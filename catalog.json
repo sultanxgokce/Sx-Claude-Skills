@@ -1,5 +1,5 @@
 {
-  "version": "1.1",
+  "version": "1.2",
   "updated": "2026-04-15",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
@@ -42,6 +42,23 @@
       "install_time": "~2min",
       "status": "stable",
       "path": "ai-engineering-kit/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": ["MMEpanel"]
+    },
+    {
+      "id": "skill-packager",
+      "type": "agent",
+      "name": "Skill Packager",
+      "version": "1.0.0",
+      "description": "Mevcut bir modülü Sx-Claude-Skills formatında paketler: SKILL.md, templates/, catalog.json güncellemesi, GitHub push ve Nexus kaydı.",
+      "prerequisites": {},
+      "tags": ["packaging", "skill-creator", "sx-claude-skills", "nexus"],
+      "stacks": ["*"],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/MMEpanel",
+      "install_time": "~2min",
+      "status": "stable",
+      "path": "skill-packager/SKILL.md",
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
       "installed_in": ["MMEpanel"]
     }
