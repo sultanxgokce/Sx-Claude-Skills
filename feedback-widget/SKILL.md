@@ -12,6 +12,7 @@ stacks: [fastapi+nextjs]
 author: sultanxgokce
 source: https://github.com/sultanxgokce/MMEpanel (M012)
 tags: [feedback, widget, screenshot, annotation, fastapi, nextjs]
+nexus_catalog: "AI Engineer Workbook > Skill Kataloğu"
 ---
 
 # Feedback Widget Skill

@@ -1,7 +1,12 @@
 {
-  "version": "1.0",
+  "version": "1.1",
   "updated": "2026-04-14",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
+  "nexus": {
+    "workbook": "AI Engineer Workbook",
+    "catalog_page": "AI Engineer Workbook > Skill Kataloğu",
+    "url": "https://nexusapp.up.railway.app"
+  },
   "skills": [
     {
       "id": "feedback-widget",
@@ -19,7 +24,9 @@
       "source": "https://github.com/sultanxgokce/MMEpanel",
       "install_time": "~2h",
       "status": "stable",
-      "path": "feedback-widget/SKILL.md"
+      "path": "feedback-widget/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": []
     },
     {
       "id": "ai-engineering-kit",
@@ -34,7 +41,9 @@
       "source": "https://github.com/sultanxgokce/MMEpanel",
       "install_time": "~2min",
       "status": "stable",
-      "path": "ai-engineering-kit/SKILL.md"
+      "path": "ai-engineering-kit/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": ["MMEpanel"]
     }
   ]
 }

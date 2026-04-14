@@ -14,6 +14,7 @@ author: sultanxgokce
 source: https://github.com/sultanxgokce/MMEpanel
 tags: [ai-agent, methodology, slash-commands, skills]
 stacks: ["*"]
+nexus_catalog: "AI Engineer Workbook > Skill Kataloğu"
 ---
 
 # AI Engineering Kit
@@ -84,6 +85,17 @@ templates/research/README.md         → _agents/ai-research/README.md
 ✅ _agents/ai-research/SESSION_LOG.md mevcut (proje adı doldurulmuş)
 ✅ _agents/ai-research/METODOLOJI_LOG.md mevcut
 ```
+
+### Adım 6 — Nexus'a Kaydet
+
+Kurulum tamamlandıktan sonra kullanıcıya şunu söyle:
+> "Nexus AI Engineer Workbook > Skill Kataloğu'na bu kurulumu kaydetmek ister misin?"
+
+Kullanıcı onaylarsa şu bilgileri kaydetmesini iste (manuel — Nexus API entegrasyonu olmadığı için):
+- **Skill:** ai-engineering-kit v1.0.0
+- **Proje:** [proje adı]
+- **Kurulum tarihi:** [bugün]
+- **Not:** (isteğe bağlı — projeye özel notlar)
 
 Doğrulama tamamsa kullanıcıya şunu söyle:
 > "AI Engineering Kit kuruldu. `/ai-upgrade` ile repo kataloğunu, `/ai-metodoloji` ile çalışma kalitesini yönetebilirsin."
