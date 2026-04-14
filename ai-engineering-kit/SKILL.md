@@ -40,6 +40,7 @@ Bu skill `type: agent` — kod üretmez, dosyaları proje yapısına yerleştiri
 ```
 templates/commands/ai-upgrade.md     → .claude/commands/ai-upgrade.md
 templates/commands/ai-metodoloji.md  → .claude/commands/ai-metodoloji.md
+templates/commands/ai-kesfet.md      → .claude/commands/ai-kesfet.md
 ```
 
 `.claude/commands/` yoksa oluştur.
@@ -51,6 +52,7 @@ templates/commands/ai-metodoloji.md  → .claude/commands/ai-metodoloji.md
 ```
 templates/skills/ai-upgrade/     → _agents/skills/ai-upgrade/
 templates/skills/ai-metodoloji/  → _agents/skills/ai-metodoloji/
+templates/skills/ai-kesfet/      → _agents/skills/ai-kesfet/
 ```
 
 `_agents/skills/` yoksa oluştur.

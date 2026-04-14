@@ -1,6 +1,6 @@
 {
   "version": "1.1",
-  "updated": "2026-04-14",
+  "updated": "2026-04-15",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -32,8 +32,8 @@
       "id": "ai-engineering-kit",
       "type": "agent",
       "name": "AI Engineering Kit",
-      "version": "1.0.0",
-      "description": "Claude ajan altyapısı — /ai-upgrade (repo kataloğu, araç yönetimi) + /ai-metodoloji (çalışma kalitesi denetimi). Stack bağımsız, her projede çalışır.",
+      "version": "1.1.0",
+      "description": "Claude ajan altyapısı — /ai-upgrade (repo kataloğu, araç yönetimi) + /ai-metodoloji (çalışma kalitesi denetimi) + /ai-kesfet (GitHub/web tarama, katalog büyütme). Stack bağımsız, her projede çalışır.",
       "prerequisites": {},
       "tags": ["ai-agent", "methodology", "slash-commands", "skills"],
       "stacks": ["*"],
