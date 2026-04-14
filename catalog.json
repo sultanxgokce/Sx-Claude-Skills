@@ -26,7 +26,7 @@
       "status": "stable",
       "path": "feedback-widget/SKILL.md",
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": []
+      "installed_in": ["MMEpanel"]
     },
     {
       "id": "ai-engineering-kit",
