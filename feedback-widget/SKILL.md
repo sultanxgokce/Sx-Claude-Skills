@@ -1,5 +1,6 @@
 ---
 name: feedback-widget
+type: feature
 version: 1.0.0
 description: >
   In-app feedback widget — floating button, screenshot capture, canvas annotation,
@@ -7,6 +8,7 @@ description: >
 prerequisites:
   backend: FastAPI, SQLModel, PostgreSQL
   frontend: Next.js (App Router), React 19, Tailwind CSS v4, lucide-react
+stacks: [fastapi+nextjs]
 author: sultanxgokce
 source: https://github.com/sultanxgokce/MMEpanel (M012)
 tags: [feedback, widget, screenshot, annotation, fastapi, nextjs]

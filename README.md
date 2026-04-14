@@ -1,45 +1,84 @@
 # Sx-Claude-Skills
 
-Claude Code ile kullanılabilen, taşınabilir modül skill'leri koleksiyonu.
+Projeye özgü olmayan, tek komutla kurulabilen portable Claude Code skill'leri koleksiyonu.
+Her skill kendi klasöründe yaşar. Claude `SKILL.md`'yi okur, projeyi anlar, adapte eder.
 
-Her skill bir `SKILL.md` içerir — Claude Code bu dosyayı okuyarak modülü
-hedef projeye otomatik adapte eder.
+---
 
-## Skill'ler
+## Skill Kataloğu
 
-| Skill | Versiyon | Stack | Açıklama |
-|-------|----------|-------|----------|
-| [feedback-widget](./feedback-widget/) | 1.0.0 | FastAPI + Next.js | In-app geri bildirim widget'ı |
+| Skill | Tür | Stack | Süre | Versiyon | Durum |
+|-------|-----|-------|------|----------|-------|
+| [feedback-widget](feedback-widget/SKILL.md) | feature | FastAPI + Next.js | ~2h | 1.0.0 | stable |
+| [ai-engineering-kit](ai-engineering-kit/SKILL.md) | agent | * (stack bağımsız) | ~2min | 1.0.0 | stable |
 
-## Nasıl Kullanılır
+Makine-okunabilir indeks: [catalog.json](catalog.json)
 
-### Yeni projede skill kurulumu
+---
+
+## Skill Türleri
+
+**`feature`** — Gerçek backend/frontend kodu üretir. Proje stack'ine adapte olur.
+`templates/` altında `.py`, `.tsx` gibi dosyalar içerir.
+
+**`agent`** — Kod üretmez. Claude'un çalışma altyapısını kurar.
+`templates/` altında `.md` ve `.json` dosyaları içerir.
+
+---
+
+## Kurulum
+
+Herhangi bir projede Claude'a şunu söyle:
 
 ```
-Claude Code'a de ki:
-"Sx-Claude-Skills/feedback-widget/SKILL.md dosyasını oku ve bu projeye kur"
+Sx-Claude-Skills reposundan [skill-adı] skill'ini kur.
+Repo: https://github.com/sultanxgokce/Sx-Claude-Skills
 ```
 
-Claude Code:
-1. `SKILL.md`'yi okur
-2. Hedef projenin yapısını (auth, routing, DB) analiz eder
-3. `templates/` içindeki dosyaları adapte ederek kopyalar
-4. Migration'ı çalıştırır
+Claude `SKILL.md`'yi okur ve projeye göre adapte ederek kurar.
 
-### Manuel kurulum
+---
 
-Her skill klasöründeki `SKILL.md` dosyasını oku — adım adım kurulum talimatları var.
+## Yeni Skill Ekleme
 
-## Katkı
+1. `yeni-skill-adi/` klasörü aç
+2. `SKILL.md` yaz — zorunlu frontmatter:
 
-Yeni bir modülü skill olarak paketlemek için:
-1. `{skill-adi}/SKILL.md` oluştur (bu repo'daki format'ı takip et)
-2. `templates/` altına kaynak dosyaları ekle
-3. `README.md` tablosunu güncelle
+   ```yaml
+   ---
+   name: skill-adi
+   type: feature | agent
+   version: 1.0.0
+   description: >
+     Tek cümle açıklama.
+   prerequisites:           # feature için
+     backend: ...
+     frontend: ...
+   install_target:          # agent için
+     commands: .claude/commands/
+     skills: _agents/skills/
+   stacks: [stack1+stack2]  # feature: spesifik; agent: ["*"]
+   author: sultanxgokce
+   tags: [tag1, tag2]
+   ---
+   ```
 
-## pCloud Storage
+3. `templates/` dizinini doldur
+4. `catalog.json`'a ekle
+5. Bu README'deki tabloyu güncelle
 
-Skill'lerin ürettiği dosyalar (görseller, ekler) şu klasöre yüklenir:
+---
+
+## Kural
+
+> Skill'ler gerçek projede test edilip onaylanmadan repoya eklenmez.
+> Template'ler çalışan koddan tersine mühendislikle çıkarılır.
+
+---
+
+## pCloud Entegrasyonu
+
+Oluşturulan asset'ler pCloud `AiSkills` klasöründe saklanır.
 
 ```
 Public Folder / Sx-Claude-Skills / AiSkills /

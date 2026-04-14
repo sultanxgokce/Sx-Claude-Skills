@@ -1,0 +1,40 @@
+{
+  "version": "1.0",
+  "updated": "2026-04-14",
+  "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
+  "skills": [
+    {
+      "id": "feedback-widget",
+      "type": "feature",
+      "name": "Feedback Widget",
+      "version": "1.0.0",
+      "description": "In-app feedback widget — floating button, screenshot capture, canvas annotation, multi-image, reply threads. FastAPI + Next.js için tam kurulum.",
+      "prerequisites": {
+        "backend": ["FastAPI", "SQLModel", "PostgreSQL"],
+        "frontend": ["Next.js App Router", "React 19", "Tailwind CSS v4", "lucide-react"]
+      },
+      "tags": ["feedback", "widget", "screenshot", "annotation", "fastapi", "nextjs"],
+      "stacks": ["fastapi+nextjs"],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/MMEpanel",
+      "install_time": "~2h",
+      "status": "stable",
+      "path": "feedback-widget/SKILL.md"
+    },
+    {
+      "id": "ai-engineering-kit",
+      "type": "agent",
+      "name": "AI Engineering Kit",
+      "version": "1.0.0",
+      "description": "Claude ajan altyapısı — /ai-upgrade (repo kataloğu, araç yönetimi) + /ai-metodoloji (çalışma kalitesi denetimi). Stack bağımsız, her projede çalışır.",
+      "prerequisites": {},
+      "tags": ["ai-agent", "methodology", "slash-commands", "skills"],
+      "stacks": ["*"],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/MMEpanel",
+      "install_time": "~2min",
+      "status": "stable",
+      "path": "ai-engineering-kit/SKILL.md"
+    }
+  ]
+}
