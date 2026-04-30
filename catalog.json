@@ -1,6 +1,6 @@
 {
-  "version": "1.2",
-  "updated": "2026-04-15",
+  "version": "1.3",
+  "updated": "2026-04-29",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -61,6 +61,26 @@
       "path": "skill-packager/SKILL.md",
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
       "installed_in": ["MMEpanel"]
+    },
+    {
+      "id": "inplace-chat",
+      "type": "feature",
+      "name": "In-Place Chat",
+      "version": "1.0.0",
+      "description": "Sayfa değiştirmeden anasayfada chat açan animasyonlu sistem. history.pushState + useState ile welcome→2-kolon geçişi. Masaüstü yatay split, mobil dikey flex split. Front-end-design kuralları zorunlu.",
+      "prerequisites": {
+        "frontend": ["Next.js 14+ App Router", "React 18+", "Tailwind CSS v3+"]
+      },
+      "tags": ["chat", "inline", "animation", "split-layout", "url-sync", "mobile-split", "nextjs", "frontend-design"],
+      "stacks": ["nextjs"],
+      "author": "sultanxgokce",
+      "source": "Vekâtip (HomeWelcome.tsx) + Nexus ChatHub",
+      "install_time": "~1h",
+      "status": "stable",
+      "path": "inplace-chat/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": ["Vekatip", "Nexus"],
+      "design_system": "front-end-design skill zorunlu — animasyon + layout prensipleri SKILL.md içinde"
     }
   ]
 }
