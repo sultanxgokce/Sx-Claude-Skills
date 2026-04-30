@@ -95,8 +95,31 @@ def get_video_title(video_id: str) -> str:
     return f"YouTube Video ({video_id})"
 
 
+CHUNK_SIZE = 12000  # karakter (~3,000 token) — çıktı için bol yer bırakır
+
+
+def _call_openrouter(client, model: str, api_key: str, system_prompt: str, user_prompt: str) -> str:
+    response = client.post(
+        "https://openrouter.ai/api/v1/chat/completions",
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+            "HTTP-Referer": "https://github.com/sultanxgokce/Sx-Claude-Skills",
+        },
+        json={
+            "model": model,
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+        },
+    )
+    response.raise_for_status()
+    return response.json()["choices"][0]["message"]["content"]
+
+
 def format_with_claude(raw_text: str, title: str, url: str) -> str:
-    """OpenRouter üzerinden Claude ile metni formatlar."""
+    """OpenRouter üzerinden Claude ile metni chunk'lara bölerek formatlar."""
     import httpx
 
     api_key = os.environ.get("OPENROUTER_API_KEY", "")
@@ -107,41 +130,46 @@ def format_with_claude(raw_text: str, title: str, url: str) -> str:
     model = os.environ.get("OPENROUTER_MODEL", "anthropic/claude-haiku-4-5")
 
     system_prompt = textwrap.dedent("""
-        Sen bir içerik editörüsün. Sana YouTube video transkripti verilecek.
-        Görürevin: ham, bitimsiz transkripti okunabilir, düzenli bir makaleye dönüştürmek.
+        Sen bir içerik editörüsün. Sana YouTube video transkriptinin bir bölümü verilecek.
+        Görevin: ham, bitimsiz transkripti okunabilir, düzenli bir makaleye dönüştürmek.
 
         Kurallar:
         - Konuşma dilini koru, metni robotik hale getirme
         - Mantıklı paragraflara böl (her paragraf bir fikir)
         - Ana konular için ## başlık kullan
-        - Tekrarları temizle ama içeriği kısaltma
+        - Tekrarları temizle ama içeriği KISALTMA — her fikri koru
         - "eee", "şey", "yani" gibi dolgu kelimeleri kaldır
         - Türkçe ise Türkçe kalsın, İngilizce ise İngilizce kalsın
         - Sadece düzenlenmiş metni döndür, yorum ekleme
     """).strip()
 
-    user_prompt = f"Video başlığı: {title}\n\nTranskript:\n{raw_text}"
+    # Metni CHUNK_SIZE karakterlik parçalara böl (kelime sınırında)
+    words = raw_text.split()
+    chunks = []
+    current = []
+    current_len = 0
+    for word in words:
+        current.append(word)
+        current_len += len(word) + 1
+        if current_len >= CHUNK_SIZE:
+            chunks.append(" ".join(current))
+            current = []
+            current_len = 0
+    if current:
+        chunks.append(" ".join(current))
 
-    print("  Claude ile formatlanıyor...", flush=True)
+    total = len(chunks)
+    print(f"  Transkript {total} parçaya bölündü ({len(raw_text):,} karakter).", flush=True)
 
-    with httpx.Client(timeout=120) as client:
-        response = client.post(
-            "https://openrouter.ai/api/v1/chat/completions",
-            headers={
-                "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json",
-                "HTTP-Referer": "https://github.com/sultanxgokce/Sx-Claude-Skills",
-            },
-            json={
-                "model": model,
-                "messages": [
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt},
-                ],
-            },
-        )
-        response.raise_for_status()
-        return response.json()["choices"][0]["message"]["content"]
+    formatted_parts = []
+    with httpx.Client(timeout=180) as client:
+        for i, chunk in enumerate(chunks, 1):
+            print(f"  Parça {i}/{total} formatlanıyor...", flush=True)
+            user_prompt = f"Video başlığı: {title}\nBölüm {i}/{total}\n\nTranskript:\n{chunk}"
+            part = _call_openrouter(client, model, api_key, system_prompt, user_prompt)
+            formatted_parts.append(part)
+
+    return "\n\n".join(formatted_parts)
 
 
 def save_as_word(formatted_text: str, title: str, url: str, output_path: Path):
