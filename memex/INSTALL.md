@@ -6,6 +6,18 @@
 
 ---
 
+## 🎯 Üç Kurulum Modu
+
+| Mod | Stack | Use Case | Kurulum Süresi |
+|-----|-------|----------|----------------|
+| **A) Full DB** | Next.js + Prisma + Postgres | Aktif capture, AI extractor, distill | ~30 dk |
+| **B) Mevcut Cortex Upgrade** | Sultan'ın Nexus'i | Bi-temporal'a geçiş | ~10 dk |
+| **C) Wiki-only** | Markdown + Python | Statik dokümantasyon, manual capture | ~5 dk |
+
+Doğrulanmış örnek: Sultan'ın setup'ı **A) Cortex (Nexus)** + **C) Veri Genom (MMEpanel)** — iki mod tek launchd cron'da koordine.
+
+---
+
 ## A) Yeni Proje — Sıfırdan Kurulum
 
 ### Ön Koşullar
@@ -229,6 +241,53 @@ psql $DATABASE_URL -c "SELECT COUNT(*) FROM cortex_captures WHERE project IS NUL
 # Bi-temporal sorgu çalışıyor mu?
 curl "http://localhost:3000/api/cortex/captures?as_of=2026-03-15"
 ```
+
+---
+
+## C) Wiki-Only Mod (DB'siz, Hızlı Kurulum)
+
+DB / API gerektirmeyen minimal kurulum. Sadece:
+- Markdown wiki yapısı
+- Audit Python scriptleri
+- Slash komutlar
+- launchd cron
+
+**Use case:** MMEpanel gibi mevcut bir Python/FastAPI projesinde Memex'in sağlık takip katmanını kullan, ama capture pipeline'ı kurma. Manuel markdown ile yaz, audit bot'u izlesin.
+
+### Hızlı Kurulum
+
+```bash
+# 1. Wiki yapısı
+mkdir -p path/to/your/wiki/{kavramlar,kararlar,konular}
+cp scaffold/wiki-template/_index.md path/to/your/wiki/kavramlar/
+cp scaffold/wiki-template/_open_questions.md path/to/your/wiki/kavramlar/
+cp scaffold/wiki-template/_audit_history.md path/to/your/wiki/kavramlar/
+
+# 2. Audit scriptleri
+mkdir -p scripts/
+cp scaffold/scripts/audit_snapshot.py.tpl scripts/audit_snapshot.py
+cp scaffold/scripts/audit_fix_frontmatter.py.tpl scripts/audit_fix_frontmatter.py
+# Path'leri proje root'una göre güncelle (CORTEX_PATH, GENOM_PATH değişkenleri)
+
+# 3. Slash komutlar
+mkdir -p .claude/commands
+cp scaffold/.claude/commands/memory-audit.md .claude/commands/
+cp scaffold/.claude/commands/memex-sync.md .claude/commands/
+
+# 4. launchd cron (macOS)
+cp scaffold/scripts/com.{{user}}.memory-audit.plist.tpl ~/Library/LaunchAgents/
+# Düzenle: {{user}} → kullanıcı adın, path → script lokasyonu
+launchctl load -w ~/Library/LaunchAgents/com.{{user}}.memory-audit.plist
+```
+
+### Smoke Test
+
+```bash
+python3 scripts/audit_snapshot.py --dry-run
+# Beklenen: skor X/100 + dosya sayımları
+```
+
+**Doğrulanmış örnek:** MMEpanel'in `_agents/docs/veri-genom/wiki/kavramlar/` yapısı. Cortex (Full DB) + Veri Genom (Wiki-only) tek launchd cron'da koordine — ikisini birden tarayıp _audit_history.md'lere snapshot ekliyor.
 
 ---
 
