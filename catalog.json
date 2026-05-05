@@ -1,6 +1,6 @@
 {
-  "version": "1.4",
-  "updated": "2026-04-30",
+  "version": "1.5",
+  "updated": "2026-05-05",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -8,6 +8,28 @@
     "url": "https://nexusapp.up.railway.app"
   },
   "skills": [
+    {
+      "id": "memex",
+      "type": "foundation",
+      "name": "Memex — Kişisel AI Hafıza Sistemi",
+      "version": "1.0.0",
+      "description": "Yaşayan kişisel AI hafıza sistemi — bi-temporal knowledge graph (Graphiti pattern), project namespace, embedding versioning. Cortex v1'in (Sultan/Nexus) parametrik kopyası. Yeni projelere /memex init ile kurulur.",
+      "prerequisites": {
+        "backend": ["PostgreSQL 14+", "Prisma 6 (Next.js) veya SQLModel (FastAPI)"],
+        "frontend": ["React 19 (opsiyonel)", "Tailwind CSS v4 (opsiyonel)"],
+        "ai": ["Anthropic / OpenAI / OpenRouter (provider seçilebilir)"]
+      },
+      "tags": ["memory", "ai", "knowledge-graph", "bi-temporal", "second-brain", "cortex", "memex", "graphiti"],
+      "stacks": ["nextjs+prisma", "fastapi+sqlmodel"],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/Nexus (Cortex v1 — bu paketin asıl prototipi)",
+      "based_on": ["Mem0", "Letta (MemGPT)", "Zep / Graphiti", "Cognee", "Vannevar Bush 1945 Memex"],
+      "install_time": "~30dk (yeni proje), ~2sa (mevcut Cortex upgrade)",
+      "status": "v1.0-mvp",
+      "path": "memex/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": ["Nexus (Cortex)"]
+    },
     {
       "id": "feedback-widget",
       "type": "feature",

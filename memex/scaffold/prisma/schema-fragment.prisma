@@ -1,0 +1,142 @@
+// ──────────────────────────────────────────────────────────────────────────
+// Memex v1.0 — Bi-Temporal Knowledge Graph Schema Fragment
+//
+// Mevcut prisma/schema.prisma'ya BU FRAGMENT'I append edin (idempotent).
+// Modeller `_prefix`'siz çünkü Prisma build-time generated.
+//
+// Kaynak: Graphiti / Zep bi-temporal pattern + Mem0 fact extraction
+// ──────────────────────────────────────────────────────────────────────────
+
+// ── Project Namespace Enum ──
+// Yeni proje için manuel olarak değer ekleyin.
+// Default scope: tek proje. Cross-project query için explicit ?project=all
+enum MemexProject {
+  cortex_meta      // Memex'in kendi meta verisi (config, audit history)
+  nexus            // Nexus projesi
+  mmepanel         // MMEpanel projesi
+  personal         // Kişisel notlar
+  // Kullanıcı eklesin: my_project, etc.
+}
+
+// ── Capture Türleri (Letta'dan adapte) ──
+enum MemexCaptureKind {
+  karar       // Decision — bilinçli karar
+  kesif       // Discovery — keşfedilen bilgi
+  uyari       // Warning — dikkat edilmesi gereken
+  soru        // Question — yanıtlanmamış soru
+  fact        // Fact — atomic gerçek
+  episode     // Raw episode (transcript, observation)
+}
+
+// ── Ana Capture Tablosu (Bi-Temporal + Namespace + Versioning) ──
+model MemexCapture {
+  id             Int               @id @default(autoincrement())
+  project        MemexProject
+  kind           MemexCaptureKind
+  title          String            @db.VarChar(255)
+  body           String            @db.Text
+  raw_source     String?           @db.Text  // ham transcript (episodic)
+
+  // ── Bi-Temporal (Graphiti pattern) ──
+  valid_from     DateTime          @default(now())
+  valid_to       DateTime?         // NULL = hâlâ geçerli
+  superseded_by  Int?              // yeni karar eskiyi geçersiz kıldıysa
+  superseded_capture MemexCapture? @relation("Supersession", fields: [superseded_by], references: [id])
+  successors     MemexCapture[]    @relation("Supersession")
+
+  // ── Çelişki/Güven (Mem0'dan ileri seviye) ──
+  conflicts_with Int?              // çakışan başka capture
+  confidence     Float             @default(0.5)  // 0.0-1.0
+
+  // ── Author tracking (multi-AI memory ledger) ──
+  author         String            @default("user")  // user / claude / codex / api
+  source_session String?           @db.VarChar(100)  // hangi seans
+
+  // ── Metadata ──
+  tags           String[]          @default([])
+  weight         Int               @default(3)       // 1-5, önem skoru
+  created_at     DateTime          @default(now())
+  updated_at     DateTime          @updatedAt
+
+  // ── Embedding (Open Brain pattern) ──
+  embedding              Bytes?    // pgvector için: Unsupported("vector(1536)")
+  embedding_model_version String?  @db.VarChar(50)
+  embedded_at             DateTime?
+
+  // ── İlişkiler ──
+  page_id        Int?              // wiki sayfasına distill edildiyse
+  page           MemexPage?        @relation(fields: [page_id], references: [id])
+
+  @@index([project, kind])
+  @@index([project, valid_from, valid_to])
+  @@index([author])
+  @@index([embedding_model_version])
+  @@map("memex_captures")
+}
+
+// ── Wiki Page (Semantic Layer) ──
+model MemexPage {
+  id             Int               @id @default(autoincrement())
+  project        MemexProject
+  branch         String            @db.VarChar(50)   // sultan, kararlar, konular, ...
+  slug           String            @db.VarChar(120)
+  title          String            @db.VarChar(255)
+  body           String            @db.Text
+  frontmatter    Json              @default("{}")
+
+  // ── Bi-Temporal ──
+  valid_from     DateTime          @default(now())
+  valid_to       DateTime?
+  superseded_by  Int?
+  successor_page MemexPage?        @relation("PageSupersession", fields: [superseded_by], references: [id])
+  predecessor_pages MemexPage[]    @relation("PageSupersession")
+
+  // ── Embedding ──
+  embedding      Bytes?
+  embedding_model_version String?  @db.VarChar(50)
+  embedded_at    DateTime?
+
+  // ── Trend & Bakım ──
+  importance     Int               @default(3)       // 1-5
+  view_count     Int               @default(0)       // kaç kez okundu (memify için)
+  last_audit_at  DateTime?
+
+  captures       MemexCapture[]
+  created_at     DateTime          @default(now())
+  updated_at     DateTime          @updatedAt
+
+  @@unique([project, branch, slug])
+  @@index([project, branch])
+  @@index([valid_from, valid_to])
+  @@map("memex_pages")
+}
+
+// ── Embedding Registry (her model upgrade için kayıt) ──
+model MemexEmbeddingRegistry {
+  id              Int       @id @default(autoincrement())
+  model_version   String    @unique @db.VarChar(50)   // "openai-text-embedding-3-small-v2"
+  dimensions      Int                                  // 1536, 768, ...
+  provider        String    @db.VarChar(50)            // openai, anthropic, local
+  activated_at    DateTime  @default(now())
+  deactivated_at  DateTime?
+  notes           String?   @db.Text
+
+  @@map("memex_embedding_registry")
+}
+
+// ── Audit History (memify cycle çıktısı) ──
+model MemexAuditEntry {
+  id             Int               @id @default(autoincrement())
+  project        MemexProject
+  audit_at       DateTime          @default(now())
+  total_files    Int
+  frontmatter_pct Float
+  isolated_count Int
+  open_questions Int
+  duplicate_count Int
+  score          Int                                  // 0-100
+  details        Json              @default("{}")     // raw metrics
+
+  @@index([project, audit_at])
+  @@map("memex_audit_history")
+}
