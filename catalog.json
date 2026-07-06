@@ -187,6 +187,24 @@
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
       "installed_in": ["_global (tüm bulut projeleri)"],
       "family": "meta (platform-erisim skill üreticisi — cloudflare-erisim onun referans çıktısı)"
+    },
+    {
+      "id": "ekip-kur",
+      "type": "agent",
+      "name": "Ekip-Kur — çok-ajan koordinasyon substratı",
+      "version": "1.1.0",
+      "description": "Bir projeye çok-ajan koordinasyon-sistemi scaffold'lar: tmux-tetik primitifi (ekip-notify.sh, 4 kritik-fix baked-in: 3-adım-ayrı-Enter · self-loop-guard · has-session-dürüst-warn · python3-parse) + tek-kaynak roster (ekip-registry.yaml) + broadcast kanalı (ekip-brief.md) + 3 USER-ONLY tetik-skill (/ekip-brief-ver · /ekip-brief-iste · /ajan-gorev) + SessionStart self-recognition hook (clear/compact-sonrası registry-tabanlı kimlik-re-bootstrap; eşleşme-yoksa sessiz=regresyon-yok) + go-live duman-testi checklist. Roster parametrik, fix'ler şablonda sabit.",
+      "prerequisites": { "system": ["bash", "tmux", "python3"] },
+      "tags": ["koordinasyon", "ekip", "multi-agent", "tmux", "orchestration", "scaffold", "skill-uretici", "self-recognition", "session-hook"],
+      "stacks": ["*"],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/Nexus (SERDAR-ailesi aile-notify.sh koordinasyon-sistemi — 6 Tem 2026 canlı-doğrulanmış 3-adım-ayrı-Enter fix'i)",
+      "install_time": "~5min (scaffold + roster doldur)",
+      "status": "v1.0-mvp",
+      "path": "ekip-kur/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [],
+      "family": "scaffold (koordinasyon-substratı üreticisi — Nexus SERDAR-ailesi'nden damıtıldı)"
     }
   ]
 }

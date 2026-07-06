@@ -1,0 +1,37 @@
+# ekip-registry.yaml — çok-ajan ekip koordinasyon sinir-sistemi TEK-KAYNAĞI
+# ekip-kur master-skill'i tarafından scaffold edildi. Kaynak-desen: Nexus aile-registry.yaml.
+#
+# NE: ekibin üyelerini {tmux-hedef · mod · rol · kanallar · inbox} olarak tanımlar.
+#     scripts/ekip-notify.sh + 3 skill (/ekip-brief-ver · /ekip-brief-iste · /ajan-gorev) bunu okur.
+# TETİK: tmux send-keys -t <tmux> -- "<mesaj>" Enter → hedef Claude'a kullanıcı-mesajı düşer.
+# YAYIN: skill'ler kardeş inbox'larına DEĞİL, ortak _agents/handoff/ekip-brief.md'ye yazar (tek-yazar korunur).
+# PARSE: ekip-notify.sh python3 line-based okur (PyYAML gereksiz) → 'id:' ve 'tmux:' satırlarını bekler; düz-blok tut.
+#
+# ⚠️ tmux CASING KRİTİK: tmux oturum-adları BÜYÜK/küçük-harf DUYARLI. Her üye için hedefi
+#    `tmux ls` çıktısından firsthand-TEYİT et (ör: bir-projede 'serdar' lowercase, başkasında 'mimSerdar' camelCase).
+#    Yanlış-casing = sessiz "oturum YOK" ping-kaybı. Format: "<oturum-adı>:0" (window 0).
+# mod ∈ {motor, kod, salt-okur, salt-plan}  ·  Değişmez: sır-değer BURAYA ASLA yazılmaz.
+#
+# 🔧 DOLDUR: aşağıdaki örnek 2 üyeyi SİL, projenin gerçek üyeleriyle değiştir. Tek-üyeli ekip de geçerli.
+
+meta:
+  ekip: "<EKİP-ADI>"                 # ör: "MMEx-ekibi", "proje-X ekibi"
+  uye_sayisi: 2                      # bilgi-amaçlı (script dinamik sayar); doldurunca güncelle
+  yayin_kanali: _agents/handoff/ekip-brief.md
+  tetik_scripti: scripts/ekip-notify.sh
+  guncelleme: "<YYYY-MM-DD>"
+
+uyeler:
+  - id: UYE1                         # BÜYÜK-harf registry-id (case-insensitive eşleşir)
+    tmux: "uye1:0"                   # ⚠️ tmux ls ile firsthand-teyit (CASING!)
+    mod: kod
+    rol: "<üyenin rolü — tek cümle>"
+    kanallar: [ _agents/handoff/uye1-durum.md ]   # üyenin okuduğu/yazdığı iş-kanalları
+    inbox: _agents/handoff/uye1-inbox.md          # o üyeye özel gelen-kutusu (opsiyonel; "" bırakılabilir)
+
+  - id: UYE2
+    tmux: "uye2:0"
+    mod: salt-okur
+    rol: "<üyenin rolü>"
+    kanallar: [ _agents/handoff/uye2-durum.md ]
+    inbox: _agents/handoff/uye2-inbox.md

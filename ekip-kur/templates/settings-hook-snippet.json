@@ -1,0 +1,17 @@
+{
+  "_KURULUM": "Bu SessionStart bloğunu hedef-projenin .claude/settings.json (COMMIT'lenen) hooks bölümüne MERGE et. settings.json'da zaten hooks.SessionStart varsa: bu entry'yi array'e EKLE (mevcut entry'leri SİLME — cortex-session-start vb. korunur). Yoksa tüm bloğu koy. Mevcut cortex-session-start hook'u genelde AYRI dosyada (settings.local.json) → RAKİP DEĞİL, ikisi de ateşler = tamamlayıcı.",
+  "_ENV": "$CLAUDE_PROJECT_DIR Claude Code tarafından proje-köküne set edilir. Set değilse 'bash scripts/ekip-self-recognition.sh' (hook'lar proje-kökünden çalışır) de olur.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/scripts/ekip-self-recognition.sh\""
+          }
+        ]
+      }
+    ]
+  }
+}
