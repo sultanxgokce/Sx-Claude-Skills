@@ -1,0 +1,16 @@
+{
+  "_comment": "Skill dağıtım haritası. 'targets' = mantıksal ad → mutlak .claude/skills dizini. 'install' = skill id → hangi hedeflere kurulacağı (target anahtarları). '_global' = /config/.claude/skills (HOME=/config → bulutta HER projede otomatik yüklenir, tek kopya).",
+  "targets": {
+    "_global": "/config/.claude/skills",
+    "vekatip": "/config/projects/vekatip/.claude/skills",
+    "nexus": "/config/projects/Nexus/.claude/skills",
+    "cortex": "/config/projects/cortex/.claude/skills",
+    "cloudtop": "/config/projects/cloudtop/.claude/skills",
+    "mmex": "/config/projects/MMEx/.claude/skills"
+  },
+  "install": {
+    "whatsapp-baileys": ["_global"],
+    "cloudflare-erisim": ["_global", "nexus", "cortex"],
+    "erisim-skill-fabrikasi": ["_global", "nexus", "cortex"]
+  }
+}

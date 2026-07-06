@@ -1,6 +1,6 @@
 {
-  "version": "1.5",
-  "updated": "2026-05-05",
+  "version": "1.8",
+  "updated": "2026-07-06",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -127,6 +127,66 @@
         "OPENROUTER_API_KEY": "zorunlu",
         "OPENROUTER_MODEL": "opsiyonel, varsayılan: anthropic/claude-haiku-4-5"
       }
+    },
+    {
+      "id": "whatsapp-baileys",
+      "type": "agent",
+      "name": "WhatsApp (Baileys) Bot Bağlama",
+      "version": "1.0.0",
+      "description": "Bir Baileys WhatsApp botunu telefona GÜVENİLİR bağlama playbook'u: bayat-sürüm bug'ı (#2679 → fetchLatestWaWebVersion), auth-churn throttle (#2691), 515-normal, QR-first, CloudBridge rotation-proof QR relay, bağlantı-sonrası daemon devri. Stack bağımsız — Baileys kullanan her projede geçerli.",
+      "prerequisites": {
+        "node": ">=18",
+        "packages": ["@whiskeysockets/baileys@7.0.0-rc13"]
+      },
+      "tags": ["whatsapp", "baileys", "pairing", "qr", "bot", "throttle", "cloudbridge", "dev-infra"],
+      "stacks": ["*"],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/vekatip (server/src/whatsapp/* + scripts/wa-login.ts, 6 Tem 2026 ilk başarılı pairing)",
+      "install_time": "~5min (adaptasyon)",
+      "status": "stable",
+      "path": "whatsapp-baileys/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": ["_global (tüm bulut projeleri)"]
+    },
+    {
+      "id": "cloudflare-erisim",
+      "type": "agent",
+      "name": "Cloudflare Erişim (panele girmeden Access/DNS)",
+      "version": "1.0.0",
+      "description": "Cloudflare işlerini (Access self-hosted app + policy, proxied DNS/tünel rotası, subdomain'i giriş-kapısı arkasına alma) dashboard'a girmeden saf API (curl+jq) ile yapar. Kimlik yoksa bir-kerelik gizli Global API Key ister, kendi dar-yetkili token üretir (POST /user/tokens), cortex-access.env'e (600) kaydeder, sonra asıl işi yapar. User-token vs account-token (cfat_) doğrulama ayrımını otomatik yapar. İdempotent + sır-hijyenik.",
+      "prerequisites": {
+        "system": ["curl", "jq"]
+      },
+      "tags": ["cloudflare", "access", "dns", "tunnel", "kimlik", "erisim", "token", "zero-trust", "platform-access"],
+      "stacks": ["*"],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/cloudtop (infra/cloudflare/ — mmex.mmepanel.com onboard'unda canlı doğrulandı, 6 Tem 2026)",
+      "install_time": "~2min",
+      "status": "stable",
+      "path": "cloudflare-erisim/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": ["_global (tüm bulut projeleri)"],
+      "family": "platform-erisim (erisim-skill-fabrikasi ile üretilen kalıbın referans implementasyonu)"
+    },
+    {
+      "id": "erisim-skill-fabrikasi",
+      "type": "agent",
+      "name": "Erişim-Skill Fabrikası (meta-skill)",
+      "version": "1.0.0",
+      "description": "Meta-skill: bir platform seç (Railway/GitHub/Google/Vercel/AWS/Hetzner…) → ortamı hazırla → bir-kerelik gizli giriş al → dar-yetkili token'ı üret/kaydet → o platform için tam bir <platform>-erisim skill'ini (cloudflare-erisim'i şablon + auth-reçetesini kullanarak) Sx-Claude-Skills'e scaffold et → dağıt. Platform-erişim angaryasını bir kez damıtıp otomatik üretir. recipes/ adversaryal-doğrulanmış auth bilgi tabanı.",
+      "prerequisites": {
+        "system": ["bash", "curl", "jq"]
+      },
+      "tags": ["meta-skill", "erisim", "platform-access", "token", "scaffold", "skill-uretici", "secret-hygiene"],
+      "stacks": ["*"],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/Sx-Claude-Skills (cloudflare-erisim referans implementasyonundan damıtıldı, 6 Tem 2026)",
+      "install_time": "~5min/platform",
+      "status": "stable",
+      "path": "erisim-skill-fabrikasi/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": ["_global (tüm bulut projeleri)"],
+      "family": "meta (platform-erisim skill üreticisi — cloudflare-erisim onun referans çıktısı)"
     }
   ]
 }

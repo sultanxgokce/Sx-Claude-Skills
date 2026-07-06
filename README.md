@@ -5,12 +5,36 @@ Her skill kendi klasöründe yaşar. Claude `SKILL.md`'yi okur, projeyi anlar, a
 
 ---
 
+## 🔑 Altın Kural — Sx-Claude-Skills = TEK KAYNAK (single source of truth)
+
+> **Bir AI skill'i güncellenir veya geliştirilirse, güncel hâli ÖNCE buraya (Sx-Claude-Skills)
+> yazılır. Diğer projeler/ortamlar bunu buradan senkronlar — asla tersi değil.**
+
+Neden: skill birden çok ortamda yaşar (`_global` bulut, Nexus/cortex VPS, tekil repolar). Herkes kendi
+kopyasını elle düzenlerse **drift** olur (aynı skill'in N farklı bayat sürümü). Kural bunu keser:
+
+1. **Düzenleme yeri = burası.** Bir skill'i geliştirdiğinde (bir başka repoda kurulu kopyada fark
+   ettiğin iyileştirme dahil) değişikliği **bu repoda** yap.
+2. **Sürümü yükselt.** İlgili `SKILL.md` frontmatter'ında `version: x.y.z` artır (senkron bunu karşılaştırır).
+3. **Yay.** `node sync-skills.mjs --apply` → değişiklik `sync-targets.json`'daki tüm hedeflere
+   versiyon-damgalı gider. `_global` sayesinde bulutta her projede otomatik tazelenir.
+4. **Kurulu kopyayı yerinde düzenleme.** Bir hedefte elle değişiklik yaparsan senkron motoru
+   "HEDEF DAHA YENİ — DRIFT!" diye UYARIR ve `--force`'suz dokunmaz → önce o farkı buraya geri taşı.
+
+Kısaca: **kaynak burada, dağıtım `sync-skills.mjs` ile, düzenleme daima yukarı-akış (upstream).**
+Mekanik detay → aşağıdaki [Senkron](#senkron--güncellemeleri-yay-sync-skillsmjs) bölümü.
+
+---
+
 ## Skill Kataloğu
 
 | Skill | Tür | Stack | Süre | Versiyon | Durum |
 |-------|-----|-------|------|----------|-------|
 | [feedback-widget](feedback-widget/SKILL.md) | feature | FastAPI + Next.js | ~2h | 1.0.0 | stable |
 | [ai-engineering-kit](ai-engineering-kit/SKILL.md) | agent | * (stack bağımsız) | ~2min | 1.0.0 | stable |
+| [whatsapp-baileys](whatsapp-baileys/SKILL.md) | agent | * (stack bağımsız) | ~5min | 1.0.0 | stable |
+| [cloudflare-erisim](cloudflare-erisim/SKILL.md) | agent | * (stack bağımsız) | ~2min | 1.0.0 | stable |
+| [erisim-skill-fabrikasi](erisim-skill-fabrikasi/SKILL.md) | agent (meta) | * (stack bağımsız) | ~5min/platform | 1.0.0 | stable |
 
 Makine-okunabilir indeks: [catalog.json](catalog.json)
 
@@ -73,6 +97,27 @@ Claude `SKILL.md`'yi okur ve projeye göre adapte ederek kurar.
 
 > Skill'ler gerçek projede test edilip onaylanmadan repoya eklenmez.
 > Template'ler çalışan koddan tersine mühendislikle çıkarılır.
+
+---
+
+## Senkron — güncellemeleri yay (`sync-skills.mjs`)
+
+"Pull + adapt" kurulumun tersine, bir skill geliştiğinde onu hedeflere **versiyon-damgalı**
+dağıtan katman. Kaynak = bu repo; hedef haritası = `sync-targets.json`.
+
+```bash
+node sync-skills.mjs                 # dry-run: ne değişirdi (VARSAYILAN)
+node sync-skills.mjs --apply         # kaynak >= hedef ise kopyala
+node sync-skills.mjs --apply --force # hedef daha yeni olsa bile ez
+node sync-skills.mjs --skill <id>    # tek skill
+```
+
+- **`_global` hedefi = `/config/.claude/skills`** → `HOME=/config` sayesinde **bulutta HER projede**
+  otomatik yüklenir (tek kopya, sıfır ek senkron). Bir skill'i belirli bir repoya (git'e girsin,
+  başka makineye/CI'a taşınsın diye) kurmak için `sync-targets.json` `install`'a o repo anahtarını ekle.
+- **Drift koruması:** hedef sürümü kaynaktan yeniyse (kurulu kopya elle düzenlenmiş) UYARIR, `--force`
+  olmadan dokunmaz → önce o değişikliği kaynağa geri taşı, sonra normal senkron.
+- Her `SKILL.md` frontmatter'ında `version: x.y.z` ZORUNLU (senkron bunu karşılaştırır).
 
 ---
 
