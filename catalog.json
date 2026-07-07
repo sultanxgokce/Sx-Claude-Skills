@@ -1,5 +1,5 @@
 {
-  "version": "1.9",
+  "version": "2.0",
   "updated": "2026-07-07",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
@@ -167,6 +167,26 @@
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
       "installed_in": ["_global (tüm bulut projeleri)"],
       "family": "platform-erisim (erisim-skill-fabrikasi ile üretilen kalıbın referans implementasyonu)"
+    },
+    {
+      "id": "railway-erisim",
+      "type": "agent",
+      "name": "Railway Erişim (panele girmeden proje/servis/DB)",
+      "version": "1.0.0",
+      "description": "Railway işlerini (proje/servis listesi, bir servisin DATABASE_URL'i, değişken sorgusu, deploy durumu, ham GraphQL) dashboard'a girmeden saf API (curl+jq, backboard.railway.com/graphql/v2) ile yapar. Kimlik yoksa bir-kerelik gizli token ister (Railway token programatik ÜRETİLEMEZ → dashboard-only), cortex-access.env'e (600) kaydeder. doctor 'me' (account) → 'projects' (workspace) ile kapsamı otomatik ayırt eder; pg-url DATABASE_URL'i env'e YAZAR (stdout'a basmaz); railway variables --set YASAK (argv sızıntısı). İdempotent + sır-hijyenik.",
+      "prerequisites": {
+        "system": ["curl", "jq"]
+      },
+      "tags": ["railway", "erisim", "platform-access", "token", "database", "graphql", "deploy", "secret-hygiene"],
+      "stacks": ["*"],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/cloudtop (erisim-skill-fabrikasi railway reçetesi — cloudtop-vekatip izole konteynerde 14 proje canlı okundu, 7 Tem 2026)",
+      "install_time": "~2min",
+      "status": "stable",
+      "path": "railway-erisim/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": ["_global (tüm bulut projeleri — 5 konteyner ortak /config/.claude)", "Nexus", "cortex"],
+      "family": "platform-erisim (erisim-skill-fabrikasi ile cloudflare-erisim şablonundan üretildi)"
     },
     {
       "id": "erisim-skill-fabrikasi",
