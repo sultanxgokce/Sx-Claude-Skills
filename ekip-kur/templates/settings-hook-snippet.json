@@ -1,10 +1,12 @@
 {
-  "_KURULUM": "Bu SessionStart bloğunu hedef-projenin .claude/settings.json (COMMIT'lenen) hooks bölümüne MERGE et. settings.json'da zaten hooks.SessionStart varsa: bu entry'yi array'e EKLE (mevcut entry'leri SİLME — cortex-session-start vb. korunur). Yoksa tüm bloğu koy. Mevcut cortex-session-start hook'u genelde AYRI dosyada (settings.local.json) → RAKİP DEĞİL, ikisi de ateşler = tamamlayıcı.",
+  "_KURULUM": "Bu SessionStart bloğunu hedef-projenin .claude/settings.json (COMMIT'lenen) hooks bölümüne MERGE et. settings.json'da zaten hooks.SessionStart varsa: bu entry'yi array'e EKLE (mevcut entry'leri SİLME). Yoksa tüm bloğu koy.",
+  "_MATCHER": "matcher='*' = TÜM SessionStart source'ları (startup|resume|clear|compact). ⚠️ matcher REGEX DEĞİL, exact-string eşleşir → 'startup|clear|compact' gibi alternation ÇALIŞMAZ (hiç ateşlemez). Tümü için '*' kullan (resume dahil = post-auto-compact kimlik-kurtarma). Kaynak: claude-code-guide doğrulaması 2026-07-06.",
+  "_MERGE_VS_OVERRIDE": "⚠️ KRİTİK ÖN-TEST: farklı settings-dosyalarındaki SessionStart-hook'ların MERGE mi (ikisi de ateşler) yoksa OVERRIDE mı (proje globali ezer) olduğu docs'ta muğlak. Mevcut bir global-bootstrap-hook (ör. cortex-session-start) VARSA: bu entry'yi eklemeden ÖNCE test et — proje-hook eklendikten sonra bir /clear yap, HEM global-bootstrap HEM bu-hook ateşledi mi (debug-log ile teyit). MERGE ise bu ayrı-entry temiz çalışır. OVERRIDE ise ayrı-entry global'i öldürür → o zaman self-recognition'ı global-bootstrap-hook İÇİNE guarded-blok olarak göm (rakip-entry açma).",
   "_ENV": "$CLAUDE_PROJECT_DIR Claude Code tarafından proje-köküne set edilir. Set değilse 'bash scripts/ekip-self-recognition.sh' (hook'lar proje-kökünden çalışır) de olur.",
   "hooks": {
     "SessionStart": [
       {
-        "matcher": "startup|clear|compact",
+        "matcher": "*",
         "hooks": [
           {
             "type": "command",
