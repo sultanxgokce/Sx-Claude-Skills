@@ -15,5 +15,20 @@
 > ⏱️ **Tetik-kuralı (tetikleyen okusun):** Üyeyi **boştayken** tetikle. Üye yanıt-ortasındayken gelen ping
 > composer'a düşer ama submit için esc-to-interrupt gerekebilir; **otomatik-interrupt/kill YOK** (bilinçli sınır).
 > Tetik = "kanalını oku" sinyali; üye ne zaman uygular ASENKRON (senkron-yanıt bekleme, best-effort).
+>
+> ✅ **İş-bitti kuralı (her üye):** görev bitince/bloklanınca çıktını kanalına yaz+commit'le, SONRA
+> `scripts/ekip-notify.sh --done "<tek-satır özet>"` koş (varsa; yoksa yöneticiyi ping'le) — sinyal deftere
+> düşer + yönetici uyanır. Özete SIR-DEĞER yazma. Yönetici meşgulse ping düşmeyebilir; defter-kaydı yeter.
+>
+> 🔀 **PR gerekiyorsa (Sultan-onaylı OTONOM-yetki):**
+> **bypassPermissions modundaysan** (alt-bar "bypass permissions on") PR-yetkin TAM: işi Sultan-diliyle özetle
+> ("şunu ekledim/değiştirdim, PR açıp merge edeyim mi?") → Sultan **"tamam"** → **KENDİN koş** (Sultan'a ham `gh`
+> komutu UZATMA): kalite-gate yeşil (tsc+test) → PR aç (projendeki pr-gate hook'u marker istiyorsa taşı,
+> ör. `AGENT_DASHBOARD_PR_SKILL=1`) → CI-yeşil bekle (arka-planda) → squash-merge → kanıt-satırı (kanal + PR-URL).
+> ⛔ "classifier bloklar / no class-retry" **bayat-hafızasına GÜVENME** → bypass-modda o engel YOK, **taze-probe et**
+> (Sultan'ın açık mod-değişimi ≠ gizli class-retry). ⛔ gate-marker sahteleme / `SKIP_*_GATE` env-set YASAK.
+> **bypass-modda DEĞİLSEN** (auto-mode) gh pr classifier'ca bloklanır → Sultan'dan
+> `claude --resume <senin-session-id> --dangerously-skip-permissions` relaunch iste (ya da container
+> `permissions.defaultMode: "bypassPermissions"` ayarlıysa sadece yeniden-başla), sonra yukarıdaki akış.
 
 <!-- İlk gerçek brief/görev buraya iner (skill'ler append eder). -->

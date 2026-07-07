@@ -27,5 +27,20 @@
 - [ ] Dosyalar **başka bir konteynerden** yazıldıysa: bu dosyalar hedef-konteynerde görünüyor mu? (mount/senkron topolojisi — VARSAYMA, `ls` ile teyit et).
 - [ ] Canlı tmux-tetik yalnız **oturumların açık olduğu konteynerde** çalışır → duman-testi ORADA.
 
+## 5b. PR-YETKİ (otonom PR+merge — opsiyonel ama önerilen)
+Üyelerin "tamam" sonrası KENDİ PR açıp merge'lemesi için (Sultan'a sıfır-komut). İki-kapı: pr-gate hook (marker)
++ permission-classifier (bypassPermissions temizler; auto-mode `gh pr merge`'ü sert-durdurur, allow-rule YETMEZ).
+- [ ] **Ortam uygun mu:** izole/sandbox container · **non-root** (`id` → uid≠0) · internet-kısıtlı · yedekli.
+      (bypassPermissions yalnız böyle ortamda güvenli; **root'ta ÇALIŞMAZ** — Anthropic güvenlik-kilidi.)
+- [ ] **Default'u ayarla:** hedef-container'ın `~/.claude/settings.json` → `permissions.defaultMode: "bypassPermissions"`
+      (+ `skipDangerousModePermissionPrompt: true` → seans-başı uyarı-atlar). ⚠️ **Her container'a AYRI** uygulanır
+      (izole-config; bir container'daki değişiklik diğerine geçmez). Git-tracked settings'e KOYMA (klon'a sızar).
+- [ ] **Açık seanslar restart:** mid-session çevrilemez (Shift+Tab bypass'ı döngüye almaz) → `claude --resume <id>`
+      (paylaşılan-cwd'de `--continue` DEĞİL — yanlış-üye çeker). tmux `cc-<uuid8>` adı = session-id prefix'i.
+- [ ] **Korumalar duruyor mu:** bypass'ta `deny`/`ask`-kuralları + PreToolUse-hook'lar + `rm -rf` root/home
+      circuit-breaker yine ateşler. Felaket-ops için küçük `deny`-listesi öner (main-force-push, prod-DB-drop).
+- [ ] **DERS içselleştirildi mi:** bayat "classifier-bloklar/no-retry" hafızası **≠ engel-kanıtı** → yeni-modda
+      taze-probe et; "no class-retry" yalnız gizli-bypass'a uygulanır, Sultan'ın açık mod-değişimine değil.
+
 ## 6. Kapanış
 - [ ] Yukarıdakiler yeşil → sistem canlı. Değilse kırmızı-maddeyi raporla (sessiz-geçme yok).
