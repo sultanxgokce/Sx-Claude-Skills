@@ -1,7 +1,7 @@
 ---
 name: ekip-kur
 type: agent
-version: 1.2.0
+version: 1.3.0
 description: >
   Bir projeye çok-ajan KOORDİNASYON-SUBSTRATI kurar — RÖPORTAJ-MODU: tek /ekip-kur çağrısında kullanıcıyı
   röportaj eder (proje · roller · terminaller · modlar · tmux-casing), gelenek-uyumlu İSİM önerir, onaylatır,
@@ -13,7 +13,7 @@ install_target:
   skills: .claude/skills/
 stacks: ["*"]
 author: sultanxgokce
-tags: [koordinasyon, ekip, multi-agent, tmux, orchestration, scaffold, skill-uretici, roportaj, self-recognition, aile-notify]
+tags: [koordinasyon, ekip, multi-agent, tmux, orchestration, scaffold, skill-uretici, roportaj, self-recognition, read-before-trigger, compact-orchestration, aile-notify]
 nexus_catalog: "AI Engineer Workbook > Skill Kataloğu"
 ---
 
@@ -34,7 +34,8 @@ projede elle kurmak angarya. Bu skill onu **bir kez damıtıp** her projeye scaf
 ## Üretilen substrat (hedef-projede)
 | Dosya | Rol |
 |-------|-----|
-| `scripts/ekip-notify.sh` | tmux-tetik primitifi (4-fix baked-in; registry'yi python3 ile parse eder) |
+| `scripts/ekip-notify.sh` | tmux-tetik primitifi (4-fix + **READ-BEFORE-TRIGGER ön-uçuş** baked-in; registry'yi python3 ile parse eder) |
+| `scripts/ekip-compact.sh` | **COMPACT-ORKESTRA** primitifi (üyeyi uzaktan compact-et → kimlik-re-bootstrap-bekle → devam-ettir; dürüst-timeout) |
 | `_agents/handoff/ekip-registry.yaml` | tek-kaynak roster {id · tmux · mod · rol · kanallar · inbox} |
 | `_agents/handoff/ekip-brief.md` | ortak broadcast kanalı (append-only, all-read) |
 | `.claude/skills/ekip-brief-ver/` | yönetici→hepsi brief (USER-ONLY) |
@@ -57,10 +58,29 @@ Bir üye `/clear` ya da compact yapınca kimliğini kaybeder. SessionStart-hook 
 **tmux-oturum-adı** (`display-message '#S'`, `$TMUX_PANE` hedefli) → **ekip-registry ters-lookup** → eşleşen
 üyenin kimlik-bloğunu (id · mod · rol · kanallar · inbox · brief + "kimliğini koru, brief oku, devam") context'e enjekte eder.
 - **Eşleşme yoksa hiçbir şey basmaz (exit 0) → ekip-dışı oturumlarda REGRESYON-YOK.** Registry/tmux yoksa da sessiz.
-- **Wire:** `EKIP-settings-hook-snippet.json` → `.claude/settings.json` `hooks.SessionStart` (matcher `startup|clear|compact`).
-  Mevcut `cortex-session-start` (genelde `settings.local.json`) **RAKİP DEĞİL** — ayrı entry/dosya, ikisi de ateşler = **tamamlayıcı**.
-  Doktrin gereği scaffold canlı-`settings.json`'u OTOMATİK yeniden-yazmaz → snippet'i ajan/Sultan merge eder (mevcut hook'ları silmeden).
+- **Çıktı = JSON `hookSpecificOutput.additionalContext`** (plain-stdout değil) → kanıtlı-güvenli desen (cortex-session-start emsali). Üye-kimliği **override-direktifi** taşır: bir genel-bootstrap default-persona bassa da "çalışma-kimliğin = <ID>, onu genel-altyapı say" → üye-eşleşmesi default'u ÖNCELER. Ek: ilk-yanıtta `🧑‍🚀 <ID> geri-yüklendi` tek-satır-marker (compact-orkestra handshake'i).
+- **Wire:** `EKIP-settings-hook-snippet.json` → `.claude/settings.json` `hooks.SessionStart`. ⚠️ **matcher REGEX DEĞİL, exact-string** → `"*"` kullan (TÜM source'lar: startup|resume|clear|compact; `resume`=post-auto-compact kimlik-kurtarma). `"startup|clear|compact"` alternation ÇALIŞMAZ (hiç ateşlemez) — kaynak: claude-code-guide 2026-07-06.
+- ⚠️ **MERGE-vs-OVERRIDE ön-testi:** mevcut bir global-bootstrap-hook (cortex-session-start) VARSA, ayrı-entry eklemeden önce test et — farklı settings-dosyalarındaki SessionStart-hook'lar **MERGE** mi (ikisi de ateşler) **OVERRIDE** mı (proje globali ezer) docs'ta muğlak. MERGE ise ayrı-entry temiz (çoklu additionalContext birleşir). OVERRIDE ise ayrı-entry global'i öldürür → self-recognition'ı global-hook İÇİNE guarded-blok göm (rakip-entry açma). Test: proje-hook ekle → `/clear` → debug-log'da HER İKİSİ ateşledi mi.
 - **Test:** `bash scripts/ekip-self-recognition.sh <oturum-adı>` (override) veya gerçek tmux-oturumunda argümansız.
+
+## READ-BEFORE-TRIGGER (ön-uçuş · `ekip-notify.sh` baked-in)
+Bir üyeyi **boştayken** tetikle. Kör-tetik (busy/menü/compact-önerisi olan üyeyi ping'leme) bir compact-önerisini ezip iş kaybettirebilir. `ekip-notify.sh` send-keys'ten ÖNCE hedef-pane'i `capture-pane | tail` ile sınıflandırır:
+- `idle` → NORMAL GÖNDER · `busy` ("esc to interrupt"/Compacting) · `menu` ("❯ 1."/"Do you want") · `compact` (footer "auto-compact"/"compact yap") → **DUR + stderr-uyar + say(engellendi)** → çağıran karar-versin.
+- **`--force`** ön-uçuşu bypass eder. Belirsiz-durum → idle (araç kullanışlı-kalır; C-u+3-adım düşük-zarar).
+- ⚠️ **Marker'lar TUNABLE + LIVE-KALİBRE:** `BUSY_RE`/`MENU_RE`/`COMPACT_RE` (env-override) hedef-TUI-string'lerine göre bir kez kalibre edilir. `ekip-compact.sh` AYNI marker'ları taşır — **birini kalibre edince diğerini de senkronla** (drift-riski).
+
+## COMPACT-ORKESTRA (`ekip-compact.sh`)
+`ekip-compact.sh <üye> ["devam-mesajı"]` — compact-gerektiğinde/üye-önerince **uzaktan uçtan-uca**: tetikle → kimliği-korunmuş-bekle → devam-ettir.
+1. **Ön-uçuş:** busy/menü → DUR (mid-work compact YAPMA). compact-önerisi/idle → GO.
+2. `/compact` gönder (3-adım-Enter fix).
+3. **Settle bekle:** "Compacting" görünüp kaybolsun (dürüst-timeout).
+4. **devam** gönder → **re-bootstrap-marker** (`🧑‍🚀 <ID> geri-yüklendi` / bootstrap) belirene dek poll → görülürse ✅, timeout ise **"tetiklendi ama re-bootstrap DOĞRULANAMADI"** (başarı-İDDİA ETMEZ = dürüst-degrade). devam-mesajı verilmezse KONUM-devri-varsayılanı.
+
+## ⚠️ BAĞIMLILIK-SIRASI (KURULUM 1→2→3)
+Üç yetenek aynı-kökün (kör-uyanma/kör-tetikleme) parçaları; sırayla canlanır:
+1. **SELF-RECOGNITION canlı** (hook wire + doğrulandı) — compact/clear sonrası kimliği kuran budur.
+2. **READ-BEFORE-TRIGGER canlı** (ekip-notify ön-uçuş kalibre) — busy-üyeyi ezmeyi önler.
+3. **COMPACT-ORKESTRA** (ekip-compact) — adım-4'ü PARÇA-1'e bağlı: self-recognition canlı-DEĞİLSE re-bootstrap doğrulanamaz → araç "compact + kör-devam"a çöker. **PARÇA-1 canlı olmadan PARÇA-3 tam-çalışmaz.**
 
 ## Akış (`/ekip-kur` çağrılınca) — RÖPORTAJ-MODU
 **Amaç:** Sultan tek `/ekip-kur` yazınca skill onu RÖPORTAJ eder, gelenek-uyumlu isimler önerir, onaylatır ve

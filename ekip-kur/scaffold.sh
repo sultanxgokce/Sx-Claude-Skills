@@ -34,6 +34,8 @@ install -d "$TARGET/scripts" "$TARGET/_agents/handoff" "$TARGET/.claude/skills"
 
 put "$TMPL/ekip-notify.sh"          "$TARGET/scripts/ekip-notify.sh"
 chmod +x "$TARGET/scripts/ekip-notify.sh" 2>/dev/null || true
+put "$TMPL/ekip-compact.sh"         "$TARGET/scripts/ekip-compact.sh"
+chmod +x "$TARGET/scripts/ekip-compact.sh" 2>/dev/null || true
 put "$TMPL/ekip-self-recognition.sh" "$TARGET/scripts/ekip-self-recognition.sh"
 chmod +x "$TARGET/scripts/ekip-self-recognition.sh" 2>/dev/null || true
 put "$TMPL/ekip-registry.yaml.tmpl" "$TARGET/_agents/handoff/ekip-registry.yaml"
@@ -53,3 +55,5 @@ echo "  2. SELF-RECOGNITION wire: EKIP-settings-hook-snippet.json → .claude/se
 echo "     (mevcut hook'ları SİLME; cortex-session-start vb. genelde settings.local.json'da → rakip değil, ikisi de ateşler)."
 echo "  3. _agents/handoff/EKIP-GO-LIVE-CHECKLIST.md duman-testini KOŞ (hedef-ortamda, ≥2 tmux-oturum)."
 echo "  4. Tetik-skiller USER-ONLY: /ekip-brief-ver · /ekip-brief-iste · /ajan-gorev"
+echo "  5. ekip-notify.sh ÖN-UÇUŞ + ekip-compact.sh COMPACT-ORKESTRA marker-regex'lerini hedef-TUI'de KALİBRE et"
+echo "     (BUSY_RE/MENU_RE/COMPACT_RE/REBOOTSTRAP_RE — capture-pane çıktısına göre). Bağımlılık-sırası: self-recognition CANLI → ön-uçuş → compact-orkestra."
