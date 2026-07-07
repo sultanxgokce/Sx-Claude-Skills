@@ -1,6 +1,6 @@
 {
-  "version": "1.8",
-  "updated": "2026-07-06",
+  "version": "1.9",
+  "updated": "2026-07-07",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -205,6 +205,40 @@
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
       "installed_in": [],
       "family": "scaffold (koordinasyon-substratı üreticisi — Nexus SERDAR-ailesi'nden damıtıldı)"
+    },
+    {
+      "id": "pr-onay",
+      "type": "agent",
+      "name": "PR-Onay — Sultan-dili özet → onay → gate'li PR+merge",
+      "version": "1.0.0",
+      "description": "İş bitince jargonsuz Sultan-dili özet + tek-soru onay-kapısı (evet/hayır/önce-diff-göster) → kalite-gate'leri GERÇEKTEN koş (tsc→vitest→temizlik+fmt; kırmızı=DUR+çıplak-çıktı+exit-kod; pipe-maskeleme yasak) → PR-aç (agent-dashboard'lu projede YOL-A: AGENT_DASHBOARD_PR_SKILL=1 marker'ı gate'ler koşulduğu için meşru-taşınır; plugin'siz projede doğrudan gh pr create) → wait-ci.sh ile CI-yeşil → merge → LEDGER'a exit-kodlu kanıt. SKIP_PR_SKILL_GATE'e asla dokunmaz. disable-model-invocation: yalnız Sultan /pr-onay ile tetikler.",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "git",
+          "gh"
+        ]
+      },
+      "tags": [
+        "pr",
+        "merge",
+        "onay",
+        "kalite-gate",
+        "sultan-dili",
+        "workflow",
+        "ci"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/Nexus (mimserdar-mimari.md PR-ONAY-AKIŞI TASARIM · YOL-A Sultan-onaylı · 7 Tem 2026)",
+      "install_time": "~1min (talimat-skill; scaffold yok)",
+      "status": "v1.0-mvp",
+      "path": "pr-onay/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [],
+      "family": "workflow (PR-yaşamdöngüsü; /agent-dashboard:pr sarmalayıcısı)"
     }
   ]
 }
