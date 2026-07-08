@@ -13,7 +13,7 @@ install_target:
   skills: .claude/skills/
 stacks: ["*"]
 author: sultanxgokce
-tags: [koordinasyon, ekip, multi-agent, tmux, orchestration, scaffold, skill-uretici, roportaj, self-recognition, aile-notify]
+tags: [koordinasyon, ekip, multi-agent, tmux, orchestration, scaffold, skill-uretici, roportaj, self-recognition, ekip-notify]
 nexus_catalog: "AI Engineer Workbook > Skill Kataloğu"
 ---
 
@@ -34,14 +34,19 @@ projede elle kurmak angarya. Bu skill onu **bir kez damıtıp** her projeye scaf
 ## Üretilen substrat (hedef-projede)
 | Dosya | Rol |
 |-------|-----|
-| `scripts/ekip-notify.sh` | tmux-tetik primitifi (4-fix baked-in; registry'yi python3 ile parse eder) |
-| `_agents/handoff/ekip-registry.yaml` | tek-kaynak roster {id · tmux · mod · rol · kanallar · inbox} |
+| `scripts/ekip-notify.sh` | tmux-tetik + sinyal-defteri primitifi (iki-yön: ping/--done/--waiting/--ack/--check; preflight+draft-guard baked-in) |
+| `scripts/ekip-preflight.lib.sh` | pane-durum sınıflandırma (busy/menu/compact/idle + ghost-vs-draft SGR) — notify+durum source eder |
+| `scripts/ekip-durum.sh` | tek-bakış radar (SALT-OKUR): insan-tablo · `--porcelain`(durum-skill tüketir) · `--nudge`(Stop-hook yönetici-nudge + üye-backstop) |
+| `_agents/handoff/ekip-registry.yaml` | tek-kaynak roster {id · tmux · mod · rol · kanallar · inbox} + `meta.yonetici` |
 | `_agents/handoff/ekip-brief.md` | ortak broadcast kanalı (append-only, all-read) |
+| `_agents/handoff/ekip-sinyal.log` | append-only sinyal-defteri (done/waiting/ack; oto-oluşur) — koordinasyonun kaynak-gerçeği |
 | `.claude/skills/ekip-brief-ver/` | yönetici→hepsi brief (USER-ONLY) |
 | `.claude/skills/ekip-brief-iste/` | ekipten durum-topla, salt-okur (USER-ONLY) |
 | `.claude/skills/ajan-gorev/` | Sultan→bir üye görev (USER-ONLY) |
-| `scripts/ekip-self-recognition.sh` | SessionStart hook: tmux-oturum→registry ters-lookup→kimlik enjekte (clear/compact-proof; eşleşme-yoksa sessiz) |
-| `_agents/handoff/EKIP-settings-hook-snippet.json` | self-recognition wire-snippet'i (settings.json'a merge-instructions) |
+| `.claude/skills/durum/` | `/durum` — Sultan-dili ekip-özeti (kim çalışıyor/boşta/yön-bekliyor; jargonsuz; USER-ONLY) |
+| `scripts/ekip-self-recognition.sh` | SessionStart hook: tmux-oturum→registry ters-lookup→**JSON** kimlik enjekte + self-heal (clear/compact-proof; eşleşme-yoksa sessiz) |
+| `scripts/ekip-hooks/ctx-nudge.sh` | PostToolUse hook: context-eşik nudge (ERKEN<%80 sessiz-anchor / DANGER≥%80 compact-öner; model-farkında pencere) |
+| `_agents/handoff/EKIP-settings-hook-snippet.json` | 3-hook wire-snippet'i (SessionStart+Stop+PostToolUse; settings.json'a merge-instructions) |
 | `_agents/handoff/EKIP-GO-LIVE-CHECKLIST.md` | duman-testi + izolasyon-notu |
 
 ## 4 KRİTİK-FİX (ŞABLONDA SABİT — tek-kaynak-gerçek, DEĞİŞTİRME)
@@ -57,10 +62,28 @@ Bir üye `/clear` ya da compact yapınca kimliğini kaybeder. SessionStart-hook 
 **tmux-oturum-adı** (`display-message '#S'`, `$TMUX_PANE` hedefli) → **ekip-registry ters-lookup** → eşleşen
 üyenin kimlik-bloğunu (id · mod · rol · kanallar · inbox · brief + "kimliğini koru, brief oku, devam") context'e enjekte eder.
 - **Eşleşme yoksa hiçbir şey basmaz (exit 0) → ekip-dışı oturumlarda REGRESYON-YOK.** Registry/tmux yoksa da sessiz.
-- **Wire:** `EKIP-settings-hook-snippet.json` → `.claude/settings.json` `hooks.SessionStart` (matcher `startup|clear|compact`).
+- **Wire:** `EKIP-settings-hook-snippet.json` → `.claude/settings.json` `hooks.SessionStart` (matcher `"*"` — REGEX DEĞİL exact-string; `startup|clear|compact` alternation ÇALIŞMAZ).
   Mevcut `cortex-session-start` (genelde `settings.local.json`) **RAKİP DEĞİL** — ayrı entry/dosya, ikisi de ateşler = **tamamlayıcı**.
   Doktrin gereği scaffold canlı-`settings.json`'u OTOMATİK yeniden-yazmaz → snippet'i ajan/Sultan merge eder (mevcut hook'ları silmeden).
 - **Test:** `bash scripts/ekip-self-recognition.sh <oturum-adı>` (override) veya gerçek tmux-oturumunda argümansız.
+
+## İKİ-YÖN KOORDİNASYON DÖNGÜSÜ (sinyal-defteri + radar + nudge)
+Klasik ping tek-yönlüdür (yönetici→üye). Bu substrat PULL→PUSH döngüsünü kapatır:
+- **`--done`/`--waiting` (üye→yönetici):** üye işini bitirince/yumuşak-kapıya gelince ÖNCE `ekip-sinyal.log`'a
+  yazar (kaynak-gerçek), SONRA yöneticiye ping atar. Ping bloklansa da sinyal kaybolmaz.
+- **`ekip-durum.sh --nudge` (Stop-hook):** yönetici bir turu bitirince, bekleyen ACK'sız sinyal VARSA
+  additionalContext ile yüzeye çıkarır (turu bloklamaz). ⚠️ **üye-backstop:** üye yumuşak-kapıda `--waiting`
+  emit etmeyi unutsa bile Stop-hook pane-imini tespit edip yönetici'ye OTOMATİK waiting atar (sessiz-kapıda-bekleme fix'i).
+- **`ekip-durum.sh --porcelain` + `/durum`:** yönetici/Sultan tek-bakışta "kim çalışıyor · kim boşta · kim gizlice
+  yön-bekliyor" görür; `/durum` skill ham-jargonu Sultan-diline çevirir.
+- **`meta.yonetici` ZORUNLU:** `--done`/`--waiting`/`--nudge` hedefi budur. Boşsa scriptler İLK-üyeyi varsayar +
+  stderr uyarı basar (yönetici-hardcode YOK — her ekibe taşınabilir).
+
+## CONTEXT-NUDGE (öz-yönetimli compact · `ekip-hooks/ctx-nudge.sh`)
+PostToolUse-hook context-doluluğunu izler: ERKEN-tier (~%65-80) sessizce "resume-anchor'ını diske yaz + devam"
+(bloke-soru AÇMAZ → koordinasyon-akışını bölmez); DANGER-tier (≥%80) TEMİZ faz-sınırında Sultan'a compact-önerir.
+Pencere model-farkındadır (1M/500k/200k). **Öz-servis-compact opsiyonel:** projede `scripts/ekip-selfcompact.sh`
+VARSA DANGER-mesajı onu önerir; YOKSA jenerik "/compact öner" fallback'ine düşer (bu paket selfcompact'i İÇERMEZ).
 
 ## Akış (`/ekip-kur` çağrılınca) — RÖPORTAJ-MODU
 **Amaç:** Sultan tek `/ekip-kur` yazınca skill onu RÖPORTAJ eder, gelenek-uyumlu isimler önerir, onaylatır ve
@@ -93,8 +116,10 @@ Sabit dosyaları (notify.sh + self-recognition.sh + brief + 3 skill + checklist 
 ### 5. Registry'yi GERÇEK-roster'la doldur
 `_agents/handoff/ekip-registry.yaml`'deki örnek `UYE1/UYE2`'yi SİL, röportaj-roster'ını yaz. `meta.ekip` · `meta.uye_sayisi` · `meta.guncelleme` doldur. **Sır-değer ASLA** (yalnız tmux/rol/kanal).
 
-### 6. Self-recognition hook'u wire et
-`_agents/handoff/EKIP-settings-hook-snippet.json` → `.claude/settings.json` `hooks.SessionStart`'a MERGE (matcher `startup|clear|compact`; mevcut hook'ları SİLME — cortex-session-start vb. korunur = tamamlayıcı).
+### 6. Hook'ları wire et (3-tip)
+`_agents/handoff/EKIP-settings-hook-snippet.json` → `.claude/settings.json` `hooks`'a MERGE — 3 tip: **SessionStart**
+(kimlik, matcher `"*"`) · **Stop** (`ekip-durum.sh --nudge`) · **PostToolUse** (`ekip-hooks/ctx-nudge.sh`, matcher `"*"`).
+⚠️ matcher REGEX DEĞİL exact-string. Mevcut hook'ları SİLME — cortex-session-start vb. korunur = tamamlayıcı.
 
 ### 7. Go-live / duman-testi
 `EKIP-GO-LIVE-CHECKLIST.md`'i Sultan'a sun. Duman-testi (3-adım-Enter + self-recognition) tmux gerektirir →

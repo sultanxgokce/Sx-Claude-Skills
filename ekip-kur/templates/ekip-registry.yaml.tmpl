@@ -1,5 +1,5 @@
 # ekip-registry.yaml — çok-ajan ekip koordinasyon sinir-sistemi TEK-KAYNAĞI
-# ekip-kur master-skill'i tarafından scaffold edildi. Kaynak-desen: Nexus aile-registry.yaml.
+# ekip-kur master-skill'i tarafından scaffold edildi. Kaynak-desen: canlı-kanıtlanmış ekip koordinasyon-sistemi.
 #
 # NE: ekibin üyelerini {tmux-hedef · mod · rol · kanallar · inbox} olarak tanımlar.
 #     scripts/ekip-notify.sh + 3 skill (/ekip-brief-ver · /ekip-brief-iste · /ajan-gorev) bunu okur.
@@ -17,7 +17,10 @@
 meta:
   ekip: "<EKİP-ADI>"                 # ör: "MMEx-ekibi", "proje-X ekibi"
   uye_sayisi: 2                      # bilgi-amaçlı (script dinamik sayar); doldurunca güncelle
+  yonetici: <YÖNETİCİ-ID>            # ⚠️ ZORUNLU: --done/--waiting/--nudge hedefi (üyelerden birinin id'si).
+                                     #    Boş bırakılırsa scriptler İLK-listelenen üyeyi yönetici varsayar + stderr uyarı basar.
   yayin_kanali: _agents/handoff/ekip-brief.md
+  sinyal_defteri: _agents/handoff/ekip-sinyal.log   # ekip-notify.sh append-only sinyal-defteri (iki-yön koordinasyon; oto-oluşur)
   tetik_scripti: scripts/ekip-notify.sh
   guncelleme: "<YYYY-MM-DD>"
 

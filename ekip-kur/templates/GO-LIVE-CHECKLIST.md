@@ -20,8 +20,28 @@
 - [ ] Kapalı-oturum dürüstlüğü: olmayan üye için `eksik_oturum` say + exit 1 doğru mu?
 
 ## 4. Tetik-skilleri
-- [ ] `/ekip-brief-ver`, `/ekip-brief-iste`, `/ajan-gorev` `.claude/skills/` altında görünüyor (USER-ONLY — `disable-model-invocation: true`).
+- [ ] `/ekip-brief-ver`, `/ekip-brief-iste`, `/ajan-gorev`, `/durum` `.claude/skills/` altında görünüyor (USER-ONLY — `disable-model-invocation: true`).
 - [ ] `/ekip-brief-ver "test brief"` → `ekip-brief.md`'ye BRİF-bloğu düştü + ping gitti.
+
+## 4b. İKİ-YÖN DÖNGÜ — sinyal-defteri + --done/--waiting + --nudge (≥2 tmux-oturum)
+Klasik ping tek-yönlü (yönetici→üye). Bu döngü PULL→PUSH'u kapatır: üye→yönetici sinyal + yönetici Stop-hook nudge.
+- [ ] **meta.yonetici doğru mu:** `ekip-registry.yaml` `meta.yonetici` gerçek yönetici-id (üyelerden biri). Boşsa scriptler
+      İLK-üyeyi varsayar + stderr uyarı basar (test et: geçici sil → `ekip-durum.sh` çalıştır → "⚠️ meta.yonetici tanımsız → ilk-üye … varsayıldı" gördün mü?).
+- [ ] **--done akışı:** bir üye-oturumdan `bash scripts/ekip-notify.sh --done "duman: iş bitti"` → `ekip-sinyal.log`'a
+      satır düştü mü (`grep done _agents/handoff/ekip-sinyal.log`) + yöneticiye ping gitti mi? (yönetici meşgulse exit 3 = sinyal-defterde, normal.)
+- [ ] **--waiting akışı:** `bash scripts/ekip-notify.sh --waiting "duman: yön bekliyorum"` → sinyal-defterine `waiting` satırı.
+- [ ] **radar:** yönetici-oturumdan `bash scripts/ekip-durum.sh` → bekleyen üye ⏳ BEKLİYOR bölümünde neden+son-KONUM ile görünüyor mu?
+- [ ] **--ack:** yönetici `bash scripts/ekip-notify.sh --ack <SID>` → sonraki `ekip-durum.sh`'de o sinyal düştü mü (ACK'sız-sayı azaldı)?
+- [ ] **--nudge (Stop-hook):** yönetici-oturumda Stop-hook devrede + bekleyen sinyal varsa turu bitirince "📟 N bekleyen ekip-sinyali" additionalContext bastı mı? (üye-oturumda yumuşak-kapı-backstop çalışır.)
+
+## 4c. DURUM-SKİLL duman-testi (Sultan-dili)
+- [ ] `bash scripts/ekip-durum.sh --porcelain` → her satır 6-alan TAB (`ID⇥oturum⇥sınıf⇥sinyal⇥neden⇥son-KONUM`) + son satır `#OZET⇥calisan=…`. Ham `idle`/emoji SIZMIYOR (sınıf: calisir/serbest/bekliyor/…).
+- [ ] `/durum` → Sultan-dili 3-bölüm (çalışanlar · boşta · seni-bekliyorlar) + tek-cümle özet. Jargon/SID/hash/dosya-yolu Sultan'a GÖRÜNMÜYOR.
+
+## 4d. CONTEXT-NUDGE eşik-doktrini (`ekip-hooks/ctx-nudge.sh`)
+- [ ] PostToolUse-hook wire edildi (matcher `"*"`). ERKEN-tier (~%65-80) BLOKE-SORU AÇMAZ (yalnız anchor-yaz+devam) — koordinasyon-akışını bölmez.
+- [ ] DANGER-tier (≥%80) yalnız TEMİZ faz-sınırında compact-önerir. Pencere TAHMİNDİR → nudge `/context ile doğrula` der.
+- [ ] **Öz-servis-compact opsiyonel:** `scripts/ekip-selfcompact.sh` bu pakette YOK → DANGER-mesajı jenerik "/compact öner" fallback'i basar. selfcompact sonradan eklenirse hook otomatik onu önerir (kod-değişikliği gerekmez).
 
 ## 5. İZOLE-KONTEYNER NOTU (varsa)
 - [ ] Dosyalar **başka bir konteynerden** yazıldıysa: bu dosyalar hedef-konteynerde görünüyor mu? (mount/senkron topolojisi — VARSAYMA, `ls` ile teyit et).
