@@ -1,6 +1,6 @@
 {
-  "version": "2.0",
-  "updated": "2026-07-07",
+  "version": "2.1",
+  "updated": "2026-07-08",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -15,20 +15,48 @@
       "version": "1.0.0",
       "description": "Yaşayan kişisel AI hafıza sistemi — bi-temporal knowledge graph (Graphiti pattern), project namespace, embedding versioning. Cortex v1'in (Sultan/Nexus) parametrik kopyası. Yeni projelere /memex init ile kurulur.",
       "prerequisites": {
-        "backend": ["PostgreSQL 14+", "Prisma 6 (Next.js) veya SQLModel (FastAPI)"],
-        "frontend": ["React 19 (opsiyonel)", "Tailwind CSS v4 (opsiyonel)"],
-        "ai": ["Anthropic / OpenAI / OpenRouter (provider seçilebilir)"]
+        "backend": [
+          "PostgreSQL 14+",
+          "Prisma 6 (Next.js) veya SQLModel (FastAPI)"
+        ],
+        "frontend": [
+          "React 19 (opsiyonel)",
+          "Tailwind CSS v4 (opsiyonel)"
+        ],
+        "ai": [
+          "Anthropic / OpenAI / OpenRouter (provider seçilebilir)"
+        ]
       },
-      "tags": ["memory", "ai", "knowledge-graph", "bi-temporal", "second-brain", "cortex", "memex", "graphiti"],
-      "stacks": ["nextjs+prisma", "fastapi+sqlmodel"],
+      "tags": [
+        "memory",
+        "ai",
+        "knowledge-graph",
+        "bi-temporal",
+        "second-brain",
+        "cortex",
+        "memex",
+        "graphiti"
+      ],
+      "stacks": [
+        "nextjs+prisma",
+        "fastapi+sqlmodel"
+      ],
       "author": "sultanxgokce",
       "source": "https://github.com/sultanxgokce/Nexus (Cortex v1 — bu paketin asıl prototipi)",
-      "based_on": ["Mem0", "Letta (MemGPT)", "Zep / Graphiti", "Cognee", "Vannevar Bush 1945 Memex"],
+      "based_on": [
+        "Mem0",
+        "Letta (MemGPT)",
+        "Zep / Graphiti",
+        "Cognee",
+        "Vannevar Bush 1945 Memex"
+      ],
       "install_time": "~30dk (yeni proje), ~2sa (mevcut Cortex upgrade)",
       "status": "v1.0-mvp",
       "path": "memex/SKILL.md",
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": ["Nexus (Cortex)"]
+      "installed_in": [
+        "Nexus (Cortex)"
+      ]
     },
     {
       "id": "feedback-widget",
@@ -37,18 +65,38 @@
       "version": "1.0.0",
       "description": "In-app feedback widget — floating button, screenshot capture, canvas annotation, multi-image, reply threads. FastAPI + Next.js için tam kurulum.",
       "prerequisites": {
-        "backend": ["FastAPI", "SQLModel", "PostgreSQL"],
-        "frontend": ["Next.js App Router", "React 19", "Tailwind CSS v4", "lucide-react"]
+        "backend": [
+          "FastAPI",
+          "SQLModel",
+          "PostgreSQL"
+        ],
+        "frontend": [
+          "Next.js App Router",
+          "React 19",
+          "Tailwind CSS v4",
+          "lucide-react"
+        ]
       },
-      "tags": ["feedback", "widget", "screenshot", "annotation", "fastapi", "nextjs"],
-      "stacks": ["fastapi+nextjs"],
+      "tags": [
+        "feedback",
+        "widget",
+        "screenshot",
+        "annotation",
+        "fastapi",
+        "nextjs"
+      ],
+      "stacks": [
+        "fastapi+nextjs"
+      ],
       "author": "sultanxgokce",
       "source": "https://github.com/sultanxgokce/MMEpanel",
       "install_time": "~2h",
       "status": "stable",
       "path": "feedback-widget/SKILL.md",
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": ["MMEpanel"]
+      "installed_in": [
+        "MMEpanel"
+      ]
     },
     {
       "id": "ai-engineering-kit",
@@ -57,15 +105,24 @@
       "version": "1.1.0",
       "description": "Claude ajan altyapısı — /ai-upgrade (repo kataloğu, araç yönetimi) + /ai-metodoloji (çalışma kalitesi denetimi) + /ai-kesfet (GitHub/web tarama, katalog büyütme). Stack bağımsız, her projede çalışır.",
       "prerequisites": {},
-      "tags": ["ai-agent", "methodology", "slash-commands", "skills"],
-      "stacks": ["*"],
+      "tags": [
+        "ai-agent",
+        "methodology",
+        "slash-commands",
+        "skills"
+      ],
+      "stacks": [
+        "*"
+      ],
       "author": "sultanxgokce",
       "source": "https://github.com/sultanxgokce/MMEpanel",
       "install_time": "~2min",
       "status": "stable",
       "path": "ai-engineering-kit/SKILL.md",
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": ["MMEpanel"]
+      "installed_in": [
+        "MMEpanel"
+      ]
     },
     {
       "id": "skill-packager",
@@ -74,15 +131,24 @@
       "version": "1.0.0",
       "description": "Mevcut bir modülü Sx-Claude-Skills formatında paketler: SKILL.md, templates/, catalog.json güncellemesi, GitHub push ve Nexus kaydı.",
       "prerequisites": {},
-      "tags": ["packaging", "skill-creator", "sx-claude-skills", "nexus"],
-      "stacks": ["*"],
+      "tags": [
+        "packaging",
+        "skill-creator",
+        "sx-claude-skills",
+        "nexus"
+      ],
+      "stacks": [
+        "*"
+      ],
       "author": "sultanxgokce",
       "source": "https://github.com/sultanxgokce/MMEpanel",
       "install_time": "~2min",
       "status": "stable",
       "path": "skill-packager/SKILL.md",
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": ["MMEpanel"]
+      "installed_in": [
+        "MMEpanel"
+      ]
     },
     {
       "id": "inplace-chat",
@@ -91,17 +157,35 @@
       "version": "1.0.0",
       "description": "Sayfa değiştirmeden anasayfada chat açan animasyonlu sistem. history.pushState + useState ile welcome→2-kolon geçişi. Masaüstü yatay split, mobil dikey flex split. Front-end-design kuralları zorunlu.",
       "prerequisites": {
-        "frontend": ["Next.js 14+ App Router", "React 18+", "Tailwind CSS v3+"]
+        "frontend": [
+          "Next.js 14+ App Router",
+          "React 18+",
+          "Tailwind CSS v3+"
+        ]
       },
-      "tags": ["chat", "inline", "animation", "split-layout", "url-sync", "mobile-split", "nextjs", "frontend-design"],
-      "stacks": ["nextjs"],
+      "tags": [
+        "chat",
+        "inline",
+        "animation",
+        "split-layout",
+        "url-sync",
+        "mobile-split",
+        "nextjs",
+        "frontend-design"
+      ],
+      "stacks": [
+        "nextjs"
+      ],
       "author": "sultanxgokce",
       "source": "Vekâtip (HomeWelcome.tsx) + Nexus ChatHub",
       "install_time": "~1h",
       "status": "stable",
       "path": "inplace-chat/SKILL.md",
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": ["Vekatip", "Nexus"],
+      "installed_in": [
+        "Vekatip",
+        "Nexus"
+      ],
       "design_system": "front-end-design skill zorunlu — animasyon + layout prensipleri SKILL.md içinde"
     },
     {
@@ -112,11 +196,32 @@
       "description": "YouTube videosunu okunabilir dokümana dönüştürür. Altyazı varsa direkt çeker, yoksa Whisper ile transkripsiyon yapar. Claude (OpenRouter) ile formatlar, PDF veya Word olarak kaydeder.",
       "prerequisites": {
         "python": ">=3.9",
-        "packages": ["youtube-transcript-api", "yt-dlp", "openai-whisper", "python-docx", "fpdf2", "httpx"],
-        "system": ["ffmpeg (Whisper fallback için)"]
+        "packages": [
+          "youtube-transcript-api",
+          "yt-dlp",
+          "openai-whisper",
+          "python-docx",
+          "fpdf2",
+          "httpx"
+        ],
+        "system": [
+          "ffmpeg (Whisper fallback için)"
+        ]
       },
-      "tags": ["youtube", "transcript", "whisper", "pdf", "word", "docx", "openrouter", "ai", "eğitim"],
-      "stacks": ["*"],
+      "tags": [
+        "youtube",
+        "transcript",
+        "whisper",
+        "pdf",
+        "word",
+        "docx",
+        "openrouter",
+        "ai",
+        "eğitim"
+      ],
+      "stacks": [
+        "*"
+      ],
       "author": "sultanxgokce",
       "install_time": "~5min",
       "status": "stable",
@@ -136,17 +241,32 @@
       "description": "Bir Baileys WhatsApp botunu telefona GÜVENİLİR bağlama playbook'u: bayat-sürüm bug'ı (#2679 → fetchLatestWaWebVersion), auth-churn throttle (#2691), 515-normal, QR-first, CloudBridge rotation-proof QR relay, bağlantı-sonrası daemon devri. Stack bağımsız — Baileys kullanan her projede geçerli.",
       "prerequisites": {
         "node": ">=18",
-        "packages": ["@whiskeysockets/baileys@7.0.0-rc13"]
+        "packages": [
+          "@whiskeysockets/baileys@7.0.0-rc13"
+        ]
       },
-      "tags": ["whatsapp", "baileys", "pairing", "qr", "bot", "throttle", "cloudbridge", "dev-infra"],
-      "stacks": ["*"],
+      "tags": [
+        "whatsapp",
+        "baileys",
+        "pairing",
+        "qr",
+        "bot",
+        "throttle",
+        "cloudbridge",
+        "dev-infra"
+      ],
+      "stacks": [
+        "*"
+      ],
       "author": "sultanxgokce",
       "source": "https://github.com/sultanxgokce/vekatip (server/src/whatsapp/* + scripts/wa-login.ts, 6 Tem 2026 ilk başarılı pairing)",
       "install_time": "~5min (adaptasyon)",
       "status": "stable",
       "path": "whatsapp-baileys/SKILL.md",
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": ["_global (tüm bulut projeleri)"]
+      "installed_in": [
+        "_global (tüm bulut projeleri)"
+      ]
     },
     {
       "id": "cloudflare-erisim",
@@ -155,17 +275,34 @@
       "version": "1.0.0",
       "description": "Cloudflare işlerini (Access self-hosted app + policy, proxied DNS/tünel rotası, subdomain'i giriş-kapısı arkasına alma) dashboard'a girmeden saf API (curl+jq) ile yapar. Kimlik yoksa bir-kerelik gizli Global API Key ister, kendi dar-yetkili token üretir (POST /user/tokens), cortex-access.env'e (600) kaydeder, sonra asıl işi yapar. User-token vs account-token (cfat_) doğrulama ayrımını otomatik yapar. İdempotent + sır-hijyenik.",
       "prerequisites": {
-        "system": ["curl", "jq"]
+        "system": [
+          "curl",
+          "jq"
+        ]
       },
-      "tags": ["cloudflare", "access", "dns", "tunnel", "kimlik", "erisim", "token", "zero-trust", "platform-access"],
-      "stacks": ["*"],
+      "tags": [
+        "cloudflare",
+        "access",
+        "dns",
+        "tunnel",
+        "kimlik",
+        "erisim",
+        "token",
+        "zero-trust",
+        "platform-access"
+      ],
+      "stacks": [
+        "*"
+      ],
       "author": "sultanxgokce",
       "source": "https://github.com/sultanxgokce/cloudtop (infra/cloudflare/ — mmex.mmepanel.com onboard'unda canlı doğrulandı, 6 Tem 2026)",
       "install_time": "~2min",
       "status": "stable",
       "path": "cloudflare-erisim/SKILL.md",
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": ["_global (tüm bulut projeleri)"],
+      "installed_in": [
+        "_global (tüm bulut projeleri)"
+      ],
       "family": "platform-erisim (erisim-skill-fabrikasi ile üretilen kalıbın referans implementasyonu)"
     },
     {
@@ -175,17 +312,35 @@
       "version": "1.0.0",
       "description": "Railway işlerini (proje/servis listesi, bir servisin DATABASE_URL'i, değişken sorgusu, deploy durumu, ham GraphQL) dashboard'a girmeden saf API (curl+jq, backboard.railway.com/graphql/v2) ile yapar. Kimlik yoksa bir-kerelik gizli token ister (Railway token programatik ÜRETİLEMEZ → dashboard-only), cortex-access.env'e (600) kaydeder. doctor 'me' (account) → 'projects' (workspace) ile kapsamı otomatik ayırt eder; pg-url DATABASE_URL'i env'e YAZAR (stdout'a basmaz); railway variables --set YASAK (argv sızıntısı). İdempotent + sır-hijyenik.",
       "prerequisites": {
-        "system": ["curl", "jq"]
+        "system": [
+          "curl",
+          "jq"
+        ]
       },
-      "tags": ["railway", "erisim", "platform-access", "token", "database", "graphql", "deploy", "secret-hygiene"],
-      "stacks": ["*"],
+      "tags": [
+        "railway",
+        "erisim",
+        "platform-access",
+        "token",
+        "database",
+        "graphql",
+        "deploy",
+        "secret-hygiene"
+      ],
+      "stacks": [
+        "*"
+      ],
       "author": "sultanxgokce",
       "source": "https://github.com/sultanxgokce/cloudtop (erisim-skill-fabrikasi railway reçetesi — cloudtop-vekatip izole konteynerde 14 proje canlı okundu, 7 Tem 2026)",
       "install_time": "~2min",
       "status": "stable",
       "path": "railway-erisim/SKILL.md",
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": ["_global (tüm bulut projeleri — 5 konteyner ortak /config/.claude)", "Nexus", "cortex"],
+      "installed_in": [
+        "_global (tüm bulut projeleri — 5 konteyner ortak /config/.claude)",
+        "Nexus",
+        "cortex"
+      ],
       "family": "platform-erisim (erisim-skill-fabrikasi ile cloudflare-erisim şablonundan üretildi)"
     },
     {
@@ -195,17 +350,33 @@
       "version": "1.0.0",
       "description": "Meta-skill: bir platform seç (Railway/GitHub/Google/Vercel/AWS/Hetzner…) → ortamı hazırla → bir-kerelik gizli giriş al → dar-yetkili token'ı üret/kaydet → o platform için tam bir <platform>-erisim skill'ini (cloudflare-erisim'i şablon + auth-reçetesini kullanarak) Sx-Claude-Skills'e scaffold et → dağıt. Platform-erişim angaryasını bir kez damıtıp otomatik üretir. recipes/ adversaryal-doğrulanmış auth bilgi tabanı.",
       "prerequisites": {
-        "system": ["bash", "curl", "jq"]
+        "system": [
+          "bash",
+          "curl",
+          "jq"
+        ]
       },
-      "tags": ["meta-skill", "erisim", "platform-access", "token", "scaffold", "skill-uretici", "secret-hygiene"],
-      "stacks": ["*"],
+      "tags": [
+        "meta-skill",
+        "erisim",
+        "platform-access",
+        "token",
+        "scaffold",
+        "skill-uretici",
+        "secret-hygiene"
+      ],
+      "stacks": [
+        "*"
+      ],
       "author": "sultanxgokce",
       "source": "https://github.com/sultanxgokce/Sx-Claude-Skills (cloudflare-erisim referans implementasyonundan damıtıldı, 6 Tem 2026)",
       "install_time": "~5min/platform",
       "status": "stable",
       "path": "erisim-skill-fabrikasi/SKILL.md",
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": ["_global (tüm bulut projeleri)"],
+      "installed_in": [
+        "_global (tüm bulut projeleri)"
+      ],
       "family": "meta (platform-erisim skill üreticisi — cloudflare-erisim onun referans çıktısı)"
     },
     {
@@ -214,9 +385,28 @@
       "name": "Ekip-Kur — çok-ajan koordinasyon substratı",
       "version": "1.3.0",
       "description": "Bir projeye çok-ajan koordinasyon-sistemi scaffold'lar: tmux-tetik primitifi (ekip-notify.sh, 4 kritik-fix baked-in: 3-adım-ayrı-Enter · self-loop-guard · has-session-dürüst-warn · python3-parse) + tek-kaynak roster (ekip-registry.yaml) + broadcast kanalı (ekip-brief.md) + 3 USER-ONLY tetik-skill (/ekip-brief-ver · /ekip-brief-iste · /ajan-gorev) + SessionStart self-recognition hook (clear/compact-sonrası registry-tabanlı kimlik-re-bootstrap; eşleşme-yoksa sessiz=regresyon-yok) + go-live duman-testi checklist. Roster parametrik, fix'ler şablonda sabit.",
-      "prerequisites": { "system": ["bash", "tmux", "python3"] },
-      "tags": ["koordinasyon", "ekip", "multi-agent", "tmux", "orchestration", "scaffold", "skill-uretici", "self-recognition", "session-hook", "roportaj"],
-      "stacks": ["*"],
+      "prerequisites": {
+        "system": [
+          "bash",
+          "tmux",
+          "python3"
+        ]
+      },
+      "tags": [
+        "koordinasyon",
+        "ekip",
+        "multi-agent",
+        "tmux",
+        "orchestration",
+        "scaffold",
+        "skill-uretici",
+        "self-recognition",
+        "session-hook",
+        "roportaj"
+      ],
+      "stacks": [
+        "*"
+      ],
       "author": "sultanxgokce",
       "source": "https://github.com/sultanxgokce/Nexus (SERDAR-ailesi aile-notify.sh koordinasyon-sistemi — 6 Tem 2026 canlı-doğrulanmış 3-adım-ayrı-Enter fix'i)",
       "install_time": "~5min (scaffold + roster doldur)",
@@ -259,6 +449,78 @@
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
       "installed_in": [],
       "family": "workflow (PR-yaşamdöngüsü; /agent-dashboard:pr sarmalayıcısı)"
+    },
+    {
+      "id": "sert-teslim",
+      "type": "agent",
+      "name": "Sert-Teslim — gereklilik-matrisli teslim-motoru",
+      "version": "0.2.1",
+      "description": "Gereklilik-matrisli, gaming-dirençli TESLİM-MOTORU: iş-sahibi talimatı verbatim→C-ID→M-satır; durum=türetilmiş-veri (durum_uret tek-yazar); kırmızı-kanıt+komut_sha256-kilidi; §1.5 sayaç-baseline (filtreli-koşum hash-kilitli); A1-A4 kadans + 6-koşul teslim-gate. Proje-agnostik MOTOR (config per-proje tooling/teslim/).",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "node"
+        ]
+      },
+      "tags": [
+        "teslim",
+        "dogrulama-motoru",
+        "gereklilik-matrisi",
+        "gaming-direnc",
+        "adversarial",
+        "iki-vites",
+        "portable"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "MMEx test-tooling (SADIK üretti, SİNAN 3-ajan-adversarial+mutasyon doğruladı, 8 Tem 2026; izole-konteynerden cloudtop-code'a devir)",
+      "install_time": "~2min",
+      "status": "v0.2-faz1",
+      "path": "sert-teslim/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global (tüm bulut projeleri — 5 konteyner ortak /config/.claude)"
+      ],
+      "family": "test-tooling (gereklilik-matrisli anti-false-green teslim-motoru)"
+    },
+    {
+      "id": "kesif",
+      "type": "agent",
+      "name": "Keşif — canlı-panel E2E kandırılamaz test (Playwright)",
+      "version": "0.2.0",
+      "description": "Canlı web-panel/SPA'yı root-suz Playwright ile insan-gibi çok-senaryo test eder; DOM↔API çapraz-kanıtla panel-yalanını (yanlış-renk/bayat-yeşil) saf-kodla yakalar; ULTIMATE-dogfood ile sahte-yeşil enjekte edip senaryoların gerçek-test-ettiğini kanıtlar. Config-driven (endpoint/selector/allowlist/senaryolar proje-config); origin-EXACT allowlist güvenlik-omurgası.",
+      "prerequisites": {
+        "system": [
+          "node>=18",
+          "micromamba (Chromium bootstrap, root-suz)"
+        ]
+      },
+      "tags": [
+        "test",
+        "kesif",
+        "e2e",
+        "playwright",
+        "dom-api-caprazi",
+        "false-green",
+        "enjeksiyon",
+        "portable",
+        "config-driven"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "MMEx test-tooling (SADIK üretti, SİNAN 3-ajan-adversarial+mutasyon doğruladı, 8 Tem 2026; izole-konteynerden cloudtop-code'a devir)",
+      "install_time": "~5min (+Chromium bootstrap ilk-kez)",
+      "status": "v0.2-faz2",
+      "path": "kesif/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global (tüm bulut projeleri — 5 konteyner ortak /config/.claude)"
+      ],
+      "family": "test-tooling (canlı-panel E2E false-green yakalayıcı)"
     }
   ]
 }

@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>generic-fixture-panel</title></head>
+<body>
+  <!-- MMEx-DIŞI minimal panel: generic-core'un endpoint/selector-BİLMEZ olduğunu kanıtlar.
+       Farklı data-testid + farklı API-ucu (/fixture/data) — config-swap ile aynı generic-runner koşar. -->
+  <h1>Generic Fixture Panel</h1>
+  <div id="root">yükleniyor…</div>
+  <script>
+    // Panelin tükettiği uç MMEx'ten FARKLI (/fixture/data). Runner bunu senaryo-config'ten öğrenir.
+    fetch('/fixture/data').then(r => r.json()).then(d => {
+      const el = document.createElement('div');
+      el.setAttribute('data-testid', 'widget');
+      el.setAttribute('data-value', String(d.value));
+      el.textContent = 'değer: ' + d.value;
+      document.getElementById('root').replaceChildren(el);
+    });
+  </script>
+</body></html>

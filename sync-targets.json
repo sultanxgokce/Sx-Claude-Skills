@@ -9,11 +9,35 @@
     "mmex": "/config/projects/MMEx/.claude/skills"
   },
   "install": {
-    "whatsapp-baileys": ["_global"],
-    "cloudflare-erisim": ["_global", "nexus", "cortex"],
-    "railway-erisim": ["_global", "nexus", "cortex"],
-    "erisim-skill-fabrikasi": ["_global", "nexus", "cortex"],
-    "ekip-kur": ["_global"],
-    "pr-onay": ["_global"]
+    "whatsapp-baileys": [
+      "_global"
+    ],
+    "cloudflare-erisim": [
+      "_global",
+      "nexus",
+      "cortex"
+    ],
+    "railway-erisim": [
+      "_global",
+      "nexus",
+      "cortex"
+    ],
+    "erisim-skill-fabrikasi": [
+      "_global",
+      "nexus",
+      "cortex"
+    ],
+    "ekip-kur": [
+      "_global"
+    ],
+    "pr-onay": [
+      "_global"
+    ],
+    "sert-teslim": [
+      "_global"
+    ],
+    "kesif": [
+      "_global"
+    ]
   }
 }
