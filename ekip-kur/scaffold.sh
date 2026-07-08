@@ -38,6 +38,8 @@ put "$TMPL/ekip-preflight.lib.sh"   "$TARGET/scripts/ekip-preflight.lib.sh"
 chmod +x "$TARGET/scripts/ekip-preflight.lib.sh" 2>/dev/null || true
 put "$TMPL/ekip-durum.sh"           "$TARGET/scripts/ekip-durum.sh"
 chmod +x "$TARGET/scripts/ekip-durum.sh" 2>/dev/null || true
+put "$TMPL/ekip-ac.sh"              "$TARGET/scripts/ekip-ac.sh"
+chmod +x "$TARGET/scripts/ekip-ac.sh" 2>/dev/null || true
 put "$TMPL/ekip-self-recognition.sh" "$TARGET/scripts/ekip-self-recognition.sh"
 chmod +x "$TARGET/scripts/ekip-self-recognition.sh" 2>/dev/null || true
 put "$TMPL/ekip-hooks/ctx-nudge.sh" "$TARGET/scripts/ekip-hooks/ctx-nudge.sh"
@@ -68,6 +70,9 @@ echo "     (mevcut hook'ları SİLME; cortex-session-start vb. genelde settings.
 echo "  3. _agents/handoff/EKIP-GO-LIVE-CHECKLIST.md duman-testini KOŞ (hedef-ortamda, ≥2 tmux-oturum)."
 echo "     Ekstra: /durum → Sultan-dili özet · ekip-durum.sh --porcelain 6-alan-TAB basıyor mu?"
 echo "  4. Tetik-skiller USER-ONLY: /ekip-brief-ver · /ekip-brief-iste · /ajan-gorev · /durum"
+echo "  6. SEKME-KURTARMA: sekmeler/terminaller kapanınca üye-tmux'ları arka planda CANLI kalır →"
+echo "     YENİ terminalde 'bash scripts/ekip-ac.sh' (ya da 'ekip' alias) TEK-KOMUTLA hepsini paylaşımlı-pencere"
+echo "     olarak geri-getirir (Ctrl-b w = üye-seç). Üye-oturumu YARATMAZ/ÖLDÜRMEZ — yalnız link-window."
 echo "  5. ÖZ-SERVİS COMPACT (otomatik-kablolu): ctx-nudge zaten scripts/ekip-selfcompact.sh'i tespit edip"
 echo "     EKIP_SELFCOMPACT_PATH set eder → DANGER-eşiğinde ajan AskUserQuestion sorup 'bash scripts/ekip-selfcompact.sh --self'"
 echo "     koşar (detached watcher: idle→/compact→re-bootstrap-marker). Canlı-test = EKIP-GO-LIVE-CHECKLIST öz-servis-compact maddesi."

@@ -14,11 +14,12 @@ LIB="$SCRIPT_DIR/ekip-preflight.lib.sh"
 
 WATCH=0; MODE=tablo
 case "${1:-}" in
-  --watch) WATCH="${2:-5}"; [[ "$WATCH" =~ ^[0-9]+$ ]] || { echo "usage: ekip-durum.sh [--watch N|--nudge|--porcelain]" >&2; exit 2; } ;;
-  --nudge) MODE=nudge ;;   # yönetici Stop-hook PULL→PUSH — bekleyen ACK'sız sinyali idle-anında yüzeye çıkar
+  --watch) WATCH="${2:-5}"; [[ "$WATCH" =~ ^[0-9]+$ ]] || { echo "usage: ekip-durum.sh [--watch N|--nudge|--nudge-poll|--porcelain]" >&2; exit 2; } ;;
+  --nudge) MODE=nudge ;;   # yönetici Stop-hook PULL→PUSH — bekleyen ACK'sız sinyali tur-sonu yüzeye çıkar (üye-backstop dahil)
+  --nudge-poll) MODE=nudge-poll ;;   # F1 (flow-gap): PostToolUse pasif tur-içi nudge — uzun-tur körlüğü; yalnız-yönetici + rate-limited, üye-backstop ATLA
   --porcelain) MODE=porcelain ;;   # durum-skill: makine-okunur çıkış (/durum skill bunu tüketir → Sultan-dili çevirir)
   "") : ;;
-  *) echo "usage: ekip-durum.sh [--watch N|--nudge|--porcelain]" >&2; exit 2 ;;
+  *) echo "usage: ekip-durum.sh [--watch N|--nudge|--nudge-poll|--porcelain]" >&2; exit 2 ;;
 esac
 [ -f "$REGISTRY" ] || { echo "HATA: registry yok: $REGISTRY" >&2; exit 3; }
 
@@ -147,12 +148,16 @@ tek_tur() {
   return 0
 }
 
-# ── nudge modu (yönetici Stop-hook PULL→PUSH) ───────────────────────────────
+# ── nudge modu (yönetici PULL→PUSH · Stop tur-sonu + PostToolUse pasif tur-içi) ──────────────
 # Yalnız YÖNETİCİ (registry meta.yonetici) oturumunda + bekleyen ACK'sız sinyal VARSA
-# additionalContext JSON basar (Claude Code Stop-hook şeması; turu BLOKLAMAZ). Aksi=sessiz exit 0.
+# additionalContext JSON basar (Claude Code hook şeması; turu BLOKLAMAZ). Aksi=sessiz exit 0.
+# EVENT: Stop (tur-sonu, üye-backstop dahil) | PostToolUse (F1 pasif tur-içi, rate-limited, yalnız-yönetici).
 # Çağıran-kimlik: EKIP_NUDGE_SESSION env (test) > stdin session_id → cc-<id8> > tmux. Debounce=aynı-sinyal-seti iki-kez basılmaz.
+# ⚠️ PostToolUse wire'ında `</dev/null` ŞART: geçerli-session_id-JSON CALLER'ı cc-<id8> yapar → registry named-tmux'la
+#    EŞLEŞMEZ → yönetici tanınmaz → nudge ölür. `</dev/null` → stdin boş → tmux-adı fallback → yönetici tanınır (firsthand-kanıt).
 nudge_mode() {
-  local YONETICI CALLER CALLER_ID SID N REFS SUMM SIG CACHE
+  local EVENT="${1:-Stop}"   # F1: Stop (default) | PostToolUse (pasif tur-içi)
+  local YONETICI CALLER CALLER_ID SID N REFS SUMM SIG CACHE DN WN BN STAMP NOW LAST INTERVAL
   YONETICI="$(coz_yonetici)"
   # çağıran tmux-session adı
   CALLER="${EKIP_NUDGE_SESSION:-}"
@@ -167,9 +172,9 @@ except: print("")' 2>/dev/null || true)"
   # çağıran-session → registry üye-id (tmux session-parçası eşleşir)
   CALLER_ID="$(awk -F'\t' -v s="$CALLER" '{split($2,a,":"); if(a[1]==s){print $1; exit}}' <<< "$MEMBERS")"
   # akış-fix: ÜYE Stop-hook oto-backstop — üye yumuşak-kapıya gelip turu-bitirince (--waiting emit etmeyi
-  # unutursa) pane-imini tespit edip yönetici'ye OTOMATİK waiting-sinyali at. Üyenin sessiz-kapıda-bekleme
-  # başarısızlık-modunu kapatır. Sıfır-disiplin gerektirir.
-  if [ -n "$CALLER_ID" ] && [ "$CALLER_ID" != "$YONETICI" ]; then
+  # unutursa) pane-imini tespit edip yönetici'ye OTOMATİK waiting-sinyali at. F1: yalnız Stop (PostToolUse'da ATLA
+  # — her-tool-call'da --waiting-emit istenmez). Üyenin sessiz-kapıda-bekleme başarısızlık-modunu kapatır.
+  if [ "$EVENT" = "Stop" ] && [ -n "$CALLER_ID" ] && [ "$CALLER_ID" != "$YONETICI" ]; then
     local WRE TAIL SIG DBKEY
     WRE="${WAITING_RE:-devam mı|onay bekli|needs_serdar|dalga.?kapı|/compact öner|yön bekli|karar bekli|onay bekle|sende bekle|land bekli|soru.{0,6}bekli}"
     TAIL="$(tmux capture-pane -p 2>/dev/null | tail -15)"
@@ -185,30 +190,54 @@ except: print("")' 2>/dev/null || true)"
   fi
   [ "$CALLER_ID" = "$YONETICI" ] || exit 0   # yalnız yönetici nudge'lanır
   [ -f "$SINYAL_LOG" ] || exit 0
-  # global bekleyen (ACK'sız done/blocked/waiting, tüm üyeler): sayı + ref-listesi + özet
-  read -r N REFS SUMM < <(awk -F'|' '
-    $3 ~ /^(done|blocked|waiting)$/ { pend[$1]=$4"("$7")"; ref[$1]=$1 }
-    $3=="ack" { r=$7; sub(/^ref=/,"",r); delete pend[r]; delete ref[r] }
-    END { n=0; rr=""; ss=""; for (s in pend){ n++; rr=rr s ","; ss=ss pend[s]"; " } print n "\t" rr "\t" ss }' "$SINYAL_LOG") || true
+  # global bekleyen (ACK'sız done/waiting/blocked): F2 tip-başına sayı + öncelik-sıralı özet (done→waiting→blocked)
+  read -r N REFS DN WN BN SUMM < <(awk -F'|' '
+    $3 ~ /^(done|blocked|waiting)$/ { pend[$1]=$4"("$7")"; typ[$1]=$3; ref[$1]=$1 }
+    $3=="ack" { r=$7; sub(/^ref=/,"",r); delete pend[r]; delete typ[r]; delete ref[r] }
+    END {
+      n=0; dn=0; wn=0; bn=0; rr=""; sd=""; sw=""; sb="";
+      for (s in pend){
+        n++; rr=rr s ",";
+        if (typ[s]=="done") { dn++; sd=sd pend[s]"; " }
+        else if (typ[s]=="waiting") { wn++; sw=sw pend[s]"; " }
+        else { bn++; sb=sb pend[s]"; " }
+      }
+      print n "\t" rr "\t" dn "\t" wn "\t" bn "\t" sd sw sb   # F2: done→waiting→blocked öncelik-sırası
+    }' "$SINYAL_LOG") || true
   [ "${N:-0}" -gt 0 ] || exit 0   # bekleyen yok → sessiz
   # debounce: aynı sinyal-seti daha önce nudge'landıysa tekrar basma
   SIG="$(printf '%s' "$REFS" | tr ',' '\n' | sort | tr '\n' ',')"
+  # F1 rate-limit (yalnız PostToolUse): ardışık tool-call'larda emit'i seyrelt — Stop muaf; throttle'da stamp/cache YAZMA (sinyal sağ-kalsın)
+  if [ "$EVENT" = "PostToolUse" ]; then
+    INTERVAL="${FLOW_POLL_INTERVAL:-240}"
+    STAMP="${XDG_CACHE_HOME:-$HOME/.cache}/ekip-nudge-poll-stamp"
+    NOW="$(date +%s 2>/dev/null || echo 0)"; LAST="$(cat "$STAMP" 2>/dev/null || echo 0)"
+    [ $((NOW - LAST)) -ge "$INTERVAL" ] || exit 0
+  fi
   CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/ekip-nudged-sids"
   if [ -f "$CACHE" ] && [ "$(cat "$CACHE" 2>/dev/null)" = "$SIG" ]; then exit 0; fi
   mkdir -p "$(dirname "$CACHE")" 2>/dev/null || true
   printf '%s' "$SIG" > "$CACHE" 2>/dev/null || true
-  # additionalContext enjekte (Stop-hook; turu bloklamaz) — sır-yok, kısa
-  python3 - "$N" "$SUMM" <<'PY'
+  # emit ediyoruz → PostToolUse rate-limit stamp'ini ŞİMDİ güncelle (throttle-sonrası, sağ-kalım korunur)
+  if [ "$EVENT" = "PostToolUse" ]; then printf '%s' "${NOW:-0}" > "$STAMP" 2>/dev/null || true; fi
+  # additionalContext enjekte (Stop|PostToolUse; turu bloklamaz) — sır-yok, kısa; F2 tip-sayısı+öncelik
+  python3 - "$N" "$DN" "$WN" "$BN" "$EVENT" "$SUMM" <<'PY'
 import json,sys
-n=sys.argv[1]; summ=(sys.argv[2] or "").strip().rstrip(";").strip()
-msg=(f"📟 {n} bekleyen ekip-sinyali (ACK'sız): {summ}. "
+n,dn,wn,bn,event=sys.argv[1:6]; summ=(sys.argv[6] or "").strip().rstrip(";").strip()
+parts=[]
+if int(dn)>0: parts.append(f"✅{dn} görev-bitti")
+if int(wn)>0: parts.append(f"⏸️{wn} kapıda")
+if int(bn)>0: parts.append(f"\U0001f538{bn} engelli")
+head=" · ".join(parts) if parts else f"{n} sinyal"
+msg=(f"📟 {n} bekleyen ekip-sinyali ({head}). Öncelik: {summ}. "
      f"`bash scripts/ekip-durum.sh` ile bak, ilgili kanalları oku, iş bitince `ekip-notify.sh --ack <SID>`.")
-print(json.dumps({"hookSpecificOutput":{"hookEventName":"Stop","additionalContext":msg}}))
+print(json.dumps({"hookSpecificOutput":{"hookEventName":event,"additionalContext":msg}}))
 PY
   exit 0
 }
 
-if [ "$MODE" = nudge ]; then nudge_mode; exit 0; fi
+if [ "$MODE" = nudge ]; then nudge_mode "Stop"; exit 0; fi
+if [ "$MODE" = nudge-poll ]; then nudge_mode "PostToolUse"; exit 0; fi
 
 if [ "$WATCH" -gt 0 ]; then
   while true; do clear; date -Is; tek_tur || true; sleep "$WATCH"; done

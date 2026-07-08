@@ -1,7 +1,7 @@
 ---
 name: ekip-kur
 type: agent
-version: 1.3.0
+version: 1.4.0
 description: >
   Bir projeye çok-ajan KOORDİNASYON-SUBSTRATI kurar — RÖPORTAJ-MODU: tek /ekip-kur çağrısında kullanıcıyı
   röportaj eder (proje · roller · terminaller · modlar · tmux-casing), gelenek-uyumlu İSİM önerir, onaylatır,
@@ -36,7 +36,8 @@ projede elle kurmak angarya. Bu skill onu **bir kez damıtıp** her projeye scaf
 |-------|-----|
 | `scripts/ekip-notify.sh` | tmux-tetik + sinyal-defteri primitifi (iki-yön: ping/--done/--waiting/--ack/--check; preflight+draft-guard baked-in) |
 | `scripts/ekip-preflight.lib.sh` | pane-durum sınıflandırma (busy/menu/compact/idle + ghost-vs-draft SGR) — notify+durum source eder |
-| `scripts/ekip-durum.sh` | tek-bakış radar (SALT-OKUR): insan-tablo · `--porcelain`(durum-skill tüketir) · `--nudge`(Stop-hook yönetici-nudge + üye-backstop) |
+| `scripts/ekip-durum.sh` | tek-bakış radar (SALT-OKUR): insan-tablo · `--porcelain`(durum-skill tüketir) · `--nudge`(Stop-hook yönetici-nudge + üye-backstop) · `--nudge-poll`(F1 PostToolUse pasif tur-içi yönetici-nudge, uzun-tur körlüğü) |
+| `scripts/ekip-ac.sh` | TEK-KOMUT sekme-kurtarma: kapanan sekmeler sonrası CANLI üye-tmux'larını tek terminalde paylaşımlı-pencere olarak geri-getirir (link-window; üye YARATMAZ/ÖLDÜRMEZ; `ekip` alias) |
 | `_agents/handoff/ekip-registry.yaml` | tek-kaynak roster {id · tmux · mod · rol · kanallar · inbox} + `meta.yonetici` |
 | `_agents/handoff/ekip-brief.md` | ortak broadcast kanalı (append-only, all-read) |
 | `_agents/handoff/ekip-sinyal.log` | append-only sinyal-defteri (done/waiting/ack; oto-oluşur) — koordinasyonun kaynak-gerçeği |
@@ -74,6 +75,11 @@ Klasik ping tek-yönlüdür (yönetici→üye). Bu substrat PULL→PUSH döngüs
 - **`ekip-durum.sh --nudge` (Stop-hook):** yönetici bir turu bitirince, bekleyen ACK'sız sinyal VARSA
   additionalContext ile yüzeye çıkarır (turu bloklamaz). ⚠️ **üye-backstop:** üye yumuşak-kapıda `--waiting`
   emit etmeyi unutsa bile Stop-hook pane-imini tespit edip yönetici'ye OTOMATİK waiting atar (sessiz-kapıda-bekleme fix'i).
+- **`ekip-durum.sh --nudge-poll` (PostToolUse · F1 flow-gap):** yönetici UZUN-TUR'dayken Stop tur-sonu ateşlemez →
+  worker-sinyalleri birikir-görünmez (uzun-tur körlüğü). `--nudge-poll` PostToolUse'da PASİF tur-içi (rate-limited
+  `FLOW_POLL_INTERVAL=240s`, yalnız-yönetici, üye-backstop-atla) sinyalleri yüzeyler — akışı KESMEZ, yönetici
+  heads-down kalır, hazır-olunca yönlendirir. F2: `done`/`waiting` (görev-bitti/kapıda) generic-ping'in önünde.
+  ⚠️ wire'da **`</dev/null` ŞART** (session_id-JSON yönetici-tanımayı bozar → snippet'te açıklı).
 - **`ekip-durum.sh --porcelain` + `/durum`:** yönetici/Sultan tek-bakışta "kim çalışıyor · kim boşta · kim gizlice
   yön-bekliyor" görür; `/durum` skill ham-jargonu Sultan-diline çevirir.
 - **`meta.yonetici` ZORUNLU:** `--done`/`--waiting`/`--nudge` hedefi budur. Boşsa scriptler İLK-üyeyi varsayar +
