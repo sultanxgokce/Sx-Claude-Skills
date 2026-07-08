@@ -42,6 +42,13 @@ put "$TMPL/ekip-self-recognition.sh" "$TARGET/scripts/ekip-self-recognition.sh"
 chmod +x "$TARGET/scripts/ekip-self-recognition.sh" 2>/dev/null || true
 put "$TMPL/ekip-hooks/ctx-nudge.sh" "$TARGET/scripts/ekip-hooks/ctx-nudge.sh"
 chmod +x "$TARGET/scripts/ekip-hooks/ctx-nudge.sh" 2>/dev/null || true
+# öz-servis-compact paketi (detached-watcher deseni): ctx-nudge DANGER-mesajı EKIP_SELFCOMPACT_PATH set olunca bunu önerir.
+put "$TMPL/ekip-compact-core.lib.sh"    "$TARGET/scripts/ekip-compact-core.lib.sh"
+chmod +x "$TARGET/scripts/ekip-compact-core.lib.sh" 2>/dev/null || true
+put "$TMPL/ekip-selfcompact.sh"         "$TARGET/scripts/ekip-selfcompact.sh"
+chmod +x "$TARGET/scripts/ekip-selfcompact.sh" 2>/dev/null || true
+put "$TMPL/ekip-selfcompact-watcher.sh" "$TARGET/scripts/ekip-selfcompact-watcher.sh"
+chmod +x "$TARGET/scripts/ekip-selfcompact-watcher.sh" 2>/dev/null || true
 put "$TMPL/ekip-registry.yaml.tmpl" "$TARGET/_agents/handoff/ekip-registry.yaml"
 put "$TMPL/ekip-brief.md"           "$TARGET/_agents/handoff/ekip-brief.md"
 for s in ekip-brief-ver ekip-brief-iste ajan-gorev durum; do
@@ -61,3 +68,6 @@ echo "     (mevcut hook'ları SİLME; cortex-session-start vb. genelde settings.
 echo "  3. _agents/handoff/EKIP-GO-LIVE-CHECKLIST.md duman-testini KOŞ (hedef-ortamda, ≥2 tmux-oturum)."
 echo "     Ekstra: /durum → Sultan-dili özet · ekip-durum.sh --porcelain 6-alan-TAB basıyor mu?"
 echo "  4. Tetik-skiller USER-ONLY: /ekip-brief-ver · /ekip-brief-iste · /ajan-gorev · /durum"
+echo "  5. ÖZ-SERVİS COMPACT (otomatik-kablolu): ctx-nudge zaten scripts/ekip-selfcompact.sh'i tespit edip"
+echo "     EKIP_SELFCOMPACT_PATH set eder → DANGER-eşiğinde ajan AskUserQuestion sorup 'bash scripts/ekip-selfcompact.sh --self'"
+echo "     koşar (detached watcher: idle→/compact→re-bootstrap-marker). Canlı-test = EKIP-GO-LIVE-CHECKLIST öz-servis-compact maddesi."
