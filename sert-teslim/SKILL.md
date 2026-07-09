@@ -1,7 +1,7 @@
 ---
 name: sert-teslim
 type: agent
-version: 0.2.1
+version: 0.2.2
 description: >
   Gereklilik-matrisli sert-teslim MOTORU (motor-v1) — iş-sahibi talimatı VERBATIM diske iner,
   deterministik C-ID'lere bölünür, her normatif cümle test-edilebilir M-satırına bağlanır; "bitti"

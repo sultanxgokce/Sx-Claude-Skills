@@ -1,7 +1,7 @@
 ---
 name: kesif
 type: agent
-version: 0.2.0
+version: 0.2.1
 description: >
   Canlı web-panel/SPA'yı Playwright (root-suz Chromium) ile insan-gibi çok-senaryo test eden kesif-mini
   apparatı. DOM↔API çapraz-kanıtla panel-yalanını (yanlış-renk/bayat-yeşil) kandırılamayan-saf-kodla yakalar;
