@@ -1,6 +1,6 @@
 {
-  "version": "2.1",
-  "updated": "2026-07-08",
+  "version": "2.2",
+  "updated": "2026-07-09",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -521,6 +521,41 @@
         "_global (tüm bulut projeleri — 5 konteyner ortak /config/.claude)"
       ],
       "family": "test-tooling (canlı-panel E2E false-green yakalayıcı)"
+    },
+    {
+      "id": "defter-kapisi",
+      "type": "agent",
+      "name": "Defter-Kapısı — görev-yakalama + mailbox-yanıt prosedürü",
+      "version": "0.1.0",
+      "description": "Sultan-sohbetinde iki tekrarlayan-anı standartlaştırır: (A) GÖREV-YAKALAMA KAPISI — işten-bahis algıla, YENİ-görev mi MEVCUT-eklemesi mi ayır, YENİ ise deftere yazmadan ÖNCE çoktan-seçmeli onay sor (Evet/Düzenle/Hayır), ekleme ise mevcut-kaydı güncelle (gürültü/dublikasyon önle). (B) MAILBOX-YANIT PROSEDÜRÜ — mesaj gelince net-hızlı sıra: kartı-oku→anla→sade-yanıtla→aksiyon-al→thread-kapat. Global, defansif (Nexus-uçları yoksa prensip geçerli).",
+      "prerequisites": {
+        "system": [
+          "bash"
+        ]
+      },
+      "tags": [
+        "defter",
+        "gorev-yakalama",
+        "mailbox",
+        "sultan-dili",
+        "kapi",
+        "onay-gate",
+        "capture",
+        "ilerleme-akisi"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/Nexus (SERDAR-ailesi defter/mailbox akışı — Sultan-direktifi 9 Tem 2026)",
+      "install_time": "~1min (protokol-skill, script yok)",
+      "status": "v0.1-mvp",
+      "path": "defter-kapisi/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "sultan-akisi (defter-etkileşim protokolü)"
     }
   ]
 }
