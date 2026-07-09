@@ -59,6 +59,14 @@ Ajan yüksek-context'te AskUserQuestion-EVET'te KENDİNİ compact + kimlik-korun
 - [ ] **Riskli-olan otomatik-YAPILMIYOR mu:** context-ağır bir üye varsa (`HEAVY` satırı) script kendisi hiçbir tmux-pane'e mesaj GÖNDERMEDİ mi (yalnız rapor)? Compact-önerisi/ping SADECE `/ekibi-tazele` skill-akışında Sultan-onaylı.
 - [ ] **`/ekibi-tazele`** çağrısı Sultan-dili özet bastı mı (jargon/hash/dosya-yolu sızmadı) — boş-durumda "ekip tertemiz" dedi mi?
 
+## 4g. COMPACT-ORKESTRA — `ekip-compact.sh` (yönetici→üye UZAKTAN compact)
+Yönetici bir üyeyi uzaktan compact+re-bootstrap eder (öz-servis'in uzaktan-kardeşi; `ekip-compact-core.lib` REUSE).
+- [ ] **Statik:** `bash -n scripts/ekip-compact.sh` → 0 hata; exec-bit'li.
+- [ ] **Usage/guard:** `bash scripts/ekip-compact.sh` (arg-yok) → usage exit 2. `bash scripts/ekip-compact.sh BILINMEYEN` → "bilinmeyen üye … registry-id kullan" exit 1.
+- [ ] **self-loop guard:** çağıran-oturumdan KENDİ id'sini compact'lemeye çalış → "kendini-compact bu araçla yapılmaz (öz-servis … ayrı-yol)" exit 1.
+- [ ] **Canlı akış (≥1 diğer-üye açık, temiz faz-sınırında):** `bash scripts/ekip-compact.sh <diğer-üye>` → preflight idle/compact GO → `/compact` → settle → devam → **re-bootstrap marker** (`🧑‍🚀 <ID> geri-yüklendi`) → exit 0. busy/menu üyede: "ENGEL: … mid-work compact'lemem" exit 1 (--force ile aşılır).
+- [ ] **Dürüstlük:** marker VERIFY_TIMEOUT'ta görülmezse exit 5 (başarı İDDİA edilmez); compaction takılırsa exit 6. `/clear` HİÇ gönderilmez (yalnız literal `/compact`).
+
 ## 5. İZOLE-KONTEYNER NOTU (varsa)
 - [ ] Dosyalar **başka bir konteynerden** yazıldıysa: bu dosyalar hedef-konteynerde görünüyor mu? (mount/senkron topolojisi — VARSAYMA, `ls` ile teyit et).
 - [ ] Canlı tmux-tetik yalnız **oturumların açık olduğu konteynerde** çalışır → duman-testi ORADA.

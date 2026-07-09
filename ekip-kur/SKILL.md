@@ -1,7 +1,7 @@
 ---
 name: ekip-kur
 type: agent
-version: 1.4.0
+version: 1.5.0
 description: >
   Bir projeye çok-ajan KOORDİNASYON-SUBSTRATI kurar — RÖPORTAJ-MODU: tek /ekip-kur çağrısında kullanıcıyı
   röportaj eder (proje · roller · terminaller · modlar · tmux-casing), gelenek-uyumlu İSİM önerir, onaylatır,
@@ -36,7 +36,10 @@ projede elle kurmak angarya. Bu skill onu **bir kez damıtıp** her projeye scaf
 |-------|-----|
 | `scripts/ekip-notify.sh` | tmux-tetik + sinyal-defteri primitifi (iki-yön: ping/--done/--waiting/--ack/--check; preflight+draft-guard baked-in) |
 | `scripts/ekip-preflight.lib.sh` | pane-durum sınıflandırma (busy/menu/compact/idle + ghost-vs-draft SGR) — notify+durum source eder |
-| `scripts/ekip-durum.sh` | tek-bakış radar (SALT-OKUR): insan-tablo · `--porcelain`(durum-skill tüketir) · `--nudge`(Stop-hook yönetici-nudge + üye-backstop) |
+| `scripts/ekip-durum.sh` | tek-bakış radar (SALT-OKUR): insan-tablo · `--porcelain`(durum-skill tüketir) · `--nudge`(Stop-hook yönetici-nudge + üye-backstop) · `--nudge-poll`(F1 PostToolUse pasif tur-içi yönetici-nudge, uzun-tur körlüğü) |
+| `scripts/ekip-ac.sh` | TEK-KOMUT sekme-kurtarma: kapanan sekmeler sonrası CANLI üye-tmux'larını tek terminalde paylaşımlı-pencere olarak geri-getirir (link-window; üye YARATMAZ/ÖLDÜRMEZ; `ekip` alias) |
+| `scripts/ekip-compact.sh` | COMPACT-ORKESTRA (yönetici→üye UZAKTAN): `<üye-id>` verince o üyenin pane'ine `/compact` tetikler → settle → devam-nonce → `geri-yüklendi` marker-doğrula (kimlik-korunmuş re-bootstrap). `ekip-compact-core.lib` REUSE (öz-servis'in uzaktan-kardeşi). Exit-dürüst (0=doğrulandı·5=doğrulanamadı·6=takıldı). |
+| `scripts/ekip-selfcompact.sh` + `-watcher.sh` + `ekip-compact-core.lib.sh` | ÖZ-SERVİS compact: üye yüksek-context'te KENDİNİ compact+re-bootstrap (detached-watcher: idle→/compact→devam-marker). ctx-nudge DANGER-eşiğinde `EKIP_SELFCOMPACT_PATH` ile önerir. |
 | `_agents/handoff/ekip-registry.yaml` | tek-kaynak roster {id · tmux · mod · rol · kanallar · inbox} + `meta.yonetici` |
 | `_agents/handoff/ekip-brief.md` | ortak broadcast kanalı (append-only, all-read) |
 | `_agents/handoff/ekip-sinyal.log` | append-only sinyal-defteri (done/waiting/ack; oto-oluşur) — koordinasyonun kaynak-gerçeği |
@@ -86,8 +89,10 @@ Klasik ping tek-yönlüdür (yönetici→üye). Bu substrat PULL→PUSH döngüs
 ## CONTEXT-NUDGE (öz-yönetimli compact · `ekip-hooks/ctx-nudge.sh`)
 PostToolUse-hook context-doluluğunu izler: ERKEN-tier (~%65-80) sessizce "resume-anchor'ını diske yaz + devam"
 (bloke-soru AÇMAZ → koordinasyon-akışını bölmez); DANGER-tier (≥%80) TEMİZ faz-sınırında Sultan'a compact-önerir.
-Pencere model-farkındadır (1M/500k/200k). **Öz-servis-compact opsiyonel:** projede `scripts/ekip-selfcompact.sh`
-VARSA DANGER-mesajı onu önerir; YOKSA jenerik "/compact öner" fallback'ine düşer (bu paket selfcompact'i İÇERMEZ).
+Pencere model-farkındadır (1M/500k/200k). **Öz-servis-compact DAHİL** (v1.5.0+): scaffold `ekip-selfcompact.sh`
+(+watcher +core-lib) yazar → ctx-nudge onu tespit edip `EKIP_SELFCOMPACT_PATH` set eder → DANGER-mesajı üyeye
+KENDİNİ-compact ettirmeyi önerir (detached-watcher: idle→/compact→re-bootstrap-marker). Uzaktan-kardeşi =
+`ekip-compact.sh <üye-id>` (yönetici→üye orkestra). İkisi de `ekip-compact-core.lib.sh` çekirdeğini paylaşır (DRY).
 
 ## EKİBİ-TAZELE (tek-komut bakım · `/ekibi-tazele` · `ekip-tazele.sh`)
 Var-olan parçalar dağınıktı: `ekip-durum.sh` bayat-registry'yi yalnız UYARIRDI (düzeltmezdi), context-doluluk
