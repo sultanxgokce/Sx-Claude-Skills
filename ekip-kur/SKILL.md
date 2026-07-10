@@ -1,7 +1,7 @@
 ---
 name: ekip-kur
 type: agent
-version: 1.5.0
+version: 1.5.1
 description: >
   Bir projeye çok-ajan KOORDİNASYON-SUBSTRATI kurar — RÖPORTAJ-MODU: tek /ekip-kur çağrısında kullanıcıyı
   röportaj eder (proje · roller · terminaller · modlar · tmux-casing), gelenek-uyumlu İSİM önerir, onaylatır,
@@ -38,7 +38,7 @@ projede elle kurmak angarya. Bu skill onu **bir kez damıtıp** her projeye scaf
 | `scripts/ekip-preflight.lib.sh` | pane-durum sınıflandırma (busy/menu/compact/idle + ghost-vs-draft SGR) — notify+durum source eder |
 | `scripts/ekip-durum.sh` | tek-bakış radar (SALT-OKUR): insan-tablo · `--porcelain`(durum-skill tüketir) · `--nudge`(Stop-hook yönetici-nudge + üye-backstop) · `--nudge-poll`(F1 PostToolUse pasif tur-içi yönetici-nudge, uzun-tur körlüğü) |
 | `scripts/ekip-ac.sh` | TEK-KOMUT sekme-kurtarma: kapanan sekmeler sonrası CANLI üye-tmux'larını tek terminalde paylaşımlı-pencere olarak geri-getirir (link-window; üye YARATMAZ/ÖLDÜRMEZ; `ekip` alias) |
-| `scripts/ekip-compact.sh` | COMPACT-ORKESTRA (yönetici→üye UZAKTAN): `<üye-id>` verince o üyenin pane'ine `/compact` tetikler → settle → devam-nonce → `geri-yüklendi` marker-doğrula (kimlik-korunmuş re-bootstrap). `ekip-compact-core.lib` REUSE (öz-servis'in uzaktan-kardeşi). Exit-dürüst (0=doğrulandı·5=doğrulanamadı·6=takıldı). |
+| `scripts/ekip-compact.sh` | COMPACT-ORKESTRA (yönetici→üye UZAKTAN): `<üye-id>` verince o üyenin pane'ine `/compact` tetikler → settle → devam-nonce → `geri-yüklendi` marker-doğrula (kimlik-korunmuş re-bootstrap). `ekip-compact-core.lib` REUSE (öz-servis'in uzaktan-kardeşi). Exit-dürüst (0=doğrulandı·5=doğrulanamadı·6=takıldı). **`--hepsi` = gözetimli-idle-pilot:** registry'deki idle-adayları (busy/menu/draft/self/oturum-yok → atla) topla → varsayılan KURU-ÇALIŞMA (gözetim = aday-listesi, hiçbiri tetiklenmez), `--uygula` ile SIRAYLA compact + dürüst-özet. ⚠️ context-% ÖLÇMEZ (ölçüm-kaynağı kurulu-değil) → preflight-IDLE temeli, sahte-% yok. |
 | `scripts/ekip-selfcompact.sh` + `-watcher.sh` + `ekip-compact-core.lib.sh` | ÖZ-SERVİS compact: üye yüksek-context'te KENDİNİ compact+re-bootstrap (detached-watcher: idle→/compact→devam-marker). ctx-nudge DANGER-eşiğinde `EKIP_SELFCOMPACT_PATH` ile önerir. |
 | `_agents/handoff/ekip-registry.yaml` | tek-kaynak roster {id · tmux · mod · rol · kanallar · inbox} + `meta.yonetici` |
 | `_agents/handoff/ekip-brief.md` | ortak broadcast kanalı (append-only, all-read) |

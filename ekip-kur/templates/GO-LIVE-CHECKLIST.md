@@ -66,6 +66,8 @@ Yönetici bir üyeyi uzaktan compact+re-bootstrap eder (öz-servis'in uzaktan-ka
 - [ ] **self-loop guard:** çağıran-oturumdan KENDİ id'sini compact'lemeye çalış → "kendini-compact bu araçla yapılmaz (öz-servis … ayrı-yol)" exit 1.
 - [ ] **Canlı akış (≥1 diğer-üye açık, temiz faz-sınırında):** `bash scripts/ekip-compact.sh <diğer-üye>` → preflight idle/compact GO → `/compact` → settle → devam → **re-bootstrap marker** (`🧑‍🚀 <ID> geri-yüklendi`) → exit 0. busy/menu üyede: "ENGEL: … mid-work compact'lemem" exit 1 (--force ile aşılır).
 - [ ] **Dürüstlük:** marker VERIFY_TIMEOUT'ta görülmezse exit 5 (başarı İDDİA edilmez); compaction takılırsa exit 6. `/clear` HİÇ gönderilmez (yalnız literal `/compact`).
+- [ ] **`--hepsi` gözetimli-idle-pilot (KURU varsayılan):** `bash scripts/ekip-compact.sh --hepsi` → registry'deki idle-adayları listeler, busy/menu/draft + oturum-yok + kendisi → `= atla …` satırı, sonunda `KURU-ÇALIŞMA … hiçbiri tetiklenmedi` exit 0 (HİÇBİR pane compact'lenmez — gözetim yüzeyi). Aday-yoksa `aday-yok …` exit 0. ⚠️ context-% ÖLÇMEZ (ölçüm-kaynağı yok) → preflight-IDLE temeli; sahte-% yok.
+- [ ] **`--hepsi --uygula` (gerçek-pilot):** kuru-listedeki adayları SIRAYLA compact eder → her biri için `── <ID> compact ediliyor ──` + drive; sonda `ozet: dogrulandi=X dogrulanamadi=Y basarisiz=Z / aday=N`. Herhangi doğrulanamadı→exit 5, başarısız→exit 1 (dürüst-toplam). Gözetim = önce KURU koş, listeyi onayla, sonra --uygula.
 
 ## 5. İZOLE-KONTEYNER NOTU (varsa)
 - [ ] Dosyalar **başka bir konteynerden** yazıldıysa: bu dosyalar hedef-konteynerde görünüyor mu? (mount/senkron topolojisi — VARSAYMA, `ls` ile teyit et).
