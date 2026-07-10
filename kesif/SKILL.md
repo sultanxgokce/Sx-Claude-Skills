@@ -1,7 +1,7 @@
 ---
 name: kesif
 type: agent
-version: 0.2.1
+version: 0.2.2
 description: >
   Canlı web-panel/SPA'yı Playwright (root-suz Chromium) ile insan-gibi çok-senaryo test eden kesif-mini
   apparatı. DOM↔API çapraz-kanıtla panel-yalanını (yanlış-renk/bayat-yeşil) kandırılamayan-saf-kodla yakalar;
@@ -67,3 +67,12 @@ sh .claude/skills/kesif/scripts/e2e-env.sh node .claude/skills/kesif/scripts/enj
 
 - `/assets/` yol-öneki Vite-varsayımı (mutant-serve); Vite-dışı bundler için config-alanı = gelecek-iş.
 - Persona-kütüphanesi / FSM / axe-a11y-tam = Aşama-3/4 (bu skill kesif-MİNİ; canlı-yüzey kapsamlı-tarar, tam-keşif-motoru değil).
+
+## v0.2.2 — HARNESS-HATA ayrımı (Bulgu-1, MMEx-dogfood'dan)
+
+`enjeksiyon.mjs`: mutant-build fırlatması (anchor-metni bulunamadı/mutasyon-no-op/build-fail) artık
+`harness_hata: true` ile AYRI etiketlenir — `KAÇTI(!!)` (gerçek anti-false-green başarısızlığı) ile
+KARIŞTIRILMAZ. Kök-neden apparat-kırılganlığı (anchor-metni koddan kaymış) olabilir; bu durumda
+senaryo hollow-DEĞİLDİR, yalnız enjeksiyon-tarifi tamir-ister. Rapor JSON'ında `harness_hatali`
+sayaç + per-enjeksiyon `harness_hata` bool. Exit-kriteri değişmedi (hâlâ sıfır-tolerans: hem
+gerçek-kaçan hem harness-hatalı sıfır olmalı) — yalnız TEŞHİS netleşti, geçme-koşulu gevşetilmedi.

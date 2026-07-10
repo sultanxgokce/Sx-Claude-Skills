@@ -1,7 +1,7 @@
 ---
 name: sert-döngü
 type: agent
-version: 0.1.0
+version: 0.1.1
 description: >
   kesif(bul)×sert-teslim(oracle) besteleyen kapalı-döngü yürütücü. Bir feature/paneli kabul-kriterine
   (teslim-lint RC=0) varana dek otomatik-yineler: e2e-bul → (bug-varsa) Task-subagent-DÜZELT → mekanik-oracle.
@@ -162,7 +162,7 @@ dongu:
 
 ## 7 · RİSKLER & AZALTIM
 1. **Sürücü inline-fix'e kayar** → sürücü=ürün-kodu-read/run-only; her-fix Task-zorunlu; `fixer_subagent_id` boşsa ihlal.
-2. **Hollow F1-yeşil** → enjeksiyon.mjs ön-uçuş (kaçan=0); RC1→apparat-fix-önce.
+2. **Hollow F1-yeşil** → enjeksiyon.mjs ön-uçuş (kaçan=0 ∧ harness_hatali=0, v0.2.2); RC1→apparat-fix-önce. Ayrım (v0.1.1): `KAÇTI(!!)` (gerçek anti-false-green başarısızlığı) ≠ `HARNESS-HATA` (anchor-metni kaymış/mutant-build-fail — apparat-tamiri-gerekir, senaryo hollow-değildir). İkisi de RC1 üretir ama teşhis ayrı (operatör "hangi bug'ı bulacağım" ile "hangi tarifi düzelteceğim"i karıştırmaz).
 3. **Sonsuz-döngü/thrash** → max_iter-tavan + aynı-tohum-2×-dönme → Sultan-gate.
 4. **F1-RC2 config retry-döngüsü** → RC2=ABORT (retry-anlamsız), iter-harcamaz.
 5. **F3-RC1 ama F1-RC0** (test-geçer, matris/kanıt-eksik) → düzelt-hedefi artifact-üretimi, yine Task-fixer (sürücü artifact-üretmez).

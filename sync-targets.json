@@ -7,7 +7,8 @@
     "cortex": "/config/projects/cortex/.claude/skills",
     "cloudtop": "/config/projects/cloudtop/.claude/skills",
     "mmex": "/config/projects/MMEx/.claude/skills",
-    "medigate": "/config/projects/medigate/.claude/skills"
+    "medigate": "/config/projects/medigate/.claude/skills",
+    "huma": "/config/projects/huma/.claude/skills"
   },
   "install": {
     "whatsapp-baileys": [
@@ -35,10 +36,12 @@
       "_global"
     ],
     "sert-teslim": [
-      "_global"
+      "_global",
+      "mmex"
     ],
     "kesif": [
-      "_global"
+      "_global",
+      "mmex"
     ],
     "sert-dongu": [
       "_global"
@@ -71,7 +74,8 @@
       "nexus",
       "mmex",
       "vekatip",
-      "medigate"
+      "medigate",
+      "huma"
     ]
   }
 }

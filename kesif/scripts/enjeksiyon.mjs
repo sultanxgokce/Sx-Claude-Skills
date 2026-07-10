@@ -109,10 +109,16 @@ async function birEnjeksiyon({ enj, senaryolar, panelUrl, allowlist, repoKoku, s
   const yakalandi = sonuc.gecti === false;
   return {
     ad: enj.ad, tip: enj.tip, hedef_senaryo: enj.hedef_senaryo, aciklama: enj.aciklama,
-    senaryo_gecti: sonuc.gecti, yakalandi, detay: sonuc.detay,
+    senaryo_gecti: sonuc.gecti, yakalandi, harness_hata: false, detay: sonuc.detay,
     allowlist_ihlali: blocked.length, mutant_dist: mutantDist,
   };
 }
+
+// Bulgu-1 (v0.1.1): mutantBuild-fırlatmalarının kökü apparat-kırılganlığı olabilir (anchor-metni
+// gerçek-uncommitted-diff'le kaymış/silinmiş) — bu durum 'KAÇTI(!!)' (gerçek anti-false-green
+// başarısızlığı) İLE AYNI ANLAMA GELMEZ. HARNESS-HATA ayrı-etiketlenir ki "kaçtı" sinyali güvenilir
+// kalsın (kök=anchor-fragility ≠ hollow-senaryo).
+const HARNESS_HATA_DESENI = /enjeksiyon-ara bulunamadı|mutasyon no-op|mutant-build FAIL|mutant-dist index\.html yok/;
 
 export async function kosEnjeksiyonlar({ panelUrl, allowlist, senaryolarYolu, enjeksiyonlarYolu, kanitDizini, scratchKok }) {
   mkdirSync(kanitDizini, { recursive: true });
@@ -127,7 +133,12 @@ export async function kosEnjeksiyonlar({ panelUrl, allowlist, senaryolarYolu, en
     try {
       s = await birEnjeksiyon({ enj, senaryolar, panelUrl, allowlist, repoKoku, scratchKok, apiEndpoints, readySelector });
     } catch (e) {
-      s = { ad: enj.ad, tip: enj.tip, hedef_senaryo: enj.hedef_senaryo, yakalandi: false, detay: `HARNESS-HATA: ${e.message}`, allowlist_ihlali: 0 };
+      const harnessMi = HARNESS_HATA_DESENI.test(e.message);
+      s = {
+        ad: enj.ad, tip: enj.tip, hedef_senaryo: enj.hedef_senaryo,
+        yakalandi: false, harness_hata: harnessMi,
+        detay: `${harnessMi ? 'HARNESS-HATA' : 'HATA'}: ${e.message}`, allowlist_ihlali: 0,
+      };
     }
     sonuclar.push(s);
   }
@@ -141,10 +152,12 @@ export async function kosEnjeksiyonlar({ panelUrl, allowlist, senaryolarYolu, en
   } catch { srcTemiz = false; }
 
   const yakalanan = sonuclar.filter((s) => s.yakalandi).length;
+  const harnessHatali = sonuclar.filter((s) => s.harness_hata).length;
+  const kacanGercek = sonuclar.length - yakalanan - harnessHatali; // harness-hatalı hariç gerçek-kaçan
   const ihlal = sonuclar.reduce((n, s) => n + (s.allowlist_ihlali || 0), 0);
   const rapor = {
     skill_version: SKILL_VERSION, panel_url: panelUrl, allowlist,
-    toplam: sonuclar.length, yakalanan, kacan: sonuclar.length - yakalanan,
+    toplam: sonuclar.length, yakalanan, kacan: kacanGercek, harness_hatali: harnessHatali,
     panel_src_temiz: srcTemiz, panel_src_diff: diffCikti,
     allowlist_ihlali_toplam: ihlal, enjeksiyonlar: sonuclar,
   };
@@ -173,12 +186,15 @@ async function main() {
   if (!arg.panelUrl || !arg.allowlist || !arg.senaryolarYolu || !arg.enjeksiyonlarYolu || !arg.kanitDizini || !arg.scratchKok) kullanim();
   const rapor = await kosEnjeksiyonlar(arg);
   for (const s of rapor.enjeksiyonlar) {
-    process.stderr.write(`${s.yakalandi ? 'YAKALANDI(kırmızı)' : 'KAÇTI(!!)'} · ${s.ad} → hedef=${s.hedef_senaryo} senaryo_gecti=${s.senaryo_gecti} — ${s.detay}\n`);
+    const etiket = s.yakalandi ? 'YAKALANDI(kırmızı)' : s.harness_hata ? 'HARNESS-HATA(apparat-kırılgan)' : 'KAÇTI(!!)';
+    process.stderr.write(`${etiket} · ${s.ad} → hedef=${s.hedef_senaryo} senaryo_gecti=${s.senaryo_gecti} — ${s.detay}\n`);
   }
-  process.stderr.write(`ENJEKSİYON: ${rapor.yakalanan}/${rapor.toplam} yakalandı · panel/src-temiz=${rapor.panel_src_temiz} · allowlist-ihlali=${rapor.allowlist_ihlali_toplam}\n`);
-  process.stdout.write(JSON.stringify({ yakalanan: rapor.yakalanan, toplam: rapor.toplam, panel_src_temiz: rapor.panel_src_temiz }) + '\n');
-  // GEÇER: hepsi-yakalandı ∧ src-temiz ∧ allowlist-ihlali-yok
-  process.exit(rapor.kacan === 0 && rapor.panel_src_temiz && rapor.allowlist_ihlali_toplam === 0 ? 0 : 1);
+  process.stderr.write(`ENJEKSİYON: ${rapor.yakalanan}/${rapor.toplam} yakalandı · harness-hatalı=${rapor.harness_hatali} · panel/src-temiz=${rapor.panel_src_temiz} · allowlist-ihlali=${rapor.allowlist_ihlali_toplam}\n`);
+  process.stdout.write(JSON.stringify({ yakalanan: rapor.yakalanan, toplam: rapor.toplam, harness_hatali: rapor.harness_hatali, panel_src_temiz: rapor.panel_src_temiz }) + '\n');
+  // GEÇER: hepsi-yakalandı ∧ harness-hata-yok ∧ src-temiz ∧ allowlist-ihlali-yok
+  // (harness-hata AYRICA fail eder — apparat-kırılganken "temiz-geçti" denemez; ama etiketi ayrı
+  // olduğundan operatör 'gerçek-kaçan-bug' ile 'anchor-tamiri-lazım'ı karıştırmaz.)
+  process.exit(rapor.kacan === 0 && rapor.harness_hatali === 0 && rapor.panel_src_temiz && rapor.allowlist_ihlali_toplam === 0 ? 0 : 1);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();
