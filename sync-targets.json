@@ -44,6 +44,26 @@
     ],
     "defter-kapisi": [
       "_global"
+    ],
+    "pcloud-erisim": [
+      "_global",
+      "nexus",
+      "cortex"
+    ],
+    "elogo-erisim": [
+      "_global",
+      "nexus",
+      "cortex"
+    ],
+    "erisim": [
+      "_global",
+      "nexus",
+      "cortex"
+    ],
+    "vault-cek": [
+      "_global",
+      "nexus",
+      "cortex"
     ]
   }
 }

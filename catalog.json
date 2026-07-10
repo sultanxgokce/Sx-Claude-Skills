@@ -272,7 +272,7 @@
       "id": "cloudflare-erisim",
       "type": "agent",
       "name": "Cloudflare Erişim (panele girmeden Access/DNS)",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "Cloudflare işlerini (Access self-hosted app + policy, proxied DNS/tünel rotası, subdomain'i giriş-kapısı arkasına alma) dashboard'a girmeden saf API (curl+jq) ile yapar. Kimlik yoksa bir-kerelik gizli Global API Key ister, kendi dar-yetkili token üretir (POST /user/tokens), cortex-access.env'e (600) kaydeder, sonra asıl işi yapar. User-token vs account-token (cfat_) doğrulama ayrımını otomatik yapar. İdempotent + sır-hijyenik.",
       "prerequisites": {
         "system": [
@@ -309,7 +309,7 @@
       "id": "railway-erisim",
       "type": "agent",
       "name": "Railway Erişim (panele girmeden proje/servis/DB)",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "Railway işlerini (proje/servis listesi, bir servisin DATABASE_URL'i, değişken sorgusu, deploy durumu, ham GraphQL) dashboard'a girmeden saf API (curl+jq, backboard.railway.com/graphql/v2) ile yapar. Kimlik yoksa bir-kerelik gizli token ister (Railway token programatik ÜRETİLEMEZ → dashboard-only), cortex-access.env'e (600) kaydeder. doctor 'me' (account) → 'projects' (workspace) ile kapsamı otomatik ayırt eder; pg-url DATABASE_URL'i env'e YAZAR (stdout'a basmaz); railway variables --set YASAK (argv sızıntısı). İdempotent + sır-hijyenik.",
       "prerequisites": {
         "system": [
@@ -347,7 +347,7 @@
       "id": "erisim-skill-fabrikasi",
       "type": "agent",
       "name": "Erişim-Skill Fabrikası (meta-skill)",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "Meta-skill: bir platform seç (Railway/GitHub/Google/Vercel/AWS/Hetzner…) → ortamı hazırla → bir-kerelik gizli giriş al → dar-yetkili token'ı üret/kaydet → o platform için tam bir <platform>-erisim skill'ini (cloudflare-erisim'i şablon + auth-reçetesini kullanarak) Sx-Claude-Skills'e scaffold et → dağıt. Platform-erişim angaryasını bir kez damıtıp otomatik üretir. recipes/ adversaryal-doğrulanmış auth bilgi tabanı.",
       "prerequisites": {
         "system": [
@@ -556,6 +556,34 @@
         "_global"
       ],
       "family": "sultan-akisi (defter-etkileşim protokolü)"
+    },
+    {
+      "id": "pcloud-erisim",
+      "type": "agent",
+      "name": "pCloud Erişim (panele girmeden dosya/link)",
+      "version": "1.1.0",
+      "description": "pCloud işlerini (dosya listele/yükle/indir, public-link) saf API (curl+jq) ile yapar. Vault-first: token'ı önce vault-cek(Infisical), sonra cortex-access.env'den DEĞER-görmeden çözer. OAuth access_token (EU/eapi host, query-param). Sır-hijyenik. (erisim-skill-fabrikasi ürünü.)"
+    },
+    {
+      "id": "elogo-erisim",
+      "type": "agent",
+      "name": "e-Logo Erişim (panele girmeden SOAP WS)",
+      "version": "1.1.0",
+      "description": "e-Logo (e-Fatura/e-Arşiv) işlerini saf SOAP WS ile yapar: durum sorgula, PDF/UBL indir. Vault-first sır-çözüm + tek-sefer gizli-intake. SALT-OKUR + kuyruk-güvenli (prod B2B senkronunu bozmaz). (erisim-skill-fabrikasi ürünü.)"
+    },
+    {
+      "id": "erisim",
+      "type": "agent",
+      "name": "/erisim — Erişim-Zinciri dispatcher (tek giriş-noktası)",
+      "version": "1.0.0",
+      "description": "Ajanın erişim-ihtiyacında TEK komut: skill VAR→delege (vault-first sır-çözüm), YOK→SERDAR'a Skill-İstek emit (F5-kanal, geçici-konvansiyon key=SKILL:<platform>), sır-eksik→--sir-iste Sultan'a Vault-İstek. doctor 3-durum. Değer stdout/log/chat'e ASLA. (Erişim-zinciri DESIGN §A.)"
+    },
+    {
+      "id": "vault-cek",
+      "type": "agent",
+      "name": "vault-cek — merkezî-vault seam (store-agnostik)",
+      "version": "1.0.0",
+      "description": "Sır-çözüm seam'i: doctor·resolve·get <KEY>·list kontratı; arkasında pluggable adaptör (vault-cek-infisical.sh = Infisical Universal-Auth, folder-path model; Railway-backbone legacy). Değer stdout'a basılmaz (600 env-dosyasına yazar). Erişim-skill'lerinin vault-first temeli."
     }
   ]
 }

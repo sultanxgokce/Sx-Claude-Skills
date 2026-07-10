@@ -33,9 +33,13 @@ Mekanik detay → aşağıdaki [Senkron](#senkron--güncellemeleri-yay-sync-skil
 | [feedback-widget](feedback-widget/SKILL.md) | feature | FastAPI + Next.js | ~2h | 1.0.0 | stable |
 | [ai-engineering-kit](ai-engineering-kit/SKILL.md) | agent | * (stack bağımsız) | ~2min | 1.0.0 | stable |
 | [whatsapp-baileys](whatsapp-baileys/SKILL.md) | agent | * (stack bağımsız) | ~5min | 1.0.0 | stable |
-| [cloudflare-erisim](cloudflare-erisim/SKILL.md) | agent | * (stack bağımsız) | ~2min | 1.0.0 | stable |
-| [railway-erisim](railway-erisim/SKILL.md) | agent | * (stack bağımsız) | ~2min | 1.0.0 | stable |
-| [erisim-skill-fabrikasi](erisim-skill-fabrikasi/SKILL.md) | agent (meta) | * (stack bağımsız) | ~5min/platform | 1.0.0 | stable |
+| [cloudflare-erisim](cloudflare-erisim/SKILL.md) | agent | * (stack bağımsız) | ~2min | 1.1.0 | stable |
+| [railway-erisim](railway-erisim/SKILL.md) | agent | * (stack bağımsız) | ~2min | 1.1.0 | stable |
+| [pcloud-erisim](pcloud-erisim/SKILL.md) | agent | * (stack bağımsız) | ~2min | 1.1.0 | stable |
+| [elogo-erisim](elogo-erisim/SKILL.md) | agent | * (stack bağımsız) | ~2min | 1.1.0 | stable |
+| [erisim](erisim/SKILL.md) | agent | * (stack bağımsız) | ~1min | 1.0.0 | stable |
+| [vault-cek](vault-cek/SKILL.md) | agent | * (stack bağımsız) | ~1min | 1.0.0 | stable |
+| [erisim-skill-fabrikasi](erisim-skill-fabrikasi/SKILL.md) | agent (meta) | * (stack bağımsız) | ~5min/platform | 1.1.0 | stable |
 | [ekip-kur](ekip-kur/SKILL.md) | agent (scaffold) | * (stack bağımsız) | ~5min | 1.2.0 | v1.2-mvp |
 
 Makine-okunabilir indeks: [catalog.json](catalog.json)

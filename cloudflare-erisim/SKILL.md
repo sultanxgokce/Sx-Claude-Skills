@@ -1,7 +1,7 @@
 ---
 name: cloudflare-erisim
 type: agent
-version: 1.0.0
+version: 1.1.0
 description: >
   Cloudflare erişimi gereken işleri (Access self-hosted app + policy, proxied DNS/tünel rotası,
   subdomain'i giriş-kapısı arkasına alma) PANELE GİRMEDEN, saf API (curl+jq) ile yapar. Kimlik yoksa

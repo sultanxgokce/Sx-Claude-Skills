@@ -17,6 +17,8 @@ DEST="$REPO/${PLATFORM}-erisim"
 
 install -d "$DEST/scripts" "$DEST/recipes" 2>/dev/null || install -d "$DEST/scripts"
 # cf.sh'i BAŞLANGIÇ referansı olarak <platform>.sh'e kopyala (ajan API'yi reçeteye göre uyarlar).
+# ⚠️ cf.sh VAULT-FIRST omurgasını taşır (_vault_refresh/_vault_status/load_creds vault-cek-önce) → üretilen
+# skill DOĞUŞTAN vault-first olur (kopya = kalıtım). Ajan yalnız key-listesini platform-KEY'lerine uyarlar.
 cp "$TMPL/scripts/cf.sh" "$DEST/scripts/${PLATFORM}.sh"
 chmod +x "$DEST/scripts/${PLATFORM}.sh"
 
@@ -28,7 +30,7 @@ type: agent
 version: 1.0.0
 description: >
   ${PLATFORM^} erişimi gereken işleri PANELE GİRMEDEN yapar. Kimlik yoksa bir-kerelik gizli giriş
-  ister, dar-yetkili token'ı üretir/alır, cortex-access.env'e (600) kaydeder, sonra asıl işi yapar.
+  ister, dar-yetkili token'ı üretir/alır, merkezî vault'a + cortex-access.env'e (600) kaydeder, sonra asıl işi yapar.
   İdempotent + sır-hijyenik. (erisim-skill-fabrikasi tarafından cloudflare-erisim şablonundan üretildi.)
 install_target:
   skills: .claude/skills/
@@ -51,7 +53,8 @@ nexus_catalog: "AI Engineer Workbook > Skill Kataloğu"
 2. Bir-kerelik gizli giriş: <recipe.credential_intake>  → \`${PLATFORM}.sh login\` / \`set-token\`
 3. Token üret/kaydet: <recipe.token_mint> · env: <recipe.env_var> · scope: <recipe.scopes>
 4. Asıl iş (idempotent): <platforma özgü komutlar>
-5. Doğrula: \`${PLATFORM}.sh doctor\` (yeşil). Sır YALNIZ cortex-access.env (600) + registry pointer.
+5. Doğrula: \`${PLATFORM}.sh doctor\` (yeşil). Sır çözüm-sırası: **vault-cek(Infisical) ÖNCE → cortex-access.env
+   (600) fallback**. Doctor \`vault:… · env-fallback:… · token-geçerli:…\` basar. Değer: vault + env(600) + registry pointer.
 
 ## YASAK / dikkat
 <recipe.forbidden>

@@ -1,7 +1,7 @@
 ---
 name: erisim-skill-fabrikasi
 type: agent
-version: 1.0.0
+version: 1.1.0
 description: >
   "Platforma-erişim skill'i ÜRETEN" meta-skill. Bir platform seçersin (Railway, GitHub, Google,
   Vercel, AWS, Hetzner…) → skill ortamı hazırlar, sana BİR KERELİK gizli giriş sorar, gerekiyorsa
@@ -36,11 +36,19 @@ kalıbı **bir kez damıtıp** her yeni platform için otomatik üretir:
    (Ajan kendisi giremez; kullanıcıya bir terminalde çalıştıracağı NET komutu verir.)
 2. **Least-privilege scoped token** — platform programatik üretimi destekliyorsa skill **kendi üretir**
    (ör. Cloudflare `POST /user/tokens`); desteklemiyorsa kullanıcı dashboard'da üretir + `set-token`.
-3. **Sakla** → `~/.config/cortex-access.env` (chmod 600), `export <ENV_VAR>=…`.
+3. **VAULT-FIRST çözüm + fallback** → sır **merkezî vault'a** (Infisical, `vault-cek` seam) yazılır; skill
+   çalışırken **vault-cek(Infisical) ÖNCE** çözer (env'e tazeler) → yoksa/erişilemezse
+   `~/.config/cortex-access.env` (chmod 600, `export <ENV_VAR>=…`) **fallback**. Vault-outage'ta skill
+   çalışmaya-DEVAM (fail-hard YOK). Çözüm-sırası `load_creds` içinde: `vault-cek get <KEY>` → dosyadan source.
 4. **Registry pointer** → `Nexus/_agents/credentials.yaml` (`[SIR: … → <platform>-*]`). Sır DEĞERİ değil, pointer.
-5. **`doctor` = 3-durum** — yeşil (geçerli) / kırmızı (fail:neden) / doğrulanmadı; + idempotent iş komutları.
+5. **`doctor` = 3-durum + vault-parite** — yeşil (geçerli) / kırmızı (fail:neden) / doğrulanmadı; + idempotent
+   iş komutları. Doctor ayrıca `vault:yeşil|kırmızı|doğrulanmadı · env-fallback:… · token-geçerli:…` (değer-OKUMAZ).
 6. **Dürüstlük guard'ı** — platformun GERÇEK auth kısıtını baştan söyle (çoğunda şifre→token API'si YOK).
 7. **Saf API (curl+jq) tercih** — resmi CLI varsa kullan, yoksa/gereksizse HTTP.
+8. **Mint→vault yazımı (folder-kuralı)** — üretilen/alınan dar-token merkezî vault'a da yazılır:
+   platform-genel tek-hesap-token (tüm-ajan-aynı, ör. `CLOUDFLARE_API_TOKEN`) → **`/shared`** (default);
+   proje-özel sır → **`/<proje>`**. Yazım **Sultan-eli/deep-link YA DA yetkili machine-identity CLI** ile
+   (değer transkripte/log'a düşmeden). Bu adım **belgelenir, OTOMATİKLEŞTİRİLMEZ** (değer-sahipliği Sultan-gate).
 
 ## Akış (meta-skill çalıştırılınca)
 

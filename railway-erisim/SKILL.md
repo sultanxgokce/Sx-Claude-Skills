@@ -1,7 +1,7 @@
 ---
 name: railway-erisim
 type: agent
-version: 1.0.0
+version: 1.1.0
 description: >
   Railway erişimi gereken işleri (staging/prod DB provision & DATABASE_URL alma, servis/değişken
   sorgusu, deploy durumu, ham GraphQL) PANELE GİRMEDEN, saf API (curl+jq) ile yapar. Kimlik yoksa
