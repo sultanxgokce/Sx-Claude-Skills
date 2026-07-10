@@ -584,6 +584,13 @@
       "name": "vault-cek — merkezî-vault seam (store-agnostik)",
       "version": "1.0.0",
       "description": "Sır-çözüm seam'i: doctor·resolve·get <KEY>·list kontratı; arkasında pluggable adaptör (vault-cek-infisical.sh = Infisical Universal-Auth, folder-path model; Railway-backbone legacy). Değer stdout'a basılmaz (600 env-dosyasına yazar). Erişim-skill'lerinin vault-first temeli."
+    },
+    {
+      "id": "seyir-defteri",
+      "type": "agent",
+      "name": "/seyir-defteri — keşif-günlüğü + döngü-refleksiyon (GLOBAL)",
+      "version": "1.0.0",
+      "description": "Çok-ajanlı işte yan-keşiflerin (aslında-şöyleymiş · bug · risk · fırsat · itiraz) SESSİZCE ATLANMAMASI için append-only günlük: her-ajan tek-komut yazar (sev×tür iki-eksen), koordinatör filtreli okur+disposition işaretler; opsiyonel döngü-sonu refleksiyon-ritüeli ('döngü bitti, plan moduna geçelim' → 4-soru + döngü-özet + hafıza-köprüsü) + geçici-md migrate (idempotent). jsonl 3-event (not/disp/ozet), satır-edit-yok, flock-güvenli, git-kök-resolve, proje-agnostik. Kültür-kuralı gömülü: orkestraya itiraz SERBEST+TEŞVİKLİ. (SİNAN/MMEx + HEKİMBAŞI/medigate birleşik-talebi; MİMSERDAR-spec.)"
     }
   ]
 }
