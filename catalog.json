@@ -383,7 +383,7 @@
       "id": "ekip-kur",
       "type": "agent",
       "name": "Ekip-Kur — çok-ajan koordinasyon substratı",
-      "version": "1.3.0",
+      "version": "1.5.1",
       "description": "Bir projeye çok-ajan koordinasyon-sistemi scaffold'lar: tmux-tetik primitifi (ekip-notify.sh, 4 kritik-fix baked-in: 3-adım-ayrı-Enter · self-loop-guard · has-session-dürüst-warn · python3-parse) + tek-kaynak roster (ekip-registry.yaml) + broadcast kanalı (ekip-brief.md) + 3 USER-ONLY tetik-skill (/ekip-brief-ver · /ekip-brief-iste · /ajan-gorev) + SessionStart self-recognition hook (clear/compact-sonrası registry-tabanlı kimlik-re-bootstrap; eşleşme-yoksa sessiz=regresyon-yok) + go-live duman-testi checklist. Roster parametrik, fix'ler şablonda sabit.",
       "prerequisites": {
         "system": [

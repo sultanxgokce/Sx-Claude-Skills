@@ -39,23 +39,30 @@ export COMPACTING_RE SETTLE_TIMEOUT VERIFY_TIMEOUT POLL SCROLLBACK  # çekirdek-
 [ -f "$CORE_LIB" ] || { echo "HATA: core-lib yok: $CORE_LIB" >&2; exit 1; }
 . "$CORE_LIB"                           # _snap/_vis/_wait_idle/_compact_drive (DRY: drive 3-6 tek-kaynak)
 
-usage() { echo "kullanım: ekip-compact.sh <üye-id> [\"devam-mesajı\"] [--force] [--timeout N]" >&2; exit 2; }
+usage() { echo "kullanım: ekip-compact.sh <üye-id> [\"devam-mesajı\"] [--force] [--timeout N]
+       ekip-compact.sh --hepsi [\"devam-mesajı\"] [--uygula] [--force]   (gözetimli-idle-pilot: idle-adayları sırayla compact)" >&2; exit 2; }
 
 # --- bayrak-tarama ---
-FORCE=0; POS=()
+FORCE=0; HEPSI=0; UYGULA=0; POS=()
 while [ $# -gt 0 ]; do
   case "$1" in
     --force)   FORCE=1 ;;
+    --hepsi)   HEPSI=1 ;;   # gözetimli-idle-pilot: registry'deki tüm idle-adayları sırayla compact
+    --uygula)  UYGULA=1 ;;  # --hepsi ile: kuru-çalışmayı gerçek-compact'e çevir (gözetim = varsayılan kuru)
     --timeout) shift; VERIFY_TIMEOUT="${1:-$VERIFY_TIMEOUT}" ;;
     --*)       echo "HATA: bilinmeyen bayrak: $1" >&2; usage ;;
     *)         POS+=("$1") ;;
   esac
   shift
 done
-[ "${#POS[@]}" -ge 1 ] || usage
-HEDEF="${POS[0]}"
 DEVAM_VARSAYILAN="compact tamam — kanalındaki son-KONUM/checkpoint dosyanı oku, kimliğinle kaldığın-işe devam et."
-DEVAM="${POS[1]:-$DEVAM_VARSAYILAN}"
+if [ "$HEPSI" -eq 1 ]; then
+  DEVAM="${POS[0]:-$DEVAM_VARSAYILAN}"   # --hepsi'de pozisyonel = ortak devam-mesajı (üye-id YOK)
+else
+  [ "${#POS[@]}" -ge 1 ] || usage
+  HEDEF="${POS[0]}"
+  DEVAM="${POS[1]:-$DEVAM_VARSAYILAN}"
+fi
 
 [ -f "$REGISTRY" ] || { echo "HATA: registry yok: $REGISTRY" >&2; exit 1; }
 command -v tmux    >/dev/null 2>&1 || { echo "HATA: tmux kurulu değil" >&2; exit 1; }
@@ -79,39 +86,95 @@ flush()
 MEMBERS="$(python3 -c "$PARSE_PY" "$REGISTRY")"
 [ -n "$MEMBERS" ] || { echo "HATA: registry parse boş — biçim bozuk: $REGISTRY" >&2; exit 1; }
 
+# CALLER_SESSION (self-loop guard — kendini-compact = öz-servis ekip-selfcompact.sh ayrı-yol; hem tekli hem --hepsi kullanır)
+CALLER_SESSION=""
+if [ -n "${TMUX_PANE:-}" ]; then
+  CALLER_SESSION="$(tmux list-panes -a -F '#{pane_id} #{session_name}' 2>/dev/null | awk -v p="$TMUX_PANE" '$1==p{print $2; exit}')"
+fi
+
+# compact_one <ID> <TARGET> <DEVAM> — TEK üyeyi preflight-gate'le + drive et; kendi mesajını basar, rc döndürür.
+# Önkoşul (çağıran garanti eder): has-session ✓ + self-loop-değil ✓.  (DRY: tekli-yol + --hepsi ortak-çekirdek.)
+compact_one() {
+  local MID="$1" TARGET="$2" DEVAM="$3" SESSION="${2%%:*}" PF rc=0
+  local RE="$REBOOTSTRAP_RE"; [ -n "$RE" ] || RE="${MID} geri-yüklendi|CORTEX BOOTSTRAP"  # üyeye-özel (precise) + jenerik fallback; emoji-suz (awk-ERE güvenli)
+  # PREFLIGHT: busy/menu → DUR (mid-work compact'leme); compact/idle → GO
+  if [ "$FORCE" -eq 0 ] && declare -F preflight_state >/dev/null; then
+    PF="$(preflight_state "$TARGET")"
+    case "$PF" in
+      busy|menu) echo "ENGEL: $MID pane-durumu='$PF' — mid-work compact'lemem; bilinçliysen --force" >&2; return 1 ;;
+      compact)   echo "→ $MID durumu='compact' (üye zaten compact istiyor) — GO" ;;
+      idle)      echo "→ $MID durumu='idle' — proaktif compact GO" ;;
+    esac
+  else
+    echo "→ preflight atlandı (--force veya lib-yok)"
+  fi
+  # DRIVE (send /compact → settle → devam+nonce → marker-verify) = çekirdek-lib (DRY, tek-kaynak)
+  _compact_drive "$TARGET" "$MID" "$DEVAM" "$RE" || rc=$?
+  [ "$rc" -eq 5 ] && echo "  → pane'e bak: tmux attach -t $SESSION" >&2
+  return "$rc"
+}
+
+# ═══ --hepsi · GÖZETİMLİ-İDLE-PİLOT (Sultan Q1=A) ═══════════════════════════════════════════
+#   idle-adayları topla (busy/menu/draft = mid-work → ATLA · self → ATLA · oturum-yok → ATLA)
+#   → varsayılan KURU-ÇALIŞMA (gözetim yüzeyi = aday-listesi) · --uygula ile sırayla compact.
+#   ⚠️ context-% ÖLÇÜMÜ YOK (ölçüm-kaynağı kurulu-değil) → preflight-IDLE temeli; SAHTE-% YAZMA.
+if [ "$HEPSI" -eq 1 ]; then
+  CAND=()
+  while IFS=$'\t' read -r ID TARGET; do
+    [ -n "$ID" ] || continue
+    SESSION="${TARGET%%:*}"
+    tmux has-session -t "$SESSION" 2>/dev/null || { echo "  = atla $ID (oturum yok: $SESSION)"; continue; }
+    if [ -n "$CALLER_SESSION" ] && [ "$SESSION" = "$CALLER_SESSION" ]; then
+      echo "  = atla $ID (kendisi — öz-servis = ekip-selfcompact.sh)"; continue
+    fi
+    PF=idle
+    if [ "$FORCE" -eq 0 ] && declare -F preflight_state >/dev/null; then
+      PF="$(preflight_state "$TARGET")"
+      if [ "$PF" = idle ] && declare -F composer_kind >/dev/null; then
+        case "$(composer_kind "$TARGET")" in draft:*) PF=draft ;; esac
+      fi
+    fi
+    case "$PF" in
+      idle|compact) CAND+=("$ID"$'\t'"$TARGET") ;;
+      *)            echo "  = atla $ID (durum='$PF' — mid-work, compact'lemem)" ;;
+    esac
+  done <<< "$MEMBERS"
+
+  [ "${#CAND[@]}" -gt 0 ] || { echo "aday-yok: compact edilecek idle-üye bulunamadı."; exit 0; }
+  echo
+  printf 'idle-aday (%s): ' "${#CAND[@]}"; for r in "${CAND[@]}"; do printf '%s ' "${r%%$'\t'*}"; done; echo
+  if [ "$UYGULA" -eq 0 ]; then
+    echo "KURU-ÇALIŞMA (gözetimli-pilot): yukarıdakileri compact ederdim — hiçbiri tetiklenmedi."
+    echo "Uygulamak için: ekip-compact.sh --hepsi --uygula"
+    exit 0
+  fi
+  OK=0; UNVER=0; FAIL=0
+  for r in "${CAND[@]}"; do
+    IFS=$'\t' read -r ID TARGET <<< "$r"
+    echo; echo "── $ID compact ediliyor ──"
+    rc=0; compact_one "$ID" "$TARGET" "$DEVAM" || rc=$?
+    case "$rc" in
+      0) OK=$((OK+1)) ;;
+      5) UNVER=$((UNVER+1)); echo "  ⚠ $ID: tetiklendi ama re-bootstrap DOĞRULANAMADI (başarı iddia etme)" >&2 ;;
+      *) FAIL=$((FAIL+1));  echo "  ✗ $ID: rc=$rc" >&2 ;;
+    esac
+  done
+  echo; echo "ozet: dogrulandi=$OK dogrulanamadi=$UNVER basarisiz=$FAIL / aday=${#CAND[@]}"
+  [ "$FAIL"  -gt 0 ] && exit 1
+  [ "$UNVER" -gt 0 ] && exit 5
+  exit 0
+fi
+
+# ═══ TEKLİ ÜYE-COMPACT (registry-id ile) ═══════════════════════════════════════════════════
 # --- 1 · RESOLVE (id → tmux-hedef; has-session; self-loop guard) ---
 HEDEF_UPPER="$(printf '%s' "$HEDEF" | tr '[:lower:]' '[:upper:]')"
 read -r MID TARGET < <(printf '%s\n' "$MEMBERS" | awk -F'\t' -v h="$HEDEF_UPPER" 'toupper($1)==h{print $1"\t"$2; exit}') || true  # eşleşme-yok=EOF→read non-zero; set -e'yi tetikleme, guard mesaj-bassın
 [ -n "${TARGET:-}" ] || { echo "HATA: bilinmeyen üye '$HEDEF' — registry-id kullan" >&2; exit 1; }
 SESSION="${TARGET%%:*}"
 tmux has-session -t "$SESSION" 2>/dev/null || { echo "HATA: $MID oturumu YOK ($SESSION) — o kimlik açık değil" >&2; exit 1; }
-
-# self-loop: bu araç UZAKTAN üye-compact içindir; kendini-compact = öz-servis (ekip-selfcompact.sh) işi, ayrı-yol.
-CALLER_SESSION=""
-if [ -n "${TMUX_PANE:-}" ]; then
-  CALLER_SESSION="$(tmux list-panes -a -F '#{pane_id} #{session_name}' 2>/dev/null | awk -v p="$TMUX_PANE" '$1==p{print $2; exit}')"
-fi
 if [ -n "$CALLER_SESSION" ] && [ "$SESSION" = "$CALLER_SESSION" ]; then
   echo "HATA: kendini-compact bu araçla yapılmaz (öz-servis = ekip-selfcompact.sh ayrı-yol). İptal." >&2; exit 1
 fi
 
-# marker default: üyeye-özel (precise) + jenerik fallback
-[ -n "$REBOOTSTRAP_RE" ] || REBOOTSTRAP_RE="${MID} geri-yüklendi|CORTEX BOOTSTRAP"  # emoji-suz (awk-ERE güvenli); metin yeterince benzersiz + nonce-çapa eski-eşleşmeyi zaten eler
-
-# --- 2 · PREFLIGHT (busy/menu → DUR: mid-work compact'leme; compact/idle → GO) ---
-if [ "$FORCE" -eq 0 ] && declare -F preflight_state >/dev/null; then
-  PF="$(preflight_state "$TARGET")"
-  case "$PF" in
-    busy|menu) echo "ENGEL: $MID pane-durumu='$PF' — mid-work compact'lemem; bilinçliysen --force" >&2; exit 1 ;;
-    compact)   echo "→ $MID durumu='compact' (üye zaten compact istiyor) — GO" ;;
-    idle)      echo "→ $MID durumu='idle' — proaktif compact GO" ;;
-  esac
-else
-  echo "→ preflight atlandı (--force veya lib-yok)"
-fi
-
-# --- 3-6 · DRIVE (send /compact → settle → devam+nonce → marker-verify) = çekirdek-lib (DRY, tek-kaynak) ---
-# Önkoşul yukarıda garanti edildi: preflight idle/compact (busy/menu → zaten exit 1 / --force).
-rc=0; _compact_drive "$TARGET" "$MID" "$DEVAM" "$REBOOTSTRAP_RE" || rc=$?   # set -e: non-zero'yu yakala
-[ "$rc" -eq 5 ] && echo "  → pane'e bak: tmux attach -t $SESSION" >&2
+rc=0; compact_one "$MID" "$TARGET" "$DEVAM" || rc=$?
 exit "$rc"
