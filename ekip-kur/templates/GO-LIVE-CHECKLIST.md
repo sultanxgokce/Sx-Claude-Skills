@@ -52,6 +52,13 @@ Ajan yüksek-context'te AskUserQuestion-EVET'te KENDİNİ compact + kimlik-korun
 - [ ] **Canlı akış (temiz faz-sınırında):** ajan `--self` koşup **turu DERHAL bitirir** → pane idle → watcher taze `/compact` yollar → settle → devam-nonce → **re-bootstrap marker** (`🧑‍🚀 <MID> geri-yüklendi`) görülür mü? Sonuç `grep SELFCOMPACT _agents/handoff/ekip-sinyal.log` → `OK compact+rebootstrap-dogrulandi`.
 - [ ] **Dürüstlük:** marker VERIFY_TIMEOUT'ta görülmezse sinyal-defterinde `UNVERIFIED rc=…` (başarı İDDİA edilmez); `/clear` HİÇBİR yerde gönderilmedi (yalnız literal `/compact`).
 
+## 4f. EKİBİ-TAZELE duman-testi (`ekip-tazele.sh` — tek-komut bakım)
+- [ ] **Statik:** `bash -n scripts/ekip-reconcile.sh scripts/ekip-context-scan.sh scripts/ekip-tazele.sh` → 0 hata; üçü de exec-bit'li.
+- [ ] **Salt-CLI çalışır mı:** `bash scripts/ekip-tazele.sh --dry-run` → hata vermeden 3 bölüm (`[A]`/`[B]`/`[C+D]`) + `SUMMARY` satırı bastı mı?
+- [ ] **Reconcile GÜVENLİ-fix uygulanıyor mu:** kasıtlı bir tmux-casing hatası (registry'de `tmux: "yanlisAd:0"` yaz, gerçek oturum farklı-casing'de açık) → `bash scripts/ekip-tazele.sh` (dry-run'sız) → registry'de `tmux:` alanı otomatik düzeldi mi (`FIX tmux-self-heal` satırı)?
+- [ ] **Riskli-olan otomatik-YAPILMIYOR mu:** context-ağır bir üye varsa (`HEAVY` satırı) script kendisi hiçbir tmux-pane'e mesaj GÖNDERMEDİ mi (yalnız rapor)? Compact-önerisi/ping SADECE `/ekibi-tazele` skill-akışında Sultan-onaylı.
+- [ ] **`/ekibi-tazele`** çağrısı Sultan-dili özet bastı mı (jargon/hash/dosya-yolu sızmadı) — boş-durumda "ekip tertemiz" dedi mi?
+
 ## 5. İZOLE-KONTEYNER NOTU (varsa)
 - [ ] Dosyalar **başka bir konteynerden** yazıldıysa: bu dosyalar hedef-konteynerde görünüyor mu? (mount/senkron topolojisi — VARSAYMA, `ls` ile teyit et).
 - [ ] Canlı tmux-tetik yalnız **oturumların açık olduğu konteynerde** çalışır → duman-testi ORADA.
