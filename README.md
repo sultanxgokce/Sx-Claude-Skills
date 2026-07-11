@@ -36,7 +36,7 @@ Mekanik detay → aşağıdaki [Senkron](#senkron--güncellemeleri-yay-sync-skil
 | [cloudflare-erisim](cloudflare-erisim/SKILL.md) | agent | * (stack bağımsız) | ~2min | 1.0.0 | stable |
 | [railway-erisim](railway-erisim/SKILL.md) | agent | * (stack bağımsız) | ~2min | 1.0.0 | stable |
 | [erisim-skill-fabrikasi](erisim-skill-fabrikasi/SKILL.md) | agent (meta) | * (stack bağımsız) | ~5min/platform | 1.0.0 | stable |
-| [ekip-kur](ekip-kur/SKILL.md) | agent (scaffold) | * (stack bağımsız) | ~5min | 1.2.0 | v1.2-mvp |
+| [ekip-kur](ekip-kur/SKILL.md) | agent (scaffold) | * (stack bağımsız) | ~5min | 1.4.0 | v1.2-mvp |
 
 Makine-okunabilir indeks: [catalog.json](catalog.json)
 

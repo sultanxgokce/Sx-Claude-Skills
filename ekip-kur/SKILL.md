@@ -1,7 +1,7 @@
 ---
 name: ekip-kur
 type: agent
-version: 1.3.0
+version: 1.4.0
 description: >
   Bir projeye çok-ajan KOORDİNASYON-SUBSTRATI kurar — RÖPORTAJ-MODU: tek /ekip-kur çağrısında kullanıcıyı
   röportaj eder (proje · roller · terminaller · modlar · tmux-casing), gelenek-uyumlu İSİM önerir, onaylatır,
@@ -44,6 +44,10 @@ projede elle kurmak angarya. Bu skill onu **bir kez damıtıp** her projeye scaf
 | `.claude/skills/ekip-brief-iste/` | ekipten durum-topla, salt-okur (USER-ONLY) |
 | `.claude/skills/ajan-gorev/` | Sultan→bir üye görev (USER-ONLY) |
 | `.claude/skills/durum/` | `/durum` — Sultan-dili ekip-özeti (kim çalışıyor/boşta/yön-bekliyor; jargonsuz; USER-ONLY) |
+| `.claude/skills/ekibi-tazele/` | `/ekibi-tazele` — TEK-komut bakım: bayat-registry auto-fix + context-ağır tespit(compact-öner, onay-kapılı) + kapıda-bekleyen/ölü-oturum yüzeyleme (USER-ONLY) |
+| `scripts/ekip-reconcile.sh` | registry↔tmux GÜVENLİ-otomatik-uzlaştırma (tmux-casing self-heal · uye_sayisi düzelt · boş-yonetici doldur); riskli-olanı (ölü-oturum, duplike-id, registry-dışı-oturum) yalnız BAYRAKLAR |
+| `scripts/ekip-context-scan.sh` | context-ağır-üye best-effort TESPİTİ (dışarıdan `~/.claude/projects/` transcript-taraması, ctx-nudge.sh ile aynı ölçüm) — SALT-OKUR, asla compact tetiklemez |
+| `scripts/ekip-tazele.sh` | `/ekibi-tazele`'nin CLI-motoru — reconcile+context-scan+durum'u sırayla koşup tek-rapor basar; `--dry-run`/`--pct`/`--max-age-min` |
 | `scripts/ekip-self-recognition.sh` | SessionStart hook: tmux-oturum→registry ters-lookup→**JSON** kimlik enjekte + self-heal (clear/compact-proof; eşleşme-yoksa sessiz) |
 | `scripts/ekip-hooks/ctx-nudge.sh` | PostToolUse hook: context-eşik nudge (ERKEN<%80 sessiz-anchor / DANGER≥%80 compact-öner; model-farkında pencere) |
 | `_agents/handoff/EKIP-settings-hook-snippet.json` | 3-hook wire-snippet'i (SessionStart+Stop+PostToolUse; settings.json'a merge-instructions) |
@@ -84,6 +88,25 @@ PostToolUse-hook context-doluluğunu izler: ERKEN-tier (~%65-80) sessizce "resum
 (bloke-soru AÇMAZ → koordinasyon-akışını bölmez); DANGER-tier (≥%80) TEMİZ faz-sınırında Sultan'a compact-önerir.
 Pencere model-farkındadır (1M/500k/200k). **Öz-servis-compact opsiyonel:** projede `scripts/ekip-selfcompact.sh`
 VARSA DANGER-mesajı onu önerir; YOKSA jenerik "/compact öner" fallback'ine düşer (bu paket selfcompact'i İÇERMEZ).
+
+## EKİBİ-TAZELE (tek-komut bakım · `/ekibi-tazele` · `ekip-tazele.sh`)
+Var-olan parçalar dağınıktı: `ekip-durum.sh` bayat-registry'yi yalnız UYARIRDI (düzeltmezdi), context-doluluk
+yalnız her üyenin KENDİ `ctx-nudge.sh` hook'unda içeriden görünürdü (dışarıdan bakan yok), bekleyen/ölü-oturum
+tespiti ayrı komutlardı. `/ekibi-tazele` bunları TEK çağrıda birleştirir:
+- **(A) registry-reconcile — GÜVENLİ olan otomatik-düzelt:** tmux-casing/rename self-heal (tek-aday varsa),
+  `meta.uye_sayisi` gerçek-sayıyla düzelt, boş `meta.yonetici`'yi ilk-üyeyle doldur (dolu-değer ASLA ezilmez).
+  Riskli/belirsiz olan (ölü-oturum, registry-dışı-oturum, duplike-id, geçersiz-yönetici) yalnız **BAYRAKLANIR** —
+  insan-kararı gerekir, otomatik eklenmez/silinmez.
+- **(B) context-ağır üye — best-effort TESPİT, ASLA otomatik-compact:** `~/.claude/projects/<proje-slug>/*.jsonl`
+  transcript'lerini `ctx-nudge.sh` ile AYNI ölçümle (usage.input_tokens+cache_*/model-pencere-tahmini) dışarıdan
+  tarar; kimlik-eşleme self-recognition marker'ı (`<MID> geri-yüklendi`) üzerinden best-effort — eşlenemeyen
+  oturum dürüstçe `UNMAPPED` sayılır (uydurulmaz). Compact-tetikleme SKILL.md'de Sultan-onaylı (AskUserQuestion).
+- **(C) kapıda-bekleyen yüzeyle:** `ekip-durum.sh --porcelain`'i REUSE eder (yeni-mantık icat etmez).
+- **(D) ölü/eksik oturum bayrakla:** aynı porcelain-çıktının `oturum=0` satırları + reconcile'ın `olu-oturum` flag'i.
+
+**CLI-motoru** (`scripts/ekip-tazele.sh [--dry-run] [--pct N] [--max-age-min N]`) skill'siz de çalışır — Sultan
+ya da bir cron/CI bunu çıplak koşup TAB-`SUMMARY` satırını otomasyonla tüketebilir. Exit: 0=tamamen-temiz ·
+1=en-az-bir-madde insan-bakışı bekliyor (fix/flag/heavy/waiting/dead) · 2=usage.
 
 ## Akış (`/ekip-kur` çağrılınca) — RÖPORTAJ-MODU
 **Amaç:** Sultan tek `/ekip-kur` yazınca skill onu RÖPORTAJ eder, gelenek-uyumlu isimler önerir, onaylatır ve
