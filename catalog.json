@@ -1,6 +1,6 @@
 {
   "version": "2.2",
-  "updated": "2026-07-09",
+  "updated": "2026-07-11",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -591,6 +591,47 @@
       "name": "/seyir-defteri — keşif-günlüğü + döngü-refleksiyon (GLOBAL)",
       "version": "1.0.0",
       "description": "Çok-ajanlı işte yan-keşiflerin (aslında-şöyleymiş · bug · risk · fırsat · itiraz) SESSİZCE ATLANMAMASI için append-only günlük: her-ajan tek-komut yazar (sev×tür iki-eksen), koordinatör filtreli okur+disposition işaretler; opsiyonel döngü-sonu refleksiyon-ritüeli ('döngü bitti, plan moduna geçelim' → 4-soru + döngü-özet + hafıza-köprüsü) + geçici-md migrate (idempotent). jsonl 3-event (not/disp/ozet), satır-edit-yok, flock-güvenli, git-kök-resolve, proje-agnostik. Kültür-kuralı gömülü: orkestraya itiraz SERBEST+TEŞVİKLİ. (SİNAN/MMEx + HEKİMBAŞI/medigate birleşik-talebi; MİMSERDAR-spec.)"
+    },
+    {
+      "id": "sunucu-kur",
+      "type": "agent",
+      "name": "Sunucu-Kur (reis sunucu ister → şak şak şak)",
+      "version": "1.0.0",
+      "description": "Bir servis için yeni Hetzner VPS kurulmasını tek-standarda bağlar: ortam-probe → röportaj → dry-run önizleme-DURAK → Sultan-onay → değer-güvenli provizyon (idempotent toolkit + hardened cloud-init; uid-1500/uv-yok→infisical-direct/rsync-yok→tar/ssh-key-register fix'leri gömülü) → healthz-doğrula → kayıt. İzole reis çağırırsa (VPS-erişimi yok) SERDAR'a istek-emit eder (erişim-zinciri). Sunucu OLUŞTURMA yıkıcı → Sultan-gate; sır-değer ASLA basılmaz.",
+      "prerequisites": {
+        "system": [
+          "hcloud",
+          "infisical",
+          "ssh",
+          "jq"
+        ]
+      },
+      "tags": [
+        "vps",
+        "hetzner",
+        "provizyon",
+        "sunucu",
+        "deploy",
+        "infra",
+        "cloud-init",
+        "serdar",
+        "hcloud",
+        "platform-access"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/Nexus (_agents/runbooks/vps-provizyon.md — MMEx auth-broker deploy'unda canlı doğrulandı, 11 Tem 2026)",
+      "install_time": "~5min",
+      "status": "stable",
+      "path": "sunucu-kur/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global (tüm bulut projeleri)",
+        "nexus"
+      ],
+      "family": "infra-provizyon (SERDAR-ailesi; erisim-skill-fabrikasi/recipes/hetzner-cloud.md tüketicisi)"
     }
   ]
 }

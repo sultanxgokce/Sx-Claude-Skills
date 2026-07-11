@@ -76,6 +76,10 @@
       "vekatip",
       "medigate",
       "huma"
+    ],
+    "sunucu-kur": [
+      "_global",
+      "nexus"
     ]
   }
 }
