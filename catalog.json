@@ -656,6 +656,49 @@
         "_global"
       ],
       "family": "sultan-dili (üslûp-modeli; sultanca ile kapalı-döngü)"
+    },
+    {
+      "id": "sunucu-kur",
+      "type": "agent",
+      "name": "sunucu-kur — VPS provizyon standardı (toolkit + cloud-init)",
+      "version": "1.0.0",
+      "description": "Reis yeni sunucu isteyince ELLE kurma yerine tek-standart provizyon: hcloud/cloud-init tabanlı VPS-kur (uid-1500-fix) + runbook. create=Sultan-gate (yıkıcı-sınıf); sır-değeri basmaz.",
+      "tags": [
+        "vps",
+        "provizyon",
+        "cloud-init",
+        "altyapı",
+        "sunucu"
+      ],
+      "author": "sultanxgokce",
+      "source": "öksüz-adoption — evergreen tek-düğme FAZ-1 devamı (2026-07-13)",
+      "status": "canli",
+      "path": "sunucu-kur/SKILL.md",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "altyapı (provizyon-standardı)"
+    },
+    {
+      "id": "sert-dongu",
+      "type": "agent",
+      "name": "sert-döngü — keşif×sert-teslim kapalı-döngü yürütücü",
+      "version": "0.1.1",
+      "description": "kesif × sert-teslim kapalı-döngü yürütücü (loop-engineering). SERDAR promote-işi (PR#5) — sync-targets'ta vardı, catalog-girdisi eksikti (evergreen-parity yakaladı).",
+      "tags": [
+        "loop",
+        "kesif",
+        "sert-teslim",
+        "döngü"
+      ],
+      "author": "sultanxgokce",
+      "source": "catalog-gap-fix — evergreen-parity P1 bulgusu (2026-07-13)",
+      "status": "canli",
+      "path": "sert-dongu/SKILL.md",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "loop-engineering"
     }
   ]
 }

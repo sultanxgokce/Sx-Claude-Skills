@@ -1,0 +1,81 @@
+#cloud-config
+# Hetzner VPS genel-hardened base (SERDAR-ailesi · sunucu-kur skill).
+# Kullanım: hcloud server create --user-data-from-file cloud-init-base.yaml
+# KRİTİK FIX (INCIDENT-2026-07-11): servis-user uid = 1500 (docker container-user standardı) →
+#   bind-mount /data'da host↔container uid HİZALI, sqlite/audit.db crash-loop OLMAZ.
+#   (Broker cloud-init'i host ilk-user uid 1000 yaratıyordu, container broker uid 1500 → yazamıyordu.)
+#
+# Değiştir/append (servise-özel): __HOSTNAME__ · __SSH_PUBKEY__ (opsiyonel; hcloud --ssh-key zaten root'a enjekte eder).
+
+hostname: __HOSTNAME__
+
+# Time sync — TOTP/oturum için kritik
+ntp:
+  enabled: true
+  servers: [time.cloudflare.com, time.google.com, pool.ntp.org]
+
+users:
+  - name: deploy
+    uid: 1500                    # ← container-user (uid 1500) ile HİZALI — /data uid-uyumsuzluğu FIX
+    groups: [docker]
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - __SSH_PUBKEY__           # opsiyonel — doldur ya da sil (root'a hcloud --ssh-key ile giriş var)
+
+package_update: true
+package_upgrade: true
+packages: [curl, ca-certificates, gnupg, chrony, ufw, sqlite3, fail2ban, unattended-upgrades]
+
+write_files:
+  - path: /etc/chrony/conf.d/cloudflare.conf
+    content: |
+      server time.cloudflare.com iburst
+      server time.google.com iburst
+      makestep 1.0 3
+      rtcsync
+  - path: /etc/apt/apt.conf.d/50unattended-upgrades
+    content: |
+      Unattended-Upgrade::Allowed-Origins { "${distro_id}:${distro_codename}-security"; };
+      Unattended-Upgrade::Automatic-Reboot "false";
+      Unattended-Upgrade::Remove-Unused-Dependencies "true";
+  - path: /etc/docker/daemon.json
+    content: |
+      {"log-driver":"json-file","log-opts":{"max-size":"10m","max-file":"3"},"storage-driver":"overlay2"}
+  - path: /etc/sysctl.d/99-disable-ipv6.conf
+    content: |
+      net.ipv6.conf.all.disable_ipv6 = 1
+      net.ipv6.conf.default.disable_ipv6 = 1
+
+runcmd:
+  # Docker resmi repo
+  - install -m 0755 -d /etc/apt/keyrings
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+  - chmod a+r /etc/apt/keyrings/docker.asc
+  - 'echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu noble stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null'
+  - apt-get update
+  - apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+  # CrowdSec + firewall-bouncer
+  - curl -s https://install.crowdsec.net | bash
+  - apt-get install -y crowdsec crowdsec-firewall-bouncer-iptables
+  - cscli collections install crowdsecurity/linux crowdsecurity/sshd
+  # IPv6 kapat
+  - sysctl --system
+  # UFW
+  - ufw default deny incoming
+  - ufw default allow outgoing
+  - ufw allow 22/tcp
+  - ufw allow 80/tcp
+  - ufw allow 443/tcp
+  - ufw --force enable
+  # SSH hardening (root yalnız key)
+  - sed -i 's/^#PermitRootLogin yes/PermitRootLogin prohibit-password/' /etc/ssh/sshd_config
+  - sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+  - systemctl restart sshd
+  - systemctl enable --now chrony
+  # Veri dizinleri — uid 1500 (container-user ile HİZALI; bind-mount /data yazılabilir)
+  - mkdir -p /opt /data
+  - chown -R 1500:1500 /opt /data
+  - echo "✅ cloud-init base bootstrap completed at $(date)" > /var/log/cloud-init-done.txt
+
+final_message: "VPS base bootstrap tamam. SSH: root@<IP> (key). Servis: /opt'a lift-shift → docker compose up -d --build."
