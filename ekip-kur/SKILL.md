@@ -1,13 +1,15 @@
 ---
 name: ekip-kur
 type: agent
-version: 1.5.1
+version: 1.6.0
 description: >
   Bir projeye çok-ajan KOORDİNASYON-SUBSTRATI kurar — RÖPORTAJ-MODU: tek /ekip-kur çağrısında kullanıcıyı
   röportaj eder (proje · roller · terminaller · modlar · tmux-casing), gelenek-uyumlu İSİM önerir, onaylatır,
   topladığı gerçek-roster'la scaffold'lar. Üretilen: tmux-tetik primitifi (ekip-notify.sh, 4 kritik-fix baked-in)
-  + tek-kaynak roster (ekip-registry.yaml) + broadcast kanalı (ekip-brief.md) + 3 USER-ONLY tetik-skill
-  + SessionStart self-recognition hook (clear/compact-proof kimlik) + go-live checklist. Fix'ler şablonda sabit.
+  + tek-kaynak roster (ekip-registry.yaml) + broadcast kanalı (ekip-brief.md) + 5 USER-ONLY tetik-skill
+  (/ekip-brief-ver · /ekip-brief-iste · /ajan-gorev · /durum · /ekibi-tazele) + compact-orkestra çifti
+  (ekip-compact.sh uzaktan + ekip-selfcompact.sh öz-servis) + SessionStart self-recognition hook
+  (clear/compact-proof kimlik) + go-live checklist. Fix'ler şablonda sabit.
   Kaynak-desen: Nexus SERDAR-ailesi koordinasyon-sistemi.
 install_target:
   skills: .claude/skills/
