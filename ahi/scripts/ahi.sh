@@ -52,6 +52,21 @@ cmd_tiers() {
   fi
 }
 
+cmd_check() {
+  local target="${1:-}"
+  command -v node >/dev/null 2>&1 || { red "node bulunamadı (validate.mjs gerektirir)"; return 2; }
+  local mani
+  if [ -z "$target" ] || [ "$target" = "ahi" ]; then
+    mani="$AHI_DIR/ahi.manifest.yaml"
+  else
+    mani="$AHI_DIR/../$target/ahi.manifest.yaml"
+    [ -f "$mani" ] || mani="$target/ahi.manifest.yaml"
+  fi
+  [ -f "$mani" ] || { red "manifest bulunamadı: $mani"; return 1; }
+  node "$AHI_DIR/schema/validate.mjs" "$mani"
+  # NOT: FAZ-0b = yalnız manifest-şema-valid. catalog/sync-targets/README parity + drift = FAZ-2 (ADR-001).
+}
+
 stub() { ylw "[$1] FAZ-$2'de gelir (şu an kabuk). Kanon hazır: ahi doctrine"; }
 
 main() {
@@ -60,7 +75,7 @@ main() {
     doctrine)        cmd_doctrine ;;
     tiers)           cmd_tiers "${1:-}" ;;
     new)             stub new 1 ;;
-    check)           stub check 2 ;;
+    check)           cmd_check "${1:-}" ;;
     promote)         stub promote 3 ;;
     deprecate)       stub deprecate 3 ;;
     classify)        stub classify 4 ;;

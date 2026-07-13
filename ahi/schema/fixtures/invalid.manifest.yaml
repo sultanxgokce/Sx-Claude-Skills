@@ -1,0 +1,6 @@
+# FIXTURE: GEÇERSİZ manifest (validate.mjs → exit 1 + named-error beklenir)
+# Kusurlar: (1) tier geçersiz (2) name eksik (3) dolmamış placeholder
+tier: kalfaX
+generic_goal: "{{DOLDUR}}"
+activation:
+  onKeyword: bozuk
