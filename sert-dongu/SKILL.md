@@ -1,7 +1,7 @@
 ---
 name: sert-döngü
 type: agent
-version: 0.1.1
+version: 0.2.0
 description: >
   kesif(bul)×sert-teslim(oracle) besteleyen kapalı-döngü yürütücü. Bir feature/paneli kabul-kriterine
   (teslim-lint RC=0) varana dek otomatik-yineler: e2e-bul → (bug-varsa) Task-subagent-DÜZELT → mekanik-oracle.
@@ -151,6 +151,21 @@ dongu:
   - `❌ F1-RC2-config` — config/kullanım hatası
   - `🕳️ apparat-boşluğu` — ön-uçuş RC1
   Uydurma-yeşil YOK; Sultan hangi-durakta olduğunu bilir.
+
+### 5b · KABUL-emit (Lonca keystone-köprü · FAZ-5B-2b — v0.2.0, INERT)
+HER STOP'ta (5 neden de) LEDGER-mühründen SONRA, curated özeti köprüye emit et:
+```
+bash <bu-skill>/scripts/lonca-emit-outcome.sh \
+  --source sert-dongu --goal <feature> \
+  --accepted <true|false>            # true YALNIZ 🎯 F3-RC0-bitti \
+  --iterations <iter> --rc <son-F3-RC|-> \
+  --agent <çağıran-kimlik> --fixer-audit "<fixer_subagent_id sayısı+listesi kısa>" \
+  --detail "<STOP-neden etiketi (yukarıdaki 5'ten biri)>"
+```
+- **INERT:** `LONCA_BRIDGE_TOKEN` yoksa script sessiz no-op (exit 0) — döngü-davranışı byte-identical.
+- **value-safe/curated:** HAM senaryo-çıktısı/kanıt-metni emit'e GİRMEZ — yalnız yukarıdaki alanlar
+  (redaksiyon bu adımın işi). Emit-hatası STOP'u ASLA bozmaz (fail-safe exit 0).
+- Emsal: /orkestra FAZ-7 emit (5B-2a) — script birebir port, kontrat aynı (`POST /api/lonca/outcome`).
 
 ---
 
