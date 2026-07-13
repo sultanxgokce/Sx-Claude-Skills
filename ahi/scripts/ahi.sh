@@ -4,7 +4,9 @@
 set -uo pipefail
 
 AHI_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"   # ahi/ kökü
-VERSION="0.1.0"
+# VERSION tek-kaynak = SKILL.md frontmatter (W5-A5: sabit-kopya v0.2.0 bump'ında ayrışmıştı — drift-dersi)
+VERSION="$(awk -F': *' '/^version:/{print $2; exit}' "$AHI_DIR/SKILL.md" 2>/dev/null)"
+: "${VERSION:=0.0.0}"
 
 grn(){ printf '\033[32m%s\033[0m\n' "$*"; }
 ylw(){ printf '\033[33m%s\033[0m\n' "$*"; }
