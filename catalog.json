@@ -259,6 +259,20 @@
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
       "installed_in": [],
       "family": "workflow (PR-yaşamdöngüsü; /agent-dashboard:pr sarmalayıcısı)"
+    },
+    {
+      "id": "ahi",
+      "type": "agent",
+      "name": "AHÎ — 4-kademe AI-yetenek-üretim fabrikası",
+      "version": "0.1.0",
+      "description": "Yeni-skill üretimini tek-standarda oturtan fabrika: Çırak→Kalfa→Usta→Pîr kademeleri; komutlar `ahi new|check|promote|deprecate|classify|health`. DOCTRINE.md kanonu + zero-dep validator; ADR-001 drift-otorite-ayrımı (ahi.sh sync-targets'a YAZMAZ — install-girdisi insan/PR işi).",
+      "tags": ["fabrika", "skill-üretim", "tier", "doctrine", "kalfa"],
+      "author": "sultanxgokce",
+      "source": "helpSerdar komisyon-1 (PR #7-#11); dağıtım-kararı: _global-only (Sultan 2026-07-13, Nexus HOLDING-ATLAS §8)",
+      "status": "v0.1-faz0a",
+      "path": "ahi/SKILL.md",
+      "installed_in": ["_global"],
+      "family": "fabrika (skill-yaşamdöngüsü; tier-standardı)"
     }
   ]
 }
