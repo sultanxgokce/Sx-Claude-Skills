@@ -168,6 +168,49 @@ cmd_deprecate() {
   echo "  npm-deprecate deseni: işaretlenir+uyarır AMA kaldırılmaz+reversible. Geri-al: ahi deprecate $skill --undo"
 }
 
+cmd_classify() {
+  cat <<'EOF'
+AHÎ Kademe-Sınıflandırıcı — yeni işi şu 4 soruyla sınıfla:
+
+  1) TEK projede mi yaşayacak, basit mi?
+       → evet ......................................... ÇIRAK  (S1 · yerel)
+  2) Birçok projede tek-komutla on/off + güvenilir-tekrarlanabilir, ama TEK skill mi?
+       → evet ......................................... KALFA  (S2 · paketli)
+  3) Tek skill'in yapamayacağı geniş iş — BİRKAÇ skill'i BESTELİYOR mu?
+       → evet, bileşik iş-sistemi ..................... USTA   (S3 · bileşik)
+  4) Çalışma-prensibi + sürekli-büyüyen, kendi-repolu, kendini-geliştiren mi?
+       → evet, yaşayan-sistem ......................... PÎR/LONCA (S4)
+
+Değişmez: TERFİ atlanamaz; DOĞUM her-kademede olabilir (born-at-tier appraisal).
+Çoğu iş Kalfa/Usta'da "yeterince olgun" kalır — hedef-kademe ≠ en-üst.
+Üret: ahi new <kademe> <ad>   ·   Kanon: ahi doctrine   ·   Terfi: ahi promote <skill>
+EOF
+}
+
+cmd_health() {
+  local repo="$AHI_DIR/.." d name mani tier dep managed=0 unmanaged=0 deprecated=0
+  echo "AHÎ Sağlık-Panosu"
+  printf "  %-26s %-8s %s\n" "SKILL" "KADEME" "DURUM"
+  printf "  %-26s %-8s %s\n" "--------------------------" "------" "-----"
+  for d in "$repo"/*/; do
+    name="$(basename "$d")"
+    [ -f "$d/SKILL.md" ] || continue
+    mani="$d/ahi.manifest.yaml"
+    if [ -f "$mani" ]; then
+      tier="$(grep -m1 '^tier:' "$mani" | awk '{print $2}')"; [ -n "$tier" ] || tier="?"
+      if grep -q '^deprecated:' "$mani"; then
+        dep="emekli (sunset:$(grep -m1 '^sunset:' "$mani" | awk '{print $2}' | tr -d '"'))"; deprecated=$((deprecated+1))
+      else dep="aktif"; fi
+      managed=$((managed+1))
+    else tier="—"; dep="unmanaged (AHÎ-yönetimsiz)"; unmanaged=$((unmanaged+1)); fi
+    printf "  %-26s %-8s %s\n" "$name" "$tier" "$dep"
+  done
+  echo
+  echo "Özet: $managed AHÎ-yönetimli · $unmanaged yönetimsiz · $deprecated emekli"
+  echo "--- repo-parity (özet) ---"
+  command -v node >/dev/null 2>&1 && node "$AHI_DIR/schema/validate-repo.mjs" "$repo" 2>&1 | head -1 || echo "  (node yok)"
+}
+
 stub() { ylw "[$1] FAZ-$2'de gelir (şu an kabuk). Kanon hazır: ahi doctrine"; }
 
 main() {
@@ -179,8 +222,8 @@ main() {
     check)           cmd_check "${1:-}" ;;
     promote)         cmd_promote "${1:-}" ;;
     deprecate)       cmd_deprecate "$@" ;;
-    classify)        stub classify 4 ;;
-    health)          stub health 4 ;;
+    classify)        cmd_classify ;;
+    health)          cmd_health ;;
     version|--version) echo "ahi $VERSION" ;;
     ""|-h|--help|help) usage ;;
     *)               red "Bilinmeyen komut: $cmd"; echo; usage; return 2 ;;
