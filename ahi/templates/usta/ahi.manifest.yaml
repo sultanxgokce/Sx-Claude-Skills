@@ -1,0 +1,11 @@
+# {{NAME}} — AHÎ ile üretildi (kademe: usta · bileşik)
+# version SKILL.md frontmatter'ında (ADR-001).
+# ⚠️ requires[]'i DOLDUR (≥1 bestelenen Kalfa-skill) — boşken ahi check uyarır (DOCTRINE §10).
+tier: usta
+name: {{NAME}}
+generic_goal: "{{GENERIC_GOAL}}"
+activation:
+  onKeyword: {{NAME}}
+requires: []
+install_targets:
+  - _global

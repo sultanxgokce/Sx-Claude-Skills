@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sx-claude-skills/ahi/ahi.schema.json",
+  "title": "AHÎ manifest (ahi.manifest.yaml)",
+  "description": "Makine-okunur tek-kaynak. version HARİÇ (tek-evi SKILL.md frontmatter — ADR-001). FAZ-0b validate.mjs kritik-alt-kümeyi enforce eder (required+tier+placeholder+usta-requires); tam-şema burada belgelidir.",
+  "type": "object",
+  "required": ["tier", "name", "generic_goal"],
+  "properties": {
+    "tier": { "enum": ["cirak", "kalfa", "usta", "pir"], "description": "kademe (zanaat-rütbesi)" },
+    "name": { "type": "string", "description": "çıplak-ad + fonksiyon-soneki (skill- öneki YOK)" },
+    "generic_goal": { "type": "string", "description": "kurumsallaşma-testi (tek cümle)" },
+    "activation": {
+      "type": "object",
+      "description": "runtime-ekseni (INERT/aktif); tetikler",
+      "properties": {
+        "onKeyword": { "type": "string" },
+        "onContext": { "type": "string" },
+        "onCommand": { "type": "string" },
+        "workspaceContains": { "type": "string" }
+      }
+    },
+    "requires": { "type": "array", "items": { "type": "string" }, "description": "S3/Usta: bestelenen bileşen-skiller (ZORUNLU); deklare-et-VE-doğrula" },
+    "requires_harness": { "type": "string", "description": "host-uyum (ör. >=X)" },
+    "spec_version": { "type": "string", "description": "manifest-spec sürümü (şema-evrimi)" },
+    "deprecated": { "type": "boolean" },
+    "sunset": { "type": "string", "description": "emeklilik-tarihi (soft-ama-sunsetli)" },
+    "successor": { "type": "string" },
+    "target_tier": { "enum": ["cirak", "kalfa", "usta", "pir"], "description": "hakettiği tavan-kademe (≠ en-üst)" },
+    "owner": { "type": "string" },
+    "install_targets": { "type": "array", "items": { "type": "string" } },
+    "layers": { "type": "array", "items": { "type": "string" }, "description": "OPSİYONEL — yalnız S3/S4" },
+    "consumable_surface": { "type": "array", "items": { "type": "string" }, "description": "OPSİYONEL — yalnız S3/S4" }
+  },
+  "allOf": [
+    { "if": { "properties": { "tier": { "const": "usta" } } }, "then": { "required": ["requires"] } }
+  ]
+}

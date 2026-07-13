@@ -6,9 +6,7 @@
     "nexus": "/config/projects/Nexus/.claude/skills",
     "cortex": "/config/projects/cortex/.claude/skills",
     "cloudtop": "/config/projects/cloudtop/.claude/skills",
-    "mmex": "/config/projects/MMEx/.claude/skills",
-    "medigate": "/config/projects/medigate/.claude/skills",
-    "huma": "/config/projects/huma/.claude/skills"
+    "mmex": "/config/projects/MMEx/.claude/skills"
   },
   "install": {
     "whatsapp-baileys": [
@@ -76,6 +74,15 @@
       "vekatip",
       "medigate",
       "huma"
+    ],
+    "ahi": [
+      "_global"
+    ],
+    "sultanca": [
+      "_global"
+    ],
+    "sultan-ogren": [
+      "_global"
     ]
   }
 }

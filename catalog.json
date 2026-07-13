@@ -1,6 +1,6 @@
 {
-  "version": "2.2",
-  "updated": "2026-07-09",
+  "version": "2.0",
+  "updated": "2026-07-07",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -383,8 +383,8 @@
       "id": "ekip-kur",
       "type": "agent",
       "name": "Ekip-Kur — çok-ajan koordinasyon substratı",
-      "version": "1.5.1",
-      "description": "Bir projeye çok-ajan koordinasyon-sistemi scaffold'lar: tmux-tetik primitifi (ekip-notify.sh, 4 kritik-fix baked-in: 3-adım-ayrı-Enter · self-loop-guard · has-session-dürüst-warn · python3-parse) + tek-kaynak roster (ekip-registry.yaml) + broadcast kanalı (ekip-brief.md) + 3 USER-ONLY tetik-skill (/ekip-brief-ver · /ekip-brief-iste · /ajan-gorev) + SessionStart self-recognition hook (clear/compact-sonrası registry-tabanlı kimlik-re-bootstrap; eşleşme-yoksa sessiz=regresyon-yok) + go-live duman-testi checklist. Roster parametrik, fix'ler şablonda sabit.",
+      "version": "1.6.0",
+      "description": "Bir projeye çok-ajan koordinasyon-sistemi scaffold'lar: tmux-tetik primitifi (ekip-notify.sh, 4 kritik-fix baked-in: 3-adım-ayrı-Enter · self-loop-guard · has-session-dürüst-warn · python3-parse) + tek-kaynak roster (ekip-registry.yaml) + broadcast kanalı (ekip-brief.md) + 5 USER-ONLY tetik-skill (/ekip-brief-ver · /ekip-brief-iste · /ajan-gorev · /durum · /ekibi-tazele: tek-komut bakım = bayat-registry auto-fix + context-ağır üye tespiti(compact-öner, onay-kapılı) + kapıda-bekleyen/ölü-oturum yüzeyleme) + compact-orkestra çifti (ekip-compact.sh yönetici→üye UZAKTAN --hepsi gözetimli-idle-pilot; ekip-selfcompact.sh öz-servis detached-watcher) + SessionStart self-recognition hook (clear/compact-sonrası registry-tabanlı kimlik-re-bootstrap; eşleşme-yoksa sessiz=regresyon-yok) + go-live duman-testi checklist. Roster parametrik, fix'ler şablonda sabit.",
       "prerequisites": {
         "system": [
           "bash",
@@ -402,7 +402,9 @@
         "skill-uretici",
         "self-recognition",
         "session-hook",
-        "roportaj"
+        "roportaj",
+        "ekip-bakimi",
+        "reconcile"
       ],
       "stacks": [
         "*"
@@ -591,6 +593,69 @@
       "name": "/seyir-defteri — keşif-günlüğü + döngü-refleksiyon (GLOBAL)",
       "version": "1.0.0",
       "description": "Çok-ajanlı işte yan-keşiflerin (aslında-şöyleymiş · bug · risk · fırsat · itiraz) SESSİZCE ATLANMAMASI için append-only günlük: her-ajan tek-komut yazar (sev×tür iki-eksen), koordinatör filtreli okur+disposition işaretler; opsiyonel döngü-sonu refleksiyon-ritüeli ('döngü bitti, plan moduna geçelim' → 4-soru + döngü-özet + hafıza-köprüsü) + geçici-md migrate (idempotent). jsonl 3-event (not/disp/ozet), satır-edit-yok, flock-güvenli, git-kök-resolve, proje-agnostik. Kültür-kuralı gömülü: orkestraya itiraz SERBEST+TEŞVİKLİ. (SİNAN/MMEx + HEKİMBAŞI/medigate birleşik-talebi; MİMSERDAR-spec.)"
+    },
+    {
+      "id": "ahi",
+      "type": "agent",
+      "name": "AHÎ — 4-kademe AI-yetenek-üretim fabrikası",
+      "version": "0.1.0",
+      "description": "Yeni-skill üretimini tek-standarda oturtan fabrika: Çırak→Kalfa→Usta→Pîr kademeleri; komutlar `ahi new|check|promote|deprecate|classify|health`. DOCTRINE.md kanonu + zero-dep validator; ADR-001 drift-otorite-ayrımı (ahi.sh sync-targets'a YAZMAZ — install-girdisi insan/PR işi).",
+      "tags": [
+        "fabrika",
+        "skill-üretim",
+        "tier",
+        "doctrine",
+        "kalfa"
+      ],
+      "author": "sultanxgokce",
+      "source": "helpSerdar komisyon-1 (PR #7-#11); dağıtım-kararı: _global-only (Sultan 2026-07-13, Nexus HOLDING-ATLAS §8)",
+      "status": "v0.1-faz0a",
+      "path": "ahi/SKILL.md",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "fabrika (skill-yaşamdöngüsü; tier-standardı)"
+    },
+    {
+      "id": "sultanca",
+      "type": "skill",
+      "name": "sultanca — Sultan üslûbu (yaşayan dil & çıktı-tercih modeli)",
+      "version": "0.1.0",
+      "description": "Sultan'a NASIL konuşulacağını (dil) ve Sultan-yüzlü çıktının NASIL biçimleneceğini (format) yöneten yaşayan-model: UYGULA / ÖĞREN / SORGU üç-yüzü. Tek-kaynak store /config/.claude/sultan-uslubu.md (git-DIŞI, VERİ-sınıfı — skill kodu store'a yalnız işaret eder, içerik taşımaz).",
+      "tags": [
+        "sultan-dili",
+        "üslûp",
+        "yaşayan-skill",
+        "sürekli-öğrenen"
+      ],
+      "author": "sultanxgokce",
+      "source": "öksüz-adoption — evergreen tek-düğme kampanyası FAZ-1 (P1-lint bulgusu, 2026-07-13)",
+      "status": "canli",
+      "path": "sultanca/SKILL.md",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "sultan-dili (üslûp-modeli; sultan-ogren ile kapalı-döngü)"
+    },
+    {
+      "id": "sultan-ogren",
+      "type": "skill",
+      "name": "sultan-ogren — Sultan-tercihi hızlı-yakala (manuel-hat)",
+      "version": "0.1.0",
+      "description": "Sultan'ın dil/biçim tercihini üslûp-modeline aday-kayıt olarak HIZLI kaydeder (ogren.sh tek-yazar helper). disable-model-invocation: açık-tetik. sultanca'nın kapalı-döngü eşi.",
+      "tags": [
+        "sultan-dili",
+        "öğrenme",
+        "yakalama"
+      ],
+      "author": "sultanxgokce",
+      "source": "öksüz-adoption — evergreen tek-düğme kampanyası FAZ-1 (P1-lint bulgusu, 2026-07-13)",
+      "status": "canli",
+      "path": "sultan-ogren/SKILL.md",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "sultan-dili (üslûp-modeli; sultanca ile kapalı-döngü)"
     }
   ]
 }

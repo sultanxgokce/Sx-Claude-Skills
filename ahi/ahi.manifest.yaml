@@ -1,0 +1,13 @@
+# AHÎ'nin KENDİ manifesti — dogfood hedefi (`ahi check ahi` bunu doğrular).
+# version manifest'te YOK (tek-evi SKILL.md frontmatter — ADR-001).
+tier: kalfa
+name: ahi
+generic_goal: "planlı + paketli + her-projede güvenilir tekrarlanabilir"
+activation:
+  onKeyword: ahi
+  onCommand: ahi
+requires_harness: ">=0"
+spec_version: "0.1"
+owner: SERDAR-KAHYA-review-kapisi
+install_targets:
+  - _global

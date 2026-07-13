@@ -1,0 +1,7 @@
+# {{NAME}} — AHÎ ile üretildi (kademe: cirak · yerel)
+# version SKILL.md frontmatter'ında (ADR-001).
+tier: cirak
+name: {{NAME}}
+generic_goal: "{{GENERIC_GOAL}}"
+activation:
+  onKeyword: {{NAME}}

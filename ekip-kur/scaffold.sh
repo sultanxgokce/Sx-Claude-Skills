@@ -38,8 +38,6 @@ put "$TMPL/ekip-preflight.lib.sh"   "$TARGET/scripts/ekip-preflight.lib.sh"
 chmod +x "$TARGET/scripts/ekip-preflight.lib.sh" 2>/dev/null || true
 put "$TMPL/ekip-durum.sh"           "$TARGET/scripts/ekip-durum.sh"
 chmod +x "$TARGET/scripts/ekip-durum.sh" 2>/dev/null || true
-put "$TMPL/ekip-ac.sh"              "$TARGET/scripts/ekip-ac.sh"
-chmod +x "$TARGET/scripts/ekip-ac.sh" 2>/dev/null || true
 put "$TMPL/ekip-self-recognition.sh" "$TARGET/scripts/ekip-self-recognition.sh"
 chmod +x "$TARGET/scripts/ekip-self-recognition.sh" 2>/dev/null || true
 put "$TMPL/ekip-hooks/ctx-nudge.sh" "$TARGET/scripts/ekip-hooks/ctx-nudge.sh"
@@ -51,12 +49,19 @@ put "$TMPL/ekip-selfcompact.sh"         "$TARGET/scripts/ekip-selfcompact.sh"
 chmod +x "$TARGET/scripts/ekip-selfcompact.sh" 2>/dev/null || true
 put "$TMPL/ekip-selfcompact-watcher.sh" "$TARGET/scripts/ekip-selfcompact-watcher.sh"
 chmod +x "$TARGET/scripts/ekip-selfcompact-watcher.sh" 2>/dev/null || true
+# ekibi-tazele paketi (tek-komut bakım: registry-reconcile auto-fix + context-ağır tespit + bekleyen/ölü-oturum yüzeyleme)
+put "$TMPL/ekip-reconcile.sh"       "$TARGET/scripts/ekip-reconcile.sh"
+chmod +x "$TARGET/scripts/ekip-reconcile.sh" 2>/dev/null || true
+put "$TMPL/ekip-context-scan.sh"    "$TARGET/scripts/ekip-context-scan.sh"
+chmod +x "$TARGET/scripts/ekip-context-scan.sh" 2>/dev/null || true
+put "$TMPL/ekip-tazele.sh"          "$TARGET/scripts/ekip-tazele.sh"
+chmod +x "$TARGET/scripts/ekip-tazele.sh" 2>/dev/null || true
 # yönetici→üye UZAKTAN compact-orkestra (öz-servis'in uzaktan-kardeşi; ekip-compact-core.lib REUSE)
 put "$TMPL/ekip-compact.sh"             "$TARGET/scripts/ekip-compact.sh"
 chmod +x "$TARGET/scripts/ekip-compact.sh" 2>/dev/null || true
 put "$TMPL/ekip-registry.yaml.tmpl" "$TARGET/_agents/handoff/ekip-registry.yaml"
 put "$TMPL/ekip-brief.md"           "$TARGET/_agents/handoff/ekip-brief.md"
-for s in ekip-brief-ver ekip-brief-iste ajan-gorev durum; do
+for s in ekip-brief-ver ekip-brief-iste ajan-gorev durum ekibi-tazele; do
   put "$TMPL/skills/$s/SKILL.md"    "$TARGET/.claude/skills/$s/SKILL.md"
 done
 put "$TMPL/GO-LIVE-CHECKLIST.md"    "$TARGET/_agents/handoff/EKIP-GO-LIVE-CHECKLIST.md"
@@ -72,10 +77,9 @@ echo "     SessionStart(kimlik) · Stop(ekip-durum.sh --nudge) · PostToolUse(ek
 echo "     (mevcut hook'ları SİLME; cortex-session-start vb. genelde settings.local.json'da → rakip değil, ikisi de ateşler)."
 echo "  3. _agents/handoff/EKIP-GO-LIVE-CHECKLIST.md duman-testini KOŞ (hedef-ortamda, ≥2 tmux-oturum)."
 echo "     Ekstra: /durum → Sultan-dili özet · ekip-durum.sh --porcelain 6-alan-TAB basıyor mu?"
-echo "  4. Tetik-skiller USER-ONLY: /ekip-brief-ver · /ekip-brief-iste · /ajan-gorev · /durum"
-echo "  6. SEKME-KURTARMA: sekmeler/terminaller kapanınca üye-tmux'ları arka planda CANLI kalır →"
-echo "     YENİ terminalde 'bash scripts/ekip-ac.sh' (ya da 'ekip' alias) TEK-KOMUTLA hepsini paylaşımlı-pencere"
-echo "     olarak geri-getirir (Ctrl-b w = üye-seç). Üye-oturumu YARATMAZ/ÖLDÜRMEZ — yalnız link-window."
+echo "  4. Tetik-skiller USER-ONLY: /ekip-brief-ver · /ekip-brief-iste · /ajan-gorev · /durum · /ekibi-tazele"
+echo "     /ekibi-tazele = tek-komut bakım (bayat-registry auto-fix + context-ağır tespit + bekleyen/ölü-oturum yüzeyleme)."
+echo "     Motoru salt-CLI'dan da çalıştırabilirsin: bash scripts/ekip-tazele.sh [--dry-run] [--pct N]"
 echo "  5. ÖZ-SERVİS COMPACT (otomatik-kablolu): ctx-nudge zaten scripts/ekip-selfcompact.sh'i tespit edip"
 echo "     EKIP_SELFCOMPACT_PATH set eder → DANGER-eşiğinde ajan AskUserQuestion sorup 'bash scripts/ekip-selfcompact.sh --self'"
 echo "     koşar (detached watcher: idle→/compact→re-bootstrap-marker). Canlı-test = EKIP-GO-LIVE-CHECKLIST öz-servis-compact maddesi."
