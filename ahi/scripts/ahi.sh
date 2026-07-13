@@ -19,7 +19,8 @@ KULLANIM: ahi <komut> [argümanlar]
   doctrine            Değişmezler Kitabı'nı (kanon) göster
   tiers [<kademe>]    Kademe-kart(lar)ını göster (cirak|kalfa|usta|pir)
   new <kademe> <ad>   Kademe-seç → standart-iskelet scaffold        [FAZ-1]
-  check [<skill>]     Deterministik drift-lint (parity + manifest)  [FAZ-2]
+  check               Repo-parity drift-lint (catalog↔sync-targets; --strict=gate)
+  check <skill>       O skill manifest-şema doğrulaması (ahi=dogfood)
   promote <skill>     Terfi-appraisal → yeşilse Sultan-törenine öner [FAZ-3]
   deprecate <s> "<m>" Soft-emeklilik (deprecated+sunset+successor)   [FAZ-3]
   classify            Yeni-işi anlat → hangi-kademe önerici          [FAZ-4]
@@ -53,18 +54,18 @@ cmd_tiers() {
 }
 
 cmd_check() {
+  command -v node >/dev/null 2>&1 || { red "node bulunamadı (validate*.mjs gerektirir)"; return 2; }
   local target="${1:-}"
-  command -v node >/dev/null 2>&1 || { red "node bulunamadı (validate.mjs gerektirir)"; return 2; }
-  local mani
-  if [ -z "$target" ] || [ "$target" = "ahi" ]; then
-    mani="$AHI_DIR/ahi.manifest.yaml"
-  else
-    mani="$AHI_DIR/../$target/ahi.manifest.yaml"
-    [ -f "$mani" ] || mani="$target/ahi.manifest.yaml"
+  # argümansız / --repo / --strict → repo-parity drift-lint (FAZ-2; ADR-001: catalog/sync-targets'a YAZMAZ, yalnız-raporlar)
+  if [ -z "$target" ] || [ "$target" = "--repo" ] || [ "$target" = "--strict" ]; then
+    node "$AHI_DIR/schema/validate-repo.mjs" "$AHI_DIR/.." "$@"; return $?
   fi
+  # <skill> → manifest-şema-valid (FAZ-0b). 'ahi' = dogfood (kendi manifesti).
+  local mani
+  if [ "$target" = "ahi" ]; then mani="$AHI_DIR/ahi.manifest.yaml"
+  else mani="$AHI_DIR/../$target/ahi.manifest.yaml"; [ -f "$mani" ] || mani="$target/ahi.manifest.yaml"; fi
   [ -f "$mani" ] || { red "manifest bulunamadı: $mani"; return 1; }
   node "$AHI_DIR/schema/validate.mjs" "$mani"
-  # NOT: FAZ-0b = yalnız manifest-şema-valid. catalog/sync-targets/README parity + drift = FAZ-2 (ADR-001).
 }
 
 cmd_new() {
