@@ -34,8 +34,35 @@ die(){ red "✗ $*"; exit 1; }
 command -v curl >/dev/null 2>&1 || die "curl yok"
 command -v jq   >/dev/null 2>&1 || die "jq yok"
 
+# ── VAULT-FIRST: sırrı ÖNCE merkezî vault'tan tazele (vault-cek seam · değer-basmaz) ────────
+# vault-cek get <KEY> → cortex-access.env'e (600) yazar (değer stdout'a DÜŞMEZ); vault yok/erişilemez
+# → sessiz-geç, ENV_FILE fallback korunur (fail-hard YOK). ⚠️ KRİTİK re-entrancy-guard: vault-cek'in
+# Railway-backbone'u BU skill'i (railway.sh gql) çağırır → VAULT_CEK_INFLIGHT olmadan sonsuz-döngü olur.
+# Guard set iken _vault_refresh no-op → iç-çağrı düz dosya-fallback'e düşer (bootstrap-token'ı yine okur).
+VAULT_CEK="${VAULT_CEK_BIN:-$HOME/.claude/skills/vault-cek/scripts/vault-cek.sh}"
+_vault_refresh(){  # _vault_refresh KEY...  — her KEY'i vault'tan ENV_FILE'a tazele (non-fatal)
+  [ -n "${VAULT_CEK_INFLIGHT:-}" ] && return 0
+  [ -f "$VAULT_CEK" ] || return 0
+  local k
+  for k in "$@"; do
+    VAULT_CEK_INFLIGHT=1 CORTEX_ACCESS_ENV="$ENV_FILE" bash "$VAULT_CEK" get "$k" >/dev/null 2>&1 || true
+  done
+}
+_vault_status(){  # doctor 3-durum: yeşil|kırmızı|doğrulanmadı (değer-OKUMAZ)
+  if [ -n "${VAULT_CEK_INFLIGHT:-}" ]; then printf 'atlandı(re-entrancy)'; return; fi
+  [ -f "$VAULT_CEK" ] || { printf 'doğrulanmadı(vault-cek-yok)'; return; }
+  if VAULT_CEK_INFLIGHT=1 bash "$VAULT_CEK" doctor >/dev/null 2>&1; then printf 'yeşil'
+  else printf 'kırmızı(fallback-aktif)'; fi
+}
+_vault_parite(){  # _vault_parite <token-durumu>  — vault-dahil 3-durum parite satırı
+  local fb="yok"; [ -f "$ENV_FILE" ] && fb="var"
+  echo "  vault:$(_vault_status) · env-fallback:${fb} · token-geçerli:${1}"
+}
+
 # ── kimlik yükleme (DEĞERİ EKRANA BASMADAN) ─────────────────────────────────
 load_creds(){
+  # VAULT-FIRST: Infisical/vault seam → cortex-access.env tazele (guard iç-çağrıda döngüyü keser)
+  _vault_refresh RAILWAY_API_TOKEN RAILWAY_TOKEN
   if [ -f "$ENV_FILE" ]; then
     set -a
     # yalnız RAILWAY_* token satırlarını source et
@@ -106,6 +133,7 @@ cmd_doctor(){
   load_creds
   if ! have_any_cred; then
     red "✗ Railway kimliği YOK ($ENV_FILE)"
+    _vault_parite "doğrulanmadı"
     echo "  Bir kerelik: railway.com/account/tokens → 'Create Token' → kopyala → bash $0 set-token"
     echo "  (⚠️ Token programatik ÜRETİLEMEZ — Railway'de yalnız dashboard'da üretilir; bu skill token isteyip saklar.)"
     echo "  Least-privilege: tek proje → PROJECT token (set-token project) · çok-proje/API işi → WORKSPACE/ACCOUNT (set-token)."
@@ -136,6 +164,7 @@ cmd_doctor(){
       ylw "  (unknown ≠ fail: token kayıtlı, HENÜZ doğrulanmadı — çalıştırıp gör.)"
     fi
   fi
+  _vault_parite "yeşil"
   echo; echo "Hazır. Örn:  bash $0 projects   ·   bash $0 services <projectId>"
 }
 

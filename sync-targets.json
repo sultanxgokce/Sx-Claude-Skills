@@ -9,14 +9,80 @@
     "mmex": "/config/projects/MMEx/.claude/skills"
   },
   "install": {
-    "whatsapp-baileys": ["_global"],
-    "cloudflare-erisim": ["_global", "nexus", "cortex"],
-    "railway-erisim": ["_global", "nexus", "cortex"],
-    "erisim-skill-fabrikasi": ["_global", "nexus", "cortex"],
-    "ekip-kur": ["_global"],
-    "pr-onay": ["_global"],
-    "ahi": ["_global"],
-    "sultanca": ["_global"],
-    "sultan-ogren": ["_global"]
+    "whatsapp-baileys": [
+      "_global"
+    ],
+    "cloudflare-erisim": [
+      "_global",
+      "nexus",
+      "cortex"
+    ],
+    "railway-erisim": [
+      "_global",
+      "nexus",
+      "cortex"
+    ],
+    "erisim-skill-fabrikasi": [
+      "_global",
+      "nexus",
+      "cortex"
+    ],
+    "ekip-kur": [
+      "_global"
+    ],
+    "pr-onay": [
+      "_global"
+    ],
+    "sert-teslim": [
+      "_global",
+      "mmex"
+    ],
+    "kesif": [
+      "_global",
+      "mmex"
+    ],
+    "sert-dongu": [
+      "_global"
+    ],
+    "defter-kapisi": [
+      "_global"
+    ],
+    "pcloud-erisim": [
+      "_global",
+      "nexus",
+      "cortex"
+    ],
+    "elogo-erisim": [
+      "_global",
+      "nexus",
+      "cortex"
+    ],
+    "erisim": [
+      "_global",
+      "nexus",
+      "cortex"
+    ],
+    "vault-cek": [
+      "_global",
+      "nexus",
+      "cortex"
+    ],
+    "seyir-defteri": [
+      "_global",
+      "nexus",
+      "mmex",
+      "vekatip",
+      "medigate",
+      "huma"
+    ],
+    "ahi": [
+      "_global"
+    ],
+    "sultanca": [
+      "_global"
+    ],
+    "sultan-ogren": [
+      "_global"
+    ]
   }
 }

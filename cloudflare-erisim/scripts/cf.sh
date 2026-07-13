@@ -37,8 +37,34 @@ die(){ red "✗ $*"; exit 1; }
 command -v curl >/dev/null 2>&1 || die "curl yok"
 command -v jq   >/dev/null 2>&1 || die "jq yok"
 
+# ── VAULT-FIRST: sırrı ÖNCE merkezî vault'tan tazele (vault-cek seam · değer-basmaz) ────────
+# vault-cek get <KEY> → cortex-access.env'e (600) yazar (değer stdout'a DÜŞMEZ); vault yok/erişilemez
+# → sessiz-geç, ENV_FILE fallback korunur (fail-hard YOK). Re-entrancy-guard: vault-cek backbone'u bu
+# skill'i çağırırsa (railway-erisim ↔ vault-cek Railway-backbone) sonsuz-döngü olmasın diye kes.
+VAULT_CEK="${VAULT_CEK_BIN:-$HOME/.claude/skills/vault-cek/scripts/vault-cek.sh}"
+_vault_refresh(){  # _vault_refresh KEY...  — her KEY'i vault'tan ENV_FILE'a tazele (non-fatal)
+  [ -n "${VAULT_CEK_INFLIGHT:-}" ] && return 0
+  [ -f "$VAULT_CEK" ] || return 0
+  local k
+  for k in "$@"; do
+    VAULT_CEK_INFLIGHT=1 CORTEX_ACCESS_ENV="$ENV_FILE" bash "$VAULT_CEK" get "$k" >/dev/null 2>&1 || true
+  done
+}
+_vault_status(){  # doctor 3-durum: yeşil|kırmızı|doğrulanmadı (değer-OKUMAZ)
+  if [ -n "${VAULT_CEK_INFLIGHT:-}" ]; then printf 'atlandı(re-entrancy)'; return; fi
+  [ -f "$VAULT_CEK" ] || { printf 'doğrulanmadı(vault-cek-yok)'; return; }
+  if VAULT_CEK_INFLIGHT=1 bash "$VAULT_CEK" doctor >/dev/null 2>&1; then printf 'yeşil'
+  else printf 'kırmızı(fallback-aktif)'; fi
+}
+_vault_parite(){  # _vault_parite <token-durumu>  — vault-dahil 3-durum parite satırı
+  local fb="yok"; [ -f "$ENV_FILE" ] && fb="var"
+  echo "  vault:$(_vault_status) · env-fallback:${fb} · token-geçerli:${1}"
+}
+
 # ── kimlik yükleme (DEĞERİ EKRANA BASMADAN) ─────────────────────────────────
 load_creds(){
+  # VAULT-FIRST: Infisical/vault seam → cortex-access.env tazele (sonra dosyadan source = vault-değeri kazanır)
+  _vault_refresh CLOUDFLARE_API_TOKEN CLOUDFLARE_EMAIL CLOUDFLARE_API_KEY CF_ACCOUNT_ID
   if [ -f "$ENV_FILE" ]; then
     set -a
     # yalnız CLOUDFLARE_* satırlarını source et
@@ -178,6 +204,7 @@ cmd_doctor(){
   load_creds
   if ! have_any_cred; then
     red "✗ Cloudflare kimliği YOK ($ENV_FILE)"
+    _vault_parite "doğrulanmadı"
     echo "  Bir kerelik giriş:  bash $0 login   →   bash $0 mint"
     echo "  (Ya da hazır token:  bash $0 set-token)"
     echo "  Token/anahtar Sultan'ın Mac'inde de var: cloudflare-api-token (credentials.yaml:100)."
@@ -195,6 +222,7 @@ cmd_doctor(){
       || { red "✗ token aktif değil/geçersiz:"; errs "$v"; exit 1; }
   fi
   grn "✓ kimlik geçerli ($mode)"
+  _vault_parite "yeşil"
   discover
   [ -n "${ZONE_ID:-}" ] && grn "✓ zone   : ${ZONE_NAME}  (${ZONE_ID})" \
     || ylw "• zone   : (Zone-Read yok — Access işleri account_id ile çalışır; DNS'i host'ta setup-tunnel.sh yapar)"

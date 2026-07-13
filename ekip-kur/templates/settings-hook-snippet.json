@@ -4,6 +4,7 @@
   "_MERGE_VS_OVERRIDE": "⚠️ KRİTİK ÖN-TEST: farklı settings-dosyalarındaki aynı-tip hook'ların MERGE mi (ikisi de ateşler) yoksa OVERRIDE mı (proje globali ezer) olduğu docs'ta muğlak. Mevcut bir global-bootstrap-hook (ör. cortex-session-start) VARSA: bu entry'yi eklemeden ÖNCE test et — proje-hook eklendikten sonra bir /clear yap, HEM global-bootstrap HEM bu-hook ateşledi mi (debug-log ile teyit). MERGE ise bu ayrı-entry temiz çalışır. OVERRIDE ise ayrı-entry global'i öldürür → o zaman self-recognition'ı global-bootstrap-hook İÇİNE guarded-blok olarak göm (rakip-entry açma).",
   "_ENV": "$CLAUDE_PROJECT_DIR Claude Code tarafından proje-köküne set edilir. Set değilse 'bash scripts/...' (hook'lar proje-kökünden çalışır) de olur.",
   "_STOP_STDIN": "Stop-hook stdin'den {session_id} JSON okur → ekip-durum.sh --nudge yalnız YÖNETİCİ oturumunda bekleyen ACK'sız sinyal varsa additionalContext basar; üye oturumunda yumuşak-kapı-backstop çalışır. Turu BLOKLAMAZ.",
+  "_POSTTOOL_NUDGE": "PostToolUse'daki ikinci entry (ekip-durum.sh --nudge-poll) = F1 flow-gap: yönetici UZUN-TUR'dayken (Stop tur-sonu ateşlemez) bekleyen üye-sinyallerini PASİF tur-içi yüzeyler (rate-limited FLOW_POLL_INTERVAL=240s, yalnız-yönetici, üye-backstop ATLA). ⚠️ `</dev/null` ŞART: geçerli session_id-JSON CALLER'ı cc-<id8> yapar → registry named-tmux'la EŞLEŞMEZ → yönetici tanınmaz → nudge ölür; </dev/null stdin'i boşaltır → tmux-adı fallback → yönetici tanınır (firsthand-kanıt). ctx-nudge entry'siyle bağımsız ateşler (ikisi de PostToolUse).",
   "hooks": {
     "SessionStart": [
       {
@@ -33,6 +34,15 @@
           {
             "type": "command",
             "command": "bash \"$CLAUDE_PROJECT_DIR/scripts/ekip-hooks/ctx-nudge.sh\""
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/scripts/ekip-durum.sh\" --nudge-poll </dev/null"
           }
         ]
       }
