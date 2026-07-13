@@ -1,0 +1,6 @@
+{
+  "_comment": "Pîr/S4 kendi-repolu sistemlerin kaydı — ahi check/health/promote own-repo çözümlemesi (FAZ-6 dogfood, ADR-002). Mutlak-yol makine-bağımlıdır: AHÎ dağıtımı _global-only (yalnız cloudtop-HOME, Nexus HOLDING-ATLAS §8 kararı) olduğundan kabul edilebilir; dağıtım genişlerse ADR-002'yi yeniden aç.",
+  "pirler": [
+    { "name": "lonca", "repo": "/config/projects/lonca" }
+  ]
+}
