@@ -111,6 +111,63 @@ cmd_new() {
   echo "--- ahi check $name ---"; cmd_check "$name"
 }
 
+cmd_promote() {
+  local skill="${1:-}"
+  [ -n "$skill" ] || { red "kullanım: ahi promote <skill>"; return 2; }
+  local sdir="$AHI_DIR/../$skill" mani="$AHI_DIR/../$skill/ahi.manifest.yaml"
+  [ -f "$mani" ] || { red "manifest bulunamadı: $mani"; return 1; }
+  local tier next
+  tier="$(grep -m1 '^tier:' "$mani" | awk '{print $2}')"
+  case "$tier" in
+    cirak) next=kalfa ;; kalfa) next=usta ;; usta) next=pir ;;
+    pir) ylw "$skill zaten Pîr (en-üst) — terfi yok, mezuniyet."; return 0 ;;
+    *) red "manifest tier okunamadı: '$tier'"; return 1 ;;
+  esac
+  echo "Terfi-appraisal: $skill  ($tier → $next)   [eşik: N=2 proje · min-yaş=30g · objective-evidence]"
+  local targets="$AHI_DIR/../sync-targets.json" pass=1
+  local projcount reqcount first_epoch agedays checkrc
+  projcount="$(node -pe "try{JSON.parse(require('fs').readFileSync('$targets','utf8')).install['$skill']?.length||0}catch(e){0}" 2>/dev/null || echo 0)"
+  reqcount="$(awk '/^requires:/{f=1} f&&/^  - /{c++} /^[a-z_]/&&!/^requires:/{if(f)f=0} END{print c+0}' "$mani")"
+  first_epoch="$(cd "$AHI_DIR/.." && git log --diff-filter=A --format=%at -- "$skill/" 2>/dev/null | tail -1)"
+  agedays="manuel"; [ -n "$first_epoch" ] && agedays=$(( ( $(date +%s) - first_epoch ) / 86400 ))
+  chk() { if [ "$1" = "1" ]; then grn "  ✓ $2"; else red "  ✗ $2"; pass=0; fi; }
+  cmd_check "$skill" >/dev/null 2>&1; checkrc=$?
+  chk "$([ "$checkrc" -eq 0 ] && echo 1 || echo 0)" "ahi check temiz"
+  case "$next" in
+    kalfa) chk "$([ -f "$sdir/SKILL.md" ] && echo 1 || echo 0)" "paketli (SKILL.md var)" ;;
+    usta)
+      chk "$([ "$reqcount" -ge 2 ] && echo 1 || echo 0)" "≥2 skill besteliyor (requires=$reqcount)"
+      chk "$([ "$projcount" -ge 2 ] && echo 1 || echo 0)" "≥2-projede-aktif (install=$projcount)" ;;
+    pir) ylw "  ⚠ Usta→Pîr (remote-repo · CI · kendini-besleyen-döngü) = MANUEL-BEYAN (makine-okunamaz, Sultan-gate)"; pass=0 ;;
+  esac
+  if [ "$agedays" = "manuel" ]; then ylw "  ⚠ min-yaş: git-geçmişi-yok (manuel-beyan)"; else chk "$([ "$agedays" -ge 30 ] && echo 1 || echo 0)" "min-yaş ≥30g (yaş=${agedays}g)"; fi
+  echo
+  if [ "$pass" = "1" ]; then
+    grn "→ ÖNERİ: $skill '$next' kademesine HAZIR görünüyor. Terfi = SULTAN-TÖRENİ (hibrit)."
+    echo "  AHÎ otomatik-terfi ETMEZ; Sultan onaylarsa manifest tier→'$next' (+usta ise requires-doğrula)."
+  else
+    ylw "→ Henüz hazır değil (yukarıdaki ✗/⚠). Objective-evidence tamamlanınca tekrar dene."
+  fi
+}
+
+cmd_deprecate() {
+  local skill="${1:-}" msg="${2:-}" successor="${3:-}"
+  [ -n "$skill" ] || { red "kullanım: ahi deprecate <skill> \"<mesaj>\" <successor|yok>  ·  geri-al: ahi deprecate <skill> --undo"; return 2; }
+  local mani="$AHI_DIR/../$skill/ahi.manifest.yaml"
+  [ -f "$mani" ] || { red "manifest bulunamadı: $mani"; return 1; }
+  if [ "$msg" = "--undo" ]; then
+    sed -i '/^# EMEKLİLİK:/d; /^deprecated:/d; /^sunset:/d; /^successor:/d' "$mani"
+    grn "✓ $skill emeklilik geri-alındı (reversible)"; return 0
+  fi
+  [ -n "$msg" ] || { red "emeklilik-mesajı gerekli"; return 2; }
+  [ -n "$successor" ] || { red "successor gerekli (DOCTRINE §9): halef-skill VEYA 'yok'"; return 2; }
+  grep -q "^deprecated:" "$mani" && { ylw "$skill zaten emekli. Geri-al: ahi deprecate $skill --undo"; return 0; }
+  local sunset; sunset="$(date -d '+90 days' +%F 2>/dev/null || date -v+90d +%F 2>/dev/null || echo 'TODO-90g')"
+  { echo ""; echo "# EMEKLİLİK: $msg"; echo "deprecated: true"; echo "sunset: \"$sunset\""; echo "successor: \"$successor\""; } >> "$mani"
+  grn "✓ $skill soft-emekli (deprecated=true · sunset=$sunset · successor=$successor)"
+  echo "  npm-deprecate deseni: işaretlenir+uyarır AMA kaldırılmaz+reversible. Geri-al: ahi deprecate $skill --undo"
+}
+
 stub() { ylw "[$1] FAZ-$2'de gelir (şu an kabuk). Kanon hazır: ahi doctrine"; }
 
 main() {
@@ -120,8 +177,8 @@ main() {
     tiers)           cmd_tiers "${1:-}" ;;
     new)             cmd_new "$@" ;;
     check)           cmd_check "${1:-}" ;;
-    promote)         stub promote 3 ;;
-    deprecate)       stub deprecate 3 ;;
+    promote)         cmd_promote "${1:-}" ;;
+    deprecate)       cmd_deprecate "$@" ;;
     classify)        stub classify 4 ;;
     health)          stub health 4 ;;
     version|--version) echo "ahi $VERSION" ;;
