@@ -273,6 +273,34 @@
       "path": "ahi/SKILL.md",
       "installed_in": ["_global"],
       "family": "fabrika (skill-yaşamdöngüsü; tier-standardı)"
+    },
+    {
+      "id": "sultanca",
+      "type": "skill",
+      "name": "sultanca — Sultan üslûbu (yaşayan dil & çıktı-tercih modeli)",
+      "version": "0.1.0",
+      "description": "Sultan'a NASIL konuşulacağını (dil) ve Sultan-yüzlü çıktının NASIL biçimleneceğini (format) yöneten yaşayan-model: UYGULA / ÖĞREN / SORGU üç-yüzü. Tek-kaynak store /config/.claude/sultan-uslubu.md (git-DIŞI, VERİ-sınıfı — skill kodu store'a yalnız işaret eder, içerik taşımaz).",
+      "tags": ["sultan-dili", "üslûp", "yaşayan-skill", "sürekli-öğrenen"],
+      "author": "sultanxgokce",
+      "source": "öksüz-adoption — evergreen tek-düğme kampanyası FAZ-1 (P1-lint bulgusu, 2026-07-13)",
+      "status": "canli",
+      "path": "sultanca/SKILL.md",
+      "installed_in": ["_global"],
+      "family": "sultan-dili (üslûp-modeli; sultan-ogren ile kapalı-döngü)"
+    },
+    {
+      "id": "sultan-ogren",
+      "type": "skill",
+      "name": "sultan-ogren — Sultan-tercihi hızlı-yakala (manuel-hat)",
+      "version": "0.1.0",
+      "description": "Sultan'ın dil/biçim tercihini üslûp-modeline aday-kayıt olarak HIZLI kaydeder (ogren.sh tek-yazar helper). disable-model-invocation: açık-tetik. sultanca'nın kapalı-döngü eşi.",
+      "tags": ["sultan-dili", "öğrenme", "yakalama"],
+      "author": "sultanxgokce",
+      "source": "öksüz-adoption — evergreen tek-düğme kampanyası FAZ-1 (P1-lint bulgusu, 2026-07-13)",
+      "status": "canli",
+      "path": "sultan-ogren/SKILL.md",
+      "installed_in": ["_global"],
+      "family": "sultan-dili (üslûp-modeli; sultanca ile kapalı-döngü)"
     }
   ]
 }
