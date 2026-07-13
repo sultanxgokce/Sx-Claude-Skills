@@ -56,6 +56,9 @@ put "$TMPL/ekip-context-scan.sh"    "$TARGET/scripts/ekip-context-scan.sh"
 chmod +x "$TARGET/scripts/ekip-context-scan.sh" 2>/dev/null || true
 put "$TMPL/ekip-tazele.sh"          "$TARGET/scripts/ekip-tazele.sh"
 chmod +x "$TARGET/scripts/ekip-tazele.sh" 2>/dev/null || true
+# yönetici→üye UZAKTAN compact-orkestra (öz-servis'in uzaktan-kardeşi; ekip-compact-core.lib REUSE)
+put "$TMPL/ekip-compact.sh"             "$TARGET/scripts/ekip-compact.sh"
+chmod +x "$TARGET/scripts/ekip-compact.sh" 2>/dev/null || true
 put "$TMPL/ekip-registry.yaml.tmpl" "$TARGET/_agents/handoff/ekip-registry.yaml"
 put "$TMPL/ekip-brief.md"           "$TARGET/_agents/handoff/ekip-brief.md"
 for s in ekip-brief-ver ekip-brief-iste ajan-gorev durum ekibi-tazele; do
