@@ -53,6 +53,12 @@ cmd_tiers() {
   fi
 }
 
+pir_repo_of() {  # pir-registry'den own-repo yolu (FAZ-6/ADR-002; yoksa boş-string)
+  local reg="$AHI_DIR/pir-registry.json"
+  { [ -f "$reg" ] && command -v node >/dev/null 2>&1; } || { echo ""; return 0; }
+  node -pe "try{(JSON.parse(require('fs').readFileSync('$reg','utf8')).pirler.find(p=>p.name==='$1')||{}).repo||''}catch(e){''}" 2>/dev/null || echo ""
+}
+
 cmd_check() {
   command -v node >/dev/null 2>&1 || { red "node bulunamadı (validate*.mjs gerektirir)"; return 2; }
   local target="${1:-}"
@@ -61,9 +67,17 @@ cmd_check() {
     node "$AHI_DIR/schema/validate-repo.mjs" "$AHI_DIR/.." "$@"; return $?
   fi
   # <skill> → manifest-şema-valid (FAZ-0b). 'ahi' = dogfood (kendi manifesti).
-  local mani
+  # Pîr/S4 own-repo hedefleri (FAZ-6): Sx-altında bulunamazsa pir-registry'den çözülür.
+  local mani prepo
   if [ "$target" = "ahi" ]; then mani="$AHI_DIR/ahi.manifest.yaml"
-  else mani="$AHI_DIR/../$target/ahi.manifest.yaml"; [ -f "$mani" ] || mani="$target/ahi.manifest.yaml"; fi
+  else
+    mani="$AHI_DIR/../$target/ahi.manifest.yaml"
+    [ -f "$mani" ] || mani="$target/ahi.manifest.yaml"
+    if [ ! -f "$mani" ]; then
+      prepo="$(pir_repo_of "$target")"
+      [ -n "$prepo" ] && mani="$prepo/ahi.manifest.yaml"
+    fi
+  fi
   [ -f "$mani" ] || { red "manifest bulunamadı: $mani"; return 1; }
   node "$AHI_DIR/schema/validate.mjs" "$mani"
 }
@@ -115,6 +129,10 @@ cmd_promote() {
   local skill="${1:-}"
   [ -n "$skill" ] || { red "kullanım: ahi promote <skill>"; return 2; }
   local sdir="$AHI_DIR/../$skill" mani="$AHI_DIR/../$skill/ahi.manifest.yaml"
+  if [ ! -f "$mani" ]; then  # Pîr own-repo (FAZ-6): registry'den çöz
+    local prepo0; prepo0="$(pir_repo_of "$skill")"
+    [ -n "$prepo0" ] && { sdir="$prepo0"; mani="$prepo0/ahi.manifest.yaml"; }
+  fi
   [ -f "$mani" ] || { red "manifest bulunamadı: $mani"; return 1; }
   local tier next
   tier="$(grep -m1 '^tier:' "$mani" | awk '{print $2}')"
@@ -138,7 +156,17 @@ cmd_promote() {
     usta)
       chk "$([ "$reqcount" -ge 2 ] && echo 1 || echo 0)" "≥2 skill besteliyor (requires=$reqcount)"
       chk "$([ "$projcount" -ge 2 ] && echo 1 || echo 0)" "≥2-projede-aktif (install=$projcount)" ;;
-    pir) ylw "  ⚠ Usta→Pîr (remote-repo · CI · kendini-besleyen-döngü) = MANUEL-BEYAN (makine-okunamaz, Sultan-gate)"; pass=0 ;;
+    pir)
+      # FAZ-6: mekanik ön-problar (nihai-karar yine MANUEL-BEYAN/Sultan-gate — pass=0 korunur)
+      local prepo1; prepo1="$(pir_repo_of "$skill")"
+      if [ -n "$prepo1" ] && [ -d "$prepo1" ]; then
+        chk "$([ -f "$prepo1/ahi.manifest.yaml" ] && echo 1 || echo 0)" "own-repo manifest var ($prepo1)"
+        chk "$([ -f "$prepo1/ROADMAP.md" ] && echo 1 || echo 0)" "kendi-roadmap var (ROADMAP.md)"
+        if git -C "$prepo1" remote get-url origin >/dev/null 2>&1; then grn "  ✓ remote var"; else ylw "  ⚠ remote YOK (Pîr-mezuniyet remote+CI ister)"; fi
+      else
+        ylw "  ⚠ pir-registry'de own-repo kaydı yok — ahi/pir-registry.json'a ekle (ADR-002)"
+      fi
+      ylw "  ⚠ Usta→Pîr nihai-karar (kendini-besleyen-döngü kanıtı) = MANUEL-BEYAN (Sultan-gate; yukarıdakiler ön-probdur)"; pass=0 ;;
   esac
   if [ "$agedays" = "manuel" ]; then ylw "  ⚠ min-yaş: git-geçmişi-yok (manuel-beyan)"; else chk "$([ "$agedays" -ge 30 ] && echo 1 || echo 0)" "min-yaş ≥30g (yaş=${agedays}g)"; fi
   echo
@@ -205,6 +233,22 @@ cmd_health() {
     else tier="—"; dep="unmanaged (AHÎ-yönetimsiz)"; unmanaged=$((unmanaged+1)); fi
     printf "  %-26s %-8s %s\n" "$name" "$tier" "$dep"
   done
+  # Pîr/S4 kendi-repolu sistemler (pir-registry.json — FAZ-6/ADR-002; Sx-alt-dizini değildir)
+  local reg="$AHI_DIR/pir-registry.json" pname prepo
+  if [ -f "$reg" ] && command -v node >/dev/null 2>&1; then
+    while IFS=$'\t' read -r pname prepo; do
+      [ -n "$pname" ] || continue
+      if [ -f "$prepo/ahi.manifest.yaml" ]; then
+        if node "$AHI_DIR/schema/validate.mjs" "$prepo/ahi.manifest.yaml" >/dev/null 2>&1; then
+          printf "  %-26s %-8s %s\n" "$pname" "pir" "aktif (own-repo: $prepo)"; managed=$((managed+1))
+        else
+          printf "  %-26s %-8s %s\n" "$pname" "pir" "manifest GEÇERSİZ ($prepo)"; managed=$((managed+1))
+        fi
+      else
+        printf "  %-26s %-8s %s\n" "$pname" "pir" "manifest YOK ($prepo — görünmez-mount/izole?)"; unmanaged=$((unmanaged+1))
+      fi
+    done < <(node -pe "try{JSON.parse(require('fs').readFileSync('$reg','utf8')).pirler.map(p=>p.name+'\t'+p.repo).join('\n')}catch(e){''}" 2>/dev/null)
+  fi
   echo
   echo "Özet: $managed AHÎ-yönetimli · $unmanaged yönetimsiz · $deprecated emekli"
   echo "--- repo-parity (özet) ---"

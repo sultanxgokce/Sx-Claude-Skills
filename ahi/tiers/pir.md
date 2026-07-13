@@ -16,3 +16,10 @@
 
 **⚠️ DOĞRULAMA-DÖNGÜSÜ (post-V1, SERDAR-Lonca-bitince):** Lonca = CANLI S4-örnek. AHÎ-kanonunun İLK gerçek-testi = "Lonca bu 9-boyuta oturuyor mu?".
 V1 bunu HENÜZ mekanik-kanıtlamaz (Sultan-kabul, `04-plan §8-Q4`); Lonca-törpüleme = FAZ-6 dogfood (Dim2/3/4/5/8/9 + üreteç-yüzü büküm + S3→S4 Pîr-özel-appraisal + substrat-emeklilik).
+
+**✅ FAZ-6 DOGFOOD YAPILDI (2026-07-13, SERDAR):** Lonca `ahi.manifest.yaml` (tier:pir) kendi-repo'sunda
+(`/config/projects/lonca`); üreteç-yüzü büküm = `pir-registry.json` + check/health/promote own-repo
+çözümlemesi (ADR-002); usta→pir appraisal'a mekanik ön-problar eklendi (nihai-karar Sultan-gate KALIR).
+Kanon-hükmü: 9-boyut Lonca'yı İFADE EDİYOR — kanon-boşluğu ÇIKMADI (boşluk araç-erişimindeydi, kapandı).
+Açık-kalan uçlar (V2): substrat-nasıl-emekli-olur · Pîr "kendini-besleyen-döngü" kanıtının mekanikleşmesi ·
+Lonca'nın üreteç-rolü (lonca_gen.py 4.-üreteç) uzlaşması. Törpüleme-raporu: Nexus `_agents/lonca/AHI-FAZ6-TORPULEME.md`.
