@@ -1,0 +1,8 @@
+# FIXTURE: geçerli manifest (validate.mjs → exit 0 beklenir)
+tier: kalfa
+name: ornek-skill
+generic_goal: "işi güvenilir tekrarlanabilir yapıyor"
+activation:
+  onKeyword: ornek
+install_targets:
+  - _global

@@ -52,6 +52,64 @@ cmd_tiers() {
   fi
 }
 
+cmd_check() {
+  local target="${1:-}"
+  command -v node >/dev/null 2>&1 || { red "node bulunamadı (validate.mjs gerektirir)"; return 2; }
+  local mani
+  if [ -z "$target" ] || [ "$target" = "ahi" ]; then
+    mani="$AHI_DIR/ahi.manifest.yaml"
+  else
+    mani="$AHI_DIR/../$target/ahi.manifest.yaml"
+    [ -f "$mani" ] || mani="$target/ahi.manifest.yaml"
+  fi
+  [ -f "$mani" ] || { red "manifest bulunamadı: $mani"; return 1; }
+  node "$AHI_DIR/schema/validate.mjs" "$mani"
+  # NOT: FAZ-0b = yalnız manifest-şema-valid. catalog/sync-targets/README parity + drift = FAZ-2 (ADR-001).
+}
+
+cmd_new() {
+  local tier="${1:-}" name="${2:-}" apply=0
+  [ "${3:-}" = "--apply" ] && apply=1
+  case "$tier" in cirak|kalfa|usta|pir) ;; *) red "geçersiz kademe: '$tier' (cirak|kalfa|usta|pir)"; return 2 ;; esac
+  [ -n "$name" ] || { red "ad gerekli: ahi new <kademe> <ad> [--apply]"; return 2; }
+  echo "$name" | grep -qE '^[a-z][a-z0-9]*(-[a-z0-9]+)*$' || { red "geçersiz slug: '$name' (kebab-case a-z0-9; ör. ornek-skill)"; return 2; }
+  local gg
+  case "$tier" in
+    cirak) gg="işi yapıyor" ;;
+    kalfa) gg="planlı + paketli + her-projede güvenilir tekrarlanabilir" ;;
+    usta)  gg="standarttan-türetilmiş bileşik iş-sistemi" ;;
+    pir)   gg="ölçülen + kendini-geliştiren yaşayan-sistem" ;;
+  esac
+  if [ "$tier" = "pir" ]; then
+    ylw "Pîr (S4 · yaşayan-sistem) = KENDİ-REPO (skill-dizini değil)."
+    echo "  Rehber: 'ahi tiers pir' — kendi-repo iskeleti (DOCTRINE/CONTRACT/ROADMAP/ADR) + remote+CI zorunlu (Lonca emsali)."
+    return 0
+  fi
+  local tdir="$AHI_DIR/templates/$tier"
+  [ -d "$tdir" ] || { red "şablon yok: $tdir"; return 1; }
+  local dest="$AHI_DIR/../$name" rel
+  if [ "$apply" -ne 1 ]; then
+    ylw "DRY-RUN (yazma-öncesi DURAK) — onaylarsan --apply ekle:"
+    echo "  kademe : $tier   ad: $name"
+    echo "  hedef  : $dest/"
+    echo "  generic-goal (default): \"$gg\""
+    echo "  üretilecek:"
+    while IFS= read -r rel; do echo "    $name/${rel#./}"; done < <(cd "$tdir" && find . -type f)
+    echo "  → onay: ahi new $tier $name --apply"
+    return 0
+  fi
+  [ -e "$dest" ] && { red "hedef zaten var: $dest (üzerine yazılmaz)"; return 2; }
+  while IFS= read -r rel; do
+    rel="${rel#./}"; mkdir -p "$dest/$(dirname "$rel")"
+    sed -e "s|{{NAME}}|$name|g" -e "s|{{TIER}}|$tier|g" -e "s|{{GENERIC_GOAL}}|$gg|g" "$tdir/$rel" > "$dest/$rel"
+  done < <(cd "$tdir" && find . -type f)
+  if grep -rq '{{' "$dest" 2>/dev/null; then
+    red "dolmamış placeholder kaldı — sevk-RED:"; grep -rn '{{' "$dest" >&2; return 1
+  fi
+  grn "✓ üretildi: $dest/"
+  echo "--- ahi check $name ---"; cmd_check "$name"
+}
+
 stub() { ylw "[$1] FAZ-$2'de gelir (şu an kabuk). Kanon hazır: ahi doctrine"; }
 
 main() {
@@ -59,8 +117,8 @@ main() {
   case "$cmd" in
     doctrine)        cmd_doctrine ;;
     tiers)           cmd_tiers "${1:-}" ;;
-    new)             stub new 1 ;;
-    check)           stub check 2 ;;
+    new)             cmd_new "$@" ;;
+    check)           cmd_check "${1:-}" ;;
     promote)         stub promote 3 ;;
     deprecate)       stub deprecate 3 ;;
     classify)        stub classify 4 ;;

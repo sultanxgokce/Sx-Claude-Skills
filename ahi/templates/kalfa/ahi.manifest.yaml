@@ -1,0 +1,9 @@
+# {{NAME}} — AHÎ ile üretildi (kademe: kalfa)
+# version manifest'te YOK (tek-evi SKILL.md frontmatter — ADR-001).
+tier: kalfa
+name: {{NAME}}
+generic_goal: "{{GENERIC_GOAL}}"
+activation:
+  onKeyword: {{NAME}}
+install_targets:
+  - _global
