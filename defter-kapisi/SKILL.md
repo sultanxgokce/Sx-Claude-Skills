@@ -38,6 +38,13 @@ ne yapacağın net olur ve mesaj geldiğinde şak şak şak hızlı yaparsın."*
 - **PROTOKOL B:** Bir **defter/mailbox mesajı** geldiğinde (Nexus: `defter-mailbox.sh check` bekleyen döndürür;
   ya da harness "📬 Sultan mailbox'a yazdı" ile haber verir).
 
+> **Güvenilir-tetik (hook backstop):** PROTOKOL A refleks-hızı model'e-bağlı olduğu için atlanabiliyordu.
+> Nexus'ta `scripts/hooks/gorev-niyeti-nudge.sh` UserPromptSubmit hook'u, Sultan'ın mesajında görev-niyeti
+> kalıbı görünce `🎯 görev-niyeti → defter-kapisi protokolü` bağlamını **model-bağımsız** düşürür. Bu bağlamı
+> gördüğünde bu skill'in PROTOKOL A'sını ÇAĞIR (A1→A2→A3). Hook = güvenilir zil; skill = izlenecek yol.
+> Hook sustuysa da (throttle/kill-switch) doğal-dil sinyali görülünce elle çağrılır — hook backstop'tur,
+> zorunlu-koşul değil. (Kaynak-proje bu hook'u sunmuyorsa PROTOKOL A yalnız doğal-dil sinyaliyle tetiklenir.)
+
 ---
 
 ## PROTOKOL A — Görev-Yakalama Kapısı
