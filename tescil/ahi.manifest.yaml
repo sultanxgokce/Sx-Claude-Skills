@@ -1,0 +1,14 @@
+# tescil — AHÎ ile üretildi (kademe: kalfa)
+# version manifest'te YOK (tek-evi SKILL.md frontmatter — ADR-001).
+# DİVAN K5 (k0054): MÜHÜRDAR el-kitabı — sert-teslim + kesif KOMPOZİSYONU (yeniden icat yok).
+tier: kalfa
+name: tescil
+generic_goal: "planlı + paketli + her-projede güvenilir tekrarlanabilir"
+activation:
+  onKeyword: tescil
+  onCommand: tescil
+requires:
+  - sert-teslim
+  - kesif
+install_targets:
+  - _global
