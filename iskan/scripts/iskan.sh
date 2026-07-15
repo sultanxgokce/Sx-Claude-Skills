@@ -13,6 +13,9 @@
 # Kullanım: bash iskan.sh doctor
 set -uo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+COMPOSE_PARSE="$SCRIPT_DIR/lib/compose_parse.py"
+
 durum() { # durum <yeşil|kırmızı|doğrulanmadı> <ad> <detay> [remediation]
   local d="$1" ad="$2" detay="$3" fix="${4:-}"
   if [ -n "$fix" ]; then
@@ -357,6 +360,200 @@ _iskan_apply_ac() {
   eval "exec ${lock_fd}>&-" 2>/dev/null || true
 }
 
+# ── yeni-proje (FAZ-4: UC1 container-provizyon motoru) ──────────────────────────────────
+#
+# NEDEN: FAZ-4 = İSKÂN'ın İLK host-mutasyonu — DOCTRINE Değişmez-1 (REPO-FIRST) + Değişmez-2
+# (B1 volume-guard) + Değişmez-3 (Sultan-GO + negatif-kapı) burada somutlaşır. Bu fonksiyon
+# YALNIZ git-tracked repo'ya yazar (append-only, tek-blok); host-deploy AYRI adım (iskan-host.sh
+# --apply, SERDAR-onaylı cloudtop-PR merge'i SONRASI) — REPO-FIRST sırası kod-seviyesinde
+# zorlanır: bu fonksiyon hiçbir ssh/docker komutu ÇALIŞTIRMAZ.
+#
+# Port-seçimi + repo-yazımı flock ile atomik (B4 tasarımının repo-fazı; host-fazı port-lock'u
+# ayrıca iskan-host.sh --apply'da host-tarafında tutulur).
+
+# _iskan_pick_port <repo_compose> — mevcut "127.0.0.1:<port>:8443" portlarını tarar, 8449'dan
+# başlayarak ilk-boş portu döner (saf-fn, hiçbir yazım yapmaz).
+_iskan_pick_port() {
+  local repo_compose="$1" floor=8449 port
+  local used
+  used="$(grep -oE '"127\.0\.0\.1:[0-9]+:8443"' "$repo_compose" 2>/dev/null | grep -oE ':[0-9]+:' | tr -d ':' | sort -un)"
+  port="$floor"
+  while printf '%s\n' "$used" | grep -qx "$port"; do
+    port=$((port + 1))
+  done
+  echo "$port"
+}
+
+# _iskan_compose_blok <ad> <cname> <config_dir> <port> <mem_limit> — HÜMA-şablon-baz, minimal
+# (test-projesi/izole-provizyon → yalnız kendi config-dizini mount edilir; kişisel-proje/ortak-
+# köprü mount'ları GENEL-şablonun kapsamı-dışı, gelecek-fazda proje-türüne göre parametrize edilir).
+_iskan_compose_blok() {
+  local ad="$1" cname="$2" config_dir="$3" port="$4" mem_limit="$5"
+  cat <<EOF
+  # ── İSKÂN FAZ-4 provizyon: ${ad} (iskan.sh yeni-proje ile üretildi) ────────────────
+  ${cname}:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: ${cname}
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=\${TZ:-Europe/Istanbul}
+      - DOCKER_MODS=linuxserver/mods:universal-package-install
+      - INSTALL_PACKAGES=python3
+    volumes:
+      - ${config_dir}:/config
+    ports:
+      - "127.0.0.1:${port}:8443"
+    restart: unless-stopped
+    mem_limit: ${mem_limit}
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c '</dev/tcp/127.0.0.1/8443' || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    logging:
+      driver: json-file
+      options: { max-size: "50m", max-file: "3" }
+EOF
+}
+
+# _iskan_b1_check <repo_compose> <blok_dosyasi> — B1 kesişim-guard: aday-blok EKLENMEDEN-ÖNCE
+# ve EKLENDİKTEN-SONRA compose_parse.py intersections kümesini karşılaştırır; yalnız YENİ
+# ortaya-çıkan kesişimler (mevcut-kasıtlı-paylaşımlar DIŞARIDA — FAZ-1 firsthand-bulgusu) RED
+# sebebi sayılır. Döner: "0" (güvenli) veya >0 (yeni-kesişim sayısı, apply RED edilmeli).
+_iskan_b1_check() {
+  local repo_compose="$1" blok_dosyasi="$2"
+  local combined; combined="$(mktemp)"
+  cat "$repo_compose" "$blok_dosyasi" > "$combined" 2>/dev/null
+  local before after
+  before="$(python3 "$COMPOSE_PARSE" "$repo_compose" 2>/dev/null)"
+  after="$(python3 "$COMPOSE_PARSE" "$combined" 2>/dev/null)"
+  rm -f "$combined"
+  python3 - "$before" "$after" <<'PYEOF'
+import json, sys
+before_raw, after_raw = sys.argv[1], sys.argv[2]
+try:
+    before = json.loads(before_raw)["intersections"] if before_raw else []
+    after = json.loads(after_raw)["intersections"] if after_raw else []
+except Exception:
+    print("parse-hatasi")
+    sys.exit(0)
+before_keys = {(i["path"], tuple(sorted(i["services"]))) for i in before}
+new = [i for i in after if (i["path"], tuple(sorted(i["services"]))) not in before_keys]
+print(len(new))
+PYEOF
+}
+
+cmd_yeni_proje() {
+  local ad="" mode="" mem_limit="512m"
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --dry-run) mode="dry-run"; shift ;;
+      --apply) mode="apply"; shift ;;
+      --mem-limit) mem_limit="${2:-512m}"; shift 2 ;;
+      -*) echo "bilinmeyen argüman: $1" >&2; exit 2 ;;
+      *) ad="$1"; shift ;;
+    esac
+  done
+  if [ -z "$ad" ] || [ -z "$mode" ]; then
+    echo "kullanım: iskan.sh yeni-proje <ad> [--mem-limit <val>] --dry-run|--apply" >&2
+    exit 2
+  fi
+
+  local repo_compose="${ISKAN_REPO_COMPOSE:-/config/projects/cloudtop/infra/docker-compose.server.yml}"
+  [ -f "$repo_compose" ] || { echo "[kırmızı] repo-compose bulunamadı: $repo_compose" >&2; exit 1; }
+
+  local cname="cloudtop-${ad}" config_dir="./config-${ad}"
+
+  # İDEMPOTENCY (FAZ-4 devral-gereği): blok zaten repo-compose'daysa RED değil GEÇİŞ —
+  # dry-run mevcut-hâli önizler (exit 3), apply yeniden-yazmadan başarıyla geçer (exit 0).
+  # (repo-first akışında blok bir-kez merge edildikten sonra üreteç tekrar-koşulabilir olmalı.)
+  local mevcut=0
+  if grep -qE "container_name:[[:space:]]*${cname}\$" "$repo_compose"; then
+    mevcut=1
+  fi
+
+  local port blok blok_dosyasi="" yeni_kesisim=0
+  if [ "$mevcut" = "1" ]; then
+    port="$(awk -v cn="$cname" '
+      /container_name:/ { if ($0 ~ cn) { found=1 } else { found=0 } }
+      found && /127\.0\.0\.1:[0-9]+:8443/ { match($0, /127\.0\.0\.1:[0-9]+:8443/); s=substr($0, RSTART, RLENGTH); split(s, a, ":"); print a[2]; exit }
+    ' "$repo_compose")"
+  else
+    port="$(_iskan_pick_port "$repo_compose")"
+    blok="$(_iskan_compose_blok "$ad" "$cname" "$config_dir" "$port" "$mem_limit")"
+    blok_dosyasi="$(mktemp)"
+    printf '%s\n' "$blok" > "$blok_dosyasi"
+    yeni_kesisim="$(_iskan_b1_check "$repo_compose" "$blok_dosyasi")"
+  fi
+
+  if [ "$mode" = "dry-run" ] && [ "$mevcut" = "1" ]; then
+    echo "== İSKÂN yeni-proje — KURU-KOŞU (DEFAULT; hiçbir dosya yazılmaz, host'a dokunulmaz) =="
+    echo "proje: $ad · container: $cname · port: 127.0.0.1:${port:-?}:8443 (mevcut-bloktan okundu)"
+    echo "[yeşil] '$cname' bloğu ZATEN repo-compose'da (idempotent) — apply'da yeniden-yazım YAPILMAYACAK"
+    echo "-- MANİFEST-DOKUNUŞ (bilgilendirme — bu çağrıda hiçbir dosya yazılmadı) --"
+    echo "  - ${repo_compose} (blok mevcut → repo-yazımı GEREKMİYOR)"
+    echo "  - host-deploy + docker-compose up (AYRI adım: iskan-host.sh --apply, cloudtop-PR merge'i SONRASI)"
+    echo "== dry-run: hiçbir yazım yapılmadı (plan-exit sözleşmesi, exit=3) =="
+    exit 3
+  fi
+
+  if [ "$mode" = "dry-run" ]; then
+    echo "== İSKÂN yeni-proje — KURU-KOŞU (DEFAULT; hiçbir dosya yazılmaz, host'a dokunulmaz) =="
+    echo "proje: $ad · container: $cname · port: 127.0.0.1:${port}:8443 · mem_limit: $mem_limit"
+    echo "-- B1 (kesişim-guard, önizleme) -- yeni-kesişim: ${yeni_kesisim} $([ "$yeni_kesisim" = "0" ] && echo '(GÜVENLİ)' || echo '(RED-adayı — apply reddedilecek)')"
+    echo "-- ÜRETİLECEK COMPOSE-BLOK --"
+    printf '%s\n' "$blok"
+    echo "-- MANİFEST-DOKUNUŞ (bilgilendirme — bu çağrıda hiçbir dosya yazılmadı) --"
+    echo "  - ${repo_compose} (REPO-FIRST: yalnız bu tek-blok eklenecek, başka satıra dokunulmayacak)"
+    echo "  - host-deploy + docker-compose up (AYRI adım: iskan-host.sh --apply, cloudtop-PR merge'i SONRASI)"
+    rm -f "$blok_dosyasi"
+    echo "== dry-run: hiçbir yazım yapılmadı (plan-exit sözleşmesi, exit=3) =="
+    exit 3
+  fi
+
+  # --apply: Sultan-GO kapısı (DOCTRINE Değişmez-3) — marker yoksa repo'ya BİLE dokunulmaz.
+  # (idempotent-geçişten de ÖNCE: GO'suz --apply her koşulda exit≠0, G3 negatif-kapı sözleşmesi.)
+  if [ "${ISKAN_FAZ4_GO:-}" != "1" ]; then
+    [ -n "$blok_dosyasi" ] && rm -f "$blok_dosyasi"
+    echo "[kırmızı] yeni-proje --apply: FAZ-4 Sultan-GO env-marker gerekli (ISKAN_FAZ4_GO=1) — repo'ya/host'a SIFIR-dokunuş (DOCTRINE Değişmez-3)" >&2
+    exit 4
+  fi
+
+  if [ "$mevcut" = "1" ]; then
+    echo "== İSKÂN yeni-proje — İDEMPOTENT GEÇİŞ =="
+    echo "[yeşil] '$cname' bloğu ZATEN repo-compose'da (port: ${port:-?}) — yeniden-yazım YOK, hiçbir dosyaya dokunulmadı"
+    exit 0
+  fi
+
+  if [ "$yeni_kesisim" != "0" ]; then
+    rm -f "$blok_dosyasi"
+    echo "[kırmızı] yeni-proje --apply: B1 volume-path kesişim-guard tetiklendi (${yeni_kesisim} yeni-kesişim) — RED, hiçbir dosya yazılmadı" >&2
+    exit 1
+  fi
+
+  echo "== İSKÂN yeni-proje — REPO-YAZIMI (FAZ-4 Sultan-GO'lu; yalnız git-tracked repo'ya yazar, host'a DOKUNMAZ) =="
+  local lock_file="${ISKAN_PORT_LOCK_PATH:-$(dirname "$repo_compose")/.iskan-port.lock}"
+  exec {ISKAN_YP_LOCKFD}>"$lock_file" || { rm -f "$blok_dosyasi"; echo "[kırmızı] port-lock açılamadı: $lock_file" >&2; exit 1; }
+  if ! flock -w 10 "$ISKAN_YP_LOCKFD"; then
+    rm -f "$blok_dosyasi"
+    echo "[kırmızı] port-lock alınamadı (10sn zaman-aşımı, başka bir yeni-proje eş-zamanlı çalışıyor olabilir)" >&2
+    exit 1
+  fi
+  {
+    printf '\n'
+    cat "$blok_dosyasi"
+  } >> "$repo_compose"
+  eval "exec ${ISKAN_YP_LOCKFD}>&-" 2>/dev/null || true
+  rm -f "$blok_dosyasi"
+
+  echo "[yeşil] compose-blok eklendi: $repo_compose (append-only, mevcut hiçbir satıra dokunulmadı)"
+  echo "proje: $ad · container: $cname · port: 127.0.0.1:${port}:8443 · mem_limit: $mem_limit · B1-yeni-kesişim: 0"
+  echo "== bitti — yalnız git-tracked repo yazıldı; commit/push/PR + host-deploy AYRI adımlardır (REPO-FIRST, D1) =="
+  exit 0
+}
+
 case "${1:-}" in
   doctor)
     cmd_doctor
@@ -366,8 +563,12 @@ case "${1:-}" in
     shift
     cmd_seans_getir "$@"
     ;;
+  yeni-proje)
+    shift
+    cmd_yeni_proje "$@"
+    ;;
   *)
-    echo "kullanım: iskan.sh doctor | iskan.sh seans-getir --container <ad> [--apply]" >&2
+    echo "kullanım: iskan.sh doctor | iskan.sh seans-getir --container <ad> [--apply] | iskan.sh yeni-proje <ad> [--mem-limit <val>] --dry-run|--apply" >&2
     exit 2
     ;;
 esac

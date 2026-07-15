@@ -1,3 +1,4 @@
-UISERDAR	degraded	cdda49c8-6b4a-4d6e-abce-d02029deb282	uiSerdar
-AHENKSERDAR	degraded	3fd1c648-2077-4d1e-9660-a41fc0c47a87	ahenkSerdar
-MIMSERDAR	degraded	c5b3b428-a292-46ef-a389-40061844f93e	mimSerdar
+UISERDAR	degraded	27bd2165-9ae6-4fd3-8217-47be18bbeebc	uiSerdar
+BUGSERDAR	degraded	60af1771-9e13-4854-8372-9fa3630d7e03	bugSerdar
+AHENKSERDAR	degraded	33a9f964-e3e6-47b8-bc08-21cf64bf8f72	ahenkSerdar
+MIMSERDAR	degraded	784fd1ce-023b-435e-968c-9cbb9d034973	mimSerdar

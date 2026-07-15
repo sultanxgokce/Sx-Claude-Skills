@@ -1,0 +1,1 @@
+[yeşil] port-flock temiz: /config/projects/cloudtop/infra/.iskan-port.lock tutulmuyor (bayat-kilit yok)

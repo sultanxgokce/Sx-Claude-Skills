@@ -1,0 +1,8 @@
+== İSKÂN yeni-proje — KURU-KOŞU (DEFAULT; hiçbir dosya yazılmaz, host'a dokunulmaz) ==
+proje: iskantest · container: cloudtop-iskantest · port: 127.0.0.1:8449:8443 (mevcut-bloktan okundu)
+[yeşil] 'cloudtop-iskantest' bloğu ZATEN repo-compose'da (idempotent) — apply'da yeniden-yazım YAPILMAYACAK
+-- MANİFEST-DOKUNUŞ (bilgilendirme — bu çağrıda hiçbir dosya yazılmadı) --
+  - /config/projects/cloudtop/infra/docker-compose.server.yml (blok mevcut → repo-yazımı GEREKMİYOR)
+  - host-deploy + docker-compose up (AYRI adım: iskan-host.sh --apply, cloudtop-PR merge'i SONRASI)
+== dry-run: hiçbir yazım yapılmadı (plan-exit sözleşmesi, exit=3) ==
+exit=3

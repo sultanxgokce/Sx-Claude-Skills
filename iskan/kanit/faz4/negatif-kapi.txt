@@ -1,0 +1,5 @@
+[kırmızı] yeni-proje --apply: FAZ-4 Sultan-GO env-marker gerekli (ISKAN_FAZ4_GO=1) — repo'ya/host'a SIFIR-dokunuş (DOCTRINE Değişmez-3)
+apply-rc=4 (beklenen ≠0)
+docker-ps-md5 önce: 042e07f4393904c3abd4cff1377c6cb9  -
+docker-ps-md5 sonra: 042e07f4393904c3abd4cff1377c6cb9  -
+[yeşil] host'a SIFIR-dokunuş (md5 eş)
