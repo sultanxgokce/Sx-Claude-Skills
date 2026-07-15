@@ -159,5 +159,135 @@ wait "$HOLDER_PID" 2>/dev/null
 rm -f "$HOLDER_SCRIPT" "$CHALLENGER_SCRIPT"
 find "$LOCK_TEST_DIR" -type f -delete 2>/dev/null; find "$LOCK_TEST_DIR" -depth -type d -delete 2>/dev/null
 
+# ── FAZ-4: yeni-proje (compose-blok üreteci) ─────────────────────────────────────────────
+
+# 12. yeni-proje --dry-run: plan-exit=3, hiçbir dosya yazılmaz, önizleme port+blok içerir
+YP_FIXTURE="/tmp/iskan-test-yp-dryrun.$$.yml"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$YP_FIXTURE"
+SUM_BEFORE="$(md5sum "$YP_FIXTURE")"
+out="$(ISKAN_REPO_COMPOSE="$YP_FIXTURE" bash "$SCRIPT_DIR/iskan.sh" yeni-proje testproje --dry-run 2>&1)"
+rc=$?
+SUM_AFTER="$(md5sum "$YP_FIXTURE")"
+[ "$rc" = "3" ] && ok "yeni-proje --dry-run: plan-exit=3" || bad "yeni-proje --dry-run: rc beklenen 3, gelen $rc"
+[ "$SUM_BEFORE" = "$SUM_AFTER" ] && ok "yeni-proje --dry-run: dosya değişmedi" || bad "yeni-proje --dry-run: dosya DEĞİŞTİ (yazmamalıydı)"
+printf '%s' "$out" | grep -q "cloudtop-testproje" && printf '%s' "$out" | grep -q "8449" \
+  && ok "yeni-proje --dry-run: önizleme container-adı+port içeriyor" || bad "yeni-proje --dry-run: beklenen içerik eksik"
+find /tmp -maxdepth 1 -name "iskan-test-yp-dryrun.$$.yml" -delete 2>/dev/null
+
+# 13. yeni-proje --apply: GO-marker yokken exit=4, dosya SIFIR-değişir (negatif-kapı, G3-emsali)
+YP_FIXTURE2="/tmp/iskan-test-yp-neggate.$$.yml"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$YP_FIXTURE2"
+SUM_BEFORE2="$(md5sum "$YP_FIXTURE2")"
+env -u ISKAN_FAZ4_GO ISKAN_REPO_COMPOSE="$YP_FIXTURE2" bash "$SCRIPT_DIR/iskan.sh" yeni-proje testproje --apply >/dev/null 2>&1
+rc=$?
+SUM_AFTER2="$(md5sum "$YP_FIXTURE2")"
+[ "$rc" != "0" ] && ok "yeni-proje --apply: GO-marker yokken exit≠0 ($rc)" || bad "yeni-proje --apply: GO-marker yokken exit=0 (guard delindi)"
+[ "$SUM_BEFORE2" = "$SUM_AFTER2" ] && ok "yeni-proje --apply: GO-marker yokken dosya SIFIR-değişti" || bad "yeni-proje --apply: GO-marker yokken dosya DEĞİŞTİ (kritik-ihlal)"
+find /tmp -maxdepth 1 -name "iskan-test-yp-neggate.$$.yml" -delete 2>/dev/null
+
+# 14. yeni-proje --apply: GO-marker'lı, geçerli-YAML üretir, tek-blok ekler (append-only)
+YP_FIXTURE3="/tmp/iskan-test-yp-apply.$$.yml"
+YP_LOCKDIR3="/tmp/iskan-test-yp-lockdir.$$"
+mkdir -p "$YP_LOCKDIR3"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$YP_FIXTURE3"
+ORIG_HEAD="$(head -5 "$YP_FIXTURE3")"
+ISKAN_FAZ4_GO=1 ISKAN_REPO_COMPOSE="$YP_FIXTURE3" ISKAN_PORT_LOCK_PATH="$YP_LOCKDIR3/.lock" \
+  bash "$SCRIPT_DIR/iskan.sh" yeni-proje testproje --apply >/dev/null 2>&1
+rc=$?
+[ "$rc" = "0" ] && ok "yeni-proje --apply: GO-marker'lı başarılı, rc=0" || bad "yeni-proje --apply: GO-marker'lı beklenen rc=0, gelen $rc"
+python3 -c "import yaml; yaml.safe_load(open('$YP_FIXTURE3'))" >/dev/null 2>&1 \
+  && ok "yeni-proje --apply: sonuç geçerli-YAML" || bad "yeni-proje --apply: sonuç YAML-parse-hatası (bozuk-yazım)"
+NEW_HEAD="$(head -5 "$YP_FIXTURE3")"
+[ "$ORIG_HEAD" = "$NEW_HEAD" ] && ok "yeni-proje --apply: mevcut satırlara dokunulmadı (append-only, baş-değişmedi)" \
+  || bad "yeni-proje --apply: dosya-başı DEĞİŞTİ (append-only ihlali)"
+grep -qE "container_name:[[:space:]]*cloudtop-testproje\$" "$YP_FIXTURE3" \
+  && ok "yeni-proje --apply: yeni servis-bloğu eklendi" || bad "yeni-proje --apply: yeni servis-bloğu bulunamadı"
+find /tmp -maxdepth 1 -name "iskan-test-yp-apply.$$.yml" -delete 2>/dev/null
+find "$YP_LOCKDIR3" -type f -delete 2>/dev/null; find "$YP_LOCKDIR3" -depth -type d -delete 2>/dev/null
+
+# 15. yeni-proje İDEMPOTENCY: aynı-ad İKİNCİ-kez → apply rc=0 + dosya-değişmez; dry-run rc=3;
+#     GO'suz apply mevcut-blokta BİLE exit≠0 (G3 negatif-kapı idempotent-yoldan delinmez)
+YP_FIXTURE4="/tmp/iskan-test-yp-dup.$$.yml"
+YP_LOCKDIR4="/tmp/iskan-test-yp-lockdir4.$$"
+mkdir -p "$YP_LOCKDIR4"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$YP_FIXTURE4"
+ISKAN_FAZ4_GO=1 ISKAN_REPO_COMPOSE="$YP_FIXTURE4" ISKAN_PORT_LOCK_PATH="$YP_LOCKDIR4/.lock" \
+  bash "$SCRIPT_DIR/iskan.sh" yeni-proje testproje --apply >/dev/null 2>&1
+SUM_DUP_BEFORE="$(md5sum "$YP_FIXTURE4" | awk '{print $1}')"
+out="$(ISKAN_FAZ4_GO=1 ISKAN_REPO_COMPOSE="$YP_FIXTURE4" ISKAN_PORT_LOCK_PATH="$YP_LOCKDIR4/.lock" \
+  bash "$SCRIPT_DIR/iskan.sh" yeni-proje testproje --apply 2>&1)"
+rc=$?
+SUM_DUP_AFTER="$(md5sum "$YP_FIXTURE4" | awk '{print $1}')"
+[ "$rc" = "0" ] && ok "yeni-proje --apply: aynı-ad ikinci-kez İDEMPOTENT-geçiş (rc=0)" || bad "yeni-proje --apply: idempotent-geçiş beklenirdi (rc=0), gelen $rc"
+[ "$SUM_DUP_BEFORE" = "$SUM_DUP_AFTER" ] && ok "yeni-proje --apply: idempotent-geçişte dosya DEĞİŞMEDİ" || bad "yeni-proje --apply: idempotent-geçişte dosya DEĞİŞTİ (yeniden-yazım ihlali)"
+printf '%s' "$out" | grep -q "İDEMPOTENT" && ok "yeni-proje --apply: idempotent-geçiş açıkça beyan edildi" || bad "yeni-proje --apply: idempotent-beyanı çıktıda yok"
+ISKAN_REPO_COMPOSE="$YP_FIXTURE4" bash "$SCRIPT_DIR/iskan.sh" yeni-proje testproje --dry-run >/dev/null 2>&1
+rc=$?
+[ "$rc" = "3" ] && ok "yeni-proje --dry-run: mevcut-blokta plan-exit=3 (idempotent-önizleme)" || bad "yeni-proje --dry-run: mevcut-blokta beklenen rc=3, gelen $rc"
+env -u ISKAN_FAZ4_GO ISKAN_REPO_COMPOSE="$YP_FIXTURE4" bash "$SCRIPT_DIR/iskan.sh" yeni-proje testproje --apply >/dev/null 2>&1
+rc=$?
+[ "$rc" != "0" ] && ok "yeni-proje --apply: mevcut-blokta bile GO'suz exit≠0 ($rc)" || bad "yeni-proje --apply: GO'suz idempotent-yol exit=0 (negatif-kapı delindi)"
+find /tmp -maxdepth 1 -name "iskan-test-yp-dup.$$.yml" -delete 2>/dev/null
+find "$YP_LOCKDIR4" -type f -delete 2>/dev/null; find "$YP_LOCKDIR4" -depth -type d -delete 2>/dev/null
+
+# 16. yeni-proje --apply: B1 kesişim-guard — aday-blok mevcut bir volume-yolunu tekrar-kullanırsa RED
+#     (compose-collision.yml fixture'ı zaten bir kesişim içeriyor; yeni-servis AYNI path'i mount ederse ek-kesişim doğar)
+YP_FIXTURE5="/tmp/iskan-test-yp-b1.$$.yml"
+cp "$SCRIPT_DIR/fixtures/compose-collision.yml" "$YP_FIXTURE5"
+# fixture'daki mevcut bir servisin volume-host-path'ini oku, kendi ürettiğimiz bloğun İÇİNE enjekte edip B1'i tetikle
+EXISTING_PATH="$(python3 -c "
+import yaml
+d = yaml.safe_load(open('$YP_FIXTURE5'))
+for name, svc in d.get('services', {}).items():
+    for v in svc.get('volumes', []) or []:
+        print(str(v).split(':')[0]); raise SystemExit
+")"
+if [ -n "$EXISTING_PATH" ]; then
+  # yeni-proje bloğunu üret, kendi config-dizinini fixture'ın mevcut-path'iyle DEĞİŞTİR → yapay-kesişim
+  BLOK_TEXT="$(ISKAN_REPO_COMPOSE="$YP_FIXTURE5" bash "$SCRIPT_DIR/iskan.sh" yeni-proje b1test --dry-run 2>/dev/null | sed -n '/^  cloudtop-b1test:/,/max-file/p')"
+  BLOK_COLLIDING="$(printf '%s' "$BLOK_TEXT" | sed "s#\./config-b1test:/config#${EXISTING_PATH}:/config#")"
+  # NOT: "services:" ÖNEKİ EKLENMEZ — gerçek _iskan_b1_check akışında blok, repo_compose'un
+  # ZATEN-açık services: eşleşmesine append edilir; ikinci "services:" anahtarı YAML'da
+  # ÖNCEKİNİ EZER (duplicate-key) → alpha/beta sessizce kaybolur, yapay-negatif üretirdi (firsthand-bulgu).
+  printf '%s\n' "$BLOK_COLLIDING" > "/tmp/iskan-test-b1-injected.$$.yml"
+  n_new="$(bash -c "
+    source <(sed -n '/^_iskan_b1_check()/,/^}/p' '$SCRIPT_DIR/iskan.sh')
+    COMPOSE_PARSE='$SCRIPT_DIR/lib/compose_parse.py'
+    _iskan_b1_check '$YP_FIXTURE5' '/tmp/iskan-test-b1-injected.$$.yml'
+  ")"
+  [ "$n_new" != "0" ] && ok "_iskan_b1_check: mevcut-path'i tekrar-kullanan aday-blok YENİ-kesişim olarak tespit edildi ($n_new)" \
+    || bad "_iskan_b1_check: yapay-çakışma tespit edilemedi (B1 guard çalışmıyor), gelen '$n_new'"
+  find /tmp -maxdepth 1 -name "iskan-test-b1-injected.$$.yml" -delete 2>/dev/null
+else
+  bad "B1-test: fixture'dan mevcut-volume-path okunamadı (test-hazırlığı başarısız)"
+fi
+find /tmp -maxdepth 1 -name "iskan-test-yp-b1.$$.yml" -delete 2>/dev/null
+
+# 17. iskan-host.sh --apply: GO-marker yokken exit≠0, hostsrv'e HİÇ dokunulmaz (ssh-çağrısı yapılmadan erken-exit)
+env -u ISKAN_FAZ4_GO ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje testproje >/dev/null 2>&1
+rc=$?
+[ "$rc" != "0" ] && ok "iskan-host.sh --apply: GO-marker yokken exit≠0 (host'a hiç değmeden erken-guard)" \
+  || bad "iskan-host.sh --apply: GO-marker yokken exit=0 (guard delindi)"
+
+# 18. iskan-host.sh --apply: REPO-KANIT kapısı — aday origin/main'de YOKSA ssh'a hiç değmeden RED
+#     (hermetik mini-repo: origin=kendisi, compose'da aday-servis yok → git-show başarır ama grep bulamaz)
+RK_REPO="/tmp/iskan-test-rk-repo.$$"
+mkdir -p "$RK_REPO/infra"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$RK_REPO/infra/docker-compose.server.yml"
+git -C "$RK_REPO" init -q -b main 2>/dev/null
+git -C "$RK_REPO" -c user.email=t@t -c user.name=t add -A 2>/dev/null
+git -C "$RK_REPO" -c user.email=t@t -c user.name=t commit -qm x 2>/dev/null
+git -C "$RK_REPO" remote add origin "$RK_REPO" 2>/dev/null
+ISKAN_FAZ4_GO=1 ISKAN_CLOUDTOP_REPO_DIR="$RK_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  ISKAN_KANIT_DIR="/tmp/iskan-test-rk-kanit.$$" \
+  bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje testproje >/dev/null 2>&1
+rc=$?
+[ "$rc" != "0" ] && ok "iskan-host.sh --apply: REPO-KANIT yokken RED (rc=$rc, host'a değmeden)" \
+  || bad "iskan-host.sh --apply: REPO-KANIT yokken exit=0 (REPO-FIRST kapısı delindi)"
+for d in "$RK_REPO" "/tmp/iskan-test-rk-kanit.$$"; do
+  find "$d" -type f -delete 2>/dev/null; find "$d" -depth -type d -delete 2>/dev/null
+done
+
 echo "== ${PASS} geçti / ${FAIL} kaldı =="
 [ "$FAIL" -eq 0 ]

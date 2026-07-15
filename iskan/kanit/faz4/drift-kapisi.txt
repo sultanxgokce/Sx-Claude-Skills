@@ -1,0 +1,1 @@
+[yeşil] R4 drift-kapısı: drift = 0 (repo-desired ⟷ host-deployed yapısal-eş) — apply'a geçilebilir
