@@ -1,0 +1,13 @@
+services:
+  alpha:
+    container_name: cloudtop-alpha
+    volumes:
+      - ./config-alpha:/config
+    ports:
+      - "127.0.0.1:9001:9001"
+  beta:
+    container_name: cloudtop-beta
+    volumes:
+      - ./config-beta:/config
+    ports:
+      - "127.0.0.1:9002:9002"

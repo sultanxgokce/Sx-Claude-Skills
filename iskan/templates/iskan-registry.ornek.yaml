@@ -1,0 +1,28 @@
+# iskan-registry.yaml — ÖRNEK (K2 şema).
+#
+# Bu dosya yalnız ŞEKİL-referansıdır — Sx-Claude-Skills'te yaşar, cloudtop-reposuna DOKUNMAZ.
+# Gerçek iskan-registry.yaml künye-dosyası `cloudtop/infra/iskan-registry.yaml`'da FAZ-4
+# (container-provizyon) sırasında doğar — `inventory.yaml`/`provider-inventory.yaml` ile
+# YAN YANA, git-tracked. Sır-DEĞERİ hiçbir alana yazılmaz (yalnız machine_identity_ref = AD).
+
+proje: ornek-proje
+container_adi: cloudtop-ornek
+hostname: ornek.mmepanel.com
+port: 8080
+config_dir: /opt/cloudtop/config-ornek
+repo_yolu: /config/projects/ornek-proje
+# izole-repo içi koordinasyon-yolu; SERDAR-ailesi projeler için aile-registry.yaml
+ekip_registry_pointer: _agents/orchestration/agent-registry.json
+cf_access_app: ornek-access-app
+# YALNIZ AD — sır-DEĞERİ (CID/CSEC) burada asla yaşamaz, bkz credentials.yaml
+machine_identity_ref: ornek-reader
+uyeler:
+  - id: ROL-01
+    # tmux hedefi: ad:pencere (casing-kayıtlı — aile-tmux-reconcile bunu okur)
+    tmux: "ROL-01:0"
+    # ZORUNLU-alan (MUTLAK yol) — K3 seans-getir merdiveni cwd olmadan resume edemez
+    cwd: /config/projects/ornek-proje
+    worktree_branch: null
+    # İSKÂN-rezerve uuid; ilk-seans açılışında `claude --session-id <uuid>` ile doldurulur (K3)
+    session_id: null
+    permission_mode: default
