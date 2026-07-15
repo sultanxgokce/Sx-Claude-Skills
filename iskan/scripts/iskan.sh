@@ -79,13 +79,223 @@ cmd_doctor() {
   echo "== bitti — advisory rapor, exit her-zaman 0 =="
 }
 
+# ── seans-getir (FAZ-2: K3 merdiveni) ───────────────────────────────────────────────────
+#
+# NEDEN: mtime-tahmini adversaryal-çürütüldü (paylaşılan-cwd'de rol-sahipliği ayırt-edilemez).
+# Yerine KAYIT-tabanlı merdiven: (a) casing-reconcile → (b) kayıtlı-session-id-resume →
+# (c) legacy-kimlik-imza eşleme → tek-anlamlı-değilse AÇIK-etiketli degraded-replay/SUSPECT.
+#
+# DEFAULT = KURU-KOŞU: hiçbir tmux-session açmaz/kapamaz, hiçbir claude-process başlatmaz,
+# hiçbir dosya yazmaz — yalnız registry+tmux-ls+transkript-BAŞI okur. exit=3 (plan-exit).
+# --apply bu fazda ÇALIŞMAZ (FAZ-3 Sultan-GO'suna kilitli) — guard exit=4.
+
+# acquire_role_lock <session_id> — FAZ-3 apply-path primitifi (K3 madde-3: kilit-ömrü
+# script-ömrü DEĞİL, PANE-PID'ine bağlı — bu yüzden flock fd'si script çıkışında KAPATILMAZ,
+# çağıran (gelecek FAZ-3 apply-akışı) pane'in ömrü boyunca fd'yi açık tutar). Bu fazda
+# --apply guard'ı erken exit ettiği için bu fonksiyon HENÜZ ÇAĞRILMIYOR — FAZ-3'ün üzerine
+# inşa edeceği primitif olarak şimdiden yazılıp iskan.test.sh'te bağımsız doğrulanıyor.
+acquire_role_lock() {
+  local session_id="$1" lock_dir="${ISKAN_LOCK_DIR:-/tmp/iskan-locks}"
+  mkdir -p "$lock_dir" 2>/dev/null || return 1
+  local lock_file="$lock_dir/${session_id}.lock"
+  exec {ISKAN_LOCK_FD}>"$lock_file" || return 1
+  if ! flock -n "$ISKAN_LOCK_FD"; then
+    echo "kırmızı: session-id ${session_id} zaten kilitli (başka bir pane sahiplenmiş)" >&2
+    return 1
+  fi
+  echo "$ISKAN_LOCK_FD"
+}
+
+# _identity_imza_ara <rol-id> <transkript-dizini> — transkript-BAŞINDA (ilk 60 satır)
+# "🧑‍🚀 <ROL> geri-yüklendi" asistan-mesajı arar. Tam-dosya grep BİLİNÇLİ KULLANILMAZ:
+# firsthand-bulgu (bu leg'in probe-turunda) — geç-satırlarda başka-rolü konu-eden metin
+# (ör. bu görevin kendi transkriptinde "MIMSERDAR" adının konuşma-içinde geçmesi) sahte-
+# eşleşme üretiyor; yalnız asistan'ın role="assistant" + text tam-imza-kalıbıyla BAŞLAYAN
+# EN-ERKEN mesajı sayılır (SessionStart-hook içeriği role="assistant" DEĞİLDİR, elenir).
+_identity_imza_ara() {
+  local rol="$1" dizin="$2"
+  [ -d "$dizin" ] || { echo ""; return 0; }
+  python3 - "$rol" "$dizin" <<'PYEOF'
+import json, re, sys, os, glob
+
+rol, dizin = sys.argv[1], sys.argv[2]
+pat = re.compile(r'^🧑‍🚀\s+(\S+)\s+geri-yüklendi')
+# en-taze N dosya (performans-sınırı, dürüst-belgelendi: sınırsız-tarama yapılmaz)
+files = sorted(glob.glob(os.path.join(dizin, "*.jsonl")), key=os.path.getmtime, reverse=True)[:200]
+
+eslesen = []
+for fp in files:
+    try:
+        with open(fp, encoding="utf-8", errors="replace") as f:
+            for i, line in enumerate(f):
+                if i >= 60:
+                    break
+                try:
+                    obj = json.loads(line)
+                except Exception:
+                    continue
+                msg = obj.get("message") or {}
+                if msg.get("role") != "assistant":
+                    continue
+                for block in msg.get("content") or []:
+                    if not isinstance(block, dict) or block.get("type") != "text":
+                        continue
+                    m = pat.match((block.get("text") or "").strip())
+                    if m and m.group(1) == rol:
+                        eslesen.append(os.path.basename(fp).removesuffix(".jsonl"))
+                        break
+                else:
+                    continue
+                break
+    except OSError:
+        continue
+
+print(",".join(eslesen))
+PYEOF
+}
+
+cmd_seans_getir() {
+  local container="" apply=0
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --container) container="${2:-}"; shift 2 ;;
+      --apply) apply=1; shift ;;
+      *) echo "bilinmeyen argüman: $1" >&2; echo "kullanım: iskan.sh seans-getir --container <ad> [--apply]" >&2; exit 2 ;;
+    esac
+  done
+  [ -n "$container" ] || { echo "kullanım: iskan.sh seans-getir --container <ad> [--apply]" >&2; exit 2; }
+
+  if [ "$apply" -eq 1 ]; then
+    echo "[kırmızı] seans-getir --apply: FAZ-3 Sultan-GO gerekli — bu fazda --apply ÇALIŞMAZ (bkz DOCTRINE Değişmez-3, K3 madde-4)" >&2
+    exit 4
+  fi
+
+  echo "== İSKÂN seans-getir — KURU-KOŞU (DEFAULT; hiçbir seans açmaz/kapamaz/yazmaz) =="
+  echo "hedef-container: $container"
+
+  # FAZ-2 kapsamı: yalnız cloudtop-code (SERDAR-ailesi, kaynak=aile-registry.yaml) desteklenir.
+  # Diğer İSKÂN-provizyonlu container'lar (K2 iskan-registry.yaml) FAZ-4+ ürünüdür, henüz yok.
+  if [ "$container" != "cloudtop-code" ]; then
+    echo "[doğrulanmadı] '$container' için K2 iskan-registry henüz yok (FAZ-4 provizyon-ürünü) — bu fazda yalnız cloudtop-code (aile-registry kaynağı) desteklenir"
+    exit 3
+  fi
+
+  local aile_registry="${ISKAN_AILE_REGISTRY:-/config/projects/Nexus/_agents/handoff/aile-registry.yaml}"
+  local reconcile_sh="${ISKAN_RECONCILE_SH:-/config/projects/Nexus/scripts/aile-tmux-reconcile.sh}"
+  local transkript_dizin="${ISKAN_TRANSCRIPT_DIR:-$HOME/.claude/projects/-config-projects-Nexus}"
+  local proje_registry="${ISKAN_PROJECT_REGISTRY:-}"   # K2 session_id kaynağı — bu proje için henüz yok (boş=atlanır)
+
+  [ -f "$aile_registry" ] || { echo "[kırmızı] aile-registry bulunamadı: $aile_registry" >&2; exit 3; }
+  echo "kaynak: aile-registry ($aile_registry)"
+
+  # (a) reconcile-compose — casing-yeniden-adlandırma self-heal ihtimali (READ-ONLY: script
+  # zaten default=dry-run, biz de --apply VERMİYORUZ → registry'ye hiç dokunulmaz).
+  local reconcile_out=""
+  if [ -f "$reconcile_sh" ]; then
+    reconcile_out="$(bash "$reconcile_sh" 2>/dev/null || true)"
+  fi
+
+  # aile-registry'den (id, tmux-hedef) çıkar + canlı-tmux-ls ile karşılaştır → kapalı-üyeler.
+  local live_sessions olu_roller
+  live_sessions="$(tmux list-sessions -F '#{session_name}' 2>/dev/null || true)"
+
+  olu_roller="$(python3 - "$aile_registry" <<PYEOF
+import re, sys
+reg_path = sys.argv[1]
+live = """$live_sessions""".split()
+live_set = set(live)
+
+lines = open(reg_path, encoding="utf-8").read().splitlines()
+cur_role = None
+for ln in lines:
+    m = re.match(r'\s*-\s*id:\s*(\S+)', ln)
+    if m:
+        cur_role = m.group(1)
+        continue
+    m = re.match(r'\s*tmux:\s*"([^"]*)"', ln)
+    if m and cur_role:
+        tmux_target = m.group(1)
+        tmux_session = tmux_target.split(":")[0]
+        if tmux_session and tmux_session not in live_set:
+            print(f"{cur_role}\t{tmux_session}")
+        cur_role = None
+PYEOF
+)"
+
+  if [ -z "$olu_roller" ]; then
+    echo "[yeşil] kapalı-üye yok — aile-registry'deki tüm roller canlı tmux'ta bulundu"
+    echo "== bitti — kuru-koşu, hiçbir yazım yapılmadı (plan-exit) =="
+    exit 3
+  fi
+
+  echo ""
+  echo "-- kapalı-üyeler (kaynak: aile-registry, tmux-ls ile karşılaştırıldı) --"
+  local rol tmux_adi
+  while IFS=$'\t' read -r rol tmux_adi; do
+    [ -n "$rol" ] || continue
+    echo "[kırmızı] $rol (kayıtlı-tmux: $tmux_adi) — canlı tmux-ls'te yok"
+
+    # reconcile bu rol için canlı-renamed bir aday buldu mu?
+    if printf '%s\n' "$reconcile_out" | grep -qE "^${rol}[[:space:]].*GÜNCELLENECEK"; then
+      echo "  → (a) reconcile-aday VAR (casing-yeniden-adlandırma) — aile-tmux-reconcile.sh --apply ile self-heal edilebilir; seans-getir bunu UYGULAMAZ (ayrı-araç, ayrı-onay)"
+      continue
+    fi
+
+    # (b) kayıtlı-session-id-resume (K2 proje-registry; bu proje için henüz YOK → atlanır)
+    kayitli_id=""
+    if [ -n "$proje_registry" ] && [ -f "$proje_registry" ]; then
+      kayitli_id="$(python3 - "$proje_registry" "$rol" <<'PYEOF'
+import re, sys
+reg_path, rol = sys.argv[1], sys.argv[2]
+lines = open(reg_path, encoding="utf-8").read().splitlines()
+cur_id = None
+match = False
+for ln in lines:
+    m = re.match(r'\s*-\s*id:\s*(\S+)', ln)
+    if m:
+        match = (m.group(1) == rol)
+        continue
+    m = re.match(r'\s*session_id:\s*(\S+)', ln)
+    if m and match and m.group(1) != "null":
+        print(m.group(1))
+        break
+PYEOF
+)"
+    fi
+    if [ -n "$kayitli_id" ]; then
+      echo "  → (b) kayıtlı-id-resume: session_id=$kayitli_id (K2-registry'de bulundu; sahiplik=bu-rol) — gerçek-resume adayı"
+      continue
+    fi
+
+    # (c) legacy-kimlik-imza eşleme (transkript-başı grep, İ3-uyumlu: yalnız dosya-adı/id konuşulur)
+    eslesenler="$(_identity_imza_ara "$rol" "$transkript_dizin")"
+    n_eslesen=0
+    [ -n "$eslesenler" ] && n_eslesen="$(($(printf '%s' "$eslesenler" | tr -cd ',' | wc -c) + 1))"
+    if [ "$n_eslesen" -eq 1 ]; then
+      echo "  → (c) legacy-kimlik-imza: TEK-anlamlı eşleşme (session-id=$eslesenler) — resume-source=legacy-transkript"
+    elif [ "$n_eslesen" -gt 1 ]; then
+      echo "  → (c) legacy-kimlik-imza: ${n_eslesen} ADAY (belirsiz) — SUSPECT-mismatch etiketli, sessiz-devam YASAK; gerçek-apply'de --fork-session + Sultan'a-sor"
+    else
+      echo "  → (c) legacy-kimlik-imza: 0 aday — resume-source=degraded-replay (dosya-tabanlı replay: kimlik+STATE/LEDGER/handoff), AÇIK-etiketli"
+    fi
+  done <<< "$olu_roller"
+
+  echo ""
+  echo "== bitti — kuru-koşu, hiçbir tmux/claude-process açılmadı/kapanmadı, hiçbir dosya yazılmadı (plan-exit) =="
+  exit 3
+}
+
 case "${1:-}" in
   doctor)
     cmd_doctor
     exit 0
     ;;
+  seans-getir)
+    shift
+    cmd_seans_getir "$@"
+    ;;
   *)
-    echo "kullanım: iskan.sh doctor" >&2
+    echo "kullanım: iskan.sh doctor | iskan.sh seans-getir --container <ad> [--apply]" >&2
     exit 2
     ;;
 esac
