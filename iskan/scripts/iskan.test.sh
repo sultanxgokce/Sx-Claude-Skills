@@ -51,9 +51,10 @@ bash "$SCRIPT_DIR/iskan-host.sh" >/dev/null 2>&1
 
 # ── FAZ-2: seans-getir + K3-primitifleri ─────────────────────────────────────────────────
 
-# 6. seans-getir --apply guard: FAZ-2'de HER ZAMAN exit=4 (Sultan-GO FAZ-3'e kilitli)
-bash "$SCRIPT_DIR/iskan.sh" seans-getir --container cloudtop-code --apply >/dev/null 2>&1
-[ "$?" = "4" ] && ok "seans-getir --apply: FAZ-2'de guard-exit=4" || bad "seans-getir --apply: rc beklenen 4"
+# 6. seans-getir --apply guard: FAZ-3'te GERÇEK-çalışır AMA yalnız ISKAN_FAZ3_GO=1 env-marker'ıyla
+#    (DOCTRINE Değişmez-3: kod-değişikliği tek-başına yeterli-tetik değil). Marker YOKSA exit=4 sabit.
+env -u ISKAN_FAZ3_GO bash "$SCRIPT_DIR/iskan.sh" seans-getir --container cloudtop-code --apply >/dev/null 2>&1
+[ "$?" = "4" ] && ok "seans-getir --apply: GO-marker yokken guard-exit=4" || bad "seans-getir --apply: rc beklenen 4"
 
 # 7. seans-getir: desteklenmeyen container → doğrulanmadı + exit=3 (yazım yapmaz)
 out="$(bash "$SCRIPT_DIR/iskan.sh" seans-getir --container cloudtop-baska-proje 2>&1)"

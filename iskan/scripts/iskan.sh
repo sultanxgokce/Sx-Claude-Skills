@@ -165,12 +165,22 @@ cmd_seans_getir() {
   done
   [ -n "$container" ] || { echo "kullanım: iskan.sh seans-getir --container <ad> [--apply]" >&2; exit 2; }
 
-  if [ "$apply" -eq 1 ]; then
-    echo "[kırmızı] seans-getir --apply: FAZ-3 Sultan-GO gerekli — bu fazda --apply ÇALIŞMAZ (bkz DOCTRINE Değişmez-3, K3 madde-4)" >&2
+  # FAZ-3: --apply artık ÇALIŞIR, ama yalnız açık Sultan-GO env-marker'ı ile (DOCTRINE Değişmez-3:
+  # kod-değişikliği tek-başına yeterli-tetik OLMAMALI — operatör her-çağrıda GO'yu bilerek beyan eder).
+  if [ "$apply" -eq 1 ] && [ "${ISKAN_FAZ3_GO:-}" != "1" ]; then
+    echo "[kırmızı] seans-getir --apply: FAZ-3 Sultan-GO env-marker gerekli (ISKAN_FAZ3_GO=1) — kanıtsız/yanlışlıkla-tetiklemeyi önler (DOCTRINE Değişmez-3)" >&2
     exit 4
   fi
 
-  echo "== İSKÂN seans-getir — KURU-KOŞU (DEFAULT; hiçbir seans açmaz/kapamaz/yazmaz) =="
+  local kanit_dir="${ISKAN_KANIT_DIR:-iskan/kanit/faz3}"
+  local apply_workdir="${ISKAN_APPLY_WORKDIR:-/config/projects/Nexus}"
+
+  if [ "$apply" -eq 1 ]; then
+    mkdir -p "$kanit_dir"
+    echo "== İSKÂN seans-getir — CANLI-APPLY (FAZ-3 Sultan-GO'lu; ölü-rolleri açar, canlıya dokunmaz) =="
+  else
+    echo "== İSKÂN seans-getir — KURU-KOŞU (DEFAULT; hiçbir seans açmaz/kapamaz/yazmaz) =="
+  fi
   echo "hedef-container: $container"
 
   # FAZ-2 kapsamı: yalnız cloudtop-code (SERDAR-ailesi, kaynak=aile-registry.yaml) desteklenir.
@@ -224,13 +234,23 @@ PYEOF
 
   if [ -z "$olu_roller" ]; then
     echo "[yeşil] kapalı-üye yok — aile-registry'deki tüm roller canlı tmux'ta bulundu"
+    if [ "$apply" -eq 1 ]; then
+      echo "== bitti — apply istendi ama açılacak-ölü-rol yok (idempotent-no-op); hiçbir tmux/dosya değişmedi =="
+      exit 0
+    fi
     echo "== bitti — kuru-koşu, hiçbir yazım yapılmadı (plan-exit) =="
     exit 3
   fi
 
   echo ""
-  echo "-- kapalı-üyeler (kaynak: aile-registry, tmux-ls ile karşılaştırıldı) --"
+  if [ "$apply" -eq 1 ]; then
+    echo "-- kapalı-üyeler (kaynak: aile-registry, tmux-ls ile karşılaştırıldı) — GERÇEK-APPLY --"
+  else
+    echo "-- kapalı-üyeler (kaynak: aile-registry, tmux-ls ile karşılaştırıldı) --"
+  fi
   local rol tmux_adi
+  local rezerve_file="$kanit_dir/rezerve-ids.md"
+  [ "$apply" -eq 1 ] && : > "$rezerve_file"
   while IFS=$'\t' read -r rol tmux_adi; do
     [ -n "$rol" ] || continue
     echo "[kırmızı] $rol (kayıtlı-tmux: $tmux_adi) — canlı tmux-ls'te yok"
@@ -264,6 +284,9 @@ PYEOF
     fi
     if [ -n "$kayitli_id" ]; then
       echo "  → (b) kayıtlı-id-resume: session_id=$kayitli_id (K2-registry'de bulundu; sahiplik=bu-rol) — gerçek-resume adayı"
+      if [ "$apply" -eq 1 ]; then
+        _iskan_apply_ac "$rol" "$tmux_adi" "resume" "$kayitli_id" "$apply_workdir" "$rezerve_file"
+      fi
       continue
     fi
 
@@ -273,16 +296,65 @@ PYEOF
     [ -n "$eslesenler" ] && n_eslesen="$(($(printf '%s' "$eslesenler" | tr -cd ',' | wc -c) + 1))"
     if [ "$n_eslesen" -eq 1 ]; then
       echo "  → (c) legacy-kimlik-imza: TEK-anlamlı eşleşme (session-id=$eslesenler) — resume-source=legacy-transkript"
+      if [ "$apply" -eq 1 ]; then
+        _iskan_apply_ac "$rol" "$tmux_adi" "resume" "$eslesenler" "$apply_workdir" "$rezerve_file"
+      fi
     elif [ "$n_eslesen" -gt 1 ]; then
       echo "  → (c) legacy-kimlik-imza: ${n_eslesen} ADAY (belirsiz) — SUSPECT-mismatch etiketli, sessiz-devam YASAK; gerçek-apply'de --fork-session + Sultan'a-sor"
+      if [ "$apply" -eq 1 ]; then
+        echo "  → [kırmızı] apply ATLANDI: SUSPECT-mismatch otomatik-çözülmez (kod-tasarımı gereği) — bu rol bu koşuda AÇILMADI, Sultan'a-sor"
+      fi
     else
       echo "  → (c) legacy-kimlik-imza: 0 aday — resume-source=degraded-replay (dosya-tabanlı replay: kimlik+STATE/LEDGER/handoff), AÇIK-etiketli"
+      if [ "$apply" -eq 1 ]; then
+        local yeni_uuid
+        yeni_uuid="$(python3 -c 'import uuid; print(uuid.uuid4())')"
+        _iskan_apply_ac "$rol" "$tmux_adi" "degraded" "$yeni_uuid" "$apply_workdir" "$rezerve_file"
+      fi
     fi
   done <<< "$olu_roller"
 
   echo ""
+  if [ "$apply" -eq 1 ]; then
+    echo "== bitti — apply tamamlandı; kanıt: $kanit_dir/ (rezerve-ids.md + bu çıktı çağıran-tarafından kaydedilir) =="
+    exit 0
+  fi
   echo "== bitti — kuru-koşu, hiçbir tmux/claude-process açılmadı/kapanmadı, hiçbir dosya yazılmadı (plan-exit) =="
   exit 3
+}
+
+# _iskan_apply_ac <rol> <tmux_adi> <mod:resume|degraded> <deger:session-id> <workdir> <rezerve_file>
+# GERÇEK-MUTASYON: tmux new-session (-d, verilen workdir'de) + claude başlatma. acquire_role_lock ile
+# ROL-adı üzerinden kilitlenir (aynı-rolü eş-zamanlı iki-çağrı açmasın); kilit script-ömrü boyunca açık
+# kalır (tam pane-ömrü-boyu kilit = FAZ-3-sonrası genişletme, bkz PR-body dürüst-şerh).
+_iskan_apply_ac() {
+  local rol="$1" tmux_adi="$2" mod="$3" deger="$4" workdir="$5" rezerve_file="$6"
+
+  if tmux has-session -t "$tmux_adi" 2>/dev/null; then
+    echo "  → [yeşil] $rol zaten canlı (idempotent-atla) — tekrar açılmadı"
+    return 0
+  fi
+
+  local lock_fd
+  lock_fd="$(acquire_role_lock "$tmux_adi")" || {
+    echo "  → [kırmızı] flock-çakışma: $tmux_adi başka bir çağrı tarafından kilitlenmiş — bu koşuda AÇILMADI" >&2
+    return 1
+  }
+
+  if [ "$mod" = "resume" ]; then
+    local transkript_yolu="$transkript_dizin/${deger}.jsonl"
+    tmux new-session -d -s "$tmux_adi" -n "$tmux_adi" -c "$workdir" \
+      exec env CLAUDE_CODE_DISABLE_TERMINAL_TITLE=1 claude --dangerously-skip-permissions --resume "$transkript_yolu"
+    echo "  → [yeşil] AÇILDI: $tmux_adi (gerçek-resume, session_id=$deger, workdir=$workdir)"
+    printf '%s\tresume\t%s\t%s\n' "$rol" "$deger" "$tmux_adi" >> "$rezerve_file"
+  else
+    tmux new-session -d -s "$tmux_adi" -n "$tmux_adi" -c "$workdir" \
+      exec claude --dangerously-skip-permissions --session-id "$deger"
+    echo "  → [yeşil] AÇILDI: $tmux_adi (degraded-replay, rezerve session_id=$deger, workdir=$workdir — bir SONRAKİ kurtarma gerçek-resume olur)"
+    printf '%s\tdegraded\t%s\t%s\n' "$rol" "$deger" "$tmux_adi" >> "$rezerve_file"
+  fi
+
+  eval "exec ${lock_fd}>&-" 2>/dev/null || true
 }
 
 case "${1:-}" in
