@@ -1,0 +1,14 @@
+# iskan — AHÎ ile üretildi (kademe: usta · bileşik)
+# version SKILL.md frontmatter'ında (ADR-001).
+tier: usta
+name: iskan
+generic_goal: "container + ekip yaşam-döngüsünü (doğuş/yeniden-doğuş/üye-ekleme) tek-komutla yöneten fabrika"
+activation:
+  onKeyword: iskan
+requires:
+  - ekip-kur
+  - ise-alim
+  - sunucu-kur
+  - cloudflare-erisim
+install_targets:
+  - _global
