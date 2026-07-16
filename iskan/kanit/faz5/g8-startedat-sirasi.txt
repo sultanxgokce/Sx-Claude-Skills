@@ -1,0 +1,8 @@
+== G8: StartedAt sıralaması (iskantest EN-YENİ olmalı) ==
+cloudtop-mmex 2026-07-06T11:06:21.501856548Z
+cloudtop-code 2026-07-15T20:10:20.981513076Z
+cloudtop-huma 2026-07-15T20:10:37.72512778Z
+cloudtop-vekatip 2026-07-15T20:10:37.996096763Z
+cloudtop-medigate 2026-07-15T20:10:38.257182929Z
+cloudtop 2026-07-15T20:37:35.7152063Z
+cloudtop-iskantest 2026-07-16T05:29:01.181308877Z

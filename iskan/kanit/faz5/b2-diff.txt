@@ -1,0 +1,2 @@
+== B2 config-hash diff (cloudtop-iskantest HARİÇ diğer container'lar İÇİN 'değişmedi' beklenir) ==
+[yeşil] hash-eş / md5-eş — diğer container'ların config-hash'i DEĞİŞMEDİ (UNCHANGED)

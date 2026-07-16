@@ -1,0 +1,5 @@
+[kırmızı] cf-yayin --apply: FAZ-5 Sultan-GO env-marker gerekli (ISKAN_FAZ5_GO=1) — CF-config'e/host'a SIFIR-dokunuş (DOCTRINE Değişmez-3)
+apply_rc=4
+once =302302302302302302302
+sonra=302302302302302302302
+G3=GECTI (rc≠0 + 7-hostname bayt-aynı)

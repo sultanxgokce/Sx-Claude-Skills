@@ -289,5 +289,64 @@ for d in "$RK_REPO" "/tmp/iskan-test-rk-kanit.$$"; do
   find "$d" -type f -delete 2>/dev/null; find "$d" -depth -type d -delete 2>/dev/null
 done
 
+# ── FAZ-5: cf-yayin (CF-hostname yayını) ─────────────────────────────────────────────────
+
+# 19. cf-yayin --dry-run: plan-exit=3, hiçbir dosya değişmez, önizleme hostname+onboard+sert-kapı içerir
+CF_FIXTURE="/tmp/iskan-test-cf-dryrun.$$.yml"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$CF_FIXTURE"
+SUM_CF_BEFORE="$(md5sum "$CF_FIXTURE")"
+out="$(ISKAN_REPO_COMPOSE="$CF_FIXTURE" ISKAN_CLOUDTOP_REPO_DIR="/tmp/iskan-yok.$$" \
+  bash "$SCRIPT_DIR/iskan.sh" cf-yayin cftest --dry-run 2>&1)"
+rc=$?
+SUM_CF_AFTER="$(md5sum "$CF_FIXTURE")"
+[ "$rc" = "3" ] && ok "cf-yayin --dry-run: plan-exit=3" || bad "cf-yayin --dry-run: rc beklenen 3, gelen $rc"
+[ "$SUM_CF_BEFORE" = "$SUM_CF_AFTER" ] && ok "cf-yayin --dry-run: dosya değişmedi" || bad "cf-yayin --dry-run: dosya DEĞİŞTİ"
+printf '%s' "$out" | grep -q "cftest.mmepanel.com" && printf '%s' "$out" | grep -q "onboard" \
+  && printf '%s' "$out" | grep -q "SERT-KAPI" \
+  && ok "cf-yayin --dry-run: önizleme hostname+onboard+sert-kapı içeriyor" \
+  || bad "cf-yayin --dry-run: beklenen önizleme-içeriği eksik"
+find /tmp -maxdepth 1 -name "iskan-test-cf-dryrun.$$.yml" -delete 2>/dev/null
+
+# 20. cf-yayin --apply: GO-marker yokken exit=4, ssh'a/CF'e HİÇ değmeden erken-guard (bozuk-host + bozuk-cf.sh ile kanıt)
+env -u ISKAN_FAZ5_GO ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_CF_SH="/tmp/iskan-yok-cf.$$.sh" \
+  ISKAN_CLOUDTOP_REPO_DIR="/tmp/iskan-yok.$$" \
+  bash "$SCRIPT_DIR/iskan.sh" cf-yayin cftest --apply >/dev/null 2>&1
+rc=$?
+[ "$rc" = "4" ] && ok "cf-yayin --apply: GO-marker yokken guard-exit=4 (CF'e/host'a sıfır-dokunuş)" \
+  || bad "cf-yayin --apply: GO-marker yokken rc beklenen 4, gelen $rc"
+
+# 21. cf-yayin --apply: GO'lu ama REPO-KANIT yok (hermetik mini-repo, setup-tunnel'da hostname yok) → ssh'a değmeden RED
+CF_RK_REPO="/tmp/iskan-test-cfrk-repo.$$"
+mkdir -p "$CF_RK_REPO/infra"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$CF_RK_REPO/infra/docker-compose.server.yml"
+printf '#!/usr/bin/env bash\n# fixture setup-tunnel (cftest satırı BİLEREK yok)\n' > "$CF_RK_REPO/infra/setup-tunnel.sh"
+git -C "$CF_RK_REPO" init -q -b main 2>/dev/null
+git -C "$CF_RK_REPO" -c user.email=t@t -c user.name=t add -A 2>/dev/null
+git -C "$CF_RK_REPO" -c user.email=t@t -c user.name=t commit -qm x 2>/dev/null
+git -C "$CF_RK_REPO" remote add origin "$CF_RK_REPO" 2>/dev/null
+ISKAN_FAZ5_GO=1 ISKAN_CLOUDTOP_REPO_DIR="$CF_RK_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan.sh" cf-yayin cftest --apply >/dev/null 2>&1
+rc=$?
+[ "$rc" != "0" ] && [ "$rc" != "4" ] && ok "cf-yayin --apply: REPO-KANIT yokken RED (rc=$rc, host'a değmeden)" \
+  || bad "cf-yayin --apply: REPO-KANIT yokken beklenen rc∉{0,4}, gelen $rc"
+find "$CF_RK_REPO" -type f -delete 2>/dev/null; find "$CF_RK_REPO" -depth -type d -delete 2>/dev/null
+
+# 22. _cf_yedi_hostname_temiz_mi: 302/401/403 temiz; 502/000 kirli
+res_temiz="$(bash -c "
+  source <(sed -n '/^_cf_yedi_hostname_temiz_mi()/,/^}/p' '$SCRIPT_DIR/iskan.sh')
+  _cf_yedi_hostname_temiz_mi 'pc=302 code=302 vekatip=403 m=401 ' && echo TEMIZ || echo KIRLI
+")"
+res_kirli="$(bash -c "
+  source <(sed -n '/^_cf_yedi_hostname_temiz_mi()/,/^}/p' '$SCRIPT_DIR/iskan.sh')
+  _cf_yedi_hostname_temiz_mi 'pc=302 code=502 vekatip=302 ' && echo TEMIZ || echo KIRLI
+")"
+res_sifir="$(bash -c "
+  source <(sed -n '/^_cf_yedi_hostname_temiz_mi()/,/^}/p' '$SCRIPT_DIR/iskan.sh')
+  _cf_yedi_hostname_temiz_mi 'pc=000 code=302 ' && echo TEMIZ || echo KIRLI
+")"
+[ "$res_temiz" = "TEMIZ" ] && [ "$res_kirli" = "KIRLI" ] && [ "$res_sifir" = "KIRLI" ] \
+  && ok "_cf_yedi_hostname_temiz_mi: 302/401/403=temiz · 502=kirli · 000=kirli (sert-kapı sınıflandırması)" \
+  || bad "_cf_yedi_hostname_temiz_mi: sınıflandırma hatalı (temiz=$res_temiz kirli=$res_kirli sifir=$res_sifir)"
+
 echo "== ${PASS} geçti / ${FAIL} kaldı =="
 [ "$FAIL" -eq 0 ]

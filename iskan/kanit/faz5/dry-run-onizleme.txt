@@ -1,0 +1,15 @@
+== İSKÂN cf-yayin — KURU-KOŞU (DEFAULT; CF-API'ye/host'a/dosyaya SIFIR-dokunuş) ==
+proje: iskantest · hostname: iskantest.mmepanel.com · hedef-servis: http://localhost:8449
+
+-- PLAN (apply'da sırayla; her adım idempotent) --
+  1. CF-onboard (cf.sh onboard iskantest.mmepanel.com): Access-app + Allow-policy + proxied DNS-CNAME → tünel
+     (mevcut app/policy/kayıt varsa no-op; 7 mevcut hostname'in Access/DNS'ine DOKUNMAZ)
+  2. tünel-ingress-satırı: setup-tunnel.sh'te 'iskantest.mmepanel.com → http://localhost:8449' (REPO-FIRST:
+     satır cloudtop origin/main'de YOKSA apply RED; host'a origin/main içeriği .bak'lı yazılır)
+  3. host'ta setup-tunnel.sh koşulur (config.yml'i kendisi .bak'lar + cloudflared restart)
+  4. 7-HOSTNAME SERT-KAPI: pc·code·vekatip·mmex·medi·huma·m curl → hepsi 302/401/403 değilse
+     OTO-GERİ-AL (.bak restore + cloudflared restart) + exit=1
+
+[yeşil] REPO-KANIT önizleme: 'iskantest' origin/main setup-tunnel.sh'te MEVCUT → apply repo-kapısını geçer
+== dry-run: hiçbir yazım/API-çağrısı yapılmadı (plan-exit sözleşmesi, exit=3) ==
+exit=3

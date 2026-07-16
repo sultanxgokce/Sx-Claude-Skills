@@ -1,0 +1,4 @@
+== .bak varlıkları (oto-geri-al hazır-durumu) ==
+-rw------- 1 root root   894 Jul 10 13:02 /etc/cloudflared/config.yml.bak
+-rw-rw-r-- 1 1000 1000 29357 Jul 15 23:00 /opt/cloudtop/docker-compose.server.yml.bak
+-rwxrwxr-x 1 1000 1000  5405 Jul 14 13:22 /opt/cloudtop/setup-tunnel.sh.bak
