@@ -693,9 +693,11 @@ cmd_provizyon() {
   fi
   echo "[yeşil] setup-script koştu: $host_setup (çıktı: $out_dosya)"
 
-  # dürüst-kanıt: kurulum-sonrası claude-binary gerçekten var mı (uid-1000 login-shell'i)
+  # dürüst-kanıt: kurulum-sonrası claude-binary gerçekten var mı. NVM-FARKINDA probe ŞART
+  # (canlı-vaka k0084-H2: claude nvm-altında /config/.nvm/.../bin/claude; çıplak 'bash -lc'
+  # nvm-source etmediğinden FALSE-RED üretti — setup-isolated.sh:100-102 doğrulama-deseni aynalanır).
   local claude_yolu
-  claude_yolu="$(timeout 30 ssh "${ssh_opts[@]}" "$ssh_host" "docker exec -u 1000 $cname bash -lc 'command -v claude'" 2>/dev/null || true)"
+  claude_yolu="$(timeout 30 ssh "${ssh_opts[@]}" "$ssh_host" "docker exec -u abc $cname bash -lc 'export NVM_DIR=\$HOME/.nvm; [ -s \$NVM_DIR/nvm.sh ] && . \$NVM_DIR/nvm.sh; export PATH=\$HOME/.local/bin:\$PATH; command -v claude'" 2>/dev/null || true)"
   if [ -n "$claude_yolu" ]; then
     echo "[yeşil] doğrulama: claude-binary container-içinde mevcut ($claude_yolu)"
   else
