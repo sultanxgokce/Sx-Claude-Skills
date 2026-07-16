@@ -1,0 +1,3 @@
+[32m✓ Access app silindi: iskantest.mmepanel.com  (cd5517fb-5a56-4d78-a7d9-826e624c8506)[0m
+[32m✓ DNS CNAME silindi: iskantest.mmepanel.com  (b8a405dae7df82ffaf6683d4968eb8af)[0m
+[32m✓ offboard tamam: iskantest.mmepanel.com (Access + DNS geri-alındı; tünel-ingress host config.yml'de ayrı yaşar)[0m

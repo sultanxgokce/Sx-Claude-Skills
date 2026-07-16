@@ -1,0 +1,2 @@
+dosya-sayısı=105 du=1.7M
+arşiv-sonrası: config-dir=YOK arşiv-ilk-yol=/opt/cloudtop/_sokum-arsiv/iskantest-2026-07-16/.ssh
