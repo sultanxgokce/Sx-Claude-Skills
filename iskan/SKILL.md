@@ -33,6 +33,12 @@ oto-yazımı. Dördü BESTELEDİĞİ kardeşlerin (aşağı) çalışma-kopyası
   Çakışma-koruması ('uye-zaten-var') · Nexus-hedefte canlı-invoke YOK ('ise-alim' yönlendirmesi, İ1) ·
   izole-hedef dry-run'ı koşulsuz 'sultan-bildirim' satırı basar. Roster-köprüsü: ekip-yerlestir artık
   roster'ı container-içi `_agents/handoff/ekip-registry.yaml`'dan okur (hardcoded 2-üye default yalnız fallback).
+- `evergreen-kaydet` (FAZ-8, CANLI): `evergreen-kaydet <proje> --dry-run|--apply` — kayıtlı İSKÂN-projesinin
+  kalıcı izlerini evergreen-manifestlere yazar (REPO-FIRST lokal cloudtop working-tree; host-apply YOK):
+  provider-inventory.yaml (tunnel.ingress + access_apps) + backup.sh (docker-inspect listesi). .bak +
+  bash -n sözdizim-kapısı (düşerse .bak-restore rc=1) · idempotent ('mevcut → atla') · K4 kayıtsız-kapı
+  ('kayitsiz-proje'). Bekçisi: cloudtop `evergreen-parity.sh` P8-CONTAINER + P9-CFAPP kolları (report-only;
+  drift-inject kanıtı `iskan/kanit/faz8/drift-inject-test.sh`).
 - `doctor` — salt-okur preflight (FAZ-1)
 - `check` — AHÎ-standart drift-lint (bugünden itibaren: `ahi check iskan`)
 
@@ -46,8 +52,10 @@ Usta (S3 · bileşik), born-at-Usta (`ahi new usta iskan`). generic-goal: "conta
 (doğuş/yeniden-doğuş/üye-ekleme) tek-komutla yöneten fabrika". Terfi-olgunluk şerhi: DOCTRINE.md → "Manuel-beyan".
 Doğrula: `ahi check iskan` · Kanon: `ahi doctrine` · İş-planı: `Nexus/_agents/handoff/help2serdar-iskan-is-plani.md`.
 
-## Durum (2026-07-16, FAZ-7)
+## Durum (2026-07-16, FAZ-8)
 CANLI alt-komutlar: `doctor` (FAZ-1) · `seans-getir` (FAZ-2/3) · `yeni-proje` + `iskan-host.sh` (FAZ-4,
-ISKAN_FAZ4_GO'lu) · `cf-yayin` (FAZ-5, ISKAN_FAZ5_GO'lu) · `ekip-yerlestir` (FAZ-6) · `uye-ekle` (FAZ-7).
-Kanıt-paketleri: `iskan/kanit/faz0..faz7/`. claude-binary hedef-container'larda bilinçli-YOK (FAZ-9 kapsamı;
-baslat-claude.sh dürüst-kırmızı basar). Kalan: FAZ-8 (evergreen) · FAZ-9 (mihenk-dogfood).
+ISKAN_FAZ4_GO'lu) · `cf-yayin` (FAZ-5, ISKAN_FAZ5_GO'lu) · `ekip-yerlestir` (FAZ-6) · `uye-ekle` (FAZ-7) ·
+`evergreen-kaydet` (FAZ-8). Kanıt-paketleri: `iskan/kanit/faz0..faz8/`. claude-binary hedef-container'larda
+bilinçli-YOK (FAZ-9 kapsamı; baslat-claude.sh dürüst-kırmızı basar). Kalan: FAZ-9 (mihenk-dogfood = BİTTİ-kontratı).
+⚠️ FAZ-9-söküm-borcu: iskantest evergreen-satırları (provider-inventory + backup.sh + compose) İSKÂN-BİTTİ
+öncesi söküm-reçetesiyle geri-alınmalı (ayrı-kart; k0078 GEREKLILIK tasarım-notu).

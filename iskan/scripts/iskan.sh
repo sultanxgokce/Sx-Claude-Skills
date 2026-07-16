@@ -1482,6 +1482,171 @@ PYEOF
   exit 0
 }
 
+# ── evergreen-kaydet (FAZ-8: evergreen-kapama — kalıcı-iz manifest-yazımı) ─────────────────
+#
+# NEDEN: FAZ-8 = "İSKÂN'ın ürettiği iz sıfırdan-rebuild'de geri gelsin". Kayıtlı bir İSKÂN-
+# projesinin kalıcı izlerini iki evergreen-manifest'e yazar (REPO-FIRST: lokal cloudtop-repo
+# working-tree dosyaları; commit/PR AYRI adım):
+#   1. infra/provider-inventory.yaml — cloudflare.tunnel.ingress + access_apps hostname-kaydı
+#   2. infra/backup.sh — docker-inspect container-listesine cloudtop-<proje>
+# HOST-APPLY YOK: çalışan-container'a/host-servise/CF'e dokunmaz → GO-marker gerekmez (B6 ayak-a:
+# yalnız repo-dosyası + bash -n sözdizim-kapısı; ayak-b [gerçek dry-koşu] host-restic ister, FAZ-9).
+# Güvenlik: yazımdan önce .bak · backup.sh yazımı sonrası bash -n (bozuksa .bak-restore + rc=1) ·
+# idempotent (mevcut-satır → 'mevcut → atla'; 2.+ koşu no-op rc=0) · kayıtsız-proje K4-kapısı
+# (_ey_proje_cozumu REUSE: origin/main compose TAM-STRING, fuzzy/önek/case-farkı YASAK).
+#
+# NOT (provider-inventory): dosya geçerli-YAML DEĞİL (serbest-metin scalar'lar, satır ~91;
+# firsthand 2026-07-16) → yaml-parse YASAK, ekleme metin-temelli blok-konum ile yapılır
+# (ingress-öğesi access_apps-anahtarından hemen önce; access_apps-öğesi son 4-boşluk öğeden sonra).
+
+# _eg_inventory_ekle <dosya> <ing_line|-> <acc_line|-> — provider-inventory'ye metin-temelli ekleme.
+# '-' = o bölüm atlanır (zaten mevcut). Marker bulunamazsa rc≠0 + dosyaya DOKUNMAZ.
+_eg_inventory_ekle() {
+  ING_LINE="$2" ACC_LINE="$3" python3 - "$1" <<'PYEOF'
+import os, re, sys
+path = sys.argv[1]
+ing, acc = os.environ["ING_LINE"], os.environ["ACC_LINE"]
+lines = open(path, encoding="utf-8", errors="replace").read().splitlines()
+if ing != "-":
+    idx = next((i for i, l in enumerate(lines) if re.match(r"^  access_apps:", l)), None)
+    if idx is None:
+        print("[kırmızı] provider-inventory: '  access_apps:' anahtarı bulunamadı — format değişti, dosyaya dokunulmadı", file=sys.stderr)
+        sys.exit(1)
+    lines.insert(idx, ing)  # ingress-bloğunun son öğesi olarak (access_apps'ten hemen önce)
+if acc != "-":
+    idx = next((i for i, l in enumerate(lines) if re.match(r"^  access_apps:", l)), None)
+    if idx is None:
+        print("[kırmızı] provider-inventory: '  access_apps:' anahtarı bulunamadı — format değişti, dosyaya dokunulmadı", file=sys.stderr)
+        sys.exit(1)
+    son = idx
+    for j in range(idx + 1, len(lines)):
+        if re.match(r"^    - \S", lines[j]):
+            son = j
+        elif re.match(r"^  \S", lines[j]):
+            break
+    lines.insert(son + 1, acc)
+open(path, "w", encoding="utf-8").write("\n".join(lines) + "\n")
+PYEOF
+}
+
+# _eg_backup_ekle <dosya> <token> — backup.sh docker-inspect argüman-listesine container ekler.
+# 'docker inspect ... >' satırı bulunamazsa rc≠0 + dosyaya DOKUNMAZ.
+_eg_backup_ekle() {
+  python3 - "$1" "$2" <<'PYEOF'
+import re, sys
+path, token = sys.argv[1], sys.argv[2]
+src = open(path, encoding="utf-8", errors="replace").read()
+yeni, n = re.subn(r"(?m)^(\s*docker inspect )([^>\n]*?)(\s*>)",
+                  lambda m: m.group(1) + m.group(2).rstrip() + " " + token + m.group(3),
+                  src, count=1)
+if n != 1:
+    print("[kırmızı] backup.sh: 'docker inspect ... >' satırı bulunamadı — format değişti, dosyaya dokunulmadı", file=sys.stderr)
+    sys.exit(1)
+open(path, "w", encoding="utf-8").write(yeni)
+PYEOF
+}
+
+cmd_evergreen_kaydet() {
+  local proje="" mode=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --dry-run) mode="dry-run"; shift ;;
+      --apply) mode="apply"; shift ;;
+      -*) echo "bilinmeyen argüman: $1" >&2; exit 2 ;;
+      *) proje="$1"; shift ;;
+    esac
+  done
+  if [ -z "$proje" ] || [ -z "$mode" ]; then
+    echo "kullanım: iskan.sh evergreen-kaydet <proje> --dry-run|--apply" >&2
+    exit 2
+  fi
+  _ey_ad_hijyeni "$proje" "evergreen-kaydet" || exit 1
+
+  # K4 kayıt-kapısı: origin/main compose TAM-STRING (kayıtsız → 'kayitsiz-proje' rc≠0, sıfır-yazım)
+  EY_REPO_DIR="${ISKAN_CLOUDTOP_REPO_DIR:-/config/projects/cloudtop}"
+  EY_CNAME="cloudtop-${proje}"
+  EY_PORT=""
+  _ey_proje_cozumu "$proje" || exit 1
+
+  local host="${proje}.mmepanel.com"
+  local inv="$EY_REPO_DIR/infra/provider-inventory.yaml"
+  local bkp="$EY_REPO_DIR/infra/backup.sh"
+  [ -f "$inv" ] || { echo "[kırmızı] provider-inventory bulunamadı: $inv — hiçbir yere dokunulmadı" >&2; exit 1; }
+  [ -f "$bkp" ] || { echo "[kırmızı] backup.sh bulunamadı: $bkp — hiçbir yere dokunulmadı" >&2; exit 1; }
+
+  # eklenecek satırlar (G6 awk-blok-sınırlarının İÇİNE düşecek girintilerle)
+  local ing_line="      - ${host}   # İSKÂN-container (${EY_CNAME}, ${EY_PORT:-port-?}; iskan.sh cf-yayin ürünü — evergreen-kaydet kaydı)"
+  local acc_line="    - ${host}     # İSKÂN-container (${EY_CNAME}; evergreen-kaydet kaydı)"
+
+  # mevcutluk-tespiti (idempotency temeli; blok-sınırlı — G6 awk-deseniyle hizalı)
+  local ing_var=0 acc_var=0 bkp_var=0
+  awk '/ingress:/{f=1} /access_apps:/{f=0} f' "$inv" | grep -qF "$host" && ing_var=1
+  awk '/access_apps:/{f=1} f' "$inv" | grep -qF "$host" && acc_var=1
+  grep -E '^[[:space:]]*docker inspect ' "$bkp" | grep -qE "(^|[[:space:]])${EY_CNAME}([[:space:]]|>|\$)" && bkp_var=1
+
+  if [ "$mode" = "dry-run" ]; then
+    echo "== İSKÂN evergreen-kaydet — evergreen-onizleme (KURU-KOŞU; hiçbir dosyaya yazılmaz) =="
+    echo "proje: $proje · hostname: $host · container: $EY_CNAME · repo: $EY_REPO_DIR"
+    echo "hedefler = REPO-FIRST lokal working-tree (host-apply YOK; commit/PR ayrı-adım)"
+    echo ""
+    echo "-- infra/provider-inventory.yaml --"
+    if [ "$ing_var" = "1" ]; then echo "  [atla/mevcut] tunnel.ingress: $host zaten kayıtlı"; else echo "  EKLENECEK (tunnel.ingress):"; echo "  + $ing_line"; fi
+    if [ "$acc_var" = "1" ]; then echo "  [atla/mevcut] access_apps: $host zaten kayıtlı"; else echo "  EKLENECEK (access_apps):"; echo "  + $acc_line"; fi
+    echo "-- infra/backup.sh --"
+    if [ "$bkp_var" = "1" ]; then echo "  [atla/mevcut] docker-inspect listesi: $EY_CNAME zaten kayıtlı"; else echo "  EKLENECEK (docker-inspect argüman-listesine): + $EY_CNAME"; fi
+    echo ""
+    echo "== dry-run: hiçbir yazım yapılmadı (plan-exit sözleşmesi, exit=3) =="
+    exit 3
+  fi
+
+  # ── APPLY (yalnız lokal repo-dosyaları; her dosyaya yazımdan önce .bak) ──────────────────
+  echo "== İSKÂN evergreen-kaydet — APPLY ($proje → evergreen-manifestler, REPO-FIRST) =="
+  local yazildi=0
+
+  if [ "$ing_var" = "1" ] && [ "$acc_var" = "1" ]; then
+    echo "[yeşil] provider-inventory: $host her iki bölümde mevcut → atla"
+  else
+    cp -a "$inv" "$inv.bak" || { echo "[kırmızı] .bak alınamadı: $inv — dokunulmadı" >&2; exit 1; }
+    local ing_arg="-" acc_arg="-"
+    [ "$ing_var" = "0" ] && ing_arg="$ing_line"
+    [ "$acc_var" = "0" ] && acc_arg="$acc_line"
+    if ! _eg_inventory_ekle "$inv" "$ing_arg" "$acc_arg"; then
+      cp -a "$inv.bak" "$inv" || true
+      echo "[kırmızı] provider-inventory yazımı başarısız — .bak geri-alındı" >&2
+      exit 1
+    fi
+    yazildi=1
+    echo "[yeşil] provider-inventory: yazıldı (+.bak) — ingress:$([ "$ing_var" = "0" ] && echo eklendi || echo mevcut) · access_apps:$([ "$acc_var" = "0" ] && echo eklendi || echo mevcut)"
+  fi
+
+  if [ "$bkp_var" = "1" ]; then
+    echo "[yeşil] backup.sh: $EY_CNAME docker-inspect listesinde mevcut → atla"
+  else
+    cp -a "$bkp" "$bkp.bak" || { echo "[kırmızı] .bak alınamadı: $bkp — dokunulmadı" >&2; exit 1; }
+    if ! _eg_backup_ekle "$bkp" "$EY_CNAME"; then
+      cp -a "$bkp.bak" "$bkp" || true
+      echo "[kırmızı] backup.sh yazımı başarısız — .bak geri-alındı" >&2
+      exit 1
+    fi
+    # B6 ayak-a: sözdizim-kapısı — bozuksa yazım GEÇERSİZ, .bak-restore + rc=1
+    if ! bash -n "$bkp" 2>/dev/null; then
+      cp -a "$bkp.bak" "$bkp" || true
+      echo "[kırmızı] backup.sh bash -n sözdizim-kapısı DÜŞTÜ — .bak geri-alındı, yazım iptal (rc=1)" >&2
+      exit 1
+    fi
+    yazildi=1
+    echo "[yeşil] backup.sh: $EY_CNAME docker-inspect listesine eklendi (+.bak, bash -n temiz)"
+  fi
+
+  echo ""
+  if [ "$yazildi" = "1" ]; then
+    echo "== evergreen-kaydet bitti: $proje kalıcı-izleri manifestlerde (REPO-FIRST — commit/PR ayrı-adım; parity P8/P9 doğrular) =="
+  else
+    echo "== evergreen-kaydet bitti: $proje zaten tam-kayıtlı — no-op (idempotent, rc=0) =="
+  fi
+  exit 0
+}
+
 case "${1:-}" in
   doctor)
     cmd_doctor
@@ -1507,8 +1672,12 @@ case "${1:-}" in
     shift
     cmd_uye_ekle "$@"
     ;;
+  evergreen-kaydet)
+    shift
+    cmd_evergreen_kaydet "$@"
+    ;;
   *)
-    echo "kullanım: iskan.sh doctor | iskan.sh seans-getir --container <ad> [--apply] | iskan.sh yeni-proje <ad> [--mem-limit <val>] --dry-run|--apply | iskan.sh cf-yayin <proje> --dry-run|--apply | iskan.sh ekip-yerlestir <proje> --dry-run|--apply | iskan.sh uye-ekle <proje> <uye> [--gorev <görev>] --dry-run|--apply" >&2
+    echo "kullanım: iskan.sh doctor | iskan.sh seans-getir --container <ad> [--apply] | iskan.sh yeni-proje <ad> [--mem-limit <val>] --dry-run|--apply | iskan.sh cf-yayin <proje> --dry-run|--apply | iskan.sh ekip-yerlestir <proje> --dry-run|--apply | iskan.sh uye-ekle <proje> <uye> [--gorev <görev>] --dry-run|--apply | iskan.sh evergreen-kaydet <proje> --dry-run|--apply" >&2
     exit 2
     ;;
 esac

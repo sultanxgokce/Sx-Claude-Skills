@@ -608,5 +608,101 @@ printf '%s' "$res" | grep -q "id: DENEKKAHYA" \
   && ok "_ue_kahya_adaptor: KÂHYA-şema → K2 üye-bloğu dönüşümü tam (5 anahtar)" \
   || bad "_ue_kahya_adaptor: dönüşüm eksik/bozuk: '$res'"
 
+# ── FAZ-8: evergreen-kaydet (fixture-repo; canlı cloudtop-repo'ya DOKUNMAZ) ──────────────
+
+# fixture cloudtop-repo üreteci: origin/main ref'i update-ref ile kurulur (remote gerekmez;
+# _ey_proje_cozumu 'git show origin/main:' okur, fetch-fail sessiz-geçilir)
+_eg_fixture_repo() { # <dizin> <backup-govde-ek (bash-n kapısı için bozuk-sözdizim enjekte edilebilir)>
+  local d="$1" ek="${2:-}"
+  mkdir -p "$d/infra"
+  cat > "$d/infra/docker-compose.server.yml" <<'EOF'
+services:
+  cloudtop-egtest:
+    image: test
+    container_name: cloudtop-egtest
+    ports:
+      - "127.0.0.1:9999:8443"
+EOF
+  cat > "$d/infra/provider-inventory.yaml" <<'EOF'
+cloudflare:
+  tunnel:
+    ingress:
+      - pc.mmepanel.com       # test-mevcut
+  access_apps:
+    - pc.mmepanel.com
+  api: test-anahtar-sonrasi-blok-siniri
+EOF
+  cat > "$d/infra/backup.sh" <<EOF
+#!/usr/bin/env bash
+${ek}
+if command -v docker >/dev/null 2>&1; then
+  docker inspect cloudtop > "/tmp/eg-test-inspect.json" 2>/dev/null \\
+    || echo "  uyarı: docker inspect atlandı"
+fi
+EOF
+  git -C "$d" init -q && git -C "$d" add -A \
+    && git -C "$d" -c user.email=t@t -c user.name=t commit -qm fixture \
+    && git -C "$d" update-ref refs/remotes/origin/main HEAD
+}
+
+EG_REPO="$(mktemp -d)"
+_eg_fixture_repo "$EG_REPO" ""
+
+# 39. evergreen-kaydet --dry-run: rc=3 + 'evergreen-onizleme' başlığı + HİÇBİR dosya yazılmaz
+SUM_EG_0="$(md5sum "$EG_REPO"/infra/*.yaml "$EG_REPO"/infra/*.sh)"
+out="$(ISKAN_CLOUDTOP_REPO_DIR="$EG_REPO" bash "$SCRIPT_DIR/iskan.sh" evergreen-kaydet egtest --dry-run 2>&1)"
+rc=$?
+SUM_EG_1="$(md5sum "$EG_REPO"/infra/*.yaml "$EG_REPO"/infra/*.sh)"
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'evergreen-onizleme' && [ "$SUM_EG_0" = "$SUM_EG_1" ] \
+  && ok "evergreen-kaydet --dry-run: rc=3 + evergreen-onizleme + yazımsız (md5 önce=sonra)" \
+  || bad "evergreen-kaydet --dry-run: sözleşme kırık (rc=$rc)"
+printf '%s' "$out" | grep -q 'EKLENECEK' \
+  && ok "evergreen-kaydet --dry-run: EKLENECEK satır-diff'i görünür" \
+  || bad "evergreen-kaydet --dry-run: EKLENECEK diff'i yok"
+
+# 40. evergreen-kaydet --apply (1. koşu): rc=0 + üç kayıt yazıldı + .bak üretildi + bash -n temiz
+ISKAN_CLOUDTOP_REPO_DIR="$EG_REPO" bash "$SCRIPT_DIR/iskan.sh" evergreen-kaydet egtest --apply >/dev/null 2>&1
+rc=$?
+ing_ok="$(awk '/ingress:/{f=1} /access_apps:/{f=0} f' "$EG_REPO/infra/provider-inventory.yaml" | grep -c 'egtest.mmepanel.com')"
+acc_ok="$(awk '/access_apps:/{f=1} f' "$EG_REPO/infra/provider-inventory.yaml" | grep -c 'egtest.mmepanel.com')"
+[ "$rc" = "0" ] && [ "$ing_ok" -ge 1 ] && [ "$acc_ok" -ge 1 ] \
+  && grep -q 'cloudtop-egtest' "$EG_REPO/infra/backup.sh" && bash -n "$EG_REPO/infra/backup.sh" \
+  && ok "evergreen-kaydet --apply: rc=0 + ingress/access_apps/backup-inspect üç-kayıt yazıldı (bash -n temiz)" \
+  || bad "evergreen-kaydet --apply: yazım eksik (rc=$rc ing=$ing_ok acc=$acc_ok)"
+[ -f "$EG_REPO/infra/provider-inventory.yaml.bak" ] && [ -f "$EG_REPO/infra/backup.sh.bak" ] \
+  && ok "evergreen-kaydet --apply: her yazılan dosyaya .bak üretildi" \
+  || bad "evergreen-kaydet --apply: .bak eksik"
+
+# 41. evergreen-kaydet --apply (2.+ koşu): İDEMPOTENT no-op rc=0 + 'mevcut' dili + md5 değişmez
+SUM_EG_2="$(md5sum "$EG_REPO"/infra/*.yaml "$EG_REPO"/infra/*.sh)"
+out="$(ISKAN_CLOUDTOP_REPO_DIR="$EG_REPO" bash "$SCRIPT_DIR/iskan.sh" evergreen-kaydet egtest --apply 2>&1)"
+rc=$?
+SUM_EG_3="$(md5sum "$EG_REPO"/infra/*.yaml "$EG_REPO"/infra/*.sh)"
+[ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'mevcut' && [ "$SUM_EG_2" = "$SUM_EG_3" ] \
+  && ok "evergreen-kaydet --apply 2.koşu: idempotent no-op (rc=0 + 'mevcut' + md5 değişmez)" \
+  || bad "evergreen-kaydet --apply 2.koşu: idempotency kırık (rc=$rc)"
+
+# 42. NEGATİF-KAPI (K4): kayıtsız proje → rc≠0 + 'kayitsiz-proje' + manifest md5 değişmez
+out="$(ISKAN_CLOUDTOP_REPO_DIR="$EG_REPO" bash "$SCRIPT_DIR/iskan.sh" evergreen-kaydet hayaletproje --apply 2>&1)"
+rc=$?
+SUM_EG_4="$(md5sum "$EG_REPO"/infra/*.yaml "$EG_REPO"/infra/*.sh)"
+[ "$rc" != "0" ] && printf '%s' "$out" | grep -q 'kayitsiz-proje' && [ "$SUM_EG_3" = "$SUM_EG_4" ] \
+  && ok "evergreen-kaydet: kayıtsız-proje rc≠0 + 'kayitsiz-proje' + yazımsız" \
+  || bad "evergreen-kaydet: kayıtsız-proje kapısı kırık (rc=$rc)"
+
+find "$EG_REPO" -type f -delete 2>/dev/null; find "$EG_REPO" -depth -type d -delete 2>/dev/null
+
+# 43. bash -n KAPISI: backup.sh sözdizim-bozuk fixture'da apply → rc≠0 + .bak-restore (byte-eş geri)
+EG_REPO2="$(mktemp -d)"
+_eg_fixture_repo "$EG_REPO2" "if true; then   # bilinçli-bozuk: fi eksik (bash -n düşer)"
+SUM_BK_0="$(md5sum "$EG_REPO2/infra/backup.sh")"
+out="$(ISKAN_CLOUDTOP_REPO_DIR="$EG_REPO2" bash "$SCRIPT_DIR/iskan.sh" evergreen-kaydet egtest --apply 2>&1)"
+rc=$?
+SUM_BK_1="$(md5sum "$EG_REPO2/infra/backup.sh")"
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'bash -n' && [ "$SUM_BK_0" = "$SUM_BK_1" ] \
+  && ok "evergreen-kaydet: bash -n kapısı düştü → rc=1 + backup.sh .bak-restore (byte-eş geri)" \
+  || bad "evergreen-kaydet: bash -n kapısı sözleşmesi kırık (rc=$rc)"
+find "$EG_REPO2" -type f -delete 2>/dev/null; find "$EG_REPO2" -depth -type d -delete 2>/dev/null
+
 echo "== ${PASS} geçti / ${FAIL} kaldı =="
 [ "$FAIL" -eq 0 ]
