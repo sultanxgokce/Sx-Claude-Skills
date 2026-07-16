@@ -1,0 +1,13 @@
+# erisim — AHÎ'ye Kalfa-adopsiyonu (2026-07-16; credential-yasam-dongusu Usta-bestesinin ön-koşulu).
+# version manifest'te YOK (tek-evi SKILL.md frontmatter — ADR-001).
+# Not: erişim-zinciri dispatcher'ı — platform-erisim skill'lerine delege eder (vault-first);
+# delege-hedefleri dinamik olduğundan requires'a yazılmaz (dispatcher-deseni).
+tier: kalfa
+name: erisim
+generic_goal: "planlı + paketli + her-projede güvenilir tekrarlanabilir"
+activation:
+  onKeyword: erisim
+install_targets:
+  - _global
+  - nexus
+  - cortex

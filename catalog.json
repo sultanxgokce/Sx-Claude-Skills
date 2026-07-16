@@ -741,6 +741,46 @@
         "kesif"
       ],
       "family": "test-tooling (sert-teslim/kesif ailesi — MÜHÜRDAR verdikt-kabuğu)"
+    },
+    {
+      "id": "credential-yasam-dongusu",
+      "type": "agent",
+      "name": "credential-yasam-dongusu — kimlik-katmanı yaşam-döngüsü (Usta/S3 bileşik)",
+      "version": "0.1.0",
+      "description": "Arçelik-kaynak-evreninin kimlik-katmanını (Okta-künye + broker-token + Fernet + VPS-custody) insan-tetikli, kanıt-üreten, fail-closed akışlarla yaşam-döngüsü-boyu yönetir: tazele (YALNIZ broker-refresh-yolu token-otonomisi; ad-hoc Okta-login hard-fail) · tasi (DR-göç, T1-runbook; Fernet-AYNEN + davranış-duvarı; --dry-run default) · teshis (SALT-OKUR sağlık-probe + 403/401/503 kök-neden-taksonomisi). vault-cek + sunucu-kur + erisim KOMPOZİSYONU. v0.1=İSKELET: doctor gerçek (requires-üçlüsü + force-bayrak-bekçisi), akışlar dürüst-fail RC=1. Sır=pointer-only.",
+      "prerequisites": {
+        "system": [
+          "bash"
+        ]
+      },
+      "tags": [
+        "credential",
+        "vault",
+        "broker",
+        "okta",
+        "dr",
+        "mmex",
+        "bilesik"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "SİNAN-spec v1.1 (2026-07-16, broker-deploy hub) — ahi new usta ile doğdu; SERDAR-scaffold, SİNAN-çapraz-review (spec-yazan≠scaffold-eden)",
+      "install_time": "~1min",
+      "status": "v0.1-usta",
+      "path": "credential-yasam-dongusu/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global (tüm bulut projeleri — ortak /config/.claude)",
+        "mmex (İZOLE MMEx-container — birincil kullanıcı SİNAN)"
+      ],
+      "requires": [
+        "vault-cek",
+        "sunucu-kur",
+        "erisim"
+      ],
+      "family": "credential (vault-cek/erisim ailesi — MMEx kimlik-katmanı Usta-kabuğu)"
     }
   ]
 }
