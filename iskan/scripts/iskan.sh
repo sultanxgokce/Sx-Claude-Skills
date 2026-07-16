@@ -554,6 +554,202 @@ cmd_yeni_proje() {
   exit 0
 }
 
+# ── cf-yayin (FAZ-5: CF-hostname yayını — Access + DNS + tünel-ingress) ─────────────────
+#
+# NEDEN: FAZ-5 = İSKÂN'ın DIŞA-DÖNÜK ilk yeteneği — bir projeye CF-Access + DNS-CNAME +
+# tünel-ingress ekler. EN YÜKSEK blast-radius: CF-tüneli 7 production-hostname'i (izole
+# privacy-tenant'lar dahil) fronting eder. Bu yüzden üç panzehir KOD-seviyesinde:
+#  (1) GO-kapısı: apply yalnız ISKAN_FAZ5_GO=1 ile; marker yoksa CF'e/host'a SIFIR-dokunuş (exit=4).
+#  (2) REPO-FIRST: hostname-satırı cloudtop origin/main'de YOKSA apply RED (exit=1) —
+#      host'a giden içerik working-tree'den DEĞİL `git show origin/main:`den beslenir.
+#  (3) 7-HOSTNAME SERT-KAPI: her dokunuştan sonra 7 production-hostname curl'lenir;
+#      HERHANGİ biri 302/401/403 dışına düşerse OTO-GERİ-AL (.bak restore + cloudflared
+#      restart) + exit=1 — regresyonlu-durumda script "başarılı" ÇIKAMAZ.
+#
+# CF-yüzeyi cloudflare-erisim/cf.sh'e DELEGE edilir (owner-domain-dokunma, ADR-001):
+# Access-app + policy + proxied-CNAME = `cf.sh onboard <host>` (idempotent, mevcut
+# app/policy/kayıt varsa no-op). Tünel-ingress = setup-tunnel.sh (host'ta config.yml'i
+# kendisi .bak'layıp yeniden-yazar + cloudflared restart eder).
+
+ISKAN_PROD_HOSTS="${ISKAN_PROD_HOSTS:-pc code vekatip mmex medi huma m}"
+
+# _cf_yedi_hostname_olc — 7 production-hostname'in http-kodlarını "h=KOD ..." tek-satır döner
+_cf_yedi_hostname_olc() {
+  local h out=""
+  for h in $ISKAN_PROD_HOSTS; do
+    out="${out}${h}=$(curl -sI -o /dev/null -w '%{http_code}' --max-time 10 "https://${h}.mmepanel.com" 2>/dev/null || echo 000) "
+  done
+  printf '%s' "$out"
+}
+
+# _cf_yedi_hostname_temiz_mi <ölçüm-satırı> — tüm kodlar 302/401/403 kümesinde mi (0=temiz)
+_cf_yedi_hostname_temiz_mi() {
+  local kod
+  for kod in $(printf '%s' "$1" | grep -oE '=[0-9]+' | tr -d '='); do
+    case "$kod" in 302|401|403) : ;; *) return 1 ;; esac
+  done
+  return 0
+}
+
+cmd_cf_yayin() {
+  local proje="" mode=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --dry-run) mode="dry-run"; shift ;;
+      --apply) mode="apply"; shift ;;
+      -*) echo "bilinmeyen argüman: $1" >&2; exit 2 ;;
+      *) proje="$1"; shift ;;
+    esac
+  done
+  if [ -z "$proje" ] || [ -z "$mode" ]; then
+    echo "kullanım: iskan.sh cf-yayin <proje> --dry-run|--apply" >&2
+    exit 2
+  fi
+
+  local host="${proje}.mmepanel.com" cname="cloudtop-${proje}"
+  local repo_dir="${ISKAN_CLOUDTOP_REPO_DIR:-/config/projects/cloudtop}"
+  local repo_compose="${ISKAN_REPO_COMPOSE:-$repo_dir/infra/docker-compose.server.yml}"
+  local cf_sh="${ISKAN_CF_SH:-$HOME/.claude/skills/cloudflare-erisim/scripts/cf.sh}"
+  local ssh_host="${ISKAN_SSH_HOST:-hostsrv}"
+  local kanit_dir="${ISKAN_KANIT_DIR:-iskan/kanit/faz5}"
+
+  # port: repo-compose'daki cloudtop-<proje> bloğundan (yoksa boş → doğrulanmadı-dili)
+  local port=""
+  [ -f "$repo_compose" ] && port="$(awk -v cn="$cname" '
+    /container_name:/ { if ($0 ~ cn) { found=1 } else { found=0 } }
+    found && /127\.0\.0\.1:[0-9]+:8443/ { match($0, /127\.0\.0\.1:[0-9]+:8443/); s=substr($0, RSTART, RLENGTH); split(s, a, ":"); print a[2]; exit }
+  ' "$repo_compose")"
+
+  if [ "$mode" = "dry-run" ]; then
+    echo "== İSKÂN cf-yayin — KURU-KOŞU (DEFAULT; CF-API'ye/host'a/dosyaya SIFIR-dokunuş) =="
+    echo "proje: $proje · hostname: $host · hedef-servis: http://localhost:${port:-<port-çözülemedi: önce yeni-proje compose-bloğu>}"
+    echo ""
+    echo "-- PLAN (apply'da sırayla; her adım idempotent) --"
+    echo "  1. CF-onboard (cf.sh onboard $host): Access-app + Allow-policy + proxied DNS-CNAME → tünel"
+    echo "     (mevcut app/policy/kayıt varsa no-op; 7 mevcut hostname'in Access/DNS'ine DOKUNMAZ)"
+    echo "  2. tünel-ingress-satırı: setup-tunnel.sh'te '$host → http://localhost:${port:-?}' (REPO-FIRST:"
+    echo "     satır cloudtop origin/main'de YOKSA apply RED; host'a origin/main içeriği .bak'lı yazılır)"
+    echo "  3. host'ta setup-tunnel.sh koşulur (config.yml'i kendisi .bak'lar + cloudflared restart)"
+    echo "  4. 7-HOSTNAME SERT-KAPI: pc·code·vekatip·mmex·medi·huma·m curl → hepsi 302/401/403 değilse"
+    echo "     OTO-GERİ-AL (.bak restore + cloudflared restart) + exit=1"
+    echo ""
+    # REPO-KANIT önizleme (salt-okur; repo erişilemezse doğrulanmadı-dili, dry-run yine plan-exit)
+    if [ -d "$repo_dir/.git" ] && git -C "$repo_dir" show origin/main:infra/setup-tunnel.sh 2>/dev/null | grep -qi "$proje"; then
+      echo "[yeşil] REPO-KANIT önizleme: '$proje' origin/main setup-tunnel.sh'te MEVCUT → apply repo-kapısını geçer"
+    else
+      echo "[doğrulanmadı] REPO-KANIT önizleme: '$proje' origin/main setup-tunnel.sh'te henüz YOK → apply RED eder (önce cloudtop-PR merge)"
+    fi
+    echo "== dry-run: hiçbir yazım/API-çağrısı yapılmadı (plan-exit sözleşmesi, exit=3) =="
+    exit 3
+  fi
+
+  # ── --apply · KAPI-1: Sultan-GO marker (HER ŞEYDEN önce — CF'e/host'a SIFIR-dokunuş) ────
+  if [ "${ISKAN_FAZ5_GO:-}" != "1" ]; then
+    echo "[kırmızı] cf-yayin --apply: FAZ-5 Sultan-GO env-marker gerekli (ISKAN_FAZ5_GO=1) — CF-config'e/host'a SIFIR-dokunuş (DOCTRINE Değişmez-3)" >&2
+    exit 4
+  fi
+
+  # ── KAPI-2: REPO-KANIT (D1 REPO-FIRST) — hostname origin/main'de yaşamalı ───────────────
+  if ! command -v git >/dev/null 2>&1 || [ ! -d "$repo_dir/.git" ]; then
+    echo "[kırmızı] cloudtop-repo bulunamadı: $repo_dir — REPO-FIRST kanıtlanamaz, hiçbir yere dokunulmadı" >&2
+    exit 1
+  fi
+  git -C "$repo_dir" fetch -q origin main 2>/dev/null || { echo "[kırmızı] cloudtop origin fetch başarısız — hiçbir yere dokunulmadı" >&2; exit 1; }
+  if ! git -C "$repo_dir" show origin/main:infra/setup-tunnel.sh 2>/dev/null | grep -qi "$proje"; then
+    echo "[kırmızı] REPO-KANIT yok: '$proje' origin/main setup-tunnel.sh'te bulunamadı — önce cloudtop-PR merge (D1), hiçbir yere dokunulmadı" >&2
+    exit 1
+  fi
+  if ! git -C "$repo_dir" show origin/main:infra/docker-compose.server.yml 2>/dev/null | grep -qE "container_name:[[:space:]]*${cname}\$"; then
+    echo "[kırmızı] REPO-KANIT yok: '$cname' origin/main compose'unda bulunamadı (hostname arkasında servis olmalı) — hiçbir yere dokunulmadı" >&2
+    exit 1
+  fi
+  echo "[yeşil] REPO-KANIT: '$proje' hostname-satırı + '$cname' compose-bloğu origin/main'de (D1 doğrulandı)"
+
+  # port'u AUTHORİTATİF kaynaktan (origin/main) yeniden çöz
+  port="$(git -C "$repo_dir" show origin/main:infra/docker-compose.server.yml 2>/dev/null | awk -v cn="$cname" '
+    /container_name:/ { if ($0 ~ cn) { found=1 } else { found=0 } }
+    found && /127\.0\.0\.1:[0-9]+:8443/ { match($0, /127\.0\.0\.1:[0-9]+:8443/); s=substr($0, RSTART, RLENGTH); split(s, a, ":"); print a[2]; exit }
+  ')"
+  [ -n "$port" ] || { echo "[kırmızı] '$cname' port'u origin/main compose'undan çözülemedi — hiçbir yere dokunulmadı" >&2; exit 1; }
+
+  [ -f "$cf_sh" ] || { echo "[kırmızı] cf.sh bulunamadı: $cf_sh — hiçbir yere dokunulmadı" >&2; exit 1; }
+  if ! command -v ssh >/dev/null 2>&1 || ! timeout 8 ssh -o BatchMode=yes -o ConnectTimeout=5 "$ssh_host" true >/dev/null 2>&1; then
+    echo "[kırmızı] $ssh_host erişilemedi — hiçbir yere dokunulmadı" >&2
+    exit 1
+  fi
+
+  mkdir -p "$kanit_dir"
+  echo "== İSKÂN cf-yayin — CANLI-APPLY (FAZ-5 Sultan-GO'lu) · $host → localhost:$port =="
+
+  # ── BASELINE: 7-hostname ÖNCE ─────────────────────────────────────────────────────────
+  local once sonra
+  once="$(_cf_yedi_hostname_olc)"
+  printf 'ÖNCE : %s\n' "$once" | tee "$kanit_dir/yedi-hostname-once.txt"
+  if ! _cf_yedi_hostname_temiz_mi "$once"; then
+    echo "[kırmızı] baseline zaten KİRLİ (302/401/403-dışı kod var) — dokunmadan DUR, SERDAR'a --waiting düş" >&2
+    exit 1
+  fi
+
+  # ── ADIM-1: CF-onboard (Access-app + policy + DNS; cf.sh'e delege, idempotent) ─────────
+  local onboard_out="$kanit_dir/cf-onboard.txt"
+  if ! bash "$cf_sh" onboard "$host" > "$onboard_out" 2>&1; then
+    echo "[kırmızı] cf.sh onboard başarısız (host'a HİÇ dokunulmadı) — çıktı: $onboard_out" >&2
+    tail -5 "$onboard_out" >&2
+    exit 1
+  fi
+  echo "[yeşil] ADIM-1 cf-onboard tamam (Access+policy+DNS idempotent) — kanıt: $onboard_out"
+
+  # ── ADIM-2: tünel-deploy (host setup-tunnel.sh'i origin/main içeriğiyle .bak'lı güncelle + koş) ─
+  # İçerik working-tree'den DEĞİL origin/main'den akar (REPO-FIRST saf-hâli; bayat/kirli
+  # working-tree host'a sızamaz). setup-tunnel.sh config.yml'i kendisi .bak'lar (satır 45).
+  if ! timeout 15 ssh -o BatchMode=yes "$ssh_host" "cp -a /opt/cloudtop/setup-tunnel.sh /opt/cloudtop/setup-tunnel.sh.bak"; then
+    echo "[kırmızı] host setup-tunnel.sh .bak alınamadı — host'a dokunulmadı, DUR" >&2
+    exit 1
+  fi
+  if ! git -C "$repo_dir" show origin/main:infra/setup-tunnel.sh | timeout 15 ssh -o BatchMode=yes "$ssh_host" "cat > /opt/cloudtop/setup-tunnel.sh && chmod +x /opt/cloudtop/setup-tunnel.sh"; then
+    echo "[kırmızı] host setup-tunnel.sh yazımı başarısız — geri-al: .bak restore" >&2
+    timeout 15 ssh -o BatchMode=yes "$ssh_host" "cp -a /opt/cloudtop/setup-tunnel.sh.bak /opt/cloudtop/setup-tunnel.sh" || true
+    exit 1
+  fi
+  local tunnel_out="$kanit_dir/setup-tunnel-kosu.txt"
+  if ! timeout 300 ssh -o BatchMode=yes "$ssh_host" "setsid -w bash /opt/cloudtop/setup-tunnel.sh" > "$tunnel_out" 2>&1; then
+    echo "[kırmızı] setup-tunnel.sh host-koşusu başarısız — OTO-GERİ-AL başlıyor (çıktı: $tunnel_out)" >&2
+    timeout 60 ssh -o BatchMode=yes "$ssh_host" "cp -a /etc/cloudflared/config.yml.bak /etc/cloudflared/config.yml && cp -a /opt/cloudtop/setup-tunnel.sh.bak /opt/cloudtop/setup-tunnel.sh && systemctl restart cloudflared" || true
+    exit 1
+  fi
+  echo "[yeşil] ADIM-2 tünel-deploy tamam (host .bak'lı, origin/main içerikli) — kanıt: $tunnel_out"
+
+  # ── ADIM-3: 7-HOSTNAME SERT-KAPI (+ regresyonda OTO-GERİ-AL) ────────────────────────────
+  sleep 5
+  sonra="$(_cf_yedi_hostname_olc)"
+  printf 'SONRA: %s\n' "$sonra" | tee "$kanit_dir/yedi-hostname-sonra.txt"
+  if ! _cf_yedi_hostname_temiz_mi "$sonra"; then
+    echo "[kırmızı] 7-HOSTNAME REGRESYON tespit edildi — OTO-GERİ-AL (.bak restore + cloudflared restart)" >&2
+    timeout 60 ssh -o BatchMode=yes "$ssh_host" "cp -a /etc/cloudflared/config.yml.bak /etc/cloudflared/config.yml && cp -a /opt/cloudtop/setup-tunnel.sh.bak /opt/cloudtop/setup-tunnel.sh && systemctl restart cloudflared" || true
+    sleep 5
+    printf 'GERİ-AL-SONRASI: %s\n' "$(_cf_yedi_hostname_olc)" | tee -a "$kanit_dir/yedi-hostname-sonra.txt"
+    echo "[kırmızı] DUR — SERDAR'a --waiting düş (kanıtlar: $kanit_dir/)" >&2
+    exit 1
+  fi
+  echo "[yeşil] ADIM-3 sert-kapı GEÇTİ: 7 hostname regresyonsuz"
+
+  # ── ADIM-4: yeni-hostname Access-challenge (DNS-yayılımı için retry'li) ─────────────────
+  local deneme kod=""
+  for deneme in 1 2 3 4 5 6 7 8 9 10 11 12; do
+    kod="$(curl -sI -o /dev/null -w '%{http_code}' --max-time 10 "https://$host" 2>/dev/null || echo 000)"
+    case "$kod" in 302|403) break ;; esac
+    sleep 10
+  done
+  printf '%s http=%s\n' "$host" "$kod" | tee "$kanit_dir/yeni-hostname-http.txt"
+  case "$kod" in
+    302|403) echo "[yeşil] ADIM-4: $host Access-challenge veriyor (http=$kod)" ;;
+    *) echo "[kırmızı] ADIM-4: $host beklenen 302/403 vermedi (http=$kod) — 7-hostname temiz olduğundan GERİ-ALINMADI; DNS-yayılımı/ingress'i incele, SERDAR'a --waiting düş" >&2; exit 1 ;;
+  esac
+
+  echo "== cf-yayin bitti: $host CANLI + 7-hostname regresyonsuz — kanıtlar: $kanit_dir/ =="
+  exit 0
+}
+
 case "${1:-}" in
   doctor)
     cmd_doctor
@@ -567,8 +763,12 @@ case "${1:-}" in
     shift
     cmd_yeni_proje "$@"
     ;;
+  cf-yayin)
+    shift
+    cmd_cf_yayin "$@"
+    ;;
   *)
-    echo "kullanım: iskan.sh doctor | iskan.sh seans-getir --container <ad> [--apply] | iskan.sh yeni-proje <ad> [--mem-limit <val>] --dry-run|--apply" >&2
+    echo "kullanım: iskan.sh doctor | iskan.sh seans-getir --container <ad> [--apply] | iskan.sh yeni-proje <ad> [--mem-limit <val>] --dry-run|--apply | iskan.sh cf-yayin <proje> --dry-run|--apply" >&2
     exit 2
     ;;
 esac
