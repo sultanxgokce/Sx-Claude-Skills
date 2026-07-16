@@ -704,5 +704,98 @@ SUM_BK_1="$(md5sum "$EG_REPO2/infra/backup.sh")"
   || bad "evergreen-kaydet: bash -n kapısı sözleşmesi kırık (rc=$rc)"
 find "$EG_REPO2" -type f -delete 2>/dev/null; find "$EG_REPO2" -depth -type d -delete 2>/dev/null
 
+# ── FAZ-9: port-override + provizyon-gate + roster-override ──────────────────────────────
+
+# 44. yeni-proje --port: override dry-run önizlemesi override-portu içerir + kaynak-beyanı + rc=3 + dosya değişmez
+PO_FIXTURE="/tmp/iskan-test-po.$$.yml"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$PO_FIXTURE"
+SUM_PO_0="$(md5sum "$PO_FIXTURE")"
+out="$(ISKAN_REPO_COMPOSE="$PO_FIXTURE" bash "$SCRIPT_DIR/iskan.sh" yeni-proje portproje --port 8448 --dry-run 2>&1)"
+rc=$?
+SUM_PO_1="$(md5sum "$PO_FIXTURE")"
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q '127.0.0.1:8448:8443' && printf '%s' "$out" | grep -q 'port-kaynağı: operatör-override' \
+  && [ "$SUM_PO_0" = "$SUM_PO_1" ] \
+  && ok "yeni-proje --port: override-port compose-önizlemede + kaynak-beyanı + rc=3 + yazımsız" \
+  || bad "yeni-proje --port: override sözleşmesi kırık (rc=$rc)"
+
+# 45. ISKAN_PORT env: --port ile aynı yol; ayrıca sayısal-olmayan değer rc=2
+out="$(ISKAN_PORT=8448 ISKAN_REPO_COMPOSE="$PO_FIXTURE" bash "$SCRIPT_DIR/iskan.sh" yeni-proje portproje --dry-run 2>&1)"
+rc=$?
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q '127.0.0.1:8448:8443' \
+  && ok "yeni-proje ISKAN_PORT: env-override arg'la eş-davranış (rc=3 + 8448)" \
+  || bad "yeni-proje ISKAN_PORT: env-override kırık (rc=$rc)"
+ISKAN_REPO_COMPOSE="$PO_FIXTURE" bash "$SCRIPT_DIR/iskan.sh" yeni-proje portproje --port abc --dry-run >/dev/null 2>&1
+rc=$?
+[ "$rc" = "2" ] && ok "yeni-proje --port: sayısal-olmayan değer rc=2" || bad "yeni-proje --port: sayısal-olmayan kabul edildi (rc=$rc)"
+
+# 46. port-override ÇAKIŞMA-kapısı: compose'da zaten bağlı porta override → rc=1 + RED + yazımsız
+cat >> "$PO_FIXTURE" <<'EOF'
+
+  cloudtop-mevcutport:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: cloudtop-mevcutport
+    ports:
+      - "127.0.0.1:8448:8443"
+EOF
+SUM_PO_2="$(md5sum "$PO_FIXTURE")"
+out="$(ISKAN_REPO_COMPOSE="$PO_FIXTURE" bash "$SCRIPT_DIR/iskan.sh" yeni-proje portproje --port 8448 --dry-run 2>&1)"
+rc=$?
+SUM_PO_3="$(md5sum "$PO_FIXTURE")"
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'zaten repo-compose.da kullanımda' && [ "$SUM_PO_2" = "$SUM_PO_3" ] \
+  && ok "yeni-proje --port: kullanımda-olan porta override rc=1 (çakışma-kapısı) + yazımsız" \
+  || bad "yeni-proje --port: çakışma-kapısı kırık (rc=$rc)"
+# GOLDEN: override YOKKEN pick_port davranışı aynen (8448 dolu → floor 8449 seçilir, kaynak-beyanı YOK)
+out="$(ISKAN_REPO_COMPOSE="$PO_FIXTURE" bash "$SCRIPT_DIR/iskan.sh" yeni-proje portproje --dry-run 2>&1)"
+rc=$?
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q '127.0.0.1:8449:8443' && ! printf '%s' "$out" | grep -q 'port-kaynağı: operatör-override' \
+  && ok "yeni-proje (override'sız): pick_port golden-davranış korunuyor (8449, beyan-yok)" \
+  || bad "yeni-proje (override'sız): golden-davranış BOZULDU (rc=$rc)"
+find /tmp -maxdepth 1 -name "iskan-test-po.$$.yml" -delete 2>/dev/null
+
+# 47. provizyon NEGATİF-KAPI (G7-sözleşmesi): marker-yokken --apply → rc=4 + stderr'de 'ISKAN_FAZ9_GO'
+err="$(env -u ISKAN_FAZ9_GO bash "$SCRIPT_DIR/iskan.sh" provizyon gatetest --apply 2>&1 >/dev/null)"
+rc=$?
+[ "$rc" = "4" ] && printf '%s' "$err" | grep -q 'ISKAN_FAZ9_GO' \
+  && ok "provizyon --apply: GO-marker yokken rc=4 + stderr'de marker-adı (FAZ-4 konvansiyonu)" \
+  || bad "provizyon --apply: negatif-kapı sözleşmesi kırık (rc=$rc)"
+
+# 48. provizyon dry-run: host/repo erişilemezken bile plan-exit=3 + doğrulanmadı-dili + plan-satırı
+out="$(ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_CLOUDTOP_REPO_DIR="/tmp/iskan-yok.$$" \
+  bash "$SCRIPT_DIR/iskan.sh" provizyon gatetest 2>&1)"
+rc=$?
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'doğrulanmadı' && printf '%s' "$out" | grep -q 'setsid -w bash' \
+  && ok "provizyon dry-run: offline'da rc=3 + doğrulanmadı-dili + plan-satırı" \
+  || bad "provizyon dry-run: plan-sözleşmesi kırık (rc=$rc)"
+bash "$SCRIPT_DIR/iskan.sh" provizyon >/dev/null 2>&1
+rc=$?
+[ "$rc" = "2" ] && ok "provizyon: projesiz çağrı rc=2 (usage)" || bad "provizyon: projesiz rc beklenen 2, gelen $rc"
+
+# 49. ekip-yerlestir ISKAN_EY_ROSTER override: 5-üye küçük-ASCII roster parse + dry-run planında 5 satır
+EYR_REPO="/tmp/iskan-test-eyr-repo.$$"
+mkdir -p "$EYR_REPO/infra"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$EYR_REPO/infra/docker-compose.server.yml"
+cat >> "$EYR_REPO/infra/docker-compose.server.yml" <<'EOF'
+
+  cloudtop-rostertest:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: cloudtop-rostertest
+    ports:
+      - "127.0.0.1:9448:8443"
+EOF
+git -C "$EYR_REPO" init -q -b main 2>/dev/null
+git -C "$EYR_REPO" -c user.email=t@t -c user.name=t add -A 2>/dev/null
+git -C "$EYR_REPO" -c user.email=t@t -c user.name=t commit -qm x 2>/dev/null
+git -C "$EYR_REPO" remote add origin "$EYR_REPO" 2>/dev/null
+git -C "$EYR_REPO" fetch -q origin main 2>/dev/null
+out="$(ISKAN_EY_ROSTER="nisanci:yonetici seyyah:uye mumeyyiz:uye vakanuvis:uye nakkas:uye" \
+  ISKAN_CLOUDTOP_REPO_DIR="$EYR_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir rostertest --dry-run 2>&1)"
+rc=$?
+n_uye="$(printf '%s\n' "$out" | grep -cE '^\s+- (nisanci|seyyah|mumeyyiz|vakanuvis|nakkas) \(')"
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'ISKAN_EY_ROSTER (açık-override)' && [ "$n_uye" = "5" ] \
+  && ok "ekip-yerlestir ISKAN_EY_ROSTER: 5-üye küçük-ASCII override parse + planında 5 satır + rc=3" \
+  || bad "ekip-yerlestir ISKAN_EY_ROSTER: override sözleşmesi kırık (rc=$rc, üye=$n_uye)"
+find "$EYR_REPO" -type f -delete 2>/dev/null; find "$EYR_REPO" -depth -type d -delete 2>/dev/null
+
 echo "== ${PASS} geçti / ${FAIL} kaldı =="
 [ "$FAIL" -eq 0 ]
