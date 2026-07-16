@@ -1,6 +1,6 @@
-[32m✓ Access app oluşturuldu: iskantest.mmepanel.com  (cd5517fb-5a56-4d78-a7d9-826e624c8506)[0m
+[32m✓ Access app oluşturuldu: mihenk.mmepanel.com  (b810d9f1-cfc8-4007-9d55-e9f5a44a3f2f)[0m
 [32m✓ Policy: Allow sultanxgokce@gmail.com[0m
 [31m✗ tünel 'cloudtop' id'si yok — doctor çalıştır / tünel host'ta kurulu mu?[0m
 [33m• DNS adımı atlandı (tünel-id API'de yok → host'ta setup-tunnel.sh route ekler).[0m
-[32m✓ onboard tamam: iskantest.mmepanel.com[0m
+[32m✓ onboard tamam: mihenk.mmepanel.com[0m
   ⚠️ Tünel INGRESS (hostname→localhost:PORT) HOST'taki /etc/cloudflared/config.yml'de → setup-tunnel.sh ekler.

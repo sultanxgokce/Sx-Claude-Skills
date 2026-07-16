@@ -797,5 +797,50 @@ n_uye="$(printf '%s\n' "$out" | grep -cE '^\s+- (nisanci|seyyah|mumeyyiz|vakanuv
   || bad "ekip-yerlestir ISKAN_EY_ROSTER: override sözleşmesi kırık (rc=$rc, üye=$n_uye)"
 find "$EYR_REPO" -type f -delete 2>/dev/null; find "$EYR_REPO" -depth -type d -delete 2>/dev/null
 
+# 50. MOUNT-FARKINDA hedef-yol çözümü (k0084-H4 gölgelenme-bug'ı regresyon-testi, host'suz):
+#     (a) paylaşımlı-mount servis (./config/projects/X:/config/projects/X) → host-yol = mount'un kendisi
+#     (b) tek-mount servis (./config-Y:/config) → host-yol = config-Y/projects/Y (eski davranış korunur)
+MM_REPO="/tmp/iskan-test-mm-repo.$$"
+mkdir -p "$MM_REPO/infra"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$MM_REPO/infra/docker-compose.server.yml"
+cat >> "$MM_REPO/infra/docker-compose.server.yml" <<'EOF'
+
+  cloudtop-paylasimli:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: cloudtop-paylasimli
+    volumes:
+      - ./config-paylasimli:/config
+      - ./config/.claude:/config/.claude
+      - ./config/projects/paylasimli:/config/projects/paylasimli
+    ports:
+      - "127.0.0.1:9448:8443"
+
+  cloudtop-tekmount:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: cloudtop-tekmount
+    volumes:
+      - ./config-tekmount:/config
+    ports:
+      - "127.0.0.1:9449:8443"
+EOF
+git -C "$MM_REPO" init -q -b main 2>/dev/null
+git -C "$MM_REPO" -c user.email=t@t -c user.name=t add -A 2>/dev/null
+git -C "$MM_REPO" -c user.email=t@t -c user.name=t commit -qm x 2>/dev/null
+git -C "$MM_REPO" remote add origin "$MM_REPO" 2>/dev/null
+git -C "$MM_REPO" fetch -q origin main 2>/dev/null
+out="$(ISKAN_CLOUDTOP_REPO_DIR="$MM_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir paylasimli --dry-run 2>&1)"
+rc=$?
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q '→ /opt/cloudtop/config/projects/paylasimli (host)' \
+  && ok "mount-çözümü: paylaşımlı-mount → mount'un kendisi (gölgelenme-panzehiri)" \
+  || bad "mount-çözümü: paylaşımlı-mount yanlış çözüldü (rc=$rc)"
+out="$(ISKAN_CLOUDTOP_REPO_DIR="$MM_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir tekmount --dry-run 2>&1)"
+rc=$?
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q '→ /opt/cloudtop/config-tekmount/projects/tekmount (host)' \
+  && ok "mount-çözümü: tek-mount eski-davranış korunuyor (config-<ad>/projects/<ad>)" \
+  || bad "mount-çözümü: tek-mount davranışı BOZULDU (rc=$rc)"
+find "$MM_REPO" -type f -delete 2>/dev/null; find "$MM_REPO" -depth -type d -delete 2>/dev/null
+
 echo "== ${PASS} geçti / ${FAIL} kaldı =="
 [ "$FAIL" -eq 0 ]

@@ -1066,6 +1066,47 @@ _ey_proje_cozumu() {
     found && /127\.0\.0\.1:[0-9]+:8443/ { match($0, /127\.0\.0\.1:[0-9]+:8443/); s=substr($0, RSTART, RLENGTH); split(s, a, ":"); print a[2]; exit }
   ')"
   echo "[yeşil] proje-çözümü: '$proje' → ${EY_CNAME} (origin/main compose, TAM-STRING) · port=${EY_PORT:-?}"
+
+  # ── MOUNT-FARKINDA hedef-yol çözümü (k0084-H4 canlı-bulgu: paylaşımlı-mount gölgelenmesi) ──
+  # EY_HEDEF_ICI'nin (container-görünür hedef-dizin) HOST-tarafı yolu servis-bloğunun volume-
+  # eşlemelerinden türetilir; EN-UZUN container-hedef-önek kazanır. İki sınıf da doğru çözülür:
+  #  - tek-mount (iskantest: ./config-<ad>:/config)          → <root>/config-<ad>/projects/<ad>
+  #  - paylaşımlı-mount (huma/mihenk: ./config/projects/<ad>:/config/projects/<ad>) → mount'un kendisi
+  # Aksi hâlde artefaktlar (registry container-kopyası, baslat-claude.sh, _iskan/ banner'lar)
+  # gölgelenen alt-yola düşer → container hiçbirini görmez (canlı-vaka: G6 üçlü-bayt-eş kırıldı).
+  local ey_host_root="${ISKAN_HOST_COMPOSE_ROOT:-/opt/cloudtop}"
+  # bazı çağıranlar (evergreen-kaydet) hedef-dizin kavramı taşımaz → default'la çöz (set -u güvenli)
+  local ey_hedef="${EY_HEDEF_ICI:-/config/projects/${proje}}"
+  local ey_cozulen
+  ey_cozulen="$(printf '%s\n' "$compose_main" | awk -v cn="$EY_CNAME" -v hedef="$ey_hedef" -v root="$ey_host_root" '
+    BEGIN { bestlen=0 }
+    /container_name:/ { f = ($0 ~ cn"$") }
+    f && /^[[:space:]]*-[[:space:]]/ {
+      line=$0
+      sub(/^[[:space:]]*-[[:space:]]*/, "", line)
+      sub(/[[:space:]]*#.*$/, "", line)
+      gsub(/"/, "", line)
+      n = split(line, a, ":")
+      if (n < 2) next
+      src = a[1]; dst = a[2]
+      if (src !~ /^\.?\//) next                      # yalnız yol-eşlemeleri (port/named-volume değil)
+      if (dst == hedef) { m = dst } else if (index(hedef, dst "/") == 1) { m = dst } else next
+      if (length(m) > bestlen) { bestlen = length(m); bestsrc = src; bestdst = m }
+    }
+    END {
+      if (bestlen > 0) {
+        suffix = substr(hedef, length(bestdst) + 1)
+        if (bestsrc ~ /^\.\//) { sub(/^\.\//, "", bestsrc); bestsrc = root "/" bestsrc }
+        print bestsrc suffix
+      }
+    }
+  ')"
+  if [ -n "$ey_cozulen" ]; then
+    EY_HOST_PROJ="$ey_cozulen"
+    echo "[yeşil] hedef-yol çözümü (mount-farkında): $ey_hedef (container) → $EY_HOST_PROJ (host)"
+  else
+    echo "[doğrulanmadı] compose-volume'den hedef-yol çözülemedi — varsayılan kullanılacak: ${EY_HOST_PROJ:-<tanımsız>}"
+  fi
   return 0
 }
 
@@ -1334,7 +1375,7 @@ cmd_ekip_yerlestir() {
     fi
     # gerçek-roster'lı ekip-registry (şablon-örnek UYE1/UYE2'nin yerine)
     _ey_ekip_registry_icerik < <(printf '%s' "$EY_UYE_SATIRLARI" | cut -f1-3) > "$staging/_agents/handoff/ekip-registry.yaml"
-    if ! tar -C "$staging" -cf - . | _ey_ssh "mkdir -p '$EY_HOST_PROJ' && tar -C '$EY_HOST_PROJ' -xf - && chown -R 1000:1000 '$EY_HOST_CFG/projects'"; then
+    if ! tar -C "$staging" -cf - . | _ey_ssh "mkdir -p '$EY_HOST_PROJ' && tar -C '$EY_HOST_PROJ' -xf - && chown -R 1000:1000 '$EY_HOST_PROJ'"; then
       rm -rf "$staging"
       echo "[kırmızı] scaffold host-taşıması başarısız (tar-pipe) — kısmi-yazım olabilir, incele + yeniden-koş (idempotent)" >&2
       exit 1
