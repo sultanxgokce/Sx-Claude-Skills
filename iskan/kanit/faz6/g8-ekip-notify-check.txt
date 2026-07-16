@@ -1,0 +1,2 @@
+denekAlfa: preflight=idle composer=empty
+denekBeta: preflight=idle composer=empty

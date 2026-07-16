@@ -1,0 +1,4 @@
+ARAÇLAR-HAZIR:
+/usr/bin/tmux
+/usr/bin/git
+/usr/bin/python3

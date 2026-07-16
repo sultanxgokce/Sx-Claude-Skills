@@ -1,0 +1,1 @@
+[kırmızı] kayitsiz-proje: 'hayaletproje' — compose-servis-listesinde (origin/main) 'cloudtop-hayaletproje' TAM-STRING eşleşmesi yok (K4: fuzzy/önek/case-farkı kabul edilmez), hiçbir yere dokunulmadı

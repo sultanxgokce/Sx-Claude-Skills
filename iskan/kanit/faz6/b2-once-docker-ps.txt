@@ -1,0 +1,7 @@
+cloudtop-iskantest	2026-07-16 08:29:01 +0300 +03	Up About an hour (healthy)
+cloudtop	2026-07-15 23:00:48 +0300 +03	Up 10 hours (healthy)
+cloudtop-huma	2026-07-10 13:00:30 +0300 +03	Up 11 hours (healthy)
+cloudtop-medigate	2026-07-07 09:49:48 +0300 +03	Up 11 hours (healthy)
+cloudtop-mmex	2026-07-06 14:06:17 +0300 +03	Up 9 days (healthy)
+cloudtop-code	2026-06-24 08:52:48 +0300 +03	Up 11 hours (healthy)
+cloudtop-vekatip	2026-06-22 11:38:46 +0300 +03	Up 11 hours (healthy)

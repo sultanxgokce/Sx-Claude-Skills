@@ -1,0 +1,3 @@
+[kirmizi] claude-binary yok — bu container'da claude kurulu degil (mem-cap geregi canli-claude FAZ-9 kapsami; sahte-yesil basilmaz).
+kur-recetesi: (1) compose'ta mem_limit >= 2g (claude ~357-657MB RSS olculdu) (2) nvm+node kur (3) npm install -g @anthropic-ai/claude-code
+rol=denekAlfa rezerve-session-id=08f2da51-d687-47e7-b855-ba8b23e0fe4e permission-mode=default (kayit hazir — binary gelince AYNI komut calisir)

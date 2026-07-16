@@ -1105,8 +1105,10 @@ cmd_ekip_yerlestir() {
   fi
 
   # ── ADIM-5: kimlik-banner dosyaları + tmux-oturumları (üye-bazlı idempotent) ─────────────
+  # ⚠️ fd-3 döngüsü ŞART (canlı-vaka, koşu-1): döngü-içi ssh-çağrıları stdin'i YER — here-string
+  # stdin'den beslenirse 2. üyenin satırı ssh tarafından tüketilir, döngü tek-üyede biter.
   local acilan=0 atlanan=0
-  while IFS=$'\t' read -r rol gorev sid kaynak; do
+  while IFS=$'\t' read -r -u 3 rol gorev sid kaynak; do
     [ -n "$rol" ] || continue
     # banner-dosyası (uuid mevcut-kayıttan geldiği için içerik deterministik; yoksa yaz)
     if ! _ey_ssh "test -f '$host_proj/_iskan/banner-$rol.txt'" 2>/dev/null; then
@@ -1115,21 +1117,24 @@ cmd_ekip_yerlestir() {
         exit 1
       fi
     fi
-    # tmux-oturumu (soket /tmp/tmux-1000; TERM detached-new-session için sabitlenir)
+    # tmux-oturumu (soket /tmp/tmux-1000; TERM detached-new-session için sabitlenir).
+    # ⚠️ SHELL=/bin/bash ŞART (canlı-vaka, koşu-1/2): tmux pane-komutunu default-shell'le koşar;
+    # abc'nin passwd-shell'i /bin/false → SHELL-override'sız pane anında ölür, son-oturumla
+    # birlikte tmux-server de kapanır ("no server running"). SHELL env'i default-shell'i ezer.
     if _ey_ssh "docker exec -u 1000 $EY_CNAME tmux has-session -t $rol 2>/dev/null"; then
       echo "[yeşil] ADIM-5 $rol: tmux-oturumu mevcut → atla (rezerve-uuid korunur: $sid)"
       atlanan=$((atlanan + 1))
     else
-      if ! _ey_ssh "docker exec -u 1000 -e TERM=xterm-256color $EY_CNAME tmux new-session -d -s $rol -c $EY_HEDEF_ICI"; then
+      if ! _ey_ssh "docker exec -u 1000 -e TERM=xterm-256color -e HOME=/config -e SHELL=/bin/bash $EY_CNAME tmux new-session -d -s $rol -c $EY_HEDEF_ICI"; then
         echo "[kırmızı] tmux new-session başarısız: $rol" >&2
         exit 1
       fi
-      _ey_ssh "docker exec -u 1000 -e TERM=xterm-256color $EY_CNAME tmux send-keys -t $rol 'clear; cat _iskan/banner-$rol.txt' Enter" || \
+      _ey_ssh "docker exec -u 1000 -e TERM=xterm-256color -e HOME=/config -e SHELL=/bin/bash $EY_CNAME tmux send-keys -t $rol 'clear; cat _iskan/banner-$rol.txt' Enter" || \
         echo "[doğrulanmadı] banner send-keys başarısız ($rol) — oturum açık, banner elle: cat _iskan/banner-$rol.txt"
       echo "[yeşil] ADIM-5 $rol: tmux-oturumu AÇILDI ($gorev, rezerve-uuid: $sid, cwd=$EY_HEDEF_ICI)"
       acilan=$((acilan + 1))
     fi
-  done <<< "$uye_satirlari"
+  done 3<<< "$uye_satirlari"
 
   echo ""
   echo "== ekip-yerlestir bitti: $proje · açılan=$acilan atlanan-mevcut=$atlanan · registry 3-kopya bayt-eş (host+repo+container-içi) =="
