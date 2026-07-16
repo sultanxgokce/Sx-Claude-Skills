@@ -1,0 +1,15 @@
+İ1 NEGATİF-TESTİ — merkez-Nexus 4 kimlik-yüzeyi (zemin=66242d05)
+== APPLY-ÖNCESİ (2026-07-16T10:39:26+03:00) ==
+a641a0843a1cb90115f22b450e3fde52  _agents/orchestration/agent-registry.json
+26ad01dec3e096005986b2c735941c1e  _agents/orchestration/AGENT_REGISTRY.md
+654949864181395cbe257aacd5bf1a11  _agents/orchestration/BOARD.md
+955a29ebdd8a2b0661eedfd63b1d4b9e  ui/app/(main)/komuta/ekip/page.tsx
+HEAD=66242d0554ee1462e4d19b225f901df975da8f23
+
+== APPLY-SONRASI (2026-07-16T10:41:33+03:00) ==
+a641a0843a1cb90115f22b450e3fde52  _agents/orchestration/agent-registry.json
+26ad01dec3e096005986b2c735941c1e  _agents/orchestration/AGENT_REGISTRY.md
+654949864181395cbe257aacd5bf1a11  _agents/orchestration/BOARD.md
+955a29ebdd8a2b0661eedfd63b1d4b9e  ui/app/(main)/komuta/ekip/page.tsx
+working-tree-kirli-satir-sayisi=0
+SONUÇ: 4 yüzey md5 apply-öncesiyle BİREBİR-EŞ → İ1 TEMİZ

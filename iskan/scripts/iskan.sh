@@ -877,6 +877,190 @@ EOF
   done
 }
 
+# _ey_ad_hijyeni <ad> <marker> — ad ssh/docker/tmux komutlarına gömülür → dar-charset (injection-panzehiri).
+# Büyük-harf BİLİNÇLİ geçirilir: 'ISKANTEST' charset'i geçer ama TAM-STRING eşleşmede düşer (K4-kanıt).
+_ey_ad_hijyeni() {
+  if ! printf '%s' "$1" | grep -qE '^[A-Za-z0-9-]+$'; then
+    echo "[kırmızı] $2: '$1' — geçersiz ad-charset ([A-Za-z0-9-] dışı), hiçbir yere dokunulmadı" >&2
+    return 1
+  fi
+}
+
+# _ey_proje_cozumu <proje> — K4 proje-çözümü: cloudtop origin/main compose-servis-listesinde
+# container_name TAM-STRING eşleşmesi (fuzzy/önek/case-farkı YASAK). Girdi: EY_REPO_DIR + EY_CNAME.
+# Çıktı: EY_PORT set edilir; başarısızlıkta mesajı ('kayitsiz-proje' marker'ı dahil) kendisi basar, rc≠0.
+_ey_proje_cozumu() {
+  local proje="$1"
+  # -e (dosya YA DA dizin): git-worktree'de .git bir gitdir-pointer DOSYASIDIR (firsthand-bulgu,
+  # FAZ-7 canlı-koşu-1: -d kontrolü worktree'yi 'repo yok' sanıp düşürdü)
+  if ! command -v git >/dev/null 2>&1 || [ ! -e "$EY_REPO_DIR/.git" ]; then
+    echo "[kırmızı] cloudtop-repo bulunamadı: $EY_REPO_DIR — proje-çözümü yapılamaz, hiçbir yere dokunulmadı" >&2
+    return 1
+  fi
+  git -C "$EY_REPO_DIR" fetch -q origin main 2>/dev/null || true   # offline'da son-fetch'lenmiş origin/main kullanılır
+  local compose_main
+  compose_main="$(git -C "$EY_REPO_DIR" show origin/main:infra/docker-compose.server.yml 2>/dev/null)"
+  if [ -z "$compose_main" ]; then
+    echo "[kırmızı] origin/main compose okunamadı ($EY_REPO_DIR) — proje-çözümü yapılamaz, hiçbir yere dokunulmadı" >&2
+    return 1
+  fi
+  if ! printf '%s\n' "$compose_main" | grep -qE "container_name:[[:space:]]*${EY_CNAME}\$"; then
+    echo "[kırmızı] kayitsiz-proje: '$proje' — compose-servis-listesinde (origin/main) '${EY_CNAME}' TAM-STRING eşleşmesi yok (K4: fuzzy/önek/case-farkı kabul edilmez), hiçbir yere dokunulmadı" >&2
+    return 1
+  fi
+  EY_PORT="$(printf '%s\n' "$compose_main" | awk -v cn="$EY_CNAME" '
+    /container_name:/ { if ($0 ~ cn"$") { found=1 } else { found=0 } }
+    found && /127\.0\.0\.1:[0-9]+:8443/ { match($0, /127\.0\.0\.1:[0-9]+:8443/); s=substr($0, RSTART, RLENGTH); split(s, a, ":"); print a[2]; exit }
+  ')"
+  echo "[yeşil] proje-çözümü: '$proje' → ${EY_CNAME} (origin/main compose, TAM-STRING) · port=${EY_PORT:-?}"
+  return 0
+}
+
+# _ey_on_kapilar <ssh_ok> — apply ön-kapıları: ssh + container-Up + araçlar (tmux/git/python3).
+# rc≠0 = kırmızı (mesajı kendisi basar; sh -c = builtin-tuzağı panzehiri).
+_ey_on_kapilar() {
+  if [ "$1" != "1" ]; then
+    echo "[kırmızı] $EY_SSH_HOST erişilemedi — hiçbir yere dokunulmadı" >&2
+    return 1
+  fi
+  if [ "$(_ey_ssh "docker inspect -f '{{.State.Running}}' $EY_CNAME 2>/dev/null" 2>/dev/null)" != "true" ]; then
+    echo "[kırmızı] $EY_CNAME çalışmıyor (docker inspect Running≠true) — hiçbir yere dokunulmadı" >&2
+    return 1
+  fi
+  local arac eksik=""
+  for arac in tmux git python3; do
+    _ey_ssh "docker exec $EY_CNAME sh -c 'command -v $arac' >/dev/null 2>&1" || eksik="$eksik $arac"
+  done
+  if [ -n "$eksik" ]; then
+    echo "[kırmızı] $EY_CNAME içinde eksik araç:${eksik} — araç-provizyonu gerekli (compose INSTALL_PACKAGES=tmux|git|python3 + servis-scoped recreate), hiçbir yere dokunulmadı" >&2
+    return 1
+  fi
+  echo "[yeşil] ön-kapılar: ssh + container-Up + araçlar (tmux/git/python3) tamam"
+}
+
+# _ey_ekip_roster_oku <ekip-registry-içerik> — roster'ı "rol:gorev" çiftleri olarak basar
+# (meta.yonetici eşleşen üye 'yonetici', diğerleri 'uye'). FAZ-7 roster-köprüsünün parser'ı.
+# İçerik stdin'den akar (BİLİNÇLİ — heredoc'a """-gömme deseni, içerik '"' ile bitince
+# Python-string'ini kırar; firsthand-bulgu, test-37 ilk-koşusu).
+_ey_ekip_roster_oku() {
+  printf '%s\n' "$1" | python3 -c '
+import re, sys
+yonetici = None
+ids = []
+in_uyeler = False
+for ln in sys.stdin:
+    if re.match(r"^uyeler:", ln):
+        in_uyeler = True
+        continue
+    if not in_uyeler:
+        m = re.match(r"\s*yonetici:\s*(\S+)", ln)
+        if m:
+            yonetici = m.group(1)
+        continue
+    m = re.match(r"\s*-\s*id:\s*(\S+)\s*$", ln)
+    if m:
+        ids.append(m.group(1))
+out = []
+for i in ids:
+    out.append(i + (":yonetici" if i == yonetici else ":uye"))
+print(" ".join(out))
+'
+}
+
+# _ey_uye_satirlari <roster> <reg_mevcut> — roster'ı "rol\tgorev\tuuid\tkaynak" satırlarına açar;
+# uuid mevcut-kayıttan YENİDEN-KULLANILIR (asla yeniden-üretilmez), yoksa uuid4 üretilir (küçük-harf).
+# Yan-etki (bilinçli — subshell'de yan-etki kaybolur): EY_UYE_SATIRLARI + EY_YONETICI + EY_UYE_SAYISI.
+_ey_uye_satirlari() {
+  local roster="$1" reg_mevcut="$2" girdi rol gorev sid kaynak
+  EY_YONETICI=""; EY_UYE_SAYISI=0; EY_UYE_SATIRLARI=""
+  for girdi in $roster; do
+    rol="${girdi%%:*}"; gorev="${girdi#*:}"
+    [ "$gorev" = "$girdi" ] && gorev="uye"
+    [ "$gorev" = "yonetici" ] && [ -z "$EY_YONETICI" ] && EY_YONETICI="$rol"
+    EY_UYE_SAYISI=$((EY_UYE_SAYISI + 1))
+    sid=""; kaynak="yeni"
+    if [ -n "$reg_mevcut" ]; then
+      sid="$(_ey_registry_sid "$reg_mevcut" "$rol")"
+      [ -n "$sid" ] && kaynak="mevcut"
+    fi
+    if [ -z "$sid" ]; then
+      sid="$(python3 -c 'import uuid; print(uuid.uuid4())')"   # uuid4 = küçük-harf (G6/G7 sözleşmesi)
+    fi
+    EY_UYE_SATIRLARI="${EY_UYE_SATIRLARI}${rol}	${gorev}	${sid}	${kaynak}
+"
+  done
+  [ -n "$EY_YONETICI" ] || EY_YONETICI="${roster%%:*}"
+}
+
+# _ey_pane_ac <rol> <gorev> <sid> — kimlik-banner dosyası (yoksa yaz) + tmux-oturumu (yoksa aç).
+# Girdi: EY_PROJE/EY_CNAME/EY_HEDEF_ICI/EY_HOST_PROJ. EY_PANE_SONUC=acildi|mevcut set eder; rc≠0=hata.
+# ⚠️ SHELL=/bin/bash ŞART (canlı-vaka, FAZ-6 koşu-1/2): tmux pane-komutunu default-shell'le koşar;
+# abc'nin passwd-shell'i /bin/false → SHELL-override'sız pane anında ölür, son-oturumla birlikte
+# tmux-server de kapanır ("no server running"). SHELL env'i default-shell'i ezer.
+_ey_pane_ac() {
+  local rol="$1" gorev="$2" sid="$3"
+  EY_PANE_SONUC=""
+  # banner-dosyası (uuid mevcut-kayıttan geldiği için içerik deterministik; yoksa yaz)
+  if ! _ey_ssh "test -f '$EY_HOST_PROJ/_iskan/banner-$rol.txt'" 2>/dev/null; then
+    if ! _ey_banner "$EY_PROJE" "$rol" "$gorev" "$sid" "default" | _ey_ssh "mkdir -p '$EY_HOST_PROJ/_iskan' && cat > '$EY_HOST_PROJ/_iskan/banner-$rol.txt' && chown -R 1000:1000 '$EY_HOST_PROJ/_iskan'"; then
+      echo "[kırmızı] banner yazımı başarısız: $rol" >&2
+      return 1
+    fi
+  fi
+  # tmux-oturumu (soket /tmp/tmux-1000; TERM detached-new-session için sabitlenir)
+  if _ey_ssh "docker exec -u 1000 $EY_CNAME tmux has-session -t $rol 2>/dev/null"; then
+    EY_PANE_SONUC="mevcut"
+    return 0
+  fi
+  if ! _ey_ssh "docker exec -u 1000 -e TERM=xterm-256color -e HOME=/config -e SHELL=/bin/bash $EY_CNAME tmux new-session -d -s $rol -c $EY_HEDEF_ICI"; then
+    echo "[kırmızı] tmux new-session başarısız: $rol" >&2
+    return 1
+  fi
+  _ey_ssh "docker exec -u 1000 -e TERM=xterm-256color -e HOME=/config -e SHELL=/bin/bash $EY_CNAME tmux send-keys -t $rol 'clear; cat _iskan/banner-$rol.txt' Enter" || \
+    echo "[doğrulanmadı] banner send-keys başarısız ($rol) — oturum açık, banner elle: cat _iskan/banner-$rol.txt"
+  EY_PANE_SONUC="acildi"
+}
+
+# _ey_registry_dagit <reg_yeni> <reg_mevcut_host> — iskan-registry K2 içeriğini ÜÇ kopyaya bayt-eş
+# dağıtır: host co-locate (EY_HOST_REGISTRY) + repo working-tree (EY_REPO_DIR/infra, commit/PR ayrı-adım)
+# + container-içi (EY_HOST_PROJ, baslat-claude.sh kaynağı). Her kopya md5-karşılaştırmalı idempotent.
+_ey_registry_dagit() {
+  local reg_yeni="$1" reg_mevcut="$2"
+  local md5_yeni; md5_yeni="$(printf '%s\n' "$reg_yeni" | md5sum | cut -d' ' -f1)"
+  if [ "$(printf '%s\n' "$reg_mevcut" | md5sum | cut -d' ' -f1)" = "$md5_yeni" ]; then
+    echo "[yeşil] iskan-registry (host): içerik-eş, mevcut → atla"
+  else
+    if ! printf '%s\n' "$reg_yeni" | _ey_ssh "mkdir -p '$(dirname "$EY_HOST_REGISTRY")' && cat > '$EY_HOST_REGISTRY'"; then
+      echo "[kırmızı] iskan-registry host-yazımı başarısız: $EY_HOST_REGISTRY" >&2
+      return 1
+    fi
+    echo "[yeşil] iskan-registry (host): yazıldı → $EY_HOST_REGISTRY"
+  fi
+  # repo-kopyası (co-locate; PR bu dosyadan açılır — apply repo'ya YALNIZ bu dosyayı yazar)
+  if [ -w "$EY_REPO_DIR/infra" ] || [ -w "$EY_REPO_DIR" ]; then
+    if [ -f "$EY_REPO_DIR/infra/iskan-registry.yaml" ] && \
+       [ "$(md5sum "$EY_REPO_DIR/infra/iskan-registry.yaml" | cut -d' ' -f1)" = "$md5_yeni" ]; then
+      echo "[yeşil] iskan-registry (repo): içerik-eş, mevcut → atla"
+    else
+      printf '%s\n' "$reg_yeni" > "$EY_REPO_DIR/infra/iskan-registry.yaml"
+      echo "[yeşil] iskan-registry (repo): yazıldı → $EY_REPO_DIR/infra/iskan-registry.yaml (commit/PR ayrı-adım, REPO-FIRST)"
+    fi
+  else
+    echo "[doğrulanmadı] iskan-registry (repo): $EY_REPO_DIR yazılabilir değil — repo-kopyası atlandı (host+container kopyaları yazıldı)"
+  fi
+  # container-içi kopya (baslat-claude.sh okur)
+  if _ey_ssh "test -f '$EY_HOST_PROJ/iskan-registry.yaml'" 2>/dev/null && \
+     [ "$(_ey_ssh "md5sum '$EY_HOST_PROJ/iskan-registry.yaml'" 2>/dev/null | cut -d' ' -f1)" = "$md5_yeni" ]; then
+    echo "[yeşil] iskan-registry (container-içi): içerik-eş, mevcut → atla"
+  else
+    if ! printf '%s\n' "$reg_yeni" | _ey_ssh "cat > '$EY_HOST_PROJ/iskan-registry.yaml' && chown 1000:1000 '$EY_HOST_PROJ/iskan-registry.yaml'"; then
+      echo "[kırmızı] iskan-registry container-içi kopya yazımı başarısız" >&2
+      return 1
+    fi
+    echo "[yeşil] iskan-registry (container-içi): yazıldı (baslat-claude.sh kaynağı)"
+  fi
+}
+
 cmd_ekip_yerlestir() {
   local proje="" mode=""
   while [ $# -gt 0 ]; do
@@ -891,84 +1075,57 @@ cmd_ekip_yerlestir() {
     echo "kullanım: iskan.sh ekip-yerlestir <proje> --dry-run|--apply" >&2
     exit 2
   fi
-  # ad-hijyeni: proje-adı ssh/docker/tmux komutlarına gömülür → dar-charset (injection-panzehiri).
-  # Büyük-harf BİLİNÇLİ geçirilir: 'ISKANTEST' charset'i geçer ama TAM-STRING eşleşmede düşer (K4-kanıt).
-  if ! printf '%s' "$proje" | grep -qE '^[A-Za-z0-9-]+$'; then
-    echo "[kırmızı] kayitsiz-proje: '$proje' — geçersiz ad-charset ([A-Za-z0-9-] dışı), hiçbir yere dokunulmadı" >&2
-    exit 1
-  fi
+  _ey_ad_hijyeni "$proje" "kayitsiz-proje" || exit 1
 
-  local repo_dir="${ISKAN_CLOUDTOP_REPO_DIR:-/config/projects/cloudtop}"
+  EY_REPO_DIR="${ISKAN_CLOUDTOP_REPO_DIR:-/config/projects/cloudtop}"
   EY_SSH_HOST="${ISKAN_SSH_HOST:-hostsrv}"
   EY_PROJE="$proje"
   EY_CNAME="cloudtop-${proje}"
   EY_HOSTNAME="${proje}.mmepanel.com"
   EY_HOST_CFG="/opt/cloudtop/config-${proje}"
   EY_HEDEF_ICI="${ISKAN_EY_HEDEF_DIR:-/config/projects/${proje}}"
-  local host_proj="${EY_HOST_CFG}/projects/${proje}"
-  local host_registry="${ISKAN_HOST_REGISTRY:-/opt/cloudtop/infra/iskan-registry.yaml}"
+  EY_HOST_PROJ="${EY_HOST_CFG}/projects/${proje}"
+  EY_HOST_REGISTRY="${ISKAN_HOST_REGISTRY:-/opt/cloudtop/infra/iskan-registry.yaml}"
   local ekipkur_dir="${ISKAN_EKIPKUR_DIR:-$SCRIPT_DIR/../../ekip-kur}"
   local tmpl_baslat="$SCRIPT_DIR/../templates/baslat-claude.sh"
 
-  # SABİT FAZ-6 deneme-roster'ı (GEREKLILIK ile bağlayıcı): denekAlfa (yönetici) + denekBeta.
-  # camelCase BİLİNÇLİ (ASCII, Türkçe-İ casing-tuzağı yok). FAZ-7 uye-ekle bu mekaniği genişletir.
-  local roster="${ISKAN_EY_ROSTER:-denekAlfa:yonetici denekBeta:uye}"
-
   # ── PROJE-ÇÖZÜMÜ (K4: TAM-STRING, origin/main authoritative; fetch best-effort) ──────────
-  if ! command -v git >/dev/null 2>&1 || [ ! -d "$repo_dir/.git" ]; then
-    echo "[kırmızı] cloudtop-repo bulunamadı: $repo_dir — proje-çözümü yapılamaz, hiçbir yere dokunulmadı" >&2
-    exit 1
-  fi
-  git -C "$repo_dir" fetch -q origin main 2>/dev/null || true   # offline'da son-fetch'lenmiş origin/main kullanılır
-  local compose_main
-  compose_main="$(git -C "$repo_dir" show origin/main:infra/docker-compose.server.yml 2>/dev/null)"
-  if [ -z "$compose_main" ]; then
-    echo "[kırmızı] origin/main compose okunamadı ($repo_dir) — proje-çözümü yapılamaz, hiçbir yere dokunulmadı" >&2
-    exit 1
-  fi
-  if ! printf '%s\n' "$compose_main" | grep -qE "container_name:[[:space:]]*${EY_CNAME}\$"; then
-    echo "[kırmızı] kayitsiz-proje: '$proje' — compose-servis-listesinde (origin/main) '${EY_CNAME}' TAM-STRING eşleşmesi yok (K4: fuzzy/önek/case-farkı kabul edilmez), hiçbir yere dokunulmadı" >&2
-    exit 1
-  fi
-  EY_PORT="$(printf '%s\n' "$compose_main" | awk -v cn="$EY_CNAME" '
-    /container_name:/ { if ($0 ~ cn"$") { found=1 } else { found=0 } }
-    found && /127\.0\.0\.1:[0-9]+:8443/ { match($0, /127\.0\.0\.1:[0-9]+:8443/); s=substr($0, RSTART, RLENGTH); split(s, a, ":"); print a[2]; exit }
-  ')"
-  echo "[yeşil] proje-çözümü: '$proje' → ${EY_CNAME} (origin/main compose, TAM-STRING) · port=${EY_PORT:-?}"
+  _ey_proje_cozumu "$proje" || exit 1
 
   # ── mevcut-durum okuması (dry-run: best-effort teşhis · apply: idempotency-temeli) ────────
-  local ssh_ok=0 reg_mevcut="" scaffold_var="" tmux_canli=""
+  local ssh_ok=0 reg_mevcut="" scaffold_var="" tmux_canli="" ekip_reg=""
   if command -v ssh >/dev/null 2>&1 && _ey_ssh true >/dev/null 2>&1; then
     ssh_ok=1
-    reg_mevcut="$(_ey_ssh "cat '$host_registry' 2>/dev/null" 2>/dev/null || true)"
-    scaffold_var="$(_ey_ssh "test -f '$host_proj/scripts/ekip-notify.sh' && echo VAR" 2>/dev/null || true)"
+    reg_mevcut="$(_ey_ssh "cat '$EY_HOST_REGISTRY' 2>/dev/null" 2>/dev/null || true)"
+    scaffold_var="$(_ey_ssh "test -f '$EY_HOST_PROJ/scripts/ekip-notify.sh' && echo VAR" 2>/dev/null || true)"
     tmux_canli="$(_ey_ssh "docker exec -u 1000 $EY_CNAME tmux list-sessions -F '#{session_name}' 2>/dev/null" 2>/dev/null || true)"
+    ekip_reg="$(_ey_ssh "cat '$EY_HOST_PROJ/_agents/handoff/ekip-registry.yaml' 2>/dev/null" 2>/dev/null || true)"
   fi
   # rezerve-uuid çözümü: host-registry ÖNCE (canlı-kaynak), yoksa repo-origin/main (merge-sonrası kaynak)
   if [ -z "$reg_mevcut" ]; then
-    reg_mevcut="$(git -C "$repo_dir" show origin/main:infra/iskan-registry.yaml 2>/dev/null || true)"
+    reg_mevcut="$(git -C "$EY_REPO_DIR" show origin/main:infra/iskan-registry.yaml 2>/dev/null || true)"
   fi
 
-  # roster satırları: "rol<TAB>gorev<TAB>uuid" (uuid: mevcut-kayıttan YENİDEN-KULLAN, yoksa üret)
-  EY_YONETICI=""; EY_UYE_SAYISI=0
-  local uye_satirlari="" girdi rol gorev sid kaynak
-  for girdi in $roster; do
-    rol="${girdi%%:*}"; gorev="${girdi#*:}"
-    [ "$gorev" = "$girdi" ] && gorev="uye"
-    [ "$gorev" = "yonetici" ] && [ -z "$EY_YONETICI" ] && EY_YONETICI="$rol"
-    EY_UYE_SAYISI=$((EY_UYE_SAYISI + 1))
-    sid=""; kaynak="yeni"
-    if [ -n "$reg_mevcut" ]; then
-      sid="$(_ey_registry_sid "$reg_mevcut" "$rol")"
-      [ -n "$sid" ] && kaynak="mevcut"
-    fi
-    if [ -z "$sid" ]; then
-      sid="$(python3 -c 'import uuid; print(uuid.uuid4())')"   # uuid4 = küçük-harf (G6/G7 sözleşmesi)
-    fi
-    uye_satirlari="${uye_satirlari}${rol}	${gorev}	${sid}	${kaynak}
-"
-  done
-  [ -n "$EY_YONETICI" ] || EY_YONETICI="${roster%%:*}"
+  # ── ROSTER-KAYNAĞI (FAZ-7 roster-köprüsü): ISKAN_EY_ROSTER (açık-override) → container-içi
+  # ekip-registry.yaml → FAZ-6 SABİT default. Köprüsüz hâl G5-vakasıydı: hardcoded 2-üye default,
+  # uye-ekle'yle doğan 3. üyeyi registry'nin üç kopyasından da SİLERDİ (md5-farklı → üzerine-yaz).
+  local roster=""
+  if [ -n "${ISKAN_EY_ROSTER:-}" ]; then
+    roster="$ISKAN_EY_ROSTER"
+    echo "[yeşil] roster-kaynağı: ISKAN_EY_ROSTER (açık-override)"
+  elif [ -n "$ekip_reg" ]; then
+    roster="$(_ey_ekip_roster_oku "$ekip_reg")"
+    [ -n "$roster" ] && echo "[yeşil] roster-kaynağı: container-içi ekip-registry.yaml ($(printf '%s\n' "$roster" | wc -w | tr -d ' ') üye)"
+  fi
+  if [ -z "$roster" ]; then
+    # SABİT FAZ-6 deneme-roster'ı (camelCase BİLİNÇLİ — ASCII, Türkçe-İ casing-tuzağı yok)
+    roster="denekAlfa:yonetici denekBeta:uye"
+    echo "[yeşil] roster-kaynağı: FAZ-6 SABİT default (ekip-registry henüz yok/erişilemedi)"
+  fi
+
+  # roster satırları: "rol<TAB>gorev<TAB>uuid<TAB>kaynak" (uuid: mevcut-kayıttan YENİDEN-KULLAN, yoksa üret)
+  _ey_uye_satirlari "$roster" "$reg_mevcut"
+  local rol gorev sid kaynak
 
   # ── DRY-RUN: tam-önizleme, SIFIR-yazım (plan-exit=3) ─────────────────────────────────────
   if [ "$mode" = "dry-run" ]; then
@@ -982,9 +1139,9 @@ cmd_ekip_yerlestir() {
     echo ""
     echo "-- PLAN (apply'da sırayla; her adım idempotent) --"
     if [ -n "$scaffold_var" ]; then
-      echo "  1. scaffold-iskelet (ekip-kur/scaffold.sh headless → $host_proj): (mevcut → atla)"
+      echo "  1. scaffold-iskelet (ekip-kur/scaffold.sh headless → $EY_HOST_PROJ): (mevcut → atla)"
     else
-      echo "  1. scaffold-iskelet (ekip-kur/scaffold.sh headless → $host_proj) + ekip-ac geçici-kopya + git init + uid-1000 sahiplik"
+      echo "  1. scaffold-iskelet (ekip-kur/scaffold.sh headless → $EY_HOST_PROJ) + ekip-ac geçici-kopya + git init + uid-1000 sahiplik"
     fi
     echo "  2. roster (SABİT, GEREKLILIK-bağlayıcı; tmux-oturum adları BİREBİR bu casing):"
     local kaynak_eki durum_eki
@@ -993,10 +1150,10 @@ cmd_ekip_yerlestir() {
       kaynak_eki="rezerv-uuid: $kaynak"
       if printf '%s\n' "$tmux_canli" | grep -qx "$rol"; then durum_eki="tmux: mevcut → atla"; else durum_eki="tmux: yeni-oturum açılacak"; fi
       echo "     - ${rol} (${gorev}) · ${kaynak_eki} (${sid}) · ${durum_eki}"
-    done <<< "$uye_satirlari"
+    done <<< "$EY_UYE_SATIRLARI"
     echo "  3. kimlik-banner (her pane'de kalıcı: İSKÂN-imzası + rol + rezerve-uuid ≤80-kolon-tek-satır + permission-mode)"
     echo "  4. baslat-claude.sh sarmalayıcısı (b0019 panzehiri: registry'den rol-kaydı çözer; claude yoksa dürüst-kırmızı 'claude-binary yok')"
-    echo "  5. iskan-registry.yaml K2 tam-şema yazımı: host-co-locate ($host_registry) + repo ($repo_dir/infra/) + container-içi kopya — üçü bayt-eş"
+    echo "  5. iskan-registry.yaml K2 tam-şema yazımı: host-co-locate ($EY_HOST_REGISTRY) + repo ($EY_REPO_DIR/infra/) + container-içi kopya — üçü bayt-eş"
     echo "== dry-run: hiçbir yazım yapılmadı (plan-exit sözleşmesi, exit=3) =="
     exit 3
   fi
@@ -1004,28 +1161,11 @@ cmd_ekip_yerlestir() {
   # ── APPLY (GO'suz — FAZ-6 sözleşmesi; idempotent; her adım value-safe log) ────────────────
   echo "== İSKÂN ekip-yerlestir — APPLY (hedef-container-içi; idempotent; diğer container'lara dokunmaz) =="
 
-  if [ "$ssh_ok" != "1" ]; then
-    echo "[kırmızı] $EY_SSH_HOST erişilemedi — hiçbir yere dokunulmadı" >&2
-    exit 1
-  fi
-  if [ "$(_ey_ssh "docker inspect -f '{{.State.Running}}' $EY_CNAME 2>/dev/null" 2>/dev/null)" != "true" ]; then
-    echo "[kırmızı] $EY_CNAME çalışmıyor (docker inspect Running≠true) — hiçbir yere dokunulmadı" >&2
-    exit 1
-  fi
-  # araç-kapısı: tmux+git+python3 container-içinde olmalı (PR-A provizyonu; sh -c = builtin-tuzağı panzehiri)
-  local arac eksik=""
-  for arac in tmux git python3; do
-    _ey_ssh "docker exec $EY_CNAME sh -c 'command -v $arac' >/dev/null 2>&1" || eksik="$eksik $arac"
-  done
-  if [ -n "$eksik" ]; then
-    echo "[kırmızı] $EY_CNAME içinde eksik araç:${eksik} — araç-provizyonu gerekli (compose INSTALL_PACKAGES=tmux|git|python3 + servis-scoped recreate), hiçbir yere dokunulmadı" >&2
-    exit 1
-  fi
-  echo "[yeşil] ön-kapılar: ssh + container-Up + araçlar (tmux/git/python3) tamam"
+  _ey_on_kapilar "$ssh_ok" || exit 1
 
   # ── ADIM-1: scaffold-iskelet (yoksa kur; varsa atla) ─────────────────────────────────────
   if [ -n "$scaffold_var" ]; then
-    echo "[yeşil] ADIM-1 scaffold: mevcut → atla ($host_proj/scripts/ekip-notify.sh var)"
+    echo "[yeşil] ADIM-1 scaffold: mevcut → atla ($EY_HOST_PROJ/scripts/ekip-notify.sh var)"
   else
     [ -f "$ekipkur_dir/scaffold.sh" ] || { echo "[kırmızı] ekip-kur/scaffold.sh bulunamadı: $ekipkur_dir — hiçbir yere dokunulmadı" >&2; exit 1; }
     local staging; staging="$(mktemp -d)"
@@ -1040,22 +1180,22 @@ cmd_ekip_yerlestir() {
       chmod +x "$staging/scripts/ekip-ac.sh"
     fi
     # gerçek-roster'lı ekip-registry (şablon-örnek UYE1/UYE2'nin yerine)
-    _ey_ekip_registry_icerik < <(printf '%s' "$uye_satirlari" | cut -f1-3) > "$staging/_agents/handoff/ekip-registry.yaml"
-    if ! tar -C "$staging" -cf - . | _ey_ssh "mkdir -p '$host_proj' && tar -C '$host_proj' -xf - && chown -R 1000:1000 '$EY_HOST_CFG/projects'"; then
+    _ey_ekip_registry_icerik < <(printf '%s' "$EY_UYE_SATIRLARI" | cut -f1-3) > "$staging/_agents/handoff/ekip-registry.yaml"
+    if ! tar -C "$staging" -cf - . | _ey_ssh "mkdir -p '$EY_HOST_PROJ' && tar -C '$EY_HOST_PROJ' -xf - && chown -R 1000:1000 '$EY_HOST_CFG/projects'"; then
       rm -rf "$staging"
       echo "[kırmızı] scaffold host-taşıması başarısız (tar-pipe) — kısmi-yazım olabilir, incele + yeniden-koş (idempotent)" >&2
       exit 1
     fi
     rm -rf "$staging"
-    echo "[yeşil] ADIM-1 scaffold: iskelet + ekip-ac + roster'lı ekip-registry $host_proj'a kuruldu (uid-1000)"
+    echo "[yeşil] ADIM-1 scaffold: iskelet + ekip-ac + roster'lı ekip-registry $EY_HOST_PROJ'a kuruldu (uid-1000)"
   fi
 
   # ── ADIM-2: baslat-claude.sh sarmalayıcısı (dosya-bazlı idempotent) ──────────────────────
-  if _ey_ssh "test -f '$host_proj/scripts/baslat-claude.sh'" 2>/dev/null; then
+  if _ey_ssh "test -f '$EY_HOST_PROJ/scripts/baslat-claude.sh'" 2>/dev/null; then
     echo "[yeşil] ADIM-2 baslat-claude.sh: mevcut → atla"
   else
     [ -f "$tmpl_baslat" ] || { echo "[kırmızı] şablon yok: $tmpl_baslat" >&2; exit 1; }
-    if ! _ey_ssh "cat > '$host_proj/scripts/baslat-claude.sh' && chmod +x '$host_proj/scripts/baslat-claude.sh' && chown 1000:1000 '$host_proj/scripts/baslat-claude.sh'" < "$tmpl_baslat"; then
+    if ! _ey_ssh "cat > '$EY_HOST_PROJ/scripts/baslat-claude.sh' && chmod +x '$EY_HOST_PROJ/scripts/baslat-claude.sh' && chown 1000:1000 '$EY_HOST_PROJ/scripts/baslat-claude.sh'" < "$tmpl_baslat"; then
       echo "[kırmızı] baslat-claude.sh yazımı başarısız" >&2
       exit 1
     fi
@@ -1070,39 +1210,8 @@ cmd_ekip_yerlestir() {
   echo "[yeşil] ADIM-3 git init: tamam (mevcut ise atlandı)"
 
   # ── ADIM-4: iskan-registry.yaml K2 tam-şema — host + repo + container-içi ÜÇÜ BAYT-EŞ ────
-  local reg_yeni; reg_yeni="$(_ey_iskan_registry_icerik < <(printf '%s' "$uye_satirlari" | cut -f1-3))"
-  if [ "$(printf '%s\n' "$reg_mevcut" | md5sum | cut -d' ' -f1)" = "$(printf '%s\n' "$reg_yeni" | md5sum | cut -d' ' -f1)" ]; then
-    echo "[yeşil] ADIM-4 iskan-registry (host): içerik-eş, mevcut → atla"
-  else
-    if ! printf '%s\n' "$reg_yeni" | _ey_ssh "mkdir -p '$(dirname "$host_registry")' && cat > '$host_registry'"; then
-      echo "[kırmızı] iskan-registry host-yazımı başarısız: $host_registry" >&2
-      exit 1
-    fi
-    echo "[yeşil] ADIM-4 iskan-registry (host): yazıldı → $host_registry"
-  fi
-  # repo-kopyası (co-locate; PR-B bu dosyadan açılır — apply repo'ya YALNIZ bu dosyayı yazar)
-  if [ -w "$repo_dir/infra" ] || [ -w "$repo_dir" ]; then
-    if [ -f "$repo_dir/infra/iskan-registry.yaml" ] && \
-       [ "$(md5sum "$repo_dir/infra/iskan-registry.yaml" | cut -d' ' -f1)" = "$(printf '%s\n' "$reg_yeni" | md5sum | cut -d' ' -f1)" ]; then
-      echo "[yeşil] ADIM-4 iskan-registry (repo): içerik-eş, mevcut → atla"
-    else
-      printf '%s\n' "$reg_yeni" > "$repo_dir/infra/iskan-registry.yaml"
-      echo "[yeşil] ADIM-4 iskan-registry (repo): yazıldı → $repo_dir/infra/iskan-registry.yaml (commit/PR ayrı-adım, REPO-FIRST)"
-    fi
-  else
-    echo "[doğrulanmadı] ADIM-4 iskan-registry (repo): $repo_dir yazılabilir değil — repo-kopyası atlandı (host+container kopyaları yazıldı)"
-  fi
-  # container-içi kopya (baslat-claude.sh okur)
-  if _ey_ssh "test -f '$host_proj/iskan-registry.yaml'" 2>/dev/null && \
-     [ "$(_ey_ssh "md5sum '$host_proj/iskan-registry.yaml'" 2>/dev/null | cut -d' ' -f1)" = "$(printf '%s\n' "$reg_yeni" | md5sum | cut -d' ' -f1)" ]; then
-    echo "[yeşil] ADIM-4 iskan-registry (container-içi): içerik-eş, mevcut → atla"
-  else
-    if ! printf '%s\n' "$reg_yeni" | _ey_ssh "cat > '$host_proj/iskan-registry.yaml' && chown 1000:1000 '$host_proj/iskan-registry.yaml'"; then
-      echo "[kırmızı] iskan-registry container-içi kopya yazımı başarısız" >&2
-      exit 1
-    fi
-    echo "[yeşil] ADIM-4 iskan-registry (container-içi): yazıldı (baslat-claude.sh kaynağı)"
-  fi
+  local reg_yeni; reg_yeni="$(_ey_iskan_registry_icerik < <(printf '%s' "$EY_UYE_SATIRLARI" | cut -f1-3))"
+  _ey_registry_dagit "$reg_yeni" "$reg_mevcut" || exit 1
 
   # ── ADIM-5: kimlik-banner dosyaları + tmux-oturumları (üye-bazlı idempotent) ─────────────
   # ⚠️ fd-3 döngüsü ŞART (canlı-vaka, koşu-1): döngü-içi ssh-çağrıları stdin'i YER — here-string
@@ -1110,35 +1219,266 @@ cmd_ekip_yerlestir() {
   local acilan=0 atlanan=0
   while IFS=$'\t' read -r -u 3 rol gorev sid kaynak; do
     [ -n "$rol" ] || continue
-    # banner-dosyası (uuid mevcut-kayıttan geldiği için içerik deterministik; yoksa yaz)
-    if ! _ey_ssh "test -f '$host_proj/_iskan/banner-$rol.txt'" 2>/dev/null; then
-      if ! _ey_banner "$proje" "$rol" "$gorev" "$sid" "default" | _ey_ssh "mkdir -p '$host_proj/_iskan' && cat > '$host_proj/_iskan/banner-$rol.txt' && chown -R 1000:1000 '$host_proj/_iskan'"; then
-        echo "[kırmızı] banner yazımı başarısız: $rol" >&2
-        exit 1
-      fi
-    fi
-    # tmux-oturumu (soket /tmp/tmux-1000; TERM detached-new-session için sabitlenir).
-    # ⚠️ SHELL=/bin/bash ŞART (canlı-vaka, koşu-1/2): tmux pane-komutunu default-shell'le koşar;
-    # abc'nin passwd-shell'i /bin/false → SHELL-override'sız pane anında ölür, son-oturumla
-    # birlikte tmux-server de kapanır ("no server running"). SHELL env'i default-shell'i ezer.
-    if _ey_ssh "docker exec -u 1000 $EY_CNAME tmux has-session -t $rol 2>/dev/null"; then
+    _ey_pane_ac "$rol" "$gorev" "$sid" || exit 1
+    if [ "$EY_PANE_SONUC" = "mevcut" ]; then
       echo "[yeşil] ADIM-5 $rol: tmux-oturumu mevcut → atla (rezerve-uuid korunur: $sid)"
       atlanan=$((atlanan + 1))
     else
-      if ! _ey_ssh "docker exec -u 1000 -e TERM=xterm-256color -e HOME=/config -e SHELL=/bin/bash $EY_CNAME tmux new-session -d -s $rol -c $EY_HEDEF_ICI"; then
-        echo "[kırmızı] tmux new-session başarısız: $rol" >&2
-        exit 1
-      fi
-      _ey_ssh "docker exec -u 1000 -e TERM=xterm-256color -e HOME=/config -e SHELL=/bin/bash $EY_CNAME tmux send-keys -t $rol 'clear; cat _iskan/banner-$rol.txt' Enter" || \
-        echo "[doğrulanmadı] banner send-keys başarısız ($rol) — oturum açık, banner elle: cat _iskan/banner-$rol.txt"
       echo "[yeşil] ADIM-5 $rol: tmux-oturumu AÇILDI ($gorev, rezerve-uuid: $sid, cwd=$EY_HEDEF_ICI)"
       acilan=$((acilan + 1))
     fi
-  done 3<<< "$uye_satirlari"
+  done 3<<< "$EY_UYE_SATIRLARI"
 
   echo ""
   echo "== ekip-yerlestir bitti: $proje · açılan=$acilan atlanan-mevcut=$atlanan · registry 3-kopya bayt-eş (host+repo+container-içi) =="
   echo "   (repo-kopyası commit/PR AYRI adımdır — REPO-FIRST; G6/G7 origin/main'den okur)"
+  exit 0
+}
+
+# ── uye-ekle (FAZ-7: UC3 tek-üye iskânı) ────────────────────────────────────────────────
+#
+# NEDEN: FAZ-7 = FAZ-6 ekip-yerleştirme-mekaniğinin (rezerve-uuid + tmux + banner + sarmalayıcı)
+# TEK-ÜYE operasyonuna indirgenmesi — filo-çağında "takıma adam ekle"nin standart yolu. FAZ-6
+# fonksiyonları REUSE edilir (_ey_proje_cozumu / _ey_pane_ac / _ey_registry_dagit / _ey_banner),
+# kopyalanmaz.
+#
+# HEDEF-SINIF AYRIMI (İ1, mahremiyet-duvarı):
+#  (a) izole/İSKÂN-hedef → hafif-kimlik-üreteci yolu (KÂHYA/ise-alim ÇAĞRILMAZ); dry-run çıktısı
+#      HER koşulda 'sultan-bildirim' satırı basar (idempotent/mevcut→atla önizlemesi DAHİL).
+#  (b) Nexus-ailesi evi (cloudtop-code, TAM-STRING) → CANLI-invoke YOK: dürüst-yönlendirme
+#      ('ise-alim' marker'ı) + rc≠0. İSKÂN'ın Nexus-katkısı yalnız _ue_kahya_adaptor'dur.
+#
+# ÇAKIŞMA-KORUMASI: var-olan üye tekrar eklenemez → rc≠0 + 'uye-zaten-var' (rezerv-id çakışması /
+# çift-kimlik felaket-sınıfı). Bu yüzden apply BİLİNÇLİ idempotent-DEĞİL — dry-run her durumda rc=3.
+#
+# GO-KAPISI YOK (bilinçli): FAZ-7 GO'suz fazdır — Sultan blanket-GO 2026-07-16 ("İSKÂN'ı bitir
+# FAZ-5→9"); hedef-container-İÇİ iştir, host-compose'a/CF'e/diğer container'lara dokunmaz.
+
+# _ue_kahya_adaptor <kahya_json_dosyasi> <session_id> — KÂHYA-şeması (agent-registry.json ajan-kaydı:
+# id/workdir/persona/…) → iskan-registry K2 üye-bloğu dönüşümü. İSKÂN'ın Nexus-hedefe TEK katkısı
+# budur (İ1: canlı KÂHYA-invoke YOK; birim-test fixture'lı, bkz iskan.test.sh).
+_ue_kahya_adaptor() {
+  local json_dosya="$1" sid="$2"
+  python3 - "$json_dosya" "$sid" <<'PYEOF'
+import json, sys
+kayit = json.load(open(sys.argv[1], encoding="utf-8"))
+sid = sys.argv[2]
+aid = kayit["id"]
+cwd = kayit.get("workdir") or "null"
+print(f"""  - id: {aid}
+    tmux: "{aid}:0"
+    cwd: {cwd}
+    worktree_branch: null
+    session_id: {sid}
+    permission_mode: {kayit.get('permission_mode', 'default')}""")
+PYEOF
+}
+
+# _ue_agentmd_icerik <uye> <gorev> — hafif-kimlik-dosyası içeriği (mihenk Katman-2 deseni:
+# rol-adı + görev-çerçevesi + ekip-bağlamı). Girdi: EY_PROJE/EY_CNAME/EY_YONETICI globals.
+_ue_agentmd_icerik() {
+  local uye="$1" gorev="$2"
+  local uye_kucuk; uye_kucuk="$(printf '%s' "$uye" | tr '[:upper:]' '[:lower:]')"
+  cat <<EOF
+# ${uye} — ${EY_PROJE} ekip-üyesi (İSKÂN hafif-kimlik)
+
+> Üretici: İSKÂN uye-ekle (FAZ-7 hafif-kimlik-üreteci). KÂHYA/ise-alim izole-hedefte ÇAĞRILMAZ (İ1
+> mahremiyet-duvarı) — kimliğin bu dosya + iskan-registry kaydıdır.
+
+## Kimlik
+- rol-adı: ${uye} · görev: ${gorev} · proje: ${EY_PROJE} (container: ${EY_CNAME})
+- rezerve session-id kaydı: iskan-registry.yaml (repo-kökünde; baslat-claude.sh okur — sid'siz başlatma YASAK)
+- başlatma: \`bash scripts/baslat-claude.sh ${uye}\`
+
+## Görev-çerçevesi
+- ${EY_PROJE} ekibinin '${gorev}' üyesisin; yönetici: ${EY_YONETICI}.
+- Koordinasyon: _agents/handoff/ekip-brief.md (yayın) · _agents/handoff/${uye_kucuk}-durum.md (durum) ·
+  scripts/ekip-notify.sh (tetik).
+
+## Ekip-bağlamı
+- roster tek-kaynağı: _agents/handoff/ekip-registry.yaml (tmux-adları BÜYÜK/küçük-harf duyarlı, bayt-eş).
+- Nexus-ailesi merkez-kimlikleri bu projede GEÇERSİZ (İ1) — başka rol/kimlik devralma.
+EOF
+}
+
+cmd_uye_ekle() {
+  local proje="" uye="" gorev="uye" mode=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --dry-run) mode="dry-run"; shift ;;
+      --apply) mode="apply"; shift ;;
+      --gorev) gorev="${2:-uye}"; shift 2 ;;
+      -*) echo "bilinmeyen argüman: $1" >&2; exit 2 ;;
+      *) if [ -z "$proje" ]; then proje="$1"; elif [ -z "$uye" ]; then uye="$1"; else echo "fazla argüman: $1" >&2; exit 2; fi; shift ;;
+    esac
+  done
+  if [ -z "$proje" ] || [ -z "$uye" ] || [ -z "$mode" ]; then
+    echo "kullanım: iskan.sh uye-ekle <proje> <uye> [--gorev <görev>] --dry-run|--apply" >&2
+    exit 2
+  fi
+  _ey_ad_hijyeni "$proje" "kayitsiz-proje" || exit 1
+  _ey_ad_hijyeni "$uye" "gecersiz-uye-adi" || exit 1
+
+  # ── HEDEF-SINIF AYRIMI (İ1): Nexus-ailesi evi (cloudtop-code) → CANLI-invoke YOK ─────────
+  if [ "$proje" = "cloudtop-code" ] || [ "cloudtop-${proje}" = "cloudtop-code" ]; then
+    echo "[kırmızı] Nexus-ailesi evi hedeflendi ('$proje' → cloudtop-code): İSKÂN burada üye AÇMAZ — Nexus-ailesi üyesi /ise-alim (KÂHYA, Sultan-eşli röportaj+onay) ile alınır. İSKÂN'ın Nexus-katkısı yalnız KÂHYA-şema→registry-satırı adaptörüdür (_ue_kahya_adaptor, birim-test fixture'lı). Hiçbir yere dokunulmadı." >&2
+    exit 1
+  fi
+
+  EY_REPO_DIR="${ISKAN_CLOUDTOP_REPO_DIR:-/config/projects/cloudtop}"
+  EY_SSH_HOST="${ISKAN_SSH_HOST:-hostsrv}"
+  EY_PROJE="$proje"
+  EY_CNAME="cloudtop-${proje}"
+  EY_HOSTNAME="${proje}.mmepanel.com"
+  EY_HOST_CFG="/opt/cloudtop/config-${proje}"
+  EY_HEDEF_ICI="${ISKAN_EY_HEDEF_DIR:-/config/projects/${proje}}"
+  EY_HOST_PROJ="${EY_HOST_CFG}/projects/${proje}"
+  EY_HOST_REGISTRY="${ISKAN_HOST_REGISTRY:-/opt/cloudtop/infra/iskan-registry.yaml}"
+
+  # ── PROJE-ÇÖZÜMÜ (K4: TAM-STRING; 'kayitsiz-proje' marker'ı helper'da) ───────────────────
+  _ey_proje_cozumu "$proje" || exit 1
+
+  # ── mevcut-durum (best-effort): ekip-registry roster + iskan-registry + tmux ──────────────
+  local ssh_ok=0 ekip_reg="" reg_mevcut="" tmux_canli=""
+  if command -v ssh >/dev/null 2>&1 && _ey_ssh true >/dev/null 2>&1; then
+    ssh_ok=1
+    ekip_reg="$(_ey_ssh "cat '$EY_HOST_PROJ/_agents/handoff/ekip-registry.yaml' 2>/dev/null" 2>/dev/null || true)"
+    reg_mevcut="$(_ey_ssh "cat '$EY_HOST_REGISTRY' 2>/dev/null" 2>/dev/null || true)"
+    tmux_canli="$(_ey_ssh "docker exec -u 1000 $EY_CNAME tmux list-sessions -F '#{session_name}' 2>/dev/null" 2>/dev/null || true)"
+  fi
+  [ -n "$reg_mevcut" ] || reg_mevcut="$(git -C "$EY_REPO_DIR" show origin/main:infra/iskan-registry.yaml 2>/dev/null || true)"
+
+  # roster (mevcut): ekip-registry (birincil) → iskan-registry uyeler (fallback, görev bilinmez → uye)
+  local roster_mevcut=""
+  [ -n "$ekip_reg" ] && roster_mevcut="$(_ey_ekip_roster_oku "$ekip_reg")"
+  if [ -z "$roster_mevcut" ] && [ -n "$reg_mevcut" ]; then
+    roster_mevcut="$(printf '%s\n' "$reg_mevcut" | awk '/^uyeler:/{f=1} f && /- id:/{printf "%s:uye ", $NF}')"
+  fi
+
+  # çakışma-tespiti (rezerv-id çakışması / çift-kimlik felaket-sınıfı)
+  local uye_mevcut=0 m
+  for m in $roster_mevcut; do
+    [ "${m%%:*}" = "$uye" ] && uye_mevcut=1
+  done
+
+  # rezerve-uuid önizlemesi (mevcut kayıttan yeniden-kullanım; apply'da da aynı kaynak)
+  local sid kaynak="yeni"
+  sid="$(_ey_registry_sid "$reg_mevcut" "$uye")"
+  [ -n "$sid" ] && kaynak="mevcut"
+
+  # ── DRY-RUN: tam-önizleme, SIFIR-yazım (plan-exit=3 HER durumda) ──────────────────────────
+  if [ "$mode" = "dry-run" ]; then
+    echo "== İSKÂN uye-ekle — KURU-KOŞU (DEFAULT; host'a/container'a/dosyaya SIFIR-dokunuş) =="
+    echo "proje: $proje · container: $EY_CNAME · yeni-üye: $uye ($gorev) · hedef-dizin: $EY_HEDEF_ICI"
+    # İ1 sözleşmesi: izole-hedef dry-run HER koşulda (idempotent/mevcut→atla önizlemesi DAHİL)
+    # 'sultan-bildirim' satırı basar — üye-iskânı Sultan'dan gizli olamaz.
+    echo "[sultan-bildirim] izole-hedef üye-iskânı: '$uye' → $proje — Sultan'a bildirilir (İ1: KÂHYA/ise-alim izole-hedefte ÇAĞRILMAZ; kimlik İSKÂN hafif-üretecinden)"
+    if [ "$ssh_ok" = "1" ]; then
+      echo "[yeşil] hostsrv-probe: taze ssh exit=0 (canlı-durum aşağıda işaretlendi)"
+    else
+      echo "[doğrulanmadı] hostsrv erişilemedi — canlı-durum probu yapılamadı; adımlar 'yeni' varsayımıyla önizlendi"
+    fi
+    echo ""
+    echo "-- PLAN (apply'da sırayla) --"
+    if [ "$uye_mevcut" = "1" ]; then
+      echo "  ⚠ '$uye' ZATEN roster'da (mevcut → atla önizlemesi) — apply bu durumda rc≠0 + 'uye-zaten-var' basar (çakışma-koruması: rezerv-id çakışması/çift-kimlik felaket-sınıfı)"
+    else
+      local sid_eki
+      if [ "$kaynak" = "mevcut" ]; then sid_eki="rezerv-uuid: mevcut ($sid)"; else sid_eki="rezerv-uuid: yeni (apply-anında uuid4, küçük-harf)"; fi
+      local tmux_eki="tmux: yeni-oturum açılacak"
+      printf '%s\n' "$tmux_canli" | grep -qx "$uye" && tmux_eki="tmux: mevcut → atla"
+      echo "  1. hafif-kimlik-dosyası: $EY_HEDEF_ICI/_agents/$uye/AGENT.md (İSKÂN-üreteci; KÂHYA çağrılmaz)"
+      echo "  2. ekip-registry.yaml roster-append: $uye ($gorev) + uye_sayisi güncelle (container-içi tek-kaynak)"
+      echo "  3. kimlik-banner + tmux-oturumu: $uye · $sid_eki · $tmux_eki"
+      echo "  4. iskan-registry.yaml K2 yeniden-üretim (tüm-roster): host-co-locate + repo + container-içi — üçü bayt-eş"
+    fi
+    echo "== dry-run: hiçbir yazım yapılmadı (plan-exit sözleşmesi, exit=3) =="
+    exit 3
+  fi
+
+  # ── APPLY (GO'suz — FAZ-7 sözleşmesi; hedef-container-içi; diğer container'lara dokunmaz) ─
+  echo "== İSKÂN uye-ekle — APPLY (tek-üye iskânı: $uye → $proje) =="
+
+  if [ "$uye_mevcut" = "1" ]; then
+    echo "[kırmızı] uye-zaten-var: '$uye' roster'da kayıtlı (rezerv-id çakışması/çift-kimlik felaket-sınıfı) — hiçbir yere dokunulmadı" >&2
+    exit 1
+  fi
+
+  _ey_on_kapilar "$ssh_ok" || exit 1
+
+  if [ -z "$ekip_reg" ]; then
+    echo "[kırmızı] ekip-registry.yaml okunamadı ($EY_HOST_PROJ/_agents/handoff/) — önce 'iskan.sh ekip-yerlestir $proje --apply' koşulmalı (uye-ekle mevcut-ekibe ekler), hiçbir yere dokunulmadı" >&2
+    exit 1
+  fi
+
+  # tam-roster (mevcut + yeni-üye) → satırlar (uuid'ler mevcut-kayıttan YENİDEN-KULLANILIR)
+  _ey_uye_satirlari "$roster_mevcut $uye:$gorev" "$reg_mevcut"
+  [ -n "$sid" ] || sid="$(printf '%s' "$EY_UYE_SATIRLARI" | awk -F'\t' -v u="$uye" '$1==u{print $3}')"
+
+  # ── ADIM-1: hafif-kimlik-dosyası (İ1: KÂHYA/ise-alim ÇAĞRILMAZ; dosya-bazlı idempotent) ──
+  if _ey_ssh "test -f '$EY_HOST_PROJ/_agents/$uye/AGENT.md'" 2>/dev/null; then
+    echo "[yeşil] ADIM-1 hafif-kimlik: mevcut → atla ($EY_HEDEF_ICI/_agents/$uye/AGENT.md var)"
+  else
+    if ! _ue_agentmd_icerik "$uye" "$gorev" | _ey_ssh "mkdir -p '$EY_HOST_PROJ/_agents/$uye' && cat > '$EY_HOST_PROJ/_agents/$uye/AGENT.md' && chown -R 1000:1000 '$EY_HOST_PROJ/_agents/$uye'"; then
+      echo "[kırmızı] hafif-kimlik-dosyası yazımı başarısız: $uye" >&2
+      exit 1
+    fi
+    echo "[yeşil] ADIM-1 hafif-kimlik: yazıldı → $EY_HEDEF_ICI/_agents/$uye/AGENT.md (İSKÂN-üreteci)"
+  fi
+
+  # ── ADIM-2: ekip-registry roster-append (üye-bloğu + uye_sayisi + guncelleme) ─────────────
+  # içerik env-değişkenle akar (BİLİNÇLİ — heredoc'a """-gömme deseni, içerik '"' içerince/bitince
+  # Python-string'ini kırabilir; firsthand-bulgu, roster-parser test-37 ilk-koşusu)
+  local ekip_reg_yeni
+  ekip_reg_yeni="$(EKIP_REG_ICERIK="$ekip_reg" python3 - "$uye" "$gorev" "$(date +%F)" <<'PYEOF'
+import os, re, sys
+uye, gorev, bugun = sys.argv[1], sys.argv[2], sys.argv[3]
+icerik = os.environ["EKIP_REG_ICERIK"]
+out = []
+for ln in icerik.splitlines():
+    m = re.match(r'(\s*uye_sayisi:\s*)(\d+)\s*$', ln)
+    if m:
+        out.append(f"{m.group(1)}{int(m.group(2)) + 1}")
+        continue
+    m = re.match(r'(\s*guncelleme:\s*).*$', ln)
+    if m:
+        out.append(f'{m.group(1)}"{bugun}"')
+        continue
+    out.append(ln)
+blok = f"""  - id: {uye}
+    tmux: "{uye}:0"
+    mod: kod
+    rol: "İSKÂN FAZ-7 tek-üye iskânı ({gorev})"
+    kanallar: [ _agents/handoff/{uye.lower()}-durum.md ]
+    inbox: _agents/handoff/{uye.lower()}-inbox.md"""
+print("\n".join(out).rstrip("\n") + "\n" + blok)
+PYEOF
+)"
+  if [ -z "$ekip_reg_yeni" ] || ! printf '%s\n' "$ekip_reg_yeni" | grep -q "id: $uye"; then
+    echo "[kırmızı] ekip-registry dönüşümü başarısız (yeni-üye bloğu üretilemedi) — hiçbir yere yazılmadı" >&2
+    exit 1
+  fi
+  if ! printf '%s\n' "$ekip_reg_yeni" | _ey_ssh "cat > '$EY_HOST_PROJ/_agents/handoff/ekip-registry.yaml' && chown 1000:1000 '$EY_HOST_PROJ/_agents/handoff/ekip-registry.yaml'"; then
+    echo "[kırmızı] ekip-registry yazımı başarısız" >&2
+    exit 1
+  fi
+  echo "[yeşil] ADIM-2 ekip-registry: $uye ($gorev) roster'a eklendi (uye_sayisi güncellendi)"
+
+  # ── ADIM-3: kimlik-banner + tmux-oturumu (FAZ-6 mekaniği, _ey_pane_ac REUSE) ──────────────
+  _ey_pane_ac "$uye" "$gorev" "$sid" || exit 1
+  if [ "$EY_PANE_SONUC" = "mevcut" ]; then
+    echo "[yeşil] ADIM-3 $uye: tmux-oturumu mevcut → atla (rezerve-uuid korunur: $sid)"
+  else
+    echo "[yeşil] ADIM-3 $uye: tmux-oturumu AÇILDI ($gorev, rezerve-uuid: $sid, cwd=$EY_HEDEF_ICI)"
+  fi
+
+  # ── ADIM-4: iskan-registry K2 yeniden-üretim (tüm-roster) → 3-kopya bayt-eş ───────────────
+  local reg_yeni; reg_yeni="$(_ey_iskan_registry_icerik < <(printf '%s' "$EY_UYE_SATIRLARI" | cut -f1-3))"
+  _ey_registry_dagit "$reg_yeni" "$reg_mevcut" || exit 1
+
+  echo ""
+  echo "== uye-ekle bitti: $uye → $proje ($gorev, rezerve-uuid: $sid) · registry 3-kopya bayt-eş =="
+  echo "   [sultan-bildirim] üye-iskânı Sultan'a raporlanır; repo-kopyası commit/PR AYRI adımdır (REPO-FIRST)"
   exit 0
 }
 
@@ -1163,8 +1503,12 @@ case "${1:-}" in
     shift
     cmd_ekip_yerlestir "$@"
     ;;
+  uye-ekle)
+    shift
+    cmd_uye_ekle "$@"
+    ;;
   *)
-    echo "kullanım: iskan.sh doctor | iskan.sh seans-getir --container <ad> [--apply] | iskan.sh yeni-proje <ad> [--mem-limit <val>] --dry-run|--apply | iskan.sh cf-yayin <proje> --dry-run|--apply | iskan.sh ekip-yerlestir <proje> --dry-run|--apply" >&2
+    echo "kullanım: iskan.sh doctor | iskan.sh seans-getir --container <ad> [--apply] | iskan.sh yeni-proje <ad> [--mem-limit <val>] --dry-run|--apply | iskan.sh cf-yayin <proje> --dry-run|--apply | iskan.sh ekip-yerlestir <proje> --dry-run|--apply | iskan.sh uye-ekle <proje> <uye> [--gorev <görev>] --dry-run|--apply" >&2
     exit 2
     ;;
 esac

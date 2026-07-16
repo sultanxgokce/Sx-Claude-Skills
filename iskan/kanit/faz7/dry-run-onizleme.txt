@@ -1,0 +1,12 @@
+[yeşil] proje-çözümü: 'iskantest' → cloudtop-iskantest (origin/main compose, TAM-STRING) · port=8449
+== İSKÂN uye-ekle — KURU-KOŞU (DEFAULT; host'a/container'a/dosyaya SIFIR-dokunuş) ==
+proje: iskantest · container: cloudtop-iskantest · yeni-üye: denekGamma (uye) · hedef-dizin: /config/projects/iskantest
+[sultan-bildirim] izole-hedef üye-iskânı: 'denekGamma' → iskantest — Sultan'a bildirilir (İ1: KÂHYA/ise-alim izole-hedefte ÇAĞRILMAZ; kimlik İSKÂN hafif-üretecinden)
+[yeşil] hostsrv-probe: taze ssh exit=0 (canlı-durum aşağıda işaretlendi)
+
+-- PLAN (apply'da sırayla) --
+  1. hafif-kimlik-dosyası: /config/projects/iskantest/_agents/denekGamma/AGENT.md (İSKÂN-üreteci; KÂHYA çağrılmaz)
+  2. ekip-registry.yaml roster-append: denekGamma (uye) + uye_sayisi güncelle (container-içi tek-kaynak)
+  3. kimlik-banner + tmux-oturumu: denekGamma · rezerv-uuid: yeni (apply-anında uuid4, küçük-harf) · tmux: yeni-oturum açılacak
+  4. iskan-registry.yaml K2 yeniden-üretim (tüm-roster): host-co-locate + repo + container-içi — üçü bayt-eş
+== dry-run: hiçbir yazım yapılmadı (plan-exit sözleşmesi, exit=3) ==
