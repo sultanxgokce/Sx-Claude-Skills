@@ -39,6 +39,14 @@ oto-yazımı. Dördü BESTELEDİĞİ kardeşlerin (aşağı) çalışma-kopyası
   bash -n sözdizim-kapısı (düşerse .bak-restore rc=1) · idempotent ('mevcut → atla') · K4 kayıtsız-kapı
   ('kayitsiz-proje'). Bekçisi: cloudtop `evergreen-parity.sh` P8-CONTAINER + P9-CFAPP kolları (report-only;
   drift-inject kanıtı `iskan/kanit/faz8/drift-inject-test.sh`).
+- `sokum` (k0083, CANLI): `sokum <proje> [--dry-run|--apply]` — TAM-SÖKÜM ("sökülemeyen sancak doğamaz"
+  kapanış-yarısı): tmux-kapat → servis-scoped container-down (arg'sız down / -v YASAK) → ingress-çıkar
+  (.bak'lı) + **8-hostname sert-kapı** (7-prod + mihenk; regresyonda oto-geri-al) → CF geri-alım
+  (`cf.sh offboard` delegesi, tek-kayıt-assertion) → 5-manifest LOKAL repo-first geri-alım (.bak +
+  bash -n kapıları + iz-sıfır/tombstone-yasak assertion; registry-dosyası SİLİNMEZ, künye çıkar) →
+  config-dizini **arşive-taşı** (telafisiz-silme YOK) → komşu ÖNCE/SONRA StartedAt+config-hash kanıtı.
+  dry-run DEFAULT (exit=3) · apply yalnız `ISKAN_SOKUM_GO=1` (marker-yok exit=4, sıfır-dokunuş) ·
+  durum-sinyalleri: 'zaten-sokuk' (kayıt-yok∧arşiv-var, rc=0) / 'kayitsiz-proje' (ikisi-de-yok, rc≠0).
 - `doctor` — salt-okur preflight (FAZ-1)
 - `check` — AHÎ-standart drift-lint (bugünden itibaren: `ahi check iskan`)
 
@@ -52,10 +60,10 @@ Usta (S3 · bileşik), born-at-Usta (`ahi new usta iskan`). generic-goal: "conta
 (doğuş/yeniden-doğuş/üye-ekleme) tek-komutla yöneten fabrika". Terfi-olgunluk şerhi: DOCTRINE.md → "Manuel-beyan".
 Doğrula: `ahi check iskan` · Kanon: `ahi doctrine` · İş-planı: `Nexus/_agents/handoff/help2serdar-iskan-is-plani.md`.
 
-## Durum (2026-07-16, FAZ-8)
+## Durum (2026-07-16, söküm-kapanışı)
 CANLI alt-komutlar: `doctor` (FAZ-1) · `seans-getir` (FAZ-2/3) · `yeni-proje` + `iskan-host.sh` (FAZ-4,
 ISKAN_FAZ4_GO'lu) · `cf-yayin` (FAZ-5, ISKAN_FAZ5_GO'lu) · `ekip-yerlestir` (FAZ-6) · `uye-ekle` (FAZ-7) ·
-`evergreen-kaydet` (FAZ-8). Kanıt-paketleri: `iskan/kanit/faz0..faz8/`. claude-binary hedef-container'larda
-bilinçli-YOK (FAZ-9 kapsamı; baslat-claude.sh dürüst-kırmızı basar). Kalan: FAZ-9 (mihenk-dogfood = BİTTİ-kontratı).
-⚠️ FAZ-9-söküm-borcu: iskantest evergreen-satırları (provider-inventory + backup.sh + compose) İSKÂN-BİTTİ
-öncesi söküm-reçetesiyle geri-alınmalı (ayrı-kart; k0078 GEREKLILIK tasarım-notu).
+`evergreen-kaydet` (FAZ-8) · `provizyon` (FAZ-9, ISKAN_FAZ9_GO'lu) · `sokum` (k0083, ISKAN_SOKUM_GO'lu).
+Kanıt-paketleri: `iskan/kanit/faz0..faz9,sokum/`. FAZ-9 mihenk-dogfood TESCİLLİ (k0084 MUHUR 13/13).
+✓ Söküm-borcu KAPANDI (k0083): iskantest izleri `iskan.sh sokum iskantest --apply` ile geri-alındı
+(container + CF + 5-manifest + arşiv); yaşam-döngüsü artık iki-yönlü (doğuş ↔ söküm).
