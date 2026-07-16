@@ -310,6 +310,64 @@ cmd_onboard(){  # <hostname> [email] — Access app + policy + DNS (asıl iş)
   echo "  ⚠️ Tünel INGRESS (hostname→localhost:PORT) HOST'taki /etc/cloudflared/config.yml'de → setup-tunnel.sh ekler."
 }
 
+# offboard koruma-listesi: prod-hostname'ler + DNS-only kök — bunlar bu komutla ASLA silinemez
+# (İSKÂN 8-hostname sert-kapısının cf-yüzeyi; yanlış-arg tek-hamlede prod-kapısını sökemesin).
+OFFBOARD_PROTECTED="${CF_OFFBOARD_PROTECTED:-pc.${ZONE_NAME} code.${ZONE_NAME} vekatip.${ZONE_NAME} mmex.${ZONE_NAME} medi.${ZONE_NAME} huma.${ZONE_NAME} m.${ZONE_NAME} mihenk.${ZONE_NAME} cloudtop.${ZONE_NAME} ${ZONE_NAME}}"
+
+cmd_offboard(){  # <hostname> [--apply] — Access app + DNS CNAME geri-alımı (dry-run DEFAULT)
+  # Silme-öncesi TEK-KAYIT-assertion (her iki yarı ayrı): lookup TAM-hostname eşleşmesiyle yapılır
+  # (Access: .domain==host · DNS: type=CNAME&name=host); sonuç ≠1 ise DUR — 0 kayıt "zaten yok"
+  # sayılıp sessiz-geçilmez, >1 kayıt asla toplu-silinmez. Değer-basmaz (yalnız hostname + ID).
+  local host="" apply=0 a
+  for a in "$@"; do
+    case "$a" in
+      --apply) apply=1 ;;
+      -*) die "bilinmeyen bayrak: $a  (kullanım: offboard <hostname> [--apply])" ;;
+      *) host="$a" ;;
+    esac
+  done
+  [ -n "$host" ] || die "kullanım: offboard <hostname> [--apply]"
+  local p
+  for p in $OFFBOARD_PROTECTED; do
+    [ "$host" = "$p" ] && die "REDDEDİLDİ: $host korumalı prod-hostname — offboard bu yüzeyden yapılamaz."
+  done
+  load_ctx
+
+  # ── yarı-1: Access app — TAM-hostname lookup + tek-kayıt-assertion ─────────────────────
+  local apps app_id n_app
+  apps="$(api GET "/accounts/${ACCOUNT_ID}/access/apps?per_page=100")"
+  ok "$apps" || { red "✗ Access app listesi alınamadı:"; errs "$apps"; exit 1; }
+  app_id="$(echo "$apps" | jq -r --arg d "$host" '.result[]? | select(.domain==$d) | .id')"
+  n_app="$(printf '%s' "$app_id" | grep -c . || true)"
+  [ "$n_app" = "1" ] || die "DUR: Access-app tek-kayıt-assertion başarısız — '$host' (.domain TAM-eş) için ${n_app} kayıt, beklenen 1. Hiçbir şey silinmedi."
+
+  # ── yarı-2: DNS CNAME — TAM-hostname lookup + tek-kayıt-assertion ──────────────────────
+  [ -n "${ZONE_ID:-}" ] || die "DUR: zone_id çözülemedi (token'da Zone-Read yok?) — DNS-yarısı doğrulanamaz, hiçbir şey silinmedi."
+  local recs rec_id n_rec
+  recs="$(api GET "/zones/${ZONE_ID}/dns_records?type=CNAME&name=${host}")"
+  ok "$recs" || { red "✗ DNS kaydı sorgulanamadı:"; errs "$recs"; exit 1; }
+  rec_id="$(echo "$recs" | jq -r '.result[]?.id')"
+  n_rec="$(printf '%s' "$rec_id" | grep -c . || true)"
+  [ "$n_rec" = "1" ] || die "DUR: DNS-CNAME tek-kayıt-assertion başarısız — '$host' (type=CNAME, name TAM-eş) için ${n_rec} kayıt, beklenen 1. Hiçbir şey silinmedi."
+
+  if [ "$apply" != "1" ]; then
+    ylw "KURU-ÇALIŞMA (DEFAULT — hiçbir şey silinmedi). Silinecekler:"
+    echo "  • Access app : $host  (id: $app_id)"
+    echo "  • DNS CNAME  : $host  (id: $rec_id)"
+    echo "Uygulamak için:  bash $0 offboard $host --apply"
+    return 0
+  fi
+
+  local dresp
+  dresp="$(api DELETE "/accounts/${ACCOUNT_ID}/access/apps/${app_id}")"
+  ok "$dresp" || { red "✗ Access app silinemedi ($host) — DNS'e dokunulmadı:"; errs "$dresp"; exit 1; }
+  grn "✓ Access app silindi: $host  ($app_id)"
+  dresp="$(api DELETE "/zones/${ZONE_ID}/dns_records/${rec_id}")"
+  ok "$dresp" || { red "✗ DNS CNAME silinemedi ($host) — Access app SİLİNDİ, DNS elle temizlenmeli:"; errs "$dresp"; exit 1; }
+  grn "✓ DNS CNAME silindi: $host  ($rec_id)"
+  grn "✓ offboard tamam: $host (Access + DNS geri-alındı; tünel-ingress host config.yml'de ayrı yaşar)"
+}
+
 cmd_list(){
   load_ctx
   echo "Access apps (${ZONE_NAME}):"
@@ -326,7 +384,8 @@ case "${1:-doctor}" in
   access-ensure) shift; cmd_access_ensure "$@" ;;
   dns-ensure)    shift; cmd_dns_ensure "$@" ;;
   onboard)       shift; cmd_onboard "$@" ;;
+  offboard)      shift; cmd_offboard "$@" ;;
   list)          cmd_list ;;
   help|-h|--help) cmd_help ;;
-  *) die "bilinmeyen komut: $1  (login|mint|set-token|doctor|onboard <host>|access-ensure|dns-ensure|list)" ;;
+  *) die "bilinmeyen komut: $1  (login|mint|set-token|doctor|onboard <host>|offboard <host> [--apply]|access-ensure|dns-ensure|list)" ;;
 esac
