@@ -348,5 +348,126 @@ res_sifir="$(bash -c "
   && ok "_cf_yedi_hostname_temiz_mi: 302/401/403=temiz · 502=kirli · 000=kirli (sert-kapı sınıflandırması)" \
   || bad "_cf_yedi_hostname_temiz_mi: sınıflandırma hatalı (temiz=$res_temiz kirli=$res_kirli sifir=$res_sifir)"
 
+# ── FAZ-6: ekip-yerlestir (ekip-yerleştirme) + baslat-claude sarmalayıcısı ────────────────
+
+# ortak hermetik mini-repo: origin/main compose'unda cloudtop-eytest kayıtlı
+EY_REPO="/tmp/iskan-test-ey-repo.$$"
+mkdir -p "$EY_REPO/infra"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$EY_REPO/infra/docker-compose.server.yml"
+cat >> "$EY_REPO/infra/docker-compose.server.yml" <<'EOF'
+
+  cloudtop-eytest:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: cloudtop-eytest
+    ports:
+      - "127.0.0.1:9449:8443"
+EOF
+git -C "$EY_REPO" init -q -b main 2>/dev/null
+git -C "$EY_REPO" -c user.email=t@t -c user.name=t add -A 2>/dev/null
+git -C "$EY_REPO" -c user.email=t@t -c user.name=t commit -qm x 2>/dev/null
+git -C "$EY_REPO" remote add origin "$EY_REPO" 2>/dev/null
+
+# 23. ekip-yerlestir: argüman-eksikliği → usage rc=2
+bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir >/dev/null 2>&1
+[ "$?" = "2" ] && ok "ekip-yerlestir: argümansız rc=2 (usage)" || bad "ekip-yerlestir: argümansız rc beklenen 2"
+
+# 24. ekip-yerlestir --dry-run: plan-exit=3 + SABİT roster-adları (denekAlfa→denekBeta) önizlemede
+out="$(ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --dry-run 2>&1)"
+rc=$?
+[ "$rc" = "3" ] && ok "ekip-yerlestir --dry-run: plan-exit=3" || bad "ekip-yerlestir --dry-run: rc beklenen 3, gelen $rc"
+printf '%s' "$out" | grep -q "denekAlfa" && printf '%s' "$out" | grep -q "denekBeta" \
+  && ok "ekip-yerlestir --dry-run: roster-adları (denekAlfa+denekBeta) önizlemede görünür" \
+  || bad "ekip-yerlestir --dry-run: roster-adları önizlemede eksik"
+printf '%s' "$out" | grep -q "scaffold" && printf '%s' "$out" | grep -qi "rezerv" \
+  && ok "ekip-yerlestir --dry-run: scaffold + rezerv-uuid adımları önizlemede görünür" \
+  || bad "ekip-yerlestir --dry-run: scaffold/rezerv-uuid adımı önizlemede eksik"
+
+# 25. ekip-yerlestir NEGATİF-KAPI (K4 TAM-STRING): bilinmeyen ad → rc≠0 + 'kayitsiz-proje' marker;
+#     önek ('eytes') ve case-farkı ('EYTEST') da reddedilir (fuzzy yasak)
+out="$(ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir hayaletproje --apply 2>&1)"
+rc=$?
+[ "$rc" != "0" ] && printf '%s' "$out" | grep -q 'kayitsiz-proje' \
+  && ok "ekip-yerlestir --apply: bilinmeyen-proje rc≠0 + 'kayitsiz-proje' marker" \
+  || bad "ekip-yerlestir --apply: bilinmeyen-proje beklenen rc≠0+marker, gelen rc=$rc"
+for p in eytes EYTEST; do
+  ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+    bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir "$p" --apply >/dev/null 2>&1
+  rc=$?
+  [ "$rc" != "0" ] && ok "ekip-yerlestir --apply: '$p' (önek/case-farkı) reddedildi rc=$rc (K4 fuzzy-yasak)" \
+    || bad "ekip-yerlestir --apply: '$p' KABUL edildi (K4 ihlali)"
+done
+
+# 26. ekip-yerlestir --apply: kayıtlı-proje ama host-erişilemez → rc=1, mutasyonsuz erken-kırmızı
+ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_EY_SSH_TIMEOUT=3 \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --apply >/dev/null 2>&1
+rc=$?
+[ "$rc" = "1" ] && ok "ekip-yerlestir --apply: host-erişilemezken rc=1 (mutasyonsuz erken-kırmızı)" \
+  || bad "ekip-yerlestir --apply: host-erişilemezken beklenen rc=1, gelen $rc"
+
+# 27. ekip-yerlestir rezerv-uuid YENİDEN-KULLANIM: origin/main iskan-registry'de kayıtlı uuid
+#     dry-run önizlemesinde 'mevcut' kaynaklı olarak AYNEN görünür (yeniden-üretilmez)
+EY_UUID_SABIT="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+cat > "$EY_REPO/infra/iskan-registry.yaml" <<EOF
+proje: eytest
+container_adi: cloudtop-eytest
+uyeler:
+  - id: denekAlfa
+    tmux: "denekAlfa:0"
+    cwd: /config/projects/eytest
+    session_id: $EY_UUID_SABIT
+    permission_mode: default
+EOF
+git -C "$EY_REPO" -c user.email=t@t -c user.name=t add -A 2>/dev/null
+git -C "$EY_REPO" -c user.email=t@t -c user.name=t commit -qm reg 2>/dev/null
+out="$(ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --dry-run 2>&1)"
+printf '%s' "$out" | grep -q "$EY_UUID_SABIT" \
+  && ok "ekip-yerlestir: kayıtlı rezerv-uuid YENİDEN-KULLANILIR (origin/main'den okundu, yeniden-üretilmedi)" \
+  || bad "ekip-yerlestir: kayıtlı rezerv-uuid önizlemede yok (yeniden-kullanım kırık)"
+printf '%s' "$out" | grep "denekBeta" | grep -q "yeni" \
+  && ok "ekip-yerlestir: kayıtsız-üye (denekBeta) için 'yeni' uuid-kaynağı raporlanır" \
+  || bad "ekip-yerlestir: kayıtsız-üye uuid-kaynağı 'yeni' değil"
+
+find "$EY_REPO" -type f -delete 2>/dev/null; find "$EY_REPO" -depth -type d -delete 2>/dev/null
+
+# 28. baslat-claude.sh: registry'den rol çözer; claude PATH'te YOKKEN dürüst-kırmızı
+#     (exit≠0 + 'claude-binary yok' marker, G9 sözleşmesi); rol-kayıtsız → exit≠0
+BC_DIR="/tmp/iskan-test-bc.$$"
+mkdir -p "$BC_DIR/scripts"
+cp "$SCRIPT_DIR/../templates/baslat-claude.sh" "$BC_DIR/scripts/baslat-claude.sh"
+cat > "$BC_DIR/iskan-registry.yaml" <<'EOF'
+proje: bctest
+uyeler:
+  - id: denekAlfa
+    tmux: "denekAlfa:0"
+    cwd: /tmp
+    session_id: 12345678-1234-1234-1234-123456789abc
+    permission_mode: default
+EOF
+out="$(PATH="/usr/bin:/bin" bash "$BC_DIR/scripts/baslat-claude.sh" denekAlfa 2>&1)"
+rc=$?
+[ "$rc" != "0" ] && printf '%s' "$out" | grep -q 'claude-binary yok' \
+  && ok "baslat-claude.sh: claude yokken dürüst-kırmızı (rc=$rc + 'claude-binary yok' marker)" \
+  || bad "baslat-claude.sh: dürüst-kırmızı sözleşmesi kırık (rc=$rc)"
+PATH="/usr/bin:/bin" bash "$BC_DIR/scripts/baslat-claude.sh" hayaletrol >/dev/null 2>&1
+rc=$?
+[ "$rc" != "0" ] && ok "baslat-claude.sh: rol-kayıtsız → rc≠0 ($rc)" || bad "baslat-claude.sh: rol-kayıtsız kabul edildi"
+
+# 29. baslat-claude.sh: claude-stub PATH'teyken rezerve session-id + rol-adı + permission-mode ile exec eder
+cat > "$BC_DIR/claude" <<'EOF'
+#!/usr/bin/env bash
+echo "STUB-CLAUDE $*"
+EOF
+chmod +x "$BC_DIR/claude"
+out="$(PATH="$BC_DIR:/usr/bin:/bin" bash "$BC_DIR/scripts/baslat-claude.sh" denekAlfa 2>&1)"
+rc=$?
+[ "$rc" = "0" ] && printf '%s' "$out" | grep -q -- "--session-id 12345678-1234-1234-1234-123456789abc" \
+  && printf '%s' "$out" | grep -q -- "--name denekAlfa" && printf '%s' "$out" | grep -q -- "--permission-mode default" \
+  && ok "baslat-claude.sh: claude-varken rezerve-id+rol+permission-mode ile exec (K3 disiplini)" \
+  || bad "baslat-claude.sh: exec-argümanları sözleşme-dışı (rc=$rc: $out)"
+find "$BC_DIR" -type f -delete 2>/dev/null; find "$BC_DIR" -depth -type d -delete 2>/dev/null
+
 echo "== ${PASS} geçti / ${FAIL} kaldı =="
 [ "$FAIL" -eq 0 ]
