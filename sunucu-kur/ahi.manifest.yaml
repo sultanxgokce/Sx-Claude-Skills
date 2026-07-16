@@ -1,0 +1,10 @@
+# sunucu-kur — AHÎ'ye Kalfa-adopsiyonu (2026-07-16; credential-yasam-dongusu Usta-bestesinin ön-koşulu).
+# version manifest'te YOK (tek-evi SKILL.md frontmatter — ADR-001).
+# Not: sunucu-OLUŞTURMA yıkıcı/masraflı → Sultan-gate skill'in kendi akışında (dry-run önizleme-DURAK).
+tier: kalfa
+name: sunucu-kur
+generic_goal: "planlı + paketli + her-projede güvenilir tekrarlanabilir"
+activation:
+  onKeyword: sunucu-kur
+install_targets:
+  - _global

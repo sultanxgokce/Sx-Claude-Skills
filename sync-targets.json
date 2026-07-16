@@ -89,6 +89,10 @@
     ],
     "tescil": [
       "_global"
+    ],
+    "credential-yasam-dongusu": [
+      "_global",
+      "mmex"
     ]
   }
 }

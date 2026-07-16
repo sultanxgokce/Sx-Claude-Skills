@@ -1,0 +1,17 @@
+# credential-yasam-dongusu — AHÎ ile üretildi (kademe: usta · bileşik)
+# version SKILL.md frontmatter'ında (ADR-001).
+# Doğum: SİNAN-spec v1.1 (2026-07-16, hub: broker-deploy/SINAN-usta-credential-SPEC.md) →
+# SERDAR-scaffold (spec-yazan≠scaffold-eden çapraz-bakışı; merge SİNAN-review-sonrası).
+# Born-at-tier: Usta (Sultan-kararı "Usta-doğ → Pîr'i-hakket").
+tier: usta
+name: credential-yasam-dongusu
+generic_goal: "kimlik-katmanını insan-tetikli + kanıt-üreten + fail-closed akışlarla yaşam-döngüsü-boyu yönetmek"
+activation:
+  onKeyword: credential-yasam-dongusu
+requires:
+  - vault-cek
+  - sunucu-kur
+  - erisim
+install_targets:
+  - _global
+  - mmex

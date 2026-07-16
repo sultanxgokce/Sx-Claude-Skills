@@ -1,0 +1,13 @@
+# vault-cek — AHÎ'ye Kalfa-adopsiyonu (2026-07-16; credential-yasam-dongusu Usta-bestesinin ön-koşulu).
+# version manifest'te YOK (tek-evi SKILL.md frontmatter — ADR-001).
+# Not: sır-çözüm seam'i store-agnostik (Infisical adaptörü birincil, Railway legacy) — adaptör
+# bağımlılığı requires'a yazılmaz (pluggable; DOCTRINE dürüstlük-ilkesi).
+tier: kalfa
+name: vault-cek
+generic_goal: "planlı + paketli + her-projede güvenilir tekrarlanabilir"
+activation:
+  onKeyword: vault-cek
+install_targets:
+  - _global
+  - nexus
+  - cortex
