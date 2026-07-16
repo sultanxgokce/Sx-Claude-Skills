@@ -1,0 +1,36 @@
+[1/5] cloudflared kuruluyor...
+cloudflared version 2026.6.0 (built 2026-06-09-09:33 UTC)
+[2/5] Cloudflare'a giriş (TARAYICIDA aç ve yetkilendir)...
+[3/5] Tünel oluşturuluyor (varsa atlanır)...
+2026-07-16T05:30:15Z WRN Your version 2026.6.0 is outdated. We recommend upgrading it to 2026.7.2
+2026-07-16T05:30:16Z WRN Your version 2026.6.0 is outdated. We recommend upgrading it to 2026.7.2
+[4/5] Yapılandırma + DNS rotası...
+2026-07-16T05:30:17Z INF pc.mmepanel.com is already configured to route to your tunnel tunnelID=6dbe0ca8-4545-44cb-8cbd-cf47073bdac4
+2026-07-16T05:30:19Z INF code.mmepanel.com is already configured to route to your tunnel tunnelID=6dbe0ca8-4545-44cb-8cbd-cf47073bdac4
+2026-07-16T05:30:20Z INF m.mmepanel.com is already configured to route to your tunnel tunnelID=6dbe0ca8-4545-44cb-8cbd-cf47073bdac4
+2026-07-16T05:30:22Z INF vekatip.mmepanel.com is already configured to route to your tunnel tunnelID=6dbe0ca8-4545-44cb-8cbd-cf47073bdac4
+2026-07-16T05:30:24Z INF mmex.mmepanel.com is already configured to route to your tunnel tunnelID=6dbe0ca8-4545-44cb-8cbd-cf47073bdac4
+2026-07-16T05:30:27Z INF medi.mmepanel.com is already configured to route to your tunnel tunnelID=6dbe0ca8-4545-44cb-8cbd-cf47073bdac4
+2026-07-16T05:30:28Z INF huma.mmepanel.com is already configured to route to your tunnel tunnelID=6dbe0ca8-4545-44cb-8cbd-cf47073bdac4
+2026-07-16T05:30:29Z INF Added CNAME iskantest.mmepanel.com which will route to this tunnel tunnelID=6dbe0ca8-4545-44cb-8cbd-cf47073bdac4
+[5/5] Servis olarak kur + başlat...
+2026-07-16T05:30:29Z INF Using Systemd
+2026-07-16T05:30:29Z ERR error generating service template error="cloudflared service is already installed at /etc/systemd/system/cloudflared.service; if you are running a cloudflared tunnel, you can point it to multiple origins, avoiding the need to run more than one cloudflared service in the same machine; otherwise if you are really sure, you can do `cloudflared service uninstall` to clean up the existing service and then try again this command"
+cloudflared service is already installed at /etc/systemd/system/cloudflared.service; if you are running a cloudflared tunnel, you can point it to multiple origins, avoiding the need to run more than one cloudflared service in the same machine; otherwise if you are really sure, you can do `cloudflared service uninstall` to clean up the existing service and then try again this command
+● cloudflared.service - cloudflared
+     Loaded: loaded (/etc/systemd/system/cloudflared.service; enabled; preset: enabled)
+     Active: active (running) since Thu 2026-07-16 08:31:00 +03; 2s ago
+   Main PID: 3664097 (cloudflared)
+      Tasks: 16 (limit: 37539)
+     Memory: 20.1M (peak: 21.1M)
+        CPU: 255ms
+     CGroup: /system.slice/cloudflared.service
+✓ Tünel hazır → https://pc.mmepanel.com        (masaüstü)
+          ve → https://code.mmepanel.com      (code-server / tarayıcıda VS Code)
+          ve → https://m.mmepanel.com      (mobil panel / agent-dashboard)
+          ve → https://vekatip.mmepanel.com  (izole vekatip workspace)
+          ve → https://mmex.mmepanel.com     (izole MMEx workspace)
+          ve → https://medi.mmepanel.com     (izole medigate workspace)
+          ve → https://huma.mmepanel.com     (izole HÜMA workspace)
+  Sıradaki: Cloudflare Zero Trust → Access ile HER hostname'e giriş kapısı (infra/README.md).
+  ⚠️ m.mmepanel.com · vekatip.mmepanel.com · mmex.mmepanel.com · medi.mmepanel.com · huma.mmepanel.com için Access app'i bu script'TEN ÖNCE oluştur (yoksa kısa süre kapısız açılır).

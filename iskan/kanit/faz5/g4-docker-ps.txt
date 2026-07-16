@@ -1,0 +1,8 @@
+== G4: docker ps (re-birth kanıtı) ==
+cloudtop-iskantest	Up 2 minutes (healthy)
+cloudtop	Up 9 hours (healthy)
+cloudtop-huma	Up 9 hours (healthy)
+cloudtop-medigate	Up 9 hours (healthy)
+cloudtop-mmex	Up 9 days (healthy)
+cloudtop-code	Up 9 hours (healthy)
+cloudtop-vekatip	Up 9 hours (healthy)
