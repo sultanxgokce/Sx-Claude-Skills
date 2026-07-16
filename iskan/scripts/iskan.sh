@@ -447,18 +447,27 @@ PYEOF
 }
 
 cmd_yeni_proje() {
-  local ad="" mode="" mem_limit="512m"
+  # FAZ-9 port-override: --port <n> (arg) > ISKAN_PORT (env) > _iskan_pick_port (default).
+  # NEDEN: pick_port floor=8449 — floor-ALTI canon-rezerve portlar (mihenk=8448, Sultan-onaylı)
+  # pick'ten asla çıkamaz; override operatörün AÇIK beyanıdır. Override verilmediğinde
+  # davranış bayt-aynı korunur (golden: mevcut fixture'lar değişmeden geçer).
+  local ad="" mode="" mem_limit="512m" port_override="${ISKAN_PORT:-}"
   while [ $# -gt 0 ]; do
     case "$1" in
       --dry-run) mode="dry-run"; shift ;;
       --apply) mode="apply"; shift ;;
       --mem-limit) mem_limit="${2:-512m}"; shift 2 ;;
+      --port) port_override="${2:-}"; shift 2 ;;
       -*) echo "bilinmeyen argüman: $1" >&2; exit 2 ;;
       *) ad="$1"; shift ;;
     esac
   done
   if [ -z "$ad" ] || [ -z "$mode" ]; then
-    echo "kullanım: iskan.sh yeni-proje <ad> [--mem-limit <val>] --dry-run|--apply" >&2
+    echo "kullanım: iskan.sh yeni-proje <ad> [--mem-limit <val>] [--port <n>] --dry-run|--apply" >&2
+    exit 2
+  fi
+  if [ -n "$port_override" ] && ! printf '%s' "$port_override" | grep -qE '^[0-9]+$'; then
+    echo "[kırmızı] --port/ISKAN_PORT sayısal olmalı, gelen: '$port_override'" >&2
     exit 2
   fi
 
@@ -482,7 +491,18 @@ cmd_yeni_proje() {
       found && /127\.0\.0\.1:[0-9]+:8443/ { match($0, /127\.0\.0\.1:[0-9]+:8443/); s=substr($0, RSTART, RLENGTH); split(s, a, ":"); print a[2]; exit }
     ' "$repo_compose")"
   else
-    port="$(_iskan_pick_port "$repo_compose")"
+    if [ -n "$port_override" ]; then
+      # override-çakışma kapısı: rezerve-port zaten compose'da bir servise bağlıysa RED
+      # (pick_port'un doğal kaçınması override'da geçerli değil → açıkça kontrol edilir).
+      if grep -qE "\"127\.0\.0\.1:${port_override}:8443\"" "$repo_compose"; then
+        echo "[kırmızı] port-override ${port_override} zaten repo-compose'da kullanımda — RED (çakışan servise dokunulmadı)" >&2
+        exit 1
+      fi
+      port="$port_override"
+      echo "[yeşil] port-kaynağı: operatör-override (--port/ISKAN_PORT) → ${port} (pick_port atlandı)"
+    else
+      port="$(_iskan_pick_port "$repo_compose")"
+    fi
     blok="$(_iskan_compose_blok "$ad" "$cname" "$config_dir" "$port" "$mem_limit")"
     blok_dosyasi="$(mktemp)"
     printf '%s\n' "$blok" > "$blok_dosyasi"
@@ -552,6 +572,139 @@ cmd_yeni_proje() {
   echo "[yeşil] compose-blok eklendi: $repo_compose (append-only, mevcut hiçbir satıra dokunulmadı)"
   echo "proje: $ad · container: $cname · port: 127.0.0.1:${port}:8443 · mem_limit: $mem_limit · B1-yeni-kesişim: 0"
   echo "== bitti — yalnız git-tracked repo yazıldı; commit/push/PR + host-deploy AYRI adımlardır (REPO-FIRST, D1) =="
+  exit 0
+}
+
+# ── provizyon (FAZ-9: container-İÇİ dev-araç kurulumu — setup-<proje>.sh tetikleyicisi) ──
+#
+# NEDEN: FAZ-9 = gerçek-dogfood. Container doğduktan (H1, iskan-host.sh --apply) sonra
+# içine dev-araç kurulumu (nvm+node+claude+cs; kardeş-desen: infra/setup-huma.sh →
+# setup-isolated.sh) İKİNCİ host-dokunuşudur (H2) → kendi Sultan-GO kapısı ISKAN_FAZ9_GO.
+# FAZ-4 konvansiyonu AYNEN (iskan-host.sh GO-kapısı emsali): marker-yokken --apply →
+# exit=4 + stderr'de marker-adı; dry-run DEFAULT → plan-exit=3, host'a SIFIR-dokunuş.
+#
+# GUARD-ZİNCİRİ (--apply; biri düşerse host'a SIFIR-dokunuş):
+#  1. GO-marker (deterministik, ağ-bağımsız — İLK kapı)
+#  2. REPO-KANIT: setup-script origin/main'de VAR ve host'un koşacağı working-tree kopyası
+#     origin/main ile bayt-eş (D1 REPO-FIRST: host'a giden içerik merge-edilmiş içeriktir;
+#     setup-isolated.sh bağımlılığı da aynı kapıdan geçer)
+#  3. ssh-erişim taze-probe (K4)
+#  4. container-running ön-koşulu (hedef ayakta değilse kurulum anlamsız → RED)
+# Sır-DEĞERİ hiçbir çıktıya düşmez (yalnız yol/durum konuşulur).
+cmd_provizyon() {
+  local proje="" mode="dry-run"
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --apply) mode="apply"; shift ;;
+      --dry-run) mode="dry-run"; shift ;;
+      -*) echo "bilinmeyen argüman: $1" >&2; echo "kullanım: iskan.sh provizyon <proje> [--apply]" >&2; exit 2 ;;
+      *) proje="$1"; shift ;;
+    esac
+  done
+  [ -n "$proje" ] || { echo "kullanım: iskan.sh provizyon <proje> [--apply]" >&2; exit 2; }
+
+  local cname="cloudtop-${proje}"
+  local repo_dir="${ISKAN_CLOUDTOP_REPO_DIR:-/config/projects/cloudtop}"
+  local setup_rel="infra/setup-${proje}.sh"
+  # host-yol gerçeği (firsthand, deploy-host.sh): cloudtop-repo host'ta
+  # /opt/cloudtop/config/projects/cloudtop olarak mount'ludur → setup-script oradan koşar.
+  local host_setup="${ISKAN_HOST_SETUP_PATH:-/opt/cloudtop/config/projects/cloudtop/${setup_rel}}"
+  local ssh_host="${ISKAN_SSH_HOST:-hostsrv}"
+  local ssh_opts=(-o BatchMode=yes -o ConnectTimeout=8)
+
+  # ── 1. GO-kapısı (DOCTRINE Değişmez-3; FAZ-4 exit=4 + stderr-marker konvansiyonu AYNEN) ──
+  if [ "$mode" = "apply" ] && [ "${ISKAN_FAZ9_GO:-}" != "1" ]; then
+    echo "[kırmızı] provizyon --apply: FAZ-9 Sultan-GO env-marker gerekli (ISKAN_FAZ9_GO=1) — host'a SIFIR-dokunuş" >&2
+    exit 4
+  fi
+
+  # ── REPO-KANIT ölçümü (dry-run: bilgi · apply: sert-kapı) ────────────────────────────────
+  local repo_kanit="doğrulanmadı" f
+  if command -v git >/dev/null 2>&1 && [ -d "$repo_dir/.git" ]; then
+    git -C "$repo_dir" fetch -q origin main 2>/dev/null || true
+    repo_kanit="yeşil"
+    for f in "$setup_rel" "infra/setup-isolated.sh"; do
+      if ! git -C "$repo_dir" show "origin/main:$f" >/dev/null 2>&1; then
+        repo_kanit="kırmızı: $f origin/main'de YOK (önce cloudtop-PR merge edilmeli)"
+        break
+      fi
+      if ! git -C "$repo_dir" show "origin/main:$f" 2>/dev/null | cmp -s - "$repo_dir/$f" 2>/dev/null; then
+        repo_kanit="kırmızı: $f working-tree ≠ origin/main (host merge-edilmemiş içerik koşardı — D1 ihlali)"
+        break
+      fi
+    done
+  fi
+
+  # ── ssh + container probe (dry-run: best-effort · apply: sert-kapı) ──────────────────────
+  local ssh_ok=0 calisiyor="?"
+  if command -v ssh >/dev/null 2>&1 && timeout 8 ssh "${ssh_opts[@]}" "$ssh_host" true >/dev/null 2>&1; then
+    ssh_ok=1
+    calisiyor="$(timeout 10 ssh "${ssh_opts[@]}" "$ssh_host" "docker ps --format '{{.Names}}'" 2>/dev/null | grep -cx "$cname" || true)"
+  fi
+
+  if [ "$mode" = "dry-run" ]; then
+    echo "== İSKÂN provizyon — KURU-KOŞU (DEFAULT; host'a/container'a SIFIR-dokunuş) =="
+    echo "proje: $proje · container: $cname · setup-script (host-yolu): $host_setup"
+    echo "-- GUARD-ÖNİZLEME (apply'da sert-kapı) --"
+    echo "  1. GO-marker: apply yalnız ISKAN_FAZ9_GO=1 ile (yokken exit=4)"
+    case "$repo_kanit" in
+      yeşil) echo "  2. [yeşil] REPO-KANIT: $setup_rel + setup-isolated.sh origin/main'de VE working-tree bayt-eş" ;;
+      kırmızı*) echo "  2. [$repo_kanit]" ;;
+      *) echo "  2. [doğrulanmadı] REPO-KANIT: cloudtop-repo/git erişilemedi ($repo_dir)" ;;
+    esac
+    if [ "$ssh_ok" = "1" ]; then
+      echo "  3. [yeşil] ssh-probe: taze $ssh_host exit=0"
+      echo "  4. container-running: '$cname' host'ta $calisiyor kopya (apply 1 ister)"
+    else
+      echo "  3. [doğrulanmadı] ssh-probe: $ssh_host erişilemedi — canlı-durum önizlenemedi"
+      echo "  4. [doğrulanmadı] container-running: ssh'sız ölçülemedi"
+    fi
+    echo "-- PLAN (apply'da tek-mutasyon) --"
+    echo "  ssh $ssh_host 'setsid -w bash $host_setup' (container-İÇİ kurulum; komşu container'lara dokunmaz)"
+    echo "  sonrası-doğrulama: docker exec -u 1000 $cname bash -lc 'command -v claude' (dürüst-kanıt)"
+    echo "== dry-run: hiçbir yazım yapılmadı (plan-exit sözleşmesi, exit=3) =="
+    exit 3
+  fi
+
+  # ── APPLY (GO'lu; guard-zinciri sert) ─────────────────────────────────────────────────────
+  echo "== İSKÂN provizyon — CANLI-APPLY (FAZ-9 Sultan-GO'lu; yalnız $cname İÇİNE kurulum) =="
+  case "$repo_kanit" in
+    yeşil) echo "[yeşil] REPO-KANIT: $setup_rel + setup-isolated.sh origin/main'de ve bayt-eş (D1)" ;;
+    kırmızı*) echo "[$repo_kanit] — host'a dokunulmadı" >&2; exit 1 ;;
+    *) echo "[kırmızı] REPO-KANIT ölçülemedi: cloudtop-repo/git erişilemedi ($repo_dir) — fail-closed, host'a dokunulmadı" >&2; exit 1 ;;
+  esac
+  if [ "$ssh_ok" != "1" ]; then
+    echo "[kırmızı] ssh-probe: $ssh_host erişilemedi — host'a dokunulmadı" >&2
+    exit 1
+  fi
+  if [ "$calisiyor" != "1" ]; then
+    echo "[kırmızı] container-running ön-koşulu: '$cname' host'ta $calisiyor kopya (beklenen 1; önce H1 container-create) — host'a dokunulmadı" >&2
+    exit 1
+  fi
+
+  local kanit_dir="${ISKAN_KANIT_DIR:-iskan/kanit/faz9}"
+  mkdir -p "$kanit_dir"
+  local out_dosya="$kanit_dir/provizyon-${proje}.txt"
+  # setsid -w: ssh-oturumu düşse kurulum yarım kalmaz (iskan-host.sh R2 emsali)
+  if ! timeout 1800 ssh "${ssh_opts[@]}" "$ssh_host" "setsid -w bash '$host_setup' 2>&1" > "$out_dosya"; then
+    echo "[kırmızı] setup-script başarısız (çıktı: $out_dosya) — DUR, SERDAR'a --waiting düş" >&2
+    tail -20 "$out_dosya" >&2
+    exit 1
+  fi
+  echo "[yeşil] setup-script koştu: $host_setup (çıktı: $out_dosya)"
+
+  # dürüst-kanıt: kurulum-sonrası claude-binary gerçekten var mı. NVM-FARKINDA probe ŞART
+  # (canlı-vaka k0084-H2: claude nvm-altında /config/.nvm/.../bin/claude; çıplak 'bash -lc'
+  # nvm-source etmediğinden FALSE-RED üretti — setup-isolated.sh:100-102 doğrulama-deseni aynalanır).
+  local claude_yolu
+  claude_yolu="$(timeout 30 ssh "${ssh_opts[@]}" "$ssh_host" "docker exec -u abc $cname bash -lc 'export NVM_DIR=\$HOME/.nvm; [ -s \$NVM_DIR/nvm.sh ] && . \$NVM_DIR/nvm.sh; export PATH=\$HOME/.local/bin:\$PATH; command -v claude'" 2>/dev/null || true)"
+  if [ -n "$claude_yolu" ]; then
+    echo "[yeşil] doğrulama: claude-binary container-içinde mevcut ($claude_yolu)"
+  else
+    echo "[kırmızı] doğrulama: claude-binary container-içinde BULUNAMADI — kurulum eksik, kanıt: $out_dosya" >&2
+    exit 1
+  fi
+  echo "== provizyon bitti: $cname dev-araçlı — kanıtlar: $kanit_dir/ =="
   exit 0
 }
 
@@ -913,6 +1066,47 @@ _ey_proje_cozumu() {
     found && /127\.0\.0\.1:[0-9]+:8443/ { match($0, /127\.0\.0\.1:[0-9]+:8443/); s=substr($0, RSTART, RLENGTH); split(s, a, ":"); print a[2]; exit }
   ')"
   echo "[yeşil] proje-çözümü: '$proje' → ${EY_CNAME} (origin/main compose, TAM-STRING) · port=${EY_PORT:-?}"
+
+  # ── MOUNT-FARKINDA hedef-yol çözümü (k0084-H4 canlı-bulgu: paylaşımlı-mount gölgelenmesi) ──
+  # EY_HEDEF_ICI'nin (container-görünür hedef-dizin) HOST-tarafı yolu servis-bloğunun volume-
+  # eşlemelerinden türetilir; EN-UZUN container-hedef-önek kazanır. İki sınıf da doğru çözülür:
+  #  - tek-mount (iskantest: ./config-<ad>:/config)          → <root>/config-<ad>/projects/<ad>
+  #  - paylaşımlı-mount (huma/mihenk: ./config/projects/<ad>:/config/projects/<ad>) → mount'un kendisi
+  # Aksi hâlde artefaktlar (registry container-kopyası, baslat-claude.sh, _iskan/ banner'lar)
+  # gölgelenen alt-yola düşer → container hiçbirini görmez (canlı-vaka: G6 üçlü-bayt-eş kırıldı).
+  local ey_host_root="${ISKAN_HOST_COMPOSE_ROOT:-/opt/cloudtop}"
+  # bazı çağıranlar (evergreen-kaydet) hedef-dizin kavramı taşımaz → default'la çöz (set -u güvenli)
+  local ey_hedef="${EY_HEDEF_ICI:-/config/projects/${proje}}"
+  local ey_cozulen
+  ey_cozulen="$(printf '%s\n' "$compose_main" | awk -v cn="$EY_CNAME" -v hedef="$ey_hedef" -v root="$ey_host_root" '
+    BEGIN { bestlen=0 }
+    /container_name:/ { f = ($0 ~ cn"$") }
+    f && /^[[:space:]]*-[[:space:]]/ {
+      line=$0
+      sub(/^[[:space:]]*-[[:space:]]*/, "", line)
+      sub(/[[:space:]]*#.*$/, "", line)
+      gsub(/"/, "", line)
+      n = split(line, a, ":")
+      if (n < 2) next
+      src = a[1]; dst = a[2]
+      if (src !~ /^\.?\//) next                      # yalnız yol-eşlemeleri (port/named-volume değil)
+      if (dst == hedef) { m = dst } else if (index(hedef, dst "/") == 1) { m = dst } else next
+      if (length(m) > bestlen) { bestlen = length(m); bestsrc = src; bestdst = m }
+    }
+    END {
+      if (bestlen > 0) {
+        suffix = substr(hedef, length(bestdst) + 1)
+        if (bestsrc ~ /^\.\//) { sub(/^\.\//, "", bestsrc); bestsrc = root "/" bestsrc }
+        print bestsrc suffix
+      }
+    }
+  ')"
+  if [ -n "$ey_cozulen" ]; then
+    EY_HOST_PROJ="$ey_cozulen"
+    echo "[yeşil] hedef-yol çözümü (mount-farkında): $ey_hedef (container) → $EY_HOST_PROJ (host)"
+  else
+    echo "[doğrulanmadı] compose-volume'den hedef-yol çözülemedi — varsayılan kullanılacak: ${EY_HOST_PROJ:-<tanımsız>}"
+  fi
   return 0
 }
 
@@ -1181,7 +1375,7 @@ cmd_ekip_yerlestir() {
     fi
     # gerçek-roster'lı ekip-registry (şablon-örnek UYE1/UYE2'nin yerine)
     _ey_ekip_registry_icerik < <(printf '%s' "$EY_UYE_SATIRLARI" | cut -f1-3) > "$staging/_agents/handoff/ekip-registry.yaml"
-    if ! tar -C "$staging" -cf - . | _ey_ssh "mkdir -p '$EY_HOST_PROJ' && tar -C '$EY_HOST_PROJ' -xf - && chown -R 1000:1000 '$EY_HOST_CFG/projects'"; then
+    if ! tar -C "$staging" -cf - . | _ey_ssh "mkdir -p '$EY_HOST_PROJ' && tar -C '$EY_HOST_PROJ' -xf - && chown -R 1000:1000 '$EY_HOST_PROJ'"; then
       rm -rf "$staging"
       echo "[kırmızı] scaffold host-taşıması başarısız (tar-pipe) — kısmi-yazım olabilir, incele + yeniden-koş (idempotent)" >&2
       exit 1
@@ -1676,8 +1870,12 @@ case "${1:-}" in
     shift
     cmd_evergreen_kaydet "$@"
     ;;
+  provizyon)
+    shift
+    cmd_provizyon "$@"
+    ;;
   *)
-    echo "kullanım: iskan.sh doctor | iskan.sh seans-getir --container <ad> [--apply] | iskan.sh yeni-proje <ad> [--mem-limit <val>] --dry-run|--apply | iskan.sh cf-yayin <proje> --dry-run|--apply | iskan.sh ekip-yerlestir <proje> --dry-run|--apply | iskan.sh uye-ekle <proje> <uye> [--gorev <görev>] --dry-run|--apply | iskan.sh evergreen-kaydet <proje> --dry-run|--apply" >&2
+    echo "kullanım: iskan.sh doctor | iskan.sh seans-getir --container <ad> [--apply] | iskan.sh yeni-proje <ad> [--mem-limit <val>] [--port <n>] --dry-run|--apply | iskan.sh cf-yayin <proje> --dry-run|--apply | iskan.sh ekip-yerlestir <proje> --dry-run|--apply | iskan.sh uye-ekle <proje> <uye> [--gorev <görev>] --dry-run|--apply | iskan.sh evergreen-kaydet <proje> --dry-run|--apply | iskan.sh provizyon <proje> [--apply]" >&2
     exit 2
     ;;
 esac
