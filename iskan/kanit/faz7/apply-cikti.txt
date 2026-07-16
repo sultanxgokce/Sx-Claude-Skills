@@ -1,0 +1,12 @@
+[yeşil] proje-çözümü: 'iskantest' → cloudtop-iskantest (origin/main compose, TAM-STRING) · port=8449
+== İSKÂN uye-ekle — APPLY (tek-üye iskânı: denekGamma → iskantest) ==
+[yeşil] ön-kapılar: ssh + container-Up + araçlar (tmux/git/python3) tamam
+[yeşil] ADIM-1 hafif-kimlik: yazıldı → /config/projects/iskantest/_agents/denekGamma/AGENT.md (İSKÂN-üreteci)
+[yeşil] ADIM-2 ekip-registry: denekGamma (uye) roster'a eklendi (uye_sayisi güncellendi)
+[yeşil] ADIM-3 denekGamma: tmux-oturumu AÇILDI (uye, rezerve-uuid: 36f66eb2-2602-4382-b9bf-1fe4a599d13d, cwd=/config/projects/iskantest)
+[yeşil] iskan-registry (host): yazıldı → /opt/cloudtop/infra/iskan-registry.yaml
+[yeşil] iskan-registry (repo): yazıldı → /config/projects/_wt/motorserdar-cloudtop/infra/iskan-registry.yaml (commit/PR ayrı-adım, REPO-FIRST)
+[yeşil] iskan-registry (container-içi): yazıldı (baslat-claude.sh kaynağı)
+
+== uye-ekle bitti: denekGamma → iskantest (uye, rezerve-uuid: 36f66eb2-2602-4382-b9bf-1fe4a599d13d) · registry 3-kopya bayt-eş ==
+   [sultan-bildirim] üye-iskânı Sultan'a raporlanır; repo-kopyası commit/PR AYRI adımdır (REPO-FIRST)

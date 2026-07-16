@@ -1,0 +1,14 @@
+diff --git a/infra/iskan-registry.yaml b/infra/iskan-registry.yaml
+index 525ae68..542afcf 100644
+--- a/infra/iskan-registry.yaml
++++ b/infra/iskan-registry.yaml
+@@ -24,3 +24,9 @@ uyeler:
+     worktree_branch: null
+     session_id: 91541080-a82a-4733-9dbd-c338474ddd9a
+     permission_mode: default
++  - id: denekGamma
++    tmux: "denekGamma:0"
++    cwd: /config/projects/iskantest
++    worktree_branch: null
++    session_id: 36f66eb2-2602-4382-b9bf-1fe4a599d13d
++    permission_mode: default

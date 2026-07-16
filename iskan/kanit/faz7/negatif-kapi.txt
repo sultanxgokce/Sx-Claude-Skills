@@ -1,0 +1,13 @@
+== NEGATİF-1: hayaletproje --apply ==
+[kırmızı] kayitsiz-proje: 'hayaletproje' — compose-servis-listesinde (origin/main) 'cloudtop-hayaletproje' TAM-STRING eşleşmesi yok (K4: fuzzy/önek/case-farkı kabul edilmez), hiçbir yere dokunulmadı
+rc=1
+
+== NEGATİF-2: denekAlfa tekrar --apply ==
+[yeşil] proje-çözümü: 'iskantest' → cloudtop-iskantest (origin/main compose, TAM-STRING) · port=8449
+== İSKÂN uye-ekle — APPLY (tek-üye iskânı: denekAlfa → iskantest) ==
+[kırmızı] uye-zaten-var: 'denekAlfa' roster'da kayıtlı (rezerv-id çakışması/çift-kimlik felaket-sınıfı) — hiçbir yere dokunulmadı
+rc=1
+
+== NEGATİF-3: cloudtop-code hedef --apply ==
+[kırmızı] Nexus-ailesi evi hedeflendi ('cloudtop-code' → cloudtop-code): İSKÂN burada üye AÇMAZ — Nexus-ailesi üyesi /ise-alim (KÂHYA, Sultan-eşli röportaj+onay) ile alınır. İSKÂN'ın Nexus-katkısı yalnız KÂHYA-şema→registry-satırı adaptörüdür (_ue_kahya_adaptor, birim-test fixture'lı). Hiçbir yere dokunulmadı.
+rc=1

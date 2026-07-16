@@ -1,0 +1,12 @@
+k0075 İSKÂN FAZ-7 — G1-G11 öz-koşu özeti (MOTORSERDAR, 2026-07-16; tescil MÜHÜRDAR'da ayrıca koşulur)
+G1  ahi check iskan .......................... rc=0 ✓
+G2  uye-ekle dry-run (denekGamma+sultan-bildirim, plan-exit) rc=3 ✓ (idempotent-önizlemede de sultan-bildirim koşulsuz)
+G3  iskan.test.sh ............................ rc=0 ✓ (66 geçti / 0 kaldı; FAZ-7: 9 yeni test + KÂHYA-adaptör fixture)
+G4  negatif-kapı×3 (kayitsiz-proje · uye-zaten-var · ise-alim) rc=0 ✓
+G5  ekip-yerlestir 3-üye köprü (roster=container-içi ekip-registry; denekGamma EZİLMEDİ) rc=0 ✓
+G6  tmux 3-oturum birebir-casing (denekAlfa/denekBeta/denekGamma) rc=0 ✓
+G7  kimlik-zinciri (pane-banner uuid 36f66eb2… → origin/main registry + AGENT.md) rc=0 ✓
+G8  origin/main registry 3-üye + ≥3 uuid + denekGamma blok-scope anahtarları rc=0 ✓ (cloudtop PR#58 merged: 53858e6)
+G9  İ1 negatif (merkez-4-yüzey 66242d05→HEAD+working-tree el-değmemiş) rc=0 ✓
+G10 incident-panzehiri (iskantest Created pin birebir + 6 eski container <2026-07-16) rc=0 ✓
+G11 kapsam-disiplini (Sx diff yalnız iskan/**) rc=0 ✓

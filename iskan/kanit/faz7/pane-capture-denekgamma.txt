@@ -1,0 +1,25 @@
+================================================================
+  İSKÂN kimlik-banner · proje: iskantest
+  rol: denekGamma · ekip-gorevi: uye
+  permission-mode: default
+  rezerve session-id (kucuk-harf uuid, tek-satir):
+  36f66eb2-2602-4382-b9bf-1fe4a599d13d
+  baslat: bash scripts/baslat-claude.sh denekGamma
+================================================================
+abc@153026dda401:~/projects/iskantest$ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+AGENT-MD-VAR

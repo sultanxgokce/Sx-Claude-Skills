@@ -28,7 +28,11 @@ oto-yazımı. Dördü BESTELEDİĞİ kardeşlerin (aşağı) çalışma-kopyası
 - `seans-getir` (UC2) — deterministik session-id resume merdiveni (FAZ-2/3, K3 tasarımı)
 - `cf-yayin` — CF-hostname yayını: Access-app+policy+DNS (cf.sh onboard delegesi) + tünel-ingress
   host-deploy (FAZ-5, `ISKAN_FAZ5_GO=1` Sultan-GO'lu; 7-hostname sert-kapı + .bak oto-geri-al)
-- `uye-ekle` (UC3) — tek-üye-iskân (FAZ-7)
+- `uye-ekle` (UC3) — tek-üye-iskân (FAZ-7, CANLI): `uye-ekle <proje> <uye> [--gorev <g>] --dry-run|--apply` —
+  kayıtlı İSKÂN-projesine TEK üye ekler (rezerve-uuid + tmux + banner + hafif-kimlik AGENT.md + registry).
+  Çakışma-koruması ('uye-zaten-var') · Nexus-hedefte canlı-invoke YOK ('ise-alim' yönlendirmesi, İ1) ·
+  izole-hedef dry-run'ı koşulsuz 'sultan-bildirim' satırı basar. Roster-köprüsü: ekip-yerlestir artık
+  roster'ı container-içi `_agents/handoff/ekip-registry.yaml`'dan okur (hardcoded 2-üye default yalnız fallback).
 - `doctor` — salt-okur preflight (FAZ-1)
 - `check` — AHÎ-standart drift-lint (bugünden itibaren: `ahi check iskan`)
 
@@ -42,6 +46,8 @@ Usta (S3 · bileşik), born-at-Usta (`ahi new usta iskan`). generic-goal: "conta
 (doğuş/yeniden-doğuş/üye-ekleme) tek-komutla yöneten fabrika". Terfi-olgunluk şerhi: DOCTRINE.md → "Manuel-beyan".
 Doğrula: `ahi check iskan` · Kanon: `ahi doctrine` · İş-planı: `Nexus/_agents/handoff/help2serdar-iskan-is-plani.md`.
 
-## Durum (2026-07-15, FAZ-0)
-Yalnız doğuş + doktrin + host-teyit probe'ları var. Host'a hiçbir yazma-dokunuşu yok. Alt-komutların HİÇBİRİ
-henüz koşmaz (FAZ-1'den itibaren dolar). Kanıt-paketi: `iskan/kanit/faz0/`.
+## Durum (2026-07-16, FAZ-7)
+CANLI alt-komutlar: `doctor` (FAZ-1) · `seans-getir` (FAZ-2/3) · `yeni-proje` + `iskan-host.sh` (FAZ-4,
+ISKAN_FAZ4_GO'lu) · `cf-yayin` (FAZ-5, ISKAN_FAZ5_GO'lu) · `ekip-yerlestir` (FAZ-6) · `uye-ekle` (FAZ-7).
+Kanıt-paketleri: `iskan/kanit/faz0..faz7/`. claude-binary hedef-container'larda bilinçli-YOK (FAZ-9 kapsamı;
+baslat-claude.sh dürüst-kırmızı basar). Kalan: FAZ-8 (evergreen) · FAZ-9 (mihenk-dogfood).

@@ -1,0 +1,11 @@
+{
+  "_comment": "KÂHYA-şema fixture (Nexus _agents/orchestration/agent-registry.json ajan-kaydı biçimi) — _ue_kahya_adaptor birim-testi için. Canlı KÂHYA-invoke YOK (İ1).",
+  "id": "DENEKKAHYA",
+  "ascii": "DENEKKAHYA",
+  "domains": ["nexus"],
+  "capabilities": ["code_write"],
+  "workdir": "/opt/nexus/repo",
+  "knowledge": "/opt/nexus/knowledge",
+  "persona": "Fixture Deneme Uzmanı",
+  "default_autonomy": 1
+}

@@ -469,5 +469,144 @@ rc=$?
   || bad "baslat-claude.sh: exec-argümanları sözleşme-dışı (rc=$rc: $out)"
 find "$BC_DIR" -type f -delete 2>/dev/null; find "$BC_DIR" -depth -type d -delete 2>/dev/null
 
+# ── FAZ-7: uye-ekle (tek-üye iskânı) + roster-köprüsü + KÂHYA-adaptörü ────────────────────
+
+# ortak hermetik mini-repo: origin/main compose'unda cloudtop-uetest + iskan-registry'de denekAlfa kayıtlı
+UE_REPO="/tmp/iskan-test-ue-repo.$$"
+UE_UUID_SABIT="11111111-2222-3333-4444-555555555555"
+mkdir -p "$UE_REPO/infra"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$UE_REPO/infra/docker-compose.server.yml"
+cat >> "$UE_REPO/infra/docker-compose.server.yml" <<'EOF'
+
+  cloudtop-uetest:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: cloudtop-uetest
+    ports:
+      - "127.0.0.1:9459:8443"
+EOF
+cat > "$UE_REPO/infra/iskan-registry.yaml" <<EOF
+proje: uetest
+container_adi: cloudtop-uetest
+uyeler:
+  - id: denekAlfa
+    tmux: "denekAlfa:0"
+    cwd: /config/projects/uetest
+    session_id: $UE_UUID_SABIT
+    permission_mode: default
+EOF
+git -C "$UE_REPO" init -q -b main 2>/dev/null
+git -C "$UE_REPO" -c user.email=t@t -c user.name=t add -A 2>/dev/null
+git -C "$UE_REPO" -c user.email=t@t -c user.name=t commit -qm x 2>/dev/null
+git -C "$UE_REPO" remote add origin "$UE_REPO" 2>/dev/null
+
+# 30. uye-ekle: argüman-eksikliği → usage rc=2 (proje-yalnız / mod-yok varyantları)
+bash "$SCRIPT_DIR/iskan.sh" uye-ekle >/dev/null 2>&1
+rc1=$?
+bash "$SCRIPT_DIR/iskan.sh" uye-ekle uetest denekGamma >/dev/null 2>&1
+rc2=$?
+[ "$rc1" = "2" ] && [ "$rc2" = "2" ] && ok "uye-ekle: eksik-argüman/mod rc=2 (usage)" || bad "uye-ekle: usage rc beklenen 2, gelen $rc1/$rc2"
+
+# 31. uye-ekle --dry-run (yeni-üye): plan-exit=3 + üye-adı + 'sultan-bildirim' satırı (G2 sözleşmesi)
+SUM_UE_BEFORE="$(md5sum "$UE_REPO/infra/iskan-registry.yaml")"
+out="$(ISKAN_CLOUDTOP_REPO_DIR="$UE_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_EY_SSH_TIMEOUT=3 \
+  bash "$SCRIPT_DIR/iskan.sh" uye-ekle uetest denekGamma --dry-run 2>&1)"
+rc=$?
+SUM_UE_AFTER="$(md5sum "$UE_REPO/infra/iskan-registry.yaml")"
+[ "$rc" = "3" ] && ok "uye-ekle --dry-run: plan-exit=3" || bad "uye-ekle --dry-run: rc beklenen 3, gelen $rc"
+printf '%s' "$out" | grep -q "denekGamma" && printf '%s' "$out" | grep -q "sultan-bildirim" \
+  && ok "uye-ekle --dry-run: üye-adı + 'sultan-bildirim' satırı önizlemede" \
+  || bad "uye-ekle --dry-run: üye-adı/sultan-bildirim eksik"
+[ "$SUM_UE_BEFORE" = "$SUM_UE_AFTER" ] && ok "uye-ekle --dry-run: dosya değişmedi" || bad "uye-ekle --dry-run: dosya DEĞİŞTİ (yazmamalıydı)"
+
+# 32. uye-ekle --dry-run MEVCUT-üye (denekAlfa): rc=3 KORUNUR + 'sultan-bildirim' KOŞULSUZ basılır
+#     (G2 NOT-2: idempotent/mevcut→atla önizlemesi DAHİL) + çakışma-uyarısı 'uye-zaten-var' önizlenir
+out="$(ISKAN_CLOUDTOP_REPO_DIR="$UE_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_EY_SSH_TIMEOUT=3 \
+  bash "$SCRIPT_DIR/iskan.sh" uye-ekle uetest denekAlfa --dry-run 2>&1)"
+rc=$?
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q "sultan-bildirim" && printf '%s' "$out" | grep -q "uye-zaten-var" \
+  && ok "uye-ekle --dry-run: mevcut-üyede de rc=3 + sultan-bildirim koşulsuz + çakışma-önizlemesi" \
+  || bad "uye-ekle --dry-run: mevcut-üye sözleşmesi kırık (rc=$rc)"
+
+# 33. uye-ekle Nexus-ailesi evi (cloudtop-code, TAM-STRING): CANLI-invoke YOK → rc≠0 + 'ise-alim'
+#     marker; 'code' kısayolu (cname=cloudtop-code) da aynı kapıya düşer; hiçbir ssh/git çağrısı gerekmez
+for p in cloudtop-code code; do
+  out="$(ISKAN_CLOUDTOP_REPO_DIR="$UE_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+    bash "$SCRIPT_DIR/iskan.sh" uye-ekle "$p" denekGamma --apply 2>&1)"
+  rc=$?
+  [ "$rc" != "0" ] && printf '%s' "$out" | grep -q 'ise-alim' \
+    && ok "uye-ekle: Nexus-hedef '$p' rc≠0 + 'ise-alim' yönlendirme-marker'ı (İ1, canlı-invoke YOK)" \
+    || bad "uye-ekle: Nexus-hedef '$p' beklenen rc≠0+ise-alim, gelen rc=$rc"
+done
+
+# 34. uye-ekle NEGATİF-KAPI (K4): bilinmeyen ad → rc≠0 + 'kayitsiz-proje'; önek/case-farkı reddedilir
+out="$(ISKAN_CLOUDTOP_REPO_DIR="$UE_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan.sh" uye-ekle hayaletproje denekGamma --apply 2>&1)"
+rc=$?
+[ "$rc" != "0" ] && printf '%s' "$out" | grep -q 'kayitsiz-proje' \
+  && ok "uye-ekle --apply: bilinmeyen-proje rc≠0 + 'kayitsiz-proje' marker" \
+  || bad "uye-ekle --apply: bilinmeyen-proje beklenen rc≠0+marker, gelen rc=$rc"
+for p in uetes UETEST; do
+  ISKAN_CLOUDTOP_REPO_DIR="$UE_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+    bash "$SCRIPT_DIR/iskan.sh" uye-ekle "$p" denekGamma --apply >/dev/null 2>&1
+  rc=$?
+  [ "$rc" != "0" ] && ok "uye-ekle --apply: '$p' (önek/case-farkı) reddedildi rc=$rc (K4 fuzzy-yasak)" \
+    || bad "uye-ekle --apply: '$p' KABUL edildi (K4 ihlali)"
+done
+
+# 35. uye-ekle --apply MEVCUT-üye: rc≠0 + 'uye-zaten-var' (çakışma-koruması; ssh-bozukken bile
+#     origin/main iskan-registry fallback'inden yakalanır → mutasyonsuz erken-kırmızı)
+out="$(ISKAN_CLOUDTOP_REPO_DIR="$UE_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_EY_SSH_TIMEOUT=3 \
+  bash "$SCRIPT_DIR/iskan.sh" uye-ekle uetest denekAlfa --apply 2>&1)"
+rc=$?
+[ "$rc" != "0" ] && printf '%s' "$out" | grep -q 'uye-zaten-var' \
+  && ok "uye-ekle --apply: mevcut-üye rc≠0 + 'uye-zaten-var' (çakışma-koruması, G4b)" \
+  || bad "uye-ekle --apply: mevcut-üye beklenen rc≠0+uye-zaten-var, gelen rc=$rc"
+
+# 36. uye-ekle --apply yeni-üye ama host-erişilemez → rc=1, mutasyonsuz erken-kırmızı
+SUM_UE_BEFORE2="$(md5sum "$UE_REPO/infra/iskan-registry.yaml")"
+ISKAN_CLOUDTOP_REPO_DIR="$UE_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_EY_SSH_TIMEOUT=3 \
+  bash "$SCRIPT_DIR/iskan.sh" uye-ekle uetest denekGamma --apply >/dev/null 2>&1
+rc=$?
+SUM_UE_AFTER2="$(md5sum "$UE_REPO/infra/iskan-registry.yaml")"
+[ "$rc" = "1" ] && [ "$SUM_UE_BEFORE2" = "$SUM_UE_AFTER2" ] \
+  && ok "uye-ekle --apply: host-erişilemezken rc=1 + repo-dosya değişmedi (mutasyonsuz erken-kırmızı)" \
+  || bad "uye-ekle --apply: host-erişilemez sözleşmesi kırık (rc=$rc)"
+
+find "$UE_REPO" -type f -delete 2>/dev/null; find "$UE_REPO" -depth -type d -delete 2>/dev/null
+
+# 37. _ey_ekip_roster_oku (FAZ-7 roster-köprüsü parser'ı): meta.yonetici + uyeler id-listesi →
+#     "rol:gorev" çiftleri (G5'in kök-fix'i: hardcoded 2-üye default yerine registry-roster)
+EKIP_REG_FIXTURE="$(cat <<'EOF'
+meta:
+  ekip: "uetest-ekibi"
+  uye_sayisi: 3
+  yonetici: denekAlfa
+
+uyeler:
+  - id: denekAlfa
+    tmux: "denekAlfa:0"
+  - id: denekBeta
+    tmux: "denekBeta:0"
+  - id: denekGamma
+    tmux: "denekGamma:0"
+EOF
+)"
+res="$(bash -c "source <(sed -n '/^_ey_ekip_roster_oku()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); _ey_ekip_roster_oku \"\$1\"" _ "$EKIP_REG_FIXTURE")"
+[ "$res" = "denekAlfa:yonetici denekBeta:uye denekGamma:uye" ] \
+  && ok "_ey_ekip_roster_oku: 3-üye roster doğru çözüldü (yonetici-etiketi dahil)" \
+  || bad "_ey_ekip_roster_oku: beklenen 3-üye roster, gelen '$res'"
+
+# 38. _ue_kahya_adaptor: KÂHYA-şema fixture → iskan-registry K2 üye-bloğu (id/tmux/cwd/session_id/
+#     permission_mode anahtarları; canlı KÂHYA-invoke YOK — İSKÂN'ın Nexus-katkısı yalnız bu dönüşüm)
+UE_ADP_SID="99999999-8888-7777-6666-555555555555"
+res="$(bash -c "source <(sed -n '/^_ue_kahya_adaptor()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); _ue_kahya_adaptor '$SCRIPT_DIR/fixtures/kahya-ornek.json' '$UE_ADP_SID'")"
+printf '%s' "$res" | grep -q "id: DENEKKAHYA" \
+  && printf '%s' "$res" | grep -q 'tmux: "DENEKKAHYA:0"' \
+  && printf '%s' "$res" | grep -q "cwd: /opt/nexus/repo" \
+  && printf '%s' "$res" | grep -q "session_id: $UE_ADP_SID" \
+  && printf '%s' "$res" | grep -q "permission_mode: default" \
+  && ok "_ue_kahya_adaptor: KÂHYA-şema → K2 üye-bloğu dönüşümü tam (5 anahtar)" \
+  || bad "_ue_kahya_adaptor: dönüşüm eksik/bozuk: '$res'"
+
 echo "== ${PASS} geçti / ${FAIL} kaldı =="
 [ "$FAIL" -eq 0 ]
