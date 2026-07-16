@@ -67,7 +67,13 @@ bash ~/.claude/skills/cloudflare-erisim/scripts/cf.sh onboard mmex.mmepanel.com 
 bash ~/.claude/skills/cloudflare-erisim/scripts/cf.sh access-ensure <host> [email] # yalnız Access app + Allow-policy
 bash ~/.claude/skills/cloudflare-erisim/scripts/cf.sh dns-ensure <host>            # yalnız proxied DNS (tünel rotası)
 bash ~/.claude/skills/cloudflare-erisim/scripts/cf.sh list                         # mevcut Access app'leri listele
+bash ~/.claude/skills/cloudflare-erisim/scripts/cf.sh offboard <host> [--apply]    # Access + DNS GERİ-ALIMI (dry-run DEFAULT)
 ```
+`offboard` = `onboard`'un tersi (İSKÂN söküm-akışı kullanır): TAM-hostname lookup + silme-öncesi
+**tek-kayıt-assertion** (Access `.domain==host` · DNS `type=CNAME&name=host`; sonuç ≠1 → DUR, hiçbir şey
+silinmez) · dry-run DEFAULT (`--apply` şart) · prod-hostname koruma-listesi (pc/code/vekatip/mmex/medi/
+huma/m/mihenk/cloudtop + zone-kökü REDDEDİLİR) · değer-basmaz. Tünel-ingress satırı host `config.yml`'de
+ayrı yaşar — onu İSKÂN `sokum` adımı (.bak'lı) çıkarır, bu komut DOKUNMAZ.
 Varsayılan izin = `sultanxgokce@gmail.com` (değiştir: 2. argüman e-posta).
 
 ### 5. Raporla + tünel ingress hatırlatması
