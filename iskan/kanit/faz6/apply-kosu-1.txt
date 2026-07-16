@@ -1,0 +1,15 @@
+[yeşil] proje-çözümü: 'iskantest' → cloudtop-iskantest (origin/main compose, TAM-STRING) · port=8449
+== İSKÂN ekip-yerlestir — APPLY (hedef-container-içi; idempotent; diğer container'lara dokunmaz) ==
+[yeşil] ön-kapılar: ssh + container-Up + araçlar (tmux/git/python3) tamam
+[yeşil] ADIM-1 scaffold: iskelet + ekip-ac + roster'lı ekip-registry /opt/cloudtop/config-iskantest/projects/iskantest'a kuruldu (uid-1000)
+[yeşil] ADIM-2 baslat-claude.sh: yazıldı (b0019 panzehiri — tek meşru başlatma-yolu)
+[yeşil] ADIM-3 git init: tamam (mevcut ise atlandı)
+[yeşil] ADIM-4 iskan-registry (host): yazıldı → /opt/cloudtop/infra/iskan-registry.yaml
+[yeşil] ADIM-4 iskan-registry (repo): yazıldı → /config/projects/cloudtop/infra/iskan-registry.yaml (commit/PR ayrı-adım, REPO-FIRST)
+[yeşil] ADIM-4 iskan-registry (container-içi): yazıldı (baslat-claude.sh kaynağı)
+no server running on /tmp/tmux-1000/default
+[doğrulanmadı] banner send-keys başarısız (denekAlfa) — oturum açık, banner elle: cat _iskan/banner-denekAlfa.txt
+[yeşil] ADIM-5 denekAlfa: tmux-oturumu AÇILDI (yonetici, rezerve-uuid: 08f2da51-d687-47e7-b855-ba8b23e0fe4e, cwd=/config/projects/iskantest)
+
+== ekip-yerlestir bitti: iskantest · açılan=1 atlanan-mevcut=0 · registry 3-kopya bayt-eş (host+repo+container-içi) ==
+   (repo-kopyası commit/PR AYRI adımdır — REPO-FIRST; G6/G7 origin/main'den okur)

@@ -1,0 +1,24 @@
+================================================================
+  İSKÂN kimlik-banner · proje: iskantest
+  rol: denekBeta · ekip-gorevi: uye
+  permission-mode: default
+  rezerve session-id (kucuk-harf uuid, tek-satir):
+  91541080-a82a-4733-9dbd-c338474ddd9a
+  baslat: bash scripts/baslat-claude.sh denekBeta
+================================================================
+abc@153026dda401:~/projects/iskantest$ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

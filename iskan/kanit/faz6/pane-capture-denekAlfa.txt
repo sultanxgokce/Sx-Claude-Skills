@@ -1,0 +1,24 @@
+================================================================
+  İSKÂN kimlik-banner · proje: iskantest
+  rol: denekAlfa · ekip-gorevi: yonetici
+  permission-mode: default
+  rezerve session-id (kucuk-harf uuid, tek-satir):
+  08f2da51-d687-47e7-b855-ba8b23e0fe4e
+  baslat: bash scripts/baslat-claude.sh denekAlfa
+================================================================
+abc@153026dda401:~/projects/iskantest$ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

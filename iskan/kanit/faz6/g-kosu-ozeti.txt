@@ -1,0 +1,15 @@
+k0074 İSKÂN FAZ-6 — MOTORSERDAR firsthand G-koşuları (çıplak + exit-echo), 2026-07-16 ~10:0X
+G1  ahi check iskan                                  → exit=0
+G2  ekip-yerlestir iskantest --dry-run               → rc=3 + denekAlfa[\s\S]*denekBeta desen=0
+G3  negatif-kapı (hayaletproje+iskantes+ISKANTEST)   → exit=0 ('kayitsiz-proje' marker + 3 red)
+G4  idempotent-apply (2.+ koşu)                      → exit=0 (açılan=0 atlanan-mevcut=2, "atla/mevcut"×10)
+G5  canlı-seanslar tam-satır (grep -qx)              → exit=0
+G6  banner-uuid ↔ origin/main rezerv-eşleşme (2 üye) → exit=0
+G7  repo-kanıt origin/main (2 üye + ≥2 uuid + alanlar)→ exit=0 (PR#57 merged)
+G8  ekip-notify --check all (çıktı-davranışlı)       → exit=0 (2 üye idle, 'oturum-YOK' yok)
+G9  baslat-claude dürüst-kırmızı                     → exit=0 (sarmalayıcı-rc=1 + 'claude-binary yok')
+G10 incident-panzehiri (6 Created < iskantest + <2026-07-16) → exit=0
+G11 kapsam-disiplini (Sx yalnız iskan/**)            → exit=0
+SONUÇ: 11/11 GEÇTİ.
+Canlı-vaka fix'leri (koşu-1/2 → koşu-3): (1) döngü-içi ssh stdin-yeme → fd-3 read -u 3;
+(2) abc passwd-shell=/bin/false → tmux pane anında ölüyor → SHELL=/bin/bash env-override.

@@ -1,0 +1,14 @@
+[yeşil] proje-çözümü: 'iskantest' → cloudtop-iskantest (origin/main compose, TAM-STRING) · port=8449
+== İSKÂN ekip-yerlestir — KURU-KOŞU (DEFAULT; host'a/container'a/dosyaya SIFIR-dokunuş) ==
+proje: iskantest · container: cloudtop-iskantest · hedef-dizin (container-içi): /config/projects/iskantest
+[yeşil] hostsrv-probe: taze ssh exit=0 (canlı-durum aşağıda 'mevcut → atla' olarak işaretlendi)
+
+-- PLAN (apply'da sırayla; her adım idempotent) --
+  1. scaffold-iskelet (ekip-kur/scaffold.sh headless → /opt/cloudtop/config-iskantest/projects/iskantest): (mevcut → atla)
+  2. roster (SABİT, GEREKLILIK-bağlayıcı; tmux-oturum adları BİREBİR bu casing):
+     - denekAlfa (yonetici) · rezerv-uuid: mevcut (08f2da51-d687-47e7-b855-ba8b23e0fe4e) · tmux: mevcut → atla
+     - denekBeta (uye) · rezerv-uuid: mevcut (91541080-a82a-4733-9dbd-c338474ddd9a) · tmux: mevcut → atla
+  3. kimlik-banner (her pane'de kalıcı: İSKÂN-imzası + rol + rezerve-uuid ≤80-kolon-tek-satır + permission-mode)
+  4. baslat-claude.sh sarmalayıcısı (b0019 panzehiri: registry'den rol-kaydı çözer; claude yoksa dürüst-kırmızı 'claude-binary yok')
+  5. iskan-registry.yaml K2 tam-şema yazımı: host-co-locate (/opt/cloudtop/infra/iskan-registry.yaml) + repo (/config/projects/cloudtop/infra/) + container-içi kopya — üçü bayt-eş
+== dry-run: hiçbir yazım yapılmadı (plan-exit sözleşmesi, exit=3) ==
