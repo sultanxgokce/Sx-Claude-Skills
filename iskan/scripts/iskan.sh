@@ -2108,9 +2108,16 @@ cmd_sokum() {
     exit 1
   fi
   # hostname-satırı + hemen-ardındaki service-satırı (2-satır ingress-öğesi) çıkar
-  if ! timeout 15 ssh -o BatchMode=yes "$ssh_host" "sed -i '/hostname: ${hostname}/,+1d' $cfd_config && systemctl restart cloudflared"; then
-    echo "[kırmızı] ADIM-3 ingress-çıkarma/restart başarısız — .bak-restore + restart" >&2
-    timeout 60 ssh -o BatchMode=yes "$ssh_host" "cp -a ${cfd_config}.bak $cfd_config && systemctl restart cloudflared" || true
+  if ! timeout 15 ssh -o BatchMode=yes "$ssh_host" "sed -i '/hostname: ${hostname}/,+1d' $cfd_config"; then
+    echo "[kırmızı] ADIM-3 ingress-çıkarma (sed) başarısız — .bak-restore" >&2
+    timeout 60 ssh -o BatchMode=yes "$ssh_host" "cp -a ${cfd_config}.bak $cfd_config" || true
+    exit 1
+  fi
+  # restart AYRI + uzun-tavan: cloudflared graceful-stop 90sn'e dek sürebilir (firsthand, canlı-koşu-1:
+  # 20sn'de rc=124 'deactivating' — kısa-timeout sağlıklı restart'ı sahte-kırmızıya çevirdi)
+  if ! timeout 200 ssh -o BatchMode=yes "$ssh_host" "systemctl restart cloudflared"; then
+    echo "[kırmızı] ADIM-3 cloudflared restart başarısız — .bak-restore + restart" >&2
+    timeout 200 ssh -o BatchMode=yes "$ssh_host" "cp -a ${cfd_config}.bak $cfd_config && systemctl restart cloudflared" || true
     exit 1
   fi
   sleep 5
@@ -2118,7 +2125,7 @@ cmd_sokum() {
   printf 'SONRA: %s\n' "$sonra" | tee "$kanit_dir/sekiz-hostname-sonra.txt"
   if ! _cf_yedi_hostname_temiz_mi "$sonra"; then
     echo "[kırmızı] 8-HOSTNAME REGRESYON — OTO-GERİ-AL (.bak restore + cloudflared restart)" >&2
-    timeout 60 ssh -o BatchMode=yes "$ssh_host" "cp -a ${cfd_config}.bak $cfd_config && systemctl restart cloudflared" || true
+    timeout 200 ssh -o BatchMode=yes "$ssh_host" "cp -a ${cfd_config}.bak $cfd_config && systemctl restart cloudflared" || true
     sleep 5
     printf 'GERİ-AL-SONRASI: %s\n' "$(ISKAN_PROD_HOSTS="$sokum_hosts" _cf_yedi_hostname_olc)" | tee -a "$kanit_dir/sekiz-hostname-sonra.txt"
     echo "[kırmızı] DUR — SERDAR'a gözlenen-vs-beklenen raporla (kanıt: $kanit_dir/)" >&2
