@@ -842,5 +842,119 @@ rc=$?
   || bad "mount-çözümü: tek-mount davranışı BOZULDU (rc=$rc)"
 find "$MM_REPO" -type f -delete 2>/dev/null; find "$MM_REPO" -depth -type d -delete 2>/dev/null
 
+# ── SÖKÜM (k0083): sokum alt-komutu — dry-run-default · GO-kapısı · durum-sinyalleri ──────
+
+# fixture cloudtop-repo (5-manifest'li; origin/main update-ref ile — remote gerekmez)
+_sk_fixture_repo() { # <dizin>
+  local d="$1"
+  mkdir -p "$d/infra"
+  cat > "$d/infra/docker-compose.server.yml" <<'EOF'
+services:
+  cloudtop-komsu:
+    image: test
+    container_name: cloudtop-komsu
+    ports:
+      - "127.0.0.1:9997:8443"
+
+  # ── İSKÂN FAZ-4 provizyon: sokumtest (iskan.sh yeni-proje ile üretildi) ────────────────
+  cloudtop-sokumtest:
+    image: test
+    container_name: cloudtop-sokumtest
+    volumes:
+      - ./config-sokumtest:/config
+    ports:
+      - "127.0.0.1:9998:8443"
+EOF
+  cat > "$d/infra/setup-tunnel.sh" <<'EOF'
+#!/usr/bin/env bash
+SOKUMTEST_HOSTNAME="sokumtest.mmepanel.com"
+cat > /tmp/x <<ING
+  - hostname: ${SOKUMTEST_HOSTNAME}
+    service: http://localhost:9998
+ING
+EOF
+  cat > "$d/infra/provider-inventory.yaml" <<'EOF'
+cloudflare:
+  tunnel:
+    ingress:
+      - pc.mmepanel.com
+      - sokumtest.mmepanel.com   # İSKÂN-container
+  access_apps:
+    - pc.mmepanel.com
+    - sokumtest.mmepanel.com     # İSKÂN-container
+EOF
+  cat > "$d/infra/backup.sh" <<'EOF'
+#!/usr/bin/env bash
+docker inspect cloudtop cloudtop-sokumtest > "/tmp/sk-inspect.json" 2>/dev/null || true
+EOF
+  cat > "$d/infra/iskan-registry.yaml" <<'EOF'
+# iskan-registry.yaml — İSKÂN K2 künye TEK-KAYNAĞI (test-fixture).
+proje: sokumtest
+container_adi: cloudtop-sokumtest
+EOF
+  git -C "$d" init -q && git -C "$d" add -A \
+    && git -C "$d" -c user.email=t@t -c user.name=t commit -qm fixture \
+    && git -C "$d" update-ref refs/remotes/origin/main HEAD
+}
+
+# ssh-stub: her çağrıyı SSH_STUB_LOG'a yazar; arşiv-probe'a sahte-arşiv-yolu döner
+SK_STUB_DIR="$(mktemp -d)"
+cat > "$SK_STUB_DIR/ssh" <<'EOF'
+#!/usr/bin/env bash
+echo "call: $*" >> "${SSH_STUB_LOG:?}"
+case "$*" in
+  *_sokum-arsiv*) echo "/opt/cloudtop/_sokum-arsiv/ghost-2026-01-01" ;;
+esac
+exit 0
+EOF
+chmod +x "$SK_STUB_DIR/ssh"
+
+SK_REPO="$(mktemp -d)"
+_sk_fixture_repo "$SK_REPO"
+
+# 48. sokum dry-run (DEFAULT — mode-arg'sız): rc=3 + plan + hiçbir dosya değişmez
+SUM_SK_0="$(md5sum "$SK_REPO"/infra/*)"
+out="$(ISKAN_CLOUDTOP_REPO_DIR="$SK_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan.sh" sokum sokumtest 2>&1)"
+rc=$?
+SUM_SK_1="$(md5sum "$SK_REPO"/infra/*)"
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'KURU-KOŞU' && printf '%s' "$out" | grep -q 'down cloudtop-sokumtest' \
+  && [ "$SUM_SK_0" = "$SUM_SK_1" ] \
+  && ok "sokum dry-run (DEFAULT): rc=3 + servis-scoped down-planı + md5-değişmez" \
+  || bad "sokum dry-run: sözleşme kırık (rc=$rc)"
+
+# 49. sokum --apply GO-marker'sız: rc=4 + stderr'de ISKAN_SOKUM_GO + SIFIR-dokunuş (md5 + ssh-stub-çağrı=0)
+SK_LOG="$(mktemp)"
+err="$(PATH="$SK_STUB_DIR:$PATH" SSH_STUB_LOG="$SK_LOG" ISKAN_CLOUDTOP_REPO_DIR="$SK_REPO" \
+  bash "$SCRIPT_DIR/iskan.sh" sokum sokumtest --apply 2>&1 >/dev/null)"
+rc=$?
+SUM_SK_2="$(md5sum "$SK_REPO"/infra/*)"
+[ "$rc" = "4" ] && printf '%s' "$err" | grep -q 'ISKAN_SOKUM_GO' && [ "$SUM_SK_1" = "$SUM_SK_2" ] \
+  && [ "$(grep -c . "$SK_LOG")" = "0" ] \
+  && ok "sokum marker-yok: rc=4 + stderr ISKAN_SOKUM_GO + md5-değişmez + ssh-stub-çağrı=0 (sıfır-dokunuş)" \
+  || bad "sokum marker-yok: GO-kapısı kırık (rc=$rc ssh-çağrı=$(grep -c . "$SK_LOG"))"
+
+# 50. sokum kayıtsız-proje: compose-kaydı YOK + arşiv-izi YOK → rc≠0 + 'kayitsiz' + md5-değişmez
+out="$(ISKAN_SOKUM_GO=1 ISKAN_CLOUDTOP_REPO_DIR="$SK_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan.sh" sokum hayalet --apply 2>&1)"
+rc=$?
+SUM_SK_3="$(md5sum "$SK_REPO"/infra/*)"
+[ "$rc" != "0" ] && printf '%s' "$out" | grep -qi 'kayitsiz' && [ "$SUM_SK_2" = "$SUM_SK_3" ] \
+  && ok "sokum kayitsiz-proje: rc≠0 + 'kayitsiz' marker + md5-değişmez (fail-closed)" \
+  || bad "sokum kayitsiz-proje: kapı kırık (rc=$rc)"
+
+# 51. sokum zaten-sokuk: compose-kaydı YOK ∧ host'ta arşiv-izi VAR (ssh-stub) → rc=0 + 'zaten-sokuk'
+SK_LOG2="$(mktemp)"
+out="$(PATH="$SK_STUB_DIR:$PATH" SSH_STUB_LOG="$SK_LOG2" ISKAN_SOKUM_GO=1 ISKAN_CLOUDTOP_REPO_DIR="$SK_REPO" \
+  bash "$SCRIPT_DIR/iskan.sh" sokum ghost --apply 2>&1)"
+rc=$?
+[ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'zaten-sokuk' \
+  && ok "sokum zaten-sokuk: kayıt-yok + arşiv-var → rc=0 idempotent ('zaten-sokuk' sinyali)" \
+  || bad "sokum zaten-sokuk: durum-sinyali kırık (rc=$rc)"
+
+rm -f "$SK_LOG" "$SK_LOG2"
+find "$SK_REPO" "$SK_STUB_DIR" -type f -delete 2>/dev/null
+find "$SK_REPO" "$SK_STUB_DIR" -depth -type d -delete 2>/dev/null
+
 echo "== ${PASS} geçti / ${FAIL} kaldı =="
 [ "$FAIL" -eq 0 ]

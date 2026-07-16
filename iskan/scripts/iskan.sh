@@ -1841,6 +1841,391 @@ cmd_evergreen_kaydet() {
   exit 0
 }
 
+# ── sokum (k0083: TAM-SÖKÜM — "sökülemeyen sancak doğamaz" ilkesinin kapanış-yarısı) ──────
+#
+# NEDEN: İSKÂN'ın doğurduğu bir projeyi AYNI araçla, telafisiz-silme olmadan geri-alır:
+# tmux-kapat → servis-scoped container-down → ingress-çıkar (+8-hostname sert-kapı) →
+# CF-offboard (cf.sh delegesi) → 5-manifest LOKAL repo-first geri-alım → config-dizini ARŞİVE-TAŞI.
+# Üç panzehir kod-seviyesinde (GEREKLILIK k0083 TASARIM-KARARLARI):
+#  (1) GO-kapısı İLK adım: apply yalnız ISKAN_SOKUM_GO=1; marker-yokken host'a/CF'e/dosyaya
+#      SIFIR-dokunuş (exit=4). dry-run DEFAULT (plan-exit=3).
+#  (2) SERT-SINIRLAR: arg'sız `docker compose down` ve -v bayrağı YASAK (deneme-1 tam-filo
+#      incident'i) — down HER ZAMAN servis-arg'lı tek-komut; silme YOK, tek meşru yol arşiv-taşıma.
+#  (3) 8-HOSTNAME SERT-KAPI (7-prod + mihenk): ingress-çıkarma sonrası herhangi biri 302/401/403
+#      dışına düşerse config.yml .bak-restore + cloudflared restart + exit=1.
+# KOMŞU-KANIT: 7 komşu (6-çekirdek + mihenk) ÖNCE/SONRA StartedAt + config-hash; fark → exit=1.
+# CF-silme cf.sh offboard'a DELEGE (ham-CF-API bu dosyaya gömülmez — token ikinci-yüzeye yayılmaz).
+
+# _sokum_compose_cikar <dosya> <cname> — compose'dan servis-bloğunu (önündeki İSKÂN-yorum
+# satırları + bir ayraç-boşluk dahil) çıkarır. Blok yoksa rc=2 (iz-yok), dosyaya dokunmaz.
+_sokum_compose_cikar() {
+  python3 - "$1" "$2" <<'PYEOF'
+import re, sys
+path, cname = sys.argv[1], sys.argv[2]
+lines = open(path, encoding="utf-8", errors="replace").read().splitlines()
+key = next((i for i, l in enumerate(lines) if re.match(r'^  ' + re.escape(cname) + r':\s*$', l)), None)
+if key is None:
+    sys.exit(2)
+start = key
+j = key - 1
+while j >= 0 and re.match(r'^  #', lines[j]):
+    start = j; j -= 1
+if start > 0 and lines[start - 1].strip() == "":
+    start -= 1
+end = key + 1
+while end < len(lines) and (lines[end].strip() == "" or lines[end].startswith("    ")):
+    end += 1
+while end - 1 > key and lines[end - 1].strip() == "":
+    end -= 1                      # ayraç-boşluğu komşuya bırak (tek-blank separatör korunur)
+del lines[start:end]
+open(path, "w", encoding="utf-8").write("\n".join(lines) + "\n")
+PYEOF
+}
+
+# _sokum_satir_cikar <dosya> <token> — token geçen satırları çıkarır (case-insensitive:
+# ISKANTEST_HOSTNAME de yakalanır); çıkan satır ingress `- hostname:` ise hemen-ardındaki
+# `service:` satırı da (tokensiz eş) çıkar. Token yoksa rc=2, dosyaya dokunmaz.
+_sokum_satir_cikar() {
+  python3 - "$1" "$2" <<'PYEOF'
+import re, sys
+path, token = sys.argv[1], sys.argv[2].lower()
+lines = open(path, encoding="utf-8", errors="replace").read().splitlines()
+out, skip_service, removed = [], False, 0
+for l in lines:
+    if skip_service and re.match(r'^\s*service:', l):
+        skip_service = False; removed += 1; continue
+    skip_service = False
+    if token in l.lower():
+        removed += 1
+        if re.match(r'^\s*-\s*hostname:', l):
+            skip_service = True
+        continue
+    out.append(l)
+if removed == 0:
+    sys.exit(2)
+open(path, "w", encoding="utf-8").write("\n".join(out) + "\n")
+PYEOF
+}
+
+# _sokum_backup_cikar <dosya> <token> — backup.sh docker-inspect argüman-listesinden container'ı
+# çıkarır (satır SİLİNMEZ — komşu container'lar aynı satırda; _eg_backup_ekle'nin tersi).
+# Token argüman-listesinde yoksa rc=2, dosyaya dokunmaz.
+_sokum_backup_cikar() {
+  python3 - "$1" "$2" <<'PYEOF'
+import re, sys
+path, token = sys.argv[1], sys.argv[2]
+src = open(path, encoding="utf-8", errors="replace").read()
+hit = [0]
+def repl(m):
+    args = m.group(2).split()
+    if token not in args:
+        return m.group(0)
+    hit[0] += 1
+    return m.group(1) + " ".join(a for a in args if a != token) + m.group(3)
+yeni = re.sub(r"(?m)^(\s*docker inspect )([^>\n]*?)(\s*>)", repl, src, count=1)
+if hit[0] == 0:
+    sys.exit(2)
+open(path, "w", encoding="utf-8").write(yeni)
+PYEOF
+}
+
+# _sokum_registry_kunye_cikar <dosya> <proje> — iskan-registry'den künye-bloğunu çıkarır,
+# dosyanın kendisi ve başlık-yorumları KALIR (aksiyon-6b: registry-dosyası silinmez).
+# Dosyadaki künye başka projeninse ya da yoksa rc=2, dosyaya dokunmaz.
+_sokum_registry_kunye_cikar() {
+  python3 - "$1" "$2" <<'PYEOF'
+import re, sys
+path, proje = sys.argv[1], sys.argv[2]
+lines = open(path, encoding="utf-8", errors="replace").read().splitlines()
+if not any(re.match(r'^proje:\s*' + re.escape(proje) + r'\s*$', l) for l in lines):
+    sys.exit(2)
+head = []
+for l in lines:
+    if l.startswith("#"):
+        head.append(l)
+    else:
+        break
+open(path, "w", encoding="utf-8").write("\n".join(head) + "\n")
+PYEOF
+}
+
+# _sokum_komsu_kanit <ssh_host> <komşu-listesi> — her komşu için "ad|StartedAt|config-md5" basar
+_sokum_komsu_kanit() {
+  local ssh_host="$1" komsular="$2" c
+  for c in $komsular; do
+    timeout 15 ssh -o BatchMode=yes -o ConnectTimeout=5 "$ssh_host" \
+      "printf '%s|%s|%s\n' '$c' \"\$(docker inspect -f '{{.State.StartedAt}}' $c 2>/dev/null)\" \"\$(docker inspect -f '{{json .Config}}' $c 2>/dev/null | md5sum | cut -d' ' -f1)\"" 2>/dev/null \
+      || printf '%s|PROBE-FAIL|PROBE-FAIL\n' "$c"
+  done
+}
+
+cmd_sokum() {
+  local proje="" mode="dry-run"    # dry-run DEFAULT (GEREKLILIK: plan-önizleme exit=3)
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --dry-run) mode="dry-run"; shift ;;
+      --apply) mode="apply"; shift ;;
+      -*) echo "bilinmeyen argüman: $1" >&2; echo "kullanım: iskan.sh sokum <proje> [--dry-run|--apply]" >&2; exit 2 ;;
+      *) proje="$1"; shift ;;
+    esac
+  done
+  [ -n "$proje" ] || { echo "kullanım: iskan.sh sokum <proje> [--dry-run|--apply]" >&2; exit 2; }
+  _ey_ad_hijyeni "$proje" "sokum" || exit 1
+
+  # ── GO-KONTROLÜ = apply'ın İLK adımı (aksiyon-15): marker yoksa host'a/CF'e/dosyaya/ssh'a
+  # SIFIR-dokunuş — bu satırın ÜSTÜNDE hiçbir probe/fetch/yazım yoktur.
+  if [ "$mode" = "apply" ] && [ "${ISKAN_SOKUM_GO:-}" != "1" ]; then
+    echo "[kırmızı] sokum --apply: Sultan-GO env-marker gerekli (ISKAN_SOKUM_GO=1) — host'a/CF'e/dosyaya SIFIR-dokunuş (DOCTRINE Değişmez-3)" >&2
+    exit 4
+  fi
+
+  local repo_dir="${ISKAN_CLOUDTOP_REPO_DIR:-/config/projects/cloudtop}"
+  local ssh_host="${ISKAN_SSH_HOST:-hostsrv}"
+  local host_root="${ISKAN_HOST_COMPOSE_ROOT:-/opt/cloudtop}"
+  local host_compose="${ISKAN_HOST_COMPOSE:-$host_root/docker-compose.server.yml}"
+  local cfd_config="${ISKAN_CLOUDFLARED_CONFIG:-/etc/cloudflared/config.yml}"
+  local arsiv_root="${ISKAN_SOKUM_ARSIV_DIR:-$host_root/_sokum-arsiv}"
+  local cf_sh="${ISKAN_CF_SH:-$HOME/.claude/skills/cloudflare-erisim/scripts/cf.sh}"
+  local kanit_dir="${ISKAN_KANIT_DIR:-iskan/kanit/sokum}"
+  local sokum_hosts="${ISKAN_SOKUM_HOSTS:-$ISKAN_PROD_HOSTS mihenk}"   # 8-set (aksiyon-7: +mihenk)
+  local komsular="${ISKAN_SOKUM_KOMSULAR:-cloudtop cloudtop-code cloudtop-vekatip cloudtop-mmex cloudtop-medigate cloudtop-huma cloudtop-mihenk}"
+  local cname="cloudtop-${proje}" hostname="${proje}.mmepanel.com"
+  local host_cfg="$host_root/config-${proje}"
+
+  # ── DURUM-TESPİTİ (aksiyon-10): K4 compose-kaydı → yoksa arşiv-probe ile üç-yol ayrımı ────
+  # 'zaten-sokuk' = kayıt YOK ∧ arşiv VAR (rc=0, idempotent) · İKİSİ DE yok = 'kayitsiz-proje' (rc≠0).
+  local cozum_out cozum_rc
+  cozum_out="$(EY_REPO_DIR="$repo_dir" EY_CNAME="$cname" _ey_proje_cozumu "$proje" 2>&1)"; cozum_rc=$?
+  if [ "$cozum_rc" != "0" ]; then
+    if printf '%s' "$cozum_out" | grep -q 'kayitsiz-proje'; then
+      local arsiv_izi=""
+      arsiv_izi="$(timeout 15 ssh -o BatchMode=yes -o ConnectTimeout=5 "$ssh_host" \
+        "ls -d ${arsiv_root}/${proje}-* 2>/dev/null | head -1" 2>/dev/null || true)"
+      if [ -n "$arsiv_izi" ]; then
+        echo "[yeşil] zaten-sokuk: '$proje' compose-kaydı yok + arşiv-izi mevcut ($arsiv_izi) — söküm daha önce tamamlanmış, hiçbir şeye dokunulmadı (idempotent, rc=0)"
+        exit 0
+      fi
+      printf '%s\n' "$cozum_out" >&2
+      echo "[kırmızı] sokum: '$proje' için ne compose-kaydı ne arşiv-izi var (arşiv-probe: ${arsiv_root}/${proje}-*) — kayitsiz-proje, hiçbir şeye dokunulmadı" >&2
+      exit 1
+    fi
+    printf '%s\n' "$cozum_out" >&2
+    exit 1
+  fi
+  printf '%s\n' "$cozum_out" | grep '^\[yeşil\] proje-çözümü' || true
+
+  # 5-manifest (LOKAL repo-first geri-alım yüzeyi)
+  local m_compose="$repo_dir/infra/docker-compose.server.yml"
+  local m_tunnel="$repo_dir/infra/setup-tunnel.sh"
+  local m_inv="$repo_dir/infra/provider-inventory.yaml"
+  local m_bkp="$repo_dir/infra/backup.sh"
+  local m_reg="$repo_dir/infra/iskan-registry.yaml"
+
+  if [ "$mode" = "dry-run" ]; then
+    echo "== İSKÂN sokum — KURU-KOŞU (DEFAULT; host'a/CF'e/dosyaya SIFIR-dokunuş) =="
+    echo "proje: $proje · container: $cname · hostname: $hostname · arşiv-hedefi: ${arsiv_root}/${proje}-<tarih>/"
+    if command -v ssh >/dev/null 2>&1 && timeout 8 ssh -o BatchMode=yes -o ConnectTimeout=5 "$ssh_host" true >/dev/null 2>&1; then
+      echo "[yeşil] hostsrv-probe: taze ssh exit=0"
+    else
+      echo "[doğrulanmadı] $ssh_host erişilemedi — canlı-durum probu yapılamadı; plan varsayımsal-önizlendi"
+    fi
+    echo ""
+    echo "-- PLAN (apply'da sırayla; İLK KIRMIZIDA DUR; telafisiz-silme YOK) --"
+    echo "  0. KOMŞU-KANIT ÖNCE: $komsular → StartedAt + config-hash ($kanit_dir/komsu-once.txt)"
+    echo "  1. tmux-seansları kapat: docker exec -u 1000 $cname tmux kill-server (container yoksa atla)"
+    echo "  2. container-down YALNIZ servis-arg'lı (arg'sız down ve -v YASAK — aksiyon-16):"
+    echo "     docker compose -f $host_compose down $cname"
+    echo "  3. cloudflared ingress'ten $hostname çıkar (.bak'lı) + restart → 8-HOSTNAME SERT-KAPI"
+    echo "     ($sokum_hosts): 302/401/403-dışı → .bak-restore + restart + exit=1"
+    echo "  4. CF geri-alım: cf.sh offboard $hostname --apply (tek-kayıt-assertion cf.sh'te; delege)"
+    echo "  5. 5-manifest LOKAL repo-first geri-alım (.bak'lı; tombstone/iz-sıfır assertion):"
+    echo "     - $m_compose (servis-bloğu çıkar)"
+    echo "     - $m_tunnel (hostname-satırları + ingress-çifti; bash -n kapısı)"
+    echo "     - $m_inv (ingress + access_apps satırları)"
+    echo "     - $m_bkp (docker-inspect argümanından $cname; bash -n kapısı)"
+    echo "     - $m_reg (künye-bloğu çıkar; DOSYA SİLİNMEZ, başlık-yorumları kalır)"
+    echo "  6. ARŞİVE-TAŞI (down-DOĞRULANDIKTAN sonra; aksiyon-11): $host_cfg → ${arsiv_root}/${proje}-<tarih>/"
+    echo "     (taşıma-öncesi dosya-sayısı+du kanıta; mv = tek meşru yol, rm YOK)"
+    echo "  7. KOMŞU-KANIT SONRA: StartedAt/config-hash ÖNCE ile bayt-eş değilse exit=1"
+    echo "== dry-run: hiçbir yazım/silme/API-çağrısı yapılmadı (plan-exit sözleşmesi, exit=3) =="
+    exit 3
+  fi
+
+  # ═══ APPLY (ISKAN_SOKUM_GO=1 doğrulandı — yukarıdaki İLK-adım kapısında) ═══════════════════
+  mkdir -p "$kanit_dir"
+  echo "== İSKÂN sokum — CANLI-APPLY (Sultan-GO'lu) · $proje TAM-SÖKÜM =="
+
+  # ön-kapılar: ssh + cf.sh offboard-yüzeyi + manifest-dosyaları
+  if ! command -v ssh >/dev/null 2>&1 || ! timeout 8 ssh -o BatchMode=yes -o ConnectTimeout=5 "$ssh_host" true >/dev/null 2>&1; then
+    echo "[kırmızı] $ssh_host erişilemedi — hiçbir yere dokunulmadı" >&2; exit 1
+  fi
+  [ -f "$cf_sh" ] || { echo "[kırmızı] cf.sh bulunamadı: $cf_sh — hiçbir yere dokunulmadı" >&2; exit 1; }
+  grep -q 'offboard' "$cf_sh" || { echo "[kırmızı] cf.sh'te offboard-komutu yok (ön-PR merge edilmemiş?) — hiçbir yere dokunulmadı" >&2; exit 1; }
+  local f
+  for f in "$m_compose" "$m_tunnel" "$m_inv" "$m_bkp" "$m_reg"; do
+    [ -f "$f" ] || { echo "[kırmızı] manifest bulunamadı: $f — hiçbir yere dokunulmadı" >&2; exit 1; }
+  done
+
+  # ── ADIM-0: KOMŞU-KANIT ÖNCE + 8-hostname baseline ─────────────────────────────────────
+  local komsu_once komsu_sonra
+  komsu_once="$(_sokum_komsu_kanit "$ssh_host" "$komsular")"
+  printf '%s\n' "$komsu_once" | tee "$kanit_dir/komsu-once.txt"
+  if printf '%s' "$komsu_once" | grep -q 'PROBE-FAIL'; then
+    echo "[kırmızı] komşu-kanıt ÖNCE eksik (PROBE-FAIL) — komşu-güvenliği kanıtlanamaz, DUR (hiçbir şeye dokunulmadı)" >&2
+    exit 1
+  fi
+  local once sonra
+  once="$(ISKAN_PROD_HOSTS="$sokum_hosts" _cf_yedi_hostname_olc)"
+  printf 'ÖNCE : %s\n' "$once" | tee "$kanit_dir/sekiz-hostname-once.txt"
+  if ! _cf_yedi_hostname_temiz_mi "$once"; then
+    echo "[kırmızı] baseline zaten KİRLİ (302/401/403-dışı kod var) — dokunmadan DUR, SERDAR'a raporla" >&2
+    exit 1
+  fi
+
+  # ── ADIM-1: tmux-seansları kapat (container ayakta değilse atla — down zaten hedef) ──────
+  if [ "$(timeout 15 ssh -o BatchMode=yes "$ssh_host" "docker inspect -f '{{.State.Running}}' $cname 2>/dev/null" 2>/dev/null)" = "true" ]; then
+    timeout 20 ssh -o BatchMode=yes "$ssh_host" "docker exec -u 1000 $cname tmux kill-server 2>/dev/null" >/dev/null 2>&1 || true
+    echo "[yeşil] ADIM-1 tmux: kill-server gönderildi ($cname)"
+  else
+    echo "[yeşil] ADIM-1 tmux: $cname zaten ayakta değil → atla"
+  fi
+
+  # ── ADIM-2: container-down — YALNIZ servis-arg'lı (arg'sız down / -v YASAK, aksiyon-16) ──
+  if ! timeout 120 ssh -o BatchMode=yes "$ssh_host" "docker compose -f $host_compose down $cname" > "$kanit_dir/compose-down.txt" 2>&1; then
+    echo "[kırmızı] ADIM-2 compose-down başarısız — çıktı: $kanit_dir/compose-down.txt; DUR" >&2
+    tail -5 "$kanit_dir/compose-down.txt" >&2
+    exit 1
+  fi
+  if timeout 15 ssh -o BatchMode=yes "$ssh_host" "docker ps -a --format '{{.Names}}'" 2>/dev/null | grep -qx "$cname"; then
+    echo "[kırmızı] ADIM-2 down-doğrulama düştü: $cname hâlâ docker ps -a'da — DUR (arşiv-taşıma yapılmadı)" >&2
+    exit 1
+  fi
+  echo "[yeşil] ADIM-2 container-down: $cname kaldırıldı (servis-scoped; komşulara dokunulmadı)"
+
+  # ── ADIM-3: cloudflared ingress'ten hostname çıkar (.bak'lı) + restart + 8-HOSTNAME KAPI ──
+  if ! timeout 15 ssh -o BatchMode=yes "$ssh_host" "cp -a $cfd_config ${cfd_config}.bak"; then
+    echo "[kırmızı] ADIM-3 config.yml .bak alınamadı — ingress'e dokunulmadı, DUR" >&2
+    exit 1
+  fi
+  # hostname-satırı + hemen-ardındaki service-satırı (2-satır ingress-öğesi) çıkar
+  if ! timeout 15 ssh -o BatchMode=yes "$ssh_host" "sed -i '/hostname: ${hostname}/,+1d' $cfd_config && systemctl restart cloudflared"; then
+    echo "[kırmızı] ADIM-3 ingress-çıkarma/restart başarısız — .bak-restore + restart" >&2
+    timeout 60 ssh -o BatchMode=yes "$ssh_host" "cp -a ${cfd_config}.bak $cfd_config && systemctl restart cloudflared" || true
+    exit 1
+  fi
+  sleep 5
+  sonra="$(ISKAN_PROD_HOSTS="$sokum_hosts" _cf_yedi_hostname_olc)"
+  printf 'SONRA: %s\n' "$sonra" | tee "$kanit_dir/sekiz-hostname-sonra.txt"
+  if ! _cf_yedi_hostname_temiz_mi "$sonra"; then
+    echo "[kırmızı] 8-HOSTNAME REGRESYON — OTO-GERİ-AL (.bak restore + cloudflared restart)" >&2
+    timeout 60 ssh -o BatchMode=yes "$ssh_host" "cp -a ${cfd_config}.bak $cfd_config && systemctl restart cloudflared" || true
+    sleep 5
+    printf 'GERİ-AL-SONRASI: %s\n' "$(ISKAN_PROD_HOSTS="$sokum_hosts" _cf_yedi_hostname_olc)" | tee -a "$kanit_dir/sekiz-hostname-sonra.txt"
+    echo "[kırmızı] DUR — SERDAR'a gözlenen-vs-beklenen raporla (kanıt: $kanit_dir/)" >&2
+    exit 1
+  fi
+  echo "[yeşil] ADIM-3 ingress-çıkarma + 8-hostname sert-kapı GEÇTİ (regresyon yok)"
+
+  # ── ADIM-4: CF geri-alım — cf.sh offboard delegesi (tek-kayıt-assertion cf.sh içinde) ────
+  if ! bash "$cf_sh" offboard "$hostname" --apply > "$kanit_dir/cf-offboard.txt" 2>&1; then
+    echo "[kırmızı] ADIM-4 cf.sh offboard başarısız — çıktı: $kanit_dir/cf-offboard.txt; DUR" >&2
+    tail -5 "$kanit_dir/cf-offboard.txt" >&2
+    exit 1
+  fi
+  echo "[yeşil] ADIM-4 cf-offboard tamam (Access-app + DNS-CNAME geri-alındı) — kanıt: $kanit_dir/cf-offboard.txt"
+
+  # ── ADIM-5: 5-manifest LOKAL repo-first geri-alım (.bak'lı; iz-sıfır assertion) ──────────
+  local rc
+  for f in "$m_compose" "$m_tunnel" "$m_inv" "$m_bkp" "$m_reg"; do
+    cp -a "$f" "$f.bak" || { echo "[kırmızı] .bak alınamadı: $f — bu dosyaya dokunulmadı, DUR" >&2; exit 1; }
+  done
+  _sokum_compose_cikar "$m_compose" "$cname"; rc=$?
+  case "$rc" in
+    0) echo "[yeşil] ADIM-5 compose: $cname servis-bloğu çıkarıldı" ;;
+    2) echo "[yeşil] ADIM-5 compose: iz yok → atla" ;;
+    *) cp -a "$m_compose.bak" "$m_compose" || true; echo "[kırmızı] ADIM-5 compose-çıkarma başarısız — .bak geri-alındı, DUR" >&2; exit 1 ;;
+  esac
+  _sokum_satir_cikar "$m_tunnel" "$proje"; rc=$?
+  case "$rc" in
+    0) if bash -n "$m_tunnel" 2>/dev/null; then
+         echo "[yeşil] ADIM-5 setup-tunnel: $proje satırları çıkarıldı (bash -n temiz)"
+       else
+         cp -a "$m_tunnel.bak" "$m_tunnel" || true
+         echo "[kırmızı] ADIM-5 setup-tunnel bash -n kapısı DÜŞTÜ — .bak geri-alındı, DUR" >&2; exit 1
+       fi ;;
+    2) echo "[yeşil] ADIM-5 setup-tunnel: iz yok → atla" ;;
+    *) cp -a "$m_tunnel.bak" "$m_tunnel" || true; echo "[kırmızı] ADIM-5 setup-tunnel çıkarma başarısız — .bak geri-alındı, DUR" >&2; exit 1 ;;
+  esac
+  _sokum_satir_cikar "$m_inv" "$proje"; rc=$?
+  case "$rc" in
+    0) echo "[yeşil] ADIM-5 provider-inventory: $proje satırları çıkarıldı" ;;
+    2) echo "[yeşil] ADIM-5 provider-inventory: iz yok → atla" ;;
+    *) cp -a "$m_inv.bak" "$m_inv" || true; echo "[kırmızı] ADIM-5 provider-inventory çıkarma başarısız — .bak geri-alındı, DUR" >&2; exit 1 ;;
+  esac
+  _sokum_backup_cikar "$m_bkp" "$cname"; rc=$?
+  case "$rc" in
+    0) if bash -n "$m_bkp" 2>/dev/null; then
+         echo "[yeşil] ADIM-5 backup.sh: $cname docker-inspect listesinden çıkarıldı (bash -n temiz)"
+       else
+         cp -a "$m_bkp.bak" "$m_bkp" || true
+         echo "[kırmızı] ADIM-5 backup.sh bash -n kapısı DÜŞTÜ — .bak geri-alındı, DUR" >&2; exit 1
+       fi ;;
+    2) echo "[yeşil] ADIM-5 backup.sh: iz yok → atla" ;;
+    *) cp -a "$m_bkp.bak" "$m_bkp" || true; echo "[kırmızı] ADIM-5 backup.sh çıkarma başarısız — .bak geri-alındı, DUR" >&2; exit 1 ;;
+  esac
+  _sokum_registry_kunye_cikar "$m_reg" "$proje"; rc=$?
+  case "$rc" in
+    0) echo "[yeşil] ADIM-5 iskan-registry: $proje künye-bloğu çıkarıldı (dosya + başlık-yorumları KALDI)" ;;
+    2) echo "[yeşil] ADIM-5 iskan-registry: künye başka projenin / iz yok → atla" ;;
+    *) cp -a "$m_reg.bak" "$m_reg" || true; echo "[kırmızı] ADIM-5 iskan-registry çıkarma başarısız — .bak geri-alındı, DUR" >&2; exit 1 ;;
+  esac
+  # tombstone-yasak assertion (aksiyon-14): 5 dosyada iz SIFIR olmalı
+  local iz_toplam=0 n
+  for f in "$m_compose" "$m_tunnel" "$m_inv" "$m_bkp" "$m_reg"; do
+    n="$(grep -ci "$proje" "$f" 2>/dev/null || true)"
+    [ "$n" = "0" ] || { echo "[kırmızı] iz-sıfır assertion düştü: $f içinde $n '$proje' izi kaldı" >&2; iz_toplam=$((iz_toplam + n)); }
+  done
+  [ "$iz_toplam" = "0" ] || { echo "[kırmızı] ADIM-5 tombstone-yasak assertion başarısız — .bak'lardan incele, DUR" >&2; exit 1; }
+  echo "[yeşil] ADIM-5 iz-sıfır assertion: 5 manifest '$proje'-izi 0 (.bak'lar working-tree'de, COMMIT'LENMEZ)"
+
+  # ── ADIM-6: config-dizini ARŞİVE-TAŞI (down ADIM-2'de doğrulandı; aksiyon-11) ────────────
+  local tarih arsiv_hedef
+  tarih="$(date +%F)"
+  arsiv_hedef="${arsiv_root}/${proje}-${tarih}"
+  if timeout 15 ssh -o BatchMode=yes "$ssh_host" "test -d '$host_cfg'" 2>/dev/null; then
+    if timeout 15 ssh -o BatchMode=yes "$ssh_host" "test -e '$arsiv_hedef'" 2>/dev/null; then
+      echo "[kırmızı] ADIM-6 arşiv-hedefi zaten var: $arsiv_hedef — üzerine-taşıma YAPILMAZ, DUR" >&2
+      exit 1
+    fi
+    timeout 30 ssh -o BatchMode=yes "$ssh_host" \
+      "printf 'dosya-sayısı=%s du=%s\n' \"\$(find '$host_cfg' | wc -l)\" \"\$(du -sh '$host_cfg' | cut -f1)\"" \
+      2>/dev/null | tee "$kanit_dir/arsiv-kanit.txt"
+    if ! timeout 60 ssh -o BatchMode=yes "$ssh_host" "mkdir -p '$arsiv_root' && mv '$host_cfg' '$arsiv_hedef'"; then
+      echo "[kırmızı] ADIM-6 arşiv-taşıma başarısız — config-dizini yerinde duruyor, DUR" >&2
+      exit 1
+    fi
+    timeout 30 ssh -o BatchMode=yes "$ssh_host" \
+      "printf 'arşiv-sonrası: config-dir=%s arşiv-ilk-yol=%s\n' \"\$(test -d '$host_cfg' && echo VAR || echo YOK)\" \"\$(find '$arsiv_hedef' -mindepth 1 -print -quit)\"" \
+      2>/dev/null | tee -a "$kanit_dir/arsiv-kanit.txt"
+    echo "[yeşil] ADIM-6 arşiv: $host_cfg → $arsiv_hedef (mv; telafisiz-silme YOK)"
+  else
+    echo "[doğrulanmadı] ADIM-6: $host_cfg host'ta yok — arşiv-taşıma atlandı (daha önce taşınmış olabilir)"
+  fi
+
+  # ── ADIM-7: KOMŞU-KANIT SONRA (aksiyon-8): ÖNCE ile bayt-eş değilse exit=1 ───────────────
+  komsu_sonra="$(_sokum_komsu_kanit "$ssh_host" "$komsular")"
+  printf '%s\n' "$komsu_sonra" | tee "$kanit_dir/komsu-sonra.txt"
+  if [ "$komsu_once" != "$komsu_sonra" ]; then
+    echo "[kırmızı] KOMŞU-KANIT FARKI: söküm sırasında bir komşunun StartedAt/config-hash'i değişti — diff'i incele ($kanit_dir/komsu-once.txt vs komsu-sonra.txt), SERDAR'a raporla" >&2
+    exit 1
+  fi
+  echo "[yeşil] ADIM-7 komşu-kanıt: $komsular ÖNCE=SONRA bayt-eş (recreate/restart=0)"
+
+  echo ""
+  echo "== sokum bitti: $proje TAM-SÖKÜLDÜ — container-down + CF-geri-alım + 5-manifest iz-sıfır (lokal, commit/PR ayrı-adım) + arşiv dolu · kanıt: $kanit_dir/ =="
+  exit 0
+}
+
 case "${1:-}" in
   doctor)
     cmd_doctor
@@ -1874,8 +2259,12 @@ case "${1:-}" in
     shift
     cmd_provizyon "$@"
     ;;
+  sokum)
+    shift
+    cmd_sokum "$@"
+    ;;
   *)
-    echo "kullanım: iskan.sh doctor | iskan.sh seans-getir --container <ad> [--apply] | iskan.sh yeni-proje <ad> [--mem-limit <val>] [--port <n>] --dry-run|--apply | iskan.sh cf-yayin <proje> --dry-run|--apply | iskan.sh ekip-yerlestir <proje> --dry-run|--apply | iskan.sh uye-ekle <proje> <uye> [--gorev <görev>] --dry-run|--apply | iskan.sh evergreen-kaydet <proje> --dry-run|--apply | iskan.sh provizyon <proje> [--apply]" >&2
+    echo "kullanım: iskan.sh doctor | iskan.sh seans-getir --container <ad> [--apply] | iskan.sh yeni-proje <ad> [--mem-limit <val>] [--port <n>] --dry-run|--apply | iskan.sh cf-yayin <proje> --dry-run|--apply | iskan.sh ekip-yerlestir <proje> --dry-run|--apply | iskan.sh uye-ekle <proje> <uye> [--gorev <görev>] --dry-run|--apply | iskan.sh evergreen-kaydet <proje> --dry-run|--apply | iskan.sh provizyon <proje> [--apply] | iskan.sh sokum <proje> [--dry-run|--apply]" >&2
     exit 2
     ;;
 esac
