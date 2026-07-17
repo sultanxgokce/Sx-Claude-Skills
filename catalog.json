@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "updated": "2026-07-07",
+  "updated": "2026-07-17",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -741,6 +741,40 @@
         "kesif"
       ],
       "family": "test-tooling (sert-teslim/kesif ailesi — MÜHÜRDAR verdikt-kabuğu)"
+    },
+    {
+      "id": "kayit-damgasi",
+      "type": "agent",
+      "name": "kayit-damgasi — merge-anı kayıt kapanış-damgası orkestratörü",
+      "version": "0.1.0",
+      "description": "Bir iş/PR merge olurken kapattığı kayda (defter-kartı, gap/bulgu-defteri, SULTAN-KAPISI gate'i, plan-satırı) kapanış-damgasını işleyen paketli yardımcı. CLAUDE.md §9 refleksini tek-komuta indirir; scripts/defter-mailbox.sh durum primitifini orkestra eder. DRY-varsayılan (tara/merge yazmaz) + insan-onay-alanına ASLA yazmaz (yalnız bitti|teslim|yeniden kart-flip'i). Kaynak: vizyon-denetimi FAZ-2 İLK-DALGA Z6 (YK-007), defter-kartı k0107.",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "git"
+        ]
+      },
+      "tags": [
+        "defter",
+        "damga",
+        "merge",
+        "kayit",
+        "closure-stamp",
+        "yaglayici"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/Nexus (vizyon-denetimi FAZ-2 İLK-DALGA Z6 — YK-007, k0107)",
+      "install_time": "~1min",
+      "status": "v0.1",
+      "path": "kayit-damgasi/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "yaglayici (vizyon-FAZ2 İLK-DALGA)"
     }
   ]
 }

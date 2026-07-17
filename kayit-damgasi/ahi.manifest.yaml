@@ -1,0 +1,9 @@
+# kayit-damgasi — AHÎ ile üretildi (kademe: kalfa)
+# version manifest'te YOK (tek-evi SKILL.md frontmatter — ADR-001).
+tier: kalfa
+name: kayit-damgasi
+generic_goal: "planlı + paketli + her-projede güvenilir tekrarlanabilir"
+activation:
+  onKeyword: kayit-damgasi
+install_targets:
+  - _global
