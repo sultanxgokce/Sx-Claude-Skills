@@ -95,6 +95,9 @@
     ],
     "worktree-hijyen": [
       "_global"
+    ],
+    "resume-banner": [
+      "_global"
     ]
   }
 }
