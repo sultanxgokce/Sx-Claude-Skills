@@ -810,6 +810,40 @@
         "_global"
       ],
       "family": "yaglayici (vizyon-FAZ2 İLK-DALGA)"
+    },
+    {
+      "id": "resume-banner",
+      "type": "agent",
+      "name": "resume-banner — oturum-açılış / post-compact KONUM-toparlayıcı",
+      "version": "0.1.0",
+      "description": "Oturum-açılış ve post-compact/resume anında 'neredeyiz' toparlamasını tek-komuta indiren kalfa skill: env-fingerprint (pwd/hostname/git) + son CONTEXT ⚓-çıpası + son defter-çıpası (+cortex STATE) + post-compact 4-zorunlu hatırlatmaları. CLAUDE.md post-compact refleksini tek harekete indirir; doctor.sh'ı tamamlar. SALT-OKU + token-güvenli (büyük dosya tam-dökmez). Kaynak: vizyon FAZ-2 İLK-DALGA Z5 (YK-007), k0110.",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "git"
+        ]
+      },
+      "tags": [
+        "resume",
+        "compact",
+        "konum",
+        "env-fingerprint",
+        "oturum",
+        "yaglayici"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/Nexus (vizyon-denetimi FAZ-2 İLK-DALGA Z5 — YK-007, k0110)",
+      "install_time": "~1min",
+      "status": "v0.1",
+      "path": "resume-banner/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "yaglayici (vizyon-FAZ2 İLK-DALGA)"
     }
   ]
 }
