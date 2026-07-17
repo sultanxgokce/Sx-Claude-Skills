@@ -1,0 +1,9 @@
+# worktree-hijyen — AHÎ ile üretildi (kademe: kalfa)
+# version manifest'te YOK (tek-evi SKILL.md frontmatter — ADR-001).
+tier: kalfa
+name: worktree-hijyen
+generic_goal: "planlı + paketli + her-projede güvenilir tekrarlanabilir"
+activation:
+  onKeyword: worktree-hijyen
+install_targets:
+  - _global
