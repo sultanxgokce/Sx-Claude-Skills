@@ -46,10 +46,25 @@ SKILL_VERSION="$(awk -F': *' '/^version:/{print $2; exit}' "$SKILL_KOKU/SKILL.md
 : "${SKILL_VERSION:=0.0.0}"
 mkdir -p "$OUT"
 
+# ── K1 gözlem-hattı (report-only): koşu-telemetrisi + muhur-lint otomatik-kablosu ──
+# Koşu-akışını ASLA etkilemez — RC'ye dokunmaz, hata koşuyu düşürmez (salt-gözlem, anti-tiyatro kapsamı).
+_BASLA=$(date +%s)
+_TESCIL_ROOT="$(cd "$OUT/../.." 2>/dev/null && pwd || true)"   # _agents/tescil (telemetri + jenerik-G kökü)
+_telemetri_yaz() {  # $1=verdict $2=g_sayisi $3=oznel $4=tip — report-only, koşu-akışını etkilemez
+  [ -n "${_TESCIL_ROOT:-}" ] || return 0
+  local _sure=$(( $(date +%s) - _BASLA ))
+  bash "$SKILL_KOKU/scripts/telemetri-append.sh" \
+    --file "$_TESCIL_ROOT/telemetri.jsonl" --kart "$KART" --deneme "$DENEME" \
+    --verdict "$1" --sure "$_sure" --g "${2:-0}" --oznel "${3:-0}" --tip "${4:-}" \
+    $([ "${TATBIKAT:-0}" -eq 1 ] && echo --tatbikat) \
+    || echo "tescil-run: telemetri-append UYARI (report-only, koşu etkilenmez)" >&2
+}
+
 # ── İSİMLİ-RED: gereklilik-eksik (dosya yok) ─────────────────────────────────
 if [ ! -f "$GEREKLILIK" ]; then
   python3 "$LIB/muhur.py" red --out "$OUT" --kart "$KART" --deneme "$DENEME" \
     --ad "gereklilik-eksik" --sebep "GEREKLILIK.md bulunamadı: $GEREKLILIK (sevk-anında SERDAR/MİMSERDAR yazmalı)"
+  _telemetri_yaz RED 0 0 ""
   exit 4
 fi
 cp -f "$GEREKLILIK" "$OUT/GEREKLILIK.md"   # anlık-görüntü (kanıt-bütünlüğü)
@@ -65,6 +80,7 @@ if [ -n "$RED_ADI" ]; then
     < <(python3 -c 'import json,sys; [print(s) for s in json.load(open(sys.argv[1]))["red"]["sebepler"]]' "$OUT/gereklilik.json")
   python3 "$LIB/muhur.py" red --out "$OUT" --kart "$KART" --deneme "$DENEME" \
     --ad "$RED_ADI" "${SEBEPLER[@]}" ${HEAD_SHA:+--head-sha "$HEAD_SHA"}
+  _telemetri_yaz RED 0 0 ""
   exit 4
 fi
 
@@ -76,6 +92,7 @@ if [ -n "$HEAD_SHA" ] && [ "$GERCEK_SHA" != "$HEAD_SHA" ]; then
   python3 "$LIB/muhur.py" red --out "$OUT" --kart "$KART" --deneme "$DENEME" \
     --ad "worktree-sha-uyusmazligi" --head-sha "$GERCEK_SHA" \
     --sebep "beklenen HEAD=$HEAD_SHA · worktree HEAD=$GERCEK_SHA (sevk edilen iş bu ağaçta değil)"
+  _telemetri_yaz RED 0 0 ""
   exit 4
 fi
 
@@ -102,5 +119,17 @@ for k in ${KATMAN2[@]+"${KATMAN2[@]}"}; do K2_ARGS+=(--katman2 "$k"); done
 python3 "$LIB/muhur.py" uret --out "$OUT" --kart "$KART" --deneme "$DENEME" \
   --head-sha "$GERCEK_SHA" ${K2_ARGS[@]+"${K2_ARGS[@]}"} $([ "$TATBIKAT" -eq 1 ] && echo --tatbikat)
 VERDIKT_RC=$?
+
+# ── K1 gözlem-hattı (report-only): verdikt-yolu telemetri + muhur-lint + jenerik-G ──
+# VERDIKT_RC yukarıda saklandı; aşağısı yalnız GÖZLEM — exit hâlâ $VERDIKT_RC (lint RC'si karışmaz).
+_OZET="$OUT/muhur-ozet.json"
+_V="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("verdikt","") or "")' "$_OZET" 2>/dev/null || echo "")"
+_GTOP="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("g_toplam",0))' "$_OZET" 2>/dev/null || echo 0)"
+_OZN="$(python3 -c 'import json,sys; print(len(json.load(open(sys.argv[1])).get("oznel_acik",[]) or []))' "$_OZET" 2>/dev/null || echo 0)"
+_TIP="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("tip","") or "")' "$_OZET" 2>/dev/null || echo "")"
+[ -n "$_V" ] && _telemetri_yaz "$_V" "$_GTOP" "$_OZN" "$_TIP"
+bash "$SKILL_KOKU/scripts/muhur-lint.sh" "$OUT" ${_TESCIL_ROOT:+--tescil-root "$_TESCIL_ROOT"} \
+  || echo "tescil-run: muhur-lint UYARI (report-only — verdikt-RC etkilenmez)"
+
 echo "tescil-run: bitti — verdikt-RC=$VERDIKT_RC (0=GECTI 1=KALDI 3=K2/ESKALASYON 4=RED)"
 exit "$VERDIKT_RC"

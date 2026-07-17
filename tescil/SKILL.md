@@ -1,7 +1,7 @@
 ---
 name: tescil
 type: agent
-version: 0.1.0
+version: 0.2.0
 description: >
   MÜHÜRDAR'ın el-kitabı: teslim edilen bir işi (kart) YAZILI gerekliliklere (GOAL + G1..Gn
   komut→beklenen/RC) karşı MAKİNE-KANITLI sınayan kör-protokol tescil-kabuğu. sert-teslim
@@ -121,8 +121,11 @@ G2: panel canlı-listeyi API ile çapraz doğrular
 **Kart-durum flip'ini tescil YAPMAZ.** Verdikt raporlanır; flip `scripts/dongu-sayac.sh` (Nexus,
 merged) → tek-boğaz GECISLER-route yolundadır. Entegrasyon-notu: dongu-sayac'ın `gecti|kaldi`
 komutları **MUHUR.md-varlık şartlıdır** — MUHUR yoksa olay RC≠0 (sahte-verdikt için tam-şema
-sahtelemek gerekir). Telemetri: her koşu sonrası `scripts/telemetri-append.sh` →
-`_agents/tescil/telemetri.jsonl` `{kart, deneme, verdict, sure, g_sayisi, oznel_g_sayisi, tip}`.
+sahtelemek gerekir). Telemetri: **tescil-run OTOMATİK** (v0.2.0, K1 gözlem-hattı) her koşu-sonucunu
+`scripts/telemetri-append.sh` → `_agents/tescil/telemetri.jsonl` `{kart, deneme, verdict, sure_sn,
+g_sayisi, oznel_g_sayisi, tip}` satırıyla düşürür (RED-erken-çıkışlar dahil; report-only, RC'ye dokunmaz)
+ve verdikt-sonrası `scripts/muhur-lint.sh --tescil-root`'u (şema + jenerik-G) çağırır. Elle-koşum artık
+yalnız ad-hoc/yeniden-üretim için.
 
 ## 6 · KALDI-paketi (negatif yol — judge-hack hijyeni)
 
@@ -170,7 +173,8 @@ bash scripts/tescil-run.sh k0054 ... --katman2 "G3=GECTI"        # ya da KALDI /
 # Verdikt-lint (şemasız/çıplak-geçti = geçersiz; iş-tipi asgari-kanıt zorlanır):
 bash scripts/muhur-lint.sh _agents/tescil/k0054/deneme-1 [--tescil-root _agents/tescil]
 
-# Telemetri:
+# Telemetri + muhur-lint: v0.2.0'dan beri tescil-run bunları OTOMATİK çağırır (K1 gözlem-hattı,
+# report-only, RED-çıkışlar dahil); aşağıdaki elle-koşum yalnız ad-hoc/yeniden-üretim için:
 bash scripts/telemetri-append.sh --file _agents/tescil/telemetri.jsonl \
   --kart k0054 --deneme 1 --verdict GECTI --sure 42 --g 3 --oznel 0 --tip kod
 ```
