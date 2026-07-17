@@ -704,7 +704,7 @@
       "id": "tescil",
       "type": "agent",
       "name": "Tescil — MÜHÜRDAR kör-protokol tescil-kabuğu (DİVAN K5)",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "description": "Teslim edilen işi (kart) YAZILI gerekliliklere (GOAL+G1..Gn komut→beklenen/RC) karşı MAKİNE-KANITLI sınayan kör-protokol tescil-kabuğu. Girdi yalnız GEREKLILIK.md + worktree (motor-raporu/transkript okumak İHLAL); Katman-1 mekanik-oracle %100 şart, Katman-2 yalnız kaçınılmaz öznel G'ler (izole-rubrik, 'emin değilim'→eskalasyon). Verdikt = MUHUR.md + şemalı kanit/G<i>.json (64KB-tavan + sha256; redaction yazım-öncesi); kart-durum flip'i YAPMAZ. sert-teslim (trust_boundary + redaction) ve kesif (DOM↔API E2E) KOMPOZİSYONU — yeniden icat yok. İş-tipi asgari-kanıt zorlayıcı (ui→e2e-check, kod→api-check, docs→lint) + HAFİF-tescil sınıfı + tatbikat/telemetri anti-tiyatro kablosu. TestSprite 2026-07 değerlendirildi, 4 gerekçeyle evde kalındı (verdict-otoritesi asla dışarı verilmez).",
       "prerequisites": {
         "system": [
@@ -730,7 +730,7 @@
       "author": "sultanxgokce",
       "source": "DİVAN-anayasası K5 (k0054, 2026-07-14) — sert-teslim + kesif kompozisyonu; ahi new kalfa tescil ile doğdu",
       "install_time": "~2min",
-      "status": "v0.1",
+      "status": "v0.2",
       "path": "tescil/SKILL.md",
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
       "installed_in": [
