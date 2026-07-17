@@ -775,6 +775,41 @@
         "_global"
       ],
       "family": "yaglayici (vizyon-FAZ2 İLK-DALGA)"
+    },
+    {
+      "id": "worktree-hijyen",
+      "type": "agent",
+      "name": "worktree-hijyen — git-worktree yaşam-döngüsü zorlayıcı",
+      "version": "0.1.0",
+      "description": "git-worktree yaşam-döngüsünü zorlayan kalfa skill: dallanma/fan-out öncesi tazelik-kapısı (scripts/branch-preflight.sh sarar), taze-off-origin/main worktree açma (bayat-base reddi), kapanışta güvenli temizlik (DRY-varsayılan, kirli/merge-olmamış --force'suz silinmez) ve bayat/öksüz-worktree + artık-artefakt denetimi. En pahalı tekil-hata sınıfını (split-brain, ölü-PR, duplicate-roster) önler. Kaynak: vizyon FAZ-2 İLK-DALGA Z8 (YK-007), k0109.",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "git"
+        ]
+      },
+      "tags": [
+        "worktree",
+        "git",
+        "hijyen",
+        "preflight",
+        "fan-out",
+        "split-brain",
+        "yaglayici"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/Nexus (vizyon-denetimi FAZ-2 İLK-DALGA Z8 — YK-007, k0109)",
+      "install_time": "~1min",
+      "status": "v0.1",
+      "path": "worktree-hijyen/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "yaglayici (vizyon-FAZ2 İLK-DALGA)"
     }
   ]
 }
