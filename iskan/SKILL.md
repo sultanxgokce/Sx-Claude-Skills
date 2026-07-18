@@ -1,7 +1,7 @@
 ---
 name: iskan
 type: agent
-version: 0.1.0
+version: 0.2.0
 description: >
   Container + ekip yaşam-döngüsü master-skill. Bir hedef (yeni-proje / mevcut-ekip-yeniden-doğuşu / tek-üye-ekleme)
   için host-provizyon (UC1), oturum-kurtarma (UC2, deterministik session-id), üye-ekleme (UC3) akışlarını
@@ -31,8 +31,10 @@ oto-yazımı. Dördü BESTELEDİĞİ kardeşlerin (aşağı) çalışma-kopyası
 - `uye-ekle` (UC3) — tek-üye-iskân (FAZ-7, CANLI): `uye-ekle <proje> <uye> [--gorev <g>] --dry-run|--apply` —
   kayıtlı İSKÂN-projesine TEK üye ekler (rezerve-uuid + tmux + banner + hafif-kimlik AGENT.md + registry).
   Çakışma-koruması ('uye-zaten-var') · Nexus-hedefte canlı-invoke YOK ('ise-alim' yönlendirmesi, İ1) ·
-  izole-hedef dry-run'ı koşulsuz 'sultan-bildirim' satırı basar. Roster-köprüsü: ekip-yerlestir artık
-  roster'ı container-içi `_agents/handoff/ekip-registry.yaml`'dan okur (hardcoded 2-üye default yalnız fallback).
+  izole-hedef dry-run'ı koşulsuz 'sultan-bildirim' satırı basar. Roster-köprüsü: ekip-yerlestir roster'ı
+  `ISKAN_EY_ROSTER` (açık-override) ya da container-içi `_agents/handoff/ekip-registry.yaml`'dan okur;
+  kaynak yoksa DÜRÜST-KIRMIZI rc=1 'roster-kaynağı yok' (D6 tuzak-fix — eski hardcoded denekAlfa/denekBeta
+  fallback'i sahte-ekip doğuruyordu, KALDIRILDI).
 - `evergreen-kaydet` (FAZ-8, CANLI): `evergreen-kaydet <proje> --dry-run|--apply` — kayıtlı İSKÂN-projesinin
   kalıcı izlerini evergreen-manifestlere yazar (REPO-FIRST lokal cloudtop working-tree; host-apply YOK):
   provider-inventory.yaml (tunnel.ingress + access_apps) + backup.sh (docker-inspect listesi). .bak +
@@ -47,6 +49,15 @@ oto-yazımı. Dördü BESTELEDİĞİ kardeşlerin (aşağı) çalışma-kopyası
   config-dizini **arşive-taşı** (telafisiz-silme YOK) → komşu ÖNCE/SONRA StartedAt+config-hash kanıtı.
   dry-run DEFAULT (exit=3) · apply yalnız `ISKAN_SOKUM_GO=1` (marker-yok exit=4, sıfır-dokunuş) ·
   durum-sinyalleri: 'zaten-sokuk' (kayıt-yok∧arşiv-var, rc=0) / 'kayitsiz-proje' (ikisi-de-yok, rc≠0).
+- `kur` (D6, CANLI): `kur <proje> [--dry-run|--devam|--durum]` — UC1 tam-yaşamdöngüsü ZİNCİRLEYİCİSİ
+  (duraklı durum-makinesi, mimSerdar §4.2): mevcut alt-komutları CLI-invoke ederek FAZ-sırasıyla besteler,
+  HİÇBİRİNİ yeniden yazmaz: yeni-proje(dry→apply) → **DURAK-1 cloudtop-PR merge** (REPO-FIRST insan-durağı,
+  exit=0 + --devam) → iskan-host --apply → provizyon → cf-yayin → ekip-yerlestir → evergreen-kaydet.
+  GO-marker'ları ASLA bypass/export etmez (her adım kendi GO'sunu kendi ortamından bekler; GO-yok exit=4
+  AYNEN iletilir + Sultan-dilinde hangi-GO raporu). Durum-dosyası git-DIŞI
+  `${ISKAN_STATE_DIR:-$HOME/.claude}/iskan-kur-<proje>.state` (tek-satır: son-tamamlanan-adım);
+  `--devam` oradan sürer · `--durum` salt-oku · `--dry-run` TÜM zinciri yazmadan uçtan-uca planlar (exit=3).
+  İlk kırmızıda DUR (fail-closed) · 3-Çit: mahrem-tenant adları (vekatip/mmex/medigate/huma/mihenk) RED.
 - `doctor` — salt-okur preflight (FAZ-1)
 - `check` — AHÎ-standart drift-lint (bugünden itibaren: `ahi check iskan`)
 
@@ -60,10 +71,14 @@ Usta (S3 · bileşik), born-at-Usta (`ahi new usta iskan`). generic-goal: "conta
 (doğuş/yeniden-doğuş/üye-ekleme) tek-komutla yöneten fabrika". Terfi-olgunluk şerhi: DOCTRINE.md → "Manuel-beyan".
 Doğrula: `ahi check iskan` · Kanon: `ahi doctrine` · İş-planı: `Nexus/_agents/handoff/help2serdar-iskan-is-plani.md`.
 
-## Durum (2026-07-16, söküm-kapanışı)
+## Durum (2026-07-18, D6 kur-zincirleyici)
 CANLI alt-komutlar: `doctor` (FAZ-1) · `seans-getir` (FAZ-2/3) · `yeni-proje` + `iskan-host.sh` (FAZ-4,
 ISKAN_FAZ4_GO'lu) · `cf-yayin` (FAZ-5, ISKAN_FAZ5_GO'lu) · `ekip-yerlestir` (FAZ-6) · `uye-ekle` (FAZ-7) ·
-`evergreen-kaydet` (FAZ-8) · `provizyon` (FAZ-9, ISKAN_FAZ9_GO'lu) · `sokum` (k0083, ISKAN_SOKUM_GO'lu).
+`evergreen-kaydet` (FAZ-8) · `provizyon` (FAZ-9, ISKAN_FAZ9_GO'lu) · `sokum` (k0083, ISKAN_SOKUM_GO'lu) ·
+`kur` (D6 zincirleyici — GO'ları yalnız SIRALAR, bypass etmez).
 Kanıt-paketleri: `iskan/kanit/faz0..faz9,sokum/`. FAZ-9 mihenk-dogfood TESCİLLİ (k0084 MUHUR 13/13).
 ✓ Söküm-borcu KAPANDI (k0083): iskantest izleri `iskan.sh sokum iskantest --apply` ile geri-alındı
 (container + CF + 5-manifest + arşiv); yaşam-döngüsü artık iki-yönlü (doğuş ↔ söküm).
+✓ D6 tuzak-fix'leri (2026-07-18): yeni-proje default `mem_limit` 512m→**2g** ("sessiz-ölü ekip" panzehiri;
+2g-altı açık-beyan WARN, hard-fail değil) · ekip-yerlestir hardcoded deneme-roster fallback'i KALDIRILDI
+(kaynaksız hâl dürüst-kırmızı 'roster-kaynağı yok').
