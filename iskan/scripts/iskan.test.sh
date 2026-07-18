@@ -371,8 +371,11 @@ git -C "$EY_REPO" remote add origin "$EY_REPO" 2>/dev/null
 bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir >/dev/null 2>&1
 [ "$?" = "2" ] && ok "ekip-yerlestir: argümansız rc=2 (usage)" || bad "ekip-yerlestir: argümansız rc beklenen 2"
 
-# 24. ekip-yerlestir --dry-run: plan-exit=3 + SABİT roster-adları (denekAlfa→denekBeta) önizlemede
-out="$(ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+# 24. ekip-yerlestir --dry-run: plan-exit=3 + roster-adları (ISKAN_EY_ROSTER açık-override'ından)
+#     önizlemede. (D6 tuzak-fix: hardcoded SABİT-default fallback KALDIRILDI — roster artık
+#     yalnız açık-override ya da container-içi ekip-registry'den gelir; kaynaksız hâl test 24b'de.)
+out="$(ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye" \
+  ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --dry-run 2>&1)"
 rc=$?
 [ "$rc" = "3" ] && ok "ekip-yerlestir --dry-run: plan-exit=3" || bad "ekip-yerlestir --dry-run: rc beklenen 3, gelen $rc"
@@ -382,6 +385,15 @@ printf '%s' "$out" | grep -q "denekAlfa" && printf '%s' "$out" | grep -q "denekB
 printf '%s' "$out" | grep -q "scaffold" && printf '%s' "$out" | grep -qi "rezerv" \
   && ok "ekip-yerlestir --dry-run: scaffold + rezerv-uuid adımları önizlemede görünür" \
   || bad "ekip-yerlestir --dry-run: scaffold/rezerv-uuid adımı önizlemede eksik"
+
+# 24b. D6 tuzak-fix: roster-kaynağı YOKKEN (override yok + ssh-bozuk → ekip-registry okunamaz)
+#      dürüst-kırmızı rc=1 + 'roster-kaynağı yok' marker + SAHTE-EKİP adları (denek*) ASLA basılmaz
+out="$(env -u ISKAN_EY_ROSTER ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --dry-run 2>&1)"
+rc=$?
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'roster-kaynağı yok' && ! printf '%s' "$out" | grep -q 'denekAlfa' \
+  && ok "ekip-yerlestir roster-kaynaksız: dürüst-kırmızı rc=1 + 'roster-kaynağı yok' + sahte-ekip adı basılmadı (D6 tuzak-fix)" \
+  || bad "ekip-yerlestir roster-kaynaksız: dürüst-kırmızı sözleşmesi kırık (rc=$rc)"
 
 # 25. ekip-yerlestir NEGATİF-KAPI (K4 TAM-STRING): bilinmeyen ad → rc≠0 + 'kayitsiz-proje' marker;
 #     önek ('eytes') ve case-farkı ('EYTEST') da reddedilir (fuzzy yasak)
@@ -421,7 +433,8 @@ uyeler:
 EOF
 git -C "$EY_REPO" -c user.email=t@t -c user.name=t add -A 2>/dev/null
 git -C "$EY_REPO" -c user.email=t@t -c user.name=t commit -qm reg 2>/dev/null
-out="$(ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+out="$(ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye" \
+  ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --dry-run 2>&1)"
 printf '%s' "$out" | grep -q "$EY_UUID_SABIT" \
   && ok "ekip-yerlestir: kayıtlı rezerv-uuid YENİDEN-KULLANILIR (origin/main'den okundu, yeniden-üretilmedi)" \
@@ -828,13 +841,13 @@ git -C "$MM_REPO" -c user.email=t@t -c user.name=t add -A 2>/dev/null
 git -C "$MM_REPO" -c user.email=t@t -c user.name=t commit -qm x 2>/dev/null
 git -C "$MM_REPO" remote add origin "$MM_REPO" 2>/dev/null
 git -C "$MM_REPO" fetch -q origin main 2>/dev/null
-out="$(ISKAN_CLOUDTOP_REPO_DIR="$MM_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+out="$(ISKAN_EY_ROSTER="denekAlfa:yonetici" ISKAN_CLOUDTOP_REPO_DIR="$MM_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir paylasimli --dry-run 2>&1)"
 rc=$?
 [ "$rc" = "3" ] && printf '%s' "$out" | grep -q '→ /opt/cloudtop/config/projects/paylasimli (host)' \
   && ok "mount-çözümü: paylaşımlı-mount → mount'un kendisi (gölgelenme-panzehiri)" \
   || bad "mount-çözümü: paylaşımlı-mount yanlış çözüldü (rc=$rc)"
-out="$(ISKAN_CLOUDTOP_REPO_DIR="$MM_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+out="$(ISKAN_EY_ROSTER="denekAlfa:yonetici" ISKAN_CLOUDTOP_REPO_DIR="$MM_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir tekmount --dry-run 2>&1)"
 rc=$?
 [ "$rc" = "3" ] && printf '%s' "$out" | grep -q '→ /opt/cloudtop/config-tekmount/projects/tekmount (host)' \
@@ -955,6 +968,163 @@ rc=$?
 rm -f "$SK_LOG" "$SK_LOG2"
 find "$SK_REPO" "$SK_STUB_DIR" -type f -delete 2>/dev/null
 find "$SK_REPO" "$SK_STUB_DIR" -depth -type d -delete 2>/dev/null
+
+# ── D6: kur (UC1 zincirleyici — duraklı durum-makinesi) + tuzak-fix'ler ───────────────────
+
+# ortak hermetik fixture: cloudtop-repo (compose'da cloudtop-kurtest kayıtlı + evergreen-manifestler)
+KR_REPO="$(mktemp -d)"
+KR_STATE="$(mktemp -d)"
+mkdir -p "$KR_REPO/infra"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$KR_REPO/infra/docker-compose.server.yml"
+cat >> "$KR_REPO/infra/docker-compose.server.yml" <<'EOF'
+
+  cloudtop-kurtest:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: cloudtop-kurtest
+    volumes:
+      - ./config-kurtest:/config
+    ports:
+      - "127.0.0.1:9447:8443"
+EOF
+cat > "$KR_REPO/infra/provider-inventory.yaml" <<'EOF'
+cloudflare:
+  tunnel:
+    ingress:
+      - pc.mmepanel.com       # test-mevcut
+  access_apps:
+    - pc.mmepanel.com
+  api: test-anahtar-sonrasi-blok-siniri
+EOF
+cat > "$KR_REPO/infra/backup.sh" <<'EOF'
+#!/usr/bin/env bash
+docker inspect cloudtop > "/tmp/kur-test-inspect.json" 2>/dev/null || true
+EOF
+git -C "$KR_REPO" init -q && git -C "$KR_REPO" add -A \
+  && git -C "$KR_REPO" -c user.email=t@t -c user.name=t commit -qm fixture \
+  && git -C "$KR_REPO" update-ref refs/remotes/origin/main HEAD
+KR_ENV=(ISKAN_STATE_DIR="$KR_STATE" ISKAN_CLOUDTOP_REPO_DIR="$KR_REPO" \
+  ISKAN_REPO_COMPOSE="$KR_REPO/infra/docker-compose.server.yml" \
+  ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_EY_SSH_TIMEOUT=3 \
+  ISKAN_EY_ROSTER="denekAlfa:yonetici")
+
+# 52. kur usage: projesiz rc=2; bilinmeyen bayrak rc=2
+bash "$SCRIPT_DIR/iskan.sh" kur >/dev/null 2>&1; rc1=$?
+bash "$SCRIPT_DIR/iskan.sh" kur kurtest --bilinmeyen >/dev/null 2>&1; rc2=$?
+[ "$rc1" = "2" ] && [ "$rc2" = "2" ] && ok "kur: projesiz/bilinmeyen-bayrak rc=2 (usage)" || bad "kur: usage rc beklenen 2/2, gelen $rc1/$rc2"
+
+# 53. kur 3-Çit: mahrem-tenant adları REDDEDİLİR (rc=1 + '3-Çit' marker; hiçbir adım koşulmaz,
+#     durum-dosyası doğmaz) — izole aile İSKÂN-doğumu değildir
+for p in mihenk huma; do
+  out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur "$p" --dry-run 2>&1)"
+  rc=$?
+  [ "$rc" = "1" ] && printf '%s' "$out" | grep -q '3-Çit' && [ ! -e "$KR_STATE/iskan-kur-$p.state" ] \
+    && ok "kur 3-Çit: '$p' reddedildi (rc=1 + marker + durum-dosyası yok)" \
+    || bad "kur 3-Çit: '$p' reddi kırık (rc=$rc)"
+done
+
+# 54. kur --dry-run: 7-adım zincir-planı uçtan-uca basılır + plan-exit=3 + HİÇBİR yazma
+#     (fixture md5 değişmez, durum-dosyası DOĞMAZ)
+SUM_KR_0="$(md5sum "$KR_REPO"/infra/*)"
+out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurtest --dry-run 2>&1)"
+rc=$?
+SUM_KR_1="$(md5sum "$KR_REPO"/infra/*)"
+[ "$rc" = "3" ] && ok "kur --dry-run: plan-exit=3" || bad "kur --dry-run: rc beklenen 3, gelen $rc"
+adim_eksik=""
+for a in "1/7: yeni-proje" "2/7: durak1-cloudtop-pr" "3/7: iskan-host" "4/7: provizyon" "5/7: cf-yayin" "6/7: ekip-yerlestir" "7/7: evergreen-kaydet"; do
+  printf '%s' "$out" | grep -q "kur adım $a" || adim_eksik="$adim_eksik [$a]"
+done
+[ -z "$adim_eksik" ] && ok "kur --dry-run: 7 adımın hepsi zincir-planında (FAZ-sırasıyla)" \
+  || bad "kur --dry-run: zincir-planında eksik adım:$adim_eksik"
+[ "$SUM_KR_0" = "$SUM_KR_1" ] && [ ! -e "$KR_STATE/iskan-kur-kurtest.state" ] \
+  && ok "kur --dry-run: hiçbir yazma yok (fixture md5 değişmez + durum-dosyası doğmadı)" \
+  || bad "kur --dry-run: yazma tespit edildi (dry-run sözleşme ihlali)"
+printf '%s' "$out" | grep -q 'DURAK-1' && ok "kur --dry-run: DURAK-1 (cloudtop-PR merge durağı) planda görünür" \
+  || bad "kur --dry-run: DURAK-1 planda yok"
+
+# 55. kur GO'suz apply: adım-1 yeni-proje --apply exit=4 AYNEN iletilir + zincir DURur
+#     (adım 2'ye geçilmez, dosya md5 değişmez, durum-dosyası doğmaz)
+SUM_KR_2="$(md5sum "$KR_REPO/infra/docker-compose.server.yml")"
+out="$(env -u ISKAN_FAZ4_GO "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurgo 2>&1)"
+rc=$?
+SUM_KR_3="$(md5sum "$KR_REPO/infra/docker-compose.server.yml")"
+[ "$rc" = "4" ] && printf '%s' "$out" | grep -q 'ISKAN_FAZ4_GO' && printf '%s' "$out" | grep -q 'GO-durağında DURDU' \
+  && ok "kur GO'suz: adım-1 exit=4 iletildi + GO-durağı Sultan-dilinde raporlandı" \
+  || bad "kur GO'suz: exit-4 iletimi kırık (rc=$rc)"
+[ "$SUM_KR_2" = "$SUM_KR_3" ] && [ ! -e "$KR_STATE/iskan-kur-kurgo.state" ] && ! printf '%s' "$out" | grep -q 'kur adım 2/7' \
+  && ok "kur GO'suz: zincir DURdu (adım-2 koşulmadı + md5 değişmez + durum-dosyası doğmadı)" \
+  || bad "kur GO'suz: DUR sözleşmesi kırık"
+
+# 56. kur DURAK-1 durum-makinesi: GO'lu adım-1 sonrası origin/main'de blok YOK → DURAK exit=0
+#     + durum-dosyası 'yeni-proje' (adım-scope'lu env; kalıcı export YOK)
+out="$(env "${KR_ENV[@]}" ISKAN_FAZ4_GO=1 bash "$SCRIPT_DIR/iskan.sh" kur kurdurak 2>&1)"
+rc=$?
+[ "$rc" = "0" ] && printf '%s' "$out" | grep -q "DURAK-1'de duraklatıldı" \
+  && ok "kur DURAK-1: merge-öncesi zincir İNSAN-durağında durdu (exit=0 adım-tamam)" \
+  || bad "kur DURAK-1: durak sözleşmesi kırık (rc=$rc)"
+[ "$(cat "$KR_STATE/iskan-kur-kurdurak.state" 2>/dev/null)" = "yeni-proje" ] \
+  && ok "kur durum-dosyası: son-tamamlanan='yeni-proje' yazıldı (git-DIŞI state)" \
+  || bad "kur durum-dosyası: beklenen 'yeni-proje', gelen '$(cat "$KR_STATE/iskan-kur-kurdurak.state" 2>/dev/null)'"
+
+# 57. kur --durum: salt-oku (rc=0 + son-tamamlanan + sıradaki; durum-dosyası md5 değişmez)
+SUM_ST_0="$(md5sum "$KR_STATE/iskan-kur-kurdurak.state")"
+out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurdurak --durum 2>&1)"
+rc=$?
+SUM_ST_1="$(md5sum "$KR_STATE/iskan-kur-kurdurak.state")"
+[ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'son-tamamlanan: yeni-proje' \
+  && printf '%s' "$out" | grep -q 'sıradaki: durak1-cloudtop-pr' && [ "$SUM_ST_0" = "$SUM_ST_1" ] \
+  && ok "kur --durum: salt-oku durum-raporu (son-tamamlanan + sıradaki + md5 değişmez)" \
+  || bad "kur --durum: salt-oku sözleşmesi kırık (rc=$rc)"
+out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurhic --durum 2>&1)"
+rc=$?
+[ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'hiç koşulmamış' \
+  && ok "kur --durum: durum-dosyası yokken 'hiç koşulmamış — baştan' (rc=0)" \
+  || bad "kur --durum: dosyasız-durum raporu kırık (rc=$rc)"
+
+# 58. kur --devam: durum-dosyasından sürer (adım-1 TEKRAR koşulmaz), DURAK-1 hâlâ merge'siz → yine DURAK
+out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurdurak --devam 2>&1)"
+rc=$?
+[ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'son-tamamlanan=yeni-proje' \
+  && ! printf '%s' "$out" | grep -q 'kur adım 1/7' && printf '%s' "$out" | grep -q "DURAK-1'de duraklatıldı" \
+  && ok "kur --devam: state'ten adım-2'den sürdü (adım-1 atlandı) + DURAK-1 idempotent" \
+  || bad "kur --devam: state-resume kırık (rc=$rc)"
+
+# 59. kur --devam İLERLEME: origin/main'de kayıtlı proje (kurtest) DURAK-1'i GEÇER, state ilerler,
+#     adım-3 (iskan-host --apply) GO'suz exit=4 AYNEN iletilir → GO-sonrası --devam kaldığı yerden
+printf 'yeni-proje\n' > "$KR_STATE/iskan-kur-kurtest.state"
+out="$(env -u ISKAN_FAZ4_GO "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurtest --devam 2>&1)"
+rc=$?
+[ "$rc" = "4" ] && printf '%s' "$out" | grep -q 'kur adım 3/7: iskan-host' \
+  && ! printf '%s' "$out" | grep -q 'kur adım 1/7' && printf '%s' "$out" | grep -q 'ISKAN_FAZ4_GO' \
+  && ok "kur --devam ilerleme: DURAK-1 geçildi (origin/main'de blok) + adım-3 GO'suz exit=4 iletildi" \
+  || bad "kur --devam ilerleme: sözleşme kırık (rc=$rc)"
+[ "$(cat "$KR_STATE/iskan-kur-kurtest.state" 2>/dev/null)" = "durak1-cloudtop-pr" ] \
+  && ok "kur --devam ilerleme: durum-dosyası 'durak1-cloudtop-pr'a ilerledi (GO-sonrası kaldığı yerden)" \
+  || bad "kur --devam ilerleme: state ilerlemedi ('$(cat "$KR_STATE/iskan-kur-kurtest.state" 2>/dev/null)')"
+
+find "$KR_REPO" "$KR_STATE" -type f -delete 2>/dev/null
+find "$KR_REPO" "$KR_STATE" -depth -type d -delete 2>/dev/null
+
+# 60. D6 tuzak-fix (mem_limit): default artık 2g ("sessiz-ölü ekip" panzehiri) + uyarı yok
+MEM_FIXTURE="/tmp/iskan-test-mem.$$.yml"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$MEM_FIXTURE"
+out="$(ISKAN_REPO_COMPOSE="$MEM_FIXTURE" bash "$SCRIPT_DIR/iskan.sh" yeni-proje memtest --dry-run 2>&1)"
+rc=$?
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'mem_limit: 2g' && ! printf '%s' "$out" | grep -q '2g-altı' \
+  && ok "yeni-proje default mem_limit=2g (512m tuzağı kapandı; uyarısız)" \
+  || bad "yeni-proje default mem_limit sözleşmesi kırık (rc=$rc)"
+
+# 61. D6 tuzak-fix (mem_limit): 2g-altı açık-beyan WARN'lanır ama hard-fail ETMEZ (bilinçli-küçük serbest)
+out="$(ISKAN_REPO_COMPOSE="$MEM_FIXTURE" bash "$SCRIPT_DIR/iskan.sh" yeni-proje memtest --mem-limit 512m --dry-run 2>&1)"
+rc=$?
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q '2g-altı' && printf '%s' "$out" | grep -q 'mem_limit: 512m' \
+  && ok "yeni-proje --mem-limit 512m: WARN basıldı + rc=3 korundu (hard-fail değil)" \
+  || bad "yeni-proje --mem-limit 512m: WARN sözleşmesi kırık (rc=$rc)"
+out="$(ISKAN_REPO_COMPOSE="$MEM_FIXTURE" bash "$SCRIPT_DIR/iskan.sh" yeni-proje memtest --mem-limit 4g --dry-run 2>&1)"
+rc=$?
+[ "$rc" = "3" ] && ! printf '%s' "$out" | grep -q '2g-altı' \
+  && ok "yeni-proje --mem-limit 4g: 2g-üstü uyarısız (golden)" \
+  || bad "yeni-proje --mem-limit 4g: yanlış-uyarı (rc=$rc)"
+find /tmp -maxdepth 1 -name "iskan-test-mem.$$.yml" -delete 2>/dev/null
 
 echo "== ${PASS} geçti / ${FAIL} kaldı =="
 [ "$FAIL" -eq 0 ]
