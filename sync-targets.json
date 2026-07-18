@@ -98,6 +98,10 @@
     ],
     "resume-banner": [
       "_global"
+    ],
+    "iskan": [
+      "_global",
+      "cloudtop"
     ]
   }
 }

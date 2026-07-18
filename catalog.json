@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "updated": "2026-07-17",
+  "updated": "2026-07-18",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -844,6 +844,45 @@
         "_global"
       ],
       "family": "yaglayici (vizyon-FAZ2 İLK-DALGA)"
+    },
+    {
+      "id": "iskan",
+      "type": "agent",
+      "name": "İSKÂN — container + ekip yaşam-döngüsü master-skill (Usta · bileşik)",
+      "version": "0.1.0",
+      "description": "Container + ekip yaşam-döngüsü master-skill: bir hedef (yeni-proje / mevcut-ekip-yeniden-doğuşu / tek-üye-ekleme) için host-provizyon (UC1 yeni-proje), oturum-kurtarma (UC2 seans-getir, deterministik session-id), üye-ekleme (UC3) akışlarını ekip-kur/ise-alim/sunucu-kur/cloudflare-erisim'i BESTELEYEREK tek-komuta indirger. Kendi owner-domain'i: container-provizyon host-adaptörü + tmux-oturum açma/casing/session-id rezervasyonu + CF-hostname orkestrasyonu + evergreen-manifest oto-yazımı; bestelediği kardeşlere YAZMAZ (ADR-001 owner-domain-dokunma).",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "git"
+        ]
+      },
+      "tags": [
+        "iskan",
+        "bilesik",
+        "container-yasamdongusu",
+        "ekip-yerlestirme"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "İSKÂN programı FAZ 0-9 + söküm kör-tescilli (Nexus k0067-k0084; damga #494-502) — ahi usta-kademe bileşik-fabrika",
+      "install_time": "~2min",
+      "status": "v0.1-usta",
+      "path": "iskan/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global",
+        "cloudtop"
+      ],
+      "requires": [
+        "ekip-kur",
+        "ise-alim",
+        "sunucu-kur",
+        "cloudflare-erisim"
+      ],
+      "family": "fabrika (container+ekip yaşam-döngüsü; İSKÂN)"
     }
   ]
 }

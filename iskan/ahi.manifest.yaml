@@ -12,3 +12,4 @@ requires:
   - cloudflare-erisim
 install_targets:
   - _global
+  - cloudtop
