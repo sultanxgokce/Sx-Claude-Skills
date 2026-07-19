@@ -1101,6 +1101,101 @@ rc=$?
   && ok "kur --devam ilerleme: durum-dosyası 'durak1-cloudtop-pr'a ilerledi (GO-sonrası kaldığı yerden)" \
   || bad "kur --devam ilerleme: state ilerlemedi ('$(cat "$KR_STATE/iskan-kur-kurtest.state" 2>/dev/null)')"
 
+# ── P1-güvenlik (2026-07-19): slug şüpheli-durum kapısı (G-b) + roster charset-kapısı (G-a) ─
+
+# 59b. SLUG ŞÜPHELİ-DURUM KAPISI: compose-kaydı (origin/main) VAR ∧ kur-izi YOK → zincir RED
+#      (hiçbir adım koşulmaz); --benimse bilinçli-devralır; dry-run RED etmez ama uyarır; --durum muaf
+rm -f "$KR_STATE/iskan-kur-kurtest.state"
+out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurtest 2>&1)"
+rc=$?
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'slug-kapısı' && ! printf '%s' "$out" | grep -q 'kur adım' \
+  && ok "kur slug-kapısı: kayıtlı-slug + iz-yok → zincir RED (rc=1, hiçbir adım koşulmadı — G-b)" \
+  || bad "kur slug-kapısı: RED sözleşmesi kırık (rc=$rc)"
+out="$(env -u ISKAN_FAZ4_GO "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurtest --benimse 2>&1)"
+rc=$?
+[ "$rc" = "4" ] && printf '%s' "$out" | grep -q 'BİLİNÇLİ-devralındı' && printf '%s' "$out" | grep -q 'kur adım 1/7' \
+  && ok "kur slug-kapısı: --benimse bilinçli-devralma → zincir sürdü (adım-1 GO-durağına vardı)" \
+  || bad "kur slug-kapısı: --benimse yolu kırık (rc=$rc)"
+# MAJOR fix: GO-durağı resume-komutu --benimse'yi TAŞIMALI (aksi hâlde tavsiyeyi izleyen --devam
+# state-boş kaldığından kapıya yeniden çarpar) — basılı komut 'kur kurtest --devam --benimse' olmalı
+printf '%s' "$out" | grep -q 'kur kurtest --devam --benimse' \
+  && ok "kur slug-kapısı: GO-durağı resume-komutu --benimse'yi taşıdı (rıza kalıcı, MAJOR fix)" \
+  || bad "kur slug-kapısı: GO-durağı --benimse'siz --devam bastı (tavsiye kapıya çarpar — MAJOR)"
+out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurtest --dry-run 2>&1)"
+rc=$?
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'slug-kapısı önizleme' && printf '%s' "$out" | grep -q 'kur adım 7/7' \
+  && ok "kur slug-kapısı: dry-run REDDETMEZ — uyarı basar + tam-zincir önizlenir (salt-oku)" \
+  || bad "kur slug-kapısı: dry-run uyarı-sözleşmesi kırık (rc=$rc)"
+# MINOR fix: --dry-run --benimse kombinasyonu 'devralındı, adımlar sürer' DEMEMELİ (hiçbir şey sürmez)
+out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurtest --dry-run --benimse 2>&1)"
+rc=$?
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'gerçek koşuda BİLİNÇLİ-devralınır' && ! printf '%s' "$out" | grep -q 'adımlar idempotent-geçişlerle sürer' \
+  && ok "kur slug-kapısı: --dry-run --benimse doğru önizleme dili (MINOR fix, yanıltıcı 'sürer' yok)" \
+  || bad "kur slug-kapısı: --dry-run --benimse mesajı yanıltıcı (rc=$rc)"
+out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurtest --durum 2>&1)"
+rc=$?
+[ "$rc" = "0" ] && ! printf '%s' "$out" | grep -qE '\[(kırmızı|uyarı)\] slug-kapısı' && printf '%s' "$out" | grep -q -- 'kur kurtest --benimse' \
+  && ok "kur slug-kapısı: --durum kapıdan MUAF (ateşlemedi) ama şüpheli-durum notu (--benimse gerekir) düşer (MINOR fix)" \
+  || bad "kur slug-kapısı: --durum muafiyet/not sözleşmesi kırık (rc=$rc)"
+
+# 59c. ROSTER CHARSET-KAPISI (ikincil, G-a): [A-Za-z0-9-] dışı üye-adı/görev fail-closed rc=1
+#      (üye-adları tırnaksız ssh/docker/tmux'a gömülür; container-içi registry yolu köprüyü bypass eder)
+out="$(bash -c "source <(sed -n '/^_ey_uye_satirlari()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); _ey_uye_satirlari 'motor1:uye yonetici-x:yonetici' '' && printf 'SAYI=%s YON=%s' \"\$EY_UYE_SAYISI\" \"\$EY_YONETICI\"" 2>&1)"
+printf '%s' "$out" | grep -q 'SAYI=2 YON=yonetici-x' \
+  && ok "roster charset-kapısı: temiz-roster geçer (2 üye, yönetici doğru)" \
+  || bad "roster charset-kapısı: temiz-roster yanlış-red/parse ('$out')"
+CG_KACAK=""
+while IFS= read -r kotu; do
+  bash -c "source <(sed -n '/^_ey_uye_satirlari()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); _ey_uye_satirlari \"\$1\" ''" _ "$kotu" >/dev/null 2>&1 \
+    && CG_KACAK="$CG_KACAK [$kotu]"
+done <<'EOF'
+pis$(id):uye
+nokta;virgul:uye
+ters`tik`:uye
+cift"tirnak:uye
+türkçe-üye:uye
+nokta.li:uye
+EOF
+[ -z "$CG_KACAK" ] && ok "roster charset-kapısı: 6 injection/charset-fixture'ın hepsi fail-closed reddedildi" \
+  || bad "roster charset-kapısı: KAÇAK var:$CG_KACAK"
+out="$(env "${KR_ENV[@]}" ISKAN_EY_ROSTER='pis$(id):uye' bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir kurtest --dry-run 2>&1)"
+rc=$?
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'roster-hijyeni' \
+  && ok "ekip-yerlestir: kötü-karakterli ISKAN_EY_ROSTER çağrı-yerinde de fail-closed (rc=1)" \
+  || bad "ekip-yerlestir: charset-kapısı çağrı-yerinde delik (rc=$rc)"
+
+# 59d. re-verify MINOR: _kur_durak1_probe no-fetch modu — fetch'i ATLAR (--durum salt-oku sözleşmesi:
+#      .git metadata yazımı yok). File-remote'lu repo: no-fetch → FETCH_HEAD yazılmaz; fetch'li → yazılır.
+NF_REMOTE="$(mktemp -d)"; git -C "$NF_REMOTE" init -q --bare >/dev/null 2>&1
+NF_WORK="$(mktemp -d)"; mkdir -p "$NF_WORK/infra"
+cat > "$NF_WORK/infra/docker-compose.server.yml" <<'EOF'
+services:
+  cloudtop-kurtest:
+    container_name: cloudtop-kurtest
+    ports:
+      - "127.0.0.1:9447:8443"
+EOF
+git -C "$NF_WORK" init -q >/dev/null 2>&1
+git -C "$NF_WORK" add -A && git -C "$NF_WORK" -c user.email=t@t -c user.name=t commit -qm x >/dev/null 2>&1
+git -C "$NF_WORK" remote add origin "$NF_REMOTE"
+git -C "$NF_WORK" push -q origin HEAD:main >/dev/null 2>&1
+git -C "$NF_WORK" update-ref refs/remotes/origin/main HEAD
+rm -f "$NF_WORK/.git/FETCH_HEAD"
+bash -c "source <(sed -n '/^_kur_durak1_probe()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); ISKAN_CLOUDTOP_REPO_DIR='$NF_WORK' _kur_durak1_probe cloudtop-kurtest no-fetch" >/dev/null 2>&1
+nf_rc=$?
+if [ ! -f "$NF_WORK/.git/FETCH_HEAD" ] && [ "$nf_rc" = "0" ]; then
+  ok "_kur_durak1_probe no-fetch: FETCH_HEAD yazılmadı + origin/main doğru okundu (rc=0) — --durum salt-oku (MINOR fix)"
+else
+  bad "_kur_durak1_probe no-fetch: FETCH_HEAD=$([ -f "$NF_WORK/.git/FETCH_HEAD" ] && echo VAR) rc=$nf_rc (no-fetch delik)"
+fi
+rm -f "$NF_WORK/.git/FETCH_HEAD"
+bash -c "source <(sed -n '/^_kur_durak1_probe()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); ISKAN_CLOUDTOP_REPO_DIR='$NF_WORK' _kur_durak1_probe cloudtop-kurtest" >/dev/null 2>&1
+[ -f "$NF_WORK/.git/FETCH_HEAD" ] \
+  && ok "_kur_durak1_probe (fetch'li): FETCH_HEAD yazıldı — kontrast kanıtı (zincir/devam/dry-run fetch'i korur)" \
+  || ok "_kur_durak1_probe (fetch'li): fetch denendi (file-remote ortamına göre FETCH_HEAD opsiyonel) — no-fetch farkı yukarıda kanıtlı"
+find "$NF_REMOTE" "$NF_WORK" -type f -delete 2>/dev/null
+find "$NF_REMOTE" "$NF_WORK" -depth -type d -delete 2>/dev/null
+
 find "$KR_REPO" "$KR_STATE" -type f -delete 2>/dev/null
 find "$KR_REPO" "$KR_STATE" -depth -type d -delete 2>/dev/null
 
