@@ -475,8 +475,12 @@ PYEOF
 # B1 zincir-blokajı fix'i: provizyon adım-4'ün REPO-KANIT kapısı bu dosyayı origin/main'de
 # ŞART koşar (iskan.sh cmd_provizyon) — üretmeyen zincir taze-tenant'ta garantili-kırmızıydı.
 _iskan_setup_script_icerik() {
-  local ad="$1" etiket
+  local ad="$1" etiket ey_idx
   etiket="${ad^}"
+  # ekip-yerlestir'in zincir-pozisyonu ISKAN_KUR_ADIMLAR'dan TÜRETİLİR (re-verify MINOR: payda
+  # ${ISKAN_KUR_ADIM_SAYISI} parametrikti ama numeratör '6' hardcoded'du → ekip-yerlestir ÖNÜNE adım
+  # eklenirse sessiz-bayardı; global ISKAN_KUR_ADIMLAR her çağrı-yolunda scope'ta, satır ~2646).
+  ey_idx=$(i=0; for a in $ISKAN_KUR_ADIMLAR; do i=$((i + 1)); [ "$a" = "ekip-yerlestir" ] && { echo "$i"; break; }; done)
   cat <<EOF
 #!/usr/bin/env bash
 # cloudtop · İZOLE ${etiket} workspace (cloudtop-${ad}) — BİR KERELİK bootstrap (İSKÂN yeni-proje üreteci)
@@ -492,7 +496,7 @@ HERE="\$(cd "\$(dirname "\$0")" && pwd)"
 bash "\$HERE/setup-isolated.sh" cloudtop-${ad} /config/projects/${ad} ${etiket}
 
 echo "  Aç: https://${ad}.mmepanel.com  (önce CF Access app'i — iskan.sh cf-yayin ${ad})"
-echo "  Ekip-yerleşimi AYRI adım: iskan.sh ekip-yerlestir ${ad} (kur zinciri adım 6/7)."
+echo "  Ekip-yerleşimi AYRI adım: iskan.sh ekip-yerlestir ${ad} (kur zinciri adım ${ey_idx}/${ISKAN_KUR_ADIM_SAYISI})."
 EOF
 }
 
@@ -1665,6 +1669,136 @@ cmd_ekip_yerlestir() {
   exit 0
 }
 
+# ── ekip-pong (FAZ-6b: canlılık-kapısı — kur zinciri adım 7, ekip-yerlestir'in ardılı) ────
+#
+# NEDEN (B5 zincir-blokajı): ekip-yerlestir seat'leri tmux'a YERLEŞTİRİR ama içlerinde bir şeyin
+# YAŞADIĞINI kanıtlamaz (ekipc oturum-ac KONTROL-DÜZLEMİDİR — host-tarafı session-id doğrular,
+# tenant-pane'i prob ETMEZ). tenant-pong-proof ÖKSÜZDÜ (çağıran yok, kur ADIMLAR'da pong yoktu) →
+# doğan ekip'in seat-iskeleti "sessiz-ölü" olabilir + kimse fark etmez. Bu komut o boşluğu kapatır: her
+# seat için tenant-pong-proof (session-var + kimlik-banner bayt-eş + KENDİ-KORUMALI PONG = üç-kapı;
+# SAHTE-YEŞİL YOK). ⚠️ KAPSAM (dürüstlük — re-verify MINOR, güven-tiyatrosu yasağı): bu kapı seat-SCAFFOLD
+# canlılığını kanıtlar (pane + shell + kimlik-banner claude'a HAZIR) — claude-AJANININ kendi canlılığını
+# DEĞİL: zincir claude'u başlatmaz, yalnız baslat-claude.sh'i dosya-yazar (claude'u operatör sonradan
+# başlatır). Tam ajan-canlılığı (OOM-ölü claude avı dahil) claude-SONRASI re-verify işidir: --no-ping.
+# Kur zincirinde ekip-yerlestir'in HEMEN ardından, claude-BAŞLATMADAN ÖNCE koşar — bu
+# pencerede pane taze-shell'dir (KAPI-D send-keys harm-free). ⚠️ SIRA-KRİTİK: claude-TUI başladıktan
+# SONRA koşulursa banner-kayması KAPI-C'de false-red verebilir (F5 kalıcı-kimlik-markörü panzehiri);
+# zincir bilinçle claude-öncesi koşar. Post-claude standalone re-verify için: --no-ping.
+#
+# GO-KAPISI YOK (ekip-yerlestir emsali — salt-DOĞRULAMA, host-mutasyonu değil). Roster-kaynağı
+# ekip-yerlestir ile AYNI: ISKAN_EY_ROSTER (açık-override) → container-içi ekip-registry.yaml.
+# Pong-script: ISKAN_PONG_SH (default Nexus scripts/tenant-pong-proof.sh; ISKAN_RECONCILE_SH
+# cross-repo delege emsali). Erişim: PONG_SSH_HOST=EY_SSH_HOST (ekip-yerlestir _ey_ssh ile simetrik).
+# Üç-durum: yeşil(GEÇTİ) / kırmızı(seat-ölü→fail-closed) / doğrulanmadı(ölçülemedi, unknown≠fail).
+cmd_ekip_pong() {
+  local proje="" mode="" ping_arg="" ping_not=" (+PONG)"
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --dry-run) mode="dry-run"; shift ;;
+      --apply) mode="apply"; shift ;;
+      --no-ping) ping_arg="--no-ping"; ping_not=" (PONG'suz)"; shift ;;
+      -*) echo "bilinmeyen argüman: $1" >&2; echo "kullanım: iskan.sh ekip-pong <proje> --dry-run|--apply [--no-ping]" >&2; exit 2 ;;
+      *) proje="$1"; shift ;;
+    esac
+  done
+  if [ -z "$proje" ] || [ -z "$mode" ]; then
+    echo "kullanım: iskan.sh ekip-pong <proje> --dry-run|--apply [--no-ping]" >&2
+    exit 2
+  fi
+  _ey_ad_hijyeni "$proje" "ekip-pong" || exit 1
+
+  EY_SSH_HOST="${ISKAN_SSH_HOST:-hostsrv}"
+  EY_CNAME="cloudtop-${proje}"
+  local host_proj="/opt/cloudtop/config-${proje}/projects/${proje}"
+  local pong_sh="${ISKAN_PONG_SH:-/config/projects/Nexus/scripts/tenant-pong-proof.sh}"
+
+  # ── ROSTER-KAYNAĞI (ekip-yerlestir ile AYNI öncelik; ekip-pong yalnız seat-ADLARINI gerektirir) ──
+  local roster=""
+  if [ -n "${ISKAN_EY_ROSTER:-}" ]; then
+    roster="$ISKAN_EY_ROSTER"
+  else
+    local ekip_reg
+    ekip_reg="$(_ey_ssh "cat '$host_proj/_agents/handoff/ekip-registry.yaml' 2>/dev/null" 2>/dev/null || true)"
+    [ -n "$ekip_reg" ] && roster="$(_ey_ekip_roster_oku "$ekip_reg")"
+  fi
+  if [ -z "$roster" ]; then
+    # ekip-yerlestir dürüst-kırmızı sözleşmesiyle AYNI marker ('roster-kaynağı yok') → kur dry-run'ı
+    # bu satırı görüp adımı [doğrulanmadı] olarak SÜRDÜRÜR (roster gerçek-koşuda ekip-yerlestir'den doğar).
+    echo "[kırmızı] roster-kaynağı yok: ne ISKAN_EY_ROSTER (açık-override) ne container-içi _agents/handoff/ekip-registry.yaml okunabildi — pong-hedefi seat'ler bilinmiyor (hiçbir prob koşulmadı)" >&2
+    exit 1
+  fi
+
+  # seat-adları + charset-hijyeni (defense-in-depth: seat ssh/docker/tmux'a gömülür; tenant-pong-proof
+  # kendi kapısını da koşar AMA tüketim-noktasında da zorla — _ey_uye_satirlari emsali, fail-closed)
+  local seatler="" girdi rol
+  for girdi in $roster; do
+    rol="${girdi%%:*}"
+    if ! printf '%s' "$rol" | LC_ALL=C grep -qE '^[A-Za-z0-9-]+$'; then
+      echo "[kırmızı] roster-hijyeni: '$rol' — seat-adı [A-Za-z0-9-] dışı karakter içeriyor (seat ssh/docker/tmux'a gömülür → fail-closed), hiçbir prob koşulmadı" >&2
+      exit 1
+    fi
+    seatler="$seatler $rol"
+  done
+
+  # yalnız-boşluk roster kör-noktası (re-verify MAJOR — aynı sahte-yeşil sınıfı): ISKAN_EY_ROSTER="   "
+  # gibi bir değer yukarıdaki [ -z "$roster" ] kontrolünü GEÇER (boşluk non-empty) ama word-split 0 seat
+  # verir → apply-döngüsü hiç koşmaz → aşağıda yeşil=0'la yanlış "canlılık-kapısı geçildi" basılabilirdi.
+  # Boş-roster ([kırmızı] roster-kaynağı yok) ile SİMETRİK fail-closed: HİÇ seat ayrıştırılamadıysa
+  # canlılık prob edilemez → dürüst-kırmızı (hem dry-run hem apply; kör-nokta erken kapanır).
+  if [ -z "$seatler" ]; then
+    echo "[kırmızı] roster-kaynağı yok: roster çözümlendi ama HİÇBİR seat-adı ayrıştırılamadı (yalnız-boşluk/bozuk-token) — pong-hedefi yok (hiçbir prob koşulmadı)" >&2
+    exit 1
+  fi
+
+  # ── DRY-RUN: hangi seat nasıl prob edilecek (SIFIR-dokunuş, plan-exit=3) ──────────────────
+  if [ "$mode" = "dry-run" ]; then
+    echo "== İSKÂN ekip-pong — KURU-KOŞU (canlılık-kapısı; host/container/pane'e SIFIR-dokunuş) =="
+    echo "proje: $proje · container: $EY_CNAME · pong-script: $pong_sh$([ -f "$pong_sh" ] || echo ' (YOK — gerçek koşuda [doğrulanmadı])')"
+    echo "-- PLAN (apply'da her seat için tenant-pong-proof; session-var + kimlik-banner bayt-eş + KENDİ-KORUMALI PONG üç-kapı; SAHTE-YEŞİL YOK; seat-KIRMIZI → fail-closed) --"
+    for rol in $seatler; do
+      echo "  - seat '$rol' · tenant-pong-proof $proje $rol --kimlik 'rol: $rol'$ping_not"
+    done
+    echo "== dry-run: hiçbir prob koşulmadı (plan-exit sözleşmesi, exit=3) =="
+    exit 3
+  fi
+
+  # ── APPLY: her seat'i prob et (üç-durum tally; ≥1 kırmızı → fail-closed exit=1) ────────────
+  echo "== İSKÂN ekip-pong — CANLILIK-PROB (her seat; claude-öncesi shell-penceresi) =="
+  if [ ! -f "$pong_sh" ]; then
+    # unknown≠fail (üç-durum): pong-script yoksa canlılık DOĞRULANAMADI ama yerleşim düşmez;
+    # zincir bloklanmaz (F4-runbook, pong-script varlığını+yeşilini kabul-kapısı yapar).
+    echo "[doğrulanmadı] ekip-pong: pong-script bulunamadı ($pong_sh) — seat-canlılığı DOĞRULANAMADI (ISKAN_PONG_SH ile yol ver); yerleşim tamam, zincir sürer"
+    exit 0
+  fi
+  local kirmizi=0 yesil=0 olcemedi=0 prc
+  for rol in $seatler; do
+    PONG_SSH_HOST="$EY_SSH_HOST" bash "$pong_sh" "$proje" "$rol" --kimlik "rol: $rol" $ping_arg
+    prc=$?
+    case "$prc" in
+      0) echo "[yeşil]  ekip-pong $rol: canlılık GEÇTİ (session + kimlik-banner + PONG)"; yesil=$((yesil + 1)) ;;
+      3) echo "[kırmızı] ekip-pong $rol: canlılık KIRMIZI — seat ölü/asılı/yanlış-kimlik (SAHTE-YEŞİL yakalandı)" >&2; kirmizi=$((kirmizi + 1)) ;;
+      *) echo "[doğrulanmadı] ekip-pong $rol: ölçülemedi (pong exit=$prc; ortam/arg) — seat-canlılığı doğrulanamadı"; olcemedi=$((olcemedi + 1)) ;;
+    esac
+  done
+  if [ "$kirmizi" -gt 0 ]; then
+    {
+      echo ""
+      echo "[kırmızı] ekip-pong: $kirmizi seat KIRMIZI — fail-closed DURDU (yeşil=$yesil ölçülemedi=$olcemedi); remediation: ölü-seat'i incele → docker exec -u 1000 $EY_CNAME tmux attach -t <seat>"
+    } >&2
+    exit 1
+  fi
+  # POZİTİF-KANIT KAPISI (re-verify MAJOR — sahte-yeşil panzehiri): "canlılık-kapısı geçildi" markörü
+  # kondüktörün (dogum-zinciri.sh) GEÇTİ kararını tetikleyen TEK sinyaldir → YALNIZ en az bir seat
+  # GERÇEKTEN yeşil-doğrulandıysa basılır. kırmızı=0 TEK BAŞINA yetmez: yeşil=0 ∧ ölçülemedi>0 (tümü-
+  # unknown) durumu unknown≠fail'dir (zincir bloklanmaz, exit=0) AMA unknown≠pass → markörsüz [doğrulanmadı].
+  if [ "$yesil" -gt 0 ]; then
+    echo "== ekip-pong bitti: $proje · yeşil=$yesil · ölçülemedi=$olcemedi · kırmızı=0 (canlılık-kapısı geçildi) =="
+  else
+    echo "[doğrulanmadı] ekip-pong bitti: $proje · yeşil=0 · ölçülemedi=$olcemedi · kırmızı=0 — HİÇBİR seat canlılığı POZİTİF doğrulanamadı (canlılık POZİTİF-kanıtsız; unknown≠pass) — yerleşim düşmedi, zincir sürer ama canlılık KANITLANMADI; bağımsız teyit: bash iskan.sh ekip-pong $proje --apply"
+  fi
+  exit 0
+}
+
 # ── uye-ekle (FAZ-7: UC3 tek-üye iskânı) ────────────────────────────────────────────────
 #
 # NEDEN: FAZ-7 = FAZ-6 ekip-yerleştirme-mekaniğinin (rezerve-uuid + tmux + banner + sarmalayıcı)
@@ -2535,7 +2669,10 @@ cmd_sokum() {
 # Exit-kontratı (aile-uyumlu): 0 adım/zincir-tamam · 1 genel-fail · 2 usage · 3 dry-run-plan ·
 # 4 GO-yok (alt-komuttan AYNEN iletilir).
 
-ISKAN_KUR_ADIMLAR="yeni-proje durak1-cloudtop-pr iskan-host provizyon cf-yayin ekip-yerlestir evergreen-kaydet"
+ISKAN_KUR_ADIMLAR="yeni-proje durak1-cloudtop-pr iskan-host provizyon cf-yayin ekip-yerlestir ekip-pong evergreen-kaydet"
+# adım-sayısı ADIMLAR'dan TÜRER (magic-number yok — adım eklenince/çıkınca tüm "n/N" göstergeleri
+# ve döngü-tavanı kendiliğinden hizalanır; P3 pong-kablosu ekip-pong'u 7. adım olarak ekledi → 8).
+ISKAN_KUR_ADIM_SAYISI=$(set -- $ISKAN_KUR_ADIMLAR; echo $#)
 ISKAN_KUR_IZOLE="vekatip mmex medigate huma mihenk"
 
 _kur_state_path() { echo "${ISKAN_STATE_DIR:-$HOME/.claude}/iskan-kur-$1.state"; }
@@ -2545,7 +2682,7 @@ _kur_state_yaz() { # <state-dosyası> <adım-adı> — git-DIŞI durum-dosyasın
   printf '%s\n' "$2" > "$1"
 }
 
-_kur_adim_no() { # <adım-adı> → 1..7 (bilinmeyen → 0)
+_kur_adim_no() { # <adım-adı> → 1..N (bilinmeyen → 0)
   local i=0 a
   for a in $ISKAN_KUR_ADIMLAR; do
     i=$((i + 1))
@@ -2554,7 +2691,7 @@ _kur_adim_no() { # <adım-adı> → 1..7 (bilinmeyen → 0)
   echo 0
 }
 
-_kur_adim_ad() { # <1..7> → adım-adı
+_kur_adim_ad() { # <1..N> → adım-adı
   local i=0 a
   for a in $ISKAN_KUR_ADIMLAR; do
     i=$((i + 1))
@@ -2664,7 +2801,7 @@ cmd_kur() {
     echo "== İSKÂN kur — DURUM (salt-oku) =="
     echo "proje: $proje · durum-dosyası: $state_file"
     if [ -z "$son_adim" ]; then
-      echo "durum: hiç koşulmamış — zincir baştan başlar (adım 1/7: yeni-proje)"
+      echo "durum: hiç koşulmamış — zincir baştan başlar (adım 1/$ISKAN_KUR_ADIM_SAYISI: yeni-proje)"
       if _kur_durak1_probe "$cname" no-fetch; then
         echo "not: '$cname' compose'da (origin/main) ZATEN kayıtlı ama kur-izi yok → çıplak 'kur' slug-kapısında REDDEDİLİR; bilinçli-devralma gerekir: bash iskan.sh kur $proje --benimse"
       fi
@@ -2672,12 +2809,12 @@ cmd_kur() {
       n="$(_kur_adim_no "$son_adim")"
       if [ "$n" = "0" ]; then
         echo "[doğrulanmadı] durum-dosyası tanınmayan adım-adı içeriyor: '$son_adim' — dosyayı incele/sil, zincir baştan güvenli (adımlar idempotent)"
-      elif [ "$n" -ge 7 ]; then
-        echo "son-tamamlanan: $son_adim (adım $n/7)"
-        echo "durum: zincir TAMAM (7/7) — yapılacak adım kalmadı"
+      elif [ "$n" -ge "$ISKAN_KUR_ADIM_SAYISI" ]; then
+        echo "son-tamamlanan: $son_adim (adım $n/$ISKAN_KUR_ADIM_SAYISI)"
+        echo "durum: zincir TAMAM ($ISKAN_KUR_ADIM_SAYISI/$ISKAN_KUR_ADIM_SAYISI) — yapılacak adım kalmadı"
       else
-        echo "son-tamamlanan: $son_adim (adım $n/7)"
-        echo "sıradaki: $(_kur_adim_ad $((n + 1))) (adım $((n + 1))/7) — sürdürmek için: bash iskan.sh kur $proje --devam$benimse_suffix"
+        echo "son-tamamlanan: $son_adim (adım $n/$ISKAN_KUR_ADIM_SAYISI)"
+        echo "sıradaki: $(_kur_adim_ad $((n + 1))) (adım $((n + 1))/$ISKAN_KUR_ADIM_SAYISI) — sürdürmek için: bash iskan.sh kur $proje --devam$benimse_suffix"
       fi
     fi
     exit 0
@@ -2692,32 +2829,32 @@ cmd_kur() {
         echo "[kırmızı] kur --devam: durum-dosyası tanınmayan adım-adı içeriyor ('$son_adim') — dosyayı incele/sil ($state_file), sonra baştan koş (fail-closed)" >&2
         exit 1
       fi
-      if [ "$n" -ge 7 ]; then
-        echo "[yeşil] kur --devam: zincir zaten TAMAM (son-tamamlanan: $son_adim, 7/7) — no-op"
+      if [ "$n" -ge "$ISKAN_KUR_ADIM_SAYISI" ]; then
+        echo "[yeşil] kur --devam: zincir zaten TAMAM (son-tamamlanan: $son_adim, $ISKAN_KUR_ADIM_SAYISI/$ISKAN_KUR_ADIM_SAYISI) — no-op"
         exit 0
       fi
       baslangic=$((n + 1))
-      echo "[yeşil] kur --devam: son-tamamlanan=$son_adim → adım $baslangic/7'den sürülüyor (kaynak: $state_file)"
+      echo "[yeşil] kur --devam: son-tamamlanan=$son_adim → adım $baslangic/$ISKAN_KUR_ADIM_SAYISI'den sürülüyor (kaynak: $state_file)"
     else
-      echo "[doğrulanmadı] kur --devam: durum-dosyası yok ($state_file) — baştan başlanıyor (adım 1/7)"
+      echo "[doğrulanmadı] kur --devam: durum-dosyası yok ($state_file) — baştan başlanıyor (adım 1/$ISKAN_KUR_ADIM_SAYISI)"
     fi
   elif [ "$mode" = "zincir" ] && [ -n "$son_adim" ]; then
     echo "[uyarı] durum-dosyası mevcut (son-tamamlanan: $son_adim) — baştan koşuluyor (adımlar idempotent); kaldığın yerden sürmek için: bash iskan.sh kur $proje --devam$benimse_suffix"
   fi
 
   if [ "$mode" = "dry-run" ]; then
-    echo "== İSKÂN kur — ZİNCİR KURU-KOŞU (7 adım uçtan-uca dry-run; hiçbir yazma — durum-dosyası DAHİL) =="
+    echo "== İSKÂN kur — ZİNCİR KURU-KOŞU ($ISKAN_KUR_ADIM_SAYISI adım uçtan-uca dry-run; hiçbir yazma — durum-dosyası DAHİL) =="
   else
     echo "== İSKÂN kur — ZİNCİR (duraklı durum-makinesi; GO-marker'lar bypass EDİLMEZ, yalnız sıralanır) =="
   fi
   echo "proje: $proje · container: $cname · durum-dosyası: $state_file"
 
   local i adim rc out go
-  for i in 1 2 3 4 5 6 7; do
+  for ((i = 1; i <= ISKAN_KUR_ADIM_SAYISI; i++)); do
     [ "$i" -lt "$baslangic" ] && continue
     adim="$(_kur_adim_ad "$i")"
     echo ""
-    echo "──── kur adım $i/7: $adim ────"
+    echo "──── kur adım $i/$ISKAN_KUR_ADIM_SAYISI: $adim ────"
 
     # ── DURAK-1 (adım 2): CLI-invoke değil, REPO-FIRST İNSAN-durağı (salt-oku probe) ────────
     if [ "$adim" = "durak1-cloudtop-pr" ]; then
@@ -2775,7 +2912,7 @@ cmd_kur() {
       out="$(_kur_cli yeni-proje "$proje" dry-run 2>&1)"; rc=$?
       printf '%s\n' "$out"
       if [ "$rc" != "3" ]; then
-        echo "[kırmızı] kur adım 1/7 önizlemesi: yeni-proje --dry-run beklenmeyen exit=$rc (plan-exit=3 değil) — DUR (fail-closed); remediation: yeni-proje'yi tek-başına koş" >&2
+        echo "[kırmızı] kur adım 1/$ISKAN_KUR_ADIM_SAYISI önizlemesi: yeni-proje --dry-run beklenmeyen exit=$rc (plan-exit=3 değil) — DUR (fail-closed); remediation: yeni-proje'yi tek-başına koş" >&2
         exit 1
       fi
     fi
@@ -2783,14 +2920,14 @@ cmd_kur() {
     rc=$?
     if [ "$rc" = "0" ]; then
       _kur_state_yaz "$state_file" "$adim" || { echo "[kırmızı] durum-dosyası yazılamadı: $state_file" >&2; exit 1; }
-      echo "[yeşil] kur adım $i/7 tamam: $adim (durum-dosyasına işlendi)"
+      echo "[yeşil] kur adım $i/$ISKAN_KUR_ADIM_SAYISI tamam: $adim (durum-dosyasına işlendi)"
       continue
     fi
     if [ "$rc" = "4" ]; then
       go="$(_kur_go_marker "$adim")"
       {
         echo ""
-        echo "== kur GO-durağında DURDU (adım $i/7: $adim — alt-komutun exit=4'ü AYNEN iletiliyor) =="
+        echo "== kur GO-durağında DURDU (adım $i/$ISKAN_KUR_ADIM_SAYISI: $adim — alt-komutun exit=4'ü AYNEN iletiliyor) =="
         echo "   Sultan-dili: bu adım Sultan'ın açık onay-işaretini bekliyor: ${go:-adımın kendi GO-markeri}."
         echo "   kur GO'yu ASLA kendisi vermez/export etmez; onay verilince adımın ortamında ${go:-GO}=1 ile:"
         echo "   bash iskan.sh kur $proje --devam$benimse_suffix"
@@ -2799,7 +2936,7 @@ cmd_kur() {
     fi
     {
       echo ""
-      echo "[kırmızı] kur adım $i/7 KIRMIZI: $adim exit=$rc — zincir DURDU (fail-closed; sonraki adıma ATLANMADI)"
+      echo "[kırmızı] kur adım $i/$ISKAN_KUR_ADIM_SAYISI KIRMIZI: $adim exit=$rc — zincir DURDU (fail-closed; sonraki adıma ATLANMADI)"
       echo "   remediation: yukarıdaki adım-çıktısını incele; adımı tek-başına koş → düzelince: bash iskan.sh kur $proje --devam$benimse_suffix"
     } >&2
     exit 1
@@ -2807,11 +2944,11 @@ cmd_kur() {
 
   if [ "$mode" = "dry-run" ]; then
     echo ""
-    echo "== kur dry-run: 7-adım zincir-planı uçtan-uca basıldı; hiçbir yazım yapılmadı — durum-dosyası dahil (plan-exit sözleşmesi, exit=3) =="
+    echo "== kur dry-run: $ISKAN_KUR_ADIM_SAYISI-adım zincir-planı uçtan-uca basıldı; hiçbir yazım yapılmadı — durum-dosyası dahil (plan-exit sözleşmesi, exit=3) =="
     exit 3
   fi
   echo ""
-  echo "== kur zincir TAMAM: $proje 7/7 — durum-dosyası: $state_file =="
+  echo "== kur zincir TAMAM: $proje $ISKAN_KUR_ADIM_SAYISI/$ISKAN_KUR_ADIM_SAYISI — durum-dosyası: $state_file =="
   exit 0
 }
 
@@ -2836,6 +2973,10 @@ case "${1:-}" in
     shift
     cmd_ekip_yerlestir "$@"
     ;;
+  ekip-pong)
+    shift
+    cmd_ekip_pong "$@"
+    ;;
   uye-ekle)
     shift
     cmd_uye_ekle "$@"
@@ -2857,7 +2998,7 @@ case "${1:-}" in
     cmd_kur "$@"
     ;;
   *)
-    echo "kullanım: iskan.sh doctor | iskan.sh seans-getir --container <ad> [--apply] | iskan.sh yeni-proje <ad> [--mem-limit <val>] [--port <n>] --dry-run|--apply | iskan.sh cf-yayin <proje> --dry-run|--apply | iskan.sh ekip-yerlestir <proje> --dry-run|--apply | iskan.sh uye-ekle <proje> <uye> [--gorev <görev>] --dry-run|--apply | iskan.sh evergreen-kaydet <proje> --dry-run|--apply | iskan.sh provizyon <proje> [--apply] | iskan.sh sokum <proje> [--dry-run|--apply] | iskan.sh kur <proje> [--dry-run|--devam|--durum] [--benimse]" >&2
+    echo "kullanım: iskan.sh doctor | iskan.sh seans-getir --container <ad> [--apply] | iskan.sh yeni-proje <ad> [--mem-limit <val>] [--port <n>] --dry-run|--apply | iskan.sh cf-yayin <proje> --dry-run|--apply | iskan.sh ekip-yerlestir <proje> --dry-run|--apply | iskan.sh ekip-pong <proje> --dry-run|--apply [--no-ping] | iskan.sh uye-ekle <proje> <uye> [--gorev <görev>] --dry-run|--apply | iskan.sh evergreen-kaydet <proje> --dry-run|--apply | iskan.sh provizyon <proje> [--apply] | iskan.sh sokum <proje> [--dry-run|--apply] | iskan.sh kur <proje> [--dry-run|--devam|--durum] [--benimse]" >&2
     exit 2
     ;;
 esac
