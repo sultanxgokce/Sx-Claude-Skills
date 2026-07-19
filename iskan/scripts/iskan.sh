@@ -395,9 +395,13 @@ _iskan_mem_mb() {
   '
 }
 
-# _iskan_compose_blok <ad> <cname> <config_dir> <port> <mem_limit> — HÜMA-şablon-baz, minimal
-# (test-projesi/izole-provizyon → yalnız kendi config-dizini mount edilir; kişisel-proje/ortak-
-# köprü mount'ları GENEL-şablonun kapsamı-dışı, gelecek-fazda proje-türüne göre parametrize edilir).
+# _iskan_compose_blok <ad> <cname> <config_dir> <port> <mem_limit> — mihenk-şablon-baz (k0084):
+# kendi config-dizini + ORTAK ./config/.claude (keyless Claude-login mirası — B2 zincir-blokajı
+# fix'i: bu mount olmadan doğan ekip claude açamaz, setup-isolated.sh credentials'ı buradan bekler)
+# + DEFAULT_WORKSPACE. BİLİNÇLİ-YOK'lar: ./config/projects/<ad> mount'u EKLENMEZ (proje-ağacı
+# tenant'ın kendi config'inde yaşar — EY_HOST_PROJ deseni; ortak-projects mount'u onu GÖLGELERdi,
+# b0024 sınıfı) · evraklar-köprüleri EKLENMEZ (mahremiyet-KARARI, röportaj/operatör açıkça isterse
+# elle) · .agent-dashboard EKLENMEZ (mobil-panel görünürlük paketi ayrı-faz).
 _iskan_compose_blok() {
   local ad="$1" cname="$2" config_dir="$3" port="$4" mem_limit="$5"
   cat <<EOF
@@ -409,11 +413,14 @@ _iskan_compose_blok() {
       - PUID=1000
       - PGID=1000
       - TZ=\${TZ:-Europe/Istanbul}
+      - DEFAULT_WORKSPACE=/config/projects/${ad}
       - DOCKER_MODS=linuxserver/mods:universal-package-install
       # FAZ-6 generator-hizası: İSKÂN-container'ları ekip-hazır doğar (tmux=oturum, git=ekip-notify REPO_ROOT)
       - INSTALL_PACKAGES=tmux|git|python3
     volumes:
       - ${config_dir}:/config
+      # ORTAK Claude master (keyless-login + skills + global CLAUDE.md mirası — mihenk-emsal k0084)
+      - ./config/.claude:/config/.claude
     ports:
       - "127.0.0.1:${port}:8443"
     restart: unless-stopped
@@ -433,7 +440,10 @@ EOF
 # _iskan_b1_check <repo_compose> <blok_dosyasi> — B1 kesişim-guard: aday-blok EKLENMEDEN-ÖNCE
 # ve EKLENDİKTEN-SONRA compose_parse.py intersections kümesini karşılaştırır; yalnız YENİ
 # ortaya-çıkan kesişimler (mevcut-kasıtlı-paylaşımlar DIŞARIDA — FAZ-1 firsthand-bulgusu) RED
-# sebebi sayılır. Döner: "0" (güvenli) veya >0 (yeni-kesişim sayısı, apply RED edilmeli).
+# sebebi sayılır. BİLİNÇLİ-KÖPRÜ allowlist'i (P-Y1): ortak-tasarım path'leri (default yalnız
+# ./config/.claude — keyless-login mirası, mount-paketinin kendisi) yeni-kesişim SAYILMAZ;
+# ISKAN_B1_BILINCLI_KOPRU env'i ile daraltılıp/genişletilebilir (boş = allowlist kapalı).
+# Döner: "0" (güvenli) veya >0 (allowlist-dışı yeni-kesişim sayısı, apply RED edilmeli).
 _iskan_b1_check() {
   local repo_compose="$1" blok_dosyasi="$2"
   local combined; combined="$(mktemp)"
@@ -442,19 +452,136 @@ _iskan_b1_check() {
   before="$(python3 "$COMPOSE_PARSE" "$repo_compose" 2>/dev/null)"
   after="$(python3 "$COMPOSE_PARSE" "$combined" 2>/dev/null)"
   rm -f "$combined"
-  python3 - "$before" "$after" <<'PYEOF'
+  python3 - "$before" "$after" "${ISKAN_B1_BILINCLI_KOPRU-./config/.claude}" <<'PYEOF'
 import json, sys
-before_raw, after_raw = sys.argv[1], sys.argv[2]
+before_raw, after_raw, allow_raw = sys.argv[1], sys.argv[2], sys.argv[3]
 try:
     before = json.loads(before_raw)["intersections"] if before_raw else []
     after = json.loads(after_raw)["intersections"] if after_raw else []
 except Exception:
     print("parse-hatasi")
     sys.exit(0)
+allow = {p for p in allow_raw.split() if p}
 before_keys = {(i["path"], tuple(sorted(i["services"]))) for i in before}
-new = [i for i in after if (i["path"], tuple(sorted(i["services"]))) not in before_keys]
+new = [i for i in after
+       if (i["path"], tuple(sorted(i["services"]))) not in before_keys
+       and i["path"] not in allow]
 print(len(new))
 PYEOF
+}
+
+# _iskan_setup_script_icerik <ad> — infra/setup-<ad>.sh içeriğini basar (setup-mihenk.sh
+# emsali: İNCE-SARMALAYICI, gerçek iş parametrik setup-isolated.sh'te — tek kaynak, drift YOK).
+# B1 zincir-blokajı fix'i: provizyon adım-4'ün REPO-KANIT kapısı bu dosyayı origin/main'de
+# ŞART koşar (iskan.sh cmd_provizyon) — üretmeyen zincir taze-tenant'ta garantili-kırmızıydı.
+_iskan_setup_script_icerik() {
+  local ad="$1" etiket
+  etiket="${ad^}"
+  cat <<EOF
+#!/usr/bin/env bash
+# cloudtop · İZOLE ${etiket} workspace (cloudtop-${ad}) — BİR KERELİK bootstrap (İSKÂN yeni-proje üreteci)
+# İNCE SARMALAYICI: gerçek iş parametrik setup-isolated.sh'te (tek kaynak → drift YOK,
+# vekatip/mmex/medigate/huma/mihenk ile birebir aynı kurulum + çok-oturum cs profili).
+#
+# Konteyner \`docker compose up -d --no-recreate cloudtop-${ad}\` ile ayağa kalktıktan SONRA
+# çalıştır (İSKÂN-yolu: iskan.sh provizyon ${ad} --apply, ISKAN_FAZ9_GO=1 Sultan-GO'lu):
+#   bash /opt/cloudtop/config/projects/cloudtop/infra/setup-${ad}.sh
+set -euo pipefail
+HERE="\$(cd "\$(dirname "\$0")" && pwd)"
+
+bash "\$HERE/setup-isolated.sh" cloudtop-${ad} /config/projects/${ad} ${etiket}
+
+echo "  Aç: https://${ad}.mmepanel.com  (önce CF Access app'i — iskan.sh cf-yayin ${ad})"
+echo "  Ekip-yerleşimi AYRI adım: iskan.sh ekip-yerlestir ${ad} (kur zinciri adım 6/7)."
+EOF
+}
+
+# _iskan_tunnel_satirlari_ekle <tunnel_dosya> <ad> <port> — setup-tunnel.sh'e üç dokunuş
+# (P-Y2, cf-yayin adım-5 REPO-KANIT'ının beklediği içerik): <AD>_HOSTNAME değişken-satırı +
+# ingress-çifti (http_status:404 catch-all'dan ÖNCE) + route-dns satırı. Söküm-simetrisi:
+# üç satır da proje-token'ı içerir → _sokum_satir_cikar temiz geri-alır (ingress service-satırı
+# çift-kuralıyla). rc=0 eklendi · rc=2 zaten-var (dokunulmadı) · rc=1 hata (çıpa-eksik /
+# bash -n düştü → dosya yedekten geri-alınır, dokunulmamış-eş kalır).
+_iskan_tunnel_satirlari_ekle() {
+  local dosya="$1" ad="$2" port="$3" yedek rc
+  yedek="$(mktemp)"
+  cp -a "$dosya" "$yedek" || { rm -f "$yedek"; return 1; }
+  python3 - "$dosya" "$ad" "$port" <<'PYEOF'
+import re, sys
+path, ad, port = sys.argv[1], sys.argv[2], sys.argv[3]
+uvar = re.sub(r"[^A-Za-z0-9]", "_", ad).upper() + "_HOSTNAME"
+lines = open(path, encoding="utf-8", errors="replace").read().splitlines()
+if any(re.match(r"^" + re.escape(uvar) + r"=", l) for l in lines):
+    sys.exit(2)
+var_idx = [i for i, l in enumerate(lines) if re.match(r"^[A-Z0-9_]+_HOSTNAME=", l)]
+catch_idx = [i for i, l in enumerate(lines) if re.match(r"^\s*-\s*service:\s*http_status:404", l)]
+route_idx = [i for i, l in enumerate(lines) if re.match(r"^cloudflared tunnel route dns ", l)]
+if not var_idx or not catch_idx or not route_idx:
+    sys.exit(1)
+# NOT (LB-1 söküm-simetrisi): ingress + route satırları RAW `ad`'ı yorum-etiketiyle taşır — böylece
+# söküm'ün generic substring-remover'ı (_sokum_satir_cikar, RAW-token eşler) TİRELİ/özel-karakterli
+# adlarda da bu satırları bulur. Aksi hâlde uvar (ad→[^A-Za-z0-9]→_ sanitize) raw-token'ı içermez
+# (ör. my-proj→MY_PROJ_HOSTNAME) → söküm yalnız tanım-satırını siler, ingress/route öksüz kalır →
+# tanımsız ${..._HOSTNAME} → gerçek setup-tunnel.sh set -u altında çöker.
+# BİLİNEN-SINIR (F5-kuyruğu): _sokum_satir_cikar SUBSTRING eşler (pre-existing) → bir üst-küme
+# hostname'in alt-dizesi olan ad (ör. 'hen' ⊂ 'mihenk') söküldüğünde komşunun satırlarını da
+# siler. Kontrivan+operatör-eli; söküm-matcher'ını word-boundary'ye evirmek AYRI PR (söküm-sözleşmesi
+# tested) → F5'e. Bugünkü gerçek adlar (mihenk/huma/medi/vekatip/code/pc/m) böyle çakışmaz.
+var_line = uvar + '="${' + uvar + "_OVERRIDE:-" + ad + '.mmepanel.com}"          # İSKÂN workspace (cloudtop-' + ad + ", " + port + "; iskan.sh yeni-proje üretti)"
+ingress_pair = ["  - hostname: ${" + uvar + "}   # " + ad + " (İSKÂN yeni-proje)", "    service: http://localhost:" + port]
+route_line = 'cloudflared tunnel route dns "$TUNNEL" "$' + uvar + '" || true   # ' + ad + " (İSKÂN yeni-proje)"
+inserts = sorted(
+    [(max(var_idx) + 1, [var_line]), (catch_idx[0], ingress_pair), (max(route_idx) + 1, [route_line])],
+    key=lambda t: t[0], reverse=True)
+for pos, new_lines in inserts:
+    lines[pos:pos] = new_lines
+open(path, "w", encoding="utf-8").write("\n".join(lines) + "\n")
+PYEOF
+  rc=$?
+  if [ "$rc" = "2" ]; then rm -f "$yedek"; return 2; fi
+  if [ "$rc" != "0" ] || ! bash -n "$dosya" 2>/dev/null; then
+    cp -a "$yedek" "$dosya"
+    rm -f "$yedek"
+    return 1
+  fi
+  rm -f "$yedek"
+  return 0
+}
+
+# _iskan_yp_kardesler <ad> <port> <setup_dosya> <tunnel_dosya> — DURAK-1 üçlüsünün compose-dışı
+# iki kalemini idempotent yazar (setup-<ad>.sh + setup-tunnel 3-satır). rc≠0 = kırmızı, çağıran
+# DURur. Hem taze-apply hem idempotent-geçiş (eksik-tamamlama) bu tek yoldan geçer.
+_iskan_yp_kardesler() {
+  local ad="$1" port="$2" setup_dosya="$3" tunnel_dosya="$4" rc
+  if [ -f "$setup_dosya" ]; then
+    echo "[yeşil] setup-script: $setup_dosya mevcut → atla (idempotent)"
+  else
+    _iskan_setup_script_icerik "$ad" > "$setup_dosya" || { echo "[kırmızı] setup-script yazılamadı: $setup_dosya" >&2; return 1; }
+    chmod +x "$setup_dosya" 2>/dev/null || true
+    if ! bash -n "$setup_dosya" 2>/dev/null; then
+      echo "[kırmızı] setup-script bash -n kapısı DÜŞTÜ: $setup_dosya — dosyayı incele, DUR" >&2
+      return 1
+    fi
+    echo "[yeşil] setup-script üretildi: $setup_dosya (İNCE-SARMALAYICI → setup-isolated.sh; provizyon adım-4 REPO-KANIT'ı bunu ister)"
+  fi
+  _iskan_tunnel_satirlari_ekle "$tunnel_dosya" "$ad" "$port"; rc=$?
+  case "$rc" in
+    0) echo "[yeşil] setup-tunnel: 3 satır eklendi — hostname-değişkeni + ingress-çifti (port $port) + route-dns ($tunnel_dosya, bash -n temiz; cf-yayin adım-5 REPO-KANIT'ı bunu ister)" ;;
+    2) echo "[yeşil] setup-tunnel: '$ad' satırları zaten mevcut → atla (idempotent)" ;;
+    *) echo "[kırmızı] setup-tunnel dokunuşu BAŞARISIZ (çıpa-eksik ya da bash -n düştü) — dosya dokunulmamış-eş geri-alındı: $tunnel_dosya" >&2; return 1 ;;
+  esac
+}
+
+# _iskan_tunnel_cipa_var <tunnel_dosya> — setup-tunnel.sh'in üç çıpası (hostname-değişkeni ·
+# http_status:404 catch-all · route-dns satırı) MEVCUT mu? rc=0 hepsi var · rc=1 en az biri yok.
+# MAJOR-3 fix: taze-apply ön-kapısı compose'a dokunmadan ÖNCE bunu koşar — çıpasız-ama-mevcut
+# tünel-dosyası 'sıfır-dokunuş fail-closed' vaadini kırmasın (compose yazıp kardeş-fail = yarım-yazım).
+_iskan_tunnel_cipa_var() {
+  local dosya="$1"
+  [ -f "$dosya" ] || return 1
+  grep -qE '^[A-Z0-9_]+_HOSTNAME=' "$dosya" \
+    && grep -qE '^[[:space:]]*-[[:space:]]*service:[[:space:]]*http_status:404' "$dosya" \
+    && grep -qE '^cloudflared tunnel route dns ' "$dosya"
 }
 
 cmd_yeni_proje() {
@@ -480,6 +607,20 @@ cmd_yeni_proje() {
     echo "kullanım: iskan.sh yeni-proje <ad> [--mem-limit <val>] [--port <n>] --dry-run|--apply" >&2
     exit 2
   fi
+  # LB-2 fix: kardeş-komutlar (kur/provizyon/sokum/cf-yayin/ekip-yerlestir) gibi yeni-proje de
+  # ad-hijyeninden geçmeli — bu PR `ad`'ı ilk kez HOST'ta koşan üretilmiş betiklere (setup-<ad>.sh
+  # içeriği + setup-tunnel default-değeri) gömüyor → tırnaksız gömme + dosya-adı = komut-enjeksiyonu
+  # + path-traversal yüzeyi. Dar-charset ([A-Za-z0-9-]) bunu kapatır. (bash -n üretilen betiği kör
+  # kontrol eder: $(...) geçerli-sözdizimidir → yalnız charset-gate yakalar.)
+  _ey_ad_hijyeni "$ad" "yeni-proje" || exit 1
+  # ek-guard (re-verify MAJOR): ad'dan tünel-değişkeni <AD>_HOSTNAME türetilir → GEÇERLİ bash-
+  # identifier olmalı. Rakam-başı (9proj→9PROJ_HOSTNAME) bash-atama DEĞİL komut sayılır, $9
+  # konumsal-parametre olur → `bash -n` KÖR geçer (sözdizimsel geçerli) ama runtime `set -u`
+  # altında 'bad substitution' ile çöker → yalancı-yeşil + repoya bozuk artefakt. Harf-başı ŞART.
+  if ! printf '%s' "$ad" | LC_ALL=C grep -qE '^[A-Za-z]'; then
+    echo "[kırmızı] yeni-proje: '$ad' harf ile başlamıyor — tünel-değişkeni (\${AD}_HOSTNAME) geçerli bash-identifier olmalı (rakam-başı runtime 'bad substitution' üretir; bash -n kör geçer), hiçbir yere dokunulmadı" >&2
+    exit 1
+  fi
   if [ -n "$port_override" ] && ! printf '%s' "$port_override" | grep -qE '^[0-9]+$'; then
     echo "[kırmızı] --port/ISKAN_PORT sayısal olmalı, gelen: '$port_override'" >&2
     exit 2
@@ -496,6 +637,13 @@ cmd_yeni_proje() {
   [ -f "$repo_compose" ] || { echo "[kırmızı] repo-compose bulunamadı: $repo_compose" >&2; exit 1; }
 
   local cname="cloudtop-${ad}" config_dir="./config-${ad}"
+
+  # DURAK-1 üçlüsünün compose-dışı kalemleri (P-Y2): setup-<ad>.sh + setup-tunnel dokunuşu.
+  # Yollar repo_compose'un dizininden türer → testler fixture-dizinle hermetik kalır.
+  local repo_infra setup_dosya tunnel_dosya
+  repo_infra="$(dirname "$repo_compose")"
+  setup_dosya="$repo_infra/setup-${ad}.sh"
+  tunnel_dosya="${ISKAN_REPO_TUNNEL:-$repo_infra/setup-tunnel.sh}"
 
   # İDEMPOTENCY (FAZ-4 devral-gereği): blok zaten repo-compose'daysa RED değil GEÇİŞ —
   # dry-run mevcut-hâli önizler (exit 3), apply yeniden-yazmadan başarıyla geçer (exit 0).
@@ -534,6 +682,21 @@ cmd_yeni_proje() {
     echo "== İSKÂN yeni-proje — KURU-KOŞU (DEFAULT; hiçbir dosya yazılmaz, host'a dokunulmaz) =="
     echo "proje: $ad · container: $cname · port: 127.0.0.1:${port:-?}:8443 (mevcut-bloktan okundu)"
     echo "[yeşil] '$cname' bloğu ZATEN repo-compose'da (idempotent) — apply'da yeniden-yazım YAPILMAYACAK"
+    echo "-- DURAK-1 ÜÇLÜ-DURUM (compose + setup-script + tünel-satırı; eksikler apply'da tamamlanır) --"
+    if [ -f "$setup_dosya" ]; then
+      echo "  [yeşil] setup-script: $setup_dosya MEVCUT"
+    else
+      echo "  [doğrulanmadı] setup-script: $setup_dosya YOK — apply üretir (provizyon adım-4 REPO-KANIT'ı ister)"
+    fi
+    if [ ! -f "$tunnel_dosya" ]; then
+      echo "  [doğrulanmadı] setup-tunnel: $tunnel_dosya BULUNAMADI — apply RED eder (fail-closed; ISKAN_REPO_TUNNEL ile yol ver)"
+    elif ! _iskan_tunnel_cipa_var "$tunnel_dosya"; then
+      echo "  [doğrulanmadı] setup-tunnel: $tunnel_dosya çıpasız (hostname-değişkeni/http_status:404/route-dns eksik) — apply RED eder (sıfır-dokunuş)"
+    elif grep -q "${ad}.mmepanel.com" "$tunnel_dosya"; then
+      echo "  [yeşil] setup-tunnel: '$ad' satırları MEVCUT ($tunnel_dosya)"
+    else
+      echo "  [doğrulanmadı] setup-tunnel: '$ad' satırları YOK — apply ekler (cf-yayin adım-5 REPO-KANIT'ı ister)"
+    fi
     echo "-- MANİFEST-DOKUNUŞ (bilgilendirme — bu çağrıda hiçbir dosya yazılmadı) --"
     echo "  - ${repo_compose} (blok mevcut → repo-yazımı GEREKMİYOR)"
     echo "  - host-deploy + docker-compose up (AYRI adım: iskan-host.sh --apply, cloudtop-PR merge'i SONRASI)"
@@ -544,11 +707,23 @@ cmd_yeni_proje() {
   if [ "$mode" = "dry-run" ]; then
     echo "== İSKÂN yeni-proje — KURU-KOŞU (DEFAULT; hiçbir dosya yazılmaz, host'a dokunulmaz) =="
     echo "proje: $ad · container: $cname · port: 127.0.0.1:${port}:8443 · mem_limit: $mem_limit"
-    echo "-- B1 (kesişim-guard, önizleme) -- yeni-kesişim: ${yeni_kesisim} $([ "$yeni_kesisim" = "0" ] && echo '(GÜVENLİ)' || echo '(RED-adayı — apply reddedilecek)')"
+    echo "-- B1 (kesişim-guard, önizleme) -- yeni-kesişim: ${yeni_kesisim} $([ "$yeni_kesisim" = "0" ] && echo '(GÜVENLİ)' || echo '(RED-adayı — apply reddedilecek)') · bilinçli-köprü allowlist: ${ISKAN_B1_BILINCLI_KOPRU-./config/.claude}"
     echo "-- ÜRETİLECEK COMPOSE-BLOK --"
     printf '%s\n' "$blok"
+    echo "-- DURAK-1 ÜÇLÜ (apply compose-bloğuna ek üretecek; P-Y2) --"
+    echo "  - setup-script: $setup_dosya (İNCE-SARMALAYICI → setup-isolated.sh cloudtop-$ad /config/projects/$ad ${ad^})"
+    if [ ! -f "$tunnel_dosya" ]; then
+      echo "  - [doğrulanmadı] setup-tunnel: $tunnel_dosya BULUNAMADI — apply RED eder (fail-closed; ISKAN_REPO_TUNNEL ile yol ver)"
+    elif ! _iskan_tunnel_cipa_var "$tunnel_dosya"; then
+      echo "  - [doğrulanmadı] setup-tunnel: $tunnel_dosya çıpasız (hostname-değişkeni/http_status:404/route-dns eksik) — apply RED eder (sıfır-dokunuş)"
+    elif grep -q "${ad}.mmepanel.com" "$tunnel_dosya"; then
+      echo "  - [yeşil] setup-tunnel: '$ad' satırları ZATEN mevcut ($tunnel_dosya) → apply atlar"
+    else
+      echo "  - setup-tunnel: 3-satır eklenecek ($tunnel_dosya — hostname-değişkeni + ingress-çifti [port $port] + route-dns)"
+    fi
     echo "-- MANİFEST-DOKUNUŞ (bilgilendirme — bu çağrıda hiçbir dosya yazılmadı) --"
     echo "  - ${repo_compose} (REPO-FIRST: yalnız bu tek-blok eklenecek, başka satıra dokunulmayacak)"
+    echo "  - ${setup_dosya} + ${tunnel_dosya} (DURAK-1 üçlüsünün kalan iki kalemi)"
     echo "  - host-deploy + docker-compose up (AYRI adım: iskan-host.sh --apply, cloudtop-PR merge'i SONRASI)"
     rm -f "$blok_dosyasi"
     echo "== dry-run: hiçbir yazım yapılmadı (plan-exit sözleşmesi, exit=3) =="
@@ -564,14 +739,38 @@ cmd_yeni_proje() {
   fi
 
   if [ "$mevcut" = "1" ]; then
-    echo "== İSKÂN yeni-proje — İDEMPOTENT GEÇİŞ =="
-    echo "[yeşil] '$cname' bloğu ZATEN repo-compose'da (port: ${port:-?}) — yeniden-yazım YOK, hiçbir dosyaya dokunulmadı"
+    echo "== İSKÂN yeni-proje — İDEMPOTENT GEÇİŞ (DURAK-1 üçlü-tamamlayıcı) =="
+    echo "[yeşil] '$cname' bloğu ZATEN repo-compose'da (port: ${port:-?}) — compose'a yeniden-yazım YOK"
+    if [ ! -f "$tunnel_dosya" ]; then
+      echo "[kırmızı] setup-tunnel bulunamadı: $tunnel_dosya — üçlü tamamlanamaz (fail-closed; ISKAN_REPO_TUNNEL ile yol ver), başka hiçbir dosyaya dokunulmadı" >&2
+      exit 1
+    fi
+    if [ -z "$port" ]; then
+      echo "[kırmızı] '$cname' port'u mevcut-bloktan çözülemedi — tünel-satırı üretilemez, DUR (başka hiçbir dosyaya dokunulmadı)" >&2
+      exit 1
+    fi
+    _iskan_yp_kardesler "$ad" "$port" "$setup_dosya" "$tunnel_dosya" || exit 1
+    echo "== bitti — idempotent-geçiş: compose'a dokunulmadı, eksik kardeş-kalemler tamamlandı (varsa) =="
     exit 0
   fi
 
   if [ "$yeni_kesisim" != "0" ]; then
     rm -f "$blok_dosyasi"
     echo "[kırmızı] yeni-proje --apply: B1 volume-path kesişim-guard tetiklendi (${yeni_kesisim} yeni-kesişim) — RED, hiçbir dosya yazılmadı" >&2
+    exit 1
+  fi
+
+  # DURAK-1 üçlü ön-kapısı (P-Y2 + MAJOR-3): compose'a dokunmadan ÖNCE tünel-dosyası hem VAR hem
+  # ÇIPALI olmalı (varlık-only kontrol yetmez — çıpasız-ama-mevcut dosya compose yazıldıktan sonra
+  # kardeş-fail'e düşüp 'sıfır-dokunuş' vaadini kırardı). Fail-closed sıfır-dokunuş.
+  if [ ! -f "$tunnel_dosya" ]; then
+    rm -f "$blok_dosyasi"
+    echo "[kırmızı] setup-tunnel bulunamadı: $tunnel_dosya — DURAK-1 üçlüsü tamamlanamaz, hiçbir dosya yazılmadı (ISKAN_REPO_TUNNEL ile yol ver)" >&2
+    exit 1
+  fi
+  if ! _iskan_tunnel_cipa_var "$tunnel_dosya"; then
+    rm -f "$blok_dosyasi"
+    echo "[kırmızı] setup-tunnel çıpasız: $tunnel_dosya üç çıpanın (hostname-değişkeni · http_status:404 · route-dns) hepsini içermiyor — tünel-satırı üretilemez, compose'a dokunulmadan DUR (sıfır-dokunuş, hiçbir dosya yazılmadı)" >&2
     exit 1
   fi
 
@@ -591,8 +790,12 @@ cmd_yeni_proje() {
   rm -f "$blok_dosyasi"
 
   echo "[yeşil] compose-blok eklendi: $repo_compose (append-only, mevcut hiçbir satıra dokunulmadı)"
+  if ! _iskan_yp_kardesler "$ad" "$port" "$setup_dosya" "$tunnel_dosya"; then
+    echo "[kırmızı] DURAK-1 üçlüsü YARIM kaldı: compose-blok yazıldı ama kardeş-kalem düştü — hepsi git-tracked, geri-al: git checkout -- <dosya>; DUR" >&2
+    exit 1
+  fi
   echo "proje: $ad · container: $cname · port: 127.0.0.1:${port}:8443 · mem_limit: $mem_limit · B1-yeni-kesişim: 0"
-  echo "== bitti — yalnız git-tracked repo yazıldı; commit/push/PR + host-deploy AYRI adımlardır (REPO-FIRST, D1) =="
+  echo "== bitti — DURAK-1 üçlüsü (compose-blok + setup-script + tünel-satırları) yalnız git-tracked repo'ya yazıldı; commit/push/PR + host-deploy AYRI adımlardır (REPO-FIRST, D1) =="
   exit 0
 }
 
