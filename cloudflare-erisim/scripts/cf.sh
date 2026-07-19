@@ -312,60 +312,104 @@ cmd_onboard(){  # <hostname> [email] — Access app + policy + DNS (asıl iş)
 
 # offboard koruma-listesi: prod-hostname'ler + DNS-only kök — bunlar bu komutla ASLA silinemez
 # (İSKÂN 8-hostname sert-kapısının cf-yüzeyi; yanlış-arg tek-hamlede prod-kapısını sökemesin).
-OFFBOARD_PROTECTED="${CF_OFFBOARD_PROTECTED:-pc.${ZONE_NAME} code.${ZONE_NAME} vekatip.${ZONE_NAME} mmex.${ZONE_NAME} medi.${ZONE_NAME} huma.${ZONE_NAME} m.${ZONE_NAME} mihenk.${ZONE_NAME} cloudtop.${ZONE_NAME} ${ZONE_NAME}}"
+# ÇEKİRDEK LİTERAL'dir (ZONE_NAME-interpolasyonsuz): CF_ZONE_NAME tek-env'iyle sert-kapı KAYDIRILAMAZ
+# (interpolasyonlu hâlde CF_ZONE_NAME=evil.com mahrem-hostname'leri koruma-dışına düşürürdü; DELETE'ler
+# ise cache'teki GERÇEK zone-id'de koşardı). Env'ler yalnız EKLER, asla daraltamaz: CF_OFFBOARD_PROTECTED_EXTRA
+# (önerilen) ve CF_OFFBOARD_PROTECTED (eski tam-override → yalnız-ekleme'ye sertleştirildi; sert-kapı zayıflatılamaz).
+OFFBOARD_PROTECTED_CORE="pc.mmepanel.com code.mmepanel.com vekatip.mmepanel.com mmex.mmepanel.com medi.mmepanel.com huma.mmepanel.com m.mmepanel.com mihenk.mmepanel.com cloudtop.mmepanel.com mmepanel.com"
+OFFBOARD_PROTECTED="${OFFBOARD_PROTECTED_CORE} ${CF_OFFBOARD_PROTECTED_EXTRA:-} ${CF_OFFBOARD_PROTECTED:-}"
 
 cmd_offboard(){  # <hostname> [--apply] — Access app + DNS CNAME geri-alımı (dry-run DEFAULT)
-  # Silme-öncesi TEK-KAYIT-assertion (her iki yarı ayrı): lookup TAM-hostname eşleşmesiyle yapılır
-  # (Access: .domain==host · DNS: type=CNAME&name=host); sonuç ≠1 ise DUR — 0 kayıt "zaten yok"
-  # sayılıp sessiz-geçilmez, >1 kayıt asla toplu-silinmez. Değer-basmaz (yalnız hostname + ID).
+  # PER-YARI ≤1-assertion (her iki yarı bağımsız): lookup TAM-hostname eşleşmesiyle yapılır
+  # (Access: .domain==host · DNS: type=CNAME&name=host). Sözleşme (idempotent söküm re-run'ı):
+  #   n==1 → sil · n==0 → "zaten-yok" kanıt-satırı + devam (yarım-kalmış apply re-run'ı kilitlenmez)
+  #   n>1  → DUR (toplu-silme ASLA — assertion'ın koruduğu asıl tehlike bu yarı)
+  # 0'ı "zaten-yok" sayabilmek POZİTİF-KANIT ister: Access listesi sunucu-FİLTRESİZ döner →
+  # tamlık-kapısı şart (total_count == dönen-liste-uzunluğu değilse görünmeyen-dilimde canlı
+  # kayıt olabilir; unknown ≠ yok → DUR). DNS sorgusu sunucu-tarafı name-filtreli → 0 = kanıtlı-yok.
+  # Değer-basmaz (yalnız hostname + CF kaynak-ID). Çift-zaten-yok → exit 0 (söküm re-run güvenliği).
   local host="" apply=0 a
   for a in "$@"; do
     case "$a" in
       --apply) apply=1 ;;
       -*) die "bilinmeyen bayrak: $a  (kullanım: offboard <hostname> [--apply])" ;;
-      *) host="$a" ;;
+      *) [ -z "$host" ] || die "birden fazla hostname verilemez ('$host' ve '$a') — yanlış-hedef riski. Kullanım: offboard <hostname> [--apply]"
+         host="$a" ;;
     esac
   done
   [ -n "$host" ] || die "kullanım: offboard <hostname> [--apply]"
+  # hostname'i KANONİKLEŞTİR (DNS case-insensitive; kuyruk-nokta = FQDN eşdeğeri): korumalı-kapı,
+  # Access .domain-eşi ve DNS name-filtresi hep kanonik-lowercase koşar — 'HUMA.mmepanel.com' /
+  # 'huma.mmepanel.com.' varyantları sert-kapıyı KAYDIRAMAZ (adversaryal-hakem repro'lu bulgu).
+  host="${host,,}"; host="${host%.}"
   local p
+  set -f  # env-kaynaklı liste-üyelerinde glob-genişleme olmasın (cwd-bağımsız davranış)
   for p in $OFFBOARD_PROTECTED; do
     [ "$host" = "$p" ] && die "REDDEDİLDİ: $host korumalı prod-hostname — offboard bu yüzeyden yapılamaz."
   done
+  set +f
   load_ctx
 
-  # ── yarı-1: Access app — TAM-hostname lookup + tek-kayıt-assertion ─────────────────────
-  local apps app_id n_app
-  apps="$(api GET "/accounts/${ACCOUNT_ID}/access/apps?per_page=100")"
+  # ── yarı-1: Access app — tamlık-kapısı + TAM-hostname lookup + ≤1-assertion ────────────
+  # Tamlık-KANITI = total_count == dönen-liste-uzunluğu (istenen-per_page varsayımı DEĞİL:
+  # sunucu per_page'i kırparsa total≤100 iken bile hedef görünmeyen-dilimde kalabilirdi).
+  local per_page=100 apps app_id n_app n_donen total_app
+  apps="$(api GET "/accounts/${ACCOUNT_ID}/access/apps?per_page=${per_page}")"
   ok "$apps" || { red "✗ Access app listesi alınamadı:"; errs "$apps"; exit 1; }
-  app_id="$(echo "$apps" | jq -r --arg d "$host" '.result[]? | select(.domain==$d) | .id')"
-  n_app="$(printf '%s' "$app_id" | grep -c . || true)"
-  [ "$n_app" = "1" ] || die "DUR: Access-app tek-kayıt-assertion başarısız — '$host' (.domain TAM-eş) için ${n_app} kayıt, beklenen 1. Hiçbir şey silinmedi."
+  total_app="$(echo "$apps" | jq -r '.result_info.total_count // empty')"
+  n_donen="$(echo "$apps" | jq -r '.result | length')"
+  case "$total_app" in
+    ''|*[!0-9]*) die "DUR: Access-app listesi tamlığı kanıtlanamadı (total_count okunamadı) — 0/1/N sayımı güvenilmez, hiçbir şey silinmedi (unknown ≠ yok)." ;;
+  esac
+  [ "$total_app" -eq "$n_donen" ] || die "DUR: Access-app listesi TAM değil (total_count=${total_app} ≠ dönen=${n_donen}) — görünmeyen-dilimde canlı kayıt olabilir, hiçbir şey silinmedi. (Çözüm: sayfalama desteği eklenmeli.)"
+  n_app="$(echo "$apps" | jq -r --arg d "$host" '[.result[]? | select(.domain==$d)] | length')"
+  case "$n_app" in
+    0) app_id="" ;;
+    1) app_id="$(echo "$apps" | jq -r --arg d "$host" '.result[]? | select(.domain==$d) | .id // empty' | head -1)"
+       { [ -n "$app_id" ] && [ "$app_id" != "null" ]; } || die "DUR: Access-app id okunamadı ('$host' eşleşti ama id boş/null) — hiçbir şey silinmedi." ;;
+    *) die "DUR: Access-app ≤1-assertion başarısız — '$host' (.domain TAM-eş) için ${n_app} kayıt. Toplu-silme ASLA; hiçbir şey silinmedi." ;;
+  esac
 
-  # ── yarı-2: DNS CNAME — TAM-hostname lookup + tek-kayıt-assertion ──────────────────────
+  # ── yarı-2: DNS CNAME — TAM-hostname lookup (sunucu-filtreli → 0=kanıtlı-yok) + ≤1-assertion ──
   [ -n "${ZONE_ID:-}" ] || die "DUR: zone_id çözülemedi (token'da Zone-Read yok?) — DNS-yarısı doğrulanamaz, hiçbir şey silinmedi."
   local recs rec_id n_rec
   recs="$(api GET "/zones/${ZONE_ID}/dns_records?type=CNAME&name=${host}")"
   ok "$recs" || { red "✗ DNS kaydı sorgulanamadı:"; errs "$recs"; exit 1; }
-  rec_id="$(echo "$recs" | jq -r '.result[]?.id')"
-  n_rec="$(printf '%s' "$rec_id" | grep -c . || true)"
-  [ "$n_rec" = "1" ] || die "DUR: DNS-CNAME tek-kayıt-assertion başarısız — '$host' (type=CNAME, name TAM-eş) için ${n_rec} kayıt, beklenen 1. Hiçbir şey silinmedi."
+  n_rec="$(echo "$recs" | jq -r '.result | length')"
+  case "$n_rec" in
+    0) rec_id="" ;;
+    1) rec_id="$(echo "$recs" | jq -r '.result[0].id // empty')"
+       { [ -n "$rec_id" ] && [ "$rec_id" != "null" ]; } || die "DUR: DNS-CNAME id okunamadı ('$host' eşleşti ama id boş/null) — hiçbir şey silinmedi." ;;
+    *) die "DUR: DNS-CNAME ≤1-assertion başarısız — '$host' (type=CNAME, name TAM-eş) için ${n_rec} kayıt. Toplu-silme ASLA; hiçbir şey silinmedi." ;;
+  esac
 
   if [ "$apply" != "1" ]; then
-    ylw "KURU-ÇALIŞMA (DEFAULT — hiçbir şey silinmedi). Silinecekler:"
-    echo "  • Access app : $host  (id: $app_id)"
-    echo "  • DNS CNAME  : $host  (id: $rec_id)"
+    ylw "KURU-ÇALIŞMA (DEFAULT — hiçbir şey silinmedi). Plan:"
+    if [ -n "$app_id" ]; then echo "  • Access app : SİLİNECEK — $host  (id: $app_id)"
+    else echo "  • Access app : zaten-yok (0 kayıt, liste-tam kanıtlı) — idempotent no-op"; fi
+    if [ -n "$rec_id" ]; then echo "  • DNS CNAME  : SİLİNECEK — $host  (id: $rec_id)"
+    else echo "  • DNS CNAME  : zaten-yok (0 kayıt) — idempotent no-op"; fi
     echo "Uygulamak için:  bash $0 offboard $host --apply"
     return 0
   fi
 
-  local dresp
-  dresp="$(api DELETE "/accounts/${ACCOUNT_ID}/access/apps/${app_id}")"
-  ok "$dresp" || { red "✗ Access app silinemedi ($host) — DNS'e dokunulmadı:"; errs "$dresp"; exit 1; }
-  grn "✓ Access app silindi: $host  ($app_id)"
-  dresp="$(api DELETE "/zones/${ZONE_ID}/dns_records/${rec_id}")"
-  ok "$dresp" || { red "✗ DNS CNAME silinemedi ($host) — Access app SİLİNDİ, DNS elle temizlenmeli:"; errs "$dresp"; exit 1; }
-  grn "✓ DNS CNAME silindi: $host  ($rec_id)"
-  grn "✓ offboard tamam: $host (Access + DNS geri-alındı; tünel-ingress host config.yml'de ayrı yaşar)"
+  local acc_sonuc="zaten-yok" dns_sonuc="zaten-yok" dresp
+  if [ -n "$app_id" ]; then
+    dresp="$(api DELETE "/accounts/${ACCOUNT_ID}/access/apps/${app_id}")"
+    ok "$dresp" || { red "✗ Access app silinemedi ($host) — DNS'e dokunulmadı; re-run kalanı temizler (idempotent):"; errs "$dresp"; exit 1; }
+    grn "✓ Access app silindi: $host  ($app_id)"; acc_sonuc="silindi"
+  else
+    ylw "• zaten-yok: Access-app '$host' (0 kayıt, liste-tam kanıtlı) — idempotent no-op"
+  fi
+  if [ -n "$rec_id" ]; then
+    dresp="$(api DELETE "/zones/${ZONE_ID}/dns_records/${rec_id}")"
+    ok "$dresp" || { red "✗ DNS CNAME silinemedi ($host) — Access-yarısı: ${acc_sonuc}; re-run kalanı temizler (idempotent):"; errs "$dresp"; exit 1; }
+    grn "✓ DNS CNAME silindi: $host  ($rec_id)"; dns_sonuc="silindi"
+  else
+    ylw "• zaten-yok: DNS-CNAME '$host' (0 kayıt) — idempotent no-op"
+  fi
+  grn "✓ offboard tamam: $host (tünel-ingress host config.yml'de ayrı yaşar)"
+  echo "OFFBOARD-SONUC: access=${acc_sonuc} dns=${dns_sonuc}"
 }
 
 cmd_list(){
