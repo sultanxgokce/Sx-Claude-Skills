@@ -1,7 +1,7 @@
 ---
 name: cloudflare-erisim
 type: agent
-version: 1.1.0
+version: 1.2.0
 description: >
   Cloudflare erişimi gereken işleri (Access self-hosted app + policy, proxied DNS/tünel rotası,
   subdomain'i giriş-kapısı arkasına alma) PANELE GİRMEDEN, saf API (curl+jq) ile yapar. Kimlik yoksa
@@ -70,10 +70,16 @@ bash ~/.claude/skills/cloudflare-erisim/scripts/cf.sh list                      
 bash ~/.claude/skills/cloudflare-erisim/scripts/cf.sh offboard <host> [--apply]    # Access + DNS GERİ-ALIMI (dry-run DEFAULT)
 ```
 `offboard` = `onboard`'un tersi (İSKÂN söküm-akışı kullanır): TAM-hostname lookup + silme-öncesi
-**tek-kayıt-assertion** (Access `.domain==host` · DNS `type=CNAME&name=host`; sonuç ≠1 → DUR, hiçbir şey
-silinmez) · dry-run DEFAULT (`--apply` şart) · prod-hostname koruma-listesi (pc/code/vekatip/mmex/medi/
-huma/m/mihenk/cloudtop + zone-kökü REDDEDİLİR) · değer-basmaz. Tünel-ingress satırı host `config.yml`'de
-ayrı yaşar — onu İSKÂN `sokum` adımı (.bak'lı) çıkarır, bu komut DOKUNMAZ.
+**per-yarı ≤1-assertion** (Access `.domain==host` · DNS `type=CNAME&name=host`): `1→sil` · `0→"zaten-yok"
+kanıt-satırı + devam` (idempotent — yarım-kalmış söküm re-run'ı kilitlenmez; çift-zaten-yok → exit 0) ·
+`>1→DUR` (toplu-silme ASLA). 0'ı "zaten-yok" saymak pozitif-kanıt ister: Access listesinde **tamlık-kapısı**
+(total_count ≤ per_page değilse DUR — unknown ≠ yok); DNS sorgusu sunucu-filtreli → 0 = kanıtlı-yok.
+Dry-run DEFAULT (`--apply` şart) · koruma-listesi **literal-çekirdek** (pc/code/vekatip/mmex/medi/huma/m/
+mihenk/cloudtop + zone-kökü; `CF_ZONE_NAME` ile KAYDIRILAMAZ; env'ler yalnız EKLER:
+`CF_OFFBOARD_PROTECTED_EXTRA`) · değer-basmaz · sonda makine-okur kanıt-satırı
+`OFFBOARD-SONUC: access=silindi|zaten-yok dns=silindi|zaten-yok` (İSKÂN kanıt-dosyası bunu saklar; exit-code
+sözleşmesi değişmez). Tünel-ingress satırı host `config.yml`'de ayrı yaşar — onu İSKÂN `sokum` adımı
+(.bak'lı) çıkarır, bu komut DOKUNMAZ. Golden-süit: `scripts/cf.test.sh` (offline curl-stub, gerçek CF'e sıfır istek).
 Varsayılan izin = `sultanxgokce@gmail.com` (değiştir: 2. argüman e-posta).
 
 ### 5. Raporla + tünel ingress hatırlatması
@@ -93,4 +99,5 @@ Varsayılan izin = `sultanxgokce@gmail.com` (değiştir: 2. argüman e-posta).
 - `cloudtop.mmepanel.com` DNS-only (gri) — `dns-ensure` onu **reddeder** (proxied → SSH/Mutagen kopar).
 - Token scope'ları: Zone.DNS:Edit + Account.Access(Apps&Policies):Edit (+ opsiyonel Zero-Trust:Read).
   Global Key ile `mint` bunları otomatik verir.
-- Kaynak `scripts/cf.sh` (304 satır) skill ile birlikte gelir; ek kurulum gerekmez (jq + curl yeter).
+- Kaynak `scripts/cf.sh` skill ile birlikte gelir; ek kurulum gerekmez (jq + curl yeter).
+  Testler: `bash scripts/cf.test.sh` (offline; ağ/kimlik gerektirmez).

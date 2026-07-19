@@ -272,7 +272,7 @@
       "id": "cloudflare-erisim",
       "type": "agent",
       "name": "Cloudflare Erişim (panele girmeden Access/DNS)",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "description": "Cloudflare işlerini (Access self-hosted app + policy, proxied DNS/tünel rotası, subdomain'i giriş-kapısı arkasına alma) dashboard'a girmeden saf API (curl+jq) ile yapar. Kimlik yoksa bir-kerelik gizli Global API Key ister, kendi dar-yetkili token üretir (POST /user/tokens), cortex-access.env'e (600) kaydeder, sonra asıl işi yapar. User-token vs account-token (cfat_) doğrulama ayrımını otomatik yapar. İdempotent + sır-hijyenik.",
       "prerequisites": {
         "system": [
