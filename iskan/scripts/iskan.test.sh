@@ -218,6 +218,13 @@ if [ -f "$YP_DIR3/setup-testproje.sh" ] && bash -n "$YP_DIR3/setup-testproje.sh"
 else
   bad "yeni-proje --apply: setup-testproje.sh üretilmedi/bozuk (B1 zincir-blokajı geri geldi)"
 fi
+# Fix-E (re-verify MINOR): setup-üreteci pozisyon-hint'i numeratörü de ISKAN_KUR_ADIMLAR'dan TÜRETİR
+# (magic-6 değil); ekip-yerlestir=6, zincir=8 → üretilen script 'kur zinciri adım 6/8' basmalı.
+if grep -qF 'kur zinciri adım 6/8' "$YP_DIR3/setup-testproje.sh"; then
+  ok "yeni-proje --apply: setup-script pozisyon-hint'i türetilmiş (adım 6/8 — numeratör+payda parametrik, magic-6 yok)"
+else
+  bad "yeni-proje --apply: setup-script pozisyon-hint'i bayat/hardcoded (beklenen 'adım 6/8' — Fix-E kırık)"
+fi
 if grep -q '^TESTPROJE_HOSTNAME=' "$YP_DIR3/setup-tunnel.sh" \
    && grep -q 'hostname: ${TESTPROJE_HOSTNAME}' "$YP_DIR3/setup-tunnel.sh" \
    && grep -q 'route dns "$TUNNEL" "$TESTPROJE_HOSTNAME"' "$YP_DIR3/setup-tunnel.sh" \
@@ -649,6 +656,120 @@ rc=$?
   && ok "baslat-claude.sh: claude-varken rezerve-id+rol+permission-mode ile exec (K3 disiplini)" \
   || bad "baslat-claude.sh: exec-argümanları sözleşme-dışı (rc=$rc: $out)"
 find "$BC_DIR" -type f -delete 2>/dev/null; find "$BC_DIR" -depth -type d -delete 2>/dev/null
+
+# ── FAZ-6b: ekip-pong (canlılık-kapısı — P3 pong-kablosu) ─────────────────────────────────
+# Stub pong-script: gerçek tenant-pong-proof yerine kontrollü exit (seat-adına göre). Böylece
+# ekip-pong'un DÖNGÜ mantığı (üç-durum tally + fail-closed + charset-hijyeni) ssh/container'sız
+# hermetik test edilir. Gerçek pong-script'in kendi testleri Nexus tenant-pong-proof.test.sh'te.
+PONG_STUB="$(mktemp)"
+cat > "$PONG_STUB" <<'EOF'
+#!/usr/bin/env bash
+# $1=proje $2=seat; seat 'dead*'→3(kırmızı) · 'unm*'→2(ölçülemedi) · diğer→0(yeşil)
+case "$2" in dead*) exit 3 ;; unm*) exit 2 ;; *) exit 0 ;; esac
+EOF
+chmod +x "$PONG_STUB"
+
+# P3-1. ekip-pong: argümansız / modsuz → usage rc=2
+bash "$SCRIPT_DIR/iskan.sh" ekip-pong >/dev/null 2>&1; ppc1=$?
+bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest >/dev/null 2>&1; ppc2=$?
+[ "$ppc1" = "2" ] && [ "$ppc2" = "2" ] && ok "ekip-pong: argümansız/modsuz rc=2 (usage)" \
+  || bad "ekip-pong: usage rc beklenen 2/2, gelen $ppc1/$ppc2"
+
+# P3-2. ekip-pong --dry-run + ISKAN_EY_ROSTER: plan-exit=3 + her seat plan-satırı + SIFIR-yazım
+out="$(ISKAN_EY_ROSTER='yon:yonetici motor1:uye' ISKAN_PONG_SH="$PONG_STUB" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --dry-run 2>&1)"; rc=$?
+[ "$rc" = "3" ] \
+  && printf '%s' "$out" | grep -q "seat 'yon'" && printf '%s' "$out" | grep -q "seat 'motor1'" \
+  && printf '%s' "$out" | grep -q "kimlik 'rol: yon'" \
+  && ok "ekip-pong --dry-run: plan-exit=3 + her seat --kimlik-plan satırı (SAHTE-YEŞİL YOK ibaresi)" \
+  || bad "ekip-pong --dry-run: plan sözleşmesi kırık (rc=$rc)"
+
+# P3-3. ekip-pong roster-kaynaksız: dürüst-kırmızı rc=1 + 'roster-kaynağı yok' (kur dry-run bunu
+# [doğrulanmadı] olarak sürdürür — ekip-yerlestir ile AYNI marker)
+out="$(env -u ISKAN_EY_ROSTER ISKAN_SSH_HOST='bilinçli-bozuk-host.invalid' ISKAN_EY_SSH_TIMEOUT=3 \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --dry-run 2>&1)"; rc=$?
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'roster-kaynağı yok' \
+  && ok "ekip-pong roster-kaynaksız: dürüst-kırmızı rc=1 + marker (kur dry-run doğrulanmadı-sürdürür)" \
+  || bad "ekip-pong roster-kaynaksız: dürüst-kırmızı sözleşmesi kırık (rc=$rc)"
+
+# P3-4. ekip-pong --apply hepsi-yeşil: rc=0 + 'canlılık-kapısı geçildi' + her seat GEÇTİ
+out="$(ISKAN_EY_ROSTER='yon:yonetici motor1:uye' ISKAN_PONG_SH="$PONG_STUB" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --apply 2>&1)"; rc=$?
+[ "$rc" = "0" ] && [ "$(printf '%s' "$out" | grep -c 'GEÇTİ')" = "2" ] \
+  && printf '%s' "$out" | grep -q 'canlılık-kapısı geçildi' \
+  && ok "ekip-pong --apply hepsi-yeşil: rc=0 + 2 seat GEÇTİ + kapı-geçildi özeti" \
+  || bad "ekip-pong --apply hepsi-yeşil: sözleşme kırık (rc=$rc)"
+
+# P3-5. ekip-pong --apply seat-ÖLÜ: fail-closed rc=1 + KIRMIZI + 'fail-closed DURDU' (SAHTE-YEŞİL yakalandı)
+out="$(ISKAN_EY_ROSTER='yon:yonetici deadmotor:uye' ISKAN_PONG_SH="$PONG_STUB" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --apply 2>&1)"; rc=$?
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'SAHTE-YEŞİL yakalandı' && printf '%s' "$out" | grep -q 'fail-closed DURDU' \
+  && ok "ekip-pong --apply seat-ölü: fail-closed rc=1 (bir seat KIRMIZI → zincir DURur)" \
+  || bad "ekip-pong --apply seat-ölü: fail-closed sözleşmesi kırık (rc=$rc)"
+
+# P3-6. ekip-pong --apply seat-ÖLÇÜLEMEDİ: unknown≠fail → rc=0 (yerleşim düşmez) + [doğrulanmadı]
+out="$(ISKAN_EY_ROSTER='yon:yonetici unmseat:uye' ISKAN_PONG_SH="$PONG_STUB" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --apply 2>&1)"; rc=$?
+[ "$rc" = "0" ] && printf '%s' "$out" | grep -q '\[doğrulanmadı\] ekip-pong unmseat' && printf '%s' "$out" | grep -q 'ölçülemedi=1' \
+  && ok "ekip-pong --apply ölçülemedi: unknown≠fail (rc=0 + [doğrulanmadı], seat-KIRMIZI değil)" \
+  || bad "ekip-pong --apply ölçülemedi: üç-durum sözleşmesi kırık (rc=$rc)"
+
+# P3-7. ekip-pong --apply pong-script YOK: [doğrulanmadı] non-blocking rc=0 (zincir bloklanmaz;
+# F4-runbook script-varlığını+yeşilini kabul-kapısı yapar)
+out="$(ISKAN_EY_ROSTER='yon:yonetici' ISKAN_PONG_SH='/tmp/yok-olmayan-pong.invalid' \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --apply 2>&1)"; rc=$?
+[ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'pong-script bulunamadı' && printf '%s' "$out" | grep -q 'DOĞRULANAMADI' \
+  && ok "ekip-pong --apply script-yok: [doğrulanmadı] non-blocking rc=0 (unknown≠fail)" \
+  || bad "ekip-pong --apply script-yok: non-blocking sözleşmesi kırık (rc=$rc)"
+
+# P3-8. ekip-pong charset-hijyeni (injection panzehiri): seat-adı [A-Za-z0-9-] dışı → fail-closed rc=1,
+# HİÇBİR prob koşulmaz (seat ssh/docker/tmux'a gömülür — tüketim-noktası kapısı)
+out="$(ISKAN_EY_ROSTER='yon:yonetici ba;rm-rf:uye' ISKAN_PONG_SH="$PONG_STUB" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --apply 2>&1)"; rc=$?
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'roster-hijyeni' && ! printf '%s' "$out" | grep -q 'GEÇTİ' \
+  && ok "ekip-pong charset-hijyeni: geçersiz seat-adı → fail-closed rc=1 (hiçbir prob koşulmadı)" \
+  || bad "ekip-pong charset-hijyeni: injection-panzehiri kırık (rc=$rc)"
+
+# P3-9. ekip-pong --no-ping: plan/pong PONG'suz iletilir (post-claude re-verify yolu)
+out="$(ISKAN_EY_ROSTER='yon:yonetici' ISKAN_PONG_SH="$PONG_STUB" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --dry-run --no-ping 2>&1)"; rc=$?
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q "PONG'suz" \
+  && ok "ekip-pong --no-ping: plan 'PONG'suz' işaretli (post-claude re-verify yolu)" \
+  || bad "ekip-pong --no-ping: bayrak-iletim kırık (rc=$rc)"
+
+# P3-10. ekip-pong yalnız-boşluk roster (re-verify MAJOR — sahte-yeşil sınıfı): "   " → [ -z ] geçer ama
+# word-split 0 seat → fail-closed rc=1 + 'HİÇBİR seat-adı ayrıştırılamadı' + 'canlılık-kapısı geçildi' YOK
+out="$(ISKAN_EY_ROSTER='   ' ISKAN_PONG_SH="$PONG_STUB" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --apply 2>&1)"; rc=$?
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'HİÇBİR seat-adı ayrıştırılamadı' && ! printf '%s' "$out" | grep -q 'canlılık-kapısı geçildi' \
+  && ok "ekip-pong yalnız-boşluk roster: fail-closed rc=1 (0 seat → sahte-yeşil basmaz)" \
+  || bad "ekip-pong yalnız-boşluk roster: sahte-yeşil kör-noktası açık (rc=$rc)"
+
+# P3-11. ekip-pong TÜMÜ-ölçülemedi (re-verify MAJOR — pozitif-kanıt kapısı): tüm seat 'unm*' → yeşil=0 ∧
+# ölçülemedi>0 ∧ kırmızı=0 → unknown≠fail (rc=0, zincir sürer) AMA unknown≠pass → 'canlılık-kapısı geçildi' YOK
+out="$(ISKAN_EY_ROSTER='unm1:yonetici unm2:uye' ISKAN_PONG_SH="$PONG_STUB" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --apply 2>&1)"; rc=$?
+[ "$rc" = "0" ] && ! printf '%s' "$out" | grep -q 'canlılık-kapısı geçildi' \
+  && printf '%s' "$out" | grep -q 'POZİTİF doğrulanamadı' && printf '%s' "$out" | grep -q 'ölçülemedi=2' \
+  && ok "ekip-pong tümü-ölçülemedi: yeşil=0 → markörsüz [doğrulanmadı] rc=0 (unknown≠pass, sahte-GEÇTİ yok)" \
+  || bad "ekip-pong tümü-ölçülemedi: pozitif-kanıt kapısı kırık (rc=$rc)"
+
+# P3-12. ekip-pong KARIŞIK yeşil≥1 + ölçülemedi (pozitif-kanıt ALT-sınırı — kapı 'tümü-yeşil' DEĞİL
+# 'en-az-bir-yeşil'; aşırı-sıkma regresyonu): 1 yeşil + 1 ölçülemedi → 'canlılık-kapısı geçildi' BASILIR
+out="$(ISKAN_EY_ROSTER='yon:yonetici unmseat:uye' ISKAN_PONG_SH="$PONG_STUB" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --apply 2>&1)"; rc=$?
+[ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'canlılık-kapısı geçildi' && printf '%s' "$out" | grep -q 'yeşil=1' \
+  && ok "ekip-pong karışık yeşil≥1: 'geçildi' basılır (pozitif-kanıt alt-sınırı, aşırı-sıkı değil)" \
+  || bad "ekip-pong karışık yeşil≥1: pozitif-kanıt alt-sınırı kırık (rc=$rc)"
+
+# P3-13. ekip-pong yalnız-boşluk roster --dry-run: guard dry-run bloğundan ÖNCE → erken fail-closed rc=1 (hem-mod)
+out="$(ISKAN_EY_ROSTER='   ' ISKAN_PONG_SH="$PONG_STUB" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-pong ptest --dry-run 2>&1)"; rc=$?
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'HİÇBİR seat-adı ayrıştırılamadı' \
+  && ok "ekip-pong yalnız-boşluk roster --dry-run: erken fail-closed rc=1 (hem-mod guard)" \
+  || bad "ekip-pong yalnız-boşluk roster --dry-run: erken-guard kırık (rc=$rc)"
+
+rm -f "$PONG_STUB" 2>/dev/null
 
 # ── FAZ-7: uye-ekle (tek-üye iskânı) + roster-köprüsü + KÂHYA-adaptörü ────────────────────
 
@@ -1242,10 +1363,10 @@ rc=$?
 SUM_KR_1="$(md5sum "$KR_REPO"/infra/*)"
 [ "$rc" = "3" ] && ok "kur --dry-run: plan-exit=3" || bad "kur --dry-run: rc beklenen 3, gelen $rc"
 adim_eksik=""
-for a in "1/7: yeni-proje" "2/7: durak1-cloudtop-pr" "3/7: iskan-host" "4/7: provizyon" "5/7: cf-yayin" "6/7: ekip-yerlestir" "7/7: evergreen-kaydet"; do
+for a in "1/8: yeni-proje" "2/8: durak1-cloudtop-pr" "3/8: iskan-host" "4/8: provizyon" "5/8: cf-yayin" "6/8: ekip-yerlestir" "7/8: ekip-pong" "8/8: evergreen-kaydet"; do
   printf '%s' "$out" | grep -q "kur adım $a" || adim_eksik="$adim_eksik [$a]"
 done
-[ -z "$adim_eksik" ] && ok "kur --dry-run: 7 adımın hepsi zincir-planında (FAZ-sırasıyla)" \
+[ -z "$adim_eksik" ] && ok "kur --dry-run: 8 adımın hepsi zincir-planında (FAZ-sırasıyla; P3 ekip-pong 7/8 dahil)" \
   || bad "kur --dry-run: zincir-planında eksik adım:$adim_eksik"
 [ "$SUM_KR_0" = "$SUM_KR_1" ] && [ ! -e "$KR_STATE/iskan-kur-kurtest.state" ] \
   && ok "kur --dry-run: hiçbir yazma yok (fixture md5 değişmez + durum-dosyası doğmadı)" \
@@ -1262,7 +1383,11 @@ SUM_KR_3="$(md5sum "$KR_REPO/infra/docker-compose.server.yml")"
 [ "$rc" = "4" ] && printf '%s' "$out" | grep -q 'ISKAN_FAZ4_GO' && printf '%s' "$out" | grep -q 'GO-durağında DURDU' \
   && ok "kur GO'suz: adım-1 exit=4 iletildi + GO-durağı Sultan-dilinde raporlandı" \
   || bad "kur GO'suz: exit-4 iletimi kırık (rc=$rc)"
-[ "$SUM_KR_2" = "$SUM_KR_3" ] && [ ! -e "$KR_STATE/iskan-kur-kurgo.state" ] && ! printf '%s' "$out" | grep -q 'kur adım 2/7' \
+# regresyon: GO-durak mesajı adım-sayısını PARAMETRİK bassın (adım 1/8, magic-7 kalıntısı DEĞİL — adversaryal MINOR)
+printf '%s' "$out" | grep -q 'GO-durağında DURDU (adım 1/8:' && ! printf '%s' "$out" | grep -q 'adım 1/7' \
+  && ok "kur GO'suz: GO-durak mesajı parametrik payda basar (adım 1/8, header ile tutarlı)" \
+  || bad "kur GO'suz: GO-durak mesajı magic-7 kalıntısı basıyor (adım 1/7, header 1/8 ile çelişir)"
+[ "$SUM_KR_2" = "$SUM_KR_3" ] && [ ! -e "$KR_STATE/iskan-kur-kurgo.state" ] && ! printf '%s' "$out" | grep -q 'kur adım 2/8' \
   && ok "kur GO'suz: zincir DURdu (adım-2 koşulmadı + md5 değişmez + durum-dosyası doğmadı)" \
   || bad "kur GO'suz: DUR sözleşmesi kırık"
 
@@ -1296,7 +1421,7 @@ rc=$?
 out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurdurak --devam 2>&1)"
 rc=$?
 [ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'son-tamamlanan=yeni-proje' \
-  && ! printf '%s' "$out" | grep -q 'kur adım 1/7' && printf '%s' "$out" | grep -q "DURAK-1'de duraklatıldı" \
+  && ! printf '%s' "$out" | grep -q 'kur adım 1/8' && printf '%s' "$out" | grep -q "DURAK-1'de duraklatıldı" \
   && ok "kur --devam: state'ten adım-2'den sürdü (adım-1 atlandı) + DURAK-1 idempotent" \
   || bad "kur --devam: state-resume kırık (rc=$rc)"
 
@@ -1305,8 +1430,8 @@ rc=$?
 printf 'yeni-proje\n' > "$KR_STATE/iskan-kur-kurtest.state"
 out="$(env -u ISKAN_FAZ4_GO "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurtest --devam 2>&1)"
 rc=$?
-[ "$rc" = "4" ] && printf '%s' "$out" | grep -q 'kur adım 3/7: iskan-host' \
-  && ! printf '%s' "$out" | grep -q 'kur adım 1/7' && printf '%s' "$out" | grep -q 'ISKAN_FAZ4_GO' \
+[ "$rc" = "4" ] && printf '%s' "$out" | grep -q 'kur adım 3/8: iskan-host' \
+  && ! printf '%s' "$out" | grep -q 'kur adım 1/8' && printf '%s' "$out" | grep -q 'ISKAN_FAZ4_GO' \
   && ok "kur --devam ilerleme: DURAK-1 geçildi (origin/main'de blok) + adım-3 GO'suz exit=4 iletildi" \
   || bad "kur --devam ilerleme: sözleşme kırık (rc=$rc)"
 [ "$(cat "$KR_STATE/iskan-kur-kurtest.state" 2>/dev/null)" = "durak1-cloudtop-pr" ] \
@@ -1325,7 +1450,7 @@ rc=$?
   || bad "kur slug-kapısı: RED sözleşmesi kırık (rc=$rc)"
 out="$(env -u ISKAN_FAZ4_GO "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurtest --benimse 2>&1)"
 rc=$?
-[ "$rc" = "4" ] && printf '%s' "$out" | grep -q 'BİLİNÇLİ-devralındı' && printf '%s' "$out" | grep -q 'kur adım 1/7' \
+[ "$rc" = "4" ] && printf '%s' "$out" | grep -q 'BİLİNÇLİ-devralındı' && printf '%s' "$out" | grep -q 'kur adım 1/8' \
   && ok "kur slug-kapısı: --benimse bilinçli-devralma → zincir sürdü (adım-1 GO-durağına vardı)" \
   || bad "kur slug-kapısı: --benimse yolu kırık (rc=$rc)"
 # MAJOR fix: GO-durağı resume-komutu --benimse'yi TAŞIMALI (aksi hâlde tavsiyeyi izleyen --devam
@@ -1335,7 +1460,7 @@ printf '%s' "$out" | grep -q 'kur kurtest --devam --benimse' \
   || bad "kur slug-kapısı: GO-durağı --benimse'siz --devam bastı (tavsiye kapıya çarpar — MAJOR)"
 out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurtest --dry-run 2>&1)"
 rc=$?
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'slug-kapısı önizleme' && printf '%s' "$out" | grep -q 'kur adım 7/7' \
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'slug-kapısı önizleme' && printf '%s' "$out" | grep -q 'kur adım 8/8' \
   && ok "kur slug-kapısı: dry-run REDDETMEZ — uyarı basar + tam-zincir önizlenir (salt-oku)" \
   || bad "kur slug-kapısı: dry-run uyarı-sözleşmesi kırık (rc=$rc)"
 # MINOR fix: --dry-run --benimse kombinasyonu 'devralındı, adımlar sürer' DEMEMELİ (hiçbir şey sürmez)

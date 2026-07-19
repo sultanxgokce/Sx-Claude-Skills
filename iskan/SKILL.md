@@ -1,7 +1,7 @@
 ---
 name: iskan
 type: agent
-version: 0.3.0
+version: 0.4.0
 description: >
   Container + ekip yaşam-döngüsü master-skill. Bir hedef (yeni-proje / mevcut-ekip-yeniden-doğuşu / tek-üye-ekleme)
   için host-provizyon (UC1), oturum-kurtarma (UC2, deterministik session-id), üye-ekleme (UC3) akışlarını
@@ -39,6 +39,17 @@ oto-yazımı. Dördü BESTELEDİĞİ kardeşlerin (aşağı) çalışma-kopyası
   `ISKAN_EY_ROSTER` (açık-override) ya da container-içi `_agents/handoff/ekip-registry.yaml`'dan okur;
   kaynak yoksa DÜRÜST-KIRMIZI rc=1 'roster-kaynağı yok' (D6 tuzak-fix — eski hardcoded denekAlfa/denekBeta
   fallback'i sahte-ekip doğuruyordu, KALDIRILDI).
+- `ekip-pong` (FAZ-6b, CANLI · P3 pong-kablosu): `ekip-pong <proje> --dry-run|--apply [--no-ping]` —
+  ekip-yerlestir'in YERLEŞTİRDİĞİ her seat'in GERÇEKTEN canlı+doğru-kimlikli+yanıt-verir olduğunu kanıtlar
+  (tenant-pong-proof delegesi; session-var + kimlik-banner bayt-eş + KENDİ-KORUMALI PONG üç-kapı; SAHTE-YEŞİL
+  YOK). Kur zincirinde ekip-yerlestir'in ardından, claude-BAŞLATMADAN ÖNCE koşar (pane taze-shell; sıra-kritik).
+  Roster-kaynağı ekip-yerlestir ile AYNI (`ISKAN_EY_ROSTER` → container-içi ekip-registry.yaml). Üç-durum:
+  yeşil(GEÇTİ) / kırmızı(seat-ölü → **fail-closed**, zincir DURur) / doğrulanmadı(ölçülemedi, unknown≠fail).
+  **Pozitif-kanıt kapısı:** özet-markör "canlılık-kapısı geçildi" (kondüktörün GEÇTİ sinyali) YALNIZ ≥1 seat
+  POZİTİF-yeşilse basılır; boş/yalnız-boşluk roster → fail-closed, tümü-ölçülemedi (yeşil=0) → markörsüz
+  [doğrulanmadı] (unknown≠pass; sahte-GEÇTİ yok).
+  Pong-script: `ISKAN_PONG_SH` (default `Nexus/scripts/tenant-pong-proof.sh`). Standalone "Test now" re-verify
+  için de kullanılır (post-claude → `--no-ping`, banner-kayması KAPI-C false-red panzehiri).
 - `evergreen-kaydet` (FAZ-8, CANLI): `evergreen-kaydet <proje> --dry-run|--apply` — kayıtlı İSKÂN-projesinin
   kalıcı izlerini evergreen-manifestlere yazar (REPO-FIRST lokal cloudtop working-tree; host-apply YOK):
   provider-inventory.yaml (tunnel.ingress + access_apps) + backup.sh (docker-inspect listesi). .bak +
@@ -56,7 +67,7 @@ oto-yazımı. Dördü BESTELEDİĞİ kardeşlerin (aşağı) çalışma-kopyası
 - `kur` (D6, CANLI): `kur <proje> [--dry-run|--devam|--durum]` — UC1 tam-yaşamdöngüsü ZİNCİRLEYİCİSİ
   (duraklı durum-makinesi, mimSerdar §4.2): mevcut alt-komutları CLI-invoke ederek FAZ-sırasıyla besteler,
   HİÇBİRİNİ yeniden yazmaz: yeni-proje(dry→apply) → **DURAK-1 cloudtop-PR merge** (REPO-FIRST insan-durağı,
-  exit=0 + --devam) → iskan-host --apply → provizyon → cf-yayin → ekip-yerlestir → evergreen-kaydet.
+  exit=0 + --devam) → iskan-host --apply → provizyon → cf-yayin → ekip-yerlestir → **ekip-pong** → evergreen-kaydet.
   GO-marker'ları ASLA bypass/export etmez (her adım kendi GO'sunu kendi ortamından bekler; GO-yok exit=4
   AYNEN iletilir + Sultan-dilinde hangi-GO raporu). Durum-dosyası git-DIŞI
   `${ISKAN_STATE_DIR:-$HOME/.claude}/iskan-kur-<proje>.state` (tek-satır: son-tamamlanan-adım);
@@ -75,9 +86,14 @@ Usta (S3 · bileşik), born-at-Usta (`ahi new usta iskan`). generic-goal: "conta
 (doğuş/yeniden-doğuş/üye-ekleme) tek-komutla yöneten fabrika". Terfi-olgunluk şerhi: DOCTRINE.md → "Manuel-beyan".
 Doğrula: `ahi check iskan` · Kanon: `ahi doctrine` · İş-planı: `Nexus/_agents/handoff/help2serdar-iskan-is-plani.md`.
 
+## Durum (2026-07-19, P3 pong-kablosu)
+✓ P3 (Doğum-Akışı, v0.4.0): `ekip-pong` (FAZ-6b) canlılık-kapısı zincire kablolandı — kur artık **8-adım**
+(ekip-yerlestir → **ekip-pong** → evergreen-kaydet). Adım-sayısı ADIMLAR'dan TÜRER (magic-number yok).
+tenant-pong-proof ÖKSÜZLÜĞÜ (B5) kapandı; seat-ölü → fail-closed (zincir DURur), SAHTE-YEŞİL yakalanır.
+
 ## Durum (2026-07-18, D6 kur-zincirleyici)
 CANLI alt-komutlar: `doctor` (FAZ-1) · `seans-getir` (FAZ-2/3) · `yeni-proje` + `iskan-host.sh` (FAZ-4,
-ISKAN_FAZ4_GO'lu) · `cf-yayin` (FAZ-5, ISKAN_FAZ5_GO'lu) · `ekip-yerlestir` (FAZ-6) · `uye-ekle` (FAZ-7) ·
+ISKAN_FAZ4_GO'lu) · `cf-yayin` (FAZ-5, ISKAN_FAZ5_GO'lu) · `ekip-yerlestir` (FAZ-6) · `ekip-pong` (FAZ-6b) · `uye-ekle` (FAZ-7) ·
 `evergreen-kaydet` (FAZ-8) · `provizyon` (FAZ-9, ISKAN_FAZ9_GO'lu) · `sokum` (k0083, ISKAN_SOKUM_GO'lu) ·
 `kur` (D6 zincirleyici — GO'ları yalnız SIRALAR, bypass etmez).
 Kanıt-paketleri: `iskan/kanit/faz0..faz9,sokum/`. FAZ-9 mihenk-dogfood TESCİLLİ (k0084 MUHUR 13/13).
