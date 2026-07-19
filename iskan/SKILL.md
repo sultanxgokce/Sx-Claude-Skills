@@ -92,14 +92,19 @@ Doğrula: `ahi check iskan` · Kanon: `ahi doctrine` · İş-planı: `Nexus/_age
 ✓ G1 zincir-fix (CYCLE-1 PR-B): `iskan-host.sh --apply` artık R4 drift-kapısından HEMEN ÖNCE
 **COMPOSE-SENKRON** koşar — origin/main'deki compose'u host'a TAM-DOSYA eşitler (elle-bridge bitti):
 host-probe 3-durum (dosya-YOK → bootstrap-reddi exit=5; ölçülemedi → fail-closed exit=5) →
-no-op kapısı **BAYT-eş** (md5; yapısal-eş-ama-bayt-farklı bayat blok EZİLİR — 512m sessiz-OOM panzehiri) →
-beklenen-delta kapısı (`compose_parse --haric <cname>` iki-taraf; komşu-fark → fark-raporu + exit=5,
-**--force YOK**, muhtemel-neden teşhis-ipucu: tamamlanmamış söküm) → .bak-TS + tmp+mv atomik yazım →
-**BAYT re-verify** (düşerse .bak-restore + exit=1). docker-up senkronda ASLA çağrılmaz (container-mutasyon
-tek-noktası R1); R4 senkron-sonrası bağımsız ikinci-göz olarak AYNEN kalır. Yeni GO-marker YOK
-(ISKAN_FAZ4_GO şemsiyesi). R2-guard yolunda yazım olduysa kanıta zorunlu not: "dosya güncellendi,
-çalışan-config ESKİ — recreate ayrı Sultan-alanı". Ertelenen: söküm ADIM-2b host-blok-çıkarma +
-standalone --senkron CLI (cycle-3).
+no-op kapısı **BAYT-eş** (md5; yapısal-eş-ama-bayt-farklı bayat ADAY-blok EZİLİR — 512m sessiz-OOM
+panzehiri) → **KOMŞU-BAYT kapısı** (`compose_block.py sil <cname>` iki-taraftan adayı metin-düzeyi
+çıkarır, kalan komşu-metinler md5-eş DEĞİLSE → fark-raporu + exit=5, **--force YOK**; yapısal kapı
+mem_limit/env/image görmediğinden MAHREM komşu-drift'ine kördü — bayt-kapı komşu-ezmeyi imkânsız kılar;
+teşhis-ipucu: tamamlanmamış söküm / komşu-drift MAHREM dahil) → .bak-TS + tmp+mv atomik yazım (mv-fail'de
+.iskan-tmp artığı temizlenir) → **BAYT re-verify** (düşerse .bak-restore + exit=1). docker-up senkronda
+ASLA çağrılmaz (container-mutasyon tek-noktası R1); R4 senkron-sonrası tanım-gereği yeşil (totoloji) —
+regresyon-bekçisi olarak kalır, genel-drift'i senkron-öncesi komşu-BAYT kapısı yakalar. Yeni GO-marker YOK
+(ISKAN_FAZ4_GO şemsiyesi). cmd_apply girişine **ad-hijyeni** (`^[a-z][a-z0-9-]*$`; REPO-KANIT
+ERE-enjeksiyonu kökten kapalı + REPO-KANIT grep'i sabit-string) + **3-Çit mahrem-reddi** eklendi
+(`--apply --proje vekatip` GO'lu bile RED; liste iskan.sh ISKAN_KUR_IZOLE ile parite-goldenli).
+R2-guard yolunda yazım olduysa kanıta zorunlu not: "dosya güncellendi, çalışan-config ESKİ — recreate
+ayrı Sultan-alanı". Ertelenen: söküm ADIM-2b host-blok-çıkarma + standalone --senkron CLI (cycle-3).
 
 ## Durum (2026-07-19, P3 pong-kablosu)
 ✓ P3 (Doğum-Akışı, v0.4.0): `ekip-pong` (FAZ-6b) canlılık-kapısı zincire kablolandı — kur artık **8-adım**

@@ -1608,11 +1608,10 @@ find "$HK_STUB" -type f -delete 2>/dev/null; find "$HK_STUB" -depth -type d -del
 # ── G1 COMPOSE-SENKRON (PR-B): origin/main → host compose eşitleme + sokum 3-Çit ──────────
 
 # fixture cloudtop-repo (SELF-REMOTE: cmd_apply'ın `git fetch origin main`i hermetik geçsin —
-# pozitif-yol şartı; RK_REPO golden-18 deseni + fetch-priming)
-_cs_fixture_repo() { # <dizin> — compose: komsu + senktest (cname=cloudtop-senktest)
-  local d="$1"
-  mkdir -p "$d/infra"
-  cat > "$d/infra/docker-compose.server.yml" <<'EOF'
+# pozitif-yol şartı; RK_REPO golden-18 deseni + fetch-priming). BASE (komşular: komsu +
+# MAHREM huma) ve ADAY-BLOK (senktest; yeni-proje append-formatı: blank+İSKÂN-yorum+blok)
+# AYRI üreteçlerde — goldenlar "origin-eksi-aday" host'unu BAYT-eş kurabilsin (duplikasyonsuz).
+_cs_base_yaml() { cat <<'EOF'
 services:
   cloudtop-komsu:
     image: test
@@ -1621,6 +1620,19 @@ services:
     ports:
       - "127.0.0.1:9997:8443"
 
+  cloudtop-huma:
+    image: test
+    container_name: cloudtop-huma
+    mem_limit: 4g
+    environment:
+      - SECRET_TIER=prod
+    ports:
+      - "127.0.0.1:9995:8443"
+EOF
+}
+_cs_aday_blok() { cat <<'EOF'
+
+  # ── İSKÂN FAZ-4 provizyon: senktest (iskan.sh yeni-proje ile üretildi) ────────────────
   cloudtop-senktest:
     image: test
     container_name: cloudtop-senktest
@@ -1630,6 +1642,11 @@ services:
     ports:
       - "127.0.0.1:9996:8443"
 EOF
+}
+_cs_fixture_repo() { # <dizin> — compose: base(komsu+huma) + aday-blok(senktest)
+  local d="$1"
+  mkdir -p "$d/infra"
+  { _cs_base_yaml; _cs_aday_blok; } > "$d/infra/docker-compose.server.yml"
   git -C "$d" init -q -b main 2>/dev/null
   git -C "$d" -c user.email=t@t -c user.name=t add -A 2>/dev/null
   git -C "$d" -c user.email=t@t -c user.name=t commit -qm fixture 2>/dev/null
@@ -1699,17 +1716,10 @@ sat_r4="$(printf '%s\n' "$out" | grep -n 'R4 drift-kapısı' | head -1 | cut -d:
   && ok "senkron SIRA-goldeni: COMPOSE-SENKRON satırı ($sat_senkron) R4 satırından ($sat_r4) ÖNCE" \
   || bad "senkron SIRA-goldeni: kapı-sırası bozuk (senkron=$sat_senkron r4=$sat_r4)"
 
-# 67. eksi-cname (klasik G1): host'ta aday-blok yok → YAZIM OLUR + host==origin/main BAYT-eş
-#     + .bak alındı + kanıtta re-verify + R2-notu (aday 'çalışıyor' stub'da → dosya≠çalışan-config notu)
-cat > "$CS_HOSTFILE" <<'EOF'
-services:
-  cloudtop-komsu:
-    image: test
-    container_name: cloudtop-komsu
-    mem_limit: 2g
-    ports:
-      - "127.0.0.1:9997:8443"
-EOF
+# 67. eksi-cname (klasik G1): host = origin-eksi-aday (base bayt-eş) → YAZIM OLUR +
+#     host==origin/main BAYT-eş + .bak alındı + kanıtta re-verify + komşu-BAYT dili +
+#     R2-notu (aday 'çalışıyor' stub'da → dosya≠çalışan-config notu)
+_cs_base_yaml > "$CS_HOSTFILE"
 CS_KANIT2="$(mktemp -d)"
 out="$(env ISKAN_FAZ4_GO=1 PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG" ISKAN_KANIT_DIR="$CS_KANIT2" "${CS_ENV_ORTAK[@]}" \
   bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje senktest 2>&1)"
@@ -1719,7 +1729,8 @@ CS_MD5_2="$(md5sum "$CS_HOSTFILE" | awk '{print $1}')"
 n_bak="$(find "$CS_HOST_DIR" -name '*.bak-*' | wc -l | tr -d '[:space:]')"
 [ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'origin/main.e eşitlendi' && [ "$CS_MD5_2" = "$CS_MD5_REPO" ] \
   && [ "$n_bak" = "1" ] && grep -q 'BAYT re-verify GEÇTİ' "$CS_KANIT2/compose-senkron.txt" \
-  && ok "senkron eksi-cname: YAZIM oldu + host==origin/main BAYT-eş (md5) + .bak-TS alındı + re-verify kanıtı" \
+  && grep -q 'komşular BAYT-eş doğrulandı' "$CS_KANIT2/compose-senkron.txt" \
+  && ok "senkron eksi-cname: YAZIM oldu + host==origin/main BAYT-eş (md5) + .bak-TS + re-verify + komşu-BAYT kanıt-dili" \
   || bad "senkron eksi-cname: yazım-yolu kırık (rc=$rc md5-eş=$([ "$CS_MD5_2" = "$CS_MD5_REPO" ] && echo E || echo H) bak=$n_bak)"
 grep -q 'çalışan-config ESKİ — recreate ayrı Sultan-alanı' "$CS_KANIT2/compose-senkron.txt" \
   && ok "senkron R2-notu: aday-çalışırken yazım → kanıtta zorunlu 'recreate ayrı Sultan-alanı' notu" \
@@ -1734,17 +1745,48 @@ n_bak2="$(find "$CS_HOST_DIR" -name '*.bak-*' | wc -l | tr -d '[:space:]')"
   && ok "senkron idempotent re-run: ikinci koşu no-op (.bak artmadı)" \
   || bad "senkron idempotent re-run: kırık (rc=$rc bak=$n_bak2)"
 
-# 69. yapısal-eş-ama-BAYT-farklı bayat blok (doktrin MAJOR-1): mem_limit 512m'li host EZİLİR
-#     (compose_parse mem_limit görmez → eski-tasarım sahte-no-op verirdi; yeni kapı YAZAR)
-git -C "$CS_REPO" show origin/main:infra/docker-compose.server.yml | sed 's/mem_limit: 2g/mem_limit: 512m/g' > "$CS_HOSTFILE"
+# 69. KOMŞU bayt-drift (LB TERS-golden): non-mahrem komşuda (komsu 2g→512m) yapısal-görünmez
+#     drift → tam-dosya yazımı onu EZERDİ → komşu-BAYT kapısı fail-closed keser (yazım=0)
+{ _cs_base_yaml | sed 's/mem_limit: 2g/mem_limit: 512m/'; _cs_aday_blok; } > "$CS_HOSTFILE"
+CS_MD5_K0="$(md5sum "$CS_HOSTFILE" | awk '{print $1}')"
 CS_KANIT3="$(mktemp -d)"
-out="$(env ISKAN_FAZ4_GO=1 PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG" ISKAN_KANIT_DIR="$CS_KANIT3" "${CS_ENV_ORTAK[@]}" \
+CS_LOG3="$(mktemp)"
+out="$(env ISKAN_FAZ4_GO=1 PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG3" ISKAN_KANIT_DIR="$CS_KANIT3" "${CS_ENV_ORTAK[@]}" \
+  bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje senktest 2>&1)"
+rc=$?
+CS_MD5_K1="$(md5sum "$CS_HOSTFILE" | awk '{print $1}')"
+[ "$rc" = "5" ] && [ "$CS_MD5_K0" = "$CS_MD5_K1" ] && [ -s "$CS_KANIT3/compose-senkron-fark.txt" ] \
+  && ! grep -q 'iskan-tmp' "$CS_LOG3" && printf '%s' "$out" | grep -q 'komşular BAYT-eş değil' \
+  && ok "senkron komşu-bayt-drift (LB): non-mahrem komşu 512m-drift'i → rc=5 + yazım=0 + fark-raporu (körü-körüne ezme YOK)" \
+  || bad "senkron komşu-bayt-drift (LB): komşu-BAYT kapısı kırık — komşu ezilebilirdi (rc=$rc)"
+
+# 69b. ADAY-only bayat-drift (doktrin MAJOR-1 KORUNUR): drift YALNIZ aday-blokta (senktest
+#      512m) → komşular bayt-eş → YAZIM OLUR, bayat aday-blok origin/main'e ezilir
+{ _cs_base_yaml; _cs_aday_blok | sed 's/mem_limit: 2g/mem_limit: 512m/'; } > "$CS_HOSTFILE"
+CS_KANIT3B="$(mktemp -d)"
+out="$(env ISKAN_FAZ4_GO=1 PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG" ISKAN_KANIT_DIR="$CS_KANIT3B" "${CS_ENV_ORTAK[@]}" \
   bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje senktest 2>&1)"
 rc=$?
 CS_MD5_3="$(md5sum "$CS_HOSTFILE" | awk '{print $1}')"
 [ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'origin/main.e eşitlendi' && [ "$CS_MD5_3" = "$CS_MD5_REPO" ] \
-  && ok "senkron bayat-blok: yapısal-eş-ama-bayt-farklı (512m) host EZİLDİ → origin/main bayt-eş (sahte-no-op yok)" \
-  || bad "senkron bayat-blok: 512m sessiz-OOM tuzağı sürüyor — yazım olmadı (rc=$rc)"
+  && ok "senkron aday-bayat-blok: drift yalnız-adayda (512m) → host EZİLDİ, origin/main bayt-eş (sahte-no-op yok)" \
+  || bad "senkron aday-bayat-blok: 512m sessiz-OOM tuzağı sürüyor — yazım olmadı (rc=$rc)"
+
+# 69c. MAHREM komşu-drift negatif-goldeni (LB): host'ta huma elle-tune'lu (8g +
+#      SECRET_TIER=prod-HANDTUNED), aday non-mahrem → rc=5 + ssh-yazım=0 + fark-raporunda huma
+{ _cs_base_yaml | sed 's/mem_limit: 4g/mem_limit: 8g/; s/SECRET_TIER=prod/SECRET_TIER=prod-HANDTUNED/'; _cs_aday_blok; } > "$CS_HOSTFILE"
+CS_MD5_M0="$(md5sum "$CS_HOSTFILE" | awk '{print $1}')"
+CS_KANIT3C="$(mktemp -d)"
+CS_LOG3C="$(mktemp)"
+out="$(env ISKAN_FAZ4_GO=1 PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG3C" ISKAN_KANIT_DIR="$CS_KANIT3C" "${CS_ENV_ORTAK[@]}" \
+  bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje senktest 2>&1)"
+rc=$?
+CS_MD5_M1="$(md5sum "$CS_HOSTFILE" | awk '{print $1}')"
+[ "$rc" = "5" ] && [ "$CS_MD5_M0" = "$CS_MD5_M1" ] && ! grep -q 'iskan-tmp' "$CS_LOG3C" \
+  && grep -q 'cloudtop-huma' "$CS_KANIT3C/compose-senkron-fark.txt" \
+  && ok "senkron MAHREM-komşu-drift (LB): huma elle-tune'u EZİLMEDİ → rc=5 + yazım=0 + fark-raporunda huma görünür" \
+  || bad "senkron MAHREM-komşu-drift (LB): mahrem-komşu sessiz-ezme deliği AÇIK (rc=$rc)"
+rm -f "$CS_LOG3" "$CS_LOG3C"
 
 # 70. komşu-fark (ölü tenant-bloğu): körü-körüne ezme YOK → rc=5 + fark-dosyası + yazım=0
 { git -C "$CS_REPO" show origin/main:infra/docker-compose.server.yml
@@ -1786,6 +1828,56 @@ b="$(python3 "$SCRIPT_DIR/lib/compose_parse.py" --haric hic-olmayan-servis "$SCR
   && ok "compose_parse --haric: olmayan-servis = bayraksız çıktıyla BAYT-eş (davranış-koruması)" \
   || bad "compose_parse --haric: bayt-eşlik kırıldı"
 
+# 72b. compose_block.py sil: (a) aday-bloğu (yorum+ayraç-boşluk dahil) çıkarınca base ile
+#      BAYT-eş · (b) olmayan-cname passthrough bayt-eş · (c) boş-girdi rc≠0 + boş-stdout (fail-closed)
+CB_TMP="$(mktemp)"; { _cs_base_yaml; _cs_aday_blok; } > "$CB_TMP"
+a="$(python3 "$SCRIPT_DIR/lib/compose_block.py" sil cloudtop-senktest "$CB_TMP" | md5sum)"
+b="$(_cs_base_yaml | md5sum)"
+[ -n "$a" ] && [ "$a" = "$b" ] \
+  && ok "compose_block sil: aday-blok (İSKÂN-yorum + ayraç-boşluk dahil) çıktı → base BAYT-eş" \
+  || bad "compose_block sil: blok-çıkarım base'le bayt-eş değil"
+c="$(python3 "$SCRIPT_DIR/lib/compose_block.py" sil cloudtop-hicyok "$CB_TMP" | md5sum)"
+d="$(cat "$CB_TMP" | md5sum)"
+[ -n "$c" ] && [ "$c" = "$d" ] \
+  && ok "compose_block sil: olmayan-cname → passthrough BAYT-eş (host'ta-aday-yok simetrisi)" \
+  || bad "compose_block sil: passthrough bayt-eş değil"
+cb_out="$(printf '' | python3 "$SCRIPT_DIR/lib/compose_block.py" sil x - 2>/dev/null)"
+cb_rc=$?
+[ "$cb_rc" != "0" ] && [ -z "$cb_out" ] \
+  && ok "compose_block sil: boş-girdi → rc≠0 + boş-stdout (çağıran fail-closed'a bağlar)" \
+  || bad "compose_block sil: boş-girdi sözleşmesi kırık (rc=$cb_rc)"
+rm -f "$CB_TMP"
+
+# 72c. iskan-host 3-Çit + ad-hijyeni (MAJOR-fix): GO'lu bile mahrem-apply RED + charset-kapısı
+CS_LOG6="$(mktemp)"
+err="$(env ISKAN_FAZ4_GO=1 PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG6" "${CS_ENV_ORTAK[@]}" \
+  bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje vekatip 2>&1 >/dev/null)"
+rc=$?
+[ "$rc" != "0" ] && printf '%s' "$err" | grep -q '3-Çit' && [ "$(grep -c . "$CS_LOG6")" = "0" ] \
+  && ok "iskan-host 3-Çit: 'vekatip' GO'lu --apply REDDEDİLDİ (rc=$rc, ssh-çağrı=0 — kardeş-yol deliği kapandı)" \
+  || bad "iskan-host 3-Çit: mahrem-apply hâlâ geçiyor (rc=$rc ssh-çağrı=$(grep -c . "$CS_LOG6"))"
+err="$(env ISKAN_FAZ4_GO=1 PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG6" "${CS_ENV_ORTAK[@]}" \
+  bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje mihenk 2>&1 >/dev/null)"
+rc=$?
+[ "$rc" != "0" ] && printf '%s' "$err" | grep -q '3-Çit' \
+  && ok "iskan-host 3-Çit: 'mihenk' de REDDEDİLDİ (rc=$rc — 5'li izole-aile tam)" \
+  || bad "iskan-host 3-Çit: mihenk deliği (rc=$rc)"
+err="$(env ISKAN_FAZ4_GO=1 PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG6" "${CS_ENV_ORTAK[@]}" \
+  bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje '.*' 2>&1 >/dev/null)"
+rc=$?
+[ "$rc" != "0" ] && printf '%s' "$err" | grep -q 'ad-hijyeni' && ! grep -q 'iskan-tmp' "$CS_LOG6" \
+  && ok "iskan-host ad-hijyeni: --proje '.*' charset-kapısında REDDEDİLDİ (ERE-enjeksiyon kökten kapalı, yazım=0)" \
+  || bad "iskan-host ad-hijyeni: regex-meta proje-adı kapıyı geçti (rc=$rc)"
+rm -f "$CS_LOG6"
+
+# 72d. izole-liste paritesi: iskan-host.sh ISKAN_HOST_IZOLE == iskan.sh ISKAN_KUR_IZOLE
+#      (tek-kaynak bekçisi — listeler ayrışırsa 3-Çit'in bir yüzü kör kalır)
+l1="$(grep -m1 '^ISKAN_KUR_IZOLE=' "$SCRIPT_DIR/iskan.sh" | cut -d= -f2-)"
+l2="$(grep -m1 '^ISKAN_HOST_IZOLE=' "$SCRIPT_DIR/iskan-host.sh" | cut -d= -f2-)"
+[ -n "$l1" ] && [ "$l1" = "$l2" ] \
+  && ok "izole-liste paritesi: iskan.sh ⟷ iskan-host.sh mahrem-listeleri BAYT-eş" \
+  || bad "izole-liste paritesi KIRIK: iskan.sh=$l1 vs iskan-host.sh=$l2"
+
 # 73. sokum 3-Çit mahrem-reddi: 'sokum vekatip' GO'lu --apply'da BİLE rc≠0 + ssh-çağrı=0
 CS_LOG5="$(mktemp)"
 err="$(PATH="$CS_STUB:$PATH" CS_LOG="$CS_LOG5" ISKAN_SOKUM_GO=1 ISKAN_CLOUDTOP_REPO_DIR="/tmp/iskan-yok.$$" \
@@ -1802,7 +1894,7 @@ rc=$?
   || bad "sokum 3-Çit: dry-run modda delik (rc=$rc)"
 
 rm -f "$CS_LOG" "$CS_LOG4" "$CS_LOG5"
-for d in "$CS_STUB" "$CS_REPO" "$CS_HOST_DIR" "$CS_KANIT1" "$CS_KANIT2" "$CS_KANIT3" "$CS_KANIT4" "$CS_KANIT5"; do
+for d in "$CS_STUB" "$CS_REPO" "$CS_HOST_DIR" "$CS_KANIT1" "$CS_KANIT2" "$CS_KANIT3" "$CS_KANIT3B" "$CS_KANIT3C" "$CS_KANIT4" "$CS_KANIT5"; do
   find "$d" -type f -delete 2>/dev/null; find "$d" -depth -type d -delete 2>/dev/null
 done
 
