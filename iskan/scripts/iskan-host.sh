@@ -303,6 +303,44 @@ else
   echo "  [doğrulanmadı] hostsrv erişilemedi"
 fi
 
+# ── HOST-KAPASİTE (P1e): yeni ~2g-tenant kabaca SIĞAR mı — salt-okur free/df ölçümü ──────
+# Karar VERMEZ, bilgi basar (dry-run yüzeyi; kur zincirinin adım-3 önizlemesinde operatör
+# doğum-öncesi kapasiteyi görsün — analiz-bulgusu: host geçmişte %93-disk'e sessizce dayanmıştı).
+# Eşikler env'le: ISKAN_KAPASITE_MEM_MB (default 2048 = 2g-tenant) · ISKAN_KAPASITE_DISK_G (default 10).
+echo "-- HOST-KAPASİTE (yeni ~2g-tenant ön-izlemesi, salt-okur) --"
+if hostsrv_ulasilir; then
+  MEM_AVAIL_MB="$(hostsrv_okur "free -m | awk '/^Mem:/{print \$7}'" | tr -d '[:space:]')"
+  DISK_AVAIL_G="$(hostsrv_okur "df -BG /opt | awk 'NR==2{gsub(/G/,\"\",\$4); print \$4}'" | tr -d '[:space:]')"
+  GEREKEN_MB="${ISKAN_KAPASITE_MEM_MB:-2048}"
+  GEREKEN_DISK_G="${ISKAN_KAPASITE_DISK_G:-10}"
+  # MINOR fix: operatör-eşiği de sayısal-doğrulanır (ölçüm gibi) — bozuk ISKAN_KAPASITE_* değeri
+  # ham 'integer expression expected' + SAHTE [kırmızı] SIĞMAZ üretmesin; doğrusu [doğrulanmadı].
+  if ! printf '%s' "$GEREKEN_MB" | grep -qE '^[0-9]{1,12}$'; then
+    echo "  [doğrulanmadı] RAM eşiği geçersiz (ISKAN_KAPASITE_MEM_MB='${GEREKEN_MB}' sayısal değil) — SIĞAR/SIĞMAZ verilemez"
+  elif printf '%s' "$MEM_AVAIL_MB" | grep -qE '^[0-9]{1,12}$'; then
+    if [ "$MEM_AVAIL_MB" -ge "$GEREKEN_MB" ]; then
+      echo "  [yeşil] RAM: avail ${MEM_AVAIL_MB}MB ≥ ${GEREKEN_MB}MB → ${GEREKEN_MB}MB'lık tenant SIĞAR"
+    else
+      echo "  [kırmızı] RAM: avail ${MEM_AVAIL_MB}MB < ${GEREKEN_MB}MB → SIĞMAZ (önce kapasite aç: uyut/temizle/büyüt)"
+    fi
+  else
+    echo "  [doğrulanmadı] RAM ölçülemedi (free-çıktısı sayısal-parse edilemedi)"
+  fi
+  if ! printf '%s' "$GEREKEN_DISK_G" | grep -qE '^[0-9]{1,12}$'; then
+    echo "  [doğrulanmadı] disk eşiği geçersiz (ISKAN_KAPASITE_DISK_G='${GEREKEN_DISK_G}' sayısal değil) — SIĞAR/SIĞMAZ verilemez"
+  elif printf '%s' "$DISK_AVAIL_G" | grep -qE '^[0-9]{1,12}$'; then
+    if [ "$DISK_AVAIL_G" -ge "$GEREKEN_DISK_G" ]; then
+      echo "  [yeşil] disk(/opt): boş ${DISK_AVAIL_G}G ≥ ${GEREKEN_DISK_G}G"
+    else
+      echo "  [kırmızı] disk(/opt): boş ${DISK_AVAIL_G}G < ${GEREKEN_DISK_G}G → imaj+config için DAR (önce temizlik)"
+    fi
+  else
+    echo "  [doğrulanmadı] disk ölçülemedi (df-çıktısı sayısal-parse edilemedi)"
+  fi
+else
+  echo "  [doğrulanmadı] hostsrv erişilemedi — kapasite ölçülemedi (SIĞAR/SIĞMAZ verilemez)"
+fi
+
 # ── D1: host↔repo compose yapısal-drift (compose-diff) ──────────────────────────────────
 echo "-- COMPOSE-DIFF (repo git-tracked ⟷ host-deployed, D1-durağı) --"
 if ! hostsrv_ulasilir; then
