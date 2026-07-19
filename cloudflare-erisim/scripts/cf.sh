@@ -325,8 +325,8 @@ cmd_offboard(){  # <hostname> [--apply] — Access app + DNS CNAME geri-alımı 
   #   n==1 → sil · n==0 → "zaten-yok" kanıt-satırı + devam (yarım-kalmış apply re-run'ı kilitlenmez)
   #   n>1  → DUR (toplu-silme ASLA — assertion'ın koruduğu asıl tehlike bu yarı)
   # 0'ı "zaten-yok" sayabilmek POZİTİF-KANIT ister: Access listesi sunucu-FİLTRESİZ döner →
-  # tamlık-kapısı şart (total_count ≤ per_page değilse görünmeyen-sayfada canlı kayıt olabilir;
-  # unknown ≠ yok → DUR). DNS sorgusu sunucu-tarafı name-filtreli → 0 = kanıtlı-yok.
+  # tamlık-kapısı şart (total_count == dönen-liste-uzunluğu değilse görünmeyen-dilimde canlı
+  # kayıt olabilir; unknown ≠ yok → DUR). DNS sorgusu sunucu-tarafı name-filtreli → 0 = kanıtlı-yok.
   # Değer-basmaz (yalnız hostname + CF kaynak-ID). Çift-zaten-yok → exit 0 (söküm re-run güvenliği).
   local host="" apply=0 a
   for a in "$@"; do
@@ -338,26 +338,35 @@ cmd_offboard(){  # <hostname> [--apply] — Access app + DNS CNAME geri-alımı 
     esac
   done
   [ -n "$host" ] || die "kullanım: offboard <hostname> [--apply]"
+  # hostname'i KANONİKLEŞTİR (DNS case-insensitive; kuyruk-nokta = FQDN eşdeğeri): korumalı-kapı,
+  # Access .domain-eşi ve DNS name-filtresi hep kanonik-lowercase koşar — 'HUMA.mmepanel.com' /
+  # 'huma.mmepanel.com.' varyantları sert-kapıyı KAYDIRAMAZ (adversaryal-hakem repro'lu bulgu).
+  host="${host,,}"; host="${host%.}"
   local p
+  set -f  # env-kaynaklı liste-üyelerinde glob-genişleme olmasın (cwd-bağımsız davranış)
   for p in $OFFBOARD_PROTECTED; do
     [ "$host" = "$p" ] && die "REDDEDİLDİ: $host korumalı prod-hostname — offboard bu yüzeyden yapılamaz."
   done
+  set +f
   load_ctx
 
   # ── yarı-1: Access app — tamlık-kapısı + TAM-hostname lookup + ≤1-assertion ────────────
-  local per_page=100 apps app_id n_app total_app
+  # Tamlık-KANITI = total_count == dönen-liste-uzunluğu (istenen-per_page varsayımı DEĞİL:
+  # sunucu per_page'i kırparsa total≤100 iken bile hedef görünmeyen-dilimde kalabilirdi).
+  local per_page=100 apps app_id n_app n_donen total_app
   apps="$(api GET "/accounts/${ACCOUNT_ID}/access/apps?per_page=${per_page}")"
   ok "$apps" || { red "✗ Access app listesi alınamadı:"; errs "$apps"; exit 1; }
   total_app="$(echo "$apps" | jq -r '.result_info.total_count // empty')"
+  n_donen="$(echo "$apps" | jq -r '.result | length')"
   case "$total_app" in
     ''|*[!0-9]*) die "DUR: Access-app listesi tamlığı kanıtlanamadı (total_count okunamadı) — 0/1/N sayımı güvenilmez, hiçbir şey silinmedi (unknown ≠ yok)." ;;
   esac
-  [ "$total_app" -le "$per_page" ] || die "DUR: Access-app listesi TAM değil (total_count=${total_app} > per_page=${per_page}) — görünmeyen-sayfada canlı kayıt olabilir, hiçbir şey silinmedi. (Çözüm: sayfalama desteği eklenmeli.)"
-  app_id="$(echo "$apps" | jq -r --arg d "$host" '.result[]? | select(.domain==$d) | .id')"
-  n_app="$(printf '%s' "$app_id" | grep -c . || true)"
+  [ "$total_app" -eq "$n_donen" ] || die "DUR: Access-app listesi TAM değil (total_count=${total_app} ≠ dönen=${n_donen}) — görünmeyen-dilimde canlı kayıt olabilir, hiçbir şey silinmedi. (Çözüm: sayfalama desteği eklenmeli.)"
+  n_app="$(echo "$apps" | jq -r --arg d "$host" '[.result[]? | select(.domain==$d)] | length')"
   case "$n_app" in
     0) app_id="" ;;
-    1) : ;;
+    1) app_id="$(echo "$apps" | jq -r --arg d "$host" '.result[]? | select(.domain==$d) | .id // empty' | head -1)"
+       { [ -n "$app_id" ] && [ "$app_id" != "null" ]; } || die "DUR: Access-app id okunamadı ('$host' eşleşti ama id boş/null) — hiçbir şey silinmedi." ;;
     *) die "DUR: Access-app ≤1-assertion başarısız — '$host' (.domain TAM-eş) için ${n_app} kayıt. Toplu-silme ASLA; hiçbir şey silinmedi." ;;
   esac
 
@@ -366,11 +375,11 @@ cmd_offboard(){  # <hostname> [--apply] — Access app + DNS CNAME geri-alımı 
   local recs rec_id n_rec
   recs="$(api GET "/zones/${ZONE_ID}/dns_records?type=CNAME&name=${host}")"
   ok "$recs" || { red "✗ DNS kaydı sorgulanamadı:"; errs "$recs"; exit 1; }
-  rec_id="$(echo "$recs" | jq -r '.result[]?.id')"
-  n_rec="$(printf '%s' "$rec_id" | grep -c . || true)"
+  n_rec="$(echo "$recs" | jq -r '.result | length')"
   case "$n_rec" in
     0) rec_id="" ;;
-    1) : ;;
+    1) rec_id="$(echo "$recs" | jq -r '.result[0].id // empty')"
+       { [ -n "$rec_id" ] && [ "$rec_id" != "null" ]; } || die "DUR: DNS-CNAME id okunamadı ('$host' eşleşti ama id boş/null) — hiçbir şey silinmedi." ;;
     *) die "DUR: DNS-CNAME ≤1-assertion başarısız — '$host' (type=CNAME, name TAM-eş) için ${n_rec} kayıt. Toplu-silme ASLA; hiçbir şey silinmedi." ;;
   esac
 

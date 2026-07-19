@@ -32,7 +32,7 @@ case "$method|$url" in
   GET\|*"/dns_records?type=CNAME&name="*) cat "${FIX_DNS:?}" ;;
   DELETE\|*"/access/apps/"*)              cat "${FIX_DEL_APP:?}" ;;
   DELETE\|*"/dns_records/"*)              cat "${FIX_DEL_DNS:?}" ;;
-  GET\|*"/zones?name="*)                  cat "${FIX_ZONES:-/dev/null}" 2>/dev/null || echo '{"success":true,"result":[]}' ;;
+  GET\|*"/zones?name="*)                  if [ -n "${FIX_ZONES:-}" ]; then cat "$FIX_ZONES"; else echo '{"success":true,"result":[]}'; fi ;;
   *) echo '{"success":true,"result":[]}' ;;
 esac
 EOS
@@ -60,6 +60,12 @@ cat > "$FIX/apps-150.json" <<'EOF'
 EOF
 cat > "$FIX/apps-nototal.json" <<'EOF'
 {"success":true,"result":[{"id":"APP1","domain":"iskantest.mmepanel.com","name":"iskantest"}]}
+EOF
+cat > "$FIX/apps-capped.json" <<'EOF'
+{"success":true,"result":[{"id":"APPX","domain":"baska-app.mmepanel.com","name":"baska"}],"result_info":{"total_count":60,"per_page":100}}
+EOF
+cat > "$FIX/apps-nullid.json" <<'EOF'
+{"success":true,"result":[{"id":null,"domain":"iskantest.mmepanel.com","name":"iskantest"}],"result_info":{"total_count":1,"per_page":100}}
 EOF
 cat > "$FIX/dns-1.json" <<'EOF'
 {"success":true,"result":[{"id":"REC1","type":"CNAME","name":"iskantest.mmepanel.com","content":"T1.cfargotunnel.com","proxied":true}],"result_info":{"total_count":1}}
@@ -114,6 +120,19 @@ for h in huma.mmepanel.com mihenk.mmepanel.com vekatip.mmepanel.com mmepanel.com
   iddia "T2 çekirdek-RED DELETE=0 ($h)" [ "$(del_say)" = "0" ]
 done
 
+# T2b · korumalı-kapı KANONİKLEŞTİRME: büyük-harf / kuyruk-nokta varyantları da RED (fail-open regresyonu kapalı)
+for h in HUMA.mmepanel.com Mihenk.mmepanel.com huma.mmepanel.com.; do
+  cf_kos -- offboard "$h" --apply; rc=$?
+  iddia "T2b varyant-RED rc≠0 ($h)" [ $rc -ne 0 ]
+  iddia "T2b varyant-RED mesaj ($h)" grep -q 'REDDEDİLDİ' "$CIKTI"
+  iddia "T2b varyant-RED DELETE=0 ($h)" [ "$(del_say)" = "0" ]
+done
+
+# T2c · kanonikleştirme İŞLEVSEL: korumasız büyük-harf hedef lowercase-kayıtla eşleşir (dry-run planı SİLİNECEK der)
+cf_kos -- offboard ISKANTEST.mmepanel.com; rc=$?
+iddia "T2c normalize-eşleşme rc=0" [ $rc -eq 0 ]
+iddia "T2c normalize-eşleşme SİLİNECEK-planı" grep -q 'SİLİNECEK' "$CIKTI"
+
 # T3 · sert-kapı KAYDIRILAMAZ: CF_ZONE_NAME=evil.com iken çekirdek YİNE korur
 cf_kos CF_ZONE_NAME=evil.com -- offboard huma.mmepanel.com --apply; rc=$?
 iddia "T3 evil-zone rc≠0" [ $rc -ne 0 ]
@@ -125,6 +144,8 @@ cf_kos CF_OFFBOARD_PROTECTED=legacy.mmepanel.com -- offboard huma.mmepanel.com -
 iddia "T4 legacy-var çekirdeği daraltamaz" [ $rc -ne 0 ]
 cf_kos CF_OFFBOARD_PROTECTED=legacy.mmepanel.com -- offboard legacy.mmepanel.com --apply; rc=$?
 iddia "T4 legacy-var yine-de EKLER" [ $rc -ne 0 ]
+iddia "T4 legacy-var EKLER mesaj" grep -q 'REDDEDİLDİ' "$CIKTI"
+iddia "T4 legacy-var EKLER DELETE=0" [ "$(del_say)" = "0" ]
 
 # T5 · CF_OFFBOARD_PROTECTED_EXTRA ekler
 cf_kos CF_OFFBOARD_PROTECTED_EXTRA=ozel.mmepanel.com -- offboard ozel.mmepanel.com --apply; rc=$?
@@ -143,7 +164,9 @@ iddia "T7 apply rc=0" [ $rc -eq 0 ]
 iddia "T7 apply DELETE=2" [ "$(del_say)" = "2" ]
 acc_satir="$(grep -n '^DELETE .*access/apps/' "$LOG" | head -1 | cut -d: -f1)"
 dns_satir="$(grep -n '^DELETE .*dns_records/' "$LOG" | head -1 | cut -d: -f1)"
-iddia "T7 apply sıra access→dns" [ -n "$acc_satir" ] && [ -n "$dns_satir" ] && [ "$acc_satir" -lt "$dns_satir" ]
+sira_ok=0
+[ -n "$acc_satir" ] && [ -n "$dns_satir" ] && [ "$acc_satir" -lt "$dns_satir" ] && sira_ok=1
+iddia "T7 apply sıra access→dns" [ "$sira_ok" = "1" ]
 iddia "T7 OFFBOARD-SONUC silindi×2" grep -q '^OFFBOARD-SONUC: access=silindi dns=silindi$' "$CIKTI"
 
 # T8 · idempotans çift-zaten-yok: apply'da bile rc=0 + DELETE=0 (söküm re-run güvenliği)
@@ -180,6 +203,16 @@ FIX_APPS="$FIX/apps-nototal.json" cf_kos -- offboard iskantest.mmepanel.com --ap
 iddia "T11 total-yok rc≠0" [ $rc -ne 0 ]
 iddia "T11 total-yok kanıtlanamadı-mesajı" grep -q 'tamlığı kanıtlanamadı' "$CIKTI"
 iddia "T11 total-yok DELETE=0" [ "$(del_say)" = "0" ]
+FIX_APPS="$FIX/apps-capped.json" cf_kos -- offboard iskantest.mmepanel.com --apply; rc=$?
+iddia "T11b sunucu-kırpması (total=60≠dönen=1) rc≠0" [ $rc -ne 0 ]
+iddia "T11b sunucu-kırpması TAM-değil mesajı" grep -q 'TAM değil' "$CIKTI"
+iddia "T11b sunucu-kırpması DELETE=0" [ "$(del_say)" = "0" ]
+
+# T11c · eşleşen kaydın id'si null/boş → DUR (bozuk-API 'zaten-yok'a ya da DELETE/null'a düşmez)
+FIX_APPS="$FIX/apps-nullid.json" cf_kos -- offboard iskantest.mmepanel.com --apply; rc=$?
+iddia "T11c null-id rc≠0" [ $rc -ne 0 ]
+iddia "T11c null-id mesaj" grep -q 'id okunamadı' "$CIKTI"
+iddia "T11c null-id DELETE=0" [ "$(del_say)" = "0" ]
 
 # T12 · DELETE-fail fail-closed: access-DELETE düşerse DNS'e DOKUNULMAZ
 FIX_DEL_APP="$FIX/fail.json" cf_kos -- offboard iskantest.mmepanel.com --apply; rc=$?
@@ -204,7 +237,9 @@ iddia "T14 zone-yok rc≠0" [ $rc -ne 0 ]
 iddia "T14 zone-yok mesaj" grep -q 'zone_id çözülemedi' "$CIKTI"
 iddia "T14 zone-yok DELETE=0" [ "$(del_say)" = "0" ]
 
-# T15 · sır-hijyeni: hiçbir test-çıktısında/curl-log'unda token-değeri geçmedi
+# T15 · sır-hijyeni: hiçbir test-çıktısında/curl-log'unda token-değeri geçmedi.
+# Kapsam-sınırı (dürüstlük): stub -H header-DEĞERLERİNİ loglamaz → oracle stdout/stderr + URL kanallarını
+# tarar; header-kanalı bu testte görünmez (cf.sh zaten değeri yalnız header'a koyar, stdout'a basmaz).
 iddia "T15 sır-hijyeni (FAKE-TOKEN 0 kez)" [ "$(grep -c 'FAKE-TOKEN-XYZ' "$TUM_CIKTILAR" || true)" = "0" ]
 
 echo "== ${PASS} geçti · ${FAIL} düştü =="
