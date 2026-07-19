@@ -1133,6 +1133,49 @@ rc=$?
   && ok "sokum zaten-sokuk: kayıt-yok + arşiv-var → rc=0 idempotent ('zaten-sokuk' sinyali)" \
   || bad "sokum zaten-sokuk: durum-sinyali kırık (rc=$rc)"
 
+# 51b. sokum P1d (kur-durum-dosyası temizliği): dry-run planı ADIM-8'i içerir + dry-run dosyaya DOKUNMAZ;
+#      zaten-sokuk --apply bayat kur-izini temizler (F4 'state-dosyası-silinmiş' söküm-oracle'ının mekanizması)
+SK_STATE_DIR="$(mktemp -d)"
+out="$(ISKAN_STATE_DIR="$SK_STATE_DIR" ISKAN_CLOUDTOP_REPO_DIR="$SK_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan.sh" sokum sokumtest 2>&1)"
+printf '%s' "$out" | grep -q 'kur-durum-dosyası temizliği' \
+  && ok "sokum dry-run: plan ADIM-8 kur-durum-temizliğini içeriyor (P1d)" \
+  || bad "sokum dry-run: ADIM-8 planda yok (P1d eksik)"
+printf 'ekip-yerlestir\n' > "$SK_STATE_DIR/iskan-kur-ghost.state"
+SK_LOG3="$(mktemp)"
+out="$(PATH="$SK_STUB_DIR:$PATH" SSH_STUB_LOG="$SK_LOG3" ISKAN_STATE_DIR="$SK_STATE_DIR" ISKAN_CLOUDTOP_REPO_DIR="$SK_REPO" \
+  bash "$SCRIPT_DIR/iskan.sh" sokum ghost 2>&1)"
+rc=$?
+[ "$rc" = "0" ] && [ -f "$SK_STATE_DIR/iskan-kur-ghost.state" ] && printf '%s' "$out" | grep -q 'bayat kur-durum-dosyası duruyor' \
+  && ok "sokum zaten-sokuk dry-run: bayat kur-izi UYARILIR ama SİLİNMEZ (dry-run yazmaz)" \
+  || bad "sokum zaten-sokuk dry-run: state-dokunma sözleşmesi kırık (rc=$rc, dosya $([ -f "$SK_STATE_DIR/iskan-kur-ghost.state" ] && echo var || echo YOK))"
+printf 'ekip-yerlestir\n' > "$SK_STATE_DIR/iskan-kur-ghost.state"
+out="$(PATH="$SK_STUB_DIR:$PATH" SSH_STUB_LOG="$SK_LOG3" ISKAN_SOKUM_GO=1 ISKAN_STATE_DIR="$SK_STATE_DIR" ISKAN_CLOUDTOP_REPO_DIR="$SK_REPO" \
+  bash "$SCRIPT_DIR/iskan.sh" sokum ghost --apply 2>&1)"
+rc=$?
+[ "$rc" = "0" ] && [ ! -f "$SK_STATE_DIR/iskan-kur-ghost.state" ] && printf '%s' "$out" | grep -q 'bayat kur-durum-dosyası temizlendi' \
+  && ok "sokum zaten-sokuk --apply: bayat kur-izi TEMİZLENDİ (P1d tamamlayıcı)" \
+  || bad "sokum zaten-sokuk --apply: kur-izi temizliği kırık (rc=$rc)"
+# MINOR fix: state silindiğinde 'hiçbir şeye dokunulmadı' DEMEZ (çelişki) — 'yalnız lokal kur-izi temizlendi' der
+printf 'ekip-yerlestir\n' > "$SK_STATE_DIR/iskan-kur-ghost.state"
+out="$(PATH="$SK_STUB_DIR:$PATH" SSH_STUB_LOG="$SK_LOG3" ISKAN_SOKUM_GO=1 ISKAN_STATE_DIR="$SK_STATE_DIR" ISKAN_CLOUDTOP_REPO_DIR="$SK_REPO" \
+  bash "$SCRIPT_DIR/iskan.sh" sokum ghost --apply 2>&1)"
+printf '%s' "$out" | grep -q 'yalnız bayat lokal kur-izi temizlendi' && ! printf '%s' "$out" | grep -q 'temizlendi.*idempotent.*hiçbir şeye dokunulmadı' \
+  && ok "sokum zaten-sokuk --apply: state-silinince 'dokunulmadı' iddiası ayrıştırıldı (MINOR fix, çelişki yok)" \
+  || bad "sokum zaten-sokuk --apply: 'dokunulmadı' çelişkisi sürüyor"
+# MAJOR fix: rm-başarısızlığı SESSİZ yutulmasın — state-dizini salt-oku iken kırmızı + rc≠0 (ADIM-8 simetrisi)
+printf 'ekip-yerlestir\n' > "$SK_STATE_DIR/iskan-kur-ghost.state"
+chmod 555 "$SK_STATE_DIR"
+out="$(PATH="$SK_STUB_DIR:$PATH" SSH_STUB_LOG="$SK_LOG3" ISKAN_SOKUM_GO=1 ISKAN_STATE_DIR="$SK_STATE_DIR" ISKAN_CLOUDTOP_REPO_DIR="$SK_REPO" \
+  bash "$SCRIPT_DIR/iskan.sh" sokum ghost --apply 2>&1)"
+rc=$?
+chmod 755 "$SK_STATE_DIR"
+[ "$rc" != "0" ] && printf '%s' "$out" | grep -q 'bayat kur-durum-dosyası silinemedi' \
+  && ok "sokum zaten-sokuk --apply: rm-başarısızlığı SESSİZ yutulmuyor → kırmızı + rc≠0 (MAJOR fix, ADIM-8 simetrisi)" \
+  || bad "sokum zaten-sokuk --apply: rm-hatası sessiz yutuldu (rc=$rc — MAJOR regresyon)"
+rm -f "$SK_LOG3"
+find "$SK_STATE_DIR" -type f -delete 2>/dev/null; find "$SK_STATE_DIR" -depth -type d -delete 2>/dev/null
+
 rm -f "$SK_LOG" "$SK_LOG2"
 find "$SK_REPO" "$SK_STUB_DIR" -type f -delete 2>/dev/null
 find "$SK_REPO" "$SK_STUB_DIR" -depth -type d -delete 2>/dev/null
@@ -1389,6 +1432,53 @@ rc=$?
   && ok "yeni-proje --mem-limit 4g: 2g-üstü uyarısız (golden)" \
   || bad "yeni-proje --mem-limit 4g: yanlış-uyarı (rc=$rc)"
 find /tmp -maxdepth 1 -name "iskan-test-mem.$$.yml" -delete 2>/dev/null
+
+# ── P1e: iskan-host.sh HOST-KAPASİTE satırı (kur adım-3 önizlemesine kapasite-görüşü) ──────
+
+# 62. kapasite yeşil-yol (ssh-stub): avail 4096MB + 42G → SIĞAR; düşük-RAM → SIĞMAZ; erişilemez → doğrulanmadı
+HK_STUB="$(mktemp -d)"
+cat > "$HK_STUB/ssh" <<'EOF'
+#!/usr/bin/env bash
+case "$*" in
+  *"free -m"*) echo "${HK_MEM:-4096}" ;;
+  *"df -BG"*) echo "${HK_DISK:-42}" ;;
+esac
+exit 0
+EOF
+chmod +x "$HK_STUB/ssh"
+out="$(PATH="$HK_STUB:$PATH" HK_MEM=4096 HK_DISK=42 ISKAN_SSH_HOST=stubhost \
+  ISKAN_REPO_COMPOSE="$SCRIPT_DIR/fixtures/compose-clean.yml" bash "$SCRIPT_DIR/iskan-host.sh" --dry-run 2>&1)"
+rc=$?
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'SIĞAR' && printf '%s' "$out" | grep -q 'boş 42G' \
+  && ok "iskan-host kapasite: avail 4096MB + 42G → SIĞAR satırı basıldı (rc=3 korunur)" \
+  || bad "iskan-host kapasite: yeşil-yol kırık (rc=$rc)"
+out="$(PATH="$HK_STUB:$PATH" HK_MEM=1024 HK_DISK=6 ISKAN_SSH_HOST=stubhost \
+  ISKAN_REPO_COMPOSE="$SCRIPT_DIR/fixtures/compose-clean.yml" bash "$SCRIPT_DIR/iskan-host.sh" --dry-run 2>&1)"
+rc=$?
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'SIĞMAZ' && printf '%s' "$out" | grep -q 'DAR' \
+  && ok "iskan-host kapasite: avail 1024MB + 6G → SIĞMAZ + disk-DAR uyarıları (dry-run karar vermez, rc=3)" \
+  || bad "iskan-host kapasite: dar-yol kırık (rc=$rc)"
+out="$(ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_REPO_COMPOSE="$SCRIPT_DIR/fixtures/compose-clean.yml" \
+  bash "$SCRIPT_DIR/iskan-host.sh" --dry-run 2>&1)"
+printf '%s' "$out" | grep -q 'SIĞAR/SIĞMAZ verilemez' \
+  && ok "iskan-host kapasite: erişilemez-host → dürüst 'doğrulanamadı' (sahte-verdikt yok)" \
+  || bad "iskan-host kapasite: erişilemez-host 3-durum dili eksik"
+# MINOR fix: bozuk eşik-env (sayısal-olmayan) → SAHTE [kırmızı] SIĞMAZ değil, dürüst [doğrulanmadı]
+out="$(PATH="$HK_STUB:$PATH" HK_MEM=4096 HK_DISK=42 ISKAN_SSH_HOST=stubhost ISKAN_KAPASITE_MEM_MB='abc' ISKAN_KAPASITE_DISK_G='10 20' \
+  ISKAN_REPO_COMPOSE="$SCRIPT_DIR/fixtures/compose-clean.yml" bash "$SCRIPT_DIR/iskan-host.sh" --dry-run 2>&1)"
+rc=$?
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'RAM eşiği geçersiz' && printf '%s' "$out" | grep -q 'disk eşiği geçersiz' \
+  && ! printf '%s' "$out" | grep -q 'integer expression' && ! printf '%s' "$out" | grep -qE '\[kırmızı\] (RAM|disk).*SIĞMAZ|\[kırmızı\] disk.*DAR' \
+  && ok "iskan-host kapasite: bozuk eşik-env → dürüst [doğrulanmadı] (SAHTE SIĞMAZ + ham bash-hatası yok, MINOR fix)" \
+  || bad "iskan-host kapasite: bozuk-eşik sözleşmesi kırık (rc=$rc)"
+# re-verify MINOR: sayısal-AMA-taşan eşik (int64-üstü, 20 hane) da [doğrulanamadı] — ham hata+sahte SIĞMAZ yok
+out="$(PATH="$HK_STUB:$PATH" HK_MEM=4096 HK_DISK=42 ISKAN_SSH_HOST=stubhost ISKAN_KAPASITE_MEM_MB='99999999999999999999' \
+  ISKAN_REPO_COMPOSE="$SCRIPT_DIR/fixtures/compose-clean.yml" bash "$SCRIPT_DIR/iskan-host.sh" --dry-run 2>&1)"
+rc=$?
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'RAM eşiği geçersiz' && ! printf '%s' "$out" | grep -q 'integer expression' && ! printf '%s' "$out" | grep -qE '\[kırmızı\] RAM.*SIĞMAZ' \
+  && ok "iskan-host kapasite: taşan-sayı eşik (20-hane) → [doğrulanamadı] (int64-overflow ham-hata+sahte SIĞMAZ yok, re-verify MINOR fix)" \
+  || bad "iskan-host kapasite: taşan-eşik hâlâ ham-hata/sahte-SIĞMAZ üretiyor (rc=$rc)"
+find "$HK_STUB" -type f -delete 2>/dev/null; find "$HK_STUB" -depth -type d -delete 2>/dev/null
 
 echo "== ${PASS} geçti / ${FAIL} kaldı =="
 [ "$FAIL" -eq 0 ]

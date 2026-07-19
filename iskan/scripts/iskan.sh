@@ -2238,7 +2238,30 @@ cmd_sokum() {
       arsiv_izi="$(timeout 15 ssh -o BatchMode=yes -o ConnectTimeout=5 "$ssh_host" \
         "ls -d ${arsiv_root}/${proje}-* 2>/dev/null | head -1" 2>/dev/null || true)"
       if [ -n "$arsiv_izi" ]; then
-        echo "[yeşil] zaten-sokuk: '$proje' compose-kaydı yok + arşiv-izi mevcut ($arsiv_izi) — söküm daha önce tamamlanmış, hiçbir şeye dokunulmadı (idempotent, rc=0)"
+        # P1d zaten-sokuk tamamlayıcısı: bayat kur-izi apply'da temizlenir (dry-run yazmaz, uyarır)
+        local kur_state_zs dokunuldu=0
+        kur_state_zs="$(_kur_state_path "$proje")"
+        if [ -f "$kur_state_zs" ]; then
+          if [ "$mode" = "apply" ]; then
+            rm -f "$kur_state_zs"
+            # MAJOR fix (ADIM-8 simetrisi): rm-başarısızlığı SESSİZ yutulmasın — re-check + kırmızı
+            if [ -f "$kur_state_zs" ]; then
+              echo "[kırmızı] bayat kur-durum-dosyası silinemedi: $kur_state_zs — elle sil (yoksa sonraki 'kur $proje --devam' sökülmüş projeyi yarım-kurulu sanar)" >&2
+              exit 1
+            fi
+            echo "[yeşil] bayat kur-durum-dosyası temizlendi: $kur_state_zs (zaten-sokuk tamamlayıcısı)"
+            dokunuldu=1
+          else
+            echo "[uyarı] bayat kur-durum-dosyası duruyor: $kur_state_zs — sokum --apply (ISKAN_SOKUM_GO=1) temizler"
+          fi
+        fi
+        # 'dokunulmadı' çelişkisi fix: state silindiğinde iddiayı ayrıştır (host/CF/manifest'e dokunulmadı;
+        # yalnız lokal kur-izi temizlendi) — Doğrulama Protokolü 'kanıtla' ruhu (silinen dosya = dokunuş)
+        if [ "$dokunuldu" = "1" ]; then
+          echo "[yeşil] zaten-sokuk: '$proje' compose-kaydı yok + arşiv-izi mevcut ($arsiv_izi) — söküm daha önce tamamlanmış; host/CF/manifest'e dokunulmadı, yalnız bayat lokal kur-izi temizlendi (idempotent, rc=0)"
+        else
+          echo "[yeşil] zaten-sokuk: '$proje' compose-kaydı yok + arşiv-izi mevcut ($arsiv_izi) — söküm daha önce tamamlanmış, hiçbir şeye dokunulmadı (idempotent, rc=0)"
+        fi
         exit 0
       fi
       printf '%s\n' "$cozum_out" >&2
@@ -2283,6 +2306,7 @@ cmd_sokum() {
     echo "  6. ARŞİVE-TAŞI (down-DOĞRULANDIKTAN sonra; aksiyon-11): $host_cfg → ${arsiv_root}/${proje}-<tarih>/"
     echo "     (taşıma-öncesi dosya-sayısı+du kanıta; mv = tek meşru yol, rm YOK)"
     echo "  7. KOMŞU-KANIT SONRA: StartedAt/config-hash ÖNCE ile bayt-eş değilse exit=1"
+    echo "  8. kur-durum-dosyası temizliği: $(_kur_state_path "$proje") (varsa silinir — F4 söküm-oracle'ı: state-dosyası-silinmiş)"
     echo "== dry-run: hiçbir yazım/silme/API-çağrısı yapılmadı (plan-exit sözleşmesi, exit=3) =="
     exit 3
   fi
@@ -2464,8 +2488,24 @@ cmd_sokum() {
   fi
   echo "[yeşil] ADIM-7 komşu-kanıt: $komsular ÖNCE=SONRA bayt-eş (recreate/restart=0)"
 
+  # ── ADIM-8: kur-durum-dosyası temizliği (P1d) — söküm-sonrası bayat kur-izi kalmasın ─────
+  # (kalırsa bir-sonraki 'kur <proje>' sökülmüş projeyi --devam ile "yarım-kurulu" sanır;
+  # F4 söküm-rubriğinin 'state-dosyası-silinmiş' oracle'ı bu mekanizmaya bağlı)
+  local kur_state
+  kur_state="$(_kur_state_path "$proje")"
+  if [ -f "$kur_state" ]; then
+    rm -f "$kur_state"
+    if [ -f "$kur_state" ]; then
+      echo "[kırmızı] ADIM-8 kur-durum-dosyası silinemedi: $kur_state — elle sil, söküm diğer-adımlarıyla TAMAM" >&2
+      exit 1
+    fi
+    echo "[yeşil] ADIM-8 kur-durum-dosyası silindi: $kur_state"
+  else
+    echo "[yeşil] ADIM-8 kur-durum-dosyası zaten yok: $kur_state"
+  fi
+
   echo ""
-  echo "== sokum bitti: $proje TAM-SÖKÜLDÜ — container-down + CF-geri-alım + 5-manifest iz-sıfır (lokal, commit/PR ayrı-adım) + arşiv dolu · kanıt: $kanit_dir/ =="
+  echo "== sokum bitti: $proje TAM-SÖKÜLDÜ — container-down + CF-geri-alım + 5-manifest iz-sıfır (lokal, commit/PR ayrı-adım) + arşiv dolu + kur-izi temiz · kanıt: $kanit_dir/ =="
   exit 0
 }
 
