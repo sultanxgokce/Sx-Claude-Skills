@@ -2674,8 +2674,10 @@ cmd_sokum() {
 #   6. ekip-yerlestir --apply           ekip-yerleştirme                (GO'suz, FAZ-6 sözleşmesi)
 #   7. evergreen-kaydet --apply         kalıcı-iz manifest-yazımı       (host-apply yok)
 #
-# Durum-dosyası: ${ISKAN_STATE_DIR:-$HOME/.claude}/iskan-kur-<proje>.state — git-DIŞI, tek-satır:
-# son-tamamlanan-adım-adı. --devam oradan sürer · --durum salt-oku basar · dosya yoksa baştan.
+# Durum-dosyası (v2, PR-C env-pin): ${ISKAN_STATE_DIR:-$HOME/.claude}/iskan-kur-<proje>.state —
+# git-DIŞI. Satır-1: son-tamamlanan-adım-adı AYNEN (eski okuyucu head-1 uyumu — geriye-uyum bedava);
+# satır-2+: 'pin AD=değer' blokları (allowlist DAR-5; GO ve güvenlik-kapı setleri ASLA pinlenmez).
+# --devam oradan sürer (açık-env > pin > default) · --durum salt-oku basar · dosya yoksa baştan.
 # --dry-run: TÜM zincir dry-run modunda uçtan-uca (hiçbir yazma — durum-dosyası DAHİL), exit=3.
 # Fail-closed: ilk kırmızıda DUR (adım-adı + exit-code + remediation); sonraki adıma atlamak YASAK.
 # 3-Çit: mahrem-tenant adları (vekatip/mmex/medigate/huma/mihenk) İSKÂN-doğumu DEĞİLDİR → RED.
@@ -2688,11 +2690,96 @@ ISKAN_KUR_ADIMLAR="yeni-proje durak1-cloudtop-pr iskan-host provizyon cf-yayin e
 ISKAN_KUR_ADIM_SAYISI=$(set -- $ISKAN_KUR_ADIMLAR; echo $#)
 ISKAN_KUR_IZOLE="vekatip mmex medigate huma mihenk"
 
+# ── ENV-PİN (PR-C, F1/F6): kur-state satır-2+'ında 'pin AD=değer' — --devam env-kaybını kapatır.
+# Allowlist DAR-5, KOŞULSUZ atama (ISKAN_KUR_ADIMLAR emsali; env ile genişletilemez — K2-garanti).
+# ISKAN_CF_SH ve ISKAN_PONG_SH BİLİNÇLİ DIŞARIDA: delege/prob-YOLU state-dosya-güvenine bağlanmaz
+# (kurcalanmış 'pin ISKAN_CF_SH=/tmp/sahte.sh' CF-mutasyonunu kaçırır, bayat pong-pini canlılık-kapısını
+# kalıcı [doğrulanmadı]-bypass'a çevirirdi — launcher/kondüktör onları her koşuda taze verir).
+ISKAN_KUR_PIN_ALLOW="ISKAN_CLOUDTOP_REPO_DIR ISKAN_REPO_COMPOSE ISKAN_REPO_TUNNEL ISKAN_SSH_HOST ISKAN_EY_ROSTER"
+# deny-sınıfı-2 (K3): *_GO gibi bu adlar da pin-satırında görülürse KURCALANMIŞ-state kırmızısı —
+# mahrem regresyon-kapı setleri (7/8-hostname) yalnız komut-satırından gelir, state'ten ASLA.
+ISKAN_KUR_PIN_DENY2="ISKAN_PROD_HOSTS ISKAN_SOKUM_HOSTS ISKAN_SOKUM_KOMSULAR"
+ISKAN_KUR_PIN_YUKLENEN=""   # _kur_pin_yukle doldurur: yüklenen pin-ADLARI (değer değil; harita kaynak-etiketi)
+
 _kur_state_path() { echo "${ISKAN_STATE_DIR:-$HOME/.claude}/iskan-kur-$1.state"; }
 
-_kur_state_yaz() { # <state-dosyası> <adım-adı> — git-DIŞI durum-dosyasına son-tamamlanan adımı yazar
+_kur_state_yaz() { # <state-dosyası> <adım-adı> — git-DIŞI durum-dosyası v2 (atomik tmp+mv, 600):
+  # satır-1 = adım-adı AYNEN (eski okuyucu head-1 uyumu); satır-2+ = pin-bloğu HER yazımda ETKİN
+  # env'den yeniden üretilir (açık-env override → pin kendiliğinden tazelenir). Rollback-notu:
+  # eski-kod truncate-yazar → pinler ilk yazımda sessizce kaybolur (F6-degradasyonu; SKILL.md'de belgeli).
+  local tmp
   mkdir -p "$(dirname "$1")" 2>/dev/null || return 1
-  printf '%s\n' "$2" > "$1"
+  tmp="$(mktemp "$1.XXXXXX" 2>/dev/null)" || return 1
+  { printf '%s\n' "$2"; _kur_pin_blok; } > "$tmp" || { rm -f "$tmp"; return 1; }
+  chmod 600 "$tmp" 2>/dev/null || { rm -f "$tmp"; return 1; }
+  mv -f "$tmp" "$1"
+}
+
+_kur_pin_blok() { # K1 YAZICI: YALNIZ allowlist üstünde döner — ortam TARANMAZ (ISKAN_* glob'u yok);
+  # ortamda ISKAN_FAZ4_GO=1 dursa bile yazıcının eline hiç geçmez. Değer state-DOSYASINA yazılır
+  # (yollar + roster-token sır-değil; dosya yine 600) — stdout-kanıt-satırları her yerde adlar-only.
+  local v d
+  for v in $ISKAN_KUR_PIN_ALLOW; do
+    d="${!v-}"
+    [ -n "$d" ] || continue
+    case "$d" in
+      *$'\n'*) echo "[uyarı] env-pin: $v çok-satırlı değer — pinlenmedi (state-formatı tek-satır)" >&2; continue ;;
+    esac
+    printf 'pin %s=%s\n' "$v" "$d"
+  done
+  return 0
+}
+
+_kur_pin_yukle() { # <state-dosyası> — satır-2+ pinlerini fail-closed kapılarla env'e yükler (F6).
+  # Kapı-SIRASI SABİT (K3): 'pin '-önek → ad-regex ^ISKAN_[A-Z0-9_]+$ → DENY-KIRMIZI (*_GO +
+  # deny-sınıfı-2; allowlist'ten ÖNCE — sessiz-atlama DEĞİL) → allowlist-üyeliği ([uyarı]+atla,
+  # ileriye-uyum) → açık-env-continue («${!ad+x}»: set-ama-BOŞ dahil = 'bu koşuda pini yok say',
+  # pin-iptal semantiği → fallback yolu) → export (K4: eval YOK).
+  # İKİ-GEÇİŞ: önce TÜM satırlar deny-taranır — kurcalanmış state'ten TEK pin bile export edilmez.
+  local state="$1" satir ad deger yuklenen=""
+  ISKAN_KUR_PIN_YUKLENEN=""
+  while IFS= read -r satir; do   # geçiş-1: deny-tarama (satır-sırasından bağımsız fail-closed)
+    case "$satir" in "pin "*) ;; *) continue ;; esac
+    ad="${satir#pin }"; ad="${ad%%=*}"
+    if ! printf '%s' "$ad" | LC_ALL=C grep -qE '^ISKAN_[A-Z0-9_]+$'; then
+      # fail-safe (PR-C re-verify): strict-regex'i geçemeyen ad normalde sessiz-atlanır — AMA
+      # GO/güvenlik-kapısı-pin'e BENZEYEN malforme ad (ör. 'ISKAN_FAZ4_GO ' trailing-space,
+      # 'ISKAN_PROD_HOSTS\t') tamper-sinyalidir → loud-kırmızı + refuse-all. Aksi halde pass-1
+      # sessizce atlar, pass-2 diğer (allowlist) pinleri yükler = kısmi-tamper onurlandırılır.
+      case "$ad" in
+        *_GO*|*PROD_HOST*|*SOKUM_HOST*|*SOKUM_KOMSU*)
+          echo "[kırmızı] malforme GO/güvenlik-kapısı-pin tespit — state kurcalanmış ($state): '$ad' strict-regex'i geçmiyor ama güvenlik-kapısına benziyor; dosyayı incele/sil (hiçbir pin yüklenmedi)" >&2
+          return 1 ;;
+      esac
+      continue
+    fi
+    case " $ISKAN_KUR_PIN_DENY2 " in *" $ad "*)
+      echo "[kırmızı] GO/güvenlik-kapısı-pin tespit — state kurcalanmış ($state): '$ad' güvenlik-kapı seti yalnız komut-satırından verilir; dosyayı incele/sil (hiçbir pin yüklenmedi)" >&2
+      return 1 ;;
+    esac
+    case "$ad" in *_GO)
+      echo "[kırmızı] GO/güvenlik-kapısı-pin tespit — state kurcalanmış ($state): GO yalnız Sultan komut-satırından verilir ('$ad'); dosyayı incele/sil (hiçbir pin yüklenmedi)" >&2
+      return 1 ;;
+    esac
+  done < <(tail -n +2 "$state")
+  while IFS= read -r satir; do   # geçiş-2: yükleme
+    case "$satir" in "pin "*) ;; *) continue ;; esac
+    satir="${satir#pin }"
+    case "$satir" in *=*) ;; *) echo "[uyarı] env-pin: bozuk pin-satırı ('=' yok) atlandı ($state)" >&2; continue ;; esac
+    ad="${satir%%=*}"; deger="${satir#*=}"
+    printf '%s' "$ad" | LC_ALL=C grep -qE '^ISKAN_[A-Z0-9_]+$' || { echo "[uyarı] env-pin: bozuk pin-adı atlandı ($state)" >&2; continue; }
+    case " $ISKAN_KUR_PIN_ALLOW " in
+      *" $ad "*) ;;
+      *) echo "[uyarı] env-pin: '$ad' allowlist-dışı — atlandı (ileriye-uyum; allowlist: $ISKAN_KUR_PIN_ALLOW)" >&2; continue ;;
+    esac
+    [ "${!ad+x}" ] && continue   # açık-env > pin; set-ama-BOŞ = pin-iptal (bu koşuda fallback/default)
+    export "$ad=$deger"          # K4: eval YOK — ad regex+allowlist kapılarından geçti
+    yuklenen="$yuklenen $ad"
+  done < <(tail -n +2 "$state")
+  yuklenen="${yuklenen# }"
+  ISKAN_KUR_PIN_YUKLENEN="$yuklenen"
+  [ -n "$yuklenen" ] && echo "[yeşil] env-pin yüklendi: $yuklenen (yalnız adlar — değer basılmaz; kaynak: $state)"
+  return 0
 }
 
 _kur_adim_no() { # <adım-adı> → 1..N (bilinmeyen → 0)
@@ -2719,6 +2806,91 @@ _kur_go_marker() { # <adım-adı> → adımın beklediği Sultan-GO marker-ADI (
     cf-yayin) echo "ISKAN_FAZ5_GO" ;;
     *) echo "" ;;
   esac
+}
+
+_kur_env_kaynak() { # <AD> → default|pin|açık-env — pin-yükleme SONRASI etkin çözümün kaynağı (harita-etiketi)
+  local ad="$1"
+  [ -n "${!ad-}" ] || { echo "default"; return 0; }
+  case " $ISKAN_KUR_PIN_YUKLENEN " in
+    *" $ad "*) echo "pin" ;;
+    *) echo "açık-env" ;;
+  esac
+}
+
+_kur_env_harita() { # <proje> <mod> <son-adım> — PREFLIGHT ENV-HEDEF-HARİTASI (PR-C, F1/F2 erken-teşhis).
+  # SALT-OKU: fetch/ssh/git-yazım YOK — yalnız yerel dosya-varlık + realpath. Kompakt tablo:
+  # adım→etkin-hedef→kaynak(default|pin|açık-env) + V4-minimal dosya-varlık satırları.
+  # V1 (F1-imzası BİREBİR): hedef-ayrışma ∧ compose-kaynağı=DEFAULT → zincir/devam'da kırmızı-DUR;
+  #   iki taraf da açık-env/pin ise [uyarı]+devam (bilinçli worktree-yaz→PR→origin/main-oku deseni
+  #   bloklanmaz — DURAK-1 origin/main-tabanlı son-savunma zaten var).
+  # V2 (F2-önleyici): repo_dir/.git DOSYA (git-worktree) ∧ son-tamamlanan < cf-yayin → zincir/devam'da
+  #   kırmızı-DUR (üç '-d .git' kapısı KESİN reddeder); cf-yayin geçildiyse yalnız bilgi-satırı.
+  # dry-run/durum modlarında V1/V2 BİLGİ-dilinde (plan-exit=3 · --durum rc=0 korunur).
+  local proje="$1" mod="$2" son_adim="${3:-}"
+  local repo_dir="${ISKAN_CLOUDTOP_REPO_DIR:-/config/projects/cloudtop}"
+  local repo_compose="${ISKAN_REPO_COMPOSE:-/config/projects/cloudtop/infra/docker-compose.server.yml}"
+  local tunnel="${ISKAN_REPO_TUNNEL:-$(dirname "$repo_compose")/setup-tunnel.sh}"
+  local ssh_host="${ISKAN_SSH_HOST:-hostsrv}"
+  local cf_sh="${ISKAN_CF_SH:-$HOME/.claude/skills/cloudflare-erisim/scripts/cf.sh}"
+  local pong_sh="${ISKAN_PONG_SH:-/config/projects/Nexus/scripts/tenant-pong-proof.sh}"
+  local k_dir k_comp k_tun k_ssh k_roster git_tip="YOK"
+  k_dir="$(_kur_env_kaynak ISKAN_CLOUDTOP_REPO_DIR)"
+  k_comp="$(_kur_env_kaynak ISKAN_REPO_COMPOSE)"
+  k_tun="$(_kur_env_kaynak ISKAN_REPO_TUNNEL)"; [ "$k_tun" = "default" ] && k_tun="türev(compose-dizini)"
+  k_ssh="$(_kur_env_kaynak ISKAN_SSH_HOST)"
+  k_roster="$(_kur_env_kaynak ISKAN_EY_ROSTER)"
+  if [ -d "$repo_dir/.git" ]; then git_tip="DİZİN"; elif [ -f "$repo_dir/.git" ]; then git_tip="DOSYA(worktree)"; fi
+  echo "== ENV-HEDEF-HARİTASI (salt-oku preflight) =="
+  echo "  adım 1 yeni-proje    yazma→ $repo_compose [kaynak: $k_comp] · tünel: $tunnel [kaynak: $k_tun]"
+  echo "  adım 2/3/4/5 okuma→ $repo_dir origin/main [kaynak: $k_dir · .git: $git_tip]"
+  echo "  ssh-hedef→ $ssh_host [kaynak: $k_ssh]"
+  if [ -f "$cf_sh" ]; then                       # V4-minimal (pinlenmez sınıf — launcher taze verir)
+    echo "  adım 5 cf-yayin delege→ $cf_sh [-f ✓ · pinlenmez]"
+  else
+    echo "  adım 5 cf-yayin delege→ $cf_sh [doğrulanmadı: dosya yok — cf-yayin apply fail-closed kırmızı olur; ISKAN_CF_SH ile yol ver · pinlenmez]"
+  fi
+  if [ -n "${ISKAN_EY_ROSTER-}" ]; then          # roster DEĞERİ basılmaz — yalnız üye-sayısı
+    local roster_n; roster_n="$(printf '%s' "$ISKAN_EY_ROSTER" | wc -w | tr -d '[:space:]')"
+    echo "  adım 6/7 roster kaynak→ $k_roster ($roster_n üye — değer basılmaz; not: pin uye-ekle sonrası BAYATLAYABİLİR — tazelemek için açık-env ver, iptal için boş ISKAN_EY_ROSTER= ver)"
+  else
+    echo "  adım 6/7 roster kaynak→ container-içi ekip-registry.yaml (default)"
+  fi
+  if [ -f "$pong_sh" ]; then
+    echo "  adım 7 ekip-pong script→ $pong_sh [-f ✓ · pinlenmez]"
+  else
+    echo "  adım 7 ekip-pong script→ $pong_sh [doğrulanmadı: dosya yok — adım-7 '[doğrulanmadı]' diliyle geçer (unknown≠fail); ISKAN_PONG_SH ile yol ver · pinlenmez]"
+  fi
+  # ── V1 HEDEF-AYRIŞMA ──────────────────────────────────────────────────────────────────────
+  local yazma_dizin okuma_infra
+  yazma_dizin="$(realpath -m "$(dirname "$repo_compose")" 2>/dev/null || dirname "$repo_compose")"
+  okuma_infra="$(realpath -m "$repo_dir/infra" 2>/dev/null || echo "$repo_dir/infra")"
+  if [ "$yazma_dizin" != "$okuma_infra" ]; then
+    if [ "$k_comp" = "default" ]; then
+      if [ "$mod" = "zincir" ] || [ "$mod" = "devam" ]; then
+        echo "[kırmızı] V1 hedef-ayrışma (F1-imzası): adım-1 üçlüsü DEFAULT compose-hedefine ($yazma_dizin) YAZACAK ama zincir origin/main'i $repo_dir'den OKUYACAK — üçlü yanlış-checkout'a gider (F1 contamination); remediation: ISKAN_REPO_COMPOSE'u açıkça ver (örn. $repo_dir/infra/docker-compose.server.yml) — adım-0 önleme, hiçbir şey yazılmadı" >&2
+        return 1
+      fi
+      echo "[uyarı] V1 hedef-ayrışma (F1-imzası): yazma=$yazma_dizin [kaynak: default] ≠ okuma=$okuma_infra — gerçek zincir/devam koşusu adım-0'da KIRMIZI durur (ISKAN_REPO_COMPOSE'u açıkça ver)"
+    else
+      echo "[uyarı] V1 hedef-ayrışma: yazma=$yazma_dizin [kaynak: $k_comp] ≠ okuma=$okuma_infra — BİLİNÇLİ (açık-env/pin) sayıldı, devam (worktree-yaz→PR→origin/main-oku deseni meşru; DURAK-1 origin/main son-savunma)"
+    fi
+  fi
+  # ── V2 .git-DOSYA (worktree-checkout) ─────────────────────────────────────────────────────
+  if [ -f "$repo_dir/.git" ]; then
+    local cf_no n2
+    cf_no="$(_kur_adim_no cf-yayin)"
+    n2="$(_kur_adim_no "$son_adim")"           # boş/tanınmayan → 0
+    if [ "$n2" -lt "$cf_no" ]; then
+      if [ "$mod" = "zincir" ] || [ "$mod" = "devam" ]; then
+        echo "[kırmızı] V2 worktree-checkout: $repo_dir/.git DOSYA (git-worktree) — üç '-d .git' kapısı KESİN reddeder (iskan-host.sh REPO-KANIT:194 · iskan.sh provizyon:851 · iskan.sh cf-yayin:1035); remediation: ISKAN_CLOUDTOP_REPO_DIR'e ANA-checkout ver (host-ops→ana-checkout, ters-PR→worktree — F2 rehberi); hiçbir adım koşulmadı" >&2
+        return 1
+      fi
+      echo "[uyarı] V2 worktree-checkout: $repo_dir/.git DOSYA — gerçek zincir/devam koşusunda adım-3/4/5 '-d .git' kapıları reddeder (ANA-checkout ver)"
+    else
+      echo "  bilgi: $repo_dir/.git DOSYA (worktree) — cf-yayin geçilmiş (son-tamamlanan: $son_adim), '-d .git' kapıları geride; kalan adımlar '-e .git' okur"
+    fi
+  fi
+  return 0
 }
 
 # _kur_cli <adım> <proje> <mod:dry-run|apply> — alt-komutu CLI-invoke eder (besteler, YENİDEN
@@ -2781,6 +2953,18 @@ cmd_kur() {
   state_file="$(_kur_state_path "$proje")"
   [ -f "$state_file" ] && son_adim="$(head -1 "$state_file" | tr -d '[:space:]')"
 
+  # ── ENV-PİN yükleme (PR-C, F6): state satır-2+ pinleri — öncelik açık-env > pin > default.
+  # LB-fix: yalnız dosya VARSA (guard'lı if — state'siz TAZE koşuların rc'leri BİREBİR değişmez:
+  # dry-run=3 · GO'suz=4 · --durum=0 · slug-kapısı=1). Kurcalanmış state (GO/deny-pin): --durum'da
+  # rapor yine BASILIR ama sonda rc=1 (inceleme-aracı çalışır, sahte-yeşil yok); diğer modlarda
+  # ANINDA dur (hiçbir adım-banner'ı basılmaz).
+  local pin_tamper=0
+  if [ -f "$state_file" ]; then
+    if ! _kur_pin_yukle "$state_file"; then
+      if [ "$mode" = "durum" ]; then pin_tamper=1; else exit 1; fi
+    fi
+  fi
+
   # benimse-rızası resume-komutlarında TAŞINIR (MAJOR fix): slug-kapısı yalnız state-boşken ateşler;
   # adım-1 GO-durağında exit=4 olunca state yazılmaz → sonraki --devam de state-boş → kapı yeniden
   # ateşler. Bu yüzden bastığımız her resume-komutu '--benimse'yi korumalı ki tavsiyeyi izleyen
@@ -2809,6 +2993,10 @@ cmd_kur() {
     fi
   fi
 
+  # ── ENV-HEDEF-HARİTASI (PR-C preflight): pin-yükleme SONRASI etkin çözüm basılır; V1/V2
+  # yalnız zincir/devam'da kırmızı-durdurur (dry-run/durum BİLGİ-dilinde — rc-sözleşmeleri korunur).
+  _kur_env_harita "$proje" "$mode" "$son_adim" || exit 1
+
   # ── --durum: salt-oku durum-raporu (hiçbir adım koşulmaz, hiçbir dosya yazılmaz) ─────────
   if [ "$mode" = "durum" ]; then
     echo "== İSKÂN kur — DURUM (salt-oku) =="
@@ -2829,6 +3017,12 @@ cmd_kur() {
         echo "son-tamamlanan: $son_adim (adım $n/$ISKAN_KUR_ADIM_SAYISI)"
         echo "sıradaki: $(_kur_adim_ad $((n + 1))) (adım $((n + 1))/$ISKAN_KUR_ADIM_SAYISI) — sürdürmek için: bash iskan.sh kur $proje --devam$benimse_suffix"
       fi
+    fi
+    if [ "$pin_tamper" = "1" ]; then
+      # kurcalanmış state'te --durum SAHTE-YEŞİL dönmez: rapor yukarıda basıldı (inceleme-aracı
+      # çalışır), sondaki kırmızı + rc=1 sözleşmeyi dürüst tutar (PR-C bilinçli rc-değişimi; SKILL.md'de belgeli).
+      echo "[kırmızı] GO-pin tespit — state kurcalanmış ($state_file): rapor yukarıda basıldı ama rc=1 (sahte-yeşil yok); dosyayı incele/sil, GO'lar yalnız Sultan komut-satırından verilir" >&2
+      exit 1
     fi
     exit 0
   fi

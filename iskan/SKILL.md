@@ -1,7 +1,7 @@
 ---
 name: iskan
 type: agent
-version: 0.5.0
+version: 0.6.0
 description: >
   Container + ekip yaşam-döngüsü master-skill. Bir hedef (yeni-proje / mevcut-ekip-yeniden-doğuşu / tek-üye-ekleme)
   için host-provizyon (UC1), oturum-kurtarma (UC2, deterministik session-id), üye-ekleme (UC3) akışlarını
@@ -72,9 +72,28 @@ oto-yazımı. Dördü BESTELEDİĞİ kardeşlerin (aşağı) çalışma-kopyası
   exit=0 + --devam) → iskan-host --apply → provizyon → cf-yayin → ekip-yerlestir → **ekip-pong** → evergreen-kaydet.
   GO-marker'ları ASLA bypass/export etmez (her adım kendi GO'sunu kendi ortamından bekler; GO-yok exit=4
   AYNEN iletilir + Sultan-dilinde hangi-GO raporu). Durum-dosyası git-DIŞI
-  `${ISKAN_STATE_DIR:-$HOME/.claude}/iskan-kur-<proje>.state` (tek-satır: son-tamamlanan-adım);
+  `${ISKAN_STATE_DIR:-$HOME/.claude}/iskan-kur-<proje>.state` — **state v2** (PR-C env-pin, 0.6.0):
+  satır-1 = son-tamamlanan-adım AYNEN (eski okuyucu head-1 uyumlu) + satır-2+ = `pin AD=değer` blokları
+  (600, atomik tmp+mv). Pin-allowlist DAR-5: `ISKAN_CLOUDTOP_REPO_DIR · ISKAN_REPO_COMPOSE ·
+  ISKAN_REPO_TUNNEL · ISKAN_SSH_HOST · ISKAN_EY_ROSTER`; **GO'lar ve güvenlik-kapı setleri
+  (ISKAN_PROD_HOSTS/ISKAN_SOKUM_HOSTS/ISKAN_SOKUM_KOMSULAR) ASLA pinlenmez** (yazıcı allowlist-only +
+  okuyucuda kurcalanmış-state kırmızısı rc=1); ISKAN_CF_SH/ISKAN_PONG_SH de bilinçli pinlenmez
+  (delege/prob-yolu state-güvenine bağlanmaz — launcher taze verir). `--devam` pinleri geri yükler
+  (öncelik **açık-env > pin > default**; boş açık-env `AD=` = o koşuda pin-iptal → fallback); kanıt-satırı
+  adlar-only (`[yeşil] env-pin yüklendi: <ADLAR>` — değer stdout'a basılmaz). Her kur-koşusu başında
+  **ENV-HEDEF-HARİTASI** (salt-oku preflight): adım→etkin-hedef→kaynak + V1 hedef-ayrışma (F1-imzası:
+  ayrışma ∧ compose=default → zincir/devam kırmızı; iki taraf açık/pin ise uyarı+devam) + V2
+  worktree-checkout (.git DOSYA ∧ cf-yayin-öncesi → kırmızı; dry-run/durum'da bilgi-dili).
   `--devam` oradan sürer · `--durum` salt-oku · `--dry-run` TÜM zinciri yazmadan uçtan-uca planlar (exit=3).
   İlk kırmızıda DUR (fail-closed) · 3-Çit: mahrem-tenant adları (vekatip/mmex/medigate/huma/mihenk) RED.
+  ⚠️ rc-değişimi (0.6.0, bilinçli): KURCALANMIŞ state'te (GO/deny-pin satırı) `--durum` raporu yine basar
+  ama sonda `[kırmızı] GO-pin tespit` + **rc=1** döner (eski daima-0 sözleşmesi temiz-state'te aynen sürer;
+  sahte-yeşil yok); zincir/devam/dry-run kurcalanmış-state'te anında rc=1.
+  Dürüstlük-notları: (a) pinler YALNIZ `kur` zincirinde geri-yüklenir — `sokum` pin OKUMAZ (sokum'da
+  env'i elle ver; sokum state-dosyasını tek-rm ile pinleriyle birlikte siler). (b) Rollback'te (eski-kod +
+  v2-state) zincir head-1 sayesinde DOĞRU sürer ama eski yazıcı truncate ettiğinden pinler ilk adım-yazımında
+  sessizce kaybolur = F6-degradasyonu (bozulma değil). (c) ISKAN_EY_ROSTER pini `uye-ekle` sonrası
+  BAYATLAYABİLİR — tazelemek için açık-env ver (pin kendini tazeler), iptal için boş `ISKAN_EY_ROSTER=` ver.
 - `doctor` — salt-okur preflight (FAZ-1)
 - `check` — AHÎ-standart drift-lint (bugünden itibaren: `ahi check iskan`)
 
@@ -87,6 +106,17 @@ izole-container hedefinde `ise-alim`/KÂHYA DOĞRUDAN invoke EDİLMEZ — İSKÂ
 Usta (S3 · bileşik), born-at-Usta (`ahi new usta iskan`). generic-goal: "container + ekip yaşam-döngüsünü
 (doğuş/yeniden-doğuş/üye-ekleme) tek-komutla yöneten fabrika". Terfi-olgunluk şerhi: DOCTRINE.md → "Manuel-beyan".
 Doğrula: `ahi check iskan` · Kanon: `ahi doctrine` · İş-planı: `Nexus/_agents/handoff/help2serdar-iskan-is-plani.md`.
+
+## Durum (2026-07-19, PR-C env-pin + preflight-harita — v0.6.0)
+✓ F1/F6 fix (CYCLE-1 PR-C): kur-state **v2 env-pin** — satır-2+'da allowlist DAR-5 pinleri; `--devam`
+env-kaybı (F6: kondüktör-roster'ı elle yeniden-hesaplama) bitti. 4-katman GO-garantisi: K1 yazıcı
+allowlist-only (ortam taranmaz) · K2 allowlist koşulsuz-atama · K3 okuyucu sabit kapı-sırası + deny-kırmızı
+(*_GO + PROD_HOSTS/SOKUM_HOSTS/SOKUM_KOMSULAR — allowlist'ten ÖNCE, sessiz-atlama değil, iki-geçişli:
+tamper'da SIFIR pin yüklenir) · K4 eval-yok. PREFLIGHT **ENV-HEDEF-HARİTASI**: adım→etkin-hedef→kaynak
+(default|pin|açık-env) + V1 F1-imzası kırmızısı (yalnız ayrışma∧default — bilinçli worktree-PR deseni
+bloklanmaz) + V2 worktree-.git erken-teşhisi (eşik `<cf-yayin`, üç '-d .git' kapısı sayılır).
+Golden: 192/192 (öncesi 175; test-56+59 head-1'e bilinçli çevrildi + 17 yeni). Ertelenen: V3-debris
+(operatör-preflight'ta var) · allowlist-v2 genişlemesi (cycle-3).
 
 ## Durum (2026-07-19, G1 compose-senkron — v0.5.0)
 ✓ G1 zincir-fix (CYCLE-1 PR-B): `iskan-host.sh --apply` artık R4 drift-kapısından HEMEN ÖNCE
