@@ -1257,7 +1257,8 @@ EOF
 # _ey_ad_hijyeni <ad> <marker> — ad ssh/docker/tmux komutlarına gömülür → dar-charset (injection-panzehiri).
 # Büyük-harf BİLİNÇLİ geçirilir: 'ISKANTEST' charset'i geçer ama TAM-STRING eşleşmede düşer (K4-kanıt).
 _ey_ad_hijyeni() {
-  if ! printf '%s' "$1" | grep -qE '^[A-Za-z0-9-]+$'; then
+  # LC_ALL=C ŞART: UTF-8 collation'da [A-Za-z] aralığı 'ü' gibi lokal-harfleri de eşler (firsthand-bulgu)
+  if ! printf '%s' "$1" | LC_ALL=C grep -qE '^[A-Za-z0-9-]+$'; then
     echo "[kırmızı] $2: '$1' — geçersiz ad-charset ([A-Za-z0-9-] dışı), hiçbir yere dokunulmadı" >&2
     return 1
   fi
@@ -1388,12 +1389,21 @@ print(" ".join(out))
 # _ey_uye_satirlari <roster> <reg_mevcut> — roster'ı "rol\tgorev\tuuid\tkaynak" satırlarına açar;
 # uuid mevcut-kayıttan YENİDEN-KULLANILIR (asla yeniden-üretilmez), yoksa uuid4 üretilir (küçük-harf).
 # Yan-etki (bilinçli — subshell'de yan-etki kaybolur): EY_UYE_SATIRLARI + EY_YONETICI + EY_UYE_SAYISI.
+# İKİNCİL CHARSET-KAPISI (G-a, P1c): rol/görev fullmatch [A-Za-z0-9-]+ değilse rc=1 fail-closed.
+# NEDEN buraya da: roster üyeleri aşağıda tırnaksız ssh/docker/tmux komutlarına gömülür; köprü
+# (ekip-modeli-iskan-kopru.sh) kendi charset-kapısını koşar AMA container-içi ekip-registry.yaml
+# roster-kaynağı o köprüyü BYPASS eder — hijyen tüketim-noktasında da zorlanmalı.
 _ey_uye_satirlari() {
   local roster="$1" reg_mevcut="$2" girdi rol gorev sid kaynak
   EY_YONETICI=""; EY_UYE_SAYISI=0; EY_UYE_SATIRLARI=""
   for girdi in $roster; do
     rol="${girdi%%:*}"; gorev="${girdi#*:}"
     [ "$gorev" = "$girdi" ] && gorev="uye"
+    # LC_ALL=C ŞART: UTF-8 collation'da [A-Za-z] aralığı 'ü' gibi lokal-harfleri de eşler (firsthand-bulgu)
+    if ! printf '%s' "$rol" | LC_ALL=C grep -qE '^[A-Za-z0-9-]+$' || ! printf '%s' "$gorev" | LC_ALL=C grep -qE '^[A-Za-z0-9-]+$'; then
+      echo "[kırmızı] roster-hijyeni: '$girdi' — üye-adı/görev [A-Za-z0-9-] dışı karakter içeriyor (ikincil charset-kapısı; üye-adları ssh/docker/tmux komutlarına gömülür → fail-closed), hiçbir yere dokunulmadı" >&2
+      return 1
+    fi
     [ "$gorev" = "yonetici" ] && [ -z "$EY_YONETICI" ] && EY_YONETICI="$rol"
     EY_UYE_SAYISI=$((EY_UYE_SAYISI + 1))
     sid=""; kaynak="yeni"
@@ -1544,7 +1554,7 @@ cmd_ekip_yerlestir() {
   fi
 
   # roster satırları: "rol<TAB>gorev<TAB>uuid<TAB>kaynak" (uuid: mevcut-kayıttan YENİDEN-KULLAN, yoksa üret)
-  _ey_uye_satirlari "$roster" "$reg_mevcut"
+  _ey_uye_satirlari "$roster" "$reg_mevcut" || exit 1
   local rol gorev sid kaynak
 
   # ── DRY-RUN: tam-önizleme, SIFIR-yazım (plan-exit=3) ─────────────────────────────────────
@@ -1832,7 +1842,7 @@ cmd_uye_ekle() {
   fi
 
   # tam-roster (mevcut + yeni-üye) → satırlar (uuid'ler mevcut-kayıttan YENİDEN-KULLANILIR)
-  _ey_uye_satirlari "$roster_mevcut $uye:$gorev" "$reg_mevcut"
+  _ey_uye_satirlari "$roster_mevcut $uye:$gorev" "$reg_mevcut" || exit 1
   [ -n "$sid" ] || sid="$(printf '%s' "$EY_UYE_SATIRLARI" | awk -F'\t' -v u="$uye" '$1==u{print $3}')"
 
   # ── ADIM-1: hafif-kimlik-dosyası (İ1: KÂHYA/ise-alim ÇAĞRILMAZ; dosya-bazlı idempotent) ──
@@ -2536,13 +2546,16 @@ _kur_cli() {
   bash "$SCRIPT_DIR/iskan.sh" "$adim" "$proje" "--$mod"
 }
 
-# _kur_durak1_probe <cname> — DURAK-1 REPO-FIRST salt-oku probe'u: compose-blok cloudtop
+# _kur_durak1_probe <cname> [no-fetch] — DURAK-1 REPO-FIRST salt-oku probe'u: compose-blok cloudtop
 # origin/main'de görünüyor mu? rc=0 görünür · rc=1 görünmez (merge bekleniyor) · rc=2 ölçülemedi.
+# no-fetch (re-verify MINOR fix): --durum "salt-oku, hiçbir dosya yazılmaz" sözleşmesindedir —
+# fetch .git metadata (FETCH_HEAD/refs) yazar. --durum çağrısı fetch'i ATLAR (son-fetch'lenmiş
+# origin/main'i okur); zincir/devam/dry-run zaten ağ-probe'u yapan akışlar → fetch'lerini korur.
 _kur_durak1_probe() {
   local cname="$1" repo_dir="${ISKAN_CLOUDTOP_REPO_DIR:-/config/projects/cloudtop}"
   command -v git >/dev/null 2>&1 || return 2
   [ -e "$repo_dir/.git" ] || return 2
-  git -C "$repo_dir" fetch -q origin main 2>/dev/null || true   # offline'da son-fetch'lenmiş origin/main
+  [ "${2:-}" = "no-fetch" ] || git -C "$repo_dir" fetch -q origin main 2>/dev/null || true   # offline'da son-fetch'lenmiş origin/main
   local compose_main
   compose_main="$(git -C "$repo_dir" show origin/main:infra/docker-compose.server.yml 2>/dev/null)"
   [ -n "$compose_main" ] || return 2
@@ -2550,17 +2563,18 @@ _kur_durak1_probe() {
 }
 
 cmd_kur() {
-  local proje="" mode="zincir"
+  local proje="" mode="zincir" benimse=0
   while [ $# -gt 0 ]; do
     case "$1" in
       --dry-run) mode="dry-run"; shift ;;
       --devam) mode="devam"; shift ;;
       --durum) mode="durum"; shift ;;
-      -*) echo "bilinmeyen argüman: $1" >&2; echo "kullanım: iskan.sh kur <proje> [--dry-run|--devam|--durum]" >&2; exit 2 ;;
+      --benimse) benimse=1; shift ;;
+      -*) echo "bilinmeyen argüman: $1" >&2; echo "kullanım: iskan.sh kur <proje> [--dry-run|--devam|--durum] [--benimse]" >&2; exit 2 ;;
       *) proje="$1"; shift ;;
     esac
   done
-  [ -n "$proje" ] || { echo "kullanım: iskan.sh kur <proje> [--dry-run|--devam|--durum]" >&2; exit 2; }
+  [ -n "$proje" ] || { echo "kullanım: iskan.sh kur <proje> [--dry-run|--devam|--durum] [--benimse]" >&2; exit 2; }
   _ey_ad_hijyeni "$proje" "kur" || exit 1
 
   # ── 3-Çit: mahrem-tenant reddi (her moddan ÖNCE — izole aile İSKÂN-doğumu değildir) ──────
@@ -2577,12 +2591,43 @@ cmd_kur() {
   state_file="$(_kur_state_path "$proje")"
   [ -f "$state_file" ] && son_adim="$(head -1 "$state_file" | tr -d '[:space:]')"
 
+  # benimse-rızası resume-komutlarında TAŞINIR (MAJOR fix): slug-kapısı yalnız state-boşken ateşler;
+  # adım-1 GO-durağında exit=4 olunca state yazılmaz → sonraki --devam de state-boş → kapı yeniden
+  # ateşler. Bu yüzden bastığımız her resume-komutu '--benimse'yi korumalı ki tavsiyeyi izleyen
+  # kullanıcı kapıya yeniden çarpmasın (herhangi bir adım tamamlanınca state dolar, kapı susar).
+  local benimse_suffix=""
+  [ "$benimse" = "1" ] && benimse_suffix=" --benimse"
+
+  # ── SLUG ŞÜPHELİ-DURUM KAPISI (G-b, P1f): compose-kaydı (origin/main) VAR ∧ bu makinede
+  # kur-izi YOK → container bu zincirden doğmamış (yaşayan/prod container ya da başka-makine
+  # doğumu olabilir). Adımların idempotent-geçişleri onu sessizce benimseyip İÇİNE tmux-ekip
+  # yerleştirebilirdi (3-Çit yalnız 5 mahrem adı tanır) → zincir/devam modunda fail-closed RED;
+  # bilinçli-devralma `--benimse` ile. dry-run salt-oku olduğundan RED edilmez, uyarı basılır.
+  # probe rc=2 (ölçülemedi) kapıyı tetiklemez — zincirin kendi DURAK-1'i zaten fail-closed ölçer.
+  if [ "$mode" != "durum" ] && [ -z "$son_adim" ] && _kur_durak1_probe "$cname"; then
+    if [ "$benimse" = "1" ]; then
+      if [ "$mode" = "dry-run" ]; then
+        echo "[uyarı] slug-kapısı önizleme: '$cname' compose'da (origin/main) kayıtlı, kur-izi yok — --benimse verildi (gerçek koşuda BİLİNÇLİ-devralınır; bu dry-run hiçbir şey yazmaz)"
+      else
+        echo "[uyarı] slug-kapısı: '$cname' compose'da (origin/main) kayıtlı ama bu makinede kur-izi yok — --benimse ile BİLİNÇLİ-devralındı (adımlar idempotent-geçişlerle sürer)"
+      fi
+    elif [ "$mode" = "dry-run" ]; then
+      echo "[uyarı] slug-kapısı önizleme: '$cname' compose'da (origin/main) ZATEN kayıtlı ama bu makinede kur-izi yok ($state_file) — gerçek koşu REDDEDİLİR; bilinçli-devralma: bash iskan.sh kur $proje --benimse"
+    else
+      echo "[kırmızı] slug-kapısı: '$cname' compose'da (origin/main) ZATEN kayıtlı AMA bu makinede kur-izi yok ($state_file) — mevcut/yaşayan container'a zincir-yerleşimi riski (G-b), hiçbir adım koşulmadı; bilinçli-devralma: bash iskan.sh kur $proje --benimse" >&2
+      exit 1
+    fi
+  fi
+
   # ── --durum: salt-oku durum-raporu (hiçbir adım koşulmaz, hiçbir dosya yazılmaz) ─────────
   if [ "$mode" = "durum" ]; then
     echo "== İSKÂN kur — DURUM (salt-oku) =="
     echo "proje: $proje · durum-dosyası: $state_file"
     if [ -z "$son_adim" ]; then
       echo "durum: hiç koşulmamış — zincir baştan başlar (adım 1/7: yeni-proje)"
+      if _kur_durak1_probe "$cname" no-fetch; then
+        echo "not: '$cname' compose'da (origin/main) ZATEN kayıtlı ama kur-izi yok → çıplak 'kur' slug-kapısında REDDEDİLİR; bilinçli-devralma gerekir: bash iskan.sh kur $proje --benimse"
+      fi
     else
       n="$(_kur_adim_no "$son_adim")"
       if [ "$n" = "0" ]; then
@@ -2592,7 +2637,7 @@ cmd_kur() {
         echo "durum: zincir TAMAM (7/7) — yapılacak adım kalmadı"
       else
         echo "son-tamamlanan: $son_adim (adım $n/7)"
-        echo "sıradaki: $(_kur_adim_ad $((n + 1))) (adım $((n + 1))/7) — sürdürmek için: bash iskan.sh kur $proje --devam"
+        echo "sıradaki: $(_kur_adim_ad $((n + 1))) (adım $((n + 1))/7) — sürdürmek için: bash iskan.sh kur $proje --devam$benimse_suffix"
       fi
     fi
     exit 0
@@ -2617,7 +2662,7 @@ cmd_kur() {
       echo "[doğrulanmadı] kur --devam: durum-dosyası yok ($state_file) — baştan başlanıyor (adım 1/7)"
     fi
   elif [ "$mode" = "zincir" ] && [ -n "$son_adim" ]; then
-    echo "[uyarı] durum-dosyası mevcut (son-tamamlanan: $son_adim) — baştan koşuluyor (adımlar idempotent); kaldığın yerden sürmek için: bash iskan.sh kur $proje --devam"
+    echo "[uyarı] durum-dosyası mevcut (son-tamamlanan: $son_adim) — baştan koşuluyor (adımlar idempotent); kaldığın yerden sürmek için: bash iskan.sh kur $proje --devam$benimse_suffix"
   fi
 
   if [ "$mode" = "dry-run" ]; then
@@ -2658,7 +2703,7 @@ cmd_kur() {
       echo "== kur DURAK-1'de duraklatıldı (hata DEĞİL — İNSAN-durağı, exit=0 adım-tamam) =="
       echo "   Sultan-dili: yeni container'ın tarifi (compose-bloğu) cloudtop deposuna yazıldı ama henüz"
       echo "   ana-dala alınmadı. Sıradaki el İNSANDA: cloudtop-PR'ı aç/merge et; origin/main'de blok"
-      echo "   görününce zinciri sürdür: bash iskan.sh kur $proje --devam"
+      echo "   görününce zinciri sürdür: bash iskan.sh kur $proje --devam$benimse_suffix"
       echo "   (REPO-FIRST güvencesi: merge görünmeden host-adımı (adım 3) zaten kendini REDDeder.)"
       exit 0
     fi
@@ -2708,14 +2753,14 @@ cmd_kur() {
         echo "== kur GO-durağında DURDU (adım $i/7: $adim — alt-komutun exit=4'ü AYNEN iletiliyor) =="
         echo "   Sultan-dili: bu adım Sultan'ın açık onay-işaretini bekliyor: ${go:-adımın kendi GO-markeri}."
         echo "   kur GO'yu ASLA kendisi vermez/export etmez; onay verilince adımın ortamında ${go:-GO}=1 ile:"
-        echo "   bash iskan.sh kur $proje --devam"
+        echo "   bash iskan.sh kur $proje --devam$benimse_suffix"
       } >&2
       exit 4
     fi
     {
       echo ""
       echo "[kırmızı] kur adım $i/7 KIRMIZI: $adim exit=$rc — zincir DURDU (fail-closed; sonraki adıma ATLANMADI)"
-      echo "   remediation: yukarıdaki adım-çıktısını incele; adımı tek-başına koş → düzelince: bash iskan.sh kur $proje --devam"
+      echo "   remediation: yukarıdaki adım-çıktısını incele; adımı tek-başına koş → düzelince: bash iskan.sh kur $proje --devam$benimse_suffix"
     } >&2
     exit 1
   done
@@ -2772,7 +2817,7 @@ case "${1:-}" in
     cmd_kur "$@"
     ;;
   *)
-    echo "kullanım: iskan.sh doctor | iskan.sh seans-getir --container <ad> [--apply] | iskan.sh yeni-proje <ad> [--mem-limit <val>] [--port <n>] --dry-run|--apply | iskan.sh cf-yayin <proje> --dry-run|--apply | iskan.sh ekip-yerlestir <proje> --dry-run|--apply | iskan.sh uye-ekle <proje> <uye> [--gorev <görev>] --dry-run|--apply | iskan.sh evergreen-kaydet <proje> --dry-run|--apply | iskan.sh provizyon <proje> [--apply] | iskan.sh sokum <proje> [--dry-run|--apply] | iskan.sh kur <proje> [--dry-run|--devam|--durum]" >&2
+    echo "kullanım: iskan.sh doctor | iskan.sh seans-getir --container <ad> [--apply] | iskan.sh yeni-proje <ad> [--mem-limit <val>] [--port <n>] --dry-run|--apply | iskan.sh cf-yayin <proje> --dry-run|--apply | iskan.sh ekip-yerlestir <proje> --dry-run|--apply | iskan.sh uye-ekle <proje> <uye> [--gorev <görev>] --dry-run|--apply | iskan.sh evergreen-kaydet <proje> --dry-run|--apply | iskan.sh provizyon <proje> [--apply] | iskan.sh sokum <proje> [--dry-run|--apply] | iskan.sh kur <proje> [--dry-run|--devam|--durum] [--benimse]" >&2
     exit 2
     ;;
 esac
