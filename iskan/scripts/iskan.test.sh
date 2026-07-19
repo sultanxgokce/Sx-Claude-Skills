@@ -186,12 +186,14 @@ SUM_AFTER2="$(md5sum "$YP_FIXTURE2")"
 find /tmp -maxdepth 1 -name "iskan-test-yp-neggate.$$.yml" -delete 2>/dev/null
 
 # 14. yeni-proje --apply: GO-marker'lı, geçerli-YAML üretir, tek-blok ekler (append-only)
-YP_FIXTURE3="/tmp/iskan-test-yp-apply.$$.yml"
-YP_LOCKDIR3="/tmp/iskan-test-yp-lockdir.$$"
-mkdir -p "$YP_LOCKDIR3"
+#     + DURAK-1 ÜÇLÜSÜ (P-Y2): setup-<ad>.sh üretilir + setup-tunnel 3-dokunuş eklenir
+YP_DIR3="/tmp/iskan-test-yp-apply.$$"
+mkdir -p "$YP_DIR3"
+YP_FIXTURE3="$YP_DIR3/docker-compose.server.yml"
 cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$YP_FIXTURE3"
+cp "$SCRIPT_DIR/fixtures/setup-tunnel-mini.sh" "$YP_DIR3/setup-tunnel.sh"
 ORIG_HEAD="$(head -5 "$YP_FIXTURE3")"
-ISKAN_FAZ4_GO=1 ISKAN_REPO_COMPOSE="$YP_FIXTURE3" ISKAN_PORT_LOCK_PATH="$YP_LOCKDIR3/.lock" \
+ISKAN_FAZ4_GO=1 ISKAN_REPO_COMPOSE="$YP_FIXTURE3" ISKAN_PORT_LOCK_PATH="$YP_DIR3/.lock" \
   bash "$SCRIPT_DIR/iskan.sh" yeni-proje testproje --apply >/dev/null 2>&1
 rc=$?
 [ "$rc" = "0" ] && ok "yeni-proje --apply: GO-marker'lı başarılı, rc=0" || bad "yeni-proje --apply: GO-marker'lı beklenen rc=0, gelen $rc"
@@ -202,33 +204,199 @@ NEW_HEAD="$(head -5 "$YP_FIXTURE3")"
   || bad "yeni-proje --apply: dosya-başı DEĞİŞTİ (append-only ihlali)"
 grep -qE "container_name:[[:space:]]*cloudtop-testproje\$" "$YP_FIXTURE3" \
   && ok "yeni-proje --apply: yeni servis-bloğu eklendi" || bad "yeni-proje --apply: yeni servis-bloğu bulunamadı"
-find /tmp -maxdepth 1 -name "iskan-test-yp-apply.$$.yml" -delete 2>/dev/null
-find "$YP_LOCKDIR3" -type f -delete 2>/dev/null; find "$YP_LOCKDIR3" -depth -type d -delete 2>/dev/null
+grep -q '\./config/\.claude:/config/\.claude' "$YP_FIXTURE3" && grep -q 'DEFAULT_WORKSPACE=/config/projects/testproje' "$YP_FIXTURE3" \
+  && ok "yeni-proje --apply: mount-paketi (ortak .claude + DEFAULT_WORKSPACE) compose-blokta (B2-fix)" \
+  || bad "yeni-proje --apply: mount-paketi EKSİK (B2 zincir-blokajı geri geldi)"
+if ! grep -q '\./config/projects/testproje' "$YP_FIXTURE3"; then
+  ok "yeni-proje --apply: ortak-projects mount'u BİLİNÇLİ-YOK (EY_HOST_PROJ gölgeleme-önlemi, b0024)"
+else
+  bad "yeni-proje --apply: ortak-projects mount'u sızmış (EY_HOST_PROJ'u gölgeler)"
+fi
+if [ -f "$YP_DIR3/setup-testproje.sh" ] && bash -n "$YP_DIR3/setup-testproje.sh" 2>/dev/null \
+   && grep -q 'setup-isolated.sh" cloudtop-testproje /config/projects/testproje Testproje' "$YP_DIR3/setup-testproje.sh"; then
+  ok "yeni-proje --apply: setup-testproje.sh üretildi (İNCE-SARMALAYICI, bash -n temiz — B1-fix)"
+else
+  bad "yeni-proje --apply: setup-testproje.sh üretilmedi/bozuk (B1 zincir-blokajı geri geldi)"
+fi
+if grep -q '^TESTPROJE_HOSTNAME=' "$YP_DIR3/setup-tunnel.sh" \
+   && grep -q 'hostname: ${TESTPROJE_HOSTNAME}' "$YP_DIR3/setup-tunnel.sh" \
+   && grep -q 'route dns "$TUNNEL" "$TESTPROJE_HOSTNAME"' "$YP_DIR3/setup-tunnel.sh" \
+   && bash -n "$YP_DIR3/setup-tunnel.sh" 2>/dev/null; then
+  ok "yeni-proje --apply: setup-tunnel 3-dokunuş (değişken + ingress + route-dns, bash -n temiz — P-Y2)"
+else
+  bad "yeni-proje --apply: setup-tunnel dokunuşu eksik/bozuk (cf-yayin REPO-KANIT'ı kırmızı kalır)"
+fi
+awk '/hostname: \$\{TESTPROJE_HOSTNAME\}/{f=1} f&&/http_status:404/{print "SIRALI"; exit}' "$YP_DIR3/setup-tunnel.sh" | grep -q SIRALI \
+  && ok "yeni-proje --apply: ingress-çifti catch-all 404'ün ÖNCESİNDE (sıra korunmuş)" \
+  || bad "yeni-proje --apply: ingress-çifti 404'ten sonra/karışık (cloudflared onu asla eşlemez)"
+# sokum-simetrisi (golden): _sokum_satir_cikar eklenen üç-satırı geri alınca dosya pristine-fixture'a bayt-eş döner
+cp "$SCRIPT_DIR/fixtures/setup-tunnel-mini.sh" "/tmp/iskan-test-tunnel-pristine.$$.sh"
+bash -c "
+  source <(sed -n '/^_sokum_satir_cikar()/,/^}/p' '$SCRIPT_DIR/iskan.sh')
+  _sokum_satir_cikar '$YP_DIR3/setup-tunnel.sh' testproje
+" >/dev/null 2>&1
+if [ "$(md5sum < "$YP_DIR3/setup-tunnel.sh")" = "$(md5sum < "/tmp/iskan-test-tunnel-pristine.$$.sh")" ]; then
+  ok "yeni-proje ⟷ sokum SİMETRİ: tünel-dokunuşu _sokum_satir_cikar ile bayt-eş geri alındı"
+else
+  bad "yeni-proje ⟷ sokum SİMETRİ KIRIK: söküm tünel-satırlarını temiz geri alamıyor"
+fi
+find /tmp -maxdepth 1 -name "iskan-test-tunnel-pristine.$$.sh" -delete 2>/dev/null
+find "$YP_DIR3" -type f -delete 2>/dev/null; find "$YP_DIR3" -depth -type d -delete 2>/dev/null
 
-# 15. yeni-proje İDEMPOTENCY: aynı-ad İKİNCİ-kez → apply rc=0 + dosya-değişmez; dry-run rc=3;
-#     GO'suz apply mevcut-blokta BİLE exit≠0 (G3 negatif-kapı idempotent-yoldan delinmez)
-YP_FIXTURE4="/tmp/iskan-test-yp-dup.$$.yml"
-YP_LOCKDIR4="/tmp/iskan-test-yp-lockdir4.$$"
-mkdir -p "$YP_LOCKDIR4"
+# 15. yeni-proje İDEMPOTENCY: aynı-ad İKİNCİ-kez → apply rc=0 + üç-dosya-değişmez; dry-run rc=3;
+#     GO'suz apply mevcut-blokta BİLE exit≠0 (G3 negatif-kapı idempotent-yoldan delinmez);
+#     + ÜÇLÜ-TAMAMLAYICI: eksik kardeş-kalem (setup-script) silinmişse idempotent-geçiş yeniden üretir
+YP_DIR4="/tmp/iskan-test-yp-dup.$$"
+mkdir -p "$YP_DIR4"
+YP_FIXTURE4="$YP_DIR4/docker-compose.server.yml"
 cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$YP_FIXTURE4"
-ISKAN_FAZ4_GO=1 ISKAN_REPO_COMPOSE="$YP_FIXTURE4" ISKAN_PORT_LOCK_PATH="$YP_LOCKDIR4/.lock" \
+cp "$SCRIPT_DIR/fixtures/setup-tunnel-mini.sh" "$YP_DIR4/setup-tunnel.sh"
+ISKAN_FAZ4_GO=1 ISKAN_REPO_COMPOSE="$YP_FIXTURE4" ISKAN_PORT_LOCK_PATH="$YP_DIR4/.lock" \
   bash "$SCRIPT_DIR/iskan.sh" yeni-proje testproje --apply >/dev/null 2>&1
-SUM_DUP_BEFORE="$(md5sum "$YP_FIXTURE4" | awk '{print $1}')"
-out="$(ISKAN_FAZ4_GO=1 ISKAN_REPO_COMPOSE="$YP_FIXTURE4" ISKAN_PORT_LOCK_PATH="$YP_LOCKDIR4/.lock" \
+SUM_DUP_BEFORE="$(cat "$YP_FIXTURE4" "$YP_DIR4/setup-tunnel.sh" "$YP_DIR4/setup-testproje.sh" 2>/dev/null | md5sum | awk '{print $1}')"
+out="$(ISKAN_FAZ4_GO=1 ISKAN_REPO_COMPOSE="$YP_FIXTURE4" ISKAN_PORT_LOCK_PATH="$YP_DIR4/.lock" \
   bash "$SCRIPT_DIR/iskan.sh" yeni-proje testproje --apply 2>&1)"
 rc=$?
-SUM_DUP_AFTER="$(md5sum "$YP_FIXTURE4" | awk '{print $1}')"
+SUM_DUP_AFTER="$(cat "$YP_FIXTURE4" "$YP_DIR4/setup-tunnel.sh" "$YP_DIR4/setup-testproje.sh" 2>/dev/null | md5sum | awk '{print $1}')"
 [ "$rc" = "0" ] && ok "yeni-proje --apply: aynı-ad ikinci-kez İDEMPOTENT-geçiş (rc=0)" || bad "yeni-proje --apply: idempotent-geçiş beklenirdi (rc=0), gelen $rc"
-[ "$SUM_DUP_BEFORE" = "$SUM_DUP_AFTER" ] && ok "yeni-proje --apply: idempotent-geçişte dosya DEĞİŞMEDİ" || bad "yeni-proje --apply: idempotent-geçişte dosya DEĞİŞTİ (yeniden-yazım ihlali)"
+[ "$SUM_DUP_BEFORE" = "$SUM_DUP_AFTER" ] && ok "yeni-proje --apply: idempotent-geçişte ÜÇ dosya da DEĞİŞMEDİ" || bad "yeni-proje --apply: idempotent-geçişte dosya DEĞİŞTİ (yeniden-yazım ihlali)"
 printf '%s' "$out" | grep -q "İDEMPOTENT" && ok "yeni-proje --apply: idempotent-geçiş açıkça beyan edildi" || bad "yeni-proje --apply: idempotent-beyanı çıktıda yok"
+rm -f "$YP_DIR4/setup-testproje.sh"
+ISKAN_FAZ4_GO=1 ISKAN_REPO_COMPOSE="$YP_FIXTURE4" ISKAN_PORT_LOCK_PATH="$YP_DIR4/.lock" \
+  bash "$SCRIPT_DIR/iskan.sh" yeni-proje testproje --apply >/dev/null 2>&1
+rc=$?
+[ "$rc" = "0" ] && [ -f "$YP_DIR4/setup-testproje.sh" ] \
+  && ok "yeni-proje --apply: ÜÇLÜ-TAMAMLAYICI — silinen setup-script idempotent-geçişte yeniden üretildi" \
+  || bad "yeni-proje --apply: üçlü-tamamlayıcı çalışmadı (rc=$rc, setup-script $([ -f "$YP_DIR4/setup-testproje.sh" ] && echo var || echo YOK))"
 ISKAN_REPO_COMPOSE="$YP_FIXTURE4" bash "$SCRIPT_DIR/iskan.sh" yeni-proje testproje --dry-run >/dev/null 2>&1
 rc=$?
 [ "$rc" = "3" ] && ok "yeni-proje --dry-run: mevcut-blokta plan-exit=3 (idempotent-önizleme)" || bad "yeni-proje --dry-run: mevcut-blokta beklenen rc=3, gelen $rc"
 env -u ISKAN_FAZ4_GO ISKAN_REPO_COMPOSE="$YP_FIXTURE4" bash "$SCRIPT_DIR/iskan.sh" yeni-proje testproje --apply >/dev/null 2>&1
 rc=$?
 [ "$rc" != "0" ] && ok "yeni-proje --apply: mevcut-blokta bile GO'suz exit≠0 ($rc)" || bad "yeni-proje --apply: GO'suz idempotent-yol exit=0 (negatif-kapı delindi)"
-find /tmp -maxdepth 1 -name "iskan-test-yp-dup.$$.yml" -delete 2>/dev/null
-find "$YP_LOCKDIR4" -type f -delete 2>/dev/null; find "$YP_LOCKDIR4" -depth -type d -delete 2>/dev/null
+find "$YP_DIR4" -type f -delete 2>/dev/null; find "$YP_DIR4" -depth -type d -delete 2>/dev/null
+
+# 14b. LB-1 söküm-simetri TİRELİ-isimde: 'my-proj' apply → söküm → tünel bayt-eş pristine döner
+#      (uvar-sanitize [my-proj→MY_PROJ] raw-token'ı içermez; ingress/route raw-ad yorum-etiketiyle taşınır)
+YP_DIR3H="/tmp/iskan-test-yp-hyphen.$$"
+mkdir -p "$YP_DIR3H"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$YP_DIR3H/docker-compose.server.yml"
+cp "$SCRIPT_DIR/fixtures/setup-tunnel-mini.sh" "$YP_DIR3H/setup-tunnel.sh"
+cp "$SCRIPT_DIR/fixtures/setup-tunnel-mini.sh" "/tmp/iskan-test-hyphen-pristine.$$.sh"
+ISKAN_FAZ4_GO=1 ISKAN_REPO_COMPOSE="$YP_DIR3H/docker-compose.server.yml" ISKAN_PORT_LOCK_PATH="$YP_DIR3H/.lock" \
+  bash "$SCRIPT_DIR/iskan.sh" yeni-proje my-proj --apply >/dev/null 2>&1
+rc=$?
+[ "$rc" = "0" ] && grep -q '^MY_PROJ_HOSTNAME=' "$YP_DIR3H/setup-tunnel.sh" && grep -q 'my-proj (İSKÂN yeni-proje)' "$YP_DIR3H/setup-tunnel.sh" \
+  && ok "yeni-proje 'my-proj': tireli-isim apply çalıştı (MY_PROJ_HOSTNAME + raw-ad yorum-etiketi)" \
+  || bad "yeni-proje 'my-proj': tireli-isim apply kırık (rc=$rc)"
+bash -c "source <(sed -n '/^_sokum_satir_cikar()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); _sokum_satir_cikar '$YP_DIR3H/setup-tunnel.sh' my-proj" >/dev/null 2>&1
+if [ "$(md5sum < "$YP_DIR3H/setup-tunnel.sh")" = "$(md5sum < "/tmp/iskan-test-hyphen-pristine.$$.sh")" ]; then
+  ok "yeni-proje 'my-proj' ⟷ sokum SİMETRİ: TİRELİ-isimde bayt-eş geri alındı (LB-1 fix)"
+else
+  bad "yeni-proje 'my-proj' ⟷ sokum SİMETRİ KIRIK: tireli-isim öksüz ${MY_PROJ_HOSTNAME} bıraktı (LB-1 regresyon)"
+fi
+! grep -q 'MY_PROJ_HOSTNAME' "$YP_DIR3H/setup-tunnel.sh" \
+  && ok "yeni-proje 'my-proj': söküm sonrası öksüz \${MY_PROJ_HOSTNAME} referansı KALMADI (set -u güvenli)" \
+  || bad "yeni-proje 'my-proj': söküm sonrası tanımsız MY_PROJ_HOSTNAME referansı kaldı"
+find /tmp -maxdepth 1 -name "iskan-test-hyphen-pristine.$$.sh" -delete 2>/dev/null
+find "$YP_DIR3H" -type f -delete 2>/dev/null; find "$YP_DIR3H" -depth -type d -delete 2>/dev/null
+
+# 14c. LB-2 charset-gate: yeni-proje enjeksiyon/traversal adları SIFIR-dokunuş reddeder (bash -n kör)
+YP_DIRINJ="/tmp/iskan-test-yp-inj.$$"
+mkdir -p "$YP_DIRINJ"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$YP_DIRINJ/docker-compose.server.yml"
+cp "$SCRIPT_DIR/fixtures/setup-tunnel-mini.sh" "$YP_DIRINJ/setup-tunnel.sh"
+INJ_BEFORE="$(md5sum "$YP_DIRINJ/docker-compose.server.yml" | awk '{print $1}')"
+INJ_KACAK=""
+for kotu in 'foo;id' 'z$(touch pwned)z' 'a/b' '../etc' 'x&y'; do
+  ISKAN_FAZ4_GO=1 ISKAN_REPO_COMPOSE="$YP_DIRINJ/docker-compose.server.yml" ISKAN_PORT_LOCK_PATH="$YP_DIRINJ/.lock" \
+    bash "$SCRIPT_DIR/iskan.sh" yeni-proje "$kotu" --apply >/dev/null 2>&1
+  [ "$?" = "1" ] || INJ_KACAK="$INJ_KACAK [$kotu:rc=$?]"
+done
+INJ_AFTER="$(md5sum "$YP_DIRINJ/docker-compose.server.yml" | awk '{print $1}')"
+NSETUP="$(find "$YP_DIRINJ" -name 'setup-*.sh' ! -name 'setup-tunnel.sh' | wc -l | tr -d ' ')"
+[ -z "$INJ_KACAK" ] && [ "$INJ_BEFORE" = "$INJ_AFTER" ] && [ ! -e pwned ] && [ "$NSETUP" = "0" ] \
+  && ok "yeni-proje charset-gate: 5 enjeksiyon/traversal adı fail-closed rc=1 + SIFIR-dosya (LB-2 fix)" \
+  || bad "yeni-proje charset-gate: KAÇAK:$INJ_KACAK compose-değişti=$([ "$INJ_BEFORE" != "$INJ_AFTER" ] && echo E) setup-üretildi=$NSETUP pwned=$([ -e pwned ] && echo VAR)"
+rm -f pwned
+find "$YP_DIRINJ" -type f -delete 2>/dev/null; find "$YP_DIRINJ" -depth -type d -delete 2>/dev/null
+
+# 14d. re-verify MAJOR: rakam-başlangıçlı MEŞRU-charset ad → RED (uvar geçersiz bash-identifier; bash -n kör)
+YP_DIRNUM="/tmp/iskan-test-yp-num.$$"
+mkdir -p "$YP_DIRNUM"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$YP_DIRNUM/docker-compose.server.yml"
+cp "$SCRIPT_DIR/fixtures/setup-tunnel-mini.sh" "$YP_DIRNUM/setup-tunnel.sh"
+SUM_NUM_BEFORE="$(md5sum "$YP_DIRNUM/docker-compose.server.yml" | awk '{print $1}')"
+ISKAN_FAZ4_GO=1 ISKAN_REPO_COMPOSE="$YP_DIRNUM/docker-compose.server.yml" ISKAN_PORT_LOCK_PATH="$YP_DIRNUM/.lock" \
+  bash "$SCRIPT_DIR/iskan.sh" yeni-proje 9proj --apply >/dev/null 2>&1
+rc=$?
+SUM_NUM_AFTER="$(md5sum "$YP_DIRNUM/docker-compose.server.yml" | awk '{print $1}')"
+[ "$rc" = "1" ] && [ "$SUM_NUM_BEFORE" = "$SUM_NUM_AFTER" ] && [ ! -f "$YP_DIRNUM/setup-9proj.sh" ] \
+  && ok "yeni-proje '9proj': rakam-başı harf-başı-kapısında RED + SIFIR-dokunuş (re-verify MAJOR fix, yalancı-yeşil yok)" \
+  || bad "yeni-proje '9proj': rakam-başı geçti (rc=$rc) — geçersiz \${9PROJ_HOSTNAME} repoya sızardı"
+# harf-başı meşru ad (rakam-İÇEREN ama harf-başlayan) hâlâ GEÇER — over-block regresyonu yok
+ISKAN_FAZ4_GO=1 ISKAN_REPO_COMPOSE="$YP_DIRNUM/docker-compose.server.yml" ISKAN_PORT_LOCK_PATH="$YP_DIRNUM/.lock" \
+  bash "$SCRIPT_DIR/iskan.sh" yeni-proje proj9 --apply >/dev/null 2>&1
+rc=$?
+[ "$rc" = "0" ] && [ -f "$YP_DIRNUM/setup-proj9.sh" ] \
+  && ok "yeni-proje 'proj9': harf-başı+rakam-içeren meşru-ad hâlâ geçer (over-block yok)" \
+  || bad "yeni-proje 'proj9': meşru-ad yanlış-red (rc=$rc)"
+find "$YP_DIRNUM" -type f -delete 2>/dev/null; find "$YP_DIRNUM" -depth -type d -delete 2>/dev/null
+
+# 15b. yeni-proje fail-closed: tünel-dosyası YOKSA taze-apply compose'a BİLE dokunmadan RED (P-Y2 ön-kapı)
+YP_DIR4B="/tmp/iskan-test-yp-notunnel.$$"
+mkdir -p "$YP_DIR4B"
+YP_FIXTURE4B="$YP_DIR4B/docker-compose.server.yml"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$YP_FIXTURE4B"
+SUM_NT_BEFORE="$(md5sum "$YP_FIXTURE4B" | awk '{print $1}')"
+ISKAN_FAZ4_GO=1 ISKAN_REPO_COMPOSE="$YP_FIXTURE4B" ISKAN_PORT_LOCK_PATH="$YP_DIR4B/.lock" \
+  bash "$SCRIPT_DIR/iskan.sh" yeni-proje testproje --apply >/dev/null 2>&1
+rc=$?
+SUM_NT_AFTER="$(md5sum "$YP_FIXTURE4B" | awk '{print $1}')"
+[ "$rc" != "0" ] && [ "$SUM_NT_BEFORE" = "$SUM_NT_AFTER" ] && [ ! -f "$YP_DIR4B/setup-testproje.sh" ] \
+  && ok "yeni-proje --apply: tünel-dosyası yokken fail-closed RED + SIFIR-dokunuş (yarım-üçlü önlendi)" \
+  || bad "yeni-proje --apply: tünel-dosyası yokken rc=$rc / dosya-dokunuşu var (fail-closed delindi)"
+find "$YP_DIR4B" -type f -delete 2>/dev/null; find "$YP_DIR4B" -depth -type d -delete 2>/dev/null
+
+# 15b2. MAJOR-3: tünel-dosyası VAR ama ÇIPASIZ → taze-apply compose'a dokunmadan RED (varlık-only yetmez)
+YP_DIRAC="/tmp/iskan-test-yp-cipasiz.$$"
+mkdir -p "$YP_DIRAC"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$YP_DIRAC/docker-compose.server.yml"
+printf '#!/usr/bin/env bash\necho çıpasız-stub\n' > "$YP_DIRAC/setup-tunnel.sh"
+SUM_AC_BEFORE="$(md5sum "$YP_DIRAC/docker-compose.server.yml" | awk '{print $1}')"
+ISKAN_FAZ4_GO=1 ISKAN_REPO_COMPOSE="$YP_DIRAC/docker-compose.server.yml" ISKAN_PORT_LOCK_PATH="$YP_DIRAC/.lock" \
+  bash "$SCRIPT_DIR/iskan.sh" yeni-proje validname --apply >/dev/null 2>&1
+rc=$?
+SUM_AC_AFTER="$(md5sum "$YP_DIRAC/docker-compose.server.yml" | awk '{print $1}')"
+[ "$rc" != "0" ] && [ "$SUM_AC_BEFORE" = "$SUM_AC_AFTER" ] && [ ! -f "$YP_DIRAC/setup-validname.sh" ] \
+  && ok "yeni-proje --apply: çıpasız-mevcut tünel-dosyası → RED + SIFIR-dokunuş (MAJOR-3 fix, varlık-only kapatıldı)" \
+  || bad "yeni-proje --apply: çıpasız-tünel yarım-yazım (rc=$rc compose-değişti=$([ "$SUM_AC_BEFORE" != "$SUM_AC_AFTER" ] && echo E) setup=$([ -f "$YP_DIRAC/setup-validname.sh" ] && echo VAR))"
+find "$YP_DIRAC" -type f -delete 2>/dev/null; find "$YP_DIRAC" -depth -type d -delete 2>/dev/null
+
+# 15c. B1 bilinçli-köprü allowlist (P-Y1): mevcut bir servis ./config/.claude paylaşıyorken
+#      mount-paketli aday-blok default-allowlist'le GÜVENLİ sayılır; allowlist kapatılınca RED-adayı
+YP_DIR4C="/tmp/iskan-test-yp-allow.$$"
+mkdir -p "$YP_DIR4C"
+YP_FIXTURE4C="$YP_DIR4C/docker-compose.server.yml"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$YP_FIXTURE4C"
+cat >> "$YP_FIXTURE4C" <<'EOF'
+  gamma:
+    container_name: cloudtop-gamma
+    volumes:
+      - ./config-gamma:/config
+      - ./config/.claude:/config/.claude
+    ports:
+      - "127.0.0.1:9003:9003"
+EOF
+out="$(ISKAN_REPO_COMPOSE="$YP_FIXTURE4C" bash "$SCRIPT_DIR/iskan.sh" yeni-proje allowtest --dry-run 2>&1)"
+printf '%s' "$out" | grep -q 'yeni-kesişim: 0' \
+  && ok "B1 allowlist: ortak .claude kesişimi bilinçli-köprü sayıldı (yeni-kesişim: 0, mount-paketi kendi kapısına takılmıyor)" \
+  || bad "B1 allowlist: mount-paketi kendi guard'ına takıldı (P-Y1 çarpışması geri geldi)"
+out="$(ISKAN_B1_BILINCLI_KOPRU="" ISKAN_REPO_COMPOSE="$YP_FIXTURE4C" bash "$SCRIPT_DIR/iskan.sh" yeni-proje allowtest --dry-run 2>&1)"
+printf '%s' "$out" | grep -qE 'yeni-kesişim: [1-9]' \
+  && ok "B1 allowlist: allowlist kapatılınca aynı kesişim yine RED-adayı (guard hâlâ dişli)" \
+  || bad "B1 allowlist: allowlist kapalıyken kesişim görünmez oldu (guard köreldi)"
+find "$YP_DIR4C" -type f -delete 2>/dev/null; find "$YP_DIR4C" -depth -type d -delete 2>/dev/null
 
 # 16. yeni-proje --apply: B1 kesişim-guard — aday-blok mevcut bir volume-yolunu tekrar-kullanırsa RED
 #     (compose-collision.yml fixture'ı zaten bir kesişim içeriyor; yeni-servis AYNI path'i mount ederse ek-kesişim doğar)
@@ -999,6 +1167,7 @@ cat > "$KR_REPO/infra/backup.sh" <<'EOF'
 #!/usr/bin/env bash
 docker inspect cloudtop > "/tmp/kur-test-inspect.json" 2>/dev/null || true
 EOF
+cp "$SCRIPT_DIR/fixtures/setup-tunnel-mini.sh" "$KR_REPO/infra/setup-tunnel.sh"   # DURAK-1 üçlüsü: adım-1 apply tünel-dosyası ister (P-Y2 ön-kapı)
 git -C "$KR_REPO" init -q && git -C "$KR_REPO" add -A \
   && git -C "$KR_REPO" -c user.email=t@t -c user.name=t commit -qm fixture \
   && git -C "$KR_REPO" update-ref refs/remotes/origin/main HEAD

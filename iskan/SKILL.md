@@ -24,7 +24,11 @@ oto-yazımı. Dördü BESTELEDİĞİ kardeşlerin (aşağı) çalışma-kopyası
 (ADR-001 owner-domain-dokunma).
 
 **Alt-komutlar (plan §K1 — henüz FAZ-0, hiçbiri implemente değil, isimler kilitli):**
-- `yeni-proje` (UC1) — container-provizyon motoru (FAZ-4'te host-mutasyonu başlar, Sultan-GO'lu)
+- `yeni-proje` (UC1) — container-provizyon motoru (FAZ-4'te host-mutasyonu başlar, Sultan-GO'lu).
+  P1-sertleştirme (2026-07-19): --apply artık **DURAK-1 ÜÇLÜSÜNÜ** üretir — compose-blok (mount-paketi:
+  ortak `./config/.claude` keyless-login + DEFAULT_WORKSPACE; mihenk-emsal) + `infra/setup-<ad>.sh`
+  (ince-sarmalayıcı → setup-isolated.sh) + setup-tunnel 3-satır (değişken+ingress-çifti+route-dns);
+  idempotent-geçiş eksik kardeş-kalemi tamamlar; B1-guard bilinçli-köprü allowlist'li (`ISKAN_B1_BILINCLI_KOPRU`)
 - `seans-getir` (UC2) — deterministik session-id resume merdiveni (FAZ-2/3, K3 tasarımı)
 - `cf-yayin` — CF-hostname yayını: Access-app+policy+DNS (cf.sh onboard delegesi) + tünel-ingress
   host-deploy (FAZ-5, `ISKAN_FAZ5_GO=1` Sultan-GO'lu; 7-hostname sert-kapı + .bak oto-geri-al)
