@@ -5,7 +5,11 @@ Diske hiçbir şey yazmaz, hiçbir ağ/host çağrısı yapmaz — yalnız veril
 stdin'i) okur ve servis/volume/port haritasını JSON olarak stdout'a basar. `iskan-host.sh` bu
 JSON'u B1 (volume-path kesişim-guard) ve compose-diff için kullanır.
 
-Kullanım: compose_parse.py <compose.yml|->
+Kullanım: compose_parse.py [--haric <servis-key>] <compose.yml|->
+  --haric: verilen servisi (compose `services:` anahtarı; İSKÂN-tenant'ında servis-key = cname,
+  bkz iskan.sh yeni-proje üreteci) rapordan DÜŞÜRÜP raporu — kesişimler DAHİL — yeniden hesaplar.
+  COMPOSE-SENKRON beklenen-delta kapısı bunu İKİ tarafa uygulayıp "fark yalnız-aday mı" sorusunu
+  yanıtlar. Bayraksız çağrı çıktısı BAYT-aynıdır (mevcut tüketiciler etkilenmez, golden-kanıtlı).
 """
 import json
 import sys
@@ -27,12 +31,14 @@ def parse_volume_host_path(entry):
     return text.split(":", 1)[0]
 
 
-def build_report(doc):
+def build_report(doc, haric=None):
     services = (doc or {}).get("services") or {}
     out = {}
     volume_owner = {}
     intersections = []
     for name in sorted(services.keys()):
+        if haric is not None and name == haric:
+            continue  # --haric: servis rapora hiç girmez → kesişimler de onsuz yeniden hesaplanır
         cfg = services[name] or {}
         container_name = cfg.get("container_name", name)
         volumes = [parse_volume_host_path(v) for v in (cfg.get("volumes") or [])]
@@ -53,10 +59,18 @@ def build_report(doc):
 
 
 def main(argv):
-    if len(argv) != 2:
-        print("kullanım: compose_parse.py <compose.yml|->", file=sys.stderr)
+    args = list(argv[1:])
+    haric = None
+    if args and args[0] == "--haric":
+        if len(args) != 3:
+            print("kullanım: compose_parse.py [--haric <servis-key>] <compose.yml|->", file=sys.stderr)
+            return 2
+        haric = args[1]
+        args = args[2:]
+    if len(args) != 1:
+        print("kullanım: compose_parse.py [--haric <servis-key>] <compose.yml|->", file=sys.stderr)
         return 2
-    src = argv[1]
+    src = args[0]
     try:
         if src == "-":
             doc = yaml.safe_load(sys.stdin.read()) or {}
@@ -66,7 +80,7 @@ def main(argv):
     except Exception as exc:  # noqa: BLE001 — okunamayan/bozuk yaml için dürüst-fail, sızdırmadan
         print(f"parse-hatasi: {exc}", file=sys.stderr)
         return 1
-    report = build_report(doc)
+    report = build_report(doc, haric=haric)
     print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
     return 0
 

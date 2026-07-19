@@ -1,7 +1,7 @@
 ---
 name: iskan
 type: agent
-version: 0.4.0
+version: 0.5.0
 description: >
   Container + ekip yaşam-döngüsü master-skill. Bir hedef (yeni-proje / mevcut-ekip-yeniden-doğuşu / tek-üye-ekleme)
   için host-provizyon (UC1), oturum-kurtarma (UC2, deterministik session-id), üye-ekleme (UC3) akışlarını
@@ -63,7 +63,9 @@ oto-yazımı. Dördü BESTELEDİĞİ kardeşlerin (aşağı) çalışma-kopyası
   bash -n kapıları + iz-sıfır/tombstone-yasak assertion; registry-dosyası SİLİNMEZ, künye çıkar) →
   config-dizini **arşive-taşı** (telafisiz-silme YOK) → komşu ÖNCE/SONRA StartedAt+config-hash kanıtı.
   dry-run DEFAULT (exit=3) · apply yalnız `ISKAN_SOKUM_GO=1` (marker-yok exit=4, sıfır-dokunuş) ·
-  durum-sinyalleri: 'zaten-sokuk' (kayıt-yok∧arşiv-var, rc=0) / 'kayitsiz-proje' (ikisi-de-yok, rc≠0).
+  durum-sinyalleri: 'zaten-sokuk' (kayıt-yok∧arşiv-var, rc=0) / 'kayitsiz-proje' (ikisi-de-yok, rc≠0) ·
+  **3-Çit mahrem-reddi** (v0.5.0): mahrem-tenant adları (vekatip/mmex/medigate/huma/mihenk) HER modda
+  GO'lu bile REDDEDİLİR (cmd_kur aynası; `sokum vekatip --apply` deliği kapandı, sıfır-dokunuş).
 - `kur` (D6, CANLI): `kur <proje> [--dry-run|--devam|--durum]` — UC1 tam-yaşamdöngüsü ZİNCİRLEYİCİSİ
   (duraklı durum-makinesi, mimSerdar §4.2): mevcut alt-komutları CLI-invoke ederek FAZ-sırasıyla besteler,
   HİÇBİRİNİ yeniden yazmaz: yeni-proje(dry→apply) → **DURAK-1 cloudtop-PR merge** (REPO-FIRST insan-durağı,
@@ -85,6 +87,29 @@ izole-container hedefinde `ise-alim`/KÂHYA DOĞRUDAN invoke EDİLMEZ — İSKÂ
 Usta (S3 · bileşik), born-at-Usta (`ahi new usta iskan`). generic-goal: "container + ekip yaşam-döngüsünü
 (doğuş/yeniden-doğuş/üye-ekleme) tek-komutla yöneten fabrika". Terfi-olgunluk şerhi: DOCTRINE.md → "Manuel-beyan".
 Doğrula: `ahi check iskan` · Kanon: `ahi doctrine` · İş-planı: `Nexus/_agents/handoff/help2serdar-iskan-is-plani.md`.
+
+## Durum (2026-07-19, G1 compose-senkron — v0.5.0)
+✓ G1 zincir-fix (CYCLE-1 PR-B): `iskan-host.sh --apply` artık R4 drift-kapısından HEMEN ÖNCE
+**COMPOSE-SENKRON** koşar — origin/main'deki compose'u host'a TAM-DOSYA eşitler (elle-bridge bitti):
+host-probe 3-durum (dosya-YOK → bootstrap-reddi exit=5; ölçülemedi → fail-closed exit=5) →
+no-op kapısı **BAYT-eş** (md5; yapısal-eş-ama-bayt-farklı bayat ADAY-blok EZİLİR — 512m sessiz-OOM
+panzehiri) → **KOMŞU-BAYT kapısı** (`compose_block.py sil <cname>` iki-taraftan adayı metin-düzeyi
+çıkarır, kalan komşu-metinler md5-eş DEĞİLSE → fark-raporu + exit=5, **--force YOK**; yapısal kapı
+mem_limit/env/image görmediğinden MAHREM komşu-drift'ine kördü — bayt-kapı komşu-ezmeyi imkânsız kılar;
+teşhis-ipucu: tamamlanmamış söküm / komşu-drift MAHREM dahil) → **ASİMETRİK-YUTMA kapısı**
+(`compose_block.py yutulan <cname>`; `sil` aday-header'a BİTİŞİK host-only bir bakım-yorumunu adaya
+yutup komşu-md5'i sahte-EŞ gösterebilir — host'un yuttuğu bir non-blank satır repo'nunkinde YOKSA
+tam-dosya yazımı onu SİLERDİ → exit=5, sahte-attestasyon panzehiri) → .bak-TS + tmp+mv atomik yazım
+(mv-fail'de .iskan-tmp artığı temizlenir) → **BAYT re-verify** (düşerse .bak-restore + exit=1). docker-up
+senkronda ASLA çağrılmaz (container-mutasyon tek-noktası R1); R4 senkron-sonrası tanım-gereği yeşil
+(totoloji) — regresyon-bekçisi olarak kalır, genel-drift'i senkron-öncesi komşu-BAYT + yutulan kapıları
+yakalar. Yeni GO-marker YOK (ISKAN_FAZ4_GO şemsiyesi). cmd_apply girişine **ad-hijyeni**
+(`^[A-Za-z0-9-]+$` — iskan.sh `_ey_ad_hijyeni` ile BAYT-eş, parite-goldenli; kur-adım-1'in kabul edip
+host-doğumun reddetmesi 'aynı-adım-fail' tuzağı kapandı; nokta/slash/boşluk charset-dışı → ERE-enjeksiyon
++ path-traversal kapalı, REPO-KANIT ayrıca sabit-string) + **3-Çit mahrem-reddi** eklendi
+(`--apply --proje vekatip` GO'lu bile RED; liste iskan.sh ISKAN_KUR_IZOLE ile parite-goldenli).
+R2-guard yolunda yazım olduysa kanıta zorunlu not: "dosya güncellendi, çalışan-config ESKİ — recreate
+ayrı Sultan-alanı". Ertelenen: söküm ADIM-2b host-blok-çıkarma + standalone --senkron CLI (cycle-3).
 
 ## Durum (2026-07-19, P3 pong-kablosu)
 ✓ P3 (Doğum-Akışı, v0.4.0): `ekip-pong` (FAZ-6b) canlılık-kapısı zincire kablolandı — kur artık **8-adım**

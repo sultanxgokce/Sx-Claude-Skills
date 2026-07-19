@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
-# iskan-host.sh — İSKÂN SALT-OKUR sunucu-görüş katmanı (FAZ-1; GO: hayır, host'a yazmaz).
+# iskan-host.sh — İSKÂN sunucu-görüş + FAZ-4 host-doğum katmanı (--dry-run SALT-OKUR; --apply GO'lu).
 #
 # NEDEN: FAZ-4+ (container-provizyon) host'a ilk yazma-dokunuşunu yapmadan ÖNCE aynı
 # gözlem-yüzeyinin salt-okur hâli kurulur — compose-parse, config-hash snapshot (B2),
 # volume-path kesişim-kümesi (B1), host↔repo md5-drift (D1-durağı), port-flock TASARIMI (B4).
 #
 # DEĞİŞMEZLER (DOCTRINE'den):
-#  - Put-only: bu dosyada silme-primitifi YOKTUR ve olmayacaktır — yalnız okuma-komutları
-#    (cat/md5sum/ss/docker inspect/docker ps). Bkz GEREKLILIK G1 (put-only-gate).
+#  - Put-only: bu dosyada SİLME-primitifi YOKTUR ve olmayacaktır. --dry-run yüzeyi yalnız
+#    okuma-komutları koşar (cat/md5sum/ss/docker inspect/docker ps). --apply'da mutasyon İKİ
+#    tek-noktadadır: container-mutasyon tek-noktası = R1 (servis-scoped up) · dosya-mutasyon
+#    tek-noktası = COMPOSE-SENKRON (.bak-TS yedekli tmp+mv, BAYT re-verify'lı; silme yok).
+#    Bkz GEREKLILIK G1 (put-only-gate).
 #  - --dry-run HİÇBİR yazım yapmadan plan basar ve plan-exit sözleşmesi gereği exit=3 döner.
 #  - Sır-DEĞERİ asla stdout'a düşmez.
 #
@@ -16,6 +19,12 @@ set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 COMPOSE_PARSE="$SCRIPT_DIR/lib/compose_parse.py"
+COMPOSE_BLOCK="$SCRIPT_DIR/lib/compose_block.py"
+
+# 3-Çit mahrem-listesi — iskan.sh ISKAN_KUR_IZOLE'nin BAYT-eş kopyası (bu dosya standalone
+# çağrılabildiğinden liste burada da yaşar; parite-goldeni iki listeyi eş tutar). Bilinçli
+# olarak ENV-override YOK: deny-listesi gevşetilebilir olmamalı (fail-closed).
+ISKAN_HOST_IZOLE="vekatip mmex medigate huma mihenk"
 
 REPO_COMPOSE="${ISKAN_REPO_COMPOSE:-/config/projects/cloudtop/infra/docker-compose.server.yml}"
 HOST_COMPOSE_PATH="${ISKAN_HOST_COMPOSE_PATH:-/opt/cloudtop/docker-compose.server.yml}"
@@ -31,6 +40,169 @@ hostsrv_ulasilir() {
   command -v ssh >/dev/null 2>&1 && timeout 8 ssh "${SSH_OPTS[@]}" "$SSH_HOST" true >/dev/null 2>&1
 }
 
+# ── COMPOSE-SENKRON (G1 zincir-fix; cmd_apply içinde R4'ten HEMEN ÖNCE koşar) ─────────────
+#
+# NEDEN (tecrube-defteri G1): apply zincirinde origin/main YALNIZ karşılaştırma+kanıt için
+# okunuyordu; `up`ın fiilen okuduğu compose = HOST'taki dosya. Yeni-tenant bloğunu host'a
+# taşıyan hiçbir adım yoktu → her doğum elle-bridge'e muhtaçtı. Bu adım o köprüyü kurar:
+# origin/main → host TAM-DOSYA eşitleme (cf-yayin ADIM-2 `git show origin/main | ssh cat>`
+# deseninin sertleştirilmişi; cerrahi blok-ekleme YAGNI-merceğiyle İPTAL edildi).
+#
+# KAPILAR (fail-closed; --force YOK — uzlaştırma AYRI Sultan-onaylı adım olarak kalır):
+#  1. 3-durum host-probe: dosya YOK → bootstrap-reddi exit=5 · ölçülemedi → exit=5 (unknown≠yok).
+#  2. no-op kapısı BAYT-eş (md5): yapısal-eşlik YETMEZ — bayat cname-bloğu (ör. eski elle-bridge
+#     kalıntısı mem_limit) yapısal-görünmez olduğundan yalnız BAYT-eşlik no-op sayılır
+#     (doktrin-merceği MAJOR-1: D6 512m sessiz-OOM tuzağının dosya-düzeyi panzehiri).
+#  3. KOMŞU-BAYT kapısı (LB-fix): compose_block sil <cname> İKİ taraftan adayı METİN-düzeyi
+#     çıkarır; kalan komşu-metinler BAYT-eş (md5) DEĞİLSE körü-körüne ezme YOK → fark-raporu
+#     kanıta + exit=5. Yapısal karşılaştırma (compose_parse) mem_limit/env/image/healthcheck
+#     GÖRMEZ → yapısal-kapı MAHREM komşu-drift'ine kördü; bayt-kapı komşu-ezmeyi imkânsız kılar
+#     (bayt-eş komşu = yazım komşulara etkisiz). --haric yapısal diff yalnız ek-teşhis.
+#  3b. ASİMETRİK-YUTMA kapısı (MAJOR-1): compose_block yutulan <cname> — `sil` aday-header'a
+#     BİTİŞİK bir host-only bakım-yorumunu adaya yutmuş olabilir; host'un yuttuğu bir non-blank
+#     satır repo'nunkinde YOKSA tam-dosya yazımı onu SİLERDİ (sahte-attestasyon) → exit=5.
+#  4. yazım: .bak-<TS> host-yedek → tmp+mv atomik → re-verify BAYT (ssh-cat md5 == origin/main
+#     md5); düşerse .bak-restore + exit=1. docker-up BU ADIMDA ASLA çağrılmaz (container-
+#     mutasyon tek-noktası R1'de kalır).
+# Çıkış-kontratı: return 0 tamam/no-op · exit=1 yazım-fail (.bak-restore denendi) · exit=5
+# fail-closed (R4 emsalleriyle hizalı). GO/dry-run kapıları cmd_apply'ın kendi kapılarıdır —
+# YENİ GO-marker İCAT EDİLMEZ (ISKAN_FAZ4_GO şemsiyesi).
+COMPOSE_SENKRON_YAZDI=0
+_compose_senkron() { # <proje> <cname> <repo_dir> <kanit_dir>
+  local proje="$1" cname="$2" repo_dir="$3" kanit_dir="$4"
+  local senkron_kanit="$kanit_dir/compose-senkron.txt"
+  local fark_kanit="$kanit_dir/compose-senkron-fark.txt"
+
+  # 1) host compose 3-durum probe (VAR/YOK/ölçülemedi — unknown ≠ yok, fail-closed)
+  local probe
+  probe="$(hostsrv_okur "test -f '$HOST_COMPOSE_PATH' && echo VAR || echo YOK" | tr -d '[:space:]')"
+  if [ "$probe" = "YOK" ]; then
+    echo "[kırmızı] COMPOSE-SENKRON: host'ta compose-dosyası YOK ($HOST_COMPOSE_PATH) — boş-host'a tam-filo yazmak bootstrap işidir, İSKÂN-doğumu değil; apply REDDEDİLDİ (host'a dokunulmadı)" | tee "$senkron_kanit" >&2
+    exit 5
+  elif [ "$probe" != "VAR" ]; then
+    echo "[kırmızı] COMPOSE-SENKRON: host compose ölçülemedi (fail-closed) — apply REDDEDİLDİ, host'a dokunulmadı" | tee "$senkron_kanit" >&2
+    exit 5
+  fi
+
+  # 2) içerikleri BAYT-doğru indir (pipe/dosya — komut-ikamesi kuyruk-newline yutar, md5 bozar)
+  local repo_tmp host_tmp
+  repo_tmp="$(mktemp)" && host_tmp="$(mktemp)" || { echo "[kırmızı] COMPOSE-SENKRON: mktemp başarısız (fail-closed)" >&2; exit 5; }
+  git -C "$repo_dir" show "origin/main:infra/docker-compose.server.yml" > "$repo_tmp" 2>/dev/null
+  hostsrv_okur "cat '$HOST_COMPOSE_PATH'" > "$host_tmp"
+  if [ ! -s "$repo_tmp" ] || [ ! -s "$host_tmp" ]; then
+    rm -f "$repo_tmp" "$host_tmp"
+    echo "[kırmızı] COMPOSE-SENKRON: repo/host compose ölçülemedi (fail-closed) — apply REDDEDİLDİ, host'a dokunulmadı" | tee "$senkron_kanit" >&2
+    exit 5
+  fi
+  local repo_md5 host_md5
+  repo_md5="$(md5sum "$repo_tmp" | awk '{print $1}')"
+  host_md5="$(md5sum "$host_tmp" | awk '{print $1}')"
+
+  # 3) no-op kapısı: yalnız BAYT-eş no-op'tur (yapısal-eş ama bayt-farklı = YAZILIR)
+  if [ "$repo_md5" = "$host_md5" ]; then
+    echo "[yeşil] COMPOSE-SENKRON: host zaten origin/main ile BAYT-eş (md5=$repo_md5) — yazım YOK (no-op)" | tee "$senkron_kanit"
+    rm -f "$repo_tmp" "$host_tmp"
+    return 0
+  fi
+
+  # 4) KOMŞU-BAYT kapısı (LB-fix): aday İKİ taraftan METİN-düzeyi çıkarılır; kalan komşu-
+  # metinler BAYT-eş DEĞİLSE yazım reddedilir — tam-dosya yazımı ancak komşulara bayt-etkisiz
+  # olduğu KANITLANINCA koşar (mahrem-komşu ezme imkânsız; yapısal kapı buna kördü).
+  local repo_komsu host_komsu
+  repo_komsu="$(python3 "$COMPOSE_BLOCK" sil "$cname" "$repo_tmp" 2>/dev/null)"
+  host_komsu="$(python3 "$COMPOSE_BLOCK" sil "$cname" "$host_tmp" 2>/dev/null)"
+  if [ -z "$repo_komsu" ] || [ -z "$host_komsu" ]; then
+    rm -f "$repo_tmp" "$host_tmp"
+    echo "[kırmızı] COMPOSE-SENKRON: komşu-küme çıkarılamadı (compose_block boş çıktı — fail-closed) — apply REDDEDİLDİ, host'a dokunulmadı" | tee "$senkron_kanit" >&2
+    exit 5
+  fi
+  local komsu_repo_md5 komsu_host_md5
+  komsu_repo_md5="$(printf '%s\n' "$repo_komsu" | md5sum | awk '{print $1}')"
+  komsu_host_md5="$(printf '%s\n' "$host_komsu" | md5sum | awk '{print $1}')"
+  if [ "$komsu_repo_md5" != "$komsu_host_md5" ]; then
+    {
+      echo "== COMPOSE-SENKRON BEKLENMEDİK-FARK: komşular BAYT-eş değil → yazım REDDEDİLDİ (host'a dokunulmadı) =="
+      echo "repo (origin/main, ${cname} çıkarılmış) ⟷ host ($HOST_COMPOSE_PATH, ${cname} çıkarılmış) metin-farkı"
+      echo "(her satır ait-olduğu servis-adıyla etiketli — driftli servis raporda HEP görünür, mahrem dahil):"
+      diff <(printf '%s\n' "$repo_komsu" | awk '/^  [A-Za-z0-9_-]+:[[:space:]]*$/ {srv=$1} {print (srv ? srv" | " : "") $0}') \
+           <(printf '%s\n' "$host_komsu" | awk '/^  [A-Za-z0-9_-]+:[[:space:]]*$/ {srv=$1} {print (srv ? srv" | " : "") $0}') | head -60
+      echo "ek-teşhis (yapısal, compose_parse --haric ${cname} — mem_limit/env/image bu katmanda GÖRÜNMEZ):"
+      diff <(python3 "$COMPOSE_PARSE" --haric "$cname" "$repo_tmp" 2>/dev/null) \
+           <(python3 "$COMPOSE_PARSE" --haric "$cname" "$host_tmp" 2>/dev/null) | head -30
+      echo "md5: repo-komşu=$komsu_repo_md5 · host-komşu=$komsu_host_md5 (tam-dosya: repo=$repo_md5 · host=$host_md5)"
+      echo "muhtemel-neden: tamamlanmamış söküm (host'ta ölü tenant-bloğu) ya da host'ta origin/main'de-olmayan komşu-drift (MAHREM tenant'lar dahil) ya da elle host-düzenlemesi."
+      echo "sonraki-adım: DUR — körü-körüne ezme YOK; uzlaştırma AYRI Sultan-onaylı adım (aile-notify --waiting ile SERDAR'a bildir)."
+    } > "$fark_kanit"
+    rm -f "$repo_tmp" "$host_tmp"
+    echo "[kırmızı] COMPOSE-SENKRON: komşular BAYT-eş değil — fark yalnız-${cname}-delta değil; körü-körüne ezme YOK, uzlaştırma AYRI Sultan-onaylı adım (kanıt: $fark_kanit). muhtemel-neden: tamamlanmamış söküm (host'ta ölü tenant-bloğu) ya da komşu-drift (MAHREM dahil)" >&2
+    exit 5
+  fi
+
+  # 4b) ASİMETRİK-YUTMA kapısı (3.tur MAJOR-1): komşu-md5 eş görünse BİLE, `sil` aday-header'a
+  # BİTİŞİK bir host-only bakım-yorumunu adaya yutmuş olabilir → tam-dosya yazımı o yorumu SİLER
+  # (sahte-attestasyon). `yutulan` iki taraftan yutulan bağlamı çıkarır; host'un yuttuğu bir
+  # NON-BLANK satır repo'nunkinde YOKSA → host-only silme → fail-closed (körü-körüne silme YOK).
+  local repo_yut host_yut yut_ihlal=""
+  repo_yut="$(python3 "$COMPOSE_BLOCK" yutulan "$cname" "$repo_tmp" 2>/dev/null)"
+  host_yut="$(python3 "$COMPOSE_BLOCK" yutulan "$cname" "$host_tmp" 2>/dev/null)"
+  while IFS= read -r yl; do
+    [ -n "${yl//[[:space:]]/}" ] || continue   # whitespace-ayraç bu katmanda ölçülmez (nötr)
+    printf '%s\n' "$repo_yut" | grep -qxF "$yl" || { yut_ihlal="$yl"; break; }
+  done <<< "$host_yut"
+  if [ -n "$yut_ihlal" ]; then
+    {
+      echo "== COMPOSE-SENKRON ASİMETRİK-YUTMA: host aday-bitişik satırı origin/main'de YOK → yazım REDDEDİLDİ (host'a dokunulmadı) =="
+      echo "host'ta ${cname}-header'ına bitişik, origin/main'de-olmayan satır (tam-dosya yazımı bunu SİLERDİ):"
+      printf '    %s\n' "$yut_ihlal"
+      echo "-- host'un aday'a-yuttuğu bağlam --"; printf '%s\n' "$host_yut" | sed 's/^/    /'
+      echo "-- repo'nun aday'a-yuttuğu bağlam --"; printf '%s\n' "$repo_yut" | sed 's/^/    /'
+      echo "muhtemel-neden: host'ta elle eklenmiş bakım-yorumu (aday-header'a bitişik) ya da tamamlanmamış söküm izi."
+      echo "sonraki-adım: DUR — körü-körüne silme YOK; uzlaştırma AYRI Sultan-onaylı adım (aile-notify --waiting ile SERDAR'a bildir)."
+    } > "$fark_kanit"
+    rm -f "$repo_tmp" "$host_tmp"
+    echo "[kırmızı] COMPOSE-SENKRON: host'ta origin/main'de-olmayan aday-bitişik satır ('$yut_ihlal') — körü-körüne silme YOK; uzlaştırma AYRI Sultan-onaylı adım (kanıt: $fark_kanit)" >&2
+    exit 5
+  fi
+
+  # 5) TAM-DOSYA yazım: .bak-TS → tmp+mv (atomik) → BAYT re-verify; düşerse .bak-restore
+  local ts bak_path
+  ts="$(date +%Y%m%d-%H%M%S)"
+  bak_path="${HOST_COMPOSE_PATH}.bak-${ts}"
+  if ! timeout 30 ssh "${SSH_OPTS[@]}" "$SSH_HOST" "cp -a '$HOST_COMPOSE_PATH' '$bak_path'" 2>/dev/null; then
+    rm -f "$repo_tmp" "$host_tmp"
+    echo "[kırmızı] COMPOSE-SENKRON: host .bak alınamadı ($bak_path) — dosyaya dokunulmadı, apply REDDEDİLDİ (fail-closed)" | tee "$senkron_kanit" >&2
+    exit 5
+  fi
+  if ! timeout 60 ssh "${SSH_OPTS[@]}" "$SSH_HOST" "cat > '${HOST_COMPOSE_PATH}.iskan-tmp' && mv '${HOST_COMPOSE_PATH}.iskan-tmp' '$HOST_COMPOSE_PATH'" < "$repo_tmp" 2>/dev/null; then
+    echo "[kırmızı] COMPOSE-SENKRON: yazım başarısız — .bak-restore + tmp-artık temizliği deneniyor ($bak_path)" | tee "$senkron_kanit" >&2
+    # MINOR-fix (orphan): mv-fail'de host'ta .iskan-tmp artığı kalabilir — temizle (tmp-dosya, compose değil)
+    timeout 30 ssh "${SSH_OPTS[@]}" "$SSH_HOST" "rm -f '${HOST_COMPOSE_PATH}.iskan-tmp'" 2>/dev/null || true
+    timeout 30 ssh "${SSH_OPTS[@]}" "$SSH_HOST" "cp -a '$bak_path' '$HOST_COMPOSE_PATH'" 2>/dev/null \
+      || echo "[kırmızı] .bak-restore da başarısız — host'ta elle geri-al: $bak_path" >&2
+    rm -f "$repo_tmp" "$host_tmp"
+    exit 1
+  fi
+  local sonra_md5
+  sonra_md5="$(hostsrv_okur "cat '$HOST_COMPOSE_PATH'" | md5sum | awk '{print $1}')"
+  if [ "$sonra_md5" != "$repo_md5" ]; then
+    echo "[kırmızı] COMPOSE-SENKRON re-verify DÜŞTÜ: yazım-sonrası host-md5 ($sonra_md5) ≠ origin/main-md5 ($repo_md5) — .bak-restore deneniyor" | tee "$senkron_kanit" >&2
+    timeout 30 ssh "${SSH_OPTS[@]}" "$SSH_HOST" "cp -a '$bak_path' '$HOST_COMPOSE_PATH'" 2>/dev/null \
+      || echo "[kırmızı] .bak-restore da başarısız — host'ta elle geri-al: $bak_path" >&2
+    rm -f "$repo_tmp" "$host_tmp"
+    exit 1
+  fi
+  rm -f "$repo_tmp" "$host_tmp"
+  COMPOSE_SENKRON_YAZDI=1
+  {
+    echo "== COMPOSE-SENKRON: origin/main → host TAM-DOSYA eşitleme TAMAM =="
+    echo "önce : host-md5=$host_md5 (host-yedek: $bak_path)"
+    echo "sonra: host-md5=$sonra_md5 == origin/main-md5=$repo_md5 (BAYT re-verify GEÇTİ)"
+    echo "beklenen-delta kapısı: komşu-servisler BAYT-eş + aday-bitişik yorum-satırları repo-simetrik doğrulandı (MAHREM dahil origin/main'e eşit; whitespace-ayraç bu katmanda ölçülmez; komşu-md5=$komsu_repo_md5) — fark yalnız-${cname}; docker-up bu adımda ÇAĞRILMADI (container-mutasyon tek-noktası R1)"
+  } > "$senkron_kanit"
+  echo "[yeşil] COMPOSE-SENKRON: host compose origin/main'e eşitlendi (BAYT re-verify md5=$sonra_md5 · host-yedek: $bak_path) — kanıt: $senkron_kanit"
+  return 0
+}
+
 # ── --apply (FAZ-4: iskan.sh yeni-proje'nin YAZMA-KARDEŞİ · R1-R5 SERVİS-SCOPED reçete) ──
 #
 # NEDEN: --dry-run yüzeyinin write-sibling'i. yeni-proje --apply YALNIZ git-tracked repo'ya
@@ -44,9 +216,12 @@ hostsrv_ulasilir() {
 #      up.sh / tüm-filo up / pin.yml bu dosyada ÇAĞRILMAZ (ayrı hardening-kartı b0018).
 #  R2: apply host'ta `setsid -w` ile koşar (ssh-oturumu düşse iş yarım kalmaz) ve aday
 #      ZATEN-çalışıyorsa up hiç çağrılmaz (kendi-container'ını hedefleme imkânsızlaşır).
-#  R4: apply'dan HEMEN önce drift-kapısı — repo-desired (origin/main) ⟷ host-deployed
-#      compose yapısal-eş DEĞİLSE apply REDDEDİLİR (uzlaştırma AYRI Sultan-onaylı adım).
-# Guard-katmanları (biri eksikse host'a SIFIR-dokunuş): GO-marker → REPO-KANIT → drift-kapısı.
+#  R4: senkron-SONRASI drift-ölçümü — DÜRÜST-NOT: COMPOSE-SENKRON host'u origin/main'e
+#      eşitlediği için R4 senkron-sonrası TANIM-GEREĞİ yeşildir (totoloji; "bağımsız
+#      ikinci-göz" DEĞİL). Genel-drift'i asıl yakalayan, senkron-ÖNCESİ komşu-BAYT kapısıdır;
+#      R4 yalnız regresyon-bekçisi (senkron atlanır/bozulursa eski fail-closed davranış kalsın).
+# Guard-katmanları (biri eksikse host-container'lara SIFIR-dokunuş): ad-hijyeni → 3-Çit →
+# GO-marker → REPO-KANIT → COMPOSE-SENKRON (komşu-BAYT kapılı) → R4.
 cmd_apply() {
   local proje=""
   while [ $# -gt 0 ]; do
@@ -56,6 +231,29 @@ cmd_apply() {
     esac
   done
   [ -n "$proje" ] || { echo "kullanım: iskan-host.sh --apply --proje <ad>" >&2; exit 2; }
+
+  # ── AD-HİJYENİ + 3-Çit (MAJOR-fix; GO/REPO-KANIT'ten de ÖNCE = sıfır-dokunuş noktası) ────
+  # charset iskan.sh _ey_ad_hijyeni (iskan.sh:1265) ile BAYT-EŞ (^[A-Za-z0-9-]+$; parite-goldeni
+  # bekçi): kur-adım-1 kabul edip host-doğum adımının reddetmesi = 'aynı-adım-fail' UX-tuzağı
+  # (3.tur MAJOR-2 fix — apply eskiden kur'dan KATIydı). Güvenlik korunur: nokta/slash/boşluk
+  # charset-DIŞI → '.*' / '../x' / 'a b' yine reddedilir (ERE-enjeksiyon + path-traversal kapalı;
+  # REPO-KANIT ayrıca sabit-string eşleşmesiyle defense-in-depth). LC_ALL=C şart (UTF-8 collation
+  # 'ü' gibi lokal-harfleri [A-Za-z] içine katar — firsthand-bulgu).
+  if ! printf '%s' "$proje" | LC_ALL=C grep -qE '^[A-Za-z0-9-]+$'; then
+    echo "[kırmızı] ad-hijyeni: '$proje' — geçersiz proje-adı (izinli: ^[A-Za-z0-9-]+$), apply REDDEDİLDİ (host'a SIFIR-dokunuş)" >&2
+    exit 1
+  fi
+  # 3-Çit mahrem-reddi (cmd_kur/cmd_sokum aynası): mahrem tenant'lar origin/main compose'da
+  # kayıtlı olduğundan REPO-KANIT onları GEÇİRİR — bu kapı olmadan GO'lu 'vekatip' apply'ı
+  # host'a yazardı. Liste = ISKAN_HOST_IZOLE (iskan.sh ISKAN_KUR_IZOLE bayt-eş; parite-goldeni).
+  local hz_iz
+  for hz_iz in $ISKAN_HOST_IZOLE; do
+    if [ "$proje" = "$hz_iz" ]; then
+      echo "[kırmızı] 3-Çit: '$proje' mahrem-tenant sınıfı (izole-container ailesi: $ISKAN_HOST_IZOLE) — İSKÂN-doğumu DEĞİL, apply REDDEDİLDİ (host'a SIFIR-dokunuş)" >&2
+      exit 1
+    fi
+  done
+
   local cname="cloudtop-${proje}"
   local kanit_dir="${ISKAN_KANIT_DIR:-iskan/kanit/faz4}"
   local repo_dir="${ISKAN_CLOUDTOP_REPO_DIR:-/config/projects/cloudtop}"
@@ -72,7 +270,11 @@ cmd_apply() {
     exit 1
   fi
   git -C "$repo_dir" fetch -q origin main 2>/dev/null || { echo "[kırmızı] cloudtop origin fetch başarısız — host'a dokunulmadı" >&2; exit 1; }
-  if ! git -C "$repo_dir" show "origin/main:infra/docker-compose.server.yml" 2>/dev/null | grep -qE "container_name:[[:space:]]*${cname}\$"; then
+  # MAJOR-fix (ERE-enjeksiyon, defense-in-depth): cname değişken-REGEX olarak aranmaz —
+  # container_name DEĞERLERİ çıkarılıp SABİT-STRING tam-satır eşleşmesi yapılır (grep -qxF).
+  # (charset-kapısı '.*' sınıfını zaten kesir; bu katman ikinci-kilit.)
+  if ! git -C "$repo_dir" show "origin/main:infra/docker-compose.server.yml" 2>/dev/null \
+      | sed -n 's/^[[:space:]]*container_name:[[:space:]]*//p' | grep -qxF "$cname"; then
     echo "[kırmızı] REPO-KANIT yok: '${cname}' origin/main'de bulunamadı — REPO-FIRST (D1) önce cloudtop-PR merge edilmeli, host'a dokunulmadı" >&2
     exit 1
   fi
@@ -85,9 +287,15 @@ cmd_apply() {
 
   mkdir -p "$kanit_dir"
 
-  # ── R4 · DRİFT-KAPISI (ZORUNLU, fail-closed) — repo-desired ⟷ host-deployed yapısal-eş mi?
-  # Eş DEĞİLSE (ya da ölçülemiyorsa) apply REDDEDİLİR: drift-uzlaştırma AYRI Sultan-onaylı
-  # adımdır, bu script reconcile KOŞMAZ — DUR + `aile-notify --waiting` ile SERDAR'a soft-blocker.
+  # ── COMPOSE-SENKRON (G1 zincir-fix) — R4'ten HEMEN ÖNCE: origin/main → host compose
+  # aday-scoped beklenen-delta eşitlemesi (kapılar+kontrat fonksiyon başlığında).
+  _compose_senkron "$proje" "$cname" "$repo_dir" "$kanit_dir"
+
+  # ── R4 · DRİFT-KAPISI (fail-closed) — DÜRÜST-NOT: senkron-sonrası TANIM-GEREĞİ yeşil
+  # (senkron host'u origin/main'e eşitledi → totoloji; "bağımsız ikinci-göz" değil). Genel-
+  # drift'i senkron-ÖNCESİ komşu-BAYT kapısı yakalar; R4 regresyon-bekçisi olarak KALIR
+  # (senkron atlanır/bozulursa eski fail-closed davranış devrede). GENEL drift-uzlaştırması
+  # AYRI Sultan-onaylı adımdır, bu script genel-reconcile KOŞMAZ — DUR + --waiting.
   local drift_kanit="$kanit_dir/drift-kapisi.txt"
   local repo_desired_json host_deployed_json
   repo_desired_json="$(git -C "$repo_dir" show "origin/main:infra/docker-compose.server.yml" 2>/dev/null | python3 "$COMPOSE_PARSE" - 2>/dev/null)"
@@ -137,6 +345,11 @@ cmd_apply() {
     echo "[yeşil] R1 servis-scoped up koştu (yalnız ${cname}; --no-recreate) — çıktı: $apply_out_dosya"
   else
     echo "[yeşil] '${cname}' zaten çalışıyor — R2-guard: up HİÇ çağrılmadı (idempotent geçiş)"
+    # R2×SENKRON kanıt-sözleşmesi (doktrin-merceği R6): aday çalışırken dosya bu koşuda
+    # güncellendiyse dosya≠çalışan-config makası kanıta ZORUNLU not düşülür (sahte-taze yasak).
+    if [ "$COMPOSE_SENKRON_YAZDI" = "1" ]; then
+      echo "[uyarı] COMPOSE-SENKRON notu: dosya güncellendi, çalışan-config ESKİ — recreate ayrı Sultan-alanı" | tee -a "$kanit_dir/compose-senkron.txt"
+    fi
   fi
 
   # ── G4: doğum-kanıtı ──────────────────────────────────────────────────────────────────
@@ -363,6 +576,7 @@ else
     fi
   fi
 fi
+echo "  (plan) --apply'da COMPOSE-SENKRON koşar (R4'ten önce): bayt-eş → no-op; fark yalnız-aday-delta ise origin/main → host TAM-DOSYA eşitleme (.bak-TS + tmp+mv + BAYT re-verify); komşu-fark → fail-closed exit=5 (körü-körüne ezme YOK, uzlaştırma ayrı Sultan-adımı)"
 
 # ── B4: port-flock tasarımı (bu fazda yalnız belge/iskelet — enforce FAZ-4'te) ──────────
 echo "-- PORT --"
