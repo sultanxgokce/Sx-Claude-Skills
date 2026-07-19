@@ -2252,6 +2252,52 @@ open(path, "w", encoding="utf-8").write("\n".join(lines) + "\n")
 PYEOF
 }
 
+# _sokum_host_compose_temizle <dosya> <cname> <proje> — cycle-3 fix-3 (İSKÂN cycle-2 bulgu-3):
+# HOST compose'undan aday servis-bloğunu CERRAHİ çıkarır. Kritik-fark (`_sokum_compose_cikar`
+# LOKAL-repo'yu temizler, bu HOST-dosyasını): söküm ADIM-2 yalnız container'ı `down` eder,
+# host compose-METNİ bayat-blokla kalır → bir-sonraki doğumun COMPOSE-SENKRON komşu-kapısını
+# "host'ta ölü tenant-bloğu" ile fail-closed'a düşürür (iskan-host.sh:137 muhtemel-neden). Bu,
+# birth'ün host'a-YAZAN _compose_senkron'unun söküm-simetriğidir (host'tan-SİLER).
+#
+# GÜVENLİK — komşu bayt-korunur (del lines[start:end] YENİDEN-İNŞA YAPMAZ, blok-dışı her satır
+# aynen kalır; birth'ün "tam-dosya yeniden-yaz" yaklaşımından DAHA güvenli, komşu-drift'ten bağımsız).
+# ASİMETRİK-YUTMA kapısı (birth 4b'nin aynası): aday-header'a bitişik YUTULAN öncü-yorumlar
+# proje-token TAŞIMALI — token'sız bitişik-yorum = host-only/komşu bakım-yorumu → körü-körüne
+# silme YOK, fail-closed (host-drift). Gövde-içi (4-boşluk+) yorumlar back-walk'a değil forward-
+# walk'a düşer → token gerekmez (İSKÂN gövde-yorumları kapsanır).
+# rc: 0=blok çıkarıldı (güvenli) · 2=iz-yok (host zaten temiz, no-op/idempotent) · 5=güvensiz.
+_sokum_host_compose_temizle() {
+  python3 - "$1" "$2" "$3" <<'PYEOF'
+import re, sys
+path, cname, proje = sys.argv[1], sys.argv[2], sys.argv[3]
+lines = open(path, encoding="utf-8", errors="replace").read().splitlines()
+key = next((i for i, l in enumerate(lines) if re.match(r'^  ' + re.escape(cname) + r':\s*$', l)), None)
+if key is None:
+    sys.exit(2)                        # iz-yok → host zaten iskantest-izsiz (idempotent no-op)
+start = key
+j = key - 1
+while j >= 0 and re.match(r'^  #', lines[j]):
+    start = j; j -= 1
+if start > 0 and lines[start - 1].strip() == "":
+    start -= 1
+end = key + 1
+while end < len(lines) and (lines[end].strip() == "" or lines[end].startswith("    ")):
+    end += 1
+while end - 1 > key and lines[end - 1].strip() == "":
+    end -= 1                          # ayraç-boşluğu komşuya bırak (tek-blank separatör korunur)
+# ASİMETRİK-YUTMA kapısı: yutulan öncü-yorumlar (start..key) proje-token taşımalı.
+tok = proje.lower()
+for i in range(start, key):
+    if lines[i].strip() == "":
+        continue                       # ayraç-blank nötr (whitespace bu katmanda ölçülmez)
+    if tok not in lines[i].lower():
+        sys.stderr.write("GUVENSIZ: aday-header'a bitişik token'sız yutulan-yorum (host-drift?): %r\n" % lines[i])
+        sys.exit(5)
+del lines[start:end]
+open(path, "w", encoding="utf-8").write("\n".join(lines) + "\n")
+PYEOF
+}
+
 # _sokum_satir_cikar <dosya> <token> — token geçen satırları çıkarır (case-insensitive:
 # ISKANTEST_HOSTNAME de yakalanır); çıkan satır ingress `- hostname:` ise hemen-ardındaki
 # `service:` satırı da (tokensiz eş) çıkar. Token yoksa rc=2, dosyaya dokunmaz.
@@ -2460,6 +2506,9 @@ cmd_sokum() {
     echo "     - $m_inv (ingress + access_apps satırları)"
     echo "     - $m_bkp (docker-inspect argümanından $cname; bash -n kapısı)"
     echo "     - $m_reg (künye-bloğu çıkar; DOSYA SİLİNMEZ, başlık-yorumları kalır)"
+    echo "  5b. HOST compose residual temizliği (cycle-3 fix-3; birth _compose_senkron simetriği):"
+    echo "     $host_compose içinden $cname bloğunu CERRAHİ sil (.bak-TS'li tmp+mv + BAYT re-verify;"
+    echo "     komşu bayt-korunur, docker ÇAĞRILMAZ; aday-bitişik token'sız yorum → fail-closed host-drift)"
     echo "  6. ARŞİVE-TAŞI (down-DOĞRULANDIKTAN sonra; aksiyon-11): $host_cfg → ${arsiv_root}/${proje}-<tarih-saat>/"
     echo "     (taşıma-öncesi dosya-sayısı+du kanıta; mv = tek meşru yol, rm YOK)"
     echo "  7. KOMŞU-KANIT SONRA: StartedAt/config-hash ÖNCE ile bayt-eş değilse exit=1"
@@ -2612,6 +2661,49 @@ cmd_sokum() {
   [ "$iz_toplam" = "0" ] || { echo "[kırmızı] ADIM-5 tombstone-yasak assertion başarısız — .bak'lardan incele, DUR" >&2; exit 1; }
   echo "[yeşil] ADIM-5 iz-sıfır assertion: 5 manifest '$proje'-izi 0 (.bak'lar working-tree'de, COMMIT'LENMEZ)"
 
+  # ── ADIM-5b: HOST compose residual temizliği (cycle-3 fix-3; birth _compose_senkron simetriği) ──
+  # ADIM-2 container'ı `down` etti ama host compose-METNİ bayat-blokla kaldı → sonraki doğumun
+  # COMPOSE-SENKRON komşu-kapısı "host'ta ölü tenant-bloğu" ile fail-closed olur. Host'tan bloğu
+  # CERRAHİ sil (.bak-TS'li tmp+mv + BAYT re-verify; docker ÇAĞRILMAZ → komşu StartedAt değişmez,
+  # ADIM-7 kanıtı korunur). Birth host'a YAZAR; söküm host'tan SİLER (aynı meşru tmp+mv yolu).
+  local hc_tmp hc_bak hc_ts hc_rc hc_clean_md5 hc_sonra_md5
+  hc_tmp="$(mktemp)" || { echo "[kırmızı] ADIM-5b: mktemp başarısız (fail-closed) — host'a dokunulmadı, DUR" >&2; exit 1; }
+  if ! timeout 20 ssh -o BatchMode=yes "$ssh_host" "cat '$host_compose'" > "$hc_tmp" 2>/dev/null || [ ! -s "$hc_tmp" ]; then
+    rm -f "$hc_tmp"
+    echo "[kırmızı] ADIM-5b: host compose okunamadı ($host_compose) — fail-closed, host'a dokunulmadı, DUR" >&2; exit 1
+  fi
+  _sokum_host_compose_temizle "$hc_tmp" "$cname" "$proje" 2>"$kanit_dir/host-compose-temizle.txt"; hc_rc=$?
+  case "$hc_rc" in
+    2) rm -f "$hc_tmp"
+       echo "[yeşil] ADIM-5b host-compose: '$cname' izi yok → host zaten temiz (idempotent no-op, yazım YOK)" ;;
+    5) echo "[kırmızı] ADIM-5b host-compose GÜVENSİZ (host-drift: aday-bitişik token'sız yorum) — körü-körüne silme YOK, host'a dokunulmadı; uzlaştırma AYRI Sultan-adımı (kanıt: $kanit_dir/host-compose-temizle.txt); DUR" >&2
+       rm -f "$hc_tmp"; exit 1 ;;
+    0) # blok çıkarıldı → BAYT-eş yazı (.bak-TS → tmp+mv → md5 re-verify → düşerse .bak-restore)
+       hc_clean_md5="$(md5sum "$hc_tmp" | awk '{print $1}')"
+       hc_ts="$(date +%Y%m%d-%H%M%S)"; hc_bak="${host_compose}.bak-${hc_ts}"
+       if ! timeout 20 ssh -o BatchMode=yes "$ssh_host" "cp -a '$host_compose' '$hc_bak'"; then
+         rm -f "$hc_tmp"; echo "[kırmızı] ADIM-5b: host .bak alınamadı ($hc_bak) — dosyaya dokunulmadı, DUR" >&2; exit 1
+       fi
+       if ! timeout 60 ssh -o BatchMode=yes "$ssh_host" "cat > '${host_compose}.iskan-tmp' && mv '${host_compose}.iskan-tmp' '$host_compose'" < "$hc_tmp"; then
+         echo "[kırmızı] ADIM-5b: host-yazım başarısız — .bak-restore + tmp-artık temizliği" >&2
+         timeout 20 ssh -o BatchMode=yes "$ssh_host" "rm -f '${host_compose}.iskan-tmp'" 2>/dev/null || true
+         timeout 20 ssh -o BatchMode=yes "$ssh_host" "cp -a '$hc_bak' '$host_compose'" 2>/dev/null \
+           || echo "[kırmızı] .bak-restore da başarısız — host'ta elle geri-al: $hc_bak" >&2
+         rm -f "$hc_tmp"; exit 1
+       fi
+       hc_sonra_md5="$(timeout 20 ssh -o BatchMode=yes "$ssh_host" "cat '$host_compose'" 2>/dev/null | md5sum | awk '{print $1}')"
+       if [ "$hc_sonra_md5" != "$hc_clean_md5" ] \
+          || timeout 20 ssh -o BatchMode=yes "$ssh_host" "grep -ci '$proje' '$host_compose'" 2>/dev/null | grep -qxv 0; then
+         echo "[kırmızı] ADIM-5b: BAYT re-verify DÜŞTÜ (host-md5=$hc_sonra_md5 ≠ beklenen; ya da '$proje' izi kaldı) — .bak-restore" >&2
+         timeout 20 ssh -o BatchMode=yes "$ssh_host" "cp -a '$hc_bak' '$host_compose'" 2>/dev/null \
+           || echo "[kırmızı] .bak-restore da başarısız — host'ta elle geri-al: $hc_bak" >&2
+         rm -f "$hc_tmp"; exit 1
+       fi
+       rm -f "$hc_tmp"
+       echo "[yeşil] ADIM-5b host-compose: '$cname' bloğu host'tan çıkarıldı (BAYT re-verify md5=$hc_sonra_md5 · host-yedek: $hc_bak · docker ÇAĞRILMADI → komşu-mutasyon yok) — kanıt: $kanit_dir/host-compose-temizle.txt" ;;
+    *) rm -f "$hc_tmp"; echo "[kırmızı] ADIM-5b: beklenmedik rc=$hc_rc (host-compose-temizle) — host'a dokunulmadı, DUR" >&2; exit 1 ;;
+  esac
+
   # ── ADIM-6: config-dizini ARŞİVE-TAŞI (down ADIM-2'de doğrulandı; aksiyon-11) ────────────
   local tarih arsiv_hedef
   # arşiv-yolu SANİYE-hassas: aynı-gün ≥2 söküm ('$proje') çakışmasın (cycle-2 bulgu-1: tarih-bazlı
@@ -2664,7 +2756,7 @@ cmd_sokum() {
   fi
 
   echo ""
-  echo "== sokum bitti: $proje TAM-SÖKÜLDÜ — container-down + CF-geri-alım + 5-manifest iz-sıfır (lokal, commit/PR ayrı-adım) + arşiv dolu + kur-izi temiz · kanıt: $kanit_dir/ =="
+  echo "== sokum bitti: $proje TAM-SÖKÜLDÜ — container-down + CF-geri-alım + 5-manifest iz-sıfır (lokal, commit/PR ayrı-adım) + HOST-compose residual-temiz + arşiv dolu + kur-izi temiz · kanıt: $kanit_dir/ =="
   exit 0
 }
 

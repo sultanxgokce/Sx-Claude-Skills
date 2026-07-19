@@ -2172,5 +2172,86 @@ for d in "$CS_STUB" "$CS_REPO" "$CS_HOST_DIR" "$CS_KANIT1" "$CS_KANIT2" "$CS_KAN
   find "$d" -type f -delete 2>/dev/null; find "$d" -depth -type d -delete 2>/dev/null
 done
 
+# ── fix-3 (İSKÂN cycle-2 bulgu-3): söküm HOST-compose residual temizliği (ADIM-5b) ─────────
+# ADIM-2 container'ı `down` eder ama host compose-METNİ bayat-blokla kalır → sonraki doğumun
+# COMPOSE-SENKRON komşu-kapısı "host'ta ölü tenant-bloğu" ile fail-closed olur (iskan-host.sh:137).
+# ADIM-5b bloğu host'tan CERRAHİ siler (birth _compose_senkron'un söküm-simetriği: birth YAZAR,
+# söküm SİLER). Saf-transform golden (komşu bayt-korunur / idempotent / asimetrik-yutma) + wiring-guard.
+HC_DIR="$(mktemp -d)"
+cat > "$HC_DIR/host.yml" <<'EOF'
+services:
+  cloudtop-komsu:
+    image: test
+    container_name: cloudtop-komsu
+    ports:
+      - "127.0.0.1:9997:8443"
+
+  # ── İSKÂN FAZ-4 provizyon: iskantest (iskan.sh yeni-proje ile üretildi) ────────────────
+  cloudtop-iskantest:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: cloudtop-iskantest
+    environment:
+      # FAZ-6 generator-hizası (token'sız gövde-yorumu)
+      - INSTALL_PACKAGES=tmux|git|python3
+    volumes:
+      - ./config-iskantest:/config
+    ports:
+      - "127.0.0.1:9998:8443"
+
+  cloudtop-mihenk:
+    image: test
+    container_name: cloudtop-mihenk
+EOF
+cat > "$HC_DIR/beklenen.yml" <<'EOF'
+services:
+  cloudtop-komsu:
+    image: test
+    container_name: cloudtop-komsu
+    ports:
+      - "127.0.0.1:9997:8443"
+
+  cloudtop-mihenk:
+    image: test
+    container_name: cloudtop-mihenk
+EOF
+source <(sed -n '/^_sokum_host_compose_temizle()/,/^}/p' "$SCRIPT_DIR/iskan.sh")
+# 75. blok-var → rc=0 + komşu BAYT-korunur (del-based; yeniden-inşa YOK) + 0 residual
+cp "$HC_DIR/host.yml" "$HC_DIR/w.yml"
+_sokum_host_compose_temizle "$HC_DIR/w.yml" cloudtop-iskantest iskantest 2>/dev/null; hc_rc=$?
+[ "$hc_rc" = "0" ] && diff -q "$HC_DIR/w.yml" "$HC_DIR/beklenen.yml" >/dev/null && [ "$(grep -ci iskantest "$HC_DIR/w.yml")" = "0" ] \
+  && ok "fix-3 host-compose (ADIM-5b): blok çıkarıldı → komşu BAYT-korunur + 0 iskantest-iz (rc=0)" \
+  || bad "fix-3 host-compose: blok-çıkarma/komşu-koruma kırık (rc=$hc_rc)"
+# 76. idempotent: temiz-dosyada blok yok → rc=2 + dosya değişmez (no-op)
+hc_before="$(md5sum "$HC_DIR/w.yml" | awk '{print $1}')"
+_sokum_host_compose_temizle "$HC_DIR/w.yml" cloudtop-iskantest iskantest 2>/dev/null; hc_rc=$?
+[ "$hc_rc" = "2" ] && [ "$(md5sum "$HC_DIR/w.yml" | awk '{print $1}')" = "$hc_before" ] \
+  && ok "fix-3 host-compose: blok-yok → rc=2 no-op (idempotent, dosya değişmez)" \
+  || bad "fix-3 host-compose: idempotent-no-op kırık (rc=$hc_rc)"
+# 77. host-drift: aday-header'a bitişik TOKEN'SIZ yorum → rc=5 fail-closed (körü-körüne silme YOK)
+cat > "$HC_DIR/drift.yml" <<'EOF'
+services:
+  cloudtop-komsu:
+    image: test
+
+  # host-only bakim notu (komsuya ait olabilir, token yok)
+  cloudtop-iskantest:
+    image: lscr.io/linuxserver/code-server:latest
+    ports:
+      - "127.0.0.1:9998:8443"
+EOF
+hc_before="$(md5sum "$HC_DIR/drift.yml" | awk '{print $1}')"
+_sokum_host_compose_temizle "$HC_DIR/drift.yml" cloudtop-iskantest iskantest 2>/dev/null; hc_rc=$?
+[ "$hc_rc" = "5" ] && [ "$(md5sum "$HC_DIR/drift.yml" | awk '{print $1}')" = "$hc_before" ] \
+  && ok "fix-3 host-compose: aday-bitişik token'sız yorum → rc=5 fail-closed (host-drift, dosya değişmez)" \
+  || bad "fix-3 host-compose: asimetrik-yutma kapısı kırık (rc=$hc_rc — körü-körüne silme riski)"
+# 78. kaynak-wiring guard: cmd_sokum ADIM-5b'yi kablolu (helper-çağrı + ADIM-5b bloğu + dry-run planı)
+hc_w1="$(grep -c '_sokum_host_compose_temizle "' "$SCRIPT_DIR/iskan.sh")"
+hc_w2="$(grep -c 'ADIM-5b' "$SCRIPT_DIR/iskan.sh")"
+hc_w3="$(grep -c '5b. HOST compose residual' "$SCRIPT_DIR/iskan.sh")"
+[ "$hc_w1" -ge 1 ] && [ "$hc_w2" -ge 3 ] && [ "$hc_w3" -ge 1 ] \
+  && ok "fix-3 host-compose: cmd_sokum ADIM-5b kablolu (helper-çağrı=$hc_w1 + ADIM-5b=$hc_w2 + dry-run-plan=$hc_w3)" \
+  || bad "fix-3 host-compose: ADIM-5b wiring eksik (çağrı=$hc_w1 adım=$hc_w2 plan=$hc_w3)"
+find "$HC_DIR" -type f -delete 2>/dev/null; rmdir "$HC_DIR" 2>/dev/null
+
 echo "== ${PASS} geçti / ${FAIL} kaldı =="
 [ "$FAIL" -eq 0 ]
