@@ -2429,7 +2429,7 @@ cmd_sokum() {
 
   if [ "$mode" = "dry-run" ]; then
     echo "== İSKÂN sokum — KURU-KOŞU (DEFAULT; host'a/CF'e/dosyaya SIFIR-dokunuş) =="
-    echo "proje: $proje · container: $cname · hostname: $hostname · arşiv-hedefi: ${arsiv_root}/${proje}-<tarih>/"
+    echo "proje: $proje · container: $cname · hostname: $hostname · arşiv-hedefi: ${arsiv_root}/${proje}-<tarih-saat>/"
     if command -v ssh >/dev/null 2>&1 && timeout 8 ssh -o BatchMode=yes -o ConnectTimeout=5 "$ssh_host" true >/dev/null 2>&1; then
       echo "[yeşil] hostsrv-probe: taze ssh exit=0"
     else
@@ -2450,7 +2450,7 @@ cmd_sokum() {
     echo "     - $m_inv (ingress + access_apps satırları)"
     echo "     - $m_bkp (docker-inspect argümanından $cname; bash -n kapısı)"
     echo "     - $m_reg (künye-bloğu çıkar; DOSYA SİLİNMEZ, başlık-yorumları kalır)"
-    echo "  6. ARŞİVE-TAŞI (down-DOĞRULANDIKTAN sonra; aksiyon-11): $host_cfg → ${arsiv_root}/${proje}-<tarih>/"
+    echo "  6. ARŞİVE-TAŞI (down-DOĞRULANDIKTAN sonra; aksiyon-11): $host_cfg → ${arsiv_root}/${proje}-<tarih-saat>/"
     echo "     (taşıma-öncesi dosya-sayısı+du kanıta; mv = tek meşru yol, rm YOK)"
     echo "  7. KOMŞU-KANIT SONRA: StartedAt/config-hash ÖNCE ile bayt-eş değilse exit=1"
     echo "  8. kur-durum-dosyası temizliği: $(_kur_state_path "$proje") (varsa silinir — F4 söküm-oracle'ı: state-dosyası-silinmiş)"
@@ -2604,7 +2604,9 @@ cmd_sokum() {
 
   # ── ADIM-6: config-dizini ARŞİVE-TAŞI (down ADIM-2'de doğrulandı; aksiyon-11) ────────────
   local tarih arsiv_hedef
-  tarih="$(date +%F)"
+  # arşiv-yolu SANİYE-hassas: aynı-gün ≥2 söküm ('$proje') çakışmasın (cycle-2 bulgu-1: tarih-bazlı
+  # yol iki aynı-gün-teardown'da çakışıp ADIM-6'da durduruyordu). test -e çakışma-reddi backstop kalır.
+  tarih="$(date +%F-%H%M%S)"
   arsiv_hedef="${arsiv_root}/${proje}-${tarih}"
   if timeout 15 ssh -o BatchMode=yes "$ssh_host" "test -d '$host_cfg'" 2>/dev/null; then
     if timeout 15 ssh -o BatchMode=yes "$ssh_host" "test -e '$arsiv_hedef'" 2>/dev/null; then
