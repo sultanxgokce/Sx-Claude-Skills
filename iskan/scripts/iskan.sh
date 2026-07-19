@@ -2381,6 +2381,16 @@ cmd_sokum() {
   cozum_out="$(EY_REPO_DIR="$repo_dir" EY_CNAME="$cname" _ey_proje_cozumu "$proje" 2>&1)"; cozum_rc=$?
   if [ "$cozum_rc" != "0" ]; then
     if printf '%s' "$cozum_out" | grep -q 'kayitsiz-proje'; then
+      # ── fix-2 (cycle-2 bulgu-2): KISMİ-SÖKÜM koruması ────────────────────────────────────────
+      # 'zaten-sokuk' YALNIZ config-dir de ARŞİVLENMİŞSE (host_cfg host'ta YOK) meşrudur.
+      # compose-kaydı temiz AMA config-dir hâlâ VARSA = önceki söküm ADIM-6 (config→arşiv) ÖNCESİ
+      # durmuş (kısmi). Bu durumda 'zaten-sokuk' demek config'i ÖKSÜZ bırakıp kur-state'i siler
+      # (TEHLİKELİ; cycle-2'de yaşandı). → REDDET: state SİLİNMEZ, config KORUNUR (telafisiz-silme yok).
+      if timeout 15 ssh -o BatchMode=yes -o ConnectTimeout=5 "$ssh_host" "test -d '$host_cfg'" 2>/dev/null; then
+        echo "[kırmızı] KISMİ-SÖKÜM tespit: '$proje' compose-kaydı temiz AMA config-dir hâlâ VAR ($host_cfg) — önceki söküm ADIM-6 (config→arşiv) öncesi durmuş; 'zaten-sokuk' DEĞİL." >&2
+        echo "         KORUMA: kur-state SİLİNMEDİ, config KORUNDU (telafisiz-silme yok). TAMAMLAMA: config-dir'i arşivle + kur-state'i sil (ADIM 6-8); ya da compose-bloğunu worktree'ye geri koyup söküm'ü yeniden koş." >&2
+        exit 1
+      fi
       local arsiv_izi=""
       arsiv_izi="$(timeout 15 ssh -o BatchMode=yes -o ConnectTimeout=5 "$ssh_host" \
         "ls -d ${arsiv_root}/${proje}-* 2>/dev/null | head -1" 2>/dev/null || true)"

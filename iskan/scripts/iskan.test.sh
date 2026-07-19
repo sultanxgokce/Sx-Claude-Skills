@@ -1206,6 +1206,8 @@ cat > "$SK_STUB_DIR/ssh" <<'EOF'
 echo "call: $*" >> "${SSH_STUB_LOG:?}"
 case "$*" in
   *_sokum-arsiv*) echo "/opt/cloudtop/_sokum-arsiv/ghost-2026-01-01" ;;
+  *"test -d"*"config-"*)   # config-dir probe (fix-2 KISMİ-ayrımı): env-kontrollü — yok=tam-söküm, var=kısmi
+    [ "${STUB_CFG_DIR_VAR:-yok}" = "var" ] && exit 0 || exit 1 ;;
 esac
 exit 0
 EOF
@@ -1295,6 +1297,15 @@ chmod 755 "$SK_STATE_DIR"
 [ "$rc" != "0" ] && printf '%s' "$out" | grep -q 'bayat kur-durum-dosyası silinemedi' \
   && ok "sokum zaten-sokuk --apply: rm-başarısızlığı SESSİZ yutulmuyor → kırmızı + rc≠0 (MAJOR fix, ADIM-8 simetrisi)" \
   || bad "sokum zaten-sokuk --apply: rm-hatası sessiz yutuldu (rc=$rc — MAJOR regresyon)"
+# 51f. fix-2 (cycle-2 bulgu-2): KISMİ-SÖKÜM koruması — compose-kaydı temiz AMA config-dir hâlâ VAR
+#      (STUB_CFG_DIR_VAR=var) → 'zaten-sokuk' DEĞİL: rc=1 'KISMİ-SÖKÜM' + kur-state SİLİNMEZ (config öksüz kalmaz)
+printf 'ekip-yerlestir\n' > "$SK_STATE_DIR/iskan-kur-ghost.state"
+out="$(PATH="$SK_STUB_DIR:$PATH" SSH_STUB_LOG="$SK_LOG3" STUB_CFG_DIR_VAR=var ISKAN_SOKUM_GO=1 ISKAN_STATE_DIR="$SK_STATE_DIR" ISKAN_CLOUDTOP_REPO_DIR="$SK_REPO" \
+  bash "$SCRIPT_DIR/iskan.sh" sokum ghost --apply 2>&1)"
+rc=$?
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'KISMİ-SÖKÜM' && [ -f "$SK_STATE_DIR/iskan-kur-ghost.state" ] \
+  && ok "sokum KISMİ-SÖKÜM (fix-2): config-dir VAR → rc=1 REDDET + kur-state KORUNDU (false-zaten-sokuk kapandı)" \
+  || bad "sokum KISMİ-SÖKÜM: config öksüz/state-silme riski (rc=$rc, state $([ -f "$SK_STATE_DIR/iskan-kur-ghost.state" ] && echo var || echo YOK))"
 rm -f "$SK_LOG3"
 find "$SK_STATE_DIR" -type f -delete 2>/dev/null; find "$SK_STATE_DIR" -depth -type d -delete 2>/dev/null
 
