@@ -2349,6 +2349,19 @@ cmd_sokum() {
     exit 4
   fi
 
+  # ── 3-Çit: mahrem-tenant reddi (cmd_kur bloğunun aynası — izole aile İSKÂN-sökümü de DEĞİLDİR).
+  # G1/PR-B güvenlik-deliği fix'i: bugüne dek sokum yalnız ad-hijyeni koşuyordu; mahrem tenant'lar
+  # origin/main compose'da kayıtlı olduğundan `sokum vekatip --apply` (GO'lu) proje-çözümünü
+  # GEÇİYORDU. Kapı HER modda (dry-run dahil) ateşler — ssh-probe'dan da ÖNCE, sıfır-dokunuş.
+  local sk_proje_kucuk sk_iz
+  sk_proje_kucuk="$(printf '%s' "$proje" | tr '[:upper:]' '[:lower:]')"
+  for sk_iz in $ISKAN_KUR_IZOLE; do
+    if [ "$sk_proje_kucuk" = "$sk_iz" ]; then
+      echo "[kırmızı] 3-Çit: '$proje' mahrem-tenant sınıfı (izole-container ailesi: $ISKAN_KUR_IZOLE) — İSKÂN-sökümü DEĞİL, sokum REDDEDİLDİ (hiçbir adım koşulmadı, hiçbir yere dokunulmadı)" >&2
+      exit 1
+    fi
+  done
+
   local repo_dir="${ISKAN_CLOUDTOP_REPO_DIR:-/config/projects/cloudtop}"
   local ssh_host="${ISKAN_SSH_HOST:-hostsrv}"
   local host_root="${ISKAN_HOST_COMPOSE_ROOT:-/opt/cloudtop}"
