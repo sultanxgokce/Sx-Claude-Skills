@@ -2148,6 +2148,14 @@ rc=$?
   && ok "sokum 3-Çit: dry-run modda da ateşler (mihenk, rc=$rc — her-mod kapısı)" \
   || bad "sokum 3-Çit: dry-run modda delik (rc=$rc)"
 
+# 74b. sokum arşiv-yolu SANİYE-hassas (cycle-2 bulgu-1 regresyon-guard): ADIM-6 tarih = date +%F-%H%M%S
+#      (bare date +%F → aynı-gün ≥2 söküm arşiv-yolu çakışır, ADIM-6 durur — cycle-2'de yaşandı)
+ts_var="$(grep -c 'tarih="$(date +%F-%H%M%S)"' "$SCRIPT_DIR/iskan.sh")"
+ts_bare="$(grep -c 'tarih="$(date +%F)"' "$SCRIPT_DIR/iskan.sh")"
+[ "$ts_var" -ge 1 ] && [ "$ts_bare" = "0" ] \
+  && ok "sokum arşiv-yolu saniye-hassas (regresyon-guard: date +%F-%H%M%S var, bare +%F yok)" \
+  || bad "sokum arşiv-yolu tarih-bazlı geri-döndü (ts_var=$ts_var ts_bare=$ts_bare) — aynı-gün çakışır (cycle-2 bulgu-1)"
+
 rm -f "$CS_LOG" "$CS_LOG4" "$CS_LOG5"
 for d in "$CS_STUB" "$CS_REPO" "$CS_HOST_DIR" "$CS_KANIT1" "$CS_KANIT2" "$CS_KANIT3" "$CS_KANIT3B" "$CS_KANIT3C" "$CS_KANIT3D" "$CS_KANIT4" "$CS_KANIT5"; do
   find "$d" -type f -delete 2>/dev/null; find "$d" -depth -type d -delete 2>/dev/null
