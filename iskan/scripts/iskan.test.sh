@@ -1270,12 +1270,13 @@ rc=$?
 [ "$rc" = "0" ] && [ -f "$SK_STATE_DIR/iskan-kur-ghost.state" ] && printf '%s' "$out" | grep -q 'bayat kur-durum-dosyası duruyor' \
   && ok "sokum zaten-sokuk dry-run: bayat kur-izi UYARILIR ama SİLİNMEZ (dry-run yazmaz)" \
   || bad "sokum zaten-sokuk dry-run: state-dokunma sözleşmesi kırık (rc=$rc, dosya $([ -f "$SK_STATE_DIR/iskan-kur-ghost.state" ] && echo var || echo YOK))"
-printf 'ekip-yerlestir\n' > "$SK_STATE_DIR/iskan-kur-ghost.state"
+# PR-C yaşamdöngüsü: v2 state (pin-satırlı) da TEK-rm ile ölür — pinler sokum-sonrası hortlamaz
+printf 'ekip-yerlestir\npin ISKAN_SSH_HOST=pinli-hayalet.invalid\n' > "$SK_STATE_DIR/iskan-kur-ghost.state"
 out="$(PATH="$SK_STUB_DIR:$PATH" SSH_STUB_LOG="$SK_LOG3" ISKAN_SOKUM_GO=1 ISKAN_STATE_DIR="$SK_STATE_DIR" ISKAN_CLOUDTOP_REPO_DIR="$SK_REPO" \
   bash "$SCRIPT_DIR/iskan.sh" sokum ghost --apply 2>&1)"
 rc=$?
 [ "$rc" = "0" ] && [ ! -f "$SK_STATE_DIR/iskan-kur-ghost.state" ] && printf '%s' "$out" | grep -q 'bayat kur-durum-dosyası temizlendi' \
-  && ok "sokum zaten-sokuk --apply: bayat kur-izi TEMİZLENDİ (P1d tamamlayıcı)" \
+  && ok "sokum zaten-sokuk --apply: bayat kur-izi (v2 pin-blok DAHİL) tek-rm ile TEMİZLENDİ (P1d + PR-C)" \
   || bad "sokum zaten-sokuk --apply: kur-izi temizliği kırık (rc=$rc)"
 # MINOR fix: state silindiğinde 'hiçbir şeye dokunulmadı' DEMEZ (çelişki) — 'yalnız lokal kur-izi temizlendi' der
 printf 'ekip-yerlestir\n' > "$SK_STATE_DIR/iskan-kur-ghost.state"
@@ -1398,9 +1399,10 @@ rc=$?
 [ "$rc" = "0" ] && printf '%s' "$out" | grep -q "DURAK-1'de duraklatıldı" \
   && ok "kur DURAK-1: merge-öncesi zincir İNSAN-durağında durdu (exit=0 adım-tamam)" \
   || bad "kur DURAK-1: durak sözleşmesi kırık (rc=$rc)"
-[ "$(cat "$KR_STATE/iskan-kur-kurdurak.state" 2>/dev/null)" = "yeni-proje" ] \
-  && ok "kur durum-dosyası: son-tamamlanan='yeni-proje' yazıldı (git-DIŞI state)" \
-  || bad "kur durum-dosyası: beklenen 'yeni-proje', gelen '$(cat "$KR_STATE/iskan-kur-kurdurak.state" 2>/dev/null)'"
+# PR-C bilinçli-değişiklik: state v2 çok-satırlı (satır-1 adım + pin-blok) → tam-eş cat DEĞİL head-1
+[ "$(head -1 "$KR_STATE/iskan-kur-kurdurak.state" 2>/dev/null)" = "yeni-proje" ] \
+  && ok "kur durum-dosyası: son-tamamlanan='yeni-proje' yazıldı (git-DIŞI state, satır-1 sözleşmesi)" \
+  || bad "kur durum-dosyası: beklenen 'yeni-proje', gelen '$(head -1 "$KR_STATE/iskan-kur-kurdurak.state" 2>/dev/null)'"
 
 # 57. kur --durum: salt-oku (rc=0 + son-tamamlanan + sıradaki; durum-dosyası md5 değişmez)
 SUM_ST_0="$(md5sum "$KR_STATE/iskan-kur-kurdurak.state")"
@@ -1434,9 +1436,10 @@ rc=$?
   && ! printf '%s' "$out" | grep -q 'kur adım 1/8' && printf '%s' "$out" | grep -q 'ISKAN_FAZ4_GO' \
   && ok "kur --devam ilerleme: DURAK-1 geçildi (origin/main'de blok) + adım-3 GO'suz exit=4 iletildi" \
   || bad "kur --devam ilerleme: sözleşme kırık (rc=$rc)"
-[ "$(cat "$KR_STATE/iskan-kur-kurtest.state" 2>/dev/null)" = "durak1-cloudtop-pr" ] \
+# PR-C bilinçli-değişiklik: v2 çok-satırlı state → head-1 (satır-1 sözleşmesi)
+[ "$(head -1 "$KR_STATE/iskan-kur-kurtest.state" 2>/dev/null)" = "durak1-cloudtop-pr" ] \
   && ok "kur --devam ilerleme: durum-dosyası 'durak1-cloudtop-pr'a ilerledi (GO-sonrası kaldığı yerden)" \
-  || bad "kur --devam ilerleme: state ilerlemedi ('$(cat "$KR_STATE/iskan-kur-kurtest.state" 2>/dev/null)')"
+  || bad "kur --devam ilerleme: state ilerlemedi ('$(head -1 "$KR_STATE/iskan-kur-kurtest.state" 2>/dev/null)')"
 
 # ── P1-güvenlik (2026-07-19): slug şüpheli-durum kapısı (G-b) + roster charset-kapısı (G-a) ─
 
@@ -1532,6 +1535,194 @@ bash -c "source <(sed -n '/^_kur_durak1_probe()/,/^}/p' '$SCRIPT_DIR/iskan.sh');
   || ok "_kur_durak1_probe (fetch'li): fetch denendi (file-remote ortamına göre FETCH_HEAD opsiyonel) — no-fetch farkı yukarıda kanıtlı"
 find "$NF_REMOTE" "$NF_WORK" -type f -delete 2>/dev/null
 find "$NF_REMOTE" "$NF_WORK" -depth -type d -delete 2>/dev/null
+
+# ── PR-C: kur-state ENV-PİN (F1/F6) + PREFLIGHT ENV-HEDEF-HARİTASI ─────────────────────────
+
+# 59e. ENV-PİN ROUND-TRIP (F6): GO'lu ilk-koşu pinleri state satır-2+'a yazar (satır-1 sözleşmesi
+#      + 600 + K1 GO-YAZILMAZ kanıtı); env'siz --devam pinleri geri yükler (kanıt-satırı adlar-only)
+rm -f "$KR_STATE/iskan-kur-kurpin.state"
+out="$(env "${KR_ENV[@]}" ISKAN_FAZ4_GO=1 bash "$SCRIPT_DIR/iskan.sh" kur kurpin 2>&1)"
+rc=$?
+pin_eksik=""
+for v in ISKAN_CLOUDTOP_REPO_DIR ISKAN_REPO_COMPOSE ISKAN_SSH_HOST ISKAN_EY_ROSTER; do
+  grep -q "^pin $v=" "$KR_STATE/iskan-kur-kurpin.state" 2>/dev/null || pin_eksik="$pin_eksik $v"
+done
+[ "$rc" = "0" ] && [ "$(head -1 "$KR_STATE/iskan-kur-kurpin.state" 2>/dev/null)" = "yeni-proje" ] && [ -z "$pin_eksik" ] \
+  && grep -q '^pin ISKAN_EY_ROSTER=denekAlfa:yonetici$' "$KR_STATE/iskan-kur-kurpin.state" \
+  && [ "$(stat -c %a "$KR_STATE/iskan-kur-kurpin.state")" = "600" ] \
+  && ok "env-pin yazıcı: satır-1='yeni-proje' + 4 allowlist-pini state'e yazıldı (600, roster-değeri dosyada — sır-değil)" \
+  || bad "env-pin yazıcı: round-trip yazımı kırık (rc=$rc, eksik:$pin_eksik)"
+# K1 GO-YAZILMAZ: koşu ISKAN_FAZ4_GO=1 ortamındaydı ama yazıcı allowlist-only → state'te _GO izi SIFIR
+[ "$(grep -c '_GO=' "$KR_STATE/iskan-kur-kurpin.state" 2>/dev/null)" = "0" ] \
+  && ok "env-pin K1: ortamda ISKAN_FAZ4_GO=1 iken state'e GO YAZILMADI (yazıcı ortam-taramaz)" \
+  || bad "env-pin K1: GO state'e sızdı (yapısal garanti kırık)"
+# round-trip: pinlenebilir env'ler TAMAMEN verilmeden --devam → pinler geri gelir (F6 birebir);
+# kanıt-satırı adlar-only (roster DEĞERİ stdout'a düşmez); DURAK-1 pinli repo_dir'den ölçülür
+out="$(env ISKAN_STATE_DIR="$KR_STATE" ISKAN_EY_SSH_TIMEOUT=3 bash "$SCRIPT_DIR/iskan.sh" kur kurpin --devam 2>&1)"
+rc=$?
+pin_satir="$(printf '%s\n' "$out" | grep 'env-pin yüklendi')"
+[ "$rc" = "0" ] && printf '%s' "$pin_satir" | grep -q 'ISKAN_EY_ROSTER' \
+  && printf '%s' "$pin_satir" | grep -q 'ISKAN_CLOUDTOP_REPO_DIR' \
+  && ! printf '%s' "$pin_satir" | grep -q 'denekAlfa' \
+  && printf '%s' "$out" | grep -q "DURAK-1'de duraklatıldı" \
+  && ok "env-pin round-trip: env'siz --devam pinleri yükledi (adlar-only kanıt, değer YOK) + DURAK-1 pinli-repo'dan ölçüldü (F6 kapandı)" \
+  || bad "env-pin round-trip: --devam pin-yüklemesi kırık (rc=$rc, satır: '$pin_satir')"
+
+# 59f. dry-run mevcut pin'li state'e DOKUNMAZ (pin-tazeleme yalnız adım-yazımında)
+SUM_PIN_D0="$(md5sum "$KR_STATE/iskan-kur-kurpin.state")"
+env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurpin --dry-run >/dev/null 2>&1
+rc=$?
+SUM_PIN_D1="$(md5sum "$KR_STATE/iskan-kur-kurpin.state")"
+[ "$rc" = "3" ] && [ "$SUM_PIN_D0" = "$SUM_PIN_D1" ] \
+  && ok "env-pin dry-run: plan-exit=3 + mevcut v2-state md5-değişmez (yazım yok)" \
+  || bad "env-pin dry-run: state'e dokunuldu ya da rc bozuk (rc=$rc)"
+
+# 59g. GO-PIN TAMPER (K3): state'e elle 'pin ISKAN_FAZ4_GO=1' → --devam rc=1 + kırmızı marker
+#      + hiçbir adım-banner'ı + hiçbir pin yüklenmedi + dosya fail-closed DEĞİŞMEDİ
+printf 'pin ISKAN_FAZ4_GO=1\n' >> "$KR_STATE/iskan-kur-kurpin.state"
+SUM_PIN_T0="$(md5sum "$KR_STATE/iskan-kur-kurpin.state")"
+out="$(env ISKAN_STATE_DIR="$KR_STATE" bash "$SCRIPT_DIR/iskan.sh" kur kurpin --devam 2>&1)"
+rc=$?
+SUM_PIN_T1="$(md5sum "$KR_STATE/iskan-kur-kurpin.state")"
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'güvenlik-kapısı-pin tespit' \
+  && ! printf '%s' "$out" | grep -q '──── kur adım' && ! printf '%s' "$out" | grep -q 'env-pin yüklendi' \
+  && [ "$SUM_PIN_T0" = "$SUM_PIN_T1" ] \
+  && ok "env-pin K3 tamper: GO-pin görüldü → rc=1 kırmızı-DUR (sessiz-atlama YOK, sıfır pin yüklendi, dosya değişmedi)" \
+  || bad "env-pin K3 tamper: GO-pin kapısı delik (rc=$rc)"
+
+# 59h. --durum + tamper: rapor BASILIR (inceleme-aracı çalışır) + sonda 'GO-pin tespit' + rc=1
+#      (PR-C bilinçli rc-değişimi: eski sözleşme --durum=0'dı; kurcalanmış state'te sahte-yeşil yok)
+out="$(env ISKAN_STATE_DIR="$KR_STATE" bash "$SCRIPT_DIR/iskan.sh" kur kurpin --durum 2>&1)"
+rc=$?
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'son-tamamlanan: yeni-proje' \
+  && printf '%s' "$out" | grep -q 'GO-pin tespit' \
+  && ok "env-pin --durum tamper: rapor basıldı + sonda kırmızı GO-pin tespiti + rc=1 (sahte-yeşil yok)" \
+  || bad "env-pin --durum tamper: sözleşme kırık (rc=$rc)"
+
+# 59i. DENY-SINIFI-2 (K3): güvenlik-kapı seti pini (ISKAN_PROD_HOSTS) de kurcalanmış-state kırmızısı
+printf 'yeni-proje\npin ISKAN_PROD_HOSTS=pc code\n' > "$KR_STATE/iskan-kur-kurpin.state"
+out="$(env ISKAN_STATE_DIR="$KR_STATE" bash "$SCRIPT_DIR/iskan.sh" kur kurpin --devam 2>&1)"
+rc=$?
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'ISKAN_PROD_HOSTS' && printf '%s' "$out" | grep -q 'güvenlik-kapısı-pin tespit' \
+  && ! printf '%s' "$out" | grep -q '──── kur adım' \
+  && ok "env-pin deny-sınıfı-2: ISKAN_PROD_HOSTS pini → rc=1 kırmızı (7/8-hostname kapı setleri state'ten daraltılamaz)" \
+  || bad "env-pin deny-sınıfı-2: PROD_HOSTS pini sessiz geçti (rc=$rc — mahrem-regresyon riski)"
+rm -f "$KR_STATE/iskan-kur-kurpin.state"
+
+# 59i2. MALFORME GO-PIN FAIL-SAFE (PR-C re-verify fix-a): strict-regex'i (^ISKAN_[A-Z0-9_]+$) geçemeyen
+#       ama GO/güvenlik-kapısına BENZEYEN ad ('ISKAN_FAZ4_GO ' trailing-space) pass-1'de sessiz-atlanmamalı
+#       → loud-kırmızı + refuse-all: aynı state'teki GEÇERLİ allowlist-pin (ISKAN_EY_ROSTER) bile YÜKLENMEZ
+#       (aksi halde pass-1 malforme-GO'yu atlar, pass-2 diğerlerini yükler = kısmi-tamper onurlandırılır).
+printf 'yeni-proje\npin ISKAN_EY_ROSTER=denekAlfa:yonetici\npin ISKAN_FAZ4_GO =1\n' > "$KR_STATE/iskan-kur-kurpin.state"
+SUM_MF_T0="$(md5sum "$KR_STATE/iskan-kur-kurpin.state")"
+out="$(env ISKAN_STATE_DIR="$KR_STATE" bash "$SCRIPT_DIR/iskan.sh" kur kurpin --devam 2>&1)"
+rc=$?
+SUM_MF_T1="$(md5sum "$KR_STATE/iskan-kur-kurpin.state")"
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'malforme GO/güvenlik-kapısı-pin tespit' \
+  && ! printf '%s' "$out" | grep -q 'env-pin yüklendi' && ! printf '%s' "$out" | grep -q '──── kur adım' \
+  && [ "$SUM_MF_T0" = "$SUM_MF_T1" ] \
+  && ok "env-pin fail-safe: malforme-GO ('ISKAN_FAZ4_GO ' trailing-space) → rc=1 refuse-all (geçerli allowlist-pin de yüklenmedi; sessiz-atlama YOK, dosya değişmedi)" \
+  || bad "env-pin fail-safe: malforme-GO sessiz-atlandı (rc=$rc — kısmi-tamper onurlandırıldı)"
+rm -f "$KR_STATE/iskan-kur-kurpin.state"
+
+# 59j. ESKİ-FORMAT UYUM: tek-satır pin'siz state → davranış BİREBİR ('env-pin yüklendi' satırı YOK)
+printf 'yeni-proje\n' > "$KR_STATE/iskan-kur-kureski.state"
+out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kureski --devam 2>&1)"
+rc=$?
+[ "$rc" = "0" ] && ! printf '%s' "$out" | grep -q 'env-pin yüklendi' \
+  && printf '%s' "$out" | grep -q 'son-tamamlanan=yeni-proje' && printf '%s' "$out" | grep -q "DURAK-1'de duraklatıldı" \
+  && ok "env-pin eski-format: tek-satır state ile --devam birebir eski davranış (pin-satırı yok, kanıt-satırı basılmaz)" \
+  || bad "env-pin eski-format: geriye-uyum kırık (rc=$rc)"
+out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kureski --durum 2>&1)"
+rc=$?
+[ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'son-tamamlanan: yeni-proje' \
+  && ok "env-pin eski-format: --durum rc=0 + rapor (salt-oku sözleşmesi temiz state'te DEĞİŞMEDİ)" \
+  || bad "env-pin eski-format: --durum kırık (rc=$rc)"
+
+# 59k. PRECEDENCE (açık-env > pin) + PİN-TAZELEME: pinli SSH_HOST açık-env'le ezilir (haritada
+#      kaynak=açık-env), adım-yazımında pin etkin-değerle tazelenir (bayat-pin ölür)
+printf 'yeni-proje\npin ISKAN_SSH_HOST=pinli-host.invalid\n' > "$KR_STATE/iskan-kur-kurprec.state"
+out="$(env "${KR_ENV[@]}" bash "$SCRIPT_DIR/iskan.sh" kur kurprec --devam 2>&1)"
+rc=$?
+[ "$rc" = "0" ] && ! printf '%s' "$out" | grep -q 'env-pin yüklendi' \
+  && printf '%s' "$out" | grep -q 'ssh-hedef→ bilinçli-bozuk-host.invalid \[kaynak: açık-env\]' \
+  && ok "env-pin precedence: açık-env pin'i ezdi (harita kaynak=açık-env, pin yüklenmedi)" \
+  || bad "env-pin precedence: öncelik-sırası kırık (rc=$rc)"
+out="$(env "${KR_ENV[@]}" ISKAN_FAZ4_GO=1 bash "$SCRIPT_DIR/iskan.sh" kur kurprec 2>&1)"
+rc=$?
+[ "$rc" = "0" ] && grep -q '^pin ISKAN_SSH_HOST=bilinçli-bozuk-host.invalid$' "$KR_STATE/iskan-kur-kurprec.state" \
+  && ! grep -q 'pinli-host.invalid' "$KR_STATE/iskan-kur-kurprec.state" \
+  && ok "env-pin tazeleme: adım-yazımı pin-bloğunu ETKİN env'den yeniden üretti (bayat pinli-host silindi)" \
+  || bad "env-pin tazeleme: bayat pin state'te kaldı (rc=$rc)"
+
+# 59l. BOŞ AÇIK-ENV = PİN-İPTAL (${!ad+x} semantiği): ISKAN_EY_ROSTER= (set-ama-boş) pini yok sayar
+#      → fallback yolu (haritada roster kaynak=container-içi default) — bayat-roster panzehiri
+printf 'yeni-proje\npin ISKAN_EY_ROSTER=denekAlfa:yonetici\n' > "$KR_STATE/iskan-kur-kuriptal.state"
+out="$(env "${KR_ENV[@]}" ISKAN_EY_ROSTER= bash "$SCRIPT_DIR/iskan.sh" kur kuriptal --devam 2>&1)"
+rc=$?
+[ "$rc" = "0" ] && ! printf '%s' "$out" | grep -q 'env-pin yüklendi' \
+  && printf '%s' "$out" | grep -q 'roster kaynak→ container-içi ekip-registry.yaml (default)' \
+  && ok "env-pin pin-iptal: boş açık-env pini yok saydı → fallback yolu (container-registry) tek komutla geri geldi" \
+  || bad "env-pin pin-iptal: set-ama-boş semantiği kırık (rc=$rc — bayat-roster panzehiri yok)"
+
+# 59m. V1 HEDEF-AYRIŞMA (F1-imzası): repo_dir AÇIK + compose DEFAULT → zincir adım-0'da kırmızı
+#      (üçlü HİÇ yazılmadan durur — F1 canlı-vakası birebir); iki taraf da AÇIK ise [uyarı]+devam
+V1_REPO="$(mktemp -d)"     # okuma-repo: default-compose çatısından AYRIŞIK, .git YOK (V2 susar)
+out="$(env ISKAN_STATE_DIR="$KR_STATE" ISKAN_CLOUDTOP_REPO_DIR="$V1_REPO" \
+  ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_EY_SSH_TIMEOUT=3 \
+  bash "$SCRIPT_DIR/iskan.sh" kur vbirtest 2>&1)"
+rc=$?
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'V1 hedef-ayrışma' \
+  && ! printf '%s' "$out" | grep -q '──── kur adım' && [ ! -e "$KR_STATE/iskan-kur-vbirtest.state" ] \
+  && ok "harita V1: ayrışma ∧ compose=default → zincir adım-0 kırmızı (F1 üçlü-yazımı önlendi, state doğmadı)" \
+  || bad "harita V1: F1-imzası kırmızısı kırık (rc=$rc)"
+# dry-run'da V1 BİLGİ-dilinde (plan-exit korunur) — izole-fonksiyon çağrısı (59c/59d sed-source deseni)
+out="$(bash -c "source <(sed -n '/^_kur_adim_no()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); source <(sed -n '/^_kur_env_kaynak()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); source <(sed -n '/^_kur_env_harita()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); ISKAN_KUR_ADIMLAR='yeni-proje durak1-cloudtop-pr iskan-host provizyon cf-yayin ekip-yerlestir ekip-pong evergreen-kaydet'; ISKAN_KUR_PIN_YUKLENEN=''; ISKAN_CLOUDTOP_REPO_DIR='$V1_REPO' _kur_env_harita vbirtest dry-run ''" 2>&1)"
+v1rc=$?
+[ "$v1rc" = "0" ] && printf '%s' "$out" | grep -q '\[uyarı\] V1 hedef-ayrışma' \
+  && ok "harita V1 dry-run: aynı ayrışma BİLGİ-dilinde [uyarı] + rc=0 (plan-exit sözleşmesi korunur)" \
+  || bad "harita V1 dry-run: bilgi-dili kırık (rc=$v1rc)"
+# iki taraf da AÇIK (bilinçli worktree-PR deseni): zincir BLOKLANMAZ — adım-1'e ilerler (GO'suz exit=4)
+V1B_REPO="$(mktemp -d)"; mkdir -p "$V1B_REPO/infra"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$V1B_REPO/infra/docker-compose.server.yml"
+cp "$SCRIPT_DIR/fixtures/setup-tunnel-mini.sh" "$V1B_REPO/infra/setup-tunnel.sh"
+out="$(env -u ISKAN_FAZ4_GO ISKAN_STATE_DIR="$KR_STATE" ISKAN_CLOUDTOP_REPO_DIR="$V1_REPO" \
+  ISKAN_REPO_COMPOSE="$V1B_REPO/infra/docker-compose.server.yml" \
+  ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_EY_SSH_TIMEOUT=3 \
+  bash "$SCRIPT_DIR/iskan.sh" kur vbirtest 2>&1)"
+rc=$?
+[ "$rc" = "4" ] && printf '%s' "$out" | grep -q 'BİLİNÇLİ (açık-env/pin) sayıldı' \
+  && printf '%s' "$out" | grep -q 'kur adım 1/8' \
+  && ok "harita V1 rafine: iki taraf AÇIK → [uyarı]+devam, zincir adım-1'e ilerledi (meşru worktree-PR deseni bloklanmadı)" \
+  || bad "harita V1 rafine: bilinçli-ayrışma false-positive bloklandı (rc=$rc)"
+
+# 59n. V2 WORKTREE-CHECKOUT: .git DOSYA ∧ son-tamamlanan < cf-yayin → devam'da kırmızı + üç-kapı
+#      sayımı; cf-yayin geçildiyse yalnız bilgi-satırı (eşik-kanıtı: provizyon=kırmızı · cf-yayin=bilgi)
+V2_REPO="$(mktemp -d)"; mkdir -p "$V2_REPO/infra"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$V2_REPO/infra/docker-compose.server.yml"
+printf 'gitdir: /tmp/olmayan-worktree-yeri\n' > "$V2_REPO/.git"
+printf 'yeni-proje\n' > "$KR_STATE/iskan-kur-vikitest.state"
+out="$(env ISKAN_STATE_DIR="$KR_STATE" ISKAN_CLOUDTOP_REPO_DIR="$V2_REPO" \
+  ISKAN_REPO_COMPOSE="$V2_REPO/infra/docker-compose.server.yml" \
+  ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_EY_SSH_TIMEOUT=3 \
+  bash "$SCRIPT_DIR/iskan.sh" kur vikitest --devam 2>&1)"
+rc=$?
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'V2 worktree-checkout' && printf '%s' "$out" | grep -q 'ANA-checkout' \
+  && printf '%s' "$out" | grep -q 'iskan-host.sh REPO-KANIT' && ! printf '%s' "$out" | grep -q '──── kur adım' \
+  && ok "harita V2: .git DOSYA + cf-yayin-öncesi → devam adım-0 kırmızı (üç '-d .git' kapısı erken teşhis, F2)" \
+  || bad "harita V2: worktree kırmızısı kırık (rc=$rc)"
+# eşik-kanıtı (mutasyon-kalkanı): son=provizyon (<cf-yayin) hâlâ KIRMIZI; son=cf-yayin BİLGİ + rc=0
+out="$(bash -c "source <(sed -n '/^_kur_adim_no()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); source <(sed -n '/^_kur_env_kaynak()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); source <(sed -n '/^_kur_env_harita()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); ISKAN_KUR_ADIMLAR='yeni-proje durak1-cloudtop-pr iskan-host provizyon cf-yayin ekip-yerlestir ekip-pong evergreen-kaydet'; ISKAN_KUR_PIN_YUKLENEN=''; ISKAN_CLOUDTOP_REPO_DIR='$V2_REPO' ISKAN_REPO_COMPOSE='$V2_REPO/infra/docker-compose.server.yml' _kur_env_harita vikitest devam provizyon" 2>&1)"
+v2a=$?
+out2="$(bash -c "source <(sed -n '/^_kur_adim_no()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); source <(sed -n '/^_kur_env_kaynak()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); source <(sed -n '/^_kur_env_harita()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); ISKAN_KUR_ADIMLAR='yeni-proje durak1-cloudtop-pr iskan-host provizyon cf-yayin ekip-yerlestir ekip-pong evergreen-kaydet'; ISKAN_KUR_PIN_YUKLENEN=''; ISKAN_CLOUDTOP_REPO_DIR='$V2_REPO' ISKAN_REPO_COMPOSE='$V2_REPO/infra/docker-compose.server.yml' _kur_env_harita vikitest devam cf-yayin" 2>&1)"
+v2b=$?
+[ "$v2a" = "1" ] && [ "$v2b" = "0" ] && printf '%s' "$out2" | grep -q 'cf-yayin geçilmiş' \
+  && ok "harita V2 eşiği: son=provizyon→kırmızı · son=cf-yayin→bilgi+rc=0 ('<cf-yayin' eşiği birebir)" \
+  || bad "harita V2 eşiği: sınır-davranışı kırık (provizyon=$v2a cf-yayin=$v2b)"
+
+for d in "$V1_REPO" "$V1B_REPO" "$V2_REPO"; do
+  find "$d" -type f -delete 2>/dev/null; find "$d" -depth -type d -delete 2>/dev/null
+done
 
 find "$KR_REPO" "$KR_STATE" -type f -delete 2>/dev/null
 find "$KR_REPO" "$KR_STATE" -depth -type d -delete 2>/dev/null
