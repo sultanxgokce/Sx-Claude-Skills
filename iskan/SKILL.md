@@ -1,7 +1,7 @@
 ---
 name: iskan
 type: agent
-version: 0.6.0
+version: 0.7.0
 description: >
   Container + ekip yaşam-döngüsü master-skill. Bir hedef (yeni-proje / mevcut-ekip-yeniden-doğuşu / tek-üye-ekleme)
   için host-provizyon (UC1), oturum-kurtarma (UC2, deterministik session-id), üye-ekleme (UC3) akışlarını
@@ -106,6 +106,22 @@ izole-container hedefinde `ise-alim`/KÂHYA DOĞRUDAN invoke EDİLMEZ — İSKÂ
 Usta (S3 · bileşik), born-at-Usta (`ahi new usta iskan`). generic-goal: "container + ekip yaşam-döngüsünü
 (doğuş/yeniden-doğuş/üye-ekleme) tek-komutla yöneten fabrika". Terfi-olgunluk şerhi: DOCTRINE.md → "Manuel-beyan".
 Doğrula: `ahi check iskan` · Kanon: `ahi doctrine` · İş-planı: `Nexus/_agents/handoff/help2serdar-iskan-is-plani.md`.
+
+## Durum (2026-07-20, CYCLE-3 söküm-fix'leri — v0.7.0)
+✓ İSKÂN sertleştirme-döngüsü cycle-2 söküm-hasadının **3 bulgusu** kapatıldı (hepsi Sx-merged, golden'lı):
+- **fix-1 (bulgu-1, Sx#48):** söküm arşiv-yolu artık **saniye-hassas** (`date +%F-%H%M%S`) — aynı-gün ≥2
+  söküm arşiv-yolu çakışıp ADIM-6'da durmuyor (cycle-1+2 aynı-gün yakalanmıştı). Golden: bare `+%F` yasak.
+- **fix-2 (bulgu-2, Sx#49):** **kısmi-teardown koruması** — compose-kaydı temiz AMA host config-dir hâlâ
+  varsa (önceki söküm ADIM-6 öncesi durmuş) 'zaten-sokuk' DEĞİL: `rc=1` KISMİ-SÖKÜM reddi, kur-state
+  SİLİNMEZ + config KORUNUR (config-öksüz-bırakma + telafisiz-state-silme kapandı). Golden: config-dir probe.
+- **fix-3 (bulgu-3, Sx#50):** yeni **ADIM-5b HOST-compose residual temizliği** — ADIM-2 `down` sadece
+  container'ı indiriyor, host compose-METNİ bayat-blokla kalıyordu → sonraki doğumun COMPOSE-SENKRON
+  komşu-kapısı "host'ta ölü tenant-bloğu" ile fail-closed oluyordu. ADIM-5b bloğu host'tan **cerrahi**
+  siler (birth `_compose_senkron`'un söküm-simetriği: birth YAZAR, söküm SİLER; aynı `.bak-TS→tmp+mv→BAYT
+  re-verify` yolu). `del lines[start:end]` yeniden-inşa yapmaz → 7 MAHREM komşu bayt-korunur (birth full-
+  rewrite'ından güvenli). Asimetrik-yutma token-kapısı: aday-bitişik token'sız yorum → `rc=5` fail-closed
+  (host-drift). docker ÇAĞRILMAZ → ADIM-7 komşu-kanıtı korunur. Golden: blok-var/idempotent/host-drift/wiring.
+Süit **215/215**. Bu sürüm söküm'ün "iz-sıfır" hedefini host-katmanına genişletir (repo iz-sıfır + host iz-sıfır).
 
 ## Durum (2026-07-19, PR-C env-pin + preflight-harita — v0.6.0)
 ✓ F1/F6 fix (CYCLE-1 PR-C): kur-state **v2 env-pin** — satır-2+'da allowlist DAR-5 pinleri; `--devam`
