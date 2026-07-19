@@ -58,6 +58,9 @@ hostsrv_ulasilir() {
 #     kanıta + exit=5. Yapısal karşılaştırma (compose_parse) mem_limit/env/image/healthcheck
 #     GÖRMEZ → yapısal-kapı MAHREM komşu-drift'ine kördü; bayt-kapı komşu-ezmeyi imkânsız kılar
 #     (bayt-eş komşu = yazım komşulara etkisiz). --haric yapısal diff yalnız ek-teşhis.
+#  3b. ASİMETRİK-YUTMA kapısı (MAJOR-1): compose_block yutulan <cname> — `sil` aday-header'a
+#     BİTİŞİK bir host-only bakım-yorumunu adaya yutmuş olabilir; host'un yuttuğu bir non-blank
+#     satır repo'nunkinde YOKSA tam-dosya yazımı onu SİLERDİ (sahte-attestasyon) → exit=5.
 #  4. yazım: .bak-<TS> host-yedek → tmp+mv atomik → re-verify BAYT (ssh-cat md5 == origin/main
 #     md5); düşerse .bak-restore + exit=1. docker-up BU ADIMDA ASLA çağrılmaz (container-
 #     mutasyon tek-noktası R1'de kalır).
@@ -135,6 +138,32 @@ _compose_senkron() { # <proje> <cname> <repo_dir> <kanit_dir>
     exit 5
   fi
 
+  # 4b) ASİMETRİK-YUTMA kapısı (3.tur MAJOR-1): komşu-md5 eş görünse BİLE, `sil` aday-header'a
+  # BİTİŞİK bir host-only bakım-yorumunu adaya yutmuş olabilir → tam-dosya yazımı o yorumu SİLER
+  # (sahte-attestasyon). `yutulan` iki taraftan yutulan bağlamı çıkarır; host'un yuttuğu bir
+  # NON-BLANK satır repo'nunkinde YOKSA → host-only silme → fail-closed (körü-körüne silme YOK).
+  local repo_yut host_yut yut_ihlal=""
+  repo_yut="$(python3 "$COMPOSE_BLOCK" yutulan "$cname" "$repo_tmp" 2>/dev/null)"
+  host_yut="$(python3 "$COMPOSE_BLOCK" yutulan "$cname" "$host_tmp" 2>/dev/null)"
+  while IFS= read -r yl; do
+    [ -n "${yl//[[:space:]]/}" ] || continue   # whitespace-ayraç bu katmanda ölçülmez (nötr)
+    printf '%s\n' "$repo_yut" | grep -qxF "$yl" || { yut_ihlal="$yl"; break; }
+  done <<< "$host_yut"
+  if [ -n "$yut_ihlal" ]; then
+    {
+      echo "== COMPOSE-SENKRON ASİMETRİK-YUTMA: host aday-bitişik satırı origin/main'de YOK → yazım REDDEDİLDİ (host'a dokunulmadı) =="
+      echo "host'ta ${cname}-header'ına bitişik, origin/main'de-olmayan satır (tam-dosya yazımı bunu SİLERDİ):"
+      printf '    %s\n' "$yut_ihlal"
+      echo "-- host'un aday'a-yuttuğu bağlam --"; printf '%s\n' "$host_yut" | sed 's/^/    /'
+      echo "-- repo'nun aday'a-yuttuğu bağlam --"; printf '%s\n' "$repo_yut" | sed 's/^/    /'
+      echo "muhtemel-neden: host'ta elle eklenmiş bakım-yorumu (aday-header'a bitişik) ya da tamamlanmamış söküm izi."
+      echo "sonraki-adım: DUR — körü-körüne silme YOK; uzlaştırma AYRI Sultan-onaylı adım (aile-notify --waiting ile SERDAR'a bildir)."
+    } > "$fark_kanit"
+    rm -f "$repo_tmp" "$host_tmp"
+    echo "[kırmızı] COMPOSE-SENKRON: host'ta origin/main'de-olmayan aday-bitişik satır ('$yut_ihlal') — körü-körüne silme YOK; uzlaştırma AYRI Sultan-onaylı adım (kanıt: $fark_kanit)" >&2
+    exit 5
+  fi
+
   # 5) TAM-DOSYA yazım: .bak-TS → tmp+mv (atomik) → BAYT re-verify; düşerse .bak-restore
   local ts bak_path
   ts="$(date +%Y%m%d-%H%M%S)"
@@ -168,7 +197,7 @@ _compose_senkron() { # <proje> <cname> <repo_dir> <kanit_dir>
     echo "== COMPOSE-SENKRON: origin/main → host TAM-DOSYA eşitleme TAMAM =="
     echo "önce : host-md5=$host_md5 (host-yedek: $bak_path)"
     echo "sonra: host-md5=$sonra_md5 == origin/main-md5=$repo_md5 (BAYT re-verify GEÇTİ)"
-    echo "beklenen-delta kapısı: komşular BAYT-eş doğrulandı (MAHREM dahil origin/main'e eşit; komşu-md5=$komsu_repo_md5) — fark yalnız-${cname}; docker-up bu adımda ÇAĞRILMADI (container-mutasyon tek-noktası R1)"
+    echo "beklenen-delta kapısı: komşu-servisler BAYT-eş + aday-bitişik yorum-satırları repo-simetrik doğrulandı (MAHREM dahil origin/main'e eşit; whitespace-ayraç bu katmanda ölçülmez; komşu-md5=$komsu_repo_md5) — fark yalnız-${cname}; docker-up bu adımda ÇAĞRILMADI (container-mutasyon tek-noktası R1)"
   } > "$senkron_kanit"
   echo "[yeşil] COMPOSE-SENKRON: host compose origin/main'e eşitlendi (BAYT re-verify md5=$sonra_md5 · host-yedek: $bak_path) — kanıt: $senkron_kanit"
   return 0
@@ -204,11 +233,14 @@ cmd_apply() {
   [ -n "$proje" ] || { echo "kullanım: iskan-host.sh --apply --proje <ad>" >&2; exit 2; }
 
   # ── AD-HİJYENİ + 3-Çit (MAJOR-fix; GO/REPO-KANIT'ten de ÖNCE = sıfır-dokunuş noktası) ────
-  # charset: proje-adı ssh/grep komutlarına gömülür → dar-charset hem injection hem
-  # ERE-enjeksiyon panzehiri ('.*' gibi regex-meta REPO-KANIT'i sahte-geçemez; iskan.sh
-  # _ey_ad_hijyeni emsali, LC_ALL=C şart — UTF-8 collation lokal-harf eşler).
-  if ! printf '%s' "$proje" | LC_ALL=C grep -qE '^[a-z][a-z0-9-]*$'; then
-    echo "[kırmızı] ad-hijyeni: '$proje' — geçersiz proje-adı (izinli: ^[a-z][a-z0-9-]*$), apply REDDEDİLDİ (host'a SIFIR-dokunuş)" >&2
+  # charset iskan.sh _ey_ad_hijyeni (iskan.sh:1265) ile BAYT-EŞ (^[A-Za-z0-9-]+$; parite-goldeni
+  # bekçi): kur-adım-1 kabul edip host-doğum adımının reddetmesi = 'aynı-adım-fail' UX-tuzağı
+  # (3.tur MAJOR-2 fix — apply eskiden kur'dan KATIydı). Güvenlik korunur: nokta/slash/boşluk
+  # charset-DIŞI → '.*' / '../x' / 'a b' yine reddedilir (ERE-enjeksiyon + path-traversal kapalı;
+  # REPO-KANIT ayrıca sabit-string eşleşmesiyle defense-in-depth). LC_ALL=C şart (UTF-8 collation
+  # 'ü' gibi lokal-harfleri [A-Za-z] içine katar — firsthand-bulgu).
+  if ! printf '%s' "$proje" | LC_ALL=C grep -qE '^[A-Za-z0-9-]+$'; then
+    echo "[kırmızı] ad-hijyeni: '$proje' — geçersiz proje-adı (izinli: ^[A-Za-z0-9-]+$), apply REDDEDİLDİ (host'a SIFIR-dokunuş)" >&2
     exit 1
   fi
   # 3-Çit mahrem-reddi (cmd_kur/cmd_sokum aynası): mahrem tenant'lar origin/main compose'da

@@ -96,12 +96,17 @@ no-op kapısı **BAYT-eş** (md5; yapısal-eş-ama-bayt-farklı bayat ADAY-blok 
 panzehiri) → **KOMŞU-BAYT kapısı** (`compose_block.py sil <cname>` iki-taraftan adayı metin-düzeyi
 çıkarır, kalan komşu-metinler md5-eş DEĞİLSE → fark-raporu + exit=5, **--force YOK**; yapısal kapı
 mem_limit/env/image görmediğinden MAHREM komşu-drift'ine kördü — bayt-kapı komşu-ezmeyi imkânsız kılar;
-teşhis-ipucu: tamamlanmamış söküm / komşu-drift MAHREM dahil) → .bak-TS + tmp+mv atomik yazım (mv-fail'de
-.iskan-tmp artığı temizlenir) → **BAYT re-verify** (düşerse .bak-restore + exit=1). docker-up senkronda
-ASLA çağrılmaz (container-mutasyon tek-noktası R1); R4 senkron-sonrası tanım-gereği yeşil (totoloji) —
-regresyon-bekçisi olarak kalır, genel-drift'i senkron-öncesi komşu-BAYT kapısı yakalar. Yeni GO-marker YOK
-(ISKAN_FAZ4_GO şemsiyesi). cmd_apply girişine **ad-hijyeni** (`^[a-z][a-z0-9-]*$`; REPO-KANIT
-ERE-enjeksiyonu kökten kapalı + REPO-KANIT grep'i sabit-string) + **3-Çit mahrem-reddi** eklendi
+teşhis-ipucu: tamamlanmamış söküm / komşu-drift MAHREM dahil) → **ASİMETRİK-YUTMA kapısı**
+(`compose_block.py yutulan <cname>`; `sil` aday-header'a BİTİŞİK host-only bir bakım-yorumunu adaya
+yutup komşu-md5'i sahte-EŞ gösterebilir — host'un yuttuğu bir non-blank satır repo'nunkinde YOKSA
+tam-dosya yazımı onu SİLERDİ → exit=5, sahte-attestasyon panzehiri) → .bak-TS + tmp+mv atomik yazım
+(mv-fail'de .iskan-tmp artığı temizlenir) → **BAYT re-verify** (düşerse .bak-restore + exit=1). docker-up
+senkronda ASLA çağrılmaz (container-mutasyon tek-noktası R1); R4 senkron-sonrası tanım-gereği yeşil
+(totoloji) — regresyon-bekçisi olarak kalır, genel-drift'i senkron-öncesi komşu-BAYT + yutulan kapıları
+yakalar. Yeni GO-marker YOK (ISKAN_FAZ4_GO şemsiyesi). cmd_apply girişine **ad-hijyeni**
+(`^[A-Za-z0-9-]+$` — iskan.sh `_ey_ad_hijyeni` ile BAYT-eş, parite-goldenli; kur-adım-1'in kabul edip
+host-doğumun reddetmesi 'aynı-adım-fail' tuzağı kapandı; nokta/slash/boşluk charset-dışı → ERE-enjeksiyon
++ path-traversal kapalı, REPO-KANIT ayrıca sabit-string) + **3-Çit mahrem-reddi** eklendi
 (`--apply --proje vekatip` GO'lu bile RED; liste iskan.sh ISKAN_KUR_IZOLE ile parite-goldenli).
 R2-guard yolunda yazım olduysa kanıta zorunlu not: "dosya güncellendi, çalışan-config ESKİ — recreate
 ayrı Sultan-alanı". Ertelenen: söküm ADIM-2b host-blok-çıkarma + standalone --senkron CLI (cycle-3).
