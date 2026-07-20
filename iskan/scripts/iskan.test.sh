@@ -49,6 +49,43 @@ bash "$SCRIPT_DIR/iskan-host.sh" >/dev/null 2>&1
 # (bkz Nexus CLAUDE.md "Araç & Hook Sürtünmesi": pattern'i literal yazma, tarif et). Gerçek
 # put-only doğrulaması GEREKLILIK.md G1'in kendisinde koşar (iskan/scripts/ dışından).
 
+# 5b. iskan-host _hostsrv_compose_port: port ORIGIN/MAIN'den çözülür (working-tree DEĞİL) —
+#     CYCLE-4 FRICTION#1 regresyonu. Redirect-senaryosu: tenant-bloğu origin/main'de VAR ama
+#     working-tree'de YOK (Tier-B birth-worktree redirect'i emsali) → port YİNE çözülmeli.
+#     İki-container fixture ayrıca awk container-scope'unu doğrular (ilk-port'u değil doğru-port'u).
+PORT_T="$(mktemp -d)"
+(
+  git init -q --bare "$PORT_T/origin.git"
+  git clone -q "$PORT_T/origin.git" "$PORT_T/wt" 2>/dev/null
+  cd "$PORT_T/wt" || exit 1
+  git config user.email t@t; git config user.name t; git config commit.gpgsign false
+  git checkout -q -b work; mkdir -p infra
+  cat > infra/docker-compose.server.yml <<'PORTYML'
+services:
+  cloudtop-other:
+    container_name: cloudtop-other
+    ports:
+      - "127.0.0.1:8450:8443"
+  cloudtop-iskantest:
+    container_name: cloudtop-iskantest
+    ports:
+      - "127.0.0.1:8449:8443"
+PORTYML
+  git add -A; git commit -qm init; git push -q origin work:main; git fetch -q origin
+  # Tier-B redirect simülasyonu: WT'den TÜM blokları SİL (origin/main'de kalır)
+  printf 'services: {}\n' > infra/docker-compose.server.yml
+)
+source <(sed -n '/^_hostsrv_compose_port()/,/^}/p' "$SCRIPT_DIR/iskan-host.sh")
+PORT_WT_BLOK="$(grep -c cloudtop-iskantest "$PORT_T/wt/infra/docker-compose.server.yml" 2>/dev/null)"
+PORT_COZ="$(_hostsrv_compose_port "$PORT_T/wt" cloudtop-iskantest)"
+PORT_NEG="$(_hostsrv_compose_port "$PORT_T/wt" cloudtop-yok-boyle)"
+[ "$PORT_WT_BLOK" = "0" ] && [ "$PORT_COZ" = "8449" ] \
+  && ok "iskan-host port-çözüm: WT-blok-yok ama origin/main'den doğru-port çözüldü (FRICTION#1 fix, redirect-agnostik, scope-doğru)" \
+  || bad "iskan-host port-çözüm: origin/main okumadı (WT-blok=$PORT_WT_BLOK port='$PORT_COZ' 8449 beklenirdi)"
+[ -z "$PORT_NEG" ] && ok "iskan-host port-çözüm: origin/main'de-olmayan container → boş (negatif)" \
+  || bad "iskan-host port-çözüm: olmayan-container boş beklenirdi, gelen '$PORT_NEG'"
+find "$PORT_T" -type f -delete 2>/dev/null; find "$PORT_T" -depth -type d -empty -delete 2>/dev/null
+
 # ── FAZ-2: seans-getir + K3-primitifleri ─────────────────────────────────────────────────
 
 # 6. seans-getir --apply guard: FAZ-3'te GERÇEK-çalışır AMA yalnız ISKAN_FAZ3_GO=1 env-marker'ıyla

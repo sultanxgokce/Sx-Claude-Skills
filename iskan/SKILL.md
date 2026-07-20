@@ -1,7 +1,7 @@
 ---
 name: iskan
 type: agent
-version: 0.7.1
+version: 0.7.2
 description: >
   Container + ekip yaşam-döngüsü master-skill. Bir hedef (yeni-proje / mevcut-ekip-yeniden-doğuşu / tek-üye-ekleme)
   için host-provizyon (UC1), oturum-kurtarma (UC2, deterministik session-id), üye-ekleme (UC3) akışlarını
@@ -106,6 +106,17 @@ izole-container hedefinde `ise-alim`/KÂHYA DOĞRUDAN invoke EDİLMEZ — İSKÂ
 Usta (S3 · bileşik), born-at-Usta (`ahi new usta iskan`). generic-goal: "container + ekip yaşam-döngüsünü
 (doğuş/yeniden-doğuş/üye-ekleme) tek-komutla yöneten fabrika". Terfi-olgunluk şerhi: DOCTRINE.md → "Manuel-beyan".
 Doğrula: `ahi check iskan` · Kanon: `ahi doctrine` · İş-planı: `Nexus/_agents/handoff/help2serdar-iskan-is-plani.md`.
+
+## Durum (2026-07-20, CYCLE-5 FIX#1 port-çözüm redirect-agnostik — v0.7.2)
+✓ Sertleştirme-döngüsü cycle-4 dürüst-verdiktinin FRICTION#1'i kapatıldı. **Kök-neden:** iskan-host.sh
+G5 healthz'in port-çözüm awk'ı `$repo_dir/infra/docker-compose.server.yml` **working-tree**'sini okuyordu;
+oysa aynı fonksiyondaki diğer TÜM compose-op'ları (REPO-KANIT / COMPOSE-SENKRON) origin/main okur. Tier-B
+birth-worktree redirect'inde compose ADIM-1'de worktree'ye yazıldığından ana-checkout working-tree'sinde
+tenant-bloğu bulunmaz → port boş → healthz-skip → exit=1 (cycle-4'te mid-flow retry + ana-checkout-pull
+gerektirdi). **Fix:** port-çözümü yeni `_hostsrv_compose_port` helper'ına izole edildi; `git show
+origin/main:infra/docker-compose.server.yml` okur (redirect-agnostik). REPO-KANIT (üstte) container'ın
+origin/main'de olduğunu zaten GARANTİLER → tutarlı ve daha doğru. Golden: redirect-senaryosu (WT-blok-yok +
+origin/main-blok-var → port çözülür) + iki-container scope-doğrulama + negatif. Süit **219/219**.
 
 ## Durum (2026-07-20, CYCLE-4 Tier-A birth-side hijyen — v0.7.1)
 ✓ Sertleştirme-döngüsü cycle-3 dürüst-verdiktinin META-DERS-3'ü (birth ana-checkout'u kirletiyor →
