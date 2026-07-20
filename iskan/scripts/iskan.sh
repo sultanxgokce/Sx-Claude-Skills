@@ -1468,17 +1468,19 @@ _ey_registry_dagit() {
     fi
     echo "[yeşil] iskan-registry (host): yazıldı → $EY_HOST_REGISTRY"
   fi
-  # repo-kopyası (co-locate; PR bu dosyadan açılır — apply repo'ya YALNIZ bu dosyayı yazar)
-  if [ -w "$EY_REPO_DIR/infra" ] || [ -w "$EY_REPO_DIR" ]; then
-    if [ -f "$EY_REPO_DIR/infra/iskan-registry.yaml" ] && \
-       [ "$(md5sum "$EY_REPO_DIR/infra/iskan-registry.yaml" | cut -d' ' -f1)" = "$md5_yeni" ]; then
+  # repo-kopyası (co-locate; PR bu dosyadan açılır — apply repo'ya YALNIZ bu dosyayı yazar).
+  # YAZMA-hedefi EY_REPO_TIERC_DIR (default=$EY_REPO_DIR; opt-in redirect FIX#2). Host + container
+  # kopyaları (yukarı/aşağı) redirect'ten ETKİLENMEZ — onlar ssh-hedefli, repo-worktree değil.
+  if [ -w "$EY_REPO_TIERC_DIR/infra" ] || [ -w "$EY_REPO_TIERC_DIR" ]; then
+    if [ -f "$EY_REPO_TIERC_DIR/infra/iskan-registry.yaml" ] && \
+       [ "$(md5sum "$EY_REPO_TIERC_DIR/infra/iskan-registry.yaml" | cut -d' ' -f1)" = "$md5_yeni" ]; then
       echo "[yeşil] iskan-registry (repo): içerik-eş, mevcut → atla"
     else
-      printf '%s\n' "$reg_yeni" > "$EY_REPO_DIR/infra/iskan-registry.yaml"
-      echo "[yeşil] iskan-registry (repo): yazıldı → $EY_REPO_DIR/infra/iskan-registry.yaml (commit/PR ayrı-adım, REPO-FIRST)"
+      printf '%s\n' "$reg_yeni" > "$EY_REPO_TIERC_DIR/infra/iskan-registry.yaml"
+      echo "[yeşil] iskan-registry (repo): yazıldı → $EY_REPO_TIERC_DIR/infra/iskan-registry.yaml (commit/PR ayrı-adım, REPO-FIRST)"
     fi
   else
-    echo "[doğrulanmadı] iskan-registry (repo): $EY_REPO_DIR yazılabilir değil — repo-kopyası atlandı (host+container kopyaları yazıldı)"
+    echo "[doğrulanmadı] iskan-registry (repo): $EY_REPO_TIERC_DIR yazılabilir değil — repo-kopyası atlandı (host+container kopyaları yazıldı)"
   fi
   # container-içi kopya (baslat-claude.sh okur)
   if _ey_ssh "test -f '$EY_HOST_PROJ/iskan-registry.yaml'" 2>/dev/null && \
@@ -1510,6 +1512,11 @@ cmd_ekip_yerlestir() {
   _ey_ad_hijyeni "$proje" "kayitsiz-proje" || exit 1
 
   EY_REPO_DIR="${ISKAN_CLOUDTOP_REPO_DIR:-/config/projects/cloudtop}"
+  # Tier-C YAZMA-hedefi (registry repo-kopyası) — opt-in redirect (Tier-B ISKAN_REPO_COMPOSE/TUNNEL emsali;
+  # CYCLE-5 FIX#2). Default=$EY_REPO_DIR → redirect YOK → üretim-davranışı DEĞİŞMEZ. Yalnız throwaway
+  # sertleştirme-cycle'ı bunu birth-worktree'ye set eder (ana-checkout kirlenmesin, söküm-simetri).
+  # DİKKAT: yalnız YAZMA-hedefi; origin/main OKUMALARI (K4/_ey_proje_cozumu) EY_REPO_DIR'de KALIR.
+  EY_REPO_TIERC_DIR="${ISKAN_REPO_TIERC_DIR:-$EY_REPO_DIR}"
   EY_SSH_HOST="${ISKAN_SSH_HOST:-hostsrv}"
   EY_PROJE="$proje"
   EY_CNAME="cloudtop-${proje}"
@@ -2128,13 +2135,16 @@ cmd_evergreen_kaydet() {
 
   # K4 kayıt-kapısı: origin/main compose TAM-STRING (kayıtsız → 'kayitsiz-proje' rc≠0, sıfır-yazım)
   EY_REPO_DIR="${ISKAN_CLOUDTOP_REPO_DIR:-/config/projects/cloudtop}"
+  # Tier-C YAZMA-hedefi (inv/bkp evergreen-manifestleri) — opt-in redirect (FIX#2, default=davranış-değişmez).
+  # K4 origin/main OKUMASI (_ey_proje_cozumu aşağıda) EY_REPO_DIR'de KALIR; yalnız inv/bkp YAZIMI redirect'lenir.
+  EY_REPO_TIERC_DIR="${ISKAN_REPO_TIERC_DIR:-$EY_REPO_DIR}"
   EY_CNAME="cloudtop-${proje}"
   EY_PORT=""
   _ey_proje_cozumu "$proje" || exit 1
 
   local host="${proje}.mmepanel.com"
-  local inv="$EY_REPO_DIR/infra/provider-inventory.yaml"
-  local bkp="$EY_REPO_DIR/infra/backup.sh"
+  local inv="$EY_REPO_TIERC_DIR/infra/provider-inventory.yaml"
+  local bkp="$EY_REPO_TIERC_DIR/infra/backup.sh"
   [ -f "$inv" ] || { echo "[kırmızı] provider-inventory bulunamadı: $inv — hiçbir yere dokunulmadı" >&2; exit 1; }
   [ -f "$bkp" ] || { echo "[kırmızı] backup.sh bulunamadı: $bkp — hiçbir yere dokunulmadı" >&2; exit 1; }
 
@@ -2812,7 +2822,7 @@ ISKAN_KUR_IZOLE="vekatip mmex medigate huma mihenk"
 # ISKAN_CF_SH ve ISKAN_PONG_SH BİLİNÇLİ DIŞARIDA: delege/prob-YOLU state-dosya-güvenine bağlanmaz
 # (kurcalanmış 'pin ISKAN_CF_SH=/tmp/sahte.sh' CF-mutasyonunu kaçırır, bayat pong-pini canlılık-kapısını
 # kalıcı [doğrulanmadı]-bypass'a çevirirdi — launcher/kondüktör onları her koşuda taze verir).
-ISKAN_KUR_PIN_ALLOW="ISKAN_CLOUDTOP_REPO_DIR ISKAN_REPO_COMPOSE ISKAN_REPO_TUNNEL ISKAN_SSH_HOST ISKAN_EY_ROSTER"
+ISKAN_KUR_PIN_ALLOW="ISKAN_CLOUDTOP_REPO_DIR ISKAN_REPO_COMPOSE ISKAN_REPO_TUNNEL ISKAN_REPO_TIERC_DIR ISKAN_SSH_HOST ISKAN_EY_ROSTER"
 # deny-sınıfı-2 (K3): *_GO gibi bu adlar da pin-satırında görülürse KURCALANMIŞ-state kırmızısı —
 # mahrem regresyon-kapı setleri (7/8-hostname) yalnız komut-satırından gelir, state'ten ASLA.
 ISKAN_KUR_PIN_DENY2="ISKAN_PROD_HOSTS ISKAN_SOKUM_HOSTS ISKAN_SOKUM_KOMSULAR"
@@ -2956,10 +2966,13 @@ _kur_env_harita() { # <proje> <mod> <son-adım> — PREFLIGHT ENV-HEDEF-HARİTAS
   k_tun="$(_kur_env_kaynak ISKAN_REPO_TUNNEL)"; [ "$k_tun" = "default" ] && k_tun="türev(compose-dizini)"
   k_ssh="$(_kur_env_kaynak ISKAN_SSH_HOST)"
   k_roster="$(_kur_env_kaynak ISKAN_EY_ROSTER)"
+  local k_tierc tierc_dir; k_tierc="$(_kur_env_kaynak ISKAN_REPO_TIERC_DIR)"
+  tierc_dir="${ISKAN_REPO_TIERC_DIR:-$repo_dir}"; [ "$k_tierc" = "default" ] && k_tierc="türev(=repo-dizini, redirect YOK)"
   if [ -d "$repo_dir/.git" ]; then git_tip="DİZİN"; elif [ -f "$repo_dir/.git" ]; then git_tip="DOSYA(worktree)"; fi
   echo "== ENV-HEDEF-HARİTASI (salt-oku preflight) =="
   echo "  adım 1 yeni-proje    yazma→ $repo_compose [kaynak: $k_comp] · tünel: $tunnel [kaynak: $k_tun]"
   echo "  adım 2/3/4/5 okuma→ $repo_dir origin/main [kaynak: $k_dir · .git: $git_tip]"
+  echo "  adım 6/8 Tier-C yazma→ $tierc_dir/infra (registry+inv+backup) [kaynak: $k_tierc]"
   echo "  ssh-hedef→ $ssh_host [kaynak: $k_ssh]"
   if [ -f "$cf_sh" ]; then                       # V4-minimal (pinlenmez sınıf — launcher taze verir)
     echo "  adım 5 cf-yayin delege→ $cf_sh [-f ✓ · pinlenmez]"

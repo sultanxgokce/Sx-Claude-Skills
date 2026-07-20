@@ -40,6 +40,20 @@ hostsrv_ulasilir() {
   command -v ssh >/dev/null 2>&1 && timeout 8 ssh "${SSH_OPTS[@]}" "$SSH_HOST" true >/dev/null 2>&1
 }
 
+# _hostsrv_compose_port <repo_dir> <cname> — <cname>'in ORIGIN/MAIN compose'undaki 127.0.0.1:<port>:8443
+# yayın-portunu döndürür (working-tree DEĞİL origin/main — REPO-KANIT/COMPOSE-SENKRON emsali,
+# redirect-agnostik). Gerekçe (CYCLE-4 FRICTION#1): birth-worktree redirect'inde (Tier-B) compose
+# ADIM-1'de birth-worktree'ye yazıldığından ana-checkout working-tree'sinde tenant-bloğu OLMAYABİLİR;
+# ama G5 healthz'e ulaşıldığında REPO-KANIT (cmd_apply) container'ın origin/main'de olduğunu zaten
+# GARANTİLER → port origin/main'den okunmalı (WT'ye bağlanmak redirect-cleanliness'iyle patlar).
+# Boş çıktı → port çözülemedi (çağıran healthz'i atlar). Salt-okur (git show); yazım YOK.
+_hostsrv_compose_port() {
+  git -C "$1" show "origin/main:infra/docker-compose.server.yml" 2>/dev/null | awk -v cn="$2" '
+    /container_name:/ { if ($0 ~ cn) { found=1 } else { found=0 } }
+    found && /127\.0\.0\.1:[0-9]+:8443/ { match($0, /127\.0\.0\.1:[0-9]+:8443/); s=substr($0, RSTART, RLENGTH); split(s, a, ":"); print a[2]; exit }
+  '
+}
+
 # ── COMPOSE-SENKRON (G1 zincir-fix; cmd_apply içinde R4'ten HEMEN ÖNCE koşar) ─────────────
 #
 # NEDEN (tecrube-defteri G1): apply zincirinde origin/main YALNIZ karşılaştırma+kanıt için
@@ -411,11 +425,10 @@ cmd_apply() {
   echo "[yeşil] G9 kanıtı: $g9_kanit"
 
   # ── G5: healthz + python3 (retry'li — package-install/mod-init doğumdan sonra sürebilir) ─
+  # NOT: port _hostsrv_compose_port ile ORIGIN/MAIN'den çözülür (WT DEĞİL — redirect-agnostik,
+  # CYCLE-4 FRICTION#1 kök-fix'i; gerekçe helper-başlığında).
   local port
-  port="$(awk -v cn="$cname" '
-    /container_name:/ { if ($0 ~ cn) { found=1 } else { found=0 } }
-    found && /127\.0\.0\.1:[0-9]+:8443/ { match($0, /127\.0\.0\.1:[0-9]+:8443/); s=substr($0, RSTART, RLENGTH); split(s, a, ":"); print a[2]; exit }
-  ' "$repo_dir/infra/docker-compose.server.yml")"
+  port="$(_hostsrv_compose_port "$repo_dir" "$cname")"
   local health_out="$kanit_dir/healthz.txt"
   if [ -n "$port" ]; then
     local deneme hc=""

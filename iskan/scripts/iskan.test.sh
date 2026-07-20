@@ -49,6 +49,43 @@ bash "$SCRIPT_DIR/iskan-host.sh" >/dev/null 2>&1
 # (bkz Nexus CLAUDE.md "Araç & Hook Sürtünmesi": pattern'i literal yazma, tarif et). Gerçek
 # put-only doğrulaması GEREKLILIK.md G1'in kendisinde koşar (iskan/scripts/ dışından).
 
+# 5b. iskan-host _hostsrv_compose_port: port ORIGIN/MAIN'den çözülür (working-tree DEĞİL) —
+#     CYCLE-4 FRICTION#1 regresyonu. Redirect-senaryosu: tenant-bloğu origin/main'de VAR ama
+#     working-tree'de YOK (Tier-B birth-worktree redirect'i emsali) → port YİNE çözülmeli.
+#     İki-container fixture ayrıca awk container-scope'unu doğrular (ilk-port'u değil doğru-port'u).
+PORT_T="$(mktemp -d)"
+(
+  git init -q --bare "$PORT_T/origin.git"
+  git clone -q "$PORT_T/origin.git" "$PORT_T/wt" 2>/dev/null
+  cd "$PORT_T/wt" || exit 1
+  git config user.email t@t; git config user.name t; git config commit.gpgsign false
+  git checkout -q -b work; mkdir -p infra
+  cat > infra/docker-compose.server.yml <<'PORTYML'
+services:
+  cloudtop-other:
+    container_name: cloudtop-other
+    ports:
+      - "127.0.0.1:8450:8443"
+  cloudtop-iskantest:
+    container_name: cloudtop-iskantest
+    ports:
+      - "127.0.0.1:8449:8443"
+PORTYML
+  git add -A; git commit -qm init; git push -q origin work:main; git fetch -q origin
+  # Tier-B redirect simülasyonu: WT'den TÜM blokları SİL (origin/main'de kalır)
+  printf 'services: {}\n' > infra/docker-compose.server.yml
+)
+source <(sed -n '/^_hostsrv_compose_port()/,/^}/p' "$SCRIPT_DIR/iskan-host.sh")
+PORT_WT_BLOK="$(grep -c cloudtop-iskantest "$PORT_T/wt/infra/docker-compose.server.yml" 2>/dev/null)"
+PORT_COZ="$(_hostsrv_compose_port "$PORT_T/wt" cloudtop-iskantest)"
+PORT_NEG="$(_hostsrv_compose_port "$PORT_T/wt" cloudtop-yok-boyle)"
+[ "$PORT_WT_BLOK" = "0" ] && [ "$PORT_COZ" = "8449" ] \
+  && ok "iskan-host port-çözüm: WT-blok-yok ama origin/main'den doğru-port çözüldü (FRICTION#1 fix, redirect-agnostik, scope-doğru)" \
+  || bad "iskan-host port-çözüm: origin/main okumadı (WT-blok=$PORT_WT_BLOK port='$PORT_COZ' 8449 beklenirdi)"
+[ -z "$PORT_NEG" ] && ok "iskan-host port-çözüm: origin/main'de-olmayan container → boş (negatif)" \
+  || bad "iskan-host port-çözüm: olmayan-container boş beklenirdi, gelen '$PORT_NEG'"
+find "$PORT_T" -type f -delete 2>/dev/null; find "$PORT_T" -depth -type d -empty -delete 2>/dev/null
+
 # ── FAZ-2: seans-getir + K3-primitifleri ─────────────────────────────────────────────────
 
 # 6. seans-getir --apply guard: FAZ-3'te GERÇEK-çalışır AMA yalnız ISKAN_FAZ3_GO=1 env-marker'ıyla
@@ -2278,6 +2315,57 @@ bt_call="$(grep -c '_iskan_bak_temizle "' "$SCRIPT_DIR/iskan.sh")"
 [ "$bt_def" = "1" ] && [ "$bt_call" -ge 2 ] \
   && ok "cycle-4 .bak-temizlik wiring: helper tanımlı (=$bt_def) + söküm/evergreen çağrılı (=$bt_call)" \
   || bad "cycle-4 .bak-temizlik wiring: eksik (def=$bt_def call=$bt_call)"
+
+# ── CYCLE-5 FIX#2 (Tier-C YAZMA-hedefi redirect): birth ADIM-6/8 registry/inv/backup ────────
+# opt-in ISKAN_REPO_TIERC_DIR (default=repo-dir=davranış-değişmez). Amaç: throwaway cycle'da
+# ana-checkout kirlenmesin → söküm müdahale=0. Default-regresyon zaten test 40 ile korunuyor
+# (redirect'siz → yazım repo-dir'e). Burada REDIRECT'in ana-checkout'u KORUduğu kanıtlanır.
+
+# C5-1. registry redirect (sourced _ey_registry_dagit + _ey_ssh no-op stub): TIERC yazılır, ana-checkout el-değmez
+source <(sed -n '/^_ey_registry_dagit()/,/^}/p' "$SCRIPT_DIR/iskan.sh")
+_ey_ssh() { return 0; }   # ssh no-op: host+container kopyaları nötrlenir; yalnız repo-kopya diske dokunur
+TC_RA="$(mktemp -d)"; TC_RB="$(mktemp -d)"; mkdir -p "$TC_RA/infra" "$TC_RB/infra"
+EY_HOST_REGISTRY="$TC_RA/host-registry.yaml"; EY_HOST_PROJ="$TC_RA/proj"
+EY_REPO_TIERC_DIR="$TC_RB"
+_ey_registry_dagit "yeni-icerik-XYZ" "eski-icerik" >/dev/null 2>&1
+TC_RB_HAS="$(grep -c 'yeni-icerik-XYZ' "$TC_RB/infra/iskan-registry.yaml" 2>/dev/null)"
+TC_RA_ABSENT=1; [ -f "$TC_RA/infra/iskan-registry.yaml" ] && TC_RA_ABSENT=0
+[ "$TC_RB_HAS" -ge 1 ] && [ "$TC_RA_ABSENT" = "1" ] \
+  && ok "FIX#2 registry redirect: yazım TIERC'ye gitti + ana-checkout/infra el-değmedi" \
+  || bad "FIX#2 registry redirect: hedef yanlış (RB_HAS=$TC_RB_HAS RA_absent=$TC_RA_ABSENT)"
+TC_RC="$(mktemp -d)"; mkdir -p "$TC_RC/infra"; EY_REPO_TIERC_DIR="$TC_RC"
+_ey_registry_dagit "def-icerik" "eski2" >/dev/null 2>&1
+[ "$(grep -c 'def-icerik' "$TC_RC/infra/iskan-registry.yaml" 2>/dev/null)" -ge 1 ] \
+  && ok "FIX#2 registry default(=repo-dir): redirect'siz repo-dir'e yazıldı (opt-in geriye-uyum)" \
+  || bad "FIX#2 registry default: repo-dir'e yazılmadı"
+find "$TC_RA" "$TC_RB" "$TC_RC" -type f -delete 2>/dev/null; find "$TC_RA" "$TC_RB" "$TC_RC" -depth -type d -empty -delete 2>/dev/null
+
+# C5-2. evergreen redirect (subcommand + _eg_fixture_repo): inv/bkp TIERC'ye, ana-checkout BAYT-korunur
+TC_EA="$(mktemp -d)"; _eg_fixture_repo "$TC_EA" ""     # ana-checkout: origin/main compose + kendi inv/bkp
+TC_EB="$(mktemp -d)"; mkdir -p "$TC_EB/infra"          # TIERC yazma-hedefi (inv/bkp seed'li olmalı)
+cp "$TC_EA/infra/provider-inventory.yaml" "$TC_EB/infra/provider-inventory.yaml"
+cp "$TC_EA/infra/backup.sh" "$TC_EB/infra/backup.sh"
+TC_A_INV0="$(md5sum "$TC_EA/infra/provider-inventory.yaml" | awk '{print $1}')"
+TC_A_BKP0="$(md5sum "$TC_EA/infra/backup.sh" | awk '{print $1}')"
+ISKAN_CLOUDTOP_REPO_DIR="$TC_EA" ISKAN_REPO_TIERC_DIR="$TC_EB" bash "$SCRIPT_DIR/iskan.sh" evergreen-kaydet egtest --apply >/dev/null 2>&1
+tc_rc=$?
+TC_B_ING="$(awk '/ingress:/{f=1} /access_apps:/{f=0} f' "$TC_EB/infra/provider-inventory.yaml" | grep -c 'egtest.mmepanel.com')"
+TC_B_BKP="$(grep -c 'cloudtop-egtest' "$TC_EB/infra/backup.sh")"
+TC_A_INV1="$(md5sum "$TC_EA/infra/provider-inventory.yaml" | awk '{print $1}')"
+TC_A_BKP1="$(md5sum "$TC_EA/infra/backup.sh" | awk '{print $1}')"
+[ "$tc_rc" = "0" ] && [ "$TC_B_ING" -ge 1 ] && [ "$TC_B_BKP" -ge 1 ] \
+  && [ "$TC_A_INV0" = "$TC_A_INV1" ] && [ "$TC_A_BKP0" = "$TC_A_BKP1" ] \
+  && ok "FIX#2 evergreen redirect: inv/bkp TIERC'ye yazıldı + ana-checkout inv/bkp BAYT-korundu (müdahale=0 kökü)" \
+  || bad "FIX#2 evergreen redirect: hedef yanlış (rc=$tc_rc B_ing=$TC_B_ING B_bkp=$TC_B_BKP A_inv_eş=$([ "$TC_A_INV0" = "$TC_A_INV1" ] && echo Y||echo N))"
+find "$TC_EA" "$TC_EB" -type f -delete 2>/dev/null; find "$TC_EA" "$TC_EB" -depth -type d -empty -delete 2>/dev/null
+
+# C5-3. wiring-guard: pin-allow + env-harita + iki türetim (ekip-yerlestir + evergreen) mevcut
+TC_PIN="$(grep -c 'ISKAN_KUR_PIN_ALLOW=.*ISKAN_REPO_TIERC_DIR' "$SCRIPT_DIR/iskan.sh")"
+TC_HARITA="$(grep -c 'adım 6/8 Tier-C yazma' "$SCRIPT_DIR/iskan.sh")"
+TC_DERIVE="$(grep -cF 'ISKAN_REPO_TIERC_DIR:-$EY_REPO_DIR' "$SCRIPT_DIR/iskan.sh")"
+[ "$TC_PIN" = "1" ] && [ "$TC_HARITA" = "1" ] && [ "$TC_DERIVE" = "2" ] \
+  && ok "FIX#2 wiring: pin-allow(resume-carry) + env-harita görünürlük + iki türetim (ekip-yerlestir+evergreen)" \
+  || bad "FIX#2 wiring eksik (pin=$TC_PIN harita=$TC_HARITA derive=$TC_DERIVE)"
 
 echo "== ${PASS} geçti / ${FAIL} kaldı =="
 [ "$FAIL" -eq 0 ]
