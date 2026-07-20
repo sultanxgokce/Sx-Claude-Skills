@@ -1,7 +1,7 @@
 ---
 name: iskan
 type: agent
-version: 0.7.0
+version: 0.7.1
 description: >
   Container + ekip yaşam-döngüsü master-skill. Bir hedef (yeni-proje / mevcut-ekip-yeniden-doğuşu / tek-üye-ekleme)
   için host-provizyon (UC1), oturum-kurtarma (UC2, deterministik session-id), üye-ekleme (UC3) akışlarını
@@ -106,6 +106,16 @@ izole-container hedefinde `ise-alim`/KÂHYA DOĞRUDAN invoke EDİLMEZ — İSKÂ
 Usta (S3 · bileşik), born-at-Usta (`ahi new usta iskan`). generic-goal: "container + ekip yaşam-döngüsünü
 (doğuş/yeniden-doğuş/üye-ekleme) tek-komutla yöneten fabrika". Terfi-olgunluk şerhi: DOCTRINE.md → "Manuel-beyan".
 Doğrula: `ahi check iskan` · Kanon: `ahi doctrine` · İş-planı: `Nexus/_agents/handoff/help2serdar-iskan-is-plani.md`.
+
+## Durum (2026-07-20, CYCLE-4 Tier-A birth-side hijyen — v0.7.1)
+✓ Sertleştirme-döngüsü cycle-3 dürüst-verdiktinin META-DERS-3'ü (birth ana-checkout'u kirletiyor →
+her tur env-reset) kapatılmaya başlandı. **Tier-A (debris-temizlik):** söküm ADIM-5 (5-manifest) ve
+evergreen (inventory + backup.sh) yazımdan önce `.bak` güvenlik-yedeği alıyor ama BAŞARIDA silmiyordu →
+working-tree'de kalıcı `.bak` debris = env-reset tetikleyicisi. Yeni ORTAK helper `_iskan_bak_temizle`
+başarı-noktasında `.bak`'ları siler; **fail-path'ler `.bak`'ı restore+inceleme için KORUR** (helper
+yalnız başarı-noktasında çağrılır). Golden: davranış (silinir + orijinal BAYT-korunur + `.bak`-yok
+sessiz-geçer) + kaynak-wiring + evergreen #40 flip (`.bak` başarıda-temiz). Süit **217/217**.
+(Tier-B = ADIM-1 temiz-worktree redirect = ayrı Nexus PR: `dogum-zinciri` env-wiring.)
 
 ## Durum (2026-07-20, CYCLE-3 söküm-fix'leri — v0.7.0)
 ✓ İSKÂN sertleştirme-döngüsü cycle-2 söküm-hasadının **3 bulgusu** kapatıldı (hepsi Sx-merged, golden'lı):

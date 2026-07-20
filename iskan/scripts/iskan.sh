@@ -2180,7 +2180,7 @@ cmd_evergreen_kaydet() {
       exit 1
     fi
     yazildi=1
-    echo "[yeşil] provider-inventory: yazıldı (+.bak) — ingress:$([ "$ing_var" = "0" ] && echo eklendi || echo mevcut) · access_apps:$([ "$acc_var" = "0" ] && echo eklendi || echo mevcut)"
+    echo "[yeşil] provider-inventory: yazıldı — ingress:$([ "$ing_var" = "0" ] && echo eklendi || echo mevcut) · access_apps:$([ "$acc_var" = "0" ] && echo eklendi || echo mevcut)"
   fi
 
   if [ "$bkp_var" = "1" ]; then
@@ -2199,8 +2199,11 @@ cmd_evergreen_kaydet() {
       exit 1
     fi
     yazildi=1
-    echo "[yeşil] backup.sh: $EY_CNAME docker-inspect listesine eklendi (+.bak, bash -n temiz)"
+    echo "[yeşil] backup.sh: $EY_CNAME docker-inspect listesine eklendi (bash -n temiz)"
   fi
+
+  # .bak güvenlik-yedeklerini başarıda temizle (yazımlar KALICI/REPO-FIRST; .bak yalnız restore-ağı)
+  _iskan_bak_temizle "$inv" "$bkp"
 
   echo ""
   if [ "$yazildi" = "1" ]; then
@@ -2225,6 +2228,15 @@ cmd_evergreen_kaydet() {
 #      dışına düşerse config.yml .bak-restore + cloudflared restart + exit=1.
 # KOMŞU-KANIT: 7 komşu (6-çekirdek + mihenk) ÖNCE/SONRA StartedAt + config-hash; fark → exit=1.
 # CF-silme cf.sh offboard'a DELEGE (ham-CF-API bu dosyaya gömülmez — token ikinci-yüzeye yayılmaz).
+
+# _iskan_bak_temizle <dosya>... — .bak güvenlik-yedeklerini BAŞARIDA temizle (söküm ADIM-5 +
+# evergreen ORTAK). Yalnız başarı-noktasında çağrılır — fail-path'ler .bak'ı restore+inceleme için
+# KORUR. Argüman = ASIL dosya yolları; her biri için "<yol>.bak" silinir. rm -f → .bak yoksa
+# (atla-dalı emsali) sessiz-geçer (idempotent). Debris-panzehiri: working-tree'yi .bak'sız bırakır.
+_iskan_bak_temizle() {
+  local f
+  for f in "$@"; do rm -f "$f.bak"; done
+}
 
 # _sokum_compose_cikar <dosya> <cname> — compose'dan servis-bloğunu (önündeki İSKÂN-yorum
 # satırları + bir ayraç-boşluk dahil) çıkarır. Blok yoksa rc=2 (iz-yok), dosyaya dokunmaz.
@@ -2500,7 +2512,7 @@ cmd_sokum() {
     echo "  3. cloudflared ingress'ten $hostname çıkar (.bak'lı) + restart → 8-HOSTNAME SERT-KAPI"
     echo "     ($sokum_hosts): 302/401/403-dışı → .bak-restore + restart + exit=1"
     echo "  4. CF geri-alım: cf.sh offboard $hostname --apply (tek-kayıt-assertion cf.sh'te; delege)"
-    echo "  5. 5-manifest LOKAL repo-first geri-alım (.bak'lı; tombstone/iz-sıfır assertion):"
+    echo "  5. 5-manifest LOKAL repo-first geri-alım (.bak'lı → başarıda temizlenir; tombstone/iz-sıfır assertion):"
     echo "     - $m_compose (servis-bloğu çıkar)"
     echo "     - $m_tunnel (hostname-satırları + ingress-çifti; bash -n kapısı)"
     echo "     - $m_inv (ingress + access_apps satırları)"
@@ -2659,7 +2671,8 @@ cmd_sokum() {
     [ "$n" = "0" ] || { echo "[kırmızı] iz-sıfır assertion düştü: $f içinde $n '$proje' izi kaldı" >&2; iz_toplam=$((iz_toplam + n)); }
   done
   [ "$iz_toplam" = "0" ] || { echo "[kırmızı] ADIM-5 tombstone-yasak assertion başarısız — .bak'lardan incele, DUR" >&2; exit 1; }
-  echo "[yeşil] ADIM-5 iz-sıfır assertion: 5 manifest '$proje'-izi 0 (.bak'lar working-tree'de, COMMIT'LENMEZ)"
+  _iskan_bak_temizle "$m_compose" "$m_tunnel" "$m_inv" "$m_bkp" "$m_reg"
+  echo "[yeşil] ADIM-5 iz-sıfır assertion: 5 manifest '$proje'-izi 0 (.bak güvenlik-yedekleri başarıda temizlendi — working-tree debris-siz)"
 
   # ── ADIM-5b: HOST compose residual temizliği (cycle-3 fix-3; birth _compose_senkron simetriği) ──
   # ADIM-2 container'ı `down` etti ama host compose-METNİ bayat-blokla kaldı → sonraki doğumun

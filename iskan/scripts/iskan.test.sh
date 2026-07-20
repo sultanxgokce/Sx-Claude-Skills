@@ -962,7 +962,7 @@ printf '%s' "$out" | grep -q 'EKLENECEK' \
   && ok "evergreen-kaydet --dry-run: EKLENECEK satır-diff'i görünür" \
   || bad "evergreen-kaydet --dry-run: EKLENECEK diff'i yok"
 
-# 40. evergreen-kaydet --apply (1. koşu): rc=0 + üç kayıt yazıldı + .bak üretildi + bash -n temiz
+# 40. evergreen-kaydet --apply (1. koşu): rc=0 + üç kayıt yazıldı + .bak başarıda-temiz + bash -n temiz
 ISKAN_CLOUDTOP_REPO_DIR="$EG_REPO" bash "$SCRIPT_DIR/iskan.sh" evergreen-kaydet egtest --apply >/dev/null 2>&1
 rc=$?
 ing_ok="$(awk '/ingress:/{f=1} /access_apps:/{f=0} f' "$EG_REPO/infra/provider-inventory.yaml" | grep -c 'egtest.mmepanel.com')"
@@ -971,9 +971,9 @@ acc_ok="$(awk '/access_apps:/{f=1} f' "$EG_REPO/infra/provider-inventory.yaml" |
   && grep -q 'cloudtop-egtest' "$EG_REPO/infra/backup.sh" && bash -n "$EG_REPO/infra/backup.sh" \
   && ok "evergreen-kaydet --apply: rc=0 + ingress/access_apps/backup-inspect üç-kayıt yazıldı (bash -n temiz)" \
   || bad "evergreen-kaydet --apply: yazım eksik (rc=$rc ing=$ing_ok acc=$acc_ok)"
-[ -f "$EG_REPO/infra/provider-inventory.yaml.bak" ] && [ -f "$EG_REPO/infra/backup.sh.bak" ] \
-  && ok "evergreen-kaydet --apply: her yazılan dosyaya .bak üretildi" \
-  || bad "evergreen-kaydet --apply: .bak eksik"
+[ ! -f "$EG_REPO/infra/provider-inventory.yaml.bak" ] && [ ! -f "$EG_REPO/infra/backup.sh.bak" ] \
+  && ok "evergreen-kaydet --apply: .bak güvenlik-yedekleri BAŞARIDA temizlendi (working-tree debris-siz)" \
+  || bad "evergreen-kaydet --apply: .bak debris kaldı (başarıda temizlenmeliydi)"
 
 # 41. evergreen-kaydet --apply (2.+ koşu): İDEMPOTENT no-op rc=0 + 'mevcut' dili + md5 değişmez
 SUM_EG_2="$(md5sum "$EG_REPO"/infra/*.yaml "$EG_REPO"/infra/*.sh)"
@@ -2252,6 +2252,32 @@ hc_w3="$(grep -c '5b. HOST compose residual' "$SCRIPT_DIR/iskan.sh")"
   && ok "fix-3 host-compose: cmd_sokum ADIM-5b kablolu (helper-çağrı=$hc_w1 + ADIM-5b=$hc_w2 + dry-run-plan=$hc_w3)" \
   || bad "fix-3 host-compose: ADIM-5b wiring eksik (çağrı=$hc_w1 adım=$hc_w2 plan=$hc_w3)"
 find "$HC_DIR" -type f -delete 2>/dev/null; rmdir "$HC_DIR" 2>/dev/null
+
+# ── cycle-4 Tier-A (birth-side hijyen): .bak debris BAŞARIDA-temizlik ──────────────────────
+# _iskan_bak_temizle: başarı-noktasında .bak güvenlik-yedeklerini siler (söküm ADIM-5 + evergreen
+# ORTAK); ASIL dosyayı KORUR; .bak yoksa (atla-dalı) sessiz-geçer (idempotent). Debris-panzehiri.
+
+# 79. davranış: .bak'lar silinir + orijinaller BAYT-korunur + .bak-yok sessiz-geçer
+BT_DIR="$(mktemp -d)"
+printf 'orijinal-A\n' > "$BT_DIR/a.txt"; printf 'yedek-A\n' > "$BT_DIR/a.txt.bak"
+printf 'orijinal-B\n' > "$BT_DIR/b.txt"; printf 'yedek-B\n' > "$BT_DIR/b.txt.bak"
+printf 'orijinal-C\n' > "$BT_DIR/c.txt"   # .bak YOK (atla-dalı emsali)
+SUM_BT_A0="$(md5sum "$BT_DIR/a.txt")"; SUM_BT_C0="$(md5sum "$BT_DIR/c.txt")"
+source <(sed -n '/^_iskan_bak_temizle()/,/^}/p' "$SCRIPT_DIR/iskan.sh")
+_iskan_bak_temizle "$BT_DIR/a.txt" "$BT_DIR/b.txt" "$BT_DIR/c.txt"
+SUM_BT_A1="$(md5sum "$BT_DIR/a.txt")"; SUM_BT_C1="$(md5sum "$BT_DIR/c.txt")"
+[ ! -f "$BT_DIR/a.txt.bak" ] && [ ! -f "$BT_DIR/b.txt.bak" ] \
+  && [ "$SUM_BT_A0" = "$SUM_BT_A1" ] && [ "$SUM_BT_C0" = "$SUM_BT_C1" ] \
+  && ok "cycle-4 .bak-temizlik: .bak'lar silindi + orijinaller BAYT-korundu + .bak-yok sessiz-geçti" \
+  || bad "cycle-4 .bak-temizlik: helper sözleşmesi kırık"
+find "$BT_DIR" -type f -delete 2>/dev/null; rmdir "$BT_DIR" 2>/dev/null
+
+# 80. kaynak-wiring guard: helper tanımlı + söküm ADIM-5 & evergreen başarı-noktasında çağırıyor
+bt_def="$(grep -c '^_iskan_bak_temizle()' "$SCRIPT_DIR/iskan.sh")"
+bt_call="$(grep -c '_iskan_bak_temizle "' "$SCRIPT_DIR/iskan.sh")"
+[ "$bt_def" = "1" ] && [ "$bt_call" -ge 2 ] \
+  && ok "cycle-4 .bak-temizlik wiring: helper tanımlı (=$bt_def) + söküm/evergreen çağrılı (=$bt_call)" \
+  || bad "cycle-4 .bak-temizlik wiring: eksik (def=$bt_def call=$bt_call)"
 
 echo "== ${PASS} geçti / ${FAIL} kaldı =="
 [ "$FAIL" -eq 0 ]
