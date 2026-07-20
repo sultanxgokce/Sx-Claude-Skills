@@ -1,7 +1,7 @@
 ---
 name: iskan
 type: agent
-version: 0.7.2
+version: 0.7.3
 description: >
   Container + ekip yaşam-döngüsü master-skill. Bir hedef (yeni-proje / mevcut-ekip-yeniden-doğuşu / tek-üye-ekleme)
   için host-provizyon (UC1), oturum-kurtarma (UC2, deterministik session-id), üye-ekleme (UC3) akışlarını
@@ -106,6 +106,19 @@ izole-container hedefinde `ise-alim`/KÂHYA DOĞRUDAN invoke EDİLMEZ — İSKÂ
 Usta (S3 · bileşik), born-at-Usta (`ahi new usta iskan`). generic-goal: "container + ekip yaşam-döngüsünü
 (doğuş/yeniden-doğuş/üye-ekleme) tek-komutla yöneten fabrika". Terfi-olgunluk şerhi: DOCTRINE.md → "Manuel-beyan".
 Doğrula: `ahi check iskan` · Kanon: `ahi doctrine` · İş-planı: `Nexus/_agents/handoff/help2serdar-iskan-is-plani.md`.
+
+## Durum (2026-07-20, CYCLE-5 FIX#2 Tier-C YAZMA-hedefi redirect — v0.7.3)
+✓ Cycle-4 FRICTION#2 kapatıldı (verify-fan-out kararı=a, high-conf). **Kök-neden:** doğum ADIM-6 (registry
+repo-kopyası) + ADIM-8 (evergreen inv/backup) `EY_REPO_DIR=ISKAN_CLOUDTOP_REPO_DIR=ana-checkout`'a REPO-FIRST
+yazıyordu; söküm ise ISKAN_CLOUDTOP_REPO_DIR'ı ters-PR için söküm-worktree'ye pinler → söküm reverse-fonksiyonları
+ana-checkout'taki Tier-C drift'ini GÖRMEZ → manuel git-checkout gerekti (müdahale≠0). **Fix (Tier-B emsali):** yeni
+**opt-in** `ISKAN_REPO_TIERC_DIR` (default=`$EY_REPO_DIR` → redirect YOK → **üretim-davranışı DEĞİŞMEZ**). Yalnız
+YAZMA-hedefi redirect'lenir (registry repo-kopyası :1479 + evergreen inv/bkp :2146-47); host+container ssh-kopyaları
+ve origin/main OKUMALARI (K4/_ey_proje_cozumu) EY_REPO_DIR'de KALIR. Pin-allow'a eklendi (--devam resume-carry) +
+env-harita görünürlük satırı. **SÖKÜM KODU SIFIR-DEĞİŞİKLİK.** Throwaway sertleştirme-cycle bunu birth-worktree'ye
+set eder → ana-checkout hiç kirlenmez → söküm müdahale=0. Golden: registry redirect + default-geriye-uyum + evergreen
+redirect (ana-checkout inv/bkp BAYT-korundu) + wiring. Süit **223/223**. (Launcher-emit + gerçek-tenant DURAK-2 =
+ayrı Nexus PR; iskan.sh değişikliği o wiring olmadan INERT=default-güvenli.)
 
 ## Durum (2026-07-20, CYCLE-5 FIX#1 port-çözüm redirect-agnostik — v0.7.2)
 ✓ Sertleştirme-döngüsü cycle-4 dürüst-verdiktinin FRICTION#1'i kapatıldı. **Kök-neden:** iskan-host.sh

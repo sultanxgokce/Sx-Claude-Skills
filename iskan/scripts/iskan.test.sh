@@ -2316,5 +2316,56 @@ bt_call="$(grep -c '_iskan_bak_temizle "' "$SCRIPT_DIR/iskan.sh")"
   && ok "cycle-4 .bak-temizlik wiring: helper tanımlı (=$bt_def) + söküm/evergreen çağrılı (=$bt_call)" \
   || bad "cycle-4 .bak-temizlik wiring: eksik (def=$bt_def call=$bt_call)"
 
+# ── CYCLE-5 FIX#2 (Tier-C YAZMA-hedefi redirect): birth ADIM-6/8 registry/inv/backup ────────
+# opt-in ISKAN_REPO_TIERC_DIR (default=repo-dir=davranış-değişmez). Amaç: throwaway cycle'da
+# ana-checkout kirlenmesin → söküm müdahale=0. Default-regresyon zaten test 40 ile korunuyor
+# (redirect'siz → yazım repo-dir'e). Burada REDIRECT'in ana-checkout'u KORUduğu kanıtlanır.
+
+# C5-1. registry redirect (sourced _ey_registry_dagit + _ey_ssh no-op stub): TIERC yazılır, ana-checkout el-değmez
+source <(sed -n '/^_ey_registry_dagit()/,/^}/p' "$SCRIPT_DIR/iskan.sh")
+_ey_ssh() { return 0; }   # ssh no-op: host+container kopyaları nötrlenir; yalnız repo-kopya diske dokunur
+TC_RA="$(mktemp -d)"; TC_RB="$(mktemp -d)"; mkdir -p "$TC_RA/infra" "$TC_RB/infra"
+EY_HOST_REGISTRY="$TC_RA/host-registry.yaml"; EY_HOST_PROJ="$TC_RA/proj"
+EY_REPO_TIERC_DIR="$TC_RB"
+_ey_registry_dagit "yeni-icerik-XYZ" "eski-icerik" >/dev/null 2>&1
+TC_RB_HAS="$(grep -c 'yeni-icerik-XYZ' "$TC_RB/infra/iskan-registry.yaml" 2>/dev/null)"
+TC_RA_ABSENT=1; [ -f "$TC_RA/infra/iskan-registry.yaml" ] && TC_RA_ABSENT=0
+[ "$TC_RB_HAS" -ge 1 ] && [ "$TC_RA_ABSENT" = "1" ] \
+  && ok "FIX#2 registry redirect: yazım TIERC'ye gitti + ana-checkout/infra el-değmedi" \
+  || bad "FIX#2 registry redirect: hedef yanlış (RB_HAS=$TC_RB_HAS RA_absent=$TC_RA_ABSENT)"
+TC_RC="$(mktemp -d)"; mkdir -p "$TC_RC/infra"; EY_REPO_TIERC_DIR="$TC_RC"
+_ey_registry_dagit "def-icerik" "eski2" >/dev/null 2>&1
+[ "$(grep -c 'def-icerik' "$TC_RC/infra/iskan-registry.yaml" 2>/dev/null)" -ge 1 ] \
+  && ok "FIX#2 registry default(=repo-dir): redirect'siz repo-dir'e yazıldı (opt-in geriye-uyum)" \
+  || bad "FIX#2 registry default: repo-dir'e yazılmadı"
+find "$TC_RA" "$TC_RB" "$TC_RC" -type f -delete 2>/dev/null; find "$TC_RA" "$TC_RB" "$TC_RC" -depth -type d -empty -delete 2>/dev/null
+
+# C5-2. evergreen redirect (subcommand + _eg_fixture_repo): inv/bkp TIERC'ye, ana-checkout BAYT-korunur
+TC_EA="$(mktemp -d)"; _eg_fixture_repo "$TC_EA" ""     # ana-checkout: origin/main compose + kendi inv/bkp
+TC_EB="$(mktemp -d)"; mkdir -p "$TC_EB/infra"          # TIERC yazma-hedefi (inv/bkp seed'li olmalı)
+cp "$TC_EA/infra/provider-inventory.yaml" "$TC_EB/infra/provider-inventory.yaml"
+cp "$TC_EA/infra/backup.sh" "$TC_EB/infra/backup.sh"
+TC_A_INV0="$(md5sum "$TC_EA/infra/provider-inventory.yaml" | awk '{print $1}')"
+TC_A_BKP0="$(md5sum "$TC_EA/infra/backup.sh" | awk '{print $1}')"
+ISKAN_CLOUDTOP_REPO_DIR="$TC_EA" ISKAN_REPO_TIERC_DIR="$TC_EB" bash "$SCRIPT_DIR/iskan.sh" evergreen-kaydet egtest --apply >/dev/null 2>&1
+tc_rc=$?
+TC_B_ING="$(awk '/ingress:/{f=1} /access_apps:/{f=0} f' "$TC_EB/infra/provider-inventory.yaml" | grep -c 'egtest.mmepanel.com')"
+TC_B_BKP="$(grep -c 'cloudtop-egtest' "$TC_EB/infra/backup.sh")"
+TC_A_INV1="$(md5sum "$TC_EA/infra/provider-inventory.yaml" | awk '{print $1}')"
+TC_A_BKP1="$(md5sum "$TC_EA/infra/backup.sh" | awk '{print $1}')"
+[ "$tc_rc" = "0" ] && [ "$TC_B_ING" -ge 1 ] && [ "$TC_B_BKP" -ge 1 ] \
+  && [ "$TC_A_INV0" = "$TC_A_INV1" ] && [ "$TC_A_BKP0" = "$TC_A_BKP1" ] \
+  && ok "FIX#2 evergreen redirect: inv/bkp TIERC'ye yazıldı + ana-checkout inv/bkp BAYT-korundu (müdahale=0 kökü)" \
+  || bad "FIX#2 evergreen redirect: hedef yanlış (rc=$tc_rc B_ing=$TC_B_ING B_bkp=$TC_B_BKP A_inv_eş=$([ "$TC_A_INV0" = "$TC_A_INV1" ] && echo Y||echo N))"
+find "$TC_EA" "$TC_EB" -type f -delete 2>/dev/null; find "$TC_EA" "$TC_EB" -depth -type d -empty -delete 2>/dev/null
+
+# C5-3. wiring-guard: pin-allow + env-harita + iki türetim (ekip-yerlestir + evergreen) mevcut
+TC_PIN="$(grep -c 'ISKAN_KUR_PIN_ALLOW=.*ISKAN_REPO_TIERC_DIR' "$SCRIPT_DIR/iskan.sh")"
+TC_HARITA="$(grep -c 'adım 6/8 Tier-C yazma' "$SCRIPT_DIR/iskan.sh")"
+TC_DERIVE="$(grep -cF 'ISKAN_REPO_TIERC_DIR:-$EY_REPO_DIR' "$SCRIPT_DIR/iskan.sh")"
+[ "$TC_PIN" = "1" ] && [ "$TC_HARITA" = "1" ] && [ "$TC_DERIVE" = "2" ] \
+  && ok "FIX#2 wiring: pin-allow(resume-carry) + env-harita görünürlük + iki türetim (ekip-yerlestir+evergreen)" \
+  || bad "FIX#2 wiring eksik (pin=$TC_PIN harita=$TC_HARITA derive=$TC_DERIVE)"
+
 echo "== ${PASS} geçti / ${FAIL} kaldı =="
 [ "$FAIL" -eq 0 ]
