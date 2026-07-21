@@ -855,7 +855,7 @@
       "id": "iskan",
       "type": "agent",
       "name": "İSKÂN — container + ekip yaşam-döngüsü master-skill (Usta · bileşik)",
-      "version": "0.6.0",
+      "version": "0.7.4",
       "description": "Container + ekip yaşam-döngüsü master-skill: bir hedef (yeni-proje / mevcut-ekip-yeniden-doğuşu / tek-üye-ekleme) için host-provizyon (UC1 yeni-proje), oturum-kurtarma (UC2 seans-getir, deterministik session-id), üye-ekleme (UC3) akışlarını ekip-kur/ise-alim/sunucu-kur/cloudflare-erisim'i BESTELEYEREK tek-komuta indirger. Kendi owner-domain'i: container-provizyon host-adaptörü + tmux-oturum açma/casing/session-id rezervasyonu + CF-hostname orkestrasyonu + evergreen-manifest oto-yazımı; bestelediği kardeşlere YAZMAZ (ADR-001 owner-domain-dokunma). D6: `kur <proje>` zincirleyicisi — UC1 tam-yaşamdöngüsünü duraklı durum-makinesi olarak besteler (DURAK-1 cloudtop-PR merge; GO-marker'lar bypass edilmez, exit-4 aynen iletilir; --dry-run/--devam/--durum).",
       "prerequisites": {
         "system": [

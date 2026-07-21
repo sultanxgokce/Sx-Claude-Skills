@@ -2229,7 +2229,7 @@ services:
     container_name: cloudtop-iskantest
     environment:
       # FAZ-6 generator-hizası (token'sız gövde-yorumu)
-      - INSTALL_PACKAGES=tmux|git|python3
+      - INSTALL_PACKAGES=tmux|git|python3|jq
     volumes:
       - ./config-iskantest:/config
     ports:
