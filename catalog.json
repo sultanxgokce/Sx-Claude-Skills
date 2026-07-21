@@ -604,7 +604,7 @@
       "id": "ahi",
       "type": "agent",
       "name": "AHÎ — 4-kademe AI-yetenek-üretim fabrikası",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "description": "Yeni-skill üretimini tek-standarda oturtan fabrika: Çırak→Kalfa→Usta→Pîr kademeleri; komutlar `ahi new|check|promote|deprecate|classify|health`. DOCTRINE.md kanonu + zero-dep validator; ADR-001 drift-otorite-ayrımı (ahi.sh sync-targets'a YAZMAZ — install-girdisi insan/PR işi).",
       "tags": [
         "fabrika",

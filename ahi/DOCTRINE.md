@@ -34,6 +34,7 @@ manifest (`ahi new`). 4. **isim+dosya-yapı** — §5. 5. **on/off** — iki-eks
 - **PLATFORM-AS-A-PRODUCT SAHİPLİK:** AHÎ-doktrini sahipli + review-kapılı (sahip = SERDAR/KÂHYA review-kapısı). Sahipsiz golden-path ölçeklenmez.
 - **VALUE-SAFE:** sır-değer ASLA stdout/log/chat/argv'ye; intake TTY-gizli; registry=pointer.
 - **OWNER-DOMAIN-DOKUNMA:** `sync-skills.mjs` + mevcut-üreteç-kodları (skill-packager · erisim-skill-fabrikasi · provision.py) AHÎ tarafından DEĞİŞTİRİLMEZ; AHÎ onları TANIR/RAPORLAR, sarmalama V2.
+- **KAPSAM-REFLEKSİ (E3/R-03 · federe-standart, Federe D8):** her yetenek-üretimi ÖNCESİNDE zorunlu 4-adım: R-03 "zaten-var-mı?" envanter-taraması (varsa üretme → "global-yayayım mı?") · negatif-kapsam ("neye DOKUNMAYACAK?"; sınırsız-cevap REDDEDİLİR, İ1 gevşemez) · bölge-çakışma (çakışıyorsa üretme → eskalasyon) · E3 dağıtım-kapsamı 3-şık (yerel / global-hepsi / seçili-liste; global=tek-üretim→senkron-yayılım, tek-tek-kurma YASAK). Cevap install-ÖNERİSİ olarak raporlanır — `sync-targets`/`catalog` girdisini insan/PR uygular (ADR-001). Metin-kanonu: `SKILL.md §Kapsam-refleksi`; bekçi: `ahi check`/CI çıpa-kontrolü.
 - **INERT/FLAG-GATED:** AHÎ additive; kapalı=byte-identical; mevcut hiçbir skill/sistem bozulmaz.
 
 ## 4 · İki-yüz (form)

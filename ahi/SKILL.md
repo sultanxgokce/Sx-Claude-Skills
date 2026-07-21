@@ -1,7 +1,7 @@
 ---
 name: ahi
 type: agent
-version: 0.2.1
+version: 0.3.0
 description: >
   AHÎ — 4-kademe AI-yetenek fabrikası. Yeni skill/sistem üretimini TEK-STANDARDA oturtan meta-fabrika:
   kademe-seç→standart-iskelet (ahi new), drift-gözcü (ahi check), terfi-appraisal (ahi promote),
@@ -26,7 +26,7 @@ Her kademe kartı: `tiers/{cirak,kalfa,usta,pir}.md`. Kademe atlanamaz (tertipli
 ```
 ahi doctrine          # Değişmezler Kitabı'nı göster (kanon)
 ahi tiers [<kademe>]  # kademe-kart(lar)ını göster
-ahi new <kademe> <ad> # kademe-seç → standart-iskelet SCAFFOLD (dry-run-DURAK → --apply onay)
+ahi new <kademe> <ad> # kademe-seç → standart-iskelet SCAFFOLD (kapsam-refleksi + dry-run-DURAK → --apply onay)
 ahi check [<skill>]   # deterministik drift-lint (repo-parity catalog↔sync-targets + manifest-şema)
 ahi promote <skill>   # terfi-appraisal-checklist → yeşilse Sultan-törenine öner (hibrit)
 ahi deprecate <s> "<m>" # soft-emeklilik (deprecated+sunset+successor; reversible)
@@ -34,6 +34,28 @@ ahi classify          # yeni-işi anlat → hangi-kademe önerici
 ahi health            # sağlık-panosu (hangi skill hangi kademede, bayat/öksüz + pir-own-repo)
 ahi --help            # bu yardım
 ```
+
+## Kapsam-refleksi (E3/R-03 · federe-standart — üretim-ÖNCESİ ZORUNLU, atlanamaz)
+`ahi new` (ve her yetenek-üretimi) öncesi 4 adım; belirsiz cevap = `--apply`'a GEÇME (ise-alim A2
+kapsam-refleksinin fabrika-aynası, Federe D8):
+0. **zaten-var-mı? (R-03)** — üretmeden ÖNCE tara: bu-kutu rafı + Sx `catalog.json` + canlı
+   `~/.claude/skills`. VARSA → üretme; "zaten var, şurada — global-yayayım mı?" de
+   (aynı-şeyi-5-kutuda-5-kez-üretme panzehiri). (İzole-kutu YEREL rafı buradan fiziksel
+   taranamaz → `catalog.json` kanonik-proxy'dir; beyanlı-daralma, spec R-03.)
+1. **negatif-kapsam** — "Bu yetenek neye **DOKUNMAYACAK**? Hangi dizin/sistem/bölge sınırın
+   **DIŞINDA**?" ("her şeye erişir / sınırsız" cevabı REDDEDİLİR → en-dar-yeterli scope;
+   mahrem-tenant duvarları İ1 gevşetilmez.)
+2. **bölge-çakışma** — "Bu kapsam mevcut bir skill'in/birimin/üretecin bölgesiyle **ÇAKIŞIYOR mu**?"
+   Çakışıyorsa duplikasyon/iki-baş riski → körlemesine üretme YOK, Sultan'a/zirveye eskalasyon
+   (owner-domain-dokunma değişmezi de burada devreye girer).
+3. **dağıtım-kapsamı (E3 · 3-şık)** — **yerel** (tek-kutu; Çırak-default) / **global-hepsi**
+   (`_global`) / **seçili-liste** (`sync-targets` subset). Global-ise tek-üretim → senkron-yayılım;
+   tek-tek-kutuya-kurma YASAK. Cevap üretim-sonunda **install-ÖNERİSİ** olarak raporlanır;
+   `sync-targets.json`/`catalog.json` girdisini İNSAN/PR uygular (ADR-001 — script ASLA yazmaz).
+
+Bekçi: CI `validate-repo --strict` = KIRMIZI-kapı; çıplak `ahi check` = uyarı (report-only).
+Zorlama-modeli: ajan-disiplini + dry-run-DURAK banner'ı + `--apply` hatırlatması (mekanik-kilit değil;
+D8-a ise-alim emsaliyle aynı sınıf — metin-çıpası bekçilidir, cevap-içeriği insan/ajan sorumluluğu).
 
 ## Progressive-disclosure (önce-bunu-oku)
 1. Kanon+değişmezler → `DOCTRINE.md`. 2. Kademe-detayı → `tiers/<kademe>.md`. 3. Şema → `schema/ahi.schema.json` + validator'lar (`schema/validate*.mjs`).
