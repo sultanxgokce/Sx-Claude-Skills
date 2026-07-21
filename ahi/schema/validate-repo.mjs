@@ -38,6 +38,17 @@ const targetKeys = new Set(Object.keys(targets.targets || {}));
 for (const [k, list] of Object.entries(targets.install || {}))
   for (const t of list || [])
     if (!targetKeys.has(t)) drift.push(`install "${k}" tanımsız hedefe işaret ediyor: "${t}" (targets'ta YOK → sync sessiz-atlar)`);
+// D8-b/E3+R-03: kapsam-refleksi davranış-çıpası — AHÎ üretim-akışı bu anahtarları taşımak ZORUNDA
+// (federe-standart; ise-alim aynası = Nexus kapsam-refleksi.test.sh). Silinirse drift → strict/CI KIRMIZI.
+const ahiSkillP = join(repoRoot, 'ahi', 'SKILL.md');
+if (existsSync(ahiSkillP)) {
+  const t = readFileSync(ahiSkillP, 'utf8');
+  for (const key of ['Kapsam-refleksi (E3/R-03', 'zaten-var-mı', 'negatif-kapsam', 'bölge-çakışma', 'dağıtım-kapsamı'])
+    if (!t.includes(key)) drift.push(`ahi/SKILL.md kapsam-refleksi çıpası eksik: "${key}" (E3/R-03 federe-standart)`);
+} else if (existsSync(join(repoRoot, 'ahi'))) {
+  // fail-closed: ahi/ var ama SKILL.md yok = kapsam-refleksi kanonu kayıp (version-lint'e kuple kalma)
+  drift.push('ahi/SKILL.md YOK — kapsam-refleksi kanonu kayıp (E3/R-03)');
+}
 
 if (drift.length === 0) {
   console.log(`✓ repo-parity temiz (catalog ${catalogIds.size} ↔ sync-targets ${installKeys.size})`);

@@ -110,12 +110,18 @@ cmd_new() {
     echo "  kademe : $tier   ad: $name"
     echo "  hedef  : $dest/"
     echo "  generic-goal (default): \"$gg\""
+    echo "  ── KAPSAM-REFLEKSİ (E3/R-03 · federe-standart — --apply'dan ÖNCE cevapla; SKILL.md §Kapsam-refleksi) ──"
+    echo "     0) zaten-var-mı? (R-03): bu-kutu + Sx-catalog + canlı-raf tarandı mı? VARSA üretme → 'global-yayayım mı?'"
+    echo "     1) negatif-kapsam: bu yetenek neye DOKUNMAYACAK? ('sınırsız' cevabı REDDEDİLİR — İ1)"
+    echo "     2) bölge-çakışma: mevcut skill/birim/üreteç bölgesiyle çakışıyor mu? (çakışma → üretme, eskalasyon)"
+    echo "     3) dağıtım-kapsamı: yerel / global-hepsi / seçili-liste → install-ÖNERİSİ (insan/PR uygular; ADR-001)"
     echo "  üretilecek:"
     while IFS= read -r rel; do echo "    $name/${rel#./}"; done < <(cd "$tdir" && find . -type f)
     echo "  → onay: ahi new $tier $name --apply"
     return 0
   fi
   [ -e "$dest" ] && { red "hedef zaten var: $dest (üzerine yazılmaz)"; return 2; }
+  ylw "KAPSAM-REFLEKSİ (E3/R-03) cevaplandı mı? (0 zaten-var-mı · 1 negatif-kapsam · 2 bölge-çakışma · 3 dağıtım-kapsamı — SKILL.md §Kapsam-refleksi; cevapsız --apply = protokol-ihlali)"
   while IFS= read -r rel; do
     rel="${rel#./}"; mkdir -p "$dest/$(dirname "$rel")"
     sed -e "s|{{NAME}}|$name|g" -e "s|{{TIER}}|$tier|g" -e "s|{{GENERIC_GOAL}}|$gg|g" "$tdir/$rel" > "$dest/$rel"
@@ -124,6 +130,7 @@ cmd_new() {
     red "dolmamış placeholder kaldı — sevk-RED:"; grep -rn '{{' "$dest" >&2; return 1
   fi
   grn "✓ üretildi: $dest/"
+  echo "  → kapsam-refleksi (3) cevabına göre install-ÖNERİNİ raporla: sync-targets.json/catalog.json girdisi insan/PR işi (ADR-001; ahi YAZMAZ)."
   echo "--- ahi check $name ---"; cmd_check "$name"
 }
 
@@ -265,7 +272,7 @@ main() {
     doctrine)        cmd_doctrine ;;
     tiers)           cmd_tiers "${1:-}" ;;
     new)             cmd_new "$@" ;;
-    check)           cmd_check "${1:-}" ;;
+    check)           cmd_check "$@" ;;
     promote)         cmd_promote "${1:-}" ;;
     deprecate)       cmd_deprecate "$@" ;;
     classify)        cmd_classify ;;
