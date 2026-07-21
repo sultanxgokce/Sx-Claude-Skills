@@ -1,0 +1,26 @@
+# Sx-Claude-Skills lint-gate (Federe Ekip-OS D6/C2 — repo'nun İLK CI'ı)
+# NE: manifest-katmanı kapısı — catalog↔install↔targets parity (validate-repo --strict) +
+#     install'lı her skill'in SKILL.md + version-frontmatter taşıdığı.
+# NE-DEĞİL: canlı-makine drift'i (o evergreen-parity cron-gate'inin işi — CI canlıyı göremez);
+#     sync-apply de KOŞULMAZ (dağıtım elle-disiplin, ahi/DOCTRINE §8).
+name: sx-lint
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: sx-lint-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Parity · catalog ↔ sync-targets ↔ targets-varlığı (STRICT gate)"
+        run: node ahi/schema/validate-repo.mjs . --strict
+      - name: "Versiyon · install'lı her skill SKILL.md + semver-frontmatter taşır"
+        run: node ahi/schema/version-lint.mjs .
+      - name: "Motor · sync-skills.mjs sözdizimi"
+        run: node --check sync-skills.mjs

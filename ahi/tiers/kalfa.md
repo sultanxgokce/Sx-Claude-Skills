@@ -10,7 +10,7 @@
 | 4 **isim+dosya-yapı** | `<ad>/SKILL.md` (name/description→progressive-disclosure) + `scripts/` + `reference/` (gerekirse). |
 | 5 **on/off** | Provizyon: `sync-targets.json` install-listesi + `--apply`. Runtime: `activation:` tetiği (INERT/aktif). |
 | 6 **test/doğrulama** | Manifest-şema-valid + placeholder-doğrulama + pre-publish-hard-lint (zorunlu-frontmatter/isim-benzersizlik). |
-| 7 **dağıtım** | Elle-apply (`sync-skills.mjs`); `_global`=ortak-mount 5-container (huma=curated). Drift-gözcü: `ahi check`. |
+| 7 **dağıtım** | Elle-apply (`sync-skills.mjs`); `_global`=ortak-mount **7-container** (compose paylaşımlı `.claude`; mihenk dahil — Federe-D6). Drift-gözcü: `ahi check`. |
 | 8 **yaşam-döngüsü** | semver (SKILL.md frontmatter); soft-emeklilik `ahi deprecate` (sunset+successor). |
 | 9 **terfi (→Usta)** | Eklenecek eksen: **çoklu-skill-besteleme**. Checklist: bu skill `requires[]` ile **≥2 Kalfa-skill besteliyor** (deklare+çözülüyor+co-install-temiz)? · ≥2-projede-aktif (katalog-sayımı)? · drift-gözcü temiz? *(NOT: başkaları-bunu-require = olgun-Kalfa sinyali, Usta-kriteri DEĞİL — Usta = besteleyen.)* |
 

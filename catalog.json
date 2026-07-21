@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "updated": "2026-07-18",
+  "updated": "2026-07-21",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -10,6 +10,7 @@
   "skills": [
     {
       "id": "memex",
+      "sync_dagitim": false,
       "type": "foundation",
       "name": "Memex — Kişisel AI Hafıza Sistemi",
       "version": "1.0.0",
@@ -60,6 +61,7 @@
     },
     {
       "id": "feedback-widget",
+      "sync_dagitim": false,
       "type": "feature",
       "name": "Feedback Widget",
       "version": "1.0.0",
@@ -100,6 +102,7 @@
     },
     {
       "id": "ai-engineering-kit",
+      "sync_dagitim": false,
       "type": "agent",
       "name": "AI Engineering Kit",
       "version": "1.1.0",
@@ -126,6 +129,7 @@
     },
     {
       "id": "skill-packager",
+      "sync_dagitim": false,
       "type": "agent",
       "name": "Skill Packager",
       "version": "1.0.0",
@@ -152,6 +156,7 @@
     },
     {
       "id": "inplace-chat",
+      "sync_dagitim": false,
       "type": "feature",
       "name": "In-Place Chat",
       "version": "1.0.0",
@@ -190,6 +195,7 @@
     },
     {
       "id": "yt-transcript",
+      "sync_dagitim": false,
       "type": "agent",
       "name": "YouTube Transcript",
       "version": "1.0.0",

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// ahi validate-repo.mjs — repo-parity drift-lint (catalog.json ↔ sync-targets.json).
+// ahi validate-repo.mjs — repo-parity drift-lint (catalog.json ↔ sync-targets.json ↔ targets-varlığı).
 // ADR-001: catalog/sync-targets'a YAZMAZ — yalnız RAPORLAR. version = sync-skills.mjs otoritesi (DOKUNMAZ).
 // Mod: default report-only (exit 0, drift-görünür ama bloklamaz) · --strict → gate (exit 1).
 // Zero-dep: yalnız Node-stdlib (catalog/sync-targets JSON → JSON.parse).
@@ -28,7 +28,16 @@ const installKeys = new Set(Object.keys(targets.install || {}));
 
 const drift = [];
 for (const k of installKeys) if (!catalogIds.has(k)) drift.push(`sync-targets.install "${k}" var → catalog.json'da YOK`);
-for (const c of catalogIds) if (!installKeys.has(c)) drift.push(`catalog "${c}" var → sync-targets.install'da YOK`);
+// sync_dagitim:false = beyanlı katalog-only giriş (proje-kod-tabanına gömülü; makine-dağıtımı yok).
+// Beyansız + install'sız katalog-girişi DRIFT kalır (yeni-giriş dişi korunur).
+const noSync = new Set((catalog.skills || []).filter((s) => s.sync_dagitim === false).map((s) => s.id));
+for (const c of catalogIds) if (!installKeys.has(c) && !noSync.has(c)) drift.push(`catalog "${c}" var → sync-targets.install'da YOK (dağıtım-dışıysa sync_dagitim:false beyan et)`);
+// D6/C1: install-listesi tanımsız hedefe işaret edemez — sync-skills.mjs bu sınıfı SESSİZCE
+// "missing" sayıp atlar (canlı-vaka: seyir-defteri→medigate/huma, hedef tanımsızdı → dağıtım hiç olmadı).
+const targetKeys = new Set(Object.keys(targets.targets || {}));
+for (const [k, list] of Object.entries(targets.install || {}))
+  for (const t of list || [])
+    if (!targetKeys.has(t)) drift.push(`install "${k}" tanımsız hedefe işaret ediyor: "${t}" (targets'ta YOK → sync sessiz-atlar)`);
 
 if (drift.length === 0) {
   console.log(`✓ repo-parity temiz (catalog ${catalogIds.size} ↔ sync-targets ${installKeys.size})`);
