@@ -416,7 +416,7 @@ _iskan_compose_blok() {
       - DEFAULT_WORKSPACE=/config/projects/${ad}
       - DOCKER_MODS=linuxserver/mods:universal-package-install
       # FAZ-6 generator-hizası: İSKÂN-container'ları ekip-hazır doğar (tmux=oturum, git=ekip-notify REPO_ROOT)
-      - INSTALL_PACKAGES=tmux|git|python3
+      - INSTALL_PACKAGES=tmux|git|python3|jq
     volumes:
       - ${config_dir}:/config
       # ORTAK Claude master (keyless-login + skills + global CLAUDE.md mirası — mihenk-emsal k0084)
@@ -1339,7 +1339,7 @@ _ey_proje_cozumu() {
   return 0
 }
 
-# _ey_on_kapilar <ssh_ok> — apply ön-kapıları: ssh + container-Up + araçlar (tmux/git/python3).
+# _ey_on_kapilar <ssh_ok> — apply ön-kapıları: ssh + container-Up + araçlar (tmux/git/python3/jq).
 # rc≠0 = kırmızı (mesajı kendisi basar; sh -c = builtin-tuzağı panzehiri).
 _ey_on_kapilar() {
   if [ "$1" != "1" ]; then
@@ -1351,14 +1351,14 @@ _ey_on_kapilar() {
     return 1
   fi
   local arac eksik=""
-  for arac in tmux git python3; do
+  for arac in tmux git python3 jq; do
     _ey_ssh "docker exec $EY_CNAME sh -c 'command -v $arac' >/dev/null 2>&1" || eksik="$eksik $arac"
   done
   if [ -n "$eksik" ]; then
-    echo "[kırmızı] $EY_CNAME içinde eksik araç:${eksik} — araç-provizyonu gerekli (compose INSTALL_PACKAGES=tmux|git|python3 + servis-scoped recreate), hiçbir yere dokunulmadı" >&2
+    echo "[kırmızı] $EY_CNAME içinde eksik araç:${eksik} — araç-provizyonu gerekli (compose INSTALL_PACKAGES=tmux|git|python3|jq + servis-scoped recreate), hiçbir yere dokunulmadı" >&2
     return 1
   fi
-  echo "[yeşil] ön-kapılar: ssh + container-Up + araçlar (tmux/git/python3) tamam"
+  echo "[yeşil] ön-kapılar: ssh + container-Up + araçlar (tmux/git/python3/jq) tamam"
 }
 
 # _ey_ekip_roster_oku <ekip-registry-içerik> — roster'ı "rol:gorev" çiftleri olarak basar
