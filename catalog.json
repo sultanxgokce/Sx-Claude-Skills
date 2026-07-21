@@ -889,6 +889,33 @@
         "cloudflare-erisim"
       ],
       "family": "fabrika (container+ekip yaşam-döngüsü; İSKÂN)"
+    },
+    {
+      "id": "federe-os-cekirdek",
+      "type": "agent",
+      "name": "/federe-os-cekirdek — Federe Ekip-OS çekirdek-protokolleri (C3/D7)",
+      "version": "0.1.0",
+      "description": "Federe Ekip-OS A/B protokolleri tek pakette (k0180): tetikleme poll+ACK (A1/A4) · not-tutma (A2/B1) · haberleşme yalnız-META (B2) · nabız (A3) · hafıza-vatandaşlığı (B3). Taşınabilir istemci scripts/federe.sh (Nexus-repo'suz container'da da çalışır); poll-cron reçetesi GO-1 token-kapılı. CLAUDE.md'lere yalnız pointer — tek-güncelleme-noktası.",
+      "installed_in": [
+        "_global"
+      ],
+      "path": "federe-os-cekirdek/",
+      "status": "v0.1-mvp",
+      "stacks": [
+        "*"
+      ],
+      "tags": [
+        "federe",
+        "ekip-os",
+        "tetik",
+        "poll",
+        "nabiz",
+        "kontrol-duzlemi",
+        "meta-only",
+        "k0180"
+      ],
+      "source": "Nexus scripts/federe-tetik.sh (FAZ-1 · PR#560) filo-taşınabilir uyarlaması",
+      "author": "sultanxgokce"
     }
   ]
 }
