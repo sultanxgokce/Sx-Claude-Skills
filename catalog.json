@@ -921,8 +921,8 @@
       "id": "layiha",
       "type": "workflow",
       "name": "Layiha — araştır → kalıcı sabitle → inşayı sonraya bırak",
-      "version": "1.1.0",
-      "description": "Bir konuyu kapsamlı ARAŞTIR (SERDAR-altı araştırma alt-ajanı), kalıcı bir tasarım-dokümanına (layiha) SABİTLE, inşayı SONRAYA bırak. 3-kanal kayıt (git-durable PR + memory-topic + defter) + kayıt-defteri (layiha-defteri.sh: ekle/durum/liste; her kayıt L01… kodu + oluşturulma-tarihi + durum) + Sultan'a sabit-format teslim (Araştırıldı/Doküman/Context-odak-cümlesi). Zaman-filtreleri: --aktif/--bugun/--hafta/--hafta-bitmemis/--hepsi. SALT-ARAŞTIRMA — inşa-yetkisi VERMEZ; her build Sultan-GO. GLOBAL, defter per-container (İ1).",
+      "version": "1.2.0",
+      "description": "Bir konuyu kapsamlı ARAŞTIR (SERDAR-altı araştırma alt-ajanı), kalıcı bir tasarım-dokümanına (layiha) SABİTLE, inşayı SONRAYA bırak. 3-kanal kayıt (git-durable PR + memory-topic + defter) + kayıt-defteri (layiha-defteri.sh: ekle/durum/liste; her kayıt L01… kodu + oluşturulma-tarihi + durum) + Sultan'a sabit-format teslim (Araştırıldı/Doküman/Context-odak-cümlesi). Zaman-filtreleri: --aktif/--bugun/--hafta/--hafta-bitmemis/--hepsi. SALT-ARAŞTIRMA — inşa-yetkisi VERMEZ; her build Sultan-GO. GLOBAL, defter per-container (İ1). v1.2: bağımsız-tescil kapısı (insa-edildi≠tescilli; MÜHÜRDAR kör-tescil reuse; tescilli/reddi/muaf + tescil-bekleyen filtresi).",
       "prerequisites": {
         "system": [
           "bash",
@@ -947,7 +947,7 @@
       "author": "sultanxgokce",
       "source": "https://github.com/sultanxgokce/Nexus (SERDAR — araştır-sonra-inşa deseni; Osmanlıca 'lâyiha'=karar-merciine sunulan tasarı)",
       "install_time": "~1min (talimat + layiha-defteri.sh yardımcısı)",
-      "status": "v1.1-mvp",
+      "status": "v1.2-mvp",
       "path": "layiha/SKILL.md",
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
       "installed_in": [
