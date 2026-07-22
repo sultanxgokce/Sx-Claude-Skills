@@ -9,6 +9,20 @@
   },
   "skills": [
     {
+      "id": "layiha",
+      "type": "workflow",
+      "name": "Layiha — Araştır → Sabitle → Sonraya Bırak",
+      "version": "1.1.0",
+      "description": "Bir konuyu kapsamlı araştır (alt-ajan), kalıcı bir tasarım-dokümanına (layiha) sabitle, inşayı sonraya bırak; kayıt-defterine işle (durum: inşa-bekliyor/edildi + zaman-filtresi), Sultan'a sabit-formatta teslim et + geri-dönüş-kolu bırak. GLOBAL, per-container defter (İ1).",
+      "tags": [
+        "arastirma",
+        "layiha",
+        "defer-build",
+        "workflow",
+        "global"
+      ]
+    },
+    {
       "id": "memex",
       "type": "foundation",
       "name": "Memex — Kişisel AI Hafıza Sistemi",
