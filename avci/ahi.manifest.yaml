@@ -1,0 +1,28 @@
+# avci — AHÎ ile üretildi (kademe: usta · bileşik) · born-at-USTA (design §1, ahi classify Q3-EVET)
+# version SKILL.md frontmatter'ında (ADR-001).
+tier: usta
+name: avci
+generic_goal: "filo-geneli, kendini-onaran KAYNAK-TOPLAMA yetenek-servisi (fetch→markdown · extract · izle/diff · self-heal) — bir HTTP-servisi ince CLI ile besteleyip vault/pcloud/erisim üzerinden güvenli merkezî kaynak-toplama kurar"
+target_tier: usta
+owner: SERDAR
+activation:
+  onKeyword: avci
+# Besteleme (DOCTRINE §10 · design §1): AVCI şu Kalfa-skilleri BESTELER —
+#   vault-cek   → sır-değer-görmeden çözüm (LLM-anahtarı/proxy-kimliği/pCloud-token; G10)
+#   pcloud-erisim → ham-veri CAS deposu (ADR-006 sha256+manifest; ham HTML/SS repo'ya GİRMEZ)
+#   erisim       → erişim-zinciri dispatcher (platform-erişim tek-giriş; vault-first)
+requires:
+  - vault-cek
+  - pcloud-erisim
+  - erisim
+# Faz-0 = REPO-ONLY: canlı servis/konteyner (cloudtop-avci) HENÜZ YOK; CLI-istemci dağıtımı
+# Sultan-gate arkasında (G-E final ACL-matrisi + KAPASİTE-GATE, design §4). _global YAYMAK YASAK
+# (KAPSAM-REFLEKSİ-3 = seçili-liste, global-hepsi DEĞİL). Gerçek per-container sınır = SERVİS-tarafı
+# runtime ACL (allowlist-dışı hedef → 403); skill-install değil. Liste G-E'de kilitlenir (Faz-3).
+install_targets: []
+# S3/Usta opsiyonel yüzey (schema): tüketicinin güvendiği CLI-kontratı (ADR-007 CLI-first).
+consumable_surface:
+  - "avci fetch <url>"
+  - "avci extract <url> --schema <f>"
+  - "avci izle <url>"
+  - "avci durum"
