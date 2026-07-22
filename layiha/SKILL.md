@@ -1,7 +1,7 @@
 ---
 name: layiha
-version: 1.1.0
-description: Bir konuyu kapsamlı ARAŞTIR, kalıcı bir tasarım-dokümanına (layiha) SABİTLE, inşayı SONRAYA bırak — kayıt-defterine işle, Sultan'a sabit-formatta teslim et + geri-dönüş-kolu bırak. "araştır inşayı sonra yaparız · bunu dökümana sabitle · layiha çıkar · aktif layihaları listele · bu haftaki layihalar" tetiğinde. GLOBAL (tüm container'lar).
+version: 1.2.0
+description: Bir konuyu kapsamlı ARAŞTIR, kalıcı bir tasarım-dokümanına (layiha) SABİTLE, inşayı SONRAYA bırak — kayıt-defterine işle, Sultan'a sabit-formatta teslim et + geri-dönüş-kolu bırak. İnşa bitince BAĞIMSIZ-AJAN (MÜHÜRDAR) tescili gerekir: "insa-edildi ≠ tescilli". "araştır inşayı sonra yaparız · bunu dökümana sabitle · layiha çıkar · aktif/tescil-bekleyen layihaları listele · bu haftaki layihalar" tetiğinde. GLOBAL (tüm container'lar).
 allowed-tools: Bash, Read, Write, Edit, Agent, AskUserQuestion
 ---
 
@@ -48,19 +48,40 @@ Context-odak cümlesi: "<resume-tetik>" de → context'imi buna odaklarım
 ```
 Birden çok araştırma → her birini AYRI blokla.
 
-### 4 · İnşa ERTELENİR
-Build YALNIZ Sultan resume-cümlesini söyleyince. İnşa BİTİNCE: `layiha-defteri.sh durum <kod|slug> insa-edildi`.
-Her kayıt otomatik bir KOD alır (L01, L02… — karışmasın); `durum` komutu kod ya da slug kabul eder.
+### 4 · İnşa ERTELENİR → sonra BAĞIMSIZ-TESCİL (insa-edildi ≠ tescilli)
+Build YALNIZ Sultan resume-cümlesini söyleyince. İnşa BİTİNCE: `layiha-defteri.sh durum <kod|slug> insa-edildi`
+→ kayıt **otomatik tescil-kuyruğuna** girer (`📋 tescil bekliyor`). Her kayıt otomatik bir KOD alır (L01, L02…);
+`durum` komutu kod ya da slug kabul eder.
 
-## MOD 2 — LİSTELE (önizleme + durum + zaman-filtresi)
-Sultan "aktif layihaları listele / bugünküleri / bu haftakini / bu hafta bitmemişleri göster" deyince:
+⚖️ **`insa-edildi` TERMİNAL DEĞİL** — üretici-beyanı. Terminal-başarı = **bağımsız-ajan (MÜHÜRDAR) TESCİL'i**
+(Sultan-kararı 2026-07-22 · üreten ≠ doğrulayan). Üretici kendi işini tescil-EDEMEZ.
+
+## MOD 3 — TESCİL (bağımsız-ajan kör-doğrulama kapısı)
+İnşa-edildi bir layiha için tescil (MÜHÜRDAR / kör-tescil sahibi yürütür; kör-protokol: DESIGN-doc'u OKUMA,
+yalnız SERDAR'ın yazdığı GEREKLILIK + build-worktree'yi taze koş):
 ```
-bash <skill-dizini>/scripts/layiha-defteri.sh liste [--aktif(default) | --bugun | --hafta | --hafta-bitmemis | --hepsi]
+layiha-defteri.sh tescil <kod|slug> <tescilli|reddi|muaf> [--vites TAM|HAFIF] [--kart k####] \
+    [--muhur <MUHUR.md|muhur-ozet.json yolu>] [--ajan AD] [--gerekce "..."]
 ```
-- **--aktif** (default): inşa-bekleyen tümü (Sultan "aktif tümünü listele").
-- **--bugun** · **--hafta** · **--hafta-bitmemis** (bu hafta ∧ yapılmamış) · **--hepsi**.
-Her satır: **[KOD]** + durum (⏳ inşa bekliyor / 🔨 inşa ediliyor / ✅ yapıldı) + konu + **oluşturulma-tarihi** +
-"…de" devam-cümlesi. Çıktı zaten Sultan-dili → olduğu gibi bas. Defter boşsa "kayıt yok" — uydurma.
+- **TAM** (orta/büyük layiha): normal DİVAN-kartı (k####) → MÜHÜRDAR `/tescil` → GEÇTİ →
+  `tescil <kod> tescilli --vites TAM --muhur <yol> --kart <k>`. Script **muhur-ozet.json verdikt=GECTI**
+  doğrular + sha256 tutar; **çıplak-flip reddedilir** (sahte-tescil panzehiri).
+- **HAFİF** (küçük layiha): `tescil <kod> tescilli --vites HAFIF --gerekce "<tek-G kanıtı>"` (kart-açmadan).
+- **reddi** (tescil geçmedi) / **muaf** (Sultan-kararı, tescilsiz-kapat): `--gerekce` ZORUNLU.
+- **İzole-container** (MÜHÜRDAR yok): `bekliyor`da AÇIK bırak — sahte-`tescilli` ASLA; merkeze tescil-isteği emit.
+- **Kim sevk eder:** şimdilik SERDAR GEREKLILIK yazıp kartı açar (LAYİHACI persona kurulunca ona devreder).
+
+## MOD 2 — LİSTELE (önizleme + inşa-durumu + TESCİL-durumu + zaman-filtresi)
+Sultan "aktif/tescil-bekleyen layihaları listele / bugünküleri / bu haftakini / bu hafta bitmemişleri göster" deyince:
+```
+bash <skill-dizini>/scripts/layiha-defteri.sh liste [--aktif(default) | --bugun | --hafta | --hafta-bitmemis | --tescil-bekleyen | --hepsi]
+```
+- **--aktif** (default): **terminal-olmayan** tümü — insa-bekleyen + inşa-edildi-ama-**tescilsiz** dahil
+  (tescilsiz iş "bitti" SAYILMAZ → aktif kalır; Sultan-ilkesi).
+- **--tescil-bekleyen**: inşa-edildi + tescil-kuyruğunda bekleyenler (toplu-tescil görünümü).
+- **--bugun** · **--hafta** · **--hafta-bitmemis** · **--hepsi**.
+Her satır: **[KOD]** + inşa-durumu (⏳/🔨/🔧 tescilsiz) + konu + **TESCİL** (🏅 tescilli / 📋 bekliyor / ↩ reddi /
+⊘ muaf) + oluşturulma-tarihi + "…de" devam-cümlesi. Çıktı zaten Sultan-dili → olduğu gibi bas. Defter boşsa "kayıt yok".
 
 ## Sınırlar / dürüstlük
 - Skill kod-içermez (talimat + `layiha-defteri.sh` yardımcısı). İnşa-yetkisi VERMEZ; her build Sultan-GO.
