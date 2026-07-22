@@ -1,7 +1,7 @@
 ---
 name: whatsapp-baileys
 type: agent
-version: 1.0.0
+version: 1.1.0
 description: >
   Bir Baileys (@whiskeysockets/baileys) WhatsApp botunu telefona GÜVENİLİR bağlama
   playbook'u. Günlerce süren pairing cebelleşmesinden çıkarılmış kesin dersler:
@@ -65,7 +65,7 @@ const { state, saveCreds } = await useMultiFileAuthState(AUTH_DIR);
 const logger = pino({ level: 'silent' });
 
 // CANLI sürüm (fetchLatestBaileysVersion DEĞİL — o bayat, #2679). Fallback GÜNCEL tuple.
-let version: [number,number,number] = [2, 3000, 1042466098]; // ⚠ zamanla bayatlar, yenile
+let version: [number,number,number] = [2, 3000, 1042466098]; // ⚠ zamanla bayatlar · son doğrulama: 2026-07-22 · yenile: scripts/wa-version-check.mjs
 try { const r = await fetchLatestWaWebVersion(); if (r.isLatest) version = r.version; } catch {}
 
 const sock = makeWASocket({
@@ -142,6 +142,50 @@ Bu skill stack-bağımsızdır; kuran proje şunları sağlar:
 - Baileys sürümü: `@whiskeysockets/baileys@7.0.0-rc13` (exact pin) — rc10 stabilite + güvenlik yaması taşır.
 - **Referans implementasyon:** Vekâtip `server/src/whatsapp/{socket,daemon}.ts` + `scripts/wa-login.ts`
   + `.claude/skills/whatsapp-baglan` (proje-özel tam koreografi + grup sync/link/rename).
+
+## 8. Parametre-sözleşmesi (doldurulabilir form — kuran Claude/proje doldurur)
+
+Bu skill **proje-agnostiktir**: hiçbir hedef-proje değeri gömülü DEĞİLdir. Aşağıdaki tablo bir
+**form**dur; "Örnek" sütunundaki değerler yalnız Vekâtip'ten alınmış ÖRNEKtir (kopyalanacak değil,
+yalnız şablon). Gerçek deployment-değerleri (numara, kalıcı auth-dizini, canlı-QR klasörü) **F5
+deployment-gate'ine ertelenir** ve Sultan tarafından hedef-projede doldurulur.
+
+| Parametre | Ne | Değişmez / kural | Örnek (Vekâtip — kopyalama, şablon) |
+|---|---|---|---|
+| `WA_AUTH_DIR` | multi-file auth dizini | **SIR** · kalıcı + container-recreate-dayanıklı · `/tmp` altı YASAK · skill okumaz/basmaz/silmez | `/config/.vekatip/wa-auth` |
+| QR-relay klasörü | kendini-tazeleyen QR'ın konduğu paylaşımlı dizin (§4) | senkron-görünür (Mutagen/Dropbox/iCloud) · atomik `.tmp`→`mv` | `<paylaşımlı>/wa-qr/` |
+| `status.json` | login/daemon durum ayak-izi (connected/logged_out) | proje-tarafında yazılır · değer-güvenli | `<WA_AUTH_DIR>/status.json` |
+| bot-no | AYRI bot numarası (kişisel hat DEĞİL) | tek-sıcak-bağlantı ilkesi | `<hedef-proje sağlar>` |
+| login-script | QR-relay + status.json yazan kısa-ömürlü giriş | 'open'-sonrası çıkış ≥4 sn (§5) | `scripts/wa-login.ts` |
+| daemon-script | uzun-ömürlü socket, iş-kuyruğu tüketen | login ile AYNI ANDA çalışmaz | `server/src/whatsapp/daemon.ts` |
+| tek-instance-kilidi | numarayı tek daemon sahiplensin | `pg_try_advisory_lock` / `flock` | advisory-lock |
+| baileys-pin | exact sürüm pin'i | `@whiskeysockets/baileys@7.0.0-rc13` | rc13 |
+
+## 9. Kurulum-koreografisi (proje-agnostik · varsayılan mimari = A)
+
+"Sultan'ın WhatsApp'ı" tek numaradır; bir numara aynı anda yalnız **tek sıcak socket** taşır. İki
+meşru mimari var — **varsayılan A**, skill B'yi de parametrik destekler:
+
+- **A · Tek-numara + tek-sahip-daemon (VARSAYILAN):** BİR container numarayı sahiplenir, daemon'u
+  **tek-instance-kilidiyle** (`pg_try_advisory_lock` / `flock`) tutar. Diğer container'lar `WA_AUTH_DIR`'i
+  **PAYLAŞMAZ**; sahip-daemon'a bir **iş-kuyruğuyla** (DB tablosu / dosya-kuyruğu) mesaj bırakır, o gönderir.
+  Auth tek yerde, çift-socket çakışması ve auth-churn throttle (#2691) yapısal olarak engellenir.
+- **B · Proje-başına ayrı bot-numarası:** her tenant kendi numarası + kendi `WA_AUTH_DIR`'i. Basit
+  ama her numara ayrı hat/pairing ister. Yalnız gerçekten ayrı-numara isteniyorsa.
+
+**A koreografisi (adımlar):**
+1. Sahip-container seç → `WA_AUTH_DIR`'i orada kalıcılaştır (§8 form).
+2. Daemon'u tek-instance-kilidiyle başlat; kilit alınamıyorsa **başlama** (başka sahip canlı).
+3. Diğer container'lar auth-dir'e DOKUNMAZ → yalnız iş-kuyruğuna yazar; sahip-daemon tüketir.
+4. İlk pairing yalnız sahip-container'da, QR-first (§3-§4), tek-deneme disipliniyle (#2691).
+
+## 10. Yeni projede 3 adım
+
+1. **Parametreleri doldur** (§8 formu) — `WA_AUTH_DIR` kalıcı-yol seç, mimariyi (A/B, varsayılan A) seç.
+2. **Çekirdeği uyarla** — `reference/wa-socket.md` + `reference/wa-login.md` + `reference/daemon-notlari.md`
+   kodunu proje-logger/DB/kontratını EKLEYEREK uyarla (referanslar generic, sıyrılmış çekirdek).
+3. **Preflight koştur** — `bash scripts/wa-preflight.sh <proje-kökü>` KIRMIZI vermemeli; tuple
+   bayatladıysa `node scripts/wa-version-check.mjs`. Canlı pairing = ayrı Sultan-gate (F5), statik-üretimde YASAK.
 
 ## Kaynaklar
 Baileys issue'ları: [#2679](https://github.com/WhiskeySockets/Baileys/issues/2679) (bayat sürüm),

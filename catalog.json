@@ -243,7 +243,7 @@
       "id": "whatsapp-baileys",
       "type": "agent",
       "name": "WhatsApp (Baileys) Bot Bağlama",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "Bir Baileys WhatsApp botunu telefona GÜVENİLİR bağlama playbook'u: bayat-sürüm bug'ı (#2679 → fetchLatestWaWebVersion), auth-churn throttle (#2691), 515-normal, QR-first, CloudBridge rotation-proof QR relay, bağlantı-sonrası daemon devri. Stack bağımsız — Baileys kullanan her projede geçerli.",
       "prerequisites": {
         "node": ">=18",
