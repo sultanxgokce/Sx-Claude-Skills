@@ -2117,6 +2117,51 @@ open(path, "w", encoding="utf-8").write(yeni)
 PYEOF
 }
 
+# ── Federe R-01.C (tek-slot-fix): per-doğum künye FRAGMENT'i ──────────────────────────────
+# SORUN: cmd_evergreen_kaydet TEK-SLOT iskan-registry.yaml'ı her doğumda ezer (son-doğan öncekini
+# siler). ÇÖZÜM: her doğum KENDİ fragment'ını infra/iskan-registry.d/<proje>.yaml'a yazar (kardeş-
+# dosyaya dokunmaz → race-yok, birikimli). Federe künye kaynağı (federe-registry-derle.sh okuyabilir).
+# FLAG-KAPILI (ISKAN_FEDERE_REGISTRY=1; DEFAULT-KAPALI = INERT); flag-off davranış BAYT-AYNI.
+# İÇERİK = _ey_iskan_registry_icerik'in roster'SIZ meta-alt-kümesi: uyeler/SIR-DEĞERİ YOK.
+
+# _eg_fragment_icerik <proje> <cname> <host> <port> — fragment YAML gövdesini stdout'a basar (yan-etkisiz).
+_eg_fragment_icerik() {
+  cat <<EOF
+# iskan-registry.d/$1.yaml — $1 per-doğum künye FRAGMENT'i (İSKÂN evergreen-kaydet yazar; tek-slot-fix).
+# Federe künye kaynağı (federe-registry-derle.sh okuyabilir). roster/sır YOK — yalnız meta.
+proje: $1
+container_adi: $2
+hostname: $3
+port: $4
+config_dir: /opt/cloudtop/config-$1
+repo_yolu: /config/projects/$1
+cf_access_app: $3
+machine_identity_ref: null
+EOF
+}
+
+# _eg_fragment_yaz <tierc_dir> <proje> <cname> <host> <port> — fragment'ı idempotent yazar.
+# rc: 0=yazıldı (yeni/değişik; .bak'lı, başarıda temiz) · 9=bayt-eş→atla (idempotent, yazımsız) · 1=hata.
+_eg_fragment_yaz() {
+  local tierc="$1" proje="$2" cname="$3" host="$4" port="$5"
+  local fragdir="$tierc/infra/iskan-registry.d"
+  local fragfile="$fragdir/${proje}.yaml"
+  mkdir -p "$fragdir" || { echo "[kırmızı] fragment-dizini oluşturulamadı: $fragdir — dokunulmadı" >&2; return 1; }
+  local yeni
+  yeni="$(_eg_fragment_icerik "$proje" "$cname" "$host" "$port")"
+  if [ -f "$fragfile" ] && [ "$(cat "$fragfile")" = "$yeni" ]; then
+    echo "[yeşil] fragment: ${fragfile} zaten bayt-eş → atla (idempotent, yazımsız)"
+    return 9
+  fi
+  if [ -f "$fragfile" ]; then
+    cp -a "$fragfile" "$fragfile.bak" || { echo "[kırmızı] fragment .bak alınamadı: $fragfile — dokunulmadı" >&2; return 1; }
+  fi
+  printf '%s\n' "$yeni" > "$fragfile" || { echo "[kırmızı] fragment yazımı başarısız: $fragfile" >&2; cp -a "$fragfile.bak" "$fragfile" 2>/dev/null || true; return 1; }
+  _iskan_bak_temizle "$fragfile"
+  echo "[yeşil] fragment: ${fragfile} yazıldı (${proje} künye meta — roster/sır YOK)"
+  return 0
+}
+
 cmd_evergreen_kaydet() {
   local proje="" mode=""
   while [ $# -gt 0 ]; do
@@ -2168,6 +2213,17 @@ cmd_evergreen_kaydet() {
     if [ "$acc_var" = "1" ]; then echo "  [atla/mevcut] access_apps: $host zaten kayıtlı"; else echo "  EKLENECEK (access_apps):"; echo "  + $acc_line"; fi
     echo "-- infra/backup.sh --"
     if [ "$bkp_var" = "1" ]; then echo "  [atla/mevcut] docker-inspect listesi: $EY_CNAME zaten kayıtlı"; else echo "  EKLENECEK (docker-inspect argüman-listesine): + $EY_CNAME"; fi
+    if [ "${ISKAN_FEDERE_REGISTRY:-0}" = "1" ]; then
+      local frag="$EY_REPO_TIERC_DIR/infra/iskan-registry.d/${proje}.yaml"
+      echo "-- infra/iskan-registry.d/${proje}.yaml --"
+      local frag_yeni; frag_yeni="$(_eg_fragment_icerik "$proje" "$EY_CNAME" "$host" "${EY_PORT}")"
+      if [ -f "$frag" ] && [ "$(cat "$frag")" = "$frag_yeni" ]; then
+        echo "  [atla/mevcut] fragment: ${proje}.yaml zaten bayt-eş (per-doğum künye)"
+      else
+        echo "  EKLENECEK (per-doğum künye FRAGMENT; roster/sır YOK):"
+        printf '  + %s\n' "$frag_yeni"
+      fi
+    fi
     echo ""
     echo "== dry-run: hiçbir yazım yapılmadı (plan-exit sözleşmesi, exit=3) =="
     exit 3
@@ -2210,6 +2266,17 @@ cmd_evergreen_kaydet() {
     fi
     yazildi=1
     echo "[yeşil] backup.sh: $EY_CNAME docker-inspect listesine eklendi (bash -n temiz)"
+  fi
+
+  # Federe R-01.C: per-doğum künye fragment (FLAG-KAPILI; DEFAULT-KAPALI = davranış BAYT-AYNI)
+  if [ "${ISKAN_FEDERE_REGISTRY:-0}" = "1" ]; then
+    local frc
+    _eg_fragment_yaz "$EY_REPO_TIERC_DIR" "$proje" "$EY_CNAME" "$host" "${EY_PORT}"; frc=$?
+    case "$frc" in
+      0) yazildi=1 ;;
+      9) : ;;                        # idempotent skip → yazildi sayacına katma
+      *) echo "[kırmızı] FEDERE-fragment yazımı başarısız — DUR (rc=$frc)" >&2; exit 1 ;;
+    esac
   fi
 
   # .bak güvenlik-yedeklerini başarıda temizle (yazımlar KALICI/REPO-FIRST; .bak yalnız restore-ağı)
@@ -2504,6 +2571,7 @@ cmd_sokum() {
   local m_inv="$repo_dir/infra/provider-inventory.yaml"
   local m_bkp="$repo_dir/infra/backup.sh"
   local m_reg="$repo_dir/infra/iskan-registry.yaml"
+  local m_frag="$repo_dir/infra/iskan-registry.d/${proje}.yaml"   # Federe R-01.C per-doğum künye fragment (flag-gated)
 
   if [ "$mode" = "dry-run" ]; then
     echo "== İSKÂN sokum — KURU-KOŞU (DEFAULT; host'a/CF'e/dosyaya SIFIR-dokunuş) =="
@@ -2531,6 +2599,10 @@ cmd_sokum() {
     echo "  5b. HOST compose residual temizliği (cycle-3 fix-3; birth _compose_senkron simetriği):"
     echo "     $host_compose içinden $cname bloğunu CERRAHİ sil (.bak-TS'li tmp+mv + BAYT re-verify;"
     echo "     komşu bayt-korunur, docker ÇAĞRILMAZ; aday-bitişik token'sız yorum → fail-closed host-drift)"
+    if [ "${ISKAN_FEDERE_REGISTRY:-0}" = "1" ]; then
+      echo "  5c. FEDERE per-doğum künye FRAGMENT silme (ISKAN_FEDERE_REGISTRY=1; evergreen-kaydet simetriği):"
+      echo "     - $m_frag (fragment dosyası SİLİNİR; yoksa 'zaten-yok atla', idempotent)"
+    fi
     echo "  6. ARŞİVE-TAŞI (down-DOĞRULANDIKTAN sonra; aksiyon-11): $host_cfg → ${arsiv_root}/${proje}-<tarih-saat>/"
     echo "     (taşıma-öncesi dosya-sayısı+du kanıta; mv = tek meşru yol, rm YOK)"
     echo "  7. KOMŞU-KANIT SONRA: StartedAt/config-hash ÖNCE ile bayt-eş değilse exit=1"
@@ -2726,6 +2798,22 @@ cmd_sokum() {
        echo "[yeşil] ADIM-5b host-compose: '$cname' bloğu host'tan çıkarıldı (BAYT re-verify md5=$hc_sonra_md5 · host-yedek: $hc_bak · docker ÇAĞRILMADI → komşu-mutasyon yok) — kanıt: $kanit_dir/host-compose-temizle.txt" ;;
     *) rm -f "$hc_tmp"; echo "[kırmızı] ADIM-5b: beklenmedik rc=$hc_rc (host-compose-temizle) — host'a dokunulmadı, DUR" >&2; exit 1 ;;
   esac
+
+  # ── ADIM-5c: FEDERE per-doğum künye FRAGMENT silme (FLAG-KAPILI; evergreen-kaydet simetriği) ──
+  # DEFAULT-KAPALI = söküm davranışı BAYT-AYNI. rm-başarısızlığı SESSİZ-yutulmaz (re-check + kırmızı,
+  # ADIM-8 emsali). LOKAL repo-first (kardeş fragment'lara dokunmaz; host/CF'e dokunmaz).
+  if [ "${ISKAN_FEDERE_REGISTRY:-0}" = "1" ]; then
+    if [ -f "$m_frag" ]; then
+      rm -f "$m_frag"
+      if [ -f "$m_frag" ]; then
+        echo "[kırmızı] ADIM-5c FEDERE-fragment silinemedi: $m_frag — elle sil (SESSİZ-yutma YASAK, ADIM-8 emsali), DUR" >&2
+        exit 1
+      fi
+      echo "[yeşil] ADIM-5c FEDERE-fragment: $m_frag silindi (lokal repo-first; kardeş-fragment/host/CF'e dokunulmadı)"
+    else
+      echo "[yeşil] ADIM-5c FEDERE-fragment: $m_frag zaten yok → atla (idempotent no-op)"
+    fi
+  fi
 
   # ── ADIM-6: config-dizini ARŞİVE-TAŞI (down ADIM-2'de doğrulandı; aksiyon-11) ────────────
   local tarih arsiv_hedef
