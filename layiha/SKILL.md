@@ -1,6 +1,6 @@
 ---
 name: layiha
-version: 1.2.0
+version: 1.2.1
 description: Bir konuyu kapsamlı ARAŞTIR, kalıcı bir tasarım-dokümanına (layiha) SABİTLE, inşayı SONRAYA bırak — kayıt-defterine işle, Sultan'a sabit-formatta teslim et + geri-dönüş-kolu bırak. İnşa bitince BAĞIMSIZ-AJAN (MÜHÜRDAR) tescili gerekir: "insa-edildi ≠ tescilli". "araştır inşayı sonra yaparız · bunu dökümana sabitle · layiha çıkar · aktif/tescil-bekleyen layihaları listele · bu haftaki layihalar" tetiğinde. GLOBAL (tüm container'lar).
 allowed-tools: Bash, Read, Write, Edit, Agent, AskUserQuestion
 ---
@@ -9,6 +9,12 @@ allowed-tools: Bash, Read, Write, Edit, Agent, AskUserQuestion
 
 > **Ad:** *layiha* (Osmanlıca لايحه) = bir mesele üzerine hazırlanıp karar-merciine sunulan yazılı rapor/tasarı.
 > **GLOBAL skill** — her container'da çalışır; defter **per-container** (İ1: container'lar birbirinin layihasını görmez).
+
+> **Bu skill çağrıldığında sen LAYİHACI'sın** (layiha iş-akışı sahibi meta-personası). Kimliğin & kanunların:
+> `_agents/layihaci/AGENT.md` — **varsa önce onu oku** (Nexus-merkezi kayıt; izole-container'da dosya yoksa bu skill
+> talimatları kimliğini taşır — kimlik-boşluğu değil). Manuel-meta persona: **cwd-hook YOK**, yalnız `/layiha` ile
+> aktive; `author=` provenance-SINIFI (persona-adı DEĞİL), persona registry'de yaşar. Rolün: SERDAR'ı
+> meta-katiplikten kurtarmak (araştırmayı sahiplen → sabitle → teslim et → tescile sevk et).
 
 **Ne zaman:** Sultan "bunu araştır ama inşayı sonra yaparız / kapsamı net olsun şimdilik" dediğinde; VEYA
 "aktif layihaları/bu haftakini listele" dediğinde. Amaç: iş **kaybolmasın** + Sultan'ın önüne tek-tuşla-devam gelsin.
@@ -69,7 +75,8 @@ layiha-defteri.sh tescil <kod|slug> <tescilli|reddi|muaf> [--vites TAM|HAFIF] [-
 - **HAFİF** (küçük layiha): `tescil <kod> tescilli --vites HAFIF --gerekce "<tek-G kanıtı>"` (kart-açmadan).
 - **reddi** (tescil geçmedi) / **muaf** (Sultan-kararı, tescilsiz-kapat): `--gerekce` ZORUNLU.
 - **İzole-container** (MÜHÜRDAR yok): `bekliyor`da AÇIK bırak — sahte-`tescilli` ASLA; merkeze tescil-isteği emit.
-- **Kim sevk eder:** şimdilik SERDAR GEREKLILIK yazıp kartı açar (LAYİHACI persona kurulunca ona devreder).
+- **Kim sevk eder:** **LAYİHACI** (bu persona) GEREKLILIK yazıp kartı açar → **MÜHÜRDAR** kör-koşar (üreten ≠
+  doğrulayan; LAYİHACI GEREKLILIK-yazar, tescil-EDEMEZ). LAYİHACI yoksa / izole-container'da SERDAR sevk eder.
 
 ## MOD 2 — LİSTELE (önizleme + inşa-durumu + TESCİL-durumu + zaman-filtresi)
 Sultan "aktif/tescil-bekleyen layihaları listele / bugünküleri / bu haftakini / bu hafta bitmemişleri göster" deyince:
