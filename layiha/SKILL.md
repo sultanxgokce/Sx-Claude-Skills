@@ -49,7 +49,8 @@ Context-odak cümlesi: "<resume-tetik>" de → context'imi buna odaklarım
 Birden çok araştırma → her birini AYRI blokla.
 
 ### 4 · İnşa ERTELENİR
-Build YALNIZ Sultan resume-cümlesini söyleyince. İnşa BİTİNCE: `layiha-defteri.sh durum <slug> insa-edildi`.
+Build YALNIZ Sultan resume-cümlesini söyleyince. İnşa BİTİNCE: `layiha-defteri.sh durum <kod|slug> insa-edildi`.
+Her kayıt otomatik bir KOD alır (L01, L02… — karışmasın); `durum` komutu kod ya da slug kabul eder.
 
 ## MOD 2 — LİSTELE (önizleme + durum + zaman-filtresi)
 Sultan "aktif layihaları listele / bugünküleri / bu haftakini / bu hafta bitmemişleri göster" deyince:
@@ -58,8 +59,8 @@ bash <skill-dizini>/scripts/layiha-defteri.sh liste [--aktif(default) | --bugun 
 ```
 - **--aktif** (default): inşa-bekleyen tümü (Sultan "aktif tümünü listele").
 - **--bugun** · **--hafta** · **--hafta-bitmemis** (bu hafta ∧ yapılmamış) · **--hepsi**.
-Çıktı zaten Sultan-dili (⏳ inşa bekliyor / 🔨 inşa ediliyor / ✅ yapıldı + "…de" devam-cümlesi). Olduğu gibi bas.
-Defter boşsa "kayıt yok" — uydurma.
+Her satır: **[KOD]** + durum (⏳ inşa bekliyor / 🔨 inşa ediliyor / ✅ yapıldı) + konu + **oluşturulma-tarihi** +
+"…de" devam-cümlesi. Çıktı zaten Sultan-dili → olduğu gibi bas. Defter boşsa "kayıt yok" — uydurma.
 
 ## Sınırlar / dürüstlük
 - Skill kod-içermez (talimat + `layiha-defteri.sh` yardımcısı). İnşa-yetkisi VERMEZ; her build Sultan-GO.
