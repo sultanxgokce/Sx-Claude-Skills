@@ -428,8 +428,8 @@
       "id": "pr-onay",
       "type": "agent",
       "name": "PR-Onay — Sultan-dili özet → onay → gate'li PR+merge",
-      "version": "1.0.0",
-      "description": "İş bitince jargonsuz Sultan-dili özet + tek-soru onay-kapısı (evet/hayır/önce-diff-göster) → kalite-gate'leri GERÇEKTEN koş (tsc→vitest→temizlik+fmt; kırmızı=DUR+çıplak-çıktı+exit-kod; pipe-maskeleme yasak) → PR-aç (agent-dashboard'lu projede YOL-A: AGENT_DASHBOARD_PR_SKILL=1 marker'ı gate'ler koşulduğu için meşru-taşınır; plugin'siz projede doğrudan gh pr create) → wait-ci.sh ile CI-yeşil → merge → LEDGER'a exit-kodlu kanıt. SKIP_PR_SKILL_GATE'e asla dokunmaz. disable-model-invocation: yalnız Sultan /pr-onay ile tetikler.",
+      "version": "1.1.0",
+      "description": "İş bitince jargonsuz Sultan-dili özet + tek-soru onay-kapısı (evet/hayır/önce-diff-göster) → kalite-gate'leri GERÇEKTEN koş (tsc→vitest→temizlik+fmt; kırmızı=DUR+çıplak-çıktı+exit-kod; pipe-maskeleme yasak) → PR-aç (agent-dashboard'lu projede YOL-A: AGENT_DASHBOARD_PR_SKILL=1 marker'ı gate'ler koşulduğu için meşru-taşınır; plugin'siz projede doğrudan gh pr create) → wait-ci.sh ile CI-yeşil → merge → LEDGER'a exit-kodlu kanıt. SKIP_PR_SKILL_GATE'e asla dokunmaz. v1.1.0 (L14/F1): ajan da başlatabilir (disable-model-invocation kaldırıldı); onay-kapısı skill-İÇİNDE korunur — evet'i yalnız Sultan yazar.",
       "prerequisites": {
         "system": [
           "bash",
