@@ -1,7 +1,7 @@
 ---
 name: pr-onay
 type: agent
-version: 1.0.0
+version: 1.1.0
 description: >
   İş bittiğinde SULTAN-DİLİNDE (jargonsuz) kısa özet üretir, "PR açıp merge edeyim mi?"
   onay-kapısından geçirir, onaylanırsa kalite-gate'leri GERÇEKTEN koşup PR açar,
@@ -9,7 +9,6 @@ description: >
   YOL-A (marker meşru-taşınır — gate'ler koşulduğu İÇİN), plugin'siz projede doğrudan
   gh pr create. Herhangi bir adım kırmızı → DUR + çıplak-çıktı + exit-kod.
   Kaynak-tasarım: Nexus mimserdar-mimari.md "PR-ONAY-AKIŞI TASARIM" (YOL-A, Sultan-onaylı).
-disable-model-invocation: true
 install_target:
   skills: .claude/skills/
 stacks: ["*"]
@@ -23,8 +22,16 @@ nexus_catalog: "AI Engineer Workbook > Skill Kataloğu"
 ## Ne işe yarar
 Her iş bitiminde aynı sürtünme yaşanıyordu: teknik-jargonlu rapor → "PR aç" → "merge et".
 Bu skill onu kalıcı tek-akışa bağlar: **sade özet → tek-soru onay → kalite-gate → PR → CI → merge.**
-`disable-model-invocation: true` → yalnız Sultan `/pr-onay` yazınca başlar (onay-kapısının kendisi
-insan-tetikli; ajan bu skill'i kendi kendine çağıramaz).
+
+> **v1.1.0 değişiklik-notu (L14 · pr-merge-kapisi-global-DESIGN, F1):** `disable-model-invocation: true`
+> KALDIRILDI — ajan artık skill'i kendisi başlatabilir. **Onay-kapısı skill'in İÇİNDE kalır ve
+> DEĞİŞMEDİ** (aşağıda "3 · Onay-kapısı": "PR açıp merge edeyim mi?" tek-soru; "evet"i YALNIZ Sultan
+> yazar, sessizlik ≠ onay). Kapı "skill'i çağırma" anından "PR açma/merge" anına taşındı; Sultan'ın
+> karar-yetkisi hiç azalmadı.
+
+**Ne zaman kendiliğinden başlatılır (ön-koşul — hepsi sağlanmadan başlatma):**
+iş fiilen bitmiş + değişiklikler commit'li (tercihen push'lu) bir dalda + kalite-gate'ler koşulabilir
+durumda. Yarım-iş, commit'siz tree ya da "belki açarız" durumunda bu skill başlatılMAZ.
 
 > Bu skill `/agent-dashboard:pr`'ı DEĞİŞTİRMEZ, sarmalar: onun kalite-gate fikrini kendi içinde
 > gerçekten koşar, üstüne Sultan-dili-özet + onay + merge ekler.
