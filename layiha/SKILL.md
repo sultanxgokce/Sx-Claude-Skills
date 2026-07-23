@@ -1,6 +1,6 @@
 ---
 name: layiha
-version: 1.2.1
+version: 1.3.0
 description: Bir konuyu kapsamlı ARAŞTIR, kalıcı bir tasarım-dokümanına (layiha) SABİTLE, inşayı SONRAYA bırak — kayıt-defterine işle, Sultan'a sabit-formatta teslim et + geri-dönüş-kolu bırak. İnşa bitince BAĞIMSIZ-AJAN (MÜHÜRDAR) tescili gerekir: "insa-edildi ≠ tescilli". "araştır inşayı sonra yaparız · bunu dökümana sabitle · layiha çıkar · aktif/tescil-bekleyen layihaları listele · bu haftaki layihalar" tetiğinde. GLOBAL (tüm container'lar).
 allowed-tools: Bash, Read, Write, Edit, Agent, AskUserQuestion
 ---
@@ -45,14 +45,43 @@ tasarım-seçenek+ÖNERİ [5] fazlama(additive/INERT) [6] açık Sultan-kararlar
 3. **defter:** `append-note.sh` özet + resume.
 4. **KAYIT-DEFTERİ (YENİ):** `bash <skill-dizini>/scripts/layiha-defteri.sh ekle --slug <slug> --konu "<konu>"
    --dokuman "<yol>" --pr "#<PR>" --resume "<resume-cümlesi>"` → durum=insa-bekliyor.
+   ⚠️ `--konu` **"\<Kısa Ad (2-3 kelime)\> — \<detay\>"** biçiminde yazılır; baştaki Kısa Ad, adım-3'teki
+   **LAYİHA İLANI**'nda kullanılan adla BİREBİR aynı olmalı (ilan ↔ defter ↔ liste tutarlılığı).
 
-### 3 · Sultan'a TESLİM (SABİT FORMAT — birebir)
+### 3 · Sultan'a TESLİM — **LAYİHA İLANI** (SABİT FORMAT, birebir · Sultan-direktifi 2026-07-23)
+
+Sultan bu bloğu **kopyalayıp not defterine yapıştırır** → tek parça, kendi-kendini-açıklayan, jargonsuz olmalı.
+Tek bir ``` kod-bloğu içinde ver (kopyalanabilirlik şartı). Şablon:
+
+````
 ```
-Araştırıldı: <2-3 cümle — verdikt + en-kritik bulgu>
-Doküman: <_agents/spec/<slug>-DESIGN.md> (detay burada, git'te #<PR>)
-Context-odak cümlesi: "<resume-tetik>" de → context'imi buna odaklarım
+📋 LAYİHA <KOD> · <Kısa Ad (2-3 kelime)>
+tarih: <YYYY-MM-DD> · durum: inşa bekliyor
+
+<Sultan-dilinde AÇIKLAMA PARAGRAFI — 3-6 cümle, jargonsuz, düz Türkçe.
+Şu üç soruyu yanıtlasın: (1) sorun neydi, (2) araştırma ne buldu / ne öneriyor,
+(3) yapılırsa ne değişir. Kısaltma/kod-adı kullanma; kullanırsan parantezle açıkla.>
+
+Öneri: <tek cümle — hangi seçenek ve neden>
+Karar bekleyen: <N> soru (dokümanda madde madde)
+Doküman: _agents/spec/<slug>-DESIGN.md  (git: #<PR>)
+Devam etmek için: "<resume-tetik cümlesi>" de
 ```
-Birden çok araştırma → her birini AYRI blokla.
+````
+
+**Kurallar:**
+- **Kısa Ad = 2-3 kelime**, Sultan'ın defterinde tek bakışta tanıyacağı ad (ör. "PR-Merge Kapısı", "Vault Ölçeklemesi").
+  Slug DEĞİL, başlık-cümlesi DEĞİL.
+- **Açıklama paragrafı Sultan-dilinde** — `/sultanca` üslûbu geçerli; teknik jargon (INERT, additive, fail-closed,
+  parity…) yasak ya da parantez-açıklamalı. Rakam/somut varsa yaz ("6 container'dan 20'ye").
+- Blok DIŞINA kısa bir kapanış cümlesi ekleyebilirsin (ör. "sıradaki adım şu"), ama **blok kendi başına tam** olmalı.
+- **Ekleyebileceklerin** (değer katıyorsa; katmıyorsa yazma): `Engel:` (varsa neyin beklendiği) · `Bağlı olduğu:`
+  (başka layiha kodu) · `Kim inşa eder:` (domain-routing sonucu: infra→NÂZIR · vault→HAZİNEDAR · skill→AHÎ ·
+  container→KONAKÇI · genel→icra-motoru).
+- Birden çok araştırma → her biri **AYRI ilan bloğu**.
+
+⚠️ İlan, defter-kaydı ve DESIGN-doc'la **tutarlı** olmalı (kod · kısa-ad · resume-cümlesi birebir aynı) — ilan
+"pazarlama" değil, kaydın insan-yüzü.
 
 ### 4 · İnşa ERTELENİR → sonra BAĞIMSIZ-TESCİL (insa-edildi ≠ tescilli)
 Build YALNIZ Sultan resume-cümlesini söyleyince. İnşa BİTİNCE: `layiha-defteri.sh durum <kod|slug> insa-edildi`
