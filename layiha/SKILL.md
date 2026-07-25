@@ -1,6 +1,6 @@
 ---
 name: layiha
-version: 1.4.0
+version: 1.5.0
 description: Bir konuyu kapsamlı ARAŞTIR, kalıcı bir tasarım-dokümanına (layiha) SABİTLE, inşayı SONRAYA bırak — kayıt-defterine işle, Sultan'a sabit-formatta teslim et + geri-dönüş-kolu bırak. İnşa bitince BAĞIMSIZ-AJAN (MÜHÜRDAR) tescili gerekir: "insa-edildi ≠ tescilli". "araştır inşayı sonra yaparız · bunu dökümana sabitle · layiha çıkar · aktif/tescil-bekleyen layihaları listele · bu haftaki layihalar" tetiğinde. GLOBAL (tüm container'lar).
 allowed-tools: Bash, Read, Write, Edit, Agent, AskUserQuestion
 ---
@@ -118,6 +118,31 @@ bash <skill-dizini>/scripts/layiha-defteri.sh liste [--aktif(default) | --bugun 
 - **--bugun** · **--hafta** · **--hafta-bitmemis** · **--hepsi**.
 Her satır: **[KOD]** + inşa-durumu (⏳/🔨/🔧 tescilsiz) + konu + **TESCİL** (🏅 tescilli / 📋 bekliyor / ↩ reddi /
 ⊘ muaf) + oluşturulma-tarihi + "…de" devam-cümlesi. Çıktı zaten Sultan-dili → olduğu gibi bas. Defter boşsa "kayıt yok".
+
+**L24 F4 ile gelen üç değişiklik:**
+- **Başlıkta "hangi çekmeceyi açtım" satırı var** (`oda: <ad> · defter: <yol>`). Defter odaya özeldir;
+  aynı cümle bir odada yedi satır, başkasında sıfır gösterebilir — **ikisi de doğrudur**. Bu satır o
+  yanılgıyı kaynağında keser. Sultan'a listeyi verirken bu satırı da göster.
+- **`liste` SALT-OKURDUR.** Artık deftere hiçbir şey yazmaz (eskiden eksik alanları doldurup dosyayı
+  baştan yazıyordu — ortak bir dosyada "sadece listeledim" demek yazma-yarışıydı).
+- **Tanınmayan bayrak sessizce yutulmaz** → RC=2 + geçerli bayrak listesi. (`--proje Nexus` gibi bir
+  yazım eskiden filtresiz listeyi süzülmüş sanmana yol açıyordu.)
+
+## MOD 2b — FİLO GÖRÜNÜMÜ (K3: "evet, yalnız başlıklar")
+Sultan "bütün odalardaki layihaları göster / hepsini tek ekranda gör" deyince:
+```
+bash <skill-dizini>/scripts/layiha-filo.sh [--aktif(default)|--bugun|--hafta|--hafta-bitmemis|--tescil-bekleyen|--hepsi]
+```
+Her satır: **oda adı** + [KOD] + durum-simgesi + **yalnız başlık**. Devam-cümlesi, doküman yolu ve kart
+numarası **bilerek basılmaz** — detay odasında kalır (federe "yalnız-META" deseni).
+- **Hiçbir dosyaya yazmaz**, ortak dizine birleşik defter KONMAZ.
+- **Görünürlük sınırı dürüstçe basılır:** yalnız bu makineden görünen odalar sayılır; izole
+  container'ların defterleri buradan görünmez (İ1) — bu arıza değil, kuralın kendisi.
+
+## Kayıt şeması (L24 F4)
+Her kayıt `v` (şema-sürümü) + `proje` (hangi oda) taşır. **İleri-uyum kapısı:** defterde bu araçtan
+daha YENİ sürümlü kayıt varsa araç DURUR ve **hiçbir şey yazmaz** — eski bir kurulum yeni şemalı
+defteri ezip alan kaybettiremez. Eski sürümsüz kayıtlar okuma-anında `v=1` sayılır; **göç yok**.
 
 ## Paket-içi kitaplık — `scripts/hat-yolu.lib.sh` (L24 F1)
 
