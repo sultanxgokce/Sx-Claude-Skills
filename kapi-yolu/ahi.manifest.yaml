@@ -1,0 +1,21 @@
+# kapi-yolu — AHÎ ile üretildi (kademe: usta · bileşik)
+# version SKILL.md frontmatter'ında (ADR-001).
+tier: usta
+name: kapi-yolu
+generic_goal: "kapıyı (çok-model şeridi) tek yerden kur/aç/kapat/denetle ve filoya yay — mevcut parçaları besteler, yeniden yazmaz"
+activation:
+  onKeyword: kapi-yolu
+requires:
+  - vault-cek          # kapı anahtarının temini (istemci-anahtar.sh `vault-cek get` ile çeker)
+  - bulut-yapilandir   # sıfırdan-rebuild ayağı: /kapi komutu + global CLAUDE.md ikizi bu motorla converge olur
+# Host-uyum: kapı modellerinin `/model` menüsünde GÖRÜNMESİ için harness'ın
+# gateway-model-discovery desteği şart (CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY).
+# Yoksa şerit yine açılır ama menü boş görünür → sessiz bozulma yerine AÇIK uyarı (SKILL.md §Harness).
+requires_harness: ">=2.1.129"
+# SYS (L01) doğum-sonrası yaşam-döngüsü kanalı.
+feedback:
+  owner: "serdar"
+  channel: skill-geri-bildirim.jsonl
+  sla_tier: closure
+install_targets:
+  - _global
