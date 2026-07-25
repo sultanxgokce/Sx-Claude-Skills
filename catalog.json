@@ -1064,6 +1064,47 @@
         "mucit-suz"
       ],
       "family": "fabrika (L24 Layiha Fabrikası; kasif-tara+mucit-suz bestecisi)"
+    },
+    {
+      "id": "kapi-yolu",
+      "type": "agent",
+      "name": "kapi-yolu — Çok-Model Kapısı Yolu (kur · aç · denetle · yay)",
+      "version": "1.0.0",
+      "description": "L25 kapı şeridinin tek giriş-noktası (Usta/bileşik): host-geçidi kurucusu (kapi-kur.sh), istemci kurucusu (setup-kapi.sh), `kapi` başlatıcısı (tek şerit-otoritesi), anahtar-temini (istemci-anahtar.sh → vault-cek) ve geri-alma düğmesini (ocak/model-modu.sh) BESTELER — kendi ssh/docker/curl kodunu yazmaz. Filo-yayılımı kuru-koşu varsayılan (scripts/kapi-yay.sh): 8/10 kutu cloudtop reposunu GÖRMEZ (firsthand ölçüldü) → istemci yüzeyi ortak mount'a dağıtım-kopyası olarak basılır, kutu başına tek ve aynı komut kalır. Değişmezler: varsayılan `claude` şeridi dokunulmaz · settings.json'a env YAZILMAZ · sessiz düşme yok · sır argv/log'a düşmez.",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "curl",
+          "claude >= 2.1.129 (geçit-model-keşfi; yoksa /model menüsü kapı modellerini listelemez)"
+        ]
+      },
+      "tags": [
+        "kapi-yolu",
+        "serit",
+        "cok-model",
+        "l25",
+        "bilesik",
+        "usta",
+        "evergreen",
+        "yayilim"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/cloudtop (infra/kapi — L25 Dalga 1-4)",
+      "install_time": "~2min",
+      "status": "v1.0-usta",
+      "path": "kapi-yolu/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "kapi (L25 çok-model şeridi)",
+      "requires": [
+        "vault-cek",
+        "bulut-yapilandir"
+      ]
     }
   ]
 }
