@@ -1,0 +1,14 @@
+# kasif-tara — AHÎ ile üretildi (kademe: kalfa)
+# version manifest'te YOK (tek-evi SKILL.md frontmatter — ADR-001).
+tier: kalfa
+name: kasif-tara
+generic_goal: "DİVAN fikir-hattının dış-ucu: web'i Sultan-ayarlı konularda tarayıp kanıtlı ham-malzemeyi YALNIZ bulgu-havuzuna yazan, her projede güvenilir-tekrarlanabilir tarama-kabuğu"
+activation:
+  onKeyword: kasif-tara
+# SYS (L01) doğum-sonrası yaşam-döngüsü kanalı.
+feedback:
+  owner: "kasif"
+  channel: skill-geri-bildirim.jsonl
+  sla_tier: closure
+install_targets:
+  - _global

@@ -58,7 +58,7 @@ Sadece-biri eksik-kalır: doküman-yalnız→disiplin-çöker; üreteç-yalnız�
 kanıtsız-yeşil YASAK. AHÎ kendi kendini denetler: `ahi check ahi` → temiz (dogfood).
 
 ## 8 · Dağıtım + Drift-gözcü
-- **Dağıtım:** elle-apply (`sync-skills.mjs --apply`, bilinçli) — `_global` (ortak-mount **7/7**: pc/kod/vekatip/mmex/medigate/huma/mihenk — compose `./config/.claude` paylaşımlı bind; Federe-D6 compose-kanıtı 2026-07-21) VEYA per-proje. *(Eski "huma ulaşmaz" notu bayattı — huma/mihenk de aynı ortak-mount'u bağlar; huma'nın curated-köprüsü Cortex-İÇERİĞİ içindir, skill-mount'u değil.)* Otomatik-tetikleyici YOK (elle disiplin).
+- **Dağıtım:** elle-apply (`sync-skills.mjs --apply`, bilinçli) — `_global` (ortak-mount **10/10**: pc(webtop)/kod/vekatip/mmex/medigate/huma/mihenk/tellal/akar/s02 — 9'u açık `./config/.claude:/config/.claude` bind, webtop üst-mount `./config:/config` üzerinden; kanıt `cloudtop/infra/docker-compose.server.yml:44,91,158,222,290,348,403,442,472,502`, ölçüm 2026-07-25) VEYA per-proje. *(Eski "huma ulaşmaz" notu bayattı — huma/mihenk de aynı ortak-mount'u bağlar; huma'nın curated-köprüsü Cortex-İÇERİĞİ içindir, skill-mount'u değil.)* Otomatik-tetikleyici YOK (elle disiplin).
 - **Drift-gözcü (`ahi check`):** YALNIZ `catalog.json`↔`sync-targets.json`↔`README` parity + tier/requires/deprecated semantiği + manifest-şema-geçerliliği. **`sync-targets`/`catalog`'a ASLA YAZMAZ — yalnız RAPORLAR** (insan/PR uygular). Bkz `ADR/ADR-001`.
 
 ## 9 · Yaşam-döngüsü (soft-ama-sunsetli)

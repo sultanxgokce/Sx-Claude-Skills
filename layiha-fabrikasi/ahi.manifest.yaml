@@ -1,0 +1,18 @@
+# layiha-fabrikasi — AHÎ ile üretildi (kademe: usta · bileşik)
+# version SKILL.md frontmatter'ında (ADR-001).
+tier: usta
+name: layiha-fabrikasi
+generic_goal: "kasif-tara + mucit-suz'ü besteleyen, kill-switch'li, filo-genelinde güncel/senkron DİVAN fikir-hattı fabrikası"
+activation:
+  onKeyword: layiha-fabrikasi
+requires:
+  - layiha
+  - kasif-tara
+  - mucit-suz
+# SYS (L01) doğum-sonrası yaşam-döngüsü kanalı.
+feedback:
+  owner: "layihaci"
+  channel: skill-geri-bildirim.jsonl
+  sla_tier: closure
+install_targets:
+  - _global
