@@ -1,6 +1,6 @@
 ---
 name: layiha
-version: 1.3.0
+version: 1.4.0
 description: Bir konuyu kapsamlı ARAŞTIR, kalıcı bir tasarım-dokümanına (layiha) SABİTLE, inşayı SONRAYA bırak — kayıt-defterine işle, Sultan'a sabit-formatta teslim et + geri-dönüş-kolu bırak. İnşa bitince BAĞIMSIZ-AJAN (MÜHÜRDAR) tescili gerekir: "insa-edildi ≠ tescilli". "araştır inşayı sonra yaparız · bunu dökümana sabitle · layiha çıkar · aktif/tescil-bekleyen layihaları listele · bu haftaki layihalar" tetiğinde. GLOBAL (tüm container'lar).
 allowed-tools: Bash, Read, Write, Edit, Agent, AskUserQuestion
 ---
@@ -118,6 +118,18 @@ bash <skill-dizini>/scripts/layiha-defteri.sh liste [--aktif(default) | --bugun 
 - **--bugun** · **--hafta** · **--hafta-bitmemis** · **--hepsi**.
 Her satır: **[KOD]** + inşa-durumu (⏳/🔨/🔧 tescilsiz) + konu + **TESCİL** (🏅 tescilli / 📋 bekliyor / ↩ reddi /
 ⊘ muaf) + oluşturulma-tarihi + "…de" devam-cümlesi. Çıktı zaten Sultan-dili → olduğu gibi bas. Defter boşsa "kayıt yok".
+
+## Paket-içi kitaplık — `scripts/hat-yolu.lib.sh` (L24 F1)
+
+Hattın **tek yol-çözüm kapısı**; kardeş paketler (`kasif-tara` · `mucit-suz` · `layiha-fabrikasi`)
+`<skill-dizini>/../layiha/scripts/hat-yolu.lib.sh` ile source eder (vendoring YOK, tek-ev).
+`hat_root` (worktree-immün, `--git-common-dir` tabanlı) · `hat_onek` (CELL_ID) · `hat_yolu <artefakt>` ·
+`hat_tani` (hangi kök/hücre — "hangi deftere bakıyorum" satırı).
+**⛔ Ortak-mount fallback'i YOK** (Sultan-kararı K1): git-kökü yoksa `$HOME/.claude/...`'e düşmez,
+**RC=2 + reçete** verir — `/config/.claude` 10 container'ın ortak dizinidir, oraya düşen defter İ1'i
+geri-alınamaz biçimde deler. Kanıt: `scripts/hat-yolu.test.sh` (21 kapı; G2/G3 bugünkü yollarla
+**bayt-aynılık**, G5 worktree-immünlük, G8 İ1 negatif-testi).
+**Durum: INERT** — kitaplık tanımlı, henüz hiçbir script onu çağırmıyor; geçiş F2/F3'te yapılacak.
 
 ## Sınırlar / dürüstlük
 - Skill kod-içermez (talimat + `layiha-defteri.sh` yardımcısı). İnşa-yetkisi VERMEZ; her build Sultan-GO.
