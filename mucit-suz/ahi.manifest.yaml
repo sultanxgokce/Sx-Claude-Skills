@@ -1,0 +1,14 @@
+# mucit-suz — AHÎ ile üretildi (kademe: kalfa)
+# version manifest'te YOK (tek-evi SKILL.md frontmatter — ADR-001).
+tier: kalfa
+name: mucit-suz
+generic_goal: "DİVAN bulgu-havuzunu acımasızca süzüp Sultan-dilinde haftada ≤3 aday öneren, her projede güvenilir-tekrarlanabilir süzme-kabuğu (T1-mekanik + T2-muhakeme)"
+activation:
+  onKeyword: mucit-suz
+# SYS (L01) doğum-sonrası yaşam-döngüsü kanalı.
+feedback:
+  owner: "mucit"
+  channel: skill-geri-bildirim.jsonl
+  sla_tier: closure
+install_targets:
+  - _global

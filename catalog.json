@@ -1,6 +1,6 @@
 {
-  "version": "2.0",
-  "updated": "2026-07-21",
+  "version": "2.1",
+  "updated": "2026-07-25",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -954,6 +954,116 @@
         "_global"
       ],
       "family": "workflow (araştır→sabitle→sonraya-bırak; SERDAR meta-akışı)"
+    },
+    {
+      "id": "kasif-tara",
+      "type": "agent",
+      "name": "kasif-tara — KAŞİF dış-tarama kabuğu (fikir-hattı dış-ucu)",
+      "version": "1.0.0",
+      "description": "DİVAN fikir-hattının dış-ucu: Sultan-ayarlı konularda (_agents/kasif/konular.md) web'i tarar, kanıtlı ham-malzemeyi YALNIZ bulgu-havuzuna yazar (scripts/kasif-havuz-ekle.sh — tek yazma-yüzeyi). Deftere/karta/arza DOKUNMAZ, MUCİT'i atlayamaz; her bulgu kaynak-URL kanıtı ister (fail-closed). Kesin süzme (dedup/MİHENK-deny/tavan) downstream MUCİT-T1'de. L24 Layiha Fabrikası'nın dış-uç bileşeni.",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "jq",
+          "git"
+        ]
+      },
+      "tags": [
+        "layiha-fabrikasi",
+        "kasif",
+        "fikir-hatti",
+        "tarama",
+        "divan",
+        "global"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/Nexus (DİVAN k0054 doktrin §5/§9; L24 Layiha Fabrikası FAZ-3 — Çırak→Kalfa terfisi)",
+      "install_time": "~1min",
+      "status": "v1.0-kalfa",
+      "path": "kasif-tara/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "fikir-hatti (L24 Layiha Fabrikası; mucit-suz ile ardışık)"
+    },
+    {
+      "id": "mucit-suz",
+      "type": "agent",
+      "name": "mucit-suz — MUCİT fikir-süzme kabuğu (T1-mekanik + T2-muhakeme)",
+      "version": "1.0.0",
+      "description": "DİVAN bulgu-havuzunu acımasızca süzüp Sultan-dilinde aday önerir. T1 = scripts/mucit-t1.sh ($0-mekanik: uygunluk · kanıt-kapısı · MİHENK-deny · kart-dedup · dönem-tavanı RC≠0); T2 = repo-grep 'zaten var mı' + Sultan-dili aday-yazımı + etki×kolaylık×kanıt×uyum puanı. Profil-parametrik: divan (hafta/≤3, DİVAN-ANAYASA §8) vs layiha (gün/10, AYRI defter — §8 kotasını TÜKETMEZ). Kuyruğa kartı MUCİT SOKAMAZ; aday→kuyruk her zaman Sultan tek-tuşundan geçer.",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "jq",
+          "git"
+        ]
+      },
+      "tags": [
+        "layiha-fabrikasi",
+        "mucit",
+        "fikir-hatti",
+        "suzme",
+        "divan",
+        "global"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/Nexus (DİVAN k0054 doktrin §9; L24 Layiha Fabrikası FAZ-3 — Çırak→Kalfa terfisi)",
+      "install_time": "~1min",
+      "status": "v1.0-kalfa",
+      "path": "mucit-suz/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "fikir-hatti (L24 Layiha Fabrikası; kasif-tara'nın alıcısı)"
+    },
+    {
+      "id": "layiha-fabrikasi",
+      "type": "agent",
+      "name": "layiha-fabrikasi — L24 Layiha Fabrikası (Usta · bileşik · kill-switch'li)",
+      "version": "1.0.0",
+      "description": "DİVAN fikir-hattını (KAŞİF dış-tarama → bulgu-havuzu → MUCİT süzme → aday-havuzu → Sultan tek-tuş terfi) tek-çatı altında toplayan Usta-paket: kasif-tara + mucit-suz'ü besteler, layiha (defter) üzerine oturur; bestelediği kardeşlere YAZMAZ (ADR-001 owner-domain-dokunma). Kill-switch: scripts/layiha-fabrika.sh kapat --sebep → bayrak /config/.claude/layiha-fabrikasi.kapali; ortak _global bind-mount sayesinde 10/10 container'da AYNI ANDA etkili, fail-closed. Kapsam DAR: yalnız layiha üretim-bandı durur — aday-havuzu CRUD (liste/göster/terfi) ve DİVAN'ın kendi fikir-hattı (profil=divan) ETKİLENMEZ.",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "jq",
+          "git"
+        ]
+      },
+      "tags": [
+        "layiha-fabrikasi",
+        "bilesik",
+        "fikir-hatti",
+        "kill-switch",
+        "usta",
+        "global"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/Nexus (_agents/spec/layiha-fabrikasi-DESIGN.md — L24; FAZ-1 PR#653, FAZ-2 PR#655)",
+      "install_time": "~2min",
+      "status": "v1.0-usta",
+      "path": "layiha-fabrikasi/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global"
+      ],
+      "requires": [
+        "layiha",
+        "kasif-tara",
+        "mucit-suz"
+      ],
+      "family": "fabrika (L24 Layiha Fabrikası; kasif-tara+mucit-suz bestecisi)"
     }
   ]
 }
