@@ -1,9 +1,9 @@
 ---
 name: mucit-suz
-version: 1.0.0
+version: 1.1.0
 description: >
   MUCİT'in el-kitabı: DİVAN bulgu-havuzunu (bulgu-havuzu.jsonl — KEŞŞAF dış-tarama + SERDAR pilot-bulguları)
-  acımasızca süzüp Sultan-dilinde en çok haftada 3 ADAY-kart önerir. T1 = scripts/mucit-t1.sh ($0-mekanik:
+  acımasızca süzüp Sultan-dilinde en çok haftada 3 ADAY-kart önerir. T1 = <skill-dizini>/scripts/mucit-t1.sh ($0-mekanik:
   uygunluk·kanıt-kapısı·MİHENK-deny·kart-dedup·haftalık-tavan RC≠0); T2 = repo-grep "zaten var mı" +
   Sultan-dili aday-yazımı + etki×kolaylık×kanıt×hedef-uyum puanı. Kalibrasyon turunda adaylar deftere DEĞİL
   önizlemeye; canlı turda sevk-arz.sh aday ile Sultan tek-tuş. Kuyruğa kartı MUCİT SOKAMAZ. (DİVAN k0054, doktrin §9.)
@@ -30,8 +30,8 @@ disable-model-invocation: false
 
 ## 1 · T1 — mekanik prefilter (script, $0)
 ```bash
-cd "$(git rev-parse --show-toplevel)"
-bash scripts/mucit-t1.sh suz            # stdout=JSON kontrat, stderr=eleme-özeti
+cd <projenin kök klasörü>          # hangi odanın havuzunu süzdüğün CWD'den belirlenir
+bash <skill-dizini>/scripts/mucit-t1.sh suz            # stdout=JSON kontrat, stderr=eleme-özeti
 #   RC 0 → adaylar emit (JSON: {hafta,tavan,uretilen,kalan,uygun_sayi,mihenk_alani,adaylar[]})
 #   RC 3 → HAFTA-TAVAN dolu → DUR: bu hafta yeni aday YOK (Sultan-dili tek-satır rapor, çık)
 #   RC 2 → girdi/kullanım hatası → düzelt
@@ -60,7 +60,7 @@ Her `adaylar[]` öğesi için sırayla:
 
 ### Canlı (kalibrasyon bittikten sonra)
 - Her seçilen aday için: prod-deftere aday-kart oluştur (durum=`aday`; defter-mailbox akışıyla) → `k####` al.
-- `bash scripts/sevk-arz.sh aday <k####>` → source=`aday-arzi`, Sultan defterde tek-tuş görür.
+- `bash scripts/sevk-arz.sh aday <k####>` **(yalnız Nexus odasında var — yoksa bu adımı atla)** → source=`aday-arzi`, Sultan defterde tek-tuş görür.
 - mucit-defteri'ne `verdikt:aday-arzi, kart:<k####>` (bu tavana SAYILIR).
 
 ## 4 · mucit-defteri satır-şeması (append-only, git-tracked)

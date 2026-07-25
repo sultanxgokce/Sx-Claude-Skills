@@ -10,5 +10,9 @@ feedback:
   owner: "mucit"
   channel: skill-geri-bildirim.jsonl
   sla_tier: closure
+# L24 F3: motor pakete taşındı → yol-çözümü `layiha` paketindeki hat-yolu.lib.sh'ten gelir.
+# (kill-switch guard'ı YALNIZ --profil layiha'da gerekir; yoksa net hata verir — döngüsel bağ kurulmadı.)
+requires:
+  - layiha
 install_targets:
   - _global
