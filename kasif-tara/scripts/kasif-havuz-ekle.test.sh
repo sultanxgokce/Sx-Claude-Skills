@@ -92,6 +92,94 @@ echo "== T10: KASIF_TEST'siz yabancı-havuz reddi (SF1 güvenlik-değişmezi) ==
 KASIF_HAVUZ="$TMP/baska.jsonl" bash "$SUT" --girdi "$TMP/g1.json" >/dev/null 2>&1
 [ $? -eq 2 ] && ok "kanonik-havuz-dışı hedef exit=2" || no "SF1 delindi"
 
+
+# ══════════════════════════════════════════════════════════════════════════════════════════
+# L24 F6 · KAŞİF HAFIZASI (yazma ucu) — H1..H8
+# Bu bloklar üç defterin gerçekten dolduğunu ve iki güvenlik sözleşmesinin (hermetik kalkan,
+# fail-soft) tuttuğunu sınar. Hepsi izole $TMP altında; gerçek deftere dokunmaz (H7 bunu KANITLAR).
+# ══════════════════════════════════════════════════════════════════════════════════════════
+HD="$TMP/kasif"; mkdir -p "$HD"
+HV="$TMP/hafiza-havuz.jsonl"; : > "$HV"
+hkos(){ KASIF_TEST=1 KASIF_HAVUZ="$HV" KASIF_HAFIZA_DIR="$HD" KASIF_TARIH=2026-07-27 bash "$SUT" "$@" 2>/dev/null; }
+
+echo ""
+echo "== H1: tur etiketi — her bulgu hangi turda geldiğini taşır =="
+printf '[{"baslik":"Birinci hafiza denemesi bulgusu","detay":"d","kanit":"https://ornek.dev/blog/bir"},{"baslik":"Ikinci hafiza denemesi bulgusu","detay":"d","kanit":"https://baska.io/yazi/iki"}]' > "$TMP/h1.json"
+hkos --girdi "$TMP/h1.json" >/dev/null
+t1="$(jq -r '.tur // ""' "$HV" | sort -u | tr '\n' ' ' | tr -d ' ')"
+[ "$t1" = "t20260727-1" ] && ok "tur=t20260727-1 iki bulguya da yazıldı" || no "tur etiketi: [$t1]"
+
+echo "== H2: kaynak kütüphanesi — hangi adrese gidildi, ne getirdi =="
+[ -f "$HD/kaynaklar.jsonl" ] && ok "kaynaklar.jsonl oluştu" || no "kaynaklar.jsonl YOK"
+[ "$(wc -l < "$HD/kaynaklar.jsonl" 2>/dev/null)" = "2" ] && ok "iki ayrı kaynak kaydedildi" || no "kaynak sayısı"
+z="$(jq -r 'select(.url_key=="ornek.dev/blog/bir") | "\(.ziyaret)/\(.verim)"' "$HD/kaynaklar.jsonl" 2>/dev/null)"
+[ "$z" = "1/1" ] && ok "ziyaret=1 verim=1" || no "ilk ziyaret sayacı: [$z]"
+
+echo "== H3: AYNI kaynağa ikinci ziyaret — sayaç artar, geçmiş korunur =="
+printf '[{"baslik":"Ucuncu bambaska bir hafiza bulgusu","detay":"d","kanit":"https://ornek.dev/blog/bir"}]' > "$TMP/h3.json"
+hkos --girdi "$TMP/h3.json" >/dev/null
+z2="$(jq -r 'select(.url_key=="ornek.dev/blog/bir") | "\(.ziyaret)/\(.verim)"' "$HD/kaynaklar.jsonl" 2>/dev/null)"
+[ "$z2" = "2/2" ] && ok "ziyaret=2 verim=2 (aynı adres, yeni bulgu)" || no "ikinci ziyaret: [$z2]"
+[ "$(jq -r 'select(.url_key=="ornek.dev/blog/bir") | (.turlar|length)' "$HD/kaynaklar.jsonl")" = "2" ] \
+  && ok "iki tur da kaynağa iliştirildi" || no "turlar birikmedi"
+
+echo "== H4: TEKRAR SİNYALİ — dedup'ta düşen aday sessizce yok olmaz =="
+printf '[{"baslik":"Birinci hafiza denemesi bulgusu","detay":"d","kanit":"https://ucuncu.com/ayni-fikir"}]' > "$TMP/h4.json"
+onceki="$(wc -l < "$HV")"
+hkos --girdi "$TMP/h4.json" >/dev/null
+[ "$(wc -l < "$HV")" = "$onceki" ] && ok "havuz BÜYÜMEDİ (dedup korundu)" || no "dedup delindi"
+[ -f "$HD/tekrar.jsonl" ] && ok "tekrar.jsonl oluştu" || no "tekrar.jsonl YOK"
+grep -q 'ucuncu.com' "$HD/tekrar.jsonl" 2>/dev/null \
+  && ok "kaybolan fikrin GELDİĞİ KAYNAK kaydedildi" || no "hostlar yazılmadı"
+
+echo "== H5: BOŞ TUR görünür (B8 — 'bulamadı' ile 'hiç bakmadı' ayrışır) =="
+echo '[]' > "$TMP/h5.json"
+hkos --girdi "$TMP/h5.json" >/dev/null
+son="$(tail -1 "$HD/seyir.jsonl" 2>/dev/null)"
+[ "$(jq -r '.eklenen' <<<"$son" 2>/dev/null)" = "0" ] && ok "boş tur seyre YAZILDI (eklenen=0)" || no "boş tur kayboldu"
+[ "$(jq -r '.aday' <<<"$son" 2>/dev/null)" = "0" ] && ok "aday=0 kaydı doğru" || no "aday alanı"
+
+echo "== H6: tur numarası seyirden artar (havuzdan DEĞİL — boş tur da sayılır) =="
+turlar="$(jq -r '.tur' "$HD/seyir.jsonl" | tr '\n' ' ')"
+[ "$turlar" = "t20260727-1 t20260727-2 t20260727-3 t20260727-4 " ] \
+  && ok "dört tur sırayla numaralandı" || no "tur dizisi: [$turlar]"
+
+echo "== H7: HERMETİK KALKAN — test modunda yol verilmezse ODANIN defterine yazmaz =="
+# F3 dersi: mutasyon-testi bu kalkan olmadığı için ortak dizine iki kez sızdı, elle temizlik gerekti.
+# ⚠️ Bu testin İLK hâli VAKUMDU: bu deponun kökünde _agents/kasif zaten YOK, dolayısıyla
+#    "değişmedi" demek hiçbir şey kanıtlamıyordu. Şimdi GERÇEKTEN defteri OLAN sahte bir proje
+#    kurulup KAŞİF onun içinde koşturuluyor — kalkan delinirse dizin dolar ve test düşer.
+SAHTE="$TMP/sahte-proje"
+mkdir -p "$SAHTE/_agents/kasif" "$SAHTE/_agents/handoff"
+( cd "$SAHTE" && git init -q && git config user.email t@t && git config user.name t ) >/dev/null 2>&1
+: > "$SAHTE/_agents/handoff/bulgu-havuzu.jsonl"
+onceden="$(ls -1 "$SAHTE/_agents/kasif" 2>/dev/null | sort | tr '\n' ',')"
+( cd "$SAHTE" && KASIF_TEST=1 KASIF_HAVUZ="$SAHTE/_agents/handoff/bulgu-havuzu.jsonl" \
+    KASIF_TARIH=2026-07-27 bash "$SUT" --girdi "$TMP/h1.json" ) >/dev/null 2>&1
+sonradan="$(ls -1 "$SAHTE/_agents/kasif" 2>/dev/null | sort | tr '\n' ',')"
+[ "$onceden" = "$sonradan" ] && ok "test modunda defter dizini BOŞ kaldı (kalkan tuttu)" \
+  || no "SIZINTI: [$onceden] → [$sonradan]"
+
+echo "== H7b: ama ÜRETİM modunda hafıza gerçekten yazılır (kalkan yalnız teste özel) =="
+# Negatif testin ikizi: kalkan her şeyi susturuyor olsaydı H7 yanlış sebeple geçerdi.
+: > "$SAHTE/_agents/handoff/bulgu-havuzu.jsonl"
+( cd "$SAHTE" && KASIF_TARIH=2026-07-27 bash "$SUT" --girdi "$TMP/h1.json" ) >/dev/null 2>&1
+[ -s "$SAHTE/_agents/kasif/seyir.jsonl" ] && ok "üretim modunda seyir defteri YAZILDI" \
+  || no "üretimde de yazmıyor — kalkan fazla geniş"
+[ -s "$SAHTE/_agents/kasif/kaynaklar.jsonl" ] && ok "üretim modunda kaynak kütüphanesi YAZILDI" \
+  || no "kaynaklar yazılmadı"
+
+echo "== H8: FAIL-SOFT — defter yazılamasa bile malzeme kaybolmaz =="
+# Sözleşme: hafıza ikincildir. Yazılamazsa uyarır ama havuza ekleme AYNEN sürer.
+KIRIK="$TMP/kirik-dizin"; : > "$KIRIK"   # dizin yerine DOSYA → mkdir/yazma imkânsız
+: > "$TMP/fs-havuz.jsonl"
+printf '[{"baslik":"Fail soft denemesi icin bulgu","detay":"d","kanit":"https://ornek.dev/fs"}]' > "$TMP/h8.json"
+KASIF_TEST=1 KASIF_HAVUZ="$TMP/fs-havuz.jsonl" KASIF_HAFIZA_DIR="$KIRIK/alt" KASIF_TARIH=2026-07-27 \
+  bash "$SUT" --girdi "$TMP/h8.json" >/dev/null 2>&1
+rc=$?
+[ "$rc" -eq 0 ] && ok "hafıza yazılamadı ama rc=0 (ana iş bozulmadı)" || no "fail-soft delindi: rc=$rc"
+[ "$(wc -l < "$TMP/fs-havuz.jsonl")" = "1" ] && ok "bulgu havuza YİNE de eklendi" || no "malzeme kayboldu"
+
 echo ""
 echo "════════ SONUÇ: PASS=$PASS · FAIL=$FAIL ════════"
 [ "$FAIL" -eq 0 ] && echo "GOLDEN: TEMİZ ✓" || echo "GOLDEN: FAIL ✗"

@@ -959,7 +959,7 @@
       "id": "kasif-tara",
       "type": "agent",
       "name": "kasif-tara — KAŞİF dış-tarama kabuğu (fikir-hattı dış-ucu)",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "description": "DİVAN fikir-hattının dış-ucu: Sultan-ayarlı konularda (_agents/kasif/konular.md) web'i tarar, kanıtlı ham-malzemeyi YALNIZ bulgu-havuzuna yazar (scripts/kasif-havuz-ekle.sh — tek yazma-yüzeyi). Deftere/karta/arza DOKUNMAZ, MUCİT'i atlayamaz; her bulgu kaynak-URL kanıtı ister (fail-closed). Kesin süzme (dedup/MİHENK-deny/tavan) downstream MUCİT-T1'de. L24 Layiha Fabrikası'nın dış-uç bileşeni.",
       "prerequisites": {
         "system": [

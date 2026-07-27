@@ -1,6 +1,6 @@
 ---
 name: kasif-tara
-version: 1.1.0
+version: 1.2.0
 description: >
   KAŞİF'in el-kitabı: DİVAN'ın işine yarayacak konularda (_agents/kasif/konular.md — Sultan-ayarlı) web'i
   tarayıp ham-malzeme (fikir/fırsat) toplar ve YALNIZ bulgu-havuzuna yazar (<skill-dizini>/scripts/kasif-havuz-ekle.sh,
@@ -37,6 +37,15 @@ Kanıt: `<skill-dizini>/scripts/kasif-tara.test.sh` (G1-G8; G6 = ortak-dizine-s�
 - **Kapsam Sultan-malı** — yalnız konular.md'deki konularda tara; MİHENK-alanı (ürün/pazar/gelir) DEFAULT tarama.
 
 ## 1 · Tara (web fan-out)
+0. **ÖNCE KENDİ DEFTERİNİ OKU** (L24 F7 — bu adım atlanmaz):
+   ```bash
+   bash <skill-dizini>/scripts/kasif-brief.sh
+   ```
+   Sen her tur sıfırdan doğuyorsun — hatırlamıyorsun. Ama dünkü sen bir defter bıraktı: hangi
+   kaynak verimliydi, hangisi üst üste boş çıktı, hangi fikri kaç ayrı yerden duyduk. Brifing
+   ≤40 satırdır ve defter büyüdükçe büyümez. **Defter boşsa hiçbir şey basmaz** — o zaman
+   doğrudan 1. adıma geç. Brifingdeki "tekrar tekrar boş çıkan kaynaklar" satırını **ciddiye al**:
+   bu turda oraya gitme, zamanını verimli olanlara ayır.
 1. `_agents/kasif/konular.md` OKU — aktif konular + kalite-zemini + kapsam-dışı.
 2. Aktif konu-başına **WebSearch** (paralel; ToolSearch ile şema-yükle: `select:WebSearch`). Taze + uygulanabilir öğe ara.
    Gerekirse **WebFetch** ile kaynağı derinleştir (kanıt-alıntısı çıkar).
@@ -65,6 +74,22 @@ Başka hiçbir yere yazma (Edit/Write ile havuza elle dokunma — id-çakışmas
 > 📍 **Hangi deftere yazıyorum?** Defter **odaya özeldir** (her proje kendi `_agents/handoff/`'una yazar).
 > Motor bunu bulunduğun klasörden çözer — `<skill-dizini>`'nden DEĞİL. Proje klasörü dışındaysan komut
 > **çalışmaz** (RC=2) ve doğru klasörü söyler; bu bilinçlidir: odalar birbirinin defterini görmez (İ1).
+
+## 3b · Hafıza kendiliğinden yazılır (L24 F6 — senden ek iş istemez)
+`kasif-havuz-ekle.sh` her koşuda üç deftere **otomatik** yazar; ayrıca bir şey yapmana gerek yok:
+
+| Defter | Ne tutar | Niçin |
+|---|---|---|
+| `kaynaklar.jsonl` | hangi adrese kaç kez gidildi, ne getirdi | bir daha boşa gitme |
+| `seyir.jsonl` | **her tur bir satır — bulgu getirmesen bile** | "aradım bulamadım" ile "hiç aramadım" ayrışsın |
+| `tekrar.jsonl` | dedup'ta düşen fikir + geldiği kaynaklar | aynı fikri 3 yerden duymak **sinyaldir**, gürültü değil |
+
+> ⚠️ Tur sonunda kısa bir **derinlik notu** bırakabilirsin: `_agents/kasif/knowledge/0N_<konu>.md`
+> (≤1 paragraf — "bu konuda öğrendiğim kalıcı şey"). Bu tek elle-yazılan parçadır; gerisi mekanik.
+
+**Karne** (haftalık, Sultan'a): `bash <skill-dizini>/scripts/kasif-karne.sh` — dönüşüm · boşa-tur ·
+kaynak-isabeti · tekrar-yükü. Yeterli veri yoksa **karne vermez** (az gözlemle hüküm ölçüm değildir).
+Adet-bazlı ölçüt bilerek YOK: ölçtüğün şeyi üretirsin, havuz çöple dolar.
 
 ## 4 · Rapor
 Sultan-dili tek-özet: "Dış-tarama turu — N konu tarandı, M ham-malzeme havuza eklendi (K atlandı: dup/gürültü).
