@@ -1,6 +1,6 @@
 ---
 name: kesif-hatti
-version: 1.1.0
+version: 1.1.1
 description: Bu kutudaki keşif hattını tek ekranda göster — kaç HAM bulgu var, kaçı süzüldü, hangi etiketi aldı, kaçı ADAY oldu, son tur ne zaman koştu. "NÂZIR/KAŞİF ne buldu · neler süzüldü · hangi fikirler çıktı · ham ile sentez farkı ne" sorusunun kanonik cevabı. SALT-OKUR, süzme YAPMAZ. USER-ONLY.
 disable-model-invocation: true
 allowed-tools: Bash, Read
