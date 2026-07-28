@@ -1,7 +1,7 @@
 ---
 name: layiha-fabrikasi
 type: agent
-version: 1.2.0
+version: 1.3.0
 description: >
   L24 Layiha Fabrikası — DİVAN'ın fikir-hattını (KAŞİF dış-tarama → bulgu-havuzu → MUCİT süzme →
   aday-havuzu → Sultan tek-tuş terfi) tek-çatı altında toplayan Usta-paket. kasif-tara + mucit-suz'ü
@@ -31,7 +31,7 @@ katmanı (`<skill-dizini>/scripts/layiha-aday-havuzu.sh`) ve terfi-hedefi (`layi
 | **Aç** (kapattığın neyse onu geri açar) | `bash <skill-dizini>/scripts/layiha-fabrika.sh ac` · yalnız bu oda: `ac --yerel` · hepsi: `ac --filo` |
 | **Durum bak** (bu oda açık mı, filoda ne var, neden) | `bash <skill-dizini>/scripts/layiha-fabrika.sh durum` |
 | **İlk kurulum** (yeni odada tezgâhı üret) | `bash <kasif-tara-dizini>/scripts/kasif-kur.sh` — oda **KAPALI doğar** |
-| **Eldeki adayları görüntüle/terfi et** (HER-ZAMAN çalışır — kill-switch'ten ETKİLENMEZ) | `bash <skill-dizini>/scripts/layiha-aday-havuzu.sh liste` · `goster <id>` · `terfi <id>` · `durum` |
+| **Eldeki adayları görüntüle/terfi et** (HER-ZAMAN çalışır — kill-switch'ten ETKİLENMEZ) | `bash <skill-dizini>/scripts/layiha-aday-havuzu.sh liste` · `goster <id>` · `terfi <id> --sultan-onay` · `durum` — ⚖️ terfi **Sultan kilidi** taşır (ADR-025 · fikir-hattındaki tek insan kapısı; otomatik akış atlayamaz) |
 
 ## Kill-switch (FAZ-D2, `_agents/spec/layiha-fabrikasi-dagitim-DESIGN.md` §5)
 

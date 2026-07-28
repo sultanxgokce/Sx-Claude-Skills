@@ -196,16 +196,29 @@ for k in ("sultan", "muhendislik", "urun"):
 PY
   ;;
   terfi)
-    # pozitif argümanları (id/slug) ve --gerekce'yi ayır
-    IDS=(); GEREKCE=""
+    # pozitif argümanları (id/slug), --gerekce ve Sultan-onayını ayır
+    IDS=(); GEREKCE=""; SULTAN_ONAY=0
     while [ $# -gt 0 ]; do
       case "$1" in
         --gerekce) GEREKCE="${2:-}"; shift 2 ;;
+        --sultan-onay) SULTAN_ONAY=1; shift ;;
         --*) shift ;;
         *) IDS+=("$1"); shift ;;
       esac
     done
-    [ "${#IDS[@]}" -gt 0 ] || { echo "HATA: terfi <id|slug> [<id|slug> ...] [--gerekce \"...\"]" >&2; exit 2; }
+    [ "${#IDS[@]}" -gt 0 ] || { echo "HATA: terfi <id|slug> [<id|slug> ...] --sultan-onay [--gerekce \"...\"]" >&2; exit 2; }
+
+    # ⚖️ SULTAN KİLİDİ (ADR-025 · otonom-fikir-hatti-DESIGN §11-9 / R3)
+    # Taslak → GERÇEK layiha geçişi, fikir-hattındaki TEK insan kapısıdır. Bu komut bugüne kadar
+    # kilitsizdi ve yalnız "çağıranı yok" diye güvendeydi — otonom hat bağlandığı an onay kapısı
+    # SESSİZCE buharlaşırdı. Bayrağı ajan kendi iradesiyle koyamaz; Sultan'ın açık emri gerekir
+    # (Yetki-Sınırı: insan-adına onay alanına ajan yazamaz).
+    if [ "$SULTAN_ONAY" -ne 1 ]; then
+      echo "HATA: taslağı GERÇEK layihaya çevirmek YALNIZ Sultan onayıyla olur (--sultan-onay)." >&2
+      echo "      Bu, fikir-hattındaki tek insan kapısıdır; otomatik akış onu atlayamaz." >&2
+      echo "      Adayı önce göster: layiha-aday-havuzu.sh goster ${IDS[0]}" >&2
+      exit 2
+    fi
 
     IDS_JSON="$(python3 -c "import json,sys; print(json.dumps(sys.argv[1:]))" "${IDS[@]}")"
 
