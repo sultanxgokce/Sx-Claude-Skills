@@ -2467,6 +2467,47 @@ printf '%s' "$out" | grep -q '127.0.0.1:8450:8443' \
   || bad "DERS-A2 golden: git-dışı fallback bozuldu"
 find "$AH_G" "$AH_G2" -type f -delete 2>/dev/null; find "$AH_G" "$AH_G2" -depth -type d -empty -delete 2>/dev/null
 
+# ── DERS-A3 (nazir provası 2.+3. tur, CANLI YAKALAMA): keşif origin/main + iç-port agnostik ──
+# İKİ ARIZA ÜST ÜSTE: (1) kardeş-dosya KEŞFİ yalnız diskten yapılıyordu; bayat checkout'ta
+# infra/docker-compose.ntfy.yml DİSKTE YOKTU (origin/main'de VAR) → görünmedi. (2) Görünse bile
+# desen `:8443` ile bitiyordu; ntfy `127.0.0.1:8452:80` bağlanır → yine sayılmazdı.
+# Çakışan şey HOST portudur, iç-port değil.
+AH_H="$(mktemp -d)"; mkdir -p "$AH_H/infra"
+cat > "$AH_H/infra/docker-compose.server.yml" <<'EOF'
+services:
+  cloudtop-a:
+    container_name: cloudtop-a
+    ports:
+      - "127.0.0.1:8449:8443"
+EOF
+# ntfy-emsali: AYRI dosya + İÇ-PORT 80 (code-server değil)
+cat > "$AH_H/infra/docker-compose.ntfy.yml" <<'EOF'
+services:
+  cloudtop-ntfy:
+    container_name: cloudtop-ntfy
+    ports:
+      - "127.0.0.1:8450:80"
+EOF
+git -C "$AH_H" init -q && git -C "$AH_H" add -A \
+  && git -C "$AH_H" -c user.email=t@t -c user.name=t commit -qm ilk >/dev/null
+git -C "$AH_H" update-ref refs/remotes/origin/main HEAD
+rm -f "$AH_H/infra/docker-compose.ntfy.yml"    # BAYAT CHECKOUT: dosya diskte YOK, origin/main'de VAR
+out="$(ISKAN_REPO_COMPOSE="$AH_H/infra/docker-compose.server.yml" bash "$SCRIPT_DIR/iskan.sh" yeni-proje ahikesif --dry-run 2>&1)"
+rc=$?
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q '127.0.0.1:8451:8443' \
+  && ok "DERS-A3: diskte-yok/origin'de-var kardeş + iç-port 80 sayıldı (8449+8450 dolu → 8451)" \
+  || bad "DERS-A3: gizli kardeş ya da iç-port-80 gözden kaçtı (rc=$rc)"
+printf '%s' "$out" | grep -q 'port-taraması: 2 compose dosyası' \
+  && ok "DERS-A3 keşif: origin/main'deki kardeş sayıldı (2 dosya)" \
+  || bad "DERS-A3 keşif: origin/main kardeşi keşfedilmedi"
+# override-kapısı da iç-port agnostik olmalı
+ISKAN_REPO_COMPOSE="$AH_H/infra/docker-compose.server.yml" bash "$SCRIPT_DIR/iskan.sh" yeni-proje ahikesif2 --port 8450 --dry-run >/dev/null 2>&1
+rc=$?
+[ "$rc" = "1" ] \
+  && ok "DERS-A3 override: iç-portu 80 olan kutunun host-portuna override rc=1" \
+  || bad "DERS-A3 override: iç-port-80 çakışması kaçtı (rc=$rc)"
+find "$AH_H" -type f -delete 2>/dev/null; find "$AH_H" -depth -type d -empty -delete 2>/dev/null
+
 # ── DERS-B: canlı kutu compose-tanımıyla uyuşmuyorsa apply REDDEDİLİR (R5) ────────────────
 # CANLI ARIZA: yarım-kalmış tez kutusu ayaktaydı; `up --no-recreate` onu diriltti; Docker
 # "healthy" diyordu (healthcheck container-İÇİ portu probe eder, dış eşlemeyi DEĞİL).

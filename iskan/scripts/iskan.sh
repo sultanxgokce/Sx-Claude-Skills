@@ -380,13 +380,37 @@ _iskan_apply_ac() {
 #   → host'ta "port is already allocated" ile patladı, elle 8453'e taşındı (PR cloudtop#138).
 #   Kök-neden: "tek dosya = tüm gerçek" varsayımı. Panzehir: kardeşleri de tara (repo-fazı).
 #   HOST-fazı ikinci-göz: iskan-host.sh apply-öncesi canlı port-haritasına da bakar.
+#
+# ⚠️ KEŞİF DE ORIGIN/MAIN'DEN (nazir provası 2. tur, 2026-07-28 — CANLI YAKALAMA):
+#   Keşif önce YALNIZ dosya-sisteminden yapılıyordu ve bu "bilinçli sınır" diye yazılmıştı.
+#   Sınır CANLI ARIZA çıktı: buradaki cloudtop çalışma-kopyası 33 commit geride olduğu için
+#   `infra/docker-compose.ntfy.yml` DİSKTE YOKTU (origin/main'de VAR). Tarayıcı "1 compose
+#   dosyası" görüp ntfy'nin tuttuğu 8452'yi BOŞ sandı → nazir'e verecekti (ntfy ile çakışma;
+#   tez'in başına gelenin birebir tekrarı). Artık keşif = dosya-sistemi ∪ origin/main.
 _iskan_compose_kardesler() {
   local repo_compose="$1"
   printf '%s\n' "$repo_compose"
-  local dizin; dizin="$(dirname "$repo_compose")"
-  local f
-  for f in "$dizin"/docker-compose*.yml; do
-    [ -f "$f" ] || continue
+  local mutlak dizin kok rel_dizin
+  mutlak="$(cd "$(dirname "$repo_compose")" 2>/dev/null && pwd)/$(basename "$repo_compose")"
+  dizin="$(dirname "$mutlak")"
+  {
+    # (1) dosya-sistemi kardeşleri
+    local f
+    for f in "$dizin"/docker-compose*.yml; do
+      [ -f "$f" ] && printf '%s\n' "$f"
+    done
+    # (2) origin/main kardeşleri (diskte OLMAYABİLİR — bayat/dallı checkout)
+    kok="$(git -C "$dizin" rev-parse --show-toplevel 2>/dev/null)"
+    if [ -n "$kok" ]; then
+      rel_dizin="${dizin#"$kok"/}"
+      [ "$rel_dizin" = "$dizin" ] && rel_dizin=""
+      git -C "$kok" ls-tree --name-only "origin/main" "${rel_dizin:+$rel_dizin/}" 2>/dev/null \
+        | grep -E '(^|/)docker-compose[^/]*\.yml$' \
+        | while read -r rel; do printf '%s\n' "$kok/$rel"; done
+    fi
+  } | sort -u | while read -r f; do
+    [ -z "$f" ] && continue
+    [ "$f" = "$mutlak" ] && continue
     [ "$f" = "$repo_compose" ] && continue
     case "$f" in *.bak|*.bak-*|*.orig) continue ;; esac
     printf '%s\n' "$f"
@@ -406,7 +430,10 @@ _iskan_compose_kardesler() {
 #   bir compose dosyası keşfedilmez. Bugünkü arıza sınıfı bu değil (dosya var, İÇERİĞİ bayat).
 _iskan_compose_icerik() {
   local f="$1" kok rel
-  [ -f "$f" ] || return 0
+  # DİKKAT: dosya DİSKTE OLMAYABİLİR (yalnız origin/main'de olan kardeş) → -f kapısı YOK;
+  # önce git denenir, sonra dosya. (Erken -f dönüşü ntfy-körlüğünü geri getirirdi.)
+  [ -n "$f" ] || return 0
+  [ -d "$(dirname "$f")" ] || return 0
   f="$(cd "$(dirname "$f")" && pwd)/$(basename "$f")"
   kok="$(git -C "$(dirname "$f")" rev-parse --show-toplevel 2>/dev/null)"
   if [ -n "$kok" ]; then
@@ -418,12 +445,18 @@ _iskan_compose_icerik() {
   cat "$f" 2>/dev/null
 }
 
-# _iskan_kullanilan_portlar <repo_compose> — kardeş-compose'lar dahil TÜM bağlı
-# "127.0.0.1:<port>:8443" portlarını sıralı-benzersiz basar (origin/main tercihli; yazım YOK).
+# _iskan_kullanilan_portlar <repo_compose> — kardeş-compose'lar dahil TÜM bağlı HOST-portlarını
+# sıralı-benzersiz basar (origin/main tercihli; yazım YOK).
+#
+# ⚠️ İÇ-PORT AGNOSTİK (nazir provası 3. tur, 2026-07-28 — CANLI YAKALAMA): desen eskiden
+#   `127.0.0.1:<port>:8443` idi — yani YALNIZ code-server kutularını sayıyordu. Altyapı kutuları
+#   başka iç-porta bağlanır: cloudtop-ntfy `127.0.0.1:8452:80`. Tarayıcı onu GÖRMÜYORDU; kardeş-
+#   dosya keşfi düzeltildikten SONRA bile 8452'yi boş sanmaya devam etti. Çakışan şey HOST portudur,
+#   iç-port değil → desen artık iç-porttan bağımsız: `127.0.0.1:<host>:<ic>`.
 _iskan_kullanilan_portlar() {
   local f
   while read -r f; do
-    _iskan_compose_icerik "$f" | grep -oE '"?127\.0\.0\.1:[0-9]+:8443"?'
+    _iskan_compose_icerik "$f" | grep -oE '"?127\.0\.0\.1:[0-9]+:[0-9]+"?'
   done < <(_iskan_compose_kardesler "$1") | grep -oE ':[0-9]+:' | tr -d ':' | sort -un
 }
 
