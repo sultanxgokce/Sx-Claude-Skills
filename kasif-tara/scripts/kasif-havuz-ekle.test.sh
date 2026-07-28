@@ -180,6 +180,26 @@ rc=$?
 [ "$rc" -eq 0 ] && ok "hafıza yazılamadı ama rc=0 (ana iş bozulmadı)" || no "fail-soft delindi: rc=$rc"
 [ "$(wc -l < "$TMP/fs-havuz.jsonl")" = "1" ] && ok "bulgu havuza YİNE de eklendi" || no "malzeme kayboldu"
 
+echo "== R1: ROL-KAPISI — MUCİT rolündeki alt-ajan havuza YAZAMAZ (ADR-025 K4) =="
+: > "$TMP/rol-havuz.jsonl"
+printf '[{"baslik":"Rol kapisi denemesi icin bulgu","detay":"d","kanit":"https://ornek.dev/rol"}]' > "$TMP/r1.json"
+ERR="$TMP/rol.err"
+LAYIHA_ROL=mucit KASIF_TEST=1 KASIF_HAVUZ="$TMP/rol-havuz.jsonl" KASIF_TARIH=2026-07-28 \
+  bash "$SUT" --girdi "$TMP/r1.json" >/dev/null 2>"$ERR"
+rc=$?
+[ "$rc" -eq 2 ] && ok "yanlış-rol RC=2 ile reddedildi" || no "rol-kapısı delik: rc=$rc"
+grep -q 'K4' "$ERR" && ok "ret gerekçesi K4'e atıf yapıyor" || no "ret sessiz/gerekçesiz"
+[ ! -s "$TMP/rol-havuz.jsonl" ] && ok "reddedilen koşu havuza HİÇBİR ŞEY yazmadı" || no "yazma sızdı"
+
+echo "== R2: doğru rol + rolsüz koşu çalışır (kapı fazla geniş değil) =="
+LAYIHA_ROL=kasif KASIF_TEST=1 KASIF_HAVUZ="$TMP/rol-havuz.jsonl" KASIF_TARIH=2026-07-28 \
+  bash "$SUT" --girdi "$TMP/r1.json" >/dev/null 2>&1
+[ "$(wc -l < "$TMP/rol-havuz.jsonl")" = "1" ] && ok "LAYIHA_ROL=kasif normal ekledi" || no "doğru rol de bloklandı"
+: > "$TMP/rol-havuz2.jsonl"
+kos --girdi "$TMP/r1.json" >/dev/null
+KASIF_TEST=1 KASIF_HAVUZ="$TMP/rol-havuz2.jsonl" KASIF_TARIH=2026-07-28 bash "$SUT" --girdi "$TMP/r1.json" >/dev/null 2>&1
+[ "$(wc -l < "$TMP/rol-havuz2.jsonl")" = "1" ] && ok "rol BOŞKEN geriye-uyum korundu" || no "rolsüz koşu bozuldu"
+
 echo ""
 echo "════════ SONUÇ: PASS=$PASS · FAIL=$FAIL ════════"
 [ "$FAIL" -eq 0 ] && echo "GOLDEN: TEMİZ ✓" || echo "GOLDEN: FAIL ✗"

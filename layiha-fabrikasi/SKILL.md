@@ -1,7 +1,7 @@
 ---
 name: layiha-fabrikasi
 type: agent
-version: 1.1.0
+version: 1.2.0
 description: >
   L24 Layiha Fabrikası — DİVAN'ın fikir-hattını (KAŞİF dış-tarama → bulgu-havuzu → MUCİT süzme →
   aday-havuzu → Sultan tek-tuş terfi) tek-çatı altında toplayan Usta-paket. kasif-tara + mucit-suz'ü
@@ -25,7 +25,7 @@ katmanı (`<skill-dizini>/scripts/layiha-aday-havuzu.sh`) ve terfi-hedefi (`layi
 
 | Ne istiyorsun | Komut |
 |---|---|
-| **Günlük üretim-turu** (dış-tarama + süzme) | `/kasif-tara` (tara → havuza yaz) sonra `/mucit-suz` (süz → önizleme/aday) — DİVAN §9 sırasıyla |
+| **Günlük üretim-turu** (dış-tarama + süzme) | `/kasif-tara` (tara → havuza yaz) sonra `/mucit-suz` (süz → önizleme/aday) — DİVAN §9 sırasıyla. ⚠️ **İkisi de AYRI birer taze alt-ajanda koşar** (ADR-025 K3+K4: bulan ≠ eleyen); dispatch kalıbı her iki el-kitabının başındadır. Müdür tarama/eleme yapmaz, orkestra şefidir. |
 | **Her yerde kapat** (hata bulundu, tüm odalarda üretimi durdur) | `bash <skill-dizini>/scripts/layiha-fabrika.sh kapat --sebep "<neden>"` |
 | **Yalnız bu odayı kapat** (öbür odalar üretmeye devam etsin) | `bash <skill-dizini>/scripts/layiha-fabrika.sh kapat --yerel --sebep "<neden>"` |
 | **Aç** (kapattığın neyse onu geri açar) | `bash <skill-dizini>/scripts/layiha-fabrika.sh ac` · yalnız bu oda: `ac --yerel` · hepsi: `ac --filo` |
