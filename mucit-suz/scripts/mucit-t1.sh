@@ -147,6 +147,69 @@ if (( KALAN <= 0 )); then
   exit 3
 fi
 
+# ── F2: ELEK-HAFIZA KAPISI (uc-elek-suzme-DESIGN §3.4 kural 4+5) ────────────────────────────
+# NİÇİN: bugüne kadar uygunluk kapısı (aşağıdaki jq) mucit-defteri'ne HİÇ bakmıyordu; defter
+#   yalnız dönem-tavanı sayılırken okunuyordu (yukarıdaki blok). Sonuç ölçüldü (2026-07-28):
+#   29 bulgu yeniden süzmeye girdi — içinde zaten aday-arzı olmuş b0022 (kart k0142) ve
+#   gerekçeli elenmiş b0029/b0030/b0031/b0020/b0024 vardı. Yani her tur aynı analiz yeniden
+#   ödeniyordu. Bu blok o deliği kapatır.
+#
+# İKİ KÜME üretir (ikisi de bulgu_id listesi):
+#   KAPATICI_IDS — kararı KALICI olan bulgular; hiçbir eleğe bir daha girmez.
+#   PENCERE_IDS  — bu elekte, bu pencerede zaten kararı olanlar; pencere dolunca yeniden girer.
+#
+# SINIF TÜRETİMİ (§3.2 geriye-uyum): satırda `sinif` alanı varsa O kullanılır; yoksa
+#   aday-arzi | mihenk-alani            → kapatici
+#   elendi + not "zaten-var|zaten-planli" → kapatici   (olgu-temelli eleme; Sultan-kararı 2)
+#   ötekiler (düşük-değer · cap-ertelendi · preview) → pencereli
+# ELEK TÜRETİMİ: satırda `elek` yoksa "haftalik" (mevcut 22 satırın tamamı divan/hafta
+#   profilinde üretildi — mucit-t1.sh:53 — dolayısıyla varsayım olgusal).
+# PREVIEW İSTİSNASI: kalibrasyon satırı pencereyi KAPATMAZ (§3.3: "aynı elek: girer").
+#
+# BAYRAK: MUCIT_ELEK_HAFIZA=1 açar. Kapalıyken iki küme de boş kalır → jq koşulları
+#   `index(...)==null` ile daima doğru → çıktı BAYT-AYNI (INERT). Testte kanıtlanır.
+ELEK="${ELEK:-haftalik}"
+KAPATICI_IDS='[]'
+PENCERE_IDS='[]'
+if [ "${MUCIT_ELEK_HAFIZA:-0}" = "1" ] && [[ -f "$DEFTER" ]]; then
+  case "$ELEK" in
+    gunluk)   _EFMT="+%F" ;;
+    haftalik) _EFMT="+%G-W%V" ;;
+    aylik)    _EFMT="" ;;   # 30-gün kayan pencere → tarih-karşılaştırması
+    *) echo "HATA: bilinmeyen elek: $ELEK (gunluk|haftalik|aylik)" >&2; exit 2 ;;
+  esac
+  _SIMDI_E="$([ -n "$_EFMT" ] && date -u "$_EFMT" || true)"
+  _AYLIK_SINIR="$(date -u -d '29 days ago' +%F)"
+
+  # sınıf+elek türetimi jq'da; pencere-kararı bash'te (tarih aritmetiği için)
+  _kap=""; _pen=""
+  while IFS=$'\t' read -r _id _sinif _elek _tarih; do
+    [ -n "$_id" ] && [ "$_id" != "null" ] || continue
+    if [ "$_sinif" = "kapatici" ]; then _kap+="$_id"$'\n'; continue; fi
+    [ "$_elek" = "$ELEK" ] || continue
+    if [ -n "$_EFMT" ]; then
+      _hw="$(date -u -d "$_tarih" "$_EFMT" 2>/dev/null || true)"
+      [ "$_hw" = "$_SIMDI_E" ] && _pen+="$_id"$'\n'
+    else
+      _d="$(date -u -d "$_tarih" +%F 2>/dev/null || true)"
+      [ -n "$_d" ] && [ ! "$_d" \< "$_AYLIK_SINIR" ] && _pen+="$_id"$'\n'
+    fi
+  done < <(jq -rc '
+      select(.bulgu_id != null)
+      | (.sinif // (
+          if (.verdikt == "aday-arzi" or .verdikt == "mihenk-alani") then "kapatici"
+          elif (.verdikt == "elendi" and ((.not // "") | test("^(zaten-var|zaten-planli)"))) then "kapatici"
+          else "pencereli" end)) as $s
+      | (.elek // "haftalik") as $e
+      | select(.verdikt != "preview" or $s == "kapatici")
+      | [.bulgu_id, $s, $e, (.tarih // "")] | @tsv
+    ' "$DEFTER" 2>/dev/null || true)
+
+  KAPATICI_IDS="$(printf '%s' "$_kap" | jq -Rnc '[inputs | select(length>0)] | unique' 2>/dev/null || echo '[]')"
+  PENCERE_IDS="$(printf '%s' "$_pen" | jq -Rnc '[inputs | select(length>0)] | unique' 2>/dev/null || echo '[]')"
+  echo "🧠 elek-hafızası AÇIK [elek=$ELEK]: kapatıcı=$(jq 'length' <<<"$KAPATICI_IDS") · bu-pencerede-kararlı=$(jq 'length' <<<"$PENCERE_IDS")" >&2
+fi
+
 # ── mevcut kart-başlıkları (dedup kaynağı) ──
 KART_BASLIKLAR="[]"
 if [[ "$KARTLAR_SRC" == "API" ]] && [[ -z "$BASE" ]]; then
@@ -187,6 +250,8 @@ CIKTI="$(jq -c -n \
   --slurpfile havuz "$HAVUZ" \
   --argjson kartlar "$KART_BASLIKLAR" \
   --arg mihenk "$MIHENK_DESEN" \
+  --argjson kapatici "$KAPATICI_IDS" \
+  --argjson pencere "$PENCERE_IDS" \
   --argjson esik "$DEDUP_ESIK" '
   def trlower: gsub("İ";"i")|gsub("I";"ı")|gsub("Ş";"ş")|gsub("Ğ";"ğ")|gsub("Ç";"ç")|gsub("Ö";"ö")|gsub("Ü";"ü");
   def norm: trlower | ascii_downcase | gsub("[^a-zçğıöşü0-9 ]"; " ") | gsub("  +"; " ") | ltrimstr(" ") | rtrimstr(" ");
@@ -209,13 +274,18 @@ CIKTI="$(jq -c -n \
       tur: $b.tur,
       _kanitli: $kanitli, _uygun_durum: ($uygun_durum != null),
       _mihenk: $mihenk_hit, _ortusme: $ortusme,
+      # F2 elek-hafızası: kümeler boşken ikisi de false → kapı ETKİSİZ (INERT, bayt-aynı çıktı)
+      _kapatici: (($kapatici | index($b.id)) != null),
+      _pencerede: (($pencere | index($b.id)) != null),
       onskor: ((($b.kanit // "" | length) / 40) + (if ($b.kaynak // "") | test("pilot|firsthand|serdar") then 3 else 1 end))
     }
   ]
 ' 2>&1)" || { echo "HATA: jq-süzme başarısız: $CIKTI" >&2; exit 2; }
 
 # ── karar: her bulguyu sınıfla, elenenleri stderr'e say, geçenleri adaylara koy ──
-ADAYLAR="$(jq -c '[ .[] | select(._uygun_durum and ._kanitli and (._mihenk|not) and (._ortusme < '"$DEDUP_ESIK"')) ]' <<<"$CIKTI")"
+ADAYLAR="$(jq -c '[ .[] | select(._uygun_durum and ._kanitli and (._mihenk|not) and (._ortusme < '"$DEDUP_ESIK"') and (._kapatici|not) and (._pencerede|not)) ]' <<<"$CIKTI")"
+E_KAPATICI=$(jq '[ .[] | select(._uygun_durum and ._kanitli and (._mihenk|not) and (._ortusme < '"$DEDUP_ESIK"') and ._kapatici) ] | length' <<<"$CIKTI")
+E_PENCERE=$(jq '[ .[] | select(._uygun_durum and ._kanitli and (._mihenk|not) and (._ortusme < '"$DEDUP_ESIK"') and (._kapatici|not) and ._pencerede) ] | length' <<<"$CIKTI")
 E_DURUM=$(jq '[ .[] | select(._uygun_durum|not) ] | length' <<<"$CIKTI")
 E_KANIT=$(jq '[ .[] | select(._uygun_durum and (._kanitli|not)) ] | length' <<<"$CIKTI")
 E_MIHENK=$(jq '[ .[] | select(._uygun_durum and ._kanitli and ._mihenk) ] | length' <<<"$CIKTI")
@@ -224,7 +294,7 @@ MIHENK_LIST=$(jq -c '[ .[] | select(._uygun_durum and ._kanitli and ._mihenk) | 
 UYGUN_SAYI=$(jq 'length' <<<"$ADAYLAR")
 
 # ön-skora göre sırala + iç-alanları temizle
-ADAYLAR_TEMIZ="$(jq -c 'sort_by(-.onskor) | [ .[] | del(._kanitli, ._uygun_durum, ._mihenk, ._ortusme) ]' <<<"$ADAYLAR")"
+ADAYLAR_TEMIZ="$(jq -c 'sort_by(-.onskor) | [ .[] | del(._kanitli, ._uygun_durum, ._mihenk, ._ortusme, ._kapatici, ._pencerede) ]' <<<"$ADAYLAR")"
 
 # ── eleme-özeti (stderr) ──
 {
@@ -233,6 +303,10 @@ ADAYLAR_TEMIZ="$(jq -c 'sort_by(-.onskor) | [ .[] | del(._kanitli, ._uygun_durum
   echo "   kanıtsız (fail-closed): $E_KANIT"
   echo "   MİHENK-alanı (Sultan) : $E_MIHENK  ${MIHENK_LIST}"
   echo "   zaten-var (kart-dedup): $E_DEDUP"
+  if [ "${MUCIT_ELEK_HAFIZA:-0}" = "1" ]; then
+    echo "   kalıcı-kararlı (hafıza): $E_KAPATICI  (aday olmuş · zaten-var/planlı elenmiş · MİHENK)"
+    echo "   bu pencerede kararlı   : $E_PENCERE  (elek=$ELEK; pencere dolunca yeniden girer)"
+  fi
   echo "   ➜ T2'ye geçen aday    : $UYGUN_SAYI   ·   [$PROFIL/$PERIYOT] kota: kalan $KALAN/$TAVAN"
 } >&2
 
