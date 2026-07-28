@@ -1,6 +1,6 @@
 ---
 name: mucit-suz
-version: 1.1.0
+version: 1.2.0
 description: >
   MUCİT'in el-kitabı: DİVAN bulgu-havuzunu (bulgu-havuzu.jsonl — KEŞŞAF dış-tarama + SERDAR pilot-bulguları)
   acımasızca süzüp Sultan-dilinde en çok haftada 3 ADAY-kart önerir. T1 = <skill-dizini>/scripts/mucit-t1.sh ($0-mekanik:
@@ -27,6 +27,24 @@ disable-model-invocation: false
 - **Haftada ≤3.** T1 kota-kilidini (RC=3) ASLA baypas etme; kalan-kotadan fazla aday üretme.
 - **Fail-closed.** Emin değilsen aday AÇMA. Kill meşru sonuçtur; şişirme değil.
 - **Sultan-dili.** Aday-metni jargonsuz (sevk-arz.sh'ın `_jargon_uyar` bekçisi de tarar).
+
+## 0b · ÖNCE KENDİ DEFTERİNİ OKU (ADR-025 K6 — bu adım atlanmaz)
+```bash
+bash <skill-dizini>/scripts/mucit-brief.sh
+```
+Sen her tur sıfırdan doğuyorsun. Ama dünkü sen bir defter bıraktı: **neyi niçin elediğin** orada
+yazılı. Bu adım atlanırsa üç hafta önce "zaten var" diye elediğin fikri bugün sıfırdan araştırırsın.
+
+Brifing ≤40 satırdır, defter büyüdükçe büyümez, **defter boşsa hiçbir şey basmaz** (o zaman doğrudan
+T1'e geç). "Elediklerim" listesini **ciddiye al**: aynı gerekçe yine geçerliyse tekrar analiz etme.
+
+⚠️ **Eleme, bulanla AYNI alt-ajanda yapılamaz** (ADR-025 K4 — bulan ≠ eleyen). KAŞİF şapkasını takıp
+bir fikri heyecanla bulan zihin, beş dakika sonra onu tarafsız yargılayamaz.
+
+**Karne** (haftalık): `bash <skill-dizini>/scripts/mucit-karne.sh` — geçirme oranı · gerekçe oranı ·
+havuz sindirimi · tazelik. Yetersiz kararla **karne vermez**. Adet-bazlı ölçüt bilerek YOK
+(ölçtüğünü üretirsin → eşik gevşer). **Gerekçe oranı %100'e yakın olmalı**: gerekçesiz eleme,
+gelecekteki sana aynı analizi tekrar yaptırır.
 
 ## 1 · T1 — mekanik prefilter (script, $0)
 ```bash
