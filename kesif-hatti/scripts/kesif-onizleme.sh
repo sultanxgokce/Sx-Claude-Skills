@@ -16,7 +16,10 @@
 #
 # SÜZMEYE UYGUNLUK: /mucit-suz'ün T1 kapısıyla AYNI kural (mucit-t1.sh:199):
 #     durum ∈ {ham, kart-red} olanlar süzmeye girer; bitti·cozuluyor·aday-onerildi·kart·elendi HARİÇ.
-#     Ayrıca mucit-defteri'nde kaydı olan bulgu "süzülmüş" sayılır → tekrar süzmeye GİRMEZ.
+#     Ayrıca mucit-defteri'nde kaydı olan bulgu BU GÖRÜNTÜLEYİCİDE "süzülmüş" sayılır.
+#     ⚠️ 2026-07-28 ölçümü: motorun kendisi (mucit-t1.sh:218) defterE BAKMIYOR — kararı olan
+#     bulgu yine de süzmeye giriyor. Yani buradaki "SÜZMEYE HAZIR" sayısı motorun fiilen
+#     işleyeceğinden AZ olabilir. Delik uc-elek-suzme-DESIGN F1+F2'de kapatılıyor.
 #
 # DÜRÜSTLÜK: dosya yoksa "kayıt yok" der, SIFIR yazmaz (yok ≠ boş). Sayı uydurmaz.
 # İ1: yalnız BU kutunun defterlerini okur; ssh/ağ yok, hiçbir şey yazmaz.
