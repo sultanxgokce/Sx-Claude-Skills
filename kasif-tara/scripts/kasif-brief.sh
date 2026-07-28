@@ -42,11 +42,33 @@ TEKRAR="${KASIF_TEKRAR:-$_dir/tekrar.jsonl}"
 HAVUZ="${KASIF_HAVUZ:-$(hat_yolu bulgu-havuzu 2>/dev/null || true)}"
 
 # Hiç defter yoksa sessizce çık — "henüz hafıza yok" bile basma (gürültü).
-[ -s "$SEYIR" ] || [ -s "$KAYNAKLAR" ] || [ -s "$TEKRAR" ] || exit 0
+YONTEM="${KASIF_YONTEM_DEFTERI:-$_dir/yontem.jsonl}"
+
+[ -s "$SEYIR" ] || [ -s "$KAYNAKLAR" ] || [ -s "$TEKRAR" ] || [ -s "$YONTEM" ] || exit 0
 
 ESIK="$(date -u -d "-${GUN} days" +%Y-%m-%d 2>/dev/null || echo "0000-00-00")"
 
 echo "🧭 KAŞİF brifingi — son $GUN gün"
+
+# ── 0) KURALLARIM — EN BAŞTA (ADR-025 K5: kayıt pasif, kural aktif) ───────────────────────
+# Damıtılmış deneyim brifingin İLK satırlarıdır: aşağıdaki istatistikleri okumadan önce
+# davranış kısıtını görürsün. Tavan 6+4 satır — defter büyüse de brifing büyümez.
+if [ -s "$YONTEM" ]; then
+  _k="$(jq -rs '[.[]|select(.durum=="kural")] | length' "$YONTEM" 2>/dev/null || echo 0)"
+  _a="$(jq -rs '[.[]|select(.durum=="aday")]  | length' "$YONTEM" 2>/dev/null || echo 0)"
+  if [ "${_k:-0}" != "0" ]; then
+    echo ""
+    echo "📏 KURALLARIM — bunlara UY (Sultan onayladı, tartışma yok):"
+    jq -rs '[.[]|select(.durum=="kural")] | .[0:6][] | "   • \(.kural)"' "$YONTEM" 2>/dev/null
+    [ "$_k" -gt 6 ] && echo "   … ve $(( _k - 6 )) kural daha (tümü: kasif-ogren.sh liste)"
+  fi
+  if [ "${_a:-0}" != "0" ]; then
+    echo ""
+    echo "🕯️ ADAY kurallar — DİKKATE al, ama seni bağlamaz (henüz onaylanmadı):"
+    jq -rs '[.[]|select(.durum=="aday")] | .[0:4][] | "   • \(.kural)"' "$YONTEM" 2>/dev/null
+    [ "$_a" -gt 4 ] && echo "   … ve $(( _a - 4 )) aday daha"
+  fi
+fi
 
 # ── 1) Nabız: en son ne zaman tarandı, kaç tur, kaçı boş ──────────────────────────────────
 if [ -s "$SEYIR" ]; then

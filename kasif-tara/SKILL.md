@@ -1,6 +1,6 @@
 ---
 name: kasif-tara
-version: 1.3.0
+version: 1.4.0
 description: >
   KAŞİF'in el-kitabı: DİVAN'ın işine yarayacak konularda (_agents/kasif/konular.md — Sultan-ayarlı) web'i
   tarayıp ham-malzeme (fikir/fırsat) toplar ve YALNIZ bulgu-havuzuna yazar (<skill-dizini>/scripts/kasif-havuz-ekle.sh,
@@ -118,6 +118,29 @@ Başka hiçbir yere yazma (Edit/Write ile havuza elle dokunma — id-çakışmas
 
 > ⚠️ Tur sonunda kısa bir **derinlik notu** bırakabilirsin: `_agents/kasif/knowledge/0N_<konu>.md`
 > (≤1 paragraf — "bu konuda öğrendiğim kalıcı şey"). Bu tek elle-yazılan parçadır; gerisi mekanik.
+
+## 3c · Kural halkası — deneyimi REFLEKSE çevirir (ADR-025 K5)
+
+Defter **pasiftir** (okunmayı bekler, senin inisiyatifine kalır); kural **aktiftir** (davranışını
+kısıtlar). Fark somut: *"kaynak-X'e 4 kez gidildi, 0 bulgu"* bir kayıttır — belki dikkate alırsın.
+*"X'e gitme"* bir kuraldır — inisiyatife bırakmaz.
+
+```bash
+bash <skill-dizini>/scripts/kasif-ogren.sh          # DRY-RUN: hangi kurallar doğardı
+bash <skill-dizini>/scripts/kasif-ogren.sh --yaz    # adayları yöntem defterine işle
+bash <skill-dizini>/scripts/kasif-ogren.sh liste    # kurallar + adaylar
+```
+
+**Kapılar (delinmez):** ≥3 örnek · 7 gün cooldown · kural **aday doğar** (uyarır, filtrelemez) ·
+aday→kural terfisi **YALNIZ Sultan** (`terfi <id> --sultan-onay`; ajan bu bayrağı kendi iradesiyle
+koyamaz) · varsayılan **dry-run**.
+
+**Kurallarını nerede görürsün:** brifingin **en başında** — istatistikleri okumadan önce. Tavan
+6 kural + 4 aday; defter büyüse de brifing büyümez.
+
+> 🛡️ **Bu halka LLM çağırmaz, %100 deterministiktir** (sayar, eşiğe bakar, yazar). Sebep: sen
+> güvenilmez web içeriği okuyorsun; öğrenme halkası LLM olsaydı okuduğun sayfa sana kural
+> yazdırabilirdi. Sayaç enjekte edilemez — bu hem daha ucuz hem daha güvenli.
 
 **Karne** (haftalık, Sultan'a): `bash <skill-dizini>/scripts/kasif-karne.sh` — dönüşüm · boşa-tur ·
 kaynak-isabeti · tekrar-yükü. Yeterli veri yoksa **karne vermez** (az gözlemle hüküm ölçüm değildir).
