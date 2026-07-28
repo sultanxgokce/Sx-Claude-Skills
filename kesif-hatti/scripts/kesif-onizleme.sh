@@ -134,6 +134,7 @@ else:
     print("HAM havuz        %-4d (%s)" % (len(bulgular), parca))
     for d, c in sorted(durum_say.items(), key=lambda x: -x[1]):
         etiket = {"ham": "henüz dokunulmamış", "cozuldu": "çözülmüş",
+                  "elendi-kalici": "kalıcı elendi — olgu-temelli, geri gelmez",
                   "cozuluyor-mvp": "çözülüyor", "yanlis-alarm": "yanlış alarm",
                   "kart-red": "kart reddedildi", "aday-onerildi": "aday olarak sunuldu"}.get(d, d)
         print("                   · %-18s %d   (%s)" % (d, c, etiket))
@@ -142,7 +143,7 @@ if n(k_durum): print("KARAR defteri    %s   → MUCİT bu kutuda hiç süzmemiş
 else:
     print("KARAR defteri    %-4d (%s)" % (len(kararlar), ", ".join(k_yerler)))
     for v, c in sorted(verdikt.items(), key=lambda x: -x[1]):
-        etiket = {"elendi": "elendi — bir daha süzmeye girmez",
+        etiket = {"elendi": "elendi (kalıcı mı geçici mi: gerekçeye bağlı — bkz not alanı)",
                   "aday-arzi": "ADAY oldu → sana sunuldu",
                   "preview": "kalibrasyon önizlemesi (deftere yazılmadı)",
                   "mihenk-alani": "ürün/pazar alanı — ayrı hat",

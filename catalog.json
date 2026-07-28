@@ -1121,7 +1121,7 @@
       "id": "kesif-hatti",
       "type": "agent",
       "name": "KEŞİF HATTI — ham bulgudan onaya giden hattın penceresi",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "description": "Bu kutudaki kesif hattini tek ekranda gosterir: kac HAM bulgu, kaci suzuldu ve hangi etiketi aldi, kaci ADAY oldu, son tur ne zaman kostu. SALT-OKUR ve SUZME YAPMAZ (suzmek MUCIT'in isi: /mucit-suz) — 'en iyi bulgular' demez, sahte-sentez uretmez. YOK != BOS: defter yoksa 'kayit yok' der, sifir yazmaz. Tekrar-suzme korumasini gorunur kilar (defterde karari olan bulgu bir daha suzmeye girmez).",
       "installed_in": [
         "_global"
