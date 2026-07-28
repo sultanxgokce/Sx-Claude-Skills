@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # federe.sh — Federe Ekip-OS çekirdek-istemcisi (C3/D7 · k0180). Nexus `scripts/federe-tetik.sh`'in
 # (FAZ-1 · A1/A4) FİLO-TAŞINABİLİR uyarlaması: Nexus-repo'suz container'da da çalışır (izole-birimler
-# Nexus'u GÖREMEZ — skill ortak ~/.claude/skills mount'uyla 7/7 dağıtılır, istemci de yanında gider).
+# Nexus'u GÖREMEZ — skill ortak ~/.claude/skills mount'uyla 10/10 dağıtılır, istemci de yanında gider).
 #
 #   gonder <hedef_sNN> "<başlık≤120>" [kart_ref] [not≤500]   → tetik bırak (META-only)
 #   gelen [durum] · giden [durum]                             → kutu listele

@@ -1,7 +1,7 @@
 ---
 name: kayit-damgasi
 type: agent
-version: 0.1.0
+version: 0.1.1
 description: >
   Bir iş/PR merge olurken kapattığı kayda (defter-kartı, gap/bulgu-defteri, SULTAN-KAPISI gate'i,
   plan-satırı) kapanış-damgasını işleyen paketli yardımcı. CLAUDE.md §9 "Kayıt-Damgası" refleksini
@@ -23,7 +23,10 @@ kapanış-damgasını işaretlemeyi refleks-hıza indiren yardımcı. 30 günde 
 önerilen damga-komutlarını basar ve (onayla) uygular.
 
 Kapsadığı kayıt-türleri: **defter-kartı** (`defter-mailbox.sh durum <k####> bitti --kanit …`) ·
-**gap/bulgu-defteri** (FIX + kanıt satırı) · **SULTAN-KAPISI** gate'i (durum + damga) · **plan-satırı**.
+**gap/bulgu-defteri** (FIX + kanıt satırı) · **SULTAN-KAPISI** gate'i (durum + damga) · **plan-satırı** ·
+**skill-defect bulgusu** (SYS/L01 · `g####`) — skill-onarımı bir `g####` bulgusunu kapatıyorsa
+kapanış `scripts/skill-fb-ekle.sh durum <g####> bitti --kanit <MUHUR|PR>` ile işlenir (kanıtsız RC=2;
+`bitti` kanıt-kapılı — tescil-mührü/PR gerekir). Aynı `bitti|teslim|yeniden`-yalnız guard'ı geçerli.
 
 ## Kullanım
 

@@ -115,6 +115,8 @@ cmd_new() {
     echo "     1) negatif-kapsam: bu yetenek neye DOKUNMAYACAK? ('sınırsız' cevabı REDDEDİLİR — İ1)"
     echo "     2) bölge-çakışma: mevcut skill/birim/üreteç bölgesiyle çakışıyor mu? (çakışma → üretme, eskalasyon)"
     echo "     3) dağıtım-kapsamı: yerel / global-hepsi / seçili-liste → install-ÖNERİSİ (insan/PR uygular; ADR-001)"
+    echo "  ── SYS (L01) doğum-sonrası yaşam ── manifest'e feedback: bloğu düşer; owner'ı DOLDUR"
+    echo "     (geri-bildirim: scripts/skill-fb-ekle.sh · süz: skill-fb-t1.sh · sağlık: ahi health). DOCTRINE §9."
     echo "  üretilecek:"
     while IFS= read -r rel; do echo "    $name/${rel#./}"; done < <(cd "$tdir" && find . -type f)
     echo "  → onay: ahi new $tier $name --apply"
@@ -130,6 +132,9 @@ cmd_new() {
     red "dolmamış placeholder kaldı — sevk-RED:"; grep -rn '{{' "$dest" >&2; return 1
   fi
   grn "✓ üretildi: $dest/"
+  if grep -q '^feedback:' "$dest/ahi.manifest.yaml" 2>/dev/null && grep -qE '^  owner: *""? *$' "$dest/ahi.manifest.yaml" 2>/dev/null; then
+    ylw "  ⚠ SYS (L01): feedback.owner BOŞ — DOLDUR (doğum-sonrası yaşam-döngüsü sahibi; 'ahi health' öksüz-owner WARN'lar)."
+  fi
   echo "  → kapsam-refleksi (3) cevabına göre install-ÖNERİNİ raporla: sync-targets.json/catalog.json girdisi insan/PR işi (ADR-001; ahi YAZMAZ)."
   echo "--- ahi check $name ---"; cmd_check "$name"
 }
@@ -260,8 +265,36 @@ cmd_health() {
   fi
   echo
   echo "Özet: $managed AHÎ-yönetimli · $unmanaged yönetimsiz · $deprecated emekli"
+  cmd_health_feedback "$repo"
   echo "--- repo-parity (özet) ---"
   command -v node >/dev/null 2>&1 && node "$AHI_DIR/schema/validate-repo.mjs" "$repo" 2>&1 | head -1 || echo "  (node yok)"
+}
+
+# ── SYS (L01) doğum-sonrası yaşam-döngüsü sağlık-arm'ı ──
+# Additive/INERT: havuz yoksa graceful-skip (mevcut 'ahi health' davranışı korunur).
+# Öksüz-owner (feedback: var AMA owner boş) = WARN; havuz varsa skill-başına açık-bulgu sayımı.
+cmd_health_feedback() {
+  local repo="$1" d name mani orphan=0
+  echo "--- SYS geri-bildirim-sağlığı (L01) ---"
+  for d in "$repo"/*/; do
+    name="$(basename "$d")"; mani="$d/ahi.manifest.yaml"
+    [ -f "$mani" ] || continue
+    if grep -q '^feedback:' "$mani" 2>/dev/null; then
+      if awk '/^feedback:/{f=1;next} f&&/^[^ ]/{f=0} f&&/^  owner:/{gsub(/[" ]/,"",$2); if($2=="")exit 0; else exit 1}' "$mani"; then
+        ylw "  ⚠ öksüz-owner: $name (feedback.owner boş — DOCTRINE §9b)"; orphan=$((orphan+1))
+      fi
+    fi
+  done
+  [ "$orphan" -eq 0 ] && grn "  ✓ öksüz-owner yok"
+  # havuz açık-bulgu özeti (env-override ya da varsayılan-aday; yoksa atla)
+  local havuz="${AHI_SKILL_FB_HAVUZU:-/config/projects/Nexus/_agents/handoff/skill-geri-bildirim.jsonl}"
+  if [ -f "$havuz" ] && command -v jq >/dev/null 2>&1; then
+    local acik; acik="$(jq -s '[ .[] | select((.durum//"ham")=="ham" or (.durum//"ham")=="cozuluyor") ] | length' "$havuz" 2>/dev/null || echo 0)"
+    echo "  havuz: $acik açık-bulgu ($(basename "$havuz"))"
+    jq -rs 'group_by(.skill)[] | select((map(select((.durum//"ham")=="ham" or (.durum//"ham")=="cozuluyor"))|length)>0) | "    · \(.[0].skill): \(map(select((.durum//"ham")=="ham" or (.durum//"ham")=="cozuluyor"))|length) açık"' "$havuz" 2>/dev/null || true
+  else
+    echo "  (skill-fb havuzu bulunamadı — açık-bulgu özeti atlandı; AHI_SKILL_FB_HAVUZU ile göster)"
+  fi
 }
 
 stub() { ylw "[$1] FAZ-$2'de gelir (şu an kabuk). Kanon hazır: ahi doctrine"; }

@@ -27,6 +27,15 @@
     "successor": { "type": "string" },
     "target_tier": { "enum": ["cirak", "kalfa", "usta", "pir"], "description": "hakettiği tavan-kademe (≠ en-üst)" },
     "owner": { "type": "string" },
+    "feedback": {
+      "type": "object",
+      "description": "SYS (L01) doğum-sonrası yaşam-döngüsü kanalı — OPSİYONEL (INERT; validate.mjs zorunlu-kılmaz). owner boşsa 'ahi health' öksüz-owner WARN'lar. channel=append-only havuz; sla_tier=digest(gürültü)|closure(tam-kapanış).",
+      "properties": {
+        "owner": { "type": "string", "description": "feedback-devralan (SYS FAZ-4'te doğum-anı zorunlu)" },
+        "channel": { "type": "string", "description": "geri-bildirim havuzu (default: skill-geri-bildirim.jsonl)" },
+        "sla_tier": { "enum": ["digest", "closure"], "description": "katmanlı-önem varsayılanı" }
+      }
+    },
     "install_targets": { "type": "array", "items": { "type": "string" } },
     "layers": { "type": "array", "items": { "type": "string" }, "description": "OPSİYONEL — yalnız S3/S4" },
     "consumable_surface": { "type": "array", "items": { "type": "string" }, "description": "OPSİYONEL — yalnız S3/S4" }

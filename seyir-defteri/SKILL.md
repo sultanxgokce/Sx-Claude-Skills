@@ -1,7 +1,7 @@
 ---
 name: seyir-defteri
 type: agent
-version: 1.0.0
+version: 1.0.1
 description: >
   Keşif-günlüğü + döngü-refleksiyonu. Yan-keşifler (aslında-şöyleymiş / bug / risk / fırsat) rapora
   gömülüp KAYBOLMASIN diye append-only defter: her-ajan gözlemini yazar, koordinatör döngü-sonu okur+
