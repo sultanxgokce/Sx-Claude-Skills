@@ -111,6 +111,22 @@ esit "G14b divan çıktısı gerçek JSON (susturulmadı)" "divan" "$(jq -r '.pr
 OUT7="$(LAYIHA_FABRIKA_BAYRAK="$T/yok.flag" "$SUT" suz --havuz "$T/havuz.jsonl" --kartlar "$T/kartlar.json" --profil layiha --defter "$T/bos6.jsonl" 2>/dev/null)"
 esit "G15 bayrak KALKINCA layiha üretimi geri gelir" "layiha" "$(jq -r '.profil' <<<"$OUT7")"
 
+# ── G16-G18: ROL-KAPISI (ADR-025 K4 — bulan ≠ eleyen) ──────────────────────────
+rolle() { LAYIHA_ROL="$1" "$SUT" suz --havuz "$T/havuz.jsonl" --kartlar "$T/kartlar.json" \
+            --profil layiha --defter "$T/bos-rol.jsonl" 2>"$T/err3"; }
+
+OUT8="$(rolle kasif)"; RC8=$?
+esit "G16 KAŞİF rolündeki alt-ajan ELEME motorunu koşamaz (RC=2)" "2" "$RC8"
+esit "G16b ret sessiz değil — gerekçe K4'e atıf yapar" "0" "$(grep -q 'K4' "$T/err3"; echo $?)"
+esit "G16c reddedilen koşu çıktı BASMAZ" "" "$OUT8"
+
+OUT9="$(rolle mucit)"; RC9=$?
+esit "G17 MUCİT rolündeki alt-ajan normal koşar" "0" "$RC9"
+esit "G17b ve gerçek çıktı üretir (kapı fazla geniş değil)" "layiha" "$(jq -r '.profil' <<<"$OUT9")"
+
+OUT10="$("$SUT" suz --havuz "$T/havuz.jsonl" --kartlar "$T/kartlar.json" --profil layiha --defter "$T/bos-rol2.jsonl" 2>/dev/null)"
+esit "G18 rol BOŞKEN geriye-uyum: elle/fabrika koşusu bozulmaz" "layiha" "$(jq -r '.profil' <<<"$OUT10")"
+
 echo
 echo "pass=$PASS fail=$FAIL"
 [[ $FAIL -eq 0 ]]

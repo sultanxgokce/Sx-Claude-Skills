@@ -23,6 +23,16 @@
 # RC: 0=başarı (adaylar emit; boş-havuz da 0) · 3=HAFTA-TAVAN dolu (kilit) · 2=kullanım/girdi hatası.
 set -euo pipefail
 
+# ── ROL-KAPISI (ADR-025 K4: bulan ≠ eleyen) ─────────────────────────────────────────────────
+# İkizi `kasif-tara/scripts/kasif-havuz-ekle.sh`'te. Alt-ajan rolünü `LAYIHA_ROL` ile taşır;
+# KAŞİF rolüyle gönderilmiş bir alt-ajan ELEME motorunu koşamaz. Boş = kısıt yok (elle koşu,
+# fabrika bandı ve eski çağrılar aynen çalışır).
+if [ -n "${LAYIHA_ROL:-}" ] && [ "${LAYIHA_ROL}" != "mucit" ]; then
+  echo "HATA: rol-kapısı — bu motor MUCİT'in eleği, alt-ajanın rolü ise '${LAYIHA_ROL}'." >&2
+  echo "      ADR-025 K4 (bulan ≠ eleyen): eleme için AYRI bir alt-ajan gönder (LAYIHA_ROL=mucit)." >&2
+  exit 2
+fi
+
 # ── yol-çözümü (L24 F3: paket-içi) ──────────────────────────────────────────────────────────
 # `hucre-baglam.lib.sh` PAKETE GİRMEZ (kökü SCRIPT dizininden hesaplar → ortak-mount'u kök sanar,
 # İ1'i deler ve sync'in rmSync'i veriyi siler). Yerine kökü CWD'den çözen `hat-yolu.lib.sh` (L24 F1).

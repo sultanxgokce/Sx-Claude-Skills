@@ -1,6 +1,6 @@
 ---
 name: mucit-suz
-version: 1.2.0
+version: 1.3.0
 description: >
   MUCİT'in el-kitabı: DİVAN bulgu-havuzunu (bulgu-havuzu.jsonl — KEŞŞAF dış-tarama + SERDAR pilot-bulguları)
   acımasızca süzüp Sultan-dilinde en çok haftada 3 ADAY-kart önerir. T1 = <skill-dizini>/scripts/mucit-t1.sh ($0-mekanik:
@@ -21,6 +21,29 @@ disable-model-invocation: false
 |---|---|
 | `/mucit-suz` ya da `/mucit-suz kalibrasyon` | Kalibrasyon turu: süz → **tek-sayfa önizleme** (defter YOK). İLK 2 tur ZORUNLU bu mod. |
 | `/mucit-suz canli` | Canlı tur: süz → aday-kart (durum=aday) + `sevk-arz.sh aday` (Sultan tek-tuş). Yalnız kalibrasyon bitince. |
+
+## 🧭 Bu iş TAZE ALT-AJANDA koşar (ADR-025 K3+K4 — atlanmaz)
+
+**Bu skill'i çağıran oturum elemeyi KENDİ yapmaz** — ayrı bir alt-ajan gönderir. Müdür orkestra
+şefidir, çalgıcı değil. Alt-ajan: masaya oturur (brifing) → süzer → deftere yazar → özet döner → yok olur.
+
+**⚖️ Bulan ≠ eleyen (K4 · bu skill için KRİTİK):** eleme, taramayı yapan alt-ajanda **yapılamaz**.
+Kendi bulduğu fikri heyecanla getiren zihin, beş dakika sonra onu tarafsız yargılayamaz — sistem bu
+ilkeyi zaten MÜHÜRDAR'ın kör-tescilinde uyguluyor, burada delik duruyordu. Motor mekanik kapatır:
+`LAYIHA_ROL=kasif` ile gelen bir alt-ajan `mucit-t1.sh`'i koşamaz (RC=2). Kanıt: `mucit-t1.test.sh` G16-G18.
+
+**⛔ Kalıcı ayrı MUCİT seansı YASAK** (ADR-025 K3): sıkıştırılmış bağlam, defterden **kötü** hafızadır
+— kayıplı, okunamaz, devredilemez, ölümlü. Birikim yalnız diskte olur.
+
+### Dispatch kalıbı (müdür bunu koşar)
+`Agent` · `subagent_type: general-purpose` · `run_in_background: true`. Prompt:
+
+> Süzme alt-ajanısın, persona değilsin. **MUCİT rolündesin — tarama YAPMAZSIN** (web'e çıkma; girdin
+> havuzda hazır duran ham-malzemedir). Kural kitabın: `<mucit-suz-dizini>/SKILL.md` — önce oku, aynen uygula.
+> Çalışma dizini: `<projenin kök klasörü>`. Sırayla: (1) `bash <skill-dizini>/scripts/mucit-brief.sh` —
+> masana otur, **neyi niçin elediğini** oku. (2) `LAYIHA_ROL=mucit bash <skill-dizini>/scripts/mucit-t1.sh suz`.
+> (3) T2 muhakemesi + acımasız-ele. (4) mod'a göre önizleme ya da aday-arzı. (5) 10-15 satır Sultan-dili özet döndür.
+> Kuyruğa kart SOKAMAZSIN; aday→kuyruk yalnız Sultan'ın tek-tuşudur.
 
 ## 0 · Değişmez-ön-kontroller (koşmadan önce)
 - **Kuyruğa SOKAMAZSIN.** En fazla `aday-arzı` mint edersin; aday→kuyruk flip'i YALNIZ Sultan (respond-endpoint).
@@ -49,7 +72,7 @@ gelecekteki sana aynı analizi tekrar yaptırır.
 ## 1 · T1 — mekanik prefilter (script, $0)
 ```bash
 cd <projenin kök klasörü>          # hangi odanın havuzunu süzdüğün CWD'den belirlenir
-bash <skill-dizini>/scripts/mucit-t1.sh suz            # stdout=JSON kontrat, stderr=eleme-özeti
+LAYIHA_ROL=mucit bash <skill-dizini>/scripts/mucit-t1.sh suz   # stdout=JSON kontrat, stderr=eleme-özeti
 #   RC 0 → adaylar emit (JSON: {hafta,tavan,uretilen,kalan,uygun_sayi,mihenk_alani,adaylar[]})
 #   RC 3 → HAFTA-TAVAN dolu → DUR: bu hafta yeni aday YOK (Sultan-dili tek-satır rapor, çık)
 #   RC 2 → girdi/kullanım hatası → düzelt
@@ -96,3 +119,6 @@ sayıları · kalan-kota. (Tavan-kilidi RC=3 ise "bu hafta tavan dolu, aday üre
 - Skill kod-içermez; T1 mekaniği `mucit-t1.sh`'te, T2 muhakemesi burada talimat-akışıdır.
 - "Değerli olabilir/muhtemelen" dili YASAK: her aday için etki+kanıt somut yazılır; belirsizse ele.
 - Bu skill kuyruk-yetkisi VERMEZ; aday→kuyruk her koşulda Sultan tek-tuşundan geçer.
+- **Rol-kapısının dürüst sınırı:** `LAYIHA_ROL` boşsa kısıt yoktur (elle koşu + fabrika bandı + eski
+  çağrılar bozulmasın diye). Yani kapı, deseni **uygulayan** akışta K4'ü mekanikleştirir; deseni hiç
+  kullanmayan bir ajanı yakalayamaz. Bu tasarım kararıdır, ölçüm değil.

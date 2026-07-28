@@ -21,6 +21,18 @@
 # DEĞER-GÜVENLİK: sır basmaz; salt-hesap + append.
 set -euo pipefail
 
+# ── ROL-KAPISI (ADR-025 K4: bulan ≠ eleyen) ─────────────────────────────────────────────────
+# Alt-ajan hangi rolle gönderildiyse `LAYIHA_ROL`'ü taşır (el-kitabındaki dispatch kalıbı koyar).
+# Tek bir alt-ajan İKİ rolü birden koşamaz: KAŞİF şapkasıyla heyecanla bulduğunu, beş dakika sonra
+# MUCİT şapkasıyla tarafsız yargılayamaz. Değişken BOŞSA kısıt yok (müdürün/Sultan'ın elle koşusu +
+# eski çağrılar bozulmaz) — bu bilinçli bir sınırdır: kapı deseni UYGULANDIĞINDA mekanikleştirir,
+# deseni hiç kullanmayan bir ajanı yakalayamaz (dürüst sınır, aşağıdaki "Sınırlar"da da yazılı).
+if [ -n "${LAYIHA_ROL:-}" ] && [ "${LAYIHA_ROL}" != "kasif" ]; then
+  echo "HATA: rol-kapısı — bu motor KAŞİF'in yazma-yüzeyi, alt-ajanın rolü ise '${LAYIHA_ROL}'." >&2
+  echo "      ADR-025 K4 (bulan ≠ eleyen): tarama için AYRI bir alt-ajan gönder (LAYIHA_ROL=kasif)." >&2
+  exit 2
+fi
+
 # ── yol-çözümü (L24 F3: paket-içi) ──────────────────────────────────────────────────────────
 # Bu script artık ortak-mount'taki `kasif-tara` paketinde yaşıyor; `hucre-baglam.lib.sh` PAKETE
 # GİRMEZ. Gerekçe: o kitaplık kökü SCRIPT dizininden hesaplar → paket dizini (ortak-mount, git-repo
