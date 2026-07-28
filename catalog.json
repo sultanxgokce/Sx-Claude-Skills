@@ -994,7 +994,7 @@
       "id": "mucit-suz",
       "type": "agent",
       "name": "mucit-suz — MUCİT fikir-süzme kabuğu (T1-mekanik + T2-muhakeme)",
-      "version": "1.5.1",
+      "version": "1.6.0",
       "description": "DİVAN bulgu-havuzunu acımasızca süzüp Sultan-dilinde aday önerir. T1 = scripts/mucit-t1.sh ($0-mekanik: uygunluk · kanıt-kapısı · MİHENK-deny · kart-dedup · dönem-tavanı RC≠0); T2 = repo-grep 'zaten var mı' + Sultan-dili aday-yazımı + etki×kolaylık×kanıt×uyum puanı. Profil-parametrik: divan (hafta/≤3, DİVAN-ANAYASA §8) vs layiha (gün/10, AYRI defter — §8 kotasını TÜKETMEZ). Kuyruğa kartı MUCİT SOKAMAZ; aday→kuyruk her zaman Sultan tek-tuşundan geçer.",
       "prerequisites": {
         "system": [

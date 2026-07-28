@@ -1,6 +1,6 @@
 ---
 name: mucit-suz
-version: 1.5.1
+version: 1.6.0
 description: >
   MUCİT'in el-kitabı: DİVAN bulgu-havuzunu (bulgu-havuzu.jsonl — KEŞŞAF dış-tarama + SERDAR pilot-bulguları)
   acımasızca süzüp Sultan-dilinde en çok haftada 3 ADAY-kart önerir. T1 = <skill-dizini>/scripts/mucit-t1.sh ($0-mekanik:
@@ -125,9 +125,18 @@ Yani aynı analiz her tur yeniden ödeniyordu. İki parça bu deliği kapatır:
 | Parça | Ne yapar | Bayrak |
 |---|---|---|
 | `scripts/mucit-durum-yaz.sh` | kapatıcı kararları havuzdaki `durum` alanına işler (tek boğaz) | `MUCIT_DURUM_YAZ=1` **+** `--uygula` |
-| T1 hafıza-kapısı | kapatıcı kararlı ve bu-pencerede-kararlı bulguları süzmeye SOKMAZ | `MUCIT_ELEK_HAFIZA=1` |
+| T1 hafıza-kapısı | kapatıcı kararlı ve bu-pencerede-kararlı bulguları süzmeye SOKMAZ | **varsayılan AÇIK** (kapatmak: `MUCIT_ELEK_HAFIZA=0`) |
 
-**Bayraklar kapalıyken davranış bugünküyle BAYT-AYNI** (INERT — `mucit-elek.test.sh` E2/E3 kanıtlar).
+Hafıza-kapısı **2026-07-28'den beri varsayılan açık** (canlı kanıt: T2'ye geçen aday 29 → 22,
+sıfır yanlış-eleme). `MUCIT_ELEK_HAFIZA=0` eski davranışı bayt-aynı geri getirir (`mucit-elek.test.sh` E2/E3).
+
+🔴 **CANLI TUR SONUNDA ZORUNLU ADIM:** aday-arzı ve `zaten-var/zaten-planli` gerekçeli eleme
+deftere yazıldıktan SONRA durum-yazıcıyı koş — yoksa karar havuza işlenmez ve hafıza deliği geri gelir:
+```
+bash <paket>/scripts/mucit-durum-yaz.sh                       # plan
+MUCIT_DURUM_YAZ=1 bash <paket>/scripts/mucit-durum-yaz.sh --uygula
+```
+Bu adım §5 kanıt-defteri satırına da yazılır ("durum-yaz: N bulgu damgalandı").
 
 Göç (tek seferlik, Sultan-kararı 5): önce kuru-koşuyla planı gör, sonra uygula:
 ```
