@@ -1,7 +1,7 @@
 ---
 name: whatsapp-baileys
 type: agent
-version: 1.1.0
+version: 1.2.0
 description: >
   Bir Baileys (@whiskeysockets/baileys) WhatsApp botunu telefona GÜVENİLİR bağlama
   playbook'u. Günlerce süren pairing cebelleşmesinden çıkarılmış kesin dersler:
@@ -65,7 +65,7 @@ const { state, saveCreds } = await useMultiFileAuthState(AUTH_DIR);
 const logger = pino({ level: 'silent' });
 
 // CANLI sürüm (fetchLatestBaileysVersion DEĞİL — o bayat, #2679). Fallback GÜNCEL tuple.
-let version: [number,number,number] = [2, 3000, 1042466098]; // ⚠ zamanla bayatlar · son doğrulama: 2026-07-22 · yenile: scripts/wa-version-check.mjs
+let version: [number,number,number] = [2, 3000, 1044006379]; // ⚠ zamanla bayatlar · son doğrulama: 2026-07-29 · yenile: scripts/wa-version-check.mjs
 try { const r = await fetchLatestWaWebVersion(); if (r.isLatest) version = r.version; } catch {}
 
 const sock = makeWASocket({
