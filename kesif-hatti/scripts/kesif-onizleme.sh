@@ -147,6 +147,7 @@ else:
                   "preview": "kalibrasyon önizlemesi (deftere yazılmadı)",
                   "mihenk-alani": "ürün/pazar alanı — ayrı hat",
                   "cap-ertelendi": "hafta tavanı doluydu, ertelendi",
+                  "tema": "AYLIK SENTEZ teması → /layiha ile ilerler (kotaya saymaz)",
                   "dogum": "doğum kaydı"}.get(v, v)
         print("                   · %-18s %d   (%s)" % (v, c, etiket))
 

@@ -47,8 +47,17 @@ source "$HAT_LIB"
 # (git-siz dizinde `--defter <yol>` verildiğinde gereksiz yere RC=2 vermemek için — fail-closed sadece
 # gerçekten default'a düşüldüğünde devreye girer).
 PROFIL="${MUCIT_PROFIL:-divan}"
+# ELEK = süzme RİTMİ (uc-elek-suzme-DESIGN §3.4). Profilden AYRI eksen:
+#   profil = hangi program (divan / layiha-fabrikası) · elek = o programın hangi ritmi.
+# Varsayılan `haftalik` = bugünkü davranış (geriye-uyum; §3.2).
+ELEK="${MUCIT_ELEK:-haftalik}"
 _prev=""
-for _a in "$@"; do [[ "$_prev" == "--profil" ]] && PROFIL="$_a"; _prev="$_a"; done
+for _a in "$@"; do
+  [[ "$_prev" == "--profil" ]] && PROFIL="$_a"
+  [[ "$_prev" == "--elek" ]]   && ELEK="$_a"
+  _prev="$_a"
+done
+case "$ELEK" in gunluk|haftalik|aylik) ;; *) echo "HATA: bilinmeyen elek: $ELEK (gunluk|haftalik|aylik)" >&2; exit 2 ;; esac
 case "$PROFIL" in
   divan)   _TAVAN_D=3;  _PERIYOT_D=hafta; _DEFTER_ART=mucit-defteri ;;
   layiha)  _TAVAN_D=10; _PERIYOT_D=gun;   _DEFTER_ART=mucit-defteri-layiha ;;
@@ -82,7 +91,7 @@ MIHENK_DESEN='pazar|müşteri|musteri|gelir|satış|satis|fiyatland|pricing|reve
 
 command -v jq >/dev/null 2>&1 || { echo "HATA: jq yok" >&2; exit 2; }
 
-usage() { echo "Kullanım: mucit-t1.sh suz [--profil divan|layiha] [--havuz <path>] [--kartlar API|<file>] [--defter <path>] [--tavan N] [--periyot hafta|gun]" >&2; exit 2; }
+usage() { echo "Kullanım: mucit-t1.sh suz [--elek gunluk|haftalik|aylik] [--profil divan|layiha] [--havuz <path>] [--kartlar API|<file>] [--defter <path>] [--tavan N] [--periyot hafta|gun]" >&2; exit 2; }
 
 # ── argümanlar ──
 CMD="${1:-suz}"; shift || true
@@ -94,6 +103,7 @@ while [[ $# -gt 0 ]]; do
     --tavan)   TAVAN="${2:?}"; shift ;;
     --periyot) PERIYOT="${2:?}"; shift ;;
     --profil)  shift ;;   # ön-taramada işlendi
+    --elek)    shift ;;   # ön-taramada işlendi (kapıları etkiler)
     *) echo "HATA: bilinmeyen bayrak: $1" >&2; usage ;;
   esac; shift
 done
@@ -132,6 +142,23 @@ case "$PERIYOT" in
   *) echo "HATA: bilinmeyen periyot: $PERIYOT (hafta|gun)" >&2; exit 2 ;;
 esac
 BU_HAFTA="$(date -u "$DFMT")"
+
+# ── ELEK-KAPILARI (uc-elek-suzme-DESIGN §3.5 — hafta-tavanı BÖLÜNMEZ) ────────────────────────
+# Kanon-sayı TEK: DİVAN-ANAYASA §8 "haftada ≤3 aday". Sunucu (arz/route.ts) bu tavanı
+# ISO-hafta × cell_id × source=aday-arzi sayarak uygular ve hangi eleğin ürettiğine BAKMAZ.
+# Dolayısıyla elekler tavanı PAYLAŞIR; elek-başına ayrı kota YOKTUR. İki tek istisna:
+#
+#   gunluk → ek RİTİM-FRENİ (≤1 aday/gün). Amacı kota bölmek değil: bir günün haftanın
+#            üçünü birden tüketip kalan altı günü kilitlemesini önlemek (Sultan-kararı 1).
+#   aylik  → aday ÜRETMEZ, `tema` üretir (Sultan-kararı 3) → tavanı hiç yemez, dolayısıyla
+#            dönem-tavan kilidi bu elekte HİÇ uygulanmaz. Vizyoner bakış bir fikri öldürmez
+#            ve kotayı da yemez; tek ilerleme yolu /layiha'dır.
+GUNLUK_TAVAN="$(_kanon "elekler.gunluk.tavan")"; [ -n "$GUNLUK_TAVAN" ] || GUNLUK_TAVAN=1
+
+if [ "$ELEK" = "aylik" ]; then
+  echo "🔭 AYLIK ELEK [sentez modu]: aday üretilmez, tema üretilir → dönem-tavan kilidi uygulanmadı." >&2
+fi
+
 URETILEN=0
 if [[ -f "$DEFTER" ]]; then
   while IFS= read -r t; do
@@ -141,10 +168,29 @@ if [[ -f "$DEFTER" ]]; then
   done < <(jq -rc 'select(.verdikt=="aday-arzi") | .tarih // empty' "$DEFTER" 2>/dev/null || true)
 fi
 KALAN=$(( TAVAN - URETILEN ))
-if (( KALAN <= 0 )); then
+if [ "$ELEK" = "aylik" ]; then
+  KALAN=0     # aylık elek aday üretmez → kota kavramı yok (tema-modu)
+elif (( KALAN <= 0 )); then
   echo "🔒 DÖNEM-TAVAN dolu [profil=$PROFIL]: $DONEM_AD ($BU_HAFTA) $URETILEN/$TAVAN gerçek-aday üretilmiş — yeni aday MEKANİK reddedilir." >&2
   echo "   (Kalibrasyon-önizleme tavana sayılmaz; yalnız verdikt=aday-arzi sayılır.)" >&2
   exit 3
+fi
+
+# günlük ritim-freni: bugün zaten aday üretilmişse dur (haftalık tavandan BAĞIMSIZ ek fren)
+if [ "$ELEK" = "gunluk" ] && [[ -f "$DEFTER" ]]; then
+  BUGUN_TARIH="$(date -u +%F)"
+  BUGUN_URETILEN=0
+  while IFS= read -r t; do
+    [[ -n "$t" ]] || continue
+    d="$(date -u -d "$t" +%F 2>/dev/null || true)"
+    [[ "$d" == "$BUGUN_TARIH" ]] && BUGUN_URETILEN=$((BUGUN_URETILEN+1))
+  done < <(jq -rc 'select(.verdikt=="aday-arzi") | .tarih // empty' "$DEFTER" 2>/dev/null || true)
+  if (( BUGUN_URETILEN >= GUNLUK_TAVAN )); then
+    echo "🔒 GÜNLÜK RİTİM-FRENİ: bugün ($BUGUN_TARIH) $BUGUN_URETILEN/$GUNLUK_TAVAN aday üretilmiş — günlük elek durdu." >&2
+    echo "   (Haftalık tavan hâlâ $KALAN/$TAVAN müsait; yarın günlük elek yeniden açılır.)" >&2
+    exit 3
+  fi
+  (( KALAN > GUNLUK_TAVAN - BUGUN_URETILEN )) && KALAN=$(( GUNLUK_TAVAN - BUGUN_URETILEN ))
 fi
 
 # ── F2: ELEK-HAFIZA KAPISI (uc-elek-suzme-DESIGN §3.4 kural 4+5) ────────────────────────────
@@ -169,7 +215,6 @@ fi
 # BAYRAK: `MUCIT_ELEK_HAFIZA` — 2026-07-28'den beri VARSAYILAN AÇIK (canlı kanıt: 29→22 aday,
 #   sıfır yanlış-eleme). Kapatmak için `MUCIT_ELEK_HAFIZA=0`; kapalıyken iki küme de boş kalır →
 #   jq koşulları `index(...)==null` ile daima doğru → çıktı bayt-aynı (INERT kaçış-kapağı korunur).
-ELEK="${ELEK:-haftalik}"
 KAPATICI_IDS='[]'
 PENCERE_IDS='[]'
 if [ "${MUCIT_ELEK_HAFIZA:-1}" = "1" ] && [[ -f "$DEFTER" ]]; then
@@ -177,7 +222,6 @@ if [ "${MUCIT_ELEK_HAFIZA:-1}" = "1" ] && [[ -f "$DEFTER" ]]; then
     gunluk)   _EFMT="+%F" ;;
     haftalik) _EFMT="+%G-W%V" ;;
     aylik)    _EFMT="" ;;   # 30-gün kayan pencere → tarih-karşılaştırması
-    *) echo "HATA: bilinmeyen elek: $ELEK (gunluk|haftalik|aylik)" >&2; exit 2 ;;
   esac
   _SIMDI_E="$([ -n "$_EFMT" ] && date -u "$_EFMT" || true)"
   _AYLIK_SINIR="$(date -u -d '29 days ago' +%F)"
@@ -308,7 +352,7 @@ ADAYLAR_TEMIZ="$(jq -c 'sort_by(-.onskor) | [ .[] | del(._kanitli, ._uygun_durum
     echo "   kalıcı-kararlı (hafıza): $E_KAPATICI  (aday olmuş · zaten-var/planlı elenmiş · MİHENK)"
     echo "   bu pencerede kararlı   : $E_PENCERE  (elek=$ELEK; pencere dolunca yeniden girer)"
   fi
-  echo "   ➜ T2'ye geçen aday    : $UYGUN_SAYI   ·   [$PROFIL/$PERIYOT] kota: kalan $KALAN/$TAVAN"
+  echo "   ➜ T2'ye geçen aday    : $UYGUN_SAYI   ·   [$PROFIL/$ELEK] kota: kalan $KALAN/$TAVAN"
 } >&2
 
 # ── stdout: T2-kontratı ──
@@ -317,5 +361,6 @@ jq -c -n \
   --argjson uygun "$UYGUN_SAYI" --argjson adaylar "$ADAYLAR_TEMIZ" \
   --argjson mihenk "$MIHENK_LIST" --arg hafta "$BU_HAFTA" \
   --arg profil "$PROFIL" --arg periyot "$PERIYOT" \
-  '{hafta:$hafta, donem:$hafta, profil:$profil, periyot:$periyot, tavan:$tavan, uretilen:$uretilen, kalan:$kalan, uygun_sayi:$uygun, mihenk_alani:$mihenk, adaylar:$adaylar}'
+  --arg elek "$ELEK" --arg mod "$([ "$ELEK" = "aylik" ] && echo tema || echo aday)" \
+  '{hafta:$hafta, donem:$hafta, profil:$profil, periyot:$periyot, elek:$elek, mod:$mod, tavan:$tavan, uretilen:$uretilen, kalan:$kalan, uygun_sayi:$uygun, mihenk_alani:$mihenk, adaylar:$adaylar}'
 exit 0

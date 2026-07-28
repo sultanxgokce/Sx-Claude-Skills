@@ -994,7 +994,7 @@
       "id": "mucit-suz",
       "type": "agent",
       "name": "mucit-suz — MUCİT fikir-süzme kabuğu (T1-mekanik + T2-muhakeme)",
-      "version": "1.6.0",
+      "version": "1.7.0",
       "description": "DİVAN bulgu-havuzunu acımasızca süzüp Sultan-dilinde aday önerir. T1 = scripts/mucit-t1.sh ($0-mekanik: uygunluk · kanıt-kapısı · MİHENK-deny · kart-dedup · dönem-tavanı RC≠0); T2 = repo-grep 'zaten var mı' + Sultan-dili aday-yazımı + etki×kolaylık×kanıt×uyum puanı. Profil-parametrik: divan (hafta/≤3, DİVAN-ANAYASA §8) vs layiha (gün/10, AYRI defter — §8 kotasını TÜKETMEZ). Kuyruğa kartı MUCİT SOKAMAZ; aday→kuyruk her zaman Sultan tek-tuşundan geçer.",
       "prerequisites": {
         "system": [
@@ -1121,7 +1121,7 @@
       "id": "kesif-hatti",
       "type": "agent",
       "name": "KEŞİF HATTI — ham bulgudan onaya giden hattın penceresi",
-      "version": "1.0.1",
+      "version": "1.1.0",
       "description": "Bu kutudaki kesif hattini tek ekranda gosterir: kac HAM bulgu, kaci suzuldu ve hangi etiketi aldi, kaci ADAY oldu, son tur ne zaman kostu. SALT-OKUR ve SUZME YAPMAZ (suzmek MUCIT'in isi: /mucit-suz) — 'en iyi bulgular' demez, sahte-sentez uretmez. YOK != BOS: defter yoksa 'kayit yok' der, sifir yazmaz. Tekrar-suzme korumasini gorunur kilar (defterde karari olan bulgu bir daha suzmeye girmez).",
       "installed_in": [
         "_global"
