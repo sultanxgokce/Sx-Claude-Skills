@@ -393,12 +393,37 @@ _iskan_compose_kardesler() {
   done
 }
 
+# _iskan_compose_icerik <dosya> — compose içeriğini ORIGIN/MAIN tercihiyle basar; dosya bir
+# git-deposunda değilse ya da origin/main'de yoksa çalışma-kopyasına düşer (saf-fn).
+#
+# ⚠️ NEDEN (nazir doğum-provası, 2026-07-28 — CANLI YAKALAMA): port-tarayıcı ÇALIŞMA-KOPYASINI
+#   okuyordu. Buradaki cloudtop checkout'u 33 commit geriydi ve tez'i HÂLÂ eski portunda (8452)
+#   sanıyordu; origin/main'de tez 8453'e taşınmıştı (cloudtop#138). Tarayıcı 8453'ü "boş" görüp
+#   nazir'e verecekti → tez ile BİREBİR çakışma. Prova bunu doğumdan önce yakaladı.
+#   Host-tarafı bu dersi zaten almıştı (`_hostsrv_compose_port` origin/main okur, CYCLE-5 FIX#1);
+#   repo-tarafı allocator'a aynı muamele yapılmamıştı — bu fonksiyon o boşluğu kapatır.
+# SINIR (bilinçli): kardeş-dosya KEŞFİ dosya-sisteminden yapılır → YALNIZ origin/main'de var olan
+#   bir compose dosyası keşfedilmez. Bugünkü arıza sınıfı bu değil (dosya var, İÇERİĞİ bayat).
+_iskan_compose_icerik() {
+  local f="$1" kok rel
+  [ -f "$f" ] || return 0
+  f="$(cd "$(dirname "$f")" && pwd)/$(basename "$f")"
+  kok="$(git -C "$(dirname "$f")" rev-parse --show-toplevel 2>/dev/null)"
+  if [ -n "$kok" ]; then
+    rel="${f#"$kok"/}"
+    if git -C "$kok" cat-file -e "origin/main:$rel" 2>/dev/null; then
+      git -C "$kok" show "origin/main:$rel" 2>/dev/null && return 0
+    fi
+  fi
+  cat "$f" 2>/dev/null
+}
+
 # _iskan_kullanilan_portlar <repo_compose> — kardeş-compose'lar dahil TÜM bağlı
-# "127.0.0.1:<port>:8443" portlarını sıralı-benzersiz basar (saf-fn, yazım YOK).
+# "127.0.0.1:<port>:8443" portlarını sıralı-benzersiz basar (origin/main tercihli; yazım YOK).
 _iskan_kullanilan_portlar() {
   local f
   while read -r f; do
-    grep -oE '"?127\.0\.0\.1:[0-9]+:8443"?' "$f" 2>/dev/null
+    _iskan_compose_icerik "$f" | grep -oE '"?127\.0\.0\.1:[0-9]+:8443"?'
   done < <(_iskan_compose_kardesler "$1") | grep -oE ':[0-9]+:' | tr -d ':' | sort -un
 }
 
@@ -710,7 +735,7 @@ cmd_yeni_proje() {
       port="$(_iskan_pick_port "$repo_compose")"
       # Şeffaflık: hangi dosyalar tarandı (tez-doğumu dersi — "tek dosya = tüm gerçek" varsayımı
       # 8452 çakışmasını doğurmuştu). Kaynak-beyanı DEĞİL (golden: override-beyanı basılmaz).
-      echo "[yeşil] port-taraması: $(_iskan_compose_kardesler "$repo_compose" | wc -l) compose dosyası (kardeşler dahil) → boş port ${port}"
+      echo "[yeşil] port-taraması: $(_iskan_compose_kardesler "$repo_compose" | wc -l) compose dosyası (kardeşler dahil · origin/main tercihli) → boş port ${port}"
     fi
     blok="$(_iskan_compose_blok "$ad" "$cname" "$config_dir" "$port" "$mem_limit")"
     blok_dosyasi="$(mktemp)"

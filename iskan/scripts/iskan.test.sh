@@ -2417,6 +2417,56 @@ printf '%s' "$out" | grep -q '127.0.0.1:8450:8443' \
   || bad "DERS-A golden: tek-dosya davranışı değişti"
 find "$AH_D" "$AH_D2" -type f -delete 2>/dev/null; rmdir "$AH_D" "$AH_D2" 2>/dev/null
 
+# ── DERS-A2 (nazir provası, CANLI YAKALAMA): tarayıcı ORIGIN/MAIN okumalı ────────────────
+# CANLI ARIZA: cloudtop checkout'u 33 commit geriydi; tez orada HÂLÂ 8452'deydi, origin/main'de
+# 8453'e taşınmıştı. Tarayıcı çalışma-kopyasını okuyup 8453'ü "boş" sandı → nazir'e verecekti
+# (tez ile birebir çakışma). Prova doğumdan ÖNCE yakaladı.
+AH_G="$(mktemp -d)"; mkdir -p "$AH_G/infra"
+cat > "$AH_G/infra/docker-compose.server.yml" <<'EOF'
+services:
+  cloudtop-eski:
+    container_name: cloudtop-eski
+    ports:
+      - "127.0.0.1:8449:8443"
+EOF
+git -C "$AH_G" init -q && git -C "$AH_G" add -A \
+  && git -C "$AH_G" -c user.email=t@t -c user.name=t commit -qm ilk >/dev/null
+# origin/main: aynı servis 8450'ye TAŞINDI (çalışma-kopyası bunu bilmiyor → 8449 sanıyor)
+cat > "$AH_G/infra/docker-compose.server.yml" <<'EOF'
+services:
+  cloudtop-eski:
+    container_name: cloudtop-eski
+    ports:
+      - "127.0.0.1:8450:8443"
+EOF
+git -C "$AH_G" -c user.email=t@t -c user.name=t commit -qam tasindi >/dev/null
+git -C "$AH_G" update-ref refs/remotes/origin/main HEAD
+git -C "$AH_G" reset -q --hard HEAD~1     # çalışma-kopyası BAYAT: 8449 der, origin/main 8450 der
+out="$(ISKAN_REPO_COMPOSE="$AH_G/infra/docker-compose.server.yml" bash "$SCRIPT_DIR/iskan.sh" yeni-proje ahiorigin --dry-run 2>&1)"
+rc=$?
+# origin/main'de 8450 DOLU → seçilen port 8450 OLMAMALI (8449 boş, floor'dan ilk boş = 8449)
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q '127.0.0.1:8449:8443' \
+  && ! printf '%s' "$out" | grep -q '127.0.0.1:8450:8443' \
+  && ok "DERS-A2 origin/main-okuma: bayat çalışma-kopyasına rağmen origin/main'de DOLU port seçilmedi" \
+  || bad "DERS-A2 origin/main-okuma: bayat kopya okundu → çakışan port seçildi (rc=$rc)"
+printf '%s' "$out" | grep -q 'origin/main tercihli' \
+  && ok "DERS-A2 şeffaflık: kaynak-tercihi (origin/main) beyan ediliyor" \
+  || bad "DERS-A2 şeffaflık: kaynak-tercihi beyanı yok"
+# git-DIŞI dosyada davranış değişmez (fallback çalışma-kopyası) — regresyon-guard
+AH_G2="$(mktemp -d)"
+cat > "$AH_G2/docker-compose.server.yml" <<'EOF'
+services:
+  cloudtop-x:
+    container_name: cloudtop-x
+    ports:
+      - "127.0.0.1:8449:8443"
+EOF
+out="$(ISKAN_REPO_COMPOSE="$AH_G2/docker-compose.server.yml" bash "$SCRIPT_DIR/iskan.sh" yeni-proje ahiorigin2 --dry-run 2>&1)"
+printf '%s' "$out" | grep -q '127.0.0.1:8450:8443' \
+  && ok "DERS-A2 golden: git-dışı dosyada çalışma-kopyası okunur (davranış değişmedi)" \
+  || bad "DERS-A2 golden: git-dışı fallback bozuldu"
+find "$AH_G" "$AH_G2" -type f -delete 2>/dev/null; find "$AH_G" "$AH_G2" -depth -type d -empty -delete 2>/dev/null
+
 # ── DERS-B: canlı kutu compose-tanımıyla uyuşmuyorsa apply REDDEDİLİR (R5) ────────────────
 # CANLI ARIZA: yarım-kalmış tez kutusu ayaktaydı; `up --no-recreate` onu diriltti; Docker
 # "healthy" diyordu (healthcheck container-İÇİ portu probe eder, dış eşlemeyi DEĞİL).
