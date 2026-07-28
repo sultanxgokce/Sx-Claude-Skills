@@ -1,6 +1,6 @@
 ---
 name: mucit-suz
-version: 1.6.0
+version: 1.7.0
 description: >
   MUCİT'in el-kitabı: DİVAN bulgu-havuzunu (bulgu-havuzu.jsonl — KEŞŞAF dış-tarama + SERDAR pilot-bulguları)
   acımasızca süzüp Sultan-dilinde en çok haftada 3 ADAY-kart önerir. T1 = <skill-dizini>/scripts/mucit-t1.sh ($0-mekanik:
@@ -21,6 +21,45 @@ disable-model-invocation: false
 |---|---|
 | `/mucit-suz` ya da `/mucit-suz kalibrasyon` | Kalibrasyon turu: süz → **tek-sayfa önizleme** (defter YOK). İLK 2 tur ZORUNLU bu mod. |
 | `/mucit-suz canli` | Canlı tur: süz → aday-kart (durum=aday) + `sevk-arz.sh aday` (Sultan tek-tuş). Yalnız kalibrasyon bitince. |
+| `/mucit-suz gunluk [kalibrasyon\|canli]` | **Günlük elek** — odaklı-keskin: bugünün taze bulguları, hızlı-fix sınıfı. |
+| `/mucit-suz haftalik [kalibrasyon\|canli]` | **Haftalık elek** — varsayılan, bugünkü davranışın aynısı. |
+| `/mucit-suz aylik` | **Aylık elek** — genel-vizyoner SENTEZ. Aday üretmez, `tema` üretir (aşağıda). |
+
+## 🔺 ÜÇ ELEK (uc-elek-suzme-DESIGN §3.4 · Sultan-kararları 1-4)
+
+Aynı hattın üç ritmi. İri/orta/ince taneyi ayıran elekler gibi: her elek aynı havuzu farklı
+zaman-ölçeğiyle görür. **Yeni sistem değil, tek motorun üç profili.**
+
+| Elek | Pencere | Odak | Tavan |
+|---|---|---|---|
+| `gunluk` | 1 gün | bugün gelen taze bulgu · hızlı-fix | **≤1 aday/gün** (ritim-freni) |
+| `haftalik` | ISO hafta | mevcut davranış — DEĞİŞMEDİ | haftalık ≤3 (§8 kanonu) |
+| `aylik` | 30 gün | desen/tez sentezi · vizyoner | aday ÜRETMEZ |
+
+**Hafta-tavanı(3) BÖLÜNMEZ.** Sunucu tavanı ISO-hafta × oda × `aday-arzi` sayarak uygular ve hangi
+eleğin ürettiğine bakmaz. Yani elekler kotayı **paylaşır**: haftalık elek 3'ü doldurduysa günlük elek
+o hafta aday üretemez, ve tersi. Günlük tavan bir kota bölümü DEĞİL, yalnız bir frendir — bir günün
+haftanın üçünü birden tüketip kalan altı günü kilitlemesini önler. §8 kanonu zayıflamaz.
+
+**Aynı gün iki kez elle süzersen ne olur?** İkinci koşu aynı bulguları GÖRMEZ (pencere kuralı,
+§3.4-5) ve bugün zaten aday ürettiysen ritim-freni durdurur. Yani mükerrer koşu zararsızdır:
+ya yeni bulgu vardır ve süzülür, ya yoktur ve motor dürüstçe "bugünlük bitti" der.
+
+**Elle ⟂ cron farkı YOK** (Sultan-kararı 4): üçü de cron'a bağlanabilir, üçü de elle çağrılabilir,
+ikisi de AYNI kapıdan geçer. Tek fark defterdeki `turu` etiketidir (`gunluk-12` vs `gunluk-12-elle`) —
+o da yalnız izleme içindir, hiçbir kapıyı değiştirmez.
+
+### Aylık elek = SENTEZ (aday değil)
+
+Aylık elek tekil bulgu muhakemesi yapmaz; **desen arar**. Çıktısı en çok **2 tema**:
+
+- her tema: Sultan-dilinde 1 paragraf + dayandığı bulgu-id listesi + *"bu tema doğruysa ne değişir"* cümlesi
+- yazıldığı yer: `_agents/handoff/kesif-tema-<YYYY-MM>.md` (tek sayfa, Sultan-yüzü)
+- deftere `verdikt:"tema"` satırları (izlenebilirlik; tavana SAYILMAZ)
+- **tek ilerleme yolu `/layiha <tema>`** — aday-kuyruğuna doğrudan geçiş YOK
+
+🔴 **Aylık elek `kapatici` verdikt VEREMEZ.** Vizyoner bakış bir fikri öldürmemeli; yalnız `tema`
+ya da sessizlik üretir. (Öldürme yetkisi olgu-temelli `zaten-var/zaten-planli` gerekçesindedir.)
 
 ## 🧭 Bu iş TAZE ALT-AJANDA koşar (ADR-025 K3+K4 — atlanmaz)
 
@@ -107,7 +146,7 @@ Her `adaylar[]` öğesi için sırayla:
 ## 4 · mucit-defteri satır-şeması (append-only, git-tracked)
 ```json
 {"turu":"kalibrasyon-0|canli-N","tarih":"YYYY-MM-DD","bulgu_id":"bNNNN","baslik":"...",
- "verdikt":"aday-arzi|preview|elendi|cap-ertelendi|mihenk-alani","kart":"k####|null",
+ "verdikt":"aday-arzi|preview|elendi|cap-ertelendi|mihenk-alani|tema","kart":"k####|null",
  "not":"gerekçe (elendi/mihenk için zorunlu)","elek":"gunluk|haftalik|aylik","sinif":"kapatici|pencereli"}
 ```
 - **Ölçüm:** kill-rate = elendi/(toplam) · **dönüşüm = aday→kuyruk (asıl sinyal)** → /durum nabız-satırı buradan.

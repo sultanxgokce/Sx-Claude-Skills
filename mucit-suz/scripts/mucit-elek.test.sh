@@ -65,11 +65,11 @@ echo "── F2 · pencere semantiği ──"
 grep -q "bu pencerede kararlı   : 1" "$T/err" && ok "E8 pencere sayacı=1 (yalnız b2)" || bad "E8 pencere sayacı" "1" "$(grep 'pencerede' "$T/err" || true)"
 # b3'ün kararı 40 gün önce ve elek=haftalik → bu ISO-haftanın dışında → yeniden girer (E5 kanıtladı)
 # aylık elekte b3 hâlâ pencere-dışı (40>30) ama b2 pencere-içi:
-AYLIK="$(ELEK=aylik MUCIT_ELEK_HAFIZA=1 t1)"
+AYLIK="$(MUCIT_ELEK_HAFIZA=1 t1 --elek aylik)"
 # b2'nin kararı elek=haftalik etiketli → aylık elekte kural-5 EŞLEŞMEZ → b2 yeniden girer.
 # Kapatıcı (b1) ise elekten bağımsız bloklamaya devam eder — asıl kanıt bu.
 esit "E9 elek=aylik: kapatıcı(b1) hâlâ dışarıda, pencereliler girer" "b2,b3,b4" "$(idler <<<"$AYLIK")"
-ELEK=aylik MUCIT_ELEK_HAFIZA=1 t1 >/dev/null
+MUCIT_ELEK_HAFIZA=1 t1 --elek aylik >/dev/null
 grep -q "bu pencerede kararlı   : 0" "$T/err" && ok "E10 aylık elekte pencere-kümesi BOŞ (kararlar haftalik etiketli)" \
   || bad "E10 aylık pencere-kümesi" "0" "$(grep 'pencerede' "$T/err" || true)"
 
@@ -104,6 +104,38 @@ printf '%s\n' "{\"turu\":\"canli\",\"tarih\":\"$BUGUN\",\"bulgu_id\":\"b9\",\"ba
 MUCIT_DURUM_YAZ=1 "$YAZ" --havuz "$T/h2.jsonl" --defter "$T/d2.jsonl" --uygula >/dev/null 2>&1
 esit "D7 aday-arzi → durum=aday-onerildi" "aday-onerildi" "$(jq -r '.durum' "$T/h2.jsonl")"
 esit "D7b kart alanı defterden taşındı" "k0142" "$(jq -r '.kart' "$T/h2.jsonl")"
+
+echo "── F3 · üç elek: kapılar ──"
+# defter: BUGÜN 1 aday-arzi (günlük freni tetiklemeli, haftalık 3'ü doldurmamalı)
+cat >"$T/d3.jsonl" <<JSONL
+{"turu":"canli","tarih":"$BUGUN","bulgu_id":"bZ","baslik":"Bugun uretilmis aday","verdikt":"aday-arzi","kart":"k0001","not":"sevk"}
+JSONL
+u3() { "$T1" suz --havuz "$T/havuz.jsonl" --kartlar "$T/kartlar.json" --defter "$T/d3.jsonl" "$@" 2>"$T/e3"; }
+
+u3 --elek haftalik >/dev/null; esit "U1 haftalik: 1/3 dolu → geçer (RC=0)" "0" "$?"
+u3 --elek gunluk >/dev/null;   esit "U2 gunluk: bugün 1 aday var → ritim-freni RC=3" "3" "$?"
+grep -q "GÜNLÜK RİTİM-FRENİ" "$T/e3" && ok "U2b fren gerekçesi Sultan-dilinde basıldı" || bad "U2b fren mesajı" "GÜNLÜK RİTİM-FRENİ" "$(cat "$T/e3")"
+grep -q "Haftalık tavan hâlâ" "$T/e3" && ok "U2c haftalık tavanın DOLU OLMADIĞI ayrıca söyleniyor" || bad "U2c" "haftalık not" "$(cat "$T/e3")"
+
+# haftalık tavan TAM dolu → günlük elek de durur (tavan bölünmez)
+: >"$T/d4.jsonl"; for i in 1 2 3; do echo "{\"verdikt\":\"aday-arzi\",\"tarih\":\"$BUGUN\"}" >>"$T/d4.jsonl"; done
+"$T1" suz --havuz "$T/havuz.jsonl" --kartlar "$T/kartlar.json" --defter "$T/d4.jsonl" --elek gunluk >/dev/null 2>&1
+esit "U3 haftalık 3/3 dolu → günlük elek de RC=3 (tavan BÖLÜNMEZ)" "3" "$?"
+
+# aylık: tavan dolu OLSA BİLE koşar (aday üretmez, tema üretir)
+AY="$("$T1" suz --havuz "$T/havuz.jsonl" --kartlar "$T/kartlar.json" --defter "$T/d4.jsonl" --elek aylik 2>"$T/e4")"; rc=$?
+esit "U4 aylık: haftalık tavan dolu olsa bile RC=0 (kotayı yemez)" "0" "$rc"
+esit "U4b aylık çıktı mod=tema" "tema" "$(jq -r '.mod' <<<"$AY")"
+esit "U4c aylık kalan=0 (aday kotası yok)" "0" "$(jq -r '.kalan' <<<"$AY")"
+grep -q "AYLIK ELEK \[sentez modu\]" "$T/e4" && ok "U4d sentez-modu ilanı basıldı" || bad "U4d" "AYLIK ELEK" "$(cat "$T/e4")"
+
+# geriye-uyum: --elek verilmezse haftalik
+VAR="$("$T1" suz --havuz "$T/havuz.jsonl" --kartlar "$T/kartlar.json" --defter "$T/d3.jsonl" 2>/dev/null)"
+esit "U5 --elek yoksa varsayılan haftalik (geriye-uyum)" "haftalik" "$(jq -r '.elek' <<<"$VAR")"
+esit "U5b varsayılan mod=aday" "aday" "$(jq -r '.mod' <<<"$VAR")"
+
+"$T1" suz --havuz "$T/havuz.jsonl" --kartlar "$T/kartlar.json" --defter "$T/d3.jsonl" --elek zirzop >/dev/null 2>&1
+esit "U6 bilinmeyen elek → RC=2 (fail-closed)" "2" "$?"
 
 echo "─────────────────────────────"
 echo "TOPLAM: $PASS PASS · $FAIL FAIL"
