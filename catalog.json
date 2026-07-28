@@ -275,6 +275,39 @@
       ]
     },
     {
+      "id": "whatsapp-gonder",
+      "type": "agent",
+      "name": "WhatsApp Gönder (filo geçidi istemcisi)",
+      "version": "1.0.1",
+      "description": "Herhangi bir kutudan Sultan'a WhatsApp mesajı/dosyası göndermenin TEK yolu. Kutu tarafında yapılandırma YOK: geçit (cloudtop-wa) iç ağda durur, kutu yalnız ona seslenir. Numara kutuya inmez — alıcı ADI gönderilir, çözümü geçit yapar. whatsapp-baileys eşleştirme playbook'udur; bu onun istemcisidir, karıştırılmaz.",
+      "prerequisites": {
+        "tools": [
+          "curl",
+          "python3"
+        ],
+        "network": "cloudtop_default iç ağı (geçide erişim)"
+      },
+      "tags": [
+        "whatsapp",
+        "bildirim",
+        "teslimat",
+        "filo",
+        "gecit"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/cloudtop (infra/wa-gecit/* + docker-compose.wa.yml, L23 F1/F3 — 29 Tem 2026 oturum göçü)",
+      "install_time": "~0 (kutu tarafında yapılandırma yok)",
+      "status": "stable",
+      "path": "whatsapp-gonder/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global (tüm bulut projeleri)"
+      ]
+    },
+    {
       "id": "cloudflare-erisim",
       "type": "agent",
       "name": "Cloudflare Erişim (panele girmeden Access/DNS)",

@@ -12,6 +12,9 @@
     "whatsapp-baileys": [
       "_global"
     ],
+    "whatsapp-gonder": [
+      "_global"
+    ],
     "cloudflare-erisim": [
       "_global",
       "nexus",
