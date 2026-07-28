@@ -99,7 +99,7 @@ check "T2 pct azalan sırada" "90,80,70" "$pct_sirali"
 # ── T3: terfi sonrası aday varsayılan liste'de yok, --hepsi'de var ──
 id_iki="$(run_in_repo bash "$AH" liste --hepsi --porcelain | awk -F'\t' '$7=="aday-iki"{print $1}')"
 check "T3 aday-iki id bulundu (A00x)" "1" "$([ -n "$id_iki" ] && echo 1 || echo 0)"
-check "T3 terfi rc=0" "0" "$(rc_of run_in_repo bash "$AH" terfi "$id_iki" --gerekce test-terfi)"
+check "T3 terfi rc=0" "0" "$(rc_of run_in_repo bash "$AH" terfi "$id_iki" --sultan-onay --gerekce test-terfi)"
 kalan_liste="$(run_in_repo bash "$AH" liste --porcelain)"
 check "T3 terfi-edilen varsayılan listede yok" "0" "$(echo "$kalan_liste" | grep -c "aday-iki" || true)"
 hepsi_liste="$(run_in_repo bash "$AH" liste --hepsi --porcelain)"
@@ -111,10 +111,10 @@ check "T3 taşınan dokümanın ilk-satırı SALT-ARAŞTIRMA statüsü" "1" \
   "$(head -1 "$T/repo/_agents/spec/aday-iki-DESIGN.md" | grep -c '> Statü: SALT-ARAŞTIRMA — İNŞA YOK')"
 
 # ── T4: terfi-edilmişi tekrar terfi → exit 2 ──
-check_ne0 "T4 zaten terfi-edilmişi tekrar terfi reddi" "$(rc_of run_in_repo bash "$AH" terfi "$id_iki")"
+check_ne0 "T4 zaten terfi-edilmişi tekrar terfi reddi" "$(rc_of run_in_repo bash "$AH" terfi "$id_iki" --sultan-onay)"
 
 # ── T5: olmayan id → exit 2 ──
-check_ne0 "T5 olmayan id terfi reddi" "$(rc_of run_in_repo bash "$AH" terfi A999)"
+check_ne0 "T5 olmayan id terfi reddi" "$(rc_of run_in_repo bash "$AH" terfi A999 --sultan-onay)"
 
 # ── T6: atomiklik — 2 adaydan biri geçersizken hiçbiri terfi etmemeli ──
 id_bir="$(run_in_repo bash "$AH" liste --hepsi --porcelain | awk -F'\t' '$7=="aday-bir"{print $1}')"
@@ -142,6 +142,14 @@ check "T8 min-pct=75 yalnız aday-dort (pct=80, aday-iki zaten terfi-edildi)" "1
 o10="$(run_in_repo bash "$AH" goster aday-uc)"
 check "T9 goster başlık içerir" "1" "$(echo "$o10" | grep -c 'Aday Üç')"
 check_ne0 "T9 olmayan slug goster reddi" "$(rc_of run_in_repo bash "$AH" goster yok-boyle-bir-slug)"
+
+# ── T10: SULTAN KİLİDİ — onaysız terfi reddedilir, aday DEĞİŞMEZ ──
+id_uc="$(run_in_repo bash "$AH" liste --hepsi --porcelain | awk -F'\t' '$7=="aday-uc"{print $1}')"
+onceki="$(run_in_repo bash "$AH" liste --hepsi 2>/dev/null | grep -c "aday-uc" || true)"
+check_ne0 "T10 --sultan-onay olmadan terfi reddi" "$(rc_of run_in_repo bash "$AH" terfi "$id_uc")"
+err="$(run_in_repo bash "$AH" terfi "$id_uc" 2>&1 >/dev/null || true)"
+check "T10b ret gerekçesi Sultan-onayına atıf yapar" "1" "$(echo "$err" | grep -ci "sultan-onay" || true)"
+check "T10c reddedilen terfi adayı DEĞİŞTİRMEDİ" "$onceki" "$(run_in_repo bash "$AH" liste --hepsi 2>/dev/null | grep -c "aday-uc" || true)"
 
 echo
 total=$((pass + fail))
