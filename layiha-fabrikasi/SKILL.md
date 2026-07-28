@@ -1,7 +1,7 @@
 ---
 name: layiha-fabrikasi
 type: agent
-version: 1.3.0
+version: 1.4.0
 description: >
   L24 Layiha Fabrikası — DİVAN'ın fikir-hattını (KAŞİF dış-tarama → bulgu-havuzu → MUCİT süzme →
   aday-havuzu → Sultan tek-tuş terfi) tek-çatı altında toplayan Usta-paket. kasif-tara + mucit-suz'ü
@@ -32,6 +32,41 @@ katmanı (`<skill-dizini>/scripts/layiha-aday-havuzu.sh`) ve terfi-hedefi (`layi
 | **Durum bak** (bu oda açık mı, filoda ne var, neden) | `bash <skill-dizini>/scripts/layiha-fabrika.sh durum` |
 | **İlk kurulum** (yeni odada tezgâhı üret) | `bash <kasif-tara-dizini>/scripts/kasif-kur.sh` — oda **KAPALI doğar** |
 | **Eldeki adayları görüntüle/terfi et** (HER-ZAMAN çalışır — kill-switch'ten ETKİLENMEZ) | `bash <skill-dizini>/scripts/layiha-aday-havuzu.sh liste` · `goster <id>` · `terfi <id> --sultan-onay` · `durum` — ⚖️ terfi **Sultan kilidi** taşır (ADR-025 · fikir-hattındaki tek insan kapısı; otomatik akış atlayamaz) |
+
+## Otonom hat (ADR-025 icra-5 · EK-A §A2-A4) — ⛔ **INERT DOĞAR**
+
+Hat kendiliğinden koşabilir, ama **açılana kadar hiçbir şey yapmaz**. Açmak ayrı bir Sultan-GO'sudur.
+
+| Ne istiyorsun | Komut |
+|---|---|
+| **Bugün ne oldu** (cam arkası) | `bash <skill-dizini>/scripts/hat-izle.sh` |
+| **Bir turu uçtan uca izle** | `hat-izle.sh --tur t20260728-1` |
+| **Tek satır özet** (gün sonu / ntfy) | `hat-izle.sh --ozet` |
+| **Kararı gör, hiçbir şey koşturma** | `bash <skill-dizini>/scripts/hat-durtme.sh --kuru` |
+| **Bu odada hattı AÇ** (⚠️ gerçek koşu başlar) | `hat-durtme.sh --ac "<sebep>"` |
+| **Kapat** (INERT'e dön) | `hat-durtme.sh --kapat` |
+
+**Mimari (§A2):** cron 30 dk'da bir `hat-durtme.sh`'i dürter → betik **LLM çağırmadan** karar verir
+("bugün koşuldu mu? hak var mı? kilit boş mu?") → hak varsa **başsız** koşu (`claude --print`).
+Müdür oturumunda loop **reddedildi**: oturum kapalıysa hat durur, her tur müdürün bağlamını şişirir,
+ve oturum ölümlüdür (2026-07-25'te tmux sunucusu öldü). *"Ekipler kendiliğinden açılmasın"* direktifi
+**delinmez** — tmux ekip-oturumu AÇILMAZ.
+
+**Karar kuralları (§A3) — dürtme sıklığı ≠ tur sıklığı.** Cron sık sorar (bedava), iş günde bir olur:
+1. Hak günlüktür; tamamlandıysa o gün bir daha koşulmaz
+2. **Boş dönmek tamamlanmadır** — aynı gün ikinci arama aynı web'i tarar; ısrar fikir değil çöp üretir
+3. Çalışamamak tamamlanma **değildir** → 3 deneme, artan aralık (+30dk, +2sa)
+4. 3'te de olmazsa **pes eder ve RC≠0 verir** — sessiz pes RASAT faciasıdır, sonsuz deneme alarm yorgunluğu
+5. MUCİT'in tetiği **saat değil sayıdır**: süzülmemiş ≥1 malzeme ∧ bugün süzülmedi
+6. Tek koşu kilidi; kilit başkasındaysa sessiz çık — **deneme sayacı artmaz** ("ölçemedim ≠ başarısız")
+7. Hak **09:00'da doğar, 18:00'de düşer** — gece boşuna deneme yok, ertesi gün taze hak
+
+**Görünürlük iki parçadır (§A4):** *var olan işi pano gösterir, olmayan işi bekçi söyler.* Pano
+**terminaldir**, panel değil — terminal defterlerden doğrudan okur, yalan söyleyemez; panel
+bozulduğunda yanlış bilgi gösterir. Dört işaret: 🟢 akıyor · 🟡 sende · 🔴 sessiz · ⚪ kapalı.
+
+**Açılış kademeli (§A5):** günde 1 tur, yalnız Nexus, 2 hafta ölç. **Günde 3 tur ölçümün sonucudur,
+varsayımı değil.** Yayılım oda-oda ayrı GO.
 
 ## Kill-switch (FAZ-D2, `_agents/spec/layiha-fabrikasi-dagitim-DESIGN.md` §5)
 

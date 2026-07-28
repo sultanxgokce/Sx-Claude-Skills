@@ -204,6 +204,9 @@ CIKTI="$(jq -c -n \
     {
       id: $b.id, kaynak: $b.kaynak, baslik: $b.baslik, detay: $b.detay,
       kanit: $b.kanit, tarih: $b.tarih, durum: ($b.durum // "ham"), kart: $b.kart, not: $b.not,
+      # tur: İPİN UCU. KAŞİF bulguya yazıyordu, burada düşüyordu → zincir ikinci halkada kopuyordu
+      # ve "t20260728-1 nerede?" sorusunun cevabı yoktu (ADR-025 icra-5 · EK-A §A4).
+      tur: $b.tur,
       _kanitli: $kanitli, _uygun_durum: ($uygun_durum != null),
       _mihenk: $mihenk_hit, _ortusme: $ortusme,
       onskor: ((($b.kanit // "" | length) / 40) + (if ($b.kaynak // "") | test("pilot|firsthand|serdar") then 3 else 1 end))
