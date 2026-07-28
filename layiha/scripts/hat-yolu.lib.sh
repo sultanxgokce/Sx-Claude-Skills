@@ -94,11 +94,18 @@ hat_yolu() {
     kasif-seyir)          printf '%s/_agents/kasif/seyir.jsonl' "$onek" ;;
     kasif-oneri)          printf '%s/_agents/kasif/oneri-havuzu.jsonl' "$onek" ;;
     kasif-tekrar)         printf '%s/_agents/kasif/tekrar.jsonl' "$onek" ;;
+
+    # Otonom hat (ADR-025 icra-5): günlük durum-kâğıdı + dürtme günlüğü.
+    # Durum kâğıdı GÜNLÜKTÜR ve tek gerçek kaynağıdır: "bugün koştu mu, kaç kez denedi, hakkı var mı".
+    # Günlük (append) ise "ne zaman dürtüldü, ne karar verildi" izidir — bekçinin okuduğu iz budur.
+    hat-durum)            printf '%s/_agents/handoff/hat-durum.json' "$onek" ;;
+    hat-gunluk)           printf '%s/_agents/handoff/hat-gunluk.jsonl' "$onek" ;;
     *)
       printf 'HATA: bilinmeyen artefakt adı: %s\n' "${ad:-<boş>}" >&2
       printf '      geçerli: handoff-dir kasif-dir kasif-knowledge-dir mucit-dir layiha-defteri\n' >&2
       printf '               aday-havuzu bulgu-havuzu mucit-defteri mucit-defteri-layiha\n' >&2
       printf '               kasif-konular kasif-kaynaklar kasif-yontem kasif-seyir kasif-oneri kasif-tekrar\n' >&2
+      printf '               hat-durum hat-gunluk\n' >&2
       return 2 ;;
   esac
 }
