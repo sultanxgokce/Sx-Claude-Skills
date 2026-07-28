@@ -1,7 +1,7 @@
 ---
 name: whatsapp-gonder
 type: agent
-version: 1.0.0
+version: 1.0.1
 description: >
   Herhangi bir kutudan Sultan'a WhatsApp mesajı/dosyası göndermenin TEK yolu. Kutu tarafında
   yapılandırma yoktur: geçit (cloudtop-wa) iç ağda durur, kutu yalnız ona seslenir. Numara

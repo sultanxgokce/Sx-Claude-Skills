@@ -31,13 +31,25 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-_cagir() { # _cagir <yol> [gövde]
+# Yanıt gövdesi HER ÇAĞRIDA taze, sürece özel bir dosyaya yazılır.
+# ⚠️ SABİT YOL KULLANMA (ör. /tmp/.wa-yanit): dosya başka bir kullanıcının koşusundan kalmışsa
+#    curl üzerine YAZAMAZ (rc=23), sessizce başarısız olur ve betik BAYAT gövdeyi okur.
+#    Bayat gövdede "open" yazıyorsa oturum kapalıyken YEŞİL basılır — sahte-yeşil.
+#    (tez-MOTOR firsthand buldu, 2026-07-29: root'a ait bayat dosya, curl_rc=23.)
+YANIT="$(mktemp "${TMPDIR:-/tmp}/wa-yanit.XXXXXX")" || { echo "HATA: gecici dosya acilamadi" >&2; exit 2; }
+trap 'rm -f "$YANIT"' EXIT
+
+_cagir() { # _cagir <yol> [gövde] → http kodunu basar; curl düşerse "000"
+  local kod rc
   if [ -n "${2:-}" ]; then
-    curl -s -m 30 -o /tmp/.wa-yanit -w '%{http_code}' \
-      -X POST -H 'content-type: application/json' -d "$2" "$GECIT$1" 2>/dev/null
+    kod=$(curl -s -m 30 -o "$YANIT" -w '%{http_code}' \
+      -X POST -H 'content-type: application/json' -d "$2" "$GECIT$1" 2>/dev/null); rc=$?
   else
-    curl -s -m 15 -o /tmp/.wa-yanit -w '%{http_code}' "$GECIT$1" 2>/dev/null
+    kod=$(curl -s -m 15 -o "$YANIT" -w '%{http_code}' "$GECIT$1" 2>/dev/null); rc=$?
   fi
+  # curl'ün kendi hatası (yazma/ağ) sessiz geçmez — "000" fail-closed sinyalidir.
+  [ "$rc" -eq 0 ] || { echo "000"; return 0; }
+  echo "$kod"
 }
 
 command -v curl >/dev/null || { echo "HATA: curl yok — kutuya kurulmalı." >&2; exit 2; }
@@ -47,9 +59,9 @@ if [ "$MOD" = "durum" ]; then
   if [ -z "${KOD:-}" ] || [ "$KOD" = "000" ]; then
     echo "🔴 geçide ULAŞILAMIYOR ($GECIT) — kutu iç ağda mı, geçit ayakta mı?"; exit 3
   fi
-  cat /tmp/.wa-yanit; echo
+  cat "$YANIT"; echo
   # Dürüstlük: 200 'servis sağlam' demek; oturum kapalıysa gövdede yazar, yeşil sayma.
-  grep -q '"baglanti":"open"' /tmp/.wa-yanit \
+  grep -q "\"baglanti\":\"open\"" "$YANIT" \
     && echo "🟢 gönderime hazır" \
     || echo "🟡 servis ayakta ama OTURUM AÇIK DEĞİL — şu an gönderemez"
   exit 0
@@ -77,5 +89,5 @@ if [ "$KOD" = "200" ]; then
   echo "🟢 gönderildi → $KIME"
   exit 0
 fi
-echo "🔴 geçit reddetti (http=$KOD):"; cat /tmp/.wa-yanit; echo
+echo "🔴 geçit reddetti (http=$KOD):"; cat "$YANIT"; echo
 exit 4
