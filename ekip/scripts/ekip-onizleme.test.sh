@@ -96,6 +96,48 @@ printf 'meta:\n  ekip: bos\nuyeler:\n' > "$TMP/bos.yaml"
 EKIP_REPO_ROOT="$TMP/repo" EKIP_REGISTRY="$TMP/bos.yaml" PATH="$TMP/bin:$PATH" bash "$SUT" --kontrol >/dev/null 2>&1; rc=$?
 esit "T7 boş roster exit=2 (sahte-yeşil yok)" "2" "$rc"
 
+# ══════════════════════════════════════════════════════════════════════════════
+# T8-T10 — PANE-BAĞLI TESPİT (NÂZIR bulgusu 2026-07-28; ilk sürümün hatası)
+# İlk sürüm ps'i GLOBAL tarıyordu: tmux DIŞINDA koşan bir ajanı "masasında çalışıyor" sanıp
+# `tmux attach` öneriyordu → kullanıcı BOŞ KABUĞA bağlanıyordu.
+# ══════════════════════════════════════════════════════════════════════════════
+tmux -L "$SOCK" kill-server >/dev/null 2>&1 || true
+sleep 1
+# tmux DIŞINDA, t-yon imzasıyla bir süreç başlat (tarayıcı-sekmesi terminali emsali)
+setsid bash -c 'exec -a "claude --session-id 11111111-1111-1111-1111-111111111111 --name t-yon --permission-mode default" sleep 120' >/dev/null 2>&1 &
+DISPID=$!
+sleep 1
+# t-yon için BOŞ bir tmux oturumu aç (ajan içinde DEĞİL)
+tmux -L "$SOCK" new-session -d -s t-yon "sleep 120" 2>/dev/null
+
+out="$(env "${E[@]}" PATH="$TMP/bin:$PATH" bash "$SUT" --kontrol --porcelain 2>&1)"
+satir="$(printf '%s\n' "$out" | grep '^t-yon' | head -1)"
+printf '%s' "$satir" | grep -q 'tmux-disi' \
+  && ok "T8 tmux-DIŞI ajan doğru sınıflanıyor (masasında sanılmıyor)" \
+  || no "T8 tmux-dışı ajan yanlış sınıflandı" "$satir"
+printf '%s' "$satir" | grep -q 'tmux attach -t t-yon' \
+  && no "T8 BOŞ KABUĞA bağlayan komut önerildi (asıl arıza)" "$satir" \
+  || ok "T8 'tmux attach' ÖNERİLMİYOR (boş kabuğa bağlamaz)"
+printf '%s' "$out" | grep -q 'ayakta=0' \
+  && ok "T8 sayaç dürüst: masasında olmayan 'ayakta' sayılmıyor" \
+  || no "T8 sayaç şişirildi" "$(printf '%s' "$out" | grep '#OZET')"
+
+# T9: ONAR modu tmux-dışı ajana DOKUNMAZ (ikinci kopya = session-id çakışması)
+once="$(ps -eo args | grep -c -- '--name t-yon')"
+env "${E[@]}" PATH="$TMP/bin:$PATH" bash "$SUT" --porcelain >/dev/null 2>&1
+sonra="$(ps -eo args | grep -c -- '--name t-yon')"
+esit "T9 tmux-dışı ajan için İKİNCİ kopya açılmadı" "$once" "$sonra"
+
+kill "$DISPID" 2>/dev/null; pkill -f -- "--name t-yon" 2>/dev/null
+
+# T10: gerçekten pane İÇİNDE koşan ajan 'çalışıyor' sayılır (pozitif kontrol)
+tmux -L "$SOCK" kill-server >/dev/null 2>&1 || true
+sleep 1
+out="$(env "${E[@]}" PATH="$TMP/bin:$PATH" bash "$SUT" --porcelain 2>&1)"
+printf '%s' "$out" | grep -q 'ayakta=2' \
+  && ok "T10 pane İÇİNDE koşan ajanlar 'çalışıyor' sayılıyor (pozitif kontrol)" \
+  || no "T10 pane-içi ajanlar sayılmadı" "$(printf '%s' "$out" | grep '#OZET')"
+
 echo "─────────────────────────────"
 echo "TOPLAM: $PASS PASS · $FAIL FAIL"
 [ "$FAIL" -eq 0 ] || exit 1
