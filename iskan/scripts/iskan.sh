@@ -371,12 +371,43 @@ _iskan_apply_ac() {
 # Port-seçimi + repo-yazımı flock ile atomik (B4 tasarımının repo-fazı; host-fazı port-lock'u
 # ayrıca iskan-host.sh --apply'da host-tarafında tutulur).
 
-# _iskan_pick_port <repo_compose> — mevcut "127.0.0.1:<port>:8443" portlarını tarar, 8449'dan
-# başlayarak ilk-boş portu döner (saf-fn, hiçbir yazım yapmaz).
+# _iskan_compose_kardesler <repo_compose> — <repo_compose> + AYNI DİZİNDEKİ tüm
+# `docker-compose*.yml` kardeşlerini (yedek/.bak hariç) satır-satır basar.
+#
+# ⚠️ NEDEN (tez-doğumu dersi, 2026-07-28): port-tarayıcı YALNIZ ana compose'a bakıyordu.
+#   Altyapı kutuları AYRI compose dosyalarında yaşıyor (docker-compose.ntfy.yml → cloudtop-ntfy
+#   8452'yi TUTUYOR, docker-compose.kapi.yml …). Tarayıcı onları GÖRMEDİĞİ için tez'e 8452 seçildi
+#   → host'ta "port is already allocated" ile patladı, elle 8453'e taşındı (PR cloudtop#138).
+#   Kök-neden: "tek dosya = tüm gerçek" varsayımı. Panzehir: kardeşleri de tara (repo-fazı).
+#   HOST-fazı ikinci-göz: iskan-host.sh apply-öncesi canlı port-haritasına da bakar.
+_iskan_compose_kardesler() {
+  local repo_compose="$1"
+  printf '%s\n' "$repo_compose"
+  local dizin; dizin="$(dirname "$repo_compose")"
+  local f
+  for f in "$dizin"/docker-compose*.yml; do
+    [ -f "$f" ] || continue
+    [ "$f" = "$repo_compose" ] && continue
+    case "$f" in *.bak|*.bak-*|*.orig) continue ;; esac
+    printf '%s\n' "$f"
+  done
+}
+
+# _iskan_kullanilan_portlar <repo_compose> — kardeş-compose'lar dahil TÜM bağlı
+# "127.0.0.1:<port>:8443" portlarını sıralı-benzersiz basar (saf-fn, yazım YOK).
+_iskan_kullanilan_portlar() {
+  local f
+  while read -r f; do
+    grep -oE '"?127\.0\.0\.1:[0-9]+:8443"?' "$f" 2>/dev/null
+  done < <(_iskan_compose_kardesler "$1") | grep -oE ':[0-9]+:' | tr -d ':' | sort -un
+}
+
+# _iskan_pick_port <repo_compose> — kardeş-compose'lar DAHİL mevcut "127.0.0.1:<port>:8443"
+# portlarını tarar, 8449'dan başlayarak ilk-boş portu döner (saf-fn, hiçbir yazım yapmaz).
 _iskan_pick_port() {
-  local repo_compose="$1" floor=8449 port
+  local floor=8449 port
   local used
-  used="$(grep -oE '"127\.0\.0\.1:[0-9]+:8443"' "$repo_compose" 2>/dev/null | grep -oE ':[0-9]+:' | tr -d ':' | sort -un)"
+  used="$(_iskan_kullanilan_portlar "$1")"
   port="$floor"
   while printf '%s\n' "$used" | grep -qx "$port"; do
     port=$((port + 1))
@@ -665,16 +696,21 @@ cmd_yeni_proje() {
     ' "$repo_compose")"
   else
     if [ -n "$port_override" ]; then
-      # override-çakışma kapısı: rezerve-port zaten compose'da bir servise bağlıysa RED
+      # override-çakışma kapısı: rezerve-port zaten BİR compose'da (kardeşler dahil) bağlıysa RED
       # (pick_port'un doğal kaçınması override'da geçerli değil → açıkça kontrol edilir).
-      if grep -qE "\"127\.0\.0\.1:${port_override}:8443\"" "$repo_compose"; then
+      if _iskan_kullanilan_portlar "$repo_compose" | grep -qx "$port_override"; then
         echo "[kırmızı] port-override ${port_override} zaten repo-compose'da kullanımda — RED (çakışan servise dokunulmadı)" >&2
+        echo "   → taranan compose dosyaları: $(_iskan_compose_kardesler "$repo_compose" | tr '\n' ' ')" >&2
+        echo "   → çare: başka port ver (--port) ya da override'ı bırak (otomatik ilk-boş seçilir)" >&2
         exit 1
       fi
       port="$port_override"
       echo "[yeşil] port-kaynağı: operatör-override (--port/ISKAN_PORT) → ${port} (pick_port atlandı)"
     else
       port="$(_iskan_pick_port "$repo_compose")"
+      # Şeffaflık: hangi dosyalar tarandı (tez-doğumu dersi — "tek dosya = tüm gerçek" varsayımı
+      # 8452 çakışmasını doğurmuştu). Kaynak-beyanı DEĞİL (golden: override-beyanı basılmaz).
+      echo "[yeşil] port-taraması: $(_iskan_compose_kardesler "$repo_compose" | wc -l) compose dosyası (kardeşler dahil) → boş port ${port}"
     fi
     blok="$(_iskan_compose_blok "$ad" "$cname" "$config_dir" "$port" "$mem_limit")"
     blok_dosyasi="$(mktemp)"
@@ -2162,6 +2198,45 @@ _eg_fragment_yaz() {
   return 0
 }
 
+# _eg_tazelik_kapisi <dir> <mode> — evergreen YAZIM-hedefi olan working-tree origin/main'in
+# GERİSİNDE mi? (3-durum: taze / bayat / doğrulanamadı — unknown ≠ bayat ≠ taze)
+#
+# ⚠️ NEDEN (tez-doğumu dersi, 2026-07-28): evergreen-kaydet REPO-FIRST çalışır — lokal
+#   working-tree'ye yazar, commit/PR ayrı adımdır. O ağaç origin/main'in GERİSİNDEYSE üretilen
+#   commit, aradaki başkalarının işini SESSİZCE GERİ ALIR. Canlı vaka: lokal cloudtop checkout'u
+#   31 commit geriydi; dosyalar taze worktree'ye kopyalanınca diff **36 SİLME** gösterdi. Kaza
+#   yalnız YAML-doğrulaması sırasında gözle yakalandı (bekçi YOKTU) → geri alınıp yalnız tez
+#   satırları uygulandı (37 ekleme / 0 silme).
+# KARAR: dry-run → görünür UYARI (akışı kesme) · apply → RED + reçete (fail-closed).
+#   Ölçülemiyorsa (origin/main ref yok, git değil) → "doğrulanamadı", GEÇER (unknown ≠ fail).
+#   Bilinçli-geçiş: ISKAN_EG_BAYAT_KABUL=1 (operatör beyanı; kayda geçer).
+_eg_tazelik_kapisi() {
+  local dir="$1" mode="$2" geride=""
+  git -C "$dir" rev-parse --git-dir >/dev/null 2>&1 || {
+    echo "[doğrulanmadı] tazelik: $dir bir git-deposu değil — bayatlık ölçülemedi (geçildi)"; return 0; }
+  git -C "$dir" rev-parse --verify -q origin/main >/dev/null 2>&1 || {
+    echo "[doğrulanmadı] tazelik: origin/main ref yok — bayatlık ölçülemedi (geçildi)"; return 0; }
+  geride="$(git -C "$dir" rev-list --count HEAD..origin/main 2>/dev/null)"
+  case "$geride" in ''|*[!0-9]*) echo "[doğrulanmadı] tazelik: geride-sayısı okunamadı (geçildi)"; return 0 ;; esac
+  if [ "$geride" = "0" ]; then
+    echo "[yeşil] tazelik: yazım-hedefi origin/main ile eşit (bayat-checkout riski yok)"; return 0
+  fi
+  if [ "${ISKAN_EG_BAYAT_KABUL:-0}" = "1" ]; then
+    echo "[uyarı] tazelik: $dir origin/main'in ${geride} commit GERİSİNDE — ISKAN_EG_BAYAT_KABUL=1 ile bilinçli geçildi"; return 0
+  fi
+  if [ "$mode" = "dry-run" ]; then
+    echo "[uyarı] tazelik: $dir origin/main'in ${geride} commit GERİSİNDE — apply'dan ÖNCE 'git -C $dir pull' (yoksa commit'in aradaki işleri SİLER)"
+    return 0
+  fi
+  {
+    echo "[kırmızı] tazelik: yazım-hedefi origin/main'in ${geride} commit GERİSİNDE — apply REDDEDİLDİ (hiçbir dosyaya dokunulmadı)."
+    echo "anlamı: bu ağaçtan çıkacak commit, aradaki ${geride} commit'in işini SESSİZCE geri alır (canlı vaka: 36 silme)."
+    echo "çare:  git -C $dir pull   (ya da taze worktree'de koş: ISKAN_REPO_TIERC_DIR=<taze-worktree>)"
+    echo "bilinçli geçiş (kayda geçer): ISKAN_EG_BAYAT_KABUL=1 iskan.sh evergreen-kaydet … --apply"
+  } >&2
+  return 1
+}
+
 cmd_evergreen_kaydet() {
   local proje="" mode=""
   while [ $# -gt 0 ]; do
@@ -2192,6 +2267,9 @@ cmd_evergreen_kaydet() {
   local bkp="$EY_REPO_TIERC_DIR/infra/backup.sh"
   [ -f "$inv" ] || { echo "[kırmızı] provider-inventory bulunamadı: $inv — hiçbir yere dokunulmadı" >&2; exit 1; }
   [ -f "$bkp" ] || { echo "[kırmızı] backup.sh bulunamadı: $bkp — hiçbir yere dokunulmadı" >&2; exit 1; }
+
+  # BAYAT-CHECKOUT kapısı (yazım-hedefi Tier-C dizini) — gerekçe fonksiyon başlığında.
+  _eg_tazelik_kapisi "$EY_REPO_TIERC_DIR" "$mode" || exit 1
 
   # eklenecek satırlar (G6 awk-blok-sınırlarının İÇİNE düşecek girintilerle)
   local ing_line="      - ${host}   # İSKÂN-container (${EY_CNAME}, ${EY_PORT:-port-?}; iskan.sh cf-yayin ürünü — evergreen-kaydet kaydı)"

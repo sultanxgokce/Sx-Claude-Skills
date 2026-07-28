@@ -1903,8 +1903,13 @@ cmd="${@: -1}"
 echo "call: $cmd" >> "${CS_LOG:?}"
 case "$cmd" in
   *config-hash*)              for n in ${CS_PS:-}; do echo "$n stubhash"; done ;;
+  # R5 canlı-kutu uyum kapısı: gerçek `docker compose config --hash=<svc>` "<svc> <hash>" basar.
+  # (Bu arm `*"docker compose"*`ten ÖNCE olmalı — yoksa 'stub-up-ok' döner, hash sanılır.)
+  *"config --hash"*)          for n in ${CS_PS:-}; do echo "$n stubhash"; done ;;
   *"docker ps"*StartedAt*)    for n in ${CS_PS:-}; do echo "$n 2026-01-01T00:00:00+00:00"; done ;;
   *StartedAt*)                echo "2026-06-01T00:00:00+00:00" ;;
+  # G5-ÖN dış port-eşlemesi kapısı: gerçek `docker port <c>` "8443/tcp -> 127.0.0.1:<port>" basar.
+  *"docker port"*)            echo "8443/tcp -> 127.0.0.1:${CS_PORT:-8449}" ;;
   *"docker compose"*)         echo "stub-up-ok" ;;
   *"docker ps"*)              for n in ${CS_PS:-}; do echo "$n"; done ;;
   *curl*)                     echo "http_code=302" ;;
@@ -2366,6 +2371,178 @@ TC_DERIVE="$(grep -cF 'ISKAN_REPO_TIERC_DIR:-$EY_REPO_DIR' "$SCRIPT_DIR/iskan.sh
 [ "$TC_PIN" = "1" ] && [ "$TC_HARITA" = "1" ] && [ "$TC_DERIVE" = "2" ] \
   && ok "FIX#2 wiring: pin-allow(resume-carry) + env-harita görünürlük + iki türetim (ekip-yerlestir+evergreen)" \
   || bad "FIX#2 wiring eksik (pin=$TC_PIN harita=$TC_HARITA derive=$TC_DERIVE)"
+
+# ═══════════════════════════════════════════════════════════════════════════════════════════
+# AHÎ-DERSLERİ (tez doğumu 2026-07-28) — üç canlı arıza, üç kapı
+# ═══════════════════════════════════════════════════════════════════════════════════════════
+
+# ── DERS-A: port-tarayıcı KARDEŞ compose dosyalarını da görmeli ───────────────────────────
+# CANLI ARIZA: tarayıcı yalnız docker-compose.server.yml'e bakıyordu; 8452'yi AYRI dosyadaki
+# cloudtop-ntfy tutuyordu → tez'e 8452 verildi, host "port is already allocated" ile patladı.
+AH_D="$(mktemp -d)"
+cat > "$AH_D/docker-compose.server.yml" <<'EOF'
+services:
+  cloudtop-a:
+    container_name: cloudtop-a
+    ports:
+      - "127.0.0.1:8449:8443"
+EOF
+cat > "$AH_D/docker-compose.ntfy.yml" <<'EOF'
+services:
+  cloudtop-ntfy:
+    container_name: cloudtop-ntfy
+    ports:
+      - "127.0.0.1:8450:8443"
+EOF
+out="$(ISKAN_REPO_COMPOSE="$AH_D/docker-compose.server.yml" bash "$SCRIPT_DIR/iskan.sh" yeni-proje ahiport --dry-run 2>&1)"
+rc=$?
+# 8449 ana-compose'da, 8450 KARDEŞ dosyada dolu → ilk boş = 8451
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q '127.0.0.1:8451:8443' \
+  && ok "DERS-A pick_port: kardeş compose'daki dolu port atlandı (8449+8450 dolu → 8451)" \
+  || bad "DERS-A pick_port: kardeş-tarama kırık (rc=$rc — 8450 kardeşte doluyken seçildi mi?)"
+printf '%s' "$out" | grep -q 'port-taraması: 2 compose dosyası' \
+  && ok "DERS-A şeffaflık: kaç compose dosyası tarandığı basılıyor" \
+  || bad "DERS-A şeffaflık: tarama-beyanı yok"
+# override-çakışma kapısı da kardeşleri görmeli (yoksa operatör kardeşteki portu 'boş' sanır)
+ISKAN_REPO_COMPOSE="$AH_D/docker-compose.server.yml" bash "$SCRIPT_DIR/iskan.sh" yeni-proje ahiport --port 8450 --dry-run >/dev/null 2>&1
+rc=$?
+[ "$rc" = "1" ] \
+  && ok "DERS-A override-kapısı: kardeş-compose'da bağlı porta override rc=1 (çakışma yakalandı)" \
+  || bad "DERS-A override-kapısı: kardeşteki dolu port kabul edildi (rc=$rc)"
+# NEGATİF-GOLDEN: kardeş YOKKEN davranış aynen (regresyon-guard)
+AH_D2="$(mktemp -d)"; cp "$AH_D/docker-compose.server.yml" "$AH_D2/"
+out="$(ISKAN_REPO_COMPOSE="$AH_D2/docker-compose.server.yml" bash "$SCRIPT_DIR/iskan.sh" yeni-proje ahiport --dry-run 2>&1)"
+printf '%s' "$out" | grep -q '127.0.0.1:8450:8443' \
+  && ok "DERS-A golden: kardeş yokken eski davranış korunuyor (8449 dolu → 8450)" \
+  || bad "DERS-A golden: tek-dosya davranışı değişti"
+find "$AH_D" "$AH_D2" -type f -delete 2>/dev/null; rmdir "$AH_D" "$AH_D2" 2>/dev/null
+
+# ── DERS-B: canlı kutu compose-tanımıyla uyuşmuyorsa apply REDDEDİLİR (R5) ────────────────
+# CANLI ARIZA: yarım-kalmış tez kutusu ayaktaydı; `up --no-recreate` onu diriltti; Docker
+# "healthy" diyordu (healthcheck container-İÇİ portu probe eder, dış eşlemeyi DEĞİL).
+AH_LOG="$(mktemp)"; AH_STUB="$(mktemp -d)"
+cat > "$AH_STUB/ssh" <<'EOF'
+#!/usr/bin/env bash
+cmd="${@: -1}"
+case "$cmd" in
+  *"config --hash"*)  echo "cloudtop-senktest ISTENEN" ;;      # compose'un istediği
+  *config-hash*)      echo "CANLI-ESKI" ;;                      # kutunun fiilen taşıdığı → UYUŞMAZ
+  *"docker ps"*StartedAt*) echo "cloudtop-senktest 2026-01-01T00:00:00+00:00" ;;
+  *"docker ps"*)      echo "cloudtop-senktest" ;;
+  *"docker port"*)    echo "8443/tcp -> 127.0.0.1:8449" ;;
+  *"docker compose"*) echo "stub-up-ok" ;;
+  *curl*)             echo "http_code=302" ;;
+  *)                  bash -c "$cmd" ;;
+esac
+EOF
+chmod +x "$AH_STUB/ssh"
+AH_REPO="$(mktemp -d)"; _cs_fixture_repo "$AH_REPO"
+AH_HOSTDIR="$(mktemp -d)"; AH_HOSTFILE="$AH_HOSTDIR/docker-compose.server.yml"
+git -C "$AH_REPO" show origin/main:infra/docker-compose.server.yml > "$AH_HOSTFILE"
+AH_MD5_0="$(md5sum "$AH_HOSTFILE" | awk '{print $1}')"
+AH_KANIT="$(mktemp -d)"
+out="$(env ISKAN_FAZ4_GO=1 PATH="$AH_STUB:$PATH" CS_LOG="$AH_LOG" ISKAN_KANIT_DIR="$AH_KANIT" \
+  ISKAN_SSH_HOST=stubhost ISKAN_CLOUDTOP_REPO_DIR="$AH_REPO" ISKAN_HOST_COMPOSE_PATH="$AH_HOSTFILE" \
+  bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje senktest 2>&1)"
+rc=$?
+AH_MD5_1="$(md5sum "$AH_HOSTFILE" | awk '{print $1}')"
+[ "$rc" = "5" ] && printf '%s' "$out" | grep -q 'UYUŞMUYOR' \
+  && ok "DERS-B R5: canlı-kutu hash'i compose ile uyuşmuyorsa apply rc=5 (sahte-yeşil kapandı)" \
+  || bad "DERS-B R5: uyumsuz canlı-kutu KABUL edildi (rc=$rc)"
+printf '%s' "$out" | grep -q 'force-recreate' \
+  && ok "DERS-B R5: reçete basılıyor (rm -f + force-recreate; yıkıcı adım Sultan-eli)" \
+  || bad "DERS-B R5: reçetesiz kırmızı (operatör ne yapacağını bilmiyor)"
+[ "$AH_MD5_0" = "$AH_MD5_1" ] \
+  && ok "DERS-B R5: red anında host-compose BAYT-değişmez (sıfır-dokunuş)" \
+  || bad "DERS-B R5: red'e rağmen host-dosyası değişti"
+
+# hash ÖLÇÜLEMEZSE fail-closed (unknown ≠ uyumlu)
+cat > "$AH_STUB/ssh" <<'EOF'
+#!/usr/bin/env bash
+cmd="${@: -1}"
+case "$cmd" in
+  *"config --hash"*)  echo "" ;;
+  *config-hash*)      echo "" ;;
+  *"docker ps"*StartedAt*) echo "cloudtop-senktest 2026-01-01T00:00:00+00:00" ;;
+  *"docker ps"*)      echo "cloudtop-senktest" ;;
+  *"docker port"*)    echo "8443/tcp -> 127.0.0.1:8449" ;;
+  *"docker compose"*) echo "stub-up-ok" ;;
+  *curl*)             echo "http_code=302" ;;
+  *)                  bash -c "$cmd" ;;
+esac
+EOF
+chmod +x "$AH_STUB/ssh"
+git -C "$AH_REPO" show origin/main:infra/docker-compose.server.yml > "$AH_HOSTFILE"
+AH_KANIT2="$(mktemp -d)"
+env ISKAN_FAZ4_GO=1 PATH="$AH_STUB:$PATH" CS_LOG="$AH_LOG" ISKAN_KANIT_DIR="$AH_KANIT2" \
+  ISKAN_SSH_HOST=stubhost ISKAN_CLOUDTOP_REPO_DIR="$AH_REPO" ISKAN_HOST_COMPOSE_PATH="$AH_HOSTFILE" \
+  bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje senktest >/dev/null 2>&1
+rc=$?
+[ "$rc" = "5" ] \
+  && ok "DERS-B R5: hash ölçülemedi → fail-closed rc=5 (unknown ≠ uyumlu)" \
+  || bad "DERS-B R5: ölçülemeyen hash geçirildi (rc=$rc)"
+
+# dış port-eşlemesi BOŞ → kırmızı (sahte-yeşilin okunur teşhisi)
+cat > "$AH_STUB/ssh" <<'EOF'
+#!/usr/bin/env bash
+cmd="${@: -1}"
+case "$cmd" in
+  *"config --hash"*)  echo "cloudtop-senktest AYNI" ;;
+  *config-hash*)      echo "AYNI" ;;
+  *"docker ps"*StartedAt*) echo "cloudtop-senktest 2026-01-01T00:00:00+00:00" ;;
+  *"docker ps"*)      echo "cloudtop-senktest" ;;
+  *"docker port"*)    echo -n "" ;;                             # dış eşleme YOK
+  *"docker compose"*) echo "stub-up-ok" ;;
+  *curl*)             echo "http_code=302" ;;
+  *"command -v python3"*) echo "/usr/bin/python3" ;;
+  *)                  bash -c "$cmd" ;;
+esac
+EOF
+chmod +x "$AH_STUB/ssh"
+git -C "$AH_REPO" show origin/main:infra/docker-compose.server.yml > "$AH_HOSTFILE"
+AH_KANIT3="$(mktemp -d)"
+out="$(env ISKAN_FAZ4_GO=1 PATH="$AH_STUB:$PATH" CS_LOG="$AH_LOG" ISKAN_KANIT_DIR="$AH_KANIT3" \
+  ISKAN_SSH_HOST=stubhost ISKAN_CLOUDTOP_REPO_DIR="$AH_REPO" ISKAN_HOST_COMPOSE_PATH="$AH_HOSTFILE" \
+  bash "$SCRIPT_DIR/iskan-host.sh" --apply --proje senktest 2>&1)"
+rc=$?
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'DIŞ PORT-EŞLEMESİ YOK' \
+  && ok "DERS-B port-kapısı: 'docker port' boşsa kırmızı + okunur teşhis (http_code=000 değil)" \
+  || bad "DERS-B port-kapısı: dış-eşlemesiz kutu yeşil geçti (rc=$rc)"
+find "$AH_REPO" "$AH_HOSTDIR" "$AH_STUB" -type f -delete 2>/dev/null
+rm -f "$AH_LOG" 2>/dev/null
+
+# ── DERS-D: evergreen-kaydet BAYAT working-tree'ye yazmamalı ──────────────────────────────
+# CANLI ARIZA: lokal cloudtop checkout'u 31 commit geriydi; o ağaçtan üretilen diff 36 SİLME
+# gösterdi (aradaki işleri geri alacaktı). Yalnız gözle yakalandı — bekçi yoktu.
+AH_EG="$(mktemp -d)"; _eg_fixture_repo "$AH_EG" ""
+# origin/main'i BİR commit ileri al → working-tree 1 commit geride kalsın
+printf '\n# ileri-commit\n' >> "$AH_EG/infra/backup.sh"
+git -C "$AH_EG" -c user.email=t@t -c user.name=t commit -qam ileri
+git -C "$AH_EG" update-ref refs/remotes/origin/main HEAD
+git -C "$AH_EG" reset -q --hard HEAD~1          # HEAD geride, origin/main ileride
+AH_INV0="$(md5sum "$AH_EG/infra/provider-inventory.yaml" | awk '{print $1}')"
+out="$(ISKAN_CLOUDTOP_REPO_DIR="$AH_EG" bash "$SCRIPT_DIR/iskan.sh" evergreen-kaydet egtest --apply 2>&1)"
+rc=$?
+AH_INV1="$(md5sum "$AH_EG/infra/provider-inventory.yaml" | awk '{print $1}')"
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'commit GERİSİNDE' && [ "$AH_INV0" = "$AH_INV1" ] \
+  && ok "DERS-D tazelik: bayat working-tree'ye apply rc=1 + SIFIR-yazım (sessiz-geri-alma kapandı)" \
+  || bad "DERS-D tazelik: bayat ağaca yazıldı (rc=$rc yazım=$([ "$AH_INV0" = "$AH_INV1" ] && echo yok || echo VAR))"
+printf '%s' "$out" | grep -q 'git -C .* pull' \
+  && ok "DERS-D tazelik: çare (git pull / taze worktree) reçetesi basılıyor" \
+  || bad "DERS-D tazelik: reçetesiz kırmızı"
+# dry-run AKIŞI KESMEZ — yalnız uyarır (önizleme yapılabilmeli)
+out="$(ISKAN_CLOUDTOP_REPO_DIR="$AH_EG" bash "$SCRIPT_DIR/iskan.sh" evergreen-kaydet egtest --dry-run 2>&1)"
+rc=$?
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q 'commit GERİSİNDE' \
+  && ok "DERS-D tazelik: dry-run'da UYARI + akış devam (rc=3 korunur)" \
+  || bad "DERS-D tazelik: dry-run kesildi ya da uyarmadı (rc=$rc)"
+# bilinçli-geçiş kapısı (operatör beyanı; kayda geçer)
+out="$(ISKAN_EG_BAYAT_KABUL=1 ISKAN_CLOUDTOP_REPO_DIR="$AH_EG" bash "$SCRIPT_DIR/iskan.sh" evergreen-kaydet egtest --apply 2>&1)"
+rc=$?
+[ "$rc" = "0" ] && printf '%s' "$out" | grep -q 'bilinçli geçildi' \
+  && ok "DERS-D tazelik: ISKAN_EG_BAYAT_KABUL=1 ile bilinçli geçiş çalışıyor + kayda geçiyor" \
+  || bad "DERS-D tazelik: bilinçli-geçiş kapısı kırık (rc=$rc)"
+find "$AH_EG" -type f -delete 2>/dev/null; find "$AH_EG" -depth -type d -empty -delete 2>/dev/null
 
 echo "== ${PASS} geçti / ${FAIL} kaldı =="
 [ "$FAIL" -eq 0 ]

@@ -342,6 +342,51 @@ cmd_apply() {
     hostsrv_okur 'docker ps --format "{{.Names}}" | while read -r n; do echo "$n $(docker inspect -f "{{.State.StartedAt}}" "$n")"; done | sort'
   } > "$g9_kanit"
 
+  # ── R5 · CANLI-KUTU UYUM KAPISI (tez-doğumu dersi, 2026-07-28 · fail-closed) ──────────────
+  # SORUN: R4 dosya⟷dosya karşılaştırır (repo-compose ⟷ host-compose). ÇALIŞAN container'ın
+  #   fiilen HANGİ tanımla ayakta olduğuna HİÇ bakmaz. Aşağıdaki R2-guard ise "zaten çalışıyor"
+  #   görünce `up`ı hiç çağırmaz → YARIM/ESKİ-tanımlı bir kutu sessizce KABUL edilir.
+  # CANLI VAKA: tez ilk kez 8452 ile yaratıldı (port çakıştı, kutu yarım kaldı: `docker port` BOŞ,
+  #   python3/tmux/claude YOK) — ama Docker healthcheck container-İÇİ 8443'ü probe ettiği için
+  #   "healthy" diyordu (SAHTE-YEŞİL). `up --no-recreate` bu bozuk kutuyu DİRİLTTİ; düzeltmek için
+  #   elle `docker rm -f` + `--force-recreate` gerekti.
+  # KAPI: canlı container'ın compose config-hash'i, host-compose'un o servis için ürettiği hash'le
+  #   AYNI mı? Değilse (ya da ölçülemiyorsa) apply REDDEDİLİR — force-recreate YIKICI olduğu için
+  #   otomatik yapılmaz, reçete basılır ve Sultan'a bırakılır (host-mutasyonu = Sultan-alanı).
+  local var_mi uyum_kanit="$kanit_dir/canli-uyum.txt"
+  var_mi="$(hostsrv_okur "docker ps -a --format '{{.Names}}'" | grep -cx "$cname" || true)"
+  if [ "$var_mi" != "0" ]; then
+    local canli_hash istenen_hash
+    # $NF (son alan): `docker inspect --format` çıplak hash basar; `compose config --hash=<svc>`
+    # ise "<servis> <hash>" basar → ikisinde de son alan HASH'tir (biçim-toleranslı okuma).
+    canli_hash="$(hostsrv_okur "docker inspect ${cname} --format '{{index .Config.Labels \"com.docker.compose.config-hash\"}}'" | tr -d '\r' | awk 'NF{print $NF; exit}')"
+    istenen_hash="$(hostsrv_okur "cd /opt/cloudtop && docker compose -f '$HOST_COMPOSE_PATH' config --hash=${cname}" | tr -d '\r' | awk 'NF{print $NF; exit}')"
+    {
+      echo "== R5 canlı-kutu uyum kapısı — ${cname} =="
+      echo "canlı  config-hash: ${canli_hash:-ÖLÇÜLEMEDİ}"
+      echo "istenen config-hash: ${istenen_hash:-ÖLÇÜLEMEDİ}"
+    } > "$uyum_kanit"
+    if [ -z "$canli_hash" ] || [ -z "$istenen_hash" ]; then
+      echo "[kırmızı] R5: hash ölçülemedi (fail-closed; unknown ≠ uyumlu) — apply REDDEDİLDİ, host'a dokunulmadı" | tee -a "$uyum_kanit" >&2
+      exit 5
+    fi
+    if [ "$canli_hash" != "$istenen_hash" ]; then
+      {
+        echo "[kırmızı] R5: canlı kutu compose-tanımıyla UYUŞMUYOR — apply REDDEDİLDİ (host'a dokunulmadı)."
+        echo "anlamı: '${cname}' ayakta ama ESKİ/YARIM bir tanımla. \`up --no-recreate\` onu OLDUĞU GİBİ bırakır"
+        echo "        (Docker 'healthy' diyebilir — healthcheck container-İÇİ portu probe eder, dış eşlemeyi DEĞİL)."
+        echo "çare (YIKICI — Sultan-eli, host-mutasyonu):"
+        echo "  ssh hostsrv 'docker rm -f ${cname}'"
+        echo "  ssh hostsrv 'cd /opt/cloudtop && docker compose -f $HOST_COMPOSE_PATH up -d --force-recreate ${cname}'"
+        echo "  sonra: iskan-host.sh --apply --proje ${proje} tekrar koşulur."
+      } | tee -a "$uyum_kanit" >&2
+      exit 5
+    fi
+    echo "[yeşil] R5 canlı-kutu uyumu: hash-eş (${canli_hash:0:12}…) — canlı kutu compose-tanımıyla AYNI" | tee -a "$uyum_kanit"
+  else
+    echo "[yeşil] R5: '${cname}' host'ta henüz YOK — taze doğum (uyum kapısı konusuz)" | tee "$uyum_kanit"
+  fi
+
   # ── R2-guard: aday ZATEN çalışıyorsa up HİÇ çağrılmaz (idempotent + öz-hedefleme imkânsız) ─
   local calisiyor
   calisiyor="$(hostsrv_okur "docker ps --format '{{.Names}}'" | grep -cx "$cname" || true)"
@@ -429,6 +474,25 @@ cmd_apply() {
   # CYCLE-4 FRICTION#1 kök-fix'i; gerekçe helper-başlığında).
   local port
   port="$(_hostsrv_compose_port "$repo_dir" "$cname")"
+
+  # ── G5-ÖN: DIŞ PORT-EŞLEMESİ VAR MI (tez-doğumu dersi — sahte-yeşilin kök-mekaniği) ───────
+  # Docker healthcheck container-İÇİ 8443'ü probe eder; dış eşleme (127.0.0.1:<port>→8443)
+  # KURULMAMIŞ olsa bile "healthy" der. Yarım-kalmış tez kutusunda `docker port` BOŞ dönüyordu.
+  # Bu kapı olmadan arıza aşağıda yalnız "http_code=000" olarak görünür — teşhisi okunmaz.
+  local port_map_out="$kanit_dir/docker-port.txt"
+  hostsrv_okur "docker port ${cname}" > "$port_map_out" 2>&1
+  if [ ! -s "$port_map_out" ]; then
+    {
+      echo "[kırmızı] DIŞ PORT-EŞLEMESİ YOK: 'docker port ${cname}' BOŞ döndü."
+      echo "anlamı: kutu ayakta (hatta 'healthy') olabilir ama dışarıdan ERİŞİLEMEZ — sahte-yeşil."
+      echo "çare (YIKICI — Sultan-eli): ssh hostsrv 'docker rm -f ${cname}' →"
+      echo "      ssh hostsrv 'cd /opt/cloudtop && docker compose -f $HOST_COMPOSE_PATH up -d --force-recreate ${cname}'"
+    } | tee -a "$port_map_out" >&2
+    sonuc_rc=1
+  else
+    echo "[yeşil] dış port-eşlemesi VAR: $(tr '\n' ' ' < "$port_map_out")"
+  fi
+
   local health_out="$kanit_dir/healthz.txt"
   if [ -n "$port" ]; then
     local deneme hc=""
