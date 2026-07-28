@@ -81,8 +81,51 @@ PY
 
 # ── canlı ölçüm ──────────────────────────────────────────────────────────────
 _oturumlar() { tmux ls -F '#{session_name}' 2>/dev/null || true; }
-# claude süreçleri kendi masalarını `--name <masa>` ile taşır (firsthand: ps çıktısı).
-_claude_masalar() { ps -eo args 2>/dev/null | sed -n 's/.*claude .*--name \([^ ][^ ]*\).*/\1/p' | sort -u; }
+
+# ⚠️ PANE-BAĞLI TESPİT (NÂZIR bulgusu, 2026-07-28 — İLK SÜRÜMÜN HATASI):
+#   İlk sürüm `ps`i GLOBAL tarayıp `claude --name <masa>` görünce "çalışıyor" diyordu; sürecin o
+#   tmux pane'inde olup olmadığına BAKMIYORDU. Ajanlar tarayıcı-sekmesi terminalinde (tmux DIŞINDA)
+#   koşarken skill "✅ çalışıyor" deyip `tmux attach -t <masa>` öneriyordu → kullanıcı BOŞ KABUĞA
+#   bağlanıyordu. Üstelik onarım tarafı da riskliydi: global-tarama bir gün kaçırsa aynı ajan İKİNCİ
+#   kez başlatılır, aynı session-id ile çift oturum açılırdı.
+#   Panzehir: bir masa ancak claude o masanın pane SÜREÇ-AĞACINDA ise "çalışıyor" sayılır.
+#   Ayrıca tmux DIŞINDA koşan claude ayrı bir durum olarak raporlanır (onarım ONA DOKUNMAZ).
+#
+# _pane_claude_masalar → "oturum<TAB>masa" (yalnız pane alt-ağacındakiler)
+_pane_claude_masalar() {
+  local panes; panes="$(tmux list-panes -a -F '#{session_name}|#{pane_pid}' 2>/dev/null || true)"
+  [ -n "$panes" ] || return 0
+  printf '%s\n' "$panes" | python3 -c '
+import sys, re, subprocess
+panes = [l.strip().split("|") for l in sys.stdin if "|" in l]
+try:
+    ps = subprocess.run(["ps","-eo","pid,ppid,args"], capture_output=True, text=True, timeout=15).stdout
+except Exception:
+    sys.exit(0)
+cocuk = {}; arg = {}
+for ln in ps.splitlines()[1:]:
+    p = ln.split(None, 2)
+    if len(p) < 3: continue
+    try: pid, ppid = int(p[0]), int(p[1])
+    except ValueError: continue
+    arg[pid] = p[2]; cocuk.setdefault(ppid, []).append(pid)
+desen = re.compile(r"claude .*--name (\S+)")
+for sess, pp in panes:
+    try: kok = int(pp)
+    except ValueError: continue
+    yigin = [kok]; gorulen = set()
+    while yigin:
+        pid = yigin.pop()
+        if pid in gorulen: continue
+        gorulen.add(pid)
+        m = desen.search(arg.get(pid, ""))
+        if m: print("%s\t%s" % (sess, m.group(1)))
+        yigin.extend(cocuk.get(pid, []))
+' 2>/dev/null
+}
+
+# _global_claude_masalar → makinedeki TÜM claude --name değerleri (pane-dışı tespiti için)
+_global_claude_masalar() { ps -eo args 2>/dev/null | sed -n 's/.*claude .*--name \([^ ][^ ]*\).*/\1/p' | sort -u; }
 _pane_komut() { tmux display-message -p -t "$1:0" '#{pane_current_command}' 2>/dev/null || true; }
 
 ONARIM=""   # rapor satırları
@@ -112,11 +155,21 @@ _onar_masa() { # <id> <session>
   esac
 }
 
+# _masada_mi <oturum> <masa-id> — claude O oturumun pane-ağacında mı?
+_masada_mi() { printf '%s\n' "$PANE_LIST" | grep -qx "$1"$'\t'"$2"; }
+
 # ── 1. tur: ölç + onar ───────────────────────────────────────────────────────
-CLAUDE_LIST="$(_claude_masalar)"
+PANE_LIST="$(_pane_claude_masalar)"
+GLOBAL_LIST="$(_global_claude_masalar)"
 while IFS=$'\t' read -r id s; do
   [ -n "$id" ] || continue
-  printf '%s\n' "$CLAUDE_LIST" | grep -qx "$id" && continue   # zaten çalışıyor
+  _masada_mi "$s" "$id" && continue                             # masasında çalışıyor → dokunma
+  if printf '%s\n' "$GLOBAL_LIST" | grep -qx "$id"; then
+    # tmux DIŞINDA koşuyor (ör. tarayıcı-sekmesi terminali). İkinci kopya başlatmak AYNI
+    # session-id ile çakışma üretir → onarım YAPILMAZ, yalnız raporlanır (NÂZIR bulgusu).
+    ONARIM+="  · $id: tmux DIŞINDA çalışıyor — dokunulmadı (ikinci kopya açmak çakışma üretir)"$'\n'
+    continue
+  fi
   _onar_masa "$id" "$s"
 done <<< "$ROSTER"
 
@@ -125,14 +178,19 @@ if [ "$MOD" = "onar" ] && [ -n "$ONARIM" ]; then sleep 6; fi
 
 # ── 2. tur: taze ölçüm (rapor bunun üstünden) ────────────────────────────────
 OTURUMLAR="$(_oturumlar)"
-CLAUDE_LIST="$(_claude_masalar)"
+PANE_LIST="$(_pane_claude_masalar)"
+GLOBAL_LIST="$(_global_claude_masalar)"
 
-SATIRLAR=""; AYAKTA=0; TOPLAM=0
+SATIRLAR=""; AYAKTA=0; TOPLAM=0; DISARIDA=0
 while IFS=$'\t' read -r id s; do
   [ -n "$id" ] || continue
   TOPLAM=$((TOPLAM+1))
-  if printf '%s\n' "$CLAUDE_LIST" | grep -qx "$id"; then
+  if _masada_mi "$s" "$id"; then
     durum="calisiyor"; AYAKTA=$((AYAKTA+1)); komut="tmux attach -t $s"
+  elif printf '%s\n' "$GLOBAL_LIST" | grep -qx "$id"; then
+    # ÇALIŞIYOR ama masasında değil → `tmux attach` BOŞ KABUĞA bağlar; o komutu ÖNERME.
+    durum="tmux-disi"; DISARIDA=$((DISARIDA+1))
+    komut="çalıştığı sekmeye/pencereye dön — 'tmux attach' seni boş kabuğa bağlar"
   elif printf '%s\n' "$OTURUMLAR" | grep -qx "$s"; then
     durum="masa-bos"; komut="tmux attach -t $s   # sonra: bash scripts/baslat-claude.sh $id"
   else
@@ -153,12 +211,13 @@ RC=0; [ "$AYAKTA" -eq "$TOPLAM" ] || RC=1
 
 if [ "$PORCELAIN" = "1" ]; then
   printf '%s' "$SATIRLAR"
-  printf '#OZET\tslug=%s\tayakta=%s\ttoplam=%s\tfazla=%s\tmod=%s\n' "$SLUG" "$AYAKTA" "$TOPLAM" "${FAZLA:-yok}" "$MOD"
+  printf '#OZET\tslug=%s\tayakta=%s\ttmux-disi=%s\ttoplam=%s\tfazla=%s\tmod=%s\n' "$SLUG" "$AYAKTA" "$DISARIDA" "$TOPLAM" "${FAZLA:-yok}" "$MOD"
   [ -n "$ONARIM" ] && printf '%s' "$ONARIM" | sed 's/^  · /#ONARIM\t/'
   exit "$RC"
 fi
 
-echo "👥 EKİP · $SLUG · $AYAKTA/$TOPLAM masa ayakta   (kayıt: ${REG#"$ROOT"/})"
+_ek=""; [ "$DISARIDA" -gt 0 ] && _ek="  · $DISARIDA ajan tmux DIŞINDA çalışıyor"
+echo "👥 EKİP · $SLUG · $AYAKTA/$TOPLAM masa ayakta$_ek   (kayıt: ${REG#"$ROOT"/})"
 echo ""
 # NOT: sütun-hizalama (printf %-20s) KULLANILMAZ — Türkçe adlar (MUAVİN, MİMAR…) çok-baytlı
 # harf taşır, printf BAYT sayar → tablo kayar. Satır-blok biçimi bu tuzağa bağışık.
@@ -166,6 +225,7 @@ while IFS=$'\t' read -r id s d k; do
   [ -n "$id" ] || continue
   case "$d" in
     calisiyor)  isaret="✅ çalışıyor" ;;
+    tmux-disi)  isaret="🟡 tmux DIŞINDA çalışıyor" ;;
     masa-bos)   isaret="⚠️ masa boş (oturum var, Claude yok)" ;;
     *)          isaret="❌ oturum yok" ;;
   esac

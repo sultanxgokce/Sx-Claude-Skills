@@ -1110,7 +1110,7 @@
       "id": "ekip",
       "type": "agent",
       "name": "EKİP — kutu-içi masa önizlemesi (süz → onar → listele)",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "Bu kutudaki ekibin masalarini once SUZ (eksik/bos/fazla), gerekirse ONAR (kapanmis oturumu ac, Claude'u baslat), sonra Sultan-dilinde LISTELE: ajan adlari, tmux adlari, geri donmek/baslatmak icin komutlar. Onarim yikici-degil: oturum silmez, mesgul masaya dokunmaz, calisan Claude'u yeniden baslatmaz (idempotent). Filo-geneli gorunum ayri: /filo.",
       "installed_in": [
         "_global"

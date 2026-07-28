@@ -1,6 +1,6 @@
 ---
 name: ekip
-version: 1.0.0
+version: 1.1.0
 description: Bu kutudaki ekibin masalarını önce SÜZ (eksik/boş/fazla var mı), gerekirse ONAR (kapanmış masaları aç, Claude'u başlat), sonra Sultan-dilinde LİSTELE — ajan adları · tmux adları · geri dönmek/başlatmak için komutlar. "ekibim ayakta mı · masalar kapanmış · kim var · tmux adları neydi · ekibi geri getir" sorusunun kanonik cevabı. USER-ONLY.
 disable-model-invocation: true
 allowed-tools: Bash, Read
@@ -36,6 +36,7 @@ allowed-tools: Bash, Read
 👥 <KUTU> EKİBİ · <N>/<M> masa ayakta
 
   ✅ <ajan> — geri dönmek için:  tmux attach -t <tmux>
+  🟡 <ajan> — tmux DIŞINDA çalışıyor (tarayıcı sekmesinde olabilir) — masaya bağlanma
   ⚠️ <ajan> — masası boştu, başlattım
   ❌ <ajan> — açılamadı: <sebep>
 
@@ -49,6 +50,8 @@ allowed-tools: Bash, Read
 - **Oturum SİLİNMEZ.** Kayıtta olmayan fazla oturum yalnız raporlanır — silme veri-kaybı riskidir, insan kararıdır.
 - **Meşgul masaya DOKUNULMAZ.** Pane'de Claude dışında bir iş koşuyorsa kesilmez, raporlanır.
 - **Çalışan Claude yeniden başlatılmaz** (idempotent — ikinci koşu hiçbir şey yapmaz).
+- **tmux DIŞINDA çalışan ajana DOKUNULMAZ.** İkinci kopya açmak aynı oturum-kimliğiyle çakışma
+  üretir. Bu durumda `tmux attach` ÖNERİLMEZ — o komut boş kabuğa bağlar.
 - Skill başka kutuya geçmez, ssh çağırmaz, sır okumaz.
 
 ## Sınırlar / dürüstlük
@@ -57,7 +60,7 @@ allowed-tools: Bash, Read
 - Bu skill kimlik/rol anlatmaz; kim-ne-yapar için kutunun `_agents/` belgelerine bak.
 
 ## Doğrula (bakım)
-`bash /config/.claude/skills/ekip/scripts/ekip-onizleme.test.sh ; echo exit=$?` → 13/13 PASS.
+`bash /config/.claude/skills/ekip/scripts/ekip-onizleme.test.sh ; echo exit=$?` → 18/18 PASS.
 Test **izole tmux sunucusunda** (`-L`) koşar — çalışan ekiplerin oturumlarına dokunmaz.
 
 ## Kademe
