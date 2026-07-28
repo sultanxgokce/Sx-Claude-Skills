@@ -67,7 +67,7 @@ _locked_append(){  # _locked_append <jsonl-satırı>
 # ── sır-desen uyarısı (H · uyar+onay; non-TTY & onaysız → yazMA) ──────────────────────────
 _sir_uyari(){  # _sir_uyari <metin> <sir_onay(0/1)>
   local metin="$1" onay="$2"
-  if printf '%s' "$metin" | grep -qiE 'sk-[a-z0-9]|token=|password=|passwd=|secret=|api[_-]?key='; then
+  if printf '%s' "$metin" | grep -qiE '\bsk-[A-Za-z0-9]{16,}|token=|password=|passwd=|secret=|api[_-]?key='; then
     ylw "⚠️  Metinde SIR-DESENİ saptandı (sk-…/token=/password=/secret=/api_key=)."
     ylw "    Seyir-defteri İÇGÖRÜ günlüğüdür — sır DEĞERİ buraya YAZILMAZ (konum/ad yaz, değer değil)."
     if [ "$onay" = "1" ]; then

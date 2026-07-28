@@ -58,12 +58,19 @@ Sadece-biri eksik-kalır: doküman-yalnız→disiplin-çöker; üreteç-yalnız�
 kanıtsız-yeşil YASAK. AHÎ kendi kendini denetler: `ahi check ahi` → temiz (dogfood).
 
 ## 8 · Dağıtım + Drift-gözcü
-- **Dağıtım:** elle-apply (`sync-skills.mjs --apply`, bilinçli) — `_global` (ortak-mount **10/10**: pc(webtop)/kod/vekatip/mmex/medigate/huma/mihenk/tellal/akar/s02 — 9'u açık `./config/.claude:/config/.claude` bind, webtop üst-mount `./config:/config` üzerinden; kanıt `cloudtop/infra/docker-compose.server.yml:44,91,158,222,290,348,403,442,472,502`, ölçüm 2026-07-25) VEYA per-proje. *(Eski "huma ulaşmaz" notu bayattı — huma/mihenk de aynı ortak-mount'u bağlar; huma'nın curated-köprüsü Cortex-İÇERİĞİ içindir, skill-mount'u değil.)* Otomatik-tetikleyici YOK (elle disiplin).
+- **Dağıtım:** elle-apply (`sync-skills.mjs --apply`, bilinçli) — `_global` (ortak-mount **10/10**: pc/kod/vekatip/mmex/medigate/huma/mihenk/tellal/akar/s02 — compose `./config/.claude` paylaşımlı bind; `pc` bunu `./config:/config` üst-mount'uyla alır. Compose-kanıtı 2026-07-25 L25-W2: docker-compose.server.yml satır 44/91/164/228/296/354/409/448/478/512. Altyapı `openbao`+`cloudtop-ntfy` AYRI compose → payda DIŞI) VEYA per-proje. *(Eski "huma ulaşmaz" notu bayattı — huma/mihenk de aynı ortak-mount'u bağlar; huma'nın curated-köprüsü Cortex-İÇERİĞİ içindir, skill-mount'u değil.)* Otomatik-tetikleyici YOK (elle disiplin).
 - **Drift-gözcü (`ahi check`):** YALNIZ `catalog.json`↔`sync-targets.json`↔`README` parity + tier/requires/deprecated semantiği + manifest-şema-geçerliliği. **`sync-targets`/`catalog`'a ASLA YAZMAZ — yalnız RAPORLAR** (insan/PR uygular). Bkz `ADR/ADR-001`.
 
-## 9 · Yaşam-döngüsü (soft-ama-sunsetli)
+## 9 · Yaşam-döngüsü (soft-ama-sunsetli + SYS geri-bildirim-döngüsü)
 - **Sürüm:** semver, TEK evi `SKILL.md` frontmatter (§11).
 - **Emeklilik:** `ahi deprecate <skill> "<mesaj>"` → frontmatter `deprecated:true` + `sunset:<tarih>` + `successor:<skill|ayar>` ZORUNLU; işaretler+uyarır+KALDIRMAZ+reversible. *(npm-deprecate)*. Silme değil arşiv. [hard-retire + demote = V2.]
+- **SYS — doğum-sonrası yaşam (Skill Yaşam-Döngüsü Standardı, L01):** doğum ile emeklilik ARASINDAKİ yaşam standarttır: **tetik→kayıt→depo→owner→anlamlandır→aksiyon→gate'li-icra** (DİVAN owner-loop'unun SKILL-instansı; yeni-sistem değil, mevcutları teKler). Mekanik:
+  - **(a) Dayanıklı-kayıt (ephemeral YASAK):** skill'den şikâyet/eksik/drift → `scripts/skill-fb-ekle.sh ekle` (tek yazma-yüzeyi, fail-closed: `skill`+`baslik`+`kanit` ZORUNLU) → append-only `_agents/handoff/skill-geri-bildirim.jsonl`. "SERDAR'a emit et, unut" YASAK — her bulgu havuza düşer (K1: DİVAN-havuzundan AYRI).
+  - **(b) Owner:** feedback owner'ı manifest `feedback.owner` (→ §schema) ile DETERMİNİSTİK atanır; boşsa `ahi health` "öksüz-owner" WARN'lar. Süzen owner'ı ATLAYAMAZ (DİVAN sahip-süzemez kuralı).
+  - **(c) KATMANLI önem (aşırı-yük panzehiri):** `scripts/skill-fb-t1.sh` her bulguya `agirlik = tür-ağırlığı × tekrar × kanıt-gücü` verir; eşik-üstü → **CLOSURE** (kart+GEREKLILIK+tescil), eşik-altı → **DIGEST** (owner'a toplu, kart-açmaz). Her feedback kart-AÇMAZ.
+  - **(d) Kanıt-kapılı kapanış:** skill-onarımı "bitti" YALNIZ tescil-mührüyle (skill-defect `GEREKLILIK.md` — en az 1 davranış-G, defect'i yeniden-üret→fix-doğrula) → `skill-fb-ekle.sh durum g#### bitti --kanit <MUHUR|PR>` (kanıtsız RC=2). Beyanla-kapanış YOK.
+  - **(e) İcra-öncesi GO-gate + INERT:** onarım-icrası/global-yayılım DAİMA insan/owner-gate'li (kontrolsüz-otomasyon YASAK). Tüm SYS-yüzeyi additive/INERT — kapalı=byte-identical.
+  - *(Konteyner-arası skill-defect wire = FAZ-3, mahremiyet-duvarı red-team-gated; bu kanonda AKTİF DEĞİL.)*
 
 ## 10 · Terfi (tertipli + appraisal-checklist)
 Terfi = **objektif-appraisal** (vibe değil). Her kademe-atlaması TEK yeni yetenek-ekseni ekler:

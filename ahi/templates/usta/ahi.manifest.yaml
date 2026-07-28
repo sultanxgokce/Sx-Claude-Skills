@@ -7,5 +7,10 @@ generic_goal: "{{GENERIC_GOAL}}"
 activation:
   onKeyword: {{NAME}}
 requires: []
+# SYS (L01) doğum-sonrası yaşam-döngüsü kanalı — owner'ı DOLDUR (SYS FAZ-4'te zorunlu).
+feedback:
+  owner: ""
+  channel: skill-geri-bildirim.jsonl
+  sla_tier: closure
 install_targets:
   - _global

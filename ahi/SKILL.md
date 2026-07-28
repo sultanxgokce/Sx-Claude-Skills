@@ -1,7 +1,7 @@
 ---
 name: ahi
 type: agent
-version: 0.3.0
+version: 0.3.1
 description: >
   AHÎ — 4-kademe AI-yetenek fabrikası. Yeni skill/sistem üretimini TEK-STANDARDA oturtan meta-fabrika:
   kademe-seç→standart-iskelet (ahi new), drift-gözcü (ahi check), terfi-appraisal (ahi promote),
