@@ -1,6 +1,6 @@
 ---
 name: mucit-suz
-version: 1.4.0
+version: 1.5.0
 description: >
   MUCİT'in el-kitabı: DİVAN bulgu-havuzunu (bulgu-havuzu.jsonl — KEŞŞAF dış-tarama + SERDAR pilot-bulguları)
   acımasızca süzüp Sultan-dilinde en çok haftada 3 ADAY-kart önerir. T1 = <skill-dizini>/scripts/mucit-t1.sh ($0-mekanik:
@@ -106,10 +106,35 @@ Her `adaylar[]` öğesi için sırayla:
 
 ## 4 · mucit-defteri satır-şeması (append-only, git-tracked)
 ```json
-{"turu":"kalibrasyon-0|canli-N","tarih":"YYYY-MM-DD","bulgu_id":"bNNNN","baslik":"...","verdikt":"aday-arzi|preview|elendi|mihenk-alani","kart":"k####|null","not":"gerekçe (elendi/mihenk için zorunlu)"}
+{"turu":"kalibrasyon-0|canli-N","tarih":"YYYY-MM-DD","bulgu_id":"bNNNN","baslik":"...",
+ "verdikt":"aday-arzi|preview|elendi|cap-ertelendi|mihenk-alani","kart":"k####|null",
+ "not":"gerekçe (elendi/mihenk için zorunlu)","elek":"gunluk|haftalik|aylik","sinif":"kapatici|pencereli"}
 ```
 - **Ölçüm:** kill-rate = elendi/(toplam) · **dönüşüm = aday→kuyruk (asıl sinyal)** → /durum nabız-satırı buradan.
 - Redaction: satırlarda sır/token YOK (Sultan-dili özet).
+- `elek` · `sinif` opsiyoneldir (uc-elek-suzme-DESIGN §3.2). Yoksa türetilir: `elek`→`haftalik`;
+  `sinif`→ `aday-arzi|mihenk-alani` ya da `zaten-var|zaten-planli` gerekçeli `elendi` ise **kapatici**, değilse **pencereli**.
+
+## 4b · ELEK-HAFIZASI (bugüne kadarki en büyük delik — 2026-07-28)
+
+⚠️ **Ölçülen gerçek:** T1'in uygunluk kapısı (`mucit-t1.sh`) mucit-defteri'ne **hiç bakmıyordu**;
+defter yalnız dönem-tavanı sayılırken okunuyordu. Sonuç: 29 bulgu her turda yeniden süzmeye
+giriyordu — içinde zaten aday-arzı olmuş `b0022` (kart k0142) ve gerekçeli elenmiş beş bulgu vardı.
+Yani aynı analiz her tur yeniden ödeniyordu. İki parça bu deliği kapatır:
+
+| Parça | Ne yapar | Bayrak |
+|---|---|---|
+| `scripts/mucit-durum-yaz.sh` | kapatıcı kararları havuzdaki `durum` alanına işler (tek boğaz) | `MUCIT_DURUM_YAZ=1` **+** `--uygula` |
+| T1 hafıza-kapısı | kapatıcı kararlı ve bu-pencerede-kararlı bulguları süzmeye SOKMAZ | `MUCIT_ELEK_HAFIZA=1` |
+
+**Bayraklar kapalıyken davranış bugünküyle BAYT-AYNI** (INERT — `mucit-elek.test.sh` E2/E3 kanıtlar).
+
+Göç (tek seferlik, Sultan-kararı 5): önce kuru-koşuyla planı gör, sonra uygula:
+```
+bash <paket>/scripts/mucit-durum-yaz.sh                      # plan — hiçbir şey yazmaz
+MUCIT_DURUM_YAZ=1 bash <paket>/scripts/mucit-durum-yaz.sh --uygula
+```
+Doğrula: `bash <paket>/scripts/mucit-elek.test.sh ; echo exit=$?` → 26/26 PASS.
 
 ## 5 · Kanıt-defteri (gate atlamadığını kanıtla)
 `scripts/append-note.sh` ile `_agents/handoff/serdar-defter.md`'ye tek-satır: tur-no · T1-RC · uygun/geçen/aday
