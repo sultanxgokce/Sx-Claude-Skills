@@ -166,12 +166,13 @@ fi
 #   profilinde üretildi — mucit-t1.sh:53 — dolayısıyla varsayım olgusal).
 # PREVIEW İSTİSNASI: kalibrasyon satırı pencereyi KAPATMAZ (§3.3: "aynı elek: girer").
 #
-# BAYRAK: MUCIT_ELEK_HAFIZA=1 açar. Kapalıyken iki küme de boş kalır → jq koşulları
-#   `index(...)==null` ile daima doğru → çıktı BAYT-AYNI (INERT). Testte kanıtlanır.
+# BAYRAK: `MUCIT_ELEK_HAFIZA` — 2026-07-28'den beri VARSAYILAN AÇIK (canlı kanıt: 29→22 aday,
+#   sıfır yanlış-eleme). Kapatmak için `MUCIT_ELEK_HAFIZA=0`; kapalıyken iki küme de boş kalır →
+#   jq koşulları `index(...)==null` ile daima doğru → çıktı bayt-aynı (INERT kaçış-kapağı korunur).
 ELEK="${ELEK:-haftalik}"
 KAPATICI_IDS='[]'
 PENCERE_IDS='[]'
-if [ "${MUCIT_ELEK_HAFIZA:-0}" = "1" ] && [[ -f "$DEFTER" ]]; then
+if [ "${MUCIT_ELEK_HAFIZA:-1}" = "1" ] && [[ -f "$DEFTER" ]]; then
   case "$ELEK" in
     gunluk)   _EFMT="+%F" ;;
     haftalik) _EFMT="+%G-W%V" ;;
@@ -303,7 +304,7 @@ ADAYLAR_TEMIZ="$(jq -c 'sort_by(-.onskor) | [ .[] | del(._kanitli, ._uygun_durum
   echo "   kanıtsız (fail-closed): $E_KANIT"
   echo "   MİHENK-alanı (Sultan) : $E_MIHENK  ${MIHENK_LIST}"
   echo "   zaten-var (kart-dedup): $E_DEDUP"
-  if [ "${MUCIT_ELEK_HAFIZA:-0}" = "1" ]; then
+  if [ "${MUCIT_ELEK_HAFIZA:-1}" = "1" ]; then
     echo "   kalıcı-kararlı (hafıza): $E_KAPATICI  (aday olmuş · zaten-var/planlı elenmiş · MİHENK)"
     echo "   bu pencerede kararlı   : $E_PENCERE  (elek=$ELEK; pencere dolunca yeniden girer)"
   fi

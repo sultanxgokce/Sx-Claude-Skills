@@ -2,7 +2,7 @@
 # mucit-elek.test.sh — ELEK-HAFIZASI kapıları (uc-elek-suzme-DESIGN F1+F2).
 #
 # Neyi kanıtlar:
-#   E1-E3  bayrak KAPALIYKEN çıktı BAYT-AYNI (INERT — mevcut davranış hiç değişmedi)
+#   E1-E3  MUCIT_ELEK_HAFIZA=0 kaçış-kapağı eski davranışı bayt-aynı geri getirir + varsayılan AÇIK
 #   E4-E7  bayrak AÇIKKEN kapatıcı/pencereli/preview ayrımı doğru
 #   E8-E9  elek penceresi: aynı pencerede bloklar, pencere dışında bırakır
 #   D1-D6  durum-yazıcı: iki kapı · kuru-koşu yazmaz · uygular · idempotent · bozuk-girdi fail-closed
@@ -46,9 +46,13 @@ echo "── F2 · elek-hafızası (bayrak KAPALI = INERT) ──"
 bash -n "$T1" 2>/dev/null; esit "E1 t1 sözdizimi temiz" "0" "$?"
 bash -n "$YAZ" 2>/dev/null; esit "E1b yazıcı sözdizimi temiz" "0" "$?"
 
-KAPALI="$(t1)"; RC=$?
-esit "E2 bayraksız koşu RC=0" "0" "$RC"
-esit "E3 bayraksız: 4 bulgunun DÖRDÜ de aday (bugünkü davranış — hafıza yok)" "b1,b2,b3,b4" "$(idler <<<"$KAPALI")"
+KAPALI="$(MUCIT_ELEK_HAFIZA=0 t1)"; RC=$?
+esit "E2 kaçış-kapağı (=0) koşusu RC=0" "0" "$RC"
+esit "E3 kaçış-kapağı: 4 bulgunun DÖRDÜ de aday (INERT — eski davranış aynen geri gelir)" "b1,b2,b3,b4" "$(idler <<<"$KAPALI")"
+
+# E3b · VARSAYILAN artık AÇIK (2026-07-28): bayraksız koşu hafızayı KULLANIR
+VARSAYILAN="$(t1)"
+esit "E3b bayraksız koşu = hafıza AÇIK (varsayılan değişti)" "b3,b4" "$(idler <<<"$VARSAYILAN")"
 
 echo "── F2 · elek-hafızası (bayrak AÇIK) ──"
 ACIK="$(MUCIT_ELEK_HAFIZA=1 t1)"; RC=$?
