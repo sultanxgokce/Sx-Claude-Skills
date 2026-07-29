@@ -1062,8 +1062,8 @@
       "id": "layiha-fabrikasi",
       "type": "agent",
       "name": "layiha-fabrikasi — L24 Layiha Fabrikası (Usta · bileşik · kill-switch'li)",
-      "version": "1.3.0",
-      "description": "DİVAN fikir-hattını (KAŞİF dış-tarama → bulgu-havuzu → MUCİT süzme → aday-havuzu → Sultan tek-tuş terfi) tek-çatı altında toplayan Usta-paket: kasif-tara + mucit-suz'ü besteler, layiha (defter) üzerine oturur; bestelediği kardeşlere YAZMAZ (ADR-001 owner-domain-dokunma). Kill-switch: scripts/layiha-fabrika.sh kapat --sebep → bayrak /config/.claude/layiha-fabrikasi.kapali; ortak _global bind-mount sayesinde 10/10 container'da AYNI ANDA etkili, fail-closed. Kapsam DAR: yalnız layiha üretim-bandı durur — aday-havuzu CRUD (liste/göster/terfi) ve DİVAN'ın kendi fikir-hattı (profil=divan) ETKİLENMEZ.",
+      "version": "1.5.0",
+      "description": "DİVAN fikir-hattını (KAŞİF dış-tarama → bulgu-havuzu → MUCİT süzme → aday-havuzu → Sultan tek-tuş terfi) tek-çatı altında toplayan Usta-paket: kasif-tara + mucit-suz'ü besteler, layiha (defter) üzerine oturur; bestelediği kardeşlere YAZMAZ (ADR-001 owner-domain-dokunma). Kill-switch: scripts/layiha-fabrika.sh kapat --sebep → bayrak /config/.claude/layiha-fabrikasi.kapali; ortak _global bind-mount sayesinde 10/10 container'da AYNI ANDA etkili, fail-closed. Kapsam DAR: yalnız layiha üretim-bandı durur — aday-havuzu CRUD (ekle/liste/göster/terfi) ve DİVAN'ın kendi fikir-hattı (profil=divan) ETKİLENMEZ. v1.5.0: layiha-aday-havuzu.sh `ekle` — tek-kayıt ekleme (flock + atomik os.replace + alt-string dedup), fabrika-turu beklemeden tekil fikri havuza sokar (K3; oto-yakalama kancasının hedefi).",
       "prerequisites": {
         "system": [
           "bash",
