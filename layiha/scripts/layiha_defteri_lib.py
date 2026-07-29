@@ -22,14 +22,42 @@ DEĞİŞMEZLER
     `--aktif`te de "terminal değil" diye kalıyor ama kimse tescile sevk etmiyor.
     Firsthand: L22 (youtube-ai-not-akisi) tam bu hâlde 5 gün görünmez kaldı (2026-07-29).
     Artık okuma-anında norm'lanır → kayıt hangi yoldan gelirse gelsin kuyruğa düşer.
+  · KANIT-KAPISI (K7, Sultan-kararı 2026-07-29): `durum=insa-edildi` KANITSIZ ilan edilemez.
+    Defterin (defter-mailbox.sh) en iyi özelliği buydu ve layihaya taşınmamıştı: "bitti"
+    demek serbestti, kimse ne PR ne commit ne de rapor göstermek zorundaydı. Artık
+    insa-edildi'ye geçiş `--kanit <ref>` ister ve ref BİÇİM-DOĞRULANIR (`kanit_gecerli`).
+    Geriye-uyum: eski kayıtlarda `insa_kanit` alanı YOKTUR — okuma-anında "" sayılır,
+    hata verilmez, göç yapılmaz (v/proje/tescil alanlarıyla aynı konvansiyon).
 """
 
 import io
 import json
 import os
+import re
 import sys
 
 SEMA_V = 1
+
+# Kabul edilen kanıt biçimleri (K7). Üçünden biri tutmalı:
+_KANIT_PR_NO = re.compile(r"^#\d+$")                    # PR referansı: #123
+_KANIT_URL = re.compile(r"^https?://\S+$")              # PR/commit URL'i
+_KANIT_SHA = re.compile(r"^[0-9a-fA-F]{7,40}$")         # commit sha (≥7 hex)
+
+KANIT_RECETE = (
+    'kanıt biçimi: PR ref ("#123" ya da URL) · commit sha (≥7 hex) · '
+    "ya da MEVCUT bir dosya yolu (mühür/rapor)"
+)
+
+
+def kanit_gecerli(ref):
+    """Kanıt referansı kabul edilebilir mi? (biçim-doğrulama, içerik-doğrulama DEĞİL)"""
+    ref = (ref or "").strip()
+    if not ref:
+        return False
+    if _KANIT_PR_NO.match(ref) or _KANIT_URL.match(ref) or _KANIT_SHA.match(ref):
+        return True
+    # dosya yolu: yalnız GERÇEKTEN VAR ise geçerli — var-olmayan yol "kanıt" değildir
+    return os.path.exists(os.path.expanduser(ref))
 
 
 def _hata(msg):
@@ -132,6 +160,11 @@ def oku(led, norm=True, kilitle=False):
             degisti = True
         if "v" not in r:
             r["v"] = 1
+            degisti = True
+        if "insa_kanit" not in r:
+            # GERİYE-UYUM: K7 öncesi kayıtlarda bu alan yok. Eksikliği HATA DEĞİLDİR ve
+            # göç gerektirmez — bellekte "" sayılır; kapı yalnız YENİ geçişlerde işler.
+            r["insa_kanit"] = ""
             degisti = True
         if "proje" not in r:
             # Eski kayıtlar hangi odada yazıldıysa orada duruyor → o odanın adı doğru cevaptır.

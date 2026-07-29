@@ -29,8 +29,12 @@
 #
 # Kullanım:
 #   layiha-defteri.sh ekle --slug S --konu "..." --dokuman "yol" [--pr "#N"] [--resume "cümle"] [--tarih YYYY-MM-DD]
-#   layiha-defteri.sh durum <kod|slug> <insa-bekliyor|insa-ediliyor|insa-edildi>
+#   layiha-defteri.sh durum <kod|slug> <insa-bekliyor|insa-ediliyor|insa-edildi> [--kanit "<ref>"]
 #       (insa-edildi → tescil.durum otomatik 'yok'→'bekliyor' kuyruğa girer)
+#       ⚖️ KANIT KAPISI (K7, 2026-07-29): `insa-edildi` KANITSIZ ilan EDİLEMEZ → RC=2 + reçete.
+#          Kabul edilen kanıt: PR ref (#123 ya da URL) · commit sha (≥7 hex) · MEVCUT dosya yolu.
+#          Kanıt kayda `insa_kanit` alanına yazılır. Diğer geçişler kanıt İSTEMEZ.
+#          Geriye-uyum: eski kayıtlarda alan yok → "" sayılır, hata yok, göç yok.
 #   layiha-defteri.sh tescil <kod|slug> <tescilli|reddi|muaf> [--vites TAM|HAFIF] [--kart k####] \
 #       [--muhur <MUHUR.md|muhur-ozet.json yolu>] [--ajan AD] [--gerekce "..."]
 #         · tescilli --vites TAM  → --muhur ZORUNLU; muhur-ozet.json verdikt=GECTI doğrulanır (çıplak-flip red)
@@ -78,10 +82,20 @@ case "$CMD" in
     LAYIHA_ARGS_JSON="$ARGS" python3 - <<'PY'
 import os, json, sys, subprocess
 sys.path.insert(0, os.environ["LAYIHA_LIB_DIR"])
-from layiha_defteri_lib import oku, yaz, yeni_tescil, proje_adi, SEMA_V
+from layiha_defteri_lib import oku, yaz, yeni_tescil, proje_adi, SEMA_V, kanit_gecerli, KANIT_RECETE
 led=os.environ["LAYIHA_LEDGER"]; a=json.loads(os.environ["LAYIHA_ARGS_JSON"])
 for req in ("slug","konu","dokuman"):
     if not a.get(req): sys.stderr.write("HATA: --%s zorunlu\n"%req); sys.exit(2)
+# KANIT KAPISI (K7) — `ekle --durum insa-edildi` kapının arka kapısıydı; o da kanıt ister.
+# Yalnız AÇIKÇA insa-edildi denince işler: mevcut kaydın eski durumu korunuyorsa (K7 öncesi
+# kayıt) dokunulmaz — geriye-uyum.
+if a.get("durum")=="insa-edildi":
+    _k=(a.get("kanit") if a.get("kanit") is not True else "") or ""
+    if not _k.strip():
+        sys.stderr.write("HATA: 'insa-edildi' KANITSIZ ilan edilemez (K7 · bitti = kanıtlı).\n"
+                         "      Reçete: ekle ... --durum insa-edildi --kanit \"#123\"   (%s)\n"%KANIT_RECETE); sys.exit(2)
+    if not kanit_gecerli(_k):
+        sys.stderr.write("HATA: kanıt biçimi tanınmadı: %r\n      Reçete: %s\n"%(_k,KANIT_RECETE)); sys.exit(2)
 tarih=a.get("tarih") or subprocess.check_output(["date","+%F"]).decode().strip()
 recs,_=oku(led, kilitle=True)
 def id_num(x):
@@ -101,6 +115,8 @@ rec={"v":SEMA_V,"id":kod,"slug":a["slug"],"konu":a["konu"],
      "durum":a.get("durum", existing.get("durum") if existing else "insa-bekliyor"),
      "dokuman":a["dokuman"],"pr":a.get("pr", existing.get("pr","") if existing else ""),
      "resume":a.get("resume", existing.get("resume","") if existing else ""),"not":a.get("not",""),
+     "insa_kanit":((a.get("kanit") if a.get("kanit") is not True else "") or
+                   (existing.get("insa_kanit","") if existing else "") or ""),
      "tescil": (existing.get("tescil") if existing and existing.get("tescil") else yeni_tescil())}
 out=[]; found=False
 for r in recs:
@@ -114,19 +130,43 @@ PY
   ;;
   durum)
     KEY="${1:-}"; YENI="${2:-}"
-    [ -n "$KEY" ] && [ -n "$YENI" ] || { echo "HATA: durum <kod|slug> <insa-bekliyor|insa-ediliyor|insa-edildi>" >&2; exit 2; }
+    [ -n "$KEY" ] && [ -n "$YENI" ] || { echo "HATA: durum <kod|slug> <insa-bekliyor|insa-ediliyor|insa-edildi> [--kanit <ref>]" >&2; exit 2; }
     case "$YENI" in insa-bekliyor|insa-ediliyor|insa-edildi) ;; *) echo "HATA: geçersiz durum: $YENI" >&2; exit 2;; esac
-    KEY="$KEY" YENI="$YENI" python3 - <<'PY'
-import os, sys
+    shift 2 2>/dev/null || true
+    DARGS="$(python_args "$@")"
+    KEY="$KEY" YENI="$YENI" LAYIHA_DURUM_ARGS="$DARGS" python3 - <<'PY'
+import os, json, sys
 sys.path.insert(0, os.environ["LAYIHA_LIB_DIR"])
-from layiha_defteri_lib import oku, yaz
+from layiha_defteri_lib import oku, yaz, kanit_gecerli, KANIT_RECETE
 led=os.environ["LAYIHA_LEDGER"]; key=os.environ["KEY"]; yeni=os.environ["YENI"]
+a=json.loads(os.environ.get("LAYIHA_DURUM_ARGS") or "{}")
+kanit=a.get("kanit")
+if kanit is True: kanit=""          # `--kanit` değer-siz verilmiş
+kanit=(kanit or "").strip()
+
+# --- KANIT KAPISI (K7): "bitti = kanıtlı". Yalnız insa-edildi geçişinde işler. ---
+if yeni=="insa-edildi":
+    if not kanit:
+        sys.stderr.write(
+            "HATA: 'insa-edildi' KANITSIZ ilan edilemez (K7 · bitti = kanıtlı).\n"
+            "      Reçete: layiha-defteri.sh durum %s insa-edildi --kanit \"#123\"   (%s)\n" % (key, KANIT_RECETE))
+        sys.exit(2)
+    if not kanit_gecerli(kanit):
+        sys.stderr.write(
+            "HATA: kanıt biçimi tanınmadı: %r\n"
+            "      Reçete: %s\n" % (kanit, KANIT_RECETE))
+        sys.exit(2)
+elif kanit:
+    sys.stderr.write("HATA: --kanit yalnız 'insa-edildi' geçişinde anlamlıdır (verilen durum: %s)\n"%yeni)
+    sys.exit(2)
+
 if not os.path.exists(led): sys.stderr.write("HATA: defter yok: %s\n"%led); sys.exit(2)
 recs,_=oku(led, kilitle=True)
 found=False; kuyruk=False; cikis=False
 for r in recs:
     if r.get("slug")==key or str(r.get("id","")).lower()==key.lower():
         r["durum"]=yeni; found=True
+        if yeni=="insa-edildi": r["insa_kanit"]=kanit
         # insa-edildi → tescil kuyruğuna otomatik giriş (K3: zorunlu-tescil). Yalnız 'yok' iken.
         t=r.get("tescil") or {"durum":"yok"}
         if yeni=="insa-edildi" and t.get("durum","yok")=="yok":
@@ -140,6 +180,7 @@ for r in recs:
 if not found: sys.stderr.write("HATA: kod/slug bulunamadı: %s\n"%key); sys.exit(2)
 yaz(led, recs)
 msg="OK: %s → %s"%(key,yeni)
+if yeni=="insa-edildi": msg+="  [kanıt: %s]"%kanit
 if kuyruk: msg+="  (→ tescil-kuyruğuna girdi: 📋 tescil bekliyor — bağımsız-ajan tescili gerekli)"
 if cikis: msg+="  (→ tescil kuyruğundan ÇIKTI: inşa geri alındı, tescil edilecek bir iş kalmadı)"
 print(msg)
@@ -288,12 +329,13 @@ sel.sort(key=lambda r:(terminal(r), id_num(r.get("id",""))))
 DUR={"insa-bekliyor":"⏳ inşa bekliyor","insa-ediliyor":"🔨 inşa ediliyor","insa-edildi":"🔧 inşa edildi (tescilsiz)"}
 TES={"yok":"—","bekliyor":"📋 tescil bekliyor","tescilli":"🏅 tescilli","reddi":"↩ tescil reddi","muaf":"⊘ muaf"}
 if porc:
-    # porcelain kontratı GENİŞLETİLDİ (sona eklendi — mevcut alan sıraları korundu): 11. sütun = proje.
+    # porcelain kontratı GENİŞLETİLDİ (sona eklendi — mevcut alan sıraları korundu):
+    #   11. sütun = proje · 12. sütun = insa_kanit (K7).
     for r in sel:
         t=r.get("tescil") or {}
         print("\t".join([r.get("id",""),r.get("slug",""),r.get("durum",""),tdurum(r),r.get("tarih",""),
                           t.get("kart",""),t.get("muhur_ref",""),r.get("konu",""),r.get("resume",""),
-                          r.get("dokuman",""),r.get("proje","")]))
+                          r.get("dokuman",""),r.get("proje",""),r.get("insa_kanit","")]))
     print("#OZET\ttoplam=%d\tfiltre=%s\tdefter=%s"%(len(sel),filt,led))
 else:
     baslik={"aktif":"aktif (tescilsiz) layihalar","bugun":"bugünkü layihalar","hafta":"bu haftaki layihalar",
@@ -317,6 +359,9 @@ else:
             if t.get("vites") and td=="tescilli": det.append(t["vites"])
             if t.get("gerekce") and td in ("reddi","muaf"): det.append(t["gerekce"])
             tescil_str="  tescil: %s%s  · "%(TES.get(td,td), (" ("+", ".join(det)+")") if det else "")
+        # K7: inşa iddiası varsa dayanağı da görünsün — "bitti dedi ama neye dayanarak?" kapanır.
+        if r.get("durum")=="insa-edildi" and r.get("insa_kanit"):
+            print("        kanıt: %s"%r["insa_kanit"])
         print("        %soluşturuldu: %s%s"%(tescil_str, r.get("tarih","?"),
               ("  ·  devam: \"%s\" de"%r["resume"]) if r.get("resume") else ""))
 PY

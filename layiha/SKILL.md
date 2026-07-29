@@ -1,6 +1,6 @@
 ---
 name: layiha
-version: 1.9.0
+version: 1.10.0
 description: Bir konuyu kapsamlı ARAŞTIR, kalıcı bir tasarım-dokümanına (layiha) SABİTLE, inşayı SONRAYA bırak — kayıt-defterine işle, Sultan'a sabit-formatta teslim et + geri-dönüş-kolu bırak. İnşa bitince BAĞIMSIZ-AJAN (MÜHÜRDAR) tescili gerekir: "insa-edildi ≠ tescilli". "araştır inşayı sonra yaparız · bunu dökümana sabitle · layiha çıkar · aktif/tescil-bekleyen layihaları listele · bu haftaki layihalar" tetiğinde. GLOBAL (tüm container'lar).
 allowed-tools: Bash, Read, Write, Edit, Agent, AskUserQuestion
 ---
@@ -84,9 +84,21 @@ Devam etmek için: "<resume-tetik cümlesi>" de
 "pazarlama" değil, kaydın insan-yüzü.
 
 ### 4 · İnşa ERTELENİR → sonra BAĞIMSIZ-TESCİL (insa-edildi ≠ tescilli)
-Build YALNIZ Sultan resume-cümlesini söyleyince. İnşa BİTİNCE: `layiha-defteri.sh durum <kod|slug> insa-edildi`
+Build YALNIZ Sultan resume-cümlesini söyleyince. İnşa BİTİNCE:
+```
+layiha-defteri.sh durum <kod|slug> insa-edildi --kanit "<ref>"
+```
 → kayıt **otomatik tescil-kuyruğuna** girer (`📋 tescil bekliyor`). Her kayıt otomatik bir KOD alır (L01, L02…);
 `durum` komutu kod ya da slug kabul eder.
+
+⚖️ **KANIT KAPISI (K7 · Sultan-kararı 2026-07-29): "bitti = kanıtlı".** `insa-edildi`'ye geçiş **kanıtsız
+REDDEDİLİR** (RC=2 + tek-satır reçete). Bu, defterin (`defter-mailbox.sh durum … --kanit`) en iyi
+özelliğiydi ve layihada yoktu: "bitti" demek serbestti, kimse PR/commit/rapor göstermek zorunda değildi.
+- Kabul edilen `--kanit` biçimleri: **PR referansı** (`#123` ya da URL) · **commit sha** (≥7 hex) ·
+  **MEVCUT bir dosya yolu** (mühür/rapor). Biçimi tutmayan ya da var-olmayan yol **reddedilir**.
+- Kanıt kayda `insa_kanit` alanına yazılır; `liste`'de `kanıt:` satırı + porcelain 12. sütunu olarak görünür.
+- Diğer geçişler (`insa-bekliyor`, `insa-ediliyor`) kanıt **İSTEMEZ**.
+- Geriye-uyum: K7 öncesi kayıtlarda alan **yoktur** → okuma-anında `""` sayılır; **hata yok, göç yok**.
 
 ⚖️ **`insa-edildi` TERMİNAL DEĞİL** — üretici-beyanı. Terminal-başarı = **bağımsız-ajan (MÜHÜRDAR) TESCİL'i**
 (Sultan-kararı 2026-07-22 · üreten ≠ doğrulayan). Üretici kendi işini tescil-EDEMEZ.
