@@ -1,10 +1,10 @@
 ---
 name: seans
-version: 1.0.0
+version: 1.1.0
 description: >
   Claude sohbetlerini yönetme ve ekip kısayolları — her kutuda çalışır.
   Motor (cs) burada tek kopya yaşar; cloudtop tarafındaki eski çağrı yolu ince köprüyle korunur.
-  Türkçe kapılar: sessiongetir · yenisession · gruba.
+  Türkçe kapılar: sessiongetir · yenisession · gruba · yardim.
 install_target: { skills: .claude/skills/ }
 stacks: ["*"]
 author: sultanxgokce
@@ -22,13 +22,14 @@ kutularda (tenant'lar) komut **yoktu**. Aynı sınıf hata daha önce de yaşand
 el kitabı on odada"). Motor artık ortak mount'ta tek kopya; cloudtop'taki eski yol ince bir
 köprüdür — **iki kopya yoktur, drift doğmaz**.
 
-## Üç kapı (günlük kullanım)
+## Dört kapı (günlük kullanım)
 
 | Komut | Ne yapar |
 |---|---|
 | `sessiongetir` | Kapanan sohbeti geri getirir. Argümansız → seçim menüsü. `sessiongetir 3` / `sessiongetir randevu` de olur. |
 | `yenisession` | Yeni sohbet açar; adını sorar. `yenisession --yan` ekranı bölüp **yanda** açar. |
 | `gruba "mesaj"` | Projenin WhatsApp grubuna yazar. Grup adı bir kez `.wa-grup` dosyasına yazılır. |
+| `yardim` | Komut listesini terminalde gösterir + projenin kılavuz adresine işaret eder (`.yardim-linki`). |
 
 Motorun tamamı hâlâ elinizin altında: `cs ls` · `cs rename` · `cs note` · `cs sil` · `cs gc`
 (bkz. `cs --help`).

@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# yardim — "ne yazacaktım?" sorusunun terminaldeki cevabı.
+#
+# NİÇİN VAR: kılavuz web sayfasında duruyor ama insan terminaldeyken tarayıcıya geçmek
+#   istemiyor. Bu komut ezberlenecek 4 şeyi hemen gösterir.
+#
+# NİÇİN KILAVUZU TEKRARLAMAZ: sayfa ile burası aynı metni iki kez tutarsa biri güncellenip
+#   öbürü bayatlar (bugüne kadar en pahalı hata sınıfımız bu). İş bölümü net:
+#   sayfa = tam anlatım · burası = komut listesi + sayfaya işaret.
+#
+# Proje kendi kılavuz adresini `.yardim-linki` dosyasına yazar (bir satır, sadece adres).
+set -uo pipefail
+
+_link_bul() {
+  [ -n "${YARDIM_LINKI:-}" ] && { printf '%s' "$YARDIM_LINKI"; return 0; }
+  local d="$PWD"
+  while [ "$d" != "/" ]; do
+    [ -f "$d/.yardim-linki" ] && { head -1 "$d/.yardim-linki" | tr -d '\r' | sed 's/[[:space:]]*$//'; return 0; }
+    d="$(dirname "$d")"
+  done
+  return 1
+}
+
+cat <<'KOMUTLAR'
+
+  Ezberlenecek 4 şey
+  ──────────────────
+
+  sessiongetir          Kapanan sohbetini geri getirir.
+                        Argümansız → liste çıkar, oklarla seç.
+                        Adını biliyorsan: sessiongetir randevu
+
+  yenisession           Yeni sohbet açar, adını sorar.
+                        Yanına ikinci ekran: yenisession --yan
+
+  gruba "mesajın"       WhatsApp grubuna yazar. Numara bilmene gerek yok.
+                        Dosya: gruba --dosya rapor.pdf --not "özet"
+
+  yardim                Bu liste.
+
+  Takıldığında
+  ────────────
+  Sohbet kapandı            → sessiongetir
+  Komut "bulunamadı" diyor  → terminali kapat/aç, olmazsa gruba yaz
+  Bir şeyi bozmaktan korku  → bozamazsın, her şeyin geçmişi tutuluyor
+
+KOMUTLAR
+
+if LINK="$(_link_bul)"; then
+  printf '  Tam kılavuz (giriş · kendi bilgisayarından gönderme · dürüst sınırlar):\n  %s\n\n' "$LINK"
+else
+  printf '  Bu projede kılavuz adresi tanımlı değil (.yardim-linki yok).\n\n'
+fi
