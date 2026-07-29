@@ -2332,15 +2332,18 @@ _ey_ssh() { return 0; }   # ssh no-op: host+container kopyaları nötrlenir; yal
 TC_RA="$(mktemp -d)"; TC_RB="$(mktemp -d)"; mkdir -p "$TC_RA/infra" "$TC_RB/infra"
 EY_HOST_REGISTRY="$TC_RA/host-registry.yaml"; EY_HOST_PROJ="$TC_RA/proj"
 EY_REPO_TIERC_DIR="$TC_RB"
+EY_PROJE="denekc5"   # d0002: repo kopyası kiracı-başına dosyaya yazılır → proje adı şart
 _ey_registry_dagit "yeni-icerik-XYZ" "eski-icerik" >/dev/null 2>&1
-TC_RB_HAS="$(grep -c 'yeni-icerik-XYZ' "$TC_RB/infra/iskan-registry.yaml" 2>/dev/null)"
-TC_RA_ABSENT=1; [ -f "$TC_RA/infra/iskan-registry.yaml" ] && TC_RA_ABSENT=0
+# d0002: repo kopyası artık KİRACI-BAŞINA dosyadır (infra/iskan-registry/<proje>.yaml) —
+# tek dosya her doğumda öncekini siliyordu (CYCLE-4 akar, CYCLE-5 s02/nazir/tez).
+TC_RB_HAS="$(grep -c 'yeni-icerik-XYZ' "$TC_RB/infra/iskan-registry/$EY_PROJE.yaml" 2>/dev/null)"
+TC_RA_ABSENT=1; [ -e "$TC_RA/infra/iskan-registry" ] && TC_RA_ABSENT=0
 [ "$TC_RB_HAS" -ge 1 ] && [ "$TC_RA_ABSENT" = "1" ] \
   && ok "FIX#2 registry redirect: yazım TIERC'ye gitti + ana-checkout/infra el-değmedi" \
   || bad "FIX#2 registry redirect: hedef yanlış (RB_HAS=$TC_RB_HAS RA_absent=$TC_RA_ABSENT)"
 TC_RC="$(mktemp -d)"; mkdir -p "$TC_RC/infra"; EY_REPO_TIERC_DIR="$TC_RC"
 _ey_registry_dagit "def-icerik" "eski2" >/dev/null 2>&1
-[ "$(grep -c 'def-icerik' "$TC_RC/infra/iskan-registry.yaml" 2>/dev/null)" -ge 1 ] \
+[ "$(grep -c 'def-icerik' "$TC_RC/infra/iskan-registry/$EY_PROJE.yaml" 2>/dev/null)" -ge 1 ] \
   && ok "FIX#2 registry default(=repo-dir): redirect'siz repo-dir'e yazıldı (opt-in geriye-uyum)" \
   || bad "FIX#2 registry default: repo-dir'e yazılmadı"
 find "$TC_RA" "$TC_RB" "$TC_RC" -type f -delete 2>/dev/null; find "$TC_RA" "$TC_RB" "$TC_RC" -depth -type d -empty -delete 2>/dev/null
