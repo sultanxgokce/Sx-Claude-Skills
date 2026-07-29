@@ -139,6 +139,27 @@ LAYIHA_FILO_KOK="$T/filo" bash "$FILO" --yok-boyle 2>/dev/null
 esit "G10 filo tanınmayan bayrağı reddediyor" "2" "$?"
 
 echo
+echo "=== G11 · kuyruk-değişmezi: inşa bitmiş kayıt tescil kuyruğu DIŞINDA kalamaz ==="
+# FIRSTHAND VAKA: L22 (youtube-ai-not-akisi) defterde durum=insa-edildi ama tescil.durum="yok" idi
+# → ne "tescil bekleyen" listesinde göründü ne de kimse tescile sevk etti; 5 gün sessizce kayboldu.
+# `durum` komutu kuyruğa sokuyordu, ama kayıt BAŞKA bir yoldan (elle düzenleme / kural konmadan önce
+# yazılmış eski kayıt / dışarıdan üretilmiş satır) o hâle gelebiliyordu. Kapı artık okuma-anında.
+D11="$T/kuyruk.jsonl"
+cat > "$D11" <<'JSONL'
+{"id":"L01","slug":"elle-bozulmus","konu":"Elle insa-edildi yapilmis kayit","tarih":"2026-07-24","durum":"insa-edildi","dokuman":"d.md","pr":"","resume":"x de","not":"","v":1,"proje":"OdaBir","tescil":{"durum":"yok","kart":"","ajan":"","tarih":"","muhur_ref":"","muhur_sha256":"","deneme":0,"vites":"","gerekce":""}}
+{"id":"L02","slug":"muaf-olan","konu":"Sultan muaf tutmus","tarih":"2026-07-24","durum":"insa-edildi","dokuman":"d.md","pr":"","resume":"y de","not":"","v":1,"proje":"OdaBir","tescil":{"durum":"muaf","kart":"","ajan":"","tarih":"2026-07-24","muhur_ref":"","muhur_sha256":"","deneme":0,"vites":"","gerekce":"Sultan karari"}}
+{"id":"L03","slug":"hala-insada","konu":"Insa bitmemis","tarih":"2026-07-24","durum":"insa-ediliyor","dokuman":"d.md","pr":"","resume":"z de","not":"","v":1,"proje":"OdaBir","tescil":{"durum":"yok","kart":"","ajan":"","tarih":"","muhur_ref":"","muhur_sha256":"","deneme":0,"vites":"","gerekce":""}}
+JSONL
+ONCE11="$(sha256sum "$D11" | cut -d' ' -f1)"
+K11="$(LAYIHA_DEFTER="$D11" HAT_ROOT="$T/OdaBir" bash "$SUT" liste --tescil-bekleyen --porcelain 2>&1)"
+var  "G11 elle bozulmuş kayıt kuyrukta göründü" "$K11" "L01"
+yok  "G11 muaf kayıt kuyruğa ÇEKİLMEDİ (verdikt ezilmiyor)" "$K11" "L02"
+yok  "G11 inşası bitmemiş kayıt kuyruğa girmedi"  "$K11" "L03"
+esit "G11 liste hâlâ salt-okur (dosya değişmedi)" "$ONCE11" "$(sha256sum "$D11" | cut -d' ' -f1)"
+H11="$(LAYIHA_DEFTER="$D11" HAT_ROOT="$T/OdaBir" bash "$SUT" liste --hepsi 2>&1)"
+var  "G11 muaf kayıt hâlâ muaf görünüyor" "$H11" "muaf"
+
+echo
 echo "════════ SONUÇ: PASS=$PASS · FAIL=$FAIL ════════"
 [ "$FAIL" -eq 0 ] || exit 1
 exit 0

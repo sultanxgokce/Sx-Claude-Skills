@@ -15,6 +15,13 @@ DEĞİŞMEZLER
     kendi tam-anlık-görüntüsünü yazıyor, ikincisi birincisini siliyordu (kayıp-güncelleme). Artık
     yazacak komutlar `oku(led, kilitle=True)` der; kilit `yaz()` bitince bırakılır.
   · `yaz()` her zaman `os.replace` — yarım dosya diye bir hâl yok.
+  · KUYRUK-DEĞİŞMEZİ: `durum=insa-edildi` olan bir kayıt `tescil.durum="yok"` ile duramaz.
+    `durum` komutu bunu zaten kuruyordu, ama kayıt başka bir yoldan (elle düzenleme, kural
+    konmadan önce yazılmış eski kayıt, dışarıdan üretilmiş satır) o hâle gelebiliyordu ve
+    sonuç SESSİZ KAYIPtı: iş bitmiş sayılıyor, `--tescil-bekleyen` listesinde görünmüyor,
+    `--aktif`te de "terminal değil" diye kalıyor ama kimse tescile sevk etmiyor.
+    Firsthand: L22 (youtube-ai-not-akisi) tam bu hâlde 5 gün görünmez kaldı (2026-07-29).
+    Artık okuma-anında norm'lanır → kayıt hangi yoldan gelirse gelsin kuyruğa düşer.
 """
 
 import io
@@ -129,6 +136,11 @@ def oku(led, norm=True, kilitle=False):
         if "proje" not in r:
             # Eski kayıtlar hangi odada yazıldıysa orada duruyor → o odanın adı doğru cevaptır.
             r["proje"] = proje
+            degisti = True
+        # KUYRUK-DEĞİŞMEZİ (bkz başlık): inşa bitmiş ama tescil hiç başlamamış kayıt olamaz.
+        # Yalnız "yok" → "bekliyor"; tescilli/reddi/muaf/bekliyor'a DOKUNULMAZ (verdikt ezilmez).
+        if r.get("durum") == "insa-edildi" and (r["tescil"].get("durum") or "yok") == "yok":
+            r["tescil"]["durum"] = "bekliyor"
             degisti = True
     return recs, degisti
 
