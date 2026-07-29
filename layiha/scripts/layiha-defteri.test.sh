@@ -74,7 +74,7 @@ OUT6="$(LAYIHA_DEFTER="$D6" HAT_ROOT="$T/OdaBir" bash "$SUT" ekle --slug yeni --
 esit "G6 ileri-sürümlü deftere yazma rc=2" "2" "$RC6"
 var  "G6 hata sürümü söylüyor"             "$OUT6" "şema-sürümü"
 esit "G6 defter DEĞİŞMEDİ (hiçbir şey yazılmadı)" "$ONCE6" "$(sha256sum "$D6" | cut -d' ' -f1)"
-LAYIHA_DEFTER="$D6" HAT_ROOT="$T/OdaBir" bash "$SUT" durum L01 insa-edildi >/dev/null 2>&1
+LAYIHA_DEFTER="$D6" HAT_ROOT="$T/OdaBir" bash "$SUT" durum L01 insa-edildi --kanit "#1" >/dev/null 2>&1
 esit "G6 durum-flip de reddedildi" "2" "$?"
 
 echo
@@ -104,7 +104,7 @@ esit "G8 ortak dizinde layiha defteri OLUŞMADI" "$ONCE8" "$(FOTO)"
 
 echo
 echo "=== G9 · mevcut davranış korundu (tescil disiplini regresyonu) ==="
-sut durum bir-konu insa-edildi >/dev/null 2>&1; esit "G9 durum rc=0" "0" "$?"
+sut durum bir-konu insa-edildi --kanit "#123" >/dev/null 2>&1; esit "G9 durum rc=0" "0" "$?"
 esit "G9 insa-edildi otomatik tescil-kuyruğuna girdi" "bekliyor" \
   "$(python3 -c "import json;print([json.loads(l)['tescil']['durum'] for l in open('$D') if 'bir-konu' in l][0])")"
 sut tescil bir-konu tescilli --vites TAM >/dev/null 2>&1
@@ -167,7 +167,7 @@ echo "=== G12 · simetrik kapı: inşa geri alınınca kayıt kuyrukta ASILI kal
 D12="$T/cikis.jsonl"; : > "$D12"
 sut12() { LAYIHA_DEFTER="$D12" HAT_ROOT="$T/OdaBir" bash "$SUT" "$@"; }
 sut12 ekle --slug geri-alinan --konu "Yarim cikan is" --dokuman d.md --resume "x de" >/dev/null
-sut12 durum L01 insa-edildi >/dev/null
+sut12 durum L01 insa-edildi --kanit "#123" >/dev/null
 esit "G12 önce kuyruğa girdi" "1" "$(sut12 liste --tescil-bekleyen --porcelain | grep -c '^L01')"
 C12="$(sut12 durum L01 insa-bekliyor 2>&1)"
 var  "G12 çıkış kullanıcıya SÖYLENİYOR" "$C12" "kuyruğundan ÇIKTI"
@@ -175,7 +175,7 @@ esit "G12 kuyruktan düştü" "0" "$(sut12 liste --tescil-bekleyen --porcelain |
 esit "G12 kayıt kaybolmadı (hepsi'nde duruyor)" "1" "$(sut12 liste --hepsi --porcelain | grep -c '^L01')"
 # VERDİKT VERİLMİŞ kayıt geri alınırsa karar EZİLMEZ — muaf, muaf kalır.
 sut12 ekle --slug verdikti-olan --konu "Sultan muaf tuttu" --dokuman d.md --resume "y de" >/dev/null
-sut12 durum L02 insa-edildi >/dev/null
+sut12 durum L02 insa-edildi --kanit "#124" >/dev/null
 sut12 tescil L02 muaf --gerekce "Sultan karari" >/dev/null
 sut12 durum L02 insa-ediliyor >/dev/null
 esit "G12 muaf verdikti EZİLMEDİ" "muaf" "$(sut12 liste --hepsi --porcelain | awk -F'\t' '$1=="L02"{print $4}')"
@@ -192,7 +192,7 @@ printf '{"verdikt":"GECTI","kart":"k9001"}\n' > "$DIS13/muhur-ozet.json"
 printf '# MUHUR\nverdikt: GECTI\n' > "$DIS13/MUHUR.md"
 sut13() { LAYIHA_DEFTER="$D13" HAT_ROOT="$K13" bash "$SUT" "$@"; }
 sut13 ekle --slug kanit-testi --konu "Kanit kaliciligi" --dokuman d.md --resume "x de" >/dev/null
-sut13 durum L01 insa-edildi >/dev/null
+sut13 durum L01 insa-edildi --kanit "#125" >/dev/null
 sut13 tescil L01 tescilli --vites TAM --kart k9001 --muhur "$DIS13/MUHUR.md" >/dev/null 2>&1
 esit "G13 tescil rc=0" "0" "$?"
 esit "G13 mühür depoya kopyalandı"      "1" "$(test -f "$K13/_agents/tescil/k9001/MUHUR.md" && echo 1 || echo 0)"
@@ -204,6 +204,87 @@ esit "G13 kayıt tescilli"               "tescilli" "$R13"
 printf 'DEGISTIRILMIS\n' > "$K13/_agents/tescil/k9001/MUHUR.md"
 sut13 tescil L01 tescilli --vites TAM --kart k9001 --muhur "$DIS13/MUHUR.md" >/dev/null 2>&1
 esit "G13 mevcut kanıt üzerine YAZILMADI" "1" "$(grep -c DEGISTIRILMIS "$K13/_agents/tescil/k9001/MUHUR.md")"
+
+echo
+echo "=== G14 · KANIT KAPISI (K7): 'insa-edildi' kanıtsız ilan edilemez ==="
+# FIRSTHAND VAKA: defter-mailbox.sh'de "bitti" TEK-giriş kanıt istiyordu (durum ... --kanit),
+# layiha defterinde İSTEMİYORDU: `durum L07 insa-edildi` yazan herkes işi bitmiş ilan
+# edebiliyordu — ne PR ne commit ne rapor. Defterin en iyi özelliği layihaya taşınmamıştı.
+D14="$T/kanit-kapisi.jsonl"; : > "$D14"
+K14="$T/kok14"; mkdir -p "$K14"
+sut14() { LAYIHA_DEFTER="$D14" HAT_ROOT="$K14" bash "$SUT" "$@"; }
+sut14 ekle --slug kapi-testi --konu "Kanit kapisi" --dokuman d.md --resume "x de" >/dev/null
+
+# (a) kanıtsız → RED
+O14="$(sut14 durum L01 insa-edildi 2>&1)"; RC14=$?
+esit "G14a kanıtsız insa-edildi rc=2" "2" "$RC14"
+var  "G14a reçete tek satırda basıldı" "$O14" "Reçete:"
+# Bu satır ŞART: "hiç kanıt yok" ile "kanıt biçimi bozuk" AYRI dallardır ve ikisi de rc=2 döner.
+# Yalnız rc'ye bakan bir test, kanıt-ZORUNLULUĞU dalı silinse bile yeşil kalırdı (biçim-kontrolü
+# boş stringi de reddettiği için) — negatif-kontrolde bizzat ölçüldü. Mesaj ayrımı o körlüğü kapatır.
+var  "G14a 'kanıtsız' dalı ayrıca ölçülüyor (biçim-dalına düşmüyor)" "$O14" "KANITSIZ ilan edilemez"
+esit "G14a durum DEĞİŞMEDİ (yazma olmadı)" "insa-bekliyor" \
+  "$(sut14 liste --hepsi --porcelain | awk -F'\t' '$1=="L01"{print $3}')"
+esit "G14a kuyruğa da GİRMEDİ" "0" "$(sut14 liste --tescil-bekleyen --porcelain | grep -c '^L01')"
+
+# (b) geçersiz biçim → RED  (ne PR, ne sha, ne var-olan dosya)
+sut14 durum L01 insa-edildi --kanit "bitti işte" >/dev/null 2>&1
+esit "G14b serbest-metin kanıt rc=2" "2" "$?"
+sut14 durum L01 insa-edildi --kanit "$T/olmayan-dosya.md" >/dev/null 2>&1
+esit "G14b var-olmayan dosya yolu rc=2" "2" "$?"
+sut14 durum L01 insa-edildi --kanit "abc123" >/dev/null 2>&1
+esit "G14b kısa/hex-olmayan sha rc=2" "2" "$?"
+
+# (c) geçerli PR referansı → KABUL
+O14c="$(sut14 durum L01 insa-edildi --kanit "#673" 2>&1)"; esit "G14c PR-ref kabul rc=0" "0" "$?"
+var  "G14c kanıt kullanıcıya geri okundu" "$O14c" "#673"
+esit "G14c kanıt kayda yazıldı (insa_kanit)" "#673" \
+  "$(python3 -c "import json;print([json.loads(l)['insa_kanit'] for l in open('$D14') if 'kapi-testi' in l][0])")"
+esit "G14c kanıt porcelain 12. sütunda" "#673" \
+  "$(sut14 liste --hepsi --porcelain | awk -F'\t' '$1=="L01"{print $12}')"
+var  "G14c kanıt insan-listesinde görünüyor" "$(sut14 liste --hepsi)" "kanıt: #673"
+
+# (d) geçerli commit sha + URL + dosya yolu → KABUL
+sut14 ekle --slug sha-testi --konu "Sha kaniti" --dokuman d.md >/dev/null
+sut14 durum L02 insa-edildi --kanit "77bbbff" >/dev/null 2>&1
+esit "G14d 7-hex commit sha kabul rc=0" "0" "$?"
+esit "G14d sha kayda yazıldı" "77bbbff" \
+  "$(sut14 liste --hepsi --porcelain | awk -F'\t' '$1=="L02"{print $12}')"
+sut14 ekle --slug url-testi --konu "Url kaniti" --dokuman d.md >/dev/null
+sut14 durum L03 insa-edildi --kanit "https://github.com/x/y/pull/12" >/dev/null 2>&1
+esit "G14d PR URL'i kabul rc=0" "0" "$?"
+RAPOR14="$T/rapor14.md"; printf 'kanit\n' > "$RAPOR14"
+sut14 ekle --slug dosya-testi --konu "Dosya kaniti" --dokuman d.md >/dev/null
+sut14 durum L04 insa-edildi --kanit "$RAPOR14" >/dev/null 2>&1
+esit "G14d MEVCUT dosya yolu kabul rc=0" "0" "$?"
+
+# (e) diğer geçişler kanıt İSTEMEZ
+sut14 durum L01 insa-bekliyor >/dev/null 2>&1;  esit "G14e insa-bekliyor kanıtsız geçer" "0" "$?"
+sut14 durum L01 insa-ediliyor >/dev/null 2>&1;  esit "G14e insa-ediliyor kanıtsız geçer" "0" "$?"
+
+# (f) GERİYE-UYUM: K7 ÖNCESİ (insa_kanit alanı OLMAYAN) kayıtlar hata vermez, göç edilmez
+D14F="$T/eski-kayit.jsonl"
+printf '{"id":"L01","slug":"kanitsiz-eski","konu":"K7 oncesi kayit","tarih":"2026-07-20","durum":"insa-edildi","dokuman":"d.md","v":1,"proje":"OdaBir","tescil":{"durum":"bekliyor","kart":"","ajan":"","tarih":"","muhur_ref":"","muhur_sha256":"","deneme":0,"vites":"","gerekce":""}}\n' > "$D14F"
+ONCE14F="$(sha256sum "$D14F" | cut -d' ' -f1)"
+E14="$(LAYIHA_DEFTER="$D14F" HAT_ROOT="$K14" bash "$SUT" liste --hepsi 2>&1)"; RC14F=$?
+esit "G14f eski kayıt listelenirken rc=0 (hata YOK)" "0" "$RC14F"
+var  "G14f eski kayıt görünüyor" "$E14" "K7 oncesi kayit"
+yok  "G14f eski kayıtta boş 'kanıt:' satırı basılmıyor" "$E14" "kanıt:"
+esit "G14f liste hâlâ salt-okur — göç YOK" "$ONCE14F" "$(sha256sum "$D14F" | cut -d' ' -f1)"
+esit "G14f eski kayıt porcelain'de boş kanıt taşıyor" "" \
+  "$(LAYIHA_DEFTER="$D14F" HAT_ROOT="$K14" bash "$SUT" liste --hepsi --porcelain | awk -F'\t' '$1=="L01"{print $12}')"
+
+# (g) KUYRUK-DEĞİŞMEZİ hâlâ çalışıyor (kanıt kapısı onu bozmadı)
+esit "G14g kanıtla geçen kayıt kuyruğa girdi" "1" "$(sut14 liste --tescil-bekleyen --porcelain | grep -c '^L02')"
+esit "G14g eski (alanı olmayan) kayıt da kuyrukta" "1" \
+  "$(LAYIHA_DEFTER="$D14F" HAT_ROOT="$K14" bash "$SUT" liste --tescil-bekleyen --porcelain | grep -c '^L01')"
+esit "G14g geri alınan kayıt kuyruktan düştü" "0" "$(sut14 liste --tescil-bekleyen --porcelain | grep -c '^L01')"
+
+# (h) arka kapı: `ekle --durum insa-edildi` de kanıt ister
+sut14 ekle --slug arka-kapi --konu "Arka kapi" --dokuman d.md --durum insa-edildi >/dev/null 2>&1
+esit "G14h ekle --durum insa-edildi kanıtsız rc=2" "2" "$?"
+sut14 ekle --slug arka-kapi --konu "Arka kapi" --dokuman d.md --durum insa-edildi --kanit "#7" >/dev/null 2>&1
+esit "G14h kanıtla geçti" "0" "$?"
 
 echo
 echo "════════ SONUÇ: PASS=$PASS · FAIL=$FAIL ════════"
