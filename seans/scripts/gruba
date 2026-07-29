@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# gruba — projenin WhatsApp grubuna mesaj at (tek kelime).
+#
+# Kullanım:
+#   gruba "toplantiyi 15:00'e aldik"
+#   gruba --dosya rapor.pdf --not "haftalik ozet"
+#   gruba --kime                 → hangi gruba yazdığını gösterir (mesaj GÖNDERMEZ)
+#
+# GRUBU NASIL AYARLARSIN (bir kez):
+#   Proje kökünde `.wa-grup` dosyası oluştur, içine grubun ADINI yaz. Örnek:
+#       echo "Huzur Ekip" > .wa-grup
+#   Ya da ortam değişkeni: export WA_GRUP="Huzur Ekip"
+#
+# ⚠️ NUMARA/ADRES BURAYA YAZILMAZ. Kutular numara bilmez; adı adrese çeviren tek yer
+#    merkezî WhatsApp geçididir (mahremiyet: numara sır sınıfıdır).
+#
+# Çıkış: 0 gönderildi · 2 kullanım/ayar eksik · 3 geçide ulaşılamadı (mesaj GİTMEDİ) · 4 geçit reddetti
+set -uo pipefail
+
+WA="${WA_GONDER:-/config/.claude/skills/whatsapp-gonder/scripts/wa-gonder.sh}"
+
+_grup_bul() {
+  [ -n "${WA_GRUP:-}" ] && { printf '%s' "$WA_GRUP"; return 0; }
+  # Proje kökünden yukarı doğru .wa-grup ara (alt dizinden de çalışsın)
+  local d="$PWD"
+  while [ "$d" != "/" ]; do
+    if [ -f "$d/.wa-grup" ]; then
+      head -1 "$d/.wa-grup" | tr -d '\r' | sed 's/[[:space:]]*$//'
+      return 0
+    fi
+    d="$(dirname "$d")"
+  done
+  return 1
+}
+
+GRUP="$(_grup_bul)" || {
+  cat >&2 <<'YARDIM'
+HATA: hangi gruba yazacağımı bilmiyorum.
+
+Bir kez ayarla — proje kökünde:
+    echo "Grubun Adı" > .wa-grup
+
+(Grup adı, WhatsApp geçidinin sözlüğünde tanımlı olmalı. Tanımlı değilse
+ SERDAR'a "şu grubu geçit sözlüğüne ekle" de — numara/adres sen ekleyemezsin.)
+YARDIM
+  exit 2
+}
+
+if [ "${1:-}" = "--kime" ]; then
+  echo "Bu dizinden yazılan mesajlar şuraya gider: $GRUP"
+  exit 0
+fi
+
+[ -f "$WA" ] || { echo "HATA: WhatsApp gönderici bulunamadı: $WA" >&2; exit 2; }
+[ $# -gt 0 ] || { sed -n '2,10p' "$0"; exit 2; }
+
+exec bash "$WA" --kime "$GRUP" "$@"
