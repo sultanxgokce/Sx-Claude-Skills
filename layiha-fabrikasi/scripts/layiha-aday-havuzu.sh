@@ -6,6 +6,7 @@
 #     Defter (`layiha-defteri.jsonl`) yalnız terfi-edilmiş kayıtları görür — havuz "temiz" kalır.
 #
 # Kullanım:
+#   layiha-aday-havuzu.sh ekle "<serbest metin>" [--kaynak <ad>] [--sinif sultan|muhendislik|urun] [--kanit "..."]
 #   layiha-aday-havuzu.sh liste [--top N] [--sinif sultan|muhendislik|urun] [--min-pct N] [--hepsi] [--porcelain]
 #   layiha-aday-havuzu.sh goster <id|slug>
 #   layiha-aday-havuzu.sh terfi <id|slug> [<id|slug> ...] [--gerekce "..."]
@@ -58,6 +59,134 @@ PY
 }
 
 case "$CMD" in
+  ekle)
+    # ── TEK-KAYIT EKLEME (K3) ────────────────────────────────────────────────────────────────
+    # NİÇİN: havuza aday BUGÜNE DEK yalnız fabrika-turundan (mucit/goç) doğabiliyordu; tekil bir
+    #   fikri (ör. Sultan'ın cümlesinden yakalanan iş) havuza sokmanın hiçbir yolu yoktu. Bu boşluk
+    #   yüzünden oto-yakalama kancası ölmekte olan deftere yazıyordu. Bu komut o tek eksik ucu kapatır.
+    # SÖZLEŞME: girdi serbest metindir; kayıt DAİMA durum="aday" doğar (terfi ayrı ve Sultan-kilitli).
+    #   Puanlama/kanıt üretilmez (pct=0) — bu komut YARGILAMAZ, yalnız kaydeder; süzme MUCİT'in işidir.
+    # EŞZAMANLILIK: flock + tam-dosya os.replace → yarım-satır/id-çakışması yok (append-race panzehiri).
+    METIN=""; ARGS_REST=()
+    while [ $# -gt 0 ]; do
+      case "$1" in
+        --*) ARGS_REST+=("$1"); if [ $# -gt 1 ] && [[ "${2:-}" != --* ]]; then ARGS_REST+=("$2"); shift; fi; shift ;;
+        *) if [ -z "$METIN" ]; then METIN="$1"; else METIN="$METIN $1"; fi; shift ;;
+      esac
+    done
+    if [ -z "${METIN// /}" ]; then
+      echo "HATA: ekle \"<serbest metin>\" [--kaynak <ad>] [--sinif sultan|muhendislik|urun] [--kanit \"...\"]" >&2
+      exit 2
+    fi
+    ARGS="$(python_args ${ARGS_REST[@]+"${ARGS_REST[@]}"})"
+    # havuz yoksa oluştur — hat-yolu zaten git-kökü doğruladı (git-siz dizinde yukarıda RC=2 verildi),
+    # dolayısıyla burada ortak-dizine ($HOME/.claude) düşme ihtimali YOK.
+    mkdir -p "$(dirname "$HAVUZ")" || { echo "HATA: havuz dizini oluşturulamadı: $(dirname "$HAVUZ")" >&2; exit 2; }
+    [ -e "$HAVUZ" ] || : > "$HAVUZ"
+    exec 9>"$HAVUZ.lock" || { echo "HATA: kilit dosyası açılamadı: $HAVUZ.lock" >&2; exit 2; }
+    if command -v flock >/dev/null 2>&1; then flock -w 15 9 || { echo "HATA: havuz kilidi alınamadı (15sn)" >&2; exit 2; }; fi
+    HAVUZ="$HAVUZ" EKLE_METIN="$METIN" EKLE_ARGS="$ARGS" python3 - <<'PY'
+import os, json, io, sys, re, datetime, tempfile
+
+havuz = os.environ["HAVUZ"]
+metin = os.environ["EKLE_METIN"].strip()
+a = json.loads(os.environ["EKLE_ARGS"])
+
+def _s(v, default=""):
+    return v if isinstance(v, str) else default
+
+kaynak = _s(a.get("kaynak"), "elle") or "elle"
+sinif  = _s(a.get("sinif"), "")
+kanit  = _s(a.get("kanit"), "")
+tarih  = _s(a.get("tarih"), "") or datetime.date.today().isoformat()
+
+if sinif and sinif not in ("sultan", "muhendislik", "urun"):
+    sys.stderr.write("HATA: --sinif yalnız sultan|muhendislik|urun olabilir (verilen: %s)\n" % sinif)
+    sys.exit(2)
+
+# ── Türkçe-farkında normalizasyon (kasif-havuz-ekle.sh / mucit-t1.sh kanonuyla aynı fikir) ──
+_TR = str.maketrans({"İ": "i", "I": "ı", "Ş": "ş", "Ğ": "ğ", "Ç": "ç", "Ö": "ö", "Ü": "ü"})
+def norm(s):
+    s = (s or "").translate(_TR).lower()
+    s = re.sub(r"[^a-zçğıöşü0-9 ]", " ", s)
+    return re.sub(r" +", " ", s).strip()
+
+def slugify(s):
+    s = (s or "").translate(_TR).lower()
+    s = (s.replace("ç", "c").replace("ğ", "g").replace("ı", "i")
+           .replace("ö", "o").replace("ş", "s").replace("ü", "u"))
+    s = re.sub(r"[^a-z0-9]+", "-", s).strip("-")
+    return "-".join([p for p in s.split("-") if p][:8]) or "aday"
+
+recs = []
+if os.path.exists(havuz):
+    with io.open(havuz, encoding="utf-8") as f:
+        for l in f:
+            if l.strip():
+                try: recs.append(json.loads(l))
+                except Exception: pass
+
+# ── DEDUP: alt-string iki yönlü (kancadaki emsal mantık) — mevcutsa YAZMA, sessizce çık ──
+yeni_n = norm(metin)
+if not yeni_n:
+    sys.stderr.write("HATA: metin normalize edilince boş kaldı.\n"); sys.exit(2)
+for r in recs:
+    for alan in ("baslik", "goal"):
+        m = norm(r.get(alan, ""))
+        if m and (m in yeni_n or yeni_n in m):
+            sys.stderr.write("ATLANDI: havuzda zaten eşdeğer kayıt var (%s).\n" % r.get("id", "?"))
+            sys.exit(0)
+
+# ── id: A%03d, havuzdaki en büyük A-numarasından +1 ──
+son = 0
+for r in recs:
+    m = re.match(r"^A(\d+)$", str(r.get("id", "")))
+    if m: son = max(son, int(m.group(1)))
+yeni_id = "A%03d" % (son + 1)
+
+# ── slug: benzersizleştir (çakışırsa -2, -3 …) ──
+mevcut_slug = {r.get("slug") for r in recs}
+taban = slugify(metin); slug = taban; i = 2
+while slug in mevcut_slug:
+    slug = "%s-%d" % (taban, i); i += 1
+
+baslik = metin if len(metin) <= 120 else metin[:117].rstrip() + "..."
+rec = {
+    "id": yeni_id,
+    "slug": slug,
+    "baslik": baslik,
+    "goal": metin,
+    "nicin_degerli": "",
+    "sinif": sinif,
+    "spekulatif": False,
+    "kanit": kanit,
+    "pct": 0,
+    "skor": {"deger": 0, "yapilabilirlik": 0, "kanit_gucu": 0, "uyum": 0, "juri": 0,
+             "gerekce": "puanlanmadı (tek-kayıt ekleme; süzme/puanlama MUCİT'in işi)"},
+    "dokuman": "_agents/spec/taslak-layiha/%s-DESIGN.md" % slug,
+    "tarih": tarih,
+    "kaynak": kaynak,
+    "durum": "aday",
+    "terfi": {"tarih": "", "layiha_kodu": "", "gerekce": ""},
+}
+recs.append(rec)
+
+# ── ATOMİK YAZMA: aynı dizinde tmp → os.replace (yarım-dosya bırakmaz) ──
+d = os.path.dirname(havuz) or "."
+fd, tmp = tempfile.mkstemp(dir=d, prefix=".havuz-", suffix=".tmp")
+try:
+    with io.open(fd, "w", encoding="utf-8") as f:
+        for r in recs:
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+        f.flush(); os.fsync(f.fileno())
+    os.replace(tmp, havuz)
+except Exception:
+    try: os.unlink(tmp)
+    except Exception: pass
+    raise
+print(yeni_id)
+PY
+  ;;
   liste)
     ARGS="$(python_args "$@")"
     HAVUZ="$HAVUZ" ADAY_ARGS="$ARGS" python3 - <<'PY'
@@ -354,5 +483,5 @@ for aid, slug, kod in sonuclar:
 print("Havuzda %d aday kaldı (durum=aday)." % kalan)
 PY
   ;;
-  *) echo "HATA: bilinmeyen komut: $CMD (liste|goster|terfi|durum)" >&2; exit 2;;
+  *) echo "HATA: bilinmeyen komut: $CMD (ekle|liste|goster|terfi|durum)" >&2; exit 2;;
 esac

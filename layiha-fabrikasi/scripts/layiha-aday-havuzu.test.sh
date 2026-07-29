@@ -151,6 +151,48 @@ err="$(run_in_repo bash "$AH" terfi "$id_uc" 2>&1 >/dev/null || true)"
 check "T10b ret gerekçesi Sultan-onayına atıf yapar" "1" "$(echo "$err" | grep -ci "sultan-onay" || true)"
 check "T10c reddedilen terfi adayı DEĞİŞTİRMEDİ" "$onceki" "$(run_in_repo bash "$AH" liste --hepsi 2>/dev/null | grep -c "aday-uc" || true)"
 
+# ── T11: ekle — tek-kayıt ekleme (K3) ────────────────────────────────────────────────────────
+once_ekle="$(wc -l < "$LAYIHA_ADAY_HAVUZ" | tr -d ' ')"
+yeni_id="$(run_in_repo bash "$AH" ekle "Gunluk yedek raporu otomatik gelsin" --kaynak oto-yakalama 2>/dev/null)"
+check "T11 ekle yeni A-id basar" "1" "$(echo "$yeni_id" | grep -c '^A[0-9][0-9][0-9]$')"
+sonra_ekle="$(wc -l < "$LAYIHA_ADAY_HAVUZ" | tr -d ' ')"
+check "T11 havuz bir satır büyüdü" "$((once_ekle + 1))" "$sonra_ekle"
+check "T11 kayıt durum=aday" "aday" \
+  "$(run_in_repo bash "$AH" liste --hepsi --porcelain | awk -F'\t' -v id="$yeni_id" '$1==id{print $4}')"
+check "T11 kaynak alanı oto-yakalama" "oto-yakalama" \
+  "$(python3 -c "import json,sys;print([json.loads(l)['kaynak'] for l in open(sys.argv[1]) if l.strip() and json.loads(l)['id']==sys.argv[2]][0])" "$LAYIHA_ADAY_HAVUZ" "$yeni_id")"
+check "T11 havuzun her satırı geçerli JSON (atomik yazma bozmadı)" "0" \
+  "$(python3 -c "import json,sys;[json.loads(l) for l in open(sys.argv[1]) if l.strip()];print(0)" "$LAYIHA_ADAY_HAVUZ" 2>/dev/null || echo 1)"
+check "T11 önceki kayıtlar korundu (aday-bir hâlâ havuzda)" "1" \
+  "$(run_in_repo bash "$AH" liste --hepsi --porcelain | grep -c 'aday-bir')"
+
+# ── T12: ekle dedup — aynı/çok-benzer metin ikinci kez YAZILMAZ, RC=0 ──
+check "T12 dedup rc=0 (sessiz atlama)" "0" \
+  "$(rc_of run_in_repo bash "$AH" ekle "Bugun sunu dedim: Gunluk yedek raporu otomatik gelsin" --kaynak oto-yakalama)"
+check "T12 dedup sonrası havuz büyümedi" "$sonra_ekle" "$(wc -l < "$LAYIHA_ADAY_HAVUZ" | tr -d ' ')"
+check "T12 dedup stdout'a id BASMAZ" "0" \
+  "$(run_in_repo bash "$AH" ekle "Gunluk yedek raporu otomatik gelsin" 2>/dev/null | grep -c '^A[0-9]')"
+
+# ── T13: boş metin reddi + geçersiz sınıf reddi ──
+check_ne0 "T13 metinsiz ekle reddi" "$(rc_of run_in_repo bash "$AH" ekle --kaynak oto-yakalama)"
+check_ne0 "T13 geçersiz --sinif reddi" "$(rc_of run_in_repo bash "$AH" ekle "sinif testi metni" --sinif saka)"
+
+# ── T14: NEGATİF — git-siz dizinde RC=2 ve ORTAK dizine ($HOME/.claude) dosya OLUŞMAZ ──
+# (İ1: /config/.claude 10 container'ın ortak fiziksel dizini; oraya düşen havuz geri-alınamaz sızıntıdır.)
+GITSIZ="$T/gitsiz"; FAKEHOME="$T/fakehome"
+mkdir -p "$GITSIZ" "$FAKEHOME/.claude"
+rc14="$( cd "$GITSIZ" && env -u LAYIHA_ADAY_HAVUZ -u HAT_ROOT HOME="$FAKEHOME" \
+         bash "$AH" ekle "gitsiz dizin sizma testi" --kaynak oto-yakalama >/dev/null 2>&1; echo $? )"
+check "T14 git-siz dizinde rc=2" "2" "$rc14"
+check "T14 ortak dizine ($HOME/.claude) HİÇBİR dosya yazılmadı" "0" \
+  "$(find "$FAKEHOME/.claude" -type f 2>/dev/null | wc -l | tr -d ' ')"
+check "T14 git-siz dizinde de dosya oluşmadı" "0" "$(find "$GITSIZ" -type f 2>/dev/null | wc -l | tr -d ' ')"
+
+# ── T15: ekle'den sonra terfi zinciri hâlâ çalışıyor (mevcut komutlar bozulmadı) ──
+id_bes="$(run_in_repo bash "$AH" liste --hepsi --porcelain | awk -F'\t' '$7=="aday-bes"{print $1}')"
+check "T15 ekle sonrası mevcut adayın terfisi rc=0" "0" \
+  "$(rc_of run_in_repo bash "$AH" terfi "$id_bes" --sultan-onay --gerekce t15)"
+
 echo
 total=$((pass + fail))
 echo "TOPLAM: pass=$pass fail=$fail"

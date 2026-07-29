@@ -1,7 +1,7 @@
 ---
 name: layiha-fabrikasi
 type: agent
-version: 1.4.0
+version: 1.5.0
 description: >
   L24 Layiha Fabrikası — DİVAN'ın fikir-hattını (KAŞİF dış-tarama → bulgu-havuzu → MUCİT süzme →
   aday-havuzu → Sultan tek-tuş terfi) tek-çatı altında toplayan Usta-paket. kasif-tara + mucit-suz'ü
@@ -32,6 +32,7 @@ katmanı (`<skill-dizini>/scripts/layiha-aday-havuzu.sh`) ve terfi-hedefi (`layi
 | **Durum bak** (bu oda açık mı, filoda ne var, neden) | `bash <skill-dizini>/scripts/layiha-fabrika.sh durum` |
 | **İlk kurulum** (yeni odada tezgâhı üret) | `bash <kasif-tara-dizini>/scripts/kasif-kur.sh` — oda **KAPALI doğar** |
 | **Eldeki adayları görüntüle/terfi et** (HER-ZAMAN çalışır — kill-switch'ten ETKİLENMEZ) | `bash <skill-dizini>/scripts/layiha-aday-havuzu.sh liste` · `goster <id>` · `terfi <id> --sultan-onay` · `durum` — ⚖️ terfi **Sultan kilidi** taşır (ADR-025 · fikir-hattındaki tek insan kapısı; otomatik akış atlayamaz) |
+| **Tek bir fikri havuza koy** (fabrika-turu beklemeden — K3) | `bash <skill-dizini>/scripts/layiha-aday-havuzu.sh ekle "<serbest metin>" --kaynak <ad>` — kayıt `durum=aday` doğar, **puanlanmaz** (`pct=0`; süzme/puanlama MUCİT'in işi). Eşdeğer metin havuzdaysa **sessizce atlar** (RC=0, stdout boş). Yazılan id stdout'a basılır. Kill-switch'ten ETKİLENMEZ (CRUD muaf). |
 
 ## Otonom hat (ADR-025 icra-5 · EK-A §A2-A4) — ⛔ **INERT DOĞAR**
 
