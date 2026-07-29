@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# yenisession — yeni bir Claude sohbeti aç; istersen ekranı bölüp YANDA açar.
+#
+# Kullanım:
+#   yenisession                  → adını sorar, bu pencerede açar
+#   yenisession "randevu ekrani" → adı verilmiş, bu pencerede açar
+#   yenisession --yan            → adını sorar, ekranı böler, YANDA açar
+#   yenisession --yan "test"     → adı verilmiş, yanda açar
+#
+# NİÇİN AD SORAR: adsız seans üç gün sonra "(isimsiz)" olur ve hangisi olduğu bilinmez;
+#   sessiongetir listesinde de bulunamaz. Ad, seansın tek tutamağıdır.
+#   Boş bırakırsan yine açılır — zorlamıyoruz, sadece hatırlatıyoruz.
+set -uo pipefail
+
+BURASI="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CS="${SEANS_CS:-$BURASI/cs.sh}"
+[ -f "$CS" ] || { echo "HATA: seans yöneticisi bulunamadı: $CS" >&2; exit 2; }
+
+YAN=0; AD=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --yan|-y) YAN=1; shift ;;
+    -h|--yardim) sed -n '2,16p' "$0"; exit 0 ;;
+    *) AD="$1"; shift ;;
+  esac
+done
+
+if [ -z "$AD" ]; then
+  # Etkileşimli olmayan ortamda (script/cron) soru sorma — sessizce adsız devam et.
+  if [ -t 0 ]; then
+    printf 'Bu sohbetin adı ne olsun? (boş bırakabilirsin): '
+    read -r AD || AD=""
+  fi
+fi
+
+if [ "$YAN" = "1" ]; then
+  if [ -z "${TMUX:-}" ]; then
+    # DÜRÜSTLÜK: tmux dışındayken ekran bölünemez. Sessizce "yanda açtım" DEME.
+    echo "⚠ Ekranı bölemiyorum: tmux oturumunda değilsin. Bu pencerede açıyorum." >&2
+    YAN=0
+  fi
+fi
+
+if [ "$YAN" = "1" ]; then
+  tmux split-window -h "bash '$CS' new; bash -l" || {
+    echo "HATA: ekran bölünemedi." >&2; exit 1; }
+  # Ad, yeni seans doğduktan SONRA verilebilir; kullanıcıya yolu söyle (sahte-yeşil yok).
+  [ -n "$AD" ] && echo "🟢 Yanda yeni sohbet açıldı. Adını koymak için orada: cs rename current \"$AD\""
+  [ -z "$AD" ] && echo "🟢 Yanda yeni sohbet açıldı."
+  exit 0
+fi
+
+if [ -n "$AD" ]; then
+  echo "ℹ Sohbet açılıyor. Açıldıktan sonra adını koymak için: cs rename current \"$AD\""
+fi
+exec bash "$CS" new

@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# sessiongetir — kapanan Claude sohbetini geri getir.
+#
+# NE-DİR: seans yöneticisinin (cs) önündeki Türkçe kapı. Yeni motor DEĞİL — argümansız
+#         çağrılınca seçim menüsünü, isim/kod verilince doğrudan o seansı açar.
+#
+# Kullanım:
+#   sessiongetir              → menü (ok tuşlarıyla seç, Enter)
+#   sessiongetir 3            → listedeki 3 numaralı seans
+#   sessiongetir randevu      → adında "randevu" geçen seans
+#
+# NİÇİN AYRI KOMUT: "cs resume" hatırlanması gereken bir şey; "sessiongetir" değil.
+#   Ekipte kod yazmayan ya da yeni katılan biri de tek kelimeyle işini görsün diye.
+set -uo pipefail
+
+BURASI="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CS="${SEANS_CS:-$BURASI/cs.sh}"
+
+[ -f "$CS" ] || { echo "HATA: seans yöneticisi bulunamadı: $CS" >&2; exit 2; }
+
+exec bash "$CS" resume "$@"
