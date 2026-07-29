@@ -123,7 +123,7 @@ from layiha_defteri_lib import oku, yaz
 led=os.environ["LAYIHA_LEDGER"]; key=os.environ["KEY"]; yeni=os.environ["YENI"]
 if not os.path.exists(led): sys.stderr.write("HATA: defter yok: %s\n"%led); sys.exit(2)
 recs,_=oku(led, kilitle=True)
-found=False; kuyruk=False
+found=False; kuyruk=False; cikis=False
 for r in recs:
     if r.get("slug")==key or str(r.get("id","")).lower()==key.lower():
         r["durum"]=yeni; found=True
@@ -131,10 +131,17 @@ for r in recs:
         t=r.get("tescil") or {"durum":"yok"}
         if yeni=="insa-edildi" and t.get("durum","yok")=="yok":
             t["durum"]="bekliyor"; r["tescil"]=t; kuyruk=True
+        # SİMETRİK KAPI: inşa geri alınırsa kayıt kuyrukta ASILI kalamaz. Yalnız HENÜZ VERDİKT
+        # ÇIKMAMIŞ ("bekliyor") kayıt çıkarılır — tescilli/reddi/muaf bir karardır, geri alınmaz.
+        # Firsthand: L23 (whatsapp-filo-erisimi) yarım çıkınca 'insa-bekliyor'a alındı ama
+        # kuyrukta kaldı → "inşa bekliyor" ile "tescil bekliyor" aynı satırda göründü (2026-07-29).
+        elif yeni!="insa-edildi" and t.get("durum","yok")=="bekliyor":
+            t["durum"]="yok"; r["tescil"]=t; cikis=True
 if not found: sys.stderr.write("HATA: kod/slug bulunamadı: %s\n"%key); sys.exit(2)
 yaz(led, recs)
 msg="OK: %s → %s"%(key,yeni)
 if kuyruk: msg+="  (→ tescil-kuyruğuna girdi: 📋 tescil bekliyor — bağımsız-ajan tescili gerekli)"
+if cikis: msg+="  (→ tescil kuyruğundan ÇIKTI: inşa geri alındı, tescil edilecek bir iş kalmadı)"
 print(msg)
 PY
   ;;

@@ -160,6 +160,27 @@ H11="$(LAYIHA_DEFTER="$D11" HAT_ROOT="$T/OdaBir" bash "$SUT" liste --hepsi 2>&1)
 var  "G11 muaf kayıt hâlâ muaf görünüyor" "$H11" "muaf"
 
 echo
+echo "=== G12 · simetrik kapı: inşa geri alınınca kayıt kuyrukta ASILI kalmaz ==="
+# FIRSTHAND VAKA: L23 (whatsapp-filo-erisimi) yarım çıktı → 'insa-bekliyor'a alındı, ama tescil
+# alanı 'bekliyor' kaldı: aynı satırda hem "⏳ inşa bekliyor" hem "📋 tescil bekliyor" göründü.
+# Giriş kapısı vardı, çıkış kapısı yoktu (2026-07-29).
+D12="$T/cikis.jsonl"; : > "$D12"
+sut12() { LAYIHA_DEFTER="$D12" HAT_ROOT="$T/OdaBir" bash "$SUT" "$@"; }
+sut12 ekle --slug geri-alinan --konu "Yarim cikan is" --dokuman d.md --resume "x de" >/dev/null
+sut12 durum L01 insa-edildi >/dev/null
+esit "G12 önce kuyruğa girdi" "1" "$(sut12 liste --tescil-bekleyen --porcelain | grep -c '^L01')"
+C12="$(sut12 durum L01 insa-bekliyor 2>&1)"
+var  "G12 çıkış kullanıcıya SÖYLENİYOR" "$C12" "kuyruğundan ÇIKTI"
+esit "G12 kuyruktan düştü" "0" "$(sut12 liste --tescil-bekleyen --porcelain | grep -c '^L01')"
+esit "G12 kayıt kaybolmadı (hepsi'nde duruyor)" "1" "$(sut12 liste --hepsi --porcelain | grep -c '^L01')"
+# VERDİKT VERİLMİŞ kayıt geri alınırsa karar EZİLMEZ — muaf, muaf kalır.
+sut12 ekle --slug verdikti-olan --konu "Sultan muaf tuttu" --dokuman d.md --resume "y de" >/dev/null
+sut12 durum L02 insa-edildi >/dev/null
+sut12 tescil L02 muaf --gerekce "Sultan karari" >/dev/null
+sut12 durum L02 insa-ediliyor >/dev/null
+esit "G12 muaf verdikti EZİLMEDİ" "muaf" "$(sut12 liste --hepsi --porcelain | awk -F'\t' '$1=="L02"{print $4}')"
+
+echo
 echo "════════ SONUÇ: PASS=$PASS · FAIL=$FAIL ════════"
 [ "$FAIL" -eq 0 ] || exit 1
 exit 0
