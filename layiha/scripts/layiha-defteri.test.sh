@@ -181,6 +181,31 @@ sut12 durum L02 insa-ediliyor >/dev/null
 esit "G12 muaf verdikti EZİLMEDİ" "muaf" "$(sut12 liste --hepsi --porcelain | awk -F'\t' '$1=="L02"{print $4}')"
 
 echo
+echo "=== G13 · kanıt kalıcılığı: damga vurulurken mühür depoya alınır ==="
+# FIRSTHAND VAKA: L14-L19'un tescil kayıtları mühür yollarını taşıyordu ama o dosyaların
+# HİÇBİRİ depoda yoktu — hepsi geçici worktree'lerde üretilmiş, worktree kaldırılınca kanıt
+# yok olmuştu. Defterde damga + parmak-izi vardı, dayandığı belge YOKTU (2026-07-29).
+D13="$T/kanit.jsonl"; : > "$D13"
+K13="$T/kok13"; mkdir -p "$K13"
+DIS13="$T/gecici-worktree/_agents/tescil/k9001"; mkdir -p "$DIS13"
+printf '{"verdikt":"GECTI","kart":"k9001"}\n' > "$DIS13/muhur-ozet.json"
+printf '# MUHUR\nverdikt: GECTI\n' > "$DIS13/MUHUR.md"
+sut13() { LAYIHA_DEFTER="$D13" HAT_ROOT="$K13" bash "$SUT" "$@"; }
+sut13 ekle --slug kanit-testi --konu "Kanit kaliciligi" --dokuman d.md --resume "x de" >/dev/null
+sut13 durum L01 insa-edildi >/dev/null
+sut13 tescil L01 tescilli --vites TAM --kart k9001 --muhur "$DIS13/MUHUR.md" >/dev/null 2>&1
+esit "G13 tescil rc=0" "0" "$?"
+esit "G13 mühür depoya kopyalandı"      "1" "$(test -f "$K13/_agents/tescil/k9001/MUHUR.md" && echo 1 || echo 0)"
+esit "G13 özet de kopyalandı"           "1" "$(test -f "$K13/_agents/tescil/k9001/muhur-ozet.json" && echo 1 || echo 0)"
+esit "G13 dış kaynak SİLİNMEDİ (kopya, taşıma değil)" "1" "$(test -f "$DIS13/MUHUR.md" && echo 1 || echo 0)"
+R13="$(sut13 liste --hepsi --porcelain | awk -F'\t' '$1=="L01"{print $4}')"
+esit "G13 kayıt tescilli"               "tescilli" "$R13"
+# İkinci damga denemesi mevcut kanıtı EZMEZ
+printf 'DEGISTIRILMIS\n' > "$K13/_agents/tescil/k9001/MUHUR.md"
+sut13 tescil L01 tescilli --vites TAM --kart k9001 --muhur "$DIS13/MUHUR.md" >/dev/null 2>&1
+esit "G13 mevcut kanıt üzerine YAZILMADI" "1" "$(grep -c DEGISTIRILMIS "$K13/_agents/tescil/k9001/MUHUR.md")"
+
+echo
 echo "════════ SONUÇ: PASS=$PASS · FAIL=$FAIL ════════"
 [ "$FAIL" -eq 0 ] || exit 1
 exit 0

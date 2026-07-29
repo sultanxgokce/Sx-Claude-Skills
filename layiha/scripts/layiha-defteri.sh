@@ -151,7 +151,7 @@ PY
     case "$VERD" in tescilli|reddi|muaf) ;; *) echo "HATA: geçersiz tescil-verdikti: $VERD (tescilli|reddi|muaf)" >&2; exit 2;; esac
     TARGS="$(python_args "$@")"
     KEY="$KEY" VERD="$VERD" LAYIHA_TESCIL_ARGS="$TARGS" python3 - <<'PY'
-import os, json, io, sys, hashlib, subprocess
+import os, json, io, sys, hashlib, shutil, subprocess
 sys.path.insert(0, os.environ["LAYIHA_LIB_DIR"])
 from layiha_defteri_lib import oku, yaz
 led=os.environ["LAYIHA_LEDGER"]; key=os.environ["KEY"]; verd=os.environ["VERD"]
@@ -187,6 +187,36 @@ if verd=="tescilli":
         # bayat-referans panzehiri: MUHUR.md'nin sha256'sı (MUHUR.md varsa onun, yoksa ozet'in)
         shafile=muhur if os.path.basename(muhur)!="muhur-ozet.json" else ozet
         sha=hashlib.sha256(open(shafile,"rb").read()).hexdigest()
+        # KANIT-KALICILIĞI: damga vurulurken kanıt dosyası deponun İÇİNE alınır.
+        # NİÇİN: 2026-07-29'da altı tescil kaydının (L14-L19) işaret ettiği mühür dosyalarının
+        #   HİÇBİRİ depoda bulunamadı — hepsi geçici worktree'lerde üretilmiş, worktree
+        #   kaldırılınca kanıt yok olmuştu. Defterde damga + parmak-izi vardı, dayandığı belge
+        #   YOKTU. Referans tutup referans verileni saklamamak; aynı sınıf bu depoda tekrar ediyor.
+        # NE YAPAR: dosyaları HAT_KOK/_agents/tescil/<kart>/ altına kopyalar (üzerine YAZMAZ) ve
+        #   ledger'a depo-içi göreli yolu yazar. Kopyalanamıyorsa damga DURMAZ — ama uyarı basılır
+        #   ve ledger'a dış yol yazılır; sessiz kayıp yerine görünür eksiklik.
+        try:
+            kok=os.environ.get("HAT_KOK") or os.environ.get("HAT_ROOT") or ""
+            if kok and kart:
+                hedef_dir=os.path.join(kok,"_agents","tescil",kart)
+                os.makedirs(hedef_dir,exist_ok=True)
+                tasinan=[]
+                for src in {muhur, ozet}:
+                    if not os.path.exists(src): continue
+                    dst=os.path.join(hedef_dir,os.path.basename(src))
+                    if os.path.abspath(src)==os.path.abspath(dst):
+                        tasinan.append(dst); continue
+                    if not os.path.exists(dst):
+                        shutil.copy2(src,dst)
+                    tasinan.append(dst)
+                ic=[t for t in tasinan if os.path.basename(t)==os.path.basename(shafile)]
+                if ic:
+                    muhur_ref_yerel=os.path.relpath(ic[0],kok)
+                    sys.stderr.write("NOT: kanıt depoya alındı → %s (COMMIT ETMEYİ UNUTMA)\n"%muhur_ref_yerel)
+                    muhur=ic[0]
+        except Exception as e:
+            sys.stderr.write("UYARI: kanıt depoya alınamadı (%s) — ledger dış yolu taşıyacak, "
+                             "kanıt worktree silinince KAYBOLUR\n"%e)
     else:  # HAFIF
         if not gerekce: hata("tescilli --vites HAFIF için --gerekce '<tek-G kanıt beyanı>' zorunlu")
         if muhur and os.path.exists(muhur):
