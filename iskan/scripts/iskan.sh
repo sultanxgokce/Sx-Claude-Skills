@@ -1565,13 +1565,30 @@ _ey_registry_dagit() {
   # repo-kopyası (co-locate; PR bu dosyadan açılır — apply repo'ya YALNIZ bu dosyayı yazar).
   # YAZMA-hedefi EY_REPO_TIERC_DIR (default=$EY_REPO_DIR; opt-in redirect FIX#2). Host + container
   # kopyaları (yukarı/aşağı) redirect'ten ETKİLENMEZ — onlar ssh-hedefli, repo-worktree değil.
+  # DERS d0002 (CYCLE-4 → CYCLE-5, İKİ KEZ ısırdı): repo kopyası TEK dosyaydı ve her doğum
+  # öncekinin künyesini SİLİYORDU (CYCLE-4: s02 akar'ı ezdi · CYCLE-5: huzur s02/nazir/tez'i ezdi).
+  # Dosyanın başlığında "K2 künye TEK-KAYNAĞI" yazıyordu ama gerçekte SON-DOĞAN snapshot'ıydı —
+  # ad, yanlış zihinsel model öğretiyordu. Üstelik rezerve-uuid çözümü host-kopyası yoksa buraya
+  # düşüyor ve YABANCI bir kiracının kaydını okuyordu (sessiz-yanlış kaynak).
+  # Artık kanonik kayıt KİRACI-BAŞINA dosyadır: infra/iskan-registry/<proje>.yaml — birikir, ezilmez.
+  # Host + container kopyaları DEĞİŞMEDİ (tek-kiracı kalmalı — İ1: kiracı ötekinin künyesini görmez).
+  # Proje adı çözülemiyorsa (doğrudan-çağrı/sınama) ESKİ tek-dosya yoluna düş — çökme YOK,
+  # sessiz-yanlış-dosya da YOK: adsız kayıt kiracı-başına dizine yazılamaz.
+  local _reg_proje="${EY_PROJE:-${proje:-}}"
+  local repo_reg_dir="$EY_REPO_TIERC_DIR/infra/iskan-registry"
+  local repo_reg="$repo_reg_dir/$_reg_proje.yaml"
+  if [ -z "$_reg_proje" ]; then
+    repo_reg_dir="$EY_REPO_TIERC_DIR/infra"
+    repo_reg="$repo_reg_dir/iskan-registry.yaml"
+    echo "[doğrulanmadı] iskan-registry (repo): proje adı çözülemedi → eski tek-dosya yoluna yazılıyor"
+  fi
   if [ -w "$EY_REPO_TIERC_DIR/infra" ] || [ -w "$EY_REPO_TIERC_DIR" ]; then
-    if [ -f "$EY_REPO_TIERC_DIR/infra/iskan-registry.yaml" ] && \
-       [ "$(md5sum "$EY_REPO_TIERC_DIR/infra/iskan-registry.yaml" | cut -d' ' -f1)" = "$md5_yeni" ]; then
+    mkdir -p "$repo_reg_dir" 2>/dev/null || true
+    if [ -f "$repo_reg" ] && [ "$(md5sum "$repo_reg" | cut -d' ' -f1)" = "$md5_yeni" ]; then
       echo "[yeşil] iskan-registry (repo): içerik-eş, mevcut → atla"
     else
-      printf '%s\n' "$reg_yeni" > "$EY_REPO_TIERC_DIR/infra/iskan-registry.yaml"
-      echo "[yeşil] iskan-registry (repo): yazıldı → $EY_REPO_TIERC_DIR/infra/iskan-registry.yaml (commit/PR ayrı-adım, REPO-FIRST)"
+      printf '%s\n' "$reg_yeni" > "$repo_reg"
+      echo "[yeşil] iskan-registry (repo): yazıldı → $repo_reg (commit/PR ayrı-adım, REPO-FIRST)"
     fi
   else
     echo "[doğrulanmadı] iskan-registry (repo): $EY_REPO_TIERC_DIR yazılabilir değil — repo-kopyası atlandı (host+container kopyaları yazıldı)"
@@ -1636,7 +1653,11 @@ cmd_ekip_yerlestir() {
   fi
   # rezerve-uuid çözümü: host-registry ÖNCE (canlı-kaynak), yoksa repo-origin/main (merge-sonrası kaynak)
   if [ -z "$reg_mevcut" ]; then
-    reg_mevcut="$(git -C "$EY_REPO_DIR" show origin/main:infra/iskan-registry.yaml 2>/dev/null || true)"
+    # d0002: ÖNCE kiracı-başına kanonik dosya; yoksa eski tek-dosya (göç-öncesi dallar için yedek).
+    # Eski dosya BAŞKA bir kiracının kaydı olabilir → ikinci sırada ve yalnız yedek.
+    _rp="${EY_PROJE:-${proje:-}}"
+    [ -n "$_rp" ] && reg_mevcut="$(git -C "$EY_REPO_DIR" show "origin/main:infra/iskan-registry/$_rp.yaml" 2>/dev/null || true)"
+    [ -n "$reg_mevcut" ] || reg_mevcut="$(git -C "$EY_REPO_DIR" show origin/main:infra/iskan-registry.yaml 2>/dev/null || true)"
   fi
 
   # ── ROSTER-KAYNAĞI (FAZ-7 roster-köprüsü): ISKAN_EY_ROSTER (açık-override) → container-içi
