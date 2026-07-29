@@ -69,9 +69,21 @@ fi
 
 if [ "$MOD" = "dosya" ]; then
   [ -f "$DOSYA" ] || { echo "HATA: dosya yok: $DOSYA" >&2; exit 2; }
+  # ⚠️ İÇERİĞİ GÖNDER, YOLU DEĞİL. Geçit ayrı bir konteynerdir ve senin dosya ağacını
+  #    GÖRMEZ — yol yollamak "bulunamadı" ile döner (canlı vaka 2026-07-29).
+  #    İçeriği gövdede taşımak ayrıca hiçbir dosya sistemi bağı kurmaz (mahremiyet duvarı sağlam).
+  BOYUT=$(wc -c < "$DOSYA" | tr -d ' ')
+  if [ "$BOYUT" -gt 17000000 ]; then
+    echo "HATA: dosya çok büyük ($BOYUT bayt) — geçit tavanı ~17MB. Küçült ya da parçala." >&2; exit 2
+  fi
   GOVDE=$(python3 -c '
-import json,sys
-print(json.dumps({"alici":sys.argv[1],"tur":"dosya","dosya":sys.argv[2],"aciklama":sys.argv[3]}))' \
+import json,sys,base64,os
+p=sys.argv[2]
+with open(p,"rb") as f: ham=f.read()
+print(json.dumps({"alici":sys.argv[1],"tur":"dosya",
+                  "dosya_adi":os.path.basename(p),
+                  "icerik_b64":base64.b64encode(ham).decode(),
+                  "aciklama":sys.argv[3]}))' \
     "$KIME" "$DOSYA" "$NOT" 2>/dev/null) || { echo "HATA: gövde üretilemedi (python3 yok?)" >&2; exit 2; }
 else
   [ -n "$METIN" ] || { echo "HATA: mesaj boş. Kullanım: $0 \"mesaj\"" >&2; exit 2; }

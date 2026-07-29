@@ -278,7 +278,7 @@
       "id": "whatsapp-gonder",
       "type": "agent",
       "name": "WhatsApp Gönder (filo geçidi istemcisi)",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "description": "Herhangi bir kutudan Sultan'a WhatsApp mesajı/dosyası göndermenin TEK yolu. Kutu tarafında yapılandırma YOK: geçit (cloudtop-wa) iç ağda durur, kutu yalnız ona seslenir. Numara kutuya inmez — alıcı ADI gönderilir, çözümü geçit yapar. whatsapp-baileys eşleştirme playbook'udur; bu onun istemcisidir, karıştırılmaz.",
       "prerequisites": {
         "tools": [
