@@ -183,6 +183,46 @@ cmd_mkdir(){  # mkdir <ad> [ust-folderid]  — idempotent (varsa mevcut id'yi d�
   printf '%s\n' "$id"   # betikten okunabilsin
 }
 
+cmd_sil_dosya(){  # sil-dosya <fileid>  — tek dosya sil (geri-alınamaz)
+  local fid="${1:-}"
+  [ -n "$fid" ] || die "kullanım: sil-dosya <fileid>"
+  case "$fid" in ''|*[!0-9]*) die "fileid sayı olmalı: '$fid'";; esac
+  load_creds; have_token || die "token yok — bash $0 doctor"
+  local r; r="$(api deletefile "fileid=${fid}")"
+  pc_ok "$r" || die "silme başarısız — fail: $(pc_err "$r")"
+  echo "$r" | jq -r '"✓ silindi: \(.metadata.name)   [fileid:\(.metadata.fileid)]"'
+}
+
+cmd_sil_klasor(){  # sil-klasor <folderid> --onayla  — klasörü İÇERİĞİYLE sil (geri-alınamaz)
+  local fid="" onay=0
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --onayla) onay=1; shift ;;
+      *) fid="$1"; shift ;;
+    esac
+  done
+  [ -n "$fid" ] || die "kullanım: sil-klasor <folderid> --onayla"
+  case "$fid" in ''|*[!0-9]*) die "folderid sayı olmalı: '$fid'";; esac
+  # KAPI-1: root ASLA silinemez (footgun).
+  [ "$fid" = "0" ] && die "REDDEDİLDİ: folderid=0 kök klasördür, silinemez."
+  load_creds; have_token || die "token yok — bash $0 doctor"
+  # KAPI-2: ne silineceğini ÖNCE bas (ad + öğe sayısı) — kör silme yok.
+  local l; l="$(api listfolder "folderid=${fid}")"
+  pc_ok "$l" || die "klasör okunamadı (silmeden önce doğrulama) — fail: $(pc_err "$l")"
+  local ad n
+  ad="$(echo "$l" | jq -r '.metadata.name')"
+  n="$(echo "$l"  | jq -r '.metadata.contents | length')"
+  ylw "silinecek: '$ad' [id:$fid] · içinde $n öğe"
+  # KAPI-3: --onayla olmadan HİÇBİR ŞEY silinmez.
+  if [ "$onay" -ne 1 ]; then
+    ylw "kuru-koşu: hiçbir şey silinmedi. Silmek için sonuna --onayla ekle."
+    return 3
+  fi
+  local r; r="$(api deletefolderrecursive "folderid=${fid}")"
+  pc_ok "$r" || die "silme başarısız — fail: $(pc_err "$r")"
+  grn "✓ silindi: '$ad' (klasör + $n öğe)"
+}
+
 cmd_upload(){  # upload <yerel-dosya> <folderid>
   local src="${1:-}" fid="${2:-}"
   [ -n "$src" ] && [ -n "$fid" ] || die "kullanım: upload <yerel-dosya> <folderid>"
@@ -238,10 +278,12 @@ case "${1:-doctor}" in
   set-token)     cmd_set_token ;;
   list)          shift; cmd_list "$@" ;;
   mkdir)         shift; cmd_mkdir "$@" ;;
+  sil-dosya)     shift; cmd_sil_dosya "$@" ;;
+  sil-klasor)    shift; cmd_sil_klasor "$@" ;;
   upload)        shift; cmd_upload "$@" ;;
   download)      shift; cmd_download "$@" ;;
   publink)       shift; cmd_publink "$@" ;;
   fingerprint)   cmd_fingerprint ;;
   help|-h|--help) cmd_help ;;
-  *) die "bilinmeyen komut: $1  (doctor|set-token|list <fid>|mkdir <ad> [ust]|upload <f> <fid>|download <fid> <dst>|publink <fid>|fingerprint)" ;;
+  *) die "bilinmeyen komut: $1  (doctor|set-token|list <fid>|mkdir <ad> [ust]|upload <f> <fid>|download <fid> <dst>|sil-dosya <fid>|sil-klasor <fid> --onayla|publink <fid>|fingerprint)" ;;
 esac
