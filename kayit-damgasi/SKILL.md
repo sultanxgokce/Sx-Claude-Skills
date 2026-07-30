@@ -1,7 +1,7 @@
 ---
 name: kayit-damgasi
 type: agent
-version: 0.1.1
+version: 1.0.0
 description: >
   Bir iş/PR merge olurken kapattığı kayda (defter-kartı, gap/bulgu-defteri, SULTAN-KAPISI gate'i,
   plan-satırı) kapanış-damgasını işleyen paketli yardımcı. CLAUDE.md §9 "Kayıt-Damgası" refleksini
