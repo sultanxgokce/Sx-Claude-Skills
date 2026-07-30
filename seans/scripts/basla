@@ -48,7 +48,13 @@ fi
 # Çıktı: seçilen satırın İLK jetonu (menü numarası ya da üye sırası). ESC/iptal → boş.
 _sec() {  # _sec "<baslik>" <satir...>
   local baslik="$1"; shift
-  if [ -n "${BASLA_TEST_SECIM:-}" ]; then printf '%s\n' "${BASLA_TEST_UYE:-}"; return 0; fi
+  if [ -n "${BASLA_TEST_SECIM:-}" ]; then
+    # Sınama-dikişi: test modunda liste EKRANA çizilmez (fzf koşmaz) → listenin İÇERİĞİ
+    # ve SIRASI hiçbir kapıdan görünmezdi. BASLA_TEST_LISTE=1 iken adayları stderr'e
+    # basar; bayrak set edilmedikçe davranış hiç değişmez.
+    [ -n "${BASLA_TEST_LISTE:-}" ] && printf 'ADAY: %s\n' "$@" >&2
+    printf '%s\n' "${BASLA_TEST_UYE:-}"; return 0
+  fi
   # ⚠️ `[ -t 1 ]` KULLANMA: _sec her zaman $(...) içinde çağrılır, orada stdout BİR BORUDUR,
   # terminal değil → kapı hep kapalı kalır, fzf hiç açılmaz ve yedek yol menüyü DEĞİŞKENE yazar
   # (kullanıcı hiçbir şey görmez, okları read'e gider → ekrana ^[[B basar).
@@ -154,39 +160,108 @@ _ekran() {
          "$C_BAS" "$C_SIF" "$C_SOL" "$C_SIF"
 }
 
+# _gec — bir masaya GEÇ. tmux'un İÇİNDEN `attach` ÇALIŞMAZ:
+#   "sessions should be nested with care, unset $TMUX to force"
+# Sultan tam bunu gördü (2026-07-30, tez kutusu · durum çubuğu [tez-yon]): ekran üyeyi
+# listeledi, seçimi aldı, sonra bu satırı basıp menüye geri attı → "geçemiyorum".
+# tmux'un İÇİNDEYSEK doğru fiil `switch-client`; DIŞINDAYSAK `attach`.
+_gec() {
+  local h="$1"
+  if [ -n "${TMUX:-}" ]; then
+    if tmux switch-client -t "$h" 2>/dev/null; then
+      # switch-client anında döner; ekranı zaten hedef masa kaplar.
+      printf '  %s%s masasına geçildi%s\n' "$C_YSL" "$h" "$C_SIF"
+    else
+      printf '  %s✗ geçilemedi: %s%s\n' "$C_KRM" "$h" "$C_SIF"
+      printf '  %selle:  tmux switch-client -t %s%s\n' "$C_SOL" "$h" "$C_SIF"
+    fi
+    return 0
+  fi
+  tmux attach -t "$h"
+  printf '\n  %smasadan ayrıldın — menüye dönülüyor%s\n' "$C_SOL" "$C_SIF"
+}
+
+# _gecici_masalar — ekip listesinde OLMAYAN açık masalar (elle açılmış geçici seanslar).
+# Sultan'ın isteği: "demirbaş ekip üyeleri sabit üstte, altta da geçici seanslar olsun
+# (silik)". Eskiden bunlar hiç görünmüyordu → elle açtığı `ui` masası listede yoktu.
+_gecici_masalar() {
+  local ekip_hedefleri="$1"   # satır başına bir roster-hedefi (küçük harf)
+  tmux ls -F '#{session_name}' 2>/dev/null | while read -r s; do
+    [ -n "$s" ] || continue
+    printf '%s\n' "$ekip_hedefleri" | grep -qix -- "$s" || printf '%s\n' "$s"
+  done
+}
+
 _uye_sec() {
   # ⚠️ ÖLÇÜM-HATASI ÜYE DEĞİLDİR. Eski hâl `ekip-durum.sh`in hata-jetonunu (EKIP-LISTESI-YOK)
   # bir üye sanıp "1 EKIP-LISTESI-YOK" diye listeliyordu (Sultan canlı testte gördü, 2026-07-30).
   # Çıkış-kodu ÖNCE kontrol edilir; jeton-satırları asla listeye girmez.
   local ham rc
   ham="$(bash "$HERE/ekip-durum.sh" 2>/dev/null)"; rc=$?
+  # Ekip listesi okunamasa da GEÇİCİ masalar listelenir — "ekip tanımı yok" bir kutuda
+  # da elle açılmış masalara geçmek istenebilir (Sultan: geçici seanslar da listede olsun).
+  local out=""
   if [ "$rc" -eq 2 ]; then
     # dosya VAR, ölçüm aracı eksik → "ekip yok" DEMEYECEĞİZ (yalan olurdu)
     printf '  %sEkip listesini okuyamadım%s (%s) — ekip listesi VAR, eksik olan ölçüm aracı.\n' \
            "$C_SAR" "$C_SIF" "$(printf '%s' "$ham" | head -1 | cut -f1)"
-    printf '  %sBunu ekran düzeltemez — kutunun kurulumunda eksik var, Sultana söyle.%s\n\n' "$C_SOL" "$C_SIF"
+    printf '  %sBunu ekran düzeltemez — kutunun kurulumunda eksik var, Sultana söyle.%s\n' "$C_SOL" "$C_SIF"
+    printf '  %saşağıda yalnız geçici masalar var.%s\n\n' "$C_SOL" "$C_SIF"
+  elif [ "$rc" -ne 0 ]; then
+    printf '  %sBu dizinde ekip tanımı yok%s (%s) — aşağıda yalnız geçici masalar var.\n\n' \
+           "$C_SAR" "$C_SIF" "$(printf '%s' "$ham" | head -1 | cut -f1)"
+  else
+    out="$(printf '%s\n' "$ham" | awk -F'\t' '$1!="ÖZET" && $1!="" && NF>=3{print}')"
+  fi
+
+  # ── liste: DEMİRBAŞ üstte sabit · GEÇİCİ altta silik (Sultan-kararı 2026-07-30) ──
+  # Sıra ANLAM taşır: üstteki satırlar ekibin sabit kadrosu, alttakiler elle açılmış
+  # geçici masalar. İkisi aynı numaralandırmada ama `hedefler` dizisi ayrımı korur.
+  local -a satirlar=() hedefler=() tipler=()
+  local i=0 uid sess durum not ekip_hedefleri=""
+  if [ -n "$out" ]; then    # boş `out`ta while bir kez BOŞ satırla dönerdi → hayalî üye
+    while IFS=$'\t' read -r uid sess durum not; do
+      [ -n "$uid" ] || continue
+      i=$((i+1))
+      local isaret="○"; local renk="$C_SOL"
+      case "$durum" in ayakta) isaret="●"; renk="$C_YSL" ;; duplike) isaret="⚠"; renk="$C_SAR" ;; esac
+      satirlar+=("$(printf '%s  %s %-16s %s%s%s%s' "$i" "$isaret" "$uid" "$renk" "$durum" "$C_SIF" "${not:+  $not}")")
+      hedefler+=("$sess"); tipler+=("demirbas")
+    done <<< "$out"
+    ekip_hedefleri="$(printf '%s\n' "$out" | awk -F'\t' '{print $2}')"
+  fi
+
+  local g
+  while read -r g; do
+    [ -n "$g" ] || continue
+    i=$((i+1))
+    satirlar+=("$(printf '%s  %s· %-15s %sgeçici%s' "$i" "$C_SOL" "$g" "$C_SOL" "$C_SIF")")
+    hedefler+=("$g"); tipler+=("gecici")
+  done <<< "$(_gecici_masalar "$ekip_hedefleri")"
+
+  if [ "${#hedefler[@]}" -eq 0 ]; then
+    printf '  %sgeçilecek masa yok — ne ekip listesi ne açık bir masa var%s\n\n' "$C_SOL" "$C_SIF"
     return 0
   fi
-  if [ "$rc" -ne 0 ]; then
-    printf '  %sBu dizinde ekip tanımı yok%s (%s).\n' "$C_SAR" "$C_SIF" "$(printf '%s' "$ham" | head -1 | cut -f1)"
-    printf '  %sBir proje dizinine geç, örn:  cd ~/projects/Nexus && basla%s\n\n' "$C_SOL" "$C_SIF"
-    return 0
-  fi
-  local out; out="$(printf '%s\n' "$ham" | awk -F'\t' '$1!="ÖZET" && $1!="" && NF>=3{print}')"
-  [ -n "$out" ] || { printf '  ekip listesi boş — geri dönülüyor\n\n'; return 0; }
-  local -a satirlar=(); local i=0
-  while IFS=$'\t' read -r uid sess durum not; do
-    i=$((i+1)); satirlar+=("$(printf '%s  %-16s %s%s' "$i" "$uid" "$durum" "${not:+  $not}")")
-  done <<< "$out"
-  local s; s="$(_sec 'Hangi üye?  (ok tuşlarıyla seç · Enter · ESC = geri)' "${satirlar[@]}")"
+  local s; s="$(_sec 'Hangi masa?  (üstte ekip · altta geçici · ESC = geri)' "${satirlar[@]}")"
   [ -n "$s" ] || return 0
-  local hedef; hedef="$(printf '%s\n' "$out" | awk -F'\t' -v n="$s" 'NR==n{print $2}')"
-  [ -n "$hedef" ] || { printf '  (anlamadım)\n'; return 0; }
+  case "$s" in ''|*[!0-9]*) printf '  (anlamadım)\n'; return 0 ;; esac
+  [ "$s" -ge 1 ] && [ "$s" -le "${#hedefler[@]}" ] || { printf '  (listede yok: %s)\n' "$s"; return 0; }
+  local hedef="${hedefler[$((s-1))]}" tip="${tipler[$((s-1))]}"
+  # ekip-durum.sh masası tanımsız üye için `-` basar; onu masa adı sanmayalım
+  if [ -z "$hedef" ] || [ "$hedef" = "-" ]; then
+    printf '  %sbu üyenin ekip listesinde masa adı yok — geçilecek yer yok%s\n\n' "$C_SAR" "$C_SIF"
+    return 0
+  fi
   if tmux has-session -t "$hedef" 2>/dev/null; then
     # `exec` KULLANMA: süreci değiştirir → masadan ayrılınca (detach) menüye DÖNÜLEMEZ,
     # kabuğa düşülür. Sultan'ın açık isteği "geri dönmek yok" idi; attach'tan sonra da geçerli.
-    tmux attach -t "$hedef"
-    printf '\n  %smasadan ayrıldın — menüye dönülüyor%s\n' "$C_SOL" "$C_SIF"
+    _gec "$hedef"
+    return 0
+  fi
+  if [ "$tip" = "gecici" ]; then
+    # Geçici masa listelendiği anda vardı, şimdi yok → aradaki saniyelerde kapanmış.
+    printf '  %s%s masası artık yok (geçici masa kapanmış)%s\n\n' "$C_SAR" "$hedef" "$C_SIF"
     return 0
   fi
   # Kapalı üye seçilince ESKİDEN yalnız "1'e bas" derdi ve menü hemen üstüne çizilirdi →
@@ -211,8 +286,7 @@ _uye_sec() {
   printf '\n'
   if tmux has-session -t "$hedef" 2>/dev/null; then
     printf '  %s%s artık ayakta — geçiliyor%s\n' "$C_YSL" "$hedef" "$C_SIF"
-    tmux attach -t "$hedef"
-    printf '\n  %smasadan ayrıldın — menüye dönülüyor%s\n' "$C_SOL" "$C_SIF"
+    _gec "$hedef"
   fi
 }
 
@@ -256,11 +330,11 @@ fi
 # Menü de ok-tuşlu: Sultan okları ANA MENÜde denedi ve ekrana kaçış-kodu bastı.
 _menu_satirlari() {
   local a b
-  if [ "${EKIP_YOK:-0}" -eq 1 ]; then a="(bu dizinde ekip yok)"; b="(bu dizinde ekip yok)"
-  else a="süz → eksikleri kaldır → duplike temizle"; b=""; fi
+  if [ "${EKIP_YOK:-0}" -eq 1 ]; then a="(bu dizinde ekip yok)"; b="yalnız geçici masalar"
+  else a="süz → eksikleri kaldır → duplike temizle"; b="ekip üstte · geçici masalar altta"; fi
   printf '%s\n' \
     "1  Ekibi kontrol et / onar          $a" \
-    "2  Bir ekip üyesine geç             $b" \
+    "2  Bir masaya geç                   $b" \
     "3  Yeni sohbet başlat               adını sorar" \
     "4  Kuralları ve komutları göster" \
     "5  Eski sohbetlerde ara             tüm liste — kalabalıktır" \

@@ -120,5 +120,71 @@ else
   ok "G5b rc=2'de 'ekip tanımı yok' YALANI basılmıyor"
 fi
 
+# ── G6 · tmux'un İÇİNDEYKEN attach DEĞİL switch-client kullanılmalı
+# Sultan canlı gördü (tez kutusu, durum çubuğu [tez-yon]): üye seçildi → tmux
+# "sessions should be nested with care, unset $TMUX to force" dedi → menüye geri atıldı.
+# tmux içinden `attach` çalışmaz; doğru fiil `switch-client`.
+g6bin="$T/g6bin"; mkdir -p "$g6bin"
+cat > "$g6bin/tmux" <<'SH'
+#!/usr/bin/env bash
+: > "$TMUX_CAGRI_LOG.tmp"; printf '%s\n' "$*" >> "$TMUX_CAGRI_LOG"
+case "${1:-}" in
+  ls)          printf 'ornek-yon\n' ;;
+  has-session) exit 0 ;;             # hedef masa AYAKTA
+  attach)      echo "sessions should be nested with care, unset \$TMUX to force"; exit 1 ;;
+  switch-client) exit 0 ;;
+  *) exit 0 ;;
+esac
+SH
+chmod +x "$g6bin/tmux"
+mk_sedir "$T/g6"
+export TMUX_CAGRI_LOG="$T/tmux-cagri.log"; : > "$TMUX_CAGRI_LOG"
+g6out="$(cd "$T/g6" && PATH="$g6bin:$PATH" TMUX="/tmp/fake,1,0" \
+        BASLA_TEST_SECIM=2 BASLA_TEST_UYE=1 bash "$B" 2>&1 || true)"
+if grep -q '^switch-client' "$TMUX_CAGRI_LOG"; then
+  ok "G6 tmux içindeyken switch-client çağrıldı"
+else
+  no "G6 switch-client çağrılmadı" "$(tr '\n' '|' < "$TMUX_CAGRI_LOG")"
+fi
+if grep -q '^attach' "$TMUX_CAGRI_LOG"; then
+  no "G6b tmux içindeyken attach çağrıldı — iç-içe hatası geri gelir" ""
+else
+  ok "G6b tmux içindeyken attach ÇAĞRILMADI"
+fi
+if printf '%s' "$g6out" | grep -q 'nested with care'; then
+  no "G6c iç-içe hata mesajı ekranda" ""
+else
+  ok "G6c iç-içe hata mesajı ekranda YOK"
+fi
+
+# ── G7 · ekip DIŞI açık masalar (geçici seanslar) listede görünür
+# Sultan: "ui adında geçici bir seans açmıştım o da yok — geçiciler altta silik olsun".
+g7bin="$T/g7bin"; mkdir -p "$g7bin"
+cat > "$g7bin/tmux" <<'SH'
+#!/usr/bin/env bash
+case "${1:-}" in
+  ls) printf 'ornek-yon\nui\n' ;;    # 'ui' ekip listesinde YOK → geçici
+  has-session) exit 0 ;;
+  *) exit 0 ;;
+esac
+SH
+chmod +x "$g7bin/tmux"
+mk_sedir "$T/g7"
+g7out="$(cd "$T/g7" && PATH="$g7bin:$PATH" BASLA_TEST_SECIM=2 BASLA_TEST_UYE=q BASLA_TEST_LISTE=1 \
+        bash "$B" 2>&1 || true)"
+g7aday="$(printf '%s\n' "$g7out" | grep '^ADAY: ')"
+printf '%s' "$g7aday" | grep -q 'ui' \
+  && ok "G7 ekip dışı masa ('ui') listede görünüyor" || no "G7 geçici masa listede yok"
+printf '%s' "$g7aday" | grep -q 'geçici' \
+  && ok "G7b geçici olarak işaretli" || no "G7b 'geçici' etiketi yok"
+# demirbaş ÜSTTE, geçici ALTTA olmalı
+s_uye="$(printf '%s\n' "$g7aday" | grep -n 'ornek-yon' | tail -1 | cut -d: -f1)"
+s_gec="$(printf '%s\n' "$g7aday" | grep -n 'geçici'    | tail -1 | cut -d: -f1)"
+if [ -n "$s_uye" ] && [ -n "$s_gec" ] && [ "$s_uye" -lt "$s_gec" ]; then
+  ok "G7c demirbaş üstte · geçici altta"
+else
+  no "G7c sıra yanlış" "uye=$s_uye gecici=$s_gec"
+fi
+
 printf '\npass=%s fail=%s\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]
