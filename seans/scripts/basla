@@ -49,17 +49,29 @@ fi
 _sec() {  # _sec "<baslik>" <satir...>
   local baslik="$1"; shift
   if [ -n "${BASLA_TEST_SECIM:-}" ]; then printf '%s\n' "${BASLA_TEST_UYE:-}"; return 0; fi
-  if command -v fzf >/dev/null 2>&1 && [ -t 0 ] && [ -t 1 ]; then
+  # ⚠️ `[ -t 1 ]` KULLANMA: _sec her zaman $(...) içinde çağrılır, orada stdout BİR BORUDUR,
+  # terminal değil → kapı hep kapalı kalır, fzf hiç açılmaz ve yedek yol menüyü DEĞİŞKENE yazar
+  # (kullanıcı hiçbir şey görmez, okları read'e gider → ekrana ^[[B basar).
+  # Firsthand: Sultan 2026-07-30, iki ayrı ekran görüntüsü. Doğru kapı: /dev/tty erişilebilir mi.
+  if command -v fzf >/dev/null 2>&1 && [ -r /dev/tty ] && [ -w /dev/tty ]; then
     printf '%s\n' "$@" | fzf --ansi --no-multi --height=~60% --reverse --border=none \
         --prompt='› ' --header="$baslik" --info=inline \
-        --bind='esc:abort,q:abort' 2>/dev/null | awk '{print $1}'
+        --bind='esc:abort' | awk '{print $1}'
+    # NOT: fzf'e `< /dev/tty` VERİLMEZ — stdin aday-listesidir (boru). /dev/tty'ye yönlendirmek
+    # listeyi EZER ve fzf boş listeyle açılır. Klavyeyi fzf kendisi /dev/tty'den okur.
     return 0
   fi
-  # yedek: numara-okuma (fzf yok ya da TTY yok)
-  printf '%s\n' "$@"
-  printf '\n  Seçimin (numara): '
-  local s; read -r s || s=""
-  printf '%s\n' "$s"
+  # yedek: numara-okuma. UI /dev/tty'ye yazılır (stdout DÖNÜŞ-DEĞERİdir, kirletilemez).
+  if [ -w /dev/tty ]; then
+    printf '%s\n' "$@"        > /dev/tty
+    printf '\n  Seçimin (numara): ' > /dev/tty
+    local s; read -r s < /dev/tty || s=""
+    printf '\n' > /dev/tty
+    printf '%s\n' "$s" | awk '{print $1}'
+  else
+    # ne fzf ne tty → seçim sorulamaz (betik/otomasyon): boş dön, çağıran çıkar.
+    printf '\n'
+  fi
 }
 
 _ekip_blogu() {
