@@ -5,7 +5,7 @@ version: 0.1.1
 description: >
   Bir iş/PR merge olurken kapattığı kayda (defter-kartı, gap/bulgu-defteri, SULTAN-KAPISI gate'i,
   plan-satırı) kapanış-damgasını işleyen paketli yardımcı. CLAUDE.md §9 "Kayıt-Damgası" refleksini
-  tek-komuta indirir; mevcut `defter-mailbox.sh durum` primitifini orkestra eder. Tetik: bir PR
+  tek-komuta indirir; mevcut `layiha-defteri.sh durum` primitifini orkestra eder. Tetik: bir PR
   merge edildikten sonra, ya da "bu iş şu kaydı kapatıyor mu?" refleksi.
 install_target: { skills: .claude/skills/ }
 stacks: ["*"]
@@ -16,13 +16,18 @@ status: v0.1
 
 # kayit-damgasi — (Kalfa · paketli skill)
 
+> ⚖️ **v1.0.0 · 2026-07-29/ADR-026:** `k####` kart tabanlı iş-takibi **emekli**; iş-kaydı artık
+> **layiha**dır. Bu skill `layiha-defteri.sh durum` primitifini orkestra eder. Kart id'si (`k0136`) ile
+> çağrı **reddedilir** (RC=2) ve layiha kodu istenir. `insa-edildi` geçişi **kanıtsız yapılamaz** (K7).
+> **Emekli olan yalnız `k####` iş-takibidir** — `seyir-defteri`·`layiha-defteri`·`bulgu-havuzu` yaşıyor.
+
 **NE-DİR:** Bir iş/PR bir kaydı fiilen kapatıyorsa (ya da ilerletiyorsa), **merge anında** o kayda
 kapanış-damgasını işaretlemeyi refleks-hıza indiren yardımcı. 30 günde **8×** "kayıt bayatken fix landed"
 ölçüldü — damga atlanınca bir-sonraki ajan aynı işi yeniden keşfediyor. Bu skill CLAUDE.md
 **§9 (Kayıt-Damgası)** adımını mekanikleştirir: verilen bir git-ref/PR'ın kapattığı kayıtları bulur,
 önerilen damga-komutlarını basar ve (onayla) uygular.
 
-Kapsadığı kayıt-türleri: **defter-kartı** (`defter-mailbox.sh durum <k####> bitti --kanit …`) ·
+Kapsadığı kayıt-türleri: **layiha** (`layiha-defteri.sh durum <kod> insa-edildi --kanit <PR|commit|dosya>`) ·
 **gap/bulgu-defteri** (FIX + kanıt satırı) · **SULTAN-KAPISI** gate'i (durum + damga) · **plan-satırı** ·
 **skill-defect bulgusu** (SYS/L01 · `g####`) — skill-onarımı bir `g####` bulgusunu kapatıyorsa
 kapanış `scripts/skill-fb-ekle.sh durum <g####> bitti --kanit <MUHUR|PR>` ile işlenir (kanıtsız RC=2;
@@ -34,7 +39,7 @@ kapanış `scripts/skill-fb-ekle.sh durum <g####> bitti --kanit <MUHUR|PR>` ile 
 # 1) SALT-OKU tarama — ref hangi kayıtları kapatıyor, hangi damgalar önerilir?
 kayit-damgasi tara <git-ref|range>        # ör: kayit-damgasi tara HEAD   ·   kayit-damgasi tara main..HEAD
 
-# 2) Tek kart-damgası uygula (defter-mailbox.sh durum sarmalayıcı)
+# 2) Tek layiha-damgası uygula (layiha-defteri.sh durum sarmalayıcı)
 kayit-damgasi isle k0107 bitti --kanit "#493"
 
 # 3) Merge-sonrası tek-hareket: tara + (--apply ise) ref'teki k#### kartlarını 'bitti' damgala
@@ -50,7 +55,7 @@ kayıtları "elle-damga adayı" olarak listelenir (bunlar serbest-metin düzenle
 - **DRY-varsayılan:** `tara` ve `merge` (`--apply`'sız) hiçbir yazma yapmaz — INERT.
 - **İnsan-onay-alanına yazmaz:** yalnız ajan-yetkili kart-durumu (`bitti|teslim|yeniden`) flip'lenir;
   `sultan_response`/onay gibi alanlara dokunmaz (ek-guard: geçersiz durum = red). Yetki-Sınırı Protokolü.
-- **Yeniden-icat yok:** kart-flip'i `scripts/defter-mailbox.sh durum`'a devreder; o yoksa (Nexus-dışı proje)
+- **Yeniden-icat yok:** durum-flip'i `~/.claude/skills/layiha/scripts/layiha-defteri.sh durum`'a devreder; o yoksa
   net-mesajla durur, sessiz-geçmez.
 
 ## Kademe

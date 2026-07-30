@@ -47,9 +47,6 @@
     "sert-dongu": [
       "_global"
     ],
-    "defter-kapisi": [
-      "_global"
-    ],
     "pcloud-erisim": [
       "_global",
       "nexus",
@@ -129,6 +126,9 @@
       "_global"
     ],
     "seans": [
+      "_global"
+    ],
+    "layiha-kapisi": [
       "_global"
     ]
   }
