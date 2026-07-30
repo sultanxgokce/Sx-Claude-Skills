@@ -156,7 +156,11 @@ _uye_sec() {
   local hedef; hedef="$(printf '%s\n' "$out" | awk -F'\t' -v n="$s" 'NR==n{print $2}')"
   [ -n "$hedef" ] || { printf '  (anlamadım)\n'; return 0; }
   if tmux has-session -t "$hedef" 2>/dev/null; then
-    exec tmux attach -t "$hedef"
+    # `exec` KULLANMA: süreci değiştirir → masadan ayrılınca (detach) menüye DÖNÜLEMEZ,
+    # kabuğa düşülür. Sultan'ın açık isteği "geri dönmek yok" idi; attach'tan sonra da geçerli.
+    tmux attach -t "$hedef"
+    printf '\n  %smasadan ayrıldın — menüye dönülüyor%s\n' "$C_SOL" "$C_SIF"
+    return 0
   fi
   printf '  %s%s kapalı%s — ayağa kaldırmak için: 1 (Ekibi kontrol et / onar)\n\n' "$C_SAR" "$hedef" "$C_SIF"
 }
