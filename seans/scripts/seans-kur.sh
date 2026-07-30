@@ -59,9 +59,31 @@ done
 # PATH kapısı: dizin PATH'te değilse sessiz kalmaz (yoksa kapılar yine çağrılamaz).
 case ":$PATH:" in
   *":$HEDEF_DIZIN:"*) grn "  ✓ PATH: $HEDEF_DIZIN görünüyor" ;;
-  *) ylw "  ⚠ PATH'te YOK: $HEDEF_DIZIN — kapılar bağlandı ama çağrılamaz."
-     ylw "    Kabuk açılışına ekle:  export PATH=\"$HEDEF_DIZIN:\$PATH\""
-     fail=$((fail+1)) ;;
+  *)
+     # KAPILAR BAĞLI AMA ÇAĞRILAMAZ — bu, bugün 11 kutuda fiilen yaşandı (Sultan: "sedir
+     # projemde basla yok"). Symlink kurmak yetmiyor; dizin PATH'te olmalı. Emsal:
+     # infra/kapi/kapi-kur.sh'in .bashrc marker-bloğu deseni.
+     if [ "$KONTROL" -eq 1 ]; then
+       ylw "  ⚠ PATH'te YOK: $HEDEF_DIZIN → .bashrc'ye marker-blok EKLENECEK"
+     elif [ -n "${SEANS_PATH_BLOK_YOK:-}" ]; then
+       ylw "  ⚠ PATH'te YOK: $HEDEF_DIZIN (blok-yazımı SEANS_PATH_BLOK_YOK ile kapatılmış)"
+       fail=$((fail+1))
+     else
+       RC="${SEANS_BASHRC:-$HOME/.bashrc}"
+       if [ -f "$RC" ] && grep -q '# >>> seans-path >>>' "$RC" 2>/dev/null; then
+         ylw "  ⚠ PATH'te YOK ama .bashrc bloğu ZATEN var → yeni terminal aç (ya da: source $RC)"
+       else
+         { printf '\n# >>> seans-path >>>\n'
+           printf '# seans kapıları (basla · sessiongetir · yenisession · gruba · yardim) buradan çağrılır.\n'
+           printf '# seans-kur.sh ekledi; kaldırmak için bu blok silinir.\n'
+           printf 'case ":$PATH:" in *":%s:"*) ;; *) export PATH="%s:$PATH" ;; esac\n' "$HEDEF_DIZIN" "$HEDEF_DIZIN"
+           printf '# <<< seans-path <<<\n'
+         } >> "$RC" 2>/dev/null \
+           && grn "  + PATH bloğu eklendi → $RC  (etkin olması için YENİ TERMİNAL aç ya da: source $RC)" \
+           || { red "  ✗ PATH bloğu yazılamadı: $RC"; fail=$((fail+1)); }
+       fi
+     fi
+     ;;
 esac
 
 if [ "$KONTROL" -eq 1 ]; then
