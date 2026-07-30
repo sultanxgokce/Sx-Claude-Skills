@@ -144,6 +144,28 @@ _ekip_blogu() {
   printf '   %smasa ≠ sohbet: masa açık olsa da içinde Claude çalışmıyor olabilir%s\n\n' "$C_SOL" "$C_SIF"
 }
 
+# _kopya_satiri — "hangi çalışma kopyasındayım, kaç masayla paylaşıyorum" tek satırı.
+#
+# NİÇİN (2026-07-30, firsthand ölçüm · huzur): üç masa TEK kopyayı paylaşıyordu ve bunu
+# EKRANDA HİÇBİR YER SÖYLEMİYORDU — biri dal değiştirince ötekinin kaydedilmemiş işi
+# taşınır, kimse haber vermez. Görünmeyen paylaşım, sessiz kayıptır. Bu satır onu görünür
+# kılar; çözümü `kendi-kopyam` yapar (ekran hiçbir şeyi kendiliğinden değiştirmez).
+#
+# ⚠️ MENÜ NUMARALARINA DOKUNULMADI: bu bilgi satırıdır, seçenek DEĞİL. Numaralar ekibe
+# yazılı olarak bildirildi (1 kontrol · 2 masaya geç · 3 yeni sohbet · 4 kurallar · 5 ara);
+# araya seçenek sokmak o yönergeyi sessizce yanlışlar.
+#
+# ⚠️ ÖLÇÜMÜ BURADA TEKRARLAMIYORUZ. Aynı gerçeği iki ayrı yerde hesaplamak, birini
+# düzeltip ötekini bayat bırakma sınıfının kaynağıdır (bugün üç kez yaşandı). Tek
+# otorite `kendi-kopyam --satir`; bu ekran onu ÇAĞIRIR. Araç yoksa sessiz kalır —
+# eski davranış birebir korunur, ekran kırılmaz.
+_kopya_satiri() {
+  local arac="$HERE/kendi-kopyam"
+  [ -x "$arac" ] || arac="$(command -v kendi-kopyam 2>/dev/null)"
+  [ -n "$arac" ] && [ -x "$arac" ] || return 0
+  "$arac" --satir 2>/dev/null || true
+}
+
 _ekran() {
   printf '\n'
   printf '  %s%s%s — çalışma ortamı\n' "$C_BAS" "$PROJE" "$C_SIF"
@@ -155,6 +177,7 @@ _ekran() {
     printf '%s\n' "$C_SIF"
   fi
   printf '\n'
+  _kopya_satiri
   _ekip_blogu
   printf '  %sHazır%s — %sok tuşlarıyla seç, Enter ile onayla, ESC ile çık%s\n\n' \
          "$C_BAS" "$C_SIF" "$C_SOL" "$C_SIF"

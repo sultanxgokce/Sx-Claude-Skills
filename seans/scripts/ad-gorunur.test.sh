@@ -75,12 +75,18 @@ grep -q 'alt çubuk etiketlenemedi' "$CS"; g $? "yapamazsa SESSİZ geçmiyor (ö
 ! grep -q 'rename-session' "$CS"; g $? "oturum adına DOKUNMUYOR (attach tutamağı korunur)"
 
 echo "── çalıştırma bitleri: her senkron 'cs'i kırmasın ──"
-eksik=0
-for f in basla cs.sh ekip-durum.sh gruba seans-kur.sh sessiongetir yardim yenisession; do
+# ⚠️ LİSTE TÜRETİLİR, ELLE YAZILMAZ. Elle liste yeni bir kapı eklendiğinde sessizce
+# geride kalır → yeni betik kip-korumasının DIŞINDA kalır ve bir senkron onu kırar.
+# (2026-07-30: `kendi-kopyam` eklenince tam bu oldu; sabit "sekiz" listesi onu görmedi.)
+eksik=0; sayi=0
+while IFS= read -r f; do
+  case "$f" in *.test.sh) continue ;; esac
+  sayi=$((sayi+1))
   m="$(git -C "$BURASI" ls-files -s "$f" 2>/dev/null | awk '{print $1}')"
   [ "$m" = "100755" ] || { echo "    ✗ $f git kipi=$m (755 olmalı)"; eksik=1; }
-done
-[ "$eksik" = 0 ]; g $? "sekiz betik de git'te çalıştırılabilir (100755)"
+done < <(git -C "$BURASI" ls-files)
+[ "$sayi" -ge 9 ] || { echo "    ✗ yalnız $sayi betik sayıldı (≥9 beklenir — biri kaybolmuş olabilir)"; eksik=1; }
+[ "$eksik" = 0 ]; g $? "$sayi betiğin hepsi git'te çalıştırılabilir (100755)"
 
 echo ""
 echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"

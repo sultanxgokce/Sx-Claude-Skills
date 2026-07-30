@@ -1,0 +1,274 @@
+#!/usr/bin/env bash
+# ─────────────────────────────────────────────────────────────────────────────
+# kendi-kopyam — masaya AYRI bir çalışma kopyası açar (git worktree), Sultan-dilinde.
+#
+# NİÇİN VAR (2026-07-30, firsthand ölçüm · huzur kutusu):
+#   Üç masa (huzur-yon · huzur-motor1 · huzur-mim) + insanların kendi sekmeleri
+#   TEK çalışma kopyasını paylaşıyordu:
+#     git worktree list  →  /config/projects/huzur  d2bb6a8 [faz-0-tasarim]   ← tek satır
+#   Yani bir masa dal değiştirince (MİMAR `faz-0-tasarim`e geçti) ÖTEKİ masaların
+#   kaydedilmemiş işi o dala taşınır ya da çakışır — kimse haber vermez, git de
+#   uyarmaz. Ölçüm anında ağaç temizdi; yani iş kaybı OLMADI, pencere hâlâ açıktı.
+#   Bu araç o pencereyi kapatır: her masa kendi kopyasında, kendi dalında çalışır.
+#
+# NE YAPMAZ (sınırlar — bilinçli):
+#   · Ana kopyanın dalını DEĞİŞTİRMEZ, dosyalarına DOKUNMAZ.
+#   · Kimseyi zorlamaz: çağrılmadıkça hiçbir şey olmaz (eski davranış birebir korunur).
+#   · Kendi kendine kopya AÇMAZ; kapatma da onaysız yapılmaz.
+#   · Ölçemediğinde "yolunda" DEMEZ — ölçemediğini söyler.
+#
+# KULLANIM:
+#   kendi-kopyam                 → durumu göster; kopya yoksa aç (onaylı)
+#   kendi-kopyam <konu>          → dal adına konu ekle (ör. randevu-akisi)
+#   kendi-kopyam --nerede        → yalnız ÖLÇ, hiçbir şey yazma (kuru-koşu)
+#   kendi-kopyam --yol           → makine-okur: yalnız kopyanın yolunu bas
+#   kendi-kopyam --kapat         → bu kopyayı kaldır (temiz + itilmiş olmalı)
+#
+# EXIT: 0 tamam · 1 iş düştü · 2 kullanım hatası · 3 burada yapılamaz (repo yok/boş)
+# ─────────────────────────────────────────────────────────────────────────────
+set -u
+
+if [ -t 1 ]; then
+  C_BAS=$'\033[1m'; C_SOL=$'\033[2m'; C_VUR=$'\033[36m'
+  C_YSL=$'\033[32m'; C_KRM=$'\033[31m'; C_SAR=$'\033[33m'; C_SIF=$'\033[0m'
+else
+  C_BAS=""; C_SOL=""; C_VUR=""; C_YSL=""; C_KRM=""; C_SAR=""; C_SIF=""
+fi
+
+MOD="ac"; KONU=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --nerede|-n)  MOD="olc"; shift ;;
+    --satir)      MOD="satir"; shift ;;
+    --yol)        MOD="yol"; shift ;;
+    --kapat)      MOD="kapat"; shift ;;
+    -h|--yardim)  sed -n '28,35p' "$0"; exit 0 ;;
+    -*)           printf 'kendi-kopyam: bilinmeyen seçenek: %s\n' "$1" >&2; exit 2 ;;
+    *)            KONU="$1"; shift ;;
+  esac
+done
+
+# ── ad temizliği: dal ve dizin adına yalnız güvenli harfler girer ────────────
+# Masa adı tmux'tan gelir; Türkçe harf / boşluk / iki nokta içerebilir. Temizlenmezse
+# `git worktree add` ya da `git branch` sessizce tuhaf ad üretir.
+# ⚠️ Türkçe harfler için `tr` KULLANILMAZ: tr BAYT eşler, UTF-8 harfleri iki bayttır →
+# "Ayşe Nur" girdisi "ayuue-nur" olur (firsthand: kendi sınamam yakaladı, 2026-07-30).
+# sed çok-baytlı örüntüyü doğru eşler.
+_temiz() {
+  printf '%s' "$1" \
+    | sed -e 's/Ç/C/g; s/ç/c/g; s/Ğ/G/g; s/ğ/g/g; s/İ/I/g; s/ı/i/g' \
+          -e 's/Ö/O/g; s/ö/o/g; s/Ş/S/g; s/ş/s/g; s/Ü/U/g; s/ü/u/g' \
+    | tr '[:upper:]' '[:lower:]' \
+    | sed -e 's/[^a-z0-9-]\+/-/g' -e 's/^-\+//' -e 's/-\+$//' -e 's/-\{2,\}/-/g'
+}
+
+# ── masa adı: pencere adı > oturum adı > kullanıcı ───────────────────────────
+# `cc-xxxxxxxx` oturum adları makine tutamağıdır (insan koymadı) — masa adı olarak
+# kullanılırsa kopya adı anlamsız olur; o durumda pencere adına düşülür.
+_masa_adi() {
+  local p="" s=""
+  if [ -n "${KENDI_KOPYAM_TEST_MASA:-}" ]; then printf '%s' "$(_temiz "$KENDI_KOPYAM_TEST_MASA")"; return 0; fi
+  if [ -n "${TMUX:-}" ] && command -v tmux >/dev/null 2>&1; then
+    p="$(tmux display-message -p '#W' 2>/dev/null)"
+    s="$(tmux display-message -p '#S' 2>/dev/null)"
+  fi
+  local aday=""
+  case "$p" in ""|bash|zsh|sh|node|claude) : ;; *) aday="$p" ;; esac
+  if [ -z "$aday" ]; then
+    case "$s" in ""|cc-*) : ;; *) aday="$s" ;; esac
+  fi
+  [ -n "$aday" ] || aday="${USER:-masa}"
+  printf '%s' "$(_temiz "$aday")"
+}
+
+# ── ağaç ölçümü ──────────────────────────────────────────────────────────────
+KOK="$(git rev-parse --show-toplevel 2>/dev/null)"
+# --satir karşılama ekranının çağırdığı moddur: depo yoksa SESSİZ çıkar (ekranı kirletmez).
+if [ -z "$KOK" ] && [ "$MOD" = "satir" ]; then exit 0; fi
+if [ -z "$KOK" ]; then
+  printf '\n  %sBurada bir çalışma kopyası yok%s — bu dizin bir proje deposu değil.\n' "$C_SAR" "$C_SIF"
+  printf '  %sÖnce projenin dizinine gir (ör: cd /config/projects/<proje>), sonra tekrar dene.%s\n\n' "$C_SOL" "$C_SIF"
+  exit 3
+fi
+GITDIR="$(git rev-parse --git-dir 2>/dev/null)"
+ORTAK="$(git rev-parse --git-common-dir 2>/dev/null)"
+# Bağlı worktree'de --git-dir ile --git-common-dir AYRIŞIR; ana kopyada aynıdır.
+BAGLI=0; [ -n "$GITDIR" ] && [ "$GITDIR" != "$ORTAK" ] && BAGLI=1
+DAL="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
+KIRLI="$(git status --porcelain 2>/dev/null | wc -l | tr -d ' ')"
+COMMIT_VAR=1; git rev-parse --verify -q HEAD >/dev/null 2>&1 || COMMIT_VAR=0
+
+# Bu kopyayı KAÇ masa paylaşıyor? Ölçüm: aynı yola bakan tmux panelleri.
+# Ölçemezsek sayı basmayız ("bilinmiyor") — uydurma sayı, olmayan güvenden kötüdür.
+_paylasan() {
+  if [ -n "${KENDI_KOPYAM_TEST_PAYLASAN:-}" ]; then printf '%s' "$KENDI_KOPYAM_TEST_PAYLASAN"; return 0; fi
+  command -v tmux >/dev/null 2>&1 || { printf '?'; return 0; }
+  local ham
+  ham="$(tmux list-panes -a -F '#{session_name}	#{pane_current_path}' 2>/dev/null)" || { printf '?'; return 0; }
+  [ -n "$ham" ] || { printf '?'; return 0; }
+  printf '%s\n' "$ham" | awk -F'\t' -v k="$KOK" '$2==k{print $1}' | sort -u | wc -l | tr -d ' '
+}
+
+MASA="$(_masa_adi)"
+ANA_ADI="$(basename "$KOK")"
+KOPYA="${KENDI_KOPYAM_KOK:-$(dirname "$KOK")}/${ANA_ADI}-${MASA}"
+if [ -n "$KONU" ]; then YENI_DAL="${MASA}-$(_temiz "$KONU")"; else YENI_DAL="$MASA"; fi
+
+# ── --yol: makine-okur tek satır ─────────────────────────────────────────────
+if [ "$MOD" = "yol" ]; then
+  if [ "$BAGLI" -eq 1 ]; then printf '%s\n' "$KOK"; else printf '%s\n' "$KOPYA"; fi
+  exit 0
+fi
+
+_durum_yaz() {
+  local pay; pay="$(_paylasan)"
+  printf '\n  %sÇalışma kopyası%s\n' "$C_BAS" "$C_SIF"
+  printf '   yer:  %s\n' "$KOK"
+  printf '   dal:  %s%s\n' "$DAL" "$([ "$KIRLI" -gt 0 ] && printf '   (%s kaydedilmemiş değişiklik)' "$KIRLI")"
+  if [ "$BAGLI" -eq 1 ]; then
+    printf '   %s✓ bu senin kendi kopyan — kimseyle paylaşmıyorsun%s\n\n' "$C_YSL" "$C_SIF"
+  elif [ "$pay" = "?" ]; then
+    printf '   %s⚠ kaç masanın paylaştığını ölçemedim%s %s(tmux okunamadı)%s\n' "$C_SAR" "$C_SIF" "$C_SOL" "$C_SIF"
+    printf '   %sbu ana kopya — paylaşılıyor olabilir%s\n\n' "$C_SOL" "$C_SIF"
+  elif [ "$pay" -gt 1 ]; then
+    printf '   %s⚠ bu ana kopyayı %s masa paylaşıyor%s\n' "$C_SAR" "$pay" "$C_SIF"
+    printf '   %sbiri dal değiştirirse ötekilerin kaydedilmemiş işi taşınır ya da çakışır%s\n\n' "$C_SOL" "$C_SIF"
+  else
+    printf '   %sana kopya · şu an yalnız senin masan burada%s\n\n' "$C_SOL" "$C_SIF"
+  fi
+}
+
+# ── --satir: karşılama ekranı için sıkıştırılmış 1-2 satır (tek otorite burada) ──
+if [ "$MOD" = "satir" ]; then
+  if [ "$BAGLI" -eq 1 ]; then
+    printf '  %sçalışma kopyan:%s %s  %s(dal: %s · yalnız senin)%s\n\n' \
+           "$C_BAS" "$C_SIF" "$(basename "$KOK")" "$C_SOL" "${DAL:-?}" "$C_SIF"
+    exit 0
+  fi
+  pay="$(_paylasan)"
+  if [ "$pay" != "?" ] && [ "$pay" -gt 1 ]; then
+    printf '  %s⚠ ana kopyayı %s masa paylaşıyor%s  %s(dal: %s)%s\n' \
+           "$C_SAR" "$pay" "$C_SIF" "$C_SOL" "${DAL:-?}" "$C_SIF"
+    printf '  %skendi kopyanı açmak için:%s %skendi-kopyam%s\n\n' "$C_SOL" "$C_SIF" "$C_VUR" "$C_SIF"
+  else
+    printf '  %sana kopya · dal: %s%s\n\n' "$C_SOL" "${DAL:-?}" "$C_SIF"
+  fi
+  exit 0
+fi
+
+if [ "$MOD" = "olc" ]; then
+  _durum_yaz
+  if [ "$BAGLI" -eq 0 ]; then
+    if [ -d "$KOPYA" ]; then printf '  Kendi kopyan HAZIR:  %s%s%s\n' "$C_VUR" "$KOPYA" "$C_SIF"
+    else printf '  Kendi kopyanı açmak için:  %skendi-kopyam%s\n' "$C_VUR" "$C_SIF"; fi
+    printf '  %s(kuru-koşu — hiçbir şey yazılmadı)%s\n\n' "$C_SOL" "$C_SIF"
+  fi
+  exit 0
+fi
+
+# ── --kapat ──────────────────────────────────────────────────────────────────
+if [ "$MOD" = "kapat" ]; then
+  if [ "$BAGLI" -eq 0 ]; then
+    printf '\n  %sBurası ANA kopya — kaldırılacak bir şey yok.%s\n' "$C_SAR" "$C_SIF"
+    printf '  %sAna kopya asla silinmez; kapatılacak olan kendi kopyandır (içinde çağır).%s\n\n' "$C_SOL" "$C_SIF"
+    exit 2
+  fi
+  if [ "$KIRLI" -gt 0 ]; then
+    printf '\n  %s✗ Kapatmadım: %s kaydedilmemiş değişiklik var.%s\n' "$C_KRM" "$KIRLI" "$C_SIF"
+    printf '  %sÖnce işini kaydet (ya da bilinçli olarak at), sonra tekrar dene.%s\n\n' "$C_SOL" "$C_SIF"
+    exit 1
+  fi
+  ANA_KOK="$(cd "$ORTAK/.." 2>/dev/null && pwd)"
+  # ⚠️ "Gönderilmemiş kayıt" ölçümü İKİ HÂLDE ayrı ölçülür. Naif ölçüm (`git log | wc -l`)
+  # taze açılmış kopyayı da "gönderilmemiş" sayardı: dal ana dalın tepesinde durur, kendine
+  # ait TEK kaydı yoktur — kaldırmak hiçbir şey kaybettirmez. Doğru soru "bu dala ÖZGÜ kayıt
+  # başka hiçbir yerde duruyor mu?"dur.
+  if [ -n "$(git remote 2>/dev/null)" ]; then
+    ITILMEMIS="$(git log --oneline HEAD --not --remotes 2>/dev/null | wc -l | tr -d ' ')"
+    NEREYE="gönder (git push) ya da öneri (PR) olarak aç"
+  else
+    ANA_HEAD="$(git -C "$ANA_KOK" rev-parse HEAD 2>/dev/null)"
+    if [ -n "$ANA_HEAD" ]; then
+      ITILMEMIS="$(git log --oneline HEAD --not "$ANA_HEAD" 2>/dev/null | wc -l | tr -d ' ')"
+    else
+      ITILMEMIS="?"
+    fi
+    NEREYE="ana kopyaya birleştir (bu depoda uzak sunucu yok)"
+  fi
+  # ⚠️ DÜRÜST GEREKÇE (kendi mutasyon-sınamamın düzelttiği iddia, 2026-07-30):
+  # `git worktree remove` YALNIZ çalışma dizinini kaldırır — DALI SİLMEZ. Kaydedilmiş iş
+  # git geçmişinde kalır. Bu yüzden gönderilmemiş kayıt bir RED sebebi değil, bir UYARI
+  # sebebidir. Önceki taslağım "silersem o iş kaybolur" diyordu; bu doğru değildi ve
+  # yanlış gerekçeyle konulan sürtünme, sürtünmenin en kötü türüdür.
+  printf '\n  Kapatılacak kopya:  %s\n' "$KOK"
+  if [ "$ITILMEMIS" = "?" ]; then
+    printf '  %s⚠ bu dalın başka yerde durup durmadığını ölçemedim%s\n' "$C_SAR" "$C_SIF"
+  elif [ "$ITILMEMIS" -gt 0 ]; then
+    printf '  %s⚠ bu dalda yalnız burada duran %s kayıt var%s — dal SİLİNMEZ, iş geçmişte kalır.\n' \
+           "$C_SAR" "$ITILMEMIS" "$C_SIF"
+    printf '  %sYine de sırası: %s.%s\n' "$C_SOL" "$NEREYE" "$C_SIF"
+  fi
+  printf '  Temiz ✓  %s(kaydedilmemiş dosya yok)%s\n' "$C_SOL" "$C_SIF"
+  onay="h"
+  if [ -n "${KENDI_KOPYAM_TEST_ONAY:-}" ]; then onay="$KENDI_KOPYAM_TEST_ONAY"
+  elif [ -r /dev/tty ]; then printf '  Kaldırayım mı? [e/H] '; read -r onay < /dev/tty || onay="h"; fi
+  case "${onay:-h}" in e|E|y|Y) : ;; *) printf '  vazgeçildi.\n\n'; exit 0 ;; esac
+  if [ -z "$ANA_KOK" ] || [ ! -d "$ANA_KOK" ]; then
+    printf '  %s✗ ana kopyayı bulamadım — elle: git worktree remove %s%s\n\n' "$C_KRM" "$KOK" "$C_SIF"; exit 1
+  fi
+  if git -C "$ANA_KOK" worktree remove "$KOK" 2>&1; then
+    printf '  %s✓ kaldırıldı%s — artık ana kopyada çalışıyorsun: %s\n' "$C_YSL" "$C_SIF" "$ANA_KOK"
+    printf '  %sdal (%s) SİLİNMEDİ; işin git geçmişinde duruyor.%s\n\n' "$C_SOL" "$DAL" "$C_SIF"
+    exit 0
+  fi
+  printf '  %s✗ kaldırılamadı (yukarıdaki git mesajı)%s\n\n' "$C_KRM" "$C_SIF"; exit 1
+fi
+
+# ── AÇ ───────────────────────────────────────────────────────────────────────
+_durum_yaz
+
+if [ "$BAGLI" -eq 1 ]; then
+  printf '  Yeni bir kopyaya ihtiyacın yok. %sÇalışmaya devam.%s\n\n' "$C_SOL" "$C_SIF"
+  exit 0
+fi
+
+if [ "$COMMIT_VAR" -eq 0 ]; then
+  printf '  %s✗ Bu depoda henüz hiç kayıt yok%s — ayrı kopya ancak ilk kayıttan sonra açılabilir.\n' "$C_SAR" "$C_SIF"
+  printf '  %s(git bunu böyle istiyor; bir engel değil, sıra meselesi.)%s\n\n' "$C_SOL" "$C_SIF"
+  exit 3
+fi
+
+if [ -d "$KOPYA" ]; then
+  printf '  %s✓ Kendi kopyan zaten var:%s %s\n' "$C_YSL" "$C_SIF" "$KOPYA"
+else
+  # Dal zaten varsa YENİDEN OLUŞTURMA (-b düşer) → var olan dala bağlan.
+  if git show-ref --verify -q "refs/heads/$YENI_DAL"; then
+    cikti="$(git worktree add "$KOPYA" "$YENI_DAL" 2>&1)"; rc=$?
+  else
+    cikti="$(git worktree add -b "$YENI_DAL" "$KOPYA" 2>&1)"; rc=$?
+  fi
+  if [ "$rc" -ne 0 ]; then
+    printf '  %s✗ Kopya açılamadı.%s\n' "$C_KRM" "$C_SIF"
+    printf '%s\n' "$cikti" | sed 's/^/    /'
+    printf '  %s(dal başka bir kopyada açık olabilir; başka bir konu adı dene: kendi-kopyam <konu>)%s\n\n' "$C_SOL" "$C_SIF"
+    exit 1
+  fi
+  printf '  %s✓ Kendi kopyan açıldı%s\n' "$C_YSL" "$C_SIF"
+  printf '     yer:  %s\n' "$KOPYA"
+  printf '     dal:  %s\n' "$YENI_DAL"
+fi
+printf '\n  %sArtık ana kopyayı kimseyle paylaşmıyorsun; dal değiştirmen kimsenin işini bozmaz.%s\n' "$C_SOL" "$C_SIF"
+printf '  Oraya geçmek için:  %scd %s%s\n\n' "$C_VUR" "$KOPYA" "$C_SIF"
+
+# Etkileşimli terminalde tek adımı da biz atalım — ALT kabuk (exec DEĞİL): `exit`
+# yazınca kullanıcı eski dizinine döner, terminali kapanmaz.
+if [ -z "${KENDI_KOPYAM_TEST_MASA:-}" ] && [ -t 0 ] && [ -t 1 ] && [ -r /dev/tty ]; then
+  printf '  Şimdi oraya geçelim mi? [E/h] '
+  read -r g < /dev/tty || g="h"
+  case "${g:-E}" in
+    h|H|n|N) printf '\n' ;;
+    *) printf '\n  %s(çıkmak için: exit — buraya geri dönersin)%s\n\n' "$C_SOL" "$C_SIF"
+       cd "$KOPYA" && bash -l ;;
+  esac
+fi
+exit 0
