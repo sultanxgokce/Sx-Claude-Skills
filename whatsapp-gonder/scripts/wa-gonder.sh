@@ -19,6 +19,16 @@ set -uo pipefail
 GECIT="${WA_GECIT:-http://cloudtop-wa:8790}"
 KIME="Sultan"; METIN=""; DOSYA=""; NOT=""; MOD="metin"
 
+# ── Kutu jetonu (kimlik) ─────────────────────────────────────────────────────
+# Geçit 2026-07-29'dan beri kimlik istiyor; jetonsuz istek 401 {"hata":"jeton_yok"} döner.
+# ⚠️ DEĞER-SINIFI: jeton bir SIRDIR — ekrana/loga/hata mesajına ASLA basılmaz.
+_jeton_oku() {
+  [ -n "${WA_JETON:-}" ] && { printf '%s' "$WA_JETON"; return 0; }
+  [ -r /config/.wa-jeton ] && { head -1 /config/.wa-jeton | tr -d '\r\n'; return 0; }
+  return 1
+}
+JETON="$(_jeton_oku)" || JETON=""
+
 while [ $# -gt 0 ]; do
   case "$1" in
     --kime)  KIME="${2:-}"; shift 2 ;;
@@ -53,10 +63,11 @@ _cagir() { # _cagir <yol> [gövde] → http kodunu basar; curl düşerse "000"
       echo "000"; printf 'wa-gonder: geçici dosya açılamadı (gövde yazılamadı)\n' >&2; return 0; }
     printf '%s' "$2" > "$govde_dosya"
     kod=$(curl -s -m 30 -o "$YANIT" -w '%{http_code}' \
-      -X POST -H 'content-type: application/json' -d "@$govde_dosya" "$GECIT$1" 2>/dev/null); rc=$?
+      -X POST -H 'content-type: application/json' -H "x-wa-jeton: $JETON" \
+      -d "@$govde_dosya" "$GECIT$1" 2>/dev/null); rc=$?
     rm -f "$govde_dosya"
   else
-    kod=$(curl -s -m 15 -o "$YANIT" -w '%{http_code}' "$GECIT$1" 2>/dev/null); rc=$?
+    kod=$(curl -s -m 15 -o "$YANIT" -w '%{http_code}' -H "x-wa-jeton: $JETON" "$GECIT$1" 2>/dev/null); rc=$?
   fi
   # curl'ün kendi hatası sessiz geçmez — "000" fail-closed sinyalidir. AMA NEDENİ DE
   # SÖYLENİR: eskiden her rc≠0 "ağ" gibi görünüyordu; 126/127 ağ değil, curl'ün hiç
