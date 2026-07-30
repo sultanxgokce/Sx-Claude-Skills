@@ -40,15 +40,35 @@ YANIT="$(mktemp "${TMPDIR:-/tmp}/wa-yanit.XXXXXX")" || { echo "HATA: gecici dosy
 trap 'rm -f "$YANIT"' EXIT
 
 _cagir() { # _cagir <yol> [gövde] → http kodunu basar; curl düşerse "000"
-  local kod rc
+  local kod rc govde_dosya=""
   if [ -n "${2:-}" ]; then
+    # GÖVDE DOSYADAN GİDER, argüman olarak DEĞİL. NİÇİN: `-d "$2"` gövdeyi komut satırı
+    # argümanı yapıyordu; ~230 KB'lık bir dosya eki base64'lendiğinde kabuğun ARG_MAX
+    # sınırı aşılıyor ve curl exec() aşamasında HİÇ BAŞLAMADAN rc=126 ile ölüyordu.
+    # Script bunu ağ hatası sanıp "geçide ulaşılamıyor" diyordu — yanlış teşhis, çünkü
+    # geçit ayaktaydı ve /saglik 200 dönüyordu (firsthand: cloudtop-tez, 2026-07-30,
+    # 44 sayfalık PDF 3 kez üst üste "gönderilemedi"). Dosya yolu sabit uzunlukta olduğu
+    # için argüman listesi büyümez; gövde boyutu ARG_MAX'a tabi değildir.
+    govde_dosya="$(mktemp "${TMPDIR:-/tmp}/wa-govde.XXXXXX")" || {
+      echo "000"; printf 'wa-gonder: geçici dosya açılamadı (gövde yazılamadı)\n' >&2; return 0; }
+    printf '%s' "$2" > "$govde_dosya"
     kod=$(curl -s -m 30 -o "$YANIT" -w '%{http_code}' \
-      -X POST -H 'content-type: application/json' -d "$2" "$GECIT$1" 2>/dev/null); rc=$?
+      -X POST -H 'content-type: application/json' -d "@$govde_dosya" "$GECIT$1" 2>/dev/null); rc=$?
+    rm -f "$govde_dosya"
   else
     kod=$(curl -s -m 15 -o "$YANIT" -w '%{http_code}' "$GECIT$1" 2>/dev/null); rc=$?
   fi
-  # curl'ün kendi hatası (yazma/ağ) sessiz geçmez — "000" fail-closed sinyalidir.
-  [ "$rc" -eq 0 ] || { echo "000"; return 0; }
+  # curl'ün kendi hatası sessiz geçmez — "000" fail-closed sinyalidir. AMA NEDENİ DE
+  # SÖYLENİR: eskiden her rc≠0 "ağ" gibi görünüyordu; 126/127 ağ değil, curl'ün hiç
+  # çalışamamasıdır ve bambaşka bir remediation ister (ölçemedim ≠ ulaşamadım).
+  if [ "$rc" -ne 0 ]; then
+    case "$rc" in
+      126|127) printf 'wa-gonder: curl ÇALIŞTIRILAMADI (rc=%s) — bu bir ağ hatası DEĞİL; komut/argüman sorunu.\n' "$rc" >&2 ;;
+      28)      printf 'wa-gonder: curl zaman aşımı (rc=28) — geçit yanıt vermedi.\n' >&2 ;;
+      *)       printf 'wa-gonder: curl düştü (rc=%s) — geçide ulaşılamadı.\n' "$rc" >&2 ;;
+    esac
+    echo "000"; return 0
+  fi
   echo "$kod"
 }
 
