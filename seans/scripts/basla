@@ -40,6 +40,28 @@ else
   C_BAS=""; C_SOL=""; C_VUR=""; C_YSL=""; C_KRM=""; C_SAR=""; C_SIF=""
 fi
 
+# ── OK-TUŞLU SEÇİCİ ──────────────────────────────────────────────────────────
+# NİÇİN (Sultan, 2026-07-30 canlı test): çıplak `read` ok-tuşlarını harf sanıyor ve ekrana
+# `^[[B^[[A` basıyordu ("saçma saçma karakterler"). fzf bu kutuda ZATEN kurulu ve `cs` de
+# onu kullanıyor — yeni bağımlılık yok, tutarlı davranış var.
+# Sözleşme: fzf varsa ok+Enter (yazarak da süzülür); yoksa numara-okuma yedeği.
+# Çıktı: seçilen satırın İLK jetonu (menü numarası ya da üye sırası). ESC/iptal → boş.
+_sec() {  # _sec "<baslik>" <satir...>
+  local baslik="$1"; shift
+  if [ -n "${BASLA_TEST_SECIM:-}" ]; then printf '%s\n' "${BASLA_TEST_UYE:-}"; return 0; fi
+  if command -v fzf >/dev/null 2>&1 && [ -t 0 ] && [ -t 1 ]; then
+    printf '%s\n' "$@" | fzf --ansi --no-multi --height=~60% --reverse --border=none \
+        --prompt='› ' --header="$baslik" --info=inline \
+        --bind='esc:abort,q:abort' 2>/dev/null | awk '{print $1}'
+    return 0
+  fi
+  # yedek: numara-okuma (fzf yok ya da TTY yok)
+  printf '%s\n' "$@"
+  printf '\n  Seçimin (numara): '
+  local s; read -r s || s=""
+  printf '%s\n' "$s"
+}
+
 _ekip_blogu() {
   local out rc
   out="$(bash "$HERE/ekip-durum.sh" 2>/dev/null)"; rc=$?
@@ -96,20 +118,8 @@ _ekran() {
   fi
   printf '\n'
   _ekip_blogu
-  printf '  %sNe yapmak istersin?%s\n\n' "$C_BAS" "$C_SIF"
-  if [ "${EKIP_YOK:-0}" -eq 1 ]; then
-    printf '   %s1  Ekibi kontrol et / onar        (bu dizinde ekip yok)%s\n' "$C_SOL" "$C_SIF"
-    printf '   %s2  Bir ekip üyesine geç           (bu dizinde ekip yok)%s\n' "$C_SOL" "$C_SIF"
-  else
-    printf '   %s1%s  Ekibi kontrol et / onar        %ssüz → eksikleri kaldır → duplike temizle%s\n' "$C_VUR" "$C_SIF" "$C_SOL" "$C_SIF"
-    printf '   %s2%s  Bir ekip üyesine geç\n'                                                        "$C_VUR" "$C_SIF"
-  fi
-  printf '   %s3%s  Yeni sohbet başlat            %sadını sorar%s\n'                               "$C_VUR" "$C_SIF" "$C_SOL" "$C_SIF"
-  printf '   %s4%s  Kuralları ve komutları göster\n'                                               "$C_VUR" "$C_SIF"
-  printf '   %s5%s  Eski sohbetlerde ara          %stüm liste — kalabalıktır%s\n'                  "$C_VUR" "$C_SIF" "$C_SOL" "$C_SIF"
-  printf '\n'
-  printf '   %sEnter%s  sadece terminal    %sq%s  çık    %s(bu ekranı sonra %sbasla%s ile geri getirirsin)%s\n\n' \
-         "$C_VUR" "$C_SIF" "$C_VUR" "$C_SIF" "$C_SOL" "$C_BAS" "$C_SIF$C_SOL" "$C_SIF"
+  printf '  %sHazır%s — %sok tuşlarıyla seç, Enter ile onayla, ESC ile çık%s\n\n' \
+         "$C_BAS" "$C_SIF" "$C_SOL" "$C_SIF"
 }
 
 _uye_sec() {
@@ -125,14 +135,11 @@ _uye_sec() {
   fi
   local out; out="$(printf '%s\n' "$ham" | awk -F'\t' '$1!="ÖZET" && $1!="" && NF>=3{print}')"
   [ -n "$out" ] || { printf '  ekip listesi boş — geri dönülüyor\n\n'; return 0; }
-  printf '\n  %sHangi üye?%s  %s(boş = geri)%s\n\n' "$C_BAS" "$C_SIF" "$C_SOL" "$C_SIF"
-  local i=0; while IFS=$'\t' read -r uid sess durum not; do
-    i=$((i+1)); printf '   %s%s%s  %-14s %s%s%s\n' "$C_VUR" "$i" "$C_SIF" "$uid" "$C_SOL" "$durum" "$C_SIF"
+  local -a satirlar=(); local i=0
+  while IFS=$'\t' read -r uid sess durum not; do
+    i=$((i+1)); satirlar+=("$(printf '%s  %-16s %s%s' "$i" "$uid" "$durum" "${not:+  $not}")")
   done <<< "$out"
-  printf '\n  Seçimin: '
-  local s
-  if [ -n "${BASLA_TEST_SECIM:-}" ]; then s="${BASLA_TEST_UYE:-}"; printf '%s\n' "$s"   # test: alt-soru da kancadan
-  else read -r s || s=""; fi
+  local s; s="$(_sec 'Hangi üye?  (ok tuşlarıyla seç · Enter · ESC = geri)' "${satirlar[@]}")"
   [ -n "$s" ] || return 0
   local hedef; hedef="$(printf '%s\n' "$out" | awk -F'\t' -v n="$s" 'NR==n{print $2}')"
   [ -n "$hedef" ] || { printf '  (anlamadım)\n'; return 0; }
@@ -179,11 +186,25 @@ if [ -n "${BASLA_TEST_SECIM:-}" ]; then
 fi
 
 # ── ETKILESIMLI DONGU (tek otorite: _eylem) ──────────────────────────────────
+# Menü de ok-tuşlu: Sultan okları ANA MENÜde denedi ve ekrana kaçış-kodu bastı.
+_menu_satirlari() {
+  local a b
+  if [ "${EKIP_YOK:-0}" -eq 1 ]; then a="(bu dizinde ekip yok)"; b="(bu dizinde ekip yok)"
+  else a="süz → eksikleri kaldır → duplike temizle"; b=""; fi
+  printf '%s\n' \
+    "1  Ekibi kontrol et / onar          $a" \
+    "2  Bir ekip üyesine geç             $b" \
+    "3  Yeni sohbet başlat               adını sorar" \
+    "4  Kuralları ve komutları göster" \
+    "5  Eski sohbetlerde ara             tüm liste — kalabalıktır" \
+    "q  Çık"
+}
 while :; do
-  printf '  Seçimin: '
-  read -r secim || secim=""
+  mapfile -t _MS < <(_menu_satirlari)
+  secim="$(_sec 'Ne yapmak istersin?  (ok tuşlarıyla seç · Enter · ESC = çık)' "${_MS[@]}")"
   printf '\n'
-  _eylem "${secim:-}" ; rc=$?
+  [ -z "${secim:-}" ] && exit 0
+  _eylem "${secim}" ; rc=$?
   [ "$rc" -eq 9 ] && exit 0
   _ekran   # ← GERİYE DÖNÜŞ: her eylemden sonra menü yeniden gelir
 done
