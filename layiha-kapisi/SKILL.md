@@ -1,24 +1,29 @@
 ---
-name: defter-kapisi
+name: layiha-kapisi
 type: agent
 version: 0.1.0
 description: >
   Sultan'la doğal-dil sohbetinde iki tekrarlayan-anı standartlaştırır ki AI'ın izleyeceği yol NET olsun
   (refleks-hızında, tutarlı). (A) GÖREV-YAKALAMA KAPISI — Sultan bir işten/görevden bahsedince: önce
-  YENİ-görev mi yoksa MEVCUT-konuya-ekleme mi olduğunu ayırt et; YENİ ise deftere yazmadan ÖNCE
-  çoktan-seçmeli onay sor ("Yeni görev algılandı: [başlık] / [açıklama] — deftere kaydedeyim mi?
-  [Evet / Düzenle / Hayır]"), EKLEME ise mevcut kaydı güncelle → böylece defter gürültüsüz + dublikasyonsuz.
-  (B) MAILBOX-YANIT PROSEDÜRÜ — bir defter/mailbox mesajı gelince net-hızlı sıra: kartı-oku → anla →
-  SADE-dille-yanıtla → gereken-aksiyonu-al → thread'i-kapat. Amaç: temiz defter + hızlı-tutarlı yanıt.
+  YENİ-görev mi yoksa MEVCUT-konuya-ekleme mi olduğunu ayırt et; YENİ ise LAYİHAYA yazmadan ÖNCE
+  çoktan-seçmeli onay sor ("Yeni görev algılandı: [başlık] / [açıklama] — layiha olarak kaydedeyim mi?
+  [Evet / Düzenle / Hayır]"), EKLEME ise mevcut kaydı güncelle → böylece kayıt gürültüsüz + dublikasyonsuz.
+  (B) SULTAN-MESAJI YANIT PROSEDÜRÜ — Sultan panelden bir mesaj yazınca net-hızlı sıra: mesajı-oku → anla →
+  SADE-dille-yanıtla → gereken-aksiyonu-al → thread'i-kapat. Amaç: temiz kayıt + hızlı-tutarlı yanıt.
 install_target:
   skills: .claude/skills/
 stacks: ["*"]
 author: sultanxgokce
-tags: [defter, gorev-yakalama, mailbox, sultan-dili, kapi, onay-gate, capture, ilerleme-akisi]
+tags: [layiha, is-yakalama, sultan-mesaji, sultan-dili, kapi, onay-gate, capture, ilerleme-akisi]
 nexus_catalog: "AI Engineer Workbook > Skill Kataloğu"
 ---
 
-# Defter-Kapısı — görev-yakalama + mailbox-yanıt prosedürü
+# Layiha-Kapısı — iş-yakalama + Sultan-mesajı yanıt prosedürü
+
+> ⚖️ **2026-07-29 · ADR-026:** `k####` **kart tabanlı iş-takibi EMEKLİ**; iş-kaydı artık **layiha**dır.
+> Bu skill'in eski adı `defter-kapisi`ydı ve PROTOKOL A kart açıyordu — artık layiha açar.
+> **Emekli olan YALNIZ `k####` iş-takibidir:** `seyir-defteri` · `layiha-defteri` · `bulgu-havuzu`
+> yaşamaya devam eder. PROTOKOL B (Sultan-mesajı yanıtı) **aynen geçerlidir** — o kanal canlı.
 
 ## Ne işe yarar
 Sultan'la terminalde doğal-dil konuşurken **iki an** tekrar tekrar geliyor ve ikisi de standart-yol olmadan
@@ -35,7 +40,7 @@ ne yapacağın net olur ve mesaj geldiğinde şak şak şak hızlı yaparsın."*
 ## Ne zaman devreye girer (tetikler)
 - **PROTOKOL A:** Sultan doğal sohbette bir **iş / görev / yapılacak / "şunu da yapalım" / "şuna bakalım"**
   niyeti ifade ettiğinde. (Soru sorması, durum-istemesi, sohbet ≠ görev — A1 filtresi.)
-- **PROTOKOL B:** Bir **defter/mailbox mesajı** geldiğinde (Nexus: `defter-mailbox.sh check` bekleyen döndürür;
+- **PROTOKOL B:** Sultan panelden bir **mesaj** yazdığında (Nexus: `defter-mailbox.sh check` bekleyeni döndürür;
   ya da harness "📬 Sultan mailbox'a yazdı" ile haber verir).
 
 > **Güvenilir-tetik (hook backstop):** PROTOKOL A refleks-hızı model'e-bağlı olduğu için atlanabiliyordu.
@@ -47,17 +52,19 @@ ne yapacağın net olur ve mesaj geldiğinde şak şak şak hızlı yaparsın."*
 
 ---
 
-## PROTOKOL A — Görev-Yakalama Kapısı
+## PROTOKOL A — İş-Yakalama Kapısı
 
-### A1 · Algıla: bu bir görev-bahsi mi?
-Her cümle görev değil. **Görev-sinyali:** yeni-yapılacak-iş, hedef, "şunu kuralım/yapalım/ekleyelim/düzeltelim",
-gelecek-kip + eylem. **Görev-DEĞİL:** soru ("X nedir?"), durum-isteği ("nerede kaldık?"), onay/ret, salt-sohbet,
-zaten-yürüyen-işe-anlık-yönlendirme. Şüpheliyse görev-değil say (yanlış-kart açmaktansa açmamak yeğ).
+### A1 · Algıla: bu bir iş-bahsi mi?
+Her cümle iş değil. **İş-sinyali:** yeni-yapılacak-iş, hedef, "şunu kuralım/yapalım/ekleyelim/düzeltelim",
+gelecek-kip + eylem. **İŞ-DEĞİL:** soru ("X nedir?"), durum-isteği ("nerede kaldık?"), onay/ret, salt-sohbet,
+zaten-yürüyen-işe-anlık-yönlendirme. Şüpheliyse iş-değil say (yanlış-layiha açmaktansa açmamak yeğ).
 
-### A2 · Ayır: YENİ görev mi, MEVCUT'a ekleme mi? (gürültü-önleyici çekirdek)
-**Yazmadan ÖNCE mevcut açık-kartları tara** — konu-örtüşmesi var mı?
-- Nexus: `bash scripts/defter-mailbox.sh` çevresindeki defter ya da `katip-defter.jsonl` / `/api/defter/*`
-  açık-kartları; kart başlıkları + `ham_istek`/`sultan_ozeti` alanlarında konu-eşleşmesi ara.
+### A2 · Ayır: YENİ iş mi, MEVCUT'a ekleme mi? (gürültü-önleyici çekirdek)
+**Yazmadan ÖNCE mevcut açık-layihaları tara** — konu-örtüşmesi var mı?
+- **Kanonik tarama:** `bash ~/.claude/skills/layiha/scripts/layiha-defteri.sh liste --aktif` →
+  başlık + konu alanlarında eşleşme ara. Aday-havuzu da bak: `layiha-aday-havuzu.sh liste`.
+  ⚠️ **Bu adım atlanınca ne olur (firsthand, 2026-07-30):** L33 "Karşılama Ekranı" mint edildi, SONRA
+  L21'in aynı derde baktığı görüldü → sınır elle yazılmak zorunda kaldı. Tarama ucuz, çakışma pahalı.
 - **Örtüşme VAR** → bu bir **EKLEME** (A4). Yeni-kart AÇMA.
 - **Örtüşme YOK** → bu **YENİ görev** (A3).
 
@@ -83,14 +90,17 @@ Seçenekler:
 "Bunu [mevcut-kart-başlığı]'na ekliyorum, doğru mu?" — ama yeni-kart açma refleksine düşme.
 
 ### A5 · Yaz (yalnız onaydan sonra)
-Onaylanan başlık+açıklamayı projenin defter-yazma-yoluyla kaydet (Nexus: defter/katip kaydı). Kaydettikten
-sonra tek-satır teyit: "📒 kaydedildi: <başlık>". Sultan'a değer-döndür, sessizce yazıp geçme.
+Onaylanan başlık+açıklamayı **layiha olarak** kaydet:
+`bash ~/.claude/skills/layiha/scripts/layiha-defteri.sh ekle --slug <slug> --konu "<Kısa Ad — detay>" ...`
+(araştırma gerekiyorsa doğrudan `/layiha` skill'ini çağır — o araştırır, sabitler, ilan üretir).
+Kaydettikten sonra tek-satır teyit: "📋 kaydedildi: <KOD> <başlık>". Sultan'a değer-döndür, sessizce
+yazıp geçme.
 
 ---
 
-## PROTOKOL B — Mailbox-Yanıt Prosedürü
+## PROTOKOL B — Sultan-Mesajı Yanıt Prosedürü *(DEĞİŞMEDİ — kanal canlı)*
 
-Bir defter/mailbox mesajı geldiğinde şu **5 adımı sırayla** uygula — dağılma, hızlı ol:
+Sultan panelden bir mesaj yazdığında şu **5 adımı sırayla** uygula — dağılma, hızlı ol:
 
 ### B1 · Al
 `bash scripts/defter-mailbox.sh check` (bekleyeni gör) → `... raw <id>` (tam içerik + hangi kart). Hangi
@@ -118,12 +128,26 @@ düşer). Aksiyon aldıysan "yaptım: <ne>" de. Thread'i asılı bırakma.
 ---
 
 ## Değişmezler / Yasaklar
-- **A3 onay-gate atlanmaz:** Sultan onaylamadan yeni-kart YAZMA. Şüphe → sor ya da yazma.
-- **Dublikasyon-önleme A2 zorunlu:** yazmadan önce mevcut-kartları tara; ekleme'yi yeni-kart yapma.
+- **A3 onay-gate atlanmaz:** Sultan onaylamadan yeni-layiha YAZMA. Şüphe → sor ya da yazma.
+- **Dublikasyon-önleme A2 zorunlu:** yazmadan önce mevcut-layihaları tara; ekleme'yi yeni-layiha yapma.
 - **İçerik-güncelleme deploysuz olmalı** (varsa): redeploy bekletme; override-yolu kullan (Sultan bunu açıkça
   istedi — "yazışarak içeriği hemen güncelleyebilmeni (deploysuz) isterim, bu önemli").
 - **İnsan-onay-alanına yazma:** onay/karar Sultan'ındır; sen taslak-öner + uygula, onay-değeri üretme.
 - **Sade-dil:** Sultan'a dönüşte jargon yok (`/sultanca`).
+
+## ⚠️ Hangi komut emekli, hangisi CANLI (karıştırma)
+
+`defter-mailbox.sh` betiği **tümüyle emekli DEĞİL** — alt-komutları iki gruba ayrılır:
+
+| Alt-komut | Durum | Neden |
+|---|---|---|
+| `kart` · `durum` | 🔴 **EMEKLİ** (ADR-026) | `k####` iş-takibi kapandı → iş-kaydı layihada |
+| `check` · `raw` · `reply` | 🟢 **CANLI** | Sultan-mesaj kanalı; PROTOKOL B bunun üstünde çalışır |
+
+Bu ayrım, L28 tasarımının **kendi bitiş-ölçütünü düzeltir**: doküman FAZ-3 kanıtı olarak
+*"`grep -rl 'defter-mailbox\.sh'` → 0 eşleşme"* yazmıştı — **o ölçüt yanlıştı**, çünkü mesaj kanalı
+aynı betiği meşru biçimde kullanmaya devam ediyor. Doğru ölçüt: **`defter-mailbox.sh kart|durum`
+çağrısı 0** olmalı; `check|raw|reply` sayısı korunur.
 
 ## Global-bağlantı notu
 Bu skill **global** kurulur (`_global` → HOME=/config, her projede yüklenir). Nexus'a özgü uçlar

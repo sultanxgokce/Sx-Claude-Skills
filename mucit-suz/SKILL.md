@@ -139,7 +139,8 @@ Her `adaylar[]` öğesi için sırayla:
 - mucit-defteri'ne her aday `verdikt:preview` satırı (tavana SAYILMAZ).
 
 ### Canlı (kalibrasyon bittikten sonra)
-- Her seçilen aday için: prod-deftere aday-kart oluştur (durum=`aday`; defter-mailbox akışıyla) → `k####` al.
+- Her seçilen aday için: **layiha aday-havuzuna** yaz (`layiha-aday-havuzu.sh ekle`) → `A###` al.
+  ⚠️ Eski yol (prod-deftere `k####` aday-kartı) **emekli** — ADR-026, 2026-07-29.
 - `bash scripts/sevk-arz.sh aday <k####>` **(yalnız Nexus odasında var — yoksa bu adımı atla)** → source=`aday-arzi`, Sultan defterde tek-tuş görür.
 - mucit-defteri'ne `verdikt:aday-arzi, kart:<k####>` (bu tavana SAYILIR).
 
