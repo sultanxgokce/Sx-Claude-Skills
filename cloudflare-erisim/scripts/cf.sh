@@ -262,13 +262,36 @@ cmd_access_ensure(){  # <hostname> [email] [label]  — idempotent
   hit="$(echo "$pols" | jq -r --arg e "$email" '.result[]? | select(.decision=="allow") | .include[]?.email.email // empty' 2>/dev/null | grep -Fx "$email" || true)"
   if [ -n "$hit" ]; then
     ylw "• Policy zaten var: Allow $email"
-  else
-    local pbody presp
-    pbody="$(jq -n --arg e "$email" '{name:("Allow "+$e), decision:"allow", precedence:1, include:[{email:{email:$e}}]}')"
-    presp="$(api POST "/accounts/${ACCOUNT_ID}/access/apps/${app_id}/policies" "$pbody")"
-    ok "$presp" || { red "✗ policy eklenemedi:"; errs "$presp"; exit 1; }
-    grn "✓ Policy: Allow $email"
+    return 0
   fi
+
+  # ── İKİNCİ E-POSTA: yeni policy DEĞİL, mevcut policy'nin include'una EKLE ────────────
+  # NİÇİN (firsthand 2026-07-30): ikinci kez POST atmak `precedence` sabit 1 olduğu için
+  # "policy precedences must be unique" ile düşüyor. Emsal HUMA app'i: doğru çözüm tek
+  # policy'yi SÜPER-KÜMEYE çevirmek. ⚠️ EZME YOK — mevcut e-postalar okunup birleştirilir
+  # (Sultan'ın e-postası kaybolursa panel ona da kapanır).
+  local mevcut_id mevcut_epostalar
+  mevcut_id="$(echo "$pols" | jq -r 'first(.result[]? | select(.decision=="allow") | .id) // empty')"
+  if [ -n "$mevcut_id" ]; then
+    mevcut_epostalar="$(echo "$pols" | jq -c --arg id "$mevcut_id" \
+      '[.result[]? | select(.id==$id) | .include[]?.email.email // empty]')"
+    local birlesik pbody presp
+    birlesik="$(jq -cn --argjson m "$mevcut_epostalar" --arg e "$email" '($m + [$e]) | unique')"
+    pbody="$(jq -n --argjson eps "$birlesik" \
+      '{name:("Allow " + ($eps|join(", "))), decision:"allow", precedence:1,
+        include:($eps | map({email:{email:.}}))}')"
+    presp="$(api PUT "/accounts/${ACCOUNT_ID}/access/apps/${app_id}/policies/${mevcut_id}" "$pbody")"
+    ok "$presp" || { red "✗ policy güncellenemedi (mevcut e-postalar KORUNDU, değişiklik olmadı):"; errs "$presp"; exit 1; }
+    grn "✓ Policy güncellendi — izinli e-postalar: $(echo "$birlesik" | jq -r 'join(", ")')"
+    return 0
+  fi
+
+  # hiç allow-policy yok → ilkini oluştur
+  local pbody presp
+  pbody="$(jq -n --arg e "$email" '{name:("Allow "+$e), decision:"allow", precedence:1, include:[{email:{email:$e}}]}')"
+  presp="$(api POST "/accounts/${ACCOUNT_ID}/access/apps/${app_id}/policies" "$pbody")"
+  ok "$presp" || { red "✗ policy eklenemedi:"; errs "$presp"; exit 1; }
+  grn "✓ Policy: Allow $email"
 }
 
 cmd_dns_ensure(){  # <hostname>  — proxied CNAME → tünel; idempotent
