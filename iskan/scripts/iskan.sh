@@ -663,6 +663,42 @@ _iskan_yp_kardesler() {
     2) echo "[yeşil] setup-tunnel: '$ad' satırları zaten mevcut → atla (idempotent)" ;;
     *) echo "[kırmızı] setup-tunnel dokunuşu BAŞARISIZ (çıpa-eksik ya da bash -n düştü) — dosya dokunulmamış-eş geri-alındı: $tunnel_dosya" >&2; return 1 ;;
   esac
+  _iskan_yp_pano "$ad" "$(dirname "$tunnel_dosya")" || return 1
+}
+
+# _iskan_yp_pano <ad> <repo_infra> — ekip PANOSUNU aynı doğum-önerisine (PR) ekler.
+#
+# NİÇİN BURADA (L32 F3, 2026-07-30): "yeni proje doğunca çalışma ortamı hazır gelsin" işinin
+# yarısı bugün bağlandı (seans kapıları — cloudtop #208), yarısı elde kalmıştı: pano için
+# `pano-kur.sh` ZATEN `--zincir` kipiyle hazırdı (yapılandırma + compose + nginx, idempotent,
+# düşerse geri alır) ama onu ÇAĞIRAN yoktu (`grep -c pano-kur iskan.sh` = 0). Ayrı bir el-işi
+# adımı unutulmaya açıktır; panonun tarifi kutunun tarifiyle AYNI incelemeye girsin.
+#
+# ⛔ DIŞ KAPIYA DOKUNMAZ: pano-kur'un kendi doktrini (üreten ≠ işleten) tünel/Cloudflare-Access
+# dokunuşlarını insana bırakır; biz de bırakıyoruz — panonun adresi ve giriş izni doğum
+# çıktısında REÇETE olarak basılır, otomatik açılmaz.
+#
+# Kapatma: ISKAN_PANO=0 (bilinçli olarak panosuz doğum). Araç yoksa (cloudtop deposu görünmüyor)
+# UYARIR ve zinciri DÜŞÜRMEZ — pano ekip-ortamıdır, kutunun canlılığı ona bağlı değil.
+_iskan_yp_pano() {
+  local ad="$1" repo_infra="$2" arac rc
+  if [ "${ISKAN_PANO:-1}" = "0" ]; then
+    echo "[yeşil] pano: ISKAN_PANO=0 → bilinçli olarak atlandı"
+    return 0
+  fi
+  arac="${ISKAN_PANO_KUR:-$repo_infra/pano/pano-kur.sh}"
+  if [ ! -r "$arac" ]; then
+    echo "[uyarı] pano: kurucu bulunamadı ($arac) → pano bu doğuma girmedi; kutu etkilenmedi. Elle: infra/pano/pano-kur.sh $ad --ad '<Ad>' --zincir"
+    return 0
+  fi
+  # --ad panoda görünen isim: slug'ı Başharfi-büyük yap (ekip ilk toplantıda düzeltebilir).
+  local gorunen; gorunen="$(printf '%s' "$ad" | sed 's/^\(.\)/\U\1/')"
+  bash "$arac" "$ad" --ad "$gorunen" --zincir; rc=$?
+  case "$rc" in
+    0) echo "[yeşil] pano: yapılandırma + compose servisi + nginx sanal sunucusu doğum-önerisine eklendi (adres/giriş izni REÇETE — insan eliyle)" ;;
+    5) echo "[yeşil] pano: '$ad' panosu zaten tanımlı → atla (idempotent)" ;;
+    *) echo "[kırmızı] pano yazımı BAŞARISIZ (rc=$rc) — kurucu kendi geri-alımını yaptı; doğum DURdu" >&2; return 1 ;;
+  esac
 }
 
 # _iskan_tunnel_cipa_var <tunnel_dosya> — setup-tunnel.sh'in üç çıpası (hostname-değişkeni ·
