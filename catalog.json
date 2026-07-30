@@ -1165,8 +1165,8 @@
       "id": "seans",
       "type": "agent",
       "name": "SEANS — sohbet yonetimi + ekip kisayollari",
-      "version": "1.10.0",
-      "description": "Claude sohbetlerini listeleme/geri getirme/yeni acma motoru (cs) HER KUTUDA. Motor burada tek kopya yasar; cloudtop'taki eski cagri yolu ince kopruyle korunur (iki kopya yok, drift yok). Turkce kapilar: sessiongetir (kapanani geri getir) - yenisession (ad sorup acar, --yan ile ekrani boler) - gruba (projenin WhatsApp grubuna yaz) - yardim (komut listesi + kilavuz adresi). MAHREMIYET: cok-insanli kutuda liste kutu-yerel; tenant kutusunda yalniz kendi projesi gorunur, bilinmeyen gizlenir (fail-closed).",
+      "version": "1.11.0",
+      "description": "Claude sohbetlerini listeleme/geri getirme/yeni acma motoru (cs) HER KUTUDA. Motor burada tek kopya yasar; cloudtop'taki eski cagri yolu ince kopruyle korunur (iki kopya yok, drift yok). Turkce kapilar: sessiongetir (kapanani geri getir) - yenisession (ad sorup acar, --yan ile ekrani boler) - gruba (projenin WhatsApp grubuna yaz) - yardim (komut listesi + kilavuz adresi). MAHREMIYET: cok-insanli kutuda liste kutu-yerel; tenant kutusunda yalniz kendi projesi gorunur, bilinmeyen gizlenir (fail-closed). KOLTUK CAKISMASI: kendi-kopyam masaya ayri calisma kopyasi (git worktree) acar; basla ekrani paylasimi gorunur kilar (olcemezse sayi uydurmaz).",
       "installed_in": [
         "_global"
       ],

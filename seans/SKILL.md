@@ -1,10 +1,10 @@
 ---
 name: seans
-version: 1.10.0
+version: 1.11.0
 description: >
   Claude sohbetlerini yönetme ve ekip kısayolları — her kutuda çalışır.
   Motor (cs) burada tek kopya yaşar; cloudtop tarafındaki eski çağrı yolu ince köprüyle korunur.
-  Türkçe kapılar: basla · sessiongetir · yenisession · gruba · yardim — beşi PATH'e `seans-kur.sh` ile bağlanır (v1.3.0: önce hiçbiri PATH'te DEĞİLDİ).
+  Türkçe kapılar: basla · sessiongetir · yenisession · gruba · yardim · kendi-kopyam — altısı PATH'e `seans-kur.sh` ile bağlanır (v1.3.0: önce hiçbiri PATH'te DEĞİLDİ).
 install_target: { skills: .claude/skills/ }
 stacks: ["*"]
 author: sultanxgokce
@@ -22,7 +22,7 @@ kutularda (tenant'lar) komut **yoktu**. Aynı sınıf hata daha önce de yaşand
 el kitabı on odada"). Motor artık ortak mount'ta tek kopya; cloudtop'taki eski yol ince bir
 köprüdür — **iki kopya yoktur, drift doğmaz**.
 
-## Dört kapı (günlük kullanım)
+## Günlük kapılar
 
 | Komut | Ne yapar |
 |---|---|
@@ -30,6 +30,27 @@ köprüdür — **iki kopya yoktur, drift doğmaz**.
 | `yenisession` | Yeni sohbet açar; adını sorar. `yenisession --yan` ekranı bölüp **yanda** açar. |
 | `gruba "mesaj"` | Projenin WhatsApp grubuna yazar. Grup adı bir kez `.wa-grup` dosyasına yazılır. |
 | `yardim` | Komut listesini terminalde gösterir + projenin kılavuz adresine işaret eder (`.yardim-linki`). |
+| `kendi-kopyam` | Masaya **ayrı çalışma kopyası** açar (git worktree) — paylaşılan kopyada dal değiştirmenin kimsenin işini bozmaması için. `--nerede` yalnız ölçer · `--kapat` kaldırır (temiz olmalı). |
+
+## Neden `kendi-kopyam` var (ölçülmüş sorun)
+
+Bir kutuda birden çok masa (ekip üyesi) **aynı çalışma kopyasına** bakabilir. 2026-07-30'da
+huzur kutusunda ölçüldü: üç masa + insanların sekmeleri tek kopyayı paylaşıyordu —
+
+    git worktree list  →  /config/projects/huzur  d2bb6a8 [faz-0-tasarim]   ← tek satır
+
+Bunun anlamı: biri dal değiştirdiğinde ötekilerin **kaydedilmemiş işi** o dala taşınır ya da
+çakışır. Git bunu engellemez, kimse haber vermez. Ölçüm anında ağaç temizdi (yani iş kaybı
+olmamıştı) — pencere hâlâ açıktı, bu araç onu kapatır.
+
+İki parça birlikte çalışır:
+- **`basla` ekranı** paylaşımı GÖRÜNÜR kılar ("⚠ ana kopyayı 3 masa paylaşıyor"). Ölçemezse
+  sayı uydurmaz, "ölçemedim" der. Ekran hiçbir şeyi kendiliğinden değiştirmez.
+- **`kendi-kopyam`** çözer: masaya kendi kopyasını + kendi dalını verir. Ana kopyanın dalına
+  ve dosyalarına dokunmaz; çağrılmadıkça hiçbir şey olmaz.
+
+Sınırlar bilinçli: `--kapat` yalnız **temiz** kopyayı kaldırır ve **dalı silmez** (kaydedilmiş
+iş git geçmişinde kalır — kaldırma onu kaybetmez). Ana kopya asla silinmez.
 
 Motorun tamamı hâlâ elinizin altında: `cs ls` · `cs rename` · `cs note` · `cs sil` · `cs gc`
 (bkz. `cs --help`).

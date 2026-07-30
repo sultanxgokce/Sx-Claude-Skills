@@ -19,7 +19,7 @@ set -u
 
 HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 HEDEF_DIZIN="${SEANS_BIN_DIR:-$HOME/.local/bin}"
-KAPILAR="basla sessiongetir yenisession gruba yardim"
+KAPILAR="basla sessiongetir yenisession gruba yardim kendi-kopyam"
 KONTROL=0
 [ "${1:-}" = "--kontrol" ] && KONTROL=1
 
