@@ -1579,9 +1579,22 @@ have_fzf() { command -v fzf >/dev/null 2>&1; }
 # Görünür blok: ●/○ ref isim durum proje not  (renkler --ansi ile). Reload da bunu kullanır.
 cmd_feed() {
   require_jq
+  # KALABALIK KAPISI (Sultan, 2026-07-30): "kapanan sohbete dön deyince çok karmaşık bir
+  # cümbüşün içine düşüyorum". Ölçtüm: listenin 104 satırının 80'i KAPALI geçmişti — %88'i
+  # tarih, canlı iş 11 satır. Varsayılan artık son 15 kapalı; gerisi ^A ile açılır.
+  # ⚠️ SESSİZ KIRPMA YOK: gizlenen sayı listenin SONUNDA yazılır (aksi hâlde "hepsi bu"
+  # sanılır — bugün tam bu sınıftan üç arıza çıktı).
+  local TAM=0
+  [ "${1:-}" = "--hepsi" ] && TAM=1
+  local KAPALI_VARSAYILAN="${CS_KAPALI_LIMIT:-15}" KAPALI_TAM=80
+  local limit="$KAPALI_VARSAYILAN"; [ "$TAM" = "1" ] && limit="$KAPALI_TAM"
   local live_raw closed_raw all="" sorted
   live_raw=$(load_sessions) || true
-  closed_raw=$(load_closed_sessions 80) || true
+  closed_raw=$(load_closed_sessions "$limit") || true
+  local kapali_tum kapali_gosterilen gizli=0
+  kapali_tum=$(load_closed_sessions "$KAPALI_TAM" 2>/dev/null | grep -c . || printf '0')
+  kapali_gosterilen=$(printf '%s' "$closed_raw" | grep -c . || printf '0')
+  gizli=$(( kapali_tum - kapali_gosterilen )); [ "$gizli" -lt 0 ] && gizli=0
   [ -n "$live_raw" ]   && all+="$(printf '%s\n' "$live_raw" | awk -F'\t' \
     '{nn=split($6,a,"/");proj=a[nn];ref=($2!=""?$2:"["$1"]"); print "L\t"proj"\t"ref"\t"$4"\t"$5"\t"$7"\t"$3}')"$'\n'
   [ -n "$closed_raw" ] && all+="$(printf '%s\n' "$closed_raw" | awk -F'\t' \
@@ -1611,6 +1624,11 @@ cmd_feed() {
       printf "%s\t  %s %-7s %-30.30s %s%-8s%s %s\n", \
         sid, dot, ref, name, col, info, Z, note
     }'
+  # Gizlenen kapalı seansları AÇIKÇA söyle — seçilemez başlık satırı olarak (no-op).
+  if [ "$gizli" -gt 0 ]; then
+    printf '__hdr__\t%s  … %s kapalı seans daha var — ^A ile hepsini göster%s\n' \
+      "$(printf '\033[2m')" "$gizli" "$(printf '\033[0m')"
+  fi
 }
 
 # Önizleme paneli: seans özeti + transcript kuyruğu (son mesajlar). Argüman: sid.
@@ -1695,7 +1713,18 @@ cmd_newpick() {
   dir=$( ls -d /config/projects/*/ 2>/dev/null | sed 's:/*$::' | sort \
         | fzf --ansi --height=100% --layout=reverse --prompt='yeni seans · proje » ' \
               --header='Enter: bu projede yeni seans · ESC: iptal' ) || dir=""
-  if [ -n "$dir" ] && [ -d "$dir" ]; then cmd_new "$dir"; else exec cs menu; fi
+  if [ -n "$dir" ] && [ -d "$dir" ]; then
+    # AD SOR (Sultan, 2026-07-30): "rastgele açtığım sessionlarda onun amacı/adı istenmeli".
+    # Eskiden ^N adsız açıyordu → liste "—" ile doluyordu ve hangisi olduğu bilinmiyordu.
+    # Kardeş kapı `yenisession` bunu zaten soruyor; motor da `new --ad` kabul ediyor →
+    # yeni mekanizma İCAT EDİLMEDİ, var olan uç kullanıldı (ikinci gerçek doğmaz).
+    local ad=""
+    if [ -r /dev/tty ]; then
+      printf 'Bu sohbetin adı ne olsun? (boş bırakabilirsin): ' > /dev/tty
+      read -r ad < /dev/tty || ad=""
+    fi
+    if [ -n "$ad" ]; then cmd_new --ad "$ad" "$dir"; else cmd_new "$dir"; fi
+  else exec cs menu; fi
 }
 
 # Ana fzf menüsü: tek picker tüm aksiyonları barındırır (--bind), sağda önizleme.
@@ -1707,9 +1736,9 @@ cmd_menu_fzf() {
   local out key sid hdr
   # L25-W7: kapı kısayolları + SAĞLIK KAPISI — kapı kırmızıysa başlık UYARIR (sessiz-kırık yok).
   if _kapi_saglik_cached; then
-    hdr=$'Enter devam · ^N yeni · ^K 🚪kapıda devam · ^G 🚪kapıda yeni · ^E adlandır · ^X sil · ^T temizle · ESC çık'
+    hdr=$'Enter devam · ^N yeni · ^A tüm geçmiş · ^K 🚪kapıda devam · ^G 🚪kapıda yeni · ^E adlandır · ^X sil · ^T temizle · ESC çık'
   else
-    hdr=$'Enter devam · ^N yeni · ^E adlandır · ^X sil · ^T temizle · ESC çık\n⚠ Kapı yanıt vermiyor → 🚪 şerit şu an kullanılamaz, varsayılan şeride düşülür'
+    hdr=$'Enter devam · ^N yeni · ^A tüm geçmiş · ^E adlandır · ^X sil · ^T temizle · ESC çık\n⚠ Kapı yanıt vermiyor → 🚪 şerit şu an kullanılamaz, varsayılan şeride düşülür'
   fi
   out=$(fzf --ansi --delimiter=$'\t' --with-nth='2..' \
       --height='100%' --layout=reverse --info=inline --cycle \
@@ -1720,6 +1749,7 @@ cmd_menu_fzf() {
       --bind='ctrl-e:execute(cs _rename {1})+reload(cs _feed)' \
       --bind='ctrl-x:execute(cs sil {1})+reload(cs _feed)' \
       --bind='ctrl-t:execute(cs clean)+reload(cs _feed)' \
+      --bind='ctrl-a:reload(cs _feed --hepsi)' \
       --bind='ctrl-/:toggle-preview' \
       < <(cmd_feed)) || true
   key=$(printf '%s\n' "$out" | sed -n 1p)
@@ -1777,7 +1807,7 @@ case "${1:-menu}" in
   gc|topla)       shift; cmd_gc "$@" ;;
   sil|delete)     shift; cmd_delete "${1:-}" ;;
   info|i)         shift; cmd_info "${1:-}" ;;
-  _feed)          cmd_feed ;;                      # (iç) fzf girdisi
+  _feed)          shift; cmd_feed "$@" ;;            # (iç) fzf girdisi (--hepsi: tüm kapalı geçmiş)
   _preview)       shift; cmd_preview "${1:-}" ;;   # (iç) fzf önizleme paneli
   _rename)        shift; cmd_rename_prompt "${1:-}" ;;  # (iç) fzf ctrl-e
   _newpick)       cmd_newpick ;;                   # (iç) fzf ctrl-n
