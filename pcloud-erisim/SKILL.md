@@ -1,7 +1,7 @@
 ---
 name: pcloud-erisim
 type: agent
-version: 1.1.0
+version: 1.2.0
 install_target:
   skills: .claude/skills/
 stacks: ["*"]
@@ -24,6 +24,7 @@ pCloud API'sine **panele girmeden** saf `curl`+`jq` ile eriş. Token ortam-store
 S=/config/.claude/skills/pcloud-erisim/scripts/pcloud.sh
 bash $S doctor                      # 3-durum sağlık: yeşil / kırmızı / doğrulanmadı
 bash $S list 0                      # klasör listele (root=0)
+bash $S mkdir "Proje-Arsiv" 0        # klasör oluştur (idempotent; varsa mevcut id döner)
 bash $S upload ./rapor.pdf 22311016127   # dosyayı folderid'ye yükle
 bash $S download 123456789 ./out.pdf     # fileid'yi indir
 bash $S publink 123456789          # public download link (R7 uyarısıyla)

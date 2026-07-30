@@ -170,6 +170,19 @@ cmd_list(){  # list <folderid>
     "  \(if .isfolder then "📁" else "📄" end) \(.name)   [id:\(if .isfolder then .folderid else .fileid end)]\(if .isfolder then "" else "   \(.size)B" end)"'
 }
 
+cmd_mkdir(){  # mkdir <ad> [ust-folderid]  — idempotent (varsa mevcut id'yi döndürür)
+  local ad="${1:-}" ust="${2:-0}"
+  [ -n "$ad" ] || die "kullanım: mkdir <ad> [ust-folderid]   (ust boş=root)"
+  load_creds; have_token || die "token yok — bash $0 doctor"
+  # createfolderifnotexists: varsa yaratmaz, ikisinde de metadata.folderid döner (idempotent).
+  local r; r="$(api createfolderifnotexists "folderid=${ust}" "name=$(printf %s "$ad" | jq -sRr @uri)")"
+  pc_ok "$r" || die "mkdir başarısız — fail: $(pc_err "$r")"
+  local id yeni; id="$(echo "$r" | jq -r '.metadata.folderid')"
+  yeni="$(echo "$r" | jq -r 'if .created == true then "yeni" else "mevcut" end')"
+  grn "✓ klasör ($yeni): $ad   [id:$id]"
+  printf '%s\n' "$id"   # betikten okunabilsin
+}
+
 cmd_upload(){  # upload <yerel-dosya> <folderid>
   local src="${1:-}" fid="${2:-}"
   [ -n "$src" ] && [ -n "$fid" ] || die "kullanım: upload <yerel-dosya> <folderid>"
@@ -224,10 +237,11 @@ case "${1:-doctor}" in
   doctor|verify) cmd_doctor ;;
   set-token)     cmd_set_token ;;
   list)          shift; cmd_list "$@" ;;
+  mkdir)         shift; cmd_mkdir "$@" ;;
   upload)        shift; cmd_upload "$@" ;;
   download)      shift; cmd_download "$@" ;;
   publink)       shift; cmd_publink "$@" ;;
   fingerprint)   cmd_fingerprint ;;
   help|-h|--help) cmd_help ;;
-  *) die "bilinmeyen komut: $1  (doctor|set-token|list <fid>|upload <f> <fid>|download <fid> <dst>|publink <fid>|fingerprint)" ;;
+  *) die "bilinmeyen komut: $1  (doctor|set-token|list <fid>|mkdir <ad> [ust]|upload <f> <fid>|download <fid> <dst>|publink <fid>|fingerprint)" ;;
 esac
