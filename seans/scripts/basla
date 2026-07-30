@@ -162,7 +162,31 @@ _uye_sec() {
     printf '\n  %smasadan ayrıldın — menüye dönülüyor%s\n' "$C_SOL" "$C_SIF"
     return 0
   fi
-  printf '  %s%s kapalı%s — ayağa kaldırmak için: 1 (Ekibi kontrol et / onar)\n\n' "$C_SAR" "$hedef" "$C_SIF"
+  # Kapalı üye seçilince ESKİDEN yalnız "1'e bas" derdi ve menü hemen üstüne çizilirdi →
+  # Sultan'ın gözünde "hiçbir şey olmuyor, aynı ekrana geri şutlanıyorum". Artık BURADA
+  # ayağa kaldırmayı teklif ediyor; iş yapılan yerde yapılıyor.
+  printf '  %s%s kapalı.%s\n' "$C_SAR" "$hedef" "$C_SIF"
+  printf '  Şimdi ayağa kaldırayım mı? [E/h] '
+  local c
+  if [ -n "${BASLA_TEST_SECIM:-}" ]; then c="${BASLA_TEST_ONAY:-h}"; printf '%s\n' "$c"
+  elif [ -r /dev/tty ]; then read -r c < /dev/tty || c="h"
+  else c="h"; fi
+  case "${c:-E}" in
+    h|H|n|N) printf '  vazgeçildi.\n\n'; return 0 ;;
+  esac
+  if command -v ekip >/dev/null 2>&1; then
+    ekip
+  else
+    tmux new-session -d -s "$hedef" 2>/dev/null \
+      && printf '  %s✓ masa açıldı: %s%s (içinde Claude başlatmak sana kaldı — ekip aracı bu kutuda yok)\n' "$C_YSL" "$hedef" "$C_SIF" \
+      || printf '  %s✗ masa açılamadı: %s%s\n' "$C_KRM" "$hedef" "$C_SIF"
+  fi
+  printf '\n'
+  if tmux has-session -t "$hedef" 2>/dev/null; then
+    printf '  %s%s artık ayakta — geçiliyor%s\n' "$C_YSL" "$hedef" "$C_SIF"
+    tmux attach -t "$hedef"
+    printf '\n  %smasadan ayrıldın — menüye dönülüyor%s\n' "$C_SOL" "$C_SIF"
+  fi
 }
 
 # TTY yoksa (betik/otomasyon): yalnız çiz, seçim sorma.
@@ -222,5 +246,12 @@ while :; do
   [ -z "${secim:-}" ] && exit 0
   _eylem "${secim}" ; rc=$?
   [ "$rc" -eq 9 ] && exit 0
+  # ⚠️ MESAJ YUTULMASIN: eskiden menü hemen yeniden çiziliyordu ve eylemin bastığı satır
+  # (ör. "X kapalı") ekranın yukarısına kaçıp kayboluyordu → "hiçbir şey olmuyor" hissi.
+  if [ -r /dev/tty ] && [ -z "${BASLA_TEST_SECIM:-}" ]; then
+    printf '  %sdevam için Enter%s' "$C_SOL" "$C_SIF"
+    read -r _ < /dev/tty || true
+    printf '\n'
+  fi
   _ekran   # ← GERİYE DÖNÜŞ: her eylemden sonra menü yeniden gelir
 done
