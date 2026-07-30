@@ -270,6 +270,56 @@ if grep -q '^TESTPROJE_HOSTNAME=' "$YP_DIR3/setup-tunnel.sh" \
 else
   bad "yeni-proje --apply: setup-tunnel dokunuşu eksik/bozuk (cf-yayin REPO-KANIT'ı kırmızı kalır)"
 fi
+# ── PANO doğuma bağlı mı? (L32 F3, 2026-07-30) ────────────────────────────────
+# "Yeni proje doğunca çalışma ortamı hazır gelsin" işinin pano yarısı elde kalmıştı:
+# pano-kur.sh --zincir ZATEN vardı, çağıran YOKTU. Bu kapılar çağıranı çiviler.
+# Kurucu yoksa doğum DÜŞMEZ (pano ekip-ortamıdır, kutunun canlılığı ona bağlı değil).
+PANO_DIR="$YP_DIR3/pano"; mkdir -p "$PANO_DIR"
+cat > "$PANO_DIR/pano-kur.sh" <<'PANOSAHTE'
+#!/usr/bin/env bash
+# sahte pano-kur: çağrıldığını ve HANGİ argümanlarla çağrıldığını kanıtlar
+printf '%s\n' "$*" > "$(dirname "$0")/cagrildi.txt"
+[ -f "$(dirname "$0")/cakisma" ] && exit 5
+exit 0
+PANOSAHTE
+chmod +x "$PANO_DIR/pano-kur.sh"
+YP_DIR3P="/tmp/iskan-test-pano.$$"; mkdir -p "$YP_DIR3P/pano"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$YP_DIR3P/docker-compose.server.yml"
+cp "$SCRIPT_DIR/fixtures/setup-tunnel-mini.sh" "$YP_DIR3P/setup-tunnel.sh"
+cp "$PANO_DIR/pano-kur.sh" "$YP_DIR3P/pano/pano-kur.sh"
+ISKAN_FAZ4_GO=1 ISKAN_REPO_COMPOSE="$YP_DIR3P/docker-compose.server.yml" ISKAN_PORT_LOCK_PATH="$YP_DIR3P/.lock" \
+  bash "$SCRIPT_DIR/iskan.sh" yeni-proje panoproje --apply >/dev/null 2>&1
+if [ -f "$YP_DIR3P/pano/cagrildi.txt" ]; then
+  ok "yeni-proje --apply: pano kurucusu ÇAĞRILDI (L32 F3 — çağıran vardı)"
+  grep -q -- '--zincir' "$YP_DIR3P/pano/cagrildi.txt" \
+    && ok "yeni-proje --apply: pano --zincir kipiyle çağrıldı (compose+nginx aynı PR'a)" \
+    || bad "yeni-proje --apply: pano --zincir OLMADAN çağrıldı (elle yapıştırma geri gelir)"
+  grep -q 'panoproje' "$YP_DIR3P/pano/cagrildi.txt" \
+    && ok "yeni-proje --apply: pano doğru slug ile çağrıldı" || bad "yeni-proje --apply: pano slug yanlış"
+else
+  bad "yeni-proje --apply: pano kurucusu ÇAĞRILMADI (F3 yarım kalır)"
+fi
+# kurucu YOKSA doğum düşmemeli (pano opsiyonel ekip-ortamı)
+YP_DIR3Q="/tmp/iskan-test-panoyok.$$"; mkdir -p "$YP_DIR3Q"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$YP_DIR3Q/docker-compose.server.yml"
+cp "$SCRIPT_DIR/fixtures/setup-tunnel-mini.sh" "$YP_DIR3Q/setup-tunnel.sh"
+out_pq="$(ISKAN_FAZ4_GO=1 ISKAN_REPO_COMPOSE="$YP_DIR3Q/docker-compose.server.yml" ISKAN_PORT_LOCK_PATH="$YP_DIR3Q/.lock" \
+  bash "$SCRIPT_DIR/iskan.sh" yeni-proje panoyok --apply 2>&1)"; rc_pq=$?
+[ "$rc_pq" = "0" ] && ok "yeni-proje --apply: pano kurucusu YOKKEN doğum düşmedi (fail-soft)" \
+  || bad "yeni-proje --apply: pano kurucusu yokken doğum düştü rc=$rc_pq (kutu pano'ya bağımlı olmamalı)"
+printf '%s' "$out_pq" | grep -q 'pano: kurucu bulunamadı' \
+  && ok "yeni-proje --apply: pano yokluğu SESSİZ değil (uyarı basılıyor)" || bad "yeni-proje --apply: pano yokluğu sessiz geçti"
+# ISKAN_PANO=0 ile bilinçli kapatma
+YP_DIR3R="/tmp/iskan-test-panokapali.$$"; mkdir -p "$YP_DIR3R/pano"
+cp "$SCRIPT_DIR/fixtures/compose-clean.yml" "$YP_DIR3R/docker-compose.server.yml"
+cp "$SCRIPT_DIR/fixtures/setup-tunnel-mini.sh" "$YP_DIR3R/setup-tunnel.sh"
+cp "$PANO_DIR/pano-kur.sh" "$YP_DIR3R/pano/pano-kur.sh"
+ISKAN_PANO=0 ISKAN_FAZ4_GO=1 ISKAN_REPO_COMPOSE="$YP_DIR3R/docker-compose.server.yml" ISKAN_PORT_LOCK_PATH="$YP_DIR3R/.lock" \
+  bash "$SCRIPT_DIR/iskan.sh" yeni-proje panokapali --apply >/dev/null 2>&1
+[ ! -f "$YP_DIR3R/pano/cagrildi.txt" ] && ok "yeni-proje --apply: ISKAN_PANO=0 kurucuyu HİÇ çağırmıyor" \
+  || bad "yeni-proje --apply: ISKAN_PANO=0 saygı görmedi"
+for _d in "$YP_DIR3P" "$YP_DIR3Q" "$YP_DIR3R"; do find "$_d" -type f -delete 2>/dev/null; find "$_d" -depth -type d -delete 2>/dev/null; done
+
 awk '/hostname: \$\{TESTPROJE_HOSTNAME\}/{f=1} f&&/http_status:404/{print "SIRALI"; exit}' "$YP_DIR3/setup-tunnel.sh" | grep -q SIRALI \
   && ok "yeni-proje --apply: ingress-çifti catch-all 404'ün ÖNCESİNDE (sıra korunmuş)" \
   || bad "yeni-proje --apply: ingress-çifti 404'ten sonra/karışık (cloudflared onu asla eşlemez)"
