@@ -1,10 +1,10 @@
 ---
 name: seans
-version: 1.1.0
+version: 1.2.0
 description: >
   Claude sohbetlerini yönetme ve ekip kısayolları — her kutuda çalışır.
   Motor (cs) burada tek kopya yaşar; cloudtop tarafındaki eski çağrı yolu ince köprüyle korunur.
-  Türkçe kapılar: sessiongetir · yenisession · gruba · yardim.
+  Türkçe kapılar: basla · sessiongetir · yenisession · gruba · yardim.
 install_target: { skills: .claude/skills/ }
 stacks: ["*"]
 author: sultanxgokce
@@ -15,7 +15,7 @@ status: v1.0-kalfa
 # /seans — Sohbet yönetimi ve ekip kısayolları
 
 **NE-DİR:** Claude sohbetlerini listeleme/geri getirme/yeni açma motoru (`cs`) **artı** günlük
-kullanım için üç Türkçe kapı. Kod yazmayan ekip üyesi de tek kelimeyle işini görsün diye.
+kullanım için Türkçe kapılar — terminal açılışındaki karşılama ekranı (`basla`) dâhil. Kod yazmayan ekip üyesi de tek kelimeyle işini görsün diye.
 
 **NİÇİN ORTAK BECERİ:** motor eskiden yalnız cloudtop deposunda yaşıyordu; o depoyu göremeyen
 kutularda (tenant'lar) komut **yoktu**. Aynı sınıf hata daha önce de yaşandı ("araç bir odada,

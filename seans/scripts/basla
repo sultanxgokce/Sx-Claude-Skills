@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# basla — kutuda terminal açılınca gelen KARŞILAMA EKRANI.
+#
+# NİÇİN VAR (2026-07-30, Sultan): terminal açılır açılmaz doğrudan `cs` seans-seçici
+# geliyordu. "Kafa karışıyor; yenisession yazması gerektiğini kimse bilmiyor." Seans
+# listesi, ne yapacağını ZATEN bilen birine göre bir ekran — yeni gelen için değil.
+# Burası onun yerini alır: nerede olduğunu söyler, kuralı hatırlatır, dört seçenek verir.
+#
+# Sözleşme: hiçbir şey ZORLAMAZ. Enter → düz terminal. Sinyal yoksa (TTY yok) sadece
+# yazar ve çıkar; hiçbir komutu kendiliğinden çalıştırmaz.
+set -u
+
+PROJE="${BASLA_PROJE:-$(basename "${PWD:-/}")}"
+[ "$PROJE" = "/" ] && PROJE="çalışma alanı"
+PANO="${BASLA_PANO:-pano-huzur.mmepanel.com}"
+KILAVUZ="${BASLA_KILAVUZ:-kilavuz-huzur.mmepanel.com}"
+
+if [ -t 1 ]; then
+  C_BAS=$'\033[1m'; C_SOL=$'\033[2m'; C_VUR=$'\033[36m'; C_SIF=$'\033[0m'
+else
+  C_BAS=""; C_SOL=""; C_VUR=""; C_SIF=""
+fi
+
+printf '\n'
+printf '  %sHuzur%s — çalışma ortamı%s\n' "$C_BAS" "$C_SIF" ""
+printf '  %spano: %s · kılavuz: %s%s\n\n' "$C_SOL" "$PANO" "$KILAVUZ" "$C_SIF"
+printf '  %sNasıl çalışıyoruz%s\n' "$C_BAS" "$C_SIF"
+printf '  • Günlük iş burada, Claude Code ile yapılır. Plan ve fikirler panoda durur.\n'
+printf '  • %smain%s dalında çalışmıyoruz: her iş kendi dalında açılır, öneri olarak ekibe gelir.\n' "$C_VUR" "$C_SIF"
+printf '  • Bir bölümün tek sahibi olur. Panodan üstlen, bitince işaretle.\n\n'
+printf '  %sNe yapmak istersin?%s\n\n' "$C_BAS" "$C_SIF"
+printf '   %s1%s  Yeni sohbet başlat            %syenisession%s\n'  "$C_VUR" "$C_SIF" "$C_SOL" "$C_SIF"
+printf '   %s2%s  Kapanan sohbetime dön         %ssessiongetir%s\n' "$C_VUR" "$C_SIF" "$C_SOL" "$C_SIF"
+printf '   %s3%s  Kuralları ve komutları göster %syardim%s\n'       "$C_VUR" "$C_SIF" "$C_SOL" "$C_SIF"
+printf '   %s4%s  Sohbetlerimi listele          %scs ls%s\n\n'      "$C_VUR" "$C_SIF" "$C_SOL" "$C_SIF"
+printf '   %sEnter%s  sadece terminal — bu ekranı sonra %sbasla%s ile geri getirirsin\n\n' "$C_VUR" "$C_SIF" "$C_SOL" "$C_SIF"
+
+# TTY yoksa seçim sorulmaz (betikten/otomasyondan çağrı): yazdı, çıktı.
+[ -t 0 ] || exit 0
+
+printf '  Seçimin: '
+read -r secim || secim=""
+printf '\n'
+
+case "${secim:-}" in
+  1) exec yenisession ;;
+  2) exec sessiongetir ;;
+  3) yardim; printf '\n' ;;
+  4) cs ls; printf '\n' ;;
+  "") : ;;
+  *) printf '  (anlamadım — terminale düşüyorum; ekranı geri getirmek için: basla)\n\n' ;;
+esac

@@ -13,7 +13,15 @@
 #   Ekipte kod yazmayan ya da yeni katılan biri de tek kelimeyle işini görsün diye.
 set -uo pipefail
 
-BURASI="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Sembolik bağdan çağrılabilir: kutularda bu betik PATH'e symlink olarak konuyor
+# (kopya bırakmak bayatlar — huzur kutusunda 2026-07-30'da tam bu yüzden eski cs koştu).
+# Bu yüzden ÖNCE bağı çöz, sonra dizini al; yoksa kardeş cs.sh bulunamaz.
+__kaynak="${BASH_SOURCE[0]}"
+while [ -L "$__kaynak" ]; do
+  __hedef="$(readlink "$__kaynak")"
+  case "$__hedef" in /*) __kaynak="$__hedef" ;; *) __kaynak="$(dirname "$__kaynak")/$__hedef" ;; esac
+done
+BURASI="$(cd "$(dirname "$__kaynak")" && pwd)"
 CS="${SEANS_CS:-$BURASI/cs.sh}"
 
 [ -f "$CS" ] || { echo "HATA: seans yöneticisi bulunamadı: $CS" >&2; exit 2; }
