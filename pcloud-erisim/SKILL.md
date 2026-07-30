@@ -1,7 +1,7 @@
 ---
 name: pcloud-erisim
 type: agent
-version: 1.2.0
+version: 1.3.0
 install_target:
   skills: .claude/skills/
 stacks: ["*"]
@@ -27,6 +27,8 @@ bash $S list 0                      # klasör listele (root=0)
 bash $S mkdir "Proje-Arsiv" 0        # klasör oluştur (idempotent; varsa mevcut id döner)
 bash $S upload ./rapor.pdf 22311016127   # dosyayı folderid'ye yükle
 bash $S download 123456789 ./out.pdf     # fileid'yi indir
+bash $S sil-dosya 123456789         # tek dosya sil (geri-alınamaz)
+bash $S sil-klasor 22311016127 --onayla   # klasörü İÇERİĞİYLE sil (3 kapı: root-yasak · ne-silinecek-bas · --onayla şart)
 bash $S publink 123456789          # public download link (R7 uyarısıyla)
 bash $S set-token                  # OAuth access_token'ı GİZLİ yapıştır (yeni ortam)
 bash $S fingerprint                # token kimlik-teyidi (tersine-çevrilemez hash, DEĞER-yok)
@@ -50,6 +52,12 @@ bash $S fingerprint                # token kimlik-teyidi (tersine-çevrilemez ha
   `curl --config -` (stdin heredoc) ile geçirilir → `ps`/argv/log'da **görünmez**.
 - **Endpoint:** `userinfo` · `listfolder` · `uploadfile` (multipart `-F file=@`) · `getfilelink`(+indir) ·
   `getpublink`.
+
+## ⚠️ Silme kapıları (v1.3.0)
+`sil-klasor` **geri-alınamaz** bir işlemdir; üç kapıyla korunur:
+1. **`folderid=0` reddedilir** — kök klasör silinemez (exit 1).
+2. **Ne silineceği ÖNCE basılır** — klasör adı + içindeki öğe sayısı (kör silme yok).
+3. **`--onayla` olmadan hiçbir şey silinmez** — varsayılan kuru-koşu, exit 3.
 
 ## ⚠️ R7 (kritik kural)
 Arçelik iç-belgeleri **Public-Folder DIŞINDA** tutulur (`getfilelink`/`getpublink` public-folder içinde
