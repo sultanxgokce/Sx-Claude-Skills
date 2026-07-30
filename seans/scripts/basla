@@ -166,6 +166,39 @@ _kopya_satiri() {
   "$arac" --satir 2>/dev/null || true
 }
 
+# _yapistirma_nabzi — resim-yapıştırma dinleyicisi (127.0.0.1:8391) yaşıyor mu?
+#
+# NİÇİN BURADA (firsthand 2026-07-30): Sultan Cmd+V ile pano-resmi yapıştırınca "HTTP 500"
+# aldı. Ölçüm: 13 kutunun 11'inde dinleyici sağlıklı, 2'sinde (tez · huzur) ÖLÜ. Dinleyici bir
+# tmux masasında yaşıyor; konteyner recreate/restart o masayı öldürüyor ve onu geri getiren
+# hiçbir şey yok. (tez'i o gün recreate etmiştim — ölüm tam o an.)
+# Bu ekran artık HER YENİ TERMİNALDE koşuyor, yani Sultan yapıştırmadan hemen önce: nabzı
+# kontrol etmenin en doğru yeri burası. Kurulumu YENİDEN YAZMAZ — kutunun kendi başlatıcısını
+# çağırır (tek kaynak). Sağlıklıysa TEK KELİME etmez; sustuğu yer "her şey yolunda"dır.
+_yapistirma_nabzi() {
+  [ -z "${BASLA_TEST_SECIM:-}" ] || return 0          # sınamalar ağa/porta bağlanmasın (hermetik)
+  [ "${BASLA_YAPISTIRMA_KONTROL:-1}" = "1" ] || return 0
+  command -v curl >/dev/null 2>&1 || return 0
+  local kod
+  kod="$(curl -s -o /dev/null -w '%{http_code}' --max-time 2 http://127.0.0.1:8391/health 2>/dev/null)"
+  [ "$kod" = "200" ] && return 0                      # yaşıyor → sessiz kal
+  local bas; bas="$(ls -1 /config/projects/*/.cc-images/imglistener-start.sh 2>/dev/null | head -1)"
+  if [ -z "$bas" ]; then
+    # Bu kutuda yapıştırma kurulumu hiç yok — arıza değil, yokluk. Sessiz geç.
+    return 0
+  fi
+  if timeout 20 bash "$bas" >/dev/null 2>&1; then
+    kod="$(curl -s -o /dev/null -w '%{http_code}' --max-time 2 http://127.0.0.1:8391/health 2>/dev/null)"
+  fi
+  if [ "$kod" = "200" ]; then
+    printf '  %sresim yapıştırma yeniden başlatıldı (konteyner yenilenince duruyor)%s\n' "$C_SOL" "$C_SIF"
+  else
+    # Onaramadık → SUSMA. Sultan Cmd+V yapıp "500" görmeden önce bilsin.
+    printf '  %s⚠ resim yapıştırma çalışmıyor%s — Cmd/Ctrl+V hata verir. Onarım: %sbash %s%s\n' \
+           "$C_SAR" "$C_SIF" "$C_SOL" "$bas" "$C_SIF"
+  fi
+}
+
 _ekran() {
   printf '\n'
   printf '  %s%s%s — çalışma ortamı\n' "$C_BAS" "$PROJE" "$C_SIF"
@@ -179,6 +212,7 @@ _ekran() {
   printf '\n'
   _kopya_satiri
   _ekip_blogu
+  _yapistirma_nabzi
   printf '  %sHazır%s — %sok tuşlarıyla seç, Enter ile onayla, ESC ile çık%s\n\n' \
          "$C_BAS" "$C_SIF" "$C_SOL" "$C_SIF"
 }
