@@ -52,13 +52,18 @@ fi
 if [ "$YAN" = "1" ]; then
   tmux split-window -h "bash '$CS' new; bash -l" || {
     echo "HATA: ekran bölünemedi." >&2; exit 1; }
-  # Ad, yeni seans doğduktan SONRA verilebilir; kullanıcıya yolu söyle (sahte-yeşil yok).
+  # Yanda açılan seansta ad, doğduktan sonra verilir (o pencerenin içinden). Tek fark:
+  # kullanıcıya iş yükleyip bırakmıyoruz — komut hazır, kopyalanabilir.
   [ -n "$AD" ] && echo "🟢 Yanda yeni sohbet açıldı. Adını koymak için orada: cs rename current \"$AD\""
   [ -z "$AD" ] && echo "🟢 Yanda yeni sohbet açıldı."
   exit 0
 fi
 
+# AD'ı MOTORA GEÇİR. Eskiden burada yalnız "açıldıktan sonra şunu çalıştır" diye bir satır
+# basılırdı; Claude açılınca o satır ekrandan kayboluyor ve kullanıcının yazdığı ad hiçbir
+# yere gitmiyordu (firsthand 2026-07-30, Sultan: "adımı sultan yazdım ama hiçbir şey sultan
+# olmadı"). Artık ad doğumda pencereye/sekmeye yazılıyor → alt çubukta sürekli görünüyor.
 if [ -n "$AD" ]; then
-  echo "ℹ Sohbet açılıyor. Açıldıktan sonra adını koymak için: cs rename current \"$AD\""
+  exec bash "$CS" new --ad "$AD"
 fi
 exec bash "$CS" new

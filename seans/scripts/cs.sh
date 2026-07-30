@@ -718,7 +718,34 @@ cmd_rename() {
     printf '  Uyarı: Dashboard API (HTTP %s) — sadece transcript güncellendi\n' "$http_code" >&2
   fi
 
+  # tmux PENCERE adını da güncelle. NİÇİN: kullanıcının adı sürekli gördüğü tek yer alt
+  # çubuktur; liste komutu çalıştırmadıkça isim hiçbir yerde görünmüyordu ve "oldu mu, ben
+  # nerede göreceğim?" diye sorulmak zorunda kalınıyordu (firsthand 2026-07-30, Sultan).
+  # Oturum ADI (cc-<id8>) DEĞİŞMEZ — o, başka cihazdan attach için kimliğe bağlı sabit tutamak.
+  _tmux_pencere_adlandir "$sid" "$name"
+
   printf "İsim değiştirildi → '%s'\n" "$name"
+}
+
+# sid → o seansın tmux penceresini yeni adla etiketle. Yapamazsa SESSİZ GEÇMEZ: ne olduğunu
+# söyler (ölçemedim ≠ yaptım).
+_tmux_pencere_adlandir() {
+  local sid="$1" name="$2"
+  command -v tmux >/dev/null 2>&1 || { printf '  (tmux yok — alt çubuk etiketlenemedi)\n'; return 0; }
+  local hedef=""
+  if [ -n "${TMUX:-}" ]; then
+    hedef="$(tmux display-message -p '#{session_name}:#{window_index}' 2>/dev/null || true)"
+  else
+    # Oturum adı sid'e deterministik bağlı (cc-<id8>) — dışarıdan da bulunabilir.
+    local ts="cc-${sid:0:8}"
+    tmux has-session -t "$ts" 2>/dev/null && hedef="${ts}:0"
+  fi
+  [ -n "$hedef" ] || { printf '  (tmux penceresi bulunamadı — alt çubuk etiketlenmedi)\n'; return 0; }
+  if tmux rename-window -t "$hedef" "$name" 2>/dev/null; then
+    printf '  Alt çubuk etiketlendi: %s\n' "$name"
+  else
+    printf '  (alt çubuk etiketlenemedi: %s)\n' "$hedef"
+  fi
 }
 
 # ── cs note <ref> [metin] ────────────────────────────────────────────────────
@@ -1210,6 +1237,12 @@ _tmux_session_name() {
 }
 
 cmd_new() {
+  # --ad "<isim>": `yenisession`ın sorduğu ad BURAYA gelir. Eskiden ad soruluyor ama
+  # KULLANILMIYORDU: "şunu çalıştır" diye bir satır basılıp devredilirdi, o satır Claude
+  # açılınca ekrandan kaybolurdu → kullanıcı adı yazar, hiçbir yere gitmezdi (firsthand
+  # 2026-07-30, Sultan). Ad verilmezse davranış BİREBİR eskisi gibi kalır (proje adı).
+  local CS_YENI_AD=""
+  if [ "${1:-}" = "--ad" ]; then CS_YENI_AD="${2:-}"; shift 2; fi
   local ref="${1:-}" dir
   if [ -z "$ref" ]; then
     dir="$PWD"
@@ -1222,6 +1255,7 @@ cmd_new() {
   cd "$dir" || die "cd başarısız: $dir"
   printf 'Yeni seans → %s\n' "$dir"
   local base; base=$(basename "$dir")
+  local pencere="${CS_YENI_AD:-$base}"   # alt çubukta ve sekmede görünecek etiket
   # L25-W7 ŞERİT: `cs new --serit kapi` / menü "🚪 Kapı şeridinde yeni seans".
   # Başarılıysa exec eder (dönmez). Kapı/anahtar yoksa uyarıp aşağıdaki eski akışa düşer.
   [ "${CS_SERIT:-}" = "kapi" ] && { _serit_new_kapi "$dir" "$base" || true; }
@@ -1233,12 +1267,12 @@ cmd_new() {
     # NOT: tmux stdin'i GERÇEK pts olmalı (ttyname→/dev/pts/N). /dev/tty'ye redirect ETME —
     # ttyname "/dev/tty" döner → tmux "can't use /dev/tty" (ampirik doğrulandı). Düz exec yeter.
     if [ -n "$newid" ]; then
-      exec tmux new-session -s "cc-${newid:0:8}" -n "$base" "exec claude $CS_CLAUDE_FLAGS --session-id $newid"
+      exec tmux new-session -s "cc-${newid:0:8}" -n "$pencere" "exec claude $CS_CLAUDE_FLAGS --session-id $newid"
     fi
-    exec tmux new-session -s "$(_tmux_session_name "$base")" -n "$base" "exec claude $CS_CLAUDE_FLAGS"
+    exec tmux new-session -s "$(_tmux_session_name "$base")" -n "$pencere" "exec claude $CS_CLAUDE_FLAGS"
   fi
   # İlk ipucu olarak proje adını sekme/pencereye yaz; claude kendi başlığını yazınca güncellenir.
-  set_session_title "$base"
+  set_session_title "$pencere"
   exec claude $CS_CLAUDE_FLAGS
 }
 
@@ -1736,7 +1770,7 @@ case "${1:-menu}" in
                   else cmd_resume "${1:-}"; fi ;;
   new|yeni)       shift
                   if [ "${1:-}" = "--serit" ]; then CS_SERIT="${2:-}"; shift 2 2>/dev/null || shift $# ; fi
-                  cmd_new "${1:-}" ;;
+                  if [ "${1:-}" = "--ad" ]; then cmd_new --ad "${2:-}" "${3:-}"; else cmd_new "${1:-}"; fi ;;
   serit|lane)     shift; cmd_serit "$@" ;;
   name|whoami)    shift; cmd_name "${1:-}" ;;
   clean|temizle)  shift; cmd_clean "$@" ;;
