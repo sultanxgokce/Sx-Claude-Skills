@@ -1,52 +1,123 @@
 #!/usr/bin/env bash
 # basla — kutuda terminal açılınca gelen KARŞILAMA EKRANI.
 #
-# NİÇİN VAR (2026-07-30, Sultan): terminal açılır açılmaz doğrudan `cs` seans-seçici
-# geliyordu. "Kafa karışıyor; yenisession yazması gerektiğini kimse bilmiyor." Seans
-# listesi, ne yapacağını ZATEN bilen birine göre bir ekran — yeni gelen için değil.
-# Burası onun yerini alır: nerede olduğunu söyler, kuralı hatırlatır, dört seçenek verir.
+# NİÇİN VAR (2026-07-30, Sultan): terminal açılır açılmaz `cs` seans-seçici geliyordu.
+# "Kafa karışıyor; yenisession yazması gerektiğini kimse bilmiyor." Seans listesi, ne
+# yapacağını ZATEN bilen birine göre bir ekran — yeni gelen için değil.
 #
-# Sözleşme: hiçbir şey ZORLAMAZ. Enter → düz terminal. Sinyal yoksa (TTY yok) sadece
-# yazar ve çıkar; hiçbir komutu kendiliğinden çalıştırmaz.
+# v2 (Sultan geri-bildirimi, aynı gün):
+#   · "seçim yaptıktan sonra geriye dönmek yok"      → her eylemden sonra menüye DÖNER
+#   · "2'yi seçince karmaşık bir cümbüşe düşüyorum"  → ekip ÜSTTE sabit; 103-satırlık
+#      filo listesi menüden kalktı, yalnız 'ara' seçeneğinin arkasında
+#   · "ekip demirbaş, üstte sabit olmalı"            → Ekibim bloğu roster'dan gelir
+#   · "tek tuşla kontrol: ayakta mı, duplike var mı" → seçenek 1 (ölç → göster → onar-öner)
+#   · kutu adı artık SABİT DEĞİL — roster/dizinden türetilir ("Huzur" her kutuda yazıyordu)
+#
+# Sözleşme: hiçbir şey ZORLAMAZ. Enter → düz terminal. TTY yoksa yalnız yazar ve çıkar.
+# ÖLÇÜM ≠ İDDİA: ekip satırı ekip-durum.sh'ten gelir; ölçülemezse "ölçülemedi" der,
+# "her şey yolunda" DEMEZ.
 set -u
 
+HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 PROJE="${BASLA_PROJE:-$(basename "${PWD:-/}")}"
 [ "$PROJE" = "/" ] && PROJE="çalışma alanı"
-PANO="${BASLA_PANO:-pano-huzur.mmepanel.com}"
-KILAVUZ="${BASLA_KILAVUZ:-kilavuz-huzur.mmepanel.com}"
+PANO="${BASLA_PANO:-}"
+KILAVUZ="${BASLA_KILAVUZ:-}"
 
 if [ -t 1 ]; then
-  C_BAS=$'\033[1m'; C_SOL=$'\033[2m'; C_VUR=$'\033[36m'; C_SIF=$'\033[0m'
+  C_BAS=$'\033[1m'; C_SOL=$'\033[2m'; C_VUR=$'\033[36m'; C_YSL=$'\033[32m'; C_KRM=$'\033[31m'; C_SAR=$'\033[33m'; C_SIF=$'\033[0m'
 else
-  C_BAS=""; C_SOL=""; C_VUR=""; C_SIF=""
+  C_BAS=""; C_SOL=""; C_VUR=""; C_YSL=""; C_KRM=""; C_SAR=""; C_SIF=""
 fi
 
-printf '\n'
-printf '  %sHuzur%s — çalışma ortamı%s\n' "$C_BAS" "$C_SIF" ""
-printf '  %spano: %s · kılavuz: %s%s\n\n' "$C_SOL" "$PANO" "$KILAVUZ" "$C_SIF"
-printf '  %sNasıl çalışıyoruz%s\n' "$C_BAS" "$C_SIF"
-printf '  • Günlük iş burada, Claude Code ile yapılır. Plan ve fikirler panoda durur.\n'
-printf '  • %smain%s dalında çalışmıyoruz: her iş kendi dalında açılır, öneri olarak ekibe gelir.\n' "$C_VUR" "$C_SIF"
-printf '  • Bir bölümün tek sahibi olur. Panodan üstlen, bitince işaretle.\n\n'
-printf '  %sNe yapmak istersin?%s\n\n' "$C_BAS" "$C_SIF"
-printf '   %s1%s  Yeni sohbet başlat            %syenisession%s\n'  "$C_VUR" "$C_SIF" "$C_SOL" "$C_SIF"
-printf '   %s2%s  Kapanan sohbetime dön         %ssessiongetir%s\n' "$C_VUR" "$C_SIF" "$C_SOL" "$C_SIF"
-printf '   %s3%s  Kuralları ve komutları göster %syardim%s\n'       "$C_VUR" "$C_SIF" "$C_SOL" "$C_SIF"
-printf '   %s4%s  Sohbetlerimi listele          %scs ls%s\n\n'      "$C_VUR" "$C_SIF" "$C_SOL" "$C_SIF"
-printf '   %sEnter%s  sadece terminal — bu ekranı sonra %sbasla%s ile geri getirirsin\n\n' "$C_VUR" "$C_SIF" "$C_SOL" "$C_SIF"
+_ekip_blogu() {
+  local out rc
+  out="$(bash "$HERE/ekip-durum.sh" 2>/dev/null)"; rc=$?
+  if [ "$rc" -ne 0 ] || [ -z "$out" ]; then
+    printf '  %sEkibim%s\n' "$C_BAS" "$C_SIF"
+    printf '  %sölçülemedi — ekip listesi bu dizinde görünmüyor (bu bir arıza değil: tek kişilik kutu olabilir)%s\n\n' "$C_SOL" "$C_SIF"
+    return 0
+  fi
+  local ozet; ozet="$(printf '%s\n' "$out" | awk -F'\t' '$1=="ÖZET"{print $2" "$3" "$4}')"
+  set -- $ozet; local a="${1:-0}" k="${2:-0}" d="${3:-0}"
+  printf '  %sEkibim%s  %s(demirbaş — sabit)%s\n' "$C_BAS" "$C_SIF" "$C_SOL" "$C_SIF"
+  printf '%s\n' "$out" | awk -F'\t' -v ys="$C_YSL" -v sr="$C_SAR" -v sf="$C_SIF" -v sl="$C_SOL" '
+    # gorunur-genislik: UTF-8 devam-baytlari (0x80-0xBF) sayilmaz — Turkce harfler sutunu kaydirmasin
+    function gw(s){ t=s; gsub(/[\200-\277]/,"",t); return length(t) }
+    function pad(s,w){ n=w-gw(s); r=""; while(n-->0) r=r" "; return s r }
+    $1=="ÖZET" || $1=="" {next}
+    {
+      ad=pad($1,15);
+      if ($3=="ayakta")       printf "   %s●%s %s %sayakta%s\n",  ys, sf, ad, ys, sf;
+      else if ($3=="duplike") printf "   %s⚠%s %s %s%s%s\n",      sr, sf, ad, sr, $4, sf;
+      else                    printf "   %s○%s %s %skapalı%s\n",  sl, sf, ad, sl, sf;
+    }'
+  printf '\n   %s%s ayakta · %s kapalı%s' "$C_SOL" "$a" "$k" "$C_SIF"
+  [ "$d" -gt 0 ] && printf '%s · %s duplike%s' "$C_SAR" "$d" "$C_SIF"
+  printf '\n'
+  printf '   %smasa ≠ sohbet: masa açık olsa da içinde Claude çalışmıyor olabilir%s\n\n' "$C_SOL" "$C_SIF"
+}
 
-# TTY yoksa seçim sorulmaz (betikten/otomasyondan çağrı): yazdı, çıktı.
+_ekran() {
+  printf '\n'
+  printf '  %s%s%s — çalışma ortamı\n' "$C_BAS" "$PROJE" "$C_SIF"
+  if [ -n "$PANO" ] || [ -n "$KILAVUZ" ]; then
+    printf '  %s' "$C_SOL"
+    [ -n "$PANO" ]    && printf 'pano: %s' "$PANO"
+    [ -n "$PANO" ] && [ -n "$KILAVUZ" ] && printf ' · '
+    [ -n "$KILAVUZ" ] && printf 'kılavuz: %s' "$KILAVUZ"
+    printf '%s\n' "$C_SIF"
+  fi
+  printf '\n'
+  _ekip_blogu
+  printf '  %sNe yapmak istersin?%s\n\n' "$C_BAS" "$C_SIF"
+  printf '   %s1%s  Ekibi kontrol et / onar        %ssüz → eksikleri kaldır → duplike temizle%s\n' "$C_VUR" "$C_SIF" "$C_SOL" "$C_SIF"
+  printf '   %s2%s  Bir ekip üyesine geç\n'                                                        "$C_VUR" "$C_SIF"
+  printf '   %s3%s  Yeni sohbet başlat            %sadını sorar%s\n'                               "$C_VUR" "$C_SIF" "$C_SOL" "$C_SIF"
+  printf '   %s4%s  Kuralları ve komutları göster\n'                                               "$C_VUR" "$C_SIF"
+  printf '   %s5%s  Eski sohbetlerde ara          %stüm liste — kalabalıktır%s\n'                  "$C_VUR" "$C_SIF" "$C_SOL" "$C_SIF"
+  printf '\n'
+  printf '   %sEnter%s  sadece terminal    %sq%s  çık    %s(bu ekranı sonra %sbasla%s ile geri getirirsin)%s\n\n' \
+         "$C_VUR" "$C_SIF" "$C_VUR" "$C_SIF" "$C_SOL" "$C_BAS" "$C_SIF$C_SOL" "$C_SIF"
+}
+
+_uye_sec() {
+  local out; out="$(bash "$HERE/ekip-durum.sh" 2>/dev/null | awk -F'\t' '$1!="ÖZET" && $1!=""{print}')"
+  [ -n "$out" ] || { printf '  ekip listesi okunamadı — geri dönülüyor\n\n'; return 0; }
+  printf '\n  %sHangi üye?%s  %s(boş = geri)%s\n\n' "$C_BAS" "$C_SIF" "$C_SOL" "$C_SIF"
+  local i=0; while IFS=$'\t' read -r uid sess durum not; do
+    i=$((i+1)); printf '   %s%s%s  %-14s %s%s%s\n' "$C_VUR" "$i" "$C_SIF" "$uid" "$C_SOL" "$durum" "$C_SIF"
+  done <<< "$out"
+  printf '\n  Seçimin: '; local s; read -r s || s=""
+  [ -n "$s" ] || return 0
+  local hedef; hedef="$(printf '%s\n' "$out" | awk -F'\t' -v n="$s" 'NR==n{print $2}')"
+  [ -n "$hedef" ] || { printf '  (anlamadım)\n'; return 0; }
+  if tmux has-session -t "$hedef" 2>/dev/null; then
+    exec tmux attach -t "$hedef"
+  fi
+  printf '  %s%s kapalı%s — ayağa kaldırmak için: 1 (Ekibi kontrol et / onar)\n\n' "$C_SAR" "$hedef" "$C_SIF"
+}
+
+# TTY yoksa (betik/otomasyon): yalnız çiz, seçim sorma.
+_ekran
 [ -t 0 ] || exit 0
 
-printf '  Seçimin: '
-read -r secim || secim=""
-printf '\n'
-
-case "${secim:-}" in
-  1) exec yenisession ;;
-  2) exec sessiongetir ;;
-  3) yardim; printf '\n' ;;
-  4) cs ls; printf '\n' ;;
-  "") : ;;
-  *) printf '  (anlamadım — terminale düşüyorum; ekranı geri getirmek için: basla)\n\n' ;;
-esac
+while :; do
+  printf '  Seçimin: '
+  read -r secim || secim=""
+  printf '\n'
+  case "${secim:-}" in
+    1) if command -v ekip >/dev/null 2>&1; then ekip; else
+         bash "$HERE/ekip-durum.sh" | sed 's/^/  /'
+         printf '\n  %sonarım aracı (ekip) bu kutuda yok — yukarıdaki ölçüm salt-bilgidir%s\n' "$C_SOL" "$C_SIF"
+       fi; printf '\n' ;;
+    2) _uye_sec ;;
+    3) if command -v yenisession >/dev/null 2>&1; then yenisession; else printf '  yenisession bulunamadı\n'; fi; printf '\n' ;;
+    4) if command -v yardim >/dev/null 2>&1; then yardim; else printf '  yardim bulunamadı\n'; fi; printf '\n' ;;
+    5) if command -v cs >/dev/null 2>&1; then cs ls; else printf '  cs bulunamadı\n'; fi; printf '\n' ;;
+    q|Q|cik|çık) exit 0 ;;
+    "") exit 0 ;;
+    *) printf '  (anlamadım — %s1-5%s, Enter ya da q)\n\n' "$C_VUR" "$C_SIF" ;;
+  esac
+  _ekran   # ← GERİYE DÖNÜŞ: her eylemden sonra menü yeniden gelir
+done

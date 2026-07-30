@@ -1,10 +1,10 @@
 ---
 name: seans
-version: 1.2.0
+version: 1.3.0
 description: >
   Claude sohbetlerini yönetme ve ekip kısayolları — her kutuda çalışır.
   Motor (cs) burada tek kopya yaşar; cloudtop tarafındaki eski çağrı yolu ince köprüyle korunur.
-  Türkçe kapılar: basla · sessiongetir · yenisession · gruba · yardim.
+  Türkçe kapılar: basla · sessiongetir · yenisession · gruba · yardim — beşi PATH'e `seans-kur.sh` ile bağlanır (v1.3.0: önce hiçbiri PATH'te DEĞİLDİ).
 install_target: { skills: .claude/skills/ }
 stacks: ["*"]
 author: sultanxgokce
