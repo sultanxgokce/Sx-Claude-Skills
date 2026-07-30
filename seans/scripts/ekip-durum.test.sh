@@ -220,5 +220,55 @@ printf '%s' "$g8out" | grep -q 'salt-bilgidir' \
 printf '%s' "$g8out" | grep -q 'vazgeçildi' \
   && ok "G8e 'h' cevabı yazma YAPMADI" || no "G8e 'h' cevabı saygı görmedi"
 
+# ── G9 · resim-yapıştırma nabzı: sağlıklıysa SUS, ölüyse SÖYLE
+# Sultan Cmd+V'de "HTTP 500" aldı (2026-07-30). Dinleyici tmux masasında yaşıyor; konteyner
+# recreate'i onu öldürüyor ve geri getiren yok — 13 kutunun 2'sinde ölü bulundu. Ekran her yeni
+# terminalde koştuğu için nabzı burada tutuyoruz. Üç davranış sınanır: sağlıklı→sessiz ·
+# onarıldı→söyler · onarılamadı→UYARIR (sessiz kalması bu bug'ın kendisiydi).
+# Sınama fonksiyonu YALITILMIŞ koşar: sahte curl/başlatıcı, gerçek porta dokunulmaz.
+_nabiz_dene() {  # <curl-kodu-1> <basarili-mi> <baslatici-var-mi> → çıktı
+  local kod1="$1" duzelir="$2" bvar="$3" d="$T/nabiz"; rm -rf "$d" 2>/dev/null; mkdir -p "$d/bin"
+  cat > "$d/bin/curl" <<SH
+#!/usr/bin/env bash
+if [ -f "$d/duzeldi" ]; then printf '200'; else printf '%s' "$kod1"; fi
+SH
+  cat > "$d/bin/timeout" <<SH
+#!/usr/bin/env bash
+shift   # süre argümanını at
+if [ "$duzelir" = "evet" ]; then : > "$d/duzeldi"; exit 0; fi
+exit 1
+SH
+  chmod +x "$d/bin/curl" "$d/bin/timeout"
+  local pdir="$d/projects/ornek/.cc-images"
+  if [ "$bvar" = "evet" ]; then mkdir -p "$pdir"; printf '#!/usr/bin/env bash\nexit 0\n' > "$pdir/imglistener-start.sh"; fi
+  # fonksiyonu tek başına source edip çağır (tüm ekranı çizdirmeden)
+  PATH="$d/bin:$PATH" bash -c '
+    C_SOL=""; C_SIF=""; C_SAR=""; T='"$d"'
+    eval "$(sed -n "/^_yapistirma_nabzi()/,/^}/p" '"$B"' | sed "s#/config/projects/#'"$d"'/projects/#")"
+    _yapistirma_nabzi
+  ' 2>&1
+}
+
+o="$(_nabiz_dene 200 evet evet)"
+[ -z "$o" ] && ok "G9 dinleyici sağlıklıyken ekran SUSUYOR" || no "G9 sağlıklıyken konuşuyor" "$o"
+
+o="$(_nabiz_dene 500 evet evet)"
+printf '%s' "$o" | grep -q 'yeniden başlatıldı' \
+  && ok "G9b ölüyken onardı ve söyledi" || no "G9b onarım mesajı yok" "$o"
+
+o="$(_nabiz_dene 000 hayir evet)"
+if printf '%s' "$o" | grep -q 'çalışmıyor'; then
+  ok "G9c onaramayınca UYARIYOR (sessiz kalmıyor)"
+else
+  no "G9c onarılamadı ama ekran sustu — bug'ın kendisi" "$o"
+fi
+
+o="$(_nabiz_dene 000 hayir hayir)"
+[ -z "$o" ] && ok "G9d kurulum HİÇ yoksa sessiz geçiyor (yokluk ≠ arıza)" || no "G9d yoklukta gürültü" "$o"
+
+# kapatma bayrağı: 0 verilince hiç çağrı yapmamalı
+o="$(BASLA_YAPISTIRMA_KONTROL=0 _nabiz_dene 000 hayir evet)"
+[ -z "$o" ] && ok "G9e BASLA_YAPISTIRMA_KONTROL=0 ile tamamen kapanıyor" || no "G9e kapatma bayrağı işlemiyor" "$o"
+
 printf '\npass=%s fail=%s\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]
