@@ -77,6 +77,26 @@ _sec() {  # _sec "<baslik>" <satir...>
 _ekip_blogu() {
   local out rc
   out="$(bash "$HERE/ekip-durum.sh" 2>/dev/null)"; rc=$?
+  # ⚠️ İKİ AYRI ARIZA, İKİ AYRI CÜMLE (Sultan tez kutusunda canlı gördü, 2026-07-30):
+  #   rc=3 → ekip listesi dosyası YOK        → "bu dizinde ekip tanımı yok" DOĞRU
+  #   rc=2 → dosya VAR ama ÖLÇEMEDİM (araç eksik: python3/tmux/bozuk-yaml)
+  # Eski hâl ikisini aynı cümleye yıkıyordu → dosya dururken "ekip yok" YALANI basılıyordu.
+  if [ "$rc" -eq 2 ] && [ -n "$out" ]; then
+    local jeton; jeton="$(printf '%s' "$out" | head -1 | cut -f1)"
+    local sebep
+    case "$jeton" in
+      PYTHON-YOK) sebep="python3 bu kutuda yok" ;;
+      TMUX-YOK)   sebep="tmux bu kutuda yok" ;;
+      OKUNAMADI)  sebep="ekip listesi okunamadı (biçim bozuk olabilir)" ;;
+      *)          sebep="$jeton" ;;
+    esac
+    printf '  %sEkibim%s\n' "$C_BAS" "$C_SIF"
+    printf '  %sölçemedim%s — %s\n' "$C_SAR" "$C_SIF" "$sebep"
+    printf '  %s(ekip listesi VAR; eksik olan ölçüm aracı — "ekip yok" demek yanlış olurdu)%s\n\n' \
+           "$C_SOL" "$C_SIF"
+    EKIP_YOK=1
+    return 0
+  fi
   if [ "$rc" -ne 0 ] || [ -z "$out" ]; then
     printf '  %sEkibim%s\n' "$C_BAS" "$C_SIF"
     printf '  %sbu dizinde ekip tanımı yok%s\n' "$C_SOL" "$C_SIF"
@@ -140,8 +160,15 @@ _uye_sec() {
   # Çıkış-kodu ÖNCE kontrol edilir; jeton-satırları asla listeye girmez.
   local ham rc
   ham="$(bash "$HERE/ekip-durum.sh" 2>/dev/null)"; rc=$?
+  if [ "$rc" -eq 2 ]; then
+    # dosya VAR, ölçüm aracı eksik → "ekip yok" DEMEYECEĞİZ (yalan olurdu)
+    printf '  %sEkip listesini okuyamadım%s (%s) — ekip listesi VAR, eksik olan ölçüm aracı.\n' \
+           "$C_SAR" "$C_SIF" "$(printf '%s' "$ham" | head -1 | cut -f1)"
+    printf '  %sBunu ekran düzeltemez — kutunun kurulumunda eksik var, Sultana söyle.%s\n\n' "$C_SOL" "$C_SIF"
+    return 0
+  fi
   if [ "$rc" -ne 0 ]; then
-    printf '  %sEkip listesi okunamadı%s (%s) — bu dizinde ekip tanımı yok.\n' "$C_SAR" "$C_SIF" "$(printf '%s' "$ham" | head -1)"
+    printf '  %sBu dizinde ekip tanımı yok%s (%s).\n' "$C_SAR" "$C_SIF" "$(printf '%s' "$ham" | head -1 | cut -f1)"
     printf '  %sBir proje dizinine geç, örn:  cd ~/projects/Nexus && basla%s\n\n' "$C_SOL" "$C_SIF"
     return 0
   fi

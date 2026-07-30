@@ -24,3 +24,22 @@ jobs:
         run: node ahi/schema/version-lint.mjs .
       - name: "Motor · sync-skills.mjs sözdizimi"
         run: node --check sync-skills.mjs
+
+      # Kabuk-sınamaları: 2026-07-30'a kadar depoda 20 adet `*.test.sh` vardı ve HİÇBİRİ
+      # bir kapıda koşmuyordu — yazılmış ama bağlanmamış koruma. (Aynı sınıf cloudtop'ta da
+      # ölçüldü.) Liste TÜRETİLİR, elle sayılmaz: yeni bir sınama eklendiği anda bu kapı onu
+      # kendiliğinden koşar; sıfır sınama bulmak KIRMIZI'dır (keşif bozulursa sessizce
+      # "hepsi geçti" demesin).
+      - name: "Kabuk sınamaları · her *.test.sh (liste türetilir, sıfır bulmak kırmızı)"
+        run: |
+          set -uo pipefail
+          mapfile -t T < <(find . -name '*.test.sh' -not -path './.git/*' | sort)
+          if [ "${#T[@]}" -eq 0 ]; then echo "::error::hiç *.test.sh bulunamadı — keşif bozuk"; exit 1; fi
+          echo "bulunan sınama: ${#T[@]}"
+          dusen=0
+          for t in "${T[@]}"; do
+            echo "── $t"
+            if timeout 300 bash "$t"; then echo "   ✓ $t"; else echo "::error::$t KIRMIZI"; dusen=$((dusen+1)); fi
+          done
+          echo "toplam=${#T[@]} düşen=$dusen"
+          [ "$dusen" -eq 0 ]
