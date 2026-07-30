@@ -18,7 +18,16 @@
 # "her şey yolunda" DEMEZ.
 set -u
 
-HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+# ⚠️ SYMLINK-FARKINDA yol çözümü. Bu betik PATH'ten (~/.local/bin/basla → symlink) çağrılır;
+# çıplak dirname o zaman /config/.local/bin verir ve yanındaki ekip-durum.sh'i BULAMAZ
+# (firsthand 2026-07-30: ekran "ölçülemedi" dedi, oysa ölçüm betiği tek başına çalışıyordu).
+# Doğrudan koşumda test edip PATH koşumunda kırılan sınıf — "birim yeşil ≠ yol çalışıyor".
+_KAYNAK="${BASH_SOURCE[0]}"
+while [ -L "$_KAYNAK" ]; do
+  _HEDEF="$(readlink "$_KAYNAK")"
+  case "$_HEDEF" in /*) _KAYNAK="$_HEDEF" ;; *) _KAYNAK="$(dirname "$_KAYNAK")/$_HEDEF" ;; esac
+done
+HERE=$(cd "$(dirname "$_KAYNAK")" && pwd)
 PROJE="${BASLA_PROJE:-$(basename "${PWD:-/}")}"
 [ "$PROJE" = "/" ] && PROJE="çalışma alanı"
 PANO="${BASLA_PANO:-}"
