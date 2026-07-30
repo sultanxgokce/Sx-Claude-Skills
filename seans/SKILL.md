@@ -1,6 +1,6 @@
 ---
 name: seans
-version: 1.5.0
+version: 1.5.1
 description: >
   Claude sohbetlerini yönetme ve ekip kısayolları — her kutuda çalışır.
   Motor (cs) burada tek kopya yaşar; cloudtop tarafındaki eski çağrı yolu ince köprüyle korunur.
