@@ -192,6 +192,68 @@ _gecici_masalar() {
   done
 }
 
+# _ekip_onar — "Ekibi kontrol et / onar".
+# ESKİ HÂL (Sultan canlı gördü, 2026-07-30 · tez kutusu): `ekip` aracı olmayan kutuda ham
+# makine çıktısı ekrana dökülüyordu — sekmeyle ayrılmış, üye adı iki kez, sonunda
+# "ÖZET 1 3 0". Sultan'a hiçbir şey anlatmıyordu, üstelik "onarım aracı yok, bu salt-bilgi"
+# diyip ELİNDEN GELENİ de yapmıyordu: kapalı masayı açmak için `ekip` aracına gerek yok,
+# `basla` bunu üye-geçişinde zaten yapıyor. Artık ölçümü Sultan-dilinde basar VE onarır.
+_ekip_onar() {
+  # Kutuda gerçek onarım aracı varsa O kanoniktir (Claude'u da başlatır) — davranış değişmez.
+  if command -v ekip >/dev/null 2>&1; then ekip; printf '\n'; return 0; fi
+  local ham rc
+  ham="$(bash "$HERE/ekip-durum.sh" 2>/dev/null)"; rc=$?
+  if [ "$rc" -eq 2 ]; then
+    printf '  %sölçemedim%s (%s) — ekip listesi VAR, eksik olan ölçüm aracı.\n\n' \
+           "$C_SAR" "$C_SIF" "$(printf '%s' "$ham" | head -1 | cut -f1)"
+    return 0
+  fi
+  if [ "$rc" -ne 0 ]; then
+    printf '  %sbu dizinde ekip tanımı yok — onarılacak ekip yok%s\n\n' "$C_SOL" "$C_SIF"
+    return 0
+  fi
+  local -a kapali=() duplike=()
+  local uid sess durum not ayakta=0
+  while IFS=$'\t' read -r uid sess durum not; do
+    [ -n "$uid" ] && [ "$uid" != "ÖZET" ] || continue
+    case "$durum" in
+      ayakta)  ayakta=$((ayakta+1)) ;;
+      duplike) duplike+=("$sess") ;;
+      *)       [ -n "$sess" ] && [ "$sess" != "-" ] && kapali+=("$sess") ;;
+    esac
+  done <<< "$ham"
+
+  printf '  %s%s ayakta%s · %s kapalı' "$C_YSL" "$ayakta" "$C_SIF" "${#kapali[@]}"
+  [ "${#duplike[@]}" -gt 0 ] && printf ' · %s%s duplike%s' "$C_SAR" "${#duplike[@]}" "$C_SIF"
+  printf '\n'
+
+  if [ "${#kapali[@]}" -eq 0 ] && [ "${#duplike[@]}" -eq 0 ]; then
+    printf '  %sonarılacak bir şey yok%s\n\n' "$C_YSL" "$C_SIF"
+    return 0
+  fi
+  [ "${#kapali[@]}" -gt 0 ]  && printf '  %skapalı:%s %s\n'  "$C_SOL" "$C_SIF" "${kapali[*]}"
+  [ "${#duplike[@]}" -gt 0 ] && printf '  %sduplike:%s %s  %s(elle bakılmalı — hangisi gerçek, sen bilirsin)%s\n' \
+                                       "$C_SAR" "$C_SIF" "${duplike[*]}" "$C_SOL" "$C_SIF"
+  [ "${#kapali[@]}" -gt 0 ] || { printf '\n'; return 0; }
+
+  printf '  %s masayı şimdi açayım mı? [E/h] ' "${#kapali[@]}"
+  local c
+  if [ -n "${BASLA_TEST_SECIM:-}" ]; then c="${BASLA_TEST_ONAY:-h}"; printf '%s\n' "$c"
+  elif [ -r /dev/tty ]; then read -r c < /dev/tty || c="h"
+  else c="h"; fi
+  case "${c:-E}" in h|H|n|N) printf '  vazgeçildi.\n\n'; return 0 ;; esac
+
+  local m acildi=0
+  for m in "${kapali[@]}"; do
+    if tmux new-session -d -s "$m" 2>/dev/null; then
+      acildi=$((acildi+1)); printf '  %s✓%s %s\n' "$C_YSL" "$C_SIF" "$m"
+    else
+      printf '  %s✗%s %s açılamadı\n' "$C_KRM" "$C_SIF" "$m"
+    fi
+  done
+  printf '  %s%s masa açıldı — içlerinde Claude başlatmak ayrı iş%s\n\n' "$C_SOL" "$acildi" "$C_SIF"
+}
+
 _uye_sec() {
   # ⚠️ ÖLÇÜM-HATASI ÜYE DEĞİLDİR. Eski hâl `ekip-durum.sh`in hata-jetonunu (EKIP-LISTESI-YOK)
   # bir üye sanıp "1 EKIP-LISTESI-YOK" diye listeliyordu (Sultan canlı testte gördü, 2026-07-30).
@@ -299,10 +361,7 @@ _ekran
 
 _eylem() {
   case "${1:-}" in
-    1) if command -v ekip >/dev/null 2>&1; then ekip; else
-         bash "$HERE/ekip-durum.sh" | sed 's/^/  /'
-         printf '\n  %sonarım aracı (ekip) bu kutuda yok — yukarıdaki ölçüm salt-bilgidir%s\n' "$C_SOL" "$C_SIF"
-       fi; printf '\n' ;;
+    1) _ekip_onar ;;
     2) _uye_sec ;;
     3) if command -v yenisession >/dev/null 2>&1; then yenisession; else printf '  yenisession bulunamadı\n'; fi; printf '\n' ;;
     4) if command -v yardim >/dev/null 2>&1; then yardim; else printf '  yardim bulunamadı\n'; fi; printf '\n' ;;

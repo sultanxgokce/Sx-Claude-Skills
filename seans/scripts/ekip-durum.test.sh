@@ -186,5 +186,39 @@ else
   no "G7c sıra yanlış" "uye=$s_uye gecici=$s_gec"
 fi
 
+# ── G8 · "Ekibi kontrol et / onar" HAM makine çıktısı DÖKMEZ
+# Sultan canlı gördü (tez kutusu): seçenek-1 sekmeyle ayrılmış ölçümü ekrana döktü —
+# üye adı iki kez, sonunda "ÖZET 1 3 0". Sultan'a hiçbir şey anlatmıyordu.
+# `ekip` aracı olmayan bir kutuyu taklit ediyoruz (PATH'te ekip YOK).
+g8bin="$T/g8bin"; mkdir -p "$g8bin"
+cat > "$g8bin/tmux" <<'SH'
+#!/usr/bin/env bash
+case "${1:-}" in
+  ls) printf 'ornek-yon\n' ;;
+  new-session) exit 0 ;;
+  has-session) exit 0 ;;
+  *) exit 0 ;;
+esac
+SH
+chmod +x "$g8bin/tmux"
+mk_sedir "$T/g8"
+# PATH'i DARALT: yalnız sahte tmux + sistem araçları; `ekip` bulunmasın
+g8out="$(cd "$T/g8" && PATH="$g8bin:/usr/bin:/bin" BASLA_TEST_SECIM=1 BASLA_TEST_ONAY=h \
+        bash "$B" 2>&1 || true)"
+if printf '%s' "$g8out" | grep -q 'ÖZET'; then
+  no "G8 ham 'ÖZET' satırı ekranda — makine çıktısı dökülüyor" ""
+else
+  ok "G8 ham 'ÖZET' satırı ekranda YOK"
+fi
+printf '%s' "$g8out" | grep -q '1 ayakta' \
+  && ok "G8b sayım Sultan-dilinde basıldı" || no "G8b sayım yok"
+printf '%s' "$g8out" | grep -q 'masayı şimdi açayım mı' \
+  && ok "G8c kapalı masalar için ONARIM teklif edildi" || no "G8c onarım teklifi yok"
+printf '%s' "$g8out" | grep -q 'salt-bilgidir' \
+  && no "G8d 'salt-bilgidir' pes etme cümlesi hâlâ var" "" || ok "G8d 'salt-bilgi' pes etmesi kalktı"
+# onay 'h' verildi → hiçbir masa açılmamalı
+printf '%s' "$g8out" | grep -q 'vazgeçildi' \
+  && ok "G8e 'h' cevabı yazma YAPMADI" || no "G8e 'h' cevabı saygı görmedi"
+
 printf '\npass=%s fail=%s\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]
