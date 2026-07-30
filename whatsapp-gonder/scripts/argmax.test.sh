@@ -76,6 +76,17 @@ k="$(SAHTE_RC=126 bash -c '
   _cagir /gonder "kisa" 2>/dev/null')"
 [ "$k" = "000" ]; g $? "sözleşme korundu: düşünce yine '000' (çağıranlar kırılmadı)"
 
+# ── KİMLİK JETONU · niçin bu kapı var ────────────────────────────────────────
+# Geçit 2026-07-29'dan beri jeton istiyor. O düzeltme CANLI kopyaya elle yazılmış ve
+# depoya HİÇ girmemişti (`git log -S x-wa-jeton` → sıfır commit): senkron motoru
+# "sürüm aynı, içerik farklı" uyarısı verdiği için kurtarıldı; bir `--force` uzaktaydı.
+# Bu kapı onu kaynağa çiviler — silinirse kırmızı olur, sessizce geri gitmez.
+grep -q 'x-wa-jeton' "$S";                       g $? "istek 'x-wa-jeton' başlığı taşıyor"
+grep -q 'WA_JETON' "$S";                         g $? "jeton WA_JETON ortamından okunabiliyor"
+grep -q '/config/.wa-jeton' "$S";                g $? "jeton dosya yolundan okunabiliyor"
+# DEĞER-SIZINTISI: jeton hiçbir echo/printf ile ekrana basılmamalı
+! grep -nE '(echo|printf)[^#]*\$(\{)?JETON' "$S"; g $? "jeton DEĞERİ ekrana basılmıyor"
+
 echo ""
 echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" = 0 ] || exit 1

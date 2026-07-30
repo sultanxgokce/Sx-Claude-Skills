@@ -1,7 +1,7 @@
 ---
 name: whatsapp-gonder
 type: agent
-version: 1.0.3
+version: 1.0.4
 description: >
   Herhangi bir kutudan Sultan'a WhatsApp mesajı/dosyası göndermenin TEK yolu. Kutu tarafında
   yapılandırma yoktur: geçit (cloudtop-wa) iç ağda durur, kutu yalnız ona seslenir. Numara
@@ -54,7 +54,13 @@ bash $S --dosya /config/projects/tez/rapor.pdf --not "ilk taslak"
 ## Ortam
 
 Geçit adresi varsayılan `http://cloudtop-wa:8790`; gerekirse `WA_GECIT` ile değiştirilir.
-Kutunun iç ağda (`cloudtop_default`) olması yeterlidir — ek mount ya da ayar yoktur.
+Kutunun iç ağda (`cloudtop_default`) olması gerekir.
+
+**Kutu jetonu (2026-07-29'dan beri ZORUNLU):** geçit kimlik ister; jetonsuz istek
+`401 {"hata":"jeton_yok"}` döner. Betik jetonu şu sırayla arar: `WA_JETON` ortam değişkeni →
+`/config/.wa-jeton` (ilk satır). **Jeton bir SIRDIR** — ekrana, loga, hata mesajına ASLA
+basılmaz; bu dosyada da yalnız KONUMU yazılır. Kayıt defteri: `Nexus/_agents/credentials.yaml`
+→ `wa-gecit-kutu-jetonu`. Jeton yoksa istek 401 döner ve betik bunu açıkça söyler.
 
 ## Kademe (AHÎ)
 
