@@ -56,4 +56,56 @@ if ! command -v claude >/dev/null 2>&1; then
   exit 1
 fi
 
-exec claude --session-id "$SID" --name "$ROL" --permission-mode "$PMODE"
+# ── İLK AÇILIŞ mı, YENİDEN AÇILIŞ mı? ────────────────────────────────────────
+# ⚠️ NİÇİN (2026-07-31, NÂZIR bildirdi → firsthand ölçüldü): kutu yeniden yaratılınca
+#   `--session-id` o kimlikle İKİNCİ kez çağrılıyordu ve claude bunu reddediyor:
+#     claude --session-id <var olan> --print …  → exit 1 · "Session ID … is already in use."
+#   Etkileşimli kipte bu, üyeyi "oturum eski, özetten devam?" menüsünde asılı bırakıyordu.
+#   MÜDÜR menüyü kendi AÇAMAZ (pane'e tuş göndermek haklı olarak yasak) → her yeniden
+#   başlatma her odada bir insan-eli istiyordu. 10 kutuluk filoda 1 restart = 10 müdahale.
+#
+# ÖLÇÜLEN ÇÖZÜM (aynı turda üç koşuyla kanıtlandı):
+#     claude --resume <var olan>  → exit 0 · üstelik önceki konuşmayı HATIRLIYOR (gerçek devam)
+#     claude --resume <yeni id>   → exit 1 · "No conversation found with session ID: …"
+#
+# Yani SONDANIN KENDİSİ PROB'dur: önce --resume denenir, "konuşma yok" derse ilk-açılıştır
+# ve --session-id ile taze başlatılır. Böylece transcript ağacına HİÇ dokunmuyoruz —
+# o ağaca dokunan tek yer `ekip-ac.sh :: _transcript_var_mi` olarak kalıyor (yüzey-daraltması
+# değişmezi korunur; ikinci bir dokunuş eklemek o güvenceyi sessizce zayıflatırdı).
+# ⚠️ PROB İÇİN `--print` KULLANILMAZ: her açılışta gerçek bir model çağrısı yapardı VE
+#   ekibin sohbetine sahte bir mesaj eklerdi (üye açtığında "hazir" diye bir alışveriş görürdü).
+#   Bunun yerine launcher KENDİ izini tutar: ilk başarılı açılışta bir işaret dosyası bırakır.
+#   Böylece ne transcript ağacına dokunuyoruz ne de jeton harcıyoruz.
+_IZ_DIR="${BASLAT_IZ_DIR:-$HOME/.claude-baslat}"
+_IZ="$_IZ_DIR/$SID.acildi"
+mkdir -p "$_IZ_DIR" 2>/dev/null || true
+
+# İşaret VARSA önce --resume, YOKSA önce --session-id. Yanılırsak claude'un kendi hata
+# metni bizi düzeltir → iki yönde de düşmeden geçeriz (işaret kaybolsa da doğru çalışır).
+if [ -f "$_IZ" ]; then _once="resume"; else _once="taze"; fi
+
+_hata="$(mktemp)"; trap 'rm -f "$_hata"' EXIT
+
+if [ "$_once" = "resume" ]; then
+  if claude --resume "$SID" --name "$ROL" --permission-mode "$PMODE" 2>"$_hata"; then exit 0; fi
+  if grep -qi "no conversation found" "$_hata"; then
+    echo "[sari] iz vardi ama konusma yok (temizlenmis olabilir) — taze aciliyor" >&2
+    : > "$_IZ"
+    exec claude --session-id "$SID" --name "$ROL" --permission-mode "$PMODE"
+  fi
+else
+  if claude --session-id "$SID" --name "$ROL" --permission-mode "$PMODE" 2>"$_hata"; then
+    : > "$_IZ"; exit 0
+  fi
+  if grep -qi "already in use" "$_hata"; then
+    echo "[sari] iz yoktu ama oturum VAR — devam ediliyor (iz onariliyor)" >&2
+    : > "$_IZ"
+    exec claude --resume "$SID" --name "$ROL" --permission-mode "$PMODE"
+  fi
+fi
+
+# Tanımadığımız bir hata: sahte-yeşil basmayız, körlemesine taze oturum da açmayız
+# (geçmişi olan bir kimliği yanlışlıkla ezme riski). Ham çıktıyı gösterip düşeriz.
+echo "[kirmizi] claude beklenmedik sekilde dustu (rol=$ROL sid=$SID). Ham cikti:" >&2
+sed 's/^/       | /' "$_hata" >&2
+exit 1
