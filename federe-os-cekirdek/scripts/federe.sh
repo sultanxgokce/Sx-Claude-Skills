@@ -93,7 +93,11 @@ _listele() { # $1=yon $2=durum
   local adet; adet="$(echo "$resp" | jq -r '.adet // 0')"
   if [[ "$adet" == "0" ]]; then echo "📭 kayıt yok ($1/$durum)"; return 0; fi
   echo "📬 $adet kayıt ($1/$durum):"
-  echo "$resp" | jq -r '.tetikler[] | "  • [\(.id)] \(.durum) · \(.kaynakCell)→\(.hedefCell) · \(.tip) · \(.baslik)\(if .kartRef then " (\(.kartRef))" else "" end)"'
+  # b0060 (2026-07-31): `not` alanı GÖNDERİLİYOR (POST :133-135, ≤500 META) ve GET tam kaydı
+  # döndürüyor — ama okuma ucu onu HİÇ basmıyordu. Gönderen "not yazdım" der, alan taraf yalnız
+  # başlığı görürdü; 7 MİHENK talebi bu yüzden yalnız başlıktan triyaj edilebildi. Not artık
+  # girintili ikinci satır olarak basılır (varsa); yoksa satır aynen eskisi gibi tek satır kalır.
+  echo "$resp" | jq -r '.tetikler[] | "  • [\(.id)] \(.durum) · \(.kaynakCell)→\(.hedefCell) · \(.tip) · \(.baslik)\(if .kartRef then " (\(.kartRef))" else "" end)" + (if (.not // "") != "" then "\n      ↳ \(.not)" else "" end)'
 }
 
 _gecis() { # $1=id $2=durum [$3=sonuc_not]
@@ -132,30 +136,58 @@ case "$cmd" in
   tamam)  _gecis "${2:-}" tamam "${3:-}" ;;
   iptal)  _gecis "${2:-}" iptal ;;
   dinle)
+    # ⚖️ TESLİMAT ≠ ÜSTLENME (L37-F0, 2026-07-31 — sahte-makbuz panzehiri)
+    #
+    # ESKİ DAVRANIŞ: `dinle` her tetiği gelen-kutusuna yazar VE durumunu KOŞULSUZ `alindi`ya
+    # çevirirdi. Gönderen tarafta bu "muhatabım işi üstlendi" anlamına geliyordu — oysa hiç
+    # kimse üstlenmemişti; kayıt yalnız kimsenin bakmadığı bir dosyaya düşmüştü.
+    # Ölçülen sonuç: 7 MİHENK talebi 8 gün 20 saat boyunca "teslim alındı" damgalı bekledi;
+    # kuyruk, hiç iş yapılmasa bile SONSUZA DEK TEMİZ görünüyordu.
+    #
+    # YENİ DAVRANIŞ: `dinle` yalnız TESLİM EDER (gelen-kutusuna yazar) — durum `bekliyor`
+    # KALIR. `alindi` damgasını yalnız bir SAHİP basar: `federe.sh alindi <id>`.
+    # Böylece "kuyrukta bekleyen" sayısı gerçeği söyler ve sahipsizlik görünür olur.
+    #
+    # MÜKERRER-YAZIM: ACK basılmadığı için her poll aynı tetikleri döndürür → görülen id'ler
+    # bir durum dosyasında tutulur; gelen-kutusuna her tetik YALNIZ BİR KEZ yazılır.
+    # `--ack` bayrağı eski davranışı korur (geriye-uyum; otomasyon kırılmasın).
     INBOX="$(_inbox)"
+    ACK=0; [ "${2:-}" = "--ack" ] && ACK=1
+    GORULEN="${FEDERE_GORULEN:-$(dirname "$INBOX")/gorulen-tetikler.txt}"
     resp="$(_api GET "/api/filo/tetik?yon=gelen&durum=bekliyor")" || { rc=$?; [ "$rc" -eq 2 ] && exit 2; exit 1; }
     if echo "$resp" | jq -e '.error' >/dev/null 2>&1; then
       echo "❌ $(echo "$resp" | jq -r '.error')"; exit 1
     fi
     adet="$(echo "$resp" | jq -r '.adet // 0')"
     if [[ "$adet" == "0" ]]; then echo "📭 bekleyen tetik yok"; exit 0; fi
-    mkdir -p "$(dirname "$INBOX")"
+    mkdir -p "$(dirname "$INBOX")"; touch "$GORULEN"
     ts="$(date -u +%Y-%m-%dT%H:%MZ)"
-    ackfail=0
+    ackfail=0; yeni=0
     while IFS=$'\t' read -r id kaynak tip baslik kart; do
-      printf -- '- [%s] %s %s ← %s: %s%s\n' "$ts" "$tip" "$id" "$kaynak" "$baslik" \
-        "${kart:+ ($kart)}" >> "$INBOX"
-      # _gecis hata-yolunda exit çağırır → subshell'e al ki tek ACK-hatası batch'i öldürmesin
-      # (409 eşzamanlılık/anlık-ağ = beklenen sınıf; ACK'lenmeyen sonraki poll'da tekrar gelir).
-      if ( _gecis "$id" alindi >/dev/null 2>&1 ); then :; else
-        ackfail=$((ackfail+1)); echo "⚠️ ACK düşmedi: $id" >&2
+      if ! grep -qxF "$id" "$GORULEN" 2>/dev/null; then
+        printf -- '- [%s] %s %s ← %s: %s%s\n' "$ts" "$tip" "$id" "$kaynak" "$baslik" \
+          "${kart:+ ($kart)}" >> "$INBOX"
+        printf '%s\n' "$id" >> "$GORULEN"
+        yeni=$((yeni+1))
+      fi
+      if [ "$ACK" -eq 1 ]; then
+        # _gecis hata-yolunda exit çağırır → subshell'e al ki tek ACK-hatası batch'i öldürmesin
+        # (409 eşzamanlılık/anlık-ağ = beklenen sınıf; ACK'lenmeyen sonraki poll'da tekrar gelir).
+        if ( _gecis "$id" alindi >/dev/null 2>&1 ); then :; else
+          ackfail=$((ackfail+1)); echo "⚠️ ACK düşmedi: $id" >&2
+        fi
       fi
     done < <(echo "$resp" | jq -r '.tetikler[] | [.id, .kaynakCell, .tip, .baslik, (.kartRef // "")] | @tsv')
-    if [ "$ackfail" -gt 0 ]; then
-      echo "📥 $adet tetik çekildi → $INBOX (ACK: $((adet-ackfail)) ok · $ackfail düşmedi — ACK'siz olanlar sonraki poll'da tekrar gelir)"
-      exit 1
+    if [ "$ACK" -eq 1 ]; then
+      if [ "$ackfail" -gt 0 ]; then
+        echo "📥 $adet tetik çekildi → $INBOX (ACK: $((adet-ackfail)) ok · $ackfail düşmedi — ACK'siz olanlar sonraki poll'da tekrar gelir)"
+        exit 1
+      fi
+      echo "📥 $adet tetik teslim-alındı → $INBOX (alindi-ACK basıldı)"
+      exit 0
     fi
-    echo "📥 $adet tetik teslim-alındı → $INBOX (alindi-ACK basıldı)"
+    # Varsayılan yol: teslim edildi, ÜSTLENİLMEDİ. Sayı gerçeği söyler.
+    echo "📥 $adet bekleyen tetik ($yeni yeni) → $INBOX · SAHİPSİZ — üstlenmek için: federe.sh alindi <id>"
     ;;
   nabiz)
     ozet="${2:-}"; skor="${3:-}"

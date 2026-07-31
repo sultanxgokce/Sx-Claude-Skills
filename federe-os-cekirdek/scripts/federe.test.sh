@@ -112,13 +112,37 @@ echo "-- T16: gonder yanıt-parse (snake kaynak_cell/hedef_cell) --"
 OUT="$(FEDERE_API_BASE="http://127.0.0.1:$MPORT" FEDERE_TETIK_TOKEN=dummytok bash "$SUT" gonder s04 "test-başlık" 2>&1)"; RC=$?
 [ "$RC" -eq 0 ] && echo "$OUT" | grep -q "s01→s04" && ok "gonder kontrat-parse RC=0" || no "gonder mock yanlış (rc=$RC)"
 
-echo "-- T17: dinle ACK-409'da batch ÖLMEZ (kalan işlenir + RC=1 + uyarı) --"
+echo "-- T17: dinle --ack · ACK-409'da batch ÖLMEZ (kalan işlenir + RC=1 + uyarı) --"
+# NOT: ACK artık VARSAYILAN DEĞİL (L37-F0). Bu kapı geriye-uyum yolunu (`--ack`) sınar.
 INB="$TMPD/inbox.md"
-OUT="$(FEDERE_API_BASE="http://127.0.0.1:$MPORT" FEDERE_TETIK_TOKEN=dummytok FEDERE_TETIK_INBOX="$INB" bash "$SUT" dinle 2>&1)"; RC=$?
-[ "$RC" -eq 1 ] && ok "dinle kısmi-ACK RC=1" || no "dinle RC yanlış (rc=$RC)"
+OUT="$(FEDERE_API_BASE="http://127.0.0.1:$MPORT" FEDERE_TETIK_TOKEN=dummytok FEDERE_TETIK_INBOX="$INB" \
+       FEDERE_GORULEN="$TMPD/gorulen-t17.txt" bash "$SUT" dinle --ack 2>&1)"; RC=$?
+[ "$RC" -eq 1 ] && ok "dinle --ack kısmi-ACK RC=1" || no "dinle RC yanlış (rc=$RC)"
 echo "$OUT" | grep -q "ACK düşmedi: t1" && ok "ACK-hata uyarısı basıldı (ölü-kod değil)" || no "ACK-uyarı yok"
 [ -f "$INB" ] && [ "$(grep -c '^- \[' "$INB")" -eq 2 ] && ok "batch tamamı inbox'a düştü (2/2)" || no "inbox eksik ($(grep -c '^- \[' "$INB" 2>/dev/null || echo 0)/2)"
 echo "$OUT" | grep -q "1 ok · 1 düşmedi" && ok "kısmi-ACK özeti dürüst" || no "özet-satırı yanlış"
+
+echo "-- T17b: TESLİMAT ≠ ÜSTLENME — varsayılan dinle ACK BASMAZ (L37-F0 sahte-makbuz panzehiri) --"
+# Bu kapının VAR OLMA sebebi: eski `dinle` koşulsuz `alindi` damgalıyordu → gönderen
+# "üstlenildi" sanıyordu. Ölçülen sonuç: 7 talep 8 gün 20 saat "teslim alındı" damgalı bekledi
+# ve kuyruk hiç iş yapılmasa bile TEMİZ görünüyordu.
+INB2="$TMPD/inbox-noack.md"; GOR2="$TMPD/gorulen-noack.txt"
+OUT="$(FEDERE_API_BASE="http://127.0.0.1:$MPORT" FEDERE_TETIK_TOKEN=dummytok FEDERE_TETIK_INBOX="$INB2" \
+       FEDERE_GORULEN="$GOR2" bash "$SUT" dinle 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && ok "varsayılan dinle RC=0" || no "varsayılan dinle rc=$RC"
+echo "$OUT" | grep -q "SAHİPSİZ" && ok "çıktı sahipsizliği AÇIKÇA söylüyor" || no "sahipsizlik bildirilmiyor"
+echo "$OUT" | grep -q "teslim-alındı" && no "hâlâ 'teslim-alındı' diyor (sahte-makbuz geri geldi)" || ok "'teslim-alındı' iddiası YOK"
+echo "$OUT" | grep -q "ACK düşmedi" && no "varsayılan yolda ACK denendi" || ok "varsayılan yolda ACK HİÇ denenmedi"
+[ "$(grep -c '^- \[' "$INB2")" -eq 2 ] && ok "teslimat yine yapıldı (2/2 inbox'a düştü)" || no "teslimat kayboldu"
+echo "$OUT" | grep -q "2 yeni" && ok "yeni-sayısı bildirildi" || no "yeni-sayısı yok"
+
+echo "-- T17c: mükerrer-yazım YOK — ikinci poll aynı tetikleri tekrar yazmaz --"
+# ACK basılmadığı için sunucu aynı tetikleri tekrar döndürür; gelen-kutusu şişmemeli.
+OUT="$(FEDERE_API_BASE="http://127.0.0.1:$MPORT" FEDERE_TETIK_TOKEN=dummytok FEDERE_TETIK_INBOX="$INB2" \
+       FEDERE_GORULEN="$GOR2" bash "$SUT" dinle 2>&1)"
+[ "$(grep -c '^- \[' "$INB2")" -eq 2 ] && ok "ikinci poll mükerrer yazmadı (hâlâ 2)" || no "inbox şişti ($(grep -c '^- \[' "$INB2"))"
+echo "$OUT" | grep -q "0 yeni" && ok "ikinci poll '0 yeni' dedi" || no "yeni-sayısı yanlış"
+echo "$OUT" | grep -q "2 bekleyen" && ok "toplam bekleyen sayısı gerçeği söylüyor" || no "toplam yanlış"
 
 echo "-- T18: nabiz 201 kontrat --"
 OUT="$(FEDERE_API_BASE="http://127.0.0.1:$MPORT" FEDERE_TETIK_TOKEN=dummytok bash "$SUT" nabiz "mock-nabız" 2>&1)"; RC=$?
