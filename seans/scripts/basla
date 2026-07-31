@@ -205,6 +205,58 @@ _kapimda_blogu() {
   printf '     %sdetay: %s%s\n' "$C_SOL" "$dosya" "$C_SIF"
 }
 
+# _talep_zili — başka odalardan gelen, HENÜZ SAHİPSİZ taleplerin zili (L37-F2).
+#
+# NİÇİN VAR: odalar arası talepler bir kuyruğa düşüyor ama kuyruğu kimse görmüyordu.
+# Ölçüm: 7 talep 8 gün 20 saat sahipsiz bekledi; kuyruk "temiz" görünüyordu çünkü
+# teslimat ile üstlenme aynı damgaya bağlıydı (L37-F0 onu ayırdı). Bu zil, ayrılan
+# gerçeği ekrana taşır: "bekleyen var ve KİMSE üstlenmemiş".
+#
+# 🔴 AĞA ÇIKMAZ. Ölçümü 15 dakikada bir koşan cron yapar ve `durum.txt`'ye yazar; bu
+# fonksiyon yalnız o dosyayı okur. Sebep: `basla` her yeni terminalde koşuyor — buraya
+# API çağrısı koymak açılışı ağ gecikmesine ve token varlığına bağlardı, token'sız
+# kutuda da ekran "0 bekliyor" diyerek SAHTE-YEŞİL üretirdi.
+# Ölçüm bayatsa (>2 saat) sayı basılmaz, "doğrulanmadı" denir — kırmızı DEĞİL, dürüst.
+_talep_zili() {
+  local d="${FEDERE_DURUM:-/config/.federe/durum.txt}"
+  [ -r "$d" ] || return 0                      # ölçüm hiç yapılmamış → sessiz (yokluk ≠ arıza)
+  local adet en_eski kontrol
+  adet="$(sed -n 's/^adet=//p' "$d" | head -1)"
+  en_eski="$(sed -n 's/^en_eski=//p' "$d" | head -1)"
+  kontrol="$(sed -n 's/^kontrol=//p' "$d" | head -1)"
+  case "${adet:-}" in ''|*[!0-9]*) return 0 ;; esac
+  [ "$adet" -gt 0 ] || return 0                # kuyruk boş → tek kelime etme
+
+  # Ölçüm tazeliği: cron 15 dk'da bir koşar. 2 saati aşan ölçüm güvenilmez sayılır
+  # (cron durmuş olabilir) → sayıyı GERÇEK gibi sunmak yanlış olur.
+  local simdi_s kontrol_s yas_dk=""
+  if [ -n "$kontrol" ]; then
+    simdi_s="$(date -u +%s 2>/dev/null)"
+    kontrol_s="$(date -u -d "$(printf '%s' "$kontrol" | sed 's/Z$//')" +%s 2>/dev/null || echo "")"
+    [ -n "$kontrol_s" ] && [ -n "$simdi_s" ] && yas_dk=$(( (simdi_s - kontrol_s) / 60 ))
+  fi
+  if [ -n "$yas_dk" ] && [ "$yas_dk" -gt 120 ]; then
+    printf '\n  %s📮 oda-talepleri: doğrulanmadı%s — son ölçüm %s dk önce (dinleyici durmuş olabilir)\n' \
+           "$C_SOL" "$C_SIF" "$yas_dk"
+    return 0
+  fi
+
+  # En eski bekleyenin yaşı — "8 gündür duruyor" cümlesini kuran şey bu.
+  local bekleme=""
+  if [ -n "$en_eski" ] && [ "$en_eski" != "-" ]; then
+    local es_s; es_s="$(date -u -d "$(printf '%s' "$en_eski" | sed 's/Z$//')" +%s 2>/dev/null || echo "")"
+    if [ -n "$es_s" ] && [ -n "${simdi_s:-}" ]; then
+      local saat=$(( (simdi_s - es_s) / 3600 ))
+      if   [ "$saat" -ge 48 ]; then bekleme=" · en eskisi $(( saat / 24 )) gündür bekliyor"
+      elif [ "$saat" -ge 1 ];  then bekleme=" · en eskisi $saat saattir bekliyor"
+      fi
+    fi
+  fi
+  printf '\n  %s📮 %s oda-talebi SAHİPSİZ%s%s\n' "$C_SAR" "$adet" "$C_SIF" "$bekleme"
+  printf '     %süstlenmek için: federe.sh alindi <id> · listelemek için: federe.sh gelen bekliyor%s\n' \
+         "$C_SOL" "$C_SIF"
+}
+
 _yapistirma_nabzi() {
   [ -z "${BASLA_TEST_SECIM:-}" ] || return 0          # sınamalar ağa/porta bağlanmasın (hermetik)
   [ "${BASLA_YAPISTIRMA_KONTROL:-1}" = "1" ] || return 0
@@ -243,6 +295,7 @@ _ekran() {
   _kopya_satiri
   _ekip_blogu
   _kapimda_blogu
+  _talep_zili
   _yapistirma_nabzi
   printf '  %sHazır%s — %sok tuşlarıyla seç, Enter ile onayla, ESC ile çık%s\n\n' \
          "$C_BAS" "$C_SIF" "$C_SOL" "$C_SIF"
