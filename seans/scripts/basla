@@ -175,6 +175,36 @@ _kopya_satiri() {
 # Bu ekran artık HER YENİ TERMİNALDE koşuyor, yani Sultan yapıştırmadan hemen önce: nabzı
 # kontrol etmenin en doğru yeri burası. Kurulumu YENİDEN YAZMAZ — kutunun kendi başlatıcısını
 # çağırır (tek kaynak). Sağlıklıysa TEK KELİME etmez; sustuğu yer "her şey yolunda"dır.
+# _kapimda_blogu — Sultan'ı bekleyen kartları karşılama ekranında göster (L38 F1).
+#
+# NİÇİN BURADA (firsthand 2026-07-31): `kapimda.md` aynı gün kuruldu ama
+# `grep -rl kapimda skills/ cloudtop/scripts/` → **0 eşleşme**. Yani "işler kaybolmasın"
+# diye açılan dosyanın kendisi kaybolmaya adaydı: Sultan elle açmadıkça hiçbir yer
+# göstermiyordu — filonun kronik "yapılmış ama bağlanmamış iş" hastalığı, kurulduğu gün.
+# Bu ekran her yeni terminalde koşuyor → kartların görüneceği en doğru yer burası.
+#
+# DAVRANIŞ: dosya yoksa ya da kart yoksa **tek kelime etmez** (yokluk ≠ arıza).
+# Tavan 3 kart (L38 §4.1); fazlası tek satır "+N daha" olarak sayılır — ekran şişmez.
+# Yalnız BAŞLIK basar: gövde/adım/komut ekrana dökülmez, detay dosyada kalır.
+_kapimda_blogu() {
+  local dosya="${KAPIMDA_DOSYA:-$HOME/.claude/kapimda.md}"
+  [ -r "$dosya" ] || return 0
+  local -a kartlar=()
+  # Kart başlığı: "🚦 SENDE · <Kısa Ad>". `⏸️ BAŞKASINDA` bilinçli olarak SAYILMAZ —
+  # o iş Sultan'da değil; kapıda göstermek yanlış-yük olur.
+  mapfile -t kartlar < <(grep -oP '^🚦 SENDE · \K.*' "$dosya" 2>/dev/null)
+  local n=${#kartlar[@]}
+  [ "$n" -gt 0 ] || return 0
+  printf '\n  %s🚦 kapında %s iş var%s\n' "$C_SAR" "$n" "$C_SIF"
+  local i=0
+  for k in "${kartlar[@]}"; do
+    i=$((i+1)); [ "$i" -le 3 ] || break
+    printf '     • %s\n' "$k"
+  done
+  [ "$n" -gt 3 ] && printf '     %s+%s daha%s\n' "$C_SOL" "$((n-3))" "$C_SIF"
+  printf '     %sdetay: %s%s\n' "$C_SOL" "$dosya" "$C_SIF"
+}
+
 _yapistirma_nabzi() {
   [ -z "${BASLA_TEST_SECIM:-}" ] || return 0          # sınamalar ağa/porta bağlanmasın (hermetik)
   [ "${BASLA_YAPISTIRMA_KONTROL:-1}" = "1" ] || return 0
@@ -212,6 +242,7 @@ _ekran() {
   printf '\n'
   _kopya_satiri
   _ekip_blogu
+  _kapimda_blogu
   _yapistirma_nabzi
   printf '  %sHazır%s — %sok tuşlarıyla seç, Enter ile onayla, ESC ile çık%s\n\n' \
          "$C_BAS" "$C_SIF" "$C_SOL" "$C_SIF"
