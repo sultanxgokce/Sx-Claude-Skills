@@ -318,7 +318,7 @@ _gec() {
     fi
     return 0
   fi
-  tmux attach -t "$h"
+  tmux attach -d -t "$h"
   printf '\n  %smasadan ayrıldın — menüye dönülüyor%s\n' "$C_SOL" "$C_SIF"
 }
 

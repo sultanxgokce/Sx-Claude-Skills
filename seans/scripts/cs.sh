@@ -1106,11 +1106,16 @@ cmd_resume() {
     local live_sess; live_sess=$(live_tmux_session_for_sid "$sid")
     if [ -n "$live_sess" ]; then
       printf 'Canlı seansa bağlanılıyor (ayna): %s\n' "$title"
-      exec tmux attach -t "=$live_sess"
+  # -d ZORUNLU (2026-08-03 firsthand): tmux, aynı oturuma bağlı EN KÜÇÜK istemciye sıkışır.
+  # Terk edilmiş 80 sütunluk bir sekme, 202 sütunluk canlı pencereyi 80'e hapsetti ve
+  # Sultan ekranın yarısını kaybetti; nedeni görünmez çünkü tmux bunu hiçbir yere yazmaz.
+  # -d yeni bağlantıda eskileri ayırır → ekran hep tam genişlikte. Bedeli bilinçli:
+  # iki cihazdan AYNI oturum eşzamanlı izlenemez (oturum yaşar, geri bağlanılır).
+      exec tmux attach -d -t "=$live_sess"
     fi
     if tmux has-session -t "=$tsess" 2>/dev/null; then
       printf 'Canlı seansa bağlanılıyor (ayna): %s\n' "$title"
-      exec tmux attach -t "$tsess"
+      exec tmux attach -d -t "$tsess"
     fi
     if sid_is_live "$sid"; then
       # canlı ama hiçbir tmux oturumunda değil = raw terminal → buradan resume FORK olur.
