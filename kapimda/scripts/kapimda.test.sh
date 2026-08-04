@@ -82,6 +82,41 @@ grep -q "kapanış: Sultan kasada kimliği açtı" "$KAPIMDA_DOSYA" && ok "B4 ge
 kos bitti "Olmayan Kart" --gerekce "x" >/dev/null 2>&1
 [ $? -eq 1 ] && ok "B6 olmayan kartı kapatmaya çalışınca RC=1 (sessiz başarı yok)" || kotu "B6 hayalet kapatma"
 
+# ── SON-HALKA: bloklu ajandan "çözüldü" oluru (MABEYN H3) ────────────────────
+# Sahte federe: verilen id'nin durumunu fixture'dan basar.
+cat > "$T/federe.sh" <<EOF
+#!/usr/bin/env bash
+[ "\$1" = "giden" ] && cat "$T/tetikler.txt" 2>/dev/null
+exit 0
+EOF
+chmod +x "$T/federe.sh"
+kos_f(){ FEDERE_SH="$T/federe.sh" bash "$SUT" "$@"; }
+
+kos ac "Olur Karti" --ne "$G_NE" --nicin-sen "$G_NICIN" --yapilmazsa "$G_YAP" --bitince "$G_BIT" >/dev/null 2>&1
+printf '  • [tetik-1] alindi · s01→s04 · tetik · is
+' > "$T/tetikler.txt"
+kos_f bitti "Olur Karti" --gerekce "Sultan adimi yapti" --federe-tamam tetik-1 >/dev/null 2>&1
+[ $? -eq 4 ] && ok "S1 olur gelmeden kart KAPANMADI (RC=4)" || kotu "S1 olursuz kapattı"
+grep -qx "🚦 SENDE · Olur Karti" "$KAPIMDA_DOSYA" && ok "S2 kart açık kaldı" || kotu "S2 kart kapandı!"
+
+printf '  • [tetik-1] tamam · s01→s04 · tetik · is
+' > "$T/tetikler.txt"
+kos_f bitti "Olur Karti" --gerekce "Sultan adimi yapti" --federe-tamam tetik-1 >/dev/null 2>&1
+[ $? -eq 0 ] && ok "S3 olur gelince kart kapandı" || kotu "S3 olur geldi ama kapanmadı"
+grep -q "^olur: bloklu ajan doğruladı" "$KAPIMDA_DOSYA" && ok "S4 olur-satırı kanıtla yazıldı" || kotu "S4 olur satırı yok"
+
+kos ac "Kanitsiz Kart" --ne "$G_NE" --nicin-sen "$G_NICIN" --yapilmazsa "$G_YAP" --bitince "$G_BIT" >/dev/null 2>&1
+kos bitti "Kanitsiz Kart" --gerekce "artık gerek kalmadı" >/dev/null 2>&1
+[ $? -eq 0 ] && ok "S5 kanıtsız kapatma hâlâ mümkün (--federe-tamam opsiyonel)" || kotu "S5 kanıtsız kapatma kırıldı"
+awk '/^✅ KAPANDI .* · Kanitsiz Kart$/{f=1;next} f&&/^olur:/{print "VAR";exit} f&&/^$/{exit}' "$KAPIMDA_DOSYA" | grep -q VAR   && kotu "S6 kanıtsız kapanışa olur-satırı yazdı" || ok "S6 kanıtsız kapanışta olur-satırı YOK (ayırt edilebilir)"
+
+printf '' > "$T/tetikler.txt"
+kos ac "Hayalet Tetik" --ne "$G_NE" --nicin-sen "$G_NICIN" --yapilmazsa "$G_YAP" --bitince "$G_BIT" >/dev/null 2>&1
+kos_f bitti "Hayalet Tetik" --gerekce "x" --federe-tamam yok-boyle-id >/dev/null 2>&1
+[ $? -eq 2 ] && ok "S7 tetik bulunamadı → RC=2 (doğrulanamadı ≠ tamam)" || kotu "S7 hayalet tetiği kabul etti"
+kos bitti "Hayalet Tetik" --gerekce "temizlik" >/dev/null 2>&1
+kos bitti "Olur Karti" --gerekce "temizlik" >/dev/null 2>&1
+
 # ── liste + lint ─────────────────────────────────────────────────────────────
 kos liste 2>/dev/null | grep -q "Ikinci Kart" && ok "L1 liste açık kartları basar" || kotu "L1 liste yanlış"
 kos lint >/dev/null 2>&1; [ $? -eq 0 ] && ok "L2 lint temiz dosyada RC=0" || kotu "L2 lint yanlış kırmızı"

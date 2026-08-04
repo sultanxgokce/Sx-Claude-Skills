@@ -13,7 +13,7 @@
       "sync_dagitim": false,
       "type": "foundation",
       "name": "Memex — Kişisel AI Hafıza Sistemi",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "Yaşayan kişisel AI hafıza sistemi — bi-temporal knowledge graph (Graphiti pattern), project namespace, embedding versioning. Cortex v1'in (Sultan/Nexus) parametrik kopyası. Yeni projelere /memex init ile kurulur.",
       "prerequisites": {
         "backend": [
@@ -64,7 +64,7 @@
       "sync_dagitim": false,
       "type": "feature",
       "name": "Feedback Widget",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "In-app feedback widget — floating button, screenshot capture, canvas annotation, multi-image, reply threads. FastAPI + Next.js için tam kurulum.",
       "prerequisites": {
         "backend": [
@@ -132,7 +132,7 @@
       "sync_dagitim": false,
       "type": "agent",
       "name": "Skill Packager",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "Mevcut bir modülü Sx-Claude-Skills formatında paketler: SKILL.md, templates/, catalog.json güncellemesi, GitHub push ve Nexus kaydı.",
       "prerequisites": {},
       "tags": [
@@ -159,7 +159,7 @@
       "sync_dagitim": false,
       "type": "feature",
       "name": "In-Place Chat",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "Sayfa değiştirmeden anasayfada chat açan animasyonlu sistem. history.pushState + useState ile welcome→2-kolon geçişi. Masaüstü yatay split, mobil dikey flex split. Front-end-design kuralları zorunlu.",
       "prerequisites": {
         "frontend": [
@@ -198,7 +198,7 @@
       "sync_dagitim": false,
       "type": "agent",
       "name": "YouTube Transcript",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "YouTube videosunu okunabilir dokümana dönüştürür. Altyazı varsa direkt çeker, yoksa Whisper ile transkripsiyon yapar. Claude (OpenRouter) ile formatlar, PDF veya Word olarak kaydeder.",
       "prerequisites": {
         "python": ">=3.9",
@@ -567,7 +567,7 @@
       "id": "layiha-kapisi",
       "type": "agent",
       "name": "Layiha-Kapısı — iş-yakalama + Sultan-mesajı yanıt prosedürü",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "Sultan-sohbetinde iki tekrarlayan-anı standartlaştırır: (A) İŞ-YAKALAMA KAPISI — işten-bahis algıla, YENİ-iş mi MEVCUT-eklemesi mi ayır, YENİ ise LAYİHAYA yazmadan ÖNCE çoktan-seçmeli onay sor (Evet/Düzenle/Hayır), ekleme ise mevcut-kaydı güncelle (gürültü/dublikasyon önle). (B) SULTAN-MESAJI YANIT PROSEDÜRÜ — mesaj gelince net-hızlı sıra: oku→anla→sade-yanıtla→aksiyon-al→kapat. NOT: k#### kart tabanlı iş-takibi 2026-07-29'da emekli (ADR-026); iş-kaydı artık layihadır. Global, defansif.",
       "prerequisites": {
         "system": [
@@ -616,21 +616,21 @@
       "id": "erisim",
       "type": "agent",
       "name": "/erisim — Erişim-Zinciri dispatcher (tek giriş-noktası)",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "Ajanın erişim-ihtiyacında TEK komut: skill VAR→delege (vault-first sır-çözüm), YOK→SERDAR'a Skill-İstek emit (F5-kanal, geçici-konvansiyon key=SKILL:<platform>), sır-eksik→--sir-iste Sultan'a Vault-İstek. doctor 3-durum. Değer stdout/log/chat'e ASLA. (Erişim-zinciri DESIGN §A.)"
     },
     {
       "id": "vault-cek",
       "type": "agent",
       "name": "vault-cek — merkezî-vault seam (store-agnostik)",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "Sır-çözüm seam'i: doctor·resolve·get <KEY>·list kontratı; arkasında pluggable adaptör (vault-cek-infisical.sh = Infisical Universal-Auth, folder-path model; Railway-backbone legacy). Değer stdout'a basılmaz (600 env-dosyasına yazar). Erişim-skill'lerinin vault-first temeli."
     },
     {
       "id": "seyir-defteri",
       "type": "agent",
       "name": "/seyir-defteri — keşif-günlüğü + döngü-refleksiyon (GLOBAL)",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "Çok-ajanlı işte yan-keşiflerin (aslında-şöyleymiş · bug · risk · fırsat · itiraz) SESSİZCE ATLANMAMASI için append-only günlük: her-ajan tek-komut yazar (sev×tür iki-eksen), koordinatör filtreli okur+disposition işaretler; opsiyonel döngü-sonu refleksiyon-ritüeli ('döngü bitti, plan moduna geçelim' → 4-soru + döngü-özet + hafıza-köprüsü) + geçici-md migrate (idempotent). jsonl 3-event (not/disp/ozet), satır-edit-yok, flock-güvenli, git-kök-resolve, proje-agnostik. Kültür-kuralı gömülü: orkestraya itiraz SERBEST+TEŞVİKLİ. (SİNAN/MMEx + HEKİMBAŞI/medigate birleşik-talebi; MİMSERDAR-spec.)"
     },
     {
@@ -700,7 +700,7 @@
       "id": "sunucu-kur",
       "type": "agent",
       "name": "sunucu-kur — VPS provizyon standardı (toolkit + cloud-init)",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "Reis yeni sunucu isteyince ELLE kurma yerine tek-standart provizyon: hcloud/cloud-init tabanlı VPS-kur (uid-1500-fix) + runbook. create=Sultan-gate (yıkıcı-sınıf); sır-değeri basmaz.",
       "tags": [
         "vps",
@@ -785,7 +785,7 @@
       "id": "kayit-damgasi",
       "type": "agent",
       "name": "kayit-damgasi — merge-anı kayıt kapanış-damgası orkestratörü",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "Bir iş/PR merge olurken kapattığı kayda (defter-kartı, gap/bulgu-defteri, SULTAN-KAPISI gate'i, plan-satırı) kapanış-damgasını işleyen paketli yardımcı. CLAUDE.md §9 refleksini tek-komuta indirir; scripts/layiha-defteri.sh durum primitifini orkestra eder. DRY-varsayılan (tara/merge yazmaz) + insan-onay-alanına ASLA yazmaz (yalnız bitti|teslim|yeniden kart-flip'i). Kaynak: vizyon-denetimi FAZ-2 İLK-DALGA Z6 (YK-007), defter-kartı k0107.",
       "prerequisites": {
         "system": [
@@ -954,7 +954,7 @@
       "id": "kapimda",
       "type": "tool",
       "name": "kapımda — Sultan'ı bekleyen işlerin yazıcısı + lint'i",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "kapimda.md kartlarını fail-closed SEKİZ lint kapısından geçirerek yazar (dört zorunlu alan · 'Niçin sen' boşsa kart AÇILAMAZ · tavan 3 · ad tekilliği · Sultan-dili/İ1 kalkanı · tek-eylem · sır-desen · uzunluk), kartı kapatır (A06: onay DEĞİL, görünürlük) ve elle-yapılacak işler için tek-mesaj-tek-adım motorunu yürütür (plan diske, ekrana yalnız sıradaki adım). Kanon: L38-F3/F4 + L39-F1 (MABEYN H2). GLOBAL: 16 kutu aynı /config/.claude/kapimda.md dosyasını görür; karşılama ekranı bu kartları çizer.",
       "prerequisites": {
         "system": [
@@ -1125,7 +1125,7 @@
       "id": "kapi-yolu",
       "type": "agent",
       "name": "kapi-yolu — Çok-Model Kapısı Yolu (kur · aç · denetle · yay)",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "L25 kapı şeridinin tek giriş-noktası (Usta/bileşik): host-geçidi kurucusu (kapi-kur.sh), istemci kurucusu (setup-kapi.sh), `kapi` başlatıcısı (tek şerit-otoritesi), anahtar-temini (istemci-anahtar.sh → vault-cek) ve geri-alma düğmesini (ocak/model-modu.sh) BESTELER — kendi ssh/docker/curl kodunu yazmaz. Filo-yayılımı kuru-koşu varsayılan (scripts/kapi-yay.sh): 8/10 kutu cloudtop reposunu GÖRMEZ (firsthand ölçüldü) → istemci yüzeyi ortak mount'a dağıtım-kopyası olarak basılır, kutu başına tek ve aynı komut kalır. Değişmezler: varsayılan `claude` şeridi dokunulmaz · settings.json'a env YAZILMAZ · sessiz düşme yok · sır argv/log'a düşmez.",
       "prerequisites": {
         "system": [
