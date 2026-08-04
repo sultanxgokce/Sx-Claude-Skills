@@ -279,9 +279,14 @@ _kuyruk_satiri() {
     # ilk sırayı aldı → BAŞKA kutunun hedefi ekrana geldi (yanlış bilgi + İ1'e yakın sızıntı).
     # Doğru kaynak: İÇİNDE BULUNDUĞUN deponun çapası. Bulunamazsa ve aday BİRDEN ÇOKSA
     # tahmin YAPILMAZ — sessiz kalınır (yanlış söylemek, susmaktan kötüdür).
+    # 🔴 İKİNCİ DERS (aynı gün, ikinci canlı koşum): "git-kökü yoksa tek-aday varsa onu al"
+    # yedeği de yanlış çıktı — bir depodaYDIK (Nexus), ama onun çapası yerel checkout'ta
+    # yoktu; yedek devreye girip KOMŞU deponun (MMEx) hedefini seçti. Doğru kural sert:
+    # bir depodaysan YALNIZ o deponun çapası; yoksa SUS. Tarama yedeği ancak hiçbir depoda
+    # değilken (git-kök çözülemiyorsa) ve tek aday varsa meşrudur.
     local kok; kok="$(git rev-parse --show-toplevel 2>/dev/null)"
-    if [ -n "$kok" ] && [ -r "$kok/_agents/ANA-HEDEF.md" ]; then
-      d="$kok/_agents/ANA-HEDEF.md"
+    if [ -n "$kok" ]; then
+      [ -r "$kok/_agents/ANA-HEDEF.md" ] && d="$kok/_agents/ANA-HEDEF.md"
     else
       local -a adaylar=()
       mapfile -t adaylar < <(ls -1 /config/projects/*/_agents/ANA-HEDEF.md 2>/dev/null)
@@ -290,8 +295,9 @@ _kuyruk_satiri() {
     # çapa yok: yalnız şablon teslim EDİLMİŞSE konuş (yoksa bu kutunun işi değil → sessiz)
     if [ -z "$d" ]; then
       local s=""
-      [ -n "$kok" ] && [ -r "$kok/0-teslimat/gelen/ANA-HEDEF-SABLON.md" ] && s="$kok/0-teslimat/gelen/ANA-HEDEF-SABLON.md"
-      if [ -z "$s" ]; then
+      if [ -n "$kok" ]; then
+        [ -r "$kok/0-teslimat/gelen/ANA-HEDEF-SABLON.md" ] && s="$kok/0-teslimat/gelen/ANA-HEDEF-SABLON.md"
+      else
         local -a sadaylar=()
         mapfile -t sadaylar < <(ls -1 /config/projects/*/0-teslimat/gelen/ANA-HEDEF-SABLON.md 2>/dev/null)
         [ "${#sadaylar[@]}" -eq 1 ] && s="${sadaylar[0]}"

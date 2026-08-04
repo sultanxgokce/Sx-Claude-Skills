@@ -107,6 +107,18 @@ grep -qE '/config/projects/\*/.*\|\s*head -1' <(sed -n '/^_kuyruk_satiri() {/,/^
   && kotu "G8b 'ilkini seç' tahmini koda geri döndü" || ok "G8b 'ilkini seç' tahmini kodda YOK"
 grep -q 'rev-parse --show-toplevel' "$SUT" && ok "G8c kaynak = içinde bulunulan depo" || kotu "G8c depo-kökü çözülmüyor"
 
+# ── G9: BİR DEPODAYIZ ama o deponun çapası YOK → komşunun çapasına DÜŞMEZ (ikinci canlı ders)
+# İlk fix "git-kökü varsa onu al, yoksa tek-aday yedeği" diyordu. Nexus'ta koşuldu: depo VAR,
+# çapası yerel checkout'ta YOK → yedek devreye girip KOMŞU deponun (MMEx) hedefini bastı.
+# Sert kural: bir depodaysan yalnız o deponun çapası; yoksa SUS.
+depo="$T/depo"; mkdir -p "$depo"
+( cd "$depo" && git init -q . && git config user.email t@t && git config user.name t )
+cikti="$(cd "$depo" && ANA_HEDEF_DOSYA='' bash -c "
+  C_SAR=''; C_SIF=''; C_SOL=''; C_BAS=''
+  $(ayikla)
+  _kuyruk_satiri" 2>&1)"
+[ -z "$cikti" ] && ok "G9 çapasız depoda komşuya DÜŞMEDİ (sustu)" || kotu "G9 komşunun hedefini bastı: $cikti"
+
 # ── G7: çizici çağrılıyor mu (bağlanmamış-iş panzehiri — kapımda bloğunun dersi)
 grep -q '^  _kuyruk_satiri$' "$SUT" && ok "G7 _ekran içinde ÇAĞRILIYOR" || kotu "G7 fonksiyon öksüz (çağıranı yok)"
 
