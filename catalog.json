@@ -1222,6 +1222,20 @@
       "status": "v0.1-canli",
       "path": "ui-tasarim-akisi/",
       "installed_in": []
+    },
+    {
+      "id": "sultan-eli",
+      "type": "agent",
+      "name": "sultan-eli — geri alınamaz kapılarda insan-eli ölçümü",
+      "version": "0.1.0",
+      "description": "A06 kapı-kaynağı ölçümü: Sultan'ın `!` komutu oturum kaydına <bash-input> olarak düşer, ajanınki düşmez; kapı bu izi imzaya+zamana bağlar. Yalnız geri alınamaz kapılarda kullanılır (Sultan kararı 2026-08-04). Kilit değil korkuluk: kazayı durdurur, kastı durdurmaz. Üç-durum: 0 var · 1 yok · 3 ÖLÇÜLEMEDİ (3≠1).",
+      "tags": [
+        "onay",
+        "kapi",
+        "guvenlik",
+        "a06",
+        "sultan-gate"
+      ]
     }
   ]
 }

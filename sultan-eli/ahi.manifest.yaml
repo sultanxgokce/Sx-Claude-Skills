@@ -1,0 +1,22 @@
+# sultan-eli — AHÎ manifesti.
+# version manifest'te YOK (tek-evi SKILL.md frontmatter — ADR-001).
+#
+# KAPSAM-REFLEKSİ (AHÎ zorunlu 4-adım, koşuldu 2026-08-04):
+#  · R-03 "zaten var mı": 18 becerinin tümü tarandı → kaynağı ölçen 0. Mükerrer DEĞİL.
+#  · negatif-kapsam: geri ALINABİLİR kapılara DOKUNMAZ (Sultan kararı); sır okumaz/yazmaz;
+#    oturum kaydından yalnız `<bash-input>` sarmalayıcısını ve zaman damgasını okur —
+#    sohbet içeriği ne raporlanır ne saklanır (İ1).
+#  · bölge-çakışma: yok (yeni yüzey).
+#  · dağıtım-kapsamı: _global — kapılar her kutuda yaşıyor.
+tier: kalfa
+name: sultan-eli
+generic_goal: "geri alınamaz bir işten önce, çağrının insan elinden gelip gelmediğini proje-bağımsız biçimde ölçme"
+activation:
+  onKeyword: sultan-eli
+requires_harness: ">=0"
+spec_version: "0.1"
+owner: SERDAR-KAHYA-review-kapisi
+feedback:
+  owner: SERDAR
+install_targets:
+  - _global
