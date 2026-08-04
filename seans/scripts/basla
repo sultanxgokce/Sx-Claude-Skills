@@ -257,6 +257,59 @@ _talep_zili() {
          "$C_SOL" "$C_SIF"
 }
 
+# _kuyruk_satiri — bu kutunun ANA-HEDEF kuyruğu: "durmak yok" kuralının EKRAN YÜZÜ (MABEYN H4-2).
+#
+# NİÇİN VAR (ölçülmüş 2026-08-04): durma-standardı "Ş2-fiili ya da eskalasyon-sinyali yoksa
+# DURMAK ihlaldir" der — ama ajan kendi kuyruğunu görmüyorsa kural boşlukta kalır. Aynı gün
+# plan-bekçisi 12/12 kutuyu PLANSIZ ölçtü; sebep tembellik değil, çapanın hiç dağıtılmamış
+# olmasıydı. Çapa artık dağıtıldı; bu satır onu HER YENİ TERMİNALDE görünür kılar — yoksa
+# dosya yine "yapılmış ama bağlanmamış iş" olurdu (kapımda bloğunun birebir dersi).
+#
+# ÜÇ HÂL (hepsi dürüst, hiçbiri sahte-yeşil):
+#   çapa YOK      → "hedefin yazılı değil" + şablonun yeri (dağıtım paketinden gelir)
+#   kuyruk DOLU   → sıradaki iş + "Ş2 yoksa sor-durma, yürü"
+#   kuyruk BOŞ    → "MÜDÜR'e kuyruk-boş bildir" — Sultan'a DEĞİL (kesme-enflasyonu panzehiri)
+# Damga >7 gün ise ayrıca "bayat" der (tazelik MÜDÜR sorumluluğu).
+# İ1: kutunun KENDİ dosyası, kendi ekranı — hiçbir şey dışarı taşınmaz. Yalnız İLK iş basılır.
+_kuyruk_satiri() {
+  local d="${ANA_HEDEF_DOSYA:-}"
+  if [ -z "$d" ]; then
+    d="$(ls -1 /config/projects/*/_agents/ANA-HEDEF.md 2>/dev/null | head -1)"
+    # çapa yok: yalnız şablon teslim EDİLMİŞSE konuş (yoksa bu kutunun işi değil → sessiz)
+    if [ -z "$d" ]; then
+      local s; s="$(ls -1 /config/projects/*/0-teslimat/gelen/ANA-HEDEF-SABLON.md 2>/dev/null | head -1)"
+      [ -n "$s" ] || return 0
+      printf '\n  %s🎯 ana-hedefin yazılı değil%s — şablon geldi: %s%s%s\n' \
+             "$C_SAR" "$C_SIF" "$C_SOL" "$s" "$C_SIF"
+      printf '     %shedefini _agents/ANA-HEDEF.md olarak yaz (tazelik ≤7 gün — MÜDÜR sorumluluğu)%s\n' \
+             "$C_SOL" "$C_SIF"
+      return 0
+    fi
+  fi
+  [ -r "$d" ] || return 0
+
+  local n ilk damga bayat=""
+  # NOT: `grep -c` eşleşme yokken "0" BASAR ve rc=1 döner; sonuna `|| echo 0` eklemek
+  # çıktıyı "0\n0" yapar ve sayı karşılaştırması patlar (ilk koşumda yakalandı — G4).
+  n="$(grep -cE '^[0-9]+\. ' "$d" 2>/dev/null)"; n="${n:-0}"
+  ilk="$(grep -m1 -E '^[0-9]+\. ' "$d" 2>/dev/null | sed 's/^[0-9]*\. *//' | cut -c1-72)"
+  damga="$(sed -n 's/^guncelleme: *\([0-9-]\{10\}\).*/\1/p' "$d" | head -1)"
+  if [ -n "$damga" ]; then
+    local e s2; e="$(date -d "$damga" +%s 2>/dev/null)"; s2="$(date +%s)"
+    [ -n "$e" ] && [ $(( (s2 - e) / 86400 )) -gt 7 ] && bayat=" · damga $(( (s2 - e) / 86400 )) günlük (bayat)"
+  fi
+
+  if [ "${n:-0}" -eq 0 ]; then
+    printf '\n  %s🎯 kuyruğun BOŞ%s%s — MÜDÜR'"'"'üne "kuyruk-boş" bildir %s(Sultan'"'"'a değil)%s\n' \
+           "$C_SAR" "$C_SIF" "$bayat" "$C_SOL" "$C_SIF"
+    return 0
+  fi
+  printf '\n  %s🎯 kuyruğunda %s iş var%s%s\n' "$C_BAS" "$n" "$C_SIF" "$bayat"
+  printf '     • sıradaki: %s\n' "$ilk"
+  printf '     %sŞ2-fiili (merge/prod/dış-servis/silme/sır) yoksa sorma — yürü; durmak ihlaldir%s\n' \
+         "$C_SOL" "$C_SIF"
+}
+
 _yapistirma_nabzi() {
   [ -z "${BASLA_TEST_SECIM:-}" ] || return 0          # sınamalar ağa/porta bağlanmasın (hermetik)
   [ "${BASLA_YAPISTIRMA_KONTROL:-1}" = "1" ] || return 0
@@ -295,6 +348,7 @@ _ekran() {
   _kopya_satiri
   _ekip_blogu
   _kapimda_blogu
+  _kuyruk_satiri
   _talep_zili
   _yapistirma_nabzi
   printf '  %sHazır%s — %sok tuşlarıyla seç, Enter ile onayla, ESC ile çık%s\n\n' \
