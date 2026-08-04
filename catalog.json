@@ -623,7 +623,7 @@
       "id": "vault-cek",
       "type": "agent",
       "name": "vault-cek — merkezî-vault seam (store-agnostik)",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "description": "Sır-çözüm seam'i: doctor·resolve·get <KEY>·list kontratı; arkasında pluggable adaptör (vault-cek-infisical.sh = Infisical Universal-Auth, folder-path model; Railway-backbone legacy). Değer stdout'a basılmaz (600 env-dosyasına yazar). Erişim-skill'lerinin vault-first temeli."
     },
     {
@@ -637,7 +637,7 @@
       "id": "ahi",
       "type": "agent",
       "name": "AHÎ — 4-kademe AI-yetenek-üretim fabrikası",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "description": "Yeni-skill üretimini tek-standarda oturtan fabrika: Çırak→Kalfa→Usta→Pîr kademeleri; komutlar `ahi new|check|promote|deprecate|classify|health`. DOCTRINE.md kanonu + zero-dep validator; ADR-001 drift-otorite-ayrımı (ahi.sh sync-targets'a YAZMAZ — install-girdisi insan/PR işi).",
       "tags": [
         "fabrika",

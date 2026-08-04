@@ -1,7 +1,7 @@
 ---
 name: vault-cek
 type: agent
-version: 1.1.0
+version: 1.1.1
 description: >
   Merkezî Vault'tan (Infisical central-vault; 2026-07-10 cutover) sır çeker → cortex-access.env. On-demand:
   Sultan sırları bir kez vault'a koyar, her container machine-identity (Universal Auth) ile self-servis çeker.

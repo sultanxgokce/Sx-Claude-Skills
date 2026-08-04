@@ -85,5 +85,53 @@ Terfi = **objektif-appraisal** (vibe değil). Her kademe-atlaması TEK yeni yete
 - **`ahi check` = TAMAMLAYICI** (rakip değil): catalog/sync-targets/README parity + manifest-semantiği. Version'ı sync-skills'e salt-okur-DELEGE; iki-yerde-varsa eşitlik-assert. sync-targets/catalog'a **yazmaz**.
 - Bkz `ADR/ADR-001-drift-otorite-ayrimi.md`.
 
+## 12 · KULLANDIKÇA GELİŞTİR (yaşayan-senkron · L46 · Sultan-onayı 2026-08-04)
+
+> **Kural tek cümle:** bir beceriyi KULLANAN, onu geliştirmekle de yükümlüdür — ve geliştirdiği
+> şey **kanona dönmeden iş bitmiş sayılmaz**.
+
+**Niçin var (ölçüldü, 2026-08-04):** 50+ becerinin **7'si** canlı rafta kanondan İLERİDEYDİ.
+Yani ajanlar becerileri zaten geliştiriyordu; gelişme kanona hiç dönmüyordu. Üç somut kayıp:
+`whatsapp-gonder`'in sessiz-yanlış-alıcı düzeltmesi 4 gün yalnız bir kutuda yaşadı ve başka bir
+kutu aynı hatayı canlıda yedi · `federe-os-cekirdek`'in tetikli-mesaj geliştirmesi kanonda yoktu →
+sıfırdan-rebuild onu geri getirmezdi · `iskan` ters yönde takıldı: kanon ileri, canlı geri, **sürüm
+aynı** olduğu için dağıtım aracı dosyaya hiç dokunmuyordu (sessizce).
+
+### 12.1 · Altı adım (sıra bağlayıcı)
+1. **Kim geliştirir:** kullanan. Eksik/hata/daha-iyi-yol gördüğün an düzeltirsin; "sahibine bildirdim"
+   diyip geçmek geliştirme DEĞİLDİR (kayıt bırakmadan geçen bulgu kaybolur — §9-SYS/a).
+2. **Nerede düzeltirsin:** kendi kutunun **canlı rafında** (`/config/.claude/skills/<ad>/`). İzole
+   kutu kanon-depoyu göremez; bu bir arıza değil mahremiyet duvarıdır.
+3. **SÜRÜMÜ YÜKSELT — atlanamaz.** Davranış değiştiyse `SKILL.md` frontmatter'ındaki `version`
+   yükselir (davranış-düzeltmesi=patch · yeni yetenek=minor). **Sürüm yükseltmeden düzenlemek =
+   sessiz drift:** dağıtım aracı sürüm eşitken dosyaya DOKUNMAZ, düzeltmen sonraki senkronda
+   sessizce ezilir ya da hiç yayılmaz. (`iskan` vakası tam buydu.)
+4. **KANONA DÖNDÜR — "bitti"nin şartı budur.** Kanon-depoya (`Sx-Claude-Skills`) PR aç. Kutun
+   kanonu göremiyorsa: beceri klasörünü kuryenin giden kutusuna bırak
+   (`oda-kurye.sh` 2026-08-04'ten beri **klasör taşır**) + yanına tek sayfalık devir notu:
+   *ne değişti · niçin · hangi işte fiilen kullanıldı · hangi kısım hâlâ sana özgü.*
+5. **Dağıtımı DOĞRULA.** "PR birleşti" ≠ "kutularda var". `sync-skills.mjs --apply` sonrası hedef
+   kutuda dosyanın fiilen durduğunu gör. (Aynı gün üç compose PR'ı host'a hiç inmemişti — depo ≠ canlı.)
+6. **Deftere bir satır.** Ne değişti + sürüm + PR. Damgasız gelişme, bir sonraki ajan tarafından
+   yeniden keşfedilir.
+
+### 12.2 · Neyi BAĞLAMAZ (negatif kapsam — sınırsız kural reddedilir)
+- **Çırak/kutu-yerel denemeler** (`<proje>/.claude/skills/`): tüketicisi yok, kanona dönmek zorunda değil.
+  Kural, **dağıtılmış** becerileri (Kalfa+ ve canlı ortak raftakileri) bağlar.
+- **Geriye dönük toplu tarama emri DEĞİLDİR.** Kural kullanım-anında işler: 50+ beceriyi bugün
+  elden geçirme borcu doğurmaz; bir beceriye DOKUNULDUĞU an o beceri için yürürlüğe girer.
+  (Bugünkü 7 ihlal kuraldan ÖNCE ayrıca temizlendi — kural doğarken ihlalli doğmasın diye.)
+- **Sır/kişisel veri** hiçbir gelişmede kanona taşınmaz; izole kutu içeriği kanala girmez (İ1).
+
+### 12.3 · Bekçi ZORLAR (yoksa kural temenni kalır)
+Canlı kopya kanondan **ileriyse ya da sürüm eşitken içeriği farklıysa** rapor **KIRMIZI** kalır.
+- `sync-skills.mjs` (bayraksız, dry-run) iki drift hâlini de yakalar — sürüm-drift'i ve
+  **içerik-drift'ini** — ve **çıkış 1** verir. Bu zorlama araçta ZATEN VAR (2026-08-04 ölçüldü).
+- Eksik olan **çağıran**dı: haftalık `evergreen-parity.sh` bu aracı yalnız *remediation metninde*
+  anıyordu, hiç KOŞMUYORDU → kırmızı üretilse de kimse duymuyordu. `P11e-BECERI-DRIFT` kolu bunu
+  bağlar. *("Bunu kim çağıracak?" — motor sağlam, çağıran yok sınıfı.)*
+- **Ölçerken tuzak:** `node sync-skills.mjs | tail` çıkış kodunu YUTAR ve bekçi yeşil görünür.
+  Çıplak koş ya da `; echo exit=$?` ekle. (Bu satır bizzat o tuzağa düşülerek yazıldı.)
+
 ---
 *AHÎ · Sx-Claude-Skills · kademe-rütbesi: Çırak → Kalfa → Usta → Pîr/Lonca · sahip: SERDAR/KÂHYA review-kapısı*
