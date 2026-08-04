@@ -274,10 +274,28 @@ _talep_zili() {
 _kuyruk_satiri() {
   local d="${ANA_HEDEF_DOSYA:-}"
   if [ -z "$d" ]; then
-    d="$(ls -1 /config/projects/*/_agents/ANA-HEDEF.md 2>/dev/null | head -1)"
+    # 🔴 İLK CANLI KOŞUM DERSİ (2026-08-04): önce `ls /config/projects/*/…| head -1` yazılmıştı.
+    # İzole kutuda tek repo var, doğru çalışıyordu; MERKEZ kutuda onlarca repo var ve alfabetik
+    # ilk sırayı aldı → BAŞKA kutunun hedefi ekrana geldi (yanlış bilgi + İ1'e yakın sızıntı).
+    # Doğru kaynak: İÇİNDE BULUNDUĞUN deponun çapası. Bulunamazsa ve aday BİRDEN ÇOKSA
+    # tahmin YAPILMAZ — sessiz kalınır (yanlış söylemek, susmaktan kötüdür).
+    local kok; kok="$(git rev-parse --show-toplevel 2>/dev/null)"
+    if [ -n "$kok" ] && [ -r "$kok/_agents/ANA-HEDEF.md" ]; then
+      d="$kok/_agents/ANA-HEDEF.md"
+    else
+      local -a adaylar=()
+      mapfile -t adaylar < <(ls -1 /config/projects/*/_agents/ANA-HEDEF.md 2>/dev/null)
+      [ "${#adaylar[@]}" -eq 1 ] && d="${adaylar[0]}"
+    fi
     # çapa yok: yalnız şablon teslim EDİLMİŞSE konuş (yoksa bu kutunun işi değil → sessiz)
     if [ -z "$d" ]; then
-      local s; s="$(ls -1 /config/projects/*/0-teslimat/gelen/ANA-HEDEF-SABLON.md 2>/dev/null | head -1)"
+      local s=""
+      [ -n "$kok" ] && [ -r "$kok/0-teslimat/gelen/ANA-HEDEF-SABLON.md" ] && s="$kok/0-teslimat/gelen/ANA-HEDEF-SABLON.md"
+      if [ -z "$s" ]; then
+        local -a sadaylar=()
+        mapfile -t sadaylar < <(ls -1 /config/projects/*/0-teslimat/gelen/ANA-HEDEF-SABLON.md 2>/dev/null)
+        [ "${#sadaylar[@]}" -eq 1 ] && s="${sadaylar[0]}"
+      fi
       [ -n "$s" ] || return 0
       printf '\n  %s🎯 ana-hedefin yazılı değil%s — şablon geldi: %s%s%s\n' \
              "$C_SAR" "$C_SIF" "$C_SOL" "$s" "$C_SIF"

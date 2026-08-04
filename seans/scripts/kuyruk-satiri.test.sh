@@ -89,6 +89,24 @@ printf '%s' "$cikti" | grep -qE 'ana-hedefin yazılı değil|kuyruğun BOŞ|kuyr
   && ok "G6 gerçek ortamda üç hâlden birini üretti (sessiz-kayıp yok)" \
   || ok "G6 bu kutuda ne çapa ne şablon var → sessiz (meşru dördüncü hâl)"
 
+# ── G8: ÇOK-REPOLU KUTU — yanlış kutunun hedefini GÖSTERMEZ (ilk canlı koşum hatası)
+# Merkez kutuda /config/projects altında onlarca repo var; ilk sürüm `ls … | head -1` diyordu
+# ve alfabetik ilk sırayı (başka bir kutunun çapasını) ekrana bastı. Doğru kaynak = İÇİNDE
+# BULUNDUĞUN depo; belirsizse SESSİZ (yanlış söylemek, susmaktan kötüdür).
+sahte="$T/projects"; mkdir -p "$sahte/aaa/_agents" "$sahte/bbb/_agents"
+printf '# ANA-HEDEF — AAA\nguncelleme: %s\nSIRADAKİ:\n1. aaa isi\n' "$(date +%F)" > "$sahte/aaa/_agents/ANA-HEDEF.md"
+printf '# ANA-HEDEF — BBB\nguncelleme: %s\nSIRADAKİ:\n1. bbb isi\n' "$(date +%F)" > "$sahte/bbb/_agents/ANA-HEDEF.md"
+# git-köksüz bir dizinden koş: iki aday var, hiçbiri "içinde bulunduğun depo" değil → SESSİZ
+cikti="$(cd "$T" && ANA_HEDEF_DOSYA='' bash -c "
+  C_SAR=''; C_SIF=''; C_SOL=''; C_BAS=''
+  ls() { command ls \"\$@\"; }
+  $(ayikla)
+  _kuyruk_satiri" 2>&1)"
+printf '%s' "$cikti" | grep -qE 'aaa isi|bbb isi' && kotu "G8a belirsizken tahmin etti (yanlış kutunun hedefi)" || ok "G8a belirsizken tahmin ETMEDİ"
+grep -qE '/config/projects/\*/.*\|\s*head -1' <(sed -n '/^_kuyruk_satiri() {/,/^}/p' "$SUT" | grep -v '^[[:space:]]*#') \
+  && kotu "G8b 'ilkini seç' tahmini koda geri döndü" || ok "G8b 'ilkini seç' tahmini kodda YOK"
+grep -q 'rev-parse --show-toplevel' "$SUT" && ok "G8c kaynak = içinde bulunulan depo" || kotu "G8c depo-kökü çözülmüyor"
+
 # ── G7: çizici çağrılıyor mu (bağlanmamış-iş panzehiri — kapımda bloğunun dersi)
 grep -q '^  _kuyruk_satiri$' "$SUT" && ok "G7 _ekran içinde ÇAĞRILIYOR" || kotu "G7 fonksiyon öksüz (çağıranı yok)"
 
