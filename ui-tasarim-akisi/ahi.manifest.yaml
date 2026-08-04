@@ -1,0 +1,16 @@
+# UI Tasarım Akışı — AHÎ manifesti.
+# version manifest'te YOK (tek-evi SKILL.md frontmatter — ADR-001).
+#
+# ÜRETEN ≠ PAKETLEYEN: metodu HUZUR ekibi kendi kutusunda yazdı ve kendi Faz-1
+# ekranlarında bir kez FİİLEN kullandı (kullanılmamış metot paketlenmez kuralı).
+# SERDAR yalnız kanonik depoya taşıdı, kaydetti ve dağıttı.
+tier: kalfa
+name: ui-tasarim-akisi
+generic_goal: "bir ürünün ekranlarını sıfırdan, proje-bağımsız ve tekrarlanabilir biçimde tasarlama akışı"
+activation:
+  onKeyword: ui-tasarim-akisi
+requires_harness: ">=0"
+spec_version: "0.1"
+owner: SERDAR-KAHYA-review-kapisi
+install_targets:
+  - _global
