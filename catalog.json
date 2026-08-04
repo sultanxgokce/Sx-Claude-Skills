@@ -1,6 +1,6 @@
 {
   "version": "2.1",
-  "updated": "2026-07-29",
+  "updated": "2026-08-04",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -1194,6 +1194,34 @@
         "_global"
       ],
       "family": "kutu-ici koordinasyon"
+    },
+    {
+      "id": "ui-tasarim-akisi",
+      "sync_dagitim": true,
+      "type": "workflow",
+      "name": "UI Tasarım Akışı",
+      "version": "0.1.0",
+      "description": "Bir ürünün ekranlarını sıfırdan tasarlama akışı: sayfa envanteri → kullanıcı senaryoları → Claude design promptu → devam promptu ile kalan sayfalar. Proje-bağımsız.",
+      "prerequisites": {
+        "backend": [],
+        "frontend": []
+      },
+      "tags": [
+        "ui",
+        "tasarim",
+        "akis",
+        "prompt",
+        "kalfa"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "huzur kutusu (HUZUR ekibi) — SERDAR paketledi",
+      "install_time": "5 dk",
+      "status": "v0.1-canli",
+      "path": "ui-tasarim-akisi/",
+      "installed_in": []
     }
   ]
 }
