@@ -1,7 +1,7 @@
 ---
 name: kapimda
 type: tool
-version: 1.1.0
+version: 1.2.0
 description: >
   Sultan'ı bekleyen işlerin TEK yüzeyini (kapimda.md) yazan, denetleyen ve adım adım yürüten
   kabuk. Kart açma fail-closed 8 lint kapısından geçer (dört zorunlu alan · "Niçin sen" boşsa
@@ -69,3 +69,36 @@ sözleşmesi + tavan + kapatma + adım motorunun tek-adım disiplini). Gerçek `
   iş çözülmüş SAYILMAZ — bunu ancak **engellenen taraf** söyleyebilir ("gönderildi ≠ ulaştı ≠ üstlenildi
   ≠ çözüldü" zincirinin kapanmayan son halkası). Kanıtlı kapanış `olur:` satırı taşır; kanıtsız kapatma
   hâlâ mümkündür ama satır yazılmaz → kayıt hangi kapanışın doğrulandığını gösterir. Test: 39 kapı.
+
+## 🎯 Kart devri — "bunu SERDAR'a şutla" (v1.2.0 · L47/F5)
+
+Sultan'ın isteği birebir: *"SİNAN container'ında Sultan kapısında biriken işlerin bazıları SERDAR
+gerektirebilir; o zaman SİNAN o kartları SERDAR etiketli atabilir, SERDAR'ın kapısına şutlayabilir."*
+
+```
+kapimda devret "<Kısa Ad>" --sahip <AJAN|SULTAN> --gerekce "…" [--sultan-onayi "<Sultan'ın cümlesi>"]
+```
+
+🔴 **Kart TAŞINMAZ.** Kapımda dosyası 14 kutuda aynı dosyadır; devir yalnız bir satır değiştirir.
+Federe/kurye zincirine bağımlılık YOK — o zincir yarım (`oda-zil` 12 turdur `zil=0`) ve zile bel
+bağlamak kartı kaybettirirdi. Zil olsa olsa **kolaylıktır**, taşıyıcı değil.
+
+| Geçiş | İzin |
+|---|---|
+| `<AJAN>` → `<AJAN>` | ✅ serbest (asıl kullanım: SİNAN→SERDAR), gerekçe zorunlu |
+| `<AJAN>` → `SULTAN` | ✅ serbest, gerekçe zorunlu |
+| `SULTAN` → `<AJAN>` | 🔴 **Sultan-onayı şart** (`--sultan-onayi`), yoksa **RC=5** |
+
+**Niçin son satır sert:** Sultan'ın kapısından iş çıkarmak bir KARARDIR. Ajan kendi kendine
+"bu bana düşer" deyip Sultan'ın listesini temizleyemez (A06'nın devir-yüzü). Verilen onay
+**verbatim karta yazılır** → denetlenebilir. ⚠️ Bu cümleyi uydurmak, sahte onay yazmakla
+**aynı sınıf ihlaldir**; kanıt kartın kendisindedir.
+
+**Damga ve sayım:** ajan-sahipli kart `🎯 <AJAN> · <Kısa Ad>` olur ve **Sultan'ın tavan-3
+sayımına girmez** — Sultan'ın kapısı yalnız kendi işlerini gösterir. Dokunulmamış kartın
+damgası birebir aynı kalır (çizici sözleşmesi bozulmaz; kapı D10).
+
+**Pinpon panzehiri:** her devir `devir: N` sayacını artırır; **3. devirde** kart otomatik
+`⚠️ TIKANDI` damgasıyla Sultan'a döner. *Üç kez el değiştirdiyse sahibi belli değildir,
+hakem Sultan'dır.* Her devir gerekçesiyle karta satır düşer — **sessiz devir yoktur**.
+

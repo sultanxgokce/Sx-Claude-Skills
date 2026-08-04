@@ -25,6 +25,10 @@
 #   kapimda bitti "<Kısa Ad>" --gerekce "…" [--federe-tamam <tetik-id>]
 #        → kartı kapat (görünürlük; onay DEĞİL). --federe-tamam verilirse SON-HALKA kapısı:
 #          bloklu ajan tetiği 'tamam' yapmadıysa kart KAPANMAZ (RC=4) — "Sultan yaptı" yetmez.
+#   kapimda devret "<Kısa Ad>" --sahip <AJAN|SULTAN> --gerekce "…" [--sultan-onayi "<Sultan'ın cümlesi>"]
+#        → kartın SAHİBİNİ değiştirir (kart taşınmaz — dosya 14 kutuda ortak). Ajan-sahipli kart
+#          `🎯 <AJAN> · <ad>` damgası alır ve Sultan'ın tavan-3 sayımına GİRMEZ.
+#          SULTAN→AJAN geçişi Sultan-onayı ister (RC=5). 3. devirde kart SULTAN'a döner (⚠️ TIKANDI).
 #   kapimda liste                                   # açık kartlar (salt-okur)
 #   kapimda lint                                    # dosya-geneli denetim (RC≠0 = bulgu)
 #   kapimda adim ekle "<Kısa Ad>" --yapilacak "…" --nerede "…" --bitince "…"
@@ -32,6 +36,7 @@
 #   kapimda adim ilerle "<Kısa Ad>"                 # Sultan cevapladıktan SONRA çağrılır
 #   kapimda adim durum "<Kısa Ad>"
 # ÇIKIŞ: 0 tamam · 1 lint-RED / bulgu · 2 kullanım/ortam · 4 son-halka eksik (olur gelmedi)
+#        5 = Sultan'ın kapısından izinsiz iş çıkarma denemesi (A06 kapısı)
 # ═══════════════════════════════════════════════════════════════════════════
 set -uo pipefail
 
@@ -123,6 +128,45 @@ _kart_yaz() { # $1..$6 kart alanları
     cat "$DOSYA" > "$tmp" 2>/dev/null || true
     printf '\n%s\n**+0 kart daha bekliyor.** (Tavan %s; sıradakiler buraya tek satır olarak düşer.)\n' "$blok" "$TAVAN" >> "$tmp"
   fi
+  mv "$tmp" "$DOSYA"
+}
+
+# ── KART DEVRİ (L47 · F5 · 2026-08-04) ─────────────────────────────────────
+# NİÇİN: Sultan'ın örneği — *"SİNAN container'ında Sultan kapısında biriken işlerin bazıları
+#   SERDAR gerektirebilir; o zaman SİNAN o kartları SERDAR etiketli atabilir, SERDAR'ın
+#   kapısına şutlayabilir."* Bugüne dek kartta "bu kimin" alanı YOKTU.
+# 🔴 TAŞIMA YOK: kapımda dosyası 14 kutuda AYNI inode. Devir yalnız BİR SATIR değiştirir;
+#   kart hiçbir yere gitmez. Federe/kurye zincirine bağımlılık yok (o zincir yarım: oda-zil
+#   12 turdur zil=0 — zile bel bağlamak kartı kaybettirirdi).
+# DAMGA: sahibi ajan olan kart `🎯 <AJAN> · <ad>` olur → Sultan'ın kapısı (`🚦 SENDE · `)
+#   yalnız KENDİ işlerini sayar; tavan-3 de yalnız Sultan-kartlarına uygulanır. Çizici
+#   sözleşmesi bozulmaz (grep aynen çalışır, ajan-kartları o grep'e düşmez).
+_kart_sahibi() { # $1=ad → SULTAN | <AJAN> | "" (kart yok)
+  grep -m1 -E "^(🚦 SENDE|🎯 [^·]+) · $(printf '%s' "$1" | sed 's/[][\.*^$/]/\\&/g')\$" "$DOSYA" 2>/dev/null \
+    | sed -E 's/^🚦 SENDE · .*/SULTAN/; s/^🎯 ([^·]+) · .*/\1/' | sed 's/[[:space:]]*$//'
+}
+_devir_sayaci() { # $1=ad → mevcut devir sayısı
+  local n; n="$(awk -v ad="$1" '
+    $0 ~ ("^(🚦 SENDE|🎯 [^·]+) · " ad "$") {icinde=1; next}
+    icinde && /^devir: [0-9]+$/ {sub(/^devir: /,""); print; exit}
+    icinde && /^```$/ {exit}' "$DOSYA" 2>/dev/null)"
+  printf '%s' "${n:-0}"
+}
+_kart_devret() { # $1=ad $2=yeni-sahip $3=gerekce $4=eski-sahip $5=yeni-devir-sayisi $6=tikandi(0/1)
+  local ad="$1" yeni="$2" ger="$3" eski="$4" say="$5" tik="$6" tmp; tmp="$(mktemp)"
+  awk -v ad="$ad" -v yeni="$yeni" -v ger="$ger" -v eski="$eski" -v say="$say" -v tik="$tik" \
+      -v gun="$(_bugun)" '
+    $0 ~ ("^(🚦 SENDE|🎯 [^·]+) · " ad "$") {
+      if (tik == "1")            print "⚠️ TIKANDI · " ad
+      else if (yeni == "SULTAN") print "🚦 SENDE · " ad
+      else                       print "🎯 " yeni " · " ad
+      print "devir: " say
+      print "↳ devir " gun ": " eski " → " (tik=="1" ? "SULTAN (üç kez el değiştirdi — hakem Sultan)" : yeni) " · gerekçe: " ger
+      bulundu=1; next }
+    /^devir: [0-9]+$/ && bulundu==1 && !atlandi { atlandi=1; next }
+    { print }
+    END { if (!bulundu) exit 3 }
+  ' "$DOSYA" > "$tmp" || { rm -f "$tmp"; return 3; }
   mv "$tmp" "$DOSYA"
 }
 
@@ -223,7 +267,7 @@ _lint_dosya() {
 # ── argüman ayrıştırma ───────────────────────────────────────────────────────
 KOMUT="${1:-}"; shift 2>/dev/null || true
 NE=""; NICIN=""; YAPILMAZSA=""; BITINCE=""; OZET=""; YAS=""; ENGEL=""; GEREKCE=""; FEDERE_TAMAM=""
-YAPILACAK=""; NEREDE=""; KURU=0
+YAPILACAK=""; NEREDE=""; KURU=0; SAHIP=""; SULTAN_ONAYI=""
 AD=""
 if [ "$KOMUT" = "adim" ]; then ALT="${1:-}"; shift 2>/dev/null || true; fi
 [ $# -gt 0 ] && case "${1:-}" in --*) ;; *) AD="$1"; shift ;; esac
@@ -240,6 +284,8 @@ while [ $# -gt 0 ]; do
     --federe-tamam) FEDERE_TAMAM="${2:-}"; shift 2 ;;
     --yapilacak) YAPILACAK="${2:-}"; shift 2 ;;
     --nerede) NEREDE="${2:-}"; shift 2 ;;
+    --sahip) SAHIP="${2:-}"; shift 2 ;;
+    --sultan-onayi) SULTAN_ONAYI="${2:-}"; shift 2 ;;
     --kuru) KURU=1; shift ;;
     *) _hata "bilinmeyen bayrak: $1"; exit 2 ;;
   esac
@@ -273,6 +319,34 @@ case "$KOMUT" in
     [ "$rc" -eq 0 ] || { _hata "kapatma düştü"; exit 1; }
     printf '✅ kart kapandı: %s\n' "$AD"
     ;;
+  devret)
+    [ -n "$AD" ] || { _hata "Kısa Ad zorunlu: kapimda devret \"<Kısa Ad>\" --sahip <AJAN|SULTAN> --gerekce \"…\""; exit 2; }
+    [ -n "$SAHIP" ] || { _hata "--sahip zorunlu (kime devrediliyor?)"; exit 2; }
+    [ -n "$GEREKCE" ] || { _hata "--gerekce zorunlu — sessiz devir YOK"; exit 2; }
+    ESKI="$(_kart_sahibi "$AD")"
+    [ -n "$ESKI" ] || { _hata "'$AD' adlı açık kart yok"; exit 1; }
+    [ "$ESKI" = "$SAHIP" ] && { _hata "kart zaten $SAHIP'te"; exit 2; }
+    # 🔴 A06 KAPISI: Sultan'ın kapısından iş ÇIKARMAK bir karardır. Ajan kendi kendine
+    #   "bu bana düşer" deyip Sultan'ın listesini temizleyemez. Sultan'ın verbatim sözü
+    #   ZORUNLU ve karta YAZILIR (denetlenebilir). Bu sözü uydurmak, sahte onay yazmakla
+    #   AYNI sınıf ihlaldir — kanıt karttadır.
+    if [ "$ESKI" = "SULTAN" ] && [ "$SAHIP" != "SULTAN" ] && [ -z "$SULTAN_ONAYI" ]; then
+      _hata "Sultan'ın kapısından iş çıkarmak Sultan-onayı ister → --sultan-onayi \"<Sultan'ın kendi cümlesi>\""; exit 5
+    fi
+    SAY="$(_devir_sayaci "$AD")"; SAY=$((SAY+1)); TIK=0
+    # PİNPON PANZEHİRİ: 3 kez el değiştirdiyse sahibi belli değildir → hakem Sultan.
+    if [ "$SAY" -ge "${KAPIMDA_SUT_TAVANI:-3}" ] && [ "$SAHIP" != "SULTAN" ]; then TIK=1; SAHIP="SULTAN"; fi
+    GER="$GEREKCE"; [ -n "$SULTAN_ONAYI" ] && GER="$GEREKCE (Sultan: \"$SULTAN_ONAYI\")"
+    flock "$KILIT" bash -c "$(declare -f _kart_devret _bugun); DOSYA='$DOSYA' _kart_devret \"\$@\"" _ \
+      "$AD" "$SAHIP" "$GER" "$ESKI" "$SAY" "$TIK"
+    rc=$?
+    [ "$rc" -eq 0 ] || { _hata "devir düştü"; exit 1; }
+    if [ "$TIK" -eq 1 ]; then
+      printf '⚠️ TIKANDI: %s → %s kez el değiştirdi, kart SULTAN'"'"'a döndü (hakem Sultan)\n' "$AD" "$SAY"
+    else
+      printf '🎯 devredildi: %s · %s → %s (devir %s)\n' "$AD" "$ESKI" "$SAHIP" "$SAY"
+    fi
+    ;;
   liste)
     n="$(_acik_sayi)"
     [ "$n" -gt 0 ] || { printf 'kapında iş yok.\n'; exit 0; }
@@ -295,5 +369,5 @@ case "$KOMUT" in
     esac ;;
   ""|-h|--help|yardim)
     sed -n '/^# KULLANIM/,/^# ÇIKIŞ/p' "$0" | sed 's/^# \{0,1\}//' ;;
-  *) _hata "bilinmeyen komut: $KOMUT (ac|bitti|liste|lint|adim)"; exit 2 ;;
+  *) _hata "bilinmeyen komut: $KOMUT (ac|bitti|devret|liste|lint|adim)"; exit 2 ;;
 esac
