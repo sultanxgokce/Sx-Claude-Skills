@@ -128,8 +128,9 @@ Canlı kopya kanondan **ileriyse ya da sürüm eşitken içeriği farklıysa** r
 - `sync-skills.mjs` (bayraksız, dry-run) iki drift hâlini de yakalar — sürüm-drift'i ve
   **içerik-drift'ini** — ve **çıkış 1** verir. Bu zorlama araçta ZATEN VAR (2026-08-04 ölçüldü).
 - Eksik olan **çağıran**dı: haftalık `evergreen-parity.sh` bu aracı yalnız *remediation metninde*
-  anıyordu, hiç KOŞMUYORDU → kırmızı üretilse de kimse duymuyordu. `P11e-BECERI-DRIFT` kolu bunu
-  bağlar. *("Bunu kim çağıracak?" — motor sağlam, çağıran yok sınıfı.)*
+  anıyordu, hiç KOŞMUYORDU → kırmızı üretilse de kimse duymuyordu. **`P13-BECERI`** kolu bunu
+  bağlar (kanonu `origin/main`'den okur, `--apply` YOK: bekçi ölçer, düzeltmez).
+  *("Bunu kim çağıracak?" — motor sağlam, çağıran yok sınıfı.)*
 - **Ölçerken tuzak:** `node sync-skills.mjs | tail` çıkış kodunu YUTAR ve bekçi yeşil görünür.
   Çıplak koş ya da `; echo exit=$?` ekle. (Bu satır bizzat o tuzağa düşülerek yazıldı.)
 
