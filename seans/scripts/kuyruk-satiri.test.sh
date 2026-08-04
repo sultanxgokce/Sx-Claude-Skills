@@ -119,6 +119,23 @@ cikti="$(cd "$depo" && ANA_HEDEF_DOSYA='' bash -c "
   _kuyruk_satiri" 2>&1)"
 [ -z "$cikti" ] && ok "G9 çapasız depoda komşuya DÜŞMEDİ (sustu)" || kotu "G9 komşunun hedefini bastı: $cikti"
 
+# ── G10: çapa main'de var ama çalışma-kopyası BAŞKA DALDA → main'den okunur (üçüncü aynı ders)
+# Merkez kutuda tam bu oldu: çapa main'e merge edilmişti, checkout başka daldaydı, ekran hiç
+# kuyruk göstermedi. Kutunun hedefi bir DAL değil, deponun kendisidir.
+d2="$T/depo2"; mkdir -p "$d2/_agents"
+( cd "$d2" && git init -q -b main . && git config user.email t@t && git config user.name t
+  printf '# ANA-HEDEF — D2\nguncelleme: %s\nSIRADAKİ:\n1. main-daki is\n' "$(date +%F)" > _agents/ANA-HEDEF.md
+  git add -A && git commit -qm x
+  git update-ref refs/remotes/origin/main HEAD
+  git checkout -q -b baska-dal && git rm -q _agents/ANA-HEDEF.md && git commit -qm "dalda yok" )
+cikti="$(cd "$d2" && ANA_HEDEF_DOSYA='' bash -c "
+  C_SAR=''; C_SIF=''; C_SOL=''; C_BAS=''
+  $(ayikla)
+  _kuyruk_satiri" 2>&1)"
+printf '%s' "$cikti" | grep -q "main-daki is" && ok "G10a başka daldayken çapa main'den okundu" || kotu "G10a kuyruk görünmedi: $cikti"
+grep -qE 'git .*fetch' <(sed -n '/^_kuyruk_satiri() {/,/^}/p' "$SUT" | grep -v '^[[:space:]]*#') \
+  && kotu "G10b ekran açılışında AĞA çıkıyor (fetch)" || ok "G10b ağa çıkmıyor (yalnız yerel ref)"
+
 # ── G7: çizici çağrılıyor mu (bağlanmamış-iş panzehiri — kapımda bloğunun dersi)
 grep -q '^  _kuyruk_satiri$' "$SUT" && ok "G7 _ekran içinde ÇAĞRILIYOR" || kotu "G7 fonksiyon öksüz (çağıranı yok)"
 

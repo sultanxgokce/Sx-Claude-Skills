@@ -286,7 +286,19 @@ _kuyruk_satiri() {
     # değilken (git-kök çözülemiyorsa) ve tek aday varsa meşrudur.
     local kok; kok="$(git rev-parse --show-toplevel 2>/dev/null)"
     if [ -n "$kok" ]; then
-      [ -r "$kok/_agents/ANA-HEDEF.md" ] && d="$kok/_agents/ANA-HEDEF.md"
+      if [ -r "$kok/_agents/ANA-HEDEF.md" ]; then
+        d="$kok/_agents/ANA-HEDEF.md"
+      else
+        # 🔴 ÜÇÜNCÜ AYNI DERS (2026-08-04): çapa main'de OLABİLİR ama bu çalışma-kopyası başka
+        # dalda olduğu için dosya diskte GÖRÜNMEZ — merkez kutuda tam bu oldu, ekran hiç kuyruk
+        # göstermedi. Kutunun hedefi bir DAL DEĞİL, deponun kendisidir → main'den okunur.
+        # AĞA ÇIKMAZ (fetch YOK, yalnız yerel ref); `basla` her terminalde koşuyor, gecikme olamaz.
+        local gecici
+        gecici="${TMPDIR:-/tmp}/.kuyruk-$(id -u)-$(printf '%s' "$kok" | tr -c 'a-zA-Z0-9' '_')"
+        if git -C "$kok" show origin/main:_agents/ANA-HEDEF.md > "$gecici" 2>/dev/null && [ -s "$gecici" ]; then
+          d="$gecici"
+        fi
+      fi
     else
       local -a adaylar=()
       mapfile -t adaylar < <(ls -1 /config/projects/*/_agents/ANA-HEDEF.md 2>/dev/null)
