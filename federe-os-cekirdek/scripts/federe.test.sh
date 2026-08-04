@@ -33,6 +33,17 @@ echo "== T5: gonder 121-char başlık → 2 =="
 b="$(printf 'a%.0s' $(seq 1 121))"
 bash "$SUT" gonder s04 "$b" >/dev/null 2>&1; [ $? -eq 2 ] && ok "başlık-uzunluk reddi" || no "uzunluk kaçtı"
 
+echo "== T5b: gonder --tetikli GEREKÇESİZ → 2 (gerekçesiz zil yok — L42/MABEYN F0.4) =="
+bash "$SUT" gonder --tetikli "" s04 "başlık" >/dev/null 2>&1; [ $? -eq 2 ] && ok "tetikli-gerekçe reddi" || no "gerekçesiz zil kaçtı"
+
+echo "== T5c: gonder --tetikli argüman-kayması — hedef/başlık doğru okunur (curl'e inmeden format-kapısı) =="
+# gerekçe verilmiş ama hedef bozuk → hedef-format reddi (RC=2) = kayma YOK kanıtı
+bash "$SUT" gonder --tetikli "MÜDÜR sessiz" kutu-4 "başlık" >/dev/null 2>&1; [ $? -eq 2 ] && ok "tetikli-sonrası hedef-format kapısı" || no "argüman kayması var"
+
+echo "== T5d: gonder --tetikli sır-desenli gerekçe → 2 (yerel ön-kapı) =="
+zfs="sk-$(printf 'B%.0s' $(seq 1 20))"
+bash "$SUT" gonder --tetikli "$zfs" s04 "başlık" >/dev/null 2>&1; [ $? -eq 2 ] && ok "tetikli sır-desen reddi" || no "tetikli sır-desen kaçtı"
+
 echo "== T6: gelen enum-dışı durum → 2 =="
 bash "$SUT" gelen yanlis >/dev/null 2>&1; [ $? -eq 2 ] && ok "durum-enum reddi" || no "enum kaçtı"
 
