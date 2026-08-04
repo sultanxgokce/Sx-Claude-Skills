@@ -135,5 +135,45 @@ kos adim ilerle "Ikinci Kart" 2>&1 | grep -q "tüm adımlar bitti" && ok "A6 son
 kos adim ekle "Yollu Adim" --yapilacak "şu dosyayı düzenle: /config/x.md" --nerede "editör" --bitince "oldu de" >/dev/null 2>&1
 [ $? -eq 1 ] && ok "A7 adım metninde yol → RED" || kotu "A7 adımda yol kaçtı"
 
+# ══ L47/F5 · KART DEVRİ kapıları ═══════════════════════════════════════════
+# Sultan'ın isteği: "SİNAN o kartları SERDAR etiketli atabilir, SERDAR'ın kapısına şutlayabilir."
+_dev_yeni(){ D="$T/dev$RANDOM.md"; printf '# baslik\n\n```\n🚦 SENDE · Test Kart\nbugün açıldı\n\ngövde\n\nNe yapman gerekiyor: x\nNiçin sen: y\nYapılmazsa: z\nBitince: w\n```\n**+0 kart daha bekliyor.** (Tavan 3;)\n' > "$D"; printf '%s' "$D"; }
+_dk(){ KAPIMDA_DOSYA="$1" bash "$SUT" "${@:2}"; }
+
+D="$(_dev_yeni)"; _dk "$D" devret "Test Kart" --sahip SINAN --gerekce "başlangıç" --sultan-onayi "devret" >/dev/null 2>&1
+out="$(_dk "$D" devret "Test Kart" --sahip SERDAR --gerekce "altyapı işi" 2>&1)"
+{ printf '%s' "$out" | grep -q 'SINAN → SERDAR' && grep -q '^🎯 SERDAR · Test Kart$' "$D"; } \
+  && ok "D1 ajan→ajan devri serbest, damga 🎯 <AJAN>" || kotu "D1 ajan→ajan devri"
+
+D="$(_dev_yeni)"; _dk "$D" devret "Test Kart" --sahip SERDAR --gerekce "bana düşer" >/dev/null 2>&1
+{ [ $? -eq 5 ] && grep -q '^🚦 SENDE · Test Kart$' "$D"; } \
+  && ok "D2 Sultan kapısından onaysız iş çıkarılamaz (A06/RC=5)" || kotu "D2 A06 kapısı delindi"
+
+D="$(_dev_yeni)"; _dk "$D" devret "Test Kart" --sahip SERDAR --gerekce "altyapı" --sultan-onayi "sen hallet" >/dev/null 2>&1
+grep -q 'Sultan: "sen hallet"' "$D" && ok "D3 Sultan-onayı verbatim karta yazılır" || kotu "D3 onay kayda geçmedi"
+
+D="$(_dev_yeni)"; _dk "$D" devret "Test Kart" --sahip SERDAR --sultan-onayi "ok" >/dev/null 2>&1
+[ $? -eq 2 ] && ok "D4 gerekçesiz devir reddedilir (sessiz devir yok)" || kotu "D4 gerekçesiz devir geçti"
+
+D="$(_dev_yeni)"; _dk "$D" devret "Test Kart" --sahip SERDAR --gerekce g --sultan-onayi ok >/dev/null 2>&1
+[ "$(_dk "$D" liste 2>/dev/null | head -1)" = "kapında iş yok." ] \
+  && ok "D5 ajana devredilen kart Sultan'ın kapısından düşer" || kotu "D5 sayım ayrışmadı"
+
+D="$(_dev_yeni)"
+_dk "$D" devret "Test Kart" --sahip A --gerekce g --sultan-onayi ok >/dev/null 2>&1
+_dk "$D" devret "Test Kart" --sahip B --gerekce g >/dev/null 2>&1
+out="$(_dk "$D" devret "Test Kart" --sahip C --gerekce g 2>&1)"
+{ printf '%s' "$out" | grep -q 'TIKANDI' && grep -q '^⚠️ TIKANDI · Test Kart$' "$D"; } \
+  && ok "D6 3. devirde kart Sultan'a döner (pinpon panzehiri)" || kotu "D6 pinpon panzehiri"
+[ "$(grep -c '^devir: ' "$D")" = "1" ] && ok "D7 devir sayacı tek satır" || kotu "D7 mükerrer sayaç"
+[ "$(grep -c '^↳ devir ' "$D")" -ge 3 ] && ok "D8 her devir gerekçesiyle kayda düşer" || kotu "D8 devir kaydı eksik"
+
+D="$(_dev_yeni)"; _dk "$D" devret "Yok Boyle" --sahip X --gerekce g >/dev/null 2>&1
+[ $? -eq 1 ] && ok "D9 olmayan kart devredilemez" || kotu "D9 hayalî kart devredildi"
+
+D="$(_dev_yeni)"; grep -q '^🚦 SENDE · Test Kart$' "$D" \
+  && ok "D10 dokunulmamış kartın damgası birebir aynı (geriye-uyum)" || kotu "D10 geriye-uyum bozuldu"
+
+
 echo; echo "── SONUÇ: $gecti geçti · $dustu kaldı ──"
 [ "$dustu" -eq 0 ]
