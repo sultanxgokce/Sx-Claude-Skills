@@ -3,7 +3,7 @@
 # (FAZ-1 · A1/A4) FİLO-TAŞINABİLİR uyarlaması: Nexus-repo'suz container'da da çalışır (izole-birimler
 # Nexus'u GÖREMEZ — skill ortak ~/.claude/skills mount'uyla 10/10 dağıtılır, istemci de yanında gider).
 #
-#   gonder <hedef_sNN> "<başlık≤120>" [kart_ref] [not≤500]   → tetik bırak (META-only)
+#   gonder [--tetikli "<gerekçe≤120>"] <hedef_sNN> "<başlık≤120>" [kart_ref] [not≤500]   → tetik bırak (META-only; --tetikli = zil)
 #   gelen [durum] · giden [durum]                             → kutu listele
 #   alindi <id> · tamam <id> ["sonuç-notu≤500"] · iptal <id>  → durum-makinesi (ileri-yönlü)
 #   dinle                                                      → poll: bekleyenleri yerel-inbox'a yaz + alindi-ACK
@@ -34,7 +34,7 @@ _inbox() { printf '%s' "${FEDERE_TETIK_INBOX:-$HOME/.federe/tetik-inbox.md}"; }
 kullanim() {
   cat >&2 <<'K'
 kullanım: federe.sh <komut>
-  gonder <hedef_sNN> "<başlık≤120>" [kart_ref] [not≤500]
+  gonder [--tetikli "<gerekçe≤120>"] <hedef_sNN> "<başlık≤120>" [kart_ref] [not≤500]
   gelen [bekliyor|alindi|tamam|iptal|all]
   giden [bekliyor|alindi|tamam|iptal|all]
   alindi <id> · tamam <id> ["sonuç-notu≤500"] · iptal <id>
@@ -116,13 +116,20 @@ _gecis() { # $1=id $2=durum [$3=sonuc_not]
 cmd="${1:-}"; [[ -n "$cmd" ]] || kullanim
 case "$cmd" in
   gonder)
+    # --tetikli "<gerekçe≤120>" (L42-F2 · MABEYN F0.4): tetik zil-META'sıyla düşer; merkez
+    # oda-zil turu YALNIZ zil'lileri okuyup hedef odayı uyandırmayı dener. Gerekçesiz zil yok.
+    zil=0; zil_sebep=""
+    if [ "${2:-}" = "--tetikli" ]; then
+      zil=1; zil_sebep="${3:-}"; shift 2
+      [[ -n "$zil_sebep" && ${#zil_sebep} -le 120 ]] || { echo "HATA: --tetikli gerekçe ister (≤120) — gerekçesiz zil yok" >&2; exit 2; }
+    fi
     hedef="${2:-}"; baslik="${3:-}"; kart="${4:-}"; nt="${5:-}"
     [[ "$hedef" =~ $CELL_RE ]] || { echo "HATA: hedef sNN formatında olmalı (ör. s04)" >&2; exit 2; }
     [[ -n "$baslik" && ${#baslik} -le 120 ]] || { echo "HATA: başlık zorunlu, ≤120" >&2; exit 2; }
     [[ ${#nt} -le 500 ]] || { echo "HATA: not ≤500 (içerik-kanalı değil — META)" >&2; exit 2; }
-    _sir_var "$baslik$kart$nt" && { echo "HATA: sır-desen tespit — META-kanala sır yazılamaz" >&2; exit 2; }
-    body="$(jq -nc --arg h "$hedef" --arg b "$baslik" --arg k "$kart" --arg n "$nt" \
-      '{hedef_cell:$h, baslik:$b} + (if $k=="" then {} else {kart_ref:$k} end) + (if $n=="" then {} else {not:$n} end)')"
+    _sir_var "$baslik$kart$nt$zil_sebep" && { echo "HATA: sır-desen tespit — META-kanala sır yazılamaz" >&2; exit 2; }
+    body="$(jq -nc --arg h "$hedef" --arg b "$baslik" --arg k "$kart" --arg n "$nt" --arg zs "$zil_sebep" --argjson z "$([ "$zil" -eq 1 ] && echo true || echo false)" \
+      '{hedef_cell:$h, baslik:$b} + (if $k=="" then {} else {kart_ref:$k} end) + (if $n=="" then {} else {not:$n} end) + (if $z then {zil:true, zil_sebep:$zs} else {} end)')"
     resp="$(_api POST /api/filo/tetik "$body")" || { rc=$?; [ "$rc" -eq 2 ] && exit 2; exit 1; }
     if echo "$resp" | jq -e '.ok == true' >/dev/null 2>&1; then
       echo "📨 tetik bırakıldı: $(echo "$resp" | jq -r '"\(.id) · \(.kaynak_cell)→\(.hedef_cell)"')"

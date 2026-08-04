@@ -1,7 +1,7 @@
 ---
 name: federe-os-cekirdek
 type: agent
-version: 0.3.0
+version: 0.4.0
 description: >
   Federe Ekip-OS çekirdek-protokolleri (k0180 · C3/D7): tetikleme (A1/A4) + not-tutma (A2/B1) +
   haberleşme (B2) + canlılık-nabzı (A3) + hafıza-vatandaşlığı (B3) TEK pakette. Uzak-birim MÜDÜR'ü
@@ -95,3 +95,9 @@ bash $S nabiz "şu an ne yapıyorum (≤200, jargonsuz)" [skor 0-100]
   yeşil · kırmızı(fail:neden) · doğrulanamadı (unknown ≠ fail, unknown ≠ yeşil).
 - Kaynak-izi: istemci = Nexus `scripts/federe-tetik.sh`'in (FAZ-1, PR#560) filo-taşınabilir
   uyarlaması; API-kontrat değişirse önce Nexus, sonra bu paket sürümlenir (semver).
+
+## Sürüm notları
+- **0.4.0 (2026-08-04, MABEYN F0.4/L42-F2):** `gonder --tetikli "<gerekçe≤120>"` eklendi — tetik
+  `zil` META'sıyla düşer (sunucu-yanı: Nexus PR #754 + migration 0127). Gerekçesiz zil yok (RC=2);
+  gerekçe sır-desen taramasında. Test: federe.test.sh 36/36 (T5b/T5c/T5d yeni). Alansız `gonder`
+  bayt-aynı. Merkez `oda-zil.sh` okuma-turu ayrı parça (cloudtop/infra).

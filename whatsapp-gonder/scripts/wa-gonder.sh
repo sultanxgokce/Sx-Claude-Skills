@@ -37,7 +37,25 @@ while [ $# -gt 0 ]; do
     --durum) MOD="durum"; shift ;;
     -h|--yardim) sed -n '2,20p' "$0"; exit 0 ;;
     -*) echo "bilinmeyen seçenek: $1" >&2; exit 2 ;;
-    *) METIN="$1"; shift ;;
+    # ⚠️ İKİNCİ KONUMSAL ARGÜMAN = GÜRÜLTÜLÜ RET (sessiz kabul DEĞİL).
+    #   Eski davranış: her konumsal argüman METIN'i EZİYORDU. `wa-gonder.sh "SaaS" "mesaj"`
+    #   yazan biri alıcı belirttiğini sanıyor; gerçekte "SaaS" metin olup ikinciyle eziliyor,
+    #   KIME varsayılanda (Sultan) kalıyor ve ekrana `🟢 gönderildi → Sultan` basılıyordu.
+    #   Yani mesaj gidiyor, YANLIŞ ADRESE, ve çıktı YEŞİL. Tam bir sahte-yeşil.
+    #   HUZUR bunu canlıda yaşadı (2026-07-31): ekip grubuna gidecek uzun metin Sultan'ın
+    #   özeline düştü. Kusur onun değildi — bu komut biçimini kendisine SERDAR öğretmişti.
+    #   Sessiz yanlış-teslimat, mahremiyet sınırı olan kutularda (hasta/müvekkil) kabul edilemez.
+    # Tek konumsal argüman = mesaj (meşru, en yaygın kullanım) → davranış DEĞİŞMEDİ.
+    *) if [ -n "$METIN" ]; then
+         cat >&2 <<EOF
+HATA: birden fazla konumsal argüman verdin ("$METIN" ve "$1").
+      Alıcıyı konumsal veremezsin — sessizce yanlış kişiye gitmesin diye reddediliyor.
+      Alıcı YALNIZ --kime ile verilir:
+          $0 --kime "$METIN" "$1"
+EOF
+         exit 2
+       fi
+       METIN="$1"; shift ;;
   esac
 done
 
