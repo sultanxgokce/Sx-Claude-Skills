@@ -1,6 +1,6 @@
 ---
 name: seans
-version: 1.16.2
+version: 1.16.3
 description: >
   Claude sohbetlerini yönetme ve ekip kısayolları — her kutuda çalışır.
   Motor (cs) burada tek kopya yaşar; cloudtop tarafındaki eski çağrı yolu ince köprüyle korunur.
@@ -68,7 +68,7 @@ plansız ölçtü; sebep tembellik değil, hedef-çapasının hiç dağıtılmam
 - **çapa yok ama şablon teslim edilmiş** → hedefini yazması hatırlatılır
 
 Damgası 7 günü geçmişse sayı yine basılır ama "bayat" da denir (sahte-yeşil yasak). Ne çapa ne
-şablon varsa ekran **tek kelime etmez** (yokluk ≠ arıza). Kanıt: `scripts/kuyruk-satiri.test.sh` (18 kapı). **v1.16.1:** ilk canlı koşumda merkez kutuda BAŞKA kutunun hedefi gösterilmişti (çok-repolu dizinde alfabetik ilk sıra seçiliyordu) — kaynak artık "içinde bulunduğun depo", belirsizse sessiz.
+şablon varsa ekran **tek kelime etmez** (yokluk ≠ arıza). Kanıt: `scripts/kuyruk-satiri.test.sh` (21 kapı). **v1.16.1:** ilk canlı koşumda merkez kutuda BAŞKA kutunun hedefi gösterilmişti (çok-repolu dizinde alfabetik ilk sıra seçiliyordu) — kaynak artık "içinde bulunduğun depo", belirsizse sessiz. **v1.16.3:** çapa main'de olup çalışma-kopyası başka dalda olduğunda ekran hiç kuyruk göstermiyordu — hedef bir DAL değil deponun kendisidir, artık main'den okunur (ağa çıkmadan).
 
 ## Mahremiyet — çok-insanlı kutu kuralı
 
