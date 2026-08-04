@@ -1,6 +1,6 @@
 ---
 name: seans
-version: 1.15.0
+version: 1.16.0
 description: >
   Claude sohbetlerini yönetme ve ekip kısayolları — her kutuda çalışır.
   Motor (cs) burada tek kopya yaşar; cloudtop tarafındaki eski çağrı yolu ince köprüyle korunur.
@@ -54,6 +54,21 @@ iş git geçmişinde kalır — kaldırma onu kaybetmez). Ana kopya asla silinme
 
 Motorun tamamı hâlâ elinizin altında: `cs ls` · `cs rename` · `cs note` · `cs sil` · `cs gc`
 (bkz. `cs --help`).
+
+## Kuyruk satırı — "durmak yok" kuralının ekran yüzü (v1.16.0 · MABEYN H4-2)
+
+Karşılama ekranı artık kutunun **kendi ANA-HEDEF kuyruğunu** da gösterir. Niçin: durma-standardı
+"Ş2-fiili (merge/prod/dış-servis/silme/sır) ya da eskalasyon-sinyali yoksa DURMAK ihlaldir" der —
+ama ajan kendi kuyruğunu görmüyorsa kural boşlukta kalır. 2026-08-04'te plan-bekçisi 12/12 kutuyu
+plansız ölçtü; sebep tembellik değil, hedef-çapasının hiç dağıtılmamış olmasıydı.
+
+Üç hâl, hepsi dürüst:
+- **kuyruk dolu** → `🎯 kuyruğunda N iş var` + sıradaki tek iş + "Ş2 yoksa sorma, yürü"
+- **kuyruk boş** → "MÜDÜR'üne *kuyruk-boş* bildir" — **Sultan'a değil** (kesme-enflasyonu panzehiri)
+- **çapa yok ama şablon teslim edilmiş** → hedefini yazması hatırlatılır
+
+Damgası 7 günü geçmişse sayı yine basılır ama "bayat" da denir (sahte-yeşil yasak). Ne çapa ne
+şablon varsa ekran **tek kelime etmez** (yokluk ≠ arıza). Kanıt: `scripts/kuyruk-satiri.test.sh` (15 kapı).
 
 ## Mahremiyet — çok-insanlı kutu kuralı
 
