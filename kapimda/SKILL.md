@@ -1,7 +1,7 @@
 ---
 name: kapimda
 type: tool
-version: 1.0.0
+version: 1.1.0
 description: >
   Sultan'ı bekleyen işlerin TEK yüzeyini (kapimda.md) yazan, denetleyen ve adım adım yürüten
   kabuk. Kart açma fail-closed 8 lint kapısından geçer (dört zorunlu alan · "Niçin sen" boşsa
@@ -59,8 +59,13 @@ Plan **diske** yazılır (`kapimda-adim/<Kısa Ad>.md`: `toplam · suanki · dur
 "Yaptım" denince üç-durumlu kanıt-probu koşulur; **"yapmamışsın" dili yasaktır** (Sultan yalanlanmaz).
 
 ## Kanıt
-`scripts/kapimda.test.sh` → 32 kapı (8 lint-RED yolu + fail-closed dosya-kirlenmezliği + çizici
+`scripts/kapimda.test.sh` → 39 kapı (8 lint-RED yolu + fail-closed dosya-kirlenmezliği + çizici
 sözleşmesi + tavan + kapatma + adım motorunun tek-adım disiplini). Gerçek `kapimda.md`'ye dokunmaz.
 
 ## Sürüm notları
 - **1.0.0 (2026-08-04, MABEYN H2):** ilk sürüm — yazıcı + 8 kapı + kapatıcı + adım motoru + lint.
+- **1.1.0 (2026-08-04, MABEYN H3):** **SON-HALKA** — `bitti --federe-tamam <tetik-id>`: kartın ilgili
+  olduğu federe tetiği `tamam` değilse kart **KAPANMAZ** (RC=4). Niçin: Sultan bir engeli kaldırdı diye
+  iş çözülmüş SAYILMAZ — bunu ancak **engellenen taraf** söyleyebilir ("gönderildi ≠ ulaştı ≠ üstlenildi
+  ≠ çözüldü" zincirinin kapanmayan son halkası). Kanıtlı kapanış `olur:` satırı taşır; kanıtsız kapatma
+  hâlâ mümkündür ama satır yazılmaz → kayıt hangi kapanışın doğrulandığını gösterir. Test: 39 kapı.

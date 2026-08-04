@@ -22,14 +22,16 @@
 # KULLANIM
 #   kapimda ac "<Kısa Ad>" --ne "…" --nicin-sen "…" --yapilmazsa "…" --bitince "…" \
 #              [--ozet "2-4 cümle gövde"] [--yas "3 gündür bekliyor"] [--engel "ne duruyor"] [--kuru]
-#   kapimda bitti "<Kısa Ad>" --gerekce "…"        # kartı kapat (görünürlük; onay DEĞİL)
+#   kapimda bitti "<Kısa Ad>" --gerekce "…" [--federe-tamam <tetik-id>]
+#        → kartı kapat (görünürlük; onay DEĞİL). --federe-tamam verilirse SON-HALKA kapısı:
+#          bloklu ajan tetiği 'tamam' yapmadıysa kart KAPANMAZ (RC=4) — "Sultan yaptı" yetmez.
 #   kapimda liste                                   # açık kartlar (salt-okur)
 #   kapimda lint                                    # dosya-geneli denetim (RC≠0 = bulgu)
 #   kapimda adim ekle "<Kısa Ad>" --yapilacak "…" --nerede "…" --bitince "…"
 #   kapimda adim goster "<Kısa Ad>"                 # SIRADAKİ tek adımı kopyalanabilir bas
 #   kapimda adim ilerle "<Kısa Ad>"                 # Sultan cevapladıktan SONRA çağrılır
 #   kapimda adim durum "<Kısa Ad>"
-# ÇIKIŞ: 0 tamam · 1 lint-RED / bulgu · 2 kullanım/ortam
+# ÇIKIŞ: 0 tamam · 1 lint-RED / bulgu · 2 kullanım/ortam · 4 son-halka eksik (olur gelmedi)
 # ═══════════════════════════════════════════════════════════════════════════
 set -uo pipefail
 
@@ -124,14 +126,36 @@ _kart_yaz() { # $1..$6 kart alanları
   mv "$tmp" "$DOSYA"
 }
 
-_kart_kapat() { # $1=ad $2=gerekce
-  local ad="$1" ger="$2" tmp; tmp="$(mktemp)"
-  awk -v ad="$ad" -v ger="$ger" -v gun="$(_bugun)" '
-    $0 == "🚦 SENDE · " ad { print "✅ KAPANDI " gun " · " ad; print "kapanış: " ger; bulundu=1; next }
+_kart_kapat() { # $1=ad $2=gerekce $3=olur(ops)
+  local ad="$1" ger="$2" olur="${3:-}" tmp; tmp="$(mktemp)"
+  awk -v ad="$ad" -v ger="$ger" -v olur="$olur" -v gun="$(_bugun)" '
+    $0 == "🚦 SENDE · " ad {
+      print "✅ KAPANDI " gun " · " ad
+      print "kapanış: " ger
+      if (olur != "") print "olur: " olur
+      bulundu=1; next }
     { print }
     END { if (!bulundu) exit 3 }
   ' "$DOSYA" > "$tmp" || { rm -f "$tmp"; return 3; }
   mv "$tmp" "$DOSYA"
+}
+
+# ── SON-HALKA: bloklu ajandan "çözüldü" oluru (MABEYN H3 · L37-F9) ──────────
+# NİÇİN: Sultan bir engeli kaldırdı diye iş çözülmüş SAYILMAZ — bunu ancak ENGELLENEN taraf
+#   söyleyebilir. Ölçülmüş desen: "gönderildi ≠ ulaştı ≠ üstlenildi ≠ çözüldü"; bu zincirin
+#   son halkası bugüne dek hiç kapanmıyordu (Sultan adımı yapıyor, ajan hâlâ duvara çarpıyordu).
+# NASIL: kartın ilgili olduğu federe tetiğin durumu okunur — `tamam` ise olur GELMİŞTİR.
+#   `--federe-tamam <id>` verilirse kanıt ZORUNLUDUR: tetik `tamam` değilse kart KAPANMAZ (RC=4).
+#   Kanıtsız kapatma hâlâ mümkün (`--gerekce` ile) ama o zaman "olur:" satırı yazılmaz —
+#   kaydın kendisi hangi kapanışın kanıtlı olduğunu gösterir (sahte-yeşil ayırt edilebilir).
+_olur_dogrula() { # $1=tetik-id → 0=tamam(olur var) · 4=henüz değil · 2=okunamadı
+  local id="$1" fed="${FEDERE_SH:-/config/.claude/skills/federe-os-cekirdek/scripts/federe.sh}"
+  [ -x "$fed" ] || [ -r "$fed" ] || { _hata "federe istemcisi yok — olur DOĞRULANAMADI"; return 2; }
+  local cikti; cikti="$(bash "$fed" giden all 2>/dev/null | grep -F "$id" | head -1)" || true
+  [ -n "$cikti" ] || { _hata "tetik bulunamadı: $id (olur doğrulanamadı)"; return 2; }
+  printf '%s' "$cikti" | grep -q " tamam " && return 0
+  _hata "tetik '$id' henüz 'tamam' değil — bloklu ajan çözüldü DEMEDİ (kart açık kalır)"
+  return 4
 }
 
 # ── adım planı ───────────────────────────────────────────────────────────────
@@ -198,7 +222,7 @@ _lint_dosya() {
 
 # ── argüman ayrıştırma ───────────────────────────────────────────────────────
 KOMUT="${1:-}"; shift 2>/dev/null || true
-NE=""; NICIN=""; YAPILMAZSA=""; BITINCE=""; OZET=""; YAS=""; ENGEL=""; GEREKCE=""
+NE=""; NICIN=""; YAPILMAZSA=""; BITINCE=""; OZET=""; YAS=""; ENGEL=""; GEREKCE=""; FEDERE_TAMAM=""
 YAPILACAK=""; NEREDE=""; KURU=0
 AD=""
 if [ "$KOMUT" = "adim" ]; then ALT="${1:-}"; shift 2>/dev/null || true; fi
@@ -213,6 +237,7 @@ while [ $# -gt 0 ]; do
     --yas) YAS="${2:-}"; shift 2 ;;
     --engel) ENGEL="${2:-}"; shift 2 ;;
     --gerekce) GEREKCE="${2:-}"; shift 2 ;;
+    --federe-tamam) FEDERE_TAMAM="${2:-}"; shift 2 ;;
     --yapilacak) YAPILACAK="${2:-}"; shift 2 ;;
     --nerede) NEREDE="${2:-}"; shift 2 ;;
     --kuru) KURU=1; shift ;;
@@ -236,7 +261,13 @@ case "$KOMUT" in
   bitti)
     [ -n "$AD" ] || { _hata "Kısa Ad zorunlu"; exit 2; }
     [ -n "$GEREKCE" ] || { _hata "--gerekce zorunlu (kart neden Sultan'da değil artık?)"; exit 2; }
-    flock "$KILIT" bash -c "$(declare -f _kart_kapat _bugun); DOSYA='$DOSYA' _kart_kapat \"\$@\"" _ "$AD" "$GEREKCE"
+    OLUR=""
+    if [ -n "$FEDERE_TAMAM" ]; then
+      _olur_dogrula "$FEDERE_TAMAM"; drc=$?
+      [ "$drc" -eq 0 ] || { printf '⛔ kart KAPANMADI — son-halka eksik (bloklu ajanın oluru yok)\n' >&2; exit "$drc"; }
+      OLUR="bloklu ajan doğruladı (federe tetik $FEDERE_TAMAM → tamam)"
+    fi
+    flock "$KILIT" bash -c "$(declare -f _kart_kapat _bugun); DOSYA='$DOSYA' _kart_kapat \"\$@\"" _ "$AD" "$GEREKCE" "$OLUR"
     rc=$?
     [ "$rc" -eq 3 ] && { _hata "'$AD' adlı açık kart yok"; exit 1; }
     [ "$rc" -eq 0 ] || { _hata "kapatma düştü"; exit 1; }
