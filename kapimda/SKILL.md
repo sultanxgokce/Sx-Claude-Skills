@@ -1,7 +1,7 @@
 ---
 name: kapimda
 type: tool
-version: 1.3.0
+version: 1.4.0
 description: >
   Sultan'ı bekleyen işlerin TEK yüzeyini (kapimda.md) yazan, denetleyen ve adım adım yürüten
   kabuk. Kart açma fail-closed 8 lint kapısından geçer (dört zorunlu alan · "Niçin sen" boşsa
@@ -59,9 +59,9 @@ Plan **diske** yazılır (`kapimda-adim/<Kısa Ad>.md`: `toplam · suanki · dur
 "Yaptım" denince üç-durumlu kanıt-probu koşulur; **"yapmamışsın" dili yasaktır** (Sultan yalanlanmaz).
 
 ## Kanıt
-`scripts/kapimda.test.sh` → **63 kapı** (8 lint-RED yolu + fail-closed dosya-kirlenmezliği + çizici
+`scripts/kapimda.test.sh` → **69 kapı** (8 lint-RED yolu + fail-closed dosya-kirlenmezliği + çizici
 sözleşmesi + tavan + kapatma + adım motorunun tek-adım disiplini + 10 devir kapısı + 14 kaynak-damgası
-kapısı). Gerçek `kapimda.md`'ye dokunmaz. Kapılar negatif-test edildi: kaynak uydurulursa O4, devir
+kapısı + 7 varsayılan-görünüm kapısı). Gerçek `kapimda.md`'ye dokunmaz. Kapılar negatif-test edildi: kaynak uydurulursa O4, devir
 kaynağı ezerse O7/O9 **kırmızıya döner** (yani koruma gerçek, süs değil).
 
 ## Sürüm notları
@@ -71,6 +71,15 @@ kaynağı ezerse O7/O9 **kırmızıya döner** (yani koruma gerçek, süs değil
   iş çözülmüş SAYILMAZ — bunu ancak **engellenen taraf** söyleyebilir ("gönderildi ≠ ulaştı ≠ üstlenildi
   ≠ çözüldü" zincirinin kapanmayan son halkası). Kanıtlı kapanış `olur:` satırı taşır; kanıtsız kapatma
   hâlâ mümkündür ama satır yazılmaz → kayıt hangi kapanışın doğrulandığını gösterir. Test: 39 kapı.
+- **1.3.0 (2026-08-05, L48/G1):** **kart kaynağı** — her kart doğuş anında `oda: <kutu>` damgası alır.
+- **1.4.0 (2026-08-05, L48/G2):** **varsayılan görünüm = KENDİ odan.** Liste artık 14 kutunun işini
+  "kapında" diye basmıyor; yalnız bu odanın kartlarını + damgasız (kökeni bilinmeyen) kartları gösteriyor.
+  🔴 **Gizlemek değil susturmak:** başka odanın işleri düşürülmez, tek satırlık dipnota iner
+  (*"… 3 iş başka odalarda"*) ve `--hepsi` ile tam liste bir tuş uzaktadır — sessizce yutulan iş kayıp iştir.
+  🔴 **Damgasız kart GÖSTERİLİR:** damgasız kart "başka odanın" değil "bilinmeyen"dir; onu gizlemek
+  kanıtsız bir varsayımla Sultan'ın işini saklamak olurdu. Test: **69 kapı** (P1-P7 yeni).
+  Tavan-3 bilerek GLOBAL bırakıldı: oda-başına gevşetmek Sultan'ı 14×3 karta açardı — ölçüm olmadan
+  koruma gevşetilmez.
 
 ## 🎯 Kart devri — "bunu SERDAR'a şutla" (v1.2.0 · L47/F5)
 
