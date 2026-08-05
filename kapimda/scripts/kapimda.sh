@@ -18,6 +18,8 @@
 #     (kart bir görünürlük yüzeyidir; onay kaydı karar-kartlarında yaşar). Gerekçe ZORUNLU.
 #   • Ortak dosya (16 kutu aynı `/config/.claude`) → her yazım flock'lu + atomik (os.replace deseni).
 #   • Çizici sözleşmesi KORUNUR: açık kart satırı `^🚦 SENDE · <Kısa Ad>` (basla `_kapimda_blogu`).
+#   • KAYNAK UYDURULMAZ (L48/G1): kartın `oda:` damgası türetilemezse "bilinmiyor" yazılır;
+#     sahte bir kutu adı basmak alanı ölçülemez kılar (818/818-s01 dersi). Devir kaynağı EZMEZ.
 #
 # KULLANIM
 #   kapimda ac "<Kısa Ad>" --ne "…" --nicin-sen "…" --yapilmazsa "…" --bitince "…" \
@@ -29,7 +31,9 @@
 #        → kartın SAHİBİNİ değiştirir (kart taşınmaz — dosya 14 kutuda ortak). Ajan-sahipli kart
 #          `🎯 <AJAN> · <ad>` damgası alır ve Sultan'ın tavan-3 sayımına GİRMEZ.
 #          SULTAN→AJAN geçişi Sultan-onayı ister (RC=5). 3. devirde kart SULTAN'a döner (⚠️ TIKANDI).
-#   kapimda liste                                   # açık kartlar (salt-okur)
+#   kapimda liste                                   # açık kartlar + kaynak odaları (salt-okur)
+#        → her satır "• <Kısa Ad>  (oda: <kutu>)". SALT-BİLGİ: kaynak GÖSTERİLİR, liste ona
+#          göre SÜZÜLMEZ (süzme Sultan'ın gördüğü çıktıyı değiştirir → ayrı faz, ayrı karar).
 #   kapimda lint                                    # dosya-geneli denetim (RC≠0 = bulgu)
 #   kapimda adim ekle "<Kısa Ad>" --yapilacak "…" --nerede "…" --bitince "…"
 #   kapimda adim goster "<Kısa Ad>"                 # SIRADAKİ tek adımı kopyalanabilir bas
@@ -47,6 +51,49 @@ KILIT="${KAPIMDA_KILIT:-$DOSYA.lock}"
 
 _hata() { printf 'HATA: %s\n' "$1" >&2; }
 _bugun() { date +%F; }
+
+# ── KART KAYNAĞI: hangi kutudan açıldı (L48 · G1 = L47'nin F3'ü · 2026-08-05) ──
+# NİÇİN VAR (ölçülmüş): kapımda dosyası 14 kutuda AYNI inode; kartta "bunu kim açtı" alanı
+#   HİÇ yoktu. Sonuç (HUZUR'un federe raporu 0f17aa5d): her kutu ötekilerin kartını KENDİ
+#   kapısı sanıyor — "kapında 3 iş" dendi, üçü de başka odanın işiydi. Sultan aynı derdi
+#   kendi cümlesiyle söyledi: *"bir container'ın işi diğerine gidiyor."*
+#
+# 🔴 DOĞUŞ ANINDA DAMGALANIR. Kimlik sonradan geri kazanılamaz: kartı yazan an, kutunun
+#   hangisi olduğunun bilindiği TEK andır. Zincirin sonraki halkaları (dosya · çizici ·
+#   Telegram) kutuyu zaten bilmiyor.
+#
+# KAYNAK SEÇİMİ — niçin DEFAULT_WORKSPACE:
+#   • hostname → İŞE YARAMAZ: docker rastgele hex üretiyor (ör. 3a0d63c53b08).
+#   • TUĞRA kutular.json → merkez deposunda; 8 İZOLE kutu o depoyu GÖREMEZ.
+#   • DEFAULT_WORKSPACE → İSKÂN her kutuyu bununla doğuruyor (iskan.sh:505), yani
+#     izole kutuda da vardır ve depoya bağlı değildir. TEK taşınabilir kaynak budur.
+#   ⚠️ Buraya kutu TABLOSU KOPYALANMAZ (TUĞRA'nın "ikinci gerçek yazmak YASAK" kuralı) —
+#     tablo değil TÜREV kullanılır: yolun son parçası.
+#
+# 🔴 UYDURMA YOK: türetilemezse "bilinmiyor" yazılır. Sahte bir kutu adı (ör. hepsine "s01")
+#   yanlış-yönlendirmeyi ÇÖZMEZ, ölçülemez hâle getirir — 818 karar kaydının 818'inin "s01"
+#   olması tam bu yüzden alanı fiilen öldürmüştü.
+_bu_oda() {
+  local ws ad
+  if [ -n "${KAPIMDA_ODA:-}" ]; then printf '%s' "$KAPIMDA_ODA"; return 0; fi
+  ws="${DEFAULT_WORKSPACE:-}"
+  ws="${ws%/}"
+  [ -n "$ws" ] || { printf 'bilinmiyor'; return 0; }
+  # merkez kutunun çalışma alanı proje KÖKÜ'dür (alt-klasör değil) → adı "projects" olurdu
+  if [ "$ws" = "/config/projects" ]; then printf 'nexus'; return 0; fi
+  ad="${ws##*/}"
+  # makine alanı: ASCII küçük harf + rakam + tire (Türkçe damga insan-yüzünde, burada değil)
+  ad="$(printf '%s' "$ad" | tr '[:upper:]' '[:lower:]' | tr -c 'a-z0-9-' '-' | sed 's/-\{1,\}/-/g; s/^-//; s/-$//')"
+  [ -n "$ad" ] || ad="bilinmiyor"
+  printf '%s' "$ad"
+}
+
+_kart_oda() { # $1=ad → kartın oda damgası (yoksa "" — eski kartlar damgasızdır)
+  awk -v ad="$1" '
+    $0 ~ ("^(🚦 SENDE|🎯 [^·]+|⚠️ TIKANDI) · " ad "$") {icinde=1; next}
+    icinde && /^oda: / {sub(/^oda: /,""); print; exit}
+    icinde && /^```$/ {exit}' "$DOSYA" 2>/dev/null
+}
 
 # ── açık kart adları (çizici ile AYNI sözleşme: satır-başı damga) ──
 _acik_adlar() { grep -oP '^🚦 SENDE · \K.*' "$DOSYA" 2>/dev/null || true; }
@@ -112,10 +159,12 @@ $ozet"
 
 # ── kart yazımı (flock + atomik) ─────────────────────────────────────────────
 _kart_yaz() { # $1..$6 kart alanları
-  local ad="$1" ne="$2" nicin="$3" yapilmazsa="$4" bitince="$5" ozet="$6" yas="$7" engel="$8"
+  local ad="$1" ne="$2" nicin="$3" yapilmazsa="$4" bitince="$5" ozet="$6" yas="$7" engel="$8" oda="${9:-bilinmiyor}"
   local blok tmp
-  blok="$(printf '```\n🚦 SENDE · %s\n%s%s\n\n%s\n\nNe yapman gerekiyor: %s\nNiçin sen: %s\nYapılmazsa: %s\nBitince: %s\n```\n' \
-    "$ad" "${yas:-bugün açıldı}" "${engel:+ · $engel}" "${ozet:-$ne}" "$ne" "$nicin" "$yapilmazsa" "$bitince")"
+  # `oda:` başlığın HEMEN ALTINA girer (L47 §7.1 şeması) — çizici sözleşmesi `^🚦 SENDE · `
+  # satır-başı damgasına bakar, altındaki satırlar onu BOZMAZ (geri-alınabilirliğin anahtarı).
+  blok="$(printf '```\n🚦 SENDE · %s\noda: %s\n%s%s\n\n%s\n\nNe yapman gerekiyor: %s\nNiçin sen: %s\nYapılmazsa: %s\nBitince: %s\n```\n' \
+    "$ad" "$oda" "${yas:-bugün açıldı}" "${engel:+ · $engel}" "${ozet:-$ne}" "$ne" "$nicin" "$yapilmazsa" "$bitince")"
   tmp="$(mktemp)"
   # ÇAPA: "+N kart daha bekliyor." satırı — kart onun ÜSTÜNE girer (dosyanın insan-yazımı
   # başlık/kural bölümleri bozulmaz). Çapa yoksa dosya sonuna eklenir ve çapa oluşturulur.
@@ -152,17 +201,23 @@ _devir_sayaci() { # $1=ad → mevcut devir sayısı
     icinde && /^```$/ {exit}' "$DOSYA" 2>/dev/null)"
   printf '%s' "${n:-0}"
 }
-_kart_devret() { # $1=ad $2=yeni-sahip $3=gerekce $4=eski-sahip $5=yeni-devir-sayisi $6=tikandi(0/1)
-  local ad="$1" yeni="$2" ger="$3" eski="$4" say="$5" tik="$6" tmp; tmp="$(mktemp)"
+_kart_devret() { # $1=ad $2=yeni-sahip $3=gerekce $4=eski-sahip $5=yeni-devir-sayisi $6=tikandi(0/1) $7=oda(ops)
+  local ad="$1" yeni="$2" ger="$3" eski="$4" say="$5" tik="$6" oda="${7:-}" tmp; tmp="$(mktemp)"
+  # 🔴 `oda:` KART DEVRİNDE KORUNUR, YENİDEN YAZILMAZ: alan "kartı KİM AÇTI" demektir,
+  #   "kart ŞU AN kimde" demek DEĞİL (o `sahip` damgasıdır). Devreden kutu, kartı açan kutu
+  #   olmak zorunda değil; buraya kendi adını yazmak kaynağı SİLER. Damgasız eski kartlara
+  #   da köken UYDURULMAZ — damgasız kalırlar.
   awk -v ad="$ad" -v yeni="$yeni" -v ger="$ger" -v eski="$eski" -v say="$say" -v tik="$tik" \
-      -v gun="$(_bugun)" '
-    $0 ~ ("^(🚦 SENDE|🎯 [^·]+) · " ad "$") {
+      -v oda="$oda" -v gun="$(_bugun)" '
+    $0 ~ ("^(🚦 SENDE|🎯 [^·]+|⚠️ TIKANDI) · " ad "$") {
       if (tik == "1")            print "⚠️ TIKANDI · " ad
       else if (yeni == "SULTAN") print "🚦 SENDE · " ad
       else                       print "🎯 " yeni " · " ad
+      if (oda != "") print "oda: " oda
       print "devir: " say
       print "↳ devir " gun ": " eski " → " (tik=="1" ? "SULTAN (üç kez el değiştirdi — hakem Sultan)" : yeni) " · gerekçe: " ger
       bulundu=1; next }
+    /^oda: / && bulundu==1 && !oatlandi { oatlandi=1; next }
     /^devir: [0-9]+$/ && bulundu==1 && !atlandi { atlandi=1; next }
     { print }
     END { if (!bulundu) exit 3 }
@@ -300,9 +355,10 @@ case "$KOMUT" in
     _lint_kart "$AD" "$NE" "$NICIN" "$YAPILMAZSA" "$BITINCE" "$OZET" || {
       printf '⛔ kart AÇILMADI — lint kapısı (yukarıdaki sebepler)\n' >&2; exit 1; }
     [ "$KURU" -eq 1 ] && { printf '✅ lint temiz (kuru koşu — yazılmadı): %s\n' "$AD"; exit 0; }
+    ODA="$(_bu_oda)"
     flock "$KILIT" bash -c "$(declare -f _kart_yaz _bugun); DOSYA='$DOSYA' TAVAN='$TAVAN' _kart_yaz \"\$@\"" _ \
-      "$AD" "$NE" "$NICIN" "$YAPILMAZSA" "$BITINCE" "$OZET" "$YAS" "$ENGEL" || { _hata "yazım düştü"; exit 1; }
-    printf '🚦 kart açıldı: %s  (açık: %s/%s)\n' "$AD" "$(_acik_sayi)" "$TAVAN"
+      "$AD" "$NE" "$NICIN" "$YAPILMAZSA" "$BITINCE" "$OZET" "$YAS" "$ENGEL" "$ODA" || { _hata "yazım düştü"; exit 1; }
+    printf '🚦 kart açıldı: %s  (oda: %s · açık: %s/%s)\n' "$AD" "$ODA" "$(_acik_sayi)" "$TAVAN"
     ;;
   bitti)
     [ -n "$AD" ] || { _hata "Kısa Ad zorunlu"; exit 2; }
@@ -337,8 +393,9 @@ case "$KOMUT" in
     # PİNPON PANZEHİRİ: 3 kez el değiştirdiyse sahibi belli değildir → hakem Sultan.
     if [ "$SAY" -ge "${KAPIMDA_SUT_TAVANI:-3}" ] && [ "$SAHIP" != "SULTAN" ]; then TIK=1; SAHIP="SULTAN"; fi
     GER="$GEREKCE"; [ -n "$SULTAN_ONAYI" ] && GER="$GEREKCE (Sultan: \"$SULTAN_ONAYI\")"
+    KART_ODA="$(_kart_oda "$AD")"
     flock "$KILIT" bash -c "$(declare -f _kart_devret _bugun); DOSYA='$DOSYA' _kart_devret \"\$@\"" _ \
-      "$AD" "$SAHIP" "$GER" "$ESKI" "$SAY" "$TIK"
+      "$AD" "$SAHIP" "$GER" "$ESKI" "$SAY" "$TIK" "$KART_ODA"
     rc=$?
     [ "$rc" -eq 0 ] || { _hata "devir düştü"; exit 1; }
     if [ "$TIK" -eq 1 ]; then
@@ -350,7 +407,19 @@ case "$KOMUT" in
   liste)
     n="$(_acik_sayi)"
     [ "$n" -gt 0 ] || { printf 'kapında iş yok.\n'; exit 0; }
-    printf '🚦 kapında %s iş:\n' "$n"; _acik_adlar | sed 's/^/  • /'
+    # G1 SALT-BİLGİ: kaynak kutu GÖSTERİLİR ama FİLTRELENMEZ. Listeyi kutuya göre süzmek
+    # Sultan'ın gördüğü çıktıyı değiştirir → ayrı faz, ayrı Sultan-kararı (G2).
+    # 🔴 ÇIKTI TEK PARÇADA basılır (satır-satır DEĞİL): `set -o pipefail` altında
+    #   `kapimda liste | grep -q …` gibi ERKEN KAPANAN bir okuyucu, satır-satır yazan
+    #   döngüye SIGPIPE gönderip komutu başarısız gösteriyordu (ilk koşumda yakalandı —
+    #   L1 kapısı kırmızıya döndü). Tek `printf` bu yüzey-farkını kapatır.
+    _cikti="🚦 kapında $n iş:"
+    while IFS= read -r _a; do
+      [ -n "$_a" ] || continue
+      _o="$(_kart_oda "$_a")"
+      _cikti="$_cikti"$'\n'"  • $_a${_o:+  (oda: $_o)}"
+    done < <(_acik_adlar)
+    printf '%s\n' "$_cikti"
     ;;
   lint) _lint_dosya ;;
   adim)

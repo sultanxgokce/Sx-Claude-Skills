@@ -175,5 +175,66 @@ D="$(_dev_yeni)"; grep -q '^🚦 SENDE · Test Kart$' "$D" \
   && ok "D10 dokunulmamış kartın damgası birebir aynı (geriye-uyum)" || kotu "D10 geriye-uyum bozuldu"
 
 
+# ── ODA DAMGASI (L48 · G1 = L47'nin F3'ü · 2026-08-05) ──────────────────────
+# NİÇİN: kapımda dosyası 14 kutuda AYNI inode ve kartta "bunu kim açtı" alanı YOKTU →
+# her kutu ötekinin işini kendi kapısı sanıyordu (HUZUR ölçtü: "kapında 3 iş", üçü de
+# başka oda). Aşağıdaki kapılar damganın DOĞUŞ ANINDA basıldığını, UYDURULMADIĞINI ve
+# çizici sözleşmesini BOZMADIĞINI kilitler.
+_oda_yeni(){ O="$T/oda$RANDOM.md"; printf '%s' "$O"; }
+_ok(){ KAPIMDA_DOSYA="$1" bash "$SUT" "${@:2}"; }
+OG_AC=(--ne "$G_NE" --nicin-sen "$G_NICIN" --yapilmazsa "$G_YAP" --bitince "$G_BIT")
+
+O="$(_oda_yeni)"; DEFAULT_WORKSPACE=/config/projects/tellal _ok "$O" ac "Kaynak Kart" "${OG_AC[@]}" >/dev/null 2>&1
+grep -q '^oda: tellal$' "$O" && ok "O1 kart doğuş anında oda damgası taşır" || kotu "O1 damga basılmadı"
+[ "$(awk '/^🚦 SENDE · Kaynak Kart$/{getline; print}' "$O")" = "oda: tellal" ] \
+  && ok "O2 damga başlığın HEMEN altında (L47 §7.1 şeması)" || kotu "O2 damga yanlış yerde"
+
+O="$(_oda_yeni)"; DEFAULT_WORKSPACE=/config/projects _ok "$O" ac "Merkez Kart" "${OG_AC[@]}" >/dev/null 2>&1
+grep -q '^oda: nexus$' "$O" && ok "O3 merkez kutusu 'nexus' (yolun son parçası 'projects' DEĞİL)" \
+  || kotu "O3 merkez kutu adı yanlış"
+
+# 🔴 UYDURMA YOK: kaynak yoksa sahte bir kutu adı basmak, alanı 818/818-s01 gibi ÖLDÜRÜR.
+O="$(_oda_yeni)"; ( unset DEFAULT_WORKSPACE; _ok "$O" ac "Koksuz Kart" "${OG_AC[@]}" ) >/dev/null 2>&1
+grep -q '^oda: bilinmiyor$' "$O" && ok "O4 türetilemeyen kaynak UYDURULMAZ → bilinmiyor" \
+  || kotu "O4 kaynak uyduruldu ya da alan düştü"
+
+O="$(_oda_yeni)"; KAPIMDA_ODA=huzur DEFAULT_WORKSPACE=/config/projects _ok "$O" ac "Elle Kart" "${OG_AC[@]}" >/dev/null 2>&1
+grep -q '^oda: huzur$' "$O" && ok "O5 açık kutu-üstgeçişi (KAPIMDA_ODA) türetimi ezer" || kotu "O5 üstgeçiş çalışmadı"
+
+# ÇİZİCİ SÖZLEŞMESİ: `basla` ve `/kapimda` satır-başı `^🚦 SENDE · ` damgasına bakar.
+O="$(_oda_yeni)"; DEFAULT_WORKSPACE=/config/projects/akar _ok "$O" ac "Cizici Kart" "${OG_AC[@]}" >/dev/null 2>&1
+{ grep -q '^🚦 SENDE · Cizici Kart$' "$O" && [ "$(grep -c '^🚦 SENDE · ' "$O")" = "1" ]; } \
+  && ok "O6 çizici sözleşmesi BOZULMADI (satır-başı damga aynen)" || kotu "O6 çizici sözleşmesi kırıldı"
+
+# DEVİR: `oda` = kartı KİM AÇTI; `sahip` = kart ŞU AN kimde. Devreden kutu kaynağı EZEMEZ.
+O="$(_oda_yeni)"; DEFAULT_WORKSPACE=/config/projects/tellal _ok "$O" ac "Devir Kart" "${OG_AC[@]}" >/dev/null 2>&1
+DEFAULT_WORKSPACE=/config/projects _ok "$O" devret "Devir Kart" --sahip SERDAR --gerekce "altyapı işi" \
+  --sultan-onayi "sen hallet" >/dev/null 2>&1
+{ grep -q '^oda: tellal$' "$O" && ! grep -q '^oda: nexus$' "$O"; } \
+  && ok "O7 devirde kaynak KORUNUR (devreden kutu kendi adını yazmaz)" || kotu "O7 devir kaynağı ezdi"
+[ "$(grep -c '^oda: ' "$O")" = "1" ] && ok "O8 devirden sonra tek oda satırı (mükerrer yok)" || kotu "O8 mükerrer oda satırı"
+
+# GERİYE-UYUM: damgasız eski kartlara köken UYDURULMAZ (HUZUR'un şartı).
+D="$(_dev_yeni)"; DEFAULT_WORKSPACE=/config/projects _dk "$D" devret "Test Kart" --sahip SERDAR \
+  --gerekce g --sultan-onayi ok >/dev/null 2>&1
+grep -q '^oda: ' "$D" && kotu "O9 damgasız eski karta köken uyduruldu" \
+  || ok "O9 damgasız eski karta köken UYDURULMAZ"
+
+O="$(_oda_yeni)"; DEFAULT_WORKSPACE=/config/projects/sedir _ok "$O" ac "Liste Kart" "${OG_AC[@]}" >/dev/null 2>&1
+_ok "$O" liste 2>/dev/null | grep -q 'Liste Kart  (oda: sedir)' \
+  && ok "O10 liste kaynağı gösterir (salt-bilgi — filtre YOK)" || kotu "O10 liste kaynağı göstermedi"
+[ "$(_ok "$O" liste 2>/dev/null | grep -c '^  • ')" = "1" ] \
+  && ok "O11 liste HÂLÂ filtresiz — kutu-süzmesi G2'nin işi, burada yok" || kotu "O11 beklenmedik filtre"
+
+# BUGÜNÜN REGRESYONU (ilk koşumda yakalandı): liste satır-satır yazınca erken kapanan
+# okuyucu SIGPIPE üretiyor, `pipefail` altında komut BAŞARISIZ görünüyordu.
+_ok "$O" liste 2>/dev/null | grep -q 'Liste Kart' \
+  && ok "O12 liste erken-kapanan okuyucuya karşı düşmez (boru kırılması)" || kotu "O12 liste boruda düştü"
+
+O="$(_oda_yeni)"; DEFAULT_WORKSPACE=/config/projects/mihenk _ok "$O" ac "Kapanan Kart" "${OG_AC[@]}" >/dev/null 2>&1
+_ok "$O" bitti "Kapanan Kart" --gerekce "halloldu" >/dev/null 2>&1
+grep -q '^oda: mihenk$' "$O" && ok "O13 kart kapanınca kaynak izi SİLİNMEZ" || kotu "O13 kapanışta iz kayboldu"
+_ok "$O" lint >/dev/null 2>&1; [ $? -eq 0 ] && ok "O14 yeni alan linti kırmızıya düşürmez" || kotu "O14 lint yanlış kırmızı"
+
 echo; echo "── SONUÇ: $gecti geçti · $dustu kaldı ──"
 [ "$dustu" -eq 0 ]

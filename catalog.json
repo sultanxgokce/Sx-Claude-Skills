@@ -954,8 +954,8 @@
       "id": "kapimda",
       "type": "tool",
       "name": "kapımda — Sultan'ı bekleyen işlerin yazıcısı + lint'i",
-      "version": "1.2.0",
-      "description": "kapimda.md kartlarını fail-closed SEKİZ lint kapısından geçirerek yazar (dört zorunlu alan · 'Niçin sen' boşsa kart AÇILAMAZ · tavan 3 · ad tekilliği · Sultan-dili/İ1 kalkanı · tek-eylem · sır-desen · uzunluk), kartı kapatır (A06: onay DEĞİL, görünürlük) ve elle-yapılacak işler için tek-mesaj-tek-adım motorunu yürütür (plan diske, ekrana yalnız sıradaki adım). Kanon: L38-F3/F4 + L39-F1 (MABEYN H2). GLOBAL: 16 kutu aynı /config/.claude/kapimda.md dosyasını görür; karşılama ekranı bu kartları çizer. Kart DEVRİ (L47/F5): kart bir ajana şutlanabilir (🎯 <AJAN> damgası, Sultan sayımından düşer); Sultan kapısından iş çıkarmak Sultan-onayı ister (A06); 3. devirde kart Sultan hakemliğine döner.",
+      "version": "1.3.0",
+      "description": "kapimda.md kartlarını fail-closed SEKİZ lint kapısından geçirerek yazar (dört zorunlu alan · 'Niçin sen' boşsa kart AÇILAMAZ · tavan 3 · ad tekilliği · Sultan-dili/İ1 kalkanı · tek-eylem · sır-desen · uzunluk), kartı kapatır (A06: onay DEĞİL, görünürlük) ve elle-yapılacak işler için tek-mesaj-tek-adım motorunu yürütür (plan diske, ekrana yalnız sıradaki adım). Kanon: L38-F3/F4 + L39-F1 (MABEYN H2). GLOBAL: 16 kutu aynı /config/.claude/kapimda.md dosyasını görür; karşılama ekranı bu kartları çizer. Kart DEVRİ (L47/F5): kart bir ajana şutlanabilir (🎯 <AJAN> damgası, Sultan sayımından düşer); Sultan kapısından iş çıkarmak Sultan-onayı ister (A06); 3. devirde kart Sultan hakemliğine döner. KART KAYNAĞI (L48/G1): her kart doğduğu anda 'oda: <kutu>' damgası alır (otomatik, kutunun çalışma alanından türer; türetilemezse 'bilinmiyor' — uydurma YOK). Kaynak ≠ sahip: devir kaynağı ezmez, damgasız eski kartlara köken uydurulmaz. Şimdilik salt-bilgi — liste kutuya göre SÜZÜLMEZ.",
       "prerequisites": {
         "system": [
           "bash",
