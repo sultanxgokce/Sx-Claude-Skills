@@ -1,7 +1,7 @@
 ---
 name: kapimda
 type: tool
-version: 1.2.0
+version: 1.3.0
 description: >
   Sultan'ı bekleyen işlerin TEK yüzeyini (kapimda.md) yazan, denetleyen ve adım adım yürüten
   kabuk. Kart açma fail-closed 8 lint kapısından geçer (dört zorunlu alan · "Niçin sen" boşsa
@@ -59,8 +59,10 @@ Plan **diske** yazılır (`kapimda-adim/<Kısa Ad>.md`: `toplam · suanki · dur
 "Yaptım" denince üç-durumlu kanıt-probu koşulur; **"yapmamışsın" dili yasaktır** (Sultan yalanlanmaz).
 
 ## Kanıt
-`scripts/kapimda.test.sh` → 39 kapı (8 lint-RED yolu + fail-closed dosya-kirlenmezliği + çizici
-sözleşmesi + tavan + kapatma + adım motorunun tek-adım disiplini). Gerçek `kapimda.md`'ye dokunmaz.
+`scripts/kapimda.test.sh` → **63 kapı** (8 lint-RED yolu + fail-closed dosya-kirlenmezliği + çizici
+sözleşmesi + tavan + kapatma + adım motorunun tek-adım disiplini + 10 devir kapısı + 14 kaynak-damgası
+kapısı). Gerçek `kapimda.md`'ye dokunmaz. Kapılar negatif-test edildi: kaynak uydurulursa O4, devir
+kaynağı ezerse O7/O9 **kırmızıya döner** (yani koruma gerçek, süs değil).
 
 ## Sürüm notları
 - **1.0.0 (2026-08-04, MABEYN H2):** ilk sürüm — yazıcı + 8 kapı + kapatıcı + adım motoru + lint.
@@ -101,4 +103,28 @@ damgası birebir aynı kalır (çizici sözleşmesi bozulmaz; kapı D10).
 **Pinpon panzehiri:** her devir `devir: N` sayacını artırır; **3. devirde** kart otomatik
 `⚠️ TIKANDI` damgasıyla Sultan'a döner. *Üç kez el değiştirdiyse sahibi belli değildir,
 hakem Sultan'dır.* Her devir gerekçesiyle karta satır düşer — **sessiz devir yoktur**.
+
+## 🏷️ Kart kaynağı — "bu kart hangi odadan çıktı" (v1.3.0 · L48/G1 = L47/F3)
+
+**Niçin var (ölçülmüş):** kapımda dosyası 14 kutuda **aynı dosyadır**, ama kartta "bunu kim
+açtı" alanı hiç yoktu. Sonuç: her kutu ötekinin işini kendi kapısı sanıyordu — HUZUR
+kutusunda "kapında 3 iş var" dendi, üçü de başka odanın işiydi. Sultan'ın cümlesiyle:
+*"bir container'ın işi diğerine gidiyor."*
+
+Artık her kart **doğduğu anda** başlığının hemen altına kaynağını yazar:
+
+```
+🚦 SENDE · Kasa Erişimi
+oda: tellal
+```
+
+- **Otomatik — ajan yazmaz.** Kaynak kutunun çalışma alanından türer (her kutuda, izole
+  olanlarda da vardır; merkez kutu `nexus` olur). Gerekirse `KAPIMDA_ODA` ile ezilebilir.
+- **🔴 Uydurma yok.** Türetilemiyorsa `bilinmiyor` yazılır. Sahte bir kutu adı basmak
+  yanlış-yönlendirmeyi çözmez, **ölçülemez hâle getirir** — 818 karar kaydının 818'inin
+  aynı değeri taşıması alanı tam bu yüzden fiilen öldürmüştü.
+- **Kaynak ≠ sahip.** `oda` kartı KİM AÇTI der; `sahip` kart ŞU AN kimde der. Devir
+  kaynağı **ezmez**, damgasız eski kartlara da köken **uydurulmaz** (kapı O7/O9).
+- **Şimdilik salt-bilgi.** Kaynak gösterilir ama liste ona göre **süzülmez** — süzme
+  Sultan'ın gördüğü çıktıyı değiştirir, ayrı karar ister.
 
