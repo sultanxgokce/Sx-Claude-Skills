@@ -65,5 +65,34 @@ chmod 755 "$R/deneme-skill/scripts/calis.sh"
 [ ! -e "$T/YAN-ETKI" ]
 kapi "G7 duman testi script'i KOŞMAZ (yan-etki yok)" $?
 
+# G8 · "GÜNCEL" DALINDA DA DENETLENİR — bu dal eskiden HİÇ bakılmıyordu
+#   (canlı ölçüm 2026-08-05: rafta 35 çalıştırılamaz script, hepsine "güncel" deniyordu)
+R="$(_kur 755 ok)"
+(cd "$R" && node sync-skills.mjs --apply >/dev/null 2>&1)      # 1. tur: kurulur
+chmod 644 "$R/hedef/deneme-skill/scripts/calis.sh"             # kurulu kopya bozulur
+out="$(cd "$R" && node sync-skills.mjs 2>&1)"                  # 2. tur: DRY-RUN, içerik aynı
+printf '%s' "$out" | grep -q 'DUMAN TESTİ DÜŞTÜ'
+kapi "G8 içerik aynıyken bile bozuk kurulu kopya yakalanır" $?
+
+# G9 · --apply KİPİ ONARIR (içeriğe dokunmadan)
+R="$(_kur 755 ok)"
+(cd "$R" && node sync-skills.mjs --apply >/dev/null 2>&1)
+onceki="$(md5sum < "$R/hedef/deneme-skill/scripts/calis.sh")"
+chmod 644 "$R/hedef/deneme-skill/scripts/calis.sh"
+out="$(cd "$R" && node sync-skills.mjs --apply 2>&1)"; rc=$?
+sonraki="$(md5sum < "$R/hedef/deneme-skill/scripts/calis.sh")"
+[ -x "$R/hedef/deneme-skill/scripts/calis.sh" ] && [ "$rc" = 0 ] \
+  && printf '%s' "$out" | grep -q 'ONARILDI' && [ "$onceki" = "$sonraki" ]
+kapi "G9 --apply izni onarır, içeriği DEĞİŞTİRMEZ" $?
+
+# G10 · DRY-RUN ONARMAZ (ölçüm aracı sessizce yazamaz)
+R="$(_kur 755 ok)"
+(cd "$R" && node sync-skills.mjs --apply >/dev/null 2>&1)
+chmod 644 "$R/hedef/deneme-skill/scripts/calis.sh"
+(cd "$R" && node sync-skills.mjs >/dev/null 2>&1)
+[ ! -x "$R/hedef/deneme-skill/scripts/calis.sh" ]
+kapi "G10 dry-run onarmaz (yalnız --apply yazar)" $?
+
+
 printf '\n%s geçti · %s kaldı\n' "$gecen" "$kalan"
 [ "$kalan" -eq 0 ]

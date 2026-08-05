@@ -135,6 +135,30 @@ function dumanTesti(dstDir, label) {
   return bulgular;
 }
 
+
+/**
+ * KİP ONARIMI — içerik aynı ama izin bozuksa, yalnız izni düzelt.
+ * NİÇİN: sync "güncel" derken içerik hash'ine bakar; KİP hash'e girmez. Kaynak
+ * düzeltildikten sonra bile kurulu kopyalar ölü kalıyordu (2026-08-05 ölçümü:
+ * canlı rafta 35 çalıştırılamaz script, dağıtım hepsine "güncel" diyordu).
+ * İçeriğe DOKUNMAZ — yalnız chmod. Bu yüzden --force gerektirmez.
+ */
+function kipOnar(srcDir, dstDir) {
+  let onarilan = 0;
+  const sdir = join(srcDir, 'scripts'), ddir = join(dstDir, 'scripts');
+  if (!existsSync(sdir) || !existsSync(ddir)) return 0;
+  for (const name of readdirSync(sdir)) {
+    const sf = join(sdir, name), df = join(ddir, name);
+    if (!existsSync(df)) continue;
+    let ss, ds; try { ss = statSync(sf); ds = statSync(df); } catch { continue; }
+    if (ss.isDirectory()) continue;
+    if ((ss.mode & 0o111) && !(ds.mode & 0o111)) {
+      try { chmodSync(df, ss.mode & 0o7777); onarilan++; } catch {}
+    }
+  }
+  return onarilan;
+}
+
 // ── manifest ─────────────────────────────────────────────────────────────────
 const manifest = JSON.parse(readFileSync(join(REPO, 'sync-targets.json'), 'utf8'));
 const { targets, install } = manifest;
@@ -173,7 +197,14 @@ for (const [skillId, targetKeys] of Object.entries(install)) {
         // Sürümler eşit — İÇERİK de eşit mi? (sürüm tek başına yeterli değil, bkz dirHash yorumu)
         const sh = dirHash(srcDir), dh = dirHash(dstDir);
         if (sh === dh) {
-          console.log(`  = ${label}: güncel (v${srcVer})`);
+          // 🔴 "güncel" DEMEK "çalışıyor" DEMEK DEĞİL: içerik hash'i eşleşse bile kurulu
+          //   kopya çalıştırılamaz olabilir (kip hash'e girmez). Bu dal eskiden HİÇ
+          //   denetlenmiyordu → 35 ölü araç yıllarca "güncel" göründü.
+          const onarildi = APPLY ? kipOnar(srcDir, dstDir) : 0;
+          const bulgu = dumanTesti(dstDir, label);
+          if (bulgu.length) { dumanDusen++; }
+          else if (onarildi) console.log(`  ⟳ ${label}: güncel (v${srcVer}) · ${onarildi} dosyanın çalıştırma izni ONARILDI`);
+          else console.log(`  = ${label}: güncel (v${srcVer})`);
           skipped++;
         } else {
           console.log(`  ⚠ ${label}: İÇERİK-DRIFT — sürüm aynı (v${srcVer}) ama içerik farklı`);
