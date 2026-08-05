@@ -221,15 +221,44 @@ grep -q '^oda: ' "$D" && kotu "O9 damgasız eski karta köken uyduruldu" \
   || ok "O9 damgasız eski karta köken UYDURULMAZ"
 
 O="$(_oda_yeni)"; DEFAULT_WORKSPACE=/config/projects/sedir _ok "$O" ac "Liste Kart" "${OG_AC[@]}" >/dev/null 2>&1
-_ok "$O" liste 2>/dev/null | grep -q 'Liste Kart  (oda: sedir)' \
-  && ok "O10 liste kaynağı gösterir (salt-bilgi — filtre YOK)" || kotu "O10 liste kaynağı göstermedi"
-[ "$(_ok "$O" liste 2>/dev/null | grep -c '^  • ')" = "1" ] \
-  && ok "O11 liste HÂLÂ filtresiz — kutu-süzmesi G2'nin işi, burada yok" || kotu "O11 beklenmedik filtre"
+DEFAULT_WORKSPACE=/config/projects/sedir _ok "$O" liste 2>/dev/null | grep -q 'Liste Kart  (oda: sedir)' \
+  && ok "O10 liste kaynağı gösterir" || kotu "O10 liste kaynağı göstermedi"
 
 # BUGÜNÜN REGRESYONU (ilk koşumda yakalandı): liste satır-satır yazınca erken kapanan
 # okuyucu SIGPIPE üretiyor, `pipefail` altında komut BAŞARISIZ görünüyordu.
-_ok "$O" liste 2>/dev/null | grep -q 'Liste Kart' \
+DEFAULT_WORKSPACE=/config/projects/sedir _ok "$O" liste 2>/dev/null | grep -q 'Liste Kart' \
   && ok "O12 liste erken-kapanan okuyucuya karşı düşmez (boru kırılması)" || kotu "O12 liste boruda düştü"
+
+# ── G2 · VARSAYILAN GÖRÜNÜM = KENDİ ODAN (2026-08-05) ──────────────────────────
+# Sözleşme: başka odanın işi GİZLENMEZ, susturulur — dipnotta sayılır, --hepsi ile açılır.
+P="$(_oda_yeni)"
+DEFAULT_WORKSPACE=/config/projects/sedir _ok "$P" ac "Sedir Isi" "${OG_AC[@]}" >/dev/null 2>&1
+DEFAULT_WORKSPACE=/config/projects/tellal _ok "$P" ac "Tellal Isi" "${OG_AC[@]}" >/dev/null 2>&1
+
+CIK="$(DEFAULT_WORKSPACE=/config/projects/sedir _ok "$P" liste 2>/dev/null)"
+printf '%s' "$CIK" | grep -q 'Sedir Isi' \
+  && ok "P1 varsayılan liste KENDİ odanın işini gösterir" || kotu "P1 kendi işi görünmüyor"
+printf '%s' "$CIK" | grep -q 'Tellal Isi' \
+  && kotu "P2 başka odanın işi varsayılan listeye sızdı" || ok "P2 başka odanın işi varsayılan listede YOK"
+printf '%s' "$CIK" | grep -q '1 iş başka odalarda' \
+  && ok "P3 saklanan iş SESSİZCE yutulmaz — dipnotta sayılır" || kotu "P3 dipnot yok (sessiz yutma)"
+printf '%s' "$CIK" | grep -q -- '--hepsi' \
+  && ok "P4 tam listeye çıkış yolu gösterilir" || kotu "P4 çıkış yolu gösterilmedi"
+
+CIK="$(DEFAULT_WORKSPACE=/config/projects/sedir _ok "$P" liste --hepsi 2>/dev/null)"
+printf '%s' "$CIK" | grep -q 'Sedir Isi' && printf '%s' "$CIK" | grep -q 'Tellal Isi' \
+  && ok "P5 --hepsi tüm odaları gösterir" || kotu "P5 --hepsi eksik"
+
+# Damgasız (eski) kart "başka odanın" DEĞİL, "bilinmeyen"dir → gizlemek kanıtsız varsayım olur.
+Q="$(_oda_yeni)"
+printf '```\n🚦 SENDE · Damgasiz Is\nbugün açıldı\n\nozet\n\nNe yapman gerekiyor: x\nNiçin sen: y\nYapılmazsa: z\nBitince: w\n```\n' > "$Q"
+DEFAULT_WORKSPACE=/config/projects/sedir _ok "$Q" liste 2>/dev/null | grep -q 'Damgasiz Is' \
+  && ok "P6 damgasız eski kart GİZLENMEZ (kanıtsız varsayımla iş saklanmaz)" || kotu "P6 damgasız kart kayboldu"
+
+# Kendi odanda iş yokken ekran boş görünmemeli — kaç iş nerede, tek satır.
+CIK="$(DEFAULT_WORKSPACE=/config/projects/huma _ok "$P" liste 2>/dev/null)"
+printf '%s' "$CIK" | grep -q 'kapında iş yok' && printf '%s' "$CIK" | grep -q '2 iş başka odalarda' \
+  && ok "P7 kendi odan boşken bile 'başka odada N iş' görünür" || kotu "P7 boş ekran sessiz kaldı"
 
 O="$(_oda_yeni)"; DEFAULT_WORKSPACE=/config/projects/mihenk _ok "$O" ac "Kapanan Kart" "${OG_AC[@]}" >/dev/null 2>&1
 _ok "$O" bitti "Kapanan Kart" --gerekce "halloldu" >/dev/null 2>&1

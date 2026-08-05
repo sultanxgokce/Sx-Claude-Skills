@@ -31,9 +31,10 @@
 #        → kartın SAHİBİNİ değiştirir (kart taşınmaz — dosya 14 kutuda ortak). Ajan-sahipli kart
 #          `🎯 <AJAN> · <ad>` damgası alır ve Sultan'ın tavan-3 sayımına GİRMEZ.
 #          SULTAN→AJAN geçişi Sultan-onayı ister (RC=5). 3. devirde kart SULTAN'a döner (⚠️ TIKANDI).
-#   kapimda liste                                   # açık kartlar + kaynak odaları (salt-okur)
-#        → her satır "• <Kısa Ad>  (oda: <kutu>)". SALT-BİLGİ: kaynak GÖSTERİLİR, liste ona
-#          göre SÜZÜLMEZ (süzme Sultan'ın gördüğü çıktıyı değiştirir → ayrı faz, ayrı karar).
+#   kapimda liste [--hepsi]                         # açık kartlar (salt-okur)
+#        → VARSAYILAN: yalnız BU odanın işleri + damgasız (kökeni bilinmeyen) kartlar.
+#          Başka odaların işi gizlenmez, dipnota iner: "… N iş başka odalarda".
+#          --hepsi → 14 kutunun tamamı. Her satır "• <Kısa Ad>  (oda: <kutu>)".
 #   kapimda lint                                    # dosya-geneli denetim (RC≠0 = bulgu)
 #   kapimda adim ekle "<Kısa Ad>" --yapilacak "…" --nerede "…" --bitince "…"
 #   kapimda adim goster "<Kısa Ad>"                 # SIRADAKİ tek adımı kopyalanabilir bas
@@ -322,7 +323,7 @@ _lint_dosya() {
 # ── argüman ayrıştırma ───────────────────────────────────────────────────────
 KOMUT="${1:-}"; shift 2>/dev/null || true
 NE=""; NICIN=""; YAPILMAZSA=""; BITINCE=""; OZET=""; YAS=""; ENGEL=""; GEREKCE=""; FEDERE_TAMAM=""
-YAPILACAK=""; NEREDE=""; KURU=0; SAHIP=""; SULTAN_ONAYI=""
+YAPILACAK=""; NEREDE=""; KURU=0; SAHIP=""; SULTAN_ONAYI=""; HEPSI=0
 AD=""
 if [ "$KOMUT" = "adim" ]; then ALT="${1:-}"; shift 2>/dev/null || true; fi
 [ $# -gt 0 ] && case "${1:-}" in --*) ;; *) AD="$1"; shift ;; esac
@@ -342,6 +343,7 @@ while [ $# -gt 0 ]; do
     --sahip) SAHIP="${2:-}"; shift 2 ;;
     --sultan-onayi) SULTAN_ONAYI="${2:-}"; shift 2 ;;
     --kuru) KURU=1; shift ;;
+    --hepsi) HEPSI=1; shift ;;
     *) _hata "bilinmeyen bayrak: $1"; exit 2 ;;
   esac
 done
@@ -407,18 +409,39 @@ case "$KOMUT" in
   liste)
     n="$(_acik_sayi)"
     [ "$n" -gt 0 ] || { printf 'kapında iş yok.\n'; exit 0; }
-    # G1 SALT-BİLGİ: kaynak kutu GÖSTERİLİR ama FİLTRELENMEZ. Listeyi kutuya göre süzmek
-    # Sultan'ın gördüğü çıktıyı değiştirir → ayrı faz, ayrı Sultan-kararı (G2).
+    # ── G2 · VARSAYILAN = KENDİ ODAN (Sultan-kararı 2026-08-05, öneriye bırakıldı) ─────
+    # G1 kaynağı GÖSTERDİ ama süzmedi; ekran hâlâ 14 kutunun işini "kapında" diye basıyordu
+    # (HUZUR ölçümü: "kapında 3 iş" dendi, üçü de başka odanın işiydi). Artık varsayılan
+    # görünüm KENDİ odandır.
+    # 🔴 GİZLEMEK DEĞİL SUSTURMAK: başka odanın işleri düşürülmez, tek satırlık dipnota
+    #   iner ve `--hepsi` ile tam liste bir tuş uzakta kalır. Sessizce yutulan iş = kayıp iş.
+    # 🔴 DAMGASIZ KART GÖSTERİLİR: damgasız kart "başka odanın" DEĞİL, "bilinmeyen"dir.
+    #   Onu gizlemek, kanıtsız bir varsayımla Sultan'ın işini saklamak olurdu (G1'in
+    #   "uydurma yok" kuralının görüntü tarafı).
     # 🔴 ÇIKTI TEK PARÇADA basılır (satır-satır DEĞİL): `set -o pipefail` altında
     #   `kapimda liste | grep -q …` gibi ERKEN KAPANAN bir okuyucu, satır-satır yazan
     #   döngüye SIGPIPE gönderip komutu başarısız gösteriyordu (ilk koşumda yakalandı —
     #   L1 kapısı kırmızıya döndü). Tek `printf` bu yüzey-farkını kapatır.
-    _cikti="🚦 kapında $n iş:"
+    _benim="$(_bu_oda)"
+    _govde=""; _mine=0; _yabanci=0
     while IFS= read -r _a; do
       [ -n "$_a" ] || continue
       _o="$(_kart_oda "$_a")"
-      _cikti="$_cikti"$'\n'"  • $_a${_o:+  (oda: $_o)}"
+      if [ "$HEPSI" -eq 0 ] && [ -n "$_o" ] && [ "$_o" != "$_benim" ]; then
+        _yabanci=$((_yabanci + 1)); continue
+      fi
+      _mine=$((_mine + 1))
+      _govde="$_govde"$'\n'"  • $_a${_o:+  (oda: $_o)}"
     done < <(_acik_adlar)
+    if [ "$HEPSI" -eq 1 ]; then
+      _cikti="🚦 kapında $n iş (tüm odalar):$_govde"
+    elif [ "$_mine" -eq 0 ]; then
+      _cikti="kapında iş yok."
+      [ "$_yabanci" -gt 0 ] && _cikti="$_cikti"$'\n'"  … $_yabanci iş başka odalarda — hepsini görmek için: kapimda liste --hepsi"
+    else
+      _cikti="🚦 kapında $_mine iş:$_govde"
+      [ "$_yabanci" -gt 0 ] && _cikti="$_cikti"$'\n'"  … $_yabanci iş başka odalarda — hepsini görmek için: kapimda liste --hepsi"
+    fi
     printf '%s\n' "$_cikti"
     ;;
   lint) _lint_dosya ;;
