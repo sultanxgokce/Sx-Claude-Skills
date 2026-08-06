@@ -134,5 +134,40 @@ Canlı kopya kanondan **ileriyse ya da sürüm eşitken içeriği farklıysa** r
 - **Ölçerken tuzak:** `node sync-skills.mjs | tail` çıkış kodunu YUTAR ve bekçi yeşil görünür.
   Çıplak koş ya da `; echo exit=$?` ekle. (Bu satır bizzat o tuzağa düşülerek yazıldı.)
 
+## 13 · Paket künyesi + lisans (ÖLÇÜLÜR — henüz zorlanmaz)
+
+### 13.1 · Neden
+İki ayrı olay aynı boşluğa işaret etti (2026-08-06):
+- Bir oda başka bir odanın paketini **iyi niyetle** düzenledi; ihlal sonradan fark edildi.
+  Paketin üstünde "bu kimin" yazmıyordu.
+- Bir paket **6 npm bağımlılığı** taşıyordu ve hiçbiri lisans açısından hiç bakılmamıştı.
+
+İkisinin de ortak kökü: **paket kendini beyan etmiyor.** Sahibi yok, tüketicisi yok, taşıdığı dış
+kod bilinmiyor. Kural koymadan önce ölçtük.
+
+### 13.2 · İki alan (manifest'te)
+- **`owner`** — paketi kim değiştirebilir, kime sorulur. Boşsa paket **sahipsizdir**.
+- **`consumers`** — paketi kim tüketiyor. Sahip, kırıcı bir değişiklikten önce buradakilere haber verir.
+
+### 13.3 · Ölçüm — `ahi/schema/kunye-raporu.mjs`
+```
+node ahi/schema/kunye-raporu.mjs <repo-koku> [--strict] [--paket <ad>]
+```
+Her paket için künye durumunu ve npm bağımlılıklarının lisans sınıfını basar. Lisanslar üç sınıfa
+ayrılır: **serbest** (MIT/Apache/BSD/ISC/MPL) · **kopyaya-bulaşan** (GPL/AGPL/SSPL/CC-BY-NC) ·
+**bilinmeyen**. Bağımlılık kurulu değilse sonuç **"ölçülemedi"**dir — temiz SAYILMAZ (sahte-yeşil yasağı).
+
+Çıkış: `0` rapor-modu · `1` `--strict` altında bulgu · `2` kullanım/ortam hatası.
+
+**İlk ölçüm (2026-08-06, origin/main):** 12 paketin **3'ünde** künye var, **9'unda yok**.
+
+### 13.4 · Neden henüz SERT değil (K01)
+Bugün 12 paketin 9'u kuralı ihlal ediyor; bu hâldeyken kapıyı kırmızıya çevirmek işi durdurur,
+kuralı değil. Ayrıca **sahibi ajan kendi kendine atayamaz** — sahiplik beyanı paketi yazanın
+kararıdır, ölçen ajanın değil. Bu yüzden araç **rapor-modunda** doğdu; `--strict`'e geçiş
+(ve CI'a bağlanması) künyeler dolduktan sonra **ayrı ve bilinçli** bir karardır.
+
+*"Ölçmediğin kuralı SERT ilan edemezsin" — K01. Bu bölüm ölçer; ilan etmez.*
+
 ---
 *AHÎ · Sx-Claude-Skills · kademe-rütbesi: Çırak → Kalfa → Usta → Pîr/Lonca · sahip: SERDAR/KÂHYA review-kapısı*

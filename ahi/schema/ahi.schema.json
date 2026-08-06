@@ -26,7 +26,8 @@
     "sunset": { "type": "string", "description": "emeklilik-tarihi (soft-ama-sunsetli)" },
     "successor": { "type": "string" },
     "target_tier": { "enum": ["cirak", "kalfa", "usta", "pir"], "description": "hakettiği tavan-kademe (≠ en-üst)" },
-    "owner": { "type": "string" },
+    "owner": { "type": "string", "description": "Paketin SAHİBİ — kim değiştirebilir, kime sorulur. Boşsa paket sahipsizdir ve başka bir oda habersiz düzenleyebilir. Ölçüm: ahi/schema/kunye-raporu.mjs" },
+    "consumers": { "type": "array", "items": { "type": "string" }, "description": "Bu paketi TÜKETEN odalar/ajanlar. Sahip, kırıcı değişiklikten önce buradakilere haber verir." },
     "feedback": {
       "type": "object",
       "description": "SYS (L01) doğum-sonrası yaşam-döngüsü kanalı — OPSİYONEL (INERT; validate.mjs zorunlu-kılmaz). owner boşsa 'ahi health' öksüz-owner WARN'lar. channel=append-only havuz; sla_tier=digest(gürültü)|closure(tam-kapanış).",
