@@ -76,6 +76,43 @@ fi
 #   ekibin sohbetine sahte bir mesaj eklerdi (üye açtığında "hazir" diye bir alışveriş görürdü).
 #   Bunun yerine launcher KENDİ izini tutar: ilk başarılı açılışta bir işaret dosyası bırakır.
 #   Böylece ne transcript ağacına dokunuyoruz ne de jeton harcıyoruz.
+# ── KOLTUK ÇALIŞMA ALANI (L43 F2) — VARSAYILAN KAPALI ────────────────────────
+# NİÇİN (ölçüldü 2026-08-03/06): `git checkout` PAYLAŞILAN bir mutasyondur. Bir kutuda birden
+#   çok koltuk tek git ağacında çalışıyorsa, dal değiştiren kişi ötekilerin ayağının altındaki
+#   dosyaları değiştirir — ve bunu göremez. Aynı ağacı paylaşan koltuklarda HAZIRLIK ALANI da
+#   ortaktır: huzur'da bir ajanın commit'i ötekinin 15 dosyasını ana dala taşıdı.
+#   Filo ölçümü: 10 kutu 🔴 (huma 8 koltuk / 1 ağaç), 2 🟡, 1 🟢.
+#
+# KAPALI VARSAYILAN BİLİNÇLİ: Sultan kararı "önce tek kutuda dene, sonra yay". Bayrak
+#   konmadıkça bu blok HİÇBİR ŞEY yapmaz — bayt-aynı davranış (mevcut kutular etkilenmez).
+#
+# FAIL-SOFT ama SESSİZ DEĞİL: ağaç açılamazsa açılış DÜŞMEZ, ana ağaçta devam edilir —
+#   ama sarı bir satır basılır. Sessizce ana ağaca düşmek, korumanın var sanılmasına yol açar.
+KOLTUK_AGACI="${KOLTUK_AGACI:-0}"
+if [ "$KOLTUK_AGACI" = "1" ]; then
+  _kok="$(git -C "$SCRIPT_DIR/.." rev-parse --show-toplevel 2>/dev/null || true)"
+  if [ -z "$_kok" ]; then
+    echo "[sari] koltuk-agaci istendi ama burasi git deposu degil — ana dizinde devam" >&2
+  else
+    _kagac="${KOLTUK_KOK:-$HOME/koltuk}/$ROL"
+    _kdal="${KOLTUK_DAL_ONEKI:-koltuk}/$ROL"
+    if [ -d "$_kagac/.git" ] || [ -f "$_kagac/.git" ]; then
+      cd "$_kagac" && echo "[koltuk] $ROL → $_kagac (mevcut ağaç)" >&2
+    else
+      # Taban: deponun O ANKİ dalı. origin/main DEĞİL — bu kutular çoğu zaman bir özellik
+      # dalında çalışıyor (tez: faz-0-kurulum); origin/main'den açmak işi geçmişe atardı.
+      _taban="$(git -C "$_kok" rev-parse --abbrev-ref HEAD 2>/dev/null || echo HEAD)"
+      mkdir -p "$(dirname "$_kagac")" 2>/dev/null || true
+      if git -C "$_kok" worktree add "$_kagac" -b "$_kdal" "$_taban" >/dev/null 2>&1 \
+         || git -C "$_kok" worktree add "$_kagac" "$_kdal" >/dev/null 2>&1; then
+        cd "$_kagac" && echo "[koltuk] $ROL → $_kagac (yeni ağaç, taban: $_taban)" >&2
+      else
+        echo "[sari] koltuk-agaci acilamadi ($_kagac) — ANA AGACTA devam ediliyor; paylasim riski surer" >&2
+      fi
+    fi
+  fi
+fi
+
 _IZ_DIR="${BASLAT_IZ_DIR:-$HOME/.claude-baslat}"
 _IZ="$_IZ_DIR/$SID.acildi"
 mkdir -p "$_IZ_DIR" 2>/dev/null || true
