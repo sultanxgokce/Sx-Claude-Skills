@@ -58,6 +58,16 @@ for yuva, env in (("{{TASARIM_DILI}}", "SOZLESME"), ("{{ESTETIK_YON}}", "ESTETIK
         sys.stderr.write("HATA: şablonda %s yuvası yok: %s\n" % (yuva, sablon)); sys.exit(2)
     govde = govde.replace(yuva, oku(os.environ[env]))
 
+# ADSIZ/boş yuvalar ({{ }} gibi) alttaki sıkı desene yakalanmaz — sözleşme gövdesi
+# gömülürken kaçarlar (ölçüldü: tasarim-dili.md'de 21 yuvanın 20'si kaçıyordu, boş
+# sözleşme platforma gidiyordu). Gevşek tarama BURADA koşar — {{ONCEKI_HTML}} henüz
+# gömülmeden — ki önceki sayfanın HTML'i içindeki masum {{…}} dizileri yanlış-kırmızı
+# yakmasın. {{ONCEKI_HTML}}'in kendisi bu aşamada meşru-bekleyen tek yuvadır, ayıklanır.
+bos = sorted(set(re.findall(r"\{\{[^}\n]{0,80}\}\}", govde)) - {"{{ONCEKI_HTML}}"})
+if bos:
+    sys.stderr.write("HATA: doldurulmamış/adsız yuva var (sözleşme boş kalmış olabilir): %s\n"
+                     % ", ".join(repr(b) for b in bos)); sys.exit(2)
+
 onceki = os.environ.get("ONCEKI") or ""
 if "{{ONCEKI_HTML}}" in govde:
     if not onceki:
