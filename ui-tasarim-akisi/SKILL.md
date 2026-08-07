@@ -1,10 +1,16 @@
 ---
 name: ui-tasarim-akisi
 type: agent
-version: 0.1.8
+version: 0.2.1
 description: >
-  Bir ürünün ekranlarını sıfırdan tasarlama akışı: sayfa envanteri → kullanıcı senaryoları →
-  Claude design promptu → devam promptu ile kalan sayfalar. Proje-bağımsız.
+  UI/arayüz tasarım işinin ZORUNLU akış kapısı. Bir ürünün ekranlarını tek tek değil dizi
+  hâlinde tasarlatır: ürün niyeti → sayfa envanteri → kullanıcı senaryoları (tık bütçesi) →
+  ÇEKİRDEK+MARKA sözleşmesi → Claude design promptu → devam promptuyla kalan sayfalar +
+  her sayfadan sonra üç denetim. "UI işi · arayüz · ekran tasarla · sayfa tasarımı ·
+  frontend görünüm · panel · layout · stil · tema · bileşen" tetiğinde çağrılır.
+  🔴 `/frontend-design` ile BİRLİKTE zorunludur (Sultan direktifi) — biri ötekinin yerine
+  GEÇMEZ: bu akış senaryo/sayfa-dizisi katmanı, `/frontend-design` görsel-dil katmanı.
+  Proje-bağımsız · GLOBAL (tüm kutular).
 install_target: { skills: .claude/skills/ }
 stacks: ["*"]
 author: sultanxgokce
@@ -97,12 +103,49 @@ kural bayatlar (ölçülmüş vaka: `frontend-design` sessizce üç kopyaya ayr�
 Promptlar yuvalıdır; `arac/prompt-yap.sh` yuvaları doldurur.
 **Sözleşme promptlara kopyalanmaz** — kopya bayatlar, yuva bayatlamaz.
 
+## Çıktıyı geri alma — iki yön ayrı işlerdir
+
+Promptu **göndermek** ve tasarımı **geri almak** aynı iş değildir. Metnin gidişi tıkanırsa insan
+yapıştırabilir; ama **dönüş yönü senin işindir** ve insanı dosya taşıyıcısı yapmadan önce sırayı
+tüket:
+
+| # | Yol | Ne zaman |
+|---|---|---|
+| 1 | Araç yüzeyine bak — tasarım platformuna bağlanan bir araç var mı | Her zaman ilk adım |
+| 2 | Proje kimliğiyle **doğrudan çek** (dosya listele → içeriği al) | Araç varsa |
+| 3 | Kırmızı dönerse **yazma** dene; yetki akışını tekrarlayıp bir kez daha dene | Okuma başarısızsa |
+| 4 | Elle taşıma: insan dosyayı kaydeder, sen okursun | **Yalnız 1–3 tükendiyse** |
+
+**Boş liste "kapalı" demek değildir.** Listeleme boş dönerken yazma çalışabiliyor — bu ölçüldü.
+Dolaylı bir sinyale bakıp yolun kapalı olduğuna karar verme; **aracı fiilen çağır.**
+
+**Çıktı bir kez çekilmez.** Platform ilk çıktıdan sonra kendini rafine edebiliyor; çektiğin dosya
+son sürüm olmayabilir. Bir süre sonra yeniden çek ve karşılaştır.
+
+Elle taşıma meşru bir yedektir ama **varsayılan değildir** — bedeli sana değil insana yazılır.
+
+## Platform tarafındaki tasarım sistemi
+
+Metodun üç tutarlılık katmanı depo tarafındadır (sözleşme · önceki kaynak · bileşen denetimi).
+Bir katman daha platform tarafında yaşar: **tasarım sistemi.**
+
+**Her ürün kendi tasarım sistemini açar.** Başka bir ürünün sistemi seçiliyse onun renkleri ve
+bileşenleri seninkilerin üstüne biner ve iki dil karışır. Üstelik **bileşen adı denetimi bunu
+yakalayamaz** — o yalnız kendi sözlüğüne bakar. Sızıntı sessiz olur.
+
+Doğru hamle *çıkarmak* değil **eklemek**: kendi sistem projeni aç, sözleşmeni ve sayfa
+senaryolarını içine koy, her turda onu seç.
+
+Ortak bir hesapta çalışıyorsan: yazma çağrıları proje kimliği alır — yanlış kimlik başka ürünün
+sistemine yazar. Kimliği her seferinde doğrula.
+
 ## Sayfa sırası nasıl seçilir
 
 **İlk sayfa dili kurar; EN ÇOK TARTIŞILACAK olan seçilir** — "en zengin" değil.
 
-Bu kural ölçümle değişti: bir turda insan oturumundan çıkan **11 maddenin 8'i açılış sayfasına**
-aitti. Yani açılış, zenginliği için değil *en çok itiraz toplayacağı* için ilk sırada olmalı —
+Bu kural ölçümle değişti: bir turda insan oturumundan çıkan **11 maddenin 10'u açılış sayfasına**
+aitti (8 karar + 2 tespit; kalan 1 madde ekran değil süreç kararıydı). Diğer **altı ekranın payı: 0**.
+Yani açılış, zenginliği için değil *en çok itiraz toplayacağı* için ilk sırada olmalı —
 itirazı erken al ki dilin geri kalanı sağlam zemine kurulsun. Zengin ama tartışmasız bir ekran
 ikinci sıraya düşer.
 
@@ -253,7 +296,10 @@ düzeltmeye çalıştığı hatanın ta kendisiydi.
 - **Yarım özellik çizilmez.** Veri modelinde olmayan alan tasarımda görünmez.
 - **Kısıt estetiği yener.** Çatışmada ürünün kabul kriterleri kazanır.
 - **Kanıtsız bitti yok.** Her denetim çıktısıyla gösterilir; "uyumlu" beyanı yetmez.
-- **Kanıtsız kırmızı da yok.** Bir yolun kapalı olduğu, denenmeden ilan edilmez.
+- **Kanıtsız kırmızı da yok** — ve bunun bir prosedürü vardır, yoksa süs kalır:
+  bir yolun kapalı olduğunu söylemeden önce (a) aracı **fiilen çağır**, (b) dolaylı sinyale
+  değil çağrının **sonucuna** bak, (c) okuma başarısızsa **yazmayı** dene, (d) hâlâ kırmızıysa
+  **hangi çağrının ne döndürdüğünü** yaz. "Bağlanamıyorum" tek başına bir ölçüm değildir.
 - **Kural tek yerde yaşar, değer kutuda.** Çekirdek sözleşme kopyalanmaz ve renk/font/sayı taşımaz;
   taşırsa koşu rc=2 ile reddedilir. Atlanabilir kural, kural değildir.
 
@@ -285,7 +331,26 @@ düzeltmeye çalıştığı hatanın ta kendisiydi.
 - Yargı hattı **kapıya (çok-model geçidine) bağımlıdır**; kapı yoksa/sağlıksızsa RC=2 döner ve
   hüküm üretmez. En az **iki ayrı model ailesi** ister — tek yargıç panel değildir, yeter sayı
   sağlanamaz. Yargıcın hükmü *yeşil değildir*: yalnız mekanik yeşili iptal edebilir.
-- Claude design'a **erişim** bu metodun konusu değil. Erişim yoksa promptlar elle yapıştırılır;
-  akış aynen çalışır.
+- Claude design'a **erişim kurmak** bu metodun konusu değil — ama **erişimi denemek** metodun
+  işidir. Promptun gidişi elle yapılabilir; çıktının dönüşü önce araçla denenir
+  ("Çıktıyı geri alma" sırası). *"Erişimi metoda karıştırma"* maddesi *"erişimi araştırma"*
+  diye okunmaz. Erişim gerçekten yoksa promptlar elle yapıştırılır; akış aynen çalışır.
 - Çıktı biçimi platformun kendi biçimidir. "Tek bağımsız HTML" isteyip bileşen dosyası almak
   aykırılık değil, platformun doğal davranışıdır — denetimler buna göre yazılır.
+
+## Sürüm geçmişi — çatal kapanışı (L56 · Faz 0)
+
+Bu beceri bir dönem **iki soydan** evrildi ve ikisi de "güncel" göründü:
+
+| Soy | Nerede | Ne getirdi |
+|---|---|---|
+| kanon `0.1.8` | `Sx-Claude-Skills` (bu depo) | Durak 0 (ürün niyeti) · ÇEKİRDEK⟂MARKA ayrımı · yoğunluk/tık araçları · kör yargı paneli · havuz |
+| teslim `0.2.0` | HUZUR kutusu, 2026-08-05 · `Nexus/_agents/handoff/gelen-huzur/` | "Çıktıyı geri alma" sırası · "Platform tarafındaki tasarım sistemi" · kanıtsız-kırmızı prosedürü |
+
+`0.2.1` **ikisinin birleşimidir**; iki soyun da tek özel maddesi taşındı, `0.2.0`'ın
+`Sınırlar` maddesi kanonun daha dar hâlini düzeltti. Bundan sonra **tek kopya bu dosyadır** —
+kutu-içi teslimler kanona döndüğünde bu tablo bir satır alır.
+
+> Kendi acı dersimiz: `SKILL.md` bu dosyada *"kopya senkron mekanizması olmadan bayatlar
+> (ölçülmüş vaka: `frontend-design`)"* diye **yazılıydı** ve beceri buna rağmen çatalladı.
+> **Doğru yazılmış uyarı = 0 koruma.** Kopya çıkarmadan önce onu geri getirecek kapıyı kur.

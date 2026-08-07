@@ -1200,8 +1200,8 @@
       "sync_dagitim": true,
       "type": "workflow",
       "name": "UI Tasarım Akışı",
-      "version": "0.1.8",
-      "description": "Bir ürünün ekranlarını sıfırdan tasarlama akışı: sayfa envanteri → kullanıcı senaryoları → Claude design promptu → devam promptu ile kalan sayfalar. Proje-bağımsız.",
+      "version": "0.2.1",
+      "description": "UI/arayüz tasarım işinin ZORUNLU akış kapısı: ürün niyeti → sayfa envanteri → senaryolar (tık bütçesi) → ÇEKİRDEK+MARKA sözleşmesi → Claude design promptu → devam promptu + üç denetim. 'UI işi · arayüz · ekran tasarla · sayfa tasarımı · frontend görünüm · panel · layout · stil' tetiğinde çağrılır. /frontend-design ile BİRLİKTE zorunlu — biri ötekinin yerine geçmez.",
       "prerequisites": {
         "backend": [],
         "frontend": []
