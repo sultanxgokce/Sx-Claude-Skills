@@ -103,6 +103,22 @@ if [ -n "$ONCEKI" ] && [ -f "$ONCEKI" ]; then
   set +e
   OLCUM="$(python3 "$ARAC/yogunluk-denetle.py" "$DIZIN" 2>&1)"; OLCUM_RC=$?
   set -e
+  # ── HAVUZ: ölçüm sonucu merkezde birikir (kapı DEĞİL, defter) ───────────────
+  # Niçin burada: hükmün doğduğu tek an burası. Ayrı bir "havuza yaz" adımı iyi niyete
+  # bırakılsaydı yazılmazdı — ölçüldü, bu ailedeki her gönüllü adım yazılmamış.
+  # Yazamamak koşuyu DÜŞÜRMEZ (defter kapı değildir) ama sessiz de geçmez: uyarır.
+  if [ -f "$ARAC/havuz.py" ]; then
+    case "$OLCUM_RC" in 0) _H=temiz ;; 1) _H=kirmizi ;; *) _H=olcemedi ;; esac
+    _KOD="$(printf '%s' "$OLCUM" | grep -oE '^❌ KIRMIZI +[A-ZÇĞİÖŞÜ]{1,2}[0-9]{1,2}' \
+            | grep -oE '[A-ZÇĞİÖŞÜ]{1,2}[0-9]{1,2}$' | sort -u | paste -sd, - || true)"
+    _EK="$(basename "$ONCEKI")"; _EK="$(printf '%s' "${_EK%.*}" | tr 'A-Z' 'a-z')"
+    _KU="$(printf '%s' "${UI_AKIS_KUTU:-$(basename "$KOK")}" | tr 'A-Z' 'a-z')"
+    _SR="$(sed -n 's/^version: *//p' "$ARAC/../SKILL.md" 2>/dev/null | head -1)"
+    python3 "$ARAC/havuz.py" yaz --kutu "$_KU" --urun "$_KU" --ekran "$_EK" \
+      --kapi yogunluk --hukum "$_H" --dusen "$_KOD" --arac "${_SR:-0.0.0}" >/dev/null \
+      || echo "UYARI: havuza yazılamadı (ölçüm geçerli, defter eksik kaldı)." >&2
+  fi
+
   case "$OLCUM_RC" in
     0) : ;;
     1) echo "$OLCUM" >&2

@@ -1,7 +1,7 @@
 ---
 name: ui-tasarim-akisi
 type: agent
-version: 0.1.5
+version: 0.1.6
 description: >
   Bir ürünün ekranlarını sıfırdan tasarlama akışı: sayfa envanteri → kullanıcı senaryoları →
   Claude design promptu → devam promptu ile kalan sayfalar. Proje-bağımsız.
@@ -191,6 +191,34 @@ düşürür; ölçülen hata sahte-yeşildi, asimetri kasıtlı).
 ekranında insan divanının üç maddesini bağımsız yakaladı; sağlam dört ekrana dokunmadı.
 **Yakalayamadığı:** reddedilmiş turun ekranları — çünkü onların kusuru anlam değil yoğunluk
 boyutundaydı. İki kapı bu yüzden ayrı: **anlam → yargıç, yoğunluk → makine.**
+
+## Havuz — öğrenilenin merkeze döndüğü yer
+
+Bir tur biterken öğrenilen şey bugüne kadar hiçbir yere düşmüyordu: kapı kırmızı yanıyor,
+düzeltiliyor, **bir sonraki tur aynı hatayı yeniden keşfediyordu.** Havuz o kaybı kapatır.
+
+```
+python3 arac/havuz.py ozet                 # merkezî görünüm: en çok hangi kural düşüyor
+python3 arac/havuz.py oku --kutu akar      # o kutunun son ölçümleri
+```
+
+**Çağıranı var — kimse "havuza yaz" demek zorunda değil.** Kayıt, hükmün doğduğu iki anda
+kendiliğinden düşer: `prompt-yap.sh --onceki` (yoğunluk ölçümü) ve `yargi-birlestir.py
+--havuz-kutu <ad>` (jüri hükmü). Ayrı bir gönüllü adım bırakılsaydı yazılmazdı — bu ailedeki
+her gönüllü adım ölçüldü ve yazılmamıştı.
+
+**Havuz kapı DEĞİL, defterdir:** yazılamazsa koşu düşmez, uyarı basılır. Ölçümü bir günlük
+tutulamadı diye durdurmak, hastalıktan beter ilaç olurdu.
+
+🔒 **Şema kapalıdır — serbest metin alanı YOKTUR.** Havuz dosyası kutuların **ortak** gördüğü
+bir dizinde yaşar; izole bir kutu başkasının satırlarını okuyabilir. Bu yüzden şemada alıntı,
+HTML, gerekçe metni, kişi/müşteri adı taşıyacak hiçbir alan yoktur — yalnız kod ve sayı
+(`kutu · urun · ekran · kapi · hukum · dusen[] · tur · arac · ts`). Şema dışı anahtar, desene
+uymayan değer ya da `dusen` alanına serbest metin → **kayıt reddedilir** (fail-closed).
+"Şuraya küçük bir not düşeyim" diye alan eklenmez; eklenirse mahremiyet sınırı sessizce delinir.
+
+**Boş havuz "temiz" demez, "hiç bakılmamış" der.** Sessizliği başarı saymak bu sistemin
+düzeltmeye çalıştığı hatanın ta kendisiydi.
 
 ## Değişmezler
 

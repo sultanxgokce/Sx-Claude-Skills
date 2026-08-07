@@ -21,6 +21,7 @@ Kullanım:
   yargi-birlestir.py --rubrik <rubrik.md> --yanit <dir> --ekran-dir <dir>
                      [--muhur <sha256>] [--panel kimi,glm,qwen]
                      [--json <cikti.json>] [--tescil-g G3]
+                     [--havuz-kutu akar] [--havuz <tasarim-havuz.jsonl>]
 
 Yanıt dosyası adı: `<ekran>__<yargic>.json` (kapının ham yanıtı ya da düz metin).
 """
@@ -164,7 +165,8 @@ def cikis(kod, mesaj=None):
 
 def main(argv):
     a = {"rubrik": None, "yanit": None, "ekran-dir": None, "muhur": None,
-         "panel": None, "json": None, "tescil-g": None}
+         "panel": None, "json": None, "tescil-g": None,
+         "havuz-kutu": None, "havuz": None}
     i = 0
     while i < len(argv):
         ad = argv[i][2:] if argv[i].startswith("--") else None
@@ -244,6 +246,28 @@ def main(argv):
                  k["gecerli_sifir"], ("· " + "; ".join(k["notlar"][:3])) if k["notlar"] else ""))
     if ekran_yok:
         print("\nUYARI ekran HTML'i yok (oy sayılmadı): %s" % ", ".join(ekran_yok))
+
+    # ── HAVUZ: hüküm merkezde birikir (ekran başına bir satır, META-ONLY) ──────
+    # Alıntı/gerekçe metni havuza GİRMEZ — şema onu taşımaz (bkz havuz.py).
+    if a["havuz-kutu"]:
+        import subprocess
+        havuz = os.path.join(os.path.dirname(os.path.abspath(__file__)), "havuz.py")
+        eslek_h = {"RED": "kirmizi", "KIRMIZI-DEĞİL": "temiz", "EMİN-DEĞİLİM": "emin-degilim"}
+        for ekran in sorted(ekranlar):
+            v = ekranlar[ekran]
+            komut = [sys.executable, havuz, "yaz",
+                     "--kutu", a["havuz-kutu"], "--urun", a["havuz-kutu"],
+                     "--ekran", ekran.lower(), "--kapi", "yargi",
+                     "--hukum", eslek_h[v["hukum"]],
+                     "--dusen", ",".join(v["dusuren_maddeler"])]
+            if a["havuz"]:
+                komut += ["--havuz", a["havuz"]]
+            try:
+                subprocess.run(komut, check=True, stdout=subprocess.DEVNULL)
+            except Exception as e:
+                sys.stderr.write("UYARI: havuza yazılamadı (%s) — hüküm geçerli, "
+                                 "defter eksik kaldı.\n" % e)
+                break
 
     if a["tescil-g"]:
         eslek = {"RED": "KALDI", "KIRMIZI-DEĞİL": "GECTI", "EMİN-DEĞİLİM": "EMIN-DEGILIM"}
