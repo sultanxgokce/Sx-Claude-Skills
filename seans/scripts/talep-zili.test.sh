@@ -59,5 +59,30 @@ printf 'adet=abc\n' > "$T/bozuk.txt"
 cikti="$(kos "$T/bozuk.txt" 2>&1)"; rc=$?
 [ "$rc" -eq 0 ] && [ -z "$cikti" ] && ok "G6 bozuk dosyada çökmedi ve sustu" || kotu "G6 bozuk dosyada davranış yanlış (rc=$rc): $cikti"
 
+
+# ═══ L50 · KAPSAM DAMGASI ════════════════════════════════════════════════════
+# NİÇİN: bu sayıyı merkez ölçüp kutuya dağıtıyor ve merkez token'ı cell-izolasyonlu →
+# tablo yalnız MERKEZ-KAYNAKLI bekleyenleri görür. Damga basılmazsa okuyan sayıyı
+# "kuyruğun tamamı" sanar; oda-odaya gelen bir mesaj görünmediğinde ekran farkında
+# olmadan yalan söylemiş olur. (Kök vaka: ekran 13 kutuya MERKEZİN sayısını basıyordu.)
+
+# G7: kapsam damgası varsa sınır SÖYLENİR
+yaz "$T/kapsamli.txt" 9 "$(date -u -d '-30 hours' +%Y-%m-%dT%H:%MZ)" 5
+printf 'kapsam=s01-kaynakli\n' >> "$T/kapsamli.txt"
+cikti="$(kos "$T/kapsamli.txt" 2>&1)"
+grep -q "BU KUTUNUN gelen kutusu" <<<"$cikti" && ok "G7a satır BU kutunun kuyruğu olduğunu söylüyor" || kotu "G7a kime ait belirsiz: $cikti"
+grep -q "9 oda-talebi SAHİPSİZ" <<<"$cikti" && ok "G7b kutunun KENDİ sayısı basıldı" || kotu "G7b sayı yok: $cikti"
+grep -q "merkez-kaynaklı" <<<"$cikti" && ok "G7c kapsam sınırı söylendi" || kotu "G7c kapsam gizlendi: $cikti"
+
+# G8: kapsam damgası YOKSA uydurma sınır cümlesi basılmaz (eski biçimle geriye-uyum)
+cikti="$(kos "$T/dolu.txt" 2>&1)"
+grep -q "merkez-kaynaklı" <<<"$cikti" && kotu "G8 damgasız dosyada uydurma kapsam cümlesi" || ok "G8 damga yoksa kapsam cümlesi YOK (geriye-uyum)"
+
+# G9: kapsamlı ama adet=0 → yine SESSİZ ("kuyruk temiz" İDDİASI edilmez)
+yaz "$T/sifir.txt" 0 "-" 5
+printf 'kapsam=s01-kaynakli\n' >> "$T/sifir.txt"
+cikti="$(kos "$T/sifir.txt" 2>&1)"
+[ -z "$cikti" ] && ok "G9 adet=0 iken sessiz (temiz iddiası yok)" || kotu "G9 0'da konuştu: $cikti"
+
 echo; echo "── SONUÇ: $gecti geçti · $dustu kaldı ──"
 [ "$dustu" -eq 0 ]
