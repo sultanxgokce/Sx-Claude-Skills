@@ -77,6 +77,7 @@ printf '# dil\nrenk: #123456\n' > "$T/proje/dil.md"
 printf '# estetik\nsakin\n' > "$T/proje/est.md"
 printf 'x\n> n\n---\n{{ONCEKI_HTML}}\n{{TASARIM_DILI}}\n{{ESTETIK_YON}}\n' > "$T/proje/sablon.md"
 ILK="$(ls "$T/proje/ciktilar/"*.html | head -1)"
+bash "$ARAC/tik-kaydet.sh" "$ILK" G1=3:2 >/dev/null   # tık kapısı: ölçüm olmadan rc=3
 J2="$T/otomatik.jsonl"
 kapi "devam promptu → rc=0" 0 env UI_AKIS_HAVUZ="$J2" UI_AKIS_KUTU=akar \
      bash "$ARAC/prompt-yap.sh" "$T/proje/sablon.md" --onceki "$ILK" \

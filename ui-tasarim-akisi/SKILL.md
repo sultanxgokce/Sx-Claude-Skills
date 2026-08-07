@@ -1,7 +1,7 @@
 ---
 name: ui-tasarim-akisi
 type: agent
-version: 0.1.7
+version: 0.1.8
 description: >
   Bir ürünün ekranlarını sıfırdan tasarlama akışı: sayfa envanteri → kullanıcı senaryoları →
   Claude design promptu → devam promptu ile kalan sayfalar. Proje-bağımsız.
@@ -99,9 +99,15 @@ Promptlar yuvalıdır; `arac/prompt-yap.sh` yuvaları doldurur.
 
 ## Sayfa sırası nasıl seçilir
 
-**İlk sayfa dili kurar; en zengin olan seçilir.** İskelet, gezinme, kart dili, durum göstergeleri
-orada doğar. Formlar ve listeler ondan türer. Giriş/oturum ekranı **en sona** bırakılır — dili
-kurmaz, yalnız tüketir.
+**İlk sayfa dili kurar; EN ÇOK TARTIŞILACAK olan seçilir** — "en zengin" değil.
+
+Bu kural ölçümle değişti: bir turda insan oturumundan çıkan **11 maddenin 8'i açılış sayfasına**
+aitti. Yani açılış, zenginliği için değil *en çok itiraz toplayacağı* için ilk sırada olmalı —
+itirazı erken al ki dilin geri kalanı sağlam zemine kurulsun. Zengin ama tartışmasız bir ekran
+ikinci sıraya düşer.
+
+İskelet, gezinme, kart dili, durum göstergeleri ilk sayfada doğar; formlar ve listeler ondan
+türer. Giriş/oturum ekranı **en sona** bırakılır — dili kurmaz, yalnız tüketir.
 
 ## Üç denetim — her sayfadan sonra, atlanmaz
 
@@ -112,7 +118,26 @@ kurmaz, yalnız tüketir.
 2. **Kısıt denetimi** — ürünün kendi yasakları çiğnenmiş mi (çizilmemesi gereken alanlar,
    gösterilmemesi gereken bilgi).
 3. **Tık sayımı** — senaryodaki hedef tutmuş mu. Aşım **sessiz geçilmez**: ya tasarım revize
-   edilir ya hedef gerekçeyle güncellenir.
+   edilir ya hedef gerekçeyle güncellenir. Sayım elle yapılır (tarayıcı yok), ama **kaydı
+   makineye verilir**:
+
+```
+bash arac/tik-kaydet.sh tasarim/ciktilar/E1.html G1=3:2 G2=1:1   # hedef:ölçülen
+```
+
+**Bu kapı sonradan eklendi ve niçini utandırıcıdır:** Durak 2 tık bütçesini ZORUNLU ilan
+ediyordu, ama aşağı akışta hiçbir kapı onu istemiyordu — `prompt-yap.sh` içinde geçen "tık"
+kelimelerinin hepsi *"esTİKk"* in içiydi, gerçek referans **sıfırdı**. Yani bu sistemin
+başkasında yakaladığı "ölçmediğine temiz der" hatası tam da kendi çekirdeğinde duruyordu.
+(Bulan: MÜTEVELLİ/AKAR, 2026-08-07 — beceriyi kullanmadan önce denetleyerek.)
+
+Artık `prompt-yap.sh --onceki` tık ölçümünü de arar:
+- ölçüm **yok** → `rc=3` ÖLÇÜLEMEDİ (yoğunluk temiz olabilir; tık *bakılmamıştır*, ikisi ayrı şey)
+- ölçüm **bayat** (sayfa ölçümden sonra değişmiş, sha tutmuyor) → `rc=3`
+- bütçe **aşılmış** → `rc=1` (bu "bakılamadı" değil, ölçüldü ve kırmızı)
+
+Bayatlık kontrolü asıl saldırı yüzeyidir: eksik artefaktı fark etmek kolay, bir kez ölçülüp
+sonra sayfası on kez değişmiş artefaktı fark etmek zordur.
 
 **1. ve 2. denetimin mekanik gövdesi + yoğunluk:** `arac/yogunluk-denetle.py <ekran-dizini>`
 
