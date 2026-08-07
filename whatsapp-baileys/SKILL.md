@@ -1,7 +1,7 @@
 ---
 name: whatsapp-baileys
 type: agent
-version: 1.2.1
+version: 1.2.2
 description: >
   Bir Baileys (@whiskeysockets/baileys) WhatsApp botunu telefona GÜVENİLİR bağlama
   playbook'u. Günlerce süren pairing cebelleşmesinden çıkarılmış kesin dersler:
@@ -50,6 +50,13 @@ günlerce kilit.) **Kod değil, OPERATÖR davranışı.**
   `411 multideviceMismatch`'te silinir. `515`/`408`/`428`/`440`'ta **KORU + reconnect.**
 - **Disiplin:** BİR oturumda BİR deneme. "Şu anda yeni cihaz bağlanamıyor" görürsen **ANINDA DUR**,
   24-48 saat SIFIR deneme. Her ek deneme kilidi UZATIR. Hiçbir kod aktif throttle'ı bypass etmez.
+- 🔴 **QR'ı TAZELEMEK ≠ yeni deneme — ama `/baglan`'ı YENİDEN ÇAĞIRMAK deneme SAYILIR.**
+  (huzur, 2026-08-07 firsthand.) QR ~1 dakikada bayatlar; ajanın refleksi *"yenisini üreteyim"*
+  deyip `/baglan`'ı tekrar çağırmaktır — ve bu **ikinci device-link kaydıdır**, sonuç
+  "Şu anda yeni cihaz bağlanamıyor" + 24-48 saat kilit. Tazeleme YALNIZ var-olan kareyi
+  yeniden okumaktır (§4 relay'i bunu zaten yapar: sayfa 4 sn'de kendini tazeler, oturum aynı
+  kalır). **Yeni deneme yalnız kullanıcının açık hareketiyle ve BİR kez.** Bu refleks her
+  ajanda kendiliğinden doğar — kural bu yüzden yazılı.
 
 ---
 
