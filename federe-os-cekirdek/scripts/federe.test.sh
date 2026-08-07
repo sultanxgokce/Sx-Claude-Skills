@@ -40,6 +40,20 @@ echo "== T5c: gonder --tetikli argüman-kayması — hedef/başlık doğru okunu
 # gerekçe verilmiş ama hedef bozuk → hedef-format reddi (RC=2) = kayma YOK kanıtı
 bash "$SUT" gonder --tetikli "MÜDÜR sessiz" kutu-4 "başlık" >/dev/null 2>&1; [ $? -eq 2 ] && ok "tetikli-sonrası hedef-format kapısı" || no "argüman kayması var"
 
+echo "== T5d: BİLİNMEYEN BAYRAK → 2 (canlı vaka 2026-08-06: sessiz yutma, 1 saat kayıp mesaj) =="
+# `--tip x --baslik y` eskiden METİN sayılıyordu: başlık '--tip' olup mesaj kuyrukta kayboluyordu.
+bash "$SUT" gonder s10 --tip tetik --baslik "gövde" >/dev/null 2>&1; [ $? -eq 2 ] && ok "bilinmeyen-bayrak reddi (başlık yuvası)" || no "bilinmeyen bayrak SESSİZCE yutuldu"
+# kart_ref yuvasındaki bayrak da yakalanmalı
+bash "$SUT" gonder s10 "gerçek başlık" --kart k0001 >/dev/null 2>&1; [ $? -eq 2 ] && ok "bilinmeyen-bayrak reddi (kart yuvası)" || no "kart yuvasında bayrak kaçtı"
+# not yuvasındaki bayrak da yakalanmalı
+bash "$SUT" gonder s10 "gerçek başlık" "" --not "gövde" >/dev/null 2>&1; [ $? -eq 2 ] && ok "bilinmeyen-bayrak reddi (not yuvası)" || no "not yuvasında bayrak kaçtı"
+
+echo "== T5e: NEGATİF — meşru çağrı bu kapıya TAKILMAZ (yanlış-pozitif yok) =="
+# tire İÇEREN ama bayrak OLMAYAN başlık geçmeli → hedef-format dışında bir kapıya takılmamalı.
+# Bozuk hedefle çağırıp RC=2'nin bayrak-kapısından DEĞİL hedef-kapısından geldiğini doğruluyoruz.
+_cikti="$(bash "$SUT" gonder kutu-4 "acil-durum: kapı-2 kırmızı" 2>&1)"
+echo "$_cikti" | grep -q "bilinmeyen bayrak" && no "yanlış-pozitif: tireli başlık bayrak sanıldı" || ok "tireli başlık bayrak sanılmadı"
+
 echo "== T5d: gonder --tetikli sır-desenli gerekçe → 2 (yerel ön-kapı) =="
 zfs="sk-$(printf 'B%.0s' $(seq 1 20))"
 bash "$SUT" gonder --tetikli "$zfs" s04 "başlık" >/dev/null 2>&1; [ $? -eq 2 ] && ok "tetikli sır-desen reddi" || no "tetikli sır-desen kaçtı"
