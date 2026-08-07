@@ -1,7 +1,7 @@
 ---
 name: ui-tasarim-akisi
 type: agent
-version: 0.1.2
+version: 0.1.3
 description: >
   Bir ürünün ekranlarını sıfırdan tasarlama akışı: sayfa envanteri → kullanıcı senaryoları →
   Claude design promptu → devam promptu ile kalan sayfalar. Proje-bağımsız.
@@ -117,6 +117,46 @@ Kalibrasyon: reddedilmiş bir turun 4 ekranının 4'ünü düşürdü, onaylanm�
 dokunmadı. Kapının kendi sınavı: `bash arac/yogunluk-denetle.test.sh` (12 kapı, negatif
 fikstürlü — fikstürsüz kapı devreye alınmaz).
 
+## Anlam yargısı — kör panel (G1, yalnız NEGATİF yetki)
+
+Yukarıdaki kapı yoğunluğu ölçer, **anlamı ölçmez**. Anlam için ayrı bir hat var: aynı ekranı
+birbirinden habersiz **farklı model ailelerinden** yargıçlara kör olarak puanlatır.
+
+```
+bash   arac/yargi-panel.sh --ekran-dir tasarim/ciktilar --sozlesme tasarim/tasarim-dili.md \
+       --out .yargi                                           # yargıçları koşar
+python3 arac/yargi-birlestir.py --rubrik arac/rubrik/urun-ui-v1.md \
+       --yanit .yargi --ekran-dir tasarim/ciktilar ; echo rc=$?  # hükmü verir
+```
+
+**Değişmez: `GEÇTİ ⟺ G0 yeşil ∧ G1 kırmızı-değil`.** Yargıç yeşil **üretmez**, yalnız iptal
+eder — hiçbir kademede bir modelin "artık iyi" demesi durma koşulu olamaz. Çıkışlar:
+`0` kırmızı-değil · `1` RED · `2` çalıştırılamadı/emin-değilim (**yeşil sayılmaz**).
+
+Beş halkanın her biri ölçülmüş bir zaafı kapatır: **parse kapısı** (bozuk çıktı düşer) →
+**alıntı kapısı** (ekranda birebir bulunmayan alıntı hükmü düşürür — uydurma kusur/övgü
+panzehiri) → **yeter sayı** (ayakta <2 oy → emin-değilim; *bilinmeyen ≠ geçti*) → **medyan**
+(ortalama değil; tek aykırı yargıcı yutar) → **kırmızı çizgi** (geçerli-alıntılı tek 0 maddeyi
+düşürür; ölçülen hata sahte-yeşildi, asimetri kasıtlı).
+
+- **Yargıç kördür — politika olarak değil, kabiliyet olarak:** araçsız tek-atış tamamlama;
+  dosya yazamaz, motorun raporunu göremez, soru soramaz.
+- **Rubrik veridir** (`arac/rubrik/`), kod değil: maddeler ve eşikler dosyadan okunur.
+  `--muhur <sha256>` verilirse rubrik koşudan sonra değişmişse koşu **reddedilir** — rubriği
+  düzenlemek, regresyonu yeniden koşmadan geçerli sayılmaz.
+- **Puan imzaya girmez:** çıktıdaki `imza` yalnız düşen madde kimliklerini taşır, sayı taşımaz.
+  (Stokastik puan imzaya girseydi döngünün "aynı hata 2 kez" freni hiç yanmazdı.)
+- **Kapı sağlıksızsa hüküm ÜRETİLMEZ** (RC=2). Servis arızasını tasarım kusuru sanmak, otonom
+  döngünün geri alamayacağı hatadır.
+- **tescil bağlantısı:** `--tescil-g G3` verildiğinde `--katman2 G3=GECTI|KALDI|EMIN-DEGILIM:not`
+  sözcesini basar; öznel G elle değil mekanik doldurulur.
+- Kendi sınavı: `bash arac/yargi-birlestir.test.sh` (14 senaryo, ağsız/hermetik).
+
+**Kalibrasyon (2026-08-07, ön-kayıtlı ölçütlerle):** kör panel, onaylanmış turun bilinen-kusurlu
+ekranında insan divanının üç maddesini bağımsız yakaladı; sağlam dört ekrana dokunmadı.
+**Yakalayamadığı:** reddedilmiş turun ekranları — çünkü onların kusuru anlam değil yoğunluk
+boyutundaydı. İki kapı bu yüzden ayrı: **anlam → yargıç, yoğunluk → makine.**
+
 ## Değişmezler
 
 - **Tasarım Claude design'da üretilir.** Bu metot promptu kurar, tasarımı üretmez.
@@ -146,11 +186,14 @@ fikstürlü — fikstürsüz kapı devreye alınmaz).
 
 ## Sınırlar / dürüstlük
 
-- Bu metot ağırlıkla bir **talimat akışı**dır; `arac/` altındaki iki araç dışında kod içermez.
-  `prompt-yap.sh` yalnız yuva doldurur; `yogunluk-denetle.py` yalnız ölçer — ikisi de tasarım
-  üretmez, tasarım hakkında yorum yapmaz.
+- Bu metot ağırlıkla bir **talimat akışı**dır; `arac/` altındaki araçlar dışında kod içermez.
+  `prompt-yap.sh` yalnız yuva doldurur; `yogunluk-denetle.py` yalnız ölçer; yargı hattı yalnız
+  puanlar — hiçbiri tasarım üretmez.
 - `yogunluk-denetle.py` **tarayıcı çalıştırmaz, LLM'e sormaz.** Gerçek tık sayımı, erişilebilirlik
   denetimi ve görsel-kalite yargısı kapsamı dışındadır; bunları "temiz" diye raporlamaz.
+- Yargı hattı **kapıya (çok-model geçidine) bağımlıdır**; kapı yoksa/sağlıksızsa RC=2 döner ve
+  hüküm üretmez. En az **iki ayrı model ailesi** ister — tek yargıç panel değildir, yeter sayı
+  sağlanamaz. Yargıcın hükmü *yeşil değildir*: yalnız mekanik yeşili iptal edebilir.
 - Claude design'a **erişim** bu metodun konusu değil. Erişim yoksa promptlar elle yapıştırılır;
   akış aynen çalışır.
 - Çıktı biçimi platformun kendi biçimidir. "Tek bağımsız HTML" isteyip bileşen dosyası almak
