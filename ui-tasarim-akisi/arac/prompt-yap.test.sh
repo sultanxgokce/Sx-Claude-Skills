@@ -130,6 +130,45 @@ if grep -q '^Kendi cümlem:' "$SKILL/sablonlar/urun-niyeti.md"; then
   echo "  ✓ urun-niyeti.md zorunlu cümle satırlarını taşıyor"; GECTI=$((GECTI + 1))
 else echo "  ✗ urun-niyeti.md zorunlu satırları taşımıyor"; KALDI=$((KALDI + 1)); fi
 
+echo "── 10 · ÇEKİRDEK sözleşme çağrılmadan, kendiliğinden prompta girer"
+kapi "çekirdek otomatik → rc=0" 0 bash "$YAP" "$T/sablon-eski.md" \
+     --dil "$T/tasarim/tasarim-dili.md" --estetik "$T/tasarim/estetik-yon.md"
+icerir "çekirdek işaret standardı girdi" "<!-- bilesen: Ad -->"
+icerir "çekirdek çıktı sözleşmesi girdi" "Tek dosya."
+icerir "marka değerleri de girdi" "renk: #123456"
+
+echo '── 11 · MARKA ":" ayraçlı liste olabilir (PATH gibi), sırayla eklenir'
+printf '# ek marka\nkademe: kucuk\n' > "$T/tasarim/ek-marka.md"
+kapi "iki marka dosyası → rc=0" 0 bash "$YAP" "$T/sablon-eski.md" \
+     --dil "$T/tasarim/tasarim-dili.md:$T/tasarim/ek-marka.md" \
+     --estetik "$T/tasarim/estetik-yon.md"
+icerir "birinci marka girdi" "renk: #123456"
+icerir "ikinci marka girdi" "kademe: kucuk"
+
+echo "── 12 · listede EKSİK dosya varsa hangisi olduğu söylenir"
+kapi "eksik marka parçası → rc=2" 2 bash "$YAP" "$T/sablon-eski.md" \
+     --dil "$T/tasarim/tasarim-dili.md:$T/tasarim/yok.md" \
+     --estetik "$T/tasarim/estetik-yon.md"
+icerir "eksik olan parça adlandırılır" "yok.md"
+
+echo "── 13 · HEX ÇİTİ: çekirdeğe renk DEĞERİ sızarsa koşu reddedilir"
+printf '# sahte cekirdek\nzemin: #ffffff\n' > "$T/sahte-cekirdek.md"
+kapi "değerli çekirdek → rc=2" 2 env UI_AKIS_CEKIRDEK="$T/sahte-cekirdek.md" \
+     bash "$YAP" "$T/sablon-eski.md" \
+     --dil "$T/tasarim/tasarim-dili.md" --estetik "$T/tasarim/estetik-yon.md"
+icerir "sebep söylenir" "Çekirdek kuralı taşır, değeri değil"
+icerir "sızan satır gösterilir" "#ffffff"
+
+echo "── 14 · gerçek çekirdek dosyası hex çitinden GEÇER (kendi kuralına uyar)"
+if grep -qEi '#[0-9a-f]{3}([0-9a-f]{3})?\b|rgba?\(|hsla?\(' "$SKILL/cekirdek/sozlesme.md"; then
+  echo "  ✗ çekirdekte renk değeri var"; KALDI=$((KALDI + 1))
+else echo "  ✓ çekirdekte sıfır renk değeri"; GECTI=$((GECTI + 1)); fi
+
+echo "── 15 · REGRESYON: çekirdek yuvasız/slotsuz — dolmamış yuva taramasını tetiklemez"
+if grep -q '{{' "$SKILL/cekirdek/sozlesme.md"; then
+  echo "  ✗ çekirdekte yuva var — her koşuyu rc=2 yapardı"; KALDI=$((KALDI + 1))
+else echo "  ✓ çekirdekte yuva yok"; GECTI=$((GECTI + 1)); fi
+
 echo
 echo "TOPLAM: $GECTI geçti · $KALDI kaldı"
 [ "$KALDI" -eq 0 ]

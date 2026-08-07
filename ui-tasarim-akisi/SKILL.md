@@ -1,7 +1,7 @@
 ---
 name: ui-tasarim-akisi
 type: agent
-version: 0.1.4
+version: 0.1.5
 description: >
   Bir ürünün ekranlarını sıfırdan tasarlama akışı: sayfa envanteri → kullanıcı senaryoları →
   Claude design promptu → devam promptu ile kalan sayfalar. Proje-bağımsız.
@@ -48,8 +48,8 @@ modelin okuyacağı bağlam şıkta değil cümlede taşınır.
 
 ## Tutarlılık nasıl sağlanır — üç katman, üçü de gerekli
 
-1. **Tasarım dili sözleşmesi** — *ne kullanılacak*: renk rolleri, tipografi kademeleri, boşluk
-   ölçeği, **bileşen sözlüğü**. Ölçülebilir.
+1. **Sözleşme** — *ne kullanılacak*. İki parçadır (aşağıda): filo geneli **ÇEKİRDEK** kurallar +
+   kutunun **MARKA** değerleri (renk, tipografi, ölçek, sözlük eklemeleri). Ölçülebilir.
 2. **Önceki sayfanın HTML'i** — *fiilen ne olmuş*: devam promptuna olduğu gibi gömülür.
 3. **Bileşen adı denetimi** — çıktıdaki `<!-- bilesen: Ad -->` işaretleri grep'lenir; sözlük dışı
    ad yakalanır.
@@ -60,13 +60,33 @@ neyin kasıtlı neyin tesadüf olduğunu bilemez. **İkisi birden verilir.**
 Dördüncü bir katman da var ve ölçülemez ama işi belirler: **estetik yön** — karakter, imza öğesi,
 hangi hazır kalıba düşülmeyeceği. Sözleşme uyumlu ama ruhsuz ekranlar bu katman olmayınca çıkar.
 
+## Sözleşme ikiye ayrılır — ÇEKİRDEK ⟂ MARKA
+
+| | **ÇEKİRDEK** (`cekirdek/sozlesme.md`) | **MARKA** (`sablonlar/tasarim-dili.md`'den türetilir) |
+|---|---|---|
+| Nerede yaşar | beceride, filo geneli | kutuda, ürüne özel |
+| Ne taşır | kural: çıktı sözleşmesi · işaret standardı · 10 çekirdek bileşen adı · yoğunluk kuralları · kontrast ölçme yükümlülüğü · dondurma | değer: renkler · font · kademeler · ölçek · iskelet · sözlük eklemeleri · yasaklar |
+| Renk değeri | **sıfır** (mekanik kapı: hex/rgb/hsl bulursa koşu rc=2) | hepsi |
+| Kim çağırır | **kimse — kendiliğinden girer** | `--dil` |
+
+Çekirdeği atlamak için bayrak **yoktur**: `prompt-yap.sh` onu her promptun sözleşme yuvasına
+kendiliğinden, marka dosyasından **önce** koyar. Kutunun kopyalamasına gerek yok — kopyalanan
+kural bayatlar (ölçülmüş vaka: `frontend-design` sessizce üç kopyaya ayrılmıştı).
+
+`--dil` birden çok dosya alabilir, `:` ile ayrılır (PATH gibi) — ör. ortak bir aile-markası +
+ürünün kendi eklemesi. Tek yol veren eski çağrılar aynen çalışır.
+
+> **Mevcut sözleşmeler için not (dürüstlük):** ayrımdan önce türetilmiş sözleşme dosyaları
+> çekirdeğin bazı bölümlerini kendi içinde tekrar ediyor olabilir. Zararsızdır (aynı kural iki kez
+> okunur) ama temizlemek iyi olur: kural satırlarını sil, değerleri bırak.
+
 ## Akış
 
 ```
 0. Ürün niyetini doldur  → sablonlar/urun-niyeti.md → tasarim/urun-niyeti.md
 1. Envanter yaz          → sablonlar/sayfa-envanteri.md
 2. Her ekrana senaryo    → sablonlar/senaryo-karti.md   (tık bütçesi ZORUNLU)
-3. Sözleşmeyi kur        → sablonlar/tasarim-dili.md
+3. MARKA sözleşmesi      → sablonlar/tasarim-dili.md   (çekirdek kendiliğinden eklenir)
 4. Estetik yönü yaz      → sablonlar/estetik-yon.md
 5. İlk sayfanın promptu  → sablonlar/tasarim-promptu.md
    ↓ Claude design'da koştur, çıkan dosyayı depoya indir
@@ -181,6 +201,8 @@ boyutundaydı. İki kapı bu yüzden ayrı: **anlam → yargıç, yoğunluk → 
 - **Kısıt estetiği yener.** Çatışmada ürünün kabul kriterleri kazanır.
 - **Kanıtsız bitti yok.** Her denetim çıktısıyla gösterilir; "uyumlu" beyanı yetmez.
 - **Kanıtsız kırmızı da yok.** Bir yolun kapalı olduğu, denenmeden ilan edilmez.
+- **Kural tek yerde yaşar, değer kutuda.** Çekirdek sözleşme kopyalanmaz ve renk/font/sayı taşımaz;
+  taşırsa koşu rc=2 ile reddedilir. Atlanabilir kural, kural değildir.
 
 ## Parametreler
 
@@ -194,7 +216,7 @@ boyutundaydı. İki kapı bu yüzden ayrı: **anlam → yargıç, yoğunluk → 
 | `{{SAYFA_ENVANTERI}}` | Durak 1 çıktısı |
 | `{{SAYFA_SENARYOSU}}` | O sayfanın Durak 2 kartı |
 | `{{URUN_NIYETI}}` | Durak 0 çıktısı (araç doldurur; boş cümle satırı varsa DURUR) |
-| `{{TASARIM_DILI}}` | Sözleşme dosyası (araç doldurur) |
+| `{{TASARIM_DILI}}` | ÇEKİRDEK + MARKA sözleşmesi (araç doldurur; çekirdek atlanamaz) |
 | `{{ESTETIK_YON}}` | Estetik yön dosyası (araç doldurur) |
 | `{{ONCEKI_HTML}}` | Önceki sayfanın HTML'i (araç doldurur) |
 | `{{KANONIK_GOREVLER}}` | Tık bütçesi ölçülecek görev listesi |
