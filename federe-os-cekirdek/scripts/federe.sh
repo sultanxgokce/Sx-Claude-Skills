@@ -124,6 +124,20 @@ case "$cmd" in
       [[ -n "$zil_sebep" && ${#zil_sebep} -le 120 ]] || { echo "HATA: --tetikli gerekçe ister (≤120) — gerekçesiz zil yok" >&2; exit 2; }
     fi
     hedef="${2:-}"; baslik="${3:-}"; kart="${4:-}"; nt="${5:-}"
+    # ── BİLİNMEYEN BAYRAK = SESSİZ KAYIP (canlı vaka 2026-08-06) ──────────────────────────────
+    # `gonder` konumsaldır; tek bayrağı `--tetikli`dir. Eskiden `--tip x --baslik y` gibi bir
+    # çağrı sessizce METİN sayılıyordu: başlık `--tip` oldu, mesaj bir saat kimsenin görmediği
+    # kuyrukta bekledi ve İKİ TARAF DA fark etmedi. Sessiz yutma bu kanalın kapattığı hastalığın
+    # ta kendisidir → artık gürültülü ret. (Aynı sınıf `layiha-defteri.sh liste`de RC=2 ile
+    # kapatılmıştı; burada açıktı.) Not: `--tetikli` yukarıda zaten tüketildi, buraya düşmez.
+    for _arg in "$baslik" "$kart" "$nt"; do
+      [[ "$_arg" == --* ]] && {
+        echo "HATA: bilinmeyen bayrak: $_arg" >&2
+        echo "      gonder KONUMSALDIR; tek bayrağı --tetikli'dir (ve o en başa yazılır)." >&2
+        echo "      doğru: federe.sh gonder [--tetikli \"gerekçe\"] <sNN> \"<başlık>\" [kart_ref] [not]" >&2
+        exit 2
+      }
+    done
     [[ "$hedef" =~ $CELL_RE ]] || { echo "HATA: hedef sNN formatında olmalı (ör. s04)" >&2; exit 2; }
     [[ -n "$baslik" && ${#baslik} -le 120 ]] || { echo "HATA: başlık zorunlu, ≤120" >&2; exit 2; }
     [[ ${#nt} -le 500 ]] || { echo "HATA: not ≤500 (içerik-kanalı değil — META)" >&2; exit 2; }
