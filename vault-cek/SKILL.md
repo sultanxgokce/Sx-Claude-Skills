@@ -1,22 +1,50 @@
 ---
 name: vault-cek
 type: agent
-version: 1.1.1
+version: 1.2.0
 description: >
-  Merkezî Vault'tan (Infisical central-vault; 2026-07-10 cutover) sır çeker → cortex-access.env. On-demand:
-  Sultan sırları bir kez vault'a koyar, her container machine-identity (Universal Auth) ile self-servis çeker.
-  KEY→path: `<KAYNAK>__<KEY>`→/kaynak; `__`-siz→/shared. Değer stdout/log/chat'e ASLA. `doctor · resolve · list · get <KEY>`.
+  Merkezî Vault'tan (OpenBao central-vault; 2026-08-07 L54 cutover) sır çeker → cortex-access.env. On-demand:
+  Sultan sırları bir kez vault'a koyar, her container kendi AppRole kimliğiyle self-servis çeker.
+  KEY→path: `<KAYNAK>__<KEY>`→/kaynak; `__`-siz→/shared. Değer stdout/log/chat'e ASLA.
+  `doctor · resolve · list · get <KEY> · backend`.
 install_target: { skills: .claude/skills/ }
 stacks: ["*"]
 author: sultanxgokce
-tags: [vault, infisical, credential, secret, on-demand, central-vault, mmex]
+tags: [vault, openbao, infisical, credential, secret, on-demand, central-vault, mmex]
 ---
-# vault-cek — On-demand Merkezî Vault (Infisical · CUTOVER-DONE 2026-07-10)
-`bash scripts/vault-cek.sh get <KEY>` → `<KEY>`'i Infisical `central-vault` projesinden çeker,
-`cortex-access.env`'e (600) yazar (değer basmadan). KEY→path: `<KAYNAK>__<KEY>` → `/kaynak` folder + `<KEY>`; `__`-siz → `/shared` (ör. `CLOUDFLARE_API_TOKEN`, `VEKATIP__DATABASE_URL`).
-Auth = machine-identity Universal Auth: consumer-node başına `~/.config/infisical/identity.env` (CID/CSEC/PROJECT_ID, 600; hardcode-YOK). Bağımlılık: `infisical` CLI (`npm i -g @infisical/cli`). Cloud/self-host agnostik (`INFISICAL_DOMAIN`/`--domain`). Değer stdout/log/chat'e ASLA.
-Komutlar: `doctor` (3-durum) · `resolve` · `get <KEY>` · `list [<kaynak>]` (KEY-adları, değer-yok).
+# vault-cek — On-demand Merkezî Vault (OpenBao · CUTOVER-DONE 2026-08-07)
+`bash scripts/vault-cek.sh get <KEY>` → `<KEY>`'i merkezî kasadan çeker, `cortex-access.env`'e (600)
+yazar (değer basmadan). KEY→path: `<KAYNAK>__<KEY>` → `<kaynak>` klasörü + `<KEY>`; `__`-siz → `shared`
+(ör. `CLOUDFLARE_API_TOKEN`, `VEKATIP__DATABASE_URL`). Değer stdout/log/chat'e ASLA.
+Komutlar: `doctor` (3-durum) · `resolve` · `get <KEY>` · `list [<kaynak>]` (KEY-adları, değer-yok) ·
+`backend` (hangi kasa aktif — teşhis).
 
-## Seam — swappable backbone (cutover-DONE)
-Canlı `scripts/vault-cek.sh` = Infisical adaptörü (2026-07-10 cutover; nexus'ta uçtan-uca kanıtlandı). **Kontrat backbone'dan bağımsız** → consumer rewire-YOK (seam kanıtı). Rollback: `scripts/vault-cek-railway.sh` (eski Railway-Vault adaptörü). Kaynak-adaptör: `scripts/vault-cek-infisical.sh`.
-**F3 provizyon (Sultan-kapısı):** her consumer-container'a `identity.env` gerekli — serdar-cli identity-CREATE yetkisiz (403), Sultan Infisical-UI'da machine-identity açar + `/shared` read verir + CID/CSEC'i o container'a koyar. identity.env yoksa `vault-cek` açık remediation'la durur (silent-break YOK).
+## Seam — swappable backbone (3. cutover TAMAM)
+`scripts/vault-cek.sh` bir **DİSPATCHER**'dır; kontrat backbone'dan bağımsızdır → 91+ tüketici
+rewire-YOK (seam kanıtı: Railway → Infisical → OpenBao).
+
+| Backbone | Adaptör | Durum |
+|---|---|---|
+| **openbao** | `scripts/vault-cek-openbao.sh` | ✅ **CANLI VARSAYILAN** (2026-08-07) |
+| infisical | `scripts/vault-cek-infisical.sh` | 🟡 fallback — 30 gün salt-okur, sonra emekli |
+| railway | `scripts/vault-cek-railway.sh` | ⚪ legacy |
+
+**Seçim önceliği:** `$VAULT_BACKEND` → `~/.config/vault-backend` (kutu-başına, tek kelime) → varsayılan `openbao`.
+**Geri dönüş:** `echo infisical > ~/.config/vault-backend` (o kutu anında eski kasaya döner).
+**Sessiz fallback YOK:** openbao düşerse hata döner, gizlice Infisical'a kaçmaz (yanlış-yeşil kalkanı).
+
+> ⚠️ Skill-dizini 13 konteynerde TEK ve ORTAK mount'tur (aynı inode) — buradaki dosyayı değiştirmek
+> filoyu tek anda çevirir. `~/.config` kutu-başına ayrıdır; cutover'ın tenant-tenant yürüyebilmesi
+> ve tek-kelimeyle geri alınabilmesi bu ayrımdan gelir.
+
+## Kimlik provizyonu (artık panel-siz)
+Her consumer-container'a `~/.config/openbao/identity.env` gerekir (`BAO_ADDR`/`BAO_ROLE_ID`/`BAO_SECRET_ID`, 600).
+Üretimi **tek komut**: host'ta `BAO_PROVIZYON_GO=1 bash cloudtop/infra/openbao/bao-provizyon.sh <tenant> --apply`
+→ teslim-dosyası `/root/l13-tenant-out/<tenant>-identity.env`. Infisical'ın "yalnız Sultan, web panelinden,
+kimlik tavanı 4/4 dolu" sürtünmesi bu yüzden ortadan kalktı. identity.env yoksa `vault-cek` açık
+remediation'la durur (silent-break YOK).
+
+## İzolasyon (ÜÇ-ÇİT / İ1)
+Her tenant `tenant-<ad>` policy'siyle YALNIZ kendi klasörünü + `shared`'ı (salt-okur) görür; çapraz-kiracı
+path'ler explicit `deny`. Ölçüm 2026-08-07: 12 çapraz denemeden 11'i reddedildi, izin verilen tek satır
+kimliğin KENDİ kapsamıydı.
