@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
-# vault-cek — OPENBAO adaptörü (L13 ölçeklenebilir-vault seam re-point).
-# ✅ CANLI (2026-08-06): etiket "TASLAK/INERT" idi ve BAYATTI — gövde zaten yazılmıştı, yalnız hiç
-#   denenmemişti. O gün L13 FAZ-4 göçü yapıldı: 132 sır Infisical→OpenBao taşındı ve kasa erişimi
-#   olan 5 kutunun 5'i de bu adaptöre çevrildi (code · mmex · huzur · tellal · mihenk).
-#   Uçtan uca kanıt: cloudflare-erisim becerisi bu adaptörden jetonu çekip GERÇEK CF API'siyle
-#   konuştu. İzolasyon her kutuda ölçüldü: kendi klasörü 0 · shared 0 · BAŞKASININ klasörü 1.
-#   Ders: "taslak" etiketi ölçülmeden asılır ve kimse sökmez — etiket kanıt değildir.
+# vault-cek — OPENBAO adaptörü (L13/L54 · CANLI VARSAYILAN · cutover 2026-08-07; taslak 2026-07-23).
 # Kontrat, Infisical/Railway adaptörleriyle BİREBİR AYNI → consumer'lar YENİDEN-KABLOLANMAZ;
 # yalnız backbone Infisical→OpenBao değişir (swappable-seam 3. kanıtı):
 #   vault-cek doctor            bao/curl + AppRole identity + KV erişimi (3-durum; exit-4 korunur)

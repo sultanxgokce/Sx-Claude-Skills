@@ -623,8 +623,8 @@
       "id": "vault-cek",
       "type": "agent",
       "name": "vault-cek — merkezî-vault seam (store-agnostik)",
-      "version": "1.1.1",
-      "description": "Sır-çözüm seam'i: doctor·resolve·get <KEY>·list kontratı; arkasında pluggable adaptör (vault-cek-infisical.sh = Infisical Universal-Auth, folder-path model; Railway-backbone legacy). Değer stdout'a basılmaz (600 env-dosyasına yazar). Erişim-skill'lerinin vault-first temeli."
+      "version": "1.2.0",
+      "description": "Sır-çözüm seam'i: doctor·resolve·get <KEY>·list·backend kontratı; vault-cek.sh artık DİSPATCHER — backbone veriden seçilir ($VAULT_BACKEND → ~/.config/vault-backend → varsayılan openbao). Aktif: OpenBao KV-v2+AppRole (L54 cutover 2026-08-07); fallback: Infisical (30-gün salt-okur), legacy: Railway. Değer stdout'a basılmaz (600 env-dosyasına yazar). Erişim-skill'lerinin vault-first temeli."
     },
     {
       "id": "seyir-defteri",
