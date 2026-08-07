@@ -3,11 +3,12 @@
 > **Metodun püf noktası budur.** Bu şablon yazılmazsa ikinci sayfa birinciye benzemez ve elde
 > tasarım dili değil, birbirinden habersiz ekranlar kalır.
 >
-> Yuvalar: `{{ONCEKI_HTML}}` · `{{SAYFA_SENARYOSU}}` · `{{TASARIM_DILI}}` · `{{ESTETIK_YON}}`
+> Yuvalar: `{{ONCEKI_HTML}}` · `{{SAYFA_SENARYOSU}}` · `{{TASARIM_DILI}}` · `{{ESTETIK_YON}}` · `{{URUN_NIYETI}}`
 > Yapıştırılacak hâli: `arac/prompt-yap.sh <bu dosya> --onceki <önceki-sayfa>`
 >
 > **Zincir kilitlidir:** önceki sayfa gelmeden bu prompt üretilemez; araç hata verip durur,
-> sessizce eksik prompt üretmez.
+> sessizce eksik prompt üretmez. Ayrıca önceki sayfa **yoğunluk kapısından geçmeden** de
+> üretilmez — ölçülmemiş sayfanın üstüne çizmek hatayı bütün diziye yayar.
 >
 > Her yeni sayfa için bu şablondan bir kopya çıkarılır ve yalnız `{{SAYFA_SENARYOSU}}` doldurulur.
 
@@ -16,6 +17,10 @@
 Aynı ürünün **bir sonraki sayfasını** tasarla. Aşağıda bu ürünün hâlihazırda tasarlanmış bir
 sayfasının tam kaynağı var. Yeni sayfa **onun dilini sürdürmeli** — yeni bir tasarım denemesi
 değil, aynı uygulamanın başka bir ekranı.
+
+## Ürün niyeti (Durak 0 — bağlayıcı)
+
+{{URUN_NIYETI}}
 
 ## Mevcut sayfa (dilin kaynağı)
 

@@ -9,6 +9,14 @@
 {{URUN_TARIFI}} için **ilk ekranını** tasarla. Bu, tasarım dilini kuran sayfa — sonraki sayfalar
 bunun dilini sürdürecek.
 
+## Ürün niyeti (Durak 0 — çizmeden önce okunacak)
+
+Aşağıdaki kararlar ürün sahibi tarafından tasarımdan **önce** verildi. Estetik tercihler
+bunlara tabidir; çelişki çıkarsa buradaki kazanır. "Çizilmeyecekler" listesindeki bir şeyi
+var sayıp çizmek, ekranı geçersiz kılar.
+
+{{URUN_NIYETI}}
+
 ## Kullanıcı
 
 {{HEDEF_KULLANICI}}
