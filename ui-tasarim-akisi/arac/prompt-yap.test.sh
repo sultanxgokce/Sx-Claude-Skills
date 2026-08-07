@@ -9,6 +9,11 @@ YAP="$ARAC/prompt-yap.sh"
 T="$(mktemp -d)"; trap 'rm -rf "$T"' EXIT
 GECTI=0; KALDI=0
 
+# Sınav GERÇEK havuza yazmaz. Ölçülmüş vaka: bu satır yokken sınavın kendi koşusu
+# kullanıcının canlı defterine 6 sahte kayıt düşürdü ("kutu: ui-tasarim-akisi").
+# Sınav-verisi ile saha-verisi aynı deftere karışırsa defter yalan söylemeye başlar.
+export UI_AKIS_HAVUZ="$T/sinav-havuzu.jsonl"
+
 kapi() { # kapi <ad> <beklenen-rc> <komut...>
   local ad="$1" bek="$2"; shift 2
   local cikti rc
@@ -168,6 +173,15 @@ echo "── 15 · REGRESYON: çekirdek yuvasız/slotsuz — dolmamış yuva tar
 if grep -q '{{' "$SKILL/cekirdek/sozlesme.md"; then
   echo "  ✗ çekirdekte yuva var — her koşuyu rc=2 yapardı"; KALDI=$((KALDI + 1))
 else echo "  ✓ çekirdekte yuva yok"; GECTI=$((GECTI + 1)); fi
+
+echo "── 16 · REGRESYON: sınav GERÇEK havuza yazmadı (sınav-verisi ⟂ saha-verisi)"
+GERCEK="$HOME/.claude/tasarim-havuz.jsonl"
+if [ ! -f "$GERCEK" ] || ! grep -q '"kutu": *"ui-tasarim-akisi"' "$GERCEK"; then
+  echo "  ✓ canlı defterde sınav kaydı yok"; GECTI=$((GECTI + 1))
+else echo "  ✗ sınav canlı deftere yazmış: $GERCEK"; KALDI=$((KALDI + 1)); fi
+if [ -s "$UI_AKIS_HAVUZ" ]; then
+  echo "  ✓ sınav kendi geçici defterine yazdı"; GECTI=$((GECTI + 1))
+else echo "  ✗ sınav havuzu boş — izolasyon test edilemedi"; KALDI=$((KALDI + 1)); fi
 
 echo
 echo "TOPLAM: $GECTI geçti · $KALDI kaldı"
