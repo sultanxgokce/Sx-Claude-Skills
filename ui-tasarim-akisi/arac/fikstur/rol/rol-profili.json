@@ -1,0 +1,39 @@
+{
+ "_aciklama": "ROL FİKSTÜRÜNÜN YEŞİL YÜZÜ — kutu kendi yazımını kullanıyor ve üç ROLÜ profilden bağlıyor. rc=0 beklenir: panel ayrı yüzey açar, vitrin muaf kalır, gezinme tanınır.",
+ "buyuk_punto_taban": 25.0,
+ "buyuk_sayi_butce": 3,
+ "blok_tur_butce": 2,
+ "font_kademeleri": [
+  "12.5",
+  "14.5",
+  "16.5",
+  "21",
+  "25"
+ ],
+ "radius_kumesi": [
+  "0",
+  "8",
+  "10",
+  "999"
+ ],
+ "birincil_renk": "#8a5a2b",
+ "sozluk": [
+  "NavCubugu",
+  "OlcuKarti",
+  "YanPanel",
+  "Dugme",
+  "DurumRozeti"
+ ],
+ "blok_turu": {
+  "OlcuKarti": "kart"
+ },
+ "yasak_dil": [
+  "tasarruf",
+  "kazan[cç]"
+ ],
+ "rol_adlari": {
+  "panel": "YanPanel",
+  "gezinme": "NavCubugu",
+  "vitrin": "OrnekDurumlar"
+ }
+}

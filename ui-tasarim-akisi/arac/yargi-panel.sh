@@ -14,8 +14,8 @@
 #      tasarım kusuru sanmak otonom döngünün geri alamadığı hatadır.)
 #
 # Kullanım:
-#   yargi-panel.sh --ekran-dir <dir> --sozlesme <tasarim-dili.md> --out <dir> \
-#                  [--rubrik <f>] [--panel kimi,glm,qwen] [--paralel 4]
+#   yargi-panel.sh --ekran-dir <dir> --sozlesme <MARKA-tasarim-dili.md> --out <dir> \
+#                  [--rubrik <f>] [--cekirdek <f>] [--panel kimi,glm,qwen] [--paralel 4]
 #   yargi-panel.sh --bir <ekran.html> --model <raf> --yargic <ad> --out <dir> ...
 set -u
 
@@ -23,6 +23,10 @@ ARAC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 KAPI_URL="${KAPI_URL:-http://cloudtop-kapi:4000}"
 ENVF="${KAPI_ENV_FILE:-$HOME/.claude/kapi.env}"
 RUBRIK="$ARAC/rubrik/urun-ui-v1.md"
+# ÇEKİRDEK ⟂ MARKA (L57/F5): --sozlesme kutunun MARKA dosyasıdır. Çekirdek filo kuralıdır
+# ve prompta KENDİLİĞİNDEN girer — kutunun onu kopyalaması gerekmez (kopyalanan kural
+# bayatlar). Enjekte edilmediği sürece rubrik M1 çekirdeğin on adını "sessiz icat" sanıyordu.
+CEKIRDEK="${UI_AKIS_CEKIRDEK:-$ARAC/../cekirdek/sozlesme.md}"
 PANEL="kimi,glm,qwen"
 PARALEL=4
 EKRAN_DIR=""; SOZLESME=""; OUT=""; BIR=""; MODEL=""; YARGIC=""
@@ -31,6 +35,7 @@ while [ $# -gt 0 ]; do
   case "$1" in
     --ekran-dir) EKRAN_DIR="$2"; shift 2 ;;
     --sozlesme)  SOZLESME="$2";  shift 2 ;;
+    --cekirdek)  CEKIRDEK="$2";  shift 2 ;;
     --out)       OUT="$2";       shift 2 ;;
     --rubrik)    RUBRIK="$2";    shift 2 ;;
     --panel)     PANEL="$2";     shift 2 ;;
@@ -44,6 +49,9 @@ done
 
 [ -n "$OUT" ] || { echo "RC=2 --out zorunlu" >&2; exit 2; }
 [ -f "$RUBRIK" ] || { echo "RC=2 rubrik yok: $RUBRIK — yargı yapılmadı" >&2; exit 2; }
+# Fail-closed: çekirdek yoksa hüküm İSTENMEZ. "Yarım sözleşmeyle alınan kırmızı"
+# tasarım kusuru sanılır; ölçülemeyen şeye hüküm verilmez.
+[ -f "$CEKIRDEK" ] || { echo "RC=2 çekirdek sözleşme yok: $CEKIRDEK — yargı yapılmadı" >&2; exit 2; }
 mkdir -p "$OUT"
 
 # ── anahtar → 0600 conf (değer hiçbir yere basılmaz) ──────────────────────────
@@ -66,33 +74,9 @@ if [ -n "$BIR" ]; then
   if [ -s "$CIKTI" ] && python3 -c 'import json,sys; sys.exit(1 if "error" in json.load(open(sys.argv[1])) else 0)' "$CIKTI" 2>/dev/null; then
     echo "atlandı (mevcut): $(basename "$CIKTI")"; exit 0
   fi
-  RUBRIK="$RUBRIK" SOZLESME="$SOZLESME" EKRAN_YOL="$BIR" MODEL="$MODEL" \
-  python3 - "$GOVDE" <<'PY'
-import json, os, sys
-def oku(p):
-    return open(p, encoding="utf-8").read() if p and os.path.exists(p) else ""
-sozlesme = oku(os.environ.get("SOZLESME", ""))
-prompt = (
-  "GÖREV: Kör tasarım yargıçlığı. Aşağıda bir puanlama rubriği ve TEK bir ekranın HTML "
-  "dosyası var. Ekranı YALNIZ rubrikteki maddelere göre puanla.\n\n"
-  "KURALLAR:\n"
-  "- Tek atış: soru soramazsın, araç kullanamazsın.\n"
-  "- Her madde için puan 0, 1 ya da 2 (rubrikteki çapalar).\n"
-  "- KANIT ZORUNLU: her maddenin \"kanit\" alanına EKRAN DOSYASINDAN harfi harfine kopyalanmış "
-  "TEK PARÇA alıntı yaz (en çok 160 karakter). Alıntıyı DEĞİŞTİRME: üç nokta ekleme, boşluk "
-  "düzeltme, birleştirme yok — dosyada birebir aranacak, bulunamazsa o maddedeki hüküm geçersiz sayılır.\n"
-  "- \"gerekce\" tek cümle.\n"
-  "- Emin değilsen 2 ver — yalnız kanıtla gösterebildiğini düşür.\n"
-  "- ÇIKTIN YALNIZ rubrikteki kapalı-şema JSON olacak; başka tek kelime yazma.\n\n"
-  + (("════════ TASARIM SÖZLEŞMESİ ════════\n" + sozlesme + "\n\n") if sozlesme else "")
-  + "════════ RUBRİK ════════\n" + oku(os.environ["RUBRIK"])
-  + "\n\n════════ EKRAN DOSYASI: " + os.path.basename(os.environ["EKRAN_YOL"]) + " ════════\n"
-  + oku(os.environ["EKRAN_YOL"]))
-json.dump({"model": os.environ["MODEL"], "temperature": 0,
-           "max_tokens": int(os.environ.get("MAXTOK", "16000")),
-           "messages": [{"role": "user", "content": prompt}]},
-          open(sys.argv[1], "w"))
-PY
+  python3 "$ARAC/yargi-istek-yap.py" --rubrik "$RUBRIK" --ekran "$BIR" \
+    --model "$MODEL" --out "$GOVDE" --cekirdek "$CEKIRDEK" ${SOZLESME:+--sozlesme "$SOZLESME"} \
+    || { echo "RC=2 istek gövdesi kurulamadı — yargı istenmedi" >&2; exit 2; }
   for _ in 1 2; do
     curl -sS --max-time "${ZAMAN_ASIMI:-420}" -K "$CONF" \
       -H 'content-type: application/json' -H 'anthropic-version: 2023-06-01' \
@@ -143,7 +127,7 @@ done
 echo "toplam çağrı: $(wc -l < "$ISLER")"
 while read -r E MODEL AD; do
   bash "$ARAC/yargi-panel.sh" --bir "$E" --model "$MODEL" --yargic "$AD" \
-       --out "$OUT" --rubrik "$RUBRIK" ${SOZLESME:+--sozlesme "$SOZLESME"} &
+       --out "$OUT" --rubrik "$RUBRIK" --cekirdek "$CEKIRDEK" ${SOZLESME:+--sozlesme "$SOZLESME"} &
   while [ "$(jobs -rp | wc -l)" -ge "$PARALEL" ]; do wait -n 2>/dev/null || break; done
 done < "$ISLER"
 wait
