@@ -1,7 +1,7 @@
 ---
 name: ui-tasarim-akisi
 type: agent
-version: 0.1.3
+version: 0.1.4
 description: >
   Bir ürünün ekranlarını sıfırdan tasarlama akışı: sayfa envanteri → kullanıcı senaryoları →
   Claude design promptu → devam promptu ile kalan sayfalar. Proje-bağımsız.
@@ -24,19 +24,27 @@ Tasarım **Claude design'da** üretilir. Bu metot orada üretilecek promptu kura
 ## Ne zaman başlatılır
 
 Bir üründe **birden çok ekran** tasarlanacaksa. Tek ekranlık iş için ağırdır.
-Ön koşul: ürünün ne olduğu ve kimin kullanacağı biliniyor olmalı. Bilinmiyorsa önce o konuşulur.
+Ön koşul yok — "ürün tam netleşmedi" hâli akışın **dışında** değil, **Durak 0**'ıdır.
 
-## Dört durak — sıra değişmez
+## Beş durak — sıra değişmez
 
 | # | Durak | Çıktı | Bitti sayılma kanıtı |
 |---|---|---|---|
+| **0** | **Ürün niyeti** | `tasarim/urun-niyeti.md` — 5 kapalı soru + iskelet | Her sorunun `Kendi cümlem:` satırı **dolu** (araç boş bırakılmışsa prompt üretmez) |
 | 1 | **Sayfa envanteri** | Hangi ekranlar var, her biri hangi işi bitiriyor | Envanterdeki her satırda "bitirdiği iş" tek cümleyle yazılı |
 | 2 | **Kullanıcı senaryosu** | Sayfa başına: ne görünür, nereye tıklanır, **kaç tıkta biter** | Her ekranın kartında `Tık bütçesi:` satırı dolu |
 | 3 | **Tasarım promptu** | İlk sayfanın promptu — dili kuran sayfa | Sözleşme ve estetik yön prompta **birebir** girmiş |
 | 4 | **Devam promptu** | Sonraki her sayfa için prompt | Önceki sayfanın HTML'i gömülü; eksikse üretim **durur** |
 
-**Durak atlanmaz.** Envanter olmadan senaryo yazılamaz (hangi ekran?), senaryo olmadan prompt
-yazılamaz (ne çizilecek?), ilk sayfa olmadan devam promptu üretilemez (neyin dilini sürdürecek?).
+**Durak atlanmaz.** Niyet olmadan envanter yazılamaz (hangi ürün?), envanter olmadan senaryo
+yazılamaz (hangi ekran?), senaryo olmadan prompt yazılamaz (ne çizilecek?), ilk sayfa olmadan
+devam promptu üretilemez (neyin dilini sürdürecek?).
+
+**Durak 0 niçin var (ölçüldü):** bir tam tasarım turu — 16 saat, 4 ekran — yalnız bu konuşma
+yapılmadığı için çöpe gitti. Kanonda "ürün biliniyor olmalı" diye bir *cümle* vardı; çıktısı
+olmadığı için denetlenemiyordu. Artık çıktısı bir dosya, kapısı da mekanik: `Kendi cümlem:`
+satırı boşsa prompt üretilmez. Şık seçmek yetmez — **şık insan için, cümle tasarımcı için**;
+modelin okuyacağı bağlam şıkta değil cümlede taşınır.
 
 ## Tutarlılık nasıl sağlanır — üç katman, üçü de gerekli
 
@@ -55,6 +63,7 @@ hangi hazır kalıba düşülmeyeceği. Sözleşme uyumlu ama ruhsuz ekranlar bu
 ## Akış
 
 ```
+0. Ürün niyetini doldur  → sablonlar/urun-niyeti.md → tasarim/urun-niyeti.md
 1. Envanter yaz          → sablonlar/sayfa-envanteri.md
 2. Her ekrana senaryo    → sablonlar/senaryo-karti.md   (tık bütçesi ZORUNLU)
 3. Sözleşmeyi kur        → sablonlar/tasarim-dili.md
@@ -106,6 +115,12 @@ insan oturumu 11 madde çıkardı. Eksik boyut renk/tipografi değil **yoğunluk
 | X2 | sözlük-dışı bileşen adı (sessiz icat) |
 | X3 | ürünün yasak dili |
 | X4 | aynı durumun iki farklı yazımı (küme geneli) |
+
+**Kapının çağıranı var — iyi niyete bırakılmadı.** `prompt-yap.sh --onceki <sayfa>` (yani
+*devam promptu üretme anı*) önce o sayfayı bu kapıdan geçirir:
+kırmızıysa **prompt üretilmez** (`rc=1`), profil yoksa **"ölçülemedi"** der (`rc=3`, "temiz"
+demez). Sebep: ölçülmemiş sayfanın üstüne bir sonraki sayfa çizilirse hata bütün diziye yayılır
+— zaten bir turu böyle kaybettik. Kapıyı koşturmanın maliyeti saniyeler; kaçırmanın maliyeti tur.
 
 **Sayılar profilden gelir, araçtan değil** — çekirdek kuraldır, değer markadır. Profil yoksa
 araç **RC=2** döner; varsayılan uydurup yanlış-yeşil vermez. Profildeki her sayı sözleşmede
@@ -178,6 +193,7 @@ boyutundaydı. İki kapı bu yüzden ayrı: **anlam → yargıç, yoğunluk → 
 | `{{HEDEF_KULLANICI}}` | Kim, hangi bağlamda, ekrana ne kadar bakabiliyor |
 | `{{SAYFA_ENVANTERI}}` | Durak 1 çıktısı |
 | `{{SAYFA_SENARYOSU}}` | O sayfanın Durak 2 kartı |
+| `{{URUN_NIYETI}}` | Durak 0 çıktısı (araç doldurur; boş cümle satırı varsa DURUR) |
 | `{{TASARIM_DILI}}` | Sözleşme dosyası (araç doldurur) |
 | `{{ESTETIK_YON}}` | Estetik yön dosyası (araç doldurur) |
 | `{{ONCEKI_HTML}}` | Önceki sayfanın HTML'i (araç doldurur) |
