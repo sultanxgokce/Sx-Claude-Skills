@@ -23,17 +23,22 @@
 #   MARKA (--dil) kutuya aittir ve yalnız DEĞER taşır. --dil `:` ile ayrılmış birden çok dosya
 #   alabilir (PATH gibi); tek yol veren eski çağrılar aynen çalışır.
 #
-# ÜÇ KAPI (üçü de ölçülmüş bir hüsranın panzehiri):
+# DÖRT KAPI (dördü de ölçülmüş bir hüsranın panzehiri):
 #   · Durak 0 — niyet dosyasındaki her "Kendi cümlem:" satırı DOLU olmalı. Şık seçmek yetmez;
 #     asıl bağlam cümlede. (Bir tam tur bu konuşma yapılmadığı için çöpe gitti.)
 #   · Ölçüm — devam promptu (--onceki) üretilmeden ÖNCE önceki sayfa yoğunluk kapısından
 #     geçirilir. Kırmızıysa prompt ÜRETİLMEZ: ölçülmemiş sayfanın üstüne sonraki sayfa
 #     çizilirse hata bütün diziye yayılır.
+#   · Tık — devam promptu üretilmeden önce önceki sayfanın TIK ÖLÇÜMÜ aranır. Ölçüm yoksa
+#     ya da BAYATSA (sayfa ölçümden sonra değişmiş) rc=3; bütçe aşımı kayıtlıysa rc=1.
+#     Durak 2 tık bütçesini ZORUNLU ilan ediyordu ama hiçbir kapı istemiyordu — sistemin
+#     başkasında yakaladığı "ölçmediğine temiz der" hatası tam da buradaydı.
 #   · Hex çiti — ÇEKİRDEK dosyası renk değeri taşıyamaz. Taşırsa ayrım fiilen çökmüştür
 #     (kural dosyasına sızan değer, filonun tamamına bir kutunun markasını dayatır).
 #
 # Çıkış: 0 üretildi · 1 önceki sayfa kapıdan geçmedi · 2 eksik/geçersiz girdi
-#        3 ÖLÇÜLEMEDİ (kapı profili yok / araç yok) — "temiz" DEĞİL, "bakılamadı"
+#        3 ÖLÇÜLEMEDİ (kapı profili yok / araç yok / TIK ölçümü yok ya da bayat)
+#          — "temiz" DEĞİL, "bakılamadı"
 set -euo pipefail
 
 ARAC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -107,16 +112,65 @@ if [ -n "$ONCEKI" ] && [ -f "$ONCEKI" ]; then
   # Niçin burada: hükmün doğduğu tek an burası. Ayrı bir "havuza yaz" adımı iyi niyete
   # bırakılsaydı yazılmazdı — ölçüldü, bu ailedeki her gönüllü adım yazılmamış.
   # Yazamamak koşuyu DÜŞÜRMEZ (defter kapı değildir) ama sessiz de geçmez: uyarır.
-  if [ -f "$ARAC/havuz.py" ]; then
-    case "$OLCUM_RC" in 0) _H=temiz ;; 1) _H=kirmizi ;; *) _H=olcemedi ;; esac
-    _KOD="$(printf '%s' "$OLCUM" | grep -oE '^❌ KIRMIZI +[A-ZÇĞİÖŞÜ]{1,2}[0-9]{1,2}' \
-            | grep -oE '[A-ZÇĞİÖŞÜ]{1,2}[0-9]{1,2}$' | sort -u | paste -sd, - || true)"
-    _EK="$(basename "$ONCEKI")"; _EK="$(printf '%s' "${_EK%.*}" | tr 'A-Z' 'a-z')"
-    _KU="$(printf '%s' "${UI_AKIS_KUTU:-$(basename "$KOK")}" | tr 'A-Z' 'a-z')"
-    _SR="$(sed -n 's/^version: *//p' "$ARAC/../SKILL.md" 2>/dev/null | head -1)"
+  _EK="$(basename "$ONCEKI")"; _EK="$(printf '%s' "${_EK%.*}" | tr 'A-Z' 'a-z')"
+  _KU="$(printf '%s' "${UI_AKIS_KUTU:-$(basename "$KOK")}" | tr 'A-Z' 'a-z')"
+  _SR="$(sed -n 's/^version: *//p' "$ARAC/../SKILL.md" 2>/dev/null | head -1)"
+  havuz_yaz() {   # havuz_yaz <kapi> <hukum> [dusen-kodlari]
+    [ -f "$ARAC/havuz.py" ] || return 0
     python3 "$ARAC/havuz.py" yaz --kutu "$_KU" --urun "$_KU" --ekran "$_EK" \
-      --kapi yogunluk --hukum "$_H" --dusen "$_KOD" --arac "${_SR:-0.0.0}" >/dev/null \
+      --kapi "$1" --hukum "$2" --dusen "${3:-}" --arac "${_SR:-0.0.0}" >/dev/null \
       || echo "UYARI: havuza yazılamadı (ölçüm geçerli, defter eksik kaldı)." >&2
+  }
+
+  case "$OLCUM_RC" in 0) _H=temiz ;; 1) _H=kirmizi ;; *) _H=olcemedi ;; esac
+  _KOD="$(printf '%s' "$OLCUM" | grep -oE '^❌ KIRMIZI +[A-ZÇĞİÖŞÜ]{1,2}[0-9]{1,2}' \
+          | grep -oE '[A-ZÇĞİÖŞÜ]{1,2}[0-9]{1,2}$' | sort -u | paste -sd, - || true)"
+  havuz_yaz yogunluk "$_H" "$_KOD"
+
+  # ── KAPI 4: tık bütçesi ÖLÇÜLMEDEN devam promptu üretilmez ──────────────────
+  # Durak 2 tık bütçesini ZORUNLU ilan ediyordu ama hiçbir kapı istemiyordu → sistemin
+  # kendi teşhis ettiği "ölçmediğine temiz der" hatası çekirdeğinde duruyordu
+  # (bulan: MÜTEVELLİ/AKAR 2026-08-07). Artefakt yok ya da BAYAT → rc=3 ÖLÇÜLEMEDİ.
+  # Bütçe aşımı kayıtlıysa → rc=1 (ölçüldü ve kırmızı; bu "bakılamadı" değil).
+  TIK_DIZINI="${UI_AKIS_TIK_DIZINI:-$(dirname "$ONCEKI")/olcum}"
+  TIK="$TIK_DIZINI/$(basename "$ONCEKI").tik.json"
+  if [ "$OLCUM_RC" = "0" ] && [ "${UI_AKIS_TIK_KAPISI:-1}" != "0" ]; then
+    if [ ! -f "$TIK" ]; then
+      echo "RC=3 ÖLÇÜLEMEDİ — tık ölçümü yok: $TIK" >&2
+      echo "  Ölçüp kaydet: bash $ARAC/tik-kaydet.sh \"$ONCEKI\" G1=<hedef>:<olculen> ..." >&2
+      echo "  Yoğunluk temiz olabilir; tık BAKILMAMIŞ. İkisi aynı şey değil." >&2
+      havuz_yaz tik olcemedi ""
+      exit 3
+    fi
+    TIK_DURUM="$(SAYFA="$ONCEKI" TIK="$TIK" python3 - <<'PY'
+import hashlib, json, os, sys
+try:
+    k = json.load(open(os.environ["TIK"], encoding="utf-8"))
+except Exception as e:
+    print("BOZUK %s" % e); sys.exit(0)
+canli = hashlib.sha256(open(os.environ["SAYFA"], "rb").read()).hexdigest()
+if k.get("sayfa_sha256") != canli:
+    print("BAYAT"); sys.exit(0)
+asim = k.get("asim") or []
+print("ASIM " + ",".join(asim) if asim else "TAZE")
+PY
+)"
+    case "$TIK_DURUM" in
+      TAZE) havuz_yaz tik temiz "" ;;
+      BAYAT)
+        echo "RC=3 ÖLÇÜLEMEDİ — tık ölçümü BAYAT (sayfa ölçümden sonra değişmiş): $TIK" >&2
+        echo "  Yeniden ölç: bash $ARAC/tik-kaydet.sh \"$ONCEKI\" ..." >&2
+        havuz_yaz tik olcemedi ""
+        exit 3 ;;
+      ASIM*)
+        echo "HATA: tık bütçesi AŞILMIŞ (${TIK_DURUM#ASIM }) — devam promptu üretilmedi." >&2
+        echo "  Ya tasarımı sadeleştir ya hedefi gerekçesiyle güncelle (senaryo kartıyla birlikte)." >&2
+        havuz_yaz tik kirmizi ""
+        exit 1 ;;
+      *)
+        echo "RC=3 ÖLÇÜLEMEDİ — tık artefaktı okunamadı: $TIK_DURUM" >&2
+        exit 3 ;;
+    esac
   fi
 
   case "$OLCUM_RC" in

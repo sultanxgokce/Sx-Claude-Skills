@@ -32,7 +32,7 @@ ANAHTARLAR = {
     "kutu":   r"^[a-z0-9][a-z0-9-]{0,23}$",
     "urun":   r"^[a-z0-9][a-z0-9-]{0,23}$",
     "ekran":  r"^[a-z0-9][a-z0-9._-]{0,39}$",
-    "kapi":   r"^(yogunluk|yargi)$",
+    "kapi":   r"^(yogunluk|yargi|tik)$",
     "hukum":  r"^(temiz|kirmizi|olcemedi|emin-degilim)$",
     "arac":   r"^[0-9]+\.[0-9]+\.[0-9]+$",
 }

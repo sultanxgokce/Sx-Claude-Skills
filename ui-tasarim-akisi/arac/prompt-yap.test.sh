@@ -92,13 +92,38 @@ kapi "kırmızı önceki → rc=1" 1 bash "$YAP" "$T/sablon-devam.md" --onceki "
      --dil "$T/tasarim/tasarim-dili.md" --estetik "$T/tasarim/estetik-yon.md"
 icerir "sebep söylenir" "yoğunluk kapısından GEÇMEDİ"
 
-echo "── 5 · ölçüm kapısı: TEMİZ önceki sayfada devam promptu üretilir"
+echo "── 5 · TIK KAPISI: yoğunluk temiz olsa bile tık ölçülmeden geçilmez"
 mkdir -p "$T/temiz"
 cp "$ARAC/fikstur/temiz/"*.html "$T/temiz/"
 TEMIZ_ILK="$(ls "$T/temiz/"*.html | head -1)"
-kapi "temiz önceki → rc=0" 0 bash "$YAP" "$T/sablon-devam.md" --onceki "$TEMIZ_ILK" \
+kapi "tık ölçümü yok → rc=3" 3 bash "$YAP" "$T/sablon-devam.md" --onceki "$TEMIZ_ILK" \
+     --dil "$T/tasarim/tasarim-dili.md" --estetik "$T/tasarim/estetik-yon.md"
+icerir "iki şeyin farkı söylenir" "tık BAKILMAMIŞ"
+icerir "çözüm aracı gösterilir" "tik-kaydet.sh"
+
+echo "── 5b · tık ölçülünce geçer"
+bash "$ARAC/tik-kaydet.sh" "$TEMIZ_ILK" G1=3:2 G2=2:2 >/dev/null
+kapi "tık taze → rc=0" 0 bash "$YAP" "$T/sablon-devam.md" --onceki "$TEMIZ_ILK" \
      --dil "$T/tasarim/tasarim-dili.md" --estetik "$T/tasarim/estetik-yon.md"
 icerir "önceki sayfa gövdesi gömüldü" "<!-- bilesen: Gezinme -->"
+
+echo "── 5c · BAYAT ölçüm 'temiz' sayılmaz (asıl saldırı yüzeyi)"
+printf '<!-- degisti -->\n' >> "$TEMIZ_ILK"
+kapi "sayfa değişti, ölçüm eski → rc=3" 3 bash "$YAP" "$T/sablon-devam.md" --onceki "$TEMIZ_ILK" \
+     --dil "$T/tasarim/tasarim-dili.md" --estetik "$T/tasarim/estetik-yon.md"
+icerir "bayat denir" "BAYAT"
+bash "$ARAC/tik-kaydet.sh" "$TEMIZ_ILK" G1=3:2 G2=2:2 >/dev/null   # yeniden ölç
+
+echo "── 5d · bütçe AŞIMI ölçülmüştür → rc=1 (bu 'bakılamadı' değil)"
+bash "$ARAC/tik-kaydet.sh" "$TEMIZ_ILK" G1=3:7 >/dev/null
+kapi "aşım → rc=1" 1 bash "$YAP" "$T/sablon-devam.md" --onceki "$TEMIZ_ILK" \
+     --dil "$T/tasarim/tasarim-dili.md" --estetik "$T/tasarim/estetik-yon.md"
+icerir "hangi görev aştı söylenir" "G1"
+bash "$ARAC/tik-kaydet.sh" "$TEMIZ_ILK" G1=3:2 G2=2:2 >/dev/null   # temizle
+
+echo "── 5e · tik-kaydet biçim denetimi"
+kapi "bozuk biçim → rc=2" 2 bash "$ARAC/tik-kaydet.sh" "$TEMIZ_ILK" "G1=cok"
+kapi "hiç görev yok → rc=2" 2 bash "$ARAC/tik-kaydet.sh" "$TEMIZ_ILK"
 
 echo "── 6 · profil yoksa 'temiz' DEĞİL 'ölçülemedi' (rc=3)"
 mkdir -p "$T/profilsiz/ekran"
