@@ -220,10 +220,11 @@ _kapimda_blogu() {
 _talep_zili() {
   local d="${FEDERE_DURUM:-/config/.federe/durum.txt}"
   [ -r "$d" ] || return 0                      # ölçüm hiç yapılmamış → sessiz (yokluk ≠ arıza)
-  local adet en_eski kontrol
+  local adet en_eski kontrol kapsam
   adet="$(sed -n 's/^adet=//p' "$d" | head -1)"
   en_eski="$(sed -n 's/^en_eski=//p' "$d" | head -1)"
   kontrol="$(sed -n 's/^kontrol=//p' "$d" | head -1)"
+  kapsam="$(sed -n 's/^kapsam=//p' "$d" | head -1)"
   case "${adet:-}" in ''|*[!0-9]*) return 0 ;; esac
   [ "$adet" -gt 0 ] || return 0                # kuyruk boş → tek kelime etme
 
@@ -252,9 +253,16 @@ _talep_zili() {
       fi
     fi
   fi
-  printf '\n  %s📮 %s oda-talebi SAHİPSİZ%s%s\n' "$C_SAR" "$adet" "$C_SIF" "$bekleme"
+  printf '\n  %sBU KUTUNUN gelen kutusu: 📮 %s oda-talebi SAHİPSİZ%s%s\n' "$C_SAR" "$adet" "$C_SIF" "$bekleme"
   printf '     %süstlenmek için: federe.sh alindi <id> · listelemek için: federe.sh gelen bekliyor%s\n' \
          "$C_SOL" "$C_SIF"
+  # Kapsam damgası (L50): sayı merkezden ölçülür ve token cell-izolasyonludur → yalnız
+  # merkez-kaynaklı bekleyenleri kapsar. Bunu söylemezsek okuyan sayıyı "kuyruğun tamamı"
+  # sanar; oda-odaya gelen bir mesaj görünmediğinde ekran farkında olmadan yalan söylemiş olur.
+  [ "${kapsam:-}" = "s01-kaynakli" ] && \
+    printf '     %s(sayım merkez-kaynaklı mesajları kapsar — oda-odaya gelenler ayrıca: federe.sh gelen)%s\n' \
+           "$C_SOL" "$C_SIF"
+  return 0
 }
 
 # _kuyruk_satiri — bu kutunun ANA-HEDEF kuyruğu: "durmak yok" kuralının EKRAN YÜZÜ (MABEYN H4-2).
