@@ -1200,7 +1200,7 @@
       "sync_dagitim": true,
       "type": "workflow",
       "name": "UI Tasarım Akışı",
-      "version": "0.1.5",
+      "version": "0.1.6",
       "description": "Bir ürünün ekranlarını sıfırdan tasarlama akışı: sayfa envanteri → kullanıcı senaryoları → Claude design promptu → devam promptu ile kalan sayfalar. Proje-bağımsız.",
       "prerequisites": {
         "backend": [],
