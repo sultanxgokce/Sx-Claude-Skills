@@ -115,10 +115,17 @@ if [ -n "$ONCEKI" ] && [ -f "$ONCEKI" ]; then
   _EK="$(basename "$ONCEKI")"; _EK="$(printf '%s' "${_EK%.*}" | tr 'A-Z' 'a-z')"
   _KU="$(printf '%s' "${UI_AKIS_KUTU:-$(basename "$KOK")}" | tr 'A-Z' 'a-z')"
   _SR="$(sed -n 's/^version: *//p' "$ARAC/../SKILL.md" 2>/dev/null | head -1)"
+  # Hangi PROFİLE karşı ölçüldüğü de düşer: aynı ekran iki profille iki farklı hüküm alır
+  # ("ölçüm doğru, referans yanlış" vakası). Parmak izi 12 hane sha — içerik değil.
+  _PRF="$(dirname "$DIZIN")/kapi-profili.json"
+  _PSHA=""
+  [ -f "$_PRF" ] && _PSHA="$(python3 -c 'import hashlib,sys;print(hashlib.sha256(open(sys.argv[1],"rb").read()).hexdigest()[:12])' "$_PRF" 2>/dev/null || true)"
   havuz_yaz() {   # havuz_yaz <kapi> <hukum> [dusen-kodlari]
     [ -f "$ARAC/havuz.py" ] || return 0
-    python3 "$ARAC/havuz.py" yaz --kutu "$_KU" --urun "$_KU" --ekran "$_EK" \
-      --kapi "$1" --hukum "$2" --dusen "${3:-}" --arac "${_SR:-0.0.0}" >/dev/null \
+    set -- --kutu "$_KU" --urun "$_KU" --ekran "$_EK" --kapi "$1" --hukum "$2" \
+           --dusen "${3:-}" --arac "${_SR:-0.0.0}"
+    [ -n "$_PSHA" ] && set -- "$@" --profil-sha "$_PSHA"
+    python3 "$ARAC/havuz.py" yaz "$@" >/dev/null \
       || echo "UYARI: havuza yazılamadı (ölçüm geçerli, defter eksik kaldı)." >&2
   }
 

@@ -79,8 +79,8 @@ Dar ekran davranışı: {{ }} altında iskelet ne yapar.
 
 ## 4 · Sözlük eklemeleri
 
-Çekirdeğin on adı (`Gezinme` · `Sayfa Başlığı` · `Liste Satırı` · `Form Alanı` · `Düğme` ·
-`Onay Diyaloğu` · `Yan Panel` · `Bilgi Şeridi` · `Boş Durum` · `Durum Rozeti`) zaten geçerlidir —
+Çekirdeğin on adı (`Gezinme` · `Sayfa başlığı` · `Liste satırı` · `Form alanı` · `Düğme` ·
+`Onay diyaloğu` · `Yan panel` · `Bilgi şeridi` · `Boş durum` · `Durum rozeti`) zaten geçerlidir —
 buraya **tekrar yazılmaz**. Yalnız bu ürüne özgü, çekirdekte karşılığı olmayan adlar eklenir:
 
 | Ad | Nedir |

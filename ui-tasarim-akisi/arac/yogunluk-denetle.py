@@ -37,8 +37,12 @@ ORNEK_PROFIL = {
     "font_kademeleri": ["12.5", "14.5", "16.5", "21", "25"],
     "radius_kumesi": ["0", "8", "10", "999"],
     "birincil_renk": "#8a5a2b",
-    "sozluk": ["Gezinme", "Başlık şeridi", "Veri tablosu", "Ölçü kartı", "Durum rozeti",
-               "Yan panel", "Düğme", "Dipnot", "Boş durum", "Bilgi şeridi"],
+    # Çekirdeğin on adı (cekirdek/sozlesme.md Ç3) + bu örnek ürünün kendi adları.
+    # ÇEKİRDEK ADLARI ÇIKARILAMAZ: cekirdek-sozluk-denetle.py bekçisi kapsamayı ölçer;
+    # buradan bir çekirdek adı düşerse ya da yazımı sapar ise sınav KIRMIZI yanar.
+    "sozluk": ["Gezinme", "Sayfa başlığı", "Liste satırı", "Form alanı", "Düğme",
+               "Onay diyaloğu", "Yan panel", "Bilgi şeridi", "Boş durum", "Durum rozeti",
+               "Başlık şeridi", "Veri tablosu", "Ölçü kartı", "Dipnot"],
     "blok_turu": {"Veri tablosu": "liste", "Ölçü kartı": "kart", "Bilgi şeridi": "şerit"},
     "yasak_dil": ["tasarruf", "kazan[cç]"],
 }

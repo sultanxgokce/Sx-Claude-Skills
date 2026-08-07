@@ -59,11 +59,14 @@ icerir "kayıt görünür" "e4-bugun"
 kapi "ozet → rc=0" 0 python3 "$H" ozet --havuz "$J"
 icerir "en çok düşen kural listelenir" "S2"
 
-echo "── 6 · BOŞ havuz 'temiz' DEĞİL 'bakılmamış' der"
-kapi "boş havuz → rc=0" 0 python3 "$H" ozet --havuz "$T/yok.jsonl"
+echo "── 6 · BOŞ havuz 'temiz' DEĞİL 'bakılmamış' der — METİN de KOD da"
+# Bir çağıran için rc=0 "temiz" demektir. Metin dürüstken kodun 0 dönmesi, sessizliği
+# başarı saymanın makine hâliydi (bulan: NAKKAŞ, 2026-08-07). 3 = ÖLÇÜLEMEDİ.
+kapi "boş havuz → rc=3 ÖLÇÜLEMEDİ" 3 python3 "$H" ozet --havuz "$T/yok.jsonl"
 icerir "dürüst dil" "hiç bakılmamış"
 icermez "ölçüm yapılmış gibi tablo basmaz" "EN ÇOK DÜŞEN"
 icermez "sıfır-ihlal iddiası yok" "Hiçbir kural düşmemiş"
+kapi "kayıt VAR ama o kutuda yok → rc=3" 3 python3 "$H" ozet --havuz "$J" --kutu bosluk
 
 echo "── 7 · bozuk satır okumayı çökertmez, sessizce elenir"
 printf 'bu json degil\n{"kutu":"x"}\n' >> "$J"
@@ -90,6 +93,47 @@ echo "── 9 · havuz yazılamasa bile prompt üretimi DÜŞMEZ (defter kapı 
 kapi "yazılamaz havuz → yine rc=0" 0 env UI_AKIS_HAVUZ="/olmayan-kok-dizin/h.jsonl" \
      UI_AKIS_KUTU=akar bash "$ARAC/prompt-yap.sh" "$T/proje/sablon.md" --onceki "$ILK" \
      --dil "$T/proje/dil.md" --estetik "$T/proje/est.md"
+
+echo "── 10 · İPTAL: yanlış satır SİLİNMEDEN geçersiz kılınabilir (salt-ekleme korunur)"
+# Canlı vaka (MÜTEVELLİ, 2026-08-07): 4 satır ölçmeden tahminle yazıldı, 2'si yanlış çıktı;
+# geri alma yolu olmadığı için özet sonsuza dek yalan söylüyordu.
+J3="$T/iptal.jsonl"
+ipt() { python3 "$H" iptal --havuz "$J3" "$@"; }
+kapi "hedef kayıt yazılır" 0 python3 "$H" yaz --havuz "$J3" --kutu akar --urun akar \
+     --ekran e9-yanlis --kapi yogunluk --hukum kirmizi --dusen S1,S2 --arac 0.2.2
+KID="$(printf '%s' "$SON" | sed -n 's/^havuz +1 · \([0-9a-f]\{12\}\).*/\1/p')"
+kapi "doğru kayıt da yazılır" 0 python3 "$H" yaz --havuz "$J3" --kutu akar --urun akar \
+     --ekran e9-dogru --kapi yogunluk --hukum kirmizi --dusen S5 --arac 0.2.2
+if [ -n "$KID" ]; then echo "  ✓ oku/yaz kayıt-id basıyor ($KID)"; GECTI=$((GECTI+1))
+else echo "  ✗ kayıt-id çıkmadı — iptal çağrılamaz"; KALDI=$((KALDI+1)); fi
+
+kapi "geçersiz sebep REDDEDİLİR (serbest metin yok)" 1 ipt "$KID" --sebep "müşteri istedi"
+icerir "kapalı küme söylenir" "kapalı küme"
+kapi "bilinmeyen kayıt-id → rc=1" 1 ipt ffffffffffff --sebep tekrar
+kapi "geçerli iptal → rc=0" 0 ipt "$KID" --sebep olcmeden-yazildi
+icerir "eski satırın durduğu söylenir" "DURUYOR"
+
+kapi "iptal sonrası özet → rc=0" 0 python3 "$H" ozet --havuz "$J3"
+icermez "iptal edilen kural sayımdan DÜŞTÜ" "S1  "
+icerir "geçerli kayıt sayımda KALDI" "S5"
+kapi "oku varsayılan görünüm → rc=0" 0 python3 "$H" oku --havuz "$J3"
+icermez "iptal edilen satır varsayılan görünümde yok" "e9-yanlis"
+kapi "oku --iptaller-dahil → rc=0" 0 python3 "$H" oku --havuz "$J3" --iptaller-dahil
+icerir "geçmiş DURUYOR (salt-ekleme)" "e9-yanlis"
+icerir "mezar-taşı görünür" "iptal→"
+kapi "aynı kayıt ikinci kez iptal edilmez" 0 ipt "$KID" --sebep tekrar
+icerir "ikinci mezar-taşı yazılmadı" "zaten iptal edilmiş"
+
+echo "── 11 · profil_sha: 'ölçüm doğru, referans yanlış' vakasına karşı skalar parmak izi"
+kapi "profil_sha ile yazılır → rc=0" 0 python3 "$H" yaz --havuz "$J3" --kutu akar \
+     --urun akar --ekran e10 --kapi yogunluk --hukum temiz --arac 0.2.2 \
+     --profil-sha 9f2a1c0b7d34
+kapi "desene uymayan profil_sha → rc=1" 1 python3 "$H" yaz --havuz "$J3" --kutu akar \
+     --urun akar --ekran e10 --kapi yogunluk --hukum temiz --arac 0.2.2 \
+     --profil-sha "kapi-profili.json"
+icerir "sebep söylenir" "profil_sha desene uymuyor"
+kapi "parmak-izsiz ölçüm özette dürüstçe sayılır" 0 python3 "$H" ozet --havuz "$J3"
+icerir "eksik parmak-izi bildirilir" "profil parmak-izi YOK"
 
 echo
 echo "TOPLAM: $GECTI geçti · $KALDI kaldı"

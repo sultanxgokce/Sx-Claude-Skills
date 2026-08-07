@@ -36,8 +36,13 @@ sonra markanın sözlüğüne eklenir.
 Hemen her üründe çıkan on ad. Ürünün işi bu adlardan birine uyuyorsa **o ad kullanılır**;
 uymuyorsa marka sözlüğüne yeni ad eklenir — eşanlamlı ikinci bir ad açılmaz.
 
-`Gezinme` · `Sayfa Başlığı` · `Liste Satırı` · `Form Alanı` · `Düğme` · `Onay Diyaloğu` ·
-`Yan Panel` · `Bilgi Şeridi` · `Boş Durum` · `Durum Rozeti`
+`Gezinme` · `Sayfa başlığı` · `Liste satırı` · `Form alanı` · `Düğme` · `Onay diyaloğu` ·
+`Yan panel` · `Bilgi şeridi` · `Boş durum` · `Durum rozeti`
+
+> **Yazım tek**: adlar burada yazıldığı gibi — cümle düzeninde — kullanılır. `Yan Panel` ile
+> `Yan panel` iki ad değildir ama araç için iki gerçektir: kapı adı harfi harfine eşler, ikinci
+> yazım hem "sözlük-dışı ad" hem yanlış yüzey-sayımı üretir. Ç2'nin "iki işaret = iki gerçek"
+> kuralı yazıma da işler. (Bu hizayı `arac/cekirdek-sozluk-denetle.py` bekçisi ölçer.)
 
 ## Ç4 · Yoğunluk kuralları (sayı YOK — sayılar markada)
 
