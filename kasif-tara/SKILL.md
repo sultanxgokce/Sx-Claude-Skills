@@ -1,6 +1,6 @@
 ---
 name: kasif-tara
-version: 1.4.0
+version: 1.4.1
 description: >
   KAŞİF'in el-kitabı: DİVAN'ın işine yarayacak konularda (_agents/kasif/konular.md — Sultan-ayarlı) web'i
   tarayıp ham-malzeme (fikir/fırsat) toplar ve YALNIZ bulgu-havuzuna yazar (<skill-dizini>/scripts/kasif-havuz-ekle.sh,
@@ -98,7 +98,8 @@ Adayları JSON-dizi dosyasına yaz (`[{baslik,detay,kanit,tip}]`) →
 ```bash
 cd <projenin kök klasörü>          # hangi odanın defterine yazdığın CWD'den belirlenir
 LAYIHA_ROL=kasif bash <skill-dizini>/scripts/kasif-havuz-ekle.sh --girdi <candidates.json>
-#   stdout: {eklenen, atlanan_dup, atlanan_gecersiz, yeni_idler}
+#   stdout: {eklenen, atlanan_dup, atlanan_anahtar, atlanan_gecersiz, atlanan_alan, yeni_idler}
+#   NOT: şema-dışı alan DÜŞÜRÜLÜR ama sessiz değil — adı `atlanan_alan`da + stderr uyarısı (değer asla).
 #   havuz-dedup + şema-fail-closed + b#### id-artır otomatik
 ```
 Başka hiçbir yere yazma (Edit/Write ile havuza elle dokunma — id-çakışması/şema-bozulması riski).

@@ -200,6 +200,47 @@ kos --girdi "$TMP/r1.json" >/dev/null
 KASIF_TEST=1 KASIF_HAVUZ="$TMP/rol-havuz2.jsonl" KASIF_TARIH=2026-07-28 bash "$SUT" --girdi "$TMP/r1.json" >/dev/null 2>&1
 [ "$(wc -l < "$TMP/rol-havuz2.jsonl")" = "1" ] && ok "rol BOŞKEN geriye-uyum korundu" || no "rolsüz koşu bozuldu"
 
+echo "== A1: ŞEMA-DIŞI ALAN sessizce düşmez — adı raporlanır (NÂZIR/s13 kart-92) =="
+: > "$TMP/alan-havuz.jsonl"
+cat > "$TMP/a1.json" <<'JSON'
+[{"baslik":"Sema disi alan tasiyan bulgu","detay":"d","kanit":"https://ör.nek/a1",
+  "depo_adayi":"github.com/ornek/repo","yildiz":42}]
+JSON
+AERR="$TMP/a1.err"
+OUT="$(KASIF_TEST=1 KASIF_HAVUZ="$TMP/alan-havuz.jsonl" KASIF_TARIH=2026-08-07 \
+  bash "$SUT" --girdi "$TMP/a1.json" 2>"$AERR")"
+echo "$OUT" | jq -e '.eklenen==1' >/dev/null \
+  && ok "kayıt yine kabul edildi (düşürme meşru, iş durmuyor)" || no "kayıt reddedildi: $OUT"
+echo "$OUT" | jq -e '.atlanan_alan == ["depo_adayi","yildiz"]' >/dev/null \
+  && ok "atlanan alan ADLARI makine-çıktısında" || no "sessiz düşürme sürüyor: $OUT"
+grep -q 'atlanan ALAN' "$AERR" && ok "stderr uyardı" || no "uyarı basılmadı"
+# DEĞER sızmamalı — havuz/seyir META kanalı
+grep -q 'github.com/ornek/repo' "$AERR" && no "🔴 alan DEĞERİ sızdı (İ1 ihlali)" \
+  || ok "yalnız ad taşındı, değer sızmadı"
+jq -e 'has("depo_adayi")|not' "$TMP/alan-havuz.jsonl" >/dev/null \
+  && ok "şema-dışı alan havuz kaydına girmedi" || no "şema kapalılığı delindi"
+
+echo "== A2: temiz girdide atlanan_alan BOŞ (yanlış-alarm yok) =="
+: > "$TMP/alan-havuz2.jsonl"
+OUT="$(KASIF_TEST=1 KASIF_HAVUZ="$TMP/alan-havuz2.jsonl" KASIF_TARIH=2026-08-07 \
+  bash "$SUT" --girdi "$TMP/g1.json" 2>"$TMP/a2.err")"
+echo "$OUT" | jq -e '.atlanan_alan == []' >/dev/null \
+  && ok "şemaya uyan girdi uyarı üretmedi" || no "yanlış-alarm: $OUT"
+grep -q 'atlanan ALAN' "$TMP/a2.err" && no "temiz koşuda gürültü basıldı" \
+  || ok "temiz koşu sessiz kaldı"
+
+echo "== A3: NÖBETÇİ — insan-okur özet stderr'e FİİLEN basılıyor mu =="
+# Regresyon: `exec 9>… 2>/dev/null` (komutsuz exec) stderr'i KALICI susturur ve aşağıdaki
+# özeti tamamen görünmez yapar. Betik "çalışıyor" görünürken raporu kimseye ulaşmaz.
+# Doğru deyim filoda zaten var: skill-fb-ekle.sh:54 `{ exec 9>…; } 2>/dev/null`.
+: > "$TMP/nob-havuz.jsonl"
+KASIF_TEST=1 KASIF_HAVUZ="$TMP/nob-havuz.jsonl" KASIF_TARIH=2026-08-07 \
+  bash "$SUT" --girdi "$TMP/g1.json" >/dev/null 2>"$TMP/nob.err"
+grep -q 'havuz-ekle özeti' "$TMP/nob.err" \
+  && ok "özet başlığı stderr'e ulaştı" || no "🔴 stderr susturulmuş — özet kimseye görünmüyor"
+grep -q 'atlanan (şema)' "$TMP/nob.err" \
+  && ok "özetin gövdesi de basıldı" || no "özet yarım basıldı"
+
 echo ""
 echo "════════ SONUÇ: PASS=$PASS · FAIL=$FAIL ════════"
 [ "$FAIL" -eq 0 ] && echo "GOLDEN: TEMİZ ✓" || echo "GOLDEN: FAIL ✗"

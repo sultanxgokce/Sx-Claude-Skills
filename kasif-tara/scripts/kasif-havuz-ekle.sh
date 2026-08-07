@@ -8,7 +8,11 @@
 # tekrar (aynı bulguyu iki taramada iki kez ekleme) engellenir.
 #
 # GİRDİ:  --girdi <candidates.json>  → JSON dizi: [{baslik, detay, kanit, [tip]}] (kanit=kaynak-URL/alıntı ZORUNLU)
-# ÇIKTI:  havuza append + stdout özet {eklenen, atlanan_dup, atlanan_anahtar, atlanan_gecersiz, yeni_idler}
+# ÇIKTI:  havuza append + stdout özet {eklenen, atlanan_dup, atlanan_anahtar, atlanan_gecersiz,
+#         atlanan_alan, yeni_idler}
+# ŞEMA-DIŞI ALAN: şema KAPALI — tanımadığı alan kayda girmez. Ama SESSİZ düşürmez: adı
+#   `atlanan_alan`da ve seyir satırında görünür, stderr uyarır. Kayıp meşru olabilir, GÖRÜNMEZ olamaz.
+#   Yalnız alan ADI taşınır, DEĞERİ asla (havuz/seyir META kanalı). Kaynak: NÂZIR/s13 kart-92.
 # RC: 0=başarı (0 eklenen de 0) · 2=girdi/şema hatası (fail-closed).
 #
 # FİLO-ALANLARI (SANCAK A2 dilim-3 · k0124 · EYALET-KANUNU §5): her yeni satıra
@@ -106,7 +110,11 @@ jq empty "$HAVUZ" 2>/dev/null || { echo "HATA: havuz bozuk-JSONL — fail-closed
 
 # SF3 · eşzamanlı /kasif-tara koşuları id-çakışmasın — oku-max→append kritik-bölümü flock ile serileştir
 # (lock süreç-çıkışında serbest kalır; icra-birimi taze-koşu → zamanlı+manuel örtüşme gerçekçi).
-exec 9>"$HAVUZ.lock" 2>/dev/null || true
+# 🔴 `exec 9>… 2>/dev/null` YAZMA: exec komutsuz kullanılınca yönlendirmelerin HEPSİ kalıcı olur →
+# `2>/dev/null` betiğin geri kalanında stderr'i susturur ve aşağıdaki insan-okur özet HİÇ görünmez.
+# (Ölçüldü 2026-08-07: özet blok yazıldığı günden beri hiç basılmamış.) Susturma yalnız exec'in
+# KENDİ hatasına ait olmalı → grupla sınırla.
+{ exec 9>"$HAVUZ.lock"; } 2>/dev/null || true
 flock 9 2>/dev/null || true
 
 # Bir sonraki b#### id (havuzdaki en büyük b-numarasından +1)
@@ -156,7 +164,10 @@ KARAR="$(jq -c -n \
     ([ $mtok[] | jaccard($ctok; .) ] | max // 0) as $ortusme |
     { baslik:$c.baslik, detay:($c.detay // ""), kanit:($c.kanit // ""), tip:($c.tip // "bulgu"),
       _key:$key, _gecerli: ($baslikli and $kanitli), _dup: ($ortusme >= $esik),
-      _dupkey: ($blokan | index($key) != null) }
+      _dupkey: ($blokan | index($key) != null),
+      # şema-dışı alanlar: DÜŞÜRÜLÜR ama SESSİZ DEĞİL (NÂZIR/s13 kart-92).
+      # Yalnız alan ADI toplanır, DEĞERİ asla — havuz/seyir META kanalıdır.
+      _atlanan_alan: (($c | keys) - ["baslik","detay","kanit","tip"]) }
   ] |
   # parti-içi tekrar: aynı anahtarın ikinci+ geçerli-adayı da anahtar-atlanır (ilk kazanır)
   reduce to_entries[] as $e ({seen:{}, out:[]};
@@ -174,6 +185,10 @@ E_GECERSIZ=$(jq '[ .[] | select(._gecerli|not) ] | length' <<<"$KARAR")
 E_DUP=$(jq '[ .[] | select(._gecerli and ._dup) ] | length' <<<"$KARAR")
 E_ANAHTAR=$(jq '[ .[] | select(._gecerli and (._dup|not) and ._dupkey) ] | length' <<<"$KARAR")
 N=$(jq 'length' <<<"$GECERLI")
+# şema-dışı alan adları (tüm adaylar boyunca birleşik, tekil, sıralı) — kayıp GÖRÜNÜR olsun diye.
+# "Düşürmek meşru, sessizce düşürmek değil": ad basılır, değer basılmaz.
+ATLANAN_ALAN="$(jq -c '[ .[] | ._atlanan_alan[]? ] | unique' <<<"$KARAR" 2>/dev/null || echo '[]')"
+E_ALAN=$(jq 'length' <<<"$ATLANAN_ALAN")
 CELL="${CELL_ID:-s01}"
 
 # ── append: her geçerli-aday'a b#### id ver, havuz-şemasında yaz ──
@@ -295,9 +310,11 @@ _hafiza_yaz() {
       --argjson aday "$(jq 'length' <<<"$KARAR" 2>/dev/null || echo 0)" \
       --argjson eklenen "$N" --argjson dup "$E_DUP" --argjson anahtar "$E_ANAHTAR" \
       --argjson sema "$E_GECERSIZ" --argjson idler "$idler_json" \
+      --argjson alan "${ATLANAN_ALAN:-[]}" \
       --argjson kaynak_sayisi "${KAYNAK_SAYISI:-0}" \
       '{v:1, tur:$tur, tarih:$tarih, kaynak:$kay, cell:$cell,
-        aday:$aday, eklenen:$eklenen, atlanan:{dup:$dup, anahtar:$anahtar, sema:$sema},
+        aday:$aday, eklenen:$eklenen,
+        atlanan:{dup:$dup, anahtar:$anahtar, sema:$sema, alan:$alan},
         yeni_idler:$idler, kaynak_kutuphanesi:$kaynak_sayisi}' >> "$SEYIR" 2>/dev/null || true
   fi
   return 0
@@ -309,8 +326,15 @@ _hafiza_yaz 2>/dev/null || true
   echo "   atlanan (dup)  : $E_DUP  (havuzda zaten benzer başlık)"
   echo "   atlanan (anahtar): $E_ANAHTAR  (deterministik çift-anahtar; ham/aday kayıtla birebir)"
   echo "   atlanan (şema) : $E_GECERSIZ  (başlık/kanıt boş — fail-closed)"
+  if [ "$E_ALAN" != "0" ]; then
+    echo "   ⚠️ atlanan ALAN : $E_ALAN  $ATLANAN_ALAN"
+    echo "      ↳ bu adlar şemada yok, kayda GİRMEDİ. Bilerek yapıyorsan sorun yok;"
+    echo "        bilmiyorsan gönderen taraf bilgi kaybediyor demektir."
+  fi
   echo "   tur            : $TUR   ·   kaynak-kütüphanesi: ${KAYNAK_SAYISI:-0} adres"
 } >&2
-jq -c -n --argjson e "$N" --argjson d "$E_DUP" --argjson a "$E_ANAHTAR" --argjson g "$E_GECERSIZ" --argjson idler "$idler_json" \
-  '{eklenen:$e, atlanan_dup:$d, atlanan_anahtar:$a, atlanan_gecersiz:$g, yeni_idler:$idler}'
+jq -c -n --argjson e "$N" --argjson d "$E_DUP" --argjson a "$E_ANAHTAR" --argjson g "$E_GECERSIZ" \
+  --argjson alan "$ATLANAN_ALAN" --argjson idler "$idler_json" \
+  '{eklenen:$e, atlanan_dup:$d, atlanan_anahtar:$a, atlanan_gecersiz:$g,
+    atlanan_alan:$alan, yeni_idler:$idler}'
 exit 0
