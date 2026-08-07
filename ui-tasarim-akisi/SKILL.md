@@ -1,7 +1,7 @@
 ---
 name: ui-tasarim-akisi
 type: agent
-version: 0.2.1
+version: 0.2.2
 description: >
   UI/arayüz tasarım işinin ZORUNLU akış kapısı. Bir ürünün ekranlarını tek tek değil dizi
   hâlinde tasarlatır: ürün niyeti → sayfa envanteri → kullanıcı senaryoları (tık bütçesi) →
@@ -217,8 +217,22 @@ yazılı olanla aynı olmalı; sapma driftir.
 **Ölçmediğini söyler:** tek-ekran anlamı (manşetin öznesi, görselin bilgi değeri) bu kapının
 konusu **değildir** ve çıktı bunu her koşuda yazar. Oraya "temiz" demez, hiç bakmaz.
 Kalibrasyon: reddedilmiş bir turun 4 ekranının 4'ünü düşürdü, onaylanmış turun 5 ekranına
-dokunmadı. Kapının kendi sınavı: `bash arac/yogunluk-denetle.test.sh` (12 kapı, negatif
+dokunmadı. Kapının kendi sınavı: `bash arac/yogunluk-denetle.test.sh` (19 kapı, negatif
 fikstürlü — fikstürsüz kapı devreye alınmaz).
+
+**Çift-yönlü fikstür:** `fikstur/panel-yesil/` ve `fikstur/panel-kirmizi/` aynı sayfanın iki
+yazımıdır — biri **yeşilde kalmalı**, öbürü **kırmızı yanmalı**. Tek yönlü fikstür yalnız
+katılaşmayı yakalar, **gevşemeyi yakalamaz**: yüzey ayrımı bozulursa yeşil yüz kırmızıya döner,
+ad-eşleme gevşerse (harf-duyarsız karşılaştırma) kırmızı yüz yeşile döner. İkisi birlikte iki
+yönü de kilitler. (Öneri: NAKKAŞ + MÜTEVELLİ, 2026-08-07.)
+
+**Bekçi — çekirdek ⟂ araç tek gerçek:** `python3 arac/cekirdek-sozluk-denetle.py`.
+Çekirdek sözleşmedeki (Ç3) her bileşen adı, aracın varsayılan sözlüğünde **harfi harfine**
+bulunmalıdır; bulunmazsa RC=1. Niçin var: çekirdek `Yan Panel` yazarken araç `Yan panel`
+bekliyordu — çekirdeği harfi harfine uygulayan kutu hem "sözlük-dışı ad" suçlaması yedi hem
+paneli ayrı yüzey saydıramadığı için **yanlış kırmızı** aldı (bulan: AKAR/MÜTEVELLİ). Çözüm
+harf-duyarsız karşılaştırma **değildi** — o, X4'ün "aynı şeyin iki yazımı = çatal" felsefesini
+çürütürdü. Yazım tek; bekçi hizayı ölçer. Ç3 okunamazsa RC=2 (ölçemediğine temiz demez).
 
 ## Anlam yargısı — kör panel (G1, yalnız NEGATİF yetki)
 
@@ -267,8 +281,23 @@ düzeltiliyor, **bir sonraki tur aynı hatayı yeniden keşfediyordu.** Havuz o 
 
 ```
 python3 arac/havuz.py ozet                 # merkezî görünüm: en çok hangi kural düşüyor
-python3 arac/havuz.py oku --kutu akar      # o kutunun son ölçümleri
+python3 arac/havuz.py oku --kutu akar      # o kutunun son ölçümleri (ilk sütun: kayıt-id)
+python3 arac/havuz.py iptal <kayit-id> --sebep olcmeden-yazildi   # yanlış satırı geçersiz kıl
+python3 arac/havuz.py oku --iptaller-dahil # iptal geçmişini de göster
 ```
+
+**Yanlış satır SİLİNMEZ, ÜSTÜNE YAZILIR.** Havuz salt-eklemedir; ama ölçmeden tahminle yazılmış
+bir satır özeti sonsuza dek kirletiyordu (canlı vaka: 4 satır tahminle yazıldı, 2'si yanlış
+çıktı; özet gerçeği söylemez oldu). `iptal` eski satıra dokunmaz — yeni bir **mezar-taşı** satırı
+ekler. `ozet` ve `oku` varsayılan görünümde ikisini de dışarıda bırakır; geçmiş
+`--iptaller-dahil` ile görünür. Görünüm süzer, dosya unutmaz.
+`--sebep` **kapalı kümedir**: `olcmeden-yazildi · yanlis-profil · tekrar · test-artigi`.
+Serbest metin kabul edilmez (aşağıdaki şema kuralı).
+
+**`profil_sha` (isteğe bağlı, 12 hane):** ölçümün hangi kapı-profiline karşı yapıldığının parmak
+izi. Aynı ekran iki profille iki farklı hüküm alır; parmak izi olmadan havuza bakan hangisinin
+geçerli olduğunu bilemez ("ölçüm doğru, referans yanlış" vakası). İçerik değil **sha** — kapalı
+şema bozulmaz. `ozet`, parmak izi taşımayan ölçüm sayısını dürüstçe basar.
 
 **Çağıranı var — kimse "havuza yaz" demek zorunda değil.** Kayıt, hükmün doğduğu iki anda
 kendiliğinden düşer: `prompt-yap.sh --onceki` (yoğunluk ölçümü) ve `yargi-birlestir.py
@@ -285,8 +314,10 @@ HTML, gerekçe metni, kişi/müşteri adı taşıyacak hiçbir alan yoktur — y
 uymayan değer ya da `dusen` alanına serbest metin → **kayıt reddedilir** (fail-closed).
 "Şuraya küçük bir not düşeyim" diye alan eklenmez; eklenirse mahremiyet sınırı sessizce delinir.
 
-**Boş havuz "temiz" demez, "hiç bakılmamış" der.** Sessizliği başarı saymak bu sistemin
-düzeltmeye çalıştığı hatanın ta kendisiydi.
+**Boş havuz "temiz" demez, "hiç bakılmamış" der — ve çıkış kodu da öyle der.** `ozet` boş
+havuzda **RC=3 (ÖLÇÜLEMEDİ)** döner. Metin bunu zaten söylüyordu ama kod `0` diyordu; bir çağıran
+için `0` "temiz" demektir. Metin dürüstken kodun yalan söylemesi, sessizliği başarı saymanın
+makine hâliydi (bulan: NAKKAŞ, 2026-08-07). **3 ≠ temiz.**
 
 ## Değişmezler
 

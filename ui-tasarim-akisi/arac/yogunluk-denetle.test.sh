@@ -43,6 +43,47 @@ python3 "$KAPI" "$gecici" >/dev/null 2>&1; rc=$?
 [ "$rc" = "2" ] && gecti "profilsiz-rc2" "rc=2 çalıştırılamadı" || kaldi "profilsiz-rc2" "rc=$rc (2 olmalı)"
 rm -rf "$gecici"
 
+# 5 · ÇİFT-YÖNLÜ FİKSTÜR: aynı sayfa iki yazımla — biri yeşilde kalmalı, öbürü kırmızı
+#     NİÇİN: tek-yönlü fikstür yalnız KATILAŞMAYI yakalar, GEVŞEMEYİ yakalamaz. Yüzey
+#     ayrımı bozulursa (panel ayrı yüzey sayılmazsa) yeşil yüz kırmızıya döner; ad-eşleme
+#     gevşerse (casefold) kırmızı yüz yeşile döner. İkisi birlikte iki yönü de kilitler.
+#     (Öneri: NAKKAŞ + MÜTEVELLİ, 2026-08-07 — ilk uygulaması burası.)
+cikti="$(python3 "$KAPI" "$FIK/panel-yesil" 2>&1)"; rc=$?
+if [ "$rc" = "0" ]; then gecti "cift-yonlu-yesil" "rc=0 — panel ayrı yüzey, iki bütçe de içeride"
+else kaldi "cift-yonlu-yesil" "rc=$rc — GEVŞEME/KATILAŞMA: $(printf '%s' "$cikti" | grep -m1 '·')"; fi
+
+cikti="$(python3 "$KAPI" "$FIK/panel-kirmizi" 2>&1)"; rc=$?
+[ "$rc" = "1" ] && gecti "cift-yonlu-kirmizi-rc" "rc=1" \
+  || kaldi "cift-yonlu-kirmizi-rc" "rc=$rc (1 olmalı) — yanlış yazım cezasız kaldı"
+printf '%s' "$cikti" | grep -q 'X2 sözlük-dışı bileşen adı.*Yan Panel' \
+  && gecti "cift-yonlu-X2" "yanlış yazım X2 ile yakalandı" \
+  || kaldi "cift-yonlu-X2" "X2 çıkmadı — ad eşlemesi gevşemiş olabilir (casefold?)"
+printf '%s' "$cikti" | grep -q 'S1\[sayfa\]' \
+  && gecti "cift-yonlu-S1" "yüzey açılmadı → bütçeler birleşti (canlı vakanın kendisi)" \
+  || kaldi "cift-yonlu-S1" "S1 çıkmadı — yüzey modeli beklenenden farklı davranıyor"
+
+# 6 · BEKÇİ: çekirdek sözleşme ⟂ araç varsayılan sözlüğü tek gerçek olmalı
+#     Bu, 5'teki tek vakayı değil SINIFI kapatır: çekirdeğe yeni bir ad eklenip araca
+#     eklenmezse (ya da yazımı saparsa) burası kırmızı yanar.
+BEKCI="$BURASI/cekirdek-sozluk-denetle.py"
+cikti="$(python3 "$BEKCI" 2>&1)"; rc=$?
+[ "$rc" = "0" ] && gecti "bekci-hizali" "çekirdeğin her adı araç sözlüğünde" \
+  || kaldi "bekci-hizali" "rc=$rc — $(printf '%s' "$cikti" | grep -m1 '·')"
+
+# 6b · NEGATİF KANIT: bekçinin gerçekten kırmızı yandığı kanıtlanır (yoksa bekçi süstür)
+gecici="$(mktemp -d)"
+sed 's/`Yan panel`/`Yan Panel`/' "$BURASI/../cekirdek/sozlesme.md" > "$gecici/sozlesme.md"
+cikti="$(python3 "$BEKCI" --sozlesme "$gecici/sozlesme.md" 2>&1)"; rc=$?
+if [ "$rc" = "1" ] && printf '%s' "$cikti" | grep -q 'YALNIZ HARF KASASI'; then
+  gecti "bekci-negatif" "bozuk çekirdekte rc=1 + harf-kasası teşhisi"
+else kaldi "bekci-negatif" "rc=$rc — bekçi bozuk çekirdeği YAKALAMADI (süs bekçi)"; fi
+# 6c · parse edilemeyen çekirdek "temiz" değil ÖLÇÜLEMEDİ'dir
+printf '# bos\n' > "$gecici/bos.md"
+python3 "$BEKCI" --sozlesme "$gecici/bos.md" >/dev/null 2>&1; rc=$?
+[ "$rc" = "2" ] && gecti "bekci-rc2" "Ç3 yoksa rc=2 (yanlış-yeşil vermez)" \
+  || kaldi "bekci-rc2" "rc=$rc (2 olmalı)"
+rm -rf "$gecici"
+
 echo "────────────────────────────────────────────"
 printf 'TOPLAM: %d geçti · %d kaldı\n' "$GECTI" "$KALDI"
 [ "$KALDI" = "0" ] || exit 1
