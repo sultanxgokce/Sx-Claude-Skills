@@ -9,18 +9,28 @@
 #                             [--niyet <dosya>] [--olcum-dizini <dizin>]
 #
 # Yuvalar:
-#   {{TASARIM_DILI}}  → --dil ile verilen dosya      (varsayılan: <kök>/tasarim/tasarim-dili.md)
+#   {{TASARIM_DILI}}  → ÇEKİRDEK + --dil ile verilen MARKA dosyası/dosyaları
+#                       (marka varsayılanı: <kök>/tasarim/tasarim-dili.md)
 #   {{ESTETIK_YON}}   → --estetik ile verilen dosya  (varsayılan: <kök>/tasarim/estetik-yon.md)
 #   {{URUN_NIYETI}}   → --niyet ile verilen dosya    (Durak 0; varsayılan: <kök>/tasarim/urun-niyeti.md)
 #   {{ONCEKI_HTML}}   → --onceki ile verilen dosya   (devam promptlarında zorunlu)
 #   diğer {{...}}     → şablon kopyası çıkarılırken ELLE doldurulur; dolmamışsa üretim DURUR
 #
-# İKİ KAPI (ikisi de ölçülmüş bir hüsranın panzehiri):
+# ÇEKİRDEK ⟂ MARKA:
+#   Sözleşme iki parçadır. ÇEKİRDEK (cekirdek/sozlesme.md) beceriyle gelir, filo geneli kuraldır,
+#   HİÇBİR değer (renk/font/sayı) taşımaz ve prompta KENDİLİĞİNDEN girer — kutunun onu kopyalaması
+#   ya da çağırması gerekmez (kopyalanan kural bayatlar; ölçülmüş vaka: frontend-design 3 kopya).
+#   MARKA (--dil) kutuya aittir ve yalnız DEĞER taşır. --dil `:` ile ayrılmış birden çok dosya
+#   alabilir (PATH gibi); tek yol veren eski çağrılar aynen çalışır.
+#
+# ÜÇ KAPI (üçü de ölçülmüş bir hüsranın panzehiri):
 #   · Durak 0 — niyet dosyasındaki her "Kendi cümlem:" satırı DOLU olmalı. Şık seçmek yetmez;
 #     asıl bağlam cümlede. (Bir tam tur bu konuşma yapılmadığı için çöpe gitti.)
 #   · Ölçüm — devam promptu (--onceki) üretilmeden ÖNCE önceki sayfa yoğunluk kapısından
 #     geçirilir. Kırmızıysa prompt ÜRETİLMEZ: ölçülmemiş sayfanın üstüne sonraki sayfa
 #     çizilirse hata bütün diziye yayılır.
+#   · Hex çiti — ÇEKİRDEK dosyası renk değeri taşıyamaz. Taşırsa ayrım fiilen çökmüştür
+#     (kural dosyasına sızan değer, filonun tamamına bir kutunun markasını dayatır).
 #
 # Çıkış: 0 üretildi · 1 önceki sayfa kapıdan geçmedi · 2 eksik/geçersiz girdi
 #        3 ÖLÇÜLEMEDİ (kapı profili yok / araç yok) — "temiz" DEĞİL, "bakılamadı"
@@ -28,7 +38,8 @@ set -euo pipefail
 
 ARAC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 KOK="${UI_AKIS_KOK:-$PWD}"
-SOZLESME="${UI_AKIS_DIL:-$KOK/tasarim/tasarim-dili.md}"
+SOZLESME="${UI_AKIS_DIL:-$KOK/tasarim/tasarim-dili.md}"   # MARKA — `:` ayraçlı liste olabilir
+CEKIRDEK="${UI_AKIS_CEKIRDEK:-$ARAC/../cekirdek/sozlesme.md}"  # filo kuralı; kapatılamaz
 ESTETIK="${UI_AKIS_ESTETIK:-$KOK/tasarim/estetik-yon.md}"
 NIYET="${UI_AKIS_NIYET:-$KOK/tasarim/urun-niyeti.md}"
 
@@ -49,8 +60,22 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-[ -f "$SOZLESME" ] || { echo "HATA: tasarım dili dosyası yok: $SOZLESME" >&2; exit 2; }
+# MARKA `:` ayraçlı olabilir — her parça tek tek doğrulanır ki hangisinin eksik olduğu görünsün.
+IFS=':' read -r -a MARKA_PARCALARI <<< "$SOZLESME"
+for _p in "${MARKA_PARCALARI[@]}"; do
+  [ -n "$_p" ] || { echo "HATA: --dil listesinde boş parça var: '$SOZLESME'" >&2; exit 2; }
+  [ -f "$_p" ] || { echo "HATA: marka sözleşme dosyası yok: $_p" >&2; exit 2; }
+done
 [ -f "$ESTETIK" ]  || { echo "HATA: estetik yön dosyası yok: $ESTETIK" >&2; exit 2; }
+
+# ── KAPI 3: hex çiti — çekirdek kural dosyası DEĞER taşıyamaz ─────────────────
+[ -f "$CEKIRDEK" ] || { echo "HATA: çekirdek sözleşme yok: $CEKIRDEK" >&2; exit 2; }
+if grep -nEi '#[0-9a-f]{3}([0-9a-f]{3})?\b|rgba?\(|hsla?\(' "$CEKIRDEK" >&2; then
+  echo "" >&2
+  echo "HATA: çekirdek sözleşmede renk DEĞERİ var (yukarıdaki satırlar): $CEKIRDEK" >&2
+  echo "  Çekirdek kuralı taşır, değeri değil. Değer marka dosyasına (--dil) aittir." >&2
+  exit 2
+fi
 
 # ── KAPI 1: Durak 0 — niyet dosyası (şablon istiyorsa) ────────────────────────
 if grep -q '{{URUN_NIYETI}}' "$SABLON"; then
@@ -99,6 +124,7 @@ GOVDE="$(awk 'basildi==1 {print} /^---$/ && basildi==0 {basildi=1}' "$SABLON")"
 [ -n "$GOVDE" ] || { echo "HATA: şablonda '---' ayracından sonra gövde yok: $SABLON" >&2; exit 2; }
 
 SABLON="$SABLON" GOVDE="$GOVDE" SOZLESME="$SOZLESME" ESTETIK="$ESTETIK" NIYET="$NIYET" \
+CEKIRDEK="$CEKIRDEK" \
 ONCEKI="$ONCEKI" python3 - <<'PY'
 import os, re, sys
 
@@ -109,10 +135,17 @@ def oku(yol):
     with open(yol, encoding="utf-8") as f:
         return f.read().rstrip("\n")
 
-for yuva, env in (("{{TASARIM_DILI}}", "SOZLESME"), ("{{ESTETIK_YON}}", "ESTETIK")):
+# Sözleşme = ÇEKİRDEK (filo kuralı, beceriyle gelir) + MARKA (kutunun değerleri).
+# Çekirdek ÖNCE gelir: kural, kendisini gevşetmeye çalışan bir değerden önce okunsun.
+# Kutunun çekirdeği atlaması için bir bayrak YOKTUR — atlanabilir kural, kural değildir.
+for yuva in ("{{TASARIM_DILI}}", "{{ESTETIK_YON}}"):
     if yuva not in govde:
         sys.stderr.write("HATA: şablonda %s yuvası yok: %s\n" % (yuva, sablon)); sys.exit(2)
-    govde = govde.replace(yuva, oku(os.environ[env]))
+
+parcalar = [oku(os.environ["CEKIRDEK"])]
+parcalar += [oku(p) for p in os.environ["SOZLESME"].split(":") if p]
+govde = govde.replace("{{TASARIM_DILI}}", "\n\n---\n\n".join(parcalar))
+govde = govde.replace("{{ESTETIK_YON}}", oku(os.environ["ESTETIK"]))
 
 # Durak 0 yuvası: varlığı şablona bağlı (eski şablonlar kırılmasın), dosyası kabuk tarafında
 # doğrulandı — buraya yalnız DOLU niyet dosyasıyla gelinir.
