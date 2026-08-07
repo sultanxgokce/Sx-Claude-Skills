@@ -1,7 +1,7 @@
 ---
 name: ui-tasarim-akisi
 type: agent
-version: 0.1.0
+version: 0.1.1
 description: >
   Bir ürünün ekranlarını sıfırdan tasarlama akışı: sayfa envanteri → kullanıcı senaryoları →
   Claude design promptu → devam promptu ile kalan sayfalar. Proje-bağımsız.
