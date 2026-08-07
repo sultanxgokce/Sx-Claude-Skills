@@ -1,7 +1,7 @@
 ---
 name: ui-tasarim-akisi
 type: agent
-version: 0.2.2
+version: 0.3.0
 description: >
   UI/arayüz tasarım işinin ZORUNLU akış kapısı. Bir ürünün ekranlarını tek tek değil dizi
   hâlinde tasarlatır: ürün niyeti → sayfa envanteri → kullanıcı senaryoları (tık bütçesi) →
@@ -187,7 +187,13 @@ sonra sayfası on kez değişmiş artefaktı fark etmek zordur.
 ```
 python3 arac/yogunluk-denetle.py --profil-ornek > tasarim/kapi-profili.json   # bir kez
 python3 arac/yogunluk-denetle.py tasarim/ciktilar ; echo rc=$?                # her sayfadan sonra
+python3 arac/yogunluk-denetle.py <dizin> --profil <yol> [--cekirdek <yol>]    # yol standart dışıysa
 ```
+
+> ⚠️ `--profil` **0.3.0'a kadar ölü yoldu**: bayrak eleniyor ama DEĞERİ elenmiyordu, konumsal
+> argüman iki sayılıp `rc=2` dönüyordu (sınav kapsamı 0). Onarıldı; `--profil=<yol>` biçimi de
+> çalışır ve değeri eksik bayrak sessizce yutulmaz. Dizin düzeni varsayılan yolu tutturmayan
+> kutular (ölçülen vaka: AKAR) artık kapıyı koşturabilir.
 
 Niçin gerekli (ölçüldü): sözleşmeye **uyan** beş ekran mekanik kapıdan 5/5 geçti, ardından
 insan oturumu 11 madde çıkardı. Eksik boyut renk/tipografi değil **yoğunluk** ve
@@ -214,17 +220,50 @@ demez). Sebep: ölçülmemiş sayfanın üstüne bir sonraki sayfa çizilirse ha
 araç **RC=2** döner; varsayılan uydurup yanlış-yeşil vermez. Profildeki her sayı sözleşmede
 yazılı olanla aynı olmalı; sapma driftir.
 
+**Sözlük = ÇEKİRDEK ∪ PROFİL (0.3.0).** X2'nin kabul kümesi artık çekirdeğin Ç3 listesi ile
+profilin `sozluk`unun birleşimidir. Niçin: çekirdek prompta kendiliğinden giriyordu ama kapı
+yalnız profile bakıyordu; marka şablonu da bilerek *"çekirdeğin on adı zaten geçerlidir, buraya
+tekrar yazılmaz"* diyor → **kurala harfi harfine uyan ekran "sessiz icat" ile reddediliyordu.**
+Kural değişmedi, kapı kurala uyduruldu. 🔴 Karşılaştırma **tam eşleşmedir, casefold YOK** —
+ölçüldü: casefold üç iddiayı birden kırıyor (yüzey ayrımı tam eşlemeye dayanır). Çekirdek
+okunamazsa **RC=2**: profil-yalnız'a sessizce düşmek eski yanlış-KIRMIZI'yı geri getirirdi.
+
+**Üç rol artık profilden türetilir (`rol_adlari`, isteğe bağlı).** `Yan panel` (yüzey açar) ·
+`Gezinme` (X1 iskeleti) · `Örnek durumlar` (vitrin muafiyeti) araçta **koda gömülü ve
+harf-duyarlı** dizgilerdi; hiçbir profilden gelmiyor, hiçbir bekçi ölçmüyordu. Adlandırması
+farklı bir kutu (ölçülen vaka: HUZUR'un `NavCubugu`/`SayfaBasligi` yazımı) kendi profilini
+yazsa bile yüzey-ayrımı, X1 ve vitrin muafiyeti kırık kalıyordu. Alan vermeyen eski profiller
+aynen çalışır (varsayılan = çekirdek yazımı); bilinmeyen bir rol anahtarı **RC=2**'dir —
+yazım hatası, ölçülmemiş rol demektir.
+
+**`blok_turu` sessiz atlamaz (sahte-yeşil panzehiri).** Haritanın anahtarı sözlükte yoksa
+hiçbir işareti tutamaz; eski kod `if tur:` ile atlıyor, S2 bütçesi hiç ölçülmüyor ve kapı
+"temiz" diyordu. Artık: anahtar sözlük dışıysa **RC=2** (yapılandırma hatası, ihlal değil);
+harita geçerli ama kümede hiç tutmuyorsa **uyarı** basılır — "temiz" o boyutu kapsamıyor.
+
 **Ölçmediğini söyler:** tek-ekran anlamı (manşetin öznesi, görselin bilgi değeri) bu kapının
 konusu **değildir** ve çıktı bunu her koşuda yazar. Oraya "temiz" demez, hiç bakmaz.
 Kalibrasyon: reddedilmiş bir turun 4 ekranının 4'ünü düşürdü, onaylanmış turun 5 ekranına
-dokunmadı. Kapının kendi sınavı: `bash arac/yogunluk-denetle.test.sh` (19 kapı, negatif
+dokunmadı. Kapının kendi sınavı: `bash arac/yogunluk-denetle.test.sh` (35 kapı, negatif
 fikstürlü — fikstürsüz kapı devreye alınmaz).
 
-**Çift-yönlü fikstür:** `fikstur/panel-yesil/` ve `fikstur/panel-kirmizi/` aynı sayfanın iki
-yazımıdır — biri **yeşilde kalmalı**, öbürü **kırmızı yanmalı**. Tek yönlü fikstür yalnız
-katılaşmayı yakalar, **gevşemeyi yakalamaz**: yüzey ayrımı bozulursa yeşil yüz kırmızıya döner,
-ad-eşleme gevşerse (harf-duyarsız karşılaştırma) kırmızı yüz yeşile döner. İkisi birlikte iki
-yönü de kilitler. (Öneri: NAKKAŞ + MÜTEVELLİ, 2026-08-07.)
+**Çift-yönlü fikstür — hattın giriş şartı.** Her ölçüm hattı hem **KIRMIZI** (yanlışı yakalar)
+hem **ALTIN** (doğruyu geçirir) fikstürüyle gelir. Tek yönlü fikstür yalnız katılaşmayı yakalar,
+**gevşemeyi yakalamaz**. Sözlük çatalı tam da ALTIN tarafı olmadığı için yıllarca görünmedi.
+(Öneri: NAKKAŞ + MÜTEVELLİ, 2026-08-07.)
+
+| Çift | Yeşil yüz | Kırmızı yüz | Neyi kilitler |
+|---|---|---|---|
+| yüzey/yazım | `fikstur/panel-yesil/` | `fikstur/panel-kirmizi/` | yüzey ayrımı bozulursa yeşil düşer; ad-eşleme gevşerse (casefold) kırmızı yeşile döner |
+| sözlük birleşimi | `fikstur/altin/` | `fikstur/birlesim-kirmizi/` | çekirdek adları kabul edilmeli; ne çekirdekte ne markada olan ad **hâlâ X2** olmalı |
+| rol türetimi | `fikstur/rol/` + `rol-profili.json` | aynı bayt + `rol-yalin-profili.json` | üç rol koda geri gömülürse yeşil yüz S1+X1+X2 ile düşer |
+| sahte-yeşil | `fikstur/temiz/` (harita tutar) | `fikstur/g5-oksuz-profil.json` | ölçülmemiş S2 "temiz" sayılamaz |
+| anlam (yargı) | `fikstur/yargi/altin/` | `fikstur/yargi/kirmizi/` | rubrik her ekranı düşürür hâle gelirse ALTIN yakalar |
+
+`fikstur/altin/` **bilerek** çekirdeğin hiçbir adını içermeyen bir marka profiliyle koşar:
+birleşim kalkarsa fikstür anında kırmızı yanar. Negatif kanıt sınavda ayrıca ölçülür —
+çekirdekten bir ad düşürülünce ALTIN kırmızıya dönüyor mu (yoksa yeşili birleşime borçlu değil,
+birleşim süstür).
 
 **Bekçi — çekirdek ⟂ araç tek gerçek:** `python3 arac/cekirdek-sozluk-denetle.py`.
 Çekirdek sözleşmedeki (Ç3) her bileşen adı, aracın varsayılan sözlüğünde **harfi harfine**
@@ -267,7 +306,22 @@ düşürür; ölçülen hata sahte-yeşildi, asimetri kasıtlı).
   döngünün geri alamayacağı hatadır.
 - **tescil bağlantısı:** `--tescil-g G3` verildiğinde `--katman2 G3=GECTI|KALDI|EMIN-DEGILIM:not`
   sözcesini basar; öznel G elle değil mekanik doldurulur.
-- Kendi sınavı: `bash arac/yargi-birlestir.test.sh` (14 senaryo, ağsız/hermetik).
+- **Çekirdek prompta enjekte edilir (0.3.0).** `--sozlesme` kutunun **MARKA** dosyasıdır;
+  çekirdek (`cekirdek/sozlesme.md`) filo kuralıdır ve prompta kendiliğinden girer — gerekirse
+  `--cekirdek <yol>` ile taşınır, yoksa **RC=2** (yarım sözleşmeyle hüküm istenmez).
+  Niçin: panel çekirdeği **hiç** enjekte etmiyordu (`grep -c cekirdek` = 0), rubrik M1 de
+  "sözlük-dışı sessiz icat var mı" diye sorduğu için yargıç çekirdeğin on adını tanımsız görüp
+  icat sayabiliyordu — **mekanik X2 hatasının birebir LLM ikizi.** İstek gövdesi artık ayrı ve
+  sınanabilir bir dosyadadır (`arac/yargi-istek-yap.py`); gömülü heredoc'a hiçbir sınav
+  dokunamıyordu, ölçülmeyen yer sessizce bozulur.
+- Kendi sınavı: `bash arac/yargi-birlestir.test.sh` (17 senaryo, ağsız/hermetik). Hattın kendi
+  fikstürleri: `fikstur/yargi/altin/` (ayakta kalmalı) ⟂ `fikstur/yargi/kirmizi/` (düşmeli).
+  İkisi de **mekanik kapıdan rc=0** geçer — böylece bir yargı-kırmızısı kesinlikle anlam
+  boyutundandır, yoğunluk bulaşması değildir. (Kırmızı fikstür önceden `fikstur/kirli/`
+  içindeydi: çağıranı yoktu ve mekanik kümeye karışıp X1 kirliliği üretiyordu.)
+  ⚠️ **Ölçülmeyenin itirafı:** sınavdaki oylar ön-kayıtlı/sentetiktir (CI ağa çıkmaz). Kanıtlanan
+  şey zincirin bu fikstürlere verdiği hükümdür; canlı yargıcın onlara fiilen ne verdiği
+  ölçülmez — o, kapıya çıkan kalibrasyon koşusunun işidir.
 
 **Kalibrasyon (2026-08-07, ön-kayıtlı ölçütlerle):** kör panel, onaylanmış turun bilinen-kusurlu
 ekranında insan divanının üç maddesini bağımsız yakaladı; sağlam dört ekrana dokunmadı.

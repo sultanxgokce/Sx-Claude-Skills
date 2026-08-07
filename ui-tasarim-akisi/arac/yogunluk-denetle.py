@@ -16,7 +16,17 @@ KULLANIM
 PROFİL: kapının ölçtüğü SAYILAR projenin kendi sözleşmesinden gelir (çekirdek = kural,
 marka = değer). Profil yoksa kapı RC=2 döner — varsayılan uydurup yanlış-yeşil vermez.
 
-ÇIKIŞ: 0 temiz · 1 en az bir ihlal · 2 çalıştırılamadı (profil/dosya yok)
+SÖZLÜK = ÇEKİRDEK ∪ PROFİL (L57/F1): kabul edilen bileşen adları filo çekirdeğinin Ç3
+listesi ile projenin marka profilindeki `sozluk` listesinin BİRLEŞİMİDİR. Niçin: çekirdek
+prompta kendiliğinden giriyor (prompt-yap.sh) ama kapı yalnız profile bakıyordu → kurala
+harfi harfine uyan ekran "sessiz icat" suçlaması yiyordu (yanlış-KIRMIZI). Çekirdek adları
+ikinci bir ayrıştırıcıyla değil, bekçinin KENDİ `cekirdek_adlari()` fonksiyonuyla okunur —
+iki ayrıştırıcı iki gerçek demektir.
+  🔴 Karşılaştırma TAM eşleşmedir; casefold YOK. Ölçüldü (2026-08-07): casefold üç iddiayı
+  birden kırar — yüzey ayrımı `== "Yan panel"` tam eşlemesine dayanır, kasa gevşerse
+  `Yan Panel` de panel sayılır, bütçeler ayrışır, `panel-kirmizi` fikstürü yeşile döner.
+
+ÇIKIŞ: 0 temiz · 1 en az bir ihlal · 2 çalıştırılamadı (profil/çekirdek/dosya yok)
 
 ÖLÇÜM-DÜRÜSTLÜĞÜ (kalibrasyonda üç yanlış-pozitif sınıfı yakalanıp kapatıldı):
   • "Örnek durumlar" vitrini bütçe sayımlarının DIŞINDA — sözleşme o bölümü zaten
@@ -26,7 +36,20 @@ marka = değer). Profil yoksa kapı RC=2 döner — varsayılan uydurup yanlış
   • Koşul-farkındalığı: birbirini dışlayan şablon dallarındaki (sc-if) öğeler bütçeye
     sert sayılmaz; AYNI daldaki çift yine serttir, farklı dallar İNSAN-GÖZÜ notu olur.
 """
-import glob, json, os, re, sys
+import glob, importlib.util, json, os, re, sys
+
+BURASI = os.path.dirname(os.path.abspath(__file__))
+BEKCI_YOLU = os.path.join(BURASI, "cekirdek-sozluk-denetle.py")
+VARSAYILAN_CEKIRDEK = os.path.join(BURASI, "..", "cekirdek", "sozlesme.md")
+
+# ROL ADLARI (L57/F4 · G4): araç üç bileşen adını KODA GÖMÜLÜ ve harf-duyarlı tanıyordu
+# ("Yan panel" yüzey açar · "Gezinme" iskelet imzası · "Örnek durumlar" vitrin muafiyeti).
+# Hiçbir profilden gelmiyor, hiçbir bekçi ölçmüyordu → adlandırması farklı bir kutu (ölçülen
+# vaka: HUZUR'un `NavCubugu`/`SayfaBasligi` yazımı) kendi profilini yazsa bile X1 ve
+# yüzey-ayrıştırma kırık kalıyordu. Artık profil `rol_adlari` ile bunları yeniden bağlayabilir.
+# İSTEĞE BAĞLI alandır — vermeyen eski profiller aynen çalışır (varsayılan = çekirdek yazımı).
+ROL_VARSAYILAN = {"panel": "Yan panel", "gezinme": "Gezinme", "vitrin": "Örnek durumlar"}
+ISTEGE_BAGLI = {"rol_adlari"}
 
 ORNEK_PROFIL = {
     "_aciklama": "Kapının ölçtüğü sayılar. Kaynak: projenin tasarım dili sözleşmesi. "
@@ -45,11 +68,34 @@ ORNEK_PROFIL = {
                "Başlık şeridi", "Veri tablosu", "Ölçü kartı", "Dipnot"],
     "blok_turu": {"Veri tablosu": "liste", "Ölçü kartı": "kart", "Bilgi şeridi": "şerit"},
     "yasak_dil": ["tasarruf", "kazan[cç]"],
+    # İSTEĞE BAĞLI (bkz ROL_VARSAYILAN): kutunun kendi yazımı farklıysa buradan bağlanır.
+    "rol_adlari": dict(ROL_VARSAYILAN),
 }
 
 MARKER = re.compile(r"<!--\s*bilesen:\s*([^->]+?)\s*(?:—\s*([^->]*?)\s*)?-->")
 FONT_PX = re.compile(r"font-size:\s*([0-9.]+)px")
 RADIUS_PX = re.compile(r"border-radius:\s*([0-9]+)px")
+
+
+def cekirdek_adlari_yukle(yol=None):
+    """Çekirdek Ç3 adları — BEKÇİNİN kendi ayrıştırıcısıyla (ikinci ayrıştırıcı YAZILMAZ).
+
+    Hata yutulmaz: sözleşme okunamıyorsa çağıran RC=2 döndürür. Sessizce "profil-yalnız"a
+    düşmek, kapıyı fark ettirmeden eski yanlış-KIRMIZI davranışına geri sokardı."""
+    spec = importlib.util.spec_from_file_location("_cekirdek_sozluk_denetle", BEKCI_YOLU)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return set(mod.cekirdek_adlari(yol or VARSAYILAN_CEKIRDEK))
+
+
+def sozluk_kumesi(P):
+    """Kabul edilen bileşen adları = çekirdek ∪ profil (TAM eşleşme, casefold YOK)."""
+    return set(P["sozluk"]) | set(P.get("_cekirdek", ()))
+
+
+def rol(P, anahtar):
+    """Koda gömülü bileşen adı yerine profilden türetilmiş rol adı (F4/G4)."""
+    return dict(ROL_VARSAYILAN, **(P.get("rol_adlari") or {}))[anahtar]
 
 
 def govde(icerik):
@@ -58,21 +104,21 @@ def govde(icerik):
     return re.sub(r"<script\b.*?</script>", "", icerik, flags=re.S)
 
 
-def ornek_disi(metin):
+def ornek_disi(metin, vitrin_ad=ROL_VARSAYILAN["vitrin"]):
     while True:
-        m = next((x for x in MARKER.finditer(metin) if x.group(1).strip() == "Örnek durumlar"), None)
+        m = next((x for x in MARKER.finditer(metin) if x.group(1).strip() == vitrin_ad), None)
         if m is None:
             return metin
         son = metin.find("</section>", m.end())
         metin = metin[:m.start()] + (metin[son + len("</section>"):] if son != -1 else "")
 
 
-def yuzeyler(metin):
+def yuzeyler(metin, panel_ad=ROL_VARSAYILAN["panel"]):
     """[(ad, parça)] — arka-sayfa + her ana/varyant yan-panel ayrı yüzey.
     'sahne'/'örtü' ekli işaretler sarmalayıcıdır, yüzey açmaz."""
     baslar = [(m.start(), "panel:" + ((m.group(2) or "").lower()[:28] or "adsız"))
               for m in MARKER.finditer(metin)
-              if m.group(1).strip() == "Yan panel"
+              if m.group(1).strip() == panel_ad
               and not any(k in (m.group(2) or "").lower() for k in ("sahne", "örtü"))]
     if not baslar:
         return [("sayfa", metin)]
@@ -93,9 +139,9 @@ def kapsayan(poz, arlar):
     return ic[-1] if ic else None
 
 
-def gezinme_imzasi(metin):
+def gezinme_imzasi(metin, gezinme_ad=ROL_VARSAYILAN["gezinme"]):
     for m in MARKER.finditer(metin):
-        if m.group(1).strip() == "Gezinme":
+        if m.group(1).strip() == gezinme_ad:
             son = MARKER.search(metin, m.end())
             blok = metin[m.end(): son.start() if son else m.end() + 4000]
             kok = re.search(r"<([a-z]+)", blok)
@@ -114,12 +160,13 @@ def rozet_metinleri(ham):
 def ekran_denetle(yol, P):
     ham = open(yol, encoding="utf-8").read()
     metin = govde(ham)
-    temiz = ornek_disi(metin)
+    temiz = ornek_disi(metin, rol(P, "vitrin"))
     ihlaller, notlar = [], []
+    blok_eslesme = 0          # F4/G5: S2 hattı bu ekranda hiç ateşlendi mi (sahte-yeşil izi)
     renk = re.escape(P["birincil_renk"].lstrip("#"))
     birincil_desen = re.compile(r"background(-color)?:\s*#%s" % renk, re.I)
 
-    for yuzey_ad, parca in yuzeyler(temiz):
+    for yuzey_ad, parca in yuzeyler(temiz, rol(P, "panel")):
         scfor, scif = araliklar(parca, "sc-for"), araliklar(parca, "sc-if")
 
         buyuk = [(m.start(), m.group(1)) for m in FONT_PX.finditer(parca)
@@ -134,6 +181,7 @@ def ekran_denetle(yol, P):
         for m in MARKER.finditer(parca):
             tur = P["blok_turu"].get(m.group(1).strip())
             if tur:
+                blok_eslesme += 1
                 (turler if kapsayan(m.start(), scif) is None else kosullu).add(tur)
         if len(turler) > P["blok_tur_butce"]:
             ihlaller.append("S2[%s] blok-türü: %d tür (%s) — bütçe %d" %
@@ -171,9 +219,9 @@ def ekran_denetle(yol, P):
                         (",".join(f_disi), "/".join(P["font_kademeleri"])))
 
     adlar = [m.group(1).strip() for m in MARKER.finditer(metin)]
-    # "Örnek durumlar" aracın KENDİ protokol adıdır (vitrin muafiyeti onunla çalışır) →
-    # projenin sözlüğünde olmasa da sessiz-icat sayılmaz.
-    disi = sorted({a for a in adlar if a not in set(P["sozluk"]) | {"Örnek durumlar"}
+    # Kabul kümesi = ÇEKİRDEK ∪ PROFİL (F1) + aracın KENDİ vitrin protokol adı (o ad
+    # projenin sözlüğünde olmasa da sessiz-icat sayılmaz — vitrin muafiyeti onunla çalışır).
+    disi = sorted({a for a in adlar if a not in sozluk_kumesi(P) | {rol(P, "vitrin")}
                    and "bildirilen" not in a.lower()})
     if disi:
         ihlaller.append("X2 sözlük-dışı bileşen adı (sessiz icat): %s" % ", ".join(disi))
@@ -182,16 +230,68 @@ def ekran_denetle(yol, P):
         if es:
             ihlaller.append("X3 yasak dil: %r ×%d" % (es[0], len(es)))
 
-    return {"ihlaller": ihlaller, "notlar": notlar,
-            "gezinme": gezinme_imzasi(metin), "rozetler": rozet_metinleri(ham)}
+    return {"ihlaller": ihlaller, "notlar": notlar, "blok_eslesme": blok_eslesme,
+            "isaret": len(adlar),
+            "gezinme": gezinme_imzasi(metin, rol(P, "gezinme")),
+            "rozetler": rozet_metinleri(ham)}
 
 
 def profil_yukle(yol):
     P = json.load(open(yol, encoding="utf-8"))
-    eksik = [k for k in ORNEK_PROFIL if not k.startswith("_") and k not in P]
+    eksik = [k for k in ORNEK_PROFIL
+             if not k.startswith("_") and k not in ISTEGE_BAGLI and k not in P]
     if eksik:
         raise KeyError("profilde eksik alan: %s" % ", ".join(eksik))
+    bilinmeyen = [k for k in (P.get("rol_adlari") or {}) if k not in ROL_VARSAYILAN]
+    if bilinmeyen:
+        raise KeyError("rol_adlari'nda bilinmeyen rol: %s (izinli: %s)"
+                       % (", ".join(sorted(bilinmeyen)), ", ".join(sorted(ROL_VARSAYILAN))))
     return P
+
+
+def profil_tutarlilik(P):
+    """F4/G5 — SAHTE-YEŞİL PANZEHİRİ (profil düzeyi).
+
+    `blok_turu` haritasının anahtarı sözlükte yoksa o anahtar HİÇBİR işareti tutamaz;
+    S2 (blok-türü bütçesi) hattı sessizce hiç ateşlenmez ve kapı 'temiz' der. Eski kod
+    `if tur:` ile sessizce atlıyordu → ölçülmemiş bütçe 'geçti' gibi görünüyordu.
+    Bu bir yapılandırma hatasıdır, ihlal değil: kapı RC=2 ile ÖLÇEMEDİĞİNİ söyler."""
+    kume = sozluk_kumesi(P)
+    oksuz = sorted(k for k in P["blok_turu"] if k not in kume)
+    if oksuz:
+        raise KeyError("blok_turu anahtarı sözlükte (çekirdek ∪ profil) YOK: %s — "
+                       "bu anahtar hiçbir işareti tutamaz, S2 bütçesi sessizce ölçülmez "
+                       "(sahte-yeşil)" % ", ".join(oksuz))
+
+
+DEGERLI_BAYRAKLAR = ("--profil", "--cekirdek")
+
+
+def bayrak_ayikla(argv):
+    """(konumsal-argümanlar, {bayrak: değer}) — F3/G6 onarımı.
+
+    Eski kod `[a for a in argv if not a.startswith('--')]` diyordu: bayrağı eliyor ama
+    DEĞERİNİ elemiyordu → `--profil <yol>` verilince yol da konumsal sayılıyor, sayı 2
+    oluyor, ilan edilmiş bayrak RC=2 ile ölü yol hâline geliyordu. Hem `--bayrak deger`
+    hem `--bayrak=deger` biçimi kabul edilir; değeri eksik bayrak sessizce yutulmaz."""
+    konum, deger, i = [], {}, 0
+    while i < len(argv):
+        a = argv[i]
+        if a in DEGERLI_BAYRAKLAR:
+            if i + 1 >= len(argv):
+                raise ValueError("%s bayrağının değeri eksik" % a)
+            deger[a] = argv[i + 1]
+            i += 2
+            continue
+        eslesen = next((b for b in DEGERLI_BAYRAKLAR if a.startswith(b + "=")), None)
+        if eslesen:
+            deger[eslesen] = a.split("=", 1)[1]
+            i += 1
+            continue
+        if not a.startswith("--"):
+            konum.append(a)
+        i += 1
+    return konum, deger
 
 
 def main(argv):
@@ -199,12 +299,16 @@ def main(argv):
         json.dump(ORNEK_PROFIL, sys.stdout, ensure_ascii=False, indent=1)
         print()
         return 0
-    args = [a for a in argv if not a.startswith("--")]
+    try:
+        args, bayrak = bayrak_ayikla(argv)
+    except ValueError as e:
+        print("RC=2 ÇALIŞTIRILAMADI — %s" % e, file=sys.stderr)
+        return 2
     if len(args) != 1:
         print(__doc__.split("KULLANIM")[1].split("PROFİL")[0].strip(), file=sys.stderr)
         return 2
     kok = args[0].rstrip("/")
-    pyol = argv[argv.index("--profil") + 1] if "--profil" in argv else \
+    pyol = bayrak.get("--profil") or \
         os.path.join(os.path.dirname(kok) or ".", "kapi-profili.json")
     if not os.path.isfile(pyol):
         print("RC=2 ÇALIŞTIRILAMADI — kapı profili yok: %s" % pyol, file=sys.stderr)
@@ -215,6 +319,22 @@ def main(argv):
         P = profil_yukle(pyol)
     except Exception as e:
         print("RC=2 ÇALIŞTIRILAMADI — profil okunamadı: %s" % e, file=sys.stderr)
+        return 2
+
+    cyol = bayrak.get("--cekirdek") or os.environ.get("UI_AKIS_CEKIRDEK") or VARSAYILAN_CEKIRDEK
+    try:
+        P["_cekirdek"] = cekirdek_adlari_yukle(cyol)
+    except Exception as e:
+        print("RC=2 ÇALIŞTIRILAMADI — çekirdek sözleşme okunamadı: %s: %s"
+              % (type(e).__name__, e), file=sys.stderr)
+        print("   kapı sözlüğü ÇEKİRDEK ∪ PROFİL'dir; çekirdek okunamazsa ölçüm yapılmaz "
+              "(profil-yalnız'a sessizce düşmek eski yanlış-KIRMIZI'yı geri getirirdi).",
+              file=sys.stderr)
+        return 2
+    try:
+        profil_tutarlilik(P)
+    except Exception as e:
+        print("RC=2 ÇALIŞTIRILAMADI — profil kendiyle tutarsız: %s" % e, file=sys.stderr)
         return 2
 
     dosyalar = sorted(glob.glob(kok + "/*.html"))
@@ -231,7 +351,7 @@ def main(argv):
         taban = max(sayim, key=sayim.get)
         for ad, s in sonuc.items():
             if s["gezinme"] is None:
-                s["ihlaller"].append("X1 gezinme: Gezinme bileşeni YOK")
+                s["ihlaller"].append("X1 gezinme: %s bileşeni YOK" % rol(P, "gezinme"))
             elif sayim[taban] == 1:
                 s["notlar"].append("X1: her ekranın gezinmesi FARKLI — küme tutarsız")
             elif s["gezinme"] != taban:
@@ -258,6 +378,14 @@ def main(argv):
             print("      ~ %s" % n)
     kirmizi = sum(1 for s in sonuc.values() if s["ihlaller"])
     print("=" * 72)
+    # F4/G5 — küme düzeyi sahte-yeşil izi: profilde blok_turu haritası VAR, ekranlarda
+    # işaret VAR, ama tek bir eşleşme bile olmadı → S2 bütçesi bu kümede hiç ölçülmedi.
+    # (Anahtarlar sözlükteyse profil_tutarlilik susar; asıl kayma ekran adlandırmasındadır.)
+    if P["blok_turu"] and sum(s["isaret"] for s in sonuc.values()) \
+            and not sum(s["blok_eslesme"] for s in sonuc.values()):
+        print("⚠️  UYARI: blok_turu haritası bu kümede HİÇ tutmadı (%s) — S2 blok-türü "
+              "bütçesi ölçülmedi; 'temiz' bu boyutu KAPSAMIYOR (sahte-yeşil riski)."
+              % ", ".join(sorted(P["blok_turu"])), file=sys.stderr)
     print("KÜME: %d ekran · %d kırmızı · profil: %s" % (len(sonuc), kirmizi, pyol))
     print("NOT: bu kapı tek-ekran ANLAMINI ölçmez (manşet, bilgi değeri) — ona hiç bakmadı.")
     return 1 if kirmizi else 0

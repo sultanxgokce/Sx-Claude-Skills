@@ -1,0 +1,34 @@
+{
+ "_aciklama": "ALTIN fikstürünün profili — BİLEREK yalnız MARKA adları taşır, çekirdeğin ON adının HİÇBİRİNİ içermez. Niçin: kapının sözlüğü ÇEKİRDEK ∪ PROFİL olmazsa bu profil altındaki ALTIN ekranı X2 'sessiz icat' ile reddedilir. Yani bu dosya F1 birleşiminin canlı kanıtıdır: birleşim kalkarsa fikstür anında KIRMIZI yanar. Aynı zamanda --profil bayrağının (F3) tek çağıranıdır.",
+ "buyuk_punto_taban": 25.0,
+ "buyuk_sayi_butce": 3,
+ "blok_tur_butce": 2,
+ "font_kademeleri": [
+  "12.5",
+  "14.5",
+  "16.5",
+  "21",
+  "25"
+ ],
+ "radius_kumesi": [
+  "0",
+  "8",
+  "10",
+  "999"
+ ],
+ "birincil_renk": "#8a5a2b",
+ "sozluk": [
+  "Veri tablosu",
+  "Ölçü kartı",
+  "Başlık şeridi",
+  "Dipnot"
+ ],
+ "blok_turu": {
+  "Veri tablosu": "liste",
+  "Ölçü kartı": "kart"
+ },
+ "yasak_dil": [
+  "tasarruf",
+  "kazan[cç]"
+ ]
+}

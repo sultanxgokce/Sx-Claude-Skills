@@ -173,6 +173,97 @@ yanit "$D" YOKEKRAN kimi "$(SEMA "$(M M1 0 "$Q1")")"
 kapi "öksüz yanıt → rc=2" 2 python3 "$BIRLESTIR" --rubrik "$RUBRIK" --yanit "$D" --ekran-dir "$T/ekran"
 icerir "ekran HTML'i yok uyarısı" "ekran HTML'i bulunamadı"
 
+# ══ L57/F5 · YARGI KATMANININ FİKSTÜRLERİ VE ÇAĞIRANI ════════════════════════
+# Bu bölüme kadar sınav yalnız SENTETİK oylarla zinciri ölçüyordu; hattın kendi
+# fikstürleri (ALTIN + KIRMIZI ekran) ya yoktu ya da çağıranı yoktu. Ağ hâlâ
+# kullanılmaz: LLM'in yerine ön-kayıtlı oy konur, ölçülen şey ZİNCİRİN o fikstürlere
+# verdiği hükümdür.
+ISTEK="$ARAC/yargi-istek-yap.py"
+KAPI="$ARAC/yogunluk-denetle.py"
+FIK="$ARAC/fikstur"
+CEK="$ARAC/../cekirdek/sozlesme.md"
+YALTIN="$FIK/yargi/altin/E1-bulgu-dili.html"
+YKIRMIZI="$FIK/yargi/kirmizi/M2-borc-dili.html"
+
+echo "── 15 · yargı fikstürleri MEKANİK olarak temiz (yargı-kırmızısı anlam boyutundandır)"
+kapi "ALTIN mekanik rc=0" 0 python3 "$KAPI" "$FIK/yargi/altin" --profil "$FIK/kapi-profili.json"
+kapi "M2 KIRMIZI mekanik rc=0" 0 python3 "$KAPI" "$FIK/yargi/kirmizi" --profil "$FIK/kapi-profili.json"
+# NİÇİN: M2 fikstürü önceden fikstur/kirli/ içindeydi; orada mekanik kümeye katılıp X1
+# gezinme kirliliği üretiyor, "yargıyı izole ediyorum" iddiasını çürütüyordu.
+
+echo "── 16 · istek gövdesi: ÇEKİRDEK prompta fiilen giriyor mu (M1'in çatalı)"
+kapi "gövde kuruldu" 0 python3 "$ISTEK" --rubrik "$RUBRIK" --ekran "$YALTIN" \
+     --model "raf/x" --out "$T/govde.json" --cekirdek "$CEK"
+PROMPT="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["messages"][0]["content"])' "$T/govde.json")"
+for AD in "Liste satırı" "Form alanı" "Onay diyaloğu" "Sayfa başlığı"; do
+  if printf '%s' "$PROMPT" | grep -qF -- "$AD"; then
+    echo "  ✓ çekirdek adı promptta: $AD"; GECTI=$((GECTI + 1))
+  else
+    echo "  ✗ çekirdek adı promptta YOK: $AD — M1 onu 'sessiz icat' sanar"; KALDI=$((KALDI + 1))
+  fi
+done
+if printf '%s' "$PROMPT" | grep -qF "ÇEKİRDEK SÖZLEŞME"; then
+  echo "  ✓ çekirdek bölümü etiketli (yargıç hangi parçanın filo kuralı olduğunu görür)"
+  GECTI=$((GECTI + 1))
+else
+  echo "  ✗ çekirdek bölüm başlığı yok"; KALDI=$((KALDI + 1))
+fi
+if printf '%s' "$PROMPT" | grep -qF "$(head -c 60 "$YALTIN" | tail -c 20)"; then
+  echo "  ✓ ekran gövdesi promptta"; GECTI=$((GECTI + 1))
+else
+  echo "  ✗ ekran gövdesi promptta yok"; KALDI=$((KALDI + 1))
+fi
+
+echo "── 16b · çekirdek okunamazsa gövde YAZILMAZ (yarım sözleşmeyle hüküm istenmez)"
+kapi "çekirdeksiz → rc=2" 2 python3 "$ISTEK" --rubrik "$RUBRIK" --ekran "$YALTIN" \
+     --model "raf/x" --out "$T/olmaz.json" --cekirdek "$T/yok.md"
+if [ ! -f "$T/olmaz.json" ]; then
+  echo "  ✓ gövde dosyası hiç oluşmadı"; GECTI=$((GECTI + 1))
+else
+  echo "  ✗ rc=2 dendi ama gövde YAZILDI — kapıya yarım prompt gidebilir"; KALDI=$((KALDI + 1))
+fi
+
+echo "── 17 · ÇİFT YÖNLÜ HÜKÜM: ALTIN ayakta kalır, M2 düşer (aynı oy şeması)"
+# M2 alıntısı KIRMIZI ekranda birebir vardır; ALTIN ekranda kendi manşeti alıntılanır.
+QK="Bugün 119 iş dikkat istiyor"
+QA="Dört sözleşmede fazla ödeme bulundu"
+mkdir -p "$T/ek-altin" "$T/ek-kirmizi"
+cp "$YALTIN" "$T/ek-altin/E1.html"; cp "$YKIRMIZI" "$T/ek-kirmizi/E1.html"
+
+D="$T/y-yargi-altin"
+for J in kimi glm; do
+  yanit "$D" E1 "$J" "$(SEMA "$(M M1 2 "$QA")" "$(M M2 2 "$QA")" "$(M M3 2 "$QA")" \
+                            "$(M M4 2 "$QA")" "$(M M5 2 "$QA")" "$(M M6 2 "$QA")")"
+done
+kapi "ALTIN → RED değil (rc=0)" 0 python3 "$BIRLESTIR" --rubrik "$RUBRIK" --yanit "$D" --ekran-dir "$T/ek-altin"
+
+# EŞİK DÜZELTMESİ (ilk yazdığım iddia YANLIŞTI, kriteri değil testi düzelttim):
+# rubrik `red_esigi: 3` diyor — RED için geçerli-alıntılı ÜÇ sıfır gerekir. Tek M2=0
+# RED üretmez, üretmemelidir. Aşağıdaki panel rubriğin kendi kalibrasyon kaydındaki üç
+# maddeyi kullanır (manşetin öznesi M2 · manşetin evi M4 · payda görünürlüğü M6).
+D="$T/y-yargi-kirmizi"
+for J in kimi glm; do
+  yanit "$D" E1 "$J" "$(SEMA "$(M M1 2 "$QK")" "$(M M2 0 "$QK")" "$(M M3 2 "$QK")" \
+                            "$(M M4 0 "$QK")" "$(M M5 2 "$QK")" "$(M M6 0 "$QK")")"
+done
+kapi "M2 fikstürü → RED (rc=1)" 1 python3 "$BIRLESTIR" --rubrik "$RUBRIK" --yanit "$D" --ekran-dir "$T/ek-kirmizi"
+icerir "düşen madde M2" "↓ M2"
+
+echo "── 17b · EŞİK ALTI dürüstlüğü: tek M2=0 RED DEĞİLDİR ama sessiz de geçmez"
+D="$T/y-yargi-tekil"
+for J in kimi glm; do
+  yanit "$D" E1 "$J" "$(SEMA "$(M M1 2 "$QK")" "$(M M2 0 "$QK")" "$(M M3 2 "$QK")" \
+                            "$(M M4 2 "$QK")" "$(M M5 2 "$QK")" "$(M M6 2 "$QK")")"
+done
+kapi "tek sıfır → KIRMIZI-DEĞİL (rc=0)" 0 python3 "$BIRLESTIR" --rubrik "$RUBRIK" \
+     --yanit "$D" --ekran-dir "$T/ek-kirmizi"
+icerir "rc=0 olsa da düşen madde raporlanır" "↓ M2"
+
+# ⚠️ ÖLÇÜLMEYENİN İTİRAFI: yukarıdaki oylar ÖN-KAYITLI/sentetiktir (CI ağa çıkmaz).
+# Kanıtlanan şey ZİNCİRİN bu fikstürlere verdiği hükümdür; canlı yargıcın M2 fikstürüne
+# fiilen 0 verip vermediği burada ÖLÇÜLMEZ — o, `yargi-panel.sh` ile kapıya çıkan
+# kalibrasyon koşusunun işidir.
+
 echo
 echo "TOPLAM: $GECTI geçti · $KALDI kaldı"
 [ "$KALDI" -eq 0 ]

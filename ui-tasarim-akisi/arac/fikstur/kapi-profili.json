@@ -1,5 +1,5 @@
 {
- "_aciklama": "Kapının ölçtüğü sayılar. Kaynak: projenin tasarım dili sözleşmesi. Buradaki her değer sözleşmede yazılı olanla AYNI olmalı; sapma driftir.",
+ "_aciklama": "Kapının ölçtüğü sayılar. Kaynak: projenin tasarım dili sözleşmesi. Buradaki her değer sözleşmede yazılı olanla AYNI olmalı; sapma driftir. · G3 (L57/F2): çekirdek Ç3'ün on adı burada TAM bulunmalıdır — becerinin KENDİ fikstür profili çekirdeğe uymazsa 140 sınavın hiçbiri öz-tutarsızlığı görmez.",
  "buyuk_punto_taban": 25.0,
  "buyuk_sayi_butce": 3,
  "blok_tur_butce": 2,
@@ -27,7 +27,11 @@
   "Düğme",
   "Dipnot",
   "Boş durum",
-  "Bilgi şeridi"
+  "Bilgi şeridi",
+  "Sayfa başlığı",
+  "Liste satırı",
+  "Form alanı",
+  "Onay diyaloğu"
  ],
  "blok_turu": {
   "Veri tablosu": "liste",
