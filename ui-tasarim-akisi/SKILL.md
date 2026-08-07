@@ -1,7 +1,7 @@
 ---
 name: ui-tasarim-akisi
 type: agent
-version: 0.1.1
+version: 0.1.2
 description: >
   Bir ürünün ekranlarını sıfırdan tasarlama akışı: sayfa envanteri → kullanıcı senaryoları →
   Claude design promptu → devam promptu ile kalan sayfalar. Proje-bağımsız.
@@ -85,6 +85,38 @@ kurmaz, yalnız tüketir.
 3. **Tık sayımı** — senaryodaki hedef tutmuş mu. Aşım **sessiz geçilmez**: ya tasarım revize
    edilir ya hedef gerekçeyle güncellenir.
 
+**1. ve 2. denetimin mekanik gövdesi + yoğunluk:** `arac/yogunluk-denetle.py <ekran-dizini>`
+
+```
+python3 arac/yogunluk-denetle.py --profil-ornek > tasarim/kapi-profili.json   # bir kez
+python3 arac/yogunluk-denetle.py tasarim/ciktilar ; echo rc=$?                # her sayfadan sonra
+```
+
+Niçin gerekli (ölçüldü): sözleşmeye **uyan** beş ekran mekanik kapıdan 5/5 geçti, ardından
+insan oturumu 11 madde çıkardı. Eksik boyut renk/tipografi değil **yoğunluk** ve
+**ekranlar-arası tutarlılık**tı — ikisi de deterministik ölçülebiliyormuş, kimse ölçmüyordu.
+
+| Kod | Ne ölçer |
+|---|---|
+| S1 | büyük-sayı bütçesi (yüzey başına) |
+| S2 | blok-türü bütçesi (yüzey başına) |
+| S3 | tek birincil eylem (koşulsuz olanlar sert) |
+| S4/S5 | köşe-yarıçapı ve font kademe kümesi — beşinci kademe icadı |
+| X1 | gezinme iskeleti ekrandan ekrana aynı mı |
+| X2 | sözlük-dışı bileşen adı (sessiz icat) |
+| X3 | ürünün yasak dili |
+| X4 | aynı durumun iki farklı yazımı (küme geneli) |
+
+**Sayılar profilden gelir, araçtan değil** — çekirdek kuraldır, değer markadır. Profil yoksa
+araç **RC=2** döner; varsayılan uydurup yanlış-yeşil vermez. Profildeki her sayı sözleşmede
+yazılı olanla aynı olmalı; sapma driftir.
+
+**Ölçmediğini söyler:** tek-ekran anlamı (manşetin öznesi, görselin bilgi değeri) bu kapının
+konusu **değildir** ve çıktı bunu her koşuda yazar. Oraya "temiz" demez, hiç bakmaz.
+Kalibrasyon: reddedilmiş bir turun 4 ekranının 4'ünü düşürdü, onaylanmış turun 5 ekranına
+dokunmadı. Kapının kendi sınavı: `bash arac/yogunluk-denetle.test.sh` (12 kapı, negatif
+fikstürlü — fikstürsüz kapı devreye alınmaz).
+
 ## Değişmezler
 
 - **Tasarım Claude design'da üretilir.** Bu metot promptu kurar, tasarımı üretmez.
@@ -114,8 +146,11 @@ kurmaz, yalnız tüketir.
 
 ## Sınırlar / dürüstlük
 
-- Bu metot **kod içermez**; bir talimat akışıdır. Tek istisna `arac/prompt-yap.sh` — o da yalnız
-  yuva doldurur.
+- Bu metot ağırlıkla bir **talimat akışı**dır; `arac/` altındaki iki araç dışında kod içermez.
+  `prompt-yap.sh` yalnız yuva doldurur; `yogunluk-denetle.py` yalnız ölçer — ikisi de tasarım
+  üretmez, tasarım hakkında yorum yapmaz.
+- `yogunluk-denetle.py` **tarayıcı çalıştırmaz, LLM'e sormaz.** Gerçek tık sayımı, erişilebilirlik
+  denetimi ve görsel-kalite yargısı kapsamı dışındadır; bunları "temiz" diye raporlamaz.
 - Claude design'a **erişim** bu metodun konusu değil. Erişim yoksa promptlar elle yapıştırılır;
   akış aynen çalışır.
 - Çıktı biçimi platformun kendi biçimidir. "Tek bağımsız HTML" isteyip bileşen dosyası almak
