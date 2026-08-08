@@ -38,6 +38,19 @@ import sys
 
 SEMA_V = 1
 
+# Bilinen inşa-durumları. `layiha-defteri.sh durum` bu kümeyi YAZMA anında zorluyordu
+# (:134) — ama okuma tarafında hiçbir kapı yoktu. Sonuç: başka yoldan giren (elle
+# düzenleme · dışarıdan üretilmiş satır · kural konmadan önceki kayıt) bilinmeyen bir
+# değer SESSİZCE kabul ediliyordu.
+# Firsthand vaka (L44, 2026-08-08): durum="insa-tamam" — sözlükte YOK. Etkisi
+# görünmezlik DEĞİL, KALICI-AKTİFLİK: terminal sayılmadığı için `--aktif`te sonsuza
+# dek "yapılacak iş" gibi duruyor, ama `insa-edildi` de olmadığı için kuyruk-değişmezi
+# onu tescile de sokmuyor → iki yönlü sıkışma, kimse fark etmiyor.
+# Karar: DÜZELTMİYORUZ, GÖRÜNÜR KILIYORUZ. Değeri tahmin edip yeniden yazmak niyet
+# uydurmaktır (K7 kanıt-kapısının ihlali); doğru davranış onu işaretleyip insana/ajana
+# göstermek. "Kayıp meşru olabilir, GÖRÜNMEZ olamaz."
+DURUMLAR = ("insa-bekliyor", "insa-ediliyor", "insa-edildi")
+
 # Kabul edilen kanıt biçimleri (K7). Üçünden biri tutmalı:
 _KANIT_PR_NO = re.compile(r"^#\d+$")                    # PR referansı: #123
 _KANIT_URL = re.compile(r"^https?://\S+$")              # PR/commit URL'i
@@ -175,6 +188,18 @@ def oku(led, norm=True, kilitle=False):
         if r.get("durum") == "insa-edildi" and (r["tescil"].get("durum") or "yok") == "yok":
             r["tescil"]["durum"] = "bekliyor"
             degisti = True
+        # ŞEMA-DIŞI DURUM KAPISI (2026-08-08): tanımadığımız değeri sessizce geçirmiyoruz.
+        # Kayıt DEĞİŞTİRİLMEZ (degisti=True yapılmaz) — yalnız bellekte işaretlenir ve
+        # stderr'de bir kez duyurulur. Böylece `liste` onu ⚠️ ile gösterir, `durum` komutu
+        # ise düzeltmeyi normal kanıt-kapısından geçerek yapar.
+        if r.get("durum") not in DURUMLAR:
+            r["_sema_disi_durum"] = True
+            sys.stderr.write(
+                "⚠️  şema-dışı durum: %s → %r (bilinen: %s)\n"
+                "    Bu kayıt ne aktif-kuyruğa ne tescil-kuyruğuna doğru düşer. Düzeltme:\n"
+                "    layiha-defteri.sh durum %s <insa-bekliyor|insa-ediliyor|insa-edildi> [--kanit <ref>]\n"
+                % (r.get("id", "?"), r.get("durum"), "|".join(DURUMLAR), r.get("id", "?"))
+            )
     return recs, degisti
 
 

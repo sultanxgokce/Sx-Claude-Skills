@@ -286,6 +286,30 @@ esit "G14h ekle --durum insa-edildi kanıtsız rc=2" "2" "$?"
 sut14 ekle --slug arka-kapi --konu "Arka kapi" --dokuman d.md --durum insa-edildi --kanit "#7" >/dev/null 2>&1
 esit "G14h kanıtla geçti" "0" "$?"
 
+# ── G15 · ŞEMA-DIŞI DURUM KAPISI (2026-08-08, L44 vakası) ────────────────────────────────
+# Yazma kapısı (:134) zaten vardı; okuma tarafında YOKTU. Başka yoldan giren bilinmeyen
+# değer sessizce kabul ediliyordu. Etkisi görünmezlik DEĞİL, KALICI-AKTİFLİK: terminal
+# sayılmadığı için --aktif'te sonsuza dek duruyor, insa-edildi olmadığı için tescile de girmiyor.
+D15="$T/sema-disi.jsonl"; K15="$T/kok15"; mkdir -p "$K15"
+printf '%s\n' '{"v":1,"id":"L01","slug":"saglam","konu":"Saglam kayit","durum":"insa-bekliyor","tarih":"2026-08-01","tescil":{"durum":"yok"},"proje":"T"}' > "$D15"
+printf '%s\n' '{"v":1,"id":"L02","slug":"bozuk","konu":"Sema disi kayit","durum":"insa-tamam","tarih":"2026-08-01","tescil":{"durum":"yok"},"proje":"T"}' >> "$D15"
+sut15() { LAYIHA_DEFTER="$D15" HAT_ROOT="$K15" bash "$SUT" "$@"; }
+ONCE15="$(sha256sum "$D15" | cut -d' ' -f1)"
+
+esit "G15a şema-dışı kayıt stderr'de duyuruluyor" "1" \
+  "$(sut15 liste --hepsi 2>&1 >/dev/null | grep -c 'şema-dışı durum: L02')"
+esit "G15b uyarı DÜZELTME REÇETESİ veriyor" "1" \
+  "$(sut15 liste --hepsi 2>&1 >/dev/null | grep -c 'layiha-defteri.sh durum L02')"
+esit "G15c liste SATIRINDA da görünüyor (stderr yeterli değil)" "1" \
+  "$(sut15 liste --hepsi 2>/dev/null | grep -c 'ŞEMA-DIŞI')"
+esit "G15d sağlam kayıt ETKİLENMİYOR (yanlış-pozitif yok)" "0" \
+  "$(sut15 liste --hepsi 2>&1 >/dev/null | grep -c 'şema-dışı durum: L01')"
+esit "G15e kapı SALT-OKUR — kayıt düzeltilmiyor, defter değişmiyor" "$ONCE15" \
+  "$(sha256sum "$D15" | cut -d' ' -f1)"
+esit "G15f şema-dışı kayıt hâlâ listede (gizlenmiyor, işaretleniyor)" "1" \
+  "$(sut15 liste --hepsi --porcelain 2>/dev/null | grep -c '^L02')"
+
+
 echo
 echo "════════ SONUÇ: PASS=$PASS · FAIL=$FAIL ════════"
 [ "$FAIL" -eq 0 ] || exit 1
