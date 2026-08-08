@@ -1,6 +1,6 @@
 ---
 name: layiha
-version: 1.11.0
+version: 1.12.0
 description: Bir konuyu kapsamlı ARAŞTIR, kalıcı bir tasarım-dokümanına (layiha) SABİTLE, inşayı SONRAYA bırak — kayıt-defterine işle, Sultan'a sabit-formatta teslim et + geri-dönüş-kolu bırak. İnşa bitince BAĞIMSIZ-AJAN (MÜHÜRDAR) tescili gerekir: "insa-edildi ≠ tescilli". "araştır inşayı sonra yaparız · bunu dökümana sabitle · layiha çıkar · aktif/tescil-bekleyen layihaları listele · bu haftaki layihalar" tetiğinde. GLOBAL (tüm container'lar).
 allowed-tools: Bash, Read, Write, Edit, Agent, AskUserQuestion
 ---
@@ -44,7 +44,11 @@ tasarım-seçenek+ÖNERİ [5] fazlama(additive/INERT) [6] açık Sultan-kararlar
 2. **memory-topic:** `project_<slug>.md` + MEMORY.md pointer + RESUME-TETİK cümlesi.
 3. **defter:** `append-note.sh` özet + resume.
 4. **KAYIT-DEFTERİ (YENİ):** `bash <skill-dizini>/scripts/layiha-defteri.sh ekle --slug <slug> --konu "<konu>"
-   --dokuman "<yol>" --pr "#<PR>" --resume "<resume-cümlesi>"` → durum=insa-bekliyor.
+   --dokuman "<yol>" --pr "#<PR>" --resume "<resume-cümlesi>" --isteyen "Sultan|<AJAN>" [--yetki "<beyan>"]`
+   → durum=insa-bekliyor.
+   ⚠️ **`--isteyen` YAZ** (K2): bu alan boş kalırsa kayıt "isteyeni bilinmeyen" olur — Sultan'ın
+   istediği iş ile ajanın kendi açtığı iş defterde ayırt edilemez. Boş bırakmak `ajan` demek DEĞİLDİR;
+   tahmin edilmez, "bilinmiyor" olarak durur ve süzgeçte ayrıca sayılır.
    ⚠️ `--konu` **"\<Kısa Ad (2-3 kelime)\> — \<detay\>"** biçiminde yazılır; baştaki Kısa Ad, adım-3'teki
    **LAYİHA İLANI**'nda kullanılan adla BİREBİR aynı olmalı (ilan ↔ defter ↔ liste tutarlılığı).
 
@@ -100,6 +104,25 @@ REDDEDİLİR** (RC=2 + tek-satır reçete). Bu, defterin (`defter-mailbox.sh dur
 - Diğer geçişler (`insa-bekliyor`, `insa-ediliyor`) kanıt **İSTEMEZ**.
 - Geriye-uyum: K7 öncesi kayıtlarda alan **yoktur** → okuma-anında `""` sayılır; **hata yok, göç yok**.
 
+⚖️ **İZİN KAPISI (K7'nin başlangıç-yüzü · Sultan-kararı 2026-08-08): "başlıyorum = izinli".**
+Bir kalemi `insa-ediliyor`a almak artık **izin beyanı ister**; izinsiz geçiş **RC=2 ile reddedilir**.
+```
+layiha-defteri.sh durum <kod|slug> insa-ediliyor --izin "Sultan onayı 2026-08-08"
+```
+Gerekçe: "bitti = kanıtlı" kuralı vardı, ama bir işin kimin izniyle BAŞLADIĞI hiçbir yere
+yazılmıyordu — sonradan "bunu kim başlattı?" diye sorulduğunda defterde cevap yoktu.
+Beyan serbest metindir (kapı içeriği değil, VARLIĞINI zorlar); `yok`/`n/a` gibi yer-tutucular reddedilir.
+
+⚖️ **TERS KAYIT (K5): yanlış girilen iddia SİLİNMEZ, geri alınır.**
+```
+layiha-defteri.sh geri-al <kod|slug> --gerekce "kanıt yanlış PR'a işaret ediyordu"
+```
+Durum `insa-bekliyor`a döner, kanıt/izin temizlenir, kayıt tescil kuyruğundan çıkar — ama **hiçbir şey
+kaybolmaz**: eski durum + eski kanıt + gerekçe kaydın `gecmis` alanına ters-kayıt olarak düşer.
+Silmek izi yok eder, ters kayıt izi çoğaltır.
+🔴 **Tescil VERDİKTİ verilmiş kayıt geri alınamaz** (`tescilli`/`reddi`/`muaf` → RC=2). Verdikt bağımsız
+ajanın hükmüdür; üretici onu geri alamaz — değişmesi gerekiyorsa MÜHÜRDAR'a gidilir.
+
 ⚖️ **`insa-edildi` TERMİNAL DEĞİL** — üretici-beyanı. Terminal-başarı = **bağımsız-ajan (MÜHÜRDAR) TESCİL'i**
 (Sultan-kararı 2026-07-22 · üreten ≠ doğrulayan). Üretici kendi işini tescil-EDEMEZ.
 
@@ -122,8 +145,15 @@ layiha-defteri.sh tescil <kod|slug> <tescilli|reddi|muaf> [--vites TAM|HAFIF] [-
 ## MOD 2 — LİSTELE (önizleme + inşa-durumu + TESCİL-durumu + zaman-filtresi)
 Sultan "aktif/tescil-bekleyen layihaları listele / bugünküleri / bu haftakini / bu hafta bitmemişleri göster" deyince:
 ```
-bash <skill-dizini>/scripts/layiha-defteri.sh liste [--aktif(default) | --bugun | --hafta | --hafta-bitmemis | --tescil-bekleyen | --hepsi]
+bash <skill-dizini>/scripts/layiha-defteri.sh liste [--aktif(default) | --bugun | --hafta | --hafta-bitmemis | --tescil-bekleyen | --hepsi] \
+     [--sultan | --ajan | --isteyeni-bilinmeyen]
 ```
+**KİM EKSENİ (K3):** Sultan "benim istediklerimi göster" deyince `--sultan`; "ajanların kendi
+açtıkları" için `--ajan`. Bu eksen zaman/tescil ekseninden **bağımsızdır** — `--aktif --sultan`
+birlikte çalışır.
+🔴 **Sessiz eleme yok:** `isteyen`i yazılmamış (eski) kayıtlar hiçbir kim-süzgecine düşmez, ama
+**kaç tanesinin elendiği ekrana basılır** ve `--isteyeni-bilinmeyen` ile görülür. Süzülmüş bir
+listeye bakıp "hepsi bu kadarmış" sanmak, bu defterin en pahalı hatasıydı.
 - **--aktif** (default): **terminal-olmayan** tümü — insa-bekleyen + inşa-edildi-ama-**tescilsiz** dahil
   (tescilsiz iş "bitti" SAYILMAZ → aktif kalır; Sultan-ilkesi).
 - **--tescil-bekleyen**: inşa-edildi + tescil-kuyruğunda bekleyenler (toplu-tescil görünümü).

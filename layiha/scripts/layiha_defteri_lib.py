@@ -28,6 +28,21 @@ DEĞİŞMEZLER
     insa-edildi'ye geçiş `--kanit <ref>` ister ve ref BİÇİM-DOĞRULANIR (`kanit_gecerli`).
     Geriye-uyum: eski kayıtlarda `insa_kanit` alanı YOKTUR — okuma-anında "" sayılır,
     hata verilmez, göç yapılmaz (v/proje/tescil alanlarıyla aynı konvansiyon).
+  · İŞ-KAYDI ALANLARI (K2/K3/K5/K7-izin, Sultan-kararı 2026-08-08): defter bugüne kadar
+    işin NE olduğunu kaydediyordu, ama KİMİN İSTEDİĞİNİ ve HANGİ İZİNLE yapıldığını
+    kaydetmiyordu. Sonuç: "bu işi kim istedi?" sorusunun defterde cevabı yoktu — Sultan'ın
+    istediği iş ile ajanın kendi kendine açtığı iş aynı görünüyordu, ve bir kalem "yapılıyor"
+    durumuna kimin izniyle geçtiği hiç yazılmıyordu.
+      `isteyen`    — işi kim istedi (Sultan / ajan adı). Boş = BİLİNMİYOR; tahmin edilmez.
+      `yetki`      — hangi yetkiyle açıldı (serbest beyan).
+      `insa_izin`  — `insa-ediliyor`a geçerken beyan edilen izin (K7'nin başlangıç-yüzü:
+                     "bitti = kanıtlı" ise "başlıyorum = izinli").
+      `gecmis`     — ters-kayıt defteri (K5). Kayıt SİLİNMEZ, geri alınır: eski değerler
+                     buraya düşer. Muhasebedeki ters-kayıt mantığı — silmek izi yok eder,
+                     ters kayıt izi çoğaltır.
+    Üçü de geriye-uyumludur: eski kayıtlarda alanlar YOKTUR → okuma-anında "" / [] sayılır.
+  · BİLİNMEYEN GİZLENMEZ: `isteyen` boş olan kayıt ne `--sultan` ne `--ajan` süzgecine düşer;
+    süzgeç bunu SAYIP EKRANA YAZAR. Bugünün dersi: kayıp meşru olabilir, GÖRÜNMEZ olamaz.
 """
 
 import io
@@ -71,6 +86,36 @@ def kanit_gecerli(ref):
         return True
     # dosya yolu: yalnız GERÇEKTEN VAR ise geçerli — var-olmayan yol "kanıt" değildir
     return os.path.exists(os.path.expanduser(ref))
+
+
+IZIN_RECETE = (
+    'izin beyanı: kim/ne yetkilendirdi — ör. "Sultan onayı 2026-08-08" · '
+    '"L63 izin paketi md-4" · "peşin-onay: federe tüm-faz"'
+)
+
+
+def izin_gecerli(ref):
+    """İzin beyanı kabul edilebilir mi? (biçim, içerik DEĞİL — beyan insanın sözüdür)
+
+    Tek kapı: boş ya da içi-boş yer-tutucu olmasın. "-" / "yok" / "?" gibi kaçamaklar
+    beyanın kendisini anlamsız kılar; onları reddetmek gate'in var olma sebebidir.
+    """
+    ref = (ref or "").strip()
+    if len(ref) < 3:
+        return False
+    return ref.lower() not in ("yok", "n/a", "na", "---", "???", "bos", "boş")
+
+
+def kim_sinifi(rec):
+    """Kaydı isteyen kim? → "sultan" | "ajan" | "bilinmiyor".
+
+    "bilinmiyor" AYRI bir sınıftır, "ajan"ın alt-kümesi DEĞİL: alanı olmayan eski kayıtları
+    ajana yazmak, ölçmediğimiz şeyi ölçmüş gibi göstermek olurdu.
+    """
+    v = (rec.get("isteyen") or "").strip()
+    if not v:
+        return "bilinmiyor"
+    return "sultan" if v.lower() in ("sultan", "sultân") else "ajan"
 
 
 def _hata(msg):
@@ -178,6 +223,15 @@ def oku(led, norm=True, kilitle=False):
             # GERİYE-UYUM: K7 öncesi kayıtlarda bu alan yok. Eksikliği HATA DEĞİLDİR ve
             # göç gerektirmez — bellekte "" sayılır; kapı yalnız YENİ geçişlerde işler.
             r["insa_kanit"] = ""
+            degisti = True
+        # İŞ-KAYDI ALANLARI (K2/K7-izin/K5) — aynı geriye-uyum konvansiyonu: yoksa boş,
+        # hata yok, göç yok. Boş `isteyen` "ajan" demek DEĞİL, "bilinmiyor" demektir.
+        for _alan in ("isteyen", "yetki", "insa_izin"):
+            if _alan not in r:
+                r[_alan] = ""
+                degisti = True
+        if "gecmis" not in r:
+            r["gecmis"] = []
             degisti = True
         if "proje" not in r:
             # Eski kayıtlar hangi odada yazıldıysa orada duruyor → o odanın adı doğru cevaptır.
