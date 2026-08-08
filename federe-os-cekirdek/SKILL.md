@@ -1,7 +1,7 @@
 ---
 name: federe-os-cekirdek
 type: agent
-version: 0.4.0
+version: 0.5.0
 description: >
   Federe Ekip-OS çekirdek-protokolleri (k0180 · C3/D7): tetikleme (A1/A4) + not-tutma (A2/B1) +
   haberleşme (B2) + canlılık-nabzı (A3) + hafıza-vatandaşlığı (B3) TEK pakette. Uzak-birim MÜDÜR'ü

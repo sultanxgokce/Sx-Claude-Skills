@@ -40,20 +40,6 @@ echo "== T5c: gonder --tetikli argüman-kayması — hedef/başlık doğru okunu
 # gerekçe verilmiş ama hedef bozuk → hedef-format reddi (RC=2) = kayma YOK kanıtı
 bash "$SUT" gonder --tetikli "MÜDÜR sessiz" kutu-4 "başlık" >/dev/null 2>&1; [ $? -eq 2 ] && ok "tetikli-sonrası hedef-format kapısı" || no "argüman kayması var"
 
-echo "== T5d: BİLİNMEYEN BAYRAK → 2 (canlı vaka 2026-08-06: sessiz yutma, 1 saat kayıp mesaj) =="
-# `--tip x --baslik y` eskiden METİN sayılıyordu: başlık '--tip' olup mesaj kuyrukta kayboluyordu.
-bash "$SUT" gonder s10 --tip tetik --baslik "gövde" >/dev/null 2>&1; [ $? -eq 2 ] && ok "bilinmeyen-bayrak reddi (başlık yuvası)" || no "bilinmeyen bayrak SESSİZCE yutuldu"
-# kart_ref yuvasındaki bayrak da yakalanmalı
-bash "$SUT" gonder s10 "gerçek başlık" --kart k0001 >/dev/null 2>&1; [ $? -eq 2 ] && ok "bilinmeyen-bayrak reddi (kart yuvası)" || no "kart yuvasında bayrak kaçtı"
-# not yuvasındaki bayrak da yakalanmalı
-bash "$SUT" gonder s10 "gerçek başlık" "" --not "gövde" >/dev/null 2>&1; [ $? -eq 2 ] && ok "bilinmeyen-bayrak reddi (not yuvası)" || no "not yuvasında bayrak kaçtı"
-
-echo "== T5e: NEGATİF — meşru çağrı bu kapıya TAKILMAZ (yanlış-pozitif yok) =="
-# tire İÇEREN ama bayrak OLMAYAN başlık geçmeli → hedef-format dışında bir kapıya takılmamalı.
-# Bozuk hedefle çağırıp RC=2'nin bayrak-kapısından DEĞİL hedef-kapısından geldiğini doğruluyoruz.
-_cikti="$(bash "$SUT" gonder kutu-4 "acil-durum: kapı-2 kırmızı" 2>&1)"
-echo "$_cikti" | grep -q "bilinmeyen bayrak" && no "yanlış-pozitif: tireli başlık bayrak sanıldı" || ok "tireli başlık bayrak sanılmadı"
-
 echo "== T5d: gonder --tetikli sır-desenli gerekçe → 2 (yerel ön-kapı) =="
 zfs="sk-$(printf 'B%.0s' $(seq 1 20))"
 bash "$SUT" gonder --tetikli "$zfs" s04 "başlık" >/dev/null 2>&1; [ $? -eq 2 ] && ok "tetikli sır-desen reddi" || no "tetikli sır-desen kaçtı"
@@ -172,6 +158,21 @@ echo "$OUT" | grep -q "2 bekleyen" && ok "toplam bekleyen sayısı gerçeği sö
 echo "-- T18: nabiz 201 kontrat --"
 OUT="$(FEDERE_API_BASE="http://127.0.0.1:$MPORT" FEDERE_TETIK_TOKEN=dummytok bash "$SUT" nabiz "mock-nabız" 2>&1)"; RC=$?
 [ "$RC" -eq 0 ] && echo "$OUT" | grep -q "cell=s09" && ok "nabiz kontrat-parse RC=0" || no "nabiz mock yanlış (rc=$RC)"
+
+echo "== T20: BAYRAK KAPISI — taninmayan bayrak sessizce yutulmaz (2026-08-08, 14 oda) =="
+# Regresyon: eski `gonder` YALNIZ 2. konumdaki --tetikli'yi tanirdi; baska her --xyz
+# sessizce KONUMSAL METIN olurdu. Canli vaka: `--tip tetik --baslik "..."` -> baslik
+# "--tip" oldu, mesaj BIR SAAT kuyrukta bekledi ve hedefi hic bulmadi.
+OUT="$(bash "$SUT" gonder --tipx s04 "baslik" 2>&1)"; RC=$?
+[ "$RC" -eq 2 ] && ok "taninmayan bayrak RC=2" || no "taninmayan bayrak RC=$RC (2 bekleniyordu)"
+echo "$OUT" | grep -q "tanınmayan bayrak" && ok "hata mesaji bayragi soyluyor" || no "hata mesaji bayragi sylemiyor"
+echo "$OUT" | grep -q -- "--tetikli" && ok "gecerli bayrak listesi basiliyor" || no "gecerli bayrak listesi yok"
+# Bayrak ASLA hedef/baslik olarak SIZMAMALI (asil zarar buydu)
+echo "$OUT" | grep -qi "hedef sNN formatında" && no "bayrak konumsal-metin olarak sizdi" || ok "bayrak konumsal-metne SIZMIYOR"
+
+echo "== T21: geriye-uyum — --tetikli aynen calisir, gerekcesiz hala reddedilir =="
+OUT="$(bash "$SUT" gonder --tetikli s04 "baslik" 2>&1)"; RC=$?
+[ "$RC" -eq 2 ] && ok "--tetikli gerekcesiz RC=2 (degismedi)" || no "--tetikli gerekce kapisi bozuldu (rc=$RC)"
 
 echo "== T19: bash -n sözdizimi =="
 bash -n "$SUT" && ok "sözdizimi temiz" || no "sözdizimi hatası"
