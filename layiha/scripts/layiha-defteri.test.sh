@@ -258,9 +258,11 @@ sut14 ekle --slug dosya-testi --konu "Dosya kaniti" --dokuman d.md >/dev/null
 sut14 durum L04 insa-edildi --kanit "$RAPOR14" >/dev/null 2>&1
 esit "G14d MEVCUT dosya yolu kabul rc=0" "0" "$?"
 
-# (e) diğer geçişler kanıt İSTEMEZ
+# (e) diğer geçişler KANIT istemez. `insa-ediliyor` artık İZİN ister (K7'nin başlangıç-yüzü,
+#     2026-08-08) — bu satır o kontrat değişikliğinin kaydıdır: eskiden izinsiz geçiyordu.
 sut14 durum L01 insa-bekliyor >/dev/null 2>&1;  esit "G14e insa-bekliyor kanıtsız geçer" "0" "$?"
-sut14 durum L01 insa-ediliyor >/dev/null 2>&1;  esit "G14e insa-ediliyor kanıtsız geçer" "0" "$?"
+sut14 durum L01 insa-ediliyor --izin "Sultan onayı 2026-08-08" >/dev/null 2>&1
+esit "G14e insa-ediliyor izinle geçer, kanıt İSTEMEZ" "0" "$?"
 
 # (f) GERİYE-UYUM: K7 ÖNCESİ (insa_kanit alanı OLMAYAN) kayıtlar hata vermez, göç edilmez
 D14F="$T/eski-kayit.jsonl"
@@ -309,6 +311,98 @@ esit "G15e kapı SALT-OKUR — kayıt düzeltilmiyor, defter değişmiyor" "$ONC
 esit "G15f şema-dışı kayıt hâlâ listede (gizlenmiyor, işaretleniyor)" "1" \
   "$(sut15 liste --hepsi --porcelain 2>/dev/null | grep -c '^L02')"
 
+echo
+echo "=== G16 · İŞ KAYDI: kim istedi · hangi izinle · geri alma (K2/K3/K5/K7-izin) ==="
+D16="$T/is-kaydi.jsonl"; : > "$D16"; K16="$T/OdaAlti"
+sut16() { LAYIHA_DEFTER="$D16" HAT_ROOT="$K16" bash "$SUT" "$@"; }
+alan16() { python3 -c "
+import json,sys
+for l in open('$D16'):
+    r=json.loads(l)
+    if r.get('id')=='$1': print(r.get('$2',''))
+"; }
+
+# (a) K2 — isteyen/yetki yazılıyor
+sut16 ekle --slug sultan-isi --konu "Sultan istedi" --dokuman a.md --isteyen "Sultan" --yetki "sözlü direktif" >/dev/null 2>&1
+esit "G16a ekle --isteyen rc=0" "0" "$?"
+esit "G16a isteyen kayda yazıldı" "Sultan" "$(alan16 L01 isteyen)"
+esit "G16a yetki kayda yazıldı" "sözlü direktif" "$(alan16 L01 yetki)"
+sut16 ekle --slug ajan-isi --konu "Ajan açtı" --dokuman b.md --isteyen "SERDAR" >/dev/null 2>&1
+# isteyen'i OLMAYAN kayıt = bilinmiyor (tahmin edilmez)
+sut16 ekle --slug kimsiz-is --konu "Isteyeni yazilmamis" --dokuman c.md >/dev/null 2>&1
+esit "G16a isteyen verilmezse BOŞ kalır (ajan sayılmaz)" "" "$(alan16 L03 isteyen)"
+
+# (b) K2 — güncelleme mevcut alanı SESSİZCE SİLMEZ
+sut16 ekle --slug sultan-isi --konu "Sultan istedi (güncel)" --dokuman a.md >/dev/null 2>&1
+esit "G16b --isteyen'siz güncelleme eski değeri korudu" "Sultan" "$(alan16 L01 isteyen)"
+
+# (c) K3 — kim ekseni süzüyor ve zaman/tescil ekseniyle BİRLİKTE çalışıyor
+esit "G16c --sultan yalnız Sultan'ınkini verir" "1" "$(sut16 liste --hepsi --sultan --porcelain 2>/dev/null | grep -c '^L01')"
+esit "G16c --sultan ajan işini vermez" "0" "$(sut16 liste --hepsi --sultan --porcelain 2>/dev/null | grep -c '^L02')"
+esit "G16c --ajan yalnız ajanınkini verir" "1" "$(sut16 liste --hepsi --ajan --porcelain 2>/dev/null | grep -c '^L02')"
+esit "G16c iki eksen birlikte (--aktif --ajan) çalışıyor" "0" "$(sut16 liste --aktif --ajan >/dev/null 2>&1; echo $?)"
+esit "G16c --isteyeni-bilinmeyen kimsiz kaydı verir" "1" "$(sut16 liste --hepsi --isteyeni-bilinmeyen --porcelain 2>/dev/null | grep -c '^L03')"
+
+# (d) K3 — SESSİZ ELEME YOK: süzgeç dışında kalanı sayıp basıyor
+var "G16d insan-çıktısı gizlenen kaydı duyuruyor" "$(sut16 liste --hepsi --sultan 2>&1)" "isteyeni yazılmamış"
+var "G16d porcelain özetinde sayı var" "$(sut16 liste --hepsi --sultan --porcelain 2>/dev/null)" "isteyeni-bilinmeyen-gizlendi=1"
+
+# (e) K7-izin — insa-ediliyor İZİNSİZ geçemez
+O16E="$(sut16 durum L01 insa-ediliyor 2>&1)"; esit "G16e izinsiz insa-ediliyor rc=2" "2" "$?"
+var  "G16e reçete veriyor" "$O16E" "--izin"
+esit "G16e yer-tutucu izin ('yok') reddedilir" "2" "$(sut16 durum L01 insa-ediliyor --izin "yok" >/dev/null 2>&1; echo $?)"
+sut16 durum L01 insa-ediliyor --izin "Sultan onayı 2026-08-08" >/dev/null 2>&1
+esit "G16e geçerli izinle geçer" "0" "$?"
+esit "G16e izin kayda yazıldı" "Sultan onayı 2026-08-08" "$(alan16 L01 insa_izin)"
+var  "G16e izin listede görünüyor" "$(sut16 liste --hepsi 2>/dev/null)" "izin: Sultan onayı"
+esit "G16e --izin yanlış geçişte reddedilir" "2" "$(sut16 durum L02 insa-bekliyor --izin "x y z" >/dev/null 2>&1; echo $?)"
+
+# (f) K5 — ters kayıt: geri-al SİLMEZ, iz bırakır
+sut16 durum L01 insa-edildi --kanit "#123" >/dev/null 2>&1
+esit "G16f geri-al gerekçesiz rc=2" "2" "$(sut16 geri-al L01 >/dev/null 2>&1; echo $?)"
+sut16 geri-al L01 --gerekce "kanıt yanlış PR'a işaret ediyordu" >/dev/null 2>&1
+esit "G16f gerekçeli geri-al rc=0" "0" "$?"
+esit "G16f durum geri döndü" "insa-bekliyor" "$(alan16 L01 durum)"
+esit "G16f kanıt temizlendi" "" "$(alan16 L01 insa_kanit)"
+esit "G16f kayıt SİLİNMEDİ (defterde duruyor)" "1" "$(sut16 liste --hepsi --porcelain 2>/dev/null | grep -c '^L01')"
+esit "G16f tescil kuyruğundan çıktı" "0" "$(sut16 liste --tescil-bekleyen --porcelain 2>/dev/null | grep -c '^L01')"
+esit "G16f ters kayıt geçmişe düştü" "1" "$(python3 -c "
+import json
+for l in open('$D16'):
+    r=json.loads(l)
+    if r.get('id')=='L01':
+        print(len([g for g in r.get('gecmis',[]) if g.get('fiil')=='geri-al']))
+")"
+# Kanıt kayıttan silindi ama İZ olarak duruyor: ters-kayıt satırının 'dayanak'ı eski kanıttır.
+esit "G16f eski kanıt ters-kayıtta SAKLI (silinmedi, taşındı)" "#123" "$(python3 -c "
+import json
+for l in open('$D16'):
+    r=json.loads(l)
+    if r.get('id')=='L01':
+        print([g['dayanak'] for g in r.get('gecmis',[]) if g.get('fiil')=='geri-al'][0])
+")"
+
+# (g) K5 — VERDİKT EZİLMEZ: tescil hükmü verilmiş kaydı üretici geri alamaz
+sut16 durum L02 insa-edildi --kanit "#124" >/dev/null 2>&1
+sut16 tescil L02 muaf --gerekce "Sultan kararı: tescilsiz kapat" >/dev/null 2>&1
+O16G="$(sut16 geri-al L02 --gerekce "fikrim değişti" 2>&1)"; esit "G16g verdiktli kayıt geri alınamaz rc=2" "2" "$?"
+var  "G16g gerekçe MÜHÜRDAR'a yönlendiriyor" "$O16G" "MÜHÜRDAR"
+esit "G16g verdikt korundu" "muaf" "$(python3 -c "
+import json
+for l in open('$D16'):
+    r=json.loads(l)
+    if r.get('id')=='L02': print(r['tescil']['durum'])
+")"
+
+# (h) GERİYE-UYUM: alanları hiç olmayan eski kayıt hata vermez, göç YOK
+D16H="$T/eski-is.jsonl"
+printf '{"id":"L01","slug":"cok-eski","konu":"K2 oncesi kayit","tarih":"2026-07-01","durum":"insa-bekliyor","dokuman":"d.md","v":1,"proje":"OdaAlti"}\n' > "$D16H"
+ONCE16H="$(sha256sum "$D16H" | cut -d' ' -f1)"
+LAYIHA_DEFTER="$D16H" HAT_ROOT="$K16" bash "$SUT" liste --hepsi >/dev/null 2>&1
+esit "G16h alanı olmayan eski kayıt rc=0" "0" "$?"
+esit "G16h liste hâlâ SALT-OKUR (göç yok)" "$ONCE16H" "$(sha256sum "$D16H" | cut -d' ' -f1)"
+esit "G16h eski kayıt 'bilinmiyor' sınıfında" "1" \
+  "$(LAYIHA_DEFTER="$D16H" HAT_ROOT="$K16" bash "$SUT" liste --hepsi --isteyeni-bilinmeyen --porcelain 2>/dev/null | grep -c '^L01')"
 
 echo
 echo "════════ SONUÇ: PASS=$PASS · FAIL=$FAIL ════════"
