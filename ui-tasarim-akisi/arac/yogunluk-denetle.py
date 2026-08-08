@@ -77,6 +77,20 @@ FONT_PX = re.compile(r"font-size:\s*([0-9.]+)px")
 RADIUS_PX = re.compile(r"border-radius:\s*([0-9]+)px")
 
 
+def punto_norm(x):
+    """`14.0` ile `14`ü aynı sayar — AMA tam sayıya DOKUNMAZ.
+
+    NİÇİN (L57-EK · NAKKAŞ ölçtü 2026-08-07): eski hâli `x.rstrip("0").rstrip(".")` idi;
+    kesirli sıfırı kırpmak için konmuştu ama tam sayının sonundaki sıfırı da yiyordu →
+    `20→2` · `10→1` · `100→1`. Sonu sıfırla biten HER punto küme-dışı sanılıp SAHTE-KIRMIZI
+    veriyordu. 172 sınav görmedi çünkü fikstür profillerinin hepsi 12.5/14.5/16.5/21/25 —
+    hiçbiri sıfırla bitmiyor. HUZUR'un ölçeği (12/14/16/20) ilk tetikleyen: 5 ekranda 5 sahte
+    ihlal, göçürme bloke. Kırpma artık YALNIZ kesirli değerde çalışır ve karşılaştırmanın
+    İKİ YANINA da uygulanır (tek yana uygulamak asimetriyi sürdürürdü).
+    """
+    return x.rstrip("0").rstrip(".") if "." in x else x
+
+
 def cekirdek_adlari_yukle(yol=None):
     """Çekirdek Ç3 adları — BEKÇİNİN kendi ayrıştırıcısıyla (ikinci ayrıştırıcı YAZILMAZ).
 
@@ -211,9 +225,9 @@ def ekran_denetle(yol, P):
     if r_disi:
         ihlaller.append("S4 köşe-yarıçapı küme-dışı: %spx (izinli: %s)" %
                         (",".join(r_disi), "/".join(P["radius_kumesi"])))
-    kademeler = set(P["font_kademeleri"])
+    kademeler = {punto_norm(k) for k in P["font_kademeleri"]}
     f_disi = sorted({v for v in FONT_PX.findall(metin)
-                     if v.rstrip("0").rstrip(".") not in kademeler})
+                     if punto_norm(v) not in kademeler})
     if f_disi:
         ihlaller.append("S5 font-kademe küme-dışı: %spx (izinli: %s)" %
                         (",".join(f_disi), "/".join(P["font_kademeleri"])))

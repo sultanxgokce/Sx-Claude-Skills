@@ -193,6 +193,22 @@ printf '%s' "$cikti" | grep -q 'blok_turu haritası bu kümede HİÇ tutmadı' \
   && gecti "g5-olcumsuz-uyari" "ölçülmemiş S2 sessiz kalmıyor" \
   || kaldi "g5-olcumsuz-uyari" "uyarı çıkmadı — 'temiz' ölçülmemişi kapsıyor gibi görünüyor"
 
+# 12 · L57-EK · SIFIRLA BİTEN PUNTO — çift yönlü (NAKKAŞ ölçtü 2026-08-07)
+#      Eski normalizasyon (`rstrip("0")`) tam sayının sıfırını da yiyordu: 20→2 · 10→1 · 100→1.
+#      Sonu sıfırla biten HER punto sahte-kırmızı alıyordu; 172 sınavın hiçbiri görmedi çünkü
+#      tüm fikstür profilleri 12.5/14.5/16.5/21/25 idi — hiçbiri sıfırla bitmiyor. Bu kör-nokta
+#      HUZUR'un ölçeğinde (12/14/16/20) patladı: 5 ekranda 5 sahte ihlal, göçürme bloke.
+#      ALTIN yüz: sıfırla biten punto küme-İÇİNDE → YEŞİL kalmalı (kırpma tam sayıyı yerse kırmızıya döner).
+#      KIRMIZI yüz: sıfırla biten punto küme-DIŞI → S5 ile düşmeli (kırpma iki yanı da yerse yeşile döner).
+cikti="$(python3 "$KAPI" "$FIK/punto/yesil" 2>&1)"; rc=$?
+if [ "$rc" = "0" ]; then gecti "punto-sifirsonu-altin" "rc=0 — 20/12/14/16 küme içinde, sahte-kırmızı yok"
+else kaldi "punto-sifirsonu-altin" "rc=$rc — SAHTE-KIRMIZI geri geldi: $(printf '%s' "$cikti" | grep -m1 'S5')"; fi
+
+cikti="$(python3 "$KAPI" "$FIK/punto/kirmizi" 2>&1)"; rc=$?
+if [ "$rc" = "1" ] && printf '%s' "$cikti" | grep -q 'S5 font-kademe küme-dışı: 30px'; then
+  gecti "punto-sifirsonu-kirmizi" "küme-dışı 30px S5 ile yakalandı"
+else kaldi "punto-sifirsonu-kirmizi" "rc=$rc — küme-dışı punto cezasız kaldı (normalizasyon gevşemiş)"; fi
+
 echo "────────────────────────────────────────────"
 printf 'TOPLAM: %d geçti · %d kaldı\n' "$GECTI" "$KALDI"
 [ "$KALDI" = "0" ] || exit 1
