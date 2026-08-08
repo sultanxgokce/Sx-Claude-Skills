@@ -259,7 +259,14 @@ def main(argv):
                      "--kutu", a["havuz-kutu"], "--urun", a["havuz-kutu"],
                      "--ekran", ekran.lower(), "--kapi", "yargi",
                      "--hukum", eslek_h[v["hukum"]],
-                     "--dusen", ",".join(v["dusuren_maddeler"])]
+                     "--dusen", ",".join(v["dusuren_maddeler"]),
+                     # L57-EK2 · REFERANS DAMGASI: hüküm HANGİ ZEMİNE karşı verildi?
+                     # Yargının referansı kapı-profili değil RUBRİKTİR; sha'sı zaten
+                     # hesaplanıyor (mühür karşılaştırması, yukarıda). Bu satır olmadan
+                     # yargı kayıtları izsiz birikiyordu (ölçüm: tik 5/5 · yogunluk 5/5
+                     # damgalı, yargi 0/3) — kırmızı bir hükmün zemini sonradan
+                     # kanıtlanamaz, geçmişe damga basılamaz.
+                     "--profil-sha", rubrik["sha256"][:12]]
             if a["havuz"]:
                 komut += ["--havuz", a["havuz"]]
             try:

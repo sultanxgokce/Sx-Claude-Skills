@@ -264,6 +264,36 @@ icerir "rc=0 olsa da düşen madde raporlanır" "↓ M2"
 # fiilen 0 verip vermediği burada ÖLÇÜLMEZ — o, `yargi-panel.sh` ile kapıya çıkan
 # kalibrasyon koşusunun işidir.
 
+echo "── L57-EK2 · ALTIN: yargı hükmü havuza REFERANS DAMGASIYLA düşer"
+#   NİÇİN: kırmızı bir hükmün HANGİ ZEMİNE karşı verildiği kayda geçmezse, hüküm sonradan
+#   savunulamaz — geçmiş kayda damga basılamaz. Ölçüm (NAKKAŞ 2026-08-08): tik 5/5 ve
+#   yogunluk 5/5 damgalıyken yargi 0/3 idi; iki ayrı havuz-yazıcıdan yalnız biri bayrağı
+#   biliyordu (prompt-yap.sh geçiriyor, yargi-birlestir.py geçirmiyordu).
+#   Yargının referansı kapı-profili DEĞİL RUBRİKTİR; rubrik sha'sı zaten hesaplanıyor.
+#   KIRMIZI yüz zaten var (havuz.test.sh: desene uymayan profil_sha → rc=1); eksik olan
+#   ALTIN yüzdü — hatayı gizleyen boşluk tam olarak buydu.
+D="$T/y-damga"; HAVUZ="$T/damga.jsonl"
+for J in kimi glm qwen; do
+  yanit "$D" E1 "$J" "$(SEMA "$(M M1 2 "$Q1")" "$(M M2 2 "$Q1")" "$(M M3 2 "$Q2")" \
+                            "$(M M4 2 "$Q2")" "$(M M5 2 "$Q1")" "$(M M6 2 "$Q2")")"
+done
+kapi "havuza yazan yargı koşumu rc=0" 0 python3 "$BIRLESTIR" --rubrik "$RUBRIK" \
+     --yanit "$D" --ekran-dir "$T/ekran" --havuz-kutu sinav --havuz "$HAVUZ"
+
+SON_CIKTI="$(python3 - "$HAVUZ" <<'PY'
+import json, re, sys
+for satir in open(sys.argv[1], encoding="utf-8"):
+    k = json.loads(satir)
+    if k.get("kapi") == "yargi":
+        s = k.get("profil_sha", "")
+        print("DAMGA-VAR" if re.fullmatch(r"[0-9a-f]{12}", s) else "DAMGA-YOK", s)
+PY
+)"
+icerir "yargı kaydı 12-hane referans damgası taşıyor" "DAMGA-VAR"
+
+SON_CIKTI="$(python3 "$ARAC/havuz.py" ozet --havuz "$HAVUZ" 2>&1)"
+icermez "damgalı ölçüm 'parmak-izi YOK' sayacına DÜŞMEZ" "profil parmak-izi YOK"
+
 echo
 echo "TOPLAM: $GECTI geçti · $KALDI kaldı"
 [ "$KALDI" -eq 0 ]
