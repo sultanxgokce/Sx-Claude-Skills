@@ -118,26 +118,31 @@ case "$cmd" in
   gonder)
     # --tetikli "<gerekçe≤120>" (L42-F2 · MABEYN F0.4): tetik zil-META'sıyla düşer; merkez
     # oda-zil turu YALNIZ zil'lileri okuyup hedef odayı uyandırmayı dener. Gerekçesiz zil yok.
+    # 🔴 BAYRAK KAPISI (2026-08-08, NÂZIR bulgusu · 14 oda etkileniyor).
+    # ESKİ DAVRANIŞ: yalnız `--tetikli` ve YALNIZ 2. konumda tanınırdı; başka her `--xyz`
+    # sessizce KONUMSAL METİN sayılırdı. Ölçülen sonuç: `--tip tetik --baslik "…"` yazan bir
+    # çağrıda başlık `--tip` oldu ve mesaj BİR SAAT kuyrukta bekledi — hedefi hiç bulmadı.
+    # Sınıf: "hatayı sessizce yutan araç". `layiha-defteri.sh liste`de RC=2 ile kapatılmıştı
+    # (L24 F4), burada açıktı. Artık tanınmayan bayrak DURDURUR ve geçerli listeyi basar.
     zil=0; zil_sebep=""
-    if [ "${2:-}" = "--tetikli" ]; then
-      zil=1; zil_sebep="${3:-}"; shift 2
-      [[ -n "$zil_sebep" && ${#zil_sebep} -le 120 ]] || { echo "HATA: --tetikli gerekçe ister (≤120) — gerekçesiz zil yok" >&2; exit 2; }
-    fi
-    hedef="${2:-}"; baslik="${3:-}"; kart="${4:-}"; nt="${5:-}"
-    # ── BİLİNMEYEN BAYRAK = SESSİZ KAYIP (canlı vaka 2026-08-06) ──────────────────────────────
-    # `gonder` konumsaldır; tek bayrağı `--tetikli`dir. Eskiden `--tip x --baslik y` gibi bir
-    # çağrı sessizce METİN sayılıyordu: başlık `--tip` oldu, mesaj bir saat kimsenin görmediği
-    # kuyrukta bekledi ve İKİ TARAF DA fark etmedi. Sessiz yutma bu kanalın kapattığı hastalığın
-    # ta kendisidir → artık gürültülü ret. (Aynı sınıf `layiha-defteri.sh liste`de RC=2 ile
-    # kapatılmıştı; burada açıktı.) Not: `--tetikli` yukarıda zaten tüketildi, buraya düşmez.
-    for _arg in "$baslik" "$kart" "$nt"; do
-      [[ "$_arg" == --* ]] && {
-        echo "HATA: bilinmeyen bayrak: $_arg" >&2
-        echo "      gonder KONUMSALDIR; tek bayrağı --tetikli'dir (ve o en başa yazılır)." >&2
-        echo "      doğru: federe.sh gonder [--tetikli \"gerekçe\"] <sNN> \"<başlık>\" [kart_ref] [not]" >&2
-        exit 2
-      }
+    while [ $# -gt 1 ]; do
+      case "${2:-}" in
+        --tetikli)
+          zil=1; zil_sebep="${3:-}"; shift 2
+          [[ -n "$zil_sebep" && ${#zil_sebep} -le 120 ]] || { echo "HATA: --tetikli gerekçe ister (≤120) — gerekçesiz zil yok" >&2; exit 2; }
+          ;;
+        --*)
+          echo "HATA: tanınmayan bayrak: '${2}'" >&2
+          echo "  gonder için geçerli bayraklar: --tetikli \"<gerekçe≤120>\"
+  (--sinif <mesaj|is|devir> HENÜZ YOK: sunucuda `tip` alanı `tetik|durdur` için alınmış,
+   iş-sınıfı ayrı alan + göç istiyor — istemciye sunucu hazır olmadan konmadı, yoksa
+   bayrak sessizce yutulurdu; düzeltilen hastalığın aynısı olurdu.)" >&2
+          echo "  (sessizce konumsal-metin saymıyorum — eski davranış mesajı kuyrukta kaybediyordu)" >&2
+          exit 2 ;;
+        *) break ;;
+      esac
     done
+    hedef="${2:-}"; baslik="${3:-}"; kart="${4:-}"; nt="${5:-}"
     [[ "$hedef" =~ $CELL_RE ]] || { echo "HATA: hedef sNN formatında olmalı (ör. s04)" >&2; exit 2; }
     [[ -n "$baslik" && ${#baslik} -le 120 ]] || { echo "HATA: başlık zorunlu, ≤120" >&2; exit 2; }
     [[ ${#nt} -le 500 ]] || { echo "HATA: not ≤500 (içerik-kanalı değil — META)" >&2; exit 2; }
