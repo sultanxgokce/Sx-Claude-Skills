@@ -349,7 +349,12 @@ else:
     if not sel: print("  (kayıt yok)")
     for r in sel:
         t=r.get("tescil") or {}; td=tdurum(r)
-        print("  [%s]  %s  · %s"%(r.get("id","?"), DUR.get(r.get("durum"),r.get("durum","")), r.get("konu","")))
+        # Şema-dışı durum SATIRDA görünür: uyarı yalnız stderr'de kalırsa kimse okumaz
+        # (bugünün dersi: görünmeyen uyarı = olmayan uyarı).
+        _d = DUR.get(r.get("durum"))
+        if _d is None:
+            _d = "⚠️ ŞEMA-DIŞI durum: %r" % r.get("durum", "")
+        print("  [%s]  %s  · %s"%(r.get("id","?"), _d, r.get("konu","")))
         # TESCİL satırı: yalnız anlamlıysa (yok değilse) bas — Sultan'ın "tescilli mi değil mi" kolonu
         tescil_str=""
         if td!="yok":
