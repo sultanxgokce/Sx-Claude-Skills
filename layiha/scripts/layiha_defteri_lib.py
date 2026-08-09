@@ -66,6 +66,54 @@ SEMA_V = 1
 # göstermek. "Kayıp meşru olabilir, GÖRÜNMEZ olamaz."
 DURUMLAR = ("insa-bekliyor", "insa-ediliyor", "insa-edildi")
 
+# ── NİZAM HÜCRESİ (L66-F2, Sultan onaylı 2026-08-08) ────────────────────────────────
+# Sultan'ın şartı: "AI ajan bana 'hangi tip ilişki' diye sormalı — free/kenarsız
+# çalışmıyoruz." Ölçüm gösterdi ki onun iki örneği aynı eksende DEĞİL, DİK:
+#   SUBSTRAT = taraflar birbirine nasıl ULAŞIR (kanal)
+#   AKIŞ     = iş hangi rollerden GEÇER (zincir)
+# Bu yüzden katalog düz liste değil MATRİS: 4 substrat × 3 akış = 12 hücre.
+#
+# Çağıranın burası olmasının sebebi ölçülen yasadır: "bir protokolün adımı, işin ÜRÜNÜNÜ
+# üretme yolunun ÜSTÜNDE değilse ölür." Kanıt: ÖLÇÜM akışı canlı (2 günde 41 hüküm,
+# kapıdan geçmeden çıktı yok) ⟂ DİVAN akışı 18 Temmuz'dan beri ölü (gönüllü olduğu için).
+# Layiha defteri filonun kanıtlı tek canlı yolu (66 kayıt) → kapı buraya takılır.
+SUBSTRATLAR = ("OTAG", "MIZAN", "MENZIL", "KAPI")
+AKISLAR = ("DIVAN", "LAYIHA", "OLCUM")
+# 🔴 `belirsiz` MEŞRUDUR — kapalı küme DAYATMAK işi yanlış kutuya sokar (ölçüldü).
+# Hiçbir hücreye oturmayan iş `belirsiz` yazar; bu bir hata değil, YENİ-TİP ARZININ
+# ham maddesidir (ÇAVUŞ'un "şüphe = üstlenmeme" emsali). Sayaca girer, gizlenmez.
+HUCRE_BELIRSIZ = "belirsiz"
+HUCRELER = tuple("%s x %s" % (s, a) for s in SUBSTRATLAR for a in AKISLAR)
+
+HUCRE_RECETE = (
+    "hücre biçimi: '<SUBSTRAT> x <AKIŞ>' — substrat: %s · akış: %s "
+    "(hiçbirine oturmuyorsa: %s)" % ("/".join(SUBSTRATLAR), "/".join(AKISLAR), HUCRE_BELIRSIZ)
+)
+
+
+def hucre_normalize(deger):
+    """Serbest yazımı kanonik biçime çeker: boşluk/büyük-küçük/ayraç toleransı.
+
+    'mizan x olcum' · 'MIZAN×OLCUM' · 'MIZAN  X  OLCUM' → 'MIZAN x OLCUM'
+    Tolerans BİÇİMDE olur, KÜMEDE değil: tanınmayan ad yine reddedilir.
+    """
+    m = (deger or "").strip()
+    if not m:
+        return ""
+    if m.casefold() == HUCRE_BELIRSIZ.casefold():
+        return HUCRE_BELIRSIZ
+    parcalar = [p for p in re.split(r"\s*[x×X]\s*|\s+", m) if p]
+    if len(parcalar) != 2:
+        return m                      # bozuk → olduğu gibi dön, kapı reddetsin
+    return "%s x %s" % (parcalar[0].upper(), parcalar[1].upper())
+
+
+def hucre_gecerli(deger):
+    """Kapalı küme + `belirsiz`. Boş değer BURADA geçerli sayılmaz —
+    'zorunlu mu' kararı çağıranın (ekle kapısı) işidir, doğrulayıcının değil."""
+    n = hucre_normalize(deger)
+    return n == HUCRE_BELIRSIZ or n in HUCRELER
+
 # Kabul edilen kanıt biçimleri (K7). Üçünden biri tutmalı:
 _KANIT_PR_NO = re.compile(r"^#\d+$")                    # PR referansı: #123
 _KANIT_URL = re.compile(r"^https?://\S+$")              # PR/commit URL'i
@@ -226,7 +274,11 @@ def oku(led, norm=True, kilitle=False):
             degisti = True
         # İŞ-KAYDI ALANLARI (K2/K7-izin/K5) — aynı geriye-uyum konvansiyonu: yoksa boş,
         # hata yok, göç yok. Boş `isteyen` "ajan" demek DEĞİL, "bilinmiyor" demektir.
-        for _alan in ("isteyen", "yetki", "insa_izin"):
+        # `hucre` (L66-F2) da aynı konvansiyon: eski 66 kayıtta YOKTUR → "" sayılır,
+        # hata verilmez, göç yapılmaz. Boş `hucre` "belirsiz" DEMEK DEĞİLDİR:
+        # belirsiz = ajan baktı ve oturmadı (bilgi); boş = hiç sorulmadı (bilgisizlik).
+        # İkisini birbirine karıştırmak, ölçmediğini ölçmüş saymaktır.
+        for _alan in ("isteyen", "yetki", "insa_izin", "hucre"):
             if _alan not in r:
                 r[_alan] = ""
                 degisti = True

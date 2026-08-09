@@ -94,7 +94,8 @@ case "$CMD" in
     LAYIHA_ARGS_JSON="$ARGS" python3 - <<'PY'
 import os, json, sys, subprocess
 sys.path.insert(0, os.environ["LAYIHA_LIB_DIR"])
-from layiha_defteri_lib import oku, yaz, yeni_tescil, proje_adi, SEMA_V, kanit_gecerli, KANIT_RECETE
+from layiha_defteri_lib import (oku, yaz, yeni_tescil, proje_adi, SEMA_V, kanit_gecerli,
+                                KANIT_RECETE, hucre_gecerli, hucre_normalize, HUCRE_RECETE)
 led=os.environ["LAYIHA_LEDGER"]; a=json.loads(os.environ["LAYIHA_ARGS_JSON"])
 def _metin(v):
     """Değersiz verilmiş bayrak (`--isteyen`) True döner — onu boş-metin say."""
@@ -111,6 +112,20 @@ if a.get("durum")=="insa-edildi":
                          "      Reçete: ekle ... --durum insa-edildi --kanit \"#123\"   (%s)\n"%KANIT_RECETE); sys.exit(2)
     if not kanit_gecerli(_k):
         sys.stderr.write("HATA: kanıt biçimi tanınmadı: %r\n      Reçete: %s\n"%(_k,KANIT_RECETE)); sys.exit(2)
+# NİZAM HÜCRE KAPISI (L66-F2) — Sultan: "ajan bana 'hangi tip ilişki' diye sormalı;
+# free/kenarsız çalışmıyoruz." Küme KAPALI ama `belirsiz` MEŞRU (ölçüldü: kapalı küme
+# dayatmak işi yanlış kutuya sokar). Değer verilmişse tanınmak ZORUNDADIR.
+_hucre = _metin(a.get("hucre"))
+if _hucre:
+    if not hucre_gecerli(_hucre):
+        sys.stderr.write("HATA: hücre tanınmadı: %r\n      %s\n" % (_hucre, HUCRE_RECETE))
+        sys.exit(2)
+    _hucre = hucre_normalize(_hucre)
+else:
+    # BİLİNMEYEN GİZLENMEZ (defterin kendi kuralı): sorulmamış hücre kaydı yazılabilir
+    # ama SESSİZ olamaz. Boş ≠ belirsiz: boş "hiç sorulmadı", belirsiz "bakıldı, oturmadı".
+    sys.stderr.write("UYARI: --hucre verilmedi (hangi NİZAM hücresinde çalışıyorsun?).\n"
+                     "       Kayıt yazıldı ama hücresi BİLİNMİYOR. %s\n" % HUCRE_RECETE)
 tarih=a.get("tarih") or subprocess.check_output(["date","+%F"]).decode().strip()
 recs,_=oku(led, kilitle=True)
 def id_num(x):
@@ -137,6 +152,9 @@ rec={"v":SEMA_V,"id":kod,"slug":a["slug"],"konu":a["konu"],
      "isteyen":(_metin(a.get("isteyen")) or (existing.get("isteyen","") if existing else "")),
      "yetki":(_metin(a.get("yetki")) or (existing.get("yetki","") if existing else "")),
      "insa_izin":(existing.get("insa_izin","") if existing else ""),
+     # NİZAM hücresi (L66-F2): verilmezse ESKİ değer korunur — güncelleme bir alanı
+     # sessizce silmez (isteyen/yetki emsali birebir).
+     "hucre":(_hucre or (existing.get("hucre","") if existing else "")),
      "gecmis":(existing.get("gecmis",[]) if existing else []),
      "tescil": (existing.get("tescil") if existing and existing.get("tescil") else yeni_tescil())}
 out=[]; found=False
