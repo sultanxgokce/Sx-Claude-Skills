@@ -1241,7 +1241,7 @@
       "id": "federe-os-cekirdek",
       "type": "agent",
       "name": "Federe OS Çekirdeği — odalar arası tetik · nabız · haberleşme",
-      "version": "0.5.0",
+      "version": "0.6.0",
       "description": "Federe Ekip-OS çekirdek protokolleri TEK pakette: tetikleme (poll+ACK round-trip), yalnız-META haberleşme, canlılık-nabzı, not-tutma. 14 odanın haberleşme omurgası. ÖKSÜZDÜ — 2026-08-08'de kanona adopte edildi (ortak mount'ta yaşıyordu, sıfırdan kurulumda geri gelmezdi).",
       "tags": [
         "federe",
