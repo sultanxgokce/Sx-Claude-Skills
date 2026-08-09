@@ -1,6 +1,6 @@
 ---
 name: layiha
-version: 1.12.0
+version: 1.13.0
 description: Bir konuyu kapsamlı ARAŞTIR, kalıcı bir tasarım-dokümanına (layiha) SABİTLE, inşayı SONRAYA bırak — kayıt-defterine işle, Sultan'a sabit-formatta teslim et + geri-dönüş-kolu bırak. İnşa bitince BAĞIMSIZ-AJAN (MÜHÜRDAR) tescili gerekir: "insa-edildi ≠ tescilli". "araştır inşayı sonra yaparız · bunu dökümana sabitle · layiha çıkar · aktif/tescil-bekleyen layihaları listele · bu haftaki layihalar" tetiğinde. GLOBAL (tüm container'lar).
 allowed-tools: Bash, Read, Write, Edit, Agent, AskUserQuestion
 ---
@@ -30,6 +30,24 @@ allowed-tools: Bash, Read, Write, Edit, Agent, AskUserQuestion
 ### 0 · Kapsam (kısa)
 konu · neden şimdi-inşa-değil · bakılacak mevcut-parçalar · efor (default yüksek). Slug = ASCII-kebab.
 
+🔴 **HÜCRE — Sultan'a SOR, tahmin etme (L66/NİZAM, Sultan-direktifi 2026-08-08):**
+*"AI ajan bana 'hangi tip ilişki' diye sormalı, gerekirse yenisini eklemeyi önerebilmeli —
+free/kenarsız çalışmıyoruz."* Bu iş hangi **NİZAM hücresinde** çalışacak? İki eksen DİKTİR:
+
+| Eksen | Soru | Değerler |
+|---|---|---|
+| **SUBSTRAT** | taraflar birbirine nasıl ULAŞIR? | `OTAG` (aynı kutu, canlı pane) · `MIZAN` (ortak araç diski + META havuz) · `MENZIL` (kutu↔kutu röle) · `KAPI` (Sultan yüzeyi) |
+| **AKIŞ** | iş hangi rollerden GEÇER? | `DIVAN` (tara→süz→Sultan→inşa→mühür) · `LAYIHA` (araştır→sabitle→teslim→inşa→tescil) · `OLCUM` (üret→kapı→hüküm→ders→kural) |
+
+Cevap adım-2'de `--hucre "<SUBSTRAT> x <AKIŞ>"` olarak deftere geçer (ör. `--hucre "MIZAN x OLCUM"`).
+
+✅ **`belirsiz` MEŞRU CEVAPTIR.** Hiçbir hücreye oturmuyorsa `--hucre belirsiz` yaz — bu bir hata
+değil, **yeni-tip arzının ham maddesidir**. Uydurma bir hücreye sıkıştırmak işi yanlış kutuya sokar;
+ölçüldü. Küme-dışı bir ad yazarsan defter kaydı REDDEDER (rc=2) — küme kapalıdır, ama genişletme
+kapılıdır: yeni tip gerekiyorsa Sultan'a **öner**.
+
+⚠️ Boş bırakmak ≠ `belirsiz`: boş "hiç sorulmadı" (bilgisizlik), `belirsiz` "bakıldı, oturmadı" (bilgi).
+
 ### 1 · Araştırmayı dispatch et
 Varsayılan = SERDAR-altı araştırma alt-ajanı (Agent `general-purpose`, `model:opus`, `run_in_background`).
 Prompt kalıbı (ZORUNLU): *"Araştırma alt-ajanısın, persona değilsin. SALT-ARAŞTIRMA — İNŞA YOK, host'a dokunma.
@@ -44,8 +62,11 @@ tasarım-seçenek+ÖNERİ [5] fazlama(additive/INERT) [6] açık Sultan-kararlar
 2. **memory-topic:** `project_<slug>.md` + MEMORY.md pointer + RESUME-TETİK cümlesi.
 3. **defter:** `append-note.sh` özet + resume.
 4. **KAYIT-DEFTERİ (YENİ):** `bash <skill-dizini>/scripts/layiha-defteri.sh ekle --slug <slug> --konu "<konu>"
-   --dokuman "<yol>" --pr "#<PR>" --resume "<resume-cümlesi>" --isteyen "Sultan|<AJAN>" [--yetki "<beyan>"]`
+   --dokuman "<yol>" --pr "#<PR>" --resume "<resume-cümlesi>" --isteyen "Sultan|<AJAN>" [--yetki "<beyan>"]
+   --hucre "<SUBSTRAT> x <AKIŞ>|belirsiz"`
    → durum=insa-bekliyor.
+   ⚠️ **`--hucre` YAZ** (L66): adım-0'da sorduğun hücre buraya geçer. Verilmezse kayıt yazılır ama
+   uyarı basılır ve hücre BİLİNMİYOR kalır — hücre-başına iş hacmi ölçülemez, katalog körleşir.
    ⚠️ **`--isteyen` YAZ** (K2): bu alan boş kalırsa kayıt "isteyeni bilinmeyen" olur — Sultan'ın
    istediği iş ile ajanın kendi açtığı iş defterde ayırt edilemez. Boş bırakmak `ajan` demek DEĞİLDİR;
    tahmin edilmez, "bilinmiyor" olarak durur ve süzgeçte ayrıca sayılır.

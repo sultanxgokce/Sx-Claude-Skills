@@ -405,6 +405,50 @@ esit "G16h eski kayıt 'bilinmiyor' sınıfında" "1" \
   "$(LAYIHA_DEFTER="$D16H" HAT_ROOT="$K16" bash "$SUT" liste --hepsi --isteyeni-bilinmeyen --porcelain 2>/dev/null | grep -c '^L01')"
 
 echo
+echo "=== G17 · NİZAM hücresi (L66-F2): kapalı küme AMA 'belirsiz' meşru ==="
+# Sultan: "ajan bana 'hangi tip ilişki' diye sormalı — free/kenarsız çalışmıyoruz."
+# Kapı buraya takıldı çünkü ölçülen yasa şu: bir protokolün adımı, işin ÜRÜNÜNÜ üretme
+# yolunun ÜSTÜNDE değilse ölür (ÖLÇÜM akışı canlı ⟂ DİVAN akışı gönüllü olduğu için ölü).
+D17="$T/nizam.jsonl"; : > "$D17"
+n17() { LAYIHA_DEFTER="$D17" HAT_ROOT="$T/OdaBir" bash "$SUT" "$@"; }
+alan17() { python3 -c "
+import json,sys
+for l in open('$D17'):
+    r=json.loads(l)
+    if r.get('slug')==sys.argv[1]: print(r.get('hucre','<ALAN-YOK>'))" "$1"; }
+
+# ALTIN: geçerli hücre yazılır ve KANONİK biçimde saklanır (serbest yazım tolere edilir,
+# küme tolere EDİLMEZ — tolerans biçimde olur, kümede değil).
+n17 ekle --slug h-altin --konu "K" --dokuman a.md --hucre "mizan x olcum" >/dev/null 2>&1
+esit "G17 geçerli hücre rc=0" "0" "$?"
+esit "G17 kanonik biçimde yazıldı" "MIZAN x OLCUM" "$(alan17 h-altin)"
+
+# KIRMIZI: küme-dışı ad REDDEDİLİR (kayıt yazılmaz) + reçete gösterilir.
+OUT17="$(n17 ekle --slug h-kirmizi --konu "K" --dokuman a.md --hucre "SARAY x OLCUM" 2>&1)"; RC17=$?
+esit "G17 küme-dışı hücre rc=2" "2" "$RC17"
+var  "G17 reçete gösterilir" "$OUT17" "hiçbirine oturmuyorsa"
+esit "G17 reddedilen kayıt YAZILMADI" "" "$(alan17 h-kirmizi)"
+
+# 'belirsiz' MEŞRU: kapalı küme dayatmak işi yanlış kutuya sokar (ölçüldü). Belirsiz bir
+# hata değil, yeni-tip arzının ham maddesidir → kabul edilir ve KAYDA GEÇER (sayılabilsin).
+n17 ekle --slug h-belirsiz --konu "K" --dokuman a.md --hucre belirsiz >/dev/null 2>&1
+esit "G17 'belirsiz' kabul edilir" "0" "$?"
+esit "G17 'belirsiz' kayda geçer" "belirsiz" "$(alan17 h-belirsiz)"
+
+# BOŞ ≠ BELİRSİZ: sorulmamış kayıt yazılabilir ama SESSİZ olamaz ("bilinmeyen gizlenmez").
+OUT17B="$(n17 ekle --slug h-bos --konu "K" --dokuman a.md 2>&1)"
+esit "G17 hücresiz kayıt yazılır (geriye-uyum)" "0" "$?"
+var  "G17 hücresizlik yüksek sesle söylenir" "$OUT17B" "hücresi BİLİNMİYOR"
+esit "G17 boş, 'belirsiz'e ÇEVRİLMEZ" "" "$(alan17 h-bos)"
+
+# GERİYE-UYUM: L66 öncesi 66 kayıtta alan yok. Eksiklik okuma-anında "" sayılır; DİSKE
+# göç YAZILMAZ (kasıtlı — eski satırı yeniden yazmak izi bozar). Bu yüzden sınav diske
+# değil OKUMA YOLUNA bakar: alansız kayıt listeyi çökertmemeli.
+printf '%s\n' '{"v":1,"id":"L99","slug":"eski-kayit","konu":"K","dokuman":"a.md","durum":"insa-bekliyor","tarih":"2026-07-01","proje":"OdaBir"}' >> "$D17"
+L17="$(n17 liste --hepsi 2>&1)"; esit "G17 alansız eski kayıt okuma yolunu çökertmez" "0" "$?"
+var  "G17 eski kayıt listede görünür" "$L17" "L99"
+
+echo
 echo "════════ SONUÇ: PASS=$PASS · FAIL=$FAIL ════════"
 [ "$FAIL" -eq 0 ] || exit 1
 exit 0
