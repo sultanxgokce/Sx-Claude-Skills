@@ -1,7 +1,7 @@
 ---
 name: federe-os-cekirdek
 type: agent
-version: 0.5.0
+version: 0.6.0
 description: >
   Federe Ekip-OS çekirdek-protokolleri (k0180 · C3/D7): tetikleme (A1/A4) + not-tutma (A2/B1) +
   haberleşme (B2) + canlılık-nabzı (A3) + hafıza-vatandaşlığı (B3) TEK pakette. Uzak-birim MÜDÜR'ü
@@ -80,6 +80,21 @@ bash $S nabiz "şu an ne yapıyorum (≤200, jargonsuz)" [skor 0-100]
   kod/log/sır gövdeye girmez (sunucu sır-desenini 400'ler; istemci ön-kapısı da reddeder).
 - Ajan↔Sultan: birimin kendi kanalı (defter/mailbox) — Sultan-dili, tek-soru netliği.
 - İnsan-onay alanına (GO/ONAY/sultan_response) ajan ASLA değer yazmaz (Yetki-Sınırı).
+
+## 4b · Üye adlarını merkeze bildirme (K3 — L64)
+```bash
+bash $D/ad-bildir.sh            # PROVA: ne göndereceğini basar, GÖNDERMEZ (rc=3)
+bash $D/ad-bildir.sh --gonder   # gönderir (hedef s01)
+```
+**Niçin:** merkezdeki künye 9 kutuda üye alanını doldurmuyordu → o kutulardaki ajanlar
+ad-tekilliği taramasının DIŞINDAYDI ve aynı ad üç kutuda habersiz doğdu. Merkez bunu kendi
+çözemez (İ1: izole kutuya otomatik okuma YOK) — çözüm **çekme değil İTME**.
+- 🔴 **Gövdeye YALNIZ AD girer.** Rol · görev · session_id · cwd · inbox · içerik: hiçbiri.
+  Kanon zaten "persona-adı meta'dır" diyor; bu, o iznin fiilen taşınmasıdır — yeni izin DEĞİL.
+- 🔴 **Kutu kodunu betik BEYAN ETMEZ** — sunucu token'dan türetir. Bir kutu başka kutu adına
+  ad bildiremez; kimlik yapısal olarak korunur.
+- Boş kayıt **gönderilmez** ("ölçemedim" ≠ "kimse yok"); uzun liste **kırpılmaz**, reddedilir
+  (kırpılmış liste eksikliği gizler).
 
 ## 5 · Hafıza-vatandaşlığı (B3)
 - Oturum-başı: kimliğini OKU (`_agents/ekip-os/<rol>/AGENT.md` + ORYANTASYON/durum-defteri) —
