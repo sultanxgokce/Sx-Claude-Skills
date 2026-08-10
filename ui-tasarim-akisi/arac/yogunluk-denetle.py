@@ -144,8 +144,27 @@ def yuzeyler(metin, panel_ad=ROL_VARSAYILAN["panel"]):
 
 
 def araliklar(metin, etiket):
-    return [(m.start(), metin.find("</%s>" % etiket, m.start()))
-            for m in re.finditer(r"<%s\b" % etiket, metin)]
+    """Etiket aralıkları — İÇ-İÇE geçmiş etiketleri yığınla doğru eşler.
+
+    ESKİ DAVRANIŞ (hatalıydı): her açılış için `find("</etiket>")` ile İLK kapanış
+    alınıyordu. İç-içe `<sc-if>`te DIŞ aralık, İÇ etiketin kapanışında bitmiş sayılıyor —
+    iç bloğun bittiği yerle dış bloğun bittiği yer arasındaki öğeler "koşulsuz" görünüp
+    bütçeye yazılıyordu. Sonuç: sahte-kırmızı, ve kanonik prompt-yap.sh --onceki yolunda
+    devam promptu hiç üretilemiyordu (huzur, 2026-08-10: üretim hattı durdu).
+
+    Kapanmamış etiket eski davranışı korur: bitiş -1 (= dosya sonuna kadar).
+    """
+    olaylar = sorted(
+        [(m.start(), 1) for m in re.finditer(r"<%s\b" % etiket, metin)]
+        + [(m.start(), -1) for m in re.finditer(r"</%s>" % etiket, metin)])
+    yigin, cift = [], []
+    for poz, tip in olaylar:
+        if tip == 1:
+            yigin.append(poz)
+        elif yigin:
+            cift.append((yigin.pop(), poz))
+    cift += [(poz, -1) for poz in yigin]          # kapanmamış → açık uçlu
+    return sorted(cift)
 
 
 def kapsayan(poz, arlar):

@@ -1,0 +1,20 @@
+<!DOCTYPE html><html><body>
+<!-- REGRESYON FİKSTÜRÜ (huzur, 2026-08-10): iç-içe sc-if.
+     Üç blok-türü var ama üçüncüsü (şerit) DIŞ sc-if'in içinde ve İÇ sc-if kapandıktan
+     SONRA geliyor. Eski aralık-eşlemesi dış aralığı iç kapanışta bitiriyordu → şerit
+     "koşulsuz" sayılıp bütçe 2 aşılıyor ve ekran sahte-kırmızı alıyordu. -->
+<!-- bilesen: Gezinme -->
+<header><a href="#">Bugün</a><a href="#">Kayıtlar</a></header>
+<!-- bilesen: Veri tablosu -->
+<table><tr><td style="font-size:14.5px">satır</td></tr></table>
+<!-- bilesen: Ölçü kartı -->
+<div style="border-radius:10px"><div style="font-size:25px">7</div></div>
+<sc-if kosul="gelismis">
+  <sc-if kosul="uyari_var">
+    <!-- bilesen: Durum rozeti -->
+    <span style="border-radius:999px;font-size:12.5px">Uygun</span>
+  </sc-if>
+  <!-- bilesen: Bilgi şeridi -->
+  <div style="font-size:12.5px">bilgilendirme</div>
+</sc-if>
+</body></html>

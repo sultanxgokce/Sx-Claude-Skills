@@ -209,6 +209,31 @@ if [ "$rc" = "1" ] && printf '%s' "$cikti" | grep -q 'S5 font-kademe küme-dış
   gecti "punto-sifirsonu-kirmizi" "küme-dışı 30px S5 ile yakalandı"
 else kaldi "punto-sifirsonu-kirmizi" "rc=$rc — küme-dışı punto cezasız kaldı (normalizasyon gevşemiş)"; fi
 
+# 13 · İÇ-İÇE sc-if — huzur ölçtü 2026-08-10, üretim hattı durmuştu.
+#      Aralık eşlemesi her açılış için İLK kapanışı alıyordu: iç-içe sc-if'te DIŞ aralık
+#      İÇ etiketin kapanışında bitmiş sayılıyor, aradaki öğeler "koşulsuz" görünüp bütçeye
+#      yazılıyordu. Sonuç: sahte-kırmızı → prompt-yap.sh --onceki hiç prompt üretemiyordu.
+#      Fikstür bilerek 3 blok-türü taşır ve üçüncüsü dış sc-if'in İÇİNDE, iç sc-if'in SONRASINDA.
+cikti="$(python3 "$KAPI" "$FIK/scif-ic-ice" --profil "$FIK/kapi-profili.json" 2>&1)"; rc=$?
+if [ "$rc" = "0" ] && printf '%s' "$cikti" | grep -q 'koşullu dallarla 3 tür'; then
+  gecti "scif-ic-ice-yesil" "iç-içe sc-if: koşullu sayıldı, sahte-kırmızı yok"
+else kaldi "scif-ic-ice-yesil" "rc=$rc — iç-içe sc-if yine sahte-kırmızı: $(printf '%s' "$cikti" | grep -m1 'S2')"; fi
+
+# 13b · Aynı onarımın birim yüzü: kardeş/kapanmamış hâller bozulmadı mı (aşırı-düzeltme freni).
+python3 - "$KAPI" <<'PYEOF' && gecti "scif-aralik-birim" "kardeş + kapanmamış aralıklar korundu" \
+  || kaldi "scif-aralik-birim" "aralık eşlemesi kardeş/kapanmamış hâlde bozuldu"
+import importlib.util, sys
+spec = importlib.util.spec_from_file_location("y", sys.argv[1])
+m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+ic = "A<sc-if a>B<sc-if b>C</sc-if>D</sc-if>E"
+kardes = "A<sc-if a>C</sc-if>D<sc-if b>E</sc-if>"
+acik = "A<sc-if a>C"
+assert m.kapsayan(ic.index("D"), m.araliklar(ic, "sc-if")) is not None, "iç-içe: dış aralık kayıp"
+assert m.kapsayan(ic.index("E"), m.araliklar(ic, "sc-if")) is None, "iç-içe: dış aralık taştı"
+assert m.kapsayan(kardes.index("D"), m.araliklar(kardes, "sc-if")) is None, "kardeş: araya taştı"
+assert m.kapsayan(acik.index("C"), m.araliklar(acik, "sc-if")) is not None, "kapanmamış: açık uç kayıp"
+PYEOF
+
 echo "────────────────────────────────────────────"
 printf 'TOPLAM: %d geçti · %d kaldı\n' "$GECTI" "$KALDI"
 [ "$KALDI" = "0" ] || exit 1
