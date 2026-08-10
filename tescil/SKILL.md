@@ -1,7 +1,7 @@
 ---
 name: tescil
 type: agent
-version: 0.2.0
+version: 0.2.1
 description: >
   MÜHÜRDAR'ın el-kitabı: teslim edilen bir işi (kart) YAZILI gerekliliklere (GOAL + G1..Gn
   komut→beklenen/RC) karşı MAKİNE-KANITLI sınayan kör-protokol tescil-kabuğu. sert-teslim
