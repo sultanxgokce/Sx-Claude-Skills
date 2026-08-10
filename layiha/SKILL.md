@@ -1,6 +1,6 @@
 ---
 name: layiha
-version: 1.13.0
+version: 1.13.1
 description: Bir konuyu kapsamlı ARAŞTIR, kalıcı bir tasarım-dokümanına (layiha) SABİTLE, inşayı SONRAYA bırak — kayıt-defterine işle, Sultan'a sabit-formatta teslim et + geri-dönüş-kolu bırak. İnşa bitince BAĞIMSIZ-AJAN (MÜHÜRDAR) tescili gerekir: "insa-edildi ≠ tescilli". "araştır inşayı sonra yaparız · bunu dökümana sabitle · layiha çıkar · aktif/tescil-bekleyen layihaları listele · bu haftaki layihalar" tetiğinde. GLOBAL (tüm container'lar).
 allowed-tools: Bash, Read, Write, Edit, Agent, AskUserQuestion
 ---
@@ -113,8 +113,10 @@ Build YALNIZ Sultan resume-cümlesini söyleyince. İnşa BİTİNCE:
 ```
 layiha-defteri.sh durum <kod|slug> insa-edildi --kanit "<ref>"
 ```
-→ kayıt **otomatik tescil-kuyruğuna** girer (`📋 tescil bekliyor`). Her kayıt otomatik bir KOD alır (L01, L02…);
-`durum` komutu kod ya da slug kabul eder.
+→ kayıt **otomatik tescil-kuyruğuna** girer (`📋 tescil bekliyor`). Her kayıt otomatik bir KOD alır —
+`<CELL>-L##` biçiminde (CELL = NİZAM hücre-kimliği, `CELL_ID` env'inden; unset → `s01`, ör. `s01-L37`).
+K6 (2026-08-10) öncesi kayıtların öneksiz kodu (`L01`, `L35`…) DEĞİŞMEZ ve aynen tanınmaya devam eder —
+`durum` komutu hem eski öneksiz hem yeni önekli kodu ya da slug'ı kabul eder.
 
 ⚖️ **KANIT KAPISI (K7 · Sultan-kararı 2026-07-29): "bitti = kanıtlı".** `insa-edildi`'ye geçiş **kanıtsız
 REDDEDİLİR** (RC=2 + tek-satır reçete). Bu, defterin (`defter-mailbox.sh durum … --kanit`) en iyi
