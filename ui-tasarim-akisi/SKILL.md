@@ -1,7 +1,7 @@
 ---
 name: ui-tasarim-akisi
 type: agent
-version: 0.3.1
+version: 0.3.2
 description: >
   UI/arayüz tasarım işinin ZORUNLU akış kapısı. Bir ürünün ekranlarını tek tek değil dizi
   hâlinde tasarlatır: ürün niyeti → sayfa envanteri → kullanıcı senaryoları (tık bütçesi) →
