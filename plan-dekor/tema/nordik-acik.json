@@ -1,0 +1,24 @@
+{
+  "id": "nordik-acik",
+  "ad": "Nordik Açık",
+  "aciklama": "Soğuk gri-mavi, açık ahşap, düşük kontrast. Minimal/çağdaş portföy sunumu.",
+  "zemin": "#ffffff",
+  "duvar": { "dis": "#2f3438", "ic": "#565f66", "poche": "#3d4449" },
+  "aciklik": { "kapi": "#8a9aa6", "pencere": "#7fb2cf", "gecis": "#a8b0b6" },
+  "metin": { "baslik": "#22282c", "oda": "#333b41", "alan": "#77838c", "lejant": "#4f585f" },
+  "oda_tipleri": {
+    "yatak_odasi":   { "dolgu": "#f4f0e9", "doku": "parke",  "doku_renk": "#e3ddd2" },
+    "oturma_odasi":  { "dolgu": "#f7f4ee", "doku": "parke",  "doku_renk": "#e6e0d5" },
+    "mutfak":        { "dolgu": "#eef1f2", "doku": "fayans", "doku_renk": "#dae0e3" },
+    "banyo":         { "dolgu": "#e7eef2", "doku": "fayans", "doku_renk": "#cfdde4" },
+    "wc":            { "dolgu": "#e7eef2", "doku": "fayans", "doku_renk": "#cfdde4" },
+    "antre":         { "dolgu": "#eef0f0", "doku": "fayans", "doku_renk": "#dcdfe0" },
+    "hol":           { "dolgu": "#eef0f0", "doku": "fayans", "doku_renk": "#dcdfe0" },
+    "giyinme":       { "dolgu": "#f4f0e9", "doku": "parke",  "doku_renk": "#e3ddd2" },
+    "balkon":        { "dolgu": "#e8efe9", "doku": "fayans", "doku_renk": "#d2dfd4" },
+    "kiler":         { "dolgu": "#eef0f0", "doku": "yok",    "doku_renk": "#dcdfe0" },
+    "diger":         { "dolgu": "#f3f4f4", "doku": "yok",    "doku_renk": "#e0e2e3" }
+  },
+  "mobilya": { "dolgu": "#ffffff", "ikincil": "#eaeef0", "vurgu": "#d6e0e6", "cizgi": "#5c666d", "kalinlik": 2 },
+  "golge": { "acik": true, "renk": "#000000", "opaklik": 0.1, "kayma_cm": 4, "bulanik_cm": 5 }
+}

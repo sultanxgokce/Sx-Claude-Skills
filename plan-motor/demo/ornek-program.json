@@ -1,0 +1,13 @@
+{
+  "ad": "PERGEL FAZ A yeşil-fixture — 2+1 · 54 m2 dikdörtgen sınır",
+  "birim": "cm",
+  "sinir": [[0, 0], [900, 0], [900, 600], [0, 600]],
+  "giris_kenari": 0,
+  "odalar": [
+    { "id": "hol", "ad": "Hol", "tip": "hol", "hedef_m2": 7 },
+    { "id": "salon", "ad": "Salon", "tip": "oturma_odasi", "hedef_m2": 22 },
+    { "id": "yatak", "ad": "Yatak Odası", "tip": "yatak_odasi", "hedef_m2": 13 },
+    { "id": "mutfak", "ad": "Mutfak", "tip": "mutfak", "hedef_m2": 8 }
+  ],
+  "komsuluk": [["hol", "salon"], ["salon", "mutfak"], ["hol", "yatak"]]
+}

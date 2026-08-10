@@ -1,0 +1,24 @@
+{
+  "id": "modern-sicak",
+  "ad": "Modern Sıcak",
+  "aciklama": "Toprak tonları, sıcak ahşap zemin, yumuşak kontrast. Emlak sunumu ve konut portföyü için varsayılan.",
+  "zemin": "#ffffff",
+  "duvar": { "dis": "#3a3430", "ic": "#5a524a", "poche": "#4a423a" },
+  "aciklik": { "kapi": "#b07b47", "pencere": "#6fa3c4", "gecis": "#9c948a" },
+  "metin": { "baslik": "#2a2520", "oda": "#3a332b", "alan": "#7a6f60", "lejant": "#5a5248" },
+  "oda_tipleri": {
+    "yatak_odasi":   { "dolgu": "#f2e3d0", "doku": "parke",  "doku_renk": "#e0cbb0" },
+    "oturma_odasi":  { "dolgu": "#f6ead8", "doku": "parke",  "doku_renk": "#e5d2b8" },
+    "mutfak":        { "dolgu": "#eae4dc", "doku": "fayans", "doku_renk": "#d5cbc0" },
+    "banyo":         { "dolgu": "#dfe9ec", "doku": "fayans", "doku_renk": "#c4d5da" },
+    "wc":            { "dolgu": "#dfe9ec", "doku": "fayans", "doku_renk": "#c4d5da" },
+    "antre":         { "dolgu": "#ece6de", "doku": "fayans", "doku_renk": "#d8d0c5" },
+    "hol":           { "dolgu": "#ece6de", "doku": "fayans", "doku_renk": "#d8d0c5" },
+    "giyinme":       { "dolgu": "#f2e3d0", "doku": "parke",  "doku_renk": "#e0cbb0" },
+    "balkon":        { "dolgu": "#e4ebe1", "doku": "fayans", "doku_renk": "#cbd8c6" },
+    "kiler":         { "dolgu": "#ece6de", "doku": "yok",    "doku_renk": "#d8d0c5" },
+    "diger":         { "dolgu": "#f2efe9", "doku": "yok",    "doku_renk": "#ddd8d0" }
+  },
+  "mobilya": { "dolgu": "#ffffff", "ikincil": "#efe6da", "vurgu": "#dcccb6", "cizgi": "#6b5f50", "kalinlik": 2 },
+  "golge": { "acik": true, "renk": "#000000", "opaklik": 0.13, "kayma_cm": 5, "bulanik_cm": 6 }
+}

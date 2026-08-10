@@ -1,0 +1,83 @@
+{
+  "surum": "0.1.0",
+  "not": "Oda tipi → mobilya programı. 'zorunlu' yerleşemezse oda için aday ÜRETİLMEZ (dürüst RC 1). 'opsiyonel' sığdıkça eklenir, sığmazsa sessizce atlanır. Oda tipleri plan-motor ODA_TIPLERI ile birebir aynıdır.",
+  "programlar": {
+    "yatak_odasi": {
+      "zorunlu": [
+        { "mobilya": "cift-yatak-160", "adet": 1 },
+        { "mobilya": "gardirop-200", "adet": 1 }
+      ],
+      "opsiyonel": [
+        { "mobilya": "komodin", "adet": 2, "oncelik": 10 },
+        { "mobilya": "sifonyer", "adet": 1, "oncelik": 6 },
+        { "mobilya": "calisma-masasi", "adet": 1, "oncelik": 4 },
+        { "mobilya": "berjer", "adet": 1, "oncelik": 2 }
+      ],
+      "kucuk_oda_m2": 11,
+      "kucuk_oda_zorunlu": [
+        { "mobilya": "tek-yatak-90", "adet": 1 },
+        { "mobilya": "gardirop-200", "adet": 1 }
+      ]
+    },
+    "oturma_odasi": {
+      "zorunlu": [
+        { "mobilya": "kanepe-3lu", "adet": 1 }
+      ],
+      "opsiyonel": [
+        { "mobilya": "tv-unitesi", "adet": 1, "oncelik": 10 },
+        { "mobilya": "sehpa", "adet": 1, "oncelik": 8 },
+        { "mobilya": "berjer", "adet": 2, "oncelik": 6 },
+        { "mobilya": "yemek-masasi-6", "adet": 1, "oncelik": 4 }
+      ]
+    },
+    "mutfak": {
+      "zorunlu": [
+        { "mobilya": "mutfak-tezgah", "adet": 1 }
+      ],
+      "opsiyonel": [
+        { "mobilya": "buzdolabi", "adet": 1, "oncelik": 10 },
+        { "mobilya": "yemek-masasi-6", "adet": 1, "oncelik": 3 }
+      ]
+    },
+    "banyo": {
+      "zorunlu": [
+        { "mobilya": "lavabo", "adet": 1 },
+        { "mobilya": "klozet", "adet": 1 }
+      ],
+      "opsiyonel": [
+        { "mobilya": "dus-teknesi", "adet": 1, "oncelik": 10 },
+        { "mobilya": "kuvet", "adet": 1, "oncelik": 5 }
+      ]
+    },
+    "wc": {
+      "zorunlu": [
+        { "mobilya": "klozet", "adet": 1 },
+        { "mobilya": "lavabo", "adet": 1 }
+      ],
+      "opsiyonel": []
+    },
+    "antre": {
+      "zorunlu": [],
+      "opsiyonel": [
+        { "mobilya": "portmanto", "adet": 1, "oncelik": 10 }
+      ]
+    },
+    "hol": {
+      "zorunlu": [],
+      "opsiyonel": [
+        { "mobilya": "portmanto", "adet": 1, "oncelik": 5 }
+      ]
+    },
+    "giyinme": {
+      "zorunlu": [
+        { "mobilya": "gardirop-200", "adet": 1 }
+      ],
+      "opsiyonel": [
+        { "mobilya": "sifonyer", "adet": 1, "oncelik": 8 }
+      ]
+    },
+    "balkon": { "zorunlu": [], "opsiyonel": [] },
+    "kiler": { "zorunlu": [], "opsiyonel": [] },
+    "diger": { "zorunlu": [], "opsiyonel": [] }
+  }
+}

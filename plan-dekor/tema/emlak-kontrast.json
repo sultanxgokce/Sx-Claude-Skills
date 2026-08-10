@@ -1,0 +1,24 @@
+{
+  "id": "emlak-kontrast",
+  "ad": "Emlak Kontrast",
+  "aciklama": "Yüksek kontrast, canlı oda ayrımı, kalın duvar poché. Küçük ekranda/ilan görselinde okunaklılık için.",
+  "zemin": "#ffffff",
+  "duvar": { "dis": "#1a1a1a", "ic": "#3d3d3d", "poche": "#262626" },
+  "aciklik": { "kapi": "#c2410c", "pencere": "#0284c7", "gecis": "#78716c" },
+  "metin": { "baslik": "#111111", "oda": "#1f1f1f", "alan": "#57534e", "lejant": "#3f3f46" },
+  "oda_tipleri": {
+    "yatak_odasi":   { "dolgu": "#fde8d4", "doku": "parke",  "doku_renk": "#f3cba4" },
+    "oturma_odasi":  { "dolgu": "#fef3c7", "doku": "parke",  "doku_renk": "#f5dd93" },
+    "mutfak":        { "dolgu": "#dcfce7", "doku": "fayans", "doku_renk": "#a7e8c0" },
+    "banyo":         { "dolgu": "#dbeafe", "doku": "fayans", "doku_renk": "#a5c9f5" },
+    "wc":            { "dolgu": "#dbeafe", "doku": "fayans", "doku_renk": "#a5c9f5" },
+    "antre":         { "dolgu": "#ede9fe", "doku": "fayans", "doku_renk": "#c9bdf5" },
+    "hol":           { "dolgu": "#ede9fe", "doku": "fayans", "doku_renk": "#c9bdf5" },
+    "giyinme":       { "dolgu": "#fce7f3", "doku": "parke",  "doku_renk": "#f5b8d8" },
+    "balkon":        { "dolgu": "#d9f99d", "doku": "fayans", "doku_renk": "#b6e762" },
+    "kiler":         { "dolgu": "#f5f5f4", "doku": "yok",    "doku_renk": "#dcdad7" },
+    "diger":         { "dolgu": "#fafaf9", "doku": "yok",    "doku_renk": "#e3e1de" }
+  },
+  "mobilya": { "dolgu": "#ffffff", "ikincil": "#e7e5e4", "vurgu": "#d6d3d1", "cizgi": "#292524", "kalinlik": 2.5 },
+  "golge": { "acik": true, "renk": "#000000", "opaklik": 0.18, "kayma_cm": 6, "bulanik_cm": 6 }
+}

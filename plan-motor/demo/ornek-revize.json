@@ -1,0 +1,6 @@
+[
+    { "islem": "duvar_tasi", "duvar": "d_ic", "dx": 40, "dy": 0 },
+    { "islem": "aciklik_ekle", "id": "yeni_pencere", "tip": "pencere", "duvar": "d_alt", "oran": 0.75, "genislik": 120 },
+    { "islem": "oda_guncelle", "oda": "oda_a", "beyan_m2": null },
+    { "islem": "oda_guncelle", "oda": "oda_b", "beyan_m2": null }
+]

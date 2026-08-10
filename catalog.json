@@ -1,6 +1,6 @@
 {
   "version": "2.1",
-  "updated": "2026-08-04",
+  "updated": "2026-08-10",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -1251,6 +1251,109 @@
         "global",
         "agent"
       ]
+    },
+    {
+      "id": "defter-kapisi",
+      "type": "agent",
+      "name": "defter-kapisi — görev-yakalama + mailbox-yanıt prosedürü",
+      "version": "0.2.0",
+      "description": "Sultan'la doğal-dil sohbette iki tekrarlayan-anı standartlaştırır: (A) GÖREV-YAKALAMA KAPISI — yeni-görev mi/mevcut-eklemesi mi ayrımı, yeni ise deftere yazmadan önce çoktan-seçmeli onay; (B) MAILBOX-YANIT PROSEDÜRÜ — kart-oku→anla→Sultan-dilinde-yanıtla→aksiyon-al→thread-kapat. ÖKSÜZDÜ — evergreen-parity 2026-08-10 yakaladı, hiçbir git kaynağında yoktu.",
+      "tags": [
+        "defter",
+        "gorev-yakalama",
+        "mailbox",
+        "sultan-dili",
+        "kapi",
+        "onay-gate",
+        "capture",
+        "ilerleme-akisi"
+      ],
+      "author": "sultanxgokce",
+      "source": "öksüz-adoption — evergreen tek-düğme hijyeni (2026-08-10)",
+      "status": "canli",
+      "path": "defter-kapisi/SKILL.md",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "sultan-dili (kapı-standardı)"
+    },
+    {
+      "id": "maas-kapisi",
+      "type": "agent",
+      "name": "maas-kapisi — bordro × Garanti maaş-yükleme çapraz-kontrolü",
+      "version": "0.1.0",
+      "description": "Aylık maaş ödemesinin önündeki makine kapısı: muhasebeciden gelen BORDRO (PDF) ile Garanti Bankası MAAŞ YÜKLE dosyasını (TGB xlsx) kişi kişi kuruşuna karşılaştırır, fark varsa onay akışını durdurur; temizse WhatsApp onay-metni + banka e-posta taslağı üretir, her ayı sha256'lı arşive alır. ÖKSÜZDÜ — evergreen-parity 2026-08-10 yakaladı, hiçbir git kaynağında yoktu.",
+      "tags": [
+        "maas",
+        "bordro",
+        "garanti",
+        "puantaj",
+        "arsiv",
+        "kvkk",
+        "kapi"
+      ],
+      "author": "sultanxgokce",
+      "source": "öksüz-adoption — evergreen tek-düğme hijyeni (2026-08-10)",
+      "status": "v0.1-pilot",
+      "path": "maas-kapisi/SKILL.md",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "finans-kapisi (onay-durdurucu)"
+    },
+    {
+      "id": "plan-dekor",
+      "type": "agent",
+      "name": "plan-dekor — renkli, mobilyalı sunum planı motoru",
+      "version": "0.6.0",
+      "description": "2B kat planını renkli, mobilyalı sunum planına çevirir: kural-tabanlı deterministik mobilya yerleşimi (kapı-süpürme alanı boş, çakışma yok), zemin dokusu + oda renkleri + lejant + kuzey oku + ölçek çubuğu ile SVG/PNG üretir, doğal-dil revizyonunu yapısal tarifle uygular. plan-motor'u CLI sınırından besteler. Fail-closed, deterministik ($0, API/GPU yok). ÖKSÜZDÜ — evergreen-parity 2026-08-10 yakaladı, hiçbir git kaynağında yoktu.",
+      "tags": [
+        "kat-plani",
+        "mobilya",
+        "yerlesim",
+        "renklendirme",
+        "sunum",
+        "emlak",
+        "svg",
+        "fail-closed",
+        "deterministik"
+      ],
+      "author": "sultanxgokce",
+      "source": "öksüz-adoption — evergreen tek-düğme hijyeni (2026-08-10)",
+      "status": "v0.6",
+      "path": "plan-dekor/SKILL.md",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "plan-motoru (mimari, plan-motor bestecisi)"
+    },
+    {
+      "id": "plan-motor",
+      "type": "agent",
+      "name": "plan-motor — 2B kat-planı motoru",
+      "version": "1.4.0",
+      "description": "DWG/DXF çizimini okur (katman/birim/envanter), kendi geometrisiyle referans-kalitede çizer, üstünden ölçer (oda alanı/duvar/mesafe), doğal-dil komutunu yapısal tarife çevirip revize eder, semantik oda grafı çıkarır (lifting), mevcut planı mimari kural setine karşı denetler, boş sınır+oda programından aday yerleşim üretir. Dosya-tabanlı tek giriş, fail-closed. ÖKSÜZDÜ — evergreen-parity 2026-08-10 yakaladı, hiçbir git kaynağında yoktu.",
+      "tags": [
+        "cad",
+        "dwg",
+        "dxf",
+        "kat-plani",
+        "2b-cizim",
+        "olcum",
+        "revizyon",
+        "lifting",
+        "fail-closed",
+        "svg",
+        "mimari"
+      ],
+      "author": "sultanxgokce",
+      "source": "öksüz-adoption — evergreen tek-düğme hijyeni (2026-08-10)",
+      "status": "canli",
+      "path": "plan-motor/SKILL.md",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "plan-motoru (mimari, çekirdek)"
     }
   ]
 }

@@ -1,0 +1,134 @@
+{
+  "ad": "TR-PAIY-2026",
+  "surum": "RG-1/7/2026-33297",
+  "aciklama": "Planlı Alanlar İmar Yönetmeliği (konsolide) asgarileri — FAZ 1 alt-kümesi. Eşikler bu dosyada YAŞAR, motor kodunda değil. Mevzuata dayanmayan kurallar kaynak alanında AÇIKÇA 'mevzuat maddesi DEĞİL' der — madde uydurmak yasak. Doğrulanamayanlar (TS 9111, Neufert, '1+1 ≥28 m²') bilinçli olarak DIŞARIDA.",
+  "kaynak_metin": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=23722&MevzuatTur=7&MevzuatTertip=5",
+  "olusturma": "2026-08-04",
+  "kurallar": [
+    {
+      "id": "SAKUL.B001.kapi_kanadi",
+      "ad": "Her hacimde en az bir kapı kanadı",
+      "kaynak": "plan-motor B-001 bulgusu — mimari tutarlılık (mevzuat maddesi DEĞİL)",
+      "uygulanir": { "kapsam": "oda" },
+      "sart": [{ "olcut": "kapi_sayisi", "op": ">=", "deger": 1 }],
+      "siddet": "uyari",
+      "not": "Duvar ağzı (gecis) kanat sayılmaz. Meşru istisna var (açık plan, niş) — o yüzden uyarı, hata değil; kararı insan verir."
+    },
+    {
+      "id": "SAKUL.ERISIM.baglantililik",
+      "ad": "Dış kapıdan her odaya erişim",
+      "kaynak": "mimari tutarlılık — yapısal zorunluluk (mevzuat maddesi DEĞİL)",
+      "uygulanir": { "kapsam": "plan" },
+      "sart": [{ "olcut": "erisilemeyen_oda_sayisi", "op": "==", "deger": 0 }],
+      "siddet": "hata",
+      "not": "Kenarlar yalnız kapi|gecis açıklıklarından kurulur; karşı tarafı modellenmemiş açıklık kenar üretmez (fail-closed) — ihlal raporunda 'belirsiz' bilgi satırlarına bak."
+    },
+    {
+      "id": "TR.PAIY.29-1.oturma_odasi",
+      "ad": "Oturma odası asgari alan ve dar kenar",
+      "kaynak": "Planlı Alanlar İmar Yönetmeliği md.29/(1)",
+      "kaynak_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=23722&MevzuatTur=7&MevzuatTertip=5",
+      "surum": "RG-1/7/2026-33297",
+      "uygulanir": { "oda.tip": "oturma_odasi" },
+      "sart": [
+        { "olcut": "net_alan_m2", "op": ">=", "deger": 12 },
+        { "olcut": "dar_kenar_cm", "op": ">=", "deger": 300 }
+      ],
+      "siddet": "hata"
+    },
+    {
+      "id": "TR.PAIY.29-1.yatak_odasi",
+      "ad": "Yatak odası asgari alan ve dar kenar",
+      "kaynak": "Planlı Alanlar İmar Yönetmeliği md.29/(1)",
+      "kaynak_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=23722&MevzuatTur=7&MevzuatTertip=5",
+      "surum": "RG-1/7/2026-33297",
+      "uygulanir": { "oda.tip": "yatak_odasi" },
+      "sart": [
+        { "olcut": "net_alan_m2", "op": ">=", "deger": 9 },
+        { "olcut": "dar_kenar_cm", "op": ">=", "deger": 250 }
+      ],
+      "siddet": "hata"
+    },
+    {
+      "id": "TR.PAIY.29-1.mutfak",
+      "ad": "Mutfak asgari alan ve dar kenar",
+      "kaynak": "Planlı Alanlar İmar Yönetmeliği md.29/(1)",
+      "kaynak_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=23722&MevzuatTur=7&MevzuatTertip=5",
+      "surum": "RG-1/7/2026-33297",
+      "uygulanir": { "oda.tip": "mutfak" },
+      "sart": [
+        { "olcut": "net_alan_m2", "op": ">=", "deger": 3.3 },
+        { "olcut": "dar_kenar_cm", "op": ">=", "deger": 150 }
+      ],
+      "siddet": "hata"
+    },
+    {
+      "id": "TR.PAIY.29-1.banyo",
+      "ad": "Banyo asgari alan ve dar kenar",
+      "kaynak": "Planlı Alanlar İmar Yönetmeliği md.29/(1)",
+      "kaynak_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=23722&MevzuatTur=7&MevzuatTertip=5",
+      "surum": "RG-1/7/2026-33297",
+      "uygulanir": { "oda.tip": "banyo" },
+      "sart": [
+        { "olcut": "net_alan_m2", "op": ">=", "deger": 3.0 },
+        { "olcut": "dar_kenar_cm", "op": ">=", "deger": 150 }
+      ],
+      "siddet": "hata"
+    },
+    {
+      "id": "TR.PAIY.29-1.wc",
+      "ad": "WC asgari alan ve dar kenar",
+      "kaynak": "Planlı Alanlar İmar Yönetmeliği md.29/(1)",
+      "kaynak_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=23722&MevzuatTur=7&MevzuatTertip=5",
+      "surum": "RG-1/7/2026-33297",
+      "uygulanir": { "oda.tip": "wc" },
+      "sart": [
+        { "olcut": "net_alan_m2", "op": ">=", "deger": 1.2 },
+        { "olcut": "dar_kenar_cm", "op": ">=", "deger": 100 }
+      ],
+      "siddet": "hata"
+    },
+    {
+      "id": "TR.PAIY.29-3.koridor_genisligi",
+      "ad": "Hol/koridor net genişliği",
+      "kaynak": "Planlı Alanlar İmar Yönetmeliği md.29/(3)",
+      "kaynak_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=23722&MevzuatTur=7&MevzuatTertip=5",
+      "surum": "RG-1/7/2026-33297",
+      "uygulanir": { "oda.tip": ["hol", "antre"] },
+      "sart": [{ "olcut": "dar_kenar_cm", "op": ">=", "deger": 120 }],
+      "siddet": "hata"
+    },
+    {
+      "id": "TR.PAIY.39.kapi_net_ic",
+      "ad": "İç kapı net genişliği",
+      "kaynak": "Planlı Alanlar İmar Yönetmeliği md.39",
+      "kaynak_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=23722&MevzuatTur=7&MevzuatTertip=5",
+      "surum": "RG-1/7/2026-33297",
+      "uygulanir": { "aciklik.tip": "kapi", "aciklik.dis": false },
+      "sart": [{ "olcut": "genislik_cm", "op": ">=", "deger": 90 }],
+      "siddet": "hata"
+    },
+    {
+      "id": "TR.PAIY.39.kapi_net_giris",
+      "ad": "Daire giriş kapısı net genişliği",
+      "kaynak": "Planlı Alanlar İmar Yönetmeliği md.39",
+      "kaynak_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=23722&MevzuatTur=7&MevzuatTertip=5",
+      "surum": "RG-1/7/2026-33297",
+      "uygulanir": { "aciklik.tip": "kapi", "aciklik.rol": "giris" },
+      "sart": [{ "olcut": "genislik_cm", "op": ">=", "deger": 100 }],
+      "siddet": "hata",
+      "not": "Seçici rol=giris'tir, 'dış duvarda' DEĞİL: balkon kapısı da dış duvardadır ama md.39 giriş eşiğine tabi değildir; iç koridora açılan gerçek giriş ise dış duvarda değildir. rol beyan edilmemiş kapılar KÖR NOKTA uyarısı düşürür (sessiz geçiş yok). Bina ana girişi (≥150) tek-daire modelinde temsil edilmiyor — bilinçli kapsam dışı."
+    },
+    {
+      "id": "TR.PAIY.32-1.dogrudan_isik",
+      "ad": "Oturma ve yatak odaları doğrudan ışık",
+      "kaynak": "Planlı Alanlar İmar Yönetmeliği md.32/(1)",
+      "kaynak_url": "https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=23722&MevzuatTur=7&MevzuatTertip=5",
+      "surum": "RG-1/7/2026-33297",
+      "uygulanir": { "oda.tip": ["oturma_odasi", "yatak_odasi"] },
+      "sart": [{ "olcut": "dogrudan_isik", "op": "==", "deger": true }],
+      "siddet": "hata",
+      "not": "Dış duvarda pencere YA DA dışa açılan kapı (balkon kapısı) ışık sayılır."
+    }
+  ]
+}

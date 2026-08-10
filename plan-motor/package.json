@@ -1,0 +1,19 @@
+{
+  "name": "plan-motor",
+  "version": "1.4.0",
+  "description": "Jenerik 2B kat-plani motoru: DWG/DXF oku · kendi geometrisiyle ciz · olc · revize · lifting · uret (bos sinirdan aday yerlesim). Dosya-tabanli CLI, fail-closed.",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "plan-motor": "./cli.mjs"
+  },
+  "dependencies": {
+    "@node-projects/acad-ts": "^2.4.0",
+    "@tarikjabiri/dxf": "^2.8.9",
+    "dejavu-fonts-ttf": "^2.37.3",
+    "dwgdxf": "^2.0.1",
+    "dxf-parser": "^1.1.2",
+    "polygon-clipping": "^0.15.7",
+    "sharp": "^0.34.0"
+  }
+}

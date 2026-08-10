@@ -1,0 +1,16 @@
+{
+  "id": "kaynaksiz",
+  "surum": "0.0.1",
+  "aciklama": "FIXTURE — kaynağı olmayan kural içerir. K01 gereği RC 1 beklenir (sessiz kabul YASAK).",
+  "kurallar": [
+    {
+      "id": "MB-99-uydurma",
+      "aciklama": "Sirkülasyon en az 73 cm olmalı — bu sayı hiçbir kaynağa dayanmıyor.",
+      "olcut": "mobilya_cakismasi",
+      "op": "=",
+      "deger": 0,
+      "siddet": "hata"
+    }
+  ],
+  "kaynak_bekleyen": []
+}

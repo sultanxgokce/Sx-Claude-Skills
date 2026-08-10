@@ -1,0 +1,45 @@
+{
+  "surum": "1.0",
+  "ad": "B-001 kopyası — 7 hacim, 1 kapı kanadı (SEDİR bulgusunun sentetik eşi)",
+  "birim": "cm",
+  "olcek": { "kaynak": "tablo", "aciklama": "sentetik fixture — B-001 kanat-yokluğu davranışını sınamak için; ağızlar gecis, tek kanat giriş kapısında" },
+  "noktalar": {
+    "a1": [0, 0], "a2": [410, 0], "a3": [600, 0], "a4": [900, 0],
+    "b1": [0, 300], "b2": [410, 300], "b3": [600, 300], "b4": [900, 300],
+    "h1": [300, 300], "h2": [640, 300], "h3": [790, 300],
+    "c1": [0, 600], "c2": [300, 600], "c3": [640, 600], "c3a": [790, 600], "c4": [900, 600]
+  },
+  "duvarlar": [
+    { "id": "d_ust", "bas": "a1", "son": "a4", "kalinlik": 20, "tip": "dis" },
+    { "id": "d_sag", "bas": "a4", "son": "c4", "kalinlik": 20, "tip": "dis" },
+    { "id": "d_alt", "bas": "c4", "son": "c1", "kalinlik": 20, "tip": "dis" },
+    { "id": "d_sol", "bas": "c1", "son": "a1", "kalinlik": 20, "tip": "dis" },
+    { "id": "d_orta", "bas": "b1", "son": "b4", "kalinlik": 10, "tip": "ic" },
+    { "id": "d_t1", "bas": "a2", "son": "b2", "kalinlik": 10, "tip": "ic" },
+    { "id": "d_t2", "bas": "a3", "son": "b3", "kalinlik": 10, "tip": "ic" },
+    { "id": "d_b1", "bas": "h1", "son": "c2", "kalinlik": 10, "tip": "ic" },
+    { "id": "d_b2", "bas": "h2", "son": "c3", "kalinlik": 10, "tip": "ic" },
+    { "id": "d_b3", "bas": "h3", "son": "c3a", "kalinlik": 10, "tip": "ic" }
+  ],
+  "odalar": [
+    { "id": "salon", "ad": "Salon", "tip": "oturma_odasi", "dongu": ["a1", "a2", "b2", "b1"] },
+    { "id": "mutfak", "ad": "Mutfak", "tip": "mutfak", "dongu": ["a2", "a3", "b3", "b2"] },
+    { "id": "yatak1", "ad": "Yatak Odası 1", "tip": "yatak_odasi", "dongu": ["a3", "a4", "b4", "b3"] },
+    { "id": "yatak2", "ad": "Yatak Odası 2", "tip": "yatak_odasi", "dongu": ["b1", "h1", "c2", "c1"] },
+    { "id": "hol", "ad": "Hol", "tip": "hol", "dongu": ["h1", "h2", "c3", "c2"] },
+    { "id": "banyo", "ad": "Banyo", "tip": "banyo", "dongu": ["h2", "h3", "c3a", "c3"] },
+    { "id": "wc", "ad": "WC", "tip": "wc", "dongu": ["h3", "b4", "c4", "c3a"] }
+  ],
+  "acikliklar": [
+    { "id": "giris", "tip": "kapi", "rol": "giris", "duvar": "d_alt", "oran": 0.477778, "genislik": 100, "aci_yonu": 1 },
+    { "id": "agiz_salon", "tip": "gecis", "duvar": "d_orta", "oran": 0.361111, "genislik": 40 },
+    { "id": "agiz_mutfak", "tip": "gecis", "duvar": "d_orta", "oran": 0.527778, "genislik": 90 },
+    { "id": "agiz_yatak1", "tip": "gecis", "duvar": "d_orta", "oran": 0.688889, "genislik": 30 },
+    { "id": "agiz_yatak2", "tip": "gecis", "duvar": "d_b1", "oran": 0.5, "genislik": 80 },
+    { "id": "agiz_banyo", "tip": "gecis", "duvar": "d_b2", "oran": 0.5, "genislik": 80 },
+    { "id": "agiz_wc", "tip": "gecis", "duvar": "d_b3", "oran": 0.5, "genislik": 70 },
+    { "id": "pencere_salon", "tip": "pencere", "duvar": "d_ust", "oran": 0.194444, "genislik": 140 },
+    { "id": "pencere_yatak1", "tip": "pencere", "duvar": "d_ust", "oran": 0.833333, "genislik": 140 },
+    { "id": "pencere_yatak2", "tip": "pencere", "duvar": "d_sol", "oran": 0.25, "genislik": 120 }
+  ]
+}
