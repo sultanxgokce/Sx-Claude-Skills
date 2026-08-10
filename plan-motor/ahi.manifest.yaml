@@ -1,0 +1,28 @@
+# plan-motor — AHÎ kaydı (kademe: kalfa)
+# version manifest'te YOK (tek-evi SKILL.md frontmatter — ADR-001).
+tier: kalfa
+name: plan-motor
+generic_goal: "2B kat-planını oku/çiz/ölç/revize/denetle/üret — paketli, fail-closed, her projede tekrarlanabilir"
+activation:
+  onKeyword: plan-motor
+install_targets:
+  - _global
+# Sahiplik künyesi (Sx PR #152 · SERDAR 2026-08-06). Aşağıdaki notes'ta serbest metin olarak
+# duruyordu; yapısal alana çekildi ki ölçülebilsin (kunye-raporu.mjs).
+owner: TELLAL            # devir gerçek — DEVIR.md, Sultan kararı
+consumers:
+  - SEDIR                # CANLI tüketici. Sözleşme yüzeyi (alt-komutlar · bayraklar · çıkış
+                         # kodları · model-sema.md) kırılmadan ÖNCE haber verilir; bildirimsiz
+                         # kırma İHLALDİR. Bkz. DEVIR-KAPANIS.md.
+ne_ise_yarar: "2B kat planı motoru: DWG/DXF okur, referans kalitede çizer, ölçer, doğal-dil revizyonunu uygular, mimari kural setine karşı denetler, boş sınırdan aday oda yerleşimi üretir. Fail-closed, deterministik."
+notes: >
+  npm bağımlılığı OLAN ilk global skill (sharp · @node-projects/acad-ts · dxf-parser · dwgdxf ·
+  dejavu-fonts-ttf). node_modules (~61 MB) ORTAK mount'ta durur ve PAYLAŞILIR — ölçüldü
+  (2026-08-04): /config/.claude → /dev/md2[/opt/cloudtop/config/.claude], host diski, kalıcı.
+  Bir kez kuruldu, her kutu aynı kurulumu görür; kur.sh idempotenttir, gerekirse onarır.
+  (Önceki "PAYLAŞILMAZ, her kutu kendi kurar" notu ölçümle çürüdü — düzeltildi.)
+  Kurulumda ağ gerekir, çalışmada gerekmez. sharp hem glibc hem musl ikilisini taşır.
+  ⚠️ AÇIK BORÇ: Sx-Claude-Skills kanonik kaydı YAPILMADI (istek SERDAR'da) — sıfırdan
+  rebuild bu skill'i kendiliğinden geri GETİRMEZ. Yedek: tellal repo sakul/plan-motor-snap.
+  ⚠️ node ≥22 her kutuda var mı DOĞRULANMADI (izole container'dan ölçülemez).
+  Sahiplik: TELLAL (MEDDAH) · ilk tüketici: sedir. Devir notu DEVIR.md.

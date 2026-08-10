@@ -1,0 +1,9 @@
+{
+  "name": "plan-dekor",
+  "version": "0.6.0",
+  "type": "module",
+  "private": true,
+  "description": "2B kat planını renkli, mobilyalı sunum planına çeviren motor. plan-motor'u CLI sınırından besteler.",
+  "engines": { "node": ">=22" },
+  "dependencies": {}
+}

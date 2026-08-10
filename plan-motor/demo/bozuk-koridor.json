@@ -1,0 +1,26 @@
+{
+  "surum": "1.0",
+  "ad": "Bozuk Koridor (denetle kırmızı-fixture — hol 90 cm)",
+  "birim": "cm",
+  "olcek": { "kaynak": "tablo", "aciklama": "kasten bozuk: hol dar kenarı 90 cm < 120 (PAİY md.29/(3)) — yalnız TR.PAIY.29-3.koridor_genisligi ihlali beklenir" },
+  "noktalar": {
+    "p1": [0, 0], "p2": [410, 0], "p3": [500, 0],
+    "p4": [500, 300], "p5": [410, 300], "p6": [0, 300]
+  },
+  "duvarlar": [
+    { "id": "d_ust", "bas": "p1", "son": "p3", "kalinlik": 20, "tip": "dis" },
+    { "id": "d_sag", "bas": "p3", "son": "p4", "kalinlik": 20, "tip": "dis" },
+    { "id": "d_alt", "bas": "p4", "son": "p6", "kalinlik": 20, "tip": "dis" },
+    { "id": "d_sol", "bas": "p6", "son": "p1", "kalinlik": 20, "tip": "dis" },
+    { "id": "d_ic", "bas": "p2", "son": "p5", "kalinlik": 10, "tip": "ic" }
+  ],
+  "odalar": [
+    { "id": "salon", "ad": "Salon", "tip": "oturma_odasi", "dongu": ["p1", "p2", "p5", "p6"] },
+    { "id": "hol", "ad": "Hol", "tip": "hol", "dongu": ["p2", "p3", "p4", "p5"] }
+  ],
+  "acikliklar": [
+    { "id": "giris", "tip": "kapi", "rol": "giris", "duvar": "d_sag", "oran": 0.5, "genislik": 100, "aci_yonu": 1 },
+    { "id": "kapi_salon", "tip": "kapi", "rol": "diger", "duvar": "d_ic", "oran": 0.5, "genislik": 90, "aci_yonu": -1 },
+    { "id": "pencere_salon", "tip": "pencere", "duvar": "d_ust", "oran": 0.375, "genislik": 140 }
+  ]
+}

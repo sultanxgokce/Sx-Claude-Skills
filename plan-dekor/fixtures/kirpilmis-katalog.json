@@ -1,0 +1,468 @@
+{
+  "surum": "0.1.0",
+  "birim": "cm",
+  "not": "FIXTURE — yatak 160x200 yerine 140x190. Kaynak alani DOLU ve inandirici. Kaynak kapisi bunu GECIRIR (kaynak serbest metindir); asgari boyut bandi GECIRMEMELIDIR.",
+  "yerlesim_tipleri": {
+    "duvar-dayali": "arka yüzü bir duvara yaslanır",
+    "kose": "iki komşu duvara yaslanır",
+    "duvar-ortali": "duvara yaslanır ve duvar boyunca ortalanmaya çalışılır",
+    "serbest": "duvar gerekmez, oda içinde herhangi bir yer"
+  },
+  "mobilyalar": [
+    {
+      "id": "cift-yatak-160",
+      "ad": "Çift Kişilik Yatak",
+      "boyut_cm": [
+        140,
+        190
+      ],
+      "yerlesim": "duvar-dayali",
+      "temiz_alan_cm": {
+        "on": 0,
+        "arka": 0,
+        "sol": 60,
+        "sag": 60
+      },
+      "pencere_onu_yasak": true,
+      "oda_tipleri": [
+        "yatak_odasi"
+      ],
+      "sembol": "yatak",
+      "kaynak": {
+        "kademe": "beyan",
+        "metin": "kompakt model — HILE SENARYOSU: sigdirmak icin kirpildi, kaynak metni de uyduruldu"
+      }
+    },
+    {
+      "id": "tek-yatak-90",
+      "ad": "Tek Kişilik Yatak",
+      "boyut_cm": [
+        90,
+        200
+      ],
+      "yerlesim": "duvar-dayali",
+      "temiz_alan_cm": {
+        "on": 0,
+        "arka": 0,
+        "sol": 60,
+        "sag": 0
+      },
+      "pencere_onu_yasak": true,
+      "oda_tipleri": [
+        "yatak_odasi"
+      ],
+      "sembol": "yatak",
+      "kaynak": {
+        "kademe": "beyan",
+        "metin": "TR piyasasinda yaygin standart olcu (2026-08); dis kaynaga baglanmadi - layiha L02 kapsaminda."
+      }
+    },
+    {
+      "id": "komodin",
+      "ad": "Komodin",
+      "boyut_cm": [
+        45,
+        40
+      ],
+      "yerlesim": "duvar-dayali",
+      "temiz_alan_cm": {
+        "on": 30,
+        "arka": 0,
+        "sol": 0,
+        "sag": 0
+      },
+      "pencere_onu_yasak": false,
+      "oda_tipleri": [
+        "yatak_odasi"
+      ],
+      "sembol": "komodin",
+      "eslenik": {
+        "mobilya": "cift-yatak-160",
+        "konum": "yan",
+        "hizala": "arka"
+      },
+      "kaynak": {
+        "kademe": "beyan",
+        "metin": "TR piyasasinda yaygin standart olcu (2026-08); dis kaynaga baglanmadi - layiha L02 kapsaminda."
+      }
+    },
+    {
+      "id": "gardirop-200",
+      "ad": "Gardırop",
+      "boyut_cm": [
+        200,
+        60
+      ],
+      "yerlesim": "duvar-dayali",
+      "temiz_alan_cm": {
+        "on": 60,
+        "arka": 0,
+        "sol": 0,
+        "sag": 0
+      },
+      "pencere_onu_yasak": true,
+      "oda_tipleri": [
+        "yatak_odasi",
+        "giyinme"
+      ],
+      "sembol": "dolap",
+      "kaynak": {
+        "kademe": "beyan",
+        "metin": "TR piyasasinda yaygin standart olcu (2026-08); dis kaynaga baglanmadi - layiha L02 kapsaminda."
+      }
+    },
+    {
+      "id": "sifonyer",
+      "ad": "Şifonyer",
+      "boyut_cm": [
+        100,
+        45
+      ],
+      "yerlesim": "duvar-dayali",
+      "temiz_alan_cm": {
+        "on": 60,
+        "arka": 0,
+        "sol": 0,
+        "sag": 0
+      },
+      "pencere_onu_yasak": false,
+      "oda_tipleri": [
+        "yatak_odasi"
+      ],
+      "sembol": "dolap",
+      "kaynak": {
+        "kademe": "beyan",
+        "metin": "TR piyasasinda yaygin standart olcu (2026-08); dis kaynaga baglanmadi - layiha L02 kapsaminda."
+      }
+    },
+    {
+      "id": "kanepe-3lu",
+      "ad": "Üçlü Kanepe",
+      "boyut_cm": [
+        220,
+        90
+      ],
+      "yerlesim": "duvar-dayali",
+      "temiz_alan_cm": {
+        "on": 80,
+        "arka": 0,
+        "sol": 0,
+        "sag": 0
+      },
+      "pencere_onu_yasak": true,
+      "oda_tipleri": [
+        "oturma_odasi"
+      ],
+      "sembol": "kanepe",
+      "kaynak": {
+        "kademe": "beyan",
+        "metin": "TR piyasasinda yaygin standart olcu (2026-08); dis kaynaga baglanmadi - layiha L02 kapsaminda."
+      }
+    },
+    {
+      "id": "berjer",
+      "ad": "Berjer",
+      "boyut_cm": [
+        80,
+        85
+      ],
+      "yerlesim": "serbest",
+      "temiz_alan_cm": {
+        "on": 60,
+        "arka": 0,
+        "sol": 0,
+        "sag": 0
+      },
+      "pencere_onu_yasak": false,
+      "oda_tipleri": [
+        "oturma_odasi",
+        "yatak_odasi"
+      ],
+      "sembol": "koltuk",
+      "kaynak": {
+        "kademe": "beyan",
+        "metin": "TR piyasasinda yaygin standart olcu (2026-08); dis kaynaga baglanmadi - layiha L02 kapsaminda."
+      }
+    },
+    {
+      "id": "sehpa",
+      "ad": "Orta Sehpa",
+      "boyut_cm": [
+        110,
+        60
+      ],
+      "yerlesim": "serbest",
+      "temiz_alan_cm": {
+        "on": 0,
+        "arka": 0,
+        "sol": 0,
+        "sag": 0
+      },
+      "pencere_onu_yasak": false,
+      "oda_tipleri": [
+        "oturma_odasi"
+      ],
+      "sembol": "sehpa",
+      "eslenik": {
+        "mobilya": "kanepe-3lu",
+        "konum": "on",
+        "mesafe_cm": 45
+      },
+      "kaynak": {
+        "kademe": "beyan",
+        "metin": "TR piyasasinda yaygin standart olcu (2026-08); dis kaynaga baglanmadi - layiha L02 kapsaminda."
+      }
+    },
+    {
+      "id": "tv-unitesi",
+      "ad": "TV Ünitesi",
+      "boyut_cm": [
+        180,
+        45
+      ],
+      "yerlesim": "duvar-dayali",
+      "temiz_alan_cm": {
+        "on": 60,
+        "arka": 0,
+        "sol": 0,
+        "sag": 0
+      },
+      "pencere_onu_yasak": true,
+      "oda_tipleri": [
+        "oturma_odasi"
+      ],
+      "sembol": "dolap",
+      "kaynak": {
+        "kademe": "beyan",
+        "metin": "TR piyasasinda yaygin standart olcu (2026-08); dis kaynaga baglanmadi - layiha L02 kapsaminda."
+      }
+    },
+    {
+      "id": "yemek-masasi-6",
+      "ad": "Yemek Masası (6 kişilik)",
+      "boyut_cm": [
+        160,
+        90
+      ],
+      "yerlesim": "serbest",
+      "temiz_alan_cm": {
+        "on": 75,
+        "arka": 75,
+        "sol": 75,
+        "sag": 75
+      },
+      "pencere_onu_yasak": false,
+      "oda_tipleri": [
+        "oturma_odasi",
+        "mutfak"
+      ],
+      "sembol": "masa",
+      "kaynak": {
+        "kademe": "beyan",
+        "metin": "TR piyasasinda yaygin standart olcu (2026-08); dis kaynaga baglanmadi - layiha L02 kapsaminda."
+      }
+    },
+    {
+      "id": "mutfak-tezgah",
+      "ad": "Mutfak Tezgâhı",
+      "boyut_cm": [
+        240,
+        60
+      ],
+      "yerlesim": "duvar-dayali",
+      "temiz_alan_cm": {
+        "on": 90,
+        "arka": 0,
+        "sol": 0,
+        "sag": 0
+      },
+      "pencere_onu_yasak": false,
+      "oda_tipleri": [
+        "mutfak"
+      ],
+      "sembol": "tezgah",
+      "kaynak": {
+        "kademe": "beyan",
+        "metin": "TR piyasasinda yaygin standart olcu (2026-08); dis kaynaga baglanmadi - layiha L02 kapsaminda."
+      }
+    },
+    {
+      "id": "buzdolabi",
+      "ad": "Buzdolabı",
+      "boyut_cm": [
+        70,
+        70
+      ],
+      "yerlesim": "duvar-dayali",
+      "temiz_alan_cm": {
+        "on": 90,
+        "arka": 0,
+        "sol": 0,
+        "sag": 0
+      },
+      "pencere_onu_yasak": true,
+      "oda_tipleri": [
+        "mutfak"
+      ],
+      "sembol": "buzdolabi",
+      "kaynak": {
+        "kademe": "beyan",
+        "metin": "TR piyasasinda yaygin standart olcu (2026-08); dis kaynaga baglanmadi - layiha L02 kapsaminda."
+      }
+    },
+    {
+      "id": "klozet",
+      "ad": "Klozet",
+      "boyut_cm": [
+        40,
+        70
+      ],
+      "yerlesim": "duvar-dayali",
+      "temiz_alan_cm": {
+        "on": 55,
+        "arka": 0,
+        "sol": 20,
+        "sag": 20
+      },
+      "pencere_onu_yasak": false,
+      "oda_tipleri": [
+        "wc",
+        "banyo"
+      ],
+      "sembol": "klozet",
+      "kaynak": {
+        "kademe": "beyan",
+        "metin": "TR piyasasinda yaygin standart olcu (2026-08); dis kaynaga baglanmadi - layiha L02 kapsaminda."
+      }
+    },
+    {
+      "id": "lavabo",
+      "ad": "Lavabo",
+      "boyut_cm": [
+        60,
+        45
+      ],
+      "yerlesim": "duvar-dayali",
+      "temiz_alan_cm": {
+        "on": 55,
+        "arka": 0,
+        "sol": 0,
+        "sag": 0
+      },
+      "pencere_onu_yasak": false,
+      "oda_tipleri": [
+        "wc",
+        "banyo"
+      ],
+      "sembol": "lavabo",
+      "kaynak": {
+        "kademe": "beyan",
+        "metin": "TR piyasasinda yaygin standart olcu (2026-08); dis kaynaga baglanmadi - layiha L02 kapsaminda."
+      }
+    },
+    {
+      "id": "dus-teknesi",
+      "ad": "Duş Teknesi",
+      "boyut_cm": [
+        90,
+        90
+      ],
+      "yerlesim": "kose",
+      "temiz_alan_cm": {
+        "on": 55,
+        "arka": 0,
+        "sol": 0,
+        "sag": 0
+      },
+      "pencere_onu_yasak": false,
+      "oda_tipleri": [
+        "banyo"
+      ],
+      "sembol": "dus",
+      "kaynak": {
+        "kademe": "beyan",
+        "metin": "TR piyasasinda yaygin standart olcu (2026-08); dis kaynaga baglanmadi - layiha L02 kapsaminda."
+      }
+    },
+    {
+      "id": "kuvet",
+      "ad": "Küvet",
+      "boyut_cm": [
+        170,
+        75
+      ],
+      "yerlesim": "duvar-dayali",
+      "temiz_alan_cm": {
+        "on": 55,
+        "arka": 0,
+        "sol": 0,
+        "sag": 0
+      },
+      "pencere_onu_yasak": false,
+      "oda_tipleri": [
+        "banyo"
+      ],
+      "sembol": "kuvet",
+      "kaynak": {
+        "kademe": "beyan",
+        "metin": "TR piyasasinda yaygin standart olcu (2026-08); dis kaynaga baglanmadi - layiha L02 kapsaminda."
+      }
+    },
+    {
+      "id": "portmanto",
+      "ad": "Portmanto / Vestiyer",
+      "boyut_cm": [
+        90,
+        35
+      ],
+      "yerlesim": "duvar-dayali",
+      "temiz_alan_cm": {
+        "on": 60,
+        "arka": 0,
+        "sol": 0,
+        "sag": 0
+      },
+      "pencere_onu_yasak": false,
+      "oda_tipleri": [
+        "antre",
+        "hol"
+      ],
+      "sembol": "dolap",
+      "kaynak": {
+        "kademe": "beyan",
+        "metin": "TR piyasasinda yaygin standart olcu (2026-08); dis kaynaga baglanmadi - layiha L02 kapsaminda."
+      }
+    },
+    {
+      "id": "calisma-masasi",
+      "ad": "Çalışma Masası",
+      "boyut_cm": [
+        120,
+        60
+      ],
+      "yerlesim": "duvar-dayali",
+      "temiz_alan_cm": {
+        "on": 75,
+        "arka": 0,
+        "sol": 0,
+        "sag": 0
+      },
+      "pencere_onu_yasak": false,
+      "oda_tipleri": [
+        "yatak_odasi",
+        "oturma_odasi"
+      ],
+      "sembol": "masa",
+      "kaynak": {
+        "kademe": "beyan",
+        "metin": "TR piyasasinda yaygin standart olcu (2026-08); dis kaynaga baglanmadi - layiha L02 kapsaminda."
+      }
+    }
+  ],
+  "kaynak_kanunu": "Her mobilya kaleminin boyut_cm degeri bir kaynak beyani tasimak ZORUNDADIR. Motor kaynaksiz kalemi REDDEDER (RC 3). Sebep: uretici kendi katalogunu duzenleyebiliyorsa, sigmayan yatagi kucultup sigdi diyebilir - sinavi kimse fark etmeden degistirmis olur. Kaynak alani bu hileyi SESSIZ olmaktan cikarir: olcuyu degistiren kaynagi da degistirmek zorundadir, o da git diffinde gorunur.",
+  "kaynak_kademeleri": {
+    "beyan": "TR piyasasinda yaygin standart olcu; dis kaynaga BAGLANMADI. Varsayilan kademe.",
+    "olculdu": "Gercek bir urunden/mekandan olculdu; olcum notu kaynak metninde.",
+    "standart": "Atif verilebilir bir standarda/yayina dayaniyor; kaynak metni madde/sayfa tasir."
+  }
+}

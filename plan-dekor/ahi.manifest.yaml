@@ -1,0 +1,42 @@
+# plan-dekor — AHÎ ile üretildi (kademe: kalfa)
+# version manifest'te YOK (tek-evi SKILL.md frontmatter — ADR-001).
+tier: kalfa
+name: plan-dekor
+generic_goal: "planlı + paketli + her-projede güvenilir tekrarlanabilir"
+# Sahiplik künyesi (Sx PR #152 · SERDAR 2026-08-06). Sahiplik beyanı paketi YAZANIN kararıdır,
+# ölçenin değil — bu yüzden SERDAR boş bıraktı, MEDDAH doldurdu.
+owner: TELLAL            # değiştirme yetkisi + bakım borcu burada
+consumers: []            # bugün dış tüketici YOK. Biri kullanmaya başlarsa buraya yazılır ve
+                         # kırıcı değişiklikten ÖNCE haber verilir (bildirimsiz kırma ihlaldir).
+ne_ise_yarar: "2B kat planını renkli, mobilyalı sunum planına çevirir: boş odaya kural-tabanlı mobilya yerleştirir, temalı SVG/PNG üretir. plan-motor'u CLI sınırından besteler."
+requires:
+  - plan-motor          # CLI sınırından beslenir (dogrula/denetle/olc/oku/goster)
+activation:
+  onKeyword: plan-dekor
+  onContext:
+    - "planı renklendir"
+    - "renkli kat planı"
+    - "mobilya yerleştir"
+    - "sunum planı"
+    - "boş odaya mobilya"
+    - "emlak planı"
+# SYS (L01) doğum-sonrası yaşam-döngüsü kanalı
+feedback:
+  owner: MEDDAH
+  channel: skill-geri-bildirim.jsonl
+  sla_tier: closure
+install_targets:
+  - _global
+notes: |
+  Kapsam-refleksi (E3/R-03) cevapları — 2026-08-06, üretim öncesi:
+    0) zaten-var-mı: bu-kutu + canlı-raf tarandı, plan-dekor YOK. plan-motor VAR ama mobilya
+       yerleşimini açıkça kapsam DIŞI ilan ediyor (plan-motor/SKILL.md:159 ·
+       tellal/_agents/PERGEL/AGENT.md:82). Boşluk gerçek, çakışma değil.
+    1) negatif-kapsam (DOKUNMAZ): 3B/render · DWG yazma · eğik-yaylı duvar · bina ölçeği
+       (emsal/TAKS/çekme) · AI görüntü üretimi · mobilya tedarik/fiyat/stok · çok-katlı kurgu ·
+       plan-motor'un kural-seti ve denetle mantığı.
+    2) bölge-çakışma: yok — plan-motor'u CLI sınırından BESTELER, üzerine yazmaz.
+    3) dağıtım: global (_global), plan-motor gibi ortak mount.
+  AÇIK BORÇ: Sx-Claude-Skills kanonik kaydı (catalog.json + sync-targets.json) bu izole
+  konteynerden yapılamıyor — repo görünmüyor. Kayıt SERDAR'a istek olarak emit edilecek
+  (plan-motor'un aynı borcu vardı; tekrarlanmasın). Yedek: tellal reposunda dekor/plan-dekor-snap.

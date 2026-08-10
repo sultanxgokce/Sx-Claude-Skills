@@ -1,0 +1,8 @@
+{
+  "id": "bantsiz",
+  "aciklama": "FIXTURE — MB-04 kuralı bant_cm taşımıyor. Motor eşiği UYDURAMAZ → RC≠0 beklenir.",
+  "kurallar": [
+    { "id": "MB-04-aciklik-onu", "kaynak": "test", "olcut": "aciklik_onu_ihlali", "op": "=", "deger": 0, "siddet": "hata" }
+  ],
+  "kaynak_bekleyen": []
+}

@@ -1,0 +1,28 @@
+{
+  "surum": "1.0",
+  "ad": "Uygun Daire (denetle yeşil-fixture)",
+  "birim": "cm",
+  "olcek": { "kaynak": "tablo", "aciklama": "TR-PAIY-2026 FAZ-1 kural-setini temiz geçen referans model" },
+  "noktalar": {
+    "n1": [0, 0], "n2": [600, 0], "n3": [600, 500], "n4": [0, 500],
+    "n5": [350, 0], "n6": [350, 500]
+  },
+  "duvarlar": [
+    { "id": "d_ust_sol", "bas": "n1", "son": "n5", "kalinlik": 20, "tip": "dis" },
+    { "id": "d_ust_sag", "bas": "n5", "son": "n2", "kalinlik": 20, "tip": "dis" },
+    { "id": "d_sag", "bas": "n2", "son": "n3", "kalinlik": 20, "tip": "dis" },
+    { "id": "d_alt", "bas": "n4", "son": "n3", "kalinlik": 20, "tip": "dis" },
+    { "id": "d_sol", "bas": "n1", "son": "n4", "kalinlik": 20, "tip": "dis" },
+    { "id": "d_ic", "bas": "n5", "son": "n6", "kalinlik": 10, "tip": "ic" }
+  ],
+  "odalar": [
+    { "id": "oda_a", "ad": "Yaşam Alanı", "tip": "oturma_odasi", "dongu": ["n1", "n5", "n6", "n4"], "guven": "normal", "beyan_m2": 17.5 },
+    { "id": "oda_b", "ad": "Yatak Odası", "tip": "yatak_odasi", "dongu": ["n5", "n2", "n3", "n6"], "guven": "normal", "beyan_m2": 12.5 }
+  ],
+  "acikliklar": [
+    { "id": "giris_kapisi", "tip": "kapi", "rol": "giris", "duvar": "d_alt", "oran": 0.25, "genislik": 100, "aci_yonu": 1 },
+    { "id": "oda_kapisi", "tip": "kapi", "rol": "diger", "duvar": "d_ic", "oran": 0.75, "genislik": 90, "aci_yonu": -1 },
+    { "id": "pencere_yasam", "tip": "pencere", "duvar": "d_ust_sol", "oran": 0.5, "genislik": 140 },
+    { "id": "pencere_yatak", "tip": "pencere", "duvar": "d_sag", "oran": 0.45, "genislik": 130 }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "id": "mobilya-TR",
+  "surum": "0.1.0",
+  "aciklama": "plan-dekor mobilya yerleşim kuralları. İKİ BÖLÜM: 'kurallar' = sert eşik (ihlal → aday elenir), 'kaynak_bekleyen' = sayısı henüz kaynağa bağlanmamış, YALNIZ puanlama sinyali.",
+
+  "_kanon": [
+    "K01 (ortak kanon, T0): Ölçmediğin kuralı SERT ilan edemezsin.",
+    "plan-motor/lib/denetle.mjs:36 — kaynaksız kural RC 1 ile reddedilir; aynı disiplin burada da geçerlidir.",
+    "tellal/_agents/PERGEL/AGENT.md:82 — mobilya yerleşimi bilinçli kapsam dışı bırakılmıştı, gerekçe: 'NKBA sayıları doğrulanamadı, uydurulmayacak'. Bu dosya o gerekçeyi ORTADAN KALDIRMAZ; sayı gerektiren kuralları ayrı bölüme sürgün ederek etrafından dolaşır.",
+    "PERGEL doktrini (AGENT.md:23-40): üreten, geçmek için sınavı değiştiremez. lib/yerlesim.mjs bu dosyayı OKUR, YAZMAZ."
+  ],
+
+  "kurallar": [
+    {
+      "id": "MB-01-cakisma",
+      "kaynak": "saf geometri — iki katı cisim aynı hacmi paylaşamaz",
+      "kaynak_url": null,
+      "aciklama": "İki mobilyanın gövdesi çakışamaz.",
+      "olcut": "mobilya_cakismasi",
+      "op": "=",
+      "deger": 0,
+      "siddet": "hata"
+    },
+    {
+      "id": "MB-02-oda-disi",
+      "kaynak": "saf geometri — mobilya odanın döngüsü içinde kalmalıdır",
+      "kaynak_url": null,
+      "aciklama": "Mobilya gövdesi oda poligonunun dışına taşamaz (duvar içine giremez).",
+      "olcut": "oda_disina_tasma",
+      "op": "=",
+      "deger": 0,
+      "siddet": "hata"
+    },
+    {
+      "id": "MB-03-kapi-yayi",
+      "kaynak": "plan-motor model şeması — kapı kanadının süpürme alanı modelde aciklik.genislik + aci_yonu ile TANIMLIDIR; kanadın çarpacağı yere mobilya konamaz",
+      "kaynak_url": null,
+      "aciklama": "Kapı açılım yayının (90° sektör, yarıçap = kapı genişliği) içinde mobilya olamaz.",
+      "olcut": "kapi_yayi_ihlali",
+      "op": "=",
+      "deger": 0,
+      "siddet": "hata"
+    },
+    {
+      "id": "MB-04-aciklik-onu",
+      "kaynak": "saf geometri — açıklık kullanılamaz hale gelirse geçit yok demektir; plan-motor lib/turet.mjs erisimGrafi deseni",
+      "kaynak_url": null,
+      "aciklama": "Kapı/geçiş açıklığının tam önü (açıklık genişliği × duvar dikine bant_cm derinliğinde) boş kalmalıdır. Bu bir KONFOR eşiği değil, açıklığın fiziksel kullanılabilirlik şartıdır: bant, kapı kanadının kendi kalınlığı + insan geçişi için gereken asgari derinliktir ve MB-03'ün doğrusal karşılığıdır.",
+      "olcut": "aciklik_onu_ihlali",
+      "op": "=",
+      "deger": 0,
+      "bant_cm": 60,
+      "_bant_notu": "Bu sayı MOTORDA DEĞİL burada yaşar (plan-motor doktrini: eşik kodda yaşamaz). Kaynak-durumu: geçit derinliği olarak savunuluyor, henüz dış kaynağa bağlanmadı — layiha L02'nin terfi listesinde.",
+      "siddet": "hata"
+    },
+    {
+      "id": "MB-05-duvar-dayanma",
+      "kaynak": "katalog tanımı — 'duvar-dayali'/'kose' yerleşim tipi mobilyanın kendi tanımıdır; tanımına uymayan yerleşim geçersizdir",
+      "kaynak_url": null,
+      "aciklama": "yerlesim:'duvar-dayali' mobilya bir duvara yaslanmak, 'kose' iki komşu duvara yaslanmak zorundadır.",
+      "olcut": "yerlesim_tipi_ihlali",
+      "op": "=",
+      "deger": 0,
+      "siddet": "hata"
+    }
+  ],
+
+  "katalog_bandi": {
+    "aciklama": "Katalogdaki ölçülerin ALT SINIRI. Sınav tarafındadır — üretici (PERGEL) buraya dokunamaz. Kaynak alanı tek başına yetmez çünkü kaynak serbest METİNDİR: ölçüyü değiştiren yanına istediğini yazabilir. Bant ise sayıdır ve üreticinin erişemediği dosyada durur.",
+    "hile_senaryosu": "Yerleştirici sığmayan yatağı [160,200]'den [140,190]'a çeker, kaynak metnine 'kompakt model' yazar ve 'sığdı' der. Kaynak kapısı bunu GEÇİRİR; bant GEÇİRMEZ.",
+    "kaynak": "Asgari satılabilir ürün ölçüsü — TR piyasası beyanı (kademe: beyan, dış kaynağa bağlanmadı). Bandın işlevi kesin ölçü tanımlamak DEĞİL, üreticinin sığdırmak için ölçü kırpmasını engellemektir; bu yüzden gevşek tutulmuştur.",
+    "asgari_boyut_cm": {
+      "cift-yatak-160": [150, 190],
+      "tek-yatak-90": [80, 180],
+      "gardirop-200": [120, 55],
+      "kanepe-3lu": [180, 80],
+      "yemek-masasi-6": [140, 80],
+      "mutfak-tezgah": [180, 55],
+      "buzdolabi": [60, 60],
+      "klozet": [35, 60],
+      "lavabo": [45, 35],
+      "dus-teknesi": [80, 80],
+      "kuvet": [150, 70]
+    }
+  },
+
+  "kaynak_bekleyen": [
+    {
+      "id": "MB-K-01-sirkulasyon",
+      "aciklama": "Mobilyalar arası / mobilya-duvar arası yürüme geçidi asgari genişliği.",
+      "onerilen_cm": 60,
+      "durum": "KAYNAK BEKLİYOR — sayı doğrulanmadı",
+      "aday_kaynaklar": ["NKBA Kitchen & Bath Planning Guidelines", "Neufert Architects' Data", "TS 9111 (erişilebilirlik)"],
+      "kullanim": "yalnız PUANLAMA — aday elenmez, skor düşer"
+    },
+    {
+      "id": "MB-K-02-dolap-kapak",
+      "aciklama": "Gardırop/dolap kapağının açılabilmesi için önündeki asgari boşluk.",
+      "onerilen_cm": 60,
+      "durum": "KAYNAK BEKLİYOR — sayı doğrulanmadı",
+      "aday_kaynaklar": ["NKBA", "Neufert"],
+      "kullanim": "yalnız PUANLAMA"
+    },
+    {
+      "id": "MB-K-03-yatak-yani",
+      "aciklama": "Çift kişilik yatağın iki yanında bırakılması gereken boşluk.",
+      "onerilen_cm": 60,
+      "durum": "KAYNAK BEKLİYOR — sayı doğrulanmadı",
+      "aday_kaynaklar": ["Neufert", "TS standartları"],
+      "kullanim": "yalnız PUANLAMA"
+    },
+    {
+      "id": "MB-K-04-pencere-onu",
+      "aciklama": "Pencere önüne konabilecek mobilyanın azami yüksekliği / pencereyi kapatma yasağı.",
+      "onerilen_cm": null,
+      "bant_cm": 40,
+      "_bant_notu": "Puanlama bandı; motorda değil burada yaşar.",
+      "durum": "KAYNAK BEKLİYOR — hiçbir kaynakta sayı bulunamadı (layiha L02 §3)",
+      "aday_kaynaklar": [
+        "DÜZELTİLDİ: önceki sürüm PAİY md.28 gösteriyordu — YANLIŞ atıf. İlgili madde md.32/(1) (ışıklık/doğrudan ışık) ve O MADDE PENCERE ÖNÜNÜ DÜZENLEMİYOR. Yanlış atıfı taşımak, kaynaksızlıktan daha kötüdür."
+      ],
+      "kullanim": "yalnız PUANLAMA — katalogdaki pencere_onu_yasak bayrağı skoru düşürür"
+    }
+  ],
+
+  "_alt_layiha": "kaynak_bekleyen kalemlerinin 'kurallar' bölümüne terfisi, ayrı bir layihanın çıktısıdır (bkz. tellal layiha-defteri: mobilya-boşluk-kaynağı). Terfi Sultan-gate'idir; yerleştiriciyi yazan terfi kararını veremez."
+}

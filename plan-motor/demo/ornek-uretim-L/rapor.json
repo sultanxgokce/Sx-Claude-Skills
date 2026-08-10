@@ -1,0 +1,353 @@
+{
+  "program": "demo/ornek-program-L.json",
+  "kural_seti": "TR-PAIY-2026",
+  "kural_seti_surum": "RG-1/7/2026-33297",
+  "istatistik": {
+    "oda_sayisi": 5,
+    "sinir_parcasi": 2,
+    "atama_toplam": 30,
+    "atama_incelenen": 30,
+    "atama_basarili": 5,
+    "parca_basina_alinan": 63,
+    "denenen_yerlesim": 10595,
+    "on_elemeden_gecen": 179,
+    "essiz_yerlesim": 179,
+    "enumerasyon_budandi": false,
+    "denetlenen": 179,
+    "geometrik_katman": 14,
+    "gecen": 91,
+    "essiz_kombinasyon": 10,
+    "istenen_adet": 3,
+    "elenen": {
+      "kurulamadi": 88,
+      "dogrula": 0,
+      "denetle": 0,
+      "olculemedi": 0
+    },
+    "elenme_ornegi": {
+      "kurulamadi": "giriş kapısı yerleşemedi: \"hol\" odasının \"alt\" kenarında 100 cm kapı alacak dış duvarı yok",
+      "dogrula": null,
+      "denetle": null,
+      "olculemedi": null
+    }
+  },
+  "eksenler": [
+    {
+      "id": "islak_cekirdek",
+      "ad": "Islak çekirdek",
+      "dayanak": "ÖLÇÜM (mevzuat maddesi DEĞİL) — ıslak hacimlerin (banyo·wc·mutfak) bitişiklik kümesi + dış duvar teması. Tesisat şaftının toplanması mimari ve maliyet sonucu doğurur.",
+      "degerler": {
+        "yok": "planda ıslak hacim yok",
+        "tekil": "tek ıslak hacim — gruplama sorusu doğmuyor",
+        "dagitik": "ıslak hacimler tek bitişik küme oluşturmuyor (ayrı şaftlar)",
+        "gruplu-dis": "tek bitişik küme; hepsinin dış duvarı var (doğal havalandırma mümkün)",
+        "gruplu-ic": "tek bitişik küme; en az biri tamamen iç (şaft/mekanik havalandırma gerekir)"
+      }
+    },
+    {
+      "id": "sirkulasyon",
+      "ad": "Sirkülasyon",
+      "dayanak": "PAİY md.29/(3) hol/koridor hacmini tanır (asgari genişlik kuralı oradan gelir); değerler kapı grafından ve hol en/boy oranından ÖLÇÜLÜR.",
+      "degerler": {
+        "koridorsuz": "planda hol/antre yok — odalar birbirinden geçilir",
+        "merkezi-hol": "her oda hole doğrudan açılıyor, hol derli toplu (en/boy < 2.5)",
+        "dogrusal-hol": "her oda hole doğrudan açılıyor, hol uzun koridor (en/boy ≥ 2.5)",
+        "karma-hol": "hol var ama en az bir odaya başka odadan geçilerek varılıyor"
+      }
+    },
+    {
+      "id": "zonlama",
+      "ad": "Zonlama",
+      "dayanak": "ÖLÇÜM (mevzuat maddesi DEĞİL) — yatma (yatak odası) ile yaşam (oturma odası·mutfak) arasında DOĞRUDAN kapı var mı. Mahremiyet, mimarın somut kararıdır.",
+      "degerler": {
+        "tek-bolge": "iki bölgeden biri planda yok",
+        "ayrik": "yatma ile yaşam arasında doğrudan kapı yok — geçiş sirkülasyon üzerinden",
+        "karisik": "en az bir yatak odası doğrudan yaşam hacmine açılıyor"
+      }
+    },
+    {
+      "id": "giris",
+      "ad": "Giriş kenarı",
+      "dayanak": "ÖLÇÜM — giriş kapısının (rol=giris) hangi dış kenarda olduğu. Program kenarı sabitlemişse bu eksen tek değerlidir (çeşitlilik üretmez, kaydı yine tutulur).",
+      "degerler": {
+        "alt": "y en küçük kenar",
+        "sag": "x en büyük kenar",
+        "ust": "y en büyük kenar",
+        "sol": "x en küçük kenar",
+        "belirsiz": "giriş kapısı dış kenara oturtulamadı"
+      }
+    }
+  ],
+  "gorulen_eksen_degerleri": {
+    "islak_cekirdek": [
+      "dagitik",
+      "gruplu-dis",
+      "gruplu-ic"
+    ],
+    "sirkulasyon": [
+      "dogrusal-hol",
+      "karma-hol",
+      "merkezi-hol"
+    ],
+    "zonlama": [
+      "ayrik",
+      "karisik"
+    ],
+    "giris": [
+      "alt"
+    ]
+  },
+  "kombinasyon_dagilimi": [
+    {
+      "kombinasyon": "dagitik|merkezi-hol|ayrik|alt",
+      "plan_sayisi": 3,
+      "en_iyi_skor": 0.9629
+    },
+    {
+      "kombinasyon": "gruplu-dis|karma-hol|karisik|alt",
+      "plan_sayisi": 22,
+      "en_iyi_skor": 1.1096
+    },
+    {
+      "kombinasyon": "gruplu-ic|karma-hol|karisik|alt",
+      "plan_sayisi": 6,
+      "en_iyi_skor": 1.1096
+    },
+    {
+      "kombinasyon": "gruplu-dis|karma-hol|ayrik|alt",
+      "plan_sayisi": 27,
+      "en_iyi_skor": 1.1168
+    },
+    {
+      "kombinasyon": "dagitik|karma-hol|karisik|alt",
+      "plan_sayisi": 10,
+      "en_iyi_skor": 1.2142
+    },
+    {
+      "kombinasyon": "dagitik|dogrusal-hol|ayrik|alt",
+      "plan_sayisi": 1,
+      "en_iyi_skor": 1.2142
+    },
+    {
+      "kombinasyon": "gruplu-ic|karma-hol|ayrik|alt",
+      "plan_sayisi": 14,
+      "en_iyi_skor": 1.2296
+    },
+    {
+      "kombinasyon": "gruplu-dis|merkezi-hol|ayrik|alt",
+      "plan_sayisi": 3,
+      "en_iyi_skor": 1.2592
+    },
+    {
+      "kombinasyon": "dagitik|karma-hol|ayrik|alt",
+      "plan_sayisi": 3,
+      "en_iyi_skor": 1.6318
+    },
+    {
+      "kombinasyon": "gruplu-dis|dogrusal-hol|ayrik|alt",
+      "plan_sayisi": 2,
+      "en_iyi_skor": 1.7762
+    }
+  ],
+  "adaylar": [
+    {
+      "dosya": "aday-01.json",
+      "skor": 0.9629,
+      "mimari_kararlar": {
+        "islak_cekirdek": "dagitik",
+        "sirkulasyon": "merkezi-hol",
+        "zonlama": "ayrik",
+        "giris": "alt",
+        "yaklasik_olcum": false
+      },
+      "kombinasyon": "dagitik|merkezi-hol|ayrik|alt",
+      "ayni_kombinasyondan_plan": 3,
+      "detay": {
+        "alan_sapma_ort": 0.1808,
+        "bicim_orani_ort": 0.4206,
+        "komsuluk_karsilanan": "3/3",
+        "komsuluk_karsilanmayan": [],
+        "denetim_uyari": 0,
+        "dogrula_uyari": 0,
+        "denetim_bilgi": 1
+      },
+      "notlar": {
+        "segment_sayisi": 17,
+        "ic_segment": 7,
+        "paylasilan_cift": 7,
+        "kapi_sigan_cift": 7,
+        "kapi_sayisi": 5,
+        "pencere_sayisi": 4,
+        "kullanilmayan_duvar": 8,
+        "komsu_ciftler": [
+          [
+            "banyo",
+            "hol"
+          ],
+          [
+            "mutfak",
+            "yatak"
+          ],
+          [
+            "hol",
+            "salon"
+          ],
+          [
+            "mutfak",
+            "salon"
+          ],
+          [
+            "banyo",
+            "yatak"
+          ],
+          [
+            "hol",
+            "yatak"
+          ],
+          [
+            "hol",
+            "mutfak"
+          ]
+        ],
+        "oda_m2": {
+          "banyo": 5.35,
+          "hol": 8.3,
+          "yatak": 13.07,
+          "mutfak": 8.28,
+          "salon": 16
+        }
+      },
+      "uyarilar": []
+    },
+    {
+      "dosya": "aday-02.json",
+      "skor": 1.1096,
+      "mimari_kararlar": {
+        "islak_cekirdek": "gruplu-dis",
+        "sirkulasyon": "karma-hol",
+        "zonlama": "karisik",
+        "giris": "alt",
+        "yaklasik_olcum": false
+      },
+      "kombinasyon": "gruplu-dis|karma-hol|karisik|alt",
+      "ayni_kombinasyondan_plan": 22,
+      "detay": {
+        "alan_sapma_ort": 0.1476,
+        "bicim_orani_ort": 0.6668,
+        "komsuluk_karsilanan": "3/3",
+        "komsuluk_karsilanmayan": [],
+        "denetim_uyari": 0,
+        "dogrula_uyari": 0,
+        "denetim_bilgi": 1
+      },
+      "notlar": {
+        "segment_sayisi": 17,
+        "ic_segment": 6,
+        "paylasilan_cift": 6,
+        "kapi_sigan_cift": 6,
+        "kapi_sayisi": 5,
+        "pencere_sayisi": 4,
+        "kullanilmayan_duvar": 8,
+        "komsu_ciftler": [
+          [
+            "hol",
+            "salon"
+          ],
+          [
+            "mutfak",
+            "salon"
+          ],
+          [
+            "banyo",
+            "hol"
+          ],
+          [
+            "hol",
+            "mutfak"
+          ],
+          [
+            "banyo",
+            "mutfak"
+          ],
+          [
+            "salon",
+            "yatak"
+          ]
+        ],
+        "oda_m2": {
+          "salon": 22.15,
+          "yatak": 12.85,
+          "hol": 6.05,
+          "banyo": 3.91,
+          "mutfak": 6.04
+        }
+      },
+      "uyarilar": []
+    },
+    {
+      "dosya": "aday-03.json",
+      "skor": 1.1096,
+      "mimari_kararlar": {
+        "islak_cekirdek": "gruplu-ic",
+        "sirkulasyon": "karma-hol",
+        "zonlama": "karisik",
+        "giris": "alt",
+        "yaklasik_olcum": false
+      },
+      "kombinasyon": "gruplu-ic|karma-hol|karisik|alt",
+      "ayni_kombinasyondan_plan": 6,
+      "detay": {
+        "alan_sapma_ort": 0.1476,
+        "bicim_orani_ort": 0.6668,
+        "komsuluk_karsilanan": "3/3",
+        "komsuluk_karsilanmayan": [],
+        "denetim_uyari": 0,
+        "dogrula_uyari": 0,
+        "denetim_bilgi": 1
+      },
+      "notlar": {
+        "segment_sayisi": 17,
+        "ic_segment": 6,
+        "paylasilan_cift": 6,
+        "kapi_sigan_cift": 6,
+        "kapi_sayisi": 5,
+        "pencere_sayisi": 5,
+        "kullanilmayan_duvar": 7,
+        "komsu_ciftler": [
+          [
+            "hol",
+            "salon"
+          ],
+          [
+            "mutfak",
+            "salon"
+          ],
+          [
+            "banyo",
+            "mutfak"
+          ],
+          [
+            "hol",
+            "mutfak"
+          ],
+          [
+            "banyo",
+            "hol"
+          ],
+          [
+            "salon",
+            "yatak"
+          ]
+        ],
+        "oda_m2": {
+          "salon": 22.15,
+          "yatak": 12.85,
+          "hol": 6.04,
+          "mutfak": 6.05,
+          "banyo": 3.91
+        }
+      },
+      "uyarilar": []
+    }
+  ]
+}

@@ -1,0 +1,337 @@
+{
+  "surum": "1.0",
+  "ad": "FAZ B2 yeşil-fixture — L biçimli sınır · 51 m2 · A3 — ıslak: gruplu-ic · sirkülasyon: karma-hol · zon: karisik · giriş: alt",
+  "birim": "cm",
+  "olcek": {
+    "kaynak": "turetilmis",
+    "aciklama": "PERGEL FAZ A · slicing-tree · program: FAZ B2 yeşil-fixture — L biçimli sınır · 51 m2 · 5 oda"
+  },
+  "noktalar": {
+    "p0_0": [
+      0,
+      0
+    ],
+    "p0_443": [
+      0,
+      443
+    ],
+    "p0_700": [
+      0,
+      700
+    ],
+    "p500_0": [
+      500,
+      0
+    ],
+    "p500_151": [
+      500,
+      151
+    ],
+    "p500_400": [
+      500,
+      400
+    ],
+    "p500_443": [
+      500,
+      443
+    ],
+    "p500_700": [
+      500,
+      700
+    ],
+    "p743_151": [
+      743,
+      151
+    ],
+    "p743_400": [
+      743,
+      400
+    ],
+    "p900_0": [
+      900,
+      0
+    ],
+    "p900_151": [
+      900,
+      151
+    ],
+    "p900_400": [
+      900,
+      400
+    ]
+  },
+  "duvarlar": [
+    {
+      "id": "w_d0_0_443",
+      "bas": "p0_0",
+      "son": "p0_443",
+      "kalinlik": 20,
+      "tip": "dis"
+    },
+    {
+      "id": "w_d0_443_700",
+      "bas": "p0_443",
+      "son": "p0_700",
+      "kalinlik": 20,
+      "tip": "dis"
+    },
+    {
+      "id": "w_d500_0_151",
+      "bas": "p500_0",
+      "son": "p500_151",
+      "kalinlik": 10,
+      "tip": "ic"
+    },
+    {
+      "id": "w_d500_151_400",
+      "bas": "p500_151",
+      "son": "p500_400",
+      "kalinlik": 10,
+      "tip": "ic"
+    },
+    {
+      "id": "w_d500_400_443",
+      "bas": "p500_400",
+      "son": "p500_443",
+      "kalinlik": 20,
+      "tip": "dis"
+    },
+    {
+      "id": "w_d500_443_700",
+      "bas": "p500_443",
+      "son": "p500_700",
+      "kalinlik": 20,
+      "tip": "dis"
+    },
+    {
+      "id": "w_d743_151_400",
+      "bas": "p743_151",
+      "son": "p743_400",
+      "kalinlik": 10,
+      "tip": "ic"
+    },
+    {
+      "id": "w_d900_0_151",
+      "bas": "p900_0",
+      "son": "p900_151",
+      "kalinlik": 20,
+      "tip": "dis"
+    },
+    {
+      "id": "w_d900_151_400",
+      "bas": "p900_151",
+      "son": "p900_400",
+      "kalinlik": 20,
+      "tip": "dis"
+    },
+    {
+      "id": "w_y0_0_500",
+      "bas": "p0_0",
+      "son": "p500_0",
+      "kalinlik": 20,
+      "tip": "dis"
+    },
+    {
+      "id": "w_y0_500_900",
+      "bas": "p500_0",
+      "son": "p900_0",
+      "kalinlik": 20,
+      "tip": "dis"
+    },
+    {
+      "id": "w_y151_500_743",
+      "bas": "p500_151",
+      "son": "p743_151",
+      "kalinlik": 10,
+      "tip": "ic"
+    },
+    {
+      "id": "w_y151_743_900",
+      "bas": "p743_151",
+      "son": "p900_151",
+      "kalinlik": 10,
+      "tip": "ic"
+    },
+    {
+      "id": "w_y400_500_743",
+      "bas": "p500_400",
+      "son": "p743_400",
+      "kalinlik": 20,
+      "tip": "dis"
+    },
+    {
+      "id": "w_y400_743_900",
+      "bas": "p743_400",
+      "son": "p900_400",
+      "kalinlik": 20,
+      "tip": "dis"
+    },
+    {
+      "id": "w_y443_0_500",
+      "bas": "p0_443",
+      "son": "p500_443",
+      "kalinlik": 10,
+      "tip": "ic"
+    },
+    {
+      "id": "w_y700_0_500",
+      "bas": "p0_700",
+      "son": "p500_700",
+      "kalinlik": 20,
+      "tip": "dis"
+    }
+  ],
+  "odalar": [
+    {
+      "id": "hol",
+      "ad": "Hol",
+      "tip": "hol",
+      "dongu": [
+        "p500_0",
+        "p900_0",
+        "p900_151",
+        "p500_151"
+      ],
+      "guven": "normal"
+    },
+    {
+      "id": "salon",
+      "ad": "Salon",
+      "tip": "oturma_odasi",
+      "dongu": [
+        "p0_0",
+        "p500_0",
+        "p500_443",
+        "p0_443"
+      ],
+      "guven": "normal"
+    },
+    {
+      "id": "yatak",
+      "ad": "Yatak Odası",
+      "tip": "yatak_odasi",
+      "dongu": [
+        "p0_443",
+        "p500_443",
+        "p500_700",
+        "p0_700"
+      ],
+      "guven": "normal"
+    },
+    {
+      "id": "mutfak",
+      "ad": "Mutfak",
+      "tip": "mutfak",
+      "dongu": [
+        "p500_151",
+        "p743_151",
+        "p743_400",
+        "p500_400"
+      ],
+      "guven": "normal"
+    },
+    {
+      "id": "banyo",
+      "ad": "Banyo",
+      "tip": "banyo",
+      "dongu": [
+        "p743_151",
+        "p900_151",
+        "p900_400",
+        "p743_400"
+      ],
+      "guven": "normal"
+    }
+  ],
+  "acikliklar": [
+    {
+      "id": "a_giris",
+      "tip": "kapi",
+      "rol": "giris",
+      "duvar": "w_y0_500_900",
+      "oran": 0.5,
+      "genislik": 100,
+      "aci_yonu": 1
+    },
+    {
+      "id": "a_kapi_banyo__hol",
+      "tip": "kapi",
+      "rol": "diger",
+      "duvar": "w_y151_743_900",
+      "oran": 0.5,
+      "genislik": 90,
+      "aci_yonu": 1
+    },
+    {
+      "id": "a_kapi_hol__mutfak",
+      "tip": "kapi",
+      "rol": "diger",
+      "duvar": "w_y151_500_743",
+      "oran": 0.5,
+      "genislik": 90,
+      "aci_yonu": 1
+    },
+    {
+      "id": "a_kapi_hol__salon",
+      "tip": "kapi",
+      "rol": "diger",
+      "duvar": "w_d500_0_151",
+      "oran": 0.5,
+      "genislik": 90,
+      "aci_yonu": 1
+    },
+    {
+      "id": "a_kapi_salon__yatak",
+      "tip": "kapi",
+      "rol": "diger",
+      "duvar": "w_y443_0_500",
+      "oran": 0.5,
+      "genislik": 90,
+      "aci_yonu": 1
+    },
+    {
+      "id": "a_pencere_hol",
+      "tip": "pencere",
+      "duvar": "w_d900_0_151",
+      "oran": 0.5,
+      "genislik": 131
+    },
+    {
+      "id": "a_pencere_salon",
+      "tip": "pencere",
+      "duvar": "w_y0_0_500",
+      "oran": 0.5,
+      "genislik": 140
+    },
+    {
+      "id": "a_pencere_yatak",
+      "tip": "pencere",
+      "duvar": "w_y700_0_500",
+      "oran": 0.5,
+      "genislik": 140
+    },
+    {
+      "id": "a_pencere_mutfak",
+      "tip": "pencere",
+      "duvar": "w_y400_500_743",
+      "oran": 0.5,
+      "genislik": 140
+    },
+    {
+      "id": "a_pencere_banyo",
+      "tip": "pencere",
+      "duvar": "w_d900_151_400",
+      "oran": 0.5,
+      "genislik": 140
+    }
+  ],
+  "mimari_kararlar": {
+    "islak_cekirdek": "gruplu-ic",
+    "sirkulasyon": "karma-hol",
+    "zonlama": "karisik",
+    "giris": "alt",
+    "yaklasik_olcum": false,
+    "kombinasyon": "gruplu-ic|karma-hol|karisik|alt",
+    "olcum": "modelden TÜRETİLDİ (beyan değil) — lib/uret-eksen.mjs"
+  }
+}

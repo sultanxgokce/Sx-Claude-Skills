@@ -1,0 +1,15 @@
+{
+  "ad": "FAZ B2 yeşil-fixture — L biçimli sınır · 51 m2",
+  "aciklama": "FAZ A'da bu fixture KIRMIZIYDI (L sınır kapsam dışıydı, dürüst RC 1). FAZ B2'de dikey süpürme ile 2 dikdörtgen parçaya ayrılıyor ve yerleşim üretiliyor → artık RC 0 beklenir. Fixture'ın rol değiştirmesi bilinçlidir; kapsam genişledi, kural gevşemedi. Sınır alanı POLİGONDAN (51 m2) hesaplanır, bbox'tan (63 m2) DEĞİL.",
+  "birim": "cm",
+  "sinir": [[0, 0], [900, 0], [900, 400], [500, 400], [500, 700], [0, 700]],
+  "giris_kenari": 0,
+  "odalar": [
+    { "id": "hol", "ad": "Hol", "tip": "hol", "hedef_m2": 7 },
+    { "id": "salon", "ad": "Salon", "tip": "oturma_odasi", "hedef_m2": 19 },
+    { "id": "yatak", "ad": "Yatak Odası", "tip": "yatak_odasi", "hedef_m2": 11 },
+    { "id": "mutfak", "ad": "Mutfak", "tip": "mutfak", "hedef_m2": 7 },
+    { "id": "banyo", "ad": "Banyo", "tip": "banyo", "hedef_m2": 4.5 }
+  ],
+  "komsuluk": [["hol", "salon"], ["salon", "mutfak"], ["hol", "banyo"]]
+}

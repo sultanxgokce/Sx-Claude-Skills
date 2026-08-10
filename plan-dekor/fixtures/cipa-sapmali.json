@@ -1,0 +1,7 @@
+{
+  "not": "FIXTURE — ikinci çıpa tutmuyor (ölçek uydurulmuş senaryosu). RC 1 beklenir.",
+  "cipalar": [
+    { "ad": "Suit oda üst duvarı", "duvar": "d_ust_1", "gercek_cm": 450 },
+    { "ad": "Salon sol duvarı", "duvar": "d_sol_2", "gercek_cm": 420 }
+  ]
+}

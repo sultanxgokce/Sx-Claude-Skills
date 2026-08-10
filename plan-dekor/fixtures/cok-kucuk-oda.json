@@ -1,0 +1,22 @@
+{
+  "surum": "1.0",
+  "ad": "FIXTURE — zorunlu program sığmayan oda (RC 1 beklenir)",
+  "birim": "cm",
+  "olcek": { "kaynak": "tablo", "aciklama": "fixture — negatif örnek" },
+  "noktalar": {
+    "a": [0, 0], "b": [200, 0], "c": [200, 200], "d": [0, 200]
+  },
+  "duvarlar": [
+    { "id": "w1", "bas": "a", "son": "b", "kalinlik": 20, "tip": "dis" },
+    { "id": "w2", "bas": "b", "son": "c", "kalinlik": 20, "tip": "dis" },
+    { "id": "w3", "bas": "d", "son": "c", "kalinlik": 20, "tip": "dis" },
+    { "id": "w4", "bas": "a", "son": "d", "kalinlik": 20, "tip": "dis" }
+  ],
+  "odalar": [
+    { "id": "kucuk", "ad": "Çok Küçük Yatak Odası", "tip": "yatak_odasi", "guven": "normal",
+      "dongu": ["a", "b", "c", "d"] }
+  ],
+  "acikliklar": [
+    { "id": "kapi1", "tip": "kapi", "rol": "diger", "duvar": "w1", "oran": 0.5, "genislik": 80, "aci_yonu": 1 }
+  ]
+}

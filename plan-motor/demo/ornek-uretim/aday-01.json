@@ -1,0 +1,269 @@
+{
+  "surum": "1.0",
+  "ad": "PERGEL FAZ A yeşil-fixture — 2+1 · 54 m2 dikdörtgen sınır · A1 — ıslak: tekil · sirkülasyon: karma-hol · zon: ayrik · giriş: alt",
+  "birim": "cm",
+  "olcek": {
+    "kaynak": "turetilmis",
+    "aciklama": "PERGEL FAZ A · slicing-tree · program: PERGEL FAZ A yeşil-fixture — 2+1 · 54 m2 dikdörtgen sınır · 4 oda"
+  },
+  "noktalar": {
+    "p0_0": [
+      0,
+      0
+    ],
+    "p0_348": [
+      0,
+      348
+    ],
+    "p0_600": [
+      0,
+      600
+    ],
+    "p217_0": [
+      217,
+      0
+    ],
+    "p217_348": [
+      217,
+      348
+    ],
+    "p557_348": [
+      557,
+      348
+    ],
+    "p557_600": [
+      557,
+      600
+    ],
+    "p900_0": [
+      900,
+      0
+    ],
+    "p900_348": [
+      900,
+      348
+    ],
+    "p900_600": [
+      900,
+      600
+    ]
+  },
+  "duvarlar": [
+    {
+      "id": "w_d0_0_348",
+      "bas": "p0_0",
+      "son": "p0_348",
+      "kalinlik": 20,
+      "tip": "dis"
+    },
+    {
+      "id": "w_d0_348_600",
+      "bas": "p0_348",
+      "son": "p0_600",
+      "kalinlik": 20,
+      "tip": "dis"
+    },
+    {
+      "id": "w_d217_0_348",
+      "bas": "p217_0",
+      "son": "p217_348",
+      "kalinlik": 10,
+      "tip": "ic"
+    },
+    {
+      "id": "w_d557_348_600",
+      "bas": "p557_348",
+      "son": "p557_600",
+      "kalinlik": 10,
+      "tip": "ic"
+    },
+    {
+      "id": "w_d900_0_348",
+      "bas": "p900_0",
+      "son": "p900_348",
+      "kalinlik": 20,
+      "tip": "dis"
+    },
+    {
+      "id": "w_d900_348_600",
+      "bas": "p900_348",
+      "son": "p900_600",
+      "kalinlik": 20,
+      "tip": "dis"
+    },
+    {
+      "id": "w_y0_0_217",
+      "bas": "p0_0",
+      "son": "p217_0",
+      "kalinlik": 20,
+      "tip": "dis"
+    },
+    {
+      "id": "w_y0_217_900",
+      "bas": "p217_0",
+      "son": "p900_0",
+      "kalinlik": 20,
+      "tip": "dis"
+    },
+    {
+      "id": "w_y348_0_217",
+      "bas": "p0_348",
+      "son": "p217_348",
+      "kalinlik": 10,
+      "tip": "ic"
+    },
+    {
+      "id": "w_y348_217_557",
+      "bas": "p217_348",
+      "son": "p557_348",
+      "kalinlik": 10,
+      "tip": "ic"
+    },
+    {
+      "id": "w_y348_557_900",
+      "bas": "p557_348",
+      "son": "p900_348",
+      "kalinlik": 10,
+      "tip": "ic"
+    },
+    {
+      "id": "w_y600_0_557",
+      "bas": "p0_600",
+      "son": "p557_600",
+      "kalinlik": 20,
+      "tip": "dis"
+    },
+    {
+      "id": "w_y600_557_900",
+      "bas": "p557_600",
+      "son": "p900_600",
+      "kalinlik": 20,
+      "tip": "dis"
+    }
+  ],
+  "odalar": [
+    {
+      "id": "hol",
+      "ad": "Hol",
+      "tip": "hol",
+      "dongu": [
+        "p0_0",
+        "p217_0",
+        "p217_348",
+        "p0_348"
+      ],
+      "guven": "normal"
+    },
+    {
+      "id": "salon",
+      "ad": "Salon",
+      "tip": "oturma_odasi",
+      "dongu": [
+        "p217_0",
+        "p900_0",
+        "p900_348",
+        "p217_348"
+      ],
+      "guven": "normal"
+    },
+    {
+      "id": "yatak",
+      "ad": "Yatak Odası",
+      "tip": "yatak_odasi",
+      "dongu": [
+        "p0_348",
+        "p557_348",
+        "p557_600",
+        "p0_600"
+      ],
+      "guven": "normal"
+    },
+    {
+      "id": "mutfak",
+      "ad": "Mutfak",
+      "tip": "mutfak",
+      "dongu": [
+        "p557_348",
+        "p900_348",
+        "p900_600",
+        "p557_600"
+      ],
+      "guven": "normal"
+    }
+  ],
+  "acikliklar": [
+    {
+      "id": "a_giris",
+      "tip": "kapi",
+      "rol": "giris",
+      "duvar": "w_y0_0_217",
+      "oran": 0.5,
+      "genislik": 100,
+      "aci_yonu": 1
+    },
+    {
+      "id": "a_kapi_hol__salon",
+      "tip": "kapi",
+      "rol": "diger",
+      "duvar": "w_d217_0_348",
+      "oran": 0.5,
+      "genislik": 90,
+      "aci_yonu": 1
+    },
+    {
+      "id": "a_kapi_hol__yatak",
+      "tip": "kapi",
+      "rol": "diger",
+      "duvar": "w_y348_0_217",
+      "oran": 0.5,
+      "genislik": 90,
+      "aci_yonu": 1
+    },
+    {
+      "id": "a_kapi_mutfak__salon",
+      "tip": "kapi",
+      "rol": "diger",
+      "duvar": "w_y348_557_900",
+      "oran": 0.5,
+      "genislik": 90,
+      "aci_yonu": 1
+    },
+    {
+      "id": "a_pencere_hol",
+      "tip": "pencere",
+      "duvar": "w_d0_0_348",
+      "oran": 0.5,
+      "genislik": 140
+    },
+    {
+      "id": "a_pencere_salon",
+      "tip": "pencere",
+      "duvar": "w_y0_217_900",
+      "oran": 0.5,
+      "genislik": 140
+    },
+    {
+      "id": "a_pencere_yatak",
+      "tip": "pencere",
+      "duvar": "w_y600_0_557",
+      "oran": 0.5,
+      "genislik": 140
+    },
+    {
+      "id": "a_pencere_mutfak",
+      "tip": "pencere",
+      "duvar": "w_y600_557_900",
+      "oran": 0.5,
+      "genislik": 140
+    }
+  ],
+  "mimari_kararlar": {
+    "islak_cekirdek": "tekil",
+    "sirkulasyon": "karma-hol",
+    "zonlama": "ayrik",
+    "giris": "alt",
+    "yaklasik_olcum": false,
+    "kombinasyon": "tekil|karma-hol|ayrik|alt",
+    "olcum": "modelden TÜRETİLDİ (beyan değil) — lib/uret-eksen.mjs"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "not": "Ölçek çıpaları — modeldeki ölçünün gerçekten görselden/sahadan geldiğini kanıtlar. En az 2, tercihen DİK eksenlerde.",
+  "cipalar": [
+    { "ad": "Suit oda üst duvarı", "kaynak": "görselde yazılı: 450 cm", "duvar": "d_ust_1", "gercek_cm": 450 },
+    { "ad": "Salon sol duvarı", "kaynak": "görselde yazılı: 500 cm", "duvar": "d_sol_2", "gercek_cm": 500 }
+  ]
+}
