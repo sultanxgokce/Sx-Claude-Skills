@@ -15,6 +15,17 @@ set -uo pipefail
 PAKET="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$PAKET" || exit 1
 
+# Kendi-kendine kurulum (kur.sh ile AYNI idempotent kontrol) — "başka bir kutuda çıplak
+# çalışır" iddiası npm bağımlılıkları kurulu değilse tutmuyordu (CI'da node_modules yok,
+# checkout taze; 2026-08-10 PR#180 bulgusu). Zaten kuruluysa no-op.
+if node -e "import('file://$PWD/node_modules/dxf-parser/dist/index.js').catch(()=>process.exit(1))" 2>/dev/null \
+   && [ -d node_modules/dejavu-fonts-ttf ] && [ -d node_modules/sharp ]; then
+  :
+else
+  echo "── bağımlılıklar eksik, kuruluyor (npm install --no-fund --no-audit) ──"
+  npm install --no-fund --no-audit >/dev/null 2>&1 || { echo "✗ npm install BAŞARISIZ"; exit 1; }
+fi
+
 T="$(mktemp -d)"; trap 'rm -rf "$T"' EXIT
 GECEN=0; KIRIK=0
 yesil() { GECEN=$((GECEN+1)); printf '  ✓ %s\n' "$1"; }
