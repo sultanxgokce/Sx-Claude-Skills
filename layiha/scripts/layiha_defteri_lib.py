@@ -247,11 +247,13 @@ def oku(led, norm=True, kilitle=False):
     if not norm:
         return recs, False
 
+    # K6 (2026-08-10, hücre-öneki): kod artık öneksiz ("L36") ya da <CELL>-önekli ("s04-L36")
+    # olabilir — sayaç ikisini de aynı numaralandırmada tutmalı, aksi hâlde backfill eski
+    # bir numarayı yeniden kullanır ve iki kayıt aynı sayıyı taşır (görünüşte farklı, aslında
+    # çakışan kod). Regex trailing-digit'i alır; önek numaralandırmayı etkilemez.
     def id_num(x):
-        try:
-            return int(str(x).lstrip("Ll"))
-        except Exception:
-            return 0
+        m = re.search(r"[Ll](\d+)$", str(x))
+        return int(m.group(1)) if m else 0
 
     mx = max([id_num(r.get("id", "")) for r in recs] + [0])
     degisti = False

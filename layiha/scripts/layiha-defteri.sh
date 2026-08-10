@@ -128,12 +128,22 @@ else:
                      "       Kayıt yazıldı ama hücresi BİLİNMİYOR. %s\n" % HUCRE_RECETE)
 tarih=a.get("tarih") or subprocess.check_output(["date","+%F"]).decode().strip()
 recs,_=oku(led, kilitle=True)
+# HÜCRE ÖNEKİ (K6, 2026-08-10) — yeni kayıtlar `<CELL>-L##` biçiminde üretilir (CELL = NİZAM
+# hücre-kimliği, hat-yolu.lib.sh'in CELL_ID/hat_onek desenidir; Nexus'ta unset → "s01").
+# GERİYE-UYUM: numaralandırma eski öneksiz "L##" kayıtlarını da sayar (id_num regex hem
+# "L36" hem "s04-L36"yı çözer) — aynı deftere karışık biçim düşse bile çakışma olmaz.
+# ESKİ öneksiz kodlar YENİDEN YAZILMAZ: yalnız YENİ atanan id'ler önek taşır, `durum`/`tescil`
+# gibi okuma-komutları zaten tam-metin eşleşir (bkz layiha_defteri_lib.py) → "durum L35" aynen çalışır.
+import re
 def id_num(x):
-    try: return int(str(x).lstrip("Ll"))
-    except: return 0
+    m=re.search(r'[Ll](\d+)$', str(x))
+    return int(m.group(1)) if m else 0
+def cell_onek():
+    c=(os.environ.get("CELL_ID") or "s01").strip()
+    return c if c else "s01"
 def next_id():
     mx=max([id_num(r.get("id","")) for r in recs] + [0])
-    return "L%02d"%(mx+1)
+    return "%s-L%02d"%(cell_onek(), mx+1)
 # mevcut slug'ın id'sini koru; yoksa yeni id
 existing=None
 for r in recs:
@@ -431,7 +441,7 @@ PY
     TODAY="$(date +%F)"; WEEK="$(date +%G-W%V)"
     # otomatik id + tescil backfill: eksik alanlı eski kayıtları idempotent göç ettir
     LAYIHA_FILT="$FILT" LAYIHA_PORC="$PORC" LAYIHA_KIM="$KIM" LAYIHA_TODAY="$TODAY" LAYIHA_WEEK="$WEEK" python3 - <<'PY'
-import os, sys, datetime
+import os, sys, re, datetime
 sys.path.insert(0, os.environ["LAYIHA_LIB_DIR"])
 from layiha_defteri_lib import oku, kim_sinifi
 led=os.environ["LAYIHA_LEDGER"]; filt=os.environ["LAYIHA_FILT"]; porc=os.environ["LAYIHA_PORC"]=="1"
@@ -439,9 +449,11 @@ kim=os.environ.get("LAYIHA_KIM","hepsi")
 today=os.environ["LAYIHA_TODAY"]; week=os.environ["LAYIHA_WEEK"]
 # SALT-OKUR: normalize BELLEKTE kalır, diske dokunulmaz (bkz başlıktaki gerekçe).
 recs,_=oku(led)
+# K6: sıralama önekli ("s04-L36") ve öneksiz ("L36") kodları AYNI sayaçla karşılaştırır —
+# regex trailing-digit'i alır, önek sıralamayı bozmaz.
 def id_num(x):
-    try: return int(str(x).lstrip("Ll"))
-    except: return 0
+    m=re.search(r'[Ll](\d+)$', str(x))
+    return int(m.group(1)) if m else 0
 def isoweek(d):
     try:
         y,m,dd=map(int,d.split("-")); iso=datetime.date(y,m,dd).isocalendar(); return "%d-W%02d"%(iso[0],iso[1])
