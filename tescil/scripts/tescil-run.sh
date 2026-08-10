@@ -96,6 +96,20 @@ if [ -n "$HEAD_SHA" ] && [ "$GERCEK_SHA" != "$HEAD_SHA" ]; then
   exit 4
 fi
 
+# ── Kopya-hazırlık kancası (proje-bilmez): worktree kendi hazırlığını sahiplenir ──
+# NEDEN: git-ignored ÜRETİLMİŞ artefaktlar (ör. Prisma client) taze kopyaya gelmez →
+# G komutları adayın suçu olmayan sahte-kırmızı üretir (k0060 ölçümü: 338 sahte tip-hatası,
+# tek başına üretim adımı 338→0). Araç projeyi TANIMAZ; yalnız sabit-adlı kancayı çağırır.
+# Kanca kırmızıysa bu bir PROKTÖR arızasıdır → aday "kaldı" SAYILMAZ, harness-hatası verilir.
+HAZIRLIK="$WORKTREE/scripts/tescil-preflight.sh"
+if [ -f "$HAZIRLIK" ]; then
+  echo "tescil-run: kopya-hazırlık kancası koşuyor (scripts/tescil-preflight.sh)"
+  if ! (cd "$WORKTREE" && bash scripts/tescil-preflight.sh); then
+    echo "tescil-run: kopya-hazırlık BAŞARISIZ → tescil koşulmadı (aday suçlanmaz; operatör baksın)" >&2
+    exit 2
+  fi
+fi
+
 # ── Katman-1: her mekanik G'yi TAZE koş (eski kanıt devralınmaz) ─────────────
 echo "tescil-run: $KART deneme-$DENEME · worktree HEAD=$GERCEK_SHA"
 rm -f "$OUT"/kanit/G*.json 2>/dev/null || true
