@@ -110,6 +110,15 @@ _jargon_var() {
 _sir_var() {
   printf '%s' "$1" | grep -qE 'sk-[A-Za-z0-9]{20}|ghp_[A-Za-z0-9]{30}|AKIA[A-Z0-9]{16}|BEGIN (RSA |EC )?PRIVATE KEY|xox[bp]-'
 }
+# ── A06 cevap-alanı koruması (L39 Sultan-kararı #6) ───────────────────────────
+# "Ajanın şık-çağrısında `answers` alanının hiç doldurulmaması" — bu script hiçbir zaman
+# Sultan'ın cevabını bir alana YAZMAZ (kapımda yalnız `suanki`'yi ilerletir, cevabın metnini
+# hiç görmez). Bu kapı SAVUNMA katmanıdır: dosyada (elle ya da başka bir araçla) Sultan'ın
+# cevabıymış gibi görünen bir alan belirirse RED — ORTAK-MIMARI.md A06 (T0-SERT)'nin bu
+# yüzeydeki karşılığı. Cortex tarafında emsal: `sultan_response` yazımı classifier'da reddedilir.
+_cevap_alani_var() { # $1=dosya-yolu → 0 bulundu(RED) · 1 temiz
+  grep -qEi '^[[:space:]]*(cevap|yanit|yanıt|sultan_cevap|sultan_response|onay-cevabi|answer)[[:space:]]*:' "$1" 2>/dev/null
+}
 # Tek-eylem: "Ne yapman gerekiyor" iki ayrı iş taşıyorsa adım-kartına bölünmeli (L39).
 _cok_eylem() {
   printf '%s' "$1" | grep -qE '(;|,[[:space:]]*(sonra|ard[ıi]ndan)|[[:space:]]sonra[[:space:]].*[[:space:]]ve[[:space:]])'
@@ -258,18 +267,73 @@ _olur_dogrula() { # $1=tetik-id → 0=tamam(olur var) · 4=henüz değil · 2=ok
   return 4
 }
 
-# ── adım planı ───────────────────────────────────────────────────────────────
+# ── adım planı (L39 — 9 Sultan-kararı, 2026-08-11 gece) ──────────────────────
+# NİÇİN VAR: L39-DESIGN §9 dokuz açık karar Sultan tarafından verildi — damga `🛠️ ŞİMDİ SEN`
+#   (zaten kuruluydu, #1), ilerleme `adım i/N` HEP görünür + N DÜRÜST olmalı (#2/#3), blokaj-
+#   kilidi YUMUŞAK (#4), her adım-bloğu MUTLAKA açık bir `🚦 SENDE` kartına bağlı (#8), takip
+#   şıkları sabit `yaptım / takıldım / iptal` (#5 — SKILL.md'de belgelenir, bu bir metin-kuralı,
+#   kod bunu ZORLAYAMAZ), A06 cevap-alanı koruması (#6). Aşağıdaki üç kapı (K9/K10/yumuşak-kilit)
+#   ve A06-lint bunları MEKANİZMAYA bağlar — kural yazılı olması yetmez (L35 dersi).
 _plan_yolu() { printf '%s/%s.md' "$ADIM_DIZIN" "$1"; }
 
 _plan_oku() { # $1=yol $2=anahtar
   sed -n "s/^$2: *//p" "$1" 2>/dev/null | head -1
 }
 
+# ── K9 · kart-çapası (Sultan-kararı #4/#8a) ───────────────────────────────────
+# "her adım-bloğu MUTLAKA bir 🚦 SENDE kartına bağlı" — kartsız adım-bloğu YASAK. `🎯 <AJAN>`
+# kartına da adım-bloğu bağlanmaz: adım-bloğu Sultan'ın ELİYLE yapacağı işi tarif eder; ajan-
+# sahipli kartta Sultan'ın yapacağı bir şey yoktur (kart devredilmişse önce Sultan'a dönmeli).
+_kart_var_mi() { # $1=ad → 0 açık 🚦 SENDE kartı var · 1 yok
+  grep -qxF "🚦 SENDE · $1" "$DOSYA" 2>/dev/null
+}
+
+# ── K10 · N-dürüstlük (Sultan-kararı #2) ──────────────────────────────────────
+# "bildirilen N ile yazılı adım sayısı eşleşmeli." Uydurma N = Sultan'a yanlış bitiş sözü
+# (L39-DESIGN R8). `toplam:` alanı normalde `adim ekle` ile otomatik artar; bu kapı yalnız
+# ELLE bozulmuş/eski bir plan dosyasını yakalar (savunma katmanı — güven ama doğrula).
+_n_dogru_mu() { # $1=yol → 0 tutarlı · 1 tutarsız (mesaj basar)
+  local yol="$1" toplam gercek
+  toplam="$(_plan_oku "$yol" toplam)"; toplam="${toplam:-0}"
+  gercek="$(grep -cE '^### adim [0-9]+$' "$yol" 2>/dev/null || echo 0)"
+  if [ "$toplam" != "$gercek" ]; then
+    _hata "K10 N-dürüstlüğü bozuk: plan 'toplam: $toplam' diyor ama dosyada $gercek adım blogu var — uydurma N yasak (L39 R8)"
+    return 1
+  fi
+  return 0
+}
+
+# ── Yumuşak-kilit (Sultan-kararı #3) ──────────────────────────────────────────
+# "açık adım varken yeni adım → uyarı basılır, engellenmez." İki durum UYARILIR (RED değil):
+#  (a) AYNI karta 2. kez `adim goster` — önceki adım Sultan'dan cevap almadan (ilerle çağrılmadan)
+#      tekrar basılıyor ("aynı karta 2. açık adım-bloğu").
+#  (b) BAŞKA bir kartın adımı hâlâ `bekliyor: evet` iken yeni bir adım gösteriliyor.
+# Sert-kilit BİLEREK reddedildi (L39-DESIGN §6.2-iii — paylaşımlı settings.json riski);
+# bu yalnız bir hatırlatma satırıdır, çıkışı ASLA kırmızıya çevirmez.
+_acik_bekleyen_planlar() { # $1=haric-ad → "ad:suanki:toplam" satırları (bekliyor=evet, TAMAM değil)
+  local haric="${1:-}" f
+  [ -d "$ADIM_DIZIN" ] || return 0
+  for f in "$ADIM_DIZIN"/*.md; do
+    [ -f "$f" ] || continue
+    local ad; ad="$(basename "$f" .md)"
+    [ "$ad" = "$haric" ] && continue
+    local bekliyor durum; bekliyor="$(_plan_oku "$f" bekliyor)"; durum="$(_plan_oku "$f" durum)"
+    case "$durum" in TAMAM*) continue ;; esac
+    [ "$bekliyor" = "evet" ] || continue
+    printf '%s:%s:%s\n' "$ad" "$(_plan_oku "$f" suanki)" "$(_plan_oku "$f" toplam)"
+  done
+}
+
 _adim_ekle() { # ad yapilacak nerede bitince
   local ad="$1" yap="$2" ner="$3" bit="$4" yol; yol="$(_plan_yolu "$ad")"
+  # K9 — kartsız adım-bloğu YASAK (Sultan-kararı #4/#8a: tek isim, tek kayıt)
+  _kart_var_mi "$ad" || {
+    _hata "K9 kart-çapası: '$ad' açık bir 🚦 SENDE kartı değil — adım-bloğu yalnız Sultan'ın açık kartına bağlanır (kapimda ac ile önce kartı aç)"
+    return 1
+  }
   mkdir -p "$ADIM_DIZIN"
   if [ ! -f "$yol" ]; then
-    printf '# %s — adım planı\nkart: %s (kapimda.md)\ntoplam: 0\nsuanki: 1\ndurum: açık\n\n' "$ad" "$ad" > "$yol"
+    printf '# %s — adım planı\nkart: %s (kapimda.md)\ntoplam: 0\nsuanki: 1\ndurum: açık\nbekliyor: hayir\n\n' "$ad" "$ad" > "$yol"
   fi
   local toplam; toplam="$(_plan_oku "$yol" toplam)"; toplam=$(( ${toplam:-0} + 1 ))
   printf '### adim %s\nYapılacak: %s\nNerede: %s\nBitince: %s\n\n' "$toplam" "$yap" "$ner" "$bit" >> "$yol"
@@ -280,12 +344,32 @@ _adim_ekle() { # ad yapilacak nerede bitince
 _adim_goster() { # ad
   local ad="$1" yol; yol="$(_plan_yolu "$ad")"
   [ -f "$yol" ] || { _hata "'$ad' için adım planı yok"; return 2; }
-  local toplam suanki; toplam="$(_plan_oku "$yol" toplam)"; suanki="$(_plan_oku "$yol" suanki)"
+  _n_dogru_mu "$yol" || return 1
+  local toplam suanki bekliyor; toplam="$(_plan_oku "$yol" toplam)"; suanki="$(_plan_oku "$yol" suanki)"
+  bekliyor="$(_plan_oku "$yol" bekliyor)"
   [ "${suanki:-1}" -le "${toplam:-0}" ] || { printf '✅ %s · tüm adımlar bitti (%s/%s)\n' "$ad" "$toplam" "$toplam"; return 0; }
+  # ── yumuşak-kilit uyarıları (RED değil — Sultan-kararı #3) ──
+  local uyari=""
+  if [ "$bekliyor" = "evet" ]; then
+    uyari="${uyari}⚠️ yumuşak-kilit: '$ad' adım $suanki/$toplam zaten Sultan'da açık bekliyordu — bu 2. kez basılıyor. Cevap gelmeden yeni adıma geçmek yasak; Sultan'a açıkça söyle.
+"
+  fi
+  local digerleri; digerleri="$(_acik_bekleyen_planlar "$ad")"
+  if [ -n "$digerleri" ]; then
+    local satir
+    while IFS= read -r satir; do
+      [ -n "$satir" ] || continue
+      local o_ad="${satir%%:*}"
+      uyari="${uyari}⚠️ yumuşak-kilit: '$o_ad' kartının adımı da Sultan'da açık bekliyor — o cevaplanmadan başka işe geçme; geçmek gerekiyorsa Sultan'a açıkça söyle.
+"
+    done <<< "$digerleri"
+  fi
   local blok; blok="$(awk -v n="### adim $suanki" '$0==n{f=1;next} /^### adim /{f=0} f' "$yol")"
+  [ -n "$uyari" ] && printf '%s' "$uyari"
   printf '```\n🛠️ ŞİMDİ SEN · %s · adım %s/%s\n%s```\n' "$ad" "$suanki" "$toplam" \
     "$(printf '%s\n' "$blok" | sed '/^$/d')
 "
+  sed -i "s/^bekliyor: .*/bekliyor: evet/" "$yol"
 }
 
 _adim_ilerle() { # ad
@@ -294,6 +378,7 @@ _adim_ilerle() { # ad
   local toplam suanki; toplam="$(_plan_oku "$yol" toplam)"; suanki="$(_plan_oku "$yol" suanki)"
   suanki=$(( ${suanki:-1} + 1 ))
   sed -i "s/^suanki: .*/suanki: $suanki/" "$yol"
+  sed -i "s/^bekliyor: .*/bekliyor: hayir/" "$yol"
   if [ "$suanki" -gt "${toplam:-0}" ]; then
     sed -i "s/^durum: .*/durum: TAMAM — tüm adımlar bitti/" "$yol"
     printf '✅ %s · tüm adımlar bitti (%s/%s)\n' "$ad" "$toplam" "$toplam"
@@ -316,6 +401,23 @@ _lint_dosya() {
       printf '%s' "$govde" | grep -qF "$alan" || { _hata "kart '$ad' eksik alan: $alan"; bulgu=1; }
     done
   done < <(_acik_adlar)
+  # A06 — Sultan'ın cevabı hiçbir yüzeyde ajan-alanı olarak görünmemeli (kararlar #6)
+  if _cevap_alani_var "$DOSYA"; then
+    _hata "A06 kapısı: kapimda.md içinde ajan-yazımı bir 'cevap' alanı bulundu — Sultan'ın cevabı ASLA ajan tarafından üretilmez"
+    bulgu=1
+  fi
+  # N-dürüstlüğü + A06'yı tüm adım planlarına da uygula
+  if [ -d "$ADIM_DIZIN" ]; then
+    local f
+    for f in "$ADIM_DIZIN"/*.md; do
+      [ -f "$f" ] || continue
+      _n_dogru_mu "$f" || bulgu=1
+      if _cevap_alani_var "$f"; then
+        _hata "A06 kapısı: $(basename "$f") plan dosyasında ajan-yazımı bir 'cevap' alanı bulundu"
+        bulgu=1
+      fi
+    done
+  fi
   [ "$bulgu" -eq 0 ] && printf '✅ kapımda temiz — %s açık kart (tavan %s)\n' "$n" "$TAVAN"
   return $bulgu
 }
@@ -456,6 +558,7 @@ case "$KOMUT" in
       ilerle) _adim_ilerle "$AD" ;;
       durum)
         yol="$(_plan_yolu "$AD")"; [ -f "$yol" ] || { _hata "'$AD' için adım planı yok"; exit 2; }
+        _n_dogru_mu "$yol" || exit 1
         printf '%s · adım %s/%s · %s\n' "$AD" "$(_plan_oku "$yol" suanki)" "$(_plan_oku "$yol" toplam)" "$(_plan_oku "$yol" durum)" ;;
       *) _hata "adim alt-komutu: ekle|goster|ilerle|durum"; exit 2 ;;
     esac ;;

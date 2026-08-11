@@ -265,5 +265,77 @@ _ok "$O" bitti "Kapanan Kart" --gerekce "halloldu" >/dev/null 2>&1
 grep -q '^oda: mihenk$' "$O" && ok "O13 kart kapanınca kaynak izi SİLİNMEZ" || kotu "O13 kapanışta iz kayboldu"
 _ok "$O" lint >/dev/null 2>&1; [ $? -eq 0 ] && ok "O14 yeni alan linti kırmızıya düşürmez" || kotu "O14 lint yanlış kırmızı"
 
+# ══ L39 · SULTAN-TALİMAT FORMATI — 9 karar (2026-08-11 gece) ═══════════════════
+# Kaynak: _agents/spec/sultan-talimat-formati-DESIGN.md §9. Damga `🛠️ ŞİMDİ SEN` ve
+# `adım i/N` zaten kuruluydu (kararlar #1/#2 kısmen); burada MEKANİZMAYA bağlanan üç
+# yeni kapı test edilir: K9 kart-çapası (#4/#8) · K10 N-dürüstlüğü (#2/R8) · yumuşak-kilit
+# (#3) · A06 cevap-alanı koruması (#6). Her biri MUTASYON-KANITLI: önce kırmızı üretiliyor
+# mu diye bakılır (negatif-test), sonra düzeltilip yeşile döndüğü doğrulanır.
+_l39_env(){ L39D="$(mktemp -d)"; }
+_l39(){ KAPIMDA_DOSYA="$L39D/kapimda.md" KAPIMDA_ADIM_DIZIN="$L39D/adim" bash "$SUT" "$@"; }
+
+# ── K9 · kart-çapası: kartsız adım-bloğu YASAK ────────────────────────────────
+_l39_env; touch "$L39D/kapimda.md"
+out="$(_l39 adim ekle "Hayalet Kart" --yapilacak "kasa panelini aç" --nerede "kasa paneli" --bitince "girdim de" 2>&1)"; rc=$?
+{ [ "$rc" -eq 1 ] && printf '%s' "$out" | grep -q "K9"; } \
+  && ok "K9 kartsız adım-bloğu → RED (açık 🚦 SENDE kartı yok)" || kotu "K9 kartsız adım geçti"
+[ ! -f "$L39D/adim/Hayalet Kart.md" ] && ok "K9b RED yolunda plan dosyası HİÇ yazılmadı (fail-closed)" || kotu "K9b plan yazıldı"
+
+# kart açılınca aynı çağrı geçer — negatif-test yeşile döner mi?
+_l39 ac "Gercek Kart" "${OG_AC[@]}" >/dev/null 2>&1
+_l39 adim ekle "Gercek Kart" --yapilacak "kasa panelini aç" --nerede "kasa paneli" --bitince "girdim de" >/dev/null 2>&1
+[ $? -eq 0 ] && ok "K9c açık kartlı adım-bloğu normal ekleniyor (mutasyon geri alınca yeşil)" || kotu "K9c geçerli ekleme kırıldı"
+
+# ── K10 · N-dürüstlüğü: bildirilen N ile dosyadaki gerçek adım sayısı eşleşmeli ─
+_l39_env
+_l39 ac "N Karti" "${OG_AC[@]}" >/dev/null 2>&1
+_l39 adim ekle "N Karti" --yapilacak "kasa panelini aç" --nerede "kasa paneli" --bitince "girdim de" >/dev/null 2>&1
+_l39 adim ekle "N Karti" --yapilacak "yeni kimlik oluştur" --nerede "aynı sayfa" --bitince "oluşturdum de" >/dev/null 2>&1
+sed -i 's/^toplam: 2/toplam: 9/' "$L39D/adim/N Karti.md"
+out="$(_l39 adim goster "N Karti" 2>&1)"; rc=$?
+{ [ "$rc" -eq 1 ] && printf '%s' "$out" | grep -q "K10"; } \
+  && ok "K10 uydurma N (toplam≠gerçek adım sayısı) → RED" || kotu "K10 uydurma N kaçtı"
+_l39 lint >/dev/null 2>&1; [ $? -eq 1 ] && ok "K10b bozuk plan genel lint'i de kırmızıya düşürür" || kotu "K10b lint yakalamadı"
+sed -i 's/^toplam: 9/toplam: 2/' "$L39D/adim/N Karti.md"
+_l39 adim goster "N Karti" >/dev/null 2>&1
+[ $? -eq 0 ] && ok "K10c N düzeltilince yeşile döner (mutasyon geri alındı)" || kotu "K10c düzeltme sonrası hâlâ kırmızı"
+
+# ── Damga şablonu — 🛠️ ŞİMDİ SEN · <Ad> · adım i/N (Sultan-kararı #1/#2) ────────
+out="$(_l39 adim goster "N Karti" 2>&1)"
+printf '%s' "$out" | grep -qF "🛠️ ŞİMDİ SEN · N Karti · adım 1/2" && ok "F1 damga şablonu birebir (#1/#2)" || kotu "F1 damga yanlış"
+
+# ── Yumuşak-kilit (Sultan-kararı #3): uyarı basılır, ENGELLENMEZ ───────────────
+out2="$(_l39 adim goster "N Karti" 2>&1)"; rc2=$?
+printf '%s' "$out2" | grep -q "yumuşak-kilit" && printf '%s' "$out2" | grep -q "2. kez" \
+  && ok "YK1 aynı karta 2. açık adım-bloğu → UYARI satırı" || kotu "YK1 uyarı basılmadı"
+printf '%s' "$out2" | grep -qF "🛠️ ŞİMDİ SEN · N Karti · adım 1/2" \
+  && ok "YK2 uyarıya rağmen blok yine de basılır" || kotu "YK2 blok bastırıldı"
+[ "$rc2" -eq 0 ] && ok "YK3 yumuşak-kilit ENGELLEMEZ (RC=0 — sert-kilit bilerek reddedildi)" || kotu "YK3 sert-kilide döndü"
+
+_l39 ac "N Karti 2" "${OG_AC[@]}" >/dev/null 2>&1
+_l39 adim ekle "N Karti 2" --yapilacak "ekranı aç" --nerede "panel" --bitince "açtım de" >/dev/null 2>&1
+out3="$(_l39 adim goster "N Karti 2" 2>&1)"
+printf '%s' "$out3" | grep -q "'N Karti' kartının adımı da Sultan'da açık bekliyor" \
+  && ok "YK4 başka kartın açık adımı çapraz-hatırlatılır" || kotu "YK4 çapraz hatırlatma yok"
+
+_l39 adim ilerle "N Karti" >/dev/null 2>&1
+out4="$(_l39 adim goster "N Karti" 2>&1)"
+printf '%s' "$out4" | grep -q "2. kez basılıyor" \
+  && kotu "YK5 ilerle sonrası hâlâ kendi-tekrar uyarısı basıyor" || ok "YK5 ilerle sonrası aynı-kart uyarısı SUSAR (bekliyor=hayir)"
+
+# ── A06 cevap-alanı koruması (Sultan-kararı #6) ────────────────────────────────
+_l39_env; touch "$L39D/kapimda.md"
+printf 'cevap: Evet\n' >> "$L39D/kapimda.md"
+_l39 lint >/dev/null 2>&1
+[ $? -eq 1 ] && ok "A06-1 ajan-yazımı 'cevap:' alanı kapimda.md'de → lint RED" || kotu "A06-1 kaçtı"
+
+_l39_env
+_l39 ac "A06 Karti" "${OG_AC[@]}" >/dev/null 2>&1
+_l39 adim ekle "A06 Karti" --yapilacak "kasa panelini aç" --nerede "kasa paneli" --bitince "girdim de" >/dev/null 2>&1
+_l39 lint >/dev/null 2>&1; [ $? -eq 0 ] && ok "A06-2 temiz plan lint'i kırmızıya düşürmez" || kotu "A06-2 yanlış kırmızı"
+printf 'sultan_response: evet\n' >> "$L39D/adim/A06 Karti.md"
+_l39 lint >/dev/null 2>&1
+[ $? -eq 1 ] && ok "A06-3 plan dosyasındaki 'sultan_response:' alanı → lint RED" || kotu "A06-3 kaçtı"
+
 echo; echo "── SONUÇ: $gecti geçti · $dustu kaldı ──"
 [ "$dustu" -eq 0 ]

@@ -1,7 +1,7 @@
 ---
 name: kapimda
 type: tool
-version: 1.4.0
+version: 1.5.0
 description: >
   Sultan'ı bekleyen işlerin TEK yüzeyini (kapimda.md) yazan, denetleyen ve adım adım yürüten
   kabuk. Kart açma fail-closed 8 lint kapısından geçer (dört zorunlu alan · "Niçin sen" boşsa
@@ -59,12 +59,57 @@ Plan **diske** yazılır (`kapimda-adim/<Kısa Ad>.md`: `toplam · suanki · dur
 "Yaptım" denince üç-durumlu kanıt-probu koşulur; **"yapmamışsın" dili yasaktır** (Sultan yalanlanmaz).
 
 ## Kanıt
-`scripts/kapimda.test.sh` → **69 kapı** (8 lint-RED yolu + fail-closed dosya-kirlenmezliği + çizici
+`scripts/kapimda.test.sh` → **84 kapı** (8 lint-RED yolu + fail-closed dosya-kirlenmezliği + çizici
 sözleşmesi + tavan + kapatma + adım motorunun tek-adım disiplini + 10 devir kapısı + 14 kaynak-damgası
-kapısı + 7 varsayılan-görünüm kapısı). Gerçek `kapimda.md`'ye dokunmaz. Kapılar negatif-test edildi: kaynak uydurulursa O4, devir
-kaynağı ezerse O7/O9 **kırmızıya döner** (yani koruma gerçek, süs değil).
+kapısı + 7 varsayılan-görünüm kapısı + **15 L39 kapısı**: K9 kart-çapası · K10 N-dürüstlüğü ·
+yumuşak-kilit · A06 cevap-alanı). Gerçek `kapimda.md`'ye dokunmaz. Kapılar negatif-test edildi: kaynak
+uydurulursa O4, devir kaynağı ezerse O7/O9, uydurma-N verilirse K10, kartsız adım eklenirse K9
+**kırmızıya döner** (yani koruma gerçek, süs değil).
+
+## 🛠️ ŞİMDİ SEN adım-bloğu — Sultan-Talimat Formatı (L39, 9 Sultan-kararı · 2026-08-11 gece)
+
+Kanon: `_agents/spec/sultan-talimat-formati-DESIGN.md`. Kart `"bu iş SENDE"` der; adım-bloğu
+`"işte tam olarak ne yapacaksın"` der — aynı gramerin iki kademesi (kartsız adım-bloğu yasak,
+§3.1 DESIGN). Sultan dokuz kararı verdi; hepsi aşağıda numaralıdır ve kod-kapısına bağlıdır
+(L35 dersi: "kural var ama hiçbir kapıda koşmuyorsa yok sayılır").
+
+**Sabit şablon:**
+```
+🛠️ ŞİMDİ SEN · <Kısa Ad> · adım <i>/<N>
+Yapılacak: <TEK eylem>
+Nerede:    <panel/uygulama adı — jargonsuz, yol/komut yok>
+Bitince:   <ajanın soracağı takip-sorusuna cevap ver>
+```
+
+**Dokuz karar → nerede yaşıyor:**
+
+| # | Karar | Nasıl uygulanır |
+|---|---|---|
+| **1** | Damga **`🛠️ ŞİMDİ SEN`** | `adim goster` bunu basar (kod: `_adim_goster`) |
+| **2** | İlerleme **`adım i/N` HEP görünür, N dürüst** — adımlar dallanmalarıyla PEŞİN yazılır | Her adım `adim ekle` ile TEK TEK, önceden eklenir; N `toplam:` alanından okunur. **K10 kapısı** (`_n_dogru_mu`): plan dosyasındaki `toplam:` ile gerçek `### adim` blok sayısı eşleşmezse `adim goster/durum` RED döner — uydurma N yasak (DESIGN R8) |
+| **3** | Blokaj-kilidi **YUMUŞAK** — açık adım varken yeni adım → **uyarı basılır, engellenmez** | `_adim_goster`: (a) aynı karta 2. kez basılırsa (`bekliyor: evet` iken tekrar `goster`) kendi-uyarısı · (b) başka bir kartın adımı `bekliyor: evet` iken çapraz-uyarı. İkisi de RC'yi **0'da bırakır** — sert-kilit (`PreToolUse` deny) DESIGN §6.2-iii'te bilerek reddedildi (paylaşımlı `settings.json` 16 kutuyu dondurur) |
+| **4** | Her adım-bloğu **MUTLAKA** açık bir `🚦 SENDE` kartına bağlı | **K9 kapısı** (`_kart_var_mi`): `adim ekle` çağrısı, o isimde açık bir `🚦 SENDE · <Ad>` satırı YOKSA RED döner (plan dosyası hiç yazılmaz — fail-closed). `🎯 <AJAN>` kartına adım-bloğu bağlanmaz: adım Sultan'ın ELİYLE yapacağı iş içindir |
+| **5** | Takip şıkları **sabit: `yaptım / takıldım / iptal`** | Ekrana `AskUserQuestion` ile basılır (kod-dışı — çağıran ajan sorar). "başka bir şey" şıkkı elle yazılmaz, harness ekler. **`takıldım` dallanma-planını açar**: ajan nerede takıldığını sorar, kalan adımları Sultan'ın gördüğü ekrana göre yeniden yazar |
+| **6** | Şık-oranı: **2-4 şık + her zaman işaretli tek öneri** | Takip-sorusunun `options[]`'ında bir seçenek `(önerim)` işaretiyle gelir — şema tavanı zaten 2-4 (`sdk-tools.d.ts:867`) |
+| **7** | Tur başına soru tavanı **4** (şema tavanı, Sultan bilerek üst-sınırı seçti) | Çağıran ajanın disiplinidir; kod bunu ölçmez. Bir turda 4'ten fazla `AskUserQuestion` çağrısı YASAK |
+| **8** | A06: **`answers` alanı hiç doldurulmasın**, lint reddetsin | **A06 kapısı** (`_cevap_alani_var`, `kapimda lint`): `kapimda.md` ya da herhangi bir `kapimda-adim/*.md` dosyasında `cevap:` / `yanit:` / `sultan_cevap:` / `sultan_response:` / `onay-cevabi:` / `answer:` deseni RED döner. Bu araç Sultan'ın cevabının METNİNE hiç dokunmaz — yalnız `suanki`'yi ilerletir |
+| **9** | Bugünkü açık kartların adım-planları şimdi çıkarılsın | Ölçülmüş kart-durumuna göre `_agents/handoff/` altına yazılır (Nexus repo, bu skill'in kapsamı değil — kart içeriği CANLI `kapimda.md`'den ölçülür, uydurulmaz) |
+
+**Kart-devri ile ilişki:** `🎯 <AJAN>` sahipli bir kart tekrar `🚦 SENDE`'ye dönerse (Sultan-onayıyla
+ya da 3. devir pinpon-panzehiriyle `⚠️ TIKANDI`), adım-bloğu ancak O NOKTADAN SONRA açılabilir
+— K9 kapısı bunu otomatik uygular, ayrı bir kural yazmaya gerek yoktur.
+
+**Sert-kilit BİLEREK reddedildi:** `PreToolUse` deny tekniği vardı ama `/config/.claude/settings.json`
+16 kutunun **paylaştığı tek dosyadır**; kötü bir gate tüm filoyu dondurur (global CLAUDE.md, "Araç
+& Hook Sürtünmesi"). Yumuşak-kilit bunun yerine yalnız bir *nudge*'dır — ajan görmezden gelebilir,
+kaçış yolu her zaman açıktır (kart `Şimdi değil`/`iptal` diyebilir, kilit dosyası kimseyi dondurmaz).
 
 ## Sürüm notları
+- **1.5.0 (2026-08-11, L39 · 9 Sultan-kararı):** `adım-bloğu` üç yeni kapıya bağlandı — **K9**
+  kart-çapası (kartsız adım-bloğu RED) · **K10** N-dürüstlüğü (uydurma `toplam:` RED) ·
+  **yumuşak-kilit** (aynı-karta 2. açık adım / çapraz açık-adım → UYARI, RED DEĞİL) · **A06**
+  cevap-alanı koruması `kapimda lint`'e eklendi. Plan dosyasına `bekliyor: evet|hayir` alanı
+  eklendi (goster→evet, ilerle→hayir). Test: **84 kapı** (69 eski + 15 yeni, hepsi mutasyon-kanıtlı).
 - **1.0.0 (2026-08-04, MABEYN H2):** ilk sürüm — yazıcı + 8 kapı + kapatıcı + adım motoru + lint.
 - **1.1.0 (2026-08-04, MABEYN H3):** **SON-HALKA** — `bitti --federe-tamam <tetik-id>`: kartın ilgili
   olduğu federe tetiği `tamam` değilse kart **KAPANMAZ** (RC=4). Niçin: Sultan bir engeli kaldırdı diye
