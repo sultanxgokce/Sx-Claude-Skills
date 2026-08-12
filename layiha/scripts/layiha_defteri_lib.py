@@ -154,6 +154,71 @@ def izin_gecerli(ref):
     return ref.lower() not in ("yok", "n/a", "na", "---", "???", "bos", "boş")
 
 
+# ── DOĞRULAMA KOMUTU (L35-F1, "bayat kayıt" panzehiri · 2026-08-12) ──────────────
+# NİÇİN: kayıtlar İDDİA biçiminde yazılıyordu, ÖLÇÜM biçiminde değil. "🔴 ekip henüz
+# giremiyor" bir cümledir — doğruluğu ancak bir insan gidip bakarsa anlaşılır. Ölçüldü
+# (bayat-kayit-DESIGN §2): 28 kırmızı-bayraklı kaydın 12'si 5-6 haftadır hiç sınanmamıştı,
+# ikisi Sultan'ın gözünde ÇOKTAN BİTMİŞTİ. Kayıt yanına "yanlışsa şu komut gösterir"
+# yazsaydı tazelik SANİYEDE sınanırdı.
+#
+# Bu yüzden YENİ açık-iş kayıtları tek satırlık bir doğrulama komutu taşır. Kapı yalnız
+# YENİ kayıtlara işler; ESKİ kayıtlarda alan YOKTUR → okuma-anında "" sayılır, hata yok,
+# GÖÇ YOK (insa_kanit/isteyen/hucre alanlarıyla birebir aynı konvansiyon).
+#
+# 🔴 DEĞER-OKUMAZ ŞART (DESIGN §8 risk-3): komut bir sırrı/token'ı EKRANA BASAMAZ. Defterin
+# kendisi paylaşılan bir dosyadır ve içeriği transkripte düşer — "doğrulama" diye bir
+# `cat .env` yazmak, sır-değer kuralını kaydın içinden delmek olurdu. Kabul edilen biçim
+# filonun zaten uyguladığı biçimdir: varlık-grep (`-c`/`-q`), çıkış-kodu, sayı.
+DOGRULA_RECETE = (
+    'doğrulama komutu: TEK satır, DEĞER-OKUMAZ — sayı/varlık/çıkış-kodu döndürsün. '
+    'Ör: `grep -c "^cell_id: s02" filo-registry.yaml` · `systemctl is-active nexus` · '
+    '`test -f /opt/nexus/deploy/preflight.sh; echo $?`'
+)
+
+# Bariz sır-okuma kalıpları. Tam bir güvenlik-çözümleyicisi DEĞİL (öyle olduğunu iddia
+# etmek K01 ihlali olurdu) — kasıt-dışı sızıntının en sık üç kalıbını kapatan bir kapı:
+# env-dosyası dökme · sır-değişkeni ekrana basma · kasadan değer çekme.
+_SIR_DESENLERI = (
+    (re.compile(r"\b(cat|less|more|head|tail|bat|nl|xxd|od)\b[^|;&]*\.env\b", re.I),
+     "env dosyasını ekrana döküyor"),
+    (re.compile(r"\b(grep|sed|awk|rg)\b(?![^|;&]*\s-[a-zA-Z]*[cql])[^|;&]*\.env\b", re.I),
+     "env dosyasından DEĞER okuyor (varlık-grep için -c/-q kullan)"),
+    # `env` yalnız KOMUT olarak yasak; `ui/.env` gibi bir DOSYA ADININ sonu değil
+    # (ilk yazımda `\benv` ".env"i de yakalayıp meşru `grep -c TOKEN ui/.env`i reddetti).
+    (re.compile(r"\bprintenv\b|(?<![\w./\\-])env\s*(\||$)", re.I),
+     "tüm ortam değişkenlerini basıyor"),
+    (re.compile(r"\$\{?[A-Za-z_]*(TOKEN|SECRET|PASSWORD|PASSWD|APIKEY|API_KEY|_KEY)\b", re.I),
+     "sır taşıyan değişkeni genişletiyor"),
+    (re.compile(r"\b(vault-cek|infisical|bao|vault)\b[^|;&]*\b(get|read|oku|export|secrets)\b", re.I),
+     "kasadan sır DEĞERİ çekiyor"),
+    (re.compile(r"\bcred\.sh\b[^|;&]*\b(get|oku|show|print)\b", re.I),
+     "credential aracından değer okuyor"),
+)
+
+
+def dogrula_sir_riski(komut):
+    """Komut bariz bir sır-okuma kalıbı taşıyor mu? → sebep metni ya da ""."""
+    k = (komut or "").strip()
+    for desen, sebep in _SIR_DESENLERI:
+        if desen.search(k):
+            return sebep
+    return ""
+
+
+def dogrula_gecerli(komut):
+    """Biçim kapısı: TEK satır, anlamlı uzunlukta, yer-tutucu değil.
+
+    (İçerik-doğrulama DEĞİL — komutun gerçekten doğru şeyi ölçtüğünü hiçbir regex bilemez;
+    `izin_gecerli` emsali: kapı yer-tutucuyu eler, hükmü yazana bırakır.)
+    """
+    k = (komut or "").strip()
+    if len(k) < 4:
+        return False
+    if "\n" in k or "\r" in k:
+        return False
+    return k.lower() not in ("yok", "n/a", "na", "---", "???", "bos", "boş", "true", "echo ok")
+
+
 def kim_sinifi(rec):
     """Kaydı isteyen kim? → "sultan" | "ajan" | "bilinmiyor".
 
@@ -280,7 +345,10 @@ def oku(led, norm=True, kilitle=False):
         # hata verilmez, göç yapılmaz. Boş `hucre` "belirsiz" DEMEK DEĞİLDİR:
         # belirsiz = ajan baktı ve oturmadı (bilgi); boş = hiç sorulmadı (bilgisizlik).
         # İkisini birbirine karıştırmak, ölçmediğini ölçmüş saymaktır.
-        for _alan in ("isteyen", "yetki", "insa_izin", "hucre"):
+        # `dogrula` (L35-F1) da aynı geriye-uyum konvansiyonu: ESKİ kayıtlarda YOKTUR →
+        # "" sayılır, hata verilmez, göç yapılmaz. Boş `dogrula` = "bu kaydın tazeliği
+        # ölçülemez" demektir; kayıt yine de listelenir, süzgeçlerden düşmez.
+        for _alan in ("isteyen", "yetki", "insa_izin", "hucre", "dogrula"):
             if _alan not in r:
                 r[_alan] = ""
                 degisti = True

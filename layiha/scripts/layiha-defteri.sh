@@ -33,8 +33,12 @@
 #   TERS KAYIT yazılır (`gecmis`). Üçü de geriye-uyumlu: eski kayıtlarda alan yok → "" sayılır.
 #
 # Kullanım:
-#   layiha-defteri.sh ekle --slug S --konu "..." --dokuman "yol" [--pr "#N"] [--resume "cümle"] [--tarih YYYY-MM-DD]
+#   layiha-defteri.sh ekle --slug S --konu "..." --dokuman "yol" --dogrula "<tek satır komut>"
+#                          [--pr "#N"] [--resume "cümle"] [--tarih YYYY-MM-DD]
 #                          [--isteyen "Sultan|<AJAN>"] [--yetki "<beyan>"]
+#       ⚖️ DOĞRULAMA KAPISI (L35-F1): YENİ açık-iş kaydı `--dogrula` olmadan AÇILAMAZ → RC=2.
+#          Komut DEĞER-OKUMAZ olmalı (varlık-grep -c · çıkış-kodu · sayı); sır basan komut REDDEDİLİR.
+#          Eski kayıtlar okuma-anında MUAF — göç YOK, güncelleme de komut istemez.
 #   layiha-defteri.sh durum <kod|slug> <insa-bekliyor|insa-ediliyor|insa-edildi> [--kanit "<ref>"] [--izin "<beyan>"]
 #       ⚖️ İZİN KAPISI: `insa-ediliyor` İZİNSİZ ilan EDİLEMEZ → RC=2 + reçete ("başlıyorum = izinli").
 #       (insa-edildi → tescil.durum otomatik 'yok'→'bekliyor' kuyruğa girer)
@@ -95,7 +99,8 @@ case "$CMD" in
 import os, json, sys, subprocess
 sys.path.insert(0, os.environ["LAYIHA_LIB_DIR"])
 from layiha_defteri_lib import (oku, yaz, yeni_tescil, proje_adi, SEMA_V, kanit_gecerli,
-                                KANIT_RECETE, hucre_gecerli, hucre_normalize, HUCRE_RECETE)
+                                KANIT_RECETE, hucre_gecerli, hucre_normalize, HUCRE_RECETE,
+                                dogrula_gecerli, dogrula_sir_riski, DOGRULA_RECETE)
 led=os.environ["LAYIHA_LEDGER"]; a=json.loads(os.environ["LAYIHA_ARGS_JSON"])
 def _metin(v):
     """Değersiz verilmiş bayrak (`--isteyen`) True döner — onu boş-metin say."""
@@ -126,8 +131,33 @@ else:
     # ama SESSİZ olamaz. Boş ≠ belirsiz: boş "hiç sorulmadı", belirsiz "bakıldı, oturmadı".
     sys.stderr.write("UYARI: --hucre verilmedi (hangi NİZAM hücresinde çalışıyorsun?).\n"
                      "       Kayıt yazıldı ama hücresi BİLİNMİYOR. %s\n" % HUCRE_RECETE)
+# ── DOĞRULAMA KAPISI (L35-F1 · bayat-kayıt panzehiri, 2026-08-12) ──────────────────
+# Kayıt "şu açık" demez; "şu açık — YANLIŞSA ŞU KOMUT GÖSTERİR" der. Kapı yalnız YENİ
+# açık-iş kayıtlarında işler (DESIGN §6-F1 + §8 risk-1):
+#   · yeni + durum açık (insa-bekliyor/insa-ediliyor) → ZORUNLU
+#   · yeni + durum insa-edildi (doğarken kapanmış) → istenmez, iş bitmiş
+#   · MEVCUT kaydın güncellenmesi → istenmez; eski kayıt komutsuz yaşamaya devam eder (GÖÇ YOK)
+_dogrula = _metin(a.get("dogrula"))
 tarih=a.get("tarih") or subprocess.check_output(["date","+%F"]).decode().strip()
 recs,_=oku(led, kilitle=True)
+_mevcut_var = any(r.get("slug")==a["slug"] for r in recs)
+_yeni_durum = a.get("durum") or "insa-bekliyor"
+if _dogrula:
+    if not dogrula_gecerli(_dogrula):
+        sys.stderr.write("HATA: doğrulama komutu boş/yer-tutucu ya da tek satır değil: %r\n"
+                         "      %s\n" % (_dogrula, DOGRULA_RECETE)); sys.exit(2)
+    _risk = dogrula_sir_riski(_dogrula)
+    if _risk:
+        sys.stderr.write("HATA: bu doğrulama komutu bir sırrı ekrana basar (%s).\n"
+                         "      Defter paylaşılan bir dosyadır — içine sır-okuyan komut yazılmaz.\n"
+                         "      %s\n" % (_risk, DOGRULA_RECETE)); sys.exit(2)
+elif (not _mevcut_var) and _yeni_durum != "insa-edildi":
+    sys.stderr.write(
+        "HATA: yeni açık iş, kendini nasıl sınayacağını da yazmalı (L35 · bayat-kayıt panzehiri).\n"
+        "      Bu kayıt yarın hâlâ doğru mu — bunu bir komut söylemeli, bir cümle değil.\n"
+        "      Reçete: ekle --slug %s ... --dogrula \"grep -c 'aranan' hedef-dosya\"\n"
+        "      %s\n" % (a["slug"], DOGRULA_RECETE))
+    sys.exit(2)
 # HÜCRE ÖNEKİ (K6, 2026-08-10) — yeni kayıtlar `<CELL>-L##` biçiminde üretilir (CELL = NİZAM
 # hücre-kimliği, hat-yolu.lib.sh'in CELL_ID/hat_onek desenidir; Nexus'ta unset → "s01").
 # GERİYE-UYUM: numaralandırma eski öneksiz "L##" kayıtlarını da sayar (id_num regex hem
@@ -165,6 +195,9 @@ rec={"v":SEMA_V,"id":kod,"slug":a["slug"],"konu":a["konu"],
      # NİZAM hücresi (L66-F2): verilmezse ESKİ değer korunur — güncelleme bir alanı
      # sessizce silmez (isteyen/yetki emsali birebir).
      "hucre":(_hucre or (existing.get("hucre","") if existing else "")),
+     # DOĞRULAMA KOMUTU (L35-F1): verilmezse ESKİ değer korunur — güncelleme bir alanı
+     # sessizce silmez (isteyen/yetki/hucre emsali birebir).
+     "dogrula":(_dogrula or (existing.get("dogrula","") if existing else "")),
      "gecmis":(existing.get("gecmis",[]) if existing else []),
      "tescil": (existing.get("tescil") if existing and existing.get("tescil") else yeni_tescil())}
 out=[]; found=False
@@ -485,12 +518,14 @@ if porc:
     # porcelain kontratı GENİŞLETİLDİ (sona eklendi — mevcut alan sıraları korundu):
     #   11. sütun = proje · 12. sütun = insa_kanit (K7)
     #   13. sütun = isteyen · 14. sütun = yetki · 15. sütun = insa_izin (K2/K7-izin, 2026-08-08)
+    #   16. sütun = dogrula — kaydın kendi tazelik-sınavı (L35-F1, 2026-08-12)
     for r in sel:
         t=r.get("tescil") or {}
         print("\t".join([r.get("id",""),r.get("slug",""),r.get("durum",""),tdurum(r),r.get("tarih",""),
                           t.get("kart",""),t.get("muhur_ref",""),r.get("konu",""),r.get("resume",""),
                           r.get("dokuman",""),r.get("proje",""),r.get("insa_kanit",""),
-                          r.get("isteyen",""),r.get("yetki",""),r.get("insa_izin","")]))
+                          r.get("isteyen",""),r.get("yetki",""),r.get("insa_izin",""),
+                          r.get("dogrula","")]))
     print("#OZET\ttoplam=%d\tfiltre=%s\tkim=%s\tisteyeni-bilinmeyen-gizlendi=%d\tdefter=%s"
           %(len(sel),filt,kim,gizlenen,led))
 else:
@@ -532,6 +567,10 @@ else:
         # İŞ KAYDI (K2/K7-izin): "bu işi kim istedi, hangi izinle yürüyor" tek bakışta.
         if r.get("durum")=="insa-ediliyor" and r.get("insa_izin"):
             print("        izin: %s"%r["insa_izin"])
+        # L35-F1: açık işin tazeliği tek komutla sınanabilsin — "bu hâlâ doğru mu?"
+        # sorusunun cevabı kaydın YANINDA dursun, insanın hafızasında değil.
+        if r.get("dogrula") and r.get("durum")!="insa-edildi":
+            print("        doğrula: %s"%r["dogrula"])
         _kim=r.get("isteyen","")
         if _kim or r.get("yetki"):
             print("        isteyen: %s%s"%(_kim or "— (yazılmamış)",

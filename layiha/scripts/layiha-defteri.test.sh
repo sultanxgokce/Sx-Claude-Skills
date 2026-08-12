@@ -31,7 +31,7 @@ esit "G1 kitaplık python-sözdizimi" "0" "$?"
 
 echo
 echo "=== G2 · kimlik: yeni kayıt v + proje taşır ==="
-sut ekle --slug bir-konu --konu "Birinci layiha" --dokuman "_agents/spec/bir.md" --resume "bir de" >/dev/null
+sut ekle --dogrula "grep -c . /dev/null" --slug bir-konu --konu "Birinci layiha" --dokuman "_agents/spec/bir.md" --resume "bir de" >/dev/null
 esit "G2 ekle rc=0" "0" "$?"
 esit "G2 şema-sürümü yazıldı" "1"        "$(python3 -c "import json;print(json.loads(open('$D').readline())['v'])")"
 esit "G2 proje (oda) yazıldı"  "OdaBir"  "$(python3 -c "import json;print(json.loads(open('$D').readline())['proje'])")"
@@ -70,7 +70,7 @@ echo "=== G6 · İLERİ-SÜRÜM KAPISI: yeni şemalı defteri eski araç EZEMEZ 
 D6="$T/ileri.jsonl"
 printf '{"v":99,"id":"L01","slug":"gelecek","konu":"Gelecekten kayıt","tarih":"2026-07-25","durum":"insa-bekliyor","dokuman":"y.md"}\n' > "$D6"
 ONCE6="$(sha256sum "$D6" | cut -d' ' -f1)"
-OUT6="$(LAYIHA_DEFTER="$D6" HAT_ROOT="$T/OdaBir" bash "$SUT" ekle --slug yeni --konu "K" --dokuman "z.md" 2>&1)"; RC6=$?
+OUT6="$(LAYIHA_DEFTER="$D6" HAT_ROOT="$T/OdaBir" bash "$SUT" ekle --dogrula "grep -c . /dev/null" --slug yeni --konu "K" --dokuman "z.md" 2>&1)"; RC6=$?
 esit "G6 ileri-sürümlü deftere yazma rc=2" "2" "$RC6"
 var  "G6 hata sürümü söylüyor"             "$OUT6" "şema-sürümü"
 esit "G6 defter DEĞİŞMEDİ (hiçbir şey yazılmadı)" "$ONCE6" "$(sha256sum "$D6" | cut -d' ' -f1)"
@@ -80,8 +80,8 @@ esit "G6 durum-flip de reddedildi" "2" "$?"
 echo
 echo "=== G7 · eşzamanlı yazım: iki paralel ekle, iki kayıt da hayatta (flock + atomik) ==="
 D7="$T/paralel.jsonl"; : > "$D7"
-( LAYIHA_DEFTER="$D7" HAT_ROOT="$T/OdaBir" bash "$SUT" ekle --slug p-bir --konu "Paralel bir" --dokuman a.md >/dev/null 2>&1 ) &
-( LAYIHA_DEFTER="$D7" HAT_ROOT="$T/OdaBir" bash "$SUT" ekle --slug p-iki --konu "Paralel iki" --dokuman b.md >/dev/null 2>&1 ) &
+( LAYIHA_DEFTER="$D7" HAT_ROOT="$T/OdaBir" bash "$SUT" ekle --dogrula "grep -c . /dev/null" --slug p-bir --konu "Paralel bir" --dokuman a.md >/dev/null 2>&1 ) &
+( LAYIHA_DEFTER="$D7" HAT_ROOT="$T/OdaBir" bash "$SUT" ekle --dogrula "grep -c . /dev/null" --slug p-iki --konu "Paralel iki" --dokuman b.md >/dev/null 2>&1 ) &
 wait
 esit "G7 iki kayıt da yazıldı" "2" "$(grep -c . "$D7")"
 python3 -c "
@@ -96,7 +96,7 @@ ORTAK="${HOME:-/config}/.claude"
 FOTO() { find "$ORTAK" -maxdepth 2 -name 'layiha-*.jsonl' 2>/dev/null | sort; }
 ONCE8="$(FOTO)"
 GITSIZ="$T/gitsiz"; mkdir -p "$GITSIZ"
-( cd "$GITSIZ" && env -u LAYIHA_DEFTER bash "$SUT" ekle --slug kacak --konu "K" --dokuman "d.md" ) >/dev/null 2>&1
+( cd "$GITSIZ" && env -u LAYIHA_DEFTER bash "$SUT" ekle --dogrula "grep -c . /dev/null" --slug kacak --konu "K" --dokuman "d.md" ) >/dev/null 2>&1
 esit "G8 git-siz dizinde ekle rc=2" "2" "$?"
 ( cd "$GITSIZ" && env -u LAYIHA_DEFTER bash "$SUT" liste ) >/dev/null 2>&1
 esit "G8 git-siz dizinde liste rc=2" "2" "$?"
@@ -120,7 +120,7 @@ echo "=== G10 · FİLO görünümü (K3): her satırda oda adı, YALNIZ başlık
 for oda in OdaBir OdaIki; do
   mkdir -p "$T/filo/$oda/_agents/handoff"
   LAYIHA_DEFTER="$T/filo/$oda/_agents/handoff/layiha-defteri.jsonl" HAT_ROOT="$T/filo/$oda" \
-    bash "$SUT" ekle --slug "${oda,,}-is" --konu "$oda odasının işi" \
+    bash "$SUT" ekle --dogrula "grep -c . /dev/null" --slug "${oda,,}-is" --konu "$oda odasının işi" \
     --dokuman "d.md" --resume "GİZLİ-DEVAM-CÜMLESİ-$oda" >/dev/null 2>&1
 done
 F10="$(LAYIHA_FILO_KOK="$T/filo" bash "$FILO" 2>&1)"; RC10=$?
@@ -166,7 +166,7 @@ echo "=== G12 · simetrik kapı: inşa geri alınınca kayıt kuyrukta ASILI kal
 # Giriş kapısı vardı, çıkış kapısı yoktu (2026-07-29).
 D12="$T/cikis.jsonl"; : > "$D12"
 sut12() { LAYIHA_DEFTER="$D12" HAT_ROOT="$T/OdaBir" bash "$SUT" "$@"; }
-sut12 ekle --slug geri-alinan --konu "Yarim cikan is" --dokuman d.md --resume "x de" >/dev/null
+sut12 ekle --dogrula "grep -c . /dev/null" --slug geri-alinan --konu "Yarim cikan is" --dokuman d.md --resume "x de" >/dev/null
 sut12 durum s01-L01 insa-edildi --kanit "#123" >/dev/null
 esit "G12 önce kuyruğa girdi" "1" "$(sut12 liste --tescil-bekleyen --porcelain | grep -c '^s01-L01')"
 C12="$(sut12 durum s01-L01 insa-bekliyor 2>&1)"
@@ -174,7 +174,7 @@ var  "G12 çıkış kullanıcıya SÖYLENİYOR" "$C12" "kuyruğundan ÇIKTI"
 esit "G12 kuyruktan düştü" "0" "$(sut12 liste --tescil-bekleyen --porcelain | grep -c '^s01-L01')"
 esit "G12 kayıt kaybolmadı (hepsi'nde duruyor)" "1" "$(sut12 liste --hepsi --porcelain | grep -c '^s01-L01')"
 # VERDİKT VERİLMİŞ kayıt geri alınırsa karar EZİLMEZ — muaf, muaf kalır.
-sut12 ekle --slug verdikti-olan --konu "Sultan muaf tuttu" --dokuman d.md --resume "y de" >/dev/null
+sut12 ekle --dogrula "grep -c . /dev/null" --slug verdikti-olan --konu "Sultan muaf tuttu" --dokuman d.md --resume "y de" >/dev/null
 sut12 durum s01-L02 insa-edildi --kanit "#124" >/dev/null
 sut12 tescil s01-L02 muaf --gerekce "Sultan karari" >/dev/null
 sut12 durum s01-L02 insa-ediliyor >/dev/null
@@ -191,7 +191,7 @@ DIS13="$T/gecici-worktree/_agents/tescil/k9001"; mkdir -p "$DIS13"
 printf '{"verdikt":"GECTI","kart":"k9001"}\n' > "$DIS13/muhur-ozet.json"
 printf '# MUHUR\nverdikt: GECTI\n' > "$DIS13/MUHUR.md"
 sut13() { LAYIHA_DEFTER="$D13" HAT_ROOT="$K13" bash "$SUT" "$@"; }
-sut13 ekle --slug kanit-testi --konu "Kanit kaliciligi" --dokuman d.md --resume "x de" >/dev/null
+sut13 ekle --dogrula "grep -c . /dev/null" --slug kanit-testi --konu "Kanit kaliciligi" --dokuman d.md --resume "x de" >/dev/null
 sut13 durum s01-L01 insa-edildi --kanit "#125" >/dev/null
 sut13 tescil s01-L01 tescilli --vites TAM --kart k9001 --muhur "$DIS13/MUHUR.md" >/dev/null 2>&1
 esit "G13 tescil rc=0" "0" "$?"
@@ -213,7 +213,7 @@ echo "=== G14 · KANIT KAPISI (K7): 'insa-edildi' kanıtsız ilan edilemez ==="
 D14="$T/kanit-kapisi.jsonl"; : > "$D14"
 K14="$T/kok14"; mkdir -p "$K14"
 sut14() { LAYIHA_DEFTER="$D14" HAT_ROOT="$K14" bash "$SUT" "$@"; }
-sut14 ekle --slug kapi-testi --konu "Kanit kapisi" --dokuman d.md --resume "x de" >/dev/null
+sut14 ekle --dogrula "grep -c . /dev/null" --slug kapi-testi --konu "Kanit kapisi" --dokuman d.md --resume "x de" >/dev/null
 
 # (a) kanıtsız → RED
 O14="$(sut14 durum s01-L01 insa-edildi 2>&1)"; RC14=$?
@@ -245,16 +245,16 @@ esit "G14c kanıt porcelain 12. sütunda" "#673" \
 var  "G14c kanıt insan-listesinde görünüyor" "$(sut14 liste --hepsi)" "kanıt: #673"
 
 # (d) geçerli commit sha + URL + dosya yolu → KABUL
-sut14 ekle --slug sha-testi --konu "Sha kaniti" --dokuman d.md >/dev/null
+sut14 ekle --dogrula "grep -c . /dev/null" --slug sha-testi --konu "Sha kaniti" --dokuman d.md >/dev/null
 sut14 durum s01-L02 insa-edildi --kanit "77bbbff" >/dev/null 2>&1
 esit "G14d 7-hex commit sha kabul rc=0" "0" "$?"
 esit "G14d sha kayda yazıldı" "77bbbff" \
   "$(sut14 liste --hepsi --porcelain | awk -F'\t' '$1=="s01-L02"{print $12}')"
-sut14 ekle --slug url-testi --konu "Url kaniti" --dokuman d.md >/dev/null
+sut14 ekle --dogrula "grep -c . /dev/null" --slug url-testi --konu "Url kaniti" --dokuman d.md >/dev/null
 sut14 durum s01-L03 insa-edildi --kanit "https://github.com/x/y/pull/12" >/dev/null 2>&1
 esit "G14d PR URL'i kabul rc=0" "0" "$?"
 RAPOR14="$T/rapor14.md"; printf 'kanit\n' > "$RAPOR14"
-sut14 ekle --slug dosya-testi --konu "Dosya kaniti" --dokuman d.md >/dev/null
+sut14 ekle --dogrula "grep -c . /dev/null" --slug dosya-testi --konu "Dosya kaniti" --dokuman d.md >/dev/null
 sut14 durum s01-L04 insa-edildi --kanit "$RAPOR14" >/dev/null 2>&1
 esit "G14d MEVCUT dosya yolu kabul rc=0" "0" "$?"
 
@@ -283,9 +283,9 @@ esit "G14g eski (alanı olmayan) kayıt da kuyrukta" "1" \
 esit "G14g geri alınan kayıt kuyruktan düştü" "0" "$(sut14 liste --tescil-bekleyen --porcelain | grep -c '^s01-L01')"
 
 # (h) arka kapı: `ekle --durum insa-edildi` de kanıt ister
-sut14 ekle --slug arka-kapi --konu "Arka kapi" --dokuman d.md --durum insa-edildi >/dev/null 2>&1
+sut14 ekle --dogrula "grep -c . /dev/null" --slug arka-kapi --konu "Arka kapi" --dokuman d.md --durum insa-edildi >/dev/null 2>&1
 esit "G14h ekle --durum insa-edildi kanıtsız rc=2" "2" "$?"
-sut14 ekle --slug arka-kapi --konu "Arka kapi" --dokuman d.md --durum insa-edildi --kanit "#7" >/dev/null 2>&1
+sut14 ekle --dogrula "grep -c . /dev/null" --slug arka-kapi --konu "Arka kapi" --dokuman d.md --durum insa-edildi --kanit "#7" >/dev/null 2>&1
 esit "G14h kanıtla geçti" "0" "$?"
 
 # ── G15 · ŞEMA-DIŞI DURUM KAPISI (2026-08-08, L44 vakası) ────────────────────────────────
@@ -323,17 +323,17 @@ for l in open('$D16'):
 "; }
 
 # (a) K2 — isteyen/yetki yazılıyor
-sut16 ekle --slug sultan-isi --konu "Sultan istedi" --dokuman a.md --isteyen "Sultan" --yetki "sözlü direktif" >/dev/null 2>&1
+sut16 ekle --dogrula "grep -c . /dev/null" --slug sultan-isi --konu "Sultan istedi" --dokuman a.md --isteyen "Sultan" --yetki "sözlü direktif" >/dev/null 2>&1
 esit "G16a ekle --isteyen rc=0" "0" "$?"
 esit "G16a isteyen kayda yazıldı" "Sultan" "$(alan16 s01-L01 isteyen)"
 esit "G16a yetki kayda yazıldı" "sözlü direktif" "$(alan16 s01-L01 yetki)"
-sut16 ekle --slug ajan-isi --konu "Ajan açtı" --dokuman b.md --isteyen "SERDAR" >/dev/null 2>&1
+sut16 ekle --dogrula "grep -c . /dev/null" --slug ajan-isi --konu "Ajan açtı" --dokuman b.md --isteyen "SERDAR" >/dev/null 2>&1
 # isteyen'i OLMAYAN kayıt = bilinmiyor (tahmin edilmez)
-sut16 ekle --slug kimsiz-is --konu "Isteyeni yazilmamis" --dokuman c.md >/dev/null 2>&1
+sut16 ekle --dogrula "grep -c . /dev/null" --slug kimsiz-is --konu "Isteyeni yazilmamis" --dokuman c.md >/dev/null 2>&1
 esit "G16a isteyen verilmezse BOŞ kalır (ajan sayılmaz)" "" "$(alan16 s01-L03 isteyen)"
 
 # (b) K2 — güncelleme mevcut alanı SESSİZCE SİLMEZ
-sut16 ekle --slug sultan-isi --konu "Sultan istedi (güncel)" --dokuman a.md >/dev/null 2>&1
+sut16 ekle --dogrula "grep -c . /dev/null" --slug sultan-isi --konu "Sultan istedi (güncel)" --dokuman a.md >/dev/null 2>&1
 esit "G16b --isteyen'siz güncelleme eski değeri korudu" "Sultan" "$(alan16 s01-L01 isteyen)"
 
 # (c) K3 — kim ekseni süzüyor ve zaman/tescil ekseniyle BİRLİKTE çalışıyor
@@ -419,24 +419,24 @@ for l in open('$D17'):
 
 # ALTIN: geçerli hücre yazılır ve KANONİK biçimde saklanır (serbest yazım tolere edilir,
 # küme tolere EDİLMEZ — tolerans biçimde olur, kümede değil).
-n17 ekle --slug h-altin --konu "K" --dokuman a.md --hucre "mizan x olcum" >/dev/null 2>&1
+n17 ekle --dogrula "grep -c . /dev/null" --slug h-altin --konu "K" --dokuman a.md --hucre "mizan x olcum" >/dev/null 2>&1
 esit "G17 geçerli hücre rc=0" "0" "$?"
 esit "G17 kanonik biçimde yazıldı" "MIZAN x OLCUM" "$(alan17 h-altin)"
 
 # KIRMIZI: küme-dışı ad REDDEDİLİR (kayıt yazılmaz) + reçete gösterilir.
-OUT17="$(n17 ekle --slug h-kirmizi --konu "K" --dokuman a.md --hucre "SARAY x OLCUM" 2>&1)"; RC17=$?
+OUT17="$(n17 ekle --dogrula "grep -c . /dev/null" --slug h-kirmizi --konu "K" --dokuman a.md --hucre "SARAY x OLCUM" 2>&1)"; RC17=$?
 esit "G17 küme-dışı hücre rc=2" "2" "$RC17"
 var  "G17 reçete gösterilir" "$OUT17" "hiçbirine oturmuyorsa"
 esit "G17 reddedilen kayıt YAZILMADI" "" "$(alan17 h-kirmizi)"
 
 # 'belirsiz' MEŞRU: kapalı küme dayatmak işi yanlış kutuya sokar (ölçüldü). Belirsiz bir
 # hata değil, yeni-tip arzının ham maddesidir → kabul edilir ve KAYDA GEÇER (sayılabilsin).
-n17 ekle --slug h-belirsiz --konu "K" --dokuman a.md --hucre belirsiz >/dev/null 2>&1
+n17 ekle --dogrula "grep -c . /dev/null" --slug h-belirsiz --konu "K" --dokuman a.md --hucre belirsiz >/dev/null 2>&1
 esit "G17 'belirsiz' kabul edilir" "0" "$?"
 esit "G17 'belirsiz' kayda geçer" "belirsiz" "$(alan17 h-belirsiz)"
 
 # BOŞ ≠ BELİRSİZ: sorulmamış kayıt yazılabilir ama SESSİZ olamaz ("bilinmeyen gizlenmez").
-OUT17B="$(n17 ekle --slug h-bos --konu "K" --dokuman a.md 2>&1)"
+OUT17B="$(n17 ekle --dogrula "grep -c . /dev/null" --slug h-bos --konu "K" --dokuman a.md 2>&1)"
 esit "G17 hücresiz kayıt yazılır (geriye-uyum)" "0" "$?"
 var  "G17 hücresizlik yüksek sesle söylenir" "$OUT17B" "hücresi BİLİNMİYOR"
 esit "G17 boş, 'belirsiz'e ÇEVRİLMEZ" "" "$(alan17 h-bos)"
@@ -462,11 +462,11 @@ for l in open('$D18'):
     if r.get('slug')==sys.argv[1]: print(r.get('id'))" "$1"; }
 
 # CELL_ID verilmezse Nexus varsayılanı 's01' kullanılır (hat-yolu.lib.sh CELL_ID deseniyle bayt-aynı).
-n18 ekle --slug onek-varsayilan --konu "K" --dokuman a.md >/dev/null 2>&1
+n18 ekle --dogrula "grep -c . /dev/null" --slug onek-varsayilan --konu "K" --dokuman a.md >/dev/null 2>&1
 esit "G18 CELL_ID unset → s01 öneki" "s01-L01" "$(kod18 onek-varsayilan)"
 
 # CELL_ID verilirse o hücrenin öneki kullanılır.
-CELL_ID=s04 n18 ekle --slug onek-s04 --konu "K" --dokuman a.md >/dev/null 2>&1
+CELL_ID=s04 n18 ekle --dogrula "grep -c . /dev/null" --slug onek-s04 --konu "K" --dokuman a.md >/dev/null 2>&1
 esit "G18 CELL_ID=s04 → s04 öneki" "s04-L02" "$(kod18 onek-s04)"
 
 # ESKİ öneksiz kayıt deftere elle enjekte edilir (K6-öncesi gerçek veri deseni).
@@ -479,7 +479,7 @@ esit "G18 eski kod DEĞİŞMEDEN kaldı (önek eklenmedi)" "L35" "$(kod18 eski-o
 
 # Yeni bir kayıt daha eklenince numaralandırma eski öneksiz "L35"i de sayıp çakışmayı önler
 # (id_num regex hem "L35" hem "s01-L01" biçimini çözer → max=35, sıradaki s01-L36).
-n18 ekle --slug onek-sonraki --konu "K" --dokuman a.md >/dev/null 2>&1
+n18 ekle --dogrula "grep -c . /dev/null" --slug onek-sonraki --konu "K" --dokuman a.md >/dev/null 2>&1
 esit "G18 karışık defterde numaralandırma çakışmıyor" "s01-L36" "$(kod18 onek-sonraki)"
 
 # `liste` çıktısında yeni kayıt önekli, eski kayıt öneksiz görünür — ikisi de aynı ekranda.
@@ -488,6 +488,69 @@ esit "G18 liste yeni-önekli kodu gösteriyor" "1" "$(printf '%s\n' "$L18" | gre
 esit "G18 liste eski-öneksiz kodu da gösteriyor" "1" "$(printf '%s\n' "$L18" | grep -c '^L35	')"
 
 echo
+
+echo
+echo "=== G19 · L35-F1 DOĞRULAMA KAPISI: yeni açık iş kendini nasıl sınayacağını yazar ==="
+D19="$T/g19.jsonl"; : > "$D19"
+n19() { LAYIHA_DEFTER="$D19" HAT_ROOT="$T/OdaBir" bash "$SUT" "$@"; }
+alan19() { python3 -c "
+import json,sys
+for l in open('$D19'):
+    d=json.loads(l)
+    if d.get('slug')=='$1': print(d.get('$2',''))
+"; }
+
+# (a) --dogrula'sız YENİ açık-iş kaydı REDDEDİLİR
+O19="$(n19 ekle --slug dogrulasiz --konu "Komutsuz kayıt" --dokuman a.md 2>&1)"; RC19=$?
+esit "G19a --dogrula'sız yeni açık kayıt rc=2" "2" "$RC19"
+var  "G19a red mesajı Sultan-dilinde (cümle değil komut ister)" "$O19" "kendini nasıl sınayacağını"
+var  "G19a reçete gösteriliyor" "$O19" "--dogrula"
+esit "G19a REDDEDİLEN kayıt deftere YAZILMADI" "0" "$(grep -c dogrulasiz "$D19" || true)"
+
+# (b) sır-okuyan komut REDDEDİLİR (değer-okumaz şartı · DESIGN §8 risk-3)
+for KOM in "cat ui/.env" "echo \$OPENROUTER_API_KEY" "printenv" "vault-cek get NEXUS_TOKEN"; do
+  OS="$(n19 ekle --slug sirli --konu "Sır basan komut" --dokuman a.md --dogrula "$KOM" 2>&1)"; RCS=$?
+  esit "G19b sır-desenli komut reddedildi rc=2 [$KOM]" "2" "$RCS"
+  var  "G19b red sebebi söyleniyor [$KOM]" "$OS" "sırrı ekrana basar"
+done
+esit "G19b sır-komutlu kayıt deftere YAZILMADI" "0" "$(grep -c sirli "$D19" || true)"
+
+# değer-OKUMAYAN komutlar kabul edilir (varlık-grep -c · çıkış-kodu)
+n19 ekle --slug taze-is --konu "Ölçülebilir iş" --dokuman a.md --dogrula "grep -c 'cell_id: s02' filo-registry.yaml" >/dev/null 2>&1
+esit "G19c varlık-grep (-c) kabul edildi rc=0" "0" "$?"
+esit "G19c komut kayda yazıldı" "grep -c 'cell_id: s02' filo-registry.yaml" "$(alan19 taze-is dogrula)"
+n19 ekle --slug taze-is2 --konu "Çıkış-kodlu" --dokuman b.md --dogrula "systemctl is-active nexus" >/dev/null 2>&1
+esit "G19c çıkış-kodu komutu kabul edildi rc=0" "0" "$?"
+# `.env` DOSYA ADI ile `env` KOMUTU karışmaz — meşru varlık-grep engellenmemeli
+n19 ekle --slug taze-is3 --konu "env-adlı dosyada varlık-grep" --dokuman c.md --dogrula "grep -c TOKEN ui/.env" >/dev/null 2>&1
+esit "G19c 'ui/.env' üzerinde -c'li varlık-grep MEŞRU" "0" "$?"
+
+# yer-tutucu reddedilir
+n19 ekle --slug yer-tutucu --konu "Kaçamak" --dokuman a.md --dogrula "yok" >/dev/null 2>&1
+esit "G19d yer-tutucu ('yok') reddedildi rc=2" "2" "$?"
+
+# (c) GÖÇ YOK: dogrula'sız ESKİ kayıt okuma-anında SORUNSUZ listelenir
+printf '{"v":1,"id":"L90","slug":"eski-komutsuz","konu":"Doğrulama kapısından ÖNCE yazılmış kayıt","tarih":"2026-06-02","durum":"insa-bekliyor","dokuman":"eski.md","proje":"OdaBir"}\n' >> "$D19"
+ONCE19="$(sha256sum "$D19" | cut -d' ' -f1)"
+L19="$(n19 liste --hepsi 2>/dev/null)"; RCL=$?
+esit "G19e eski (dogrula'sız) kayıtla liste rc=0" "0" "$RCL"
+var  "G19e eski kayıt listede GÖRÜNÜYOR" "$L19" "Doğrulama kapısından ÖNCE yazılmış kayıt"
+esit "G19e liste eski kaydı GÖÇ ETTİRMEDİ (defter bayt-aynı)" "$ONCE19" "$(sha256sum "$D19" | cut -d' ' -f1)"
+esit "G19e eski kaydın dogrula alanı diske YAZILMADI" "0" "$(grep -c '"slug": *"eski-komutsuz".*dogrula' "$D19" || true)"
+
+# eski kayıt GÜNCELLENİRKEN de komut istenmez (güncelleme ≠ yeni kayıt · göç yok)
+n19 ekle --slug eski-komutsuz --konu "Eski kayıt güncellendi" --dokuman eski.md >/dev/null 2>&1
+esit "G19f eski kaydın güncellenmesi --dogrula İSTEMEZ rc=0" "0" "$?"
+
+# doğarken kapanmış kayıt (insa-edildi) komut istemez — DESIGN §8: kapatılmış kayıt sınav istemez
+n19 ekle --slug dogarken-bitmis --konu "Kapalı doğdu" --dokuman d.md --durum insa-edildi --kanit "#123" >/dev/null 2>&1
+esit "G19g insa-edildi doğan kayıt --dogrula İSTEMEZ rc=0" "0" "$?"
+
+# görünürlük: komut hem insan-listesinde hem porcelain 16. sütunda
+var "G19h komut insan-listesinde görünüyor" "$(n19 liste --hepsi)" "doğrula: systemctl is-active nexus"
+esit "G19h porcelain 16. sütun = dogrula" "systemctl is-active nexus" \
+     "$(n19 liste --hepsi --porcelain | awk -F'\t' '$2=="taze-is2"{print $16}')"
+
 echo "════════ SONUÇ: PASS=$PASS · FAIL=$FAIL ════════"
 [ "$FAIL" -eq 0 ] || exit 1
 exit 0
