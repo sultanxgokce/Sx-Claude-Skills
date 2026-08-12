@@ -40,7 +40,8 @@
 #   kapimda adim goster "<Kısa Ad>"                 # SIRADAKİ tek adımı kopyalanabilir bas
 #   kapimda adim ilerle "<Kısa Ad>"                 # Sultan cevapladıktan SONRA çağrılır
 #   kapimda adim durum "<Kısa Ad>"
-# ÇIKIŞ: 0 tamam · 1 lint-RED / bulgu · 2 kullanım/ortam · 4 son-halka eksik (olur gelmedi)
+#   kapimda sahip "<Kısa Ad>"                       # SULTAN|<AJAN>|TIKANDI bas · RC 1 = kart yok
+# ÇIKIŞ: 0 tamam · 1 lint-RED / bulgu / kart yok · 2 kullanım/ortam · 4 son-halka eksik (olur gelmedi)
 #        5 = Sultan'ın kapısından izinsiz iş çıkarma denemesi (A06 kapısı)
 # ═══════════════════════════════════════════════════════════════════════════
 set -uo pipefail
@@ -100,6 +101,32 @@ _kart_oda() { # $1=ad → kartın oda damgası (yoksa "" — eski kartlar damgas
 _acik_adlar() { grep -oP '^🚦 SENDE · \K.*' "$DOSYA" 2>/dev/null || true; }
 _acik_sayi()  { _acik_adlar | grep -c . || true; }
 
+# ── SAHİP-KÖR OLMAYAN ad/sahip yüzeyi (L49 · 2026-08-11 ölçümü) ──────────────
+# 🔴 `_acik_adlar` DEĞİŞMEDİ ve DEĞİŞMEYECEK: o fonksiyon Sultan'ın TAVAN-3 sayımının
+#   TANIMIDIR ve devredilmiş kartı BİLEREK saymaz (bkz. "Kart devri" bloğu). Doğru olan
+#   filtre yanlış katmanda ödünç alınmıştı: ad-tekilliği (K4) ve besleyici "bu kart açık mı"
+#   sorusu da aynı dar filtreye bakınca KÖR kaldı →
+#     • devredilmiş bir kartın adıyla İKİNCİ kart açılabiliyordu (lint geçiyordu),
+#     • cron'daki besleyici (günde 4 tur) kartı "yok" sayıp yeniden açıyordu.
+#   Ölçülmüş canlı vaka: "Tescil Bekleyen İşler" 2026-08-11'de 16:52 ve 17:29 olmak üzere
+#   AYNI GÜN İKİ KEZ açıldı (kapimda-besle.log). Aşağıdaki iki fonksiyon sahipten bağımsız
+#   okur; yalnız K4 + `sahip` yüzeyi (besleyicinin sorduğu yer) bunları kullanır.
+_tum_adlar() { grep -oP '^(?:🚦 SENDE|🎯 [^·]+|⚠️ TIKANDI) · \K.*' "$DOSYA" 2>/dev/null || true; }
+
+# _tum_sahip: SULTAN | <AJAN> | TIKANDI | "" (kart yok). Ad REGEX olarak DEĞİL, birebir
+#   karşılaştırılır (ayraçtan sonrası tam eşit mi) → adında nokta/köşeli-parantez olan kart
+#   yanlış eşleşmez. `_kart_sahibi` (devir yolu) bilerek DOKUNULMADI: orası TIKANDI'yı
+#   görmemeye devam eder, davranışı birebir korunur.
+_tum_sahip() { # $1=ad
+  awk -v ad="$1" -v SEP=" · " '
+    { p=index($0,SEP); if (p==0) next
+      if (substr($0,p+length(SEP)) != ad) next
+      pre=substr($0,1,p-1)
+      if (pre=="🚦 SENDE")   { print "SULTAN";  exit }
+      if (pre=="⚠️ TIKANDI") { print "TIKANDI"; exit }
+      if (pre ~ /^🎯 /)      { sub(/^🎯 /,"",pre); print pre; exit } }' "$DOSYA" 2>/dev/null
+}
+
 # ── LİNT KAPILARI ────────────────────────────────────────────────────────────
 # Jargon/İ1 kalkanı: Sultan-yüzü metinde dosya-yolu · uzantı · komut · kod-terimi ARANMAZ.
 # (Kartın amacı "ne yapman gerekiyor"u insan diliyle söylemek; yol/komut adım-kartına aittir
@@ -141,7 +168,11 @@ _lint_kart() { # $1=ad $2=ne $3=nicin $4=yapilmazsa $5=bitince $6=ozet ; RC=1 �
     _hata "K3 tavan dolu: $n açık kart (tavan $TAVAN). Önce birini kapat — sıraya sessizce eklenmez."; red=1
   fi
   # K4 — ad tekil
-  if _acik_adlar | grep -qxF "$ad"; then _hata "K4 bu ad zaten açık: '$ad'"; red=1; fi
+  # K4 SAHİPTEN BAĞIMSIZ sorar (L49): devredilmiş kart da "açık"tır — aynı ad ikinci kez açılamaz.
+  if _tum_adlar | grep -qxF "$ad"; then
+    local _s4; _s4="$(_tum_sahip "$ad")"
+    _hata "K4 bu ad zaten açık: '$ad'${_s4:+ (şu an: $_s4)}"; red=1
+  fi
   [ -n "$ad" ] || { _hata "K4 Kısa Ad zorunlu"; red=1; }
   # K5 — jargon/İ1
   local metin="$ad
@@ -237,8 +268,21 @@ _kart_devret() { # $1=ad $2=yeni-sahip $3=gerekce $4=eski-sahip $5=yeni-devir-sa
 
 _kart_kapat() { # $1=ad $2=gerekce $3=olur(ops)
   local ad="$1" ger="$2" olur="${3:-}" tmp; tmp="$(mktemp)"
-  awk -v ad="$ad" -v ger="$ger" -v olur="$olur" -v gun="$(_bugun)" '
-    $0 == "🚦 SENDE · " ad {
+  # L49 · Sultan-kararı 2026-08-11: devredilmiş (`🎯 <AJAN>`) ve tıkanmış (`⚠️ TIKANDI`)
+  #   kartın KAPANIŞ YOLU YOKTU (yalnız `🚦 SENDE` eşleşiyordu → RC 3). Artık üç damga da
+  #   kapanır. Ad birebir karşılaştırılır (regex DEĞİL) — ayraçtan sonrası tam eşit mi.
+  awk -v ad="$ad" -v ger="$ger" -v olur="$olur" -v gun="$(_bugun)" -v SEP=" · " '
+    {
+      kart=0
+      if (!bulundu) {
+        p=index($0,SEP)
+        if (p>0 && substr($0,p+length(SEP))==ad) {
+          pre=substr($0,1,p-1)
+          kart=(pre=="🚦 SENDE" || pre=="⚠️ TIKANDI" || pre ~ /^🎯 /)
+        }
+      }
+    }
+    kart {
       print "✅ KAPANDI " gun " · " ad
       print "kapanış: " ger
       if (olur != "") print "olur: " olur
@@ -546,6 +590,17 @@ case "$KOMUT" in
     fi
     printf '%s\n' "$_cikti"
     ;;
+  sahip)
+    # ── SAHİP SORGUSU (L49) — otomasyonun "bu kart açık mı / kimde" yüzeyi ──────────
+    # NİÇİN AYRI KOMUT: besleyici bugüne dek `liste | grep` ile soruyordu; `liste` Sultan-yüzü
+    #   bir ekrandır (kendi-odan süzmesi + yalnız 🚦 SENDE) ve devredilmiş kartı GÖSTERMEZ →
+    #   besleyici kartı "yok" sanıp mükerrer açıyordu. Bu komut ham gerçeği verir; `liste`nin
+    #   Sultan-yüzü davranışı ve tavan-3 semantiği DEĞİŞMEDİ.
+    # ÇIKTI: SULTAN | <AJAN> | TIKANDI (stdout, tek satır) · RC 1 = böyle bir açık kart YOK.
+    [ -n "$AD" ] || { _hata "Kısa Ad zorunlu: kapimda sahip \"<Kısa Ad>\""; exit 2; }
+    _S="$(_tum_sahip "$AD")"
+    [ -n "$_S" ] || exit 1
+    printf '%s\n' "$_S" ;;
   lint) _lint_dosya ;;
   adim)
     [ -n "$AD" ] || { _hata "Kısa Ad zorunlu"; exit 2; }
@@ -564,5 +619,5 @@ case "$KOMUT" in
     esac ;;
   ""|-h|--help|yardim)
     sed -n '/^# KULLANIM/,/^# ÇIKIŞ/p' "$0" | sed 's/^# \{0,1\}//' ;;
-  *) _hata "bilinmeyen komut: $KOMUT (ac|bitti|devret|liste|lint|adim)"; exit 2 ;;
+  *) _hata "bilinmeyen komut: $KOMUT (ac|bitti|devret|liste|sahip|lint|adim)"; exit 2 ;;
 esac

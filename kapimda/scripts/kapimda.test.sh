@@ -337,5 +337,53 @@ printf 'sultan_response: evet\n' >> "$L39D/adim/A06 Karti.md"
 _l39 lint >/dev/null 2>&1
 [ $? -eq 1 ] && ok "A06-3 plan dosyasındaki 'sultan_response:' alanı → lint RED" || kotu "A06-3 kaçtı"
 
+# ── L49 · SAHİP-KÖR OLMAYAN TEKİLLİK + DEVREDİLMİŞ KARTIN KAPANIŞI (2026-08-11) ──
+# Ölçülmüş vaka: "Tescil Bekleyen İşler" kartı SERDAR'a devredildi, K4 ve besleyici onu
+# GÖRMEDİ → aynı gün iki kez yeniden açıldı. Aşağıdaki kapılar o kör-noktayı kilitler ve
+# EN KRİTİĞİ D5: tavan-3 semantiği DEĞİŞMEMELİ (devredilmiş kart Sultan'ın 3'ünü YEMEZ).
+_l49_env() { L49D="$(mktemp -d)"; export KAPIMDA_DOSYA="$L49D/kapimda.md" \
+  KAPIMDA_ADIM_DIZIN="$L49D/adim" KAPIMDA_KILIT="$L49D/lock" KAPIMDA_ODA="l49"; }
+_l49_ac() { kos ac "$1" --ne "$G_NE" --nicin-sen "$G_NICIN" --yapilmazsa "$G_YAP" --bitince "$G_BIT"; }
+
+_l49_env
+_l49_ac "Devir Karti" >/dev/null 2>&1
+kos devret "Devir Karti" --sahip SERDAR --gerekce "SERDAR bakacak" --sultan-onayi "Evet, sen devral" >/dev/null 2>&1
+grep -qx "🎯 SERDAR · Devir Karti" "$KAPIMDA_DOSYA" && ok "L49-0 kart SERDAR'a devredildi (ön-koşul)" || kotu "L49-0 devir olmadı"
+
+_l49_ac "Devir Karti" >/dev/null 2>&1
+[ $? -eq 1 ] && ok "L49-1 devredilmiş kartın adıyla İKİNCİ kart AÇILAMAZ (K4 sahip-kör değil)" || kotu "L49-1 mükerrer kart açıldı"
+[ "$(grep -c ' · Devir Karti$' "$KAPIMDA_DOSYA")" -eq 1 ] && ok "L49-1b dosyada tek kart satırı var" || kotu "L49-1b kart çoğaldı"
+
+out="$(kos sahip "Devir Karti" 2>&1)"; rc=$?
+[ "$rc" -eq 0 ] && [ "$out" = "SERDAR" ] && ok "L49-2 'sahip' devredilmiş kartın sahibini basar" || kotu "L49-2 sahip yanlış: rc=$rc out=$out"
+kos sahip "Hic Olmayan Kart" >/dev/null 2>&1
+[ $? -eq 1 ] && ok "L49-2b olmayan kart → RC 1 (kart yok)" || kotu "L49-2b olmayan karta RC 1 dönmedi"
+
+kos bitti "Devir Karti" --gerekce "kaynak boşaldı" >/dev/null 2>&1
+[ $? -eq 0 ] && ok "L49-3 devredilmiş kart 'bitti' ile KAPANIR (eskiden RC 3'tü)" || kotu "L49-3 devredilmiş kart kapanmadı"
+grep -qx "✅ KAPANDI $(date +%F) · Devir Karti" "$KAPIMDA_DOSYA" && ok "L49-3b kapanış damgası yazıldı" || kotu "L49-3b damga yok"
+
+# TIKANDI kartı da tekillik sayımına girer (3. devirde kart bu damgayı alır)
+_l49_env
+_l49_ac "Tikanik Kart" >/dev/null 2>&1
+kos devret "Tikanik Kart" --sahip SERDAR --gerekce "g1" --sultan-onayi "Evet" >/dev/null 2>&1
+kos devret "Tikanik Kart" --sahip HAFIZ --gerekce "g2" >/dev/null 2>&1
+kos devret "Tikanik Kart" --sahip GOZCU --gerekce "g3" >/dev/null 2>&1
+grep -qx "⚠️ TIKANDI · Tikanik Kart" "$KAPIMDA_DOSYA" && ok "L49-4 üçüncü devirde TIKANDI damgası (ön-koşul)" || kotu "L49-4 TIKANDI olmadı"
+_l49_ac "Tikanik Kart" >/dev/null 2>&1
+[ $? -eq 1 ] && ok "L49-4b TIKANDI kartın adıyla ikinci kart AÇILAMAZ" || kotu "L49-4b mükerrer açıldı"
+
+# 🔴 REGRESYON ZIRHI — tavan-3 SEMANTİĞİ DEĞİŞMEDİ
+_l49_env
+_l49_ac "Devredilen A" >/dev/null 2>&1
+kos devret "Devredilen A" --sahip SERDAR --gerekce "SERDAR bakacak" --sultan-onayi "Evet" >/dev/null 2>&1
+_l49_ac "Sultan 1" >/dev/null 2>&1
+_l49_ac "Sultan 2" >/dev/null 2>&1
+_l49_ac "Sultan 3" >/dev/null 2>&1
+[ $? -eq 0 ] && ok "L49-5 devredilmiş kart Sultan'ın TAVAN-3'ünü YEMEZ (3 Sultan kartı hâlâ açılır)" || kotu "L49-5 REGRESYON: tavan semantiği bozuldu"
+_l49_ac "Sultan 4" >/dev/null 2>&1
+[ $? -eq 1 ] && ok "L49-5b tavan hâlâ 3'te kapanıyor (gevşemedi)" || kotu "L49-5b tavan gevşedi"
+[ "$(kos liste 2>/dev/null | grep -c '•')" -eq 3 ] && ok "L49-6 'liste' Sultan-yüzü değişmedi (devredilmiş kart görünmez)" || kotu "L49-6 liste yüzeyi değişti"
+
 echo; echo "── SONUÇ: $gecti geçti · $dustu kaldı ──"
 [ "$dustu" -eq 0 ]

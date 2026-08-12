@@ -1,7 +1,7 @@
 ---
 name: kapimda
 type: tool
-version: 1.5.0
+version: 1.6.0
 description: >
   Sultan'ı bekleyen işlerin TEK yüzeyini (kapimda.md) yazan, denetleyen ve adım adım yürüten
   kabuk. Kart açma fail-closed 8 lint kapısından geçer (dört zorunlu alan · "Niçin sen" boşsa
@@ -20,6 +20,12 @@ besleyici yoktu. Canlı sonuç (2026-08-04): Sultan "onay verdim" dedi, sistem 0
 tek yüzü 2.671 mesajlık bir Telegram sohbetiydi ve Sultan onları bulamadı. Bu kabuk o derdin
 yazıcı-yarısıdır. Kanon: `_agents/spec/sultan-blokaj-formati-DESIGN.md` (L38) + `…talimat-formati…` (L39).
 
+## Çakışma kuralı (⏸️ BAŞKASINDA kuralının YERİNE — Sultan-kararı 2026-08-11)
+**Kartla ilgili işe girmeden önce devret damgasına bak; kart dışı işte üstlenme kaydına yaz.**
+Eski `⏸️ BAŞKASINDA` damgası **kaldırıldı**: aynı ihtiyaca bakan üçüncü kopyaydı ve hiçbir kod
+yolu onu yazmıyor, hiçbir lint okumuyordu (ölçüm: fiilî kullanım **0**). Kart işleri için
+`devret` (sahip damgası `🎯 <AJAN>`), kart-dışı işler için `ustlen al` zaten vardı.
+
 ## Değişmezler
 - **A06:** bu araç Sultan'ın cevabını ÜRETMEZ. `bitti` yalnız kartın GÖRÜNÜRLÜĞÜNÜ kapatır
   (kart bir görünürlük yüzeyidir; onay kaydı karar-kartlarında yaşar). `--gerekce` zorunludur.
@@ -33,7 +39,9 @@ yazıcı-yarısıdır. Kanon: `_agents/spec/sultan-blokaj-formati-DESIGN.md` (L3
 kapimda ac "<Kısa Ad>" --ne "…" --nicin-sen "…" --yapilmazsa "…" --bitince "…" \
            [--ozet "gövde 2-4 cümle"] [--yas "3 gündür bekliyor"] [--engel "ne duruyor"] [--kuru]
 kapimda bitti "<Kısa Ad>" --gerekce "…"
-kapimda liste            # açık kartlar
+kapimda liste            # açık kartlar (Sultan-yüzü: kendi odan · yalnız 🚦 SENDE)
+kapimda sahip "<Kısa Ad>"  # SULTAN | <AJAN> | TIKANDI bas · RC 1 = böyle bir açık kart YOK
+                           # (otomasyon yüzeyi: "bu kart açık mı / kimde" — devredilmişi de görür)
 kapimda lint             # dosya-geneli denetim (RC≠0 = bulgu)
 kapimda adim ekle "<Kısa Ad>" --yapilacak "…" --nerede "…" --bitince "…"
 kapimda adim goster "<Kısa Ad>"   # YALNIZ sıradaki adım (tek mesaj = tek adım)
@@ -47,7 +55,7 @@ kapimda adim durum  "<Kısa Ad>"
 | K1 | dört alan dolu | kartın iskeleti (Ne yapman gerekiyor · Niçin sen · Yapılmazsa · Bitince) |
 | K2 | `Niçin sen` bir cümle | ajanın yapabileceği iş kart OLAMAZ — Sultan'a gitmesinin sebebi yazılmalı |
 | K3 | tavan 3 açık kart | dördüncüsü sessizce sıraya atılmaz, RED verir (kesme-enflasyonu panzehiri) |
-| K4 | Kısa Ad tekil | aynı iş iki kart olmaz |
+| K4 | Kısa Ad tekil | aynı iş iki kart olmaz — **sahipten bağımsız** sorar: devredilmiş (`🎯`) ve tıkanmış (`⚠️`) kart da "açık" sayılır (L49) |
 | K5 | Sultan-dili / İ1 kalkanı | dosya yolu · uzantı · komut · kod-terimi → RED (yol/komut adım-kartına ait) |
 | K6 | tek-eylem | "şunu yap, sonra şunu" → adım-kartına bölünür |
 | K7 | sır-desen | karta sır yazılamaz (değer basılmadan reddedilir) |
@@ -125,6 +133,16 @@ kaçış yolu her zaman açıktır (kart `Şimdi değil`/`iptal` diyebilir, kili
   kanıtsız bir varsayımla Sultan'ın işini saklamak olurdu. Test: **69 kapı** (P1-P7 yeni).
   Tavan-3 bilerek GLOBAL bırakıldı: oda-başına gevşetmek Sultan'ı 14×3 karta açardı — ölçüm olmadan
   koruma gevşetilmez.
+
+- **1.6.0 (2026-08-11, L49):** **sahip-kör tekillik kapatıldı.** Ölçülmüş vaka: SERDAR'a
+  devredilen "Tescil Bekleyen İşler" kartı aynı gün **iki kez** yeniden açıldı (16:52 ve 17:29) —
+  çünkü K4 ve besleyici, tavan-3 için yazılmış dar filtreye (`^🚦 SENDE`) bakıyordu ve devredilmiş
+  kartı GÖRMÜYORDU. Üç değişiklik: (a) K4 artık sahipten bağımsız sorar → devredilmiş/tıkanmış
+  kartın adıyla ikinci kart AÇILAMAZ; (b) `bitti` devredilmiş (`🎯`) ve tıkanmış (`⚠️`) kartı da
+  kapatır (eskiden RC 3 → kapanış yolu YOKTU); (c) yeni `sahip` komutu otomasyona ham gerçeği verir
+  (besleyici artık `liste | grep` ile sormaz). 🔴 **Tavan-3 semantiği DEĞİŞMEDİ** — devredilmiş kart
+  Sultan'ın 3'lük sayımına hâlâ girmez ve `liste` Sultan-yüzü aynı kalır; regresyon zırhı testte
+  kilitli (L49-5/L49-5b/L49-6). Test: **96 kapı** (12 yeni).
 
 ## 🎯 Kart devri — "bunu SERDAR'a şutla" (v1.2.0 · L47/F5)
 
