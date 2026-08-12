@@ -385,5 +385,86 @@ _l49_ac "Sultan 4" >/dev/null 2>&1
 [ $? -eq 1 ] && ok "L49-5b tavan hâlâ 3'te kapanıyor (gevşemedi)" || kotu "L49-5b tavan gevşedi"
 [ "$(kos liste 2>/dev/null | grep -c '•')" -eq 3 ] && ok "L49-6 'liste' Sultan-yüzü değişmedi (devredilmiş kart görünmez)" || kotu "L49-6 liste yüzeyi değişti"
 
+# ══ L49-B · GÖVDE TAZELEME (2026-08-12) ═══════════════════════════════════════
+# Ölçülmüş canlı vaka: kart açıldığı andaki sayıyı DONDURUYORDU — gövdede "iki oda talebi
+# cevapsız" yazarken besleyicinin AYNI GÜN ölçtüğü gerçek sayı 48'di. Aşağıdaki kapılar
+# hem tazelemenin ÇALIŞTIĞINI hem de kart KİMLİĞİNE dokunmadığını kilitler.
+_tz_env(){ TZD="$(mktemp -d)"; export KAPIMDA_DOSYA="$TZD/kapimda.md" \
+  KAPIMDA_ADIM_DIZIN="$TZD/adim" KAPIMDA_KILIT="$TZD/lock" KAPIMDA_ODA="tzoda"; }
+_tz_ac(){ kos ac "$1" --ne "$G_NE" --nicin-sen "$G_NICIN" --yapilmazsa "$G_YAP" --bitince "$G_BIT" \
+  --ozet "Şu an 2 oda talebi cevapsız." --engel "2 oda talebi cevapsız"; }
+
+_tz_env
+_tz_ac "Sahipsiz Talepler" >/dev/null 2>&1
+cp "$KAPIMDA_DOSYA" "$TZD/once.md"
+kos tazele "Sahipsiz Talepler" --ozet "Şu an 48 oda talebi cevapsız." --engel "48 oda talebi cevapsız" >/dev/null 2>&1
+[ $? -eq 0 ] && ok "T1 tazele RC 0" || kotu "T1 tazele düştü"
+grep -q "Şu an 48 oda talebi cevapsız\." "$KAPIMDA_DOSYA" && ok "T2 gövdedeki SAYI güncellendi (donmuş sayı panzehiri)" || kotu "T2 sayı güncellenmedi"
+grep -q "48 oda talebi cevapsız$" "$KAPIMDA_DOSYA" && ok "T3 engel satırı güncellendi" || kotu "T3 engel güncellenmedi"
+grep -q "Şu an 2 oda talebi cevapsız" "$KAPIMDA_DOSYA" && kotu "T4 eski sayı gövdede kaldı (çift-gerçek)" || ok "T4 eski sayı kalmadı"
+
+# ⭐ EN KRİTİK REGRESYON ZIRHI — KART KİMLİĞİ DEĞİŞMEDİ
+grep -qx "🚦 SENDE · Sahipsiz Talepler" "$KAPIMDA_DOSYA" && ok "T5 açılış damgası birebir aynı" || kotu "T5 damga bozuldu"
+grep -qx "oda: tzoda" "$KAPIMDA_DOSYA" && ok "T6 oda (kaynak) damgası korundu" || kotu "T6 oda damgası ezildi"
+grep -q "^bugün açıldı · " "$KAPIMDA_DOSYA" && ok "T7 --yas verilmedi → açılış-yaşı KORUNDU" || kotu "T7 açılış damgası ezildi"
+{ grep -qF "Ne yapman gerekiyor: $G_NE" "$KAPIMDA_DOSYA" && grep -qF "Niçin sen: $G_NICIN" "$KAPIMDA_DOSYA" \
+  && grep -qF "Yapılmazsa: $G_YAP" "$KAPIMDA_DOSYA" && grep -qF "Bitince: $G_BIT" "$KAPIMDA_DOSYA"; } \
+  && ok "T8 dört alan (kart sözleşmesi) DEĞİŞMEDİ" || kotu "T8 kart alanları tazelemede ezildi"
+[ "$(diff "$TZD/once.md" "$KAPIMDA_DOSYA" | grep -c '^<')" -eq 2 ] \
+  && ok "T9 yalnız İKİ satır değişti (yaş/engel + özet) — başka hiçbir satıra dokunulmadı" \
+  || kotu "T9 tazeleme fazla satıra dokundu: $(diff "$TZD/once.md" "$KAPIMDA_DOSYA" | grep -c '^<')"
+
+# ── İDEMPOTENT: aynı içerikle ikinci tazele dosyayı DEĞİŞTİRMEZ ────────────────
+cp "$KAPIMDA_DOSYA" "$TZD/ikinci-once.md"
+out="$(kos tazele "Sahipsiz Talepler" --ozet "Şu an 48 oda talebi cevapsız." --engel "48 oda talebi cevapsız" 2>&1)"
+[ $? -eq 0 ] && ok "T10 idempotent tazele RC 0" || kotu "T10 idempotent tazele düştü"
+cmp -s "$TZD/ikinci-once.md" "$KAPIMDA_DOSYA" && ok "T11 aynı içerikle 2. tazele dosyayı DEĞİŞTİRMEDİ" || kotu "T11 gereksiz yazım yapıldı"
+printf '%s' "$out" | grep -q "zaten güncel" && ok "T12 değişmediği kullanıcıya söylenir (sessiz değil)" || kotu "T12 sessiz geçti"
+
+# ── YALNIZ VERİLEN ALAN: verilmeyen alana DOKUNULMAZ ──────────────────────────
+kos tazele "Sahipsiz Talepler" --engel "50 oda talebi cevapsız" >/dev/null 2>&1
+{ grep -q "Şu an 48 oda talebi cevapsız\." "$KAPIMDA_DOSYA" && grep -q "50 oda talebi cevapsız$" "$KAPIMDA_DOSYA"; } \
+  && ok "T13 yalnız --engel verildi → özet DOKUNULMADI" || kotu "T13 verilmeyen alan ezildi"
+kos tazele "Sahipsiz Talepler" --yas "3 gündür bekliyor" >/dev/null 2>&1
+grep -q "^3 gündür bekliyor · 50 oda talebi cevapsız$" "$KAPIMDA_DOSYA" \
+  && ok "T14 --yas verilince yaş güncellenir, engel korunur" || kotu "T14 yaş/engel birleşimi bozuldu"
+
+# ── DEVREDİLMİŞ / TIKANMIŞ KART DA TAZELENİR (sahip kim olursa olsun gövde doğru olmalı) ──
+_tz_env
+_tz_ac "Tescil Bekleyen Isler" >/dev/null 2>&1
+kos devret "Tescil Bekleyen Isler" --sahip SERDAR --gerekce "SERDAR bakacak" --sultan-onayi "Evet, sen devral" >/dev/null 2>&1
+kos tazele "Tescil Bekleyen Isler" --ozet "Şu an 48 oda talebi cevapsız." >/dev/null 2>&1
+[ $? -eq 0 ] && grep -q "Şu an 48 oda talebi cevapsız" "$KAPIMDA_DOSYA" \
+  && ok "T15 devredilmiş (🎯) kart da tazelenir" || kotu "T15 devredilmiş kart tazelenemedi"
+grep -qx "🎯 SERDAR · Tescil Bekleyen Isler" "$KAPIMDA_DOSYA" && ok "T16 devir damgası korundu" || kotu "T16 devir damgası ezildi"
+[ "$(grep -c '^↳ devir ' "$KAPIMDA_DOSYA")" -eq 1 ] && ok "T17 devir geçmişi (↳) korundu" || kotu "T17 devir geçmişi bozuldu"
+[ "$(grep -c '^devir: ' "$KAPIMDA_DOSYA")" -eq 1 ] && ok "T18 devir sayacı korundu" || kotu "T18 devir sayacı bozuldu"
+
+_tz_env
+_tz_ac "Tikanik Tazele" >/dev/null 2>&1
+kos devret "Tikanik Tazele" --sahip A --gerekce g --sultan-onayi ok >/dev/null 2>&1
+kos devret "Tikanik Tazele" --sahip B --gerekce g >/dev/null 2>&1
+kos devret "Tikanik Tazele" --sahip C --gerekce g >/dev/null 2>&1
+kos tazele "Tikanik Tazele" --ozet "Şu an 7 iş bekliyor." >/dev/null 2>&1
+{ [ $? -eq 0 ] && grep -qx "⚠️ TIKANDI · Tikanik Tazele" "$KAPIMDA_DOSYA" && grep -q "Şu an 7 iş bekliyor" "$KAPIMDA_DOSYA"; } \
+  && ok "T19 tıkanmış (⚠️) kart da tazelenir, damgası korunur" || kotu "T19 tıkanmış kart tazelemesi"
+
+# ── RED yolları ───────────────────────────────────────────────────────────────
+_tz_env; touch "$KAPIMDA_DOSYA"
+out="$(kos tazele "Hic Olmayan Kart" --ozet "bir şey" 2>&1)"; rc=$?
+{ [ "$rc" -eq 1 ] && [ -n "$out" ]; } && ok "T20 kart yoksa RC 1 + tek satır sebep (sessiz başarı yok)" || kotu "T20 hayalet tazeleme"
+_tz_ac "Lint Karti" >/dev/null 2>&1
+cp "$KAPIMDA_DOSYA" "$TZD/lint-once.md"
+kos tazele "Lint Karti" >/dev/null 2>&1
+[ $? -eq 2 ] && ok "T21 alansız tazele → RC 2 (kullanım)" || kotu "T21 alansız tazele geçti"
+kos tazele "Lint Karti" --ozet "şu dosyaya bak: /config/projects/x.sh" >/dev/null 2>&1
+[ $? -eq 1 ] && ok "T22 jargon/yol → RED (lint tazelemede de koşar)" || kotu "T22 jargon kaçtı"
+kos tazele "Lint Karti" --engel "$SAHTE" >/dev/null 2>&1
+[ $? -eq 1 ] && ok "T23 sır-deseni → RED" || kotu "T23 sır kaçtı"
+kos tazele "Lint Karti" --ozet "$(printf 'x%.0s' $(seq 1 700))" >/dev/null 2>&1
+[ $? -eq 1 ] && ok "T24 uzunluk → RED" || kotu "T24 uzunluk kaçtı"
+cmp -s "$TZD/lint-once.md" "$KAPIMDA_DOSYA" && ok "T25 RED yolları dosyaya HİÇ yazmadı (fail-closed)" || kotu "T25 RED yolu dosyayı kirletti"
+kos lint >/dev/null 2>&1; [ $? -eq 0 ] && ok "T26 tazelenmiş dosya lint'ten geçer" || kotu "T26 tazeleme lint'i kırdı"
+
 echo; echo "── SONUÇ: $gecti geçti · $dustu kaldı ──"
 [ "$dustu" -eq 0 ]

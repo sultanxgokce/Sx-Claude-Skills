@@ -1,7 +1,7 @@
 ---
 name: kapimda
 type: tool
-version: 1.6.0
+version: 1.7.0
 description: >
   Sultan'ı bekleyen işlerin TEK yüzeyini (kapimda.md) yazan, denetleyen ve adım adım yürüten
   kabuk. Kart açma fail-closed 8 lint kapısından geçer (dört zorunlu alan · "Niçin sen" boşsa
@@ -38,6 +38,11 @@ yolu onu yazmıyor, hiçbir lint okumuyordu (ölçüm: fiilî kullanım **0**). 
 ```
 kapimda ac "<Kısa Ad>" --ne "…" --nicin-sen "…" --yapilmazsa "…" --bitince "…" \
            [--ozet "gövde 2-4 cümle"] [--yas "3 gündür bekliyor"] [--engel "ne duruyor"] [--kuru]
+kapimda tazele "<Kısa Ad>" [--ozet "…"] [--engel "…"] [--yas "…"]
+                         # AÇIK kartın GÖVDESİNİ tazeler (sayı bayatlamasın). Yalnız verilen
+                         # alanı günceller; kart KİMLİĞİNE (açılış damgası · oda · devir
+                         # geçmişi · dört alan) DOKUNMAZ. Devredilmiş/tıkanmış kart da
+                         # tazelenir. İçerik aynıysa dosyaya HİÇ yazmaz. RC 1 = kart yok.
 kapimda bitti "<Kısa Ad>" --gerekce "…"
 kapimda liste            # açık kartlar (Sultan-yüzü: kendi odan · yalnız 🚦 SENDE)
 kapimda sahip "<Kısa Ad>"  # SULTAN | <AJAN> | TIKANDI bas · RC 1 = böyle bir açık kart YOK
@@ -61,17 +66,40 @@ kapimda adim durum  "<Kısa Ad>"
 | K7 | sır-desen | karta sır yazılamaz (değer basılmadan reddedilir) |
 | K8 | uzunluk | gövde ≤600, alan ≤240 karakter |
 
+## Gövde tazeleme (L49-B · 2026-08-12) — donmuş sayı panzehiri
+**Ölçülmüş vaka:** kart açıldığı andaki sayıyı **donduruyordu**. Gövdede *"iki oda talebi cevapsız"*
+yazarken besleyicinin **aynı gün** ölçtüğü gerçek sayı **48**'di — Sultan yanlış büyüklükte bir iş
+görüyordu. Kök neden çiftti: besleyici kartı "zaten açık" görüp hiç dokunmuyordu **ve** yazıcıda
+gövdeyi güncelleyecek komut yoktu.
+
+`tazele` yalnız **sayı/durum taşıyan iki yüzeyi** yeniler: yaş/engel satırı ve gövde özeti.
+
+| Değişir | Değişmez (kart KİMLİĞİ) |
+|---|---|
+| `--ozet` verilirse gövde özeti | açılış damgası (`🚦`/`🎯`/`⚠️` satırı) |
+| `--engel` verilirse engel parçası | `oda:` kaynak damgası · `devir:` sayacı · `↳ devir` geçmişi |
+| `--yas` verilirse yaş parçası | dört alan (Ne yapman gerekiyor · Niçin sen · Yapılmazsa · Bitince) |
+| — | `--yas` verilmediyse açılış-yaşı ("bugün açıldı") |
+
+- **Yalnız verilen alan:** verilmeyen alana dokunulmaz (boşlukla silme yok).
+- **İdempotent:** yeni içerik mevcutla aynıysa dosyaya hiç yazılmaz → "gövde zaten güncel".
+- **Sahipten bağımsız:** devredilmiş/tıkanmış kart da tazelenir — kart kimde olursa olsun sayı doğru olmalı.
+- **Lint tazelemede de koşar:** Sultan-dili (K5) · sır (K7) · uzunluk (K8) kapıları geçerlidir; tazeleme
+  lint'i atlayan bir arka kapı değildir. Kart yoksa **RC 1** (sessiz başarı yok).
+- **Çağıran:** `cloudtop/scripts/kapimda-besle.sh` her turda açık kartın gövdesini tazeler; yazıcı eski
+  sürümse eski davranışa düşer ama sebebi **kütüğe yazar** (sessizce bayat sayı göstermez).
+
 ## Adım motoru (L39)
 Plan **diske** yazılır (`kapimda-adim/<Kısa Ad>.md`: `toplam · suanki · durum`), ekrana yalnız
 `adım i/N` ve tek iş basılır. Sıradaki adım **ancak Sultan cevapladıktan sonra** `ilerle` ile açılır.
 "Yaptım" denince üç-durumlu kanıt-probu koşulur; **"yapmamışsın" dili yasaktır** (Sultan yalanlanmaz).
 
 ## Kanıt
-`scripts/kapimda.test.sh` → **84 kapı** (8 lint-RED yolu + fail-closed dosya-kirlenmezliği + çizici
+`scripts/kapimda.test.sh` → **122 kapı** (8 lint-RED yolu + fail-closed dosya-kirlenmezliği + çizici
 sözleşmesi + tavan + kapatma + adım motorunun tek-adım disiplini + 10 devir kapısı + 14 kaynak-damgası
 kapısı + 7 varsayılan-görünüm kapısı + **15 L39 kapısı**: K9 kart-çapası · K10 N-dürüstlüğü ·
-yumuşak-kilit · A06 cevap-alanı). Gerçek `kapimda.md`'ye dokunmaz. Kapılar negatif-test edildi: kaynak
-uydurulursa O4, devir kaynağı ezerse O7/O9, uydurma-N verilirse K10, kartsız adım eklenirse K9
+yumuşak-kilit · A06 cevap-alanı + **26 L49-B gövde-tazeleme kapısı**). Gerçek `kapimda.md`'ye dokunmaz. Kapılar negatif-test edildi: kaynak
+uydurulursa O4, devir kaynağı ezerse O7/O9, uydurma-N verilirse K10, kartsız adım eklenirse K9, kimlik-koruma guardı bozulursa T6/T9/T17/T18
 **kırmızıya döner** (yani koruma gerçek, süs değil).
 
 ## 🛠️ ŞİMDİ SEN adım-bloğu — Sultan-Talimat Formatı (L39, 9 Sultan-kararı · 2026-08-11 gece)
