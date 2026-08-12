@@ -444,8 +444,16 @@ for r in hedefler:
 
     # layiha-defteri.sh ekle çağrısı — L-kodunu al
     resume = "%s işini inşa edelim" % slug
+    # DOĞRULAMA KOMUTU (L35-F1): defter artık her YENİ açık-iş kaydından "yanlışsa şu komut
+    # gösterir" satırını ister. Terfi bir MAKİNE adımıdır; işin ürününü henüz bilmez — ama
+    # bu kaydın iddiası ("bu layiha inşa EDİLMEDİ") tam olarak belgenin statü satırında
+    # yaşıyor: yukarıda "İNŞA YOK" damgasını biz yazdık. Belge inşa edilip statüsü
+    # değiştiğinde ya da arşive taşındığında komut 0 döner → kayıt BAYAT demektir.
+    # Değer-okumaz (yalnız sayı), tek satır. Layihanın sahibi ilk inşa turunda bunu
+    # işin GERÇEK ürününü ölçen komutla değiştirmelidir (`ekle ... --dogrula "<yeni>"`).
+    dogrula = "grep -c 'İNŞA YOK' %s" % yeni_dokuman_rel
     cmd = [defteri_bin, "ekle", "--slug", slug, "--konu", r.get("baslik",""),
-           "--dokuman", yeni_dokuman_rel, "--resume", resume]
+           "--dokuman", yeni_dokuman_rel, "--resume", resume, "--dogrula", dogrula]
     try:
         out = subprocess.check_output(cmd, cwd=root, stderr=subprocess.STDOUT).decode()
     except subprocess.CalledProcessError as e:

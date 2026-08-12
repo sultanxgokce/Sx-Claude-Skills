@@ -1,6 +1,6 @@
 ---
 name: layiha
-version: 1.13.1
+version: 1.14.0
 description: Bir konuyu kapsamlı ARAŞTIR, kalıcı bir tasarım-dokümanına (layiha) SABİTLE, inşayı SONRAYA bırak — kayıt-defterine işle, Sultan'a sabit-formatta teslim et + geri-dönüş-kolu bırak. İnşa bitince BAĞIMSIZ-AJAN (MÜHÜRDAR) tescili gerekir: "insa-edildi ≠ tescilli". "araştır inşayı sonra yaparız · bunu dökümana sabitle · layiha çıkar · aktif/tescil-bekleyen layihaları listele · bu haftaki layihalar" tetiğinde. GLOBAL (tüm container'lar).
 allowed-tools: Bash, Read, Write, Edit, Agent, AskUserQuestion
 ---
@@ -62,9 +62,14 @@ tasarım-seçenek+ÖNERİ [5] fazlama(additive/INERT) [6] açık Sultan-kararlar
 2. **memory-topic:** `project_<slug>.md` + MEMORY.md pointer + RESUME-TETİK cümlesi.
 3. **defter:** `append-note.sh` özet + resume.
 4. **KAYIT-DEFTERİ (YENİ):** `bash <skill-dizini>/scripts/layiha-defteri.sh ekle --slug <slug> --konu "<konu>"
-   --dokuman "<yol>" --pr "#<PR>" --resume "<resume-cümlesi>" --isteyen "Sultan|<AJAN>" [--yetki "<beyan>"]
-   --hucre "<SUBSTRAT> x <AKIŞ>|belirsiz"`
+   --dokuman "<yol>" --dogrula "<tek satır komut>" --pr "#<PR>" --resume "<resume-cümlesi>"
+   --isteyen "Sultan|<AJAN>" [--yetki "<beyan>"] --hucre "<SUBSTRAT> x <AKIŞ>|belirsiz"`
    → durum=insa-bekliyor.
+   🔴 **`--dogrula` ZORUNLU** (L35-F1, bayat-kayıt panzehiri): yeni açık iş "şu açık" demez,
+   *"şu açık — yanlışsa şu komut gösterir"* der. Kayıt bir İDDİA değil bir ÖLÇÜM olur; bir ay
+   sonra hâlâ doğru mu diye kimse elle bakmak zorunda kalmaz. Komut **DEĞER-OKUMAZ** olmalı
+   (varlık-grep `-c`, çıkış-kodu, sayı) — sır basan komut (`cat .env`, `echo $TOKEN`,
+   `vault-cek get`) defter tarafından REDDEDİLİR (RC=2). Eski kayıtlar MUAF, göç YOK.
    ⚠️ **`--hucre` YAZ** (L66): adım-0'da sorduğun hücre buraya geçer. Verilmezse kayıt yazılır ama
    uyarı basılır ve hücre BİLİNMİYOR kalır — hücre-başına iş hacmi ölçülemez, katalog körleşir.
    ⚠️ **`--isteyen` YAZ** (K2): bu alan boş kalırsa kayıt "isteyeni bilinmeyen" olur — Sultan'ın

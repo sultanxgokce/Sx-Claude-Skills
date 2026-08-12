@@ -91,7 +91,8 @@ Seçenekler:
 
 ### A5 · Yaz (yalnız onaydan sonra)
 Onaylanan başlık+açıklamayı **layiha olarak** kaydet:
-`bash ~/.claude/skills/layiha/scripts/layiha-defteri.sh ekle --slug <slug> --konu "<Kısa Ad — detay>" ...`
+`bash ~/.claude/skills/layiha/scripts/layiha-defteri.sh ekle --slug <slug> --konu "<Kısa Ad — detay>" --dokuman "<yol>" --dogrula "<tek satır komut>" ...`
+🔴 `--dogrula` ZORUNLU (L35-F1): yeni açık iş, kendini nasıl sınayacağını da yazar — "yanlışsa şu komut gösterir". DEĞER-OKUMAZ olmalı (varlık-grep `-c` · çıkış-kodu · sayı).
 (araştırma gerekiyorsa doğrudan `/layiha` skill'ini çağır — o araştırır, sabitler, ilan üretir).
 Kaydettikten sonra tek-satır teyit: "📋 kaydedildi: <KOD> <başlık>". Sultan'a değer-döndür, sessizce
 yazıp geçme.
