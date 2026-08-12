@@ -31,6 +31,10 @@
 #        → kartın SAHİBİNİ değiştirir (kart taşınmaz — dosya 14 kutuda ortak). Ajan-sahipli kart
 #          `🎯 <AJAN> · <ad>` damgası alır ve Sultan'ın tavan-3 sayımına GİRMEZ.
 #          SULTAN→AJAN geçişi Sultan-onayı ister (RC=5). 3. devirde kart SULTAN'a döner (⚠️ TIKANDI).
+#   kapimda tazele "<Kısa Ad>" [--ozet "…"] [--engel "…"] [--yas "…"]
+#        → AÇIK bir kartın GÖVDESİNİ tazeler (sayı/durum bayatlamasın). Yalnız verilen alanı
+#          günceller; kart KİMLİĞİNE (açılış damgası · oda · devir geçmişi · dört alan) DOKUNMAZ.
+#          Devredilmiş/tıkanmış kart da tazelenir. İçerik aynıysa dosyaya HİÇ yazmaz.
 #   kapimda liste [--hepsi]                         # açık kartlar (salt-okur)
 #        → VARSAYILAN: yalnız BU odanın işleri + damgasız (kökeni bilinmeyen) kartlar.
 #          Başka odaların işi gizlenmez, dipnota iner: "… N iş başka odalarda".
@@ -218,6 +222,72 @@ _kart_yaz() { # $1..$6 kart alanları
     cat "$DOSYA" > "$tmp" 2>/dev/null || true
     printf '\n%s\n**+0 kart daha bekliyor.** (Tavan %s; sıradakiler buraya tek satır olarak düşer.)\n' "$blok" "$TAVAN" >> "$tmp"
   fi
+  mv "$tmp" "$DOSYA"
+}
+
+# ── GÖVDE TAZELEME (L49-B · 2026-08-12) ──────────────────────────────────────
+# NİÇİN VAR (ölçülmüş canlı vaka): kart bir kez açılınca gövdesindeki SAYI DONUYORDU.
+#   Besleyici ikinci turda kartı "zaten açık" görüp hiç dokunmuyordu (kapimda-besle.sh:83
+#   → `return 0`), yazıcıda gövdeyi güncelleyecek komut da YOKTU. Sonuç: kartta "iki oda
+#   talebi cevapsız" yazarken besleyicinin AYNI GÜN ölçtüğü gerçek sayı 48'di — Sultan
+#   yanlış büyüklükte bir iş görüyordu.
+#
+# 🔴 KART KİMLİĞİNE DOKUNMAZ: açılış damgası (`🚦/🎯/⚠️` satırı) · `oda:` kaynağı ·
+#   `devir:`/`↳ devir` geçmişi · dört alan (Ne yapman gerekiyor · Niçin sen · Yapılmazsa ·
+#   Bitince) ve --yas verilmediyse açılış-yaşı ("bugün açıldı") AYNEN kalır. Tazeleme yalnız
+#   SAYI/DURUM taşıyan iki yüzeyi yeniler: yaş/engel satırı ve gövde özeti. Kimlik, kartın
+#   "bu iş nedir, niçin sende" sözleşmesidir; sayı değişti diye o sözleşme yeniden yazılmaz.
+# 🔴 YALNIZ VERİLEN ALAN: --ozet/--engel/--yas'tan hangisi verildiyse o güncellenir; verilmeyen
+#   alana DOKUNULMAZ (boş string ile silme değil, "dokunma" varsayılanı).
+# 🔴 İDEMPOTENT: yeni içerik mevcutla birebir aynıysa dosyaya HİÇ yazılmaz (mtime/gürültü yok,
+#   --kuru uyumu) ve çıktı "gövde zaten güncel" der.
+# 🔴 SAHİPTEN BAĞIMSIZ: devredilmiş (`🎯`) ve tıkanmış (`⚠️`) kart da tazelenir — kart kimde
+#   olursa olsun gövdedeki sayı DOĞRU olmalıdır (yanlış sayı yanlış önceliktir).
+_kart_tazele() { # $1=ad $2=s_ozet $3=v_ozet $4=s_engel $5=v_engel $6=s_yas $7=v_yas
+                 # RC 0 = güncellendi · 3 = kart yok · 9 = değişmedi (idempotent no-op)
+  local ad="$1" s_ozet="$2" v_ozet="$3" s_engel="$4" v_engel="$5" s_yas="$6" v_yas="$7" tmp
+  tmp="$(mktemp)"
+  awk -v ad="$ad" -v SEP=" · " \
+      -v s_ozet="$s_ozet" -v v_ozet="$v_ozet" \
+      -v s_engel="$s_engel" -v v_engel="$v_engel" \
+      -v s_yas="$s_yas" -v v_yas="$v_yas" '
+    # durum 0 = kart dışı · 1 = başlık-altı üstveri · 2 = yaş satırı geçildi · 3 = özet · 4 = bitti
+    durum==0 && !bitti {
+      p=index($0,SEP)
+      if (p>0 && substr($0,p+length(SEP))==ad) {
+        pre=substr($0,1,p-1)
+        if (pre=="🚦 SENDE" || pre=="⚠️ TIKANDI" || pre ~ /^🎯 /) { print; durum=1; bulundu=1; next }
+      }
+      print; next
+    }
+    # 🔴 KİMLİK SATIRLARI ATLANIR (mutasyon-kanıtlı guard): oda damgası, devir sayacı ve devir
+    #   geçmişi tazelemenin konusu DEĞİLDİR; buraya düşerlerse yaş satırı sanılıp EZİLİRLER.
+    durum==1 && ($0 ~ /^oda: / || $0 ~ /^devir: [0-9]+$/ || $0 ~ /^↳ /) { print; next }
+    durum==1 {
+      yas=$0; engel=""
+      q=index($0,SEP)
+      if (q>0) { yas=substr($0,1,q-1); engel=substr($0,q+length(SEP)) }
+      if (s_yas=="1")   yas=v_yas
+      if (s_engel=="1") engel=v_engel
+      print (engel=="" ? yas : yas SEP engel)
+      durum=2; next
+    }
+    durum==2 {
+      if ($0=="") { print; durum=3; next }
+      durum=4; bitti=1; print; next        # beklenmedik şema → dokunma (fail-safe)
+    }
+    durum==3 {
+      if ($0=="" || $0 ~ /^Ne yapman gerekiyor: /) {
+        if (s_ozet=="1") print v_ozet
+        durum=4; bitti=1; print; next
+      }
+      if (s_ozet=="1") next                # eski özet satırları düşer, yenisi yukarıda basılır
+      print; next
+    }
+    { print }
+    END { if (!bulundu) exit 3 }
+  ' "$DOSYA" > "$tmp" || { rm -f "$tmp"; return 3; }
+  if cmp -s "$tmp" "$DOSYA"; then rm -f "$tmp"; return 9; fi
   mv "$tmp" "$DOSYA"
 }
 
@@ -470,6 +540,7 @@ _lint_dosya() {
 KOMUT="${1:-}"; shift 2>/dev/null || true
 NE=""; NICIN=""; YAPILMAZSA=""; BITINCE=""; OZET=""; YAS=""; ENGEL=""; GEREKCE=""; FEDERE_TAMAM=""
 YAPILACAK=""; NEREDE=""; KURU=0; SAHIP=""; SULTAN_ONAYI=""; HEPSI=0
+S_OZET=0; S_YAS=0; S_ENGEL=0   # "verildi mi" bayrakları (tazele: verilmeyen alana DOKUNULMAZ)
 AD=""
 if [ "$KOMUT" = "adim" ]; then ALT="${1:-}"; shift 2>/dev/null || true; fi
 [ $# -gt 0 ] && case "${1:-}" in --*) ;; *) AD="$1"; shift ;; esac
@@ -479,9 +550,9 @@ while [ $# -gt 0 ]; do
     --nicin-sen) NICIN="${2:-}"; shift 2 ;;
     --yapilmazsa) YAPILMAZSA="${2:-}"; shift 2 ;;
     --bitince) BITINCE="${2:-}"; shift 2 ;;
-    --ozet) OZET="${2:-}"; shift 2 ;;
-    --yas) YAS="${2:-}"; shift 2 ;;
-    --engel) ENGEL="${2:-}"; shift 2 ;;
+    --ozet) OZET="${2:-}"; S_OZET=1; shift 2 ;;
+    --yas) YAS="${2:-}"; S_YAS=1; shift 2 ;;
+    --engel) ENGEL="${2:-}"; S_ENGEL=1; shift 2 ;;
     --gerekce) GEREKCE="${2:-}"; shift 2 ;;
     --federe-tamam) FEDERE_TAMAM="${2:-}"; shift 2 ;;
     --yapilacak) YAPILACAK="${2:-}"; shift 2 ;;
@@ -507,6 +578,36 @@ case "$KOMUT" in
     flock "$KILIT" bash -c "$(declare -f _kart_yaz _bugun); DOSYA='$DOSYA' TAVAN='$TAVAN' _kart_yaz \"\$@\"" _ \
       "$AD" "$NE" "$NICIN" "$YAPILMAZSA" "$BITINCE" "$OZET" "$YAS" "$ENGEL" "$ODA" || { _hata "yazım düştü"; exit 1; }
     printf '🚦 kart açıldı: %s  (oda: %s · açık: %s/%s)\n' "$AD" "$ODA" "$(_acik_sayi)" "$TAVAN"
+    ;;
+  tazele)
+    # ── GÖVDE TAZELEME (L49-B) — donmuş sayı panzehiri ─────────────────────────
+    # 🔴 A06: bu komut Sultan'ın cevabını/onayını ÜRETMEZ; yalnız kaynaktan ÖLÇÜLEN sayıyı
+    #   kartın gövdesine taşır. Kart kimliği ve dört alan bu yoldan DEĞİŞTİRİLEMEZ.
+    [ -n "$AD" ] || { _hata "Kısa Ad zorunlu: kapimda tazele \"<Kısa Ad>\" [--ozet …] [--engel …] [--yas …]"; exit 2; }
+    [ "$S_OZET" -eq 1 ] || [ "$S_ENGEL" -eq 1 ] || [ "$S_YAS" -eq 1 ] || {
+      _hata "tazele: en az bir alan gerekli (--ozet / --engel / --yas)"; exit 2; }
+    # Kart YOKSA sessiz başarı YOK: tek satır sebep + RC 1 (besleyici bunu yetenek-probu olarak da kullanır).
+    _TS="$(_tum_sahip "$AD")"
+    [ -n "$_TS" ] || { _hata "'$AD' adlı açık kart yok — tazelenecek gövde yok"; exit 1; }
+    # Lint: kartı AÇARKEN geçen Sultan-dili/sır/uzunluk kapıları tazelemede de geçerlidir
+    # (aksi hâlde tazeleme lint'i atlayan bir arka kapı olurdu).
+    _TM="$OZET
+$ENGEL
+$YAS"
+    if _jargon_var "$_TM"; then _hata "K5 jargon/yol/komut yakalandı — gövde Sultan-dilinde olmalı"; exit 1; fi
+    if _sir_var "$_TM";    then _hata "K7 sır-deseni yakalandı — karta sır yazılamaz (değer basılmadı)"; exit 1; fi
+    [ "${#OZET}" -le 600 ] || { _hata "K8 gövde çok uzun (${#OZET} > 600)"; exit 1; }
+    [ "${#ENGEL}" -le 240 ] && [ "${#YAS}" -le 240 ] || { _hata "K8 alan çok uzun (> 240)"; exit 1; }
+    if [ "$KURU" -eq 1 ]; then printf '✅ lint temiz (kuru koşu — yazılmadı): %s\n' "$AD"; exit 0; fi
+    flock "$KILIT" bash -c "$(declare -f _kart_tazele); DOSYA='$DOSYA' _kart_tazele \"\$@\"" _ \
+      "$AD" "$S_OZET" "$OZET" "$S_ENGEL" "$ENGEL" "$S_YAS" "$YAS"
+    rc=$?
+    case "$rc" in
+      0) printf '🔄 gövde tazelendi: %s (sahip: %s)\n' "$AD" "$_TS" ;;
+      9) printf '· gövde zaten güncel: %s (dosyaya yazılmadı)\n' "$AD" ;;
+      3) _hata "'$AD' adlı açık kart yok"; exit 1 ;;
+      *) _hata "tazeleme düştü"; exit 1 ;;
+    esac
     ;;
   bitti)
     [ -n "$AD" ] || { _hata "Kısa Ad zorunlu"; exit 2; }
@@ -619,5 +720,5 @@ case "$KOMUT" in
     esac ;;
   ""|-h|--help|yardim)
     sed -n '/^# KULLANIM/,/^# ÇIKIŞ/p' "$0" | sed 's/^# \{0,1\}//' ;;
-  *) _hata "bilinmeyen komut: $KOMUT (ac|bitti|devret|liste|sahip|lint|adim)"; exit 2 ;;
+  *) _hata "bilinmeyen komut: $KOMUT (ac|tazele|bitti|devret|liste|sahip|lint|adim)"; exit 2 ;;
 esac
