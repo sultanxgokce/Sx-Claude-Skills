@@ -38,6 +38,12 @@ doğrulama `ls ~/.claude/skills/federe-os-cekirdek` = ORYANTASYON O6 adımı, FA
   kimliği sessizce başka birime kaydırır (kimlik sunucu-türevli; gölgeleme fark edilmez).
 - **Token yoksa:** federe-kanal durumun "DOĞRULANAMADI"dır — böyle RAPORLA (`federe.sh durum`).
   Sahte-yeşil basmak, token uydurmak, başka kanaldan kimliksiz-tetik denemek YASAK (#80 dersi).
+- **`durum` insana yazar, `durum --kapi` makineye de yazar.** Bayraksız çağrı report-only'dir:
+  KIRMIZI bassa bile exit 0 döner — insan görür, cron/bekçi göremez. Bir bekçiden ya da
+  betikten çağırıyorsan `--kapi` kullan: **0 yeşil · 1 kırmızı · 3 doğrulanamadı** (2 =
+  kullanım/ortam hatası, script-geneli kanon). "Doğrulanamadı" bilerek 3'tür; 2 olsaydı
+  "token yok" ile "yanlış çağırdım" ayırt edilemezdi. Varsayılan bozulmadı — mevcut
+  çağıranlar aynen çalışır.
 
 ## 1 · Tetikleme (A1 — görev/uyandırma round-trip'i)
 Kanal = Railway API-mailbox (`/api/filo/tetik`), **poll-modeli** (push yok; container'a inbound

@@ -40,7 +40,9 @@ kullanım: federe.sh <komut>
   alindi <id> · tamam <id> ["sonuç-notu≤500"] · iptal <id>
   dinle    (poll: bekleyenleri yerel gelen-kutusuna yaz + alindi-ACK)
   nabiz "<özet≤200>" [skor 0-100]
-  durum    (dürüst-3-durum probe: token/API/inbox)
+  durum [--kapi]  (dürüst-3-durum probe: token/API/inbox)
+           --kapi: sonucu ÇIKIŞ-KODUNA da yazar → 0 yeşil · 1 kırmızı · 3 doğrulanamadı
+           (bayraksız varsayılan report-only'dir: her hâlde exit 0 — mevcut çağıranlar bozulmaz)
 K
   exit 2
 }
@@ -233,7 +235,17 @@ case "$cmd" in
     fi
     ;;
   durum)
-    # Dürüst-3-durum probe (report-only, exit 0): yeşil · kırmızı(fail:neden) · doğrulanamadı.
+    # Dürüst-3-durum probe. Varsayılan report-only (exit 0 — ekrana yazar, makine göremez).
+    # --kapi: aynı sonucu ÇIKIŞ-KODUNA da yazar → makine/cron da okuyabilir.
+    #   0 = yeşil · 1 = kırmızı · 3 = doğrulanamadı · 2 = kullanım/ortam hatası (script-geneli kanon).
+    #   Not: "doğrulanamadı" bilerek 3'tür, 2 DEĞİL — 2 bu script'te zaten kullanım-hatasıdır;
+    #   ikisi aynı kod olsaydı çağıran "token yok" ile "yanlış çağırdım"ı ayırt edemezdi.
+    kapi=0
+    case "${2:-}" in
+      "") ;;
+      --kapi) kapi=1 ;;
+      *) echo "HATA: durum tanınmayan bayrak: $2 (geçerli: --kapi)" >&2; exit 2 ;;
+    esac
     kaynak="$(_token_kaynagi)"
     echo "🔎 federe-os-çekirdek durum-probu"
     echo "  • bağımlılıklar: curl+jq OK (ön-koşul başta doğrulandı)"
@@ -242,17 +254,29 @@ case "$cmd" in
     if [[ "$kaynak" == "YOK" ]]; then
       echo "  • token: YOK (bu birimin token'ı henüz provizyonlanmadı — kutu-kutu vault, Sultan-eli) → API: DOĞRULANAMADI (tokensız probe atılmadı)"
       echo "  ℹ️ sahte-yeşil basılmaz: kimlik gelene dek bu birim federe-kanalda 'doğrulanamadı' sayılır."
+      [ "$kapi" -eq 1 ] && { echo "  ⇒ kapı: DOĞRULANAMADI (exit=3)"; exit 3; }
       exit 0
     fi
     echo "  • token kaynağı: $kaynak (değer basılmaz)"
+    sonuc="dogrulanamadi"
     if resp="$(_api GET "/api/filo/tetik?yon=gelen&durum=bekliyor" 2>&1)"; then
       if echo "$resp" | jq -e '.adet' >/dev/null 2>&1; then
         echo "  • API: YEŞİL (gelen-kutusu okunabildi; bekleyen=$(echo "$resp" | jq -r '.adet'))"
+        sonuc="yesil"
       else
         echo "  • API: KIRMIZI (fail: $(echo "$resp" | jq -r '.error // "beklenmedik-yanıt"' 2>/dev/null || echo 'yanıt çözülemedi'))"
+        sonuc="kirmizi"
       fi
     else
       echo "  • API: KIRMIZI (fail: erişim/ağ hatası)"
+      sonuc="kirmizi"
+    fi
+    if [ "$kapi" -eq 1 ]; then
+      case "$sonuc" in
+        yesil)   echo "  ⇒ kapı: YEŞİL (exit=0)"; exit 0 ;;
+        kirmizi) echo "  ⇒ kapı: KIRMIZI (exit=1)"; exit 1 ;;
+        *)       echo "  ⇒ kapı: DOĞRULANAMADI (exit=3)"; exit 3 ;;
+      esac
     fi
     ;;
   *) kullanim ;;

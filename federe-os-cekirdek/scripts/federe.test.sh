@@ -174,6 +174,34 @@ echo "== T21: geriye-uyum — --tetikli aynen calisir, gerekcesiz hala reddedili
 OUT="$(bash "$SUT" gonder --tetikli s04 "baslik" 2>&1)"; RC=$?
 [ "$RC" -eq 2 ] && ok "--tetikli gerekcesiz RC=2 (degismedi)" || no "--tetikli gerekce kapisi bozuldu (rc=$RC)"
 
+echo "== T22: durum KAPI MODU — kirmizi ekrana yaziliyordu ama exit=0 idi (MUAVIN olcumu) =="
+# Kok kusur: `durum` probu KIRMIZI basip exit 0 donuyordu -> insan gorur, makine/cron goremez.
+# Varsayilan report-only KORUNUR; --kapi sonucu cikis-koduna da yazar.
+OUT="$(bash "$SUT" durum 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && ok "bayraksiz durum exit=0 (geriye-uyum bozulmadi)" || no "bayraksiz durum exit=$RC (0 bekleniyordu)"
+echo "$OUT" | grep -q "kapı:" && no "bayraksiz koşuda kapı-satiri sizdi" || ok "bayraksiz cikti degismedi (kapi-satiri yok)"
+
+# token YOK + --kapi -> dogrulanamadi (3). "olculemedi != 0" fail-loud kurali.
+OUT="$(bash "$SUT" durum --kapi 2>&1)"; RC=$?
+[ "$RC" -eq 3 ] && ok "tokensiz --kapi exit=3 (dogrulanamadi)" || no "tokensiz --kapi exit=$RC (3 bekleniyordu)"
+echo "$OUT" | grep -q "DOĞRULANAMADI (exit=3)" && ok "kapi-satiri dogrulanamadi diyor" || no "kapi-satiri yok/yanlis"
+
+# token VAR ama API erisilemez (sahte BASE) -> KIRMIZI (1). Asil kusurun kanidi.
+TF2="$(mktemp -d)/token"; printf 'TESTTOKEN-xyz789\n' > "$TF2"
+OUT="$(FEDERE_TOKEN_FILE="$TF2" bash "$SUT" durum --kapi 2>&1)"; RC=$?
+[ "$RC" -eq 1 ] && ok "erisilemez API + --kapi exit=1 (kirmizi)" || no "kirmizi --kapi exit=$RC (1 bekleniyordu)"
+echo "$OUT" | grep -q "KIRMIZI (exit=1)" && ok "kapi-satiri kirmizi diyor" || no "kirmizi kapi-satiri yok"
+# AYNI kosu bayraksizken hala 0 donmeli (varsayilan report-only degismedi)
+FEDERE_TOKEN_FILE="$TF2" bash "$SUT" durum >/dev/null 2>&1
+[ $? -eq 0 ] && ok "ayni kirmizi durum bayraksiz hala exit=0" || no "varsayilan davranis bozuldu"
+# Sir-sizmasi: token degeri hicbir kosuda basilmaz
+echo "$OUT" | grep -q "TESTTOKEN-xyz789" && no "TOKEN DEGERI SIZDI" || ok "token degeri sizmiyor"
+
+echo "== T23: durum taninmayan bayrak → 2 (kullanim; 3 ile karismaz) =="
+OUT="$(bash "$SUT" durum --kapii 2>&1)"; RC=$?
+[ "$RC" -eq 2 ] && ok "durum taninmayan bayrak RC=2" || no "durum bayrak-kapisi RC=$RC"
+echo "$OUT" | grep -q -- "--kapi" && ok "gecerli bayrak listeleniyor" || no "gecerli bayrak listelenmiyor"
+
 echo "== T19: bash -n sözdizimi =="
 bash -n "$SUT" && ok "sözdizimi temiz" || no "sözdizimi hatası"
 
