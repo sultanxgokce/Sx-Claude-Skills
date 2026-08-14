@@ -15,6 +15,16 @@ grn(){ printf '\033[32m%s\033[0m\n' "$*"; }
 red(){ printf '\033[31m%s\033[0m\n' "$*"; }
 ylw(){ printf '\033[33m%s\033[0m\n' "$*"; }
 die(){ red "✗ $*" >&2; exit 1; }
+
+# L68/F1 — KASAYA YAZAN verb yalniz openbao backbone'unda var. Bu ret, adaptorun kendi
+# on-ucusundan (CLI/arac varligi) ONCE gelmelidir: aksi halde arac kurulu olmayan bir
+# makinede "put yok" yerine "CLI yok" denir ve sozlesme yanlis raporlanir.
+# (CI'da fiilen boyle dustu: runner'da infisical CLI ve railway-erisim yok.)
+for _a in "$@"; do
+  [ "$_a" = "put" ] || continue
+  red "bu backbone'da put yok (aktif=railway) - kasaya yazmak icin: echo openbao > ~/.config/vault-backend" >&2
+  exit 2
+done
 [ -x "$RAILWAY" ] || die "railway-erisim yok ($RAILWAY)"
 
 _ids(){  # stdout: "<projectId> <envId>"  — Vault projesini adıyla çöz (production env)
@@ -65,10 +75,5 @@ open(envf,"w").write("\n".join(lines)+"\n"); os.chmod(envf,0o600)
 print("OK %d"%len(val))')
     set -- $RES
     if [ "${1:-}" = "OK" ]; then grn "✓ $KEY alındı → cortex-access.env (${2} krk, değer basılmadı)"; else die "$KEY Vault'ta yok"; fi ;;
-  put)
-    # L68/F1: kasaya YAZAN verb yalnız openbao backbone'unda var. Sessiz-fallback YOK.
-    red "✗ bu backbone'da put yok (aktif=railway) — kasaya yazmak için: echo openbao > ~/.config/vault-backend" >&2
-    exit 2 ;;
-
   *) sed -n '2,13p' "$0" | sed 's/^# \{0,1\}//' ;;
 esac

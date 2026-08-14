@@ -26,6 +26,16 @@ red(){ printf '\033[31m%s\033[0m\n' "$*"; }
 ylw(){ printf '\033[33m%s\033[0m\n' "$*"; }
 die(){ red "✗ $*" >&2; exit 1; }
 
+# L68/F1 — KASAYA YAZAN verb yalniz openbao backbone'unda var. Bu ret, adaptorun kendi
+# on-ucusundan (CLI/arac varligi) ONCE gelmelidir: aksi halde arac kurulu olmayan bir
+# makinede "put yok" yerine "CLI yok" denir ve sozlesme yanlis raporlanir.
+# (CI'da fiilen boyle dustu: runner'da infisical CLI ve railway-erisim yok.)
+for _a in "$@"; do
+  [ "$_a" = "put" ] || continue
+  red "bu backbone'da put yok (aktif=infisical) - kasaya yazmak icin: echo openbao > ~/.config/vault-backend" >&2
+  exit 2
+done
+
 # --domain <d> / --path <p> herhangi konumda ayrıştır → kalan pozisyonelleri ARGS'a topla.
 ARGS=()
 while [ $# -gt 0 ]; do
@@ -122,11 +132,6 @@ lines.append("export %s=%s"%(k, shlex.quote(val)))
 open(envf,"w").write("\n".join(lines)+"\n"); os.chmod(envf,0o600)
 print(len(val))')
     grn "✓ $KEY alındı → cortex-access.env (${LEN} krk, değer basılmadı · $MAP_PATH/$MAP_INFKEY)" ;;
-
-  put)
-    # L68/F1: kasaya YAZAN verb yalnız openbao backbone'unda var. Sessiz-fallback YOK.
-    red "✗ bu backbone'da put yok (aktif=infisical) — kasaya yazmak için: echo openbao > ~/.config/vault-backend" >&2
-    exit 2 ;;
 
   *) sed -n '2,17p' "$0" | sed 's/^# \{0,1\}//' ;;
 esac
