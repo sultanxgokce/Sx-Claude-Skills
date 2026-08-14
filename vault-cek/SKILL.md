@@ -1,12 +1,12 @@
 ---
 name: vault-cek
 type: agent
-version: 1.2.0
+version: 1.3.0
 description: >
   Merkezî Vault'tan (OpenBao central-vault; 2026-08-07 L54 cutover) sır çeker → cortex-access.env. On-demand:
   Sultan sırları bir kez vault'a koyar, her container kendi AppRole kimliğiyle self-servis çeker.
   KEY→path: `<KAYNAK>__<KEY>`→/kaynak; `__`-siz→/shared. Değer stdout/log/chat'e ASLA.
-  `doctor · resolve · list · get <KEY> · backend`.
+  `doctor · resolve · list · get <KEY> · put <KEY> · backend`.
 install_target: { skills: .claude/skills/ }
 stacks: ["*"]
 author: sultanxgokce
@@ -17,7 +17,21 @@ tags: [vault, openbao, infisical, credential, secret, on-demand, central-vault, 
 yazar (değer basmadan). KEY→path: `<KAYNAK>__<KEY>` → `<kaynak>` klasörü + `<KEY>`; `__`-siz → `shared`
 (ör. `CLOUDFLARE_API_TOKEN`, `VEKATIP__DATABASE_URL`). Değer stdout/log/chat'e ASLA.
 Komutlar: `doctor` (3-durum) · `resolve` · `get <KEY>` · `list [<kaynak>]` (KEY-adları, değer-yok) ·
-`backend` (hangi kasa aktif — teşhis).
+`put <KEY>` (kasaya YATIR) · `backend` (hangi kasa aktif — teşhis).
+
+## `put` — kasaya yatıran kalem (L68/F1 · yalnız openbao backbone'unda)
+```
+vault-cek put <KEY> [--tenant <ad>] [--uzerine-yaz] [--stdin]
+```
+- **Değer argv'ye ASLA düşmez.** İki kaynak var: `--stdin` (borudan) ya da ortamdaki `<KEY>` değişkeni.
+  `--deger <x>` gibi bir bayrak **yoktur** — süreç listesine sızardı. Boru: `jq -Rs` → `curl --data-binary @-`
+  (`faz4-tasi.sh` deseni; `jq --arg` YASAK). `set -x` altında bile değer görünmez.
+- **Üzerine-yazma fail-closed:** hedefte kayıt varsa komut DURUR; ezmek `--uzerine-yaz` ister.
+- **Çıktı yalnız** `hedef=<mount>/<klasör>/<anahtar> http=<kod> version=<n>`.
+  🔴 "değer doğru yazıldı" **denmez** — merkez kiracı kasasına *yazar ama okuyamaz* (ölü-kutu deseni),
+  o iddia kanıtlanamaz. Dürüst ifade: **yazıldı, doğrulaması alıcıda.**
+- Yol, `get` ile **aynı** KEY→path kuralından çözülür; `--tenant` hedef klasörü ezer.
+- Kabul testi: `bash scripts/kabul-testi-put.sh` (A1..A8, canlı kasa · yalnız kanarya anahtarları).
 
 ## Seam — swappable backbone (3. cutover TAMAM)
 `scripts/vault-cek.sh` bir **DİSPATCHER**'dır; kontrat backbone'dan bağımsızdır → 91+ tüketici

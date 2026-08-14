@@ -1,6 +1,6 @@
 # vault-cek OpenBao adaptörü — **CANLI VARSAYILAN** (L54 cutover, 2026-08-07)
 
-`vault-cek-openbao.sh` = aynı public-kontrat (doctor/resolve/list/get · KEY→path · 600-env-yazıcı),
+`vault-cek-openbao.sh` = aynı public-kontrat (doctor/resolve/list/get/put · KEY→path · 600-env-yazıcı),
 backend = OpenBao KV-v2 + AppRole. **2026-08-07'den beri aktif adaptör** — `vault-cek.sh` artık
 bir DİSPATCHER'dır ve varsayılan olarak buraya yönlendirir. `vault-cek-infisical.sh` silinmedi;
 30-gün salt-okur fallback olarak duruyor.

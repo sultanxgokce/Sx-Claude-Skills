@@ -6,6 +6,7 @@
 #   vault-cek resolve           hedef/kapsam göster (SIR DEĞİL)
 #   vault-cek get <KEY>         <KEY>'i çek → cortex-access.env (değer BASILMAZ)
 #   vault-cek list [<kaynak>]   <kaynak>'taki KEY ADLARINI göster (değer DEĞİL; default shared)
+#   vault-cek put <KEY> …       <KEY>'i kasaya YATIR (değer stdin/ortam; argv YASAK) — YALNIZ openbao
 #   vault-cek backend           HANGİ backbone aktif + nereden geldi (teşhis; SIR DEĞİL)
 #
 # BACKBONE SEÇİMİ (öncelik sırası — üstteki alttakini ezer):

@@ -26,6 +26,16 @@ red(){ printf '\033[31m%s\033[0m\n' "$*"; }
 ylw(){ printf '\033[33m%s\033[0m\n' "$*"; }
 die(){ red "✗ $*" >&2; exit 1; }
 
+# L68/F1 — KASAYA YAZAN verb yalniz openbao backbone'unda var. Bu ret, adaptorun kendi
+# on-ucusundan (CLI/arac varligi) ONCE gelmelidir: aksi halde arac kurulu olmayan bir
+# makinede "put yok" yerine "CLI yok" denir ve sozlesme yanlis raporlanir.
+# (CI'da fiilen boyle dustu: runner'da infisical CLI ve railway-erisim yok.)
+for _a in "$@"; do
+  [ "$_a" = "put" ] || continue
+  red "bu backbone'da put yok (aktif=infisical) - kasaya yazmak icin: echo openbao > ~/.config/vault-backend" >&2
+  exit 2
+done
+
 # --domain <d> / --path <p> herhangi konumda ayrıştır → kalan pozisyonelleri ARGS'a topla.
 ARGS=()
 while [ $# -gt 0 ]; do
