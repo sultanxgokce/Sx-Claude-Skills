@@ -291,9 +291,11 @@ fi
 # ── mekanik süzme (jq): uygunluk + kanıt-kapısı + MİHENK-deny + dedup + ön-skor ──
 # not: metin normalize (küçült, noktalama→boşluk, token-set) jq-içinde; Jaccard-örtüşme mevcut kartlarla.
 export DEDUP_ESIK MIHENK_DESEN
+# ARGV-LİMİTİ (aynı sınıf): kart-başlıkları da defter büyüdükçe argv'yi taşırıyordu.
+_t1_kartf="$(mktemp)"; printf '%s' "$KART_BASLIKLAR" > "$_t1_kartf"
 CIKTI="$(jq -c -n \
   --slurpfile havuz "$HAVUZ" \
-  --argjson kartlar "$KART_BASLIKLAR" \
+  --slurpfile kartlar_f "$_t1_kartf" \
   --arg mihenk "$MIHENK_DESEN" \
   --argjson kapatici "$KAPATICI_IDS" \
   --argjson pencere "$PENCERE_IDS" \
@@ -302,7 +304,7 @@ CIKTI="$(jq -c -n \
   def norm: trlower | ascii_downcase | gsub("[^a-zçğıöşü0-9 ]"; " ") | gsub("  +"; " ") | ltrimstr(" ") | rtrimstr(" ");
   def tokens: norm | split(" ") | map(select(length>2)) | unique;
   def jaccard($a;$b): ($a+$b|unique) as $u | if ($u|length)==0 then 0 else (($a|length)+($b|length)-($u|length)) / ($u|length) end;
-  ($kartlar | map(tokens)) as $karttok |
+  ($kartlar_f[0] | map(tokens)) as $karttok |
   [ $havuz[] |
     . as $b |
     ($b.kanit // "" | gsub("\\s";"") | length > 0) as $kanitli |
@@ -356,11 +358,18 @@ ADAYLAR_TEMIZ="$(jq -c 'sort_by(-.onskor) | [ .[] | del(._kanitli, ._uygun_durum
 } >&2
 
 # ── stdout: T2-kontratı ──
+# ⚠️ ARGV-LİMİTİ (2026-08-14): aday/MİHENK listeleri argv'den geçiyordu. Havuz büyüyünce
+# çekirdek komutu reddediyor ("Argument list too long", rc=126) ve T2-kontratı HİÇ üretilmiyor.
+# Üstelik özet satırları bu noktadan ÖNCE stderr'e basıldığı için koşu SAĞLIKLI görünüyordu.
+# Çözüm: büyüyebilen listeler argv yerine DOSYADAN okunur (--slurpfile → $x[0]).
+_t1_tmp="$(mktemp -d)"; trap 'rm -rf "$_t1_tmp"' EXIT
+printf '%s' "$ADAYLAR_TEMIZ" > "$_t1_tmp/adaylar.json"
+printf '%s' "$MIHENK_LIST"   > "$_t1_tmp/mihenk.json"
 jq -c -n \
   --argjson tavan "$TAVAN" --argjson uretilen "$URETILEN" --argjson kalan "$KALAN" \
-  --argjson uygun "$UYGUN_SAYI" --argjson adaylar "$ADAYLAR_TEMIZ" \
-  --argjson mihenk "$MIHENK_LIST" --arg hafta "$BU_HAFTA" \
+  --argjson uygun "$UYGUN_SAYI" --slurpfile adaylar "$_t1_tmp/adaylar.json" \
+  --slurpfile mihenk "$_t1_tmp/mihenk.json" --arg hafta "$BU_HAFTA" \
   --arg profil "$PROFIL" --arg periyot "$PERIYOT" \
   --arg elek "$ELEK" --arg mod "$([ "$ELEK" = "aylik" ] && echo tema || echo aday)" \
-  '{hafta:$hafta, donem:$hafta, profil:$profil, periyot:$periyot, elek:$elek, mod:$mod, tavan:$tavan, uretilen:$uretilen, kalan:$kalan, uygun_sayi:$uygun, mihenk_alani:$mihenk, adaylar:$adaylar}'
+  '{hafta:$hafta, donem:$hafta, profil:$profil, periyot:$periyot, elek:$elek, mod:$mod, tavan:$tavan, uretilen:$uretilen, kalan:$kalan, uygun_sayi:$uygun, mihenk_alani:$mihenk[0], adaylar:$adaylar[0]}'
 exit 0
