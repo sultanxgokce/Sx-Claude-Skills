@@ -14,7 +14,9 @@
 #   (get → yalnız cortex-access.env'e 600; token/secret YALNIZ shell-değişkeninde).
 # Auth: ~/.config/openbao/identity.env → BAO_ROLE_ID + BAO_SECRET_ID + BAO_ADDR (HARDCODE YOK).
 # Model: Infisical folder/düz-KEY → KV-v2 KEY-başına-secret eşleği:
-#   `<KAYNAK>__<REST>` → secret/<kaynak-lower>/<REST> · `__`-siz → secret/shared/<KEY> · field=value.
+#   `<KAYNAK>__<REST>` → secret/<kaynak-lower>/<REST> (AÇIK HEDEF — daima kazanır) ·
+#   `__`-siz → ÖNCE secret/<kendi-kiracı>/<KEY>, bulunamazsa secret/shared/<KEY> (L68/F3) ·
+#   field=value. Kiracı adı login yanıtından türetilir (EK AĞ TURU YOK); türetilemezse shared.
 #   cortex-access.env'e ORİJİNAL <KEY> adıyla yazılır.
 # Motor: `bao` CLI varsa CLI-yolu, yoksa curl HTTP-API fallback (jq gerekli).
 set -uo pipefail
@@ -64,32 +66,88 @@ _load_ident(){   # identity.env'den ROLE_ID/SECRET_ID/ADDR yükle (değer basmad
   export BAO_ADDR
 }
 
+# Login yanıtından SÜZÜLMÜŞ kimlik-bilgisi (YALNIZ policy adları + rol adı; TOKEN ASLA burada
+# tutulmaz). Kiracı adı bundan türetilir → ek ağ turu YOKTUR (bkz _tenant_bul).
+_LOGIN_JSON=""
+
 _login(){   # AppRole → kısa-ömürlü token. Token yalnız $BAO_TOKEN'a (stdout'a BASILMAZ).
   _load_ident
-  local tok
-  if [ "$ENGINE" = cli ]; then
+  local tok="" resp="" _xtl=0
+  # 🔴 SIR-HİJYENİ: login yanıtı token TAŞIR; xtrace açıksa atama değeri trace'e basar → kapat.
+  case $- in *x*) _xtl=1 ;; esac
+  set +x
+  if [ "$ENGINE" = cli ] && ! command -v jq >/dev/null 2>&1; then
+    # jq yoksa yalnız token alınır; kiracı türetilemez → eski (shared) davranışa düşülür.
     tok=$(bao write -field=token auth/approle/login \
-          role_id="$BAO_ROLE_ID" secret_id="$BAO_SECRET_ID" 2>/dev/null) \
-      || die "AppRole login başarısız (ROLE_ID/SECRET_ID ya da BAO_ADDR?)"
+          role_id="$BAO_ROLE_ID" secret_id="$BAO_SECRET_ID" 2>/dev/null) || tok=""
   else
-    tok=$(curl -sf -X POST "$BAO_ADDR/v1/auth/approle/login" \
-          -d "{\"role_id\":\"$BAO_ROLE_ID\",\"secret_id\":\"$BAO_SECRET_ID\"}" \
-          | jq -r '.auth.client_token // empty' 2>/dev/null) \
-      || die "AppRole login başarısız (HTTP · BAO_ADDR erişilebilir mi?)"
+    if [ "$ENGINE" = cli ]; then
+      resp=$(bao write -format=json auth/approle/login \
+             role_id="$BAO_ROLE_ID" secret_id="$BAO_SECRET_ID" 2>/dev/null) || resp=""
+    else
+      resp=$(curl -sf -X POST "$BAO_ADDR/v1/auth/approle/login" \
+             -d "{\"role_id\":\"$BAO_ROLE_ID\",\"secret_id\":\"$BAO_SECRET_ID\"}" 2>/dev/null) || resp=""
+    fi
+    tok=$(printf '%s' "$resp" | jq -r '.auth.client_token // empty' 2>/dev/null) || tok=""
+    # Yanıtı TOKEN'DAN ARINDIRARAK sakla: yalnız policy adları + rol adı kalır (sır değil).
+    _LOGIN_JSON=$(printf '%s' "$resp" \
+      | jq -c '{p:(.auth.token_policies // .auth.policies // []), r:(.auth.metadata.role_name // "")}' 2>/dev/null) || _LOGIN_JSON=""
+    resp=""
   fi
-  [ -n "$tok" ] || die "login token boş (AppRole role/policy?)"
+  if [ "$_xtl" -eq 1 ]; then set -x; fi
+  [ -n "$tok" ] || die "AppRole login başarısız / token boş (ROLE_ID·SECRET_ID·BAO_ADDR·policy?)"
   export BAO_TOKEN="$tok"
+  return 0
+}
+
+_tenant_ad_gecerli(){   # $1=aday kiracı adı → RC0 geçerli. (Ad SIR DEĞİL; provizyon charset'i.)
+  case "${1:-}" in
+    ""|shared) return 1 ;;         # shared zaten yedek yol — kendi-kiracı sayılmaz
+    -*|*[!a-z0-9-]*) return 1 ;;   # path-traversal / büyük-harf / boşluk kalkanı
+  esac
+  [ "${#1}" -le 31 ] || return 1
+  return 0
+}
+
+_tenant_bul(){   # stdout: kutunun KENDİ kiracı adı, ya da BOŞ (türetilemedi → sessizce shared).
+  # ⚙️ EK AĞ TURU YOK: kaynak, zaten yapılmış olan AppRole login'in yanıtıdır
+  #    (lookup-self'e gerek kalmadı — ölçüm 2026-08-14: yanıt hem token_policies hem
+  #    metadata.role_name taşıyor). Provizyon değişmezi (bao-provizyon.sh:140-145):
+  #    policy adı = `tenant-<ad>` ∧ AppRole rol adı = `<ad>`.
+  local pols n aday
+  # 0) Açık override — kurtarma/test için (ad sır değil).
+  if [ -n "${VAULT_TENANT:-}" ]; then
+    _tenant_ad_gecerli "$VAULT_TENANT" && { printf '%s' "$VAULT_TENANT"; return 0; }
+    return 1
+  fi
+  [ -n "$_LOGIN_JSON" ] || return 1
+  command -v jq >/dev/null 2>&1 || return 1
+  # 1) Policy'den türet — yetkinin GERÇEK kaynağı budur. TEK bir `tenant-*` varsa kesin;
+  #    sıfır ya da BİRDEN ÇOK varsa belirsiz → türetme, yedeğe geç.
+  pols=$(printf '%s' "$_LOGIN_JSON" | jq -r '.p[]? // empty' 2>/dev/null | grep '^tenant-' || true)
+  n=$(printf '%s' "$pols" | grep -c . || true)
+  if [ "$n" = "1" ]; then
+    aday="${pols#tenant-}"
+    _tenant_ad_gecerli "$aday" && { printf '%s' "$aday"; return 0; }
+  fi
+  # 2) Yedek: AppRole rol adı.
+  aday=$(printf '%s' "$_LOGIN_JSON" | jq -r '.r // empty' 2>/dev/null) || aday=""
+  _tenant_ad_gecerli "$aday" && { printf '%s' "$aday"; return 0; }
+  return 1
 }
 
 _map_key(){   # $1=KEY → MAP_PATH (mount-altı klasör), MAP_INFKEY (secret adı). Override: --path/VAULT_PATH.
+  # MAP_ONEKSIZ=1 → anahtar `__`-siz VE --path/VAULT_PATH override'ı yok demektir; yalnız bu
+  # durumda `get` kendi-kiracı-önce çözümünü uygular (açık hedef DAİMA kazanır — değişmez).
   local k="$1"
+  MAP_ONEKSIZ=0
   if [ -n "$OVR_PATH" ]; then
     MAP_PATH="${OVR_PATH#/}"; MAP_INFKEY="$k"
   elif [ "${k%%__*}" != "$k" ]; then
     local src="${k%%__*}" rest="${k#*__}"
     MAP_PATH="$(printf '%s' "$src" | tr '[:upper:]' '[:lower:]')"; MAP_INFKEY="$rest"
   else
-    MAP_PATH="shared"; MAP_INFKEY="$k"
+    MAP_PATH="shared"; MAP_INFKEY="$k"; MAP_ONEKSIZ=1
   fi
 }
 
@@ -152,7 +210,13 @@ cmd="${1:-help}"
 case "$cmd" in
   resolve)
     _login
-    grn "✓ openbao → addr=$BAO_ADDR mount=$MOUNT engine=$ENGINE" ;;
+    _T="$(_tenant_bul || true)"
+    grn "✓ openbao → addr=$BAO_ADDR mount=$MOUNT engine=$ENGINE"
+    if [ -n "$_T" ]; then
+      printf '  kiracı   : %s (öneksiz anahtar önce %s/%s, sonra %s/shared)\n' "$_T" "$MOUNT" "$_T" "$MOUNT"
+    else
+      ylw "  kiracı   : belirlenemedi — öneksiz anahtar YALNIZ $MOUNT/shared'da aranır (eski davranış)"
+    fi ;;
 
   doctor)
     if [ ! -f "$IDENT_FILE" ]; then ylw "• motor=$ENGINE var; identity.env YOK ($IDENT_FILE) — Sultan AppRole provision"; exit 4; fi
@@ -194,9 +258,33 @@ case "$cmd" in
     KEY="${2:-}"; [ -n "$KEY" ] || die "kullanım: get <KEY>"
     _map_key "$KEY"
     _login
-    # field=value → YALNIZ değer; shell-değişkenine capture, ekrana BASILMAZ.
-    VAL=$(_kv_get "$MAP_PATH" "$MAP_INFKEY") || VAL=""
-    if [ -z "$VAL" ]; then die "$KEY yok ($MOUNT/$MAP_PATH/$MAP_INFKEY) — Sultan OpenBao'ya eklemeli"; fi
+    # ── KENDİ-KİRACI-ÖNCE (L68/F3, 2026-08-14) ──────────────────────────────────────────
+    # Öneksiz anahtar ARTIK önce kutunun KENDİ kiracı klasöründe aranır, bulunamazsa
+    # `shared`'a düşer. Niçin: bir anahtarı bir ajana vermek tek komut olsun diye
+    # (`vault-cek put SEDIR__PCLOUD_AUTH_TOKEN`) — alıcı beceriler hiç değişmeden bulsun.
+    # Vaka: pCloud anahtarları SEDİR'in kendi klasöründeydi, beceri `shared`'a bakıyordu →
+    # "izin doğru, adres yanlış". Değişmezler: (1) açık `<KAYNAK>__<KEY>` hedefi etkilenmez,
+    # (2) kendi klasöründe kopyası olmayan kutu eskisi gibi `shared` görür (geriye-uyum),
+    # (3) kiracı türetilemezse / okuma yasaksa SESSİZCE eski davranışa düşülür.
+    _TEN=""; _COZUM=""
+    if [ "${MAP_ONEKSIZ:-0}" -eq 1 ]; then
+      _TEN="$(_tenant_bul || true)"
+      if [ -n "$_TEN" ]; then
+        # field=value → YALNIZ değer; shell-değişkenine capture, ekrana BASILMAZ.
+        VAL=$(_kv_get "$_TEN" "$MAP_INFKEY") || VAL=""
+        if [ -n "$VAL" ]; then MAP_PATH="$_TEN"; _COZUM="kendi-kiracı"; fi
+      fi
+    fi
+    if [ -z "${VAL:-}" ]; then
+      VAL=$(_kv_get "$MAP_PATH" "$MAP_INFKEY") || VAL=""
+      [ -n "$VAL" ] && _COZUM="$([ "${MAP_ONEKSIZ:-0}" -eq 1 ] && printf shared || printf 'açık-hedef')"
+    fi
+    if [ -z "$VAL" ]; then
+      if [ -n "$_TEN" ]; then
+        die "$KEY yok (bakıldı: $MOUNT/$_TEN/$MAP_INFKEY → $MOUNT/shared/$MAP_INFKEY) — Sultan OpenBao'ya eklemeli"
+      fi
+      die "$KEY yok ($MOUNT/$MAP_PATH/$MAP_INFKEY) — Sultan OpenBao'ya eklemeli"
+    fi
     # Idempotent yaz: ORİJİNAL <KEY> adıyla (consumer rewire-yok), shlex-quote, 600. Değer python-env (argv-YOK).
     LEN=$(KEY="$KEY" ENVF="$ENV_FILE" VAL="$VAL" python3 -c '
 import os,re,shlex
@@ -205,7 +293,7 @@ lines=[l for l in open(envf).read().splitlines() if not re.match(r"^export "+re.
 lines.append("export %s=%s"%(k, shlex.quote(val)))
 open(envf,"w").write("\n".join(lines)+"\n"); os.chmod(envf,0o600)
 print(len(val))')
-    grn "✓ $KEY alındı → cortex-access.env (${LEN} krk, değer basılmadı · $MOUNT/$MAP_PATH/$MAP_INFKEY)" ;;
+    grn "✓ $KEY alındı → cortex-access.env (${LEN} krk, değer basılmadı · $MOUNT/$MAP_PATH/$MAP_INFKEY · yol=${_COZUM:-açık-hedef})" ;;
 
   put)
     # ── KALEM (L68/F1): kasaya YATIRAN komut. Değer stdout/log/argv/trace'e ASLA düşmez.

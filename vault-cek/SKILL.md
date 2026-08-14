@@ -1,11 +1,12 @@
 ---
 name: vault-cek
 type: agent
-version: 1.3.0
+version: 1.4.0
 description: >
   Merkezî Vault'tan (OpenBao central-vault; 2026-08-07 L54 cutover) sır çeker → cortex-access.env. On-demand:
   Sultan sırları bir kez vault'a koyar, her container kendi AppRole kimliğiyle self-servis çeker.
-  KEY→path: `<KAYNAK>__<KEY>`→/kaynak; `__`-siz→/shared. Değer stdout/log/chat'e ASLA.
+  KEY→path: `<KAYNAK>__<KEY>`→/kaynak (açık hedef); `__`-siz→ÖNCE kutunun kendi kiracı klasörü,
+  bulunamazsa /shared (L68/F3). Değer stdout/log/chat'e ASLA.
   `doctor · resolve · list · get <KEY> · put <KEY> · backend`.
 install_target: { skills: .claude/skills/ }
 stacks: ["*"]
@@ -14,8 +15,40 @@ tags: [vault, openbao, infisical, credential, secret, on-demand, central-vault, 
 ---
 # vault-cek — On-demand Merkezî Vault (OpenBao · CUTOVER-DONE 2026-08-07)
 `bash scripts/vault-cek.sh get <KEY>` → `<KEY>`'i merkezî kasadan çeker, `cortex-access.env`'e (600)
-yazar (değer basmadan). KEY→path: `<KAYNAK>__<KEY>` → `<kaynak>` klasörü + `<KEY>`; `__`-siz → `shared`
-(ör. `CLOUDFLARE_API_TOKEN`, `VEKATIP__DATABASE_URL`). Değer stdout/log/chat'e ASLA.
+yazar (değer basmadan). Değer stdout/log/chat'e ASLA.
+
+## KEY → yol çözümü (v1.4.0 · KENDİ-KİRACI-ÖNCE)
+| KEY biçimi | Nereye bakılır | Not |
+|---|---|---|
+| `<KAYNAK>__<KEY>` (ör. `VEKATIP__DATABASE_URL`) | `secret/<kaynak>/<KEY>` | **AÇIK HEDEF — daima kazanır**, bu kuraldan etkilenmez |
+| `--path <p>` / `$VAULT_PATH` | `secret/<p>/<KEY>` | override; öneksiz-yolu kapatır |
+| `<KEY>` (öneksiz, ör. `PCLOUD_AUTH_TOKEN`) | **1.** `secret/<kendi-kiracı>/<KEY>` → **2.** `secret/shared/<KEY>` | v1.4.0'da eklenen adım 1 |
+
+**Niçin:** bir anahtarı bir ajana vermek tek komut olsun diye — `vault-cek put SEDIR__PCLOUD_AUTH_TOKEN`
+yeter; alıcı beceri **hiç değişmeden** onu bulur. Öncesinde beceriler `shared`'a bakıyor, anahtar ise
+kiracının kendi klasöründe duruyordu (canlı vaka 2026-08-14: SEDİR pCloud'a giremedi — *izin doğruydu,
+adres yanlıştı*).
+
+**Kutu kendi kiracı adını nereden bilir:** AppRole login **yanıtından** — `token_policies` içinde tek bir
+`tenant-<ad>` varsa ondan, yoksa `metadata.role_name`'den. Provizyon değişmezi bunu garanti eder
+(`bao-provizyon.sh`: policy = `tenant-<ad>` ∧ AppRole rol adı = `<ad>`). **Ek ağ turu YOKTUR** —
+`lookup-self` çağrılmaz, bilgi zaten yapılan login'in yanıtındadır. Saklanan yanıt token'dan
+arındırılmıştır (yalnız policy adları + rol adı; ikisi de sır değil).
+
+**Fail-open değil, fail-BACK:** kiracı türetilemezse (policy yok · birden çok `tenant-*` ∧ rol-adı da yok ·
+jq yok · login JSON'u okunamadı) ya da kendi klasöründe okuma yasak/boşsa **sessizce eski davranışa
+(`shared`) düşülür** — hata basılmaz, kimse kırılmaz. Elle sabitleme gerekirse: `VAULT_TENANT=<ad>`.
+
+**Geriye uyum:** kendi klasöründe kopyası olmayan kutu bugünkü gibi `shared` görür. `put` **değişmedi** —
+öneksiz `put` hâlâ `shared`'a yazar; kiracıya yazmak için `<KAYNAK>__<KEY>` ya da `--tenant` kullanılır.
+
+**Maliyet (ölçüldü 2026-08-14, bu kutu):** login **+0** istek. Öneksiz anahtar kendi klasöründe bulunursa
+toplam 2 istek (**değişmedi**); yalnız `shared`'da varsa 3 istek (**+1 KV okuması**). Açık hedefli
+`<KAYNAK>__<KEY>` 2 istek (**değişmedi**).
+
+**Hangi yol çözüldü:** `get` çıktısı sonunda `yol=kendi-kiracı|shared|açık-hedef` der; `resolve` kutunun
+türetilmiş kiracı adını basar (`kiracı: nexus`) ya da türetilemediğini söyler.
+
 Komutlar: `doctor` (3-durum) · `resolve` · `get <KEY>` · `list [<kaynak>]` (KEY-adları, değer-yok) ·
 `put <KEY>` (kasaya YATIR) · `backend` (hangi kasa aktif — teşhis).
 
@@ -32,6 +65,9 @@ vault-cek put <KEY> [--tenant <ad>] [--uzerine-yaz] [--stdin]
   o iddia kanıtlanamaz. Dürüst ifade: **yazıldı, doğrulaması alıcıda.**
 - Yol, `get` ile **aynı** KEY→path kuralından çözülür; `--tenant` hedef klasörü ezer.
 - Kabul testi: `bash scripts/kabul-testi-put.sh` (A1..A8, canlı kasa · yalnız kanarya anahtarları).
+- Çevrimdışı sınamalar (CI): `scripts/vault-cek-put.test.sh` (T1..T10) ·
+  `scripts/vault-cek-tenant.test.sh` (T1..T12 — kendi-kiracı-önce ad-türetmesi, traversal kalkanı,
+  geriye-uyum değişmezi, token-sızmazlığı).
 
 ## Seam — swappable backbone (3. cutover TAMAM)
 `scripts/vault-cek.sh` bir **DİSPATCHER**'dır; kontrat backbone'dan bağımsızdır → 91+ tüketici
