@@ -127,6 +127,27 @@ esit "G17b ve gerçek çıktı üretir (kapı fazla geniş değil)" "layiha" "$(
 OUT10="$("$SUT" suz --havuz "$T/havuz.jsonl" --kartlar "$T/kartlar.json" --profil layiha --defter "$T/bos-rol2.jsonl" 2>/dev/null)"
 esit "G18 rol BOŞKEN geriye-uyum: elle/fabrika koşusu bozulmaz" "layiha" "$(jq -r '.profil' <<<"$OUT10")"
 
+echo "── G19: BÜYÜK HAVUZ — argv limiti (NÂZIR bulgusu · MUAVİN doğruladı · 2026-08-14) ──"
+# KÖK KUSUR: aday/MİHENK/kart listeleri jq'ya ARGV'den geçiyordu. Havuz büyüyünce çekirdek
+# komutu reddediyor ("Argument list too long", rc=126) ve T2-kontratı HİÇ üretilmiyor.
+# Sinsi tarafı: özet satırları o noktadan ÖNCE stderr'e basıldığı için koşu SAĞLIKLI görünüyordu.
+# Bu sınıfı yakalayan test YOKTU — kusur iki kez sessizce geçti. Kapı artık burada.
+BUYUK="$T/havuz-buyuk.jsonl"; : >"$BUYUK"
+# ~2200 bulgu × uzun başlık/kanıt → eski argv-yolunda komut satırı MB mertebesine çıkar.
+_pad="$(printf 'x%.0s' $(seq 1 400))"
+for i in $(seq 1 2200); do
+  printf '{"id":"bg%s","baslik":"Buyuk havuz bulgusu %s %s","durum":"ham","kanit":"scripts/z.sh:%s — kanit %s","kaynak":"denetim"}\n' \
+    "$i" "$i" "$_pad" "$i" "$_pad" >>"$BUYUK"
+done
+BUYUK_OUT="$("$SUT" suz --havuz "$BUYUK" --kartlar "$T/kartlar.json" --profil layiha --defter "$T/bos-buyuk.jsonl" 2>"$T/err-buyuk")"; BUYUK_RC=$?
+esit "G19a büyük havuzda çıkış-kodu 0 (eski hâlde 126 = argv taşması)" "0" "$BUYUK_RC"
+# ASIL KAPI: stdout'ta GERÇEK kontrat var mı? Özet stderr'e gider; boş stdout = sessiz-başarısızlık.
+[[ -n "$BUYUK_OUT" ]] && ok "G19b T2-kontratı üretildi (stdout boş DEĞİL)" || bad "G19b T2-kontratı ÜRETİLMEDİ (sessiz-başarısızlık)" "dolu" "boş"
+esit "G19c kontrat geçerli JSON ve aday alanı taşıyor" "true" "$(jq -e 'has("adaylar")' <<<"$BUYUK_OUT" 2>/dev/null || echo false)"
+esit "G19d aday listesi DİZİ olarak geldi (slurpfile sarmalı açıldı)" "array" "$(jq -r '.adaylar|type' <<<"$BUYUK_OUT" 2>/dev/null)"
+esit "G19e mihenk_alani da dizi (aynı sarmal hatası orada da yok)" "array" "$(jq -r '.mihenk_alani|type' <<<"$BUYUK_OUT" 2>/dev/null)"
+grep -qi "argument list too long" "$T/err-buyuk" && bad "G19f argv taşması hâlâ var" "yok" "var" || ok "G19f 'Argument list too long' YOK"
+
 echo
 echo "pass=$PASS fail=$FAIL"
 [[ $FAIL -eq 0 ]]
