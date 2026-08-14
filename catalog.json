@@ -623,8 +623,8 @@
       "id": "vault-cek",
       "type": "agent",
       "name": "vault-cek — merkezî-vault seam (store-agnostik)",
-      "version": "1.3.0",
-      "description": "Sır-çözüm seam'i: doctor·resolve·get <KEY>·list·put <KEY>·backend kontratı; `put` (L68/F1) kasaya YAZAN kalem — değer stdin/ortamdan gelir, argv'ye düşmez, üzerine-yazma fail-closed, çıktı yalnız hedef+http+version (yalnız openbao backbone'unda); vault-cek.sh artık DİSPATCHER — backbone veriden seçilir ($VAULT_BACKEND → ~/.config/vault-backend → varsayılan openbao). Aktif: OpenBao KV-v2+AppRole (L54 cutover 2026-08-07); fallback: Infisical (30-gün salt-okur), legacy: Railway. Değer stdout'a basılmaz (600 env-dosyasına yazar). Erişim-skill'lerinin vault-first temeli."
+      "version": "1.4.0",
+      "description": "Sır-çözüm seam'i: doctor·resolve·get <KEY>·list·put <KEY>·backend kontratı; `put` (L68/F1) kasaya YAZAN kalem — değer stdin/ortamdan gelir, argv'ye düşmez, üzerine-yazma fail-closed, çıktı yalnız hedef+http+version (yalnız openbao backbone'unda); vault-cek.sh artık DİSPATCHER — backbone veriden seçilir ($VAULT_BACKEND → ~/.config/vault-backend → varsayılan openbao). Aktif: OpenBao KV-v2+AppRole (L54 cutover 2026-08-07); fallback: Infisical (30-gün salt-okur), legacy: Railway. Değer stdout'a basılmaz (600 env-dosyasına yazar). Öneksiz KEY çözümü v1.4.0'dan itibaren KENDİ-KİRACI-ÖNCE: önce kutunun kendi kiracı klasörü, bulunamazsa shared (kiracı adı login yanıtından türetilir — ek ağ turu yok; türetilemezse sessizce shared). Açık `<KAYNAK>__<KEY>` hedefi ve `put` davranışı değişmedi. Erişim-skill'lerinin vault-first temeli."
     },
     {
       "id": "seyir-defteri",
