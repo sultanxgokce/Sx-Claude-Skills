@@ -123,5 +123,10 @@ open(envf,"w").write("\n".join(lines)+"\n"); os.chmod(envf,0o600)
 print(len(val))')
     grn "✓ $KEY alındı → cortex-access.env (${LEN} krk, değer basılmadı · $MAP_PATH/$MAP_INFKEY)" ;;
 
+  put)
+    # L68/F1: kasaya YAZAN verb yalnız openbao backbone'unda var. Sessiz-fallback YOK.
+    red "✗ bu backbone'da put yok (aktif=infisical) — kasaya yazmak için: echo openbao > ~/.config/vault-backend" >&2
+    exit 2 ;;
+
   *) sed -n '2,17p' "$0" | sed 's/^# \{0,1\}//' ;;
 esac

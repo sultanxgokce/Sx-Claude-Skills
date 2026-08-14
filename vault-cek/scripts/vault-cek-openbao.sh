@@ -6,6 +6,9 @@
 #   vault-cek resolve           addr/mount/namespace göster (SIR DEĞİL)
 #   vault-cek get <KEY>         <KEY>'i çek → cortex-access.env (değer BASILMAZ)
 #   vault-cek list [<kaynak>]   <kaynak> path'indeki KEY ADLARINI göster (değer DEĞİL; default shared)
+#   vault-cek put <KEY> [--tenant <ad>] [--uzerine-yaz] [--stdin]
+#                               <KEY>'i kasaya YATIR — değer STDIN'den ya da ortamdaki <KEY>
+#                               değişkeninden gelir; argv'ye ASLA düşmez. Üzerine-yazma fail-closed.
 #
 # Backbone: OpenBao KV-v2 + AppRole auth. Değer stdout/log/chat'e ASLA basılmaz
 #   (get → yalnız cortex-access.env'e 600; token/secret YALNIZ shell-değişkeninde).
@@ -20,11 +23,15 @@ ENV_FILE="${CORTEX_ACCESS_ENV:-$HOME/.config/cortex-access.env}"
 IDENT_FILE="${OPENBAO_IDENTITY_ENV:-$HOME/.config/openbao/identity.env}"
 MOUNT="${BAO_KV_MOUNT:-secret}"      # KV-v2 mount adı
 OVR_PATH="${VAULT_PATH:-}"           # KEY-map path override (opsiyonel, mount-altı göreli)
+TENANT_OVR=""                        # put: hedef kiracı klasörü override (--tenant)
+UZERINE=0                            # put: 1 ise mevcut kaydın üstüne yaz (varsayılan fail-closed)
+STDIN_MODU=0                         # put: değer borudan mı gelsin (--stdin)
 
 grn(){ printf '\033[32m%s\033[0m\n' "$*"; }
 red(){ printf '\033[31m%s\033[0m\n' "$*"; }
 ylw(){ printf '\033[33m%s\033[0m\n' "$*"; }
 die(){ red "✗ $*" >&2; exit 1; }
+die2(){ red "✗ $*" >&2; exit 2; }   # kullanım/sözleşme hatası (RC=2)
 
 # --mount <m> / --path <p> herhangi konumda ayrıştır → kalan pozisyonelleri ARGS'a topla.
 ARGS=()
@@ -34,6 +41,10 @@ while [ $# -gt 0 ]; do
     --mount=*) MOUNT="${1#--mount=}"; shift ;;
     --path) OVR_PATH="${2:-}"; shift 2 ;;
     --path=*) OVR_PATH="${1#--path=}"; shift ;;
+    --tenant) TENANT_OVR="${2:-}"; shift 2 ;;
+    --tenant=*) TENANT_OVR="${1#--tenant=}"; shift ;;
+    --uzerine-yaz) UZERINE=1; shift ;;
+    --stdin) STDIN_MODU=1; shift ;;
     *) ARGS+=("$1"); shift ;;
   esac
 done
@@ -118,6 +129,25 @@ _kv_get(){   # $1=path $2=key → field 'value' stdout'a (YALNIZ komut-ikamesiyl
   fi
 }
 
+_kv_var_mi(){   # $1=path $2=key → RC0 varsa, RC1 yoksa. YALNIZ http-kodu okunur; DEĞER OKUNMAZ.
+  local p="$1" k="$2" kod
+  kod="$(curl -s -o /dev/null -w '%{http_code}' -m 15 \
+         -H "X-Vault-Token: $BAO_TOKEN" "$BAO_ADDR/v1/$MOUNT/data/$p/$k")"
+  [ "$kod" = "200" ]
+}
+
+_kv_put(){   # $1=path $2=key · DEĞER **STDIN'den** okunur (argv'ye ASLA düşmez — R6).
+  # Boru faz4-tasi.sh:99-104'ten: jq -Rs stdin → curl -d @-. `jq --arg` YASAK (argv).
+  # Fark: orada `printf '%s' "$V" |` vardı; burada here-string kullanılıyor çünkü
+  # `printf` argümanı `set -x` altında değeri trace'e basıyordu (kabul-testi A5).
+  # stdout: gövde + son satırda http-kodu.
+  local p="$1" k="$2"
+  jq -Rs '{data:{value:(rtrimstr("\n"))}}' \
+    | curl -s -m 20 -w '\n%{http_code}' \
+           -H "X-Vault-Token: $BAO_TOKEN" \
+           --data-binary @- "$BAO_ADDR/v1/$MOUNT/data/$p/$k"
+}
+
 cmd="${1:-help}"
 case "$cmd" in
   resolve)
@@ -177,5 +207,65 @@ open(envf,"w").write("\n".join(lines)+"\n"); os.chmod(envf,0o600)
 print(len(val))')
     grn "✓ $KEY alındı → cortex-access.env (${LEN} krk, değer basılmadı · $MOUNT/$MAP_PATH/$MAP_INFKEY)" ;;
 
-  *) sed -n '2,18p' "$0" | sed 's/^# \{0,1\}//' ;;
+  put)
+    # ── KALEM (L68/F1): kasaya YATIRAN komut. Değer stdout/log/argv/trace'e ASLA düşmez.
+    #    Merkez yatırdığını GERİ OKUYAMAZ (tenant-nexus.hcl ölü-kutu deseni) → çıktı
+    #    yalnız "yazıldı, sürüm N" der; "değer doğru" İDDİA EDİLMEZ (R4).
+    KEY="${2:-}"; [ -n "$KEY" ] || die2 "kullanım: put <KEY> [--tenant <ad>] [--uzerine-yaz] [--stdin]"
+    case "$KEY" in
+      --*|"") die2 "kullanım: put <KEY> [--tenant <ad>] [--uzerine-yaz] [--stdin]" ;;
+      *[!A-Za-z0-9_]*) die2 "geçersiz KEY: yalnız A-Z a-z 0-9 _ (eval/enjeksiyon kalkanı)" ;;
+    esac
+    command -v curl >/dev/null 2>&1 && command -v jq >/dev/null 2>&1 \
+      || die "put yalnız HTTP-yolundan yazar (değer argv'ye düşmesin diye) — curl+jq gerekli"
+
+    _map_key "$KEY"
+    # --tenant verilirse hedef klasörü EZER; anahtar-adı eşlemesi (§2.1) korunur.
+    if [ -n "$TENANT_OVR" ]; then
+      MAP_PATH="$(printf '%s' "$TENANT_OVR" | tr '[:upper:]' '[:lower:]')"
+    fi
+    case "$MAP_PATH" in
+      ""|*/*|.|..) die2 "geçersiz hedef klasör: '$MAP_PATH' (tek seviye ad olmalı)" ;;
+    esac
+    case "$MAP_INFKEY" in
+      ""|*/*) die2 "geçersiz anahtar adı: '$MAP_INFKEY'" ;;
+    esac
+
+    # 🔴 SIR-HİJYENİ: değer bu noktadan itibaren shell-değişkeninde. xtrace açıksa
+    #    atamalar değeri trace'e basar → burada kapatılır, yazma bitince geri açılır.
+    _XT=0; case $- in *x*) _XT=1 ;; esac
+    set +x
+    if [ "$STDIN_MODU" -eq 1 ]; then
+      [ ! -t 0 ] || die2 "--stdin verildi ama boru yok — değeri borudan ver"
+      VAL="$(cat)"
+    else
+      VAL="${!KEY:-}"   # dolaylı genişletme (eval YOK) — değer argv'ye düşmez
+      [ -n "$VAL" ] || { die2 "değer yok — ya '--stdin' ile borudan ver ya da ortamda $KEY tanımla (argv YASAK)"; }
+    fi
+    [ -n "$VAL" ] || die2 "değer BOŞ — boş sır yatırılmaz"
+
+    _login
+
+    if [ "$UZERINE" -eq 0 ] && _kv_var_mi "$MAP_PATH" "$MAP_INFKEY"; then
+      VAL=""
+      die "hedefte zaten var — --uzerine-yaz ister ($MOUNT/$MAP_PATH/$MAP_INFKEY)"
+    fi
+
+    _CIKTI="$(_kv_put "$MAP_PATH" "$MAP_INFKEY" <<<"$VAL")" || _CIKTI=""
+    VAL=""   # değeri bellekten düşür
+    [ "$_XT" -eq 1 ] && set -x
+
+    _KOD="$(printf '%s\n' "$_CIKTI" | tail -n1)"
+    _GOVDE="$(printf '%s\n' "$_CIKTI" | sed '$d')"
+    case "$_KOD" in
+      200|204) ;;
+      403) die "YASAK (http=403) — kimliğin $MOUNT/$MAP_PATH üstünde create/update yetkisi yok" ;;
+      "") die "yazma denemesi yanıtsız — $BAO_ADDR erişilebilir mi?" ;;
+      *)  die "yazılamadı (http=$_KOD · $MOUNT/$MAP_PATH/$MAP_INFKEY)" ;;
+    esac
+    _VER="$(printf '%s' "$_GOVDE" | jq -r '.data.version // empty' 2>/dev/null)"
+    grn "✓ yazıldı: hedef=$MOUNT/$MAP_PATH/$MAP_INFKEY http=$_KOD version=${_VER:-?}"
+    ylw "  not: doğrulaması ALICIDA — merkez yatırdığını geri OKUYAMAZ; 'değer doğru' iddia EDİLMEZ." ;;
+
+  *) sed -n '2,21p' "$0" | sed 's/^# \{0,1\}//' ;;
 esac
