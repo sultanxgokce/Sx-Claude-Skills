@@ -1,7 +1,7 @@
 ---
 name: whatsapp-gonder
 type: agent
-version: 1.0.5
+version: 1.1.0
 description: >
   Herhangi bir kutudan Sultan'a WhatsApp mesajı/dosyası göndermenin TEK yolu. Kutu tarafında
   yapılandırma yoktur: geçit (cloudtop-wa) iç ağda durur, kutu yalnız ona seslenir. Numara
@@ -29,8 +29,12 @@ S=/config/.claude/skills/whatsapp-gonder/scripts/wa-gonder.sh
 bash $S --durum                                   # geçit ayakta mı, oturum açık mı
 bash $S "işi bitirdim, rapor hazır"               # Sultan'a metin
 bash $S --kime Sultan "..."                       # adlandırılmış alıcı
-bash $S --dosya /config/projects/tez/rapor.pdf --not "ilk taslak"
+bash $S --dosya /config/projects/tez/rapor.pdf --not "ilk taslak"   # BELGE (ek) olarak
+bash $S --dosya /config/projects/tez/ekran.png --gorsel             # satır-içi FOTOĞRAF olarak
 ```
+
+`--gorsel` yalnız `--dosya` ile kullanılır ve **yalnız görünümü** değiştirir: aynı içerik
+belge yerine satır-içi fotoğraf olarak düşer. Bayrak verilmezse davranış eskisi gibidir.
 
 Çıkış kodları: `0` gönderildi · `2` kullanım/ortam · `3` geçide ulaşılamadı (**mesaj gitmedi**) ·
 `4` geçit reddetti (gövdede neden).
@@ -44,6 +48,10 @@ bash $S --dosya /config/projects/tez/rapor.pdf --not "ilk taslak"
 - **Kanıtsız yeşil yok.** `--durum`, servis ayakta ama oturum kapalıysa 🟡 der; ulaşılamıyorsa
   🔴 ve "mesaj GİTMEDİ" yazar. `0` yalnız geçit 200 dönerse basılır.
 - **Teslim ≠ gönderim.** `0` "geçit kabul etti" demektir. Kritik bir bildirimde teslimi insan teyit eder.
+- **Ekin TÜRÜ de bildirilir.** Gövdeye dosyanın uzantısından türetilen `mimetype` konur.
+  Bildirilmezse geçidin altındaki kütüphane kendi varsayılanını ("application/pdf") koyuyor;
+  adı `.png` olan dosya karşıya **PDF olarak düşüyor ve açılmıyordu** (2026-08-15, 13+ kutu).
+  Uzantı tahmin edilemezse alan hiç konmaz — geçit onu "bilinmeyen" sayar, pdf'e DÜŞMEZ.
 
 ## Ne zaman KULLANMA
 
