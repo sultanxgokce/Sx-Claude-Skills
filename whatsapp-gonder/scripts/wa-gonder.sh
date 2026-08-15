@@ -10,14 +10,15 @@
 # Kullanım:
 #   wa-gonder.sh "mesaj"                      → varsayılan alıcıya (Sultan) metin
 #   wa-gonder.sh --kime Sultan "mesaj"        → adlandırılmış alıcıya
-#   wa-gonder.sh --dosya /yol/rapor.pdf [--not "açıklama"]
+#   wa-gonder.sh --dosya /yol/rapor.pdf [--not "açıklama"]   → BELGE (ek) olarak
+#   wa-gonder.sh --dosya /yol/foto.png --gorsel               → satır-içi FOTOĞRAF olarak
 #   wa-gonder.sh --durum                      → geçit ayakta mı, oturum açık mı
 #
 # Çıkış: 0 gönderildi · 2 kullanım · 3 geçide ulaşılamıyor · 4 geçit reddetti (gövdede neden)
 set -uo pipefail
 
 GECIT="${WA_GECIT:-http://cloudtop-wa:8790}"
-KIME="Sultan"; METIN=""; DOSYA=""; NOT=""; MOD="metin"
+KIME="Sultan"; METIN=""; DOSYA=""; NOT=""; MOD="metin"; GORSEL=0
 
 # ── Kutu jetonu (kimlik) ─────────────────────────────────────────────────────
 # Geçit 2026-07-29'dan beri kimlik istiyor; jetonsuz istek 401 {"hata":"jeton_yok"} döner.
@@ -34,8 +35,9 @@ while [ $# -gt 0 ]; do
     --kime)  KIME="${2:-}"; shift 2 ;;
     --dosya) DOSYA="${2:-}"; MOD="dosya"; shift 2 ;;
     --not)   NOT="${2:-}"; shift 2 ;;
+    --gorsel) GORSEL=1; shift ;;
     --durum) MOD="durum"; shift ;;
-    -h|--yardim) sed -n '2,20p' "$0"; exit 0 ;;
+    -h|--yardim) sed -n '2,17p' "$0"; exit 0 ;;
     -*) echo "bilinmeyen seçenek: $1" >&2; exit 2 ;;
     # ⚠️ İKİNCİ KONUMSAL ARGÜMAN = GÜRÜLTÜLÜ RET (sessiz kabul DEĞİL).
     #   Eski davranış: her konumsal argüman METIN'i EZİYORDU. `wa-gonder.sh "SaaS" "mesaj"`
@@ -116,6 +118,10 @@ if [ "$MOD" = "durum" ]; then
   exit 0
 fi
 
+if [ "$GORSEL" = "1" ] && [ "$MOD" != "dosya" ]; then
+  echo "HATA: --gorsel yalnız --dosya ile kullanılır (gönderilecek görselin yolu gerekir)." >&2; exit 2
+fi
+
 if [ "$MOD" = "dosya" ]; then
   [ -f "$DOSYA" ] || { echo "HATA: dosya yok: $DOSYA" >&2; exit 2; }
   # ⚠️ İÇERİĞİ GÖNDER, YOLU DEĞİL. Geçit ayrı bir konteynerdir ve senin dosya ağacını
@@ -125,15 +131,25 @@ if [ "$MOD" = "dosya" ]; then
   if [ "$BOYUT" -gt 17000000 ]; then
     echo "HATA: dosya çok büyük ($BOYUT bayt) — geçit tavanı ~17MB. Küçült ya da parçala." >&2; exit 2
   fi
+  # ⚠️ MIMETYPE'I DA GÖNDER (canlı vaka 2026-08-15, 13+ kutu): tür bildirilmeyince geçidin
+  #    altındaki kütüphane kendi varsayılanını koyuyor ve o varsayılan "application/pdf".
+  #    Dosya adı `foto.png` kalıyor ama TÜRÜ "pdf" diyor; WhatsApp ve macOS türe inanıp
+  #    dosyayı yeniden adlandırıyor → PNG karşıya PDF olarak düşüyor ve AÇILMIYOR.
+  #    Tahmin edilemeyen uzantıda alan HİÇ KONULMAZ — o zaman geçit kendi türetimini yapar
+  #    (ve bilinmeyeni "octet-stream" sayar, pdf'e düşmez).
+  TUR_ALANI="dosya"; [ "$GORSEL" = "1" ] && TUR_ALANI="gorsel"
   GOVDE=$(python3 -c '
-import json,sys,base64,os
+import json,sys,base64,os,mimetypes
 p=sys.argv[2]
 with open(p,"rb") as f: ham=f.read()
-print(json.dumps({"alici":sys.argv[1],"tur":"dosya",
-                  "dosya_adi":os.path.basename(p),
-                  "icerik_b64":base64.b64encode(ham).decode(),
-                  "aciklama":sys.argv[3]}))' \
-    "$KIME" "$DOSYA" "$NOT" 2>/dev/null) || { echo "HATA: gövde üretilemedi (python3 yok?)" >&2; exit 2; }
+g={"alici":sys.argv[1],"tur":sys.argv[4],
+   "dosya_adi":os.path.basename(p),
+   "icerik_b64":base64.b64encode(ham).decode(),
+   "aciklama":sys.argv[3]}
+m=mimetypes.guess_type(p)[0]
+if m: g["mimetype"]=m
+print(json.dumps(g))' \
+    "$KIME" "$DOSYA" "$NOT" "$TUR_ALANI" 2>/dev/null) || { echo "HATA: gövde üretilemedi (python3 yok?)" >&2; exit 2; }
 else
   [ -n "$METIN" ] || { echo "HATA: mesaj boş. Kullanım: $0 \"mesaj\"" >&2; exit 2; }
   GOVDE=$(python3 -c '
