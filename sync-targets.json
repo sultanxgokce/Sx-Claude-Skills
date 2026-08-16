@@ -52,6 +52,11 @@
       "nexus",
       "cortex"
     ],
+    "notion-erisim": [
+      "_global",
+      "nexus",
+      "cortex"
+    ],
     "elogo-erisim": [
       "_global",
       "nexus",

@@ -606,6 +606,13 @@
       "description": "pCloud işlerini (dosya listele/yükle/indir, public-link) saf API (curl+jq) ile yapar. Vault-first: token'ı önce vault-cek(Infisical), sonra cortex-access.env'den DEĞER-görmeden çözer. OAuth access_token (EU/eapi host, query-param). Sır-hijyenik. (erisim-skill-fabrikasi ürünü.)"
     },
     {
+      "id": "notion-erisim",
+      "type": "agent",
+      "name": "Notion Erişim (SALT-OKUR · panele girmeden)",
+      "version": "1.0.0",
+      "description": "Notion okuma işlerini (db-list, db-query, page-get, file-download) saf API (curl+jq) ile yapar. YAZMA FİİLİ YOK. Vault-first jeton çözümü (vault-cek → cortex-access.env), zorunlu Notion-Version başlığı, gerçek sayfalama (has_more/next_cursor), imzalı-süreli dosya URL'lerini anında indirme. (erisim-skill-fabrikasi ürünü · pcloud-erisim emsali.)"
+    },
+    {
       "id": "elogo-erisim",
       "type": "agent",
       "name": "e-Logo Erişim (panele girmeden SOAP WS)",

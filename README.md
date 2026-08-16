@@ -37,6 +37,7 @@ Mekanik detay → aşağıdaki [Senkron](#senkron--güncellemeleri-yay-sync-skil
 | [railway-erisim](railway-erisim/SKILL.md) | agent | * (stack bağımsız) | ~2min | 1.1.0 | stable |
 | [pcloud-erisim](pcloud-erisim/SKILL.md) | agent | * (stack bağımsız) | ~2min | 1.1.0 | stable |
 | [elogo-erisim](elogo-erisim/SKILL.md) | agent | * (stack bağımsız) | ~2min | 1.1.0 | stable |
+| [notion-erisim](notion-erisim/SKILL.md) | agent | * (stack bağımsız) | ~2min | 1.0.0 | stable (SALT-OKUR) |
 | [erisim](erisim/SKILL.md) | agent | * (stack bağımsız) | ~1min | 1.0.0 | stable |
 | [vault-cek](vault-cek/SKILL.md) | agent | * (stack bağımsız) | ~1min | 1.0.0 | stable |
 | [seyir-defteri](seyir-defteri/SKILL.md) | agent | * (stack bağımsız) | ~1min | 1.0.0 | stable |
