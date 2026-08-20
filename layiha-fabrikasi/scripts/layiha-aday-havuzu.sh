@@ -420,7 +420,47 @@ for r in hedefler:
         sys.stderr.write("HATA: doküman yok: %s — %s terfi edilemedi (önceki adımlar geri alınmadı, elle kontrol gerekir)\n" % (eski_dokuman, r.get("id")))
         sys.exit(2)
 
-    # git mv varsa onu kullan, yoksa mv
+    # ── DOĞRULAMA KOMUTU: tasarım belgesinden okunur (L35-F1 kapısı) ────────────
+    # NİÇİN BELGEDEN: defter 2026-08-14'te `--dogrula`yı ZORUNLU yaptı, çağıran burası
+    #   güncellenmedi → 14 Ağu'dan 20 Ağu'ya terfi FİİLEN İMKÂNSIZDI ve kimse denemediği
+    #   için görünmedi (NÂZIR bulgusu f728dc35). Bilgi belgede DOĞAR; ayrı alanda dursaydı
+    #   belge güncellenince sessizce ayrışırdı → tek-kaynak.
+    dogrula = ""
+    with io.open(eski_dokuman, encoding="utf-8") as f:
+        for satir in f:
+            m2 = re.match(r"^\s*(?:>\s*)?(?:\*\*)?Doğrulama(?:\*\*)?\s*:\s*(.+?)\s*$", satir)
+            if m2:
+                dogrula = m2.group(1).strip().strip("`")
+                break
+    if not dogrula:
+        sys.stderr.write(
+            "HATA: doğrulama komutu yok — %s terfi edilemedi.\n"
+            "      Tasarım belgesine tek satır ekleyin:  Doğrulama: <komut>\n"
+            "      Belge: %s\n"
+            "      (defter --dogrula olmadan kayıt açmaz; bu kapı bilerek fail-closed'dur)\n"
+            % (r.get("id"), eski_dokuman))
+        sys.exit(2)
+
+    # ── ÖNCE DEFTER, SONRA TAŞIMA ──────────────────────────────────────────────
+    # DEĞİŞMEZ (NÂZIR 2f73a2ac): defter kabul etmediyse artefakt TAŞINMAZ.
+    #   Eski sıra tersti (git mv → ekle): defter RC=2 verirken belge çoktan yeni
+    #   yerine gitmiş oluyordu; kayıt temiz, dosya sistemi kaymış, fark SESSİZ.
+    #   `ekle` belgenin varlığını kontrol etmiyor (ölçüldü) → önce çağrılabilir.
+    resume = "%s işini inşa edelim" % slug
+    cmd = [defteri_bin, "ekle", "--slug", slug, "--konu", r.get("baslik",""),
+           "--dokuman", yeni_dokuman_rel, "--resume", resume, "--dogrula", dogrula]
+    try:
+        out = subprocess.check_output(cmd, cwd=root, stderr=subprocess.STDOUT).decode()
+    except subprocess.CalledProcessError as e:
+        sys.stderr.write("HATA: layiha-defteri.sh ekle başarısız (%s): %s\n"
+                         "      Belge TAŞINMADI — dosya sistemi ile defter tutarlı.\n"
+                         % (slug, e.output.decode() if e.output else str(e)))
+        sys.exit(2)
+
+    m = re.search(r"\b(L\d+)\b", out)
+    layiha_kodu = m.group(1) if m else "?"
+
+    # defter kabul etti → ancak ŞİMDİ taşı
     moved = False
     try:
         subprocess.run(["git", "mv", eski_dokuman, yeni_dokuman], check=True, cwd=root,
@@ -441,27 +481,6 @@ for r in hedefler:
         lines.insert(0, "> Statü: SALT-ARAŞTIRMA — İNŞA YOK")
     with io.open(yeni_dokuman, "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
-
-    # layiha-defteri.sh ekle çağrısı — L-kodunu al
-    resume = "%s işini inşa edelim" % slug
-    # DOĞRULAMA KOMUTU (L35-F1): defter artık her YENİ açık-iş kaydından "yanlışsa şu komut
-    # gösterir" satırını ister. Terfi bir MAKİNE adımıdır; işin ürününü henüz bilmez — ama
-    # bu kaydın iddiası ("bu layiha inşa EDİLMEDİ") tam olarak belgenin statü satırında
-    # yaşıyor: yukarıda "İNŞA YOK" damgasını biz yazdık. Belge inşa edilip statüsü
-    # değiştiğinde ya da arşive taşındığında komut 0 döner → kayıt BAYAT demektir.
-    # Değer-okumaz (yalnız sayı), tek satır. Layihanın sahibi ilk inşa turunda bunu
-    # işin GERÇEK ürününü ölçen komutla değiştirmelidir (`ekle ... --dogrula "<yeni>"`).
-    dogrula = "grep -c 'İNŞA YOK' %s" % yeni_dokuman_rel
-    cmd = [defteri_bin, "ekle", "--slug", slug, "--konu", r.get("baslik",""),
-           "--dokuman", yeni_dokuman_rel, "--resume", resume, "--dogrula", dogrula]
-    try:
-        out = subprocess.check_output(cmd, cwd=root, stderr=subprocess.STDOUT).decode()
-    except subprocess.CalledProcessError as e:
-        sys.stderr.write("HATA: layiha-defteri.sh ekle başarısız (%s): %s\n" % (slug, e.output.decode() if e.output else str(e)))
-        sys.exit(2)
-
-    m = re.search(r"\b(L\d+)\b", out)
-    layiha_kodu = m.group(1) if m else "?"
 
     with io.open(yeni_dokuman, "a", encoding="utf-8") as f:
         f.write("\n> Terfi: aday %s → layiha %s (%s)\n" % (r.get("id"), layiha_kodu, tarih))
