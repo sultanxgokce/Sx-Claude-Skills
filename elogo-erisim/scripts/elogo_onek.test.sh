@@ -38,6 +38,21 @@ kapi     "CAGRI değişkeni tanımlı"          grep -q 'CAGRI="\$0"' elogo.sh
 kapi     "demo modunda CAGRI bayrak taşır"  grep -q 'CAGRI="\$0 --demo"' elogo.sh
 red_kapi "🔴 bayrak-düşüren yönlendirme YOK" grep -q 'bash \$0 login' elogo.sh
 
+echo "🔒 ORTAM KİLİDİ (Sultan kararı 2026-08-22)"
+# Niçin sert: canlı kimlik MMEx kutusunda DURUYOR. Sınır belgede yazılıydı, kodda değildi.
+# Kilit "demo" iken canlı çağrı REDDEDİLMELİ — sessizce demoya düşürmek de yanlış olurdu
+# (o zaman kullanıcı canlı sandığını demoya gönderir ve gönderdiğini sanır).
+_K=$(mktemp); echo demo > "$_K"
+if ELOGO_ORTAM_KILIDI="$_K" bash elogo.sh --canli doctor >/dev/null 2>&1; then
+  DUSEN=$((DUSEN+1)); echo "  ✗ kilit DEMO iken --canli GEÇTİ (geçmemeliydi)"
+else
+  GECEN=$((GECEN+1)); echo "  ✓ kilit DEMO iken --canli reddedildi"
+fi
+kapi "kilit kodu okunuyor (kabuk)"     grep -q "ORTAM_KILIDI" elogo.sh
+kapi "kilit kodu okunuyor (gönderici)" grep -q "ORTAM_KILIDI" elogo_gonder.py
+red_kapi "🔴 kilit sessizce demoya DÜŞÜRMÜYOR" grep -q "kilit == .demo. and not n.canli" elogo_gonder.py
+rm -f "$_K"
+
 echo "🔴 Sabit canlı-önek sızıntısı KALMADI (asıl regresyon kapısı)"
 # Öneke bağlanmış olması gereken yerlerde çıplak ELOGO_WS_* kalıntısı var mı?
 # Canlı dalda üç satır BİLEREK duruyor (eski doğrulayıcı sabit ad okuyor) → tavan 3.

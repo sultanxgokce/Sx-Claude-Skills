@@ -41,6 +41,7 @@ paramList (Key=Value):
 """
 from __future__ import annotations
 
+import os
 import re
 import sys
 from pathlib import Path
@@ -178,7 +179,21 @@ def _main(argv: list[str]) -> int:
         print(f"⛔ paketlenemedi: {e}", file=sys.stderr)
         return 1
 
-    ortam = "ELOGO" if n.canli else "ELOGO_DEMO"
+    # 🔴 ORTAM KİLİDİ — kutu demoya kilitliyse --canli REDDEDİLİR (Sultan kararı 2026-08-22).
+    #    Gönderim geri alınamaz; bu yüzden kilit ASIL burada işler.
+    kilit_yolu = Path(os.environ.get("ELOGO_ORTAM_KILIDI", "")) or Path.home() / ".config" / "elogo-ortam"
+    kilit = ""
+    try:
+        kilit = kilit_yolu.read_text(encoding="utf-8").strip().lower()
+    except OSError:
+        pass
+    if kilit == "demo" and n.canli:
+        print(f"⛔ Bu kutu DEMO ortamına kilitli ({kilit_yolu}) — canlı gönderim REDDEDİLDİ.",
+              file=sys.stderr)
+        print("   Canlıya geçmek bilinçli bir adımdır: kilit dosyasını Sultan değiştirir.",
+              file=sys.stderr)
+        return 6
+    ortam = "ELOGO" if (n.canli and kilit != "demo") else "ELOGO_DEMO"
     print(f"ortam : {'🔴 CANLI' if n.canli else 'demo'}")
     print(f"belge : {paket['fileName']} · özet {paket['hash']}")
     print(f"etiket: {n.alias or '(verilmedi — alıcının tek etiketi varsa oraya gider,'
