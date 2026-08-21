@@ -31,8 +31,31 @@ PYSOAP="$HERE/elogo_soap.py"
 #
 # 🔴 Varsayılan CANLI'dır ve öyle kalmalı — mevcut çağrıların davranışı bayt-aynı sürsün diye.
 #    Demo'ya geçmek AÇIK niyet ister: `--demo`.
+# ── ORTAM KİLİDİ (Sultan kararı 2026-08-22) ─────────────────────────────────
+# Kutuya konan tek kelimelik dosya, o kutunun hangi ortamda çalışacağını KİLİTLER.
+# Niçin: canlı kimlik MMEx kutusunda DURUYOR (Sultan kararı). Sınır belgede yazılıydı
+# ama kodda değildi — tek koruma bir bayraktı ve bu aracın varsayılanı CANLI'ydı.
+# Yani `--demo` yazmayı unutmak, sessizce gerçek fatura kesmek demekti.
+#
+# 🔴 FAIL-CLOSED ve ŞEFFAF: kilit "demo" iken canlı istenirse REDDEDİLİR.
+#    Sessizce demoya düşürmek de yanlış olurdu — o zaman kullanıcı canlı sandığı
+#    faturayı demoya gönderir ve gönderdiğini sanır. İki yön de sessiz olmamalı.
+# Desen yeni değil: kasa aracı da kutu-başına `~/.config/vault-backend` ile ayrılıyor.
+ORTAM_KILIDI="${ELOGO_ORTAM_KILIDI:-$HOME/.config/elogo-ortam}"
+KILIT=""
+[ -f "$ORTAM_KILIDI" ] && KILIT="$(tr -d '[:space:]' < "$ORTAM_KILIDI" | tr '[:upper:]' '[:lower:]')"
+
 ONEK="ELOGO"
+[ "$KILIT" = "demo" ] && ONEK="ELOGO_DEMO"
 if [ "${1:-}" = "--demo" ]; then ONEK="ELOGO_DEMO"; shift; fi
+if [ "${1:-}" = "--canli" ]; then
+  if [ "$KILIT" = "demo" ]; then
+    printf '\033[31m⛔ Bu kutu DEMO ortamına kilitli (%s) — canlı çağrı REDDEDİLDİ.\033[0m\n' "$ORTAM_KILIDI" >&2
+    printf '   Canlıya geçmek bilinçli bir adımdır: kilit dosyasını Sultan değiştirir.\n' >&2
+    exit 6
+  fi
+  ONEK="ELOGO"; shift
+fi
 K_USER="${ONEK}_WS_USER"; K_PASS="${ONEK}_WS_PASSWORD"; K_WSDL="${ONEK}_WS_WSDL"
 # 🔴 Kendini gösteren yönlendirmeler bayrağı TAŞIMALI.
 # Bulan: MUHASİP (MMEx), ilk koşumunda, 2026-08-22. `--demo doctor` "Önce: bash …/elogo.sh login"
