@@ -29,7 +29,8 @@ TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
 cat > "$TMP/tam.json" <<'JSON'
 {
   "duzenleyen": {"unvan": "ÖRNEK ALICI LTD. ŞTİ.", "vkn": "1111111111",
-                 "vergi_dairesi": "Örnek VD", "il": "Ankara", "ilce": "Çankaya"},
+                 "vergi_dairesi": "Örnek VD", "adres": "Örnek Mah. Deneme Cad. No:1",
+                 "il": "Ankara", "ilce": "Çankaya"},
   "muhatap":    {"unvan": "ÖRNEK SATICI A.Ş.",   "vkn": "2222222222",
                  "vergi_dairesi": "Deneme VD", "il": "İstanbul", "ilce": "Kadıköy"},
   "tarih": "2026-08-21",
@@ -122,6 +123,29 @@ icermez "G1 · requests yok"               "import requests" "$GOVDE"
 icermez "G2 · zeep/SOAP yok"              "zeep" "$GOVDE"
 icermez "G3 · urllib çağrısı yok"         "urlopen" "$GOVDE"
 icermez "G4 · socket yok"                 "import socket" "$GOVDE"
+
+echo "── I · ÜRETİCİ ZORUNLU ALANLARI (kaynak: Logo 'Zorunlu Bilgiler', 2026-08-21) ───"
+icerir "I1 · vergi TÜRÜ kodu yazılıyor"   "<cbc:TaxTypeCode>0015</cbc:TaxTypeCode>" "$CIK"
+icerir "I2 · vergi türü adı"              "<cbc:Name>KDV</cbc:Name>" "$CIK"
+icerir "I3 · TaxCategory sarmalı"         "<cac:TaxCategory>" "$CIK"
+python3 - "$TMP" <<'PY2'
+import json,sys
+t=sys.argv[1]; tam=json.load(open(f"{t}/tam.json",encoding="utf-8"))
+def yaz(ad,f):
+    d=json.loads(json.dumps(tam)); f(d); json.dump(d,open(f"{t}/{ad}.json","w",encoding="utf-8"))
+yaz("vdsiz",     lambda d: d["duzenleyen"].pop("vergi_dairesi"))
+yaz("adressiz",  lambda d: d["duzenleyen"].pop("adres"))
+yaz("muhatap-vdsiz", lambda d: d["muhatap"].pop("vergi_dairesi"))
+PY2
+for f in vdsiz adressiz; do
+  OUT="$(python3 ubl_iade.py kur "$TMP/$f.json" 2>&1)"; R=$?
+  kapi    "I · duzenleyen $f → RC=2"      "2" "$R"
+  icermez "I · duzenleyen $f → XML YOK"   "<cbc:InvoiceTypeCode>" "$OUT"
+done
+I4="$(python3 ubl_iade.py denetle "$TMP/vdsiz.json" 2>&1)"
+icerir "I4 · gerekçe ÜRETİCİye dayanıyor" "üretici:" "$I4"
+python3 ubl_iade.py kur "$TMP/muhatap-vdsiz.json" >/dev/null 2>&1
+kapi   "I5 · MUHATAP vergi dairesiz GEÇER (üretici: 'varsa')" "0" "$?"
 
 echo "── H · TCKN tarafı (şahıs muhatap) ──────────────────────────────────────"
 python3 - "$TMP" <<'PY'
