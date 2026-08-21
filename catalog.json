@@ -616,7 +616,7 @@
       "id": "elogo-erisim",
       "type": "agent",
       "name": "e-Logo Erişim (panele girmeden SOAP WS)",
-      "version": "1.4.0",
+      "version": "1.5.0",
       "description": "e-Logo (e-Fatura/e-Arşiv) işlerini saf SOAP WS ile yapar: durum sorgula, PDF/UBL indir. Vault-first sır-çözüm + tek-sefer gizli-intake. SALT-OKUR + kuyruk-güvenli (prod B2B senkronunu bozmaz). (erisim-skill-fabrikasi ürünü.)"
     },
     {
