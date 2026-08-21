@@ -1,0 +1,14 @@
+# arcelik-fatura-kesim — AHÎ ile üretildi (kademe: kalfa)
+# version manifest'te YOK (tek-evi SKILL.md frontmatter — ADR-001).
+tier: kalfa
+name: arcelik-fatura-kesim
+generic_goal: "Arçelik paketlerinde kes/kesme kararı + kalem eşlemesi (fail-closed)"
+activation:
+  onKeyword: "arcelik-fatura-kesim · kesilecek fatura var mı · fiş paketi faturası · iade paketi · malzeme iade"
+# SYS (L01) doğum-sonrası yaşam-döngüsü kanalı — owner'ı DOLDUR (SYS FAZ-4'te zorunlu).
+feedback:
+  owner: "MUHASIP (MMEx) — e-Fatura kalemi"
+  channel: skill-geri-bildirim.jsonl
+  sla_tier: closure
+install_targets:
+  - _global

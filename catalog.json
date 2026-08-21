@@ -1361,6 +1361,24 @@
         "_global"
       ],
       "family": "plan-motoru (mimari, çekirdek)"
+    },
+    {
+      "id": "arcelik-mail-erisim",
+      "type": "agent",
+      "name": "Arçelik Mail Erişimi (fiş paketi maillerine bağlanır)",
+      "version": "1.0.0"
+    },
+    {
+      "id": "arcelik-fatura-kesim",
+      "type": "agent",
+      "name": "Arçelik Fatura Kesim Kararı (hangi pakete kesilir/kesilmez)",
+      "version": "1.0.0"
+    },
+    {
+      "id": "elogo-portal-otomasyon",
+      "type": "agent",
+      "name": "e-Logo Portal Otomasyonu (yükle · sıra numarası · gönder)",
+      "version": "1.0.0"
     }
   ]
 }
