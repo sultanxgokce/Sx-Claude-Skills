@@ -55,6 +55,12 @@ IADE_TIPI = "IADE"
 #: VUK 229 gereği iade faturası bu şerhi taşır (mali müşavir teyidi bekleyen madde).
 IADE_SERHI = "İADE FATURASIDIR"
 
+#: Vergi türü kodu. Üreticinin "Zorunlu Bilgiler" belgesi faturada "vergi TÜRÜ, oranı ve
+#: tutarı" bulunmasını şart koşuyor — bizde oran ve tutar vardı, TÜR yoktu. UBL-TR'de tür,
+#: `cac:TaxCategory/cac:TaxScheme/cbc:TaxTypeCode` içinde taşınır. 0015 = KDV.
+KDV_TUR_KODU = "0015"
+KDV_ADI = "KDV"
+
 VKN_RE = re.compile(r"^\d{10}$")
 TCKN_RE = re.compile(r"^\d{11}$")
 TARIH_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
@@ -147,6 +153,16 @@ class IadeFaturasi:
                 eksik.append(f"{etiket}.unvan")
             if not (VKN_RE.match(taraf.vkn or "") or TCKN_RE.match(taraf.vkn or "")):
                 eksik.append(f"{etiket}.vkn (10 hane VKN ya da 11 hane TCKN olmalı)")
+
+        # 🔴 Üreticinin "Zorunlu Bilgiler" belgesine göre DÜZENLEYEN tarafı için
+        # "iş adresi" ve "bağlı olduğu vergi dairesi" ZORUNLUDUR. Bunlar bizde
+        # opsiyoneldi — yani eksik adresli bir fatura sessizce kurulabiliyordu.
+        # MUHATAP için aynı belge "VARSA vergi dairesi" diyor → onda zorunlu DEĞİL.
+        # Asimetri bilinçlidir ve kaynağı üreticinin kendi metnidir, bizim yorumumuz değil.
+        if not self.duzenleyen.vergi_dairesi.strip():
+            eksik.append("duzenleyen.vergi_dairesi (üretici: 'bağlı olduğu vergi dairesi' zorunlu)")
+        if not self.duzenleyen.adres.strip():
+            eksik.append("duzenleyen.adres (üretici: 'iş adresi' zorunlu)")
 
         if not TARIH_RE.match(self.tarih or ""):
             eksik.append("tarih (YYYY-MM-DD)")
@@ -286,6 +302,11 @@ def kur(f: IadeFaturasi) -> str:
         _e(alt, "cbc", "TaxableAmount", _tl(k.matrah_kurus()), currencyID=f.para_birimi)
         _e(alt, "cbc", "TaxAmount", _tl(k.kdv_kurus()), currencyID=f.para_birimi)
         _e(alt, "cbc", "Percent", str(k.kdv_orani))
+        # Vergi TÜRÜ (oran/tutar yetmez — üretici belgesi üçünü birden istiyor).
+        kategori = _e(alt, "cac", "TaxCategory")
+        sema = _e(kategori, "cac", "TaxScheme")
+        _e(sema, "cbc", "Name", KDV_ADI)
+        _e(sema, "cbc", "TaxTypeCode", KDV_TUR_KODU)
 
         urun = _e(satir, "cac", "Item")
         _e(urun, "cbc", "Name", k.ad)
