@@ -1,7 +1,7 @@
 ---
 name: elogo-erisim
 type: agent
-version: 1.4.0
+version: 1.5.0
 description: >
   e-Logo (Logo e-Fatura/e-Arşiv entegratörü) erişimi gereken işleri PANELE GİRMEDEN, saf SOAP WS ile
   yapar: fatura durumu sorgula, kesilmiş e-Arşiv PDF/UBL indir, **iade faturasının UBL-TR belgesini
@@ -81,6 +81,28 @@ python3 ubl_iade.py kur     <veri.json>   # UBL-TR XML üretir (eksikse RC 2 ve 
 **Fail-closed:** eksik alanla belge üretilmez. Zorunlu alanlar üreticinin kendi
 *"Zorunlu Bilgiler"* belgesinden kalibre edildi (vergi türü `0015` · düzenleyenin vergi dairesi
 ve iş adresi zorunlu · muhatapta *"varsa"* → zorunlu değil). Sınav: `ubl_iade.test.sh` (55 kapı).
+
+## İKİ FATURA TÜRÜ — satış ⟂ iade (v1.5.0, Sultan direktifi 2026-08-22)
+
+| tür | modül | `InvoiceTypeCode` | zorunlu şerh | dayanak (`BillingReference`) |
+|---|---|---|---|---|
+| **Satış** (olağan) | `ubl_satis.py` | `SATIS` | — | **YOK** |
+| **İade** (alıcı keser) | `ubl_iade.py` | `IADE` | "İADE FATURASIDIR" | **ZORUNLU** (yoksa GİB 1150) |
+
+Gövde ikisinde de **ortaktır** (`ubl_ortak.py`): taraflar, kalemler, kuruş aritmetiği,
+KDV türü/oranı/tutarı, numara politikası, XML iskeleti. Ayrıştıkları yer yukarıdaki üç sütun.
+
+🔴 **İki ayrı sınıf, bilerek.** `SatisFaturasi` dayanak alanını **kabul etmez**;
+`IadeFaturasi` dayanaksız **kurulmaz**. Böylece "satış sanıp dayanağı atlama" ve
+"satışa dayanak ekleyip belgeyi iade gibi gösterme" hataları yapısal olarak imkânsız.
+Sınav bu ayrımı iki yönden de kilitler.
+
+🔴 **Ortak gövdeye çıkarma bir refactor'dü ve kanıtlandı:** iade kurucusu 396 → 190 satıra
+indi, 55 kapının 55'i yeşil kaldı ve **üretilen XML eski koda göre bayt bayt aynı**
+(4730 bayt, `diff` ile doğrulandı). Üçüncü bir kopya açmak yerine çatalın kökü kapatıldı.
+
+Sınavlar: `ubl_satis.test.sh` (**24 kapı**) · `ubl_iade.test.sh` (**55 kapı**).
+Toplam paket: **132 kapı** (satış 24 · iade 55 · paketleyici 17 · gönderici 22 · önek 14).
 
 ## Taşıma — `elogo_soap.py`
 ```
