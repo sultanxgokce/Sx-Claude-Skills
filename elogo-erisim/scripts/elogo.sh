@@ -22,6 +22,18 @@ ENV_FILE="${CORTEX_ACCESS_ENV:-$HOME/.config/cortex-access.env}"
 WSDL_DEFAULT="https://pb.elogo.com.tr/PostBoxService.svc?wsdl"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PYHELP="$HERE/elogo_ws.py"
+PYSOAP="$HERE/elogo_soap.py"
+
+# ── ORTAM ÖNEKİ (v1.4.0) ────────────────────────────────────────────────────
+# Kimlik değişkenleri ortama göre AYRI yaşar:  ELOGO_WS_*  (canlı)  ⟂  ELOGO_DEMO_WS_*  (demo)
+# Bu ayrım python tarafında zaten vardı (`elogo_soap.kimlik_env`); eksik olan kabuk tarafıydı,
+# bu yüzden demo girişi elle yapılmak zorunda kalıyordu (SERDAR tespiti, 2026-08-21).
+#
+# 🔴 Varsayılan CANLI'dır ve öyle kalmalı — mevcut çağrıların davranışı bayt-aynı sürsün diye.
+#    Demo'ya geçmek AÇIK niyet ister: `--demo`.
+ONEK="ELOGO"
+if [ "${1:-}" = "--demo" ]; then ONEK="ELOGO_DEMO"; shift; fi
+K_USER="${ONEK}_WS_USER"; K_PASS="${ONEK}_WS_PASSWORD"; K_WSDL="${ONEK}_WS_WSDL"
 
 red(){ printf '\033[31m%s\033[0m\n' "$*"; }
 grn(){ printf '\033[32m%s\033[0m\n' "$*"; }
@@ -32,6 +44,13 @@ die(){ red "✗ $*"; exit 1; }
 setup_runtime(){
   [ -f /config/.local/bin/env ] && . /config/.local/bin/env 2>/dev/null || true
   export PATH="$HOME/.local/bin:$PATH"
+  # DEMO yolu zeep KULLANMAZ (elogo_soap.py saf python3) → uv'ye ihtiyacı yok.
+  # Bunu ayırmazsak, uv kurulu olmayan bir kutuda demo girişi de ölür — oysa
+  # MUHASİP'in kutusunda ölçülen şey python3'ün VARLIĞIYDI, uv'nin değil.
+  if [ "$ONEK" = "ELOGO_DEMO" ]; then
+    command -v python3 >/dev/null 2>&1 || die "python3 yok"
+    return 0
+  fi
   command -v uv >/dev/null 2>&1 || die "uv yok (runtime bootstrap eksik)"
 }
 run_py(){ uv run --with zeep --with lxml python3 "$PYHELP" "$@"; }
@@ -63,15 +82,15 @@ _vault_parite(){  # _vault_parite <kimlik-durumu>  — vault-dahil 3-durum parit
 # ── kimlik yükleme (DEĞERİ EKRANA BASMADAN) ─────────────────────────────────
 load_creds(){
   # VAULT-FIRST: Infisical/vault seam → cortex-access.env tazele (sonra dosyadan source = vault kazanır)
-  _vault_refresh ELOGO_WS_USER ELOGO_WS_PASSWORD ELOGO_WS_WSDL
+  _vault_refresh "$K_USER" "$K_PASS" "$K_WSDL"
   if [ -f "$ENV_FILE" ]; then
     set -a
-    . <(grep -E '^export ELOGO_WS_(USER|PASSWORD|WSDL)=' "$ENV_FILE" 2>/dev/null) || true
+    . <(grep -E "^export ${ONEK}_WS_(USER|PASSWORD|WSDL)=" "$ENV_FILE" 2>/dev/null) || true
     set +a
   fi
-  export ELOGO_WS_WSDL="${ELOGO_WS_WSDL:-$WSDL_DEFAULT}"
+  [ -n "$(eval "printf %s \"\${$K_WSDL:-}\"")" ] || export "$K_WSDL"="$WSDL_DEFAULT"
 }
-have_creds(){ [ -n "${ELOGO_WS_USER:-}" ] && [ -n "${ELOGO_WS_PASSWORD:-}" ]; }
+have_creds(){ [ -n "$(eval "printf %s \"\${$K_USER:-}\"")" ] && [ -n "$(eval "printf %s \"\${$K_PASS:-}\"")" ]; }
 
 # ── env'e sır yaz (dup'ı çıkar, 600, DEĞER görünmez) ────────────────────────
 put_env(){  # put_env KEY VALUE
@@ -92,27 +111,39 @@ e-Logo Web Servis kullanıcısı ile giriş (bir kerelik).
 Bağlantı (Web Servis) Kullanıcısı → Yeni Ekle), ana insan-şifreni WS'e KOYMA.
 Girdiler GİZLİ okunur (ekrana/geçmişe/argv'ye düşmez).
 EOF
-  local user pw
+  [ "$ONEK" = "ELOGO_DEMO" ] && ylw "• DEMO ortamı — gerçek fatura kesilmez, gerçek kontör harcanmaz."
+  local user pw wsdl
   read -rp  'WS Kullanıcı Kodu : ' user
   read -rsp 'WS Şifre          : ' pw; echo
   [ -n "$user" ] && [ -n "$pw" ] || die "kullanıcı/şifre boş"
   setup_runtime
-  ELOGO_WS_USER="$user" ELOGO_WS_PASSWORD="$pw" ELOGO_WS_WSDL="${ELOGO_WS_WSDL:-$WSDL_DEFAULT}" \
-    run_py doctor >/dev/null 2>&1 \
-    || { red "✗ giriş doğrulanamadı (kullanıcı/şifre hatalı ya da WSDL erişilemedi)"; exit 1; }
-  put_env ELOGO_WS_USER "$user"
-  put_env ELOGO_WS_PASSWORD "$pw"
-  put_env ELOGO_WS_WSDL "${ELOGO_WS_WSDL:-$WSDL_DEFAULT}"
+  wsdl="$(eval "printf %s \"\${$K_WSDL:-}\"")"; [ -n "$wsdl" ] || wsdl="$WSDL_DEFAULT"
+  # 🔴 Doğrulayıcı ÖNEKE göre seçilir. Demo, zeep'siz taşıyıcıdan (elogo_soap.py) geçer;
+  #    o taşıyıcı öneki parametre alır, `elogo_ws.py` ise ELOGO_WS_* adlarını SABİT okur.
+  #    Canlı yol bilerek eski doğrulayıcıda bırakıldı → mevcut davranış bayt-aynı kalsın
+  #    (iki-kopya çatalı bilinen borçtur, burada büyütülmedi, kapatılması AYRI iş).
+  if [ "$ONEK" = "ELOGO_DEMO" ]; then
+    env "$K_USER=$user" "$K_PASS=$pw" "$K_WSDL=$wsdl" python3 "$PYSOAP" "$ONEK" >/dev/null 2>&1 \
+      || { red "✗ giriş doğrulanamadı (kullanıcı/şifre hatalı ya da uç-adres erişilemedi)"; exit 1; }
+  else
+    ELOGO_WS_USER="$user" ELOGO_WS_PASSWORD="$pw" ELOGO_WS_WSDL="$wsdl" \
+      run_py doctor >/dev/null 2>&1 \
+      || { red "✗ giriş doğrulanamadı (kullanıcı/şifre hatalı ya da WSDL erişilemedi)"; exit 1; }
+  fi
+  put_env "$K_USER" "$user"
+  put_env "$K_PASS" "$pw"
+  put_env "$K_WSDL" "$wsdl"
   unset pw
-  grn "✓ giriş doğrulandı → $ENV_FILE (600)"
+  grn "✓ giriş doğrulandı ($ONEK) → $ENV_FILE (600)"
   echo "  Kanonik pointer öner: Nexus/_agents/credentials.yaml → [SIR: … → elogo-ws-user/pass]"
 }
 
 cmd_doctor(){  # 3-durum: yeşil (geçerli) / kırmızı (fail) / doğrulanmadı
   setup_runtime; load_creds
   have_creds || { ylw "• doğrulanmadı — kimlik yok. Önce: bash $0 login"; _vault_parite "doğrulanmadı"; exit 4; }
-  if run_py doctor >/dev/null 2>&1; then
-    grn "✓ e-Logo WS erişimi GEÇERLİ (kullanıcı: ${ELOGO_WS_USER})"
+  if { [ "$ONEK" = "ELOGO_DEMO" ] && python3 "$PYSOAP" "$ONEK" >/dev/null 2>&1; } \
+     || { [ "$ONEK" != "ELOGO_DEMO" ] && run_py doctor >/dev/null 2>&1; }; then
+    grn "✓ e-Logo WS erişimi GEÇERLİ ($ONEK · kullanıcı: $(eval "printf %s \"\${$K_USER}\""))"
     _vault_parite "yeşil"
     exit 0
   else
@@ -141,6 +172,8 @@ cmd_xml(){    # xml <ETTN> [out.xml] — UBL XML indir (salt-okur)
 usage(){ cat <<EOF
 e-Logo erişim CLI — salt-okur, kuyruk-güvenli.
   $0 login            Bir-kerelik gizli giriş (WS kullanıcı+şifre → doğrula → kaydet)
+  $0 --demo login     Aynısı, DEMO ortamı için (ELOGO_DEMO_WS_* önekine yazar)
+                      --demo İLK argüman olmalı ve her komutta çalışır (doctor dahil).
   $0 doctor           3-durum sağlık kontrolü (yeşil/kırmızı/doğrulanmadı)
   $0 status <ETTN>    Fatura durumu (getInvoiceStatus)
   $0 get <ETTN> [f]   Kesilmiş e-Arşiv PDF'ini indir
