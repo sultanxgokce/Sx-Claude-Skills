@@ -1,7 +1,7 @@
 ---
 name: elogo-erisim
 type: agent
-version: 1.3.0
+version: 1.4.0
 description: >
   e-Logo (Logo e-Fatura/e-Arşiv entegratörü) erişimi gereken işleri PANELE GİRMEDEN, saf SOAP WS ile
   yapar: fatura durumu sorgula, kesilmiş e-Arşiv PDF/UBL indir, **iade faturasının UBL-TR belgesini
@@ -131,6 +131,26 @@ olduğu gibi yazıyorum:
 (`Get2FACode`, arabirim dokümanı s.24) — insansız akışa uymaz. Sultan 2026-08-21'de hattın
 **e-Fatura** üstüne kurulmasına karar verdi. Bu bir eksiklik değil, bir karardır; kodda
 sınavla kilitli.
+
+### Ortam öneki — `--demo` (v1.4.0)
+Kimlik değişkenleri ortama göre **ayrı** yaşar: `ELOGO_WS_*` (canlı) ⟂ `ELOGO_DEMO_WS_*` (demo).
+Bu ayrım python tarafında baştan vardı; eksik olan kabuk tarafıydı, bu yüzden demo girişi
+elle yapılmak zorunda kalıyordu (SERDAR tespiti, 2026-08-21).
+
+```
+elogo.sh --demo login      # demo kimliğini gizli al, doğrula, DEMO önekine yaz
+elogo.sh --demo doctor     # demo erişimini 3-durum raporla
+elogo.sh login             # canlı — davranış DEĞİŞMEDİ
+```
+🔴 **Varsayılan canlıdır ve öyle kalmalı** — mevcut çağrılar bayt-aynı sürsün diye.
+Demo'ya geçmek açık niyet ister. Sınav bunu tersinden de kilitler (`varsayılan DEMO DEĞİL`).
+
+🔴 **Demo yolu `uv`/`zeep` istemez** — saf `python3` üstünde koşar (`elogo_soap.py`). MUHASİP'in
+kutusunda ölçülen şey python3'ün varlığıydı; demo girişini uv'ye bağlamak orada işi öldürürdü.
+Canlı doğrulayıcı bilerek eski yolunda bırakıldı (iki-kopya çatalı bilinen borç, burada büyütülmedi).
+
+Sınav: `elogo_onek.test.sh` (**11 kapı**). Regresyon kanıtı: bayraksız `doctor` eski dosyayla
+**birebir aynı** çıktı ve exit kodunu verdi.
 
 ### Alıcı etiketi (`ALIAS`) — zorunlu değil
 Belge s.5: *"Etiket gönderilmezse; alıcının **tek** etiketi varsa belge bu etikete gönderilir.
