@@ -31,6 +31,13 @@ kapi "demo yolu zeep/uv İSTEMEZ"         grep -q 'command -v python3'          
 kapi "demo doğrulayıcı elogo_soap.py"    grep -q 'PYSOAP.*ONEK'                 elogo.sh
 kapi "yardımda --demo görünür"           grep -q -- '--demo login'              elogo.sh
 
+echo "🔴 Yönlendirme satırları bayrağı TAŞIYOR (MUHASİP bulgusu, 2026-08-22)"
+# Niçin sert: bayraksız bir "Önce: bash elogo.sh login" yönlendirmesi, mesajı harfiyen izleyen
+# kişiyi CANLI önekine kimlik yazmaya götürür. MUHASİP'in kutusunda kırmızı çizgi tam buydu.
+kapi     "CAGRI değişkeni tanımlı"          grep -q 'CAGRI="\$0"' elogo.sh
+kapi     "demo modunda CAGRI bayrak taşır"  grep -q 'CAGRI="\$0 --demo"' elogo.sh
+red_kapi "🔴 bayrak-düşüren yönlendirme YOK" grep -q 'bash \$0 login' elogo.sh
+
 echo "🔴 Sabit canlı-önek sızıntısı KALMADI (asıl regresyon kapısı)"
 # Öneke bağlanmış olması gereken yerlerde çıplak ELOGO_WS_* kalıntısı var mı?
 # Canlı dalda üç satır BİLEREK duruyor (eski doğrulayıcı sabit ad okuyor) → tavan 3.
