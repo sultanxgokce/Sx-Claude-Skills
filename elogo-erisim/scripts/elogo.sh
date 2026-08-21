@@ -34,6 +34,12 @@ PYSOAP="$HERE/elogo_soap.py"
 ONEK="ELOGO"
 if [ "${1:-}" = "--demo" ]; then ONEK="ELOGO_DEMO"; shift; fi
 K_USER="${ONEK}_WS_USER"; K_PASS="${ONEK}_WS_PASSWORD"; K_WSDL="${ONEK}_WS_WSDL"
+# 🔴 Kendini gösteren yönlendirmeler bayrağı TAŞIMALI.
+# Bulan: MUHASİP (MMEx), ilk koşumunda, 2026-08-22. `--demo doctor` "Önce: bash …/elogo.sh login"
+# diyordu — bayraksız. Mesajı harfiyen izleyen biri CANLI öneke kimlik yazardı; oysa o kutunun
+# kırmızı çizgisi tam olarak "canlı kimlik buraya konmaz"dı. Yardım metni yanlış yöne çağırırsa
+# koda yazılmış kapı bir işe yaramaz.
+CAGRI="$0"; [ "$ONEK" = "ELOGO_DEMO" ] && CAGRI="$0 --demo"
 
 red(){ printf '\033[31m%s\033[0m\n' "$*"; }
 grn(){ printf '\033[32m%s\033[0m\n' "$*"; }
@@ -140,20 +146,20 @@ EOF
 
 cmd_doctor(){  # 3-durum: yeşil (geçerli) / kırmızı (fail) / doğrulanmadı
   setup_runtime; load_creds
-  have_creds || { ylw "• doğrulanmadı — kimlik yok. Önce: bash $0 login"; _vault_parite "doğrulanmadı"; exit 4; }
+  have_creds || { ylw "• doğrulanmadı — kimlik yok. Önce: bash $CAGRI login"; _vault_parite "doğrulanmadı"; exit 4; }
   if { [ "$ONEK" = "ELOGO_DEMO" ] && python3 "$PYSOAP" "$ONEK" >/dev/null 2>&1; } \
      || { [ "$ONEK" != "ELOGO_DEMO" ] && run_py doctor >/dev/null 2>&1; }; then
     grn "✓ e-Logo WS erişimi GEÇERLİ ($ONEK · kullanıcı: $(eval "printf %s \"\${$K_USER}\""))"
     _vault_parite "yeşil"
     exit 0
   else
-    red "✗ e-Logo WS girişi BAŞARISIZ (şifre değişmiş/rotate olmuş olabilir). Yenile: bash $0 login"
+    red "✗ e-Logo WS girişi BAŞARISIZ (şifre değişmiş/rotate olmuş olabilir). Yenile: bash $CAGRI login"
     _vault_parite "kırmızı"
     exit 1
   fi
 }
 
-need_creds(){ setup_runtime; load_creds; have_creds || die "kimlik yok. Önce: bash $0 login"; }
+need_creds(){ setup_runtime; load_creds; have_creds || die "kimlik yok. Önce: bash $CAGRI login"; }
 
 cmd_status(){ need_creds; [ -n "${1:-}" ] || die "kullanım: $0 status <ETTN>"; run_py status "$1"; }
 
