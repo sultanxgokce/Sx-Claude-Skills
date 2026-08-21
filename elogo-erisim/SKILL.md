@@ -1,7 +1,7 @@
 ---
 name: elogo-erisim
 type: agent
-version: 1.2.0
+version: 1.3.0
 description: >
   e-Logo (Logo e-Fatura/e-Arşiv entegratörü) erişimi gereken işleri PANELE GİRMEDEN, saf SOAP WS ile
   yapar: fatura durumu sorgula, kesilmiş e-Arşiv PDF/UBL indir, **iade faturasının UBL-TR belgesini
@@ -100,23 +100,50 @@ kesmesi demektir.
    Tarayıcı-benzeri `User-Agent` **şart**. Kod bu hatayı yakalar ve *"bu bir kimlik hatası
    DEĞİLDİR"* der.
 
-## 🔴 GÖNDERME KAPISI — niçin kapalı
+## Gönderim hattı — `elogo_paket.py` + `elogo_gonder.py`
 
-Gönderme çağrısı bu pakette **yoktur ve bilerek yoktur**. Üç ölçülmüş sebep:
+**2026-08-21'de kapı aralandı.** Önceki sürümde burada üç sebeple "gönderme çağrısı yoktur"
+yazıyordu. Arabirim dokümanı geldi ve o sebeplerin **ikisi çürüdü** — dürüstlük gereği
+olduğu gibi yazıyorum:
 
-1. **`paramList` anahtarları eksik.** Yalnız bir tanesi biliniyor
-   (`SendDocument / DocumentType=OBJECTIONARCHIVEINVOICE`, sürüm dokümanlarından). Gerisi tahmin
-   olur; tahminle doldurulan alan **GİB reddi** ve boşa kontör demektir.
-2. **Taslak akışı belgesiz.** `SendDraftDocument` WSDL'de VAR ama üreticinin doküman deposunda
-   **0 sonuç** veriyor. Nasıl çağrılacağı hiçbir yerde yazılı değil.
-3. **e-Faturada iptal YOKTUR.** Yanlış kesilenin düzeltmesi *başka bir fatura kesmektir*.
-   Denenmemiş bir gönderme fonksiyonunu 13 kutuya dağıtmak, emniyeti olmayan silah dağıtmaktır.
+| eski sebep | bugünkü durum |
+|---|---|
+| "`paramList` anahtarları eksik" | ❌ **çürüdü** — tam liste belgede var, kodda uygulandı |
+| "taslak akışı belgesiz" | ❌ **çürüdü** — `SendDraftDocument` belgelendi (`DRAFTINVOICE` + `UUID`) |
+| "e-Faturada iptal yoktur" | ✅ **ayakta** — bu yüzden gönderim hâlâ dört kapının arkasında |
 
-**Kapı ne zaman açılır:** e-Logo destek talebi `#6683484` cevabı gelip `paramList` anahtarları
-ve taslak akışı belgelendiğinde; ardından **demo ortamında** uçtan uca prova geçtiğinde.
+### İki dosya, iki risk sınıfı
+- **`elogo_paket.py`** — saf hesap: UBL → zip → base64 → **MD5**. Ağsız, şirketsiz, kimliksiz.
+  Sınav: `elogo_paket.test.sh` (**17 kapı**). En değerli ikisi özetin *hangi veri üstünde*
+  alındığını kilitler — zip'in ham baytları üstünde, base64 metni üstünde değil.
+- **`elogo_gonder.py`** — geri alınamaz taraf. `SendDocument` zarfını kurar ve gönderir.
+  Sınav: `elogo_gonder.test.sh` (**22 kapı**), tamamı ağsız; ikisi taşıyıcıyı sabote edip
+  *"kapı düştüğünde ağa çıkılmıyor mu"* sorusunu fiilen ölçer.
 
-⚠️ **Demo'da gönderim de garanti değil:** sözleşme §7.7 → *"kontör bitince belge ALINIR ama
-GÖNDERİLEMEZ"* ve demo hesabında `Kalan Kontör: 0` görüldü. Prova öncesi demo kontörü ölçülmeli.
+### Dört kapı (hepsi geçilmeden tek bayt gitmez)
+1. **Ortam** açıkça seçilir — varsayılan **demo**; canlı `--canli` ister.
+2. **Kuru koşum varsayılandır** — `--gercekten-gonder` yoksa zarf kurulur, **ağa çıkılmaz**.
+3. **Sultan onayı beyanı** — yer-tutucu ve **tarihsiz** beyan reddedilir.
+4. **Paket bütünlüğü** — dört alan dolu, özet 32 hane MD5 (SHA-256 kazası yakalanır).
+
+### 🔴 Yeni e-Arşiv bilerek DESTEKLENMİYOR
+`EARCHIVETYPE2` her gönderimde Sultan'ın telefonuna **180 saniyelik bir kod** düşürür
+(`Get2FACode`, arabirim dokümanı s.24) — insansız akışa uymaz. Sultan 2026-08-21'de hattın
+**e-Fatura** üstüne kurulmasına karar verdi. Bu bir eksiklik değil, bir karardır; kodda
+sınavla kilitli.
+
+### Alıcı etiketi (`ALIAS`) — zorunlu değil
+Belge s.5: *"Etiket gönderilmezse; alıcının **tek** etiketi varsa belge bu etikete gönderilir.
+**Birden fazla** etiketi varsa **hata** üretilir."* → etiketi bilmiyorsak boş bırakmak meşrudur;
+hata alırsak sebebini e-Logo söyler.
+
+### Hâlâ ölçülmemiş üç şey (gerçek gönderimden ÖNCE kapanmalı)
+1. **Kontör** — servisten sorulamıyor (belgede 0 geçiş, ölçüldü). Sözleşme §7.7: kontör bitince
+   belge **alınır ama gönderilemez**. Demo hesabında `Kalan Kontör: 0` görülmüştü.
+2. **Tanımlı fatura serisi yok** — demo'da `GetPrefixLastNumberList` **boş liste** döndü.
+   Numara neyden atanacağı ölçülmedi.
+3. **Alıcının e-Fatura mükellefi olup olmadığı** — `CheckGIBUser` cevaplar ama **VKN elde yok**.
+   Mükellef değilse e-Fatura yolu çalışmaz, e-Arşiv gerekir (ve o da 2FA'ya bağlıdır).
 
 ## Türev katmanı — her işin kendi eşlemesi
 Gövde **şirketsiz ve işsizdir**. Hangi cari, hangi kalem, hangi KDV oranı, hangi dayanak fatura —
