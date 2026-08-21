@@ -1,0 +1,14 @@
+# arcelik-mail-erisim — AHÎ ile üretildi (kademe: kalfa)
+# version manifest'te YOK (tek-evi SKILL.md frontmatter — ADR-001).
+tier: kalfa
+name: arcelik-mail-erisim
+generic_goal: "Arçelik Exchange fiş-paketi hattına salt-okur erişim + kopunca onarım reçetesi"
+activation:
+  onKeyword: "arcelik-mail-erisim · fiş paketi · Arçelik maili · mail bağlantısı koptu · AADSTS · Exchange token"
+# SYS (L01) doğum-sonrası yaşam-döngüsü kanalı — owner'ı DOLDUR (SYS FAZ-4'te zorunlu).
+feedback:
+  owner: "MUHASIP (MMEx) — e-Fatura kalemi; hat sahibi MUAVİN/SERDAR ile ortak"
+  channel: skill-geri-bildirim.jsonl
+  sla_tier: closure
+install_targets:
+  - _global

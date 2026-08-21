@@ -1,0 +1,14 @@
+# elogo-portal-otomasyon — AHÎ ile üretildi (kademe: kalfa)
+# version manifest'te YOK (tek-evi SKILL.md frontmatter — ADR-001).
+tier: kalfa
+name: elogo-portal-otomasyon
+generic_goal: "e-Logo portalını tarayıcıyla sürmek (kuru-koşum varsayılan, fail-closed)"
+activation:
+  onKeyword: "elogo-portal-otomasyon · portalden fatura yükle · sıra numarası al · e-Fatura Yükleme"
+# SYS (L01) doğum-sonrası yaşam-döngüsü kanalı — owner'ı DOLDUR (SYS FAZ-4'te zorunlu).
+feedback:
+  owner: "MUHASIP (MMEx)"
+  channel: skill-geri-bildirim.jsonl
+  sla_tier: closure
+install_targets:
+  - _global
