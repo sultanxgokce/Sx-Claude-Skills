@@ -1,7 +1,7 @@
 ---
 name: elogo-erisim
 type: agent
-version: 1.6.0
+version: 1.7.0
 description: >
   e-Logo (Logo e-Fatura/e-Arşiv entegratörü) erişimi gereken işleri PANELE GİRMEDEN, saf SOAP WS ile
   yapar: fatura durumu sorgula, kesilmiş e-Arşiv PDF/UBL indir, **iade faturasının UBL-TR belgesini
@@ -21,6 +21,16 @@ nexus_catalog: "AI Engineer Workbook > Skill Kataloğu"
 
 > e-Fatura/e-Arşiv işlerini Sultan'a tekrar tekrar giriş sordurmadan yap.
 > Kanon reçete: `erisim-skill-fabrikasi/recipes/elogo.md`. Omurga: ../cloudflare-erisim/SKILL.md.
+
+## 🔴 ÖNCE BUNU OKU — `TUZAKLAR.md`
+
+Bu yeteneği ilk kez alıyorsan **`TUZAKLAR.md`'yi oku.** İçinde 2026-08-21/22 gecesinde
+**ölçülerek** bulunmuş dokuz başlık var: SOAP'ın kimlik-hatası taklidi yapan üç değişmezi ·
+belgede zorunlu dört alan (altı ret ile öğrenildi) · iki gönderim yolu ve farklı numara kuralları ·
+tarayıcı otomasyonunun **iki sessiz tuzağı** · portalın iki giriş yolu · kontör · ortam kilidi.
+
+Hiçbiri tahmin değil. Okumadan başlarsan aynı duvarlara yeniden çarparsın — ve o duvarların
+çoğu **hata mesajı vermiyor**.
 
 ## GERÇEK KISIT (dürüstçe söyle)
 e-Logo'nun "şifre → API token" akışı YOK — Web Servisi doğrudan **kullanıcı-adı+şifre → `Login` → sessionID**
