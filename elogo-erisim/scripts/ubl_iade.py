@@ -45,6 +45,7 @@ from typing import Any
 #    çatalın bedelini ödüyor (elogo_ws.py ⟂ elogo_soap.py) — üçüncüsü açılmadı.
 #    Aşağıdaki yeniden-dışa-verme BİLEREKtir: `from ubl_iade import Taraf, Kalem` diye çağıran
 #    mevcut kod (ve 55 kapılık sınav) hiç değişmeden çalışmaya devam etsin diye.
+from ubl_xslt import sablon_baytlari
 from ubl_ortak import (  # noqa: F401  (yeniden dışa verilir — geriye uyum)
     NS,
     KDV_ADI,
@@ -111,7 +112,7 @@ def kur(f: IadeFaturasi) -> str:
     if eksik:
         raise EksikAlan("belge kurulamaz — eksik alanlar: " + " · ".join(eksik))
 
-    return belge_kur(f, tip=IADE_TIPI, on_notlar=[IADE_SERHI], dayanaklar=f.dayanaklar)
+    return belge_kur(f, tip=IADE_TIPI, on_notlar=[IADE_SERHI], dayanaklar=f.dayanaklar, xslt=sablon_baytlari())
 
 
 def sozlukten(veri: dict[str, Any]) -> IadeFaturasi:

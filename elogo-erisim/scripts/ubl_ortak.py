@@ -26,7 +26,9 @@ Tutarlar **kuruş (int)** olarak taşınır — para float'a hiç düşmez.
 """
 from __future__ import annotations
 
+import base64
 import re
+import uuid as uuid_mod
 from dataclasses import dataclass, field
 from decimal import Decimal
 from xml.etree import ElementTree as ET
@@ -122,6 +124,11 @@ class FaturaGovdesi:
     numara_modu: str = "elogo"    # "elogo" → cbc:ID boş; "verilen" → fatura_no kullanılır
     fatura_no: str = ""
     notlar: list[str] = field(default_factory=list)
+    #: 🔴 ETTN — faturanın EVRENSEL kimliği. Numaradan AYRI bir şeydir:
+    #: numarayı e-Logo atar (taslak→sıra numarası), ETTN'yi DÜZENLEYEN üretir ve
+    #: belge boyunca değişmez. Boş bırakılırsa `kur()` anında üretilir.
+    #: Ölçüldü 2026-08-22: UUID'siz belge e-Logo şema doğrulamasından GEÇMEZ.
+    uuid: str = ""
 
     # ── toplamlar ────────────────────────────────────────────────────────────
     def matrah_kurus(self) -> int:
@@ -213,7 +220,7 @@ def _taraf_yaz(parent: ET.Element, sarmal: str, t: Taraf) -> None:
 
 
 def belge_kur(f: FaturaGovdesi, *, tip: str, on_notlar: list[str] | None = None,
-              dayanaklar: list[Dayanak] | None = None) -> str:
+              dayanaklar: list[Dayanak] | None = None, xslt: bytes | None = None) -> str:
     """UBL-TR XML gövdesini üretir. Doğrulama ÇAĞIRANIN sorumluluğudur —
     tür-özel eksikleri ancak o bilir, bu yüzden `kur()` sarmalayıcıları kontrol eder.
 
@@ -232,6 +239,13 @@ def belge_kur(f: FaturaGovdesi, *, tip: str, on_notlar: list[str] | None = None,
     # Numara: "elogo" modunda BOŞ bırakılır — e-Logo taslağa numarayı kendisi atar.
     _e(kok, "cbc", "ID", f.fatura_no if f.numara_modu == "verilen" else "")
 
+    # 🔴 UBL 2.1 ELEMAN SIRASI KATIDIR — ID'den sonra CopyIndicator, sonra UUID gelir.
+    #    Bu ikisi eksikken e-Logo şema hatası verdi (ölçüldü 2026-08-22):
+    #    "invalid child element 'IssueDate' … expected: 'CopyIndicator'".
+    #    Sıra bozulursa hata İÇERİKTE aranır; oysa sebep buradadır.
+    _e(kok, "cbc", "CopyIndicator", "false")
+    _e(kok, "cbc", "UUID", f.uuid or str(uuid_mod.uuid4()))
+
     _e(kok, "cbc", "IssueDate", f.tarih)
     _e(kok, "cbc", "InvoiceTypeCode", tip)
     for satir in [*(on_notlar or []), *f.notlar]:
@@ -246,11 +260,45 @@ def belge_kur(f: FaturaGovdesi, *, tip: str, on_notlar: list[str] | None = None,
         _e(belge, "cbc", "IssueDate", d.tarih)
         _e(belge, "cbc", "DocumentTypeCode", tip)
 
+    # 🔴 GÖRÜNÜM ŞABLONU — belgesiz gönderim reddedilir (ölçüldü 2026-08-22).
+    #    Hesapta tanımlı tasarım yoksa tek yol şablonu belgeye GÖMMEKTİR.
+    #    UBL sıralaması duyarlıdır: BillingReference'tan SONRA, taraflardan ÖNCE.
+    if xslt:
+        ek = _e(kok, "cac", "AdditionalDocumentReference")
+        _e(ek, "cbc", "ID", f.fatura_no or "XSLT")
+        _e(ek, "cbc", "IssueDate", f.tarih)
+        _e(ek, "cbc", "DocumentType", "XSLT")
+        iliskli = _e(ek, "cac", "Attachment")
+        _e(iliskli, "cbc", "EmbeddedDocumentBinaryObject",
+           base64.b64encode(xslt).decode("ascii"),
+           mimeCode="application/xml", encodingCode="Base64",
+           filename=f"{f.fatura_no or 'fatura'}.xslt")
+
     _taraf_yaz(kok, "AccountingSupplierParty", f.duzenleyen)
     _taraf_yaz(kok, "AccountingCustomerParty", f.muhatap)
 
+    # 🔴 BELGE DÜZEYİ KDV ÖZETİ — yalnız toplam tutar YETMEZ (ölçüldü 2026-08-22):
+    #    e-Logo şeması "TaxTotal has incomplete content … expected: TaxSubtotal" dedi.
+    #    UBL, belge toplamının KDV ORANI BAZINDA dökümünü ister. Bu aynı zamanda
+    #    muhasebenin doğru gösterimidir: %20 ve %10 kalemler tek torbada toplanmaz.
     vergi_toplam = _e(kok, "cac", "TaxTotal")
     _e(vergi_toplam, "cbc", "TaxAmount", _tl(f.kdv_kurus()), currencyID=f.para_birimi)
+
+    gruplar: dict[int, list[int]] = {}          # oran → [matrah, kdv]
+    for k in f.kalemler:
+        g = gruplar.setdefault(int(k.kdv_orani or 0), [0, 0])
+        g[0] += k.matrah_kurus()
+        g[1] += k.kdv_kurus()
+    for oran in sorted(gruplar):
+        matrah, kdv = gruplar[oran]
+        alt = _e(vergi_toplam, "cac", "TaxSubtotal")
+        _e(alt, "cbc", "TaxableAmount", _tl(matrah), currencyID=f.para_birimi)
+        _e(alt, "cbc", "TaxAmount", _tl(kdv), currencyID=f.para_birimi)
+        _e(alt, "cbc", "Percent", str(oran))
+        kategori = _e(alt, "cac", "TaxCategory")
+        sema = _e(kategori, "cac", "TaxScheme")
+        _e(sema, "cbc", "Name", KDV_ADI)
+        _e(sema, "cbc", "TaxTypeCode", KDV_TUR_KODU)
 
     toplam = _e(kok, "cac", "LegalMonetaryTotal")
     _e(toplam, "cbc", "LineExtensionAmount", _tl(f.matrah_kurus()), currencyID=f.para_birimi)
