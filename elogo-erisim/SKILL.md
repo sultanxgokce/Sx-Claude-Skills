@@ -1,7 +1,7 @@
 ---
 name: elogo-erisim
 type: agent
-version: 1.5.0
+version: 1.6.0
 description: >
   e-Logo (Logo e-Fatura/e-Arşiv entegratörü) erişimi gereken işleri PANELE GİRMEDEN, saf SOAP WS ile
   yapar: fatura durumu sorgula, kesilmiş e-Arşiv PDF/UBL indir, **iade faturasının UBL-TR belgesini
@@ -81,6 +81,33 @@ python3 ubl_iade.py kur     <veri.json>   # UBL-TR XML üretir (eksikse RC 2 ve 
 **Fail-closed:** eksik alanla belge üretilmez. Zorunlu alanlar üreticinin kendi
 *"Zorunlu Bilgiler"* belgesinden kalibre edildi (vergi türü `0015` · düzenleyenin vergi dairesi
 ve iş adresi zorunlu · muhatapta *"varsa"* → zorunlu değil). Sınav: `ubl_iade.test.sh` (55 kapı).
+
+## ✅ GÖNDERİM ÇALIŞIYOR — 2026-08-22, demo'da üç fatura geçti
+
+`resultCode=1` · refId **55848628** (satış) · **55848629** (satış) · **55848630** (iade).
+Üçüncüsü birinciyi dayanak gösteren gerçek bir iade faturasıdır.
+
+### 🔴 İki gönderim yolu — numara kuralı FARKLI
+| yol | çağrı | numarayı kim verir |
+|---|---|---|
+| Taslak | `SendDraftDocument` | **e-Logo** (portalde "sıra numarası ver") |
+| Doğrudan | `SendDocument` | **DÜZENLEYEN — yani biz** |
+
+Doğrudan gönderimde `cbc:ID` boş bırakılamaz. Format e-Logo'nun kendi hata metninden:
+**16 karakter** = 3 serbest + 4 yıl + 9 rakam (`ABC2026000000001`).
+→ `numara_modu="elogo"` bu yolda **çalışmaz**; `numara_modu="verilen"` + `fatura_no` gerekir.
+→ "Demo'da tanımlı seri yok" engeli bu yolda **bloklayıcı değildi** — seri tanımı olmadan geçti.
+🔴 **Numara üretimi bizim sorumluluğumuz** → mükerrer numara riski gerçek; sayacın nerede
+tutulacağı ve portalden elle kesilenlerle çakışmanın nasıl önleneceği **AÇIK SORU**.
+
+### Belgede olması ZORUNLU olan, ölçülerek bulunan dört şey
+1. `cbc:CopyIndicator` + **`cbc:UUID` (ETTN)** — UBL sırası katı: `ID → CopyIndicator → UUID → IssueDate`
+2. Belge düzeyinde **oran-bazlı KDV dökümü** (`TaxTotal/TaxSubtotal`) — yalnız toplam yetmez
+3. **Görünüm şablonu** — hesapta tanımlı yoksa belgeye gömülür (`ubl_xslt.py`)
+4. 16 haneli **numara**
+
+Altı denemede altı engel ölçüldü; hiçbiri tahmin edilmedi — her ret bir sonrakini söyledi.
+Ayrıntılı tablo: `Nexus/_agents/bilgi/elogo-entegrasyon-bilgisi.md`.
 
 ## İKİ FATURA TÜRÜ — satış ⟂ iade (v1.5.0, Sultan direktifi 2026-08-22)
 

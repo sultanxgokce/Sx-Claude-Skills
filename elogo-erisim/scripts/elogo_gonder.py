@@ -69,7 +69,8 @@ def _paketi_dogrula(paket: dict[str, str]) -> None:
 ARR_NS = "http://schemas.microsoft.com/2003/10/Serialization/Arrays"
 
 
-def zarf_kur(sid: str, paket: dict[str, str], alias: str | None = None) -> str:
+def zarf_kur(sid: str, paket: dict[str, str], alias: str | None = None,
+             tasarim: str = "varsayilan") -> str:
     """SendDocument SOAP gövdesini kurar. Ağa çıkmaz — kuru koşum da bunu kullanır.
 
     Ön-ekler taşıyıcıdan (`elogo_soap._cagir`) gelir: `t` = tempuri,
@@ -83,6 +84,22 @@ def zarf_kur(sid: str, paket: dict[str, str], alias: str | None = None) -> str:
     params = ["DOCUMENTTYPE=EINVOICE"]
     if alias:
         params.append(f"ALIAS={alias}")
+
+    # 🔴 GÖRSEL TASARIM — belgesiz gönderim REDDEDİLİR (ölçüldü 2026-08-22, demo):
+    #    e-Logo `resultCode=-1` + "e-Belge görsel tasarım içermelidir." döndürdü.
+    #    UBL-TR faturası belgenin nasıl görüneceğini tarif eden bir XSLT ister.
+    #    Kendi şablonumuzu uydurmak yerine üreticinin sunduğu iki yol kullanılır (s.8):
+    #      varsayilan → `UseDefaultXSLT=1`  (hesabın ön tanımlı tasarımı)
+    #      <uuid>     → `XSLTUUID=<uuid>`   (portalden yüklenmiş belirli tasarım)
+    #      gomulu     → hiçbiri; tasarım belgenin İÇİNDE taşınır (bugün üretmiyoruz)
+    if tasarim == "varsayilan":
+        params.append("UseDefaultXSLT=1")
+    elif tasarim == "gomulu":
+        pass
+    elif tasarim:
+        if any(c in tasarim for c in "<>&= "):
+            raise GonderimHatasi(f"geçersiz tasarım kimliği: {tasarim}")
+        params.append(f"XSLTUUID={tasarim}")
     satirlar = "".join(f"<a:string>{p}</a:string>" for p in params)
     return (
         f"<t:SendDocument>"
@@ -124,10 +141,10 @@ def onayi_dogrula(beyan: str) -> str:
 
 
 def gonder(sid: str, url: str, paket: dict[str, str], onay: str,
-           alias: str | None = None) -> dict[str, str]:
+           alias: str | None = None, tasarim: str = "varsayilan") -> dict[str, str]:
     """🔴 GERİ ALINAMAZ. Yalnız dört kapı da geçildikten sonra çağrılır."""
     onayi_dogrula(onay)
-    xml = S._cagir(url, "SendDocument", zarf_kur(sid, paket, alias))
+    xml = S._cagir(url, "SendDocument", zarf_kur(sid, paket, alias, tasarim))
     return {
         "resultCode": S._alan(xml, "resultCode") or "?",
         "resultMsg": S._alan(xml, "resultMsg") or "",
@@ -143,6 +160,8 @@ def _main(argv: list[str]) -> int:
     a.add_argument("xml", help="gönderilecek UBL XML dosyası")
     a.add_argument("--belge-adi", help="zip/belge adı (varsayılan: dosya adı)")
     a.add_argument("--alias", help="alıcı etiketi (opsiyonel — tek etiketliyse gerekmez)")
+    a.add_argument("--tasarim", default="varsayilan",
+                   help="görsel tasarım: varsayilan | <uuid> | gomulu (varsayılan: varsayilan)")
     a.add_argument("--canli", action="store_true", help="🔴 CANLI ortam (varsayılan: demo)")
     a.add_argument("--gercekten-gonder", action="store_true",
                    help="🔴 K2'yi açar — bu bayrak olmadan AĞA ÇIKILMAZ")
@@ -167,7 +186,7 @@ def _main(argv: list[str]) -> int:
 
     if not n.gercekten_gonder:
         try:
-            zarf_kur("KURU-KOSUM", paket, n.alias)
+            zarf_kur("KURU-KOSUM", paket, n.alias, n.tasarim)
         except GonderimHatasi as e:
             print(f"⛔ zarf kurulamadı: {e}", file=sys.stderr)
             return 1
@@ -184,7 +203,7 @@ def _main(argv: list[str]) -> int:
     kullanici, parola, url = S.kimlik_env(ortam)
     sid = S.login(kullanici, parola, url)
     try:
-        s = gonder(sid, url, paket, n.sultan_onayi, n.alias)
+        s = gonder(sid, url, paket, n.sultan_onayi, n.alias, n.tasarim)
     finally:
         S.logout(sid, url)
 

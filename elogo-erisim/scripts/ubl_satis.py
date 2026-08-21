@@ -34,6 +34,7 @@ from dataclasses import dataclass
 from decimal import Decimal
 from typing import Any
 
+from ubl_xslt import sablon_baytlari
 from ubl_ortak import (  # noqa: F401  (yeniden dışa verilir — çağıran tek yerden alsın)
     KDV_ADI,
     KDV_TUR_KODU,
@@ -79,7 +80,7 @@ def kur(f: SatisFaturasi) -> str:
         raise EksikAlan("belge kurulamaz — eksik alanlar: " + " · ".join(eksik))
 
     # on_notlar boş, dayanaklar boş — satışın iadeden ayrıldığı tam yer burası.
-    return belge_kur(f, tip=SATIS_TIPI)
+    return belge_kur(f, tip=SATIS_TIPI, xslt=sablon_baytlari())
 
 
 def sozlukten(veri: dict[str, Any]) -> SatisFaturasi:

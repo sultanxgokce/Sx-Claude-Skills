@@ -61,7 +61,15 @@ icerir "B1 · matrah 1302.00"              '<cbc:LineExtensionAmount currencyID=
 icerir "B2 · KDV 260.40"                  '<cbc:TaxAmount currencyID="TRY">260.40' "$CIK"
 icerir "B3 · genel toplam 1562.40"        '<cbc:PayableAmount currencyID="TRY">1562.40' "$CIK"
 icerir "B4 · satır KDV oranı"             "<cbc:Percent>20</cbc:Percent>" "$CIK"
-icermez "B5 · bilimsel gösterim sızmadı"  "E+" "$CIK"
+# B5 — "E+" ARAMASI ARTIK YETMEZ (2026-08-22): gömülü XSLT'nin base64'ünde "E+" dizisi
+# rastlantısal olarak geçiyor ve kapı YANLIŞ-POZİTİF veriyordu. Kapı gevşetilmedi,
+# KESKİNLEŞTİRİLDİ: kaba dizi yerine gerçek bilimsel-gösterim deseni aranıyor.
+# Aradığımız şey para alanına sızmış float artığıydı (ör. 1.5E+10), base64 gürültüsü değil.
+if printf '%s' "$CIK" | grep -qE '>[0-9]+\.?[0-9]*[Ee][+-][0-9]+<'; then
+  DUSEN=$((DUSEN+1)); echo "  ✗ B5 · bilimsel gösterim SIZDI (para alanında)"
+else
+  GECEN=$((GECEN+1)); echo "  ✓ B5 · bilimsel gösterim sızmadı (eleman-içi desen)"
+fi
 icermez "B6 · float kuyruğu sızmadı"      ".00000" "$CIK"
 
 echo "── C · NUMARA — üretilmiyor, e-Logo atacak (Sultan gözlemi) ─────────────"
