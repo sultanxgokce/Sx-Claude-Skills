@@ -1382,6 +1382,21 @@
       "name": "e-Logo Portal Otomasyonu (yükle · sıra numarası · gönder)",
       "version": "1.0.0",
       "sync_dagitim": false
+    },
+    {
+      "id": "kapi-sinavi",
+      "sync_dagitim": true,
+      "type": "agent",
+      "name": "kapi-sinavi — kapının gerçekten kapı olduğunu kanıtla",
+      "version": "1.0.1",
+      "description": "Kapının doğru karar verdiğini değil, DEVREDE olduğunu ve sınavının onu fiilen ölçtüğünü kanıtlar. kos · bagli-mi (AST) · bayat-mi · mutasyon (sil/no-op/yer-kaydırma). RC=3 ÖLÇÜLEMEDİ demektir, yeşil değil.",
+      "triggers": [
+        "kapı yazdım",
+        "koruma ekledim",
+        "bu gate çalışıyor mu",
+        "mutasyon sınavı",
+        "kapı bağlı mı"
+      ]
     }
   ]
 }

@@ -40,7 +40,17 @@ jobs:
           #   GitHub runner'ında düşüyor; üç yerel yapılandırmada (worktree · temiz klon ·
           #   LC_ALL=C) 39/39 geçiyor. Ortam-farkı henüz izole edilmedi; L24 MUCİT paketinin
           #   kendi işi (üreten≠işleten) → burada bodoslama düzeltilmiyor.
-          KARANTINA=" ./mucit-suz/scripts/mucit-t1.test.sh "
+          #   kasif-hafiza.test.sh — TAKVİMLE ÇÜRÜYEN SINAV (ölçüldü 2026-08-23, PR #206).
+          #   Kimsenin değişikliğinden kırılmadı: dosyaya en son #72'de dokunuldu. Ölçtüğü araç
+          #   (kasif-karne.sh:39) KAYAN 30 GÜNLÜK pencere kullanıyor — `date -u -d "-30 days"` —
+          #   ama sınavın fikstürü SABİT tarihler yazıyor (2026-07-01 · 07-25 · 07-26). Fikstür
+          #   pencerenin dışına düşünce araç karne yerine "Henüz karne verilemez" basıyor ve
+          #   metrik satırlarını arayan 5 iddia birden düşüyor (15 geçen / 5 düşen).
+          #   → Gerçek onarım: fikstür tarihleri GÖRECELİ olsun ("bugünden N gün önce").
+          #     Sahibi KAŞİF/MUCİT hattı; burada bodoslama düzeltilmiyor (üreten≠işleten).
+          #   ⚠️ Bu, "yeşilin ne zamanki veriye ait olduğu sorulmuyor" sınıfının bir vakasıdır —
+          #     kapı-sinavi becerisinin `bayat-mi` kapısının fikstür tarafındaki karşılığı.
+          KARANTINA=" ./mucit-suz/scripts/mucit-t1.test.sh ./kasif-tara/scripts/kasif-hafiza.test.sh "
           mapfile -t T < <(find . -name '*.test.sh' -not -path './.git/*' | sort)
           if [ "${#T[@]}" -eq 0 ]; then echo "::error::hiç *.test.sh bulunamadı — keşif bozuk"; exit 1; fi
           echo "bulunan sınama: ${#T[@]}"
