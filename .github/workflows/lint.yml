@@ -25,6 +25,32 @@ jobs:
       - name: "Motor · sync-skills.mjs sözdizimi"
         run: node --check sync-skills.mjs
 
+      # Kapı sınavı: aşağıdaki keşif adımı "sınavlar geçiyor mu" diye sorar. Bu adım
+      # onun SORMADIĞI üç soruyu sorar: kapı DEVREDE mi (çağıran var mı) · modül
+      # ÇAĞRILABİLİR mi (içe aktarınca donuyor mu) · defter TUTARLI mı.
+      # 🔴 `kos` bilerek KOŞULMAZ — keşif adımı zaten aynı dosyaları koşuyor; iki kez
+      #    koşmak sıfır yeni bilgi için çift maliyettir.
+      # 🔴 `bayat-mi` de bilerek KOŞULMAZ — CI her seferinde TEMİZ ortamda başlar, yani
+      #    "son yeşil koşum" damgası hiç var olmaz ve kapı DAİMA "ölçemedim" der. Daima
+      #    sarı yanan kapı ya her şeyi bloklar ya görmezden gelinir; ikisi de tiyatrodur.
+      #    Bayatlık YEREL/İNSAN kapısıdır ("ben geldiğimde bu yeşil güncel miydi?").
+      # RC=3 (ÖLÇÜLEMEDİ) bu adımı DÜŞÜRÜR — ölçemediğimiz kapı temiz sayılmaz.
+      - name: "Kapı sınavı · devrede mi · çağrılabilir mi (ÖLÇÜLEMEDİ = kırmızı)"
+        run: |
+          set -uo pipefail
+          A=kapi-sinavi/scripts/kapi-sinavi.sh
+          dusen=0
+          for k in kayit bagli-mi ithal; do
+            echo "── $k"
+            bash "$A" "$k"; rc=$?
+            case "$rc" in
+              0) echo "   ✓ $k" ;;
+              3) echo "::error::$k ÖLÇÜLEMEDİ (rc=3) — bu YEŞİL DEĞİLDİR"; dusen=$((dusen+1)) ;;
+              *) echo "::error::$k BULGU/HATA (rc=$rc)"; dusen=$((dusen+1)) ;;
+            esac
+          done
+          [ "$dusen" -eq 0 ]
+
       # Kabuk-sınamaları: 2026-07-30'a kadar depoda 20 adet `*.test.sh` vardı ve HİÇBİRİ
       # bir kapıda koşmuyordu — yazılmış ama bağlanmamış koruma. (Aynı sınıf cloudtop'ta da
       # ölçüldü.) Liste TÜRETİLİR, elle sayılmaz: yeni bir sınama eklendiği anda bu kapı onu

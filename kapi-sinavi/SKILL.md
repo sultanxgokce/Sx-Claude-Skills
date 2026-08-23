@@ -1,7 +1,7 @@
 ---
 name: kapi-sinavi
 type: agent
-version: 1.2.0
+version: 1.2.1
 description: >
   Bir KAPININ gerçekten kapı olduğunu kanıtlar. Kapının doğru karar verdiğini değil —
   DEVREDE olduğunu, SINAVININ onu fiilen ölçtüğünü ve son yeşil koşumdan sonra
@@ -133,6 +133,14 @@ Yazanın kendi cümlesi: *"Kod doğruydu, çağrılma biçimi yanlıştı."*
 Modül düzeyinde bloklayan bir yan etki (girdi okuma · ağ · uzun uyku) o modülü içe aktaran
 **her** sınavı kilitler — ve kilitlenen sınav **kırmızı bile görünmez**, sadece donar.
 Sessiz hatanın en pahalı biçimi.
+
+🔴 **Kendi hastalığından ikinci vaka (2026-08-23, v1.2.1).** İlk sürüm modülü ADIYLA
+içe aktarıyordu (`import <dosya-adı>`) — yani *dosya adının geçerli bir Python
+tanımlayıcısı olduğunu* varsayıyordu. Tireli ad (`yargi-birlestir.py`) bu varsayımı
+çürütür: sapasağlam üç modül "içe aktarılamadı" diye **yanlış kırmızı** aldı. Aracın
+kendisi, ölçmek yerine varsaydığı için yanıldı. Düzeltme: modül artık **adıyla değil
+dosya yoluyla** yüklenir (`importlib`) — zaten ölçtüğümüz soru *"bu DOSYA
+çalıştırılınca donuyor mu"*dur. Regresyon kapısı sınavda, mutasyonla doğrulandı.
 
 **Ölçüm dinamiktir, bilinçli olarak.** Statik tarama *"modül düzeyinde stdin var mı"*
 sorusunu yaklaşık cevaplar; gerçek soru *"içe aktarınca donuyor mu"*dur ve o ancak
