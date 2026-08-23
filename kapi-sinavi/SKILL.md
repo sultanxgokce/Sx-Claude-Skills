@@ -1,7 +1,7 @@
 ---
 name: kapi-sinavi
 type: agent
-version: 1.1.0
+version: 1.2.0
 description: >
   Bir KAPININ gerçekten kapı olduğunu kanıtlar. Kapının doğru karar verdiğini değil —
   DEVREDE olduğunu, SINAVININ onu fiilen ölçtüğünü ve son yeşil koşumdan sonra
@@ -80,6 +80,7 @@ kapi-sinavi.sh kayit                 defteri doğrula (dosyalar var mı, alanlar
 kapi-sinavi.sh kos      [ad]         sınavı ÇIPLAK koş; yeşilse kapının sha'sını damgala
 kapi-sinavi.sh bagli-mi [ad]         kapı fiilen ÇAĞRILIYOR mu (AST tabanlı)
 kapi-sinavi.sh bayat-mi [ad]         kapı son yeşil koşumdan sonra değişti mi
+kapi-sinavi.sh ithal    [ad]         modül güvenle İÇE AKTARILABİLİYOR mu (donma avı)
 kapi-sinavi.sh mutasyon <ad>         sil · no-op · yer-kaydırma — üçü de KIRMIZI yakmalı
 kapi-sinavi.sh denetle  [--mutasyon] [--taban <dosya>]   hepsi, tek RC
 ```
@@ -119,6 +120,37 @@ damgayı yazar ve bayatlık kapısı kendi ölçtüğü şeyi tazeler — hiç a
 - `mutasyon` yalnız Python kapıları için uygulanır; başka dil → RC=3, sessiz yeşil YOK.
 - Mutasyon projenin tamamını kopyalar → çok büyük depolarda yavaştır. `denetle` varsayılan
   olarak mutasyon **koşmaz** (`--mutasyon` ile açılır).
+
+## `ithal` — "çağrılabilir mi" (v1.2.0)
+
+`bagli-mi` *"çağrılıyor mu"* diye sorar. Bu komut onun **sormadığı** soruyu sorar:
+**bu modül güvenle içe aktarılabiliyor mu?**
+
+🔴 **Ölçülmüş vaka (2026-08-23):** bir süzgeç yazıldı, kod **doğruydu** — ama `stdin`
+okuması **modül düzeyindeydi**. Onu içe aktaran sınav girdi bekleyerek **askıda kaldı**.
+Yazanın kendi cümlesi: *"Kod doğruydu, çağrılma biçimi yanlıştı."*
+
+Modül düzeyinde bloklayan bir yan etki (girdi okuma · ağ · uzun uyku) o modülü içe aktaran
+**her** sınavı kilitler — ve kilitlenen sınav **kırmızı bile görünmez**, sadece donar.
+Sessiz hatanın en pahalı biçimi.
+
+**Ölçüm dinamiktir, bilinçli olarak.** Statik tarama *"modül düzeyinde stdin var mı"*
+sorusunu yaklaşık cevaplar; gerçek soru *"içe aktarınca donuyor mu"*dur ve o ancak
+çalıştırarak ölçülür. Girdi **asla gelmeyen** bir kanal + 8 saniyelik zaman aşımı.
+
+| Sonuç | Anlamı |
+|---|---|
+| `0` | temiz içe aktarıldı |
+| `1` (donma) | modül düzeyinde bloklayan yan etki → fonksiyonun İÇİNE al |
+| `1` (hata) | içe aktarılamıyor |
+| `3` | python değil → **ölçülemedi**, yeşil değil |
+
+`denetle` zincirinde **`bagli-mi`'den ÖNCE** koşar: içe aktarılamayan bir modülün
+bağlılığı zaten ölçülemez.
+
+> ⚠️ İlk sürüm `sleep … | python` yazıyordu ve kabuk **boru hattının tamamını** beklediği
+> için temiz modülde bile 25 saniye harcıyordu. Süreç-ikamesine (`< <(sleep …)`) çevrildi;
+> komut biter bitmez döner. Ölçüm aracının kendi maliyeti de ölçülür.
 
 ## Cırcır — `denetle --taban <dosya>` (v1.1.0)
 
@@ -160,12 +192,15 @@ dokunuyorsa, `denetle` yeşil (ya da en azından kırmızısız) olmadan merge e
 
 ## Kanıt
 
-`scripts/kapi-sinavi.test.sh` → **37 kapı**, hermetik (gerçek hiçbir depoya dokunmaz, her
+`scripts/kapi-sinavi.test.sh` → **41 kapı**, hermetik (gerçek hiçbir depoya dokunmaz, her
 vaka kendi geçici fikstür-projesini kurar). Kapsanan negatifler: sınavsız kapı · çift ad ·
 bozuk defter · kırmızı sınav · **çağıran yok** · **yalnız yorumda anılıyor** · yanlış giriş
 noktası · girişsiz (→3) · damgasız (→3) · bayat kapı · üç mutasyonun yakalanması ·
 mutasyonun gerçek ağaca dokunmadığının **sha ile** kanıtı · zaten-kırmızı sınav (→3) ·
 `denetle` RC birleştirme kuralı · bilinmeyen komut · olmayan kapı adı.
+
+**Gerçek-veri regresyonu (ithal):** canlı `elogo-erisim`'in **12 python modülü** tarandı →
+**12/12 temiz, RC=0, yanlış-pozitif yok.**
 
 **Gerçek-veri regresyonu:** araç, canlı `elogo-portal-otomasyon` becerisinin bir kopyasına
 koşuldu ve **kurulduğu kusuru yakaladı**: `guvenli_tikla` — yazılmış, beceri metninde kanon
