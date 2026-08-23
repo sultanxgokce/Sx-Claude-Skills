@@ -1,7 +1,7 @@
 ---
 name: kapi-sinavi
 type: agent
-version: 1.0.0
+version: 1.0.1
 description: >
   Bir KAPININ gerçekten kapı olduğunu kanıtlar. Kapının doğru karar verdiğini değil —
   DEVREDE olduğunu, SINAVININ onu fiilen ölçtüğünü ve son yeşil koşumdan sonra
@@ -112,6 +112,18 @@ damgayı yazar ve bayatlık kapısı kendi ölçtüğü şeyi tazeler — hiç a
 - Mutasyon projenin tamamını kopyalar → çok büyük depolarda yavaştır. `denetle` varsayılan
   olarak mutasyon **koşmaz** (`--mutasyon` ile açılır).
 
+## Bayt-kodu önbelleği (v1.0.1)
+
+MUHASİP kolu ölçtü: mutasyondan sonra kaynak geri alınsa bile sınav **yanlış kırmızı**
+verebiliyor — mutasyonlu `.pyc` diskte kalıyor ve geri dönen kaynağın mtime'ı aynı saniyeye
+düşerse Python yeniden derlemiyor.
+
+Bu araç o tuzağa **düşmüyordu**, çünkü mutasyon kopyası `__pycache__`'i dışlıyor. Ama o
+dışlama **tek** koruma ve tesadüfiydi. Ayrıca merkezde ölçüldü: `kos`, sınavı gerçek ağaçta
+koştuğu için kullanıcının deposuna `__pycache__` bırakıyordu — **ölçüm aracı ölçtüğü şeyi
+kirletmemeli.** Her iki yüz de tek yerde kapandı: bütün sınav koşumları
+`PYTHONDONTWRITEBYTECODE=1` ile geçer (`_sinav_kos`), ve sınav bunu kilitler.
+
 ## Çağıran kim (bu becerinin kendi kapısı)
 
 Bu beceri gönüllülüğe bırakılmaz — kurulduğu derste tam olarak o hata ölçüldü.
@@ -120,7 +132,7 @@ dokunuyorsa, `denetle` yeşil (ya da en azından kırmızısız) olmadan merge e
 
 ## Kanıt
 
-`scripts/kapi-sinavi.test.sh` → **28 kapı**, hermetik (gerçek hiçbir depoya dokunmaz, her
+`scripts/kapi-sinavi.test.sh` → **29 kapı**, hermetik (gerçek hiçbir depoya dokunmaz, her
 vaka kendi geçici fikstür-projesini kurar). Kapsanan negatifler: sınavsız kapı · çift ad ·
 bozuk defter · kırmızı sınav · **çağıran yok** · **yalnız yorumda anılıyor** · yanlış giriş
 noktası · girişsiz (→3) · damgasız (→3) · bayat kapı · üç mutasyonun yakalanması ·

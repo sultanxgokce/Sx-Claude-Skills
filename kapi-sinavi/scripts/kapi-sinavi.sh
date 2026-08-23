@@ -54,6 +54,17 @@ _iyi(){ printf '✓ %s\n' "$*"; }
 _temizle(){ [ -n "${1:-}" ] && [ -d "$1" ] && find "$1" -depth -delete 2>/dev/null; return 0; }
 _dosya_sil(){ [ -n "${1:-}" ] && [ -f "$1" ] && find "$1" -maxdepth 0 -delete 2>/dev/null; return 0; }
 
+# 🔴 BAYT-KODU ÖNBELLEĞİ (MUHASİP ölçtü 2026-08-23, merkez doğruladı)
+#    Mutasyon koşumlarında yanlış KIRMIZI görülebiliyor: mutasyonlu `.pyc` diskte kalıyor
+#    ve geri alınan kaynağın mtime'ı aynı saniyeye düşerse Python yeniden derlemiyor.
+#    Bizim `mutasyon` altkomutumuz bu tuzağa DÜŞMÜYOR çünkü kopya `__pycache__`'i dışlıyor —
+#    ama o dışlama TEK korumaydı ve tesadüfiydi. Ayrıca ölçüldü: `kos`, sınavı gerçek ağaçta
+#    koştuğu için kullanıcının deposuna `__pycache__` bırakıyordu (ölçüm-aracı ölçtüğü şeyi
+#    kirletmemeli). Her iki yüz de tek satırla kapandı: bayt-kodu HİÇ yazılmıyor.
+_sinav_kos(){ # <calisma-dizini> <sinav-yolu>
+  ( cd "$1" && PYTHONDONTWRITEBYTECODE=1 bash "$2" )
+}
+
 command -v jq >/dev/null 2>&1 || { _hata "HATA: jq gerekli"; exit "$RC_KULLANIM"; }
 
 _defter_var(){
@@ -131,7 +142,7 @@ _kos(){
     fi
     # Çıplak koşum: çıkış kodu bir pipe'ın arkasına GİZLENMEZ.
     local kutuk; kutuk="$(mktemp)"
-    ( cd "$KOK" && bash "$s" ) >"$kutuk" 2>&1
+    _sinav_kos "$KOK" "$s" >"$kutuk" 2>&1
     local rc=$?
     if [[ $rc -eq 0 ]]; then
       _iyi "$ad: sınav yeşil (exit=0)"
@@ -290,7 +301,7 @@ _mutasyon(){
   esac
 
   # Ön koşul: mutasyonsuz hâl YEŞİL olmalı. Kırmızıdan kırmızıya geçiş hiçbir şey kanıtlamaz.
-  if ! ( cd "$KOK" && bash "$sinav" ) >/dev/null 2>&1; then
+  if ! _sinav_kos "$KOK" "$sinav" >/dev/null 2>&1; then
     _olcemedim "$ad: sınav mutasyonsuz hâlde ZATEN KIRMIZI → mutasyon anlamsız (önce onar)"
     return "$RC_OLCULEMEDI"
   fi
@@ -349,7 +360,7 @@ PY
       [[ $bulgu -eq 1 ]] || bulgu=3; _temizle "$tmp"; continue
     fi
 
-    if ( cd "$tmp" && bash "$sinav" ) >/dev/null 2>&1; then
+    if _sinav_kos "$tmp" "$sinav" >/dev/null 2>&1; then
       _bulgu "$ad/$m: mutasyon KIRMIZI YAKMADI → sınav bu kapıyı ölçmüyor"
       bulgu=1
     else

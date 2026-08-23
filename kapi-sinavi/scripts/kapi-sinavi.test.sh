@@ -168,6 +168,12 @@ if [[ -f "$P/.kapi/durum.json" ]] && grep -q 'son_yesil' "$P/.kapi/durum.json"; 
 else
   _no "yeşil koşum damgası diske yazıldı" "durum.json yok ya da damgasız"
 fi
+# 🔴 Ölçüm aracı, ölçtüğü ağacı KİRLETMEZ (MUHASİP'in bayt-kodu bulgusunun merkez yüzü)
+if [[ -z "$(find "$P" -name '__pycache__' -o -name '*.pyc' 2>/dev/null)" ]]; then
+  _ok "kos gerçek ağaca bayt-kodu bırakmadı (__pycache__ yok)"
+else
+  _no "kos gerçek ağaca bayt-kodu bırakmadı" "__pycache__/*.pyc üretildi"
+fi
 _sil "$P"
 
 P="$(_fikstur kirmizi)"
