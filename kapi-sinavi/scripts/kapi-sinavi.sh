@@ -175,12 +175,11 @@ _kos(){
 #    gerçek Call düğümleri sayılır). Diğer diller için satır-temelli yaklaşım kullanılır ve
 #    yorum satırları elenir — yaklaşıklığı SKILL.md'de açıkça yazılıdır.
 _cagri_yerleri(){
-  local cagri="$1" tanim="$2"
+  local cagri="$1"
   ( cd "$KOK" && grep -rl --include='*.py' --include='*.sh' --include='*.js' --include='*.ts' \
       -e "$cagri" . 2>/dev/null \
       | sed 's|^\./||' \
-      | grep -v -e '\.test\.' -e '_test\.' -e '/tests\?/' -e '^\.kapi/' \
-      | grep -vx -e "$tanim" || true ) \
+      | grep -v -e '\.test\.' -e '_test\.' -e '/tests\?/' -e '^\.kapi/' || true ) \
   | while IFS= read -r f; do
       [[ -n "$f" ]] || continue
       if KAPI_F="$KOK/$f" KAPI_AD="$cagri" python3 - <<'PY'
@@ -232,12 +231,21 @@ _bagli_mi(){
 
     # Tanım dosyasının KENDİSİ ve sınav dosyaları çağrı sayılmaz —
     # kapıyı yalnız kendi sınavı çağırıyorsa o kapı üretimde YOKTUR.
-    local yerler; yerler="$(_cagri_yerleri "$cagri" "$dosya")"
+    local yerler; yerler="$(_cagri_yerleri "$cagri")"
     local sayi; sayi="$(printf '%s' "$yerler" | grep -c . || true)"
+    # 🔴 KENDİ DOSYASINDAKİ ÇAĞRI MEŞRUDUR (MUHASİP bildirdi, merkez firsthand doğruladı
+    #    2026-08-23): ilk sürüm tanım dosyasını çağıran saymıyordu ve altı SAHTE KIRMIZI
+    #    üretti. Ölçülmüş emsal: `elogo_gonder.py: ortam_kilidi_dogrula` — hattın en geri
+    #    alınamaz kapısı, tek çağıranı KENDİ dosyasında ve tamamen doğru. Kapının modülü
+    #    aynı zamanda giriş noktasıysa, kendi içinden çağrılması normaldir.
+    #    Hüküm artık `girisler` beyanına dayanır; ayrım yalnız RAPORLANIR.
+    local ic; ic=0
+    printf '%s\n' "$yerler" | grep -qx -e "$dosya" && ic=1
 
     if [[ "$sayi" -eq 0 ]]; then
       _bulgu_k "$ad/bagli-mi" "$ad: ÇAĞIRAN YOK — '$cagri' yalnız kendi dosyasında/sınavında geçiyor"
       _hata  "     → 'yazılmış ama bağlanmamış' vakası. Bu kapı için kapı sayısı SIFIRDIR."
+      _hata  "     (kendi modülü dahil taranır; sayılmayan tek şey sınav dosyalarıdır)"
       bulgu=1; continue
     fi
 
@@ -257,7 +265,11 @@ _bagli_mi(){
       _hata  "     → kapı ölü bir koldan çağrılıyor olabilir."
       bulgu=1; continue
     fi
-    _iyi "$ad: bağlı ($sayi çağıran, giriş noktası doğrulandı)"
+    if [[ $ic -eq 1 ]]; then
+      _iyi "$ad: bağlı ($sayi çağıran; biri kapının KENDİ modülünde — giriş noktası doğrulandı)"
+    else
+      _iyi "$ad: bağlı ($sayi çağıran, giriş noktası doğrulandı)"
+    fi
   done < <(_adlar "${1:-}")
   return "${bulgu:-0}"
 }

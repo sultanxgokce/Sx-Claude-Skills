@@ -103,6 +103,14 @@ damgayı yazar ve bayatlık kapısı kendi ölçtüğü şeyi tazeler — hiç a
 
 ## Sınırlar — dürüstçe
 
+- 🔴 **Kapı adı TEKİL olmalı.** AST, `x.ad()` biçimindeki her çağrıyı sayar ama nesnenin
+  türünü bilmez → jenerik ad (`dogrula` · `kontrol` · `kaydet`) başka modüldeki aynı adla
+  çakışır ve sahte "bağlı" üretir. Tam çözüm tür-çıkarımı ister; panzehir addır.
+  *(MUHASİP bildirdi 2026-08-23; düzeltilmedi, dürüst sınır olarak yazıldı.)*
+- **Kapının KENDİ modülündeki çağrı meşrudur** — modül aynı zamanda giriş noktası olabilir.
+  İlk sürüm tanım dosyasını dışlıyordu ve sahte kırmızı üretiyordu; ölçülmüş emsal
+  `elogo_gonder.py: ortam_kilidi_dogrula` (hattın en geri alınamaz kapısı, tek çağıranı
+  kendi dosyasında ve tamamen doğru). v1.1.0'da düzeltildi; ayrım artık yalnız raporlanır.
 - `bagli-mi` **statik**tir. *"Çağıran yok"* hükmü **kesindir** (0 eşleşme çürütülemez).
   *"Bağlı"* hükmü **yaklaşıktır** — çağıran satır ölü bir kolda olabilir. Bu yüzden
   `girisler` beyan edilmemişse sonuç yeşil değil **ÖLÇÜLEMEDİ** olur.
@@ -152,7 +160,7 @@ dokunuyorsa, `denetle` yeşil (ya da en azından kırmızısız) olmadan merge e
 
 ## Kanıt
 
-`scripts/kapi-sinavi.test.sh` → **36 kapı**, hermetik (gerçek hiçbir depoya dokunmaz, her
+`scripts/kapi-sinavi.test.sh` → **37 kapı**, hermetik (gerçek hiçbir depoya dokunmaz, her
 vaka kendi geçici fikstür-projesini kurar). Kapsanan negatifler: sınavsız kapı · çift ad ·
 bozuk defter · kırmızı sınav · **çağıran yok** · **yalnız yorumda anılıyor** · yanlış giriş
 noktası · girişsiz (→3) · damgasız (→3) · bayat kapı · üç mutasyonun yakalanması ·

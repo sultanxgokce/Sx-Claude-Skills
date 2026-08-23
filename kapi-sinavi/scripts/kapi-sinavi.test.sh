@@ -88,6 +88,34 @@ cd "$(dirname "$0")" || exit 1
 python3 -c "import kapi; assert kapi.izin_var_mi('Kaydet') is True" || exit 1
 SH
       ;;
+    ic-cagri)
+      # 🔴 ÖLÇÜLMÜŞ EMSAL (elogo_gonder.py: ortam_kilidi_dogrula): kapının tek çağıranı
+      #    KENDİ modülünde ve bu tamamen doğru — modül aynı zamanda giriş noktası.
+      #    İlk sürüm buna SAHTE KIRMIZI veriyordu.
+      cat > "$p/kapi.py" <<'PYF'
+class Yasak(Exception): pass
+
+def izin_var_mi(dugme):
+    if 'sil' in dugme:
+        raise Yasak(dugme)
+    return True
+
+def surucu(dugme):
+    izin_var_mi(dugme)      # tek çağrı: kendi modülünde
+    return 'yapildi'
+PYF
+      cat > "$p/kapi.test.sh" <<'SH'
+#!/usr/bin/env bash
+cd "$(dirname "$0")" || exit 1
+python3 - <<'PY' || exit 1
+import kapi
+assert kapi.izin_var_mi('Kaydet') is True
+try:
+    kapi.surucu('Secilenleri sil'); raise SystemExit(1)
+except kapi.Yasak: pass
+PY
+SH
+      ;;
     cagrisiz)
       # 🔴 Kapı VAR, sınavı VAR, ama onu çağıran üretim yolu YOK (gecenin ana vakası).
       cat > "$p/giris.py" <<'PY'
@@ -188,6 +216,10 @@ _sil "$P"
 
 P="$(_fikstur cagrisiz)"
 _bekle "🔴 ÇAĞIRAN YOK → BULGU ('yazılmış ama bağlanmamış')" 1 "$(_kos "$P" bagli-mi)"
+_sil "$P"
+
+P="$(_fikstur ic-cagri)"
+_bekle "kapı yalnız KENDİ modülünden çağrılıyor + o modül giriş → 0 (sahte kırmızı YOK)" 0 "$(_kos "$P" bagli-mi)"
 _sil "$P"
 
 P="$(_fikstur anilan)"
