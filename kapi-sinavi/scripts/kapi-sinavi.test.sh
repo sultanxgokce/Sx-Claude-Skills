@@ -258,6 +258,41 @@ P="$(_fikstur cagrisiz)"
 _bekle "bulgu varken → 1 (3'e düşmez)" 1 "$(_kos "$P" denetle)"
 _sil "$P"
 
+# ── 6b · CIRCIR (taban) ──────────────────────────────────────────────────────
+printf 'cırcır — bilinen kalem geçer, yeni kalem kırmızı, bayat taban kırmızı\n'
+P="$(_fikstur cagrisiz)"          # bilinen kusur: guvenli-benzeri "çağıran yok"
+_kos "$P" kos >/dev/null
+TB="$P/taban.txt"
+printf '# bilinen kusurlar (2026-08-23)\nB muhafiz/bagli-mi\n' > "$TB"
+_bekle "bilinen kalem tabanda → 0 (bilinen kusur yolu tıkamaz)" 0 "$(_kos "$P" denetle --taban "$TB")"
+
+R="$(KAPI_SINAVI_KOK="$P" bash "$ARAC" denetle --taban "$TB" 2>&1)"
+if grep -q 'BİLİNEN' <<<"$R" && grep -q 'muhafiz/bagli-mi' <<<"$R"; then
+  _ok "bilinen kalemler ADIYLA ekrana basılıyor (gizlenmiyor)"
+else
+  _no "bilinen kalemler ADIYLA ekrana basılıyor" "liste basılmadı"
+fi
+
+printf '# bos taban\n' > "$TB"
+_bekle "🔴 tabanda olmayan kalem → gerileme, KIRMIZI" 1 "$(_kos "$P" denetle --taban "$TB")"
+
+printf '# bilinen\nB muhafiz/bagli-mi\nB olmayan/kapi\n' > "$TB"
+R="$(KAPI_SINAVI_KOK="$P" bash "$ARAC" denetle --taban "$TB" 2>&1)"; RC=$?
+_bekle "🔴 artık düşmeyen kalem tabanda duruyorsa → TABAN BAYAT, KIRMIZI" 1 "$RC"
+if grep -q 'TABAN BAYAT' <<<"$R"; then
+  _ok "bayat taban gerekçesiyle basılıyor (taban yalnız küçülür)"
+else
+  _no "bayat taban gerekçesiyle basılıyor" "uyarı yok"
+fi
+_sil "$P"
+
+P="$(_fikstur tam)"
+_kos "$P" kos >/dev/null
+printf '# hicbir kusur yok\n' > "$P/taban.txt"
+_bekle "temiz proje + boş taban → 0" 0 "$(_kos "$P" denetle --taban "$P/taban.txt")"
+_bekle "olmayan taban dosyası → kullanım hatası" 2 "$(_kos "$P" denetle --taban "$P/yok.txt")"
+_sil "$P"
+
 # ── 7 · kullanım ─────────────────────────────────────────────────────────────
 printf 'kullanım\n'
 P="$(_fikstur tam)"

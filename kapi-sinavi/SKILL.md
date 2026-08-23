@@ -1,7 +1,7 @@
 ---
 name: kapi-sinavi
 type: agent
-version: 1.0.1
+version: 1.1.0
 description: >
   Bir KAPININ gerçekten kapı olduğunu kanıtlar. Kapının doğru karar verdiğini değil —
   DEVREDE olduğunu, SINAVININ onu fiilen ölçtüğünü ve son yeşil koşumdan sonra
@@ -81,7 +81,7 @@ kapi-sinavi.sh kos      [ad]         sınavı ÇIPLAK koş; yeşilse kapının s
 kapi-sinavi.sh bagli-mi [ad]         kapı fiilen ÇAĞRILIYOR mu (AST tabanlı)
 kapi-sinavi.sh bayat-mi [ad]         kapı son yeşil koşumdan sonra değişti mi
 kapi-sinavi.sh mutasyon <ad>         sil · no-op · yer-kaydırma — üçü de KIRMIZI yakmalı
-kapi-sinavi.sh denetle  [--mutasyon] hepsi, tek RC
+kapi-sinavi.sh denetle  [--mutasyon] [--taban <dosya>]   hepsi, tek RC
 ```
 
 **Çıkış kodları:** `0` temiz · `1` BULGU · `2` kullanım/ortam · `3` ÖLÇÜLEMEDİ
@@ -112,6 +112,26 @@ damgayı yazar ve bayatlık kapısı kendi ölçtüğü şeyi tazeler — hiç a
 - Mutasyon projenin tamamını kopyalar → çok büyük depolarda yavaştır. `denetle` varsayılan
   olarak mutasyon **koşmaz** (`--mutasyon` ile açılır).
 
+## Cırcır — `denetle --taban <dosya>` (v1.1.0)
+
+Bir kapıyı *"önce her şeyi düzeltelim, sonra bağlarız"* diye ertelemek, kapıyı **hiç
+bağlamamakla** aynı yere çıkar. Bu filoda ölçüldü: 20 sınav yazılmıştı, hiçbiri bir kapıda
+koşmuyordu. Cırcır üçüncü yolu açar:
+
+- **Bilinen kusurlar tabanda** durur ve her koşumda **adlarıyla ekrana basılır** — gizlenmez.
+- **Yeni bir kusur ilk günden KIRMIZI** yakar. Gerileme anında durur.
+- **Taban yalnız küçülebilir:** bir kalem düzelmiş ama tabandan silinmemişse **KIRMIZI**
+  (*"taban bayat"*). Küçülmeyen taban çürür ve sessizce kalkana dönüşür — bu, aynı gün
+  ölçülen *"takvimle çürüyen sınav"* vakasının panzehiridir.
+
+Taban satırları makine anahtarıdır: `B <ad>/<kapı>` bulgu · `O <ad>/<kapı>` ölçülemedi.
+
+```
+# .kapi/taban.txt — bilinen kusurlar (tarih)
+B guvenli_tikla/bagli-mi
+O muhafiz/bayat-mi
+```
+
 ## Bayt-kodu önbelleği (v1.0.1)
 
 MUHASİP kolu ölçtü: mutasyondan sonra kaynak geri alınsa bile sınav **yanlış kırmızı**
@@ -132,7 +152,7 @@ dokunuyorsa, `denetle` yeşil (ya da en azından kırmızısız) olmadan merge e
 
 ## Kanıt
 
-`scripts/kapi-sinavi.test.sh` → **29 kapı**, hermetik (gerçek hiçbir depoya dokunmaz, her
+`scripts/kapi-sinavi.test.sh` → **36 kapı**, hermetik (gerçek hiçbir depoya dokunmaz, her
 vaka kendi geçici fikstür-projesini kurar). Kapsanan negatifler: sınavsız kapı · çift ad ·
 bozuk defter · kırmızı sınav · **çağıran yok** · **yalnız yorumda anılıyor** · yanlış giriş
 noktası · girişsiz (→3) · damgasız (→3) · bayat kapı · üç mutasyonun yakalanması ·

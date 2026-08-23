@@ -32,7 +32,8 @@
 #   kapi-sinavi.sh bagli-mi [ad]         kapı fiilen ÇAĞRILIYOR mu (üretim yolundan)
 #   kapi-sinavi.sh bayat-mi [ad]         kapı son yeşil koşumdan sonra değişti mi
 #   kapi-sinavi.sh mutasyon <ad>         sil · no-op · yer-kaydırma — üçü de KIRMIZI yakmalı
-#   kapi-sinavi.sh denetle  [--mutasyon] hepsi, tek RC
+#   kapi-sinavi.sh denetle  [--mutasyon] [--taban <dosya>]   hepsi, tek RC
+#        --taban: CIRCIR — bilinen kalemler tabanda; yeni kalem ya da bayat taban KIRMIZI
 #
 # Defter: <kök>/.kapi/kapilar.json · Durum: <kök>/.kapi/durum.json
 # Çıkış: 0 temiz · 1 BULGU · 2 kullanım/ortam · 3 ÖLÇÜLEMEDİ
@@ -48,6 +49,12 @@ _hata(){ printf '%s\n' "$*" >&2; }
 _bulgu(){ printf '🔴 %s\n' "$*"; }
 _olcemedim(){ printf '⚠️  ÖLÇÜLEMEDİ · %s\n' "$*"; }
 _iyi(){ printf '✓ %s\n' "$*"; }
+# Bulgu/ölçülemedi kayıtlarının MAKİNE ANAHTARI. Cırcır (taban) bunun üstünde çalışır.
+#   B <ad>/<kapı>  = bulgu   ·   O <ad>/<kapı>  = ölçülemedi
+ANAHTAR_DOSYA="${KAPI_SINAVI_ANAHTAR:-}"
+_anahtar(){ [[ -n "$ANAHTAR_DOSYA" ]] && printf '%s %s\n' "$1" "$2" >> "$ANAHTAR_DOSYA"; return 0; }
+_bulgu_k(){ _anahtar B "$1"; shift; _bulgu "$*"; }
+_olcemedim_k(){ _anahtar O "$1"; shift; _olcemedim "$*"; }
 # Geçici dizini sil. Silme fiili `find -delete` ile yapılır: yol DEĞİŞMEZ 2'nin
 # gereği olarak daima mktemp'ten gelir, ve bu dosyanın konusu tam olarak
 # "tehlikeli fiil alt-dizge ile tanınmaz" olduğu için burada da desen bırakılmaz.
@@ -118,11 +125,11 @@ _kayit(){
     n=$((n+1))
     local d s
     d="$(_alan "$ad" dosya)"; s="$(_alan "$ad" sinav)"
-    [[ -n "$d" ]] || { _bulgu "$ad: 'dosya' alanı boş"; bulgu=1; }
-    [[ -n "$s" ]] || { _bulgu "$ad: 'sinav' alanı boş — sınavı olmayan kapı, kapı değildir"; bulgu=1; }
-    [[ -z "$d" || -f "$KOK/$d" ]] || { _bulgu "$ad: dosya yok → $d"; bulgu=1; }
-    [[ -z "$s" || -f "$KOK/$s" ]] || { _bulgu "$ad: sınav dosyası yok → $s"; bulgu=1; }
-    [[ -n "$(_alan "$ad" cagri)" ]] || { _bulgu "$ad: 'cagri' alanı boş — neyin çağrıldığını bilmeden bağlılık ölçülemez"; bulgu=1; }
+    [[ -n "$d" ]] || { _bulgu_k "$ad/kayit" "$ad: 'dosya' alanı boş"; bulgu=1; }
+    [[ -n "$s" ]] || { _bulgu_k "$ad/kayit" "$ad: 'sinav' alanı boş — sınavı olmayan kapı, kapı değildir"; bulgu=1; }
+    [[ -z "$d" || -f "$KOK/$d" ]] || { _bulgu_k "$ad/kayit" "$ad: dosya yok → $d"; bulgu=1; }
+    [[ -z "$s" || -f "$KOK/$s" ]] || { _bulgu_k "$ad/kayit" "$ad: sınav dosyası yok → $s"; bulgu=1; }
+    [[ -n "$(_alan "$ad" cagri)" ]] || { _bulgu_k "$ad/kayit" "$ad: 'cagri' alanı boş — neyin çağrıldığını bilmeden bağlılık ölçülemez"; bulgu=1; }
   done < <(_adlar "${1:-}")
   [[ $n -gt 0 ]] || { _bulgu "defterde hiç kapı yok"; return "$RC_BULGU"; }
   [[ $bulgu -eq 0 ]] && { _iyi "defter tutarlı ($n kapı)"; return "$RC_TEMIZ"; }
@@ -138,7 +145,7 @@ _kos(){
     [[ -n "$ad" ]] || continue
     local s d; s="$(_alan "$ad" sinav)"; d="$(_alan "$ad" dosya)"
     if [[ -z "$s" || ! -f "$KOK/$s" ]]; then
-      _olcemedim "$ad: sınav dosyası yok"; [[ $bulgu -eq 1 ]] || bulgu=3; continue
+      _olcemedim_k "$ad/kos" "$ad: sınav dosyası yok"; [[ $bulgu -eq 1 ]] || bulgu=3; continue
     fi
     # Çıplak koşum: çıkış kodu bir pipe'ın arkasına GİZLENMEZ.
     local kutuk; kutuk="$(mktemp)"
@@ -148,7 +155,7 @@ _kos(){
       _iyi "$ad: sınav yeşil (exit=0)"
       [[ -n "$d" && -f "$KOK/$d" ]] && _durum_yaz "$ad" "$(_sha "$KOK/$d")"
     else
-      _bulgu "$ad: sınav KIRMIZI (exit=$rc)"
+      _bulgu_k "$ad/kos" "$ad: sınav KIRMIZI (exit=$rc)"
       tail -5 "$kutuk" | sed 's/^/     /'
       bulgu=1
     fi
@@ -221,7 +228,7 @@ _bagli_mi(){
   while IFS= read -r ad; do
     [[ -n "$ad" ]] || continue
     local cagri dosya; cagri="$(_alan "$ad" cagri)"; dosya="$(_alan "$ad" dosya)"
-    if [[ -z "$cagri" ]]; then _olcemedim "$ad: 'cagri' yok"; [[ $bulgu -eq 1 ]] || bulgu=3; continue; fi
+    if [[ -z "$cagri" ]]; then _olcemedim_k "$ad/bagli-mi" "$ad: 'cagri' yok"; [[ $bulgu -eq 1 ]] || bulgu=3; continue; fi
 
     # Tanım dosyasının KENDİSİ ve sınav dosyaları çağrı sayılmaz —
     # kapıyı yalnız kendi sınavı çağırıyorsa o kapı üretimde YOKTUR.
@@ -229,14 +236,14 @@ _bagli_mi(){
     local sayi; sayi="$(printf '%s' "$yerler" | grep -c . || true)"
 
     if [[ "$sayi" -eq 0 ]]; then
-      _bulgu "$ad: ÇAĞIRAN YOK — '$cagri' yalnız kendi dosyasında/sınavında geçiyor"
+      _bulgu_k "$ad/bagli-mi" "$ad: ÇAĞIRAN YOK — '$cagri' yalnız kendi dosyasında/sınavında geçiyor"
       _hata  "     → 'yazılmış ama bağlanmamış' vakası. Bu kapı için kapı sayısı SIFIRDIR."
       bulgu=1; continue
     fi
 
     local girisler; girisler="$(_dizi "$ad" girisler)"
     if [[ -z "$girisler" ]]; then
-      _olcemedim "$ad: 'girisler' beyan edilmemiş — yalnız çağrı VARLIĞI ölçüldü ($sayi yer)"
+      _olcemedim_k "$ad/bagli-mi" "$ad: 'girisler' beyan edilmemiş — yalnız çağrı VARLIĞI ölçüldü ($sayi yer)"
       [[ $bulgu -eq 1 ]] || bulgu=3; continue
     fi
     local eslesen=0
@@ -245,7 +252,7 @@ _bagli_mi(){
       printf '%s\n' "$yerler" | grep -qx -e "$g" && eslesen=1
     done <<< "$girisler"
     if [[ $eslesen -eq 0 ]]; then
-      _bulgu "$ad: çağrılıyor ama beyan edilen giriş noktalarının HİÇBİRİNDEN değil"
+      _bulgu_k "$ad/bagli-mi" "$ad: çağrılıyor ama beyan edilen giriş noktalarının HİÇBİRİNDEN değil"
       _hata  "     çağıranlar: $(printf '%s' "$yerler" | tr '\n' ' ')"
       _hata  "     → kapı ölü bir koldan çağrılıyor olabilir."
       bulgu=1; continue
@@ -263,15 +270,15 @@ _bayat_mi(){
   while IFS= read -r ad; do
     [[ -n "$ad" ]] || continue
     local d; d="$(_alan "$ad" dosya)"
-    if [[ -z "$d" || ! -f "$KOK/$d" ]]; then _olcemedim "$ad: kapı dosyası yok"; [[ $bulgu -eq 1 ]] || bulgu=3; continue; fi
+    if [[ -z "$d" || ! -f "$KOK/$d" ]]; then _olcemedim_k "$ad/bayat-mi" "$ad: kapı dosyası yok"; [[ $bulgu -eq 1 ]] || bulgu=3; continue; fi
     local kayitli; kayitli="$(_durum_oku "$ad" sha)"
     if [[ -z "$kayitli" ]]; then
       # 🔴 Kayıt yoksa "temiz" DEĞİL, ÖLÇÜLEMEDİ. Bu ayrım bu aracın varlık sebebidir.
-      _olcemedim "$ad: hiç yeşil koşum kaydı yok → 'kos' çalıştır"
+      _olcemedim_k "$ad/bayat-mi" "$ad: hiç yeşil koşum kaydı yok → 'kos' çalıştır"
       [[ $bulgu -eq 1 ]] || bulgu=3; continue
     fi
     if [[ "$kayitli" != "$(_sha "$KOK/$d")" ]]; then
-      _bulgu "$ad: BAYAT — kapı son yeşil koşumdan sonra değişti (son yeşil: $(_durum_oku "$ad" son_yesil))"
+      _bulgu_k "$ad/bayat-mi" "$ad: BAYAT — kapı son yeşil koşumdan sonra değişti (son yeşil: $(_durum_oku "$ad" son_yesil))"
       bulgu=1
     else
       _iyi "$ad: taze (son yeşil: $(_durum_oku "$ad" son_yesil))"
@@ -372,8 +379,55 @@ PY
 }
 
 # ── denetle ──────────────────────────────────────────────────────────────────
+# 🔴 CIRCIR (taban) — bir kapıyı "önce her şeyi düzelt, sonra bağla" diye ERTELEMEK,
+#    kapıyı hiç bağlamamakla aynı kapıya çıkar (bu filoda ölçüldü: 20 sınav yazılmış,
+#    hiçbiri bir kapıda koşmuyordu). Cırcır üçüncü yolu açar:
+#      · bugün BİLİNEN kusurlar tabana yazılır ve adlarıyla ekrana basılır — gizlenmez
+#      · YENİ bir kusur ilk günden KIRMIZI yakar (gerileme anında durur)
+#      · taban YALNIZ KÜÇÜLEBİLİR: bir kalem düzelmişse ve tabandan silinmemişse KIRMIZI
+#        ("taban bayat") — yoksa taban çürür ve sessizce sonsuza dek "bilinen" kalır.
+#        (Bu, aynı gün ölçülen 'takvimle çürüyen sınav' vakasının panzehiridir.)
+_taban_karsilastir(){ # <taban-dosyasi> <anahtar-dosyasi>
+  local taban="$1" simdi="$2"
+  [[ -f "$taban" ]] || { _hata "HATA: taban dosyası yok: $taban"; return "$RC_KULLANIM"; }
+  local t s yeni_k kalkan
+  t="$(grep -vE '^\s*(#|$)' "$taban" | sort -u)"
+  s="$(sort -u "$simdi" 2>/dev/null || true)"
+  yeni_k="$(comm -13 <(printf '%s\n' "$t") <(printf '%s\n' "$s"))"
+  kalkan="$(comm -23 <(printf '%s\n' "$t") <(printf '%s\n' "$s"))"
+  local rc=0
+  if [[ -n "${yeni_k//[[:space:]]/}" ]]; then
+    printf '\n🔴 TABANDA OLMAYAN YENİ KALEM — gerileme:\n'
+    printf '%s\n' "$yeni_k" | sed 's/^/   + /'
+    rc=1
+  fi
+  if [[ -n "${kalkan//[[:space:]]/}" ]]; then
+    printf '\n🔴 TABAN BAYAT — bu kalemler artık düşmüyor, tabandan SİLİNMELİ:\n'
+    printf '%s\n' "$kalkan" | sed 's/^/   - /'
+    printf '   → taban yalnız küçülür; küçülmeyen taban çürür ve sessizce kalkan olur.\n'
+    rc=1
+  fi
+  if [[ $rc -eq 0 ]]; then
+    local n; n="$(printf '%s' "$s" | grep -c . || true)"
+    printf '\n✓ cırcır: yeni kalem yok · taban tam kullanılıyor (BİLİNEN %s kalem)\n' "$n"
+    [[ "$n" -gt 0 ]] && printf '%s\n' "$s" | sed 's/^/   · /'
+  fi
+  return "$rc"
+}
+
 _denetle(){
-  local mut=0; [[ "${1:-}" == "--mutasyon" ]] && mut=1
+  local mut=0 taban=""
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --mutasyon) mut=1; shift ;;
+      --taban) taban="${2:-}"; shift 2 ;;
+      "") shift ;;
+      *) _hata "bilinmeyen bayrak: $1"; exit "$RC_KULLANIM" ;;
+    esac
+  done
+  if [[ -n "$taban" ]]; then
+    ANAHTAR_DOSYA="$(mktemp)"; : > "$ANAHTAR_DOSYA"
+  fi
   local kirmizi=0 olculemedi=0 rc
   # 🔴 SIRA BİLİNÇLİ: bayat-mi, kos'tan ÖNCE koşar. Aksi hâlde `kos` yeni damgayı
   #    yazar ve bayatlık kapısı KENDİ ÖLÇTÜĞÜ ŞEYİ tazeler — hiçbir zaman ateşlemez.
@@ -395,6 +449,12 @@ _denetle(){
     done < <(_adlar)
   fi
   printf '\n'
+  # Taban verildiyse hüküm CIRCIRINDIR: mutlak temizlik değil, GERİLEME YOK + TABAN TAZE.
+  if [[ -n "$taban" ]]; then
+    _taban_karsilastir "$taban" "$ANAHTAR_DOSYA"; local trc=$?
+    _dosya_sil "$ANAHTAR_DOSYA"
+    return "$trc"
+  fi
   # 🔴 Sıralama bilinçli: bulgu varsa 1; yoksa ama ölçülemeyen varsa 3.
   #    Ölçülemeyen ASLA 0'a yuvarlanmaz — bu aracın tüm anlamı o ayrımdadır.
   if [[ $kirmizi -eq 1 ]]; then
@@ -416,7 +476,7 @@ case "${1:-}" in
   bagli-mi) shift; _bagli_mi "${1:-}" ;;
   bayat-mi) shift; _bayat_mi "${1:-}" ;;
   mutasyon) shift; _mutasyon "${1:-}" ;;
-  denetle)  shift; _denetle "${1:-}" ;;
+  denetle)  shift; _denetle "$@" ;;
   -h|--help|"") sed -n '/^# Kullanım:/,/^set -/p' "$0" | sed 's/^# \{0,1\}//'; exit "$RC_KULLANIM" ;;
   *) _hata "bilinmeyen komut: $1"; exit "$RC_KULLANIM" ;;
 esac
