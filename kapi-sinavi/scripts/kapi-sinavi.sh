@@ -328,16 +328,30 @@ _ithal(){
       _olcemedim_k "$ad/ithal" "$ad: python değil ($d) — içe-aktarma ölçülemez"
       [[ $bulgu -eq 1 ]] || bulgu=3; continue
     fi
-    local dizin modul
+    local dizin dosya_adi
     dizin="$(cd "$KOK/$(dirname "$d")" && pwd)"
-    modul="$(basename "$d" .py)"
+    dosya_adi="$(basename "$d")"
     # Girdi ASLA gelmez: `sleep` boruyu açık tutar ama veri yollamaz.
     # Modül düzeyinde okuma varsa süreç bekler → zaman aşımı → kod 124.
     local cikti rc
     # Girdi ASLA gelmez. 🔴 BORU DEĞİL SÜREÇ-İKAMESİ: `sleep | cmd` yazılırsa kabuk
     # boru hattının TAMAMINI bekler ve temiz modülde bile 25sn harcanır (ilk sürümde
     # ölçüldü). `< <(sleep …)` ise komut biter bitmez döner — bekleyen tarafı bırakır.
-    cikti="$( ( cd "$dizin" && PYTHONDONTWRITEBYTECODE=1 timeout 8 python3 -c "import $modul" ) < <(sleep 12) 2>&1 )"
+    # 🔴 MODÜL ADIYLA DEĞİL, DOSYA YOLUYLA yüklenir. `import <ad>` yazmak, dosya adının
+    # geçerli bir Python tanımlayıcısı olduğunu VARSAYAR — tireli ad (`yargi-birlestir.py`)
+    # bu varsayımı çürütür ve sağlam modül "içe aktarılamadı" diye YANLIŞ KIRMIZI alır
+    # (ölçüldü 2026-08-23, bu deponun kendi sicilinde 3 vaka). importlib dosyayı doğrudan
+    # yükler; ölçtüğümüz soru zaten "bu DOSYA çalıştırılınca donuyor mu"dur.
+    cikti="$( ( cd "$dizin" && PYTHONDONTWRITEBYTECODE=1 KS_ITHAL_DOSYA="$dosya_adi" \
+                timeout 8 python3 -c '
+import importlib.util, os, sys
+sys.path.insert(0, os.getcwd())
+_p = os.environ["KS_ITHAL_DOSYA"]
+_spec = importlib.util.spec_from_file_location("_kapi_sinavi_ithal", _p)
+if _spec is None or _spec.loader is None:
+    raise SystemExit("spec kurulamadi: " + _p)
+_spec.loader.exec_module(importlib.util.module_from_spec(_spec))
+' ) < <(sleep 12) 2>&1 )"
     rc=$?
     case "$rc" in
       0) _iyi "$ad: temiz içe aktarıldı (modül düzeyinde bloklayan yan etki yok)" ;;

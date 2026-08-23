@@ -158,6 +158,38 @@ cd "$(dirname "$0")" || exit 1
 python3 -c "import kapi; assert kapi.izin_var_mi('Kaydet') is True" || exit 1
 SH
       ;;
+    tireli-ad)
+      # 🔴 OLCULMUS VAKA (2026-08-23, bu deponun kendi sicili): kapi dosyasinin adinda
+      #    TIRE var (`yargi-birlestir.py`). Ilk surum `import <dosya-adi>` yaziyordu;
+      #    tire Python tanimlayicisinda gecersiz oldugu icin SAGLAM modul "ice
+      #    aktarilamadi" diye YANLIS KIRMIZI aliyordu (3 vaka birden). Yanlis kirmizi,
+      #    yanlis yesilden daha az tehlikeli ama ayni olcude guven kiricidir.
+      cat > "$p/kapi-guvenlik.py" <<'PYF'
+class Yasak(Exception): pass
+
+def izin_var_mi(dugme):
+    if 'sil' in dugme:
+        raise Yasak(dugme)
+    return True
+
+def surucu(dugme):
+    izin_var_mi(dugme)      # cagri kendi dosyasinda: tireli dosya CLI giris noktasidir
+    return 'yapildi'
+PYF
+      cat > "$p/kapi.test.sh" <<'SH'
+#!/usr/bin/env bash
+cd "$(dirname "$0")" || exit 1
+python3 - <<'PYT' || exit 1
+import importlib.util
+s = importlib.util.spec_from_file_location("kg", "kapi-guvenlik.py")
+m = importlib.util.module_from_spec(s); s.loader.exec_module(m)
+assert m.izin_var_mi('Kaydet') is True
+try:
+    m.surucu('Secilenleri sil'); raise SystemExit(1)
+except m.Yasak: pass
+PYT
+SH
+      ;;
     kirmizi)
       cat > "$p/kapi.test.sh" <<'SH'
 #!/usr/bin/env bash
@@ -171,8 +203,10 @@ SH
   local girisler='["giris.py"]'
   [[ "$tur" == "girissiz"    ]] && girisler='[]'
   [[ "$tur" == "yanlis-giris" ]] && girisler='["baska.py"]'
+  local kapi_dosya='kapi.py'
+  [[ "$tur" == "tireli-ad" ]] && { kapi_dosya='kapi-guvenlik.py'; girisler='["kapi-guvenlik.py"]'; }
   cat > "$p/.kapi/kapilar.json" <<JSON
-{"v":1,"kapilar":[{"ad":"muhafiz","dosya":"kapi.py","cagri":"izin_var_mi",
+{"v":1,"kapilar":[{"ad":"muhafiz","dosya":"$kapi_dosya","cagri":"izin_var_mi",
  "sinav":"kapi.test.sh","girisler":$girisler,"mutasyon":"python"}]}
 JSON
   printf '%s' "$p"
@@ -276,6 +310,11 @@ _sil "$P"
 
 P="$(_fikstur bozuk-ithal)"
 _bekle "içe aktarılamayan modül → BULGU" 1 "$(_kos "$P" ithal)"
+
+# Regresyon: tireli dosya adi SAGLAM moduldur — yanlis kirmizi verilemez.
+P="$(_fikstur tireli-ad)"
+_bekle "🔴 REGRESYON: tireli dosya adı → temiz içe aktarılır (yanlış kırmızı YOK)" 0 "$(_kos "$P" ithal)"
+_bekle "tireli dosya adı → bağlılık da ölçülebilir" 0 "$(_kos "$P" bagli-mi)"
 _sil "$P"
 
 P="$(_fikstur tam)"

@@ -1,2 +1,5 @@
 __pycache__/
 *.pyc
+
+# kapi-sinavi kos komutunun yazdigi damga — koşuma ozel, paylasilmaz
+.kapi/durum.json

@@ -1,0 +1,53 @@
+{
+  "v": 1,
+  "kapilar": [
+    {
+      "ad":       "elogo-paket-butunlugu",
+      "dosya":    "elogo-erisim/scripts/elogo_gonder.py",
+      "cagri":    "_paketi_dogrula",
+      "sinav":    "elogo-erisim/scripts/elogo_gonder.test.sh",
+      "girisler": ["elogo-erisim/scripts/elogo_gonder.py"],
+      "mutasyon": "python"
+    },
+    {
+      "ad":       "elogo-onay-beyani",
+      "dosya":    "elogo-erisim/scripts/elogo_gonder.py",
+      "cagri":    "onayi_dogrula",
+      "sinav":    "elogo-erisim/scripts/elogo_gonder.test.sh",
+      "girisler": ["elogo-erisim/scripts/elogo_gonder.py"],
+      "mutasyon": "python"
+    },
+    {
+      "ad":       "havuz-kayit-semasi",
+      "dosya":    "ui-tasarim-akisi/arac/havuz.py",
+      "cagri":    "dogrula",
+      "sinav":    "ui-tasarim-akisi/arac/havuz.test.sh",
+      "girisler": ["ui-tasarim-akisi/arac/havuz.py"],
+      "mutasyon": "python"
+    },
+    {
+      "ad":       "yargi-hukum-esigi",
+      "dosya":    "ui-tasarim-akisi/arac/yargi-birlestir.py",
+      "cagri":    "hukum_ver",
+      "sinav":    "ui-tasarim-akisi/arac/yargi-birlestir.test.sh",
+      "girisler": ["ui-tasarim-akisi/arac/yargi-birlestir.py"],
+      "mutasyon": "python"
+    },
+    {
+      "ad":       "yogunluk-ekran-denetimi",
+      "dosya":    "ui-tasarim-akisi/arac/yogunluk-denetle.py",
+      "cagri":    "ekran_denetle",
+      "sinav":    "ui-tasarim-akisi/arac/yogunluk-denetle.test.sh",
+      "girisler": ["ui-tasarim-akisi/arac/yogunluk-denetle.py"],
+      "mutasyon": "python"
+    },
+    {
+      "ad":       "yogunluk-profil-tutarliligi",
+      "dosya":    "ui-tasarim-akisi/arac/yogunluk-denetle.py",
+      "cagri":    "profil_tutarlilik",
+      "sinav":    "ui-tasarim-akisi/arac/yogunluk-denetle.test.sh",
+      "girisler": ["ui-tasarim-akisi/arac/yogunluk-denetle.py"],
+      "mutasyon": "python"
+    }
+  ]
+}
