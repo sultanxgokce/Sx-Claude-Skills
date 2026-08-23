@@ -1397,6 +1397,21 @@
         "mutasyon sınavı",
         "kapı bağlı mı"
       ]
+    },
+    {
+      "id": "olcum-disiplini",
+      "sync_dagitim": true,
+      "type": "agent",
+      "name": "olcum-disiplini — ölçümün gerçekten ölçüm olduğunu denetle",
+      "version": "1.0.0",
+      "description": "boru (çıkış kodu görüntü süzgecinin arkasından mı okundu) · negatif (aynı negatifi ikinci kez ölçme, kanıtlı append-only defter) · kart (ölçümü kurmadan beş soru, defteri kendi sorar). RC=3 ÖLÇÜLEMEDİ demektir.",
+      "triggers": [
+        "ölçtüm",
+        "kanıtladım",
+        "temiz mi",
+        "bunu daha önce ölçtük mü",
+        "ölçüm kurmak"
+      ]
     }
   ]
 }
