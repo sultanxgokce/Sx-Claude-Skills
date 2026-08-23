@@ -1388,7 +1388,7 @@
       "sync_dagitim": true,
       "type": "agent",
       "name": "kapi-sinavi — kapının gerçekten kapı olduğunu kanıtla",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "description": "Kapının doğru karar verdiğini değil, DEVREDE olduğunu ve sınavının onu fiilen ölçtüğünü kanıtlar. kos · bagli-mi (AST) · bayat-mi · mutasyon (sil/no-op/yer-kaydırma). RC=3 ÖLÇÜLEMEDİ demektir, yeşil değil. Cırcır (--taban): bilinen kusurlar tabanda görünür, yeni kusur ilk günden kırmızı, taban yalnız küçülür.",
       "triggers": [
         "kapı yazdım",

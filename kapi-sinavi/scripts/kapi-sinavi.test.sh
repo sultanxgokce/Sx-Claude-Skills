@@ -88,6 +88,36 @@ cd "$(dirname "$0")" || exit 1
 python3 -c "import kapi; assert kapi.izin_var_mi('Kaydet') is True" || exit 1
 SH
       ;;
+    donan-ithal)
+      # 🔴 ÖLÇÜLMÜŞ VAKA (MUHASİP, 2026-08-23): stdin okuması MODÜL DÜZEYİNDE.
+      #    Kod doğru, çağrılma biçimi yanlış. Onu içe aktaran her sınav ASKIDA kalır.
+      cat > "$p/kapi.py" <<'PYF'
+import sys
+class Yasak(Exception): pass
+
+AYAR = sys.stdin.read()      # 🔴 MODÜL DÜZEYİNDE bloklayan okuma
+
+def izin_var_mi(dugme):
+    if 'sil' in dugme:
+        raise Yasak(dugme)
+    return True
+PYF
+      cat > "$p/kapi.test.sh" <<'SH'
+#!/usr/bin/env bash
+cd "$(dirname "$0")" || exit 1
+exit 0
+SH
+      ;;
+    bozuk-ithal)
+      cat > "$p/kapi.py" <<'PYF'
+import olmayan_modul_xyz          # içe aktarılamaz
+def izin_var_mi(d): return True
+PYF
+      cat > "$p/kapi.test.sh" <<'SH'
+#!/usr/bin/env bash
+exit 0
+SH
+      ;;
     ic-cagri)
       # 🔴 ÖLÇÜLMÜŞ EMSAL (elogo_gonder.py: ortam_kilidi_dogrula): kapının tek çağıranı
       #    KENDİ modülünde ve bu tamamen doğru — modül aynı zamanda giriş noktası.
@@ -232,6 +262,29 @@ _sil "$P"
 
 P="$(_fikstur girissiz)"
 _bekle "giriş noktası beyan edilmemiş → ÖLÇÜLEMEDİ (0 DEĞİL)" 3 "$(_kos "$P" bagli-mi)"
+_sil "$P"
+
+# ── 3b · ithal — "çağrılabilir mi" (bagli-mi'nin SORMADIĞI soru) ─────────────
+printf 'ithal — modül güvenle içe aktarılabiliyor mu\n'
+P="$(_fikstur tam)"
+_bekle "temiz modül içe aktarılır → 0" 0 "$(_kos "$P" ithal)"
+_sil "$P"
+
+P="$(_fikstur donan-ithal)"
+_bekle "🔴 GERÇEK VAKA: modül düzeyinde stdin → İÇE AKTARIRKEN DONDU" 1 "$(_kos "$P" ithal)"
+_sil "$P"
+
+P="$(_fikstur bozuk-ithal)"
+_bekle "içe aktarılamayan modül → BULGU" 1 "$(_kos "$P" ithal)"
+_sil "$P"
+
+P="$(_fikstur tam)"
+python3 - "$P/.kapi/kapilar.json" <<'PY'
+import json,sys
+p=sys.argv[1]; d=json.load(open(p)); d['kapilar'][0]['dosya']='kapi.test.sh'
+json.dump(d,open(p,'w'))
+PY
+_bekle "python olmayan kapı → ÖLÇÜLEMEDİ (0 DEĞİL)" 3 "$(_kos "$P" ithal)"
 _sil "$P"
 
 # ── 4 · bayat-mi ─────────────────────────────────────────────────────────────

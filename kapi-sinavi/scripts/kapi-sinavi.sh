@@ -31,6 +31,7 @@
 #   kapi-sinavi.sh kos      [ad]         kapının sınavını koş; yeşilse damgayı kaydet
 #   kapi-sinavi.sh bagli-mi [ad]         kapı fiilen ÇAĞRILIYOR mu (üretim yolundan)
 #   kapi-sinavi.sh bayat-mi [ad]         kapı son yeşil koşumdan sonra değişti mi
+#   kapi-sinavi.sh ithal    [ad]         modül güvenle İÇE AKTARILABİLİYOR mu (donma avı)
 #   kapi-sinavi.sh mutasyon <ad>         sil · no-op · yer-kaydırma — üçü de KIRMIZI yakmalı
 #   kapi-sinavi.sh denetle  [--mutasyon] [--taban <dosya>]   hepsi, tek RC
 #        --taban: CIRCIR — bilinen kalemler tabanda; yeni kalem ya da bayat taban KIRMIZI
@@ -299,6 +300,61 @@ _bayat_mi(){
   return "${bulgu:-0}"
 }
 
+# ── ithal ────────────────────────────────────────────────────────────────────
+# 🔴 NİÇİN VAR (ölçülmüş vaka, 2026-08-23 · günün YEDİNCİ "çağrılma biçimi" hatası)
+#    MUHASİP bir süzgeç yazdı; kod DOĞRUYDU. Ama `stdin` okumasını **modül düzeyine**
+#    koymuştu: onu içe aktaran sınav, girdi bekleyerek ASKIDA KALDI. Kendi cümlesi:
+#    *"Kod doğruydu, çağrılma biçimi yanlıştı."*
+#
+#    `bagli-mi` bu soruyu SORMAZ — o "çağrılıyor mu" diye bakar, "çağrılabilir mi"
+#    diye değil. Modül düzeyinde bloklayan bir yan etki (girdi okuma · ağ · uzun uyku)
+#    o modülü içe aktaran HER sınavı kilitler ve kilitlenen sınav "kırmızı" bile
+#    görünmez — sadece donar. Sessiz hatanın en pahalı biçimi.
+#
+#    Ölçüm yöntemi bilinçli olarak DİNAMİK: statik tarama "modül düzeyinde stdin var mı"
+#    sorusunu yaklaşık cevaplar; gerçek soru "içe aktarınca donuyor mu"dur ve o ancak
+#    çalıştırarak ölçülür. Girdi ASLA gelmeyen bir boru + zaman aşımı ile ölçülür.
+_ithal(){
+  _defter_var
+  _ad_dogrula "${1:-}"
+  local bulgu=0
+  while IFS= read -r ad; do
+    [[ -n "$ad" ]] || continue
+    local d; d="$(_alan "$ad" dosya)"
+    if [[ -z "$d" || ! -f "$KOK/$d" ]]; then
+      _olcemedim_k "$ad/ithal" "$ad: kapı dosyası yok"; [[ $bulgu -eq 1 ]] || bulgu=3; continue
+    fi
+    if [[ "$d" != *.py ]]; then
+      _olcemedim_k "$ad/ithal" "$ad: python değil ($d) — içe-aktarma ölçülemez"
+      [[ $bulgu -eq 1 ]] || bulgu=3; continue
+    fi
+    local dizin modul
+    dizin="$(cd "$KOK/$(dirname "$d")" && pwd)"
+    modul="$(basename "$d" .py)"
+    # Girdi ASLA gelmez: `sleep` boruyu açık tutar ama veri yollamaz.
+    # Modül düzeyinde okuma varsa süreç bekler → zaman aşımı → kod 124.
+    local cikti rc
+    # Girdi ASLA gelmez. 🔴 BORU DEĞİL SÜREÇ-İKAMESİ: `sleep | cmd` yazılırsa kabuk
+    # boru hattının TAMAMINI bekler ve temiz modülde bile 25sn harcanır (ilk sürümde
+    # ölçüldü). `< <(sleep …)` ise komut biter bitmez döner — bekleyen tarafı bırakır.
+    cikti="$( ( cd "$dizin" && PYTHONDONTWRITEBYTECODE=1 timeout 8 python3 -c "import $modul" ) < <(sleep 12) 2>&1 )"
+    rc=$?
+    case "$rc" in
+      0) _iyi "$ad: temiz içe aktarıldı (modül düzeyinde bloklayan yan etki yok)" ;;
+      124)
+        _bulgu_k "$ad/ithal" "$ad: İÇE AKTARIRKEN DONDU (8sn) — modül düzeyinde bloklayan yan etki"
+        _hata "     → bu modülü içe aktaran HER sınav kilitlenir; kilitlenen sınav kırmızı bile görünmez."
+        _hata "     → girdi okuma / ağ çağrısı / uyku fonksiyonun İÇİNE alınmalı, modül düzeyine değil."
+        bulgu=1 ;;
+      *)
+        _bulgu_k "$ad/ithal" "$ad: içe aktarılamadı (rc=$rc)"
+        printf '%s\n' "$cikti" | tail -3 | sed 's/^/     /'
+        bulgu=1 ;;
+    esac
+  done < <(_adlar "${1:-}")
+  return "${bulgu:-0}"
+}
+
 # ── mutasyon ─────────────────────────────────────────────────────────────────
 # Üç sınıf:
 #   sil          — kapı yok edilir. Sınav yeşil kalırsa: sınav kapıya HİÇ dokunmuyor.
@@ -445,7 +501,7 @@ _denetle(){
   #    yazar ve bayatlık kapısı KENDİ ÖLÇTÜĞÜ ŞEYİ tazeler — hiçbir zaman ateşlemez.
   #    (Bu aracın sınavı yakaladı: "kırmızı yok ama ölçülemeyen var" vakası 0 dönüyordu.)
   #    Doğru soru: "BEN GELDİĞİMDE bu kapının son yeşil koşumu güncel miydi?"
-  for adim in _kayit _bayat_mi _bagli_mi _kos; do
+  for adim in _kayit _bayat_mi _ithal _bagli_mi _kos; do
     printf '\n── %s ──\n' "${adim#_}"
     $adim; rc=$?
     [[ $rc -eq 1 ]] && kirmizi=1
@@ -488,6 +544,7 @@ case "${1:-}" in
   bagli-mi) shift; _bagli_mi "${1:-}" ;;
   bayat-mi) shift; _bayat_mi "${1:-}" ;;
   mutasyon) shift; _mutasyon "${1:-}" ;;
+  ithal)    shift; _ithal "${1:-}" ;;
   denetle)  shift; _denetle "$@" ;;
   -h|--help|"") sed -n '/^# Kullanım:/,/^set -/p' "$0" | sed 's/^# \{0,1\}//'; exit "$RC_KULLANIM" ;;
   *) _hata "bilinmeyen komut: $1"; exit "$RC_KULLANIM" ;;
