@@ -88,6 +88,34 @@ cd "$(dirname "$0")" || exit 1
 python3 -c "import kapi; assert kapi.izin_var_mi('Kaydet') is True" || exit 1
 SH
       ;;
+    ic-cagri)
+      # 🔴 ÖLÇÜLMÜŞ EMSAL (elogo_gonder.py: ortam_kilidi_dogrula): kapının tek çağıranı
+      #    KENDİ modülünde ve bu tamamen doğru — modül aynı zamanda giriş noktası.
+      #    İlk sürüm buna SAHTE KIRMIZI veriyordu.
+      cat > "$p/kapi.py" <<'PYF'
+class Yasak(Exception): pass
+
+def izin_var_mi(dugme):
+    if 'sil' in dugme:
+        raise Yasak(dugme)
+    return True
+
+def surucu(dugme):
+    izin_var_mi(dugme)      # tek çağrı: kendi modülünde
+    return 'yapildi'
+PYF
+      cat > "$p/kapi.test.sh" <<'SH'
+#!/usr/bin/env bash
+cd "$(dirname "$0")" || exit 1
+python3 - <<'PY' || exit 1
+import kapi
+assert kapi.izin_var_mi('Kaydet') is True
+try:
+    kapi.surucu('Secilenleri sil'); raise SystemExit(1)
+except kapi.Yasak: pass
+PY
+SH
+      ;;
     cagrisiz)
       # 🔴 Kapı VAR, sınavı VAR, ama onu çağıran üretim yolu YOK (gecenin ana vakası).
       cat > "$p/giris.py" <<'PY'
@@ -190,6 +218,10 @@ P="$(_fikstur cagrisiz)"
 _bekle "🔴 ÇAĞIRAN YOK → BULGU ('yazılmış ama bağlanmamış')" 1 "$(_kos "$P" bagli-mi)"
 _sil "$P"
 
+P="$(_fikstur ic-cagri)"
+_bekle "kapı yalnız KENDİ modülünden çağrılıyor + o modül giriş → 0 (sahte kırmızı YOK)" 0 "$(_kos "$P" bagli-mi)"
+_sil "$P"
+
 P="$(_fikstur anilan)"
 _bekle "🔴 yalnız YORUMDA anılıyor → ÇAĞIRAN YOK (anmak ≠ çağırmak)" 1 "$(_kos "$P" bagli-mi)"
 _sil "$P"
@@ -256,6 +288,41 @@ _sil "$P"
 
 P="$(_fikstur cagrisiz)"
 _bekle "bulgu varken → 1 (3'e düşmez)" 1 "$(_kos "$P" denetle)"
+_sil "$P"
+
+# ── 6b · CIRCIR (taban) ──────────────────────────────────────────────────────
+printf 'cırcır — bilinen kalem geçer, yeni kalem kırmızı, bayat taban kırmızı\n'
+P="$(_fikstur cagrisiz)"          # bilinen kusur: guvenli-benzeri "çağıran yok"
+_kos "$P" kos >/dev/null
+TB="$P/taban.txt"
+printf '# bilinen kusurlar (2026-08-23)\nB muhafiz/bagli-mi\n' > "$TB"
+_bekle "bilinen kalem tabanda → 0 (bilinen kusur yolu tıkamaz)" 0 "$(_kos "$P" denetle --taban "$TB")"
+
+R="$(KAPI_SINAVI_KOK="$P" bash "$ARAC" denetle --taban "$TB" 2>&1)"
+if grep -q 'BİLİNEN' <<<"$R" && grep -q 'muhafiz/bagli-mi' <<<"$R"; then
+  _ok "bilinen kalemler ADIYLA ekrana basılıyor (gizlenmiyor)"
+else
+  _no "bilinen kalemler ADIYLA ekrana basılıyor" "liste basılmadı"
+fi
+
+printf '# bos taban\n' > "$TB"
+_bekle "🔴 tabanda olmayan kalem → gerileme, KIRMIZI" 1 "$(_kos "$P" denetle --taban "$TB")"
+
+printf '# bilinen\nB muhafiz/bagli-mi\nB olmayan/kapi\n' > "$TB"
+R="$(KAPI_SINAVI_KOK="$P" bash "$ARAC" denetle --taban "$TB" 2>&1)"; RC=$?
+_bekle "🔴 artık düşmeyen kalem tabanda duruyorsa → TABAN BAYAT, KIRMIZI" 1 "$RC"
+if grep -q 'TABAN BAYAT' <<<"$R"; then
+  _ok "bayat taban gerekçesiyle basılıyor (taban yalnız küçülür)"
+else
+  _no "bayat taban gerekçesiyle basılıyor" "uyarı yok"
+fi
+_sil "$P"
+
+P="$(_fikstur tam)"
+_kos "$P" kos >/dev/null
+printf '# hicbir kusur yok\n' > "$P/taban.txt"
+_bekle "temiz proje + boş taban → 0" 0 "$(_kos "$P" denetle --taban "$P/taban.txt")"
+_bekle "olmayan taban dosyası → kullanım hatası" 2 "$(_kos "$P" denetle --taban "$P/yok.txt")"
 _sil "$P"
 
 # ── 7 · kullanım ─────────────────────────────────────────────────────────────

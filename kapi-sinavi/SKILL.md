@@ -1,7 +1,7 @@
 ---
 name: kapi-sinavi
 type: agent
-version: 1.0.1
+version: 1.1.0
 description: >
   Bir KAPININ gerçekten kapı olduğunu kanıtlar. Kapının doğru karar verdiğini değil —
   DEVREDE olduğunu, SINAVININ onu fiilen ölçtüğünü ve son yeşil koşumdan sonra
@@ -81,7 +81,7 @@ kapi-sinavi.sh kos      [ad]         sınavı ÇIPLAK koş; yeşilse kapının s
 kapi-sinavi.sh bagli-mi [ad]         kapı fiilen ÇAĞRILIYOR mu (AST tabanlı)
 kapi-sinavi.sh bayat-mi [ad]         kapı son yeşil koşumdan sonra değişti mi
 kapi-sinavi.sh mutasyon <ad>         sil · no-op · yer-kaydırma — üçü de KIRMIZI yakmalı
-kapi-sinavi.sh denetle  [--mutasyon] hepsi, tek RC
+kapi-sinavi.sh denetle  [--mutasyon] [--taban <dosya>]   hepsi, tek RC
 ```
 
 **Çıkış kodları:** `0` temiz · `1` BULGU · `2` kullanım/ortam · `3` ÖLÇÜLEMEDİ
@@ -103,6 +103,14 @@ damgayı yazar ve bayatlık kapısı kendi ölçtüğü şeyi tazeler — hiç a
 
 ## Sınırlar — dürüstçe
 
+- 🔴 **Kapı adı TEKİL olmalı.** AST, `x.ad()` biçimindeki her çağrıyı sayar ama nesnenin
+  türünü bilmez → jenerik ad (`dogrula` · `kontrol` · `kaydet`) başka modüldeki aynı adla
+  çakışır ve sahte "bağlı" üretir. Tam çözüm tür-çıkarımı ister; panzehir addır.
+  *(MUHASİP bildirdi 2026-08-23; düzeltilmedi, dürüst sınır olarak yazıldı.)*
+- **Kapının KENDİ modülündeki çağrı meşrudur** — modül aynı zamanda giriş noktası olabilir.
+  İlk sürüm tanım dosyasını dışlıyordu ve sahte kırmızı üretiyordu; ölçülmüş emsal
+  `elogo_gonder.py: ortam_kilidi_dogrula` (hattın en geri alınamaz kapısı, tek çağıranı
+  kendi dosyasında ve tamamen doğru). v1.1.0'da düzeltildi; ayrım artık yalnız raporlanır.
 - `bagli-mi` **statik**tir. *"Çağıran yok"* hükmü **kesindir** (0 eşleşme çürütülemez).
   *"Bağlı"* hükmü **yaklaşıktır** — çağıran satır ölü bir kolda olabilir. Bu yüzden
   `girisler` beyan edilmemişse sonuç yeşil değil **ÖLÇÜLEMEDİ** olur.
@@ -111,6 +119,26 @@ damgayı yazar ve bayatlık kapısı kendi ölçtüğü şeyi tazeler — hiç a
 - `mutasyon` yalnız Python kapıları için uygulanır; başka dil → RC=3, sessiz yeşil YOK.
 - Mutasyon projenin tamamını kopyalar → çok büyük depolarda yavaştır. `denetle` varsayılan
   olarak mutasyon **koşmaz** (`--mutasyon` ile açılır).
+
+## Cırcır — `denetle --taban <dosya>` (v1.1.0)
+
+Bir kapıyı *"önce her şeyi düzeltelim, sonra bağlarız"* diye ertelemek, kapıyı **hiç
+bağlamamakla** aynı yere çıkar. Bu filoda ölçüldü: 20 sınav yazılmıştı, hiçbiri bir kapıda
+koşmuyordu. Cırcır üçüncü yolu açar:
+
+- **Bilinen kusurlar tabanda** durur ve her koşumda **adlarıyla ekrana basılır** — gizlenmez.
+- **Yeni bir kusur ilk günden KIRMIZI** yakar. Gerileme anında durur.
+- **Taban yalnız küçülebilir:** bir kalem düzelmiş ama tabandan silinmemişse **KIRMIZI**
+  (*"taban bayat"*). Küçülmeyen taban çürür ve sessizce kalkana dönüşür — bu, aynı gün
+  ölçülen *"takvimle çürüyen sınav"* vakasının panzehiridir.
+
+Taban satırları makine anahtarıdır: `B <ad>/<kapı>` bulgu · `O <ad>/<kapı>` ölçülemedi.
+
+```
+# .kapi/taban.txt — bilinen kusurlar (tarih)
+B guvenli_tikla/bagli-mi
+O muhafiz/bayat-mi
+```
 
 ## Bayt-kodu önbelleği (v1.0.1)
 
@@ -132,7 +160,7 @@ dokunuyorsa, `denetle` yeşil (ya da en azından kırmızısız) olmadan merge e
 
 ## Kanıt
 
-`scripts/kapi-sinavi.test.sh` → **29 kapı**, hermetik (gerçek hiçbir depoya dokunmaz, her
+`scripts/kapi-sinavi.test.sh` → **37 kapı**, hermetik (gerçek hiçbir depoya dokunmaz, her
 vaka kendi geçici fikstür-projesini kurar). Kapsanan negatifler: sınavsız kapı · çift ad ·
 bozuk defter · kırmızı sınav · **çağıran yok** · **yalnız yorumda anılıyor** · yanlış giriş
 noktası · girişsiz (→3) · damgasız (→3) · bayat kapı · üç mutasyonun yakalanması ·
