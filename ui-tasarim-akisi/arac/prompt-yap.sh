@@ -23,7 +23,7 @@
 #   MARKA (--dil) kutuya aittir ve yalnız DEĞER taşır. --dil `:` ile ayrılmış birden çok dosya
 #   alabilir (PATH gibi); tek yol veren eski çağrılar aynen çalışır.
 #
-# DÖRT KAPI (dördü de ölçülmüş bir hüsranın panzehiri):
+# BEŞ KAPI (hepsi ölçülmüş bir hüsranın panzehiri):
 #   · Durak 0 — niyet dosyasındaki her "Kendi cümlem:" satırı DOLU olmalı. Şık seçmek yetmez;
 #     asıl bağlam cümlede. (Bir tam tur bu konuşma yapılmadığı için çöpe gitti.)
 #   · Ölçüm — devam promptu (--onceki) üretilmeden ÖNCE önceki sayfa yoğunluk kapısından
@@ -33,6 +33,9 @@
 #     ya da BAYATSA (sayfa ölçümden sonra değişmiş) rc=3; bütçe aşımı kayıtlıysa rc=1.
 #     Durak 2 tık bütçesini ZORUNLU ilan ediyordu ama hiçbir kapı istemiyordu — sistemin
 #     başkasında yakaladığı "ölçmediğine temiz der" hatası tam da buradaydı.
+#   · Gerekçe — önceki tur KIRMIZI ve "ne öğrenildi" yazılmamışsa devam promptu ÜRETİLMEZ
+#     (rc=1). Ölçüm yine deftere düşer; duran şey yalnız bir sonraki sayfanın çizilmesi.
+#     Kapatma: UI_AKIS_GEREKCE_KAPISI=0 (kaçış yolu açık ama sessiz değil).
 #   · Hex çiti — ÇEKİRDEK dosyası renk değeri taşıyamaz. Taşırsa ayrım fiilen çökmüştür
 #     (kural dosyasına sızan değer, filonun tamamına bir kutunun markasını dayatır).
 #
@@ -128,6 +131,24 @@ if [ -n "$ONCEKI" ] && [ -f "$ONCEKI" ]; then
     python3 "$ARAC/havuz.py" yaz "$@" >/dev/null \
       || echo "UYARI: havuza yazılamadı (ölçüm geçerli, defter eksik kaldı)." >&2
   }
+
+  # ── KAPI 5: GEREKÇESİZ KIRMIZI SONRAKİ TURU BLOKLAR (F3 · Sultan-kararı 2026-08-24)
+  # Niçin burada ve niçin havuz.py'nin yazma yolunda DEĞİL: havuz_yaz her hatayı tek satırlık
+  # uyarıya yutar (aşağıda) — kapıyı oraya koymak "kural var ama kapıda koşmuyor" hastalığının
+  # ta kendisi olurdu. Ayrıca kapıyı yazma yoluna koymak ÖLÇÜMÜ kaybettirirdi; ölçümü kaybetmek
+  # dersi kaybetmekten beterdir. Bu yüzden: ölçüm HER ZAMAN deftere düşer, PROMPT üretilmez.
+  # Kapı grup bazlıdır (kutu/urun/ekran/kapi) — başka ekranlar kilitlenmez.
+  if [ -f "$ARAC/havuz.py" ] && [ "${UI_AKIS_GEREKCE_KAPISI:-1}" != "0" ]; then
+    set +e
+    python3 "$ARAC/havuz.py" gerekce-kapisi --kutu "$_KU" --urun "$_KU" \
+            --ekran "$_EK" --kapi yogunluk; _GK=$?
+    set -e
+    if [ "$_GK" = "1" ]; then
+      echo "  Devam promptu ÜRETİLMEDİ: önceki kırmızıdan ne öğrenildiği yazılmadan" >&2
+      echo "  bir sonraki sayfa çizilirse aynı hata bütün diziye yayılır." >&2
+      exit 1
+    fi
+  fi
 
   case "$OLCUM_RC" in 0) _H=temiz ;; 1) _H=kirmizi ;; *) _H=olcemedi ;; esac
   _KOD="$(printf '%s' "$OLCUM" | grep -oE '^❌ KIRMIZI +[A-ZÇĞİÖŞÜ]{1,2}[0-9]{1,2}' \

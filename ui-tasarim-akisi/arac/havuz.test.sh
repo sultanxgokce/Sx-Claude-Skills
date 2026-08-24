@@ -135,6 +135,97 @@ icerir "sebep söylenir" "profil_sha desene uymuyor"
 kapi "parmak-izsiz ölçüm özette dürüstçe sayılır" 0 python3 "$H" ozet --havuz "$J3"
 icerir "eksik parmak-izi bildirilir" "profil parmak-izi YOK"
 
+echo "── 12 · ders: kutunun kendi defterine opak işaretçi (F2 · L40-kalem-4)"
+J4="$T/ders.jsonl"
+kapi "serbest metin ders → rc=1 (İ1 kalkanı)" 1 python3 "$H" yaz --havuz "$J4" \
+     --kutu akar --urun akar --ekran e11 --kapi yogunluk --hukum kirmizi \
+     --dusen S1 --arac 0.3.1 --ders "bu uzun bir gerekçe metni"
+icerir "sebep söylenir" "ders desene uymuyor"
+kapi "s0000 biçimli ders → rc=0" 0 python3 "$H" yaz --havuz "$J4" \
+     --kutu akar --urun akar --ekran e11 --kapi yogunluk --hukum kirmizi \
+     --dusen S1 --arac 0.3.1 --ders s0251
+kapi "gerekçesiz kırmızı da yazılabilir (ders opsiyonel)" 0 python3 "$H" yaz --havuz "$J4" \
+     --kutu akar --urun akar --ekran e12 --kapi yogunluk --hukum kirmizi --dusen S2 --arac 0.3.1
+kapi "ders alanlı özet → rc=0" 0 python3 "$H" ozet --havuz "$J4"
+icerir "gerekçesi olan kırmızı sayılır" "gerekçesi olan kırmızı: 1/2"
+
+echo "── 13 · dusen_karar: kural mı zayıf tasarım mı zayıf (F4 · L40-kalem-4)"
+J5="$T/karar.jsonl"
+kapi "enum-dışı dusen_karar → rc=1 (kapalı küme)" 1 python3 "$H" yaz --havuz "$J5" \
+     --kutu akar --urun akar --ekran e13 --kapi yogunluk --hukum temiz \
+     --dusen S1 --arac 0.3.1 --dusen-karar "belki-oyle-belki-boyle"
+icerir "sebep söylenir" "dusen_karar desene uymuyor"
+kapi "kural-hatali yargısı → rc=0" 0 python3 "$H" yaz --havuz "$J5" \
+     --kutu akar --urun akar --ekran e13 --kapi yogunluk --hukum temiz \
+     --dusen S1 --arac 0.3.1 --dusen-karar kural-hatali
+kapi "tasarim-duzeltildi yargısı → rc=0" 0 python3 "$H" yaz --havuz "$J5" \
+     --kutu akar --urun akar --ekran e14 --kapi yogunluk --hukum temiz \
+     --dusen S1 --arac 0.3.1 --dusen-karar tasarim-duzeltildi
+kapi "ikinci tasarim-duzeltildi" 0 python3 "$H" yaz --havuz "$J5" \
+     --kutu akar --urun akar --ekran e15 --kapi yogunluk --hukum temiz \
+     --dusen S1 --arac 0.3.1 --dusen-karar tasarim-duzeltildi
+kapi "yargı-dağılımlı özet → rc=0" 0 python3 "$H" ozet --havuz "$J5"
+icerir "kural NAKKAŞ'ın sorusuna cevap verir" "S1   3  (2 tasarim-duzeltildi · 1 kural-hatali)"
+
+echo "── 14 · GEREKÇE: kırmızıya sonradan ders bağlanır (salt-ekleme, hedefe dokunulmaz)"
+J6="$T/f3.jsonl"
+kapi "e20 kırmızı yazılır (gerekçesiz)" 0 python3 "$H" yaz --havuz "$J6" \
+     --kutu akar --urun akar --ekran e20 --kapi yogunluk --hukum kirmizi --dusen S3 --arac 0.3.1
+GID="$(printf '%s' "$SON" | sed -n 's/^havuz +1 · \([0-9a-f]\{12\}\).*/\1/p')"
+kapi "ÖLÇÜM KAYBOLMAZ: gerekçesiz kırmızıya rağmen yazma sürer" 0 python3 "$H" yaz \
+     --havuz "$J6" --kutu akar --urun akar --ekran e22 --kapi yogunluk \
+     --hukum kirmizi --dusen S3 --arac 0.3.1
+kapi "boş gerekçe reddedilir → rc=2" 2 python3 "$H" gerekce --havuz "$J6" "$GID"
+icerir "boş gerekçe gerekçe değil" "boş gerekçe"
+kapi "bilinmeyen hedef → rc=1" 1 python3 "$H" gerekce --havuz "$J6" ffffffffffff \
+     --dusen-karar kural-hatali
+kapi "geçerli gerekçe bağlanır → rc=0" 0 python3 "$H" gerekce --havuz "$J6" "$GID" \
+     --ders s0300 --dusen-karar kural-hatali
+icerir "hedef bildirilir" "gerekçe bağlandı"
+kapi "gerekçeli özet → rc=0" 0 python3 "$H" ozet --havuz "$J6"
+icerir "gerekçe satırı ÖLÇÜM sayılmaz (2 kırmızı, 1'i gerekçeli)" "gerekçesi olan kırmızı: 1/2"
+
+echo "── 15 · F3 KAPISI: sorulur, yazma yolunu kilitlemez (Sultan-kararı 2026-08-24)"
+J7="$T/kapi.jsonl"
+kapi "hiç kayıt yoksa kapı AÇIK → rc=0" 0 python3 "$H" gerekce-kapisi --havuz "$J7" \
+     --kutu akar --urun akar --ekran e30 --kapi yogunluk
+kapi "eksik argüman → rc=2" 2 python3 "$H" gerekce-kapisi --havuz "$J7" --kutu akar
+python3 "$H" yaz --havuz "$J7" --kutu akar --urun akar --ekran e30 --kapi yogunluk \
+     --hukum kirmizi --dusen S3 --arac 0.3.1 >/dev/null
+KID2="$(python3 "$H" oku --havuz "$J7" | head -1 | cut -d' ' -f1)"
+kapi "gerekçesiz kırmızıdan sonra kapı KAPALI → rc=1" 1 python3 "$H" gerekce-kapisi \
+     --havuz "$J7" --kutu akar --urun akar --ekran e30 --kapi yogunluk
+icerir "reçete verilir" "havuz.py gerekce"
+kapi "BAŞKA ekran etkilenmez (grup bazlı) → rc=0" 0 python3 "$H" gerekce-kapisi \
+     --havuz "$J7" --kutu akar --urun akar --ekran e31 --kapi yogunluk
+python3 "$H" gerekce --havuz "$J7" "$KID2" --dusen-karar tasarim-duzeltildi >/dev/null
+kapi "gerekçe bağlanınca kapı AÇILIR → rc=0" 0 python3 "$H" gerekce-kapisi \
+     --havuz "$J7" --kutu akar --urun akar --ekran e30 --kapi yogunluk
+kapi "temiz hükümden sonra kapı AÇIK → rc=0" 0 python3 "$H" gerekce-kapisi \
+     --havuz "$J7" --kutu akar --urun akar --ekran e32 --kapi yogunluk
+
+echo "── 16 · ÇAĞIRAN GERÇEK Mİ: kapı prompt-yap.sh'te fiilen duruyor mu?"
+# Bu bloğun niçini: kapı önce havuz.py'nin YAZMA yoluna konmuştu — ama prompt-yap.sh
+# havuz hatalarını tek satırlık uyarıya yutuyor, yani kapı orada GÖRÜNMEZDİ. "Kural var,
+# kapıda koşmuyor" hastalığının ta kendisi. Aşağısı kapının GERÇEK çağırandaki etkisini ölçer.
+J8="$T/cagiran.jsonl"
+_EKAD="$(basename "$ILK")"; _EKAD="$(printf '%s' "${_EKAD%.*}" | tr 'A-Z' 'a-z')"
+python3 "$H" yaz --havuz "$J8" --kutu akar --urun akar --ekran "$_EKAD" \
+     --kapi yogunluk --hukum kirmizi --dusen S3 --arac 0.3.1 >/dev/null 2>&1
+kapi "gerekçesiz kırmızıdan sonra devam promptu ÜRETİLMEZ → rc=1" 1 \
+     env UI_AKIS_HAVUZ="$J8" UI_AKIS_KUTU=akar bash "$ARAC/prompt-yap.sh" \
+     "$T/proje/sablon.md" --onceki "$ILK" --dil "$T/proje/dil.md" --estetik "$T/proje/est.md"
+icerir "sebep Sultan-dilinde söylenir" "önceki tur KIRMIZI ve gerekçesiz"
+KID3="$(python3 "$H" oku --havuz "$J8" 2>/dev/null | head -1 | cut -d' ' -f1)"
+python3 "$H" gerekce --havuz "$J8" "$KID3" --dusen-karar tasarim-duzeltildi >/dev/null 2>&1
+kapi "gerekçe bağlanınca devam promptu ÜRETİLİR → rc=0" 0 \
+     env UI_AKIS_HAVUZ="$J8" UI_AKIS_KUTU=akar bash "$ARAC/prompt-yap.sh" \
+     "$T/proje/sablon.md" --onceki "$ILK" --dil "$T/proje/dil.md" --estetik "$T/proje/est.md"
+kapi "kaçış yolu açık ama sessiz değil (UI_AKIS_GEREKCE_KAPISI=0)" 0 \
+     env UI_AKIS_HAVUZ="$T/kacis.jsonl" UI_AKIS_KUTU=akar UI_AKIS_GEREKCE_KAPISI=0 \
+     bash "$ARAC/prompt-yap.sh" "$T/proje/sablon.md" --onceki "$ILK" \
+     --dil "$T/proje/dil.md" --estetik "$T/proje/est.md"
+
 echo
 echo "TOPLAM: $GECTI geçti · $KALDI kaldı"
 [ "$KALDI" -eq 0 ]

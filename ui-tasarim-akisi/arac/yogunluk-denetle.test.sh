@@ -234,6 +234,29 @@ assert m.kapsayan(kardes.index("D"), m.araliklar(kardes, "sc-if")) is None, "kar
 assert m.kapsayan(acik.index("C"), m.araliklar(acik, "sc-if")) is not None, "kapanmamış: açık uç kayıp"
 PYEOF
 
+# 14 · F5 KAPISI — KURAL DEĞİŞİKLİĞİ KANITSIZ SÜRÜM ALAMAZ (Sultan-kararı 2026-08-24)
+# Niçin: S5 kapısının "sonu 0 olan font kademesinde kırılması" kuralın kendi hatasıydı; o vaka
+# ancak bir fikstür ÇİFTİ (kırmızı + yeşil) yazıldığında kapandı. Kural sonradan yazmak bedava;
+# bu yüzden kanıt kuralın kendisiyle aynı anda istenir. Yeni bir kural kodu (ör. S6) eklenip
+# fikstürü yazılmazsa bu kapı KIRMIZI döner — beyan değil, sayım.
+kodlar="$(grep -oE '(ihlaller|notlar)\.append\("[SX][0-9]' "$KAPI" \
+          | grep -oE '[SX][0-9]' | sort -u)"
+eksik=""
+for kod in $kodlar; do
+  if ! ls "$FIK/kirli/$kod"-*.html >/dev/null 2>&1; then eksik="$eksik $kod"; fi
+done
+if [ -z "$eksik" ]; then
+  gecti "f5-fikstur-cifti" "$(printf '%s' "$kodlar" | wc -w) kural kodunun hepsinde kırmızı fikstür var"
+else
+  kaldi "f5-fikstur-cifti" "kanıtsız kural kodu:$eksik (fikstur/kirli/<KOD>-*.html yaz)"
+fi
+# Çiftin yeşil yarısı: temiz küme zaten §1'de rc=0 veriyor; ikisi birlikte ÇİFT eder.
+if ls "$FIK/temiz/"*.html >/dev/null 2>&1; then
+  gecti "f5-yesil-yari" "çiftin yeşil yarısı mevcut (fikstur/temiz)"
+else
+  kaldi "f5-yesil-yari" "yeşil fikstür yok — çift yarım, kanıt sayılmaz"
+fi
+
 echo "────────────────────────────────────────────"
 printf 'TOPLAM: %d geçti · %d kaldı\n' "$GECTI" "$KALDI"
 [ "$KALDI" = "0" ] || exit 1

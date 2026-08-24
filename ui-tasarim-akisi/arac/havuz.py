@@ -59,9 +59,18 @@ DUSEN_DESENI = r"^[A-ZÇĞİÖŞÜ]{1,2}[0-9]{1,2}$"
 #      Desen `rubrik_sha` (yargi-birlestir.py) ile aynı: içerik değil PARMAK İZİ.
 #    iptal + sebep: mezar-taşı satırı; ikisi BİRLİKTE gelir (fail-closed).
 SECIMLI = {
-    "profil_sha": r"^[0-9a-f]{12}$",
-    "iptal":      r"^[0-9a-f]{12}$",
-    "sebep":      r"^(olcmeden-yazildi|yanlis-profil|tekrar|test-artigi)$",
+    "profil_sha":  r"^[0-9a-f]{12}$",
+    "iptal":       r"^[0-9a-f]{12}$",
+    "sebep":       r"^(olcmeden-yazildi|yanlis-profil|tekrar|test-artigi)$",
+    # ders: kutunun KENDİ seyir-defterindeki notuna opak işaretçi (içerik taşımaz —
+    #   yalnız "s0123" gibi bir sıra-no; havuzdan çözülemez, kutunun git-kökünde yaşar).
+    "ders":        r"^s[0-9]{4}$",
+    # dusen_karar: bir SONRAKİ turun, ÖNCEKİ turun kırmızısı için verdiği kapalı yargı
+    #   (NAKKAŞ'ın "kural mı zor, tasarım mı zayıf" sorusunu mekanik cevaplar).
+    "dusen_karar": r"^(kural-hatali|tasarim-duzeltildi|kabul-edildi|olcemedi)$",
+    # gerekce: hedef kırmızı kaydın id'si. `iptal` mezar-taşının kardeşi — hedefi
+    #   geçersiz KILMAZ, ona gerekçe BAĞLAR (salt-ekleme korunur).
+    "gerekce":     r"^[0-9a-f]{12}$",
 }
 SEBEPLER = ("olcmeden-yazildi", "yanlis-profil", "tekrar", "test-artigi")
 
@@ -141,6 +150,10 @@ def yaz(argv, yol):
     }
     if al("profil-sha"):
         kayit["profil_sha"] = al("profil-sha")
+    if al("ders"):
+        kayit["ders"] = al("ders")
+    if al("dusen-karar"):
+        kayit["dusen_karar"] = al("dusen-karar")
     hata = dogrula(kayit)
     if hata:
         sys.stderr.write("HAVUZ REDDETTİ — kayıt yazılmadı:\n")
@@ -215,6 +228,114 @@ def iptal(argv, yol):
     return 0
 
 
+def _grup(kayitlar, kayit):
+    return [k for k in kayitlar
+            if k["kutu"] == kayit["kutu"] and k["urun"] == kayit["urun"]
+            and k["ekran"] == kayit["ekran"] and k["kapi"] == kayit["kapi"]]
+
+
+def gerekcesi_var(kayit, hepsi):
+    """Kırmızı bir kayıt gerekçeye bağlanmış mı?
+
+    İki yol: (a) kaydın KENDİSİ ders/dusen_karar taşır (ölçüm anında biliniyordu),
+    (b) sonradan bir `gerekce` satırı onu referanslar (turdan sonra öğrenildi).
+    """
+    if "ders" in kayit or "dusen_karar" in kayit:
+        return True
+    kid = kayit_id(kayit)
+    return any(k.get("gerekce") == kid for k in hepsi)
+
+
+def gerekce(argv, yol):
+    """Kırmızı bir kayda SONRADAN gerekçe bağlar (salt-ekleme; hedefe dokunulmaz)."""
+    degerli = {"--havuz", "--ders", "--dusen-karar"}
+    hedefler, atla = [], False
+    for a in argv[2:]:
+        if atla:
+            atla = False
+            continue
+        if a.startswith("--"):
+            atla = a in degerli
+            continue
+        hedefler.append(a)
+    def al(ad):
+        return argv[argv.index("--" + ad) + 1] if "--" + ad in argv else None
+    ders, karar = al("ders"), al("dusen-karar")
+    if len(hedefler) != 1 or not (ders or karar):
+        sys.stderr.write("kullanım: havuz.py gerekce <kayit-id> "
+                         "[--ders sNNNN] [--dusen-karar %s]\n"
+                         % "|".join(("kural-hatali", "tasarim-duzeltildi",
+                                     "kabul-edildi", "olcemedi")))
+        sys.stderr.write("  en az biri ZORUNLU — boş gerekçe gerekçe değildir.\n")
+        return 2
+    hedef_id = hedefler[0]
+    kayitlar = satirlar(yol)
+    hedef = next((k for k in gecerli(kayitlar) if kayit_id(k) == hedef_id), None)
+    if hedef is None:
+        sys.stderr.write("kayıt bulunamadı (ya da iptal edilmiş): %s\n" % hedef_id)
+        return 1
+    satir = {a: hedef[a] for a in ZORUNLU}
+    satir["ts"] = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    satir["dusen"] = []                     # gerekçe satırı kural DÜŞÜRMEZ
+    satir["gerekce"] = hedef_id
+    if ders:
+        satir["ders"] = ders
+    if karar:
+        satir["dusen_karar"] = karar
+    hata = dogrula(satir)
+    if hata:
+        sys.stderr.write("GEREKÇE YAZILAMADI — şemaya uymadı:\n")
+        for h in hata:
+            sys.stderr.write("  · %s\n" % h)
+        return 1
+    try:
+        with open(yol, "a", encoding="utf-8") as f:
+            f.write(json.dumps(satir, ensure_ascii=False, sort_keys=True) + "\n")
+    except OSError as e:
+        sys.stderr.write("HAVUZA YAZILAMADI: %s\n" % e)
+        return 2
+    print("gerekçe bağlandı · %s (%s/%s %s)%s%s" % (hedef_id, hedef["kutu"],
+          hedef["ekran"], hedef["kapi"],
+          (" ders=" + ders) if ders else "", (" karar=" + karar) if karar else ""))
+    return 0
+
+
+def gerekce_kapisi(argv, yol):
+    """F3 KAPISI (Sultan-kararı 2026-08-24): gerekçesiz kırmızı sonraki turu bloklar.
+
+    Çağıranı `prompt-yap.sh --onceki`; ORADA rc≠0 üretir. Burada yalnız SORULUR —
+    yazma yolunda durmaz, çünkü ölçümü kaybetmek dersi kaybetmekten beterdir.
+    ÇIKIŞ: 0 kapı AÇIK · 1 KAPALI (gerekçesiz kırmızı var) · 2 kullanım
+    """
+    def al(ad):
+        return argv[argv.index("--" + ad) + 1] if "--" + ad in argv else None
+    alan = {a: al(a) for a in ("kutu", "urun", "ekran", "kapi")}
+    if not all(alan.values()):
+        sys.stderr.write("kullanım: havuz.py gerekce-kapisi --kutu X --urun X "
+                         "--ekran Y --kapi yogunluk\n")
+        return 2
+    hepsi = satirlar(yol)
+    grup = [k for k in gecerli(hepsi)
+            if k["kutu"] == alan["kutu"] and k["urun"] == alan["urun"]
+            and k["ekran"] == alan["ekran"] and k["kapi"] == alan["kapi"]
+            and "gerekce" not in k]
+    if not grup:
+        return 0
+    son = grup[-1]
+    if son["hukum"] != "kirmizi" or gerekcesi_var(son, hepsi):
+        return 0
+    sys.stderr.write("KAPI KAPALI — önceki tur KIRMIZI ve gerekçesiz: %s/%s %s (%s)\n"
+                     % (son["kutu"], son["ekran"], son["kapi"], kayit_id(son)))
+    sys.stderr.write("  Düşen: %s\n" % (", ".join(son["dusen"]) or "kaydedilmemiş"))
+    sys.stderr.write("  Gerekçeyi bağla, sonra devam et:\n")
+    sys.stderr.write("    havuz.py gerekce %s --dusen-karar "
+                     "<kural-hatali|tasarim-duzeltildi|kabul-edildi|olcemedi>\n"
+                     % kayit_id(son))
+    sys.stderr.write("    (ayrıca --ders sNNNN ile kendi seyir-defterindeki nota "
+                     "işaretçi bağlayabilirsin)\n")
+    return 1
+
+
 def satirlar(yol):
     if not os.path.isfile(yol):
         return []
@@ -284,6 +405,10 @@ def ozet(argv, yol):
         if ham:
             print("(dosyada %d satır var ama hepsi iptal edilmiş / süzgeç dışında)" % len(ham))
         return 3
+    kayitlar = [k for k in kayitlar if "gerekce" not in k]   # gerekçe satırı ölçüm değil
+    if not kayitlar:
+        print("Havuz boş — ölçüm yapılmamış ya da havuz yolu yanlış: %s" % yol)
+        return 3
     sayac, kutular, hukumler = {}, {}, {}
     for k in kayitlar:
         for d in k["dusen"]:
@@ -297,12 +422,32 @@ def ozet(argv, yol):
     if sha_yok:
         print("profil: %d/%d ölçümde profil parmak-izi YOK — hangi referansa göre "
               "ölçüldüğü bilinmiyor" % (sha_yok, len(kayitlar)))
+    kirmizilar = [k for k in kayitlar if k["hukum"] == "kirmizi" and "gerekce" not in k]
+    if kirmizilar:
+        dersli = sum(1 for k in kirmizilar if gerekcesi_var(k, ham))
+        print("gerekçesi olan kırmızı: %d/%d" % (dersli, len(kirmizilar)))
     print("hüküm: " + " · ".join("%s=%d" % (h, n) for h, n in sorted(hukumler.items())))
     print("kutu:  " + " · ".join("%s=%d" % (h, n) for h, n in sorted(kutular.items())))
     if sayac:
         print("\nEN ÇOK DÜŞEN KURALLAR (kural mı zor, tasarım mı zayıf — NAKKAŞ'ın sorusu):")
+        # dusen_karar: hangi koda hangi yargı verilmiş — kayıt-seviyesi yargı, kayıttaki
+        # HER düşen koda aynı yargı uygulanır (bir kayıtta tek yargı, DESIGN §Seçenek-C).
+        karar_dagilimi = {}
+        for k in kayitlar:
+            dk = k.get("dusen_karar")
+            if not dk:
+                continue
+            for kod in k["dusen"]:
+                karar_dagilimi.setdefault(kod, {})
+                karar_dagilimi[kod][dk] = karar_dagilimi[kod].get(dk, 0) + 1
         for kod, n in sorted(sayac.items(), key=lambda x: (-x[1], x[0]))[:10]:
-            print("  %-4s %d" % (kod, n))
+            kararlar = karar_dagilimi.get(kod)
+            if kararlar:
+                detay = " · ".join("%d %s" % (c, kk) for kk, c in
+                                    sorted(kararlar.items(), key=lambda x: -x[1]))
+                print("  %-4s %d  (%s)" % (kod, n, detay))
+            else:
+                print("  %-4s %d" % (kod, n))
     else:
         print("\nHiçbir kural düşmemiş.")
     return 0
@@ -321,7 +466,12 @@ def main(argv):
         return ozet(argv, yol)
     if komut == "iptal":
         return iptal(argv, yol)
-    sys.stderr.write("bilinmeyen komut: %s (yaz|oku|ozet|iptal)\n" % komut)
+    if komut == "gerekce":
+        return gerekce(argv, yol)
+    if komut == "gerekce-kapisi":
+        return gerekce_kapisi(argv, yol)
+    sys.stderr.write("bilinmeyen komut: %s "
+                     "(yaz|oku|ozet|iptal|gerekce|gerekce-kapisi)\n" % komut)
     return 2
 
 
