@@ -1,7 +1,7 @@
 ---
 name: ui-tasarim-akisi
 type: agent
-version: 0.3.2
+version: 0.4.0
 description: >
   UI/arayüz tasarım işinin ZORUNLU akış kapısı. Bir ürünün ekranlarını tek tek değil dizi
   hâlinde tasarlatır: ürün niyeti → sayfa envanteri → kullanıcı senaryoları (tık bütçesi) →
@@ -367,6 +367,50 @@ HTML, gerekçe metni, kişi/müşteri adı taşıyacak hiçbir alan yoktur — y
 (`kutu · urun · ekran · kapi · hukum · dusen[] · tur · arac · ts`). Şema dışı anahtar, desene
 uymayan değer ya da `dusen` alanına serbest metin → **kayıt reddedilir** (fail-closed).
 "Şuraya küçük bir not düşeyim" diye alan eklenmez; eklenirse mahremiyet sınırı sessizce delinir.
+
+### Hüküm birikiyordu, ders birikmiyordu — `ders` + `dusen_karar` (2026-08-24)
+
+Havuzun 41 kaydı ölçüldü: **41'inin 0'ından "ne öğrenildi / ne değiştirdim" çıkarılamıyordu.**
+Bir kural gerçekten çiğnendiği için mi kırmızı yandı, yoksa kuralın kendisi mi bozuktu — havuz
+ikisini aynı gösteriyordu. Kanıt: `yogunluk-denetle.py` S5 kapısının sonu 0 olan font kademesinde
+kırıldığı bulundu, ama bu bilgi havuzda **hiç yok** (`grep -c S5` → 0); federe tetikle, insan
+hatırladığı için taşındı. Sistemi geliştiren bilgi defterin DIŞINDAN geliyordu.
+
+İki isteğe bağlı alan bunu kapatır — ikisi de **kapalı desen**, serbest metin taşımaz:
+
+| Alan | Desen | Ne söyler |
+|---|---|---|
+| `--ders` | `^s[0-9]{4}$` | Kutunun **kendi** `seyir-defteri`'ndeki notun sıra-no'su. İçerik kutuda kalır (o kutunun git kökünde), havuzda yalnız opak işaretçi durur — ortak dizinden çözülemez. |
+| `--dusen-karar` | `kural-hatali · tasarim-duzeltildi · kabul-edildi · olcemedi` | Bir SONRAKİ turun, önceki turun kırmızısı için verdiği tek kelimelik yargı. |
+
+`ozet` artık NAKKAŞ'ın sorusunu **mekanik** cevaplar: `S1 4` yerine
+`S1   4  (3 tasarim-duzeltildi · 1 kural-hatali)`, ve ayrıca `gerekçesi olan kırmızı: n/m` basar.
+
+Gerekçe **sonradan** da bağlanabilir — `iptal` mezar-taşının kardeşi, hedefe dokunmaz:
+
+```
+python3 arac/havuz.py gerekce <kayit-id> --dusen-karar kural-hatali [--ders s0251]
+```
+
+🚪 **KAPI 5 — gerekçesiz kırmızı bir sonraki SAYFAYI bloklar** (Sultan-kararı 2026-08-24).
+`prompt-yap.sh --onceki`, devam promptunu üretmeden önce havuza sorar
+(`havuz.py gerekce-kapisi`): aynı `kutu/urun/ekran/kapi` grubunda en son ölçüm kırmızı ve
+gerekçesizse **prompt üretilmez** (`rc=1` + reçete). Başka ekranlar etkilenmez (grup bazlı).
+Kaçış yolu var ama sessiz değil: `UI_AKIS_GEREKCE_KAPISI=0`.
+
+🔴 **Kapı niçin `prompt-yap.sh`'te, havuz.py'nin YAZMA yolunda değil** — bu ayrım işin özü ve
+ilk denemede yanlış yapıldı: kapı önce `havuz.py yaz`'a kondu, ama `prompt-yap.sh` içindeki
+`havuz_yaz` her havuz hatasını tek satırlık uyarıya **yutar** → kapı gerçek çağıranda hiç
+görünmezdi. Bu, tam da bu bölümün teşhis ettiği "kural var, kapıda koşmuyor" hastalığıdır.
+İkinci sebep: kapıyı yazma yoluna koymak **ölçümü** kaybettirirdi. Ölçümü kaybetmek dersi
+kaybetmekten beterdir. Bu yüzden kural şudur — **ölçüm her zaman deftere düşer, duran şey
+yalnız bir sonraki sayfanın çizilmesidir.** Testte kilitli (§16, mutasyon-kanıtlı).
+
+⚠️ **F1 bağımlılığı yok (dürüst kayıt):** tasarım belgesi kapının `seyir-defteri` kurulumundan
+SONRA açılmasını şart koşuyordu — çünkü gerekçenin tek yolu `--ders` sanılıyordu. Değil:
+`--dusen-karar` kapalı bir enumdur ve **hiçbir deftere ihtiyaç duymaz**. Defteri olmayan kutu
+da kapıdan geçebilir. Bu yüzden kapı bugün açık; `seyir-defteri` kurulumu (F1) hâlâ değerlidir
+(gerekçenin *niçin*'ini o taşır) ama artık ön-koşul değildir.
 
 **Boş havuz "temiz" demez, "hiç bakılmamış" der — ve çıkış kodu da öyle der.** `ozet` boş
 havuzda **RC=3 (ÖLÇÜLEMEDİ)** döner. Metin bunu zaten söylüyordu ama kod `0` diyordu; bir çağıran
