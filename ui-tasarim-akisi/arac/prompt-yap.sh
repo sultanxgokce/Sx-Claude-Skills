@@ -150,6 +150,21 @@ if [ -n "$ONCEKI" ] && [ -f "$ONCEKI" ]; then
     fi
   fi
 
+  # ── KAPI 6: AYIRT-EDİCİLİK YARGISI VERİLMEDEN SONRAKİ SAYFA ÇİZİLMEZ (L77 · 2026-08-25)
+  # Ölçüldü: filo'nun UI kapılarında "bu ekran ayırt edici mi" diye soran madde YOKTU (0 eşleşme).
+  # Sonuç: sözleşmeye uyan ama birbirinin aynısı ekranlar. Bu kapı çarpıcılığı ÖLÇMEZ —
+  # yargının VERİLMİŞ olmasını şart koşar. Rubrik: sablonlar/estetik-guc-v1.md
+  if [ -f "$ARAC/havuz.py" ] && [ "${UI_AKIS_AYIRT_KAPISI:-1}" != "0" ]; then
+    set +e
+    python3 "$ARAC/havuz.py" ayirt-kapisi --kutu "$_KU" --urun "$_KU" --ekran "$_EK"; _AK=$?
+    set -e
+    if [ "$_AK" = "1" ]; then
+      echo "  Devam promptu ÜRETİLMEDİ: önceki sayfanın ayırt edici olup olmadığına" >&2
+      echo "  karar verilmeden sıradaki çizilirse dizi kendi kendini tekrarlar." >&2
+      exit 1
+    fi
+  fi
+
   case "$OLCUM_RC" in 0) _H=temiz ;; 1) _H=kirmizi ;; *) _H=olcemedi ;; esac
   _KOD="$(printf '%s' "$OLCUM" | grep -oE '^❌ KIRMIZI +[A-ZÇĞİÖŞÜ]{1,2}[0-9]{1,2}' \
           | grep -oE '[A-ZÇĞİÖŞÜ]{1,2}[0-9]{1,2}$' | sort -u | paste -sd, - || true)"
