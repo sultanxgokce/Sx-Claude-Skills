@@ -1412,6 +1412,35 @@
         "bunu daha önce ölçtük mü",
         "ölçüm kurmak"
       ]
+    },
+    {
+      "id": "gunluk-plan",
+      "type": "workflow",
+      "name": "Günün Planı — Ölç → Süz → Sun → İcra",
+      "version": "1.0.0",
+      "description": "Elimizdeki işleri yedi kaynaktan ÖLÇER (layiha defteri · kapımda kartları · açık PR'lar · odalardan gelen · kuyruk · defter · ortam), dört elekten süzer (bugün kapanır mı · kilit açar mı · bozuk mu · Sultan hisseder mi), Sultan-dilinde sabit-formatta plan sunar ve onaydan sonra icra eder. Ölçmeden madde yazmak yasak; elenen iş gerekçesiyle kayda geçer.",
+      "tags": [
+        "planlama",
+        "gunluk",
+        "olcum",
+        "suzme",
+        "workflow",
+        "global"
+      ]
+    },
+    {
+      "id": "gorsel-yon",
+      "type": "workflow",
+      "name": "Görsel Yön — üretilmiş görselle yön arayışı (kanıt üretmez)",
+      "version": "0.2.0",
+      "description": "Higgsfield hattı. Üretilmiş görselin bir sayfada NEREYE girip giremeyeceğini kodla zorlar (ölçüt 'üretilmiş mi' değil 'KANIT konumunda mı'); üç fail-closed kapı. v0.2.0 ile fiilen üretir: iste → bekle → indir zinciri + harcama defteri (adet sayar, lira değil) + çoklu kare. Varsayılan kuru-koşum, kredi harcamaz.",
+      "tags": [
+        "gorsel",
+        "tasarim",
+        "higgsfield",
+        "fail-closed",
+        "global"
+      ]
     }
   ]
 }
