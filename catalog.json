@@ -1245,21 +1245,6 @@
       ]
     },
     {
-      "id": "federe-os-cekirdek",
-      "type": "agent",
-      "name": "Federe OS Çekirdeği — odalar arası tetik · nabız · haberleşme",
-      "version": "0.5.0",
-      "description": "Federe Ekip-OS çekirdek protokolleri TEK pakette: tetikleme (poll+ACK round-trip), yalnız-META haberleşme, canlılık-nabzı, not-tutma. 14 odanın haberleşme omurgası. ÖKSÜZDÜ — 2026-08-08'de kanona adopte edildi (ortak mount'ta yaşıyordu, sıfırdan kurulumda geri gelmezdi). 0.5.0 (2026-08-27, KATLAMA F1): gonder --tip (mesaj|is|devir) + bilinmeyen-bayrak RC=2 + geri-al ters-kayıt (K4/K5, NÂZIR-mutabık).",
-      "tags": [
-        "federe",
-        "haberlesme",
-        "tetik",
-        "nabiz",
-        "global",
-        "agent"
-      ]
-    },
-    {
       "id": "defter-kapisi",
       "type": "agent",
       "name": "defter-kapisi — görev-yakalama + mailbox-yanıt prosedürü",
