@@ -137,8 +137,10 @@ def kanit_gecerli(ref):
 
 
 IZIN_RECETE = (
-    'izin beyanı: kim/ne yetkilendirdi — ör. "Sultan onayı 2026-08-08" · '
-    '"L63 izin paketi md-4" · "peşin-onay: federe tüm-faz"'
+    'izin beyanı: kim/ne yetkilendirdi — D1-damga biçimi önerilir: '
+    '"2026-08-27 Sultan: GO (sohbet · <oturum-ref> · \\"<≤15-kelime kırpık>\\" · beyan:<AJAN>)" · '
+    'ör. "Sultan onayı 2026-08-08" · "L63 izin paketi md-4". '
+    'A06: araç Sultan\'ın sözünü ÜRETMEZ — bu alan ajanın GÖRDÜĞÜ onayın referans-beyanıdır'
 )
 
 
@@ -217,6 +219,80 @@ def dogrula_gecerli(komut):
     if "\n" in k or "\r" in k:
         return False
     return k.lower() not in ("yok", "n/a", "na", "---", "???", "bos", "boş", "true", "echo ok")
+
+
+# ── K2 KAPALI-BİÇİM (Sultan-onaylı K#1 çatı, 2026-08-27 · NÂZIR-mutabık K2) ─────────────
+# `isteyen`/`yetki` bugüne dek serbest metindi ("SERDAR", "sözlü direktif") — makine
+# ayrıştıramıyordu (S5: Sultan'ın işi ile ajanınki ayırt EDİLEMİYORDU). Artık kapalı biçim:
+#   isteyen: `sultan` ya da `<oda>/<rol>` (ör. s13/mim) — regex aşağıda.
+#   yetki  : sultan-emri | oda-ici | odalar-arasi (kapalı küme).
+# Tolerans BİÇİMDE olur, KÜMEDE değil (hucre_normalize emsali): "Sultan"/"S13/MIM" küçük
+# harfe çekilir, tanınmayan değer RC=2. ESKİ serbest-metin kayıtlar okuma-anında AYNEN
+# yaşar — kapı yalnız YENİ yazımda işler, göç yok.
+ISTEYEN_RE = re.compile(r"^(sultan|[a-z0-9-]+/[a-z0-9-]+)$")
+ISTEYEN_RECETE = (
+    "isteyen biçimi: `sultan` ya da `<oda>/<rol>` (küçük harf, ör. s13/mim · s01/serdar)"
+)
+YETKILER = ("sultan-emri", "oda-ici", "odalar-arasi")
+YETKI_RECETE = "yetki kapalı kümedir: %s" % " | ".join(YETKILER)
+
+
+def isteyen_normalize(v):
+    return (v or "").strip().lower()
+
+
+def isteyen_gecerli(v):
+    return bool(ISTEYEN_RE.match(isteyen_normalize(v)))
+
+
+def yetki_normalize(v):
+    return (v or "").strip().lower()
+
+
+def yetki_gecerli(v):
+    return yetki_normalize(v) in YETKILER
+
+
+# ── K6 ODA-ÖNEKLİ KOD ÇÖZÜMÜ (2026-08-27) ────────────────────────────────────────────────
+# Girdi `s01-L13` biçiminde gelebilir; defterdeki kod alanı DEĞİŞMEZ (append-only).
+# Kendi öneki → soyulur (hem "s01-L13" hem "L13" aday olur; defterde hangisi varsa o bulunur).
+# Yabancı-oda öneki → hata metni döner (fail-closed: başka odanın kaydına burada dokunulmaz).
+ODA_KOD_RE = re.compile(r"^(s\d{2})-([Ll]\d+)$")
+
+
+def kod_adaylari(key, onek):
+    """→ (aday_listesi, hata_metni). Hata doluysa adaylar boştur."""
+    k = (key or "").strip()
+    m = ODA_KOD_RE.match(k)
+    if not m:
+        return [k], ""
+    if onek and m.group(1).lower() != onek.lower():
+        return [], ("bu defter %s defteri — '%s' öneki başka odanın kaydına işaret ediyor "
+                    "(o odanın kendi defterinde işlem yap)" % (onek, m.group(1)))
+    return [k, m.group(2)], ""
+
+
+def kayit_eslesir(rec, adaylar):
+    """slug tam-metin · id büyük/küçük-duyarsız — mevcut eşleşme kuralının aday-listeli hâli."""
+    rid = str(rec.get("id", "")).lower()
+    for a in adaylar:
+        if rec.get("slug") == a or rid == a.lower():
+            return True
+    return False
+
+
+def kim_suzgec(rec, kim):
+    """K3 süzgeç-yüklemi (2026-08-27 genişletme): --sultan artık yetki-eksenini de görür.
+    sultan     → isteyen==sultan VEYA yetki==sultan-emri
+    ajan       → isteyen dolu VE sultan değil
+    bilinmiyor → isteyen boş (eski kayıtlar; tahmin edilmez)"""
+    if kim == "sultan":
+        return kim_sinifi(rec) == "sultan" or yetki_normalize(rec.get("yetki")) == "sultan-emri"
+    if kim == "ajan":
+        return kim_sinifi(rec) == "ajan"
+    if kim == "bilinmiyor":
+        return kim_sinifi(rec) == "bilinmiyor"
+    return True
 
 
 def kim_sinifi(rec):

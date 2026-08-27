@@ -229,3 +229,19 @@ geri-alınamaz biçimde deler. Kanıt: `scripts/hat-yolu.test.sh` (21 kapı; G2/
 ## Sınırlar / dürüstlük
 - Skill kod-içermez (talimat + `layiha-defteri.sh` yardımcısı). İnşa-yetkisi VERMEZ; her build Sultan-GO.
 - Defter per-container (İ1 yalnız-yerel); fleet-rollup gerekirse ayrı meta-iş.
+
+## Sürüm notları
+- **2026-08-27 (KATLAMA F1 · Sultan-onaylı K#1 çatı + K#6 izin-kaydı · NÂZIR-mutabık K2/K3/K6/K7):**
+  `layiha-defteri.sh` iş-kaydı alanları KAPALI-BİÇİME alındı ve oda-öneki görünüme bağlandı:
+  - **K2:** `ekle --isteyen` artık `sultan` ya da `<oda>/<rol>` (regex; "S13/MIM"→"s13/mim"
+    biçim-toleransı), `--yetki` kapalı küme `sultan-emri|oda-ici|odalar-arasi`; uymayan değer RC=2.
+    Verilmeyen alan kayda HİÇ yazılmaz; eski serbest-metin kayıtlar okuma-anında aynen yaşar (göç yok).
+  - **K3:** `liste --sultan` artık `yetki==sultan-emri`yi de kapsar (isteyen boş olsa bile);
+    `--ajan` = isteyen dolu ∧ sultan değil. İnsan-görünümünde satır rozeti: `⚜ sultan` / `⚙ s13/mim`.
+    Porcelain sütun sırası/sayısı DEĞİŞMEDİ.
+  - **K6:** insan-görünümünde kod her zaman oda-önekli basılır (`[s01-L13]`); dosyadaki kod alanı
+    DEĞİŞMEZ (append-only). `durum`/`tescil`/`geri-al` önekli girdiyi kabul eder (kendi öneki
+    soyulur); yabancı-oda öneki RC=2 + "bu defter <oda> defteri".
+  - **K7-izin:** `--izin` reçetesi D1-damga biçimini örnekler; A06 cümlesi yardım metninde —
+    araç Sultan'ın sözünü ÜRETMEZ, alan ajanın GÖRDÜĞÜ onayın referans-beyanıdır.
+  Test: layiha-defteri.test.sh 197/197 (G20 yeni; G16a serbest-metin değerleri bilinçli güncellendi).

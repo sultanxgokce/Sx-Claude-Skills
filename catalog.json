@@ -934,8 +934,8 @@
       "id": "federe-os-cekirdek",
       "type": "agent",
       "name": "/federe-os-cekirdek — Federe Ekip-OS çekirdek-protokolleri (C3/D7)",
-      "version": "0.3.0",
-      "description": "Federe Ekip-OS A/B protokolleri tek pakette (k0180): tetikleme poll+ACK (A1/A4) · not-tutma (A2/B1) · haberleşme yalnız-META (B2) · nabız (A3) · hafıza-vatandaşlığı (B3). Taşınabilir istemci scripts/federe.sh (Nexus-repo'suz container'da da çalışır); poll-cron reçetesi GO-1 token-kapılı. CLAUDE.md'lere yalnız pointer — tek-güncelleme-noktası.",
+      "version": "0.5.0",
+      "description": "Federe Ekip-OS A/B protokolleri tek pakette (k0180): tetikleme poll+ACK (A1/A4) · not-tutma (A2/B1) · haberleşme yalnız-META (B2) · nabız (A3) · hafıza-vatandaşlığı (B3). Taşınabilir istemci scripts/federe.sh (Nexus-repo'suz container'da da çalışır); poll-cron reçetesi GO-1 token-kapılı. CLAUDE.md'lere yalnız pointer — tek-güncelleme-noktası. 0.5.0 (2026-08-27, KATLAMA F1): gonder --tip (mesaj|is|devir) + bilinmeyen-bayrak RC=2 + geri-al ters-kayıt (K4/K5, NÂZIR-mutabık).",
       "installed_in": [
         "_global"
       ],
@@ -985,7 +985,7 @@
       "type": "workflow",
       "name": "Layiha — araştır → kalıcı sabitle → inşayı sonraya bırak",
       "version": "1.13.1",
-      "description": "Bir konuyu kapsamlı ARAŞTIR (SERDAR-altı araştırma alt-ajanı), kalıcı bir tasarım-dokümanına (layiha) SABİTLE, inşayı SONRAYA bırak. 3-kanal kayıt (git-durable PR + memory-topic + defter) + kayıt-defteri (layiha-defteri.sh: ekle/durum/liste; her kayıt <CELL>-L## kodu — CELL_ID unset → s01, K6 2026-08-10; eski öneksiz L## kodlar geri-uyumlu — + oluşturulma-tarihi + durum) + Sultan'a sabit-format teslim (Araştırıldı/Doküman/Context-odak-cümlesi). Zaman-filtreleri: --aktif/--bugun/--hafta/--hafta-bitmemis/--hepsi. SALT-ARAŞTIRMA — inşa-yetkisi VERMEZ; her build Sultan-GO. GLOBAL, defter per-container (İ1). v1.2: bağımsız-tescil kapısı (insa-edildi≠tescilli; MÜHÜRDAR kör-tescil reuse; tescilli/reddi/muaf + tescil-bekleyen filtresi).",
+      "description": "Bir konuyu kapsamlı ARAŞTIR (SERDAR-altı araştırma alt-ajanı), kalıcı bir tasarım-dokümanına (layiha) SABİTLE, inşayı SONRAYA bırak. 3-kanal kayıt (git-durable PR + memory-topic + defter) + kayıt-defteri (layiha-defteri.sh: ekle/durum/liste; her kayıt <CELL>-L## kodu — CELL_ID unset → s01, K6 2026-08-10; eski öneksiz L## kodlar geri-uyumlu — + oluşturulma-tarihi + durum) + Sultan'a sabit-format teslim (Araştırıldı/Doküman/Context-odak-cümlesi). Zaman-filtreleri: --aktif/--bugun/--hafta/--hafta-bitmemis/--hepsi. SALT-ARAŞTIRMA — inşa-yetkisi VERMEZ; her build Sultan-GO. GLOBAL, defter per-container (İ1). v1.2: bağımsız-tescil kapısı (insa-edildi≠tescilli; MÜHÜRDAR kör-tescil reuse; tescilli/reddi/muaf + tescil-bekleyen filtresi). K1-K7 (2026-08-27): isteyen/yetki alanları + liste --sultan/--ajan + oda-önekli kod kabulü + insa-ediliyor --izin ZORUNLU.",
       "prerequisites": {
         "system": [
           "bash",
@@ -1248,8 +1248,8 @@
       "id": "federe-os-cekirdek",
       "type": "agent",
       "name": "Federe OS Çekirdeği — odalar arası tetik · nabız · haberleşme",
-      "version": "0.7.0",
-      "description": "Federe Ekip-OS çekirdek protokolleri TEK pakette: tetikleme (poll+ACK round-trip), yalnız-META haberleşme, canlılık-nabzı, not-tutma. 14 odanın haberleşme omurgası. ÖKSÜZDÜ — 2026-08-08'de kanona adopte edildi (ortak mount'ta yaşıyordu, sıfırdan kurulumda geri gelmezdi).",
+      "version": "0.5.0",
+      "description": "Federe Ekip-OS çekirdek protokolleri TEK pakette: tetikleme (poll+ACK round-trip), yalnız-META haberleşme, canlılık-nabzı, not-tutma. 14 odanın haberleşme omurgası. ÖKSÜZDÜ — 2026-08-08'de kanona adopte edildi (ortak mount'ta yaşıyordu, sıfırdan kurulumda geri gelmezdi). 0.5.0 (2026-08-27, KATLAMA F1): gonder --tip (mesaj|is|devir) + bilinmeyen-bayrak RC=2 + geri-al ters-kayıt (K4/K5, NÂZIR-mutabık).",
       "tags": [
         "federe",
         "haberlesme",
@@ -1431,8 +1431,8 @@
       "id": "gorsel-yon",
       "type": "workflow",
       "name": "Görsel Yön — üretilmiş görselle yön arayışı (kanıt üretmez)",
-      "version": "0.2.0",
-      "description": "Higgsfield hattı. Üretilmiş görselin bir sayfada NEREYE girip giremeyeceğini kodla zorlar (ölçüt 'üretilmiş mi' değil 'KANIT konumunda mı'); üç fail-closed kapı. v0.2.0 ile fiilen üretir: iste → bekle → indir zinciri + harcama defteri (adet sayar, lira değil) + çoklu kare. Varsayılan kuru-koşum, kredi harcamaz.",
+      "version": "0.3.0",
+      "description": "Higgsfield hattı. Üretilmiş görselin bir sayfada NEREYE girip giremeyeceğini kodla zorlar (ölçüt 'üretilmiş mi' değil 'KANIT konumunda mı'); üç fail-closed kapı. v0.2.0 ile fiilen üretir: iste → bekle → indir zinciri + harcama defteri (adet sayar, lira değil) + çoklu kare. Varsayılan kuru-koşum, kredi harcamaz. 0.3.0 (2026-08-27): kesif-katalog kullanım-alanı (Sultan-izinli) + TR-imla yasak-deliği kapandı + anahtar env-önce.",
       "tags": [
         "gorsel",
         "tasarim",
