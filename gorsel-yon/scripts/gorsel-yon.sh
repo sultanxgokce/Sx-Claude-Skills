@@ -31,9 +31,10 @@ declare -A IZINLI=(
   [yon-arayisi]="kompozisyon/ışık denemesi — SİTEYE GİRMEZ, atılacak taslak"
   [doku-zemin]="içerik iddiası taşımayan soyut yüzey (zemin, boşluk dolgusu)"
   [hareket-dili]="geçişin nasıl olacağını GÖSTEREN örnek, içerik değil"
+  [kesif-katalog]="müşteri-keşif katalog matrisi (stil×oda×palet) — HER kare ILHAM/YÖN rozetli; kanıt konumuna GEÇMEZ, site-yüzeyine SIZMAZ (Sultan-izni 2026-08-27, MİHMANDAR talebi; B3-site-yasağı katalog stillerine uygulanmaz)"
 )
 # 🔴 YASAK — bunlar kanıt konumudur, üretilmiş görsel giremez
-YASAK_ANAHTAR="vaka|proje|once-sonra|oncesi|sonrasi|santiye|imalat|cizim|daire|mahal|portfolyo|referans"
+YASAK_ANAHTAR="vaka|proje|once-sonra|önce-sonra|oncesi|öncesi|sonrasi|sonrası|santiye|şantiye|imalat|imalât|cizim|çizim|daire|mahal|portfolyo|referans"
 
 _hata(){ echo "HATA: $*" >&2; }
 # 🔴 Anahtar KASADA (openbao secret/nexus/HIGGSFIELD_API_KEY) — .env'de DEĞİL.
@@ -41,10 +42,15 @@ _hata(){ echo "HATA: $*" >&2; }
 _anahtar(){
   local v="${HIGGSFIELD_API_KEY:-}"
   [ -n "$v" ] && { printf '%s' "$v"; return 0; }
+  # v0.3.0: env-dosyası ÖNCE okunur — kasa-çekimi düşse bile eldeki anahtar kullanılır
+  # (Nova vakası 2026-08-27: anahtar aynalanmış env-dosyasındaydı, get-fail her şeyi düşürüyordu)
+  local envf="${CORTEX_ACCESS_ENV:-$HOME/.config/cortex-access.env}"
+  v="$(sed -n 's/^export HIGGSFIELD_API_KEY=//p;s/^HIGGSFIELD_API_KEY=//p' "$envf" 2>/dev/null | head -1)"
+  [ -n "$v" ] && { printf '%s' "$v"; return 0; }
   local vc="${VAULT_CEK:-/config/.claude/skills/vault-cek/scripts/vault-cek.sh}"
   [ -x "$vc" ] || [ -f "$vc" ] || return 1
   bash "$vc" get HIGGSFIELD_API_KEY >/dev/null 2>&1 || return 1
-  v="$(sed -n 's/^export HIGGSFIELD_API_KEY=//p;s/^HIGGSFIELD_API_KEY=//p' "${CORTEX_ACCESS_ENV:-$HOME/.config/cortex-access.env}" 2>/dev/null | head -1)"
+  v="$(sed -n 's/^export HIGGSFIELD_API_KEY=//p;s/^HIGGSFIELD_API_KEY=//p' "$envf" 2>/dev/null | head -1)"
   [ -n "$v" ] && { printf '%s' "$v"; return 0; }
   return 1
 }
@@ -53,7 +59,7 @@ kullanimlar(){
   echo "İzinli kullanım alanları (kapalı küme):"
   for k in "${!IZINLI[@]}"; do printf '  %-14s %s\n' "$k" "${IZINLI[$k]}"; done
   echo
-  echo "🔴 Bu üçünün DIŞI reddedilir. Ölçüt 'üretilmiş mi' değil, 'KANIT konumunda mı'."
+  echo "🔴 Bu kapalı kümenin DIŞI reddedilir. Ölçüt 'üretilmiş mi' değil, 'KANIT konumunda mı'."
   echo "   Yanında hafta/çizim/karar duran her görsel kanıttır → gerçek olmak zorundadır."
 }
 

@@ -3,7 +3,9 @@
 # (FAZ-1 · A1/A4) FİLO-TAŞINABİLİR uyarlaması: Nexus-repo'suz container'da da çalışır (izole-birimler
 # Nexus'u GÖREMEZ — skill ortak ~/.claude/skills mount'uyla 10/10 dağıtılır, istemci de yanında gider).
 #
-#   gonder [--tetikli "<gerekçe≤120>"] <hedef_sNN> "<başlık≤120>" [kart_ref] [not≤500]   → tetik bırak (META-only; --tetikli = zil)
+#   gonder [--tetikli "<gerekçe≤120>"] [--tip mesaj|is|devir] <hedef_sNN> "<başlık≤120>" [kart_ref] [not≤500]
+#            → tetik bırak (META-only; --tetikli = zil; --tip = K4 tip-ayrımı, 2026-08-27)
+#   geri-al <id> --gerekce "<metin>"   → K5: tip=devir kaydını SİLMEZ, karşıt (ters) kayıt ekler
 #   gelen [durum] · giden [durum]                             → kutu listele
 #   alindi <id> · tamam <id> ["sonuç-notu≤500"] · iptal <id>  → durum-makinesi (ileri-yönlü)
 #   dinle                                                      → poll: bekleyenleri yerel-inbox'a yaz + alindi-ACK
@@ -34,7 +36,8 @@ _inbox() { printf '%s' "${FEDERE_TETIK_INBOX:-$HOME/.federe/tetik-inbox.md}"; }
 kullanim() {
   cat >&2 <<'K'
 kullanım: federe.sh <komut>
-  gonder [--tetikli "<gerekçe≤120>"] <hedef_sNN> "<başlık≤120>" [kart_ref] [not≤500]
+  gonder [--tetikli "<gerekçe≤120>"] [--tip mesaj|is|devir] <hedef_sNN> "<başlık≤120>" [kart_ref] [not≤500]
+  geri-al <id> --gerekce "<metin>"   (K5: tip=devir kaydına ters-kayıt — silme YOK)
   gelen [bekliyor|alindi|tamam|iptal|all]
   giden [bekliyor|alindi|tamam|iptal|all]
   alindi <id> · tamam <id> ["sonuç-notu≤500"] · iptal <id>
@@ -99,7 +102,8 @@ _listele() { # $1=yon $2=durum
   # döndürüyor — ama okuma ucu onu HİÇ basmıyordu. Gönderen "not yazdım" der, alan taraf yalnız
   # başlığı görürdü; 7 MİHENK talebi bu yüzden yalnız başlıktan triyaj edilebildi. Not artık
   # girintili ikinci satır olarak basılır (varsa); yoksa satır aynen eskisi gibi tek satır kalır.
-  echo "$resp" | jq -r '.tetikler[] | "  • [\(.id)] \(.durum) · \(.kaynakCell)→\(.hedefCell) · \(.tip) · \(.baslik)\(if .kartRef then " (\(.kartRef))" else "" end)" + (if (.not // "") != "" then "\n      ↳ \(.not)" else "" end)'
+  # K4 okuma-uyumu (2026-08-27): tip'i OLMAYAN eski kayıt `mesaj` sayılır (göç yok).
+  echo "$resp" | jq -r '.tetikler[] | "  • [\(.id)] \(.durum) · \(.kaynakCell)→\(.hedefCell) · \(.tip // "mesaj") · \(.baslik)\(if .kartRef then " (\(.kartRef))" else "" end)" + (if (.not // "") != "" then "\n      ↳ \(.not)" else "" end)'
 }
 
 _gecis() { # $1=id $2=durum [$3=sonuc_not]
@@ -126,19 +130,25 @@ case "$cmd" in
     # çağrıda başlık `--tip` oldu ve mesaj BİR SAAT kuyrukta bekledi — hedefi hiç bulmadı.
     # Sınıf: "hatayı sessizce yutan araç". `layiha-defteri.sh liste`de RC=2 ile kapatılmıştı
     # (L24 F4), burada açıktı. Artık tanınmayan bayrak DURDURUR ve geçerli listeyi basar.
-    zil=0; zil_sebep=""
+    zil=0; zil_sebep=""; tip=""
     while [ $# -gt 1 ]; do
       case "${2:-}" in
         --tetikli)
           zil=1; zil_sebep="${3:-}"; shift 2
           [[ -n "$zil_sebep" && ${#zil_sebep} -le 120 ]] || { echo "HATA: --tetikli gerekçe ister (≤120) — gerekçesiz zil yok" >&2; exit 2; }
           ;;
+        --tip)
+          # K4 (NÂZIR+SERDAR mutabık, Sultan-onaylı 2026-08-27): tip-ayrımı — sunucu enum'u hazır
+          # (route.ts TIPLER: tetik|durdur|mesaj|is|devir). İstemci kapalı-küme yeni-üçlüyü tanır.
+          # BAYRAKSIZ çağrı tip GÖNDERMEZ → sunucu bugünkü varsayılanı yazar (bayt-aynı davranış);
+          # "varsayılan mesaj" OKUMA-anında gerçekleşir: tip alanı boş/yok gelen kayıt `mesaj` sayılır.
+          tip="${3:-}"; shift 2
+          case "$tip" in mesaj|is|devir) ;; *)
+            echo "HATA: --tip enum-dışı: '${tip}' (geçerli: mesaj | is | devir)" >&2; exit 2 ;; esac
+          ;;
         --*)
           echo "HATA: tanınmayan bayrak: '${2}'" >&2
-          echo "  gonder için geçerli bayraklar: --tetikli \"<gerekçe≤120>\"
-  (--sinif <mesaj|is|devir> HENÜZ YOK: sunucuda `tip` alanı `tetik|durdur` için alınmış,
-   iş-sınıfı ayrı alan + göç istiyor — istemciye sunucu hazır olmadan konmadı, yoksa
-   bayrak sessizce yutulurdu; düzeltilen hastalığın aynısı olurdu.)" >&2
+          echo "  gonder için geçerli bayraklar: --tetikli \"<gerekçe≤120>\" · --tip <mesaj|is|devir>" >&2
           echo "  (sessizce konumsal-metin saymıyorum — eski davranış mesajı kuyrukta kaybediyordu)" >&2
           exit 2 ;;
         *) break ;;
@@ -149,8 +159,8 @@ case "$cmd" in
     [[ -n "$baslik" && ${#baslik} -le 120 ]] || { echo "HATA: başlık zorunlu, ≤120" >&2; exit 2; }
     [[ ${#nt} -le 500 ]] || { echo "HATA: not ≤500 (içerik-kanalı değil — META)" >&2; exit 2; }
     _sir_var "$baslik$kart$nt$zil_sebep" && { echo "HATA: sır-desen tespit — META-kanala sır yazılamaz" >&2; exit 2; }
-    body="$(jq -nc --arg h "$hedef" --arg b "$baslik" --arg k "$kart" --arg n "$nt" --arg zs "$zil_sebep" --argjson z "$([ "$zil" -eq 1 ] && echo true || echo false)" \
-      '{hedef_cell:$h, baslik:$b} + (if $k=="" then {} else {kart_ref:$k} end) + (if $n=="" then {} else {not:$n} end) + (if $z then {zil:true, zil_sebep:$zs} else {} end)')"
+    body="$(jq -nc --arg h "$hedef" --arg b "$baslik" --arg k "$kart" --arg n "$nt" --arg zs "$zil_sebep" --arg t "$tip" --argjson z "$([ "$zil" -eq 1 ] && echo true || echo false)" \
+      '{hedef_cell:$h, baslik:$b} + (if $t=="" then {} else {tip:$t} end) + (if $k=="" then {} else {kart_ref:$k} end) + (if $n=="" then {} else {not:$n} end) + (if $z then {zil:true, zil_sebep:$zs} else {} end)')"
     resp="$(_api POST /api/filo/tetik "$body")" || { rc=$?; [ "$rc" -eq 2 ] && exit 2; exit 1; }
     if echo "$resp" | jq -e '.ok == true' >/dev/null 2>&1; then
       echo "📨 tetik bırakıldı: $(echo "$resp" | jq -r '"\(.id) · \(.kaynak_cell)→\(.hedef_cell)"')"
@@ -160,6 +170,35 @@ case "$cmd" in
     ;;
   gelen) _listele gelen "${2:-bekliyor}" ;;
   giden) _listele giden "${2:-all}" ;;
+  geri-al)
+    # K5 (NÂZIR-mutabık, Sultan-onaylı 2026-08-27): `tip=devir` kaydının geri alınması =
+    # TERS KAYIT. Kayıt SİLİNMEZ, durumu bile değiştirilmez — aynı hedefe yeni bir `devir`
+    # kaydı düşer ("devir geri alındı" makbuzu; defter mantığı: silmek izi yok eder, ters
+    # kayıt izi çoğaltır — sunucu route.ts K4 notundaki ilkenin istemci-icrası).
+    # Yalnız GÖNDEREN geri alabilir → kayıt giden-kutuda aranır (cell-izolasyonu zaten öyle).
+    id="${2:-}"; bayrak="${3:-}"; gerekce="${4:-}"
+    [[ -n "$id" && "$bayrak" == "--gerekce" && -n "$gerekce" ]] || {
+      echo "HATA: kullanım: geri-al <id> --gerekce \"<metin>\" — gerekçesiz geri-alma yok (kaydı SİLMEZ, ters kayıt ekler)" >&2; exit 2; }
+    [[ ${#gerekce} -le 400 ]] || { echo "HATA: gerekçe ≤400 (META-kanal)" >&2; exit 2; }
+    _sir_var "$gerekce" && { echo "HATA: sır-desen tespit — META-kanala sır yazılamaz" >&2; exit 2; }
+    resp="$(_api GET "/api/filo/tetik?yon=giden&durum=all")" || { rc=$?; [ "$rc" -eq 2 ] && exit 2; exit 1; }
+    if echo "$resp" | jq -e '.error' >/dev/null 2>&1; then
+      echo "❌ $(echo "$resp" | jq -r '.error')"; exit 1
+    fi
+    kayit="$(echo "$resp" | jq -c --arg i "$id" '[.tetikler[]? | select(.id==$i)] | first // empty')"
+    [[ -n "$kayit" ]] || { echo "HATA: kayıt giden-kutunda bulunamadı: $id (geri-al yalnız GÖNDERENİN hakkıdır)" >&2; exit 2; }
+    ktip="$(echo "$kayit" | jq -r '.tip // "mesaj"')"
+    [[ "$ktip" == "devir" ]] || { echo "HATA: geri-al yalnız tip=devir kayıtları için (bu kayıt: $ktip) — K5 ters-kayıt devire özgüdür" >&2; exit 2; }
+    hedef="$(echo "$kayit" | jq -r '.hedefCell')"
+    body="$(jq -nc --arg h "$hedef" --arg i "$id" --arg n "K5 ters-kayıt · gerekçe: $gerekce" \
+      '{hedef_cell:$h, tip:"devir", baslik:("GERİ-AL: devir geri alındı ("+$i+")"), kart_ref:$i, not:$n}')"
+    resp="$(_api POST /api/filo/tetik "$body")" || { rc=$?; [ "$rc" -eq 2 ] && exit 2; exit 1; }
+    if echo "$resp" | jq -e '.ok == true' >/dev/null 2>&1; then
+      echo "↩ ters kayıt yazıldı: $(echo "$resp" | jq -r '.id') (asıl kayıt $id SİLİNMEDİ — defter mantığı)"
+    else
+      echo "❌ $(echo "$resp" | jq -r '.error // "beklenmedik-yanıt"')"; exit 1
+    fi
+    ;;
   alindi) _gecis "${2:-}" alindi ;;
   tamam)  _gecis "${2:-}" tamam "${3:-}" ;;
   iptal)  _gecis "${2:-}" iptal ;;
@@ -205,7 +244,7 @@ case "$cmd" in
           ackfail=$((ackfail+1)); echo "⚠️ ACK düşmedi: $id" >&2
         fi
       fi
-    done < <(echo "$resp" | jq -r '.tetikler[] | [.id, .kaynakCell, .tip, .baslik, (.kartRef // "")] | @tsv')
+    done < <(echo "$resp" | jq -r '.tetikler[] | [.id, .kaynakCell, (.tip // "mesaj"), .baslik, (.kartRef // "")] | @tsv')
     if [ "$ACK" -eq 1 ]; then
       if [ "$ackfail" -gt 0 ]; then
         echo "📥 $adet tetik çekildi → $INBOX (ACK: $((adet-ackfail)) ok · $ackfail düşmedi — ACK'siz olanlar sonraki poll'da tekrar gelir)"
