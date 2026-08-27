@@ -35,12 +35,18 @@
 # Kullanım:
 #   layiha-defteri.sh ekle --slug S --konu "..." --dokuman "yol" --dogrula "<tek satır komut>"
 #                          [--pr "#N"] [--resume "cümle"] [--tarih YYYY-MM-DD]
-#                          [--isteyen "Sultan|<AJAN>"] [--yetki "<beyan>"]
+#                          [--isteyen "sultan|<oda>/<rol>"] [--yetki "sultan-emri|oda-ici|odalar-arasi"]
+#       ⚖️ K2 KAPALI-BİÇİM (2026-08-27): --isteyen `sultan` ya da `<oda>/<rol>` (ör. s13/mim);
+#          --yetki kapalı küme. Uymayan değer RC=2. Verilmezse alan kayda HİÇ yazılmaz.
 #       ⚖️ DOĞRULAMA KAPISI (L35-F1): YENİ açık-iş kaydı `--dogrula` olmadan AÇILAMAZ → RC=2.
 #          Komut DEĞER-OKUMAZ olmalı (varlık-grep -c · çıkış-kodu · sayı); sır basan komut REDDEDİLİR.
 #          Eski kayıtlar okuma-anında MUAF — göç YOK, güncelleme de komut istemez.
 #   layiha-defteri.sh durum <kod|slug> <insa-bekliyor|insa-ediliyor|insa-edildi> [--kanit "<ref>"] [--izin "<beyan>"]
-#       ⚖️ İZİN KAPISI: `insa-ediliyor` İZİNSİZ ilan EDİLEMEZ → RC=2 + reçete ("başlıyorum = izinli").
+#       ⚖️ İZİN KAPISI (K7): `insa-ediliyor` İZİNSİZ ilan EDİLEMEZ → RC=2 + reçete ("başlıyorum = izinli").
+#          A06: araç Sultan'ın sözünü ÜRETMEZ — --izin, ajanın GÖRDÜĞÜ onayın referans-beyanıdır
+#          (D1-damga biçimi önerilir: tarih · sohbet/oturum-ref · verbatim-kırpık · beyan:<AJAN>).
+#       ⚖️ K6 ODA-ÖNEKİ: durum/tescil/geri-al `s01-L13` biçimli kodu kabul eder (kendi öneki soyulur);
+#          yabancı-oda öneki RC=2 ("bu defter <oda> defteri"). Dosyadaki kod alanı DEĞİŞMEZ.
 #       (insa-edildi → tescil.durum otomatik 'yok'→'bekliyor' kuyruğa girer)
 #       ⚖️ KANIT KAPISI (K7, 2026-07-29): `insa-edildi` KANITSIZ ilan EDİLEMEZ → RC=2 + reçete.
 #          Kabul edilen kanıt: PR ref (#123 ya da URL) · commit sha (≥7 hex) · MEVCUT dosya yolu.
@@ -72,7 +78,11 @@ else LEDGER="$(hat_yolu layiha-defteri)" || exit 2; fi
 HAT_KOK="$(hat_root 2>/dev/null)" || HAT_KOK=""
 
 CMD="${1:-liste}"; shift || true
-export LAYIHA_LEDGER="$LEDGER" LAYIHA_LIB_DIR="$HERE" HAT_KOK
+# K6 (2026-08-27): oda-öneki tek yerden türetilir (hat-yolu.lib.sh CELL_ID deseni — hat_onek'in
+# hücre-dallanmasıyla aynı kaynak). Defterdeki kod alanı DEĞİŞMEZ; önek yalnız görünümde ve
+# girdi-çözümünde kullanılır.
+LAYIHA_ONEK="${CELL_ID:-s01}"
+export LAYIHA_LEDGER="$LEDGER" LAYIHA_LIB_DIR="$HERE" HAT_KOK LAYIHA_ONEK
 
 python_args() {
   python3 - "$@" <<'PY'
@@ -100,7 +110,9 @@ import os, json, sys, subprocess
 sys.path.insert(0, os.environ["LAYIHA_LIB_DIR"])
 from layiha_defteri_lib import (oku, yaz, yeni_tescil, proje_adi, SEMA_V, kanit_gecerli,
                                 KANIT_RECETE, hucre_gecerli, hucre_normalize, HUCRE_RECETE,
-                                dogrula_gecerli, dogrula_sir_riski, DOGRULA_RECETE)
+                                dogrula_gecerli, dogrula_sir_riski, DOGRULA_RECETE,
+                                isteyen_gecerli, isteyen_normalize, ISTEYEN_RECETE,
+                                yetki_gecerli, yetki_normalize, YETKI_RECETE)
 led=os.environ["LAYIHA_LEDGER"]; a=json.loads(os.environ["LAYIHA_ARGS_JSON"])
 def _metin(v):
     """Değersiz verilmiş bayrak (`--isteyen`) True döner — onu boş-metin say."""
@@ -117,6 +129,22 @@ if a.get("durum")=="insa-edildi":
                          "      Reçete: ekle ... --durum insa-edildi --kanit \"#123\"   (%s)\n"%KANIT_RECETE); sys.exit(2)
     if not kanit_gecerli(_k):
         sys.stderr.write("HATA: kanıt biçimi tanınmadı: %r\n      Reçete: %s\n"%(_k,KANIT_RECETE)); sys.exit(2)
+# K2 KAPALI-BİÇİM KAPISI (Sultan-onaylı, 2026-08-27): isteyen/yetki artık serbest metin
+# DEĞİL — makine ayrıştırabilsin diye kapalı biçim (S5: "Sultan'ın işi ⟂ ajanınki
+# ayırt edilemiyordu"). Verilmezse alan kayda HİÇ yazılmaz (geriye-uyum: eski kayıtlar
+# okuma-anında boş sayılır, göç YOK). Tolerans biçimde: "Sultan"/"S13/MIM" küçük harfe çekilir.
+_ist = _metin(a.get("isteyen"))
+if _ist:
+    if not isteyen_gecerli(_ist):
+        sys.stderr.write("HATA: --isteyen biçimi tanınmadı: %r\n      %s\n" % (_ist, ISTEYEN_RECETE))
+        sys.exit(2)
+    _ist = isteyen_normalize(_ist)
+_yet = _metin(a.get("yetki"))
+if _yet:
+    if not yetki_gecerli(_yet):
+        sys.stderr.write("HATA: --yetki tanınmadı: %r\n      %s\n" % (_yet, YETKI_RECETE))
+        sys.exit(2)
+    _yet = yetki_normalize(_yet)
 # NİZAM HÜCRE KAPISI (L66-F2) — Sultan: "ajan bana 'hangi tip ilişki' diye sormalı;
 # free/kenarsız çalışmıyoruz." Küme KAPALI ama `belirsiz` MEŞRU (ölçüldü: kapalı küme
 # dayatmak işi yanlış kutuya sokar). Değer verilmişse tanınmak ZORUNDADIR.
@@ -189,8 +217,8 @@ rec={"v":SEMA_V,"id":kod,"slug":a["slug"],"konu":a["konu"],
                    (existing.get("insa_kanit","") if existing else "") or ""),
      # İŞ-KAYDI (K2): kim istedi · hangi yetkiyle. Verilmezse ESKİ değer korunur (güncelleme
      # bir alanı sessizce silmemeli); hiç yoksa "" = BİLİNMİYOR — tahmin edilmez.
-     "isteyen":(_metin(a.get("isteyen")) or (existing.get("isteyen","") if existing else "")),
-     "yetki":(_metin(a.get("yetki")) or (existing.get("yetki","") if existing else "")),
+     "isteyen":(_ist or (existing.get("isteyen","") if existing else "")),
+     "yetki":(_yet or (existing.get("yetki","") if existing else "")),
      "insa_izin":(existing.get("insa_izin","") if existing else ""),
      # NİZAM hücresi (L66-F2): verilmezse ESKİ değer korunur — güncelleme bir alanı
      # sessizce silmez (isteyen/yetki emsali birebir).
@@ -200,6 +228,10 @@ rec={"v":SEMA_V,"id":kod,"slug":a["slug"],"konu":a["konu"],
      "dogrula":(_dogrula or (existing.get("dogrula","") if existing else "")),
      "gecmis":(existing.get("gecmis",[]) if existing else []),
      "tescil": (existing.get("tescil") if existing and existing.get("tescil") else yeni_tescil())}
+# K2 (2026-08-27): verilmeyen isteyen/yetki kayda HİÇ yazılmaz — boş-string bile değil.
+# Okuma tarafı (oku norm) alansız kaydı zaten "" sayar; "hiç sorulmadı"nın izi alan-yokluğudur.
+for _f in ("isteyen","yetki"):
+    if not rec.get(_f): rec.pop(_f, None)
 out=[]; found=False
 for r in recs:
     if r.get("slug")==rec["slug"]: out.append(rec); found=True
@@ -219,8 +251,13 @@ PY
     KEY="$KEY" YENI="$YENI" LAYIHA_DURUM_ARGS="$DARGS" python3 - <<'PY'
 import os, json, sys
 sys.path.insert(0, os.environ["LAYIHA_LIB_DIR"])
-from layiha_defteri_lib import oku, yaz, kanit_gecerli, KANIT_RECETE, izin_gecerli, IZIN_RECETE
+from layiha_defteri_lib import (oku, yaz, kanit_gecerli, KANIT_RECETE, izin_gecerli, IZIN_RECETE,
+                                kod_adaylari, kayit_eslesir)
 led=os.environ["LAYIHA_LEDGER"]; key=os.environ["KEY"]; yeni=os.environ["YENI"]
+# K6 (2026-08-27): oda-önekli girdi kabul edilir, kendi öneki soyulur; yabancı önek RC=2.
+adaylar,_onek_hata=kod_adaylari(key, os.environ.get("LAYIHA_ONEK","s01"))
+if _onek_hata:
+    sys.stderr.write("HATA: %s\n"%_onek_hata); sys.exit(2)
 a=json.loads(os.environ.get("LAYIHA_DURUM_ARGS") or "{}")
 kanit=a.get("kanit")
 if kanit is True: kanit=""          # `--kanit` değer-siz verilmiş
@@ -271,7 +308,7 @@ _bugun=subprocess.check_output(["date","+%F"]).decode().strip()
 recs,_=oku(led, kilitle=True)
 found=False; kuyruk=False; cikis=False
 for r in recs:
-    if r.get("slug")==key or str(r.get("id","")).lower()==key.lower():
+    if kayit_eslesir(r, adaylar):
         _eski=r.get("durum",""); r["durum"]=yeni; found=True
         if yeni=="insa-edildi": r["insa_kanit"]=kanit
         if yeni=="insa-ediliyor": r["insa_izin"]=izin
@@ -311,8 +348,11 @@ PY
     KEY="$KEY" LAYIHA_GERI_ARGS="$GARGS" python3 - <<'PY'
 import os, json, sys, subprocess
 sys.path.insert(0, os.environ["LAYIHA_LIB_DIR"])
-from layiha_defteri_lib import oku, yaz
+from layiha_defteri_lib import oku, yaz, kod_adaylari, kayit_eslesir
 led=os.environ["LAYIHA_LEDGER"]; key=os.environ["KEY"]
+adaylar,_onek_hata=kod_adaylari(key, os.environ.get("LAYIHA_ONEK","s01"))
+if _onek_hata:
+    sys.stderr.write("HATA: %s\n"%_onek_hata); sys.exit(2)
 a=json.loads(os.environ.get("LAYIHA_GERI_ARGS") or "{}")
 g=a.get("gerekce")
 if g is True: g=""
@@ -327,7 +367,7 @@ bugun=subprocess.check_output(["date","+%F"]).decode().strip()
 recs,_=oku(led, kilitle=True)
 hedef=None
 for r in recs:
-    if r.get("slug")==key or str(r.get("id","")).lower()==key.lower(): hedef=r; break
+    if kayit_eslesir(r, adaylar): hedef=r; break
 if hedef is None: sys.stderr.write("HATA: kod/slug bulunamadı: %s\n"%key); sys.exit(2)
 
 t=hedef.get("tescil") or {}
@@ -366,8 +406,11 @@ PY
     KEY="$KEY" VERD="$VERD" LAYIHA_TESCIL_ARGS="$TARGS" python3 - <<'PY'
 import os, json, io, sys, hashlib, shutil, subprocess
 sys.path.insert(0, os.environ["LAYIHA_LIB_DIR"])
-from layiha_defteri_lib import oku, yaz
+from layiha_defteri_lib import oku, yaz, kod_adaylari, kayit_eslesir
 led=os.environ["LAYIHA_LEDGER"]; key=os.environ["KEY"]; verd=os.environ["VERD"]
+adaylar,_onek_hata=kod_adaylari(key, os.environ.get("LAYIHA_ONEK","s01"))
+if _onek_hata:
+    sys.stderr.write("HATA: %s\n"%_onek_hata); sys.exit(2)
 a=json.loads(os.environ["LAYIHA_TESCIL_ARGS"])
 if not os.path.exists(led): sys.stderr.write("HATA: defter yok: %s\n"%led); sys.exit(2)
 vites=(a.get("vites") or "").upper()
@@ -441,7 +484,7 @@ tarih=subprocess.check_output(["date","+%F"]).decode().strip()
 recs,_=oku(led, kilitle=True)
 found=False; eski=None
 for r in recs:
-    if r.get("slug")==key or str(r.get("id","")).lower()==key.lower():
+    if kayit_eslesir(r, adaylar):
         found=True; eski=(r.get("tescil") or {}).get("durum","yok")
         deneme=int((r.get("tescil") or {}).get("deneme",0) or 0)+1
         durum_map={"tescilli":"tescilli","reddi":"reddi","muaf":"muaf"}
@@ -476,8 +519,9 @@ PY
     LAYIHA_FILT="$FILT" LAYIHA_PORC="$PORC" LAYIHA_KIM="$KIM" LAYIHA_TODAY="$TODAY" LAYIHA_WEEK="$WEEK" python3 - <<'PY'
 import os, sys, re, datetime
 sys.path.insert(0, os.environ["LAYIHA_LIB_DIR"])
-from layiha_defteri_lib import oku, kim_sinifi
+from layiha_defteri_lib import oku, kim_sinifi, kim_suzgec
 led=os.environ["LAYIHA_LEDGER"]; filt=os.environ["LAYIHA_FILT"]; porc=os.environ["LAYIHA_PORC"]=="1"
+onek=os.environ.get("LAYIHA_ONEK","s01")
 kim=os.environ.get("LAYIHA_KIM","hepsi")
 today=os.environ["LAYIHA_TODAY"]; week=os.environ["LAYIHA_WEEK"]
 # SALT-OKUR: normalize BELLEKTE kalır, diske dokunulmaz (bkz başlıktaki gerekçe).
@@ -506,11 +550,12 @@ sel=[r for r in recs if keep(r)]
 # KİM EKSENİ (K3): zaman/tescil süzgecinden SONRA uygulanır → iki eksen çarpışmaz.
 # `isteyen` boş olan kayıt hiçbir kim-süzgecine düşmez; kaçını elediğimizi SAYIP BASIYORUZ —
 # sessiz eleme, süzgeci "hepsi bu kadarmış" sanmaya iter (bugünün dersi).
+# K3 genişletmesi (2026-08-27): --sultan artık `yetki==sultan-emri`yi de görür (kim_suzgec).
 gizlenen=0
 if kim!="hepsi":
-    sel=[r for r in sel if kim_sinifi(r)==kim]
+    sel=[r for r in sel if kim_suzgec(r, kim)]
     if kim in ("sultan","ajan"):
-        gizlenen=len([r for r in recs if keep(r) and kim_sinifi(r)=="bilinmiyor"])
+        gizlenen=len([r for r in recs if keep(r) and kim_sinifi(r)=="bilinmiyor" and not kim_suzgec(r, kim)])
 sel.sort(key=lambda r:(terminal(r), id_num(r.get("id",""))))
 DUR={"insa-bekliyor":"⏳ inşa bekliyor","insa-ediliyor":"🔨 inşa ediliyor","insa-edildi":"🔧 inşa edildi (tescilsiz)"}
 TES={"yok":"—","bekliyor":"📋 tescil bekliyor","tescilli":"🏅 tescilli","reddi":"↩ tescil reddi","muaf":"⊘ muaf"}
@@ -551,7 +596,20 @@ else:
         _d = DUR.get(r.get("durum"))
         if _d is None:
             _d = "⚠️ ŞEMA-DIŞI durum: %r" % r.get("durum", "")
-        print("  [%s]  %s  · %s"%(r.get("id","?"), _d, r.get("konu","")))
+        # K6 (2026-08-27): görünümde kod HER ZAMAN oda-önekli — dosyadaki alan DEĞİŞMEZ
+        # (append-only defter); öneksiz eski kod yalnız BASILIRKEN önek alır.
+        _kod = str(r.get("id","?"))
+        if onek and re.fullmatch(r"[Ll]\d+", _kod):
+            _kod = "%s-%s" % (onek, _kod)
+        # K2/K3 rozeti: isteyen/yetki doluysa satırda kısa işaret — ⚜ Sultan-işi · ⚙ ajan-işi.
+        _roz = ""
+        if kim_suzgec(r, "sultan"):
+            _roz = "  ⚜ sultan"
+        elif (r.get("isteyen") or "").strip():
+            _roz = "  ⚙ %s" % r["isteyen"].strip()
+        elif (r.get("yetki") or "").strip():
+            _roz = "  ⚙ %s" % r["yetki"].strip()
+        print("  [%s]  %s  · %s%s"%(_kod, _d, r.get("konu",""), _roz))
         # TESCİL satırı: yalnız anlamlıysa (yok değilse) bas — Sultan'ın "tescilli mi değil mi" kolonu
         tescil_str=""
         if td!="yok":

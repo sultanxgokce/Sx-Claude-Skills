@@ -1,7 +1,7 @@
 ---
 name: gorsel-yon
 type: workflow
-version: 0.2.0
+version: 0.3.0
 description: >
   Üretilmiş görselle YÖN ARAYIŞI — kanıt üretmez. Nova/mimarlık sitesi gibi iddiası
   "gerçek iş" olan yüzeylerde, üretilmiş görselin nereye girip nereye giremeyeceğini
@@ -107,3 +107,14 @@ gorsel-yon.sh uret --kullanim doku-zemin --istem "..." --uygula # gerçek üreti
   istemi konusuz bırakmaz. Panzehir ölçüldü ve tuttu: istemi **sahneye çıpala** ("empty interior
   corner, bare plaster wall meeting pale oak floor, raking daylight… absolutely no objects no
   furniture no people") → 4/4 kare temiz geldi. Kanıt: istek `8c3fba2b…`, 4 kare, hepsi boş mekân.
+
+## 0.3.0 (2026-08-27 · KATLAMA günü — MİHMANDAR talebi, Sultan-izinli)
+- **Yeni kullanım-alanı `kesif-katalog`:** Nova müşteri-keşif katalog matrisi (stil×oda×palet).
+  Çit: her kare HER YERDE "ilham/yön" rozetli · kanıt konumuna geçmez · site-yüzeyine sızmaz ·
+  karar-kaydında alan tipi ayrık (kanıt-foto ≠ ilham-referans). B3-SİTE-yasağı (lüks/klasik vb.)
+  katalog stillerine uygulanmaz — o yasak SİTENİN estetiği içindir, müşteri kataloğu değil.
+- **Türkçe-imla deliği kapandı:** yasak-desen artık `şantiye/çizim/öncesi/sonrası…` Türkçe-karakterli
+  biçimleri de yakalar (MÜZEYYİN bulgusu + MİHMANDAR kutu-içi probu; negatif-test rc=1 kanıtlı).
+- **Anahtar-sırası onarımı:** `_anahtar` önce eldeki `cortex-access.env`i okur; kasa-çekimi
+  başarısız diye eldeki anahtar artık çöpe gitmez (Nova vakası: anahtar aynada VARDI, get-fail
+  her şeyi düşürüyordu).

@@ -159,6 +159,69 @@ echo "-- T18: nabiz 201 kontrat --"
 OUT="$(FEDERE_API_BASE="http://127.0.0.1:$MPORT" FEDERE_TETIK_TOKEN=dummytok bash "$SUT" nabiz "mock-nabız" 2>&1)"; RC=$?
 [ "$RC" -eq 0 ] && echo "$OUT" | grep -q "cell=s09" && ok "nabiz kontrat-parse RC=0" || no "nabiz mock yanlış (rc=$RC)"
 
+echo "== T24: K4 --tip kapalı küme — enum-dışı RC=2 (curl'e inmeden) =="
+OUT="$(bash "$SUT" gonder --tip yanlis s04 "baslik" 2>&1)"; RC=$?
+[ "$RC" -eq 2 ] && ok "--tip enum-dışı RC=2" || no "--tip enum kaçtı (rc=$RC)"
+echo "$OUT" | grep -q "mesaj | is | devir" && ok "geçerli tip listesi basılıyor" || no "tip listesi yok"
+bash "$SUT" gonder --tip s04 "baslik" >/dev/null 2>&1; [ $? -eq 2 ] && ok "--tip değersiz RC=2 (kayma yok)" || no "--tip değersiz kaçtı"
+
+echo "== T25-T26: [mock-API gövde-kaydeden] K4 tip gönderimi + K5 geri-al ters-kayıt =="
+BLOG="$TMPD/post-govdeleri.log"; : > "$BLOG"
+cat > "$TMPD/mock2.py" <<'PY'
+import json, sys
+from http.server import BaseHTTPRequestHandler, HTTPServer
+LOG = sys.argv[2]
+class H(BaseHTTPRequestHandler):
+    def log_message(self, *a): pass
+    def _send(self, code, obj):
+        b = json.dumps(obj).encode()
+        self.send_response(code); self.send_header('Content-Type','application/json')
+        self.send_header('Content-Length', str(len(b))); self.end_headers(); self.wfile.write(b)
+    def do_GET(self):
+        if 'yon=giden' in self.path:
+            self._send(200, {"adet":3,"tetikler":[
+                {"id":"d1","durum":"alindi","kaynakCell":"s01","hedefCell":"s04","tip":"devir","baslik":"devir-isi","kartRef":None},
+                {"id":"m1","durum":"bekliyor","kaynakCell":"s01","hedefCell":"s04","tip":"tetik","baslik":"mesaj-isi","kartRef":None},
+                {"id":"e1","durum":"bekliyor","kaynakCell":"s01","hedefCell":"s04","baslik":"tip-alani-yok","kartRef":None}]})
+        else: self._send(200, {"adet":0,"tetikler":[]})
+    def do_POST(self):
+        n = int(self.headers.get('Content-Length','0')); b = self.rfile.read(n)
+        open(LOG,'ab').write(b + b'\n')
+        self._send(200, {"ok":True,"id":"t9","kaynak_cell":"s01","hedef_cell":"s04"})
+HTTPServer(('127.0.0.1', int(sys.argv[1])), H).serve_forever()
+PY
+M2PORT="$(python3 -c 'import socket;s=socket.socket();s.bind(("127.0.0.1",0));print(s.getsockname()[1]);s.close()')"
+python3 "$TMPD/mock2.py" "$M2PORT" "$BLOG" & M2PID=$!
+trap 'kill "$MPID" "$M2PID" 2>/dev/null' EXIT
+for _i in $(seq 1 20); do curl -s -o /dev/null "http://127.0.0.1:$M2PORT/" && break; sleep 0.1; done
+m2() { FEDERE_API_BASE="http://127.0.0.1:$M2PORT" FEDERE_TETIK_TOKEN=dummytok bash "$SUT" "$@"; }
+
+echo "-- T25: --tip gövdeye yazılır; BAYRAKSIZ gövdede tip alanı YOK (bayt-aynı davranış) --"
+m2 gonder --tip devir s04 "devir-basligi" >/dev/null 2>&1; RC=$?
+[ "$RC" -eq 0 ] && ok "gonder --tip devir RC=0" || no "gonder --tip devir rc=$RC"
+tail -1 "$BLOG" | grep -q '"tip":"devir"' && ok "gövdede tip:devir var" || no "gövdede tip yok"
+m2 gonder s04 "bayraksiz-baslik" >/dev/null 2>&1
+tail -1 "$BLOG" | grep -q '"tip"' && no "bayraksız gövdeye tip SIZDI (bayt-davranış bozuldu)" || ok "bayraksız gövdede tip alanı YOK"
+
+echo "-- T25b: okuma-uyumu — tip alanı olmayan kayıt 'mesaj' sayılır --"
+OUT="$(m2 giden all 2>&1)"
+echo "$OUT" | grep -q "tip-alani-yok" && echo "$OUT" | grep "e1" | grep -q "mesaj" \
+  && ok "tip'siz kayıt listede 'mesaj' olarak basıldı" || no "tip'siz kayıt okuma-uyumu yanlış"
+
+echo "-- T26: K5 geri-al — ters kayıt ekler, silmez; yalnız tip=devir --"
+m2 geri-al d1 --gerekce "yanlis odaya devredilmisti" >"$TMPD/geri.out" 2>&1; RC=$?
+[ "$RC" -eq 0 ] && ok "geri-al devir-kaydında RC=0" || no "geri-al rc=$RC"
+grep -q "ters kayıt yazıldı" "$TMPD/geri.out" && ok "çıktı ters-kayıt diyor" || no "ters-kayıt çıktısı yok"
+grep -q "SİLİNMEDİ" "$TMPD/geri.out" && ok "silinmediği açıkça söyleniyor" || no "silme-yokluğu söylenmiyor"
+tail -1 "$BLOG" | grep -q '"tip":"devir"' && tail -1 "$BLOG" | grep -q 'GERİ-AL' && tail -1 "$BLOG" | grep -q '"kart_ref":"d1"' \
+  && ok "ters kayıt gövdesi doğru (devir + GERİ-AL + kart_ref=d1)" || no "ters-kayıt gövdesi eksik: $(tail -1 "$BLOG")"
+
+m2 geri-al m1 --gerekce "x y z" >/dev/null 2>&1; [ $? -eq 2 ] && ok "tip≠devir geri-al RC=2" || no "mesaj-kaydı geri-al kaçtı"
+m2 geri-al yok9 --gerekce "x y z" >/dev/null 2>&1; [ $? -eq 2 ] && ok "olmayan id RC=2" || no "olmayan id kaçtı"
+bash "$SUT" geri-al d1 >/dev/null 2>&1; [ $? -eq 2 ] && ok "gerekçesiz geri-al RC=2 (curl'e inmeden)" || no "gerekçesiz geri-al kaçtı"
+fs26="sk-$(printf 'C%.0s' $(seq 1 20))"
+bash "$SUT" geri-al d1 --gerekce "$fs26" >/dev/null 2>&1; [ $? -eq 2 ] && ok "sır-desenli gerekçe RC=2" || no "sır-desen kaçtı (geri-al)"
+
 echo "== T20: BAYRAK KAPISI — taninmayan bayrak sessizce yutulmaz (2026-08-08, 14 oda) =="
 # Regresyon: eski `gonder` YALNIZ 2. konumdaki --tetikli'yi tanirdi; baska her --xyz
 # sessizce KONUMSAL METIN olurdu. Canli vaka: `--tip tetik --baslik "..."` -> baslik

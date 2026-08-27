@@ -323,18 +323,21 @@ for l in open('$D16'):
 "; }
 
 # (a) K2 — isteyen/yetki yazılıyor
-sut16 ekle --dogrula "grep -c . /dev/null" --slug sultan-isi --konu "Sultan istedi" --dokuman a.md --isteyen "Sultan" --yetki "sözlü direktif" >/dev/null 2>&1
+# BİLİNÇLİ GÜNCELLEME (K2 kapalı-biçim, 2026-08-27): eski serbest-metin değerler
+# ("Sultan"/"sözlü direktif"/"SERDAR") artık kapıdan geçmez — biçim-toleransı var
+# ("Sultan"→"sultan"), küme-toleransı yok. Yeni negatif kapılar G20'de.
+sut16 ekle --dogrula "grep -c . /dev/null" --slug sultan-isi --konu "Sultan istedi" --dokuman a.md --isteyen "Sultan" --yetki "sultan-emri" >/dev/null 2>&1
 esit "G16a ekle --isteyen rc=0" "0" "$?"
-esit "G16a isteyen kayda yazıldı" "Sultan" "$(alan16 s01-L01 isteyen)"
-esit "G16a yetki kayda yazıldı" "sözlü direktif" "$(alan16 s01-L01 yetki)"
-sut16 ekle --dogrula "grep -c . /dev/null" --slug ajan-isi --konu "Ajan açtı" --dokuman b.md --isteyen "SERDAR" >/dev/null 2>&1
+esit "G16a isteyen kayda yazıldı (küçük harfe normalize)" "sultan" "$(alan16 s01-L01 isteyen)"
+esit "G16a yetki kayda yazıldı" "sultan-emri" "$(alan16 s01-L01 yetki)"
+sut16 ekle --dogrula "grep -c . /dev/null" --slug ajan-isi --konu "Ajan açtı" --dokuman b.md --isteyen "s01/serdar" >/dev/null 2>&1
 # isteyen'i OLMAYAN kayıt = bilinmiyor (tahmin edilmez)
 sut16 ekle --dogrula "grep -c . /dev/null" --slug kimsiz-is --konu "Isteyeni yazilmamis" --dokuman c.md >/dev/null 2>&1
 esit "G16a isteyen verilmezse BOŞ kalır (ajan sayılmaz)" "" "$(alan16 s01-L03 isteyen)"
 
 # (b) K2 — güncelleme mevcut alanı SESSİZCE SİLMEZ
 sut16 ekle --dogrula "grep -c . /dev/null" --slug sultan-isi --konu "Sultan istedi (güncel)" --dokuman a.md >/dev/null 2>&1
-esit "G16b --isteyen'siz güncelleme eski değeri korudu" "Sultan" "$(alan16 s01-L01 isteyen)"
+esit "G16b --isteyen'siz güncelleme eski değeri korudu" "sultan" "$(alan16 s01-L01 isteyen)"
 
 # (c) K3 — kim ekseni süzüyor ve zaman/tescil ekseniyle BİRLİKTE çalışıyor
 esit "G16c --sultan yalnız Sultan'ınkini verir" "1" "$(sut16 liste --hepsi --sultan --porcelain 2>/dev/null | grep -c '^s01-L01')"
@@ -550,6 +553,77 @@ esit "G19g insa-edildi doğan kayıt --dogrula İSTEMEZ rc=0" "0" "$?"
 var "G19h komut insan-listesinde görünüyor" "$(n19 liste --hepsi)" "doğrula: systemctl is-active nexus"
 esit "G19h porcelain 16. sütun = dogrula" "systemctl is-active nexus" \
      "$(n19 liste --hepsi --porcelain | awk -F'\t' '$2=="taze-is2"{print $16}')"
+
+echo
+echo "=== G20 · K2 kapalı-biçim + K3 yetki-ekseni + K6 oda-öneki (Sultan-onaylı, 2026-08-27) ==="
+D20="$T/k2026.jsonl"; : > "$D20"; K20="$T/OdaYirmi"
+s20() { LAYIHA_DEFTER="$D20" HAT_ROOT="$K20" bash "$SUT" "$@"; }
+alan20() { python3 -c "
+import json,sys
+for l in open('$D20'):
+    r=json.loads(l)
+    if r.get('slug')==sys.argv[1]: print(r.get(sys.argv[2],'<ALAN-YOK>'))" "$1" "$2"; }
+
+# (a) K2 negatif — biçim-dışı isteyen/yetki RC=2 + reçete (küme-toleransı YOK)
+O20A="$(s20 ekle --dogrula "grep -c . /dev/null" --slug kotu-iste --konu "x" --dokuman a.md --isteyen "SERDAR" 2>&1)"
+esit "G20a serbest-metin isteyen ('SERDAR') rc=2" "2" "$?"
+var  "G20a reçete biçimi söylüyor" "$O20A" "oda>/<rol"
+s20 ekle --dogrula "grep -c . /dev/null" --slug kotu-yetki --konu "x" --dokuman a.md --yetki "sözlü direktif" >/dev/null 2>&1
+esit "G20a küme-dışı yetki rc=2" "2" "$?"
+esit "G20a reddedilen kayıt deftere YAZILMADI" "0" "$(grep -c kotu "$D20")"
+
+# (b) K2 pozitif — <oda>/<rol> biçimi geçer, BÜYÜK harf biçim-toleransıyla küçülür
+s20 ekle --dogrula "grep -c . /dev/null" --slug mim-isi --konu "NÂZIR istedi" --dokuman a.md --isteyen "S13/MIM" --yetki "odalar-arasi" >/dev/null 2>&1
+esit "G20b <oda>/<rol> isteyen rc=0" "0" "$?"
+esit "G20b isteyen normalize saklandı" "s13/mim" "$(alan20 mim-isi isteyen)"
+esit "G20b yetki saklandı" "odalar-arasi" "$(alan20 mim-isi yetki)"
+
+# (c) K2 — verilmeyen alan kayda HİÇ yazılmaz (boş-string bile değil; alan-YOKLUĞU izdir)
+s20 ekle --dogrula "grep -c . /dev/null" --slug alansiz --konu "Kimse sormadı" --dokuman b.md >/dev/null 2>&1
+esit "G20c isteyen ALANI dosyada yok" "<ALAN-YOK>" "$(alan20 alansiz isteyen)"
+esit "G20c yetki ALANI dosyada yok" "<ALAN-YOK>" "$(alan20 alansiz yetki)"
+
+# (d) K3 — yetki==sultan-emri, isteyen boşken bile --sultan süzgecine düşer
+s20 ekle --dogrula "grep -c . /dev/null" --slug emirli --konu "Yalnız yetki dolu" --dokuman c.md --yetki "sultan-emri" >/dev/null 2>&1
+esit "G20d yetki=sultan-emri --sultan'a düşer" "1" "$(s20 liste --hepsi --sultan --porcelain 2>/dev/null | awk -F'\t' '$2=="emirli"' | wc -l)"
+esit "G20d ajan işi --sultan'a düşmez" "0" "$(s20 liste --hepsi --sultan --porcelain 2>/dev/null | awk -F'\t' '$2=="mim-isi"' | wc -l)"
+esit "G20d mim-isi --ajan'da" "1" "$(s20 liste --hepsi --ajan --porcelain 2>/dev/null | awk -F'\t' '$2=="mim-isi"' | wc -l)"
+
+# (e) rozet — insan görünümünde ⚜/⚙ işaretleri
+L20="$(s20 liste --hepsi 2>/dev/null)"
+var "G20e sultan-emri satırında ⚜ rozeti" "$L20" "⚜ sultan"
+var "G20e ajan satırında ⚙ rozeti" "$L20" "⚙ s13/mim"
+
+# (f) K6 — öneksiz ESKİ kayıt görünümde önekli basılır, DOSYADA değişmez
+D20F="$T/onek.jsonl"
+printf '{"v":1,"id":"L13","slug":"eski-kod","konu":"Oneksiz eski kayit","tarih":"2026-07-01","durum":"insa-bekliyor","dokuman":"d.md","proje":"OdaYirmi","dogrula":"true","tescil":{"durum":"yok"}}\n' > "$D20F"
+ONCE20F="$(sha256sum "$D20F" | cut -d' ' -f1)"
+f20() { LAYIHA_DEFTER="$D20F" HAT_ROOT="$K20" bash "$SUT" "$@"; }
+var  "G20f görünümde kod önekli: [s01-L13]" "$(f20 liste --hepsi 2>/dev/null)" "\[s01-L13\]"
+esit "G20f liste dosyadaki kodu DEĞİŞTİRMEDİ" "$ONCE20F" "$(sha256sum "$D20F" | cut -d' ' -f1)"
+esit "G20f porcelain ham kodu basıyor (kontrat korunur)" "1" "$(f20 liste --hepsi --porcelain 2>/dev/null | grep -c '^L13	')"
+
+# (g) K6 — durum/tescil önekli girdiyi kabul eder (kendi öneki soyulur)
+f20 durum s01-L13 insa-ediliyor --izin "Sultan onayı 2026-08-27 (sohbet)" >/dev/null 2>&1
+esit "G20g durum 's01-L13' öneksiz L13 kaydını buldu" "0" "$?"
+esit "G20g dosyadaki kod alanı hâlâ 'L13' (append-only)" "1" "$(grep -c '"id": *"L13"' "$D20F")"
+f20 durum s01-L13 insa-edildi --kanit "#999" >/dev/null 2>&1
+f20 tescil s01-L13 muaf --gerekce "test kapanışı" >/dev/null 2>&1
+esit "G20g tescil de önekli girdiyle çalıştı" "0" "$?"
+
+# (h) K6 negatif — yabancı-oda öneki RC=2 + "bu defter" uyarısı; kayda DOKUNULMAZ
+O20H="$(f20 durum s13-L13 insa-bekliyor 2>&1)"; RC20H=$?
+esit "G20h yabancı önek rc=2" "2" "$RC20H"
+var  "G20h uyarı 'bu defter … defteri' diyor" "$O20H" "bu defter s01 defteri"
+O20H2="$(f20 tescil s13-L13 muaf --gerekce "x" 2>&1)"
+esit "G20h tescil'de de yabancı önek rc=2" "2" "$?"
+O20H3="$(f20 geri-al s13-L13 --gerekce "x" 2>&1)"
+esit "G20h geri-al'da da yabancı önek rc=2" "2" "$?"
+
+# (i) K7-izin reçetesi D1-biçimi + A06 cümlesi taşıyor
+O20I="$(s20 durum mim-isi insa-ediliyor 2>&1)"
+var "G20i reçete D1-damga biçimini örnekliyor" "$O20I" "beyan:"
+var "G20i A06: aracın söz-üretmediği yazılı" "$O20I" "ÜRETMEZ"
 
 echo "════════ SONUÇ: PASS=$PASS · FAIL=$FAIL ════════"
 [ "$FAIL" -eq 0 ] || exit 1

@@ -122,3 +122,12 @@ ad-tekilliği taramasının DIŞINDAYDI ve aynı ad üç kutuda habersiz doğdu.
   `zil` META'sıyla düşer (sunucu-yanı: Nexus PR #754 + migration 0127). Gerekçesiz zil yok (RC=2);
   gerekçe sır-desen taramasında. Test: federe.test.sh 36/36 (T5b/T5c/T5d yeni). Alansız `gonder`
   bayt-aynı. Merkez `oda-zil.sh` okuma-turu ayrı parça (cloudtop/infra).
+- **0.5.0 (2026-08-27, KATLAMA F1 · NÂZIR-mutabık K4/K5, Sultan-onaylı K#1):** (1) `gonder --tip
+  <mesaj|is|devir>` — K4 tip-ayrımı (sunucu enum'u hazır: route.ts TIPLER). Bayraksız çağrı tip
+  GÖNDERMEZ → bayt-aynı; "varsayılan mesaj" okuma-anındadır: `tip`i olmayan kayıt listede `mesaj`
+  sayılır (göç yok). Enum-dışı değer RC=2 + geçerli liste (bilinmeyen-bayrak sessiz-yutması zaten
+  2026-08-08'de kapatılmıştı; `--tip` artık tanınan bayrak). (2) `geri-al <id> --gerekce "…"` —
+  K5 ters-kayıt: `tip=devir` kaydını SİLMEZ, aynı hedefe karşıt `devir` kaydı ekler (defter
+  mantığı); yalnız gönderen geri alabilir, tip≠devir RC=2, gerekçesiz RC=2, gerekçe sır-desen
+  taramasında. Test: federe.test.sh 66/66 (T24-T26 yeni; gövde-kaydeden mock ile bayraksız-gövdede
+  tip-yokluğu kanıtlı).
