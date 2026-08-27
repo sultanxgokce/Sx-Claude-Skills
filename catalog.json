@@ -1280,7 +1280,8 @@
       "status": "EMEKLI (KATLAMA F1 2026-08-27, Sultan K#5; halef: layiha akisi)",
       "path": "defter-kapisi/SKILL.md",
       "installed_in": [],
-      "family": "sultan-dili (kapı-standardı)"
+      "family": "sultan-dili (kapı-standardı)",
+      "sync_dagitim": false
     },
     {
       "id": "maas-kapisi",
