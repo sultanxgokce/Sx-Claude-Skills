@@ -13,9 +13,19 @@ printf '📊 GÜNÜN ÖLÇÜMÜ · %s · oda: %s\n' "$gun" "$(basename "$KOK")"
 
 bolum "1/7 · Aktif layihalar (araştırma bitti, inşa bekliyor)"
 if [ -x "$SK/layiha/scripts/layiha-defteri.sh" ] || [ -f "$SK/layiha/scripts/layiha-defteri.sh" ]; then
-  bash "$SK/layiha/scripts/layiha-defteri.sh" liste --aktif 2>/dev/null | head -3
-  n=$(bash "$SK/layiha/scripts/layiha-defteri.sh" liste --aktif 2>/dev/null | grep -c '^  \[L')
-  printf '  toplam aktif: %s\n' "${n:-0}"
+  # 🔴 KOD DESENİ ODA-ÖNEKLİ (2026-08-29 onarımı): defter satırları `  [s01-L13]` biçiminde
+  #   basılıyor; eski desen `^  \[L` bunu HİÇ yakalamıyordu → araç 59 aktif layiha varken
+  #   "toplam aktif: 0" diyordu. Ölçüm aracının kendisi kördü ve günün planı ona dayanıyordu.
+  #   Sıfır sessizce basılıyordu; sahte-boşluk, gerçek boşluktan ayırt edilemiyordu.
+  # Tek koşum, iki kullanım: liste iki kez çağrılmaz (ikinci çağrı arada değişebilirdi).
+  _lay="$(bash "$SK/layiha/scripts/layiha-defteri.sh" liste --aktif 2>/dev/null)" || _lay=""
+  if [ -z "$_lay" ]; then
+    olcemedim "layiha defteri okunamadı (sıfır SAYILMADI)"
+  else
+    printf '%s\n' "$_lay" | head -3
+    n="$(printf '%s\n' "$_lay" | grep -cE '^  \[[^]]+\]')" || n=0
+    printf '  toplam aktif: %s\n' "$n"
+  fi
 else olcemedim "layiha defteri bulunamadı"; fi
 
 bolum "2/7 · Sultan'ın kapısı"
