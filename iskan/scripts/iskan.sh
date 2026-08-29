@@ -487,12 +487,28 @@ _iskan_mem_mb() {
 # _iskan_compose_blok <ad> <cname> <config_dir> <port> <mem_limit> — mihenk-şablon-baz (k0084):
 # kendi config-dizini + ORTAK ./config/.claude (keyless Claude-login mirası — B2 zincir-blokajı
 # fix'i: bu mount olmadan doğan ekip claude açamaz, setup-isolated.sh credentials'ı buradan bekler)
-# + DEFAULT_WORKSPACE. BİLİNÇLİ-YOK'lar: ./config/projects/<ad> mount'u EKLENMEZ (proje-ağacı
+# + DEFAULT_WORKSPACE + kutu-yerel `claude-projects` ÖRTÜSÜ (mahremiyet kapısı 2026-08-11: ortak
+# .claude'un getirdiği filo-geneli sohbet+memory dökümünü kutuya kapatır — huzur emsali; bu satır
+# olmadan yeni tenant AÇIK doğar. Golden: cloudtop/infra/izole-ortu.test.sh).
+# 6. parametre <ortak_erisim>: `yok` (varsayılan) | `sultan`. Sultan-direktifi 2026-08-29:
+# "yeni container doğururken ortak erişim tercihimi HER ZAMAN sor". Tercih röportajda sorulur
+# (Nexus /proje-dogum K-R1) ve buraya taşınır; `sultan` seçilirse EN-AZ-YETKİ köprüsü kurulur:
+# yalnız ./config/evraklar/Sultan (Fahri/Ayşe klasörleri ASLA). Ölçülmüş vaka: nova kutusu
+# köprüsüz doğdu, ekip müşteri belgesini teslim EDEMEDİ ("koymadım değil, koyamıyorum");
+# boşluk günler sonra elle kapatıldı (cloudtop#398).
+# BİLİNÇLİ-YOK'lar: ./config/projects/<ad> mount'u EKLENMEZ (proje-ağacı
 # tenant'ın kendi config'inde yaşar — EY_HOST_PROJ deseni; ortak-projects mount'u onu GÖLGELERdi,
-# b0024 sınıfı) · evraklar-köprüleri EKLENMEZ (mahremiyet-KARARI, röportaj/operatör açıkça isterse
-# elle) · .agent-dashboard EKLENMEZ (mobil-panel görünürlük paketi ayrı-faz).
+# b0024 sınıfı) · .agent-dashboard EKLENMEZ (mobil-panel görünürlük paketi ayrı-faz).
 _iskan_compose_blok() {
-  local ad="$1" cname="$2" config_dir="$3" port="$4" mem_limit="$5"
+  local ad="$1" cname="$2" config_dir="$3" port="$4" mem_limit="$5" ortak_erisim="${6:-yok}"
+  local evraklar_satiri=""
+  if [ "$ortak_erisim" = "sultan" ]; then
+    evraklar_satiri="
+      # Sultan-hub teslimat köprüsü (EN-AZ-YETKİ: yalnız Sultan/, Fahri/Ayşe DEĞİL) — röportajda
+      # AÇIKÇA istendi (Sultan-direktifi 2026-08-29 · akar/nova emsali). Ekip teslim edeceği
+      # belgeyi evraklar/Sultan/0-Gelen'e ${ad}_ önekiyle bırakır → Mutagen ile Mac'e akar.
+      - ./config/evraklar/Sultan:/config/evraklar/Sultan"
+  fi
   cat <<EOF
   # ── İSKÂN FAZ-4 provizyon: ${ad} (iskan.sh yeni-proje ile üretildi) ────────────────
   ${cname}:
@@ -507,9 +523,22 @@ _iskan_compose_blok() {
       # FAZ-6 generator-hizası: İSKÂN-container'ları ekip-hazır doğar (tmux=oturum, git=ekip-notify REPO_ROOT)
       - INSTALL_PACKAGES=tmux|git|python3|jq
     volumes:
+      # Konteyner açılış kancaları (LSIO /custom-cont-init.d) — git-tracked, salt-okur; tuğra
+      # kimliği · resim-yapıştırma dinleyicisi · oda servisi/gözetmeni · crontab kalıcılığı ·
+      # federe dinleyici · tarayıcı kütüphaneleri buradan iner. Üreteçte YOKTU → nova kancasız
+      # doğdu (2026-08-29 ölçümü, cloudtop#399); her yeni kutu aynı kusurla doğuyordu.
+      - ./config/projects/cloudtop/infra/cont-init:/custom-cont-init.d:ro
       - ${config_dir}:/config
       # ORTAK Claude master (keyless-login + skills + global CLAUDE.md mirası — mihenk-emsal k0084)
       - ./config/.claude:/config/.claude
+      # 🔒 SOHBET DÖKÜMLERİ KUTUYA ÖZEL (2026-08-11 · huzur emsali 2026-07-30 · ölçüm:
+      #   Nexus/_agents/spec/izolasyon-transkript-acigi-OLCUM.md). YUKARIDAKİ ortak .claude
+      #   mount'u filonun TÜM sohbet dökümünü (memory/ kalıcı-hafıza DÂHİL) yeni kutuya OKUNUR
+      #   getirir; dizin izin biti KORUMAZ (tüm kutular PUID=1000 → aynı uid). Bu satır olmadan
+      #   her yeni tenant AÇIK doğar. Örtü projects/'i kutu-yerel klasörle DEĞİŞTİRİR → kutu
+      #   yalnız KENDİ dökümünü görür; login/skill/CLAUDE.md mirası aynen kalır (2. /login YOK).
+      #   Geri-alma (tek satır): bu satırı sil + \`docker compose up -d ${cname}\` — veri diskte kalır.
+      - ${config_dir}/claude-projects:/config/.claude/projects${evraklar_satiri}
     ports:
       - "127.0.0.1:${port}:8443"
     restart: unless-stopped
@@ -541,7 +570,9 @@ _iskan_b1_check() {
   before="$(python3 "$COMPOSE_PARSE" "$repo_compose" 2>/dev/null)"
   after="$(python3 "$COMPOSE_PARSE" "$combined" 2>/dev/null)"
   rm -f "$combined"
-  python3 - "$before" "$after" "${ISKAN_B1_BILINCLI_KOPRU-./config/.claude}" <<'PYEOF'
+  local _allow_default="./config/.claude ./config/projects/cloudtop/infra/cont-init"
+  [ "${ISKAN_ORTAK_ERISIM:-yok}" = "sultan" ] && _allow_default="$_allow_default ./config/evraklar/Sultan"
+  python3 - "$before" "$after" "${ISKAN_B1_BILINCLI_KOPRU-$_allow_default}" <<'PYEOF'
 import json, sys
 before_raw, after_raw, allow_raw = sys.argv[1], sys.argv[2], sys.argv[3]
 try:
@@ -806,7 +837,7 @@ cmd_yeni_proje() {
       # 8452 çakışmasını doğurmuştu). Kaynak-beyanı DEĞİL (golden: override-beyanı basılmaz).
       echo "[yeşil] port-taraması: $(_iskan_compose_kardesler "$repo_compose" | wc -l) compose dosyası (kardeşler dahil · origin/main tercihli) → boş port ${port}"
     fi
-    blok="$(_iskan_compose_blok "$ad" "$cname" "$config_dir" "$port" "$mem_limit")"
+    blok="$(_iskan_compose_blok "$ad" "$cname" "$config_dir" "$port" "$mem_limit" "${ISKAN_ORTAK_ERISIM:-yok}")"
     blok_dosyasi="$(mktemp)"
     printf '%s\n' "$blok" > "$blok_dosyasi"
     yeni_kesisim="$(_iskan_b1_check "$repo_compose" "$blok_dosyasi")"
