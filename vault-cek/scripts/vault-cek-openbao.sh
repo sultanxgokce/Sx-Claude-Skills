@@ -207,6 +207,42 @@ _kv_put(){   # $1=path $2=key · DEĞER **STDIN'den** okunur (argv'ye ASLA düş
 }
 
 cmd="${1:-help}"
+
+# ── ÇOK-SATIRLI DEĞER YARDIMCILARI (2026-08-29, MEDDAH'ın bulgusu) ───────────────────
+# Satır-içi kod yerine FONKSİYON: çevrimdışı sınama yalnız fonksiyon çağırabiliyor
+# (vault-cek-tenant.test.sh deseni). Satır-içi kalsaydı bu davranış test EDİLEMEZDİ —
+# ve tam da test edilemeyen davranışlar sessizce bozuluyor.
+
+# _env_yaz_olc <KEY> <ENV_DOSYA> — değeri VAL ortam-değişkeninden alır, env dosyasına
+# shlex-quote'lu yazar (600) ve "uzunluk<TAB>parmak-izi<TAB>satır-sayısı" basar.
+# 🔴 Değer stdout'a ASLA düşmez; parmak izi sha256'nın ilk 12 hanesidir (geri döndürülemez).
+_env_yaz_olc() {
+  KEY="$1" ENVF="$2" python3 -c '
+import os,re,shlex,hashlib
+k=os.environ["KEY"]; envf=os.environ["ENVF"]; val=os.environ["VAL"]
+lines=[l for l in open(envf).read().splitlines() if not re.match(r"^export "+re.escape(k)+"=",l)] if os.path.exists(envf) else []
+lines.append("export %s=%s"%(k, shlex.quote(val)))
+open(envf,"w").write("\n".join(lines)+"\n"); os.chmod(envf,0o600)
+iz=hashlib.sha256(val.encode("utf-8")).hexdigest()[:12]
+print("%d\t%s\t%d" % (len(val), iz, val.count("\n")+1))'
+}
+
+# _cok_satir_uyar <KEY> <SATIR> <IZ> — çok satırlıysa yüksek sesle uyarır (stderr), değilse susar.
+# NİÇİN: çok satırlı bir değer shlex.quote ile DOĞRU yazılır ama env dosyasında FİZİKSEL olarak
+# birden çok satıra yayılır. Tüketicilerin çoğu satır-tabanlı okuyor
+# (`sed -n 's/^export K=//p' | head -1`) → ölçüldü: 55 karakterlik bir değer **2 karaktere**
+# düşüyor ve HİÇ SES ÇIKMIYOR. "Anahtar var mı" diye bakan her kapı yeşil yanıyor; elde kalan
+# şey bir süs parantezi. Yazan taraf doğru, okuyan taraf kırık — bu fonksiyon kırığı görünür kılar.
+_cok_satir_uyar() {
+  local k="$1" satir="$2" iz="$3"
+  [ "${satir:-1}" -gt 1 ] || return 0
+  printf '%s\n' "⚠️  ÇOK SATIRLI DEĞER (${satir} satır) — satır-tabanlı okuma bu değeri SESSİZCE bozar." >&2
+  printf '%s\n' "    Yanlış: sed/grep/head ile 'export ${k}=' satırını ayıklamak → yalnız ilk satır alınır." >&2
+  printf '%s\n' "    Doğru : set -a; . \"\$HOME/.config/cortex-access.env\"; set +a   (kabuk dizeyi bütün okur)" >&2
+  printf '%s\n' "    Doğrula: değeri BASMADAN  printf '%%s' \"\$${k}\" | sha256sum  → ilk 12 hane ${iz} olmalı." >&2
+}
+
+
 case "$cmd" in
   resolve)
     _login
@@ -286,14 +322,12 @@ case "$cmd" in
       die "$KEY yok ($MOUNT/$MAP_PATH/$MAP_INFKEY) — Sultan OpenBao'ya eklemeli"
     fi
     # Idempotent yaz: ORİJİNAL <KEY> adıyla (consumer rewire-yok), shlex-quote, 600. Değer python-env (argv-YOK).
-    LEN=$(KEY="$KEY" ENVF="$ENV_FILE" VAL="$VAL" python3 -c '
-import os,re,shlex
-k=os.environ["KEY"]; envf=os.environ["ENVF"]; val=os.environ["VAL"]
-lines=[l for l in open(envf).read().splitlines() if not re.match(r"^export "+re.escape(k)+"=",l)] if os.path.exists(envf) else []
-lines.append("export %s=%s"%(k, shlex.quote(val)))
-open(envf,"w").write("\n".join(lines)+"\n"); os.chmod(envf,0o600)
-print(len(val))')
-    grn "✓ $KEY alındı → cortex-access.env (${LEN} krk, değer basılmadı · $MOUNT/$MAP_PATH/$MAP_INFKEY · yol=${_COZUM:-açık-hedef})" ;;
+    _OLC="$(VAL="$VAL" _env_yaz_olc "$KEY" "$ENV_FILE")"
+    LEN="$(printf '%s' "$_OLC" | cut -f1)"
+    IZ="$(printf '%s' "$_OLC" | cut -f2)"
+    SATIR="$(printf '%s' "$_OLC" | cut -f3)"
+    grn "✓ $KEY alındı → cortex-access.env (${LEN} krk, değer basılmadı · iz=${IZ} · $MOUNT/$MAP_PATH/$MAP_INFKEY · yol=${_COZUM:-açık-hedef})"
+    _cok_satir_uyar "$KEY" "$SATIR" "$IZ" ;;
 
   put)
     # ── KALEM (L68/F1): kasaya YATIRAN komut. Değer stdout/log/argv/trace'e ASLA düşmez.
