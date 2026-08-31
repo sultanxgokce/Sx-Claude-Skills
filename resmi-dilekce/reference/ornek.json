@@ -1,0 +1,26 @@
+{
+  "dosya_adi": "DILEKCE-biyomedikal-birim-talebi",
+  "baslik": "Dilekçe — Biyomedikal Birim Görevlendirme Talebi",
+  "tarih": "31.08.2026",
+  "makam": [
+    "T.C. SAĞLIK BAKANLIĞI",
+    "ETİMESGUT ŞEHİT SAİT ERTÜRK DEVLET HASTANESİ",
+    "BAŞHEKİMLİĞİNE"
+  ],
+  "il": "ANKARA",
+  "paragraflar": [
+    "Birinci paragraf: kim olduğun, hangi sıfatla başvurduğun.",
+    "İkinci paragraf: dayanak — belge, mevzuat, olgu.",
+    "Üçüncü paragraf: talep ve gerekçesi. Son cümle: 'Gereğini bilgilerinize arz ederim.'"
+  ],
+  "ad": "Ayşenur GÖKÇE",
+  "unvan": "Sağlık Teknikeri",
+  "ekler": ["Yükseköğretim Kurulu Başkanlığı Mezun Belgesi (1 sayfa)"],
+  "iletisim": {
+    "T.C. Kimlik No": "00000000000",
+    "Telefon": "0500 000 00 00",
+    "E-posta": "ornek@ornek.com"
+  },
+  "dogrula": ["Ayşenur GÖKÇE", "BAŞHEKİMLİĞİNE"],
+  "max_sayfa": 1
+}
