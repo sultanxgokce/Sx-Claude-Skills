@@ -644,8 +644,8 @@
       "id": "zeyl",
       "type": "agent",
       "name": "/zeyl — Sultan'ın söylediği gereklilik uçmasın (GLOBAL)",
-      "version": "1.0.0",
-      "description": "Gün içinde söylenen gereklilikleri sessizce seyir-defterine düşürür ve verdikt almadan yaşamalarına izin vermez. Ölçüldü: 6 günde 72 kalemin 45'i (%62) hiçbir dosyaya inmemiş, compaction 3'ünü yemiş, Sultan aynı şeyi tekrar söylemek zorunda kalmış. YENİ DEPO AÇMAZ — seyir-defterinin kendi dosyasına aynı şemayla yazar (üç delta: tur=gereklilik, kaynak+tur_no provenans, durum=ham|yapildi). Kanıtsız 'yapıldı' REDDEDİLİR; sebepsiz 'düştü' REDDEDİLİR; defter yoksa rc=2 'ölçülemedi' (temiz DEĞİL). `onaylandi` alanı YOK — o insan alanıdır (A06). 20 kapı, çift yönlü fikstür (ALTIN yüz boş defterin onurlu olduğunu kilitler). MİHENK/NİŞANCI yazdı ve o kutuda kanıtladı; merkez globalleştirdi — devirde iki kutu-özgü kusur düzeltildi: defter betiğin yanında aranıyordu (global kurulumda 15 kutunun ortak dizinine düşerdi, İ1 ihlali) ve kimlik MİHENK'e sabitlenmişti."
+      "version": "1.0.1",
+      "description": "Gün içinde söylenen gereklilikleri sessizce seyir-defterine düşürür ve verdikt almadan yaşamalarına izin vermez. Ölçüldü: 6 günde 72 kalemin 45'i (%62) hiçbir dosyaya inmemiş, compaction 3'ünü yemiş, Sultan aynı şeyi tekrar söylemek zorunda kalmış. YENİ DEPO AÇMAZ — seyir-defterinin kendi dosyasına aynı şemayla yazar (üç delta: tur=gereklilik, kaynak+tur_no provenans, durum=ham|yapildi). Kanıtsız 'yapıldı' REDDEDİLİR; sebepsiz 'düştü' REDDEDİLİR; defter yoksa rc=2 'ölçülemedi' (temiz DEĞİL). `onaylandi` alanı YOK — o insan alanıdır (A06). 20 kapı, çift yönlü fikstür (ALTIN yüz boş defterin onurlu olduğunu kilitler). MİHENK/NİŞANCI yazdı ve o kutuda kanıtladı; merkez globalleştirdi — devirde iki kutu-özgü kusur düzeltildi: defter betiğin yanında aranıyordu (global kurulumda 15 kutunun ortak dizinine düşerdi, İ1 ihlali) ve kimlik MİHENK'e sabitlenmişti. · 1.0.1: özetin bastığı reçete ölü uçtu ('bash scripts/zeyl.sh' global kurulumda yok) — koşulan yoldan türetiliyor; G-D/G-D2 kapıları reçeteyi KOŞARAK ölçer."
     },
     {
       "id": "ahi",
