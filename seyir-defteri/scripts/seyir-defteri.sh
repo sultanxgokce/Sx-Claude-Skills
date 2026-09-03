@@ -43,8 +43,17 @@ _kim(){
 _now(){ date -u +%Y-%m-%dT%H:%M:%SZ; }
 
 VALID_SEV="kritik onemli bilgi"
-VALID_TUR="bug iyilestirme varsayim-curudu risk soru firsat oneri gozlem"
-VALID_DURUM="acik okundu sonraki-donguye kapatildi"
+# 2026-09-03 · ZEYL DELTASI (üç alan, kardeş araç `zeyl` AYNI dosyaya yazıyor):
+#   tur   += gereklilik  → Sultan'ın gün içinde söylediği, bağlamda kalıp compact'te uçan istek
+#   durum += ham         → henüz verdikt almamış kayıt (zeyl'in çıkış-zorunluluğunun dayanağı)
+#   durum += yapildi     → canlıya indi, KANITLI (üretici beyanı; terminal değil)
+# 🔴 `onaylandi` BİLEREK EKLENMEDİ: o bir İNSAN alanıdır (A06). Ajan `yapildi` yazar —
+#   "Sultan onayladı" hükmünü hiçbir ajan kendi eliyle veremez. Alanı açmak Sultan kararı.
+# Bu kümeler açılmadan zeyl'in kayıtları kardeş araçta süzülemez ve işaretlenemezdi
+# (--tur=gereklilik → "geçersiz tur" ile ölürdü) — yani iki araç aynı deftere yazıp
+# birbirini görmezdi. Ölçüldü 2026-09-03, globalleştirme öncesi.
+VALID_TUR="bug iyilestirme varsayim-curudu risk soru firsat oneri gozlem gereklilik"
+VALID_DURUM="acik okundu sonraki-donguye kapatildi ham yapildi"
 _in(){ local x="$1"; shift; local w; for w in $*; do [ "$w" = "$x" ] && return 0; done; return 1; }
 
 # ── güncel-döngü-no = son ozet.dongu + 1 (durable, transkript-bağımsız); ozet yoksa 1 ────

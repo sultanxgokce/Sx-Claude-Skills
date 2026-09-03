@@ -1,6 +1,6 @@
 {
   "version": "2.1",
-  "updated": "2026-08-10",
+  "updated": "2026-09-03",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -637,8 +637,15 @@
       "id": "seyir-defteri",
       "type": "agent",
       "name": "/seyir-defteri — keşif-günlüğü + döngü-refleksiyon (GLOBAL)",
-      "version": "1.1.0",
-      "description": "Çok-ajanlı işte yan-keşiflerin (aslında-şöyleymiş · bug · risk · fırsat · itiraz) SESSİZCE ATLANMAMASI için append-only günlük: her-ajan tek-komut yazar (sev×tür iki-eksen), koordinatör filtreli okur+disposition işaretler; opsiyonel döngü-sonu refleksiyon-ritüeli ('döngü bitti, plan moduna geçelim' → 4-soru + döngü-özet + hafıza-köprüsü) + geçici-md migrate (idempotent). jsonl 3-event (not/disp/ozet), satır-edit-yok, flock-güvenli, git-kök-resolve, proje-agnostik. Kültür-kuralı gömülü: orkestraya itiraz SERBEST+TEŞVİKLİ. (SİNAN/MMEx + HEKİMBAŞI/medigate birleşik-talebi; MİMSERDAR-spec.)"
+      "version": "1.2.0",
+      "description": "Çok-ajanlı işte yan-keşiflerin (aslında-şöyleymiş · bug · risk · fırsat · itiraz) SESSİZCE ATLANMAMASI için append-only günlük: her-ajan tek-komut yazar (sev×tür iki-eksen), koordinatör filtreli okur+disposition işaretler; opsiyonel döngü-sonu refleksiyon-ritüeli ('döngü bitti, plan moduna geçelim' → 4-soru + döngü-özet + hafıza-köprüsü) + geçici-md migrate (idempotent). jsonl 3-event (not/disp/ozet), satır-edit-yok, flock-güvenli, git-kök-resolve, proje-agnostik. Kültür-kuralı gömülü: orkestraya itiraz SERBEST+TEŞVİKLİ. (SİNAN/MMEx + HEKİMBAŞI/medigate birleşik-talebi; MİMSERDAR-spec.) · 1.2.0 (2026-09-03): kardeş araç `zeyl` AYNI deftere yazdığı için kapalı kümeler açıldı — tur+=gereklilik, durum+=ham|yapildi. `onaylandi` BİLEREK açılmadı (insan alanı, A06). Bu delta olmadan zeyl'in kayıtları burada süzülemiyor ve işaretlenemiyordu."
+    },
+    {
+      "id": "zeyl",
+      "type": "agent",
+      "name": "/zeyl — Sultan'ın söylediği gereklilik uçmasın (GLOBAL)",
+      "version": "1.0.0",
+      "description": "Gün içinde söylenen gereklilikleri sessizce seyir-defterine düşürür ve verdikt almadan yaşamalarına izin vermez. Ölçüldü: 6 günde 72 kalemin 45'i (%62) hiçbir dosyaya inmemiş, compaction 3'ünü yemiş, Sultan aynı şeyi tekrar söylemek zorunda kalmış. YENİ DEPO AÇMAZ — seyir-defterinin kendi dosyasına aynı şemayla yazar (üç delta: tur=gereklilik, kaynak+tur_no provenans, durum=ham|yapildi). Kanıtsız 'yapıldı' REDDEDİLİR; sebepsiz 'düştü' REDDEDİLİR; defter yoksa rc=2 'ölçülemedi' (temiz DEĞİL). `onaylandi` alanı YOK — o insan alanıdır (A06). 20 kapı, çift yönlü fikstür (ALTIN yüz boş defterin onurlu olduğunu kilitler). MİHENK/NİŞANCI yazdı ve o kutuda kanıtladı; merkez globalleştirdi — devirde iki kutu-özgü kusur düzeltildi: defter betiğin yanında aranıyordu (global kurulumda 15 kutunun ortak dizinine düşerdi, İ1 ihlali) ve kimlik MİHENK'e sabitlenmişti."
     },
     {
       "id": "ahi",
