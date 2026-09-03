@@ -51,6 +51,10 @@ _store(){
   fi
   printf '%s/seyir-defteri.jsonl' "$root"
 }
+# Reçetelerde kullanılacak KENDİ yolu — sabit yol yazmak ölü uç üretir (bkz. ozet).
+KENDI_YOL="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)/$(basename "${BASH_SOURCE[0]}")"
+[ -e "$KENDI_YOL" ] || KENDI_YOL="zeyl"
+
 STORE="$(_store)"
 
 # KÖK = defterin bulunduğu dizin (eskiden betiğin dizini). Kanıt çözümü ve proje-adı
@@ -216,7 +220,7 @@ cmd_ozet(){
   [ -z "$eskiTs" ] || printf ' · en eskisi %s gündür' "$(_yas_gun "$eskiTs")"
   printf '\n'
   [ -z "$eskiId" ] || printf '   → sıradaki: %s "%s"\n' "$eskiId" "$eskiMetin"
-  [ "$ham" = 0 ] || printf '   → verdikt: bash scripts/zeyl.sh bekleyen\n'
+  [ "$ham" = 0 ] || printf '   → verdikt: %s bekleyen\n' "$KENDI_YOL"
 }
 
 # ═══ doktor (DOĞRULAMA KOMUTU) ═══════════════════════════════════════════════

@@ -88,5 +88,23 @@ ok "G-C: kayıtta sabitlenmiş kutu-adı yok" \
 ok "G-C2: verilen kimlik kayda geçer" \
    "$(grep -c '"kim":"TEST"' "$t2/depo/seyir-defteri.jsonl" 2>/dev/null)" "1"
 
+
+# G-D · ÖZETİN BASTIĞI REÇETE FİİLEN KOŞMALI (2026-09-03, canlı vaka)
+# Devralınan sürüm sabit 'bash scripts/zeyl.sh bekleyen' basıyordu. Global kurulumda
+# betik ~/.claude/skills/zeyl/scripts/ altında yaşar; çalışma dizininde 'scripts/zeyl.sh'
+# YOKTUR → kimlik bloğu kullanıcıya ÖLÜ BİR YOL gösteriyordu. Bugün canlı görüldü.
+# Bu kapı reçeteyi metin olarak değil, KOŞARAK ölçer.
+t3="$(mktemp -d)"; mkdir -p "$t3/kurulum/derin/scripts" "$t3/depo"
+cp "$KOK/scripts/zeyl.sh" "$t3/kurulum/derin/scripts/"
+: > "$t3/depo/seyir-defteri.jsonl"
+SEYIR_DEFTERI="$t3/depo/seyir-defteri.jsonl" ZEYL_KIM=TEST \
+  bash "$t3/kurulum/derin/scripts/zeyl.sh" yaz "recete kapisi" --kaynak=gun-ici-not >/dev/null 2>&1
+RECETE="$(SEYIR_DEFTERI="$t3/depo/seyir-defteri.jsonl" \
+  bash "$t3/kurulum/derin/scripts/zeyl.sh" ozet 2>/dev/null | sed -n 's/.*→ verdikt: //p')"
+ok "G-D: özet bir reçete basar" "$([ -n "$RECETE" ] && echo var || echo yok)" "var"
+# Reçeteyi BAŞKA bir dizinden koş — sabit göreli yol burada ölür, mutlak yol yaşar.
+( cd "$t3" && SEYIR_DEFTERI="$t3/depo/seyir-defteri.jsonl" bash $RECETE ) >/dev/null 2>&1
+ok "G-D2: basılan reçete BAŞKA dizinden koşulunca ÇALIŞIR (ölü uç değil)" "$?" "0"
+
 echo "── $gecen geçti · $kalan kaldı"
 [ "$kalan" = 0 ]
