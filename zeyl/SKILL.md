@@ -1,7 +1,7 @@
 ---
 name: zeyl
 type: agent
-version: 1.0.0
+version: 1.0.1
 description: >
   Sultan'ın gün içinde söylediği gereklilikleri sessizce deftere düşürür ve verdikt almadan
   yaşamalarına izin vermez. Ölçüldü: 6 günde 72 kalemin 45'i (%62) hiçbir dosyaya inmemiş,
