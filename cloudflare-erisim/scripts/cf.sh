@@ -14,6 +14,8 @@
 #   mint   : Global Key ile DAR-YETKİLİ token ÜRET (Zone.DNS + Account.Access), token'ı sakla,
 #            Global Key'i UNUT (yalnız least-privilege token kalır). "Sen token oluştur" = bu.
 #   onboard: <host> için Access self-hosted app + Allow-policy + proxied DNS (tümü idempotent).
+#   ingress: tünelin yönlendirme kurallarını BAS (SALT-OKUR). "Bu konteynerden okunamaz"
+#            kanısının panzehiri; yazma yolu bilerek YOK (canlı kurallar tek çağrıyla silinebilir).
 #
 # Sır-hijyeni: DEĞER asla stdout'a/log'a/geçmişe düşmez; yalnız ~/.config/cortex-access.env (600).
 # Kanonik pointer: Nexus/_agents/credentials.yaml. cloudflared GEREKMEZ (saf curl+jq).
@@ -441,6 +443,23 @@ cmd_list(){
   api GET "/accounts/${ACCOUNT_ID}/access/apps" | jq -r '.result[]? | "  • \(.domain)   [\(.name)]   \(.id)"' 2>/dev/null || echo "  (okunamadı)"
 }
 
+cmd_ingress(){  # SALT-OKUR: tünelin yönlendirme kurallarını bas
+  # NİÇİN VAR (2026-09-06, ölçümle): filoda "tünel ingress'i konteynerden yapılamaz,
+  # host'ta /etc/cloudflared/config.yml elle düzenlenir" kanısı dolaşıyordu ve bir oda
+  # bu yüzden merkezden ELLE müdahale bekledi. Ölçtüm: kurallar API'den konteynerden
+  # OKUNUYOR (28 kural, akar-ai dahil). Kanının panzehiri "yapılabilir" demek değil,
+  # YAPAN KOMUTU koymaktır — bu komut o boşluğu kapatır.
+  # ⚠️ SINIR: bu komut YALNIZ OKUR. Yazma (PUT) yolu bilerek eklenmedi; 28 canlı kuralı
+  #    tek hatalı çağrı silebilir. Yazma ayrı bir karar ve ayrı bir kapı ister.
+  load_ctx
+  [ -n "${TUNNEL_ID:-}" ] || die "tünel '${TUNNEL_NAME}' id'si yok — doctor çalıştır"
+  local r; r="$(api GET "/accounts/${ACCOUNT_ID}/cfd_tunnel/${TUNNEL_ID}/configurations")"
+  ok "$r" || { errs "$r"; die "ingress okunamadı (token'da Tunnel-Read var mı?)"; }
+  echo "$r" | jq -r '.result.config.ingress[]? | "  • \(.hostname // "(varsayılan)")   →   \(.service)"' 2>/dev/null \
+    || echo "  (ayrıştırılamadı)"
+  echo "  ── toplam: $(echo "$r" | jq -r '.result.config.ingress | length' 2>/dev/null) kural (SALT-OKUR)"
+}
+
 cmd_help(){ sed -n '2,40p' "$0" | sed 's/^# \{0,1\}//'; }
 
 case "${1:-doctor}" in
@@ -453,6 +472,7 @@ case "${1:-doctor}" in
   onboard)       shift; cmd_onboard "$@" ;;
   offboard)      shift; cmd_offboard "$@" ;;
   list)          cmd_list ;;
+  ingress)       cmd_ingress ;;
   help|-h|--help) cmd_help ;;
   *) die "bilinmeyen komut: $1  (login|mint|set-token|doctor|onboard <host>|offboard <host> [--apply]|access-ensure|dns-ensure|list)" ;;
 esac
