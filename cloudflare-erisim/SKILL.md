@@ -1,7 +1,7 @@
 ---
 name: cloudflare-erisim
 type: agent
-version: 1.4.0
+version: 1.5.0
 description: >
   Cloudflare erişimi gereken işleri (Access self-hosted app + policy, proxied DNS/tünel rotası,
   subdomain'i giriş-kapısı arkasına alma) PANELE GİRMEDEN, saf API (curl+jq) ile yapar. Kimlik yoksa
@@ -67,6 +67,7 @@ bash ~/.claude/skills/cloudflare-erisim/scripts/cf.sh onboard mmex.mmepanel.com 
 bash ~/.claude/skills/cloudflare-erisim/scripts/cf.sh access-ensure <host> [email] # yalnız Access app + Allow-policy
 bash ~/.claude/skills/cloudflare-erisim/scripts/cf.sh dns-ensure <host>            # yalnız proxied DNS (tünel rotası)
 bash ~/.claude/skills/cloudflare-erisim/scripts/cf.sh list                         # mevcut Access app'leri listele
+bash ~/.claude/skills/cloudflare-erisim/scripts/cf.sh ingress                      # tünel yönlendirme kuralları (SALT-OKUR)
 bash ~/.claude/skills/cloudflare-erisim/scripts/cf.sh offboard <host> [--apply]    # Access + DNS GERİ-ALIMI (dry-run DEFAULT)
 ```
 `offboard` = `onboard`'un tersi (İSKÂN söküm-akışı kullanır): TAM-hostname lookup + silme-öncesi
@@ -78,15 +79,23 @@ Dry-run DEFAULT (`--apply` şart) · koruma-listesi **literal-çekirdek** (pc/co
 mihenk/cloudtop + zone-kökü; `CF_ZONE_NAME` ile KAYDIRILAMAZ; env'ler yalnız EKLER:
 `CF_OFFBOARD_PROTECTED_EXTRA`) · değer-basmaz · sonda makine-okur kanıt-satırı
 `OFFBOARD-SONUC: access=silindi|zaten-yok dns=silindi|zaten-yok` (İSKÂN kanıt-dosyası bunu saklar; exit-code
-sözleşmesi değişmez). Tünel-ingress satırı host `config.yml`'de ayrı yaşar — onu İSKÂN `sokum` adımı
-(.bak'lı) çıkarır, bu komut DOKUNMAZ. Golden-süit: `scripts/cf.test.sh` (offline curl-stub, gerçek CF'e sıfır istek).
+sözleşmesi değişmez). Tünel-ingress satırı host `config.yml`'de de yaşar — onu İSKÂN `sokum` adımı
+(.bak'lı) çıkarır, bu komut DOKUNMAZ. (Kuralların API'den okunabildiği 2026-09-06'da ölçüldü;
+bkz. `cf.sh ingress`.) Golden-süit: `scripts/cf.test.sh` (offline curl-stub, gerçek CF'e sıfır istek).
 Varsayılan izin = `sultanxgokce@gmail.com` (değiştir: 2. argüman e-posta).
 
 ### 5. Raporla + tünel ingress hatırlatması
 - Çıktının `✓/•/✗` satırlarını kullanıcıya ilet.
-- ⚠️ **Tünel INGRESS** (`hostname → http://localhost:PORT`) HOST'taki `/etc/cloudflared/config.yml`'de
-  yaşar; bunu API DEĞİL, host'ta `setup-tunnel.sh` yazar (konteynerden erişilemez). Yeni subdomain'de
-  Access+DNS bu skill'le biter; ingress için `ssh <host> 'bash .../setup-tunnel.sh'` adımını hatırlat.
+- **Tünel INGRESS** (`hostname → http://localhost:PORT`).
+  🔴 **DÜZELTME 2026-09-06 — eski metin yanlıştı.** Burada "konteynerden erişilemez" yazıyordu; bu
+  cümle filoda dolaştı ve bir oda bu yüzden merkezden ELLE müdahale bekledi. **Ölçüldü:** kurallar
+  konteynerden API ile **OKUNUYOR** — `cf.sh ingress` 28 kuralı bastı (2026-09-06, firsthand).
+  · **okuma:** `cf.sh ingress` (bu skill, SALT-OKUR) — ssh gerekmez.
+  · **yazma:** bu skill'de YOK ve **ölçülmedi** — API'nin yazma ucu var ama denenmedi, dolayısıyla
+    "yapılır" da denmez ("yapılmaz" demek de aynı hataya düşmek olur). Bugünkü bilinen yol:
+    host'ta `setup-tunnel.sh`. Yazmanın konteynerden yapılıp yapılamayacağı **açık soru**.
+  · **niçin yazma yolu eklenmedi:** 28 canlı kural tek hatalı çağrıyla silinebilir; ayrı karar ister.
+  Yeni subdomain'de Access+DNS bu skill'le biter; ingress **yazımı** için `ssh <host> '.../setup-tunnel.sh'`.
 
 ## Kalıcılık & sır-hijyeni
 - Token/anahtar YALNIZ `~/.config/cortex-access.env` (600) içinde; **değer asla stdout/log/chat/geçmişe düşmez**.
