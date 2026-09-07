@@ -145,6 +145,7 @@ if _yet:
         sys.stderr.write("HATA: --yetki tanınmadı: %r\n      %s\n" % (_yet, YETKI_RECETE))
         sys.exit(2)
     _yet = yetki_normalize(_yet)
+_hucre_uyari = ""
 # NİZAM HÜCRE KAPISI (L66-F2) — Sultan: "ajan bana 'hangi tip ilişki' diye sormalı;
 # free/kenarsız çalışmıyoruz." Küme KAPALI ama `belirsiz` MEŞRU (ölçüldü: kapalı küme
 # dayatmak işi yanlış kutuya sokar). Değer verilmişse tanınmak ZORUNDADIR.
@@ -157,8 +158,10 @@ if _hucre:
 else:
     # BİLİNMEYEN GİZLENMEZ (defterin kendi kuralı): sorulmamış hücre kaydı yazılabilir
     # ama SESSİZ olamaz. Boş ≠ belirsiz: boş "hiç sorulmadı", belirsiz "bakıldı, oturmadı".
-    sys.stderr.write("UYARI: --hucre verilmedi (hangi NİZAM hücresinde çalışıyorsun?).\n"
-                     "       Kayıt yazıldı ama hücresi BİLİNMİYOR. %s\n" % HUCRE_RECETE)
+    # ERTELENMİŞ UYARI (2026-09-07 E2E ölçümü): bu satır "Kayıt yazıldı" derken kayıt henüz
+    # yazılmamıştı; K#4 kapısı aşağıda reddederse cümle YALAN olurdu. Beyan, yazımdan SONRA basılır.
+    _hucre_uyari = ("UYARI: --hucre verilmedi (hangi NİZAM hücresinde çalışıyorsun?).\n"
+                    "       Kayıt yazıldı ama hücresi BİLİNMİYOR. %s\n" % HUCRE_RECETE)
 # ── DOĞRULAMA KAPISI (L35-F1 · bayat-kayıt panzehiri, 2026-08-12) ──────────────────
 # Kayıt "şu açık" demez; "şu açık — YANLIŞSA ŞU KOMUT GÖSTERİR" der. Kapı yalnız YENİ
 # açık-iş kayıtlarında işler (DESIGN §6-F1 + §8 risk-1):
@@ -277,6 +280,7 @@ for r in recs:
     else: out.append(r)
 if not found: out.append(rec)
 yaz(led, out)
+if _hucre_uyari: sys.stderr.write(_hucre_uyari)
 print("OK: layiha %s %s (%s · %s · oda: %s)"%(rec["id"], "güncellendi" if found else "eklendi",
                                                rec["slug"], rec["tarih"], rec.get("proje") or "?"))
 PY

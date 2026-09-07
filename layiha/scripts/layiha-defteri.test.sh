@@ -672,6 +672,12 @@ var  "G21f bayatlık ÖLÇÜLEMEDİ olarak basıldı" "$O21F" "ÖLÇÜLEMEDİ"
 s21 "$K21/altinda.log" --slug altinda-bir --konu "Tavan altında" --dokuman f.md >/dev/null 2>&1
 esit "G21g tavan altındayken normal RC=0" "0" "$?"
 
+# G21h park ederken "Kayıt yazıldı" cümlesi BASILMAZ (yalan beyan panzehiri); normal yolda basılır
+O21H="$(s21 "$K21/asildi.log" --slug park-iki --konu "Park iki" --dokuman g.md 2>&1)"
+yok "G21h parkta 'Kayıt yazıldı' basılmadı" "$O21H" "Kayıt yazıldı"
+O21I="$(s21 "$K21/altinda.log" --slug hucresiz --konu "Hücresiz normal" --dokuman h.md 2>&1)"
+var "G21i normal yolda hücre uyarısı hâlâ basılıyor" "$O21I" "Kayıt yazıldı"
+
 echo "════════ SONUÇ: PASS=$PASS · FAIL=$FAIL ════════"
 [ "$FAIL" -eq 0 ] || exit 1
 exit 0
