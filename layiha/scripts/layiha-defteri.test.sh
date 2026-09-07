@@ -625,6 +625,53 @@ O20I="$(s20 durum mim-isi insa-ediliyor 2>&1)"
 var "G20i reçete D1-damga biçimini örnekliyor" "$O20I" "beyan:"
 var "G20i A06: aracın söz-üretmediği yazılı" "$O20I" "ÜRETMEZ"
 
+
+echo
+echo "=== G21 · K#4 META-FREEZE KAPISI: tavan aşılmışsa yeni meta-iş PARKTA (diş 2026-09-07) ==="
+# NİÇİN: kuzey-yıldızı 28 Ağustos'tan beri "TAVAN AŞILDI" diyor, hiçbir şey durmuyordu.
+K21="$T/katlama"; mkdir -p "$K21"
+printf '   • 🔴 meta-oranı %%97 — TAVAN AŞILDI (%%30)\n[2026-09-07 08:55:02] TAVAN AŞILDI (rc=3)\n' > "$K21/asildi.log"
+printf '   • 🟢 meta-oranı %%12 — tavan altında (%%30)\n[2026-09-07 08:55:02] tur tamam\n' > "$K21/altinda.log"
+printf '   • 🔴 meta-oranı %%97 — TAVAN AŞILDI (%%30)\n' > "$K21/bayat.log"; touch -d "9 days ago" "$K21/bayat.log"
+D21="$T/defter21.jsonl"; : > "$D21"
+s21() { LAYIHA_DEFTER="$D21" HAT_ROOT="$T/OdaBir" LAYIHA_PROJE=Nexus LAYIHA_KATLAMA_LOG="$1" bash "$SUT" ekle --dogrula "grep -c . /dev/null" "${@:2}"; }
+
+# G21a aşılmış + yeni kayıt + yetki yok → RC=4, defter DEĞİŞMEDİ
+O21A="$(s21 "$K21/asildi.log" --slug park-bir --konu "Yeni meta iş" --dokuman a.md 2>&1)"; RC21A=$?
+esit "G21a tavan aşılmışken yeni kayıt RC=4" "4" "$RC21A"
+esit "G21a defter boş kaldı (yazılmadı)" "0" "$(grep -c . "$D21")"
+var  "G21a mesaj META-FREEZE" "$O21A" "META-FREEZE"
+var  "G21a reçete --yetki sultan-emri" "$O21A" "sultan-emri"
+var  "G21a ölçüm satırı basıldı" "$O21A" "meta-oranı"
+
+# G21b aşılmış + --yetki sultan-emri → RC=0 (K#4 istisnası)
+s21 "$K21/asildi.log" --slug emir-bir --konu "Sultan emri" --dokuman b.md --yetki sultan-emri --isteyen sultan >/dev/null 2>&1
+esit "G21b sultan-emri muaf RC=0" "0" "$?"
+esit "G21b kayıt yazıldı" "1" "$(grep -c . "$D21")"
+
+# G21c aşılmış + MEVCUT slug güncelleme → RC=0 (güncelleme yeni meta-iş değil)
+s21 "$K21/asildi.log" --slug emir-bir --konu "Sultan emri (güncel)" --dokuman b.md >/dev/null 2>&1
+esit "G21c mevcut kayıt güncellemesi muaf RC=0" "0" "$?"
+
+# G21d aşılmış ama oda ticari kutu (LAYIHA_PROJE=akar) → RC=0 (plan: ticari kutulara dokunulmaz)
+LAYIHA_DEFTER="$D21" HAT_ROOT="$T/OdaBir" LAYIHA_PROJE=akar LAYIHA_KATLAMA_LOG="$K21/asildi.log" \
+  bash "$SUT" ekle --dogrula "grep -c . /dev/null" --slug akar-is --konu "Ticari kutu işi" --dokuman c.md >/dev/null 2>&1
+esit "G21d ticari oda kapıya girmez RC=0" "0" "$?"
+
+# G21e kütük YOK → RC=0 + ÖLÇÜLEMEDİ (sessiz geçilmez)
+O21E="$(s21 "$K21/yok.log" --slug yok-bir --konu "Kütük yok" --dokuman d.md 2>&1)"; RC21E=$?
+esit "G21e kütük yokken kapı uygulanmaz RC=0" "0" "$RC21E"
+var  "G21e ÖLÇÜLEMEDİ basıldı" "$O21E" "ÖLÇÜLEMEDİ"
+
+# G21f kütük BAYAT (9 gün) → RC=0 + ÖLÇÜLEMEDİ
+O21F="$(s21 "$K21/bayat.log" --slug bayat-bir --konu "Bayat kütük" --dokuman e.md 2>&1)"; RC21F=$?
+esit "G21f bayat kütükte kapı uygulanmaz RC=0" "0" "$RC21F"
+var  "G21f bayatlık ÖLÇÜLEMEDİ olarak basıldı" "$O21F" "ÖLÇÜLEMEDİ"
+
+# G21g tavan ALTINDA → RC=0 (normal yol)
+s21 "$K21/altinda.log" --slug altinda-bir --konu "Tavan altında" --dokuman f.md >/dev/null 2>&1
+esit "G21g tavan altındayken normal RC=0" "0" "$?"
+
 echo "════════ SONUÇ: PASS=$PASS · FAIL=$FAIL ════════"
 [ "$FAIL" -eq 0 ] || exit 1
 exit 0
