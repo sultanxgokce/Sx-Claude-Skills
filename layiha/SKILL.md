@@ -1,6 +1,6 @@
 ---
 name: layiha
-version: 1.14.0
+version: 1.15.0
 description: Bir konuyu kapsamlı ARAŞTIR, kalıcı bir tasarım-dokümanına (layiha) SABİTLE, inşayı SONRAYA bırak — kayıt-defterine işle, Sultan'a sabit-formatta teslim et + geri-dönüş-kolu bırak. İnşa bitince BAĞIMSIZ-AJAN (MÜHÜRDAR) tescili gerekir: "insa-edildi ≠ tescilli". "araştır inşayı sonra yaparız · bunu dökümana sabitle · layiha çıkar · aktif/tescil-bekleyen layihaları listele · bu haftaki layihalar" tetiğinde. GLOBAL (tüm container'lar).
 allowed-tools: Bash, Read, Write, Edit, Agent, AskUserQuestion
 ---
@@ -231,6 +231,12 @@ geri-alınamaz biçimde deler. Kanıt: `scripts/hat-yolu.test.sh` (21 kapı; G2/
 - Defter per-container (İ1 yalnız-yerel); fleet-rollup gerekirse ayrı meta-iş.
 
 ## Sürüm notları
+- **1.15.0 (2026-09-07, KATLAMA F1 dişi):** `ekle` artık **K#4 META-FREEZE kapısından** geçer —
+  haftalık kuzey-yıldızı (`katlama-haftalik.sh`) "TAVAN AŞILDI" diyorsa **yeni** kayıt PARKTA (RC=4 +
+  reçete). Muaf: mevcut kaydı güncelleme · `--yetki sultan-emri` · ticari odalar (varsayılan yalnız
+  `Nexus`). Kütük yok/bayat → ÖLÇÜLEMEDİ: kapı uygulanmaz ama sessiz de geçilmez. Ölçüldü: bekçi 28
+  Ağustos'tan beri her hafta kırmızı diyordu, hiçbir şey durmuyordu — gösterge vardı, kapı yoktu.
+  Env: `LAYIHA_KATLAMA_LOG` · `LAYIHA_KATLAMA_ODALAR` · `LAYIHA_KATLAMA_TAZE_GUN`. Test G21 (7 kapı).
 - **2026-08-27 (KATLAMA F1 · Sultan-onaylı K#1 çatı + K#6 izin-kaydı · NÂZIR-mutabık K2/K3/K6/K7):**
   `layiha-defteri.sh` iş-kaydı alanları KAPALI-BİÇİME alındı ve oda-öneki görünüme bağlandı:
   - **K2:** `ekle --isteyen` artık `sultan` ya da `<oda>/<rol>` (regex; "S13/MIM"→"s13/mim"

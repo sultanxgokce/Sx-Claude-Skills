@@ -63,7 +63,7 @@
 #         [--sultan|--ajan|--isteyeni-bilinmeyen] [--porcelain]
 #         · kim-ekseni zaman/tescil ekseninden BAĞIMSIZ (birlikte kullanılır)
 #         · `isteyen`i yazılmamış kayıt hiçbir kim-süzgecine düşmez; kaç tane elendiği EKRANA BASILIR
-# Çıkış: 0 OK · 2 girdi/ortam hatası
+# Çıkış: 0 OK · 2 girdi/ortam hatası · 4 META-FREEZE PARKI (K#4: tavan aşılmış, yeni meta-iş yazılmadı)
 set -euo pipefail
 
 if ! command -v python3 >/dev/null 2>&1; then echo "HATA: python3 yok." >&2; exit 2; fi
@@ -106,7 +106,7 @@ case "$CMD" in
   ekle)
     ARGS="$(python_args "$@")"
     LAYIHA_ARGS_JSON="$ARGS" python3 - <<'PY'
-import os, json, sys, subprocess
+import os, json, sys, subprocess, io
 sys.path.insert(0, os.environ["LAYIHA_LIB_DIR"])
 from layiha_defteri_lib import (oku, yaz, yeni_tescil, proje_adi, SEMA_V, kanit_gecerli,
                                 KANIT_RECETE, hucre_gecerli, hucre_normalize, HUCRE_RECETE,
@@ -232,6 +232,45 @@ rec={"v":SEMA_V,"id":kod,"slug":a["slug"],"konu":a["konu"],
 # Okuma tarafı (oku norm) alansız kaydı zaten "" sayar; "hiç sorulmadı"nın izi alan-yokluğudur.
 for _f in ("isteyen","yetki"):
     if not rec.get(_f): rec.pop(_f, None)
+# ── K#4 META-FREEZE KAPISI (KATLAMA F1 · Sultan-kararı 2026-08-27 K#4+K#7 · diş 2026-09-07) ──
+# ÖLÇÜLDÜ 2026-09-07: kuzey-yıldızı (katlama-haftalik.sh) 28 Ağustos'tan beri her pazartesi
+# koşuyor ve "TAVAN AŞILDI" diyor (bu hafta %97, tavan %30); çıktısı bir kütüğe iniyor ve
+# HİÇBİR ŞEYİ DURDURMUYORDU — gösterge vardı, kapı yoktu. Plan "aşımda yeni meta-iş
+# otomatik parka düşer" demişti; park hiç yazılmamıştı. Bu blok o parktır.
+# KURAL: YENİ kayıt + tavan aşılmış + Sultan-emri değil → kayıt YAZILMAZ (RC=4 + reçete).
+#   · GÜNCELLEME muaf (mevcut slug) — yeni meta-iş değildir.
+#   · Yalnız LAYIHA_KATLAMA_ODALAR'daki odalar (varsayılan: Nexus = ajan-makinesinin evi);
+#     ticari kutular (akar/tellal/…) plana göre DOKUNULMAZ, onların defteri bu kapıya girmez.
+#   · --yetki sultan-emri MUAF (K#4 metni: "Sultan-emri istisna") — beyanın kendisi kayda geçer.
+#   · Kütük YOK ya da BAYAT (> LAYIHA_KATLAMA_TAZE_GUN, vars. 8 gün) → ÖLÇÜLEMEDİ: kapı
+#     UYGULANMAZ ama sessiz de geçilmez (stderr'e yazılır). unknown ≠ fail; unknown ≠ yeşil.
+# A06: kapı Sultan'ın kararını üretmez; K#4 damgası SENTEZ-VE-YAPILANDIRMA-PLANI.md §8'dedir.
+_kat_log=os.environ.get("LAYIHA_KATLAMA_LOG","/config/.claude/katlama-haftalik-son.log")
+_kat_odalar=[o.strip() for o in os.environ.get("LAYIHA_KATLAMA_ODALAR","Nexus").split(",") if o.strip()]
+try: _kat_taze_gun=int(os.environ.get("LAYIHA_KATLAMA_TAZE_GUN","8") or 8)
+except ValueError: _kat_taze_gun=8
+if existing is None and rec.get("proje") in _kat_odalar and _yet!="sultan-emri":
+    import time as _t
+    if not os.path.exists(_kat_log):
+        sys.stderr.write("ℹ️  KATLAMA kapısı ÖLÇÜLEMEDİ: kütük yok (%s) — kapı uygulanmadı, yeşil de sayılmadı\n"%_kat_log)
+    else:
+        _yas_gun=(_t.time()-os.path.getmtime(_kat_log))/86400.0
+        if _yas_gun>_kat_taze_gun:
+            sys.stderr.write("ℹ️  KATLAMA kapısı ÖLÇÜLEMEDİ: kütük %.0f gün eski (tavan %d) — bekçi koşmuyor olabilir; kapı uygulanmadı\n"%(_yas_gun,_kat_taze_gun))
+        else:
+            _kat_metin=io.open(_kat_log,encoding="utf-8",errors="replace").read() if True else ""
+            if "TAVAN AŞILDI" in _kat_metin:
+                _oran=""
+                for _ln in _kat_metin.splitlines():
+                    if "meta-oranı" in _ln: _oran=_ln.strip(); break
+                sys.stderr.write(
+                    "🔴 META-FREEZE (KATLAMA F1 · Sultan K#4): bu hafta makineye giden pay TAVANI AŞMIŞ — "
+                    "yeni makine-işi kaydı PARKTA, yazılmadı.\n"
+                    "   ölçüm : %s\n"
+                    "   kütük : %s\n"
+                    "   Reçete: bu iş Sultan'ın AÇIK emriyse → ekle ... --yetki sultan-emri --isteyen sultan\n"
+                    "           değilse bekle: kapı ölçülemez kılınmaz, tavan düşürülür.\n" % (_oran or "(oran satırı okunamadı)", _kat_log))
+                sys.exit(4)
 out=[]; found=False
 for r in recs:
     if r.get("slug")==rec["slug"]: out.append(rec); found=True
