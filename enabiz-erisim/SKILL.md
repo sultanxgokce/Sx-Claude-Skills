@@ -83,3 +83,6 @@ yarım klasör yarım ZIP üretir.
 - **Özel Dünya Hastanesi PACS'i (retrieveWadoId STR_31333938) ~40 kare/dk** — öbür hastaneler ~1000 kare/dk.
   Uzun sürüyorsa Dünya-dışı çalışmaları ikinci bir süreçle paralel indir (dosya varsa atlar, çakışmaz).
 - ES (endoskopi) serilerinde bazı kareler 400 verir; atla.
+- 🔴 **Bearer tek başına yetmez**: `CheckOTAC` sonrası `LoadWorkItemForENabiz?otac=` çağrılmadan WADO **401 "Yetkisiz
+  Erişim"** verir. Token 60 dk; e-Nabız oturumu **30 dk idle**'da düşer (`SessionTimeoutABC`) → uzun indirmede her
+  4 dk `/Home/Index` ping + 45 dk'da token yenile (skill bunu yapar).

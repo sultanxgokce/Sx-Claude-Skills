@@ -250,6 +250,8 @@ def _teletip_token(s, verif, acc):
         raise SystemExit("✗ otac alınamadı (oturum düşmüş olabilir)")
     otac = m.group(1)
     tok = requests.post(TELE + "/CheckOTAC", params={"otac": otac}, timeout=60).json()["ResponseValue"]["AccessToken"]
+    # WADO yetkisi ancak iş-öğesi yüklendikten sonra tanınır (aksi hâlde 401 "Yetkisiz Erişim")
+    requests.get(TELE + "/LoadWorkItemForENabiz", params={"otac": otac}, headers={"Authorization": tok}, timeout=120)
     return tok, otac
 
 
@@ -260,6 +262,7 @@ def cmd_goruntu(args):
     acc0 = args.acc or next(c["accession"] for c in L["radyoloji"] if c["accession"])
     TOK = {"v": None, "t": 0}
     def yenile():
+        s.get(B + "/Home/Index", timeout=60)  # e-Nabız oturumunu canlı tut (30 dk idle → SessionTimeout)
         TOK["v"], otac = _teletip_token(s, L["_verifToken"], acc0); TOK["t"] = time.time(); return otac
     otac = yenile()
     wi = requests.get(TELE + "/LoadWorkItemForENabiz", params={"otac": otac}, headers={"Authorization": TOK["v"]}, timeout=120).json()
