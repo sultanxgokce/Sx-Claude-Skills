@@ -1,6 +1,6 @@
 {
   "version": "2.2",
-  "updated": "2026-07-11",
+  "updated": "2026-09-11",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -646,6 +646,76 @@
         "nexus"
       ],
       "family": "infra-provizyon (SERDAR-ailesi; erisim-skill-fabrikasi/recipes/hetzner-cloud.md tüketicisi)"
+    },
+    {
+      "id": "kasif-tara",
+      "type": "agent",
+      "name": "/kasif-tara — KAŞİF dış-tarama kabuğu (fikir-hattı dış-uç)",
+      "version": "1.0.0",
+      "description": "DİVAN fikir-hattının dış-ucu: Sultan-ayarlı konularda (_agents/kasif/konular.md) web'i tarar, kanıtlı ham-malzemeyi YALNIZ bulgu-havuzuna (scripts/kasif-havuz-ekle.sh, tek yazma-yüzeyi) yazar. Deftere/karta/arza dokunmaz, MUCİT'i atlayamaz. Her bulgu kaynak-URL kanıtı ister (fail-closed). L24 Layiha Fabrikası'nın bileşenlerinden biri.",
+      "tags": [
+        "layiha-fabrikasi",
+        "kasif",
+        "fikir-hatti",
+        "tarama",
+        "global"
+      ]
+    },
+    {
+      "id": "mucit-suz",
+      "type": "agent",
+      "name": "/mucit-suz — MUCİT fikir-süzme kabuğu (T1-mekanik + T2-muhakeme)",
+      "version": "1.0.0",
+      "description": "DİVAN bulgu-havuzunu acımasızca süzüp Sultan-dilinde haftada en çok 3 aday-kart önerir. T1 = scripts/mucit-t1.sh ($0-mekanik: uygunluk/kanıt-kapısı/MİHENK-deny/kart-dedup/haftalık-tavan); T2 = repo-grep + Sultan-dili aday-yazımı + puanlama. Kuyruğa kartı sokamaz — aday→kuyruk her zaman Sultan tek-tuşundan geçer. L24 Layiha Fabrikası'nın bileşenlerinden biri.",
+      "tags": [
+        "layiha-fabrikasi",
+        "mucit",
+        "fikir-hatti",
+        "suzme",
+        "global"
+      ]
+    },
+    {
+      "id": "layiha-fabrikasi",
+      "type": "agent",
+      "name": "layiha-fabrikasi — DİVAN Fikir-Hattı Fabrikası (Usta · bileşik)",
+      "version": "1.0.0",
+      "description": "kasif-tara + mucit-suz'ü besteleyen, kill-switch'li Usta-paket: DİVAN'ın günlük ham-malzeme→aday bandını tek-çatıda toplar. Sultan hata bulunca scripts/layiha-fabrika.sh kapat ile günlük-üretim-turunu tek-komutla durdurabilir; aday-havuzu CRUD'u (liste/göster/terfi) kill-switch'ten etkilenmez. Paylaşılan _global bind-mount sayesinde 10/10 container'da tek-tuş kurulur + anında senkron güncellenir.",
+      "tags": [
+        "layiha-fabrikasi",
+        "bilesik",
+        "fikir-hatti",
+        "kill-switch",
+        "global"
+      ]
+    },
+    {
+      "id": "enabiz-erisim",
+      "type": "agent",
+      "name": "e-Nabız Erişim — e-Devlet ile rapor + radyoloji görüntü çekimi",
+      "version": "1.0.0",
+      "description": "e-Nabız'a e-Devlet kimliğiyle headless girer; tahlil/ilaç raporu/patoloji/epikriz/radyoloji PDF'leri + Teletıp WADO görüntülerini indirir, metin-dedupe yapar. Kimlik kasadan (EDEVLET_TC/EDEVLET_SIFRE, nexus).",
+      "tags": [
+        "enabiz",
+        "e-devlet",
+        "saglik",
+        "erisim",
+        "playwright",
+        "wado"
+      ]
+    },
+    {
+      "id": "video-transkript",
+      "type": "tool",
+      "name": "video-transkript",
+      "version": "1.0.0",
+      "description": "YouTube videosunun tam konuşma metnini getirir (IP-bloklu ortam için; istek servisin kendi sunucusundan)",
+      "tags": [
+        "youtube",
+        "transkript",
+        "video",
+        "altyazi"
+      ]
     }
   ]
 }
