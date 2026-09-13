@@ -40,8 +40,10 @@ doktor() {
   echo "kayıt: $reg"
   while IFS= read -r satir; do
     case "$satir" in
-      *"- id:"*) id="${satir#*- id:}"; id="${id// /}" ;;
-      *"tmux:"*) tm="${satir#*tmux:}"; tm="${tm//\"/}"; tm="${tm// /}"
+      *"- id:"*) id="${satir#*- id:}"; id="${id%%#*}"; id="${id// /}" ;;
+      # 🔴 SATIR-SONU YORUMU AYIKLA: kayıtta `tmux: "x:0"  # not` biçimi var; yorum
+      # oturum adına yapışırsa doktor SAHTE-KIRMIZI verir (ölçüldü 2026-09-13, kendi kusurum).
+      *"tmux:"*) tm="${satir#*tmux:}"; tm="${tm%%#*}"; tm="${tm//\"/}"; tm="${tm// /}"
         [ -n "${id:-}" ] || continue
         if printf '%s\n' "$canli" | grep -qxF "${tm%%:*}"; then
           printf '  ✓ %-16s %s\n' "$id" "$tm"; v=$((v+1))
