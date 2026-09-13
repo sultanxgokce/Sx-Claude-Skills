@@ -14,16 +14,53 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null || dirname "$SCRIPT_DIR")"
+# 🔴 WORKTREE-BAĞIŞIKLIĞI (ölçüldü 2026-09-13): `--show-toplevel` worktree'de
+# WORKTREE kökünü verir → kayıt ve sinyal-defteri her worktree'de AYRI dosyaya düşerdi.
+# Defter TEK olmalı. `--git-common-dir` ana ağacın .git'ini verir; onun dizini ana köktür.
+_ana_kok() {
+  local cg; cg="$(git -C "$1" rev-parse --git-common-dir 2>/dev/null)" || return 1
+  case "$cg" in /*) ;; *) cg="$(cd "$1" && cd "$cg" && pwd)" ;; esac
+  dirname "$cg"
+}
+REPO_ROOT="$(_ana_kok "$SCRIPT_DIR" || git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null || dirname "$SCRIPT_DIR")"
 REGISTRY="${EKIP_REGISTRY:-$REPO_ROOT/_agents/handoff/ekip-registry.yaml}"   # env-override yalnız test/scratch içindir
 SINYAL_LOG="${EKIP_SINYAL_LOG:-$REPO_ROOT/_agents/handoff/ekip-sinyal.log}"
 PREFLIGHT_LIB="$SCRIPT_DIR/ekip-preflight.lib.sh"
 # shellcheck source=/dev/null
 [ -f "$PREFLIGHT_LIB" ] && . "$PREFLIGHT_LIB"
 
+# 🔴 DOKTOR — "kayıt ne diyor" ⟂ "canlıda ne var". Ölçüldü 2026-09-13: kayıt
+# MUTEVELLI:0 diyordu, canlıda o oturum YOKTU; kimse fark etmedi çünkü hiçbir
+# komut bu iki yüzeyi KARŞILAŞTIRMIYORDU. Üç durum basar; tahmin etmez.
+doktor() {
+  local reg="$REGISTRY" id tm canli rc=0 v=0 y=0
+  [ -f "$reg" ] || { echo "ÖLÇÜLEMEDİ: kayıt yok ($reg)" >&2; return 2; }
+  command -v tmux >/dev/null 2>&1 || { echo "ÖLÇÜLEMEDİ: tmux yok" >&2; return 2; }
+  canli="$(tmux list-sessions -F '#{session_name}' 2>/dev/null || true)"
+  echo "kayıt: $reg"
+  while IFS= read -r satir; do
+    case "$satir" in
+      *"- id:"*) id="${satir#*- id:}"; id="${id// /}" ;;
+      *"tmux:"*) tm="${satir#*tmux:}"; tm="${tm//\"/}"; tm="${tm// /}"
+        [ -n "${id:-}" ] || continue
+        if printf '%s\n' "$canli" | grep -qxF "${tm%%:*}"; then
+          printf '  ✓ %-16s %s\n' "$id" "$tm"; v=$((v+1))
+        else
+          printf '  🔴 %-16s %s — CANLIDA YOK (tetik teslim EDİLEMEZ)\n' "$id" "$tm"; y=$((y+1)); rc=1
+        fi
+        id="" ;;
+    esac
+  done < "$reg"
+  echo "özet: tutan=$v · AYRIŞAN=$y"
+  return $rc
+}
+
+case "${1:-}" in --doktor|--doctor) doktor; exit $? ;; esac
+
 usage() {
   cat >&2 <<'EOF'
 Kullanım:
+  ekip-notify.sh --doktor                    # kayıt ⟂ canlı tmux karşılaştırması (3-durum)
   ekip-notify.sh <ajan|all> "<mesaj>"        # ping (klasik pozisyonel-kontrat — KORUNUR)
   ekip-notify.sh --done "<tek-satır özet>"   # üye→yönetici: iş-bitti (önce-defter-sonra-ping)
   ekip-notify.sh --waiting "<kapı-nedeni>"   # üye→yönetici: yumuşak-kapıda yön-bekliyor (FIX-1 kör-nokta)
@@ -180,7 +217,8 @@ fi
 if [ "$MODE" = "check" ]; then
   while IFS=$'\t' read -r ID TARGET INBOX; do
     [ -n "$ID" ] || continue
-    if ! tmux has-session -t "${TARGET%%:*}" 2>/dev/null; then printf '%s: oturum-YOK\n' "$ID"; continue; fi
+    if ! tmux list-sessions -F '#{session_name}' 2>/dev/null | grep -qxF "${TARGET%%:*}"; then
+      printf '%s: oturum-YOK (tam-eşleme)\n' "$ID"; continue; fi
     printf '%s: preflight=%s composer=%s\n' "$ID" \
       "$(declare -F preflight_state >/dev/null && preflight_state "$TARGET" || echo lib-yok)" \
       "$(declare -F composer_kind >/dev/null && composer_kind "$TARGET" || echo lib-yok)"
@@ -197,8 +235,13 @@ while IFS=$'\t' read -r ID TARGET INBOX; do
     echo "atla(self): $ID ($TARGET) — çağıran-oturum, self-loop koruması" >&2
     SELF=$((SELF+1)); continue
   fi
-  if ! tmux has-session -t "$SESSION" 2>/dev/null; then
-    echo "UYARI: $ID oturumu YOK ($SESSION) — ping atlandı (Claude o kimlikte açık değil?)" >&2
+  # 🔴 TAM-ESLEME ZORUNLU (ölçüldü 2026-09-13 · canlı vaka):
+  # `tmux has-session -t MUTEVELLI` ÖNEK eşler ve MUTEVELLI-CODEX'i "var" sayar;
+  # ardından send-keys tetiği YANLIŞ panele (gönderenin kendi paneline) düşürür.
+  # Sultan'ın baktığı terminalde hiçbir şey görünmez, hiçbir hata da basılmaz —
+  # sessiz yanlış-teslim. Artık oturum adı BAYT-EŞ aranır; yoksa GÖNDERİLMEZ.
+  if ! tmux list-sessions -F '#{session_name}' 2>/dev/null | grep -qxF "$SESSION"; then
+    echo "UYARI: $ID oturumu YOK ($SESSION · tam-eşleme) — ping atlandı; ÖNEK eşleşmesi kabul EDİLMEZ" >&2
     MISSING=$((MISSING+1))
     sinyal_yaz ping "${FROM_ID:-HARICI}" "$ID" oturum-yok "$MESAJ" >/dev/null 2>&1 || true
     continue
