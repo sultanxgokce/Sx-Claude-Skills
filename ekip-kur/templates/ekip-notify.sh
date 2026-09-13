@@ -14,9 +14,29 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null || dirname "$SCRIPT_DIR")"
-REGISTRY="${EKIP_REGISTRY:-$REPO_ROOT/_agents/handoff/ekip-registry.yaml}"   # env-override yalnız test/scratch içindir
-SINYAL_LOG="${EKIP_SINYAL_LOG:-$REPO_ROOT/_agents/handoff/ekip-sinyal.log}"
+command -v python3 >/dev/null 2>&1 || { echo "HATA: python3 kurulu değil (worktree/registry çözümü için gerekir)" >&2; exit 1; }
+REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null)" \
+  || { echo "HATA: ekip-notify bir git worktree içinde çalışmalı: $SCRIPT_DIR" >&2; exit 1; }
+COMMON_ROOT="$(python3 - "$SCRIPT_DIR" <<'PY'
+import subprocess, sys
+p = subprocess.run(
+    ["git", "-C", sys.argv[1], "worktree", "list", "--porcelain"],
+    text=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+)
+if p.returncode:
+    raise SystemExit(1)
+blocks = [b.splitlines() for b in p.stdout.strip().split("\n\n") if b.strip()]
+# Git'in porcelain sözleşmesinde ilk blok ana worktree'dir; bare ana depo ledger taşıyamaz.
+if not blocks or not blocks[0] or not blocks[0][0].startswith("worktree ") or "bare" in blocks[0]:
+    raise SystemExit(1)
+print(blocks[0][0][len("worktree "):])
+PY
+)" || { echo "HATA: ana worktree çözülemedi; ortak sinyal-defterine güvenli yazılamaz" >&2; exit 1; }
+REGISTRY="${EKIP_REGISTRY:-$REPO_ROOT/_agents/handoff/ekip-registry.yaml}"   # registry branch/worktree bağlamını korur
+SINYAL_LOG="${EKIP_SINYAL_LOG:-$COMMON_ROOT/_agents/handoff/ekip-sinyal.log}" # append-only ledger tüm linked-worktree'lerde tektir
+LEDGER_PARENT="$(dirname "$SINYAL_LOG")"
+[ -d "$LEDGER_PARENT" ] \
+  || { echo "HATA: ledger dizini yok: $LEDGER_PARENT" >&2; exit 1; }
 PREFLIGHT_LIB="$SCRIPT_DIR/ekip-preflight.lib.sh"
 # shellcheck source=/dev/null
 [ -f "$PREFLIGHT_LIB" ] && . "$PREFLIGHT_LIB"
@@ -180,7 +200,7 @@ fi
 if [ "$MODE" = "check" ]; then
   while IFS=$'\t' read -r ID TARGET INBOX; do
     [ -n "$ID" ] || continue
-    if ! tmux has-session -t "${TARGET%%:*}" 2>/dev/null; then printf '%s: oturum-YOK\n' "$ID"; continue; fi
+    if ! tmux list-sessions -F '#{session_name}' 2>/dev/null | awk -v s="${TARGET%%:*}" '$0==s{found=1} END{exit !found}'; then printf '%s: oturum-YOK\n' "$ID"; continue; fi
     printf '%s: preflight=%s composer=%s\n' "$ID" \
       "$(declare -F preflight_state >/dev/null && preflight_state "$TARGET" || echo lib-yok)" \
       "$(declare -F composer_kind >/dev/null && composer_kind "$TARGET" || echo lib-yok)"
@@ -197,7 +217,7 @@ while IFS=$'\t' read -r ID TARGET INBOX; do
     echo "atla(self): $ID ($TARGET) — çağıran-oturum, self-loop koruması" >&2
     SELF=$((SELF+1)); continue
   fi
-  if ! tmux has-session -t "$SESSION" 2>/dev/null; then
+  if ! tmux list-sessions -F '#{session_name}' 2>/dev/null | awk -v s="$SESSION" '$0==s{found=1} END{exit !found}'; then
     echo "UYARI: $ID oturumu YOK ($SESSION) — ping atlandı (Claude o kimlikte açık değil?)" >&2
     MISSING=$((MISSING+1))
     sinyal_yaz ping "${FROM_ID:-HARICI}" "$ID" oturum-yok "$MESAJ" >/dev/null 2>&1 || true
@@ -234,6 +254,7 @@ while IFS=$'\t' read -r ID TARGET INBOX; do
     fi
   fi
   # --- 3-adım send (gömülü-Enter TUI'de submit ETMEZ → C-u ayrı · metin ayrı · 0.4s · Enter ayrı) ---
+  BEFORE_RC=0; BEFORE_SNAP="$(tmux capture-pane -p -t "$TARGET" -S -120 2>/dev/null)" || BEFORE_RC=$?
   tmux send-keys -t "$TARGET" C-u 2>/dev/null || true
   if ! tmux send-keys -t "$TARGET" -- "$MESAJ" 2>/dev/null; then
     echo "UYARI: $ID send-keys başarısız ($TARGET) — hedef ölmüş olabilir; batch sürüyor" >&2
@@ -242,7 +263,8 @@ while IFS=$'\t' read -r ID TARGET INBOX; do
     continue
   fi
   sleep 0.4
-  tmux send-keys -t "$TARGET" Enter 2>/dev/null || true   # Enter-fail → doğrulama 'dogrulanamadi' yakalar
+  ENTER_OK=1
+  tmux send-keys -t "$TARGET" Enter 2>/dev/null || ENTER_OK=0
   SENT=$((SENT+1))
   # --- R4b iletim-doğrulama (dürüst-3-durum; 'okundu' İDDİA ETMEZ; default-exit'i etkilemez) ---
   VERIFY_WAIT="${VERIFY_WAIT:-1.5}"
@@ -250,10 +272,13 @@ while IFS=$'\t' read -r ID TARGET INBOX; do
   sleep "$VERIFY_WAIT"
   SNAP_RC=0; SNAP="$(tmux capture-pane -p -t "$TARGET" -S -120 2>/dev/null)" || SNAP_RC=$?
   COMP_LINE="$(printf '%s' "$SNAP" | grep -E "${COMPOSER_RE:-^│ >}" | tail -1)" || true
-  if [ "$SNAP_RC" -ne 0 ]; then DURUM_ILETIM="dogrulanamadi"                              # capture-fail → İDDİA ETME
+  BEFORE_COUNT=0; AFTER_COUNT=0
+  if [ "$BEFORE_RC" -eq 0 ]; then BEFORE_COUNT="$(printf '%s\n' "$BEFORE_SNAP" | grep -cF -- "$PROBE" || true)"; fi
+  if [ "$SNAP_RC" -eq 0 ]; then AFTER_COUNT="$(printf '%s\n' "$SNAP" | grep -cF -- "$PROBE" || true)"; fi
+  if [ "$ENTER_OK" -ne 1 ] || [ "$SNAP_RC" -ne 0 ] || [ "$BEFORE_RC" -ne 0 ]; then DURUM_ILETIM="dogrulanamadi"
   elif printf '%s' "$COMP_LINE" | grep -qF -- "$PROBE"; then DURUM_ILETIM="dogrulanamadi" # metin composer'da KALDI
-  elif printf '%s' "$SNAP" | grep -qF -- "$PROBE"; then DURUM_ILETIM="iletildi"           # scrollback'te + composer'da değil
-  else DURUM_ILETIM="dogrulanamadi"; fi                                                    # render-gecikmesi olabilir
+  elif [ "$AFTER_COUNT" -gt "$BEFORE_COUNT" ]; then DURUM_ILETIM="iletildi"                # yalnız bu gönderim yeni eşleşme üretti
+  else DURUM_ILETIM="dogrulanamadi"; fi
   if [ "$DURUM_ILETIM" = iletildi ]; then
     VERIFIED=$((VERIFIED+1)); echo "gönderildi: $ID → $TARGET (iletildi✓)"
   else
@@ -266,7 +291,9 @@ done <<< "$SECILEN"
 echo "ozet: gonderildi=$SENT atlandi_self=$SELF eksik_oturum=$MISSING engellendi=$BLOCKED dogrulandi=$VERIFIED dogrulanamadi=$UNVERIFIED"
 
 if [ "$MODE" = "done" ]; then
-  if [ "$SENT" -ge 1 ]; then echo "done: sinyal deftere + ping yöneticiye tamam"; exit 0
+  if [ "$SENT" -ge 1 ]; then
+    if [ "$STRICT_ACK" -eq 1 ] && [ "$UNVERIFIED" -gt 0 ]; then exit 4; fi
+    echo "done: sinyal deftere + ping yöneticiye tamam"; exit 0
   else echo "done: sinyal DEFTERDE ama ping ulaşmadı (yönetici meşgul/oturum-yok) — ekip-durum.sh yüzeye çıkarır" >&2; exit 3; fi
 fi
 if [ "$MISSING" -gt 0 ] || [ "$BLOCKED" -gt 0 ] || [ "$SENT" -eq 0 ]; then exit 1; fi

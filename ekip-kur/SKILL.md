@@ -1,7 +1,7 @@
 ---
 name: ekip-kur
 type: agent
-version: 1.6.0
+version: 1.7.0
 description: >
   Bir projeye çok-ajan KOORDİNASYON-SUBSTRATI kurar — RÖPORTAJ-MODU: tek /ekip-kur çağrısında kullanıcıyı
   röportaj eder (proje · roller · terminaller · modlar · tmux-casing), gelenek-uyumlu İSİM önerir, onaylatır,
@@ -36,8 +36,9 @@ projede elle kurmak angarya. Bu skill onu **bir kez damıtıp** her projeye scaf
 ## Üretilen substrat (hedef-projede)
 | Dosya | Rol |
 |-------|-----|
-| `scripts/ekip-notify.sh` | tmux-tetik + sinyal-defteri primitifi (iki-yön: ping/--done/--waiting/--ack/--check; preflight+draft-guard baked-in) |
+| `scripts/ekip-notify.sh` | tmux-tetik + sinyal-defteri primitifi (iki-yön: ping/--done/--waiting/--ack/--check; preflight+draft-guard baked-in; linked-worktree'ler ortak git kökündeki tek ledger'ı kullanır; tmux hedefi exact eşleşir) |
 | `scripts/ekip-preflight.lib.sh` | pane-durum sınıflandırma (busy/menu/compact/idle + ghost-vs-draft SGR) — notify+durum source eder |
+| `ekip-kur/update-immutable.sh` | mevcut tenant'a yalnız notify+preflight salt-kod yüzeylerini dry-run/check/apply ile hash·mode·registry-schema·ortak-ledger kapısından geçirerek dosya-başına atomik, rollback-korumalı kurar; SIGKILL yarım işlemini sonraki koşuda marker'dan onarır; state/hook/ürün dosyalarına dokunmaz |
 | `scripts/ekip-durum.sh` | tek-bakış radar (SALT-OKUR): insan-tablo · `--porcelain`(durum-skill tüketir) · `--nudge`(Stop-hook yönetici-nudge + üye-backstop) · `--nudge-poll`(F1 PostToolUse pasif tur-içi yönetici-nudge, uzun-tur körlüğü) |
 | `scripts/ekip-ac.sh` | TEK-KOMUT sekme-kurtarma: kapanan sekmeler sonrası CANLI üye-tmux'larını tek terminalde paylaşımlı-pencere olarak geri-getirir (link-window; üye YARATMAZ/ÖLDÜRMEZ; `ekip` alias) |
 | `scripts/ekip-compact.sh` | COMPACT-ORKESTRA (yönetici→üye UZAKTAN): `<üye-id>` verince o üyenin pane'ine `/compact` tetikler → settle → devam-nonce → `geri-yüklendi` marker-doğrula (kimlik-korunmuş re-bootstrap). `ekip-compact-core.lib` REUSE (öz-servis'in uzaktan-kardeşi). Exit-dürüst (0=doğrulandı·5=doğrulanamadı·6=takıldı). **`--hepsi` = gözetimli-idle-pilot:** registry'deki idle-adayları (busy/menu/draft/self/oturum-yok → atla) topla → varsayılan KURU-ÇALIŞMA (gözetim = aday-listesi, hiçbiri tetiklenmez), `--uygula` ile SIRAYLA compact + dürüst-özet. ⚠️ context-% ÖLÇMEZ (ölçüm-kaynağı kurulu-değil) → preflight-IDLE temeli, sahte-% yok. |
@@ -57,6 +58,16 @@ projede elle kurmak angarya. Bu skill onu **bir kez damıtıp** her projeye scaf
 | `scripts/ekip-hooks/ctx-nudge.sh` | PostToolUse hook: context-eşik nudge (ERKEN<%80 sessiz-anchor / DANGER≥%80 compact-öner; model-farkında pencere) |
 | `_agents/handoff/EKIP-settings-hook-snippet.json` | 3-hook wire-snippet'i (SessionStart+Stop+PostToolUse; settings.json'a merge-instructions) |
 | `_agents/handoff/EKIP-GO-LIVE-CHECKLIST.md` | duman-testi + izolasyon-notu |
+
+## IMMUTABLE GÜNCELLEME (mevcut tenant state'ini korur)
+Rollout için `scaffold.sh --force` kullanma. Yalnız kanonik salt-kod yüzeylerini güncelle:
+```bash
+bash "${HOME}/.claude/skills/ekip-kur/update-immutable.sh" <hedef-proje>           # varsayılan dry-run
+bash "${HOME}/.claude/skills/ekip-kur/update-immutable.sh" <hedef-proje> --check   # hash·mode·schema·worktree kapısı
+bash "${HOME}/.claude/skills/ekip-kur/update-immutable.sh" <hedef-proje> --apply   # dosya-başına atomik + rollback/recovery
+```
+Allowlist yalnız `scripts/ekip-notify.sh` ve `scripts/ekip-preflight.lib.sh` içerir. Registry, brief, sinyal,
+tenant hook/settings ve ürün kodu hiçbir modda yazılmaz. `--check`: `0=çalışıyor`, `1=kırık`, `2=kullanım/ölçülemedi`.
 
 ## 4 KRİTİK-FİX (ŞABLONDA SABİT — tek-kaynak-gerçek, DEĞİŞTİRME)
 `ekip-notify.sh` bu 4 fix'i taşır; roster değişse de bunlar sabit kalır:
