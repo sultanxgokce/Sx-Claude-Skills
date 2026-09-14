@@ -106,6 +106,49 @@ echo "── 6) transcript ağacına DOKUNMUYOR (yüzey-daraltması değişmezi)
 ! grep -qE '^[^#]*\.claude/projects' "$SABLON" && ok "transcript yolu şablonda geçmiyor" \
   || no "transcript ağacına dokunuyor" "o ağaca dokunan tek yer ekip-ac.sh::_transcript_var_mi olmalı"
 
+echo "── 7) KOLTUĞA ÖZEL İZİN DOSYASI: kayıtta settings_file → her açılış yolunda --settings ──"
+# NİÇİN (2026-09-14): "ekler ama silemez" koltuğu. Yasak istemde değil claude'un izin katmanında
+#   olmalı; restart (resume) yolunda düşerse koruma ilk yeniden başlatmada sessizce kaybolur.
+IZIN_DOSYA="$EV/proje/izin.json"
+printf '{"permissions":{"deny":["Bash(rm:*)"]}}\n' > "$IZIN_DOSYA"
+cat >> "$EV/proje/iskan-registry.yaml" <<REG
+  - id: dar-koltuk
+    session_id: "66666666-7777-8888-9999-000000000000"
+    permission_mode: "default"
+    settings_file: $IZIN_DOSYA
+  - id: kayip-izin
+    session_id: "77777777-8888-9999-0000-111111111111"
+    permission_mode: "default"
+    settings_file: $EV/proje/YOK.json
+REG
+kosr(){ # kosr <mod> <rol>
+  SAHTE_MOD="$1" SAHTE_GUNLUK="$EV/cagri.log" HOME="$EV/ev" BASLAT_IZ_DIR="$EV/ev/.iz" \
+  ISKAN_REGISTRY="$EV/proje/iskan-registry.yaml" \
+  PATH="$EV/bin:$PATH" bash "$SABLON" "$2" 2>&1
+}
+sifirla; cikti=$(kosr taze_ok dar-koltuk); rc=$?
+[ "$rc" = 0 ] && ok "izinli koltuk ilk açılış rc=0" || no "izinli koltuk ilk açılış" "gelen=$rc · $cikti"
+case "$(cagrilar)" in --session-id*"--settings $IZIN_DOSYA"*) ok "taze açılışta --settings geçti" ;;
+  *) no "taze açılışta --settings YOK" "çağrılar: $(cagrilar)" ;; esac
+sifirla; cikti=$(kosr resume_ok dar-koltuk); rc=$?
+[ "$rc" = 0 ] && ok "izinli koltuk yeniden açılış rc=0" || no "izinli koltuk yeniden açılış" "gelen=$rc · $cikti"
+case "$(cagrilar)" in --resume*"--settings $IZIN_DOSYA"*) ok "yeniden açılışta da --settings geçti (restart korumayı düşürmez)" ;;
+  *) no "yeniden açılışta --settings YOK" "çağrılar: $(cagrilar)" ;; esac
+
+echo "── 8) izin dosyası kayıtta VAR ama diskte YOK → koltuk AÇILMAZ ──"
+sifirla; cikti=$(kosr taze_ok kayip-izin); rc=$?
+[ "$rc" != "0" ] && ok "kayıp izin dosyasında rc≠0" || no "kayıp izin dosyasında rc=0" "yasaksız açıldı"
+case "$cikti" in *"izin-dosyasi okunamiyor"*) ok "sebebi açıkça söylüyor" ;;
+  *) no "sebep sessiz" "çıktı: $cikti" ;; esac
+[ -z "$(cagrilar)" ] && ok "claude HİÇ çağrılmadı (yasaksız açılış yok)" \
+  || no "claude çağrıldı" "çağrılar: $(cagrilar)"
+
+echo "── 9) alan YOKSA bayt-aynı: --settings eklenmez ──"
+sifirla; kos resume_ok >/dev/null
+case "$(cagrilar)" in *--settings*) no "alansız koltuğa --settings eklendi" "çağrılar: $(cagrilar)" ;;
+  --resume*) ok "alansız koltuk eskisi gibi açıldı (--settings yok)" ;;
+  *) no "alansız koltuk açılmadı" "çağrılar: $(cagrilar)" ;; esac
+
 echo
 printf 'baslat-claude: GEÇTI=%s DUSTU=%s\n' "$G" "$D"
 [ "$D" -eq 0 ] || exit 1

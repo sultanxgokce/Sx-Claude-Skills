@@ -1,7 +1,7 @@
 ---
 name: iskan
 type: agent
-version: 0.9.0
+version: 0.10.0
 description: >
   Container + ekip yaşam-döngüsü master-skill. Bir hedef (yeni-proje / mevcut-ekip-yeniden-doğuşu / tek-üye-ekleme)
   için host-provizyon (UC1), oturum-kurtarma (UC2, deterministik session-id), üye-ekleme (UC3) akışlarını
@@ -32,8 +32,14 @@ oto-yazımı. Dördü BESTELEDİĞİ kardeşlerin (aşağı) çalışma-kopyası
 - `seans-getir` (UC2) — deterministik session-id resume merdiveni (FAZ-2/3, K3 tasarımı)
 - `cf-yayin` — CF-hostname yayını: Access-app+policy+DNS (cf.sh onboard delegesi) + tünel-ingress
   host-deploy (FAZ-5, `ISKAN_FAZ5_GO=1` Sultan-GO'lu; 7-hostname sert-kapı + .bak oto-geri-al)
-- `uye-ekle` (UC3) — tek-üye-iskân (FAZ-7, CANLI): `uye-ekle <proje> <uye> [--gorev <g>] --dry-run|--apply` —
+- `uye-ekle` (UC3) — tek-üye-iskân (FAZ-7, CANLI): `uye-ekle <proje> <uye> [--gorev <g>] [--settings-file <yol>] --dry-run|--apply` —
   kayıtlı İSKÂN-projesine TEK üye ekler (rezerve-uuid + tmux + banner + hafif-kimlik AGENT.md + registry).
+  **Koltuğa özel izin dosyası (0.10.0):** `--settings-file /config/projects/<proje>/…/*.json` kayda
+  `settings_file` yazar; `baslat-claude.sh` her açılış yolunda `--settings` geçirir, dosya okunamazsa
+  koltuğu AÇMAZ (fail-closed). Hazır profil: `templates/izin-ekler-silemez.json` (silme komutlarını reddeder,
+  yeni dosya eklemeye izin verir — kalıp-reddi bir engeldir, kilit değil). **Kayıt koruması (0.10.0):**
+  mevcut kayıt YALNIZ aynı kiracıdan okunur (`proje:` tam-eşleşme; host tek-dosyası yabancı kiracınınsa
+  reddedilir) ve yeniden-üretimde üyelerin `permission_mode` + `settings_file` alanları KORUNUR.
   Çakışma-koruması ('uye-zaten-var') · Nexus-hedefte canlı-invoke YOK ('ise-alim' yönlendirmesi, İ1) ·
   izole-hedef dry-run'ı koşulsuz 'sultan-bildirim' satırı basar. Roster-köprüsü: ekip-yerlestir roster'ı
   `ISKAN_EY_ROSTER` (açık-override) ya da container-içi `_agents/handoff/ekip-registry.yaml`'dan okur;

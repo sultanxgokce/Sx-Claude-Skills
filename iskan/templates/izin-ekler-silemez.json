@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "deny": [
+      "Bash(rm:*)",
+      "Bash(rmdir:*)",
+      "Bash(unlink:*)",
+      "Bash(shred:*)",
+      "Bash(git rm:*)",
+      "Bash(git clean:*)"
+    ]
+  }
+}

@@ -1354,8 +1354,63 @@ _ey_banner() {
 EOF
 }
 
+# _ey_reg_mevcut_oku <proje> <ssh_ok> — mevcut K2 kaydını YALNIZ bu kiracıdan okur.
+# Yan-etki: EY_REG_MEVCUT (içerik, yoksa boş) + EY_REG_KAYNAK (container|host|repo-kiraci|repo-eski|yok).
+# NİÇİN (2026-09-14, MUAVİN ölçtü): uye-ekle/ekip-yerlestir "mevcut kayıt"ı ÖNCE host co-locate
+#   dosyasından okuyordu. O dosya tek-dosyadır ve SON-DOĞANIN kaydını taşır — ölçüm:
+#   /opt/cloudtop/infra/iskan-registry.yaml = `proje: tellal`. `uye-ekle akar …` onu mevcut sayınca
+#   AKAR üyelerinin rezerv-uuid'leri bulunamıyor → YENİ uuid üretiliyor (koltuk geçmişini kaybeder,
+#   K3 kırılır), permission_mode sıfırlanıyor ve TELLAL'ın host kaydı AKAR'ınkiyle eziliyordu.
+# SIRA: container-içi kopya (baslat-claude.sh'in okuduğu canlı kaynak) → host co-locate → repo
+#   kiracı-dosyası (d0002) → eski repo tek-dosyası.
+# KAPI: adayda `proje: <proje>` satırı TAM-STRING yoksa REDDEDİLİR — yabancı kiracının kaydı asla
+#   'mevcut' sayılmaz. Hepsi reddedilirse boş döner (= yeni kiracı; uuid'ler bilinçli yeni üretilir).
+_ey_reg_mevcut_oku() {
+  local p="$1" ssh_ok="$2" aday kaynak
+  EY_REG_MEVCUT=""; EY_REG_KAYNAK="yok"
+  for kaynak in container host repo-kiraci repo-eski; do
+    aday=""
+    case "$kaynak" in
+      container)   [ "$ssh_ok" = "1" ] && aday="$(_ey_ssh "cat '$EY_HOST_PROJ/iskan-registry.yaml' 2>/dev/null" 2>/dev/null || true)" ;;
+      host)        [ "$ssh_ok" = "1" ] && aday="$(_ey_ssh "cat '$EY_HOST_REGISTRY' 2>/dev/null" 2>/dev/null || true)" ;;
+      repo-kiraci) aday="$(git -C "$EY_REPO_DIR" show "origin/main:infra/iskan-registry/$p.yaml" 2>/dev/null || true)" ;;
+      repo-eski)   aday="$(git -C "$EY_REPO_DIR" show origin/main:infra/iskan-registry.yaml 2>/dev/null || true)" ;;
+    esac
+    [ -n "$aday" ] || continue
+    if printf '%s\n' "$aday" | grep -qxF "proje: $p"; then
+      EY_REG_MEVCUT="$aday"; EY_REG_KAYNAK="$kaynak"
+      return 0
+    fi
+    echo "[sarı] iskan-registry adayı ($kaynak) BAŞKA kiracıya ait — reddedildi (yabancı kayıt 'mevcut' sayılmaz)" >&2
+  done
+  return 0
+}
+
+# _ey_registry_alan <icerik> <rol> <alan> — bir üye-kaydından tek alan okur (yoksa/null ise boş).
+# İçerik env ile akar (heredoc'a """-gömme YOK — içerik tırnak taşırsa python dizgesini kırar).
+_ey_registry_alan() {
+  REG_ICERIK="$1" python3 - "$2" "$3" <<'PYEOF'
+import os, re, sys
+rol, alan = sys.argv[1], sys.argv[2]
+cur = None
+for ln in os.environ.get("REG_ICERIK", "").splitlines():
+    m = re.match(r'\s*-\s*id:\s*(\S+)\s*$', ln)
+    if m:
+        cur = m.group(1)
+        continue
+    m = re.match(r'\s*' + re.escape(alan) + r':\s*"?([^"\s]+)"?\s*$', ln)
+    if m and cur == rol:
+        if m.group(1) != "null":
+            print(m.group(1))
+        break
+PYEOF
+}
+
 # _ey_iskan_registry_icerik — K2 TAM-şemalı iskan-registry.yaml içeriği üretir.
 # Girdi: global EY_* değişkenleri + "rol<TAB>gorev<TAB>uuid" satırları (stdin).
+# KORUMA (2026-09-14): mevcut kayıttaki (EY_REG_MEVCUT) permission_mode ve settings_file üye-bazında
+#   KORUNUR — eskiden her üretim hepsini `default`'a çeviriyor, elle verilmiş izin kipini ve koltuğa
+#   özel izin dosyasını sessizce siliyordu. Yeni üyenin izin dosyası EY_YENI_UYE/EY_YENI_SETTINGS'ten.
 _ey_iskan_registry_icerik() {
   cat <<EOF
 # iskan-registry.yaml — İSKÂN K2 künye TEK-KAYNAĞI (FAZ-6'da doğdu; iskan.sh ekip-yerlestir yazar).
@@ -1373,17 +1428,22 @@ cf_access_app: ${EY_HOSTNAME}
 machine_identity_ref: null
 uyeler:
 EOF
-  local rol gorev uuid
+  local rol gorev uuid pmode sfile
   while IFS=$'\t' read -r rol gorev uuid; do
     [ -n "$rol" ] || continue
+    pmode="$(_ey_registry_alan "${EY_REG_MEVCUT:-}" "$rol" permission_mode)"
+    [ -n "$pmode" ] || pmode="default"
+    sfile="$(_ey_registry_alan "${EY_REG_MEVCUT:-}" "$rol" settings_file)"
+    if [ "$rol" = "${EY_YENI_UYE:-}" ] && [ -n "${EY_YENI_SETTINGS:-}" ]; then sfile="$EY_YENI_SETTINGS"; fi
     cat <<EOF
   - id: ${rol}
     tmux: "${rol}:0"
     cwd: ${EY_HEDEF_ICI}
     worktree_branch: null
     session_id: ${uuid}
-    permission_mode: default
+    permission_mode: ${pmode}
 EOF
+    [ -z "$sfile" ] || printf '    settings_file: %s\n' "$sfile"
   done
 }
 
@@ -1710,22 +1770,19 @@ cmd_ekip_yerlestir() {
   _ey_proje_cozumu "$proje" || exit 1
 
   # ── mevcut-durum okuması (dry-run: best-effort teşhis · apply: idempotency-temeli) ────────
-  local ssh_ok=0 reg_mevcut="" scaffold_var="" tmux_canli="" ekip_reg=""
+  local ssh_ok=0 reg_mevcut="" reg_host="" scaffold_var="" tmux_canli="" ekip_reg=""
   if command -v ssh >/dev/null 2>&1 && _ey_ssh true >/dev/null 2>&1; then
     ssh_ok=1
-    reg_mevcut="$(_ey_ssh "cat '$EY_HOST_REGISTRY' 2>/dev/null" 2>/dev/null || true)"
+    reg_host="$(_ey_ssh "cat '$EY_HOST_REGISTRY' 2>/dev/null" 2>/dev/null || true)"
     scaffold_var="$(_ey_ssh "test -f '$EY_HOST_PROJ/scripts/ekip-notify.sh' && echo VAR" 2>/dev/null || true)"
     tmux_canli="$(_ey_ssh "docker exec -u 1000 $EY_CNAME tmux list-sessions -F '#{session_name}' 2>/dev/null" 2>/dev/null || true)"
     ekip_reg="$(_ey_ssh "cat '$EY_HOST_PROJ/_agents/handoff/ekip-registry.yaml' 2>/dev/null" 2>/dev/null || true)"
   fi
-  # rezerve-uuid çözümü: host-registry ÖNCE (canlı-kaynak), yoksa repo-origin/main (merge-sonrası kaynak)
-  if [ -z "$reg_mevcut" ]; then
-    # d0002: ÖNCE kiracı-başına kanonik dosya; yoksa eski tek-dosya (göç-öncesi dallar için yedek).
-    # Eski dosya BAŞKA bir kiracının kaydı olabilir → ikinci sırada ve yalnız yedek.
-    _rp="${EY_PROJE:-${proje:-}}"
-    [ -n "$_rp" ] && reg_mevcut="$(git -C "$EY_REPO_DIR" show "origin/main:infra/iskan-registry/$_rp.yaml" 2>/dev/null || true)"
-    [ -n "$reg_mevcut" ] || reg_mevcut="$(git -C "$EY_REPO_DIR" show origin/main:infra/iskan-registry.yaml 2>/dev/null || true)"
-  fi
+  # rezerve-uuid çözümü: YALNIZ bu kiracıya ait kayıttan (bkz _ey_reg_mevcut_oku — host tek-dosyası
+  # son-doğanın kaydıdır; yabancı kiracı kaydı 'mevcut' sayılırsa uuid'ler yeniden üretilir).
+  # reg_host AYRI tutulur: _ey_registry_dagit host kopyasının md5-karşılaştırmasını onunla yapar.
+  _ey_reg_mevcut_oku "$proje" "$ssh_ok"
+  reg_mevcut="$EY_REG_MEVCUT"
 
   # ── ROSTER-KAYNAĞI (FAZ-7 roster-köprüsü): ISKAN_EY_ROSTER (açık-override) → container-içi
   # ekip-registry.yaml → FAZ-6 SABİT default. Köprüsüz hâl G5-vakasıydı: hardcoded 2-üye default,
@@ -1834,7 +1891,7 @@ cmd_ekip_yerlestir() {
 
   # ── ADIM-4: iskan-registry.yaml K2 tam-şema — host + repo + container-içi ÜÇÜ BAYT-EŞ ────
   local reg_yeni; reg_yeni="$(_ey_iskan_registry_icerik < <(printf '%s' "$EY_UYE_SATIRLARI" | cut -f1-3))"
-  _ey_registry_dagit "$reg_yeni" "$reg_mevcut" || exit 1
+  _ey_registry_dagit "$reg_yeni" "$reg_host" || exit 1
 
   # ── ADIM-5: kimlik-banner dosyaları + tmux-oturumları (üye-bazlı idempotent) ─────────────
   # ⚠️ fd-3 döngüsü ŞART (canlı-vaka, koşu-1): döngü-içi ssh-çağrıları stdin'i YER — here-string
@@ -2055,18 +2112,19 @@ EOF
 }
 
 cmd_uye_ekle() {
-  local proje="" uye="" gorev="uye" mode=""
+  local proje="" uye="" gorev="uye" mode="" sfile=""
   while [ $# -gt 0 ]; do
     case "$1" in
       --dry-run) mode="dry-run"; shift ;;
       --apply) mode="apply"; shift ;;
       --gorev) gorev="${2:-uye}"; shift 2 ;;
+      --settings-file) sfile="${2:-}"; shift 2 ;;
       -*) echo "bilinmeyen argüman: $1" >&2; exit 2 ;;
       *) if [ -z "$proje" ]; then proje="$1"; elif [ -z "$uye" ]; then uye="$1"; else echo "fazla argüman: $1" >&2; exit 2; fi; shift ;;
     esac
   done
   if [ -z "$proje" ] || [ -z "$uye" ] || [ -z "$mode" ]; then
-    echo "kullanım: iskan.sh uye-ekle <proje> <uye> [--gorev <görev>] --dry-run|--apply" >&2
+    echo "kullanım: iskan.sh uye-ekle <proje> <uye> [--gorev <görev>] [--settings-file /config/projects/<proje>/<yol>.json] --dry-run|--apply" >&2
     exit 2
   fi
   _ey_ad_hijyeni "$proje" "kayitsiz-proje" || exit 1
@@ -2088,18 +2146,39 @@ cmd_uye_ekle() {
   EY_HOST_PROJ="${EY_HOST_CFG}/projects/${proje}"
   EY_HOST_REGISTRY="${ISKAN_HOST_REGISTRY:-/opt/cloudtop/infra/iskan-registry.yaml}"
 
+  # ── KOLTUĞA ÖZEL İZİN DOSYASI (opsiyonel · 2026-09-14) ───────────────────────────────────
+  # Yol container-İÇİ yazılır ve YALNIZ bu kiracının repo ağacında olabilir: host eşlemesi
+  # (EY_HOST_PROJ) ancak o zaman doğrudur (/config/.claude gibi başka bağlamalar farklı host
+  # dizinine düşer — yanlış yerde "dosya var" demek sahte-yeşil olurdu). Dar charset: yol
+  # tırnaksız ssh komutuna gömülür.
+  EY_YENI_UYE="$uye"; EY_YENI_SETTINGS=""
+  if [ -n "$sfile" ]; then
+    case "$sfile" in
+      "$EY_HEDEF_ICI"/*.json) ;;
+      *) echo "[kırmızı] --settings-file '$sfile' — yalnız $EY_HEDEF_ICI/…/*.json kabul edilir (hiçbir yere dokunulmadı)" >&2; exit 2 ;;
+    esac
+    if ! printf '%s' "$sfile" | LC_ALL=C grep -qE '^/[A-Za-z0-9._/-]+$' || printf '%s' "$sfile" | grep -q '\.\.'; then
+      echo "[kırmızı] --settings-file '$sfile' — izinli karakter dışı ya da '..' içeriyor (hiçbir yere dokunulmadı)" >&2
+      exit 2
+    fi
+    EY_YENI_SETTINGS="$sfile"
+  fi
+
   # ── PROJE-ÇÖZÜMÜ (K4: TAM-STRING; 'kayitsiz-proje' marker'ı helper'da) ───────────────────
   _ey_proje_cozumu "$proje" || exit 1
 
   # ── mevcut-durum (best-effort): ekip-registry roster + iskan-registry + tmux ──────────────
-  local ssh_ok=0 ekip_reg="" reg_mevcut="" tmux_canli=""
+  local ssh_ok=0 ekip_reg="" reg_mevcut="" reg_host="" tmux_canli=""
   if command -v ssh >/dev/null 2>&1 && _ey_ssh true >/dev/null 2>&1; then
     ssh_ok=1
     ekip_reg="$(_ey_ssh "cat '$EY_HOST_PROJ/_agents/handoff/ekip-registry.yaml' 2>/dev/null" 2>/dev/null || true)"
-    reg_mevcut="$(_ey_ssh "cat '$EY_HOST_REGISTRY' 2>/dev/null" 2>/dev/null || true)"
+    reg_host="$(_ey_ssh "cat '$EY_HOST_REGISTRY' 2>/dev/null" 2>/dev/null || true)"
     tmux_canli="$(_ey_ssh "docker exec -u 1000 $EY_CNAME tmux list-sessions -F '#{session_name}' 2>/dev/null" 2>/dev/null || true)"
   fi
-  [ -n "$reg_mevcut" ] || reg_mevcut="$(git -C "$EY_REPO_DIR" show origin/main:infra/iskan-registry.yaml 2>/dev/null || true)"
+  # rezerv-uuid + izin kipi YALNIZ bu kiracının kaydından (bkz _ey_reg_mevcut_oku — ölçülmüş vaka:
+  # host dosyası TELLAL'ındı; AKAR'a üye eklemek AKAR koltuklarının uuid'lerini yeniden üretirdi).
+  _ey_reg_mevcut_oku "$proje" "$ssh_ok"
+  reg_mevcut="$EY_REG_MEVCUT"
 
   # roster (mevcut): ekip-registry (birincil) → iskan-registry uyeler (fallback, görev bilinmez → uye)
   local roster_mevcut=""
@@ -2144,6 +2223,8 @@ cmd_uye_ekle() {
       echo "  2. ekip-registry.yaml roster-append: $uye ($gorev) + uye_sayisi güncelle (container-içi tek-kaynak)"
       echo "  3. kimlik-banner + tmux-oturumu: $uye · $sid_eki · $tmux_eki"
       echo "  4. iskan-registry.yaml K2 yeniden-üretim (tüm-roster): host-co-locate + repo + container-içi — üçü bayt-eş"
+      echo "     mevcut-kayıt kaynağı: $EY_REG_KAYNAK (yalnız '$proje' kiracısının kaydı kabul edilir; izin kipleri + izin dosyaları korunur)"
+      [ -z "$EY_YENI_SETTINGS" ] || echo "  5. koltuğa özel izin dosyası: $EY_YENI_SETTINGS → kayıtta settings_file (baslat-claude.sh --settings geçirir; dosya okunamazsa koltuk AÇILMAZ)"
     fi
     echo "== dry-run: hiçbir yazım yapılmadı (plan-exit sözleşmesi, exit=3) =="
     exit 3
@@ -2158,6 +2239,17 @@ cmd_uye_ekle() {
   fi
 
   _ey_on_kapilar "$ssh_ok" || exit 1
+
+  # izin dosyası istendiyse YAZIMDAN ÖNCE diskte olmalı — yoksa koltuk kaydı yasaklı görünür ama
+  # baslat-claude.sh açılışı reddeder; yarım-kurulum bırakmamak için burada durulur.
+  if [ -n "$EY_YENI_SETTINGS" ]; then
+    local sfile_host="${EY_HOST_PROJ}${EY_YENI_SETTINGS#"$EY_HEDEF_ICI"}"
+    if ! _ey_ssh "test -r '$sfile_host'" 2>/dev/null; then
+      echo "[kırmızı] izin-dosyası yok: $EY_YENI_SETTINGS (host: $sfile_host) — önce dosyayı koy; hiçbir yere dokunulmadı" >&2
+      exit 1
+    fi
+    echo "[yeşil] izin-dosyası mevcut: $EY_YENI_SETTINGS"
+  fi
 
   if [ -z "$ekip_reg" ]; then
     echo "[kırmızı] ekip-registry.yaml okunamadı ($EY_HOST_PROJ/_agents/handoff/) — önce 'iskan.sh ekip-yerlestir $proje --apply' koşulmalı (uye-ekle mevcut-ekibe ekler), hiçbir yere dokunulmadı" >&2
@@ -2227,7 +2319,7 @@ PYEOF
 
   # ── ADIM-4: iskan-registry K2 yeniden-üretim (tüm-roster) → 3-kopya bayt-eş ───────────────
   local reg_yeni; reg_yeni="$(_ey_iskan_registry_icerik < <(printf '%s' "$EY_UYE_SATIRLARI" | cut -f1-3))"
-  _ey_registry_dagit "$reg_yeni" "$reg_mevcut" || exit 1
+  _ey_registry_dagit "$reg_yeni" "$reg_host" || exit 1
 
   echo ""
   echo "== uye-ekle bitti: $uye → $proje ($gorev, rezerve-uuid: $sid) · registry 3-kopya bayt-eş =="

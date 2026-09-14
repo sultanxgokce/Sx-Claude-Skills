@@ -32,13 +32,14 @@ for ln in open(reg, encoding="utf-8"):
     if m:
         cur = m.group(1)
         continue
-    for key in ("session_id", "permission_mode"):
+    for key in ("session_id", "permission_mode", "settings_file"):
         m = re.match(r'\s*' + key + r':\s*"?([^"\s]+)"?\s*$', ln)
         if m and cur == rol:
             rec[key] = m.group(1)
 sid = rec.get("session_id")
 if sid and sid != "null":
-    print(sid, rec.get("permission_mode", "default"))
+    sf = rec.get("settings_file", "-")
+    print(sid, rec.get("permission_mode", "default"), "-" if sf == "null" else sf)
 PYEOF
 )"
 
@@ -46,14 +47,30 @@ if [ -z "$KAYIT" ]; then
   echo "[kirmizi] rol-kayitsiz: '$ROL' — registry'de uye-kaydi/rezerve-session-id yok ($REG)" >&2
   exit 1
 fi
-SID="${KAYIT%% *}"
-PMODE="${KAYIT##* }"
+read -r SID PMODE SFILE <<<"$KAYIT"
 
 if ! command -v claude >/dev/null 2>&1; then
   echo "[kirmizi] claude-binary yok — bu container'da claude kurulu degil (mem-cap geregi canli-claude FAZ-9 kapsami; sahte-yesil basilmaz)."
   echo "kur-recetesi: (1) compose'ta mem_limit >= 2g (claude ~357-657MB RSS olculdu) (2) nvm+node kur (3) npm install -g @anthropic-ai/claude-code"
   echo "rol=$ROL rezerve-session-id=$SID permission-mode=$PMODE (kayit hazir — binary gelince AYNI komut calisir)"
   exit 1
+fi
+
+# ── KOLTUĞA ÖZEL İZİN DOSYASI (2026-09-14, Sultan onayı · AKAR/EHLİVUKUF) ─────
+# NİÇİN: bir koltuk "ekler ama silemez" gibi DAR yetkiyle açılacaksa kural istemde (prompt)
+#   değil, claude'un kendi izin katmanında olmalı — istem kuralı ölçülemez, izin kuralı ölçülür.
+#   Ölçüldü (gerçek claude, bypassPermissions altında): --settings ile
+#   '{"permissions":{"deny":["Bash(rm:*)"]}}' → rm ENGELLENDİ, Write ile yeni dosya GEÇTİ.
+#   ⚠️ Kalıp-reddi delinmez DEĞİL (başka dilden silme kalıbı aşar) — bu bir engel, kilit değil.
+# FAIL-CLOSED: kayıtta settings_file yazıyor ama dosya okunamıyorsa koltuk AÇILMAZ. Yasaksız
+#   açılmak, korumanın var sanılmasıdır (sessiz-sahte-yeşil). Alan yoksa davranış BAYT-AYNI.
+IZIN=()
+if [ "${SFILE:--}" != "-" ]; then
+  if [ ! -r "$SFILE" ]; then
+    echo "[kirmizi] izin-dosyasi okunamiyor: $SFILE (rol=$ROL) — koltuk yasaksiz ACILMAZ; dosyayi koy ya da kayittan settings_file satirini bilincli kaldir" >&2
+    exit 1
+  fi
+  IZIN=(--settings "$SFILE")
 fi
 
 # ── İLK AÇILIŞ mı, YENİDEN AÇILIŞ mı? ────────────────────────────────────────
@@ -124,20 +141,20 @@ if [ -f "$_IZ" ]; then _once="resume"; else _once="taze"; fi
 _hata="$(mktemp)"; trap 'rm -f "$_hata"' EXIT
 
 if [ "$_once" = "resume" ]; then
-  if claude --resume "$SID" --name "$ROL" --permission-mode "$PMODE" 2>"$_hata"; then exit 0; fi
+  if claude --resume "$SID" --name "$ROL" --permission-mode "$PMODE" ${IZIN[@]+"${IZIN[@]}"} 2>"$_hata"; then exit 0; fi
   if grep -qi "no conversation found" "$_hata"; then
     echo "[sari] iz vardi ama konusma yok (temizlenmis olabilir) — taze aciliyor" >&2
     : > "$_IZ"
-    exec claude --session-id "$SID" --name "$ROL" --permission-mode "$PMODE"
+    exec claude --session-id "$SID" --name "$ROL" --permission-mode "$PMODE" ${IZIN[@]+"${IZIN[@]}"}
   fi
 else
-  if claude --session-id "$SID" --name "$ROL" --permission-mode "$PMODE" 2>"$_hata"; then
+  if claude --session-id "$SID" --name "$ROL" --permission-mode "$PMODE" ${IZIN[@]+"${IZIN[@]}"} 2>"$_hata"; then
     : > "$_IZ"; exit 0
   fi
   if grep -qi "already in use" "$_hata"; then
     echo "[sari] iz yoktu ama oturum VAR — devam ediliyor (iz onariliyor)" >&2
     : > "$_IZ"
-    exec claude --resume "$SID" --name "$ROL" --permission-mode "$PMODE"
+    exec claude --resume "$SID" --name "$ROL" --permission-mode "$PMODE" ${IZIN[@]+"${IZIN[@]}"}
   fi
 fi
 
