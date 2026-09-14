@@ -2137,6 +2137,9 @@ cmd_uye_ekle() {
   fi
 
   EY_REPO_DIR="${ISKAN_CLOUDTOP_REPO_DIR:-/config/projects/cloudtop}"
+  # Tier-C YAZMA-hedefi — _ey_registry_dagit okur; burada türetilmezse set -u altında --apply
+  # registry dağıtımında "unbound variable" ile yarıda kalır (canlı vaka 2026-09-14, AKAR EHLİVUKUF).
+  EY_REPO_TIERC_DIR="${ISKAN_REPO_TIERC_DIR:-$EY_REPO_DIR}"
   EY_SSH_HOST="${ISKAN_SSH_HOST:-hostsrv}"
   EY_PROJE="$proje"
   EY_CNAME="cloudtop-${proje}"

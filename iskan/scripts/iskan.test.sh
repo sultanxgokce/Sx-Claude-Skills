@@ -2478,9 +2478,20 @@ find "$TC_EA" "$TC_EB" -type f -delete 2>/dev/null; find "$TC_EA" "$TC_EB" -dept
 TC_PIN="$(grep -c 'ISKAN_KUR_PIN_ALLOW=.*ISKAN_REPO_TIERC_DIR' "$SCRIPT_DIR/iskan.sh")"
 TC_HARITA="$(grep -c 'adım 6/8 Tier-C yazma' "$SCRIPT_DIR/iskan.sh")"
 TC_DERIVE="$(grep -cF 'ISKAN_REPO_TIERC_DIR:-$EY_REPO_DIR' "$SCRIPT_DIR/iskan.sh")"
-[ "$TC_PIN" = "1" ] && [ "$TC_HARITA" = "1" ] && [ "$TC_DERIVE" = "2" ] \
-  && ok "FIX#2 wiring: pin-allow(resume-carry) + env-harita görünürlük + iki türetim (ekip-yerlestir+evergreen)" \
+[ "$TC_PIN" = "1" ] && [ "$TC_HARITA" = "1" ] && [ "$TC_DERIVE" = "3" ] \
+  && ok "FIX#2 wiring: pin-allow(resume-carry) + env-harita görünürlük + üç türetim (ekip-yerlestir+uye-ekle+evergreen)" \
   || bad "FIX#2 wiring eksik (pin=$TC_PIN harita=$TC_HARITA derive=$TC_DERIVE)"
+
+# C5-4. _ey_registry_dagit'i çağıran HER komut, çağrıdan ÖNCE kendi gövdesinde EY_REPO_TIERC_DIR türetir.
+# Toplam sayım (C5-3) hangi komutta eksik olduğunu göstermez — uye-ekle bu yüzden set -u ile düştü.
+TC_EKSIK="$(awk '
+  /^[a-z_]+\(\) \{/ { fn=$1; turet=0 }
+  index($0, "ISKAN_REPO_TIERC_DIR:-$EY_REPO_DIR") { turet=1 }
+  /^[[:space:]]+_ey_registry_dagit / && !turet { print fn }
+' "$SCRIPT_DIR/iskan.sh")"
+[ -z "$TC_EKSIK" ] \
+  && ok "FIX#2 wiring: registry dağıtan her komut Tier-C hedefini önce türetiyor" \
+  || bad "FIX#2 wiring: türetmeden _ey_registry_dagit çağıran komut(lar): $TC_EKSIK"
 
 # ═══════════════════════════════════════════════════════════════════════════════════════════
 # AHÎ-DERSLERİ (tez doğumu 2026-07-28) — üç canlı arıza, üç kapı
