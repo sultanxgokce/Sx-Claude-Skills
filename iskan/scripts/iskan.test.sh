@@ -951,6 +951,63 @@ rc=$?
   && ok "uye-ekle --apply: mevcut-üye rc≠0 + 'uye-zaten-var' (çakışma-koruması, G4b)" \
   || bad "uye-ekle --apply: mevcut-üye beklenen rc≠0+uye-zaten-var, gelen rc=$rc"
 
+# 35b. uye-ekle --settings-file: kiracı-dışı / '..' / json-dışı yol → rc=2 (hiçbir yere dokunulmaz)
+#      NİÇİN: yol tırnaksız ssh komutuna gömülür ve host eşlemesi yalnız kiracı ağacında doğrudur.
+for yol in /config/.claude/izin.json /config/projects/uetest/../x.json /config/projects/uetest/a.txt; do
+  ISKAN_CLOUDTOP_REPO_DIR="$UE_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_EY_SSH_TIMEOUT=3 \
+    bash "$SCRIPT_DIR/iskan.sh" uye-ekle uetest denekGamma --settings-file "$yol" --dry-run >/dev/null 2>&1
+  rc=$?
+  [ "$rc" = "2" ] && ok "uye-ekle --settings-file '$yol' reddedildi (rc=2)" \
+    || bad "uye-ekle --settings-file '$yol' beklenen rc=2, gelen $rc"
+done
+
+# 35c. uye-ekle --settings-file geçerli yol → dry-run planında izin-dosyası adımı + kayıt-kaynağı satırı
+out="$(ISKAN_CLOUDTOP_REPO_DIR="$UE_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_EY_SSH_TIMEOUT=3 \
+  bash "$SCRIPT_DIR/iskan.sh" uye-ekle uetest denekGamma --settings-file /config/projects/uetest/_agents/izin.json --dry-run 2>&1)"
+rc=$?
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q "koltuğa özel izin dosyası: /config/projects/uetest/_agents/izin.json" \
+  && printf '%s' "$out" | grep -q "mevcut-kayıt kaynağı: repo-eski" \
+  && ok "uye-ekle --settings-file: dry-run planında izin dosyası + kayıt kaynağı görünür (rc=3)" \
+  || bad "uye-ekle --settings-file: plan satırı eksik (rc=$rc)"
+
+# 35d. _ey_reg_mevcut_oku: YABANCI kiracının kaydı 'mevcut' SAYILMAZ.
+#      Ölçülmüş vaka (2026-09-14): host co-locate dosyası `proje: tellal` idi; `uye-ekle akar` onu
+#      mevcut sayınca AKAR koltuklarının rezerv-uuid'leri yeniden üretilecekti.
+source <(sed -n '/^_ey_reg_mevcut_oku()/,/^}/p' "$SCRIPT_DIR/iskan.sh")
+EY_REPO_DIR="$UE_REPO"
+_ey_reg_mevcut_oku akar 0 2>/dev/null
+[ -z "$EY_REG_MEVCUT" ] && [ "$EY_REG_KAYNAK" = "yok" ] \
+  && ok "_ey_reg_mevcut_oku: yabancı kiracı kaydı (uetest ≠ akar) reddedildi" \
+  || bad "_ey_reg_mevcut_oku: yabancı kiracı kaydı KABUL edildi (kaynak=$EY_REG_KAYNAK)"
+_ey_reg_mevcut_oku uetest 0 2>/dev/null
+[ "$EY_REG_KAYNAK" = "repo-eski" ] && printf '%s' "$EY_REG_MEVCUT" | grep -q "$UE_UUID_SABIT" \
+  && ok "_ey_reg_mevcut_oku: aynı kiracının kaydı kabul edildi (uuid yeniden-kullanılabilir)" \
+  || bad "_ey_reg_mevcut_oku: aynı kiracının kaydı okunamadı (kaynak=$EY_REG_KAYNAK)"
+unset EY_REPO_DIR EY_REG_MEVCUT EY_REG_KAYNAK
+
+# 35e. _ey_iskan_registry_icerik: izin kipi + izin dosyası yeniden-üretimde KORUNUR;
+#      yeni üyeye bayraktaki dosya yazılır; alanı olmayan üyeye settings_file EKLENMEZ.
+#      Eskiden her üretim hepsini `permission_mode: default` yapıyordu (AKAR'da MUHTESİP bypass'tı).
+source <(sed -n '/^_ey_registry_alan()/,/^}/p' "$SCRIPT_DIR/iskan.sh")
+source <(sed -n '/^_ey_iskan_registry_icerik()/,/^}/p' "$SCRIPT_DIR/iskan.sh")
+RG_ESKI="$(printf 'proje: t\nuyeler:\n  - id: KOD\n    session_id: aaaaaaaa-0000-0000-0000-000000000001\n    permission_mode: bypassPermissions\n  - id: DAR\n    session_id: aaaaaaaa-0000-0000-0000-000000000002\n    permission_mode: default\n    settings_file: /config/projects/t/eski.json\n')"
+out="$(EY_PROJE=t EY_CNAME=c EY_HOSTNAME=h EY_PORT=1 EY_HOST_CFG=/x EY_HEDEF_ICI=/config/projects/t \
+  EY_REG_MEVCUT="$RG_ESKI" EY_YENI_UYE=YENI EY_YENI_SETTINGS=/config/projects/t/izin.json \
+  _ey_iskan_registry_icerik < <(printf 'KOD\tuye\taaaaaaaa-0000-0000-0000-000000000001\nDAR\tuye\taaaaaaaa-0000-0000-0000-000000000002\nYENI\tuye\taaaaaaaa-0000-0000-0000-000000000003\n'))"
+blok(){ printf '%s\n' "$out" | awk -v id="$1" '$0 ~ "- id: "id"$"{f=1;next} /- id:/{f=0} f'; }
+blok KOD | grep -q "permission_mode: bypassPermissions" \
+  && ok "registry-üretimi: KOD'un bypassPermissions kipi korundu" \
+  || bad "registry-üretimi: KOD'un izin kipi SIFIRLANDI"
+blok KOD | grep -q "settings_file" && bad "registry-üretimi: alanı olmayan KOD'a settings_file eklendi" \
+  || ok "registry-üretimi: alanı olmayan üyeye settings_file eklenmedi (bayt-aynı)"
+blok DAR | grep -q "settings_file: /config/projects/t/eski.json" \
+  && ok "registry-üretimi: DAR'ın izin dosyası korundu" \
+  || bad "registry-üretimi: DAR'ın izin dosyası SİLİNDİ"
+blok YENI | grep -q "settings_file: /config/projects/t/izin.json" && blok YENI | grep -q "permission_mode: default" \
+  && ok "registry-üretimi: yeni üyeye bayraktaki izin dosyası yazıldı (kip default)" \
+  || bad "registry-üretimi: yeni üyenin izin dosyası yazılmadı"
+unset RG_ESKI
+
 # 36. uye-ekle --apply yeni-üye ama host-erişilemez → rc=1, mutasyonsuz erken-kırmızı
 SUM_UE_BEFORE2="$(md5sum "$UE_REPO/infra/iskan-registry.yaml")"
 ISKAN_CLOUDTOP_REPO_DIR="$UE_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" ISKAN_EY_SSH_TIMEOUT=3 \
