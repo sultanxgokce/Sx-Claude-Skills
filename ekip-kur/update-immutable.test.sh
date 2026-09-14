@@ -74,6 +74,39 @@ assert_eq "old notify" "$(tr -d '\n' < "$TARGET/scripts/ekip-notify.sh")" "faile
 assert_eq "old preflight" "$(tr -d '\n' < "$TARGET/scripts/ekip-preflight.lib.sh")" "failed apply precondition writes no preflight bytes"
 mv "$TMP/registry.before-precondition" "$TARGET/_agents/handoff/ekip-registry.yaml"
 
+cat >> "$TARGET/_agents/handoff/ekip-registry.yaml" <<'YAML'
+yardimcilar:
+  - id: MUNECCIM
+    sinif: arac
+    tmux: "muneccim:0"
+    kimlik: _agents/muneccim/AGENT.md
+YAML
+run_rc "$TMP/helper-schema.out" "$UPDATER" "$TARGET" --dry-run
+assert_eq 0 "$RUN_RC" "registry helpers are not validated as team members"
+cp "$TARGET/_agents/handoff/ekip-registry.yaml" "$TMP/registry.with-helper"
+python3 - "$TARGET/_agents/handoff/ekip-registry.yaml" <<'PY'
+import sys
+p=sys.argv[1]; s=open(p).read(); s=s.replace('    inbox: _agents/handoff/mutevelli-inbox.md\n', '')
+open(p,'w').write(s)
+PY
+run_rc "$TMP/helper-broken-member.out" "$UPDATER" "$TARGET" --apply
+assert_eq 1 "$RUN_RC" "broken real member remains fail closed when helpers exist"
+mv "$TMP/registry.with-helper" "$TARGET/_agents/handoff/ekip-registry.yaml"
+cp "$TARGET/_agents/handoff/ekip-registry.yaml" "$TMP/registry.with-helper"
+python3 - "$TARGET/_agents/handoff/ekip-registry.yaml" <<'PY'
+import sys
+p=sys.argv[1]; s=open(p).read(); s=s.replace('uye_sayisi: 1', 'uye_sayisi: 2')
+open(p,'w').write(s)
+PY
+run_rc "$TMP/helper-count.out" "$UPDATER" "$TARGET" --apply
+assert_eq 1 "$RUN_RC" "member count mismatch remains fail closed"
+mv "$TMP/registry.with-helper" "$TARGET/_agents/handoff/ekip-registry.yaml"
+sha "$TARGET/_agents/handoff/ekip-registry.yaml" > "$STATE_BEFORE"
+sha "$TARGET/_agents/handoff/ekip-brief.md" >> "$STATE_BEFORE"
+sha "$TARGET/_agents/handoff/ekip-sinyal.log" >> "$STATE_BEFORE"
+sha "$TARGET/.claude/settings.json" >> "$STATE_BEFORE"
+sha "$TARGET/product.txt" >> "$STATE_BEFORE"
+
 run_rc "$TMP/apply.out" "$UPDATER" "$TARGET" --apply
 assert_eq 0 "$RUN_RC" "apply exits zero"
 assert_file_eq "$ROOT/ekip-kur/templates/ekip-notify.sh" "$TARGET/scripts/ekip-notify.sh" "apply installs canonical notify"

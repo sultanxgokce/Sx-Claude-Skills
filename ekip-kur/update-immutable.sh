@@ -81,14 +81,23 @@ except (OSError, UnicodeError):
 meta = {"ekip", "uye_sayisi", "yonetici", "yayin_kanali", "sinyal_defteri", "tetik_scripti", "guncelleme"}
 seen_meta = set()
 members = []
+member_count = None
 current = None
+section = None
 for line in lines:
-    if re.match(r"^meta:\s*$", line):
+    top = re.match(r"^([a-z_]+):\s*(?:#.*)?$", line)
+    if top:
+        section = top.group(1)
+        current = None
         continue
     m = re.match(r"^\s{2}([a-z_]+):\s*(.*?)\s*(?:#.*)?$", line)
-    if m and not members and m.group(1) in meta:
+    if section == "meta" and m and m.group(1) in meta:
         if m.group(2) not in ("", '""', "''"):
             seen_meta.add(m.group(1))
+            if m.group(1) == "uye_sayisi" and re.fullmatch(r"\d+", m.group(2)):
+                member_count = int(m.group(2))
+    if section != "uyeler":
+        continue
     m = re.match(r"^\s*-\s*id:\s*(\S+)", line)
     if m:
         current = {"id"}
@@ -98,7 +107,8 @@ for line in lines:
     if m and current is not None and m.group(2) not in ("", '""', "''"):
         current.add(m.group(1))
 required_member = {"id", "tmux", "mod", "rol", "kanallar", "inbox"}
-ok = meta <= seen_meta and bool(members) and all(required_member <= member for member in members)
+ok = (meta <= seen_meta and bool(members) and member_count == len(members)
+      and all(required_member <= member for member in members))
 raise SystemExit(0 if ok else 1)
 PY
 }
