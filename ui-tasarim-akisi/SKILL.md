@@ -1,7 +1,7 @@
 ---
 name: ui-tasarim-akisi
 type: agent
-version: 0.4.0
+version: 0.5.0
 description: >
   UI/arayüz tasarım işinin ZORUNLU akış kapısı. Bir ürünün ekranlarını tek tek değil dizi
   hâlinde tasarlatır: ürün niyeti → sayfa envanteri → kullanıcı senaryoları (tık bütçesi) →
@@ -483,3 +483,26 @@ kutu-içi teslimler kanona döndüğünde bu tablo bir satır alır.
 > Kendi acı dersimiz: `SKILL.md` bu dosyada *"kopya senkron mekanizması olmadan bayatlar
 > (ölçülmüş vaka: `frontend-design`)"* diye **yazılıydı** ve beceri buna rağmen çatalladı.
 > **Doğru yazılmış uyarı = 0 koruma.** Kopya çıkarmadan önce onu geri getirecek kapıyı kur.
+
+## Sürüm notu — 0.5.0 (2026-08-25 · L77)
+
+**Ayırt-edicilik kapısı eklendi.** Ölçüldü: filo'nun UI kapılarında *"bu ekran ayırt edici mi,
+şablona mı düştü"* diye soran **tek bir madde yoktu** (`ayırt|özgün|imza|çarpıc|etkiley|estetik`
+→ rubrikte 0, çekirdek sözleşmede 0). Akışın kendi metni bunu itiraf ediyordu; artık kapıya bağlı.
+
+- Yeni rubrik: `sablonlar/estetik-guc-v1.md` — iki soru, iki **kapalı küme**:
+  `--klise` (hangi hazır kalıba düşüldü; beş ölçülmüş varsayılan + `yok`) ve
+  `--imza` (sayfanın hatırlanacağı öğe nerede yaşıyor; `yok` = kırmızı).
+- Havuz: dördüncü kapı türü `ayirt` + iki seçimli alan. `kapi=ayirt` kaydında
+  **`--klise` ve `--imza` ZORUNLU** — "ölçtüm" demek yetmez, ne görüldüğü yazılır.
+- Kapı: `havuz.py ayirt-kapisi`, çağıranı `prompt-yap.sh` **KAPI 6**. Önceki sayfa için
+  ayırt yargısı yoksa devam promptu üretilmez. KAPI 5'ten **bağımsız** koşar.
+
+🔴 **Ne ölçmediği açıkça:** çarpıcılığı ölçmez, ölçemez. Ölçtüğü şey **yargının verilmiş olması**.
+Yargıyı kimin verdiği (insan mı ajan mı) ayrı bir konudur, burada çözülmedi.
+
+Kanıt: 8/8 kapı. Kritik ikisi — yargısız `ayirt` kaydı REDDEDİLİYOR (süs-alan olamaz) ve
+kapalı-küme dışı değer REDDEDİLİYOR (havuz yorum defterine dönmüyor).
+İnşa sırasında iki kendi hatam yakalandı ve düzeltildi: (a) alanlar şemaya eklenmişti ama
+`yaz` onları hiç okumuyordu — yani ölçü süstü; (b) KAPI 6 önce KAPI 5'in içine gömülmüştü,
+gerekçe kapısı kapatılınca ayırt kapısı da susardı.
