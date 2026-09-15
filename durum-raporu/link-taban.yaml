@@ -1,0 +1,24 @@
+# link-taban.yaml — mmepanel:// çözüm şablonları (FİLO GENELİ TEK DOSYA; kutular kopyalamaz).
+# {kutu} = konteyner kısa adı (akar, tellal, mihenk…), {hedef} = tür hedefi.
+# Arama sırası: önce `<tur>_<kutu>:` (kutuya özel), sonra `<tur>:` (filo geneli).
+# 🔴 KURAL: ölçülmemiş şablon BOŞ bırakılır — boş tür çözülmez, rapor ham `mmepanel://…` basar.
+#    Uydurma URL, çalışmayan bağlantıdan beterdir: tıklanır, 404 döner, güven ölçülemez olur.
+
+# Kod sunucusu: her kutunun kendi adresi var (federe-registry.yaml `hostname` alanı ile birebir).
+# ⚠️ Ölçülmedi: code-server'ın TEK DOSYA açan sorgu parametresi doğrulanmadı → proje klasörü açılır,
+#    hedef yol raporda metin olarak zaten yazılıdır.
+dosya:   "https://{kutu}.mmepanel.com/?folder=/config/projects/{kutu}"
+
+# Mobil panelde canlı pencereye derin bağlantı: adres var (m.mmepanel.com) ama pencere-başına
+# bağlantı biçimi ÖLÇÜLMEDİ → boş.
+pencere: ""
+
+# Kayıt (commit) görünümü: kutuların depo uzaktan-adresleri tek biçimde değil → ÖLÇÜLMEDİ, boş.
+kayit:   ""
+
+# Yayın: kutu başına canlı adres. Yalnız ölçülmüş olan yazılır.
+yayin:   ""
+yayin_akar: "https://akar.mukarnas.net"
+
+# Sinyal defteri satırına bağlantı: panelde arama yüzeyi ÖLÇÜLMEDİ → boş.
+sinyal:  ""

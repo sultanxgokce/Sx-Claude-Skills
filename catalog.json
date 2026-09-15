@@ -1432,6 +1432,13 @@
         "fail-closed",
         "global"
       ]
+    },
+    {
+      "id": "durum-raporu",
+      "type": "agent",
+      "name": "/durum-raporu — personel durum raporu (GLOBAL, Sultan standardı)",
+      "version": "0.2.0",
+      "description": "Sultan 'durum raporu / son durum / neler yapılıyor' deyince kutunun personelini STANDART biçimde raporlar: kişi başına bitirdi · geçti · önündeki işler · bekliyor · canlı bağlantı. Veri sözleşmesi tüm kutularda aynı (SEMA.md): her üye kendi _agents/durum/<AD>.json dosyasını yazar (durum-yaz.sh), reis okur (durum-raporu.sh). Durum dosyası olmayan üye kayıttan TÜRETİLİR ve '(türetildi)' damgası alır — uydurma yok. Bağlantılar tek dilde: mmepanel://<kutu>/<tür>/<hedef>, çözüm filo-geneli link-taban.yaml'dan; ölçülmemiş tür boş bırakılır ve ham link basılır. AKAR/MÜTEVELLİ doğurdu, MUAVİN filo geneline paketledi."
     }
   ]
 }
