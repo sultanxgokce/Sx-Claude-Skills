@@ -1,6 +1,6 @@
 ---
 name: durum-raporu
-version: 0.2.0
+version: 0.2.1
 description: Sultan "durum raporu / son durum / neler yapılıyor" deyince bu kutunun personelini STANDART biçimde raporlar — kişi başına bitirdi · geçti · önündeki işler · bekliyor · canlı bağlantı; veri tüm kutularda aynı şemadan (SEMA.md).
 allowed-tools: Bash, Read
 ---
@@ -37,3 +37,7 @@ Beceri AKAR'da (MÜTEVELLİ) doğdu; bu sürümle **filo geneline paketlendi**:
   sınıfı). Artık `scripts/repo-bul.sh`: açık ayar → cwd → üst dizinler; hiçbiri değilse rc=1 ve
   sahte kök uydurulmaz.
 - Kapılar eklendi: `scripts/link-coz.test.sh` (8) · `scripts/repo-bul.test.sh` (5), ikisi de ağsız.
+
+## Sürüm notu — 0.2.1 (MUAVİN, 2026-09-16)
+Betikler depoda çalıştırma izni OLMADAN kaydedilmişti (git kipi 100644) → kurulum aracının duman
+testi "ÇALIŞTIRILAMAZ (izin yok)" dedi ve dağıtımı kırmızı bıraktı. Altı betik 100755 yapıldı.
