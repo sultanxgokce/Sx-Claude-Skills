@@ -1,6 +1,6 @@
 {
   "version": "2.1",
-  "updated": "2026-09-13",
+  "updated": "2026-09-16",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -1446,6 +1446,13 @@
       "name": "ekip-iletisim-uzmani — yönetici⇄ajan iletişim gözetmeni (GLOBAL ROL SINIFI)",
       "version": "0.1.0",
       "description": "Persona değil rol sınıfı: yönetici ile emrindeki AI ajanlar arasındaki iletişim/iş-akışı sorunlarını sürekli gözeten personelin ortak çekirdeği. iletisim-nabiz.sh beş sınıfı üç durumlu ölçer (kayıp tetik · ACK'siz tetik · sessiz üye · bayat iş · yönetim darboğazı), kök neden + onarım önerir; emir vermez, tetik göndermez, dış gönderim yapmaz, sağlayıcı/model bilgisi taşımaz. Mirasçı kutular kendi adıyla açar (ISE-ALIM.md, 4 komut), DEVIR-SINAVI 5 kapı, miras-damga.sh ile sürüm+sha drift görünür. İlk mirasçı NÂZIR/PEYK. Ölçüldü 2026-09-16 AKAR: 24 saatte 543 kayıp tetik."
+    },
+    {
+      "id": "baglam-nobeti",
+      "type": "agent",
+      "name": "/baglam-nobeti — bağlam doluluk nöbeti (GLOBAL, Sultan kuralı)",
+      "version": "0.2.0",
+      "description": "Oturum bağlamı dolarken Sultan'ı asla sessizce geçmez: %70'te uyarı satırı, %80'de her cevabın başında kalın compact önerisi, %90'da yeni iş almama; compact'tan önce kutunun VAR OLAN çıpa dosyaları (cipa-bul.sh) tazelenir. Ölçü mekaniktir: PostToolUse kancası (nobet-kancasi.sh) her araç çağrısında transkriptten doluluğu hesaplar (baglam-olc.py); pencere filo kanonundan (ORTAK-MIMARI.md) okunur, [1m] eki transkriptin model-kimlik kaydından geri kazanılır. Ölçemediğinde 'ÖLÇÜLEMEDİ' der, yüzde uydurmaz. AKAR/MÜTEVELLİ doğurdu (0.1.0 salt kural), MUAVİN mekanik gövdeyle filo geneline paketledi."
     }
   ]
 }
