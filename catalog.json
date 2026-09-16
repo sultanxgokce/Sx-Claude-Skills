@@ -1439,6 +1439,13 @@
       "name": "/durum-raporu — personel durum raporu (GLOBAL, Sultan standardı)",
       "version": "0.2.1",
       "description": "Sultan 'durum raporu / son durum / neler yapılıyor' deyince kutunun personelini STANDART biçimde raporlar: kişi başına bitirdi · geçti · önündeki işler · bekliyor · canlı bağlantı. Veri sözleşmesi tüm kutularda aynı (SEMA.md): her üye kendi _agents/durum/<AD>.json dosyasını yazar (durum-yaz.sh), reis okur (durum-raporu.sh). Durum dosyası olmayan üye kayıttan TÜRETİLİR ve '(türetildi)' damgası alır — uydurma yok. Bağlantılar tek dilde: mmepanel://<kutu>/<tür>/<hedef>, çözüm filo-geneli link-taban.yaml'dan; ölçülmemiş tür boş bırakılır ve ham link basılır. AKAR/MÜTEVELLİ doğurdu, MUAVİN filo geneline paketledi."
+    },
+    {
+      "id": "ekip-iletisim-uzmani",
+      "type": "agent",
+      "name": "ekip-iletisim-uzmani — yönetici⇄ajan iletişim gözetmeni (GLOBAL ROL SINIFI)",
+      "version": "0.1.0",
+      "description": "Persona değil rol sınıfı: yönetici ile emrindeki AI ajanlar arasındaki iletişim/iş-akışı sorunlarını sürekli gözeten personelin ortak çekirdeği. iletisim-nabiz.sh beş sınıfı üç durumlu ölçer (kayıp tetik · ACK'siz tetik · sessiz üye · bayat iş · yönetim darboğazı), kök neden + onarım önerir; emir vermez, tetik göndermez, dış gönderim yapmaz, sağlayıcı/model bilgisi taşımaz. Mirasçı kutular kendi adıyla açar (ISE-ALIM.md, 4 komut), DEVIR-SINAVI 5 kapı, miras-damga.sh ile sürüm+sha drift görünür. İlk mirasçı NÂZIR/PEYK. Ölçüldü 2026-09-16 AKAR: 24 saatte 543 kayıp tetik."
     }
   ]
 }
