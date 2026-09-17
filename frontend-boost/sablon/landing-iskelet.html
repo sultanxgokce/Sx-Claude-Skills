@@ -1,0 +1,33 @@
+<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MARKA</title>
+<!-- 1) arac/font-altkume.py çıktısını buraya <style> olarak göm (dış istek 0).  2) sahne.css'i de göm. -->
+<link rel="stylesheet" href="sahne.css">
+<style>
+  html,body{margin:0;overflow-x:hidden}body{font-family:'Archivo',system-ui,sans-serif;font-size:16px;line-height:1.5}
+  .studyo{min-height:100vh;padding:28px clamp(20px,4vw,56px) 0}
+  .levha.a{width:900px;height:900px;left:-380px;top:-300px}.levha.b{width:1100px;height:1100px;right:-520px;top:180px}
+  .ust{display:flex;align-items:center;gap:28px}.ust b{margin-right:auto;font-weight:800;font-size:21px}
+  .dev{top:clamp(90px,13vh,150px)}
+  .havada-kap{width:min(900px,68vw);margin:clamp(150px,21vh,230px) auto 0}
+  .havada img{display:block;width:100%;border-radius:14px}
+  .soz{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(24px,5vw,88px);align-items:end;max-width:1180px;margin:72px auto 0;padding-bottom:72px}
+  .soz h1{margin:0;font-weight:800;font-size:clamp(30px,3.6vw,54px);line-height:1.02;letter-spacing:-.02em;text-wrap:balance}
+  .soz p{margin:0 0 22px;color:var(--murekkep-soluk);max-width:34em}
+  @media (max-width:760px){.havada-kap{width:100%}.soz{grid-template-columns:minmax(0,1fr)}}
+</style></head><body>
+<main class="studyo" id="sahne"><div class="levha a"></div><div class="levha b"></div>
+  <header class="ust"><b>MARKA</b><a class="hap" href="#">Demoyu aç <i aria-hidden="true">↓</i></a></header>
+  <p class="dev" aria-hidden="true">MAR<span class="kontur">KA</span></p>
+  <!-- bilesen: Kahraman nesne — ürünün GERÇEK ekranı (canlı sayfadan alınmış kare), stok görsel değil -->
+  <div class="havada-kap"><div class="havada" id="nesne"><img src="URUN-EKRANI.jpg" alt="Ürün ekranının ne gösterdiğini bir cümleyle yaz"></div>
+    <div class="elips-golge" aria-hidden="true"></div></div>
+  <section class="soz"><div><h1>Tek cümle: ürün ne yapar, kimin için.</h1></div>
+    <div><p>İki düz cümle. Vaat değil, bugün çalışan şey. Bilmediğin yerde “eksik veri” de.</p><a class="hap" href="#">Demoyu aç <i aria-hidden="true">↓</i></a></div></section>
+</main>
+<script>/* tek dokunuş: nesne imleci izleyerek hafifçe eğilir; dokunmatikte ve hareket azaltmada kapalı */
+(function(){var n=document.getElementById('nesne'),s=document.getElementById('sahne');
+ if(matchMedia('(prefers-reduced-motion: reduce)').matches||matchMedia('(pointer: coarse)').matches)return;
+ s.addEventListener('pointermove',function(e){var r=s.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+  n.style.setProperty('--ry',(-5+x*9).toFixed(2)+'deg');n.style.setProperty('--rx',(6-y*7).toFixed(2)+'deg');});
+ s.addEventListener('pointerleave',function(){n.style.removeProperty('--ry');n.style.removeProperty('--rx');});})();</script>
+</body></html>
