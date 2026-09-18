@@ -10,3 +10,5 @@ description: Bu sayfayı "bir tasarımcı yapmış" dedirtecek biçimde, etkili 
 4. Becerideki formülü (sahne · tek kahraman nesne · yazı görsel öğe · tek ışık · derinlik · tek açılış anı + tek dokunuş) uygula; şablondan başla.
 5. Kendi gözünle bak, ölç (taşma · dış istek · hareket azaltma · piksel tabanlı kontrast), sonra insana **kareyi ve dosyayı** gönder.
 Sıradan ürün içi ekranlarda (form, tablo, ayar) bu beceriyi kullanma; orada ürünün kendi tasarım dili geçerlidir.
+
+🔴 **YAMA YASAK (Sultan, 18 Eylül):** iş birimi sayfanın tamamıdır; sahnesi yeni, altı eski sayfa teslim edilmez, pakete girmez, yayınlanmaz. Kaydırınca iki dil görünüyorsa bitmemiştir.

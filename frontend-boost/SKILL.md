@@ -1,6 +1,6 @@
 ---
 name: frontend-boost
-version: 0.2.0
+version: 0.3.0
 allowed-tools: Bash, Read, Write, Edit
 description: Bir sayfanın (karşılama sayfası, ürünün açılış ekranı, sunum kapağı, broşür kapağı) "bunu bir tasarımcı yapmış" dedirtecek biçimde, etkili ama yalın tasarlanması istendiğinde kullan. Tetikleyiciler — "/frontend-boost", "daha efektli ama minimal", "vasat durmasın", "premium görünsün", "landing page", "sahne", "wow etkisi". Formülü, belirteçleri, hazır şablonu, ölçüm araçlarını ve düşülen tuzakları içerir. Sıradan ürün içi ekranlar (form, tablo, ayar) için KULLANMA.
 ---
@@ -12,10 +12,19 @@ description: Bir sayfanın (karşılama sayfası, ürünün açılış ekranı, 
 delmeden, bakınca bir tasarımcının elinden çıktığı anlaşılsın." Aynı fikir bu becerideki formülle yeniden çizildi ve cevap şu oldu:
 "bayıldım, sonuna kadar git." Ders: **sessiz doğruluk etki değildir.** Etki, tek bir cesur öğeye harcanan ışık, ölçek ve harekettir.
 
+## 🔴 YAMA YASAK — Sultan'ın ikinci dersi (18 Eylül 2026, sabah)
+Işık sahnesi ürünün Bugün ekranına kondu, ölçümler yeşildi, Sultan **reddetti**: *"Grafik müthiş olmuş; ama eski sayfanın üzerine koyunca yama gibi durmuş — başka bir sitenin tasarımının bir bölümünü alıp bizimkinin üzerine yerleştirmişsin gibi. Sayfayı bütüncül olarak tasarlaman lazım; tek elden çıkmış gibi olsun. Eski tasarımın yok olmasında sıkıntı yok, gerekirse sıfırdan."*
+**Kural (pazarlıksız):**
+1. **Yama tasarım işi VERİLMEZ.** "Şu bölümü güzelleştir", "üst kısma sahne koy" diye iş açılmaz. İş birimi **sayfanın tamamıdır**: sahne + altındaki her bölüm (notlar, harita, tablo, dipnot) aynı yazı ailesi, aynı zemin mantığı, aynı aralık ve punto kümesi, aynı hareket kuralı.
+2. **Yama TESLİM YASAK.** Sahnesi bitmiş ama altı eski kalan sayfa "hazır" denemez, pakete girmez, yayınlanmaz, Sultan'a gösterilmez. Kaydırınca "başka bir sayfaya geçtim" hissi veren her teslim **reddedilmiş sayılır** — ölçüm yeşil olsa da.
+3. **Eski tasarımı korumak bir değer değildir.** Yeni dil sayfanın geri kalanına uymuyorsa geri kalan yeniden çizilir; "eskiyi bozmayalım" gerekçesiyle iki dil bir sayfada bırakılmaz.
+4. **Sahnedeki nesne anlamını taşımalı.** Grafik güzel ama neyi saydığı okunmuyorsa ("Ferrari'ye Tofaş direksiyonu") bitmemiştir: eksen, ölçek, gösterge, tek satır açıklama sahnenin parçasıdır.
+5. **Kendi ölçütün:** teslimden önce sayfayı en üstten en alta kaydır; iki farklı elin izi görünüyorsa iş bitmemiştir. Bunu kareyle kanıtla (tam boy kare, üç genişlik).
+
 ## Ne zaman, ne zaman değil
 | Kullan | Kullanma |
 |---|---|
-| Karşılama (landing) sayfası · ürünün açılış ekranının **üst bölümü** · sunum ve broşür kapağı · tanıtım görseli | Form, tablo, ayar, liste ekranları — orada ürünün kendi tasarım dili geçerlidir |
+| Karşılama (landing) sayfası · ürünün açılış ekranı (**tamamı** — üst bölüm tek başına yama olur, bkz. YAMA YASAK) · sunum ve broşür kapağı · tanıtım görseli | Form, tablo, ayar, liste ekranları — orada ürünün kendi tasarım dili geçerlidir |
 Kural: sayfa başına **tek sahne**. Etki her yere yayılırsa etki olmaktan çıkar.
 
 ## Formül — altı parça, hepsi birden
@@ -81,6 +90,7 @@ Yapay zekâ varlığı süsle değil **içerikle** gösterilir: sayfa cümleyle 
 - [ ] Sahnedeki her metin gerçek zemine göre ≥ 5,5 (en açık piksele göre ≥ 4,5)
 - [ ] Kareye **kendi gözünle** bakıldı · insana kare **ve** dosya gitti
 - [ ] Ürüne girecekse: sahne ayrı bir yüzey olarak reçetelendi (sınırları ölçülebilir), kapı **gevşetilmedi**
+- [ ] **Yama değil:** sayfanın tamamı aynı elden (yazı ailesi, zemin, aralık, punto, hareket); tam boy karede tek dil; sahnenin altı eski kalmış sayfa **teslim edilmedi**
 
 ## Paket içeriği
 `sablon/sahne.css` belirteçler + koyu sahne + stüdyo sahnesi + hap düğme + dev yazı + havada duran nesne ·
