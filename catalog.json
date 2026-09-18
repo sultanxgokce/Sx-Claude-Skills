@@ -1451,7 +1451,7 @@
       "id": "frontend-boost",
       "type": "agent",
       "name": "/frontend-boost — etkili ama yalın sayfa tasarımı (GLOBAL)",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "description": "Karşılama sayfası, ürünün açılış ekranı, sunum/broşür kapağı 'bir tasarımcı yapmış' densin diye tasarlanır: sahne · tek kahraman nesne · yazı görsel öğe · tek ışık · derinlik · tek açılış anı. Şablon (sahne.css + landing iskeleti), karakter alt kümeli yazı tipi aracı ve kontrastı GERÇEK zemin pikselinden ölçen araç birlikte gelir. Sıradan ürün içi ekranlar (form, tablo, ayar) için kullanılmaz. NAKKAŞ/AKAR doğurdu (Sultan 17 Eylül: 'bayıldım, sonuna kadar git'); MUAVİN filo geneline paketledi: tarayıcı yolu artık kutuya sabit değil, ölçülemeyen kontrast rc=3 ile 'ölçülemedi' der, temiz demez."
     },
     {
