@@ -47,6 +47,7 @@
 #   kapimda sahip "<Kısa Ad>"                       # SULTAN|<AJAN>|TIKANDI bas · RC 1 = kart yok
 # ÇIKIŞ: 0 tamam · 1 lint-RED / bulgu / kart yok · 2 kullanım/ortam · 4 son-halka eksik (olur gelmedi)
 #        5 = Sultan'ın kapısından izinsiz iş çıkarma denemesi (A06 kapısı)
+#        6 = kapanış gerekçesi Sultan'ın sözünü damgasız aktarıyor (D1 damga kapısı)
 # ═══════════════════════════════════════════════════════════════════════════
 set -uo pipefail
 
@@ -612,6 +613,32 @@ $YAS"
   bitti)
     [ -n "$AD" ] || { _hata "Kısa Ad zorunlu"; exit 2; }
     [ -n "$GEREKCE" ] || { _hata "--gerekce zorunlu (kart neden Sultan'da değil artık?)"; exit 2; }
+    # ── K11 · D1 DAMGA KAPISI (Sultan-kararı 2026-09-18) ──────────────────────
+    # Ölçülmüş vaka: 16 Eylül'de kapatılan kartların gerekçe satırları Sultan'ın onayını
+    # AKTARIYORDU ama hiçbirinde kaynak yoktu (ölçüm: 10 kapanışın 10'u damgasız). BEŞİR
+    # (AKAR) bunu yakaladı ve filmi yayına vermeyi reddetti: *"onay kaydını ajan yazamaz;
+    # ben de yazılmış bir kapanış satırını onay saymıyorum."* Haklıydı — bir ajanın yazdığı
+    # "Sultan onayladı" cümlesi başka bir ajanı yayına çıkarmaya ikna edebilirdi.
+    # Kural zaten vardı (CLAUDE.md §9 · D1); hiçbir kapıda koşmuyordu (L35 dersi).
+    # 🔴 KAPSAM DAR TUTULUR — kapı Sultan'ın SÖZÜNÜ aktaran gerekçeye bakar, EYLEMİNİ
+    #   anlatana değil. "Sultan kasada kimliği açtı" bir gözlemdir, onay iddiası değil;
+    #   "Sultan onayladı / dedi / izin verdi" ise Sultan'ın ağzından bir karar taşır.
+    #   İlk yazımda yalnız "sultan" geçmesine baktım: kendi süitimdeki 9 masum kapanış
+    #   kırmızıya döndü. Fazla geniş kapı ya kapatılır ya atlatılır — daraltıldı.
+    _SOZ='onayla|onay ver|izin ver|dedi|dedì|demiş|demis|söyledi|soyledi|istedi|emretti|emir|talimat|kabul etti|reddetti|karar verdi|onay'
+    if printf '%s' "$GEREKCE" | grep -qi 'sultan' && printf '%s' "$GEREKCE" | grep -qiE "$_SOZ"; then
+      _eksik=""
+      printf '%s' "$GEREKCE" | grep -q 'beyan:[^ ]' || _eksik="$_eksik beyan:<AJAN>"
+      printf '%s' "$GEREKCE" | grep -qE '"[^"]+"|“[^”]+”' || _eksik="$_eksik \"<verbatim-kırpık>\""
+      printf '%s' "$GEREKCE" | grep -qiE 'sohbet|nöbet|nobet|oturum|ref' || _eksik="$_eksik <nerede-söyledi>"
+      if [ -n "$_eksik" ]; then
+        _hata "D1 damga kapısı: gerekçe Sultan'ın sözünü aktarıyor ama kaynağı eksik →$_eksik"
+        printf '   Sultan'"'"'ın sözü ÜRETİLMEZ, damgayla AKTARILIR (A06). Biçim:\n' >&2
+        printf '   --gerekce "%s Sultan: <sonuç> (sohbet · <oturum-ref> · \"<≤15 kelime verbatim>\" · beyan:<AJAN>)"\n' "$(_bugun)" >&2
+        printf '   Sultan sana bunu SÖYLEMEDİYSE kartı kapatma — kendi gözlemini yaz, ona atıf yapma.\n' >&2
+        exit 6
+      fi
+    fi
     OLUR=""
     if [ -n "$FEDERE_TAMAM" ]; then
       _olur_dogrula "$FEDERE_TAMAM"; drc=$?

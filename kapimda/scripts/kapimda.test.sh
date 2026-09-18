@@ -466,5 +466,35 @@ kos tazele "Lint Karti" --ozet "$(printf 'x%.0s' $(seq 1 700))" >/dev/null 2>&1
 cmp -s "$TZD/lint-once.md" "$KAPIMDA_DOSYA" && ok "T25 RED yolları dosyaya HİÇ yazmadı (fail-closed)" || kotu "T25 RED yolu dosyayı kirletti"
 kos lint >/dev/null 2>&1; [ $? -eq 0 ] && ok "T26 tazelenmiş dosya lint'ten geçer" || kotu "T26 tazeleme lint'i kırdı"
 
+# ══ D1 DAMGA KAPISI (Sultan-kararı 2026-09-18) ══════════════════════════════
+# Sultan'ın sözünü AKTARAN kapanış gerekçesi kaynağını taşımak zorunda; taşımıyorsa RC=6.
+_d1_kart(){ kos ac "$1" --ne "$G_NE" --nicin-sen "$G_NICIN" --yapilmazsa "$G_YAP" --bitince "$G_BIT" >/dev/null 2>&1; }
+
+# D1-1 · damgasız "Sultan onayladı" → RED (BEŞİR'in yakaladığı birebir vaka)
+_d1_kart "D1 Bir"
+kos bitti "D1 Bir" --gerekce "Sultan 12:50 nöbette bölge filmini onayladı" >/dev/null 2>&1
+[ $? -eq 6 ] && ok "D1-1 damgasız Sultan-aktarımı → RED (rc=6)" || kotu "D1-1 damgasız aktarım KAÇTI"
+
+# D1-2 · RED yolu kartı KAPATMAMIŞ olmalı (fail-closed)
+kos sahip "D1 Bir" >/dev/null 2>&1
+[ $? -eq 0 ] && ok "D1-2 reddedilen kapanış kartı AÇIK bıraktı" || kotu "D1-2 kart RED'e rağmen kapandı"
+
+# D1-3 · tam damga → GEÇER
+kos bitti "D1 Bir" --gerekce '2026-09-18 Sultan: filmi onayladı (sohbet · nöbet-1250 · "bölge filmini onayladım" · beyan:BEŞİR)' >/dev/null 2>&1
+[ $? -eq 0 ] && ok "D1-3 tam damgalı aktarım → GEÇER" || kotu "D1-3 tam damga reddedildi"
+
+# D1-4 · beyan eksik → RED (üç parçanın her biri ayrı ayrı zorunlu)
+_d1_kart "D1 Iki"
+kos bitti "D1 Iki" --gerekce '2026-09-18 Sultan: onayladı (sohbet · nöbet-1250 · "onayladım")' >/dev/null 2>&1
+[ $? -eq 6 ] && ok "D1-4 beyan: eksikse RED" || kotu "D1-4 beyansız aktarım kaçtı"
+
+# D1-5 · verbatim kırpık eksik → RED
+kos bitti "D1 Iki" --gerekce '2026-09-18 Sultan: onayladı (sohbet · nöbet-1250 · beyan:BEŞİR)' >/dev/null 2>&1
+[ $? -eq 6 ] && ok "D1-5 verbatim kırpık eksikse RED" || kotu "D1-5 kırpıksız aktarım kaçtı"
+
+# D1-6 · Sultan'a ATIF YOKSA kapı hiç devreye girmez (kendi gözlemi serbest)
+kos bitti "D1 Iki" --gerekce "soru kendiliğinden düştü: ürün tarafında karar verildi" >/dev/null 2>&1
+[ $? -eq 0 ] && ok "D1-6 Sultan'a atıf yoksa kapı devreye girmez" || kotu "D1-6 masum gerekçe bloklandı"
+
 echo; echo "── SONUÇ: $gecti geçti · $dustu kaldı ──"
 [ "$dustu" -eq 0 ]
