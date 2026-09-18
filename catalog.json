@@ -1,6 +1,6 @@
 {
   "version": "2.1",
-  "updated": "2026-09-17",
+  "updated": "2026-09-18",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -1453,6 +1453,13 @@
       "name": "/frontend-boost — etkili ama yalın sayfa tasarımı (GLOBAL)",
       "version": "0.2.0",
       "description": "Karşılama sayfası, ürünün açılış ekranı, sunum/broşür kapağı 'bir tasarımcı yapmış' densin diye tasarlanır: sahne · tek kahraman nesne · yazı görsel öğe · tek ışık · derinlik · tek açılış anı. Şablon (sahne.css + landing iskeleti), karakter alt kümeli yazı tipi aracı ve kontrastı GERÇEK zemin pikselinden ölçen araç birlikte gelir. Sıradan ürün içi ekranlar (form, tablo, ayar) için kullanılmaz. NAKKAŞ/AKAR doğurdu (Sultan 17 Eylül: 'bayıldım, sonuna kadar git'); MUAVİN filo geneline paketledi: tarayıcı yolu artık kutuya sabit değil, ölçülemeyen kontrast rc=3 ile 'ölçülemedi' der, temiz demez."
+    },
+    {
+      "id": "baglam-nobeti",
+      "type": "agent",
+      "name": "/baglam-nobeti — bağlam doluluk nöbeti (GLOBAL, Sultan kuralı)",
+      "version": "0.2.0",
+      "description": "Oturum bağlamı dolarken Sultan'ı asla sessizce geçmez: %70'te uyarı satırı, %80'de her cevabın başında kalın compact önerisi, %90'da yeni iş almama; compact'tan önce kutunun VAR OLAN çıpa dosyaları (cipa-bul.sh) tazelenir. Ölçü mekaniktir: PostToolUse kancası (nobet-kancasi.sh) her araç çağrısında transkriptten doluluğu hesaplar (baglam-olc.py); pencere filo kanonundan (ORTAK-MIMARI.md) okunur, [1m] eki transkriptin model-kimlik kaydından geri kazanılır. Ölçemediğinde 'ÖLÇÜLEMEDİ' der, yüzde uydurmaz. AKAR/MÜTEVELLİ doğurdu (0.1.0 salt kural), MUAVİN mekanik gövdeyle filo geneline paketledi."
     }
   ]
 }

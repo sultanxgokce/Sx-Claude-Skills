@@ -180,6 +180,9 @@
     ],
     "frontend-boost": [
       "_global"
+    ],
+    "baglam-nobeti": [
+      "_global"
     ]
   }
 }
