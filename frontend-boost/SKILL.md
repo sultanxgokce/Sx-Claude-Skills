@@ -1,6 +1,6 @@
 ---
 name: frontend-boost
-version: 0.3.0
+version: 0.4.0
 allowed-tools: Bash, Read, Write, Edit
 description: Bir sayfanın (karşılama sayfası, ürünün açılış ekranı, sunum kapağı, broşür kapağı) "bunu bir tasarımcı yapmış" dedirtecek biçimde, etkili ama yalın tasarlanması istendiğinde kullan. Tetikleyiciler — "/frontend-boost", "daha efektli ama minimal", "vasat durmasın", "premium görünsün", "landing page", "sahne", "wow etkisi". Formülü, belirteçleri, hazır şablonu, ölçüm araçlarını ve düşülen tuzakları içerir. Sıradan ürün içi ekranlar (form, tablo, ayar) için KULLANMA.
 ---
@@ -20,6 +20,14 @@ Işık sahnesi ürünün Bugün ekranına kondu, ölçümler yeşildi, Sultan **
 3. **Eski tasarımı korumak bir değer değildir.** Yeni dil sayfanın geri kalanına uymuyorsa geri kalan yeniden çizilir; "eskiyi bozmayalım" gerekçesiyle iki dil bir sayfada bırakılmaz.
 4. **Sahnedeki nesne anlamını taşımalı.** Grafik güzel ama neyi saydığı okunmuyorsa ("Ferrari'ye Tofaş direksiyonu") bitmemiştir: eksen, ölçek, gösterge, tek satır açıklama sahnenin parçasıdır.
 5. **Kendi ölçütün:** teslimden önce sayfayı en üstten en alta kaydır; iki farklı elin izi görünüyorsa iş bitmemiştir. Bunu kareyle kanıtla (tam boy kare, üç genişlik).
+
+## 🔴 ÜÇ İLKE KAPISI — Sultan'ın üçüncü dersi (18 Eylül 2026, 11:02)
+mukarnas.net ana sayfa v14b Sultan'a gitti; sahne şıktı, ölçümler yeşildi. Sultan altı eleştiri döndürdü: *"kesit çizimi amatör yapılmış kötü bir rölöve gibi"*, *"öğeler hizasız ve medya açılmıyor"* (görsel `file:///` yolundaydı, Sultan'ın ekranında siyah kutu), *"'Kurumsal sistemler geliştiriyoruz. Ankara.' amatör oldu, yazı ile arka plan ilişkisi oturmadı"*, *"tüm sayfadaki ifadeler kontrol edilmeli; anlamsız, anlamı düşük, saçma şey yazmamalı; önemli noktalara vurgu"*, *"adım hiçbir yerde geçmesin"*. Sonra kural koydu: **"Kurumsallık, orijinallik ve güçlü anlatım ilkelerinden geçmeyen tasarımlar bana sunulmayacak."**
+**Kapı (pazarlıksız — Sultan'a sunmadan önce üçü de "geçti" olmalı; biri kalırsa teslim yok):**
+1. **Kurumsallık.** Her öğe bir profesyonelin elinden çıkmış gibi durur. Amatör görünen tek çizim, tek ikon, tek çerçeve sayfayı düşürür: **ustaca yapılamayan öğe sayfaya girmez** (kesit çizilemiyorsa kesit yok; planla aynı elden ikinci plan). Aynı tür öğeler tek çerçeve dili (köşe, çizgi ağırlığı, gölge), tek boşluk ritmi, tek hiza çizgisi. Kişi adı hiçbir yerde; kurum kimliği kurum adıyla.
+2. **Orijinallik.** Sayfa tek fikirden çıkmış görünür ve o fikir gövdede de sürer (sahnedeki motif alt bölümlerde iz bırakır). Aynı kahraman iki sayfada kullanılmaz. Şablon kokan kalıp ("… geliştiriyoruz. Şehir.") yok.
+3. **Güçlü anlatım.** Her cümle bir iş görür; anlamı düşük, dolgu, "saçma" cümle sıfır. Önemli 3–5 nokta görünür biçimde vurgulanır (boy, yer, mürekkep), gerisi sessiz. Alt cümle başlıkla aynı aileden, aynı hizada, zeminle konumla bağ kurar — küçük gri sans koyu zeminde yüzmez. Metin denetimi ayrı bir göz (yazı sahibi) tarafından satır satır yapılır; sonucu yazılıdır.
+**Teslim öncesi zorunlu prova:** hub kopyasını **kutudan bağımsız** aç (geçici klasöre kopyala; `file:///` ve mutlak yol 0; görsel/yazı tipi gömülü), 1440/1360/390 tam boy kareye bak, hiza çizgilerini ölç (metin bloğu ile görsel aynı üst çizgide; dikiş/çizgi görselin üstünden geçmez), sayfada kişi adı 0. Bu üç ilkeden geçtiğini **tek satırla yazıp** teslim et; yazmadan sunulan iş sunulmamış sayılır.
 
 ## Ne zaman, ne zaman değil
 | Kullan | Kullanma |
@@ -91,6 +99,7 @@ Yapay zekâ varlığı süsle değil **içerikle** gösterilir: sayfa cümleyle 
 - [ ] Kareye **kendi gözünle** bakıldı · insana kare **ve** dosya gitti
 - [ ] Ürüne girecekse: sahne ayrı bir yüzey olarak reçetelendi (sınırları ölçülebilir), kapı **gevşetilmedi**
 - [ ] **Yama değil:** sayfanın tamamı aynı elden (yazı ailesi, zemin, aralık, punto, hareket); tam boy karede tek dil; sahnenin altı eski kalmış sayfa **teslim edilmedi**
+- [ ] **Üç ilke kapısı:** kurumsallık (amatör öğe 0, tek çerçeve dili, kişi adı 0) · orijinallik (tek fikir gövdede sürer, kahraman tekrarı 0) · güçlü anlatım (zayıf cümle 0, 3–5 vurgu, yazı sahibi denetimi yazılı) · hub kopyası kutudan bağımsız açıldı, `file:///` 0
 
 ## Paket içeriği
 `sablon/sahne.css` belirteçler + koyu sahne + stüdyo sahnesi + hap düğme + dev yazı + havada duran nesne ·

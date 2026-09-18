@@ -12,3 +12,5 @@ description: Bu sayfayı "bir tasarımcı yapmış" dedirtecek biçimde, etkili 
 Sıradan ürün içi ekranlarda (form, tablo, ayar) bu beceriyi kullanma; orada ürünün kendi tasarım dili geçerlidir.
 
 🔴 **YAMA YASAK (Sultan, 18 Eylül):** iş birimi sayfanın tamamıdır; sahnesi yeni, altı eski sayfa teslim edilmez, pakete girmez, yayınlanmaz. Kaydırınca iki dil görünüyorsa bitmemiştir.
+
+🔴 **ÜÇ İLKE KAPISI (Sultan, 18 Eylül 11:02):** kurumsallık · orijinallik · güçlü anlatım ilkelerinden geçmeyen tasarım Sultan'a sunulmaz. Amatör öğe sayfaya girmez, kişi adı 0, her cümle iş görür ve 3–5 nokta vurgulanır, hub kopyası kutudan bağımsız açılır (`file:///` 0). Üçü de "geçti" diye yazılmadan teslim yok.
