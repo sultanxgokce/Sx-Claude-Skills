@@ -35,5 +35,38 @@ kapi "T5b argümansız çıktıda yığın izi yok" "0" "$(cikti python3 "$KOK/f
 kapi "T6 sözdizimi temiz (py)" "0" "$(rc python3 -c "import ast;ast.parse(open('$KOK/font-altkume.py').read())")"
 kapi "T6b sözdizimi temiz (mjs)" "0" "$(rc node --check "$KOK/kontrast-olc.mjs")"
 
-printf '\ngeçti=%s · kaldı=%s\n' "$G" "$K"
-[ "$K" -eq 0 ]
+# T7-T9 🔴 ÖZEL SEÇİCİ GİZLENMİYORDU (MUAVİN, 2026-09-19): gizleme stili sabit seçicilerle
+# yazılıydı; FRONTEND_BOOST_SECICILER ile verilen metin saydam yapılmıyor, zemin yerine yazının
+# KENDİ pikseli okunuyor, oran 1,00 çıkıyordu (eşik ihlali gibi görünen sahte ölçüm).
+kapi "T7 gizleme listesi SECICILER'i de kapsar (kodda)" "1" "$(grep -c '^const GIZLE = .*SECICILER' "$KOK/kontrast-olc.mjs")"
+kapi "T7b oran 1,00 → ölçülemedi kapısı kodda" "1" "$(grep -c 'olculemeyen.length > 0' "$KOK/kontrast-olc.mjs")"
+
+# Tarayıcılı kapılar: bu kutuda tarayıcı yoksa KOŞMAZ ve "geçti" SAYILMAZ — ölçülemedi diye ayrı sayılır.
+U=0
+olcul(){ U=$((U+1)); printf '  ⊘ %s — ÖLÇÜLEMEDİ (tarayıcı yok/başlamadı; FRONTEND_BOOST_PW ver)\n' "$1"; }
+cat > "$TMP/ozel.html" <<'H'
+<!doctype html><meta charset="utf-8"><style>body{margin:0;background:#fff}.sahne{background:#120e0a;height:600px;padding:40px}p{margin:0;font:700 48px sans-serif}.ozel{color:#f4ede2}.ayni{color:#120e0a}</style>
+<div class="sahne"><p class="ozel">Özel seçicili metin</p></div>
+H
+cat > "$TMP/ayni.html" <<'H'
+<!doctype html><meta charset="utf-8"><style>body{margin:0;background:#fff}.sahne{background:#120e0a;height:600px;padding:40px}p{margin:0;font:700 48px sans-serif}.ayni{color:#120e0a}</style>
+<div class="sahne"><p class="ayni">Zeminle aynı renkte metin</p></div>
+H
+calistir(){ FRONTEND_BOOST_SECICILER="$1" node "$KOK/kontrast-olc.mjs" "file://$2" >"$TMP/cikti" 2>&1; printf '%s' $?; }
+tarayicisiz(){ [ "$1" = 3 ] && grep -qE 'çalışma-zamanı|başlatılamadı' "$TMP/cikti"; }
+r="$(calistir .ozel "$TMP/ozel.html")"
+if tarayicisiz "$r"; then olcul "T8 yalnız SECICILER ile verilen metin zeminden ölçülür (rc=0)"
+else kapi "T8 yalnız SECICILER ile verilen metin zeminden ölçülür (rc=0; eskiden 1,00 → rc=1)" "0" "$r"
+     kapi "T8b ölçülen oran 1,00 DEĞİL" "0" "$(grep -c '=1 (en açık' "$TMP/cikti")"; fi
+r="$(calistir .ayni "$TMP/ayni.html")"
+if tarayicisiz "$r"; then olcul "T9 oranı 1,00 çıkan kutu ölçülemedi sayılır (rc=3)"
+else kapi "T9 oranı 1,00 çıkan kutu ölçülemedi sayılır (rc=3, rc=1 DEĞİL)" "3" "$r"
+     kapi "T9b stderr nedeni söyler" "1" "$(grep -c 'ÖLÇÜLEMEDİ: .* kutuda oran 1,00' "$TMP/cikti")"; fi
+
+printf '\ngeçti=%s · kaldı=%s · ölçülemedi=%s\n' "$G" "$K" "$U"
+[ "$K" -eq 0 ] || exit 1
+if [ "$U" -gt 0 ]; then
+  echo "⚠️  $U tarayıcılı kapı KOŞMADI — bu kutuda kontrast düzeltmesi ÖLÇÜLMEDİ, yalnız kaynak kapıları geçti."
+  [ "${FRONTEND_BOOST_TEST_KATI:-0}" = 1 ] && exit 3
+fi
+exit 0

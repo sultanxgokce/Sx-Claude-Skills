@@ -1,6 +1,6 @@
 {
   "version": "2.1",
-  "updated": "2026-09-18",
+  "updated": "2026-09-19",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -1451,8 +1451,36 @@
       "id": "frontend-boost",
       "type": "agent",
       "name": "/frontend-boost — etkili ama yalın sayfa tasarımı (GLOBAL)",
-      "version": "0.4.0",
-      "description": "Karşılama sayfası, ürünün açılış ekranı, sunum/broşür kapağı 'bir tasarımcı yapmış' densin diye tasarlanır: sahne · tek kahraman nesne · yazı görsel öğe · tek ışık · derinlik · tek açılış anı. Şablon (sahne.css + landing iskeleti), karakter alt kümeli yazı tipi aracı ve kontrastı GERÇEK zemin pikselinden ölçen araç birlikte gelir. Sıradan ürün içi ekranlar (form, tablo, ayar) için kullanılmaz. NAKKAŞ/AKAR doğurdu (Sultan 17 Eylül: 'bayıldım, sonuna kadar git'); MUAVİN filo geneline paketledi: tarayıcı yolu artık kutuya sabit değil, ölçülemeyen kontrast rc=3 ile 'ölçülemedi' der, temiz demez."
+      "version": "0.5.0",
+      "description": "Karşılama sayfası, ürünün açılış ekranı, sunum/broşür kapağı 'bir tasarımcı yapmış' densin diye tasarlanır: sahne · tek kahraman nesne · yazı görsel öğe · tek ışık · derinlik · tek açılış anı. Şablon (sahne.css + landing iskeleti), karakter alt kümeli yazı tipi aracı ve kontrastı GERÇEK zemin pikselinden ölçen araç birlikte gelir. 0.5.0 (Sultan 19 Eylül): her UI/tasarım işinde frontend-design ile BİRLİKTE zorunlu; frontend-design'ın güçlü yanları 'Devralınan disiplin' olarak içeride ve form/tablo/panel dahil her işte geçerli, sahne formülü yalnız önemli yüzeylerde. Dördüncü kapı tasarim-citasi (kütüphanesiz kutuda 'çıta kıyası yapılamadı' yazılır); referans arşivinden (55 broşür + 50 sunum) basılı ve sunum dersleri eklendi. Kontrast aracı onarıldı: FRONTEND_BOOST_SECICILER ile verilen metin gizlenmiyor, oran 1,00 çıkıyordu; artık gizleniyor ve 1,00 kalan kutu rc=3 'ölçülemedi' der. NAKKAŞ/MÜTEVELLİ/AKAR doğurdu; MUAVİN filo geneline paketledi."
+    },
+    {
+      "id": "arayuz-zanaati",
+      "type": "agent",
+      "name": "/arayuz-zanaati — arayüz zanaatı: garip, amatör durmasın (GLOBAL)",
+      "version": "0.1.0",
+      "description": "Web sayfası ya da uygulama ekranı yazılırken, değiştirilirken ve denetlenirken tasarım zevki değil ZANAAT: tek aralık ölçeği, yakınlık, tek sol kenar, düğme-kutu aynı boy, tek yarıçap ailesi, her durum (otomatik doldurma dahil), koyu temada color-scheme, form temelleri, tipografi, tarayıcı tuzakları, tablo kuralları. KURALLAR.md (kırk belirti → çare, CSS parçaları) + KONTROL-LISTESI.md (kırk maddelik yayın öncesi bakış). Sultan 19 Eylül: 'kutucuklarda gariplik var, harmoni olmamış'. MÜTEVELLİ/AKAR doğurdu (38 sayfalık kaynaklı tarama); MUAVİN filo geneline paketledi."
+    },
+    {
+      "id": "sunum-hazirlama",
+      "type": "agent",
+      "name": "/sunum-hazirlama — karar vericiye sunumun içeriği ve anlatımı (GLOBAL)",
+      "version": "0.1.0",
+      "description": "Toplantı sunumunda ne anlatılır, hangi sırayla, slaytta ne görünür, sunan ne söyler, demo nereye girer: beş anlatı iskeleti, slayt kuralları (başlık = sonuç cümlesi, yatay akış ve üç saniye sınavı), görür/söyler ayrımı, önce son ekranı gösteren canlı demo, açılış/kapanış, temkinli komite, süre dağılımı, yirmi maddelik kapı ve referans arşivinden (50 deste) dersler. Kuruma özgü kapılar (fiyat, oran, pilot süresi, kurum adı, şov anı) 'kuruma göre değişir' diye işaretli. MÜTEVELLİ/AKAR doğurdu (Sultan 19 Eylül); MUAVİN filo geneline paketledi."
+    },
+    {
+      "id": "brosur-hazirlama",
+      "type": "agent",
+      "name": "/brosur-hazirlama — basılı broşürün biçimi, içeriği ve kapısı (GLOBAL)",
+      "version": "0.1.0",
+      "description": "Katlamalı broşür ve föy: broşür sunum değildir; katlama anlatı aracıdır, panel tek başına tamamdır. SKILL.md biçim ölçütleri (A–G) + ICERIK.md (okur ve okuma anı, panel başına cevaplanan soru, şart/seçmeli bloklar, özellik → fayda → dayanak, yirmi maddelik içerik kapısı, ikinci kişi testi) + ölçülebilenleri ölçen brosur-kapi.mjs (kelime, punto, metin alanı, kırıma yakın metin, yasak söz; tarayıcı ya da PDF sayacı yoksa rc=3 ölçülemedi). AKAR kararları (tablo yok, süre rakamı yok, yasak söz listesi) 'kuruma göre değişir' diye işaretli. MÜTEVELLİ/AKAR doğurdu; MUAVİN filo geneline paketledi."
+    },
+    {
+      "id": "tasarim-citasi",
+      "type": "agent",
+      "name": "/tasarim-citasi — referans kütüphanesiyle kalite çıtası, dördüncü kapı (GLOBAL)",
+      "version": "0.1.0",
+      "description": "Sultan 18 Eylül: 'Bu seviyenin altında iş çıkarmayın.' Her tasarım teslimi referans tasarımcı kütüphanesindeki en yakın iyi örnekle yan yana konur ve on maddelik kapıdan geçer; beğeniden çıkan B kuralları ve referans arşivi dersleri içeride. Kütüphane yolu TASARIM_CITASI_KUTUPHANE (varsayılan hub /config/evraklar/Sultan/1-Calisma/AKAR/tasarim-referans); erişemeyen kutuda 'çıta kıyası yapılamadı' yazılır, sessizce atlanmaz. frontend-boost ve üç ilke kapısının üstüne biner. NAKKAŞ/AKAR doğurdu; MUAVİN filo geneline paketledi."
     },
     {
       "id": "sergi",
