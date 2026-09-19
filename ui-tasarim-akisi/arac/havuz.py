@@ -45,7 +45,7 @@ ANAHTARLAR = {
     "kutu":   r"^[a-z0-9][a-z0-9-]{0,23}$",
     "urun":   r"^[a-z0-9][a-z0-9-]{0,23}$",
     "ekran":  r"^[a-z0-9][a-z0-9._-]{0,39}$",
-    "kapi":   r"^(yogunluk|yargi|tik)$",
+    "kapi":   r"^(yogunluk|yargi|tik|ayirt)$",
     "hukum":  r"^(temiz|kirmizi|olcemedi|emin-degilim)$",
     "arac":   r"^[0-9]+\.[0-9]+\.[0-9]+$",
 }
@@ -71,6 +71,14 @@ SECIMLI = {
     # gerekce: hedef kırmızı kaydın id'si. `iptal` mezar-taşının kardeşi — hedefi
     #   geçersiz KILMAZ, ona gerekçe BAĞLAR (salt-ekleme korunur).
     "gerekce":     r"^[0-9a-f]{12}$",
+    # ── AYIRT-EDİCİLİK (L77, 2026-08-25) — ölçülmüş boşluğun kapatılması.
+    #   Ölçüm: filo'nun UI kapılarında "bu ekran ayırt edici mi, şablona mı düştü"
+    #   diye soran TEK BİR madde yoktu (rubrik 0, çekirdek sözleşme 0 eşleşme).
+    #   Estetik yargı mekanikleştirilemez — ama YARGI VERİLDİ Mİ, o mekanik sorulur.
+    # klise: hangi hazır kalıba düşüldüğü (kapalı küme; "yok" = düşülmedi).
+    "klise":       r"^(krem-serif-toprak|siyah-neon|gazete-hatti|mor-gradyan|merkezli-kart|yok)$",
+    # imza: sayfanın hatırlanacağı öğe NEREDE yaşıyor (boldluk tek yere harcanır).
+    "imza":        r"^(tipografi|malzeme|isik|oran|hareket|yerlesim|yok)$",
 }
 SEBEPLER = ("olcmeden-yazildi", "yanlis-profil", "tekrar", "test-artigi")
 
@@ -154,7 +162,17 @@ def yaz(argv, yol):
         kayit["ders"] = al("ders")
     if al("dusen-karar"):
         kayit["dusen_karar"] = al("dusen-karar")
+    if al("klise"):
+        kayit["klise"] = al("klise")
+    if al("imza"):
+        kayit["imza"] = al("imza")
     hata = dogrula(kayit)
+    # AYIRT kapısında yargı BOŞ GEÇİLEMEZ (L77): "ölçtüm" demek yetmez, NE gördüğün yazılır.
+    # Aksi hâlde alan şemada durur ama kimse doldurmaz — süs-alan sınıfı.
+    if kayit["kapi"] == "ayirt":
+        for a in ("klise", "imza"):
+            if a not in kayit:
+                hata.append("kapi=ayirt için --%s ZORUNLU (yargısız ayırt-ölçümü olmaz)" % a)
     if hata:
         sys.stderr.write("HAVUZ REDDETTİ — kayıt yazılmadı:\n")
         for h in hata:
@@ -336,6 +354,43 @@ def gerekce_kapisi(argv, yol):
     return 1
 
 
+def ayirt_kapisi(argv, yol):
+    """AYIRT KAPISI (L77 · 2026-08-25): ayırt-edicilik yargısı verilmeden sonraki sayfa çizilmez.
+
+    Niçin mekanik değil de "yargı verildi mi" sorusu: çarpıcılık ölçülemez, ama
+    ÖLÇÜLMESİ GEREKTİĞİ hatırlatılabilir. Bugüne dek hiçbir kapı bunu sormuyordu;
+    sonuç sözleşmeye uyan ama birbirinin aynısı ekranlardı.
+
+    KAPI 5'in (gerekçe) kardeşidir ve aynı yerde koşar: prompt-yap.sh. Yazma yolunda
+    DURMAZ — ölçümü kaybetmek dersi kaybetmekten beterdir.
+    ÇIKIŞ: 0 kapı AÇIK · 1 KAPALI (ayırt yargısı yok) · 2 kullanım
+    """
+    def al(ad):
+        return argv[argv.index("--" + ad) + 1] if "--" + ad in argv else None
+    alan = {a: al(a) for a in ("kutu", "urun", "ekran")}
+    if not all(alan.values()):
+        sys.stderr.write("kullanım: havuz.py ayirt-kapisi --kutu X --urun X --ekran Y\n")
+        return 2
+    hepsi = gecerli(satirlar(yol))
+    onceki = [k for k in hepsi
+              if k["kutu"] == alan["kutu"] and k["urun"] == alan["urun"]
+              and k["ekran"] == alan["ekran"]]
+    if not onceki:
+        return 0            # ilk sayfa: kıyaslanacak öncesi yok
+    if any(k["kapi"] == "ayirt" for k in onceki):
+        return 0
+    sys.stderr.write("KAPI KAPALI — '%s' sayfası için AYIRT-EDİCİLİK yargısı yok.\n"
+                     % alan["ekran"])
+    sys.stderr.write("  Sözleşmeye uyan ama birbirinin aynısı ekranlar tam burada doğar.\n")
+    sys.stderr.write("  Rubrik: sablonlar/estetik-guc-v1.md · yargıyı yaz:\n")
+    sys.stderr.write("    havuz.py yaz --kutu %s --urun %s --ekran %s --kapi ayirt \\\n"
+                     % (alan["kutu"], alan["urun"], alan["ekran"]))
+    sys.stderr.write("      --hukum <temiz|kirmizi> --klise <krem-serif-toprak|siyah-neon|"
+                     "gazete-hatti|mor-gradyan|merkezli-kart|yok> \\\n")
+    sys.stderr.write("      --imza <tipografi|malzeme|isik|oran|hareket|yerlesim|yok>\n")
+    return 1
+
+
 def satirlar(yol):
     if not os.path.isfile(yol):
         return []
@@ -470,8 +525,10 @@ def main(argv):
         return gerekce(argv, yol)
     if komut == "gerekce-kapisi":
         return gerekce_kapisi(argv, yol)
+    if komut == "ayirt-kapisi":
+        return ayirt_kapisi(argv, yol)
     sys.stderr.write("bilinmeyen komut: %s "
-                     "(yaz|oku|ozet|iptal|gerekce|gerekce-kapisi)\n" % komut)
+                     "(yaz|oku|ozet|iptal|gerekce|gerekce-kapisi|ayirt-kapisi)\n" % komut)
     return 2
 
 
