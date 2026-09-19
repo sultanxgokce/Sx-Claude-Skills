@@ -1455,9 +1455,9 @@
       "description": "Karşılama sayfası, ürünün açılış ekranı, sunum/broşür kapağı 'bir tasarımcı yapmış' densin diye tasarlanır: sahne · tek kahraman nesne · yazı görsel öğe · tek ışık · derinlik · tek açılış anı. Şablon (sahne.css + landing iskeleti), karakter alt kümeli yazı tipi aracı ve kontrastı GERÇEK zemin pikselinden ölçen araç birlikte gelir. Sıradan ürün içi ekranlar (form, tablo, ayar) için kullanılmaz. NAKKAŞ/AKAR doğurdu (Sultan 17 Eylül: 'bayıldım, sonuna kadar git'); MUAVİN filo geneline paketledi: tarayıcı yolu artık kutuya sabit değil, ölçülemeyen kontrast rc=3 ile 'ölçülemedi' der, temiz demez."
     },
     {
-      "id": "kutuphane-katalog",
+      "id": "sergi",
       "type": "agent",
-      "name": "/kutuphane-katalog — görsel kütüphane ve katalog standardı (GLOBAL)",
+      "name": "/sergi — görsel kütüphane ve katalog standardı (GLOBAL)",
       "version": "0.1.0",
       "description": "Toplanan dosya, kaynak, referans örneği ya da kayıt koleksiyonunu arama + filtre + önizlemeli, taşınabilir tek-klasör HTML kataloğa dönüştürür; Sultan'ın beğendiği AKAR referans kataloğu düzeni varsayılan. Filo standardı: önizlemeli 20+ varlık ya da Sultan'a/dışarıya sürümlü koleksiyon teslim eden işte zorunlu. Üretici yalnız Python standart kütüphanesiyle çalışır, ağa çıkmaz, var olan klasörün üzerine yazmaz. Sultan'ın çalıştığı bir ajan doğurdu (19 Eylül: 'çok pür ve temiz, standart yapalım'); MUAVİN filoya paketledi: dosya yolu kapsam kapısı, paylaşılabilir klasör izni, Türkçe tetikleyiciler, 8 test."
     },

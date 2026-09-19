@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# kutuphane-katalog — Python sınamalarını depo kapısına bağlar.
+# sergi — Python sınamalarını depo kapısına bağlar.
 # NİÇİN: depo CI'ı yalnız *.test.sh koşar; test_catalog.py tek başına hiçbir kapıda
 # koşmuyordu ("test yazmak onu koşturmaz"). Bu sarmalayıcı onu her PR'da koşturur.
 set -uo pipefail

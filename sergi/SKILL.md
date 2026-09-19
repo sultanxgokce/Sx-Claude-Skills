@@ -1,8 +1,8 @@
 ---
-name: kutuphane-katalog
+name: sergi
 version: 0.1.0
 allowed-tools: Bash, Read, Write, Edit
-description: Toplanan dosyaları, araştırma kaynaklarını, referans örneklerini ya da kayıt koleksiyonunu arama + filtre + önizlemeli, taşınabilir tek-klasör HTML kataloğa dönüştürür (Sultan'ın beğendiği AKAR referans kataloğu düzeni varsayılan). Tetikleyiciler — "katalog yap", "kütüphane oluştur", "arşivi gezilebilir yap", "kaynakları topla ve sun", "referans örnekleri bul", "web'i kaz", "koleksiyon", "/kutuphane-katalog". Filo standardı: önizlemeli 20+ varlık teslim eden ya da Sultan'a/dışarıya sürümlü koleksiyon teslim eden işte ZORUNLU. Tek dosya düzenlemesi, kısa not klasörü, hesaplı/canlı veri isteyen uygulama için KULLANMA.
+description: Toplanan dosyaları, araştırma kaynaklarını, referans örneklerini ya da kayıt koleksiyonunu arama + filtre + önizlemeli, taşınabilir tek-klasör HTML kataloğa dönüştürür (Sultan'ın beğendiği AKAR referans kataloğu düzeni varsayılan). Tetikleyiciler — "katalog yap", "kütüphane oluştur", "arşivi gezilebilir yap", "kaynakları topla ve sun", "referans örnekleri bul", "web'i kaz", "koleksiyon", "/sergi". Filo standardı: önizlemeli 20+ varlık teslim eden ya da Sultan'a/dışarıya sürümlü koleksiyon teslim eden işte ZORUNLU. Tek dosya düzenlemesi, kısa not klasörü, hesaplı/canlı veri isteyen uygulama için KULLANMA.
 ---
 
 # Görsel kütüphane ve katalog
@@ -27,7 +27,7 @@ Kullanıcının istediği koleksiyonu, dosyaların yanında keşfedilebilir bir 
 7. **Teslim et.** Kullanıcının seçtiği hedefe tüm katalog klasörünü kopyala; var olan farklı dosyaların üzerine sessizce yazma. Son mesajda gerçek kayıt sayısını, katalog bağlantısını, mutlak klasör yolunu ve önemli eksikleri belirt. Araştırmanın ara çıktılarıyla teslim klasörünü doldurma.
 
 ```bash
-python3 /config/.claude/skills/kutuphane-katalog/scripts/build_catalog.py \
+python3 /config/.claude/skills/sergi/scripts/build_catalog.py \
   /tam/yol/manifest.json \
   --out /tam/yol/yeni-katalog
 ```
