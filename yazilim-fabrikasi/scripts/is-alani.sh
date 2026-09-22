@@ -66,14 +66,32 @@ kapsam_kontrol() {
 }
 
 ac() {
-  local is="" dosyalar=""
+  local is="" dosyalar="" kartsiz=0
   while [ $# -gt 0 ]; do
     case "$1" in
       --dosyalar) dosyalar="${2:-}"; shift 2 ;;
+      --kartsiz) kartsiz=1; shift ;;
       *) is="$1"; shift ;;
     esac
   done
-  [ -n "$is" ] || { _hata "iş adı gerekiyor: is-alani.sh ac <iş> [--dosyalar a,b,c]"; exit 1; }
+  [ -n "$is" ] || { _hata "iş adı gerekiyor: is-alani.sh ac <iş> [--dosyalar a,b,c] [--kartsiz]"; exit 1; }
+  # 0. adım kapısı: iş kartı yoksa alan açılmaz (K6 — sınıf işin başında belli olur). Kaçış: --kartsiz →
+  # kart ARAÇ tarafından "cevapsız" açılır ve sultan=true damgalanır (şüphede sınıf yukarı); kaçış gün sonu özetinde görünür.
+  local kart="$DEPO/_agents/fabrika/kartlar/$is.json"
+  if [ ! -f "$kart" ]; then
+    if [ "$kartsiz" -eq 0 ]; then
+      _hata "iş kartı yok: $is — önce: bash $HERE/kart.sh ac $is --is \"…\" --istedi … --aldi … --geri-alinamaz/--para/--dis-yuzey/--yetki e|h|?"
+      _hata "  (kaçış: --kartsiz → kart cevapsız açılır ve Sultan'a gider)"; exit 1
+    fi
+    mkdir -p "$(dirname "$kart")"
+    python3 - "$kart" "$is" <<'PY'
+import json,sys,datetime
+yol,is_=sys.argv[1:]
+json.dump({"is":is_,"cumle":"(kartsız açıldı — --kartsiz kaçışı)","istedi":"?","aldi":"?","zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
+           "sinif_cevaplari":{},"siniflar":["cevapsiz"],"sultan":True,"kanit_nerede":"","oda":"","durum":"acik","kacis":True,"gecmis":[]},open(yol,"w"),ensure_ascii=False,indent=2)
+PY
+    _bilgi "⚠ --kartsiz: kart CEVAPSIZ açıldı, sultan=true damgalı (şüphede sınıf yukarı); gün sonu özetinde görünür"
+  fi
   git -C "$DEPO" fetch -q origin || { _hata "fetch düştü — taze başlangıç garanti edilemez, DURDUM"; exit 1; }
   if git -C "$DEPO" show-ref --verify --quiet "refs/heads/$is"; then
     _hata "'$is' dalı zaten var — başka ad seç ya da önce kapat (asla zorla üstüne yazma)"; exit 1
@@ -88,7 +106,8 @@ ac() {
   mkdir -p "$KOK"
   [ -e "$yol" ] && { _hata "$yol zaten var"; exit 1; }
   git -C "$DEPO" worktree add -q -b "$is" "$yol" "origin/$ANA" || { _hata "worktree açılamadı"; exit 1; }
-  _bilgi "✓ çalışma alanı hazır (origin/$ANA üstünde, TAZE)"
+  mkdir -p "$yol/_agents/fabrika/kartlar" && cp "$kart" "$yol/_agents/fabrika/kartlar/"   # kart PR ile birlikte gider
+  _bilgi "✓ çalışma alanı hazır (origin/$ANA üstünde, TAZE) · kart kopyalandı"
   _bilgi "  cd $yol"
   _bilgi "  ⚠ worktree PAYLAŞILAN KAYNAĞI izole etmez: port · veritabanı · kilit dosyası ortaktır;"
   _bilgi "    port cevap veriyorsa SENİN süreç mi bak; kilit çakışırsa elle birleştirme, yeniden üret."

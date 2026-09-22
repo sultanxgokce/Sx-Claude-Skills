@@ -4,9 +4,9 @@
 
 F=/config/.claude/skills/yazilim-fabrikasi
 
-0. KABUL — iş kartı dört satır: kim istedi · kim aldı · ne zaman · kanıt nerede olacak.
-   Sınıf sor: geri alınamaz mı · para mı · dış yüzey mi · yetki genişletiyor mu → biri evet/emin değilsen SULTAN.
-   Şüphede sınıf YUKARI. Sınıfsız iş ekipte biter, gün sonu özetine girer. (adım: $F/adimlar/0-kabul.md)
+0. KABUL — `bash $F/scripts/kart.sh ac <iş> --is "…" --istedi … --aldi … --geri-alinamaz/--para/--dis-yuzey/--yetki e|h|?`
+   Dört sınıf sorusu cevapsız kart açılmaz; biri evet ya da "?" ise iş SULTAN'a gider. Şüphede sınıf YUKARI.
+   Sınıfsız iş ekipte biter; bitince `kart.sh bitti` → gün sonu özeti (`gun-sonu.sh`) defterden üretilir. ($F/adimlar/0-kabul.md)
 
 1. İZOLE — `bash $F/scripts/is-alani.sh ac <iş>` → origin/main'den taze alan. Ana dalda ASLA çalışma.
    Başkasının alanına, dalına, kayıtsız işine dokunma. Açık PR'la dosya çakışıyorsa DUR ve sor.
