@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# pre-commit — PAYLAŞILAN çalışma ağacında ÖZELLİK DALINA commit'i engeller. (yazilim-fabrikasi · fabrika-kur.sh --kanca kurar)
+#
+# NİÇİN VAR (cloudtop, 2026-08-04, aynı gün üç canlı vaka): depo birden çok ajanın ortak alanı.
+# Dal global ve değişken bir durum: sen `checkout -b` yapıp çalışırken başka bir ajan `checkout`
+# derse dal ayağının altından çekilir ve sonraki commit'lerin ONUN dalına düşer. Bir keresinde
+# 16 dosyalık commit başkasının PR'ına karıştı; ancak elle fark edildi.
+#
+# KURAL (dar ve kasıtlı):
+#   · Kendi worktree'nde  → HER dal serbest (izole, kimse çekemez)
+#   · Paylaşılan ağaçta   → yalnız `main` serbest (mühürleyici gibi otomatik işler burada koşar)
+#   · Paylaşılan ağaçta özellik dalı → BLOKE + ne yapılacağı yazılı
+#
+# Kaçış: acil durumda `PAYLASILAN_COMMIT=1 git commit …`. Kaçışı KULLANDIYSAN sebebi commit
+# mesajına yaz — sessiz bypass, korumanın kendisini çürütür.
+set -u
+
+[ "${PAYLASILAN_COMMIT:-0}" = "1" ] && exit 0
+
+d="$(git rev-parse --absolute-git-dir 2>/dev/null || echo x)"
+c="$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null || echo y)"
+[ "$d" != "$c" ] && exit 0            # linked worktree → güvenli, karışma
+
+dal="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")"
+[ "$dal" = "main" ] || [ "$dal" = "master" ] || [ "$dal" = "HEAD" ] && exit 0
+
+IS_ALANI="${FABRIKA_IS_ALANI:-/config/.claude/skills/yazilim-fabrikasi/scripts/is-alani.sh}"
+cat >&2 <<MESAJ
+
+✗ PAYLAŞILAN çalışma ağacında özellik dalına commit engellendi.
+  dal: $dal
+
+  NEDEN: bu depo birden çok ajanın ortak alanı. Başka bir ajan dal değiştirirse
+  commit'in ONUN dalına düşer — 2026-08-04'te üç kez oldu, biri başkasının PR'ına karıştı.
+
+  YAPILACAK (işini kaybetmeden):
+    bash $IS_ALANI ac $dal-2
+    # değişikliklerini oraya taşı (git diff > yama.patch / git apply), commit'le
+
+  Acil durumda:  PAYLASILAN_COMMIT=1 git commit …   (sebebi mesaja yaz)
+
+MESAJ
+exit 1
