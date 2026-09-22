@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DENETIM — bağımsız göz çıktısı (yazilim-fabrikasi)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["kod_puani", "dogru_sey", "ozet", "bulgular", "kanit_gorusu"],
+  "properties": {
+    "kod_puani": { "type": "integer", "minimum": 0, "maximum": 5, "description": "KOD İYİ Mİ: ciddi hata→2 · uygulama sorunları→3-4 'önce bunları çöz' · yalnız rötuş→5 (üretime hazır)" },
+    "dogru_sey": { "type": "string", "enum": ["E", "H"], "description": "DOĞRU ŞEY Mİ: iş kartındaki talep ile kanıt yan yana; kod doğru ama yanlış şeyi yapmışsa H" },
+    "ozet": { "type": "string", "description": "İki cümle, Sultan-dilinde: ne yapılmış, neden bu puan" },
+    "bulgular": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["ne", "kanit", "konum", "agirlik"],
+        "properties": {
+          "ne": { "type": "string" },
+          "kanit": { "type": "string", "description": "Bulgunun kanıtı: satır, kare, ölçüm — 'bulgu da kanıt ister'" },
+          "konum": { "type": "string", "description": "dosya:satır ya da kanıt kaydı etiketi" },
+          "agirlik": { "type": "string", "enum": ["ciddi", "uygulama", "rotus"] }
+        }
+      }
+    },
+    "kanit_gorusu": { "type": "string", "description": "Kanıt manifesti hakkında: yeterli mi, sarı kayıt var mı, kare gerçekçi veriyle mi, ölçüm çifti var mı" }
+  }
+}

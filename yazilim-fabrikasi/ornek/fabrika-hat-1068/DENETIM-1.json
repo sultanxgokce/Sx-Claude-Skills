@@ -1,0 +1,23 @@
+{
+  "tur": 1,
+  "is": "fabrika-hat-1068",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-09-22T18:25:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Nexus köküne şablonla SHA’sı eşit FABRIKA.md konmuş, CLAUDE.md’ye de yalnız @FABRIKA.md işaretçisi eklenmiş; talep edilen doğru iş yapılmış. Ancak iş kartının açıkça istediği “fabrika-kur.sh denetle rc=0” kaydı manifestte yok; üretime hazır demeden önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "İş kartında zorunlu tutulan fabrika-kur.sh denetle çalıştırmasının rc=0 kanıtı sunulmamış.",
+        "kanit": "Araç imzalı manifestte yalnız “sha-esit” ve “isaretci” etiketli iki kayıt var; komutların hiçbiri “fabrika-kur.sh denetle” çağırmıyor.",
+        "konum": "KANIT MANİFESTİ:kayitlar[0-1]",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve iki kayıt da yeşil; SHA eşitliği ile işaretçinin tam bir kez bulunduğu gerçek komut çıktılarıyla ölçülmüş. Buna karşılık önce/sonra ölçüm çifti yok ve özellikle iş kartındaki denetle rc=0 kanıtı eksik; sarı kayıt bulunmuyor."
+  }
+}

@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.1.0
+version: 0.2.0
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -9,7 +9,8 @@ description: >
   özetinde görünür. Hat dosyası FABRIKA.md her depoda birebir aynıdır (fabrika-kur.sh koyar ve
   sha ile denetler). Tetik: "/fabrika", "iş başlat", "iş alanı aç", "hat dosyasını kur",
   "fabrika denetle", "kanıtla", "gönder", "bağımsız göz". F0 sürümü: hat dosyası + iş alanı;
-  kanıt/denetçi/karne/gün-sonu betikleri F1–F3'te gelir (bkz. "Durum").
+  F1: kanıt (kanit.sh, manifesti araç yazar) +
+  bağımsız göz (denetci.sh, Codex/Claude çapraz, tavan 3+1) + karne. Gün-sonu/sergi F2–F3'te (bkz. "Durum").
 install_target: { skills: .claude/skills/ }
 stacks: ["*"]
 author: sultanxgokce
@@ -38,6 +39,11 @@ tags: [fabrika, worktree, kanit, bagimsiz-goz, puan, hat-dosyasi, orkestrasyon, 
 | `is-alani.sh kontrol` | güvenli / riskli / ölçülemedi | 0 · 1 · 2 |
 | `is-alani.sh kapat <iş>` | merge sonrası temizlik; **kayıtsız iş varsa silmez** | 0 · 1 |
 | `is-alani.sh liste` | açık alanlar | 0 |
+| `kanit.sh olcum <iş> <etiket> --asama once\|sonra -- <komut>` | komutu ARAÇ koşar, kırpılmamış çıktı+rc kaydeder, manifesti imzalar | 0 · 3 sarı (komut rc=3) |
+| `kanit.sh ekran <iş> <etiket> --url U [--urun-imi CSS]` | başsız Chromium karesi; ürün imi yoksa kare kanıt sayılmaz | 0 · 2 ürün imi yok · 3 alınamadı (sarı) |
+| `kanit.sh dosya <iş> <etiket> <yol>` · `dogrula <iş>` · `ozet <iş>` | var olan dosyayı ekler · imza+sha doğrular · PR tablosu | dogrula: 0 sağlam · 1 bozuk · 3 yok |
+| `denetci.sh <iş> --pr N\|--diff F [--yazan claude\|codex] [--denetci …]` | BAĞIMSIZ GÖZ: yazandan farklı model; puan iki satır; DENETIM-<tur>.json'u araç yazar | 0 GEÇTİ · 1 adım 2 · 2 kanıt yok/bozuk · 3 ölçemedi · 4 tıkandı |
+| `karne.sh yaz <iş>` · `kirildi <iş> --neden --kanit` · `ozet` | puan kalibrasyonu defteri: "5 alanların kaçı kırıldı" | 0 · 3 |
 
 ## Beş adım — kısa; tam kural her adımın kendi dosyasında
 
@@ -62,9 +68,10 @@ Hat dosyası **düzenlenmez**; kutuya özel kural `.claude/skills/` katmanına g
 | Parça | Durum |
 |---|---|
 | FABRIKA.md şablonu + fabrika-kur.sh + is-alani.sh + 5 adım belgesi | **F0 — bu sürümde var**, sınavlı |
-| `kanit.sh` (KANIT.json'u araç yazar) · `denetci.sh` (Codex/Claude çapraz) · `karne.sh` | F1 — **henüz yok**; adım 3-4 şimdilik elle, rubrik belgede |
+| `kanit.sh` (KANIT.json'u araç yazar, imzalı) · `denetci.sh` (Codex/Claude çapraz, tavan 3+1/4) · `karne.sh` | **F1 — bu sürümde var**, sınavlı (21+25+9); Codex canlı koşuldu |
 | `sergi-beceri.py` → sergi.mmepanel.com | F2 — yok |
 | `gun-sonu.sh` + sınıf soruları araçta | F3 — yok (kabul kartı şimdilik elle, biçim `0-kabul.md`) |
+| akış videosu (grafik ortam) | yok — konteynerde grafik ortam yok; `ekran` kare dizisi, video SARI kalır |
 | ana-dal Edit/Write kilidi (filo kancası) | F4 — yok, ayrı Sultan onayı ister |
 
 Bu tablo "yazılmış ≠ kurulmuş" kanununun beceriye uygulanmış hâlidir: olmayan şey "var" diye yazılmaz.
@@ -73,4 +80,6 @@ Bu tablo "yazılmış ≠ kurulmuş" kanununun beceriye uygulanmış hâlidir: o
 - Beceri **proje bilmez**: test/lint/paket komutunu deponun kendi dosyasından okur, hat dosyasına yazmaz.
 - Worktree **paylaşılan kaynağı izole etmez** (port · veritabanı · kilit dosyası) — `is-alani.sh ac` her açılışta bunu basar.
 - Her betik `rc=3` = ölçülemedi (sarı); yeşil değil. Kanıt komutu boru arkasına konmaz.
-- Sınav: `bash scripts/is-alani.test.sh` (sahte depoda gerçek koşum) · `bash scripts/fabrika-kur.test.sh`.
+- Kanıt manifesti imzası elle yazımı yakalar; kriptografik gizlilik iddiası YOK (tuz araçta açık). Kararlı ajanı değil, kestirmeyi durdurur.
+- Codex bu konteynerde kum havuzu (bwrap) açamıyor → istem argüman olarak verilir, denetçi komut koşmaz; >120 KB istem kırpılır ve söylenir.
+- Sınav: `is-alani.test.sh` · `fabrika-kur.test.sh` · `kanit.test.sh` (playwright varsa gerçek kare) · `denetci.test.sh` (sahte denetçi) · `karne.test.sh`.

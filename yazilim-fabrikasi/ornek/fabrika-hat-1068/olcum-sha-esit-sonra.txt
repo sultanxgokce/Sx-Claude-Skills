@@ -1,0 +1,5 @@
+$ bash -c cd /config/projects/Nexus && a=$(git show origin/main:FABRIKA.md | sha256sum | cut -c1-16); b=$(bash /config/.claude/skills/yazilim-fabrikasi/scripts/fabrika-kur.sh sablon-sha); echo "main=$a sablon=$b"; [ "$a" = "$b" ]
+# rc=0 sure=0.0s zaman=2026-09-22T18:22:39+03:00
+--- stdout ---
+main=7def220eb6d32849 sablon=7def220eb6d32849
+--- stderr ---

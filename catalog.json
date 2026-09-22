@@ -1500,8 +1500,8 @@
       "id": "yazilim-fabrikasi",
       "type": "agent",
       "name": "Yazılım Fabrikası — tek hat, beş adım (kabul→izole→inşa→kanıtla→gönder)",
-      "version": "0.1.0",
-      "description": "Filonun tek çalışma hattı: her iş kabul→izole→inşa→kanıtla→gönder adımlarından geçer; çıktıyı araç yazar, puanı yazandan farklı model verir, Sultan yalnız dört sınıfta ve gün sonu özetinde görünür. Hat dosyası FABRIKA.md her depoda birebir aynı (fabrika-kur.sh kur/denetle, sha). F0: hat dosyası + iş alanı (is-alani.sh, açık PR çakışma kontrolü, pre-commit kancası). F1+: kanıt/denetçi/karne/gün-sonu.",
+      "version": "0.2.0",
+      "description": "Filonun tek çalışma hattı: her iş kabul→izole→inşa→kanıtla→gönder adımlarından geçer; çıktıyı araç yazar, puanı yazandan farklı model verir, Sultan yalnız dört sınıfta ve gün sonu özetinde görünür. Hat dosyası FABRIKA.md her depoda birebir aynı (fabrika-kur.sh kur/denetle, sha). F0: hat dosyası + iş alanı (is-alani.sh, açık PR çakışma kontrolü, pre-commit kancası). F1: kanit.sh (manifesti araç yazar, imzalı; Playwright kare, ürün imi), denetci.sh (bağımsız göz: Codex/Claude çapraz, puan iki satır, tavan 3+1), karne.sh (kalibrasyon defteri). F2+: sergi, gün-sonu.",
       "prerequisites": {
         "system": [
           "bash",
@@ -1525,7 +1525,7 @@
       "author": "sultanxgokce",
       "source": "Nexus _agents/handoff/YAZILIM-FABRIKASI-MIMARI-20260922.md (Sultan onaylı 22 Eyl 2026 · s01-L93); fikir: Mert Durmazer videosu; okunan dış beceriler lisanssız → yeniden yazıldı (KAYNAK.md)",
       "install_time": "~2min (fabrika-kur.sh kur <depo>)",
-      "status": "v0.1-f0",
+      "status": "v0.2-f1",
       "path": "yazilim-fabrikasi/SKILL.md",
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
       "installed_in": [],

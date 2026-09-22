@@ -1,0 +1,57 @@
+{
+  "is": "fabrika-hat-1068",
+  "arac": "kanit.py/0.1.0",
+  "guncelleme": "2026-09-22T18:25:44+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sha-esit",
+      "asama": "sonra",
+      "dosya": "olcum-sha-esit-sonra.txt",
+      "sha256": "8ca383470dbb6f33c6c42284037cee680bb0bceaa82029fa9628eac3b7487154",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/projects/Nexus && a=$(git show origin/main:FABRIKA.md | sha256sum | cut -c1-16); b=$(bash /config/.claude/skills/yazilim-fabrikasi/scripts/fabrika-kur.sh sablon-sha); echo \"main=$a sablon=$b\"; [ \"$a\" = \"$b\" ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-22T18:22:39+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "isaretci",
+      "asama": "sonra",
+      "dosya": "olcum-isaretci-sonra.txt",
+      "sha256": "fd15cfd37e61a2c9bde030e39ab8fe3a25998582d2b959dfb293e08827b1a330",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/projects/Nexus && git show origin/main:CLAUDE.md | grep -c \"^@FABRIKA.md$\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-22T18:22:39+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetle",
+      "asama": "sonra",
+      "dosya": "olcum-denetle-sonra.txt",
+      "sha256": "891bfeb445ae6aa8eb34a763708bed2d9049278d1619a340fdcfbab0d20623ae",
+      "komut": [
+        "bash",
+        "/config/.claude/skills/yazilim-fabrikasi/scripts/fabrika-kur.sh",
+        "denetle",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/canli-denetim/main-kopya"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-22T18:25:44+03:00",
+      "sure_sn": 0.0
+    }
+  ],
+  "imza": "3a061df03cfaec6a242a92511ed8e8358911cb0ddf6f04b254fb87504e97360e"
+}
