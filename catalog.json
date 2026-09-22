@@ -1,6 +1,6 @@
 {
   "version": "2.1",
-  "updated": "2026-09-19",
+  "updated": "2026-09-22",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -1495,6 +1495,41 @@
       "name": "/baglam-nobeti — bağlam doluluk nöbeti (GLOBAL, Sultan kuralı)",
       "version": "0.2.0",
       "description": "Oturum bağlamı dolarken Sultan'ı asla sessizce geçmez: %70'te uyarı satırı, %80'de her cevabın başında kalın compact önerisi, %90'da yeni iş almama; compact'tan önce kutunun VAR OLAN çıpa dosyaları (cipa-bul.sh) tazelenir. Ölçü mekaniktir: PostToolUse kancası (nobet-kancasi.sh) her araç çağrısında transkriptten doluluğu hesaplar (baglam-olc.py); pencere filo kanonundan (ORTAK-MIMARI.md) okunur, [1m] eki transkriptin model-kimlik kaydından geri kazanılır. Ölçemediğinde 'ÖLÇÜLEMEDİ' der, yüzde uydurmaz. AKAR/MÜTEVELLİ doğurdu (0.1.0 salt kural), MUAVİN mekanik gövdeyle filo geneline paketledi."
+    },
+    {
+      "id": "yazilim-fabrikasi",
+      "type": "agent",
+      "name": "Yazılım Fabrikası — tek hat, beş adım (kabul→izole→inşa→kanıtla→gönder)",
+      "version": "0.1.0",
+      "description": "Filonun tek çalışma hattı: her iş kabul→izole→inşa→kanıtla→gönder adımlarından geçer; çıktıyı araç yazar, puanı yazandan farklı model verir, Sultan yalnız dört sınıfta ve gün sonu özetinde görünür. Hat dosyası FABRIKA.md her depoda birebir aynı (fabrika-kur.sh kur/denetle, sha). F0: hat dosyası + iş alanı (is-alani.sh, açık PR çakışma kontrolü, pre-commit kancası). F1+: kanıt/denetçi/karne/gün-sonu.",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "git",
+          "gh (kapsam kontrolü için, yoksa 'ölçülemedi')"
+        ]
+      },
+      "tags": [
+        "fabrika",
+        "worktree",
+        "kanit",
+        "bagimsiz-goz",
+        "puan",
+        "hat-dosyasi",
+        "orkestrasyon",
+        "global"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "Nexus _agents/handoff/YAZILIM-FABRIKASI-MIMARI-20260922.md (Sultan onaylı 22 Eyl 2026 · s01-L93); fikir: Mert Durmazer videosu; okunan dış beceriler lisanssız → yeniden yazıldı (KAYNAK.md)",
+      "install_time": "~2min (fabrika-kur.sh kur <depo>)",
+      "status": "v0.1-f0",
+      "path": "yazilim-fabrikasi/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [],
+      "family": "workflow (çalışma hattı; pr-onay · olcum-disiplini · kapi-sinavi · kayit-damgasi çağırır)"
     }
   ]
 }
