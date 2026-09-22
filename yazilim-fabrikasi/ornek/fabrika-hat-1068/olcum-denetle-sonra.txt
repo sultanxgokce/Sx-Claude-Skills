@@ -1,0 +1,6 @@
+$ bash /config/.claude/skills/yazilim-fabrikasi/scripts/fabrika-kur.sh denetle /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/canli-denetim/main-kopya
+# rc=0 sure=0.0s zaman=2026-09-22T18:25:44+03:00
+--- stdout ---
+✓ FABRIKA.md şablonla birebir (sha 7def220eb6d32849)
+✓ CLAUDE.md işaretçisi var
+--- stderr ---

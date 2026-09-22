@@ -1,0 +1,16 @@
+{
+  "tur": 2,
+  "is": "fabrika-hat-1068",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-09-22T18:26:17+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Nexus köküne şablonla birebir FABRIKA.md kurulmuş, CLAUDE.md’ye hat metni gömülmeden tek @FABRIKA.md işaretçisi eklenmiş. Önceki turun eksiği kapatılmış; denetim rc=0, şablon SHA’sı eşit ve doğrudan origin/main ölçümleri talebi üretime hazır düzeyde doğruluyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve tüm kayıtlar yeşil; sarı kayıt yok. denetle kaydı rc=0 ile hem FABRIKA.md eşliğini hem işaretçiyi sınıyor; ayrıca origin/main üzerinde SHA eşitliği ve işaretçinin tam bir kez bulunması ayrı çıktılarla ölçülmüş. Önce/sonra çifti yok, ancak bu kurulum kartının açık kabul ölçütleri olan denetle rc=0 ve SHA eşitliği doğrudan kanıtlanmış."
+  }
+}

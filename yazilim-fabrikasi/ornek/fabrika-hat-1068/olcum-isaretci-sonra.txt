@@ -1,0 +1,5 @@
+$ bash -c cd /config/projects/Nexus && git show origin/main:CLAUDE.md | grep -c "^@FABRIKA.md$"
+# rc=0 sure=0.0s zaman=2026-09-22T18:22:39+03:00
+--- stdout ---
+1
+--- stderr ---
