@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.2.0
+version: 0.3.0
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -44,6 +44,7 @@ tags: [fabrika, worktree, kanit, bagimsiz-goz, puan, hat-dosyasi, orkestrasyon, 
 | `kanit.sh dosya <iş> <etiket> <yol>` · `dogrula <iş>` · `ozet <iş>` | var olan dosyayı ekler · imza+sha doğrular · PR tablosu | dogrula: 0 sağlam · 1 bozuk · 3 yok |
 | `denetci.sh <iş> --pr N\|--diff F [--yazan claude\|codex] [--denetci …]` | BAĞIMSIZ GÖZ: yazandan farklı model; puan iki satır; DENETIM-<tur>.json'u araç yazar | 0 GEÇTİ · 1 adım 2 · 2 kanıt yok/bozuk · 3 ölçemedi · 4 tıkandı |
 | `karne.sh yaz <iş>` · `kirildi <iş> --neden --kanit` · `ozet` | puan kalibrasyonu defteri: "5 alanların kaçı kırıldı" | 0 · 3 |
+| `sergi-beceri.py --sx <Sx> --out <dizin> [--depo ad=yol]` | beceri sergisi manifesti (+SKILL.md kopyaları); sonra `sergi/scripts/build_catalog.py` | 0 · 3 |
 
 ## Beş adım — kısa; tam kural her adımın kendi dosyasında
 
@@ -69,7 +70,7 @@ Hat dosyası **düzenlenmez**; kutuya özel kural `.claude/skills/` katmanına g
 |---|---|
 | FABRIKA.md şablonu + fabrika-kur.sh + is-alani.sh + 5 adım belgesi | **F0 — bu sürümde var**, sınavlı |
 | `kanit.sh` (KANIT.json'u araç yazar, imzalı) · `denetci.sh` (Codex/Claude çapraz, tavan 3+1/4) · `karne.sh` | **F1 — bu sürümde var**, sınavlı (21+25+9); Codex canlı koşuldu |
-| `sergi-beceri.py` → sergi.mmepanel.com | F2 — yok |
+| `sergi-beceri.py` → sergi.mmepanel.com | **F2 — var**: manifest üretir (katalog ∪ kurulu ∪ depo-yerel; öksüz görünür), `sergi` becerisi basar, Nexus `scripts/sergi-yayinla.sh` yayınlar. Canlı 22 Eyl: 117 kayıt, Access arkasında |
 | `gun-sonu.sh` + sınıf soruları araçta | F3 — yok (kabul kartı şimdilik elle, biçim `0-kabul.md`) |
 | akış videosu (grafik ortam) | yok — konteynerde grafik ortam yok; `ekran` kare dizisi, video SARI kalır |
 | ana-dal Edit/Write kilidi (filo kancası) | F4 — yok, ayrı Sultan onayı ister |
