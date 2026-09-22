@@ -14,15 +14,18 @@ args=(); NEDEN=""; KANIT=""; GUN=7
 while [ $# -gt 0 ]; do case "$1" in
   --depo) DEPO="$2"; shift 2 ;; --neden) NEDEN="$2"; shift 2 ;; --kanit) KANIT="$2"; shift 2 ;; --gun) GUN="$2"; shift 2 ;;
   *) args+=("$1"); shift ;; esac; done
-[ -n "$DEPO" ] || DEPO="$(git rev-parse --show-toplevel 2>/dev/null || echo "")"
+# Defter BİRİNCİL depoda (worktree'ler ortak yazar); DENETIM kayıtları çağrıldığı ağaçtan (worktree) okunur.
+WT="$(git rev-parse --show-toplevel 2>/dev/null || echo "")"
+[ -n "$DEPO" ] || { c="$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)" && DEPO="$(dirname "$c")"; }
 [ -n "$DEPO" ] || { _hata "depo kökü bulunamadı"; exit 3; }
+[ -n "$WT" ] || WT="$DEPO"
 DEFTER="$DEPO/_agents/fabrika/karne.jsonl"; mkdir -p "$(dirname "$DEFTER")"
 CMD="${args[0]:-}"; HEDEF="${args[1]:-}"
 
 case "$CMD" in
   yaz)
     [ -n "$HEDEF" ] || { _hata "iş adı gerekiyor"; exit 1; }
-    DZ="$DEPO/_agents/fabrika/kanit/$HEDEF"
+    DZ="$WT/_agents/fabrika/kanit/$HEDEF"; [ -d "$DZ" ] || DZ="$DEPO/_agents/fabrika/kanit/$HEDEF"
     SON="$(ls "$DZ"/DENETIM-[0-9]*.json 2>/dev/null | sort -V | tail -1)"
     [ -n "$SON" ] || { _hata "$HEDEF için DENETIM kaydı yok — karneye yazacak şey yok"; exit 3; }
     python3 - "$DZ" "$SON" "$DEFTER" "$HEDEF" <<'PY'

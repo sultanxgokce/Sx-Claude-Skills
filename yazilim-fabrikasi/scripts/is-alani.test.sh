@@ -54,7 +54,7 @@ g $? "PAYLASILAN_COMMIT=1 ile geçilebiliyor"
 ( cd "$T/depo" && git checkout -q main ) >/dev/null 2>&1
 
 echo "════ T4 · ac: kendi alanı, origin/main'den, <depo>-<iş> adıyla ════"
-CIKTI="$( cd "$T/depo" && bash "$IS" ac yeni-is 2>&1 )"; g $? "alan açıldı"
+CIKTI="$( cd "$T/depo" && bash "$IS" ac yeni-is --kartsiz 2>&1 )"; g $? "alan açıldı"
 grep -q "TAZE" <<<"$CIKTI"; g $? "origin/main üstünde açtığını söylüyor"
 grep -q "PAYLAŞILAN KAYNAĞI izole etmez" <<<"$CIKTI"; g $? "paylaşılan-kaynak uyarısı basıldı"
 grep -q "dosya listesi verilmedi" <<<"$CIKTI"; g $? "kapsam bakılmadığını SÖYLÜYOR (sessiz atlama yok)"
@@ -62,7 +62,7 @@ grep -q "dosya listesi verilmedi" <<<"$CIKTI"; g $? "kapsam bakılmadığını S
 ( cd "$T/alan/depo-yeni-is" && echo c >> dosya.txt && git add -A && git commit -qm "chore: izole" ) >/dev/null 2>&1
 g $? "İZOLE alanda özellik dalına commit SERBEST"
 commit_gorunuyor "$T/alan/depo-yeni-is" "chore: izole"; g $? "commit düştü"
-( cd "$T/depo" && bash "$IS" ac yeni-is >/dev/null 2>&1 ); [ $? -ne 0 ]; g $? "aynı adla ikinci açılış REDDEDİLDİ"
+( cd "$T/depo" && bash "$IS" ac yeni-is --kartsiz >/dev/null 2>&1 ); [ $? -ne 0 ]; g $? "aynı adla ikinci açılış REDDEDİLDİ"
 
 echo "════ T5 · kontrol üç durum ════"
 CIKTI="$( cd "$T/alan/depo-yeni-is" && bash "$IS" kontrol 2>&1 )"; grep -q "güvenli" <<<"$CIKTI"; g $? "izole alanda: güvenli (IS_ALANI_DEPO dışarıdan verilmişken bile)"
@@ -93,18 +93,18 @@ case "$1 $2" in
 esac
 GH
 chmod +x "$SAHTE/gh"
-CIKTI="$( cd "$T/depo" && PATH="$SAHTE:$PATH" bash "$IS" ac cakisan-is --dosyalar dosya.txt,z.txt 2>&1 )"; RC=$?
+CIKTI="$( cd "$T/depo" && PATH="$SAHTE:$PATH" bash "$IS" ac cakisan-is --kartsiz --dosyalar dosya.txt,z.txt 2>&1 )"; RC=$?
 [ "$RC" -eq 2 ]; g $? "çakışmada rc=2"
 grep -q "PR #7" <<<"$CIKTI"; g $? "hangi PR'la çakıştığı yazılı"
 [ ! -d "$T/alan/depo-cakisan-is" ]; g $? "alan AÇILMADI"
-CIKTI="$( cd "$T/depo" && PATH="$SAHTE:$PATH" bash "$IS" ac temiz-is --dosyalar z.txt 2>&1 )"; RC=$?
+CIKTI="$( cd "$T/depo" && PATH="$SAHTE:$PATH" bash "$IS" ac temiz-is --kartsiz --dosyalar z.txt 2>&1 )"; RC=$?
 [ "$RC" -eq 0 ]; g $? "çakışma yokken rc=0"
 grep -q "çakışması yok" <<<"$CIKTI"; g $? "kaç PR'a bakıldığı yazılı"
 ( cd "$T/depo" && bash "$IS" kapat temiz-is ) >/dev/null 2>&1
 
 echo "════ T8 · gh DÜŞÜNCE (yetkisiz/ağsız): ölçülemedi der, yine açar (sessiz atlama yok) ════"
 BOZUK="$T/bozuk-bin"; mkdir -p "$BOZUK"; printf '#!/usr/bin/env bash\nexit 1\n' > "$BOZUK/gh"; chmod +x "$BOZUK/gh"
-CIKTI="$( cd "$T/depo" && PATH="$BOZUK:$PATH" bash "$IS" ac ghsiz --dosyalar z.txt 2>&1 )"; RC=$?
+CIKTI="$( cd "$T/depo" && PATH="$BOZUK:$PATH" bash "$IS" ac ghsiz --kartsiz --dosyalar z.txt 2>&1 )"; RC=$?
 grep -q "YAPILAMADI" <<<"$CIKTI"; g $? "kapsam kontrolü yapılamadığını söyledi"
 [ -d "$T/alan/depo-ghsiz" ]; g $? "alan yine açıldı"
 

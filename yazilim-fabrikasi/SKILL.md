@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.3.0
+version: 0.4.0
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -10,7 +10,7 @@ description: >
   sha ile denetler). Tetik: "/fabrika", "iş başlat", "iş alanı aç", "hat dosyasını kur",
   "fabrika denetle", "kanıtla", "gönder", "bağımsız göz". F0 sürümü: hat dosyası + iş alanı;
   F1: kanıt (kanit.sh, manifesti araç yazar) +
-  bağımsız göz (denetci.sh, Codex/Claude çapraz, tavan 3+1) + karne. Gün-sonu/sergi F2–F3'te (bkz. "Durum").
+  bağımsız göz (denetci.sh, Codex/Claude çapraz, tavan 3+1) + karne. F2: sergi. F3: kart.sh (0. adım: sınıf sorularını araç sorar, kartsız alan açılmaz) + gun-sonu.sh (özet defterden). Kalan F4: ana-dal kilidi.
 install_target: { skills: .claude/skills/ }
 stacks: ["*"]
 author: sultanxgokce
@@ -35,7 +35,9 @@ tags: [fabrika, worktree, kanit, bagimsiz-goz, puan, hat-dosyasi, orkestrasyon, 
 | `fabrika-kur.sh kur [depo]` | `FABRIKA.md`'yi depo köküne koyar, `CLAUDE.md`'ye tek satır işaretçi (`@FABRIKA.md`) ekler | 0 kuruldu · 1 çakışma (elle değişmiş hat dosyası) · 3 ölçülemedi |
 | `fabrika-kur.sh denetle [depo]` | şablon sha ≟ depo sha; işaretçi var mı | 0 eşit · 1 drift · 3 dosya yok |
 | `fabrika-kur.sh kur --kanca` | ek olarak ana-dal commit korumasını (pre-commit) kurar | — |
-| `is-alani.sh ac <iş>` | `origin/main`'den TAZE worktree (`/config/projects/_wt/<depo>-<iş>`), açık PR'larla dosya çakışması varsa **durur ve sorar** | 0 · 1 hata · 2 çakışma |
+| `kart.sh ac <iş> --is … --istedi … --aldi … --geri-alinamaz/--para/--dis-yuzey/--yetki e\|h\|?` | 0. adım: iş kartını ARAÇ yazar; dört sınıf sorusu cevapsız kart açılmaz; e/? → Sultan'a gider. `bitti` · `tikandi --yol --neden` · `liste` · `goster`. `--oda` ile tetikli mesaj | 0 · 1 eksik cevap · 3 |
+| `is-alani.sh ac <iş> [--dosyalar a,b] [--kartsiz]` | `origin/main`'den TAZE worktree (`/config/projects/_wt/<depo>-<iş>`); **kart yoksa açılmaz** (kaçış `--kartsiz` → kart cevapsız açılır, Sultan'a gider); açık PR'larla dosya çakışması varsa **durur ve sorar**; kartı worktree'ye kopyalar | 0 · 1 hata/kart yok · 2 çakışma |
+| `gun-sonu.sh [--gun] [--yaz]` | gün sonu özeti DEFTERDEN (kartlar + karne): Sultan'a gidenler · içeride bitirdiklerimiz · tıkananlar · açık işler; elle satır yok | 0 · 3 defter yok |
 | `is-alani.sh kontrol` | güvenli / riskli / ölçülemedi | 0 · 1 · 2 |
 | `is-alani.sh kapat <iş>` | merge sonrası temizlik; **kayıtsız iş varsa silmez** | 0 · 1 |
 | `is-alani.sh liste` | açık alanlar | 0 |
@@ -71,7 +73,7 @@ Hat dosyası **düzenlenmez**; kutuya özel kural `.claude/skills/` katmanına g
 | FABRIKA.md şablonu + fabrika-kur.sh + is-alani.sh + 5 adım belgesi | **F0 — bu sürümde var**, sınavlı |
 | `kanit.sh` (KANIT.json'u araç yazar, imzalı) · `denetci.sh` (Codex/Claude çapraz, tavan 3+1/4) · `karne.sh` | **F1 — bu sürümde var**, sınavlı (21+25+9); Codex canlı koşuldu |
 | `sergi-beceri.py` → sergi.mmepanel.com | **F2 — var**: manifest üretir (katalog ∪ kurulu ∪ depo-yerel; öksüz görünür), `sergi` becerisi basar, Nexus `scripts/sergi-yayinla.sh` yayınlar. Canlı 22 Eyl: 117 kayıt, Access arkasında |
-| `gun-sonu.sh` + sınıf soruları araçta | F3 — yok (kabul kartı şimdilik elle, biçim `0-kabul.md`) |
+| `kart.sh` (sınıf soruları araçta, kartsız alan açılmaz) · `gun-sonu.sh` (defterden özet) · tetik entegrasyonu (`--oda`) | **F3 — var**, sınavlı (25) |
 | akış videosu (grafik ortam) | yok — konteynerde grafik ortam yok; `ekran` kare dizisi, video SARI kalır |
 | ana-dal Edit/Write kilidi (filo kancası) | F4 — yok, ayrı Sultan onayı ister |
 
@@ -83,4 +85,5 @@ Bu tablo "yazılmış ≠ kurulmuş" kanununun beceriye uygulanmış hâlidir: o
 - Her betik `rc=3` = ölçülemedi (sarı); yeşil değil. Kanıt komutu boru arkasına konmaz.
 - Kanıt manifesti imzası elle yazımı yakalar; kriptografik gizlilik iddiası YOK (tuz araçta açık). Kararlı ajanı değil, kestirmeyi durdurur.
 - Codex bu konteynerde kum havuzu (bwrap) açamıyor → istem argüman olarak verilir, denetçi komut koşmaz; >120 KB istem kırpılır ve söylenir.
-- Sınav: `is-alani.test.sh` · `fabrika-kur.test.sh` · `kanit.test.sh` (playwright varsa gerçek kare) · `denetci.test.sh` (sahte denetçi) · `karne.test.sh`.
+- Defter yerleşimi: kartlar + karne + gün-sonu BİRİNCİL depoda (`_agents/fabrika/kartlar|karne.jsonl|gun-sonu`), kanıt + denetim İŞİN worktree'sinde (`_agents/fabrika/kanit/<iş>/`, PR ile gider).
+- Sınav: `is-alani.test.sh` · `fabrika-kur.test.sh` · `kanit.test.sh` (playwright varsa gerçek kare) · `denetci.test.sh` (sahte denetçi) · `karne.test.sh` · `kart.test.sh` (kart + gün sonu + zincir).
