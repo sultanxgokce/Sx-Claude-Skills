@@ -1,7 +1,7 @@
 {
   "is": "tavan-kapisi",
   "arac": "kanit.py/0.1.0",
-  "guncelleme": "2026-09-23T16:38:57+03:00",
+  "guncelleme": "2026-09-23T16:49:39+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -33,7 +33,22 @@
       "renk": "yesil",
       "zaman": "2026-09-23T16:38:57+03:00",
       "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinavi-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-sinavi-tur2-sonra.txt",
+      "sha256": "43ab6050f0a3e88aed2934aecb9b9f25bc072ec13672dd0813ad31ab9b18d0ba",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-23T16:49:39+03:00",
+      "sure_sn": 30.9
     }
   ],
-  "imza": "a760d39b6c42f53057d8bac8f43e53f25d6ffafaa54a7ad9985f84980988c311"
+  "imza": "0809482bc6352ce65d3443c28e33d2cd4312e9138a30aa26b46ebbc8614cb57f"
 }
