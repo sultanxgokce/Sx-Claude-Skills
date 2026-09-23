@@ -26,6 +26,10 @@ kart is-a; bash "$K" olcum is-a olc --asama tek -- echo 1 >/dev/null 2>&1
 CIKTI="$(bash "$G" is-a 2>&1)"; RC=$?
 [ "$RC" -eq 1 ]; g $? "bağımsız göz koşmamışken rc=1"
 grep -q "DENETİM kaydı YOK" <<<"$CIKTI"; g $? "sebebi yazılı"
+# 🔴 rc'ye bakmak yetmiyor: bozuk tırnak yüzünden mesaj satırı yönlendirmeye dönüşmüştü ve rc aynı
+# kalıyordu (23 Eyl, bağımsız göz turu sırasında yakalandı). Artık METNİN BASILDIĞINI da iddia ediyoruz.
+grep -q 'FABRIKA_KAPISIZ="<en az 20 karakterlik gerekçe>"' <<<"$CIKTI"; g $? "kaçış satırı bozulmadan basılıyor"
+grep -qv "No such file" <<<"$CIKTI"; g $? "yönlendirme hatası yok"
 
 echo "════ T3 · puan 4 → engeller · 5 ama H → engeller ════"
 den is-a 1 4 E; bash "$G" is-a --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "4/5 → rc=1"

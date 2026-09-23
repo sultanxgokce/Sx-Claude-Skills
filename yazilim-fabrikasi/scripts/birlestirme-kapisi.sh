@@ -101,7 +101,7 @@ if [ "$eksik" -gt 0 ]; then
   _y ""
   _h "BİRLEŞTİRME ENGELLENDİ — $eksik eksik."
   _y "  Yapılacak: kanıtı topla (kanit.sh), bağımsız göze gönder (denetci.sh), 5+E alınca tekrar dene."
-  _y "  Acil durumda: FABRIKA_KAPISIZ="<en az 20 karakterlik gerekçe>" — kaçış deftere yazılır (sessiz atlama yasak)."
+  _y '  Acil durumda: FABRIKA_KAPISIZ="<en az 20 karakterlik gerekçe>" — kaçış deftere yazılır (sessiz atlama yasak).'
   exit 1
 fi
 _y ""; _y "✓ GEÇTİ — kanıt imzalı, bağımsız göz 5/5 + doğru şey E, kart yerinde."
