@@ -1500,7 +1500,7 @@
       "id": "yazilim-fabrikasi",
       "type": "agent",
       "name": "Yazılım Fabrikası — tek hat, beş adım (kabul→izole→inşa→kanıtla→gönder)",
-      "version": "0.5.0",
+      "version": "0.5.1",
       "description": "Filonun tek çalışma hattı: her iş kabul→izole→inşa→kanıtla→gönder adımlarından geçer; çıktıyı araç yazar, puanı yazandan farklı model verir, Sultan yalnız dört sınıfta ve gün sonu özetinde görünür. Hat dosyası FABRIKA.md her depoda birebir aynı (fabrika-kur.sh kur/denetle, sha). F0: hat dosyası + iş alanı (is-alani.sh, açık PR çakışma kontrolü, pre-commit kancası). F1: kanit.sh (manifesti araç yazar, imzalı; Playwright kare, ürün imi), denetci.sh (bağımsız göz: Codex/Claude çapraz, puan iki satır, tavan 3+1), karne.sh (kalibrasyon defteri). F2: sergi-beceri.py → sergi.mmepanel.com canlı (22 Eyl). F3: kart.sh (sınıf soruları araçta; kartsız iş alanı açılmaz) + gun-sonu.sh (özet defterden). Kapılar: ana-dal Edit/Write kilidi + birleştirme kapısı (kanıtsız/puansız iş birleşemez).",
       "prerequisites": {
         "system": [

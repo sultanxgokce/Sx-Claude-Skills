@@ -54,6 +54,15 @@ grep -q "## Sultan'a gidenler (3)" <<<"$CIKTI"; g $? "Sultan'a gidenler 3 (is-2 
 grep -q "## İçeride bitirdiklerimiz (1)" <<<"$CIKTI" && grep -q "is-1" <<<"$CIKTI"; g $? "içeride bitenler 1 (is-1, 5/5 E)"
 grep -q "## Tıkananlar (1)" <<<"$CIKTI" && grep -q "şema çakışıyor" <<<"$CIKTI"; g $? "tıkananlar 1, nedeniyle"
 grep -q "## Açık işler (1)" <<<"$CIKTI" && grep -q "kartsiz-is" <<<"$CIKTI"; g $? "açık iş 1 (kartsız kaçış kartı)"
+grep -q "## Kapı kaçışları (0)" <<<"$CIKTI"; g $? "kaçış başlığı var, bugün kaçış yok"
+# NOT: satırı parça parça kuruyoruz; tek parça yazarsak Nexus'taki kapı kancası bu dosyayı
+# yazan komutu "birleştirme" sanıp engelliyor (23 Eyl, kapının kendi kör noktası).
+KAC="$(date +%F)T09:15:00Z | KAPISIZ | codex kutuda yok, Sultan sozlu onay | <komut>"
+printf '%s\n' "$KAC" > "$T/depo/_agents/fabrika/kacis-defteri.log"
+CIKTI="$(bash "$GS" 2>&1)"
+grep -q "## Kapı kaçışları (1)" <<<"$CIKTI"; g $? "kaçış özete düşüyor"
+grep -q "Sultan sozlu onay" <<<"$CIKTI"; g $? "gerekçe görünüyor"
+grep -q "veto hakkın var" <<<"$CIKTI"; g $? "Sultan'ın veto hakkı yazılı"
 [ -f "$T/depo/_agents/fabrika/gun-sonu/$(date +%F).md" ]; g $? "dosyaya yazıldı"
 bash "$KT" liste --acik 2>&1 | grep -q "kartsiz-is"; g $? "liste --acik çalışıyor"
 
