@@ -45,7 +45,7 @@ Mekanik detay → aşağıdaki [Senkron](#senkron--güncellemeleri-yay-sync-skil
 | [erisim-skill-fabrikasi](erisim-skill-fabrikasi/SKILL.md) | agent (meta) | * (stack bağımsız) | ~5min/platform | 1.1.0 | stable |
 | [ekip-kur](ekip-kur/SKILL.md) | agent (scaffold) | * (stack bağımsız) | ~5min | 1.7.0 | v1.7-mvp |
 | [kapi-yolu](kapi-yolu/SKILL.md) | agent (usta/bileşik) | * (stack bağımsız) | ~2min | 1.0.0 | v1.0-usta |
-| [yazilim-fabrikasi](yazilim-fabrikasi/SKILL.md) | agent (çalışma hattı) | * (stack bağımsız) | ~2min | 0.5.0 | v0.5 |
+| [yazilim-fabrikasi](yazilim-fabrikasi/SKILL.md) | agent (çalışma hattı) | * (stack bağımsız) | ~2min | 0.5.1 | v0.5 |
 
 Makine-okunabilir indeks: [catalog.json](catalog.json)
 

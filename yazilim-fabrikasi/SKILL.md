@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.5.0
+version: 0.5.1
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -45,6 +45,7 @@ tags: [fabrika, worktree, kanit, bagimsiz-goz, puan, hat-dosyasi, orkestrasyon, 
 | `kanit.sh ekran <iş> <etiket> --url U [--urun-imi CSS]` | başsız Chromium karesi; ürün imi yoksa kare kanıt sayılmaz | 0 · 2 ürün imi yok · 3 alınamadı (sarı) |
 | `kanit.sh dosya <iş> <etiket> <yol>` · `dogrula <iş>` · `ozet <iş>` | var olan dosyayı ekler · imza+sha doğrular · PR tablosu | dogrula: 0 sağlam · 1 bozuk · 3 yok |
 | `denetci.sh <iş> --pr N\|--diff F [--yazan claude\|codex] [--denetci …]` | BAĞIMSIZ GÖZ: yazandan farklı model; puan iki satır; DENETIM-<tur>.json'u araç yazar | 0 GEÇTİ · 1 adım 2 · 2 kanıt yok/bozuk · 3 ölçemedi · 4 tıkandı |
+| `gun-sonu.sh` kaçış başlığı | kapı atlamaları **Sultan'ın önüne** gelir: gerekçe + komut, veto hakkıyla |
 | `karne.sh yaz <iş>` · `kirildi <iş> --neden --kanit` · `ozet` | puan kalibrasyonu defteri: "5 alanların kaçı kırıldı" | 0 · 3 |
 | `birlestirme-kapisi.sh <iş>\|--pr N` | 4. adımın SON kapısı: kart + imzalı kanıt + bağımsız göz 5/5 ve "doğru şey E" ve denetçi≠yazan. Biri eksikse birleştirme YOK | 0 geçti · 1 eksik · 3 ölçülemedi |
 | `sergi-beceri.py --sx <Sx> --out <dizin> [--depo ad=yol]` | beceri sergisi manifesti (+SKILL.md kopyaları); sonra `sergi/scripts/build_catalog.py` | 0 · 3 |

@@ -43,6 +43,16 @@ out.append(""); out.append(f"## İçeride bitirdiklerimiz ({len(icerde)}) — 'b
 for k in icerde: out.append(f"- **{k['is']}** — {k['cumle']} · sahip {k['aldi']} · {puan(k)} · kanıt {'var' if k.get('kanit_var') else '⚠ YOK'}{' · PR '+k['pr'] if k.get('pr') else ''}")
 out.append(""); out.append(f"## Tıkananlar ({len(tik)})")
 for k in tik: out.append(f"- **{k['is']}** — {k['cumle']} · yol: {k['tikanma']['yol']} · neden: {k['tikanma']['neden']} · sahip {k['aldi']}")
+# 🔴 Kaçışlar Sultan'ın önüne gelir (23 Eyl kararı): sessiz delik olmaktan çıkar, kayda geçen istisna olur.
+import os as _os
+kac=_os.path.join(_os.path.dirname(kd),"kacis-defteri.log")  # kd=<depo>/_agents/fabrika/kartlar
+sat=[l.strip() for l in open(kac,encoding="utf-8")] if _os.path.exists(kac) else []
+bugun_kac=[l for l in sat if l[:10]==gun]
+out.append(""); out.append(f"## Kapı kaçışları ({len(bugun_kac)}) — her biri bir istisnadır, veto hakkın var")
+for l in bugun_kac:
+    par=[x.strip() for x in l.split("|")]
+    out.append(f"- {par[0][11:16]} · gerekçe: {par[2] if len(par)>2 else '?'} · komut: `{(par[3] if len(par)>3 else '?')[:70]}`")
+if not bugun_kac: out.append("- (bugün kapı atlanmadı)")
 out.append(""); out.append(f"## Açık işler ({len(acik)})")
 for k in acik: out.append(f"- {k['is']} — sahip {k['aldi']} · açıldı {k['zaman'][:16]}{' · SULTAN' if k['sultan'] else ''}")
 print("\n".join(out))
