@@ -1,0 +1,46 @@
+{
+  "is": "izin-biti",
+  "arac": "kanit.py/0.1.0",
+  "guncelleme": "2026-09-23T10:21:02+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "duman",
+      "asama": "sonra",
+      "dosya": "olcum-duman-sonra.txt",
+      "sha256": "dd447505290ef65ff3f443fdb20b109f6ad1a410a28410e74cb9160d280f631b",
+      "komut": [
+        "node",
+        "sync-skills.mjs",
+        "--skill",
+        "yazilim-fabrikasi",
+        "--apply",
+        "--force"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-09-23T10:20:49+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "duman-2",
+      "asama": "sonra",
+      "dosya": "olcum-duman-2-sonra.txt",
+      "sha256": "e29d83f7a5e000e289c140f403dd4f14875fee917d0b49af8c6f98a3ffbba4c0",
+      "komut": [
+        "node",
+        "sync-skills.mjs",
+        "--skill",
+        "yazilim-fabrikasi",
+        "--apply",
+        "--force"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-23T10:21:02+03:00",
+      "sure_sn": 0.7
+    }
+  ],
+  "imza": "0091633731858356838f1bfbeb7a4fabf64fb8865915696e646efbc5d9dc08e7"
+}

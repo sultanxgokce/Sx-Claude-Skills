@@ -1,0 +1,26 @@
+$ node sync-skills.mjs --skill yazilim-fabrikasi --apply --force
+# rc=1 sure=0.1s zaman=2026-09-23T10:20:49+03:00
+--- stdout ---
+
+  sync-skills — APPLY --force
+
+     🔴 DUMAN TESTİ DÜŞTÜ — yazilim-fabrikasi → _global:
+        • denetci.sh: ÇALIŞTIRILAMAZ (izin yok)
+        • denetci.test.sh: ÇALIŞTIRILAMAZ (izin yok)
+        • fabrika-kur.sh: ÇALIŞTIRILAMAZ (izin yok)
+        • fabrika-kur.test.sh: ÇALIŞTIRILAMAZ (izin yok)
+        • gun-sonu.sh: ÇALIŞTIRILAMAZ (izin yok)
+        • is-alani.sh: ÇALIŞTIRILAMAZ (izin yok)
+        • is-alani.test.sh: ÇALIŞTIRILAMAZ (izin yok)
+        • kanit.sh: ÇALIŞTIRILAMAZ (izin yok)
+        • kanit.test.sh: ÇALIŞTIRILAMAZ (izin yok)
+        • karne.sh: ÇALIŞTIRILAMAZ (izin yok)
+        • karne.test.sh: ÇALIŞTIRILAMAZ (izin yok)
+        • kart.sh: ÇALIŞTIRILAMAZ (izin yok)
+        • kart.test.sh: ÇALIŞTIRILAMAZ (izin yok)
+        → dosya kopyalandı ama KULLANILAMAZ. "Dağıtıldı" demek yetmez.
+
+  özet: 0 uygulandı · 1 güncel · 0 drift-uyarı · 0 eksik · 1 duman-düştü
+  🔴 1 skill KULLANILAMAZ hâlde kuruldu — dağıtım YEŞİL DEĞİL.
+
+--- stderr ---
