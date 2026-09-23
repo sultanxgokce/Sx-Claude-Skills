@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.4.1
+version: 0.5.0
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -46,6 +46,7 @@ tags: [fabrika, worktree, kanit, bagimsiz-goz, puan, hat-dosyasi, orkestrasyon, 
 | `kanit.sh dosya <iş> <etiket> <yol>` · `dogrula <iş>` · `ozet <iş>` | var olan dosyayı ekler · imza+sha doğrular · PR tablosu | dogrula: 0 sağlam · 1 bozuk · 3 yok |
 | `denetci.sh <iş> --pr N\|--diff F [--yazan claude\|codex] [--denetci …]` | BAĞIMSIZ GÖZ: yazandan farklı model; puan iki satır; DENETIM-<tur>.json'u araç yazar | 0 GEÇTİ · 1 adım 2 · 2 kanıt yok/bozuk · 3 ölçemedi · 4 tıkandı |
 | `karne.sh yaz <iş>` · `kirildi <iş> --neden --kanit` · `ozet` | puan kalibrasyonu defteri: "5 alanların kaçı kırıldı" | 0 · 3 |
+| `birlestirme-kapisi.sh <iş>\|--pr N` | 4. adımın SON kapısı: kart + imzalı kanıt + bağımsız göz 5/5 ve "doğru şey E" ve denetçi≠yazan. Biri eksikse birleştirme YOK | 0 geçti · 1 eksik · 3 ölçülemedi |
 | `sergi-beceri.py --sx <Sx> --out <dizin> [--depo ad=yol]` | beceri sergisi manifesti (+SKILL.md kopyaları); sonra `sergi/scripts/build_catalog.py` | 0 · 3 |
 
 ## Beş adım — kısa; tam kural her adımın kendi dosyasında
@@ -75,7 +76,8 @@ Hat dosyası **düzenlenmez**; kutuya özel kural `.claude/skills/` katmanına g
 | `sergi-beceri.py` → sergi.mmepanel.com | **F2 — var**: manifest üretir (katalog ∪ kurulu ∪ depo-yerel; öksüz görünür), `sergi` becerisi basar, Nexus `scripts/sergi-yayinla.sh` yayınlar. Canlı 22 Eyl: 117 kayıt, Access arkasında |
 | `kart.sh` (sınıf soruları araçta, kartsız alan açılmaz) · `gun-sonu.sh` (defterden özet) · tetik entegrasyonu (`--oda`) | **F3 — var**, sınavlı (25) |
 | akış videosu (grafik ortam) | yok — konteynerde grafik ortam yok; `ekran` kare dizisi, video SARI kalır |
-| ana-dal Edit/Write kilidi (filo kancası) | F4 — yok, ayrı Sultan onayı ister |
+| ana-dal Edit/Write kilidi | **var** — Nexus'ta canlı, uçtan uca ölçüldü (Write engellendi) |
+| birleştirme kapısı (`gh pr merge` kancası) | **var** — kanıtsız/puansız iş birleşemez; hat dosyası kurulu depolarda geçerli |
 
 Bu tablo "yazılmış ≠ kurulmuş" kanununun beceriye uygulanmış hâlidir: olmayan şey "var" diye yazılmaz.
 

@@ -1,0 +1,21 @@
+{
+  "is": "birlestirme-kapisi",
+  "cumle": "Birleştirme kapısı betiği (Nexus'taki kanca ile eş iş; kart iki depoda ayrı)",
+  "istedi": "Sultan",
+  "aldi": "MUAVIN",
+  "zaman": "2026-09-23T13:46:38+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "e"
+  },
+  "siniflar": [
+    "yetki"
+  ],
+  "sultan": true,
+  "kanit_nerede": "kapı sınavı + mutasyon",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}
