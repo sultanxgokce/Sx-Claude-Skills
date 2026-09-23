@@ -1,0 +1,23 @@
+{
+  "is": "denetci-tirnak",
+  "arac": "kanit.py/0.1.0",
+  "guncelleme": "2026-09-23T10:05:34+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "56542bd424d1e94ce17e8b09faa6c1f4ac360389bd11125cf6794dd132eb7737",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-23T10:05:34+03:00",
+      "sure_sn": 4.6
+    }
+  ],
+  "imza": "eb3baf42582c8ecc86d2a5cfce36d37125b7ab56ae877b5f250a61753e0cfbfb"
+}

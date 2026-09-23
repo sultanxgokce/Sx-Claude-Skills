@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.4.0
+version: 0.4.1
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -84,6 +84,7 @@ Bu tablo "yazılmış ≠ kurulmuş" kanununun beceriye uygulanmış hâlidir: o
 - Worktree **paylaşılan kaynağı izole etmez** (port · veritabanı · kilit dosyası) — `is-alani.sh ac` her açılışta bunu basar.
 - Her betik `rc=3` = ölçülemedi (sarı); yeşil değil. Kanıt komutu boru arkasına konmaz.
 - Kanıt manifesti imzası elle yazımı yakalar; kriptografik gizlilik iddiası YOK (tuz araçta açık). Kararlı ajanı değil, kestirmeyi durdurur.
+- Araçlar arası veri DOSYADAN geçer, kabuk alıntısından değil (23 Eyl: denetçinin Türkçe metnindeki kesme işareti puan satırını kırdı).
 - Codex bu konteynerde kum havuzu (bwrap) açamıyor → istem argüman olarak verilir, denetçi komut koşmaz; >120 KB istem kırpılır ve söylenir.
 - Defter yerleşimi: kartlar + karne + gün-sonu BİRİNCİL depoda (`_agents/fabrika/kartlar|karne.jsonl|gun-sonu`), kanıt + denetim İŞİN worktree'sinde (`_agents/fabrika/kanit/<iş>/`, PR ile gider).
 - Sınav: `is-alani.test.sh` · `fabrika-kur.test.sh` · `kanit.test.sh` (playwright varsa gerçek kare) · `denetci.test.sh` (sahte denetçi) · `karne.test.sh` · `kart.test.sh` (kart + gün sonu + zincir).
