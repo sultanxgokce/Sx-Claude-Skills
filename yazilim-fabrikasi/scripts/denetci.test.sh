@@ -81,7 +81,7 @@ SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-s --diff "$T/d.patch" >/dev/null 2>&1; [
 # kartta kayıt YOKKEN bayrak işe yaramaz
 CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-s --diff "$T/d.patch" --sultan-devam 2>&1)"; RC=$?
 [ "$RC" -eq 1 ]; g $? "🔴 kartta karar yokken bayrak kapıyı AÇMIYOR (rc=1)"
-grep -q "KARTTA 'devam' kararı YOK" <<<"$CIKTI"; g $? "sebebi yazılı"
+grep -q "KARTTA gerekçeli" <<<"$CIKTI"; g $? "sebebi yazılı"
 grep -q "sultan-dedi" <<<"$CIKTI"; g $? "ne yapılacağı komutla yazılı"
 [ ! -f "$T/_agents/fabrika/kanit/is-s/DENETIM-4.json" ]; g $? "denetim KOŞULMADI"
 [ ! -f "$T/_agents/fabrika/tavan-defteri.log" ]; g $? "deftere de yazılmadı"
@@ -89,18 +89,23 @@ grep -q "sultan-dedi" <<<"$CIKTI"; g $? "ne yapılacağı komutla yazılı"
 bash "$KT" sultan-dedi is-s --karar devam --oturum ref1 --soz "devam" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "--beyan eksikken kart kaydı REDDEDİLDİ"
 bash "$KT" sultan-dedi is-s --karar devam --soz "devam" --beyan MUAVIN >/dev/null 2>&1; [ $? -ne 0 ]; g $? "--oturum eksikken REDDEDİLDİ"
 # tam D1 kaydı → kapı açılır
-bash "$KT" sultan-dedi is-s --karar devam --oturum "muavin/4390ad1f" --soz "olur bir tur daha devam" --beyan MUAVIN >/dev/null 2>&1; g $? "tam D1 kaydı karta işlendi"
+# gerekçesiz kayıt da REDDEDİLİR — "devam" sözcüğü gerekçe değildir (bağımsız göz tur 2)
+bash "$KT" sultan-dedi is-s --karar devam --oturum ref0 --soz "devam" --beyan MUAVIN >/dev/null 2>&1; [ $? -ne 0 ]; g $? "🔴 --gerekce eksikken REDDEDİLDİ"
+bash "$KT" sultan-dedi is-s --karar devam --oturum ref0 --soz "devam" --beyan MUAVIN --gerekce "kisa" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "20 karakterden kısa gerekçe REDDEDİLDİ"
+bash "$KT" sultan-dedi is-s --karar devam --oturum "muavin/4390ad1f" --soz "olur bir tur daha devam" --beyan MUAVIN --gerekce "acik bulgu kucuk ve anlasilir, birakmak kapinin amacini curutur" >/dev/null 2>&1; g $? "tam D1 kaydı (gerekçeli) karta işlendi"
 CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-s --diff "$T/d.patch" --sultan-devam 2>&1)"; RC=$?
 [ "$RC" -eq 0 ]; g $? "karttaki kararla tur4 koştu ve GEÇTİ"
 grep -q "TAVAN AÇILDI" <<<"$CIKTI"; g $? "tavanın açıldığını SÖYLÜYOR (sessiz değil)"
 grep -q "muavin/4390ad1f" <<<"$CIKTI"; g $? "oturum referansı çıktıda görünüyor"
+grep -q "kapinin amacini curutur" <<<"$CIKTI"; g $? "GEREKÇE de çıktıda görünüyor (niçin bir tur daha)"
 [ -s "$T/_agents/fabrika/tavan-defteri.log" ]; g $? "tavan defteri GERÇEKTEN yazıldı"
 grep -q "olur bir tur daha devam" "$T/_agents/fabrika/tavan-defteri.log"; g $? "Sultan'ın kırpık sözü defterde"
 grep -q "beyan=MUAVIN" "$T/_agents/fabrika/tavan-defteri.log"; g $? "beyan eden ajan defterde (kim aktardı)"
+grep -q "kapinin amacini curutur" "$T/_agents/fabrika/tavan-defteri.log"; g $? "gerekçe defterde (Sultan gün sonunda niçin'i görür)"
 # 🔴 Deftere YAZILAMIYORSA kapı açılmaz — kaydedilemeyen istisna delikTİR
 kartac is-u; bash "$K" olcum is-u olc --asama tek -- echo 1 >/dev/null 2>&1
 for i in 1 2 3; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-u --diff "$T/d.patch" >/dev/null 2>&1; done
-bash "$KT" sultan-dedi is-u --karar devam --oturum ref9 --soz "devam et" --beyan MUAVIN >/dev/null 2>&1
+bash "$KT" sultan-dedi is-u --gerekce "acik bulgu kucuk ve anlasilir, birakmak kapinin amacini curutur" --karar devam --oturum ref9 --soz "devam et" --beyan MUAVIN >/dev/null 2>&1
 # 🔴 Dizini kilitlemek YETMEZ: var olan bir dosyaya eklemek dizin izni değil DOSYA izni
 #    ister. İlk denememde bunu kaçırdım ve sınav yanlış sebepten yeşil verecekti.
 touch "$T/_agents/fabrika/tavan-defteri.log"; chmod a-w "$T/_agents/fabrika/tavan-defteri.log" 2>/dev/null
@@ -112,16 +117,38 @@ grep -q "geri OKUNAMADI" <<<"$CIKTI"; g $? "sebebi yazılı"
 #    bağlıysa append rc=0 döner ama satır yoktur). Geri-okuma kontrolünü ölçen tek vaka budur.
 kartac is-v; bash "$K" olcum is-v olc --asama tek -- echo 1 >/dev/null 2>&1
 for i in 1 2 3; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-v --diff "$T/d.patch" >/dev/null 2>&1; done
-bash "$KT" sultan-dedi is-v --karar devam --oturum ref7 --soz "devam" --beyan MUAVIN >/dev/null 2>&1
+bash "$KT" sultan-dedi is-v --gerekce "acik bulgu kucuk ve anlasilir, birakmak kapinin amacini curutur" --karar devam --oturum ref7 --soz "devam" --beyan MUAVIN >/dev/null 2>&1
 rm -f "$T/_agents/fabrika/tavan-defteri.log"; ln -s /dev/null "$T/_agents/fabrika/tavan-defteri.log"
 CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-v --diff "$T/d.patch" --sultan-devam 2>&1)"; RC=$?
 rm -f "$T/_agents/fabrika/tavan-defteri.log"
 [ "$RC" -eq 1 ]; g $? "🔴 yazma başarılı ama satır kaybolduysa kapı AÇILMIYOR"
 grep -q "geri OKUNAMADI" <<<"$CIKTI"; g $? "kaybolduğunu söylüyor"
+
+# 🔴 ELLE YAZILMIŞ KART: kart.sh gerekçesiz kaydı reddediyor, ama kartı elle düzenleyen ya da
+#    eski sürümle damgalanmış bir kart gerekçesiz olabilir. Kapı KENDİ kontrolünü yapmalı —
+#    "yazan araç doğrulamıştır" varsayımı, aracın atlatılabildiği her yerde çöker.
+kartac is-y; bash "$K" olcum is-y olc --asama tek -- echo 1 >/dev/null 2>&1
+for i in 1 2 3; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-y --diff "$T/d.patch" >/dev/null 2>&1; done
+python3 - "$T/_agents/fabrika/kartlar/is-y.json" <<'PYX'
+import json,sys
+y=sys.argv[1]; k=json.load(open(y,encoding="utf-8"))
+k["sultan_kararlari"]=[{"karar":"devam","oturum":"ref-elle","soz":"devam","beyan":"MUAVIN","zaman":"2026-09-23T00:00:00+03:00"}]
+json.dump(k,open(y,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
+PYX
+CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-y --diff "$T/d.patch" --sultan-devam 2>&1)"; RC=$?
+[ "$RC" -eq 1 ]; g $? "🔴 elle yazılmış GEREKÇESİZ kart kapıyı AÇMIYOR"
+grep -q "KARTTA gerekçeli" <<<"$CIKTI"; g $? "sebebi yazılı"
+python3 - "$T/_agents/fabrika/kartlar/is-y.json" <<'PYX'
+import json,sys
+y=sys.argv[1]; k=json.load(open(y,encoding="utf-8"))
+k["sultan_kararlari"][0]["gerekce"]="kisa"
+json.dump(k,open(y,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
+PYX
+SAHTE_JSON="$(J 5 E "")" bash "$D" is-y --diff "$T/d.patch" --sultan-devam >/dev/null 2>&1; [ $? -eq 1 ]; g $? "elle yazılmış KISA gerekçe de AÇMIYOR"
 # 🔴 MUTLAK tavanı AÇMAZ — dört tur hâlâ mutlaktır
 kartac is-t; bash "$K" olcum is-t olc --asama tek -- echo 1 >/dev/null 2>&1
 for i in 1 2 3; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-t --diff "$T/d.patch" >/dev/null 2>&1; done
-bash "$KT" sultan-dedi is-t --karar devam --oturum ref2 --soz "devam edelim" --beyan MUAVIN >/dev/null 2>&1
+bash "$KT" sultan-dedi is-t --gerekce "acik bulgu kucuk ve anlasilir, birakmak kapinin amacini curutur" --karar devam --oturum ref2 --soz "devam edelim" --beyan MUAVIN >/dev/null 2>&1
 SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-t --diff "$T/d.patch" --sultan-devam >/dev/null 2>&1
 CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-t --diff "$T/d.patch" --sultan-devam 2>&1)"; RC=$?
 [ "$RC" -eq 4 ]; g $? "🔴 5. tur: Sultan kapısı MUTLAK tavanı açmıyor (rc=4)"
@@ -173,6 +200,7 @@ mut() { # mut <ad> <sed-ifadesi> [hedef]
   [ $? -ne 0 ]; g $? "mutant '$1' sınavı KIRMIZI yapıyor"
   rm -f "$M" "$M.err"
 }
+mut "gerekce-zorunlulugunu-kaldir" 's@^if len(x.get("gerekce") or "") < 20: raise SystemExit(1)@pass@'
 mut "karti-okumayi-kaldir" 's@^  if \[ -z "$GEREKCE" \]; then@  if false; then@'
 mut "defter-dogrulamasini-kaldir" 's@^  grep -qF "$SATIR" "$DEF"@  true@'
 mut "mutlak-tavani-kaldir" 's@^if \[ "$TUR" -gt "$MUTLAK" \]; then@if false; then@'

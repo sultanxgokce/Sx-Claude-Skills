@@ -90,13 +90,16 @@ kk=[x for x in (k.get("sultan_kararlari") or []) if x.get("karar")==sys.argv[2]]
 if not kk: raise SystemExit(1)
 x=kk[-1]
 if not (x.get("oturum") and x.get("soz") and x.get("beyan")): raise SystemExit(1)
-print(f'oturum={x["oturum"]} soz="{x["soz"]}" beyan={x["beyan"]}')
+# gerekçe ayrı alandır: Sultan'ın sözü "ne dedi"yi, gerekçe "niçin işe yarar"ı taşır.
+if len(x.get("gerekce") or "") < 20: raise SystemExit(1)
+print(f'oturum={x["oturum"]} soz="{x["soz"]}" beyan={x["beyan"]} gerekce="{x["gerekce"]}"')
 PY
 )"
   if [ -z "$GEREKCE" ]; then
-    _hata "--sultan-devam verildi ama KARTTA 'devam' kararı YOK — kapı açılmadı."
+    _hata "--sultan-devam verildi ama KARTTA gerekçeli 'devam' kararı YOK — kapı açılmadı."
     _bilgi "   Sultan gerçekten 'devam' dediyse önce kayda geçir (A06: onay üretilmez, aktarılır):"
-    _bilgi "     kart.sh sultan-dedi $IS --karar devam --oturum <ref> --soz \"<verbatim>\" --beyan <AJAN>"
+    _bilgi "     kart.sh sultan-dedi $IS --karar devam --oturum <ref> --soz \"<verbatim>\" --beyan <AJAN> \\"
+    _bilgi "        --gerekce \"<niçin bir tur daha işe yarar — en az 20 karakter>\""
     return 2
   fi
   # 🔴 Deftere yazılamıyorsa kapı AÇILMAZ: kaydedilemeyen istisna, istisna değil DELİKTİR.
