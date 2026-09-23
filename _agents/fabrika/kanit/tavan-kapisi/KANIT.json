@@ -1,0 +1,39 @@
+{
+  "is": "tavan-kapisi",
+  "arac": "kanit.py/0.1.0",
+  "guncelleme": "2026-09-23T16:38:57+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-sinavi-sonra.txt",
+      "sha256": "32ba834e8610c017f689fb20680c908add0a72591fbb8ff0c1d3c28556ba7b36",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-23T16:38:03+03:00",
+      "sure_sn": 16.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gun-sonu-tavan-bolumu",
+      "asama": "sonra",
+      "dosya": "olcum-gun-sonu-tavan-bolumu-sonra.txt",
+      "sha256": "4cf48eae816f59f37273029c9b18166004b45ffdb752b077b13749bbd33751e1",
+      "komut": [
+        "bash",
+        "-c",
+        "KANIT_DEPO=\"$PWD\" bash yazilim-fabrikasi/scripts/gun-sonu.sh | grep -A2 \"Tavan açılışları\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-23T16:38:57+03:00",
+      "sure_sn": 0.0
+    }
+  ],
+  "imza": "a760d39b6c42f53057d8bac8f43e53f25d6ffafaa54a7ad9985f84980988c311"
+}

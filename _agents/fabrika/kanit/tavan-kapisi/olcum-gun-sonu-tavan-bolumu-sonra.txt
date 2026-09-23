@@ -1,0 +1,7 @@
+$ bash -c KANIT_DEPO="$PWD" bash yazilim-fabrikasi/scripts/gun-sonu.sh | grep -A2 "Tavan açılışları"
+# rc=0 sure=0.0s zaman=2026-09-23T16:38:57+03:00
+--- stdout ---
+## Tavan açılışları (1) — dönüş tavanını senin kararın aştı
+- 13:38 · is=ornek tur=4 · gerekçe: Sultan devam dedi: acik bulgu kucuk ve anlasilir
+
+--- stderr ---

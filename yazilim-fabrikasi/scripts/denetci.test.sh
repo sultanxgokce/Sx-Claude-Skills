@@ -3,7 +3,7 @@
 # Ölçtüğü: kanıt kapısı · yazan≠denetleyen · puan/karar · tavan 3(+1)/4 · geçersiz çıktı=ölçemedi · istem içeriği.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-D="$HERE/denetci.sh"; K="$HERE/kanit.sh"
+D="${MUTANT_D:-$HERE/denetci.sh}"; K="$HERE/kanit.sh"
 gecen=0; kalan=0
 g() { if [ "$1" -eq 0 ]; then gecen=$((gecen+1)); echo "  ✓ $2"; else kalan=$((kalan+1)); echo "  ✗ $2"; fi; }
 
@@ -64,6 +64,35 @@ CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-d --diff "$T/d.patch" 2>&1)"; RC=
 grep -q "İLERLİYOR" <<<"$CIKTI"; g $? "payın gerekçesi yazılı"
 SAHTE_JSON="$(J 5 E "")" bash "$D" is-d --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 4 ]; g $? "tur5 mutlak tavan → rc=4"
 
+echo "════ T7b · 🚪 SULTAN KAPISI: 'devam' kararı tavanı aşar, gerekçesiz aşmaz ════"
+# NİÇİN (23 Eyl canlı vaka): tıkandı raporu "karar sınıf işiyse Sultan'ın" diyordu ama araçta
+# o kararı kabul edecek kapı YOKTU. Kapı onarımında puanlar 3·3·2 gitti; düşüşün sebebi işin
+# kötüleşmesi değil, denetçinin her turda DAHA CİDDİ kusur bulmasıydı — "ilerliyor_mu" bu ikisini
+# ayırt edemez. Kural insana havale ediyor, araç insanı dinlemiyordu.
+bash "$K" olcum is-s olc --asama tek -- echo 1 >/dev/null 2>&1
+SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-s --diff "$T/d.patch" >/dev/null 2>&1
+SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-s --diff "$T/d.patch" >/dev/null 2>&1
+SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-s --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 4 ]; g $? "puan düşünce tur3 tıkandı (rc=4)"
+# gerekçesiz / kısa gerekçeli kapı AÇILMAZ
+CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-s --diff "$T/d.patch" --sultan-devam "kisa" 2>&1)"; RC=$?
+[ "$RC" -eq 1 ]; g $? "kısa gerekçe REDDEDİLDİ (rc=1)"
+grep -q "GEREKÇE ister" <<<"$CIKTI"; g $? "ne istendiği yazılı"
+[ ! -f "$T/_agents/fabrika/kanit/is-s/DENETIM-4.json" ]; g $? "kısa gerekçeyle denetim KOŞULMADI"
+# gerekçeli kapı açılır, denetim koşar, deftere yazılır
+CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-s --diff "$T/d.patch" --sultan-devam "Sultan devam dedi: acik bulgu kucuk ve anlasilir, birakmak kapinin amacini cürütür" 2>&1)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "gerekçeli kapı → tur4 koştu ve GEÇTİ"
+grep -q "TAVAN AÇILDI" <<<"$CIKTI"; g $? "tavanın açıldığını SÖYLÜYOR (sessiz değil)"
+[ -s "$T/_agents/fabrika/tavan-defteri.log" ]; g $? "tavan defteri GERÇEKTEN yazıldı"
+grep -q "Sultan devam dedi" "$T/_agents/fabrika/tavan-defteri.log"; g $? "gerekçe defterde duruyor"
+grep -q "TAVAN-ACILDI" "$T/_agents/fabrika/tavan-defteri.log"; g $? "defter satırı etiketli"
+# 🔴 MUTLAK tavanı AÇMAZ — dört tur hâlâ mutlaktır
+bash "$K" olcum is-t olc --asama tek -- echo 1 >/dev/null 2>&1
+for i in 1 2 3; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-t --diff "$T/d.patch" >/dev/null 2>&1; done
+SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-t --diff "$T/d.patch" --sultan-devam "dorduncu tur icin Sultan karari alindi ve kayda gecti" >/dev/null 2>&1
+CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-t --diff "$T/d.patch" --sultan-devam "besinci tur icin de devam denildi ama mutlak tavan acilmamali" 2>&1)"; RC=$?
+[ "$RC" -eq 4 ]; g $? "🔴 5. tur: Sultan kapısı MUTLAK tavanı açmıyor (rc=4)"
+grep -q "mutlak tavan" <<<"$CIKTI"; g $? "mutlak olduğunu söylüyor"
+
 echo "════ T8 · geçersiz çıktı → rc=3 ölçemedi, ham saklanır ════"
 bash "$K" olcum is-e olc --asama tek -- echo 1 >/dev/null 2>&1
 SAHTE_JSON='ben denetçiyim, her şey harika' bash "$D" is-e --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 3 ]; g $? "JSON değil → rc=3"
@@ -92,5 +121,17 @@ PY
 SAHTE_JSON="$(J 5 E "")" bash "$D" is-f --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 2 ]; g $? "elle boyanmış manifestle denetim açılmaz"
 
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
+if [ -n "${IC_KOSUM:-}" ]; then echo "(ic)"; [ "$kalan" -eq 0 ]; exit $?; fi
+echo "════ T11 · MUTASYON: Sultan kapısını bozunca sınav kırmızı veriyor mu ════"
+mut() { # mut <ad> <sed>
+  local M="$HERE/.mutant-$1.sh"; sed "$2" "$HERE/denetci.sh" > "$M"; chmod +x "$M"
+  IC_KOSUM=1 MUTANT_D="$M" bash "$0" >/dev/null 2>&1
+  [ $? -ne 0 ]; g $? "mutant '$1' sınavı KIRMIZI yapıyor"
+  rm -f "$M"
+}
+mut "gerekce-kontrolunu-kaldir" 's|^  if \[ "${#SULTAN_DEVAM}" -lt 20 \]; then|  if false; then|'
+mut "deftere-yazmayi-kaldir" 's|^  printf .%s . TAVAN-ACILDI|  : printf "%s | TAVAN-ACILDI|'
+mut "mutlak-tavani-kaldir" 's|^if \[ "$TUR" -gt "$MUTLAK" \]; then|if false; then|'
+
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]

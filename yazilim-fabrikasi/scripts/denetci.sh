@@ -6,6 +6,8 @@
 #   · denetleyen model yazanla AYNI OLAMAZ (Claude→Codex, Codex→Claude; --denetci ile açıkça seçilebilir)
 #   · kanıt yoksa ya da manifest bozuksa denetim AÇILMAZ (rc=2) — "kanıtsız adım 4 yok"
 #   · tavan 3 tur; ilerleyen işe (puan↑ VE açık bulgu↓) +1; DÖRT mutlak → sonrası "tıkandı + üç yol" (rc=4)
+#   · --sultan-devam "<gerekçe>" : Sultan "devam" dediyse "ilerlemiyor" hükmünü aşar (MUTLAK tavanı AÇMAZ).
+#     Gerekçe ≥20 karakter, <depo>/_agents/fabrika/tavan-defteri.log'a yazılır, gün sonu özetinde görünür.
 #
 # Kullanım:
 #   denetci.sh <iş> (--pr N | --diff DOSYA) [--kart DOSYA] [--yazan claude|codex] [--denetci auto|codex|claude]
@@ -21,12 +23,14 @@ TAVAN=3; MUTLAK=4
 _hata() { printf '✗ %s\n' "$*" >&2; }
 _bilgi() { printf '%s\n' "$*"; }
 
-IS=""; PR=""; DIFF=""; KART=""; YAZAN="claude"; DENETCI="auto"; MODEL=""; DEPO="${KANIT_DEPO:-}"
+IS=""; PR=""; DIFF=""; KART=""; YAZAN="claude"; DENETCI="auto"; MODEL=""; DEPO="${KANIT_DEPO:-}"; SULTAN_DEVAM=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --pr) PR="$2"; shift 2 ;; --diff) DIFF="$2"; shift 2 ;; --kart) KART="$2"; shift 2 ;;
     --yazan) YAZAN="$2"; shift 2 ;; --denetci) DENETCI="$2"; shift 2 ;; --model) MODEL="$2"; shift 2 ;;
-    --depo) DEPO="$2"; shift 2 ;; -h|--help) sed -n '1,20p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    --depo) DEPO="$2"; shift 2 ;;
+    --sultan-devam) SULTAN_DEVAM="$2"; shift 2 ;;
+    -h|--help) sed -n '1,20p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) [ -z "$IS" ] && IS="$1" || { _hata "tanınmayan argüman: $1"; exit 1; }; shift ;;
   esac
 done
@@ -65,10 +69,39 @@ tikandi_raporu() {
   _bilgi "   2) KAPSAMI DARALT — iş kartını küçült, geçen kısmı gönder, kalanı yeni kart"
   _bilgi "   3) GERİ AL — alanı kapat, iş kartına 'tıkandı' damgası, ders deftere"
 }
+# 🔴 SULTAN KAPISI (23 Eyl 2026): tıkandı raporu "karar sınıf işiyse Sultan'ın" diyordu ama
+#    araçta o kararı kabul edecek kapı YOKTU — kural insana havale ediyor, araç insanı dinlemiyordu.
+#    Canlı vaka: kapı onarımında puanlar 3·3·2 gitti; düşüşün sebebi işin kötüleşmesi değil,
+#    denetçinin her turda DAHA CİDDİ bir kusur bulmasıydı. "ilerliyor_mu" bu ikisini ayırt edemez.
+#    Kapı gerekçesiz açılmaz (≥20 karakter), deftere yazılır, gün sonu özetinde Sultan'a görünür.
+#    ⚠ MUTLAK tavanı AÇMAZ: dört tur hâlâ mutlaktır. Bu kapı yalnız "ilerlemiyor" hükmünü aşar.
+#    ⚠ A06: bu bayrağı yazan ajan Sultan'ın onayını ÜRETMEZ; aldığı onayı AKTARIR. Gerekçe metni
+#      denetlenebilir olsun diye deftere düşer — uyduran, defterde yakalanır.
+sultan_kapisi() {
+  [ -n "$SULTAN_DEVAM" ] || return 1
+  if [ "${#SULTAN_DEVAM}" -lt 20 ]; then
+    _hata "--sultan-devam GEREKÇE ister (en az 20 karakter) — 'Sultan dedi' tek başına kayıt değildir"
+    return 2
+  fi
+  mkdir -p "$DEPO/_agents/fabrika" 2>/dev/null
+  printf '%s | TAVAN-ACILDI | is=%s tur=%s | %s\n' \
+    "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$IS" "$TUR" "$SULTAN_DEVAM" \
+    >> "$DEPO/_agents/fabrika/tavan-defteri.log" 2>/dev/null
+  _bilgi "⚠ TAVAN AÇILDI (tur $TUR) — Sultan kararı, deftere yazıldı: $SULTAN_DEVAM"
+  return 0
+}
 if [ "$TUR" -gt "$MUTLAK" ]; then _hata "mutlak tavan ($MUTLAK) aşıldı — denetim koşulmadı"; tikandi_raporu; exit 4; fi
 if [ "$TUR" -gt "$TAVAN" ]; then
   if ilerliyor_mu; then _bilgi "· tur $TUR: tavan $TAVAN aşıldı ama iş İLERLİYOR (puan↑, bulgu↓) → +1 tur payı"
-  else _hata "tavan ($TAVAN) doldu ve iş ilerlemiyor — denetim koşulmadı"; tikandi_raporu; exit 4; fi
+  else
+    sultan_kapisi; sk=$?
+    [ "$sk" -eq 2 ] && exit 1
+    if [ "$sk" -ne 0 ]; then
+      _hata "tavan ($TAVAN) doldu ve iş ilerlemiyor — denetim koşulmadı"; tikandi_raporu
+      _bilgi "   Sultan 'devam' dediyse: --sultan-devam \"<en az 20 karakterlik gerekçe>\" (deftere yazılır)"
+      exit 4
+    fi
+  fi
 fi
 
 # ── 3 · girdiler ─────────────────────────────────────────────────────────────────
