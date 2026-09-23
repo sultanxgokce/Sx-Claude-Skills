@@ -145,6 +145,26 @@ k["sultan_kararlari"][0]["gerekce"]="kisa"
 json.dump(k,open(y,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
 PYX
 SAHTE_JSON="$(J 5 E "")" bash "$D" is-y --diff "$T/d.patch" --sultan-devam >/dev/null 2>&1; [ $? -eq 1 ]; g $? "elle yazılmış KISA gerekçe de AÇMIYOR"
+
+# 🔴 DEFTER AYRAÇ ENJEKSİYONU (bağımsız göz tur 3): alanlar "|" ayrımlı bir kayıt satırına
+#    yazılıyor. İçinde "|" ya da satır sonu olan bir değer sütunları kaydırır ya da SAHTE bir
+#    ek kayıt gibi görünür. Kendi eliyle satır eklenebilen defter, denetim defteri değildir.
+bash "$KT" sultan-dedi is-s --karar devam --oturum "ref|sahte" --soz "x" --beyan M --gerekce "yirmi karakterden uzun bir gerekce metni" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "🔴 '|' içeren alan kartta REDDEDİLDİ"
+bash "$KT" sultan-dedi is-s --karar devam --oturum ref --soz "$(printf 'a\nSAHTE | KAYIT')" --beyan M --gerekce "yirmi karakterden uzun bir gerekce metni" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "satır sonu içeren alan REDDEDİLDİ"
+# ikinci çit: kart elle yazılmış olsa bile deftere temizlenerek girer
+kartac is-z; bash "$K" olcum is-z olc --asama tek -- echo 1 >/dev/null 2>&1
+for i in 1 2 3; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-z --diff "$T/d.patch" >/dev/null 2>&1; done
+python3 - "$T/_agents/fabrika/kartlar/is-z.json" <<'PYX'
+import json,sys
+y=sys.argv[1]; k=json.load(open(y,encoding="utf-8"))
+k["sultan_kararlari"]=[{"karar":"devam","oturum":"ref","soz":"a\nSAHTE-SATIR | TAVAN-ACILDI | is=baska",
+  "beyan":"M","gerekce":"yirmi karakterden uzun bir gerekce metni","zaman":"2026-09-23T00:00:00+03:00"}]
+json.dump(k,open(y,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
+PYX
+SAHTE_JSON="$(J 5 E "")" bash "$D" is-z --diff "$T/d.patch" --sultan-devam >/dev/null 2>&1; g $? "elle yazılmış kirli kartla kapı açıldı (gerekçe tam)"
+# Her meşru kayıt zaman damgasıyla BAŞLAR. Damgasız bir satır, enjekte edilmiş satırdır.
+! grep -qvE '^[0-9]{4}-[0-9]{2}-[0-9]{2}T' "$T/_agents/fabrika/tavan-defteri.log"; g $? "🔴 defterde damgasız (enjekte) satır YOK"
+! grep -qE '\| TAVAN-ACILDI \| is=baska' "$T/_agents/fabrika/tavan-defteri.log"; g $? "enjekte edilen ayraçlar temizlenmiş"
 # 🔴 MUTLAK tavanı AÇMAZ — dört tur hâlâ mutlaktır
 kartac is-t; bash "$K" olcum is-t olc --asama tek -- echo 1 >/dev/null 2>&1
 for i in 1 2 3; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-t --diff "$T/d.patch" >/dev/null 2>&1; done
@@ -200,6 +220,7 @@ mut() { # mut <ad> <sed-ifadesi> [hedef]
   [ $? -ne 0 ]; g $? "mutant '$1' sınavı KIRMIZI yapıyor"
   rm -f "$M" "$M.err"
 }
+mut "ayrac-temizligini-kaldir" 's@^def tmz(v): return " ".join(str(v).replace("|","/").split())@def tmz(v): return str(v)@'
 mut "gerekce-zorunlulugunu-kaldir" 's@^if len(x.get("gerekce") or "") < 20: raise SystemExit(1)@pass@'
 mut "karti-okumayi-kaldir" 's@^  if \[ -z "$GEREKCE" \]; then@  if false; then@'
 mut "defter-dogrulamasini-kaldir" 's@^  grep -qF "$SATIR" "$DEF"@  true@'

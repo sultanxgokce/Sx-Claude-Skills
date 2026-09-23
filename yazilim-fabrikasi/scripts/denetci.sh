@@ -92,7 +92,10 @@ x=kk[-1]
 if not (x.get("oturum") and x.get("soz") and x.get("beyan")): raise SystemExit(1)
 # gerekçe ayrı alandır: Sultan'ın sözü "ne dedi"yi, gerekçe "niçin işe yarar"ı taşır.
 if len(x.get("gerekce") or "") < 20: raise SystemExit(1)
-print(f'oturum={x["oturum"]} soz="{x["soz"]}" beyan={x["beyan"]} gerekce="{x["gerekce"]}"')
+# 🔴 İKİNCİ ÇİT: kart elle düzenlenmiş olabilir, kart.sh'ın kapısından geçmemiş olabilir.
+# Deftere yazmadan ÖNCE ayraç ve satır sonunu burada da temizliyoruz — tek çit, çit değildir.
+def tmz(v): return " ".join(str(v).replace("|","/").split())
+print(f'oturum={tmz(x["oturum"])} soz="{tmz(x["soz"])}" beyan={tmz(x["beyan"])} gerekce="{tmz(x["gerekce"])}"')
 PY
 )"
   if [ -z "$GEREKCE" ]; then

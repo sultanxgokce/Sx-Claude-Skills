@@ -108,6 +108,18 @@ PY
     #    (a) Sultan ne dedi (verbatim, kısa)  (b) bu yolun niçin işe yarayacağı (muhakeme).
     #    İkisini birleştirmek, "devam" sözcüğünü gerekçe saymak olurdu — bağımsız göz 23 Eyl tur 2.
     [ "${#GEREKCE}" -ge 20 ] || { _hata "--gerekce en az 20 karakter — 'devam' bir gerekçe değildir"; exit 1; }
+    # 🔴 DEFTER AYRAÇ GÜVENLİĞİ (bağımsız göz 23 Eyl tur 3): bu alanlar sonradan "|" ayrımlı bir
+    #    kayıt satırına yazılıyor. İçinde "|" ya da satır sonu olan bir değer, gün sonu özetinde
+    #    sütunları kaydırır ya da SAHTE bir ek kayıt gibi görünür. Denetim defterine kendi eliyle
+    #    satır ekleyebilen bir alan, denetim defteri değildir. Kaynağında reddediyoruz.
+    # ⚠ İlk denememde satır-sonu desenini `*"$(printf '\n')"*` ile yazdım: komut ikamesi sondaki
+    #   satır sonunu yuttuğu için desen boş dizgeye dönüştü ve HER değeri reddetti. Sınav yakaladı.
+    for v in KARAR OTURUM SOZ BEYAN GEREKCE; do
+      d="${!v}"
+      if [[ "$d" == *"|"* || "$d" == *$'\n'* ]]; then
+        _hata "--$(printf '%s' "$v" | tr 'A-Z' 'a-z') içinde '|' ya da satır sonu olamaz (defter ayracı)"; exit 1
+      fi
+    done
     python3 - "$KD/$IS.json" "$KARAR" "$OTURUM" "$SOZ" "$BEYAN" "$GEREKCE" <<'PY' || exit 1
 import json,sys,datetime
 yol,karar,oturum,soz,beyan,gerekce=sys.argv[1:]
