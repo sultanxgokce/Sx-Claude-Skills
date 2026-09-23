@@ -118,32 +118,42 @@ fi
 if [ "$DRC" -ne 0 ]; then _hata "denetçi ($DENETCI_AD) düştü rc=$DRC"; head -5 "$TMP/err" >&2; cp "$HAM" "$DZ/DENETIM-$TUR-HAM.txt" 2>/dev/null; exit 3; fi
 
 # ── 5 · çıktıyı doğrula, kaydet, karar ver ───────────────────────────────────────
-SONUC="$(python3 - "$HAM" "$SEMA" <<'PY'
+# 🔴 Doğrulanmış JSON kabuğa DEĞİŞKEN olarak taşınmaz, DOSYADA kalır. Neden: denetçi Türkçe yazıyor ve
+# metindeki kesme işareti python gömmesini kırıyordu (23 Eyl canlı koşum: tur 1 sonucu diske yazıldı ama
+# betik JSONDecodeError verdi, ardından "[: : integer expression expected"). Araçlar arası veri dosyadan
+# geçer, kabuk alıntısından değil.
+DOGRULANMIS="$TMP/sonuc.json"
+python3 - "$HAM" "$DOGRULANMIS" <<'PY'
 import json,sys,re
 ham=open(sys.argv[1],encoding='utf-8').read().strip()
 m=re.search(r'\{.*\}',ham,re.S)
 try: d=json.loads(m.group(0) if m else ham)
-except Exception as e: print("GEÇERSİZ:"+str(e)); sys.exit(3)
+except Exception as e: print("GEÇERSİZ:"+str(e),file=sys.stderr); sys.exit(3)
 ok=isinstance(d.get("kod_puani"),int) and 0<=d["kod_puani"]<=5 and d.get("dogru_sey") in("E","H") and isinstance(d.get("bulgular"),list)
-if not ok: print("GEÇERSİZ: alanlar eksik/yanlış"); sys.exit(3)
+if not ok: print("GEÇERSİZ: alanlar eksik/yanlış",file=sys.stderr); sys.exit(3)
 for b in d["bulgular"]:
-    if not all(k in b for k in("ne","kanit","konum","agirlik")): print("GEÇERSİZ: bulgu alanları eksik"); sys.exit(3)
-print(json.dumps(d,ensure_ascii=False))
+    if not all(k in b for k in("ne","kanit","konum","agirlik")): print("GEÇERSİZ: bulgu alanları eksik",file=sys.stderr); sys.exit(3)
+json.dump(d,open(sys.argv[2],"w",encoding="utf-8"),ensure_ascii=False)
 PY
-)"; SRC=$?
-if [ "$SRC" -ne 0 ]; then _hata "denetçi çıktısı $SONUC — ölçemedi"; cp "$HAM" "$DZ/DENETIM-$TUR-HAM.txt"; exit 3; fi
-python3 - "$DZ/DENETIM-$TUR.json" "$TUR" "$IS" "$PR" "$YAZAN" "$DENETCI_AD" "$KANIT_DURUM" "$SONUC" <<'PY'
+SRC=$?
+if [ "$SRC" -ne 0 ]; then _hata "denetçi çıktısı geçersiz — ölçemedi"; cp "$HAM" "$DZ/DENETIM-$TUR-HAM.txt"; exit 3; fi
+python3 - "$DZ/DENETIM-$TUR.json" "$TUR" "$IS" "$PR" "$YAZAN" "$DENETCI_AD" "$KANIT_DURUM" "$DOGRULANMIS" <<'PY'
 import json,sys,datetime
-yol,tur,is_,pr,yazan,den,kd,sonuc=sys.argv[1:]
+yol,tur,is_,pr,yazan,den,kd,sonuc_yolu=sys.argv[1:]
 json.dump({"tur":int(tur),"is":is_,"pr":pr,"yazan":yazan,"denetci":den,"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
-           "kanit_durumu":kd,"sonuc":json.loads(sonuc)},open(yol,"w"),ensure_ascii=False,indent=2)
+           "kanit_durumu":kd,"sonuc":json.load(open(sonuc_yolu,encoding="utf-8"))},open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
 PY
-PUAN="$(python3 -c "import json;print(json.loads('''$SONUC''')['kod_puani'])")"
-DOGRU="$(python3 -c "import json;print(json.loads('''$SONUC''')['dogru_sey'])")"
-NB="$(python3 -c "import json;print(len(json.loads('''$SONUC''')['bulgular']))")"
+_oku() { python3 -c "import json,sys;d=json.load(open(sys.argv[1],encoding='utf-8'));print(len(d['bulgular']) if sys.argv[2]=='n' else d[sys.argv[2]])" "$DOGRULANMIS" "$1"; }
+PUAN="$(_oku kod_puani)"; DOGRU="$(_oku dogru_sey)"; NB="$(_oku n)"
+[ -n "$PUAN" ] && [ -n "$DOGRU" ] || { _hata "puan okunamadı — ölçemedi"; exit 3; }
 _bilgi "── DENETİM tur $TUR · denetçi: $DENETCI_AD · yazan: $YAZAN"
 _bilgi "   KOD İYİ Mİ: $PUAN/5 · DOĞRU ŞEY Mİ: $DOGRU · bulgu: $NB · kanıt: $KANIT_DURUM"
-python3 -c "import json;d=json.loads('''$SONUC''');print('   özet: '+d['ozet']);[print(f\"   • [{b['agirlik']}] {b['ne']} — {b['konum']} — kanıt: {b['kanit']}\") for b in d['bulgular']]"
+python3 - "$DOGRULANMIS" <<'PY'
+import json,sys
+d=json.load(open(sys.argv[1],encoding="utf-8"))
+print("   özet: "+d["ozet"])
+for b in d["bulgular"]: print(f"   • [{b['agirlik']}] {b['ne']} — {b['konum']} — kanıt: {b['kanit']}")
+PY
 _bilgi "   kayıt: $DZ/DENETIM-$TUR.json"
 if [ "$PUAN" -eq 5 ] && [ "$DOGRU" = "E" ]; then _bilgi "✓ GEÇTİ — merge kararı: sınıf işi Sultan, sınıfsız iş kutu reisi"; exit 0; fi
 if [ "$TUR" -ge "$TAVAN" ]; then

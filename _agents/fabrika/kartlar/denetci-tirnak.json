@@ -1,0 +1,19 @@
+{
+  "is": "denetci-tirnak",
+  "cumle": "Denetçi çıktısındaki kesme işareti betiği kırıyor — JSON artık dosyadan okunur",
+  "istedi": "MUAVIN",
+  "aldi": "MUAVIN",
+  "zaman": "2026-09-23T10:03:32+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "kart.test.sh + kesme işaretli gerçek çıktı",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}
