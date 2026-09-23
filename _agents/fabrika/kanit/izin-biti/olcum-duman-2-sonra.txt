@@ -1,0 +1,11 @@
+$ node sync-skills.mjs --skill yazilim-fabrikasi --apply --force
+# rc=0 sure=0.7s zaman=2026-09-23T10:21:02+03:00
+--- stdout ---
+
+  sync-skills — APPLY --force
+
+  ⟳ yazilim-fabrikasi → _global: güncel (v0.4.1) · 13 dosyanın çalıştırma izni ONARILDI
+
+  özet: 0 uygulandı · 1 güncel · 0 drift-uyarı · 0 eksik · 0 duman-düştü
+
+--- stderr ---
