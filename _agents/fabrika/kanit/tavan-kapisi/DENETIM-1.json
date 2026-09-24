@@ -1,0 +1,35 @@
+{
+  "tur": 1,
+  "is": "tavan-kapisi",
+  "pr": "249",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-09-23T16:40:13+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Tavanı gerekçeli olarak bir tur açan, mutlak tavanı koruyan ve açılışı gün sonuna taşıyan akış kurulmuş. Ama Sultan kararı doğrulanmıyor ve defter yazımı başarısız olsa bile kapı açılıyor; yetki sınıfındaki bu iş üretime hazır değil, önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "Kapı Sultan kararını doğrulamıyor; komutu çalıştırabilen herkes 20 karakterlik herhangi bir metinle yetki kapısını açabiliyor.",
+        "kanit": "SULTAN_DEVAM yalnız komut satırındaki $2 değerinden alınıyor; sultan_kapisi sadece doluluk ve ${#SULTAN_DEVAM} >= 20 denetliyor. Karttaki sultan alanı, karar kaydı veya çağıranın yetkisi kontrol edilmiyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:23-30,69-91",
+        "agirlik": "ciddi"
+      },
+      {
+        "ne": "Deftere yazma garantisi yok; dizin oluşturma veya kayıt ekleme başarısız olsa da işlev başarı döndürüp denetimi sürdürüyor.",
+        "kanit": "mkdir ve printf hataları 2>/dev/null ile bastırılıyor, dönüş değerleri sınanmıyor; ardından koşulsuz bilgi basılıp return 0 çalışıyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:80-87",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Defter yazımını kaldıran mutasyon sınavı güvenilir değil; mutasyonu üreten sed ifadesi hata veriyor, bu nedenle kırmızılık gerçek davranış bozulmasından değil geçersiz mutanttan kaynaklanabilir.",
+        "kanit": "Ölçüm stderr'inde \"sed: -e expression #1, char 49: unknown option to `s'\" bulunuyor; diffteki deftere-yazmayi-kaldir sed ikamesi ayraç olarak kullanılan kaçırılmamış `|` karakterleri içeriyor.",
+        "konum": "olcum-denetci-sinavi-sonra.txt stderr; yazilim-fabrikasi/scripts/denetci.test.sh:128-136",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve iki kayıt da yeşil; ana sınav Sultan kapısı, gerekçe reddi, mutlak tavan, defter ve gün sonu görünümünü ölçüyor. Ancak önce/sonra ölçüm çifti yok, yalnız sonra kayıtları var; ayrıca sınavın stderr'indeki sed hatası defter mutasyon kanıtını geçersiz kılıyor. Gün sonu örneği gerçekçi biçimde satırı gösterse de Sultan yetkisinin gerçekten alındığını ölçen bir kanıt bulunmuyor."
+  }
+}

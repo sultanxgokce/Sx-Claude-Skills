@@ -1,0 +1,23 @@
+{
+  "tur": 3,
+  "is": "tavan-kapisi",
+  "pr": "249",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-09-23T16:56:53+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ın gerekçeli devam kararı karttan okunuyor, gerekçesiz veya kısa kayıt kapıyı açmıyor; mutlak tavan korunuyor ve açılış deftere taşınıyor. Doğru iş yapılmış, ancak denetim kaydındaki serbest metinler ayraç ve satır sonuna karşı korunmadığı için gün sonu kaydı bozulabilir; önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "Deftere yazılan oturum, söz, beyan ve gerekçe alanları satır sonu ile “|” karakterine karşı korunmuyor; geçerli bir kart kaydı gün sonu satırını bozabilir veya sahte ek kayıt görünümü oluşturabilir.",
+        "kanit": "kart.sh, SOZ ve GEREKCE değerlerini doğrularken yalnız doluluk ve gerekçe uzunluğunu denetliyor; denetci.sh bu değerleri doğrudan “ | ” ayrımlı SATIR içine koyuyor. gun-sonu.sh ise her fiziksel satırı ayrı kayıt kabul edip l.split(\"|\") ile sabit sütunlardan okuyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh:101-118; yazilim-fabrikasi/scripts/denetci.sh:79-104; yazilim-fabrikasi/scripts/gun-sonu.sh:56-63",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Son denetçi ölçümü 62 geçişle gerekçe zorunluluğunu, karttan karar okumayı, defter geri doğrulamasını ve mutlak tavanı ölçüyor; mutasyon sınavları da bu ana korumaların gerçekten sınandığını gösteriyor. Buna karşılık bütün kayıtlar yalnız “sonra” aşamasında, önce/sonra ölçüm çifti yok; gün sonu ölçümü final kart-temelli akıştan önce alınmış eski “ornek” satırını gösteriyor ve serbest metindeki ayraç/satır sonu vakalarını ölçen sınav bulunmuyor."
+  }
+}

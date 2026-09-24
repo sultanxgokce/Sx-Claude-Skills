@@ -1,0 +1,21 @@
+{
+  "is": "tavan-kapisi",
+  "cumle": "denetci.sh tavan kuralina Sultan-karari kapisi: --sultan-devam gerekce ile bir tur daha, gerekcesiz calismaz, deftere ve gun sonu ozetine duser",
+  "istedi": "SULTAN",
+  "aldi": "MUAVIN",
+  "zaman": "2026-09-23T16:32:18+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "e"
+  },
+  "siniflar": [
+    "yetki"
+  ],
+  "sultan": true,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

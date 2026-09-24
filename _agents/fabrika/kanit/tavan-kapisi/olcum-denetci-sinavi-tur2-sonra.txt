@@ -1,0 +1,73 @@
+$ bash yazilim-fabrikasi/scripts/denetci.test.sh
+# rc=0 sure=30.9s zaman=2026-09-23T16:49:39+03:00
+--- stdout ---
+════ T1 · kanıt yok → rc=2, denetim dosyası yok ════
+  ✓ kanıtsız adım 4 açılmadı (rc=2)
+  ✓ DENETIM yazılmadı
+════ T2 · kanıt var, 3/H → rc=1, tur 1 ════
+  ✓ rc=1 (adım 2'ye dön)
+  ✓ DENETIM-1.json araç yazdı, tur=1, alanlar doğru
+════ T3 · 5/E → rc=0 GEÇTİ, tur 2 ════
+  ✓ rc=0
+  ✓ GEÇTİ ve tur 2 yazılı
+════ T4 · 5 ama H → geçmez (doğru şey sütunu puanı ezer) ════
+  ✓ 5/H → rc=1
+════ T5 · yazan=denetleyen reddedilir (K1) ════
+  ✓ aynı model → rc=1
+  ✓ denetim koşulmadı
+════ T6 · tavan: üç düşük tur ilerlemeden → 3. turda tıkandı (rc=4), 4. çağrı reddedilir ════
+  ✓ tur1 rc=1
+  ✓ tur2 rc=1
+  ✓ tur3 ilerlemeyince rc=4
+  ✓ tıkandı + üç yol raporu
+  ✓ 4. çağrı koşulmadı (rc=4)
+  ✓ DENETIM-4 yazılmadı
+════ T7 · ilerleyen iş +1 tur alır; 4 mutlak ════
+  ✓ tur3 ilerliyor → rc=1 (tıkandı değil)
+  ✓ +1 tur payı yazılı
+  ✓ tur4 (pay) 5/E → GEÇTİ
+  ✓ payın gerekçesi yazılı
+  ✓ tur5 mutlak tavan → rc=4
+════ T7b · 🚪 SULTAN KAPISI: karar KARTTAN okunur, serbest metinle açılmaz ════
+  ✓ puan düşünce tur3 tıkandı (rc=4)
+  ✓ 🔴 kartta karar yokken bayrak kapıyı AÇMIYOR (rc=1)
+  ✓ sebebi yazılı
+  ✓ ne yapılacağı komutla yazılı
+  ✓ denetim KOŞULMADI
+  ✓ deftere de yazılmadı
+  ✓ --beyan eksikken kart kaydı REDDEDİLDİ
+  ✓ --oturum eksikken REDDEDİLDİ
+  ✓ tam D1 kaydı karta işlendi
+  ✓ karttaki kararla tur4 koştu ve GEÇTİ
+  ✓ tavanın açıldığını SÖYLÜYOR (sessiz değil)
+  ✓ oturum referansı çıktıda görünüyor
+  ✓ tavan defteri GERÇEKTEN yazıldı
+  ✓ Sultan'ın kırpık sözü defterde
+  ✓ beyan eden ajan defterde (kim aktardı)
+  ✓ 🔴 deftere yazılamıyorsa kapı AÇILMIYOR
+  ✓ sebebi yazılı
+  ✓ 🔴 yazma başarılı ama satır kaybolduysa kapı AÇILMIYOR
+  ✓ kaybolduğunu söylüyor
+  ✓ 🔴 5. tur: Sultan kapısı MUTLAK tavanı açmıyor (rc=4)
+  ✓ mutlak olduğunu söylüyor
+════ T8 · geçersiz çıktı → rc=3 ölçemedi, ham saklanır ════
+  ✓ JSON değil → rc=3
+  ✓ ham çıktı saklandı
+  ✓ puan 9 → rc=3 (şema dışı)
+════ T9 · istem: kart + manifest + diff + rubrik içeriyor ════
+  ✓ kart · manifest · diff · rubrik · ölçüm çıktısı istemde
+════ T9b · Türkçe metin + KESME İŞARETİ çıktıyı kırmıyor (23 Eyl canlı hatası) ════
+  ✓ rc=1 (3/H) — kesme işaretli metinde de karar verildi
+  ✓ puan satırı basıldı
+  ✓ özet kesme işaretiyle birlikte basıldı
+  ✓ bulgu satırı basıldı
+  ✓ kayıt dosyası doğru yazıldı
+════ T10 · bozuk manifest → rc=2 ════
+  ✓ elle boyanmış manifestle denetim açılmaz
+════ T11 · MUTASYON: Sultan kapısını bozunca sınav kırmızı veriyor mu ════
+  ✓ mutant 'karti-okumayi-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'defter-dogrulamasini-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'mutlak-tavani-kaldir' sınavı KIRMIZI yapıyor
+
+── SONUÇ: 54 geçti · 0 kaldı ──
+--- stderr ---

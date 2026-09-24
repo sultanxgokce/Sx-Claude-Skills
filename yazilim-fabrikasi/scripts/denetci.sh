@@ -6,6 +6,8 @@
 #   · denetleyen model yazanla AYNI OLAMAZ (Claude→Codex, Codex→Claude; --denetci ile açıkça seçilebilir)
 #   · kanıt yoksa ya da manifest bozuksa denetim AÇILMAZ (rc=2) — "kanıtsız adım 4 yok"
 #   · tavan 3 tur; ilerleyen işe (puan↑ VE açık bulgu↓) +1; DÖRT mutlak → sonrası "tıkandı + üç yol" (rc=4)
+#   · --sultan-devam : KARTA işlenmiş Sultan kararını (kart.sh sultan-dedi) okur ve "ilerlemiyor"
+#     hükmünü aşar. Kartta kayıt yoksa AÇILMAZ. MUTLAK tavanı (4) AÇMAZ. Deftere yazılamazsa AÇILMAZ.
 #
 # Kullanım:
 #   denetci.sh <iş> (--pr N | --diff DOSYA) [--kart DOSYA] [--yazan claude|codex] [--denetci auto|codex|claude]
@@ -21,12 +23,14 @@ TAVAN=3; MUTLAK=4
 _hata() { printf '✗ %s\n' "$*" >&2; }
 _bilgi() { printf '%s\n' "$*"; }
 
-IS=""; PR=""; DIFF=""; KART=""; YAZAN="claude"; DENETCI="auto"; MODEL=""; DEPO="${KANIT_DEPO:-}"
+IS=""; PR=""; DIFF=""; KART=""; YAZAN="claude"; DENETCI="auto"; MODEL=""; DEPO="${KANIT_DEPO:-}"; SULTAN_DEVAM=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --pr) PR="$2"; shift 2 ;; --diff) DIFF="$2"; shift 2 ;; --kart) KART="$2"; shift 2 ;;
     --yazan) YAZAN="$2"; shift 2 ;; --denetci) DENETCI="$2"; shift 2 ;; --model) MODEL="$2"; shift 2 ;;
-    --depo) DEPO="$2"; shift 2 ;; -h|--help) sed -n '1,20p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    --depo) DEPO="$2"; shift 2 ;;
+    --sultan-devam) SULTAN_DEVAM=1; shift ;;
+    -h|--help) sed -n '1,20p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) [ -z "$IS" ] && IS="$1" || { _hata "tanınmayan argüman: $1"; exit 1; }; shift ;;
   esac
 done
@@ -65,10 +69,66 @@ tikandi_raporu() {
   _bilgi "   2) KAPSAMI DARALT — iş kartını küçült, geçen kısmı gönder, kalanı yeni kart"
   _bilgi "   3) GERİ AL — alanı kapat, iş kartına 'tıkandı' damgası, ders deftere"
 }
+# 🔴 SULTAN KAPISI (23 Eyl 2026): tıkandı raporu "karar sınıf işiyse Sultan'ın" diyordu ama
+#    araçta o kararı kabul edecek kapı YOKTU — kural insana havale ediyor, araç insanı dinlemiyordu.
+#    Canlı vaka: kapı onarımında puanlar 3·3·2 gitti; düşüşün sebebi işin kötüleşmesi değil,
+#    denetçinin her turda DAHA CİDDİ bir kusur bulmasıydı. "ilerliyor_mu" bu ikisini ayırt edemez.
+#    Kapı gerekçesiz açılmaz (≥20 karakter), deftere yazılır, gün sonu özetinde Sultan'a görünür.
+#    ⚠ MUTLAK tavanı AÇMAZ: dört tur hâlâ mutlaktır. Bu kapı yalnız "ilerlemiyor" hükmünü aşar.
+#    ⚠ A06: bu bayrağı yazan ajan Sultan'ın onayını ÜRETMEZ; aldığı onayı AKTARIR. Gerekçe metni
+#      denetlenebilir olsun diye deftere düşer — uyduran, defterde yakalanır.
+sultan_kapisi() {
+  [ "$SULTAN_DEVAM" = "1" ] || return 1
+  # Karar KARTTAN okunur, komut satırından DEĞİL. (Bağımsız göz 23 Eyl, ciddi: serbest metinle
+  # açılan yetki kapısı, kapı değildir.) Kartta D1 kaydı yoksa kapı AÇILMAZ.
+  KARTYOL="$DEPO/_agents/fabrika/kartlar/$IS.json"
+  GEREKCE="$(python3 - "$KARTYOL" "devam" 2>/dev/null <<'PY'
+import json,sys
+try: k=json.load(open(sys.argv[1],encoding="utf-8"))
+except Exception: raise SystemExit(1)
+kk=[x for x in (k.get("sultan_kararlari") or []) if x.get("karar")==sys.argv[2]]
+if not kk: raise SystemExit(1)
+x=kk[-1]
+if not (x.get("oturum") and x.get("soz") and x.get("beyan")): raise SystemExit(1)
+# gerekçe ayrı alandır: Sultan'ın sözü "ne dedi"yi, gerekçe "niçin işe yarar"ı taşır.
+if len(x.get("gerekce") or "") < 20: raise SystemExit(1)
+# 🔴 İKİNCİ ÇİT: kart elle düzenlenmiş olabilir, kart.sh'ın kapısından geçmemiş olabilir.
+# Deftere yazmadan ÖNCE ayraç ve satır sonunu burada da temizliyoruz — tek çit, çit değildir.
+def tmz(v): return " ".join(str(v).replace("|","/").split())
+print(f'oturum={tmz(x["oturum"])} soz="{tmz(x["soz"])}" beyan={tmz(x["beyan"])} gerekce="{tmz(x["gerekce"])}"')
+PY
+)"
+  if [ -z "$GEREKCE" ]; then
+    _hata "--sultan-devam verildi ama KARTTA gerekçeli 'devam' kararı YOK — kapı açılmadı."
+    _bilgi "   Sultan gerçekten 'devam' dediyse önce kayda geçir (A06: onay üretilmez, aktarılır):"
+    _bilgi "     kart.sh sultan-dedi $IS --karar devam --oturum <ref> --soz \"<verbatim>\" --beyan <AJAN> \\"
+    _bilgi "        --gerekce \"<niçin bir tur daha işe yarar — en az 20 karakter>\""
+    return 2
+  fi
+  # 🔴 Deftere yazılamıyorsa kapı AÇILMAZ: kaydedilemeyen istisna, istisna değil DELİKTİR.
+  #    (Bağımsız göz 23 Eyl: mkdir/printf hataları yutuluyor, kapı yine açılıyordu.)
+  DEF="$DEPO/_agents/fabrika/tavan-defteri.log"
+  mkdir -p "$DEPO/_agents/fabrika" || { _hata "tavan defteri dizini açılamadı — kapı AÇILMADI"; return 2; }
+  SATIR="$(date -u +%Y-%m-%dT%H:%M:%SZ) | TAVAN-ACILDI | is=$IS tur=$TUR | $GEREKCE"
+  # Tek kontrol, ama DOĞRU olanı: yaz ve GERİ OKU. Yazma hatasını ayrıca sınamaya gerek yok —
+  # yazılamayan satır geri de okunamaz. İki ayrı kontrol koymak, ikincisini sınanamaz kılıyordu.
+  printf '%s\n' "$SATIR" >> "$DEF" 2>/dev/null
+  grep -qF "$SATIR" "$DEF" 2>/dev/null || { _hata "tavan defterine yazılan satır geri OKUNAMADI — kapı AÇILMADI"; return 2; }
+  _bilgi "⚠ TAVAN AÇILDI (tur $TUR) — Sultan kararı karttan okundu ve deftere yazıldı: $GEREKCE"
+  return 0
+}
 if [ "$TUR" -gt "$MUTLAK" ]; then _hata "mutlak tavan ($MUTLAK) aşıldı — denetim koşulmadı"; tikandi_raporu; exit 4; fi
 if [ "$TUR" -gt "$TAVAN" ]; then
   if ilerliyor_mu; then _bilgi "· tur $TUR: tavan $TAVAN aşıldı ama iş İLERLİYOR (puan↑, bulgu↓) → +1 tur payı"
-  else _hata "tavan ($TAVAN) doldu ve iş ilerlemiyor — denetim koşulmadı"; tikandi_raporu; exit 4; fi
+  else
+    sultan_kapisi; sk=$?
+    [ "$sk" -eq 2 ] && exit 1
+    if [ "$sk" -ne 0 ]; then
+      _hata "tavan ($TAVAN) doldu ve iş ilerlemiyor — denetim koşulmadı"; tikandi_raporu
+      _bilgi "   Sultan 'devam' dediyse: önce kart.sh sultan-dedi ile kayda geçir, sonra --sultan-devam"
+      exit 4
+    fi
+  fi
 fi
 
 # ── 3 · girdiler ─────────────────────────────────────────────────────────────────

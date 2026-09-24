@@ -1,0 +1,84 @@
+{
+  "is": "tavan-kapisi",
+  "arac": "kanit.py/0.1.0",
+  "guncelleme": "2026-09-23T17:03:26+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-sinavi-sonra.txt",
+      "sha256": "32ba834e8610c017f689fb20680c908add0a72591fbb8ff0c1d3c28556ba7b36",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-23T16:38:03+03:00",
+      "sure_sn": 16.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gun-sonu-tavan-bolumu",
+      "asama": "sonra",
+      "dosya": "olcum-gun-sonu-tavan-bolumu-sonra.txt",
+      "sha256": "4cf48eae816f59f37273029c9b18166004b45ffdb752b077b13749bbd33751e1",
+      "komut": [
+        "bash",
+        "-c",
+        "KANIT_DEPO=\"$PWD\" bash yazilim-fabrikasi/scripts/gun-sonu.sh | grep -A2 \"Tavan açılışları\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-23T16:38:57+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinavi-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-sinavi-tur2-sonra.txt",
+      "sha256": "43ab6050f0a3e88aed2934aecb9b9f25bc072ec13672dd0813ad31ab9b18d0ba",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-23T16:49:39+03:00",
+      "sure_sn": 30.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinavi-tur3",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-sinavi-tur3-sonra.txt",
+      "sha256": "3a1ce61d5500b4f960af900eea3fc4a4d090d50b0ec896bbd31c1f32fc70a1e3",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-23T16:56:05+03:00",
+      "sure_sn": 38.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinavi-tur4",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-sinavi-tur4-sonra.txt",
+      "sha256": "3cac112966405a846802f39b4b3403d96929ea1f6978c937f7cc2265b1116e74",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-23T17:03:26+03:00",
+      "sure_sn": 54.7
+    }
+  ],
+  "imza": "849eaaf9bc0426f2f12b3e63266aac1222ba596171cf480ebc49bdc1d6a3334f"
+}

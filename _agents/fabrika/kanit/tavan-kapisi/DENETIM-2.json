@@ -1,0 +1,23 @@
+{
+  "tur": 2,
+  "is": "tavan-kapisi",
+  "pr": "249",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-09-23T16:50:25+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Sultan kararını karttan okuyan, mutlak tavanı koruyan, defter yazısını geri doğrulayan ve gün sonuna taşıyan bir kapı kurulmuş; önceki turun iki uygulama kusuru da sınavlarla kapatılmış. Ancak iş kartının açıkça istediği gerekçe artık hiç alınmıyor: --sultan-devam değersiz bir bayrak, kart kaydı ise yalnız karar, oturum, söz ve beyan istiyor; yetki sınıfındaki bu anlamsal açık için önce gerekçe zorunluluğunu çöz.",
+    "bulgular": [
+      {
+        "ne": "Kapı gerekçesiz de açılıyor; Sultan'ın “devam” sözü gerekçe yerine kullanılmış, fakat neden devam edilmesi gerektiğini bildiren ayrı ve zorunlu bir alan yok.",
+        "kanit": "Argüman ayrıştırmada --sultan-devam yalnız SULTAN_DEVAM=1 yapıyor. sultan_kapisi karttan karar=devam kaydını seçip yalnız oturum, soz ve beyan doluluğunu denetliyor; kart.sh sultan-dedi de zorunlu alanlar arasında gerekçe istemiyor. Sınav bunu doğruluyor: --soz \"devam\" içeren kayıt kabul ediliyor ve sonrasında kapının açılmaması gerekçesizlikten değil defter deneyi üzerinden sınanıyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:27-31,78-92; yazilim-fabrikasi/scripts/kart.sh:9-12,89-111; yazilim-fabrikasi/scripts/denetci.test.sh:107-128",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve üç kayıt yeşil; ikinci denetçi sınavı 54 geçişle karttan karar okuma, eksik D1 alanlarının reddi, defter başarısızlığında kapının kapanması, mutlak tavan ve düzeltilmiş mutasyon sınavlarını doğrudan ölçüyor. Buna karşılık kayıtların tümü yalnız “sonra” aşamasında, önce/sonra ölçüm çifti yok; gün sonu ölçümü de yeni kart-temelli akış yerine eski biçimli “ornek” satırını gösteriyor. En önemlisi, yeşil sınav gerekçeyi ölçmüyor: kendi vakalarında kısa Sultan sözü gerekçe sayıldığı için iş kartındaki gerekçeli devam iddiası kanıtlanmış değil."
+  }
+}
