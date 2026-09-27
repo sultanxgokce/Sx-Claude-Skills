@@ -1,0 +1,75 @@
+/* Sedir kapısı — tek bilinçli dünya: koyu (terminalle aynı zemin). Açık tema bilerek yok. */
+@font-face { font-family: "Archivo"; src: url(/archivo-400.ttf) format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Archivo"; src: url(/archivo-600.ttf) format("truetype"); font-weight: 600; font-display: swap; }
+
+:root {
+  color-scheme: dark;
+  /* yüzey · metin · kenar */
+  --zemin: #15120e;      /* sedir kabuğu, terminal zemini */
+  --yuzey: #1e1a15;
+  --yuzey-2: #28231c;
+  --yuzey-3: #332c23;
+  --kenar: #3d3529;
+  --kenar-guclu: #5a4e3d;
+  --metin: #ede5d7;
+  --metin-2: #b3a792;
+  --metin-3: #8a7f6d;
+  /* tek vurgu: sedir bronzu */
+  --vurgu: #c9914f;
+  --vurgu-bas: #b27c3c;
+  --vurgu-uzeri: #1b130a;
+  --odak: #e7b877;
+  /* anlam renkleri (vurgudan ayrı) */
+  --iyi: #86c08a;
+  --uyari: #e2b34f;
+  --kotu: #e77f66;
+  /* ölçek */
+  --a1: 4px; --a2: 8px; --a3: 12px; --a4: 16px; --a5: 24px; --a6: 32px; --a7: 48px;
+  --r1: 8px; --r2: 12px; --r3: 20px; --hap: 999px;
+  --ctl-h: 44px;
+  --sure: 160ms;
+  --yazi: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --t-kucuk: 13px; --t-govde: 16px; --t-baslik: 17px; --t-buyuk: 24px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--zemin); color: var(--metin); }
+body { font: 400 var(--t-govde)/1.45 var(--yazi); -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; }
+button, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--odak); outline-offset: 2px; }
+
+/* ortak denetimler */
+.dugme {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--a2);
+  min-height: var(--ctl-h); padding: 0 var(--a4); border-radius: var(--r2);
+  border: 1px solid var(--kenar); background: var(--yuzey-2); color: var(--metin);
+  font-weight: 600; font-size: 15px; letter-spacing: .01em; white-space: nowrap;
+  transition: background var(--sure), border-color var(--sure), transform var(--sure);
+}
+.dugme:active { transform: scale(.97); background: var(--yuzey-3); }
+.dugme[disabled] { opacity: .45; pointer-events: none; }
+.dugme.birincil { background: var(--vurgu); border-color: var(--vurgu); color: var(--vurgu-uzeri); }
+.dugme.birincil:active { background: var(--vurgu-bas); }
+.dugme.ikon { width: var(--ctl-h); padding: 0; }
+.dugme svg { width: 22px; height: 22px; flex: none; }
+@media (hover: hover) {
+  .dugme:hover { border-color: var(--kenar-guclu); }
+  .dugme.birincil:hover { background: var(--vurgu-bas); }
+}
+
+.kutu {
+  width: 100%; min-height: var(--ctl-h); padding: 10px var(--a3);
+  border-radius: var(--r2); border: 1px solid var(--kenar); background: var(--yuzey);
+  font-size: 16px; line-height: 1.4; transition: border-color var(--sure);
+}
+.kutu::placeholder { color: var(--metin-3); }
+.kutu:focus { outline: none; border-color: var(--vurgu); box-shadow: 0 0 0 1px var(--vurgu); }
+.kutu:-webkit-autofill, .kutu:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--metin); caret-color: var(--metin);
+  -webkit-box-shadow: 0 0 0 100px var(--yuzey) inset; transition: background-color 9999s;
+}
+
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
