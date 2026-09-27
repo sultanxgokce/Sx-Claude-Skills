@@ -1,18 +1,18 @@
 ---
 name: terminal-onar
-description: Sultan'ın canlı çalışma düzenini (tmux sedir-ana'daki Claude konuşması + sedir-terminal.mmepanel.com web terminali + kurtarıcı ajan + dakikalık bekçi) ÖLÇER, ONARIR ve gerekirse SIFIRDAN kurar. "/terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; ayrıca onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de bu beceriyi çağırır.
+description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
+version: 2.0.0
 ---
-
 # /terminal-onar — canlı düzenin onarıcısı
 
 ## Düzen (neyi koruyoruz)
 | Parça | Ne | Sağlam sayılma ölçüsü |
 |---|---|---|
-| konuşma odası | tmux `sedir-ana` | oturum var |
-| konuşma | `sedir-ana` içinde Claude (Sultan'ın ana konuşması) | Claude'un oturum kaydında `tmux=sedir-ana:` + süreç canlı |
-| web kapısı | `kapi/sunucu.mjs` `:7681` → `sedir-terminal.mmepanel.com` — telefon ekranı (PWA), giriş (parola, imzalı çerez), mesaj/foto/tuş/Onar API'si. tmux `kapi-sedir` | `/giris` 200 · `/` girişsiz 302 |
-| terminal | ttyd yalnız UNIX soketinde (`/config/.terminal-onar/ttyd.sock`, TCP portu yok), kapı `/tty/` altında sunar. tmux `ttyd-sedir` | soket `/tty/` 200 |
-| kurtarıcı ajan | tmux `sedir-kurtarici` içinde ayrı Claude | aynı ölçü |
+| konuşma odası | tmux `<kutu>-ana` | oturum var |
+| konuşma | `<kutu>-ana` içinde Claude (Sultan'ın ana konuşması) | Claude'un oturum kaydında `tmux=<kutu>-ana:` + süreç canlı |
+| web kapısı | `kapi/sunucu.mjs` `:7681` → merkez (`terminal.mmepanel.com/<kutu>/`) — telefon ekranı (PWA), giriş (parola, imzalı çerez), mesaj/foto/tuş/Onar API'si. tmux `kapi-<kutu>` | `<taban>/giris` 200 · `<taban>/` girişsiz 302 |
+| terminal | ttyd yalnız UNIX soketinde (`/config/.terminal-onar/ttyd.sock`, TCP portu yok), kapı `<taban>/tty/` altında sunar. tmux `ttyd-<kutu>` | soket `/tty/` 200 |
+| kurtarıcı ajan | tmux `<kutu>-kurtarici` içinde ayrı Claude | aynı ölçü |
 | bekçi | crontab `* * * * * … bekci.sh # terminal-onar-bekci` (+ kalıcı kopya `.oda/cron`) | satır var |
 
 code-server terminali ve web terminali **aynı tmux oturumuna** bağlanır → birebir, canlı senkron.
@@ -51,3 +51,44 @@ başlatır. Bekçi tetiklediğinde K1/K2 15 dakikada bir defadan sık denenmez.
 ## Durum dosyaları
 `/config/.terminal-onar/` — `gunluk.log` · `ana-oturum` · `kurtarici-oturum` · `kademe.durum` · `duraklat`.
 Sultan-onayı: 2026-09-25 (gözetimsiz ajan kademeleri dahil).
+
+## 🆕 Kurulum — `/terminal-kur` (2.0.0)
+
+```
+TERMINAL_KUR_ONAY=sultan-verdi bash <beceri>/scripts/kur.sh
+```
+
+Kutuda sırasıyla: ttyd'yi indirir → parolayı kasadan okur → düzeni kurar → bekçiyi kutunun
+**kalıcı** cron'una yazar → ölçer → merkeze düşecek satırı basar.
+
+🔴 **Sultan onayı ZORUNLU ve dolanılmaz.** Bu kurulum kutuda bir **dış yüzey** açar ve
+gözetimsiz bir onarım kademesi kurar. Claude Code güvenlik sınıflandırıcısı bu iki adımı
+bilerek reddediyor ("Expose Local Services" · "Create Unsafe Agents"). Betik onaysız
+çalışmayı **denemez**, sebebini söyler ve durur. Gizli yol aranmaz.
+
+🔴 **Parola ÜRETİLMEZ.** Kasada yoksa kurulum durur ve Sultan'ın koşacağı satırları basar.
+Sessizce üretilen parola kayıtsız bir sırdır: sıfırdan kurulumda geri gelmez.
+
+🔴 **Host tarafına DOKUNMAZ.** Tünel · Access · merkez kaydı kutu ajanının işi değildir;
+betik yalnız merkeze iletilecek satırı basar, onu MUAVİN işler.
+
+## Kutudan türeyen adlar (hiçbiri koda gömülü değil)
+| Değişken | Varsayılan | Ezmek için |
+|---|---|---|
+| `KUTU` | çalışma alanından / makine adından | `TO_KUTU` |
+| konuşma odası | `<kutu>-ana` | `TO_ANA_TMUX` |
+| kapı · terminal | `kapi-<kutu>` · `ttyd-<kutu>` | `TO_KAPI_TMUX` · `TO_TTYD_TMUX` |
+| parola anahtarı | `<KUTU>__TERMINAL_SIFRE` | `TO_SIFRE_ANAHTAR` |
+| taban yolu | `/<kutu>` | `TO_TABAN` (boş = kök, eski davranış) |
+
+**Niçin tek kaynak:** her adı ayrı ayrı ezilebilir bırakmak da mümkündü; o zaman bir kutuyu
+kurmak on değişkeni doğru yazmayı gerektirir ve biri unutulunca kurulum **sessizce başka
+kutunun adına** bakardı.
+
+## Taban yolu — merkez sayfanın ön şartı
+Merkez (`terminal.mmepanel.com`) kutuları **yol** ile ayırır: `/sedir/` · `/akar/`. Kapı
+tabanı bilmek zorundadır; bilmezse döndürdüğü her mutlak yol merkeze gider ve kutuya hiç
+ulaşmaz. Taban boş bırakılırsa eski kök davranışı **bayt bayt** aynı kalır.
+
+Kanıt: `kapi/sunucu.test.mjs` (25 kapı, gerçek HTTP + WebSocket) · `kapi/mutasyon.sh` (9/9,
+her kapı öldürülünce sınav kırmızıya dönüyor).
