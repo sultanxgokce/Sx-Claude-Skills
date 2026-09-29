@@ -1,0 +1,35 @@
+{
+  "tur": 2,
+  "is": "terminal-onar-global",
+  "pr": "250",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-09-29T11:29:47+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "E",
+    "ozet": "Tabanlı giriş akışı, kutu başına PWA kimliği, çerez kapsamı ve WebSocket sınırı son turda sınanmış; talep edilen istikamete gidilmiş. Lakin başka kutuda SEDİR parolasına geri düşebilen güvenlik kapısı fail-closed sözünü bozuyor, ayrıca canlı kurulum kanıtı yok ve diff kırpılmış; bu hâliyle üretime çıkmaz.",
+    "bulgular": [
+      {
+        "ne": "Parola anahtarı kutudan türetilse bile bulunamadığında kod SEDİR parolasına geri düşüyor; başka kutuda kendi parolası yokken SEDİR sırrı mevcutsa kapı durmak yerine yanlış sırla açılabilir. Bu, iş kartındaki “kasada yoksa kurulum durur” ve kutu başına parola/fail-closed şartını ihlal eder.",
+        "kanit": "`const SIFRE = process.env[SIFRE_ANAHTAR] || process.env.SEDIR__TERMINAL_SIFRE || '';` satırı türetilen anahtar yokken SEDİR değişkenini kabul ediyor; hemen sonraki uzunluk denetimi de bu durumda kapanmayı engelliyor.",
+        "konum": "terminal-onar/kapi/sunucu.mjs: SIFRE_ANAHTAR ve SIFRE tanımları",
+        "agirlik": "ciddi"
+      },
+      {
+        "ne": "Tabanlı CSS içindeki font adresleri kök-mutlak kaldığı için `/sedir/` altında font istekleri kutunun tabanına değil merkez köküne gider.",
+        "kanit": "`zanaat.css` iki fontu `url(/archivo-400.ttf)` ve `url(/archivo-600.ttf)` ile çağırıyor; `dosyaTabanli` yalnız HTML içindeki `href|src` değerlerini dönüştürüyor ve sunucu CSS'yi düz `dosya()` ile sunuyor. B2 ölçümü de yalnız giriş HTML'sinde kök-mutlak varlık yolu kalmadığını söylüyor.",
+        "konum": "terminal-onar/kapi/genel/zanaat.css: @font-face satırları; terminal-onar/kapi/sunucu.mjs: dosyaTabanli ve statik dosya dalı; kapi-sinavi-tur2b:B2",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "“Bütün kutularda, hiçbir kutu adı gömülü değil” beyanına rağmen çalışma davranışında SEDİR'e bağlı varsayılanlar kalmış.",
+        "kanit": "`ANA_TMUX` varsayılanı `sedir-ana`, parola geri dönüşü `SEDIR__TERMINAL_SIFRE`; istemci görünüm tercihi de `localStorage.setItem('sedir-gorunum', ...)` anahtarını kullanıyor. Bunlar SKILL.md'deki “hiçbiri koda gömülü değil” iddiasıyla çelişiyor.",
+        "konum": "terminal-onar/kapi/sunucu.mjs: ANA_TMUX ve SIFRE; terminal-onar/kapi/genel/uygulama.js: gorunumAyarla ve başlangıç tercihi; terminal-onar/SKILL.md: Kutudan türeyen adlar",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sarı kayıt yok; son turdaki 29/29 kapı ile 10/10 mutasyon yeşil, önceki kırmızı mutasyon kaydı daha sonra düzeltilmiş. Ancak davranış ölçümlerinin tamamı “sonra”; gerçekçi tarayıcı kare dizisi ve kurulum için önce/sonra ölçüm çifti yok. Tek canlı kayıt yalnız “önce” durumunu gösterip paketin SEDİR'e kurulmadığını açıkça söylüyor; dolayısıyla `/terminal-kur`, kalıcı cron ve canlı merkez yolculuğu kanıtlanmış değil. İstem 110000 baytta kırpıldığı için diff'in sonu ve kurulum betiklerinin bütünü de denetlenemiyor."
+  }
+}
