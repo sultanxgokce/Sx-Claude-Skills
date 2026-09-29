@@ -1,0 +1,41 @@
+{
+  "tur": 4,
+  "is": "terminal-onar-global",
+  "pr": "250",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-09-29T11:38:06+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, tabanlı HTTP/WebSocket, giriş, parola ayrımı ve önbellek sınırı için kapsamlı sınavlar eklenmiş; talep edilen istikamete gidilmiş. Önce kutudan türeme sözünü bozan SEDİR’e gömülü arayüz ve belge parçalarını temizleyin, sonra `/terminal-kur` zincirini gerçek kutuda ölçün; ayrıca diff 110000 baytta kırpıldığı için bütün değişiklik üretime hazır sayılamaz.",
+    "bulgular": [
+      {
+        "ne": "“Bütün kutularda çalışır, hiçbir kutu adı koda gömülü değildir” şartına rağmen kullanıcıya görünen PWA ve giriş ekranı Sedir adına gömülü; başka kutu Sedir başlığı, marka adı ve konuşmacı sınıfıyla açılacak.",
+        "kanit": "giris.html içinde apple-mobile-web-app-title, title ve h1 değerleri `Sedir`; index.html içinde aynı PWA/title değerleri, üst şerit metni `<b>Sedir</b>` ve konuşmacı seçicisi `.msj[data-kim=\"sedir\"]` olarak sabit. Buna karşılık SKILL.md açıklaması hiçbir kutu adının gömülü olmadığını söylüyor.",
+        "konum": "terminal-onar/kapi/genel/giris.html:9-14,34-38; terminal-onar/kapi/genel/index.html:10-15,59,117; terminal-onar/SKILL.md:1-6",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Parola değişkeninin kutudan türediği beyanıyla beceri belgesi çelişiyor; değişmezler bölümü kasayı hâlâ sabit `SEDIR__TERMINAL_SIFRE` adıyla tarif ediyor. Bu belgeyi izleyen başka kutu kurulumu yanlış kasa anahtarına yönlenebilir.",
+        "kanit": "SKILL.md “Kutudan türeyen adlar” tablosunda parola anahtarını `<KUTU>__TERMINAL_SIFRE` olarak verirken “Değişmezler” bölümünde parolanın kasadaki adresini doğrudan `SEDIR__TERMINAL_SIFRE` diye yazıyor.",
+        "konum": "terminal-onar/SKILL.md:47-50,78-86",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "İş kartındaki `/terminal-kur` zinciri ve “bütün kutularda çalışır” sonucu gerçek kurulumla doğrulanmamış; paket sınavları kurulumun ttyd indirme, kasa okuma, kalıcı cron ve slash-komutu entegrasyonunu kanıtlamıyor.",
+        "kanit": "Araç imzalı manifestte canlı `sedir-canli-olcum` yalnız `asama=once`; kaydın sonucu paketin SEDİR kutusuna kurulmadığını söylüyor. Sonra ölçümleri yalnız `sunucu.test.mjs` ve `mutasyon.sh`; KAPSAM-SINIRI.md de gerçek `/terminal-kur` kurulumunun hiç koşulmadığını açıkça kaydediyor.",
+        "konum": "KANIT.json:sedir-canli-olcum ve sonra ölçümleri; dosya-sedir-canli-olcum-once.txt:1-4; terminal-onar/KAPSAM-SINIRI.md:14-29",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Beceri içindeki kanıt özeti güncel ölçümle uyuşmuyor; teslim edilen belge 25 kapı ve 9/9 mutasyon derken son araç kayıtları 36 kapı ve 12/12 gösteriyor.",
+        "kanit": "SKILL.md son satırı `25 kapı` ve `9/9` diyor; `olcum-kapi-sinavi-tur4-sonra.txt` sonucu `GECEN: 36`, `olcum-mutasyon-tur4-sonra.txt` sonucu `gecti=12 dusen=0`.",
+        "konum": "terminal-onar/SKILL.md:94; olcum-kapi-sinavi-tur4-sonra.txt:sonuç; olcum-mutasyon-tur4-sonra.txt:sonuç",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sha’ları sağlam ve sarı kayıt yok. Son turdaki 36/36 kapı ile 12/12 mutasyon yeşil; önceki kırmızı `mutasyon-tur2` kaydı sonraki başarılı turlarla giderilmiş ve HTTP, WebSocket, giriş, parola, font ve önbellek sınırları güçlü biçimde ölçülmüş. Buna karşılık bütün davranış ölçümleri yalnız “sonra”; gerçekçi tarayıcı kare dizisi ve önce/sonra ölçüm çifti yok. Tek canlı ölçüm yalnız “önce” durumunu ve paketin kurulmadığını gösterdiğinden slash kurulumu, kalıcı cron, dinamik Node yolu ve canlı merkez yolculuğu kanıtlanmış değil. Diff 190832 bayttan 110000 baytta kırpıldığı için kurulum kodunun ve değişikliğin kalanının bütünü doğrudan denetlenemedi."
+  }
+}

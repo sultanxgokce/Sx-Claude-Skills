@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#15120e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="{{KUTU}}">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/ikon-180.png">
+<link rel="icon" href="/ikon.svg" type="image/svg+xml">
+<title>{{KUTU}}</title>
+<link rel="stylesheet" href="/zanaat.css">
+<style>
+  body { min-height: 100dvh; display: grid; place-items: center; padding: var(--a5) var(--a4); }
+  main { width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: var(--a6); }
+  .marka { display: flex; align-items: center; gap: var(--a3); }
+  .marka img { width: 48px; height: 48px; border-radius: var(--r2); }
+  h1 { margin: 0; font-size: var(--t-buyuk); font-weight: 600; letter-spacing: -.01em; }
+  .alt { margin: var(--a1) 0 0; color: var(--metin-2); font-size: 15px; }
+  form { display: flex; flex-direction: column; gap: var(--a5); }
+  .alan { display: flex; flex-direction: column; gap: var(--a2); }
+  label { font-size: 15px; font-weight: 600; }
+  .hata { min-height: 20px; margin: calc(-1 * var(--a4)) 0 0; color: var(--kotu); font-size: 15px; }
+  .dugme.birincil { width: 100%; }
+</style>
+</head>
+<body>
+<main>
+  <div class="marka">
+    <img src="/ikon-180.png" alt="" width="48" height="48">
+    <div>
+      <h1>{{KUTU}}</h1>
+      <p class="alt">Canlı konuşmaya giriş</p>
+    </div>
+  </div>
+  <form id="f" novalidate>
+    <input type="text" name="username" value="sultan" autocomplete="username" hidden>
+    <div class="alan">
+      <label for="p">Parola</label>
+      <input class="kutu" id="p" name="password" type="password" autocomplete="current-password" required autofocus>
+    </div>
+    <p class="hata" id="h" role="alert"></p>
+    <button class="dugme birincil" id="b" type="submit">Giriş yap</button>
+  </form>
+</main>
+<script>
+const f = document.getElementById('f'), p = document.getElementById('p'), h = document.getElementById('h'), b = document.getElementById('b');
+f.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!p.value) { h.textContent = 'Parolayı yaz.'; p.focus(); return; }
+  b.disabled = true; b.textContent = 'Giriş yapılıyor…'; h.textContent = '';
+  try {
+    const r = await fetch(((window.__TABAN||'')+'/giris'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ parola: p.value }) });
+    const j = await r.json().catch(() => ({}));
+    if (r.ok) { location.replace((window.__TABAN||'')+'/'); return; }
+    h.textContent = j.hata || 'Giriş yapılamadı.';
+  } catch { h.textContent = 'Bağlantı yok. İnternetini kontrol et.'; }
+  b.disabled = false; b.textContent = 'Giriş yap'; p.select();
+});
+</script>
+</body>
+</html>

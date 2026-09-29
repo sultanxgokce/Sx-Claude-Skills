@@ -1,0 +1,210 @@
+{
+  "is": "terminal-onar-global",
+  "arac": "kanit.py/0.1.0",
+  "guncelleme": "2026-09-29T11:42:24+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-sonra.txt",
+      "sha256": "7100b6c68fcd41aab2dccdb149aff20d468519b84cdc34e2ad82c378a6cb91aa",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-29T11:25:45+03:00",
+      "sure_sn": 0.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-sonra.txt",
+      "sha256": "69ebf9e12fb315d9cdf731cf7dfdcfca37824a34df72d7133f5806920dc4e8ab",
+      "komut": [
+        "bash",
+        "terminal-onar/kapi/mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-29T11:25:50+03:00",
+      "sure_sn": 4.4
+    },
+    {
+      "tur": "dosya",
+      "etiket": "sedir-canli-olcum",
+      "asama": "once",
+      "dosya": "dosya-sedir-canli-olcum-once.txt",
+      "sha256": "ad66529524fff1748c9148da44d7786c3991696f7bf4e332e2e270500c1c7ffe",
+      "kaynak": "/tmp/sx-canli.txt",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-29T11:25:57+03:00"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-tur2-sonra.txt",
+      "sha256": "62022f62433d5152b5517a39683d5082e2b3209ce9033e8e493ddfb0a30e93e3",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-29T11:28:14+03:00",
+      "sure_sn": 0.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-tur2-sonra.txt",
+      "sha256": "fdad8d28b91637c16e3ab431fa9caa73140087d4376575f1f3cda5037b087895",
+      "komut": [
+        "bash",
+        "terminal-onar/kapi/mutasyon.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-09-29T11:28:17+03:00",
+      "sure_sn": 3.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi-tur2b",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-tur2b-sonra.txt",
+      "sha256": "21c74d4e65337ebdf12a7cc0e4caf3ec7a87da0ac7b43af077917bbe3948ee85",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-29T11:29:11+03:00",
+      "sure_sn": 0.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-tur2b",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-tur2b-sonra.txt",
+      "sha256": "ed2e82c5ec54697cf537391ceebb0057dd7199da9ca167c4d59e61cf438c0d35",
+      "komut": [
+        "bash",
+        "terminal-onar/kapi/mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-29T11:29:16+03:00",
+      "sure_sn": 5.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi-tur3",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-tur3-sonra.txt",
+      "sha256": "b8e5a73d9358f041dfd0e157356b487ed1617d92c41fab150e7a19d3686babc9",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-29T11:32:23+03:00",
+      "sure_sn": 4.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-tur3",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-tur3-sonra.txt",
+      "sha256": "a2bdefcf82d508be184b074560a612b4ed59941bec3b349cf59ec53559eac05b",
+      "komut": [
+        "bash",
+        "terminal-onar/kapi/mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-29T11:33:17+03:00",
+      "sure_sn": 53.9
+    },
+    {
+      "tur": "dosya",
+      "etiket": "bilinen-sinir",
+      "asama": "sonra",
+      "dosya": "dosya-bilinen-sinir-sonra.md",
+      "sha256": "d476560b34b5a39c4532fb23bfb613d3705cef51941b47f925f4d29b9c4a2363",
+      "kaynak": "/config/projects/_wt/sx-terminal/terminal-onar/KAPSAM-SINIRI.md",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-29T11:36:28+03:00"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi-tur4",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-tur4-sonra.txt",
+      "sha256": "e6990c2e748e25571ab1b9df16a8984411bce86a475d3c05be01af593ee8e9f6",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-29T11:36:32+03:00",
+      "sure_sn": 4.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-tur4",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-tur4-sonra.txt",
+      "sha256": "9001e51e5d1cf17fc0224fa386f913f5b8c9d0097a6c179200889b785b4db41f",
+      "komut": [
+        "bash",
+        "terminal-onar/kapi/mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-29T11:37:30+03:00",
+      "sure_sn": 58.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi-tur5",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-tur5-sonra.txt",
+      "sha256": "4460104b918fca7f2b7c9b6d77c8c74be8fd16e7608ad8b22ce838d1da098044",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-29T11:41:20+03:00",
+      "sure_sn": 4.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-tur5",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-tur5-sonra.txt",
+      "sha256": "6faf49be26c2c0cab099ab0525a48e16d18f2e0d23a86930dd11d986e394db3b",
+      "komut": [
+        "bash",
+        "terminal-onar/kapi/mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-29T11:42:24+03:00",
+      "sure_sn": 64.1
+    }
+  ],
+  "imza": "ff8300ed44ef0e12318c8832b4a54e47dd8611d7d02ea4d7c67275785a1c2c14"
+}

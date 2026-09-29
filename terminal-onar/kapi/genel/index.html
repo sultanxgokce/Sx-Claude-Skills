@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#15120e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="{{KUTU}}">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/ikon-180.png">
+<link rel="icon" href="/ikon.svg" type="image/svg+xml">
+<title>{{KUTU}}</title>
+<link rel="stylesheet" href="/zanaat.css">
+<style>
+  /* sayfa KİLİTLİ: yalnız konuşma alanı kayar (iOS lastik kaydırması ve yanlış kaydırma yok) */
+  html, body { position: fixed; inset: 0; height: 100%; overflow: hidden; overscroll-behavior: none; }
+  header, .alt { touch-action: none; }
+  button, textarea { touch-action: manipulation; }
+  .uyg {
+    height: var(--gorunur, 100dvh); display: flex; flex-direction: column;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
+  }
+
+  /* üst şerit */
+  header {
+    flex: none; display: flex; align-items: center; justify-content: space-between; gap: var(--a3);
+    height: 52px; padding: 0 var(--a3) 0 var(--a4); border-bottom: 1px solid var(--kenar); background: var(--zemin);
+  }
+  .baslik { display: flex; align-items: center; gap: var(--a2); min-width: 0; }
+  .baslik b { font-size: var(--t-baslik); font-weight: 600; letter-spacing: -.01em; }
+  .nabiz { width: 10px; height: 10px; border-radius: 50%; background: var(--metin-3); flex: none; }
+  .nabiz[data-d="iyi"] { background: var(--iyi); box-shadow: 0 0 0 4px color-mix(in srgb, var(--iyi) 18%, transparent); }
+  .nabiz[data-d="kotu"] { background: var(--kotu); box-shadow: 0 0 0 4px color-mix(in srgb, var(--kotu) 22%, transparent); }
+  .nabiz[data-d="calisiyor"] { background: var(--uyari); animation: atim 1.1s ease-in-out infinite; }
+  @keyframes atim { 50% { opacity: .35; } }
+  .durum-yazi { color: var(--metin-2); font-size: var(--t-kucuk); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  header .dugme { min-height: 36px; padding: 0 var(--a3); font-size: 14px; border-radius: var(--r1); }
+
+  /* canlı terminal */
+  .ekran { flex: 1; min-height: 0; position: relative; background: var(--zemin); }
+  .ekran iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: var(--zemin); }
+  .kaydir { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; touch-action: pan-y; }
+  .kaydir[hidden] { display: none; }
+  .okuma { margin: 0; padding: var(--a3) var(--a3) var(--a4); color: #d9d1c3;
+    font: 11.5px/1.4 ui-monospace, "SF Mono", Menlo, Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .okuma > div { min-height: 1.4em; }  /* boş satır da yer tutsun */
+  .okuma .b { font-weight: 700; } .okuma .d { opacity: .6; } .okuma .i { font-style: italic; } .okuma .u { text-decoration: underline; }
+  /* önceki mesajlar (konuşma kaydından) — ekran tam-ekran kipte olduğu için tmux'ta geçmiş yok */
+  .gecmis { padding: var(--a3) var(--a3) 0; display: flex; flex-direction: column; gap: var(--a2); }
+  .gecmis-ac { align-self: center; min-height: 36px; padding: 0 var(--a4); border-radius: var(--hap); border: 1px solid var(--kenar);
+    background: var(--yuzey-2); color: var(--metin-2); font-size: 14px; font-weight: 600; }
+  .gecmis-ac[hidden] { display: none; }
+  #gecmisListe { display: flex; flex-direction: column; gap: var(--a2); }
+  #gecmisListe:empty { display: none; }
+  .msj { padding: var(--a2) var(--a3); border-radius: var(--r2); background: var(--yuzey); border: 1px solid var(--kenar);
+    font-size: 14px; line-height: 1.45; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .msj[data-kim="sen"] { background: var(--yuzey-2); margin-left: var(--a6); }
+  .msj[data-kim="sedir"] { margin-right: var(--a4); }
+  .msj small { display: block; margin-bottom: var(--a1); color: var(--metin-3); font-size: 12px; font-weight: 600; }
+  .simdi { margin: var(--a2) 0 0; text-align: center; color: var(--metin-3); font-size: 12px; }
+  .en-alta { position: absolute; right: var(--a3); bottom: var(--a3); z-index: 2; min-height: 36px; padding: 0 var(--a3);
+    border-radius: var(--hap); border: 1px solid var(--kenar-guclu); background: var(--yuzey-3); color: var(--metin); font-size: 14px; font-weight: 600; }
+  .en-alta[hidden] { display: none; }
+
+  /* alt panel */
+  .alt { flex: none; display: flex; flex-direction: column; gap: var(--a2);
+    padding: var(--a2) var(--a3) calc(var(--a2) + env(safe-area-inset-bottom)); border-top: 1px solid var(--kenar); background: var(--yuzey); isolation: isolate; }
+
+  .tuslar { display: flex; gap: var(--a2); overflow-x: auto; scrollbar-width: none; margin: 0 calc(-1 * var(--a3)); padding: 0 var(--a3); }
+  .tuslar::-webkit-scrollbar { display: none; }
+  .tus { flex: none; min-width: 44px; height: 36px; padding: 0 var(--a3); border-radius: var(--hap);
+    border: 1px solid var(--kenar); background: var(--yuzey-2); color: var(--metin); font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .tus:active { background: var(--yuzey-3); transform: scale(.95); }
+  .tus.zayif { color: var(--metin-2); font-weight: 400; }
+
+  .ekler { display: flex; gap: var(--a2); overflow-x: auto; }
+  .ekler:empty { display: none; }
+  .ek { position: relative; flex: none; width: 56px; height: 56px; border-radius: var(--r1); overflow: hidden; border: 1px solid var(--kenar); background: var(--yuzey-2); }
+  .ek img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ek[data-d="yukleniyor"] img { opacity: .4; }
+  .ek[data-d="hata"] { border-color: var(--kotu); }
+  .ek button { position: absolute; top: 2px; right: 2px; width: 22px; height: 22px; border-radius: 50%; border: 0;
+    background: rgb(0 0 0 / .7); color: #fff; font-size: 14px; line-height: 1; display: grid; place-items: center; padding: 0; }
+
+  .yaz { display: flex; align-items: flex-end; gap: var(--a2); }
+  .yaz textarea { flex: 1; min-width: 0; resize: none; max-height: 40vh; display: block; }
+  .dugme.dinliyor { background: var(--kotu); border-color: var(--kotu); color: #1a0d09; animation: atim 1.1s ease-in-out infinite; }
+
+  .bildirim { position: fixed; left: 50%; bottom: calc(160px + env(safe-area-inset-bottom)); transform: translateX(-50%);
+    max-width: calc(100% - 32px); padding: var(--a2) var(--a4); border-radius: var(--r2); background: var(--yuzey-3);
+    border: 1px solid var(--kenar-guclu); font-size: 15px; opacity: 0; pointer-events: none; transition: opacity var(--sure); z-index: 20; }
+  .bildirim.acik { opacity: 1; }
+
+  /* onarım sayfası */
+  dialog { width: 100%; max-width: 520px; margin: auto auto 0; border: 1px solid var(--kenar); border-bottom: 0;
+    border-radius: var(--r3) var(--r3) 0 0; padding: var(--a5) var(--a4) calc(var(--a5) + env(safe-area-inset-bottom));
+    background: var(--yuzey); color: var(--metin); }
+  dialog::backdrop { background: rgb(0 0 0 / .55); }
+  dialog[open] { display: flex; flex-direction: column; gap: var(--a5); }
+  dialog h2 { margin: 0; font-size: var(--t-baslik); font-weight: 600; }
+  .parcalar { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+  .parcalar li { display: flex; justify-content: space-between; align-items: center; gap: var(--a3); min-height: 44px; border-bottom: 1px solid var(--kenar); }
+  .parcalar li:last-child { border-bottom: 0; }
+  .rozet { font-size: var(--t-kucuk); font-weight: 600; padding: 2px var(--a2); border-radius: var(--r1); background: var(--yuzey-3); color: var(--metin-2); }
+  .rozet[data-d="ok"] { color: var(--iyi); }
+  .rozet[data-d="yok"] { color: var(--kotu); }
+  .gunluk { margin: 0; max-height: 28vh; overflow: auto; padding: var(--a3); border-radius: var(--r2); background: var(--zemin);
+    border: 1px solid var(--kenar); font: 12.5px/1.5 ui-monospace, "SF Mono", Menlo, monospace; color: var(--metin-2); white-space: pre-wrap; }
+  .gunluk:empty { display: none; }
+  .eylemler { display: flex; gap: var(--a2); }
+  .eylemler .dugme { flex: 1; }
+</style>
+</head>
+<body>
+<div class="uyg" id="uyg">
+  <header>
+    <div class="baslik">
+      <span class="nabiz" id="nabiz" aria-hidden="true"></span>
+      <b>{{KUTU}}</b>
+      <span class="durum-yazi" id="durumYazi">ölçülüyor…</span>
+    </div>
+    <div class="baslik">
+      <button class="dugme" id="gorunum" type="button" aria-pressed="false">Terminal</button>
+      <button class="dugme" id="onarAc" type="button">Onar</button>
+    </div>
+  </header>
+
+  <div class="ekran" id="ekran">
+    <div class="kaydir" id="kaydir">
+      <div class="gecmis" id="gecmis" aria-label="Önceki mesajlar">
+        <button class="gecmis-ac" id="gecmisAc" type="button">↑ Önceki mesajlar</button>
+        <div id="gecmisListe"></div>
+      </div>
+      <pre class="okuma" id="okuma" aria-live="off" aria-label="Canlı konuşma"></pre>
+    </div>
+    <button class="en-alta" id="enAlta" type="button" hidden>↓ En alta</button>
+  </div>
+
+  <div class="alt">
+    <div class="tuslar" role="toolbar" aria-label="Hızlı tuşlar">
+      <button class="tus" data-tus="1" type="button">1</button>
+      <button class="tus" data-tus="2" type="button">2</button>
+      <button class="tus" data-tus="3" type="button">3</button>
+      <button class="tus" data-tus="Up" type="button" aria-label="Yukarı">↑</button>
+      <button class="tus" data-tus="Down" type="button" aria-label="Aşağı">↓</button>
+      <button class="tus" data-tus="Enter" type="button">Enter</button>
+      <button class="tus" data-tus="Escape" type="button">Esc</button>
+      <button class="tus zayif" data-tus="BTab" type="button">Mod ⇧⇥</button>
+      <button class="tus zayif" data-tus="C-c" type="button">Durdur ^C</button>
+    </div>
+    <div class="ekler" id="ekler" aria-label="Eklenen fotoğraflar"></div>
+    <form class="yaz" id="yaz">
+      <input type="file" id="dosya" accept="image/*" multiple class="sr" tabindex="-1">
+      <button class="dugme ikon" type="button" id="foto" aria-label="Fotoğraf çek ya da galeriden seç">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.7l1.3-2h5l1.3 2h1.7A2.5 2.5 0 0 1 20 8.5v8A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5z"/><circle cx="12" cy="12.5" r="3.5"/></svg>
+      </button>
+      <label for="mesaj" class="sr">Mesaj</label>
+      <textarea class="kutu" id="mesaj" rows="1" placeholder="Mesaj yaz…" enterkeyhint="enter" autocomplete="off" autocapitalize="sentences"></textarea>
+      <button class="dugme ikon" type="button" id="mik" aria-label="Sesle yaz" aria-pressed="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>
+      </button>
+      <button class="dugme ikon birincil" type="submit" id="gonder" aria-label="Gönder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+      </button>
+    </form>
+  </div>
+</div>
+
+<div class="bildirim" id="bildirim" role="status" aria-live="polite"></div>
+
+<dialog id="onarim" aria-labelledby="onarBaslik">
+  <h2 id="onarBaslik">Düzenin durumu</h2>
+  <ul class="parcalar" id="parcalar"></ul>
+  <pre class="gunluk" id="gunluk"></pre>
+  <div class="eylemler">
+    <button class="dugme" type="button" id="onarKapat">Kapat</button>
+    <button class="dugme birincil" type="button" id="onarBasla">Onarımı başlat</button>
+  </div>
+</dialog>
+
+<script src="/uygulama.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+$ node terminal-onar/kapi/sunucu.test.mjs
+# rc=0 sure=4.7s zaman=2026-09-29T11:41:20+03:00
+--- stdout ---
+
+── T · TABAN YOLU (kapı /sedir altında) ──
+  ✓ T1 giriş sayfası TABAN altında açılır
+  ✓ T2 taban DIŞI istek reddedilir (404) — kapı başkasının yoluna cevap vermez
+  ✓ T3 tabanın kendisi sondaki eğik çizgiye yönlenir
+  ✓ T4 girişsiz kök TABANLI giriş sayfasına yönlenir (kök yola DEĞİL)
+  ✓ T5 girişsiz API 401 döner (yönlendirme değil)
+  ✓ T6 yanlış parola REDDEDİLİR
+  ✓ T7 doğru parola KABUL (T6 tautoloji değil)
+  ✓ T8 çerez YALNIZ kendi tabanında geçerli (Path=/sedir)
+  ✓ T9 çerez HttpOnly+Secure+SameSite korunur
+  ✓ T10 sayfa kendi tabanını TAŞIR (sunucudan öğrenir, tahmin etmez)
+  ✓ T11 sayfadaki mutlak varlık yolları tabana taşınmış
+  ✓ T12 PWA kimliği KUTU BAŞINA üretilir (kapsam tabanda, ad kutudan)
+  ✓ T13 PWA ikon yolları da tabanlı
+  ✓ T14 ttyd vekili tabanlı yolu OLDUĞU GİBİ iletir (ttyd -b ile eşleşsin)
+
+── K · KÖK DAVRANIŞI (taban boş — geriye dönük) ──
+  ✓ K1 taban boşken giriş kök yolda açılır
+  ✓ K2 girişsiz kök → /giris (eski davranış BAYT BAYT aynı)
+  ✓ K3 taban boşken çerez Path=/ kalır
+  ✓ K4 taban boşken sayfa yolları DEĞİŞTİRİLMEZ
+  ✓ K5 taban boşken ttyd yolu kök kalır
+
+── M · MAHREMİYET (iki kutu aynı kaynağı paylaşıyor) ──
+  ✓ M1 geçerli oturumla BAŞKA kutunun yoluna gidilemez (404)
+  ✓ M2 ... kendi yolu çalışıyor (M1 "her şey 404" değil)
+
+── W · WEBSOCKET (tam terminal bağlantısı) ──
+  ✓ W1 tabanlı WS yolu ttyd'ye ULAŞIR
+  ✓ W2 taban DIŞI WS yolu REDDEDİLİR (401) — geçerli oturumla bile
+  ✓ W3 çerezsiz WS REDDEDİLİR (401)
+  ✓ W4 tty dışı yola upgrade REDDEDİLİR
+  ✓ B1 giriş sayfası tabanı TAŞIR (window.__TABAN gömülü)
+  ✓ B2 giriş sayfasında KÖK-mutlak varlık yolu kalmadı
+  ✓ B3 başarılı girişten sonra taban altına dönülür (köke DEĞİL)
+  ✓ B4 tabansız kutuda sayfa yine çalışır (B1 tautoloji değil)
+  ✓ P1 kutunun kendi parolası yokken BAŞKASININKİYLE açılmaz (fail-closed)
+  ✓ P2 kendi parolası varken AÇILIR (P1 tautoloji değil)
+  ✓ F1 biçem dosyasında kök-mutlak yazı tipi adresi yok
+  ✓ F2 yazı tipi taban altından İNİYOR (F1 tautoloji değil)
+  ✓ C1 kısa adlı kutu UZUN adlının önbelleğini silmez
+  ✓ C2 ... ama kendi eski kabını siler (C1 tautoloji değil)
+  ✓ C3 kutu kendi eski sürümünü temizler, komşununkine dokunmaz
+  ✓ A1 giriş ekranı KUTUNUN adını gösterir
+  ✓ A2 sayfada doldurulmamış yuva kalmadı
+  ✓ A3 kaynakta sabit kutu adı kalmadı
+  ✓ A4 BAŞKA kutu KENDİ adını gösterir (A1 tautoloji değil)
+
+────────────────────────────────────────────────────────
+GECEN: 40  ·  KALAN: 0
+--- stderr ---
