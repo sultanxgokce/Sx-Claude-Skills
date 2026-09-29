@@ -92,5 +92,5 @@ Merkez (`terminal.mmepanel.com`) kutuları **yol** ile ayırır: `/sedir/` · `/
 tabanı bilmek zorundadır; bilmezse döndürdüğü her mutlak yol merkeze gider ve kutuya hiç
 ulaşmaz. Taban boş bırakılırsa eski kök davranışı **bayt bayt** aynı kalır.
 
-Kanıt: `kapi/sunucu.test.mjs` (36 kapı, gerçek HTTP + WebSocket) · `kapi/mutasyon.sh` (12/12,
+Kanıt: `kapi/sunucu.test.mjs` (40 kapı, gerçek HTTP + WebSocket) · `kapi/mutasyon.sh` (13/13,
 her kapı öldürülünce sınav kırmızıya dönüyor).
