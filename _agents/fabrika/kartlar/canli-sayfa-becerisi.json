@@ -1,0 +1,19 @@
+{
+  "is": "canli-sayfa-becerisi",
+  "cumle": "Canlı sayfa kuralı: her kutu kurduğu canlı sayfayı ortak kayda yazar; kayıt aracı + beceri + komut, bütün kutulara dağıtılır (kokpit menüsü bu kayıttan beslenir)",
+  "istedi": "Sultan",
+  "aldi": "SERDAR",
+  "zaman": "2026-09-29T22:07:40+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/canli-sayfa-becerisi/ (sınav, mutasyon, kurulu kopya ile kaynak eşitliği, gerçek kayıtla liste)",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

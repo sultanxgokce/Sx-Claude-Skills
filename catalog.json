@@ -1530,6 +1530,30 @@
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
       "installed_in": [],
       "family": "workflow (çalışma hattı; pr-onay · olcum-disiplini · kapi-sinavi · kayit-damgasi çağırır)"
+    },
+    {
+      "id": "canli-sayfa",
+      "type": "tool",
+      "name": "canlı sayfa — filonun canlı sayfa kuralı ve kaydı",
+      "version": "1.0.0",
+      "description": "Sultan bir kutudan canlı sayfa istediğinde uyulacak filo kuralı ve aracı: canlıya çıkan her sayfa ortak kayda yazılır (sayfa başına bir dosya), kokpitteki Canlı sayfalar menüsü bu kayıttan beslenir. Kayıt adresi o an ölçer: açılmayan sayfa kayda girmez, giriş kapısı olmadan açılan sayfa onaysız kayda girmez. Komutlar: ekle · liste (--json menü biçimi) · emekli · dogrula. Metin kuralları: Sultan'ın okuyacağı dil, sır deseni reddi, adreste soru işareti/port/kullanıcı adı yok.",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "python3",
+          "curl"
+        ]
+      },
+      "tags": [
+        "sultan-yuzu",
+        "kokpit",
+        "canli-sayfa",
+        "global",
+        "filo-kurali"
+      ],
+      "installed_in": [
+        "_global"
+      ]
     }
   ]
 }
