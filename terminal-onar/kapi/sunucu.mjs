@@ -40,7 +40,12 @@ const RESIM_URL = process.env.KAPI_RESIM_URL || 'http://127.0.0.1:8391/upload';
 //    gibi görünürdü — oysa parola vardı, aranan ad yanlıştı. Ad da veri gibi taşınır.
 const SIFRE_ANAHTAR = process.env.KAPI_SIFRE_ANAHTAR
   || ((process.env.TO_KUTU || (TABAN ? TABAN.slice(1) : '')).replace(/-/g, '_').toUpperCase() + '__TERMINAL_SIFRE');
-const SIFRE = process.env[SIFRE_ANAHTAR] || process.env.SEDIR__TERMINAL_SIFRE || '';
+// 🔴 GERI DUSUS YOK (bagimsiz goz tur 2, CIDDI). Onceki hal kutunun kendi
+//    anahtari bulunamazsa SEDIR'inkine dusuyordu: AKAR kutusunda AKAR__... yokken
+//    SEDIR__... ortamda duruyorsa kapi DURMAK yerine YANLIS SIRLA acilirdi — hem
+//    kart 'kasada yoksa kurulum durur' derken, hem de bir kutunun parolasi otekini
+//    acardi. Anahtar kutudan turer; baskasinin anahtari asla vekil olamaz.
+const SIFRE = process.env[SIFRE_ANAHTAR] || '';
 const GUN = 24 * 3600;
 if (SIFRE.length < 4) { console.error(`KAPI: parola ortamda yok (${SIFRE_ANAHTAR}) — fail-closed, açılmıyorum`); process.exit(2); }
 

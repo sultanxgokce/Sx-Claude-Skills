@@ -35,6 +35,7 @@ dene "M6 html varlık yolları" sunucu.mjs "s=s.replace('if (TABAN) h = h.replac
 dene "M7 PWA kimliği kutu başına" sunucu.mjs "s=s.replace(\"start_url: TABAN + '/', scope: TABAN + '/'\",\"start_url: '/', scope: '/'\")"
 # ── Tarayıcı akışı mutantları (28-29 Eylül · bağımsız göz, CİDDİ)
 dene "M10 giris sayfasi tabani tasir" sunucu.mjs "s=s.replace(\"GET') return dosyaTabanli(res, 'giris\",\"GET') return dosya(res, 'giris\")"
+dene "M11 parola vekilligi" sunucu.mjs "s=s.replace('process.env[SIFRE_ANAHTAR] ||','process.env[SIFRE_ANAHTAR] || process.env.SEDIR__TERMINAL_SIFRE ||')"
 dene "M8 WS upgrade taban denetimi" sunucu.mjs "s=s.replace('_yol === _tty ||','true ||')"
 dene "M9 WS giris denetimi" sunucu.mjs "s=s.replace('!girisli(req) ||','false ||')"
 echo "─────────────"

@@ -1,6 +1,6 @@
 /* Sedir kapısı — tek bilinçli dünya: koyu (terminalle aynı zemin). Açık tema bilerek yok. */
-@font-face { font-family: "Archivo"; src: url(/archivo-400.ttf) format("truetype"); font-weight: 400; font-display: swap; }
-@font-face { font-family: "Archivo"; src: url(/archivo-600.ttf) format("truetype"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Archivo"; src: url(archivo-400.ttf) format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Archivo"; src: url(archivo-600.ttf) format("truetype"); font-weight: 600; font-display: swap; }
 
 :root {
   color-scheme: dark;

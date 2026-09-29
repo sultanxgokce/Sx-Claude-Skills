@@ -1,3 +1,6 @@
+// Yerel saklama anahtari da kutudan turer — ayni tarayicida iki kutu acilirsa
+// sabit ad ikisinin gorunum tercihini BIRBIRINE karistirirdi (bagimsiz goz tur 2).
+const GORUNUM_ANAHTAR = ((window.__KUTU || 'kutu') + '-gorunum');
 // ── TABAN YOLU ───────────────────────────────────────────────────────────────
 // Sayfa kendi tabanını sunucudan öğrenir (index.html'e enjekte edilir). Merkez sayfa
 // kutuları yol ile ayırdığı için (/sedir/ · /akar/) buradaki her çağrı o yolun altında
@@ -298,7 +301,7 @@ function gorunumAyarla(terminal) {
   $('gorunum').textContent = terminal ? 'Okuma' : 'Terminal';
   if (terminal) { ttyKur(); kaydir.hidden = true; enAlta.hidden = true; }
   else { ttySok(); kaydir.hidden = false; ekranH = ''; ekranCek(); }
-  try { localStorage.setItem('sedir-gorunum', terminal ? 'terminal' : 'okuma'); } catch {}
+  try { localStorage.setItem(GORUNUM_ANAHTAR, terminal ? 'terminal' : 'okuma'); } catch {}
 }
 document.addEventListener('visibilitychange', () => {
   if (!gorunumTerminal) return;
@@ -317,4 +320,4 @@ $('gorunum').addEventListener('click', () => {
   if (!gorunumTerminal && matchMedia('(pointer: coarse)').matches) bildir('Tam terminal açıkken Mac ekranı telefona göre daralır; Okuma’ya dönünce düzelir.');
   gorunumAyarla(!gorunumTerminal);
 });
-try { if (localStorage.getItem('sedir-gorunum') === 'terminal' && !matchMedia('(pointer: coarse)').matches) gorunumAyarla(true); } catch {}
+try { if (localStorage.getItem(GORUNUM_ANAHTAR) === 'terminal' && !matchMedia('(pointer: coarse)').matches) gorunumAyarla(true); } catch {}

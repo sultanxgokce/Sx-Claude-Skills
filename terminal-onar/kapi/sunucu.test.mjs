@@ -190,6 +190,38 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
        gk.status === 200 && /window\.__TABAN\s*=\s*""/.test(hk), `→ ${gk.status}`);
 }
 
+// ── P · PAROLA VEKİLLİĞİ (bağımsız göz tur 2, CİDDİ) ─────────────────────────
+// 🔴 NİÇİN: kutunun kendi anahtarı yoksa kod SEDİR'inkine düşüyordu. AKAR kutusunda
+//    AKAR__… yokken SEDİR__… ortamda duruyorsa kapı DURMAK yerine YANLIŞ SIRLA
+//    açılırdı. Fail-closed sözü tam burada bozuluyordu.
+{
+  const cik = (ortam) => new Promise((coz) => {
+    const c = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], {
+      env: { ...process.env, KAPI_TABAN: '/akar', TO_KUTU: 'akar', KAPI_PORT: '18779',
+             KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), AKAR__TERMINAL_SIFRE: '', ...ortam },
+      stdio: ['ignore', 'ignore', 'pipe'] });
+    let e = ''; c.stderr.on('data', (d) => { e += d; });
+    c.on('exit', (k) => coz({ kod: k, hata: e })); setTimeout(() => { c.kill(); coz({ kod: null, hata: e }); }, 4000);
+  });
+  const baskasi = await cik({ SEDIR__TERMINAL_SIFRE: 'baskasinin-parolasi-9999' });
+  kapi('P1 kutunun kendi parolası yokken BAŞKASININKİYLE açılmaz (fail-closed)',
+       baskasi.kod === 2 && /parola ortamda yok/.test(baskasi.hata), `→ çıkış ${baskasi.kod}`);
+  const kendi = await cik({ AKAR__TERMINAL_SIFRE: 'akarin-kendi-parolasi-1234' });
+  kapi('P2 kendi parolası varken AÇILIR (P1 tautoloji değil)',
+       kendi.kod === null, `→ çıkış ${kendi.kod}`);
+}
+
+// ── F · YAZI TİPİ YOLU ────────────────────────────────────────────────────────
+// Biçem dosyası taban enjeksiyonundan GEÇMEZ (yalnız html yazılır); kök-mutlak
+// yazı tipi adresi /sedir/ altında merkez köküne kaçardı.
+{
+  const c = await iste(P1, '/sedir/zanaat.css'); const g = await c.text();
+  kapi('F1 biçem dosyasında kök-mutlak yazı tipi adresi yok',
+       !/url\(\s*\//.test(g), `→ ${(g.match(/url\([^)]*\)/g) || []).slice(0, 2).join(' ')}`);
+  const f = await iste(P1, '/sedir/archivo-400.ttf');
+  kapi('F2 yazı tipi taban altından İNİYOR (F1 tautoloji değil)', f.status === 200, `→ ${f.status}`);
+}
+
 kapiTaban.kill(); kapiKok.kill(); ttyd.close();
 console.log(`\n${'─'.repeat(56)}`);
 console.log(`GECEN: ${gecen}  ·  KALAN: ${kalan}`);
