@@ -17,7 +17,14 @@
 KUTU="${TO_KUTU:-$(
   # 1) açık beyan · 2) çalışma alanının adı · 3) makine adı → hiçbiri yoksa BOŞ
   d="${TO_PROJE:-}"; [ -n "$d" ] && basename "$d" && exit 0
-  for c in /config/projects/*/; do :; done
+  # 2) BECERİNİN KENDİ KURULU OLDUĞU YER: <...>/projects/<kutu>/.claude/skills/terminal-onar/scripts
+  #    Bu en güvenilir kaynak: kurulu kopya zaten kutunun içinde yaşıyor.
+  #    🔴 Eskiden burada `for c in /config/projects/*/; do :; done` vardı — döngü değişkeni
+  #    HİÇ KULLANILMIYORDU (ölü kod) ve akış doğrudan makine adına düşüyordu. Kabın makine adı
+  #    rastgele bir kimlik olduğunda (ölçüldü: SEDİR kutusunda `f517818d622f`) beceri kutuyu
+  #    o kimlik sanıyor: tmux adları, kasa anahtarı ve TABAN yolu hep yanlış türüyordu.
+  k="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")/../../../.." 2>/dev/null && pwd)"
+  case "$k" in */projects/*) basename "$k" && exit 0 ;; esac
   hostname 2>/dev/null | sed 's/^cloudtop-//'
 )}"
 # Kutu adı ÇÖZÜLEMEZSE kurulum yapılmaz: yanlış kutunun adına yazmaktansa durmak yeğdir.
