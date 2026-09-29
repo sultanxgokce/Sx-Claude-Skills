@@ -1,0 +1,5 @@
+$ git cat-file -e origin/main:canli-sayfa/SKILL.md
+# rc=128 sure=0.0s zaman=2026-09-29T22:35:47+03:00
+--- stdout ---
+--- stderr ---
+fatal: path 'canli-sayfa/SKILL.md' exists on disk, but not in 'origin/main'

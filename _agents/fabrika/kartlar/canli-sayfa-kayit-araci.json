@@ -1,0 +1,19 @@
+{
+  "is": "canli-sayfa-kayit-araci",
+  "cumle": "Canlı sayfa kuralının beceri metni ve kayıt aracı beceri deposuna KAYNAK olarak girer (dağıtım hedefi kayıtlı). Kurulum, ilk kayıtlar, kokpit menüsü ve kutulara duyuru bu işte YOK; her biri ayrı kart",
+  "istedi": "Sultan",
+  "aldi": "SERDAR",
+  "zaman": "2026-09-29T22:34:04+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/canli-sayfa-kayit-araci/ (sınav, mutasyon, gerçek ağ ölçümüyle GEÇİCİ kayıt dizininde prova, depo kapıları)",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}
