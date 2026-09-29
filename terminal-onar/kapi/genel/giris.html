@@ -55,7 +55,7 @@ f.addEventListener('submit', async (e) => {
   try {
     const r = await fetch(((window.__TABAN||'')+'/giris'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ parola: p.value }) });
     const j = await r.json().catch(() => ({}));
-    if (r.ok) { location.replace('/'); return; }
+    if (r.ok) { location.replace((window.__TABAN||'')+'/'); return; }
     h.textContent = j.hata || 'Giriş yapılamadı.';
   } catch { h.textContent = 'Bağlantı yok. İnternetini kontrol et.'; }
   b.disabled = false; b.textContent = 'Giriş yap'; p.select();

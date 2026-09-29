@@ -169,6 +169,27 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   kapi('W4 tty dışı yola upgrade REDDEDİLİR', /401/.test(w4), `→ ${w4.slice(0, 40)}`);
 }
 
+// ── B · TARAYICI AKIŞI (bağımsız göz, CİDDİ) ──────────────────────────────────
+// 🔴 NİÇİN: sunucu /sedir/giris'e 200 döndürüyordu ve sınav yeşildi — ama sayfanın
+//    KENDİSİ tabanı bilmiyordu: parola köke gidiyor, varlıklar kökten isteniyor,
+//    başarılı girişten sonra kullanıcı kökün / adresine atılıyordu. Yani ölçülen
+//    şey "sunucu cevap verdi mi" idi; kırılan şey KULLANICININ YOLUYDU.
+{
+  const g = await iste(P1, '/sedir/giris');
+  const h = await g.text();
+  kapi('B1 giriş sayfası tabanı TAŞIR (window.__TABAN gömülü)',
+       /window\.__TABAN\s*=\s*"\/sedir"/.test(h), `→ ${/__TABAN/.test(h) ? 'var ama değer yanlış' : 'HİÇ YOK'}`);
+  const kokMutlak = (h.match(/(?:href|src)="\/(?!\/)[^"]*/g) || []).filter((x) => !x.includes('/sedir/'));
+  kapi('B2 giriş sayfasında KÖK-mutlak varlık yolu kalmadı',
+       kokMutlak.length === 0, `→ ${kokMutlak.slice(0, 2).join(' ')}`);
+  kapi('B3 başarılı girişten sonra taban altına dönülür (köke DEĞİL)',
+       /location\.replace\(\(window\.__TABAN\|\|''\)\s*\+\s*'\/'\)/.test(h),
+       `→ ${/location\.replace\('\/'\)/.test(h) ? "hâlâ köke atıyor" : 'desen bulunamadı'}`);
+  const gk = await iste(P2, '/giris'); const hk = await gk.text();
+  kapi('B4 tabansız kutuda sayfa yine çalışır (B1 tautoloji değil)',
+       gk.status === 200 && /window\.__TABAN\s*=\s*""/.test(hk), `→ ${gk.status}`);
+}
+
 kapiTaban.kill(); kapiKok.kill(); ttyd.close();
 console.log(`\n${'─'.repeat(56)}`);
 console.log(`GECEN: ${gecen}  ·  KALAN: ${kalan}`);

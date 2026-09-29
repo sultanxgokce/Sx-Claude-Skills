@@ -187,7 +187,11 @@ const sunucu = http.createServer(async (req, res) => {
   res.setHeader('referrer-policy', 'no-referrer');
 
   // girişsiz açık olanlar: giriş sayfası + PWA kimlik dosyaları
-  if (y === '/giris' && req.method === 'GET') return dosya(res, 'giris.html');
+  // 🔴 GİRİŞ SAYFASI DA TABANI BİLMELİ (bağımsız göz, CİDDİ). Düz `dosya()` ile
+  //    sunulunca sayfada `window.__TABAN` tanımsız kalıyor, parola KÖKTEKİ /giris'e
+  //    gidiyor ve varlıklar kökten isteniyordu. Sunucu 200 döndürdüğü için sınav
+  //    yeşildi; kırılan şey sunucu değil TARAYICI AKIŞIYDI.
+  if (y === '/giris' && req.method === 'GET') return dosyaTabanli(res, 'giris.html');
   if (y === '/giris' && req.method === 'POST') {
     if (cokDeneme()) return json(res, 429, { hata: 'Çok fazla deneme. Bir dakika bekle.' });
     denemeler.push(Date.now());
@@ -295,7 +299,11 @@ const sunucu = http.createServer(async (req, res) => {
 // ---- WebSocket (ttyd) — yalnız girişli ve /tty altında
 sunucu.on('upgrade', (req, soket, bas) => {
   console.log(new Date().toISOString(), 'tam-terminal bağlantısı', (req.headers['user-agent'] || '').slice(0, 80));
-  if (!girisli(req) || !req.url.startsWith(T('/tty'))) { soket.end('HTTP/1.1 401 Unauthorized\r\n\r\n'); return; }
+  // 🔴 ÖNEK DEĞİL SINIR: `startsWith('/sedir/tty')` `/sedir/ttyXYZ` yolunu da kabul
+  //    ederdi. Yol ya tam eşleşir ya da eğik çizgiyle devam eder.
+  const _tty = T('/tty');
+  const _yol = (req.url || '').split('?')[0];
+  if (!girisli(req) || !(_yol === _tty || _yol.startsWith(_tty + '/'))) { soket.end('HTTP/1.1 401 Unauthorized\r\n\r\n'); return; }
   const hedef = net.connect(TTYD_SOKET, () => {
     const b = [`${req.method} ${req.url} HTTP/1.1`];
     for (let i = 0; i < req.rawHeaders.length; i += 2) {
