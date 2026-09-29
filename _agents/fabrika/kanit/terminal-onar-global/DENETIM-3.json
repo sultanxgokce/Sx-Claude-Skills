@@ -1,0 +1,29 @@
+{
+  "tur": 3,
+  "is": "terminal-onar-global",
+  "pr": "250",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-09-29T11:33:52+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, tabanlı HTTP/WebSocket akışı, kutuya özgü parola ve PWA davranışı güçlü kapı ve mutasyon sınavlarıyla kurulmuş; iş kartındaki ana yöne gidilmiş. Önce önbellek ayrımındaki önek çakışmasını çözün ve `/terminal-kur` ile gerçek kutu kurulumunu kanıtlayın; diff kırpıldığı için bütün uygulama üretime hazır ilan edilemez.",
+    "bulgular": [
+      {
+        "ne": "Service Worker eski önbellek temizliğinde tam kutu sınırı yerine önek eşleşmesi kullanıyor; kısa adlı bir kutu, adı aynı önekle başlayan başka kutunun önbelleğini silebilir.",
+        "kanit": "KAP `kabuk${TABAN}-v3` biçiminde kurulurken temizlik `x.startsWith('kabuk' + TABAN)` yapıyor. Örneğin TABAN=/sedir olan kutu `kabuk/sedir2-v3` kaydını da kendi eski kabı sayar; bu, yorumdaki “yalnız kendi tabanına dokunur” güvencesini bozar. Sunulan 33 kapı ve 11 mutasyon arasında önbelleklerin kutular arası silinmesini ölçen sınav yok.",
+        "konum": "terminal-onar/kapi/genel/sw.js: KAP tanımı ve activate dinleyicisi; olcum-kapi-sinavi-tur3-sonra.txt; olcum-mutasyon-tur3-sonra.txt",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "İş kartının `/terminal-kur` kurulum zinciri ve “bütün kutularda çalışır” sonucu canlı bir kurulumla doğrulanmamış.",
+        "kanit": "Tek canlı kayıt `sedir-canli-olcum` aşama=önce ve metni açıkça “yeni taban yolu HENUZ kurulmadi” ile “bu paket SEDIR kutusuna kurulmamis” diyor. Sonra kayıtları yalnız `sunucu.test.mjs` ve `mutasyon.sh`; kur.sh, kalıcı cron, dinamik Node yolu, kasa okuma ve slash çağrısına ait sonra ölçümü bulunmuyor.",
+        "konum": "KANIT.json:sedir-canli-olcum; dosya-sedir-canli-olcum-once.txt; manifest kayitlar listesi",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sha’ları sağlam ve sarı kayıt yok; son turda kapı sınavı 33/33, mutasyon 11/11 yeşil ve önceki kırmızı mutasyon kaydı sonraki başarılı turla giderilmiş. HTTP, WebSocket, giriş sayfası, parola vekilliği ve yazı tipi tabanı iyi ölçülüyor; ancak davranış için önce/sonra çifti veya gerçekçi tarayıcı kare dizisi yok, canlı kayıt yalnız “önce” ve kurulmamış durumu gösteriyor. Ayrıca istem 110000 baytta kırpıldığı için kurulum betiği ile diff’in kalanının bütünlüğü doğrudan denetlenemiyor."
+  }
+}
