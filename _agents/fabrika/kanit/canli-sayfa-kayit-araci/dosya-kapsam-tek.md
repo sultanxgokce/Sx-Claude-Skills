@@ -18,6 +18,10 @@ kuralının cümlesi düzeltildi.
   kaydı silinmiş, güncelleme tarihi gerilemişti. Gerçek hata. Dosyalar ana dalın güncel hâlinden alındı, yalnız
   `canli-sayfa` eklendi; korunumu ölçen betik kanıta girdi.
 
+- **Tur 2 (4/5):** dosya adı üretimi iki ayrı adresi aynı dosyaya düşürebiliyordu (`/a/b` ile `/a_b`) · emeklilik
+  gerekçesi süzülmeden kayda yazılıyordu. İkisi de gerçek hata, ikisi de düzeltildi: dosya adı adresten bire bir
+  üretiliyor ve başka adresin kaydının üzerine yazılmıyor; gerekçe öbür metinlerle aynı kurallardan geçiyor.
+
 ## Bu işte ne var
 | Parça | Ne |
 |---|---|

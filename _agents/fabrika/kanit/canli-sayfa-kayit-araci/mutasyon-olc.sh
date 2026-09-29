@@ -33,6 +33,10 @@ M = {
  "21-emekli-gerekcesiz": ('[ "${#gerekce}" -ge 10 ] ||', 'true ||'),
  "22-uzunluk-aranmiyor": ('[ "${#d}" -le "$n" ] ||', 'true ||'),
  "23-dogrula-acilmayani-gormuyor": ('if [ "$r" -ne 0 ]; then echo "✗ AÇILMIYOR', 'if false; then echo "✗ AÇILMIYOR'),
+ "25-ayri-adresler-ayni-dosyaya-dusuyor": ('urllib.parse.quote(sys.argv[1][len("https://"):], safe=".-_~")', 'urllib.parse.quote(sys.argv[1][len("https://"):], safe=".-_~").replace("%2F", "_")'),
+ "26-baska-adresin-kaydi-eziliyor": ('ayni_adres_mi "$f" "$a" || hata "bu dosya adında BAŞKA bir adresin kaydı var; üzerine yazılmadı: $f" 3', 'true'),
+ "27-emekli-baska-adresin-kaydina-dokunuyor": ('ayni_adres_mi "$f" "$a" || hata "bu dosya adında BAŞKA bir adresin kaydı var; dokunulmadı: $f" 3', 'true'),
+ "28-emekli-gerekcesi-suzulmuyor": ('    metin_denetle "gerekçe" "$gerekce" 200', '    true'),
  "24-eksik-alanli-kayit-menuye-geciyor": ('if not all(isinstance(k.get(a), str) and k[a] for a in ALAN): raise ValueError', 'pass'),
 }
 for ad, (a, b) in M.items():

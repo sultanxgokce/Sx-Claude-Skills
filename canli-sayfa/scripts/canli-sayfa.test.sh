@@ -95,7 +95,21 @@ esit "büyük harf ve sondaki eğik çizgi düzeltilir → rc 0" 0 "$RC"
 esit "düzeltilmiş adres yazıldı" https://bulgu.ornek.com "$(alan "$D/bulgu.ornek.com.json" adres)"
 ekle https://acik.ornek.com/akar "Akar Tanıtım" "Kira yönetimi tanıtım sayfası" akar MUTEVELLI --herkese-acik evet
 esit "yollu adres ayrı kayıt" 2 "$(say)"
-esit "yollu adres olduğu gibi" https://acik.ornek.com/akar "$(alan "$D/acik.ornek.com_akar.json" adres)"
+esit "yollu adres olduğu gibi" https://acik.ornek.com/akar "$(alan "$D/acik.ornek.com%2Fakar.json" adres)"
+# iki ayrı adres aynı dosyaya düşemez: /a/b ile /a_b
+kur; printf '%s\n' "https://acik.ornek.com/a/b 200" "https://acik.ornek.com/a_b 200" >> "$T/cevaplar"
+ekle https://acik.ornek.com/a/b "Birinci Sayfa" "Eğik çizgili adresteki sayfa" merkez SERDAR --herkese-acik evet
+ekle https://acik.ornek.com/a_b "İkinci Sayfa" "Alt çizgili adresteki sayfa" merkez SERDAR --herkese-acik evet
+esit "iki ayrı kayıt dosyası" 2 "$(say)"
+cag liste; icerir "birinci sayfa kayıtta duruyor" "$CIKTI" "Birinci Sayfa"; icerir "ikinci sayfa kayıtta duruyor" "$CIKTI" "İkinci Sayfa"
+# dosya adında başka adresin kaydı duruyorsa (elle konmuş) üzerine yazılmaz
+kur; ekle https://bulgu.ornek.com; ekle https://fikir.ornek.com "Fikir Defteri" "Yeni iş fikirlerinin defteri" mihenk MIHENK
+cp "$D/fikir.ornek.com.json" "$D/bulgu.ornek.com.json"; ekle https://bulgu.ornek.com
+esit "başka adresin kaydının üzerine yazılmaz → rc 3" 3 "$RC"
+esit "o dosyadaki kayıt olduğu gibi" https://fikir.ornek.com "$(alan "$D/bulgu.ornek.com.json" adres)"
+cag emekli --adres https://bulgu.ornek.com --gerekce "sayfa kaldırıldı, adres kapandı"
+esit "emekli de başka adresin kaydına dokunmaz → rc 3" 3 "$RC"
+esit "durum değişmedi" canli "$(alan "$D/bulgu.ornek.com.json" durum)"
 
 echo "== T6: metin kuralları (Sultan'ın okuyacağı dil · sır · uzunluk) =="
 red() { kur; cag ekle --adres https://bulgu.ornek.com "$@"; esit "$BASLIK → rc 2" 2 "$RC"; esit "$BASLIK → kayıt yok" 0 "$(say)"; }
@@ -138,6 +152,13 @@ kur; ekle https://bulgu.ornek.com; ekle https://fikir.ornek.com "Fikir Defteri" 
 cag emekli --adres https://bulgu.ornek.com --gerekce "kısa"
 esit "gerekçe kısa → rc 2" 2 "$RC"
 esit "durum değişmedi" canli "$(alan "$D/bulgu.ornek.com.json" durum)"
+for g in "parola=CokGizliDeger12345 yüzünden kapandı" "Kaynağı /srv/kilavuz/bulgu altından kalktı" $'sayfa kaldırıldı\nadres kapandı' "$(printf 'a %.0s' $(seq 1 110))" 'Komut `sil` ile kaldırıldı'; do
+  cag emekli --adres https://bulgu.ornek.com --gerekce "$g"
+  esit "kurala uymayan gerekçe → rc 2" 2 "$RC"
+  esit "durum değişmedi" canli "$(alan "$D/bulgu.ornek.com.json" durum)"
+  icermez "sır değeri çıktıya basılmadı" "$CIKTI" "CokGizliDeger12345"
+done
+esit "kayıt dosyasına sır yazılmadı" 0 "$(grep -c CokGizli "$D/bulgu.ornek.com.json")"
 cag emekli --adres https://yok-kayit.ornek.com --gerekce "sayfa kaldırıldı, adres kapandı"
 esit "olmayan kayıt → rc 1" 1 "$RC"
 cag emekli --adres https://bulgu.ornek.com --gerekce "sayfa kaldırıldı, adres kapandı"

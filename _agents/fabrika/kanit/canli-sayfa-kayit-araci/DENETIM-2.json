@@ -1,0 +1,29 @@
+{
+  "tur": 2,
+  "is": "canli-sayfa-kayit-araci",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-09-29T22:44:55+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Beceri metni, kayıt aracı, sınavlar ve `_global` dağıtım hedefi kaynak olarak eklenmiş; önceki turdaki kayıt kaybı da ana dala karşı korunum ölçümüyle giderilmiş. Araç güçlü biçimde sınanmış, ancak kayıt dosyası adı üretimi farklı adresleri aynı dosyaya düşürebildiği için önce bu veri ezme sorununu çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "Farklı URL yolları aynı kayıt dosyası adına dönüşebiliyor; böyle iki canlı sayfadan biri diğerinin kaydını sessizce ezer.",
+        "kanit": "`dosya_adi`, `https://` sonrasındaki `/` dahil izin verilmeyen her karakteri `_` yaparken gerçek `_` karakterini de aynen bırakıyor. Bu nedenle örneğin `https://ornek.com/a/b` ile `https://ornek.com/a_b` için aynı `ornek.com_a_b.json` adı üretilir; `yaz` da hedefi `mv -fT` ile değiştirir. Sınav yalnız `/akar` yolunu ayrı kayıttan ayırıyor ve bu çakışma çiftini sınamıyor.",
+        "konum": "canli-sayfa/scripts/canli-sayfa.sh:68,100,156; canli-sayfa/scripts/canli-sayfa.test.sh:T5",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Emeklilik gerekçesi ortak kayda süzülmeden yazılıyor; becerinin Sultan-dili ve sır sızdırmama koruması bu alanda uygulanmıyor.",
+        "kanit": "`ekle` alanları `metin_denetle` ile dosya yolu, adres, kod imi ve sır desenlerine karşı denetlenirken `emekli` kolunda gerekçe için yalnız `${#gerekce} -ge 10` koşulu var ve değer doğrudan `emekli_gerekce` alanına konuyor. Böylece `parola=...`, token, dosya yolu veya çok uzun/çok satırlı içerik ortak kayıt dosyasına yazılabilir.",
+        "konum": "canli-sayfa/scripts/canli-sayfa.sh:70-82,162-174",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Ana dalda kaynağın yokluğunu gösteren önce ölçümü ile sınav, 24 mutasyon, gerçek ağ provası, depo eşliği, sürüm ve ana dala karşı kayıt-korunumu ölçümleri güçlü kanıt oluşturuyor. Gerçek ağ provası geçici kayıt dizininde üç gerçekçi sayfa ve olumsuz örnekler kullanıyor; ancak URL-dosya adı çakışması ile emeklilik gerekçesinin güvenlik/dil kuralları özel olarak ölçülmemiş."
+  }
+}

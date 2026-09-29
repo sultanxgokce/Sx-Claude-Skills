@@ -1,5 +1,5 @@
 $ bash _agents/fabrika/kanit/canli-sayfa-kayit-araci/kayit-korunumu-olc.sh
-# rc=0 sure=0.6s zaman=2026-09-29T22:44:32+03:00
+# rc=0 sure=0.6s zaman=2026-09-29T22:48:58+03:00
 --- stdout ---
 ana dal: c31e2c3
 beceri kaydı: ana dalda 67 · şimdi 68 · silinen [] · değişen [] · eklenen ['canli-sayfa']

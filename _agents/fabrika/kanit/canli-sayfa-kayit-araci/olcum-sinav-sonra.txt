@@ -1,5 +1,5 @@
 $ bash canli-sayfa/scripts/canli-sayfa.test.sh
-# rc=0 sure=3.9s zaman=2026-09-29T22:42:51+03:00
+# rc=0 sure=5.2s zaman=2026-09-29T22:46:24+03:00
 --- stdout ---
 == T1: kapı arkasındaki canlı sayfa kayda girer ==
   ✓ rc 0
@@ -63,6 +63,13 @@ $ bash canli-sayfa/scripts/canli-sayfa.test.sh
   ✓ düzeltilmiş adres yazıldı
   ✓ yollu adres ayrı kayıt
   ✓ yollu adres olduğu gibi
+  ✓ iki ayrı kayıt dosyası
+  ✓ birinci sayfa kayıtta duruyor
+  ✓ ikinci sayfa kayıtta duruyor
+  ✓ başka adresin kaydının üzerine yazılmaz → rc 3
+  ✓ o dosyadaki kayıt olduğu gibi
+  ✓ emekli de başka adresin kaydına dokunmaz → rc 3
+  ✓ durum değişmedi
 == T6: metin kuralları (Sultan'ın okuyacağı dil · sır · uzunluk) ==
   ✓ ad beş kelime → rc 2
   ✓ ad beş kelime → kayıt yok
@@ -103,6 +110,22 @@ $ bash canli-sayfa/scripts/canli-sayfa.test.sh
 == T8: emekli — kayıt silinmez, menüden kalkar ==
   ✓ gerekçe kısa → rc 2
   ✓ durum değişmedi
+  ✓ kurala uymayan gerekçe → rc 2
+  ✓ durum değişmedi
+  ✓ sır değeri çıktıya basılmadı
+  ✓ kurala uymayan gerekçe → rc 2
+  ✓ durum değişmedi
+  ✓ sır değeri çıktıya basılmadı
+  ✓ kurala uymayan gerekçe → rc 2
+  ✓ durum değişmedi
+  ✓ sır değeri çıktıya basılmadı
+  ✓ kurala uymayan gerekçe → rc 2
+  ✓ durum değişmedi
+  ✓ sır değeri çıktıya basılmadı
+  ✓ kurala uymayan gerekçe → rc 2
+  ✓ durum değişmedi
+  ✓ sır değeri çıktıya basılmadı
+  ✓ kayıt dosyasına sır yazılmadı
   ✓ olmayan kayıt → rc 1
   ✓ rc 0
   ✓ kayıt dosyası duruyor
@@ -135,5 +158,5 @@ $ bash canli-sayfa/scripts/canli-sayfa.test.sh
   ✓ kayıt dizini yokken liste rc 0
   ✓ sıfır sayfa
 
-════════ SONUÇ: PASS=122 · FAIL=0 ════════
+════════ SONUÇ: PASS=145 · FAIL=0 ════════
 --- stderr ---
