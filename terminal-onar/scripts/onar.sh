@@ -9,6 +9,27 @@ WEB_YENILE=0; [ "${1:-}" = "--web-yenile" ] && WEB_YENILE=1
 gunluk "K0 onar başladı"
 SIFRE_YOK=0
 
+# ── ÖN KOŞUL: tmux'un varsayılan kabuğu GERÇEK bir kabuk mu ────────────────────
+# 🔴 Niçin (SEDİR/RAHVAN uyarısı + REVAK'ta ölçülen vaka, 2026-09-29): LSIO imajında
+#    `abc` kullanıcısının kabuğu `/bin/false`. Kutuda `.tmux.conf`'ta `default-shell`
+#    satırı yoksa her oturum DOĞAR DOĞMAZ ölür. Belirtisi yanıltıcıdır: tmux rc=0 döner,
+#    soket bile oluşur; yalnız ayrıntılı günlükte "%0 error" görünür. Sonuç: telefonda
+#    terminal açılıp kapanır, bekçi her dakika yeniden kurar, merdiven K1/K2'ye tırmanır
+#    ve her tırmanış yeni bir Claude süreci (yani bellek) demektir.
+# 🔴 KENDİLİĞİNDEN DÜZELTMİYORUZ, DURUYORUZ: `.tmux.conf` kutu genelinde ORTAK bir dosyadır;
+#    başkasının dosyasına sessizce yazmak onarımın işi değil (öneri: RAHVAN).
+kabuk_gecerli_mi() {
+  local k; k=$(tmux show -gv default-shell 2>/dev/null)
+  [ -n "$k" ] || k="${SHELL:-}"
+  case "$k" in ""|*/false|*/nologin) return 1 ;; esac
+  [ -x "$k" ]
+}
+if ! kabuk_gecerli_mi; then
+  gunluk "K0 DUR: tmux varsayılan kabuğu çalıştırılabilir DEĞİL ($(tmux show -gv default-shell 2>/dev/null || echo tanımsız)) — oturumlar doğar doğmaz ölür"
+  gunluk "K0 ÇARE: kutunun .tmux.conf dosyasına tek satır: set -g default-shell /bin/bash"
+  exit 3
+fi
+
 # Bir tmux oturumunda Claude başlat (kabuk boştaysa aynı pencerede, değilse yeni pencerede).
 # 🔴 26 Eyl dersi: eski sürüm "yeni pencere" açamayınca komutu CANLI Claude'un içine yazdı.
 #    Artık hedef pane kimliğiyle (%N) seçilir ve yazmadan hemen önce yeniden ölçülür:
