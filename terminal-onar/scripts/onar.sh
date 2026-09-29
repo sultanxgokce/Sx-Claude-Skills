@@ -68,7 +68,7 @@ if [ $WEB_YENILE = 1 ] || ! ttyd_saglam; then
     -t fontSize=12 -t disableLeaveAlert=true -t disableResizeOverlay=true -t titleFixed=Sedir \
     -t 'theme={\"background\":\"#15120e\",\"foreground\":\"#ede5d7\",\"cursor\":\"#c9914f\"}' \
     tmux new-session -A -s $ANA_TMUX -c $PROJE"
-  for i in 1 2 3 4 5; do sleep 1; ttyd_saglam && break; done
+  bekle_saglam ttyd_saglam "$TTYD_BEKLE" || true
   ttyd_saglam && gunluk "K0 terminal (ttyd) başlatıldı" || gunluk "K0 HATA: terminal ayağa kalkmadı ($(ttyd_kod))"
 fi
 if [ $WEB_YENILE = 1 ] || ! kapi_saglam; then
@@ -81,7 +81,7 @@ if [ $WEB_YENILE = 1 ] || ! kapi_saglam; then
     # Parola tmux komutuna YAZILMAZ: kapıyı başlatan kabuk onu env dosyasından kendisi okur.
     tmux new-session -d -s "$KAPI_TMUX" \
       "set -a; . $ENV_DOSYA; set +a; KAPI_PORT=$KAPI_PORT KAPI_TTYD_SOKET=$TTYD_SOKET TO_ANA_TMUX=$ANA_TMUX TO_DURUM_DIZ=$DURUM_DIZ KAPI_TABAN=$TABAN TO_KUTU=$KUTU exec node $KAPI_DIZ/sunucu.mjs >> $DURUM_DIZ/kapi.log 2>&1"
-    for i in 1 2 3 4 5 6; do sleep 1; kapi_saglam && break; done
+    bekle_saglam kapi_saglam "$KAPI_BEKLE" || true
     kapi_saglam && gunluk "K0 kapı başlatıldı" || gunluk "K0 HATA: kapı ayağa kalkmadı ($(kapi_kod))"
   fi
 fi

@@ -117,6 +117,19 @@ kapi_saglam() { [ "$(kapi_kod)" = "200" ] && [ "$(curl -s -o /dev/null -m 4 -w '
 
 ttyd_saglam() { [ "$(ttyd_kod)" = "200" ]; }
 
+# Sağlık bekleme — bütçe SANİYE cinsinden, sağlıklı olur olmaz döner.
+# SEDİR ölçümü (2026-09-27): bellek sıkışıkken (oom_kill 40) kapı 28 sn'de açıldı;
+# 6 sn'lik bütçe "bozuk" deyip merdiveni boşuna tırmandırıyordu — K1 yeni bir Claude
+# açar, belleği daha da sıkıştırır. Bütçe uzun, dönüş erken: yavaş açılışta bedel yok.
+TTYD_BEKLE=${TTYD_BEKLE:-20}
+KAPI_BEKLE=${KAPI_BEKLE:-40}
+TO_BEKLE_ADIM=${TO_BEKLE_ADIM:-1}     # sınav hızlandırması; canlıda 1 sn
+bekle_saglam() {
+  local f=$1 n=$2 i
+  for i in $(seq 1 "$n"); do sleep "$TO_BEKLE_ADIM"; "$f" && return 0; done
+  return 1
+}
+
 bekci_kurulu() { crontab -l 2>/dev/null | grep -q '# terminal-onar-bekci'; }
 # Kapı ve ttyd TABAN'ı ortamdan okur; tek yerden verilir ki ikisi ayrışmasın.
 export KAPI_TABAN="$TABAN"
