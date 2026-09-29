@@ -41,7 +41,9 @@ Tek kilit (flock) → iki merdiven aynı anda koşmaz. Merdiven ölürse bekçi 
 başlatır. Bekçi tetiklediğinde K1/K2 15 dakikada bir defadan sık denenmez.
 
 ## Değişmezler
-- **Parolasız kapı ASLA açılmaz** (fail-closed; hem onar.sh hem sunucu.mjs reddeder). Parola kasada: `SEDIR__TERMINAL_SIFRE`
+- **Parolasız kapı ASLA açılmaz** (fail-closed; hem onar.sh hem sunucu.mjs reddeder). Parola kasada ve **anahtarın adı kutudan türer**: `<KUTU>__TERMINAL_SIFRE`
+  (SEDİR kutusunda `SEDIR__TERMINAL_SIFRE`, AKAR kutusunda `AKAR__TERMINAL_SIFRE`). Sabit ad YAZILMAZ —
+  yazılsaydı bir kutunun parolası ötekinin kapısını açardı (bağımsız göz tur 2'de yakalandı).
   (vault-cek). Değer hiçbir dosyaya, günlüğe, sohbete yazılmaz.
 - Ana konuşma başka bir yerde canlıysa **ikinci kopya açılmaz** (günlüğe uyarı düşer).
 - Bilerek kapatırken önce `duraklat` — yoksa bekçi bir dakika içinde geri açar.
@@ -90,5 +92,5 @@ Merkez (`terminal.mmepanel.com`) kutuları **yol** ile ayırır: `/sedir/` · `/
 tabanı bilmek zorundadır; bilmezse döndürdüğü her mutlak yol merkeze gider ve kutuya hiç
 ulaşmaz. Taban boş bırakılırsa eski kök davranışı **bayt bayt** aynı kalır.
 
-Kanıt: `kapi/sunucu.test.mjs` (25 kapı, gerçek HTTP + WebSocket) · `kapi/mutasyon.sh` (9/9,
+Kanıt: `kapi/sunucu.test.mjs` (36 kapı, gerçek HTTP + WebSocket) · `kapi/mutasyon.sh` (12/12,
 her kapı öldürülünce sınav kırmızıya dönüyor).

@@ -88,6 +88,10 @@ function dosyaTabanli(res, ad) {
   // Sayfadaki mutlak varlık yolları da tabana taşınır (manifest · ikon · css · js).
   // Yalnız kök-mutlak olanlar; "//" ile başlayan dış kaynaklara dokunulmaz.
   if (TABAN) h = h.replace(/(href|src)="\/(?!\/)/g, `$1="${TABAN}/`);
+  // 🔴 KULLANICIYA GORUNEN AD DA KUTUDAN TURER (bagimsiz goz tur 4).
+  //    Sayfalarda 'Sedir' sabit yaziliydi: AKAR kutusunu acan kisi tepede
+  //    'Sedir' gorurdu — 'hicbir kutu adi gomulu degil' sozu arayuzde bozuluyordu.
+  h = h.split('{{KUTU}}').join(KUTU_BAS);
   h = h.replace('<head>', `<head><script>window.__TABAN=${JSON.stringify(TABAN)};window.__KUTU=${JSON.stringify(KUTU)};</script>`);
   res.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-cache' });
   res.end(h);

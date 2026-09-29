@@ -37,6 +37,7 @@ dene "M7 PWA kimliği kutu başına" sunucu.mjs "s=s.replace(\"start_url: TABAN 
 dene "M10 giris sayfasi tabani tasir" sunucu.mjs "s=s.replace(\"GET') return dosyaTabanli(res, 'giris\",\"GET') return dosya(res, 'giris\")"
 dene "M11 parola vekilligi" sunucu.mjs "s=s.replace('process.env[SIFRE_ANAHTAR] ||','process.env[SIFRE_ANAHTAR] || process.env.SEDIR__TERMINAL_SIFRE ||')"
 dene "M12 onbellek siniri" genel/sw.js "s=s.replace('(TABAN || \'-kok\') + \'-v\';','(TABAN || \'-kok\');')"
+dene "M13 gorunen ad kutudan turer" genel/giris.html "s=s.replace('<h1>{{KUTU}}</h1>','<h1>Sedir</h1>')"
 dene "M8 WS upgrade taban denetimi" sunucu.mjs "s=s.replace('_yol === _tty ||','true ||')"
 dene "M9 WS giris denetimi" sunucu.mjs "s=s.replace('!girisli(req) ||','false ||')"
 echo "─────────────"

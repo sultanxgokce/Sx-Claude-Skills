@@ -259,6 +259,33 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
        `→ sildi: ${uzun.join(' ')}`);
 }
 
+// ── A · GÖRÜNEN AD DA KUTUDAN TÜRER (bağımsız göz tur 4) ─────────────────────
+// 🔴 NİÇİN: sayfalarda "Sedir" sabit yazılıydı. AKAR kutusunu açan kişi tepede
+//    "Sedir" görürdü; "hiçbir kutu adı gömülü değil" sözü arayüzde bozuluyordu.
+{
+  const g = await (await iste(P1, '/sedir/giris')).text();
+  kapi('A1 giriş ekranı KUTUNUN adını gösterir', /<h1>Sinavkutu<\/h1>/.test(g),
+       `→ ${(g.match(/<h1>[^<]*<\/h1>/) || ['yok'])[0]}`);
+  kapi('A2 sayfada doldurulmamış yuva kalmadı', !/\{\{KUTU\}\}/.test(g), '→ yuva açık kaldı');
+  kapi('A3 kaynakta sabit kutu adı kalmadı',
+       !/Sedir/.test(await (await iste(P1, '/sedir/giris')).text()), '→ hâlâ gömülü ad var');
+
+  // Farklı kutu → farklı ad (A1 tautoloji değil)
+  const p3 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], {
+    env: { ...process.env, KAPI_PORT: '18781', KAPI_TABAN: '/akar', TO_KUTU: 'akar',
+           KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, AKAR__TERMINAL_SIFRE: SIFRE },
+    stdio: ['ignore', 'ignore', 'ignore'] });
+  let ak = '';
+  for (let i = 0; i < 50; i++) {
+    await new Promise((r) => setTimeout(r, 100));
+    try { const r = await fetch('http://127.0.0.1:18781/akar/giris'); if (r.status === 200) { ak = await r.text(); break; } } catch {}
+  }
+  kapi('A4 BAŞKA kutu KENDİ adını gösterir (A1 tautoloji değil)',
+       /<h1>Akar<\/h1>/.test(ak) && !/Sinavkutu/.test(ak),
+       `→ ${(ak.match(/<h1>[^<]*<\/h1>/) || ['açılmadı'])[0]}`);
+  p3.kill();
+}
+
 kapiTaban.kill(); kapiKok.kill(); ttyd.close();
 console.log(`\n${'─'.repeat(56)}`);
 console.log(`GECEN: ${gecen}  ·  KALAN: ${kalan}`);
