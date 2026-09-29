@@ -1,6 +1,6 @@
 {
   "version": "2.1",
-  "updated": "2026-09-22",
+  "updated": "2026-09-29",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -1532,11 +1532,45 @@
       "family": "workflow (çalışma hattı; pr-onay · olcum-disiplini · kapi-sinavi · kayit-damgasi çağırır)"
     },
     {
+      "id": "terminal-onar",
+      "name": "terminal-onar — kutunun web terminali ve telefon ekranı",
+      "version": "2.0.0",
+      "type": "capability",
+      "sync_dagitim": true,
+      "description": "Bir kutuda canlı çalışma düzenini kurar, ölçer ve onarır: tmux konuşma odası + web terminali (ttyd, yalnız UNIX soketi) + telefon ekranı (PWA) + kurtarıcı ajan + dakikalık bekçi; dört kademeli onarım merdiveni. Bütün kutularda koşar — adlar kutudan türer, kutu adı koda gömülü değildir. Merkez sayfa (terminal.mmepanel.com) kutuları yol ile ayırdığı için taban yolu destekler. Kurulum Sultan onayı ister (kutuda dış yüzey açar); parola kasadan gelir, ÜRETİLMEZ.",
+      "prerequisites": [
+        "ttyd",
+        "tmux",
+        "node>=20",
+        "vault-cek"
+      ],
+      "tags": [
+        "terminal",
+        "pwa",
+        "onarim",
+        "kutu",
+        "mobil"
+      ],
+      "stacks": [
+        "nextjs+prisma",
+        "fastapi+sqlmodel"
+      ],
+      "author": "sultanxgokce",
+      "source": "sedir kutusu (SEDİR/MÜDÜR + RAHVAN), genelleştiren MUAVİN 2026-09-27",
+      "install_time": "~30dk (yeni proje), ~2sa (mevcut Cortex upgrade)",
+      "status": "aktif",
+      "path": "terminal-onar",
+      "nexus_catalog": false,
+      "installed_in": [
+        "_global"
+      ]
+    },
+    {
       "id": "canli-sayfa",
       "type": "tool",
       "name": "canlı sayfa — filonun canlı sayfa kuralı ve kaydı",
       "version": "1.0.0",
-      "description": "Sultan bir kutudan canlı sayfa istediğinde uyulacak filo kuralı ve aracı: canlıya çıkan her sayfa ortak kayda yazılır (sayfa başına bir dosya), kokpitteki Canlı sayfalar menüsü bu kayıttan beslenir. Kayıt adresi o an ölçer: açılmayan sayfa kayda girmez, giriş kapısı olmadan açılan sayfa onaysız kayda girmez. Komutlar: ekle · liste (--json menü biçimi) · emekli · dogrula. Metin kuralları: Sultan'ın okuyacağı dil, sır deseni reddi, adreste soru işareti/port/kullanıcı adı yok.",
+      "description": "Sultan bir kutudan canlı sayfa istediğinde uyulacak filo kuralı ve aracı: canlıya çıkan her sayfa ortak kayda yazılır (sayfa başına bir dosya); kayıt canlı sayfaların tek listesidir. Kayıt adresi o an ölçer: açılmayan sayfa kayda girmez, giriş kapısı olmadan açılan sayfa onaysız kayda girmez. Komutlar: ekle · liste (--json menü biçimi) · emekli · dogrula. Metin kuralları: Sultan'ın okuyacağı dil, sır deseni reddi, adreste soru işareti/port/kullanıcı adı yok.",
       "prerequisites": {
         "system": [
           "bash",

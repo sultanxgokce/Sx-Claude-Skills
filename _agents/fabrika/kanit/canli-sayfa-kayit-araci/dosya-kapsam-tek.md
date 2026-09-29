@@ -13,6 +13,11 @@ beceri ve komut olarak global dağıtılsın
 kurulmamış menü hakkında söz vermiyor (sınav T1), beceri metni menünün henüz kurulmadığını açıkça yazıyor, adres
 kuralının cümlesi düzeltildi.
 
+## Denetim turları
+- **Tur 1 (2/5):** ortak kayıt dosyaları eski bir çalışma kopyasından taşınmıştı; o arada ana dala giren `terminal-onar`
+  kaydı silinmiş, güncelleme tarihi gerilemişti. Gerçek hata. Dosyalar ana dalın güncel hâlinden alındı, yalnız
+  `canli-sayfa` eklendi; korunumu ölçen betik kanıta girdi.
+
 ## Bu işte ne var
 | Parça | Ne |
 |---|---|
@@ -47,6 +52,7 @@ kuralının cümlesi düzeltildi.
 | mutasyon | aracın bozuk kopyalarının her biri sınavda kırmızı |
 | canlı prova | gerçek ağ ölçümüyle, **geçici** kayıt dizininde ve **kaynak** kopyayla (kurulu kopya ve gerçek kayıt kurulum kartının kanıtıdır): üç gerçek sayfa kayda girdi (giriş: kapalı), olmayan adres rc 3, kapısız sayfa rc 4, `dogrula` yeşil |
 | depo kapıları | kayıt ile dağıtım haritası eşleşiyor · sürüm satırı geçerli |
+| kayıt korunumu | ortak kayıt dosyalarında ana daldaki her kayıt aynen duruyor; eklenen tek kayıt `canli-sayfa` |
 Sayılar ölçüm dosyalarındadır; belgeye sayı yazılmadı (kanıt yeniden üretildiğinde belge bayatlamasın).
 
 ## Bilinen sınırlar

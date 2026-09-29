@@ -1,0 +1,35 @@
+{
+  "tur": 1,
+  "is": "canli-sayfa-kayit-araci",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-09-29T22:38:33+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "H",
+    "ozet": "Canlı sayfa becerisi, kayıt aracı, sınavları ve `_global` dağıtım hedefi kaynak olarak eklenmiş; gerçek ağ provası ile mutasyon sınaması da yeşil. Ancak ekleme yapılırken mevcut `terminal-onar` katalog ve dağıtım kayıtları silinmiş; Sultan’ın dar kapsamlı kartı başka bir becerinin kaydını kaybettiği için bu hâliyle birleşmemeli.",
+    "bulgular": [
+      {
+        "ne": "Yeni kayıt kataloğa eklenmek yerine mevcut `terminal-onar` kaydının üzerine konmuş; bağımsız bir becerinin katalog bilgisi bütünüyle kayboluyor. Bu ciddi kapsam kayması ve veri kaybıdır.",
+        "kanit": "Diff, `catalog.json` içinde `terminal-onar` nesnesinin tamamının silinip aynı konuma `canli-sayfa` nesnesinin getirildiğini gösteriyor. İş kartı yalnız canlı sayfa becerisi ile aracının kaynak olarak eklenmesini istiyor; `terminal-onar` kaldırılması istenmiyor.",
+        "konum": "catalog.json:1535",
+        "agirlik": "ciddi"
+      },
+      {
+        "ne": "Dağıtım haritasında da `terminal-onar` korunmadan `canli-sayfa` ile değiştirilmiş; mevcut becerinin `_global` dağıtım hedefi kayboluyor.",
+        "kanit": "Diffte `sync-targets.json` anahtarı `\"terminal-onar\"`dan `\"canli-sayfa\"`ya değiştirilmiş. Yeşil `depo-kayit-esligi` ölçümü yalnız mevcut katalog ile haritanın birbirine uyduğunu bildiriyor; silinen hedefin korunmasını sınamıyor.",
+        "konum": "sync-targets.json:205; kanıt `depo-kayit-esligi`",
+        "agirlik": "ciddi"
+      },
+      {
+        "ne": "Katalog güncelleme tarihi yeni değişiklikte ileri alınmak yerine 2026-09-27’den 2026-09-22’ye geriletilmiş.",
+        "kanit": "Diff başında `\"updated\": \"2026-09-27\"` satırı silinip `\"updated\": \"2026-09-22\"` eklenmiş; kart ve kanıtların tarihi 2026-09-29.",
+        "konum": "catalog.json:3",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Hermetik sınav, mutasyon sınaması ve gerçek ağla geçici dizinde yapılan prova aracın ana davranışları için güçlü kanıt sağlıyor; ana dalda becerinin yokluğu için de önce ölçümü var. Buna karşılık katalog ve dağıtım haritasında mevcut kayıtların korunmasına ilişkin önce/sonra ölçüm çifti yok: yeşil eşlik sınavı iki dosyanın birlikte yanlış değiştirilmesini yakalayamamış."
+  }
+}
