@@ -45,11 +45,15 @@ başlatır. Bekçi tetiklediğinde K1/K2 15 dakikada bir defadan sık denenmez.
   (SEDİR kutusunda `SEDIR__TERMINAL_SIFRE`, AKAR kutusunda `AKAR__TERMINAL_SIFRE`). Sabit ad YAZILMAZ —
   yazılsaydı bir kutunun parolası ötekinin kapısını açardı (bağımsız göz tur 2'de yakalandı).
   (vault-cek). Değer hiçbir dosyaya, günlüğe, sohbete yazılmaz.
-- 🔴 **PAROLA İKİ YERDE DURUR — biri değişirse İKİSİ BİRDEN değişir.**
+- 🔴 **PAROLA ÜÇ YERDE DURUR — biri değişirse HEPSİ BİRDEN değişir.**
   Kutunun kendi rafında (`secret/<kutu>/TERMINAL_SIFRE`) **ve** merkez sayfasının kendi rafında
   bir kopyası bulunur. Merkez kutu rafını okuyamaz (yalıtım iki yönlüdür), bu yüzden kopya
   zorunludur. Birini değiştirip ötekini unutmak **sessiz ayrışma** üretir: kapı doğru
   parolayla açılırken merkez yanlış parolayı dener ve kutu "bozuk" görünür.
+  **ÜÇÜNCÜ kopya kutunun kendi ortam dosyasındadır** (kapı parolayı çalışırken oradan okur;
+  SEDİR ölçümü, 2026-09-29). Kasadaki değer yenilenince ortam dosyası da yenilenmeli —
+  yoksa kasa doğru, kapı eski parolayla açılır ve ayrışma yine sessiz olur.
+  Sayının kendisi de bir uyarıdır: aynı sır üç yerde duruyorsa rotasyon kırılgandır.
   Parolayı değiştiren ya da yenileyen kişi ikisini birlikte değiştirmekle yükümlüdür.
 - Ana konuşma başka bir yerde canlıysa **ikinci kopya açılmaz** (günlüğe uyarı düşer).
 - Bilerek kapatırken önce `duraklat` — yoksa bekçi bir dakika içinde geri açar.
