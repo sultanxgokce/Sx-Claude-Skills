@@ -8,12 +8,17 @@
 //    Taban, dosyanın KENDİ sunulduğu yoldan türetilir — tahmin yok, beyan yok.
 const TABAN = self.location.pathname.replace(/\/sw\.js$/, '');   // "" ya da "/sedir"
 const KAP = 'kabuk' + (TABAN || '-kok') + '-v3';
+// 🔴 ONEK DEGIL SINIR (bagimsiz goz tur 3): temizlik suzgeci 'kabuk' + taban
+//    ile onek esliyordu. Kisa adli bir kutu (/sed) uzun adlinin kabini (kabuk/sedir-v3)
+//    silebilirdi — baska kutunun cevrimdisi kabugunu sessizce bozmak. Surum ayraci
+//    '-v' sinira dahil edilince /sed yalniz kendi kaplarini gorur.
+const ONEK = 'kabuk' + (TABAN || '-kok') + '-v';
 const KABUK = ['/zanaat.css', '/uygulama.js', '/ikon-192.png', '/archivo-400.ttf', '/archivo-600.ttf'].map((y) => TABAN + y);
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(KAP).then((c) => c.addAll(KABUK)).catch(() => {})); self.skipWaiting(); });
 // Eski sürümleri temizlerken YALNIZ kendi tabanının kaplarına dokunur: başka kutunun
 // önbelleğini silmek, onun çevrimdışı kabuğunu sessizce bozmak olurdu.
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((k) => Promise.all(
-  k.filter((x) => x !== KAP && x.startsWith('kabuk' + (TABAN || '-kok'))).map((x) => caches.delete(x))))); self.clients.claim(); });
+  k.filter((x) => x !== KAP && x.startsWith(ONEK)).map((x) => caches.delete(x))))); self.clients.claim(); });
 self.addEventListener('fetch', (e) => {
   const u = new URL(e.request.url);
   const p = u.pathname.startsWith(TABAN) ? u.pathname.slice(TABAN.length) : u.pathname;

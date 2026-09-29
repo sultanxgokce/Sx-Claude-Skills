@@ -222,6 +222,43 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   kapi('F2 yazı tipi taban altından İNİYOR (F1 tautoloji değil)', f.status === 200, `→ ${f.status}`);
 }
 
+// ── C · ÖNBELLEK SINIRI (bağımsız göz tur 3) ─────────────────────────────────
+// 🔴 NİÇİN: eski temizlik süzgeci 'kabuk'+taban ile ÖNEK eşliyordu. Kısa adlı bir
+//    kutu (/sed) uzun adlının kabını (kabuk/sedir-v3) silebilirdi — başka kutunun
+//    çevrimdışı kabuğunu sessizce bozmak. Sınav GERÇEK sw.js'i sahte bir ortamda koşar.
+{
+  const kaynak = await (await iste(P1, '/sedir/sw.js')).text();
+  const calistir = async (yol, kaplar) => {
+    const silinen = [];
+    const dinleyici = {};
+    const sahte = {
+      location: { pathname: yol + '/sw.js', origin: 'http://x' },
+      addEventListener: (ad, f) => { dinleyici[ad] = f; },
+      skipWaiting() {}, clients: { claim() {} },
+    };
+    const caches = {
+      open: async () => ({ addAll: async () => {}, put: async () => {} }),
+      keys: async () => kaplar,
+      delete: async (x) => { silinen.push(x); return true; },
+      match: async () => undefined,
+    };
+    const fn = new Function('self', 'caches', 'location', 'fetch', 'Response', kaynak);
+    fn(sahte, caches, sahte.location, async () => ({ ok: false }), function () {});
+    await new Promise((c) => dinleyici.activate({ waitUntil: (p) => p.then(c).catch(c) }));
+    return silinen;
+  };
+  const kaplar = ['kabuk/sedir-v3', 'kabuk/sedir-v2', 'kabuk/sed-v1', 'kabuk-kok-v3'];
+  const kisa = await calistir('/sed', kaplar);
+  kapi('C1 kısa adlı kutu UZUN adlının önbelleğini silmez',
+       !kisa.some((x) => x.startsWith('kabuk/sedir')), `→ sildi: ${kisa.join(' ')}`);
+  kapi('C2 ... ama kendi eski kabını siler (C1 tautoloji değil)',
+       kisa.includes('kabuk/sed-v1'), `→ sildi: ${kisa.join(' ')}`);
+  const uzun = await calistir('/sedir', kaplar);
+  kapi('C3 kutu kendi eski sürümünü temizler, komşununkine dokunmaz',
+       uzun.includes('kabuk/sedir-v2') && !uzun.includes('kabuk/sed-v1') && !uzun.includes('kabuk-kok-v3'),
+       `→ sildi: ${uzun.join(' ')}`);
+}
+
 kapiTaban.kill(); kapiKok.kill(); ttyd.close();
 console.log(`\n${'─'.repeat(56)}`);
 console.log(`GECEN: ${gecen}  ·  KALAN: ${kalan}`);
