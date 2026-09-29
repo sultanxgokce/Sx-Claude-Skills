@@ -30,9 +30,10 @@ command -v python3 >/dev/null 2>&1 || hata "ÖLÇÜLEMEDİ · python3 yok; kayı
 
 olc() {  # olc <adres> → "<giris> <kod>" basar; rc 0 canlı · 3 canlı değil/ölçülemedi
   local a="$1" c kod yon
-  if [ -n "${CANLI_SAYFA_OLCER:-}" ]; then c="$(bash -c "$CANLI_SAYFA_OLCER \"\$1\"" _ "$a" 2>/dev/null)"
+  # ölçer girdiyi OKUYAMAZ: dogrula kayıtları satır satır okurken ölçer o satırları yutmasın
+  if [ -n "${CANLI_SAYFA_OLCER:-}" ]; then c="$(bash -c "$CANLI_SAYFA_OLCER \"\$1\"" _ "$a" 2>/dev/null </dev/null)"
   else command -v curl >/dev/null 2>&1 || { echo "olculemedi curl-yok"; return 3; }
-       c="$(curl -s -o /dev/null -m 15 -w '%{http_code} %{redirect_url}' "$a" 2>/dev/null)"; fi
+       c="$(curl -s -o /dev/null -m 15 -w '%{http_code} %{redirect_url}' "$a" 2>/dev/null </dev/null)"; fi
   kod="${c%% *}"; yon="${c#* }"; [ "$yon" = "$c" ] && yon=""
   case "$kod" in
     2[0-9][0-9]) echo "acik $kod"; return 0 ;;
@@ -118,6 +119,8 @@ PY
 komut="${1:-}"; [ "$#" -gt 0 ] && shift
 adres=""; ad=""; ne=""; kutu=""; ekleyen=""; acik=""; gerekce=""; hepsi=0; json=0
 while [ "$#" -gt 0 ]; do
+  # değer isteyen seçenek değersiz verilirse DUR (denetim tur 3: kaydırma düşüyor, döngü aynı seçenekte dönüyordu)
+  case "$1" in --adres|--ad|--ne|--kutu|--ekleyen|--herkese-acik|--gerekce) [ "$#" -ge 2 ] || hata "$1 bir değer ister" ;; esac
   case "$1" in
     --adres) adres="${2:-}"; shift 2 ;;   --ad) ad="${2:-}"; shift 2 ;;
     --ne) ne="${2:-}"; shift 2 ;;         --kutu) kutu="${2:-}"; shift 2 ;;

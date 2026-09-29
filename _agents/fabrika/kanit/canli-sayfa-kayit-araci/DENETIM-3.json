@@ -1,0 +1,23 @@
+{
+  "tur": 3,
+  "is": "canli-sayfa-kayit-araci",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-09-29T22:49:21+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Beceri metni, kayıt aracı ve `_global` dağıtım hedefi kaynak olarak eklenmiş; önceki turdaki dosya çakışması ile süzülmeyen emeklilik gerekçesi de özel sınav ve mutasyonlarla kapatılmış. Ana işlev güçlü kanıtlanmış, ancak değeri eksik bırakılan bir komut seçeneği aracı sonsuz döngüye sokabildiği için önce bu uygulama sorununu çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "Değer isteyen bir seçenek değersiz verilirse bağımsız değişken ayrıştırıcısı ilerlemiyor ve araç sonsuz döngüye giriyor.",
+        "kanit": "Döngüde `--adres`, `--ad`, `--ne`, `--kutu`, `--ekleyen`, `--herkese-acik` ve `--gerekce` kolları değeri `${2:-}` ile alıp koşulsuz `shift 2` çalıştırıyor. Son bağımsız değişken yalnız `--adres` gibi bir seçenek olduğunda `shift 2` başarısız olur; `set -e` bulunmadığından döngü sürer ve aynı seçenek tekrar işlenir. T11 yalnız komutsuz çağrıyı, bilinmeyen komutu ve normal `liste`yi ölçüyor; eksik seçenek değeri sınanmıyor.",
+        "konum": "canli-sayfa/scripts/canli-sayfa.sh:133-145; canli-sayfa/scripts/canli-sayfa.test.sh:T11",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kaynağın ana dalda önce bulunmadığı ölçülmüş; sonrasında hermetik sınav, mutasyonlar, gerçek ağla geçici dizin provası, kayıt korunumu, depo eşliği ve sürüm kapıları yeşil. Canlı prova gerçekçi olumlu ve olumsuz adresler kullanıyor; CLI işi olduğundan kare yerine ölçüm çıktıları uygundur. Bununla birlikte eksik seçenek değeri/hang davranışı mevcut sınav ve mutasyon kümesinde ölçülmemiştir."
+  }
+}

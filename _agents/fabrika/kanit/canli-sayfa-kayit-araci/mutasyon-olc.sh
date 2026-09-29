@@ -37,6 +37,8 @@ M = {
  "26-baska-adresin-kaydi-eziliyor": ('ayni_adres_mi "$f" "$a" || hata "bu dosya adında BAŞKA bir adresin kaydı var; üzerine yazılmadı: $f" 3', 'true'),
  "27-emekli-baska-adresin-kaydina-dokunuyor": ('ayni_adres_mi "$f" "$a" || hata "bu dosya adında BAŞKA bir adresin kaydı var; dokunulmadı: $f" 3', 'true'),
  "28-emekli-gerekcesi-suzulmuyor": ('    metin_denetle "gerekçe" "$gerekce" 200', '    true'),
+ "29-degersiz-secenek-asili-birakiyor": ('[ "$#" -ge 2 ] || hata "$1 bir değer ister"', 'true'),
+ "30-olcer-girdiyi-yutuyor": ('_ "$a" 2>/dev/null </dev/null)"', '_ "$a" 2>/dev/null)"'),
  "24-eksik-alanli-kayit-menuye-geciyor": ('if not all(isinstance(k.get(a), str) and k[a] for a in ALAN): raise ValueError', 'pass'),
 }
 for ad, (a, b) in M.items():
@@ -46,7 +48,7 @@ PY
 k=0
 for b in "$T"/*.sh; do
   ad="$(basename "$b" .sh)"
-  cikti="$(CANLI_SAYFA_TEST_SUT="$b" timeout 120 bash "$SINAV" 2>&1)"; rc=$?
+  cikti="$(CANLI_SAYFA_TEST_SUT="$b" timeout 400 bash "$SINAV" 2>&1)"; rc=$?
   [ "$rc" -ne 124 ] || { echo "✗ SÜRE DOLDU: $ad"; k=1; continue; }
   n="$(printf '%s\n' "$cikti" | grep -c '^  ✗')"
   if [ "$rc" -ne 0 ] && [ "$n" -ge 1 ]; then echo "✓ yakalandı: $ad ($n kapı kırmızı)"; else echo "✗ KAÇTI: $ad (rc=$rc)"; k=1; fi

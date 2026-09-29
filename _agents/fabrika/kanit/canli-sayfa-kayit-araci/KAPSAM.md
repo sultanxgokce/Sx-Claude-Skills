@@ -22,6 +22,10 @@ kuralının cümlesi düzeltildi.
   gerekçesi süzülmeden kayda yazılıyordu. İkisi de gerçek hata, ikisi de düzeltildi: dosya adı adresten bire bir
   üretiliyor ve başka adresin kaydının üzerine yazılmıyor; gerekçe öbür metinlerle aynı kurallardan geçiyor.
 
+- **Tur 3 (4/5):** değer isteyen seçenek değersiz verilince araç sonsuz döngüye giriyordu. Gerçek hata, düzeltildi
+  (sınav T11; sınavdaki her çağrı artık süreyle sınırlı). Aynı turda kendi gözden geçirmemle bir açık daha kapatıldı:
+  `dogrula` kayıtları okurken ölçerin girdiyi yutması.
+
 ## Bu işte ne var
 | Parça | Ne |
 |---|---|

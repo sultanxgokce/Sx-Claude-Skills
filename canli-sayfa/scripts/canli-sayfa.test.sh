@@ -31,7 +31,8 @@ s="$(grep -m1 "^$1 " "$(dirname "$0")/cevaplar")" || { echo "000"; exit 0; }
 echo "${s#* }"
 O
 }
-cag() { CIKTI="$(CANLI_SAYFA_DIZIN="$D" CANLI_SAYFA_OLCER="bash $T/olcer.sh" bash "$SUT" "$@" 2>&1)"; RC=$?; }
+# her çağrı 20 saniyeyle sınırlı: asılı kalan araç sınavı kilitlemez, rc 124 ile kırmızı olur
+cag() { CIKTI="$(CANLI_SAYFA_DIZIN="$D" CANLI_SAYFA_OLCER="bash $T/olcer.sh" timeout 20 bash "$SUT" "$@" 2>&1)"; RC=$?; }
 ekle() { cag ekle --adres "$1" --ad "${2:-Bulgu Defteri}" --ne "${3:-Kutulardan gelen bulguların tek listesi}" --kutu "${4:-merkez}" --ekleyen "${5:-SERDAR}" "${@:6}"; }
 say() { find "$D" -maxdepth 1 -name '*.json' 2>/dev/null | wc -l; }
 alan() { python3 -c 'import json,sys; print(json.load(open(sys.argv[1],encoding="utf-8")).get(sys.argv[2],""))' "$1" "$2"; }
@@ -205,7 +206,18 @@ kur; cag dogrula; esit "kayıt yokken rc 0" 0 "$RC"
 echo "== T11: kullanım =="
 kur; cag; esit "komutsuz → rc 2" 2 "$RC"
 cag sil --adres https://bulgu.ornek.com; esit "silme komutu yok → rc 2" 2 "$RC"
-cag liste; esit "kayıt dizini yokken liste rc 0" 0 "$RC"
+for s in --adres --ad --ne --kutu --ekleyen --herkese-acik --gerekce; do
+  cag ekle $s; esit "değersiz $s → rc 2 (asılı kalmaz)" 2 "$RC"
+  icerir "değersiz $s → sebebi söylüyor" "$CIKTI" "$s bir değer ister"
+done
+cag ekle --adres https://bulgu.ornek.com --ad "Bulgu" --ne "Bulgu listesi" --kutu merkez --ekleyen
+esit "sondaki seçenek değersiz → rc 2" 2 "$RC"
+esit "kayıt yok" 0 "$(say)"
+# ölçer girdiyi yutmaya çalışsa da dogrula bütün kayıtları ölçer
+kur; ekle https://bulgu.ornek.com; ekle https://fikir.ornek.com "Fikir Defteri" "Yeni iş fikirlerinin defteri" mihenk MIHENK
+printf '%s\n' 'cat > /dev/null' "$(cat "$T/olcer.sh")" > "$T/olcer-yutan.sh"; mv "$T/olcer-yutan.sh" "$T/olcer.sh"
+cag dogrula; icerir "girdiyi yutan ölçerle de iki sayfa ölçüldü" "$CIKTI" "── 2 sayfa ölçüldü"
+kur; cag liste; esit "kayıt dizini yokken liste rc 0" 0 "$RC"
 icerir "sıfır sayfa" "$CIKTI" "── 0 sayfa"
 
 echo ""

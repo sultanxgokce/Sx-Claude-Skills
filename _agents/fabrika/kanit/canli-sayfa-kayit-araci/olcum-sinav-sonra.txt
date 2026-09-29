@@ -1,5 +1,5 @@
 $ bash canli-sayfa/scripts/canli-sayfa.test.sh
-# rc=0 sure=5.2s zaman=2026-09-29T22:46:24+03:00
+# rc=0 sure=5.5s zaman=2026-09-30T00:46:37+03:00
 --- stdout ---
 == T1: kapı arkasındaki canlı sayfa kayda girer ==
   ✓ rc 0
@@ -155,8 +155,25 @@ $ bash canli-sayfa/scripts/canli-sayfa.test.sh
 == T11: kullanım ==
   ✓ komutsuz → rc 2
   ✓ silme komutu yok → rc 2
+  ✓ değersiz --adres → rc 2 (asılı kalmaz)
+  ✓ değersiz --adres → sebebi söylüyor
+  ✓ değersiz --ad → rc 2 (asılı kalmaz)
+  ✓ değersiz --ad → sebebi söylüyor
+  ✓ değersiz --ne → rc 2 (asılı kalmaz)
+  ✓ değersiz --ne → sebebi söylüyor
+  ✓ değersiz --kutu → rc 2 (asılı kalmaz)
+  ✓ değersiz --kutu → sebebi söylüyor
+  ✓ değersiz --ekleyen → rc 2 (asılı kalmaz)
+  ✓ değersiz --ekleyen → sebebi söylüyor
+  ✓ değersiz --herkese-acik → rc 2 (asılı kalmaz)
+  ✓ değersiz --herkese-acik → sebebi söylüyor
+  ✓ değersiz --gerekce → rc 2 (asılı kalmaz)
+  ✓ değersiz --gerekce → sebebi söylüyor
+  ✓ sondaki seçenek değersiz → rc 2
+  ✓ kayıt yok
+  ✓ girdiyi yutan ölçerle de iki sayfa ölçüldü
   ✓ kayıt dizini yokken liste rc 0
   ✓ sıfır sayfa
 
-════════ SONUÇ: PASS=145 · FAIL=0 ════════
+════════ SONUÇ: PASS=162 · FAIL=0 ════════
 --- stderr ---

@@ -1,5 +1,5 @@
 $ bash _agents/fabrika/kanit/canli-sayfa-kayit-araci/mutasyon-olc.sh
-# rc=0 sure=151.5s zaman=2026-09-29T22:48:55+03:00
+# rc=0 sure=337.1s zaman=2026-09-30T00:52:15+03:00
 --- stdout ---
 ✓ yakalandı: 01-canli-olmayan-kayda-giriyor (10 kapı kırmızı)
        ✗ https://yok.ornek.com → rc 3 (beklenen '3' · gelen '0')
@@ -33,7 +33,7 @@ $ bash _agents/fabrika/kanit/canli-sayfa-kayit-araci/mutasyon-olc.sh
        ✗ liste rc 1 (beklenen '1' · gelen '0')
        ✗ bozuk kayıtlar adıyla yazıldı (yok: BOZUK KAYIT: 2 (eksik.json, kirik.json))
 ✓ yakalandı: 12-ilk-tarih-korunmuyor (1 kapı kırmızı)
-       ✗ ilk tarih korundu (beklenen '2026-01-01T00:00:00+03:00' · gelen '2026-09-29T22:47:24+03:00')
+       ✗ ilk tarih korundu (beklenen '2026-01-01T00:00:00+03:00' · gelen '2026-09-30T00:47:44+03:00')
 ✓ yakalandı: 13-kapi-degisimi-gorulmuyor (2 kapı kırmızı)
        ✗ kapı kalkmış → rc 1 (beklenen '1' · gelen '0')
        ✗ kapının değiştiği yazıyor (yok: KAPI DEĞİŞTİ Fikir Defteri)
@@ -78,5 +78,10 @@ $ bash _agents/fabrika/kanit/canli-sayfa-kayit-araci/mutasyon-olc.sh
 ✓ yakalandı: 28-emekli-gerekcesi-suzulmuyor (10 kapı kırmızı)
        ✗ kurala uymayan gerekçe → rc 2 (beklenen '2' · gelen '0')
        ✗ durum değişmedi (beklenen 'canli' · gelen 'emekli')
-✓ karşı sınama: gerçek araç aynı sınavdan yeşil geçiyor (════════ SONUÇ: PASS=145 · FAIL=0 ════════)
+✓ yakalandı: 29-degersiz-secenek-asili-birakiyor (15 kapı kırmızı)
+       ✗ değersiz --adres → rc 2 (asılı kalmaz) (beklenen '2' · gelen '124')
+       ✗ değersiz --adres → sebebi söylüyor (yok: --adres bir değer ister)
+✓ yakalandı: 30-olcer-girdiyi-yutuyor (1 kapı kırmızı)
+       ✗ girdiyi yutan ölçerle de iki sayfa ölçüldü (yok: ── 2 sayfa ölçüldü)
+✓ karşı sınama: gerçek araç aynı sınavdan yeşil geçiyor (════════ SONUÇ: PASS=162 · FAIL=0 ════════)
 --- stderr ---
