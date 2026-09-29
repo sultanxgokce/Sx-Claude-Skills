@@ -1,0 +1,41 @@
+{
+  "tur": 1,
+  "is": "terminal-onar-global",
+  "pr": "250",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-09-29T11:26:32+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "H",
+    "ozet": "Taban yolu için sunucu, çerez, PWA ve WebSocket katmanları eklenmiş; ancak gerçek kullanıcı giriş akışı taban yolunda kırıldığı için merkezin ön şartı karşılanmıyor. Diff sonu kırpılmış, kurulum ve genelleştirme bütünü görülemiyor; görünen ciddi hatalar ile yalnız sunucu odaklı yeşil sınavlar üretime hazır saymaya yetmez.",
+    "bulgular": [
+      {
+        "ne": "Taban yolundaki giriş sayfası taban bilgisini almıyor ve varlıkları kökten istiyor; form da parolayı kökteki /giris adresine gönderiyor. /sedir/giris 200 dönse bile tarayıcı akışı merkez köküne kaçar.",
+        "kanit": "GET /giris için dosya(res, 'giris.html') kullanılıyor; dosyaTabanli çağrılmıyor. giris.html içinde href=\"/manifest.webmanifest\", src=\"/ikon-180.png\", href=\"/zanaat.css\" ve fetch(((window.__TABAN||'')+'/giris')) var; window.__TABAN bu sayfaya enjekte edilmiyor.",
+        "konum": "terminal-onar/kapi/sunucu.mjs: HTTP /giris GET dalı; terminal-onar/kapi/genel/giris.html: head ve submit işleyicisi",
+        "agirlik": "ciddi"
+      },
+      {
+        "ne": "Doğru paroladan sonra yönlendirme tabanı yok sayıyor; /sedir altında giriş yapan kullanıcı location.replace('/') ile merkez köküne gönderiliyor.",
+        "kanit": "Başarılı giriş dalı doğrudan `location.replace('/')` çalıştırıyor. Sunucu sınavındaki T6-T7 yalnız POST yanıt kodlarını ölçüyor; tarayıcıdaki başarı yönlendirmesini ölçmüyor.",
+        "konum": "terminal-onar/kapi/genel/giris.html: `if (r.ok)` dalı; olcum-kapi-sinavi-sonra.txt:T6-T7",
+        "agirlik": "ciddi"
+      },
+      {
+        "ne": "“Bütün kutularda çalışır, hiçbir kutu adı koda gömülü değildir” iddiası görünür kodla uyuşmuyor; Sedir'e bağlı varsayılanlar ve metinler çalışır davranışta kalmış.",
+        "kanit": "ANA_TMUX varsayılanı `sedir-ana`, parola için `process.env.SEDIR__TERMINAL_SIFRE` geri dönüşü, localStorage anahtarı `sedir-gorunum`; ayrıca arayüz başlıkları ve bildirimler Sedir adını kullanıyor. SKILL.md ise hiçbir kutu adının gömülü olmadığını söylüyor.",
+        "konum": "terminal-onar/kapi/sunucu.mjs: ANA_TMUX ve SIFRE tanımları; terminal-onar/kapi/genel/uygulama.js: localStorage ve bildirimler; terminal-onar/SKILL.md: ön bilgi ve değişmezler",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "WebSocket yükseltme denetimi taban sınırını doğru ayırmıyor; önek eşleşmesi `/sedir/tty` dışındaki benzer yolları da kabul edebilir.",
+        "kanit": "Denetim `req.url.startsWith(T('/tty'))` kullanıyor; bu ifade `/sedir/tty-kotu` gibi bir yolu da kabul eder. W4 yalnız `/sedir/api/ekran` yolunu sınıyor, önek çakışmasını ölçmüyor.",
+        "konum": "terminal-onar/kapi/sunucu.mjs: `sunucu.on('upgrade')`; terminal-onar/kapi/sunucu.test.mjs: W1-W4",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve iki ölçüm yeşil; sarı kayıt yok. Ancak yalnız “sonra” sınavları var, davranış için önce/sonra ölçüm çifti veya gerçekçi tarayıcı kare dizisi yok. `sedir-canli-olcum` yalnız “önce” kaydı ve paketin kurulmadığını açıkça söylüyor; dolayısıyla kurulum, slash komutu ve canlı taban-yolu yolculuğu kanıtlanmış değil. 25 kapı ile 9/9 mutasyon özellikle sunucu rotalarını ölçüyor, fakat giriş HTML’sinin tabanlı varlıklarını ve başarılı giriş sonrası tarayıcı yönlendirmesini sınamıyor. Diff 110000 baytta kırpıldığı için kurulum betiğinin kalanı ve diğer dosyalar bütünüyle denetlenemedi."
+  }
+}
