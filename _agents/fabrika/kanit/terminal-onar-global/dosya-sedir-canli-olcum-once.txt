@@ -1,0 +1,4 @@
+SEDIR kutusunda canli olcum (2026-09-29, hostsrv uzerinden)
+  kok yol  /giris        -> 200  (ESKI kapi hala kok yolda)
+  taban    /sedir/giris  -> 302  (yeni taban yolu HENUZ kurulmadi)
+SONUC: bu paket SEDIR kutusuna kurulmamis; pilot gecis bu PR birlesince yapilacak.
