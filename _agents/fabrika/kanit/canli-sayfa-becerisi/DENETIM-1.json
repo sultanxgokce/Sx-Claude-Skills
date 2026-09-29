@@ -1,0 +1,47 @@
+{
+  "tur": 1,
+  "is": "canli-sayfa-becerisi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-09-29T22:24:28+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "H",
+    "ozet": "Kayıt aracı, beceri tanımı ve güçlü sınavlar hazırlanmış; gerçek üç adresle geçici kayıt provası da yapılmış. Ama Sultan’ın istediği bütün kutulara kurulum ve kokpitin bu kayıttan beslenmesi teslim edilmemiş, buna rağmen araç menüde görüneceğini kesin söylüyor; önce bu ana eksikler çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Beceri ve komut bütün kutulara dağıtılmamış; yalnız dağıtım kataloğuna hedef olarak yazılmış. Kapsam belgesi kurulumu ve kutulara duyuruyu açıkça ayrı işe bırakıyor.",
+        "kanit": "KAPSAM.md içindeki “Bu işte OLMAYAN” bölümünün 1. ve 4. maddeleri kurulumu ve bütün kutulara duyuruyu sonraya bırakıyor; manifestte kurulu kopya ile kaynak eşitliğini ölçen kayıt yok. `catalog.json` ve `sync-targets.json` yalnız `_global` hedefini bildiriyor.",
+        "konum": "_agents/fabrika/kanit/canli-sayfa-becerisi/KAPSAM.md:17",
+        "agirlik": "ciddi"
+      },
+      {
+        "ne": "Kokpit menüsünün ortak kaydı okuyan tüketicisi yapılmamış; iş kartının ana sonucu eksik.",
+        "kanit": "KAPSAM.md “Bu işte OLMAYAN” 3. maddede kokpit veri toplayıcısı ve “Canlı sayfalar” ekranını ayrı iş sayıyor. Diffte kokpit tüketicisine ait başka değişiklik bulunmuyor.",
+        "konum": "_agents/fabrika/kanit/canli-sayfa-becerisi/KAPSAM.md:20",
+        "agirlik": "ciddi"
+      },
+      {
+        "ne": "Araç, kokpit bağlantısı kurulmamışken kaydın menüde görüneceğini başarı mesajı olarak bildiriyor; kullanıcıya yanlış tamamlanma güvencesi veriyor.",
+        "kanit": "`ekle` başarı yolunda “kokpitteki Canlı sayfalar menüsünde görünür” yazıyor; aynı diffteki KAPSAM.md ise menü tüketicisinin bu işte olmadığını söylüyor.",
+        "konum": "canli-sayfa/scripts/canli-sayfa.sh:164",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Canlı prova gerçek ortak kaydı ve kurulmuş kopyayı sınamıyor; geçici dizindeki kaynak betiğini çalıştırıyor. Bu nedenle iş kartında özellikle istenen gerçek kayıt ve kurulu kopya eşitliği kanıtlanmış değil.",
+        "kanit": "`canli-prova.sh` aracı doğrudan depo kökündeki `canli-sayfa/scripts/canli-sayfa.sh` yolundan alıyor ve `CANLI_SAYFA_DIZIN` değerini `/tmp/.../kayit` olarak ayarlıyor. Çıktı da kayıt yolunu `/tmp/canli-sayfa-prova.../kayit` gösteriyor.",
+        "konum": "_agents/fabrika/kanit/canli-sayfa-becerisi/canli-prova.sh:6",
+        "agirlik": "ciddi"
+      },
+      {
+        "ne": "Beceri belgesindeki adres kuralı kendi içinde çelişkili: soru işaretini reddederken aynı satır adresin anahtar taşıyabileceğini söylüyor.",
+        "kanit": "Adres kuralları tablosunda “soru işareti ... yok (adres satırı anahtar taşıyabilir)” yazıyor; uygulama ve T5 sınavı sorgu içeren adresi rc 2 ile reddediyor.",
+        "konum": "canli-sayfa/SKILL.md:49",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Hermetik sınav ile mutasyon ölçümü kapsamlı, canlı prova da üç gerçek adresin ağdan ölçülebildiğini gösteriyor. Ancak önce/sonra çifti yalnız becerinin ana dalda bulunmamasını gösteriyor; sonrasında kurulduğunu gösteren karşı ölçüm yok. Canlı prova geçici kayıt ve depo kaynağı kullanıyor; gerçek ortak kayıt, kurulu kopya-kaynak eşitliği, bütün kutulardaki erişilebilirlik ve kokpit menüsünün kaydı gerçekten okuduğu ölçülmemiş."
+  }
+}
