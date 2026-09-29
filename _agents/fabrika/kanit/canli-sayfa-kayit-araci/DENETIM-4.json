@@ -1,0 +1,23 @@
+{
+  "tur": 4,
+  "is": "canli-sayfa-kayit-araci",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-09-30T00:52:46+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Beceri metni, kayıt aracı ve `_global` dağıtım hedefi kaynak olarak eklenmiş; kurulum, ilk kayıtlar, kokpit menüsü ve duyuru kapsam dışında tutulmuş. Ana akış güçlü biçimde sınanmış, ancak araç kayıt açıklamasındaki “tek cümle” kuralını gerçekten uygulamadığı için önce bu uygulama sorununu çöz.",
+    "bulgular": [
+      {
+        "ne": "Araç, `ne` alanı için ilan ettiği “tek cümle” kuralını uygulamıyor; yalnızca boşluk, uzunluk, satır sonu, teknik ifade ve sır desenlerini denetliyor. Bu nedenle `Birinci cümle. İkinci cümle.` gibi çok cümleli bir açıklama kayda kabul edilir.",
+        "kanit": "SKILL.md kayıt kuralları tablosu `ne` alanını “tek cümle” olarak tanımlıyor. `metin_denetle` ise yalnız boşluk/uzunluk, yeni satır-sekme, teknik kalıp ve sır desenlerini denetliyor; `ekle` akışında bunun dışında cümle sayısı denetimi yok. T6 sınavları da iki satırı reddediyor fakat aynı satırdaki iki cümleyi sınamıyor; mutasyon listesinde bu kurala ait sınama bulunmuyor.",
+        "konum": "canli-sayfa/SKILL.md:57-64; canli-sayfa/scripts/canli-sayfa.sh:97-110,151-153; canli-sayfa/scripts/canli-sayfa.test.sh:T6; olcum-mutasyonlar-sonra.txt",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kaynağın ana dalda önce bulunmadığı ölçülmüş; ardından hermetik sınav, mutasyonlar, gerçek ağla geçici dizin provası, kayıt korunumu, depo eşliği ve sürüm kapıları yeşil. CLI işi için ölçüm çıktıları kare yerine uygundur ve canlı prova gerçekçi olumlu/olumsuz adresler içerir; ancak yeşil sınav ile mutasyon kümesi “tek cümle” iddiasını ölçmüyor."
+  }
+}

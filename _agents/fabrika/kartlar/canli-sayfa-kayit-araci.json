@@ -15,5 +15,15 @@
   "kanit_nerede": "_agents/fabrika/kanit/canli-sayfa-kayit-araci/ (sınav, mutasyon, gerçek ağ ölçümüyle GEÇİCİ kayıt dizininde prova, depo kapıları)",
   "oda": "",
   "durum": "acik",
-  "gecmis": []
+  "gecmis": [],
+  "sultan_kararlari": [
+    {
+      "karar": "devam",
+      "oturum": "session_013fuJSNg65VkgQE4sJsQURS",
+      "soz": "Devam, son tur",
+      "beyan": "SERDAR",
+      "gerekce": "Puan 2/5'ten 4/5'e çıktı, bulgu 3'ten 1'e indi; her bulgu gerçek hataydı ve kapatıldı. Son bulgu (değersiz seçenek aracı asılı bırakıyordu) düzeltildi, sınav 162 kapı ve mutasyon 30/30. Bu parça ara işin temeli.",
+      "zaman": "2026-09-30T00:46:31+03:00"
+    }
+  ]
 }
