@@ -33,8 +33,10 @@ dene "M4 giriş yönlendirmesi tabanlı" sunucu.mjs "s=s.replace(\"location: T('
 dene "M5 sayfaya taban enjeksiyonu" sunucu.mjs "s=s.replace('window.__TABAN=\${JSON.stringify(TABAN)};','')"
 dene "M6 html varlık yolları" sunucu.mjs "s=s.replace('if (TABAN) h = h.replace(','if (false) h = h.replace(')"
 dene "M7 PWA kimliği kutu başına" sunucu.mjs "s=s.replace(\"start_url: TABAN + '/', scope: TABAN + '/'\",\"start_url: '/', scope: '/'\")"
-dene "M8 WS upgrade taban denetimi" sunucu.mjs "s=s.replace(\"!req.url.startsWith(T('/tty'))\",\"!req.url.startsWith('/tty')\")"
-dene "M9 WS giris denetimi" sunucu.mjs "s=s.replace('if (!girisli(req) || !req.url.startsWith(T(\'/tty\')))','if (false)')"
+# ── Tarayıcı akışı mutantları (28-29 Eylül · bağımsız göz, CİDDİ)
+dene "M10 giris sayfasi tabani tasir" sunucu.mjs "s=s.replace(\"GET') return dosyaTabanli(res, 'giris\",\"GET') return dosya(res, 'giris\")"
+dene "M8 WS upgrade taban denetimi" sunucu.mjs "s=s.replace('_yol === _tty ||','true ||')"
+dene "M9 WS giris denetimi" sunucu.mjs "s=s.replace('!girisli(req) ||','false ||')"
 echo "─────────────"
 echo "MUTASYON: gecti=$gecti dusen=$dusen"
 [ "$dusen" = 0 ] || exit 1
