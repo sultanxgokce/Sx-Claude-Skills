@@ -1,0 +1,16 @@
+{
+  "tur": 2,
+  "is": "kasif-havuz-ekle-arg-tavani",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-09-30T12:11:29+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Tek argüman tavanına takılan üç büyük JSON aktarımı dosya tabanlı jq girdisine çevrilmiş, sürüm hem SKILL.md hem katalogda 1.4.2 yapılmış ve depo denetimleri temiz geçmiştir. Yeni sınavın düzeltilmiş araçta 47/47 geçmesi, eski araçta ise yalnız üç tavan kapısında gerçek “Argument list too long” hatası vermesi çözümü üretime hazır düzeyde kanıtlıyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Pozitif sınav rc=0; negatif eski-araç ölçümü 44 geçişe karşı yalnız üç tavan vakasını düşürerek sınavın iddiayı gerçekten ayırt ettiğini gösteriyor. Kurulu kaynak betiği ile depo betiği cmp sonucu eşit, SKILL.md ile catalog.json sürümleri 1.4.2 olarak eşit ve iki depo kapısı yeşil. Ayrı bir “önce” manifest kaydı yok; ancak eski araçla aynı yeni sınavın karşılaştırmalı negatif ölçümü işlevsel önce/sonra kanıtı niteliğinde."
+  }
+}
