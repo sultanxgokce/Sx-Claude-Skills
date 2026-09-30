@@ -1,0 +1,19 @@
+{
+  "is": "canli-sayfa-araci",
+  "cumle": "Canlı sayfa kayıt aracı: ekle/liste/emekli/doğrula komutları, ölçüm kuralları, tek cümle denetimi, sınav ve mutasyon kanıtı (beceri tanımı ve dağıtım kaydı ayrı kartta)",
+  "istedi": "Sultan",
+  "aldi": "SERDAR",
+  "zaman": "2026-09-30T10:18:28+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "Sultan 2026-09-29: 'bunu bir ai skill ve slash komutuna çevir ve tüm kutulara global dağıt'; 2026-09-30 D1: 'İkiye böl, yeniden gönder' (session_013fuJSNg65VkgQE4sJsQURS · beyan:SERDAR)",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

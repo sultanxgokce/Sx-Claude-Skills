@@ -1,0 +1,114 @@
+{
+  "is": "canli-sayfa-araci",
+  "arac": "kanit.py/0.1.0",
+  "guncelleme": "2026-09-30T10:35:49+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "arac-ana-dalda-var-mi",
+      "asama": "once",
+      "dosya": "olcum-arac-ana-dalda-var-mi-once.txt",
+      "sha256": "d757e9d54df4e47c6ec02f205d12d6483781d029db487bcbc86aac841b2fae90",
+      "komut": [
+        "git",
+        "cat-file",
+        "-e",
+        "origin/main:canli-sayfa/scripts/canli-sayfa.sh"
+      ],
+      "rc": 128,
+      "renk": "kirmizi",
+      "zaman": "2026-09-30T10:28:34+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "853bf83dd33209bc188e32cc4fedd42217ab35e94786500a89796f44fc0d677f",
+      "komut": [
+        "bash",
+        "canli-sayfa/scripts/canli-sayfa.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-30T10:28:41+03:00",
+      "sure_sn": 6.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyonlar",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyonlar-sonra.txt",
+      "sha256": "946611db6a2beae8e7a63b983215bf2edb4469b52202f47e0dd5bf7b19573d81",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/canli-sayfa-araci/mutasyon-olc.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-30T10:35:46+03:00",
+      "sure_sn": 424.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-prova",
+      "asama": "sonra",
+      "dosya": "olcum-canli-prova-sonra.txt",
+      "sha256": "76732e865db18ef989927fb84931e9fa77624ef37fc6c277736d52b3036f8b00",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/canli-sayfa-araci/canli-prova.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-30T10:35:49+03:00",
+      "sure_sn": 2.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "depo-denetimi",
+      "asama": "sonra",
+      "dosya": "olcum-depo-denetimi-sonra.txt",
+      "sha256": "5821513c7b11b779cad46209c9cac82d487e21407f465612d75fbe82566cf5c0",
+      "komut": [
+        "node",
+        "ahi/schema/validate-repo.mjs",
+        ".",
+        "--strict"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-30T10:35:49+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "surum-satiri",
+      "asama": "sonra",
+      "dosya": "olcum-surum-satiri-sonra.txt",
+      "sha256": "ed3cac4e0ae8d9052c64e6384d593dbb8511e5083ce15912511e857fc80a84db",
+      "komut": [
+        "node",
+        "ahi/schema/version-lint.mjs",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-30T10:35:49+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "dosya",
+      "etiket": "kapsam",
+      "asama": "tek",
+      "dosya": "dosya-kapsam-tek.md",
+      "sha256": "83c34fe82ad59e74157f9628ccfc2768daf99c0461053f27503ec22c8cd23003",
+      "kaynak": "/config/projects/_wt/Sx-Claude-Skills-canli-sayfa-araci/_agents/fabrika/kanit/canli-sayfa-araci/KAPSAM.md",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-30T10:35:49+03:00"
+    }
+  ],
+  "imza": "8ae4f08b8d1fb1d7c195c220ee6485f893be075feb43418f49fb52f9e1d240e2"
+}
