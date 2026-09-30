@@ -241,6 +241,52 @@ grep -q 'havuz-ekle özeti' "$TMP/nob.err" \
 grep -q 'atlanan (şema)' "$TMP/nob.err" \
   && ok "özetin gövdesi de basıldı" || no "özet yarım basıldı"
 
+echo "== T-ARG: havuz listeleri tek-argüman tavanını (131 072 bayt) aşınca da yazılır (2026-09-30) =="
+# VAKA: 23-30 Eylül nazir havuzu 523 ham/aday kayıtla anahtar listesini 131 218 bayta çıkardı;
+# `--argjson` jq'yu "Argument list too long" (rc=126) ile düşürdü, havuza 7 gün yazılamadı.
+# Fikstür üretilir: 1200 ham kayıt × uzun başlık → anahtar listesi tavanın ÜSTÜNDE olmalı (ölçülür).
+BH="$TMP/buyuk-havuz.jsonl"; : > "$BH"
+for n in $(seq 1 1200); do
+  printf '{"id":"b%04d","baslik":"büyük havuz fikstür kaydı numara %04d uzun başlık dolgusu dolgusu dolgusu dolgusu dolgusu dolgusu dolgusu","kanit":"https://ornek.test/%d","durum":"ham"}\n' "$n" "$n" "$n" >> "$BH"
+done
+ANAHTAR_BAYT="$(jq -cs '[ .[] | {k: .baslik, d: .durum} ]' "$BH" | wc -c)"
+BK="$TMP/buyuk-kaynaklar.jsonl"; : > "$BK"
+for n in $(seq 1 900); do
+  printf '{"url_key":"ornek.test/kutuphane/%04d/uzun/yol/dolgusu/dolgusu/dolgusu/dolgusu","url":"https://ornek.test/kutuphane/%04d","host":"ornek.test","ziyaret":1,"turlar":["t1"],"bulgu_idler":[],"verim":0,"durum":"aktif"}\n' "$n" "$n" >> "$BK"
+done
+KUTUP_BAYT="$(wc -c < "$BK")"
+echo '[{"baslik":"tavan üstü havuza yeni bulgu","detay":"d","kanit":"https://yeni.test/x"}]' > "$TMP/garg.json"
+if [ "$ANAHTAR_BAYT" -le 131072 ] || [ "$KUTUP_BAYT" -le 131072 ]; then
+  no "fikstür tavanın altında kaldı (anahtar=$ANAHTAR_BAYT kütüphane=$KUTUP_BAYT) — kapı boşluğa ölçerdi"
+else
+  OUT="$(KASIF_TEST=1 KASIF_HAVUZ="$BH" KASIF_KAYNAKLAR="$BK" KASIF_TARIH=2026-09-30 bash "$SUT" --girdi "$TMP/garg.json" 2>"$TMP/garg.err")"; RC=$?
+  echo "$OUT" | jq -e '.eklenen==1' >/dev/null 2>&1 && [ "$RC" -eq 0 ] && ! grep -q 'Argument list too long' "$TMP/garg.err" \
+    && ok "anahtar listesi $ANAHTAR_BAYT bayt (>131072) → eklenen=1 rc=0" \
+    || no "🔴 tavan üstü havuzda yazma düştü: rc=$RC · $(grep -m1 'too long' "$TMP/garg.err")"
+  grep -q '"url_key":"yeni.test/x"' "$BK" \
+    && ok "kaynak kütüphanesi $KUTUP_BAYT bayt (>131072) iken de güncellendi (sessiz atlama yok)" \
+    || no "🔴 büyük kütüphane sessizce güncellenmedi"
+fi
+
+echo "== T-ARG-3: tekrar defteri tavan üstündeyken de güncellenir (kör inceleme-1 SARI) =="
+TT="$TMP/buyuk-tekrar.jsonl"; : > "$TT"
+for n in $(seq 1 1500); do
+  printf '{"dedup_key":"tekrar fikstur kaydi %04d uzun dolgu dolgu dolgu dolgu","baslik":"tekrar %04d","kez":1,"ilk":"2026-09-01","son":"2026-09-01","hostlar":["ornek.test"],"turlar":["t1"]}\n' "$n" "$n" >> "$TT"
+done
+TT_BAYT="$(wc -c < "$TT")"; TT_ONCE="$(wc -l < "$TT")"
+: > "$TMP/tt-havuz.jsonl"
+echo '[{"baslik":"tekrar kalkanı ilk kayıt","detay":"d","kanit":"https://t.test/1"}]' > "$TMP/tt1.json"
+KASIF_TEST=1 KASIF_HAVUZ="$TMP/tt-havuz.jsonl" KASIF_TARIH=2026-09-30 bash "$SUT" --girdi "$TMP/tt1.json" >/dev/null 2>&1
+KASIF_TEST=1 KASIF_HAVUZ="$TMP/tt-havuz.jsonl" KASIF_TEKRAR="$TT" KASIF_TARIH=2026-09-30 bash "$SUT" --girdi "$TMP/tt1.json" >/dev/null 2>&1
+TT_SONRA="$(wc -l < "$TT")"
+if [ "$TT_BAYT" -le 131072 ]; then
+  no "tekrar fikstürü tavanın altında ($TT_BAYT) — kapı boşluğa ölçerdi"
+else
+  [ "$TT_SONRA" -eq $((TT_ONCE+1)) ] && grep -q '"dedup_key":"tekrar kalkanı ilk kayıt"' "$TT" \
+    && ok "tekrar defteri $TT_BAYT bayt (>131072) iken düşen aday kaydedildi ($TT_ONCE→$TT_SONRA)" \
+    || no "🔴 büyük tekrar defteri sessizce güncellenmedi ($TT_ONCE→$TT_SONRA)"
+fi
+
 echo ""
 echo "════════ SONUÇ: PASS=$PASS · FAIL=$FAIL ════════"
 [ "$FAIL" -eq 0 ] && echo "GOLDEN: TEMİZ ✓" || echo "GOLDEN: FAIL ✗"

@@ -1,0 +1,82 @@
+$ bash kasif-tara/scripts/kasif-havuz-ekle.test.sh
+# rc=0 sure=3.4s zaman=2026-09-30T12:08:09+03:00
+--- stdout ---
+== T1: geçerli aday eklenir + cell(s01) + dedup_key alanları doğar ==
+  ✓ eklenen=1
+  ✓ cell=s01 + dedup_key=norm(başlık) yazıldı
+== T2: birebir-tekrar ikinci koşuda anahtar-atlanır (idempotent) ==
+  ✓ tekrar-koşu 0 ekledi
+  ✓ havuz hâlâ 1 satır
+== T3: Jaccard'ın KAÇIRDIĞI kısa-token başlıkta anahtar yakalar ==
+  ✓ kısa-token varyantı YALNIZ anahtarla yakalandı (Jaccard kör-noktası kapandı)
+== T4: CELL_ID=s02 → cell etiketi s02 (birim-ayrımı) ==
+  ✓ s02-etiketi yazıldı
+== T5: eski alansız-satır (göç yok) aynı-başlık adayı yine bloklar ==
+  ✓ alansız eski-satır okuma-anında norm'landı, bloke etti
+== T6: işlenmiş (durum≠ham/aday) eski kayıt YENİDEN-girişi engellemez (nüks=sinyal) ==
+  ✓ işlenmiş-kayıt nüksü yeniden girebildi
+== T6b: ham-durumda Jaccard-benzeri başlık HÂLÂ bloklar (mevcut koruma aynen) ==
+  ✓ ham-kayıt Jaccard-koruması aynen
+== T7: parti-içi çift → ilk kazanır, ikinci anahtar-atlanır ==
+  ✓ parti-içi tekilleşti
+== T8: 2-İSTEMCİ eşzamanlılık — aynı aday iki paralel koşuda TEK satır (flock+anahtar) ==
+  ✓ iki paralel istemci → havuzda TEK kayıt (A2 kabul-kriteri)
+== T9: fail-closed korundu — kanıtsız aday şema-atlanır, rc=0 ==
+  ✓ şema-süzgeci aynen
+== T10: KASIF_TEST'siz yabancı-havuz reddi (SF1 güvenlik-değişmezi) ==
+  ✓ kanonik-havuz-dışı hedef exit=2
+
+== H1: tur etiketi — her bulgu hangi turda geldiğini taşır ==
+  ✓ tur=t20260727-1 iki bulguya da yazıldı
+== H2: kaynak kütüphanesi — hangi adrese gidildi, ne getirdi ==
+  ✓ kaynaklar.jsonl oluştu
+  ✓ iki ayrı kaynak kaydedildi
+  ✓ ziyaret=1 verim=1
+== H3: AYNI kaynağa ikinci ziyaret — sayaç artar, geçmiş korunur ==
+  ✓ ziyaret=2 verim=2 (aynı adres, yeni bulgu)
+  ✓ iki tur da kaynağa iliştirildi
+== H4: TEKRAR SİNYALİ — dedup'ta düşen aday sessizce yok olmaz ==
+  ✓ havuz BÜYÜMEDİ (dedup korundu)
+  ✓ tekrar.jsonl oluştu
+  ✓ kaybolan fikrin GELDİĞİ KAYNAK kaydedildi
+== H5: BOŞ TUR görünür (B8 — 'bulamadı' ile 'hiç bakmadı' ayrışır) ==
+  ✓ boş tur seyre YAZILDI (eklenen=0)
+  ✓ aday=0 kaydı doğru
+== H6: tur numarası seyirden artar (havuzdan DEĞİL — boş tur da sayılır) ==
+  ✓ dört tur sırayla numaralandı
+== H7: HERMETİK KALKAN — test modunda yol verilmezse ODANIN defterine yazmaz ==
+  ✓ test modunda defter dizini BOŞ kaldı (kalkan tuttu)
+== H7b: ama ÜRETİM modunda hafıza gerçekten yazılır (kalkan yalnız teste özel) ==
+  ✓ üretim modunda seyir defteri YAZILDI
+  ✓ üretim modunda kaynak kütüphanesi YAZILDI
+== H8: FAIL-SOFT — defter yazılamasa bile malzeme kaybolmaz ==
+  ✓ hafıza yazılamadı ama rc=0 (ana iş bozulmadı)
+  ✓ bulgu havuza YİNE de eklendi
+== R1: ROL-KAPISI — MUCİT rolündeki alt-ajan havuza YAZAMAZ (ADR-025 K4) ==
+  ✓ yanlış-rol RC=2 ile reddedildi
+  ✓ ret gerekçesi K4'e atıf yapıyor
+  ✓ reddedilen koşu havuza HİÇBİR ŞEY yazmadı
+== R2: doğru rol + rolsüz koşu çalışır (kapı fazla geniş değil) ==
+  ✓ LAYIHA_ROL=kasif normal ekledi
+  ✓ rol BOŞKEN geriye-uyum korundu
+== A1: ŞEMA-DIŞI ALAN sessizce düşmez — adı raporlanır (NÂZIR/s13 kart-92) ==
+  ✓ kayıt yine kabul edildi (düşürme meşru, iş durmuyor)
+  ✓ atlanan alan ADLARI makine-çıktısında
+  ✓ stderr uyardı
+  ✓ yalnız ad taşındı, değer sızmadı
+  ✓ şema-dışı alan havuz kaydına girmedi
+== A2: temiz girdide atlanan_alan BOŞ (yanlış-alarm yok) ==
+  ✓ şemaya uyan girdi uyarı üretmedi
+  ✓ temiz koşu sessiz kaldı
+== A3: NÖBETÇİ — insan-okur özet stderr'e FİİLEN basılıyor mu ==
+  ✓ özet başlığı stderr'e ulaştı
+  ✓ özetin gövdesi de basıldı
+== T-ARG: havuz listeleri tek-argüman tavanını (131 072 bayt) aşınca da yazılır (2026-09-30) ==
+  ✓ anahtar listesi 156002 bayt (>131072) → eklenen=1 rc=0
+  ✓ kaynak kütüphanesi 192600 bayt (>131072) iken de güncellendi (sessiz atlama yok)
+== T-ARG-3: tekrar defteri tavan üstündeyken de güncellenir (kör inceleme-1 SARI) ==
+  ✓ tekrar defteri 271500 bayt (>131072) iken düşen aday kaydedildi (1500→1501)
+
+════════ SONUÇ: PASS=47 · FAIL=0 ════════
+GOLDEN: TEMİZ ✓
+--- stderr ---

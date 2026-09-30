@@ -144,17 +144,21 @@ HAVUZ_ANAHTARLAR="$(jq -cs '
 
 # ── mekanik süzme: geçerlilik (baslik+kanit) + havuz-dedup (Jaccard + deterministik-anahtar) ──
 # norm/tokens/jaccard = mucit-t1.sh ile AYNI kanon (Türkçe-normalize dahil).
+# 🔴 ARGÜMAN TAVANI (2026-09-30, nazir · Sultan onayı): havuz listeleri `--argjson` ile TEK argüman
+#   geçiyordu; Linux tek argümanı 131 072 baytta keser (MAX_ARG_STRLEN). 23 Eylül'de anahtar listesi
+#   131 218 bayta çıktı → jq "Argument list too long", rc=126, havuza 7 gün hiçbir şey yazılamadı.
+#   Artık büyük listeler DOSYADAN (`--slurpfile`, süreç ikamesi) okunur; `$x[0]` slurp sarmalını açar.
 KARAR="$(jq -c -n \
   --slurpfile aday "$GIRDI" \
-  --argjson mevcut "$HAVUZ_BASLIKLAR" \
-  --argjson manahtar "$HAVUZ_ANAHTARLAR" \
+  --slurpfile mevcut <(printf '%s' "$HAVUZ_BASLIKLAR") \
+  --slurpfile manahtar <(printf '%s' "$HAVUZ_ANAHTARLAR") \
   --argjson esik "$DEDUP_ESIK" '
   def trlower: gsub("İ";"i")|gsub("I";"ı")|gsub("Ş";"ş")|gsub("Ğ";"ğ")|gsub("Ç";"ç")|gsub("Ö";"ö")|gsub("Ü";"ü");
   def norm: trlower | ascii_downcase | gsub("[^a-zçğıöşü0-9 ]"; " ") | gsub("  +"; " ") | ltrimstr(" ") | rtrimstr(" ");
   def tokens: norm | split(" ") | map(select(length>2)) | unique;
   def jaccard($a;$b): ($a+$b|unique) as $u | if ($u|length)==0 then 0 else (($a|length)+($b|length)-($u|length)) / ($u|length) end;
-  ($mevcut | map(tokens)) as $mtok |
-  ([ $manahtar[] | select(.d == "ham" or .d == "aday") | .k ]) as $blokan |
+  ($mevcut[0] | map(tokens)) as $mtok |
+  ([ $manahtar[0][] | select(.d == "ham" or .d == "aday") | .k ]) as $blokan |
   [ $aday[0][] |
     . as $c |
     (($c.baslik // "") | gsub("\\s";"") | length > 0) as $baslikli |
@@ -232,8 +236,10 @@ _hafiza_yaz() {
         { url: $u, bulgu: ($idler[$i] // null) } ]' <<<"$GECERLI" 2>/dev/null || echo '[]')"
     mevcut="[]"
     [ -r "$KAYNAKLAR" ] && mevcut="$(jq -cs '.' "$KAYNAKLAR" 2>/dev/null || echo '[]')"
-    birlesik="$(jq -c -n --argjson eski "$mevcut" --argjson yeni "$yeni" \
+    # Kütüphane de büyür: `eski` DOSYADAN (argüman tavanı — yukarıdaki KARAR notu).
+    birlesik="$(jq -c -n --slurpfile eskiS <(printf '%s' "$mevcut") --slurpfile yeniS <(printf '%s' "$yeni") \
       --arg tur "$TUR" --arg tarih "$TARIH" '
+      $eskiS[0] as $eski | $yeniS[0] as $yeni |
       def urlkey: sub("^https?://";"") | sub("[?#].*$";"") | sub("/+$";"") | ascii_downcase;
       def urlhost: sub("^https?://";"") | split("/")[0] | ascii_downcase;
       ($yeni | map(. + {k: (.url | urlkey), h: (.url | urlhost)}) | group_by(.k)) as $gruplu |
@@ -273,8 +279,9 @@ _hafiza_yaz() {
     if [ "$(jq 'length' <<<"$dusen" 2>/dev/null || echo 0)" != "0" ]; then
       mevcutT="[]"
       [ -r "$TEKRAR" ] && mevcutT="$(jq -cs '.' "$TEKRAR" 2>/dev/null || echo '[]')"
-      birlesikT="$(jq -c -n --argjson eski "$mevcutT" --argjson yeni "$dusen" \
+      birlesikT="$(jq -c -n --slurpfile eskiS <(printf '%s' "$mevcutT") --slurpfile yeniS <(printf '%s' "$dusen") \
         --arg tur "$TUR" --arg tarih "$TARIH" '
+        $eskiS[0] as $eski | $yeniS[0] as $yeni |
         def urlhost: (capture("https?://(?<h>[^/\\s\")<>]+)") // {h:""}) | .h | ascii_downcase;
         ($yeni | group_by(.k)) as $g |
         ($eski | map({key: (.dedup_key // ""), value: .}) | from_entries) as $idx |

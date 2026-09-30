@@ -1,0 +1,98 @@
+{
+  "is": "kasif-havuz-ekle-arg-tavani",
+  "arac": "kanit.py/0.1.0",
+  "guncelleme": "2026-09-30T12:08:12+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "eec66a618e72168de07a957c0efaaf3489741fa9222be2917548c142b3fcb8e2",
+      "komut": [
+        "bash",
+        "kasif-tara/scripts/kasif-havuz-ekle.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-30T12:08:09+03:00",
+      "sure_sn": 3.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "negatif-eski-arac",
+      "asama": "sonra",
+      "dosya": "olcum-negatif-eski-arac-sonra.txt",
+      "sha256": "41825f04989b9ea8d176bdc7313e2587e9c11ef818a40fd36c46ebad7bf7c205",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kasif-havuz-ekle-arg-tavani/negatif-olc.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-30T12:08:12+03:00",
+      "sure_sn": 2.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kurulu-esit-kaynak",
+      "asama": "sonra",
+      "dosya": "olcum-kurulu-esit-kaynak-sonra.txt",
+      "sha256": "15b02d9b6e370e19109f9c26f8200ce9efbb89dfa11a346914290dda2b37d861",
+      "komut": [
+        "cmp",
+        "kasif-tara/scripts/kasif-havuz-ekle.sh",
+        "/config/.claude/skills/kasif-tara/scripts/kasif-havuz-ekle.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-30T12:08:12+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "depo-denetimi",
+      "asama": "sonra",
+      "dosya": "olcum-depo-denetimi-sonra.txt",
+      "sha256": "7731159620c3b717ae7970e111f8ed50d089bfe5726d52c75b5dd3c2aec358a7",
+      "komut": [
+        "node",
+        "ahi/schema/validate-repo.mjs",
+        ".",
+        "--strict"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-30T12:08:12+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "surum-satiri",
+      "asama": "sonra",
+      "dosya": "olcum-surum-satiri-sonra.txt",
+      "sha256": "c4a2f4cc75bb5fb722f35ea10f71e6c8a7b10bf78c483ed2602ac317724e5cee",
+      "komut": [
+        "node",
+        "ahi/schema/version-lint.mjs",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-30T12:08:12+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "dosya",
+      "etiket": "kapsam",
+      "asama": "tek",
+      "dosya": "dosya-kapsam-tek.md",
+      "sha256": "2dda2f6e8f4e3e9421fd9a2aa960f67410add4f7962e6429c23c8fcf0c53ec24",
+      "kaynak": "/config/projects/_wt/Sx-Claude-Skills-kasif-havuz-ekle-arg-tavani/_agents/fabrika/kanit/kasif-havuz-ekle-arg-tavani/KAPSAM.md",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-30T12:08:12+03:00"
+    }
+  ],
+  "imza": "9bb8e1fe596e5d90839e54eee87c39d62fa12b0725ee50bb9fb52ddf86869a8e"
+}

@@ -1,0 +1,9 @@
+$ bash _agents/fabrika/kanit/kasif-havuz-ekle-arg-tavani/negatif-olc.sh
+# rc=0 sure=2.5s zaman=2026-09-30T12:08:12+03:00
+--- stdout ---
+  ✗ 🔴 tavan üstü havuzda yazma düştü: rc=126 · /config/projects/_wt/Sx-Claude-Skills-kasif-havuz-ekle-arg-tavani/.negatif-kasif-tara.3960022/scripts/kasif-havuz-ekle.sh: line 181: /usr/bin/jq: Argument list too long
+  ✗ 🔴 büyük kütüphane sessizce güncellenmedi
+  ✗ 🔴 büyük tekrar defteri sessizce güncellenmedi (1500→1500)
+════════ SONUÇ: PASS=44 · FAIL=3 ════════
+✓ eski araç yalnız tavan kapılarında kırmızı (3) — sınav ayırt ediyor, başka kapı bozulmadı
+--- stderr ---
