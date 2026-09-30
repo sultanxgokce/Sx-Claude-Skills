@@ -70,11 +70,13 @@ PY
 dosya_adi() { python3 -c 'import sys, urllib.parse; print(urllib.parse.quote(sys.argv[1][len("https://"):], safe=".-_~"))' "$1"; }
 ayni_adres_mi() {  # ayni_adres_mi <dosya> <adres> → dosya yoksa ya da aynı adresin kaydıysa 0; başka adresin kaydıysa 1; okunamıyorsa 2
   [ -e "$1" ] || return 0
-  # bozuk (okunamayan) kayıt DELİLDİR: üstüne yazılmaz, elle incelenir (denetim tur 1, kart canli-sayfa-araci)
+  # bozuk (okunamayan ya da adres alanı olmayan) kayıt DELİLDİR: üstüne yazılmaz, elle incelenir (denetim tur 1, kart canli-sayfa-araci)
   python3 -c 'import json,sys
 try: k = json.load(open(sys.argv[1], encoding="utf-8"))
 except Exception: sys.exit(2)
-sys.exit(0 if not isinstance(k, dict) or k.get("adres") in (None, sys.argv[2]) else 1)' "$1" "$2"
+a = k.get("adres") if isinstance(k, dict) else None
+if not isinstance(a, str) or not a: sys.exit(2)   # okunuyor ama kayıt değil ({} · adres yok · liste): yine bozuk
+sys.exit(0 if a == sys.argv[2] else 1)' "$1" "$2"
 }
 # hedef_kontrol <dosya> <adres> <fiil> → hedef başka adresin ya da bozuk bir kaydıysa rc 3 ile çıkar
 hedef_kontrol() {

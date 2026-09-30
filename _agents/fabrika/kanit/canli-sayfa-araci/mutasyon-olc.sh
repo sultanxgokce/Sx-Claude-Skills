@@ -43,6 +43,7 @@ M = {
  "30-olcer-girdiyi-yutuyor": ('_ "$a" 2>/dev/null </dev/null)"', '_ "$a" 2>/dev/null)"'),
  "31-tek-cumle-aranmiyor": ("if printf '%s' \"$2\" | grep -qE '[.!?;…][[:space:]]+[^[:space:]]'; then", "if false; then"),
  "32-tek-cumle-denetimi-cagrilmiyor": ('; tek_cumle_denetle "ne" "$ne"', ''),
+ "35-semasiz-hedef-bozuk-sayilmiyor": ('if not isinstance(a, str) or not a: sys.exit(2)', 'if not isinstance(a, str) or not a: sys.exit(0)'),
  "24-eksik-alanli-kayit-menuye-geciyor": ('if not all(isinstance(k.get(a), str) and k[a] for a in ALAN): raise ValueError', 'pass'),
 }
 for ad, (a, b) in M.items():

@@ -1,5 +1,5 @@
 $ bash _agents/fabrika/kanit/canli-sayfa-araci/canli-prova.sh
-# rc=0 sure=2.3s zaman=2026-09-30T10:54:23+03:00
+# rc=0 sure=2.5s zaman=2026-09-30T11:19:02+03:00
 --- stdout ---
 ✓ bulgu sayfası kayda girdi (rc 0)
      ✓ kayda girdi: Bulgu Defteri · https://bulgu.mmepanel.com · giriş: kapali · kutu: merkez
@@ -15,7 +15,7 @@ $ bash _agents/fabrika/kanit/canli-sayfa-araci/canli-prova.sh
 ✓ fikir: giriş kapalı ölçüldü
 ✓ kokpit: giriş kapalı ölçüldü
 ✓ liste üç sayfayı gösteriyor (rc 0)
-     canlı sayfalar · kayıt: /tmp/canli-sayfa-prova.qiQapW/kayit
+     canlı sayfalar · kayıt: /tmp/canli-sayfa-prova.BOSq9l/kayit
        merkez     Bulgu Defteri                https://bulgu.mmepanel.com  (kapı arkasında)
                   Kutulardan gelen bulguların tek listesi
 ✓ menü biçiminde 3 sayfa

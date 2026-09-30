@@ -212,6 +212,10 @@ esit "başka dosya açılmadı" 1 "$(say)"
 cag emekli --adres https://bulgu.ornek.com --gerekce "Sayfa kapatıldı, artık yok"
 esit "emekli rc 3" 3 "$RC"
 esit "emekli de dokunmadı" "{bozuk kayit" "$(cat "$D/bulgu.ornek.com.json")"
+for kotu in '{}' '{"adres":null}' '[]' '{"ad":"Bulgu","ne":"x"}'; do   # okunuyor ama kayıt değil (denetim tur 2)
+  kur; mkdir -p "$D"; printf '%s' "$kotu" > "$D/bulgu.ornek.com.json"; ekle https://bulgu.ornek.com
+  esit "şemasız hedef $kotu → ekle rc 3" 3 "$RC"; esit "dosya aynen duruyor ($kotu)" "$kotu" "$(cat "$D/bulgu.ornek.com.json")"
+done
 
 echo "== T10: dogrula — kayıtlı sayfalar yeniden ölçülür =="
 kur; ekle https://bulgu.ornek.com; ekle https://fikir.ornek.com "Fikir Defteri" "Yeni iş fikirlerinin defteri" mihenk MIHENK

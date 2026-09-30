@@ -37,6 +37,9 @@ kuralının cümlesi düzeltildi.
 - **Tur 1 (4/5 E):** hedef dosyada bozuk (okunamayan) kayıt varsa `ekle` üstüne yazıyordu; delil kaybolabilirdi. Gerçek
   hata, düzeltildi: bozuk hedef başka adresin kaydı gibi korunur, `ekle` ve `emekli` rc 3 ile durur ve elle inceleme
   ister (sınav T9b, mutasyon 33-34).
+- **Tur 2 (4/5 E):** okunabilen ama kayıt olmayan hedef (`{}`, adres alanı boş, liste) hâlâ "aynı adres" sayılıp eziliyordu.
+  Gerçek hata, düzeltildi: adres alanı düzgün bir metin değilse hedef bozuk sayılır, rc 3 (sınav T9b dört örnek,
+  mutasyon 35).
 
 ## Bu işte ne var
 | Parça | Ne |

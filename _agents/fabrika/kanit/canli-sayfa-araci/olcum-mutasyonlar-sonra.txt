@@ -1,5 +1,5 @@
 $ bash _agents/fabrika/kanit/canli-sayfa-araci/mutasyon-olc.sh
-# rc=0 sure=419.5s zaman=2026-09-30T10:54:21+03:00
+# rc=0 sure=425.8s zaman=2026-09-30T11:18:59+03:00
 --- stdout ---
 ✓ yakalandı: 01-canli-olmayan-kayda-giriyor (10 kapı kırmızı)
        ✗ https://yok.ornek.com → rc 3 (beklenen '3' · gelen '0')
@@ -33,7 +33,7 @@ $ bash _agents/fabrika/kanit/canli-sayfa-araci/mutasyon-olc.sh
        ✗ liste rc 1 (beklenen '1' · gelen '0')
        ✗ bozuk kayıtlar adıyla yazıldı (yok: BOZUK KAYIT: 2 (eksik.json, kirik.json))
 ✓ yakalandı: 12-ilk-tarih-korunmuyor (1 kapı kırmızı)
-       ✗ ilk tarih korundu (beklenen '2026-01-01T00:00:00+03:00' · gelen '2026-09-30T10:48:47+03:00')
+       ✗ ilk tarih korundu (beklenen '2026-01-01T00:00:00+03:00' · gelen '2026-09-30T11:13:19+03:00')
 ✓ yakalandı: 13-kapi-degisimi-gorulmuyor (2 kapı kırmızı)
        ✗ kapı kalkmış → rc 1 (beklenen '1' · gelen '0')
        ✗ kapının değiştiği yazıyor (yok: KAPI DEĞİŞTİ Fikir Defteri)
@@ -69,7 +69,7 @@ $ bash _agents/fabrika/kanit/canli-sayfa-araci/mutasyon-olc.sh
 ✓ yakalandı: 25-ayri-adresler-ayni-dosyaya-dusuyor (3 kapı kırmızı)
        ✗ yollu adres olduğu gibi (beklenen 'https://acik.ornek.com/akar' · gelen '')
        ✗ iki ayrı kayıt dosyası (beklenen '2' · gelen '1')
-✓ yakalandı: 26-baska-adresin-kaydi-eziliyor (9 kapı kırmızı)
+✓ yakalandı: 26-baska-adresin-kaydi-eziliyor (15 kapı kırmızı)
        ✗ başka adresin kaydının üzerine yazılmaz → rc 3 (beklenen '3' · gelen '0')
        ✗ o dosyadaki kayıt olduğu gibi (beklenen 'https://fikir.ornek.com' · gelen 'https://bulgu.ornek.com')
 ✓ yakalandı: 27-emekli-baska-adresin-kaydina-dokunuyor (2 kapı kırmızı)
@@ -92,8 +92,11 @@ $ bash _agents/fabrika/kanit/canli-sayfa-araci/mutasyon-olc.sh
 ✓ yakalandı: 33-bozuk-hedef-eziliyor (5 kapı kırmızı)
        ✗ ekle rc 3 (beklenen '3' · gelen '0')
        ✗ sebep: bozuk kayıt (yok: BOZUK)
-✓ yakalandı: 34-bozuk-hedef-baska-adres-sayilmiyor (5 kapı kırmızı)
+✓ yakalandı: 34-bozuk-hedef-baska-adres-sayilmiyor (11 kapı kırmızı)
        ✗ ekle rc 3 (beklenen '3' · gelen '0')
        ✗ sebep: bozuk kayıt (yok: BOZUK)
-✓ karşı sınama: gerçek araç aynı sınavdan yeşil geçiyor (════════ SONUÇ: PASS=176 · FAIL=0 ════════)
+✓ yakalandı: 35-semasiz-hedef-bozuk-sayilmiyor (6 kapı kırmızı)
+       ✗ şemasız hedef {} → ekle rc 3 (beklenen '3' · gelen '0')
+       ✗ dosya aynen duruyor ({}) (beklenen '{}' · gelen '{"v": 1, "adres": "https://bulgu.ornek.com", "ad": "Bulgu Defteri", "ne": "Kutulardan gelen bulguların tek listesi", "kutu": "merkez", "ekleyen": "SERDAR", "giris": "kapali", "durum": "canli", "eklendi": "2026-09-30T11:18:50+03:00", "olculdu": "2026-09-30T11:18:50+03:00"}')
+✓ karşı sınama: gerçek araç aynı sınavdan yeşil geçiyor (════════ SONUÇ: PASS=184 · FAIL=0 ════════)
 --- stderr ---

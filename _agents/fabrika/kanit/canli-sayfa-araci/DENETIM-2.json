@@ -1,0 +1,23 @@
+{
+  "tur": 2,
+  "is": "canli-sayfa-araci",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-09-30T10:55:24+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Araç istenen ekle, liste, emekli ve doğrula komutlarını; ölçüm kurallarını, tek cümle denetimini ve mutasyon sınavını kurmuş. Önce okunabilen ama yapısal olarak bozuk hedef kayıtların ezilmesini engelle; bu veri kaybı açığı dışında kartın hedefi karşılanmış ve kanıtı güçlü.",
+    "bulgular": [
+      {
+        "ne": "Hedef dosya geçerli JSON olduğu hâlde kayıt şemasına uymuyorsa bozuk delil olarak korunmuyor; örneğin `{}` veya `{\"adres\":null}` aynı adresin kaydı kabul edilip `ekle` tarafından ezilebiliyor.",
+        "kanit": "`ayni_adres_mi`, JSON nesnesinin zorunlu alanlarını doğrulamadan `k.get(\"adres\") in (None, sys.argv[2])` sonucunda rc 0 veriyor; `hedef_kontrol` bunu güvenli sayıyor ve ardından `yaz` mevcut dosyanın yerini alıyor. T9b yalnız okunamayan `{bozuk kayit` örneğini, 33-34 mutasyonları da yalnız JSON okuma hatası yollarını ölçüyor; okunabilen eksik hedef kaydın korunmasına yönelik sınav yok.",
+        "konum": "canli-sayfa/scripts/canli-sayfa.sh:73",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Hermetik sınav, mutasyon ölçümü, gerçek ağla üç canlı sayfa ve olumsuz örnekler güçlü davranış kanıtı sağlıyor; ancak klasik aynı iddiaya ait önce/sonra ölçüm çifti yok, önce kaydı yalnız aracın ana dalda bulunmadığını gösteriyor. Canlı prova gerçekçi veri kullanıyor fakat bulunan okunabilir-bozuk-hedef dalı sınav ve mutasyon kapsamının dışında kalmış."
+  }
+}

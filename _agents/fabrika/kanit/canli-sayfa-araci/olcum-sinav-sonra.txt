@@ -1,5 +1,5 @@
 $ bash canli-sayfa/scripts/canli-sayfa.test.sh
-# rc=0 sure=8.4s zaman=2026-09-30T10:47:21+03:00
+# rc=0 sure=7.1s zaman=2026-09-30T11:11:53+03:00
 --- stdout ---
 == T1: kapı arkasındaki canlı sayfa kayda girer ==
   ✓ rc 0
@@ -159,6 +159,14 @@ $ bash canli-sayfa/scripts/canli-sayfa.test.sh
   ✓ başka dosya açılmadı
   ✓ emekli rc 3
   ✓ emekli de dokunmadı
+  ✓ şemasız hedef {} → ekle rc 3
+  ✓ dosya aynen duruyor ({})
+  ✓ şemasız hedef {"adres":null} → ekle rc 3
+  ✓ dosya aynen duruyor ({"adres":null})
+  ✓ şemasız hedef [] → ekle rc 3
+  ✓ dosya aynen duruyor ([])
+  ✓ şemasız hedef {"ad":"Bulgu","ne":"x"} → ekle rc 3
+  ✓ dosya aynen duruyor ({"ad":"Bulgu","ne":"x"})
 == T10: dogrula — kayıtlı sayfalar yeniden ölçülür ==
   ✓ hepsi açılıyor → rc 0
   ✓ sayı doğru
@@ -191,5 +199,5 @@ $ bash canli-sayfa/scripts/canli-sayfa.test.sh
   ✓ kayıt dizini yokken liste rc 0
   ✓ sıfır sayfa
 
-════════ SONUÇ: PASS=176 · FAIL=0 ════════
+════════ SONUÇ: PASS=184 · FAIL=0 ════════
 --- stderr ---
