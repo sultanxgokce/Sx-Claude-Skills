@@ -203,6 +203,16 @@ kur; mkdir -p "$D"; echo '{"v":1,"adres":"javascript:alert(1)","ad":"x","ne":"x"
 cag liste --json
 esit "https olmayan adresli kayıt menüye geçmez" 0 "$(printf '%s' "$CIKTI" | python3 -c 'import json,sys; print(len(json.load(sys.stdin)["sayfalar"]))')"
 
+echo "== T9b: hedef dosyadaki bozuk kayıt delildir, üstüne yazılmaz (denetim tur 1) =="
+kur; mkdir -p "$D"; printf '{bozuk kayit' > "$D/bulgu.ornek.com.json"
+ekle https://bulgu.ornek.com
+esit "ekle rc 3" 3 "$RC"; icerir "sebep: bozuk kayıt" "$CIKTI" "BOZUK"
+esit "bozuk dosya aynen duruyor" "{bozuk kayit" "$(cat "$D/bulgu.ornek.com.json")"
+esit "başka dosya açılmadı" 1 "$(say)"
+cag emekli --adres https://bulgu.ornek.com --gerekce "Sayfa kapatıldı, artık yok"
+esit "emekli rc 3" 3 "$RC"
+esit "emekli de dokunmadı" "{bozuk kayit" "$(cat "$D/bulgu.ornek.com.json")"
+
 echo "== T10: dogrula — kayıtlı sayfalar yeniden ölçülür =="
 kur; ekle https://bulgu.ornek.com; ekle https://fikir.ornek.com "Fikir Defteri" "Yeni iş fikirlerinin defteri" mihenk MIHENK
 cag dogrula

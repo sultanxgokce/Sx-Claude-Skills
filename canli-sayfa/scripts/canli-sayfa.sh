@@ -68,12 +68,21 @@ PY
 # Dosya adı adresten BİRE BİR üretilir: iki ayrı adres aynı ada düşemez (denetim tur 2: eğik çizgi alt çizgiye
 # çevrilince /a/b ile /a_b aynı dosyaya yazıyordu). Adresteki her özel karakter kendi koduna döner.
 dosya_adi() { python3 -c 'import sys, urllib.parse; print(urllib.parse.quote(sys.argv[1][len("https://"):], safe=".-_~"))' "$1"; }
-ayni_adres_mi() {  # ayni_adres_mi <dosya> <adres> → dosya yoksa ya da aynı adresin kaydıysa 0; başka adresin kaydıysa 1
+ayni_adres_mi() {  # ayni_adres_mi <dosya> <adres> → dosya yoksa ya da aynı adresin kaydıysa 0; başka adresin kaydıysa 1; okunamıyorsa 2
   [ -e "$1" ] || return 0
+  # bozuk (okunamayan) kayıt DELİLDİR: üstüne yazılmaz, elle incelenir (denetim tur 1, kart canli-sayfa-araci)
   python3 -c 'import json,sys
 try: k = json.load(open(sys.argv[1], encoding="utf-8"))
-except Exception: sys.exit(0)
+except Exception: sys.exit(2)
 sys.exit(0 if not isinstance(k, dict) or k.get("adres") in (None, sys.argv[2]) else 1)' "$1" "$2"
+}
+# hedef_kontrol <dosya> <adres> <fiil> → hedef başka adresin ya da bozuk bir kaydıysa rc 3 ile çıkar
+hedef_kontrol() {
+  ayni_adres_mi "$1" "$2"; case $? in
+    0) ;;
+    1) hata "bu dosya adında BAŞKA bir adresin kaydı var; $3: $1" 3 ;;
+    *) hata "bu dosya adında BOZUK bir kayıt var (okunamıyor); $3, elle incelenmeli: $1" 3 ;;
+  esac
 }
 
 metin_denetle() {  # metin_denetle <alan> <değer> <en çok> → kurala uymuyorsa çıkar
@@ -152,7 +161,7 @@ case "$komut" in
       hata "bu sayfa GİRİŞ KAPISI OLMADAN açılıyor ($o): $a — bilerek herkese açıksa --herkese-acik evet ile yeniden kaydet; değilse önce giriş kapısını kur" 4
     fi
     f="$DIZIN/$(dosya_adi "$a").json"
-    ayni_adres_mi "$f" "$a" || hata "bu dosya adında BAŞKA bir adresin kaydı var; üzerine yazılmadı: $f" 3
+    hedef_kontrol "$f" "$a" "üzerine yazılmadı"
     j="$(python3 - "$f" "$a" "$ad" "$ne" "$kutu" "$ekleyen" "$giris" <<'PY'
 import json, sys, datetime
 f, a, ad, ne, kutu, ek, giris = sys.argv[1:8]
@@ -174,7 +183,7 @@ PY
     [ "${#gerekce}" -ge 10 ] || hata "--gerekce gerekli (en az 10 karakter): sayfa niçin kalktı"
     metin_denetle "gerekçe" "$gerekce" 200      # gerekçe de ortak kayda yazılır: aynı dil ve sır kuralları
     f="$DIZIN/$(dosya_adi "$a").json"; [ -f "$f" ] || hata "böyle bir kayıt yok: $a" 1
-    ayni_adres_mi "$f" "$a" || hata "bu dosya adında BAŞKA bir adresin kaydı var; dokunulmadı: $f" 3
+    hedef_kontrol "$f" "$a" "dokunulmadı"
     j="$(python3 - "$f" "$gerekce" <<'PY'
 import json, sys, datetime
 k = json.load(open(sys.argv[1], encoding="utf-8"))

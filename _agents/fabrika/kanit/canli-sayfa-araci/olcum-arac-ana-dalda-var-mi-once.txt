@@ -1,5 +1,5 @@
 $ git cat-file -e origin/main:canli-sayfa/scripts/canli-sayfa.sh
-# rc=128 sure=0.0s zaman=2026-09-30T10:28:34+03:00
+# rc=128 sure=0.0s zaman=2026-09-30T10:47:13+03:00
 --- stdout ---
 --- stderr ---
 fatal: path 'canli-sayfa/scripts/canli-sayfa.sh' exists on disk, but not in 'origin/main'

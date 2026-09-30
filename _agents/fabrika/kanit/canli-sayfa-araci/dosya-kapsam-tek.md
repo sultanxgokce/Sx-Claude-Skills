@@ -33,6 +33,11 @@ kuralının cümlesi düzeltildi.
   (sınav T11; sınavdaki her çağrı artık süreyle sınırlı). Aynı turda kendi gözden geçirmemle bir açık daha kapatıldı:
   `dogrula` kayıtları okurken ölçerin girdiyi yutması.
 
+## Denetim turları (bu kart)
+- **Tur 1 (4/5 E):** hedef dosyada bozuk (okunamayan) kayıt varsa `ekle` üstüne yazıyordu; delil kaybolabilirdi. Gerçek
+  hata, düzeltildi: bozuk hedef başka adresin kaydı gibi korunur, `ekle` ve `emekli` rc 3 ile durur ve elle inceleme
+  ister (sınav T9b, mutasyon 33-34).
+
 ## Bu işte ne var
 | Parça | Ne |
 |---|---|
@@ -57,7 +62,7 @@ kuralının cümlesi düzeltildi.
 - **Giriş kapısı ölçülür.** Kapısız açılan sayfa yalnız açık onayla kaydedilir (rc 4). Emsal: 25 Eylül'de bir sayfa
   kayıtta "kapı var" derken canlıda kapısız açılıyordu.
 - **Adres satırı anahtar taşıyamaz:** soru işareti, `#`, kullanıcı adı, port reddedilir.
-- **Silme komutu yok.** Kalkan sayfa `emekli` olur; kayıt delil olarak kalır.
+- **Silme komutu yok.** Kalkan sayfa `emekli` olur; kayıt delil olarak kalır. Bozuk kayıt da delildir: araç üstüne yazmaz.
 
 ## Kanıt
 | Ölçüm | Ne gösterir |
