@@ -3,8 +3,10 @@
 # tek listesidir; onu okuyan yüzeyler (ör. kokpit menüsü) `liste --json` çıktısını kullanır.
 #
 # KAYIT NEREDE: ortak dizinde, SAYFA BAŞINA BİR DOSYA (varsayılan /config/.claude/canli-sayfalar/<adres>.json).
-#   Ortak dizin bütün kutulardan görünür; sayfa başına dosya olduğu için iki kutu aynı anda yazsa da
-#   birbirinin kaydını ezmez. Yazma önce geçici dosyaya, sonra yerine taşınarak yapılır.
+#   Ortak dizin bütün kutulardan görünür; sayfa başına dosya olduğu için FARKLI sayfaların kayıtları birbirini
+#   etkilemez. AYNI sayfaya iki kutu aynı anda yazarsa dosya başına kilit sırayla yazdırır (denetim tur 3):
+#   ikinci yazan birincinin kaydını gördükten sonra yazar, sessiz ezme olmaz. Yazma geçici dosyaya, sonra taşıma.
+#   Kilit dosyası (.<kayıt>.kilit) dizinde kalır; silinmez (silmek yeni bir yarış açar), boştur, listeye girmez.
 #
 # KOMUTLAR
 #   ekle    --adres https://… --ad "Kısa Ad" --ne "tek cümle" --kutu <kutu> --ekleyen <AJAN> [--herkese-acik evet]
@@ -21,6 +23,7 @@
 # ORTAM (yalnız sınav ve kurulum için)
 #   CANLI_SAYFA_DIZIN   kayıt dizini
 #   CANLI_SAYFA_OLCER   adresi ölçen komut; adres son argüman olarak verilir, "<kod> <yönlenilen adres>" basar
+#   CANLI_SAYFA_KILIT_SURE  aynı sayfanın kilidini en çok kaç saniye beklesin (varsayılan 10)
 # rc: 0 tamam · 1 doğrulamada sorunlu kayıt var / bozuk kayıt var · 2 kullanım ya da kural ihlali
 #     3 ölçülemedi ya da canlı değil · 4 kapısız sayfa onaysız
 set -uo pipefail
@@ -106,6 +109,13 @@ tek_cumle_denetle() {  # tek_cumle_denetle <alan> <değer> → cümle bitiminden
     hata "$1 tek cümle olmalı: nokta, soru, ünlem ya da noktalı virgülden sonra yeni söz başlıyor"; fi
 }
 
+kilit_al() {  # kilit_al <kayıt dosyası> → aynı sayfaya yazanlar sırayla girer; kilit süreç bitince kalkar
+  mkdir -p "$DIZIN" 2>/dev/null || hata "kayıt dizini açılamadı: $DIZIN" 3
+  command -v flock >/dev/null 2>&1 || hata "ÖLÇÜLEMEDİ · flock yok; aynı sayfaya eşzamanlı yazım güvenceye alınamaz" 3
+  exec 9>"$DIZIN/.$(basename "$1").kilit" || hata "kilit dosyası açılamadı" 3
+  flock -w "${CANLI_SAYFA_KILIT_SURE:-10}" 9 || hata "bu sayfanın kaydına başka bir süreç yazıyor, kilit alınamadı; biraz sonra yeniden dene: $1" 3
+}
+
 yaz() {  # yaz <dosya> <json metni> → atomik
   mkdir -p "$DIZIN" 2>/dev/null || hata "kayıt dizini açılamadı: $DIZIN" 3
   local g="$DIZIN/.$(basename "$1").$$.yeni"
@@ -163,6 +173,7 @@ case "$komut" in
       hata "bu sayfa GİRİŞ KAPISI OLMADAN açılıyor ($o): $a — bilerek herkese açıksa --herkese-acik evet ile yeniden kaydet; değilse önce giriş kapısını kur" 4
     fi
     f="$DIZIN/$(dosya_adi "$a").json"
+    kilit_al "$f"    # hedef okuma + yazma tek kilit altında: aynı sayfaya eşzamanlı yazım sıraya girer
     hedef_kontrol "$f" "$a" "üzerine yazılmadı"
     j="$(python3 - "$f" "$a" "$ad" "$ne" "$kutu" "$ekleyen" "$giris" <<'PY'
 import json, sys, datetime
@@ -185,6 +196,7 @@ PY
     [ "${#gerekce}" -ge 10 ] || hata "--gerekce gerekli (en az 10 karakter): sayfa niçin kalktı"
     metin_denetle "gerekçe" "$gerekce" 200      # gerekçe de ortak kayda yazılır: aynı dil ve sır kuralları
     f="$DIZIN/$(dosya_adi "$a").json"; [ -f "$f" ] || hata "böyle bir kayıt yok: $a" 1
+    kilit_al "$f"
     hedef_kontrol "$f" "$a" "dokunulmadı"
     j="$(python3 - "$f" "$gerekce" <<'PY'
 import json, sys, datetime

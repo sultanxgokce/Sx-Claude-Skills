@@ -40,6 +40,12 @@ kuralının cümlesi düzeltildi.
 - **Tur 2 (4/5 E):** okunabilen ama kayıt olmayan hedef (`{}`, adres alanı boş, liste) hâlâ "aynı adres" sayılıp eziliyordu.
   Gerçek hata, düzeltildi: adres alanı düzgün bir metin değilse hedef bozuk sayılır, rc 3 (sınav T9b dört örnek,
   mutasyon 35).
+- **Tur 3 (4/5 E):** aynı sayfaya iki kutu aynı anda yazarsa son yazan öbürünü ezebiliyordu; dosya başlığı da "ezmez"
+  diyordu (yanlış iddia). Gerçek hata. Sultan: devam, son tur (2026-09-30 Sultan: devam (sohbet ·
+  session_013fuJSNg65VkgQE4sJsQURS · "Devam, son tur" · beyan:SERDAR)). Düzeltme: kayıt dosyası başına kilit (flock);
+  hedef okuma ve yazma tek kilit altında, `ekle` ve `emekli` ikisi de; kilit beklemesi en çok 10 sn (ayarlanır),
+  alınamazsa rc 3. Sınav T9c: kilit tutulurken beklemesiz ekle rc 3, kilit düşünce yazar; altı eşzamanlı yazım hepsi
+  rc 0 ve tek sağlam kayıt. Mutasyon 36-38. Kilit dosyası dizinde kalır (silmek yeni yarış açar).
 
 ## Bu işte ne var
 | Parça | Ne |
@@ -86,5 +92,7 @@ Sayılar ölçüm dosyalarındadır; belgeye sayı yazılmadı (kanıt yeniden �
   "vb. sonra" gibi kısaltma bitişleri de reddedilir; ondalık sayı ("2.5") ve sondaki nokta geçer.
 - Sır deseni kaba bir ağdır (uzun rastgele dizi, "parola=" gibi kalıplar); kısa bir sırrı yakalamaz. Asıl koruma
   alanların dar olmasıdır (ad, tek cümle, adres).
+- Kilit aynı kutu içindeki ve aynı dosya sistemini paylaşan kutular arasındaki eşzamanlı yazımı sıralar; ağ dosya sistemi
+  üzerinden kilitleme güvencesi ölçülmedi (bugün ortak dizin tek makinede).
 - Kayıt dosyaları ortak dizinde düz dosyadır; bir kutu başka kutunun kaydını değiştirebilir. Kimin yazdığı `ekleyen`
   alanındadır ama doğrulanmaz.

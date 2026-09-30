@@ -160,7 +160,7 @@ esit "rc 0" 0 "$RC"
 esit "tek kayıt" 1 "$(say)"
 esit "ad güncellendi" "Bulgu Toplayıcı" "$(alan "$D/bulgu.ornek.com.json" ad)"
 esit "ilk tarih korundu" "2026-01-01T00:00:00+03:00" "$(alan "$D/bulgu.ornek.com.json" eklendi)"
-esit "geçici dosya kalmadı" 0 "$(find "$D" -name '.*' -type f | wc -l)"
+esit "geçici dosya kalmadı" 0 "$(find "$D" -name '.*.yeni' -type f | wc -l)"
 
 echo "== T8: emekli — kayıt silinmez, menüden kalkar =="
 kur; ekle https://bulgu.ornek.com; ekle https://fikir.ornek.com "Fikir Defteri" "Yeni iş fikirlerinin defteri" mihenk MIHENK
@@ -216,6 +216,23 @@ for kotu in '{}' '{"adres":null}' '[]' '{"ad":"Bulgu","ne":"x"}'; do   # okunuyo
   kur; mkdir -p "$D"; printf '%s' "$kotu" > "$D/bulgu.ornek.com.json"; ekle https://bulgu.ornek.com
   esit "şemasız hedef $kotu → ekle rc 3" 3 "$RC"; esit "dosya aynen duruyor ($kotu)" "$kotu" "$(cat "$D/bulgu.ornek.com.json")"
 done
+
+echo "== T9c: aynı sayfaya eşzamanlı yazım sıraya girer (denetim tur 3) =="
+kur; mkdir -p "$D"; K="$D/.bulgu.ornek.com.json.kilit"
+( flock -x "$K" -c "sleep 2" ) & TUTAN=$!; sleep 0.3
+CIKTI="$(CANLI_SAYFA_DIZIN="$D" CANLI_SAYFA_OLCER="bash $T/olcer.sh" CANLI_SAYFA_KILIT_SURE=0 timeout 20 bash "$SUT" ekle --adres https://bulgu.ornek.com --ad "Bulgu" --ne "Bulgu listesi" --kutu merkez --ekleyen SERDAR 2>&1)"; RC=$?
+esit "kilit başkasındayken beklemesiz ekle rc 3" 3 "$RC"; icerir "sebep: kilit" "$CIKTI" "kilit"; esit "yazmadı" 0 "$(say)"
+ekle https://bulgu.ornek.com   # varsayılan bekleme 10 sn: kilit 2 sn sonra düşer, kayıt yazılır
+esit "kilit düşünce ekle rc 0" 0 "$RC"; esit "kayıt yazıldı" 1 "$(say)"; wait "$TUTAN" 2>/dev/null
+kur; for i in 1 2 3 4 5 6; do
+  ( CANLI_SAYFA_DIZIN="$D" CANLI_SAYFA_OLCER="bash $T/olcer.sh" bash "$SUT" ekle --adres https://bulgu.ornek.com --ad "Bulgu $i" --ne "Kutu $i yazdı" --kutu "kutu$i" --ekleyen SERDAR >/dev/null 2>&1; echo $? >> "$T/rc-esz" ) &
+done; wait
+esit "altı eşzamanlı yazım hepsi rc 0" "0 0 0 0 0 0" "$(sort "$T/rc-esz" | tr '\n' ' ' | sed 's/ $//')"
+esit "tek kayıt dosyası" 1 "$(say)"
+cag liste --json; esit "kayıt okunur ve sağlam" 1 "$(printf '%s' "$CIKTI" | python3 -c 'import json,sys; print(len(json.load(sys.stdin)["sayfalar"]))')"
+kur; ekle https://bulgu.ornek.com; ( flock -x "$K" -c "sleep 2" ) & TUTAN=$!; sleep 0.3
+CIKTI="$(CANLI_SAYFA_DIZIN="$D" CANLI_SAYFA_KILIT_SURE=0 timeout 20 bash "$SUT" emekli --adres https://bulgu.ornek.com --gerekce "Sayfa kapatıldı, artık yok" 2>&1)"; RC=$?
+esit "emekli de kilide uyar → rc 3" 3 "$RC"; esit "durum değişmedi" canli "$(alan "$D/bulgu.ornek.com.json" durum)"; wait "$TUTAN" 2>/dev/null
 
 echo "== T10: dogrula — kayıtlı sayfalar yeniden ölçülür =="
 kur; ekle https://bulgu.ornek.com; ekle https://fikir.ornek.com "Fikir Defteri" "Yeni iş fikirlerinin defteri" mihenk MIHENK

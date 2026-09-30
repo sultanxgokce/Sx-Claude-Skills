@@ -1,5 +1,5 @@
 $ bash canli-sayfa/scripts/canli-sayfa.test.sh
-# rc=0 sure=7.1s zaman=2026-09-30T11:11:53+03:00
+# rc=0 sure=15.0s zaman=2026-09-30T11:49:16+03:00
 --- stdout ---
 == T1: kapı arkasındaki canlı sayfa kayda girer ==
   ✓ rc 0
@@ -167,6 +167,17 @@ $ bash canli-sayfa/scripts/canli-sayfa.test.sh
   ✓ dosya aynen duruyor ([])
   ✓ şemasız hedef {"ad":"Bulgu","ne":"x"} → ekle rc 3
   ✓ dosya aynen duruyor ({"ad":"Bulgu","ne":"x"})
+== T9c: aynı sayfaya eşzamanlı yazım sıraya girer (denetim tur 3) ==
+  ✓ kilit başkasındayken beklemesiz ekle rc 3
+  ✓ sebep: kilit
+  ✓ yazmadı
+  ✓ kilit düşünce ekle rc 0
+  ✓ kayıt yazıldı
+  ✓ altı eşzamanlı yazım hepsi rc 0
+  ✓ tek kayıt dosyası
+  ✓ kayıt okunur ve sağlam
+  ✓ emekli de kilide uyar → rc 3
+  ✓ durum değişmedi
 == T10: dogrula — kayıtlı sayfalar yeniden ölçülür ==
   ✓ hepsi açılıyor → rc 0
   ✓ sayı doğru
@@ -199,5 +210,5 @@ $ bash canli-sayfa/scripts/canli-sayfa.test.sh
   ✓ kayıt dizini yokken liste rc 0
   ✓ sıfır sayfa
 
-════════ SONUÇ: PASS=184 · FAIL=0 ════════
+════════ SONUÇ: PASS=194 · FAIL=0 ════════
 --- stderr ---

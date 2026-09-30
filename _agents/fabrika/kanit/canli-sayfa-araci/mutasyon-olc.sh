@@ -44,6 +44,9 @@ M = {
  "31-tek-cumle-aranmiyor": ("if printf '%s' \"$2\" | grep -qE '[.!?;…][[:space:]]+[^[:space:]]'; then", "if false; then"),
  "32-tek-cumle-denetimi-cagrilmiyor": ('; tek_cumle_denetle "ne" "$ne"', ''),
  "35-semasiz-hedef-bozuk-sayilmiyor": ('if not isinstance(a, str) or not a: sys.exit(2)', 'if not isinstance(a, str) or not a: sys.exit(0)'),
+ "36-kilit-alinmiyor": ('flock -w "${CANLI_SAYFA_KILIT_SURE:-10}" 9 ||', 'true ||'),
+ "37-ekle-kilitsiz": ('    kilit_al "$f"    # hedef okuma + yazma tek kilit altında: aynı sayfaya eşzamanlı yazım sıraya girer\n', ''),
+ "38-emekli-kilitsiz": ('    kilit_al "$f"\n    hedef_kontrol "$f" "$a" "dokunulmadı"', '    hedef_kontrol "$f" "$a" "dokunulmadı"'),
  "24-eksik-alanli-kayit-menuye-geciyor": ('if not all(isinstance(k.get(a), str) and k[a] for a in ALAN): raise ValueError', 'pass'),
 }
 for ad, (a, b) in M.items():

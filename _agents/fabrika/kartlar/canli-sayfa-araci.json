@@ -14,6 +14,29 @@
   "sultan": false,
   "kanit_nerede": "Sultan 2026-09-29: 'bunu bir ai skill ve slash komutuna çevir ve tüm kutulara global dağıt'; 2026-09-30 D1: 'İkiye böl, yeniden gönder' (session_013fuJSNg65VkgQE4sJsQURS · beyan:SERDAR)",
   "oda": "",
-  "durum": "acik",
-  "gecmis": []
+  "durum": "tikandi",
+  "gecmis": [
+    {
+      "zaman": "2026-09-30T11:33:28+03:00",
+      "olay": "tikandi"
+    }
+  ],
+  "bitis": "2026-09-30T11:33:28+03:00",
+  "pr": "",
+  "puan": null,
+  "kanit_var": false,
+  "tikanma": {
+    "yol": "devam",
+    "neden": "3 turda 4/5 E; her tur tek gerçek kenar bulgusu, hepsi kapandı; kalan: aynı adrese eşzamanlı yazımda kilit"
+  },
+  "sultan_kararlari": [
+    {
+      "karar": "devam",
+      "oturum": "session_013fuJSNg65VkgQE4sJsQURS",
+      "soz": "Devam, son tur",
+      "beyan": "SERDAR",
+      "gerekce": "Kalan tek bulgu kilit eksikliği; 15 dakikalık düzeltme, eşzamanlı sınavla kanıtlanır",
+      "zaman": "2026-09-30T11:33:28+03:00"
+    }
+  ]
 }

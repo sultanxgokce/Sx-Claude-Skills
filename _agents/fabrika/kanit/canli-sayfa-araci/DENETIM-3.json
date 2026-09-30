@@ -1,0 +1,23 @@
+{
+  "tur": 3,
+  "is": "canli-sayfa-araci",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-09-30T11:20:13+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Araç; ekle, liste, emekli ve doğrula komutlarını, ölçüm kurallarını, tek cümle denetimini ve güçlü bir sınav takımını kurmuş. Önce aynı sayfaya eşzamanlı yazan iki kutunun birbirinin güncellemesini ezmesini önle; bunun dışında kartın istediği iş yapılmış ve kanıtı güçlü.",
+    "bulgular": [
+      {
+        "ne": "Aynı adrese iki kutu eşzamanlı yazarsa ikisi de eski hedefi güvenli görüp kendi geçici dosyasını hedefe taşıyabilir; son taşıyan diğer kutunun ad, açıklama, kutu ve ekleyen bilgisini sessizce ezer. Sayfa başına dosya düzeni yalnız farklı adreslerin çakışmasını önlüyor, kodun belirttiği eşzamanlı yazma güvencesini aynı sayfa için sağlamıyor.",
+        "kanit": "Akış `hedef_kontrol` ile hedefi okuyup denetledikten sonra kilit veya koşullu oluşturma olmadan JSON üretip `mv -fT` ile hedefin yerini alıyor. Dosya başındaki açıklama ise iki kutunun aynı anda yazmasının birbirinin kaydını ezmeyeceğini söylüyor; sınav ve mutasyon çıktılarında eşzamanlı iki süreç ölçümü bulunmuyor.",
+        "konum": "canli-sayfa/scripts/canli-sayfa.sh:8",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Hermetik sınav, mutasyon ölçümü ve gerçek ağ kullanan canlı prova hedef davranışların çoğunu gerçekçi verilerle destekliyor; önce kaydı yalnız aracın ana dalda bulunmadığını gösterdiğinden davranışsal bir önce/sonra ölçüm çifti yok. Ayrıca sunulan mutasyon çıktısı ilk 60 satırda kesildiği için yeni 35 numaralı mutasyonun tekil sonucu görünmüyor, fakat ana mutasyon komutu rc 0 ve yeni şemasız-hedef örnekleri sınav kodunda mevcut."
+  }
+}
