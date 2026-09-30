@@ -9,7 +9,7 @@ version: 2.0.0
 | Parça | Ne | Sağlam sayılma ölçüsü |
 |---|---|---|
 | konuşma odası | tmux `<kutu>-ana` | oturum var |
-| konuşma | `<kutu>-ana` içinde Claude (Sultan'ın ana konuşması) | Claude'un oturum kaydında `tmux=<kutu>-ana:` + süreç canlı |
+| konuşma | `<kutu>-ana` içinde Claude (Sultan'ın ana konuşması) | panenin **süreç ağacında canlı `claude`** (oturum kaydı yalnız KİMLİK için okunur) |
 | web kapısı | `kapi/sunucu.mjs` `:7681` → merkez (`terminal.mmepanel.com/<kutu>/`) — telefon ekranı (PWA), giriş (parola, imzalı çerez), mesaj/foto/tuş/Onar API'si. tmux `kapi-<kutu>` | `<taban>/giris` 200 · `<taban>/` girişsiz 302 |
 | terminal | ttyd yalnız UNIX soketinde (`/config/.terminal-onar/ttyd.sock`, TCP portu yok), kapı `<taban>/tty/` altında sunar. tmux `ttyd-<kutu>` | soket `/tty/` 200 |
 | kurtarıcı ajan | tmux `<kutu>-kurtarici` içinde ayrı Claude | aynı ölçü |
