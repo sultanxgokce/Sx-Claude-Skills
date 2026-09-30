@@ -1,4 +1,4 @@
 $ cmp kasif-tara/scripts/kasif-havuz-ekle.sh /config/.claude/skills/kasif-tara/scripts/kasif-havuz-ekle.sh
-# rc=0 sure=0.0s zaman=2026-09-30T12:08:12+03:00
+# rc=0 sure=0.0s zaman=2026-09-30T12:10:40+03:00
 --- stdout ---
 --- stderr ---

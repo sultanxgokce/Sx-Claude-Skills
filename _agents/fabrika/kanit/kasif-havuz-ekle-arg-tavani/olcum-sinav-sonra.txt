@@ -1,5 +1,5 @@
 $ bash kasif-tara/scripts/kasif-havuz-ekle.test.sh
-# rc=0 sure=3.4s zaman=2026-09-30T12:08:09+03:00
+# rc=0 sure=3.4s zaman=2026-09-30T12:10:37+03:00
 --- stdout ---
 == T1: geçerli aday eklenir + cell(s01) + dedup_key alanları doğar ==
   ✓ eklenen=1

@@ -18,8 +18,11 @@ pozitif kontrol yoktu. Deftere düzeltme yazıldı.)
 | `kasif-tara/scripts/kasif-havuz-ekle.test.sh` | T-ARG: 1200 kayıtlık havuz + 900 kayıtlık kütüphane + 1500 kayıtlık tekrar defteri; fikstürün tavanı AŞTIĞI ölçülür, aşmıyorsa kapı kendini kırmızıya çeker |
 | `kasif-tara/SKILL.md` | sürüm 1.4.1 → 1.4.2 + sınır notu |
 
-`catalog.json`'daki sürüm satırına bu işte dokunulmadı: dosya iki açık PR'da (#256, #33) değişiyor; kayıt sürümü
-#256 birleşince ayrı küçük işle 1.4.2'ye çekilir (depo kapısı sürümü SKILL.md'den okur, kataloğu değil — ölçüldü).
+`catalog.json`'da yalnız `kasif-tara` sürüm satırı 1.4.2 yapıldı (denetim tur 1: sürüm artışı depo genelinde eksikti).
+Dosya #256/#33'te de açık ama farklı satırlar; birleştirmede çakışmaz.
+
+## Denetim turları
+- **Tur 1 (4/5 E):** katalog sürümü eski kalmıştı → düzeltildi; kanıta katalog↔SKILL.md sürüm eşitliği ölçümü eklendi.
 
 ## Kanıt
 | Ölçüm | Ne gösterir |
@@ -31,5 +34,4 @@ pozitif kontrol yoktu. Deftere düzeltme yazıldı.)
 
 ## Bu işte OLMAYAN
 - Kurulum yok (kurulu kopya zaten yeni; bu iş kaynağı ona eşitler). Birleşince `kurulu = kaynak` ölçümü yeniden yapılır, NÂZIR'a yazılır.
-- Katalog sürüm satırı (yukarıda).
 - "Kurulu kopyada yapılan düzeltme kaynağa nasıl otomatik döner" sorusu bu işin değil; aday havuzuna yazıldı.
