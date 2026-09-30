@@ -1,0 +1,19 @@
+{
+  "is": "kasif-havuz-ekle-arg-tavani",
+  "cumle": "kasif-havuz-ekle aracında havuz listelerinin tek argüman tavanına (128 KiB) takılması: kurulu kopyada yapılmış --slurpfile düzeltmesi kaynak kopyaya işlenir, sürüm artar, sınav kanıtlanır",
+  "istedi": "NÂZIR",
+  "aldi": "SERDAR",
+  "zaman": "2026-09-30T12:02:22+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "ÇAVUŞ tetik 212239d9 · NÂZIR mektubu: ortak klasörde düzeltildi (Sultan onayı, kör 5·E, 47/47), eşitleme geri alabilir; ölçüm: kurulu↔kaynak 19 satır fark",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

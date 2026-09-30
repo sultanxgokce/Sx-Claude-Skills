@@ -1,0 +1,23 @@
+{
+  "tur": 1,
+  "is": "kasif-havuz-ekle-arg-tavani",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-09-30T12:09:51+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Tek argüman tavanına yol açan üç büyük JSON aktarımı dosya tabanlı jq girdisine çevrilmiş, 1.4.2 sürümü yazılmış ve yeni sınav eski araçta 3 tavan kapısını düşürürken yeni araçta bütün takımı geçiriyor. Çözüm talebin özünü karşılıyor; ancak katalog sürümünün bilerek eski bırakılması sürüm artışını depo genelinde eksik kılıyor, önce bu tutarsızlık çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Sürüm SKILL.md içinde 1.4.2'ye çıkarılmış olsa da catalog.json sürüm kaydı bilerek güncellenmemiş; iş kartındaki koşulsuz “sürüm artar” talebi depo genelinde tamamlanmamış.",
+        "kanit": "KAPSAM.md açıkça “catalog.json'daki sürüm satırına bu işte dokunulmadı” ve bunun daha sonra ayrı bir işle 1.4.2'ye çekileceğini söylüyor; diff yalnız kasif-tara/SKILL.md sürümünü 1.4.1→1.4.2 değiştiriyor. version-lint çıktısı sadece “SKILL.md + version tam” diyor, katalog sürüm eşitliğini kanıtlamıyor.",
+        "konum": "_agents/fabrika/kanit/kasif-havuz-ekle-arg-tavani/KAPSAM.md:23; kasif-tara/SKILL.md:3; olcum-surum-satiri-sonra.txt",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Pozitif sınav rc=0; eski araç ölçümü 44 geçiş ve yalnız 3 tavan hatasıyla ayırt ediciliği gösteriyor, kurulu araç ile kaynak betiği cmp sonucu eşit ve depo kapıları yeşil. Buna karşılık baştaki 19 satır fark yalnız KAPSAM.md anlatımı olarak verilmiş, araç ölçümlü bir önce/sonra çifti yok; ayrıca ilk 60 satırlık pozitif çıktı T-ARG bölümünü göstermese de negatif karşılaştırma ve toplam rc=0 bu iddiayı makul ölçüde destekliyor."
+  }
+}
