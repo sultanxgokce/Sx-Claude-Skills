@@ -22,7 +22,8 @@ Sultan'ın isteği (29 Eylül 2026): canlı sayfalar sürekli kuruluyor, adresle
 menü olacak; yeni sayfa kuruldukça oraya eklenecek. Menüyü elle kimse yazmaz: **menü kayıttan üretilir**,
 kaydı da sayfayı kuran ajan yazar.
 
-> **Durum (sürüm 1.0.0):** kayıt ve araç hazır. Kokpit menüsü ayrı işte kuruluyor; o iş canlıya çıkana kadar
+> **Durum (sürüm 1.0.0):** kayıt biçimi ve kural hazır; araç ayrı işle (PR #255) gelir — o birleşmeden komutlar
+> çalışmaz, önce `ls scripts/canli-sayfa.sh` ile var mı bak. Kokpit menüsü de ayrı işte kuruluyor; o iş canlıya çıkana kadar
 > kayıt `liste` komutuyla görülür. Sultan'a "menüye eklendi" DEME; "kayda girdi" de.
 
 "Canlı sayfa" = Sultan'ın tarayıcıdan bir adresle açtığı her şey. Kutunun çalışma ekranı (kutuya girilen adres)

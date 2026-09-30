@@ -1,14 +1,14 @@
 {
   "is": "canli-sayfa-beceri-kaydi",
   "arac": "kanit.py/0.1.0",
-  "guncelleme": "2026-09-30T11:19:41+03:00",
+  "guncelleme": "2026-09-30T11:45:55+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "beceri-ana-dalda-var-mi",
       "asama": "once",
       "dosya": "olcum-beceri-ana-dalda-var-mi-once.txt",
-      "sha256": "d15a4f79061130e0e593307b8e46be0434f03c8aaae3706548c273b680e505e9",
+      "sha256": "e9d00faf87b470d03c2c07129ed3e5c224ec7b58536f284d2a61b538f5f69b14",
       "komut": [
         "git",
         "cat-file",
@@ -17,7 +17,7 @@
       ],
       "rc": 128,
       "renk": "kirmizi",
-      "zaman": "2026-09-30T11:19:41+03:00",
+      "zaman": "2026-09-30T11:45:54+03:00",
       "sure_sn": 0.0
     },
     {
@@ -25,22 +25,22 @@
       "etiket": "kayit-korunumu",
       "asama": "sonra",
       "dosya": "olcum-kayit-korunumu-sonra.txt",
-      "sha256": "b6de472d68274d6cd0dd6f989db6b3053f98a12b7f8043cfa427f26e3783994d",
+      "sha256": "e03eaeefcbac422cfdc1d8276f46642ccfb3f920d4a9b168ab855f070eca245d",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/canli-sayfa-beceri-kaydi/kayit-korunumu-olc.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-09-30T11:19:41+03:00",
-      "sure_sn": 0.6
+      "zaman": "2026-09-30T11:45:55+03:00",
+      "sure_sn": 0.7
     },
     {
       "tur": "olcum",
       "etiket": "depo-kayit-esligi",
       "asama": "sonra",
       "dosya": "olcum-depo-kayit-esligi-sonra.txt",
-      "sha256": "4fcd9feefa98a759d05945d52cfa0d128da8fca74ad7cbd32d2d45c46b74a766",
+      "sha256": "07a72d006953f16621810bbd45f74f4cbf2ad772febc155eaf34fb3cf9c46ec1",
       "komut": [
         "node",
         "ahi/schema/validate-repo.mjs",
@@ -49,7 +49,7 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-09-30T11:19:41+03:00",
+      "zaman": "2026-09-30T11:45:55+03:00",
       "sure_sn": 0.0
     },
     {
@@ -57,7 +57,7 @@
       "etiket": "surum-satiri",
       "asama": "sonra",
       "dosya": "olcum-surum-satiri-sonra.txt",
-      "sha256": "80778281a232fa1452246b92724c3c5a4f0a8203eed8fc9cd1d7584c36217786",
+      "sha256": "bdcb09100bbb6e17cdc98b4d40288eb5ca57c5ff05327681d98b0dea52e4c3f7",
       "komut": [
         "node",
         "ahi/schema/version-lint.mjs",
@@ -65,7 +65,7 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-09-30T11:19:41+03:00",
+      "zaman": "2026-09-30T11:45:55+03:00",
       "sure_sn": 0.0
     },
     {
@@ -77,8 +77,8 @@
       "kaynak": "/config/projects/_wt/Sx-Claude-Skills-canli-sayfa-beceri-kaydi/_agents/fabrika/kanit/canli-sayfa-beceri-kaydi/KAPSAM.md",
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-09-30T11:19:41+03:00"
+      "zaman": "2026-09-30T11:45:55+03:00"
     }
   ],
-  "imza": "05ed1e5db03b0fe2f631bd9ec0c5f85adeff5e30d11b856ce35c8f94da8cde12"
+  "imza": "566f9478c35f87f966a14fdca77a58abd59ed1663ed577bef3a038cb0ac4c076"
 }
