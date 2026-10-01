@@ -26,6 +26,7 @@ kos() { # $1 = default-shell değeri → onar.sh rc'si + günlük
   #    Yarış sessizdi: ayar tutmayınca kapı hesabın (geçerli) kabuğunu okuyup onarımı
   #    sonuna kadar koşturuyor, 124 dönüyordu — ve eski S4 onu YEŞİL sayıyordu.
   _sok_no=$((_sok_no+1)); S="$T/sok$_sok_no"
+  : > "$T/durum/gunluk.log" 2>/dev/null   # her koşum kendi günlüğünü yazsın
   tmux -S "$S" -f /dev/null new-session -d -s x "sleep 30" 2>/dev/null
   tmux -S "$S" set -g default-shell "$1" 2>/dev/null
   # 🔴 FİKSTÜRÜN KENDİSİ ÖLÇÜLÜR (pozitif kontrol). Ayar tutmadıysa sınav hüküm VERMEZ:
@@ -47,11 +48,20 @@ kapi "S2 günlükte sebep yazılı" "1" "$(grep -c 'çalıştırılabilir DEĞİ
 kapi "S3 günlükte ÇARE satırı var" "1" "$(grep -c 'default-shell /bin/bash' "$T/durum/gunluk.log" 2>/dev/null || echo 0)"
 
 echo "── gerçek kabukta DURMAMALI (kapı süs olmasın)"
+# 🔴 KAPININ KARARINI ÖLÇ, PROGRAMIN SONUCUNU DEĞİL (CI dersi, 2026-10-01).
+#    Önce "çıkış kodu 3 değilse geçti" diyordu: zaman aşımı (124) da 3 değil → sahte yeşil.
+#    Sonra 124'ü düşürdüm: bu kez GEÇERLİ kabukta da kırmızı oldu, çünkü kabuk geçerliyken
+#    onarım gerçekten iş yapmaya kalkıyor ve bu makinede (ttyd yok) süreyi aşıyor. İkisi de
+#    yanlış soruydu: bu kart ONARIMIN BİTMESİNİ değil, KAPININ DURDURUP DURDURMADIĞINI
+#    ölçmek için var. Ölçü artık kapının kendi kararı: günlükteki DUR satırı.
 rc=$(kos /bin/bash)
-# 🔴 "3 DEĞİL" YETMEZ: zaman aşımı (124) da 3 değildir ve eski hâli onu YEŞİL sayıyordu.
-#    Kapı artık hem durmamayı hem ASILMAMAYI ölçer; fikstür tutmadıysa açıkça söyler.
-kapi "S4 /bin/bash ile kabuk kapısına TAKILMAZ (ve asılmaz)" "e" \
-     "$(case "$rc" in 3) echo h ;; 124) echo "asildi" ;; FIKSTUR-TUTMADI) echo "olculemedi" ;; *) echo e ;; esac)"
+dur_sayisi=$(grep -c 'K0 DUR' "$T/durum/gunluk.log" 2>/dev/null); dur_sayisi=${dur_sayisi:-0}
+kapi "S4 /bin/bash ile kapı DURDURMAZ (fikstür tuttu mu önce o ölçüldü)" "0" \
+     "$([ "$rc" = "FIKSTUR-TUTMADI" ] && echo olculemedi || echo "$dur_sayisi")"
+# S4 tautoloji değil: aynı ölçü sahte kabukta 1 dönmeli (S1'in günlük tarafı).
+kos /bin/false >/dev/null
+kapi "S4b aynı ölçü SAHTE kabukta DUR yazar (S4 boş kapı değil)" "1" \
+     "$(grep -c 'K0 DUR' "$T/durum/gunluk.log" 2>/dev/null; true)"
 
 echo "── hemen ÇIKAN sahte kabuk da sahtedir (bağımsız göz, tur 1)"
 # 🔴 Eski ölçüt yalnız adı false/nologin ile biten yolları eliyordu ve çalıştırılabilirlik
