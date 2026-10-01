@@ -18,11 +18,27 @@ SIFRE_YOK=0
 #    ve her tırmanış yeni bir Claude süreci (yani bellek) demektir.
 # 🔴 KENDİLİĞİNDEN DÜZELTMİYORUZ, DURUYORUZ: `.tmux.conf` kutu genelinde ORTAK bir dosyadır;
 #    başkasının dosyasına sessizce yazmak onarımın işi değil (öneri: RAHVAN).
+# 🔴 İKİ DÜZELTME (bağımsız göz, tur 1 — ikisi de haklıydı):
+#  1) ESKİ HÂLİ ASIL VAKAYI KORUMUYORDU. tmux sunucusu YOKKEN `$SHELL`e düşüyordu; ama
+#     $SHELL ÇAĞIRANIN ortamıdır, hesabın kabuğu değil. Yeni doğmuş bir kutuda hesabın
+#     kabuğu /bin/false iken, onarımı geçerli bir kabuktan çalıştırmak kapıyı AÇIYORDU —
+#     yani kapı tam da yazıldığı vakada sessiz kalıyordu. Artık sunucu yoksa HESABIN
+#     kabuğu okunur (parola dosyası), ortam değişkeni DEĞİL.
+#  2) "ÇALIŞTIRILABİLİR" KABUK DEMEK DEĞİL. Eski ölçüt yalnız adı false/nologin ile biten
+#     yolları eliyor ve çalıştırılabilirlik bitine bakıyordu; /bin/true gibi hemen çıkan
+#     bir dosya GEÇERLİ sayılıyordu ve aynı "oturum doğar doğmaz ölür" hâlini üretirdi.
+#     Artık kabuğun kabuk gibi DAVRANDIĞI ölçülür: bir komut verilip çıktısı okunur.
+_hesap_kabugu() {
+  local u; u="$(id -un 2>/dev/null)" || return 1
+  getent passwd "$u" 2>/dev/null | awk -F: '{print $7}' | head -1
+}
 kabuk_gecerli_mi() {
   local k; k=$(tmux show -gv default-shell 2>/dev/null)
-  [ -n "$k" ] || k="${SHELL:-}"
+  [ -n "$k" ] || k="$(_hesap_kabugu)"
   case "$k" in ""|*/false|*/nologin) return 1 ;; esac
-  [ -x "$k" ]
+  [ -x "$k" ] || return 1
+  # Davranış ölçümü: çıkış kodu YETMEZ (/bin/true da 0 döner), ÇIKTI okunur.
+  [ "$("$k" -c 'printf kabuk' 2>/dev/null)" = "kabuk" ]
 }
 if ! kabuk_gecerli_mi; then
   gunluk "K0 DUR: tmux varsayılan kabuğu çalıştırılabilir DEĞİL ($(tmux show -gv default-shell 2>/dev/null || echo tanımsız)) — oturumlar doğar doğmaz ölür"

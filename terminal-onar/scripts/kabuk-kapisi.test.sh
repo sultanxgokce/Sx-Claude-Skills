@@ -34,6 +34,30 @@ echo "── gerçek kabukta DURMAMALI (kapı süs olmasın)"
 rc=$(kos /bin/bash)
 kapi "S4 /bin/bash ile kabuk kapısına TAKILMAZ" "e" "$([ "$rc" != 3 ] && echo e || echo h)"
 
+echo "── hemen ÇIKAN sahte kabuk da sahtedir (bağımsız göz, tur 1)"
+# 🔴 Eski ölçüt yalnız adı false/nologin ile biten yolları eliyordu ve çalıştırılabilirlik
+#    bitine bakıyordu. /bin/true adı masum, biti var, çıkış kodu 0 — ama kabuk DEĞİL:
+#    oturum yine doğar doğmaz ölür. Kapı adı değil DAVRANIŞI ölçmeli.
+kapi "S5 /bin/true ile de onarım durur (çıkış kodu yetmez, çıktı ölçülür)" "3" "$(kos /bin/true)"
+
+echo "── tmux SUNUCUSU YOKKEN hesabın kabuğu okunur (asıl vaka: yeni doğmuş kutu)"
+# 🔴 BULGUNUN ÖZÜ: eski kod sunucu yokken $SHELL'e düşüyordu. $SHELL ÇAĞIRANIN ortamıdır;
+#    onarımı geçerli bir kabuktan çalıştırmak kapıyı açıyordu — yani kapı tam da yazıldığı
+#    vakada (yeni kutu, hesabın kabuğu sahte) sessiz kalıyordu.
+#    Burada gövdeyi doğrudan ölçüyoruz: tmux hiç yokmuş gibi davran, $SHELL GEÇERLİ olsun,
+#    hesabın kabuğu SAHTE olsun → kapı DURDURMALI.
+govde_olc() { # $1 = sahte hesap kabuğu → kabuk_gecerli_mi rc
+  env SHELL=/bin/bash bash -c '
+    tmux() { return 1; }                       # sunucu YOK
+    _hesap_kabugu() { printf "%s" "'"$1"'"; }  # hesabın kabuğu (parola dosyası yerine)
+    '"$(sed -n "/^kabuk_gecerli_mi()/,/^}/p" "$KOK/scripts/onar.sh")"'
+    kabuk_gecerli_mi; echo $?'
+}
+kapi "S6 sunucu yok + hesabın kabuğu /bin/false → kapı DURDURUR (\$SHELL geçerli olsa bile)" \
+     "1" "$(govde_olc /bin/false | tail -1)"
+kapi "S7 sunucu yok + hesabın kabuğu /bin/bash → kapı GEÇİRİR (S6 tautoloji değil)" \
+     "0" "$(govde_olc /bin/bash | tail -1)"
+
 tmux -S "$S" kill-server 2>/dev/null; rm -r -- "$T" 2>/dev/null
 echo
 echo "SONUÇ: $gecen geçti · $kalan kaldı"
