@@ -1,0 +1,23 @@
+{
+  "tur": 2,
+  "is": "canli-sayfa-kokpit-kurali",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-01T18:12:05+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "İstenen 1.1.0 kuralı metne doğru yönde işlenmiş; alan adı ayrımı, kokpit içi açılış, çerçeve yükümlülüğü ve bayat notun kaldırılması ölçülmüş. Ancak yalnız geçici hedefe kurulum kanıtlanmış; gerçek çağıranın kullandığı beceriye kurulduğu gösterilmediği için önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "Değişikliğin gerçek kullanım hedefinde kurulduğu kanıtlanmamış; ölçüm açıkça geçici hedefe kurulum yapıyor. Bu nedenle depodaki ve geçici kopyadaki 1.1.0 doğru olsa da ajanların fiilen çağırdığı kurulumun hâlâ eski sürümde kalması mümkün.",
+        "kanit": "Kurulum kaydının etiketi `gecici-hedefe-gercek-kurulum`; çıktı yalnız bu hedefte `kurulu-surum: version: 1.1.0`, `kurulu=kaynak: evet` ve `calisiyor: ── 20 sayfa` bildiriyor. Küresel/üretim çağırma hedefinin yolu veya oradaki sürüm ölçümü yok.",
+        "konum": "olcum-gecici-hedefe-gercek-kurulum-sonra.txt",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. `kural-iddialari` önce/sonra çifti sekiz yeni metinsel iddianın kırmızıdan yeşile geçtiğini, ayrıca mevcut kokpit dallarının üç kontrolden geçtiğini gösteriyor; fakat kurulum ölçümü gerçek çağıran yerine geçici hedefte olduğundan devreye alma kanıtı eksik, UI karesi de bulunmuyor."
+  }
+}

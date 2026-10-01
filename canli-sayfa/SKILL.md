@@ -1,30 +1,39 @@
 ---
 name: canli-sayfa
 type: tool
-version: 1.0.0
+version: 1.1.0
 description: >
-  Sultan bir kutudan ya da ajandan CANLI bir sayfa istediğinde (tarayıcıdan adresle açılan her şey:
-  pano, liste, rapor sayfası, uygulama, tanıtım sayfası) uyulacak FİLO KURALI ve onun aracı.
-  Kural: canlıya çıkan her sayfa ortak kayda yazılır; kayıt canlı sayfaların TEK listesidir ve Sultan'ın
-  menüsü bu listeden üretilir. Kayıt adresi o an ölçer: açılmayan sayfa
-  kayda girmez, giriş kapısı olmadan açılan sayfa onaysız kayda girmez. Şu durumlarda kullan: yeni bir
-  canlı adres açtın · var olan sayfanın adı/işi değişti · bir sayfayı kaldırdın · "canlı sayfalarımız
-  neler" diye soruldu · "/canli-sayfa". Kayıtsız canlı sayfa bırakmak kural ihlalidir.
+  Sultan bir kutudan ya da ajandan CANLI bir UI, sayfa, pano, ekran, demo ya da rapor sayfası istediğinde
+  (tarayıcıdan adresle açılan her şey) uyulacak FİLO KURALI ve onun aracı. Kural (Sultan, 1 Ekim 2026):
+  Sultan'ın canlı sayfaları tek yerden yayınlanır ve tek yerden ulaşılır — kokpitin "Canlı sayfalar"
+  menüsü (kokpit.mmepanel.com/#/sayfalar). Menü bu becerinin kaydından üretilir: canlıya çıkan her sayfa
+  kayda yazılır, kayda girmeyen sayfa Sultan için yoktur. Kendi alan adımızdaki (.mmepanel.com) sayfa
+  kokpitin İÇİNDE açılır — sayfanın sunucusu kokpitin çerçevesine izin vermelidir; .mukarnas.net ya da
+  başka alandaki sayfa ayrı sekmede açılır. Şu durumlarda kullan: Sultan "canlı bir sayfa / ekran / pano
+  istiyorum" dedi · yeni bir canlı adres açtın · var olan sayfanın adı/işi değişti · bir sayfayı kaldırdın ·
+  "canlı sayfalarımız neler" diye soruldu · "/canli-sayfa". Kayıtsız canlı sayfa bırakmak kural ihlalidir.
 ---
 
 # /canli-sayfa — canlı sayfa kuralı ve kaydı
 
 ## Kural (bütün kutular, bütün ajanlar)
 
-> **Canlıya çıkan her sayfa kayda girer. Kayda girmeyen sayfa Sultan için yoktur.**
+> **Sultan canlı bir UI ya da sayfa istediğinde o sayfa kokpitin "Canlı sayfalar" menüsünden yayınlanır ve oradan ulaşılır.
+> Canlıya çıkan her sayfa kayda girer; kayda girmeyen sayfa Sultan için yoktur.**
 
-Sultan'ın isteği (29 Eylül 2026): canlı sayfalar sürekli kuruluyor, adresleri dağınık kalıyor. Kokpitte tek bir
-menü olacak; yeni sayfa kuruldukça oraya eklenecek. Menüyü elle kimse yazmaz: **menü kayıttan üretilir**,
-kaydı da sayfayı kuran ajan yazar.
+Sultan'ın sözü (1 Ekim 2026): *"Sultan canlı bir UI veya page istediğinde burada yayınlanacak veya buradan ulaşılacak. Eğer domain
+.mmepanel.com şeklinde ise buraya direk kendinden olarak (tıkladığımda başka bir siteye yönlenmeyecek, bu sayfa içinde açılacak);
+eğer .mukarnas.net veya başka domainse ayrı sekmede açılabilir."* İlk istek 29 Eylül: tek menü, yeni sayfa kuruldukça oraya eklenir.
+Menüyü elle kimse yazmaz: **menü kayıttan üretilir**, kaydı da sayfayı kuran ajan yazar.
 
-> **Durum (sürüm 1.0.0):** kayıt biçimi ve kural hazır; araç ayrı işle (PR #255) gelir — o birleşmeden komutlar
-> çalışmaz, önce `ls scripts/canli-sayfa.sh` ile var mı bak. Kokpit menüsü de ayrı işte kuruluyor; o iş canlıya çıkana kadar
-> kayıt `liste` komutuyla görülür. Sultan'a "menüye eklendi" DEME; "kayda girdi" de.
+| Sayfanın alanı | Menüde ne olur | Sayfayı kuranın yükümlülüğü |
+|---|---|---|
+| `*.mmepanel.com` | **kokpitin içinde** açılır (çerçeve, `#/sayfa/…`); "ayrı sekmede aç" izi hep durur | sunucu kokpitin çerçevesini **yasaklamamalı**: `X-Frame-Options: SAMEORIGIN/DENY` koyma; çerçeve korumasını `Content-Security-Policy: frame-ancestors 'self' https://kokpit.mmepanel.com` ile ver |
+| `*.mukarnas.net` ve başka alan | ayrı sekmede açılır | — |
+| kokpitin kendisi | kokpit ana ekranına götürür | — |
+
+Çerçeveyi yasaklayan sayfa kokpitte **boş** görünür (menü ayrı sekme izini ve sebebi yazar). Bunu bilerek bırakma: kayda yazarken
+kendi sunucunun başlığına bak, yasak varsa yukarıdaki satırla değiştir; değiştiremiyorsan (başkasının sunucusu) SERDAR'a yaz.
 
 "Canlı sayfa" = Sultan'ın tarayıcıdan bir adresle açtığı her şey. Kutunun çalışma ekranı (kutuya girilen adres)
 bu kaydın konusu değildir; o, kokpitte zaten kutu kartındadır.
@@ -32,7 +41,7 @@ bu kaydın konusu değildir; o, kokpitte zaten kutu kartındadır.
 ## Sultan canlı sayfa istediğinde — dört adım, sıra değişmez
 
 1. **Kur.** Sayfayı kutunun kendi kurallarıyla yap.
-2. **Yayına çıkar — önce giriş kapısı, sonra adres.** Kapı arkasında olması gereken sayfa, kapısı kurulmadan
+2. **Yayına çıkar — önce giriş kapısı, sonra adres.** `.mmepanel.com` adresinde sunucu kokpitin çerçevesine izin versin (üstteki tablo). Kapı arkasında olması gereken sayfa, kapısı kurulmadan
    adres almaz. Adres ve giriş kapısı açmak merkezin işidir: izole kutudaysan kendin açmaya çalışma,
    SERDAR'a istek yaz (kutunun teslimat yolu). Herkese açık olacak sayfa Sultan'ın açık kararını ister.
 3. **Kayda yaz.**
@@ -41,7 +50,7 @@ bu kaydın konusu değildir; o, kokpitte zaten kutu kartındadır.
      --adres https://ornek.mmepanel.com --ad "Bulgu Defteri" \
      --ne "Kutulardan gelen bulguların tek listesi" --kutu <kutunun adı> --ekleyen <SENİN ADIN>
    ```
-4. **Gör ve söyle.** `canli-sayfa.sh liste` ile kaydı gör; Sultan'a adresi verirken "canlı sayfa kaydına girdi" de.
+4. **Gör ve söyle.** `canli-sayfa.sh liste` ile kaydı gör; Sultan'a "kokpitte Canlı sayfalar menüsünde" de; adresi de ver.
    Kayıt reddedildiyse sebebini olduğu gibi söyle, "girdi" deme.
 
 Sayfa kalktıysa: `canli-sayfa.sh emekli --adres … --gerekce "…"`. Adı ya da işi değiştiyse aynı adresle yeniden `ekle`.
