@@ -1,0 +1,23 @@
+{
+  "tur": 1,
+  "is": "canli-sayfa-araci",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-09-30T10:37:38+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Araç ekle, liste, emekli ve doğrula yollarını; ölçüm, tek cümle sınaması ve geniş mutasyon sınavıyla birlikte kurmuş. Önce bozuk hedef kaydın sessizce ezilmesini çöz; bunun dışında kanıt güçlü ve talep edilen bölünmüş karta uygun.",
+    "bulgular": [
+      {
+        "ne": "Hedef dosyada bozuk JSON varsa araç bunu çakışma saymıyor ve ekle komutu mevcut kaydı sessizce ezebiliyor; delil olarak tutulması amaçlanan kayıt kaybolabilir.",
+        "kanit": "ayni_adres_mi içindeki JSON okuma hatası `except Exception: sys.exit(0)` ile güvenli kabul ediliyor; ekle yolu bu sonuçtan sonra aynı dosyayı `yaz` ile değiştiriyor. Sınav T9 bozuk kayıtların listede görünmesini ölçüyor, fakat hedef ada denk gelen bozuk kaydın ekle sırasında korunmasını sınamıyor.",
+        "konum": "canli-sayfa/scripts/canli-sayfa.sh:74",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Hermetik sınav yeşil, 32 mutasyonun yakalandığı ölçülmüş ve gerçek ağla üç sayfa, olumsuz adres, açık sayfa koruması ile doğrulama denenmiş. Ancak klasik aynı iddiaya ait önce/sonra ölçüm çifti yok: önce kaydı yalnız dosyanın origin/main'de bulunmadığını, sonra kayıtları ise davranışı gösteriyor; buna rağmen canlı prova ve mutasyon kanıtı işlevsel iddialar için güçlü."
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "tur": 1,
+  "is": "canli-sayfa-kokpit-kurali",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-01T18:10:06+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "İstenen 1.1.0 kuralı beceri metnine işlenmiş; .mmepanel.com sayfaları kokpit içinde, diğer alanlar ayrı sekmede tarif edilmiş ve bayat durum notu kaldırılmış. Ancak değişiklik gerçek kullanım yerine kurulmamış: kuru koşu hâlâ “1 planlandı” ve “uygulamak için --apply” diyor; önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "1.1.0 değişikliği gerçek kullanım yerine uygulanmamış; yalnız kuru kurulum kontrol edilmiş. Bu nedenle ajanların çağırdığı küresel becerinin hâlâ 1.0.0 kalması mümkün ve talep fiilen devreye alınmış sayılmaz.",
+        "kanit": "Kuru kurulum çıktısı “CHECK (dry-run)”, “canli-sayfa → _global: güncelle v1.0.0 → v1.1.0”, “1 planlandı” ve “uygulamak için: node sync-skills.mjs --apply” diyor.",
+        "konum": "olcum-kuru-kurulum-sonra.txt",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Yeni davranış için ölçüm semantik olarak yetersiz; üç anahtar metnin toplam sayısını sayıyor, alan adına göre kokpit içi/ayrı sekme ayrımını ve çerçeve kuralının doğru kurulmasını sınamıyor.",
+        "kanit": "Sonra komutundaki tek kontrol `grep -cE 'version: 1.1.0|kokpitin İÇİNDE|frame-ancestors'` ve sonucu yalnız `3`; davranış dallarını doğrulayan ayrı iddialar veya çağıran sistem testi yok.",
+        "konum": "olcum-surum-ve-kural-sonra.txt",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sağlam ve sarı kayıt yok; önce/sonra ölçüm çifti sürüm, üç metin izi ve eski durum notunun kalktığını gösteriyor. Fakat gerçekçi UI karesi/video yok, alan adı dallarının davranış ölçümü yok ve kurulum kaydı yalnız dry-run: yazılan kuralın çağrılan küresel beceriye kurulduğu kanıtlanmamış."
+  }
+}

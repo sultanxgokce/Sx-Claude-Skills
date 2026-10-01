@@ -1,0 +1,26 @@
+$ bash _agents/fabrika/kanit/canli-sayfa-araci/canli-prova.sh
+# rc=0 sure=2.6s zaman=2026-09-30T12:01:41+03:00
+--- stdout ---
+✓ bulgu sayfası kayda girdi (rc 0)
+     ✓ kayda girdi: Bulgu Defteri · https://bulgu.mmepanel.com · giriş: kapali · kutu: merkez
+✓ fikir sayfası kayda girdi (rc 0)
+     ✓ kayda girdi: Fikir Defteri · https://fikir.mmepanel.com · giriş: kapali · kutu: mihenk
+✓ kokpit kayda girdi (rc 0)
+     ✓ kayda girdi: Kokpit · https://kokpit.mmepanel.com · giriş: kapali · kutu: merkez
+✓ olmayan adres reddedildi (rc 3)
+     ✗ CANLI DEĞİL ya da ölçülemedi (canli-degil 000): https://boyle-bir-sayfa-yok-7f3a.mmepanel.com — sayfa açılmadan kayda girmez
+✓ kapısız açılan sayfa onaysız reddedildi (rc 4)
+     ✗ bu sayfa GİRİŞ KAPISI OLMADAN açılıyor (acik 200): https://www.cloudflare.com — bilerek herkese açıksa --herkese-acik evet ile yeniden kaydet; değilse önce giriş kapısını kur
+✓ bulgu: giriş kapalı ölçüldü
+✓ fikir: giriş kapalı ölçüldü
+✓ kokpit: giriş kapalı ölçüldü
+✓ liste üç sayfayı gösteriyor (rc 0)
+     canlı sayfalar · kayıt: /tmp/canli-sayfa-prova.uZUvM1/kayit
+       merkez     Bulgu Defteri                https://bulgu.mmepanel.com  (kapı arkasında)
+                  Kutulardan gelen bulguların tek listesi
+✓ menü biçiminde 3 sayfa
+✓ dogrula: üçü de açılıyor, kapıları yerinde (rc 0)
+     ✓ Bulgu Defteri · https://bulgu.mmepanel.com (kapali 302)
+     ✓ Kokpit · https://kokpit.mmepanel.com (kapali 302)
+     ✓ Fikir Defteri · https://fikir.mmepanel.com (kapali 302)
+--- stderr ---

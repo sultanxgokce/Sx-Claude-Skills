@@ -1,0 +1,16 @@
+{
+  "tur": 4,
+  "is": "canli-sayfa-araci",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-09-30T12:02:48+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Araç; ekle, liste, emekli ve doğrula komutlarını, ölçüm kurallarını, tek cümle denetimini, dosya başına kilidi ve bunları sınayan mutasyon takımını kurmuş. Önceki turun eşzamanlı yazım açığı hem ekle hem emekli akışında kapatılmış; eldeki kod ve yeşil ölçümler üretimi engelleyen bir sorun göstermiyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Hermetik sınav, gerçek ağ kullanan canlı prova, depo kapıları ve mutasyon komutu yeşil; T9c kodu kilit alınamaması, kilit sonrası yazım, altı eşzamanlı yazım ve emekli kilidini açıkça sınıyor, mutasyon tanımları da kilidin alınmasını ve iki yazma yolundaki çağrıları ayrı ayrı bozuyor. Ancak yayımlanan sınav ve mutasyon çıktıları ilk 60 satırla kesildiği için T9c ile 36-38 mutasyonlarının tekil sonuçları doğrudan görünmüyor; bunlar yalnız bütün komutun rc 0 sonucu ve sunulan sınav kaynak koduyla destekleniyor. Davranışsal bir önce/sonra ölçüm çifti de yok; önce kaydı yalnız dosyanın ana dalda bulunmadığını gösteriyor."
+  }
+}

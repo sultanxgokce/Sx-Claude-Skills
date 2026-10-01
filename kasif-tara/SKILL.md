@@ -1,6 +1,6 @@
 ---
 name: kasif-tara
-version: 1.4.1
+version: 1.4.2
 description: >
   KAŞİF'in el-kitabı: DİVAN'ın işine yarayacak konularda (_agents/kasif/konular.md — Sultan-ayarlı) web'i
   tarayıp ham-malzeme (fikir/fırsat) toplar ve YALNIZ bulgu-havuzuna yazar (<skill-dizini>/scripts/kasif-havuz-ekle.sh,
@@ -159,3 +159,6 @@ tek-satır (tur · konu-sayısı · eklenen/atlanan) — **bu araç yalnız Nexu
 - **Rol-kapısının dürüst sınırı:** `LAYIHA_ROL` boşsa kısıt yoktur (elle koşu + eski çağrılar
   bozulmasın diye). Kapı, deseni **uygulayan** akışta K4'ü mekanikleştirir; deseni hiç kullanmayan
   bir ajanı yakalayamaz. Bu bilinçli tasarım kararıdır.
+- **Büyük havuz (1.4.2, 2026-09-30):** havuz listeleri artık jq'ya tek argüman olarak değil dosyadan verilir. Eskiden liste
+  128 KiB'ı aşınca (523 kayıt yetti) araç "argüman listesi çok uzun" diye düşüyor, havuza günlerce hiçbir şey yazılamıyordu.
+  Düzeltme NÂZIR'ın kutusunda yapılıp kaynağa alındı; sınav tavan üstü havuzla ölçer.

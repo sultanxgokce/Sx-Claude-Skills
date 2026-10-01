@@ -1,0 +1,23 @@
+{
+  "tur": 1,
+  "is": "canli-sayfa-beceri-kaydi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-09-30T11:21:14+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İstenen beceri tanımı; filo kuralı, dört sıralı adım, komutlar ve catalog/sync-targets kayıtlarıyla eklenmiş. Üretime engel yok; yalnız araç hazırmış gibi konuşan bir cümle, belgelenmiş birleşme sırası bağıyla daha açık hizalanmalı.",
+    "bulgular": [
+      {
+        "ne": "Beceri metni “kayıt ve araç hazır” diyor; oysa araç bu değişiklikte yok ve ancak PR #255 önce birleşirse komutlar çalışacak. Birleşme sırası KAPSAM.md’de doğru yazılmış olsa da kullanıcıya dönük SKILL.md durum cümlesi koşulu belirtmeli.",
+        "kanit": "KAPSAM.md sıra bağı bölümünde “Önce #255, sonra bu PR birleşir” ve tek başına birleşirse komutun olmayacağı yazarken, SKILL.md sürüm 1.0.0 durum notunda koşulsuz olarak “kayıt ve araç hazır” deniyor.",
+        "konum": "canli-sayfa/SKILL.md:27; _agents/fabrika/kanit/canli-sayfa-beceri-kaydi/KAPSAM.md:17",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Ana dalda becerinin önce bulunmadığı ölçülmüş, kayıt-korunumu ölçümü origin/main ile şimdiki durumu karşılaştırarak yalnız canli-sayfa satırlarının eklendiğini göstermiş, depo eşliği ve sürüm denetimleri yeşil. Görsel kare bu belge/kayıt işi için gerekli değil; ancak SKILL.md içeriğinin filo kuralı, dört adım ve komut şartlarını anlamsal olarak sınayan özel bir ölçüm yok, bunlar verilen diff üzerinden doğrulanabiliyor."
+  }
+}

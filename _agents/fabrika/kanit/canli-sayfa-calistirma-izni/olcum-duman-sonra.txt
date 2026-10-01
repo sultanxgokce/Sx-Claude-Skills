@@ -1,0 +1,6 @@
+$ bash -c for f in canli-sayfa/scripts/*.sh; do [ -x "$f" ] && bash -n "$f" && echo "✓ $f çalıştırılabilir, sözdizimi temiz"; done
+# rc=0 sure=0.0s zaman=2026-09-30T21:28:36+03:00
+--- stdout ---
+✓ canli-sayfa/scripts/canli-sayfa.sh çalıştırılabilir, sözdizimi temiz
+✓ canli-sayfa/scripts/canli-sayfa.test.sh çalıştırılabilir, sözdizimi temiz
+--- stderr ---

@@ -1,0 +1,37 @@
+{
+  "is": "canli-sayfa-kokpit-kurali",
+  "cumle": "canli-sayfa 1.1.0: Sultan kuralı (1 Eki) — canlı UI/sayfa istenince yayın/erişim yeri kokpit Canlı sayfalar; .mmepanel.com sayfası kokpit içinde açılır (sunucu çerçeveyi yasaklamaz), başka alan ayrı sekmede; bayat durum notu kalkar",
+  "istedi": "Sultan",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-01T17:05:55+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "sultan_kararlari": [
+    {
+      "karar": "devam",
+      "oturum": "session_013fuJSNg65VkgQE4sJsQURS",
+      "soz": "Evet, ayrı satırsa devam (önerim)",
+      "beyan": "SERDAR",
+      "gerekce": "catalog.json'da #33 başka bir becerinin satırlarına dokunuyor; bu iş yalnız canli-sayfa sürüm satırını değiştirir, git ayrı satırları birleştirir",
+      "zaman": "2026-10-01T18:05:25+03:00"
+    },
+    {
+      "karar": "daralt",
+      "oturum": "session_013fuJSNg65VkgQE4sJsQURS",
+      "soz": "Birleştirdikten sonra (önerim)",
+      "beyan": "SERDAR",
+      "gerekce": "Ortak dizine (bütün filo) kurulum birleşme sonrası yapılır; bu PR'ın kapsamı metin + geçici hedefe gerçek kurulumla kurulabilirlik kanıtı",
+      "zaman": "2026-10-01T18:46:31+03:00"
+    }
+  ]
+}

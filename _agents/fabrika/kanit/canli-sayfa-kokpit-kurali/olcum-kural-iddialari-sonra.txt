@@ -1,0 +1,16 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/sx-kural-olc.sh
+# rc=0 sure=0.0s zaman=2026-10-01T18:11:38+03:00
+--- stdout ---
+✓ I1 sürüm 1.1.0
+✓ I2 tetik: Sultan canlı UI/sayfa istediğinde (açıklamada)
+✓ I3 yayın/erişim yeri kokpit Canlı sayfalar menüsü
+✓ I4 *.mmepanel.com satırı → kokpitin içinde
+✓ I5 *.mukarnas.net ve başka alan → ayrı sekme
+✓ I6 sunucu yükümlülüğü: X-Frame-Options yasak, frame-ancestors kokpit
+✓ I7 bayat durum notu (1.0.0 menü yok) kalktı
+✓ I8 Sultan'ın 1 Eki sözü verbatim kırpık
+✓ X1 kokpit kodu aynı kuralı uygular: mmepanel.com → içeride
+✓ X2 kokpit kodu: kokpitin kendisi gömülmez
+✓ X3 kokpit kodu: başka alan target=_blank
+SONUÇ: 11 geçti · 0 kaldı
+--- stderr ---
