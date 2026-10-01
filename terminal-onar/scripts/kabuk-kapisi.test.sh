@@ -14,6 +14,10 @@ kapi(){ if [ "$2" = "$3" ]; then gecen=$((gecen+1)); echo "  ✓ $1"; else kalan
 command -v tmux >/dev/null || { echo "ÖLÇÜLEMEDİ: tmux yok"; exit 3; }
 
 T=$(mktemp -d); S="$T/sok"
+# 🔴 Temizlik ÇIKIŞA bağlı (bağımsız göz, tur 2 rötuşu): eski hâlde yalnız son satırda
+#    temizleniyordu; sınav yarıda kesilirse tmux sunucusu ve geçici dizin ARTIK kalıyordu.
+temizle() { tmux -S "$S" kill-server 2>/dev/null; rm -r -- "$T" 2>/dev/null; }
+trap temizle EXIT INT TERM
 kos() { # $1 = default-shell değeri → onar.sh rc'si + günlük
   tmux -S "$S" kill-server 2>/dev/null
   tmux -S "$S" -f /dev/null new-session -d -s x "sleep 30" 2>/dev/null
@@ -58,7 +62,6 @@ kapi "S6 sunucu yok + hesabın kabuğu /bin/false → kapı DURDURUR (\$SHELL ge
 kapi "S7 sunucu yok + hesabın kabuğu /bin/bash → kapı GEÇİRİR (S6 tautoloji değil)" \
      "0" "$(govde_olc /bin/bash | tail -1)"
 
-tmux -S "$S" kill-server 2>/dev/null; rm -r -- "$T" 2>/dev/null
 echo
 echo "SONUÇ: $gecen geçti · $kalan kaldı"
 [ "$kalan" -eq 0 ]
