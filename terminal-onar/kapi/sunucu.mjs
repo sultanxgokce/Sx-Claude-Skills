@@ -70,6 +70,10 @@ const denemeler = [];
 const cokDeneme = () => { const t = Date.now(); while (denemeler.length && t - denemeler[0] > 60000) denemeler.shift(); return denemeler.length >= 6; };
 
 // ---- yardımcılar
+const RAPOR_DIZ = process.env.KAPI_RAPOR_DIZ || '/config/.terminal-onar/rapor';
+const RAPOR_TIP = { '.html': 'text/html; charset=utf-8', '.json': 'application/json; charset=utf-8', '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8' };
+
 const TIPLER = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8',
   '.webmanifest': 'application/manifest+json', '.png': 'image/png', '.svg': 'image/svg+xml', '.ttf': 'font/ttf' };
 function json(res, kod, veri) { res.writeHead(kod, { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' }); res.end(JSON.stringify(veri)); }
@@ -242,6 +246,34 @@ const sunucu = http.createServer(async (req, res) => {
   if (y === '/' || y === '/index.html') return dosyaTabanli(res, 'index.html');
   if (y === '/uygulama.js') return dosya(res, 'uygulama.js');
   if (y.startsWith('/tty')) return ttydVekil(req, res);
+
+    // ── RAPOR SAYFALARI (2026-09-30, Sultan isteği) ─────────────────────────────
+  // Girişten SONRA sunulan küçük statik sayfalar: <taban>/rapor/<ad>/ → RAPOR_DIZ/<ad>/.
+  // Yazılabilen TEK dosya veri.json (PUT, x-kapi başlığı, geçerli JSON, ≤1 MB, atomik).
+  // Kapı parolası + Cloudflare Access arkasında kalır; dışarıya yeni bir yol açmaz.
+  if (y.startsWith('/rapor/')) {
+    const parca = y.slice('/rapor/'.length).split('/');
+    const ad = parca.shift();
+    if (!/^[a-z0-9-]{1,40}$/.test(ad || '')) { res.writeHead(404); return res.end('yok'); }
+    const kok = path.join(RAPOR_DIZ, ad);
+    if (!parca.length) { res.writeHead(302, { location: T(`/rapor/${ad}/`) }); return res.end(); }
+    const ic = parca.join('/') || 'index.html';
+    const yol = path.join(kok, ic);
+    if (!yol.startsWith(kok + path.sep)) { res.writeHead(404); return res.end('yok'); }
+    if (req.method === 'PUT' && ic === 'veri.json') {
+      if (req.headers['x-kapi'] !== '1') return json(res, 403, { hata: 'Başlık eksik.' });
+      try {
+        const g = await govde(req, 1024 * 1024);
+        JSON.parse(g.toString('utf8'));
+        const gecici = yol + '.' + process.pid + '.gecici';
+        fs.writeFileSync(gecici, g, { mode: 0o600 }); fs.renameSync(gecici, yol);
+        return json(res, 200, { tamam: true, zaman: new Date().toISOString() });
+      } catch (e) { return json(res, e.kod || 400, { hata: e.kod === 413 ? 'Çok büyük.' : 'Geçersiz veri.' }); }
+    }
+    if (req.method !== 'GET' || !fs.existsSync(yol) || !fs.statSync(yol).isFile()) { res.writeHead(404); return res.end('yok'); }
+    res.writeHead(200, { 'content-type': RAPOR_TIP[path.extname(yol)] || 'application/octet-stream', 'cache-control': 'no-store' });
+    return fs.createReadStream(yol).pipe(res);
+  }
 
   if (y.startsWith('/api/')) {
     if (req.method === 'POST' && req.headers['x-kapi'] !== '1') return json(res, 403, { hata: 'Başlık eksik.' });
