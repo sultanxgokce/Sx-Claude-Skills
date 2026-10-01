@@ -1,0 +1,57 @@
+{
+  "is": "canli-sayfa-kokpit-kurali",
+  "arac": "kanit.py/0.1.0",
+  "guncelleme": "2026-10-01T18:06:07+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "surum-ve-kural",
+      "asama": "once",
+      "dosya": "olcum-surum-ve-kural-once.txt",
+      "sha256": "9074da92e353d10afadbb9f06b101a90b5bc2854f7ff634a0740dceb062461b8",
+      "komut": [
+        "bash",
+        "-c",
+        "git show origin/main:canli-sayfa/SKILL.md | grep -cE 'version: 1.1.0|kokpitin İÇİNDE|frame-ancestors'; git show origin/main:canli-sayfa/SKILL.md | grep -c 'Durum (sürüm 1.0.0)'"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-01T18:06:07+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "surum-ve-kural",
+      "asama": "sonra",
+      "dosya": "olcum-surum-ve-kural-sonra.txt",
+      "sha256": "db2990e3de562bc29b25330312f2396c5195733a1c93fefe154b8b7a40c9da8f",
+      "komut": [
+        "bash",
+        "-c",
+        "grep -cE 'version: 1.1.0|kokpitin İÇİNDE|frame-ancestors' canli-sayfa/SKILL.md; grep -c 'Durum (sürüm 1.0.0)' canli-sayfa/SKILL.md; python3 -c \"import json;d=json.load(open('catalog.json'));L=d['skills'] if isinstance(d,dict) else d;print([x['version'] for x in L if x.get('id')=='canli-sayfa'])\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-01T18:06:07+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kuru-kurulum",
+      "asama": "sonra",
+      "dosya": "olcum-kuru-kurulum-sonra.txt",
+      "sha256": "95e8be3a5c3ede4bd577b39ca96519c5a408c181e5f97d39bbc8214d3e612640",
+      "komut": [
+        "node",
+        "sync-skills.mjs",
+        "--skill",
+        "canli-sayfa"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-01T18:06:07+03:00",
+      "sure_sn": 0.0
+    }
+  ],
+  "imza": "3e31e20175dce2095a9f225754449aaa88d2a17201141840c0d0f917365e245e"
+}
