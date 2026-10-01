@@ -16,14 +16,26 @@ command -v tmux >/dev/null || { echo "ÖLÇÜLEMEDİ: tmux yok"; exit 3; }
 T=$(mktemp -d); S="$T/sok"
 # 🔴 Temizlik ÇIKIŞA bağlı (bağımsız göz, tur 2 rötuşu): eski hâlde yalnız son satırda
 #    temizleniyordu; sınav yarıda kesilirse tmux sunucusu ve geçici dizin ARTIK kalıyordu.
-temizle() { tmux -S "$S" kill-server 2>/dev/null; rm -r -- "$T" 2>/dev/null; }
+temizle() { for k in "$T"/sok*; do [ -S "$k" ] && tmux -S "$k" kill-server 2>/dev/null; done; rm -r -- "$T" 2>/dev/null; }
 trap temizle EXIT INT TERM
+_sok_no=0
 kos() { # $1 = default-shell değeri → onar.sh rc'si + günlük
-  tmux -S "$S" kill-server 2>/dev/null
+  # 🔴 HER KOŞUM KENDİ SOKETİNDE. Eskiden tek soket paylaşılıyor ve her çağrıda
+  #    kill-server + new-session yapılıyordu; kill-server ASENKRONDUR, ölen sunucu
+  #    hâlâ ayaktayken açılan oturum eski sunucuya düşüyor ve ayar tutmuyordu.
+  #    Yarış sessizdi: ayar tutmayınca kapı hesabın (geçerli) kabuğunu okuyup onarımı
+  #    sonuna kadar koşturuyor, 124 dönüyordu — ve eski S4 onu YEŞİL sayıyordu.
+  _sok_no=$((_sok_no+1)); S="$T/sok$_sok_no"
   tmux -S "$S" -f /dev/null new-session -d -s x "sleep 30" 2>/dev/null
   tmux -S "$S" set -g default-shell "$1" 2>/dev/null
+  # 🔴 FİKSTÜRÜN KENDİSİ ÖLÇÜLÜR (pozitif kontrol). Ayar tutmadıysa sınav hüküm VERMEZ:
+  #    CI'da tam bu oldu — ayar uygulanmadı, kapı hesabın (geçerli) kabuğunu okudu, onarım
+  #    sonuna kadar koştu ve 124 (zaman aşımı) döndü. O sırada S4 "3 değil" diye YEŞİL
+  #    basıyordu: zaman aşımını başarı sayan bir kapı sahte yeşildir.
+  local okunan; okunan=$(tmux -S "$S" show -gv default-shell 2>/dev/null)
+  [ "$okunan" = "$1" ] || { echo "FIKSTUR-TUTMADI"; return 0; }
   env TO_KUTU=sinav TO_PROJE="$T/proje" TO_DURUM_DIZ="$T/durum" \
-      TMUX_TMPDIR="$T" tmux_soket="$S" \
+      TMUX_TMPDIR="$T" tmux_soket="$S" TTYD_BEKLE=2 KAPI_BEKLE=2 TO_BEKLE_ADIM=0 \
       bash -c 'tmux() { command tmux -S "'"$S"'" "$@"; }; export -f tmux; timeout 25 bash "'"$KOK"'/scripts/onar.sh" >/dev/null 2>&1'
   echo $?
 }
@@ -36,13 +48,18 @@ kapi "S3 günlükte ÇARE satırı var" "1" "$(grep -c 'default-shell /bin/bash'
 
 echo "── gerçek kabukta DURMAMALI (kapı süs olmasın)"
 rc=$(kos /bin/bash)
-kapi "S4 /bin/bash ile kabuk kapısına TAKILMAZ" "e" "$([ "$rc" != 3 ] && echo e || echo h)"
+# 🔴 "3 DEĞİL" YETMEZ: zaman aşımı (124) da 3 değildir ve eski hâli onu YEŞİL sayıyordu.
+#    Kapı artık hem durmamayı hem ASILMAMAYI ölçer; fikstür tutmadıysa açıkça söyler.
+kapi "S4 /bin/bash ile kabuk kapısına TAKILMAZ (ve asılmaz)" "e" \
+     "$(case "$rc" in 3) echo h ;; 124) echo "asildi" ;; FIKSTUR-TUTMADI) echo "olculemedi" ;; *) echo e ;; esac)"
 
 echo "── hemen ÇIKAN sahte kabuk da sahtedir (bağımsız göz, tur 1)"
 # 🔴 Eski ölçüt yalnız adı false/nologin ile biten yolları eliyordu ve çalıştırılabilirlik
 #    bitine bakıyordu. /bin/true adı masum, biti var, çıkış kodu 0 — ama kabuk DEĞİL:
 #    oturum yine doğar doğmaz ölür. Kapı adı değil DAVRANIŞI ölçmeli.
 kapi "S5 /bin/true ile de onarım durur (çıkış kodu yetmez, çıktı ölçülür)" "3" "$(kos /bin/true)"
+kapi "S5b /bin/true ile onarım ASILMADI (124 başarı sayılmaz)" "e" \
+     "$([ "$(kos /bin/true)" = "124" ] && echo "asildi" || echo e)"
 
 echo "── tmux SUNUCUSU YOKKEN hesabın kabuğu okunur (asıl vaka: yeni doğmuş kutu)"
 # 🔴 BULGUNUN ÖZÜ: eski kod sunucu yokken $SHELL'e düşüyordu. $SHELL ÇAĞIRANIN ortamıdır;
