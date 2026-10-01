@@ -1,0 +1,10 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/sx-gecici-kurulum.sh
+# rc=0 sure=0.3s zaman=2026-10-01T18:11:39+03:00
+--- stdout ---
+  özet: 1 uygulandı · 0 güncel · 0 drift-uyarı · 0 eksik · 0 duman-düştü
+
+kurulu-surum: version: 1.1.0
+kurulu=kaynak: evet
+izin: 755
+calisiyor: ── 20 sayfa
+--- stderr ---

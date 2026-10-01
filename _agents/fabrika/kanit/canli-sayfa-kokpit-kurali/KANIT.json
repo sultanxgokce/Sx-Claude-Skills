@@ -1,57 +1,86 @@
 {
   "is": "canli-sayfa-kokpit-kurali",
   "arac": "kanit.py/0.1.0",
-  "guncelleme": "2026-10-01T18:06:07+03:00",
+  "guncelleme": "2026-10-01T18:11:39+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
-      "etiket": "surum-ve-kural",
+      "etiket": "kural-iddialari",
       "asama": "once",
-      "dosya": "olcum-surum-ve-kural-once.txt",
-      "sha256": "9074da92e353d10afadbb9f06b101a90b5bc2854f7ff634a0740dceb062461b8",
+      "dosya": "olcum-kural-iddialari-once.txt",
+      "sha256": "058ced52438f359a812cf5d25bfdb53bc18b8d9c764171a13d50d3761763f6ad",
       "komut": [
         "bash",
-        "-c",
-        "git show origin/main:canli-sayfa/SKILL.md | grep -cE 'version: 1.1.0|kokpitin İÇİNDE|frame-ancestors'; git show origin/main:canli-sayfa/SKILL.md | grep -c 'Durum (sürüm 1.0.0)'"
+        "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/sx-kural-olc-ters.sh"
       ],
-      "rc": 0,
-      "renk": "yesil",
-      "zaman": "2026-10-01T18:06:07+03:00",
+      "rc": 8,
+      "renk": "kirmizi",
+      "zaman": "2026-10-01T18:11:38+03:00",
       "sure_sn": 0.0
     },
     {
       "tur": "olcum",
-      "etiket": "surum-ve-kural",
+      "etiket": "kural-iddialari",
       "asama": "sonra",
-      "dosya": "olcum-surum-ve-kural-sonra.txt",
-      "sha256": "db2990e3de562bc29b25330312f2396c5195733a1c93fefe154b8b7a40c9da8f",
+      "dosya": "olcum-kural-iddialari-sonra.txt",
+      "sha256": "3cd2e2fb4b16f9db4f812c0dc443d92d4dd2eddd2e0990550f6f3fb558a5e2ee",
       "komut": [
         "bash",
-        "-c",
-        "grep -cE 'version: 1.1.0|kokpitin İÇİNDE|frame-ancestors' canli-sayfa/SKILL.md; grep -c 'Durum (sürüm 1.0.0)' canli-sayfa/SKILL.md; python3 -c \"import json;d=json.load(open('catalog.json'));L=d['skills'] if isinstance(d,dict) else d;print([x['version'] for x in L if x.get('id')=='canli-sayfa'])\""
+        "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/sx-kural-olc.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-01T18:06:07+03:00",
+      "zaman": "2026-10-01T18:11:38+03:00",
       "sure_sn": 0.0
     },
     {
       "tur": "olcum",
-      "etiket": "kuru-kurulum",
+      "etiket": "gecici-hedefe-gercek-kurulum",
       "asama": "sonra",
-      "dosya": "olcum-kuru-kurulum-sonra.txt",
-      "sha256": "95e8be3a5c3ede4bd577b39ca96519c5a408c181e5f97d39bbc8214d3e612640",
+      "dosya": "olcum-gecici-hedefe-gercek-kurulum-sonra.txt",
+      "sha256": "7af68f4a1466416eaff4a49e80061af15069f294e7c1db05a15dd15f0b37aa4d",
       "komut": [
-        "node",
-        "sync-skills.mjs",
-        "--skill",
-        "canli-sayfa"
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/sx-gecici-kurulum.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-01T18:06:07+03:00",
-      "sure_sn": 0.0
+      "zaman": "2026-10-01T18:11:39+03:00",
+      "sure_sn": 0.3
+    },
+    {
+      "tur": "dosya",
+      "etiket": "kural-olcer",
+      "asama": "tek",
+      "dosya": "dosya-kural-olcer-tek.sh",
+      "sha256": "bd1a37fa8d6925fa963be7fd98229895d49718ee2b3d9ca4eba855288ff3109c",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/sx-kural-olc.sh",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-01T18:11:39+03:00"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "kurulum-olcer",
+      "asama": "tek",
+      "dosya": "dosya-kurulum-olcer-tek.sh",
+      "sha256": "3fc8ec2f619827dd40a73f410499baf4709aa46409117b21f0d5172b56d5d0ba",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/sx-gecici-kurulum.sh",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-01T18:11:39+03:00"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "kapsam",
+      "asama": "tek",
+      "dosya": "dosya-kapsam-tek.md",
+      "sha256": "a758270a50eedc23dabca276c0193b334f93f884bace4227ea6d6f4f3701e0ac",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/KAPSAM-sx-kural.md",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-01T18:11:39+03:00"
     }
   ],
-  "imza": "3e31e20175dce2095a9f225754449aaa88d2a17201141840c0d0f917365e245e"
+  "imza": "01d925a35fa1f79d7747336c279891da90e8a35e567a755e41b09adfe7579ea4"
 }
