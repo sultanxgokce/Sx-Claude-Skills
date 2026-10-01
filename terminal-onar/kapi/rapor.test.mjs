@@ -97,6 +97,17 @@ try {
   kapi('R18 atomik yazım geride geçici dosya bırakmaz', !readdirSync(join(RD, 'ornek')).some((n) => n.includes('gecici')));
   const oku = await iste('/rapor/ornek/veri.json', { cerez });
   kapi('R19 yazılan veri geri okunur, önbelleğe alınmaz', (await oku.text()) === '{"surum":3}' && oku.headers.get('cache-control') === 'no-store');
+
+  // 🔴 R20 · ÇERÇEVE İZNİ (SEDİR'in önerdiği kapı · canlı sayfa kuralı 1.1.0).
+  //    Ölçülmüştü: kapı hiç çerçeve başlığı göndermiyordu, yani açık oturumlu terminal ve
+  //    rapor sayfaları herhangi bir sitenin içine gömülebiliyordu. Kapı HER cevapta ölçülür:
+  //    tek bir yolun başlıksız kalması korumayı o yoldan deler.
+  const csp = (y) => (y.headers.get('content-security-policy') || '');
+  const girisSayfa = await iste('/giris');
+  kapi('R20 giriş sayfasında frame-ancestors var', csp(girisSayfa).includes('frame-ancestors'), csp(girisSayfa) || 'başlık YOK');
+  kapi('R20b kokpite izinli', csp(girisSayfa).includes('https://kokpit.mmepanel.com'), csp(girisSayfa));
+  kapi('R20c herkese açık DEĞİL (R20 tautoloji değil)', !/frame-ancestors[^;]*\*/.test(csp(girisSayfa)), csp(girisSayfa));
+  kapi('R20d rapor sayfasında da var (tek yol başlıksız kalmaz)', csp(oku).includes('frame-ancestors'), csp(oku) || 'başlık YOK');
 } finally {
   p.kill();
 }

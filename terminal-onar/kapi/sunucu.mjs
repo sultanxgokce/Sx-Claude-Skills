@@ -198,6 +198,14 @@ const sunucu = http.createServer(async (req, res) => {
   }
   res.setHeader('x-content-type-options', 'nosniff');
   res.setHeader('referrer-policy', 'no-referrer');
+  // 🔴 ÇERÇEVE İZNİ (canlı sayfa kuralı 1.1.0 · SEDİR'in ölçümü ve isteği, 2026-10-01).
+  //    Ölçüldü: kapı HİÇ çerçeve başlığı göndermiyordu — yani açık oturumlu bir terminal
+  //    ve altındaki rapor sayfaları HERHANGİ bir sitenin içine gömülebiliyordu. Kural
+  //    kokpitin içinde açılmayı istiyor; başlık EKLEMEK burada koruma gevşetmesi DEĞİL,
+  //    SIKILAŞTIRMADIR: artık yalnız kendimiz ve kokpit gömebilir.
+  //    Her cevaba konur (giriş · rapor · terminal): tek bir yolun başlıksız kalması
+  //    korumayı o yoldan deler.
+  res.setHeader('content-security-policy', "frame-ancestors 'self' https://kokpit.mmepanel.com");
 
   // girişsiz açık olanlar: giriş sayfası + PWA kimlik dosyaları
   // 🔴 GİRİŞ SAYFASI DA TABANI BİLMELİ (bağımsız göz, CİDDİ). Düz `dosya()` ile
