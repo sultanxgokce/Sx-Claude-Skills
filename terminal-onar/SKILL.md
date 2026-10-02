@@ -111,12 +111,19 @@ Adres `<taban>/rapor/<ad>/`; dosyalar `KAPI_RAPOR_DIZ` (varsayılan
 Access ve kapı parolasının arkasında kalır. Yazılabilen tek dosya `veri.json`: PUT, `x-kapi: 1`
 başlığı, geçerli JSON, en çok 1 MB, diske atomik iner. Ad kısıtı `^[a-z0-9-]{1,40}$`.
 
-🔴 **Dürüst sınır — M9 ölçülemez.** Yol dışına kaçış kontrolü HTTP üzerinden
+🔴 **Kaçışın ölçülebilir yarısı — SEMBOLİK BAĞ.** Yol dışına çıkmanın iki yolu var:
+*yazım* (`..`) ve *bağ*. Metinsel önek kontrolü yolun yazımına bakar, dosya sisteminin
+nereye baktığına değil — ağacın içine konan bir bağ kökün dışını gösterebilir. Bu kapatıldı:
+gerçek yol çözülüp (bağlar izlenerek) önek **yeniden** soruluyor. Ve bu yarı HTTP'den
+**ölçülebiliyor**: R21-R21d (bağ dosya · gövde sızmaması · bağlı dizin · sağlam dosya hâlâ
+sunuluyor). Kontrol öldürülünce kök dışındaki içerik fiilen sızıyor — ölçüldü.
+
+🔴 **Dürüst sınır — M9 (YAZIM kaçışı) ölçülemez.** Yol dışına kaçış kontrolü HTTP üzerinden
 **tetiklenemiyor**: adres ayrıştırıcısı `..` ve `%2e%2e` parçalarını kontrole varmadan
 sadeleştiriyor, `%2f` ise tek parça ad olarak kalıyor. Mutasyon turu bu korumayı **bilgi**
 olarak koşturur ve tura saymaz. Kontrol yine durmalıdır: ayrıştırıcı bir gün değişirse tek
 savunma odur. "Ölçemedim" ile "gerek yok" aynı şey değildir.
 
-Kanıt: `kapi/rapor.test.mjs` (22 kapı, gerçek süreç + gerçek HTTP) · `kapi/rapor.mutasyon.sh`
+Kanıt: `kapi/rapor.test.mjs` (**30 kapı**, gerçek süreç + gerçek HTTP) · `kapi/rapor.mutasyon.sh`
 (8 koruma öldürüldü, 8'i de sınavı kırmızıya çevirdi) · `kapi/rapor-kapi.test.sh` (koşucunun
 gördüğü çağıran — depo kapısı yalnız kabuk sınavlarını keşfediyor).

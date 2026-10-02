@@ -7,7 +7,7 @@
  * yüzü birlikte ölçülür; mutasyonları: rapor.mutasyon.sh.
  */
 import { spawn } from 'node:child_process';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync, symlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -27,6 +27,11 @@ mkdirSync(join(RD, 'ornek', 'foto'), { recursive: true });
 writeFileSync(join(RD, 'ornek', 'index.html'), '<title>ornek</title>SAYFA');
 writeFileSync(join(RD, 'ornek', 'veri.json'), '{"surum":1}');
 writeFileSync(join(RD, 'ornek', 'foto', 'a.jpg'), 'JPEGGIBI');
+// 🔴 SEMBOLİK BAĞ FİKSTÜRÜ (bağımsız göz, tur 1): rapor ağacının İÇİNE konan bir bağ,
+//    kökün DIŞINDAKİ bir dosyayı gösteriyor. Metinsel önek kontrolü bunu göremez.
+writeFileSync(join(T, 'disarida.txt'), 'KOK-DISI-GIZLI');
+try { symlinkSync(join(T, 'disarida.txt'), join(RD, 'ornek', 'kacis.txt')); } catch {}
+try { symlinkSync(T, join(RD, 'ornek', 'disari')); } catch {}
 writeFileSync(join(T, 'gizli.log'), 'GIZLI');
 // ad kısıtının ATEŞLEYEN yüzü: diskte VAR olan ama adı kurala uymayan bir klasör (yoksa 404'ü 'dosya yok' verir, kısıt ölçülmez)
 mkdirSync(join(RD, 'BUYUK_ad'), { recursive: true }); writeFileSync(join(RD, 'BUYUK_ad', 'index.html'), 'SIZDI');
@@ -97,6 +102,20 @@ try {
   kapi('R18 atomik yazım geride geçici dosya bırakmaz', !readdirSync(join(RD, 'ornek')).some((n) => n.includes('gecici')));
   const oku = await iste('/rapor/ornek/veri.json', { cerez });
   kapi('R19 yazılan veri geri okunur, önbelleğe alınmaz', (await oku.text()) === '{"surum":3}' && oku.headers.get('cache-control') === 'no-store');
+
+  // 🔴 R21 · SEMBOLİK BAĞ KAÇIŞI (bağımsız göz, tur 1 — M9'un ÖLÇÜLEBİLİR yarısı).
+  //    M9 (yazım kaçışı) adres ayrıştırıcısı yüzünden HTTP'den tetiklenemiyordu ve
+  //    "ölçemedim" diye yazılmıştı. Ama kaçışın ikinci yolu BAĞ üzerinden geçiyor ve o
+  //    HTTP'den ölçülebiliyor: ağacın içindeki bir bağ, kökün dışını gösterebilir.
+  const kacis1 = await iste('/rapor/ornek/kacis.txt', { cerez });
+  kapi('R21 ağaç içindeki bağ kök DIŞINI gösteriyorsa 404', kacis1.status === 404, `→ ${kacis1.status}`);
+  const govde1 = await kacis1.text();
+  kapi('R21b kök dışı içerik SIZMADI (durum kodu yetmez, gövde ölçülür)',
+    !govde1.includes('KOK-DISI-GIZLI'), `→ ${govde1.slice(0, 40)}`);
+  const kacis2 = await iste('/rapor/ornek/disari/disarida.txt', { cerez });
+  kapi('R21c bağlı DİZİN üzerinden de geçilemez', kacis2.status === 404, `→ ${kacis2.status}`);
+  const saglam = await iste('/rapor/ornek/foto/a.jpg', { cerez });
+  kapi('R21d gerçek dosya HÂLÂ sunuluyor (R21 her şeyi kapatmadı)', saglam.status === 200, `→ ${saglam.status}`);
 
   // 🔴 R20 · ÇERÇEVE İZNİ (SEDİR'in önerdiği kapı · canlı sayfa kuralı 1.1.0).
   //    Ölçülmüştü: kapı hiç çerçeve başlığı göndermiyordu, yani açık oturumlu terminal ve

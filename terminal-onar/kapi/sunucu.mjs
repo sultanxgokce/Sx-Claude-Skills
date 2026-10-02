@@ -267,7 +267,17 @@ const sunucu = http.createServer(async (req, res) => {
     if (!parca.length) { res.writeHead(302, { location: T(`/rapor/${ad}/`) }); return res.end(); }
     const ic = parca.join('/') || 'index.html';
     const yol = path.join(kok, ic);
+    // 🔴 METİNSEL ÖNEK YETMEZ — SEMBOLİK BAĞ (bağımsız göz, tur 1).
+    //    Önek kontrolü yolun YAZIMINA bakar; dosya sisteminin nereye baktığına değil.
+    //    Rapor ağacına konan bir bağ, kökün DIŞINDAKİ bir dosyayı gösterebilir ve metin
+    //    kontrolü bunu göremez. Üstelik M9 (yazım kaçışı) ayrıştırıcı yüzünden HTTP'den
+    //    tetiklenemiyordu; bu kapı ise HTTP'den ÖLÇÜLEBİLİR — yani ölçülemez sandığımız
+    //    savunmanın ölçülebilir yarısı buymuş.
+    //    Gerçek yol çözülür (bağlar izlenir), sonra önek YENİDEN sorulur.
     if (!yol.startsWith(kok + path.sep)) { res.writeHead(404); return res.end('yok'); }
+    const _gercek = (p0) => { try { return fs.realpathSync(p0); } catch { return null; } };
+    const kokGercek = _gercek(kok);
+    if (!kokGercek) { res.writeHead(404); return res.end('yok'); }
     if (req.method === 'PUT' && ic === 'veri.json') {
       if (req.headers['x-kapi'] !== '1') return json(res, 403, { hata: 'Başlık eksik.' });
       try {
@@ -278,7 +288,13 @@ const sunucu = http.createServer(async (req, res) => {
         return json(res, 200, { tamam: true, zaman: new Date().toISOString() });
       } catch (e) { return json(res, e.kod || 400, { hata: e.kod === 413 ? 'Çok büyük.' : 'Geçersiz veri.' }); }
     }
-    if (req.method !== 'GET' || !fs.existsSync(yol) || !fs.statSync(yol).isFile()) { res.writeHead(404); return res.end('yok'); }
+    if (req.method !== 'GET' || !fs.existsSync(yol)) { res.writeHead(404); return res.end('yok'); }
+    const yolGercek = _gercek(yol);
+    //    Bağ izlendikten SONRA hâlâ kökün içinde mi? Değilse 404 — dosya var olsa bile.
+    if (!yolGercek || !(yolGercek === kokGercek || yolGercek.startsWith(kokGercek + path.sep))) {
+      res.writeHead(404); return res.end('yok');
+    }
+    if (!fs.statSync(yolGercek).isFile()) { res.writeHead(404); return res.end('yok'); }
     res.writeHead(200, { 'content-type': RAPOR_TIP[path.extname(yol)] || 'application/octet-stream', 'cache-control': 'no-store' });
     return fs.createReadStream(yol).pipe(res);
   }
