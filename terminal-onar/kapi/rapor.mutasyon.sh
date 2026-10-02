@@ -24,6 +24,15 @@ dene "M7 atomik yazım bozuldu" "fs.renameSync(gecici, yol);" ""
 dene "M8 önbellek yasağı kalktı" "'cache-control': 'no-store' });
     return fs.createReadStream(yol).pipe(res);" "'cache-control': 'max-age=3600' });
     return fs.createReadStream(yol).pipe(res);"
+# 🔴 M10 TURA SAYILIR — kaçışın ÖLÇÜLEBİLİR yarısı (bağımsız göz, tur 2 rötuşu).
+# Bağ üzerinden kök dışına çıkış HTTP'den tetiklenebiliyor; o yüzden bu koruma bilgi değil KAPIDIR.
+# Belgeye "öldürülünce sızıyor, ölçüldü" diye yazmıştım ama TUR bunu koşturmuyordu — iddia
+# elle ölçülmüştü, yeniden üretilemiyordu. Artık tur üretiyor.
+dene "M10 bağ kaçışı kontrolü kalktı (gerçek yol çözülmüyor)" \
+  "if (!yolGercek || !(yolGercek === kokGercek || yolGercek.startsWith(kokGercek + path.sep))) {
+      res.writeHead(404); return res.end('yok');
+    }" ""
+
 # M9 BİLİNÇLİ OLARAK ÖLÇÜLEMEZ: yol dışı kaçış kontrolü (yol.startsWith(kok)) ikinci savunma hattıdır. HTTP ile
 # tetiklenemiyor: sunucu yolu `new URL()` ile ayrıştırır ve WHATWG ayrıştırıcısı '..' ile '%2e%2e' parçalarını kod
 # kontrole varmadan normalleştirir; '%2f' ise çözülmez (tek parça ad olarak kalır). Mutasyonu bilgi için koşturulur,
