@@ -1,0 +1,6 @@
+$ git ls-files -s canli-sayfa/scripts/
+# rc=0 sure=0.0s zaman=2026-09-30T21:28:36+03:00
+--- stdout ---
+100644 39d4b6dc4bb58266fca0e379514aa7b9c7c65549 0	canli-sayfa/scripts/canli-sayfa.sh
+100644 00928b5ca6b819db50d8db60646c78024272e7a9 0	canli-sayfa/scripts/canli-sayfa.test.sh
+--- stderr ---

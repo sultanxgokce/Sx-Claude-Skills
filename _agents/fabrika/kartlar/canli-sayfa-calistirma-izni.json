@@ -1,0 +1,19 @@
+{
+  "is": "canli-sayfa-calistirma-izni",
+  "cumle": "canlı sayfa aracı ve sınavı depoda çalıştırma izni olmadan (644) duruyor; dağıtım aracı kurulumu KULLANILAMAZ sayıyor. İzin biti 755 yapılır",
+  "istedi": "Sultan",
+  "aldi": "SERDAR",
+  "zaman": "2026-09-30T21:28:11+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "sync-skills.mjs --skill canli-sayfa: DUMAN TESTİ DÜŞTÜ · ÇALIŞTIRILAMAZ (izin yok); git ls-files -s → 100644",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

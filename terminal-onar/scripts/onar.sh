@@ -9,6 +9,43 @@ WEB_YENILE=0; [ "${1:-}" = "--web-yenile" ] && WEB_YENILE=1
 gunluk "K0 onar başladı"
 SIFRE_YOK=0
 
+# ── ÖN KOŞUL: tmux'un varsayılan kabuğu GERÇEK bir kabuk mu ────────────────────
+# 🔴 Niçin (SEDİR/RAHVAN uyarısı + REVAK'ta ölçülen vaka, 2026-09-29): LSIO imajında
+#    `abc` kullanıcısının kabuğu `/bin/false`. Kutuda `.tmux.conf`'ta `default-shell`
+#    satırı yoksa her oturum DOĞAR DOĞMAZ ölür. Belirtisi yanıltıcıdır: tmux rc=0 döner,
+#    soket bile oluşur; yalnız ayrıntılı günlükte "%0 error" görünür. Sonuç: telefonda
+#    terminal açılıp kapanır, bekçi her dakika yeniden kurar, merdiven K1/K2'ye tırmanır
+#    ve her tırmanış yeni bir Claude süreci (yani bellek) demektir.
+# 🔴 KENDİLİĞİNDEN DÜZELTMİYORUZ, DURUYORUZ: `.tmux.conf` kutu genelinde ORTAK bir dosyadır;
+#    başkasının dosyasına sessizce yazmak onarımın işi değil (öneri: RAHVAN).
+# 🔴 İKİ DÜZELTME (bağımsız göz, tur 1 — ikisi de haklıydı):
+#  1) ESKİ HÂLİ ASIL VAKAYI KORUMUYORDU. tmux sunucusu YOKKEN `$SHELL`e düşüyordu; ama
+#     $SHELL ÇAĞIRANIN ortamıdır, hesabın kabuğu değil. Yeni doğmuş bir kutuda hesabın
+#     kabuğu /bin/false iken, onarımı geçerli bir kabuktan çalıştırmak kapıyı AÇIYORDU —
+#     yani kapı tam da yazıldığı vakada sessiz kalıyordu. Artık sunucu yoksa HESABIN
+#     kabuğu okunur (parola dosyası), ortam değişkeni DEĞİL.
+#  2) "ÇALIŞTIRILABİLİR" KABUK DEMEK DEĞİL. Eski ölçüt yalnız adı false/nologin ile biten
+#     yolları eliyor ve çalıştırılabilirlik bitine bakıyordu; /bin/true gibi hemen çıkan
+#     bir dosya GEÇERLİ sayılıyordu ve aynı "oturum doğar doğmaz ölür" hâlini üretirdi.
+#     Artık kabuğun kabuk gibi DAVRANDIĞI ölçülür: bir komut verilip çıktısı okunur.
+_hesap_kabugu() {
+  local u; u="$(id -un 2>/dev/null)" || return 1
+  getent passwd "$u" 2>/dev/null | awk -F: '{print $7}' | head -1
+}
+kabuk_gecerli_mi() {
+  local k; k=$(tmux show -gv default-shell 2>/dev/null)
+  [ -n "$k" ] || k="$(_hesap_kabugu)"
+  case "$k" in ""|*/false|*/nologin) return 1 ;; esac
+  [ -x "$k" ] || return 1
+  # Davranış ölçümü: çıkış kodu YETMEZ (/bin/true da 0 döner), ÇIKTI okunur.
+  [ "$("$k" -c 'printf kabuk' 2>/dev/null)" = "kabuk" ]
+}
+if ! kabuk_gecerli_mi; then
+  gunluk "K0 DUR: tmux varsayılan kabuğu çalıştırılabilir DEĞİL ($(tmux show -gv default-shell 2>/dev/null || echo tanımsız)) — oturumlar doğar doğmaz ölür"
+  gunluk "K0 ÇARE: kutunun .tmux.conf dosyasına tek satır: set -g default-shell /bin/bash"
+  exit 3
+fi
+
 # Bir tmux oturumunda Claude başlat (kabuk boştaysa aynı pencerede, değilse yeni pencerede).
 # 🔴 26 Eyl dersi: eski sürüm "yeni pencere" açamayınca komutu CANLI Claude'un içine yazdı.
 #    Artık hedef pane kimliğiyle (%N) seçilir ve yazmadan hemen önce yeniden ölçülür:

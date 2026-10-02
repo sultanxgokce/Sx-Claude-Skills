@@ -1,0 +1,16 @@
+{
+  "tur": 3,
+  "is": "canli-sayfa-kokpit-kurali",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-01T18:46:45+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ın 1 Ekim kuralı 1.1.0 metnine işlendi: kokpit yayın yeri, alan adına göre açılış, çerçeve yükümlülüğü ve bayat notun kaldırılması talep edildiği gibi yerinde. Önce/sonra ölçümü ile geçici hedefte gerçek kurulum yeşil; ortak filo kurulumu da Sultan kararıyla birleşme sonrasına bırakıldığından üretime engel bulgu yok.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. `kural-iddialari` için kırmızı önce/yeşil sonra ölçüm çifti 8 talep iddiasını ve 3 kokpit davranış kontrolünü kapsıyor; geçici hedef kurulumunda sürüm, kaynak eşliği, çalıştırma izni ve duman sonucu ölçülmüş. UI karesi yok, ancak iş kartı Sultan kararıyla metin ve geçici hedefte kurulabilirlik kanıtına daraltılmış; ortak dizine kurulumun birleşme sonrasında yapılacağı açıkça kararlaştırılmış."
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "is": "canli-sayfa-calistirma-izni",
+  "arac": "kanit.py/0.1.0",
+  "guncelleme": "2026-09-30T21:28:36+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "izin-once",
+      "asama": "once",
+      "dosya": "olcum-izin-once-once.txt",
+      "sha256": "deb364c7363319284f3e0b89962b3f140c20e021de55e124ecdbfd28e33f1553",
+      "komut": [
+        "git",
+        "ls-files",
+        "-s",
+        "canli-sayfa/scripts/"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-30T21:28:36+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "izin-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-izin-sonra-sonra.txt",
+      "sha256": "5ca81022e32fa25bb120e55bdc222b86f8ceb6a7dbdf6c97ff6e08086467d01a",
+      "komut": [
+        "bash",
+        "-c",
+        "git ls-files -s canli-sayfa/scripts/ | grep -c 100755"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-30T21:28:36+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "duman",
+      "asama": "sonra",
+      "dosya": "olcum-duman-sonra.txt",
+      "sha256": "4116318e14352a7d00b93aaac329a0441d2f379db8c4875b2850e24d64921a06",
+      "komut": [
+        "bash",
+        "-c",
+        "for f in canli-sayfa/scripts/*.sh; do [ -x \"$f\" ] && bash -n \"$f\" && echo \"✓ $f çalıştırılabilir, sözdizimi temiz\"; done"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-09-30T21:28:36+03:00",
+      "sure_sn": 0.0
+    }
+  ],
+  "imza": "755361e965e3021e12e13024aa55d19bcd1b7f765628be42e44a7fe9ee55b618"
+}
