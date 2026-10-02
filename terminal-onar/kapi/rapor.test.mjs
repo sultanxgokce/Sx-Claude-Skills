@@ -32,6 +32,14 @@ writeFileSync(join(RD, 'ornek', 'foto', 'a.jpg'), 'JPEGGIBI');
 writeFileSync(join(T, 'disarida.txt'), 'KOK-DISI-GIZLI');
 try { symlinkSync(join(T, 'disarida.txt'), join(RD, 'ornek', 'kacis.txt')); } catch {}
 try { symlinkSync(T, join(RD, 'ornek', 'disari')); } catch {}
+// Yazma kaçışı fikstürü: ayrı bir rapor klasöründe veri.json'un KENDİSİ kök dışına bağ.
+mkdirSync(join(RD, 'yazkacis'), { recursive: true });
+writeFileSync(join(T, 'kurban.json'), '{"dokunulmadi":true}');
+try { symlinkSync(join(T, 'kurban.json'), join(RD, 'yazkacis', 'veri.json')); } catch {}
+// Bağlı DİZİN: rapor adı kökün dışındaki bir klasöre bakıyor → yazma oraya düşerdi.
+mkdirSync(join(T, 'disklasor'), { recursive: true });
+writeFileSync(join(T, 'disklasor', 'veri.json'), '{"dis":"dokunulmadi"}');
+try { symlinkSync(join(T, 'disklasor'), join(RD, 'dizkacis')); } catch {}
 writeFileSync(join(T, 'gizli.log'), 'GIZLI');
 // ad kısıtının ATEŞLEYEN yüzü: diskte VAR olan ama adı kurala uymayan bir klasör (yoksa 404'ü 'dosya yok' verir, kısıt ölçülmez)
 mkdirSync(join(RD, 'BUYUK_ad'), { recursive: true }); writeFileSync(join(RD, 'BUYUK_ad', 'index.html'), 'SIZDI');
@@ -116,6 +124,22 @@ try {
   kapi('R21c bağlı DİZİN üzerinden de geçilemez', kacis2.status === 404, `→ ${kacis2.status}`);
   const saglam = await iste('/rapor/ornek/foto/a.jpg', { cerez });
   kapi('R21d gerçek dosya HÂLÂ sunuluyor (R21 her şeyi kapatmadı)', saglam.status === 200, `→ ${saglam.status}`);
+
+  // 🔴 R22 · YAZMA kaçışı (bağımsız göz, tur 4). Okuma korunuyordu, YAZMA korunmuyordu:
+  //    sıra yüzünden PUT gerçek-yol sınamasından ÖNCE çalışıyordu. Hedef kökün dışına bakan
+  //    bir bağ olsaydı yazma o dosyayı EZERDİ. Okuma kaçışı sızdırır, yazma kaçışı BOZAR.
+  const yz = await iste('/rapor/yazkacis/veri.json', { cerez, metot: 'PUT', govde: '{"ele":"gecti"}' });
+  kapi('R22 bağ olan veri.json\'a yazma REDDEDİLİR', yz.status === 404, `→ ${yz.status}`);
+  kapi('R22b bağ EZİLSE de kök dışındaki dosya DEĞİŞMEDİ (atomik yazım bağı izlemez)',
+    readFileSync(join(T, 'kurban.json'), 'utf8') === '{"dokunulmadi":true}',
+    `→ ${readFileSync(join(T, 'kurban.json'), 'utf8')}`);
+  // 🔴 ASIL AĞIR HÂL: rapor adının KENDİSİ kök dışına bakan bir dizin bağı. O zaman
+  //    atomik yazım da kurtarmaz — geçici dosya da hedef de kökün DIŞINA düşer.
+  const dz = await iste('/rapor/dizkacis/veri.json', { cerez, metot: 'PUT', govde: '{"ele":"gecti"}' });
+  kapi('R22c bağlı DİZİNE yazma REDDEDİLİR', dz.status === 404, `→ ${dz.status}`);
+  kapi('R22d kök dışı klasördeki dosya DEĞİŞMEDİ (dosya ölçülür)',
+    readFileSync(join(T, 'disklasor', 'veri.json'), 'utf8') === '{"dis":"dokunulmadi"}',
+    `→ ${readFileSync(join(T, 'disklasor', 'veri.json'), 'utf8')}`);
 
   // 🔴 R20 · ÇERÇEVE İZNİ (SEDİR'in önerdiği kapı · canlı sayfa kuralı 1.1.0).
   //    Ölçülmüştü: kapı hiç çerçeve başlığı göndermiyordu, yani açık oturumlu terminal ve

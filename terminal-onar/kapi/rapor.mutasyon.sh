@@ -2,6 +2,11 @@
 # Rapor yolu mutasyon turu: her korumayı tek tek öldür → rapor.test.mjs KIRMIZI olmalı. Olmazsa koruma ölçülmüyor.
 set -u
 D="$(cd "$(dirname "$0")" && pwd)"; cd "$D" || exit 9
+# 🔴 Kesintide kaynağı GERİ YÜKLE (bağımsız göz, tur 4 rötuşu): tur sunucu.mjs'i yerinde
+#    değiştiriyor; süreç kesilirse çalışma ağacı MUTASYONLU kalırdı ve bir sonraki koşum
+#    bozuk gövdeyi "kaynak" sanırdı.
+geri_yukle() { [ -f sunucu.mjs.yedek ] && mv -f sunucu.mjs.yedek sunucu.mjs; }
+trap geri_yukle EXIT INT TERM
 gecti=0; dusen=0
 dene() {
   local ad="$1" eski="$2" yeni="$3"
@@ -28,10 +33,12 @@ dene "M8 önbellek yasağı kalktı" "'cache-control': 'no-store' });
 # Bağ üzerinden kök dışına çıkış HTTP'den tetiklenebiliyor; o yüzden bu koruma bilgi değil KAPIDIR.
 # Belgeye "öldürülünce sızıyor, ölçüldü" diye yazmıştım ama TUR bunu koşturmuyordu — iddia
 # elle ölçülmüştü, yeniden üretilemiyordu. Artık tur üretiyor.
-dene "M10 bağ kaçışı kontrolü kalktı (gerçek yol çözülmüyor)" \
-  "if (!yolGercek || !(yolGercek === kokGercek || yolGercek.startsWith(kokGercek + path.sep))) {
-      res.writeHead(404); return res.end('yok');
-    }" ""
+dene "M10 okuma kolunda bağ kaçışı kontrolü kalktı" \
+  "if (!_icinde(yolGercek)) { res.writeHead(404); return res.end('yok'); }" ""
+dene "M11 YAZMA kolunda bağ reddi kalktı (bağ olan veri.json ezilir)" \
+  "try { if (fs.lstatSync(yol).isSymbolicLink()) { res.writeHead(404); return res.end('yok'); } } catch { /* yoksa sorun değil */ }" ""
+dene "M12 çapa rapor KÖKÜ yerine rapor KLASÖRÜ olursa (kontrol kendi kendini onaylar)" \
+  "const tabanGercek = _gercek(RAPOR_DIZ);" "const tabanGercek = _gercek(kok);"
 
 # M9 BİLİNÇLİ OLARAK ÖLÇÜLEMEZ: yol dışı kaçış kontrolü (yol.startsWith(kok)) ikinci savunma hattıdır. HTTP ile
 # tetiklenemiyor: sunucu yolu `new URL()` ile ayrıştırır ve WHATWG ayrıştırıcısı '..' ile '%2e%2e' parçalarını kod

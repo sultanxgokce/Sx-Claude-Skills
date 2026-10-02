@@ -276,9 +276,24 @@ const sunucu = http.createServer(async (req, res) => {
     //    Gerçek yol çözülür (bağlar izlenir), sonra önek YENİDEN sorulur.
     if (!yol.startsWith(kok + path.sep)) { res.writeHead(404); return res.end('yok'); }
     const _gercek = (p0) => { try { return fs.realpathSync(p0); } catch { return null; } };
+    // 🔴 ÇAPA RAPOR KÖKÜDÜR, rapor KLASÖRÜ DEĞİL (kendi düzeltmemin kusuru, tur 4'te ölçüldü).
+    //    İlk yazımda her şeyi `kok`a (yani <RAPOR_DIZ>/<ad>) göre sınıyordum. Ama `ad`ın
+    //    kendisi kök dışına bakan bir BAĞ olabilir; o zaman `kok`un gerçeği de dışarıdadır
+    //    ve kontrol KENDİ KENDİNİ onaylar. Ölçüldü: bağlı dizine yazma fiilen dışarı düştü.
+    //    Çapa sabit olmalı: RAPOR_DIZ'in gerçeği.
+    const tabanGercek = _gercek(RAPOR_DIZ);
     const kokGercek = _gercek(kok);
-    if (!kokGercek) { res.writeHead(404); return res.end('yok'); }
+    if (!tabanGercek || !kokGercek) { res.writeHead(404); return res.end('yok'); }
+    const _icinde = (p0) => !!p0 && (p0 === tabanGercek || p0.startsWith(tabanGercek + path.sep));
+    if (!_icinde(kokGercek)) { res.writeHead(404); return res.end('yok'); }
+    // 🔴 YAZMA KOLU DA BAĞ KONTROLÜNDEN GEÇER (bağımsız göz, tur 4 — okuma korunmuş,
+    //    YAZMA korunmamıştı). Sıra yüzünden PUT, aşağıdaki gerçek-yol sınamasından ÖNCE
+    //    çalışıyordu: `veri.json` kökün dışına bakan bir bağ olsaydı, yazma o dosyayı
+    //    EZERDİ. Okuma kaçışı sızdırır; yazma kaçışı BOZAR — ikincisi daha ağır.
+    //    İki kapı: (a) hedefin bulunduğu dizin gerçekte kökün içinde mi
+    //              (b) hedef zaten varsa BAĞ mı — bağsa yazma reddedilir (izlenmez).
     if (req.method === 'PUT' && ic === 'veri.json') {
+      try { if (fs.lstatSync(yol).isSymbolicLink()) { res.writeHead(404); return res.end('yok'); } } catch { /* yoksa sorun değil */ }
       if (req.headers['x-kapi'] !== '1') return json(res, 403, { hata: 'Başlık eksik.' });
       try {
         const g = await govde(req, 1024 * 1024);
@@ -291,9 +306,7 @@ const sunucu = http.createServer(async (req, res) => {
     if (req.method !== 'GET' || !fs.existsSync(yol)) { res.writeHead(404); return res.end('yok'); }
     const yolGercek = _gercek(yol);
     //    Bağ izlendikten SONRA hâlâ kökün içinde mi? Değilse 404 — dosya var olsa bile.
-    if (!yolGercek || !(yolGercek === kokGercek || yolGercek.startsWith(kokGercek + path.sep))) {
-      res.writeHead(404); return res.end('yok');
-    }
+    if (!_icinde(yolGercek)) { res.writeHead(404); return res.end('yok'); }
     if (!fs.statSync(yolGercek).isFile()) { res.writeHead(404); return res.end('yok'); }
     res.writeHead(200, { 'content-type': RAPOR_TIP[path.extname(yol)] || 'application/octet-stream', 'cache-control': 'no-store' });
     return fs.createReadStream(yol).pipe(res);
