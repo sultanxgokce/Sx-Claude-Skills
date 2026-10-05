@@ -1,7 +1,7 @@
 ---
 name: gun-ortasi
 description: Gün ortası planı — sabahki plan (ya da günün işleri) erken bittiğinde "elde kalan iş var mı?" sorusunu ÖLÇEREK cevaplar; kalan işi dağınık kaynaklardan (plan çıpası, kartlar, konum çapaları, bağımsız göz raporları, gelen kutusu) bulup doğrular ve süzer; kalmadıysa kutunun ana hedeflerine bağlı, ölçülmüş bir boşluğu kapatan 2-3 geliştirme fikri önerir ve Sultan'ın seçimiyle günün ikinci yarısını planlar. Tetik: "/gun-ortasi", "plan bitti ne yapalım", "iş kaldı mı", "gün ortası planı", "yapacak iş kalmadıysa ne geliştirelim".
-version: 1.0.1
+version: 1.0.2
 ---
 
 # /gun-ortasi — gün ortası planı (ölç → doğrula → süz · yoksa fikir → sun → çıpa → icra)
@@ -140,6 +140,15 @@ Akşam `/gunluk-plan kapanis` sabah + gün ortası maddelerini birlikte okur.
 - Sınav: `bash scripts/kalan.test.sh` (hermetik; gerçek kutuya dokunmaz).
 
 ## Sürüm notları
+- **1.0.2 (2026-10-05, MUAVİN · CI kırmızısı):** sınav `cipa-ekle.sh`'ı çağırırken **arama
+  dikişini vermiyordu** (`GUN_ORTASI_SK`), 16 çağrının hiçbirinde. Araç bu yüzden kurulu yola
+  düşüyordu: geliştirici kutusunda o yol VAR olduğu için sınav yeşil kalıyor, CI temiz makinede
+  koştuğu için **altı kapı birden kırmızıya** dönüyordu. 🔴 Asıl ders bende: bunu önceden
+  "CI provası" yaparak yakaladığımı sanmıştım — ama provada yalnız **sınavın** arama yolunu
+  kör etmişim, **aracın** arama yolunu değil. İki ayrı arama vardı, birini taklit ettim.
+  Artık üç yol birlikte kör ediliyor ve prova öyle ölçülüyor. Yeni kapı **T14i**: araç
+  görünmüyorsa `cipa-ekle` rc=1 verir ve sebebini söyler — bu dal eskiden sınavda **kazara**
+  tetikleniyordu, artık bilerek ölçülüyor. 30 geçti · 0 kaldı.
 - **1.0.1 (2026-10-05, MUAVİN · kurulum turu):** `cipa-ekle.sh` çıpa yolunu **kendisi
   türetmeyi bıraktı**, artık sahibine soruyor (`gunluk-plan/scripts/cipa.sh yol`, aynı gün
   eklenen tek-kaynak komutu). Niçin: `cipa.sh` 2026-10-05'te çıpayı **ajan başına** dosyaya

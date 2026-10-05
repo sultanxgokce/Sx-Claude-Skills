@@ -97,38 +97,46 @@ if [ -f "$GERCEK_CIPA" ]; then
   O11b="$(kos env GUN_ORTASI_TARIH=2000-01-01)"
   kapi "T11b başka günün çıpası sayılmaz → ? ve ölçemedim" "$(oz "$O11b" cipa_acik)/$(grep -c 'çıpa bugüne ait değil' <<<"$O11b")" "?/1"
   # T14 cipa-ekle: sabahki maddelere dokunmadan arkaya ekler; tazele yeni maddeyi numarasıyla bulur
-  E="$(cd "$B" && bash "$EKLE" --plan "G1) gün ortası X | G2) Y" 2>&1)"; ER=$?
+  E="$(cd "$B" && GUN_ORTASI_SK="$SK" bash "$EKLE" --plan "G1) gün ortası X | G2) Y" 2>&1)"; ER=$?
   M="$(grep -E '^- \[.\] ' "$CF")"
   T4ok="$( (cd "$B" && bash "$SK/gunluk-plan/scripts/cipa.sh" tazele --madde 4 --durum kapandi) >/dev/null 2>&1; echo $?)"
   kapi "T14 cipa-ekle: rc=0 · 5 madde · sabah [x] korundu · 4. madde G1 · tazele 4 çalışır" \
     "$ER/$(grep -c . <<<"$M")/$(sed -n 1p <<<"$M" | cut -c1-5)/$(sed -n 4p <<<"$M" | grep -c 'G1) gün ortası X')/$T4ok" "0/5/- [x]/1/0"
-  (cd "$B" && bash "$EKLE" --plan "G1) gün ortası X | G2) Y" >/dev/null 2>&1); n2="$(grep -cE '^- \[.\] ' "$CF")"
-  (cd "$B" && bash "$EKLE" --geri-al "G2)" >/dev/null 2>&1); rg=$?
+  (cd "$B" && GUN_ORTASI_SK="$SK" bash "$EKLE" --plan "G1) gün ortası X | G2) Y" >/dev/null 2>&1); n2="$(grep -cE '^- \[.\] ' "$CF")"
+  (cd "$B" && GUN_ORTASI_SK="$SK" bash "$EKLE" --geri-al "G2)" >/dev/null 2>&1); rg=$?
   O14="$(kos env)"
   kapi "T14c tekrar ekleme çoğaltmaz (5) · geri-al rc=0 · geri alınan açık sayılmaz (açık 2: [~]B,[ ]C; G1 kapandı, G2 geri)" \
     "$n2/$rg/$(grep -c '^- \[-\] G2) Y → GERİ ALINDI' "$CF")/$(oz "$O14" cipa_acik)" "5/0/1/2"
-  (cd "$B" && bash "$EKLE" --geri-al "G7)" >/dev/null 2>&1); rg2=$?
-  timeout 5 bash "$EKLE" --plan >/dev/null 2>&1; rd=$?; (cd "$B" && bash "$EKLE" --plan " | " >/dev/null 2>&1); rb=$?
+  (cd "$B" && GUN_ORTASI_SK="$SK" bash "$EKLE" --geri-al "G7)" >/dev/null 2>&1); rg2=$?
+  timeout 5 env GUN_ORTASI_SK="$SK" bash "$EKLE" --plan >/dev/null 2>&1; rd=$?; (cd "$B" && GUN_ORTASI_SK="$SK" bash "$EKLE" --plan " | " >/dev/null 2>&1); rb=$?
   kapi "T14d eşleşmeyen geri-al rc=1 · değersiz bayrak rc=2 (döngü yok) · boş liste rc=2" "$rg2/$rd/$rb" "1/2/2"
   kapi "T14e çıpanın '## Not' bölümü ve yazıldı satırı korunur, maddeler Not'tan önce" \
     "$(grep -c '^## Not' "$CF")/$(grep -c '^_yazıldı:' "$CF")/$(awk '/^- \[/{m=NR} /^## Not/{n=NR} END{print (m<n)?"once":"sonra"}' "$CF")" "1/1/once"
   # T14f geri alınan yeniden eklenince AÇILIR (kör-3 Y1) · geri-al yalnız tam etiket: "2)" ve "G" reddedilir, sabah maddesi dokunulmaz (Y2)
-  (cd "$B" && bash "$EKLE" --plan "G2) Y" >/dev/null 2>&1); ry=$?
-  (cd "$B" && timeout 5 bash "$EKLE" --geri-al "2)" >/dev/null 2>&1); ra=$?; (cd "$B" && timeout 5 bash "$EKLE" --geri-al "G" >/dev/null 2>&1); rb2=$?
-  (cd "$B" && timeout 5 bash "$EKLE" --plan "serbest metin" >/dev/null 2>&1); rp=$?
+  (cd "$B" && GUN_ORTASI_SK="$SK" bash "$EKLE" --plan "G2) Y" >/dev/null 2>&1); ry=$?
+  (cd "$B" && timeout 5 env GUN_ORTASI_SK="$SK" bash "$EKLE" --geri-al "2)" >/dev/null 2>&1); ra=$?; (cd "$B" && timeout 5 env GUN_ORTASI_SK="$SK" bash "$EKLE" --geri-al "G" >/dev/null 2>&1); rb2=$?
+  (cd "$B" && timeout 5 env GUN_ORTASI_SK="$SK" bash "$EKLE" --plan "serbest metin" >/dev/null 2>&1); rp=$?
   kapi "T14f geri alınan yeniden açılır · '2)' ve 'G' ret (rc=2) · etiketsiz plan ret · sabah 2. madde [~] kaldı" \
     "$ry/$(grep -c '^- \[ \] G2) Y$' "$CF")/$ra/$rb2/$rp/$(grep -c '^- \[~\] 2) B' "$CF")" "0/1/2/2/2/1"
   # T14g kilit depoda dosya bırakmaz (kör-3 Y3) · "→" geçen madde metni tekrar-yazma engelini bozmaz
-  (cd "$B" && bash "$EKLE" --plan "G5) a → b arası" >/dev/null 2>&1; bash "$EKLE" --plan "G5) a → b arası" >/dev/null 2>&1)
+  (cd "$B" && GUN_ORTASI_SK="$SK" bash "$EKLE" --plan "G5) a → b arası" >/dev/null 2>&1; GUN_ORTASI_SK="$SK" bash "$EKLE" --plan "G5) a → b arası" >/dev/null 2>&1)
   # T14h ikinci gün ortası turu aynı etiketi başka metinle kullanamaz (kör-4 Y4); seçilmiş G1 yerinde kalır
-  (cd "$B" && timeout 5 bash "$EKLE" --plan "G1) başka iş" >/dev/null 2>&1); r14h=$?
+  (cd "$B" && timeout 5 env GUN_ORTASI_SK="$SK" bash "$EKLE" --plan "G1) başka iş" >/dev/null 2>&1); r14h=$?
   kapi "T14h aynı etiket farklı metin → rc=2, sabahki G1 dokunulmadı" "$r14h/$(grep -c 'G1) gün ortası X' "$CF")/$(grep -c 'G1) başka iş' "$CF")" "2/1/0"
   # T14g cipa-ekle cipa.sh ile AYNI kilidi bekler (2026-10-03: ayrı kilitler karşılıklı dışlamıyordu) · "→" metni bir kez
   ( exec 8>>"$CF.kilit"; flock 8; sleep 2 ) & kp=$!; sleep 0.3
-  t0=$(date +%s%N); (cd "$B" && bash "$EKLE" --plan "G6) kilit sınavı" >/dev/null 2>&1); bek=$(( ($(date +%s%N)-t0)/1000000 )); wait "$kp"
+  t0=$(date +%s%N); (cd "$B" && GUN_ORTASI_SK="$SK" bash "$EKLE" --plan "G6) kilit sınavı" >/dev/null 2>&1); bek=$(( ($(date +%s%N)-t0)/1000000 )); wait "$kp"
   kapi "T14g ortak kilit tutulurken ekle BEKLER (≥1500 ms) · '→' içeren madde bir kez" "$([ "$bek" -ge 1500 ] && echo bekledi || echo "beklemedi(${bek}ms)")/$(grep -c 'G5) a → b arası' "$CF")" "bekledi/1"
-  (cd "$B" && GUNLUK_PLAN_TARIH=2000-01-01 bash "$EKLE" --plan "G9) z" >/dev/null 2>&1); r1=$?
-  mv "$CF" "$TMP/cipa.yedek"; (cd "$B" && bash "$EKLE" --plan "G9) z" >/dev/null 2>&1); r2=$?
+  # T14i · 🔴 ARAÇ BULUNAMAZSA FAIL-CLOSED (2026-10-05, CI'da ölçüldü): cipa-ekle çıpa yolunu
+  #   `cipa.sh yol`dan sorar. Araç görünmüyorsa TAHMİN ETMEZ, rc=1 verir ve sebebini söyler.
+  #   Bu kapı niçin var: sınav bu yolu KAZARA tetikliyordu — çağrılara arama dikişi verilmediği
+  #   için kurulu yola düşüyor, geliştirici makinesinde o yol VAR olduğu için yeşil kalıyor,
+  #   CI'da YOK olduğu için altı kapı birden kırmızıya dönüyordu. Artık yol bilerek ölçülüyor.
+  ry_yok="$( (cd "$B" && GUN_ORTASI_SK="$TMP/yok-boyle-bir-dizin" bash "$EKLE" --plan "G8) q" 2>&1) )"; r_yok=$?
+  kapi "T14i araç yoksa rc=1 + sebep söylenir (tahminle yazmaz)" \
+       "$r_yok/$(grep -c 'cipa.sh bulunamadı' <<<"$ry_yok")" "1/1"
+  (cd "$B" && GUNLUK_PLAN_TARIH=2000-01-01 GUN_ORTASI_SK="$SK" bash "$EKLE" --plan "G9) z" >/dev/null 2>&1); r1=$?
+  mv "$CF" "$TMP/cipa.yedek"; (cd "$B" && GUN_ORTASI_SK="$SK" bash "$EKLE" --plan "G9) z" >/dev/null 2>&1); r2=$?
   kapi "T14b cipa-ekle eski çıpaya ve çıpasız kutuya YAZMAZ (rc=1/1)" "$r1/$r2" "1/1"
 else
   echo "  🟡 [OLCEMEDIM] T11/T11b/T11c/T14/T14b/T14c/T14d/T14e/T14f/T14g — gerçek cipa.sh yok: $GERCEK_CIPA (yeşil DEĞİL)"; O3=$((O3+10))
