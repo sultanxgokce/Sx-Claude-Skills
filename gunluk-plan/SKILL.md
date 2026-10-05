@@ -1,7 +1,7 @@
 ---
 name: gunluk-plan
 description: Günün planı — elimizdeki işleri ÖLÇ, katma değer katacakları süz, Sultan-dilinde plan sun, onaydan sonra icra et. Sultan'ın her gün verdiği "işleri analiz et, bugün ne yapalım" isteğinin tek komutlu karşılığı.
-version: 1.0.0
+version: 1.2.0
 ---
 
 # /gunluk-plan — günün planı (ölç → süz → sun → icra)
@@ -22,6 +22,27 @@ bırakmaktır** — plan yalnız oraya giden yoldur.
 4. **Sultan-dili.** Dosya yolu · komut · kod-terimi plan gövdesinde geçmez; kanıt satırında geçebilir.
 5. **Kapasite dürüstlüğü.** Bir güne 3-5 maddeden fazlası yazılmaz. Uzun liste plan değil, kaçıştır.
 6. **Kuyruğunda iş varken durma.** Onaylanan maddeyi bitir, sonra sonrakine geç.
+7. **🔴 ÇIPA ÖNCE, COMPACT SONRA.** Bu komut günün en uzun işidir; bağlamı en çok yiyen
+   komut bağlam kuralı taşımazsa plan transkriptle birlikte kaybolur. Bu yüzden:
+   **plan sunulur sunulmaz çıpa diske yazılır** ve bağlam eşiği geçildiğinde
+   **compact ŞİDDETLE ÖNERİLİR** — ama **asla otomatik yapılmaz** (karar Sultan'ın).
+   🔴 **Dürüst sınır:** bu beceri bağlam doluluğunu **ölçemez** — onu yalnız ajanın kendi
+   göstergesi bilir. Mekanik olarak güvence altına alınan şey **sıradır**: çıpa diskte
+   değilse öneri aracı **üretmeyi reddeder** (çıkış 3). Yani "önce yaz, sonra öner"
+   iyi niyete değil kapıya bağlıdır.
+
+## ADIM 0 — ÇIPAYI AÇ (plan sunulur sunulmaz, onay beklenmeden)
+
+```bash
+bash /config/.claude/skills/gunluk-plan/scripts/cipa.sh yaz --plan "1) … | 2) … | 3) …"
+```
+
+Niçin onay beklenmeden: Sultan onayı gecikebilir, bağlam gecikmez. Çıpa planın **diskteki**
+hâlidir; compact ya da kesinti olursa plan oradan geri okunur.
+
+🔴 **Bu adım ADIM 5'in yıllarca yazılı ama koşmayan yarısıydı** (ölçüldü 2026-10-02):
+belge *"yarım kalanı ertesi günün ölçümüne çıpalar"* diyordu, ama bunu yazan ya da okuyan
+tek satır yoktu. Kural vardı, kapısı yoktu.
 
 ## ADIM 1 — YER-GERÇEĞİNİ ÖLÇ (yedi kaynak, hepsi zorunlu)
 
@@ -88,17 +109,30 @@ Onaydan sonra maddeleri **sırayla** yürüt. Her madde bitince:
 - kayıt-damgası (layiha defteri / kart / CONTEXT — hangisi ilgiliyse)
 - `append-note.sh` ile deftere tek satır
 - Sultan'ın notlarına tek satır (`[SERDAR]` etiketli, onun ağzından)
+- **çıpayı tazele:** `cipa.sh tazele --madde <n> --durum kapandi|yarim --not "<kanıt>"`
+
+**Bağlam eşiği geçildiyse — madde ortasında bile:**
+```bash
+bash /config/.claude/skills/gunluk-plan/scripts/cipa.sh compact-onerisi
+```
+Araç çıpayı diskte görmezse öneri **üretmez** (çıkış 3) — o zaman önce `yaz`/`tazele` koş.
+Öneri çıktısını Sultan'a **olduğu gibi** sun ve bekle. Otomatik compact YOK: oturumu
+Sultan'ın haberi olmadan kesmek, kazandığı bağlamdan pahalıdır.
 
 Madde ortasında yeni bir bulgu çıkarsa: **bodoslama fixleme** — layihaya yaz, plana dokunma
 ([[feedback_kesif_layiha_yolu]]).
 
 ## ADIM 5 — GÜN SONU (aynı komut, `kapanis` argümanıyla)
 
-`/gunluk-plan kapanis` → sabah sunulan planı geri okur, her madde için **kapandı / yarım / açılmadı**
-basar ve yarım kalanı ertesi günün ölçümüne çıpalar. Kapanış olmadan plan bir dilek listesidir.
+`/gunluk-plan kapanis` → sabah sunulan planı **çıpadan** geri okur (`cipa.sh oku`), her madde
+için **kapandı / yarım / açılmadı** basar ve yarım kalanı ertesi güne bırakır. Kapanış olmadan
+plan bir dilek listesidir — ve çıpa olmadan kapanış **hafızadan** yazılır, yani bayattır.
 
 ## Sınırlar / dürüstlük
 
 - Bu skill iş ÜRETMEZ, var olanı süzer. Ölçüm boşsa plan da boştur — uydurma madde yazma.
 - Süzme bir yargıdır, mekanik değil; gerekçesi her zaman yazılır ki ertesi gün tartışılabilsin.
 - Ölçülemeyen kaynak "yok" sayılmaz, "ölçülemedi" diye basılır (unknown ≠ fail).
+- Çıpa ve compact kapısının kendi sınavı: `bash scripts/cipa.test.sh` (18 kapı, hermetik —
+  gerçek çıpaya dokunmaz). Fail-closed kapısı öldürülünce iki kapı kırmızıya döner; yani
+  koruma süs değil, ölçülmüştür.
