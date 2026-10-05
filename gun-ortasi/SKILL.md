@@ -1,7 +1,7 @@
 ---
 name: gun-ortasi
 description: Gün ortası planı — sabahki plan (ya da günün işleri) erken bittiğinde "elde kalan iş var mı?" sorusunu ÖLÇEREK cevaplar; kalan işi dağınık kaynaklardan (plan çıpası, kartlar, konum çapaları, bağımsız göz raporları, gelen kutusu) bulup doğrular ve süzer; kalmadıysa kutunun ana hedeflerine bağlı, ölçülmüş bir boşluğu kapatan 2-3 geliştirme fikri önerir ve Sultan'ın seçimiyle günün ikinci yarısını planlar. Tetik: "/gun-ortasi", "plan bitti ne yapalım", "iş kaldı mı", "gün ortası planı", "yapacak iş kalmadıysa ne geliştirelim".
-version: 1.0.2
+version: 1.0.3
 ---
 
 # /gun-ortasi — gün ortası planı (ölç → doğrula → süz · yoksa fikir → sun → çıpa → icra)
@@ -140,6 +140,14 @@ Akşam `/gunluk-plan kapanis` sabah + gün ortası maddelerini birlikte okur.
 - Sınav: `bash scripts/kalan.test.sh` (hermetik; gerçek kutuya dokunmaz).
 
 ## Sürüm notları
+- **1.0.3 (2026-10-05, bağımsız göz tur 3):** `cipa-ekle.sh` çıpanın varlığını ve TARİHİNİ
+  kilitten **önce** soruyordu. Kilidi beklerken `cipa.sh yaz` dosyayı başka bir güne
+  çevirebilir ve ekleme **yanlış günün çıpasına** yazardı (kontrol-sonra-kullan açığı).
+  Sıra artık: kilitle → doğrula → yaz. Kapı **T14j** (31 kapı). 🔴 Kapının ilk yazımı
+  ISIRMIYORDU — mutasyonda yeşil kaldı, çünkü tarihi kilidi alır almaz değiştiriyordum ve
+  eski sıra da onu görüp reddediyordu; iki sıra aynı sonucu veriyordu. Senaryo düzeltildi:
+  tarih, ekleyici ön kontrolünü GEÇTİKTEN sonra değişiyor. Mutasyonda eski sıra rc=0 verip
+  maddeyi yanlış güne YAZDI — yani açık gerçekti.
 - **1.0.2 (2026-10-05, MUAVİN · CI kırmızısı):** sınav `cipa-ekle.sh`'ı çağırırken **arama
   dikişini vermiyordu** (`GUN_ORTASI_SK`), 16 çağrının hiçbirinde. Araç bu yüzden kurulu yola
   düşüyordu: geliştirici kutusunda o yol VAR olduğu için sınav yeşil kalıyor, CI temiz makinede

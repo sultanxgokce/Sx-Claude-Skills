@@ -127,6 +127,23 @@ if [ -f "$GERCEK_CIPA" ]; then
   ( exec 8>>"$CF.kilit"; flock 8; sleep 2 ) & kp=$!; sleep 0.3
   t0=$(date +%s%N); (cd "$B" && GUN_ORTASI_SK="$SK" bash "$EKLE" --plan "G6) kilit sınavı" >/dev/null 2>&1); bek=$(( ($(date +%s%N)-t0)/1000000 )); wait "$kp"
   kapi "T14g ortak kilit tutulurken ekle BEKLER (≥1500 ms) · '→' içeren madde bir kez" "$([ "$bek" -ge 1500 ] && echo bekledi || echo "beklemedi(${bek}ms)")/$(grep -c 'G5) a → b arası' "$CF")" "bekledi/1"
+  # T14j · 🔴 TOCTOU (bağımsız göz tur 3): kilidi beklerken çıpa BAŞKA güne dönerse ekleme
+  #   REDDEDİLİR. Eskiden tarih kilitten ÖNCE sorulduğu için bekleyen ekleme yanlış günün
+  #   çıpasına yazıyordu. Senaryo: kilidi tutan süreç dosyayı dünün çıpasıyla değiştirir.
+  #   🔴 SIRA KRİTİK (ilk yazımda kapı ISIRMIYORDU — mutasyonda yeşil kaldı): tarihi kilidi
+  #   alır almaz değiştirirsem, ESKİ sıra da kilitten önceki kontrolde yeni tarihi görüp
+  #   reddeder; iki sıra aynı sonucu verir ve kapı hiçbir şey ölçmez. Tarih, ekleyici
+  #   kilitten ÖNCEKİ kontrolünü GEÇTİKTEN sonra değişmeli. Onun için: kilidi al → bekle
+  #   (ekleyici ön kontrolünü geçsin ve kilide takılsın) → tarihi değiştir → bırak.
+  CFK="$CF.kilit"
+  ( exec 9>>"$CFK"; flock 9; sleep 1.5; sed -i "s/ÇIPASI · $BUGUN/ÇIPASI · 2000-01-01/" "$CF" ) & kt=$!
+  sleep 0.3
+  rt="$( (cd "$B" && GUN_ORTASI_SK="$SK" timeout 20 bash "$EKLE" --plan "G4) toctou" 2>&1) )"; rtc=$?
+  wait "$kt" 2>/dev/null
+  kapi "T14j kilit beklenirken çıpa başka güne dönerse YAZMAZ (rc=1)" \
+       "$rtc/$(grep -c 'bugüne ait değil' <<<"$rt")/$(grep -c 'G4) toctou' "$CF")" "1/1/0"
+  sed -i "s/ÇIPASI · 2000-01-01/ÇIPASI · $BUGUN/" "$CF"
+
   # T14i · 🔴 ARAÇ BULUNAMAZSA FAIL-CLOSED (2026-10-05, CI'da ölçüldü): cipa-ekle çıpa yolunu
   #   `cipa.sh yol`dan sorar. Araç görünmüyorsa TAHMİN ETMEZ, rc=1 verir ve sebebini söyler.
   #   Bu kapı niçin var: sınav bu yolu KAZARA tetikliyordu — çağrılara arama dikişi verilmediği

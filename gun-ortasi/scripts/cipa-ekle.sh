@@ -38,11 +38,16 @@ while [ $# -gt 0 ]; do
 done
 [ -n "$KIP" ] || kullanim
 printf '%s' "$METIN" | tr '|' '\n' | grep -q '[^[:space:]]' || { echo "HATA: boş madde listesi" >&2; exit 2; }
+# KİLİT cipa.sh ile AYNI dosya (`$CIPA.kilit`): farklı kilit iki aracı birbirinden habersiz
+#   bırakır — eşzamanlı ekle/tazele ezişirdi (2026-10-03 ölçüldü). Ortak kilit = karşılıklı dışlama.
+# 🔴 DOĞRULAMA KİLİDİN İÇİNDE (bağımsız göz tur 3, 2026-10-05): eskiden varlık ve TARİH
+#    kontrolü kilitten ÖNCE yapılıyordu. Kilidi beklerken `cipa.sh yaz` dosyayı BAŞKA bir
+#    güne/plana çevirebilir; biz kilidi aldıktan sonra tekrar sormadığımız için gün ortası
+#    maddesini YANLIŞ GÜNÜN çıpasına yazardık. Kontrol-sonra-kullan (TOCTOU) açığı.
+#    Sıra artık: kilitle → DOĞRULA → yaz.
+exec 9>>"$CIPA.kilit" && flock -w 10 9 || { echo "HATA: çıpa kilidi alınamadı" >&2; exit 1; }
 [ -f "$CIPA" ] || { echo "HATA: çıpa yok ($CIPA) — önce: cipa.sh yaz --plan …" >&2; exit 1; }
 grep -q "GÜNÜN PLANI ÇIPASI · $BUGUN" "$CIPA" || { echo "HATA: çıpa bugüne ait değil — cipa.sh yaz ile bugünün çıpasını aç" >&2; exit 1; }
-# KİLİT cipa.sh ile AYNI dosya (`$CIPA.kilit`, 2026-10-02 MUAVİN onarımı): farklı kilit iki aracı birbirinden
-#   habersiz bırakır — eşzamanlı ekle/tazele yine ezişirdi (2026-10-03 ölçüldü). Ortak kilit = karşılıklı dışlama.
-exec 9>>"$CIPA.kilit" && flock -w 10 9 || { echo "HATA: çıpa kilidi alınamadı" >&2; exit 1; }
 python3 - "$CIPA" "$KIP" "$METIN" <<'PY'; prc=$?; [ "$prc" -eq 0 ] || exit "$prc"
 import sys, re
 yol, kip, metin = sys.argv[1:4]
