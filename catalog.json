@@ -1408,13 +1408,28 @@
       "id": "gunluk-plan",
       "type": "workflow",
       "name": "Günün Planı — Ölç → Süz → Sun → İcra",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "Elimizdeki işleri yedi kaynaktan ÖLÇER (layiha defteri · kapımda kartları · açık PR'lar · odalardan gelen · kuyruk · defter · ortam), dört elekten süzer (bugün kapanır mı · kilit açar mı · bozuk mu · Sultan hisseder mi), Sultan-dilinde sabit-formatta plan sunar ve onaydan sonra icra eder. Ölçmeden madde yazmak yasak; elenen iş gerekçesiyle kayda geçer.",
       "tags": [
         "planlama",
         "gunluk",
         "olcum",
         "suzme",
+        "workflow",
+        "global"
+      ]
+    },
+    {
+      "id": "gun-ortasi",
+      "type": "workflow",
+      "name": "Gün Ortası Planı — İş Kaldı mı? Kalmadıysa Ne Geliştirelim?",
+      "version": "1.0.1",
+      "description": "Sabahki plan gün ortasında bittiğinde 'elde kalan iş var mı?' sorusunu dokuz kaynaktan ÖLÇER (günün plan çıpası · fabrika kartları · konum çapaları · bağımsız göz raporları · gelen kutusu · layiha defteri · kapımda · hedefler · ortam), adayı gerçek işten ayırır, süzer; iş kalmadıysa kutunun ana hedeflerine bağlı ve ölçülmüş bir boşluğu kapatan 2-3 fikir önerir. Ölçemediği kaynağa 'iş yok' demez, 'ölçemedim' der. Günün çıpasına sabahki maddelere dokunmadan ekler, Sultan başka şık seçerse geri alır.",
+      "tags": [
+        "planlama",
+        "gun-ortasi",
+        "olcum",
+        "fikir",
         "workflow",
         "global"
       ]
