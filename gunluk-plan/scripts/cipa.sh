@@ -35,14 +35,45 @@ _ajan() {
   [ -n "$a" ] || a="$(printf '%s' "${TMUX_PANE:+${TMUX:+}}" >/dev/null 2>&1; tmux display-message -p '#S' 2>/dev/null)"
   [ -n "$a" ] || a="$(id -un 2>/dev/null)"
   [ -n "$a" ] || a="bilinmiyor"
-  printf '%s' "$a" | tr '[:upper:]' '[:lower:]' | tr -c 'a-z0-9_-' '-' | sed 's/-\{1,\}/-/g; s/^-//; s/-$//'
+  # 🔴 TÜRKÇE KATLAMA ÖNCE (bağımsız göz tur 2, 2026-10-05): `tr -c` çok baytlı harfi
+  #    tanımaz; "MUAVİN" → "muav-n" oluyordu, yani KENDİ adım bozuluyordu. Katlama,
+  #    oda-tetik'in kullandığı eşlemenin aynısı — iki yerde iki ayrı yazım olmasın.
+  local k; k="$(printf '%s' "$a" | sed 'y/İIıĞğÜüŞşÖöÇç/iiigguussoocc/' | tr '[:upper:]' '[:lower:]')"
+  local t; t="$(printf '%s' "$k" | tr -c 'a-z0-9_-' '-' | sed 's/-\{1,\}/-/g; s/^-//; s/-$//')"
+  # 🔴 BOŞ KALABİLİYORDU: "###" gibi bir ad tamamen eleniyor ve yol `…-cipa..md` oluyordu.
+  [ -n "$t" ] && [ "$t" != "-" ] || { printf '%s' "bilinmiyor"; return; }
+  # 🔴 ÇAKIŞMA: "A!" ile "A?" ikisi de "a" oluyordu → iki ajan TEK dosyaya düşüyordu.
+  #    Temizlik adı değiştirdiyse, aslının kısa özetini ekliyoruz; temiz adlar aynen kalır.
+  if [ "$t" = "$k" ]; then printf '%s' "$t"
+  else printf '%s-%s' "$t" "$(printf '%s' "$a" | sha256sum | cut -c1-6)"; fi
 }
 AJAN="$(_ajan)"
 CIPA="$DIZ/gunluk-plan-cipa.$AJAN.md"
 # Geriye dönük: eski TEK dosya duruyorsa ve bu ajanınki yoksa, onu EZMEDEN yanına taşı.
-if [ ! -f "$CIPA" ] && [ -f "$DIZ/gunluk-plan-cipa.md" ]; then
-  cp -n "$DIZ/gunluk-plan-cipa.md" "$CIPA" 2>/dev/null || true
-fi
+# 🔴 YALNIZ YAZAN KOMUTLARDA (bağımsız göz tur 2): eskiden bu blok komut ayrıştırılmadan
+#    önce koşuyordu, yani `oku` · `yol` · `compact-onerisi` gibi SALT-OKUR çağrılar bile
+#    dosya YARATIYORDU. Salt-okur bir komutun diske dokunması, ölçümü ölçülen şeyi
+#    değiştiren bir araca çevirir. Göç artık yalnız yazma anında yapılır.
+_gecis_yap() {
+  if [ ! -f "$CIPA" ] && [ -f "$DIZ/gunluk-plan-cipa.md" ]; then
+    cp -n "$DIZ/gunluk-plan-cipa.md" "$CIPA" 2>/dev/null || true
+  fi
+}
+# 🔴 KİLİT TEK YERDEN, FAIL-CLOSED (bağımsız göz tur 2): eskiden kilidi yalnız `tazele`
+#    alıyordu — oysa DOSYAYI KESEN komut `yaz`. Üstelik `|| true` vardı: kilit alınamazsa
+#    yazmaya yine geçiyordu, yani koruma görünüyor ama yoktu (fail-open).
+# 🔴 SALT-OKUR GERİYE DÖNÜKLÜK: eski TEK dosya duruyorsa ve bu ajanın dosyası yoksa,
+#    `oku` ve `compact-onerisi` onu KOPYALAMADAN okur. Göç bir YAZMA işidir; onu yalnız
+#    `tazele` yapar (düzenlemek için dosyaya ihtiyacı var). `yaz` zaten üstüne yazar.
+_okunacak() {
+  if [ -f "$CIPA" ]; then printf '%s' "$CIPA"
+  elif [ -f "$DIZ/gunluk-plan-cipa.md" ]; then printf '%s' "$DIZ/gunluk-plan-cipa.md"
+  else printf '%s' "$CIPA"; fi
+}
+_kilitle() {
+  exec 9>>"$CIPA.kilit" 2>/dev/null || { echo "HATA: çıpa kilidi açılamadı ($CIPA.kilit) — yazmıyorum" >&2; exit 1; }
+  flock -w 10 9 2>/dev/null || { echo "HATA: çıpa kilidi 10 sn'de alınamadı — yazmıyorum (başka bir araç yazıyor)" >&2; exit 1; }
+}
 
 kullanim() {
   cat >&2 <<'K'
@@ -88,6 +119,9 @@ case "$KOMUT" in
   yaz)
     [ -n "$PLAN" ] || { echo "HATA: --plan zorunlu (boş çıpa çıpa değildir)" >&2; exit 2; }
     mkdir -p "$DIZ" 2>/dev/null || { echo "HATA: çıpa dizini açılamadı: $DIZ" >&2; exit 1; }
+    # 🔴 DOSYAYI KESEN KOMUT BU — kilidi ÖNCE o almalı (bağımsız göz tur 2). Eskiden kilit
+    #    yalnız `tazele`de vardı; `yaz` kilitsiz kesiyordu, yani en yıkıcı yol korumasızdı.
+    _kilitle
     {
       printf '# ⚓ GÜNÜN PLANI ÇIPASI · %s\n\n' "$BUGUN"
       printf '> Bu dosya compact/kesinti sonrası planın geri okunduğu yerdir.\n'
@@ -104,11 +138,14 @@ case "$KOMUT" in
     echo "✓ çıpa yazıldı: $CIPA"
     ;;
   tazele)
+    # 🔴 GÖÇ VARLIK KONTROLÜNDEN ÖNCE: eski TEK dosyadan devralan ajan, dosyası henüz
+    #    doğmadığı için "çıpa yok" duyuyordu ve dünkü planı düzenleyemiyordu.
+    _gecis_yap
     [ -f "$CIPA" ] || { echo "HATA: çıpa yok — önce 'yaz'" >&2; exit 1; }
     # 🔴 KİLİT (bulan: NÂZIR/MÜDÜR — eşzamanlı yazımda 5 turun 1'inde bir işaret EZİLDİ).
     #    Çıpa tek dosya ve birden çok el ona yazıyor; kilitsiz tazeleme kapanmış bir maddeyi
     #    sessizce geri açabilir. Kardeş araçta aynı desen kullanılıyor.
-    exec 9>>"$CIPA.kilit" 2>/dev/null && flock 9 2>/dev/null || true
+    _kilitle
     [ -n "$MADDE" ] && [ -n "$DURUM" ] || { echo "HATA: --madde ve --durum zorunlu" >&2; exit 2; }
     # 🔴 "geri-alindi" EKLENDI (bulan: NÂZIR/MÜDÜR). Eksikti ve eksikliği sessizdi: geri
     #    alınmış bir madde `kapandi` ile tazelenince "GERİ ALINDI → KAPANDI" diye ÜST ÜSTE
@@ -141,8 +178,9 @@ print(f'✓ madde {madde} → {et}')
 PY
     ;;
   oku)
-    [ -f "$CIPA" ] || { echo "çıpa YOK: $CIPA" >&2; exit 1; }
-    cat "$CIPA"
+    _OK="$(_okunacak)"
+    [ -f "$_OK" ] || { echo "çıpa YOK: $CIPA" >&2; exit 1; }
+    cat "$_OK"
     ;;
   yol)
     # 🔴 TEK KAYNAK: çıpanın yolunu BAŞKA araçlar da bilmek zorunda (ör. /gun-ortasi'nın
@@ -156,7 +194,7 @@ PY
   compact-onerisi)
     # 🔴 FAIL-CLOSED: çıpa diskte yoksa öneri ÜRETİLMEZ. Sultan'ın direktifi
     #    "sormadan ÖNCE çıpayı yaz" idi; burada o sıra mekanik olarak zorlanır.
-    if [ ! -f "$CIPA" ]; then
+    if [ ! -f "$(_okunacak)" ]; then
       echo "✗ ÇIPA YOK — compact önerisi üretilmedi (önce: cipa.sh yaz --plan …)" >&2
       echo "  Niçin sert: çıpasız compact, planı transkriptle birlikte götürür." >&2
       exit 3

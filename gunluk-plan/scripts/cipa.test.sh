@@ -75,7 +75,19 @@ kapi "K25 birinci dosyada ikincinin planı YOK (K23 tautoloji değil)" "0" \
      "$(grep -c 'ikinci isi' "$AT/gunluk-plan-cipa.birinci.md" 2>/dev/null; true)"
 # Eski tek dosya duruyorsa EZİLMEDEN yanına taşınır (geriye dönük).
 ET="$T/eski"; mkdir -p "$ET"; printf '# eski plan\n- [ ] 1) eski madde\n' > "$ET/gunluk-plan-cipa.md"
-GUNLUK_PLAN_CIPA_DIZ="$ET" GUNLUK_PLAN_AJAN=UCUNCU bash "$ARAC" oku >/dev/null 2>&1
+# 🔴 K28b · SALT-OKUR KOMUT DOSYA YARATMAZ (bağımsız göz tur 2): göç eskiden komut
+#    ayrıştırılmadan ÖNCE koşuyordu; `oku`/`yol`/`compact-onerisi` bile dosya yaratıyordu.
+#    Bu kapı o yan etkiyi yasaklıyor — ölçen araç ölçtüğü şeyi değiştirmemeli.
+for kk in oku yol compact-onerisi; do
+  GUNLUK_PLAN_CIPA_DIZ="$ET" GUNLUK_PLAN_AJAN=UCUNCU bash "$ARAC" "$kk" >/dev/null 2>&1
+done
+kapi "K28b salt-okur komutlar (oku·yol·compact-onerisi) dosya YARATMAZ" "0" \
+     "$(ls "$ET" 2>/dev/null | grep -c '^gunluk-plan-cipa\.ucuncu\.md$')"
+# K28c · salt-okur `oku` eski tek dosyayı KOPYALAMADAN okur (içerik kaybolmaz, dosya doğmaz)
+kapi "K28c oku eski tek dosyayı kopyalamadan okur" "1" \
+     "$(GUNLUK_PLAN_CIPA_DIZ="$ET" GUNLUK_PLAN_AJAN=UCUNCU bash "$ARAC" oku 2>/dev/null | grep -c 'eski madde')"
+# göç YAZMA işidir → `tazele` yapar (düzenlemek için dosyaya ihtiyacı var)
+GUNLUK_PLAN_CIPA_DIZ="$ET" GUNLUK_PLAN_AJAN=UCUNCU bash "$ARAC" tazele --madde 1 --durum yarim >/dev/null 2>&1
 kapi "K26 eski TEK dosya korunur (silinmez)" "1" "$(grep -c 'eski madde' "$ET/gunluk-plan-cipa.md" 2>/dev/null; true)"
 kapi "K27 eski plan ajanın dosyasına TAŞINIR (kaybolmaz)" "1" \
      "$(grep -c 'eski madde' "$ET/gunluk-plan-cipa.ucuncu.md" 2>/dev/null; true)"
@@ -93,6 +105,35 @@ kapi "K30 yol AJANA göre değişir (tek dosyaya dönmez)" "0" \
      "$(a=$(GUNLUK_PLAN_CIPA_DIZ="$T/cipa" GUNLUK_PLAN_AJAN=bir bash "$ARAC" yol); \
         b=$(GUNLUK_PLAN_CIPA_DIZ="$T/cipa" GUNLUK_PLAN_AJAN=iki bash "$ARAC" yol); \
         [ "$a" != "$b" ] && echo 0 || echo 1)"
+
+# ── K31-K35 · bağımsız gözün tur-2 bulguları (2026-10-05) ────────────────────
+# K31 · Türkçe harf adı BOZMAZ. Ölçülmüş vaka: "MUAVİN" → "muav-n" (tr -c çok baytlı harfi
+#   tanımıyor) — yani aracın sahibinin kendi adı bozuluyordu ve kimse görmüyordu.
+kapi "K31 Türkçe ad bozulmaz (MUAVİN → muavin)" "gunluk-plan-cipa.muavin.md" \
+     "$(GUNLUK_PLAN_CIPA_DIZ="$T/cipa" GUNLUK_PLAN_AJAN="MUAVİN" bash "$ARAC" yol | sed 's|.*/||')"
+# K32 · Tamamen elenen ad BOŞ bırakılmaz (yol `…-cipa..md` oluyordu)
+kapi "K32 tamamen elenen ad → bilinmiyor (boş değil)" "gunluk-plan-cipa.bilinmiyor.md" \
+     "$(GUNLUK_PLAN_CIPA_DIZ="$T/cipa" GUNLUK_PLAN_AJAN="###" bash "$ARAC" yol | sed 's|.*/||')"
+# K33 · İki AYRI ad tek dosyaya ÇÖKMEZ ("A!" ile "A?" ikisi de "a" oluyordu)
+kapi "K33 temizlikte çakışan iki ad AYRI dosya" "0" \
+     "$(a=$(GUNLUK_PLAN_CIPA_DIZ="$T/cipa" GUNLUK_PLAN_AJAN='A!' bash "$ARAC" yol); \
+        b=$(GUNLUK_PLAN_CIPA_DIZ="$T/cipa" GUNLUK_PLAN_AJAN='A?' bash "$ARAC" yol); \
+        [ "$a" != "$b" ] && echo 0 || echo 1)"
+# K34 · KİLİT FAIL-CLOSED: kilit alınamıyorsa YAZMAZ. Eskiden `|| true` ile yazmaya geçiyordu.
+#   Kilidi başka bir süreç tutuyorken yaz/tazele 10 sn bekler, alamazsa rc=1 verir.
+KL="$T/cipa/gunluk-plan-cipa.kilitli.md"
+GUNLUK_PLAN_CIPA_DIZ="$T/cipa" GUNLUK_PLAN_AJAN=kilitli bash "$ARAC" yaz --plan "1) a" >/dev/null 2>&1
+( exec 9>>"$KL.kilit"; flock 9; sleep 3 ) & kp=$!; sleep 0.4
+t0=$(date +%s%N)
+rk="$(GUNLUK_PLAN_CIPA_DIZ="$T/cipa" GUNLUK_PLAN_AJAN=kilitli timeout 20 bash "$ARAC" yaz --plan "1) b" >/dev/null 2>&1; echo $?)"
+bk=$(( ($(date +%s%N)-t0)/1000000 )); wait "$kp" 2>/dev/null
+kapi "K34 yaz dalı ortak kilidi BEKLER (kilitsiz kesmiyor)" "bekledi" \
+     "$([ "$bk" -ge 1500 ] && echo bekledi || echo "beklemedi(${bk}ms)")"
+# K35 · kilit DOSYASI açılamıyorsa yazma YAPILMAZ (dizin salt-okur)
+RO="$T/salt-okur"; mkdir -p "$RO"; printf '# x\n- [ ] 1) a\n' > "$RO/gunluk-plan-cipa.ro.md"; chmod 500 "$RO"
+kapi "K35 kilit açılamıyorsa rc=1 (fail-open değil)" "1" \
+     "$(GUNLUK_PLAN_CIPA_DIZ="$RO" GUNLUK_PLAN_AJAN=ro bash "$ARAC" tazele --madde 1 --durum kapandi >/dev/null 2>&1; echo $?)"
+chmod 700 "$RO"
 
 echo "── GERÇEK çıpaya dokunulmadı"
 kapi "K18 sınav kendi dizininde kaldı" "1" "$(printf '%s' "$C" | grep -c "^$T/" )"
