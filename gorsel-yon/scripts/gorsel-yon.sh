@@ -304,7 +304,8 @@ case "${1:-}" in
   # 🔴 DÖRDÜNCÜ KAPI (2026-10-06): yukarıdaki üç kapı ÜRETİM tarafını süzer — ne
   #    isteyeceğimizi. HAZIR GELEN dosya o kapılardan HİÇ geçmiyordu. Canlı vaka: 62 kare
   #    başka bir araçla üretilip köprüye düştü ve vitrine gidiyordu; dosyanın kendi
-  #    köken kutusundaki beyanını okuyan tek satır yoktu. Bu kol onu okur (imza DOĞRULANMAZ).
+  #    köken kutusundaki beyanını okuyan tek satır yoktu. Bu kol onu okur; imza, c2pa kütüphanesi
+  #    varsa YAPISAL olarak doğrulanır, yoksa doğrulanmadığı çıktıda söylenir (sessiz düşüş yok).
   koken)        shift; exec python3 "$(dirname "$0")/koken.py" "$@" ;;
   *) sed -n '2,26p' "$0"; exit 2 ;;
 esac
