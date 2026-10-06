@@ -60,7 +60,11 @@ parçalarında **değil**, JUMBF kutusunda (PNG `caBX` · JPEG APP11 · WebP `C2
    - okuyucu **pozitif kontrolü** geçemezse → `rc=3` ÖLÇEMEDİM. Ölçemediğine temiz demez.
    - hüküm YALNIZ köken kutusunun GÖVDESİNDEN çıkar; kutu dışında geçen beyan metni
      `parca_disi_iz` olarak **kayda geçer ama hüküm vermez** (sahte-pozitif kapısı).
-   - biçimi ayrıştırılamayan dosya `okunamadi`'dır — "temiz" değil.
+   - biçimi ayrıştırılamayan **ya da yapısı bozuk** dosya `okunamadi`'dır — "temiz" değil ve
+     **iddia da çıkarılmaz**. Üç ayrıştırıcı sınır + bütünlük denetler (PNG'de CRC ve kesiklik,
+     JPEG'de zincirin sonuna varması, WebP'de RIFF/kutu boyları); ihlalde fail-closed.
+     Niçin bu yönde: dar kapının zararı **yanlış suçlama**dır — kısmi ayrıştırmadan "üretilmiş"
+     hükmü çıkarmak masum bir kareyi vitrine sokmamak olurdu (bağımsız göz, dar kapı tur-1).
    - **tanımadığım parça** varken bilinen hiçbir kayıt yoksa sınıf `belirsiz-tasiyici`'dir,
      `hic-yok` DEĞİL: bilmediğim bir taşıyıcıyı "köken yok" diye sınıflamak sözlük tuzağının
      ikinci yüzüdür (bağımsız göz tur-2 bunu yakaladı).
@@ -182,12 +186,16 @@ gorsel-yon.sh uret --kullanim doku-zemin --istem "..." --uygula # gerçek üreti
   sulanması ölçülmüştü).
 
 ## Kanıt
-`bash scripts/koken.test.sh` → **35 kapı**, hermetik (gerçek karelere dokunmaz), çift yönlü
-fikstürlü. Altı mutasyon kapısı: PNG kolu körleştirilince K13, JPEG kolu körleştirilince K18, kutu-dışı
+`bash scripts/koken.test.sh` → **42 kapı**, hermetik (gerçek karelere dokunmaz), çift yönlü
+fikstürlü. Yedi mutasyon kapısı: PNG kolu körleştirilince K13, JPEG kolu körleştirilince K18, kutu-dışı
 iz kaydı susturulunca K19 → `rc=3 ÖLÇEMEDİM`; imza-şartı kaldırılınca K26 doğrulanmamış
 çelişkinin RED'e döndüğünü gösterir; yapısal kol koparılınca K27 imzalı dosyanın
-`olculemedi`ye düştüğünü, K31b de beraat yolu geri eklenince `kanit_olabilir`
-kümesinin kirlendiğini gösterir (kapalılık süs değil).
+`olculemedi`ye düştüğünü, K31b beraat yolu geri eklenince `kanit_olabilir`
+kümesinin kirlendiğini, K32 de PNG CRC denetimi kaldırılınca bozuk bir dosyanın "üretilmiş"
+diye **suçlandığını** gösterir (denetim süs değil).
+**Bozuk-yapı ailesi ayrıca ölçülür:** beş bozuk fikstür (kesik PNG · CRC'si bozuk PNG ·
+uzunluğu dosyayı aşan PNG · EOI'siz JPEG · kutu boyu şişirilmiş WebP) — hepsi köken iddiası
+TAŞIYOR, hepsi `okunamadi` olmalı ve iddia yüzeyinde **RED üretmemeli** (sahte-kırmızı kapısı).
 **İmzalı yüz GERÇEK:** sınav kendi sertifikasını `openssl` ile üretir ve `c2pa` ile gerçekten
 imzalı bir kare yazar (ağa çıkmaz) — K23 imzayı doğrular, K24 doğrulanmış çelişkinin kestiğini,
 K25 imzalı üretilmiş karenin iddia yüzeyine giremediğini, K30 ise imzası DOĞRULANMIŞ bir

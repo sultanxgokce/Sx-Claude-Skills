@@ -10,10 +10,14 @@ kapi(){ if [ "$2" = "$3" ]; then G=$((G+1)); printf '  🟢 %s\n' "$1"; else K=$
 python3 - "$TMP" <<'PY'
 import struct, sys, os
 T=sys.argv[1]
-def png(yol, parcalar):
+import zlib
+def png_bayt(parcalar):
     out=bytearray(b"\x89PNG\r\n\x1a\n")
-    for t,d in parcalar: out+=struct.pack(">I",len(d))+t.encode()+d+b"\0\0\0\0"
-    open(yol,"wb").write(bytes(out))
+    for t,d in parcalar:
+        tip=t.encode()
+        out+=struct.pack(">I",len(d))+tip+d+struct.pack(">I",zlib.crc32(tip+d)&0xffffffff)
+    return bytes(out)
+def png(yol, parcalar): open(yol,"wb").write(png_bayt(parcalar))
 ihdr=struct.pack(">IIBBBBB",1,1,8,2,0,0,0)
 URET=b"trainedAlgorithmicMedia"; KARMA=b"compositeWithTrainedAlgorithmicMedia"
 ANAH=b'digitalSourceType":"http://cv.iptc.org/newscodes/digitalsourcetype/'
@@ -47,6 +51,19 @@ os.makedirs(f"{T}/bagsiz",exist_ok=True)
 png(f"{T}/bagsiz/i.png",[("IHDR",ihdr),("caBX",b'jumbc2pa"description":"'+URET+b'"'),("IDAT",b"x"),("IEND",b"")])
 # BİÇİM AYRIŞTIRILAMAZ: adı .png ama gövdesi değil
 os.makedirs(f"{T}/bozuk",exist_ok=True); open(f"{T}/bozuk/h.png","wb").write(b"bu bir goruntu degil")
+# 🔴 BOZUK YAPI AİLESİ: hepsi KÖKEN İDDİASI TAŞIYOR — fail-closed olmazsa yanlış SUÇLAMA üretirler
+tam = png_bayt([("IHDR",ihdr),("caBX",iddia(URET)),("IDAT",b"x"),("IEND",b"")])
+open(f"{T}/bozuk/kesik.png","wb").write(tam[:-6])                      # IEND kesildi
+kotu = bytearray(tam); kotu[-1] ^= 0xFF
+open(f"{T}/bozuk/crc.png","wb").write(bytes(kotu))                     # CRC bozuk
+asan = bytearray(tam); asan[8:12] = struct.pack(">I", 10**6)
+open(f"{T}/bozuk/uzunluk.png","wb").write(bytes(asan))                 # uzunluk dosyayı aşıyor
+jham = bytearray(); jham += b"\xff\xd8\xff\xeb"
+jgov = b"JP\0\0"+iddia(URET)
+jham += struct.pack(">H", len(jgov)+2) + jgov                          # EOI YOK → zincir bitmedi
+open(f"{T}/bozuk/kesik.jpg","wb").write(bytes(jham))
+wgov = bytearray(b"WEBP"); wgov += b"C2PA" + struct.pack("<I", 10**6) + iddia(URET)
+open(f"{T}/bozuk/uzunluk.webp","wb").write(b"RIFF"+struct.pack("<I",len(wgov))+bytes(wgov))
 PY
 
 O="$(python3 "$A" "$TMP/uretilmis/a.png" 2>&1)"; r=$?
@@ -96,6 +113,16 @@ kapi "K16 imzasız kipte metin çıktısı doğrulanmadığını SÖYLER (overcl
 O="$(python3 "$A" "$TMP/bozuk/h.png" 2>&1)"
 kapi "K17 biçimi ayrıştırılamayan dosya 'temiz' DEĞİL 'okunamadi' sayılır" \
      "$(grep -c 'okunamadi' <<<"$O")/$(grep -c 'ÖLÇEMEDİM' <<<"$O")" "1/1"
+# 🔴 YANLIŞ SUÇLAMA KAPISI: bozuk yapılar köken iddiası TAŞIYOR; kısmi ayrıştırma olsa
+#    hepsi 'üretilmiş' diye suçlanırdı. Beşi de fail-closed 'okunamadi' olmalı.
+for b in kesik.png crc.png uzunluk.png kesik.jpg uzunluk.webp; do
+  O="$(python3 "$A" "$TMP/bozuk/$b" --json 2>&1)"
+  kapi "K17-$b bozuk yapıdan İDDİA ÇIKARILMAZ (okunamadi · yanlış suçlama yok)" \
+       "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(k['koken_durumu']+'/'+str(k['kaynak_turu']))" <<<"$O")" \
+       "okunamadi/None"
+done
+O="$(python3 "$A" "$TMP/bozuk/crc.png" "$TMP/bozuk/kesik.jpg" --kullanim vitrin 2>&1)"; r=$?
+kapi "K17z bozuk yapı iddia taşıyan yüzeyde RED ÜRETMEZ (sahte-kırmızı yok)" "$r" "0"
 
 O="$(python3 "$A" "$TMP/bagsiz/i.png" --json 2>&1)"
 kapi "K20 kutuda BAĞSIZ dizi iddia sayılmaz (açıklama metnine konan sözcük hüküm vermez)" \
@@ -117,11 +144,13 @@ kapi "K28 İÇİ OKUNAMAYAN köken kutusu 'kanıt olabilir' DAMGASI ALMAZ (sahte
      "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(k['kanit_olabilir']+'/'+k['iddia_guveni'])" <<<"$O")" \
      "bilinmiyor/yok"
 python3 - "$TMP" <<'FIX'
-import struct, sys
+import struct, sys, zlib
 T=sys.argv[1]
 def png(yol,parcalar):
     out=bytearray(b"\x89PNG\r\n\x1a\n")
-    for t,d in parcalar: out+=struct.pack(">I",len(d))+t.encode()+d+b"\0\0\0\0"
+    for t,d in parcalar:
+        tip=t.encode()
+        out+=struct.pack(">I",len(d))+tip+d+struct.pack(">I",zlib.crc32(tip+d)&0xffffffff)
     open(yol,"wb").write(bytes(out))
 ihdr=struct.pack(">IIBBBBB",1,1,8,2,0,0,0)
 ANAH=b'digitalSourceType":"http://cv.iptc.org/newscodes/digitalsourcetype/'
@@ -196,6 +225,11 @@ O="$(python3 "$A" "$TMP/uretilmis" "$TMP/temizmis" "$TMP/karma" "$TMP/tanimadik"
 kapi "K31 'kanıt olabilir' kapalı küme {HAYIR,bilinmiyor} — hiçbir yoldan 'evet' çıkmaz" \
      "$(python3 -c "import json,sys;d=json.load(sys.stdin);print(','.join(sorted({k['kanit_olabilir'] for k in d['kayitlar']})))" <<<"$O")" \
      "HAYIR,bilinmiyor"
+M7="$TMP/koken-mutant7.py"
+sed 's/        if zlib.crc32(tip + govde) & 0xFFFFFFFF != beklenen: return None   # CRC tutmuyor/        pass/' "$A" > "$M7"
+O="$(python3 "$M7" "$TMP/bozuk/crc.png" --json 2>&1)"
+kapi "K32 MUTASYON: CRC denetimi kaldırılınca bozuk dosya 'üretilmiş' diye SUÇLANIR (denetim süs değil)" \
+     "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(str(k['kaynak_turu']))" <<<"$O")" "uretilmis"
 M6="$TMP/koken-mutant6.py"; sed 's/        kanit_olabilir = "HAYIR" if kt == "uretilmis" else "bilinmiyor"/        kanit_olabilir = "HAYIR" if kt == "uretilmis" else "evet"/' "$A" > "$M6"
 O="$(python3 "$M6" "$TMP/temizmis/b.png" --json 2>&1)"
 kapi "K31b MUTASYON: beraat yolu geri eklenince küme kirlenir (kapalılık süs değil)" \

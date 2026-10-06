@@ -33,7 +33,7 @@
 
 Çıkış: 0 kapı geçti · 1 RED · 2 kullanım · 3 ÖLÇEMEDİ (okuyucu kör — temiz SAYILMAZ)
 """
-import argparse, collections, hashlib, json, os, struct, sys, tempfile
+import argparse, collections, hashlib, json, os, struct, sys, tempfile, zlib
 
 try:
     if os.environ.get("KOKEN_IMZA") == "kapali": raise ImportError("elle kapatıldı")
@@ -57,43 +57,58 @@ PNG_BILINEN = {"IHDR","IDAT","IEND","PLTE","tRNS","gAMA","cHRM","sRGB","iCCP","b
                "pHYs","sBIT","sPLT","hIST","tIME","acTL","fcTL","fdAT"}
 
 # ───────────────────────── biçim ayrıştırıcıları (hepsi gövde döndürür) ─────────────────────────
+# 🔴 BOZUK YAPIYI "OKUNABİLİR" SAYMA (bağımsız göz · dar kapı tur-1): zararın yönü yanlış
+#    SUÇLAMA olduğu için, kısmi ayrıştırmadan iddia çıkarmak kabul edilemez. Üç ayrıştırıcı da
+#    sınır + bütünlük denetler; ihlalde None döner ve dosya `okunamadi` olur ("temiz" değil).
 def png_parcalari(ham):
     if ham[:8] != b"\x89PNG\r\n\x1a\n": return None
-    i, out = 8, []
+    i, out, bitti = 8, [], False
     while i + 8 <= len(ham):
         n, tip = struct.unpack(">I4s", ham[i:i+8])
+        if i + 12 + n > len(ham): return None            # bildirilen uzunluk dosyayı aşıyor
+        govde = ham[i+8:i+8+n]
+        beklenen = struct.unpack(">I", ham[i+8+n:i+12+n])[0]
+        if zlib.crc32(tip + govde) & 0xFFFFFFFF != beklenen: return None   # CRC tutmuyor
         t = tip.decode("latin1", "replace")
-        out.append((t, ham[i+8:i+8+n]))
+        out.append((t, govde))
         i += 12 + n
-        if t == "IEND": break
+        if t == "IEND": bitti = True; break
+    if not bitti or i != len(ham): return None           # kesik ya da artık bayt var
     return out
 
 def jpeg_parcalari(ham):
     """JPEG işaretçi zincirini yürür → [(ad, gövde)]. APP11 = JUMBF taşıyıcısı."""
     if ham[:2] != b"\xff\xd8": return None
-    i, out = 2, []
-    while i + 4 <= len(ham):
-        if ham[i] != 0xFF: return out          # zincir bozuk — okunanı döndür
+    i, out, bitti = 2, [], False
+    while i + 2 <= len(ham):
+        if ham[i] != 0xFF: return None          # zincir bozuk → kısmi okuma İDDİA ÜRETMEZ
         m = ham[i+1]
-        if m == 0xD9: out.append(("EOI", b"")); break
+        if m == 0xD9: out.append(("EOI", b"")); bitti = True; break
         if m == 0xDA:                           # görüntü verisi başladı
-            out.append(("SOS", b"")); break
+            out.append(("SOS", b"")); bitti = True; break
+        if m in (0x01,) or 0xD0 <= m <= 0xD8:   # uzunluk alanı OLMAYAN işaretçiler
+            i += 2; continue
+        if i + 4 > len(ham): return None         # uzunluk alanı dosyada yok
         n = struct.unpack(">H", ham[i+2:i+4])[0]
+        if n < 2 or i + 2 + n > len(ham): return None     # uzunluk alanı tutmuyor
         ad = f"APP{m-0xE0}" if 0xE0 <= m <= 0xEF else f"M{m:02X}"
         out.append((ad, ham[i+4:i+2+n]))
         i += 2 + n
-    return out
+    return out if bitti else None
 
 def webp_parcalari(ham):
     """RIFF kutu zinciri → [(fourcc, gövde)]. Köken taşıyıcısı: C2PA."""
     if ham[:4] != b"RIFF" or ham[8:12] != b"WEBP": return None
+    riff = struct.unpack("<I", ham[4:8])[0]
+    if riff + 8 != len(ham): return None        # bildirilen RIFF boyu dosya boyuyla tutmuyor
     i, out = 12, []
     while i + 8 <= len(ham):
         t = ham[i:i+4].decode("latin1", "replace")
         n = struct.unpack("<I", ham[i+4:i+8])[0]
+        if i + 8 + n > len(ham): return None    # kutu uzunluğu dosyayı aşıyor
         out.append((t, ham[i+8:i+8+n]))
         i += 8 + n + (n & 1)                    # tek uzunluk dolgu baytı alır
-    return out
+    return out if i == len(ham) else None       # artık bayt = bozuk zincir
 
 def imzali_oku(yol):
     """c2pa ile YAPISAL okuma: imza + sertifika zinciri doğrulanır, iddia şemadan alınır.
@@ -222,7 +237,9 @@ def oku(yol):
 def _png(parcalar):
     out = bytearray(b"\x89PNG\r\n\x1a\n")
     for t, d in parcalar:
-        out += struct.pack(">I", len(d)) + t.encode() + d + b"\0\0\0\0"
+        tip = t.encode()
+        out += (struct.pack(">I", len(d)) + tip + d
+                + struct.pack(">I", zlib.crc32(tip + d) & 0xFFFFFFFF))
     return bytes(out)
 
 def _jpeg(segmentler):
