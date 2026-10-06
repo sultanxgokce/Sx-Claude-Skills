@@ -62,7 +62,7 @@ parçalarında **değil**, JUMBF kutusunda (PNG `caBX` · JPEG APP11 · WebP `C2
      `parca_disi_iz` olarak **kayda geçer ama hüküm vermez** (sahte-pozitif kapısı).
    - biçimi ayrıştırılamayan **ya da yapısı bozuk** dosya `okunamadi`'dır — "temiz" değil ve
      **iddia da çıkarılmaz**. Üç ayrıştırıcı sınır + bütünlük denetler (PNG'de CRC ve kesiklik,
-     JPEG'de zincirin sonuna varması ve entropi akışı başladıktan sonra dosyanın EOI ile bitmesi, WebP'de RIFF/kutu boyları); ihlalde fail-closed.
+     JPEG'de zincirin sonuna varması + tarama bölümünün KENDİ BAŞLIĞININ tutarlılığı (uzunluk = 6+2×bileşen, bileşen 1-4) + tarama başlığının GÖVDESİ (bileşen kimlikleri tekil · tablo seçicileri 0-3 · Ss/Se 0-63 ve Se≥Ss · Ah/Al 0-13) + bileşen kimliklerinin ÇERÇEVE başlığında (SOF) tanımlı olması — **ve çerçeve başlığının VAR olması**: yokluğu sessizce atlanmaz, yapı bozukluğudur (geçerli JPEG'de SOF, SOS'tan önce gelir) + başlıktan sonra akışın var olması + dosyanın EOI ile bitmesi, WebP'de RIFF/kutu boyları); ihlalde fail-closed.
      Niçin bu yönde: dar kapının zararı **yanlış suçlama**dır — kısmi ayrıştırmadan "üretilmiş"
      hükmü çıkarmak masum bir kareyi vitrine sokmamak olurdu (bağımsız göz, dar kapı tur-1).
    - **tanımadığım parça** varken bilinen hiçbir kayıt yoksa sınıf `belirsiz-tasiyici`'dir,
@@ -198,8 +198,8 @@ gorsel-yon.sh uret --kullanim doku-zemin --istem "..." --uygula # gerçek üreti
   sulanması ölçülmüştü).
 
 ## Kanıt
-`bash scripts/koken.test.sh` → **48 kapı**, hermetik (gerçek karelere dokunmaz), çift yönlü
-fikstürlü. Dokuz mutasyon kapısı: PNG kolu körleştirilince K13, JPEG kolu körleştirilince K18, kutu-dışı
+`bash scripts/koken.test.sh` → **60 kapı**, hermetik (gerçek karelere dokunmaz), çift yönlü
+fikstürlü. On üç mutasyon kapısı: PNG kolu körleştirilince K13, JPEG kolu körleştirilince K18, kutu-dışı
 iz kaydı susturulunca K19 → `rc=3 ÖLÇEMEDİM`; imza-şartı kaldırılınca K26 doğrulanmamış
 çelişkinin RED'e döndüğünü gösterir; yapısal kol koparılınca K27 imzalı dosyanın
 `olculemedi`ye düştüğünü, K31b beraat yolu geri eklenince `kanit_olabilir`
@@ -207,9 +207,11 @@ kümesinin kirlendiğini, K32 PNG CRC denetimi kaldırılınca bozuk bir dosyan�
 diye **suçlandığını**, K34 aynı şeyin kesik bir JPEG'de olduğunu, K35 de
 anahtar-değer bağı yerine pencere-araması geri gelirse ilgisiz alandaki bir dizinin
 **suçladığını** gösterir (denetimler süs değil).
-**Bozuk-yapı ailesi ayrıca ölçülür:** altı bozuk fikstür (kesik PNG · CRC'si bozuk PNG ·
-uzunluğu dosyayı aşan PNG · EOI'siz JPEG · SOS'tan sonra kesilmiş JPEG · kutu boyu
-şişirilmiş WebP) — hepsi köken iddiası
+**Bozuk-yapı ailesi ayrıca ölçülür:** on iki bozuk fikstür (kesik PNG · CRC'si bozuk PNG ·
+uzunluğu dosyayı aşan PNG · EOI'siz JPEG · SOS'tan sonra kesilmiş JPEG · **tarama başlığı
+tutarsız JPEG — EOI'si yerinde! — beş ayrı bozulma biçimiyle: bileşen sayısı · tekrarlı kimlik ·
+tablo seçicisi · tarama aralığı · Ah/Al · çerçevede tanımsız bileşene gönderme** — her
+birinin ALTIN karşılığı da var (K36/K37: geçerli başlık ve çerçeveyle uyumlu SOS okunur) · kutu boyu şişirilmiş WebP) — hepsi köken iddiası
 TAŞIYOR, hepsi `okunamadi` olmalı ve iddia yüzeyinde **RED üretmemeli** (sahte-kırmızı kapısı).
 **İmzalı yüz GERÇEK:** sınav kendi sertifikasını `openssl` ile üretir ve `c2pa` ile gerçekten
 imzalı bir kare yazar (ağa çıkmaz) — K23 imzayı doğrular, K24 doğrulanmış çelişkinin kestiğini,
@@ -219,6 +221,35 @@ K25 imzalı üretilmiş karenin iddia yüzeyine giremediğini, K30 ise imzası D
 davranış süs değil, ölçülmüştür. Üç biçim de GERÇEK zincirle sınanır (PNG parça · JPEG APP11
 segmenti · WebP RIFF kutusu) — kılık verilmiş bayt dizisiyle değil. K3/K5 tautoloji kapıları: üretilmiş kare
 iddiasız yüzeye **girer**, uyuşan beyan **geçer** — yoksa kapı "her şeye kırmızı" olurdu.
+
+**Sıkılaştırmanın yanlış-kırmızı üretmediği GERÇEK dosyalarla ölçülür — ve bu ölçümün kendi
+betiği vardır** (`scripts/koken-canli-olcum.sh`; hermetik sınav sentetiktir, "gerçek dosyada
+yanlış-kırmızı yok" bambaşka bir iddiadır ve kayıtsızsa iddia değil anıdır):
+```
+koken-canli-olcum.sh /config/evraklar/Sultan/0-Gelen   (KOKEN_OLCUM_TAVAN=4000)
+ölçülen dosya: 2159 (tavan 4000)
+biçim : jpeg 1589 · png 567 · webp 3
+durum : hic-yok 1986 · meta-var 103 · koken-kutusu-var 63 · belirsiz-tasiyici 7
+okunamadi: 0/2159  🟢
+```
+🔴 **Bu ölçümün kapsamı dardır ve betik bunu kendi çıktısında söyler:** saydığı şey yapısal
+ayrıştırmadır. Dosyaların hepsinin gerçekten geçerli olduğunu bağımsız bir referansla
+doğrulamaz, kapının öteki kararlarına bakmaz. O yüzden "yanlış-kırmızı yok" demez,
+**"bu kümede `okunamadi` yok"** der — ölçtüğünün adını olduğundan büyük söylemek vekil-ölçüt
+tuzağının ta kendisidir.
+
+🔴 **Her sıkılaştırma bu betikle ölçüldü:** SOF-zorunluluğu eklendikten sonra 2159 gerçek
+dosyanın **0'ı** `okunamadi` döndü. Sıkılaştırmanın bedeli ölçülmeden kabul edilmedi — tek
+masum dosya düşse geri alınacaktı.
+
+🔴 **Ölçmediğim (kodda da yazılı):** seçilen Huffman tablolarının DHT'de tanımlı olması ve
+tarama parametrelerinin JPEG kipine (baseline/progressive) uygun BİRLEŞİMİ. Bunlar kod-çözücü
+işidir; bu araç kod çözmez, yapı tutarlılığına bakar. Sonucu: alanları aralıkta olup anlamsal
+olarak geçersiz bir başlık `okunamadi` sayılmaz — ama bu **iddia üretmek** değildir.
+Betik **tavanını basar** ve sayım tavana dayandıysa bunu söyler — tavanını bilmediğin okumada
+ölçtüğün şey olay değil tavandır. Exif taşıyan dosyalarda `meta-var` döndüğü ayrıca doğrulandı
+(meta kolunun pozitif kontrolü) — yani `hic-yok` sonucu aracın körlüğü değil, dosyaların
+gerçekten çıplak olması.
 
 **Canlı kalibrasyon (ilk gerçek koşu, 2026-10-06):** 62 kare · 46 ayrı görüntü · küme içi
 ikiz 16 · kümeler arası 0 — üç bağımsız ölçümle birebir. Hepsinde köken kutusu
