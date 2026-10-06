@@ -16,7 +16,7 @@
 #   gorsel-yon.sh uret --kullanim <alan> --istem "..." [--sayi 1] [--uygula]
 #   gorsel-yon.sh kullanimlar                  # izinli alanları listele
 #   gorsel-yon.sh koken <dosya|dizin> [--kullanim vitrin] [--beyan gercek] [--json]
-#                                              # DOSYANIN kendi beyanını okur (4. kapı)
+#                                              # DOSYANIN köken kutusunu okur (4. kapı)
 #
 #   VARSAYILAN KURU-KOŞUM: --uygula verilmedikçe HİÇBİR kredi harcanmaz, istek gönderilmez.
 #
