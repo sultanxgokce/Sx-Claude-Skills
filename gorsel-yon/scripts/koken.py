@@ -140,6 +140,13 @@ def _kutuda_iddia(govde, pencere=96):
         if b"digitalCapture" in yakin: return "gercek"
         i += len(ANAHTAR)
 
+# 🔴 OLUMLU ⟂ OLUMSUZ İDDİA (bağımsız göz tur-3): "ben üretilmişim" dosyayı KISITLAR,
+#    "ben gerçek fotoğrafım" dosyayı SERBEST BIRAKIR. İkisi aynı güvenle kabul edilemez.
+#    Olumsuz iddia imza doğrulanmasa da işler (temkinli taraf). OLUMLU iddia ise YALNIZ
+#    imza doğrulanmışsa işler — yoksa "bilinmiyor"dur. Eski kod ikisini eşitliyordu:
+#    imzası GEÇERSİZ bir manifest "digitalCapture" deyip kareyi kanıt yüzeyine sokabilirdi.
+OLUMLU_IDDIA = {"gercek"}
+
 def oku(yol):
     """→ sözlük. Hüküm YALNIZ köken kutusunun gövdesinden çıkar."""
     with open(yol, "rb") as f: ham = f.read()
@@ -200,6 +207,12 @@ def oku(yol):
                       "dogrulama_hali": im["dogrulama_hali"], "eylemler": im["eylemler"],
                       "okuma_yolu": "c2pa-yapisal",
                       "koken_durumu": "koken-kutusu-var" if durum in ("hic-yok", "belirsiz-tasiyici", "meta-var") else durum})
+    kt, imza = sonuc["kaynak_turu"], sonuc["imza_dogrulandi"]
+    if kt in OLUMLU_IDDIA and imza != "evet":
+        sonuc["kaynak_turu"] = None                 # olumlu iddia DOĞRULANMADAN kabul edilmez
+        sonuc["dusurulen_iddia"] = kt
+    sonuc["iddia_guveni"] = ("dogrulanmis-imza" if imza == "evet"
+                             else "dogrulanmamis" if sonuc["kaynak_turu"] else "yok")
     return sonuc
 
 # ───────────────────────── pozitif kontrol (okuyucu kör mü) ─────────────────────────
@@ -285,14 +298,19 @@ def main():
         tur = kt or "bilinmiyor"
         tur_kaynagi = "dosyadan" if kt else ("beyandan" if a.beyan else "yok")
         if not kt and a.beyan: tur = a.beyan
+        # 🔴 'evet' DAMGASI YALNIZ DOĞRULANMIŞ OLUMLU İDDİAYLA (bağımsız göz tur-3):
+        #    eski kod "köken kutusu var ama iddia okunamadı" hâline de 'evet' diyordu →
+        #    boş/şema-dışı/güvenilmez kutu gerçeklik kanıtına dönüşüyordu (sahte-yeşil).
         kanit_olabilir = ("HAYIR" if kt == "uretilmis"
-                          else "bilinmiyor" if durum in ("hic-yok", "okunamadi", "belirsiz-tasiyici")
-                          else "evet")
+                          else "evet" if (kt in OLUMLU_IDDIA and r.get("imza_dogrulandi") == "evet")
+                          else "bilinmiyor")
         celisen = a.beyan_sahibi if (kt and a.beyan and a.beyan != kt) else None
         imza_ok = r.get("imza_dogrulandi") == "evet"
         iddia = bool(a.kullanim and a.kullanim in KANIT_ALANLARI)
         if kt == "uretilmis" and iddia:
-            red.append((y, f"üretilmiş kare iddia taşıyan yüzeye ({a.kullanim}) giremez"))
+            red.append((y, f"üretilmiş kare iddia taşıyan yüzeye ({a.kullanim}) giremez"
+                           f" · iddianın güveni: {r.get('iddia_guveni')}"
+                           + ("" if imza_ok else " (imza doğrulanmadı — TEMKİNLİ red)")))
         if celisen and imza_ok:
             red.append((y, f"dosya '{kt}' diyor, {celisen} beyanı '{a.beyan}' diyor — çelişki çözülmeden yayın YOK"))
         elif celisen:
@@ -330,6 +348,11 @@ def main():
                   "\n      Gerçek fotoğraf olarak SUNULAMAZ (kayıt tek yeniden-kayıtta yok olur).")
         if say.get("okunamadi"):
             print(f"   ◻ {say['okunamadi']} dosyanın biçimini ayrıştıramadım → ÖLÇEMEDİM (temiz değil).")
+        dus = [s for s in satirlar if s.get("dusurulen_iddia")]
+        if dus:
+            print(f"   🔴 {len(dus)} dosya 'gerçek fotoğraf' iddiası taşıyor AMA imzası doğrulanmadı"
+                  f" ({dus[0]['imza_dogrulandi']}) → iddia DÜŞÜRÜLDÜ, sınıf 'bilinmiyor'."
+                  "\n      Olumlu iddia doğrulanmadan kabul edilmez; olumsuz iddia edilir (asimetri).")
         disi = sum(1 for s in satirlar if s["parca_disi_iz"])
         if disi:
             print(f"   ℹ️ {disi} dosyada beyan metni köken kutusunun DIŞINDA görüldü"

@@ -43,3 +43,18 @@ if os.path.exists(hedef):
     os.remove(hedef)
 c2pa.Builder(manifest).sign_file(f"{T}/ham.png", hedef, c2pa.Signer.from_info(bilgi))
 print(hedef)
+
+# İKİNCİ FİKSTÜR: OLUMLU iddia ("gerçek makine karesi"), İMZALI.
+# Niçin: "olumlu iddia yalnız doğrulanmış imzayla kabul edilir" kuralının GEÇEN yüzü
+# yoksa kural tautolojidir — her olumlu iddiayı düşüren bir kapı da aynı sınavı geçerdi.
+GERCEK = "http://cv.iptc.org/newscodes/digitalsourcetype/digitalCapture"
+man2 = {
+    "claim_generator_info": [{"name": "koken-sinav", "version": "1.0"}],
+    "assertions": [{"label": "c2pa.actions.v2", "data": {"actions": [
+        {"action": "c2pa.created", "digitalSourceType": GERCEK}]}}],
+}
+hedef2 = f"{T}/imzali/k-gercek.png"
+if os.path.exists(hedef2):
+    os.remove(hedef2)
+c2pa.Builder(man2).sign_file(f"{T}/ham.png", hedef2, c2pa.Signer.from_info(bilgi))
+print(hedef2)
