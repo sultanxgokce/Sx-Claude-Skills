@@ -62,7 +62,7 @@ parçalarında **değil**, JUMBF kutusunda (PNG `caBX` · JPEG APP11 · WebP `C2
      `parca_disi_iz` olarak **kayda geçer ama hüküm vermez** (sahte-pozitif kapısı).
    - biçimi ayrıştırılamayan **ya da yapısı bozuk** dosya `okunamadi`'dır — "temiz" değil ve
      **iddia da çıkarılmaz**. Üç ayrıştırıcı sınır + bütünlük denetler (PNG'de CRC ve kesiklik,
-     JPEG'de zincirin sonuna varması, WebP'de RIFF/kutu boyları); ihlalde fail-closed.
+     JPEG'de zincirin sonuna varması ve entropi akışı başladıktan sonra dosyanın EOI ile bitmesi, WebP'de RIFF/kutu boyları); ihlalde fail-closed.
      Niçin bu yönde: dar kapının zararı **yanlış suçlama**dır — kısmi ayrıştırmadan "üretilmiş"
      hükmü çıkarmak masum bir kareyi vitrine sokmamak olurdu (bağımsız göz, dar kapı tur-1).
    - **tanımadığım parça** varken bilinen hiçbir kayıt yoksa sınıf `belirsiz-tasiyici`'dir,
@@ -94,6 +94,11 @@ o kurulana kadar olumlu iddia **yalnız kayda geçer** (`dusurulen_iddia`) ve ç
 |---|---|---|
 | *üretilmişim* (kısıtlayıcı) | keser | **keser** — "TEMKİNLİ red" yazar |
 | *gerçek fotoğrafım* (serbest bırakıcı) | kayda geçer, hüküm YOK | kayda geçer, hüküm YOK |
+
+🔴 **Hükme girmemek, GÖRÜNMEZ olmak değildir:** düşürülen olumlu iddia `dosya_iddiasi`
+alanında yaşamaya devam eder ve **çelişki hesabına girer** — dosya "gerçeğim" derken insan
+"üretilmiş" dediğinde uyarı/red yine çıkar. (Bu ayrım bir turda kaçtı: iddia hükümden önce
+silindiği için gerçek bir çelişki sessizce geçiyordu.)
 | *çelişki* (insanı suçlar) | keser | uyarır, kesmez — "sorulmalı" |
 
 Bir köken kutusu bulunup içindeki iddia okunamazsa sonuç `bilinmiyor`'dur — boş ya da
@@ -186,15 +191,16 @@ gorsel-yon.sh uret --kullanim doku-zemin --istem "..." --uygula # gerçek üreti
   sulanması ölçülmüştü).
 
 ## Kanıt
-`bash scripts/koken.test.sh` → **42 kapı**, hermetik (gerçek karelere dokunmaz), çift yönlü
-fikstürlü. Yedi mutasyon kapısı: PNG kolu körleştirilince K13, JPEG kolu körleştirilince K18, kutu-dışı
+`bash scripts/koken.test.sh` → **45 kapı**, hermetik (gerçek karelere dokunmaz), çift yönlü
+fikstürlü. Sekiz mutasyon kapısı: PNG kolu körleştirilince K13, JPEG kolu körleştirilince K18, kutu-dışı
 iz kaydı susturulunca K19 → `rc=3 ÖLÇEMEDİM`; imza-şartı kaldırılınca K26 doğrulanmamış
 çelişkinin RED'e döndüğünü gösterir; yapısal kol koparılınca K27 imzalı dosyanın
 `olculemedi`ye düştüğünü, K31b beraat yolu geri eklenince `kanit_olabilir`
-kümesinin kirlendiğini, K32 de PNG CRC denetimi kaldırılınca bozuk bir dosyanın "üretilmiş"
-diye **suçlandığını** gösterir (denetim süs değil).
-**Bozuk-yapı ailesi ayrıca ölçülür:** beş bozuk fikstür (kesik PNG · CRC'si bozuk PNG ·
-uzunluğu dosyayı aşan PNG · EOI'siz JPEG · kutu boyu şişirilmiş WebP) — hepsi köken iddiası
+kümesinin kirlendiğini, K32 PNG CRC denetimi kaldırılınca bozuk bir dosyanın "üretilmiş"
+diye **suçlandığını**, K34 de aynı şeyin kesik bir JPEG'de olduğunu gösterir (denetimler süs değil).
+**Bozuk-yapı ailesi ayrıca ölçülür:** altı bozuk fikstür (kesik PNG · CRC'si bozuk PNG ·
+uzunluğu dosyayı aşan PNG · EOI'siz JPEG · SOS'tan sonra kesilmiş JPEG · kutu boyu
+şişirilmiş WebP) — hepsi köken iddiası
 TAŞIYOR, hepsi `okunamadi` olmalı ve iddia yüzeyinde **RED üretmemeli** (sahte-kırmızı kapısı).
 **İmzalı yüz GERÇEK:** sınav kendi sertifikasını `openssl` ile üretir ve `c2pa` ile gerçekten
 imzalı bir kare yazar (ağa çıkmaz) — K23 imzayı doğrular, K24 doğrulanmış çelişkinin kestiğini,

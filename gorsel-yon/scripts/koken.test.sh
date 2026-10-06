@@ -62,6 +62,11 @@ jham = bytearray(); jham += b"\xff\xd8\xff\xeb"
 jgov = b"JP\0\0"+iddia(URET)
 jham += struct.pack(">H", len(jgov)+2) + jgov                          # EOI YOK → zincir bitmedi
 open(f"{T}/bozuk/kesik.jpg","wb").write(bytes(jham))
+jsos = bytearray(b"\xff\xd8\xff\xeb")
+jg2 = b"JP\0\0"+iddia(URET)
+jsos += struct.pack(">H", len(jg2)+2) + jg2
+jsos += b"\xff\xda\x00\x0c" + b"\x00"*8 + b"\x12\x34\x56"   # SOS + entropi akışı, EOI YOK
+open(f"{T}/bozuk/sos-kesik.jpg","wb").write(bytes(jsos))
 wgov = bytearray(b"WEBP"); wgov += b"C2PA" + struct.pack("<I", 10**6) + iddia(URET)
 open(f"{T}/bozuk/uzunluk.webp","wb").write(b"RIFF"+struct.pack("<I",len(wgov))+bytes(wgov))
 PY
@@ -115,7 +120,7 @@ kapi "K17 biçimi ayrıştırılamayan dosya 'temiz' DEĞİL 'okunamadi' sayıl�
      "$(grep -c 'okunamadi' <<<"$O")/$(grep -c 'ÖLÇEMEDİM' <<<"$O")" "1/1"
 # 🔴 YANLIŞ SUÇLAMA KAPISI: bozuk yapılar köken iddiası TAŞIYOR; kısmi ayrıştırma olsa
 #    hepsi 'üretilmiş' diye suçlanırdı. Beşi de fail-closed 'okunamadi' olmalı.
-for b in kesik.png crc.png uzunluk.png kesik.jpg uzunluk.webp; do
+for b in kesik.png crc.png uzunluk.png kesik.jpg sos-kesik.jpg uzunluk.webp; do
   O="$(python3 "$A" "$TMP/bozuk/$b" --json 2>&1)"
   kapi "K17-$b bozuk yapıdan İDDİA ÇIKARILMAZ (okunamadi · yanlış suçlama yok)" \
        "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(k['koken_durumu']+'/'+str(k['kaynak_turu']))" <<<"$O")" \
@@ -184,6 +189,9 @@ if [ "$IMZALI" = "1" ]; then
   python3 "$A" "$TMP/imzali/j.png" --beyan gercek --beyan-sahibi insan >/dev/null 2>"$TMP/e8"; r=$?
   kapi "K24 imza DOĞRULANMIŞSA çelişki RED (K22 tautoloji değil — iki yüz ayrı ölçüldü)" \
        "$r/$(grep -c 'çelişki çözülmeden yayın YOK' "$TMP/e8")" "1/1"
+  python3 "$A" "$TMP/imzali/k-gercek.png" --beyan uretilmis --beyan-sahibi insan >/dev/null 2>"$TMP/e9"; r=$?
+  kapi "K33 DÜŞÜRÜLEN olumlu iddia çelişkide GÖRÜNÜR kalır (hükme girmemek görünmez olmak değil)" \
+       "$r/$(grep -c "dosya 'gercek' diyor" "$TMP/e9")" "1/1"
   python3 "$A" "$TMP/imzali/j.png" --kullanim vitrin >/dev/null 2>&1; r=$?
   kapi "K25 imzalı üretilmiş kare iddia taşıyan yüzeye GİREMEZ" "$r" "1"
   O="$(python3 "$A" "$TMP/imzali/k-gercek.png" --json 2>&1)"
@@ -225,6 +233,11 @@ O="$(python3 "$A" "$TMP/uretilmis" "$TMP/temizmis" "$TMP/karma" "$TMP/tanimadik"
 kapi "K31 'kanıt olabilir' kapalı küme {HAYIR,bilinmiyor} — hiçbir yoldan 'evet' çıkmaz" \
      "$(python3 -c "import json,sys;d=json.load(sys.stdin);print(','.join(sorted({k['kanit_olabilir'] for k in d['kayitlar']})))" <<<"$O")" \
      "HAYIR,bilinmiyor"
+M8="$TMP/koken-mutant8.py"
+sed 's|            if ham\[-2:\] != b"\\xff\\xd9": return None|            pass|' "$A" > "$M8"
+O="$(python3 "$M8" "$TMP/bozuk/sos-kesik.jpg" --json 2>&1)"
+kapi "K34 MUTASYON: SOS bütünlük denetimi kaldırılınca kesik JPEG 'üretilmiş' diye SUÇLANIR" \
+     "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(str(k['kaynak_turu']))" <<<"$O")" "uretilmis"
 M7="$TMP/koken-mutant7.py"
 sed 's/        if zlib.crc32(tip + govde) & 0xFFFFFFFF != beklenen: return None   # CRC tutmuyor/        pass/' "$A" > "$M7"
 O="$(python3 "$M7" "$TMP/bozuk/crc.png" --json 2>&1)"
