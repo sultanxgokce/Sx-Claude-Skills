@@ -182,6 +182,12 @@ PY
     [ -f "$_OK" ] || { echo "çıpa YOK: $CIPA" >&2; exit 1; }
     cat "$_OK"
     ;;
+  ajan)
+    # 🔴 TEK KAYNAK: ajan kimliğini BAŞKA araçlar da bilmek zorunda (ör. ölçüm aracının
+    #    "dün nerede bıraktım" kaynağı). İkinci bir türetme yazmak, aynı kimliğin iki
+    #    yazımı demektir ve ilk değişimde ayrışır — `yol` verbiyle aynı gerekçe.
+    printf '%s\n' "$AJAN"
+    ;;
   yol)
     # 🔴 TEK KAYNAK: çıpanın yolunu BAŞKA araçlar da bilmek zorunda (ör. /gun-ortasi'nın
     #    cipa-ekle.sh'ı). Yolu ikinci bir yerde TÜRETMEK, b0097'nin birebir tekrarıdır:
