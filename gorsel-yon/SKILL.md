@@ -73,8 +73,15 @@ parçalarında **değil**, JUMBF kutusunda (PNG `caBX` · JPEG APP11 · WebP `C2
 
 | kip | şart | ne yapar | kayıt |
 |---|---|---|---|
-| **AÇIK** | `c2pa` kütüphanesi var | manifest **yapısal** okunur: imza + sertifika zinciri doğrulanır, `digitalSourceType` eylem iddiasının İÇİNDEN alınır (bayt arama DEĞİL) | `imza_dogrulandi: evet` + verenin adı |
-| **KAPALI** | kütüphane yok ya da `KOKEN_IMZA=kapali` | kutu-gövdesi okuyucusuna düşer; iddia `digitalSourceType` anahtarına **bağlı** olmak zorunda (serbest geçen sözcük iddia sayılmaz) | `imza_dogrulandi: olculemedi` |
+| **AÇIK** | `c2pa` kütüphanesi var | manifest **yapısal** okunur, imza doğrulanır, `digitalSourceType` eylem iddiasının İÇİNDEN alınır (bayt arama DEĞİL) | `evet-guven-zinciri` ya da `evet-imza-tutuyor` |
+| **KAPALI** | kütüphane yok ya da `KOKEN_IMZA=kapali` | kutu-gövdesi okuyucusuna düşer; `digitalSourceType` anahtarının **DEĞERİ ayrıştırılır** — anahtardan sonra yalnız ayıraçlar atlanır, gelen tek belirteç okunur; ilgisiz alandaki dizi iddia sayılmaz | `imza_dogrulandi: olculemedi` |
+
+🔴 **İMZA TUTMAK ⟂ MÜHRE GÜVENMEK — iki ayrı şey, ikisi tek 'evet'e indirilmez.**
+`evet-imza-tutuyor` = imza matematiksel olarak doğrulandı, ama **veren kimliği beyandır**:
+kendi sertifikasını üreten herkes bu sonucu alır (ölçülmüş vaka: sınavın kendi yerel
+sertifikası). `evet-guven-zinciri` = mühür güvenilen bir köke bağlandı. Çıktı bu ayrımı
+yazar ve zincir doğrulanmadığında bunu açıkça söyler — ölçülenden fazlasını beyan etmek,
+bu kapının korumaya çalıştığı şeyi deler.
 
 🔴 **Sessiz düşüş yasak:** kip her koşuda çıktıya basılır ve kayda geçer.
 
@@ -191,13 +198,15 @@ gorsel-yon.sh uret --kullanim doku-zemin --istem "..." --uygula # gerçek üreti
   sulanması ölçülmüştü).
 
 ## Kanıt
-`bash scripts/koken.test.sh` → **45 kapı**, hermetik (gerçek karelere dokunmaz), çift yönlü
-fikstürlü. Sekiz mutasyon kapısı: PNG kolu körleştirilince K13, JPEG kolu körleştirilince K18, kutu-dışı
+`bash scripts/koken.test.sh` → **48 kapı**, hermetik (gerçek karelere dokunmaz), çift yönlü
+fikstürlü. Dokuz mutasyon kapısı: PNG kolu körleştirilince K13, JPEG kolu körleştirilince K18, kutu-dışı
 iz kaydı susturulunca K19 → `rc=3 ÖLÇEMEDİM`; imza-şartı kaldırılınca K26 doğrulanmamış
 çelişkinin RED'e döndüğünü gösterir; yapısal kol koparılınca K27 imzalı dosyanın
 `olculemedi`ye düştüğünü, K31b beraat yolu geri eklenince `kanit_olabilir`
 kümesinin kirlendiğini, K32 PNG CRC denetimi kaldırılınca bozuk bir dosyanın "üretilmiş"
-diye **suçlandığını**, K34 de aynı şeyin kesik bir JPEG'de olduğunu gösterir (denetimler süs değil).
+diye **suçlandığını**, K34 aynı şeyin kesik bir JPEG'de olduğunu, K35 de
+anahtar-değer bağı yerine pencere-araması geri gelirse ilgisiz alandaki bir dizinin
+**suçladığını** gösterir (denetimler süs değil).
 **Bozuk-yapı ailesi ayrıca ölçülür:** altı bozuk fikstür (kesik PNG · CRC'si bozuk PNG ·
 uzunluğu dosyayı aşan PNG · EOI'siz JPEG · SOS'tan sonra kesilmiş JPEG · kutu boyu
 şişirilmiş WebP) — hepsi köken iddiası
@@ -220,7 +229,8 @@ var ve `trainedAlgorithmicMedia` diyor; üretici `gpt-image`, filigran var. Beya
 
 **Sıkı okuyucuyla yeniden ölçüldü (tur-2/tur-3, şema şartı + imza doğrulaması eklendikten
 SONRA):** aynı 62 kare · 46 ayrı görüntü · küme içi 16 · kümeler arası 0 — rakamlar birebir
-aynı kaldı, yani sıkılaştırma gerçek pozitifleri düşürmedi. Üstelik artık **imza ve sertifika
-zinciri de doğrulanıyor**: 62/62 `Valid`, veren **OpenAI OpCo, LLC**, iddia `c2pa.actions.v2`
-eyleminin içinden okundu; 62/62 `kanit_olabilir: HAYIR`. Yani "dosyanın kendi beyanı" cümlesi artık ölçülmüş bir güven
-sınırına dayanıyor, anahtar sözcüğe değil.
+aynı kaldı, yani sıkılaştırma gerçek pozitifleri düşürmedi. Üstelik iddia artık
+`c2pa.actions.v2` eyleminin **içinden** okunuyor, anahtar sözcükten değil: 62/62
+`evet-imza-tutuyor`, beyan edilen veren **OpenAI OpCo, LLC**, 62/62 `kanit_olabilir: HAYIR`.
+🔴 Dürüst sınır: bu 62 karede doğrulanan şey **imzanın tutması**dır; güven zinciri
+(`Trusted`) doğrulanmadı — veren kimliği beyandır ve araç bunu her koşuda söyler.
