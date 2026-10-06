@@ -48,6 +48,7 @@ os.makedirs(f"{T}/disi",exist_ok=True)
 png(f"{T}/disi/g.png",[("IHDR",ihdr),("tEXt",b"Not\0"+URET),("IDAT",b"x"),("IEND",b"")])
 # KUTUDA BAĞSIZ İZ: dizi köken kutusunda ama digitalSourceType anahtarına bağlı DEĞİL
 os.makedirs(f"{T}/bagsiz",exist_ok=True)
+png(f"{T}/bagsiz/n.png",[("IHDR",ihdr),("caBX",b'jumbc2pa'+ANAH+b'digitalCompositeOfTrackedEvent","aciklama":"'+URET+b'"'),("IDAT",b"x"),("IEND",b"")])
 png(f"{T}/bagsiz/i.png",[("IHDR",ihdr),("caBX",b'jumbc2pa"description":"'+URET+b'"'),("IDAT",b"x"),("IEND",b"")])
 # BİÇİM AYRIŞTIRILAMAZ: adı .png ama gövdesi değil
 os.makedirs(f"{T}/bozuk",exist_ok=True); open(f"{T}/bozuk/h.png","wb").write(b"bu bir goruntu degil")
@@ -129,6 +130,10 @@ done
 O="$(python3 "$A" "$TMP/bozuk/crc.png" "$TMP/bozuk/kesik.jpg" --kullanim vitrin 2>&1)"; r=$?
 kapi "K17z bozuk yapı iddia taşıyan yüzeyde RED ÜRETMEZ (sahte-kırmızı yok)" "$r" "0"
 
+O="$(python3 "$A" "$TMP/bagsiz/n.png" --json 2>&1)"
+kapi "K20c ANAHTAR-DEĞER BAĞI: anahtarın değeri başka şeyse, ilgisiz alandaki dizi iddia DEĞİL" \
+     "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(str(k['kaynak_turu'])+'/'+k['kanit_olabilir'])" <<<"$O")" \
+     "None/bilinmiyor"
 O="$(python3 "$A" "$TMP/bagsiz/i.png" --json 2>&1)"
 kapi "K20 kutuda BAĞSIZ dizi iddia sayılmaz (açıklama metnine konan sözcük hüküm vermez)" \
      "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(str(k['kaynak_turu'])+'/'+k['koken_durumu'])" <<<"$O")" \
@@ -183,9 +188,12 @@ if command -v openssl >/dev/null 2>&1 && python3 -c "import c2pa" >/dev/null 2>&
 fi
 if [ "$IMZALI" = "1" ]; then
   O="$(python3 "$A" "$TMP/imzali/j.png" --json 2>&1)"
-  kapi "K23 GERÇEK imzalı dosyada imza DOĞRULANIR, iddia ŞEMADAN okunur (bayt arama değil)" \
-       "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(k['imza_dogrulandi']+'/'+str(k['kaynak_turu'])+'/'+k['okuma_yolu'])" <<<"$O")" \
-       "evet/uretilmis/c2pa-yapisal"
+  kapi "K23 GERÇEK imzalı dosyada imza TUTAR, iddia ŞEMADAN okunur; güven zinciri AYRI yazılır" \
+       "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(k['imza_dogrulandi']+'/'+str(k['kaynak_turu'])+'/'+k['okuma_yolu']+'/'+k['iddia_guveni'])" <<<"$O")" \
+       "evet-imza-tutuyor/uretilmis/c2pa-yapisal/imza-tutuyor-veren-dogrulanmadi"
+  O="$(python3 "$A" "$TMP/imzali/j.png" 2>&1)"
+  kapi "K23b çıktı FAZLA GÜVEN BEYAN ETMEZ: zincirin doğrulanmadığını açıkça söyler" \
+       "$(grep -c 'GÜVEN ZİNCİRİ doğrulanmadı' <<<"$O")/$(grep -c 'GÜVEN ZİNCİRİ doğrulandı' <<<"$O")" "1/0"
   python3 "$A" "$TMP/imzali/j.png" --beyan gercek --beyan-sahibi insan >/dev/null 2>"$TMP/e8"; r=$?
   kapi "K24 imza DOĞRULANMIŞSA çelişki RED (K22 tautoloji değil — iki yüz ayrı ölçüldü)" \
        "$r/$(grep -c 'çelişki çözülmeden yayın YOK' "$TMP/e8")" "1/1"
@@ -247,5 +255,17 @@ M6="$TMP/koken-mutant6.py"; sed 's/        kanit_olabilir = "HAYIR" if kt == "ur
 O="$(python3 "$M6" "$TMP/temizmis/b.png" --json 2>&1)"
 kapi "K31b MUTASYON: beraat yolu geri eklenince küme kirlenir (kapalılık süs değil)" \
      "$(python3 -c "import json,sys;print(json.load(sys.stdin)['kayitlar'][0]['kanit_olabilir'])" <<<"$O")" "evet"
+M9="$TMP/koken-mutant9.py"
+sed 's/        belirtec = govde\[j:k\].rsplit(b"\/", 1)\[-1\]          # IPTC URL.si de olabilir/        belirtec = govde[j:j+200]/' "$A" > "$M9"
+python3 - "$M9" "$TMP" <<'MUT' 2>/dev/null
+import sys
+m,T=sys.argv[1],sys.argv[2]
+s=open(m,encoding="utf-8").read()
+s=s.replace('if belirtec == KARMA','if KARMA in belirtec').replace('if belirtec == URETIM','if URETIM in belirtec').replace('if belirtec == b"digitalCapture"','if b"digitalCapture" in belirtec')
+open(m,"w",encoding="utf-8").write(s)
+MUT
+O="$(KOKEN_IMZA=kapali python3 "$M9" "$TMP/bagsiz/n.png" --json 2>&1)"
+kapi "K35 MUTASYON: bağ yerine pencere-araması geri gelirse ilgisiz alandaki dizi SUÇLAR" \
+     "$(python3 -c "import json,sys;print(str(json.load(sys.stdin)['kayitlar'][0]['kaynak_turu']))" <<<"$O")" "uretilmis"
 echo; echo "SONUÇ: $G geçti · $K kaldı${ATLANAN:+ · $ATLANAN atlandı (ölçülmedi)}"
 [ "$K" -eq 0 ]

@@ -141,23 +141,46 @@ def imzali_oku(yol):
             if dst in IPTC_SON and kaynak_turu is None: kaynak_turu = IPTC_SON[dst]
     imza = (m.get("signature_info") or {})
     return {"kaynak_turu": kaynak_turu,
-            "imza_dogrulandi": "evet" if hal.lower() in ("valid", "trusted") else f"gecersiz:{hal}",
+            # 🔴 İKİ AYRI ŞEY (bağımsız göz · dar kapı tur-3): imzanın MATEMATİKSEL olarak
+            #    tutması (Valid) ile mührün GÜVENİLEN bir kökten gelmesi (Trusted) aynı şey
+            #    değildir. Kendi sertifikasını üreten herkes Valid alır. İkisini tek 'evet'e
+            #    indirmek, ölçülenden fazlasını beyan etmekti.
+            "imza_dogrulandi": ("evet-guven-zinciri" if hal.lower() == "trusted"
+                                else "evet-imza-tutuyor" if hal.lower() == "valid"
+                                else f"gecersiz:{hal}"),
             "imza_sahibi": imza.get("issuer"), "imza_zamani": imza.get("time"),
             "eylemler": eylemler, "dogrulama_hali": hal}
 
 ANAHTAR = b"digitalSourceType"
 
-def _kutuda_iddia(govde, pencere=96):
-    """Köken kutusunun gövdesinde `digitalSourceType` anahtarına BAĞLI değeri arar."""
+AYIRAC = b"\"':= \t\r\n\x00"          # anahtar ile değer arasına girebilen baytlar
+TANIMLI = (b"abcdefghijklmnopqrstuvwxyz"
+           b"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.:/")
+
+def _kutuda_iddia(govde):
+    """Köken kutusunda `digitalSourceType` anahtarının DEĞERİNİ ayrıştırır.
+
+    🔴 Niçin pencere-araması değil (bağımsız göz · dar kapı tur-3): "anahtardan sonraki 96
+       baytta tanınan bir sözcük geçsin" şartı, anahtarla İLGİSİZ bir alanda geçen diziyi de
+       iddia sayıyordu → yanlış suçlama. Artık anahtar-değer bağı fiilen kuruluyor: anahtardan
+       sonra YALNIZ ayıraçlar atlanır, sonra gelen TEK belirteç okunur; araya başka bir alan
+       girerse (yani belirteç tanınan değerlerden biri değilse) iddia YOK sayılır.
+    """
     i = 0
     while True:
         i = govde.find(ANAHTAR, i)
         if i < 0: return None
-        yakin = govde[i:i + len(ANAHTAR) + pencere]
-        if KARMA in yakin: return "gercek+iyilestirme"      # uzun olan ÖNCE (URETIM onun alt dizisi değil ama sıra korunur)
-        if URETIM in yakin: return "uretilmis"
-        if b"digitalCapture" in yakin: return "gercek"
-        i += len(ANAHTAR)
+        j = i + len(ANAHTAR)
+        while j < len(govde) and govde[j:j+1] in (AYIRAC[k:k+1] for k in range(len(AYIRAC))):
+            j += 1
+        k = j
+        while k < len(govde) and govde[k:k+1] in (TANIMLI[t:t+1] for t in range(len(TANIMLI))):
+            k += 1
+        belirtec = govde[j:k].rsplit(b"/", 1)[-1]          # IPTC URL'si de olabilir
+        if belirtec == KARMA: return "gercek+iyilestirme"
+        if belirtec == URETIM: return "uretilmis"
+        if belirtec == b"digitalCapture": return "gercek"
+        i = j
 
 # 🔴 BU KAPI YALNIZ SUÇLAR, ASLA BERAAT ETTİRMEZ (kapsam daraltıldı · Sultan kararı 2026-10-06).
 #    Niçin: "ben üretilmişim" beyanı dosyayı KISITLAR → temkinli taraf, imzasız da işler.
@@ -234,7 +257,8 @@ def oku(yol):
         # olumlu iddia HÜKME girmez; imzası doğrulanmış olsa bile yalnız kayda geçer
         sonuc["kaynak_turu"] = None
         sonuc["dusurulen_iddia"] = kt
-    sonuc["iddia_guveni"] = ("dogrulanmis-imza" if imza == "evet"
+    sonuc["iddia_guveni"] = ("guven-zinciri-dogrulandi" if imza == "evet-guven-zinciri"
+                             else "imza-tutuyor-veren-dogrulanmadi" if imza == "evet-imza-tutuyor"
                              else "dogrulanmamis" if sonuc["kaynak_turu"] else "yok")
     return sonuc
 
@@ -333,7 +357,7 @@ def main():
         # iddia da beyanla çelişebilir ("dosya gerçeğim diyor, insan üretilmiş dedi")
         di = r.get("dosya_iddiasi")
         celisen = a.beyan_sahibi if (di and a.beyan and a.beyan != di) else None
-        imza_ok = r.get("imza_dogrulandi") == "evet"
+        imza_ok = str(r.get("imza_dogrulandi")).startswith("evet")   # kısıtlayıcı taraf
         iddia = bool(a.kullanim and a.kullanim in KANIT_ALANLARI)
         if kt == "uretilmis" and iddia:
             red.append((y, f"üretilmiş kare iddia taşıyan yüzeye ({a.kullanim}) giremez"
@@ -366,9 +390,13 @@ def main():
         if uret:
             print(f"   🔴 ÜRETİLMİŞ (dosyanın köken kutusundaki beyanı): {len(uret)}"
                   f" · üretici: {uret[0]['uretici'] or 'adsız'} · filigran: {'var' if uret[0]['filigran'] else 'yok'}"
-                  + ("\n      ✅ imza + sertifika zinciri DOĞRULANDI · veren: "
+                  + ("\n      ✅ imza + GÜVEN ZİNCİRİ doğrulandı · veren: "
                      + str(uret[0].get("imza_sahibi") or "adsız")
-                     if uret[0].get("imza_dogrulandi") == "evet" else
+                     if uret[0].get("imza_dogrulandi") == "evet-guven-zinciri" else
+                     "\n      ✅ imza matematiksel olarak TUTUYOR · beyan edilen veren: "
+                     + str(uret[0].get("imza_sahibi") or "adsız")
+                     + "\n      ⚠️ ama GÜVEN ZİNCİRİ doğrulanmadı — veren kimliği beyandır"
+                     if uret[0].get("imza_dogrulandi") == "evet-imza-tutuyor" else
                      "\n      ⚠️ imza DOĞRULANMADI (" + str(uret[0].get("imza_dogrulandi"))
                      + ") — beyan kutuya elle de konabilir."))
         if say.get("hic-yok"):
