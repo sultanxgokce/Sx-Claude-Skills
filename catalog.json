@@ -1438,8 +1438,8 @@
       "id": "gorsel-yon",
       "type": "workflow",
       "name": "Görsel Yön — üretilmiş görselle yön arayışı (kanıt üretmez)",
-      "version": "0.3.1",
-      "description": "Higgsfield hattı. Üretilmiş görselin bir sayfada NEREYE girip giremeyeceğini kodla zorlar (ölçüt 'üretilmiş mi' değil 'KANIT konumunda mı'); üç fail-closed kapı. v0.2.0 ile fiilen üretir: iste → bekle → indir zinciri + harcama defteri (adet sayar, lira değil) + çoklu kare. Varsayılan kuru-koşum, kredi harcamaz. 0.3.0 (2026-08-27): kesif-katalog kullanım-alanı (Sultan-izinli) + TR-imla yasak-deliği kapandı + anahtar env-önce.",
+      "version": "0.4.0",
+      "description": "Higgsfield hattı. Üretilmiş görselin bir sayfada NEREYE girip giremeyeceğini kodla zorlar (ölçüt 'üretilmiş mi' değil 'KANIT konumunda mı'); üç fail-closed kapı. v0.2.0 ile fiilen üretir: iste → bekle → indir zinciri + harcama defteri (adet sayar, lira değil) + çoklu kare. Varsayılan kuru-koşum, kredi harcamaz. 0.3.0 (2026-08-27): kesif-katalog kullanım-alanı (Sultan-izinli) + TR-imla yasak-deliği kapandı + anahtar env-önce. 0.3.1 (MİHMANDAR): kesif-katalog B3 muafiyeti + nötr kalite çiti. 0.4.0 (2026-10-06): DÖRDÜNCÜ kapı — hazır gelen dosyanın KENDİ imzalı köken beyanını okur (JUMBF/C2PA: PNG caBX · JPEG APP11 · WebP C2PA); 'köken yok' hüküm DEĞİL, bilinmiyordur (tek yeniden-kayıt kutuyu siler); pozitif kontrolü geçmeyen okuyucu rc=3 ÖLÇEMEDİM der.",
       "tags": [
         "gorsel",
         "tasarim",

@@ -15,6 +15,8 @@
 #   gorsel-yon.sh dogrula                      # anahtar geçerli mi (KREDİ HARCAMAZ)
 #   gorsel-yon.sh uret --kullanim <alan> --istem "..." [--sayi 1] [--uygula]
 #   gorsel-yon.sh kullanimlar                  # izinli alanları listele
+#   gorsel-yon.sh koken <dosya|dizin> [--kullanim vitrin] [--beyan gercek] [--json]
+#                                              # DOSYANIN kendi beyanını okur (4. kapı)
 #
 #   VARSAYILAN KURU-KOŞUM: --uygula verilmedikçe HİÇBİR kredi harcanmaz, istek gönderilmez.
 #
@@ -299,5 +301,10 @@ case "${1:-}" in
   kullanimlar)  shift; kullanimlar "$@" ;;
   bekle)        shift; bekle "$@" ;;
   defter)       shift; defter "$@" ;;
+  # 🔴 DÖRDÜNCÜ KAPI (2026-10-06): yukarıdaki üç kapı ÜRETİM tarafını süzer — ne
+  #    isteyeceğimizi. HAZIR GELEN dosya o kapılardan HİÇ geçmiyordu. Canlı vaka: 62 kare
+  #    başka bir araçla üretilip köprüye düştü ve vitrine gidiyordu; dosyanın kendi
+  #    imzalı beyanını okuyan tek satır yoktu. Bu kol onu okur.
+  koken)        shift; exec python3 "$(dirname "$0")/koken.py" "$@" ;;
   *) sed -n '2,26p' "$0"; exit 2 ;;
 esac
