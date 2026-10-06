@@ -138,6 +138,18 @@ chmod 700 "$RO"
 echo "── GERÇEK çıpaya dokunulmadı"
 kapi "K18 sınav kendi dizininde kaldı" "1" "$(printf '%s' "$C" | grep -c "^$T/" )"
 
+# ── K36-K38 · `ajan` komutu: kimliğin TEK KAYNAĞI (2026-10-06) ───────────────
+#   Ölçülmüş vaka: ölçüm aracı (olc.sh) "dün nerede bıraktım" kaynağında SERDAR'ın defterini
+#   ÇİVİLİ okuyordu — her ajana. Çare kimliği burada ikinci kez türetmek değil, SORMAKTIR.
+kapi "K36 ajan, yol'daki dosya adıyla AYNI kimliği basar (iki yazım yok)" "0" \
+     "$(a=$(GUNLUK_PLAN_CIPA_DIZ="$T/cipa" GUNLUK_PLAN_AJAN="MUAVİN" bash "$ARAC" ajan); \
+        y=$(GUNLUK_PLAN_CIPA_DIZ="$T/cipa" GUNLUK_PLAN_AJAN="MUAVİN" bash "$ARAC" yol); \
+        [ "$(basename "$y")" = "gunluk-plan-cipa.$a.md" ] && echo 0 || echo 1)"
+kapi "K37 ajan SALT-OKUR: dosya YARATMAZ" "0" \
+     "$(d="$T/cipa-ajan"; mkdir -p "$d"; GUNLUK_PLAN_CIPA_DIZ="$d" GUNLUK_PLAN_AJAN=sinavci bash "$ARAC" ajan >/dev/null 2>&1; ls "$d" | wc -l)"
+kapi "K38 kimlik türetilemezse 'bilinmiyor' basar (uydurma ad YOK)" "bilinmiyor" \
+     "$(GUNLUK_PLAN_CIPA_DIZ="$T/cipa" GUNLUK_PLAN_AJAN="###" bash "$ARAC" ajan 2>/dev/null)"
+
 echo
 echo "SONUÇ: $gecen geçti · $kalan kaldı"
 [ "$kalan" -eq 0 ]

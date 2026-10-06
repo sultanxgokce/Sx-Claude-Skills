@@ -2,8 +2,10 @@
 # /gunluk-plan ADIM-1 — yedi kaynağı ölç. Ölçemediğini "ölçemedim" diye bas (sessiz atlama yok).
 # SALT-OKUR: hiçbir dosyaya yazmaz.
 set -uo pipefail
-KOK="$(git rev-parse --show-toplevel 2>/dev/null || echo /config/projects/Nexus)"
-SK=/config/.claude/skills
+# 🔴 SINANABİLİRLİK: kök ve beceri dizini ezilebilir olmalı — yoksa bu aracın kendi sınavı
+#    gerçek depoya ve gerçek deftere dokunmak zorunda kalır (ölçüm, ölçtüğü şeyi değiştirir).
+KOK="${GUNLUK_PLAN_KOK:-$(git rev-parse --show-toplevel 2>/dev/null || echo /config/projects/Nexus)}"
+SK="${GUNLUK_PLAN_SK:-/config/.claude/skills}"
 gun="$(date +%Y-%m-%d)"
 
 bolum(){ printf '\n━━━ %s ━━━\n' "$1"; }
@@ -47,9 +49,43 @@ else olcemedim "federe gelen kutusu yok"; fi
 bolum "5/7 · Kendi kuyruğum (devam eden)"
 printf '  → görev listesi harness tarafında; TaskList ile oku (script göremez)\n'
 
-bolum "6/7 · Dün nerede bıraktım (defterin son satırları)"
-d="$KOK/_agents/handoff/serdar-defter.md"
-[ -f "$d" ] && tail -12 "$d" || olcemedim "defter bulunamadı: $d"
+bolum "6/7 · Dün nerede bıraktım (KENDİ izimin son satırları)"
+# 🔴 BAŞKASININ DEFTERİ OKUTULUYORDU (CEZERÎ bildirdi, 2026-10-06; ben de aynı sabah çarptım):
+#    bu kaynak SERDAR'ın defterini ÇİVİLİ yoldan okuyordu. Yani ölçüm aracı, hangi ajan
+#    koşarsa koşsun ona SERDAR'ın izini "dün nerede bıraktım" diye sunuyordu. İki ayrı zarar:
+#    (a) yanlış ize bakan ajan yanlış plan yazar; (b) başka bir ajanın günlük izi, onu
+#    görmesi gerekmeyen odalara sızar. Çare: kimliği SORMAK ve bulamayınca SUSMAK —
+#    "ölçemedim" demek, başkasının defterini basmaktan iyidir (unknown ≠ başkasının verisi).
+#    Kimlik TEK KAYNAKTAN sorulur: `cipa.sh ajan`. Burada ikinci bir türetme YOK.
+#    🔴 İKİNCİ TÜRETME YOK — ORTAM DEĞİŞKENİNE DE BAKMAZ (bağımsız göz tur-1, 2026-10-06):
+#    ilk yazımda `GUNLUK_PLAN_AJAN` doluysa çıpa aracına hiç sormuyordum. Bu, "tek kaynak"
+#    iddiasını çürütüyordu: aynı kimlik iki yerde hesaplanıyor ve ilk değişimde ayrışır
+#    (o değişkenin katlama/çakışma kuralları çıpa aracının içinde yaşıyor, burada değil).
+#    Açık ayar hâlâ işler — ama ARACIN İÇİNDEN, çünkü kimlik sırasının sahibi o.
+_ajan_sor() {
+  local a arac
+  arac="${GUNLUK_PLAN_CIPA_ARAC:-$SK/gunluk-plan/scripts/cipa.sh}"
+  [ -f "$arac" ] || return 1
+  a="$(bash "$arac" ajan 2>/dev/null)" || return 1
+  [ -n "$a" ] && printf '%s' "$a"
+}
+_ajan6="$(_ajan_sor)" || _ajan6=""
+if [ -z "$_ajan6" ] || [ "$_ajan6" = "bilinmiyor" ]; then
+  olcemedim "kimliğimi soramadım (çıpa aracı eski ya da yok) — BAŞKASININ defterini basmıyorum"
+else
+  _d=""
+  for _y in "$KOK/_agents/handoff/$_ajan6-defter.md" \
+            "$(ls -t "$KOK/_agents/handoff/$_ajan6-konum-"*.md 2>/dev/null | head -1)"; do
+    [ -n "$_y" ] && [ -f "$_y" ] && { _d="$_y"; break; }
+  done
+  if [ -n "$_d" ]; then
+    printf '  kaynak: %s (ajan: %s)\n' "$(basename "$_d")" "$_ajan6"
+    tail -12 "$_d"
+  else
+    olcemedim "bu ajanın ($_ajan6) kendi izi bulunamadı — aradığım: $_ajan6-defter.md · $_ajan6-konum-*.md"
+    printf '  ℹ️ başka bir ajanın defteri BİLEREK basılmadı (yanlış iz + sızıntı).\n'
+  fi
+fi
 
 bolum "7/7 · Ortam (dallanma güvenli mi)"
 git -C "$KOK" status -sb 2>/dev/null | head -1

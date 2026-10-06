@@ -1,7 +1,7 @@
 ---
 name: gunluk-plan
 description: Günün planı — elimizdeki işleri ÖLÇ, katma değer katacakları süz, Sultan-dilinde plan sun, onaydan sonra icra et. Sultan'ın her gün verdiği "işleri analiz et, bugün ne yapalım" isteğinin tek komutlu karşılığı.
-version: 1.2.0
+version: 1.3.0
 ---
 
 # /gunluk-plan — günün planı (ölç → süz → sun → icra)
@@ -59,8 +59,16 @@ Script yedi kaynağı sırayla basar ve **ölçemediğini "ölçemedim" diye bas
 | 3 | açık PR'lar + yaşları | yarım bırakılmış iş nerede |
 | 4 | federe gelen kutusu (son 7 gün) | başka odalardan ne geldi, cevapsız ne var |
 | 5 | görev listesi (`in_progress`) | kendi kuyruğumda ne açık kaldı |
-| 6 | kendi defterim (son 30 satır) | dün nerede bıraktım |
+| 6 | **kendi** izim (son satırlar) | dün nerede bıraktım |
 | 7 | git durumu (dal · commit'siz · geride) | ortam temiz mi, dallanma güvenli mi |
+
+🔴 **6. kaynak başkasının defterini okutuyordu** (CEZERÎ bildirdi · 2026-10-06): yol çiviliydi
+ve hangi ajan koşarsa koşsun ona **SERDAR'ın** izini "dün nerede bıraktım" diye sunuyordu.
+İki ayrı zarar: yanlış ize bakan ajan yanlış plan yazar, ve bir ajanın günlük izi onu görmesi
+gerekmeyen odalara **sızar**. Artık kimlik **sorulur** (`cipa.sh ajan` — tek kaynak; ölçüm aracı
+ortam değişkenine de **bakmaz**, çünkü kimlik sırasının sahibi çıpa aracıdır — ikinci türetme
+"tek kaynak" iddiasını çürütürdü), kendi izi aranır (`<ajan>-defter.md` → `<ajan>-konum-*.md`, en yenisi) ve
+bulunamazsa **ölçemedim** denir: unknown ≠ başkasının verisi.
 
 ## ADIM 2 — SÜZ (dört elek, sırayla)
 
@@ -133,6 +141,9 @@ plan bir dilek listesidir — ve çıpa olmadan kapanış **hafızadan** yazıl�
 - Bu skill iş ÜRETMEZ, var olanı süzer. Ölçüm boşsa plan da boştur — uydurma madde yazma.
 - Süzme bir yargıdır, mekanik değil; gerekçesi her zaman yazılır ki ertesi gün tartışılabilsin.
 - Ölçülemeyen kaynak "yok" sayılmaz, "ölçülemedi" diye basılır (unknown ≠ fail).
-- Çıpa ve compact kapısının kendi sınavı: `bash scripts/cipa.test.sh` (18 kapı, hermetik —
-  gerçek çıpaya dokunmaz). Fail-closed kapısı öldürülünce iki kapı kırmızıya döner; yani
+- Çıpa ve compact kapısının kendi sınavı: `bash scripts/cipa.test.sh` (44 kapı, hermetik —
+  gerçek çıpaya dokunmaz). Ölçüm aracının sınavı: `bash scripts/olc.test.sh` (12 kapı,
+  hermetik — sahte bir kök kurar; ağırlık merkezi **sızıntı**: sahte kökte başkasının defteri
+  bilerek durur ve hiçbir kimlikte basılmamalıdır; O8 mutasyonu çivili yol geri gelince,
+  O10 mutasyonu da ortam kısayolu geri eklenince kimlik taklidinin tuttuğunu gösterir). Fail-closed kapısı öldürülünce iki kapı kırmızıya döner; yani
   koruma süs değil, ölçülmüştür.
