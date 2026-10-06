@@ -71,6 +71,50 @@ fi
 echo "════ T9 · ozet tablo ════"
 CIKTI="$(bash "$K" ozet is-2 2>&1)"; grep -q "^| 1 | olcum | a" <<<"$CIKTI"; g $? "markdown tablo üretildi"
 
+echo "════ T10 · EKRAN: kitaplık yolu ortamdan · eksik kitaplığın ADI yüzeye çıkar (MEDDAH) ════"
+# Sahte tarayıcı ortamı: playwright dizini VAR gibi görünsün, `node` yerine güdük betik koşsun.
+# 🔴 Niçin güdük: gerçek tarayıcıyı kitaplıksız bırakmak için kutuyu bozmak gerekirdi. Ölçülen
+#    şey aracın ÇOCUK SÜRECE verdiği ortam ve çocuğun hatasını nasıl RAPORLADIĞI — ikisi de
+#    güdükle sadakatle ölçülür. (Gerçek tarayıcı yolu T8'de ayrıca koşuyor.)
+PWD_DIR="$T/pw"; mkdir -p "$PWD_DIR/playwright"
+mkdir -p "$T/bin"
+EKR="$T/_agents/fabrika/kanit/is-ekran"
+_node_kur() { printf '%s\n' '#!/usr/bin/env bash' "$1" > "$T/bin/node"; chmod +x "$T/bin/node"; }
+_ekran() { PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran "$@" 2>&1; }
+_alan() { python3 -c 'import json,sys;m=json.load(open(sys.argv[1]));k=m["kayitlar"][-1];v=k.get(sys.argv[2]);print(json.dumps(v,ensure_ascii=False))' "$EKR/KANIT.json" "$1"; }
+
+# E1 · eksik kitaplık satırı GÜRÜLTÜNÜN ARKASINDA: önce 400+ karakter başka hata, sonra asıl sebep
+_node_kur 'printf "Target page, context or browser has been closed\n" >&2; printf "%.0sX" $(seq 1 420) >&2; printf "\nError: libnspr4.so: cannot open shared object file: No such file or directory\n" >&2; exit 1'
+O="$(_ekran is-ekran kitapliksiz --url https://ornek.test --asama tek)"; RC=$?
+[ "$RC" -eq 3 ]; g $? "E1a kare alınamadı → rc=3 (SARI, yeşil değil)"
+grep -q "EKSİK KİTAPLIK: libnspr4.so" <<<"$O"; g $? "E1b eksik kitaplığın ADI yüzeyde (300 karakter kırpmasının arkasında kalmıyor)"
+grep -q "kitaplık görünmüyor" <<<"$O"; g $? "E1c sebep doğru söylenir: ayağa kalkmama DEĞİL, görünmeme"
+[ "$(_alan renk)" = '"sari"' ]; g $? "E1d manifestte renk=sari"
+[ "$(_alan eksik_kitaplik)" = '["libnspr4.so"]' ]; g $? "E1e manifestte eksik_kitaplik adıyla"
+HG="$EKR/ekran-kitapliksiz-tek.hata.txt"
+[ -f "$HG" ] && grep -q "libnspr4.so" "$HG" && grep -q "LD_LIBRARY_PATH=" "$HG"; g $? "E1f tam çıktı KIRPILMADAN diske yazıldı (kullanılan yol bilgisiyle)"
+
+# E2 · KANIT_PW_LIBS çocuğa geçer VE odanın mevcut ayarı EZİLMEZ
+_node_kur 'printf "LDP=[%s]\n" "${LD_LIBRARY_PATH:-}" >&2; exit 1'
+LD_LIBRARY_PATH=/onceki/yol KANIT_PW_LIBS=/oda/kitaplik _ekran is-ekran yol --url https://ornek.test --asama tek >/dev/null
+HG2="$EKR/ekran-yol-tek.hata.txt"
+grep -q 'LDP=\[/oda/kitaplik:/onceki/yol\]' "$HG2"; g $? "E2a KANIT_PW_LIBS ÖNE eklenir, odanın kendi ayarı KORUNUR"
+[ "$(_alan ld_library_path)" = '"/oda/kitaplik:/onceki/yol"' ]; g $? "E2b kullanılan yol manifeste yazılır (teşhis edilebilir sarı)"
+
+# E3 · kitaplıkla İLGİSİZ hata: eski davranış korunur → E1 tautoloji değil
+_node_kur 'echo "zaman asimi" >&2; exit 1'
+O="$(_ekran is-ekran ilgisiz --url https://ornek.test --asama tek)"
+if grep -q "EKSİK KİTAPLIK" <<<"$O"; then g 1 "E3a ilgisiz hatada kitaplık iddiası YOK"; else g 0 "E3a ilgisiz hatada kitaplık iddiası YOK"; fi
+[ "$(_alan eksik_kitaplik)" = '[]' ]; g $? "E3b manifestte eksik_kitaplik BOŞ (uydurma yok)"
+
+# E4 · MUTASYON: KANIT_PW_LIBS kablosu koparılınca E2 kırmızıya döner
+M="$T/kanit-mutant.py"
+python3 -c 'import sys;s=open(sys.argv[1],encoding="utf-8").read();s=s.replace("    libs = kitaplik_yolu()","    libs = \"\"",1);open(sys.argv[2],"w",encoding="utf-8").write(s)' "$HERE/kanit.py" "$M"
+_node_kur 'printf "LDP=[%s]\n" "${LD_LIBRARY_PATH:-}" >&2; exit 1'
+PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" LD_LIBRARY_PATH=/onceki/yol KANIT_PW_LIBS=/oda/kitaplik \
+  KANIT_DEPO="$T" python3 "$M" ekran is-ekran mutasyon --url https://ornek.test --asama tek >/dev/null 2>&1
+grep -q 'LDP=\[/onceki/yol\]' "$EKR/ekran-mutasyon-tek.hata.txt"; g $? "E4 MUTASYON: kablo koparılınca oda ayarı çocuğa GİTMEZ (kablo süs değil)"
+
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]

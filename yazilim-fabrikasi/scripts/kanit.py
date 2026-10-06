@@ -16,7 +16,7 @@ Kullanım:
   kanit.py liste  <iş>
 Ortam: KANIT_DEPO (depo kökü; vars. git toplevel) · KANIT_PLAYWRIGHT_DIR (node_modules'lı dizin)
 """
-import argparse, datetime, hashlib, json, os, shutil, subprocess, sys
+import argparse, datetime, hashlib, json, os, re, shutil, subprocess, sys
 
 SURUM = "kanit.py/0.1.0"
 TUZ = "yazilim-fabrikasi-kanit-2026"  # imza tuzu: elle yazımı yakalar; kriptografik gizlilik iddiası YOK
@@ -107,6 +107,22 @@ def cmd_olcum(a):
 
 
 # ── ekran ────────────────────────────────────────────────────────────────────────
+EKSIK_KITAPLIK = re.compile(r"([\w.+-]+\.so[\w.]*): cannot open shared object file")
+
+
+def kitaplik_yolu():
+    """Tarayıcının sistem kitaplıklarının yolu — ORTAMDAN okunur, ÇİVİLENMEZ.
+
+    🔴 NİÇİN (MEDDAH/TELLAL ölçümü 2026-10-06): o kutuda tarayıcının yedi sistem kitaplığı
+       root'suz kurulmuş ve yalnız LD_LIBRARY_PATH verilirse görünüyor. Değişken verilmezse
+       kare ALINAMIYOR ve kanıt SARI'ya düşüyor — sebebi "tarayıcı ayağa kalkmadı" değil,
+       "kitaplık görünmedi". Yolu buraya çivilemek yanlış olurdu: her kutuda ayrı yer.
+       Oda ayarını `KANIT_PW_LIBS` ile verir; varsa LD_LIBRARY_PATH'in ÖNÜNE eklenir
+       (mevcut değer korunur — ezmek, kutunun kendi ayarını sessizce silmek olurdu).
+    """
+    return os.environ.get("KANIT_PW_LIBS", "").strip()
+
+
 def playwright_dizin():
     aday = [os.environ.get("KANIT_PLAYWRIGHT_DIR")] + [
         os.path.join(d, "node_modules") for d in ("/config/projects/Nexus/ui", "/config/projects/akar", os.getcwd())]
@@ -127,6 +143,10 @@ def cmd_ekran(a):
         print("◻ SARI: kare alınamadı (playwright/node yok) — bu yeşil DEĞİLDİR; manifeste sarı yazıldı")
         sys.exit(3)
     env = {**os.environ, "NODE_PATH": pw}
+    libs = kitaplik_yolu()
+    if libs:
+        onceki = env.get("LD_LIBRARY_PATH", "")
+        env["LD_LIBRARY_PATH"] = f"{libs}:{onceki}" if onceki else libs
     argv = ["node", os.path.join(HERE, "kanit-ekran.mjs"), a.url, yol, a.urun_imi or "", a.bekle or "", str(a.genislik)]
     p = subprocess.run(argv, capture_output=True, text=True, env=env)
     if p.returncode == 2:
@@ -135,9 +155,30 @@ def cmd_ekran(a):
         print(f"✗ ürün imi bulunamadı ({a.urun_imi}) — ölçer ürünü görmedi; kare kanıt sayılmaz\n{p.stderr}", file=sys.stderr)
         sys.exit(2)
     if p.returncode != 0 or not os.path.exists(yol):
-        kayit = {**temel, "sha256": None, "rc": 3, "renk": "sari", "not": f"kare alınamadı: {p.stderr.strip()[:300]}"}
+        # 🔴 SEBEBİ KIRPMA (MEDDAH, 2026-10-06): stderr 300 karakterde kesiliyordu ve asıl
+        #    satır ("… .so: cannot open shared object file") ÖNDEKİ gürültünün arkasında
+        #    kalıyordu. Ölçülmüş vaka: üstte "Target page, context or browser has been closed"
+        #    görünüyor, gerçek sebep altta duruyor. Teşhis edilemeyen sarı, sarı değil sistir.
+        tam = (p.stderr or "") + (p.stdout or "")
+        eksik = sorted(set(EKSIK_KITAPLIK.findall(tam)))
+        gunluk = os.path.join(dz, f"ekran-{a.etiket}-{a.asama}.hata.txt")
+        with open(gunluk, "w", encoding="utf-8") as f:
+            f.write(f"$ {' '.join(argv)}\nrc={p.returncode} zaman={simdi()}\n"
+                    f"LD_LIBRARY_PATH={env.get('LD_LIBRARY_PATH','(yok)')}\n"
+                    f"--- stdout ---\n{p.stdout}--- stderr ---\n{p.stderr}")
+        kayit = {**temel, "sha256": None, "rc": 3, "renk": "sari",
+                 "eksik_kitaplik": eksik, "hata_gunlugu": os.path.basename(gunluk),
+                 "ld_library_path": env.get("LD_LIBRARY_PATH", ""),
+                 "not": (f"kare alınamadı · EKSİK KİTAPLIK: {', '.join(eksik)}" if eksik
+                         else f"kare alınamadı: {p.stderr.strip()[:300]}")}
         kayit_ekle(depo, a.is_adi, kayit)
-        print(f"◻ SARI: kare alınamadı — {p.stderr.strip()[:300]}")
+        if eksik:
+            print(f"◻ SARI: kare alınamadı — EKSİK KİTAPLIK: {', '.join(eksik)}")
+            print(f"   Bu 'tarayıcı ayağa kalkmadı' DEĞİL: kitaplık görünmüyor. Odanın kitaplık")
+            print(f"   dizinini KANIT_PW_LIBS ile ver (şu an: {kitaplik_yolu() or 'verilmemiş'}).")
+        else:
+            print(f"◻ SARI: kare alınamadı — {p.stderr.strip()[:300]}")
+        print(f"   tam çıktı kırpılmadan burada: {os.path.basename(gunluk)}")
         sys.exit(3)
     kayit = {**temel, "sha256": sha_dosya(yol), "rc": 0, "renk": "yesil", "urun_imi": a.urun_imi, "genislik": a.genislik}
     kayit_ekle(depo, a.is_adi, kayit)
