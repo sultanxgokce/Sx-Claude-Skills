@@ -1,7 +1,7 @@
 ---
 name: gorsel-yon
 type: workflow
-version: 0.3.1
+version: 0.4.0
 description: >
   Üretilmiş görselle YÖN ARAYIŞI — kanıt üretmez. Nova/mimarlık sitesi gibi iddiası
   "gerçek iş" olan yüzeylerde, üretilmiş görselin nereye girip nereye giremeyeceğini
@@ -37,13 +37,47 @@ Bu ölçüt "render yasak"tan daha keskin ve **sınanabilir**: zarar üretilmiş
 
 Bu üçünün dışı **reddedilir** (kapalı küme, `--kullanim` zorunlu).
 
-## Üç kapı — hepsi fail-closed
+## DÖRT kapı — hepsi fail-closed
+
+🔴 **Dördüncü kapı 2026-10-06'da eklendi ve niçini ölçülmüş bir kaçaktır.** İlk üç kapı
+**ÜRETİM** tarafını süzüyordu: ne isteyeceğimizi. Ama **hazır gelen dosya** bu kapıların
+hiçbirinden geçmiyordu — ve kaçak tam oradan oldu: 62 kare başka bir araçla üretilip
+köprüye düştü, vitrine gidiyordu. Üç ölçüm (iki ajan + ben) "bu dosyalarda meta yok,
+kökü belirsiz" dedi; gerçekte **hepsinde üreticinin imzalı köken kaydı** vardı ve
+`trainedAlgorithmicMedia` diyordu. Yanlış kümede arıyorduk: köken kaydı Exif/metin
+parçalarında **değil**, JUMBF kutusunda (PNG `caBX` · JPEG APP11 · WebP `C2PA`).
+
 
 1. **Kullanım alanı kapısı** — kapalı küme dışı → `rc=1`
 2. **Kanıt-konumu kapısı** — istemde `vaka·proje·şantiye·çizim·daire·mahal·portfolyo·referans`
    geçerse → `rc=1`. Vaka görselleri gerçek olmak zorunda.
 3. **B3 kapısı** — `lüks·altın·mermer·render·3d·fotogerçekçi·stok` → `rc=1`
    (Sultan'ın yasakladığı yön)
+4. **Köken kapısı (`koken`)** — DOSYANIN kendi beyanını okur, beyanımıza bakmaz:
+   - dosya `trainedAlgorithmicMedia` diyor **ve** yüzey iddia taşıyor (`kanit·vitrin·portfolyo·referans`) → `rc=1`
+   - dosya ile **beyan çelişiyorsa** → `rc=1`, ve `celisen_taraf` yazılır:
+     **insan beyanı SORULUR, ajan beyanı DÜZELTİLİR** (ikisi aynı ağırlıkta değil; öneri: KALFA/Nova)
+   - okuyucu **pozitif kontrolü** geçemezse → `rc=3` ÖLÇEMEDİM. Ölçemediğine temiz demez.
+
+🔴 **ASİMETRİ — "köken yok" HİÇBİR ŞEY KANITLAMAZ** (ölçüldü 2026-10-06): bir kareyi
+hiçbir şey değiştirmeden **yeniden kaydetmek** köken kutusunu tamamen yok ediyor
+(ölçek+sıkıştırma da öyle). Yani:
+| bulgu | hüküm |
+|---|---|
+| kayıt VAR + üretilmiş | **güçlü pozitif** — kapı keser |
+| kayıt YOK | **bilinmiyor** — gerçek makine karesi de olabilir, bir kez paylaşılmış üretilmiş kare de |
+
+Bu yüzden alan değeri **asla `temiz` ya da `gercek` olmaz**; `hic-yok` olur ve "gerçek
+fotoğraf olarak SUNULAMAZ" uyarısı basılır. Sahada beklenen hâl "yok"tur (paylaşım
+uygulamaları her kareyi yeniden kodlar) — "temiz" diyen bir etiket çoğunluğa **yanlış
+güven rozeti** takar ve korumak istediği iddiayı deler.
+
+🔴 **Tanımadığım parça türü "yok" SAYILMAZ**, kayda geçer. Bu kapının kendi doğuş hatası
+buydu: bilinen dört ada bakıp bulamayınca "meta yok" dendi — sözlük eksikti, araç kör değildi.
+
+**Beş alan** (kayda giren): `tur` · `tur_kaynagi` (dosyadan|beyandan) · `koken_durumu`
+(imzali-koken-var|meta-var|hic-yok) · `kanit_olabilir` · `celisen_taraf` · artı `ikizlik`
+(küme içi ve kümeler arası AYRI sayılır).
 
 **Yön çiti:** her isteme Sultan'ın seçtiği yön (B1/B4/B5) otomatik eklenir ve
 **çıkarılamaz** — yumuşak yayılı gündüz ışığı · doğal ahşap + mat antrasit · süs yok ·
@@ -125,3 +159,14 @@ gorsel-yon.sh uret --kullanim doku-zemin --istem "..." --uygula # gerçek üreti
 - **Pürüz-2 kapandı:** yön-çiti alan-koşullu — site-alanları Sultan-yönünü aynen korur;
   kesif-katalog stil-slotunu serbest bırakan nötr kalite-çiti alır (endüstriyel-hücre
   sulanması ölçülmüştü).
+
+## Kanıt
+`bash scripts/koken.test.sh` → **13 kapı**, hermetik (gerçek karelere dokunmaz), çift yönlü
+fikstürlü. Mutasyon-kanıtlı: okuyucu körleştirilince K13 `rc=3 ÖLÇEMEDİM` bekler — yani
+"temiz" demeyen fail-closed davranış ölçülmüştür. K3/K5 tautoloji kapıları: üretilmiş kare
+iddiasız yüzeye **girer**, uyuşan beyan **geçer** — yoksa kapı "her şeye kırmızı" olurdu.
+
+**Canlı kalibrasyon (ilk gerçek koşu, 2026-10-06):** 62 kare · 46 ayrı görüntü · küme içi
+ikiz 16 · kümeler arası 0 — üç bağımsız ölçümle birebir. Sultan'ın beyanı
+`gercek+iyilestirme` verilince **22 çelişkinin 22'si** yakalandı (`rc=1`), çelişen taraf
+`insan` diye işaretlendi (yani Sultan'a sorulacak, düzeltilmeyecek).
