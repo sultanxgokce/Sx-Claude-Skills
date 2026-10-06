@@ -61,35 +61,31 @@ parçalarında **değil**, JUMBF kutusunda (PNG `caBX` · JPEG APP11 · WebP `C2
    - hüküm YALNIZ köken kutusunun GÖVDESİNDEN çıkar; kutu dışında geçen beyan metni
      `parca_disi_iz` olarak **kayda geçer ama hüküm vermez** (sahte-pozitif kapısı).
    - biçimi ayrıştırılamayan dosya `okunamadi`'dır — "temiz" değil.
+   - **tanımadığım parça** varken bilinen hiçbir kayıt yoksa sınıf `belirsiz-tasiyici`'dir,
+     `hic-yok` DEĞİL: bilmediğim bir taşıyıcıyı "köken yok" diye sınıflamak sözlük tuzağının
+     ikinci yüzüdür (bağımsız göz tur-2 bunu yakaladı).
 
-🔴 **ÖLÇMEDİĞİM ŞEY — İMZA** (bağımsız göz, tur-1): bu kapı köken kutusunun VARLIĞINI ve
-içindeki beyanı okur; C2PA manifestinin **kriptografik imzasını ve sertifika zincirini
-DOĞRULAMAZ** (kutuda o araç yok — ölçüldü). Bu yüzden alan adı `imzali-koken-var` değil
-**`koken-kutusu-var`**dır ve her kayıt `imza_dogrulandi: hayir` taşır. Beyanı kutuya elle
-koymak mümkündür; hatanın iki yönü vardır ve **ağırlıkları farklıdır**:
-- "üretilmiş → iddia taşıyan yüzeye giremez" kuralında yanlış-KIRMIZI üretir → temkinli taraf, zararsız.
-- ÇELİŞKİ kuralında bir insanı haksız yere suçlayabilir → bu yüzden çıktı "çözülmeli" der,
-  asla "yanlış beyan" demez.
+🔴 **İMZA KAPISI — İKİ KİP, HANGİSİNDE OLDUĞUNU HER ZAMAN SÖYLER:**
 
-🔴 **ASİMETRİ — "köken yok" HİÇBİR ŞEY KANITLAMAZ** (ölçüldü 2026-10-06): bir kareyi
-hiçbir şey değiştirmeden **yeniden kaydetmek** köken kutusunu tamamen yok ediyor
-(ölçek+sıkıştırma da öyle). Yani:
-| bulgu | hüküm |
-|---|---|
-| kayıt VAR + üretilmiş | **güçlü pozitif** — kapı keser |
-| kayıt YOK | **bilinmiyor** — gerçek makine karesi de olabilir, bir kez paylaşılmış üretilmiş kare de |
+| kip | şart | ne yapar | kayıt |
+|---|---|---|---|
+| **AÇIK** | `c2pa` kütüphanesi var | manifest **yapısal** okunur: imza + sertifika zinciri doğrulanır, `digitalSourceType` eylem iddiasının İÇİNDEN alınır (bayt arama DEĞİL) | `imza_dogrulandi: evet` + verenin adı |
+| **KAPALI** | kütüphane yok ya da `KOKEN_IMZA=kapali` | kutu-gövdesi okuyucusuna düşer; iddia `digitalSourceType` anahtarına **bağlı** olmak zorunda (serbest geçen sözcük iddia sayılmaz) | `imza_dogrulandi: olculemedi` |
 
-Bu yüzden alan değeri **asla `temiz` ya da `gercek` olmaz**; `hic-yok` olur ve "gerçek
-fotoğraf olarak SUNULAMAZ" uyarısı basılır. Sahada beklenen hâl "yok"tur (paylaşım
-uygulamaları her kareyi yeniden kodlar) — "temiz" diyen bir etiket çoğunluğa **yanlış
-güven rozeti** takar ve korumak istediği iddiayı deler.
+🔴 **Sessiz düşüş yasak:** kip her koşuda çıktıya basılır ve kayda geçer. Kipin hükme etkisi
+**asimetriktir** ve niçini zarar yönündedir:
+- *"üretilmiş → iddia taşıyan yüzeye giremez"* → imza doğrulanmasa da **keser** (temkinli taraf).
+- *çelişki* ("dosya şunu diyor, insan bunu dedi") → **yalnız imza doğrulanmışsa keser.**
+  Doğrulanmamış bir beyanla bir insanı yanlış-beyanla suçlamak zararın ağır tarafıdır; o hâlde
+  uyarı basılır ve "sorulmalı" denir.
 
-🔴 **Tanımadığım parça türü "yok" SAYILMAZ**, kayda geçer. Bu kapının kendi doğuş hatası
-buydu: bilinen dört ada bakıp bulamayınca "meta yok" dendi — sözlük eksikti, araç kör değildi.
+**İsteğe bağlı bağımlılık:** `pip install --user c2pa-python` (imzalı kip). Kurulu değilse araç
+çalışır ama imzayı ölçmediğini söyler. Sınavın imzalı yüzü `openssl` + `c2pa` ister; ikisi yoksa
+o üç kapı **ATLANDI** basar — "geçti" demez.
 
 **Alanlar** (kayda giren): `tur` · `tur_kaynagi` (dosyadan|beyandan) · `imza_dogrulandi` ·
-`parca_disi_iz` · `bicim` · `koken_durumu`
-(koken-kutusu-var|meta-var|hic-yok|okunamadi) · `kanit_olabilir` · `celisen_taraf` · artı `ikizlik`
+`parca_disi_iz` · `bicim` · `imza_kipi` · `okuma_yolu` · `koken_durumu`
+(koken-kutusu-var|meta-var|belirsiz-tasiyici|hic-yok|okunamadi) · `kanit_olabilir` · `celisen_taraf` · artı `ikizlik`
 (küme içi ve kümeler arası AYRI sayılır).
 
 **Yön çiti:** her isteme Sultan'ın seçtiği yön (B1/B4/B5) otomatik eklenir ve
@@ -174,9 +170,14 @@ gorsel-yon.sh uret --kullanim doku-zemin --istem "..." --uygula # gerçek üreti
   sulanması ölçülmüştü).
 
 ## Kanıt
-`bash scripts/koken.test.sh` → **21 kapı**, hermetik (gerçek karelere dokunmaz), çift yönlü
-fikstürlü. Üç mutasyon kapısı: PNG kolu körleştirilince K13, JPEG kolu körleştirilince K18, kutu-dışı
-iz kaydı susturulunca K19 → hepsi `rc=3 ÖLÇEMEDİM` bekler. Yani "temiz" demeyen fail-closed
+`bash scripts/koken.test.sh` → **29 kapı**, hermetik (gerçek karelere dokunmaz), çift yönlü
+fikstürlü. Beş mutasyon kapısı: PNG kolu körleştirilince K13, JPEG kolu körleştirilince K18, kutu-dışı
+iz kaydı susturulunca K19 → `rc=3 ÖLÇEMEDİM`; imza-şartı kaldırılınca K26 doğrulanmamış
+çelişkinin RED'e döndüğünü gösterir; yapısal kol koparılınca K27 imzalı dosyanın
+`olculemedi`ye düştüğünü gösterir (kol süs değil).
+**İmzalı yüz GERÇEK:** sınav kendi sertifikasını `openssl` ile üretir ve `c2pa` ile gerçekten
+imzalı bir kare yazar (ağa çıkmaz) — K23 imzayı doğrular, K24 doğrulanmış çelişkinin kestiğini,
+K25 imzalı üretilmiş karenin iddia yüzeyine giremediğini ölçer. Yani "temiz" demeyen fail-closed
 davranış süs değil, ölçülmüştür. Üç biçim de GERÇEK zincirle sınanır (PNG parça · JPEG APP11
 segmenti · WebP RIFF kutusu) — kılık verilmiş bayt dizisiyle değil. K3/K5 tautoloji kapıları: üretilmiş kare
 iddiasız yüzeye **girer**, uyuşan beyan **geçer** — yoksa kapı "her şeye kırmızı" olurdu.
@@ -188,6 +189,9 @@ var ve `trainedAlgorithmicMedia` diyor; üretici `gpt-image`, filigran var. Beya
 `insan` işaretlendi — yani Sultan'a sorulacak, düzeltilmeyecek. (Sultan'ın o beyanı fiilen
 22 karelik alt kümeye aitti; kümenin tamamına uygulandığında 62/62 çelişki döner.)
 
-**Sıkı okuyucuyla yeniden ölçüldü (tur-2, kutu-gövdesi şartı eklendikten SONRA):** aynı 62
-kare · 46 ayrı görüntü · küme içi 16 · kümeler arası 0 — rakamlar birebir aynı kaldı, yani
-sıkılaştırma gerçek pozitifleri düşürmedi.
+**Sıkı okuyucuyla yeniden ölçüldü (tur-2/tur-3, şema şartı + imza doğrulaması eklendikten
+SONRA):** aynı 62 kare · 46 ayrı görüntü · küme içi 16 · kümeler arası 0 — rakamlar birebir
+aynı kaldı, yani sıkılaştırma gerçek pozitifleri düşürmedi. Üstelik artık **imza ve sertifika
+zinciri de doğrulanıyor**: 62/62 `Valid`, veren **OpenAI OpCo, LLC**, iddia `c2pa.actions.v2`
+eyleminin içinden okundu. Yani "dosyanın kendi beyanı" cümlesi artık ölçülmüş bir güven
+sınırına dayanıyor, anahtar sözcüğe değil.
