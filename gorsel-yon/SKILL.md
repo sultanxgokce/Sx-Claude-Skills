@@ -79,9 +79,45 @@ parçalarında **değil**, JUMBF kutusunda (PNG `caBX` · JPEG APP11 · WebP `C2
 🔴 **İMZA TUTMAK ⟂ MÜHRE GÜVENMEK — iki ayrı şey, ikisi tek 'evet'e indirilmez.**
 `evet-imza-tutuyor` = imza matematiksel olarak doğrulandı, ama **veren kimliği beyandır**:
 kendi sertifikasını üreten herkes bu sonucu alır (ölçülmüş vaka: sınavın kendi yerel
-sertifikası). `evet-guven-zinciri` = mühür güvenilen bir köke bağlandı. Çıktı bu ayrımı
-yazar ve zincir doğrulanmadığında bunu açıkça söyler — ölçülenden fazlasını beyan etmek,
-bu kapının korumaya çalıştığı şeyi deler.
+sertifikası). `evet-guven-zinciri` = mühür güvenilen bir köke bağlandı.
+
+🔴 **GÜVEN, KÜTÜPHANENİN 'Valid' ALANINDAN OKUNMAZ** (ölçüldü 2026-10-07): güven doğrulaması
+**açıkken bile** aynı dosya için üst düzey alan `Valid` döndü, oysa ayrıntı sonuçlarında
+`failure: signingCredential.untrusted` duruyordu. Üst satır yeşil, altındaki kayıt kırmızı —
+gürültülü-yeşilin kütüphane sürümü. Bu yüzden güven, **ayrıntı kodlarından** ölçülür ve
+sebebi kayda + çıktıya yazılır (`guven` · `guven_sebebi` · `guven_kipi`). Negatif kontrol de
+yapıldı: güven doğrulaması kapalıyken o kod **hiç çıkmıyor** — yani bayrağın fiilen koştuğu
+ölçülmüştür, varsayılmamıştır. Ölçülemediğinde zincir **iddia edilmez** (sessiz yükseltme yok).
+
+🔴 **GÜVEN YOKLUKTAN ÇIKARILMAZ — pozitif kanıt şarttır.** İlk yazımda *"şu dört olumsuz kod
+görünmüyorsa güvenilir"* diyordum: fail-open. Sonuçlar boş gelse, başka bir kod taşısa ya da
+hiç okunamasa "güvenilir" diyordu. Artık güven ancak kütüphane **açıkça**
+`signingCredential.trusted` bastığında kurulur; yoksa `hayir` ya da `olculemedi`.
+
+🔴 **GÜVENİLİR MÜHÜR LİSTESİ VERİDİR, KODDA DEĞİL.** Hangi imza sahibinin beyanı kabul edilir —
+bu bir **politika** kararıdır, aracın icadı değil. Araç sorar: `--guven-kok <PEM|dizin>` ya da
+`KOKEN_GUVEN_KOK`. Davranış kapılarla kilitli:
+
+| çıpa | sonuç |
+|---|---|
+| verilmedi | `acik-cipasiz` · hiçbir mühre güvenilmez (meşru, fail-closed varsayılan) |
+| verildi, yüklendi | `acik-cipali` · pozitif kod çıkarsa `guven: evet` → `evet-guven-zinciri` |
+| verildi, **okunamadı** | `acik-cipa-okunamadi` · **ölçemedim** — "çıpa yok" SAYILMAZ |
+| dizin verildi, **PEM yok** | **ölçemedim** — boş liste "herkese güven" demek değildir |
+| güven kapatıldı | `kapali` · ölçemedim, zincir **iddia edilmez** |
+
+🔴 **Teşhis tek kalıba sokulmaz:** *"liste verilmedi"* ile *"liste var ama bu mühür listeye
+bağlanmıyor"* ayrı cümlelerdir — birinde politika eksiktir, ötekinde politika var ve mühür
+ona girmiyor. Yanlış teşhis yanlış iş üretir (G10/G10b bunu iki yönlü ölçer).
+
+Altın yüz ölçülü: **aynı dosya**, tek fark çıpa → çıpasız `signingCredential.untrusted`,
+çıpalı `signingCredential.trusted` (sınav bunu kendi ürettiği sertifikayla, ağa çıkmadan
+gösterir). Mutasyon: pozitif-kanıt şartı kaldırılınca güvenilmeyen mühür "güvenilir" oluyor.
+
+🔴 **Güven 'evet' olsa bile kapı beraat ETTİRMEZ:** `kanit_olabilir` kapalı kümesi güvene
+bağlı değildir (G9 bunu çıpa yüklüyken ölçer). Canlı ölçümde 62/62 karenin sebebi tek tek
+yazılı: `signingCredential.untrusted` — yani bugün o kareler için *hangi* listeye ihtiyaç
+olduğu da belli.
 
 🔴 **Sessiz düşüş yasak:** kip her koşuda çıktıya basılır ve kayda geçer.
 
@@ -198,8 +234,8 @@ gorsel-yon.sh uret --kullanim doku-zemin --istem "..." --uygula # gerçek üreti
   sulanması ölçülmüştü).
 
 ## Kanıt
-`bash scripts/koken.test.sh` → **60 kapı**, hermetik (gerçek karelere dokunmaz), çift yönlü
-fikstürlü. On üç mutasyon kapısı: PNG kolu körleştirilince K13, JPEG kolu körleştirilince K18, kutu-dışı
+`bash scripts/koken.test.sh` → **71 kapı**, hermetik (gerçek karelere dokunmaz), çift yönlü
+fikstürlü. On altı mutasyon kapısı: PNG kolu körleştirilince K13, JPEG kolu körleştirilince K18, kutu-dışı
 iz kaydı susturulunca K19 → `rc=3 ÖLÇEMEDİM`; imza-şartı kaldırılınca K26 doğrulanmamış
 çelişkinin RED'e döndüğünü gösterir; yapısal kol koparılınca K27 imzalı dosyanın
 `olculemedi`ye düştüğünü, K31b beraat yolu geri eklenince `kanit_olabilir`

@@ -42,6 +42,75 @@ try:
 except Exception:
     _c2pa, IMZA_KIPI = None, "kapali"
 
+# 🔴 GÜVEN KÖKÜ AYRI ÖLÇÜLÜR (b0122, 2026-10-07): kütüphanenin üst düzey `validation_state`
+#    alanı GÜVENİ ÖLÇMÜYOR — güven doğrulaması AÇIKKEN bile aynı dosya için "Valid" döndü,
+#    oysa ayrıntı sonuçlarında `failure: signingCredential.untrusted` duruyordu. Yani üst
+#    satır yeşil, altındaki kayıt kırmızı: gürültülü-yeşilin kütüphane sürümü.
+#    Doğru ölçüm yeri: validation_results.activeManifest.failure kodları.
+#    Negatif kontrol de yapıldı: güven doğrulaması KAPALI iken o kod HİÇ çıkmıyor — yani
+#    bayrağın fiilen koştuğu ölçülmüştür, varsayılmamıştır.
+GUVENSIZ_KODLAR = ("signingCredential.untrusted", "signingCredential.invalid",
+                   "signingCredential.revoked", "signingCredential.expired")
+# 🔴 GÜVEN YALNIZ POZİTİF KANITLA (bağımsız göz · güven-kökü tur-1): ilk yazımda güveni
+#    "şu dört olumsuz kod görünmüyorsa evet" diye kurmuştum — yani fail-OPEN. Sonuçlar boş
+#    gelse, başka bir kod taşısa ya da hiç okunamasa "güvenilir" diyordu. Güven, yokluktan
+#    çıkarılmaz: kütüphane güvenilen köke bağlanan mühür için AÇIKÇA `signingCredential.trusted`
+#    basıyor ve durumu `Trusted`a çeviriyor (ölçüldü: aynı dosya, çıpa yüklüyken Trusted,
+#    yüklü değilken Valid + untrusted). Pozitif kanıt yoksa güven YOKTUR.
+GUVENLI_KOD = "signingCredential.trusted"
+
+# 🔴 GÜVENİLİR MÜHÜR LİSTESİ VERİDİR, KODDA DEĞİL: hangi imza sahibinin beyanının kabul
+#    edileceği bir POLİTİKA kararıdır (Sultan'ın). Araç onu uydurmaz, SORAR:
+#    `KOKEN_GUVEN_KOK` ya da `--guven-kok` → PEM dosyası veya PEM'lerin bulunduğu dizin.
+#    Verilmezse hiçbir mühre güvenilmez (fail-closed varsayılan). Verilip OKUNAMAZSA
+#    "ölçemedim" denir — eksik çıpayı "çıpa yok" saymak, politikayı sessizce boşaltmaktı.
+def guven_kok_metni(yol):
+    """→ (pem_metni, hata). Yol boşsa (None, None) = çıpa verilmemiş (meşru varsayılan)."""
+    yol = (yol or "").strip()
+    if not yol: return None, None
+    try:
+        if os.path.isdir(yol):
+            parcalar = []
+            for ad in sorted(os.listdir(yol)):
+                if ad.lower().endswith((".pem", ".crt", ".cer")):
+                    with open(os.path.join(yol, ad), encoding="utf-8") as f: parcalar.append(f.read())
+            if not parcalar: return None, f"çıpa dizininde PEM yok: {yol}"
+            return "\n".join(parcalar), None
+        with open(yol, encoding="utf-8") as f: return f.read(), None
+    except Exception as e:
+        return None, f"çıpa okunamadı ({yol}): {type(e).__name__}"
+
+
+GUVEN_KIPI = "kapali"
+GUVEN_NOTU = None
+_KOKEN_BAGLAM = None
+
+
+def guven_baglami_kur(kok_yolu=None):
+    """Güven doğrulamasını açar; çıpa verilmişse yükler. Kip ve sebep GLOBAL'e yazılır."""
+    global GUVEN_KIPI, GUVEN_NOTU, _KOKEN_BAGLAM
+    if _c2pa is None or os.environ.get("KOKEN_GUVEN") == "kapali":
+        GUVEN_KIPI, GUVEN_NOTU = "kapali", "güven doğrulaması KAPALI (kütüphane/ayar)"
+        return
+    pem, hata = guven_kok_metni(kok_yolu if kok_yolu is not None else os.environ.get("KOKEN_GUVEN_KOK"))
+    ayar = {"verify": {"verify_trust": True}}
+    if pem: ayar["trust"] = {"trust_anchors": pem}
+    try:
+        _KOKEN_BAGLAM = _c2pa.Context.from_dict(ayar)
+    except Exception as e:
+        GUVEN_KIPI, GUVEN_NOTU = "acik-cipa-bozuk", f"çıpa yüklenemedi: {type(e).__name__}"
+        _KOKEN_BAGLAM = None
+        return
+    if hata:
+        GUVEN_KIPI, GUVEN_NOTU = "acik-cipa-okunamadi", hata
+    elif pem:
+        GUVEN_KIPI, GUVEN_NOTU = "acik-cipali", None
+    else:
+        GUVEN_KIPI, GUVEN_NOTU = "acik-cipasiz", "güvenilir-mühür listesi VERİLMEDİ"
+
+
+guven_baglami_kur()
+
 IPTC_SON = {"trainedAlgorithmicMedia": "uretilmis",
             "compositeWithTrainedAlgorithmicMedia": "gercek+iyilestirme",
             "digitalCapture": "gercek"}
@@ -169,7 +238,9 @@ def imzali_oku(yol):
     if not tur: return None
     try:
         with open(yol, "rb") as fh:
-            d = json.loads(_c2pa.Reader(tur, fh).json())
+            okuyucu = (_c2pa.Reader(tur, fh, context=_KOKEN_BAGLAM) if _KOKEN_BAGLAM is not None
+                       else _c2pa.Reader(tur, fh))
+            d = json.loads(okuyucu.json())
     except Exception:
         return None
     am = d.get("active_manifest"); m = (d.get("manifests") or {}).get(am) or {}
@@ -187,14 +258,32 @@ def imzali_oku(yol):
             dst = str(veri.get("digitalSourceType") or "").rsplit("/", 1)[-1]
             if dst in IPTC_SON and kaynak_turu is None: kaynak_turu = IPTC_SON[dst]
     imza = (m.get("signature_info") or {})
-    return {"kaynak_turu": kaynak_turu,
+    # güven kökü: ayrıntı kodlarından okunur (üst düzey alandan DEĞİL)
+    sonuclar = ((d.get("validation_results") or {}).get("activeManifest") or {})
+    kodlar = [x.get("code") for x in (sonuclar.get("failure") or [])]
+    guvensiz = [k for k in kodlar if k in GUVENSIZ_KODLAR]
+    basarili = [x.get("code") for x in (sonuclar.get("success") or [])]
+    if not GUVEN_KIPI.startswith("acik"):
+        guven, guven_sebebi = "olculemedi", GUVEN_NOTU
+    elif GUVEN_KIPI in ("acik-cipa-okunamadi", "acik-cipa-bozuk"):
+        guven, guven_sebebi = "olculemedi", GUVEN_NOTU          # fail-closed: çıpa yok SAYILMAZ
+    elif GUVENLI_KOD in basarili:
+        guven, guven_sebebi = "evet", None                      # POZİTİF kanıt
+    elif guvensiz:
+        guven, guven_sebebi = "hayir", ", ".join(guvensiz)
+    else:
+        guven, guven_sebebi = "olculemedi", (GUVEN_NOTU or "güven kanıtı YOK (pozitif kod çıkmadı)")
+    return {"kaynak_turu": kaynak_turu, "guven": guven, "guven_sebebi": guven_sebebi,
             # 🔴 İKİ AYRI ŞEY (bağımsız göz · dar kapı tur-3): imzanın MATEMATİKSEL olarak
             #    tutması (Valid) ile mührün GÜVENİLEN bir kökten gelmesi (Trusted) aynı şey
             #    değildir. Kendi sertifikasını üreten herkes Valid alır. İkisini tek 'evet'e
             #    indirmek, ölçülenden fazlasını beyan etmekti.
-            "imza_dogrulandi": ("evet-guven-zinciri" if hal.lower() == "trusted"
-                                else "evet-imza-tutuyor" if hal.lower() == "valid"
-                                else f"gecersiz:{hal}"),
+            # 🔴 ZİNCİR İDDİASI ARTIK ÖLÇÜME BAĞLI: "trusted" sözcüğünü beklemek yetmiyordu
+            #    (kütüphane güvenilmeyen mühre de "Valid" diyor). Zincir ancak güven
+            #    doğrulaması AÇIK koştu VE güvensizlik kodu ÇIKMADIYSA iddia edilir.
+            "imza_dogrulandi": (f"gecersiz:{hal}" if hal.lower() not in ("valid", "trusted")
+                                else "evet-guven-zinciri" if guven == "evet"
+                                else "evet-imza-tutuyor"),
             "imza_sahibi": imza.get("issuer"), "imza_zamani": imza.get("time"),
             "eylemler": eylemler, "dogrulama_hali": hal}
 
@@ -287,7 +376,9 @@ def oku(yol):
             if ad in koken_govde: uretici = ad.decode(); break
     sonuc = {"bicim": bicim, "koken_durumu": durum, "kaynak_turu": kaynak_turu,
              "uretici": uretici, "filigran": b"c2pa.watermarked" in koken_govde,
-             "imza_kipi": IMZA_KIPI, "imza_dogrulandi": "olculemedi",
+             "imza_kipi": IMZA_KIPI, "guven_kipi": GUVEN_KIPI,
+             "guven": "olculemedi", "guven_sebebi": None,
+             "imza_dogrulandi": "olculemedi",
              "imza_sahibi": None, "okuma_yolu": "kutu-govdesi",
              "parca_disi_iz": bool(disi), "tanimadik_parca": tanimadik,
              "md5": hashlib.md5(ham).hexdigest()}
@@ -296,6 +387,7 @@ def oku(yol):
         sonuc.update({"kaynak_turu": im["kaynak_turu"] or kaynak_turu,
                       "imza_dogrulandi": im["imza_dogrulandi"], "imza_sahibi": im["imza_sahibi"],
                       "dogrulama_hali": im["dogrulama_hali"], "eylemler": im["eylemler"],
+                      "guven": im["guven"], "guven_sebebi": im["guven_sebebi"],
                       "okuma_yolu": "c2pa-yapisal",
                       "koken_durumu": "koken-kutusu-var" if durum in ("hic-yok", "belirsiz-tasiyici", "meta-var") else durum})
     kt, imza = sonuc["kaynak_turu"], sonuc["imza_dogrulandi"]
@@ -366,9 +458,12 @@ def main():
     ap.add_argument("--beyan", choices=["gercek", "gercek+iyilestirme", "uretilmis"],
                     help="insanın/ajanın beyanı — dosyayla çelişirse kapı keser")
     ap.add_argument("--beyan-sahibi", choices=["insan", "ajan"], default="insan")
+    ap.add_argument("--guven-kok", help="güvenilir mühür listesi: PEM dosyası ya da PEM dizini "
+                                        "(verilmezse hiçbir mühre güvenilmez — fail-closed)")
     ap.add_argument("--json", action="store_true")
     a = ap.parse_args()
 
+    if a.guven_kok: guven_baglami_kur(a.guven_kok)
     ok, detay = pozitif_kontrol()
     if not ok:
         print(f"◻ ÖLÇEMEDİM: okuyucu pozitif kontrolü geçemedi (görülen {detay})\n"
@@ -425,10 +520,12 @@ def main():
     if a.json:
         print(json.dumps({"dosya": len(dosyalar), "ayri": len(kume), "ikiz_ici": ikiz_ici,
                           "ikiz_arasi": ikiz_arasi, "red": len(red),
-                          "imza_kipi": IMZA_KIPI, "uyari": len(uyari), "kayitlar": satirlar},
+                          "imza_kipi": IMZA_KIPI, "guven_kipi": GUVEN_KIPI,
+                          "guven_notu": GUVEN_NOTU, "uyari": len(uyari), "kayitlar": satirlar},
                          ensure_ascii=False, indent=2))
     else:
-        print(f"   imza kapısı: {'AÇIK (c2pa yapısal doğrulama)' if IMZA_KIPI == 'acik' else 'KAPALI (kütüphane yok → kutu-gövdesi okuyucusu; imza ÖLÇÜLMEDİ)'}")
+        print(f"   imza kapısı: {'AÇIK (c2pa yapısal doğrulama)' if IMZA_KIPI == 'acik' else 'KAPALI (kütüphane yok → kutu-gövdesi okuyucusu; imza ÖLÇÜLMEDİ)'}"
+              f" · güven kökü: {GUVEN_KIPI}{' — ' + GUVEN_NOTU if GUVEN_NOTU else ''}")
         print(f"🔎 KÖKEN ÖLÇÜMÜ · {len(dosyalar)} dosya · {len(kume)} ayrı görüntü"
               f" · ikiz (küme içi {ikiz_ici} · kümeler arası {ikiz_arasi})")
         say = collections.Counter(s["koken_durumu"] for s in satirlar)
@@ -442,7 +539,17 @@ def main():
                      if uret[0].get("imza_dogrulandi") == "evet-guven-zinciri" else
                      "\n      ✅ imza matematiksel olarak TUTUYOR · beyan edilen veren: "
                      + str(uret[0].get("imza_sahibi") or "adsız")
-                     + "\n      ⚠️ ama GÜVEN ZİNCİRİ doğrulanmadı — veren kimliği beyandır"
+                     + "\n      ⚠️ GÜVEN ZİNCİRİ KURULMADI — sebebi ölçüldü: "
+                     + str(uret[0].get("guven_sebebi") or "bilinmiyor")
+                     # 🔴 SEBEBİ TEK KALIBA SOKMA (bağımsız göz · güven-kökü tur-2): çıpa
+                     #    YÜKLÜ olup sertifika o köke bağlanmadığında da "liste henüz yok"
+                     #    diyordum. İkisi AYRI durum: birinde politika eksik, ötekinde
+                     #    politika var ve mühür o politikaya girmiyor. Yanlış teşhis, yanlış iş.
+                     + "\n      (veren kimliği BEYANDIR; "
+                     + ("güvenilir-mühür listesi VERİLDİ ama bu mühür o listeye bağlanmıyor)"
+                        if GUVEN_KIPI == "acik-cipali" else
+                        "güvenilir-mühür listesi VERİLMEDİ)" if GUVEN_KIPI == "acik-cipasiz" else
+                        f"güven ÖLÇÜLEMEDİ: {GUVEN_NOTU})")
                      if uret[0].get("imza_dogrulandi") == "evet-imza-tutuyor" else
                      "\n      ⚠️ imza DOĞRULANMADI (" + str(uret[0].get("imza_dogrulandi"))
                      + ") — beyan kutuya elle de konabilir."))

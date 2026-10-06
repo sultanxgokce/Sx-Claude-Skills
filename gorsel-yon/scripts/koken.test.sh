@@ -239,8 +239,8 @@ if [ "$IMZALI" = "1" ]; then
        "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(k['imza_dogrulandi']+'/'+str(k['kaynak_turu'])+'/'+k['okuma_yolu']+'/'+k['iddia_guveni'])" <<<"$O")" \
        "evet-imza-tutuyor/uretilmis/c2pa-yapisal/imza-tutuyor-veren-dogrulanmadi"
   O="$(python3 "$A" "$TMP/imzali/j.png" 2>&1)"
-  kapi "K23b çıktı FAZLA GÜVEN BEYAN ETMEZ: zincirin doğrulanmadığını açıkça söyler" \
-       "$(grep -c 'GÜVEN ZİNCİRİ doğrulanmadı' <<<"$O")/$(grep -c 'GÜVEN ZİNCİRİ doğrulandı' <<<"$O")" "1/0"
+  kapi "K23b çıktı FAZLA GÜVEN BEYAN ETMEZ: zincirin kurulmadığını açıkça söyler" \
+       "$(grep -c 'GÜVEN ZİNCİRİ KURULMADI' <<<"$O")/$(grep -c 'GÜVEN ZİNCİRİ doğrulandı' <<<"$O")" "1/0"
   python3 "$A" "$TMP/imzali/j.png" --beyan gercek --beyan-sahibi insan >/dev/null 2>"$TMP/e8"; r=$?
   kapi "K24 imza DOĞRULANMIŞSA çelişki RED (K22 tautoloji değil — iki yüz ayrı ölçüldü)" \
        "$r/$(grep -c 'çelişki çözülmeden yayın YOK' "$TMP/e8")" "1/1"
@@ -338,5 +338,77 @@ python3 -c 'import sys;s=open(sys.argv[1],encoding="utf-8").read();s=s.replace("
 O="$(python3 "$M10" "$TMP/sosvar/gecerli.jpg" --json 2>&1)"
 kapi "K38 MUTASYON: eski gevşek koşul dönünce SOF'suz dosya OKUNUR (fail-closed süs değil)" \
      "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(str(k['kaynak_turu']))" <<<"$O")" "uretilmis"
+
+# ── 🔴 GÜVEN KÖKÜ KAPILARI (b0122 + bağımsız göz güven-kökü tur-1 · 2026-10-07) ───────────
+#   İki ders burada kilitli:
+#   (a) Güven kütüphanenin üst düzey `validation_state` alanından OKUNMAZ — güven doğrulaması
+#       açıkken bile o alan "Valid" dönüyor, oysa ayrıntıda `signingCredential.untrusted`.
+#   (b) Güven YOKLUKTAN çıkarılmaz: POZİTİF kanıt (`signingCredential.trusted`) şarttır.
+#       İlk yazımda "şu dört olumsuz kod yoksa güvenilir" diyordum — fail-open'dı.
+if [ "$IMZALI" = "1" ]; then
+  O="$(python3 "$A" "$TMP/imzali/j.png" --json 2>&1)"
+  kapi "G1 ÇIPASIZ: imza TUTAR ama güven KURULMAZ, sebebi ölçülü yazılır" \
+       "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(k['imza_dogrulandi']+'/'+k['guven']+'/'+str(k['guven_sebebi']))" <<<"$O")" \
+       "evet-imza-tutuyor/hayir/signingCredential.untrusted"
+  O="$(python3 "$A" "$TMP/imzali/j.png" 2>&1)"
+  kapi "G1b sebep ÇIKTIDA da görünür (kayıtta kalıp yüzeyde kaybolmaz)" \
+       "$(grep -c 'GÜVEN ZİNCİRİ KURULMADI' <<<"$O")/$(grep -c 'signingCredential.untrusted' <<<"$O")" "1/1"
+
+  # G5 · ALTIN YÜZ: çıpa VERİLİNCE aynı dosya güvenilir olur → G1 tautoloji değil
+  O="$(python3 "$A" "$TMP/imzali/j.png" --guven-kok "$TMP/cert.pem" --json 2>&1)"
+  kapi "G5 ÇIPA VERİLİNCE güven POZİTİF kanıtla kurulur (aynı dosya, tek fark çıpa)" \
+       "$(python3 -c "import json,sys;d=json.load(sys.stdin);k=d['kayitlar'][0];print(d['guven_kipi']+'/'+k['guven']+'/'+k['imza_dogrulandi'])" <<<"$O")" \
+       "acik-cipali/evet/evet-guven-zinciri"
+  # G5b · çıpa DİZİN olarak da verilebilir (politika birden çok mühür taşıyabilir)
+  mkdir -p "$TMP/cipalar" && cp "$TMP/cert.pem" "$TMP/cipalar/sinav.pem"
+  O="$(python3 "$A" "$TMP/imzali/j.png" --guven-kok "$TMP/cipalar" --json 2>&1)"
+  kapi "G5b çıpa DİZİNİ de kabul edilir (liste tek sertifikaya mahkûm değil)" \
+       "$(python3 -c "import json,sys;print(json.load(sys.stdin)['kayitlar'][0]['guven'])" <<<"$O")" "evet"
+
+  # G6 · FAIL-CLOSED: çıpa VERİLDİ ama okunamıyor → 'çıpa yok' SAYILMAZ, ÖLÇEMEDİM denir
+  O="$(python3 "$A" "$TMP/imzali/j.png" --guven-kok "$TMP/yok-boyle-bir-cipa.pem" --json 2>&1)"
+  kapi "G6 okunamayan çıpa 'çıpasız' sayılmaz: ölçemedim + sebep (politika sessizce boşalmaz)" \
+       "$(python3 -c "import json,sys;d=json.load(sys.stdin);k=d['kayitlar'][0];print(d['guven_kipi']+'/'+k['guven'])" <<<"$O")" \
+       "acik-cipa-okunamadi/olculemedi"
+  mkdir -p "$TMP/bos-cipa"
+  O="$(python3 "$A" "$TMP/imzali/j.png" --guven-kok "$TMP/bos-cipa" --json 2>&1)"
+  kapi "G6b PEM içermeyen çıpa dizini de ölçemedim (boş liste 'herkese güven' DEĞİL)" \
+       "$(python3 -c "import json,sys;print(json.load(sys.stdin)['kayitlar'][0]['guven'])" <<<"$O")" "olculemedi"
+
+  # G7 · güven KAPATILINCA zincir iddia edilmez (sessiz yükseltme yok)
+  O="$(KOKEN_GUVEN=kapali python3 "$A" "$TMP/imzali/j.png" --json 2>&1)"
+  kapi "G7 güven kapalıyken 'olculemedi' ve zincir iddiası YOK" \
+       "$(python3 -c "import json,sys;d=json.load(sys.stdin);k=d['kayitlar'][0];print(d['guven_kipi']+'/'+k['guven']+'/'+k['imza_dogrulandi'])" <<<"$O")" \
+       "kapali/olculemedi/evet-imza-tutuyor"
+
+  # G8 · MUTASYON: pozitif-kanıt şartı kaldırılınca (yokluktan güven) güvenilmeyen mühür geçer
+  MG="$TMP/koken-mutantG.py"
+  python3 -c 'import sys;s=open(sys.argv[1],encoding="utf-8").read();s=s.replace("    elif GUVENLI_KOD in basarili:","    elif True:",1);s=s.replace("    elif guvensiz:","    elif False:",1);open(sys.argv[2],"w",encoding="utf-8").write(s)' "$A" "$MG"
+  O="$(python3 "$MG" "$TMP/imzali/j.png" --json 2>&1)"
+  kapi "G8 MUTASYON: pozitif-kanıt şartı kalkınca güvenilmeyen mühür 'güvenilir' olur (fail-open geri döner)" \
+       "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(k['guven']+'/'+k['imza_dogrulandi'])" <<<"$O")" \
+       "evet/evet-guven-zinciri"
+
+  # G10 · TEŞHİS AYRIMI: "liste yok" ile "liste var ama bu mühür listede yok" AYRI yazılır
+  openssl req -x509 -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 -days 30 -nodes \
+    -keyout "$TMP/baska.key" -out "$TMP/baska.pem" -subj "/CN=baska-muhur/O=Baska" \
+    -addext "keyUsage=critical,digitalSignature" -addext "extendedKeyUsage=emailProtection" \
+    -addext "basicConstraints=critical,CA:FALSE" >/dev/null 2>&1
+  O="$(python3 "$A" "$TMP/imzali/j.png" --guven-kok "$TMP/baska.pem" 2>&1)"
+  kapi "G10 çıpa YÜKLÜ ama mühür listeye bağlanmıyorsa teşhis BUNU söyler (liste yok DEMEZ)" \
+       "$(grep -c 'listesi VERİLDİ ama bu mühür o listeye bağlanmıyor' <<<"$O")/$(grep -c 'listesi VERİLMEDİ' <<<"$O")" "1/0"
+  O="$(python3 "$A" "$TMP/imzali/j.png" 2>&1)"
+  kapi "G10b çıpa VERİLMEMİŞSE teşhis onu söyler (G10 tautoloji değil)" \
+       "$(grep -c 'BEYANDIR; güvenilir-mühür listesi VERİLMEDİ' <<<"$O")/$(grep -c 'listesi VERİLDİ ama' <<<"$O")" "1/0"
+
+  # G9 · GÜVEN, OLUMLU HÜKÜM AÇMAZ: çıpa yüklü ve güven 'evet' iken bile beraat yok
+  O="$(python3 "$A" "$TMP/imzali/k-gercek.png" --guven-kok "$TMP/cert.pem" --json 2>&1)"
+  kapi "G9 güven KURULSA bile 'kanıt olabilir' açılmaz (daraltma güvene bağlı değil)" \
+       "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(k['guven']+'/'+k['kanit_olabilir'])" <<<"$O")" \
+       "evet/bilinmiyor"
+else
+  echo "  ◻ G1-G10 ATLANDI — imzalı fikstür üretilemedi; güven kökü bu makinede ÖLÇÜLMEDİ."
+  ATLANAN=$(( ${ATLANAN:-0} + 11 ))
+fi
 echo; echo "SONUÇ: $G geçti · $K kaldı${ATLANAN:+ · $ATLANAN atlandı (ölçülmedi)}"
 [ "$K" -eq 0 ]
