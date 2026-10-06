@@ -72,12 +72,21 @@ parçalarında **değil**, JUMBF kutusunda (PNG `caBX` · JPEG APP11 · WebP `C2
 | **AÇIK** | `c2pa` kütüphanesi var | manifest **yapısal** okunur: imza + sertifika zinciri doğrulanır, `digitalSourceType` eylem iddiasının İÇİNDEN alınır (bayt arama DEĞİL) | `imza_dogrulandi: evet` + verenin adı |
 | **KAPALI** | kütüphane yok ya da `KOKEN_IMZA=kapali` | kutu-gövdesi okuyucusuna düşer; iddia `digitalSourceType` anahtarına **bağlı** olmak zorunda (serbest geçen sözcük iddia sayılmaz) | `imza_dogrulandi: olculemedi` |
 
-🔴 **Sessiz düşüş yasak:** kip her koşuda çıktıya basılır ve kayda geçer. Kipin hükme etkisi
-**asimetriktir** ve niçini zarar yönündedir:
-- *"üretilmiş → iddia taşıyan yüzeye giremez"* → imza doğrulanmasa da **keser** (temkinli taraf).
-- *çelişki* ("dosya şunu diyor, insan bunu dedi") → **yalnız imza doğrulanmışsa keser.**
-  Doğrulanmamış bir beyanla bir insanı yanlış-beyanla suçlamak zararın ağır tarafıdır; o hâlde
-  uyarı basılır ve "sorulmalı" denir.
+🔴 **Sessiz düşüş yasak:** kip her koşuda çıktıya basılır ve kayda geçer.
+
+🔴 **OLUMLU ⟂ OLUMSUZ İDDİA — aynı güvenle kabul edilmezler.** Bir dosyanın *"ben
+üretilmişim"* demesi onu **kısıtlar**; *"ben gerçek fotoğrafım"* demesi onu **serbest
+bırakır**. Bu yüzden kipin hükme etkisi asimetriktir ve ölçüt zarar yönüdür:
+
+| iddia | imza doğrulanmış | imza doğrulanmamış / geçersiz |
+|---|---|---|
+| *üretilmişim* (kısıtlayıcı) | keser | **keser** — temkinli taraf, dürüstçe "TEMKİNLİ red" yazar |
+| *gerçek fotoğrafım* (serbest bırakıcı) | kabul · `kanit_olabilir: evet` | **iddia DÜŞÜRÜLÜR** → `bilinmiyor`, `dusurulen_iddia` kayda geçer ve çıktıda söylenir |
+| *çelişki* (insanı suçlar) | keser | uyarır, kesmez — "sorulmalı" |
+
+`kanit_olabilir: evet` damgası **yalnız doğrulanmış olumlu iddiayla** verilir. Bir köken kutusu
+bulunup içindeki iddia okunamazsa sonuç `bilinmiyor`'dur — boş, şema-dışı ya da güvenilmez bir
+kutunun gerçeklik kanıtına dönüşmesi sahte-yeşildir (bağımsız göz tur-3 bunu yakaladı).
 
 **İsteğe bağlı bağımlılık:** `pip install --user c2pa-python` (imzalı kip). Kurulu değilse araç
 çalışır ama imzayı ölçmediğini söyler. Sınavın imzalı yüzü `openssl` + `c2pa` ister; ikisi yoksa
@@ -170,14 +179,17 @@ gorsel-yon.sh uret --kullanim doku-zemin --istem "..." --uygula # gerçek üreti
   sulanması ölçülmüştü).
 
 ## Kanıt
-`bash scripts/koken.test.sh` → **29 kapı**, hermetik (gerçek karelere dokunmaz), çift yönlü
-fikstürlü. Beş mutasyon kapısı: PNG kolu körleştirilince K13, JPEG kolu körleştirilince K18, kutu-dışı
+`bash scripts/koken.test.sh` → **34 kapı**, hermetik (gerçek karelere dokunmaz), çift yönlü
+fikstürlü. Altı mutasyon kapısı: PNG kolu körleştirilince K13, JPEG kolu körleştirilince K18, kutu-dışı
 iz kaydı susturulunca K19 → `rc=3 ÖLÇEMEDİM`; imza-şartı kaldırılınca K26 doğrulanmamış
 çelişkinin RED'e döndüğünü gösterir; yapısal kol koparılınca K27 imzalı dosyanın
-`olculemedi`ye düştüğünü gösterir (kol süs değil).
+`olculemedi`ye düştüğünü, K31 de olumlu-iddia şartı kaldırılınca imzasız bir "gerçeğim"
+iddiasının kabul edildiğini gösterir (şart süs değil).
 **İmzalı yüz GERÇEK:** sınav kendi sertifikasını `openssl` ile üretir ve `c2pa` ile gerçekten
 imzalı bir kare yazar (ağa çıkmaz) — K23 imzayı doğrular, K24 doğrulanmış çelişkinin kestiğini,
-K25 imzalı üretilmiş karenin iddia yüzeyine giremediğini ölçer. Yani "temiz" demeyen fail-closed
+K25 imzalı üretilmiş karenin iddia yüzeyine giremediğini, K30 ise imzalı bir
+"gerçek makine karesi" iddiasının KABUL edildiğini ölçer — yoksa "her olumlu iddiayı düşüren"
+bir kapı da aynı sınavı geçerdi. Yani "temiz" demeyen fail-closed
 davranış süs değil, ölçülmüştür. Üç biçim de GERÇEK zincirle sınanır (PNG parça · JPEG APP11
 segmenti · WebP RIFF kutusu) — kılık verilmiş bayt dizisiyle değil. K3/K5 tautoloji kapıları: üretilmiş kare
 iddiasız yüzeye **girer**, uyuşan beyan **geçer** — yoksa kapı "her şeye kırmızı" olurdu.
@@ -193,5 +205,5 @@ var ve `trainedAlgorithmicMedia` diyor; üretici `gpt-image`, filigran var. Beya
 SONRA):** aynı 62 kare · 46 ayrı görüntü · küme içi 16 · kümeler arası 0 — rakamlar birebir
 aynı kaldı, yani sıkılaştırma gerçek pozitifleri düşürmedi. Üstelik artık **imza ve sertifika
 zinciri de doğrulanıyor**: 62/62 `Valid`, veren **OpenAI OpCo, LLC**, iddia `c2pa.actions.v2`
-eyleminin içinden okundu. Yani "dosyanın kendi beyanı" cümlesi artık ölçülmüş bir güven
+eyleminin içinden okundu; 62/62 `kanit_olabilir: HAYIR`. Yani "dosyanın kendi beyanı" cümlesi artık ölçülmüş bir güven
 sınırına dayanıyor, anahtar sözcüğe değil.
