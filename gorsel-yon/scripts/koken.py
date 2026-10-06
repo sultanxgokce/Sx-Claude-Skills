@@ -84,7 +84,11 @@ def jpeg_parcalari(ham):
         if ham[i] != 0xFF: return None          # zincir bozuk → kısmi okuma İDDİA ÜRETMEZ
         m = ham[i+1]
         if m == 0xD9: out.append(("EOI", b"")); bitti = True; break
-        if m == 0xDA:                           # görüntü verisi başladı
+        if m == 0xDA:
+            # 🔴 SOS'ta "tamamlandı" DEME (bağımsız göz · dar kapı tur-2): entropi akışı
+            #    işaretçi zinciri gibi yürünmez, ama dosyanın EOI ile bittiği ÖLÇÜLEBİLİR.
+            #    Kesik bir JPEG'den suçlayıcı hüküm çıkmasın.
+            if ham[-2:] != b"\xff\xd9": return None
             out.append(("SOS", b"")); bitti = True; break
         if m in (0x01,) or 0xD0 <= m <= 0xD8:   # uzunluk alanı OLMAYAN işaretçiler
             i += 2; continue
@@ -225,7 +229,8 @@ def oku(yol):
                       "okuma_yolu": "c2pa-yapisal",
                       "koken_durumu": "koken-kutusu-var" if durum in ("hic-yok", "belirsiz-tasiyici", "meta-var") else durum})
     kt, imza = sonuc["kaynak_turu"], sonuc["imza_dogrulandi"]
-    if kt in OLUMLU_IDDIA:
+    sonuc["dosya_iddiasi"] = kt          # 🔴 ÇELİŞKİ için korunur (tur-2): hükme girmemek,
+    if kt in OLUMLU_IDDIA:               #    "görünmez olmak" demek DEĞİL
         # olumlu iddia HÜKME girmez; imzası doğrulanmış olsa bile yalnız kayda geçer
         sonuc["kaynak_turu"] = None
         sonuc["dusurulen_iddia"] = kt
@@ -324,7 +329,10 @@ def main():
         # 🔴 KAPALI KÜME: {HAYIR, bilinmiyor}. 'evet' hiçbir yoldan ÜRETİLEMEZ —
         #    beraat için güven kökü gerekir, o da bu kapının işi değil (bkz. başlık).
         kanit_olabilir = "HAYIR" if kt == "uretilmis" else "bilinmiyor"
-        celisen = a.beyan_sahibi if (kt and a.beyan and a.beyan != kt) else None
+        # çelişki HÜKÜM-türünden değil DOSYANIN İDDİASINDAN hesaplanır: düşürülmüş olumlu
+        # iddia da beyanla çelişebilir ("dosya gerçeğim diyor, insan üretilmiş dedi")
+        di = r.get("dosya_iddiasi")
+        celisen = a.beyan_sahibi if (di and a.beyan and a.beyan != di) else None
         imza_ok = r.get("imza_dogrulandi") == "evet"
         iddia = bool(a.kullanim and a.kullanim in KANIT_ALANLARI)
         if kt == "uretilmis" and iddia:
@@ -332,11 +340,11 @@ def main():
                            f" · iddianın güveni: {r.get('iddia_guveni')}"
                            + ("" if imza_ok else " (imza doğrulanmadı — TEMKİNLİ red)")))
         if celisen and imza_ok:
-            red.append((y, f"dosya '{kt}' diyor, {celisen} beyanı '{a.beyan}' diyor — çelişki çözülmeden yayın YOK"))
+            red.append((y, f"dosya '{di}' diyor, {celisen} beyanı '{a.beyan}' diyor — çelişki çözülmeden yayın YOK"))
         elif celisen:
             # 🔴 İMZA DOĞRULANMADI → kapı KESMEZ, uyarır. Doğrulanmamış beyanla insanı
             #    yanlış-beyanla suçlamak zararın ağır tarafıdır (tur-1/tur-2 dersi).
-            uyari.append((y, f"dosya '{kt}' diyor, {celisen} beyanı '{a.beyan}' diyor — AMA imza"
+            uyari.append((y, f"dosya '{di}' diyor, {celisen} beyanı '{a.beyan}' diyor — AMA imza"
                              f" doğrulanmadı ({r.get('imza_dogrulandi')}); kapı kesmiyor, SORULMALI"))
         satirlar.append({"dosya": os.path.basename(y), "tur": tur, "tur_kaynagi": tur_kaynagi,
                          "kanit_olabilir": kanit_olabilir, "celisen_taraf": celisen, **r})
