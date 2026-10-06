@@ -74,23 +74,26 @@ parçalarında **değil**, JUMBF kutusunda (PNG `caBX` · JPEG APP11 · WebP `C2
 
 🔴 **Sessiz düşüş yasak:** kip her koşuda çıktıya basılır ve kayda geçer.
 
-🔴 **OLUMLU ⟂ OLUMSUZ İDDİA — aynı güvenle kabul edilmezler.** Bir dosyanın *"ben
-üretilmişim"* demesi onu **kısıtlar**; *"ben gerçek fotoğrafım"* demesi onu **serbest
-bırakır**. Bu yüzden kipin hükme etkisi asimetriktir ve ölçüt zarar yönüdür:
+🔴 **BU KAPI YALNIZ SUÇLAR, ASLA BERAAT ETTİRMEZ** (kapsam Sultan kararıyla daraltıldı,
+2026-10-06 · bağımsız göz tur-4). `kanit_olabilir` **kapalı kümedir: `HAYIR` ya da
+`bilinmiyor`.** Üçüncü hâl yoktur, `evet` hiçbir yoldan üretilemez.
 
-| iddia | imza doğrulanmış | imza doğrulanmamış / geçersiz |
+Niçin: *"ben üretilmişim"* beyanı dosyayı **kısıtlar** — temkinli taraf, imzasız da işler.
+*"ben gerçek fotoğrafım"* beyanı dosyayı **serbest bırakır** ve bunu kabul etmek bir **GÜVEN
+KÖKÜ** ister. İmzanın matematiksel olarak tutması, mührün **kimden geldiğini söylemez**: kendi
+sertifikasını üreten herkes "gerçeğim" diye imzalayabilir. Ölçülmüş vaka — sınavın kendi
+ürettiği yerel sertifika `validation_state: Valid` alıyor. Güvenilir-mühür listesi ayrı iştir;
+o kurulana kadar olumlu iddia **yalnız kayda geçer** (`dusurulen_iddia`) ve çıktıda
+"KAYDA geçti, HÜKÜM OLMADI" denir.
+
+| iddia | imza doğrulanmış | doğrulanmamış / geçersiz |
 |---|---|---|
-| *üretilmişim* (kısıtlayıcı) | keser | **keser** — temkinli taraf, dürüstçe "TEMKİNLİ red" yazar |
-| *gerçek fotoğrafım* (serbest bırakıcı) | kabul · `kanit_olabilir: evet` | **iddia DÜŞÜRÜLÜR** → `bilinmiyor`, `dusurulen_iddia` kayda geçer ve çıktıda söylenir |
+| *üretilmişim* (kısıtlayıcı) | keser | **keser** — "TEMKİNLİ red" yazar |
+| *gerçek fotoğrafım* (serbest bırakıcı) | kayda geçer, hüküm YOK | kayda geçer, hüküm YOK |
 | *çelişki* (insanı suçlar) | keser | uyarır, kesmez — "sorulmalı" |
 
-`kanit_olabilir: evet` damgası **yalnız doğrulanmış olumlu iddiayla** verilir. Bir köken kutusu
-bulunup içindeki iddia okunamazsa sonuç `bilinmiyor`'dur — boş, şema-dışı ya da güvenilmez bir
-kutunun gerçeklik kanıtına dönüşmesi sahte-yeşildir (bağımsız göz tur-3 bunu yakaladı).
-
-**İsteğe bağlı bağımlılık:** `pip install --user c2pa-python` (imzalı kip). Kurulu değilse araç
-çalışır ama imzayı ölçmediğini söyler. Sınavın imzalı yüzü `openssl` + `c2pa` ister; ikisi yoksa
-o üç kapı **ATLANDI** basar — "geçti" demez.
+Bir köken kutusu bulunup içindeki iddia okunamazsa sonuç `bilinmiyor`'dur — boş ya da
+şema-dışı bir kutunun gerçeklik kanıtına dönüşmesi sahte-yeşildi (tur-3 bunu yakaladı).
 
 **Alanlar** (kayda giren): `tur` · `tur_kaynagi` (dosyadan|beyandan) · `imza_dogrulandi` ·
 `parca_disi_iz` · `bicim` · `imza_kipi` · `okuma_yolu` · `koken_durumu`
@@ -179,17 +182,17 @@ gorsel-yon.sh uret --kullanim doku-zemin --istem "..." --uygula # gerçek üreti
   sulanması ölçülmüştü).
 
 ## Kanıt
-`bash scripts/koken.test.sh` → **34 kapı**, hermetik (gerçek karelere dokunmaz), çift yönlü
+`bash scripts/koken.test.sh` → **35 kapı**, hermetik (gerçek karelere dokunmaz), çift yönlü
 fikstürlü. Altı mutasyon kapısı: PNG kolu körleştirilince K13, JPEG kolu körleştirilince K18, kutu-dışı
 iz kaydı susturulunca K19 → `rc=3 ÖLÇEMEDİM`; imza-şartı kaldırılınca K26 doğrulanmamış
 çelişkinin RED'e döndüğünü gösterir; yapısal kol koparılınca K27 imzalı dosyanın
-`olculemedi`ye düştüğünü, K31 de olumlu-iddia şartı kaldırılınca imzasız bir "gerçeğim"
-iddiasının kabul edildiğini gösterir (şart süs değil).
+`olculemedi`ye düştüğünü, K31b de beraat yolu geri eklenince `kanit_olabilir`
+kümesinin kirlendiğini gösterir (kapalılık süs değil).
 **İmzalı yüz GERÇEK:** sınav kendi sertifikasını `openssl` ile üretir ve `c2pa` ile gerçekten
 imzalı bir kare yazar (ağa çıkmaz) — K23 imzayı doğrular, K24 doğrulanmış çelişkinin kestiğini,
-K25 imzalı üretilmiş karenin iddia yüzeyine giremediğini, K30 ise imzalı bir
-"gerçek makine karesi" iddiasının KABUL edildiğini ölçer — yoksa "her olumlu iddiayı düşüren"
-bir kapı da aynı sınavı geçerdi. Yani "temiz" demeyen fail-closed
+K25 imzalı üretilmiş karenin iddia yüzeyine giremediğini, K30 ise imzası DOĞRULANMIŞ bir
+"gerçek makine karesi" iddiasının dahi beraat ettirmediğini ölçer (yerel sertifikayla
+üretilmiş gerçek bir imzalı dosya üzerinde) — güven kökü olmadan beraat yoktur. Yani "temiz" demeyen fail-closed
 davranış süs değil, ölçülmüştür. Üç biçim de GERÇEK zincirle sınanır (PNG parça · JPEG APP11
 segmenti · WebP RIFF kutusu) — kılık verilmiş bayt dizisiyle değil. K3/K5 tautoloji kapıları: üretilmiş kare
 iddiasız yüzeye **girer**, uyuşan beyan **geçer** — yoksa kapı "her şeye kırmızı" olurdu.

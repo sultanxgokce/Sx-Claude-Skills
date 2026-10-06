@@ -140,12 +140,14 @@ def _kutuda_iddia(govde, pencere=96):
         if b"digitalCapture" in yakin: return "gercek"
         i += len(ANAHTAR)
 
-# 🔴 OLUMLU ⟂ OLUMSUZ İDDİA (bağımsız göz tur-3): "ben üretilmişim" dosyayı KISITLAR,
-#    "ben gerçek fotoğrafım" dosyayı SERBEST BIRAKIR. İkisi aynı güvenle kabul edilemez.
-#    Olumsuz iddia imza doğrulanmasa da işler (temkinli taraf). OLUMLU iddia ise YALNIZ
-#    imza doğrulanmışsa işler — yoksa "bilinmiyor"dur. Eski kod ikisini eşitliyordu:
-#    imzası GEÇERSİZ bir manifest "digitalCapture" deyip kareyi kanıt yüzeyine sokabilirdi.
-OLUMLU_IDDIA = {"gercek"}
+# 🔴 BU KAPI YALNIZ SUÇLAR, ASLA BERAAT ETTİRMEZ (kapsam daraltıldı · Sultan kararı 2026-10-06).
+#    Niçin: "ben üretilmişim" beyanı dosyayı KISITLAR → temkinli taraf, imzasız da işler.
+#    "ben gerçek fotoğrafım" beyanı dosyayı SERBEST BIRAKIR → bunu kabul etmek bir GÜVEN KÖKÜ
+#    ister: imzanın matematiksel olarak tutması, mührün KİMDEN geldiğini söylemez. Kendi
+#    sertifikasını üreten herkes "gerçeğim" diye imzalayabilir (bağımsız göz tur-4, haklı).
+#    Güvenilir-mühür listesi AYRI iştir; o kurulana kadar bu kapı olumlu hüküm VERMEZ:
+#    çıktı ya "üretilmiş, iddia yüzeyine giremez" ya "bilinmiyor"dur. ÜÇÜNCÜ hâl yoktur.
+OLUMLU_IDDIA = {"gercek"}        # yalnız KAYDA geçer — hüküm üretmez (aşağıda kanit_olabilir)
 
 def oku(yol):
     """→ sözlük. Hüküm YALNIZ köken kutusunun gövdesinden çıkar."""
@@ -208,8 +210,9 @@ def oku(yol):
                       "okuma_yolu": "c2pa-yapisal",
                       "koken_durumu": "koken-kutusu-var" if durum in ("hic-yok", "belirsiz-tasiyici", "meta-var") else durum})
     kt, imza = sonuc["kaynak_turu"], sonuc["imza_dogrulandi"]
-    if kt in OLUMLU_IDDIA and imza != "evet":
-        sonuc["kaynak_turu"] = None                 # olumlu iddia DOĞRULANMADAN kabul edilmez
+    if kt in OLUMLU_IDDIA:
+        # olumlu iddia HÜKME girmez; imzası doğrulanmış olsa bile yalnız kayda geçer
+        sonuc["kaynak_turu"] = None
         sonuc["dusurulen_iddia"] = kt
     sonuc["iddia_guveni"] = ("dogrulanmis-imza" if imza == "evet"
                              else "dogrulanmamis" if sonuc["kaynak_turu"] else "yok")
@@ -301,9 +304,9 @@ def main():
         # 🔴 'evet' DAMGASI YALNIZ DOĞRULANMIŞ OLUMLU İDDİAYLA (bağımsız göz tur-3):
         #    eski kod "köken kutusu var ama iddia okunamadı" hâline de 'evet' diyordu →
         #    boş/şema-dışı/güvenilmez kutu gerçeklik kanıtına dönüşüyordu (sahte-yeşil).
-        kanit_olabilir = ("HAYIR" if kt == "uretilmis"
-                          else "evet" if (kt in OLUMLU_IDDIA and r.get("imza_dogrulandi") == "evet")
-                          else "bilinmiyor")
+        # 🔴 KAPALI KÜME: {HAYIR, bilinmiyor}. 'evet' hiçbir yoldan ÜRETİLEMEZ —
+        #    beraat için güven kökü gerekir, o da bu kapının işi değil (bkz. başlık).
+        kanit_olabilir = "HAYIR" if kt == "uretilmis" else "bilinmiyor"
         celisen = a.beyan_sahibi if (kt and a.beyan and a.beyan != kt) else None
         imza_ok = r.get("imza_dogrulandi") == "evet"
         iddia = bool(a.kullanim and a.kullanim in KANIT_ALANLARI)
@@ -350,9 +353,9 @@ def main():
             print(f"   ◻ {say['okunamadi']} dosyanın biçimini ayrıştıramadım → ÖLÇEMEDİM (temiz değil).")
         dus = [s for s in satirlar if s.get("dusurulen_iddia")]
         if dus:
-            print(f"   🔴 {len(dus)} dosya 'gerçek fotoğraf' iddiası taşıyor AMA imzası doğrulanmadı"
-                  f" ({dus[0]['imza_dogrulandi']}) → iddia DÜŞÜRÜLDÜ, sınıf 'bilinmiyor'."
-                  "\n      Olumlu iddia doğrulanmadan kabul edilmez; olumsuz iddia edilir (asimetri).")
+            print(f"   ℹ️ {len(dus)} dosya 'gerçek fotoğraf' iddiası taşıyor → KAYDA geçti, HÜKÜM OLMADI."
+                  "\n      Bu kapı yalnız suçlar, beraat ettirmez: beraat için mührün KİMDEN geldiğini"
+                  "\n      ölçen bir güven kökü gerekir ve o ayrı iştir.")
         disi = sum(1 for s in satirlar if s["parca_disi_iz"])
         if disi:
             print(f"   ℹ️ {disi} dosyada beyan metni köken kutusunun DIŞINDA görüldü"

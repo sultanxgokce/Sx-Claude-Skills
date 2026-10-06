@@ -129,12 +129,12 @@ import os; os.makedirs(f"{T}/olumlu",exist_ok=True)
 png(f"{T}/olumlu/m.png",[("IHDR",ihdr),("caBX",b"jumbc2pa"+ANAH+b'digitalCapture"'),("IDAT",b"x"),("IEND",b"")])
 FIX
 O="$(python3 "$A" "$TMP/olumlu/m.png" --json 2>&1)"
-kapi "K29 İMZASIZ 'gerçek fotoğrafım' iddiası DÜŞÜRÜLÜR (olumlu iddia doğrulanmadan kabul edilmez)" \
+kapi "K29 'gerçek fotoğrafım' iddiası HÜKME girmez, KAYDA geçer" \
      "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(str(k['kaynak_turu'])+'/'+str(k.get('dusurulen_iddia'))+'/'+k['kanit_olabilir'])" <<<"$O")" \
      "None/gercek/bilinmiyor"
 O="$(python3 "$A" "$TMP/olumlu/m.png" 2>&1)"
-kapi "K29b düşürülen iddia SESSİZ değil, çıktıda söylenir" \
-     "$(grep -c 'iddia DÜŞÜRÜLDÜ' <<<"$O")" "1"
+kapi "K29b kayda geçen iddia SESSİZ değil, çıktıda söylenir" \
+     "$(grep -c 'KAYDA geçti, HÜKÜM OLMADI' <<<"$O")" "1"
 
 # ── GERÇEK İMZALI FİKSTÜR (hermetik: kendi sınav sertifikasını üretir, ağ YOK)
 #    Niçin: "imza doğrulanırsa çelişki keser" kuralının RED yüzü, imzasız fikstürle
@@ -158,9 +158,9 @@ if [ "$IMZALI" = "1" ]; then
   python3 "$A" "$TMP/imzali/j.png" --kullanim vitrin >/dev/null 2>&1; r=$?
   kapi "K25 imzalı üretilmiş kare iddia taşıyan yüzeye GİREMEZ" "$r" "1"
   O="$(python3 "$A" "$TMP/imzali/k-gercek.png" --json 2>&1)"
-  kapi "K30 İMZALI 'gerçek makine karesi' iddiası KABUL EDİLİR (K29 tautoloji değil)" \
-       "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(str(k['kaynak_turu'])+'/'+k['kanit_olabilir']+'/'+k['iddia_guveni'])" <<<"$O")" \
-       "gercek/evet/dogrulanmis-imza"
+  kapi "K30 İMZASI DOĞRULANMIŞ 'gerçeğim' iddiası dahi BERAAT ETTİRMEZ (güven kökü yok)" \
+       "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(str(k['kaynak_turu'])+'/'+k['kanit_olabilir']+'/'+str(k.get('dusurulen_iddia')))" <<<"$O")" \
+       "None/bilinmiyor/gercek"
 
 else
   echo "  ◻ K23/K24/K25/K30 ATLANDI — imzalı fikstür üretilemedi (openssl ya da c2pa yok)."
@@ -191,10 +191,14 @@ if [ "$IMZALI" = "1" ]; then
        "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(k['imza_dogrulandi']+'/'+k['okuma_yolu'])" <<<"$O")" \
        "olculemedi/kutu-govdesi"
 fi
-M6="$TMP/koken-mutant6.py"; sed 's/^OLUMLU_IDDIA = {"gercek"}/OLUMLU_IDDIA = set()/' "$A" > "$M6"
-O="$(python3 "$M6" "$TMP/olumlu/m.png" --json 2>&1)"
-kapi "K31 MUTASYON: olumlu-iddia şartı kaldırılınca imzasız 'gerçek' iddiası kabul edilir (şart süs değil)" \
-     "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(str(k['kaynak_turu'])+'/'+k['kanit_olabilir'])" <<<"$O")" \
-     "gercek/bilinmiyor"
+# KAPALI KÜME kapısı: 'evet' hiçbir dosyada ÜRETİLEMEZ (beraat yolu yok)
+O="$(python3 "$A" "$TMP/uretilmis" "$TMP/temizmis" "$TMP/karma" "$TMP/tanimadik" "$TMP/bagsiz" "$TMP/olumlu" "$TMP/webp" --json 2>&1)"
+kapi "K31 'kanıt olabilir' kapalı küme {HAYIR,bilinmiyor} — hiçbir yoldan 'evet' çıkmaz" \
+     "$(python3 -c "import json,sys;d=json.load(sys.stdin);print(','.join(sorted({k['kanit_olabilir'] for k in d['kayitlar']})))" <<<"$O")" \
+     "HAYIR,bilinmiyor"
+M6="$TMP/koken-mutant6.py"; sed 's/        kanit_olabilir = "HAYIR" if kt == "uretilmis" else "bilinmiyor"/        kanit_olabilir = "HAYIR" if kt == "uretilmis" else "evet"/' "$A" > "$M6"
+O="$(python3 "$M6" "$TMP/temizmis/b.png" --json 2>&1)"
+kapi "K31b MUTASYON: beraat yolu geri eklenince küme kirlenir (kapalılık süs değil)" \
+     "$(python3 -c "import json,sys;print(json.load(sys.stdin)['kayitlar'][0]['kanit_olabilir'])" <<<"$O")" "evet"
 echo; echo "SONUÇ: $G geçti · $K kaldı${ATLANAN:+ · $ATLANAN atlandı (ölçülmedi)}"
 [ "$K" -eq 0 ]
