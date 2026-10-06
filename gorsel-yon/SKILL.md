@@ -43,7 +43,7 @@ Bu üçünün dışı **reddedilir** (kapalı küme, `--kullanim` zorunlu).
 **ÜRETİM** tarafını süzüyordu: ne isteyeceğimizi. Ama **hazır gelen dosya** bu kapıların
 hiçbirinden geçmiyordu — ve kaçak tam oradan oldu: 62 kare başka bir araçla üretilip
 köprüye düştü, vitrine gidiyordu. Üç ölçüm (iki ajan + ben) "bu dosyalarda meta yok,
-kökü belirsiz" dedi; gerçekte **hepsinde üreticinin imzalı köken kaydı** vardı ve
+kökü belirsiz" dedi; gerçekte **hepsinde üreticinin köken kutusu** vardı ve
 `trainedAlgorithmicMedia` diyordu. Yanlış kümede arıyorduk: köken kaydı Exif/metin
 parçalarında **değil**, JUMBF kutusunda (PNG `caBX` · JPEG APP11 · WebP `C2PA`).
 
@@ -58,6 +58,18 @@ parçalarında **değil**, JUMBF kutusunda (PNG `caBX` · JPEG APP11 · WebP `C2
    - dosya ile **beyan çelişiyorsa** → `rc=1`, ve `celisen_taraf` yazılır:
      **insan beyanı SORULUR, ajan beyanı DÜZELTİLİR** (ikisi aynı ağırlıkta değil; öneri: KALFA/Nova)
    - okuyucu **pozitif kontrolü** geçemezse → `rc=3` ÖLÇEMEDİM. Ölçemediğine temiz demez.
+   - hüküm YALNIZ köken kutusunun GÖVDESİNDEN çıkar; kutu dışında geçen beyan metni
+     `parca_disi_iz` olarak **kayda geçer ama hüküm vermez** (sahte-pozitif kapısı).
+   - biçimi ayrıştırılamayan dosya `okunamadi`'dır — "temiz" değil.
+
+🔴 **ÖLÇMEDİĞİM ŞEY — İMZA** (bağımsız göz, tur-1): bu kapı köken kutusunun VARLIĞINI ve
+içindeki beyanı okur; C2PA manifestinin **kriptografik imzasını ve sertifika zincirini
+DOĞRULAMAZ** (kutuda o araç yok — ölçüldü). Bu yüzden alan adı `imzali-koken-var` değil
+**`koken-kutusu-var`**dır ve her kayıt `imza_dogrulandi: hayir` taşır. Beyanı kutuya elle
+koymak mümkündür; hatanın iki yönü vardır ve **ağırlıkları farklıdır**:
+- "üretilmiş → iddia taşıyan yüzeye giremez" kuralında yanlış-KIRMIZI üretir → temkinli taraf, zararsız.
+- ÇELİŞKİ kuralında bir insanı haksız yere suçlayabilir → bu yüzden çıktı "çözülmeli" der,
+  asla "yanlış beyan" demez.
 
 🔴 **ASİMETRİ — "köken yok" HİÇBİR ŞEY KANITLAMAZ** (ölçüldü 2026-10-06): bir kareyi
 hiçbir şey değiştirmeden **yeniden kaydetmek** köken kutusunu tamamen yok ediyor
@@ -75,8 +87,9 @@ güven rozeti** takar ve korumak istediği iddiayı deler.
 🔴 **Tanımadığım parça türü "yok" SAYILMAZ**, kayda geçer. Bu kapının kendi doğuş hatası
 buydu: bilinen dört ada bakıp bulamayınca "meta yok" dendi — sözlük eksikti, araç kör değildi.
 
-**Beş alan** (kayda giren): `tur` · `tur_kaynagi` (dosyadan|beyandan) · `koken_durumu`
-(imzali-koken-var|meta-var|hic-yok) · `kanit_olabilir` · `celisen_taraf` · artı `ikizlik`
+**Alanlar** (kayda giren): `tur` · `tur_kaynagi` (dosyadan|beyandan) · `imza_dogrulandi` ·
+`parca_disi_iz` · `bicim` · `koken_durumu`
+(koken-kutusu-var|meta-var|hic-yok|okunamadi) · `kanit_olabilir` · `celisen_taraf` · artı `ikizlik`
 (küme içi ve kümeler arası AYRI sayılır).
 
 **Yön çiti:** her isteme Sultan'ın seçtiği yön (B1/B4/B5) otomatik eklenir ve
@@ -161,12 +174,20 @@ gorsel-yon.sh uret --kullanim doku-zemin --istem "..." --uygula # gerçek üreti
   sulanması ölçülmüştü).
 
 ## Kanıt
-`bash scripts/koken.test.sh` → **13 kapı**, hermetik (gerçek karelere dokunmaz), çift yönlü
-fikstürlü. Mutasyon-kanıtlı: okuyucu körleştirilince K13 `rc=3 ÖLÇEMEDİM` bekler — yani
-"temiz" demeyen fail-closed davranış ölçülmüştür. K3/K5 tautoloji kapıları: üretilmiş kare
+`bash scripts/koken.test.sh` → **21 kapı**, hermetik (gerçek karelere dokunmaz), çift yönlü
+fikstürlü. Üç mutasyon kapısı: PNG kolu körleştirilince K13, JPEG kolu körleştirilince K18, kutu-dışı
+iz kaydı susturulunca K19 → hepsi `rc=3 ÖLÇEMEDİM` bekler. Yani "temiz" demeyen fail-closed
+davranış süs değil, ölçülmüştür. Üç biçim de GERÇEK zincirle sınanır (PNG parça · JPEG APP11
+segmenti · WebP RIFF kutusu) — kılık verilmiş bayt dizisiyle değil. K3/K5 tautoloji kapıları: üretilmiş kare
 iddiasız yüzeye **girer**, uyuşan beyan **geçer** — yoksa kapı "her şeye kırmızı" olurdu.
 
 **Canlı kalibrasyon (ilk gerçek koşu, 2026-10-06):** 62 kare · 46 ayrı görüntü · küme içi
-ikiz 16 · kümeler arası 0 — üç bağımsız ölçümle birebir. Sultan'ın beyanı
-`gercek+iyilestirme` verilince **22 çelişkinin 22'si** yakalandı (`rc=1`), çelişen taraf
-`insan` diye işaretlendi (yani Sultan'a sorulacak, düzeltilmeyecek).
+ikiz 16 · kümeler arası 0 — üç bağımsız ölçümle birebir. Hepsinde köken kutusu
+var ve `trainedAlgorithmicMedia` diyor; üretici `gpt-image`, filigran var. Beyan
+`gercek+iyilestirme` verilince çelişkilerin **tamamı** yakalandı (`rc=1`), çelişen taraf
+`insan` işaretlendi — yani Sultan'a sorulacak, düzeltilmeyecek. (Sultan'ın o beyanı fiilen
+22 karelik alt kümeye aitti; kümenin tamamına uygulandığında 62/62 çelişki döner.)
+
+**Sıkı okuyucuyla yeniden ölçüldü (tur-2, kutu-gövdesi şartı eklendikten SONRA):** aynı 62
+kare · 46 ayrı görüntü · küme içi 16 · kümeler arası 0 — rakamlar birebir aynı kaldı, yani
+sıkılaştırma gerçek pozitifleri düşürmedi.

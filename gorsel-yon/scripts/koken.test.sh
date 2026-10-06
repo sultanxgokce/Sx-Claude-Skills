@@ -25,8 +25,23 @@ png(f"{T}/tanimadik/d.png",[("IHDR",ihdr),("zzZZ",b"bilinmeyen"),("IDAT",b"x"),(
 png(f"{T}/kumeA/x.png",[("IHDR",ihdr),("IDAT",b"ayni"),("IEND",b"")])
 open(f"{T}/kumeA/x2.png","wb").write(open(f"{T}/kumeA/x.png","rb").read())
 open(f"{T}/kumeB/x.png","wb").write(open(f"{T}/kumeA/x.png","rb").read())
-# JPEG kılığında JUMBF (tek biçime bakan okuyucu 'temiz' der)
-open(f"{T}/uretilmis/e.jpg","wb").write(b"\xff\xd8\xff\xe0"+b"\x00"*20+b"jumb"+b"c2pa"+URET+b"\xff\xd9")
+# GERÇEK JPEG: APP11 segmenti (uzunluk alanıyla) — kılık değil, zincirde yürünebilir
+def jpeg(yol, segmentler):
+    out=bytearray(b"\xff\xd8")
+    for m,d in segmentler: out+=bytes([0xFF,m])+struct.pack(">H",len(d)+2)+d
+    open(yol,"wb").write(bytes(out+b"\xff\xd9"))
+jpeg(f"{T}/uretilmis/e.jpg",[(0xEB,b"JP\0\0jumbc2pa"+URET+b"gpt-image"),(0xE0,b"JFIF\0")])
+# GERÇEK WebP: RIFF zincirinde C2PA kutusu
+def webp(yol, parcalar):
+    gov=bytearray(b"WEBP")
+    for t,d in parcalar: gov+=t.encode()+struct.pack("<I",len(d))+d+(b"\0" if len(d)&1 else b"")
+    open(yol,"wb").write(b"RIFF"+struct.pack("<I",len(gov))+bytes(gov))
+os.makedirs(f"{T}/webp",exist_ok=True); webp(f"{T}/webp/f.webp",[("VP8X",b"\0"*10),("C2PA",b"jumbc2pa"+URET)])
+# KUTU-DIŞI İZ: beyan metni köken kutusunda DEĞİL, sıradan bir metin parçasında
+os.makedirs(f"{T}/disi",exist_ok=True)
+png(f"{T}/disi/g.png",[("IHDR",ihdr),("tEXt",b"Not\0"+URET),("IDAT",b"x"),("IEND",b"")])
+# BİÇİM AYRIŞTIRILAMAZ: adı .png ama gövdesi değil
+os.makedirs(f"{T}/bozuk",exist_ok=True); open(f"{T}/bozuk/h.png","wb").write(b"bu bir goruntu degil")
 PY
 
 O="$(python3 "$A" "$TMP/uretilmis/a.png" 2>&1)"; r=$?
@@ -57,13 +72,40 @@ O="$(python3 "$A" "$TMP/kumeA" "$TMP/kumeB" --json 2>&1)"
 kapi "K11 ikiz: küme içi 2 · kümeler arası 1 AYRI sayılır" \
      "$(python3 -c "import json,sys;d=json.load(sys.stdin);print(str(d['ikiz_ici'])+'/'+str(d['ikiz_arasi']))" <<<"$O")" "2/1"
 O="$(python3 "$A" "$TMP/uretilmis/e.jpg" 2>&1)"
-kapi "K12 JPEG'de de köken bulunur (tek biçime bakan okuyucu 'temiz' der)" \
+kapi "K12 GERÇEK JPEG APP11 segmentinden köken okunur (kılık değil, zincir yürünür)" \
      "$(grep -c 'ÜRETİLMİŞ' <<<"$O")" "1"
+
+O="$(python3 "$A" "$TMP/webp/f.webp" 2>&1)"
+kapi "K14 GERÇEK WebP RIFF zincirindeki C2PA kutusundan köken okunur" \
+     "$(grep -c 'ÜRETİLMİŞ' <<<"$O")" "1"
+O="$(python3 "$A" "$TMP/disi/g.png" --json 2>&1)"
+kapi "K15 kutu DIŞINDAKİ beyan metni HÜKÜM DEĞİL, kayıttır (sahte-pozitif kapısı)" \
+     "$(python3 -c "import json,sys;d=json.load(sys.stdin);k=d['kayitlar'][0];print(str(k['kaynak_turu'])+'/'+str(k['parca_disi_iz'])+'/'+k['koken_durumu'])" <<<"$O")" \
+     "None/True/meta-var"
+python3 "$A" "$TMP/disi/g.png" --kullanim vitrin >/dev/null 2>&1; r=$?
+kapi "K15b kutu-dışı iz iddia taşıyan yüzeyde RED ÜRETMEZ (yanlış-kırmızı yok)" "$r" "0"
+O="$(python3 "$A" "$TMP/uretilmis/a.png" --json 2>&1)"
+kapi "K16 İMZA DOĞRULANMADI dürüstlüğü: her kayıtta yazılı, metinde uyarı basılı" \
+     "$(python3 -c "import json,sys;d=json.load(sys.stdin);print(d['imza_dogrulandi']+'/'+d['kayitlar'][0]['imza_dogrulandi'])" <<<"$O")" "hayir/hayir"
+O="$(python3 "$A" "$TMP/uretilmis/a.png" 2>&1)"
+kapi "K16b metin çıktısı imzanın doğrulanmadığını söyler (overclaim yok)" \
+     "$(grep -c 'imza DOĞRULANMADI' <<<"$O")" "1"
+O="$(python3 "$A" "$TMP/bozuk/h.png" 2>&1)"
+kapi "K17 biçimi ayrıştırılamayan dosya 'temiz' DEĞİL 'okunamadi' sayılır" \
+     "$(grep -c 'okunamadi' <<<"$O")/$(grep -c 'ÖLÇEMEDİM' <<<"$O")" "1/1"
 
 # ── MUTASYON · pozitif kontrol kırılınca hüküm ÜRETİLMEZ (rc=3), 'temiz' DEMEZ
 M="$TMP/koken-mutant.py"; sed 's/^KOKEN_PARCA = {"caBX"}/KOKEN_PARCA = {"yokBX"}/' "$A" > "$M"
 python3 "$M" "$TMP/uretilmis/a.png" >/dev/null 2>"$TMP/e4"; r=$?
 kapi "K13 MUTASYON: okuyucu körleştirilince rc=3 ÖLÇEMEDİM (temiz DEĞİL)" \
      "$r/$(grep -c 'ÖLÇEMEDİM' "$TMP/e4")" "3/1"
+M2="$TMP/koken-mutant2.py"; sed 's/if t == "APP11" and any/if t == "APP99" and any/' "$A" > "$M2"
+python3 "$M2" "$TMP/uretilmis/a.png" >/dev/null 2>"$TMP/e5"; r=$?
+kapi "K18 MUTASYON: JPEG kolu körleştirilince de rc=3 (pozitif kontrol üç biçimi kapsar)" \
+     "$r/$(grep -c 'ÖLÇEMEDİM' "$TMP/e5")" "3/1"
+M3="$TMP/koken-mutant3.py"; sed 's/^    disi = (URETIM in ham or KARMA in ham)/    disi = False and (URETIM in ham or KARMA in ham)/' "$A" > "$M3"
+python3 "$M3" "$TMP/uretilmis/a.png" >/dev/null 2>"$TMP/e6"; r=$?
+kapi "K19 MUTASYON: kutu-dışı iz kaydı susturulunca pozitif kontrol düşer (kayıt süs değil)" \
+     "$r/$(grep -c 'ÖLÇEMEDİM' "$TMP/e6")" "3/1"
 echo; echo "SONUÇ: $G geçti · $K kaldı"
 [ "$K" -eq 0 ]
