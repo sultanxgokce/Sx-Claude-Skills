@@ -80,22 +80,69 @@ def jpeg_parcalari(ham):
     """JPEG işaretçi zincirini yürür → [(ad, gövde)]. APP11 = JUMBF taşıyıcısı."""
     if ham[:2] != b"\xff\xd8": return None
     i, out, bitti = 2, [], False
+    sof_kimlikleri = set()          # çerçeve başlığında TANIMLI bileşenler (SOS onlara gönderir)
     while i + 2 <= len(ham):
         if ham[i] != 0xFF: return None          # zincir bozuk → kısmi okuma İDDİA ÜRETMEZ
         m = ham[i+1]
         if m == 0xD9: out.append(("EOI", b"")); bitti = True; break
         if m == 0xDA:
-            # 🔴 SOS'ta "tamamlandı" DEME (bağımsız göz · dar kapı tur-2): entropi akışı
-            #    işaretçi zinciri gibi yürünmez, ama dosyanın EOI ile bittiği ÖLÇÜLEBİLİR.
-            #    Kesik bir JPEG'den suçlayıcı hüküm çıkmasın.
+            # 🔴 SOS'ta "tamamlandı" DEME (bağımsız göz · dar kapı tur-2/tur-4): entropi akışı
+            #    işaretçi zinciri gibi yürünmez — AMA üç şey ÖLÇÜLEBİLİR ve ölçülüyor:
+            #    (a) SOS'un KENDİ BAŞLIĞI tutarlı mı: uzunluk = 6 + 2×bileşen-sayısı, bileşen
+            #        sayısı 1-4 arası (JPEG şartı). Tutmuyorsa yapı bozuk.
+            #    (b) başlıktan sonra gerçekten bir tarama akışı var mı (boş değil).
+            #    (c) dosya EOI ile bitiyor mu.
+            #    (d) bileşen kimlikleri ÇERÇEVEDE tanımlı olanlar arasında mı (SOF'tan toplanır).
+            #    Niçin bu kadarı: kesik ya da uydurma başlıklı bir JPEG'den SUÇLAYICI hüküm
+            #    çıkmamalı; bu kapının zarar yönü yanlış suçlamadır.
+            #    🔴 ÖLÇMEDİĞİM: seçilen Huffman tablolarının DHT'de TANIMLI olması ve tarama
+            #    parametrelerinin JPEG KİPİNE (baseline/progressive) uygun BİRLEŞİMİ. Bunlar
+            #    kod-çözücü işidir; bu araç kod çözmez, yapı tutarlılığına bakar. Sonuç:
+            #    alanları aralıkta olup anlamsal olarak geçersiz bir başlık okunabilir sayılır
+            #    — bu, iddia ÜRETMEZ, yalnız dosyayı "okunamadi" saymaz.
+            if i + 4 > len(ham): return None
+            sn = struct.unpack(">H", ham[i+2:i+4])[0]
+            if sn < 6 or i + 2 + sn > len(ham): return None
+            bilesen = ham[i+4]
+            if not (1 <= bilesen <= 4) or sn != 6 + 2 * bilesen: return None
+            # 🔴 GÖVDE DE DOĞRULANIR (bağımsız göz · jpeg-sos tur-1): uzunluk ve bileşen sayısı
+            #    doğru olup gövdesi uydurma bir başlık "okunabilir" sayılıyordu. JPEG şartları:
+            #    bileşen kimlikleri TEKİL · tablo seçicileri (Td/Ta) 0-3 · Ss/Se 0-63 ve Se≥Ss ·
+            #    Ah/Al 0-13. Hiçbiri tutmazsa yapı bozuktur ve İDDİA ÇIKARILMAZ.
+            gov = ham[i+4:i+2+sn]
+            kimlikler = [gov[1 + 2*b] for b in range(bilesen)]
+            # 🔴 SOS, ÇERÇEVEDE TANIMLI bileşene gönderir (bağımsız göz · jpeg-sos tur-2/tur-3):
+            #    tekillik yetmez; kimlik SOF'ta yoksa başlık var olmayan bir bileşeni gösteriyor.
+            #    🔴 VE SOF'SUZ DOSYA ARTIK GEÇMİYOR (tur-3): eski koşul `if sof_kimlikleri and …`
+            #    idi, yani çerçeve başlığı HİÇ YOKSA bağ denetimi SESSİZCE ATLANIYORDU — kodun
+            #    ve tarifin kurduğunu söylediği bağ, tam da en bozuk dosyada uygulanmıyordu.
+            #    Geçerli bir JPEG'de SOF, SOS'tan ÖNCE gelmek zorundadır; yokluğu yapı
+            #    bozukluğudur. (Kararın bedeli ölçüldü: 2157 gerçek dosya yeniden okundu.)
+            if not sof_kimlikleri or not set(kimlikler) <= sof_kimlikleri: return None
+            seciciler = [gov[2 + 2*b] for b in range(bilesen)]
+            if len(set(kimlikler)) != bilesen: return None
+            if any((sc >> 4) > 3 or (sc & 0x0F) > 3 for sc in seciciler): return None
+            ss, se, ahal = gov[1 + 2*bilesen], gov[2 + 2*bilesen], gov[3 + 2*bilesen]
+            if ss > 63 or se > 63 or se < ss: return None
+            if (ahal >> 4) > 13 or (ahal & 0x0F) > 13: return None
+            akis_bas = i + 2 + sn
+            if akis_bas >= len(ham) - 2: return None          # başlıktan sonra akış YOK
             if ham[-2:] != b"\xff\xd9": return None
-            out.append(("SOS", b"")); bitti = True; break
+            out.append(("SOS", ham[i+4:i+2+sn])); bitti = True; break
         if m in (0x01,) or 0xD0 <= m <= 0xD8:   # uzunluk alanı OLMAYAN işaretçiler
             i += 2; continue
         if i + 4 > len(ham): return None         # uzunluk alanı dosyada yok
         n = struct.unpack(">H", ham[i+2:i+4])[0]
         if n < 2 or i + 2 + n > len(ham): return None     # uzunluk alanı tutmuyor
         ad = f"APP{m-0xE0}" if 0xE0 <= m <= 0xEF else f"M{m:02X}"
+        # SOF (çerçeve başlığı): bileşen kimliklerini topla — SOS'un göndereceği küme budur.
+        #   0xC0-0xCF arası SOF'lar; DHT(0xC4) · JPG(0xC8) · DAC(0xCC) SOF DEĞİLDİR.
+        if 0xC0 <= m <= 0xCF and m not in (0xC4, 0xC8, 0xCC):
+            g = ham[i+4:i+2+n]
+            if len(g) >= 6:
+                nb = g[5]
+                if 1 <= nb <= 4 and len(g) >= 6 + 3*nb:
+                    sof_kimlikleri = {g[6 + 3*b] for b in range(nb)}
         out.append((ad, ham[i+4:i+2+n]))
         i += 2 + n
     return out if bitti else None

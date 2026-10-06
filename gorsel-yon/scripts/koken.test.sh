@@ -63,6 +63,46 @@ jham = bytearray(); jham += b"\xff\xd8\xff\xeb"
 jgov = b"JP\0\0"+iddia(URET)
 jham += struct.pack(">H", len(jgov)+2) + jgov                          # EOI YOK → zincir bitmedi
 open(f"{T}/bozuk/kesik.jpg","wb").write(bytes(jham))
+def sos(ns, bilesenler=None, kuyruk=b"\x00\x3f\x00"):
+    # GERÇEK JPEG şartlarına uyan tarama başlığı: kimlikler TEKİL, seçiciler 0-3,
+    # Ss=0 · Se=63 · Ah/Al=0. (ns yalnız BAŞ bayt; gövde 3 bileşen taşır → uzunluk 12.)
+    b = bilesenler if bilesenler is not None else [(1, 0x00), (2, 0x11), (3, 0x11)]
+    g = bytearray([ns])
+    for kid, sc in b: g += bytes([kid, sc])
+    g += bytearray(kuyruk)
+    return b"\xff\xda" + struct.pack(">H", 6 + 2*len(b)) + bytes(g)
+# GEÇERLİ SOS: başlık tutarlı (3 bileşen → uzunluk 12), akış var, EOI var → OKUNUR
+os.makedirs(f"{T}/sosvar",exist_ok=True)
+open(f"{T}/sosvar/gecerli.jpg","wb").write(
+    b"\xff\xd8\xff\xeb" + struct.pack(">H", len(b"JP\0\0"+iddia(URET))+2) + b"JP\0\0"+iddia(URET)
+    + sos(3) + b"\x12\x34\x56\x78" + b"\xff\xd9")
+# BAŞLIĞI BOZUK SOS: uzunluk 12 diyor ama bileşen sayısı 9 (JPEG şartına aykırı) — EOI VAR
+def jpg_sos(yol, sosbaytlari):
+    g = b"JP\0\0"+iddia(URET)
+    open(yol,"wb").write(b"\xff\xd8\xff\xeb" + struct.pack(">H", len(g)+2) + g
+                         + sosbaytlari + b"\x12\x34\x56\x78" + b"\xff\xd9")
+def jpg_sof_sos(yol, sofbilesen, sosbilesen):
+    # SOF0: [uzunluk][derinlik][y][x][bilesen-sayisi] + her bileşen (kimlik, ornekleme, nicem)
+    g = b"JP\0\0"+iddia(URET)
+    sof = bytearray([8]) + struct.pack(">HH", 8, 8) + bytearray([len(sofbilesen)])
+    for kid in sofbilesen: sof += bytes([kid, 0x11, 0])
+    sofb = b"\xff\xc0" + struct.pack(">H", len(sof)+2) + bytes(sof)
+    open(yol,"wb").write(b"\xff\xd8\xff\xeb" + struct.pack(">H", len(g)+2) + g + sofb
+                         + sos(len(sosbilesen), [(k,0x00) for k in sosbilesen])
+                         + b"\x12\x34\x56\x78" + b"\xff\xd9")
+# ÇERÇEVEDE 1,2,3 tanımlı; SOS 7,8,9 gönderiyor → var olmayan bileşen
+jpg_sof_sos(f"{T}/bozuk/sos-sofsuz.jpg", [1,2,3], [7,8,9])
+# ALTIN yüz: SOS çerçevedeki bileşenlere gönderiyor → OKUNUR
+os.makedirs(f"{T}/sofvar",exist_ok=True)
+jpg_sof_sos(f"{T}/sofvar/uyumlu.jpg", [1,2,3], [1,2,3])
+jpg_sos(f"{T}/bozuk/sos-kimlik.jpg", sos(3, [(1,0x00),(1,0x11),(3,0x11)]))   # kimlik TEKRARLI
+jpg_sos(f"{T}/bozuk/sos-secici.jpg", sos(3, [(1,0x00),(2,0x9F),(3,0x11)]))   # tablo seçici > 3
+jpg_sos(f"{T}/bozuk/sos-tarama.jpg", sos(3, kuyruk=b"\x40\x3f\x00"))        # Ss > 63
+jpg_sos(f"{T}/bozuk/sos-sira.jpg",   sos(3, kuyruk=b"\x20\x05\x00"))        # Se < Ss
+jpg_sos(f"{T}/bozuk/sos-ahal.jpg",   sos(3, kuyruk=b"\x00\x3f\xff"))        # Ah/Al > 13
+open(f"{T}/bozuk/sos-basligi.jpg","wb").write(
+    b"\xff\xd8\xff\xeb" + struct.pack(">H", len(b"JP\0\0"+iddia(URET))+2) + b"JP\0\0"+iddia(URET)
+    + sos(9) + b"\x12\x34\x56\x78" + b"\xff\xd9")
 jsos = bytearray(b"\xff\xd8\xff\xeb")
 jg2 = b"JP\0\0"+iddia(URET)
 jsos += struct.pack(">H", len(jg2)+2) + jg2
@@ -104,6 +144,13 @@ O="$(python3 "$A" "$TMP/uretilmis/e.jpg" 2>&1)"
 kapi "K12 GERÇEK JPEG APP11 segmentinden köken okunur (kılık değil, zincir yürünür)" \
      "$(grep -c 'ÜRETİLMİŞ' <<<"$O")" "1"
 
+O="$(python3 "$A" "$TMP/sofvar/uyumlu.jpg" 2>&1)"
+kapi "K37 SOS çerçevedeki bileşenlere gönderiyorsa OKUNUR (K17-sos-sofsuz tautoloji değil)" \
+     "$(grep -c 'ÜRETİLMİŞ' <<<"$O")" "1"
+O="$(python3 "$A" "$TMP/sosvar/gecerli.jpg" --json 2>&1)"
+kapi "K36 ÇERÇEVE BAŞLIĞI (SOF) OLMAYAN JPEG okunamadi — bağ denetimi sessizce ATLANMAZ" \
+     "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(k['koken_durumu']+'/'+str(k['kaynak_turu']))" <<<"$O")" \
+     "okunamadi/None"
 O="$(python3 "$A" "$TMP/webp/f.webp" 2>&1)"
 kapi "K14 GERÇEK WebP RIFF zincirindeki C2PA kutusundan köken okunur" \
      "$(grep -c 'ÜRETİLMİŞ' <<<"$O")" "1"
@@ -121,7 +168,7 @@ kapi "K17 biçimi ayrıştırılamayan dosya 'temiz' DEĞİL 'okunamadi' sayıl�
      "$(grep -c 'okunamadi' <<<"$O")/$(grep -c 'ÖLÇEMEDİM' <<<"$O")" "1/1"
 # 🔴 YANLIŞ SUÇLAMA KAPISI: bozuk yapılar köken iddiası TAŞIYOR; kısmi ayrıştırma olsa
 #    hepsi 'üretilmiş' diye suçlanırdı. Beşi de fail-closed 'okunamadi' olmalı.
-for b in kesik.png crc.png uzunluk.png kesik.jpg sos-kesik.jpg uzunluk.webp; do
+for b in kesik.png crc.png uzunluk.png kesik.jpg sos-kesik.jpg sos-basligi.jpg sos-kimlik.jpg sos-secici.jpg sos-tarama.jpg sos-sira.jpg sos-ahal.jpg sos-sofsuz.jpg uzunluk.webp; do
   O="$(python3 "$A" "$TMP/bozuk/$b" --json 2>&1)"
   kapi "K17-$b bozuk yapıdan İDDİA ÇIKARILMAZ (okunamadi · yanlış suçlama yok)" \
        "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(k['koken_durumu']+'/'+str(k['kaynak_turu']))" <<<"$O")" \
@@ -242,9 +289,28 @@ kapi "K31 'kanıt olabilir' kapalı küme {HAYIR,bilinmiyor} — hiçbir yoldan 
      "$(python3 -c "import json,sys;d=json.load(sys.stdin);print(','.join(sorted({k['kanit_olabilir'] for k in d['kayitlar']})))" <<<"$O")" \
      "HAYIR,bilinmiyor"
 M8="$TMP/koken-mutant8.py"
-sed 's|            if ham\[-2:\] != b"\\xff\\xd9": return None|            pass|' "$A" > "$M8"
+python3 - "$A" "$M8" <<'MUT8'
+import sys
+k,h=sys.argv[1],sys.argv[2]
+s=open(k,encoding="utf-8").read()
+bas=s.find("            if i + 4 > len(ham): return None")
+son=s.find('            out.append(("SOS"')
+assert 0 < bas < son, "SOS denetim bloğu bulunamadı"
+# gövde bir DEĞİŞKEN kullanıyor; mutasyon onu da nötrleştirmeli (yoksa mutant çöker ve
+# "kapı kırmızı" sanılır — oysa ölçtüğümüz şey denetimin kalkmasıdır, çökme değil)
+s = s.replace('out.append(("SOS", ham[i+4:i+2+sn]))', 'out.append(("SOS", b""))')
+bas=s.find("            if i + 4 > len(ham): return None")
+son=s.find('            out.append(("SOS"')
+open(h,"w",encoding="utf-8").write(s[:bas] + "            pass\n" + s[son:])
+MUT8
 O="$(python3 "$M8" "$TMP/bozuk/sos-kesik.jpg" --json 2>&1)"
-kapi "K34 MUTASYON: SOS bütünlük denetimi kaldırılınca kesik JPEG 'üretilmiş' diye SUÇLANIR" \
+kapi "K34 MUTASYON: SOS denetimleri kaldırılınca kesik JPEG 'üretilmiş' diye SUÇLANIR" \
+     "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(str(k['kaynak_turu']))" <<<"$O")" "uretilmis"
+O="$(python3 "$M8" "$TMP/bozuk/sos-basligi.jpg" --json 2>&1)"
+kapi "K34b MUTASYON: aynı denetim kalkınca BAŞLIĞI BOZUK SOS da suçlanır (başlık denetimi süs değil)" \
+     "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(str(k['kaynak_turu']))" <<<"$O")" "uretilmis"
+O="$(python3 "$M8" "$TMP/bozuk/sos-kimlik.jpg" --json 2>&1)"
+kapi "K34c MUTASYON: gövde denetimi kalkınca kimliği TEKRARLI başlık da suçlanır" \
      "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(str(k['kaynak_turu']))" <<<"$O")" "uretilmis"
 M7="$TMP/koken-mutant7.py"
 sed 's/        if zlib.crc32(tip + govde) & 0xFFFFFFFF != beklenen: return None   # CRC tutmuyor/        pass/' "$A" > "$M7"
@@ -267,5 +333,10 @@ MUT
 O="$(KOKEN_IMZA=kapali python3 "$M9" "$TMP/bagsiz/n.png" --json 2>&1)"
 kapi "K35 MUTASYON: bağ yerine pencere-araması geri gelirse ilgisiz alandaki dizi SUÇLAR" \
      "$(python3 -c "import json,sys;print(str(json.load(sys.stdin)['kayitlar'][0]['kaynak_turu']))" <<<"$O")" "uretilmis"
+M10="$TMP/koken-mutant10.py"
+python3 -c 'import sys;s=open(sys.argv[1],encoding="utf-8").read();s=s.replace("            if not sof_kimlikleri or not set(kimlikler) <= sof_kimlikleri: return None","            if sof_kimlikleri and not set(kimlikler) <= sof_kimlikleri: return None",1);open(sys.argv[2],"w",encoding="utf-8").write(s)' "$A" "$M10"
+O="$(python3 "$M10" "$TMP/sosvar/gecerli.jpg" --json 2>&1)"
+kapi "K38 MUTASYON: eski gevşek koşul dönünce SOF'suz dosya OKUNUR (fail-closed süs değil)" \
+     "$(python3 -c "import json,sys;k=json.load(sys.stdin)['kayitlar'][0];print(str(k['kaynak_turu']))" <<<"$O")" "uretilmis"
 echo; echo "SONUÇ: $G geçti · $K kaldı${ATLANAN:+ · $ATLANAN atlandı (ölçülmedi)}"
 [ "$K" -eq 0 ]
