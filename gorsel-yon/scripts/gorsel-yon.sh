@@ -112,16 +112,28 @@ uret(){
     echo "  Vaka/şantiye/çizim/daire görselleri GERÇEK olmak zorunda — üretilemez." >&2
     return 1
   fi
-  # B3 YASAKLARI — Sultan'ın seçtiği yönün ihlali (fail-closed)
-  if printf '%s' "$istem" | grep -qiE "luxury|lüks|altin|altın|gold|mermer|marble|render|3d|photoreal|foto.?ger|stok|stock"; then
+  # B3 YASAKLARI — Sultan'ın seçtiği SİTE-yönünün ihlali (fail-closed)
+  # v0.3.1 (MİHMANDAR pürüz-1, 2026-08-27): kesif-katalog MUAF — tarif zaten vaat ediyordu
+  # ("B3-site-yasağı katalog stillerine uygulanmaz"), kod koşulsuzdu → avangart/klasik/altın
+  # hücreleri rc=1 yiyordu (çıplak-rc ölçümü MİHMANDAR'ın). Muafiyet YALNIZ bu alan.
+  if [ "$kullanim" != "kesif-katalog" ] && printf '%s' "$istem" | grep -qiE "luxury|lüks|altin|altın|gold|mermer|marble|render|3d|photoreal|foto.?ger|stok|stock"; then
     _hata "istem B3 yasaklarına giriyor (lüks emlak parlaklığı · render ağırlıklı dil)"
     return 1
   fi
 
-  # NOVA YÖN ÇİTİ — her isteme Sultan'ın seçtiği yön otomatik eklenir (unutulamaz)
-  local yon="natural diffuse daylight, soft shadows, generous negative space, calm restraint; \
+  # YÖN ÇİTİ — alana göre (v0.3.1, MİHMANDAR pürüz-2):
+  #   site-alanları → Sultan'ın SİTE-yönü (değişmedi, çıkarılamaz)
+  #   kesif-katalog → stil-slotunu SERBEST bırakan nötr KALİTE-çiti (site-yönü katalog karesini
+  #     kendi estetiğine çekiyordu — pilotta endüstriyel hücre bu yüzden sulandı, ölçüldü)
+  local yon
+  if [ "$kullanim" = "kesif-katalog" ]; then
+    yon="natural daylight, realistic amateur phone photo look, true-to-life colors, \
+no text, no watermark, no people; Turkish apartment envelope where applicable"
+  else
+    yon="natural diffuse daylight, soft shadows, generous negative space, calm restraint; \
 materials: natural wood and matte black/anthracite metal; no ornament, no gloss, no gold; \
 composition led by light and emptiness, not decoration; legible at small size on a phone screen at night"
+  fi
 
   echo "── gorsel-yon · kullanım=$kullanim · sayı=$sayi"
   echo "   alan: ${IZINLI[$kullanim]}"

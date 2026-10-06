@@ -1,7 +1,7 @@
 ---
 name: gorsel-yon
 type: workflow
-version: 0.3.0
+version: 0.3.1
 description: >
   Üretilmiş görselle YÖN ARAYIŞI — kanıt üretmez. Nova/mimarlık sitesi gibi iddiası
   "gerçek iş" olan yüzeylerde, üretilmiş görselin nereye girip nereye giremeyeceğini
@@ -118,3 +118,10 @@ gorsel-yon.sh uret --kullanim doku-zemin --istem "..." --uygula # gerçek üreti
 - **Anahtar-sırası onarımı:** `_anahtar` önce eldeki `cortex-access.env`i okur; kasa-çekimi
   başarısız diye eldeki anahtar artık çöpe gitmez (Nova vakası: anahtar aynada VARDI, get-fail
   her şeyi düşürüyordu).
+
+## 0.3.1 (2026-08-27 · MİHMANDAR pilot-dönüşü, aynı gün)
+- **Pürüz-1 kapandı:** B3-site-yasağı artık KODDA da `kesif-katalog`a uygulanmıyor (tarif-kod
+  uyumu; kanıt: katalog+altın rc=0 · site+altın rc=1, iki yönlü çıplak-rc).
+- **Pürüz-2 kapandı:** yön-çiti alan-koşullu — site-alanları Sultan-yönünü aynen korur;
+  kesif-katalog stil-slotunu serbest bırakan nötr kalite-çiti alır (endüstriyel-hücre
+  sulanması ölçülmüştü).
