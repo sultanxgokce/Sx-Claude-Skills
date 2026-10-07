@@ -1,0 +1,16 @@
+{
+  "tur": 1,
+  "is": "imza-surumden-ayrilsin",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-08T00:54:43+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sürüm imza gövdesinden ayrılmış, eski manifestler kendi kayıtlı sürümüyle doğrulanmış ve sürüm farkı yalnız bilgi olarak yüzeye çıkarılmıştır. Filo ölçümü 82/82 yanlış suçlamanın 0/82’ye indiğini, gerçek bozmanın hâlâ yakalandığını ve uyumluluk kolunun mutasyon sınavından geçtiğini gösterdiği için iş üretime hazırdır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalıdır; sarı kayıt yoktur. İki ayrı önce/sonra ölçüm çifti vardır: filo-genişliği rc=1’den rc=0’a geçerek 82 gerçek manifestte yanlış suçlamayı 82’den 0’a indirmiş, imza-probu rc=1’den rc=0’a geçerken eski sağlam manifestin kabulünü ve elle bozulan manifestin rc=1 kalmasını göstermiştir. Ayrıca 62/62 yeşil sınav; eski biçim doğrulaması, yazımda yeni biçime geçiş ve uyumluluk dalını öldüren mutasyon sınavını kapsıyor."
+  }
+}

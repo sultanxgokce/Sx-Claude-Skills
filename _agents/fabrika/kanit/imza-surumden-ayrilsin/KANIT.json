@@ -1,0 +1,87 @@
+{
+  "is": "imza-surumden-ayrilsin",
+  "arac": "kanit.py/0.1.0",
+  "guncelleme": "2026-10-08T00:53:38+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "filo-genisligi",
+      "asama": "once",
+      "dosya": "olcum-filo-genisligi-once.txt",
+      "sha256": "e5c8dbdd2c362325957d66cd2c1cc0659fcd087831e3fa5a5ddb6a83d55a845c",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/filo-probu.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/kanit-eski-bumped.py"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-08T00:53:29+03:00",
+      "sure_sn": 3.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "filo-genisligi",
+      "asama": "sonra",
+      "dosya": "olcum-filo-genisligi-sonra.txt",
+      "sha256": "27f7f454b614ce97c2efc9cc3d614d0db2dc4337b583a1d149b3680b369ee926",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/filo-probu.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-imza-surumden-ayrilsin/yazilim-fabrikasi/scripts/kanit.py"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-08T00:53:33+03:00",
+      "sure_sn": 3.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "imza-probu",
+      "asama": "once",
+      "dosya": "olcum-imza-probu-once.txt",
+      "sha256": "d687cbe92cce00bfc3c94578e6e3e0999dc10f3967b2b0ec6b1feffdc9f7ca21",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/imza-probu.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/kanit-eski-bumped.py"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-08T00:53:33+03:00",
+      "sure_sn": 0.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "imza-probu",
+      "asama": "sonra",
+      "dosya": "olcum-imza-probu-sonra.txt",
+      "sha256": "761ebec7e946a5438a2c1a1e384cf9ba7fe1e25dfa62c70d9b8a512da3598316",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/imza-probu.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-imza-surumden-ayrilsin/yazilim-fabrikasi/scripts/kanit.py"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-08T00:53:34+03:00",
+      "sure_sn": 0.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "ef01d1c9fb35678294480ae84cb7e2af7bf1650482a88ce79cc8d060f978469e",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-08T00:53:38+03:00",
+      "sure_sn": 4.3
+    }
+  ],
+  "imza": "2e9ac5feb423be059a4365ce30fb8547c0be0283985d48465d9b9fd6fe0e8d95"
+}
