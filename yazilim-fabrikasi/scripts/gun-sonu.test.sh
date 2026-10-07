@@ -4,6 +4,21 @@
 # çalışır; aradaki fark her gün 3 saatlik KÖR PENCERE açıyordu (ölçülmüş canlı vaka:
 # 7 Ekim yerel 00:55 ve 01:11'deki iki kapı kaçışı 7 Ekim özetinde HİÇ görünmedi).
 set -uo pipefail
+
+# 🔴 SAAT DİLİMİ ÇİVİLENİR — ve bunu bir kez CI'da düşerek öğrendim.
+#   Bu sınav SAAT KAYMASINI ölçüyor; kayma ancak yerel saat ile dünya saati FARKLIYSA
+#   vardır. CI dünya saatinde koşuyor; orada ikisi aynı olduğu için senaryo hiç kurulmuyor
+#   ve sınav kendi fikstürünü kuramadığı için kırmızı yanıyordu. Yani sonuç ORTAMA bağlıydı
+#   — oysa sonucu ortama bağlı olan bir şey ölçüm değildir, bu filoda ölçülmüş bir derstir.
+#   Çözüm: dilimi SINAV seçer, ortamdan devralmaz. (Onarımın kendisi dilimden bağımsızdır;
+#   çivilenen yalnız fikstürün koşullarıdır.)
+export TZ="${GUN_SONU_SINAV_TZ:-Europe/Istanbul}"
+_ofs="$(date +%z)"
+if [ "$_ofs" = "+0000" ]; then
+  echo "ATLANDI: seçilen dilim ($TZ) dünya saatiyle aynı ofsette — kayma senaryosu kurulamaz."
+  echo "  (Bu bir YEŞİL DEĞİLDİR: ölçüm yapılmadı. Dilim verisi kurulu mu bakın.)"
+  exit 3
+fi
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 G="${MUTANT:-$HERE/gun-sonu.sh}"
 gecen=0; kalan=0
@@ -27,7 +42,7 @@ say() { printf '%s' "$1" | sed -n "s/^## $2 (\([0-9]*\)).*/\1/p" | head -1; }
 
 GECE="$(dunya 01:11:00)"; GUNDUZ="$(dunya 14:30:00)"
 echo "════ Ö0 · senaryo kurulabiliyor mu (tautoloji panzehiri) ════"
-[ "${GECE:0:10}" != "$GUN" ]; g $? "Ö0 yerel gece saati FARKLI dünya-gününe düşüyor (kör pencere senaryosu gerçek)"
+[ "${GECE:0:10}" != "$GUN" ]; g $? "Ö0 yerel gece saati FARKLI dünya-gününe düşüyor — dilim çivili, her ortamda aynı"
 
 echo "════ Ö1 · YEREL GECE olayı o günün özetinde GÖRÜNÜR ════"
 printf '%s | KAPISIZ | gece-kacisi | komut-A\n' "$GECE"   > "$T/_agents/fabrika/kacis-defteri.log"

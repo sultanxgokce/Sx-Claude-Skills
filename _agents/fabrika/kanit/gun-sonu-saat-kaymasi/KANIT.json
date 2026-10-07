@@ -1,7 +1,7 @@
 {
   "is": "gun-sonu-saat-kaymasi",
   "arac": "kanit.py/0.1.0",
-  "guncelleme": "2026-10-08T00:15:52+03:00",
+  "guncelleme": "2026-10-08T00:25:37+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -49,7 +49,24 @@
       "renk": "yesil",
       "zaman": "2026-10-08T00:15:51+03:00",
       "sure_sn": 1.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-dilimsiz",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-dilimsiz-sonra.txt",
+      "sha256": "a65f7191f267eee2f5eb818c8c57701f7c06b0ed445588291bc39aaee581b30a",
+      "komut": [
+        "env",
+        "TZ=UTC",
+        "bash",
+        "yazilim-fabrikasi/scripts/gun-sonu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-08T00:25:37+03:00",
+      "sure_sn": 0.4
     }
   ],
-  "imza": "1e217555950157ab1b66c2a1b5964e30d2422d7986f9dd30770d14a83d453c59"
+  "imza": "8873004df5c909b65f9cd8c43e618f794f67461714387237b627cc181f38846a"
 }
