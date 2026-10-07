@@ -15,5 +15,15 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": []
+  "gecmis": [],
+  "sultan_kararlari": [
+    {
+      "karar": "devam",
+      "oturum": "muavin/4390ad1f",
+      "soz": "önerin kabul edildi",
+      "beyan": "MUAVIN",
+      "gerekce": "Uc tur kosuldu, son tur 4/5 E ve tek bulgu (kurulumun fiilen olculmemesi) kapatildi; prob negatif kontrollu, 51 kapi. Tavan uc tur; dorduncu tur Sultan izniyle.",
+      "zaman": "2026-10-08T00:22:41+03:00"
+    }
+  ]
 }
