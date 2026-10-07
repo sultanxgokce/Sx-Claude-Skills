@@ -1,7 +1,7 @@
 {
   "is": "soluklan-becerisi",
   "arac": "kanit.py/0.1.0",
-  "guncelleme": "2026-10-08T00:12:30+03:00",
+  "guncelleme": "2026-10-08T00:18:46+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -33,7 +33,39 @@
       "renk": "yesil",
       "zaman": "2026-10-07T23:54:54+03:00",
       "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kurulum",
+      "asama": "once",
+      "dosya": "olcum-kurulum-once.txt",
+      "sha256": "7a02121b5dc523a4c78b557f293e738f9d7e5937a58e2a55e8f004c04f8ef6cb",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/kurulum-probu.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/negatif-depo"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-08T00:18:46+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kurulum",
+      "asama": "sonra",
+      "dosya": "olcum-kurulum-sonra.txt",
+      "sha256": "ed146f01083a2b7a9cfb166aa67055d1d407a8779c51d3c00f77c604a5da7d50",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/kurulum-probu.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-soluklan-becerisi"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-08T00:18:46+03:00",
+      "sure_sn": 0.7
     }
   ],
-  "imza": "c0bcba96b0b80ceba4778a52cb63423c295477bdae5738e02dfd416f3ff15964"
+  "imza": "f2bf1b87db89567247d1c8ee8e593f148595b86be5c1c3c1359d4a4068420bc7"
 }

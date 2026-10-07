@@ -1,0 +1,7 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/kurulum-probu.sh /config/projects/_wt/Sx-Claude-Skills-soluklan-becerisi
+# rc=0 sure=0.7s zaman=2026-10-08T00:18:46+03:00
+--- stdout ---
+kurulu kopya cagrildi: rc=3 · 🔴 ÇIPA YOK — compact önerilmez. Önce planı diske yaz (çıpa aracı 'yaz').
+kurulu kopyanin kendi sinavi: ── SONUÇ: 51 geçti · 0 kaldı ──
+KURULDU VE KOSTU
+--- stderr ---
