@@ -1,17 +1,13 @@
 $ python3 -c 
 import json
 st=json.load(open('sync-targets.json')); ct=json.load(open('catalog.json'))
-assert st['install']['soluklan']==['_global'], 'global kurulum kaydi yok'
-k=[x for x in ct['skills'] if x['id']=='soluklan']
-assert len(k)==1, 'katalogda tek kayit yok'
-print('global kurulum kaydi: VAR'); print('katalog kaydi: VAR ·', k[0]['version'])
-import re
+assert st['install']['soluklan']==['_global']
+k=[x for x in ct['skills'] if x['id']=='soluklan']; assert len(k)==1
 fm=open('soluklan/SKILL.md',encoding='utf-8').read().split('---')[1]
-assert 'version: 1.0.0' in fm and 'name: soluklan' in fm, 'frontmatter eksik'
-print('SKILL frontmatter: ad+surum VAR')
-# rc=0 sure=0.0s zaman=2026-10-07T23:52:47+03:00
+assert 'version: 1.0.0' in fm and 'name: soluklan' in fm
+import os; assert not os.path.exists('soluklan/scripts/.gitkeep'), 'bos dosya sizdi'
+print('global kurulum: VAR · katalog: VAR ·', k[0]['version'], '· frontmatter: VAR · artik dosya: yok')
+# rc=0 sure=0.0s zaman=2026-10-07T23:54:54+03:00
 --- stdout ---
-global kurulum kaydi: VAR
-katalog kaydi: VAR · 1.0.0
-SKILL frontmatter: ad+surum VAR
+global kurulum: VAR · katalog: VAR · 1.0.0 · frontmatter: VAR · artik dosya: yok
 --- stderr ---

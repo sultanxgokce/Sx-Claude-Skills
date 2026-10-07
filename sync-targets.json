@@ -9,19 +9,10 @@
     "mmex": "/config/projects/MMEx/.claude/skills"
   },
   "install": {
-    "ahi": [
+    "whatsapp-baileys": [
       "_global"
     ],
-    "arayuz-zanaati": [
-      "_global"
-    ],
-    "baglam-nobeti": [
-      "_global"
-    ],
-    "brosur-hazirlama": [
-      "_global"
-    ],
-    "canli-sayfa": [
+    "whatsapp-gonder": [
       "_global"
     ],
     "cloudflare-erisim": [
@@ -29,17 +20,42 @@
       "nexus",
       "cortex"
     ],
-    "durum-raporu": [
-      "_global"
+    "railway-erisim": [
+      "_global",
+      "nexus",
+      "cortex"
     ],
-    "ekip": [
-      "_global"
-    ],
-    "ekip-iletisim-uzmani": [
-      "_global"
+    "erisim-skill-fabrikasi": [
+      "_global",
+      "nexus",
+      "cortex"
     ],
     "ekip-kur": [
       "_global"
+    ],
+    "pr-onay": [
+      "_global"
+    ],
+    "sert-teslim": [
+      "_global",
+      "mmex"
+    ],
+    "kesif": [
+      "_global",
+      "mmex"
+    ],
+    "sert-dongu": [
+      "_global"
+    ],
+    "pcloud-erisim": [
+      "_global",
+      "nexus",
+      "cortex"
+    ],
+    "notion-erisim": [
+      "_global",
+      "nexus",
+      "cortex"
     ],
     "elogo-erisim": [
       "_global",
@@ -51,109 +67,10 @@
       "nexus",
       "cortex"
     ],
-    "erisim-skill-fabrikasi": [
+    "vault-cek": [
       "_global",
       "nexus",
       "cortex"
-    ],
-    "federe-os-cekirdek": [
-      "_global"
-    ],
-    "frontend-boost": [
-      "_global"
-    ],
-    "gorsel-yon": [
-      "_global"
-    ],
-    "gun-ortasi": [
-      "_global"
-    ],
-    "gunluk-plan": [
-      "_global"
-    ],
-    "iskan": [
-      "_global",
-      "cloudtop"
-    ],
-    "kapi-sinavi": [
-      "_global"
-    ],
-    "kapi-yolu": [
-      "_global"
-    ],
-    "kapimda": [
-      "_global"
-    ],
-    "kasif-tara": [
-      "_global"
-    ],
-    "kayit-damgasi": [
-      "_global"
-    ],
-    "kesif": [
-      "_global",
-      "mmex"
-    ],
-    "kesif-hatti": [
-      "_global"
-    ],
-    "layiha": [
-      "_global"
-    ],
-    "layiha-fabrikasi": [
-      "_global"
-    ],
-    "layiha-kapisi": [
-      "_global"
-    ],
-    "maas-kapisi": [
-      "_global"
-    ],
-    "mucit-suz": [
-      "_global"
-    ],
-    "notion-erisim": [
-      "_global",
-      "nexus",
-      "cortex"
-    ],
-    "olcum-disiplini": [
-      "_global"
-    ],
-    "pcloud-erisim": [
-      "_global",
-      "nexus",
-      "cortex"
-    ],
-    "plan-dekor": [
-      "_global"
-    ],
-    "plan-motor": [
-      "_global"
-    ],
-    "pr-onay": [
-      "_global"
-    ],
-    "railway-erisim": [
-      "_global",
-      "nexus",
-      "cortex"
-    ],
-    "resume-banner": [
-      "_global"
-    ],
-    "seans": [
-      "_global"
-    ],
-    "sergi": [
-      "_global"
-    ],
-    "sert-dongu": [
-      "_global"
-    ],
-    "sert-teslim": [
-      "_global",
-      "mmex"
     ],
     "seyir-defteri": [
       "_global",
@@ -161,51 +78,95 @@
       "mmex",
       "vekatip"
     ],
-    "soluklan": [
-      "_global"
-    ],
-    "sultan-eli": [
-      "_global"
-    ],
-    "sultan-ogren": [
+    "ahi": [
       "_global"
     ],
     "sultanca": [
       "_global"
     ],
+    "sultan-ogren": [
+      "_global"
+    ],
     "sunucu-kur": [
-      "_global"
-    ],
-    "sunum-hazirlama": [
-      "_global"
-    ],
-    "tasarim-citasi": [
-      "_global"
-    ],
-    "terminal-onar": [
       "_global"
     ],
     "tescil": [
       "_global"
     ],
-    "ui-tasarim-akisi": [
-      "_global"
-    ],
-    "vault-cek": [
-      "_global",
-      "nexus",
-      "cortex"
-    ],
-    "whatsapp-baileys": [
-      "_global"
-    ],
-    "whatsapp-gonder": [
+    "kayit-damgasi": [
       "_global"
     ],
     "worktree-hijyen": [
       "_global"
     ],
-    "yazilim-fabrikasi": [
+    "resume-banner": [
+      "_global"
+    ],
+    "iskan": [
+      "_global",
+      "cloudtop"
+    ],
+    "federe-os-cekirdek": [
+      "_global"
+    ],
+    "kapimda": [
+      "_global"
+    ],
+    "layiha": [
+      "_global"
+    ],
+    "kasif-tara": [
+      "_global"
+    ],
+    "mucit-suz": [
+      "_global"
+    ],
+    "layiha-fabrikasi": [
+      "_global"
+    ],
+    "kapi-yolu": [
+      "_global"
+    ],
+    "ekip": [
+      "_global"
+    ],
+    "kesif-hatti": [
+      "_global"
+    ],
+    "seans": [
+      "_global"
+    ],
+    "layiha-kapisi": [
+      "_global"
+    ],
+    "ui-tasarim-akisi": [
+      "_global"
+    ],
+    "sultan-eli": [
+      "_global"
+    ],
+    "maas-kapisi": [
+      "_global"
+    ],
+    "plan-dekor": [
+      "_global"
+    ],
+    "plan-motor": [
+      "_global"
+    ],
+    "kapi-sinavi": [
+      "_global"
+    ],
+    "olcum-disiplini": [
+      "_global"
+    ],
+    "gunluk-plan": [
+      "_global"
+    ],
+    "gun-ortasi": [
+      "_global"
+    ],
+    "gorsel-yon": [
       "_global"
     ],
     "zeyl": [
@@ -213,6 +174,45 @@
       "nexus",
       "mmex",
       "vekatip"
+    ],
+    "durum-raporu": [
+      "_global"
+    ],
+    "ekip-iletisim-uzmani": [
+      "_global"
+    ],
+    "frontend-boost": [
+      "_global"
+    ],
+    "arayuz-zanaati": [
+      "_global"
+    ],
+    "sunum-hazirlama": [
+      "_global"
+    ],
+    "brosur-hazirlama": [
+      "_global"
+    ],
+    "tasarim-citasi": [
+      "_global"
+    ],
+    "baglam-nobeti": [
+      "_global"
+    ],
+    "sergi": [
+      "_global"
+    ],
+    "yazilim-fabrikasi": [
+      "_global"
+    ],
+    "terminal-onar": [
+      "_global"
+    ],
+    "canli-sayfa": [
+      "_global"
+    ],
+    "soluklan": [
+      "_global"
     ]
   }
 }

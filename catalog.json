@@ -9,826 +9,6 @@
   },
   "skills": [
     {
-      "id": "ahi",
-      "type": "agent",
-      "name": "AHÎ — 4-kademe AI-yetenek-üretim fabrikası",
-      "version": "0.4.0",
-      "description": "Yeni-skill üretimini tek-standarda oturtan fabrika: Çırak→Kalfa→Usta→Pîr kademeleri; komutlar `ahi new|check|promote|deprecate|classify|health`. DOCTRINE.md kanonu + zero-dep validator; ADR-001 drift-otorite-ayrımı (ahi.sh sync-targets'a YAZMAZ — install-girdisi insan/PR işi).",
-      "tags": [
-        "fabrika",
-        "skill-üretim",
-        "tier",
-        "doctrine",
-        "kalfa"
-      ],
-      "author": "sultanxgokce",
-      "source": "helpSerdar komisyon-1 (PR #7-#11); dağıtım-kararı: _global-only (Sultan 2026-07-13, Nexus HOLDING-ATLAS §8)",
-      "status": "v0.1-faz0a",
-      "path": "ahi/SKILL.md",
-      "installed_in": [
-        "_global"
-      ],
-      "family": "fabrika (skill-yaşamdöngüsü; tier-standardı)"
-    },
-    {
-      "id": "ai-engineering-kit",
-      "sync_dagitim": false,
-      "type": "agent",
-      "name": "AI Engineering Kit",
-      "version": "1.1.0",
-      "description": "Claude ajan altyapısı — /ai-upgrade (repo kataloğu, araç yönetimi) + /ai-metodoloji (çalışma kalitesi denetimi) + /ai-kesfet (GitHub/web tarama, katalog büyütme). Stack bağımsız, her projede çalışır.",
-      "prerequisites": {},
-      "tags": [
-        "ai-agent",
-        "methodology",
-        "slash-commands",
-        "skills"
-      ],
-      "stacks": [
-        "*"
-      ],
-      "author": "sultanxgokce",
-      "source": "https://github.com/sultanxgokce/MMEpanel",
-      "install_time": "~2min",
-      "status": "stable",
-      "path": "ai-engineering-kit/SKILL.md",
-      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": [
-        "MMEpanel"
-      ]
-    },
-    {
-      "id": "arayuz-zanaati",
-      "type": "agent",
-      "name": "/arayuz-zanaati — arayüz zanaatı: garip, amatör durmasın (GLOBAL)",
-      "version": "0.1.0",
-      "description": "Web sayfası ya da uygulama ekranı yazılırken, değiştirilirken ve denetlenirken tasarım zevki değil ZANAAT: tek aralık ölçeği, yakınlık, tek sol kenar, düğme-kutu aynı boy, tek yarıçap ailesi, her durum (otomatik doldurma dahil), koyu temada color-scheme, form temelleri, tipografi, tarayıcı tuzakları, tablo kuralları. KURALLAR.md (kırk belirti → çare, CSS parçaları) + KONTROL-LISTESI.md (kırk maddelik yayın öncesi bakış). Sultan 19 Eylül: 'kutucuklarda gariplik var, harmoni olmamış'. MÜTEVELLİ/AKAR doğurdu (38 sayfalık kaynaklı tarama); MUAVİN filo geneline paketledi."
-    },
-    {
-      "id": "arcelik-fatura-kesim",
-      "type": "agent",
-      "name": "Arçelik Fatura Kesim Kararı (hangi pakete kesilir/kesilmez)",
-      "version": "1.0.0",
-      "sync_dagitim": false
-    },
-    {
-      "id": "arcelik-mail-erisim",
-      "type": "agent",
-      "name": "Arçelik Mail Erişimi (fiş paketi maillerine bağlanır)",
-      "version": "1.0.0",
-      "sync_dagitim": false
-    },
-    {
-      "id": "baglam-nobeti",
-      "type": "agent",
-      "name": "/baglam-nobeti — bağlam doluluk nöbeti (GLOBAL, Sultan kuralı)",
-      "version": "0.2.0",
-      "description": "Oturum bağlamı dolarken Sultan'ı asla sessizce geçmez: %70'te uyarı satırı, %80'de her cevabın başında kalın compact önerisi, %90'da yeni iş almama; compact'tan önce kutunun VAR OLAN çıpa dosyaları (cipa-bul.sh) tazelenir. Ölçü mekaniktir: PostToolUse kancası (nobet-kancasi.sh) her araç çağrısında transkriptten doluluğu hesaplar (baglam-olc.py); pencere filo kanonundan (ORTAK-MIMARI.md) okunur, [1m] eki transkriptin model-kimlik kaydından geri kazanılır. Ölçemediğinde 'ÖLÇÜLEMEDİ' der, yüzde uydurmaz. AKAR/MÜTEVELLİ doğurdu (0.1.0 salt kural), MUAVİN mekanik gövdeyle filo geneline paketledi."
-    },
-    {
-      "id": "brosur-hazirlama",
-      "type": "agent",
-      "name": "/brosur-hazirlama — basılı broşürün biçimi, içeriği ve kapısı (GLOBAL)",
-      "version": "0.1.0",
-      "description": "Katlamalı broşür ve föy: broşür sunum değildir; katlama anlatı aracıdır, panel tek başına tamamdır. SKILL.md biçim ölçütleri (A–G) + ICERIK.md (okur ve okuma anı, panel başına cevaplanan soru, şart/seçmeli bloklar, özellik → fayda → dayanak, yirmi maddelik içerik kapısı, ikinci kişi testi) + ölçülebilenleri ölçen brosur-kapi.mjs (kelime, punto, metin alanı, kırıma yakın metin, yasak söz; tarayıcı ya da PDF sayacı yoksa rc=3 ölçülemedi). AKAR kararları (tablo yok, süre rakamı yok, yasak söz listesi) 'kuruma göre değişir' diye işaretli. MÜTEVELLİ/AKAR doğurdu; MUAVİN filo geneline paketledi."
-    },
-    {
-      "id": "canli-sayfa",
-      "type": "tool",
-      "name": "canlı sayfa — filonun canlı sayfa kuralı ve kaydı",
-      "version": "1.1.0",
-      "description": "Sultan bir kutudan canlı sayfa istediğinde uyulacak filo kuralı ve aracı: canlıya çıkan her sayfa ortak kayda yazılır (sayfa başına bir dosya); kayıt canlı sayfaların tek listesidir. Kayıt adresi o an ölçer: açılmayan sayfa kayda girmez, giriş kapısı olmadan açılan sayfa onaysız kayda girmez. Komutlar: ekle · liste (--json menü biçimi) · emekli · dogrula. Metin kuralları: Sultan'ın okuyacağı dil, sır deseni reddi, adreste soru işareti/port/kullanıcı adı yok.",
-      "prerequisites": {
-        "system": [
-          "bash",
-          "python3",
-          "curl"
-        ]
-      },
-      "tags": [
-        "sultan-yuzu",
-        "kokpit",
-        "canli-sayfa",
-        "global",
-        "filo-kurali"
-      ],
-      "installed_in": [
-        "_global"
-      ]
-    },
-    {
-      "id": "cloudflare-erisim",
-      "type": "agent",
-      "name": "Cloudflare Erişim (panele girmeden Access/DNS)",
-      "version": "1.2.0",
-      "description": "Cloudflare işlerini (Access self-hosted app + policy, proxied DNS/tünel rotası, subdomain'i giriş-kapısı arkasına alma) dashboard'a girmeden saf API (curl+jq) ile yapar. Kimlik yoksa bir-kerelik gizli Global API Key ister, kendi dar-yetkili token üretir (POST /user/tokens), cortex-access.env'e (600) kaydeder, sonra asıl işi yapar. User-token vs account-token (cfat_) doğrulama ayrımını otomatik yapar. İdempotent + sır-hijyenik.",
-      "prerequisites": {
-        "system": [
-          "curl",
-          "jq"
-        ]
-      },
-      "tags": [
-        "cloudflare",
-        "access",
-        "dns",
-        "tunnel",
-        "kimlik",
-        "erisim",
-        "token",
-        "zero-trust",
-        "platform-access"
-      ],
-      "stacks": [
-        "*"
-      ],
-      "author": "sultanxgokce",
-      "source": "https://github.com/sultanxgokce/cloudtop (infra/cloudflare/ — mmex.mmepanel.com onboard'unda canlı doğrulandı, 6 Tem 2026)",
-      "install_time": "~2min",
-      "status": "stable",
-      "path": "cloudflare-erisim/SKILL.md",
-      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": [
-        "_global (tüm bulut projeleri)"
-      ],
-      "family": "platform-erisim (erisim-skill-fabrikasi ile üretilen kalıbın referans implementasyonu)"
-    },
-    {
-      "id": "defter-kapisi",
-      "type": "agent",
-      "name": "defter-kapisi — görev-yakalama + mailbox-yanıt prosedürü",
-      "version": "0.2.0",
-      "description": "Sultan'la doğal-dil sohbette iki tekrarlayan-anı standartlaştırır: (A) GÖREV-YAKALAMA KAPISI — yeni-görev mi/mevcut-eklemesi mi ayrımı, yeni ise deftere yazmadan önce çoktan-seçmeli onay; (B) MAILBOX-YANIT PROSEDÜRÜ — kart-oku→anla→Sultan-dilinde-yanıtla→aksiyon-al→thread-kapat. ÖKSÜZDÜ — evergreen-parity 2026-08-10 yakaladı, hiçbir git kaynağında yoktu.",
-      "tags": [
-        "defter",
-        "gorev-yakalama",
-        "mailbox",
-        "sultan-dili",
-        "kapi",
-        "onay-gate",
-        "capture",
-        "ilerleme-akisi"
-      ],
-      "author": "sultanxgokce",
-      "source": "öksüz-adoption — evergreen tek-düğme hijyeni (2026-08-10)",
-      "status": "EMEKLI (KATLAMA F1 2026-08-27, Sultan K#5; halef: layiha akisi)",
-      "path": "defter-kapisi/SKILL.md",
-      "installed_in": [],
-      "family": "sultan-dili (kapı-standardı)",
-      "sync_dagitim": false
-    },
-    {
-      "id": "durum-raporu",
-      "type": "agent",
-      "name": "/durum-raporu — personel durum raporu (GLOBAL, Sultan standardı)",
-      "version": "0.2.1",
-      "description": "Sultan 'durum raporu / son durum / neler yapılıyor' deyince kutunun personelini STANDART biçimde raporlar: kişi başına bitirdi · geçti · önündeki işler · bekliyor · canlı bağlantı. Veri sözleşmesi tüm kutularda aynı (SEMA.md): her üye kendi _agents/durum/<AD>.json dosyasını yazar (durum-yaz.sh), reis okur (durum-raporu.sh). Durum dosyası olmayan üye kayıttan TÜRETİLİR ve '(türetildi)' damgası alır — uydurma yok. Bağlantılar tek dilde: mmepanel://<kutu>/<tür>/<hedef>, çözüm filo-geneli link-taban.yaml'dan; ölçülmemiş tür boş bırakılır ve ham link basılır. AKAR/MÜTEVELLİ doğurdu, MUAVİN filo geneline paketledi."
-    },
-    {
-      "id": "ekip",
-      "type": "agent",
-      "name": "EKİP — kutu-içi masa önizlemesi (süz → onar → listele)",
-      "version": "1.1.0",
-      "description": "Bu kutudaki ekibin masalarini once SUZ (eksik/bos/fazla), gerekirse ONAR (kapanmis oturumu ac, Claude'u baslat), sonra Sultan-dilinde LISTELE: ajan adlari, tmux adlari, geri donmek/baslatmak icin komutlar. Onarim yikici-degil: oturum silmez, mesgul masaya dokunmaz, calisan Claude'u yeniden baslatmaz (idempotent). Filo-geneli gorunum ayri: /filo.",
-      "installed_in": [
-        "_global"
-      ],
-      "family": "kutu-ici koordinasyon"
-    },
-    {
-      "id": "ekip-iletisim-uzmani",
-      "type": "agent",
-      "name": "ekip-iletisim-uzmani — yönetici⇄ajan iletişim gözetmeni (GLOBAL ROL SINIFI)",
-      "version": "0.1.0",
-      "description": "Persona değil rol sınıfı: yönetici ile emrindeki AI ajanlar arasındaki iletişim/iş-akışı sorunlarını sürekli gözeten personelin ortak çekirdeği. iletisim-nabiz.sh beş sınıfı üç durumlu ölçer (kayıp tetik · ACK'siz tetik · sessiz üye · bayat iş · yönetim darboğazı), kök neden + onarım önerir; emir vermez, tetik göndermez, dış gönderim yapmaz, sağlayıcı/model bilgisi taşımaz. Mirasçı kutular kendi adıyla açar (ISE-ALIM.md, 4 komut), DEVIR-SINAVI 5 kapı, miras-damga.sh ile sürüm+sha drift görünür. İlk mirasçı NÂZIR/PEYK. Ölçüldü 2026-09-16 AKAR: 24 saatte 543 kayıp tetik."
-    },
-    {
-      "id": "ekip-kur",
-      "type": "agent",
-      "name": "Ekip-Kur — çok-ajan koordinasyon substratı",
-      "version": "1.7.0",
-      "description": "Bir projeye çok-ajan koordinasyon-sistemi scaffold'lar ve mevcut tenant'larda immutable updater ile yalnız notify/preflight kodunu atomik günceller: varsayılan dry-run, hash/mode/registry-schema/worktree ortak-ledger check'i, state/hook/ürün korunumu, exact tmux hedefi ve strict-ack sözleşmesi. Tmux-tetik primitifi 3-adım-ayrı-Enter · self-loop-guard · exact-session dürüst-warn · python3-parse fix'lerini taşır; roster parametrik ve state yüzeyleri updater allowlist'i dışındadır.",
-      "prerequisites": {
-        "system": [
-          "bash",
-          "tmux",
-          "python3"
-        ]
-      },
-      "tags": [
-        "koordinasyon",
-        "ekip",
-        "multi-agent",
-        "tmux",
-        "orchestration",
-        "scaffold",
-        "skill-uretici",
-        "self-recognition",
-        "session-hook",
-        "roportaj",
-        "ekip-bakimi",
-        "reconcile"
-      ],
-      "stacks": [
-        "*"
-      ],
-      "author": "sultanxgokce",
-      "source": "https://github.com/sultanxgokce/Nexus (SERDAR-ailesi aile-notify.sh koordinasyon-sistemi — 6 Tem 2026 canlı-doğrulanmış 3-adım-ayrı-Enter fix'i)",
-      "install_time": "~5min (scaffold + roster doldur)",
-      "status": "v1.7-mvp",
-      "path": "ekip-kur/SKILL.md",
-      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": [],
-      "family": "scaffold (koordinasyon-substratı üreticisi — Nexus SERDAR-ailesi'nden damıtıldı)"
-    },
-    {
-      "id": "elogo-erisim",
-      "type": "agent",
-      "name": "e-Logo Erişim (panele girmeden SOAP WS)",
-      "version": "1.7.0",
-      "description": "e-Logo (e-Fatura/e-Arşiv) işlerini saf SOAP WS ile yapar: durum sorgula, PDF/UBL indir. Vault-first sır-çözüm + tek-sefer gizli-intake. SALT-OKUR + kuyruk-güvenli (prod B2B senkronunu bozmaz). (erisim-skill-fabrikasi ürünü.)"
-    },
-    {
-      "id": "elogo-portal-otomasyon",
-      "type": "agent",
-      "name": "e-Logo Portal Otomasyonu (yükle · sıra numarası · gönder)",
-      "version": "1.0.0",
-      "sync_dagitim": false
-    },
-    {
-      "id": "erisim",
-      "type": "agent",
-      "name": "/erisim — Erişim-Zinciri dispatcher (tek giriş-noktası)",
-      "version": "1.1.0",
-      "description": "Ajanın erişim-ihtiyacında TEK komut: skill VAR→delege (vault-first sır-çözüm), YOK→SERDAR'a Skill-İstek emit (F5-kanal, geçici-konvansiyon key=SKILL:<platform>), sır-eksik→--sir-iste Sultan'a Vault-İstek. doctor 3-durum. Değer stdout/log/chat'e ASLA. (Erişim-zinciri DESIGN §A.)"
-    },
-    {
-      "id": "erisim-skill-fabrikasi",
-      "type": "agent",
-      "name": "Erişim-Skill Fabrikası (meta-skill)",
-      "version": "1.1.0",
-      "description": "Meta-skill: bir platform seç (Railway/GitHub/Google/Vercel/AWS/Hetzner…) → ortamı hazırla → bir-kerelik gizli giriş al → dar-yetkili token'ı üret/kaydet → o platform için tam bir <platform>-erisim skill'ini (cloudflare-erisim'i şablon + auth-reçetesini kullanarak) Sx-Claude-Skills'e scaffold et → dağıt. Platform-erişim angaryasını bir kez damıtıp otomatik üretir. recipes/ adversaryal-doğrulanmış auth bilgi tabanı.",
-      "prerequisites": {
-        "system": [
-          "bash",
-          "curl",
-          "jq"
-        ]
-      },
-      "tags": [
-        "meta-skill",
-        "erisim",
-        "platform-access",
-        "token",
-        "scaffold",
-        "skill-uretici",
-        "secret-hygiene"
-      ],
-      "stacks": [
-        "*"
-      ],
-      "author": "sultanxgokce",
-      "source": "https://github.com/sultanxgokce/Sx-Claude-Skills (cloudflare-erisim referans implementasyonundan damıtıldı, 6 Tem 2026)",
-      "install_time": "~5min/platform",
-      "status": "stable",
-      "path": "erisim-skill-fabrikasi/SKILL.md",
-      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": [
-        "_global (tüm bulut projeleri)"
-      ],
-      "family": "meta (platform-erisim skill üreticisi — cloudflare-erisim onun referans çıktısı)"
-    },
-    {
-      "id": "federe-os-cekirdek",
-      "type": "agent",
-      "name": "/federe-os-cekirdek — Federe Ekip-OS çekirdek-protokolleri (C3/D7)",
-      "version": "0.5.0",
-      "description": "Federe Ekip-OS A/B protokolleri tek pakette (k0180): tetikleme poll+ACK (A1/A4) · not-tutma (A2/B1) · haberleşme yalnız-META (B2) · nabız (A3) · hafıza-vatandaşlığı (B3). Taşınabilir istemci scripts/federe.sh (Nexus-repo'suz container'da da çalışır); poll-cron reçetesi GO-1 token-kapılı. CLAUDE.md'lere yalnız pointer — tek-güncelleme-noktası. 0.5.0 (2026-08-27, KATLAMA F1): gonder --tip (mesaj|is|devir) + bilinmeyen-bayrak RC=2 + geri-al ters-kayıt (K4/K5, NÂZIR-mutabık).",
-      "installed_in": [
-        "_global"
-      ],
-      "path": "federe-os-cekirdek/",
-      "status": "v0.1-mvp",
-      "stacks": [
-        "*"
-      ],
-      "tags": [
-        "federe",
-        "ekip-os",
-        "tetik",
-        "poll",
-        "nabiz",
-        "kontrol-duzlemi",
-        "meta-only",
-        "k0180"
-      ],
-      "source": "Nexus scripts/federe-tetik.sh (FAZ-1 · PR#560) filo-taşınabilir uyarlaması",
-      "author": "sultanxgokce"
-    },
-    {
-      "id": "feedback-widget",
-      "sync_dagitim": false,
-      "type": "feature",
-      "name": "Feedback Widget",
-      "version": "1.1.0",
-      "description": "In-app feedback widget — floating button, screenshot capture, canvas annotation, multi-image, reply threads. FastAPI + Next.js için tam kurulum.",
-      "prerequisites": {
-        "backend": [
-          "FastAPI",
-          "SQLModel",
-          "PostgreSQL"
-        ],
-        "frontend": [
-          "Next.js App Router",
-          "React 19",
-          "Tailwind CSS v4",
-          "lucide-react"
-        ]
-      },
-      "tags": [
-        "feedback",
-        "widget",
-        "screenshot",
-        "annotation",
-        "fastapi",
-        "nextjs"
-      ],
-      "stacks": [
-        "fastapi+nextjs"
-      ],
-      "author": "sultanxgokce",
-      "source": "https://github.com/sultanxgokce/MMEpanel",
-      "install_time": "~2h",
-      "status": "stable",
-      "path": "feedback-widget/SKILL.md",
-      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": [
-        "MMEpanel"
-      ]
-    },
-    {
-      "id": "frontend-boost",
-      "type": "agent",
-      "name": "/frontend-boost — etkili ama yalın sayfa tasarımı (GLOBAL)",
-      "version": "0.5.0",
-      "description": "Karşılama sayfası, ürünün açılış ekranı, sunum/broşür kapağı 'bir tasarımcı yapmış' densin diye tasarlanır: sahne · tek kahraman nesne · yazı görsel öğe · tek ışık · derinlik · tek açılış anı. Şablon (sahne.css + landing iskeleti), karakter alt kümeli yazı tipi aracı ve kontrastı GERÇEK zemin pikselinden ölçen araç birlikte gelir. 0.5.0 (Sultan 19 Eylül): her UI/tasarım işinde frontend-design ile BİRLİKTE zorunlu; frontend-design'ın güçlü yanları 'Devralınan disiplin' olarak içeride ve form/tablo/panel dahil her işte geçerli, sahne formülü yalnız önemli yüzeylerde. Dördüncü kapı tasarim-citasi (kütüphanesiz kutuda 'çıta kıyası yapılamadı' yazılır); referans arşivinden (55 broşür + 50 sunum) basılı ve sunum dersleri eklendi. Kontrast aracı onarıldı: FRONTEND_BOOST_SECICILER ile verilen metin gizlenmiyor, oran 1,00 çıkıyordu; artık gizleniyor ve 1,00 kalan kutu rc=3 'ölçülemedi' der. NAKKAŞ/MÜTEVELLİ/AKAR doğurdu; MUAVİN filo geneline paketledi."
-    },
-    {
-      "id": "gorsel-yon",
-      "type": "workflow",
-      "name": "Görsel Yön — üretilmiş görselle yön arayışı (kanıt üretmez)",
-      "version": "0.4.0",
-      "description": "Higgsfield hattı. Üretilmiş görselin bir sayfada NEREYE girip giremeyeceğini kodla zorlar (ölçüt 'üretilmiş mi' değil 'KANIT konumunda mı'); üç fail-closed kapı. v0.2.0 ile fiilen üretir: iste → bekle → indir zinciri + harcama defteri (adet sayar, lira değil) + çoklu kare. Varsayılan kuru-koşum, kredi harcamaz. 0.3.0 (2026-08-27): kesif-katalog kullanım-alanı (Sultan-izinli) + TR-imla yasak-deliği kapandı + anahtar env-önce. 0.3.1 (MİHMANDAR): kesif-katalog B3 muafiyeti + nötr kalite çiti. 0.4.0 (2026-10-06): DÖRDÜNCÜ kapı — hazır gelen dosyanın KENDİ köken kutusundaki beyanını okur (JUMBF/C2PA: PNG caBX · JPEG APP11 segmenti · WebP RIFF kutusu; hüküm yalnız kutu gövdesinden, kutu-dışı iz kayıt olur hüküm olmaz); imza kipi İKİ ('imza tuttu' ⟂ 'mühre güvenildi' AYRI yazılır; güven kütüphanenin 'Valid' alanından DEĞİL ayrıntı kodlarından okunur, POZİTİF kanıt ister ve sebebi kayda geçer; güvenilir-mühür listesi VERİDİR (--guven-kok PEM|dizin), verilmezse hiçbir mühre güvenilmez, verilip okunamazsa 'ölçemedim' denir): c2pa varsa manifest yapısal okunur ve imza+sertifika zinciri DOĞRULANIR, yoksa kutu-gövdesine düşer ve bunu ÇIKTIDA söyler (sessiz düşüş yok); kapı YALNIZ SUÇLAR, beraat ETTİRMEZ: kanit_olabilir kapalı küme (HAYIR|bilinmiyor), 'evet' hiçbir yoldan üretilemez — beraat güven kökü ister, imzanın tutması mührün kimden geldiğini söylemez; olumsuz iddia ('üretilmişim') temkinli olarak imzasız da keser; 'köken yok' hüküm DEĞİL, bilinmiyordur (tek yeniden-kayıt kutuyu siler); pozitif kontrolü geçmeyen okuyucu rc=3 ÖLÇEMEDİM der. 71 kapı, on altı mutasyon-kanıtlı; canli-olcum betigi sahadaki gerçek dosyaların yapısal ayrıştırmadan geçtiğini ölçer — ölçtüğü şey 'bu kümede okunamadi yok', 'hiç yanlış-kırmızı yok' DEĞİL (dosyaların geçerliliği bağımsız doğrulanmaz); tavanını da basar; bozuk yapı fail-closed okunamadi (kısmi ayrıştırmadan suçlayıcı iddia çıkmaz); imzalı yüz gerçek (sınav kendi sertifikasını üretip imzalar, ağa çıkmaz).",
-      "tags": [
-        "gorsel",
-        "tasarim",
-        "higgsfield",
-        "fail-closed",
-        "global"
-      ]
-    },
-    {
-      "id": "gun-ortasi",
-      "type": "workflow",
-      "name": "Gün Ortası Planı — İş Kaldı mı? Kalmadıysa Ne Geliştirelim?",
-      "version": "1.0.3",
-      "description": "Sabahki plan gün ortasında bittiğinde 'elde kalan iş var mı?' sorusunu dokuz kaynaktan ÖLÇER (günün plan çıpası · fabrika kartları · konum çapaları · bağımsız göz raporları · gelen kutusu · layiha defteri · kapımda · hedefler · ortam), adayı gerçek işten ayırır, süzer; iş kalmadıysa kutunun ana hedeflerine bağlı ve ölçülmüş bir boşluğu kapatan 2-3 fikir önerir. Ölçemediği kaynağa 'iş yok' demez, 'ölçemedim' der. Günün çıpasına sabahki maddelere dokunmadan ekler, Sultan başka şık seçerse geri alır.",
-      "tags": [
-        "planlama",
-        "gun-ortasi",
-        "olcum",
-        "fikir",
-        "workflow",
-        "global"
-      ]
-    },
-    {
-      "id": "gunluk-plan",
-      "type": "workflow",
-      "name": "Günün Planı — Ölç → Süz → Sun → İcra",
-      "version": "1.3.0",
-      "description": "Elimizdeki işleri yedi kaynaktan ÖLÇER (layiha defteri · kapımda kartları · açık PR'lar · odalardan gelen · kuyruk · defter · ortam), dört elekten süzer (bugün kapanır mı · kilit açar mı · bozuk mu · Sultan hisseder mi), Sultan-dilinde sabit-formatta plan sunar ve onaydan sonra icra eder. Ölçmeden madde yazmak yasak; elenen iş gerekçesiyle kayda geçer.",
-      "tags": [
-        "planlama",
-        "gunluk",
-        "olcum",
-        "suzme",
-        "workflow",
-        "global"
-      ]
-    },
-    {
-      "id": "inplace-chat",
-      "sync_dagitim": false,
-      "type": "feature",
-      "name": "In-Place Chat",
-      "version": "1.1.0",
-      "description": "Sayfa değiştirmeden anasayfada chat açan animasyonlu sistem. history.pushState + useState ile welcome→2-kolon geçişi. Masaüstü yatay split, mobil dikey flex split. Front-end-design kuralları zorunlu.",
-      "prerequisites": {
-        "frontend": [
-          "Next.js 14+ App Router",
-          "React 18+",
-          "Tailwind CSS v3+"
-        ]
-      },
-      "tags": [
-        "chat",
-        "inline",
-        "animation",
-        "split-layout",
-        "url-sync",
-        "mobile-split",
-        "nextjs",
-        "frontend-design"
-      ],
-      "stacks": [
-        "nextjs"
-      ],
-      "author": "sultanxgokce",
-      "source": "Vekâtip (HomeWelcome.tsx) + Nexus ChatHub",
-      "install_time": "~1h",
-      "status": "stable",
-      "path": "inplace-chat/SKILL.md",
-      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": [
-        "Vekatip",
-        "Nexus"
-      ],
-      "design_system": "front-end-design skill zorunlu — animasyon + layout prensipleri SKILL.md içinde"
-    },
-    {
-      "id": "iskan",
-      "type": "agent",
-      "name": "İSKÂN — container + ekip yaşam-döngüsü master-skill (Usta · bileşik)",
-      "version": "0.10.1",
-      "description": "Container + ekip yaşam-döngüsü master-skill: bir hedef (yeni-proje / mevcut-ekip-yeniden-doğuşu / tek-üye-ekleme) için host-provizyon (UC1 yeni-proje), oturum-kurtarma (UC2 seans-getir, deterministik session-id), üye-ekleme (UC3) akışlarını ekip-kur/ise-alim/sunucu-kur/cloudflare-erisim'i BESTELEYEREK tek-komuta indirger. Kendi owner-domain'i: container-provizyon host-adaptörü + tmux-oturum açma/casing/session-id rezervasyonu + CF-hostname orkestrasyonu + evergreen-manifest oto-yazımı; bestelediği kardeşlere YAZMAZ (ADR-001 owner-domain-dokunma). D6: `kur <proje>` zincirleyicisi — UC1 tam-yaşamdöngüsünü duraklı durum-makinesi olarak besteler (DURAK-1 cloudtop-PR merge; GO-marker'lar bypass edilmez, exit-4 aynen iletilir; --dry-run/--devam/--durum).",
-      "prerequisites": {
-        "system": [
-          "bash",
-          "git"
-        ]
-      },
-      "tags": [
-        "iskan",
-        "bilesik",
-        "container-yasamdongusu",
-        "ekip-yerlestirme"
-      ],
-      "stacks": [
-        "*"
-      ],
-      "author": "sultanxgokce",
-      "source": "İSKÂN programı FAZ 0-9 + söküm kör-tescilli (Nexus k0067-k0084; damga #494-502) — ahi usta-kademe bileşik-fabrika",
-      "install_time": "~2min",
-      "status": "v0.1-usta",
-      "path": "iskan/SKILL.md",
-      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": [
-        "_global",
-        "cloudtop"
-      ],
-      "requires": [
-        "ekip-kur",
-        "ise-alim",
-        "sunucu-kur",
-        "cloudflare-erisim"
-      ],
-      "family": "fabrika (container+ekip yaşam-döngüsü; İSKÂN)"
-    },
-    {
-      "id": "kapi-sinavi",
-      "sync_dagitim": true,
-      "type": "agent",
-      "name": "kapi-sinavi — kapının gerçekten kapı olduğunu kanıtla",
-      "version": "1.2.1",
-      "description": "Kapının doğru karar verdiğini değil, DEVREDE olduğunu ve sınavının onu fiilen ölçtüğünü kanıtlar. kos · bagli-mi (AST) · bayat-mi · mutasyon (sil/no-op/yer-kaydırma). RC=3 ÖLÇÜLEMEDİ demektir, yeşil değil. Cırcır (--taban): bilinen kusurlar tabanda görünür, yeni kusur ilk günden kırmızı, taban yalnız küçülür.",
-      "triggers": [
-        "kapı yazdım",
-        "koruma ekledim",
-        "bu gate çalışıyor mu",
-        "mutasyon sınavı",
-        "kapı bağlı mı"
-      ]
-    },
-    {
-      "id": "kapi-yolu",
-      "type": "agent",
-      "name": "kapi-yolu — Çok-Model Kapısı Yolu (kur · aç · denetle · yay)",
-      "version": "1.1.0",
-      "description": "L25 kapı şeridinin tek giriş-noktası (Usta/bileşik): host-geçidi kurucusu (kapi-kur.sh), istemci kurucusu (setup-kapi.sh), `kapi` başlatıcısı (tek şerit-otoritesi), anahtar-temini (istemci-anahtar.sh → vault-cek) ve geri-alma düğmesini (ocak/model-modu.sh) BESTELER — kendi ssh/docker/curl kodunu yazmaz. Filo-yayılımı kuru-koşu varsayılan (scripts/kapi-yay.sh): 8/10 kutu cloudtop reposunu GÖRMEZ (firsthand ölçüldü) → istemci yüzeyi ortak mount'a dağıtım-kopyası olarak basılır, kutu başına tek ve aynı komut kalır. Değişmezler: varsayılan `claude` şeridi dokunulmaz · settings.json'a env YAZILMAZ · sessiz düşme yok · sır argv/log'a düşmez.",
-      "prerequisites": {
-        "system": [
-          "bash",
-          "curl",
-          "claude >= 2.1.129 (geçit-model-keşfi; yoksa /model menüsü kapı modellerini listelemez)"
-        ]
-      },
-      "tags": [
-        "kapi-yolu",
-        "serit",
-        "cok-model",
-        "l25",
-        "bilesik",
-        "usta",
-        "evergreen",
-        "yayilim"
-      ],
-      "stacks": [
-        "*"
-      ],
-      "author": "sultanxgokce",
-      "source": "https://github.com/sultanxgokce/cloudtop (infra/kapi — L25 Dalga 1-4)",
-      "install_time": "~2min",
-      "status": "v1.0-usta",
-      "path": "kapi-yolu/SKILL.md",
-      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": [
-        "_global"
-      ],
-      "family": "kapi (L25 çok-model şeridi)",
-      "requires": [
-        "vault-cek",
-        "bulut-yapilandir"
-      ]
-    },
-    {
-      "id": "kapimda",
-      "type": "tool",
-      "name": "kapımda — Sultan'ı bekleyen işlerin yazıcısı + lint'i",
-      "version": "1.7.0",
-      "description": "kapimda.md kartlarını fail-closed SEKİZ lint kapısından geçirerek yazar (dört zorunlu alan · 'Niçin sen' boşsa kart AÇILAMAZ · tavan 3 · ad tekilliği · Sultan-dili/İ1 kalkanı · tek-eylem · sır-desen · uzunluk), kartı kapatır (A06: onay DEĞİL, görünürlük) ve elle-yapılacak işler için tek-mesaj-tek-adım motorunu yürütür (plan diske, ekrana yalnız sıradaki adım). Kanon: L38-F3/F4 + L39 (MABEYN H2 + 9-karar 2026-08-11). GLOBAL: 16 kutu aynı /config/.claude/kapimda.md dosyasını görür; karşılama ekranı bu kartları çizer. Kart DEVRİ (L47/F5): kart bir ajana şutlanabilir (🎯 <AJAN> damgası, Sultan sayımından düşer); Sultan kapısından iş çıkarmak Sultan-onayı ister (A06); 3. devirde kart Sultan hakemliğine döner. KART KAYNAĞI (L48/G1): her kart doğduğu anda 'oda: <kutu>' damgası alır (otomatik, kutunun çalışma alanından türer; türetilemezse 'bilinmiyor' — uydurma YOK). Kaynak ≠ sahip: devir kaynağı ezmez, damgasız eski kartlara köken uydurulmaz. VARSAYILAN GÖRÜNÜM (L48/G2, v1.4.0): liste artık yalnız BU odanın kartlarını + damgasız (kökeni bilinmeyen) kartları gösterir; başka odaların işi gizlenmez, tek satırlık dipnota iner ('… N iş başka odalarda') ve --hepsi ile tam liste açılır. Tavan-3 bilerek GLOBAL kaldı. ADIM-BLOĞU (L39, v1.5.0): 🛠️ ŞİMDİ SEN bloğu artık K9 kart-çapası (kartsız adım RED) + K10 N-dürüstlüğü (uydurma toplam RED) + yumuşak-kilit (açık adım varken yeni adım → UYARI, engellenmez) + A06 cevap-alanı korumasına (kapimda lint) bağlı. SAHİP-KÖR TEKİLLİK (L49, v1.6.0): ad-tekilliği kapısı artık devredilmiş (🎯) ve tıkanmış (⚠️) kartı da görür (aynı ad ikinci kez açılamaz), `bitti` onları kapatabilir ve yeni `sahip` komutu otomasyona ham sahip bilgisini verir — tavan-3 semantiği DEĞİŞMEDİ. GÖVDE TAZELEME (L49-B, v1.7.0): yeni `tazele` komutu AÇIK bir kartın gövdesindeki SAYI/DURUM yüzeylerini (özet + yaş/engel satırı) yeniler — kart açıldığı andaki sayıyı DONDURUYORDU (ölçülmüş vaka: gövdede 'iki oda talebi cevapsız' yazarken gerçek sayı 48'di). Yalnız verilen alanı günceller, kart KİMLİĞİNE (açılış damgası · oda kaynağı · devir geçmişi · dört alan) DOKUNMAZ, idempotenttir (aynı içerik → dosyaya hiç yazmaz), devredilmiş/tıkanmış kartta da çalışır ve K5/K7/K8 lint kapılarından geçer.",
-      "prerequisites": {
-        "system": [
-          "bash",
-          "flock"
-        ]
-      },
-      "tags": [
-        "sultan-yuzu",
-        "blokaj",
-        "onay",
-        "global",
-        "mabeyn"
-      ],
-      "installed_in": [
-        "_global"
-      ]
-    },
-    {
-      "id": "kasif-tara",
-      "type": "agent",
-      "name": "kasif-tara — KAŞİF dış-tarama kabuğu (fikir-hattı dış-ucu)",
-      "version": "1.4.2",
-      "description": "DİVAN fikir-hattının dış-ucu: Sultan-ayarlı konularda (_agents/kasif/konular.md) web'i tarar, kanıtlı ham-malzemeyi YALNIZ bulgu-havuzuna yazar (scripts/kasif-havuz-ekle.sh — tek yazma-yüzeyi). Deftere/karta/arza DOKUNMAZ, MUCİT'i atlayamaz; her bulgu kaynak-URL kanıtı ister (fail-closed). Kesin süzme (dedup/MİHENK-deny/tavan) downstream MUCİT-T1'de. L24 Layiha Fabrikası'nın dış-uç bileşeni.",
-      "prerequisites": {
-        "system": [
-          "bash",
-          "jq",
-          "git"
-        ]
-      },
-      "tags": [
-        "layiha-fabrikasi",
-        "kasif",
-        "fikir-hatti",
-        "tarama",
-        "divan",
-        "global"
-      ],
-      "stacks": [
-        "*"
-      ],
-      "author": "sultanxgokce",
-      "source": "https://github.com/sultanxgokce/Nexus (DİVAN k0054 doktrin §5/§9; L24 Layiha Fabrikası FAZ-3 — Çırak→Kalfa terfisi)",
-      "install_time": "~1min",
-      "status": "v1.0-kalfa",
-      "path": "kasif-tara/SKILL.md",
-      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": [
-        "_global"
-      ],
-      "family": "fikir-hatti (L24 Layiha Fabrikası; mucit-suz ile ardışık)"
-    },
-    {
-      "id": "kayit-damgasi",
-      "type": "agent",
-      "name": "kayit-damgasi — merge-anı kayıt kapanış-damgası orkestratörü",
-      "version": "1.1.0",
-      "description": "Bir iş/PR merge olurken kapattığı kayda (defter-kartı, gap/bulgu-defteri, SULTAN-KAPISI gate'i, plan-satırı) kapanış-damgasını işleyen paketli yardımcı. CLAUDE.md §9 refleksini tek-komuta indirir; scripts/layiha-defteri.sh durum primitifini orkestra eder. DRY-varsayılan (tara/merge yazmaz) + insan-onay-alanına ASLA yazmaz (yalnız bitti|teslim|yeniden kart-flip'i). Kaynak: vizyon-denetimi FAZ-2 İLK-DALGA Z6 (YK-007), defter-kartı k0107.",
-      "prerequisites": {
-        "system": [
-          "bash",
-          "git"
-        ]
-      },
-      "tags": [
-        "defter",
-        "damga",
-        "merge",
-        "kayit",
-        "closure-stamp",
-        "yaglayici"
-      ],
-      "stacks": [
-        "*"
-      ],
-      "author": "sultanxgokce",
-      "source": "https://github.com/sultanxgokce/Nexus (vizyon-denetimi FAZ-2 İLK-DALGA Z6 — YK-007, k0107)",
-      "install_time": "~1min",
-      "status": "v0.1",
-      "path": "kayit-damgasi/SKILL.md",
-      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": [
-        "_global"
-      ],
-      "family": "yaglayici (vizyon-FAZ2 İLK-DALGA)"
-    },
-    {
-      "id": "kesif",
-      "type": "agent",
-      "name": "Keşif — canlı-panel E2E kandırılamaz test (Playwright)",
-      "version": "0.2.0",
-      "description": "Canlı web-panel/SPA'yı root-suz Playwright ile insan-gibi çok-senaryo test eder; DOM↔API çapraz-kanıtla panel-yalanını (yanlış-renk/bayat-yeşil) saf-kodla yakalar; ULTIMATE-dogfood ile sahte-yeşil enjekte edip senaryoların gerçek-test-ettiğini kanıtlar. Config-driven (endpoint/selector/allowlist/senaryolar proje-config); origin-EXACT allowlist güvenlik-omurgası.",
-      "prerequisites": {
-        "system": [
-          "node>=18",
-          "micromamba (Chromium bootstrap, root-suz)"
-        ]
-      },
-      "tags": [
-        "test",
-        "kesif",
-        "e2e",
-        "playwright",
-        "dom-api-caprazi",
-        "false-green",
-        "enjeksiyon",
-        "portable",
-        "config-driven"
-      ],
-      "stacks": [
-        "*"
-      ],
-      "author": "sultanxgokce",
-      "source": "MMEx test-tooling (SADIK üretti, SİNAN 3-ajan-adversarial+mutasyon doğruladı, 8 Tem 2026; izole-konteynerden cloudtop-code'a devir)",
-      "install_time": "~5min (+Chromium bootstrap ilk-kez)",
-      "status": "v0.2-faz2",
-      "path": "kesif/SKILL.md",
-      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": [
-        "_global (tüm bulut projeleri — 5 konteyner ortak /config/.claude)"
-      ],
-      "family": "test-tooling (canlı-panel E2E false-green yakalayıcı)"
-    },
-    {
-      "id": "kesif-hatti",
-      "type": "agent",
-      "name": "KEŞİF HATTI — ham bulgudan onaya giden hattın penceresi",
-      "version": "1.1.1",
-      "description": "Bu kutudaki kesif hattini tek ekranda gosterir: kac HAM bulgu, kaci suzuldu ve hangi etiketi aldi, kaci ADAY oldu, son tur ne zaman kostu. SALT-OKUR ve SUZME YAPMAZ (suzmek MUCIT'in isi: /mucit-suz) — 'en iyi bulgular' demez, sahte-sentez uretmez. YOK != BOS: defter yoksa 'kayit yok' der, sifir yazmaz. Tekrar-suzme korumasini gorunur kilar (defterde karari olan bulgu bir daha suzmeye girmez).",
-      "installed_in": [
-        "_global"
-      ],
-      "family": "kutu-ici koordinasyon"
-    },
-    {
-      "id": "layiha",
-      "type": "workflow",
-      "name": "Layiha — araştır → kalıcı sabitle → inşayı sonraya bırak",
-      "version": "1.15.1",
-      "description": "Bir konuyu kapsamlı ARAŞTIR (SERDAR-altı araştırma alt-ajanı), kalıcı bir tasarım-dokümanına (layiha) SABİTLE, inşayı SONRAYA bırak. 3-kanal kayıt (git-durable PR + memory-topic + defter) + kayıt-defteri (layiha-defteri.sh: ekle/durum/liste; her kayıt <CELL>-L## kodu — CELL_ID unset → s01, K6 2026-08-10; eski öneksiz L## kodlar geri-uyumlu — + oluşturulma-tarihi + durum) + Sultan'a sabit-format teslim (Araştırıldı/Doküman/Context-odak-cümlesi). Zaman-filtreleri: --aktif/--bugun/--hafta/--hafta-bitmemis/--hepsi. SALT-ARAŞTIRMA — inşa-yetkisi VERMEZ; her build Sultan-GO. GLOBAL, defter per-container (İ1). v1.2: bağımsız-tescil kapısı (insa-edildi≠tescilli; MÜHÜRDAR kör-tescil reuse; tescilli/reddi/muaf + tescil-bekleyen filtresi). K1-K7 (2026-08-27): isteyen/yetki alanları + liste --sultan/--ajan + oda-önekli kod kabulü + insa-ediliyor --izin ZORUNLU.",
-      "prerequisites": {
-        "system": [
-          "bash",
-          "python3",
-          "git"
-        ]
-      },
-      "tags": [
-        "arastirma",
-        "design",
-        "layiha",
-        "defer-build",
-        "kayit-defteri",
-        "memoranda",
-        "serdar",
-        "global",
-        "provenance"
-      ],
-      "stacks": [
-        "*"
-      ],
-      "author": "sultanxgokce",
-      "source": "https://github.com/sultanxgokce/Nexus (SERDAR — araştır-sonra-inşa deseni; Osmanlıca 'lâyiha'=karar-merciine sunulan tasarı)",
-      "install_time": "~1min (talimat + layiha-defteri.sh yardımcısı)",
-      "status": "v1.2-mvp",
-      "path": "layiha/SKILL.md",
-      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": [
-        "_global"
-      ],
-      "family": "workflow (araştır→sabitle→sonraya-bırak; SERDAR meta-akışı)"
-    },
-    {
-      "id": "layiha-fabrikasi",
-      "type": "agent",
-      "name": "layiha-fabrikasi — L24 Layiha Fabrikası (Usta · bileşik · kill-switch'li)",
-      "version": "1.5.0",
-      "description": "DİVAN fikir-hattını (KAŞİF dış-tarama → bulgu-havuzu → MUCİT süzme → aday-havuzu → Sultan tek-tuş terfi) tek-çatı altında toplayan Usta-paket: kasif-tara + mucit-suz'ü besteler, layiha (defter) üzerine oturur; bestelediği kardeşlere YAZMAZ (ADR-001 owner-domain-dokunma). Kill-switch: scripts/layiha-fabrika.sh kapat --sebep → bayrak /config/.claude/layiha-fabrikasi.kapali; ortak _global bind-mount sayesinde 10/10 container'da AYNI ANDA etkili, fail-closed. Kapsam DAR: yalnız layiha üretim-bandı durur — aday-havuzu CRUD (ekle/liste/göster/terfi) ve DİVAN'ın kendi fikir-hattı (profil=divan) ETKİLENMEZ. v1.5.0: layiha-aday-havuzu.sh `ekle` — tek-kayıt ekleme (flock + atomik os.replace + alt-string dedup), fabrika-turu beklemeden tekil fikri havuza sokar (K3; oto-yakalama kancasının hedefi).",
-      "prerequisites": {
-        "system": [
-          "bash",
-          "jq",
-          "git"
-        ]
-      },
-      "tags": [
-        "layiha-fabrikasi",
-        "bilesik",
-        "fikir-hatti",
-        "kill-switch",
-        "usta",
-        "global"
-      ],
-      "stacks": [
-        "*"
-      ],
-      "author": "sultanxgokce",
-      "source": "https://github.com/sultanxgokce/Nexus (_agents/spec/layiha-fabrikasi-DESIGN.md — L24; FAZ-1 PR#653, FAZ-2 PR#655)",
-      "install_time": "~2min",
-      "status": "v1.0-usta",
-      "path": "layiha-fabrikasi/SKILL.md",
-      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": [
-        "_global"
-      ],
-      "requires": [
-        "layiha",
-        "kasif-tara",
-        "mucit-suz"
-      ],
-      "family": "fabrika (L24 Layiha Fabrikası; kasif-tara+mucit-suz bestecisi)"
-    },
-    {
-      "id": "layiha-kapisi",
-      "type": "agent",
-      "name": "Layiha-Kapısı — iş-yakalama + Sultan-mesajı yanıt prosedürü",
-      "version": "1.1.0",
-      "description": "Sultan-sohbetinde iki tekrarlayan-anı standartlaştırır: (A) İŞ-YAKALAMA KAPISI — işten-bahis algıla, YENİ-iş mi MEVCUT-eklemesi mi ayır, YENİ ise LAYİHAYA yazmadan ÖNCE çoktan-seçmeli onay sor (Evet/Düzenle/Hayır), ekleme ise mevcut-kaydı güncelle (gürültü/dublikasyon önle). (B) SULTAN-MESAJI YANIT PROSEDÜRÜ — mesaj gelince net-hızlı sıra: oku→anla→sade-yanıtla→aksiyon-al→kapat. NOT: k#### kart tabanlı iş-takibi 2026-07-29'da emekli (ADR-026); iş-kaydı artık layihadır. Global, defansif.",
-      "prerequisites": {
-        "system": [
-          "bash"
-        ]
-      },
-      "tags": [
-        "layiha",
-        "is-yakalama",
-        "sultan-mesaji",
-        "sultan-dili",
-        "kapi",
-        "onay-gate",
-        "capture",
-        "ilerleme-akisi"
-      ],
-      "stacks": [
-        "*"
-      ],
-      "author": "sultanxgokce",
-      "source": "https://github.com/sultanxgokce/Nexus (SERDAR-ailesi defter/mailbox akışı — Sultan-direktifi 9 Tem 2026)",
-      "install_time": "~1min (protokol-skill, script yok)",
-      "status": "v1.0",
-      "path": "layiha-kapisi/SKILL.md",
-      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": [
-        "_global"
-      ],
-      "family": "sultan-akisi (defter-etkileşim protokolü)"
-    },
-    {
-      "id": "maas-kapisi",
-      "type": "agent",
-      "name": "maas-kapisi — bordro × Garanti maaş-yükleme çapraz-kontrolü",
-      "version": "0.1.0",
-      "description": "Aylık maaş ödemesinin önündeki makine kapısı: muhasebeciden gelen BORDRO (PDF) ile Garanti Bankası MAAŞ YÜKLE dosyasını (TGB xlsx) kişi kişi kuruşuna karşılaştırır, fark varsa onay akışını durdurur; temizse WhatsApp onay-metni + banka e-posta taslağı üretir, her ayı sha256'lı arşive alır. ÖKSÜZDÜ — evergreen-parity 2026-08-10 yakaladı, hiçbir git kaynağında yoktu.",
-      "tags": [
-        "maas",
-        "bordro",
-        "garanti",
-        "puantaj",
-        "arsiv",
-        "kvkk",
-        "kapi"
-      ],
-      "author": "sultanxgokce",
-      "source": "öksüz-adoption — evergreen tek-düğme hijyeni (2026-08-10)",
-      "status": "v0.1-pilot",
-      "path": "maas-kapisi/SKILL.md",
-      "installed_in": [
-        "_global"
-      ],
-      "family": "finans-kapisi (onay-durdurucu)"
-    },
-    {
       "id": "memex",
       "sync_dagitim": false,
       "type": "foundation",
@@ -880,309 +60,72 @@
       ]
     },
     {
-      "id": "mucit-suz",
-      "type": "agent",
-      "name": "mucit-suz — MUCİT fikir-süzme kabuğu (T1-mekanik + T2-muhakeme)",
-      "version": "1.8.0",
-      "description": "DİVAN bulgu-havuzunu acımasızca süzüp Sultan-dilinde aday önerir. T1 = scripts/mucit-t1.sh ($0-mekanik: uygunluk · kanıt-kapısı · MİHENK-deny · kart-dedup · dönem-tavanı RC≠0); T2 = repo-grep 'zaten var mı' + Sultan-dili aday-yazımı + etki×kolaylık×kanıt×uyum puanı. Profil-parametrik: divan (hafta/≤3, DİVAN-ANAYASA §8) vs layiha (gün/10, AYRI defter — §8 kotasını TÜKETMEZ). Kuyruğa kartı MUCİT SOKAMAZ; aday→kuyruk her zaman Sultan tek-tuşundan geçer.",
+      "id": "feedback-widget",
+      "sync_dagitim": false,
+      "type": "feature",
+      "name": "Feedback Widget",
+      "version": "1.1.0",
+      "description": "In-app feedback widget — floating button, screenshot capture, canvas annotation, multi-image, reply threads. FastAPI + Next.js için tam kurulum.",
       "prerequisites": {
-        "system": [
-          "bash",
-          "jq",
-          "git"
+        "backend": [
+          "FastAPI",
+          "SQLModel",
+          "PostgreSQL"
+        ],
+        "frontend": [
+          "Next.js App Router",
+          "React 19",
+          "Tailwind CSS v4",
+          "lucide-react"
         ]
       },
       "tags": [
-        "layiha-fabrikasi",
-        "mucit",
-        "fikir-hatti",
-        "suzme",
-        "divan",
-        "global"
+        "feedback",
+        "widget",
+        "screenshot",
+        "annotation",
+        "fastapi",
+        "nextjs"
       ],
       "stacks": [
-        "*"
+        "fastapi+nextjs"
       ],
       "author": "sultanxgokce",
-      "source": "https://github.com/sultanxgokce/Nexus (DİVAN k0054 doktrin §9; L24 Layiha Fabrikası FAZ-3 — Çırak→Kalfa terfisi)",
-      "install_time": "~1min",
-      "status": "v1.0-kalfa",
-      "path": "mucit-suz/SKILL.md",
+      "source": "https://github.com/sultanxgokce/MMEpanel",
+      "install_time": "~2h",
+      "status": "stable",
+      "path": "feedback-widget/SKILL.md",
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
       "installed_in": [
-        "_global"
-      ],
-      "family": "fikir-hatti (L24 Layiha Fabrikası; kasif-tara'nın alıcısı)"
-    },
-    {
-      "id": "notion-erisim",
-      "type": "agent",
-      "name": "Notion Erişim (SALT-OKUR · panele girmeden)",
-      "version": "1.0.0",
-      "description": "Notion okuma işlerini (db-list, db-query, page-get, file-download) saf API (curl+jq) ile yapar. YAZMA FİİLİ YOK. Vault-first jeton çözümü (vault-cek → cortex-access.env), zorunlu Notion-Version başlığı, gerçek sayfalama (has_more/next_cursor), imzalı-süreli dosya URL'lerini anında indirme. (erisim-skill-fabrikasi ürünü · pcloud-erisim emsali.)"
-    },
-    {
-      "id": "olcum-disiplini",
-      "sync_dagitim": true,
-      "type": "agent",
-      "name": "olcum-disiplini — ölçümün gerçekten ölçüm olduğunu denetle",
-      "version": "1.0.0",
-      "description": "boru (çıkış kodu görüntü süzgecinin arkasından mı okundu) · negatif (aynı negatifi ikinci kez ölçme, kanıtlı append-only defter) · kart (ölçümü kurmadan beş soru, defteri kendi sorar). RC=3 ÖLÇÜLEMEDİ demektir.",
-      "triggers": [
-        "ölçtüm",
-        "kanıtladım",
-        "temiz mi",
-        "bunu daha önce ölçtük mü",
-        "ölçüm kurmak"
+        "MMEpanel"
       ]
     },
     {
-      "id": "pcloud-erisim",
+      "id": "ai-engineering-kit",
+      "sync_dagitim": false,
       "type": "agent",
-      "name": "pCloud Erişim (panele girmeden dosya/link)",
+      "name": "AI Engineering Kit",
       "version": "1.1.0",
-      "description": "pCloud işlerini (dosya listele/yükle/indir, public-link) saf API (curl+jq) ile yapar. Vault-first: token'ı önce vault-cek(Infisical), sonra cortex-access.env'den DEĞER-görmeden çözer. OAuth access_token (EU/eapi host, query-param). Sır-hijyenik. (erisim-skill-fabrikasi ürünü.)"
-    },
-    {
-      "id": "plan-dekor",
-      "type": "agent",
-      "name": "plan-dekor — renkli, mobilyalı sunum planı motoru",
-      "version": "0.6.0",
-      "description": "2B kat planını renkli, mobilyalı sunum planına çevirir: kural-tabanlı deterministik mobilya yerleşimi (kapı-süpürme alanı boş, çakışma yok), zemin dokusu + oda renkleri + lejant + kuzey oku + ölçek çubuğu ile SVG/PNG üretir, doğal-dil revizyonunu yapısal tarifle uygular. plan-motor'u CLI sınırından besteler. Fail-closed, deterministik ($0, API/GPU yok). ÖKSÜZDÜ — evergreen-parity 2026-08-10 yakaladı, hiçbir git kaynağında yoktu.",
+      "description": "Claude ajan altyapısı — /ai-upgrade (repo kataloğu, araç yönetimi) + /ai-metodoloji (çalışma kalitesi denetimi) + /ai-kesfet (GitHub/web tarama, katalog büyütme). Stack bağımsız, her projede çalışır.",
+      "prerequisites": {},
       "tags": [
-        "kat-plani",
-        "mobilya",
-        "yerlesim",
-        "renklendirme",
-        "sunum",
-        "emlak",
-        "svg",
-        "fail-closed",
-        "deterministik"
-      ],
-      "author": "sultanxgokce",
-      "source": "öksüz-adoption — evergreen tek-düğme hijyeni (2026-08-10)",
-      "status": "v0.6",
-      "path": "plan-dekor/SKILL.md",
-      "installed_in": [
-        "_global"
-      ],
-      "family": "plan-motoru (mimari, plan-motor bestecisi)"
-    },
-    {
-      "id": "plan-motor",
-      "type": "agent",
-      "name": "plan-motor — 2B kat-planı motoru",
-      "version": "1.4.0",
-      "description": "DWG/DXF çizimini okur (katman/birim/envanter), kendi geometrisiyle referans-kalitede çizer, üstünden ölçer (oda alanı/duvar/mesafe), doğal-dil komutunu yapısal tarife çevirip revize eder, semantik oda grafı çıkarır (lifting), mevcut planı mimari kural setine karşı denetler, boş sınır+oda programından aday yerleşim üretir. Dosya-tabanlı tek giriş, fail-closed. ÖKSÜZDÜ — evergreen-parity 2026-08-10 yakaladı, hiçbir git kaynağında yoktu.",
-      "tags": [
-        "cad",
-        "dwg",
-        "dxf",
-        "kat-plani",
-        "2b-cizim",
-        "olcum",
-        "revizyon",
-        "lifting",
-        "fail-closed",
-        "svg",
-        "mimari"
-      ],
-      "author": "sultanxgokce",
-      "source": "öksüz-adoption — evergreen tek-düğme hijyeni (2026-08-10)",
-      "status": "canli",
-      "path": "plan-motor/SKILL.md",
-      "installed_in": [
-        "_global"
-      ],
-      "family": "plan-motoru (mimari, çekirdek)"
-    },
-    {
-      "id": "pr-onay",
-      "type": "agent",
-      "name": "PR-Onay — Sultan-dili özet → onay → gate'li PR+merge",
-      "version": "1.1.0",
-      "description": "İş bitince jargonsuz Sultan-dili özet + tek-soru onay-kapısı (evet/hayır/önce-diff-göster) → kalite-gate'leri GERÇEKTEN koş (tsc→vitest→temizlik+fmt; kırmızı=DUR+çıplak-çıktı+exit-kod; pipe-maskeleme yasak) → PR-aç (agent-dashboard'lu projede YOL-A: AGENT_DASHBOARD_PR_SKILL=1 marker'ı gate'ler koşulduğu için meşru-taşınır; plugin'siz projede doğrudan gh pr create) → wait-ci.sh ile CI-yeşil → merge → LEDGER'a exit-kodlu kanıt. SKIP_PR_SKILL_GATE'e asla dokunmaz. v1.1.0 (L14/F1): ajan da başlatabilir (disable-model-invocation kaldırıldı); onay-kapısı skill-İÇİNDE korunur — evet'i yalnız Sultan yazar.",
-      "prerequisites": {
-        "system": [
-          "bash",
-          "git",
-          "gh"
-        ]
-      },
-      "tags": [
-        "pr",
-        "merge",
-        "onay",
-        "kalite-gate",
-        "sultan-dili",
-        "workflow",
-        "ci"
+        "ai-agent",
+        "methodology",
+        "slash-commands",
+        "skills"
       ],
       "stacks": [
         "*"
       ],
       "author": "sultanxgokce",
-      "source": "https://github.com/sultanxgokce/Nexus (mimserdar-mimari.md PR-ONAY-AKIŞI TASARIM · YOL-A Sultan-onaylı · 7 Tem 2026)",
-      "install_time": "~1min (talimat-skill; scaffold yok)",
-      "status": "v1.0-mvp",
-      "path": "pr-onay/SKILL.md",
-      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": [],
-      "family": "workflow (PR-yaşamdöngüsü; /agent-dashboard:pr sarmalayıcısı)"
-    },
-    {
-      "id": "railway-erisim",
-      "type": "agent",
-      "name": "Railway Erişim (panele girmeden proje/servis/DB)",
-      "version": "1.1.0",
-      "description": "Railway işlerini (proje/servis listesi, bir servisin DATABASE_URL'i, değişken sorgusu, deploy durumu, ham GraphQL) dashboard'a girmeden saf API (curl+jq, backboard.railway.com/graphql/v2) ile yapar. Kimlik yoksa bir-kerelik gizli token ister (Railway token programatik ÜRETİLEMEZ → dashboard-only), cortex-access.env'e (600) kaydeder. doctor 'me' (account) → 'projects' (workspace) ile kapsamı otomatik ayırt eder; pg-url DATABASE_URL'i env'e YAZAR (stdout'a basmaz); railway variables --set YASAK (argv sızıntısı). İdempotent + sır-hijyenik.",
-      "prerequisites": {
-        "system": [
-          "curl",
-          "jq"
-        ]
-      },
-      "tags": [
-        "railway",
-        "erisim",
-        "platform-access",
-        "token",
-        "database",
-        "graphql",
-        "deploy",
-        "secret-hygiene"
-      ],
-      "stacks": [
-        "*"
-      ],
-      "author": "sultanxgokce",
-      "source": "https://github.com/sultanxgokce/cloudtop (erisim-skill-fabrikasi railway reçetesi — cloudtop-vekatip izole konteynerde 14 proje canlı okundu, 7 Tem 2026)",
+      "source": "https://github.com/sultanxgokce/MMEpanel",
       "install_time": "~2min",
       "status": "stable",
-      "path": "railway-erisim/SKILL.md",
+      "path": "ai-engineering-kit/SKILL.md",
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
       "installed_in": [
-        "_global (tüm bulut projeleri — 5 konteyner ortak /config/.claude)",
-        "Nexus",
-        "cortex"
-      ],
-      "family": "platform-erisim (erisim-skill-fabrikasi ile cloudflare-erisim şablonundan üretildi)"
-    },
-    {
-      "id": "resume-banner",
-      "type": "agent",
-      "name": "resume-banner — oturum-açılış / post-compact KONUM-toparlayıcı",
-      "version": "0.1.0",
-      "description": "Oturum-açılış ve post-compact/resume anında 'neredeyiz' toparlamasını tek-komuta indiren kalfa skill: env-fingerprint (pwd/hostname/git) + son CONTEXT ⚓-çıpası + son defter-çıpası (+cortex STATE) + post-compact 4-zorunlu hatırlatmaları. CLAUDE.md post-compact refleksini tek harekete indirir; doctor.sh'ı tamamlar. SALT-OKU + token-güvenli (büyük dosya tam-dökmez). Kaynak: vizyon FAZ-2 İLK-DALGA Z5 (YK-007), k0110.",
-      "prerequisites": {
-        "system": [
-          "bash",
-          "git"
-        ]
-      },
-      "tags": [
-        "resume",
-        "compact",
-        "konum",
-        "env-fingerprint",
-        "oturum",
-        "yaglayici"
-      ],
-      "stacks": [
-        "*"
-      ],
-      "author": "sultanxgokce",
-      "source": "https://github.com/sultanxgokce/Nexus (vizyon-denetimi FAZ-2 İLK-DALGA Z5 — YK-007, k0110)",
-      "install_time": "~1min",
-      "status": "v0.1",
-      "path": "resume-banner/SKILL.md",
-      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": [
-        "_global"
-      ],
-      "family": "yaglayici (vizyon-FAZ2 İLK-DALGA)"
-    },
-    {
-      "id": "seans",
-      "type": "agent",
-      "name": "SEANS — sohbet yonetimi + ekip kisayollari",
-      "version": "1.13.0",
-      "description": "Claude sohbetlerini listeleme/geri getirme/yeni acma motoru (cs) HER KUTUDA. Motor burada tek kopya yasar; cloudtop'taki eski cagri yolu ince kopruyle korunur (iki kopya yok, drift yok). Turkce kapilar: sessiongetir (kapanani geri getir) - yenisession (ad sorup acar, --yan ile ekrani boler) - gruba (projenin WhatsApp grubuna yaz) - yardim (komut listesi + kilavuz adresi). MAHREMIYET: cok-insanli kutuda liste kutu-yerel; tenant kutusunda yalniz kendi projesi gorunur, bilinmeyen gizlenir (fail-closed). KOLTUK CAKISMASI: kendi-kopyam masaya ayri calisma kopyasi (git worktree) acar; basla ekrani paylasimi gorunur kilar (olcemezse sayi uydurmaz).",
-      "installed_in": [
-        "_global"
-      ],
-      "family": "kutu-ici koordinasyon"
-    },
-    {
-      "id": "sergi",
-      "type": "agent",
-      "name": "/sergi — görsel kütüphane ve katalog standardı (GLOBAL)",
-      "version": "0.1.0",
-      "description": "Toplanan dosya, kaynak, referans örneği ya da kayıt koleksiyonunu arama + filtre + önizlemeli, taşınabilir tek-klasör HTML kataloğa dönüştürür; Sultan'ın beğendiği AKAR referans kataloğu düzeni varsayılan. Filo standardı: önizlemeli 20+ varlık ya da Sultan'a/dışarıya sürümlü koleksiyon teslim eden işte zorunlu. Üretici yalnız Python standart kütüphanesiyle çalışır, ağa çıkmaz, var olan klasörün üzerine yazmaz. Sultan'ın çalıştığı bir ajan doğurdu (19 Eylül: 'çok pür ve temiz, standart yapalım'); MUAVİN filoya paketledi: dosya yolu kapsam kapısı, paylaşılabilir klasör izni, Türkçe tetikleyiciler, 8 test."
-    },
-    {
-      "id": "sert-dongu",
-      "type": "agent",
-      "name": "sert-döngü — keşif×sert-teslim kapalı-döngü yürütücü",
-      "version": "0.2.0",
-      "description": "kesif × sert-teslim kapalı-döngü yürütücü (loop-engineering). SERDAR promote-işi (PR#5) — sync-targets'ta vardı, catalog-girdisi eksikti (evergreen-parity yakaladı).",
-      "tags": [
-        "loop",
-        "kesif",
-        "sert-teslim",
-        "döngü"
-      ],
-      "author": "sultanxgokce",
-      "source": "catalog-gap-fix — evergreen-parity P1 bulgusu (2026-07-13)",
-      "status": "canli",
-      "path": "sert-dongu/SKILL.md",
-      "installed_in": [
-        "_global"
-      ],
-      "family": "loop-engineering"
-    },
-    {
-      "id": "sert-teslim",
-      "type": "agent",
-      "name": "Sert-Teslim — gereklilik-matrisli teslim-motoru",
-      "version": "0.2.1",
-      "description": "Gereklilik-matrisli, gaming-dirençli TESLİM-MOTORU: iş-sahibi talimatı verbatim→C-ID→M-satır; durum=türetilmiş-veri (durum_uret tek-yazar); kırmızı-kanıt+komut_sha256-kilidi; §1.5 sayaç-baseline (filtreli-koşum hash-kilitli); A1-A4 kadans + 6-koşul teslim-gate. Proje-agnostik MOTOR (config per-proje tooling/teslim/).",
-      "prerequisites": {
-        "system": [
-          "bash",
-          "node"
-        ]
-      },
-      "tags": [
-        "teslim",
-        "dogrulama-motoru",
-        "gereklilik-matrisi",
-        "gaming-direnc",
-        "adversarial",
-        "iki-vites",
-        "portable"
-      ],
-      "stacks": [
-        "*"
-      ],
-      "author": "sultanxgokce",
-      "source": "MMEx test-tooling (SADIK üretti, SİNAN 3-ajan-adversarial+mutasyon doğruladı, 8 Tem 2026; izole-konteynerden cloudtop-code'a devir)",
-      "install_time": "~2min",
-      "status": "v0.2-faz1",
-      "path": "sert-teslim/SKILL.md",
-      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": [
-        "_global (tüm bulut projeleri — 5 konteyner ortak /config/.claude)"
-      ],
-      "family": "test-tooling (gereklilik-matrisli anti-false-green teslim-motoru)"
-    },
-    {
-      "id": "seyir-defteri",
-      "type": "agent",
-      "name": "/seyir-defteri — keşif-günlüğü + döngü-refleksiyon (GLOBAL)",
-      "version": "1.2.0",
-      "description": "Çok-ajanlı işte yan-keşiflerin (aslında-şöyleymiş · bug · risk · fırsat · itiraz) SESSİZCE ATLANMAMASI için append-only günlük: her-ajan tek-komut yazar (sev×tür iki-eksen), koordinatör filtreli okur+disposition işaretler; opsiyonel döngü-sonu refleksiyon-ritüeli ('döngü bitti, plan moduna geçelim' → 4-soru + döngü-özet + hafıza-köprüsü) + geçici-md migrate (idempotent). jsonl 3-event (not/disp/ozet), satır-edit-yok, flock-güvenli, git-kök-resolve, proje-agnostik. Kültür-kuralı gömülü: orkestraya itiraz SERBEST+TEŞVİKLİ. (SİNAN/MMEx + HEKİMBAŞI/medigate birleşik-talebi; MİMSERDAR-spec.) · 1.2.0 (2026-09-03): kardeş araç `zeyl` AYNI deftere yazdığı için kapalı kümeler açıldı — tur+=gereklilik, durum+=ham|yapildi. `onaylandi` BİLEREK açılmadı (insan alanı, A06). Bu delta olmadan zeyl'in kayıtları burada süzülemiyor ve işaretlenemiyordu."
+        "MMEpanel"
+      ]
     },
     {
       "id": "skill-packager",
@@ -1212,222 +155,89 @@
       ]
     },
     {
-      "id": "soluklan",
-      "type": "workflow",
-      "name": "Soluklan — ara ver, bak, çıpala, devam et",
-      "version": "1.0.0",
-      "description": "Bağlam dolmadan önce DUR: değerlendir, planı diske çıpala, compact'i Sultan'a SOR, sonrasında kaldığın yerden daha iyi bir planla devam et. Doluluğu ÖLÇMEZ (ajanın göstergesinden alır) ve çıpa taze değilse öneri ÜRETMEZ — bayat çıpa = çıpa yok.",
-      "tags": [
-        "baglam",
-        "compact",
-        "cipa",
-        "planlama",
-        "olcum",
-        "workflow",
-        "global"
-      ]
-    },
-    {
-      "id": "sultan-eli",
-      "type": "agent",
-      "name": "sultan-eli — geri alınamaz kapılarda insan-eli ölçümü",
-      "version": "0.1.0",
-      "description": "A06 kapı-kaynağı ölçümü: Sultan'ın `!` komutu oturum kaydına <bash-input> olarak düşer, ajanınki düşmez; kapı bu izi imzaya+zamana bağlar. Yalnız geri alınamaz kapılarda kullanılır (Sultan kararı 2026-08-04). Kilit değil korkuluk: kazayı durdurur, kastı durdurmaz. Üç-durum: 0 var · 1 yok · 3 ÖLÇÜLEMEDİ (3≠1).",
-      "tags": [
-        "onay",
-        "kapi",
-        "guvenlik",
-        "a06",
-        "sultan-gate"
-      ]
-    },
-    {
-      "id": "sultan-ogren",
-      "type": "skill",
-      "name": "sultan-ogren — Sultan-tercihi hızlı-yakala (manuel-hat)",
-      "version": "0.1.0",
-      "description": "Sultan'ın dil/biçim tercihini üslûp-modeline aday-kayıt olarak HIZLI kaydeder (ogren.sh tek-yazar helper). disable-model-invocation: açık-tetik. sultanca'nın kapalı-döngü eşi.",
-      "tags": [
-        "sultan-dili",
-        "öğrenme",
-        "yakalama"
-      ],
-      "author": "sultanxgokce",
-      "source": "öksüz-adoption — evergreen tek-düğme kampanyası FAZ-1 (P1-lint bulgusu, 2026-07-13)",
-      "status": "canli",
-      "path": "sultan-ogren/SKILL.md",
-      "installed_in": [
-        "_global"
-      ],
-      "family": "sultan-dili (üslûp-modeli; sultanca ile kapalı-döngü)"
-    },
-    {
-      "id": "sultanca",
-      "type": "skill",
-      "name": "sultanca — Sultan üslûbu (yaşayan dil & çıktı-tercih modeli)",
-      "version": "0.1.0",
-      "description": "Sultan'a NASIL konuşulacağını (dil) ve Sultan-yüzlü çıktının NASIL biçimleneceğini (format) yöneten yaşayan-model: UYGULA / ÖĞREN / SORGU üç-yüzü. Tek-kaynak store /config/.claude/sultan-uslubu.md (git-DIŞI, VERİ-sınıfı — skill kodu store'a yalnız işaret eder, içerik taşımaz).",
-      "tags": [
-        "sultan-dili",
-        "üslûp",
-        "yaşayan-skill",
-        "sürekli-öğrenen"
-      ],
-      "author": "sultanxgokce",
-      "source": "öksüz-adoption — evergreen tek-düğme kampanyası FAZ-1 (P1-lint bulgusu, 2026-07-13)",
-      "status": "canli",
-      "path": "sultanca/SKILL.md",
-      "installed_in": [
-        "_global"
-      ],
-      "family": "sultan-dili (üslûp-modeli; sultan-ogren ile kapalı-döngü)"
-    },
-    {
-      "id": "sunucu-kur",
-      "type": "agent",
-      "name": "sunucu-kur — VPS provizyon standardı (toolkit + cloud-init)",
+      "id": "inplace-chat",
+      "sync_dagitim": false,
+      "type": "feature",
+      "name": "In-Place Chat",
       "version": "1.1.0",
-      "description": "Reis yeni sunucu isteyince ELLE kurma yerine tek-standart provizyon: hcloud/cloud-init tabanlı VPS-kur (uid-1500-fix) + runbook. create=Sultan-gate (yıkıcı-sınıf); sır-değeri basmaz.",
-      "tags": [
-        "vps",
-        "provizyon",
-        "cloud-init",
-        "altyapı",
-        "sunucu"
-      ],
-      "author": "sultanxgokce",
-      "source": "öksüz-adoption — evergreen tek-düğme FAZ-1 devamı (2026-07-13)",
-      "status": "canli",
-      "path": "sunucu-kur/SKILL.md",
-      "installed_in": [
-        "_global"
-      ],
-      "family": "altyapı (provizyon-standardı)"
-    },
-    {
-      "id": "sunum-hazirlama",
-      "type": "agent",
-      "name": "/sunum-hazirlama — karar vericiye sunumun içeriği ve anlatımı (GLOBAL)",
-      "version": "0.1.0",
-      "description": "Toplantı sunumunda ne anlatılır, hangi sırayla, slaytta ne görünür, sunan ne söyler, demo nereye girer: beş anlatı iskeleti, slayt kuralları (başlık = sonuç cümlesi, yatay akış ve üç saniye sınavı), görür/söyler ayrımı, önce son ekranı gösteren canlı demo, açılış/kapanış, temkinli komite, süre dağılımı, yirmi maddelik kapı ve referans arşivinden (50 deste) dersler. Kuruma özgü kapılar (fiyat, oran, pilot süresi, kurum adı, şov anı) 'kuruma göre değişir' diye işaretli. MÜTEVELLİ/AKAR doğurdu (Sultan 19 Eylül); MUAVİN filo geneline paketledi."
-    },
-    {
-      "id": "tasarim-citasi",
-      "type": "agent",
-      "name": "/tasarim-citasi — referans kütüphanesiyle kalite çıtası, dördüncü kapı (GLOBAL)",
-      "version": "0.1.0",
-      "description": "Sultan 18 Eylül: 'Bu seviyenin altında iş çıkarmayın.' Her tasarım teslimi referans tasarımcı kütüphanesindeki en yakın iyi örnekle yan yana konur ve on maddelik kapıdan geçer; beğeniden çıkan B kuralları ve referans arşivi dersleri içeride. Kütüphane yolu TASARIM_CITASI_KUTUPHANE (varsayılan hub /config/evraklar/Sultan/1-Calisma/AKAR/tasarim-referans); erişemeyen kutuda 'çıta kıyası yapılamadı' yazılır, sessizce atlanmaz. frontend-boost ve üç ilke kapısının üstüne biner. NAKKAŞ/AKAR doğurdu; MUAVİN filo geneline paketledi."
-    },
-    {
-      "id": "terminal-onar",
-      "name": "terminal-onar — kutunun web terminali ve telefon ekranı",
-      "version": "2.0.0",
-      "type": "capability",
-      "sync_dagitim": true,
-      "description": "Bir kutuda canlı çalışma düzenini kurar, ölçer ve onarır: tmux konuşma odası + web terminali (ttyd, yalnız UNIX soketi) + telefon ekranı (PWA) + kurtarıcı ajan + dakikalık bekçi; dört kademeli onarım merdiveni. Bütün kutularda koşar — adlar kutudan türer, kutu adı koda gömülü değildir. Merkez sayfa (terminal.mmepanel.com) kutuları yol ile ayırdığı için taban yolu destekler. Kurulum Sultan onayı ister (kutuda dış yüzey açar); parola kasadan gelir, ÜRETİLMEZ.",
-      "prerequisites": [
-        "ttyd",
-        "tmux",
-        "node>=20",
-        "vault-cek"
-      ],
-      "tags": [
-        "terminal",
-        "pwa",
-        "onarim",
-        "kutu",
-        "mobil"
-      ],
-      "stacks": [
-        "nextjs+prisma",
-        "fastapi+sqlmodel"
-      ],
-      "author": "sultanxgokce",
-      "source": "sedir kutusu (SEDİR/MÜDÜR + RAHVAN), genelleştiren MUAVİN 2026-09-27",
-      "install_time": "~30dk (yeni proje), ~2sa (mevcut Cortex upgrade)",
-      "status": "aktif",
-      "path": "terminal-onar",
-      "nexus_catalog": false,
-      "installed_in": [
-        "_global"
-      ]
-    },
-    {
-      "id": "tescil",
-      "type": "agent",
-      "name": "Tescil — MÜHÜRDAR kör-protokol tescil-kabuğu (DİVAN K5)",
-      "version": "0.2.1",
-      "description": "Teslim edilen işi (kart) YAZILI gerekliliklere (GOAL+G1..Gn komut→beklenen/RC) karşı MAKİNE-KANITLI sınayan kör-protokol tescil-kabuğu. Girdi yalnız GEREKLILIK.md + worktree (motor-raporu/transkript okumak İHLAL); Katman-1 mekanik-oracle %100 şart, Katman-2 yalnız kaçınılmaz öznel G'ler (izole-rubrik, 'emin değilim'→eskalasyon). Verdikt = MUHUR.md + şemalı kanit/G<i>.json (64KB-tavan + sha256; redaction yazım-öncesi); kart-durum flip'i YAPMAZ. sert-teslim (trust_boundary + redaction) ve kesif (DOM↔API E2E) KOMPOZİSYONU — yeniden icat yok. İş-tipi asgari-kanıt zorlayıcı (ui→e2e-check, kod→api-check, docs→lint) + HAFİF-tescil sınıfı + tatbikat/telemetri anti-tiyatro kablosu. TestSprite 2026-07 değerlendirildi, 4 gerekçeyle evde kalındı (verdict-otoritesi asla dışarı verilmez).",
+      "description": "Sayfa değiştirmeden anasayfada chat açan animasyonlu sistem. history.pushState + useState ile welcome→2-kolon geçişi. Masaüstü yatay split, mobil dikey flex split. Front-end-design kuralları zorunlu.",
       "prerequisites": {
-        "system": [
-          "bash",
-          "node>=18",
-          "python3",
-          "git"
+        "frontend": [
+          "Next.js 14+ App Router",
+          "React 18+",
+          "Tailwind CSS v3+"
         ]
       },
       "tags": [
-        "tescil",
-        "muhurdar",
-        "divan",
-        "kor-protokol",
-        "makine-kanit",
-        "oracle",
-        "anti-tiyatro",
-        "test-tooling"
+        "chat",
+        "inline",
+        "animation",
+        "split-layout",
+        "url-sync",
+        "mobile-split",
+        "nextjs",
+        "frontend-design"
       ],
       "stacks": [
-        "*"
+        "nextjs"
       ],
       "author": "sultanxgokce",
-      "source": "DİVAN-anayasası K5 (k0054, 2026-07-14) — sert-teslim + kesif kompozisyonu; ahi new kalfa tescil ile doğdu",
-      "install_time": "~2min",
-      "status": "v0.2",
-      "path": "tescil/SKILL.md",
+      "source": "Vekâtip (HomeWelcome.tsx) + Nexus ChatHub",
+      "install_time": "~1h",
+      "status": "stable",
+      "path": "inplace-chat/SKILL.md",
       "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
       "installed_in": [
-        "_global (tüm bulut projeleri — ortak /config/.claude)"
+        "Vekatip",
+        "Nexus"
       ],
-      "requires": [
-        "sert-teslim",
-        "kesif"
-      ],
-      "family": "test-tooling (sert-teslim/kesif ailesi — MÜHÜRDAR verdikt-kabuğu)"
+      "design_system": "front-end-design skill zorunlu — animasyon + layout prensipleri SKILL.md içinde"
     },
     {
-      "id": "ui-tasarim-akisi",
-      "sync_dagitim": true,
-      "type": "workflow",
-      "name": "UI Tasarım Akışı",
-      "version": "0.4.0",
-      "description": "UI/arayüz tasarım işinin ZORUNLU akış kapısı: ürün niyeti → sayfa envanteri → senaryolar (tık bütçesi) → ÇEKİRDEK+MARKA sözleşmesi → Claude design promptu → devam promptu + üç denetim. 'UI işi · arayüz · ekran tasarla · sayfa tasarımı · frontend görünüm · panel · layout · stil' tetiğinde çağrılır. /frontend-design ile BİRLİKTE zorunlu — biri ötekinin yerine geçmez.",
+      "id": "yt-transcript",
+      "sync_dagitim": false,
+      "type": "agent",
+      "name": "YouTube Transcript",
+      "version": "1.1.0",
+      "description": "YouTube videosunu okunabilir dokümana dönüştürür. Altyazı varsa direkt çeker, yoksa Whisper ile transkripsiyon yapar. Claude (OpenRouter) ile formatlar, PDF veya Word olarak kaydeder.",
       "prerequisites": {
-        "backend": [],
-        "frontend": []
+        "python": ">=3.9",
+        "packages": [
+          "youtube-transcript-api",
+          "yt-dlp",
+          "openai-whisper",
+          "python-docx",
+          "fpdf2",
+          "httpx"
+        ],
+        "system": [
+          "ffmpeg (Whisper fallback için)"
+        ]
       },
       "tags": [
-        "ui",
-        "tasarim",
-        "akis",
-        "prompt",
-        "kalfa"
+        "youtube",
+        "transcript",
+        "whisper",
+        "pdf",
+        "word",
+        "docx",
+        "openrouter",
+        "ai",
+        "eğitim"
       ],
       "stacks": [
         "*"
       ],
       "author": "sultanxgokce",
-      "source": "huzur kutusu (HUZUR ekibi) — SERDAR paketledi",
-      "install_time": "5 dk",
-      "status": "v0.1-canli",
-      "path": "ui-tasarim-akisi/",
-      "installed_in": []
-    },
-    {
-      "id": "vault-cek",
-      "type": "agent",
-      "name": "vault-cek — merkezî-vault seam (store-agnostik)",
-      "version": "1.4.0",
-      "description": "Sır-çözüm seam'i: doctor·resolve·get <KEY>·list·put <KEY>·backend kontratı; `put` (L68/F1) kasaya YAZAN kalem — değer stdin/ortamdan gelir, argv'ye düşmez, üzerine-yazma fail-closed, çıktı yalnız hedef+http+version (yalnız openbao backbone'unda); vault-cek.sh artık DİSPATCHER — backbone veriden seçilir ($VAULT_BACKEND → ~/.config/vault-backend → varsayılan openbao). Aktif: OpenBao KV-v2+AppRole (L54 cutover 2026-08-07); fallback: Infisical (30-gün salt-okur), legacy: Railway. Değer stdout'a basılmaz (600 env-dosyasına yazar). Öneksiz KEY çözümü v1.4.0'dan itibaren KENDİ-KİRACI-ÖNCE: önce kutunun kendi kiracı klasörü, bulunamazsa shared (kiracı adı login yanıtından türetilir — ek ağ turu yok; türetilemezse sessizce shared). Açık `<KAYNAK>__<KEY>` hedefi ve `put` davranışı değişmedi. Erişim-skill'lerinin vault-first temeli."
+      "install_time": "~5min",
+      "status": "stable",
+      "path": "yt-transcript/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [],
+      "env": {
+        "OPENROUTER_API_KEY": "zorunlu",
+        "OPENROUTER_MODEL": "opsiyonel, varsayılan: anthropic/claude-haiku-4-5"
+      }
     },
     {
       "id": "whatsapp-baileys",
@@ -1498,6 +308,528 @@
       ]
     },
     {
+      "id": "cloudflare-erisim",
+      "type": "agent",
+      "name": "Cloudflare Erişim (panele girmeden Access/DNS)",
+      "version": "1.2.0",
+      "description": "Cloudflare işlerini (Access self-hosted app + policy, proxied DNS/tünel rotası, subdomain'i giriş-kapısı arkasına alma) dashboard'a girmeden saf API (curl+jq) ile yapar. Kimlik yoksa bir-kerelik gizli Global API Key ister, kendi dar-yetkili token üretir (POST /user/tokens), cortex-access.env'e (600) kaydeder, sonra asıl işi yapar. User-token vs account-token (cfat_) doğrulama ayrımını otomatik yapar. İdempotent + sır-hijyenik.",
+      "prerequisites": {
+        "system": [
+          "curl",
+          "jq"
+        ]
+      },
+      "tags": [
+        "cloudflare",
+        "access",
+        "dns",
+        "tunnel",
+        "kimlik",
+        "erisim",
+        "token",
+        "zero-trust",
+        "platform-access"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/cloudtop (infra/cloudflare/ — mmex.mmepanel.com onboard'unda canlı doğrulandı, 6 Tem 2026)",
+      "install_time": "~2min",
+      "status": "stable",
+      "path": "cloudflare-erisim/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global (tüm bulut projeleri)"
+      ],
+      "family": "platform-erisim (erisim-skill-fabrikasi ile üretilen kalıbın referans implementasyonu)"
+    },
+    {
+      "id": "railway-erisim",
+      "type": "agent",
+      "name": "Railway Erişim (panele girmeden proje/servis/DB)",
+      "version": "1.1.0",
+      "description": "Railway işlerini (proje/servis listesi, bir servisin DATABASE_URL'i, değişken sorgusu, deploy durumu, ham GraphQL) dashboard'a girmeden saf API (curl+jq, backboard.railway.com/graphql/v2) ile yapar. Kimlik yoksa bir-kerelik gizli token ister (Railway token programatik ÜRETİLEMEZ → dashboard-only), cortex-access.env'e (600) kaydeder. doctor 'me' (account) → 'projects' (workspace) ile kapsamı otomatik ayırt eder; pg-url DATABASE_URL'i env'e YAZAR (stdout'a basmaz); railway variables --set YASAK (argv sızıntısı). İdempotent + sır-hijyenik.",
+      "prerequisites": {
+        "system": [
+          "curl",
+          "jq"
+        ]
+      },
+      "tags": [
+        "railway",
+        "erisim",
+        "platform-access",
+        "token",
+        "database",
+        "graphql",
+        "deploy",
+        "secret-hygiene"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/cloudtop (erisim-skill-fabrikasi railway reçetesi — cloudtop-vekatip izole konteynerde 14 proje canlı okundu, 7 Tem 2026)",
+      "install_time": "~2min",
+      "status": "stable",
+      "path": "railway-erisim/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global (tüm bulut projeleri — 5 konteyner ortak /config/.claude)",
+        "Nexus",
+        "cortex"
+      ],
+      "family": "platform-erisim (erisim-skill-fabrikasi ile cloudflare-erisim şablonundan üretildi)"
+    },
+    {
+      "id": "erisim-skill-fabrikasi",
+      "type": "agent",
+      "name": "Erişim-Skill Fabrikası (meta-skill)",
+      "version": "1.1.0",
+      "description": "Meta-skill: bir platform seç (Railway/GitHub/Google/Vercel/AWS/Hetzner…) → ortamı hazırla → bir-kerelik gizli giriş al → dar-yetkili token'ı üret/kaydet → o platform için tam bir <platform>-erisim skill'ini (cloudflare-erisim'i şablon + auth-reçetesini kullanarak) Sx-Claude-Skills'e scaffold et → dağıt. Platform-erişim angaryasını bir kez damıtıp otomatik üretir. recipes/ adversaryal-doğrulanmış auth bilgi tabanı.",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "curl",
+          "jq"
+        ]
+      },
+      "tags": [
+        "meta-skill",
+        "erisim",
+        "platform-access",
+        "token",
+        "scaffold",
+        "skill-uretici",
+        "secret-hygiene"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/Sx-Claude-Skills (cloudflare-erisim referans implementasyonundan damıtıldı, 6 Tem 2026)",
+      "install_time": "~5min/platform",
+      "status": "stable",
+      "path": "erisim-skill-fabrikasi/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global (tüm bulut projeleri)"
+      ],
+      "family": "meta (platform-erisim skill üreticisi — cloudflare-erisim onun referans çıktısı)"
+    },
+    {
+      "id": "ekip-kur",
+      "type": "agent",
+      "name": "Ekip-Kur — çok-ajan koordinasyon substratı",
+      "version": "1.7.0",
+      "description": "Bir projeye çok-ajan koordinasyon-sistemi scaffold'lar ve mevcut tenant'larda immutable updater ile yalnız notify/preflight kodunu atomik günceller: varsayılan dry-run, hash/mode/registry-schema/worktree ortak-ledger check'i, state/hook/ürün korunumu, exact tmux hedefi ve strict-ack sözleşmesi. Tmux-tetik primitifi 3-adım-ayrı-Enter · self-loop-guard · exact-session dürüst-warn · python3-parse fix'lerini taşır; roster parametrik ve state yüzeyleri updater allowlist'i dışındadır.",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "tmux",
+          "python3"
+        ]
+      },
+      "tags": [
+        "koordinasyon",
+        "ekip",
+        "multi-agent",
+        "tmux",
+        "orchestration",
+        "scaffold",
+        "skill-uretici",
+        "self-recognition",
+        "session-hook",
+        "roportaj",
+        "ekip-bakimi",
+        "reconcile"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/Nexus (SERDAR-ailesi aile-notify.sh koordinasyon-sistemi — 6 Tem 2026 canlı-doğrulanmış 3-adım-ayrı-Enter fix'i)",
+      "install_time": "~5min (scaffold + roster doldur)",
+      "status": "v1.7-mvp",
+      "path": "ekip-kur/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [],
+      "family": "scaffold (koordinasyon-substratı üreticisi — Nexus SERDAR-ailesi'nden damıtıldı)"
+    },
+    {
+      "id": "pr-onay",
+      "type": "agent",
+      "name": "PR-Onay — Sultan-dili özet → onay → gate'li PR+merge",
+      "version": "1.1.0",
+      "description": "İş bitince jargonsuz Sultan-dili özet + tek-soru onay-kapısı (evet/hayır/önce-diff-göster) → kalite-gate'leri GERÇEKTEN koş (tsc→vitest→temizlik+fmt; kırmızı=DUR+çıplak-çıktı+exit-kod; pipe-maskeleme yasak) → PR-aç (agent-dashboard'lu projede YOL-A: AGENT_DASHBOARD_PR_SKILL=1 marker'ı gate'ler koşulduğu için meşru-taşınır; plugin'siz projede doğrudan gh pr create) → wait-ci.sh ile CI-yeşil → merge → LEDGER'a exit-kodlu kanıt. SKIP_PR_SKILL_GATE'e asla dokunmaz. v1.1.0 (L14/F1): ajan da başlatabilir (disable-model-invocation kaldırıldı); onay-kapısı skill-İÇİNDE korunur — evet'i yalnız Sultan yazar.",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "git",
+          "gh"
+        ]
+      },
+      "tags": [
+        "pr",
+        "merge",
+        "onay",
+        "kalite-gate",
+        "sultan-dili",
+        "workflow",
+        "ci"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/Nexus (mimserdar-mimari.md PR-ONAY-AKIŞI TASARIM · YOL-A Sultan-onaylı · 7 Tem 2026)",
+      "install_time": "~1min (talimat-skill; scaffold yok)",
+      "status": "v1.0-mvp",
+      "path": "pr-onay/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [],
+      "family": "workflow (PR-yaşamdöngüsü; /agent-dashboard:pr sarmalayıcısı)"
+    },
+    {
+      "id": "sert-teslim",
+      "type": "agent",
+      "name": "Sert-Teslim — gereklilik-matrisli teslim-motoru",
+      "version": "0.2.1",
+      "description": "Gereklilik-matrisli, gaming-dirençli TESLİM-MOTORU: iş-sahibi talimatı verbatim→C-ID→M-satır; durum=türetilmiş-veri (durum_uret tek-yazar); kırmızı-kanıt+komut_sha256-kilidi; §1.5 sayaç-baseline (filtreli-koşum hash-kilitli); A1-A4 kadans + 6-koşul teslim-gate. Proje-agnostik MOTOR (config per-proje tooling/teslim/).",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "node"
+        ]
+      },
+      "tags": [
+        "teslim",
+        "dogrulama-motoru",
+        "gereklilik-matrisi",
+        "gaming-direnc",
+        "adversarial",
+        "iki-vites",
+        "portable"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "MMEx test-tooling (SADIK üretti, SİNAN 3-ajan-adversarial+mutasyon doğruladı, 8 Tem 2026; izole-konteynerden cloudtop-code'a devir)",
+      "install_time": "~2min",
+      "status": "v0.2-faz1",
+      "path": "sert-teslim/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global (tüm bulut projeleri — 5 konteyner ortak /config/.claude)"
+      ],
+      "family": "test-tooling (gereklilik-matrisli anti-false-green teslim-motoru)"
+    },
+    {
+      "id": "kesif",
+      "type": "agent",
+      "name": "Keşif — canlı-panel E2E kandırılamaz test (Playwright)",
+      "version": "0.2.0",
+      "description": "Canlı web-panel/SPA'yı root-suz Playwright ile insan-gibi çok-senaryo test eder; DOM↔API çapraz-kanıtla panel-yalanını (yanlış-renk/bayat-yeşil) saf-kodla yakalar; ULTIMATE-dogfood ile sahte-yeşil enjekte edip senaryoların gerçek-test-ettiğini kanıtlar. Config-driven (endpoint/selector/allowlist/senaryolar proje-config); origin-EXACT allowlist güvenlik-omurgası.",
+      "prerequisites": {
+        "system": [
+          "node>=18",
+          "micromamba (Chromium bootstrap, root-suz)"
+        ]
+      },
+      "tags": [
+        "test",
+        "kesif",
+        "e2e",
+        "playwright",
+        "dom-api-caprazi",
+        "false-green",
+        "enjeksiyon",
+        "portable",
+        "config-driven"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "MMEx test-tooling (SADIK üretti, SİNAN 3-ajan-adversarial+mutasyon doğruladı, 8 Tem 2026; izole-konteynerden cloudtop-code'a devir)",
+      "install_time": "~5min (+Chromium bootstrap ilk-kez)",
+      "status": "v0.2-faz2",
+      "path": "kesif/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global (tüm bulut projeleri — 5 konteyner ortak /config/.claude)"
+      ],
+      "family": "test-tooling (canlı-panel E2E false-green yakalayıcı)"
+    },
+    {
+      "id": "layiha-kapisi",
+      "type": "agent",
+      "name": "Layiha-Kapısı — iş-yakalama + Sultan-mesajı yanıt prosedürü",
+      "version": "1.1.0",
+      "description": "Sultan-sohbetinde iki tekrarlayan-anı standartlaştırır: (A) İŞ-YAKALAMA KAPISI — işten-bahis algıla, YENİ-iş mi MEVCUT-eklemesi mi ayır, YENİ ise LAYİHAYA yazmadan ÖNCE çoktan-seçmeli onay sor (Evet/Düzenle/Hayır), ekleme ise mevcut-kaydı güncelle (gürültü/dublikasyon önle). (B) SULTAN-MESAJI YANIT PROSEDÜRÜ — mesaj gelince net-hızlı sıra: oku→anla→sade-yanıtla→aksiyon-al→kapat. NOT: k#### kart tabanlı iş-takibi 2026-07-29'da emekli (ADR-026); iş-kaydı artık layihadır. Global, defansif.",
+      "prerequisites": {
+        "system": [
+          "bash"
+        ]
+      },
+      "tags": [
+        "layiha",
+        "is-yakalama",
+        "sultan-mesaji",
+        "sultan-dili",
+        "kapi",
+        "onay-gate",
+        "capture",
+        "ilerleme-akisi"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/Nexus (SERDAR-ailesi defter/mailbox akışı — Sultan-direktifi 9 Tem 2026)",
+      "install_time": "~1min (protokol-skill, script yok)",
+      "status": "v1.0",
+      "path": "layiha-kapisi/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "sultan-akisi (defter-etkileşim protokolü)"
+    },
+    {
+      "id": "pcloud-erisim",
+      "type": "agent",
+      "name": "pCloud Erişim (panele girmeden dosya/link)",
+      "version": "1.1.0",
+      "description": "pCloud işlerini (dosya listele/yükle/indir, public-link) saf API (curl+jq) ile yapar. Vault-first: token'ı önce vault-cek(Infisical), sonra cortex-access.env'den DEĞER-görmeden çözer. OAuth access_token (EU/eapi host, query-param). Sır-hijyenik. (erisim-skill-fabrikasi ürünü.)"
+    },
+    {
+      "id": "notion-erisim",
+      "type": "agent",
+      "name": "Notion Erişim (SALT-OKUR · panele girmeden)",
+      "version": "1.0.0",
+      "description": "Notion okuma işlerini (db-list, db-query, page-get, file-download) saf API (curl+jq) ile yapar. YAZMA FİİLİ YOK. Vault-first jeton çözümü (vault-cek → cortex-access.env), zorunlu Notion-Version başlığı, gerçek sayfalama (has_more/next_cursor), imzalı-süreli dosya URL'lerini anında indirme. (erisim-skill-fabrikasi ürünü · pcloud-erisim emsali.)"
+    },
+    {
+      "id": "elogo-erisim",
+      "type": "agent",
+      "name": "e-Logo Erişim (panele girmeden SOAP WS)",
+      "version": "1.7.0",
+      "description": "e-Logo (e-Fatura/e-Arşiv) işlerini saf SOAP WS ile yapar: durum sorgula, PDF/UBL indir. Vault-first sır-çözüm + tek-sefer gizli-intake. SALT-OKUR + kuyruk-güvenli (prod B2B senkronunu bozmaz). (erisim-skill-fabrikasi ürünü.)"
+    },
+    {
+      "id": "erisim",
+      "type": "agent",
+      "name": "/erisim — Erişim-Zinciri dispatcher (tek giriş-noktası)",
+      "version": "1.1.0",
+      "description": "Ajanın erişim-ihtiyacında TEK komut: skill VAR→delege (vault-first sır-çözüm), YOK→SERDAR'a Skill-İstek emit (F5-kanal, geçici-konvansiyon key=SKILL:<platform>), sır-eksik→--sir-iste Sultan'a Vault-İstek. doctor 3-durum. Değer stdout/log/chat'e ASLA. (Erişim-zinciri DESIGN §A.)"
+    },
+    {
+      "id": "vault-cek",
+      "type": "agent",
+      "name": "vault-cek — merkezî-vault seam (store-agnostik)",
+      "version": "1.4.0",
+      "description": "Sır-çözüm seam'i: doctor·resolve·get <KEY>·list·put <KEY>·backend kontratı; `put` (L68/F1) kasaya YAZAN kalem — değer stdin/ortamdan gelir, argv'ye düşmez, üzerine-yazma fail-closed, çıktı yalnız hedef+http+version (yalnız openbao backbone'unda); vault-cek.sh artık DİSPATCHER — backbone veriden seçilir ($VAULT_BACKEND → ~/.config/vault-backend → varsayılan openbao). Aktif: OpenBao KV-v2+AppRole (L54 cutover 2026-08-07); fallback: Infisical (30-gün salt-okur), legacy: Railway. Değer stdout'a basılmaz (600 env-dosyasına yazar). Öneksiz KEY çözümü v1.4.0'dan itibaren KENDİ-KİRACI-ÖNCE: önce kutunun kendi kiracı klasörü, bulunamazsa shared (kiracı adı login yanıtından türetilir — ek ağ turu yok; türetilemezse sessizce shared). Açık `<KAYNAK>__<KEY>` hedefi ve `put` davranışı değişmedi. Erişim-skill'lerinin vault-first temeli."
+    },
+    {
+      "id": "seyir-defteri",
+      "type": "agent",
+      "name": "/seyir-defteri — keşif-günlüğü + döngü-refleksiyon (GLOBAL)",
+      "version": "1.2.0",
+      "description": "Çok-ajanlı işte yan-keşiflerin (aslında-şöyleymiş · bug · risk · fırsat · itiraz) SESSİZCE ATLANMAMASI için append-only günlük: her-ajan tek-komut yazar (sev×tür iki-eksen), koordinatör filtreli okur+disposition işaretler; opsiyonel döngü-sonu refleksiyon-ritüeli ('döngü bitti, plan moduna geçelim' → 4-soru + döngü-özet + hafıza-köprüsü) + geçici-md migrate (idempotent). jsonl 3-event (not/disp/ozet), satır-edit-yok, flock-güvenli, git-kök-resolve, proje-agnostik. Kültür-kuralı gömülü: orkestraya itiraz SERBEST+TEŞVİKLİ. (SİNAN/MMEx + HEKİMBAŞI/medigate birleşik-talebi; MİMSERDAR-spec.) · 1.2.0 (2026-09-03): kardeş araç `zeyl` AYNI deftere yazdığı için kapalı kümeler açıldı — tur+=gereklilik, durum+=ham|yapildi. `onaylandi` BİLEREK açılmadı (insan alanı, A06). Bu delta olmadan zeyl'in kayıtları burada süzülemiyor ve işaretlenemiyordu."
+    },
+    {
+      "id": "zeyl",
+      "type": "agent",
+      "name": "/zeyl — Sultan'ın söylediği gereklilik uçmasın (GLOBAL)",
+      "version": "1.0.1",
+      "description": "Gün içinde söylenen gereklilikleri sessizce seyir-defterine düşürür ve verdikt almadan yaşamalarına izin vermez. Ölçüldü: 6 günde 72 kalemin 45'i (%62) hiçbir dosyaya inmemiş, compaction 3'ünü yemiş, Sultan aynı şeyi tekrar söylemek zorunda kalmış. YENİ DEPO AÇMAZ — seyir-defterinin kendi dosyasına aynı şemayla yazar (üç delta: tur=gereklilik, kaynak+tur_no provenans, durum=ham|yapildi). Kanıtsız 'yapıldı' REDDEDİLİR; sebepsiz 'düştü' REDDEDİLİR; defter yoksa rc=2 'ölçülemedi' (temiz DEĞİL). `onaylandi` alanı YOK — o insan alanıdır (A06). 20 kapı, çift yönlü fikstür (ALTIN yüz boş defterin onurlu olduğunu kilitler). MİHENK/NİŞANCI yazdı ve o kutuda kanıtladı; merkez globalleştirdi — devirde iki kutu-özgü kusur düzeltildi: defter betiğin yanında aranıyordu (global kurulumda 15 kutunun ortak dizinine düşerdi, İ1 ihlali) ve kimlik MİHENK'e sabitlenmişti. · 1.0.1: özetin bastığı reçete ölü uçtu ('bash scripts/zeyl.sh' global kurulumda yok) — koşulan yoldan türetiliyor; G-D/G-D2 kapıları reçeteyi KOŞARAK ölçer."
+    },
+    {
+      "id": "ahi",
+      "type": "agent",
+      "name": "AHÎ — 4-kademe AI-yetenek-üretim fabrikası",
+      "version": "0.4.0",
+      "description": "Yeni-skill üretimini tek-standarda oturtan fabrika: Çırak→Kalfa→Usta→Pîr kademeleri; komutlar `ahi new|check|promote|deprecate|classify|health`. DOCTRINE.md kanonu + zero-dep validator; ADR-001 drift-otorite-ayrımı (ahi.sh sync-targets'a YAZMAZ — install-girdisi insan/PR işi).",
+      "tags": [
+        "fabrika",
+        "skill-üretim",
+        "tier",
+        "doctrine",
+        "kalfa"
+      ],
+      "author": "sultanxgokce",
+      "source": "helpSerdar komisyon-1 (PR #7-#11); dağıtım-kararı: _global-only (Sultan 2026-07-13, Nexus HOLDING-ATLAS §8)",
+      "status": "v0.1-faz0a",
+      "path": "ahi/SKILL.md",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "fabrika (skill-yaşamdöngüsü; tier-standardı)"
+    },
+    {
+      "id": "sultanca",
+      "type": "skill",
+      "name": "sultanca — Sultan üslûbu (yaşayan dil & çıktı-tercih modeli)",
+      "version": "0.1.0",
+      "description": "Sultan'a NASIL konuşulacağını (dil) ve Sultan-yüzlü çıktının NASIL biçimleneceğini (format) yöneten yaşayan-model: UYGULA / ÖĞREN / SORGU üç-yüzü. Tek-kaynak store /config/.claude/sultan-uslubu.md (git-DIŞI, VERİ-sınıfı — skill kodu store'a yalnız işaret eder, içerik taşımaz).",
+      "tags": [
+        "sultan-dili",
+        "üslûp",
+        "yaşayan-skill",
+        "sürekli-öğrenen"
+      ],
+      "author": "sultanxgokce",
+      "source": "öksüz-adoption — evergreen tek-düğme kampanyası FAZ-1 (P1-lint bulgusu, 2026-07-13)",
+      "status": "canli",
+      "path": "sultanca/SKILL.md",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "sultan-dili (üslûp-modeli; sultan-ogren ile kapalı-döngü)"
+    },
+    {
+      "id": "sultan-ogren",
+      "type": "skill",
+      "name": "sultan-ogren — Sultan-tercihi hızlı-yakala (manuel-hat)",
+      "version": "0.1.0",
+      "description": "Sultan'ın dil/biçim tercihini üslûp-modeline aday-kayıt olarak HIZLI kaydeder (ogren.sh tek-yazar helper). disable-model-invocation: açık-tetik. sultanca'nın kapalı-döngü eşi.",
+      "tags": [
+        "sultan-dili",
+        "öğrenme",
+        "yakalama"
+      ],
+      "author": "sultanxgokce",
+      "source": "öksüz-adoption — evergreen tek-düğme kampanyası FAZ-1 (P1-lint bulgusu, 2026-07-13)",
+      "status": "canli",
+      "path": "sultan-ogren/SKILL.md",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "sultan-dili (üslûp-modeli; sultanca ile kapalı-döngü)"
+    },
+    {
+      "id": "sunucu-kur",
+      "type": "agent",
+      "name": "sunucu-kur — VPS provizyon standardı (toolkit + cloud-init)",
+      "version": "1.1.0",
+      "description": "Reis yeni sunucu isteyince ELLE kurma yerine tek-standart provizyon: hcloud/cloud-init tabanlı VPS-kur (uid-1500-fix) + runbook. create=Sultan-gate (yıkıcı-sınıf); sır-değeri basmaz.",
+      "tags": [
+        "vps",
+        "provizyon",
+        "cloud-init",
+        "altyapı",
+        "sunucu"
+      ],
+      "author": "sultanxgokce",
+      "source": "öksüz-adoption — evergreen tek-düğme FAZ-1 devamı (2026-07-13)",
+      "status": "canli",
+      "path": "sunucu-kur/SKILL.md",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "altyapı (provizyon-standardı)"
+    },
+    {
+      "id": "sert-dongu",
+      "type": "agent",
+      "name": "sert-döngü — keşif×sert-teslim kapalı-döngü yürütücü",
+      "version": "0.2.0",
+      "description": "kesif × sert-teslim kapalı-döngü yürütücü (loop-engineering). SERDAR promote-işi (PR#5) — sync-targets'ta vardı, catalog-girdisi eksikti (evergreen-parity yakaladı).",
+      "tags": [
+        "loop",
+        "kesif",
+        "sert-teslim",
+        "döngü"
+      ],
+      "author": "sultanxgokce",
+      "source": "catalog-gap-fix — evergreen-parity P1 bulgusu (2026-07-13)",
+      "status": "canli",
+      "path": "sert-dongu/SKILL.md",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "loop-engineering"
+    },
+    {
+      "id": "tescil",
+      "type": "agent",
+      "name": "Tescil — MÜHÜRDAR kör-protokol tescil-kabuğu (DİVAN K5)",
+      "version": "0.2.1",
+      "description": "Teslim edilen işi (kart) YAZILI gerekliliklere (GOAL+G1..Gn komut→beklenen/RC) karşı MAKİNE-KANITLI sınayan kör-protokol tescil-kabuğu. Girdi yalnız GEREKLILIK.md + worktree (motor-raporu/transkript okumak İHLAL); Katman-1 mekanik-oracle %100 şart, Katman-2 yalnız kaçınılmaz öznel G'ler (izole-rubrik, 'emin değilim'→eskalasyon). Verdikt = MUHUR.md + şemalı kanit/G<i>.json (64KB-tavan + sha256; redaction yazım-öncesi); kart-durum flip'i YAPMAZ. sert-teslim (trust_boundary + redaction) ve kesif (DOM↔API E2E) KOMPOZİSYONU — yeniden icat yok. İş-tipi asgari-kanıt zorlayıcı (ui→e2e-check, kod→api-check, docs→lint) + HAFİF-tescil sınıfı + tatbikat/telemetri anti-tiyatro kablosu. TestSprite 2026-07 değerlendirildi, 4 gerekçeyle evde kalındı (verdict-otoritesi asla dışarı verilmez).",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "node>=18",
+          "python3",
+          "git"
+        ]
+      },
+      "tags": [
+        "tescil",
+        "muhurdar",
+        "divan",
+        "kor-protokol",
+        "makine-kanit",
+        "oracle",
+        "anti-tiyatro",
+        "test-tooling"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "DİVAN-anayasası K5 (k0054, 2026-07-14) — sert-teslim + kesif kompozisyonu; ahi new kalfa tescil ile doğdu",
+      "install_time": "~2min",
+      "status": "v0.2",
+      "path": "tescil/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global (tüm bulut projeleri — ortak /config/.claude)"
+      ],
+      "requires": [
+        "sert-teslim",
+        "kesif"
+      ],
+      "family": "test-tooling (sert-teslim/kesif ailesi — MÜHÜRDAR verdikt-kabuğu)"
+    },
+    {
+      "id": "kayit-damgasi",
+      "type": "agent",
+      "name": "kayit-damgasi — merge-anı kayıt kapanış-damgası orkestratörü",
+      "version": "1.1.0",
+      "description": "Bir iş/PR merge olurken kapattığı kayda (defter-kartı, gap/bulgu-defteri, SULTAN-KAPISI gate'i, plan-satırı) kapanış-damgasını işleyen paketli yardımcı. CLAUDE.md §9 refleksini tek-komuta indirir; scripts/layiha-defteri.sh durum primitifini orkestra eder. DRY-varsayılan (tara/merge yazmaz) + insan-onay-alanına ASLA yazmaz (yalnız bitti|teslim|yeniden kart-flip'i). Kaynak: vizyon-denetimi FAZ-2 İLK-DALGA Z6 (YK-007), defter-kartı k0107.",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "git"
+        ]
+      },
+      "tags": [
+        "defter",
+        "damga",
+        "merge",
+        "kayit",
+        "closure-stamp",
+        "yaglayici"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/Nexus (vizyon-denetimi FAZ-2 İLK-DALGA Z6 — YK-007, k0107)",
+      "install_time": "~1min",
+      "status": "v0.1",
+      "path": "kayit-damgasi/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "yaglayici (vizyon-FAZ2 İLK-DALGA)"
+    },
+    {
       "id": "worktree-hijyen",
       "type": "agent",
       "name": "worktree-hijyen — git-worktree yaşam-döngüsü zorlayıcı",
@@ -1531,6 +863,653 @@
         "_global"
       ],
       "family": "yaglayici (vizyon-FAZ2 İLK-DALGA)"
+    },
+    {
+      "id": "resume-banner",
+      "type": "agent",
+      "name": "resume-banner — oturum-açılış / post-compact KONUM-toparlayıcı",
+      "version": "0.1.0",
+      "description": "Oturum-açılış ve post-compact/resume anında 'neredeyiz' toparlamasını tek-komuta indiren kalfa skill: env-fingerprint (pwd/hostname/git) + son CONTEXT ⚓-çıpası + son defter-çıpası (+cortex STATE) + post-compact 4-zorunlu hatırlatmaları. CLAUDE.md post-compact refleksini tek harekete indirir; doctor.sh'ı tamamlar. SALT-OKU + token-güvenli (büyük dosya tam-dökmez). Kaynak: vizyon FAZ-2 İLK-DALGA Z5 (YK-007), k0110.",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "git"
+        ]
+      },
+      "tags": [
+        "resume",
+        "compact",
+        "konum",
+        "env-fingerprint",
+        "oturum",
+        "yaglayici"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/Nexus (vizyon-denetimi FAZ-2 İLK-DALGA Z5 — YK-007, k0110)",
+      "install_time": "~1min",
+      "status": "v0.1",
+      "path": "resume-banner/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "yaglayici (vizyon-FAZ2 İLK-DALGA)"
+    },
+    {
+      "id": "iskan",
+      "type": "agent",
+      "name": "İSKÂN — container + ekip yaşam-döngüsü master-skill (Usta · bileşik)",
+      "version": "0.10.1",
+      "description": "Container + ekip yaşam-döngüsü master-skill: bir hedef (yeni-proje / mevcut-ekip-yeniden-doğuşu / tek-üye-ekleme) için host-provizyon (UC1 yeni-proje), oturum-kurtarma (UC2 seans-getir, deterministik session-id), üye-ekleme (UC3) akışlarını ekip-kur/ise-alim/sunucu-kur/cloudflare-erisim'i BESTELEYEREK tek-komuta indirger. Kendi owner-domain'i: container-provizyon host-adaptörü + tmux-oturum açma/casing/session-id rezervasyonu + CF-hostname orkestrasyonu + evergreen-manifest oto-yazımı; bestelediği kardeşlere YAZMAZ (ADR-001 owner-domain-dokunma). D6: `kur <proje>` zincirleyicisi — UC1 tam-yaşamdöngüsünü duraklı durum-makinesi olarak besteler (DURAK-1 cloudtop-PR merge; GO-marker'lar bypass edilmez, exit-4 aynen iletilir; --dry-run/--devam/--durum).",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "git"
+        ]
+      },
+      "tags": [
+        "iskan",
+        "bilesik",
+        "container-yasamdongusu",
+        "ekip-yerlestirme"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "İSKÂN programı FAZ 0-9 + söküm kör-tescilli (Nexus k0067-k0084; damga #494-502) — ahi usta-kademe bileşik-fabrika",
+      "install_time": "~2min",
+      "status": "v0.1-usta",
+      "path": "iskan/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global",
+        "cloudtop"
+      ],
+      "requires": [
+        "ekip-kur",
+        "ise-alim",
+        "sunucu-kur",
+        "cloudflare-erisim"
+      ],
+      "family": "fabrika (container+ekip yaşam-döngüsü; İSKÂN)"
+    },
+    {
+      "id": "federe-os-cekirdek",
+      "type": "agent",
+      "name": "/federe-os-cekirdek — Federe Ekip-OS çekirdek-protokolleri (C3/D7)",
+      "version": "0.5.0",
+      "description": "Federe Ekip-OS A/B protokolleri tek pakette (k0180): tetikleme poll+ACK (A1/A4) · not-tutma (A2/B1) · haberleşme yalnız-META (B2) · nabız (A3) · hafıza-vatandaşlığı (B3). Taşınabilir istemci scripts/federe.sh (Nexus-repo'suz container'da da çalışır); poll-cron reçetesi GO-1 token-kapılı. CLAUDE.md'lere yalnız pointer — tek-güncelleme-noktası. 0.5.0 (2026-08-27, KATLAMA F1): gonder --tip (mesaj|is|devir) + bilinmeyen-bayrak RC=2 + geri-al ters-kayıt (K4/K5, NÂZIR-mutabık).",
+      "installed_in": [
+        "_global"
+      ],
+      "path": "federe-os-cekirdek/",
+      "status": "v0.1-mvp",
+      "stacks": [
+        "*"
+      ],
+      "tags": [
+        "federe",
+        "ekip-os",
+        "tetik",
+        "poll",
+        "nabiz",
+        "kontrol-duzlemi",
+        "meta-only",
+        "k0180"
+      ],
+      "source": "Nexus scripts/federe-tetik.sh (FAZ-1 · PR#560) filo-taşınabilir uyarlaması",
+      "author": "sultanxgokce"
+    },
+    {
+      "id": "kapimda",
+      "type": "tool",
+      "name": "kapımda — Sultan'ı bekleyen işlerin yazıcısı + lint'i",
+      "version": "1.7.0",
+      "description": "kapimda.md kartlarını fail-closed SEKİZ lint kapısından geçirerek yazar (dört zorunlu alan · 'Niçin sen' boşsa kart AÇILAMAZ · tavan 3 · ad tekilliği · Sultan-dili/İ1 kalkanı · tek-eylem · sır-desen · uzunluk), kartı kapatır (A06: onay DEĞİL, görünürlük) ve elle-yapılacak işler için tek-mesaj-tek-adım motorunu yürütür (plan diske, ekrana yalnız sıradaki adım). Kanon: L38-F3/F4 + L39 (MABEYN H2 + 9-karar 2026-08-11). GLOBAL: 16 kutu aynı /config/.claude/kapimda.md dosyasını görür; karşılama ekranı bu kartları çizer. Kart DEVRİ (L47/F5): kart bir ajana şutlanabilir (🎯 <AJAN> damgası, Sultan sayımından düşer); Sultan kapısından iş çıkarmak Sultan-onayı ister (A06); 3. devirde kart Sultan hakemliğine döner. KART KAYNAĞI (L48/G1): her kart doğduğu anda 'oda: <kutu>' damgası alır (otomatik, kutunun çalışma alanından türer; türetilemezse 'bilinmiyor' — uydurma YOK). Kaynak ≠ sahip: devir kaynağı ezmez, damgasız eski kartlara köken uydurulmaz. VARSAYILAN GÖRÜNÜM (L48/G2, v1.4.0): liste artık yalnız BU odanın kartlarını + damgasız (kökeni bilinmeyen) kartları gösterir; başka odaların işi gizlenmez, tek satırlık dipnota iner ('… N iş başka odalarda') ve --hepsi ile tam liste açılır. Tavan-3 bilerek GLOBAL kaldı. ADIM-BLOĞU (L39, v1.5.0): 🛠️ ŞİMDİ SEN bloğu artık K9 kart-çapası (kartsız adım RED) + K10 N-dürüstlüğü (uydurma toplam RED) + yumuşak-kilit (açık adım varken yeni adım → UYARI, engellenmez) + A06 cevap-alanı korumasına (kapimda lint) bağlı. SAHİP-KÖR TEKİLLİK (L49, v1.6.0): ad-tekilliği kapısı artık devredilmiş (🎯) ve tıkanmış (⚠️) kartı da görür (aynı ad ikinci kez açılamaz), `bitti` onları kapatabilir ve yeni `sahip` komutu otomasyona ham sahip bilgisini verir — tavan-3 semantiği DEĞİŞMEDİ. GÖVDE TAZELEME (L49-B, v1.7.0): yeni `tazele` komutu AÇIK bir kartın gövdesindeki SAYI/DURUM yüzeylerini (özet + yaş/engel satırı) yeniler — kart açıldığı andaki sayıyı DONDURUYORDU (ölçülmüş vaka: gövdede 'iki oda talebi cevapsız' yazarken gerçek sayı 48'di). Yalnız verilen alanı günceller, kart KİMLİĞİNE (açılış damgası · oda kaynağı · devir geçmişi · dört alan) DOKUNMAZ, idempotenttir (aynı içerik → dosyaya hiç yazmaz), devredilmiş/tıkanmış kartta da çalışır ve K5/K7/K8 lint kapılarından geçer.",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "flock"
+        ]
+      },
+      "tags": [
+        "sultan-yuzu",
+        "blokaj",
+        "onay",
+        "global",
+        "mabeyn"
+      ],
+      "installed_in": [
+        "_global"
+      ]
+    },
+    {
+      "id": "layiha",
+      "type": "workflow",
+      "name": "Layiha — araştır → kalıcı sabitle → inşayı sonraya bırak",
+      "version": "1.15.1",
+      "description": "Bir konuyu kapsamlı ARAŞTIR (SERDAR-altı araştırma alt-ajanı), kalıcı bir tasarım-dokümanına (layiha) SABİTLE, inşayı SONRAYA bırak. 3-kanal kayıt (git-durable PR + memory-topic + defter) + kayıt-defteri (layiha-defteri.sh: ekle/durum/liste; her kayıt <CELL>-L## kodu — CELL_ID unset → s01, K6 2026-08-10; eski öneksiz L## kodlar geri-uyumlu — + oluşturulma-tarihi + durum) + Sultan'a sabit-format teslim (Araştırıldı/Doküman/Context-odak-cümlesi). Zaman-filtreleri: --aktif/--bugun/--hafta/--hafta-bitmemis/--hepsi. SALT-ARAŞTIRMA — inşa-yetkisi VERMEZ; her build Sultan-GO. GLOBAL, defter per-container (İ1). v1.2: bağımsız-tescil kapısı (insa-edildi≠tescilli; MÜHÜRDAR kör-tescil reuse; tescilli/reddi/muaf + tescil-bekleyen filtresi). K1-K7 (2026-08-27): isteyen/yetki alanları + liste --sultan/--ajan + oda-önekli kod kabulü + insa-ediliyor --izin ZORUNLU.",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "python3",
+          "git"
+        ]
+      },
+      "tags": [
+        "arastirma",
+        "design",
+        "layiha",
+        "defer-build",
+        "kayit-defteri",
+        "memoranda",
+        "serdar",
+        "global",
+        "provenance"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/Nexus (SERDAR — araştır-sonra-inşa deseni; Osmanlıca 'lâyiha'=karar-merciine sunulan tasarı)",
+      "install_time": "~1min (talimat + layiha-defteri.sh yardımcısı)",
+      "status": "v1.2-mvp",
+      "path": "layiha/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "workflow (araştır→sabitle→sonraya-bırak; SERDAR meta-akışı)"
+    },
+    {
+      "id": "kasif-tara",
+      "type": "agent",
+      "name": "kasif-tara — KAŞİF dış-tarama kabuğu (fikir-hattı dış-ucu)",
+      "version": "1.4.2",
+      "description": "DİVAN fikir-hattının dış-ucu: Sultan-ayarlı konularda (_agents/kasif/konular.md) web'i tarar, kanıtlı ham-malzemeyi YALNIZ bulgu-havuzuna yazar (scripts/kasif-havuz-ekle.sh — tek yazma-yüzeyi). Deftere/karta/arza DOKUNMAZ, MUCİT'i atlayamaz; her bulgu kaynak-URL kanıtı ister (fail-closed). Kesin süzme (dedup/MİHENK-deny/tavan) downstream MUCİT-T1'de. L24 Layiha Fabrikası'nın dış-uç bileşeni.",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "jq",
+          "git"
+        ]
+      },
+      "tags": [
+        "layiha-fabrikasi",
+        "kasif",
+        "fikir-hatti",
+        "tarama",
+        "divan",
+        "global"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/Nexus (DİVAN k0054 doktrin §5/§9; L24 Layiha Fabrikası FAZ-3 — Çırak→Kalfa terfisi)",
+      "install_time": "~1min",
+      "status": "v1.0-kalfa",
+      "path": "kasif-tara/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "fikir-hatti (L24 Layiha Fabrikası; mucit-suz ile ardışık)"
+    },
+    {
+      "id": "mucit-suz",
+      "type": "agent",
+      "name": "mucit-suz — MUCİT fikir-süzme kabuğu (T1-mekanik + T2-muhakeme)",
+      "version": "1.8.0",
+      "description": "DİVAN bulgu-havuzunu acımasızca süzüp Sultan-dilinde aday önerir. T1 = scripts/mucit-t1.sh ($0-mekanik: uygunluk · kanıt-kapısı · MİHENK-deny · kart-dedup · dönem-tavanı RC≠0); T2 = repo-grep 'zaten var mı' + Sultan-dili aday-yazımı + etki×kolaylık×kanıt×uyum puanı. Profil-parametrik: divan (hafta/≤3, DİVAN-ANAYASA §8) vs layiha (gün/10, AYRI defter — §8 kotasını TÜKETMEZ). Kuyruğa kartı MUCİT SOKAMAZ; aday→kuyruk her zaman Sultan tek-tuşundan geçer.",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "jq",
+          "git"
+        ]
+      },
+      "tags": [
+        "layiha-fabrikasi",
+        "mucit",
+        "fikir-hatti",
+        "suzme",
+        "divan",
+        "global"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/Nexus (DİVAN k0054 doktrin §9; L24 Layiha Fabrikası FAZ-3 — Çırak→Kalfa terfisi)",
+      "install_time": "~1min",
+      "status": "v1.0-kalfa",
+      "path": "mucit-suz/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "fikir-hatti (L24 Layiha Fabrikası; kasif-tara'nın alıcısı)"
+    },
+    {
+      "id": "layiha-fabrikasi",
+      "type": "agent",
+      "name": "layiha-fabrikasi — L24 Layiha Fabrikası (Usta · bileşik · kill-switch'li)",
+      "version": "1.5.0",
+      "description": "DİVAN fikir-hattını (KAŞİF dış-tarama → bulgu-havuzu → MUCİT süzme → aday-havuzu → Sultan tek-tuş terfi) tek-çatı altında toplayan Usta-paket: kasif-tara + mucit-suz'ü besteler, layiha (defter) üzerine oturur; bestelediği kardeşlere YAZMAZ (ADR-001 owner-domain-dokunma). Kill-switch: scripts/layiha-fabrika.sh kapat --sebep → bayrak /config/.claude/layiha-fabrikasi.kapali; ortak _global bind-mount sayesinde 10/10 container'da AYNI ANDA etkili, fail-closed. Kapsam DAR: yalnız layiha üretim-bandı durur — aday-havuzu CRUD (ekle/liste/göster/terfi) ve DİVAN'ın kendi fikir-hattı (profil=divan) ETKİLENMEZ. v1.5.0: layiha-aday-havuzu.sh `ekle` — tek-kayıt ekleme (flock + atomik os.replace + alt-string dedup), fabrika-turu beklemeden tekil fikri havuza sokar (K3; oto-yakalama kancasının hedefi).",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "jq",
+          "git"
+        ]
+      },
+      "tags": [
+        "layiha-fabrikasi",
+        "bilesik",
+        "fikir-hatti",
+        "kill-switch",
+        "usta",
+        "global"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/Nexus (_agents/spec/layiha-fabrikasi-DESIGN.md — L24; FAZ-1 PR#653, FAZ-2 PR#655)",
+      "install_time": "~2min",
+      "status": "v1.0-usta",
+      "path": "layiha-fabrikasi/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global"
+      ],
+      "requires": [
+        "layiha",
+        "kasif-tara",
+        "mucit-suz"
+      ],
+      "family": "fabrika (L24 Layiha Fabrikası; kasif-tara+mucit-suz bestecisi)"
+    },
+    {
+      "id": "kapi-yolu",
+      "type": "agent",
+      "name": "kapi-yolu — Çok-Model Kapısı Yolu (kur · aç · denetle · yay)",
+      "version": "1.1.0",
+      "description": "L25 kapı şeridinin tek giriş-noktası (Usta/bileşik): host-geçidi kurucusu (kapi-kur.sh), istemci kurucusu (setup-kapi.sh), `kapi` başlatıcısı (tek şerit-otoritesi), anahtar-temini (istemci-anahtar.sh → vault-cek) ve geri-alma düğmesini (ocak/model-modu.sh) BESTELER — kendi ssh/docker/curl kodunu yazmaz. Filo-yayılımı kuru-koşu varsayılan (scripts/kapi-yay.sh): 8/10 kutu cloudtop reposunu GÖRMEZ (firsthand ölçüldü) → istemci yüzeyi ortak mount'a dağıtım-kopyası olarak basılır, kutu başına tek ve aynı komut kalır. Değişmezler: varsayılan `claude` şeridi dokunulmaz · settings.json'a env YAZILMAZ · sessiz düşme yok · sır argv/log'a düşmez.",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "curl",
+          "claude >= 2.1.129 (geçit-model-keşfi; yoksa /model menüsü kapı modellerini listelemez)"
+        ]
+      },
+      "tags": [
+        "kapi-yolu",
+        "serit",
+        "cok-model",
+        "l25",
+        "bilesik",
+        "usta",
+        "evergreen",
+        "yayilim"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "https://github.com/sultanxgokce/cloudtop (infra/kapi — L25 Dalga 1-4)",
+      "install_time": "~2min",
+      "status": "v1.0-usta",
+      "path": "kapi-yolu/SKILL.md",
+      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "kapi (L25 çok-model şeridi)",
+      "requires": [
+        "vault-cek",
+        "bulut-yapilandir"
+      ]
+    },
+    {
+      "id": "ekip",
+      "type": "agent",
+      "name": "EKİP — kutu-içi masa önizlemesi (süz → onar → listele)",
+      "version": "1.1.0",
+      "description": "Bu kutudaki ekibin masalarini once SUZ (eksik/bos/fazla), gerekirse ONAR (kapanmis oturumu ac, Claude'u baslat), sonra Sultan-dilinde LISTELE: ajan adlari, tmux adlari, geri donmek/baslatmak icin komutlar. Onarim yikici-degil: oturum silmez, mesgul masaya dokunmaz, calisan Claude'u yeniden baslatmaz (idempotent). Filo-geneli gorunum ayri: /filo.",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "kutu-ici koordinasyon"
+    },
+    {
+      "id": "kesif-hatti",
+      "type": "agent",
+      "name": "KEŞİF HATTI — ham bulgudan onaya giden hattın penceresi",
+      "version": "1.1.1",
+      "description": "Bu kutudaki kesif hattini tek ekranda gosterir: kac HAM bulgu, kaci suzuldu ve hangi etiketi aldi, kaci ADAY oldu, son tur ne zaman kostu. SALT-OKUR ve SUZME YAPMAZ (suzmek MUCIT'in isi: /mucit-suz) — 'en iyi bulgular' demez, sahte-sentez uretmez. YOK != BOS: defter yoksa 'kayit yok' der, sifir yazmaz. Tekrar-suzme korumasini gorunur kilar (defterde karari olan bulgu bir daha suzmeye girmez).",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "kutu-ici koordinasyon"
+    },
+    {
+      "id": "seans",
+      "type": "agent",
+      "name": "SEANS — sohbet yonetimi + ekip kisayollari",
+      "version": "1.13.0",
+      "description": "Claude sohbetlerini listeleme/geri getirme/yeni acma motoru (cs) HER KUTUDA. Motor burada tek kopya yasar; cloudtop'taki eski cagri yolu ince kopruyle korunur (iki kopya yok, drift yok). Turkce kapilar: sessiongetir (kapanani geri getir) - yenisession (ad sorup acar, --yan ile ekrani boler) - gruba (projenin WhatsApp grubuna yaz) - yardim (komut listesi + kilavuz adresi). MAHREMIYET: cok-insanli kutuda liste kutu-yerel; tenant kutusunda yalniz kendi projesi gorunur, bilinmeyen gizlenir (fail-closed). KOLTUK CAKISMASI: kendi-kopyam masaya ayri calisma kopyasi (git worktree) acar; basla ekrani paylasimi gorunur kilar (olcemezse sayi uydurmaz).",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "kutu-ici koordinasyon"
+    },
+    {
+      "id": "ui-tasarim-akisi",
+      "sync_dagitim": true,
+      "type": "workflow",
+      "name": "UI Tasarım Akışı",
+      "version": "0.4.0",
+      "description": "UI/arayüz tasarım işinin ZORUNLU akış kapısı: ürün niyeti → sayfa envanteri → senaryolar (tık bütçesi) → ÇEKİRDEK+MARKA sözleşmesi → Claude design promptu → devam promptu + üç denetim. 'UI işi · arayüz · ekran tasarla · sayfa tasarımı · frontend görünüm · panel · layout · stil' tetiğinde çağrılır. /frontend-design ile BİRLİKTE zorunlu — biri ötekinin yerine geçmez.",
+      "prerequisites": {
+        "backend": [],
+        "frontend": []
+      },
+      "tags": [
+        "ui",
+        "tasarim",
+        "akis",
+        "prompt",
+        "kalfa"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "huzur kutusu (HUZUR ekibi) — SERDAR paketledi",
+      "install_time": "5 dk",
+      "status": "v0.1-canli",
+      "path": "ui-tasarim-akisi/",
+      "installed_in": []
+    },
+    {
+      "id": "sultan-eli",
+      "type": "agent",
+      "name": "sultan-eli — geri alınamaz kapılarda insan-eli ölçümü",
+      "version": "0.1.0",
+      "description": "A06 kapı-kaynağı ölçümü: Sultan'ın `!` komutu oturum kaydına <bash-input> olarak düşer, ajanınki düşmez; kapı bu izi imzaya+zamana bağlar. Yalnız geri alınamaz kapılarda kullanılır (Sultan kararı 2026-08-04). Kilit değil korkuluk: kazayı durdurur, kastı durdurmaz. Üç-durum: 0 var · 1 yok · 3 ÖLÇÜLEMEDİ (3≠1).",
+      "tags": [
+        "onay",
+        "kapi",
+        "guvenlik",
+        "a06",
+        "sultan-gate"
+      ]
+    },
+    {
+      "id": "defter-kapisi",
+      "type": "agent",
+      "name": "defter-kapisi — görev-yakalama + mailbox-yanıt prosedürü",
+      "version": "0.2.0",
+      "description": "Sultan'la doğal-dil sohbette iki tekrarlayan-anı standartlaştırır: (A) GÖREV-YAKALAMA KAPISI — yeni-görev mi/mevcut-eklemesi mi ayrımı, yeni ise deftere yazmadan önce çoktan-seçmeli onay; (B) MAILBOX-YANIT PROSEDÜRÜ — kart-oku→anla→Sultan-dilinde-yanıtla→aksiyon-al→thread-kapat. ÖKSÜZDÜ — evergreen-parity 2026-08-10 yakaladı, hiçbir git kaynağında yoktu.",
+      "tags": [
+        "defter",
+        "gorev-yakalama",
+        "mailbox",
+        "sultan-dili",
+        "kapi",
+        "onay-gate",
+        "capture",
+        "ilerleme-akisi"
+      ],
+      "author": "sultanxgokce",
+      "source": "öksüz-adoption — evergreen tek-düğme hijyeni (2026-08-10)",
+      "status": "EMEKLI (KATLAMA F1 2026-08-27, Sultan K#5; halef: layiha akisi)",
+      "path": "defter-kapisi/SKILL.md",
+      "installed_in": [],
+      "family": "sultan-dili (kapı-standardı)",
+      "sync_dagitim": false
+    },
+    {
+      "id": "maas-kapisi",
+      "type": "agent",
+      "name": "maas-kapisi — bordro × Garanti maaş-yükleme çapraz-kontrolü",
+      "version": "0.1.0",
+      "description": "Aylık maaş ödemesinin önündeki makine kapısı: muhasebeciden gelen BORDRO (PDF) ile Garanti Bankası MAAŞ YÜKLE dosyasını (TGB xlsx) kişi kişi kuruşuna karşılaştırır, fark varsa onay akışını durdurur; temizse WhatsApp onay-metni + banka e-posta taslağı üretir, her ayı sha256'lı arşive alır. ÖKSÜZDÜ — evergreen-parity 2026-08-10 yakaladı, hiçbir git kaynağında yoktu.",
+      "tags": [
+        "maas",
+        "bordro",
+        "garanti",
+        "puantaj",
+        "arsiv",
+        "kvkk",
+        "kapi"
+      ],
+      "author": "sultanxgokce",
+      "source": "öksüz-adoption — evergreen tek-düğme hijyeni (2026-08-10)",
+      "status": "v0.1-pilot",
+      "path": "maas-kapisi/SKILL.md",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "finans-kapisi (onay-durdurucu)"
+    },
+    {
+      "id": "plan-dekor",
+      "type": "agent",
+      "name": "plan-dekor — renkli, mobilyalı sunum planı motoru",
+      "version": "0.6.0",
+      "description": "2B kat planını renkli, mobilyalı sunum planına çevirir: kural-tabanlı deterministik mobilya yerleşimi (kapı-süpürme alanı boş, çakışma yok), zemin dokusu + oda renkleri + lejant + kuzey oku + ölçek çubuğu ile SVG/PNG üretir, doğal-dil revizyonunu yapısal tarifle uygular. plan-motor'u CLI sınırından besteler. Fail-closed, deterministik ($0, API/GPU yok). ÖKSÜZDÜ — evergreen-parity 2026-08-10 yakaladı, hiçbir git kaynağında yoktu.",
+      "tags": [
+        "kat-plani",
+        "mobilya",
+        "yerlesim",
+        "renklendirme",
+        "sunum",
+        "emlak",
+        "svg",
+        "fail-closed",
+        "deterministik"
+      ],
+      "author": "sultanxgokce",
+      "source": "öksüz-adoption — evergreen tek-düğme hijyeni (2026-08-10)",
+      "status": "v0.6",
+      "path": "plan-dekor/SKILL.md",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "plan-motoru (mimari, plan-motor bestecisi)"
+    },
+    {
+      "id": "plan-motor",
+      "type": "agent",
+      "name": "plan-motor — 2B kat-planı motoru",
+      "version": "1.4.0",
+      "description": "DWG/DXF çizimini okur (katman/birim/envanter), kendi geometrisiyle referans-kalitede çizer, üstünden ölçer (oda alanı/duvar/mesafe), doğal-dil komutunu yapısal tarife çevirip revize eder, semantik oda grafı çıkarır (lifting), mevcut planı mimari kural setine karşı denetler, boş sınır+oda programından aday yerleşim üretir. Dosya-tabanlı tek giriş, fail-closed. ÖKSÜZDÜ — evergreen-parity 2026-08-10 yakaladı, hiçbir git kaynağında yoktu.",
+      "tags": [
+        "cad",
+        "dwg",
+        "dxf",
+        "kat-plani",
+        "2b-cizim",
+        "olcum",
+        "revizyon",
+        "lifting",
+        "fail-closed",
+        "svg",
+        "mimari"
+      ],
+      "author": "sultanxgokce",
+      "source": "öksüz-adoption — evergreen tek-düğme hijyeni (2026-08-10)",
+      "status": "canli",
+      "path": "plan-motor/SKILL.md",
+      "installed_in": [
+        "_global"
+      ],
+      "family": "plan-motoru (mimari, çekirdek)"
+    },
+    {
+      "id": "arcelik-mail-erisim",
+      "type": "agent",
+      "name": "Arçelik Mail Erişimi (fiş paketi maillerine bağlanır)",
+      "version": "1.0.0",
+      "sync_dagitim": false
+    },
+    {
+      "id": "arcelik-fatura-kesim",
+      "type": "agent",
+      "name": "Arçelik Fatura Kesim Kararı (hangi pakete kesilir/kesilmez)",
+      "version": "1.0.0",
+      "sync_dagitim": false
+    },
+    {
+      "id": "elogo-portal-otomasyon",
+      "type": "agent",
+      "name": "e-Logo Portal Otomasyonu (yükle · sıra numarası · gönder)",
+      "version": "1.0.0",
+      "sync_dagitim": false
+    },
+    {
+      "id": "kapi-sinavi",
+      "sync_dagitim": true,
+      "type": "agent",
+      "name": "kapi-sinavi — kapının gerçekten kapı olduğunu kanıtla",
+      "version": "1.2.1",
+      "description": "Kapının doğru karar verdiğini değil, DEVREDE olduğunu ve sınavının onu fiilen ölçtüğünü kanıtlar. kos · bagli-mi (AST) · bayat-mi · mutasyon (sil/no-op/yer-kaydırma). RC=3 ÖLÇÜLEMEDİ demektir, yeşil değil. Cırcır (--taban): bilinen kusurlar tabanda görünür, yeni kusur ilk günden kırmızı, taban yalnız küçülür.",
+      "triggers": [
+        "kapı yazdım",
+        "koruma ekledim",
+        "bu gate çalışıyor mu",
+        "mutasyon sınavı",
+        "kapı bağlı mı"
+      ]
+    },
+    {
+      "id": "olcum-disiplini",
+      "sync_dagitim": true,
+      "type": "agent",
+      "name": "olcum-disiplini — ölçümün gerçekten ölçüm olduğunu denetle",
+      "version": "1.0.0",
+      "description": "boru (çıkış kodu görüntü süzgecinin arkasından mı okundu) · negatif (aynı negatifi ikinci kez ölçme, kanıtlı append-only defter) · kart (ölçümü kurmadan beş soru, defteri kendi sorar). RC=3 ÖLÇÜLEMEDİ demektir.",
+      "triggers": [
+        "ölçtüm",
+        "kanıtladım",
+        "temiz mi",
+        "bunu daha önce ölçtük mü",
+        "ölçüm kurmak"
+      ]
+    },
+    {
+      "id": "gunluk-plan",
+      "type": "workflow",
+      "name": "Günün Planı — Ölç → Süz → Sun → İcra",
+      "version": "1.3.0",
+      "description": "Elimizdeki işleri yedi kaynaktan ÖLÇER (layiha defteri · kapımda kartları · açık PR'lar · odalardan gelen · kuyruk · defter · ortam), dört elekten süzer (bugün kapanır mı · kilit açar mı · bozuk mu · Sultan hisseder mi), Sultan-dilinde sabit-formatta plan sunar ve onaydan sonra icra eder. Ölçmeden madde yazmak yasak; elenen iş gerekçesiyle kayda geçer.",
+      "tags": [
+        "planlama",
+        "gunluk",
+        "olcum",
+        "suzme",
+        "workflow",
+        "global"
+      ]
+    },
+    {
+      "id": "gun-ortasi",
+      "type": "workflow",
+      "name": "Gün Ortası Planı — İş Kaldı mı? Kalmadıysa Ne Geliştirelim?",
+      "version": "1.0.3",
+      "description": "Sabahki plan gün ortasında bittiğinde 'elde kalan iş var mı?' sorusunu dokuz kaynaktan ÖLÇER (günün plan çıpası · fabrika kartları · konum çapaları · bağımsız göz raporları · gelen kutusu · layiha defteri · kapımda · hedefler · ortam), adayı gerçek işten ayırır, süzer; iş kalmadıysa kutunun ana hedeflerine bağlı ve ölçülmüş bir boşluğu kapatan 2-3 fikir önerir. Ölçemediği kaynağa 'iş yok' demez, 'ölçemedim' der. Günün çıpasına sabahki maddelere dokunmadan ekler, Sultan başka şık seçerse geri alır.",
+      "tags": [
+        "planlama",
+        "gun-ortasi",
+        "olcum",
+        "fikir",
+        "workflow",
+        "global"
+      ]
+    },
+    {
+      "id": "gorsel-yon",
+      "type": "workflow",
+      "name": "Görsel Yön — üretilmiş görselle yön arayışı (kanıt üretmez)",
+      "version": "0.4.0",
+      "description": "Higgsfield hattı. Üretilmiş görselin bir sayfada NEREYE girip giremeyeceğini kodla zorlar (ölçüt 'üretilmiş mi' değil 'KANIT konumunda mı'); üç fail-closed kapı. v0.2.0 ile fiilen üretir: iste → bekle → indir zinciri + harcama defteri (adet sayar, lira değil) + çoklu kare. Varsayılan kuru-koşum, kredi harcamaz. 0.3.0 (2026-08-27): kesif-katalog kullanım-alanı (Sultan-izinli) + TR-imla yasak-deliği kapandı + anahtar env-önce. 0.3.1 (MİHMANDAR): kesif-katalog B3 muafiyeti + nötr kalite çiti. 0.4.0 (2026-10-06): DÖRDÜNCÜ kapı — hazır gelen dosyanın KENDİ köken kutusundaki beyanını okur (JUMBF/C2PA: PNG caBX · JPEG APP11 segmenti · WebP RIFF kutusu; hüküm yalnız kutu gövdesinden, kutu-dışı iz kayıt olur hüküm olmaz); imza kipi İKİ ('imza tuttu' ⟂ 'mühre güvenildi' AYRI yazılır; güven kütüphanenin 'Valid' alanından DEĞİL ayrıntı kodlarından okunur, POZİTİF kanıt ister ve sebebi kayda geçer; güvenilir-mühür listesi VERİDİR (--guven-kok PEM|dizin), verilmezse hiçbir mühre güvenilmez, verilip okunamazsa 'ölçemedim' denir): c2pa varsa manifest yapısal okunur ve imza+sertifika zinciri DOĞRULANIR, yoksa kutu-gövdesine düşer ve bunu ÇIKTIDA söyler (sessiz düşüş yok); kapı YALNIZ SUÇLAR, beraat ETTİRMEZ: kanit_olabilir kapalı küme (HAYIR|bilinmiyor), 'evet' hiçbir yoldan üretilemez — beraat güven kökü ister, imzanın tutması mührün kimden geldiğini söylemez; olumsuz iddia ('üretilmişim') temkinli olarak imzasız da keser; 'köken yok' hüküm DEĞİL, bilinmiyordur (tek yeniden-kayıt kutuyu siler); pozitif kontrolü geçmeyen okuyucu rc=3 ÖLÇEMEDİM der. 71 kapı, on altı mutasyon-kanıtlı; canli-olcum betigi sahadaki gerçek dosyaların yapısal ayrıştırmadan geçtiğini ölçer — ölçtüğü şey 'bu kümede okunamadi yok', 'hiç yanlış-kırmızı yok' DEĞİL (dosyaların geçerliliği bağımsız doğrulanmaz); tavanını da basar; bozuk yapı fail-closed okunamadi (kısmi ayrıştırmadan suçlayıcı iddia çıkmaz); imzalı yüz gerçek (sınav kendi sertifikasını üretip imzalar, ağa çıkmaz).",
+      "tags": [
+        "gorsel",
+        "tasarim",
+        "higgsfield",
+        "fail-closed",
+        "global"
+      ]
+    },
+    {
+      "id": "durum-raporu",
+      "type": "agent",
+      "name": "/durum-raporu — personel durum raporu (GLOBAL, Sultan standardı)",
+      "version": "0.2.1",
+      "description": "Sultan 'durum raporu / son durum / neler yapılıyor' deyince kutunun personelini STANDART biçimde raporlar: kişi başına bitirdi · geçti · önündeki işler · bekliyor · canlı bağlantı. Veri sözleşmesi tüm kutularda aynı (SEMA.md): her üye kendi _agents/durum/<AD>.json dosyasını yazar (durum-yaz.sh), reis okur (durum-raporu.sh). Durum dosyası olmayan üye kayıttan TÜRETİLİR ve '(türetildi)' damgası alır — uydurma yok. Bağlantılar tek dilde: mmepanel://<kutu>/<tür>/<hedef>, çözüm filo-geneli link-taban.yaml'dan; ölçülmemiş tür boş bırakılır ve ham link basılır. AKAR/MÜTEVELLİ doğurdu, MUAVİN filo geneline paketledi."
+    },
+    {
+      "id": "ekip-iletisim-uzmani",
+      "type": "agent",
+      "name": "ekip-iletisim-uzmani — yönetici⇄ajan iletişim gözetmeni (GLOBAL ROL SINIFI)",
+      "version": "0.1.0",
+      "description": "Persona değil rol sınıfı: yönetici ile emrindeki AI ajanlar arasındaki iletişim/iş-akışı sorunlarını sürekli gözeten personelin ortak çekirdeği. iletisim-nabiz.sh beş sınıfı üç durumlu ölçer (kayıp tetik · ACK'siz tetik · sessiz üye · bayat iş · yönetim darboğazı), kök neden + onarım önerir; emir vermez, tetik göndermez, dış gönderim yapmaz, sağlayıcı/model bilgisi taşımaz. Mirasçı kutular kendi adıyla açar (ISE-ALIM.md, 4 komut), DEVIR-SINAVI 5 kapı, miras-damga.sh ile sürüm+sha drift görünür. İlk mirasçı NÂZIR/PEYK. Ölçüldü 2026-09-16 AKAR: 24 saatte 543 kayıp tetik."
+    },
+    {
+      "id": "frontend-boost",
+      "type": "agent",
+      "name": "/frontend-boost — etkili ama yalın sayfa tasarımı (GLOBAL)",
+      "version": "0.5.0",
+      "description": "Karşılama sayfası, ürünün açılış ekranı, sunum/broşür kapağı 'bir tasarımcı yapmış' densin diye tasarlanır: sahne · tek kahraman nesne · yazı görsel öğe · tek ışık · derinlik · tek açılış anı. Şablon (sahne.css + landing iskeleti), karakter alt kümeli yazı tipi aracı ve kontrastı GERÇEK zemin pikselinden ölçen araç birlikte gelir. 0.5.0 (Sultan 19 Eylül): her UI/tasarım işinde frontend-design ile BİRLİKTE zorunlu; frontend-design'ın güçlü yanları 'Devralınan disiplin' olarak içeride ve form/tablo/panel dahil her işte geçerli, sahne formülü yalnız önemli yüzeylerde. Dördüncü kapı tasarim-citasi (kütüphanesiz kutuda 'çıta kıyası yapılamadı' yazılır); referans arşivinden (55 broşür + 50 sunum) basılı ve sunum dersleri eklendi. Kontrast aracı onarıldı: FRONTEND_BOOST_SECICILER ile verilen metin gizlenmiyor, oran 1,00 çıkıyordu; artık gizleniyor ve 1,00 kalan kutu rc=3 'ölçülemedi' der. NAKKAŞ/MÜTEVELLİ/AKAR doğurdu; MUAVİN filo geneline paketledi."
+    },
+    {
+      "id": "arayuz-zanaati",
+      "type": "agent",
+      "name": "/arayuz-zanaati — arayüz zanaatı: garip, amatör durmasın (GLOBAL)",
+      "version": "0.1.0",
+      "description": "Web sayfası ya da uygulama ekranı yazılırken, değiştirilirken ve denetlenirken tasarım zevki değil ZANAAT: tek aralık ölçeği, yakınlık, tek sol kenar, düğme-kutu aynı boy, tek yarıçap ailesi, her durum (otomatik doldurma dahil), koyu temada color-scheme, form temelleri, tipografi, tarayıcı tuzakları, tablo kuralları. KURALLAR.md (kırk belirti → çare, CSS parçaları) + KONTROL-LISTESI.md (kırk maddelik yayın öncesi bakış). Sultan 19 Eylül: 'kutucuklarda gariplik var, harmoni olmamış'. MÜTEVELLİ/AKAR doğurdu (38 sayfalık kaynaklı tarama); MUAVİN filo geneline paketledi."
+    },
+    {
+      "id": "sunum-hazirlama",
+      "type": "agent",
+      "name": "/sunum-hazirlama — karar vericiye sunumun içeriği ve anlatımı (GLOBAL)",
+      "version": "0.1.0",
+      "description": "Toplantı sunumunda ne anlatılır, hangi sırayla, slaytta ne görünür, sunan ne söyler, demo nereye girer: beş anlatı iskeleti, slayt kuralları (başlık = sonuç cümlesi, yatay akış ve üç saniye sınavı), görür/söyler ayrımı, önce son ekranı gösteren canlı demo, açılış/kapanış, temkinli komite, süre dağılımı, yirmi maddelik kapı ve referans arşivinden (50 deste) dersler. Kuruma özgü kapılar (fiyat, oran, pilot süresi, kurum adı, şov anı) 'kuruma göre değişir' diye işaretli. MÜTEVELLİ/AKAR doğurdu (Sultan 19 Eylül); MUAVİN filo geneline paketledi."
+    },
+    {
+      "id": "brosur-hazirlama",
+      "type": "agent",
+      "name": "/brosur-hazirlama — basılı broşürün biçimi, içeriği ve kapısı (GLOBAL)",
+      "version": "0.1.0",
+      "description": "Katlamalı broşür ve föy: broşür sunum değildir; katlama anlatı aracıdır, panel tek başına tamamdır. SKILL.md biçim ölçütleri (A–G) + ICERIK.md (okur ve okuma anı, panel başına cevaplanan soru, şart/seçmeli bloklar, özellik → fayda → dayanak, yirmi maddelik içerik kapısı, ikinci kişi testi) + ölçülebilenleri ölçen brosur-kapi.mjs (kelime, punto, metin alanı, kırıma yakın metin, yasak söz; tarayıcı ya da PDF sayacı yoksa rc=3 ölçülemedi). AKAR kararları (tablo yok, süre rakamı yok, yasak söz listesi) 'kuruma göre değişir' diye işaretli. MÜTEVELLİ/AKAR doğurdu; MUAVİN filo geneline paketledi."
+    },
+    {
+      "id": "tasarim-citasi",
+      "type": "agent",
+      "name": "/tasarim-citasi — referans kütüphanesiyle kalite çıtası, dördüncü kapı (GLOBAL)",
+      "version": "0.1.0",
+      "description": "Sultan 18 Eylül: 'Bu seviyenin altında iş çıkarmayın.' Her tasarım teslimi referans tasarımcı kütüphanesindeki en yakın iyi örnekle yan yana konur ve on maddelik kapıdan geçer; beğeniden çıkan B kuralları ve referans arşivi dersleri içeride. Kütüphane yolu TASARIM_CITASI_KUTUPHANE (varsayılan hub /config/evraklar/Sultan/1-Calisma/AKAR/tasarim-referans); erişemeyen kutuda 'çıta kıyası yapılamadı' yazılır, sessizce atlanmaz. frontend-boost ve üç ilke kapısının üstüne biner. NAKKAŞ/AKAR doğurdu; MUAVİN filo geneline paketledi."
+    },
+    {
+      "id": "sergi",
+      "type": "agent",
+      "name": "/sergi — görsel kütüphane ve katalog standardı (GLOBAL)",
+      "version": "0.1.0",
+      "description": "Toplanan dosya, kaynak, referans örneği ya da kayıt koleksiyonunu arama + filtre + önizlemeli, taşınabilir tek-klasör HTML kataloğa dönüştürür; Sultan'ın beğendiği AKAR referans kataloğu düzeni varsayılan. Filo standardı: önizlemeli 20+ varlık ya da Sultan'a/dışarıya sürümlü koleksiyon teslim eden işte zorunlu. Üretici yalnız Python standart kütüphanesiyle çalışır, ağa çıkmaz, var olan klasörün üzerine yazmaz. Sultan'ın çalıştığı bir ajan doğurdu (19 Eylül: 'çok pür ve temiz, standart yapalım'); MUAVİN filoya paketledi: dosya yolu kapsam kapısı, paylaşılabilir klasör izni, Türkçe tetikleyiciler, 8 test."
+    },
+    {
+      "id": "baglam-nobeti",
+      "type": "agent",
+      "name": "/baglam-nobeti — bağlam doluluk nöbeti (GLOBAL, Sultan kuralı)",
+      "version": "0.2.0",
+      "description": "Oturum bağlamı dolarken Sultan'ı asla sessizce geçmez: %70'te uyarı satırı, %80'de her cevabın başında kalın compact önerisi, %90'da yeni iş almama; compact'tan önce kutunun VAR OLAN çıpa dosyaları (cipa-bul.sh) tazelenir. Ölçü mekaniktir: PostToolUse kancası (nobet-kancasi.sh) her araç çağrısında transkriptten doluluğu hesaplar (baglam-olc.py); pencere filo kanonundan (ORTAK-MIMARI.md) okunur, [1m] eki transkriptin model-kimlik kaydından geri kazanılır. Ölçemediğinde 'ÖLÇÜLEMEDİ' der, yüzde uydurmaz. AKAR/MÜTEVELLİ doğurdu (0.1.0 salt kural), MUAVİN mekanik gövdeyle filo geneline paketledi."
     },
     {
       "id": "yazilim-fabrikasi",
@@ -1568,57 +1547,78 @@
       "family": "workflow (çalışma hattı; pr-onay · olcum-disiplini · kapi-sinavi · kayit-damgasi çağırır)"
     },
     {
-      "id": "yt-transcript",
-      "sync_dagitim": false,
-      "type": "agent",
-      "name": "YouTube Transcript",
+      "id": "terminal-onar",
+      "name": "terminal-onar — kutunun web terminali ve telefon ekranı",
+      "version": "2.0.0",
+      "type": "capability",
+      "sync_dagitim": true,
+      "description": "Bir kutuda canlı çalışma düzenini kurar, ölçer ve onarır: tmux konuşma odası + web terminali (ttyd, yalnız UNIX soketi) + telefon ekranı (PWA) + kurtarıcı ajan + dakikalık bekçi; dört kademeli onarım merdiveni. Bütün kutularda koşar — adlar kutudan türer, kutu adı koda gömülü değildir. Merkez sayfa (terminal.mmepanel.com) kutuları yol ile ayırdığı için taban yolu destekler. Kurulum Sultan onayı ister (kutuda dış yüzey açar); parola kasadan gelir, ÜRETİLMEZ.",
+      "prerequisites": [
+        "ttyd",
+        "tmux",
+        "node>=20",
+        "vault-cek"
+      ],
+      "tags": [
+        "terminal",
+        "pwa",
+        "onarim",
+        "kutu",
+        "mobil"
+      ],
+      "stacks": [
+        "nextjs+prisma",
+        "fastapi+sqlmodel"
+      ],
+      "author": "sultanxgokce",
+      "source": "sedir kutusu (SEDİR/MÜDÜR + RAHVAN), genelleştiren MUAVİN 2026-09-27",
+      "install_time": "~30dk (yeni proje), ~2sa (mevcut Cortex upgrade)",
+      "status": "aktif",
+      "path": "terminal-onar",
+      "nexus_catalog": false,
+      "installed_in": [
+        "_global"
+      ]
+    },
+    {
+      "id": "canli-sayfa",
+      "type": "tool",
+      "name": "canlı sayfa — filonun canlı sayfa kuralı ve kaydı",
       "version": "1.1.0",
-      "description": "YouTube videosunu okunabilir dokümana dönüştürür. Altyazı varsa direkt çeker, yoksa Whisper ile transkripsiyon yapar. Claude (OpenRouter) ile formatlar, PDF veya Word olarak kaydeder.",
+      "description": "Sultan bir kutudan canlı sayfa istediğinde uyulacak filo kuralı ve aracı: canlıya çıkan her sayfa ortak kayda yazılır (sayfa başına bir dosya); kayıt canlı sayfaların tek listesidir. Kayıt adresi o an ölçer: açılmayan sayfa kayda girmez, giriş kapısı olmadan açılan sayfa onaysız kayda girmez. Komutlar: ekle · liste (--json menü biçimi) · emekli · dogrula. Metin kuralları: Sultan'ın okuyacağı dil, sır deseni reddi, adreste soru işareti/port/kullanıcı adı yok.",
       "prerequisites": {
-        "python": ">=3.9",
-        "packages": [
-          "youtube-transcript-api",
-          "yt-dlp",
-          "openai-whisper",
-          "python-docx",
-          "fpdf2",
-          "httpx"
-        ],
         "system": [
-          "ffmpeg (Whisper fallback için)"
+          "bash",
+          "python3",
+          "curl"
         ]
       },
       "tags": [
-        "youtube",
-        "transcript",
-        "whisper",
-        "pdf",
-        "word",
-        "docx",
-        "openrouter",
-        "ai",
-        "eğitim"
+        "sultan-yuzu",
+        "kokpit",
+        "canli-sayfa",
+        "global",
+        "filo-kurali"
       ],
-      "stacks": [
-        "*"
-      ],
-      "author": "sultanxgokce",
-      "install_time": "~5min",
-      "status": "stable",
-      "path": "yt-transcript/SKILL.md",
-      "nexus_catalog": "AI Engineer Workbook > Skill Kataloğu",
-      "installed_in": [],
-      "env": {
-        "OPENROUTER_API_KEY": "zorunlu",
-        "OPENROUTER_MODEL": "opsiyonel, varsayılan: anthropic/claude-haiku-4-5"
-      }
+      "installed_in": [
+        "_global"
+      ]
     },
     {
-      "id": "zeyl",
-      "type": "agent",
-      "name": "/zeyl — Sultan'ın söylediği gereklilik uçmasın (GLOBAL)",
-      "version": "1.0.1",
-      "description": "Gün içinde söylenen gereklilikleri sessizce seyir-defterine düşürür ve verdikt almadan yaşamalarına izin vermez. Ölçüldü: 6 günde 72 kalemin 45'i (%62) hiçbir dosyaya inmemiş, compaction 3'ünü yemiş, Sultan aynı şeyi tekrar söylemek zorunda kalmış. YENİ DEPO AÇMAZ — seyir-defterinin kendi dosyasına aynı şemayla yazar (üç delta: tur=gereklilik, kaynak+tur_no provenans, durum=ham|yapildi). Kanıtsız 'yapıldı' REDDEDİLİR; sebepsiz 'düştü' REDDEDİLİR; defter yoksa rc=2 'ölçülemedi' (temiz DEĞİL). `onaylandi` alanı YOK — o insan alanıdır (A06). 20 kapı, çift yönlü fikstür (ALTIN yüz boş defterin onurlu olduğunu kilitler). MİHENK/NİŞANCI yazdı ve o kutuda kanıtladı; merkez globalleştirdi — devirde iki kutu-özgü kusur düzeltildi: defter betiğin yanında aranıyordu (global kurulumda 15 kutunun ortak dizinine düşerdi, İ1 ihlali) ve kimlik MİHENK'e sabitlenmişti. · 1.0.1: özetin bastığı reçete ölü uçtu ('bash scripts/zeyl.sh' global kurulumda yok) — koşulan yoldan türetiliyor; G-D/G-D2 kapıları reçeteyi KOŞARAK ölçer."
+      "id": "soluklan",
+      "type": "workflow",
+      "name": "Soluklan — ara ver, bak, çıpala, devam et",
+      "version": "1.0.0",
+      "description": "Bağlam dolmadan önce DUR: değerlendir, planı diske çıpala, compact'i Sultan'a SOR, sonrasında kaldığın yerden daha iyi bir planla devam et. Doluluğu ÖLÇMEZ (ajanın göstergesinden alır) ve çıpa taze değilse öneri ÜRETMEZ — bayat çıpa = çıpa yok.",
+      "tags": [
+        "baglam",
+        "compact",
+        "cipa",
+        "planlama",
+        "olcum",
+        "workflow",
+        "global"
+      ]
     }
   ]
 }
