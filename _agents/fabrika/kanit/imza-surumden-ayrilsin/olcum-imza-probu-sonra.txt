@@ -1,0 +1,12 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/imza-probu.sh /config/projects/_wt/Sx-Claude-Skills-imza-surumden-ayrilsin/yazilim-fabrikasi/scripts/kanit.py
+# rc=0 sure=0.3s zaman=2026-10-08T00:53:34+03:00
+--- stdout ---
+manifest kanit.py/0.1.0 ile yazildi · dogrulayan arac kanit.py/0.3.0
+  · eski araçla yazılmış: kanit.py/0.1.0 (bu: kanit.py/0.3.0) — sağlamlığı etkilemez
+  · imza eski biçimde (sürüm gövdede) ve TUTUYOR — ilk yazımda yeni biçime geçer
+  ✓ manifest sağlam: 1 kayıt, imza ve sha'lar tutuyor
+  eski manifeste yeni kayit eklenebildi mi: rc=0
+    bozma: renk yesil -> kirmizi
+  ELLE bozulmus manifest: rc=1 (1 olmali)
+SAGLAM: eski manifest suclanmiyor, bozuk olan hala yakalaniyor
+--- stderr ---

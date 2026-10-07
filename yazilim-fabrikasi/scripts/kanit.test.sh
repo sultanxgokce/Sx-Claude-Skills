@@ -160,6 +160,64 @@ python3 -c 'import sys;s=open(sys.argv[1],encoding="utf-8").read();s=s.replace("
 KANIT_DEPO="$T" python3 "$M3" olcum is-mut2 e --asama tek -- bash -c 'printf "ba\xc5lam\n"' >/dev/null 2>&1; [ $? -ne 0 ]; g $? "T13b MUTASYON: errors kaldırılınca geçersiz bayt yine çökertir (onarım gerçek)"
 [ ! -f "$T/_agents/fabrika/kanit/is-mut2/KANIT.json" ]; g $? "T13c MUTASYON: çöküşte kayıt hiç yazılmaz (sessiz kaybın kendisi)"
 
+echo "════ T14 · İMZA SÜRÜMDEN AYRI: eski araçla yazılan kanıt SUÇLANMAZ (NÂZIR+RASATÇI) ════"
+# VAKA: imza gövdesi SURUM içeriyordu → aracı güncellemek, eski araçla yazılmış HER manifesti
+#   "elle değişmiş" diye suçluyordu (ölçüldü: nazir kutusunda 31/31). Göç yanlış çare: eski
+#   manifestleri yeniden imzalamak, aracın koşmadığı koşumlara imza atması demektir.
+_eski_bicime_cevir() { # <KANIT.json yolu>
+  python3 - "$1" "$HERE/kanit.py" <<'PYX'
+import json,sys,importlib.util
+p,arac=sys.argv[1],sys.argv[2]
+sp=importlib.util.spec_from_file_location("k",arac); mod=importlib.util.module_from_spec(sp); sp.loader.exec_module(mod)
+m=json.load(open(p,encoding="utf-8")); m["arac"]="kanit.py/0.1.0"
+m["imza"]=mod.imza_eski(m["kayitlar"], m["arac"])
+json.dump(m,open(p,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
+PYX
+}
+E="$T/_agents/fabrika/kanit/is-imza"
+bash "$K" olcum is-imza a --asama once -- echo x >/dev/null 2>&1; g $? "T14a manifest yazıldı"
+_eski_bicime_cevir "$E/KANIT.json"
+CIKTI="$(bash "$K" dogrula is-imza 2>&1)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "T14b ESKİ biçimli imza SAĞLAM sayılıyor (rc=0, suçlanmıyor)"
+grep -q 'sağlamlığı etkilemez' <<<"$CIKTI"; g $? "T14c sürüm farkı BİLGİ satırı — hüküm değil"
+grep -q 'imza eski biçimde' <<<"$CIKTI"; g $? "T14d hangi biçimde imzalandığı söyleniyor (sessiz kabul yok)"
+grep -q 'İMZA TUTMUYOR' <<<"$CIKTI"; [ $? -ne 0 ]; g $? "T14e sahtecilik suçlaması YOK"
+
+echo "════ T15 · ama GERÇEKTEN bozulan hâlâ yakalanır (tautoloji panzehiri) ════"
+python3 - "$E/KANIT.json" <<'PY15'
+import json,sys
+p=sys.argv[1]; m=json.load(open(p,encoding="utf-8"))
+k=m["kayitlar"][0]; onceki=k.get("renk")
+k["renk"]="kirmizi" if onceki!="kirmizi" else "yesil"
+assert k["renk"]!=onceki, "bozma hiçbir şeyi değiştirmedi"
+json.dump(m,open(p,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
+PY15
+bash "$K" dogrula is-imza >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T15a eski biçimli manifest ELLE bozulunca rc=1"
+bash "$K" olcum is-imza b --asama once -- echo y >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T15b bozuk manifeste yeni kayıt EKLENMİYOR"
+
+echo "════ T16 · eski biçimli SAĞLAM manifest, yazım anında YENİ biçime geçer ════"
+E2="$T/_agents/fabrika/kanit/is-imza2"
+bash "$K" olcum is-imza2 a --asama once -- echo x >/dev/null 2>&1
+_eski_bicime_cevir "$E2/KANIT.json"
+ERR="$(bash "$K" olcum is-imza2 b --asama once -- echo y 2>&1 >/dev/null)"; g $? "T16a eski biçimli manifeste kayıt eklendi"
+grep -q 'yeni biçime geçiyor' <<<"$ERR"; g $? "T16b geçiş SESSİZ değil — yüzeye basılıyor"
+python3 -c "
+import json,importlib.util
+sp=importlib.util.spec_from_file_location('k','$HERE/kanit.py'); mod=importlib.util.module_from_spec(sp); sp.loader.exec_module(mod)
+m=json.load(open('$E2/KANIT.json'));assert m['imza']==mod.imza(m['kayitlar']),'yeni bicimde degil'"; g $? "T16c yazımdan sonra imza YENİ biçimde"
+bash "$K" dogrula is-imza2 >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T16d geçiş sonrası doğrulama temiz"
+
+echo "════ T17 · MUTASYON: uyumluluk dalı koparılınca eski manifest yine suçlanır ════"
+MI="$T/kanit-mutant-imza.py"
+sed 's@^    if arac and mevcut == imza_eski(kayitlar, arac):@    if False:@' "$HERE/kanit.py" > "$MI"
+if cmp -s "$MI" "$HERE/kanit.py"; then g 1 "T17 mutant FARKSIZ (çapa bayat)"; else
+  E3="$T/_agents/fabrika/kanit/is-imza3"
+  bash "$K" olcum is-imza3 a --asama once -- echo x >/dev/null 2>&1
+  _eski_bicime_cevir "$E3/KANIT.json"
+  KANIT_DEPO="$T" python3 "$MI" dogrula is-imza3 >/dev/null 2>&1
+  [ $? -eq 1 ]; g $? "T17 MUTASYON: uyumluluk ölünce eski manifest YİNE kırmızı (kapı gerçek)"
+fi
+
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]

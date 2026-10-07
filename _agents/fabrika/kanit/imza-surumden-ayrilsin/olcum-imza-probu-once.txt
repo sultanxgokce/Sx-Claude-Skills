@@ -1,0 +1,11 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/imza-probu.sh /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/kanit-eski-bumped.py
+# rc=1 sure=0.2s zaman=2026-10-08T00:53:33+03:00
+--- stdout ---
+manifest kanit.py/0.1.0 ile yazildi · dogrulayan arac kanit.py/0.2.0
+  · araç sürümü farklı: kanit.py/0.1.0 (bu: kanit.py/0.2.0)
+  ✗ İMZA TUTMUYOR — manifest elle değişmiş ya da araç dışında yazılmış
+  eski manifeste yeni kayit eklenebildi mi: rc=1
+    bozma: renk yesil -> kirmizi
+  ELLE bozulmus manifest: rc=1 (1 olmali)
+KUSUR: eski manifest rc=1 (0 olmali) · ekleme rc=1 (0) · bozuk rc=1 (1)
+--- stderr ---

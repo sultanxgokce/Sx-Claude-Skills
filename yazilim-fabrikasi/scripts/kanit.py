@@ -18,14 +18,10 @@ Ortam: KANIT_DEPO (depo kökü; vars. git toplevel) · KANIT_PLAYWRIGHT_DIR (nod
 """
 import argparse, datetime, hashlib, json, os, re, shutil, subprocess, sys
 
-SURUM = "kanit.py/0.1.0"
-# 🔴 SÜRÜM NUMARASI BİLEREK ARTIRILMADI (ölçüldü 7 Eki 2026). İmza gövdesi SURUM'u İÇERİR
-#    (bkz imza()): sürümü 0.2.0'a çekmek, 0.1.0 ile yazılmış HER manifestin imzasını
-#    geçersiz kılıyor ve `dogrula` bunu "manifest ELLE DEĞİŞMİŞ" diye raporluyor —
-#    yani filodaki tüm eski kanıt, araç güncellendiği için sahtelikle suçlanıyordu.
-#    Ölçüm: 0.1.0 ile yazılan manifest, 0.2.0 aracıyla rc=1 + "İMZA TUTMUYOR".
-#    Bu, düzeltilen kusurdan daha ağır bir yanlış-kırmızı olurdu. Sürüm-imza bağı
-#    ayrı bir kusurdur ve ayrı kartta ele alınır; bu işte DOKUNULMADI.
+SURUM = "kanit.py/0.3.0"
+# Sürüm artık GÜVENLE yükseltilebilir: imza gövdesinde değil (yukarıdaki not).
+# 0.1.0 → 0.3.0: 0.2.0 denendi ve geri alındı (o gün imza sürüme bağlıydı, yükseltmek
+# bütün geçmişi suçluyordu); numarayı atlayarak o denemeyi izlenebilir bırakıyorum.
 TUZ = "yazilim-fabrikasi-kanit-2026"  # imza tuzu: elle yazımı yakalar; kriptografik gizlilik iddiası YOK
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -56,9 +52,45 @@ def sha_dosya(yol):
     return h.hexdigest()
 
 
+# 🔴 İMZA SÜRÜMDEN AYRILDI (NÂZIR + RASATÇI bağımsız ölçtü · 8 Eki 2026)
+#   ESKİ HÂL: imza gövdesi araç SÜRÜMÜNÜ içeriyordu. Sonuç: aracı güncellemek, eski araçla
+#   yazılmış HER manifesti "İMZA TUTMUYOR — manifest elle değişmiş" diye suçluyordu. Mesaj
+#   insanı yanlış yere sürüyor: sahtecilik aranır, oysa tek fark sürüm dizgisidir.
+#   ÖLÇÜLDÜ: nazir kutusunda 31 manifestin 31'i 0.1.0 damgalı — sürüm artışı 31'ini birden
+#   kırmızıya düşürürdü ve hiçbiri "sahte değilim" diyemezdi.
+#   NİÇİN GÖÇ DEĞİL: göç = eski manifestleri yeniden imzalamak; o zaman araç KENDİ KOŞMADIĞI
+#   koşumlara imza atar ve yeniden-imzalanmış kanıt, araç dışında üretilmişten ayırt edilemez
+#   hâle gelir — imzanın var olma sebebi gider. (NÂZIR'ın cümlesi, katılıyorum.)
+#   İMZANIN TEK SORUSU: "bu manifest araç DIŞINDA değişti mi". Sürüm bir BİLGİdir, hüküm değil.
+#
+#   🔴 ÇIKARMANIN KENDİSİ DE KIRAR — ölçtüm: gövdeden sürümü atmak imzayı değiştiriyor, yani
+#   "düzeltme" eski manifestleri aynı anda geçersiz kılardı. Bu yüzden doğrulama UYUMLUDUR:
+#   önce yeni biçim denenir, tutmazsa manifestin KENDİ kayıtlı sürümüyle eski biçim denenir.
+#   Koşan aracın sürümü DEĞİL — manifestin kendi damgası. İkisi de tutmazsa gerçekten bozuktur.
 def imza(kayitlar):
-    govde = json.dumps(kayitlar, ensure_ascii=False, sort_keys=True) + SURUM + TUZ
+    """Yeni biçim: sürüm GÖVDEDE DEĞİL."""
+    govde = json.dumps(kayitlar, ensure_ascii=False, sort_keys=True) + TUZ
     return hashlib.sha256(govde.encode()).hexdigest()
+
+
+def imza_eski(kayitlar, arac_surumu):
+    """Eski biçim: gövde sürümü İÇERİR. Yalnız GERİYE UYUM için — yeni yazımda kullanılmaz."""
+    govde = json.dumps(kayitlar, ensure_ascii=False, sort_keys=True) + str(arac_surumu) + TUZ
+    return hashlib.sha256(govde.encode()).hexdigest()
+
+
+def imza_tutuyor_mu(m):
+    """(tutuyor, bicim) → bicim: 'yeni' | 'eski' | None. Manifestin KENDİ 'arac' damgası esas."""
+    kayitlar = m.get("kayitlar", [])
+    mevcut = m.get("imza")
+    if not mevcut:
+        return False, None
+    if mevcut == imza(kayitlar):
+        return True, "yeni"
+    arac = m.get("arac")
+    if arac and mevcut == imza_eski(kayitlar, arac):
+        return True, "eski"
+    return False, None
 
 
 def manifest_oku(dz):
@@ -84,8 +116,16 @@ def kayit_ekle(depo, is_adi, kayit):
     dz = kanit_dizin(depo, is_adi); os.makedirs(dz, exist_ok=True)
     m = manifest_oku(dz)
     kayitlar = m["kayitlar"] if m else []
-    if m and m.get("imza") != imza(kayitlar):
-        hata("var olan KANIT.json imzası TUTMUYOR — elle değişmiş; yeni kayıt eklenmedi (dogrula ile bak)", 1)
+    if m:
+        tutuyor, bicim = imza_tutuyor_mu(m)
+        if not tutuyor:
+            hata("var olan KANIT.json imzası TUTMUYOR — elle değişmiş; yeni kayıt eklenmedi (dogrula ile bak)", 1)
+        if bicim == "eski":
+            # Manifest eski biçimle imzalanmış ve SAĞLAM. Şimdi ona yeni bir kayıt ekliyoruz,
+            # yani bu yazımı ARAÇ yapıyor → yeni biçimle imzalamak meşrudur. Bu bir GÖÇ DEĞİL:
+            # dokunulmamış kanıtı yeniden imzalamıyoruz, zaten yazdığımız manifesti imzalıyoruz.
+            print(f"↻ manifest eski imza biçimindeydi ({m.get('arac')}) ve sağlamdı — bu yazımla "
+                  f"yeni biçime geçiyor", file=sys.stderr)
     # AYNI KANIT DOSYASI = AYNI KAYIT (NÂZIR/MOTOR1, 7 Eki 2026). Ölçüm yeniden koşulunca
     # dosya ÜSTÜNE yazılıyordu ama manifestte eski kayıt kalıyordu → eski kaydın sha'sı artık
     # tutmaz ve `dogrula` KALICI rc=1 verirdi; silme komutu da yoktu, tek çıkış kanıt dizinini
@@ -224,10 +264,15 @@ def cmd_dogrula(a):
     if not m:
         print(f"◻ {dz}/KANIT.json YOK — kanıt yok (ölçülemedi)"); sys.exit(3)
     rc = 0
+    tutuyor, bicim = imza_tutuyor_mu(m)
     if m.get("arac") != SURUM:
-        print(f"· araç sürümü farklı: {m.get('arac')} (bu: {SURUM})")
-    if m.get("imza") != imza(m.get("kayitlar", [])):
+        # 🔴 BİLGİ satırı — HÜKÜM DEĞİL. Eski araçla yazılmış kanıt, elle değişmediği sürece
+        #    SAĞLAMDIR. Bu satır rc'ye dokunmaz; dokunsaydı araç güncellemesi geçmişi suçlardı.
+        print(f"· eski araçla yazılmış: {m.get('arac')} (bu: {SURUM}) — sağlamlığı etkilemez")
+    if not tutuyor:
         print("✗ İMZA TUTMUYOR — manifest elle değişmiş ya da araç dışında yazılmış"); rc = 1
+    elif bicim == "eski":
+        print(f"· imza eski biçimde (sürüm gövdede) ve TUTUYOR — ilk yazımda yeni biçime geçer")
     sari = 0
     for k in m.get("kayitlar", []):
         if k.get("renk") == "sari": sari += 1
