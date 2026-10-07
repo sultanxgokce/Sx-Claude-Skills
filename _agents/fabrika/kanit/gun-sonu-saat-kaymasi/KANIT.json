@@ -1,0 +1,55 @@
+{
+  "is": "gun-sonu-saat-kaymasi",
+  "arac": "kanit.py/0.1.0",
+  "guncelleme": "2026-10-08T00:07:30+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kor-pencere",
+      "asama": "once",
+      "dosya": "olcum-kor-pencere-once.txt",
+      "sha256": "215a489c47e04bc6319ce41d8333e5188fe84bbf5a5e78262f51cfbeb89db3b6",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/kaymapro.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/gun-sonu-anadal.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-08T00:07:19+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kor-pencere",
+      "asama": "sonra",
+      "dosya": "olcum-kor-pencere-sonra.txt",
+      "sha256": "9b9be7126ebb0bd1646c5f6a52b76e953e06f1e2eb6dd6362a8cc1fdeaf91e6b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/kaymapro.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-gun-sonu-saat-kaymasi/yazilim-fabrikasi/scripts/gun-sonu.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-08T00:07:30+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "96927855bc4bce3cb262c83cc1b4164f07b7fa79c673862196acc9643e246b8b",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/gun-sonu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-08T00:07:20+03:00",
+      "sure_sn": 0.3
+    }
+  ],
+  "imza": "78e16f169f52c830664bb9ae2b36c603771c76683b2000344285d9dcae016b71"
+}
