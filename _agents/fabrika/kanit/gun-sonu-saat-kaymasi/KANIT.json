@@ -1,0 +1,72 @@
+{
+  "is": "gun-sonu-saat-kaymasi",
+  "arac": "kanit.py/0.1.0",
+  "guncelleme": "2026-10-08T00:25:37+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kor-pencere",
+      "asama": "once",
+      "dosya": "olcum-kor-pencere-once.txt",
+      "sha256": "215a489c47e04bc6319ce41d8333e5188fe84bbf5a5e78262f51cfbeb89db3b6",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/kaymapro.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/gun-sonu-anadal.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-08T00:07:19+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kor-pencere",
+      "asama": "sonra",
+      "dosya": "olcum-kor-pencere-sonra.txt",
+      "sha256": "ec8e2cc79e3012f159e6d6889ad16477ba4728321cea465c43b72144bd76d352",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/kaymapro.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-gun-sonu-saat-kaymasi/yazilim-fabrikasi/scripts/gun-sonu.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-08T00:15:52+03:00",
+      "sure_sn": 0.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "b1236481342eb992cd38cb7be682504c04940a62daeab685a11c82fe7994d7de",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/gun-sonu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-08T00:15:51+03:00",
+      "sure_sn": 1.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-dilimsiz",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-dilimsiz-sonra.txt",
+      "sha256": "a65f7191f267eee2f5eb818c8c57701f7c06b0ed445588291bc39aaee581b30a",
+      "komut": [
+        "env",
+        "TZ=UTC",
+        "bash",
+        "yazilim-fabrikasi/scripts/gun-sonu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-08T00:25:37+03:00",
+      "sure_sn": 0.4
+    }
+  ],
+  "imza": "8873004df5c909b65f9cd8c43e618f794f67461714387237b627cc181f38846a"
+}
