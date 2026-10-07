@@ -1,0 +1,19 @@
+{
+  "is": "kanit-iki-kusur",
+  "cumle": "kanit.py iki kusur: ayni etiket+asama yeniden olculunce manifestte bayat kayit kaliyor (dogrula kalici kirmizi) ve gecersiz UTF-8 baytinda cokuyor, kayit hic yazilmiyor (NAZIR/MOTOR1 bildirdi, ikisi de birinci elden dogrulandi)",
+  "istedi": "NAZIR",
+  "aldi": "MUAVIN",
+  "zaman": "2026-10-07T21:49:44+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

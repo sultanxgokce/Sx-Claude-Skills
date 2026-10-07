@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/kusur-probu.sh /config/.claude/skills/yazilim-fabrikasi/scripts/kanit.py
+# rc=1 sure=0.2s zaman=2026-10-07T21:52:37+03:00
+--- stdout ---
+KUSUR-a VAR: yeniden olculen kanit -> kayit=2 dogrula-rc=1
+KUSUR-b VAR: gecersiz bayt -> arac rc=1, kayit yazilmadi
+--- stderr ---

@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/kusur-probu.sh yazilim-fabrikasi/scripts/kanit.py
+# rc=0 sure=0.2s zaman=2026-10-07T21:52:37+03:00
+--- stdout ---
+kusur-a yok: kayit=1 dogrula-rc=0
+kusur-b yok: gecersiz bayt tolere edildi, kayit yazildi
+--- stderr ---

@@ -1,0 +1,70 @@
+{
+  "is": "kanit-iki-kusur",
+  "arac": "kanit.py/0.1.0",
+  "guncelleme": "2026-10-07T21:52:49+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kusur-probu",
+      "asama": "once",
+      "dosya": "olcum-kusur-probu-once.txt",
+      "sha256": "bb179bc39e3666bb7f60b6d980d853252087f75427575b6b4df3bc56069ad43a",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/kusur-probu.sh",
+        "/config/.claude/skills/yazilim-fabrikasi/scripts/kanit.py"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-07T21:52:37+03:00",
+      "sure_sn": 0.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kusur-probu",
+      "asama": "sonra",
+      "dosya": "olcum-kusur-probu-sonra.txt",
+      "sha256": "c9c09f12336aab58a4cb8999db17e91bd1c9d18d2494783afbc6a552da015b2e",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/kusur-probu.sh",
+        "yazilim-fabrikasi/scripts/kanit.py"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-07T21:52:37+03:00",
+      "sure_sn": 0.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "once",
+      "dosya": "olcum-sinav-once.txt",
+      "sha256": "c98d15ccf9620a3bc77416226aa196f2f6f441adfe22488ec500ad0bef274782",
+      "komut": [
+        "bash",
+        "/config/.claude/skills/yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-07T21:52:46+03:00",
+      "sure_sn": 3.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "43119a29c2c369cddadcfc0834b04131b75e05efe2f7ba65a97c6e3f0bcd3a4e",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-07T21:52:49+03:00",
+      "sure_sn": 3.5
+    }
+  ],
+  "imza": "1301ad9c4f51cc7d245d103f169cb6654f44ebd8723ed7630efc1fa33d925b1c"
+}
