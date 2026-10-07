@@ -1,0 +1,16 @@
+{
+  "tur": 1,
+  "is": "kanit-iki-kusur",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-07T21:53:41+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Muavin, aynı etiket+aşama yeniden ölçümünde bayat manifest kaydını yenisiyle değiştirip geçersiz UTF-8 çıktısını kayıt kaybetmeden tolere etmiş. Nâzır’ın iki kusuru da kırmızıdan yeşile dönen doğrudan probla ve genişletilmiş sınavla ölçüldüğünden iş üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. kusur-probu ölçüm çifti iki bildirilen kusuru önce rc=1/kırmızı, sonra rc=0/yeşil olarak doğrudan sınıyor; sonra çıktısı tek kayıt, doğrulama rc=0, geçersiz baytın tolere edilmesi ve kaydın yazılması sonuçlarını gösteriyor. Genel sınav da önce 32/0 ve sonra rc=0; T11-T12 yeni davranışları açıkça kapsıyor. Çıktıların yalnız ilk 60 satırı verildiği için T13 mutasyon sonuçları görünmüyor, ancak bu iki ana iddia için doğrudan prob ve görünen T11-T12 yeterli kanıt sağlıyor."
+  }
+}

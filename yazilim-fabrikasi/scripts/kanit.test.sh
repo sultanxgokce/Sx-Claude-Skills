@@ -115,6 +115,51 @@ PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" LD_LIBRARY_PATH=/onceki/yol 
   KANIT_DEPO="$T" python3 "$M" ekran is-ekran mutasyon --url https://ornek.test --asama tek >/dev/null 2>&1
 grep -q 'LDP=\[/onceki/yol\]' "$EKR/ekran-mutasyon-tek.hata.txt"; g $? "E4 MUTASYON: kablo koparılınca oda ayarı çocuğa GİTMEZ (kablo süs değil)"
 
+echo "════ T11 · AYNI KANIT YENİDEN ÖLÇÜLÜNCE kayıt ÜSTÜNE yazılır (NÂZIR/MOTOR1) ════"
+# VAKA: dosya üstüne yazılıyordu ama manifestte eski kayıt kalıyordu → eski sha tutmaz,
+#   `dogrula` KALICI rc=1; silme komutu yok, tek çıkış kanıt dizinini komple silmek.
+R="$T/_agents/fabrika/kanit/is-tekrar"
+bash "$K" olcum is-tekrar et --asama once -- bash -c 'echo BIR' >/dev/null 2>&1; g $? "T11a ilk ölçüm alındı"
+O="$(bash "$K" olcum is-tekrar et --asama once -- bash -c 'echo IKI' 2>&1 >/dev/null)"; g $? "T11b aynı etiket+aşama yeniden ölçüldü"
+N="$(python3 -c "import json;print(len(json.load(open('$R/KANIT.json'))['kayitlar']))")"
+[ "$N" = 1 ]; g $? "T11c manifestte TEK kayıt (bayat kayıt kalmadı; ölçülen=$N)"
+bash "$K" dogrula is-tekrar >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T11d dogrula rc=0 (eskiden KALICI rc=1 idi)"
+grep -q "BIR" "$R/olcum-et-once.txt"; [ $? -ne 0 ]; g $? "T11e kanıt dosyası gerçekten yenisi (eski çıktı yok)"
+grep -q "aynı kanıt yeniden ölçüldü" <<<"$O"; g $? "T11f üstüne yazmak SESSİZ değil — yüzeye basılır"
+# renk değişimi de görünür olmalı: yeşilden kırmızıya düşen bir yeniden-ölçüm
+O2="$(bash "$K" olcum is-tekrar et --asama once -- bash -c 'exit 1' 2>&1 >/dev/null)"
+grep -q "renk=yesil → kirmizi" <<<"$O2"; g $? "T11g renk değişimi söylenir (yeşili sessizce kırmızıya çevirmez)"
+[ "$(python3 -c "import json;print(json.load(open('$R/KANIT.json'))['kayitlar'][-1]['renk'])")" = kirmizi ]; g $? "T11h son renk manifestte kirmizi"
+# AYRI etiket/aşama BİRLEŞMEZ → T11c tautoloji değil
+bash "$K" olcum is-tekrar et --asama sonra -- echo z >/dev/null 2>&1
+bash "$K" olcum is-tekrar baska --asama once -- echo z >/dev/null 2>&1
+[ "$(python3 -c "import json;print(len(json.load(open('$R/KANIT.json'))['kayitlar']))")" = 3 ]; g $? "T11i farklı aşama/etiket AYRI kayıt kalır (3 kayıt) — birleştirme körü körüne değil"
+
+echo "════ T12 · GEÇERSİZ UTF-8 baytı aracı ÇÖKERTMEZ, kayıt yazılır (NÂZIR/MOTOR1) ════"
+# VAKA: text=True + errors= yok → çocuk sürecin yarım-kesilmiş Türkçe karakteri
+#   UnicodeDecodeError veriyordu; kayıt HİÇ yazılmıyordu ve sebebi görünmüyordu (sessiz).
+U="$T/_agents/fabrika/kanit/is-bayt"
+bash "$K" olcum is-bayt ham --asama tek -- bash -c 'printf "ba\xc5lam\n"' >/dev/null 2>&1; g $? "T12a geçersiz bayta rağmen rc=0"
+[ -f "$U/KANIT.json" ]; g $? "T12b kayıt YAZILDI (eskiden hiç yazılmıyordu)"
+[ -s "$U/olcum-ham-tek.txt" ]; g $? "T12c kanıt dosyası dolu"
+grep -q "ba" "$U/olcum-ham-tek.txt"; g $? "T12d okunabilen kısım korunmuş"
+bash "$K" dogrula is-bayt >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T12e dogrula rc=0"
+# stderr tarafı da aynı kapıdan geçmeli
+bash "$K" olcum is-bayt hamerr --asama tek -- bash -c 'printf "x\xffy\n" >&2' >/dev/null 2>&1; g $? "T12f geçersiz bayt stderr'de de çökertmez"
+
+echo "════ T13 · MUTASYON: iki onarım da kablolu mu (süs değil mi) ════"
+M2="$T/kanit-mutant-tekrar.py"
+python3 -c 'import sys;s=open(sys.argv[1],encoding="utf-8").read();s=s.replace("    eski_sira = next((i for i, k in enumerate(kayitlar) if k.get(\"dosya\") == kayit.get(\"dosya\")), None)","    eski_sira = None",1);open(sys.argv[2],"w",encoding="utf-8").write(s)' "$HERE/kanit.py" "$M2"
+MR="$T/_agents/fabrika/kanit/is-mut1"
+KANIT_DEPO="$T" python3 "$M2" olcum is-mut1 e --asama once -- echo a >/dev/null 2>&1
+KANIT_DEPO="$T" python3 "$M2" olcum is-mut1 e --asama once -- echo b >/dev/null 2>&1
+KANIT_DEPO="$T" python3 "$M2" dogrula is-mut1 >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T13a MUTASYON: üstüne-yazma kaldırılınca bayat kayıt geri gelir ve dogrula KIRMIZI olur"
+
+M3="$T/kanit-mutant-bayt.py"
+python3 -c 'import sys;s=open(sys.argv[1],encoding="utf-8").read();s=s.replace("capture_output=True, text=True, errors=\"replace\")","capture_output=True, text=True)",1);open(sys.argv[2],"w",encoding="utf-8").write(s)' "$HERE/kanit.py" "$M3"
+KANIT_DEPO="$T" python3 "$M3" olcum is-mut2 e --asama tek -- bash -c 'printf "ba\xc5lam\n"' >/dev/null 2>&1; [ $? -ne 0 ]; g $? "T13b MUTASYON: errors kaldırılınca geçersiz bayt yine çökertir (onarım gerçek)"
+[ ! -f "$T/_agents/fabrika/kanit/is-mut2/KANIT.json" ]; g $? "T13c MUTASYON: çöküşte kayıt hiç yazılmaz (sessiz kaybın kendisi)"
+
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]

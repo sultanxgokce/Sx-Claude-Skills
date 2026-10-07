@@ -1,0 +1,69 @@
+$ bash yazilim-fabrikasi/scripts/kanit.test.sh
+# rc=0 sure=3.5s zaman=2026-10-07T21:52:49+03:00
+--- stdout ---
+════ T1 · ölçüm çifti: komutu araç koşar, kırpılmamış çıktı+rc ════
+  ✓ önce ölçümü rc=0
+  ✓ sonra ölçümü rc=0
+  ✓ KANIT.json araç tarafından yazıldı
+  ✓ stdout ve stderr kırpılmadan saklandı
+  ✓ iki kayıt, yeşil, imzalı
+════ T2 · rc=3 komut → SARI, aracın rc'si 3 (yeşil değil) ════
+  ✓ araç rc=3 döndü
+  ✓ manifestte renk=sari
+════ T3 · kırmızı komut → kirmizi, araç rc=0 (kayıt başarılı) ════
+  ✓ kayıt alındı
+  ✓ renk=kirmizi rc=1
+════ T4 · dosya ekleme + dogrula sağlam ════
+  ✓ dosya eklendi
+  ✓ dogrula rc=0
+  ✓ sarı kayıt sayısı özetle söyleniyor
+════ T5 · elle yazım yakalanır ════
+  ✓ renk elle yeşile boyanınca imza tutmuyor → rc=1
+  ✓ bozuk manifeste yeni kayıt EKLENMİYOR
+  ✓ içerik aslına dönünce imza yine tutar (imza İÇERİĞE aittir, dosya baytlarına değil)
+════ T6 · dosya sha bozulursa yakalanır ════
+  ✓ kanıt dosyası sonradan değişince rc=1
+════ T7 · kanıt yok → rc=3 ════
+  ✓ manifest yokken rc=3 (ölçülemedi)
+════ T8 · ekran: playwright YOKSA sarı+rc=3; VARSA yerel sayfadan kare + ürün imi ════
+  ✓ gerçek kare alındı (playwright var)
+  ✓ ürün imi yoksa rc=2 (ölçer ürünü görmedi — 6. kanun)
+  ✓ imsiz kare manifestte kırmızı
+════ T9 · ozet tablo ════
+  ✓ markdown tablo üretildi
+════ T10 · EKRAN: kitaplık yolu ortamdan · eksik kitaplığın ADI yüzeye çıkar (MEDDAH) ════
+  ✓ E1a kare alınamadı → rc=3 (SARI, yeşil değil)
+  ✓ E1b eksik kitaplığın ADI yüzeyde (300 karakter kırpmasının arkasında kalmıyor)
+  ✓ E1c sebep doğru söylenir: ayağa kalkmama DEĞİL, görünmeme
+  ✓ E1d manifestte renk=sari
+  ✓ E1e manifestte eksik_kitaplik adıyla
+  ✓ E1f tam çıktı KIRPILMADAN diske yazıldı (kullanılan yol bilgisiyle)
+  ✓ E2a KANIT_PW_LIBS ÖNE eklenir, odanın kendi ayarı KORUNUR
+  ✓ E2b kullanılan yol manifeste yazılır (teşhis edilebilir sarı)
+  ✓ E3a ilgisiz hatada kitaplık iddiası YOK
+  ✓ E3b manifestte eksik_kitaplik BOŞ (uydurma yok)
+  ✓ E4 MUTASYON: kablo koparılınca oda ayarı çocuğa GİTMEZ (kablo süs değil)
+════ T11 · AYNI KANIT YENİDEN ÖLÇÜLÜNCE kayıt ÜSTÜNE yazılır (NÂZIR/MOTOR1) ════
+  ✓ T11a ilk ölçüm alındı
+  ✓ T11b aynı etiket+aşama yeniden ölçüldü
+  ✓ T11c manifestte TEK kayıt (bayat kayıt kalmadı; ölçülen=1)
+  ✓ T11d dogrula rc=0 (eskiden KALICI rc=1 idi)
+  ✓ T11e kanıt dosyası gerçekten yenisi (eski çıktı yok)
+  ✓ T11f üstüne yazmak SESSİZ değil — yüzeye basılır
+  ✓ T11g renk değişimi söylenir (yeşili sessizce kırmızıya çevirmez)
+  ✓ T11h son renk manifestte kirmizi
+  ✓ T11i farklı aşama/etiket AYRI kayıt kalır (3 kayıt) — birleştirme körü körüne değil
+════ T12 · GEÇERSİZ UTF-8 baytı aracı ÇÖKERTMEZ, kayıt yazılır (NÂZIR/MOTOR1) ════
+  ✓ T12a geçersiz bayta rağmen rc=0
+  ✓ T12b kayıt YAZILDI (eskiden hiç yazılmıyordu)
+  ✓ T12c kanıt dosyası dolu
+  ✓ T12d okunabilen kısım korunmuş
+  ✓ T12e dogrula rc=0
+  ✓ T12f geçersiz bayt stderr'de de çökertmez
+════ T13 · MUTASYON: iki onarım da kablolu mu (süs değil mi) ════
+  ✓ T13a MUTASYON: üstüne-yazma kaldırılınca bayat kayıt geri gelir ve dogrula KIRMIZI olur
+  ✓ T13b MUTASYON: errors kaldırılınca geçersiz bayt yine çökertir (onarım gerçek)
+  ✓ T13c MUTASYON: çöküşte kayıt hiç yazılmaz (sessiz kaybın kendisi)
+
+── SONUÇ: 50 geçti · 0 kaldı ──
+--- stderr ---

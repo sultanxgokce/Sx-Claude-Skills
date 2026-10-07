@@ -19,6 +19,13 @@ Ortam: KANIT_DEPO (depo kökü; vars. git toplevel) · KANIT_PLAYWRIGHT_DIR (nod
 import argparse, datetime, hashlib, json, os, re, shutil, subprocess, sys
 
 SURUM = "kanit.py/0.1.0"
+# 🔴 SÜRÜM NUMARASI BİLEREK ARTIRILMADI (ölçüldü 7 Eki 2026). İmza gövdesi SURUM'u İÇERİR
+#    (bkz imza()): sürümü 0.2.0'a çekmek, 0.1.0 ile yazılmış HER manifestin imzasını
+#    geçersiz kılıyor ve `dogrula` bunu "manifest ELLE DEĞİŞMİŞ" diye raporluyor —
+#    yani filodaki tüm eski kanıt, araç güncellendiği için sahtelikle suçlanıyordu.
+#    Ölçüm: 0.1.0 ile yazılan manifest, 0.2.0 aracıyla rc=1 + "İMZA TUTMUYOR".
+#    Bu, düzeltilen kusurdan daha ağır bir yanlış-kırmızı olurdu. Sürüm-imza bağı
+#    ayrı bir kusurdur ve ayrı kartta ele alınır; bu işte DOKUNULMADI.
 TUZ = "yazilim-fabrikasi-kanit-2026"  # imza tuzu: elle yazımı yakalar; kriptografik gizlilik iddiası YOK
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -31,7 +38,7 @@ def depo_kok(arg):
     d = arg or os.environ.get("KANIT_DEPO")
     if not d:
         try:
-            d = subprocess.check_output(["git", "rev-parse", "--show-toplevel"], text=True, stderr=subprocess.DEVNULL).strip()
+            d = subprocess.check_output(["git", "rev-parse", "--show-toplevel"], text=True, errors="replace", stderr=subprocess.DEVNULL).strip()
         except Exception:
             hata("depo kökü bulunamadı (--depo ver ya da KANIT_DEPO)", 3)
     return d
@@ -79,7 +86,20 @@ def kayit_ekle(depo, is_adi, kayit):
     kayitlar = m["kayitlar"] if m else []
     if m and m.get("imza") != imza(kayitlar):
         hata("var olan KANIT.json imzası TUTMUYOR — elle değişmiş; yeni kayıt eklenmedi (dogrula ile bak)", 1)
-    kayitlar.append(kayit)
+    # AYNI KANIT DOSYASI = AYNI KAYIT (NÂZIR/MOTOR1, 7 Eki 2026). Ölçüm yeniden koşulunca
+    # dosya ÜSTÜNE yazılıyordu ama manifestte eski kayıt kalıyordu → eski kaydın sha'sı artık
+    # tutmaz ve `dogrula` KALICI rc=1 verirdi; silme komutu da yoktu, tek çıkış kanıt dizinini
+    # komple silmekti (MOTOR1 iki kez yaptı). Kayıt KİMLİĞİ kanıt dosyasının adıdır: aynı
+    # dosyaya iki kayıt işaret edemez. Üstüne yazmak SESSİZ olmaz — yüzeye basılır.
+    eski_sira = next((i for i, k in enumerate(kayitlar) if k.get("dosya") == kayit.get("dosya")), None)
+    if eski_sira is None:
+        kayitlar.append(kayit)
+    else:
+        onceki = kayitlar[eski_sira]
+        kayitlar[eski_sira] = kayit
+        print(f"↻ aynı kanıt yeniden ölçüldü: {kayit.get('dosya')} "
+              f"(önceki renk={onceki.get('renk')} → {kayit.get('renk')}; kayıt üstüne yazıldı)",
+              file=sys.stderr)
     manifest_yaz(dz, is_adi, kayitlar)
     return dz
 
@@ -92,7 +112,7 @@ def cmd_olcum(a):
     ad = f"olcum-{a.etiket}-{a.asama}.txt"
     yol = os.path.join(dz, ad)
     t0 = datetime.datetime.now()
-    p = subprocess.run(a.komut, capture_output=True, text=True)   # boru YOK: çıktı kırpılmadan
+    p = subprocess.run(a.komut, capture_output=True, text=True, errors="replace")   # boru YOK: çıktı kırpılmadan
     sure = (datetime.datetime.now() - t0).total_seconds()
     with open(yol, "w", encoding="utf-8") as f:
         f.write(f"$ {' '.join(a.komut)}\n# rc={p.returncode} sure={sure:.1f}s zaman={simdi()}\n--- stdout ---\n{p.stdout}--- stderr ---\n{p.stderr}")
@@ -148,7 +168,7 @@ def cmd_ekran(a):
         onceki = env.get("LD_LIBRARY_PATH", "")
         env["LD_LIBRARY_PATH"] = f"{libs}:{onceki}" if onceki else libs
     argv = ["node", os.path.join(HERE, "kanit-ekran.mjs"), a.url, yol, a.urun_imi or "", a.bekle or "", str(a.genislik)]
-    p = subprocess.run(argv, capture_output=True, text=True, env=env)
+    p = subprocess.run(argv, capture_output=True, text=True, errors="replace", env=env)
     if p.returncode == 2:
         kayit = {**temel, "sha256": None, "rc": 2, "renk": "kirmizi", "not": "ÜRÜN İMİ YOK — açılan sayfa ürün değil (giriş/hata sayfası olabilir)"}
         kayit_ekle(depo, a.is_adi, kayit)
