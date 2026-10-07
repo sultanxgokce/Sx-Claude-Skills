@@ -1,0 +1,16 @@
+{
+  "tur": 2,
+  "is": "gun-sonu-saat-kaymasi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-08T00:16:20+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Dünya saati damgaları yerel güne ve yerel gösterim saatine çevrilmiş; kaçış ile tavan kayıtlarındaki üç saatlik kör pencere kapatılmış. Önce/sonra ölçümü ana arızayı doğrudan gösteriyor, önceki turun iki uygulama kusuru da yabancı dilim ve bozuk ofset sınavlarıyla giderildiği için yalnız küçük rötuş payı kalmış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Kırmızı önce/yeşil sonra ölçüm çifti 01:11 yerel olayının önce iki bölümde de kaybolduğunu, sonra kaçış ve tavan özetlerinde görünüp 01:11 basıldığını gösteriyor; ayrıca 23 geçişli sınav yabancı dilim dönüşümünü, bozuk ofset dayanıklılığını, başka gün süzmesini ve üç mutasyon kontrolünü kapsıyor. Kanıt gerçek canlı defterlerin birebir karesi değil, hermetik gerçekçi veriyle davranış ölçümü; iş kartındaki teknik iddiayı değerlendirmek için yeterli."
+  }
+}
