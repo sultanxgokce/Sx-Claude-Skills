@@ -65,9 +65,36 @@ printf '%sT01:11:00+03:00 | KAPISIZ | dilimli | komut-E\n' "$GUN" > "$T/_agents/
 O6="$(ozet)"
 [ "$(say "$O6" 'Kapı kaçışları')" = 1 ]; g $? "Ö6 açık dilimli damga da bugüne sayılıyor"
 
+echo "════ Ö9 · YABANCI DİLİM: saat de çevrilmeli, gün de (göz tur-1) ════"
+# 🔴 Fikstür BİLEREK kendi dilimimizden DEĞİL: +03:00 kullanmak açığı örter, çünkü
+#    çevrilmemiş saat yerel saatle aynı çıkar. Çevrim gerçekten koşuyor mu, ancak
+#    yabancı bir dilimle görünür. +00:00 = yerelde 03:00 (biz +03'teyiz).
+printf '%sT00:00:00+00:00 | KAPISIZ | yabanci-dilim | komut-F\n' "$GUN" > "$T/_agents/fabrika/kacis-defteri.log"
+O9="$(ozet)"
+BEK="$(python3 -c "
+import datetime,sys
+t=datetime.datetime.fromisoformat(sys.argv[1]+'T00:00:00+00:00').astimezone()
+print(t.strftime('%Y-%m-%d'), t.strftime('%H:%M'))" "$GUN")"
+BEK_GUN="${BEK%% *}"; BEK_SAAT="${BEK##* }"
+if [ "$BEK_GUN" = "$GUN" ]; then
+  [ "$(say "$O9" 'Kapı kaçışları')" = 1 ]; g $? "Ö9a yabancı dilimli damga doğru güne sayılıyor"
+  grep -qE "^- $BEK_SAAT · gerekçe" <<<"$O9"; g $? "Ö9b saat YEREL'e çevrilmiş basılıyor ($BEK_SAAT, ham 00:00 değil)"
+  grep -qE '^- 00:00 · gerekçe' <<<"$O9"; [ $? -ne 0 ]; g $? "Ö9c ham dilim saati BASILMIYOR"
+else
+  g 0 "Ö9 ATLANDI: bu dilimde yabancı damga başka güne düşüyor (fikstür kurulamadı)"
+fi
+
+echo "════ Ö10 · BOZUK DİLİM özeti ÇÖKERTMEZ (göz tur-1: try kapsamı dardı) ════"
+printf '%sT01:11:00+99:00 | KAPISIZ | bozuk-dilim | komut-G\n' "$GUN" > "$T/_agents/fabrika/kacis-defteri.log"
+O10="$(ozet)"; RC10=$?
+[ "$RC10" -eq 0 ]; g $? "Ö10a özet yine üretiliyor (çökmüyor)"
+grep -q 'ÇÖZÜLEMEDİ' <<<"$O10"; g $? "Ö10b bozuk satır ÇÖZÜLEMEDİ diye sayılıyor"
+[ "$(say "$O10" 'Kapı kaçışları')" = 0 ]; g $? "Ö10c bugüne sayılmıyor"
+grep -q 'Açık işler' <<<"$O10"; g $? "Ö10d özetin SONRAKİ bölümleri de üretildi (akış kesilmedi)"
+
 echo "════ Ö7 · MUTASYON: saat çevrimi koparılınca kör pencere GERİ GELİR ════"
 M="$T/mutant.sh"
-sed 's@^    return t.astimezone().strftime("%Y-%m-%d")@    return tarih@' "$G" > "$M"
+sed 's@^        return t.astimezone().strftime("%Y-%m-%d")@        return tarih@' "$G" > "$M"
 if cmp -s "$M" "$G"; then g 1 "Ö7 mutant orijinalden FARKSIZ — ölçtüğü şey yok"; else
   printf '%s | KAPISIZ | gece-kacisi | komut-A\n' "$GECE" > "$T/_agents/fabrika/kacis-defteri.log"
   OM="$( cd "$T" && bash "$M" --gun "$GUN" 2>&1 )"
@@ -81,6 +108,15 @@ if cmp -s "$M2" "$G"; then g 1 "Ö8 mutant2 FARKSIZ"; else
   printf 'tarihsiz bir satir | KAPISIZ | bozuk | komut-D\n' > "$T/_agents/fabrika/kacis-defteri.log"
   OM2="$( cd "$T" && bash "$M2" --gun "$GUN" 2>&1 )"
   grep -q 'ÇÖZÜLEMEDİ' <<<"$OM2"; [ $? -ne 0 ]; g $? "Ö8 MUTASYON: uyarı kaldırılınca bozuk satır SESSİZCE düşüyor"
+fi
+
+echo "════ Ö11 · MUTASYON: açık-dilim çevrimi koparılınca Ö9 kırmızıya döner ════"
+M3="$T/mutant3.sh"
+sed 's@^        if dilim:$@        if False:@' "$G" > "$M3"
+if cmp -s "$M3" "$G"; then g 1 "Ö11 mutant3 FARKSIZ (çapa bayat)"; else
+  printf '%sT00:00:00+00:00 | KAPISIZ | yabanci-dilim | komut-F\n' "$GUN" > "$T/_agents/fabrika/kacis-defteri.log"
+  OM3="$( cd "$T" && bash "$M3" --gun "$GUN" 2>&1 )"
+  grep -qE '^- 00:00 · gerekçe' <<<"$OM3"; g $? "Ö11 MUTASYON: çevrim ölünce HAM dilim saati basılıyor"
 fi
 
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null

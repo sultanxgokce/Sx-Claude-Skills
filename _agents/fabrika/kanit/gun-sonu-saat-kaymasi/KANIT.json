@@ -1,7 +1,7 @@
 {
   "is": "gun-sonu-saat-kaymasi",
   "arac": "kanit.py/0.1.0",
-  "guncelleme": "2026-10-08T00:07:30+03:00",
+  "guncelleme": "2026-10-08T00:15:52+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -24,7 +24,7 @@
       "etiket": "kor-pencere",
       "asama": "sonra",
       "dosya": "olcum-kor-pencere-sonra.txt",
-      "sha256": "9b9be7126ebb0bd1646c5f6a52b76e953e06f1e2eb6dd6362a8cc1fdeaf91e6b",
+      "sha256": "ec8e2cc79e3012f159e6d6889ad16477ba4728321cea465c43b72144bd76d352",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/kaymapro.sh",
@@ -32,24 +32,24 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-08T00:07:30+03:00",
-      "sure_sn": 0.1
+      "zaman": "2026-10-08T00:15:52+03:00",
+      "sure_sn": 0.2
     },
     {
       "tur": "olcum",
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "96927855bc4bce3cb262c83cc1b4164f07b7fa79c673862196acc9643e246b8b",
+      "sha256": "b1236481342eb992cd38cb7be682504c04940a62daeab685a11c82fe7994d7de",
       "komut": [
         "bash",
         "yazilim-fabrikasi/scripts/gun-sonu.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-08T00:07:20+03:00",
-      "sure_sn": 0.3
+      "zaman": "2026-10-08T00:15:51+03:00",
+      "sure_sn": 1.2
     }
   ],
-  "imza": "78e16f169f52c830664bb9ae2b36c603771c76683b2000344285d9dcae016b71"
+  "imza": "1e217555950157ab1b66c2a1b5964e30d2422d7986f9dd30770d14a83d453c59"
 }

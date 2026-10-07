@@ -64,19 +64,22 @@ def _yerel_gun(satir):
     if not m:
         return None
     tarih, saat, dilim = m.groups()
+    # 🔴 TÜM çözümleme tek try içinde (bağımsız göz tur 1): eskiden yalnız `fromisoformat`
+    #    korunuyordu; aralık dışı bir ofset (ör. +99:00) `timezone()` kurulurken patlıyor ve
+    #    ÖZETİN TAMAMINI durduruyordu. Bir satırın bozukluğu, günün raporunu öldüremez.
     try:
         t = _dt.datetime.fromisoformat(f"{tarih}T{saat}")
-    except ValueError:
-        return None
-    if dilim is None:
-        return tarih                      # dilimsiz damga zaten yereldir, dokunma
-    if dilim == "Z":
-        t = t.replace(tzinfo=_dt.timezone.utc)
-    else:
-        d = dilim.replace(":", "")
-        ofs = _dt.timedelta(hours=int(d[1:3]), minutes=int(d[3:5]))
-        t = t.replace(tzinfo=_dt.timezone(-ofs if d[0] == "-" else ofs))
-    return t.astimezone().strftime("%Y-%m-%d")
+        if dilim is None:
+            return tarih                  # dilimsiz damga zaten yereldir, dokunma
+        if dilim == "Z":
+            t = t.replace(tzinfo=_dt.timezone.utc)
+        else:
+            d = dilim.replace(":", "")
+            ofs = _dt.timedelta(hours=int(d[1:3]), minutes=int(d[3:5]))
+            t = t.replace(tzinfo=_dt.timezone(-ofs if d[0] == "-" else ofs))
+        return t.astimezone().strftime("%Y-%m-%d")
+    except (ValueError, OverflowError):
+        return None                       # çözülemedi → sessizce DÜŞMEZ, sayılır
 
 
 def _yerel_saat(damga):
@@ -85,13 +88,25 @@ def _yerel_saat(damga):
     m = _re.match(r"(\d{4}-\d{2}-\d{2})[T ](\d{2}:\d{2}:\d{2})(Z|[+-]\d{2}:?\d{2})?", damga)
     if not m:
         return damga[11:16] or "?"
-    g = _yerel_gun(damga)
-    if g is None:
-        return m.group(2)[:5]
+    if _yerel_gun(damga) is None:
+        return m.group(2)[:5]             # çözülemedi: ham saati bas, uydurma yapma
     tarih, saat, dilim = m.groups()
-    t = _dt.datetime.fromisoformat(f"{tarih}T{saat}")
-    if dilim == "Z":
-        t = t.replace(tzinfo=_dt.timezone.utc).astimezone()
+    # 🔴 AÇIK DİLİM de çevrilir (bağımsız göz tur 1): eskiden yalnız `Z` dalı astimezone
+    #    çağırıyordu; `+00:00` taşıyan bir damga dünya saatini YEREL diye basıyordu.
+    #    Sınav da bunu örtmüştü — yalnız kendi dilimimizi (+03:00) deniyordu, o da zaten
+    #    yerelle aynı olduğu için fark görünmüyordu. Fikstür kendi diliminden SEÇİLMEZ.
+    try:
+        t = _dt.datetime.fromisoformat(f"{tarih}T{saat}")
+        if dilim == "Z":
+            t = t.replace(tzinfo=_dt.timezone.utc)
+        elif dilim:
+            d = dilim.replace(":", "")
+            ofs = _dt.timedelta(hours=int(d[1:3]), minutes=int(d[3:5]))
+            t = t.replace(tzinfo=_dt.timezone(-ofs if d[0] == "-" else ofs))
+        if dilim:
+            t = t.astimezone()
+    except (ValueError, OverflowError):
+        return saat[:5]
     return t.strftime("%H:%M")
 
 

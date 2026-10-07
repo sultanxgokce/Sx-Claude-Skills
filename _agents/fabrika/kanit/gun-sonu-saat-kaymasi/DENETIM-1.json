@@ -1,0 +1,29 @@
+{
+  "tur": 1,
+  "is": "gun-sonu-saat-kaymasi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-08T00:13:43+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kör pencere, dünya damgasını yerel güne çevirerek kapatılmış; önce/sonra ölçümü gece olayının hem kaçış hem tavan özetine girdiğini ve saatin 01:11 basıldığını gösteriyor. Ancak açık saat dilimli damgaların gösteriminde dönüşüm eksik ve bazı bozuk dilimler özeti çökertebildiği için önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "_yerel_saat yalnız Z damgalarını yerel saate çeviriyor; +00:00 veya başka bir açık dilim taşıyan damgada yerel karşılığı yerine damganın kendi saatini basıyor. Ö6 sınavı yalnız +03:00 kullanarak bu açığı örtüyor.",
+        "kanit": "_yerel_saat içinde astimezone() sadece `if dilim == \"Z\"` dalında; sınav Ö6 girdisi `%sT01:11:00+03:00` ve yalnız güne dahil edilmeyi ölçüyor, basılan saati sınamıyor.",
+        "konum": "yazilim-fabrikasi/scripts/gun-sonu.sh: _yerel_saat; yazilim-fabrikasi/scripts/gun-sonu.test.sh: Ö6",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Çözülemeyen damgaların raporlanacağı iddiası tüm bozuk dilimler için geçerli değil; örneğin aralık dışı açık ofset timezone kurulurken ValueError üretip özetin tamamını durdurabilir.",
+        "kanit": "_yerel_gun içindeki try/except yalnız `datetime.fromisoformat` çağrısını kapsıyor; `timedelta` ve `timezone(...)` kurulumları try dışında. Ö5 ise yalnız zaman damgası hiç bulunmayan `tarihsiz bir satir` girdisini sınıyor.",
+        "konum": "yazilim-fabrikasi/scripts/gun-sonu.sh: _yerel_gun; yazilim-fabrikasi/scripts/gun-sonu.test.sh: Ö5",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Kırmızı önce/yeşil sonra ölçüm çifti gerçek kör pencere davranışını doğrudan gösteriyor; ayrıca 15 geçişli sınav ve iki mutasyon kontrolü var. Kanıt ana talep için güçlü, fakat açık dilimlerin saat gösterimi ve hatalı ofset dayanıklılığı kapsanmamış."
+  }
+}
