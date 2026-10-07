@@ -21,7 +21,8 @@ taze_cipa() { cat > "$T/cipa.md" <<EOF
 - [ ] 2) açılmamış iş
 - [x] 3) biten iş
 
-_yazıldı: $(date +%FT%T)_
+_yazıldı: $(date -d '-300 min' +%FT%T)_
+_dokunuldu: $(date +%FT%T)
 EOF
 touch "$T/cipa.md"
 }
@@ -33,13 +34,19 @@ yasli_cipa() { local dk="${1:-500}"
 - [~] 1) sabah yazılmış, akşam bayatlamış iş
 
 _yazıldı: $(date -d "-$dk min" +%FT%T)_
+_dokunuldu: $(date -d "-$dk min" +%FT%T)
 EOF
   touch -d "-$dk min" "$T/cipa.md"
 }
-bayat_cipa() { sed "s/$BUGUN/$ESKI/" > "$T/cipa.md" <<EOF
-# ⚓ GÜNÜN PLANI ÇIPASI · $BUGUN
+# Dünün çıpası ama damgası TAZE: böylece bayatlığı yakalayan TEK şey başlık tarihidir.
+# (Damgasız yazsaydım ikinci bir kapı da tutardı ve S12a mutasyonu hiçbir şey ölçmezdi —
+#  savunma derinliği iyidir ama mutasyon sınavını kör eder.)
+bayat_cipa() { cat > "$T/cipa.md" <<EOF
+# ⚓ GÜNÜN PLANI ÇIPASI · $ESKI
 ## Maddeler
 - [~] 1) dünün yarım işi
+
+_dokunuldu: $(date +%FT%T)
 EOF
 }
 bos_cipa() { printf '# ⚓ GÜNÜN PLANI ÇIPASI · %s\n\n## Maddeler\n\n_madde yok_\n' "$BUGUN" > "$T/cipa.md"; }
@@ -111,6 +118,42 @@ RC=0; O="$(SOLUKLAN_AZAMI_YAS_DK=600 SOLUKLAN_CIPA_ARAC="$T/cipa.sh" SOLUKLAN_BU
 [ "$RC" -eq 0 ]; g $? "S6g5 azami yaş 600'e çıkınca AYNI çıpa taze sayılır (eşik gerçekten okunuyor)"
 taze_cipa
 
+echo "════ S13 · BOŞ DOKUNUŞ tazelik SAYILMAZ (göz tur-2: fail-open idi) ════"
+# Eski içerik + yeni dosya zamanı: ilk yazımda "taze olan kazanır" diyordum ve BU GEÇİYORDU.
+yasli_cipa 500; touch "$T/cipa.md"          # dosya ŞİMDİ dokunulmuş gibi
+O="$(kos oneri --doluluk 90)"; RC=$?
+[ "$RC" -eq 3 ]; g $? "S13a boş dokunuş yaşı sıfırlamıyor → rc=3"
+grep -q 'ÇIPA YAŞLI' <<<"$O"; g $? "S13b hâlâ yaşlı diyor (EN ESKİ yüzey kazanıyor)"
+# Gerçek tazeleme (dokunma damgası YENİ) ise geçmeli — yoksa kapı her şeyi reddeder
+taze_cipa
+O="$(kos oneri --doluluk 90)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "S13c GERÇEK tazelemede (yeni dokunma damgası) geçiyor — kapı kör değil"
+
+echo "════ S14 · DAMGASIZ çıpa 'taze' sayılmaz, ölçemedim denir ════"
+printf '# ⚓ GÜNÜN PLANI ÇIPASI · %s\n\n## Maddeler\n- [~] 1) damgasiz plan\n' "$BUGUN" > "$T/cipa.md"
+O="$(kos oneri --doluluk 90)"; RC=$?
+[ "$RC" -eq 3 ]; g $? "S14a damgasız çıpa rc=3"
+grep -q 'ÇIPA DAMGASIZ' <<<"$O"; g $? "S14b sebebi ayrı sınıf olarak söyleniyor"
+grep -q 'TAHMİN, ölçüm değil' <<<"$O"; g $? "S14c dosya zamanının ölçüm olmadığı yazılı"
+
+echo "════ S15 · TARİH BAŞLIKTAN okunur, gövdeden ARANMAZ (göz tur-2) ════"
+# Dünün çıpası ama gövdesinde bugünün tarihi geçiyor — eski kapı bunu TAZE sayıyordu.
+cat > "$T/cipa.md" <<EOF
+# ⚓ GÜNÜN PLANI ÇIPASI · $ESKI
+## Maddeler
+- [~] 1) teslim $BUGUN tarihinde yapılacak
+
+_dokunuldu: $(date +%FT%T)
+EOF
+O="$(kos oneri --doluluk 90)"; RC=$?
+[ "$RC" -eq 3 ]; g $? "S15a gövdede bugünün tarihi geçse de BAYAT (rc=3)"
+grep -q "ÇIPA BAYAT ($ESKI)" <<<"$O"; g $? "S15b başlıktaki GERÇEK tarih bildiriliyor"
+# başlıksız çıpa da taze sayılmaz
+printf '## Maddeler\n- [~] 1) başlıksız\n\n_dokunuldu: %s\n' "$(date +%FT%T)" > "$T/cipa.md"
+O="$(kos oneri --doluluk 90)"; RC=$?
+[ "$RC" -eq 3 ]; g $? "S15c başlıksız çıpa da geçmiyor"
+taze_cipa
+
 echo "════ S7 · AÇIK MADDE SAYIMI doğru (biten madde sayılmaz) ════"
 O="$(kos oneri --doluluk 90)"
 grep -q '2 açık madde' <<<"$O"; g $? "S7 yarım+açılmamış=2 sayılıyor, biten sayılmıyor"
@@ -142,11 +185,20 @@ O="$(kos oneri --doluluk)"; RC=$?
 
 echo "════ S12 · MUTASYON: tazelik kapısı kaldırılınca sınav KIRMIZI olmalı ════"
 M="$T/mutant.sh"
-sed 's@^  if ! printf .%s. "\$govde" | grep -q "\$BUGUN"; then@  if false; then@' "$S" > "$M"
-if cmp -s "$M" "$S"; then g 1 "S12a mutant orijinalden FARKSIZ — ölçtüğü şey yok"; else
+sed 's@^  if \[ "\$baslik_tarih" != "\$BUGUN" \]; then@  if false; then@' "$S" > "$M"
+if cmp -s "$M" "$S"; then g 1 "S12a mutant orijinalden FARKSIZ — ölçtüğü şey yok (çapa bayat)"; else
   bayat_cipa
   SOLUKLAN_CIPA_ARAC="$T/cipa.sh" SOLUKLAN_BUGUN="$BUGUN" bash "$M" oneri --doluluk 90 >/dev/null 2>&1
-  [ $? -eq 0 ]; g $? "S12a MUTASYON: tazelik kapısı ölünce BAYAT çıpa öneri üretiyor (kapı gerçek)"
+  [ $? -eq 0 ]; g $? "S12a MUTASYON: tarih kapısı ölünce DÜNÜN çıpası öneri üretiyor (kapı gerçek)"
+fi
+# EN ESKİ yüzey kuralı da mutasyonla ölçülür — "taze olan kazanır"a geri dönülürse yakalanmalı
+M3="$T/mutant3.sh"
+sed 's@^  \[ "\$mtime_yas" -gt "\$yas_dk" \] && yas_dk="\$mtime_yas".*@  [ "$mtime_yas" -lt "$yas_dk" ] \&\& yas_dk="$mtime_yas"@' "$S" > "$M3"
+if cmp -s "$M3" "$S"; then g 1 "S12c mutant3 FARKSIZ (çapa bayat)"; else
+  yasli_cipa 500; touch "$T/cipa.md"
+  SOLUKLAN_CIPA_ARAC="$T/cipa.sh" SOLUKLAN_BUGUN="$BUGUN" bash "$M3" oneri --doluluk 90 >/dev/null 2>&1
+  [ $? -eq 0 ]; g $? "S12c MUTASYON: 'taze olan kazanır'a dönülünce boş dokunuş kapıyı yine geçiyor"
+  taze_cipa
 fi
 M2="$T/mutant2.sh"
 sed 's@^    if \[ -z "\$DOLULUK" \]; then@    if false; then@' "$S" > "$M2"

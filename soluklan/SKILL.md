@@ -66,7 +66,7 @@ bash <bu-dizin>/scripts/soluklan.sh oneri --doluluk <ajanın kendi göstergesi>
 |---|---|---|
 | 0 | hazır, eşik aşıldı | öneri metnini Sultan'a **olduğu gibi** sun |
 | 1 | eşik altı | compact önerme, çalışmaya devam |
-| 3 | çıpa yok / bayat / boş / **yaşlı** | **önce çıpayı yaz**, sonra tekrar çağır |
+| 3 | çıpa yok / bayat / boş / yaşlı / **damgasız** | **önce çıpayı yaz**, sonra tekrar çağır |
 | 4 | doluluk verilmedi | ajan kendi göstergesine bakar; **uydurmaz** |
 
 Eşik varsayılan **%60** (Sultan) ve kural **"üstü"**: tam %60 tetiklemez, %61 tetikler —
@@ -108,8 +108,15 @@ kaybın kendisinden pahalıdır.
   bayatlamayı yakalayamam" diye **dipnot düşmüştüm** — bağımsız göz haklı olarak itiraz etti:
   *belgelemek onarmak değildir*, ölçülebilir bir şeyi ölçmeyip dipnota yazmak kapıyı süse çevirir.
   Yaş iki yüzeyden okunur (çıpanın kendi damgası + dosyanın değişme zamanı), taze olan kazanır.
-- Gerçek sınır şu: araç çıpanın **güncel** olduğunu değil, **dokunulduğunu** ölçer. Bir ajan
-  çıpayı anlamsızca tazeleyip kapıyı geçebilir — ikinci yarısı hâlâ 5. adımdaki doğrulamadır.
-- Kendi sınavı: `bash scripts/soluklan.test.sh` (41 kapı, hermetik — gerçek çıpaya dokunmaz).
-  İki **mutasyon** kapısı: tazelik kapısı öldürülünce bayat çıpa öneri üretir hâle gelir,
+  🔴 İlk onarımda "taze olan yüzey kazanır" demiştim; bu **fail-open**'dı — eski içerikli bir
+  dosyaya boş bir dokunuş yaşı sıfırlıyordu. Artık **en eski yüzey kazanır**. Üstelik kökten
+  onarıldı: çıpa aracının `tazele` komutu artık kendi izini (`_dokunuldu:`) bırakıyor, yani
+  tazelik bir **tahminden** ölçüme döndü. Damgası hiç olmayan çıpa "taze" sayılmaz, **ölçemedim**
+  sınıfına girer.
+- Tarih **başlıktan** okunur, gövdeden aranmaz: dünün planı içinde bugünü anan tek bir satır
+  (*"teslim 8 Ekim'de"*) eski kapıyı geçiriyordu. Yakınlık bağ değildir.
+- Gerçek sınır şu: araç çıpanın **doğru** olduğunu değil, **güncellendiğini** ölçer. Anlamsız bir
+  tazeleme kapıyı geçer — ikinci yarısı hâlâ 5. adımdaki doğrulamadır.
+- Kendi sınavı: `bash scripts/soluklan.test.sh` (51 kapı, hermetik — gerçek çıpaya dokunmaz).
+  Dört **mutasyon** kapısı: tazelik kapısı öldürülünce bayat çıpa öneri üretir hâle gelir,
   "ölçemedim" kapısı öldürülünce doluluksuz çağrı yeşile döner. Yani korumalar süs değil.

@@ -50,10 +50,14 @@ _cipa_durumu() { # yazdırır: yok | bayat:<tarih> | bos | taze
   [ -n "$y" ] && [ -f "$y" ] || { printf 'yok'; return; }
   local govde; govde="$(cat "$y" 2>/dev/null)"
   [ -n "$govde" ] || { printf 'yok'; return; }
-  if ! printf '%s' "$govde" | grep -q "$BUGUN"; then
-    local t; t="$(printf '%s' "$govde" | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}' | head -1)"
-    printf 'bayat:%s' "${t:-tarihsiz}"; return
-  fi
+  # 🔴 TARİH BAŞLIKTAN OKUNUR, gövdeden ARANMAZ (bağımsız göz tur 2): `grep -q "$BUGUN"`
+  #    gövdenin herhangi bir yerinde bugünün tarihini görünce "taze" diyordu — dünün planı
+  #    içinde bugünü anan tek bir satır (ör. "yarın 8 Ekim'de teslim") kapıyı geçiriyordu.
+  #    Yakınlık bağ değildir: tarih, çıpanın KENDİ başlık alanından ayrıştırılır.
+  local baslik_tarih
+  baslik_tarih="$(printf '%s' "$govde" | sed -n 's/^#[[:space:]]*⚓[^0-9]*\([0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}\).*$/\1/p' | head -1)"
+  if [ -z "$baslik_tarih" ]; then printf 'bayat:basliksiz'; return; fi
+  if [ "$baslik_tarih" != "$BUGUN" ]; then printf 'bayat:%s' "$baslik_tarih"; return; fi
   printf '%s' "$govde" | grep -qE '^- \[' || { printf 'bos'; return; }
   # 🔴 AYNI GÜN DE BAYATLAR (bağımsız göz tur 1): takvim günü tek başına tazelik DEĞİLDİR.
   #   Sabah 09:30'da yazılmış bir çıpa akşam 23:00'te hâlâ "bugünün" ama planı anlatmıyor.
@@ -61,15 +65,30 @@ _cipa_durumu() { # yazdırır: yok | bayat:<tarih> | bos | taze
   #   ölçülebilir bir şeyi ölçmeyip dipnota yazmak, kapıyı süse çevirir.
   #   İki yüzeyden yaş: çıpanın kendi damgası (_yazıldı:) ve dosyanın değişme zamanı;
   #   hangisi TAZE ise o kazanır (tazele dosyayı günceller ama damgayı değiştirmeyebilir).
-  local damga yas_dk mtime_yas
-  damga="$(printf '%s' "$govde" | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}' | tail -1)"
+  # 🔴 YAŞ: EN ESKİ yüzey kazanır (fail-closed). İlk yazımda "taze olan kazanır" demiştim;
+  #    bu FAIL-OPEN'dı — bağımsız göz haklı olarak gösterdi: eski içerikli bir dosyaya boş
+  #    bir dokunuş yapmak yaşı sıfırlıyordu. İki yüzey farklı soruları yanıtlar:
+  #      `_dokunuldu:` → çıpa SON NE ZAMAN güncellendi (tazele artık bunu yazıyor; otorite budur)
+  #      `_yazıldı:`   → plan ne zaman KURULDU (tazelemede değişmez, tek başına hep eskidir)
+  #      dosya zamanı  → herhangi bir yazma (boş dokunuşla kandırılabilir)
+  #    Kural: dokunma damgası varsa O esastır; yoksa yazım damgası. Dosya zamanı tek başına
+  #    tazelik KANITI sayılmaz — yalnız damgayı DOĞRULAR: damga diyor ki taze ama dosya
+  #    ondan da eskiyse, eski olan kazanır.
+  local dokunma yazim yas_dk mtime_yas sn
+  dokunma="$(printf '%s' "$govde" | sed -n 's/^_dokunuldu:[[:space:]]*\([0-9T:+-]\{19,25\}\).*$/\1/p' | tail -1)"
+  yazim="$(printf '%s' "$govde" | sed -n 's/^_yazıldı:[[:space:]]*\([0-9T:+-]\{19,25\}\).*$/\1/p' | tail -1)"
+  damga="${dokunma:-$yazim}"
   yas_dk=""
   if [ -n "$damga" ]; then
-    local sn; sn="$(date -d "$damga" +%s 2>/dev/null)" && yas_dk=$(( ( $(date +%s) - sn ) / 60 ))
+    sn="$(date -d "$damga" +%s 2>/dev/null)" && yas_dk=$(( ( $(date +%s) - sn ) / 60 ))
   fi
   mtime_yas="$(( ( $(date +%s) - $(stat -c %Y "$y" 2>/dev/null || echo 0) ) / 60 ))"
-  if [ -n "$yas_dk" ] && [ "$mtime_yas" -lt "$yas_dk" ]; then yas_dk="$mtime_yas"; fi
-  [ -n "$yas_dk" ] || yas_dk="$mtime_yas"
+  if [ -z "$yas_dk" ]; then
+    # Hiçbir damga yok: yalnız dosya zamanı kaldı. Bu bir ÖLÇÜM DEĞİL, bir tahmindir →
+    # taze diyemeyiz. Damgasız çıpa "ölçemedim" sınıfıdır.
+    printf 'damgasiz:%s' "$mtime_yas"; return
+  fi
+  [ "$mtime_yas" -gt "$yas_dk" ] && yas_dk="$mtime_yas"   # EN ESKİ kazanır
   if [ "$yas_dk" -gt "$AZAMI_YAS_DK" ]; then printf 'yasli:%s' "$yas_dk"; return; fi
   printf 'taze'
 }
@@ -105,6 +124,10 @@ case "$KOMUT" in
       bayat:*) echo "🔴 ÇIPA BAYAT (${DURUM#bayat:}) — bugünün planı değil. Dünün çıpasıyla compact'e girmek"
                echo "   kaybolmayacağını sandığın bir planın BAYATINI korur. Önce tazele."; exit 3 ;;
       bos)   echo "🔴 ÇIPA BOŞ — dosya var ama madde yok; hiçbir şey korumuyor. Önce planı yaz."; exit 3 ;;
+      damgasiz:*) echo "◻ ÇIPA DAMGASIZ — içinde ne zaman yazıldığı/dokunulduğu yazmıyor."
+               echo "   Dosya ${DURUM#damgasiz:} dakikadır değişmemiş ama bu bir TAHMİN, ölçüm değil:"
+               echo "   boş bir dokunuş da dosya zamanını yeniler. Tazeliği ölçemediğim bir çıpayla"
+               echo "   compact önermem. Çıpayı aracıyla tazele (damga kendiliğinden düşer)."; exit 3 ;;
       yasli:*) echo "🔴 ÇIPA YAŞLI (${DURUM#yasli:} dakika) — bugünün ama son ${AZAMI_YAS_DK} dakikada dokunulmamış."
                echo "   Takvim günü tazelik değildir: sabah yazılan plan akşam olan biteni anlatmaz."
                echo "   Önce çıpayı tazele (ne bitti, ne yarım kaldı), sonra tekrar çağır."; exit 3 ;;
@@ -142,6 +165,7 @@ M
     esac
     y="$(_cipa_yolu)"
     echo "⚓ ÇIPADAN GERİ OKUNAN PLAN${DURUM#taze}"
+    [ "${DURUM%%:*}" = damgasiz ] && echo "⚠ DİKKAT: çıpa damgasız — tazeliği ölçülemedi."
     [ "${DURUM%%:*}" = yasli ] && echo "⚠ DİKKAT: çıpaya ${DURUM#yasli:} dakikadır dokunulmamış — maddeler bayat olabilir."
     [ "${DURUM%%:*}" = bayat ] && echo "⚠ DİKKAT: çıpa bugünün değil (${DURUM#bayat:}) — maddeler bayat olabilir, ölçmeden sürdürme."
     echo "────────────────────────────────────────"

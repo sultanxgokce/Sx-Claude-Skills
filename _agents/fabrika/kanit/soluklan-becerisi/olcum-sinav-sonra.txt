@@ -1,5 +1,5 @@
 $ bash soluklan/scripts/soluklan.test.sh
-# rc=0 sure=0.4s zaman=2026-10-07T23:57:36+03:00
+# rc=0 sure=0.5s zaman=2026-10-08T00:12:30+03:00
 --- stdout ---
 ════ S1 · ÇIPA YOK → öneri ÜRETİLMEZ (fail-closed) ════
   ✓ S1a rc=3 (çıpa yok)
@@ -37,6 +37,18 @@ $ bash soluklan/scripts/soluklan.test.sh
   ✓ S6g3 kuralın niçini yazılı
   ✓ S6g4 yaşlı çıpayla öneri ÜRETİLMİYOR
   ✓ S6g5 azami yaş 600'e çıkınca AYNI çıpa taze sayılır (eşik gerçekten okunuyor)
+════ S13 · BOŞ DOKUNUŞ tazelik SAYILMAZ (göz tur-2: fail-open idi) ════
+  ✓ S13a boş dokunuş yaşı sıfırlamıyor → rc=3
+  ✓ S13b hâlâ yaşlı diyor (EN ESKİ yüzey kazanıyor)
+  ✓ S13c GERÇEK tazelemede (yeni dokunma damgası) geçiyor — kapı kör değil
+════ S14 · DAMGASIZ çıpa 'taze' sayılmaz, ölçemedim denir ════
+  ✓ S14a damgasız çıpa rc=3
+  ✓ S14b sebebi ayrı sınıf olarak söyleniyor
+  ✓ S14c dosya zamanının ölçüm olmadığı yazılı
+════ S15 · TARİH BAŞLIKTAN okunur, gövdeden ARANMAZ (göz tur-2) ════
+  ✓ S15a gövdede bugünün tarihi geçse de BAYAT (rc=3)
+  ✓ S15b başlıktaki GERÇEK tarih bildiriliyor
+  ✓ S15c başlıksız çıpa da geçmiyor
 ════ S7 · AÇIK MADDE SAYIMI doğru (biten madde sayılmaz) ════
   ✓ S7 yarım+açılmamış=2 sayılıyor, biten sayılmıyor
 ════ S8 · SONRASI · çıpayı geri okur + üç adımı dayatır ════
@@ -54,8 +66,9 @@ $ bash soluklan/scripts/soluklan.test.sh
   ✓ S11a harf verilince rc=2
   ✓ S11b değersiz bayrak rc=2 (sessiz yutulmuyor)
 ════ S12 · MUTASYON: tazelik kapısı kaldırılınca sınav KIRMIZI olmalı ════
-  ✓ S12a MUTASYON: tazelik kapısı ölünce BAYAT çıpa öneri üretiyor (kapı gerçek)
+  ✓ S12a MUTASYON: tarih kapısı ölünce DÜNÜN çıpası öneri üretiyor (kapı gerçek)
+  ✓ S12c MUTASYON: 'taze olan kazanır'a dönülünce boş dokunuş kapıyı yine geçiyor
   ✓ S12b MUTASYON: 'ölçemedim' kapısı ölünce doluluksuz çağrı 4 dönmüyor
 
-── SONUÇ: 41 geçti · 0 kaldı ──
+── SONUÇ: 51 geçti · 0 kaldı ──
 --- stderr ---
