@@ -66,10 +66,12 @@ bash <bu-dizin>/scripts/soluklan.sh oneri --doluluk <ajanın kendi göstergesi>
 |---|---|---|
 | 0 | hazır, eşik aşıldı | öneri metnini Sultan'a **olduğu gibi** sun |
 | 1 | eşik altı | compact önerme, çalışmaya devam |
-| 3 | çıpa yok / bayat / boş | **önce çıpayı yaz**, sonra tekrar çağır |
+| 3 | çıpa yok / bayat / boş / **yaşlı** | **önce çıpayı yaz**, sonra tekrar çağır |
 | 4 | doluluk verilmedi | ajan kendi göstergesine bakar; **uydurmaz** |
 
-Eşik varsayılan **%60** (Sultan). Çivili değil: `--esik` ya da `SOLUKLAN_ESIK`.
+Eşik varsayılan **%60** (Sultan) ve kural **"üstü"**: tam %60 tetiklemez, %61 tetikler —
+Sultan'ın cümlesi *"60'ın üstü ise"*. Çivili değil: `--esik` ya da `SOLUKLAN_ESIK`.
+Bozuk eşik/yaş değeri **sessizce 0 sayılmaz**, çıkış 2 ile reddedilir (fail-closed).
 
 ### 4 · SOR — tek soru, yığmadan
 
@@ -101,8 +103,13 @@ kaybın kendisinden pahalıdır.
 
 - Bu beceri **compact'i çalıştırmaz**; onu Sultan başlatır. Araç sırayı ve dürüstlüğü korur.
 - Doluluk sayısı ajanın beyanıdır; araç onu doğrulayamaz — bunu her koşuda söyler.
-- Çıpa tazelik ölçümü **tarihe** bakar; aynı gün içinde bayatlamış bir çıpayı yakalayamaz.
-  Bilinen sınır, yazılı: tazeliğin ikinci yarısı 5. adımdaki **doğrulama**dır.
-- Kendi sınavı: `bash scripts/soluklan.test.sh` (31 kapı, hermetik — gerçek çıpaya dokunmaz).
+- Çıpa tazeliği **iki** şeye bakar: bugünün mü, ve son `SOLUKLAN_AZAMI_YAS_DK` dakikada
+  (varsayılan **240**) dokunulmuş mu. İlk yazımda yalnız tarihe bakıyordu ve "aynı gün
+  bayatlamayı yakalayamam" diye **dipnot düşmüştüm** — bağımsız göz haklı olarak itiraz etti:
+  *belgelemek onarmak değildir*, ölçülebilir bir şeyi ölçmeyip dipnota yazmak kapıyı süse çevirir.
+  Yaş iki yüzeyden okunur (çıpanın kendi damgası + dosyanın değişme zamanı), taze olan kazanır.
+- Gerçek sınır şu: araç çıpanın **güncel** olduğunu değil, **dokunulduğunu** ölçer. Bir ajan
+  çıpayı anlamsızca tazeleyip kapıyı geçebilir — ikinci yarısı hâlâ 5. adımdaki doğrulamadır.
+- Kendi sınavı: `bash scripts/soluklan.test.sh` (41 kapı, hermetik — gerçek çıpaya dokunmaz).
   İki **mutasyon** kapısı: tazelik kapısı öldürülünce bayat çıpa öneri üretir hâle gelir,
   "ölçemedim" kapısı öldürülünce doluluksuz çağrı yeşile döner. Yani korumalar süs değil.

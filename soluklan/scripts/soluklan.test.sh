@@ -20,7 +20,21 @@ taze_cipa() { cat > "$T/cipa.md" <<EOF
 - [~] 1) yarım iş
 - [ ] 2) açılmamış iş
 - [x] 3) biten iş
+
+_yazıldı: $(date +%FT%T)_
 EOF
+touch "$T/cipa.md"
+}
+# aynı GÜN ama ESKİ: damga da dosya da geriye çekilir (iki yüzey birden)
+yasli_cipa() { local dk="${1:-500}"
+  cat > "$T/cipa.md" <<EOF
+# ⚓ GÜNÜN PLANI ÇIPASI · $BUGUN
+## Maddeler
+- [~] 1) sabah yazılmış, akşam bayatlamış iş
+
+_yazıldı: $(date -d "-$dk min" +%FT%T)_
+EOF
+  touch -d "-$dk min" "$T/cipa.md"
 }
 bayat_cipa() { sed "s/$BUGUN/$ESKI/" > "$T/cipa.md" <<EOF
 # ⚓ GÜNÜN PLANI ÇIPASI · $BUGUN
@@ -63,16 +77,39 @@ grep -q 'Compact yapalım mı' <<<"$O"; [ $? -ne 0 ]; g $? "S4d 🔴 sayı yokke
 echo "════ S5 · EŞİK ALTI → compact önerilmez (rc=1) ════"
 O="$(kos oneri --doluluk 59)"; RC=$?
 [ "$RC" -eq 1 ]; g $? "S5a rc=1 (59 < 60)"
-grep -q 'Eşik altı' <<<"$O"; g $? "S5b sebebi yazılı"
+grep -q 'Eşik aşılmadı' <<<"$O"; g $? "S5b sebebi yazılı"
+# 🔴 Sultan'ın sözü "60'IN ÜSTÜ" — tam eşik TETİKLEMEZ (göz tur-1 bulgusu).
 O="$(kos oneri --doluluk 60)"; RC=$?
-[ "$RC" -eq 0 ]; g $? "S5c tam eşikte (60) ÖNERİLİR — sınır dahil"
-grep -q 'Compact yapalım mı' <<<"$O"; g $? "S5d öneri metni basıldı"
+[ "$RC" -eq 1 ]; g $? "S5c tam eşikte (60) ÖNERİLMEZ — 'üstü' demek sınır dahil DEĞİL"
+O="$(kos oneri --doluluk 61)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "S5d eşiğin BİR ÜSTÜ (61) önerilir"
+grep -q 'Compact yapalım mı' <<<"$O"; g $? "S5e öneri metni basıldı"
 
 echo "════ S6 · EŞİK taşınabilir (Sultan 60 dedi ama kural çivili değil) ════"
 O="$(kos oneri --doluluk 70 --esik 80)"; RC=$?
 [ "$RC" -eq 1 ]; g $? "S6a --esik 80 ile 70 eşik ALTI"
 RC=0; O="$(SOLUKLAN_ESIK=40 SOLUKLAN_CIPA_ARAC="$T/cipa.sh" SOLUKLAN_BUGUN="$BUGUN" bash "$S" oneri --doluluk 45 2>&1)" || RC=$?
 [ "$RC" -eq 0 ]; g $? "S6b ortamdan eşik 40 ile 45 ÖNERİLİR"
+
+echo "════ S6c · BOZUK EŞİK sessizce 0 sayılmaz (göz tur-1: fail-open riski) ════"
+RC=0; O="$(SOLUKLAN_CIPA_ARAC="$T/cipa.sh" SOLUKLAN_BUGUN="$BUGUN" bash "$S" oneri --doluluk 90 --esik seksen 2>&1)" || RC=$?
+[ "$RC" -eq 2 ]; g $? "S6c harfli --esik rc=2"
+grep -q 'Compact yapalım mı' <<<"$O"; [ $? -ne 0 ]; g $? "S6d bozuk eşikte öneri ÜRETİLMİYOR (fail-closed)"
+RC=0; O="$(SOLUKLAN_ESIK=abc SOLUKLAN_CIPA_ARAC="$T/cipa.sh" SOLUKLAN_BUGUN="$BUGUN" bash "$S" oneri --doluluk 90 2>&1)" || RC=$?
+[ "$RC" -eq 2 ]; g $? "S6e ortamdan gelen bozuk eşik de rc=2"
+RC=0; O="$(SOLUKLAN_AZAMI_YAS_DK=cok SOLUKLAN_CIPA_ARAC="$T/cipa.sh" SOLUKLAN_BUGUN="$BUGUN" bash "$S" oneri --doluluk 90 2>&1)" || RC=$?
+[ "$RC" -eq 2 ]; g $? "S6f bozuk azami-yaş da rc=2"
+
+echo "════ S6g · AYNI GÜN BAYATLAMA: takvim günü tazelik DEĞİLDİR (göz tur-1) ════"
+yasli_cipa 500
+O="$(kos oneri --doluluk 90)"; RC=$?
+[ "$RC" -eq 3 ]; g $? "S6g1 bugünün ama 500 dk dokunulmamış çıpa → rc=3"
+grep -q 'ÇIPA YAŞLI' <<<"$O"; g $? "S6g2 sebebi 'yaşlı' diye söyleniyor (bayat/boş ile karışmıyor)"
+grep -q 'Takvim günü tazelik değildir' <<<"$O"; g $? "S6g3 kuralın niçini yazılı"
+grep -q 'Compact yapalım mı' <<<"$O"; [ $? -ne 0 ]; g $? "S6g4 yaşlı çıpayla öneri ÜRETİLMİYOR"
+RC=0; O="$(SOLUKLAN_AZAMI_YAS_DK=600 SOLUKLAN_CIPA_ARAC="$T/cipa.sh" SOLUKLAN_BUGUN="$BUGUN" bash "$S" oneri --doluluk 90 2>&1)" || RC=$?
+[ "$RC" -eq 0 ]; g $? "S6g5 azami yaş 600'e çıkınca AYNI çıpa taze sayılır (eşik gerçekten okunuyor)"
+taze_cipa
 
 echo "════ S7 · AÇIK MADDE SAYIMI doğru (biten madde sayılmaz) ════"
 O="$(kos oneri --doluluk 90)"

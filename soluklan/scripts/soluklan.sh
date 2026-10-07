@@ -25,8 +25,16 @@
 set -uo pipefail
 
 ESIK="${SOLUKLAN_ESIK:-60}"
+AZAMI_YAS_DK="${SOLUKLAN_AZAMI_YAS_DK:-240}"   # çıpa bu kadar dakikadan eskiyse BAYAT (aynı gün olsa bile)
 CIPA_ARAC="${SOLUKLAN_CIPA_ARAC:-/config/.claude/skills/gunluk-plan/scripts/cipa.sh}"
 BUGUN="${SOLUKLAN_BUGUN:-$(date +%F)}"
+
+# Sayı olmayan eşik/yaş sessizce 0 sayılmaz — karşılaştırma hatası fail-OPEN üretirdi
+# (bağımsız göz tur 1): `[ "$D" -lt "$E" ]` hatalı E ile çöker, betikte `set -e` yok,
+# akış hazır/öneri yoluna düşebilirdi. Sayı kapısı giriş noktasında.
+_sayi_mi() { case "${1:-}" in (""|*[!0-9]*) return 1 ;; (*) return 0 ;; esac; }
+_sayi_mi "$ESIK"        || { echo "HATA: eşik tam sayı olmalı (yüzde): '$ESIK'" >&2; exit 2; }
+_sayi_mi "$AZAMI_YAS_DK" || { echo "HATA: azami yaş tam sayı olmalı (dakika): '$AZAMI_YAS_DK'" >&2; exit 2; }
 
 kullanim() { sed -n '/^# Komutlar:/,/^# Çıkış:/p' "$0" | sed 's/^# \{0,1\}//' >&2; exit 2; }
 
@@ -47,6 +55,22 @@ _cipa_durumu() { # yazdırır: yok | bayat:<tarih> | bos | taze
     printf 'bayat:%s' "${t:-tarihsiz}"; return
   fi
   printf '%s' "$govde" | grep -qE '^- \[' || { printf 'bos'; return; }
+  # 🔴 AYNI GÜN DE BAYATLAR (bağımsız göz tur 1): takvim günü tek başına tazelik DEĞİLDİR.
+  #   Sabah 09:30'da yazılmış bir çıpa akşam 23:00'te hâlâ "bugünün" ama planı anlatmıyor.
+  #   İlk yazımda bunu "bilinen sınır" diye BELGELEDİM — oysa belgelemek onarmak değildir;
+  #   ölçülebilir bir şeyi ölçmeyip dipnota yazmak, kapıyı süse çevirir.
+  #   İki yüzeyden yaş: çıpanın kendi damgası (_yazıldı:) ve dosyanın değişme zamanı;
+  #   hangisi TAZE ise o kazanır (tazele dosyayı günceller ama damgayı değiştirmeyebilir).
+  local damga yas_dk mtime_yas
+  damga="$(printf '%s' "$govde" | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}' | tail -1)"
+  yas_dk=""
+  if [ -n "$damga" ]; then
+    local sn; sn="$(date -d "$damga" +%s 2>/dev/null)" && yas_dk=$(( ( $(date +%s) - sn ) / 60 ))
+  fi
+  mtime_yas="$(( ( $(date +%s) - $(stat -c %Y "$y" 2>/dev/null || echo 0) ) / 60 ))"
+  if [ -n "$yas_dk" ] && [ "$mtime_yas" -lt "$yas_dk" ]; then yas_dk="$mtime_yas"; fi
+  [ -n "$yas_dk" ] || yas_dk="$mtime_yas"
+  if [ "$yas_dk" -gt "$AZAMI_YAS_DK" ]; then printf 'yasli:%s' "$yas_dk"; return; fi
   printf 'taze'
 }
 
@@ -65,6 +89,12 @@ while [ $# -gt 0 ]; do
   esac
 done
 
+# 🔴 BAYRAK, ORTAMDAN SONRA GELİR: yukarıdaki sayı kapısı yalnız ORTAM değerini gördü;
+#   `--esik seksen` argüman ayrıştırmasında atandığı için o kapıdan SONRA geliyordu ve
+#   denetlenmiyordu. Kapıyı bir kez koymak yetmez — değerin DEĞİŞTİĞİ her yerde durur.
+_sayi_mi "$ESIK"         || { echo "HATA: eşik tam sayı olmalı (yüzde): '$ESIK'" >&2; exit 2; }
+_sayi_mi "$AZAMI_YAS_DK" || { echo "HATA: azami yaş tam sayı olmalı (dakika): '$AZAMI_YAS_DK'" >&2; exit 2; }
+
 case "$KOMUT" in
   cipa-yolu) _cipa_yolu || { echo "HATA: çıpa aracı bulunamadı: $CIPA_ARAC" >&2; exit 2; }; echo; exit 0 ;;
 
@@ -75,6 +105,9 @@ case "$KOMUT" in
       bayat:*) echo "🔴 ÇIPA BAYAT (${DURUM#bayat:}) — bugünün planı değil. Dünün çıpasıyla compact'e girmek"
                echo "   kaybolmayacağını sandığın bir planın BAYATINI korur. Önce tazele."; exit 3 ;;
       bos)   echo "🔴 ÇIPA BOŞ — dosya var ama madde yok; hiçbir şey korumuyor. Önce planı yaz."; exit 3 ;;
+      yasli:*) echo "🔴 ÇIPA YAŞLI (${DURUM#yasli:} dakika) — bugünün ama son ${AZAMI_YAS_DK} dakikada dokunulmamış."
+               echo "   Takvim günü tazelik değildir: sabah yazılan plan akşam olan biteni anlatmaz."
+               echo "   Önce çıpayı tazele (ne bitti, ne yarım kaldı), sonra tekrar çağır."; exit 3 ;;
     esac
     if [ -z "$DOLULUK" ]; then
       echo "◻ ÖLÇEMEDİM: bağlam doluluğunu bu araç ölçemez, ajanın kendi göstergesinden gelir (--doluluk)."
@@ -82,13 +115,16 @@ case "$KOMUT" in
       exit 4
     fi
     case "$DOLULUK" in (*[!0-9]*|"") echo "HATA: --doluluk tam sayı olmalı (yüzde): '$DOLULUK'" >&2; exit 2 ;; esac
-    if [ "$DOLULUK" -lt "$ESIK" ]; then
-      echo "🟢 Eşik altı: doluluk %$DOLULUK < %$ESIK — compact önerilmez, çalışmaya devam."
+    # 🔴 SULTAN'IN SÖZÜ "60'IN ÜSTÜ" — tam eşikte TETİKLEMEZ (bağımsız göz tur 1).
+    #   İlk yazımda sınırı dahil etmiş ve sınava "sınır dahil" diye yazmıştım; bu, Sultan'ın
+    #   sormadığı bir kararı benim vermemdi. Kural onun cümlesiyle hizalandı.
+    if [ "$DOLULUK" -le "$ESIK" ]; then
+      echo "🟢 Eşik aşılmadı: doluluk %$DOLULUK ≤ %$ESIK — compact önerilmez, çalışmaya devam."
       exit 1
     fi
-    [ "$KOMUT" = hazir-mi ] && { echo "🟡 HAZIR: doluluk %$DOLULUK ≥ %$ESIK · çıpa TAZE · $(_acik_madde_sayisi) açık madde"; exit 0; }
+    [ "$KOMUT" = hazir-mi ] && { echo "🟡 HAZIR: doluluk %$DOLULUK > %$ESIK · çıpa TAZE · $(_acik_madde_sayisi) açık madde"; exit 0; }
     cat <<M
-🟡 SOLUKLANMA ZAMANI · doluluk %$DOLULUK (eşik %$ESIK)
+🟡 SOLUKLANMA ZAMANI · doluluk %$DOLULUK (eşik %$ESIK aşıldı)
 
 Planı diske yazdım, kaybolmaz — $(_acik_madde_sayisi) açık madde çıpada duruyor.
 Compact'ten sonra kaldığım yerden, aynı maddelerle devam ederim.
@@ -106,6 +142,7 @@ M
     esac
     y="$(_cipa_yolu)"
     echo "⚓ ÇIPADAN GERİ OKUNAN PLAN${DURUM#taze}"
+    [ "${DURUM%%:*}" = yasli ] && echo "⚠ DİKKAT: çıpaya ${DURUM#yasli:} dakikadır dokunulmamış — maddeler bayat olabilir."
     [ "${DURUM%%:*}" = bayat ] && echo "⚠ DİKKAT: çıpa bugünün değil (${DURUM#bayat:}) — maddeler bayat olabilir, ölçmeden sürdürme."
     echo "────────────────────────────────────────"
     cat "$y"

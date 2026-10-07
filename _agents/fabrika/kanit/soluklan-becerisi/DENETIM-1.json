@@ -1,0 +1,35 @@
+{
+  "tur": 1,
+  "is": "soluklan-becerisi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-07T23:55:23+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Sultan’ım, global beceri, çıpa kapısı ve compact sonrası yeniden planlama akışı kurulmuş; fakat talep edilen “%60’ı geçince” kuralı “%60 ve üstü” olarak uygulanmış. Ayrıca tazelik yalnız takvim gününe indirgenmiş; aynı gün eskimiş çıpa öneriyi engellemediği için önce bu iki uygulama sorununu çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "Eşik talebe aykırı: kart “%60’ı geçince” derken kod tam %60’ta da compact önerisi üretiyor.",
+        "kanit": "Koşul yalnız DOLULUK < ESIK olduğunda duruyor; dolayısıyla 60, varsayılan 60 eşiğinde öneriye geçiyor. S5c sınavı da bunu açıkça “tam eşikte (60) ÖNERİLİR” diye doğruluyor.",
+        "konum": "soluklan/scripts/soluklan.sh:90-96; soluklan/scripts/soluklan.test.sh:76-78; olcum-sinav-sonra.txt:S5c",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "“TAZE değilse öneri üretilmez” kapısı aynı gün içinde bayatlayan çıpayı yakalamıyor; tarih metninin dosyanın herhangi bir yerinde bulunması taze sayılmaya yetiyor.",
+        "kanit": "_cipa_durumu, gövdede BUGUN metnini grep ile arıyor ve ayrıca yalnız madde satırı varlığını denetliyor; yaş, güncelleme zamanı veya çıpa başlığındaki tarih doğrulanmıyor. Beceri metni de “aynı gün içinde bayatlamış bir çıpayı yakalayamaz” sınırını açıkça kabul ediyor.",
+        "konum": "soluklan/scripts/soluklan.sh:45-56; soluklan/SKILL.md:103-105",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Eşik değeri tam sayı olarak doğrulanmıyor; bozuk --esik veya SOLUKLAN_ESIK değeri karşılaştırma hatasından sonra hazır/öneri yoluna düşebilir.",
+        "kanit": "Sayısal biçim kontrolü yalnız DOLULUK için var; ESIK doğrudan [ \"$DOLULUK\" -lt \"$ESIK\" ] karşılaştırmasına giriyor. Betikte set -e bulunmadığından hatalı karşılaştırmanın ardından hazir-mi/oneri çıktısı üretilebilir; sınavlar bozuk eşik girdisini kapsamıyor.",
+        "konum": "soluklan/scripts/soluklan.sh:27,74-79,89-96; soluklan/scripts/soluklan.test.sh:S11",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; iki kayıt da yeşil, sarı kayıt yok. Sonra ölçümleri 31 hermetik sınav ile kayıt/katalog bütünlüğünü gösteriyor ve mutasyon sınavları iki kapının gerçekten sınandığını destekliyor. Ancak önce/sonra ölçüm çifti veya gerçekçi bir global slash çağrısı karesi/dizisi yok; kanıt yalnız son durum ve sahte çıpa aracıyla sınırlı, ayrıca mevcut sınav tam %60 davranışını talebin tersine başarı sayıyor."
+  }
+}

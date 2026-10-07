@@ -1,22 +1,22 @@
 {
   "is": "soluklan-becerisi",
   "arac": "kanit.py/0.1.0",
-  "guncelleme": "2026-10-07T23:54:54+03:00",
+  "guncelleme": "2026-10-07T23:57:36+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "35a2734463a2fd9e4951daea17cab108bd4dfae546e5b5b8d2a4ce0ef25c5eac",
+      "sha256": "3559702c0154e5b06fc91695361cfc783bcdb580956c75b153816f5e7dca686f",
       "komut": [
         "bash",
         "soluklan/scripts/soluklan.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-07T23:52:47+03:00",
-      "sure_sn": 0.2
+      "zaman": "2026-10-07T23:57:36+03:00",
+      "sure_sn": 0.4
     },
     {
       "tur": "olcum",
@@ -35,5 +35,5 @@
       "sure_sn": 0.0
     }
   ],
-  "imza": "3748ac6d7caccd5e6dcc1da189b4f1187f3e61a7f90c0cab45f2ca54c1b0a297"
+  "imza": "f876fbfd85036c863d45348fca6b06cf1ef8d1dec008061377039e237796eb79"
 }

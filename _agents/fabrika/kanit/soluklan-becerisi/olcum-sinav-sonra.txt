@@ -1,5 +1,5 @@
 $ bash soluklan/scripts/soluklan.test.sh
-# rc=0 sure=0.2s zaman=2026-10-07T23:52:47+03:00
+# rc=0 sure=0.4s zaman=2026-10-07T23:57:36+03:00
 --- stdout ---
 ════ S1 · ÇIPA YOK → öneri ÜRETİLMEZ (fail-closed) ════
   ✓ S1a rc=3 (çıpa yok)
@@ -20,11 +20,23 @@ $ bash soluklan/scripts/soluklan.test.sh
 ════ S5 · EŞİK ALTI → compact önerilmez (rc=1) ════
   ✓ S5a rc=1 (59 < 60)
   ✓ S5b sebebi yazılı
-  ✓ S5c tam eşikte (60) ÖNERİLİR — sınır dahil
-  ✓ S5d öneri metni basıldı
+  ✓ S5c tam eşikte (60) ÖNERİLMEZ — 'üstü' demek sınır dahil DEĞİL
+  ✓ S5d eşiğin BİR ÜSTÜ (61) önerilir
+  ✓ S5e öneri metni basıldı
 ════ S6 · EŞİK taşınabilir (Sultan 60 dedi ama kural çivili değil) ════
   ✓ S6a --esik 80 ile 70 eşik ALTI
   ✓ S6b ortamdan eşik 40 ile 45 ÖNERİLİR
+════ S6c · BOZUK EŞİK sessizce 0 sayılmaz (göz tur-1: fail-open riski) ════
+  ✓ S6c harfli --esik rc=2
+  ✓ S6d bozuk eşikte öneri ÜRETİLMİYOR (fail-closed)
+  ✓ S6e ortamdan gelen bozuk eşik de rc=2
+  ✓ S6f bozuk azami-yaş da rc=2
+════ S6g · AYNI GÜN BAYATLAMA: takvim günü tazelik DEĞİLDİR (göz tur-1) ════
+  ✓ S6g1 bugünün ama 500 dk dokunulmamış çıpa → rc=3
+  ✓ S6g2 sebebi 'yaşlı' diye söyleniyor (bayat/boş ile karışmıyor)
+  ✓ S6g3 kuralın niçini yazılı
+  ✓ S6g4 yaşlı çıpayla öneri ÜRETİLMİYOR
+  ✓ S6g5 azami yaş 600'e çıkınca AYNI çıpa taze sayılır (eşik gerçekten okunuyor)
 ════ S7 · AÇIK MADDE SAYIMI doğru (biten madde sayılmaz) ════
   ✓ S7 yarım+açılmamış=2 sayılıyor, biten sayılmıyor
 ════ S8 · SONRASI · çıpayı geri okur + üç adımı dayatır ════
@@ -45,5 +57,5 @@ $ bash soluklan/scripts/soluklan.test.sh
   ✓ S12a MUTASYON: tazelik kapısı ölünce BAYAT çıpa öneri üretiyor (kapı gerçek)
   ✓ S12b MUTASYON: 'ölçemedim' kapısı ölünce doluluksuz çağrı 4 dönmüyor
 
-── SONUÇ: 31 geçti · 0 kaldı ──
+── SONUÇ: 41 geçti · 0 kaldı ──
 --- stderr ---
