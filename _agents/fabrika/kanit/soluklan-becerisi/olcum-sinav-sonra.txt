@@ -1,0 +1,49 @@
+$ bash soluklan/scripts/soluklan.test.sh
+# rc=0 sure=0.2s zaman=2026-10-07T23:52:47+03:00
+--- stdout ---
+════ S1 · ÇIPA YOK → öneri ÜRETİLMEZ (fail-closed) ════
+  ✓ S1a rc=3 (çıpa yok)
+  ✓ S1b sebebi söylüyor
+  ✓ S1c 🔴 öneri METNİ BASILMADI — doluluk 90 olsa bile
+════ S2 · ÇIPA BAYAT → yok sayılır (var olan aracın kapatmadığı açık) ════
+  ✓ S2a rc=3 (bayat)
+  ✓ S2b hangi tarihe ait olduğunu söylüyor
+  ✓ S2c dünün çıpasıyla compact ÖNERİLMİYOR
+════ S3 · ÇIPA BOŞ → dosya var ama hiçbir şey korumuyor ════
+  ✓ S3a rc=3 (boş)
+  ✓ S3b boş dosyanın koruma OLMADIĞI yazılı
+════ S4 · DOLULUK VERİLMEDİ → ölçemedim (4), yeşil DEĞİL ════
+  ✓ S4a rc=4 (ölçemedim)
+  ✓ S4b dürüst sınırı söylüyor
+  ✓ S4c doluluğun NEREDEN geldiğini söylüyor
+  ✓ S4d 🔴 sayı yokken öneri UYDURULMUYOR
+════ S5 · EŞİK ALTI → compact önerilmez (rc=1) ════
+  ✓ S5a rc=1 (59 < 60)
+  ✓ S5b sebebi yazılı
+  ✓ S5c tam eşikte (60) ÖNERİLİR — sınır dahil
+  ✓ S5d öneri metni basıldı
+════ S6 · EŞİK taşınabilir (Sultan 60 dedi ama kural çivili değil) ════
+  ✓ S6a --esik 80 ile 70 eşik ALTI
+  ✓ S6b ortamdan eşik 40 ile 45 ÖNERİLİR
+════ S7 · AÇIK MADDE SAYIMI doğru (biten madde sayılmaz) ════
+  ✓ S7 yarım+açılmamış=2 sayılıyor, biten sayılmıyor
+════ S8 · SONRASI · çıpayı geri okur + üç adımı dayatır ════
+  ✓ S8a rc=0
+  ✓ S8b çıpanın İÇERİĞİ basıldı (özet değil, aslı)
+  ✓ S8c ortam damgası adımı var (compact harness'ı sıfırlar)
+  ✓ S8d 'açık' damgasının iddia olduğu yazılı
+════ S9 · SONRASI · çıpa yoksa UYDURMA PLAN YAZMA der ════
+  ✓ S9a rc=3
+  ✓ S9b kayıp planı uydurmak YASAKLANIYOR
+════ S10 · ÇIPA ARACI YOKSA → ölçemedim, 'çıpa yok' DEĞİL ════
+  ✓ S10a aracsızken de öneri ÜRETİLMİYOR (fail-closed)
+  ✓ S10b öneri metni yok
+════ S11 · bozuk doluluk reddedilir (sessiz 0 sayılmaz) ════
+  ✓ S11a harf verilince rc=2
+  ✓ S11b değersiz bayrak rc=2 (sessiz yutulmuyor)
+════ S12 · MUTASYON: tazelik kapısı kaldırılınca sınav KIRMIZI olmalı ════
+  ✓ S12a MUTASYON: tazelik kapısı ölünce BAYAT çıpa öneri üretiyor (kapı gerçek)
+  ✓ S12b MUTASYON: 'ölçemedim' kapısı ölünce doluluksuz çağrı 4 dönmüyor
+
+── SONUÇ: 31 geçti · 0 kaldı ──
+--- stderr ---

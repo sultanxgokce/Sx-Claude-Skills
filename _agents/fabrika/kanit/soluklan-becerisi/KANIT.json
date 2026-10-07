@@ -1,0 +1,39 @@
+{
+  "is": "soluklan-becerisi",
+  "arac": "kanit.py/0.1.0",
+  "guncelleme": "2026-10-07T23:52:47+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "35a2734463a2fd9e4951daea17cab108bd4dfae546e5b5b8d2a4ce0ef25c5eac",
+      "komut": [
+        "bash",
+        "soluklan/scripts/soluklan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-07T23:52:47+03:00",
+      "sure_sn": 0.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kayit-butunlugu",
+      "asama": "sonra",
+      "dosya": "olcum-kayit-butunlugu-sonra.txt",
+      "sha256": "fee42023fd1f97868e91d5746f1e822710decb67b7332b7430b3a68de65ded6c",
+      "komut": [
+        "python3",
+        "-c",
+        "\nimport json\nst=json.load(open('sync-targets.json')); ct=json.load(open('catalog.json'))\nassert st['install']['soluklan']==['_global'], 'global kurulum kaydi yok'\nk=[x for x in ct['skills'] if x['id']=='soluklan']\nassert len(k)==1, 'katalogda tek kayit yok'\nprint('global kurulum kaydi: VAR'); print('katalog kaydi: VAR ·', k[0]['version'])\nimport re\nfm=open('soluklan/SKILL.md',encoding='utf-8').read().split('---')[1]\nassert 'version: 1.0.0' in fm and 'name: soluklan' in fm, 'frontmatter eksik'\nprint('SKILL frontmatter: ad+surum VAR')"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-07T23:52:47+03:00",
+      "sure_sn": 0.0
+    }
+  ],
+  "imza": "b4ee4d06a86ed3c6f302ec1e7cfcf4af20473866d2843b36605a66d9e43af347"
+}
