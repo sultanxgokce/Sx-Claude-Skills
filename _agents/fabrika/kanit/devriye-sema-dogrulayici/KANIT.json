@@ -1,7 +1,7 @@
 {
   "is": "devriye-sema-dogrulayici",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-08T03:56:18+03:00",
+  "guncelleme": "2026-10-08T04:14:20+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -24,16 +24,27 @@
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "3703664b78e1132058cdeaf2da65ff184e9cd3a56dd6dbb37e9329edd520f4f6",
+      "sha256": "5d63ed0a6452a47d91cf5b25f1a09b7d3c2daa3d2c7ab7290210d4c585dee1c4",
       "komut": [
         "bash",
         "devriye/scripts/profil-dogrula.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-08T03:56:18+03:00",
+      "zaman": "2026-10-08T04:14:20+03:00",
       "sure_sn": 2.1
+    },
+    {
+      "tur": "dosya",
+      "etiket": "fikstur-korumasi",
+      "asama": "tek",
+      "dosya": "dosya-fikstur-korumasi-tek.txt",
+      "sha256": "c441ac307e7571fb480466893db50d941cfdcf28e2a0a6f9533b5779a4884ffa",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/fikstur-korumasi.txt",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-08T04:14:20+03:00"
     }
   ],
-  "imza": "0e00a3903768d6f1fae7543fde5888e06671d6721b9cc9ecc20a19327ed4af11"
+  "imza": "dc0a426cfeba5020cdd22ef705070899d4dbb6639dd17e721b1cbbd9bc228154"
 }

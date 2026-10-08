@@ -34,11 +34,32 @@ echo "════ P1 · ALTIN profil GEÇER (gevşeme değil, doğru kabul) ═
 O="$(kos "$T/altin.json")"
 icerir 'şema-1 geçerli' "$O"; g $? "P1b ne kabul ettiğini söylüyor"
 
-_boz() { python3 - "$T/altin.json" "$T/k.json" "$1" <<'PY'
+# 🔴 FİKSTÜR ÜRETİLEMEZSE SINAV DURUR (bağımsız göz tur 3). İlk yazımda `_boz` sessizce
+#    düşebiliyordu: bir mutasyon ifadesinde Python'da tanımsız bir ad vardı, python
+#    NameError ile ölüyor, betik DEVAM ediyor ve BİR ÖNCEKİ k.json sınanıyordu — iki kapı
+#    "geçti" diyordu, oysa ölçtükleri şey o vaka değildi. Doğru cevap yanlış sebepten.
+#    Artık: üretim başarısızsa kapı KIRMIZI olur ve sebebi basılır; üretilen dosyanın
+#    öncekinden FARKLI olduğu da doğrulanır (değiştirmeyen mutasyon = ölçümsüz kapı).
+_boz() {
+  local onceki=""
+  [ -f "$T/k.json" ] && onceki="$(sha256sum "$T/k.json" | cut -d" " -f1)"
+  if ! python3 - "$T/altin.json" "$T/k.json" "$1" 2>"$T/boz.err" <<'PYB'
 import json,sys
-d=json.load(open(sys.argv[1],encoding="utf-8")); exec(sys.argv[3])
+d=json.load(open(sys.argv[1],encoding="utf-8"))
+exec(sys.argv[3])
 json.dump(d,open(sys.argv[2],"w",encoding="utf-8"),ensure_ascii=False)
-PY
+PYB
+  then
+    kalan=$((kalan+1))
+    echo "  ✗ FİKSTÜR ÜRETİLEMEDİ: $1 → $(head -1 "$T/boz.err")"
+    return 1
+  fi
+  local yeni; yeni="$(sha256sum "$T/k.json" | cut -d" " -f1)"
+  if [ -n "$onceki" ] && [ "$onceki" = "$yeni" ]; then
+    kalan=$((kalan+1)); echo "  ✗ FİKSTÜR DEĞİŞMEDİ: $1 (önceki vakayla aynı dosya — ölçümsüz kapı)"
+    return 1
+  fi
+  return 0
 }
 
 echo "════ P2 · BİLİNMEYEN alan RED (sessizce atlanmaz) ════"
@@ -148,7 +169,7 @@ _boz 'd["kapilar"]=5'
 [ "$(rc_of "$T/k.json")" = 1 ]; g $? "P14a kapilar sayı → denetimli RED (rc=1), çökme değil"
 O="$(kos "$T/k.json")"; icerir 'kapilar bir liste değil' "$O"; g $? "P14b teşhis söyleniyor"
 icerir 'Traceback' "$O"; [ $? -ne 0 ]; g $? "P14c çıktıda yığın izi YOK"
-for _v in 'd["nobetler"]=5' 'd["yollar"]="metin"' 'd["hat"]=[]' 'd["defter_semasi"]=[1,2]' 'd["kurulum_sinavi"]={"a":1}' 'd["karne_alanlari"]="x"' 'd["nobetler"]=[5]' 'd["kapilar"]=[null]'; do
+for _v in 'd["nobetler"]=5' 'd["yollar"]="metin"' 'd["hat"]=[]' 'd["defter_semasi"]=[1,2]' 'd["kurulum_sinavi"]={"a":1}' 'd["karne_alanlari"]="x"' 'd["nobetler"]=[5]' 'd["kapilar"]=[None]'; do
   _boz "$_v"
   RC="$(rc_of "$T/k.json")"
   if [ "$RC" != 1 ] && [ "$RC" != 2 ]; then kalan=$((kalan+1)); echo "  ✗ P14d bozuk girdi beklenmedik rc=$RC ($_v)";

@@ -1,5 +1,5 @@
 $ bash devriye/scripts/profil-dogrula.test.sh
-# rc=0 sure=2.1s zaman=2026-10-08T03:56:18+03:00
+# rc=0 sure=2.1s zaman=2026-10-08T04:14:20+03:00
 --- stdout ---
 ════ P1 · ALTIN profil GEÇER (gevşeme değil, doğru kabul) ════
   ✓ P1a geçerli profil rc=0
@@ -70,8 +70,8 @@ $ bash devriye/scripts/profil-dogrula.test.sh
   ✓ P14e çökmedi: d["karne_alanlari"]="x"
   ✓ P14d bozuk girdi denetimli (rc=1): d["nobetler"]=[5]
   ✓ P14e çökmedi: d["nobetler"]=[5]
-  ✓ P14d bozuk girdi denetimli (rc=1): d["kapilar"]=[null]
-  ✓ P14e çökmedi: d["kapilar"]=[null]
+  ✓ P14d bozuk girdi denetimli (rc=1): d["kapilar"]=[None]
+  ✓ P14e çökmedi: d["kapilar"]=[None]
 ════ P15 · GENEL KALKAN: beklenmedik hata 'ihlal' değil 'ölçemedim' ════
   ✓ P15a içeride çökme olsa bile rc=2 (ölçemedim), rc=1 DEĞİL
   ✓ P15b hükmün verilmediği açıkça söyleniyor
@@ -81,7 +81,3 @@ $ bash devriye/scripts/profil-dogrula.test.sh
 
 ── SONUÇ: 62 geçti · 0 kaldı ──
 --- stderr ---
-Traceback (most recent call last):
-  File "<stdin>", line 2, in <module>
-  File "<string>", line 1, in <module>
-NameError: name 'null' is not defined
