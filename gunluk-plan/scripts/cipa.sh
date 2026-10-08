@@ -173,6 +173,19 @@ for i, satir in enumerate(s):
     bulundu = True
 if not bulundu:
     sys.stderr.write(f'HATA: {madde}. madde yok (çıpada {n} madde var)\n'); sys.exit(1)
+# 🔴 DOKUNMA DAMGASI (2026-10-08): `tazele` bugüne kadar `_yazıldı:` satırını HİÇ
+#    güncellemiyordu. Sonuç: çıpanın içindeki damga hep ilk yazım anını gösteriyor,
+#    gün boyu tazelense bile "sabah yazılmış" görünüyordu. Tazeliği ölçmek isteyen
+#    araç (soluklan) bu yüzden dosya değişme-zamanına düşmek zorunda kalıyordu — o da
+#    boş bir dokunuşla kandırılabilir. Çare: tazeleme kendi izini bıraksın.
+#    `_yazıldı:` DOKUNULMAZ (plan ne zaman kuruldu sorusunun cevabı odur).
+import datetime as _dt
+_damga = _dt.datetime.now().astimezone().isoformat(timespec='seconds')
+s = [x for x in s if not x.startswith('_dokunuldu:')]
+while s and s[-1].strip() == '':
+    s.pop()
+s.append(f'_dokunuldu: {_damga}')
+s.append('')
 open(yol, 'w', encoding='utf-8').write('\n'.join(s))
 print(f'✓ madde {madde} → {et}')
 PY

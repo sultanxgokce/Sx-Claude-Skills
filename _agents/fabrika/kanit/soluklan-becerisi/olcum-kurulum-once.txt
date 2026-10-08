@@ -1,0 +1,9 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/kurulum-probu.sh /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/negatif-depo
+# rc=1 sure=0.1s zaman=2026-10-08T00:18:46+03:00
+--- stdout ---
+KURULMADI: dagitici sahte global dizine beceriyi koymadi
+  sync-skills — APPLY
+
+
+  özet: 0 uygulandı · 0 güncel · 0 drift-uyarı · 0 eksik · 0 duman-düştü
+--- stderr ---

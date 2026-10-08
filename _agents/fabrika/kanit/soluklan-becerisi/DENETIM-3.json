@@ -1,0 +1,23 @@
+{
+  "tur": 3,
+  "is": "soluklan-becerisi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-08T00:13:29+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, %60 üstü kapısı, bayat/damgasız çıpanın reddi, çıpa içi dokunma damgası ve compact sonrası yeniden planlama akışı talebe uygun biçimde kurulmuş; önceki iki tazelik açığı da hedefli sınavlarla kapatılmış. Ancak global slash becerisinin gerçekten kurulup çağrılabildiği değil, yalnız kurulum kayıtlarına yazıldığı ölçülmüş; üretime hazır demeden önce gerçek kurulum ve uçtan uca çağrı kanıtlanmalı.",
+    "bulgular": [
+      {
+        "ne": "Global slash olarak fiilî kurulum ve kullanım doğrulanmamış; değişiklik yalnız global kurulum hedefini ve katalog kaydını yazıyor.",
+        "kanit": "Kayıt-bütünlüğü ölçümü sadece sync-targets.json içindeki ['_global'] değerini, katalog girdisini ve SKILL.md frontmatter’ını assert ediyor; kurulmuş global dizinden /soluklan çağrısı yapan hiçbir sınav veya ölçüm yok. Mevcut işlev sınavı da doğrudan kaynak ağacındaki soluklan/scripts/soluklan.test.sh dosyasını çalıştırıyor.",
+        "konum": "olcum-kayit-butunlugu-sonra.txt:1-13; olcum-sinav-sonra.txt:1-2; sync-targets.json:213-215",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve iki kayıt da yeşil; sarı kayıt yok. Sonra sınavı 51 kontrolle eşik, bozuk girdi, aynı gün yaşlanma, boş dokunuş, damgasız çıpa, başlıktan tarih okuma ve compact sonrası akışı destekliyor; fakat önce/sonra ölçüm çifti bulunmuyor ve gerçekçi global slash kurulumu/çağrısı ölçülmediği için “global beceri üretimde çalışıyor” iddiası henüz kanıtlı değil."
+  }
+}

@@ -1,6 +1,6 @@
 {
   "version": "2.1",
-  "updated": "2026-09-30",
+  "updated": "2026-10-07",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -1602,6 +1602,22 @@
       ],
       "installed_in": [
         "_global"
+      ]
+    },
+    {
+      "id": "soluklan",
+      "type": "workflow",
+      "name": "Soluklan — ara ver, bak, çıpala, devam et",
+      "version": "1.0.0",
+      "description": "Bağlam dolmadan önce DUR: değerlendir, planı diske çıpala, compact'i Sultan'a SOR, sonrasında kaldığın yerden daha iyi bir planla devam et. Doluluğu ÖLÇMEZ (ajanın göstergesinden alır) ve çıpa taze değilse öneri ÜRETMEZ — bayat çıpa = çıpa yok.",
+      "tags": [
+        "baglam",
+        "compact",
+        "cipa",
+        "planlama",
+        "olcum",
+        "workflow",
+        "global"
       ]
     }
   ]
