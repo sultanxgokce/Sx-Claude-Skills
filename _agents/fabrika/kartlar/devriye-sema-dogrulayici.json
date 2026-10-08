@@ -1,0 +1,19 @@
+{
+  "is": "devriye-sema-dogrulayici",
+  "cumle": "DEVRIYE iskeletinin ilk parcasi: sema-1 profil dogrulayicisi. MUTEVELLI profili teslim etti ve 'semaya uydum, bos alan 0, kapisiz nobet 0' dedi -- IDDIAYI OLCMEDEN KABUL ETMEM. Dogrulayici: bilinmeyen alan RED, zorunlu bos RED, kapisiz nobet RED (semanin uc kurali).",
+  "istedi": "MUTEVELLI",
+  "aldi": "MUAVIN",
+  "zaman": "2026-10-08T03:49:01+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

@@ -1,0 +1,41 @@
+$ bash devriye/scripts/profil-dogrula.test.sh
+# rc=0 sure=1.0s zaman=2026-10-08T03:51:28+03:00
+--- stdout ---
+════ P1 · ALTIN profil GEÇER (gevşeme değil, doğru kabul) ════
+  ✓ P1a geçerli profil rc=0
+  ✓ P1b ne kabul ettiğini söylüyor
+════ P2 · BİLİNMEYEN alan RED (sessizce atlanmaz) ════
+  ✓ P2a üst düzeyde bilinmeyen alan rc=1
+  ✓ P2b adıyla söyleniyor
+  ✓ P2c nöbet içinde bilinmeyen alan da rc=1
+════ P3 · ZORUNLU alan BOŞ → kurulum üretilmez ════
+  ✓ P3a boş yol rc=1
+  ✓ P3b hangi alan olduğu yazılı
+  ✓ P3c boş nöbet komutu rc=1 (yeşil görünüp iş yapmayan nöbet)
+  ✓ P3d eksik zorunlu üst alan rc=1
+════ P4 · KAPISIZ nöbet RED (üçüncü kural) ════
+  ✓ P4a kapısız nöbet rc=1
+  ✓ P4b sebebi 'kapısız' diye söyleniyor
+  ✓ P4c niçini yazılı
+  ✓ P4d 'kırmızı ne demek' eksikse de rc=1
+════ P5 · yapısal bozukluklar ════
+  ✓ P5a nöbetsiz profil rc=1
+  ✓ P5b kapısız profil rc=1
+  ✓ P5c başka şema sürümü rc=1
+  ✓ P5d AYNI ADLI iki nöbet rc=1 (hangisi düştü ayırt edilemez)
+  ✓ P5e 'zorunlu' metin verilirse rc=1 (evet/hayır olmalı)
+  ✓ P5f alansız defter şeması rc=1
+════ P6 · okuma hataları 'ihlal' DEĞİL, ayrı sınıf (rc=2) ════
+  ✓ P6a ayrıştırılamayan dosya rc=2
+  ✓ P6b olmayan dosya rc=2
+  ✓ P6c argümansız çağrı rc=2
+════ P7 · İSTEĞE BAĞLI alanlar geçerliliği bozmaz ════
+  ✓ P7 bilinen isteğe-bağlı alanlar rc=0
+════ P8 · GERÇEK profil (MÜTEVELLİ/akar) — varsa ölçülür ════
+  ✓ P8 canlı profil şema-1'e UYUYOR (iddia ölçüldü)
+════ P9 · MUTASYON: kapısız-nöbet kuralı koparılınca P4 kırmızıya döner ════
+  ✓ P9a asıl araç kapısız nöbeti REDDEDİYOR
+  ✓ P9b MUTASYON: kural ölünce 'KAPISIZ' teşhisi KAYBOLUYOR (kapı gerçek)
+
+── SONUÇ: 26 geçti · 0 kaldı ──
+--- stderr ---

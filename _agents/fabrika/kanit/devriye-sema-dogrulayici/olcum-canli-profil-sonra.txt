@@ -1,0 +1,5 @@
+$ python3 devriye/scripts/profil-dogrula.py /config/projects/Nexus/_agents/handoff/gelen-akar/devriye-profil.sema1.json
+# rc=0 sure=0.0s zaman=2026-10-08T03:51:27+03:00
+--- stdout ---
+✓ profil şema-1 geçerli: akar/devriye · 8 nöbet · 5 kapı · kapısız nöbet 0
+--- stderr ---

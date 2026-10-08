@@ -1,0 +1,39 @@
+{
+  "is": "devriye-sema-dogrulayici",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-08T03:51:28+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "canli-profil",
+      "asama": "sonra",
+      "dosya": "olcum-canli-profil-sonra.txt",
+      "sha256": "2b66b8797e2775ef597723f3e14e702ec49a1d6eeaab2189ecaff39908928b2d",
+      "komut": [
+        "python3",
+        "devriye/scripts/profil-dogrula.py",
+        "/config/projects/Nexus/_agents/handoff/gelen-akar/devriye-profil.sema1.json"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-08T03:51:27+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "826724f9498aa53ee5f30a71e6f4ab1bcd0e1b9a988fb8533bc41278a6bfc2c8",
+      "komut": [
+        "bash",
+        "devriye/scripts/profil-dogrula.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-08T03:51:28+03:00",
+      "sure_sn": 1.0
+    }
+  ],
+  "imza": "8219be87082abf422e7fad85dedc015326fc47355cb76a30c76834304a118cf1"
+}
