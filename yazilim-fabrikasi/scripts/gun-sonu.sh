@@ -136,10 +136,11 @@ if kac_cozulemedi: out.append(f"- ⚠ {len(kac_cozulemedi)} satırın tarihi Ç�
 tav=_os.path.join(_os.path.dirname(kd),"tavan-defteri.log")
 tsat=[l.strip() for l in open(tav,encoding="utf-8")] if _os.path.exists(tav) else []
 bugun_tav, tav_cozulemedi = _gunun_satirlari(tsat, gun)
-out.append(""); out.append(f"## Tavan açılışları ({len(bugun_tav)}) — dönüş tavanını senin kararın aştı")
+out.append(""); out.append(f"## Tavan açılışları ({len(bugun_tav)}) — dönüş tavanı bir kararla aşıldı (Sultan ya da sınıfsız işte reis)")
 for l in bugun_tav:
     par=[x.strip() for x in l.split("|")]
-    out.append(f"- {_yerel_saat(par[0])} · {par[2] if len(par)>2 else '?'} · gerekçe: {par[3] if len(par)>3 else '?'}")
+    kim = "reis kararı (sınıfsız iş)" if len(par)>1 and par[1]=="TAVAN-ACILDI-REIS" else "Sultan kararı"
+    out.append(f"- {_yerel_saat(par[0])} · {par[2] if len(par)>2 else '?'} · {kim} · gerekçe: {par[3] if len(par)>3 else '?'}")
 if not bugun_tav: out.append("- (bugün tavan açılmadı)")
 if tav_cozulemedi: out.append(f"- ⚠ {len(tav_cozulemedi)} satırın tarihi ÇÖZÜLEMEDİ — \"yok\" sayılmadı, sayıldı ve söyleniyor")
 out.append(""); out.append(f"## Açık işler ({len(acik)})")

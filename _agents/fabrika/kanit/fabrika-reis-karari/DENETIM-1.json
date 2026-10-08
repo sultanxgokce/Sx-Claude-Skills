@@ -1,0 +1,29 @@
+{
+  "tur": 1,
+  "is": "fabrika-reis-karari",
+  "pr": "274",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-08T11:20:54+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sınıfsız karta ayrı reis kararı yazma, sınıflı kartı reddetme, bu kararla yalnız dördüncü turu açma ve açılışı ayrı defter etiketiyle gösterme yolu kurulmuş. Ana talep doğru karşılanıyor; ancak karar sahibinin doğrulanmaması ve kabul edilen karar değerinin sınırlandırılmaması çözülmeden üretime hazır sayılmaz.",
+    "bulgular": [
+      {
+        "ne": "Reis kararını gerçekten iş sahibi/reisin verdiği doğrulanmıyor; çağıran kişi istediği adı --reis alanına yazarak geçerli devam kaydı oluşturabiliyor.",
+        "kanit": "reis-dedi dalı yalnız REIS alanının dolu olmasını denetliyor ve değeri doğrudan reis_kararlari'na ekliyor; karttaki sahip/atanan kişiyle veya doğrulanmış oturum kimliğiyle eşleştirme yok.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh: reis-dedi doğrulamaları ve Python append bloğu",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "--karar değeri belgelenen devam|daralt|geri-al kümesiyle sınırlandırılmıyor; araç geçersiz kararları karta başarıyla yazabiliyor.",
+        "kanit": "KARAR için yalnız -n kontrolü var; Python bloğu karar değişkenini doğrulamadan kaydediyor. Eklenen kart testleri de geçersiz karar değerini sınamıyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh: reis-dedi eksik alan kontrolü ve reis_kararlari append bloğu; yazilim-fabrikasi/scripts/kart.test.sh:T9",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve bütün kayıtlar yeşil; denetci 92/0, kart 34/0 ve gün-sonu 23/0 sonuçları mevcut. Ancak iş kartındaki canlı vaka için yalnız önce kaydı var, gerçekçi aynı vakanın sonra kaydı/ölçüm çifti yok; ayrıca kurulu kopyadan çalıştırma iddiası kanıtlanmamış, komutlar depo içindeki yazilim-fabrikasi yollarını çalıştırıyor. Gün sonu çıktısı da yeni reis etiketli bir açılış örneği göstermiyor; bu nedenle ilgili iddiaların kanıtı test/kod düzeyinde, uçtan uca kurulum ve canlı önce/sonra düzeyinde eksik."
+  }
+}

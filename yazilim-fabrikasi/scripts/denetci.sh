@@ -8,6 +8,8 @@
 #   · tavan 3 tur; ilerleyen işe (puan↑ VE açık bulgu↓) +1; DÖRT mutlak → sonrası "tıkandı + üç yol" (rc=4)
 #   · --sultan-devam : KARTA işlenmiş Sultan kararını (kart.sh sultan-dedi) okur ve "ilerlemiyor"
 #     hükmünü aşar. Kartta kayıt yoksa AÇILMAZ. MUTLAK tavanı (4) AÇMAZ. Deftere yazılamazsa AÇILMAZ.
+#   · --reis-devam   : SINIFSIZ işte KARTA işlenmiş sahip/reis kararını (kart.sh reis-dedi) okur; aynı sınırlar.
+#     Sınıflı kartta AÇILMAZ (o kararın merci Sultan'dır). Defter satırı TAVAN-ACILDI-REIS, gün sonu özetinde görünür.
 #
 # Kullanım:
 #   denetci.sh <iş> (--pr N | --diff DOSYA) [--kart DOSYA] [--yazan claude|codex] [--denetci auto|codex|claude]
@@ -23,13 +25,14 @@ TAVAN=3; MUTLAK=4
 _hata() { printf '✗ %s\n' "$*" >&2; }
 _bilgi() { printf '%s\n' "$*"; }
 
-IS=""; PR=""; DIFF=""; KART=""; YAZAN="claude"; DENETCI="auto"; MODEL=""; DEPO="${KANIT_DEPO:-}"; SULTAN_DEVAM=0
+IS=""; PR=""; DIFF=""; KART=""; YAZAN="claude"; DENETCI="auto"; MODEL=""; DEPO="${KANIT_DEPO:-}"; SULTAN_DEVAM=0; REIS_DEVAM=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --pr) PR="$2"; shift 2 ;; --diff) DIFF="$2"; shift 2 ;; --kart) KART="$2"; shift 2 ;;
     --yazan) YAZAN="$2"; shift 2 ;; --denetci) DENETCI="$2"; shift 2 ;; --model) MODEL="$2"; shift 2 ;;
     --depo) DEPO="$2"; shift 2 ;;
     --sultan-devam) SULTAN_DEVAM=1; shift ;;
+    --reis-devam) REIS_DEVAM=1; shift ;;
     -h|--help) sed -n '1,20p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) [ -z "$IS" ] && IS="$1" || { _hata "tanınmayan argüman: $1"; exit 1; }; shift ;;
   esac
@@ -117,6 +120,46 @@ PY
   _bilgi "⚠ TAVAN AÇILDI (tur $TUR) — Sultan kararı karttan okundu ve deftere yazıldı: $GEREKCE"
   return 0
 }
+# 🔴 REİS KAPISI (8 Eki 2026 · A268): tıkandı raporu "karar iş sahibinin/reisin, sınıf işiyse Sultan'ın" diyordu
+#    ama araçta yalnız Sultan yolu vardı — sınıfsız işin sahibi kendi kararını araca yazdıramıyor, kapı ya
+#    kapalı kalıyor ya da A06'ya özendiriyordu (aynı gün iki vaka). Bu kapı YALNIZ sınıfsız kartta açılır;
+#    sınıflı kartta reis kararı yok sayılır ve Sultan yolu gösterilir. Mutlak tavanı (4) yine AÇMAZ.
+reis_kapisi() {
+  [ "$REIS_DEVAM" = "1" ] || return 1
+  KARTYOL="$DEPO/_agents/fabrika/kartlar/$IS.json"
+  GEREKCE="$(python3 - "$KARTYOL" "devam" 2>/dev/null <<'PY'
+import json,sys
+try: k=json.load(open(sys.argv[1],encoding="utf-8"))
+except Exception: raise SystemExit(1)
+# sınıflı kart → bu yol KAPALI (merci Sultan). "sultan" bayrağı ya da sınıf listesi dolu ise reddet.
+if k.get("sultan") or k.get("siniflar"): raise SystemExit(3)
+kk=[x for x in (k.get("reis_kararlari") or []) if x.get("karar")==sys.argv[2]]
+if not kk: raise SystemExit(1)
+x=kk[-1]
+if not (x.get("reis") and x.get("oturum")): raise SystemExit(1)
+if len(x.get("gerekce") or "") < 20: raise SystemExit(1)
+def tmz(v): return " ".join(str(v).replace("|","/").split())
+print(f'reis={tmz(x["reis"])} oturum={tmz(x["oturum"])} gerekce="{tmz(x["gerekce"])}"')
+PY
+)"; prc=$?
+  if [ "$prc" -eq 3 ]; then
+    _hata "--reis-devam verildi ama kart SINIFLI — sınıf işinin kararı Sultan'ındır; reis kapısı AÇILMADI (yol: kart.sh sultan-dedi + --sultan-devam)."
+    return 2
+  fi
+  if [ -z "$GEREKCE" ]; then
+    _hata "--reis-devam verildi ama KARTTA gerekçeli reis 'devam' kararı YOK — kapı açılmadı."
+    _bilgi "   Sınıfsız işin sahibi/reisi kararını önce kayda geçirir:"
+    _bilgi "     kart.sh reis-dedi $IS --karar devam --reis <AD> --oturum <ref> --gerekce \"<niçin bir tur daha — en az 20 karakter>\""
+    return 2
+  fi
+  DEF="$DEPO/_agents/fabrika/tavan-defteri.log"
+  mkdir -p "$DEPO/_agents/fabrika" || { _hata "tavan defteri dizini açılamadı — kapı AÇILMADI"; return 2; }
+  SATIR="$(date -u +%Y-%m-%dT%H:%M:%SZ) | TAVAN-ACILDI-REIS | is=$IS tur=$TUR | $GEREKCE"
+  printf '%s\n' "$SATIR" >> "$DEF" 2>/dev/null
+  grep -qF "$SATIR" "$DEF" 2>/dev/null || { _hata "tavan defterine yazılan satır geri OKUNAMADI — kapı AÇILMADI"; return 2; }
+  _bilgi "⚠ TAVAN AÇILDI (tur $TUR) — REİS kararı karttan okundu ve deftere yazıldı (sınıfsız iş): $GEREKCE"
+  return 0
+}
 if [ "$TUR" -gt "$MUTLAK" ]; then _hata "mutlak tavan ($MUTLAK) aşıldı — denetim koşulmadı"; tikandi_raporu; exit 4; fi
 if [ "$TUR" -gt "$TAVAN" ]; then
   if ilerliyor_mu; then _bilgi "· tur $TUR: tavan $TAVAN aşıldı ama iş İLERLİYOR (puan↑, bulgu↓) → +1 tur payı"
@@ -124,9 +167,14 @@ if [ "$TUR" -gt "$TAVAN" ]; then
     sultan_kapisi; sk=$?
     [ "$sk" -eq 2 ] && exit 1
     if [ "$sk" -ne 0 ]; then
-      _hata "tavan ($TAVAN) doldu ve iş ilerlemiyor — denetim koşulmadı"; tikandi_raporu
-      _bilgi "   Sultan 'devam' dediyse: önce kart.sh sultan-dedi ile kayda geçir, sonra --sultan-devam"
-      exit 4
+      reis_kapisi; rk=$?
+      [ "$rk" -eq 2 ] && exit 1
+      if [ "$rk" -ne 0 ]; then
+        _hata "tavan ($TAVAN) doldu ve iş ilerlemiyor — denetim koşulmadı"; tikandi_raporu
+        _bilgi "   Sultan 'devam' dediyse: önce kart.sh sultan-dedi ile kayda geçir, sonra --sultan-devam"
+        _bilgi "   SINIFSIZ işte sahip/reis 'devam' diyorsa: kart.sh reis-dedi ile kayda geçir, sonra --reis-devam"
+        exit 4
+      fi
     fi
   fi
 fi

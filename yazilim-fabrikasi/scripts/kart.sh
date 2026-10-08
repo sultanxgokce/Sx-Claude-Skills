@@ -11,6 +11,8 @@
 #   kart.sh tikandi <iş> --yol devam|daralt|geri-al --neden "..."
 #   kart.sh sultan-dedi <iş> --karar <devam|daralt|geri-al> --oturum <ref> --soz "<verbatim ≤15 kelime>" \
 #          --beyan <AJAN> --gerekce "<niçin bu yol işe yarar — en az 20 karakter>"
+#   kart.sh reis-dedi <iş> --karar <devam|daralt|geri-al> --reis <AD> --oturum <ref> \
+#          --gerekce "<niçin — en az 20 karakter>"     ← YALNIZ SINIFSIZ kartta (sınıflı işin kararı Sultan'ındır)
 #          Sultan'ın SÖZLÜ kararını KARTA işler (D1 deseni). Üç parça zorunlu: oturum-ref · kırpık · beyan.
 #          🔴 A06: onay ÜRETMEZ, alınan onayı AKTARIR. Ref'siz beyan sayılmaz; uyduran kartta yakalanır.
 #   kart.sh goster <iş> · kart.sh liste [--acik]
@@ -29,13 +31,13 @@ KD="$DEPO/_agents/fabrika/kartlar"; mkdir -p "$KD"
 
 CMD="${1:-}"; IS="${2:-}"; shift 2 2>/dev/null || true
 IS_C=""; ISTEDI=""; ALDI=""; GA=""; PARA=""; DIS=""; YETKI=""; KANIT=""; ODA=""; PR=""; YOL=""; NEDEN=""
-KARAR=""; OTURUM=""; SOZ=""; BEYAN=""; GEREKCE=""
+KARAR=""; OTURUM=""; SOZ=""; BEYAN=""; GEREKCE=""; REIS=""
 while [ $# -gt 0 ]; do case "$1" in
   --is) IS_C="$2"; shift 2 ;; --istedi) ISTEDI="$2"; shift 2 ;; --aldi) ALDI="$2"; shift 2 ;;
   --geri-alinamaz) GA="$2"; shift 2 ;; --para) PARA="$2"; shift 2 ;; --dis-yuzey) DIS="$2"; shift 2 ;; --yetki) YETKI="$2"; shift 2 ;;
   --kanit) KANIT="$2"; shift 2 ;; --oda) ODA="$2"; shift 2 ;; --pr) PR="$2"; shift 2 ;; --yol) YOL="$2"; shift 2 ;; --neden) NEDEN="$2"; shift 2 ;;
   --karar) KARAR="$2"; shift 2 ;; --oturum) OTURUM="$2"; shift 2 ;; --soz) SOZ="$2"; shift 2 ;; --beyan) BEYAN="$2"; shift 2 ;;
-  --gerekce) GEREKCE="$2"; shift 2 ;;
+  --gerekce) GEREKCE="$2"; shift 2 ;; --reis) REIS="$2"; shift 2 ;;
   --acik) ACIK=1; shift ;; *) _hata "tanınmayan argüman: $1"; exit 1 ;; esac; done
 
 tetik() {  # tetik <oda> <başlık> <gövde>
@@ -129,6 +131,47 @@ k.setdefault("sultan_kararlari",[]).append({
   "zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds")})
 json.dump(k,open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
 print(f"\u2713 Sultan karari karta islendi: {karar} \u00b7 oturum {oturum} \u00b7 beyan {beyan}")
+PY
+    ;;
+  reis-dedi)
+    # 🔴 SAHİP/REİS KARARI (8 Eki 2026 · A268): hat "sınıfsız işin kararı sahibinin/reisin" diyordu ama araç
+    #    yalnız Sultan'ın kararını okuyordu. Sonuç: sınıfsız bir işin sahibi kendi yetkisindeki kararı yazdıramıyor,
+    #    kapı ya kapalı kalıyor ya da birisi Sultan'ın ağzından yazmaya özeniyor (A06). Aynı gün iki vaka
+    #    (DEVRİYE doğrulayıcısı · kokpit A2). Karar AYRI alana girer (reis_kararlari) — Sultan'ın alanına değil —
+    #    ve YALNIZ sınıfsız kartta kabul edilir: sınıf işinin tek karar mercii Sultan'dır, bu yol onu AÇMAZ.
+    [ -n "$IS" ] || { _hata "iş adı gerekiyor"; exit 1; }
+    [ -f "$KD/$IS.json" ] || { _hata "kart YOK: $KD/$IS.json"; exit 1; }
+    eksik=""
+    [ -n "$KARAR" ] || eksik="$eksik --karar"
+    [ -n "$REIS" ] || eksik="$eksik --reis"
+    [ -n "$OTURUM" ] || eksik="$eksik --oturum"
+    [ -n "$GEREKCE" ] || eksik="$eksik --gerekce"
+    [ -z "$eksik" ] || { _hata "eksik:$eksik — adsız, ref'siz ya da GEREKÇESİZ reis kararı SAYILMAZ"; exit 1; }
+    [ "${#GEREKCE}" -ge 20 ] || { _hata "--gerekce en az 20 karakter — 'devam' bir gerekçe değildir"; exit 1; }
+    # 🔴 (bağımsız göz 8 Eki tur 1) karar kapalı kümedir; araç tanımadığı bir kararı karta YAZMAZ
+    case "$KARAR" in devam|daralt|geri-al) ;; *) _hata "--karar yalnız devam|daralt|geri-al olabilir ('$KARAR' değil)"; exit 1 ;; esac
+    for v in KARAR REIS OTURUM GEREKCE; do
+      d="${!v}"
+      if [[ "$d" == *"|"* || "$d" == *$'\n'* ]]; then
+        _hata "--$(printf '%s' "$v" | tr 'A-Z' 'a-z') içinde '|' ya da satır sonu olamaz (defter ayracı)"; exit 1
+      fi
+    done
+    python3 - "$KD/$IS.json" "$KARAR" "$REIS" "$OTURUM" "$GEREKCE" <<'PY' || exit 1
+import json,sys,datetime
+yol,karar,reis,oturum,gerekce=sys.argv[1:]
+k=json.load(open(yol,encoding="utf-8"))
+# 🔴 (bağımsız göz 8 Eki tur 1) kararı veren, KARTTA yazılı iş sahibi (aldi) olmalı — araç kimlik doğrulayamaz,
+#    ama en azından karta yazılı sahipten başka bir adı kabul etmez. Başka bir reisin kararı (ör. SERDAR'ın MUAVİN'in
+#    işine "devam" demesi) mektupla gelir; sahip kendi adıyla işler ve gerekçede o mektuba atıf yapar.
+if reis != k.get("aldi"):
+    print(f"\u2717 --reis '{reis}' kartın sahibi değil (kartta aldi: {k.get('aldi')}) — sahip kendi adıyla işler, başkasının kararına gerekçede atıf yapar", file=sys.stderr); raise SystemExit(1)
+if k.get("sultan") or k.get("siniflar"):
+    print(f"\u2717 kart SINIFLI ({', '.join(k.get('siniflar') or ['?'])}) — sınıf işinin kararı SULTAN'ındır; reis kararı bu kartı AÇAMAZ (kart.sh sultan-dedi)", file=sys.stderr); raise SystemExit(1)
+k.setdefault("reis_kararlari",[]).append({
+  "karar":karar,"reis":reis,"oturum":oturum,"gerekce":gerekce,
+  "zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds")})
+json.dump(k,open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
+print(f"\u2713 reis karari karta islendi: {karar} \u00b7 reis {reis} \u00b7 oturum {oturum} (sinifsiz is)")
 PY
     ;;
   goster) [ -f "$KD/$IS.json" ] && cat "$KD/$IS.json" || { _hata "kart yok: $IS"; exit 3; } ;;

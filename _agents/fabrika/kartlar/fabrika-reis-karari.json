@@ -1,0 +1,19 @@
+{
+  "is": "fabrika-reis-karari",
+  "cumle": "Fabrika tur kapısına sahip/reis kararı yolu: sınıfsız işte 'kart.sh reis-dedi' + 'denetci.sh --reis-devam' (yalnız sınıfsız kartta; sınıflı kart Sultan'da kalır; mutlak tavan 4 açılmaz; defter satırı TAVAN-ACILDI-REIS gün sonu özetine girer)",
+  "istedi": "MUAVİN (A268 · DEVRİYE 4. tur) + SERDAR (kokpit A2 aynı kapıda kilitlendi)",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-08T11:11:29+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}
