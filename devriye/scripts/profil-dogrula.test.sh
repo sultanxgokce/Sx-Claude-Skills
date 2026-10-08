@@ -141,6 +141,31 @@ icerir 'SERBEST TARİF' "$O"; g $? "P13d ama SUSULMUYOR — zayıf bağ olduğu 
 icerir 'zayıf bağ' "$O"; g $? "P13e niçin zayıf olduğu yazılı"
 _boz 'd["nobetler"][0]["kapi"]="hizli"'
 
+echo "════ P14 · DOĞRULAYICI HİÇBİR GİRDİDE ÇÖKMEZ (göz tur-2) ════"
+# 🔴 Bir doğrulayıcının çökmesi, 'hayır' demesinden KÖTÜDÜR: çağıran taraf bunu
+#    'araç bozuk' sanır, 'profil bozuk' değil. Şema ihlali denetimsiz istisnaya dönüşmemeli.
+_boz 'd["kapilar"]=5'
+[ "$(rc_of "$T/k.json")" = 1 ]; g $? "P14a kapilar sayı → denetimli RED (rc=1), çökme değil"
+O="$(kos "$T/k.json")"; icerir 'kapilar bir liste değil' "$O"; g $? "P14b teşhis söyleniyor"
+icerir 'Traceback' "$O"; [ $? -ne 0 ]; g $? "P14c çıktıda yığın izi YOK"
+for _v in 'd["nobetler"]=5' 'd["yollar"]="metin"' 'd["hat"]=[]' 'd["defter_semasi"]=[1,2]' 'd["kurulum_sinavi"]={"a":1}' 'd["karne_alanlari"]="x"' 'd["nobetler"]=[5]' 'd["kapilar"]=[null]'; do
+  _boz "$_v"
+  RC="$(rc_of "$T/k.json")"
+  if [ "$RC" != 1 ] && [ "$RC" != 2 ]; then kalan=$((kalan+1)); echo "  ✗ P14d bozuk girdi beklenmedik rc=$RC ($_v)";
+  else gecen=$((gecen+1)); echo "  ✓ P14d bozuk girdi denetimli (rc=$RC): $_v"; fi
+  O="$(kos "$T/k.json")"
+  if icerir 'Traceback' "$O"; then kalan=$((kalan+1)); echo "  ✗ P14e ÇÖKTÜ: $_v"; else gecen=$((gecen+1)); echo "  ✓ P14e çökmedi: $_v"; fi
+done
+
+echo "════ P15 · GENEL KALKAN: beklenmedik hata 'ihlal' değil 'ölçemedim' ════"
+MK="$T/mutant-cokertici.py"
+sed 's@^    h = \[\]                                  # hatalar@    h = []; raise RuntimeError("sinav: kasitli cokme")@' "$D" > "$MK"
+if cmp -s "$MK" "$D"; then g 1 "P15 mutant FARKSIZ (çapa bayat)"; else
+  python3 "$MK" "$T/altin.json" >/dev/null 2>&1; [ $? -eq 2 ]; g $? "P15a içeride çökme olsa bile rc=2 (ölçemedim), rc=1 DEĞİL"
+  OM="$(python3 "$MK" "$T/altin.json" 2>&1 || true)"
+  icerir 'profil hükmü DEĞİL' "$OM"; g $? "P15b hükmün verilmediği açıkça söyleniyor"
+fi
+
 echo "════ P9 · MUTASYON: kapısız-nöbet kuralı koparılınca P4 kırmızıya döner ════"
 M="$T/mutant.py"
 sed 's@^                if _bos(n.get("kapi")):@                if False:@' "$D" > "$M"

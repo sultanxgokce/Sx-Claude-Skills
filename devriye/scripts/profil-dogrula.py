@@ -97,7 +97,12 @@ def dogrula(d):
         # 🔴 DOLU OLMAK YETMEZ, KARŞILIĞI OLMALI (bağımsız göz tur 1): `kapi` alanı yalnız
         #    boş mu diye bakılıyordu; uydurma ama dolu bir kapı adı geçiyordu. Var olmayan
         #    bir kapıya bağlı nöbet, kapısız nöbetin kılık değiştirmiş hâlidir.
-        kapi_adlari = {k.get("ad") for k in (d.get("kapilar") or []) if isinstance(k, dict)}
+        # 🔴 TÜR DENETİMİ KULLANIMDAN ÖNCE (bağımsız göz tur 2): `kapilar` liste değilse
+        #    (ör. 5) bu küme kurulurken TypeError atıyordu — yani şema ihlali, DENETİMSİZ
+        #    BİR ÇÖKMEYE dönüşüyordu. Bir doğrulayıcının çökmesi, "hayır" demesinden kötüdür:
+        #    çağıran taraf bunu "araç bozuk" sanır, "profil bozuk" değil.
+        _kp = d.get("kapilar")
+        kapi_adlari = {k.get("ad") for k in _kp if isinstance(k, dict)} if isinstance(_kp, list) else set()
         for i, n in enumerate(nb):
             if not isinstance(n, dict):
                 continue
@@ -110,7 +115,9 @@ def dogrula(d):
                 serbest.append(n.get("ad"))   # RED DEĞİL — gerekçesi aşağıda
 
     kp = d.get("kapilar")
-    if not isinstance(kp, list) or not kp:
+    if "kapilar" in d and not isinstance(kp, list):
+        h.append("kapilar bir liste değil")
+    elif not isinstance(kp, list) or not kp:
         h.append("kapilar: en az bir kapı şart")
     else:
         for i, k in enumerate(kp):
@@ -172,7 +179,16 @@ def main():
         d = json.load(open(sys.argv[1], encoding="utf-8"))
     except Exception as e:
         print(f"✗ profil OKUNAMADI: {e}", file=sys.stderr); sys.exit(2)
-    h, uy = dogrula(d)
+    # 🔴 GENEL KALKAN: tek tek tür denetimi eklemek bu sınıfı bitirmez — bir sonraki
+    #    beklenmedik girdi yine çökertebilir. Doğrulayıcı HİÇBİR girdide çökmemeli:
+    #    çökme, "profil bozuk" hükmünü "araç bozuk" gibi gösterir. Beklenmedik hata
+    #    ayrı bir sınıftır (rc=2 · ölçemedim), ihlal (rc=1) DEĞİL.
+    try:
+        h, uy = dogrula(d)
+    except Exception as e:
+        print(f"✗ doğrulayıcı BEKLENMEDİK hata verdi: {type(e).__name__}: {e}", file=sys.stderr)
+        print("  Bu bir profil hükmü DEĞİL — ölçemedim. Araçta açık var, bildir.", file=sys.stderr)
+        sys.exit(2)
     for x in uy:
         print(f"⚠ {x}")
     if h:

@@ -1,0 +1,23 @@
+{
+  "tur": 2,
+  "is": "devriye-sema-dogrulayici",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-08T03:54:40+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Şema-1 doğrulayıcısı, canlı MÜTEVELLİ profilini ölçmüş; bilinmeyen alan, zorunlu boş alan ve kapısız nöbet hükümlerini 41 yeşil sınavla ayırt eder hâle getirmiştir. Lakin bozuk türde bir kapılar değeri doğrulayıcının kendi sözleştiği RED teşhisi yerine denetimsiz istisna doğurabilir; üretim mühründen önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "kapilar alanı liste dışı, yinelenemeyen dolu bir değer olduğunda doğrulayıcı kontrollü şema ihlali üretmeden çökebilir.",
+        "kanit": "kapi_adlari, kapilar türü denetlenmeden `{k.get(\"ad\") for k in (d.get(\"kapilar\") or []) ...}` ile kuruluyor; örneğin kapilar=5 değeri üzerinde yineleme TypeError doğurur. kapilar için `bir liste değil` denetimi ise daha sonra çalışıyor ve P12 yanlış tür sınavları kapilar alanını kapsamıyor.",
+        "konum": "devriye/scripts/profil-dogrula.py:105",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlamdır; iki kayıt yeşil, sarı kayıt yoktur. Canlı profil gerçek veriyle doğrudan ölçülmüş, üç kart kuralı ile önceki tur açıkları P2–P4 ve P10–P12 sınavlarında gösterilmiş, toplam 41/41 geçmiştir; ancak kayıtların ikisi de yalnız “sonra” aşamasındadır ve önce/sonra ölçüm çifti yoktur. Ayrıca yeşil sınav, kapilar alanının yanlış türünü sınamadığından belirtilen çökme yolunu dışlamaz."
+  }
+}

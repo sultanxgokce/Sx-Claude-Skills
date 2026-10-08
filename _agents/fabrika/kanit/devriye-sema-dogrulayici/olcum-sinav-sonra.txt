@@ -1,5 +1,5 @@
 $ bash devriye/scripts/profil-dogrula.test.sh
-# rc=0 sure=1.4s zaman=2026-10-08T03:54:05+03:00
+# rc=0 sure=2.1s zaman=2026-10-08T03:56:18+03:00
 --- stdout ---
 ════ P1 · ALTIN profil GEÇER (gevşeme değil, doğru kabul) ════
   ✓ P1a geçerli profil rc=0
@@ -52,9 +52,36 @@ $ bash devriye/scripts/profil-dogrula.test.sh
   ✓ P13c serbest tarif GEÇERLİ (rc=0) — sözleşme sonradan sıkılmaz
   ✓ P13d ama SUSULMUYOR — zayıf bağ olduğu söyleniyor
   ✓ P13e niçin zayıf olduğu yazılı
+════ P14 · DOĞRULAYICI HİÇBİR GİRDİDE ÇÖKMEZ (göz tur-2) ════
+  ✓ P14a kapilar sayı → denetimli RED (rc=1), çökme değil
+  ✓ P14b teşhis söyleniyor
+  ✓ P14c çıktıda yığın izi YOK
+  ✓ P14d bozuk girdi denetimli (rc=1): d["nobetler"]=5
+  ✓ P14e çökmedi: d["nobetler"]=5
+  ✓ P14d bozuk girdi denetimli (rc=1): d["yollar"]="metin"
+  ✓ P14e çökmedi: d["yollar"]="metin"
+  ✓ P14d bozuk girdi denetimli (rc=1): d["hat"]=[]
+  ✓ P14e çökmedi: d["hat"]=[]
+  ✓ P14d bozuk girdi denetimli (rc=1): d["defter_semasi"]=[1,2]
+  ✓ P14e çökmedi: d["defter_semasi"]=[1,2]
+  ✓ P14d bozuk girdi denetimli (rc=1): d["kurulum_sinavi"]={"a":1}
+  ✓ P14e çökmedi: d["kurulum_sinavi"]={"a":1}
+  ✓ P14d bozuk girdi denetimli (rc=1): d["karne_alanlari"]="x"
+  ✓ P14e çökmedi: d["karne_alanlari"]="x"
+  ✓ P14d bozuk girdi denetimli (rc=1): d["nobetler"]=[5]
+  ✓ P14e çökmedi: d["nobetler"]=[5]
+  ✓ P14d bozuk girdi denetimli (rc=1): d["kapilar"]=[null]
+  ✓ P14e çökmedi: d["kapilar"]=[null]
+════ P15 · GENEL KALKAN: beklenmedik hata 'ihlal' değil 'ölçemedim' ════
+  ✓ P15a içeride çökme olsa bile rc=2 (ölçemedim), rc=1 DEĞİL
+  ✓ P15b hükmün verilmediği açıkça söyleniyor
 ════ P9 · MUTASYON: kapısız-nöbet kuralı koparılınca P4 kırmızıya döner ════
   ✓ P9a asıl araç kapısız nöbeti REDDEDİYOR
   ✓ P9b MUTASYON: kural ölünce 'KAPISIZ' teşhisi KAYBOLUYOR (kapı gerçek)
 
-── SONUÇ: 41 geçti · 0 kaldı ──
+── SONUÇ: 62 geçti · 0 kaldı ──
 --- stderr ---
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+  File "<string>", line 1, in <module>
+NameError: name 'null' is not defined

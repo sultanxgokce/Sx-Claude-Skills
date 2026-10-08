@@ -1,7 +1,7 @@
 {
   "is": "devriye-sema-dogrulayici",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-08T03:54:05+03:00",
+  "guncelleme": "2026-10-08T03:56:18+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -24,16 +24,16 @@
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "d4f4558544d9f5595585f804dbb0ff426e9fb6291785428570438d7feeb49235",
+      "sha256": "3703664b78e1132058cdeaf2da65ff184e9cd3a56dd6dbb37e9329edd520f4f6",
       "komut": [
         "bash",
         "devriye/scripts/profil-dogrula.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-08T03:54:05+03:00",
-      "sure_sn": 1.4
+      "zaman": "2026-10-08T03:56:18+03:00",
+      "sure_sn": 2.1
     }
   ],
-  "imza": "1d56b2e67935e84900d053f8bb754249ec0b451038ec0e58090ba869dd298078"
+  "imza": "0e00a3903768d6f1fae7543fde5888e06671d6721b9cc9ecc20a19327ed4af11"
 }
