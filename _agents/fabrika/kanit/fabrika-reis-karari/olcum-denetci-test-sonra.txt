@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/denetci.test.sh
-# rc=0 sure=85.6s zaman=2026-10-08T11:19:35+03:00
+# rc=0 sure=77.4s zaman=2026-10-08T11:25:00+03:00
 --- stdout ---
 ════ T1 · kanıt yok → rc=2, denetim dosyası yok ════
   ✓ kanıtsız adım 4 açılmadı (rc=2)
@@ -60,6 +60,8 @@ $ bash yazilim-fabrikasi/scripts/denetci.test.sh
   ✓ --reis eksikken REDDEDİLDİ
   ✓ --oturum eksikken REDDEDİLDİ
   ✓ kısa gerekçe REDDEDİLDİ
+  ✓ 🔴 kartın sahibi olmayan ad REDDEDİLDİ (aldi MUAVIN)
+  ✓ 🔴 küme dışı karar REDDEDİLDİ
   ✓ '|' içeren alan REDDEDİLDİ (defter ayracı)
   ✓ tam reis kaydı karta işlendi
   ✓ 🔴 kayıt reis_kararlari'nda; sultan_kararlari'na HİÇ dokunulmadı (A06)
@@ -108,5 +110,5 @@ $ bash yazilim-fabrikasi/scripts/denetci.test.sh
   ✓ mutant 'reis-sinif-citini-kaldir' sınavı KIRMIZI yapıyor
   ✓ mutant 'mutlak-tavani-kaldir' sınavı KIRMIZI yapıyor
 
-── SONUÇ: 92 geçti · 0 kaldı ──
+── SONUÇ: 94 geçti · 0 kaldı ──
 --- stderr ---

@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/kart.test.sh
-# rc=0 sure=0.9s zaman=2026-10-08T11:19:36+03:00
+# rc=0 sure=1.0s zaman=2026-10-08T11:25:01+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -18,6 +18,9 @@ $ bash yazilim-fabrikasi/scripts/kart.test.sh
   ✓ 🔴 SINIFLI karta (is-2, dis_yuzey) reis kararı REDDEDİLDİ
   ✓ sınıflı kartta alan oluşmadı
   ✓ kısa gerekçe REDDEDİLDİ
+  ✓ 🔴 kartın sahibi olmayan ad (SERDAR ≠ aldi MUAVIN) REDDEDİLDİ
+  ✓ 🔴 küme dışı karar ('olur') REDDEDİLDİ
+  ✓ reddedilen denemeler karta hiçbir şey yazmadı
 ════ T4 · is-alani ac kart ister; kartı worktree'ye taşır ════
   ✓ kartsız iş alanı açılmaz (rc=1)
   ✓ --kartsiz kaçışıyla açılır (gerekçe loglanır)
@@ -44,5 +47,5 @@ $ bash yazilim-fabrikasi/scripts/kart.test.sh
   ✓ dosyaya yazıldı
   ✓ liste --acik çalışıyor
 
-── SONUÇ: 34 geçti · 0 kaldı ──
+── SONUÇ: 37 geçti · 0 kaldı ──
 --- stderr ---

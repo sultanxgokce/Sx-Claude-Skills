@@ -148,6 +148,8 @@ PY
     [ -n "$GEREKCE" ] || eksik="$eksik --gerekce"
     [ -z "$eksik" ] || { _hata "eksik:$eksik — adsız, ref'siz ya da GEREKÇESİZ reis kararı SAYILMAZ"; exit 1; }
     [ "${#GEREKCE}" -ge 20 ] || { _hata "--gerekce en az 20 karakter — 'devam' bir gerekçe değildir"; exit 1; }
+    # 🔴 (bağımsız göz 8 Eki tur 1) karar kapalı kümedir; araç tanımadığı bir kararı karta YAZMAZ
+    case "$KARAR" in devam|daralt|geri-al) ;; *) _hata "--karar yalnız devam|daralt|geri-al olabilir ('$KARAR' değil)"; exit 1 ;; esac
     for v in KARAR REIS OTURUM GEREKCE; do
       d="${!v}"
       if [[ "$d" == *"|"* || "$d" == *$'\n'* ]]; then
@@ -158,6 +160,11 @@ PY
 import json,sys,datetime
 yol,karar,reis,oturum,gerekce=sys.argv[1:]
 k=json.load(open(yol,encoding="utf-8"))
+# 🔴 (bağımsız göz 8 Eki tur 1) kararı veren, KARTTA yazılı iş sahibi (aldi) olmalı — araç kimlik doğrulayamaz,
+#    ama en azından karta yazılı sahipten başka bir adı kabul etmez. Başka bir reisin kararı (ör. SERDAR'ın MUAVİN'in
+#    işine "devam" demesi) mektupla gelir; sahip kendi adıyla işler ve gerekçede o mektuba atıf yapar.
+if reis != k.get("aldi"):
+    print(f"\u2717 --reis '{reis}' kartın sahibi değil (kartta aldi: {k.get('aldi')}) — sahip kendi adıyla işler, başkasının kararına gerekçede atıf yapar", file=sys.stderr); raise SystemExit(1)
 if k.get("sultan") or k.get("siniflar"):
     print(f"\u2717 kart SINIFLI ({', '.join(k.get('siniflar') or ['?'])}) — sınıf işinin kararı SULTAN'ındır; reis kararı bu kartı AÇAMAZ (kart.sh sultan-dedi)", file=sys.stderr); raise SystemExit(1)
 k.setdefault("reis_kararlari",[]).append({

@@ -1,7 +1,7 @@
 {
   "is": "fabrika-reis-karari",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-08T11:19:36+03:00",
+  "guncelleme": "2026-10-08T11:25:01+03:00",
   "kayitlar": [
     {
       "tur": "dosya",
@@ -19,30 +19,30 @@
       "etiket": "denetci-test",
       "asama": "sonra",
       "dosya": "olcum-denetci-test-sonra.txt",
-      "sha256": "0d7f8e9584275c2a28eb0b954e10e124539f19b0696d5fea75a67577cdaee079",
+      "sha256": "5ee3a25763eb8b0b6f1e70b805342dfc4a6abbfe5aa023fe35f70557714e7078",
       "komut": [
         "bash",
         "yazilim-fabrikasi/scripts/denetci.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-08T11:19:35+03:00",
-      "sure_sn": 85.6
+      "zaman": "2026-10-08T11:25:00+03:00",
+      "sure_sn": 77.4
     },
     {
       "tur": "olcum",
       "etiket": "kart-test",
       "asama": "sonra",
       "dosya": "olcum-kart-test-sonra.txt",
-      "sha256": "9fbdea73a419d3447102a55dbb5e4535a269d9f5821051fb24cffa40f1a1d17b",
+      "sha256": "f97d92c94a4b47445a55667e5479e3d881a0bad8a98112014bb26891b6e7bd36",
       "komut": [
         "bash",
         "yazilim-fabrikasi/scripts/kart.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-08T11:19:36+03:00",
-      "sure_sn": 0.9
+      "zaman": "2026-10-08T11:25:01+03:00",
+      "sure_sn": 1.0
     },
     {
       "tur": "olcum",
@@ -60,5 +60,5 @@
       "sure_sn": 0.4
     }
   ],
-  "imza": "53bd6d94723d85eeca342ee8eeccecf581f31d9e3edb157ef944efd5087c1508"
+  "imza": "de6742ac421e2eaa2b4ad0284d963821570327446ec316fbe9864a11df75f930"
 }
