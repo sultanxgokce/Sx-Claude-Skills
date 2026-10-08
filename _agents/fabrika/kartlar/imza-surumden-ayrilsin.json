@@ -1,0 +1,19 @@
+{
+  "is": "imza-surumden-ayrilsin",
+  "cumle": "Kanit imzasinin govdesi arac SURUMUNU iceriyor: surum artisi eski manifestleri 'ELLE DEGISMIS' diye sucluyor (olculdu: nazir kutusunda 31 manifestin 31'i). NAZIR+RASATCI bagimsiz olctu, hukum: AYRILSIN. Surum govdeden cikar, VERI olarak kalir; dogrula surum farkini BILGI satiri basar, rc=1 VERMEZ. Tuzak: cikarmanin kendisi de eski imzalari kirar -> uyumluluk dogrulayicisi sart (manifestin KENDI kayitli surumuyle).",
+  "istedi": "NAZIR",
+  "aldi": "MUAVIN",
+  "zaman": "2026-10-08T00:49:05+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

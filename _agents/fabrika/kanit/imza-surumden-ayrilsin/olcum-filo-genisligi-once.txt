@@ -1,0 +1,5 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/filo-probu.sh /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/kanit-eski-bumped.py
+# rc=1 sure=3.6s zaman=2026-10-08T00:53:29+03:00
+--- stdout ---
+gercek manifest: 82 · sahtecilikle SUCLANAN: 82 · suclanmayan: 0
+--- stderr ---

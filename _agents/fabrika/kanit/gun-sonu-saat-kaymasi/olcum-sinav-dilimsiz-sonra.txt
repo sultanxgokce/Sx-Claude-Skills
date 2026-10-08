@@ -1,0 +1,41 @@
+$ env TZ=UTC bash yazilim-fabrikasi/scripts/gun-sonu.test.sh
+# rc=0 sure=0.4s zaman=2026-10-08T00:25:37+03:00
+--- stdout ---
+════ Ö0 · senaryo kurulabiliyor mu (tautoloji panzehiri) ════
+  ✓ Ö0 yerel gece saati FARKLI dünya-gününe düşüyor — dilim çivili, her ortamda aynı
+════ Ö1 · YEREL GECE olayı o günün özetinde GÖRÜNÜR ════
+  ✓ Ö1a gece kaçışı sayılıyor
+  ✓ Ö1b gece tavan açılışı sayılıyor
+  ✓ Ö1c gerekçesi basılıyor
+════ Ö2 · basılan SAAT yerel olmalı (Sultan 01:11'i 22:11 okumamalı) ════
+  ✓ Ö2 saat YEREL basılıyor (01:11)
+════ Ö3 · GÜNDÜZ olayı da görünür (onarım geceyi alıp gündüzü düşürmedi) ════
+  ✓ Ö3a gündüz kaçışı sayılıyor
+  ✓ Ö3b gündüz saati de yerel
+════ Ö4 · BAŞKA GÜNÜN olayı SAYILMAZ (süzgeç hâlâ süzüyor) ════
+  ✓ Ö4a dünün kaçışı bugüne KARIŞMIYOR
+  ✓ Ö4b boş hâli açıkça söyleniyor
+════ Ö5 · ÇÖZÜLEMEYEN damga sessizce DÜŞMEZ (unknown ≠ yok) ════
+  ✓ Ö5a bugünkü sayıya girmiyor
+  ✓ Ö5b çözülemediği SÖYLENİYOR (sessiz atlama yok)
+  ✓ Ö5c kaç satır olduğu yazılı
+════ Ö6 · DİLİMLİ (yerel) damga da doğru okunur — eski/karışık defter ════
+  ✓ Ö6 açık dilimli damga da bugüne sayılıyor
+════ Ö9 · YABANCI DİLİM: saat de çevrilmeli, gün de (göz tur-1) ════
+  ✓ Ö9a yabancı dilimli damga doğru güne sayılıyor
+  ✓ Ö9b saat YEREL'e çevrilmiş basılıyor (03:00, ham 00:00 değil)
+  ✓ Ö9c ham dilim saati BASILMIYOR
+════ Ö10 · BOZUK DİLİM özeti ÇÖKERTMEZ (göz tur-1: try kapsamı dardı) ════
+  ✓ Ö10a özet yine üretiliyor (çökmüyor)
+  ✓ Ö10b bozuk satır ÇÖZÜLEMEDİ diye sayılıyor
+  ✓ Ö10c bugüne sayılmıyor
+  ✓ Ö10d özetin SONRAKİ bölümleri de üretildi (akış kesilmedi)
+════ Ö7 · MUTASYON: saat çevrimi koparılınca kör pencere GERİ GELİR ════
+  ✓ Ö7 MUTASYON: çevrim ölünce gece olayı yine KAYBOLUYOR (onarım gerçek)
+════ Ö8 · MUTASYON: 'çözülemedi' uyarısı kaldırılınca Ö5 kırmızıya döner ════
+  ✓ Ö8 MUTASYON: uyarı kaldırılınca bozuk satır SESSİZCE düşüyor
+════ Ö11 · MUTASYON: açık-dilim çevrimi koparılınca Ö9 kırmızıya döner ════
+  ✓ Ö11 MUTASYON: çevrim ölünce HAM dilim saati basılıyor
+
+── SONUÇ: 23 geçti · 0 kaldı ──
+--- stderr ---

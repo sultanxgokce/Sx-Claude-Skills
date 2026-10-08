@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/kaymapro.sh /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/gun-sonu-anadal.sh
+# rc=1 sure=0.1s zaman=2026-10-08T00:07:19+03:00
+--- stdout ---
+yerel 01:11 olayi -> ozette kacis=0 tavan=0 · basilan saat=yok
+KOR PENCERE ACIK: yerel gece olayi o gunun ozetinde GORUNMUYOR
+--- stderr ---
