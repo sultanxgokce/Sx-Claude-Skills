@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.5.2
+version: 0.5.3
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -36,6 +36,7 @@ tags: [fabrika, worktree, kanit, bagimsiz-goz, puan, hat-dosyasi, orkestrasyon, 
 | `fabrika-kur.sh denetle [depo]` | şablon sha ≟ depo sha; işaretçi var mı | 0 eşit · 1 drift · 3 dosya yok |
 | `fabrika-kur.sh kur --kanca` | ek olarak ana-dal commit korumasını (pre-commit) kurar | — |
 | `kart.sh ac <iş> --is … --istedi … --aldi … --geri-alinamaz/--para/--dis-yuzey/--yetki e\|h\|?` | 0. adım: iş kartını ARAÇ yazar; dört sınıf sorusu cevapsız kart açılmaz; e/? → Sultan'a gider. `bitti` · `tikandi --yol --neden` · `liste` · `goster`. `--oda` ile tetikli mesaj | 0 · 1 eksik cevap · 3 |
+| `kart.sh reis-dedi <iş> --karar devam --reis <AD> --oturum <ref> --gerekce …` | **Sınıfsız** işte sahip/reis kararı karta `reis_kararlari` alanına girer (Sultan'ın alanına DEĞİL — A06). Sınıflı kartta reddedilir: sınıf işinin merci Sultan (`sultan-dedi`). 8 Eki 2026 · A268 | 0 · 1 eksik/sınıflı |
 | `is-alani.sh ac <iş> [--dosyalar a,b] [--kartsiz]` | `origin/main`'den TAZE worktree (`/config/projects/_wt/<depo>-<iş>`); **kart yoksa açılmaz** (kaçış `--kartsiz` → kart cevapsız açılır, Sultan'a gider); açık PR'larla dosya çakışması varsa **durur ve sorar**; kartı worktree'ye kopyalar | 0 · 1 hata/kart yok · 2 çakışma |
 | `gun-sonu.sh [--gun] [--yaz]` | gün sonu özeti DEFTERDEN (kartlar + karne): Sultan'a gidenler · içeride bitirdiklerimiz · tıkananlar · açık işler; elle satır yok | 0 · 3 defter yok |
 | `is-alani.sh kontrol` | güvenli / riskli / ölçülemedi | 0 · 1 · 2 |
@@ -44,7 +45,7 @@ tags: [fabrika, worktree, kanit, bagimsiz-goz, puan, hat-dosyasi, orkestrasyon, 
 | `kanit.sh olcum <iş> <etiket> --asama once\|sonra -- <komut>` | komutu ARAÇ koşar, kırpılmamış çıktı+rc kaydeder, manifesti imzalar | 0 · 3 sarı (komut rc=3) |
 | `kanit.sh ekran <iş> <etiket> --url U [--urun-imi CSS]` | başsız Chromium karesi; ürün imi yoksa kare kanıt sayılmaz | 0 · 2 ürün imi yok · 3 alınamadı (sarı) |
 | `kanit.sh dosya <iş> <etiket> <yol>` · `dogrula <iş>` · `ozet <iş>` | var olan dosyayı ekler · imza+sha doğrular · PR tablosu | dogrula: 0 sağlam · 1 bozuk · 3 yok |
-| `denetci.sh <iş> --pr N\|--diff F [--yazan claude\|codex] [--denetci …]` | BAĞIMSIZ GÖZ: yazandan farklı model; puan iki satır; DENETIM-<tur>.json'u araç yazar | 0 GEÇTİ · 1 adım 2 · 2 kanıt yok/bozuk · 3 ölçemedi · 4 tıkandı |
+| `denetci.sh <iş> --pr N\|--diff F [--yazan claude\|codex] [--denetci …]` | BAĞIMSIZ GÖZ (`--sultan-devam` · sınıfsız işte `--reis-devam`: tavan kapısı karttaki karardan açılır, mutlak 4 açılmaz, defter satırı gün sonu özetine girer): yazandan farklı model; puan iki satır; DENETIM-<tur>.json'u araç yazar | 0 GEÇTİ · 1 adım 2 · 2 kanıt yok/bozuk · 3 ölçemedi · 4 tıkandı |
 | `gun-sonu.sh` kaçış başlığı | kapı atlamaları **Sultan'ın önüne** gelir: gerekçe + komut, veto hakkıyla |
 | `karne.sh yaz <iş>` · `kirildi <iş> --neden --kanit` · `ozet` | puan kalibrasyonu defteri: "5 alanların kaçı kırıldı" | 0 · 3 |
 | `birlestirme-kapisi.sh <iş>\|--pr N` | 4. adımın SON kapısı: kart + imzalı kanıt + bağımsız göz 5/5 ve "doğru şey E" ve denetçi≠yazan. Biri eksikse birleştirme YOK | 0 geçti · 1 eksik · 3 ölçülemedi |

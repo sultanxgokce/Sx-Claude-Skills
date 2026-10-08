@@ -1,0 +1,9 @@
+✗ tavan (3) doldu ve iş ilerlemiyor — denetim koşulmadı
+
+⛔ TIKANDI — 3 turda 5+E'ye ulaşılamadı (tavan 3, ilerleyene +1, 4 mutlak).
+   Üç yol (karar iş sahibinin/reisin, sınıf işiyse Sultan'ın):
+   1) DEVAM — gerekçeyle: neden bir tur daha işe yarar?
+   2) KAPSAMI DARALT — iş kartını küçült, geçen kısmı gönder, kalanı yeni kart
+   3) GERİ AL — alanı kapat, iş kartına 'tıkandı' damgası, ders deftere
+   Sultan 'devam' dediyse: önce kart.sh sultan-dedi ile kayda geçir, sonra --sultan-devam
+exit=4
