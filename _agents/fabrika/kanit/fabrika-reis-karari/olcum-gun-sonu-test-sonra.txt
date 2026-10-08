@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/gun-sonu.test.sh
-# rc=0 sure=0.8s zaman=2026-10-08T11:26:11+03:00
+# rc=0 sure=0.5s zaman=2026-10-08T11:27:04+03:00
 --- stdout ---
 ════ Ö0 · senaryo kurulabiliyor mu (tautoloji panzehiri) ════
   ✓ Ö0 yerel gece saati FARKLI dünya-gününe düşüyor — dilim çivili, her ortamda aynı
@@ -11,7 +11,8 @@ $ bash yazilim-fabrikasi/scripts/gun-sonu.test.sh
   ✓ Ö1e reis açılışı 'reis kararı (sınıfsız iş)' etiketiyle basılıyor
   ✓ Ö1f Sultan açılışı 'Sultan kararı' etiketiyle basılıyor (karışmıyor)
 ════ Ö2 · basılan SAAT yerel olmalı (Sultan 01:11'i 22:11 okumamalı) ════
-  ✓ Ö2 saat YEREL basılıyor (01:11)
+  ✓ Ö2 saat YEREL basılıyor (01:11) — kaçış satırı (biçimi: saat · gerekçe · komut)
+  ✓ Ö2b tavan satırı da yerel saatle ve karar etiketiyle basılıyor
 ════ Ö3 · GÜNDÜZ olayı da görünür (onarım geceyi alıp gündüzü düşürmedi) ════
   ✓ Ö3a gündüz kaçışı sayılıyor
   ✓ Ö3b gündüz saati de yerel
@@ -40,5 +41,5 @@ $ bash yazilim-fabrikasi/scripts/gun-sonu.test.sh
 ════ Ö11 · MUTASYON: açık-dilim çevrimi koparılınca Ö9 kırmızıya döner ════
   ✓ Ö11 MUTASYON: çevrim ölünce HAM dilim saati basılıyor
 
-── SONUÇ: 26 geçti · 0 kaldı ──
+── SONUÇ: 27 geçti · 0 kaldı ──
 --- stderr ---
