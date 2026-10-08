@@ -1,0 +1,23 @@
+{
+  "tur": 3,
+  "is": "fabrika-reis-karari",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-08T11:26:40+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Sınıfsız işte reis kararını ayrı alana yazan, sınıflı işi Sultan’a yönelten ve tavan açılışını gün sonuna taşıyan akış kurulmuş; önceki turdaki sahip ve kapalı-karar-kümesi açıkları da diffte kapatılmış. Ancak gün-sonu sınavındaki Ö2 beklentisi yeni çıktı biçimine göre güncellenmediği hâlde ölçüm yeşil gösteriliyor; önce kaynak ile kanıt arasındaki bu tutarsızlık çözülmeli, ayrıca iş kartı bulunmadığından yapılanın talep edilen şey olduğu söylenemez.",
+    "bulgular": [
+      {
+        "ne": "Gün-sonu testindeki Ö2 eşleşmesi, üretim çıktısına eklenen karar etiketiyle uyumsuz; sunulan 26/0 sonucu gösterilen kaynaklardan üretilemez görünüyor.",
+        "kanit": "gun-sonu.sh artık satırı saatten sonra `par[2]` ve `Sultan kararı`/`reis kararı` ekleyerek basıyor; buna karşılık gun-sonu.test.sh Ö2 hâlâ `^- 01:11 · gerekçe` desenini arıyor. Ölçüm çıktısı yine “Ö2 saat YEREL basılıyor” ve 26/0 bildiriyor.",
+        "konum": "yazilim-fabrikasi/scripts/gun-sonu.sh: tavan açılışları döngüsü; yazilim-fabrikasi/scripts/gun-sonu.test.sh: Ö2; olcum-gun-sonu-test-sonra.txt:Ö2",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sha’ları tutuyor ve sarı kayıt yok; denetçi, kart ve gün-sonu ölçümleri yeşil. Bununla birlikte yalnız “sonra” ölçümleri var, önce/sonra ölçüm çifti veya gerçekçi kare dizisi yok; ayrıca gün-sonu ölçümünün Ö2 sonucu gösterilen test ve üretim koduyla çeliştiğinden bu yeşil kayıt ilgili iddiayı güvenilir biçimde ölçmüyor."
+  }
+}

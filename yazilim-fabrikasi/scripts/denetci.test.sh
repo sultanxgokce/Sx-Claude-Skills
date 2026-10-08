@@ -98,6 +98,51 @@ CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-s --diff "$T/d.patch" --sultan-de
 grep -q "TAVAN AÇILDI" <<<"$CIKTI"; g $? "tavanın açıldığını SÖYLÜYOR (sessiz değil)"
 grep -q "muavin/4390ad1f" <<<"$CIKTI"; g $? "oturum referansı çıktıda görünüyor"
 grep -q "kapinin amacini curutur" <<<"$CIKTI"; g $? "GEREKÇE de çıktıda görünüyor (niçin bir tur daha)"
+echo "════ T7c · 🚪 REİS KAPISI: sınıfsız işte sahip kararı KARTTAN; sınıflı kartta KAPALI ════"
+# NİÇİN (8 Eki 2026 · A268): tıkandı raporu "karar iş sahibinin/reisin, sınıf işiyse Sultan'ın" diyordu ama araç
+# yalnız Sultan'ın kararını okuyordu. Sınıfsız işin sahibi kendi yetkisindeki kararı yazdıramıyor; kapı ya kapalı
+# kalıyor ya da A06'ya özendiriyordu (aynı gün iki vaka: DEVRİYE doğrulayıcısı · kokpit A2).
+# (a) SINIFLI kart: reis yolu her adımda KAPALI
+kartac is-r1; bash "$K" olcum is-r1 olc --asama tek -- echo 1 >/dev/null 2>&1
+SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-r1 --diff "$T/d.patch" >/dev/null 2>&1
+SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-r1 --diff "$T/d.patch" >/dev/null 2>&1
+SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-r1 --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 4 ]; g $? "sınıflı iş tur3 tıkandı (rc=4)"
+bash "$KT" reis-dedi is-r1 --karar devam --reis MUAVIN --oturum ref-r1 --gerekce "bulgular farkliydi ve hepsi kapandi, dorduncu tur ilerlemeyi olcer" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "🔴 SINIFLI karta reis kararı YAZILAMADI (merci Sultan)"
+python3 -c "import json;k=json.load(open('$T/_agents/fabrika/kartlar/is-r1.json'));assert not k.get('reis_kararlari')"; g $? "kartta reis_kararlari alanı oluşmadı"
+python3 - "$T/_agents/fabrika/kartlar/is-r1.json" <<'PY'
+import json,sys; k=json.load(open(sys.argv[1])); k["reis_kararlari"]=[{"karar":"devam","reis":"MUAVIN","oturum":"ref-elle","gerekce":"yirmi karakterden uzun elle yazilmis gerekce"}]; json.dump(k,open(sys.argv[1],"w"))
+PY
+CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-r1 --diff "$T/d.patch" --reis-devam 2>&1)"; RC=$?
+[ "$RC" -eq 1 ]; g $? "🔴 sınıflı karta ELLE yazılmış reis kararı bile kapıyı AÇMIYOR (rc=1)"
+grep -q "SINIFLI" <<<"$CIKTI"; g $? "sebebi yazılı: kart sınıflı, merci Sultan"
+grep -q "sultan-dedi" <<<"$CIKTI"; g $? "doğru yol gösterildi (sultan-dedi)"
+[ ! -f "$T/_agents/fabrika/kanit/is-r1/DENETIM-4.json" ]; g $? "denetim KOŞULMADI"
+! grep -q "is=is-r1" "$T/_agents/fabrika/tavan-defteri.log" 2>/dev/null; g $? "deftere de yazılmadı"
+# (b) SINIFSIZ kart: karar karttan okunur, serbest metinle açılmaz
+bash "$KT" ac is-r2 --is x --istedi SULTAN --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+bash "$K" olcum is-r2 olc --asama tek -- echo 1 >/dev/null 2>&1
+SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-r2 --diff "$T/d.patch" >/dev/null 2>&1
+SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-r2 --diff "$T/d.patch" >/dev/null 2>&1
+SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-r2 --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 4 ]; g $? "sınıfsız iş tur3 tıkandı (rc=4)"
+CIKTI="$(SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-r2 --diff "$T/d.patch" 2>&1)"; grep -q "reis-dedi" <<<"$CIKTI"; g $? "tıkandı raporu sınıfsız iş için reis yolunu da söylüyor"
+CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-r2 --diff "$T/d.patch" --reis-devam 2>&1)"; RC=$?
+[ "$RC" -eq 1 ]; g $? "🔴 kartta reis kararı yokken bayrak kapıyı AÇMIYOR (rc=1)"
+grep -q "reis-dedi" <<<"$CIKTI"; g $? "ne yapılacağı komutla yazılı"
+bash "$KT" reis-dedi is-r2 --karar devam --oturum ref-r2 --gerekce "yirmi karakterden uzun bir gerekce metni" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "--reis eksikken REDDEDİLDİ"
+bash "$KT" reis-dedi is-r2 --karar devam --reis MUAVIN --gerekce "yirmi karakterden uzun bir gerekce metni" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "--oturum eksikken REDDEDİLDİ"
+bash "$KT" reis-dedi is-r2 --karar devam --reis MUAVIN --oturum ref-r2 --gerekce "kisa" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "kısa gerekçe REDDEDİLDİ"
+bash "$KT" reis-dedi is-r2 --karar devam --reis SERDAR --oturum ref-r2 --gerekce "yirmi karakterden uzun bir gerekce metni" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "🔴 kartın sahibi olmayan ad REDDEDİLDİ (aldi MUAVIN)"
+bash "$KT" reis-dedi is-r2 --karar evet --reis MUAVIN --oturum ref-r2 --gerekce "yirmi karakterden uzun bir gerekce metni" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "🔴 küme dışı karar REDDEDİLDİ"
+bash "$KT" reis-dedi is-r2 --karar devam --reis "SER|DAR" --oturum ref-r2 --gerekce "yirmi karakterden uzun bir gerekce metni" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "'|' içeren alan REDDEDİLDİ (defter ayracı)"
+bash "$KT" reis-dedi is-r2 --karar devam --reis MUAVIN --oturum "muavin/d69a1b07" --gerekce "uc turun bulgulari farkliydi ve her biri kapandi; dorduncu tur ilerlemeyi olcer" >/dev/null 2>&1; g $? "tam reis kaydı karta işlendi"
+python3 -c "import json;k=json.load(open('$T/_agents/fabrika/kartlar/is-r2.json'));assert k['reis_kararlari'][-1]['reis']=='MUAVIN' and not k.get('sultan_kararlari')"; g $? "🔴 kayıt reis_kararlari'nda; sultan_kararlari'na HİÇ dokunulmadı (A06)"
+CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-r2 --diff "$T/d.patch" --reis-devam 2>&1)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "karttaki reis kararıyla tur4 koştu ve GEÇTİ"
+grep -q "REİS kararı" <<<"$CIKTI"; g $? "açılışın REİS kararıyla olduğu yazılı (Sultan kararı DEĞİL)"
+grep -q "muavin/d69a1b07" <<<"$CIKTI"; g $? "oturum referansı çıktıda"
+grep -q "TAVAN-ACILDI-REIS | is=is-r2 tur=4" "$T/_agents/fabrika/tavan-defteri.log"; g $? "defter satırı TAVAN-ACILDI-REIS (Sultan satırından ayırt edilir)"
+SAHTE_JSON="$(J 5 E "")" bash "$D" is-r2 --diff "$T/d.patch" --reis-devam >/dev/null 2>&1; [ $? -eq 4 ]; g $? "reis kararı MUTLAK tavanı (4) AÇMIYOR → tur5 rc=4"
+
 [ -s "$T/_agents/fabrika/tavan-defteri.log" ]; g $? "tavan defteri GERÇEKTEN yazıldı"
 grep -q "olur bir tur daha devam" "$T/_agents/fabrika/tavan-defteri.log"; g $? "Sultan'ın kırpık sözü defterde"
 grep -q "beyan=MUAVIN" "$T/_agents/fabrika/tavan-defteri.log"; g $? "beyan eden ajan defterde (kim aktardı)"
@@ -224,6 +269,7 @@ mut "ayrac-temizligini-kaldir" 's@^def tmz(v): return " ".join(str(v).replace("|
 mut "gerekce-zorunlulugunu-kaldir" 's@^if len(x.get("gerekce") or "") < 20: raise SystemExit(1)@pass@'
 mut "karti-okumayi-kaldir" 's@^  if \[ -z "$GEREKCE" \]; then@  if false; then@'
 mut "defter-dogrulamasini-kaldir" 's@^  grep -qF "$SATIR" "$DEF"@  true@'
+mut "reis-sinif-citini-kaldir" 's@^if k.get("sultan") or k.get("siniflar"): raise SystemExit(3)@pass@'
 mut "mutlak-tavani-kaldir" 's@^if \[ "$TUR" -gt "$MUTLAK" \]; then@if false; then@'
 
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"

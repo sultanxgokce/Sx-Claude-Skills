@@ -51,9 +51,18 @@ O="$(ozet)"
 [ "$(say "$O" 'Kapı kaçışları')" = 1 ]; g $? "Ö1a gece kaçışı sayılıyor"
 [ "$(say "$O" 'Tavan açılışları')" = 1 ]; g $? "Ö1b gece tavan açılışı sayılıyor"
 grep -q 'gece-kacisi' <<<"$O"; g $? "Ö1c gerekçesi basılıyor"
+# A268 (8 Eki): reis açılışı Sultan açılışından AYIRT EDİLEREK görünür; ikisi de sayılır
+printf '%s | TAVAN-ACILDI-REIS | is=y tur=4 | reis-gerekcesi-uzun\n' "$GECE" >> "$T/_agents/fabrika/tavan-defteri.log"
+O="$(ozet)"
+[ "$(say "$O" 'Tavan açılışları')" = 2 ]; g $? "Ö1d reis açılışı da sayılıyor (2)"
+grep -qE 'is=y tur=4 · reis kararı \(sınıfsız iş\) · gerekçe: reis-gerekcesi-uzun' <<<"$O"; g $? "Ö1e reis açılışı 'reis kararı (sınıfsız iş)' etiketiyle basılıyor"
+grep -qE 'is=x tur=4 · Sultan kararı · gerekçe: gece-tavani' <<<"$O"; g $? "Ö1f Sultan açılışı 'Sultan kararı' etiketiyle basılıyor (karışmıyor)"
+printf '%s | TAVAN-ACILDI | is=x tur=4 | gece-tavani\n' "$GECE" > "$T/_agents/fabrika/tavan-defteri.log"; O="$(ozet)"
 
 echo "════ Ö2 · basılan SAAT yerel olmalı (Sultan 01:11'i 22:11 okumamalı) ════"
-grep -qE '^- 01:11 · gerekçe' <<<"$O"; g $? "Ö2 saat YEREL basılıyor (01:11)"
+grep -qE '^- 01:11 · gerekçe' <<<"$O"; g $? "Ö2 saat YEREL basılıyor (01:11) — kaçış satırı (biçimi: saat · gerekçe · komut)"
+# tavan satırının biçimi farklıdır (saat · iş/tur · kim · gerekçe) — denetim tur 3: iki satır türü ayrı ayrı sınanır
+grep -qE '^- 01:11 · is=x tur=4 · Sultan kararı · gerekçe: gece-tavani' <<<"$O"; g $? "Ö2b tavan satırı da yerel saatle ve karar etiketiyle basılıyor"
 
 echo "════ Ö3 · GÜNDÜZ olayı da görünür (onarım geceyi alıp gündüzü düşürmedi) ════"
 printf '%s | KAPISIZ | gunduz-kacisi | komut-B\n' "$GUNDUZ" > "$T/_agents/fabrika/kacis-defteri.log"

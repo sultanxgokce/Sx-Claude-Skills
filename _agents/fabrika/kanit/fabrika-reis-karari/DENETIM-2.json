@@ -1,0 +1,35 @@
+{
+  "tur": 2,
+  "is": "fabrika-reis-karari",
+  "pr": "274",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-08T11:25:28+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Sınıfsız iş için ayrı reis kararı, sınıflı işte ret, dördüncü tur kapısı ve ayrı defter etiketi doğru yöne kurulmuş. Önceki iki uygulama açığının kapandığını söyleyen yeni ölçüm çıktısı sunulsa da gösterilen kod değişikliği bu doğrulamaları içermiyor; önce bu tutarsızlık ve yetkilendirme açıkları çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Gösterilen kart.sh kodu, reis kararını gerçekten kartın sahibinin verdiğini doğrulamıyor; herhangi bir dolu --reis değeri kayda girebiliyor.",
+        "kanit": "Yeni kart ölçümü “SERDAR ≠ aldı MUAVIN REDDEDİLDİ” diyor; fakat diffteki reis-dedi dalında yalnız `[ -n \"$REIS\" ]` kontrolü var ve Python bloğu `reis` değerini karttaki `aldi` alanıyla karşılaştırmadan ekliyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh: reis-dedi eksik alan kontrolleri ve reis_kararlari append bloğu; olcum-kart-test-sonra.txt:T9",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Gösterilen kart.sh kodu --karar değerini devam|daralt|geri-al kümesiyle sınırlamıyor; ölçümdeki geçersiz karar reddi bu diff tarafından açıklanamıyor.",
+        "kanit": "Yeni kart ölçümü “küme dışı karar ('olur') REDDEDİLDİ” diyor; diffte KARAR için yalnız boşluk kontrolü bulunuyor ve değer doğrulanmadan JSON'a yazılıyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh: reis-dedi doğrulamaları; olcum-kart-test-sonra.txt:T9",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Gün sonu özetinde gerçek bir reis açılışının “reis kararı” etiketiyle görünmesi doğrudan sınanmıyor.",
+        "kanit": "gun-sonu ölçümü 23/0 ile önceki sayıda kalmış ve listelenen Ö0–Ö11 kontrollerinin hiçbirinde TAVAN-ACILDI-REIS ya da “reis kararı” beklentisi yok; yeni davranış yalnız kod satırında görülüyor.",
+        "konum": "olcum-gun-sonu-test-sonra.txt; yazilim-fabrikasi/scripts/gun-sonu.sh: tavan açılışları döngüsü",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sha'ları tutan ve sarı kaydı olmayan sağlam bir manifest olarak verilmiş; denetçi 92/0, kart 37/0 ve gün-sonu 23/0 yeşil. Ancak güncel ölçüm çıktısındaki sahip ve karar-kümesi retleri gösterilen diffle uyuşmuyor; canlı A2 vakasının yalnız önce kaydı var, aynı vaka için sonra ölçümü yok. Kurulu kopyadan çalıştırma da kanıtlanmamış; kayıtlı komutlar depo içindeki yazilim-fabrikasi yollarını çağırıyor."
+  }
+}
