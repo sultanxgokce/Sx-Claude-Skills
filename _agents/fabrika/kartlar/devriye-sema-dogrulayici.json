@@ -15,5 +15,14 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": []
+  "gecmis": [],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "MUAVIN",
+      "oturum": "muavin/4390ad1f",
+      "gerekce": "SERDAR reis karari DEVAM verdi (SERDAR-MUAVIN-devriye-dorduncu-tur-cevap-20261008.md): uc turun bulgulari FARKLIYDI ve her biri sonraki turda kapandi; tur-3 bulgusu (yalanci-yesil sinav) hem onarildi hem NEGATIF KONTROLLE kanitlandi (eski hal 22/41 kirmizi, yeni 62/0). Puan sabit kaldi cunku denetci her turda daha derin bir kusur buldu, is kotulesmedi. Dorduncu tur ilerlemeyi olcer; mutlak tavan dort asilmaz.",
+      "zaman": "2026-10-08T12:31:08+03:00"
+    }
+  ]
 }

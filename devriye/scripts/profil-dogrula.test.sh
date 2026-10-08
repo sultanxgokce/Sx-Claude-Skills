@@ -212,7 +212,22 @@ PY
   # mutantta 'zorunlu bos' kapisi hala tutar; o yuzden mutasyonun ETKISI mesaj duzeyinde olculur
   MUT_CIKTI="$(python3 "$M" "$T/k.json" 2>&1 || true)"
   MUTANT_MESAJ="$(printf '%s' "$MUT_CIKTI" | grep -c 'KAPISIZ' || true)"
-  [ "$MUTANT_MESAJ" = 0 ]; g $? "P9b MUTASYON: kural ölünce 'KAPISIZ' teşhisi KAYBOLUYOR (kapı gerçek)"
+  # 🔴 ETİKET, İDDİASINI AŞMAYACAK (bağımsız göz tur 4 rötuşu): bu mutant yalnız ÖZEL
+  #    teşhis dalını kapatıyor; aynı boş `kapi` girdisi `_kume` içindeki zorunlu-boş
+  #    denetimiyle HÂLÂ rc=1 alıyor. Yani burada ölçülen şey REDDETME değil, TEŞHİSİN
+  #    kendisi. Eski ad ("kural ölünce") ölçtüğünden fazlasını iddia ediyordu.
+  [ "$MUTANT_MESAJ" = 0 ]; g $? "P9b MUTASYON: teşhis dalı ölünce 'KAPISIZ' mesajı KAYBOLUYOR (teşhis gerçek)"
+  # P9c: REDDETMENİN KENDİSİ de yük taşıyor mu? Bunun için zorunlu-boş denetimini de
+  #      öldürmek gerekir — ikisi birden ölünce kapısız nöbet SESSİZCE GEÇMELİ (rc=0).
+  #      Tek mutantla ölçülemeyen şey, iki mutantla ölçülür.
+  M2="$T/mutant2.py"
+  sed -e 's@^                if _bos(n.get("kapi")):@                if False:@' \
+      -e 's@^def _bos(v):@def _bos(v):\n    return False  # MUTASYON: zorunlu-bos denetimi kapatildi@' "$D" > "$M2"
+  if cmp -s "$M2" "$D"; then g 1 "P9c mutant2 FARKSIZ — reddetme yolu ölçülmüyor"; else
+    _boz 'd["nobetler"][0]["kapi"]=""; d["nobetler"][0]["kirmizi_ne_demek"]="x"'
+    M2_RC=$(python3 "$M2" "$T/k.json" >/dev/null 2>&1; echo $?)
+    [ "$M2_RC" = 0 ]; g $? "P9c MUTASYON²: iki kapı da ölünce kapısız nöbet SESSİZCE geçiyor (reddetme gerçek)"
+  fi
 fi
 
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null

@@ -1,7 +1,7 @@
 {
   "is": "devriye-sema-dogrulayici",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-08T04:14:20+03:00",
+  "guncelleme": "2026-10-08T12:33:51+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -44,7 +44,37 @@
       "rc": 0,
       "renk": "yesil",
       "zaman": "2026-10-08T04:14:20+03:00"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-tur4",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-tur4-sonra.txt",
+      "sha256": "cb0e11d8426fb1ed45f51fb27a76c398eb6f3ac4b924381e274155f401f5d86d",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-devriye-sema-dogrulayici/devriye/scripts/profil-dogrula.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-08T12:33:51+03:00",
+      "sure_sn": 3.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "fikstur-bekcisi-negatif",
+      "asama": "once",
+      "dosya": "olcum-fikstur-bekcisi-negatif-once.txt",
+      "sha256": "aa8fba80e3cd5a685eb684ea6035b9fe61353b45b2fb6ea55f2e9c79de14eac1",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/p14b.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-08T11:05:40+03:00",
+      "sure_sn": 1.9
     }
   ],
-  "imza": "dc0a426cfeba5020cdd22ef705070899d4dbb6639dd17e721b1cbbd9bc228154"
+  "imza": "631c7cad240ef026d0cd4553c4452de729429c7b07803b60b2867ccecb9f91ec"
 }
