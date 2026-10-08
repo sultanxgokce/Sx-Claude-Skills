@@ -1,0 +1,29 @@
+{
+  "is": "soluklan-becerisi",
+  "cumle": "Sultan: baglam %60'i gecince compact oncesi/sonrasi degerlendirme + cipalama + yeniden planlama yapan global slash becerisi. Kapi: cipa diskte ve TAZE degilse oneri URETILMEZ (var olan arac yalnizca dosya varligina bakiyor, bayatligi gormuyor)",
+  "istedi": "Sultan",
+  "aldi": "MUAVIN",
+  "zaman": "2026-10-07T23:39:04+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "sultan_kararlari": [
+    {
+      "karar": "devam",
+      "oturum": "muavin/4390ad1f",
+      "soz": "önerin kabul edildi",
+      "beyan": "MUAVIN",
+      "gerekce": "Uc tur kosuldu, son tur 4/5 E ve tek bulgu (kurulumun fiilen olculmemesi) kapatildi; prob negatif kontrollu, 51 kapi. Tavan uc tur; dorduncu tur Sultan izniyle.",
+      "zaman": "2026-10-08T00:22:41+03:00"
+    }
+  ]
+}

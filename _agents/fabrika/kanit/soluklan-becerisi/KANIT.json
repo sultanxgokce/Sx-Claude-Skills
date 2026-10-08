@@ -1,0 +1,101 @@
+{
+  "is": "soluklan-becerisi",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-08T10:46:44+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "0a521794e28a19c1f31d4acc201632810f901e0abffd750eb9ca23f1ab4e678c",
+      "komut": [
+        "bash",
+        "soluklan/scripts/soluklan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-08T00:12:30+03:00",
+      "sure_sn": 0.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kayit-butunlugu",
+      "asama": "sonra",
+      "dosya": "olcum-kayit-butunlugu-sonra.txt",
+      "sha256": "71d72a157c1e2abbc323c9e10feb2823f5afbd733edf47dc90f9c862008bcf00",
+      "komut": [
+        "python3",
+        "-c",
+        "\nimport json\nst=json.load(open('sync-targets.json')); ct=json.load(open('catalog.json'))\nassert st['install']['soluklan']==['_global']\nk=[x for x in ct['skills'] if x['id']=='soluklan']; assert len(k)==1\nfm=open('soluklan/SKILL.md',encoding='utf-8').read().split('---')[1]\nassert 'version: 1.0.0' in fm and 'name: soluklan' in fm\nimport os; assert not os.path.exists('soluklan/scripts/.gitkeep'), 'bos dosya sizdi'\nprint('global kurulum: VAR · katalog: VAR ·', k[0]['version'], '· frontmatter: VAR · artik dosya: yok')"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-07T23:54:54+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kurulum",
+      "asama": "once",
+      "dosya": "olcum-kurulum-once.txt",
+      "sha256": "7a02121b5dc523a4c78b557f293e738f9d7e5937a58e2a55e8f004c04f8ef6cb",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/kurulum-probu.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/negatif-depo"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-08T00:18:46+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kurulum",
+      "asama": "sonra",
+      "dosya": "olcum-kurulum-sonra.txt",
+      "sha256": "ed146f01083a2b7a9cfb166aa67055d1d407a8779c51d3c00f77c604a5da7d50",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/kurulum-probu.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-soluklan-becerisi"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-08T00:18:46+03:00",
+      "sure_sn": 0.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-tur4",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-tur4-sonra.txt",
+      "sha256": "244c9b16932b8b318819814e3b1e789469f108aec2dfde930c6b7d4c5d42e140",
+      "komut": [
+        "bash",
+        "soluklan/scripts/soluklan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-08T10:44:19+03:00",
+      "sure_sn": 1.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-gelecek-damga",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-gelecek-damga-sonra.txt",
+      "sha256": "a7b30a0b78e6e14c9fa554481e9c3550659c0f8a840f5f63bc06090b3a0106f8",
+      "komut": [
+        "bash",
+        "soluklan/scripts/soluklan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-08T10:46:44+03:00",
+      "sure_sn": 1.0
+    }
+  ],
+  "imza": "b921be0a58e9b0c6004ee26bd97896df524d75d67dc765009d3524f2cc0b4ae6"
+}

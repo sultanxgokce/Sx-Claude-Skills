@@ -1,0 +1,23 @@
+{
+  "tur": 4,
+  "is": "soluklan-becerisi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-08T10:44:51+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, %60’ın üstünde çalışan kapı; taze, damgalı ve açık maddeli çıpa şartı; compact öncesi değerlendirme ve sonrası yeniden planlama akışı kurulmuş, global kurulumdan çağrı da ölçülmüş. Önceki üretim engeli kapanmış; yalnız geleceğe düşen damgaların taze kabul edilmesini önleyecek küçük bir sertleştirme rötuşu kalmış.",
+    "bulgular": [
+      {
+        "ne": "Gelecek zamanlı bir `_dokunuldu:` damgası negatif yaş üretip taze kabul edilebilir; saat kayması veya bozuk damga için fail-closed denetimi yok.",
+        "kanit": "Damga epoch değeri şimdiki zamandan çıkarılıyor; sonuç negatif olduğunda yalnız `yas_dk > AZAMI_YAS_DK` sınanıyor ve negatif değer bu kapıyı geçiyor. Sunulan 51 kontrolde gelecek zamanlı damga örneği bulunmuyor.",
+        "konum": "soluklan/scripts/soluklan.sh:91-106; soluklan/scripts/soluklan.test.sh:S1-S15",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. İşlev ölçümleri 51 kapının iki ayrı koşuda geçtiğini; kurulum önce/sonra çifti ise negatif depoda kurulmama ile hedef depoda dağıtılmış kopyanın çağrılması ve kendi sınavını çalıştırması farkını gösteriyor. Kayıt-bütünlüğü ölçümü de global hedef, katalog ve frontmatter’ı doğruluyor; böylece önceki turdaki “yazılmış ama fiilen kurulmamış olabilir” boşluğu kapanmış."
+  }
+}
