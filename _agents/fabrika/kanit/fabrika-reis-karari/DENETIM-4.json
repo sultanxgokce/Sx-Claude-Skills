@@ -1,0 +1,16 @@
+{
+  "tur": 4,
+  "is": "fabrika-reis-karari",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-08T11:27:26+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "H",
+    "ozet": "Sınıfsız işte sahibin gerekçeli kararını ayrı alana kaydeden, sınıflı kartı Sultan’a yönelten ve açılışı denetim ile gün sonu akışına taşıyan değişiklik sınırlarıyla birlikte kurulmuş; önceki turdaki Ö2 kaynak-kanıt uyuşmazlığı da ayrı beklenti eklenerek giderilmiş. Gösterilen diff ve yeşil sınavlarda üretimi engelleyen açık kalmadığından kod 5’tir, fakat iş kartı hiç verilmediği için bunun talep edilen doğru değişiklik olduğu doğrulanamaz ve doğru şey hükmü H’dir.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Denetçi, kart ve gün-sonu sınavları rc=0; önceki turdaki Ö2 çelişkisi yeni Ö2b beklentisi ve 27/0 taze ölçümle kapanmış, ayrıca mutasyon sınavları ilgili davranışların gerçekten ölçüldüğünü destekliyor. Yalnız 'sonra' ölçümleri bulunuyor; önce/sonra ölçüm çifti veya gerçekçi kare dizisi yok, ancak bu komut satırı davranış değişikliği için kapsamlı senaryo ve mutasyon kanıtı yeterli. İş kartının yokluğu ise teknik kanıttan bağımsız olarak hedef doğrulamasını imkânsız kılıyor."
+  }
+}
