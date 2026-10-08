@@ -1,7 +1,7 @@
 {
   "is": "fabrika-reis-karari",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-08T11:25:01+03:00",
+  "guncelleme": "2026-10-08T11:26:11+03:00",
   "kayitlar": [
     {
       "tur": "dosya",
@@ -49,16 +49,16 @@
       "etiket": "gun-sonu-test",
       "asama": "sonra",
       "dosya": "olcum-gun-sonu-test-sonra.txt",
-      "sha256": "c7bf776c140b3aa721630bc8f95439adb5b6e0bd26c17a536b3b0d15043484a9",
+      "sha256": "d26f103c2c7dea110bd193c5622083836d03d6549473914afe47d25fece067b8",
       "komut": [
         "bash",
         "yazilim-fabrikasi/scripts/gun-sonu.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-08T11:19:36+03:00",
-      "sure_sn": 0.4
+      "zaman": "2026-10-08T11:26:11+03:00",
+      "sure_sn": 0.8
     }
   ],
-  "imza": "de6742ac421e2eaa2b4ad0284d963821570327446ec316fbe9864a11df75f930"
+  "imza": "67fc1362764ff534314eefbff76200dd50dde4c3c28a91986776de834295065f"
 }
