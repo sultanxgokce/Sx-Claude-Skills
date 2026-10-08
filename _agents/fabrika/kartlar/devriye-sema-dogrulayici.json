@@ -1,0 +1,28 @@
+{
+  "is": "devriye-sema-dogrulayici",
+  "cumle": "DEVRIYE iskeletinin ilk parcasi: sema-1 profil dogrulayicisi. MUTEVELLI profili teslim etti ve 'semaya uydum, bos alan 0, kapisiz nobet 0' dedi -- IDDIAYI OLCMEDEN KABUL ETMEM. Dogrulayici: bilinmeyen alan RED, zorunlu bos RED, kapisiz nobet RED (semanin uc kurali).",
+  "istedi": "MUTEVELLI",
+  "aldi": "MUAVIN",
+  "zaman": "2026-10-08T03:49:01+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "MUAVIN",
+      "oturum": "muavin/4390ad1f",
+      "gerekce": "SERDAR reis karari DEVAM verdi (SERDAR-MUAVIN-devriye-dorduncu-tur-cevap-20261008.md): uc turun bulgulari FARKLIYDI ve her biri sonraki turda kapandi; tur-3 bulgusu (yalanci-yesil sinav) hem onarildi hem NEGATIF KONTROLLE kanitlandi (eski hal 22/41 kirmizi, yeni 62/0). Puan sabit kaldi cunku denetci her turda daha derin bir kusur buldu, is kotulesmedi. Dorduncu tur ilerlemeyi olcer; mutlak tavan dort asilmaz.",
+      "zaman": "2026-10-08T12:31:08+03:00"
+    }
+  ]
+}

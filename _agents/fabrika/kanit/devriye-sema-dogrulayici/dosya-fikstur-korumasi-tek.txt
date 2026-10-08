@@ -1,0 +1,22 @@
+FİKSTÜR KORUMASI — negatif kontrol (8 Ekim 2026, göz tur-3 bulgusu)
+
+BULGU (codex, tur 3): sınavdaki `d["kapilar"]=[null]` vakası ÇALIŞMIYORDU. `null` Python'da
+tanımsız; fikstür üreticisi NameError ile ölüyor, betik DEVAM ediyor ve BİR ÖNCEKİ k.json
+sınanıyordu. İki kapı "geçti" diyordu — ama ölçtükleri şey o vaka DEĞİLDİ.
+Bu, bugün dördüncü kez karşılaştığım sınıf: DOĞRU CEVAP, YANLIŞ SEBEPTEN.
+
+ONARIM iki katmanlı — tek vakayı düzeltmek bu sınıfı bitirmez:
+  1. Fikstür üretimi BAŞARISIZSA kapı KIRMIZI olur ve sebebi basılır.
+  2. Üretilen dosya öncekinden FARKLI değilse de KIRMIZI — değiştirmeyen mutasyon,
+     ölçümsüz kapıdır (mutant-FARKSIZ denetiminin fikstür tarafındaki karşılığı).
+
+NEGATİF KONTROL (korumanın kendisi ölçüldü — süs mü, gerçek mi):
+  a) bilerek tanımsız ad içeren mutasyon:
+     ✗ FİKSTÜR ÜRETİLEMEDİ: d["kapilar"]=[tanimsiz_ad] → Traceback...
+  b) AYNI mutasyon arka arkaya iki kez (dosya değişmez):
+     ✗ FİKSTÜR DEĞİŞMEDİ: d["sema"]=2 (önceki vakayla aynı dosya — ölçümsüz kapı)
+  İkisi de sınavı KIRMIZI yaptı. Koruma gerçek.
+
+🔴 İlk negatif kontrolüm de yanlıştı: "değişmeyen fikstür"ü sınamak için FARKLI bir mutasyon
+   kullanmıştım, oysa dosya gerçekten değişiyordu. AYNI mutasyonu iki kez uygulamak gerekti.
+   Kontrolün kendisi de kontrol edilmek zorunda.

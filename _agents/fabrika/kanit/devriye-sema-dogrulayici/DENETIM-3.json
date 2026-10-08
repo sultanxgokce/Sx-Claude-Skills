@@ -1,0 +1,23 @@
+{
+  "tur": 3,
+  "is": "devriye-sema-dogrulayici",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-08T04:12:01+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Şema-1 doğrulayıcısı karttaki üç hükmü uyguluyor ve canlı MÜTEVELLİ profilini doğrudan ölçerek geçerli buluyor. Ancak sınav betiğindeki bozuk JSON mutasyonu gerçekte üretilemiyor; hata görmezden gelinip eski fikstür sınandığı hâlde 62/62 yeşil raporlandığından, üretim mühründen önce bu yalancı-yeşil sınavı düzelt.",
+    "bulgular": [
+      {
+        "ne": "P14 içindeki kapilar=[null] vakası çalışmıyor: Python mutasyon ifadesindeki `null` tanımsız olduğu için fikstür güncellenemiyor, fakat betik hatayı durdurmayıp önceki k.json dosyasını sınayarak iki testi de geçmiş sayıyor.",
+        "kanit": "Ölçüm stderr'inde `NameError: name 'null' is not defined` bulunmasına rağmen stdout aynı vaka için `P14d ... d[\"kapilar\"]=[null]` ve `P14e çökmedi` başarılarını, sonunda da `62 geçti · 0 kaldı` sonucunu gösteriyor. Betikte `set -uo pipefail` var fakat `-e` yok; `_boz` dönüşü denetlenmeden RC ve çıktı eski `$T/k.json` üzerinden ölçülüyor.",
+        "konum": "devriye/scripts/profil-dogrula.test.sh:142",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; iki kayıt yeşil, sarı kayıt yok. Canlı profil gerçek veriyle doğrudan ölçülmüş ve kartın bilinmeyen alan, zorunlu boş alan, kapısız nöbet kuralları P2–P4 ile desteklenmiş; ancak yalnız “sonra” kayıtları bulunduğundan önce/sonra ölçüm çifti yok. Ayrıca sınav kaydındaki açık NameError ve buna rağmen verilen 62/62 hükmü, en az bir P14 iddiasının gerçek ölçüm olmadığını ve yeşil sınav toplamının güvenilir olmadığını gösteriyor."
+  }
+}

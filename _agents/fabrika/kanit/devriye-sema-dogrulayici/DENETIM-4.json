@@ -1,0 +1,23 @@
+{
+  "tur": 4,
+  "is": "devriye-sema-dogrulayici",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-08T12:31:53+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Şema-1 doğrulayıcısı karttaki üç hükmü uyguluyor; bilinmeyen alanı, zorunlu boş alanı ve kapısız nöbeti reddediyor, canlı MÜTEVELLİ profilini de doğrudan ölçüyor. Önceki yalancı-yeşil fikstür sorunu korumalı üretim ve negatif kontrolle kapanmış; üretimi engelleyen kusur görünmüyor, yalnız mutasyon sınavında küçük bir kapsam rötuşu kalıyor.",
+    "bulgular": [
+      {
+        "ne": "P9 mutasyonu kapısız nöbetin reddedilmesini bütünüyle öldürdüğünü göstermiyor; yalnız özel `KAPISIZ` teşhis dalını kapatıyor, aynı boş `kapi` girdisi `_kume` içindeki zorunlu-boş denetimiyle yine rc=1 kalıyor. Bu nedenle testin “kural ölünce” ifadesi gerçekte teşhis mesajının kaybını ölçüyor.",
+        "kanit": "P9, `if _bos(n.get(\"kapi\")):` satırını `if False:` yapıyor; hemen altındaki yorum da mutantta `zorunlu bos` kapısının hâlâ tuttuğunu ve etkinin yalnız mesaj düzeyinde ölçüldüğünü açıkça söylüyor. Asıl reddetme davranışı ayrıca P4a ve P9a ile doğrulanmış olduğundan bu üretim engeli değil, mutasyon kapsamı rötuşudur.",
+        "konum": "devriye/scripts/profil-dogrula.test.sh:203",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Canlı profil gerçek veriyle rc=0 ölçülmüş, kartın üç kuralı P2–P4 ile sınanmış ve tur-4 sınavı rc=0 vermiştir. Önceki yalancı-yeşil kusur için kırmızı negatif kontrol kaydı bulunuyor; `_boz` artık üretim hatasını ve değişmeyen fikstürü kırmızıya çeviriyor. Tam önce/sonra çıktı çifti aynı sınav için sunulmasa da kırmızı negatif kontrol ile yeşil tur-4 sonucu birlikte yeterli davranış kanıtı oluşturuyor."
+  }
+}
