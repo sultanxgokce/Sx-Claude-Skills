@@ -28,13 +28,22 @@ KAPI_ISTEGE = {"aciklama"}
 
 
 def _bos(v):
-    return v is None or (isinstance(v, (str, list, dict)) and len(v) == 0)
+    """🔴 YALNIZCA-BOŞLUK DA BOŞTUR (bağımsız göz tur 1). İlk yazımda `len(v)==0` bakıyordum;
+    `" "` dolu sayılıyordu. Daha kötüsü: bunu sınavımın yorumunda *"boş DEĞİL ama anlamsız,
+    _bos görmez, bu kasıtlı"* diye YAZMIŞTIM — açığı onarmak yerine BELGELEMİŞİM. Belgelemek
+    onarmak değildir; aynı dersi bugün bir kez daha almak zorunda kaldım."""
+    if v is None:
+        return True
+    if isinstance(v, str):
+        return v.strip() == ""
+    return isinstance(v, (list, dict)) and len(v) == 0
 
 
 def dogrula(d):
+    """(hatalar, uyarılar) döndürür. Uyarı rc'yi değiştirmez ama SUSULMAZ."""
     h = []                                  # hatalar
     if not isinstance(d, dict):
-        return ["profil bir nesne değil"]
+        return ["profil bir nesne değil"], []
     if d.get("sema") != 1:
         h.append(f"sema 1 olmalı, gelen: {d.get('sema')!r}")
 
@@ -65,6 +74,7 @@ def dogrula(d):
     if "hat" in d:
         _kume("hat", d["hat"], HAT_ZORUNLU)
 
+    bagli, serbest = [], []
     nb = d.get("nobetler")
     if not isinstance(nb, list) or not nb:
         h.append("nobetler: en az bir nöbet şart (boş liste = kurulacak hiçbir şey yok)")
@@ -84,6 +94,20 @@ def dogrula(d):
         if tekrar:
             h.append(f"nobetler: AYNI AD birden çok nöbette: {sorted(tekrar)} — "
                      f"hangisinin düştüğü ayırt edilemez")
+        # 🔴 DOLU OLMAK YETMEZ, KARŞILIĞI OLMALI (bağımsız göz tur 1): `kapi` alanı yalnız
+        #    boş mu diye bakılıyordu; uydurma ama dolu bir kapı adı geçiyordu. Var olmayan
+        #    bir kapıya bağlı nöbet, kapısız nöbetin kılık değiştirmiş hâlidir.
+        kapi_adlari = {k.get("ad") for k in (d.get("kapilar") or []) if isinstance(k, dict)}
+        for i, n in enumerate(nb):
+            if not isinstance(n, dict):
+                continue
+            ka = n.get("kapi")
+            if _bos(ka) or not isinstance(ka, str):
+                continue                      # zaten yukarıda KAPISIZ diye yakalandı
+            if ka in kapi_adlari:
+                bagli.append(n.get("ad"))
+            else:
+                serbest.append(n.get("ad"))   # RED DEĞİL — gerekçesi aşağıda
 
     kp = d.get("kapilar")
     if not isinstance(kp, list) or not kp:
@@ -92,22 +116,53 @@ def dogrula(d):
         for i, k in enumerate(kp):
             _kume("kapilar", k, KAPI_ZORUNLU, KAPI_ISTEGE, sira=i)
 
+    # 🔴 "Bilinmeyen alan RED" kuralı ŞEMANIN HER KATINDA geçerli (bağımsız göz tur 1):
+    #    ilk yazımda yalnız üst düzeyde ve nöbet/kapı içinde uyguluyordum; defter şemasının
+    #    KENDİ anahtarları denetlenmiyordu, oraya eklenen uydurma bir alan sessizce geçiyordu.
+    #    Bir kuralı bazı katlarda uygulamak, o kuralı olmayan katlarda YOK saymaktır.
     ds = d.get("defter_semasi")
-    if isinstance(ds, dict):
-        al = ds.get("alanlar")
-        if not isinstance(al, list) or not al:
-            h.append("defter_semasi.alanlar: en az bir alan şart")
+    if "defter_semasi" in d:
+        if isinstance(ds, dict):
+            _kume("defter_semasi", ds, {"alanlar"}, {"aciklama"})
+            al = ds.get("alanlar")
+            if not isinstance(al, list) or not al:
+                h.append("defter_semasi.alanlar: en az bir alan şart")
+            else:
+                for i, a in enumerate(al):
+                    _kume("defter_semasi.alanlar", a, {"ad", "tur"}, {"zorunlu", "aciklama", "not"}, sira=i)
         else:
-            for i, a in enumerate(al):
-                _kume("defter_semasi.alanlar", a, {"ad", "tur"}, {"zorunlu", "aciklama", "not"}, sira=i)
-    elif "defter_semasi" in d:
-        h.append("defter_semasi bir nesne değil")
+            h.append("defter_semasi bir nesne değil")
 
+    # 🔴 YANLIŞ TÜR SESSİZCE GEÇMEZ: `isinstance(...)` doğruysa incele, DEĞİLSE söyle.
+    #    Eksik `else` dalı, "denetlenmedi"yi "temiz" diye göstermenin en sessiz biçimidir.
     ks = d.get("kurulum_sinavi")
-    if isinstance(ks, list):
-        for i, a in enumerate(ks):
-            _kume("kurulum_sinavi", a, {"adim", "beklenen"}, {"aciklama"}, sira=i)
-    return h
+    if "kurulum_sinavi" in d:
+        if isinstance(ks, list):
+            for i, a in enumerate(ks):
+                _kume("kurulum_sinavi", a, {"adim", "beklenen"}, {"aciklama"}, sira=i)
+        else:
+            h.append("kurulum_sinavi bir liste değil")
+    if "karne_alanlari" in d and not isinstance(d["karne_alanlari"], list):
+        h.append("karne_alanlari bir liste değil")
+    for a in ("profil", "kutu", "etiket", "bayrak", "damga_olcutu"):
+        if a in d and not isinstance(d[a], str):
+            h.append(f"{a} metin olmalı")
+
+    # 🔴 KAPI BAĞI: adlı mı, serbest tarif mi — RED DEĞİL, çünkü ŞEMAYI BEN EKSİK YAZDIM.
+    #    Bağımsız göz haklı olarak "dolu olmak yetmez, karşılığı olmalı" dedi; doğru.
+    #    AMA şemada `kapi` alanının `kapilar` listesinden bir AD olması gerektiğini HİÇ
+    #    yazmamıştım — profili yazan taraf yazdığım şemaya uydu. Teslimden SONRA sözleşmeyi
+    #    sıkılaştırıp onun işini reddetmek, kuralı sonradan koyup geçmişi suçlamak olurdu;
+    #    bugün tam bunun bedelini imza-sürüm işinde ölçtük.
+    #    Bu yüzden: iki biçim de geçerli, ama hangisinin hangisi olduğu SÖYLENİR.
+    #    Adlı bağ güçlüdür (kapının komutu ve "kırmızı ne demek"i profilde ayrıca yazılı);
+    #    serbest tarif zayıftır (kapı bir metindir, koşulabilir bir şey değildir).
+    uy = []
+    if serbest:
+        uy.append(f"{len(serbest)} nöbetin kapısı SERBEST TARİF (adlı kapıya bağlı değil): "
+                  f"{serbest} — geçerli ama zayıf bağ; 'kapilar' listesindeki bir ADA bağlamak "
+                  f"kapıyı koşulabilir kılar")
+    return h, uy
 
 
 def main():
@@ -117,7 +172,9 @@ def main():
         d = json.load(open(sys.argv[1], encoding="utf-8"))
     except Exception as e:
         print(f"✗ profil OKUNAMADI: {e}", file=sys.stderr); sys.exit(2)
-    h = dogrula(d)
+    h, uy = dogrula(d)
+    for x in uy:
+        print(f"⚠ {x}")
     if h:
         print(f"✗ profil ŞEMA-1'e UYMUYOR — {len(h)} bulgu (kurulum ÜRETİLMEZ):")
         for x in h:
@@ -125,7 +182,8 @@ def main():
         sys.exit(1)
     nb = d.get("nobetler", [])
     print(f"✓ profil şema-1 geçerli: {d.get('kutu')}/{d.get('profil')} · "
-          f"{len(nb)} nöbet · {len(d.get('kapilar', []))} kapı · kapısız nöbet 0")
+          f"{len(nb)} nöbet · {len(d.get('kapilar', []))} kapı · kapısız nöbet 0"
+          + (f" · ⚠ {len(uy)} uyarı" if uy else ""))
     sys.exit(0)
 
 

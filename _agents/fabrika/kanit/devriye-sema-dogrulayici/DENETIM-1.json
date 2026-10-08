@@ -1,0 +1,41 @@
+{
+  "tur": 1,
+  "is": "devriye-sema-dogrulayici",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-08T03:51:55+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Şema-1 doğrulayıcısı ile canlı profil ölçümü kurulmuş; üç ana kuralın temel örnekleri yeşil sınavlarla gösterilmiş. Lakin bilinmeyen alan reddi bütün alt yapılara uygulanmıyor ve nöbetin kapısı yalnız dolu metin olarak denetleniyor; önce bu şema açıklarını çöz.",
+    "bulgular": [
+      {
+        "ne": "“Bilinmeyen alan RED” kuralı bütün şemada uygulanmıyor: defter_semasi nesnesinin kendi alanları denetlenmediğinden buraya eklenen uydurma bir alan sessizce kabul edilir.",
+        "kanit": "dogrula(), defter_semasi için yalnız ds.get(\"alanlar\") sonucunu denetliyor; ds anahtar kümesini _kume ile doğrulamıyor. Sınav çıktısında bilinmeyen alan ölçümleri yalnız üst düzey ve nöbet içi P2a–P2c ile sınırlı.",
+        "konum": "devriye/scripts/profil-dogrula.py:93",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Kapılı nöbet kuralı anlamsal olarak tamamlanmamış: nöbet.kapi değerinin kapilar listesindeki gerçek bir kapıya karşılık geldiği doğrulanmıyor; uydurma fakat dolu bir kapı adı geçebilir.",
+        "kanit": "Nöbet döngüsünde yalnız _bos(n.get(\"kapi\")) kontrolü var; kapilar içindeki adlarla üyelik karşılaştırması yok. P4 sınavları da yalnız boş kapi ve eksik kirmizi_ne_demek vakalarını ölçüyor.",
+        "konum": "devriye/scripts/profil-dogrula.py:78",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Zorunlu metinlerde yalnız boş dize reddediliyor; sadece boşluklardan oluşan değerler geçerli sayılıyor.",
+        "kanit": "_bos, str için yalnız len(v) == 0 ölçüyor. Sınavın P9 hazırlığında kapi=\" \" değerinin “bos DEGIL ama anlamsiz: _bos gormez” diye açıkça gösterilmesi açığın bilindiğini kanıtlıyor.",
+        "konum": "devriye/scripts/profil-dogrula.py:35",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Bazı zorunlu üst alanların türü ve iç yapısı doğrulanmıyor; örneğin kurulum_sinavi liste değilse sessizce geçebilir.",
+        "kanit": "kurulum_sinavi yalnız isinstance(ks, list) doğru olduğunda inceleniyor; yanlış tür için hata ekleyen else dalı yok. Üst düzey zorunlu kontrolü ise dolu bir metni boş saymaz.",
+        "konum": "devriye/scripts/profil-dogrula.py:103",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; iki kayıt da yeşil, sarı kayıt yok. Canlı profil gerçekçi veriyle doğrudan ölçülmüş ve sınav 26/26 geçmiştir; ancak yalnız “sonra” ölçümleri vardır, önce/sonra ölçüm çifti yoktur. Mevcut sınavlar yazılan davranışı destekliyor fakat yukarıdaki şema boşluklarını sınamadığı için üretime hazır oluşu kanıtlamıyor."
+  }
+}

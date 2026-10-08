@@ -101,6 +101,46 @@ else
   echo "  ATLANDI: canlı profil bu ağaçta yok (yeşil DEĞİL)"
 fi
 
+echo "════ P10 · YALNIZCA-BOŞLUK da BOŞTUR (göz tur-1; sınavımda belgelenmişti) ════"
+_boz 'd["yollar"]["hub"]="   "'
+[ "$(rc_of "$T/k.json")" = 1 ]; g $? "P10a boşluklardan ibaret yol rc=1"
+_boz 'd["nobetler"][0]["kapi"]=" "'
+[ "$(rc_of "$T/k.json")" = 1 ]; g $? "P10b boşluk-kapı da KAPISIZ sayılıyor"
+O="$(kos "$T/k.json")"; icerir 'KAPISIZ' "$O"; g $? "P10c sebebi kapısız diye söyleniyor"
+
+echo "════ P11 · BİLİNMEYEN alan kuralı HER KATTA (göz tur-1) ════"
+_boz 'd["defter_semasi"]["uydurma"]="x"'
+[ "$(rc_of "$T/k.json")" = 1 ]; g $? "P11a defter şemasının KENDİ anahtarında bilinmeyen alan rc=1"
+_boz 'd["defter_semasi"]["alanlar"][0]["uydurma"]="x"'
+[ "$(rc_of "$T/k.json")" = 1 ]; g $? "P11b alan nesnesinde bilinmeyen alan rc=1"
+_boz 'd["kapilar"][0]["uydurma"]="x"'
+[ "$(rc_of "$T/k.json")" = 1 ]; g $? "P11c kapı nesnesinde bilinmeyen alan rc=1"
+
+echo "════ P12 · YANLIŞ TÜR sessizce geçmez (göz tur-1: eksik else) ════"
+_boz 'd["kurulum_sinavi"]="liste degil"'
+[ "$(rc_of "$T/k.json")" = 1 ]; g $? "P12a kurulum_sinavi liste değilse rc=1"
+_boz 'd["karne_alanlari"]={"a":1}'
+[ "$(rc_of "$T/k.json")" = 1 ]; g $? "P12b karne_alanlari liste değilse rc=1"
+_boz 'd["etiket"]=5'
+[ "$(rc_of "$T/k.json")" = 1 ]; g $? "P12c metin olması gereken alan sayıysa rc=1"
+_boz 'd["defter_semasi"]="nesne degil"'
+[ "$(rc_of "$T/k.json")" = 1 ]; g $? "P12d defter_semasi nesne değilse rc=1"
+
+echo "════ P13 · KAPI BAĞI: adlı güçlü, serbest tarif UYARI (RED değil) ════"
+# 🔴 Niçin RED değil: şemada `kapi` alanının `kapilar`dan bir AD olması gerektiği YAZILMAMIŞTI.
+#    Teslimden sonra sözleşmeyi sıkılaştırıp karşı tarafın işini reddetmek, kuralı sonradan
+#    koyup geçmişi suçlamak olurdu — bedelini bugün imza-sürüm işinde ölçtük.
+_boz 'd["nobetler"][0]["kapi"]="hizli"'      # kapilar[0].ad == "hizli"
+O="$(kos "$T/k.json")"
+[ "$(rc_of "$T/k.json")" = 0 ]; g $? "P13a ADLI kapıya bağlı nöbet rc=0"
+icerir 'SERBEST TARİF' "$O"; [ $? -ne 0 ]; g $? "P13b adlı bağda uyarı YOK"
+_boz 'd["nobetler"][0]["kapi"]="boyle-bir-kapi-yok"'
+O="$(kos "$T/k.json")"
+[ "$(rc_of "$T/k.json")" = 0 ]; g $? "P13c serbest tarif GEÇERLİ (rc=0) — sözleşme sonradan sıkılmaz"
+icerir 'SERBEST TARİF' "$O"; g $? "P13d ama SUSULMUYOR — zayıf bağ olduğu söyleniyor"
+icerir 'zayıf bağ' "$O"; g $? "P13e niçin zayıf olduğu yazılı"
+_boz 'd["nobetler"][0]["kapi"]="hizli"'
+
 echo "════ P9 · MUTASYON: kapısız-nöbet kuralı koparılınca P4 kırmızıya döner ════"
 M="$T/mutant.py"
 sed 's@^                if _bos(n.get("kapi")):@                if False:@' "$D" > "$M"

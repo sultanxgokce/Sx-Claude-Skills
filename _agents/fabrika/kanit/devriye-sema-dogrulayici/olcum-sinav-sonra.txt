@@ -1,5 +1,5 @@
 $ bash devriye/scripts/profil-dogrula.test.sh
-# rc=0 sure=1.0s zaman=2026-10-08T03:51:28+03:00
+# rc=0 sure=1.4s zaman=2026-10-08T03:54:05+03:00
 --- stdout ---
 ════ P1 · ALTIN profil GEÇER (gevşeme değil, doğru kabul) ════
   ✓ P1a geçerli profil rc=0
@@ -33,9 +33,28 @@ $ bash devriye/scripts/profil-dogrula.test.sh
   ✓ P7 bilinen isteğe-bağlı alanlar rc=0
 ════ P8 · GERÇEK profil (MÜTEVELLİ/akar) — varsa ölçülür ════
   ✓ P8 canlı profil şema-1'e UYUYOR (iddia ölçüldü)
+════ P10 · YALNIZCA-BOŞLUK da BOŞTUR (göz tur-1; sınavımda belgelenmişti) ════
+  ✓ P10a boşluklardan ibaret yol rc=1
+  ✓ P10b boşluk-kapı da KAPISIZ sayılıyor
+  ✓ P10c sebebi kapısız diye söyleniyor
+════ P11 · BİLİNMEYEN alan kuralı HER KATTA (göz tur-1) ════
+  ✓ P11a defter şemasının KENDİ anahtarında bilinmeyen alan rc=1
+  ✓ P11b alan nesnesinde bilinmeyen alan rc=1
+  ✓ P11c kapı nesnesinde bilinmeyen alan rc=1
+════ P12 · YANLIŞ TÜR sessizce geçmez (göz tur-1: eksik else) ════
+  ✓ P12a kurulum_sinavi liste değilse rc=1
+  ✓ P12b karne_alanlari liste değilse rc=1
+  ✓ P12c metin olması gereken alan sayıysa rc=1
+  ✓ P12d defter_semasi nesne değilse rc=1
+════ P13 · KAPI BAĞI: adlı güçlü, serbest tarif UYARI (RED değil) ════
+  ✓ P13a ADLI kapıya bağlı nöbet rc=0
+  ✓ P13b adlı bağda uyarı YOK
+  ✓ P13c serbest tarif GEÇERLİ (rc=0) — sözleşme sonradan sıkılmaz
+  ✓ P13d ama SUSULMUYOR — zayıf bağ olduğu söyleniyor
+  ✓ P13e niçin zayıf olduğu yazılı
 ════ P9 · MUTASYON: kapısız-nöbet kuralı koparılınca P4 kırmızıya döner ════
   ✓ P9a asıl araç kapısız nöbeti REDDEDİYOR
   ✓ P9b MUTASYON: kural ölünce 'KAPISIZ' teşhisi KAYBOLUYOR (kapı gerçek)
 
-── SONUÇ: 26 geçti · 0 kaldı ──
+── SONUÇ: 41 geçti · 0 kaldı ──
 --- stderr ---
