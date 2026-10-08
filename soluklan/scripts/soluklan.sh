@@ -88,6 +88,15 @@ _cipa_durumu() { # yazdırır: yok | bayat:<tarih> | bos | taze
     # taze diyemeyiz. Damgasız çıpa "ölçemedim" sınıfıdır.
     printf 'damgasiz:%s' "$mtime_yas"; return
   fi
+  # 🔴 GELECEK ZAMANLI DAMGA FAIL-CLOSED (bağımsız göz tur 4): ileri tarihli bir damga
+  #    NEGATİF yaş üretir ve "yaşlı mı" kapısı yalnız üst sınıra baktığı için negatif değer
+  #    oradan sorunsuz geçip "taze" basardı. Bozuk damga ya da saat kayması tazelik KANITI
+  #    değildir — ölçemediğimiz hâldir. (Aynı sınıf hata filoda bir kez üç saatlik kaymayla
+  #    ödendi; orada da hiçbir kapı kırmızı olmamıştı.) EN ESKİ-kazanır kuralından ÖNCE
+  #    bakılır, çünkü en-eski kuralı negatifi yutar.
+  if [ "$yas_dk" -lt 0 ] || [ "$mtime_yas" -lt 0 ]; then
+    printf 'gelecek:%s' "$yas_dk"; return
+  fi
   [ "$mtime_yas" -gt "$yas_dk" ] && yas_dk="$mtime_yas"   # EN ESKİ kazanır
   if [ "$yas_dk" -gt "$AZAMI_YAS_DK" ]; then printf 'yasli:%s' "$yas_dk"; return; fi
   printf 'taze'
@@ -128,6 +137,10 @@ case "$KOMUT" in
                echo "   Dosya ${DURUM#damgasiz:} dakikadır değişmemiş ama bu bir TAHMİN, ölçüm değil:"
                echo "   boş bir dokunuş da dosya zamanını yeniler. Tazeliği ölçemediğim bir çıpayla"
                echo "   compact önermem. Çıpayı aracıyla tazele (damga kendiliğinden düşer)."; exit 3 ;;
+      gelecek:*) echo "🔴 ÇIPA DAMGASI GELECEĞİ GÖSTERİYOR (${DURUM#gelecek:} dakika) — ölçemedim."
+               echo "   Bir plan henüz yazılmamış olamaz: ya damga bozuk ya makinenin saati kaymış."
+               echo "   Bu bir tazelik kanıtı değil, ölçüm arızasıdır; compact önermem."
+               echo "   Saati kontrol et ya da çıpayı aracıyla yeniden tazele."; exit 3 ;;
       yasli:*) echo "🔴 ÇIPA YAŞLI (${DURUM#yasli:} dakika) — bugünün ama son ${AZAMI_YAS_DK} dakikada dokunulmamış."
                echo "   Takvim günü tazelik değildir: sabah yazılan plan akşam olan biteni anlatmaz."
                echo "   Önce çıpayı tazele (ne bitti, ne yarım kaldı), sonra tekrar çağır."; exit 3 ;;
@@ -167,6 +180,7 @@ M
     echo "⚓ ÇIPADAN GERİ OKUNAN PLAN${DURUM#taze}"
     [ "${DURUM%%:*}" = damgasiz ] && echo "⚠ DİKKAT: çıpa damgasız — tazeliği ölçülemedi."
     [ "${DURUM%%:*}" = yasli ] && echo "⚠ DİKKAT: çıpaya ${DURUM#yasli:} dakikadır dokunulmamış — maddeler bayat olabilir."
+    [ "${DURUM%%:*}" = gelecek ] && echo "⚠ DİKKAT: çıpa damgası geleceği gösteriyor — tazeliği ölçülemedi."
     [ "${DURUM%%:*}" = bayat ] && echo "⚠ DİKKAT: çıpa bugünün değil (${DURUM#bayat:}) — maddeler bayat olabilir, ölçmeden sürdürme."
     echo "────────────────────────────────────────"
     cat "$y"

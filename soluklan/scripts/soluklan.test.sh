@@ -49,6 +49,20 @@ bayat_cipa() { cat > "$T/cipa.md" <<EOF
 _dokunuldu: $(date +%FT%T)
 EOF
 }
+# İLERİ TARİHLİ damga: bugünün çıpası ama damga geleceği gösteriyor (bozuk damga ya da
+# kaymış saat). Dosya zamanı da ileri alınır, yoksa "EN ESKİ kazanır" kuralı negatifi yutar
+# ve sınav aslında mtime'ı ölçer — ölçtüğünü sandığın şeyi ölçmeyen kapı sınıfı.
+gelecek_cipa() { local dk="${1:-120}"
+  cat > "$T/cipa.md" <<EOF
+# ⚓ GÜNÜN PLANI ÇIPASI · $BUGUN
+## Maddeler
+- [ ] 1) henüz yazılmamış olması gereken iş
+
+_yazıldı: $(date -d "+$dk min" +%FT%T)_
+_dokunuldu: $(date -d "+$dk min" +%FT%T)
+EOF
+  touch -d "+$dk min" "$T/cipa.md"
+}
 bos_cipa() { printf '# ⚓ GÜNÜN PLANI ÇIPASI · %s\n\n## Maddeler\n\n_madde yok_\n' "$BUGUN" > "$T/cipa.md"; }
 
 mk_arac "$T/cipa.md"
@@ -183,6 +197,22 @@ O="$(kos oneri --doluluk altmis)"; RC=$?
 O="$(kos oneri --doluluk)"; RC=$?
 [ "$RC" -eq 2 ]; g $? "S11b değersiz bayrak rc=2 (sessiz yutulmuyor)"
 
+echo "════ S13 · İLERİ TARİHLİ DAMGA → taze SAYILMAZ (fail-closed) ════"
+gelecek_cipa 120
+O="$(kos oneri --doluluk 90)"; RC=$?
+[ "$RC" -eq 3 ]; g $? "S13a ileri tarihli damgada öneri ÜRETİLMEZ (rc=3)"
+printf '%s' "$O" | grep -q "GELECEĞİ GÖSTERİYOR"; g $? "S13b sebebi söylüyor: damga geleceği gösteriyor"
+printf '%s' "$O" | grep -qi "ölçemedim"; g $? "S13c 'taze' demiyor, 'ölçemedim' diyor"
+O="$(kos hazir-mi --doluluk 90)"; RC=$?
+[ "$RC" -eq 3 ]; g $? "S13d hazır-mı da ileri damgada 3 dönüyor"
+O="$(kos sonrasi)"; RC=$?
+printf '%s' "$O" | grep -q "geleceği gösteriyor"; g $? "S13e sonrası planı okurken uyarı basıyor"
+# POZİTİF KONTROL: aynı fikstür damgası geri alınınca YEŞİL olmalı — yoksa S13 her şeyi reddeden
+# bir kapıdır ve hiçbir şey ölçmez.
+taze_cipa
+O="$(kos oneri --doluluk 90)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "S13f POZİTİF KONTROL: damga geri alınınca aynı yol YEŞİL (kapı ayırt ediyor)"
+
 echo "════ S12 · MUTASYON: tazelik kapısı kaldırılınca sınav KIRMIZI olmalı ════"
 M="$T/mutant.sh"
 sed 's@^  if \[ "\$baslik_tarih" != "\$BUGUN" \]; then@  if false; then@' "$S" > "$M"
@@ -206,6 +236,17 @@ if cmp -s "$M2" "$S"; then g 1 "S12b mutant2 FARKSIZ"; else
   taze_cipa
   SOLUKLAN_CIPA_ARAC="$T/cipa.sh" SOLUKLAN_BUGUN="$BUGUN" bash "$M2" oneri >/dev/null 2>&1
   [ $? -ne 4 ]; g $? "S12b MUTASYON: 'ölçemedim' kapısı ölünce doluluksuz çağrı 4 dönmüyor"
+fi
+
+# İleri tarihli damga kapısı mutasyonla ölçülür: negatif yaş denetimi ölünce ileri
+# tarihli çıpa yine "taze" basmalı (yani kapı gerçekten o satırda yaşıyor).
+M4="$T/mutant4.sh"
+sed 's@^  if \[ "\$yas_dk" -lt 0 \] || \[ "\$mtime_yas" -lt 0 \]; then@  if false; then@' "$S" > "$M4"
+if cmp -s "$M4" "$S"; then g 1 "S13g mutant4 FARKSIZ — negatif-yaş kapısı sınavda ölçülmüyor"; else
+  gelecek_cipa 120
+  SOLUKLAN_CIPA_ARAC="$T/cipa.sh" SOLUKLAN_BUGUN="$BUGUN" bash "$M4" oneri --doluluk 90 >/dev/null 2>&1
+  [ $? -eq 0 ]; g $? "S13g MUTASYON: negatif-yaş kapısı ölünce ileri tarihli çıpa öneri üretiyor"
+  taze_cipa
 fi
 
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null

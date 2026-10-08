@@ -1,0 +1,82 @@
+$ bash soluklan/scripts/soluklan.test.sh
+# rc=0 sure=1.0s zaman=2026-10-08T10:46:44+03:00
+--- stdout ---
+════ S1 · ÇIPA YOK → öneri ÜRETİLMEZ (fail-closed) ════
+  ✓ S1a rc=3 (çıpa yok)
+  ✓ S1b sebebi söylüyor
+  ✓ S1c 🔴 öneri METNİ BASILMADI — doluluk 90 olsa bile
+════ S2 · ÇIPA BAYAT → yok sayılır (var olan aracın kapatmadığı açık) ════
+  ✓ S2a rc=3 (bayat)
+  ✓ S2b hangi tarihe ait olduğunu söylüyor
+  ✓ S2c dünün çıpasıyla compact ÖNERİLMİYOR
+════ S3 · ÇIPA BOŞ → dosya var ama hiçbir şey korumuyor ════
+  ✓ S3a rc=3 (boş)
+  ✓ S3b boş dosyanın koruma OLMADIĞI yazılı
+════ S4 · DOLULUK VERİLMEDİ → ölçemedim (4), yeşil DEĞİL ════
+  ✓ S4a rc=4 (ölçemedim)
+  ✓ S4b dürüst sınırı söylüyor
+  ✓ S4c doluluğun NEREDEN geldiğini söylüyor
+  ✓ S4d 🔴 sayı yokken öneri UYDURULMUYOR
+════ S5 · EŞİK ALTI → compact önerilmez (rc=1) ════
+  ✓ S5a rc=1 (59 < 60)
+  ✓ S5b sebebi yazılı
+  ✓ S5c tam eşikte (60) ÖNERİLMEZ — 'üstü' demek sınır dahil DEĞİL
+  ✓ S5d eşiğin BİR ÜSTÜ (61) önerilir
+  ✓ S5e öneri metni basıldı
+════ S6 · EŞİK taşınabilir (Sultan 60 dedi ama kural çivili değil) ════
+  ✓ S6a --esik 80 ile 70 eşik ALTI
+  ✓ S6b ortamdan eşik 40 ile 45 ÖNERİLİR
+════ S6c · BOZUK EŞİK sessizce 0 sayılmaz (göz tur-1: fail-open riski) ════
+  ✓ S6c harfli --esik rc=2
+  ✓ S6d bozuk eşikte öneri ÜRETİLMİYOR (fail-closed)
+  ✓ S6e ortamdan gelen bozuk eşik de rc=2
+  ✓ S6f bozuk azami-yaş da rc=2
+════ S6g · AYNI GÜN BAYATLAMA: takvim günü tazelik DEĞİLDİR (göz tur-1) ════
+  ✓ S6g1 bugünün ama 500 dk dokunulmamış çıpa → rc=3
+  ✓ S6g2 sebebi 'yaşlı' diye söyleniyor (bayat/boş ile karışmıyor)
+  ✓ S6g3 kuralın niçini yazılı
+  ✓ S6g4 yaşlı çıpayla öneri ÜRETİLMİYOR
+  ✓ S6g5 azami yaş 600'e çıkınca AYNI çıpa taze sayılır (eşik gerçekten okunuyor)
+════ S13 · BOŞ DOKUNUŞ tazelik SAYILMAZ (göz tur-2: fail-open idi) ════
+  ✓ S13a boş dokunuş yaşı sıfırlamıyor → rc=3
+  ✓ S13b hâlâ yaşlı diyor (EN ESKİ yüzey kazanıyor)
+  ✓ S13c GERÇEK tazelemede (yeni dokunma damgası) geçiyor — kapı kör değil
+════ S14 · DAMGASIZ çıpa 'taze' sayılmaz, ölçemedim denir ════
+  ✓ S14a damgasız çıpa rc=3
+  ✓ S14b sebebi ayrı sınıf olarak söyleniyor
+  ✓ S14c dosya zamanının ölçüm olmadığı yazılı
+════ S15 · TARİH BAŞLIKTAN okunur, gövdeden ARANMAZ (göz tur-2) ════
+  ✓ S15a gövdede bugünün tarihi geçse de BAYAT (rc=3)
+  ✓ S15b başlıktaki GERÇEK tarih bildiriliyor
+  ✓ S15c başlıksız çıpa da geçmiyor
+════ S7 · AÇIK MADDE SAYIMI doğru (biten madde sayılmaz) ════
+  ✓ S7 yarım+açılmamış=2 sayılıyor, biten sayılmıyor
+════ S8 · SONRASI · çıpayı geri okur + üç adımı dayatır ════
+  ✓ S8a rc=0
+  ✓ S8b çıpanın İÇERİĞİ basıldı (özet değil, aslı)
+  ✓ S8c ortam damgası adımı var (compact harness'ı sıfırlar)
+  ✓ S8d 'açık' damgasının iddia olduğu yazılı
+════ S9 · SONRASI · çıpa yoksa UYDURMA PLAN YAZMA der ════
+  ✓ S9a rc=3
+  ✓ S9b kayıp planı uydurmak YASAKLANIYOR
+════ S10 · ÇIPA ARACI YOKSA → ölçemedim, 'çıpa yok' DEĞİL ════
+  ✓ S10a aracsızken de öneri ÜRETİLMİYOR (fail-closed)
+  ✓ S10b öneri metni yok
+════ S11 · bozuk doluluk reddedilir (sessiz 0 sayılmaz) ════
+  ✓ S11a harf verilince rc=2
+  ✓ S11b değersiz bayrak rc=2 (sessiz yutulmuyor)
+════ S13 · İLERİ TARİHLİ DAMGA → taze SAYILMAZ (fail-closed) ════
+  ✓ S13a ileri tarihli damgada öneri ÜRETİLMEZ (rc=3)
+  ✓ S13b sebebi söylüyor: damga geleceği gösteriyor
+  ✓ S13c 'taze' demiyor, 'ölçemedim' diyor
+  ✓ S13d hazır-mı da ileri damgada 3 dönüyor
+  ✓ S13e sonrası planı okurken uyarı basıyor
+  ✓ S13f POZİTİF KONTROL: damga geri alınınca aynı yol YEŞİL (kapı ayırt ediyor)
+════ S12 · MUTASYON: tazelik kapısı kaldırılınca sınav KIRMIZI olmalı ════
+  ✓ S12a MUTASYON: tarih kapısı ölünce DÜNÜN çıpası öneri üretiyor (kapı gerçek)
+  ✓ S12c MUTASYON: 'taze olan kazanır'a dönülünce boş dokunuş kapıyı yine geçiyor
+  ✓ S12b MUTASYON: 'ölçemedim' kapısı ölünce doluluksuz çağrı 4 dönmüyor
+  ✓ S13g MUTASYON: negatif-yaş kapısı ölünce ileri tarihli çıpa öneri üretiyor
+
+── SONUÇ: 58 geçti · 0 kaldı ──
+--- stderr ---
