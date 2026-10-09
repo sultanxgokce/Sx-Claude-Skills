@@ -1,0 +1,13 @@
+$ bash kosu-kaydi/scripts/kosu-sar.test.sh
+# rc=0 sure=3.0s zaman=2026-10-09T12:37:18+03:00
+--- stdout ---
+════ K1 · her koşu tam satır, geçerli JSON, 15 alan ════
+════ K4 · sessiz başarı YALNIZ beyanla ════
+════ K5 · çelişki: canlı tablo ≠ kanon ════
+════ K5 · @reboot türetilemez · satırı olmayan iş ════
+════ olculemedi · hatalı kullanım ════
+════ kanon bildirilmemiş · kutu adı türetimi (A290: her kutunun kanon yolu başka) ════
+════ cron-sonraki.py tek başına (bağımsız hesap, paket yok) ════
+
+── SONUÇ: 45 geçti · 0 düştü ──
+--- stderr ---

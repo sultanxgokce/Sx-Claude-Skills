@@ -1,0 +1,11 @@
+$ bash -c echo "merkez: $(md5sum /config/.claude/skills/yazilim-fabrikasi/SKILL.md | cut -c1-12)"; ssh -o BatchMode=yes -o ConnectTimeout=10 hostsrv "docker exec -u abc cloudtop-nazir sh -c 'echo \"nazir : $(md5sum /config/.claude/skills/yazilim-fabrikasi/SKILL.md | cut -c1-12)\"; ls -d /config/projects/*; python3 -c \"import croniter\" 2>&1 | tail -1'"
+# rc=0 sure=0.3s zaman=2026-10-09T12:37:15+03:00
+--- stdout ---
+merkez: 4e9e58131afc
+nazir : 4e9e58131afc
+/config/projects/cortex
+/config/projects/nazir
+/config/projects/Nexus
+/config/projects/_wt-nazir
+ModuleNotFoundError: No module named 'croniter'
+--- stderr ---

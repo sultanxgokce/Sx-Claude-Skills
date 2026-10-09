@@ -1,0 +1,19 @@
+{
+  "is": "kosu-kaydi-paketi",
+  "cumle": "kosu-kaydi beceri PAKETİ: sarmalayıcı + paketsiz sonraki-koşu hesabı + katalog/kurulum kaydı (_global). Kabul: sınav hedef kutuda (nazir, croniter yok) geçer; dağıtım yolu ölçülür (merkez kurulumu = nazir'de aynı dosya). Kurulum ve kutu görünürlüğü BU KARTIN DIŞINDA → kosu-kaydi-kurulum",
+  "istedi": "SERDAR (A290; kosu-kaydi-becerisi tıkandı → daralt)",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-09T12:36:40+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

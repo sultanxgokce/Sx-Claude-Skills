@@ -1,0 +1,71 @@
+{
+  "is": "kosu-kaydi-paketi",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-09T12:37:22+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "dagitim-yolu",
+      "asama": "once",
+      "dosya": "olcum-dagitim-yolu-once.txt",
+      "sha256": "aa558a9e70f054756db7692079c5750edacc63987662b8f10a8075fed4ed3085",
+      "komut": [
+        "bash",
+        "-c",
+        "echo \"merkez: $(md5sum /config/.claude/skills/yazilim-fabrikasi/SKILL.md | cut -c1-12)\"; ssh -o BatchMode=yes -o ConnectTimeout=10 hostsrv \"docker exec -u abc cloudtop-nazir sh -c 'echo \\\"nazir : $(md5sum /config/.claude/skills/yazilim-fabrikasi/SKILL.md | cut -c1-12)\\\"; ls -d /config/projects/*; python3 -c \\\"import croniter\\\" 2>&1 | tail -1'\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T12:37:15+03:00",
+      "sure_sn": 0.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "5ff604a0bd00067e4f68d09e8440c801cbe6d012bd060ac843f75981c09e339b",
+      "komut": [
+        "bash",
+        "kosu-kaydi/scripts/kosu-sar.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T12:37:18+03:00",
+      "sure_sn": 3.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "nazir-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-nazir-sinav-sonra.txt",
+      "sha256": "e8d52aa69fba123ed1b496cffec11f112089715353297cfe1282e06a4f7c3a1d",
+      "komut": [
+        "bash",
+        "/config/.claude/jobs/d69a1b07/tmp/nazir-sinav.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T12:37:21+03:00",
+      "sure_sn": 3.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sema-parite",
+      "asama": "sonra",
+      "dosya": "olcum-sema-parite-sonra.txt",
+      "sha256": "553b42e8c4c5c8df7bad9122d7871cb7c3ec81a16ddc4294ddbc797ce25302c5",
+      "komut": [
+        "node",
+        "ahi/schema/validate-repo.mjs",
+        ".",
+        "--strict"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T12:37:22+03:00",
+      "sure_sn": 0.0
+    }
+  ],
+  "imza": "3531377aaf3972a055d084d55e734de8af035880b488d5672f31482002360ff1"
+}
