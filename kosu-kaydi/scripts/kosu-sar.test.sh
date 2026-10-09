@@ -53,6 +53,21 @@ bash "$S" nobetci --nobetci -- bash -c 'printf "\n  \n"' >/dev/null
 ol "--nobetci + yalnız boşluk/yeni satır stdout → boş sayılır: ayakta-dokunmadim" "$(alan sonuc)" "ayakta-dokunmadim"
 bash "$S" nobetci --nobetci -- bash -c 'echo uyarı >&2' >/dev/null 2>&1
 ol "--nobetci + yalnız stderr → sınıflamaya girmez: ayakta-dokunmadim" "$(alan sonuc)" "ayakta-dokunmadim"
+echo "════ K4 · GÖZLEMLİ nöbetçi (--gozlem, 0.4 / şema 1.2): ölçü stdout değil, önce/sonra gözlem ════"
+printf 'pid-100\n' > "$T/dinleyen"
+bash "$S" nobetci --nobetci --gozlem "cat $T/dinleyen" -- true >/dev/null
+ol "gözlem aynı (sunucu ayakta, dokunmadı) → ayakta-dokunmadim" "$(alan sonuc)" "ayakta-dokunmadim"
+bash "$S" nobetci --nobetci --gozlem "cat $T/dinleyen" -- bash -c "echo pid-200 > $T/dinleyen" >/dev/null
+ol "gözlem DEĞİŞTİ (yeniden başlattı, stdout yine boş) → tamam (iş yaptı)" "$(alan sonuc)" "tamam"
+bash "$S" nobetci --nobetci --gozlem "cat $T/dinleyen" -- bash -c "echo bir şeyler yazdı" >/dev/null
+ol "gözlem aynı ama stdout dolu → yine ayakta-dokunmadim (ölçü gözlemdir, çıktı değil)" "$(alan sonuc)" "ayakta-dokunmadim"
+bash "$S" nobetci --nobetci --gozlem "cat $T/dinleyen" -- bash -c 'exit 4' >/dev/null; rc=$?
+ol "gözlemli + rc≠0 → hata, rc geçer" "$(alan sonuc)/$rc" "hata/4"
+bash "$S" nobetci --nobetci --gozlem "/yok/gozlem-komutu" -- true >/dev/null 2>&1
+ol "gözlem komutu çalışmıyor → olculemedi (dokunmadı DENMEZ)" "$(alan sonuc)" "olculemedi"
+bash "$S" nobetci --nobetci --gozlem -- true >/dev/null 2>&1; ol "--gozlem komutsuz rc=2" "$?" "2"
+bash "$S" nobetci --gozlem "cat $T/dinleyen" -- true >/dev/null
+ol "--nobetci olmadan --gozlem etkisiz: rc0 = tamam" "$(alan sonuc)" "tamam"
 bash "$S" nobetci --nobetci -- bash -c 'exit 2' >/dev/null; rc=$?
 ol "--nobetci + rc≠0 → hata, rc geçer" "$(alan sonuc)/$rc" "hata/2"
 bash "$S" nobetci --bilinmeyen -- true >/dev/null 2>&1; ol "bilinmeyen bayrak rc=2" "$?" "2"

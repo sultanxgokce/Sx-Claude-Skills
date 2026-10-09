@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # kosu-sar.sh — koşu kaydı sarmalayıcısı (Nexus kokpit-ux/05 şema sürüm 1.1, K1-K6). Sürüm 0.3 (global beceri, A290-A293).
-#   Kullanım (kanon satırında):  bash /config/.claude/skills/kosu-kaydi/scripts/kosu-sar.sh <is> [--nobetci] -- <eski komut…>
+#   Kullanım (kanon satırında):  bash /config/.claude/skills/kosu-kaydi/scripts/kosu-sar.sh <is> [--nobetci [--gozlem <komut>]] [--kilit <dosya>] -- <eski komut…>
 #   Her koşu TAM BİR SATIR yazar (K1): /config/.kosu-kaydi/<kutu>.<YYYY-MM>.jsonl (kutu-yerel; /config/.claude ortak bağ) — özet yok.
 #   sonuc: tamam · hata · ayakta-dokunmadim (K4: işin $KOSU_BEYAN dosyasına 'dokunmadim' yazmasıyla YA DA kanon satırında --nobetci
 #          bayrağı varken rc 0 + boş çıktı) · atlandi-kilit (--kilit <dosya>: kilidi sarmalayıcı alır, alamazsa komut koşmaz, rc 75 sabit) · olculemedi (126/127)
@@ -13,11 +13,12 @@
 #   Dikişler (sınav): KOSU_KAYIT_DIZ · KOSU_KANON · KOSU_CRONTAB_KOMUT (varsayılan 'crontab -l') · KOSU_KUTU · KOSU_SIMDI.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SURUM="kosu-sar 0.3"
-KULLANIM="kullanım: kosu-sar.sh <is> [--nobetci] [--kilit <dosya>] -- <komut…>"
-IS="${1:-}"; shift || true; NOBETCI=0; KILIT=""
+SURUM="kosu-sar 0.4"
+KULLANIM="kullanım: kosu-sar.sh <is> [--nobetci [--gozlem <komut>]] [--kilit <dosya>] -- <komut…>"
+IS="${1:-}"; shift || true; NOBETCI=0; KILIT=""; GOZLEM=""
 while [ $# -gt 0 ] && [ "$1" != "--" ]; do
   case "$1" in --nobetci) NOBETCI=1;; --kilit) KILIT="${2:-}"; [ -n "$KILIT" ] || { echo "$KULLANIM (--kilit dosya ister)" >&2; exit 2; }; shift;;
+    --gozlem) GOZLEM="${2:-}"; [ -n "$GOZLEM" ] || { echo "$KULLANIM (--gozlem komut ister)" >&2; exit 2; }; shift;;
     *) echo "$KULLANIM (bilinmeyen: $1)" >&2; exit 2;; esac; shift
 done
 [ "${1:-}" = "--" ] || { echo "$KULLANIM" >&2; exit 2; }; shift
@@ -73,7 +74,7 @@ SAHIP="${KANON_BILGI%%|*}"; REST="${KANON_BILGI#*|}"; DAMGA="${REST%%|*}"; KANON
 [ -n "$SAHIP" ] || SAHIP="bilinmiyor"
 
 BEYAN_DOSYA="$(mktemp)"; export KOSU_BEYAN="$BEYAN_DOSYA"
-BASLANGIC="$(_an)"; T0=$(date +%s); ATLANDI=0; KILIT_SORUN=0
+BASLANGIC="$(_an)"; T0=$(date +%s); ATLANDI=0; KILIT_SORUN=0; GOZLEM_SORUN=0
 if [ -n "$KILIT" ]; then
   FLOCK="${KOSU_FLOCK_KOMUT:-flock}"   # dikiş: sınav 'flock yok' hâlini taklit eder
   if ! command -v "$FLOCK" >/dev/null 2>&1; then
@@ -88,7 +89,14 @@ if [ -n "$KILIT" ]; then
 fi
 if [ "$ATLANDI" -eq 1 ]; then RC="$KILIT_RC"; CIKTI_VAR=0   # kilit dolu: komut KOŞMADI
 elif [ "$KILIT_SORUN" -eq 1 ]; then RC=127; CIKTI_VAR=0        # kilit alınabilir mi bilinmiyor: komut KOŞMADI, ölçülemedi
-elif [ "$NOBETCI" -eq 1 ]; then   # nöbetçi kipi: beyan KANON satırında (--nobetci); çıktı boş + rc 0 = ayaktaydı, dokunmadı (K4, NÂZIR A291)
+elif [ "$NOBETCI" -eq 1 ] && [ -n "$GOZLEM" ]; then   # nöbetçi kipi, GÖZLEMLİ (0.4, şema 1.2): ölçü stdout değil, gözlem komutunun önce/sonra çıktısı
+  # Niçin: sessiz nöbetçi yeniden başlatırken de sessiz olabilir (nazir sunucu.sh, A300); "boş çıktı = iş yok" orada çıkarıma dönerdi.
+  ONCE="$(bash -c "$GOZLEM" 2>/dev/null)"; GRC1=$?
+  if "$@"; then RC=0; else RC=$?; fi
+  SONRA="$(bash -c "$GOZLEM" 2>/dev/null)"; GRC2=$?
+  if [ "$GRC1" -ne 0 ] && [ "$GRC2" -ne 0 ] && [ -z "$ONCE$SONRA" ]; then GOZLEM_SORUN=1; CIKTI_VAR=1   # gözlem komutu iki kez de düştü → ölçülemedi
+  elif [ "$ONCE" = "$SONRA" ]; then CIKTI_VAR=0; else CIKTI_VAR=1; fi   # aynı = dokunmadı · değişti = iş yaptı (ör. dinleyen pid)
+elif [ "$NOBETCI" -eq 1 ]; then   # nöbetçi kipi, gözlemsiz: beyan KANON satırında (--nobetci); çıktı boş + rc 0 = ayaktaydı, dokunmadı (K4, A291)
   CIKTI_DOSYA="$(mktemp)"; if "$@" | tee "$CIKTI_DOSYA"; then RC=0; else RC=$?; fi
   # "çıktı" = yalnız stdout; yalnız boşluk/sekme/yeni satır BOŞ sayılır; stderr sınıflamaya girmez (şema K4, bağlayıcı tanım)
   if [ -n "$(tr -d '[:space:]' < "$CIKTI_DOSYA")" ]; then CIKTI_VAR=1; else CIKTI_VAR=0; fi; rm -f "$CIKTI_DOSYA"
@@ -99,6 +107,7 @@ BITIS="$(_an)"; SURE=$(( $(date +%s) - T0 ))
 BEYAN="$(tr -d '[:space:]' < "$BEYAN_DOSYA" 2>/dev/null || true)"; rm -f "$BEYAN_DOSYA"
 if [ "$ATLANDI" -eq 1 ]; then SONUC="atlandi-kilit"   # kilit dolu, komut koşmadı — hata DEĞİL (A293); yalnız sarmalayıcının kendi kilidi sayılır
 elif [ "$KILIT_SORUN" -eq 1 ]; then SONUC="olculemedi"   # flock yok ya da bozuk: kilit durumu bilinmiyor, "atlandı" DENMEZ
+elif [ "${GOZLEM_SORUN:-0}" -eq 1 ] && [ "$RC" -eq 0 ]; then SONUC="olculemedi"   # iş koştu ama gözlem komutu çalışmadı: sessiz başarı ölçülemedi
 elif [ "$RC" -eq 0 ] && { [ "$BEYAN" = "dokunmadim" ] || { [ "$NOBETCI" -eq 1 ] && [ "$CIKTI_VAR" -eq 0 ]; }; }; then SONUC="ayakta-dokunmadim"
 elif [ "$RC" -eq 0 ]; then SONUC="tamam"
 elif [ "$RC" -eq 127 ] || [ "$RC" -eq 126 ]; then SONUC="olculemedi"   # rc olduğu gibi kalır (126 ≠ 127), yalnız sonuç sınıfı

@@ -1,11 +1,11 @@
 ---
 name: kosu-kaydi
 type: agent
-version: 0.3.0
+version: 0.4.0
 description: >
-  Koşu kaydı sarmalayıcısı: her cron/zamanlı iş kendi komutunu `kosu-sar.sh <is> [--nobetci] -- <komut>` ile sarar; her koşu
+  Koşu kaydı sarmalayıcısı: her cron/zamanlı iş kendi komutunu `kosu-sar.sh <is> [--nobetci [--gozlem <komut>]] [--kilit <dosya>] -- <komut>` ile sarar; her koşu
   TAM BİR satır yazar (/config/.kosu-kaydi/<kutu>.<YYYY-MM>.jsonl, kutu-yerel, 15 alan — Nexus kokpit-ux/05 şeması sürüm 1.1).
-  Sessiz başarı yalnız beyanla ($KOSU_BEYAN dosyası ya da kanon satırında --nobetci) ayrı sonuç olur; kilitte atlanan koşu
+  Sessiz başarı yalnız beyanla ($KOSU_BEYAN dosyası ya da kanon satırında --nobetci; --gozlem ile ölçü stdout değil önce/sonra gözlemdir) ayrı sonuç olur; kilitte atlanan koşu
   (flock -n -E 75) `atlandi-kilit`; sahip etiketi satır üstü ya da satır sonu. Sonraki koşu canlı crontab'dan GÖZLEM, kanon
   dosyasından TAHMİN olarak iki alan, çelişki kokpitte sarı; hesap paketsiz saf python. Global beceri: cloudtop deposu izole
   kutularda görünmez (A290), /config/.claude/skills her kutuda aynı dizin.
@@ -36,7 +36,7 @@ KOSU_KANON=/config/projects/nazir/.oda/cron            # verilmezse drift ölç�
 # sahip: NAZIR                                          # (a) satır ÜSTÜ not — cloudtop kanonunun deseni
 # damga: /config/.claude/supur.log
 35 * * * * bash /config/.claude/skills/kosu-kaydi/scripts/kosu-sar.sh supur --kilit /x.lock -- bash .../supur.sh   # eski: flock -n /x.lock bash …
-*/5 * * * * bash /config/.claude/skills/kosu-kaydi/scripts/kosu-sar.sh bulgu-defteri --nobetci -- bash /config/.ic-sayfa/sunucu.sh # bulgu-defteri sahip:NAZIR
+*/5 * * * * bash /config/.claude/skills/kosu-kaydi/scripts/kosu-sar.sh bulgu-defteri --nobetci --gozlem "ss -ltnpH sport = :8790" -- bash /config/.ic-sayfa/sunucu.sh # bulgu-defteri sahip:NAZIR
 ```
 - `sahip` (K3): satır üstü `# sahip:` **ya da** satır sonu `# <ad> sahip:<ROL> [damga:<yol>]`; ikisi varsa satır sonu kazanır
   (A292: bazı kanon üreticileri yorum satırlarını canlıya taşımaz, satır sonu etiketi taşınır); yoksa `bilinmiyor` (uydurma yok).
@@ -59,6 +59,9 @@ KOSU_KANON=/config/projects/nazir/.oda/cron            # verilmezse drift ölç�
 Sarmalayıcı işin çıkış kodunu **olduğu gibi** geçirir (126/127/75 dahil); kayıt yazılamasa bile iş engellenmez — ama izsiz de kalmaz:
 kayıt dizini açılamaz/yazılamazsa satır **yedek dizine** düşer (`KOSU_YEDEK_DIZ`, varsayılan `$TMPDIR/kosu-kaydi`) ve stderr'e uyarı basılır
 (cron bunu kütüğe/postaya taşır); satır hiç yazılamazsa stderr'de `KAYIT YAZILAMADI`.
+`--nobetci --gozlem <komut>` (0.4, şema 1.2): nöbetçi **yeniden başlatırken de sessizse** (nazir `sunucu.sh` iki kolda da rc 0 + boş stdout, A300)
+"boş çıktı = iş yok" çıkarıma döner. Gözlemli kipte ölçü stdout değildir: gözlem komutu koşudan **önce** ve **sonra** koşar; çıktı aynıysa
+`ayakta-dokunmadim`, değiştiyse `tamam` (ör. dinleyen pid değişti = yeniden başlattı). Gözlem komutu çalışmıyorsa `olculemedi` (dokunmadı denmez).
 `--nobetci`: beyan betikte değil **kanon satırında** yaşar — sürümsüz bir nöbetçi betiğine (A291: nazir'inki hiçbir depoda değil)
 dokunmadan K4 ölçülür. Bedeli: nöbetçinin çıktısı sarmalayıcıdan geçer (`tee`), kütüğe yine düşer.
 
