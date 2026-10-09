@@ -1,5 +1,5 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/elogo-prob.sh /config/projects/_wt/Sx-Claude-Skills-elogo-paket-adi/elogo-erisim/scripts
-# rc=0 sure=0.1s zaman=2026-10-09T22:10:05+03:00
+# rc=0 sure=0.1s zaman=2026-10-09T22:13:35+03:00
 --- stdout ---
 == SORU 1 · numarasiz belge, --belge-adi VERILMEDI: paket adi ne olur?
 ⛔ paketlenemedi: paket adı türetilemedi: belgenin kökünde ne numara (cbc:ID) ne tekil kimlik (cbc:UUID) var.
@@ -8,9 +8,10 @@ $ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b3
 rc=1
 
 == SORU 2 · acikca verilmis 52 haneli ad (.zip ile 56 = olculmus RET uzunlugu)
-⛔ paketlenemedi: paket adı çok uzun: 56 hane (ölçülmüş geçen tavan 47, .zip dahil) — gönderim YAPILMADI.
-   e-Logo bu adı reddeder ve ret ağa çıktıktan sonra düşer; belge numarası o ana kadar harcanmış olur.
+⛔ paketlenemedi: paket adı ölçülmüş güvenli tavanı aşıyor: 56 hane > 47 (.zip dahil) — gönderim YAPILMADI.
+   Ölçülen: 47 hane GEÇTİ, 56 hane e-Logo tarafından REDDEDİLDİ. Aradaki değerler ÖLÇÜLMEDİ — bu adın reddedileceğini BİLMİYORUZ, geçeceğini de.
+   Kapı burada duruyor çünkü ret ancak ağa çıktıktan sonra düşer ve belge numarası o ana kadar harcanmış olur; bilinmezlikte durmak, numara dizisinde boşluk bırakmaktan ucuzdur.
    ad: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA.zip
-   Çare: adı belgenin kendi numarasına indir (--belge-adi), irsaliye/sipariş numaralarını adın içine yığma.
+   Çare: adı belgenin kendi numarasına indir (--belge-adi), irsaliye/sipariş numaralarını adın içine yığma. Tavanı yükseltmek ayrı iştir ve yeni bir ÖLÇÜM ister.
 rc=1
 --- stderr ---

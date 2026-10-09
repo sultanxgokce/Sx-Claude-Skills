@@ -1,5 +1,5 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/elogo-mutasyon.sh
-# rc=0 sure=17.7s zaman=2026-10-09T22:11:13+03:00
+# rc=0 sure=17.5s zaman=2026-10-09T22:13:35+03:00
 --- stdout ---
   OK  M1 dosya adina geri dusmek -> KIRMIZI (paket=1 gonder=1)
   OK  M2 tavani tahminle yukseltmek 47->60 -> KIRMIZI (paket=1 gonder=1)

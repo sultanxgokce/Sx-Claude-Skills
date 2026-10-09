@@ -137,6 +137,17 @@ try: paketle(b'<x/>', 'A' * 52)
 except PaketHatasi: raise SystemExit(1)"
 kapi "H4 · tavan ölçülmüş değerde, tahminle yükseltilmemiş" 0 "$O
 assert AD_TAVANI == 47, AD_TAVANI"
+kapi "H4b · 🔴 hata metni ÖLÇMEDİĞİ kesinliği iddia etmez (K01)" 0 "$O
+try:
+    paketle(b'<x/>', 'A' * 52)
+except PaketHatasi as e:
+    m = str(e)
+else:
+    raise SystemExit(1)
+assert 'ÖLÇÜLMEDİ' in m, m
+# Bagimsiz gozun tur-1 bulgusu: eski metin 'e-Logo bu adi reddeder' diyordu —
+# 48-55 arasi icin elimizde olcum YOK, kapi guvenli tarafta duruyor, o kadar.
+assert 'reddeder' not in m, 'olculmemis kesinlik geri gelmis: ' + m"
 kapi "H5 · adda zarfı bozacak karakter reddedilir (ad artık XML'den geliyor)" 1 "$O
 try: paketle(b'<x/>', 'a&b')
 except PaketHatasi: raise SystemExit(1)"

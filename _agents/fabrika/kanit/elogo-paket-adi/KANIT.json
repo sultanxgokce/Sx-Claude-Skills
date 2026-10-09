@@ -1,7 +1,7 @@
 {
   "is": "elogo-paket-adi",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-09T22:11:13+03:00",
+  "guncelleme": "2026-10-09T22:13:35+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -24,7 +24,7 @@
       "etiket": "ad-varsayilani",
       "asama": "sonra",
       "dosya": "olcum-ad-varsayilani-sonra.txt",
-      "sha256": "3013b770bcae24c54bc03039c134ded91c4ad8abcad41d14f10e4bb8ff0b4ddb",
+      "sha256": "db0bc71026d155a23bbf865b0d1b403fb6cf0cc7b8edbb3abfdb79c2281bf737",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/elogo-prob.sh",
@@ -32,7 +32,7 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T22:10:05+03:00",
+      "zaman": "2026-10-09T22:13:35+03:00",
       "sure_sn": 0.1
     },
     {
@@ -55,14 +55,14 @@
       "etiket": "sinavlar",
       "asama": "sonra",
       "dosya": "olcum-sinavlar-sonra.txt",
-      "sha256": "bc9fc1aea98493f49e12ed741a68d362399b0ecf9f8a89f99dd8a8b245ce031d",
+      "sha256": "51d58b89e4ee892a30344017499c5475ea19bf133b11986a996d532e8fc70855",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/elogo-sinav.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T22:10:37+03:00",
+      "zaman": "2026-10-09T22:13:17+03:00",
       "sure_sn": 2.4
     },
     {
@@ -70,16 +70,16 @@
       "etiket": "mutasyon",
       "asama": "sonra",
       "dosya": "olcum-mutasyon-sonra.txt",
-      "sha256": "7bf4b291fc9950f1e840344813d19a5a68ffd3c6c3256292d35ee807593a1b29",
+      "sha256": "ce3b245cf6c81f9d1fc4ddd578b38ed9c80acb811465ba97578114c445adf461",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/elogo-mutasyon.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T22:11:13+03:00",
-      "sure_sn": 17.7
+      "zaman": "2026-10-09T22:13:35+03:00",
+      "sure_sn": 17.5
     }
   ],
-  "imza": "9888d5a90a8bcb9c02e2777ca5ce19a8e2244a23e0929316d5fc06fedc9eda1f"
+  "imza": "d4ab903f63fda39c39d0a63c71cd14be2ecd41a2dcd042768c71961c6f09a293"
 }

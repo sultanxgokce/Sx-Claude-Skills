@@ -191,13 +191,18 @@ def paketle(xml: bytes, belge_adi: str, tarih: date | None = None) -> dict[str, 
     #    saf hesapla. Tavanın niçin 47 olduğu AD_TAVANI'nın başında yazılı.
     if len(dosya_adi) > AD_TAVANI:
         raise PaketHatasi(
-            f"paket adı çok uzun: {len(dosya_adi)} hane (ölçülmüş geçen tavan "
-            f"{AD_TAVANI}, .zip dahil) — gönderim YAPILMADI.\n"
-            f"   e-Logo bu adı reddeder ve ret ağa çıktıktan sonra düşer; "
-            f"belge numarası o ana kadar harcanmış olur.\n"
+            f"paket adı ölçülmüş güvenli tavanı aşıyor: {len(dosya_adi)} hane "
+            f"> {AD_TAVANI} (.zip dahil) — gönderim YAPILMADI.\n"
+            f"   Ölçülen: {AD_TAVANI} hane GEÇTİ, 56 hane e-Logo tarafından "
+            f"REDDEDİLDİ. Aradaki değerler ÖLÇÜLMEDİ — bu adın reddedileceğini "
+            f"BİLMİYORUZ, geçeceğini de.\n"
+            f"   Kapı burada duruyor çünkü ret ancak ağa çıktıktan sonra düşer ve "
+            f"belge numarası o ana kadar harcanmış olur; bilinmezlikte durmak, "
+            f"numara dizisinde boşluk bırakmaktan ucuzdur.\n"
             f"   ad: {dosya_adi}\n"
             f"   Çare: adı belgenin kendi numarasına indir (--belge-adi), "
-            f"irsaliye/sipariş numaralarını adın içine yığma."
+            f"irsaliye/sipariş numaralarını adın içine yığma. Tavanı yükseltmek "
+            f"ayrı iştir ve yeni bir ÖLÇÜM ister."
         )
 
     ham_zip = zip_kur({f"{ad}.xml": xml})

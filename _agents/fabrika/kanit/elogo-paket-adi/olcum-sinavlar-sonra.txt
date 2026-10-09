@@ -1,5 +1,5 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/elogo-sinav.sh
-# rc=0 sure=2.4s zaman=2026-10-09T22:10:37+03:00
+# rc=0 sure=2.4s zaman=2026-10-09T22:13:17+03:00
 --- stdout ---
 A · alan sözleşmesi
   ✓ dört alan da üretilir
@@ -39,6 +39,7 @@ H · 🔴 uzunluk kapısı — ret ağa çıkmadan ÖNCE düşer
   ✓ H2 · tavanın bir hane üstü REDDEDİLİR
   ✓ H3 · ölçülmüş RET uzunluğu (56) reddedilir
   ✓ H4 · tavan ölçülmüş değerde, tahminle yükseltilmemiş
+  ✓ H4b · 🔴 hata metni ÖLÇMEDİĞİ kesinliği iddia etmez (K01)
   ✓ H5 · adda zarfı bozacak karakter reddedilir (ad artık XML'den geliyor)
   ✓ H6 · adda yazdırılamaz karakter reddedilir
 I · 🔴 ÇAĞIRAN KİM — gövde fiilen bu yolu kullanıyor mu (mutasyon)
@@ -47,7 +48,7 @@ I · 🔴 ÇAĞIRAN KİM — gövde fiilen bu yolu kullanıyor mu (mutasyon)
   ✓ I4 · kuru koşumda ad-türetme dalı ÖLÜ DEĞİL (tek argümanla çağrılabilir)
   ✓ I3 · paketleyicinin kendi kuru koşumu da dosya adına düşmüyor
 
-toplam=36 geçen=36 düşen=0
+toplam=37 geçen=37 düşen=0
 ### elogo_paket.test.sh rc=0
 K3 · onay kapısı (yer-tutucu geçmez)
   ✓ reddedilir: ""
