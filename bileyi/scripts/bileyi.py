@@ -349,6 +349,18 @@ def tur_durumu_yolu(depo: Path) -> Path:
     return depo / "_agents" / "fabrika" / "bileyi-tur.json"
 
 
+def havuz_deposu(n) -> Path:
+    """Havuzların yaşadığı depo. KOD deposundan AYRI olabilir.
+
+    🔴 Ölçülmüş gerçek: bulgu ve aday havuzları merkez odada (Nexus) yaşıyor,
+    üretilen yetenek ise başka bir depoya (ör. beceri deposu) iniyor. İlk yazım
+    tek depo varsayıyordu ve bu, aracın kendi gerçek ilk işinde patlıyordu.
+    Varsayılan `--depo`; ayrıldığında `--havuz-depo` verilir.
+    """
+    h = getattr(n, "havuz_depo", None)
+    return Path(h).resolve() if h else Path(n.depo).resolve()
+
+
 FABRIKA = Path("/config/.claude/skills/yazilim-fabrikasi/scripts")
 
 # ───────────────────────────────────────── kill-switch
@@ -395,7 +407,8 @@ def esik_dosyasi(n) -> Path:
 
 
 def olc_veri(n) -> dict:
-    depo = Path(n.depo).resolve()
+    # Havuzlar HAVUZ deposunda, ölçüm oradan yapılır.
+    depo = havuz_deposu(n)
     kim = kimlik(depo)
     es = esik_oku(esik_dosyasi(n))
     # 🔴 BAĞIMSIZ GÖZÜN TUR-1 BULGUSU: komut satırı ezmesi dosyanın pozitif-tam-sayı
@@ -589,7 +602,7 @@ def komut_tur(n) -> int:
              kendi adayını alır, kaynak bulgu kimliklerini taşır, tavan
              fiilen keser ve aynı tekrar iki kez aday olmaz.
     """
-    depo = Path(n.depo).resolve()
+    depo = havuz_deposu(n)
     kapali, gerekce = kapali_mi()
     if kapali and not n.kuru:
         print(f"🔴 otonom tur KAPALI — koşmuyorum. gerekçe: {gerekce}")
@@ -711,7 +724,7 @@ def komut_kart(n) -> int:
     if not kart.exists():
         raise Durdu(f"fabrika kart aracı yok: {kart} — ÖLÇEMEDİM", 3)
     if n.anahtar:
-        hata = _adayi_ise_bagla(depo, n.anahtar, n.is_)
+        hata = _adayi_ise_bagla(havuz_deposu(n), n.anahtar, n.is_)
         if hata:
             print(f"   🟡 aday bağlanamadı: {hata}")
             print("      Kart açılacak ama kapanış damgası ATILAMAZ (fail-closed).")
@@ -805,13 +818,35 @@ def komut_devam(n) -> int:
     if n.kuru:
         print("\n(kuru koşum — sınıfsız iş birleştirilebilirdi, birleştirilmedi)")
         return 0
+
+    # 🔴 PR yoksa KENDİ AÇAR. Eksik halka buydu: `devam` birleştirmeye kalkıyor
+    #    ama birleştirecek bir teslim yoktu. Kalite kapıları fiilen koştuğu için
+    #    yaptırım işareti meşrudur (gate'ler koşmadan taşımak ihlaldir).
+    rcv, cikv = _kos(["gh", "pr", "view", n.dal, "--json", "number"], depo, 120)
+    if rcv != 0:
+        print("   teslim yok — açıyorum…")
+        ortam = dict(os.environ, AGENT_DASHBOARD_PR_SKILL="1")
+        try:
+            a = subprocess.run(
+                ["gh", "pr", "create", "--base", "main", "--head", n.dal,
+                 "--title", f"fix: {n.is_} — bileyi otonom turu (sınıfsız)",
+                 "--body", ("Bileyi otonom turu. Ölçülen tekrar aday havuzunda, sınıf kâhini "
+                            "dört soruyu da 'h' cevapladı, bağımsız göz geçti.\n\n"
+                            "🤖 Generated with [Claude Code](https://claude.com/claude-code)")],
+                capture_output=True, text=True, timeout=300, cwd=str(depo), env=ortam)
+        except (OSError, subprocess.SubprocessError) as e:
+            print(f"   🔴 teslim açılamadı: {e}")
+            return 1
+        print("   " + (a.stdout + a.stderr).strip()[:300])
+        if a.returncode != 0:
+            return 1
     rc4, cik4 = _kos(["gh", "pr", "merge", "--squash", "--delete-branch", n.dal], depo, 300)
     print(cik4.strip()[:400])
     if rc4 != 0:
         print("   🔴 birleştirme başarısız — el değmeden bırakıldı.")
         return 1
     print("\n✓ SINIFSIZ iş otonom birleştirildi.")
-    return _kapanis_damgasi(depo, n.is_, cik4)
+    return _kapanis_damgasi(havuz_deposu(n), n.is_, cik4)
 
 
 def _kapanis_damgasi(depo: Path, is_: str, kanit: str) -> int:
@@ -885,6 +920,8 @@ def main(argv: list[str]) -> int:
     a = argparse.ArgumentParser(prog="bileyi", description=__doc__.splitlines()[0])
     a.add_argument("--depo", default=os.environ.get("BILEYI_DEPO", "."),
                    help="ölçülecek odanın deposu (vars. içinde bulunduğun)")
+    a.add_argument("--havuz-depo", default=os.environ.get("BILEYI_HAVUZ_DEPO"),
+                   help="havuzların yaşadığı depo (KOD deposundan ayrıysa)")
     a.add_argument("--esik-dosya", default=None, help="eşik dosyası (vars. becerinin yanındaki)")
     alt = a.add_subparsers(dest="komut", required=True)
 

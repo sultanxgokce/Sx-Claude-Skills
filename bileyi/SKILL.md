@@ -204,6 +204,19 @@ bileyi.sh kart  --is <ad> --hedef <yol>… sınıfı KÂHİN cevaplar, kartı A�
 bileyi.sh devam --is <ad> --dal <dal>     kanıt + bağımsız göz + SINIFSIZSA birleştir
 ```
 
+## Ürettiği yetenekler (bileyi'nin kendi ürünleri)
+
+| Yetenek | Hangi tekrardan doğdu | Ne yapar |
+|---|---|---|
+| `scripts/guvenli-sil.sh` | **engellenen silme girişimi · 30 olay / 14 gün · yükselen** | geçici dizini meşru yolla siler: yasaklı deseni hiç kullanmaz, karşılığında dört kendi kapısını koyar (izinli kök · bağ değil · üst-yol yok · kökün kendisi değil) |
+
+🔴 **Koruma gevşetilmedi.** Kanca haklıdır ve haklı kalmalı: desen niyeti değil dizgiyi
+eşler, bir kez gevşerse gerçek bir kaza geçer. Çare korumayı delmek değil **meşru bir yol
+açmak** — ve kancayı atlayan bir araç, kancanın koruduğu şeyi **kendisi** korumak zorundadır.
+Bu yüzden araç dört kapılı ve 18 sınav kapısı var; `/tmp`'nin tamamı bilerek izinli **değil**
+(ilk yazımda öyleydi, kendi sınavım yakaladı — başka oturumların dizinleri silinebilir
+durumdaydı).
+
 ## Sınırlar / dürüstlük
 
 - Bu komut **sürtünme üretmez**, var olanı görür. Havuz boşsa çıktı da boştur.
