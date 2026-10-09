@@ -1,16 +1,25 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-mutasyon.sh
-# rc=0 sure=19.2s zaman=2026-10-09T22:35:03+03:00
+# rc=0 sure=58.4s zaman=2026-10-09T22:47:43+03:00
 --- stdout ---
 POZITIF KONTROL · temiz hal (ONCE) rc=0
-  OK  M1 dayanaksiz esigi kabul etmek -> KIRMIZI
-  OK  M2 havuz yokken temiz demek -> KIRMIZI
-  OK  M3 bos kimligi kabul etmek -> KIRMIZI
-  OK  M4 tek-partiyi tekrar saymak -> KIRMIZI
-  OK  M5 kapsamayi basmamak -> KIRMIZI
-  OK  M6 surtunme yoksa yok demek -> KIRMIZI
-  OK  M7 kill-switch i yok saymak -> KIRMIZI
-  OK  M8 bozuk satiri sessizce atlamak -> KIRMIZI
-  OK  M9 esik 0 i kabul etmek -> KIRMIZI
+  OK  M01 dayanaksiz esigi kabul etmek -> KIRMIZI
+  OK  M02 havuz yokken temiz demek -> KIRMIZI
+  OK  M03 bos kimligi kabul etmek -> KIRMIZI
+  OK  M04 tek-partiyi tekrar saymak -> KIRMIZI
+  OK  M05 kapsamayi basmamak -> KIRMIZI
+  OK  M06 surtunme yoksa yok demek -> KIRMIZI
+  OK  M07 kill-switch i yok saymak -> KIRMIZI
+  OK  M08 bozuk satiri sessizce atlamak -> KIRMIZI
+  OK  M09 esik 0 i kabul etmek -> KIRMIZI
+  OK  M10 anahtar varsayilanini Path() tuzagina geri atmak -> KIRMIZI
+  OK  M11 esik ezmesini kapisiz birakmak -> KIRMIZI
+  OK  M12 celiski kapisini kaldirmak -> KIRMIZI
+  OK  M13 bilinmeyen yolu guvenli saymak -> KIRMIZI
+  OK  M14 sinif kurallarini dayanaksiz kabul etmek -> KIRMIZI
+  OK  M15 tur un aday havuzu kapisini kaldirmak -> KIRMIZI
+  OK  M16 tur u yine ekrana basmaya dusurmek -> KIRMIZI
+  OK  M17 sinif yukari cikinca yine devam etmek -> KIRMIZI
+  OK  M18 devam da kill-switch i yok saymak -> KIRMIZI
 POZITIF KONTROL · temiz hal (SONRA) rc=0
 sus-kapi=0
 --- stderr ---

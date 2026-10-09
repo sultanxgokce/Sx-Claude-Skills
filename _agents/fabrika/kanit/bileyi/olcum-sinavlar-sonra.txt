@@ -1,5 +1,5 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-sinav.sh
-# rc=0 sure=2.9s zaman=2026-10-09T22:34:44+03:00
+# rc=0 sure=4.4s zaman=2026-10-09T22:46:45+03:00
 --- stdout ---
 A · temel akış
   ✓ A1 eşiği aşan tekrar VAR → rc=0
@@ -41,12 +41,39 @@ I · 🔴 kimlik kapısı (çivili yol / sızıntı panzehiri)
   ✓ I1 kimlik aracı yoksa rc=3 — başkasının defterine DÜŞMEZ
   ✓ I2 kimlik BOŞ dönerse de rc=3 (boş ad kabul edilmez)
 J · 🔴 yeni havuz KURULMAZ · A06
-  ✓ J1 araç bulgu/aday havuzuna YAZMAZ (yalnız okur)
+  ✓ J1 🔴 araç BULGU havuzuna asla yazmaz (yeni havuz da kurmaz)
   ✓ J2 araç ONAY alanı yazmaz (A06)
   ✓ J3 kimlik ORTAM değişkeninden alınmaz (taklit panzehiri)
   ✓ J4 süzme yeniden yazılmaz — mucit-suz'e devredilir (SKILL.md'de yazılı)
+K · 🔴 kill-switch ÜRETİM yolu (bağımsız gözün tur-1 bulgusu, ciddi)
+  ✓ K1 ortam değişkeni YOKken varsayılan DOSYA kullanılır (çalışma dizini DEĞİL)
+  ✓ K2 ortam değişkeni VERİLİRSE o yol kullanılır
+L · eşik ezmesi de kapıdan geçer (tur-1 bulgusu)
+  ✓ L1 negatif --ikili-esik → rc=2
+  ✓ L2 sıfır --ikili-esik → rc=2
+  ✓ L3 geçerli ezme çalışır
+M · 🔴 iki yüzey ÇELİŞİRSE hüküm YOK (tur-1 bulgusu)
+  ✓ M1 tüm adaylarda çelişki varsa rc=3 (ne temiz ne kirli)
+  ✓ M2 çelişki işaretlenir ve niçini yazılır
+N · 🔴 sınıf kâhini (otonom turun emniyeti)
+  ✓ N1 güvenli yol → dört sınıf da h
+  ✓ N2 yetki deseni tutarsa yetki=e
+  ✓ N3 🔴 BİLİNMEYEN yol → '?' → SULTAN'A GİDER (şüphede sınıf YUKARI)
+  ✓ N4 para deseni tutarsa para=e
+  ✓ N5 sınıf kurallarının dayanağı yoksa rc=3 — sınıf UYDURULMAZ
+  ✓ N6 sınıf kuralları dosyası yoksa rc=3
+O · 🔴 'tur' FİİLEN iş yapar (tur-1 bulgusu: eskiden ekrana basıyordu)
+  ✓ O1 aday havuzu YOKsa tur rc=3 — yeni havuz KURMAZ
+  ✓ O2 aday havuzu varsa tur koşar
+  ✓ O3 🔴 tur aday havuzuna GERÇEKTEN yazdı (basmakla yetinmedi)
+  ✓ O4 🔴 tur durum dosyası bıraktı (yazım aşaması bir DURUM, tavsiye değil)
+  ✓ O5 kuru tur HİÇBİR ŞEY yazmaz
+P · 🔴 'devam' birleştirme kilitleri
+  ✓ P1 kartsız iş birleştirilmez → rc=3
+  ✓ P2 kill-switch kapalıyken devam rc=4 (birleştirmez)
+  ✓ P3 🔴 sınıf YUKARI çıkarsa birleştirme YOK — hem rc hem SEBEP ölçülür
 
-toplam=33 geçen=33 düşen=0
+toplam=54 geçen=54 düşen=0
 ### bileyi.test.sh rc=0
 ### manifest-parity rc=0
 ### versiyon-lint rc=0

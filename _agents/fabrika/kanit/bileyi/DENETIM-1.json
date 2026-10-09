@@ -1,0 +1,46 @@
+{
+  "tur": 1,
+  "is": "bileyi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-09T22:36:24+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 64671,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "H",
+    "ozet": "Bileyi adlı iç-tarama aracı, eşik ve kapsam denetimleriyle birlikte eklenmiş; ancak üretimde kill-switch varsayılanı bozuk ve vaat edilen otonom uygulama hattı gerçekte kurulmamış. Önce bu ciddi işlev boşlukları çözülmeli; ayrıca iş kartı bulunmadığından yapılan değişikliğin talebi karşıladığı doğrulanamaz.",
+    "bulgular": [
+      {
+        "ne": "Kill-switch yolu ortam değişkeni verilmediğinde varsayılan dosyaya değil mevcut dizine çözülüyor; araç normal üretim çağrısında dizini kapalı anahtar sanabilir, `dur` ise dizine yazmaya çalışarak hata verebilir.",
+        "kanit": "`Path(os.environ.get(\"BILEYI_ANAHTAR\", \"\")) or ...` ifadesinde `Path(\"\")` değeri `Path('.')` olur ve truthy olduğu için sağdaki `/config/.claude/bileyi-kapali` varsayılanına geçilmez. Sınavların tamamı `BILEYI_ANAHTAR` verdiğinden yeşil sonuç bu üretim yolunu kapsamıyor.",
+        "konum": "bileyi/scripts/bileyi.py:209",
+        "agirlik": "ciddi"
+      },
+      {
+        "ne": "“Tam otonom” diye tanımlanan tur hiçbir kart açmıyor, iş alanı/inşa/kanıt/denetim/birleştirme işlemi çağırmıyor; yalnız yapılacak adımları ekrana yazıyor.",
+        "kanit": "`komut_tur`, `komut_olc` sonrasında sadece `SIRADAKİ` başlığı ve 0–5 yönergelerini `print` ediyor, ardından 0 dönüyor. Buna karşılık SKILL.md sınıfsız işin uçtan uca bitirilip kendi birleştirileceğini söylüyor; gerçek koşum kanıtı da yalnız ölçüm çıktısı içeriyor.",
+        "konum": "bileyi/scripts/bileyi.py:337",
+        "agirlik": "ciddi"
+      },
+      {
+        "ne": "Belgelenen “iki yüzey çelişiyorsa hüküm yok ve tur durur” kapısı uygulanmamış.",
+        "kanit": "`komut_olc`, sınıf ve ikili sonuçlarını bağımsızca `bulunan` listesine ekliyor; yüzeyler arasında çelişki denetimi veya durdurma dalı bulunmuyor. Sunulan 33 sınav arasında da yüzey çelişkisi vakası yok.",
+        "konum": "bileyi/scripts/bileyi.py:253",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Komut satırındaki ikili eşik ezmesi ölçülmüş dayanak ve pozitif tam sayı kapısını aşabiliyor.",
+        "kanit": "`ik_esik = n.ikili_esik if n.ikili_esik else es[\"ikili_esik\"]` nedeniyle negatif bir `--ikili-esik` doğrudan kabul edilir; `esik_oku` yalnız dosyadaki değeri doğrular. Yardım metni de ezmenin dosyadaki dayanağı değiştirmediğini açıkça belirtiyor.",
+        "konum": "bileyi/scripts/bileyi.py:232",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok, gerçek havuzla bir sonrasında koşum ile 33/33 sınav ve 9 mutasyon sonucu var. Ancak gerçek bir önce/sonra ölçüm çifti yok: “önce” kaydı yalnız mevcut friction-report çağıranlarını sayıyor, “sonra” ise farklı bir bileyi ölçümü yapıyor; ayrıca yeşil sınavlar varsayılan kill-switch yolunu, yüzey çelişkisini ve vaat edilen otonom hattın gerçekten çağrılmasını sınamıyor."
+  }
+}

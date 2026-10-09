@@ -1,0 +1,36 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-kahin.sh
+# rc=0 sure=0.2s zaman=2026-10-09T22:46:40+03:00
+--- stdout ---
+== 1 · GUVENLI yol -> dort sinif da h (otonom birlestirmeye ACIK)
+🔪 sınıf kâhini · hedef yollar: bileyi/scripts/x.py
+   geri_alinamaz   = h
+   para            = h
+   dis_yuzey       = h
+   yetki           = h
+   gerekçe: tüm yollar güvenli önek içinde, desen tutmadı
+(kuru koşum — kart açılmadı)
+
+== 2 · YETKI deseni -> yetki=e ve SULTAN
+🔪 sınıf kâhini · hedef yollar: hooks/yeni.js
+   geri_alinamaz   = ?
+   para            = ?
+   dis_yuzey       = ?
+   yetki           = e
+   gerekçe: yetki=e · 'hooks/' → hooks/yeni.js | ? · güvenli öneklerin dışında yol var: hooks/yeni.js
+   🔴 '?' var → kanona göre bu iş SULTAN'A GİDER (şüphede sınıf YUKARI)
+(kuru koşum — kart açılmadı)
+
+== 3 · NEGATIF KONTROL: bilinmeyen yol -> '?' -> SULTAN (fail-closed)
+🔪 sınıf kâhini · hedef yollar: ui/app/sayfa.tsx
+   geri_alinamaz   = ?
+   para            = ?
+   dis_yuzey       = ?
+   yetki           = ?
+   gerekçe: ? · güvenli öneklerin dışında yol var: ui/app/sayfa.tsx
+   🔴 '?' var → kanona göre bu iş SULTAN'A GİDER (şüphede sınıf YUKARI)
+(kuru koşum — kart açılmadı)
+
+== 4 · POZITIF KONTROL: kill-switch varsayilani ORTAM DEGISKENI OLMADAN
+🔪 BİLEYİ · durum
+   otonom tur: 🟢 açık
+--- stderr ---

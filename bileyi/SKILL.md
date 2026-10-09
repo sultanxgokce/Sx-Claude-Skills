@@ -127,19 +127,45 @@ söz öbeğini gürültüden ayırıyor — tek ve iki kez görünen öbekler y�
 *"kurdum ama koşmuyor"*: kural yazılı, kapısı yok, göstergesi yeşil. Var olan bir kuralı
 kapıya bağlamak, yeni bir beceri yazmaktan **neredeyse her zaman** daha değerlidir.
 
-### 4 · UYGULA (otonom — fabrika hattı)
+### 4 · UYGULA (otonom — araç FİİLEN yapar, tavsiye basmaz)
 
-Kendi hat kurallarını icat etmez, `yazilim-fabrikasi` hattına girer:
-kart → iş alanı → inşa → kanıt → bağımsız göz → teslim.
+🔴 **Bu bölüm bir kez yalan söyledi ve bağımsız göz yakaladı.** İlk sürümde `tur`
+komutu ölçümden sonra "sıradaki adımlar" diye altı satır **basıyor** ve 0 dönüyordu;
+belge ise uçtan uca otonomluk vaat ediyordu. Yani becerinin manşet iddiası
+belgelenmiş, yapılmamıştı — bu filoda en pahalı sınıf olan *"kurdum ama koşmuyor"*un
+manşet hâli. Şimdi üç komut da gerçek iş yapıyor:
 
-- **sınıfsız** → araç kendi birleştirir, deftere kanıt+puan+damga işler
-- **sınıflı** → Sultan'ın kapısına kart, birleştirme onda
+| Komut | FİİLEN ne yapar |
+|---|---|
+| `tur` | ölçer · **var olan** aday havuzuna satır yazar · tur durumunu diske bırakır |
+| `kart` | sınıf sorularını **kâhinle** cevaplar ve kartı fabrika aracıyla **açar** |
+| `devam` | diffin sınıfını **yeniden ölçer** · kanıt + bağımsız gözü **koşar** · sınıfsızsa **birleştirir** |
+
+**Yapmadığı tek şey ve onu gizlemiyor:** *yazmak.* Bir kural metnini ya da yeni bir
+beceriyi bir kabuk betiği yazamaz; onu ajan yazar. Fark şurada: eskiden **bütün hat**
+tavsiyeydi, şimdi yalnız bu tek adım bir **durum**dur — diskte durur, `devam` onu arar.
+
+### Sınıf kâhini — otonomluğun emniyet supabı
+
+Otonom tur kart açacaksa sınıf sorusu cevaplanmak zorundadır. Bunu ajanın serbest
+muhakemesine bırakmak, **ajanın kendi işini "sınıfsız" ilan edip kendi kendine
+birleştirmesine** kapı açardı. O yüzden cevap muhakemeden değil, **denetlenebilir bir
+listeden** gelir: `sinif-kurallari.json` (ölçülmüş dayanağı zorunlu; dayanaksızsa rc=3).
+
+- bir desen tutarsa → sınıf **e**
+- güvenli öneklerin **hiçbirini** tutmayan tek bir yol varsa → sınıf **"?"** → **Sultan**
+- güvenli önek listesi bilerek **dardır**; onu genişletmek bir yetki genişletmesidir,
+  yani Sultan kararıdır
+
+🔴 **Sınıf iki kez ölçülür.** Kart açıldığında henüz diff yoktur; `devam` gerçek diffi
+ölçer. Gerçek sınıf karttakinden **yukarı** çıkmışsa birleştirme YOK. Aşağı inmişse de
+kartın sınıfı **korunur** — sınıf aşağı çekilmez.
 
 ### 5 · KAYDET
 
-Üretilen yetenek bulgu havuzundaki **kaynak satırlara** bağlanır (hangi tekrarı kapattığı
-yazılır) ve o satırlar `kapandi` damgası alır. Damgasız kapanış, bir sonraki turda aynı
-tekrarı yeniden keşfetmek demektir — bu filoda 30 günde 8 kez ölçüldü.
+Üretilen yetenek bulgu havuzundaki **kaynak satırlara** bağlanır (hangi tekrarı
+kapattığı yazılır) ve o satırlar `kapandi` damgası alır. Damgasız kapanış, bir sonraki
+turda aynı tekrarı yeniden keşfetmek demektir — 30 günde 8 kez ölçüldü.
 
 ## Komutlar
 
@@ -148,7 +174,9 @@ bileyi.sh olc   [--gun N] [--esik N]    ölçüm raporu — YAZMAZ, hüküm verm
 bileyi.sh durum                          son tur · kill-switch hâli · eşik ve dayanağı
 bileyi.sh dur   --gerekce "…"            otonom turu KAPAT (olc/durum kesilmez)
 bileyi.sh ac    --gerekce "…"            otonom turu aç
-bileyi.sh tur   [--kuru]                 tam tur; --kuru hiçbir şey yazmaz
+bileyi.sh tur   [--kuru]                 ölç + adayı havuza yaz + tur durumu bırak
+bileyi.sh kart  --is <ad> --hedef <yol>… sınıfı KÂHİN cevaplar, kartı AÇAR
+bileyi.sh devam --is <ad> --dal <dal>     kanıt + bağımsız göz + SINIFSIZSA birleştir
 ```
 
 ## Sınırlar / dürüstlük
@@ -160,4 +188,14 @@ bileyi.sh tur   [--kuru]                 tam tur; --kuru hiçbir şey yazmaz
   aynı eşik geçerli değildir ve araç bunu her koşuda söyler.
 - 🔴 **Ölçmediğini söyler:** bir sürtünmenin *maliyeti* bu aracın konusu değildir. Kaç kez
   olduğunu sayar, kaç dakika yediğini **bilmez** ve oraya "temiz" demez — hiç bakmaz.
-- Kendi sınavı: `bash scripts/bileyi.test.sh` (hermetik — gerçek havuza dokunmaz).
+- 🔴 **Çelişki kapısı:** iki yüzey aynı aday hakkında zıt şey söylüyorsa (biri "N kez
+  tekrar etti", öbürü "tek parti") o aday hüküm üretmez; hepsi çelişiyorsa **rc=3** —
+  ne temiz ne kirli. Bu kapı da belgede yazılıp uygulanmamıştı; bağımsız göz yakaladı.
+- Kendi sınavı: `bash scripts/bileyi.test.sh` (**54 kapı**, hermetik — gerçek havuza,
+  gerçek anahtara dokunmaz). Kapılar mutasyonla sınandı: eşik dayanağı · havuz yokluğu ·
+  boş kimlik · tek-parti · kapsama · sürtünme bilinmezliği · kill-switch · bozuk satır ·
+  eşik sıfırı öldürülünce sınav **kırmızıya döner**.
+- 🔴 **Mutasyon düzeneğinin kendi pozitif kontrolü var** ve niçini utandırıcıdır: ilk
+  koşumda bir kopyalama uyarısı yüzünden dizine hiç geçilmemişti ve **on mutasyon da
+  "kırmızı" bastı** (rc=127) — yani mutasyonlar değil kırık düzenek ölçülmüştü. Artık
+  temiz hâl önce ve sonra ölçülür; temiz hâl kırmızıysa koşum **geçersiz** sayılır.

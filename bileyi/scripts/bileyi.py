@@ -233,10 +233,95 @@ def dedup_kaynaklari(depo: Path) -> tuple[set[str], str]:
     return adlar, " · ".join(notlar)
 
 
+
+# ───────────────────────────────────────── sınıf kâhini (otonom turun emniyeti)
+
+def sinif_kurallari(yol: Path | None = None) -> dict:
+    y = yol or (BECERI / "sinif-kurallari.json")
+    if not y.exists():
+        raise Durdu(f"sınıf kuralları yok: {y} — sınıfı UYDURMUYORUM (ÖLÇEMEDİM)", 3)
+    try:
+        d = json.loads(y.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as e:
+        raise Durdu(f"sınıf kuralları okunamadı: {e}", 2)
+    if len(str(d.get("dayanak", "")).strip()) < 40:
+        raise Durdu("sınıf kurallarının ÖLÇÜLMÜŞ DAYANAĞI yok — rc=3", 3)
+    for a in ("geri_alinamaz", "para", "dis_yuzey", "yetki", "guvenli_onekler"):
+        if not isinstance(d.get(a), list) or not d[a]:
+            raise Durdu(f"sınıf kuralı eksik ya da boş: {a}", 2)
+    return d
+
+
+def sinifla(yollar: list[str], kurallar: dict) -> dict[str, str]:
+    """Dokunulan yollardan dört sınıf sorusunu cevaplar. FAIL-CLOSED.
+
+    🔴 Niçin araç cevaplıyor: otonom tur kart açacaksa sınıf sorusu cevaplanmak
+    zorundadır ve onu ajanın serbest muhakemesine bırakmak, ajanın kendi işini
+    "sınıfsız" ilan edip kendi kendine birleştirmesine kapı açardı. Cevap bu
+    yüzden **denetlenebilir bir listeden** gelir, muhakemeden değil.
+
+    🔴 BİLİNMEYEN YOL = "?" = SULTAN. Güvenli öneklerin hiçbirini tutmayan tek
+    bir yol bile varsa sınıf "?" olur; kanonda "?" Sultan'a gider ve şüphede
+    sınıf YUKARI çıkar. Yani liste eksikse araç kendine izin vermez, DURUR.
+    """
+    cevap = {"geri_alinamaz": "h", "para": "h", "dis_yuzey": "h", "yetki": "h"}
+    gerekce: list[str] = []
+    dusuk = [y.lower() for y in yollar]
+
+    for alan in ("geri_alinamaz", "para", "dis_yuzey", "yetki"):
+        for desen in kurallar[alan]:
+            d = desen.lower()
+            tutan = [y for y in dusuk if d in y]
+            if tutan:
+                cevap[alan] = "e"
+                gerekce.append(f"{alan}=e · '{desen}' → {tutan[0]}")
+                break
+
+    yabanci = [y for y in yollar
+               if not any(y.startswith(o) for o in kurallar["guvenli_onekler"])]
+    if yabanci:
+        for alan in cevap:
+            if cevap[alan] == "h":
+                cevap[alan] = "?"
+        gerekce.append("? · güvenli öneklerin dışında yol var: " + ", ".join(yabanci[:4]))
+
+    cevap["_gerekce"] = " | ".join(gerekce) if gerekce else "tüm yollar güvenli önek içinde, desen tutmadı"
+    return cevap
+
+
+def _kos(komut: list[str], cwd: Path, zaman: int = 600) -> tuple[int, str]:
+    try:
+        s = subprocess.run(komut, capture_output=True, text=True, timeout=zaman, cwd=str(cwd))
+    except (OSError, subprocess.SubprocessError) as e:
+        return 9, f"çalıştırılamadı: {e}"
+    return s.returncode, (s.stdout or "") + (s.stderr or "")
+
+
+def tur_durumu_yolu(depo: Path) -> Path:
+    return depo / "_agents" / "fabrika" / "bileyi-tur.json"
+
+
+FABRIKA = Path("/config/.claude/skills/yazilim-fabrikasi/scripts")
+
 # ───────────────────────────────────────── kill-switch
 
+ANAHTAR_VARSAYILAN = Path("/config/.claude/bileyi-kapali")
+
+
 def anahtar_yolu() -> Path:
-    return Path(os.environ.get("BILEYI_ANAHTAR", "")) or Path("/config/.claude/bileyi-kapali")
+    """Kill-switch dosyasının yolu.
+
+    🔴 BAĞIMSIZ GÖZÜN TUR-1 BULGUSU (ciddi): eski satır
+    `Path(os.environ.get(...,"")) or VARSAYILAN` idi. `Path("")` → `Path(".")`
+    ve o **truthy**'dir; yani varsayılan HİÇBİR ZAMAN uygulanmıyordu. Üretimde
+    anahtar yolu çalışma dizini oluyordu, dizin de **var** olduğu için araç
+    kendini DAİMA "kapalı" sanıyordu ve `dur` bir dizine yazmaya çalışıyordu.
+    Sınavların hepsi ortam değişkenini verdiği için **üretim yolu hiç
+    ölçülmemişti** — "sınav yeşil, yol çalışmıyor" sınıfının birebir kendisi.
+    Artık boşluk açıkça sınanıyor ve bu yolun kendi kapısı var.
+    """
+    ham = os.environ.get("BILEYI_ANAHTAR", "").strip()
+    return Path(ham) if ham else ANAHTAR_VARSAYILAN
 
 
 def kapali_mi() -> tuple[bool, str]:
@@ -265,6 +350,11 @@ def komut_olc(n) -> int:
     depo = Path(n.depo).resolve()
     kim = kimlik(depo)
     es = esik_oku(esik_dosyasi(n))
+    # 🔴 BAĞIMSIZ GÖZÜN TUR-1 BULGUSU: komut satırı ezmesi dosyanın pozitif-tam-sayı
+    #    kapısını AŞIYORDU — negatif bir eşik doğrudan kabul ediliyordu ve o eşikte
+    #    her söz öbeği "tekrar" olurdu. Ezme de aynı kapıdan geçer.
+    if n.ikili_esik is not None and n.ikili_esik < 1:
+        raise Durdu(f"--ikili-esik pozitif tam sayı olmalı (verilen: {n.ikili_esik})", 2)
     ik_esik = n.ikili_esik if n.ikili_esik else es["ikili_esik"]
     sn_esik = es["sinif_esik"]
     pencere = n.gun if n.gun is not None else es.get("pencere_gun", 30)
@@ -290,9 +380,21 @@ def komut_olc(n) -> int:
     tek_parti_sayisi = [0]
 
     print(f"── YÜZEY 1 · sınıf alanı (kesin, kısmi kapsama)")
+    # 🔴 ÇELİŞKİ KAPISI — bağımsız gözün tur-1 bulgusu: belge "iki yüzey çelişirse
+    #    hüküm YOK" diyordu ama hiçbir yerde ölçülmüyordu. Çelişki şudur: sınıf
+    #    yüzeyi "bu N kez tekrar etti" derken, AYNI kayıtların kimlikleri tek bir
+    #    partiden geliyorsa öbür yüzey "bu bir olay" diyor. İki yüzey aynı aday
+    #    hakkında zıt şey söylüyorsa o aday hüküm üretmez.
     s1 = [(k, v) for k, v in o["sinif"].most_common() if v >= sn_esik]
+    celiski = []
     if s1:
         for k, v in s1[:10]:
+            idler = [str(r.get("id", "?")) for r in kayit
+                     if str(r.get("sinif", "")).strip().lower() == k]
+            if tek_parti_mi(idler):
+                celiski.append((k, v, idler))
+                print(f"   {v:3d} × {k[:60]}  ⚡ ÇELİŞKİ: öbür yüzey tek parti diyor [{','.join(idler[:4])}]")
+                continue
             print(f"   {v:3d} × {k[:80]}")
             bulunan.append(("sinif", k, v))
     else:
@@ -326,6 +428,11 @@ def komut_olc(n) -> int:
         print(f"   ⚠ {tek_parti_sayisi[0]} söz öbeği TEK PARTİ sayıldı ve tekrar sayılmadı —")
         print(f"     ardışık kimlikler aynı oturumun tek olayıdır. (Yanlış-negatif verebilir:")
         print(f"     ardışık olmayan ama aynı oturumdan gelen kayıtları bu ölçü göremez.)")
+    if celiski and not bulunan:
+        print(f"⚡ HÜKÜM YOK — eşiği aşan {len(celiski)} adayın hepsinde iki yüzey ÇELİŞİYOR.")
+        print("   Çelişki 'temiz' değildir ve 'kirli' de değildir; çözülmesi gerekir.")
+        print("   Çare: çelişen kayıtların sınıf alanını gözden geçir ya da pencereyi genişlet.")
+        return 3
     if not bulunan:
         print("✓ eşiği aşan TEKRAR YOK — bileyecek bir şey çıkmadı (bu bir ölçümdür, iddia değil)")
         return 1
@@ -376,24 +483,185 @@ def komut_ac(n) -> int:
 
 
 def komut_tur(n) -> int:
+    """Otonom turu BAŞLATIR — fiilen iş yapar, yapılacaklar listesi BASMAZ.
+
+    🔴 BAĞIMSIZ GÖZÜN TUR-1 BULGUSU (ciddi): bu komut eskiden ölçümden sonra
+    "sıradaki adımlar" diye altı satır **basıyordu** ve 0 dönüyordu. Yani
+    becerinin manşet iddiası ("tam otonom") belgeleniyor, yapılmıyordu —
+    bu filoda en pahalı sınıf olan "kurdum ama koşmuyor"un manşet hâli.
+    Artık üç komut da gerçek iş yapıyor: `tur` adayı havuza yazar ve kartı
+    sınıf kâhiniyle AÇAR, `devam` kanıtı toplar + bağımsız gözü koşar +
+    sınıfsızsa BİRLEŞTİRİR.
+
+    🔴 Bir şeyi yapmaz ve bunu gizlemez: **yazmayı**. Bir kural metnini ya da
+    yeni bir beceriyi bir kabuk betiği yazamaz; onu ajan yazar. Fark şu: eskiden
+    bütün hat tavsiyeydi, şimdi yalnız bu tek adım bir **durum**dur — diskte
+    duruyor, `devam` onu arar ve yoksa ilerlemez.
+    """
+    depo = Path(n.depo).resolve()
     kapali, gerekce = kapali_mi()
     if kapali and not n.kuru:
         print(f"🔴 otonom tur KAPALI — koşmuyorum. gerekçe: {gerekce}")
-        print("   Açmak Sultan kararıdır: bileyi.sh ac --gerekce \"…\"")
+        print('   Açmak Sultan kararıdır: bileyi.sh ac --gerekce "…"')
         return 4
+
     rc = komut_olc(n)
     if rc != 0:
         return rc
+
+    # Adaylar VAR OLAN havuza yazılır — yeni havuz kurulmaz.
+    aday_yolu = depo / "_agents" / "handoff" / "layiha-aday-havuzu.jsonl"
+    if not aday_yolu.exists():
+        print(f"\n⛔ aday havuzu yok ({aday_yolu}) — YENİ HAVUZ KURMUYORUM.")
+        print("   Bu odada aday havuzu kurulu değilse bu tur burada durur.")
+        return 3
+
     print()
-    print("── SIRADAKİ (fabrika hattı — bu araç kod YAZMAZ, hattı çağırır)")
-    print("   0 KABUL  · kart.sh ac <iş> … · sınıf sorularını ÖLÇÜMDEN cevapla, gerekçeyi karta yaz")
-    print("   1 İZOLE  · is-alani.sh ac <iş>")
-    print("   2 İNŞA   · önce 'kural var mı, koşuyor mu'")
-    print("   3 KANIT  · kanit.sh olcum … (önce/sonra · pozitif kontrol · mutasyon)")
-    print("   4 GÖNDER · denetci.sh (bağımsız göz) → sınıfsız: kendin birleştir · sınıflı: Sultan")
-    print("   5 KAYDET · kapatılan tekrarı bulgu satırlarına damgala")
+    print("── ADAY YAZIMI (var olan aday havuzuna)")
+    if n.kuru:
+        print("   (kuru koşum — yazılmadı)")
+    else:
+        kim = kimlik(depo)
+        damga = datetime.now(timezone.utc).isoformat()
+        with aday_yolu.open("a", encoding="utf-8") as f:
+            f.write(json.dumps({
+                "kaynak": "bileyi",
+                "tarih": date.today().isoformat(),
+                "bulan": kim,
+                "baslik": "iç-tarama: tekrar eden sürtünme ölçüldü",
+                "not": ("Eşiği aşan tekrarlar bileyi ölçümünde basıldı. Hangi cinsten yetenek "
+                        "üretileceği (kural · yapılandırma · beceri) muhakeme ister; ÖNCE "
+                        "'kural var mı, koşuyor mu' sorulur."),
+                "damga": damga,
+            }, ensure_ascii=False) + "\n")
+        print(f"   ✓ aday havuzuna 1 satır yazıldı ({aday_yolu.name})")
+
+    durum = tur_durumu_yolu(depo)
+    if not n.kuru:
+        durum.parent.mkdir(parents=True, exist_ok=True)
+        durum.write_text(json.dumps({
+            "asama": "yazim-bekliyor",
+            "acildi": datetime.now(timezone.utc).isoformat(),
+            "not": "Kural/yapılandırma/beceri metnini AJAN yazar; betik yazamaz.",
+        }, ensure_ascii=False) + "\n", encoding="utf-8")
+
+    print()
+    print("🔪 TUR AÇIK · aşama: yazım bekliyor")
+    print("   Yazım bitince:  bileyi.sh kart --is <ad> --hedef <yol> [--hedef <yol>…]")
+    print("   Sonra:          bileyi.sh devam --is <ad> --dal <dal>")
     if n.kuru:
         print("\n(kuru koşum — hiçbir şey yazılmadı)")
+    return 0
+
+
+def komut_kart(n) -> int:
+    """Kartı AÇAR ve sınıf sorularını kâhinle cevaplar (muhakemeyle değil)."""
+    depo = Path(n.depo).resolve()
+    kurallar = sinif_kurallari(Path(n.sinif_dosya) if n.sinif_dosya else None)
+    c = sinifla(list(n.hedef), kurallar)
+    print(f"🔪 sınıf kâhini · hedef yollar: {', '.join(n.hedef)}")
+    for alan in ("geri_alinamaz", "para", "dis_yuzey", "yetki"):
+        print(f"   {alan:15s} = {c[alan]}")
+    print(f"   gerekçe: {c['_gerekce']}")
+    if "?" in c.values():
+        print("   🔴 '?' var → kanona göre bu iş SULTAN'A GİDER (şüphede sınıf YUKARI)")
+    if n.kuru:
+        print("(kuru koşum — kart açılmadı)")
+        return 0
+    kart = FABRIKA / "kart.sh"
+    if not kart.exists():
+        raise Durdu(f"fabrika kart aracı yok: {kart} — ÖLÇEMEDİM", 3)
+    rc, cik = _kos(["bash", str(kart), "ac", n.is_,
+                    "--is", n.cumle or "bileyi: tekrar eden sürtünme yeteneğe çevriliyor",
+                    "--istedi", "BILEYI", "--aldi", kimlik(depo),
+                    "--geri-alinamaz", c["geri_alinamaz"], "--para", c["para"],
+                    "--dis-yuzey", c["dis_yuzey"], "--yetki", c["yetki"],
+                    "--kanit", f"_agents/fabrika/kanit/{n.is_}"], depo)
+    print(cik.strip())
+    return 0 if rc == 0 else 1
+
+
+def komut_devam(n) -> int:
+    """Kanıtı toplar, bağımsız gözü koşar, SINIFSIZSA birleştirir.
+
+    🔴 ÜÇ KİLİT, hepsi dosyadan okunur ve fail-closed:
+       (1) kill-switch açık olmalı
+       (2) kartın sınıfı BOŞ olmalı — sınıflı iş Sultan'ındır
+       (3) 🔴 SINIF YENİDEN ÖLÇÜLÜR: kart açıldığında diff yoktu; şimdi var.
+           Gerçek sınıf kartta yazandan YUKARI çıkmışsa birleştirme YOK.
+           Aşağı inmişse de kartın sınıfı KORUNUR — sınıf aşağı çekilmez.
+    """
+    depo = Path(n.depo).resolve()
+    kapali, gerekce = kapali_mi()
+    if kapali:
+        print(f"🔴 otonom tur KAPALI — birleştirmiyorum. gerekçe: {gerekce}")
+        return 4
+
+    kart_yolu = depo / "_agents" / "fabrika" / "kartlar" / f"{n.is_}.json"
+    if not kart_yolu.exists():
+        raise Durdu(f"kart yok: {kart_yolu} — kartsız iş birleştirilmez", 3)
+    try:
+        kart = json.loads(kart_yolu.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as e:
+        raise Durdu(f"kart okunamadı: {e}", 2)
+
+    rc, diff = _kos(["git", "diff", "--name-only", f"origin/main...{n.dal}"], depo)
+    if rc != 0:
+        raise Durdu(f"diff ölçülemedi ({n.dal}): {diff.strip()[:200]}", 3)
+    yollar = [y for y in diff.splitlines() if y.strip()]
+    if not yollar:
+        raise Durdu(f"dalda değişiklik YOK ({n.dal}) — birleştirecek bir şey yok", 3)
+
+    kurallar = sinif_kurallari(Path(n.sinif_dosya) if n.sinif_dosya else None)
+    gercek = sinifla(yollar, kurallar)
+    gercek_siniflar = {a for a in ("geri_alinamaz", "para", "dis_yuzey", "yetki")
+                       if gercek[a] in ("e", "?")}
+    kart_siniflar = set(kart.get("siniflar") or [])
+
+    print(f"🔪 devam · iş={n.is_} · dal={n.dal} · {len(yollar)} dosya")
+    print(f"   kart sınıfı   : {sorted(kart_siniflar) or 'sınıfsız'}")
+    print(f"   ölçülen sınıf : {sorted(gercek_siniflar) or 'sınıfsız'}  ({gercek['_gerekce']})")
+
+    yeni_sinif = gercek_siniflar - kart_siniflar
+    if yeni_sinif:
+        print(f"   🔴 SINIF YUKARI ÇIKTI: {sorted(yeni_sinif)} — kart açıldığında diff yoktu.")
+        print("      Birleştirme YOK. Bu iş Sultan'a gider; kart güncellenmeli.")
+        return 1
+
+    if kart.get("sultan") or kart_siniflar:
+        print("   🔴 SINIFLI İŞ — birleştirme Sultan'ın. Kanıt ve bağımsız göz koşulacak,")
+        print("      birleştirme YAPILMAYACAK.")
+
+    denetci = FABRIKA / "denetci.sh"
+    if not denetci.exists():
+        raise Durdu(f"bağımsız göz aracı yok: {denetci} — ÖLÇEMEDİM", 3)
+    rc2, diffmetin = _kos(["git", "diff", f"origin/main...{n.dal}"], depo, 300)
+    if rc2 != 0:
+        raise Durdu("diff gövdesi alınamadı", 3)
+    gecici = depo / "_agents" / "fabrika" / f".bileyi-{n.is_}.diff"
+    gecici.write_text(diffmetin, encoding="utf-8")
+    print("   bağımsız göz koşuyor (farklı model)…")
+    rc3, cik = _kos(["bash", str(denetci), n.is_, "--diff", str(gecici),
+                     "--yazan", "claude", "--depo", str(depo)], depo, 900)
+    print("\n".join("   " + l for l in cik.strip().splitlines()[-8:]))
+    gecici.unlink(missing_ok=True)
+    if "GEÇTİ" not in cik:
+        print("   🔴 bağımsız göz GEÇMEDİ — birleştirme YOK, adım 2'ye dön.")
+        return 1
+
+    if kart.get("sultan") or kart_siniflar:
+        print("\n🔪 Kanıt tam, bağımsız göz geçti. SINIFLI iş → Sultan'ın kapısında bekliyor.")
+        return 0
+
+    if n.kuru:
+        print("\n(kuru koşum — sınıfsız iş birleştirilebilirdi, birleştirilmedi)")
+        return 0
+    rc4, cik4 = _kos(["gh", "pr", "merge", "--squash", "--delete-branch", n.dal], depo, 300)
+    print(cik4.strip()[:400])
+    if rc4 != 0:
+        print("   🔴 birleştirme başarısız — el değmeden bırakıldı.")
+        return 1
+    print("\n✓ SINIFSIZ iş otonom birleştirildi.")
     return 0
 
 
@@ -414,6 +682,18 @@ def main(argv: list[str]) -> int:
     ortak(t)
     t.add_argument("--kuru", action="store_true")
     alt.add_parser("durum", help="kill-switch ve eşik hâli")
+    kt = alt.add_parser("kart", help="kartı aç — sınıfı KÂHİN cevaplar")
+    kt.add_argument("--is", dest="is_", required=True)
+    kt.add_argument("--hedef", action="append", required=True,
+                    help="dokunulacak yol (birden çok verilebilir)")
+    kt.add_argument("--cumle", default=None)
+    kt.add_argument("--sinif-dosya", default=None)
+    kt.add_argument("--kuru", action="store_true")
+    dv = alt.add_parser("devam", help="kanıt + bağımsız göz + SINIFSIZSA birleştir")
+    dv.add_argument("--is", dest="is_", required=True)
+    dv.add_argument("--dal", required=True)
+    dv.add_argument("--sinif-dosya", default=None)
+    dv.add_argument("--kuru", action="store_true")
     d = alt.add_parser("dur", help="otonom turu kapat")
     d.add_argument("--gerekce", required=True)
     c = alt.add_parser("ac", help="otonom turu aç")
@@ -425,7 +705,8 @@ def main(argv: list[str]) -> int:
             setattr(n, alan, vars_)
 
     islem = {"olc": komut_olc, "tur": komut_tur, "durum": komut_durum,
-             "dur": komut_dur, "ac": komut_ac}[n.komut]
+             "dur": komut_dur, "ac": komut_ac, "kart": komut_kart,
+             "devam": komut_devam}[n.komut]
     try:
         return islem(n)
     except Durdu as e:

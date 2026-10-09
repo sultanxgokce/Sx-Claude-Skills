@@ -56,6 +56,7 @@ with open(y, "w", encoding="utf-8") as f:
     for r in k:
         f.write(json.dumps(r, ensure_ascii=False) + "\n")
 PY
+: > "$KOK/oda/_agents/handoff/layiha-aday-havuzu.jsonl"
 ES="$KOK/esik.json"
 python3 - "$ES" <<'PY'
 import json, sys
@@ -194,16 +195,15 @@ else:
 " 
 
 echo "J · 🔴 yeni havuz KURULMAZ · A06"
-kapi "J1 araç bulgu/aday havuzuna YAZMAZ (yalnız okur)" 0 python3 -c "
+kapi "J1 🔴 araç BULGU havuzuna asla yazmaz (yeni havuz da kurmaz)" 0 python3 -c "
 k = open('$B', encoding='utf-8').read()
 kod = '\n'.join(l for l in k.splitlines() if not l.lstrip().startswith('#'))
+# Bulgu havuzu SALT-OKUNUR olmali: acilis kipi 'a' ya da 'w' ile gecmemeli.
 import re
-# Yazma yuzeyi YALNIZ kill-switch dosyasi olmali.
-yazmalar = re.findall(r'write_text\(|open\([^)]*[\"\\']w[\"\\']', kod)
-assert len(yazmalar) == 1, f'beklenmeyen yazma yuzeyi: {len(yazmalar)}'
-assert 'anahtar_yolu' in kod
-for yasak in ('bulgu-havuzu.jsonl\", \"a\"', 'layiha-aday-havuzu.jsonl\", \"a\"'):
-    assert yasak not in kod, yasak
+assert not re.search(r'bulgu-havuzu[^\n]{0,80}(open|write_text|\"a\"|\"w\")', kod), 'bulgu havuzuna yazma izi'
+# Aday havuzu VAR OLANA eklenir; yoksa KURULMAZ.
+assert 'if not aday_yolu.exists():' in kod
+assert 'YENİ HAVUZ KURMUYORUM' in k
 "
 kapi "J2 araç ONAY alanı yazmaz (A06)" 0 python3 -c "
 k = open('$B', encoding='utf-8').read()
@@ -220,6 +220,123 @@ kapi "J4 süzme yeniden yazılmaz — mucit-suz'e devredilir (SKILL.md'de yazıl
 m = open('$PWD/../SKILL.md', encoding='utf-8').read()
 assert 'mucit-suz' in m
 assert 'YENİ HAVUZ KURULMAZ' in m
+"
+
+echo "K · 🔴 kill-switch ÜRETİM yolu (bağımsız gözün tur-1 bulgusu, ciddi)"
+kapi "K1 ortam değişkeni YOKken varsayılan DOSYA kullanılır (çalışma dizini DEĞİL)" 0 python3 -c "
+import os, importlib.util as u, pathlib
+for v in ('', '   '):
+    os.environ['BILEYI_ANAHTAR'] = v
+    s=u.spec_from_file_location('b','$B'); m=u.module_from_spec(s); s.loader.exec_module(m)
+    y = m.anahtar_yolu()
+    assert y == m.ANAHTAR_VARSAYILAN, f'bos ortamda yol {y} oldu — Path() tuzagi geri gelmis'
+os.environ.pop('BILEYI_ANAHTAR')
+s=u.spec_from_file_location('b','$B'); m=u.module_from_spec(s); s.loader.exec_module(m)
+assert m.anahtar_yolu() == m.ANAHTAR_VARSAYILAN
+assert m.anahtar_yolu() != pathlib.Path('.'), 'calisma dizini anahtar sanilmis'
+"
+kapi "K2 ortam değişkeni VERİLİRSE o yol kullanılır" 0 python3 -c "
+import os, importlib.util as u, pathlib
+os.environ['BILEYI_ANAHTAR'] = '$KOK/x'
+s=u.spec_from_file_location('b','$B'); m=u.module_from_spec(s); s.loader.exec_module(m)
+assert m.anahtar_yolu() == pathlib.Path('$KOK/x')
+"
+
+echo "L · eşik ezmesi de kapıdan geçer (tur-1 bulgusu)"
+kapi "L1 negatif --ikili-esik → rc=2" 2 env BILEYI_ANAHTAR="$ANAH" "${O[@]}" olc --gun 0 --ikili-esik -5
+kapi "L2 sıfır --ikili-esik → rc=2" 2 env BILEYI_ANAHTAR="$ANAH" "${O[@]}" olc --gun 0 --ikili-esik 0
+kapi "L3 geçerli ezme çalışır" 0 env BILEYI_ANAHTAR="$ANAH" "${O[@]}" olc --gun 0 --ikili-esik 2
+
+echo "M · 🔴 iki yüzey ÇELİŞİRSE hüküm YOK (tur-1 bulgusu)"
+mkdir -p "$KOK/celiski/_agents/handoff"
+python3 - "$KOK/celiski/_agents/handoff/bulgu-havuzu.jsonl" <<'PY'
+import json, sys
+from datetime import date
+b = date.today().isoformat()
+# Sinif yuzeyi "3 kez tekrar" diyor; kimlikler ARDISIK, yani obur yuzey "tek olay" diyor.
+k = [{"id": f"b{700+i}", "tarih": b, "baslik": f"farkli baslik {i} burada", "sinif": "celisen-sinif",
+      "gercek": ""} for i in range(3)]
+k += [{"id": "b0800", "tarih": b, "baslik": "yalniz bir kere", "gercek": ""}]
+with open(sys.argv[1], "w", encoding="utf-8") as f:
+    for r in k: f.write(json.dumps(r, ensure_ascii=False) + "\n")
+PY
+kapi "M1 tüm adaylarda çelişki varsa rc=3 (ne temiz ne kirli)" 3 \
+  env BILEYI_ANAHTAR="$ANAH" python3 "$B" --depo "$KOK/celiski" --esik-dosya "$ES" olc --gun 0
+iceren "M2 çelişki işaretlenir ve niçini yazılır" "ÇELİŞKİ" \
+  env BILEYI_ANAHTAR="$ANAH" python3 "$B" --depo "$KOK/celiski" --esik-dosya "$ES" olc --gun 0
+
+echo "N · 🔴 sınıf kâhini (otonom turun emniyeti)"
+SK="$(cd "$(dirname "$B")/.." && pwd)/sinif-kurallari.json"
+iceren "N1 güvenli yol → dört sınıf da h" "yetki           = h" \
+  env BILEYI_ANAHTAR="$ANAH" python3 "$B" --depo "$KOK/oda" kart --is x --hedef "bileyi/scripts/a.py" --kuru
+iceren "N2 yetki deseni tutarsa yetki=e" "yetki           = e" \
+  env BILEYI_ANAHTAR="$ANAH" python3 "$B" --depo "$KOK/oda" kart --is x --hedef "hooks/a.js" --kuru
+iceren "N3 🔴 BİLİNMEYEN yol → '?' → SULTAN'A GİDER (şüphede sınıf YUKARI)" "SULTAN'A GİDER" \
+  env BILEYI_ANAHTAR="$ANAH" python3 "$B" --depo "$KOK/oda" kart --is x --hedef "ui/app/x.tsx" --kuru
+iceren "N4 para deseni tutarsa para=e" "para            = e" \
+  env BILEYI_ANAHTAR="$ANAH" python3 "$B" --depo "$KOK/oda" kart --is x --hedef "bileyi/fatura-x.py" --kuru
+python3 -c "
+import json,sys
+d=json.load(open(sys.argv[1])); d['dayanak']=''
+json.dump(d, open(sys.argv[2],'w'), ensure_ascii=False)" "$SK" "$KOK/sk-dayanaksiz.json"
+kapi "N5 sınıf kurallarının dayanağı yoksa rc=3 — sınıf UYDURULMAZ" 3 \
+  env BILEYI_ANAHTAR="$ANAH" python3 "$B" --depo "$KOK/oda" kart --is x --hedef "bileyi/a.py" --sinif-dosya "$KOK/sk-dayanaksiz.json" --kuru
+kapi "N6 sınıf kuralları dosyası yoksa rc=3" 3 \
+  env BILEYI_ANAHTAR="$ANAH" python3 "$B" --depo "$KOK/oda" kart --is x --hedef "bileyi/a.py" --sinif-dosya "$KOK/yok.json" --kuru
+
+echo "O · 🔴 'tur' FİİLEN iş yapar (tur-1 bulgusu: eskiden ekrana basıyordu)"
+mkdir -p "$KOK/havuzsuz/_agents/handoff"
+cp "$HAV" "$KOK/havuzsuz/_agents/handoff/bulgu-havuzu.jsonl"
+kapi "O1 aday havuzu YOKsa tur rc=3 — yeni havuz KURMAZ" 3 \
+  env BILEYI_ANAHTAR="$ANAH" python3 "$B" --depo "$KOK/havuzsuz" --esik-dosya "$ES" tur --gun 0
+kapi "O2 aday havuzu varsa tur koşar" 0 \
+  env BILEYI_ANAHTAR="$ANAH" python3 "$B" --depo "$KOK/oda" --esik-dosya "$ES" tur --gun 0
+kapi "O3 🔴 tur aday havuzuna GERÇEKTEN yazdı (basmakla yetinmedi)" 0 python3 -c "
+import pathlib
+y = pathlib.Path('$KOK/oda/_agents/handoff/layiha-aday-havuzu.jsonl')
+satir = [l for l in y.read_text(encoding='utf-8').splitlines() if l.strip()]
+assert len(satir) >= 1, 'aday havuzuna hic yazilmadi'
+import json
+assert json.loads(satir[-1])['kaynak'] == 'bileyi'
+"
+kapi "O4 🔴 tur durum dosyası bıraktı (yazım aşaması bir DURUM, tavsiye değil)" 0 python3 -c "
+import json, pathlib
+d = json.loads(pathlib.Path('$KOK/oda/_agents/fabrika/bileyi-tur.json').read_text(encoding='utf-8'))
+assert d['asama'] == 'yazim-bekliyor', d
+"
+kapi "O5 kuru tur HİÇBİR ŞEY yazmaz" 0 env BILEYI_ANAHTAR="$ANAH" sh -c "
+before=\$(wc -c < '$KOK/oda/_agents/handoff/layiha-aday-havuzu.jsonl')
+python3 '$B' --depo '$KOK/oda' --esik-dosya '$ES' tur --gun 0 --kuru >/dev/null 2>&1
+after=\$(wc -c < '$KOK/oda/_agents/handoff/layiha-aday-havuzu.jsonl')
+[ \"\$before\" = \"\$after\" ]"
+
+echo "P · 🔴 'devam' birleştirme kilitleri"
+kapi "P1 kartsız iş birleştirilmez → rc=3" 3 \
+  env BILEYI_ANAHTAR="$ANAH" python3 "$B" --depo "$KOK/oda" devam --is olmayan-is --dal x
+kapi "P2 kill-switch kapalıyken devam rc=4 (birleştirmez)" 4 env BILEYI_ANAHTAR="$ANAH" sh -c \
+  "python3 '$B' --depo '$KOK/oda' dur --gerekce 'sinav kilidi' >/dev/null && python3 '$B' --depo '$KOK/oda' devam --is x --dal y; r=\$?; python3 '$B' --depo '$KOK/oda' ac --gerekce 'sinav' >/dev/null; exit \$r"
+kapi "P3 🔴 sınıf YUKARI çıkarsa birleştirme YOK — hem rc hem SEBEP ölçülür" 0 python3 -c "
+import importlib.util as u, json, pathlib, io, contextlib, os
+s=u.spec_from_file_location('b','$B'); m=u.module_from_spec(s); s.loader.exec_module(m)
+kok = pathlib.Path('$KOK/yukari'); (kok/'_agents/fabrika/kartlar').mkdir(parents=True, exist_ok=True)
+(kok/'_agents/fabrika/kartlar/is1.json').write_text(json.dumps(
+    {'is':'is1','siniflar':[],'sultan':False}), encoding='utf-8')
+cagrilan = []
+def sahte(komut, cwd, zaman=600):
+    cagrilan.append(komut)
+    return (0, 'hooks/yeni.js\n') if '--name-only' in komut else (0, 'GEÇTİ')
+m._kos = sahte
+class N: pass
+n=N(); n.depo=str(kok); n.is_='is1'; n.dal='d'; n.sinif_dosya=None; n.kuru=False
+os.environ['BILEYI_ANAHTAR']='$KOK/acik-anahtar'
+t=io.StringIO()
+with contextlib.redirect_stdout(t):
+    rc = m.komut_devam(n)
+cik = t.getvalue()
+assert rc == 1, rc
+assert 'SINIF YUKARI ÇIKTI' in cik, 'rc=1 geldi ama SEBEP bu degil: ' + cik[-200:]
+# Ve en onemlisi: BIRLESTIRME hic denenmemis olmali.
+assert not any('merge' in ' '.join(k) for k in cagrilan), 'birlestirme denendi!'
 "
 
 echo

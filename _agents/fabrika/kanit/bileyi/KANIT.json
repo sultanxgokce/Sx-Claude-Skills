@@ -1,7 +1,7 @@
 {
   "is": "bileyi",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-09T22:35:03+03:00",
+  "guncelleme": "2026-10-09T22:47:43+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -38,31 +38,46 @@
       "etiket": "sinavlar",
       "asama": "sonra",
       "dosya": "olcum-sinavlar-sonra.txt",
-      "sha256": "85768f5aa2ac2b441eb830c27c8cede2c780fff68e40586f3c65aad19115ea51",
+      "sha256": "daf9a47f22d0b14dad31cf6a3675b048cf89316424ff1267048b83fc343c4b39",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-sinav.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T22:34:44+03:00",
-      "sure_sn": 2.9
+      "zaman": "2026-10-09T22:46:45+03:00",
+      "sure_sn": 4.4
     },
     {
       "tur": "olcum",
       "etiket": "mutasyon",
       "asama": "sonra",
       "dosya": "olcum-mutasyon-sonra.txt",
-      "sha256": "498983bd2bb723afcdcff2c740eb8ae2c1143ffcec131de00bd6722e8cb463a2",
+      "sha256": "e98bad059e7b9832e372e5a62c6f581f328088a725b3b40d9cc4c6390b20b31e",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-mutasyon.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T22:35:03+03:00",
-      "sure_sn": 19.2
+      "zaman": "2026-10-09T22:47:43+03:00",
+      "sure_sn": 58.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinif-kahini",
+      "asama": "sonra",
+      "dosya": "olcum-sinif-kahini-sonra.txt",
+      "sha256": "62633466d4f8a43291d1eb1685049fa04d1fd7c92c5a1eee29362b3d611ea6ed",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-kahin.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T22:46:40+03:00",
+      "sure_sn": 0.2
     }
   ],
-  "imza": "6db5b00dae3cf7b6062fa4f53fe209fd74d5bd53f21e140f2f901f2d7d3874f6"
+  "imza": "06c957de3823d586297a64de54ff22e89684781f158823a7a5e1b3f0616b9c19"
 }
