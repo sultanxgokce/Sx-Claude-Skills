@@ -1,0 +1,40 @@
+{
+  "tur": 1,
+  "is": "kosu-kaydi-paketi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-09T12:38:26+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 54163,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İstenen paket, paketsiz sonraki-koşu hesabı, katalog kaydı ve hedef nazir kutusunda croniter olmadan geçen sınavla teslim edilmiş; kurulum/görünürlük ise kartın açıkça dışında tutulmuş. Önce 126 dönüş kodunun bozulmasını ve karta ait olmayan eski denetim/kanıt dosyalarının değişikliğe karışmasını çöz; ayrıca dağıtım yolu ölçümü yeni paketi doğrudan ölçmediği için kanıt rötuş istiyor.",
+    "bulgular": [
+      {
+        "ne": "Sarmalayıcı, çalıştırılan komutun 126 çıkış kodunu olduğu gibi geçirmiyor; 126 ve 127'yi aynılaştırıp dışarıya 127 döndürüyor.",
+        "kanit": "Kodda `RC` 126 veya 127 olduğunda `RC=-1` yapılıyor ve sonda `RC=-1` için `exit 127` uygulanıyor. Buna karşılık SKILL.md ve betik başlığı işin çıkış kodunun olduğu gibi geçirileceğini söylüyor; sınav yalnız bulunamayan komutun 127 durumunu kapsıyor, 126 için denetim yok.",
+        "konum": "kosu-kaydi/scripts/kosu-sar.sh:65-79; kosu-kaydi/SKILL.md sonuç kümesi; kosu-kaydi/scripts/kosu-sar.test.sh olculemedi bölümü",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Değişiklik, bu kartın dışındaki eski `kosu-kaydi-becerisi` kartını, manifestini, ölçümlerini ve iki denetim çıktısını da ekliyor.",
+        "kanit": "İş kartının kimliği `kosu-kaydi-paketi` iken diff ayrıca `_agents/fabrika/kartlar/kosu-kaydi-becerisi.json` ile `_agents/fabrika/kanit/kosu-kaydi-becerisi/` altındaki KANIT, DENETIM-1, DENETIM-2 ve ölçüm dosyalarını yeni dosya olarak içeriyor.",
+        "konum": "diff: _agents/fabrika/kartlar/kosu-kaydi-becerisi.json; _agents/fabrika/kanit/kosu-kaydi-becerisi/*",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Dağıtım yolu ölçümü yeni `kosu-kaydi` paketinin merkez ve nazir kopyalarını doğrudan karşılaştırmıyor; başka bir becerinin eşitliğini vekil olarak kullanıyor.",
+        "kanit": "`dagitim-yolu/once` komutu ve çıktısı yalnız `/config/.claude/skills/yazilim-fabrikasi/SKILL.md` için iki tarafta `4e9e58131afc` değerini ölçüyor. `kosu-kaydi` dosyalarının iki uçtaki özdeşliğini ölçen kayıt yok; kurulum kart dışında olduğundan bu teslimi yanlış işe çevirmiyor fakat dağıtım yolu iddiasını dolaylı bırakıyor.",
+        "konum": "kanıt kaydı: dagitim-yolu/once; olcum-dagitim-yolu-once.txt satır 1-5",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; dört kaydın tümü yeşil, sarı kayıt yok. Yerel ve nazir geçici hedef sınavları 45/45 geçiyor, nazirde croniter bulunmadığı gösteriliyor ve şema paritesi temiz; bunlar paketin hedef ortam uyumluluğunu destekliyor. Kurulum ve kutu görünürlüğü bu kartın açıkça dışında olduğundan bunların eksikliği ret nedeni değil; ancak dağıtım ölçümü yeni paket yerine mevcut `yazilim-fabrikasi` dosyasını karşılaştırdığı için doğrudan bir önce/sonra çifti değil."
+  }
+}

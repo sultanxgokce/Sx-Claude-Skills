@@ -62,7 +62,7 @@ BITIS="$(_an)"; SURE=$(( $(date +%s) - T0 ))
 BEYAN="$(tr -d '[:space:]' < "$BEYAN_DOSYA" 2>/dev/null || true)"; rm -f "$BEYAN_DOSYA"
 if [ "$RC" -eq 0 ] && [ "$BEYAN" = "dokunmadim" ]; then SONUC="ayakta-dokunmadim"
 elif [ "$RC" -eq 0 ]; then SONUC="tamam"
-elif [ "$RC" -eq 127 ] || [ "$RC" -eq 126 ]; then SONUC="olculemedi"; RC=-1
+elif [ "$RC" -eq 127 ] || [ "$RC" -eq 126 ]; then SONUC="olculemedi"   # rc olduğu gibi kalır (126 ≠ 127), yalnız sonuç sınıfı
 else SONUC="hata"; fi
 
 CANLI_IFADE="$(_canli_ifade)"
@@ -75,5 +75,4 @@ printf '{"is":%s,"kutu":%s,"sahip":%s,"baslangic":%s,"bitis":%s,"sure_sn":%s,"rc
   "$(_json "$IS")" "$(_json "$KUTU")" "$(_json "$SAHIP")" "$(_json "$BASLANGIC")" "$(_json "$BITIS")" "$SURE" "$RC" "$(_json "$SONUC")" \
   "$(_jnull "$DAMGA")" "$(_jnull "$PLANLI")" "$(_jnull "$TAHMIN")" "$TAHMIN_B" "$TURETILEMEDI" "$(_json "$SURUM")" >> "$DOSYA"
 [ -n "$KANON_GECICI" ] && rm -f "$KANON_GECICI"
-[ "$RC" -eq -1 ] && exit 127
 exit "$RC"

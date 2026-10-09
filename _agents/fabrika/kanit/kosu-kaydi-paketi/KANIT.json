@@ -1,7 +1,7 @@
 {
   "is": "kosu-kaydi-paketi",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-09T12:37:22+03:00",
+  "guncelleme": "2026-10-09T12:40:23+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -24,37 +24,37 @@
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "5ff604a0bd00067e4f68d09e8440c801cbe6d012bd060ac843f75981c09e339b",
+      "sha256": "ca65a421fdc70bbec4a13107d49d24efcee61b8212c5a5a01b9b4aa103307b4d",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/kosu-sar.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T12:37:18+03:00",
-      "sure_sn": 3.0
+      "zaman": "2026-10-09T12:40:19+03:00",
+      "sure_sn": 5.4
     },
     {
       "tur": "olcum",
       "etiket": "nazir-sinav",
       "asama": "sonra",
       "dosya": "olcum-nazir-sinav-sonra.txt",
-      "sha256": "e8d52aa69fba123ed1b496cffec11f112089715353297cfe1282e06a4f7c3a1d",
+      "sha256": "312e620b293e7d1474983bc82bd3de104e5989b5f2c9a6b89b4db9af6334ce9c",
       "komut": [
         "bash",
         "/config/.claude/jobs/d69a1b07/tmp/nazir-sinav.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T12:37:21+03:00",
-      "sure_sn": 3.7
+      "zaman": "2026-10-09T12:40:23+03:00",
+      "sure_sn": 4.1
     },
     {
       "tur": "olcum",
       "etiket": "sema-parite",
       "asama": "sonra",
       "dosya": "olcum-sema-parite-sonra.txt",
-      "sha256": "553b42e8c4c5c8df7bad9122d7871cb7c3ec81a16ddc4294ddbc797ce25302c5",
+      "sha256": "a41cb9aa49e301e26d2cde0c3b617b50e322103b426b7fd64a630ae35e899903",
       "komut": [
         "node",
         "ahi/schema/validate-repo.mjs",
@@ -63,9 +63,25 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T12:37:22+03:00",
+      "zaman": "2026-10-09T12:40:23+03:00",
       "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dagitim-yolu-dizin",
+      "asama": "once",
+      "dosya": "olcum-dagitim-yolu-dizin-once.txt",
+      "sha256": "25aa706d10758a4c3f9561f880f56f0f33a6ef35d44f879e8073a6a010d749e0",
+      "komut": [
+        "bash",
+        "-c",
+        "echo \"merkez skills dizini aygıt:inode $(stat -c %d:%i /config/.claude/skills)\"; ssh -o BatchMode=yes -o ConnectTimeout=10 hostsrv \"docker exec -u abc cloudtop-nazir stat -c \\\"nazir  skills dizini aygıt:inode %d:%i\\\" /config/.claude/skills\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T12:40:13+03:00",
+      "sure_sn": 0.4
     }
   ],
-  "imza": "3531377aaf3972a055d084d55e734de8af035880b488d5672f31482002360ff1"
+  "imza": "5759e204c2a0699189f483ade725aba4973ebe2ed19c8097cfb7184af9418664"
 }

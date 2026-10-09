@@ -1,7 +1,7 @@
 $ bash /config/.claude/jobs/d69a1b07/tmp/nazir-sinav.sh
-# rc=0 sure=3.7s zaman=2026-10-09T12:37:21+03:00
+# rc=0 sure=4.1s zaman=2026-10-09T12:40:23+03:00
 --- stdout ---
-kutu: cloudtop-nazir · hedef: /tmp/kosu-kaydi-sinav-2112180
+kutu: cloudtop-nazir · hedef: /tmp/kosu-kaydi-sinav-2129158
 bash: 5.2.21(1)-release · Python 3.12.3 · croniter: ModuleNotFoundError: No module named 'cr
 ════ K1 · her koşu tam satır, geçerli JSON, 15 alan ════
 ════ K4 · sessiz başarı YALNIZ beyanla ════
@@ -11,7 +11,7 @@ bash: 5.2.21(1)-release · Python 3.12.3 · croniter: ModuleNotFoundError: No mo
 ════ kanon bildirilmemiş · kutu adı türetimi (A290: her kutunun kanon yolu başka) ════
 ════ cron-sonraki.py tek başına (bağımsız hesap, paket yok) ════
 
-── SONUÇ: 45 geçti · 0 düştü ──
+── SONUÇ: 47 geçti · 0 düştü ──
 temizlik: silindi
 nazir sınav rc=0
 --- stderr ---

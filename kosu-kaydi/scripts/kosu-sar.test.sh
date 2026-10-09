@@ -62,6 +62,10 @@ echo "════ olculemedi · hatalı kullanım ════"
 bash "$S" supur -- /yok/boyle/komut >/dev/null 2>&1; rc=$?
 ol "komut yok → sonuc olculemedi" "$(alan sonuc)" "olculemedi"
 ol "komut yok → rc 127" "$rc" "127"
+printf '#!/bin/sh\necho x\n' > "$T/calismaz.sh"; chmod -x "$T/calismaz.sh"
+bash "$S" supur -- "$T/calismaz.sh" >/dev/null 2>&1; rc=$?
+ol "çalıştırılamaz komut → sonuc olculemedi" "$(alan sonuc)" "olculemedi"
+ol "çalıştırılamaz → rc 126 olduğu gibi geçer (127'ye çevrilmez)" "$rc/$(alan rc)" "126/126"
 bash "$S" "KÖTÜ AD" -- true >/dev/null 2>&1; ol "geçersiz iş adı rc=2" "$?" "2"
 bash "$S" supur true >/dev/null 2>&1; ol "'--' yoksa rc=2" "$?" "2"
 n0=$(satir_sayisi); bash "$S" "KÖTÜ AD" -- true >/dev/null 2>&1; ol "geçersiz kullanım satır YAZMAZ" "$(satir_sayisi)" "$n0"

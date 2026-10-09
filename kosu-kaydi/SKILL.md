@@ -43,7 +43,7 @@ Kanon cron satırında eski komutun önüne sarmalayıcı gelir; iş adı `[a-z0
 | `tamam` | rc 0 |
 | `ayakta-dokunmadim` | rc 0 **ve** iş `$KOSU_BEYAN` dosyasına `dokunmadim` yazdı — çıkarım yok, yalnız beyan |
 | `hata` | rc ≠ 0 (beyan olsa da) |
-| `olculemedi` | komut bulunamadı/çalıştırılamadı (rc 126/127); sarmalayıcı 127 ile çıkar |
+| `olculemedi` | komut bulunamadı (127) ya da çalıştırılamadı (126); rc olduğu gibi geçer, yalnız sonuç sınıfı değişir |
 Sarmalayıcı işin çıkış kodunu olduğu gibi geçirir; kayıt yazılamasa bile iş engellenmez.
 
 ### Sonraki koşu (K5)
