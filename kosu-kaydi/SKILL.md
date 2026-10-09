@@ -1,13 +1,14 @@
 ---
 name: kosu-kaydi
 type: agent
-version: 0.2.0
+version: 0.3.0
 description: >
-  Koşu kaydı sarmalayıcısı: her cron/zamanlı iş kendi komutunu `kosu-sar.sh <is> -- <komut>` ile sarar; her koşu
-  TAM BİR satır yazar (/config/.claude/kosu-kaydi/<kutu>.<YYYY-MM>.jsonl, 15 alan — Nexus kokpit-ux/05 şeması K1-K6).
-  Sessiz başarı yalnız işin beyanıyla ("dokunmadim") ayrı sonuç olur; sonraki koşu canlı crontab'dan GÖZLEM, kanon
-  dosyasından TAHMİN olarak iki ayrı alan taşır, çelişki kokpitte sarı. Sonraki-koşu hesabı bağımsız (paket yok).
-  Global beceri: cloudtop deposu izole kutularda görünmez (A290), /config/.claude/skills her kutuda görünür.
+  Koşu kaydı sarmalayıcısı: her cron/zamanlı iş kendi komutunu `kosu-sar.sh <is> [--nobetci] -- <komut>` ile sarar; her koşu
+  TAM BİR satır yazar (/config/.kosu-kaydi/<kutu>.<YYYY-MM>.jsonl, kutu-yerel, 15 alan — Nexus kokpit-ux/05 şeması sürüm 1.1).
+  Sessiz başarı yalnız beyanla ($KOSU_BEYAN dosyası ya da kanon satırında --nobetci) ayrı sonuç olur; kilitte atlanan koşu
+  (flock -n -E 75) `atlandi-kilit`; sahip etiketi satır üstü ya da satır sonu. Sonraki koşu canlı crontab'dan GÖZLEM, kanon
+  dosyasından TAHMİN olarak iki alan, çelişki kokpitte sarı; hesap paketsiz saf python. Global beceri: cloudtop deposu izole
+  kutularda görünmez (A290), /config/.claude/skills her kutuda aynı dizin.
 install_target: { skills: .claude/skills/ }
 stacks: ["*"]
 author: sultanxgokce
@@ -18,33 +19,44 @@ tags: [kosu-kaydi, cron, sarmalayici, kokpit, headless, agentic-os, jsonl]
 ## Niçin var
 Kokpit, kutularda koşan zamanlı işleri (cron) **göremez**: her iş kendi kütüğüne yazar ya da hiç yazmaz; "koştu mu,
 ne zaman, ne oldu, bir sonraki ne zaman" sorusunun tek cevabı yok. Şema Nexus `_agents/handoff/kokpit-ux/05-kosu-kaydi.md`
-(sürüm 1) — bu beceri onun **yazıcısı**dır. Okuyucu (kokpit) ayrı iştir.
+(sürüm 1.1) — bu beceri onun **yazıcısı**dır. Okuyucu (kokpit) ayrı iştir.
 
 **Niçin global beceri (A290, 9 Eki 2026):** ilk sürüm cloudtop deposunda yaşıyordu. Ölçüldü: nazir kutusu `/config/projects`
-altında yalnız `cortex · nazir · Nexus · _wt-nazir` görüyor, cloudtop YOK; `/config/.claude/skills` ise 90 beceriyle görünür.
-Ayrıca `croniter` paketi orada yoktu → sonraki-koşu hesabı pakete bırakılmadı, saf python yazıldı.
+altında yalnız `cortex · nazir · Nexus · _wt-nazir` görüyor, cloudtop YOK; `/config/.claude/skills` ise merkezle **aynı dizin**
+(aygıt:inode eşit). Ayrıca `croniter` paketi orada yoktu → sonraki-koşu hesabı pakete bırakılmadı, saf python yazıldı.
+
+**Niçin kutu-yerel kayıt (A291):** `/config/.claude` 13 kutunun ortak bağıdır (`findmnt` → `/opt/cloudtop/config/.claude`); nazir
+oda kuralında oraya yazmak Sultan kapısı. `/config`'in kendisi kutuya özeldir → kayıt `/config/.kosu-kaydi/` (merkez `docker exec` ile okur).
 
 ## Kullanım
-Kanon cron satırında eski komutun önüne sarmalayıcı gelir; iş adı `[a-z0-9-]+`:
+Kanon cron satırında eski komutun önüne sarmalayıcı gelir; iş adı `[a-z0-9-]+`. İki etiket biçimi de tanınır:
 ```
-# sahip: NAZIR
+KOSU_KUTU=nazir
+KOSU_KANON=/config/projects/nazir/.oda/cron            # verilmezse drift ölçülemez (aşağıda)
+# sahip: NAZIR                                          # (a) satır ÜSTÜ not — cloudtop kanonunun deseni
 # damga: /config/.claude/supur.log
-35 * * * * bash /config/.claude/skills/kosu-kaydi/scripts/kosu-sar.sh supur -- flock -n /x bash .../supur.sh
+35 * * * * bash /config/.claude/skills/kosu-kaydi/scripts/kosu-sar.sh supur -- flock -n -E 75 /x bash .../supur.sh
+*/5 * * * * bash /config/.claude/skills/kosu-kaydi/scripts/kosu-sar.sh bulgu-defteri --nobetci -- bash /config/.ic-sayfa/sunucu.sh # bulgu-defteri sahip:NAZIR
 ```
-- `# sahip:` satırın hemen üstünde → `sahip` alanı (K3); yoksa `bilinmiyor` (uydurma yok). `# damga:` → `kutuk`.
-- Kutunun adı: crontab başına `KOSU_KUTU=<kutu>` satırı koy. Yoksa `DEFAULT_WORKSPACE`'ten türer; o da yoksa `bilinmiyor`
+- `sahip` (K3): satır üstü `# sahip:` **ya da** satır sonu `# <ad> sahip:<ROL> [damga:<yol>]`; ikisi varsa satır sonu kazanır
+  (A292: bazı kanon üreticileri yorum satırlarını canlıya taşımaz, satır sonu etiketi taşınır); yoksa `bilinmiyor` (uydurma yok).
+- Kutunun adı: crontab başına `KOSU_KUTU=<kutu>`. Yoksa `DEFAULT_WORKSPACE`'ten türer; o da yoksa `bilinmiyor`
   (konteyner hostname'i onaltılık bir kimliktir, kutu adı değil — basılmaz).
-- Kanon dosyasının yolu biliniyorsa `KOSU_KANON=<yol>` (crontab başına). **Verilmezse kanon = canlı crontab**: sahip okunur
-  ama `ifadeden_tahmin` gözlemle aynı olur, yani **drift ölçülemez** — bu dürüstçe böyledir, "drift yok" demek değildir.
+- Kanon dosyasının yolu biliniyorsa `KOSU_KANON=<yol>`. **Verilmezse kanon = canlı crontab**: sahip okunur ama
+  `ifadeden_tahmin` gözlemle aynı olur, yani **drift ölçülemez** — bu dürüstçe böyledir, "drift yok" demek değildir.
+- Sarmalayıcı `flock`'un **dışında** durur; içinde dursa kilitli koşu hiç satır yazmaz ve kokpit "koşmadı" der.
 
-### Sonuç kümesi (K4)
+### Sonuç kümesi (K4 · K4b)
 | `sonuc` | Ne zaman |
 |---|---|
-| `tamam` | rc 0 |
-| `ayakta-dokunmadim` | rc 0 **ve** iş `$KOSU_BEYAN` dosyasına `dokunmadim` yazdı — çıkarım yok, yalnız beyan |
-| `hata` | rc ≠ 0 (beyan olsa da) |
-| `olculemedi` | komut bulunamadı (127) ya da çalıştırılamadı (126); rc olduğu gibi geçer, yalnız sonuç sınıfı değişir |
-Sarmalayıcı işin çıkış kodunu olduğu gibi geçirir; kayıt yazılamasa bile iş engellenmez.
+| `tamam` | rc 0 (nöbetçi kipinde: rc 0 **ve** çıktı var — iş yaptı) |
+| `ayakta-dokunmadim` | rc 0 **ve** beyan: iş `$KOSU_BEYAN` dosyasına `dokunmadim` yazdı **ya da** satır `--nobetci` taşıyor ve çıktı boş. Bayraksız satırda çıkarım yok |
+| `atlandi-kilit` | rc = `KOSU_KILIT_RC` (varsayılan 75): kanon satırı `flock -n -E 75` yazar, kilit doluydu, komut koşmadı — hata değil (A293). `-E` yoksa rc 1 `hata` kalır |
+| `hata` | diğer rc ≠ 0 (beyan olsa da) |
+| `olculemedi` | komut bulunamadı (127) ya da çalıştırılamadı (126) |
+Sarmalayıcı işin çıkış kodunu **olduğu gibi** geçirir (126/127/75 dahil); kayıt yazılamasa bile iş engellenmez.
+`--nobetci`: beyan betikte değil **kanon satırında** yaşar — sürümsüz bir nöbetçi betiğine (A291: nazir'inki hiçbir depoda değil)
+dokunmadan K4 ölçülür. Bedeli: nöbetçinin çıktısı sarmalayıcıdan geçer (`tee`), kütüğe yine düşer.
 
 ### Sonraki koşu (K5)
 `sonraki_planli` = **canlı** `crontab -l`'deki kendi satırının ifadesinden · `ifadeden_tahmin` = **kanon** dosyasındaki satırdan,
@@ -53,15 +65,20 @@ Sarmalayıcı işin çıkış kodunu olduğu gibi geçirir; kayıt yazılamasa b
 kısıtlıysa OR). Tarama 366 gün; bulunamazsa rc 3.
 
 ## Dikişler (sınav için)
-`KOSU_KAYIT_DIZ` · `KOSU_KANON` · `KOSU_CRONTAB_KOMUT` (varsayılan `crontab -l`) · `KOSU_KUTU` · `KOSU_SIMDI`.
+`KOSU_KAYIT_DIZ` · `KOSU_KANON` · `KOSU_CRONTAB_KOMUT` (varsayılan `crontab -l`) · `KOSU_KUTU` · `KOSU_SIMDI` · `KOSU_KILIT_RC` (75).
 
 ## Sınav
-`bash scripts/kosu-sar.test.sh` — hermetik (sahte kanon, sahte crontab, geçici dizin). Ölçtüğü: 15 alan geçerli JSON ·
-beyan protokolü · kanon/canlı çelişkisi · @reboot · kanonsuz kip · kutu adı türetimi · cron-sonraki 10 ifade + 4 ret.
+- `bash scripts/kosu-sar.test.sh` — hermetik (sahte kanon, sahte crontab, geçici dizin). Ölçtüğü: 15 alan geçerli JSON · beyan
+  protokolü (dosya + `--nobetci`) · satır sonu etiketi · `atlandi-kilit` · kanon/canlı çelişkisi · @reboot · kanonsuz kip · kutu adı
+  türetimi · rc 126/127 geçişi · cron-sonraki 10 ifade + 4 ret · croniter zehirli-modül kapısı (pakete bağımlılık yok).
+- `bash scripts/hedef-kutu-sinav.sh <konteyner> [<ssh-host>|-]` — aynı sınavı **hedef kutuda** koşturur (tar → `/tmp`, orada koş, sil;
+  kaynak/hedef md5'leri basılır). Kurulumdan önce "bu kutuda çalışır" iddiasının ölçümü.
 
 ## Sınırlar (dürüst)
 - Bu beceri **yazar**; okuyan (kokpit paneli, `kokpit_veri.py`) ayrı iştir. Satır yoksa kokpit "koşmadı" der — sarılmamış iş
   bu defterde görünmez (K6 listesi okuyucunun işi).
-- Kanon yolu verilmeyen kutuda drift (A267) ölçülemez.
+- Kurulum bu paketin işi değil: merge sonrası `sync-skills.mjs --skill kosu-kaydi --apply` (yalnız bu beceri; toplu `--force` yasak) ve
+  kutularda görünürlük ölçümü ayrı karttır (`kosu-kaydi-kurulum`).
+- Kanon yolu verilmeyen kutuda drift (A267) ölçülemez. `-E 75` verilmeyen `flock -n` satırında kilit/hata ayrımı yoktur.
 - Saat dilimi: kayıt `date -Iseconds` yerel dilimle; `KOSU_SIMDI` verilirse dilimi onunla gider. DST geçişleri özel ele alınmaz.
 - `defter_ref` alanı şimdilik hep `null` (headless defter B0-d ayrı kart).

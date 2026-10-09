@@ -44,6 +44,21 @@ ol "K4 beyanla → ayakta-dokunmadim" "$(alan sonuc)" "ayakta-dokunmadim"
 bash "$S" nobetci -- bash -c 'echo dokunmadim > "$KOSU_BEYAN"; exit 3' >/dev/null; rc=$?
 ol "K4 beyan + rc≠0 → hata (beyan başarıyı yaratmaz)" "$(alan sonuc)" "hata"
 ol "K4 rc geçirildi" "$rc" "3"
+echo "════ K4 · nöbetçi kipi (--nobetci): beyan kanon satırında, dosyaya dokunulmaz (NÂZIR A291) ════"
+bash "$S" nobetci --nobetci -- true >/dev/null
+ol "--nobetci + rc0 + boş çıktı → ayakta-dokunmadim" "$(alan sonuc)" "ayakta-dokunmadim"
+bash "$S" nobetci --nobetci -- echo "sunucu yeniden başlatıldı" >/dev/null
+ol "--nobetci + rc0 + çıktı VAR → tamam (iş yaptı)" "$(alan sonuc)" "tamam"
+bash "$S" nobetci --nobetci -- bash -c 'exit 2' >/dev/null; rc=$?
+ol "--nobetci + rc≠0 → hata, rc geçer" "$(alan sonuc)/$rc" "hata/2"
+bash "$S" nobetci --bilinmeyen -- true >/dev/null 2>&1; ol "bilinmeyen bayrak rc=2" "$?" "2"
+echo "════ atlandi-kilit · flock -n -E 75 (NÂZIR A293) ════"
+bash "$S" supur -- bash -c 'exit 75' >/dev/null; rc=$?
+ol "rc 75 → sonuc atlandi-kilit (hata değil)" "$(alan sonuc)" "atlandi-kilit"
+ol "rc 75 olduğu gibi geçer" "$rc/$(alan rc)" "75/75"
+bash "$S" supur -- bash -c 'exit 1' >/dev/null
+ol "rc 1 hâlâ hata (flock -E verilmemişse ayrım yok — belgede yazılı)" "$(alan sonuc)" "hata"
+( KOSU_KILIT_RC=99 bash "$S" supur -- bash -c 'exit 75' >/dev/null ); ol "kilit kodu dikişle değişir: 75 artık hata" "$(alan sonuc)" "hata"
 
 echo "════ K5 · çelişki: canlı tablo ≠ kanon ════"
 sed -i 's/^35 \* \* \* \* flock/40 * * * * flock/' "$T/canli"
@@ -57,6 +72,14 @@ ol "@reboot planlı null" "$(alan sonraki_planli)" "null"
 ol "@reboot tahmin null · tahmin=false · turetilemedi=true" "$(alan ifadeden_tahmin)/$(alan tahmin)/$(alan turetilemedi)" "null/false/true"
 bash "$S" kanonda-yok -- true >/dev/null
 ol "kanonda olmayan iş: sahip bilinmiyor, turetilemedi" "$(alan sahip)/$(alan turetilemedi)" "bilinmiyor/true"
+echo "════ K3 · satır SONU etiketi (canlıya taşınan tek yüzey, NÂZIR A292) ════"
+printf '%s\n' '# sahip: ESKI' '*/10 * * * * bash /x/kosu-sar.sh etiketli -- true # etiketli sahip:HAFIZADAR damga:/var/log/e.log' '5 4 * * * bash /x/kosu-sar.sh yalin -- true # yalin' >> "$T/kanon"
+cp "$T/kanon" "$T/canli"; sed -i 's/^35 \* \* \* \* flock/40 * * * * flock/' "$T/canli"   # canlıdaki 40 draft'ı korunur (K5 kanonsuz kapısı buna bakar)
+bash "$S" etiketli -- true >/dev/null
+ol "satır sonu sahip: üstteki notu EZER" "$(alan sahip)" "HAFIZADAR"
+ol "satır sonu damga:" "$(alan kutuk)" "/var/log/e.log"
+bash "$S" yalin -- true >/dev/null
+ol "etiketsiz satır sonu yorumu → bilinmiyor" "$(alan sahip)" "bilinmiyor"
 
 echo "════ olculemedi · hatalı kullanım ════"
 bash "$S" supur -- /yok/boyle/komut >/dev/null 2>&1; rc=$?

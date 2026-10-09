@@ -1,7 +1,7 @@
 {
   "is": "kosu-kaydi-paketi",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-09T12:40:23+03:00",
+  "guncelleme": "2026-10-09T12:51:59+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -24,14 +24,14 @@
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "ca65a421fdc70bbec4a13107d49d24efcee61b8212c5a5a01b9b4aa103307b4d",
+      "sha256": "ad4309517736ea064dcd9513b2ee80f7061159a102a3ec813a97a59f53022eb6",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/kosu-sar.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T12:40:19+03:00",
+      "zaman": "2026-10-09T12:51:53+03:00",
       "sure_sn": 5.4
     },
     {
@@ -39,32 +39,32 @@
       "etiket": "nazir-sinav",
       "asama": "sonra",
       "dosya": "olcum-nazir-sinav-sonra.txt",
-      "sha256": "312e620b293e7d1474983bc82bd3de104e5989b5f2c9a6b89b4db9af6334ce9c",
+      "sha256": "06f3e2b375ad98f40f63dfd4ed1547530c06505e9938ccc2de9f2639e2f1a8da",
       "komut": [
         "bash",
-        "/config/.claude/jobs/d69a1b07/tmp/nazir-sinav.sh"
+        "kosu-kaydi/scripts/hedef-kutu-sinav.sh",
+        "cloudtop-nazir"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T12:40:23+03:00",
-      "sure_sn": 4.1
+      "zaman": "2026-10-09T12:51:59+03:00",
+      "sure_sn": 6.3
     },
     {
       "tur": "olcum",
       "etiket": "sema-parite",
       "asama": "sonra",
       "dosya": "olcum-sema-parite-sonra.txt",
-      "sha256": "a41cb9aa49e301e26d2cde0c3b617b50e322103b426b7fd64a630ae35e899903",
+      "sha256": "a554ed18cafa2046dcaeacdb501aa223e9826cb9c9223a1af3644f0c7c0eae5a",
       "komut": [
-        "node",
-        "ahi/schema/validate-repo.mjs",
-        ".",
-        "--strict"
+        "bash",
+        "-c",
+        "node ahi/schema/validate-repo.mjs . --strict && node ahi/schema/version-lint.mjs ."
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T12:40:23+03:00",
-      "sure_sn": 0.0
+      "zaman": "2026-10-09T12:51:59+03:00",
+      "sure_sn": 0.1
     },
     {
       "tur": "olcum",
@@ -83,5 +83,5 @@
       "sure_sn": 0.4
     }
   ],
-  "imza": "5759e204c2a0699189f483ade725aba4973ebe2ed19c8097cfb7184af9418664"
+  "imza": "e1f9383f98c02655ebc0100f6b7ad82e8bde53583aa15bf1f7365d5803b5e9a2"
 }

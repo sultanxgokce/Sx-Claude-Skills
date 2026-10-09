@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# kosu-sar.sh — koşu kaydı sarmalayıcısı (Nexus kokpit-ux/05 şema sürüm 1, K1-K6). Sürüm 0.2 (global beceri, A290).
-#   Kullanım (kanon satırında):  bash /config/.claude/skills/kosu-kaydi/scripts/kosu-sar.sh <is> -- <eski komut…>
-#   Her koşu TAM BİR SATIR yazar (K1): /config/.claude/kosu-kaydi/<kutu>.<YYYY-MM>.jsonl — özet yok.
-#   sonuc: tamam · hata · ayakta-dokunmadim (YALNIZ işin $KOSU_BEYAN dosyasına 'dokunmadim' yazmasıyla, K4) · olculemedi
+# kosu-sar.sh — koşu kaydı sarmalayıcısı (Nexus kokpit-ux/05 şema sürüm 1.1, K1-K6). Sürüm 0.3 (global beceri, A290-A293).
+#   Kullanım (kanon satırında):  bash /config/.claude/skills/kosu-kaydi/scripts/kosu-sar.sh <is> [--nobetci] -- <eski komut…>
+#   Her koşu TAM BİR SATIR yazar (K1): /config/.kosu-kaydi/<kutu>.<YYYY-MM>.jsonl (kutu-yerel; /config/.claude ortak bağ) — özet yok.
+#   sonuc: tamam · hata · ayakta-dokunmadim (K4: işin $KOSU_BEYAN dosyasına 'dokunmadim' yazmasıyla YA DA kanon satırında --nobetci
+#          bayrağı varken rc 0 + boş çıktı) · atlandi-kilit (rc = KOSU_KILIT_RC, varsayılan 75: 'flock -n -E 75') · olculemedi (126/127)
 #   sonraki_planli = CANLI crontab'daki kendi satırının ifadesinden · ifadeden_tahmin = KANON dosyasındaki satırdan (K5);
 #   ikisi cron-sonraki.py ile (bağımsız, paket istemez); türetilemezse null + turetilemedi:true. Çelişki kokpitte sarı (A267).
 #   sahip = kanon satırının üstündeki '# sahip:' notu (K3), yoksa "bilinmiyor"; kutuk = '# damga:' notu, yoksa null.
@@ -12,10 +13,16 @@
 #   Dikişler (sınav): KOSU_KAYIT_DIZ · KOSU_KANON · KOSU_CRONTAB_KOMUT (varsayılan 'crontab -l') · KOSU_KUTU · KOSU_SIMDI.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SURUM="kosu-sar 0.2"
-IS="${1:-}"; [ "${2:-}" = "--" ] || { echo "kullanım: kosu-sar.sh <is> -- <komut…>" >&2; exit 2; }; shift 2
+SURUM="kosu-sar 0.3"
+KULLANIM="kullanım: kosu-sar.sh <is> [--nobetci] -- <komut…>"
+IS="${1:-}"; shift || true; NOBETCI=0
+while [ $# -gt 0 ] && [ "$1" != "--" ]; do
+  case "$1" in --nobetci) NOBETCI=1;; *) echo "$KULLANIM (bilinmeyen: $1)" >&2; exit 2;; esac; shift
+done
+[ "${1:-}" = "--" ] || { echo "$KULLANIM" >&2; exit 2; }; shift
 [[ "$IS" =~ ^[a-z0-9-]+$ ]] || { echo "geçersiz iş adı: $IS" >&2; exit 2; }
 [ $# -gt 0 ] || { echo "komut yok" >&2; exit 2; }
+KILIT_RC="${KOSU_KILIT_RC:-75}"   # kanon satırı 'flock -n -E 75 …' yazar; 75 = kilit doluydu, komut hiç koşmadı (atlandi-kilit)
 _kutu_adi() {  # KOSU_KUTU → DEFAULT_WORKSPACE son parçası (kapimda ile aynı türetme) → bilinmiyor
   if [ -n "${KOSU_KUTU:-}" ]; then printf '%s' "$KOSU_KUTU"; return; fi
   local ws="${DEFAULT_WORKSPACE:-}"; ws="${ws%/}"
@@ -25,7 +32,7 @@ _kutu_adi() {  # KOSU_KUTU → DEFAULT_WORKSPACE son parçası (kapimda ile ayn�
   printf '%s' "${ad:-bilinmiyor}"
 }
 KUTU="$(_kutu_adi)"
-DIZ="${KOSU_KAYIT_DIZ:-/config/.claude/kosu-kaydi}"; mkdir -p "$DIZ"
+DIZ="${KOSU_KAYIT_DIZ:-/config/.kosu-kaydi}"; mkdir -p "$DIZ"   # KUTU-YEREL: /config/.claude ortak bağdır (nazir'de Sultan kapısı, A291)
 CRONTAB_KOMUT="${KOSU_CRONTAB_KOMUT:-crontab -l}"
 KANON="${KOSU_KANON:-}"; KANON_GECICI=""
 if [ -z "$KANON" ]; then  # kanon bildirilmemiş → canlı crontab kanon yerine geçer (drift ölçülemez, sahip okunur)
@@ -37,7 +44,10 @@ _an() { date -Iseconds; }
 _kanon_oku() {  # <dosya> → "sahip|damga|ifade"
   awk -v is="$IS" '
     /^#/ { if ($0 ~ /^# sahip:/) {s=$0; sub(/^# sahip:[ \t]*/,"",s)} ; if ($0 ~ /^# damga:/) {d=$0; sub(/^# damga:[ \t]*/,"",d)}; next }
-    /^[0-9*@]/ { if (index($0, "kosu-sar.sh " is " ") > 0) { n=split($0,a," "); ifade=(a[1] ~ /^@/) ? a[1] : a[1]" "a[2]" "a[3]" "a[4]" "a[5]; print s "|" d "|" ifade; exit } ; s=""; d="" ; next }
+    /^[0-9*@]/ { if (index($0, "kosu-sar.sh " is " ") > 0) { n=split($0,a," "); ifade=(a[1] ~ /^@/) ? a[1] : a[1]" "a[2]" "a[3]" "a[4]" "a[5];
+                   # satır SONU etiketi (… # <ad> sahip:<ROL> damga:<yol>) satır üstü notu EZER: canlıya yalnız o taşınır (NÂZIR, A292)
+                   k=index($0,"#"); if (k>0) { son=substr($0,k); if (match(son,/sahip:[^ \t]+/)) s=substr(son,RSTART+6,RLENGTH-6); if (match(son,/damga:[^ \t]+/)) d=substr(son,RSTART+6,RLENGTH-6) }
+                   print s "|" d "|" ifade; exit } ; s=""; d="" ; next }
     { s=""; d="" }' "$1" 2>/dev/null
 }
 _canli_ifade() {  # canlı crontab'daki kendi satırının ifadesi
@@ -57,10 +67,16 @@ SAHIP="${KANON_BILGI%%|*}"; REST="${KANON_BILGI#*|}"; DAMGA="${REST%%|*}"; KANON
 
 BEYAN_DOSYA="$(mktemp)"; export KOSU_BEYAN="$BEYAN_DOSYA"
 BASLANGIC="$(_an)"; T0=$(date +%s)
-if "$@"; then RC=0; else RC=$?; fi
+if [ "$NOBETCI" -eq 1 ]; then   # nöbetçi kipi: beyan KANON satırında (--nobetci); çıktı boş + rc 0 = ayaktaydı, dokunmadı (K4, NÂZIR A291)
+  CIKTI_DOSYA="$(mktemp)"; if "$@" | tee "$CIKTI_DOSYA"; then RC=0; else RC=$?; fi
+  [ -s "$CIKTI_DOSYA" ] && CIKTI_VAR=1 || CIKTI_VAR=0; rm -f "$CIKTI_DOSYA"
+else
+  if "$@"; then RC=0; else RC=$?; fi; CIKTI_VAR=1
+fi
 BITIS="$(_an)"; SURE=$(( $(date +%s) - T0 ))
 BEYAN="$(tr -d '[:space:]' < "$BEYAN_DOSYA" 2>/dev/null || true)"; rm -f "$BEYAN_DOSYA"
-if [ "$RC" -eq 0 ] && [ "$BEYAN" = "dokunmadim" ]; then SONUC="ayakta-dokunmadim"
+if [ "$RC" -eq "$KILIT_RC" ]; then SONUC="atlandi-kilit"   # flock -n -E 75: kilit dolu, komut koşmadı — hata DEĞİL (A293)
+elif [ "$RC" -eq 0 ] && { [ "$BEYAN" = "dokunmadim" ] || { [ "$NOBETCI" -eq 1 ] && [ "$CIKTI_VAR" -eq 0 ]; }; }; then SONUC="ayakta-dokunmadim"
 elif [ "$RC" -eq 0 ]; then SONUC="tamam"
 elif [ "$RC" -eq 127 ] || [ "$RC" -eq 126 ]; then SONUC="olculemedi"   # rc olduğu gibi kalır (126 ≠ 127), yalnız sonuç sınıfı
 else SONUC="hata"; fi

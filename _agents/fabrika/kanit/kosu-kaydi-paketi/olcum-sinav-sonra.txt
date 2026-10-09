@@ -1,13 +1,16 @@
 $ bash kosu-kaydi/scripts/kosu-sar.test.sh
-# rc=0 sure=5.4s zaman=2026-10-09T12:40:19+03:00
+# rc=0 sure=5.4s zaman=2026-10-09T12:51:53+03:00
 --- stdout ---
 ════ K1 · her koşu tam satır, geçerli JSON, 15 alan ════
 ════ K4 · sessiz başarı YALNIZ beyanla ════
+════ K4 · nöbetçi kipi (--nobetci): beyan kanon satırında, dosyaya dokunulmaz (NÂZIR A291) ════
+════ atlandi-kilit · flock -n -E 75 (NÂZIR A293) ════
 ════ K5 · çelişki: canlı tablo ≠ kanon ════
 ════ K5 · @reboot türetilemez · satırı olmayan iş ════
+════ K3 · satır SONU etiketi (canlıya taşınan tek yüzey, NÂZIR A292) ════
 ════ olculemedi · hatalı kullanım ════
 ════ kanon bildirilmemiş · kutu adı türetimi (A290: her kutunun kanon yolu başka) ════
 ════ cron-sonraki.py tek başına (bağımsız hesap, paket yok) ════
 
-── SONUÇ: 47 geçti · 0 düştü ──
+── SONUÇ: 58 geçti · 0 düştü ──
 --- stderr ---

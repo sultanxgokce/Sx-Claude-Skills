@@ -1,17 +1,32 @@
-$ bash /config/.claude/jobs/d69a1b07/tmp/nazir-sinav.sh
-# rc=0 sure=4.1s zaman=2026-10-09T12:40:23+03:00
+$ bash kosu-kaydi/scripts/hedef-kutu-sinav.sh cloudtop-nazir
+# rc=0 sure=6.3s zaman=2026-10-09T12:51:59+03:00
 --- stdout ---
-kutu: cloudtop-nazir · hedef: /tmp/kosu-kaydi-sinav-2129158
-bash: 5.2.21(1)-release · Python 3.12.3 · croniter: ModuleNotFoundError: No module named 'cr
+kutu: cloudtop-nazir · host: hostsrv · hedef: /tmp/kosu-kaydi-sinav-2200543 · kaynak: /config/projects/_wt/Sx-Claude-Skills-kosu-kaydi-becerisi/kosu-kaydi
+── kaynak md5:
+  9a3121086e9346b495252e03297e4990  kosu-kaydi/scripts/cron-sonraki.py
+  5b8c9feebcf7b7f411de1e9e3af5c2c1  kosu-kaydi/scripts/hedef-kutu-sinav.sh
+  1ff12db616661d96abc14c03e7d69ad5  kosu-kaydi/scripts/kosu-sar.sh
+  2c147e3af09699278b47277252237f2a  kosu-kaydi/scripts/kosu-sar.test.sh
+  c42ac8e1a7d4e6c22634ee8f6e38b252  kosu-kaydi/SKILL.md
+── hedef md5:
+  9a3121086e9346b495252e03297e4990  kosu-kaydi/scripts/cron-sonraki.py
+  5b8c9feebcf7b7f411de1e9e3af5c2c1  kosu-kaydi/scripts/hedef-kutu-sinav.sh
+  1ff12db616661d96abc14c03e7d69ad5  kosu-kaydi/scripts/kosu-sar.sh
+  2c147e3af09699278b47277252237f2a  kosu-kaydi/scripts/kosu-sar.test.sh
+  c42ac8e1a7d4e6c22634ee8f6e38b252  kosu-kaydi/SKILL.md
+── hedef ortam: bash 5.2.21(1)-release · Python 3.12.3 · croniter: ModuleNotFoundError: No module named 'cr
 ════ K1 · her koşu tam satır, geçerli JSON, 15 alan ════
 ════ K4 · sessiz başarı YALNIZ beyanla ════
+════ K4 · nöbetçi kipi (--nobetci): beyan kanon satırında, dosyaya dokunulmaz (NÂZIR A291) ════
+════ atlandi-kilit · flock -n -E 75 (NÂZIR A293) ════
 ════ K5 · çelişki: canlı tablo ≠ kanon ════
 ════ K5 · @reboot türetilemez · satırı olmayan iş ════
+════ K3 · satır SONU etiketi (canlıya taşınan tek yüzey, NÂZIR A292) ════
 ════ olculemedi · hatalı kullanım ════
 ════ kanon bildirilmemiş · kutu adı türetimi (A290: her kutunun kanon yolu başka) ════
 ════ cron-sonraki.py tek başına (bağımsız hesap, paket yok) ════
 
-── SONUÇ: 47 geçti · 0 düştü ──
+── SONUÇ: 58 geçti · 0 düştü ──
 temizlik: silindi
-nazir sınav rc=0
+hedef kutu sınav rc=0
 --- stderr ---
