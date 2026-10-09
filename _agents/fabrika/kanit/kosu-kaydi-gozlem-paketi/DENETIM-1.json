@@ -1,0 +1,34 @@
+{
+  "tur": 1,
+  "is": "kosu-kaydi-gozlem-paketi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-09T20:54:52+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32704,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Gözlemli nöbetçi akışı, kırpılmış önce/sonra karşılaştırması ve Nâzır kutusunda `/tmp` sınavı eklenmiş; 85 sınav iki ortamda da geçiyor. Ancak gözlem arızası iş komutu da başarısız olduğunda `olculemedi` yerine `hata` yazılıyor ve başka karta ait denetim kaydı kapsama karışmış; önce bunlar çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Gözlem çağrılarından biri rc≠0 olsa bile iş komutu rc≠0 dönerse sonuç `olculemedi` değil `hata` oluyor; bu, kartın koşulsuz “önce YA DA sonra gözlem rc≠0 = olculemedi” talebine aykırı.",
+        "kanit": "`GOZLEM_SORUN` gözlem rc'lerinden biri nonzero olduğunda kuruluyor; fakat sonuç dalı bunu yalnız `RC=0` iken `olculemedi` sayıyor. Ardından genel nonzero iş rc'si `hata` dalına düşüyor. Sınavlarda gözlem arızası yalnız başarılı `true` işiyle, iş arızası ise çalışan gözlemle ayrı ayrı denenmiş; birleşik durum yok.",
+        "konum": "kosu-kaydi/scripts/kosu-sar.sh:99, kosu-kaydi/scripts/kosu-sar.sh:111-114; kosu-kaydi/scripts/kosu-sar.test.sh:63-66",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Değişiklik, bu iş kartına ait olmayan önceki `kosu-kaydi-gozlem` denetim kaydını da ekliyor.",
+        "kanit": "Diffte `_agents/fabrika/kanit/kosu-kaydi-gozlem/DENETIM-1.json` yeni dosya; içindeki `is` alanı `kosu-kaydi-gozlem`, mevcut kart ve manifest ise `kosu-kaydi-gozlem-paketi`.",
+        "konum": "_agents/fabrika/kanit/kosu-kaydi-gozlem/DENETIM-1.json:1",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Hermetik sınav ile aynı sınavın Nâzır kutusunda `/tmp` hedefinde çalışması ayrı yeşil ölçümlerle gösterilmiş, kaynak-hedef md5 eşliği ve croniter yokluğu da kayıtta görülüyor. Yalnız “sonra” ölçümleri bulunduğundan önce/sonra ölçüm çifti yok; ayrıca 85/85 özeti, gözlem arızası ile iş arızasının aynı koşuda birleştiği eksik durumu sınamıyor."
+  }
+}

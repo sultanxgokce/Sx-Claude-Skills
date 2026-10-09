@@ -108,7 +108,7 @@ BITIS="$(_an)"; SURE=$(( $(date +%s) - T0 ))
 BEYAN="$(tr -d '[:space:]' < "$BEYAN_DOSYA" 2>/dev/null || true)"; rm -f "$BEYAN_DOSYA"
 if [ "$ATLANDI" -eq 1 ]; then SONUC="atlandi-kilit"   # kilit dolu, komut koşmadı — hata DEĞİL (A293); yalnız sarmalayıcının kendi kilidi sayılır
 elif [ "$KILIT_SORUN" -eq 1 ]; then SONUC="olculemedi"   # flock yok ya da bozuk: kilit durumu bilinmiyor, "atlandı" DENMEZ
-elif [ "${GOZLEM_SORUN:-0}" -eq 1 ] && [ "$RC" -eq 0 ]; then SONUC="olculemedi"   # iş koştu ama gözlem komutu çalışmadı: sessiz başarı ölçülemedi
+elif [ "${GOZLEM_SORUN:-0}" -eq 1 ]; then SONUC="olculemedi"   # gözlem komutu (önce ya da sonra) çalışmadı: sınıf ölçülemedi — iş rc'si ne olursa olsun; rc olduğu gibi geçer
 elif [ "$RC" -eq 0 ] && { [ "$BEYAN" = "dokunmadim" ] || { [ "$NOBETCI" -eq 1 ] && [ "$CIKTI_VAR" -eq 0 ]; }; }; then SONUC="ayakta-dokunmadim"
 elif [ "$RC" -eq 0 ]; then SONUC="tamam"
 elif [ "$RC" -eq 127 ] || [ "$RC" -eq 126 ]; then SONUC="olculemedi"   # rc olduğu gibi kalır (126 ≠ 127), yalnız sonuç sınıfı

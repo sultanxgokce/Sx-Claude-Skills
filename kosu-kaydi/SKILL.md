@@ -61,7 +61,7 @@ kayıt dizini açılamaz/yazılamazsa satır **yedek dizine** düşer (`KOSU_YED
 (cron bunu kütüğe/postaya taşır); satır hiç yazılamazsa stderr'de `KAYIT YAZILAMADI`.
 `--nobetci --gozlem <komut>` (0.4, şema 1.2): nöbetçi **yeniden başlatırken de sessizse** (nazir `sunucu.sh` iki kolda da rc 0 + boş stdout, A300)
 "boş çıktı = iş yok" çıkarıma döner. Gözlemli kipte ölçü stdout değildir: gözlem komutu koşudan **önce** ve **sonra** koşar; çıktı aynıysa
-`ayakta-dokunmadim`, değiştiyse `tamam` (ör. dinleyen pid değişti = yeniden başlattı). Karşılaştırma: gözlem stdout'u, bütünün baş/son boşluğu kırpılıp bayt bayt; içteki boşluk anlamlı. Önce ya da sonra gözlemden biri rc≠0 → `olculemedi` (dokunmadı denmez; iş rc'si olduğu gibi).
+`ayakta-dokunmadim`, değiştiyse `tamam` (ör. dinleyen pid değişti = yeniden başlattı). Karşılaştırma: gözlem stdout'u, bütünün baş/son boşluğu kırpılıp bayt bayt; içteki boşluk anlamlı. Önce ya da sonra gözlemden biri rc≠0 → `olculemedi` — iş rc'si ne olursa olsun (koşulsuz; `hata` bile denmez, çünkü sınıf ölçülememiştir); iş rc'si olduğu gibi geçer.
 `--nobetci`: beyan betikte değil **kanon satırında** yaşar — sürümsüz bir nöbetçi betiğine (A291: nazir'inki hiçbir depoda değil)
 dokunmadan K4 ölçülür. Bedeli: nöbetçinin çıktısı sarmalayıcıdan geçer (`tee`), kütüğe yine düşer.
 
