@@ -198,6 +198,54 @@ def surtunme_oku(depo: Path) -> tuple[str, str]:
     return ("olculdu", s.stdout.strip())
 
 
+def surtunme_ayristir(metin: str, esik: int) -> list[dict]:
+    """Sürtünme raporunun sınıf tablosunu adaya çevrilebilir veriye ayrıştırır.
+
+    🔴 BAĞIMSIZ GÖZÜN TUR-3 BULGUSU (ciddi): sürtünme raporu ölçülüyor ama
+    sonucu **yalnız ekrana basılıyordu**; aday hattına hiç girmiyordu. Yani
+    becerinin kurulma gerekçesi olan araç (sürtünmeyi sayan rapor) tam da
+    yeteneğe çevrilemiyordu. Bu, iki tur önce iki yüzey için onardığım
+    "kablo yok" kusurunun ÜÇÜNCÜ yüzeyde kalmış hâliydi.
+
+    Satır biçimi: `<sınıf adı>  <olay>  <oturum>  <trend>` — sınıf adı boşluk
+    içerebilir, bu yüzden SONDAN ayrıştırılır.
+
+    🔴 Ayrıştırılamayan satır SESSİZCE atlanmaz: sayısı çağırana döner.
+    """
+    aday, atlanan = [], 0
+    basladi = False
+    for satir in metin.splitlines():
+        h = satir.strip()
+        if h.startswith("SINIF"):
+            basladi = True
+            continue
+        if not basladi:
+            continue
+        if h.startswith("---") or h.startswith("En son"):
+            break
+        parca = h.split()
+        if len(parca) < 4:
+            if h:
+                atlanan += 1
+            continue
+        trend = parca[-1]
+        try:
+            olay = int(parca[-3])
+        except ValueError:
+            atlanan += 1
+            continue
+        ad = " ".join(parca[:-3]).strip()
+        if not ad:
+            atlanan += 1
+            continue
+        if olay >= esik:
+            aday.append({"yuzey": "surtunme", "tekrar": ad, "sayi": olay,
+                         "kaynak_bulgular": [f"surtunme:{ad}"], "trend": trend})
+    if atlanan:
+        aday.append({"_atlanan": atlanan})
+    return aday
+
+
 def dedup_kaynaklari(depo: Path) -> tuple[set[str], str]:
     """Zaten önerilmiş / zaten var olan yetenekler. Eksikse SÖYLER."""
     adlar: set[str] = set()
@@ -417,12 +465,21 @@ def olc_veri(n) -> dict:
     else:
         print("   eşiği aşan tekrar yok")
 
-    print(f"\n── YÜZEY 3 · sürtünme raporu")
+    print(f"\n── YÜZEY 3 · sürtünme raporu (olay ≥ {es.get('surtunme_esik', 10)})")
     if surt_hal == "olcemedim":
         print(f"   🟡 {surt}")
     else:
-        for satir in surt.splitlines()[:12]:
-            print("   " + satir)
+        sa = surtunme_ayristir(surt, int(es.get("surtunme_esik", 10)))
+        atlanan = sum(x.get("_atlanan", 0) for x in sa if "_atlanan" in x)
+        sa = [x for x in sa if "_atlanan" not in x]
+        if atlanan:
+            print(f"   🟡 {atlanan} satır ayrıştırılamadı (sessizce atlanmadı, sayıldı)")
+        if sa:
+            for a in sorted(sa, key=lambda x: -x["sayi"]):
+                print(f"   {a['sayi']:3d} × {a['tekrar']:<32} trend {a['trend']}")
+                bulunan.append(a)
+        else:
+            print("   eşiği aşan sürtünme sınıfı yok")
 
     print()
     if tek_parti_sayisi[0]:
@@ -617,6 +674,25 @@ def komut_tur(n) -> int:
     return 0
 
 
+def _adayi_ise_bagla(depo: Path, anahtar: str, is_: str) -> str:
+    """Tur durumundaki adayı bu işe bağlar. Damganın doğru adayı kapatması için ŞART."""
+    durum = tur_durumu_yolu(depo)
+    if not durum.exists():
+        return "tur durumu yok — bağlanamadı (damga atılamayacak)"
+    try:
+        d = json.loads(durum.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as e:
+        return f"tur durumu okunamadı: {e}"
+    hedef = [a for a in d.get("adaylar", []) if a.get("anahtar") == anahtar]
+    if not hedef:
+        var = ", ".join(a.get("anahtar", "?") for a in d.get("adaylar", []))
+        return f"'{anahtar}' tur durumunda YOK (var olanlar: {var})"
+    for a in hedef:
+        a["is"] = is_
+    durum.write_text(json.dumps(d, ensure_ascii=False) + "\n", encoding="utf-8")
+    return ""
+
+
 def komut_kart(n) -> int:
     """Kartı AÇAR ve sınıf sorularını kâhinle cevaplar (muhakemeyle değil)."""
     depo = Path(n.depo).resolve()
@@ -634,6 +710,16 @@ def komut_kart(n) -> int:
     kart = FABRIKA / "kart.sh"
     if not kart.exists():
         raise Durdu(f"fabrika kart aracı yok: {kart} — ÖLÇEMEDİM", 3)
+    if n.anahtar:
+        hata = _adayi_ise_bagla(depo, n.anahtar, n.is_)
+        if hata:
+            print(f"   🟡 aday bağlanamadı: {hata}")
+            print("      Kart açılacak ama kapanış damgası ATILAMAZ (fail-closed).")
+        else:
+            print(f"   ✓ aday '{n.anahtar}' bu işe bağlandı — damga doğru adayı kapatacak")
+    else:
+        print("   🟡 --anahtar verilmedi: kapanış damgası ATILAMAZ (hangi tekrarın")
+        print("      kapandığı bilinmez). Tüm adayları kapatmak YANLIŞ KAPANIŞ olurdu.")
     rc, cik = _kos(["bash", str(kart), "ac", n.is_,
                     "--is", n.cumle or "bileyi: tekrar eden sürtünme yeteneğe çevriliyor",
                     "--istedi", "BILEYI", "--aldi", kimlik(depo),
@@ -750,9 +836,23 @@ def _kapanis_damgasi(depo: Path, is_: str, kanit: str) -> int:
     except (OSError, json.JSONDecodeError) as e:
         print(f"   🟡 tur durumu okunamadı ({e}) — damga atılmadı.")
         return 0
-    idler = sorted({i for a in d.get("adaylar", []) for i in a.get("kaynak_bulgular", [])})
+    # 🔴 BAĞIMSIZ GÖZÜN TUR-3 BULGUSU (ciddi): burada `adaylar`ın HEPSİNİN kaynak
+    #    bulguları kapatılıyordu. Yani bir turda iki aday varsa ve biri inince
+    #    ÖTEKİNİN kaynakları da "kapandı" damgası yiyordu — damganın önlemek için
+    #    var olduğu hatanın ta kendisi: YANLIŞ KAPANIŞ. Bir sonraki tur o tekrarı
+    #    kapanmış sanıp hiç ele almazdı.
+    #    Artık iş → aday eşleştirmesi ZORUNLU: eşleşme yoksa damga ATILMAZ ve
+    #    sebebi yazılır (fail-closed; sessiz tüm-kapatmadan iyidir).
+    eslesen = [a for a in d.get("adaylar", []) if a.get("is") == is_]
+    if not eslesen:
+        print(f"   🟡 '{is_}' işi tur durumundaki hiçbir adaya BAĞLI DEĞİL — damga atılmadı.")
+        print("      Hepsini kapatmak YANLIŞ KAPANIŞ olurdu: aynı turdaki öteki adayların")
+        print("      kaynakları da kapanmış sayılır ve bir daha ele alınmazdı.")
+        print("      Bağlamak için: bileyi.sh kart --is <ad> --anahtar <aday-anahtari> …")
+        return 0
+    idler = sorted({i for a in eslesen for i in a.get("kaynak_bulgular", [])})
     if not idler:
-        print("   🟡 tur durumunda kaynak bulgu yok — damga atılmadı.")
+        print("   🟡 eşleşen adayda kaynak bulgu yok — damga atılmadı.")
         return 0
     havuz = depo / "_agents" / "handoff" / "bulgu-havuzu.jsonl"
     if not havuz.exists():
@@ -765,13 +865,18 @@ def _kapanis_damgasi(depo: Path, is_: str, kanit: str) -> int:
             "kaynak": "bileyi",
             "sinif": "kapanis-damgasi",
             "baslik": f"'{is_}' indi; kapatılan tekrar: "
-                      + ", ".join(a["tekrar"] for a in d.get("adaylar", [])),
+                      + ", ".join(a["tekrar"] for a in eslesen),
             "kapatilan": idler,
             "kanit": kanit.strip()[:300],
             "durum": "kapandi",
         }, ensure_ascii=False) + "\n")
-    print(f"   ✓ kapanış damgası eklendi · {len(idler)} kaynak bulgu adıyla sayıldı")
-    d["asama"] = "kapandi"
+    print(f"   ✓ kapanış damgası eklendi · {len(idler)} kaynak bulgu adıyla sayıldı "
+          f"({len(eslesen)}/{len(d.get('adaylar', []))} aday)")
+    for a in eslesen:
+        a["asama"] = "kapandi"
+    # 🔴 Tur ancak TÜM adaylar kapandığında kapanır; biri indi diye tur bitmez.
+    d["asama"] = ("kapandi" if all(a.get("asama") == "kapandi" for a in d.get("adaylar", []))
+                  else "yazim-bekliyor")
     durum.write_text(json.dumps(d, ensure_ascii=False) + "\n", encoding="utf-8")
     return 0
 
@@ -799,6 +904,9 @@ def main(argv: list[str]) -> int:
                     help="dokunulacak yol (birden çok verilebilir)")
     kt.add_argument("--cumle", default=None)
     kt.add_argument("--sinif-dosya", default=None)
+    kt.add_argument("--anahtar", default=None,
+                    help="bu işin kapattığı ADAY anahtarı (tur çıktısında yazılı) — "
+                         "verilmezse kapanış damgası atılamaz")
     kt.add_argument("--kuru", action="store_true")
     dv = alt.add_parser("devam", help="kanıt + bağımsız göz + SINIFSIZSA birleştir")
     dv.add_argument("--is", dest="is_", required=True)

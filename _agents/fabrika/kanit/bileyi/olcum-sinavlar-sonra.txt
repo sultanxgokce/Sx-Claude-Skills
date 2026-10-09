@@ -1,5 +1,5 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-sinav.sh
-# rc=0 sure=4.3s zaman=2026-10-09T22:55:48+03:00
+# rc=0 sure=4.7s zaman=2026-10-09T23:08:30+03:00
 --- stdout ---
 A · temel akış
   ✓ A1 eşiği aşan tekrar VAR → rc=0
@@ -78,8 +78,20 @@ P · 🔴 'devam' birleştirme kilitleri
   ✓ P1 kartsız iş birleştirilmez → rc=3
   ✓ P2 kill-switch kapalıyken devam rc=4 (birleştirmez)
   ✓ P3 🔴 sınıf YUKARI çıkarsa birleştirme YOK — hem rc hem SEBEP ölçülür
+S · 🔴 sürtünme yüzeyi ADAY HATTINA girer (tur-3 bulgusu, ciddi)
+  ✓ S1 rapor tablosu ayrıştırılır ve eşiği aşanlar aday olur
+  ✓ S2 ayrıştırılamayan satır SESSİZCE atlanmaz, sayılır
+  ✓ S3 eşiği aşmayan sürtünme sınıfı aday OLMAZ
+  ✓ S4 ölçüm çıktısı sürtünme eşiğini yazar
+  ✓ S5 🔴 SONUÇ: sürtünme sınıfı FİİLEN aday olur (yardımcı değil, HAT ölçülür)
+  ✓ S5b aday kaydı sürtünme yüzeyini ve sayısını taşır
+T · 🔴 damga YALNIZ bağlı adayı kapatır (tur-3 bulgusu, ciddi: yanlış kapanış)
+  ✓ T1 iki adaydan yalnız BAĞLI olanın kaynakları kapanır
+  ✓ T2 işe BAĞLI aday yoksa damga ATILMAZ ve sebebi yazılır
+  ✓ T3 tur ancak TÜM adaylar kapanınca kapanır
+  ✓ T4 --anahtar verilmezse kart bunu SÖYLER (sessiz kalmaz)
 
-toplam=59 geçen=59 düşen=0
+toplam=69 geçen=69 düşen=0
 ### bileyi.test.sh rc=0
 ### manifest-parity rc=0
 ### versiyon-lint rc=0

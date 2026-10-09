@@ -1,7 +1,7 @@
 {
   "is": "bileyi",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-09T22:57:11+03:00",
+  "guncelleme": "2026-10-09T23:10:27+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -38,30 +38,30 @@
       "etiket": "sinavlar",
       "asama": "sonra",
       "dosya": "olcum-sinavlar-sonra.txt",
-      "sha256": "2f97bd11f743ce5e14887ef740367abac73519f3781fbe30c572eb20bde9c143",
+      "sha256": "d128d3d59f6aa43e4a34ab909d016d7b88d341ec1194d03c48f707619e521370",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-sinav.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T22:55:48+03:00",
-      "sure_sn": 4.3
+      "zaman": "2026-10-09T23:08:30+03:00",
+      "sure_sn": 4.7
     },
     {
       "tur": "olcum",
       "etiket": "mutasyon",
       "asama": "sonra",
       "dosya": "olcum-mutasyon-sonra.txt",
-      "sha256": "d66d9079287702edec0d6210921ea9f4ef95608ff41bb31583441d9047ff5ec2",
+      "sha256": "e15d5f283f4d261d7ec5ff5be7fc2b0c79e2731092c4a1b5bf575a3be1c2b52e",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-mutasyon.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T22:57:11+03:00",
-      "sure_sn": 83.0
+      "zaman": "2026-10-09T23:10:27+03:00",
+      "sure_sn": 117.0
     },
     {
       "tur": "olcum",
@@ -94,5 +94,5 @@
       "sure_sn": 0.2
     }
   ],
-  "imza": "25543de50a616d3cfb6354577fa16954ebbe54c37e8ba1b6b1d76975e69bdadf"
+  "imza": "34a4d2ce33f7cf60332621ffd09e704b63b5f86bf5b54e8801e0c1854179cb9a"
 }

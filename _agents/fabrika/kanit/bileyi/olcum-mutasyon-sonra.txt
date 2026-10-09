@@ -1,5 +1,5 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-mutasyon.sh
-# rc=0 sure=83.0s zaman=2026-10-09T22:57:11+03:00
+# rc=0 sure=117.0s zaman=2026-10-09T23:10:27+03:00
 --- stdout ---
 POZITIF KONTROL · temiz hal (ONCE) rc=0
   OK  M01 dayanaksiz esigi kabul etmek -> KIRMIZI
@@ -25,6 +25,11 @@ POZITIF KONTROL · temiz hal (ONCE) rc=0
   OK  M21 ayni tekrari iki kez aday yapmak -> KIRMIZI
   OK  M22 kapanis damgasini sessizce atlamak -> KIRMIZI
   OK  M23 damgayi satir ustune yazmak -> KIRMIZI
+  OK  M24 surtunme yuzeyini aday hattindan koparmak -> KIRMIZI
+  OK  M25 surtunme esigini yok saymak -> KIRMIZI
+  OK  M26 ayristirilamayan satiri sessizce atmak -> KIRMIZI
+  OK  M27 damgayi TUM adaylara atmak (yanlis kapanis) -> KIRMIZI
+  OK  M28 turu erken kapatmak -> KIRMIZI
 POZITIF KONTROL · temiz hal (SONRA) rc=0
 sus-kapi=0
 --- stderr ---

@@ -2,9 +2,10 @@
   "_niçin_dosya": "Eşik koda GÖMÜLMEZ. 'Kaç tekrar yeteneğe döner' bir ölçüm sorusudur; kodda sabit olursa değiştirmek bir ölçüm değil bir düzenleme olur ve dayanağı kaybolur.",
   "ikili_esik": 4,
   "sinif_esik": 2,
-  "dayanak": "2026-10-09 · MUAVİN · Nexus bulgu havuzu 177 kayıt üstünde ölçüldü. İkili söz öbeği dağılımı: tepe 'vekil olcut' x8, 'sahte yesil' x5, sonra x4 bandı (4 öbek), ardından x3 ve x2 bandında yüzlerce öbek. >=4 gürültüyü kesen ilk nokta. Sınıf alanı yüzeyi: 61/177 dolu (%34) -> sınıfa dayanan sayım havuzun %66'sına kör; bu yüzden sınıf eşiği DAHA DÜŞÜK (2) ama kapsama her koşuda basılır.",
+  "dayanak": "2026-10-09 · MUAVİN · Nexus bulgu havuzu 177 kayıt üstünde ölçüldü. İkili söz öbeği dağılımı: tepe 'vekil olcut' x8, 'sahte yesil' x5, sonra x4 bandı (4 öbek), ardından x3 ve x2 bandında yüzlerce öbek. >=4 gürültüyü kesen ilk nokta. Sınıf alanı yüzeyi: 61/177 dolu (%34) -> sınıfa dayanan sayım havuzun %66'sına kör; bu yüzden sınıf eşiği DAHA DÜŞÜK (2) ama kapsama her koşuda basılır. || SÜRTÜNME YÜZEYİ (2026-10-09, aynı ölçüm): bu odanın 14 günlük sürtünme raporunda 11 sınıfın olay sayıları büyükten küçüğe 30, 25, 14, 8, 7, 4, 3, 1, 0, 0, 0. En belirgin kopuş 14 ile 8 arasında; >=10 ilk üçü (destructive-blok 30, dosya-bulunamadı 25, py-traceback 14) ayırıyor. 🔴 DÜRÜST SINIR: bu TEK odanın TEK günlük görüntüsü; eşik bir hafta veri birikince yeniden türetilmeli. Sayıyı artırıp dayanağı eski bırakmak bu dosyanın tek yasağı.",
   "dayanak_tarihi": "2026-10-09",
   "_uyari": "Dayanak satırı BOŞ ya da yoksa araç rc=3 (ÖLÇEMEDİM) döner. Eşiği değiştirmek yeni bir ÖLÇÜM ister; sayıyı artırıp dayanağı eski bırakmak bu dosyanın tek yasağıdır.",
   "tavan": 2,
-  "pencere_gun": 30
+  "pencere_gun": 30,
+  "surtunme_esik": 10
 }

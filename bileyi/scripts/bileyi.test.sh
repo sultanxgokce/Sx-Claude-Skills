@@ -376,7 +376,7 @@ onceki = [json.dumps({'id':'b0001','baslik':'eski','durum':'acik'}, ensure_ascii
 (kok/'_agents/handoff/bulgu-havuzu.jsonl').write_text(onceki[0]+chr(10), encoding='utf-8')
 (kok/'_agents/fabrika/bileyi-tur.json').write_text(json.dumps(
     {'asama':'yazim-bekliyor','adaylar':[{'anahtar':'ikili:a b','tekrar':'a b',
-     'kaynak_bulgular':['b0001']}]}, ensure_ascii=False), encoding='utf-8')
+     'kaynak_bulgular':['b0001'],'is':'is1'}]}, ensure_ascii=False), encoding='utf-8')
 t=io.StringIO()
 with contextlib.redirect_stdout(t):
     m._kapanis_damgasi(kok, 'is1', 'PR #1')
@@ -427,6 +427,127 @@ assert 'SINIF YUKARI ÇIKTI' in cik, 'rc=1 geldi ama SEBEP bu degil: ' + cik[-20
 # Ve en onemlisi: BIRLESTIRME hic denenmemis olmali.
 assert not any('merge' in ' '.join(k) for k in cagrilan), 'birlestirme denendi!'
 "
+
+echo "S · 🔴 sürtünme yüzeyi ADAY HATTINA girer (tur-3 bulgusu, ciddi)"
+kapi "S1 rapor tablosu ayrıştırılır ve eşiği aşanlar aday olur" 0 python3 -c "
+import importlib.util as u
+s=u.spec_from_file_location('b','$B'); m=u.module_from_spec(s); s.loader.exec_module(m)
+rapor = chr(10).join([
+  '=== baslik ===',
+  '  SINIF              OLAY  OTURUM  TREND',
+  '  dosya-bulunamadi     25       4    ^',
+  '  destructive-blok     30       4    ^',
+  '  commit-lint reddi     3       2    v',
+  '  auto-mode izin-reddi    4       1    ^',
+  '  --- TOPLAM 62 olay / 5 oturum',
+  '  En son ornekler:',
+  '    dosya-bulunamadi x Nexus x 2026-10-09 x tetik',
+])
+a = m.surtunme_ayristir(rapor, 10)
+ad = {x['tekrar']: x['sayi'] for x in a if '_atlanan' not in x}
+assert ad == {'dosya-bulunamadi': 25, 'destructive-blok': 30}, ad
+a2 = [x for x in m.surtunme_ayristir(rapor, 3) if '_atlanan' not in x]
+ad2 = {x['tekrar'] for x in a2}
+assert 'commit-lint reddi' in ad2, ad2
+assert 'auto-mode izin-reddi' in ad2, ad2
+assert not any('Nexus' in t for t in ad2), ad2
+"
+kapi "S2 ayrıştırılamayan satır SESSİZCE atlanmaz, sayılır" 0 python3 -c "
+import importlib.util as u
+s=u.spec_from_file_location('b','$B'); m=u.module_from_spec(s); s.loader.exec_module(m)
+rapor = '  SINIF  OLAY  OTURUM  TREND\n  bozuk satir burada\n  iyi-sinif  20  3  ^\n  --- TOPLAM\n'
+a = m.surtunme_ayristir(rapor, 10)
+atl = [x for x in a if '_atlanan' in x]
+assert atl and atl[0]['_atlanan'] == 1, a
+"
+kapi "S3 eşiği aşmayan sürtünme sınıfı aday OLMAZ" 0 python3 -c "
+import importlib.util as u
+s=u.spec_from_file_location('b','$B'); m=u.module_from_spec(s); s.loader.exec_module(m)
+rapor = '  SINIF  OLAY  OTURUM  TREND\n  az-olan  2  1  v\n  --- TOPLAM\n'
+a = [x for x in m.surtunme_ayristir(rapor, 10) if '_atlanan' not in x]
+assert a == [], a
+"
+iceren "S4 ölçüm çıktısı sürtünme eşiğini yazar" "olay ≥" env BILEYI_ANAHTAR="$ANAH" "${O[@]}" olc --gun 0
+
+mkdir -p "$KOK/surt/_agents/handoff" "$KOK/surt/scripts"
+cat > "$KOK/surt/scripts/friction-report.sh" <<'FR'
+#!/usr/bin/env bash
+echo "  SINIF              OLAY  OTURUM  TREND"
+echo "  cokca-olan           42       6    ^"
+echo "  --- TOPLAM 42 olay"
+FR
+chmod +x "$KOK/surt/scripts/friction-report.sh"
+python3 - "$KOK/surt/_agents/handoff" <<'PY'
+import json, sys, pathlib
+from datetime import date
+d = pathlib.Path(sys.argv[1]); b = date.today().isoformat()
+# Havuzda esigi asan HICBIR tekrar yok -> tek aday kaynagi SURTUNME olmali.
+kay = [{'id': f'e{i}', 'tarih': b, 'baslik': f'bambaska kelimeler {i} burada', 'gercek': ''} for i in range(3)]
+(d/'bulgu-havuzu.jsonl').write_text(''.join(json.dumps(k, ensure_ascii=False)+chr(10) for k in kay), encoding='utf-8')
+(d/'layiha-aday-havuzu.jsonl').write_text('', encoding='utf-8')
+PY
+kapi "S5 🔴 SONUÇ: sürtünme sınıfı FİİLEN aday olur (yardımcı değil, HAT ölçülür)" 0 \
+  env BILEYI_ANAHTAR="$ANAH" python3 "$B" --depo "$KOK/surt" --esik-dosya "$ES" tur --gun 0
+kapi "S5b aday kaydı sürtünme yüzeyini ve sayısını taşır" 0 python3 -c "
+import json, pathlib
+a = [json.loads(l) for l in pathlib.Path('$KOK/surt/_agents/handoff/layiha-aday-havuzu.jsonl').read_text(encoding='utf-8').splitlines() if l.strip()]
+yuz = {x['yuzey'] for x in a}
+assert 'surtunme' in yuz, f'surtunme yuzeyi adaya GIRMEDI: {yuz}'
+x = [k for k in a if k['yuzey'] == 'surtunme'][0]
+assert x['sayi'] == 42, x
+assert x['kaynak_bulgular'] == ['surtunme:cokca-olan'], x
+"
+
+echo "T · 🔴 damga YALNIZ bağlı adayı kapatır (tur-3 bulgusu, ciddi: yanlış kapanış)"
+kapi "T1 iki adaydan yalnız BAĞLI olanın kaynakları kapanır" 0 python3 -c "
+import importlib.util as u, pathlib, json, io, contextlib
+s=u.spec_from_file_location('b','$B'); m=u.module_from_spec(s); s.loader.exec_module(m)
+kok = pathlib.Path('$KOK/t1'); (kok/'_agents/handoff').mkdir(parents=True, exist_ok=True)
+(kok/'_agents/fabrika').mkdir(parents=True, exist_ok=True)
+(kok/'_agents/handoff/bulgu-havuzu.jsonl').write_text('{}'+chr(10), encoding='utf-8')
+(kok/'_agents/fabrika/bileyi-tur.json').write_text(json.dumps({'asama':'yazim-bekliyor','adaylar':[
+    {'anahtar':'ikili:a b','tekrar':'a b','kaynak_bulgular':['b0001','b0002'],'is':'isA'},
+    {'anahtar':'ikili:c d','tekrar':'c d','kaynak_bulgular':['b0009']}]}, ensure_ascii=False), encoding='utf-8')
+t=io.StringIO()
+with contextlib.redirect_stdout(t): m._kapanis_damgasi(kok, 'isA', 'PR #1')
+satir=[l for l in (kok/'_agents/handoff/bulgu-havuzu.jsonl').read_text(encoding='utf-8').splitlines() if l.strip()]
+d=json.loads(satir[-1])
+assert d['kapatilan'] == ['b0001','b0002'], d['kapatilan']
+assert 'b0009' not in d['kapatilan'], 'BAGLI OLMAYAN adayin kaynagi da kapatildi — yanlis kapanis'
+"
+kapi "T2 işe BAĞLI aday yoksa damga ATILMAZ ve sebebi yazılır" 0 python3 -c "
+import importlib.util as u, pathlib, json, io, contextlib
+s=u.spec_from_file_location('b','$B'); m=u.module_from_spec(s); s.loader.exec_module(m)
+kok = pathlib.Path('$KOK/t2'); (kok/'_agents/handoff').mkdir(parents=True, exist_ok=True)
+(kok/'_agents/fabrika').mkdir(parents=True, exist_ok=True)
+(kok/'_agents/handoff/bulgu-havuzu.jsonl').write_text('{}'+chr(10), encoding='utf-8')
+(kok/'_agents/fabrika/bileyi-tur.json').write_text(json.dumps({'asama':'yazim-bekliyor','adaylar':[
+    {'anahtar':'ikili:a b','tekrar':'a b','kaynak_bulgular':['b0001']}]}, ensure_ascii=False), encoding='utf-8')
+t=io.StringIO()
+with contextlib.redirect_stdout(t): m._kapanis_damgasi(kok, 'baska-is', 'PR #1')
+cik=t.getvalue()
+assert 'BAĞLI DEĞİL' in cik, cik
+assert 'YANLIŞ KAPANIŞ' in cik
+n=len([l for l in (kok/'_agents/handoff/bulgu-havuzu.jsonl').read_text(encoding='utf-8').splitlines() if l.strip()])
+assert n == 1, 'damga atilmis olmamali'
+"
+kapi "T3 tur ancak TÜM adaylar kapanınca kapanır" 0 python3 -c "
+import importlib.util as u, pathlib, json, io, contextlib
+s=u.spec_from_file_location('b','$B'); m=u.module_from_spec(s); s.loader.exec_module(m)
+kok = pathlib.Path('$KOK/t3'); (kok/'_agents/handoff').mkdir(parents=True, exist_ok=True)
+(kok/'_agents/fabrika').mkdir(parents=True, exist_ok=True)
+(kok/'_agents/handoff/bulgu-havuzu.jsonl').write_text('{}'+chr(10), encoding='utf-8')
+dy = kok/'_agents/fabrika/bileyi-tur.json'
+dy.write_text(json.dumps({'asama':'yazim-bekliyor','adaylar':[
+    {'anahtar':'k1','tekrar':'a b','kaynak_bulgular':['b1'],'is':'isA'},
+    {'anahtar':'k2','tekrar':'c d','kaynak_bulgular':['b2'],'is':'isB'}]}, ensure_ascii=False), encoding='utf-8')
+with contextlib.redirect_stdout(io.StringIO()): m._kapanis_damgasi(kok, 'isA', 'PR #1')
+assert json.loads(dy.read_text(encoding='utf-8'))['asama'] == 'yazim-bekliyor', 'tur erken kapandi'
+with contextlib.redirect_stdout(io.StringIO()): m._kapanis_damgasi(kok, 'isB', 'PR #2')
+assert json.loads(dy.read_text(encoding='utf-8'))['asama'] == 'kapandi', 'tur kapanmadi'
+"
+iceren "T4 --anahtar verilmezse kart bunu SÖYLER (sessiz kalmaz)" "kapanış damgası ATILAMAZ" \
+  env BILEYI_ANAHTAR="$ANAH" python3 "$B" --depo "$KOK/oda" kart --is x --hedef "bileyi/a.py"
 
 echo
 echo "toplam=$((GECEN+DUSEN)) geçen=$GECEN düşen=$DUSEN"

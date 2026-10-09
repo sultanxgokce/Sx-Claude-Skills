@@ -102,11 +102,18 @@ Dört kaynağı tarar ve **ölçemediğini "ölçemedim" diye basar**:
 | 3 | aday havuzu | bu zaten **önerilmiş** mi |
 | 4 | kurulu beceriler | bu yetenek zaten **var** mı |
 
-Tekrar **iki yüzeyden** sayılır, çünkü biri eksik:
+Tekrar **üç yüzeyden** sayılır ve **üçü de aday üretir**:
 - **sınıf alanı** — kesin ama havuzun bir kısmına kör (kapsama basılır)
 - **ikili söz öbeği** — tüm havuzu görür, gürültülü
+- **sürtünme raporu** — araç/kanca reddi; eşiği aşan sınıf aday olur
 
-İki yüzey **çelişiyorsa hüküm YOK** — çelişki basılır ve tur durur.
+🔴 Üçüncü yüzey iki tur boyunca **yalnız ekrana basılıyordu**, aday hattına hiç
+girmiyordu — yani becerinin kurulma gerekçesi olan araç tam da yeteneğe
+çevrilemiyordu. Bağımsız göz üçüncü turda yakaladı. Ayrıştırılamayan satır
+sessizce atlanmaz, sayısı basılır.
+
+İki yüzey **çelişiyorsa hüküm YOK** — çelişki basılır ve o aday düşer; hepsi
+çelişiyorsa **rc=3**.
 
 ### 2 · SAY ve EŞİKTEN GEÇİR
 
@@ -174,6 +181,12 @@ bu yüzden bir **ek** satırdır — `havuz.py iptal` deseninin aynısı.
 yazar: damgasız kapanış, bir sonraki turda aynı tekrarın yeniden keşfedilmesi demektir
 (30 günde 8 kez ölçüldü).
 
+🔴 **Damga YALNIZ işe bağlı adayı kapatır.** Bir turda iki aday varsa ve biri
+inerse, ötekinin kaynakları **kapanmaz**. İlk yazımda hepsi kapanıyordu — yani
+damganın önlemek için var olduğu hatanın kendisi: **yanlış kapanış**. Bağlama
+`kart --anahtar <aday>` ile yapılır; bağ yoksa damga **atılmaz** ve sebebi yazılır.
+Tur, ancak **bütün** adayları kapandığında kapanır.
+
 🔴 **Aynı tekrar iki kez aday olmaz.** Her adayın kalıcı bir anahtarı vardır ve havuzda
 o anahtar varsa tur onu atlar — gerekçesini de yazar ("zaten aday"). Tavan da **fiilen
 keser**, rapor metni değildir: tavan dolunca atlanan adaylar adıyla listelenir.
@@ -203,7 +216,7 @@ bileyi.sh devam --is <ad> --dal <dal>     kanıt + bağımsız göz + SINIFSIZSA
 - 🔴 **Çelişki kapısı:** iki yüzey aynı aday hakkında zıt şey söylüyorsa (biri "N kez
   tekrar etti", öbürü "tek parti") o aday hüküm üretmez; hepsi çelişiyorsa **rc=3** —
   ne temiz ne kirli. Bu kapı da belgede yazılıp uygulanmamıştı; bağımsız göz yakaladı.
-- Kendi sınavı: `bash scripts/bileyi.test.sh` (**59 kapı**, hermetik — gerçek havuza,
+- Kendi sınavı: `bash scripts/bileyi.test.sh` (**69 kapı**, hermetik — gerçek havuza,
   gerçek anahtara dokunmaz). Kapılar mutasyonla sınandı: eşik dayanağı · havuz yokluğu ·
   boş kimlik · tek-parti · kapsama · sürtünme bilinmezliği · kill-switch · bozuk satır ·
   eşik sıfırı öldürülünce sınav **kırmızıya döner**.
