@@ -1,5 +1,5 @@
-$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-sinav.sh
-# rc=0 sure=4.7s zaman=2026-10-09T23:08:30+03:00
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/gs-sinav.sh
+# rc=0 sure=3.9s zaman=2026-10-09T23:27:48+03:00
 --- stdout ---
 A · temel akış
   ✓ A1 eşiği aşan tekrar VAR → rc=0
@@ -76,6 +76,7 @@ R · 🔴 kapanış damgası (bayat kayıt panzehiri · tur-2 bulgusu)
   ✓ O5 kuru tur HİÇBİR ŞEY yazmaz
 P · 🔴 'devam' birleştirme kilitleri
   ✓ P1 kartsız iş birleştirilmez → rc=3
+  ✓ P1b 🔴 kart BİRİNCİL depoda da aranır (çalışma alanı kartı görmüyordu)
   ✓ P2 kill-switch kapalıyken devam rc=4 (birleştirmez)
   ✓ P3 🔴 sınıf YUKARI çıkarsa birleştirme YOK — hem rc hem SEBEP ölçülür
 S · 🔴 sürtünme yüzeyi ADAY HATTINA girer (tur-3 bulgusu, ciddi)
@@ -91,12 +92,35 @@ T · 🔴 damga YALNIZ bağlı adayı kapatır (tur-3 bulgusu, ciddi: yanlış k
   ✓ T3 tur ancak TÜM adaylar kapanınca kapanır
   ✓ T4 --anahtar verilmezse kart bunu SÖYLER (sessiz kalmaz)
 
-toplam=69 geçen=69 düşen=0
-### bileyi.test.sh rc=0
-### manifest-parity rc=0
-### versiyon-lint rc=0
-### kapi:kayit rc=0
-### kapi:bagli-mi rc=0
-### kapi:ithal rc=0
+toplam=70 geçen=70 düşen=0
+### bileyi/scripts/bileyi.test.sh rc=0
+A · asil is (meşru yol acildi mi)
+  ✓ A1 izinli kokun ALTINDAKI dizin silinir
+  ✓ A2 silindigi dogrulanir (geri okundu)
+  ✓ A3 zaten yok olan yol rc=0 (silmekle ayni sonuc)
+B · 🔴 yasakli deseni HIC kullanmaz (kancayi atlamanin sarti)
+  ✓ B1 kaynakta yasakli kabuk deseni YOK
+C · 🔴 K1/K4 — izinli kok kapisi
+  ✓ C1 izinli KOKUN KENDISI silinmez
+  ✓ C2 koklerin DISINDAKI yol silinmez
+  ✓ C3 dis yol HALA DURUYOR (pozitif kontrol: kapi sadece rc dondurmuyor)
+  ✓ C4 dosya (dizin degil) silinmez
+  ✓ C5 bos yol reddedilir
+  ✓ C6 kok '/' olsa bile izinli sayilmaz
+D · 🔴 K2/K3 — bag ve ust-yol kapisi
+  ✓ D1 sembolik BAG silinmez
+  ✓ D2 bagin HEDEFI duruyor (pozitif kontrol)
+  ✓ D3 ust-yolla kacis (..) kok disina cikamaz
+  ✓ D4 kardes dizin HALA DURUYOR (pozitif kontrol)
+  ✓ D5 ciplak /tmp izinli kok DEGIL (kendi sinavimin buldugu daralma)
+E · olcemedigine yesil demez
+  ✓ E1 hicbir izinli kok yoksa rc=3 (OLCEMEDIM, silmez)
+  ✓ E2 kullanimsiz cagri rc=2
+  ✓ E3 iki arguman rc=2 (sessizce ilkini silmez)
+
+toplam=18 geçen=18 düşen=0
+### bileyi/scripts/guvenli-sil.test.sh rc=0
+### parity rc=0
+### versiyon rc=0
 dusen=0
 --- stderr ---

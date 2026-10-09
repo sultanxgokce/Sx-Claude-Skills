@@ -1,7 +1,7 @@
 {
   "is": "bileyi",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-09T23:10:27+03:00",
+  "guncelleme": "2026-10-09T23:27:48+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -38,15 +38,15 @@
       "etiket": "sinavlar",
       "asama": "sonra",
       "dosya": "olcum-sinavlar-sonra.txt",
-      "sha256": "d128d3d59f6aa43e4a34ab909d016d7b88d341ec1194d03c48f707619e521370",
+      "sha256": "db84c188447601c1ec25f17a02e90e2d87ce23572e548045b80c12756dcaa874",
       "komut": [
         "bash",
-        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-sinav.sh"
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/gs-sinav.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T23:08:30+03:00",
-      "sure_sn": 4.7
+      "zaman": "2026-10-09T23:27:48+03:00",
+      "sure_sn": 3.9
     },
     {
       "tur": "olcum",
@@ -92,7 +92,22 @@
       "renk": "yesil",
       "zaman": "2026-10-09T22:55:44+03:00",
       "sure_sn": 0.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-otonom-tur",
+      "asama": "sonra",
+      "dosya": "olcum-canli-otonom-tur-sonra.txt",
+      "sha256": "42ff0386e63c0d15891119670c96c3db593325e437d69e92f44a8030e364f2f5",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-otonom.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T23:27:44+03:00",
+      "sure_sn": 15.1
     }
   ],
-  "imza": "34a4d2ce33f7cf60332621ffd09e704b63b5f86bf5b54e8801e0c1854179cb9a"
+  "imza": "82d21a7b7d95c595f25a605a625b70533c80f4f1021a63992f435748ade4e6b5"
 }

@@ -402,6 +402,28 @@ after=\$(wc -c < '$KOK/oda/_agents/handoff/layiha-aday-havuzu.jsonl')
 echo "P · 🔴 'devam' birleştirme kilitleri"
 kapi "P1 kartsız iş birleştirilmez → rc=3" 3 \
   env BILEYI_ANAHTAR="$ANAH" python3 "$B" --depo "$KOK/oda" devam --is olmayan-is --dal x
+kapi "P1b 🔴 kart BİRİNCİL depoda da aranır (çalışma alanı kartı görmüyordu)" 0 python3 -c "
+import importlib.util as u, pathlib, json, io, contextlib, os
+s=u.spec_from_file_location('b','$B'); m=u.module_from_spec(s); s.loader.exec_module(m)
+# Sahte 'birincil depo' + onun icinde bir calisma alani; kart YALNIZ birincilde.
+birincil = pathlib.Path('$KOK/p1b'); (birincil/'_agents/fabrika/kartlar').mkdir(parents=True, exist_ok=True)
+(birincil/'_agents/fabrika/kartlar/isX.json').write_text(json.dumps({'is':'isX','siniflar':[],'sultan':False}), encoding='utf-8')
+alan = pathlib.Path('$KOK/p1b-alan'); alan.mkdir(parents=True, exist_ok=True)
+m.birincil_depo = lambda depo: birincil
+cagrilan = []
+def sahte(komut, cwd, zaman=600):
+    cagrilan.append(komut)
+    return (0, 'bileyi/x.py'+chr(10)) if '--name-only' in komut else (0, 'GEÇTİ')
+m._kos = sahte
+class N: pass
+n=N(); n.depo=str(alan); n.is_='isX'; n.dal='d'; n.sinif_dosya=None; n.kuru=True; n.havuz_depo=str(alan)
+os.environ['BILEYI_ANAHTAR']='$KOK/acik2'
+t=io.StringIO()
+with contextlib.redirect_stdout(t): rc = m.komut_devam(n)
+cik = t.getvalue()
+assert 'kart yok' not in cik, cik
+assert rc == 0, (rc, cik)
+"
 kapi "P2 kill-switch kapalıyken devam rc=4 (birleştirmez)" 4 env BILEYI_ANAHTAR="$ANAH" sh -c \
   "python3 '$B' --depo '$KOK/oda' dur --gerekce 'sinav kilidi' >/dev/null && python3 '$B' --depo '$KOK/oda' devam --is x --dal y; r=\$?; python3 '$B' --depo '$KOK/oda' ac --gerekce 'sinav' >/dev/null; exit \$r"
 kapi "P3 🔴 sınıf YUKARI çıkarsa birleştirme YOK — hem rc hem SEBEP ölçülür" 0 python3 -c "

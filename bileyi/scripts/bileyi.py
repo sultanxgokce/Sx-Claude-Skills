@@ -349,6 +349,29 @@ def tur_durumu_yolu(depo: Path) -> Path:
     return depo / "_agents" / "fabrika" / "bileyi-tur.json"
 
 
+def birincil_depo(depo: Path) -> Path:
+    """Kartların yaşadığı BİRİNCİL depo kökü.
+
+    🔴 Aracın kendi ilk gerçek işinde çıktı: fabrika kartları birincil depo
+    kökünde yaşıyor (çalışma alanları onu ORTAK görür), ama `devam` kartı
+    çalışma alanının içinde arıyordu ve "kart yok" diyordu. Yani kartı AÇAN
+    araçla kartı ARAYAN araç iki ayrı yere bakıyordu.
+    Çözüm tahmin değil ölçüm: git'in ortak dizininden birincil kök türetilir.
+    """
+    try:
+        s = subprocess.run(["git", "rev-parse", "--git-common-dir"],
+                           capture_output=True, text=True, timeout=20, cwd=str(depo))
+    except (OSError, subprocess.SubprocessError):
+        return depo
+    ham = (s.stdout or "").strip()
+    if s.returncode != 0 or not ham:
+        return depo
+    g = Path(ham)
+    if not g.is_absolute():
+        g = (depo / g).resolve()
+    return g.parent
+
+
 def havuz_deposu(n) -> Path:
     """Havuzların yaşadığı depo. KOD deposundan AYRI olabilir.
 
@@ -759,9 +782,12 @@ def komut_devam(n) -> int:
         print(f"🔴 otonom tur KAPALI — birleştirmiyorum. gerekçe: {gerekce}")
         return 4
 
-    kart_yolu = depo / "_agents" / "fabrika" / "kartlar" / f"{n.is_}.json"
-    if not kart_yolu.exists():
-        raise Durdu(f"kart yok: {kart_yolu} — kartsız iş birleştirilmez", 3)
+    adaylar = [depo / "_agents" / "fabrika" / "kartlar" / f"{n.is_}.json",
+               birincil_depo(depo) / "_agents" / "fabrika" / "kartlar" / f"{n.is_}.json"]
+    kart_yolu = next((y for y in adaylar if y.exists()), None)
+    if kart_yolu is None:
+        raise Durdu("kart yok — kartsız iş birleştirilmez. Bakılan yerler: "
+                    + " · ".join(str(y) for y in adaylar), 3)
     try:
         kart = json.loads(kart_yolu.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as e:
@@ -800,13 +826,18 @@ def komut_devam(n) -> int:
     rc2, diffmetin = _kos(["git", "diff", f"origin/main...{n.dal}"], depo, 300)
     if rc2 != 0:
         raise Durdu("diff gövdesi alınamadı", 3)
-    gecici = depo / "_agents" / "fabrika" / f".bileyi-{n.is_}.diff"
-    gecici.write_text(diffmetin, encoding="utf-8")
-    print("   bağımsız göz koşuyor (farklı model)…")
-    rc3, cik = _kos(["bash", str(denetci), n.is_, "--diff", str(gecici),
-                     "--yazan", "claude", "--depo", str(depo)], depo, 900)
-    print("\n".join("   " + l for l in cik.strip().splitlines()[-8:]))
-    gecici.unlink(missing_ok=True)
+    import tempfile
+    tg = tempfile.NamedTemporaryFile("w", suffix=".diff", delete=False, encoding="utf-8")
+    try:
+        tg.write(diffmetin)
+        tg.close()
+        gecici = Path(tg.name)
+        print("   bağımsız göz koşuyor (farklı model)…")
+        rc3, cik = _kos(["bash", str(denetci), n.is_, "--diff", str(gecici),
+                         "--yazan", "claude", "--depo", str(depo)], depo, 900)
+        print("\n".join("   " + l for l in cik.strip().splitlines()[-8:]))
+    finally:
+        Path(tg.name).unlink(missing_ok=True)
     if "GEÇTİ" not in cik:
         print("   🔴 bağımsız göz GEÇMEDİ — birleştirme YOK, adım 2'ye dön.")
         return 1
