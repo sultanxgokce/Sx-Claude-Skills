@@ -65,6 +65,14 @@ bash "$S" nobetci --nobetci --gozlem "cat $T/dinleyen" -- bash -c 'exit 4' >/dev
 ol "gözlemli + rc≠0 → hata, rc geçer" "$(alan sonuc)/$rc" "hata/4"
 bash "$S" nobetci --nobetci --gozlem "/yok/gozlem-komutu" -- true >/dev/null 2>&1
 ol "gözlem komutu çalışmıyor → olculemedi (dokunmadı DENMEZ)" "$(alan sonuc)" "olculemedi"
+printf 'pid-100\n' > "$T/dinleyen"
+bash "$S" nobetci --nobetci --gozlem "cat $T/dinleyen" -- bash -c "printf '  pid-100  \n\n' > $T/dinleyen" >/dev/null
+ol "baş/son boşluk kırpılır: aynı → ayakta-dokunmadim" "$(alan sonuc)" "ayakta-dokunmadim"
+printf 'pid-100\n' > "$T/dinleyen"
+bash "$S" nobetci --nobetci --gozlem "cat $T/dinleyen" -- bash -c "printf 'pid-1 00\n' > $T/dinleyen" >/dev/null
+ol "içteki boşluk anlamlı: farklı → tamam" "$(alan sonuc)" "tamam"
+rm -f "$T/ilk"; bash "$S" nobetci --nobetci --gozlem "test -e $T/ilk && exit 1; touch $T/ilk; echo x" -- true >/dev/null 2>&1; rc=$?
+ol "kısmi hata (önce ok, sonra düştü) → olculemedi, iş rc 0 geçer" "$(alan sonuc)/$rc" "olculemedi/0"
 bash "$S" nobetci --nobetci --gozlem -- true >/dev/null 2>&1; ol "--gozlem komutsuz rc=2" "$?" "2"
 bash "$S" nobetci --gozlem "cat $T/dinleyen" -- true >/dev/null
 ol "--nobetci olmadan --gozlem etkisiz: rc0 = tamam" "$(alan sonuc)" "tamam"

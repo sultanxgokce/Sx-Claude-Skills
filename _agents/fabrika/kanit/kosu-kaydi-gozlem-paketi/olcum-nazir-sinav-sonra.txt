@@ -1,19 +1,19 @@
 $ bash kosu-kaydi/scripts/hedef-kutu-sinav.sh cloudtop-nazir
-# rc=0 sure=14.8s zaman=2026-10-09T20:52:18+03:00
+# rc=0 sure=12.4s zaman=2026-10-09T20:54:30+03:00
 --- stdout ---
-kutu: cloudtop-nazir · host: hostsrv · hedef: /tmp/kosu-kaydi-sinav-3363954 · kaynak: /config/projects/_wt/Sx-Claude-Skills-kosu-kaydi-gozlem/kosu-kaydi
+kutu: cloudtop-nazir · host: hostsrv · hedef: /tmp/kosu-kaydi-sinav-3378132 · kaynak: /config/projects/_wt/Sx-Claude-Skills-kosu-kaydi-gozlem/kosu-kaydi
 ── kaynak md5:
   cf5a9369b5276010f3a4b696bcf00b33  kosu-kaydi/scripts/cron-sonraki.py
   5b8c9feebcf7b7f411de1e9e3af5c2c1  kosu-kaydi/scripts/hedef-kutu-sinav.sh
-  6f8b102f5c65f472ca545a717e01b9a9  kosu-kaydi/scripts/kosu-sar.sh
-  65ffb8544afc09325235a485eb09c040  kosu-kaydi/scripts/kosu-sar.test.sh
-  a11627b976220099b71026e1ca71705d  kosu-kaydi/SKILL.md
+  7a412827467801c0094f2db009ecced9  kosu-kaydi/scripts/kosu-sar.sh
+  c42d5146265c52265bdf2e40fc2c305e  kosu-kaydi/scripts/kosu-sar.test.sh
+  fd7c56b3af737ecfe9a390071ac37810  kosu-kaydi/SKILL.md
 ── hedef md5:
   cf5a9369b5276010f3a4b696bcf00b33  kosu-kaydi/scripts/cron-sonraki.py
   5b8c9feebcf7b7f411de1e9e3af5c2c1  kosu-kaydi/scripts/hedef-kutu-sinav.sh
-  6f8b102f5c65f472ca545a717e01b9a9  kosu-kaydi/scripts/kosu-sar.sh
-  65ffb8544afc09325235a485eb09c040  kosu-kaydi/scripts/kosu-sar.test.sh
-  a11627b976220099b71026e1ca71705d  kosu-kaydi/SKILL.md
+  7a412827467801c0094f2db009ecced9  kosu-kaydi/scripts/kosu-sar.sh
+  c42d5146265c52265bdf2e40fc2c305e  kosu-kaydi/scripts/kosu-sar.test.sh
+  fd7c56b3af737ecfe9a390071ac37810  kosu-kaydi/SKILL.md
 ── hedef ortam: bash 5.2.21(1)-release · Python 3.12.3 · croniter: ModuleNotFoundError: No module named 'cr
 ════ K1 · her koşu tam satır, geçerli JSON, 15 alan ════
 ════ K4 · sessiz başarı YALNIZ beyanla ════
@@ -28,7 +28,7 @@ kutu: cloudtop-nazir · host: hostsrv · hedef: /tmp/kosu-kaydi-sinav-3363954 ·
 ════ kayıt dizini yazılamıyor → iş yine koşar, satır YEDEK dizine düşer, stderr uyarı ════
 ════ cron-sonraki.py tek başına (bağımsız hesap, paket yok) ════
 
-── SONUÇ: 82 geçti · 0 düştü ──
+── SONUÇ: 85 geçti · 0 düştü ──
 temizlik: silindi
 hedef kutu sınav rc=0
 --- stderr ---

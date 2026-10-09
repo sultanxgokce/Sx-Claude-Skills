@@ -1,0 +1,34 @@
+{
+  "tur": 1,
+  "is": "kosu-kaydi-gozlem",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-09T20:52:46+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 28665,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Gözlemli nöbetçi akışı eklenmiş ve yerel/kutu sınavları yeşil geçmiş; ancak gözlem komutunun tek tarafta başarısız olması yanlışlıkla “tamam” veya “ayakta-dokunmadim” diye sınıflanabilir, önce bu düzeltilmeli. Ayrıca Nâzır kutusu ölçümü geçse de çıktı sınavın gerçek kurulu yoldan değil `/tmp/kosu-kaydi-sinav-3363954` hedefinden çalıştığını gösteriyor; kartın “kurulu yoldan sınav” talebi kanıtlanmış değil.",
+    "bulgular": [
+      {
+        "ne": "Gözlem komutunun yalnız önce veya yalnız sonra çağrısı başarısız olduğunda ölçüm geçerli kabul ediliyor; talep gözlem komutu çalışmıyorsa `olculemedi` ister.",
+        "kanit": "Sorun bayrağı yalnız `GRC1 != 0 && GRC2 != 0 && ONCE+SONRA boş` koşulunda kuruluyor; dolayısıyla tek çağrının nonzero olması veya iki çağrının nonzero olup stdout üretmesi karşılaştırmaya düşüyor. Eklenen sınav yalnız iki çağrıda da bulunmayan `/yok/gozlem-komutu` durumunu kapsıyor.",
+        "konum": "kosu-kaydi/scripts/kosu-sar.sh:95; kosu-kaydi/scripts/kosu-sar.test.sh:66",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Nâzır kutusunda gerçek kurulu yoldan sınav yapıldığı gösterilmiyor.",
+        "kanit": "Nâzır ölçüm çıktısı hedefi açıkça `/tmp/kosu-kaydi-sinav-3363954` olarak bildiriyor; `/config/.claude/skills/kosu-kaydi` gibi kurulu yolun çağrıldığına dair satır yok.",
+        "konum": "olcum-nazir-sinav-sonra.txt:4",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sağlam ve üç kayıt da yeşil; yerel sınav 82/82, hedef kutu sınavı rc=0 ve kaynak-hedef md5 eşliği gösterilmiş. Ancak yalnız “sonra” ölçümleri var, önce/sonra ölçüm çifti yok; ayrıca yeşil Nâzır sınavı gerçek kurulu yolu değil geçici `/tmp` hedefini gösterdiğinden karttaki kurulu-yol iddiasına yeterli kanıt sayılmaz."
+  }
+}

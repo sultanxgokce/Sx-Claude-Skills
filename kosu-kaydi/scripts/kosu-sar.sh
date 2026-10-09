@@ -91,11 +91,12 @@ if [ "$ATLANDI" -eq 1 ]; then RC="$KILIT_RC"; CIKTI_VAR=0   # kilit dolu: komut 
 elif [ "$KILIT_SORUN" -eq 1 ]; then RC=127; CIKTI_VAR=0        # kilit alınabilir mi bilinmiyor: komut KOŞMADI, ölçülemedi
 elif [ "$NOBETCI" -eq 1 ] && [ -n "$GOZLEM" ]; then   # nöbetçi kipi, GÖZLEMLİ (0.4, şema 1.2): ölçü stdout değil, gözlem komutunun önce/sonra çıktısı
   # Niçin: sessiz nöbetçi yeniden başlatırken de sessiz olabilir (nazir sunucu.sh, A300); "boş çıktı = iş yok" orada çıkarıma dönerdi.
-  ONCE="$(bash -c "$GOZLEM" 2>/dev/null)"; GRC1=$?
+  _kirp() { sed -e ':a;N;$!ba' -e 's/^[[:space:]]*//;s/[[:space:]]*$//'; }   # bütünün baş/son boşluğu kırpılır; içteki boşluk anlamlı (şema 1.2)
+  ONCE="$(bash -c "$GOZLEM" 2>/dev/null | _kirp; exit "${PIPESTATUS[0]}")"; GRC1=$?
   if "$@"; then RC=0; else RC=$?; fi
-  SONRA="$(bash -c "$GOZLEM" 2>/dev/null)"; GRC2=$?
-  if [ "$GRC1" -ne 0 ] && [ "$GRC2" -ne 0 ] && [ -z "$ONCE$SONRA" ]; then GOZLEM_SORUN=1; CIKTI_VAR=1   # gözlem komutu iki kez de düştü → ölçülemedi
-  elif [ "$ONCE" = "$SONRA" ]; then CIKTI_VAR=0; else CIKTI_VAR=1; fi   # aynı = dokunmadı · değişti = iş yaptı (ör. dinleyen pid)
+  SONRA="$(bash -c "$GOZLEM" 2>/dev/null | _kirp; exit "${PIPESTATUS[0]}")"; GRC2=$?
+  if [ "$GRC1" -ne 0 ] || [ "$GRC2" -ne 0 ]; then GOZLEM_SORUN=1; CIKTI_VAR=1   # önce YA DA sonra gözlem düştü → ölçülemedi (kısmi hata, şema 1.2)
+  elif [ "$ONCE" = "$SONRA" ]; then CIKTI_VAR=0; else CIKTI_VAR=1; fi   # bayt bayt aynı = dokunmadı · değişti = iş yaptı (ör. dinleyen pid)
 elif [ "$NOBETCI" -eq 1 ]; then   # nöbetçi kipi, gözlemsiz: beyan KANON satırında (--nobetci); çıktı boş + rc 0 = ayaktaydı, dokunmadı (K4, A291)
   CIKTI_DOSYA="$(mktemp)"; if "$@" | tee "$CIKTI_DOSYA"; then RC=0; else RC=$?; fi
   # "çıktı" = yalnız stdout; yalnız boşluk/sekme/yeni satır BOŞ sayılır; stderr sınıflamaya girmez (şema K4, bağlayıcı tanım)
