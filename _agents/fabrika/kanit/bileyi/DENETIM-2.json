@@ -1,0 +1,40 @@
+{
+  "tur": 2,
+  "is": "bileyi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-09T22:49:08+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 105333,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "H",
+    "ozet": "Önceki turun dört somut kusuru kapatılmış; ancak araç hâlâ ölçtüğü tekrarı belirli bir yeteneğe çevirmiyor, yalnız tek ve genel bir aday kaydı bırakıp insan/ajan yazımını bekliyor. Bu, “tam otonom” ve “tekrar edeni yeteneğe çevirir” manşetlerinin çekirdek işlevini karşılamayan ciddi bir boşluktur; ayrıca iş kartı bulunmadığından doğru talebin yapıldığı doğrulanamaz.",
+    "bulgular": [
+      {
+        "ne": "“Tam otonom” tur, ölçülen tekrarları seçip sınıflandırarak kart açmıyor veya inşa başlatmıyor; genel bir kayıt yazıp yazımın ajan tarafından yapılmasını ve `kart` ile `devam` komutlarının sonradan ayrıca çağrılmasını bekliyor.",
+        "kanit": "`komut_tur`, `komut_olc` sonrasında sabit başlıklı tek bir JSON satırı (`iç-tarama: tekrar eden sürtünme ölçüldü`) yazar, durumu `yazim-bekliyor` yapar ve kullanıcıya `kart`/`devam` komutlarını basar. SKILL.md ise aracı “Tam otonom: sınıfsız işi uçtan uca bitirir ve kendi birleştirir” diye tanımlar; sınav O2–O4 de yalnız genel aday ve durum dosyasının yazıldığını ölçer.",
+        "konum": "bileyi/scripts/bileyi.py:499",
+        "agirlik": "ciddi"
+      },
+      {
+        "ne": "Üretilen aday, hangi tekrar veya bulgu satırlarından doğduğunu kaydetmiyor; kaynak bulguları kapatmıyor ve her tur aynı genel adayı yeniden ekleyebiliyor.",
+        "kanit": "`komut_tur` tarafından aday havuzuna eklenen nesnede kaynak bulgu kimlikleri veya seçilmiş tekrar bulunmuyor; yalnız `kaynak`, `tarih`, `bulan`, sabit `baslik`, genel `not` ve `damga` alanları var. Kodda bulgu satırlarına `kapandi` damgası yazan bir adım da yok; buna rağmen SKILL.md §5 kaynak satırlara bağlama ve kapanış damgasını zorunlu kılıyor.",
+        "konum": "bileyi/scripts/bileyi.py:526",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Tavan ve bulunan tekrarlar aday üretimine bağlanmamış; gerçek koşum beş tekrar bulduğu hâlde tur daima tek, içeriği sabit aday yazar.",
+        "kanit": "Gerçek koşum kaydı `eşiği aşan 5 tekrar var · tavan 2 yetenek/tur` diyor. Buna karşılık `komut_olc` yalnız bir çıkış kodu döndürüyor, bulunan adayları `komut_tur`a aktarmıyor; `komut_tur` koşulsuz olarak tam bir sabit kayıt ekliyor. Böylece `tavan` fiilî üretimi sınırlayan bir kapı değil, yalnız rapor metnidir.",
+        "konum": "olcum-gercek-kosum-sonra.txt; bileyi/scripts/bileyi.py:491",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Sonraki kayıtlar 54 sınavı, 18 mutasyonu, gerçek havuz koşumunu ve önceki turdaki dört düzeltmeyi güçlü biçimde destekliyor. Bununla birlikte gerçek bir önce/sonra ölçüm çifti yok; “önce” ile “sonra” farklı iddiaları ölçüyor. En önemlisi, kanıtta gerçek bir tekrarın seçilip karta, inşaya, bağımsız göze ve birleşmeye kadar götürüldüğü uçtan uca koşum bulunmuyor; mevcut sınavlar bu aşamaları ayrı parçalar ve kilitler olarak ölçüyor."
+  }
+}

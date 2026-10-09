@@ -346,7 +346,7 @@ def esik_dosyasi(n) -> Path:
     return Path(d) if d else (BECERI / "esik.json")
 
 
-def komut_olc(n) -> int:
+def olc_veri(n) -> dict:
     depo = Path(n.depo).resolve()
     kim = kimlik(depo)
     es = esik_oku(esik_dosyasi(n))
@@ -396,7 +396,7 @@ def komut_olc(n) -> int:
                 print(f"   {v:3d} × {k[:60]}  ⚡ ÇELİŞKİ: öbür yüzey tek parti diyor [{','.join(idler[:4])}]")
                 continue
             print(f"   {v:3d} × {k[:80]}")
-            bulunan.append(("sinif", k, v))
+            bulunan.append({"yuzey": "sinif", "tekrar": k, "sayi": v, "kaynak_bulgular": idler})
     else:
         print("   eşiği aşan tekrar yok")
 
@@ -410,7 +410,8 @@ def komut_olc(n) -> int:
             isaret = " ⚠ TEK PARTİ (bir olay, tekrar değil)" if parti else ""
             print(f"   {v:3d} × {k:<34} [{','.join(idler[:3])}]{zaten}{isaret}")
             if not parti:
-                bulunan.append(("ikili", k, v))
+                bulunan.append({"yuzey": "ikili", "tekrar": k, "sayi": v,
+                                "kaynak_bulgular": idler})
             else:
                 tek_parti_sayisi[0] += 1
     else:
@@ -428,21 +429,38 @@ def komut_olc(n) -> int:
         print(f"   ⚠ {tek_parti_sayisi[0]} söz öbeği TEK PARTİ sayıldı ve tekrar sayılmadı —")
         print(f"     ardışık kimlikler aynı oturumun tek olayıdır. (Yanlış-negatif verebilir:")
         print(f"     ardışık olmayan ama aynı oturumdan gelen kayıtları bu ölçü göremez.)")
+    sonuc = {"bulunan": bulunan, "celiski": celiski, "es": es, "toplam": o["toplam"],
+             "kim": kim, "depo": depo}
     if celiski and not bulunan:
+        sonuc["rc"] = 3
         print(f"⚡ HÜKÜM YOK — eşiği aşan {len(celiski)} adayın hepsinde iki yüzey ÇELİŞİYOR.")
         print("   Çelişki 'temiz' değildir ve 'kirli' de değildir; çözülmesi gerekir.")
         print("   Çare: çelişen kayıtların sınıf alanını gözden geçir ya da pencereyi genişlet.")
-        return 3
+        return sonuc
     if not bulunan:
+        sonuc["rc"] = 1
         print("✓ eşiği aşan TEKRAR YOK — bileyecek bir şey çıkmadı (bu bir ölçümdür, iddia değil)")
-        return 1
+        return sonuc
+    sonuc["rc"] = 0
     print(f"🔪 eşiği aşan {len(bulunan)} tekrar var · tavan {es['tavan']} yetenek/tur")
     print("   🔴 Bu bir GİRDİdir, hüküm değil: hangi cinsten yetenek üretileceği")
     print("      (kural · yapılandırma · beceri) muhakeme ister — ÖNCE 'kural var mı,")
     print("      koşuyor mu' sorulur; var olanı kapıya bağlamak yeni beceri yazmaktan ucuzdur.")
     print("   🔴 ÖLÇMEDİĞİM: bu sürtünmelerin MALİYETİ. Kaç kez olduğunu saydım,")
     print("      kaç dakika yediğini bilmiyorum ve oraya temiz demiyorum.")
-    return 0
+    return sonuc
+
+
+def komut_olc(n) -> int:
+    """Ölçüm raporu. Veriyi `olc_veri` üretir; bu yalnız çıkış kodunu verir.
+
+    🔴 Niçin ikiye ayrıldı (bağımsız gözün tur-2 bulgusu): eskiden ölçüm yalnız
+    bir çıkış kodu döndürüyordu, bulunan tekrarları **kimseye aktarmıyordu**.
+    Sonuç: otonom tur ne ölçüldüğünden habersiz, SABİT içerikli tek bir aday
+    yazıyordu ve `tavan` fiilî bir kapı değil rapor metniydi. Ölçümün sonucu
+    artık veri olarak akıyor.
+    """
+    return olc_veri(n)["rc"]
 
 
 def komut_durum(n) -> int:
@@ -482,21 +500,37 @@ def komut_ac(n) -> int:
     return 0
 
 
+def aday_anahtari(aday: dict) -> str:
+    """Bir tekrarın kalıcı kimliği. Aynı tekrar iki kez aday OLMAZ."""
+    return f"{aday['yuzey']}:{aday['tekrar']}"
+
+
+def mevcut_anahtarlar(aday_yolu: Path) -> set[str]:
+    """Havuzda ZATEN olan bileyi adaylarının anahtarları."""
+    var: set[str] = set()
+    for satir in aday_yolu.read_text(encoding="utf-8", errors="replace").splitlines():
+        if not satir.strip():
+            continue
+        try:
+            d = json.loads(satir)
+        except json.JSONDecodeError:
+            continue
+        if d.get("kaynak") == "bileyi" and d.get("anahtar"):
+            var.add(str(d["anahtar"]))
+    return var
+
+
 def komut_tur(n) -> int:
-    """Otonom turu BAŞLATIR — fiilen iş yapar, yapılacaklar listesi BASMAZ.
+    """Otonom turu BAŞLATIR: ölçer, ÖLÇÜLEN her tekrar için ayrı aday yazar.
 
-    🔴 BAĞIMSIZ GÖZÜN TUR-1 BULGUSU (ciddi): bu komut eskiden ölçümden sonra
-    "sıradaki adımlar" diye altı satır **basıyordu** ve 0 dönüyordu. Yani
-    becerinin manşet iddiası ("tam otonom") belgeleniyor, yapılmıyordu —
-    bu filoda en pahalı sınıf olan "kurdum ama koşmuyor"un manşet hâli.
-    Artık üç komut da gerçek iş yapıyor: `tur` adayı havuza yazar ve kartı
-    sınıf kâhiniyle AÇAR, `devam` kanıtı toplar + bağımsız gözü koşar +
-    sınıfsızsa BİRLEŞTİRİR.
-
-    🔴 Bir şeyi yapmaz ve bunu gizlemez: **yazmayı**. Bir kural metnini ya da
-    yeni bir beceriyi bir kabuk betiği yazamaz; onu ajan yazar. Fark şu: eskiden
-    bütün hat tavsiyeydi, şimdi yalnız bu tek adım bir **durum**dur — diskte
-    duruyor, `devam` onu arar ve yoksa ilerlemez.
+    🔴 İKİ TUR BULGU YEDİ, ikisi de haklıydı:
+      tur-1: bu komut "sıradaki adımlar" diye ekrana basıyordu, iş yapmıyordu.
+      tur-2: iş yapmaya başladı ama ölçümden habersizdi — SABİT içerikli TEK
+             bir aday yazıyordu; hangi tekrardan doğduğu, hangi bulgulardan
+             geldiği kayıtlı değildi ve `tavan` fiilî bir kapı değil rapor
+             metniydi. Şimdi ölçüm veri olarak akıyor: her seçilen tekrar
+             kendi adayını alır, kaynak bulgu kimliklerini taşır, tavan
+             fiilen keser ve aynı tekrar iki kez aday olmaz.
     """
     depo = Path(n.depo).resolve()
     kapali, gerekce = kapali_mi()
@@ -505,52 +539,81 @@ def komut_tur(n) -> int:
         print('   Açmak Sultan kararıdır: bileyi.sh ac --gerekce "…"')
         return 4
 
-    rc = komut_olc(n)
-    if rc != 0:
-        return rc
+    o = olc_veri(n)
+    if o["rc"] != 0:
+        return o["rc"]
 
-    # Adaylar VAR OLAN havuza yazılır — yeni havuz kurulmaz.
     aday_yolu = depo / "_agents" / "handoff" / "layiha-aday-havuzu.jsonl"
     if not aday_yolu.exists():
         print(f"\n⛔ aday havuzu yok ({aday_yolu}) — YENİ HAVUZ KURMUYORUM.")
         print("   Bu odada aday havuzu kurulu değilse bu tur burada durur.")
         return 3
 
+    tavan = o["es"]["tavan"]
+    sirali = sorted(o["bulunan"], key=lambda a: (-a["sayi"], a["tekrar"]))
+    zaten = mevcut_anahtarlar(aday_yolu)
+
     print()
-    print("── ADAY YAZIMI (var olan aday havuzuna)")
+    print(f"── ADAY SEÇİMİ · {len(sirali)} tekrar ölçüldü · tavan {tavan}")
+    secilen, atlanan = [], []
+    for a in sirali:
+        k = aday_anahtari(a)
+        if k in zaten:
+            atlanan.append((k, "zaten aday"))
+            continue
+        if len(secilen) >= tavan:
+            atlanan.append((k, "tavan doldu"))
+            continue
+        secilen.append(a)
+
+    for a in secilen:
+        print(f"   ✓ {a['sayi']:3d} × {a['tekrar']:<32} "
+              f"[{','.join(a['kaynak_bulgular'][:4])}] ({a['yuzey']})")
+    for k, sebep in atlanan:
+        print(f"   – {k:<40} atlandı: {sebep}")
+
+    if not secilen:
+        print("\n✓ yeni aday YOK — ölçülen tekrarların hepsi zaten havuzda ya da tavan dolu.")
+        print("   (Bu bir ölçümdür: 'tekrar yok' demek DEĞİL.)")
+        return 1
+
     if n.kuru:
-        print("   (kuru koşum — yazılmadı)")
-    else:
-        kim = kimlik(depo)
-        damga = datetime.now(timezone.utc).isoformat()
-        with aday_yolu.open("a", encoding="utf-8") as f:
+        print("\n(kuru koşum — aday yazılmadı, durum bırakılmadı)")
+        return 0
+
+    kim = o["kim"]
+    damga = datetime.now(timezone.utc).isoformat()
+    with aday_yolu.open("a", encoding="utf-8") as f:
+        for a in secilen:
             f.write(json.dumps({
                 "kaynak": "bileyi",
+                "anahtar": aday_anahtari(a),
                 "tarih": date.today().isoformat(),
                 "bulan": kim,
-                "baslik": "iç-tarama: tekrar eden sürtünme ölçüldü",
-                "not": ("Eşiği aşan tekrarlar bileyi ölçümünde basıldı. Hangi cinsten yetenek "
-                        "üretileceği (kural · yapılandırma · beceri) muhakeme ister; ÖNCE "
-                        "'kural var mı, koşuyor mu' sorulur."),
+                "baslik": f"iç-tarama: '{a['tekrar']}' {a['sayi']} kez tekrar etti",
+                "yuzey": a["yuzey"],
+                "sayi": a["sayi"],
+                "kaynak_bulgular": a["kaynak_bulgular"],
+                "not": ("Hangi cinsten yetenek üretileceği (kural · yapılandırma · beceri) "
+                        "muhakeme ister; ÖNCE 'kural var mı, koşuyor mu' sorulur."),
                 "damga": damga,
             }, ensure_ascii=False) + "\n")
-        print(f"   ✓ aday havuzuna 1 satır yazıldı ({aday_yolu.name})")
+    print(f"\n   ✓ aday havuzuna {len(secilen)} satır yazıldı ({aday_yolu.name})")
 
     durum = tur_durumu_yolu(depo)
-    if not n.kuru:
-        durum.parent.mkdir(parents=True, exist_ok=True)
-        durum.write_text(json.dumps({
-            "asama": "yazim-bekliyor",
-            "acildi": datetime.now(timezone.utc).isoformat(),
-            "not": "Kural/yapılandırma/beceri metnini AJAN yazar; betik yazamaz.",
-        }, ensure_ascii=False) + "\n", encoding="utf-8")
+    durum.parent.mkdir(parents=True, exist_ok=True)
+    durum.write_text(json.dumps({
+        "asama": "yazim-bekliyor",
+        "acildi": damga,
+        "adaylar": [{"anahtar": aday_anahtari(a), "tekrar": a["tekrar"],
+                     "kaynak_bulgular": a["kaynak_bulgular"]} for a in secilen],
+        "not": "Kural/yapılandırma/beceri metnini AJAN yazar; betik yazamaz.",
+    }, ensure_ascii=False) + "\n", encoding="utf-8")
 
     print()
-    print("🔪 TUR AÇIK · aşama: yazım bekliyor")
+    print(f"🔪 TUR AÇIK · aşama: yazım bekliyor · {len(secilen)} aday")
     print("   Yazım bitince:  bileyi.sh kart --is <ad> --hedef <yol> [--hedef <yol>…]")
     print("   Sonra:          bileyi.sh devam --is <ad> --dal <dal>")
-    if n.kuru:
-        print("\n(kuru koşum — hiçbir şey yazılmadı)")
     return 0
 
 
@@ -662,6 +725,54 @@ def komut_devam(n) -> int:
         print("   🔴 birleştirme başarısız — el değmeden bırakıldı.")
         return 1
     print("\n✓ SINIFSIZ iş otonom birleştirildi.")
+    return _kapanis_damgasi(depo, n.is_, cik4)
+
+
+def _kapanis_damgasi(depo: Path, is_: str, kanit: str) -> int:
+    """Kapatılan tekrarı bulgu havuzuna EKLEYEREK damgalar.
+
+    🔴 Niçin satır ÜSTÜNE yazılmıyor: bulgu havuzu salt-eklemedir. Var olan
+    satırları yeniden yazmak bu araca verilmesi gereken yetkiden büyüktür ve
+    geçmişi değiştirir. Onun yerine kapatılan kimlikleri ADIYLA sayan bir
+    kapanış satırı eklenir — `havuz.py iptal` deseninin aynısı.
+
+    🔴 Damga atlanırsa bir sonraki tur aynı tekrarı yeniden keşfeder; 30 günde
+    8 kez ölçüldü. Bu yüzden durum dosyası yoksa SESSİZ GEÇİLMEZ, söylenir.
+    """
+    durum = tur_durumu_yolu(depo)
+    if not durum.exists():
+        print("   🟡 tur durumu yok — hangi tekrarın kapandığı BİLİNMİYOR, damga atılmadı.")
+        print("      (Sessizce geçmiyorum: damgasız kapanış, aynı tekrarın yeniden")
+        print("       keşfedilmesi demektir.)")
+        return 0
+    try:
+        d = json.loads(durum.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as e:
+        print(f"   🟡 tur durumu okunamadı ({e}) — damga atılmadı.")
+        return 0
+    idler = sorted({i for a in d.get("adaylar", []) for i in a.get("kaynak_bulgular", [])})
+    if not idler:
+        print("   🟡 tur durumunda kaynak bulgu yok — damga atılmadı.")
+        return 0
+    havuz = depo / "_agents" / "handoff" / "bulgu-havuzu.jsonl"
+    if not havuz.exists():
+        print("   🟡 bulgu havuzu yok — damga atılmadı.")
+        return 0
+    with havuz.open("a", encoding="utf-8") as f:
+        f.write(json.dumps({
+            "id": f"bileyi-kapanis-{date.today().isoformat()}-{is_}",
+            "tarih": date.today().isoformat(),
+            "kaynak": "bileyi",
+            "sinif": "kapanis-damgasi",
+            "baslik": f"'{is_}' indi; kapatılan tekrar: "
+                      + ", ".join(a["tekrar"] for a in d.get("adaylar", [])),
+            "kapatilan": idler,
+            "kanit": kanit.strip()[:300],
+            "durum": "kapandi",
+        }, ensure_ascii=False) + "\n")
+    print(f"   ✓ kapanış damgası eklendi · {len(idler)} kaynak bulgu adıyla sayıldı")
+    d["asama"] = "kapandi"
+    durum.write_text(json.dumps(d, ensure_ascii=False) + "\n", encoding="utf-8")
     return 0
 
 

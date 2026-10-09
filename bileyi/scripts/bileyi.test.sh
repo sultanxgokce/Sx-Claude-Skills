@@ -292,12 +292,101 @@ kapi "O1 aday havuzu YOKsa tur rc=3 — yeni havuz KURMAZ" 3 \
 kapi "O2 aday havuzu varsa tur koşar" 0 \
   env BILEYI_ANAHTAR="$ANAH" python3 "$B" --depo "$KOK/oda" --esik-dosya "$ES" tur --gun 0
 kapi "O3 🔴 tur aday havuzuna GERÇEKTEN yazdı (basmakla yetinmedi)" 0 python3 -c "
-import pathlib
+import pathlib, json
 y = pathlib.Path('$KOK/oda/_agents/handoff/layiha-aday-havuzu.jsonl')
-satir = [l for l in y.read_text(encoding='utf-8').splitlines() if l.strip()]
+satir = [json.loads(l) for l in y.read_text(encoding='utf-8').splitlines() if l.strip()]
 assert len(satir) >= 1, 'aday havuzuna hic yazilmadi'
-import json
-assert json.loads(satir[-1])['kaynak'] == 'bileyi'
+assert satir[-1]['kaynak'] == 'bileyi'
+"
+kapi "O6 🔴 aday ÖLÇÜLEN tekrarı taşır (sabit metin DEĞİL — tur-2 bulgusu)" 0 python3 -c "
+import pathlib, json
+y = pathlib.Path('$KOK/oda/_agents/handoff/layiha-aday-havuzu.jsonl')
+a = [json.loads(l) for l in y.read_text(encoding='utf-8').splitlines() if l.strip()]
+b = [x for x in a if x.get('kaynak') == 'bileyi']
+assert b, 'bileyi adayi yok'
+for x in b:
+    assert x.get('anahtar'), 'anahtar yok — ayni tekrar iki kez aday olabilir'
+    assert x.get('sayi'), 'kac kez tekrar ettigi kayitli degil'
+    assert x.get('kaynak_bulgular'), 'hangi bulgulardan dogdugu kayitli degil'
+    assert x['tekrar'] if 'tekrar' in x else True
+    assert 'sürtünme ölçüldü' not in x['baslik'], 'sabit baslik geri gelmis'
+"
+kapi "O7 🔴 TAVAN fiilen keser (rapor metni değil — tur-2 bulgusu)" 0 python3 -c "
+import json, pathlib, subprocess, os, sys
+kok = pathlib.Path('$KOK/tavan'); (kok/'_agents/handoff').mkdir(parents=True, exist_ok=True)
+# Uc AYRI gercek tekrar uret (her biri dort ardisik-olmayan kayitta)
+kay = []
+from datetime import date
+b = date.today().isoformat()
+for grup, obek in enumerate(('alfa beta', 'gama delta', 'epsilon zeta')):
+    for i in range(4):
+        kay.append({'id': f'c{grup}{i*7}', 'tarih': b, 'baslik': obek + ' burada', 'gercek': ''})
+(kok/'_agents/handoff/bulgu-havuzu.jsonl').write_text(
+    ''.join(json.dumps(k, ensure_ascii=False)+chr(10) for k in kay), encoding='utf-8')
+(kok/'_agents/handoff/layiha-aday-havuzu.jsonl').write_text('', encoding='utf-8')
+es = json.load(open('$ES')); es['tavan'] = 1
+json.dump(es, open(str(kok/'esik.json'), 'w'), ensure_ascii=False)
+env = dict(os.environ, BILEYI_ANAHTAR='$ANAH')
+r = subprocess.run([sys.executable, '$B', '--depo', str(kok), '--esik-dosya', str(kok/'esik.json'),
+                    'tur', '--gun', '0'], capture_output=True, text=True, env=env)
+assert r.returncode == 0, r.stdout + r.stderr
+yaz = [l for l in (kok/'_agents/handoff/layiha-aday-havuzu.jsonl').read_text(encoding='utf-8').splitlines() if l.strip()]
+assert len(yaz) == 1, f'tavan 1 iken {len(yaz)} aday yazildi — tavan kesmiyor'
+assert 'tavan doldu' in r.stdout, 'tavan gerekcesi yazilmadi'
+"
+kapi "O8 🔴 aynı tekrar İKİ KEZ aday olmaz (ikinci tur atlar)" 0 python3 -c "
+import json, pathlib, subprocess, os, sys
+from datetime import date
+kok = pathlib.Path('$KOK/dedup'); (kok/'_agents/handoff').mkdir(parents=True, exist_ok=True)
+b = date.today().isoformat()
+kay = [{'id': f'd{i*5}', 'tarih': b, 'baslik': 'tekil obek burada', 'gercek': ''} for i in range(4)]
+(kok/'_agents/handoff/bulgu-havuzu.jsonl').write_text(
+    ''.join(json.dumps(k, ensure_ascii=False)+chr(10) for k in kay), encoding='utf-8')
+(kok/'_agents/handoff/layiha-aday-havuzu.jsonl').write_text('', encoding='utf-8')
+env = dict(os.environ, BILEYI_ANAHTAR='$ANAH')
+cag = [sys.executable, '$B', '--depo', str(kok), '--esik-dosya', '$ES', 'tur', '--gun', '0']
+r1 = subprocess.run(cag, capture_output=True, text=True, env=env)
+n1 = len([l for l in (kok/'_agents/handoff/layiha-aday-havuzu.jsonl').read_text(encoding='utf-8').splitlines() if l.strip()])
+r2 = subprocess.run(cag, capture_output=True, text=True, env=env)
+n2 = len([l for l in (kok/'_agents/handoff/layiha-aday-havuzu.jsonl').read_text(encoding='utf-8').splitlines() if l.strip()])
+assert n1 >= 1 and n2 == n1, f'ikinci turda da yazdi: {n1} -> {n2}'
+assert r2.returncode == 1, f'yeni aday yokken rc={r2.returncode} (1 olmali)'
+assert 'zaten aday' in r2.stdout
+assert 'TEKRAR YOK' not in r2.stdout, 'tekrar yok demis — oysa tekrar var, adayi vardi'
+"
+
+echo "R · 🔴 kapanış damgası (bayat kayıt panzehiri · tur-2 bulgusu)"
+kapi "R1 tur durumu yoksa SESSİZ GEÇMEZ, söyler" 0 python3 -c "
+import importlib.util as u, pathlib, io, contextlib
+s=u.spec_from_file_location('b','$B'); m=u.module_from_spec(s); s.loader.exec_module(m)
+kok = pathlib.Path('$KOK/damgasiz'); kok.mkdir(parents=True, exist_ok=True)
+t=io.StringIO()
+with contextlib.redirect_stdout(t):
+    rc = m._kapanis_damgasi(kok, 'is1', 'kanit')
+assert rc == 0
+assert 'damga atılmadı' in t.getvalue(), t.getvalue()
+assert 'Sessizce geçmiyorum' in t.getvalue()
+"
+kapi "R2 🔴 damga EKLER, satır ÜSTÜNE YAZMAZ (havuz salt-eklemedir)" 0 python3 -c "
+import importlib.util as u, pathlib, json, io, contextlib
+s=u.spec_from_file_location('b','$B'); m=u.module_from_spec(s); s.loader.exec_module(m)
+kok = pathlib.Path('$KOK/damga'); (kok/'_agents/handoff').mkdir(parents=True, exist_ok=True)
+(kok/'_agents/fabrika').mkdir(parents=True, exist_ok=True)
+onceki = [json.dumps({'id':'b0001','baslik':'eski','durum':'acik'}, ensure_ascii=False)]
+(kok/'_agents/handoff/bulgu-havuzu.jsonl').write_text(onceki[0]+chr(10), encoding='utf-8')
+(kok/'_agents/fabrika/bileyi-tur.json').write_text(json.dumps(
+    {'asama':'yazim-bekliyor','adaylar':[{'anahtar':'ikili:a b','tekrar':'a b',
+     'kaynak_bulgular':['b0001']}]}, ensure_ascii=False), encoding='utf-8')
+t=io.StringIO()
+with contextlib.redirect_stdout(t):
+    m._kapanis_damgasi(kok, 'is1', 'PR #1')
+satir = [l for l in (kok/'_agents/handoff/bulgu-havuzu.jsonl').read_text(encoding='utf-8').splitlines() if l.strip()]
+assert len(satir) == 2, f'satir sayisi {len(satir)} — eklemedi ya da ezdi'
+assert satir[0] == onceki[0], 'ESKI SATIR DEGISTI — havuz salt-eklemedir'
+d = json.loads(satir[1])
+assert d['kapatilan'] == ['b0001'], d
+assert d['sinif'] == 'kapanis-damgasi'
+assert json.loads((kok/'_agents/fabrika/bileyi-tur.json').read_text(encoding='utf-8'))['asama'] == 'kapandi'
 "
 kapi "O4 🔴 tur durum dosyası bıraktı (yazım aşaması bir DURUM, tavsiye değil)" 0 python3 -c "
 import json, pathlib

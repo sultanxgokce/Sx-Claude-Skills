@@ -161,11 +161,22 @@ listeden** gelir: `sinif-kurallari.json` (ölçülmüş dayanağı zorunlu; daya
 ölçer. Gerçek sınıf karttakinden **yukarı** çıkmışsa birleştirme YOK. Aşağı inmişse de
 kartın sınıfı **korunur** — sınıf aşağı çekilmez.
 
-### 5 · KAYDET
+### 5 · KAYDET — kapanış damgası (bayat kayıt panzehiri)
 
-Üretilen yetenek bulgu havuzundaki **kaynak satırlara** bağlanır (hangi tekrarı
-kapattığı yazılır) ve o satırlar `kapandi` damgası alır. Damgasız kapanış, bir sonraki
-turda aynı tekrarı yeniden keşfetmek demektir — 30 günde 8 kez ölçüldü.
+Her aday **hangi tekrarı** ve **hangi bulgu satırlarından** doğduğunu taşır. Yetenek
+indiğinde `devam` bir **kapanış satırı ekler** ve kapatılan kimlikleri adıyla sayar.
+
+🔴 **Satır üstüne yazılmaz.** Bulgu havuzu salt-eklemedir; var olan satırları yeniden
+yazmak bu araca verilmesi gerekenden büyük bir yetkidir ve geçmişi değiştirir. Kapanış
+bu yüzden bir **ek** satırdır — `havuz.py iptal` deseninin aynısı.
+
+🔴 **Damga atlanırsa sessiz geçilmez.** Tur durumu yoksa araç bunu söyler ve niçinini
+yazar: damgasız kapanış, bir sonraki turda aynı tekrarın yeniden keşfedilmesi demektir
+(30 günde 8 kez ölçüldü).
+
+🔴 **Aynı tekrar iki kez aday olmaz.** Her adayın kalıcı bir anahtarı vardır ve havuzda
+o anahtar varsa tur onu atlar — gerekçesini de yazar ("zaten aday"). Tavan da **fiilen
+keser**, rapor metni değildir: tavan dolunca atlanan adaylar adıyla listelenir.
 
 ## Komutlar
 
@@ -174,7 +185,8 @@ bileyi.sh olc   [--gun N] [--esik N]    ölçüm raporu — YAZMAZ, hüküm verm
 bileyi.sh durum                          son tur · kill-switch hâli · eşik ve dayanağı
 bileyi.sh dur   --gerekce "…"            otonom turu KAPAT (olc/durum kesilmez)
 bileyi.sh ac    --gerekce "…"            otonom turu aç
-bileyi.sh tur   [--kuru]                 ölç + adayı havuza yaz + tur durumu bırak
+bileyi.sh tur   [--kuru]                 ölç + ÖLÇÜLEN her tekrar için ayrı aday yaz
+                                         (tavan fiilen keser · aynı tekrar iki kez olmaz)
 bileyi.sh kart  --is <ad> --hedef <yol>… sınıfı KÂHİN cevaplar, kartı AÇAR
 bileyi.sh devam --is <ad> --dal <dal>     kanıt + bağımsız göz + SINIFSIZSA birleştir
 ```
@@ -191,7 +203,7 @@ bileyi.sh devam --is <ad> --dal <dal>     kanıt + bağımsız göz + SINIFSIZSA
 - 🔴 **Çelişki kapısı:** iki yüzey aynı aday hakkında zıt şey söylüyorsa (biri "N kez
   tekrar etti", öbürü "tek parti") o aday hüküm üretmez; hepsi çelişiyorsa **rc=3** —
   ne temiz ne kirli. Bu kapı da belgede yazılıp uygulanmamıştı; bağımsız göz yakaladı.
-- Kendi sınavı: `bash scripts/bileyi.test.sh` (**54 kapı**, hermetik — gerçek havuza,
+- Kendi sınavı: `bash scripts/bileyi.test.sh` (**59 kapı**, hermetik — gerçek havuza,
   gerçek anahtara dokunmaz). Kapılar mutasyonla sınandı: eşik dayanağı · havuz yokluğu ·
   boş kimlik · tek-parti · kapsama · sürtünme bilinmezliği · kill-switch · bozuk satır ·
   eşik sıfırı öldürülünce sınav **kırmızıya döner**.

@@ -1,7 +1,7 @@
 {
   "is": "bileyi",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-09T22:47:43+03:00",
+  "guncelleme": "2026-10-09T22:57:11+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -38,30 +38,30 @@
       "etiket": "sinavlar",
       "asama": "sonra",
       "dosya": "olcum-sinavlar-sonra.txt",
-      "sha256": "daf9a47f22d0b14dad31cf6a3675b048cf89316424ff1267048b83fc343c4b39",
+      "sha256": "2f97bd11f743ce5e14887ef740367abac73519f3781fbe30c572eb20bde9c143",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-sinav.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T22:46:45+03:00",
-      "sure_sn": 4.4
+      "zaman": "2026-10-09T22:55:48+03:00",
+      "sure_sn": 4.3
     },
     {
       "tur": "olcum",
       "etiket": "mutasyon",
       "asama": "sonra",
       "dosya": "olcum-mutasyon-sonra.txt",
-      "sha256": "e98bad059e7b9832e372e5a62c6f581f328088a725b3b40d9cc4c6390b20b31e",
+      "sha256": "d66d9079287702edec0d6210921ea9f4ef95608ff41bb31583441d9047ff5ec2",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-mutasyon.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T22:47:43+03:00",
-      "sure_sn": 58.4
+      "zaman": "2026-10-09T22:57:11+03:00",
+      "sure_sn": 83.0
     },
     {
       "tur": "olcum",
@@ -77,7 +77,22 @@
       "renk": "yesil",
       "zaman": "2026-10-09T22:46:40+03:00",
       "sure_sn": 0.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "aday-hatti",
+      "asama": "sonra",
+      "dosya": "olcum-aday-hatti-sonra.txt",
+      "sha256": "158c4a8809f46f74950cb485c8ff9bb741c8e3124ce84d78f9b84fb821341c62",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-aday.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T22:55:44+03:00",
+      "sure_sn": 0.2
     }
   ],
-  "imza": "06c957de3823d586297a64de54ff22e89684781f158823a7a5e1b3f0616b9c19"
+  "imza": "25543de50a616d3cfb6354577fa16954ebbe54c37e8ba1b6b1d76975e69bdadf"
 }

@@ -1,5 +1,5 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-sinav.sh
-# rc=0 sure=4.4s zaman=2026-10-09T22:46:45+03:00
+# rc=0 sure=4.3s zaman=2026-10-09T22:55:48+03:00
 --- stdout ---
 A · temel akış
   ✓ A1 eşiği aşan tekrar VAR → rc=0
@@ -66,6 +66,12 @@ O · 🔴 'tur' FİİLEN iş yapar (tur-1 bulgusu: eskiden ekrana basıyordu)
   ✓ O1 aday havuzu YOKsa tur rc=3 — yeni havuz KURMAZ
   ✓ O2 aday havuzu varsa tur koşar
   ✓ O3 🔴 tur aday havuzuna GERÇEKTEN yazdı (basmakla yetinmedi)
+  ✓ O6 🔴 aday ÖLÇÜLEN tekrarı taşır (sabit metin DEĞİL — tur-2 bulgusu)
+  ✓ O7 🔴 TAVAN fiilen keser (rapor metni değil — tur-2 bulgusu)
+  ✓ O8 🔴 aynı tekrar İKİ KEZ aday olmaz (ikinci tur atlar)
+R · 🔴 kapanış damgası (bayat kayıt panzehiri · tur-2 bulgusu)
+  ✓ R1 tur durumu yoksa SESSİZ GEÇMEZ, söyler
+  ✓ R2 🔴 damga EKLER, satır ÜSTÜNE YAZMAZ (havuz salt-eklemedir)
   ✓ O4 🔴 tur durum dosyası bıraktı (yazım aşaması bir DURUM, tavsiye değil)
   ✓ O5 kuru tur HİÇBİR ŞEY yazmaz
 P · 🔴 'devam' birleştirme kilitleri
@@ -73,7 +79,7 @@ P · 🔴 'devam' birleştirme kilitleri
   ✓ P2 kill-switch kapalıyken devam rc=4 (birleştirmez)
   ✓ P3 🔴 sınıf YUKARI çıkarsa birleştirme YOK — hem rc hem SEBEP ölçülür
 
-toplam=54 geçen=54 düşen=0
+toplam=59 geçen=59 düşen=0
 ### bileyi.test.sh rc=0
 ### manifest-parity rc=0
 ### versiyon-lint rc=0

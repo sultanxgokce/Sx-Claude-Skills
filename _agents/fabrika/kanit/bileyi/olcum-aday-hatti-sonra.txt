@@ -1,0 +1,32 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-aday.sh
+# rc=0 sure=0.2s zaman=2026-10-09T22:55:44+03:00
+--- stdout ---
+== 1. TUR (gercek havuz · tavan 2)
+── ADAY SEÇİMİ · 5 tekrar ölçüldü · tavan 2
+   ✓   8 × vekil olcut                      [b0130,b0151,b0154,b0157] (ikili)
+   ✓   5 × sahte yesil                      [b0091,b0150,b0158,b0159] (ikili)
+   – sinif:kapi-kapsami                       atlandı: tavan doldu
+   – sinif:olcum-korlugu                      atlandı: tavan doldu
+   – sinif:sinav-hijyeni                      atlandı: tavan doldu
+
+   ✓ aday havuzuna 2 satır yazıldı (layiha-aday-havuzu.jsonl)
+
+🔪 TUR AÇIK · aşama: yazım bekliyor · 2 aday
+
+== yazilan aday kayitlari (tekrar + kaynak bulgular TASINIYOR mu)
+ · ikili:vekil olcut | sayi 8 | kaynak ['b0130', 'b0151', 'b0154', 'b0157', 'b0159', 'b0161', 'b0166', 'b0176']
+ · ikili:sahte yesil | sayi 5 | kaynak ['b0091', 'b0150', 'b0158', 'b0159', 'b0176']
+
+== 2. TUR (POZITIF/NEGATIF: ayni tekrar iki kez aday OLMAMALI, baskalari gecmeli)
+── ADAY SEÇİMİ · 5 tekrar ölçüldü · tavan 2
+   ✓   2 × kapi-kapsami                     [b0144,b0149] (sinif)
+   ✓   2 × olcum-korlugu                    [b0101,b0143] (sinif)
+   – ikili:vekil olcut                        atlandı: zaten aday
+   – ikili:sahte yesil                        atlandı: zaten aday
+   – sinif:sinav-hijyeni                      atlandı: tavan doldu
+
+   ✓ aday havuzuna 2 satır yazıldı (layiha-aday-havuzu.jsonl)
+
+🔪 TUR AÇIK · aşama: yazım bekliyor · 2 aday
+rc=0
+--- stderr ---
