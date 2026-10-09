@@ -1,6 +1,8 @@
-$ bash kosu-kaydi/scripts/kosu-sar.test.sh
-# rc=0 sure=3.2s zaman=2026-10-09T12:34:39+03:00
+$ bash /config/.claude/jobs/d69a1b07/tmp/nazir-sinav.sh
+# rc=0 sure=3.9s zaman=2026-10-09T12:34:43+03:00
 --- stdout ---
+kutu: cloudtop-nazir · hedef: /tmp/kosu-kaydi-sinav-2096549
+bash: 5.2.21(1)-release · Python 3.12.3 · croniter: ModuleNotFoundError: No module named 'cr
 ════ K1 · her koşu tam satır, geçerli JSON, 15 alan ════
 ════ K4 · sessiz başarı YALNIZ beyanla ════
 ════ K5 · çelişki: canlı tablo ≠ kanon ════
@@ -10,4 +12,6 @@ $ bash kosu-kaydi/scripts/kosu-sar.test.sh
 ════ cron-sonraki.py tek başına (bağımsız hesap, paket yok) ════
 
 ── SONUÇ: 45 geçti · 0 düştü ──
+temizlik: silindi
+nazir sınav rc=0
 --- stderr ---

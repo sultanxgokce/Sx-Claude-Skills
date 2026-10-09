@@ -87,7 +87,11 @@ ol "ay adla (jan) → yıl devri" "$(CS '0 0 * jan *')" "2027-01-01T00:00:00+03:
 ol "liste 1,15" "$(CS '15 3 1,15 * *')" "2026-10-15T03:15:00+03:00"
 ol "gün-ay VE hafta-günü kısıtlı → biri tutunca (cron OR kuralı)" "$(CS '0 6 31 * 1')" "2026-10-12T06:00:00+03:00"
 ol "5/15 biçimi" "$(CS '5/15 * * * *')" "2026-10-09T12:05:00+03:00"
-python3 -c 'import croniter' >/dev/null 2>&1 && echo "  (not: croniter kurulu ama hesap ona bakmaz)"
+# paket bağımsızlığı sınav ortamından bağımsız kanıtlanır: croniter adıyla ZEHİRLİ bir modül öne konur; hesap ona
+# dokunsaydı ImportError ile düşerdi (nazir'de paket yok, A290 — bu kapı o kutuyu burada taklit eder)
+mkdir -p "$T/zehir"; printf 'raise ImportError("croniter zehirli: hesap pakete dokundu")\n' > "$T/zehir/croniter.py"
+ol "croniter zehirliyken de doğru (pakete bağımlılık yok)" "$(PYTHONPATH="$T/zehir" CS '0 9 * * 1-5')" "2026-10-12T09:00:00+03:00"
+PYTHONPATH="$T/zehir" python3 -c 'import croniter' >/dev/null 2>&1; ol "zehir gerçekten ısırıyor (pozitif kontrol)" "$?" "1"
 python3 "$HERE/cron-sonraki.py" '@daily' >/dev/null 2>&1; ol "@daily rc=3 (türetilemedi)" "$?" "3"
 python3 "$HERE/cron-sonraki.py" '1 2 3' >/dev/null 2>&1; ol "3 alan rc=3" "$?" "3"
 python3 "$HERE/cron-sonraki.py" '99 * * * *' >/dev/null 2>&1; ol "aralık dışı rc=3 (uydurma yok)" "$?" "3"
