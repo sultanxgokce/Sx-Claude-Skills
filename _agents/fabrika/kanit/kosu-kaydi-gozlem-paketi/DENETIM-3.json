@@ -1,0 +1,21 @@
+{
+  "tur": 3,
+  "is": "kosu-kaydi-gozlem-paketi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-09T20:59:17+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 40353,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İstenen gözlemli nöbetçi akışı dosya tabanlı bayt karşılaştırmasıyla kurulmuş; gözlem arızası iş kodundan bağımsız `olculemedi` oluyor ve `--nobetci` yokken davranış değişmiyor. Önceki NUL, sürüm ve birleşik hata açıkları kapatılmış; hermetik ve Nâzır `/tmp` sınavları 88/88 geçtiği için üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Hermetik sınav ile aynı sınavın Nâzır kutusunda `/tmp` üzerinden çalışması iki ayrı yeşil ölçümle gösteriliyor; kutu kaydı kaynak-hedef md5 eşliğini, Python varlığını ve croniter yokluğunu da doğruluyor. Sınavlar aynı/değişen gözlemi, baş-son boşluk kırpmayı, iç boşluğu, NUL baytlarını, tek ve birleşik gözlem hatalarını, rc aktarımını ve `--nobetci` olmadan etkisizliği kapsıyor. Yalnız “sonra” kayıtları bulunduğundan önce/sonra ölçüm çifti yok; ancak kartın açık kabul ölçütleri iki hedef ortamındaki doğrudan sınavlarla kanıtlanmış."
+  }
+}
