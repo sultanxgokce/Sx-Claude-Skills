@@ -1,0 +1,74 @@
+{
+  "is": "fabrika-duman-calistirilabilir",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-09T11:36:13+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "duman",
+      "asama": "once",
+      "dosya": "olcum-duman-once.txt",
+      "sha256": "cbd67bd3ff35641d2b8999f21760aaa266a16f8944f45a0fb23b84b66804a666",
+      "komut": [
+        "node",
+        "sync-skills.mjs",
+        "--skill",
+        "yazilim-fabrikasi"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-09T11:35:04+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "duman",
+      "asama": "sonra",
+      "dosya": "olcum-duman-sonra.txt",
+      "sha256": "974036a4351686a3bd93619bfeb322fa41427929ed880a42ab38f8765899f4f9",
+      "komut": [
+        "node",
+        "sync-skills.mjs",
+        "--skill",
+        "yazilim-fabrikasi"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-09T11:35:28+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gun-sonu-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-gun-sonu-sinavi-sonra.txt",
+      "sha256": "fe328721915d2a6a4389a146c873e7dc513564ee4994199fac381a922a5915ba",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/gun-sonu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T11:35:28+03:00",
+      "sure_sn": 0.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "duman-kurulu-izinli",
+      "asama": "sonra",
+      "dosya": "olcum-duman-kurulu-izinli-sonra.txt",
+      "sha256": "b555d5f9d906d9580a3f3d64e2bf1c5afb4e9369b66025f8cfad82995e7afed2",
+      "komut": [
+        "node",
+        "sync-skills.mjs",
+        "--skill",
+        "yazilim-fabrikasi"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T11:36:13+03:00",
+      "sure_sn": 0.1
+    }
+  ],
+  "imza": "b2fd1c767b50dbb5460ce340268982cc7517339c8c1790582c12b2cc85fabbbd"
+}

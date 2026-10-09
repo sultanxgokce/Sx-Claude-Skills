@@ -1,0 +1,28 @@
+{
+  "tur": 1,
+  "is": "fabrika-duman-calistirilabilir",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-09T11:36:43+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 9250,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Depodaki gun-sonu.test.sh dosyasına istenen çalıştırma biti verilmiş; son kuru koşu da kurulu kopyanın kullanılabilir olduğunu göstermiş. Değişiklik üretime hazırdır, yalnız ilk “sonra” kaydının hâlâ kırmızı olması kanıt anlatımını gereksiz yere karıştırıyor.",
+    "bulgular": [
+      {
+        "ne": "Aynı akışta “sonra” diye kaydedilen ilk duman ölçümü kırmızı, daha geç alınan ikinci ölçüm yeşil; nihai sonuç sağlam olsa da hangi dağıtım/yenileme adımının sonucu değiştirdiği kanıtta açık değil.",
+        "kanit": "olcum-duman-sonra.txt rc=1 ve “ÇALIŞTIRILAMAZ (izin yok)” derken, 45 saniye sonraki olcum-duman-kurulu-izinli-sonra.txt rc=0 ve “0 duman-düştü” diyor.",
+        "konum": "kanıt kayıtları: duman/sonra ve duman-kurulu-izinli/sonra",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. İstenen önce/sonra ölçüm çifti fiilen mevcut: önce rc=1 izin hatası, nihai sonra rc=0 ve 0 duman-düştü. Diff yalnız dosya kipini 100644’ten 100755’e çeviriyor; doğrudan “bash script” ölçümü x bitini sınamasa da sync-skills nihai yeşil ölçümü kurulu hedefteki çalıştırılabilirliği sınayıp doğruluyor."
+  }
+}
