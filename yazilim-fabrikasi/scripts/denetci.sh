@@ -201,20 +201,25 @@ else echo "(iş kartı verilmedi — talep bilinmiyor; DOĞRU ŞEY Mİ sorusu H'
 if [ "$DENETCI" = "auto" ]; then case "$YAZAN" in codex) DENETCI="claude" ;; *) DENETCI="codex" ;; esac; fi
 [ "$DENETCI" != "$YAZAN" ] || { _hata "denetleyen ($DENETCI) yazanla ($YAZAN) AYNI — K1 ihlali; --denetci ile farklı model seç"; exit 1; }
 HAM="$TMP/ham.json"
+# ── KIRPMA KAYDI (NÂZIR/RASATÇI 8 Eki 2026): kırpma eskiden yalnız istemin sonuna ve ekrana düşüyordu, ikisi de
+#    kayboluyordu; DENETIM-<tur>.json'da alan yoktu. Artık her turda `kirpildi` {oldu · istem_bayt · esik} yazılır —
+#    kırpılmamış turda da (oldu=false), "yok" ile "yazılmadı" ayırt edilsin. Kırpma Codex yoluna özgüdür (tek argüman
+#    sınırı ~128 KB); DENETCI_KIRP_ESIK dikişi sınav için eşiği düşürür ve kırpmayı sahte denetçi yolunda da uygular.
+KIRP_ESIK="${DENETCI_KIRP_ESIK:-110000}"; KIRP_TETIK=$((KIRP_ESIK + KIRP_ESIK/11))   # varsayılan 110000 → 120000
+ISTEM_BAYT=$(wc -c < "$TMP/istem.md"); KIRPILDI=0
+if { [ "$DENETCI" = "codex" ] || [ -n "${DENETCI_KIRP_ESIK:-}" ]; } && [ "$ISTEM_BAYT" -gt "$KIRP_TETIK" ]; then
+  # İstem ARGÜMAN olarak verilir, dosya olarak değil: bu konteynerde Codex'in kum havuzu (bwrap) ad-alanı
+  # açamıyor ve "dosyayı oku" komutu düşüyor (22 Eyl canlı koşum: 2/H "istem.md okunamadı"). Tek argüman
+  # sınırı ~128 KB → diff büyükse kırpılır ve istemde SÖYLENİR (sessiz kırpma yok).
+  head -c "$KIRP_ESIK" "$TMP/istem.md" > "$TMP/istem-kirpik.md"
+  printf '\n\n[UYARI: istem %s bayttı, %s baytta KIRPILDI — diff'"'"'in sonu görülmedi; puanı buna göre ver, kırpıldığını özete yaz]\n' "$ISTEM_BAYT" "$KIRP_ESIK" >> "$TMP/istem-kirpik.md"
+  mv "$TMP/istem-kirpik.md" "$TMP/istem.md"; KIRPILDI=1; _bilgi "⚠ istem $ISTEM_BAYT bayt → $KIRP_ESIK'e kırpıldı (denetçiye söylendi, DENETIM kaydına yazılır)"
+fi
 if [ -n "${DENETCI_KOMUT:-}" ]; then
   DENETCI_AD="$DENETCI_KOMUT (sınav)"; $DENETCI_KOMUT "$TMP/istem.md" > "$HAM" 2>"$TMP/err"; DRC=$?
 elif [ "$DENETCI" = "codex" ]; then
   command -v codex >/dev/null || { _hata "codex yok — denetçi ölçemedi"; exit 3; }
   DENETCI_AD="codex${MODEL:+ ($MODEL)}"
-  # İstem ARGÜMAN olarak verilir, dosya olarak değil: bu konteynerde Codex'in kum havuzu (bwrap) ad-alanı
-  # açamıyor ve "dosyayı oku" komutu düşüyor (22 Eyl canlı koşum: 2/H "istem.md okunamadı"). Tek argüman
-  # sınırı ~128 KB → diff büyükse kırpılır ve istemde SÖYLENİR (sessiz kırpma yok).
-  BOYUT=$(wc -c < "$TMP/istem.md")
-  if [ "$BOYUT" -gt 120000 ]; then
-    head -c 110000 "$TMP/istem.md" > "$TMP/istem-kirpik.md"
-    printf '\n\n[UYARI: istem %s bayttı, 110000 baytta KIRPILDI — diff'"'"'in sonu görülmedi; puanı buna göre ver, kırpıldığını özete yaz]\n' "$BOYUT" >> "$TMP/istem-kirpik.md"
-    mv "$TMP/istem-kirpik.md" "$TMP/istem.md"; _bilgi "⚠ istem $BOYUT bayt → 110000'e kırpıldı (denetçiye söylendi)"
-  fi
   codex exec -s read-only --skip-git-repo-check --ephemeral -C "$TMP" ${MODEL:+-m "$MODEL"} \
     --output-schema "$SEMA" -o "$HAM" "$(printf 'Hiçbir komut koşma, dosya okuma; gereken her şey aşağıda. Talimata göre YALNIZ JSON üret.\n\n'; cat "$TMP/istem.md")" >"$TMP/log" 2>"$TMP/err"; DRC=$?
 else
@@ -245,17 +250,20 @@ json.dump(d,open(sys.argv[2],"w",encoding="utf-8"),ensure_ascii=False)
 PY
 SRC=$?
 if [ "$SRC" -ne 0 ]; then _hata "denetçi çıktısı geçersiz — ölçemedi"; cp "$HAM" "$DZ/DENETIM-$TUR-HAM.txt"; exit 3; fi
-python3 - "$DZ/DENETIM-$TUR.json" "$TUR" "$IS" "$PR" "$YAZAN" "$DENETCI_AD" "$KANIT_DURUM" "$DOGRULANMIS" <<'PY'
+python3 - "$DZ/DENETIM-$TUR.json" "$TUR" "$IS" "$PR" "$YAZAN" "$DENETCI_AD" "$KANIT_DURUM" "$DOGRULANMIS" "$KIRPILDI" "$ISTEM_BAYT" "$KIRP_ESIK" <<'PY'
 import json,sys,datetime
-yol,tur,is_,pr,yazan,den,kd,sonuc_yolu=sys.argv[1:]
+yol,tur,is_,pr,yazan,den,kd,sonuc_yolu,kirp,bayt,esik=sys.argv[1:]
 json.dump({"tur":int(tur),"is":is_,"pr":pr,"yazan":yazan,"denetci":den,"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
-           "kanit_durumu":kd,"sonuc":json.load(open(sonuc_yolu,encoding="utf-8"))},open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
+           "kanit_durumu":kd,
+           "kirpildi":{"oldu":kirp=="1","istem_bayt":int(bayt),"esik":int(esik)},   # kalıcı kayıt: kırpılan denetim "tam gördü" sanılmasın
+           "sonuc":json.load(open(sonuc_yolu,encoding="utf-8"))},open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
 PY
 _oku() { python3 -c "import json,sys;d=json.load(open(sys.argv[1],encoding='utf-8'));print(len(d['bulgular']) if sys.argv[2]=='n' else d[sys.argv[2]])" "$DOGRULANMIS" "$1"; }
 PUAN="$(_oku kod_puani)"; DOGRU="$(_oku dogru_sey)"; NB="$(_oku n)"
 [ -n "$PUAN" ] && [ -n "$DOGRU" ] || { _hata "puan okunamadı — ölçemedi"; exit 3; }
 _bilgi "── DENETİM tur $TUR · denetçi: $DENETCI_AD · yazan: $YAZAN"
 _bilgi "   KOD İYİ Mİ: $PUAN/5 · DOĞRU ŞEY Mİ: $DOGRU · bulgu: $NB · kanıt: $KANIT_DURUM"
+[ "$KIRPILDI" -eq 1 ] && _bilgi "   ⚠ KIRPILDI: istem $ISTEM_BAYT bayt → $KIRP_ESIK (diff'in sonu görülmedi; kayıtta kirpildi.oldu=true)"
 python3 - "$DOGRULANMIS" <<'PY'
 import json,sys
 d=json.load(open(sys.argv[1],encoding="utf-8"))
