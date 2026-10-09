@@ -121,8 +121,7 @@ elif [ "$RC" -eq 127 ] || [ "$RC" -eq 126 ]; then SONUC="olculemedi"   # iş kom
 elif [ "$GOZLEM_HATA" -eq 1 ]; then SONUC="hata"   # 0.4.1 K4-d: gözlenen şey yok (boş→boş) ya da düşürüldü (dolu→boş) — iş rc 0 olsa bile hata; rc olduğu gibi geçer
 elif [ "$RC" -eq 0 ] && { [ "$BEYAN" = "dokunmadim" ] || { [ "$NOBETCI" -eq 1 ] && [ "$CIKTI_VAR" -eq 0 ]; }; }; then SONUC="ayakta-dokunmadim"
 elif [ "$RC" -eq 0 ]; then SONUC="tamam"
-elif [ "$RC" -eq 127 ] || [ "$RC" -eq 126 ]; then SONUC="olculemedi"   # rc olduğu gibi kalır (126 ≠ 127), yalnız sonuç sınıfı
-else SONUC="hata"; fi
+else SONUC="hata"; fi   # 126/127 yukarıda olculemedi oldu (rc olduğu gibi kalır, 126 ≠ 127); bağımsız göz tur 1: ikinci dal erişilemezdi, kaldırıldı
 
 CANLI_IFADE="$(_canli_ifade)"
 PLANLI="$(_sonraki "$CANLI_IFADE")"; TAHMIN="$(_sonraki "$KANON_IFADE")"

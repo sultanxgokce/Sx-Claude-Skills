@@ -1,5 +1,5 @@
 $ bash kosu-kaydi/scripts/kosu-sar.test.sh
-# rc=0 sure=13.0s zaman=2026-10-09T22:24:52+03:00
+# rc=0 sure=13.5s zaman=2026-10-09T22:27:24+03:00
 --- stdout ---
 ════ K1 · her koşu tam satır, geçerli JSON, 15 alan ════
 ════ K4 · sessiz başarı YALNIZ beyanla ════

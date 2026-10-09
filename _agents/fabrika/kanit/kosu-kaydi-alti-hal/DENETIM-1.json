@@ -1,0 +1,28 @@
+{
+  "tur": 1,
+  "is": "kosu-kaydi-alti-hal",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-09T22:26:44+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 22678,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Hünkârım, değişiklik boş gözlemi “gözlenen şey yok” diye sınıflandırmış, boş→boş ile dolu→boşu hata yapmış, damgaları UTC’ye çekmiş ve Nâzır’da bulunmayan ss örneğini /proc/net/tcp ile değiştirmiştir. Araç imzalı önce/sonra ölçümü dört eski kusurun kapandığını ve sınavın 94/94 geçtiğini gösteriyor; yalnız erişilemeyen mükerrer rc 126/127 dalı küçük bir temizlik borcudur.",
+    "bulgular": [
+      {
+        "ne": "rc 126/127 için sonuç sınıflandırması iki kez yazılmış; ikinci dal, aynı koşul daha önce ele alındığı için erişilemez.",
+        "kanit": "Diffte sonuç zincirine önce `elif [ \"$RC\" -eq 127 ] || [ \"$RC\" -eq 126 ]; then SONUC=\"olculemedi\"` eklenmiş, daha aşağıdaki mevcut aynı koşullu dal bırakılmıştır.",
+        "konum": "kosu-kaydi/scripts/kosu-sar.sh:120",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önce ölçümü boş→boş, dolu→boş, yalnız boşluk ve UTC olmak üzere 4 ayırt edici kusuru gösteriyor; sonra ölçümü gerçek betikte 94 geçti/0 düştü veriyor, ayrıca sürüm ile /proc/net/tcp değişiklikleri ayrı yeşil ölçümle doğrulanıyor. Önce/sonra ölçüm çifti yeterli; görsel kare gerektirmeyen komut satırı davranışı için ölçümler uygun."
+  }
+}
