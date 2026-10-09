@@ -1,0 +1,11 @@
+$ node sync-skills.mjs --skill yazilim-fabrikasi
+# rc=0 sure=0.1s zaman=2026-10-09T11:36:13+03:00
+--- stdout ---
+
+  sync-skills — CHECK (dry-run)
+
+  = yazilim-fabrikasi → _global: güncel (v0.5.4)
+
+  özet: 0 planlandı · 1 güncel · 0 drift-uyarı · 0 eksik · 0 duman-düştü
+
+--- stderr ---

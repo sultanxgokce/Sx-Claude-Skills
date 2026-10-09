@@ -1,7 +1,7 @@
 {
   "is": "fabrika-duman-calistirilabilir",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-09T11:35:28+03:00",
+  "guncelleme": "2026-10-09T11:36:13+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -51,7 +51,24 @@
       "renk": "yesil",
       "zaman": "2026-10-09T11:35:28+03:00",
       "sure_sn": 0.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "duman-kurulu-izinli",
+      "asama": "sonra",
+      "dosya": "olcum-duman-kurulu-izinli-sonra.txt",
+      "sha256": "b555d5f9d906d9580a3f3d64e2bf1c5afb4e9369b66025f8cfad82995e7afed2",
+      "komut": [
+        "node",
+        "sync-skills.mjs",
+        "--skill",
+        "yazilim-fabrikasi"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T11:36:13+03:00",
+      "sure_sn": 0.1
     }
   ],
-  "imza": "7bcaa004545e2d70fd9742f77d628d612abf627ad1f1558737b32b1edc9788d7"
+  "imza": "b2fd1c767b50dbb5460ce340268982cc7517339c8c1790582c12b2cc85fabbbd"
 }
