@@ -1,0 +1,14 @@
+$ node sync-skills.mjs --skill yazilim-fabrikasi
+# rc=1 sure=0.1s zaman=2026-10-09T11:35:28+03:00
+--- stdout ---
+
+  sync-skills — CHECK (dry-run)
+
+     🔴 DUMAN TESTİ DÜŞTÜ — yazilim-fabrikasi → _global:
+        • gun-sonu.test.sh: ÇALIŞTIRILAMAZ (izin yok)
+        → dosya kopyalandı ama KULLANILAMAZ. "Dağıtıldı" demek yetmez.
+
+  özet: 0 planlandı · 1 güncel · 0 drift-uyarı · 0 eksik · 1 duman-düştü
+  🔴 1 skill KULLANILAMAZ hâlde kuruldu — dağıtım YEŞİL DEĞİL.
+
+--- stderr ---
