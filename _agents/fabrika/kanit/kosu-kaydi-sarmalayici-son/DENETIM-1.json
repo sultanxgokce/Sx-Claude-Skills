@@ -1,0 +1,21 @@
+{
+  "tur": 1,
+  "is": "kosu-kaydi-sarmalayici-son",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-09T13:13:07+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 66533,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İstenen dar düzeltme yapılmış: ana dizin yazılabilir görünse bile JSONL eklemesi düşerse aynı satır yedek dizinde yeniden deneniyor, iki yazma da düşerse stderr’e KAYIT YAZILAMADI basılıyor. Hedef nazir kutusunda gerçek paket kopyasıyla çalışan sınav 75/0 geçtiği ve özellikle iki hata yolunu sınadığı için yalnız rötuş düzeyi risk kalmış, değişiklik üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; dört kayıt yeşil, sarı kayıt yok. Yerel ve nazir ölçümleri 75/0 geçiyor; nazir kaydındaki kaynak/hedef md5 eşitliği sınanan kodun verilen paket olduğunu, hedefte croniter bulunmaması da ortam gerçekçiliğini destekliyor. Kabulün çekirdeği doğrudan sınanmış: yazılabilir dizindeki salt-okunur JSONL hedefinde satır yedeğe düşüyor ve iş rc=0 kalıyor; yedek de yazılamadığında stderr KAYIT YAZILAMADI doğrulanıyor. Klasik önce/sonra ölçüm çifti yok, ancak kartın kabulü regresyon sınavının hedef kutuda geçmesi olduğundan bu eksik kanıtı geçersiz kılmıyor."
+  }
+}
