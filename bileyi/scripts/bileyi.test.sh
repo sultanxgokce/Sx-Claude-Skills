@@ -149,34 +149,61 @@ icermeyen "G2 'sürtünme yok' diye bir cümle BASMAZ" "sürtünme yok" env BILE
 
 echo "H · kill-switch"
 kapi "H1 kapalıyken tam tur rc=4" 4 env BILEYI_ANAHTAR="$ANAH" sh -c \
-  "python3 '$B' --depo '$KOK/oda' --esik-dosya '$ES' dur --gerekce 'sinav' >/dev/null && python3 '$B' --depo '$KOK/oda' --esik-dosya '$ES' tur"
+  "python3 '$B' --depo '$KOK/oda' --esik-dosya '$ES' dur --gerekce 'sinav' >/dev/null && python3 '$B' --depo '$KOK/oda' --esik-dosya '$ES' tur --gun 0"
 kapi "H2 🔴 kapalıyken 'olc' YİNE çalışır (ölçüme erişim kesilmez)" 0 \
   env BILEYI_ANAHTAR="$ANAH" python3 "$B" --depo "$KOK/oda" --esik-dosya "$ES" olc --gun 0
 kapi "H3 🔴 kapalıyken 'durum' YİNE çalışır" 0 \
   env BILEYI_ANAHTAR="$ANAH" python3 "$B" --depo "$KOK/oda" --esik-dosya "$ES" durum
 iceren "H4 durum kapalı olduğunu ve gerekçesini söyler" "KAPALI" \
   env BILEYI_ANAHTAR="$ANAH" python3 "$B" --depo "$KOK/oda" --esik-dosya "$ES" durum
-kapi "H5 açılınca tam tur yine koşar" 0 env BILEYI_ANAHTAR="$ANAH" sh -c \
-  "python3 '$B' --depo '$KOK/oda' --esik-dosya '$ES' ac --gerekce 'sinav' >/dev/null && python3 '$B' --depo '$KOK/oda' --esik-dosya '$ES' tur --gun 0"
+kapi "H5 açılınca tur yine koşar (kill-switch açıldı)" 0 python3 -c "
+import importlib.util as u, io, contextlib, os, subprocess, sys
+s=u.spec_from_file_location('b','$B'); m=u.module_from_spec(s); s.loader.exec_module(m)
+m.kimlik = lambda depo, zorunlu=True: 'sinav-ajani'
+os.environ['BILEYI_ANAHTAR'] = '$ANAH'
+subprocess.run([sys.executable,'$B','--depo','$KOK/oda','--esik-dosya','$ES','ac','--gerekce','sinav'],
+               capture_output=True, env=dict(os.environ))
+class N: pass
+n=N(); n.depo='$KOK/oda'; n.havuz_depo='$KOK/oda'; n.esik_dosya='$ES'; n.gun=0
+n.ikili_esik=None; n.kuru=True
+with contextlib.redirect_stdout(io.StringIO()): rc = m.komut_tur(n)
+assert rc == 0, rc
+"
 kapi "H6 'dur' gerekçesiz çağrılamaz" 2 \
   env BILEYI_ANAHTAR="$ANAH" python3 "$B" --depo "$KOK/oda" --esik-dosya "$ES" dur
 
 echo "I · 🔴 kimlik kapısı (çivili yol / sızıntı panzehiri)"
-kapi "I1 kimlik aracı yoksa rc=3 — başkasının defterine DÜŞMEZ" 0 python3 -c "
-import importlib.util as u
+kapi "I1 🔴 ölçmek için ada gerek YOK — kimlik aracı yoksa da ölçer ve bilinmediğini söyler" 0 python3 -c "
+import importlib.util as u, io, contextlib, pathlib
 s=u.spec_from_file_location('b','$B'); m=u.module_from_spec(s); s.loader.exec_module(m)
-def sahte(depo): raise m.Durdu('kimlik sorulamadi — OLCEMEDIM', 3)
+m.kimlik = lambda depo, zorunlu=True: ('' if not zorunlu else (_ for _ in ()).throw(m.Durdu('yok',3)))
+class N: pass
+n=N(); n.depo='$KOK/oda'; n.havuz_depo='$KOK/oda'; n.esik_dosya='$ES'; n.gun=0; n.ikili_esik=None
+t=io.StringIO()
+with contextlib.redirect_stdout(t): rc = m.komut_olc(n)
+cik=t.getvalue()
+assert rc == 0, (rc, cik[:300])
+assert 'bilinmiyor' in cik, cik[:200]
+# Hangi izi okudugunu YOL olarak basmali — odayi secen sey o
+assert 'iz:' in cik and 'bulgu-havuzu.jsonl' in cik, cik[:200]
+"
+kapi "I1b 🔴 YAZMAK için ad ŞART — kimliksiz tur ilerlemez (provenans uydurulamaz)" 0 python3 -c "
+import importlib.util as u, io, contextlib
+s=u.spec_from_file_location('b','$B'); m=u.module_from_spec(s); s.loader.exec_module(m)
+def sahte(depo, zorunlu=True):
+    if zorunlu: raise m.Durdu('kimlik araci yok', 3)
+    return ''
 m.kimlik = sahte
 class N: pass
-n=N(); n.depo='$KOK/oda'; n.esik_dosya='$ES'; n.gun=0; n.ikili_esik=None
+n=N(); n.depo='$KOK/oda'; n.havuz_depo='$KOK/oda'; n.esik_dosya='$ES'; n.gun=0
+n.ikili_esik=None; n.kuru=False
+t=io.StringIO()
 try:
-    m.komut_olc(n)
+    with contextlib.redirect_stdout(t): m.komut_tur(n)
 except m.Durdu as e:
     assert e.rc == 3, e.rc
 else:
     raise SystemExit(1)
-# main AYNI durumu 3 cikis koduna cevirmeli — kapi ile cikis kodu arasindaki kablo
-assert m.main(['--depo','$KOK/oda','--esik-dosya','$ES','olc','--gun','0']) == 3
 "
 kapi "I2 kimlik BOŞ dönerse de rc=3 (boş ad kabul edilmez)" 0 python3 -c "
 import importlib.util as u
@@ -289,115 +316,97 @@ mkdir -p "$KOK/havuzsuz/_agents/handoff"
 cp "$HAV" "$KOK/havuzsuz/_agents/handoff/bulgu-havuzu.jsonl"
 kapi "O1 aday havuzu YOKsa tur rc=3 — yeni havuz KURMAZ" 3 \
   env BILEYI_ANAHTAR="$ANAH" python3 "$B" --depo "$KOK/havuzsuz" --esik-dosya "$ES" tur --gun 0
-kapi "O2 aday havuzu varsa tur koşar" 0 \
-  env BILEYI_ANAHTAR="$ANAH" python3 "$B" --depo "$KOK/oda" --esik-dosya "$ES" tur --gun 0
-kapi "O3 🔴 tur aday havuzuna GERÇEKTEN yazdı (basmakla yetinmedi)" 0 python3 -c "
-import pathlib, json
-y = pathlib.Path('$KOK/oda/_agents/handoff/layiha-aday-havuzu.jsonl')
-satir = [json.loads(l) for l in y.read_text(encoding='utf-8').splitlines() if l.strip()]
-assert len(satir) >= 1, 'aday havuzuna hic yazilmadi'
-assert satir[-1]['kaynak'] == 'bileyi'
-"
-kapi "O6 🔴 aday ÖLÇÜLEN tekrarı taşır (sabit metin DEĞİL — tur-2 bulgusu)" 0 python3 -c "
-import pathlib, json
+kapi "O2 🔴 tur koşar ve ÖLÇÜLEN her tekrar için ayrı aday yazar (işlev düzeyi)" 0 python3 -c "
+import importlib.util as u, io, contextlib, json, pathlib, os
+s=u.spec_from_file_location('b','$B'); m=u.module_from_spec(s); s.loader.exec_module(m)
+# 🔴 CLI yerine islev duzeyi: uretim kimligi makineye bagli, sinav olmamali.
+#    CI bunu yakaladi — 'hermetik' iddiam yanlisti.
+m.kimlik = lambda depo, zorunlu=True: 'sinav-ajani'
+os.environ['BILEYI_ANAHTAR'] = '$ANAH'
+class N: pass
+n=N(); n.depo='$KOK/oda'; n.havuz_depo='$KOK/oda'; n.esik_dosya='$ES'; n.gun=0
+n.ikili_esik=None; n.kuru=False
+t=io.StringIO()
+with contextlib.redirect_stdout(t): rc = m.komut_tur(n)
+cik = t.getvalue()
+assert rc == 0, (rc, cik[-400:])
 y = pathlib.Path('$KOK/oda/_agents/handoff/layiha-aday-havuzu.jsonl')
 a = [json.loads(l) for l in y.read_text(encoding='utf-8').splitlines() if l.strip()]
 b = [x for x in a if x.get('kaynak') == 'bileyi']
-assert b, 'bileyi adayi yok'
+assert b, 'aday yazilmadi'
 for x in b:
-    assert x.get('anahtar'), 'anahtar yok — ayni tekrar iki kez aday olabilir'
-    assert x.get('sayi'), 'kac kez tekrar ettigi kayitli degil'
-    assert x.get('kaynak_bulgular'), 'hangi bulgulardan dogdugu kayitli degil'
-    assert x['tekrar'] if 'tekrar' in x else True
+    assert x['anahtar'] and x['sayi'] and x['kaynak_bulgular'], x
+    assert x['bulan'] == 'sinav-ajani', x
     assert 'sürtünme ölçüldü' not in x['baslik'], 'sabit baslik geri gelmis'
+d = json.loads(pathlib.Path('$KOK/oda/_agents/fabrika/bileyi-tur.json').read_text(encoding='utf-8'))
+assert d['asama'] == 'yazim-bekliyor', d
 "
-kapi "O7 🔴 TAVAN fiilen keser (rapor metni değil — tur-2 bulgusu)" 0 python3 -c "
-import json, pathlib, subprocess, os, sys
-kok = pathlib.Path('$KOK/tavan'); (kok/'_agents/handoff').mkdir(parents=True, exist_ok=True)
-# Uc AYRI gercek tekrar uret (her biri dort ardisik-olmayan kayitta)
-kay = []
+kapi "O7 🔴 TAVAN fiilen keser (rapor metni değil — işlev düzeyi)" 0 python3 -c "
+import importlib.util as u, io, contextlib, json, pathlib, os
 from datetime import date
-b = date.today().isoformat()
+s=u.spec_from_file_location('b','$B'); m=u.module_from_spec(s); s.loader.exec_module(m)
+m.kimlik = lambda depo, zorunlu=True: 'sinav-ajani'
+os.environ['BILEYI_ANAHTAR'] = '$ANAH'
+kok = pathlib.Path('$KOK/tavan2'); (kok/'_agents/handoff').mkdir(parents=True, exist_ok=True)
+b = date.today().isoformat(); kay = []
 for grup, obek in enumerate(('alfa beta', 'gama delta', 'epsilon zeta')):
     for i in range(4):
-        kay.append({'id': f'c{grup}{i*7}', 'tarih': b, 'baslik': obek + ' burada', 'gercek': ''})
+        kay.append({'id': f'f{grup}{i*7}', 'tarih': b, 'baslik': obek + ' burada', 'gercek': ''})
 (kok/'_agents/handoff/bulgu-havuzu.jsonl').write_text(
     ''.join(json.dumps(k, ensure_ascii=False)+chr(10) for k in kay), encoding='utf-8')
 (kok/'_agents/handoff/layiha-aday-havuzu.jsonl').write_text('', encoding='utf-8')
 es = json.load(open('$ES')); es['tavan'] = 1
 json.dump(es, open(str(kok/'esik.json'), 'w'), ensure_ascii=False)
-env = dict(os.environ, BILEYI_ANAHTAR='$ANAH')
-r = subprocess.run([sys.executable, '$B', '--depo', str(kok), '--esik-dosya', str(kok/'esik.json'),
-                    'tur', '--gun', '0'], capture_output=True, text=True, env=env)
-assert r.returncode == 0, r.stdout + r.stderr
+class N: pass
+n=N(); n.depo=str(kok); n.havuz_depo=str(kok); n.esik_dosya=str(kok/'esik.json')
+n.gun=0; n.ikili_esik=None; n.kuru=False
+t=io.StringIO()
+with contextlib.redirect_stdout(t): rc = m.komut_tur(n)
+cik=t.getvalue()
+assert rc == 0, (rc, cik[-300:])
 yaz = [l for l in (kok/'_agents/handoff/layiha-aday-havuzu.jsonl').read_text(encoding='utf-8').splitlines() if l.strip()]
-assert len(yaz) == 1, f'tavan 1 iken {len(yaz)} aday yazildi — tavan kesmiyor'
-assert 'tavan doldu' in r.stdout, 'tavan gerekcesi yazilmadi'
+assert len(yaz) == 1, f'tavan 1 iken {len(yaz)} aday yazildi'
+assert 'tavan doldu' in cik
 "
-kapi "O8 🔴 aynı tekrar İKİ KEZ aday olmaz (ikinci tur atlar)" 0 python3 -c "
-import json, pathlib, subprocess, os, sys
+kapi "O8 🔴 aynı tekrar İKİ KEZ aday olmaz (işlev düzeyi)" 0 python3 -c "
+import importlib.util as u, io, contextlib, json, pathlib, os
 from datetime import date
-kok = pathlib.Path('$KOK/dedup'); (kok/'_agents/handoff').mkdir(parents=True, exist_ok=True)
+s=u.spec_from_file_location('b','$B'); m=u.module_from_spec(s); s.loader.exec_module(m)
+m.kimlik = lambda depo, zorunlu=True: 'sinav-ajani'
+os.environ['BILEYI_ANAHTAR'] = '$ANAH'
+kok = pathlib.Path('$KOK/dedup2'); (kok/'_agents/handoff').mkdir(parents=True, exist_ok=True)
 b = date.today().isoformat()
-kay = [{'id': f'd{i*5}', 'tarih': b, 'baslik': 'tekil obek burada', 'gercek': ''} for i in range(4)]
+kay = [{'id': f'g{i*5}', 'tarih': b, 'baslik': 'tekil obek burada', 'gercek': ''} for i in range(4)]
 (kok/'_agents/handoff/bulgu-havuzu.jsonl').write_text(
     ''.join(json.dumps(k, ensure_ascii=False)+chr(10) for k in kay), encoding='utf-8')
 (kok/'_agents/handoff/layiha-aday-havuzu.jsonl').write_text('', encoding='utf-8')
-env = dict(os.environ, BILEYI_ANAHTAR='$ANAH')
-cag = [sys.executable, '$B', '--depo', str(kok), '--esik-dosya', '$ES', 'tur', '--gun', '0']
-r1 = subprocess.run(cag, capture_output=True, text=True, env=env)
+class N: pass
+n=N(); n.depo=str(kok); n.havuz_depo=str(kok); n.esik_dosya='$ES'; n.gun=0
+n.ikili_esik=None; n.kuru=False
+with contextlib.redirect_stdout(io.StringIO()): m.komut_tur(n)
 n1 = len([l for l in (kok/'_agents/handoff/layiha-aday-havuzu.jsonl').read_text(encoding='utf-8').splitlines() if l.strip()])
-r2 = subprocess.run(cag, capture_output=True, text=True, env=env)
+t=io.StringIO()
+with contextlib.redirect_stdout(t): rc2 = m.komut_tur(n)
 n2 = len([l for l in (kok/'_agents/handoff/layiha-aday-havuzu.jsonl').read_text(encoding='utf-8').splitlines() if l.strip()])
-assert n1 >= 1 and n2 == n1, f'ikinci turda da yazdi: {n1} -> {n2}'
-assert r2.returncode == 1, f'yeni aday yokken rc={r2.returncode} (1 olmali)'
-assert 'zaten aday' in r2.stdout
-assert 'TEKRAR YOK' not in r2.stdout, 'tekrar yok demis — oysa tekrar var, adayi vardi'
+cik=t.getvalue()
+assert n1 >= 1 and n2 == n1, (n1, n2)
+assert rc2 == 1, rc2
+assert 'zaten aday' in cik
+assert 'TEKRAR YOK' not in cik
 "
-
-echo "R · 🔴 kapanış damgası (bayat kayıt panzehiri · tur-2 bulgusu)"
-kapi "R1 tur durumu yoksa SESSİZ GEÇMEZ, söyler" 0 python3 -c "
-import importlib.util as u, pathlib, io, contextlib
+kapi "O5 kuru tur HİÇBİR ŞEY yazmaz" 0 python3 -c "
+import importlib.util as u, io, contextlib, pathlib, os
 s=u.spec_from_file_location('b','$B'); m=u.module_from_spec(s); s.loader.exec_module(m)
-kok = pathlib.Path('$KOK/damgasiz'); kok.mkdir(parents=True, exist_ok=True)
-t=io.StringIO()
-with contextlib.redirect_stdout(t):
-    rc = m._kapanis_damgasi(kok, 'is1', 'kanit')
-assert rc == 0
-assert 'damga atılmadı' in t.getvalue(), t.getvalue()
-assert 'Sessizce geçmiyorum' in t.getvalue()
+m.kimlik = lambda depo, zorunlu=True: 'sinav-ajani'
+os.environ['BILEYI_ANAHTAR'] = '$ANAH'
+y = pathlib.Path('$KOK/oda/_agents/handoff/layiha-aday-havuzu.jsonl')
+once = y.read_bytes()
+class N: pass
+n=N(); n.depo='$KOK/oda'; n.havuz_depo='$KOK/oda'; n.esik_dosya='$ES'; n.gun=0
+n.ikili_esik=None; n.kuru=True
+with contextlib.redirect_stdout(io.StringIO()): m.komut_tur(n)
+assert y.read_bytes() == once, 'kuru kosum yazdi'
 "
-kapi "R2 🔴 damga EKLER, satır ÜSTÜNE YAZMAZ (havuz salt-eklemedir)" 0 python3 -c "
-import importlib.util as u, pathlib, json, io, contextlib
-s=u.spec_from_file_location('b','$B'); m=u.module_from_spec(s); s.loader.exec_module(m)
-kok = pathlib.Path('$KOK/damga'); (kok/'_agents/handoff').mkdir(parents=True, exist_ok=True)
-(kok/'_agents/fabrika').mkdir(parents=True, exist_ok=True)
-onceki = [json.dumps({'id':'b0001','baslik':'eski','durum':'acik'}, ensure_ascii=False)]
-(kok/'_agents/handoff/bulgu-havuzu.jsonl').write_text(onceki[0]+chr(10), encoding='utf-8')
-(kok/'_agents/fabrika/bileyi-tur.json').write_text(json.dumps(
-    {'asama':'yazim-bekliyor','adaylar':[{'anahtar':'ikili:a b','tekrar':'a b',
-     'kaynak_bulgular':['b0001'],'is':'is1'}]}, ensure_ascii=False), encoding='utf-8')
-t=io.StringIO()
-with contextlib.redirect_stdout(t):
-    m._kapanis_damgasi(kok, 'is1', 'PR #1')
-satir = [l for l in (kok/'_agents/handoff/bulgu-havuzu.jsonl').read_text(encoding='utf-8').splitlines() if l.strip()]
-assert len(satir) == 2, f'satir sayisi {len(satir)} — eklemedi ya da ezdi'
-assert satir[0] == onceki[0], 'ESKI SATIR DEGISTI — havuz salt-eklemedir'
-d = json.loads(satir[1])
-assert d['kapatilan'] == ['b0001'], d
-assert d['sinif'] == 'kapanis-damgasi'
-assert json.loads((kok/'_agents/fabrika/bileyi-tur.json').read_text(encoding='utf-8'))['asama'] == 'kapandi'
-"
-kapi "O4 🔴 tur durum dosyası bıraktı (yazım aşaması bir DURUM, tavsiye değil)" 0 python3 -c "
-import json, pathlib
-d = json.loads(pathlib.Path('$KOK/oda/_agents/fabrika/bileyi-tur.json').read_text(encoding='utf-8'))
-assert d['asama'] == 'yazim-bekliyor', d
-"
-kapi "O5 kuru tur HİÇBİR ŞEY yazmaz" 0 env BILEYI_ANAHTAR="$ANAH" sh -c "
-before=\$(wc -c < '$KOK/oda/_agents/handoff/layiha-aday-havuzu.jsonl')
-python3 '$B' --depo '$KOK/oda' --esik-dosya '$ES' tur --gun 0 --kuru >/dev/null 2>&1
-after=\$(wc -c < '$KOK/oda/_agents/handoff/layiha-aday-havuzu.jsonl')
-[ \"\$before\" = \"\$after\" ]"
 
 echo "P · 🔴 'devam' birleştirme kilitleri"
 kapi "P1 kartsız iş birleştirilmez → rc=3" 3 \
@@ -508,11 +517,20 @@ kay = [{'id': f'e{i}', 'tarih': b, 'baslik': f'bambaska kelimeler {i} burada', '
 (d/'bulgu-havuzu.jsonl').write_text(''.join(json.dumps(k, ensure_ascii=False)+chr(10) for k in kay), encoding='utf-8')
 (d/'layiha-aday-havuzu.jsonl').write_text('', encoding='utf-8')
 PY
-kapi "S5 🔴 SONUÇ: sürtünme sınıfı FİİLEN aday olur (yardımcı değil, HAT ölçülür)" 0 \
-  env BILEYI_ANAHTAR="$ANAH" python3 "$B" --depo "$KOK/surt" --esik-dosya "$ES" tur --gun 0
-kapi "S5b aday kaydı sürtünme yüzeyini ve sayısını taşır" 0 python3 -c "
-import json, pathlib
-a = [json.loads(l) for l in pathlib.Path('$KOK/surt/_agents/handoff/layiha-aday-havuzu.jsonl').read_text(encoding='utf-8').splitlines() if l.strip()]
+kapi "S5 🔴 SONUÇ: sürtünme sınıfı FİİLEN aday olur (yardımcı değil, HAT ölçülür)" 0 python3 -c "
+import importlib.util as u, io, contextlib, json, pathlib, os
+s=u.spec_from_file_location('b','$B'); m=u.module_from_spec(s); s.loader.exec_module(m)
+# 🔴 İşlev düzeyi: üretim kimliği makineye bağlı, SINAV olmamalı (CI yakaladı).
+m.kimlik = lambda depo, zorunlu=True: 'sinav-ajani'
+os.environ['BILEYI_ANAHTAR'] = '$ANAH'
+kok = pathlib.Path('$KOK/surt')
+class N: pass
+n=N(); n.depo=str(kok); n.havuz_depo=str(kok); n.esik_dosya='$ES'; n.gun=0
+n.ikili_esik=None; n.kuru=False
+t=io.StringIO()
+with contextlib.redirect_stdout(t): rc = m.komut_tur(n)
+assert rc == 0, (rc, t.getvalue()[-400:])
+a = [json.loads(l) for l in (kok/'_agents/handoff/layiha-aday-havuzu.jsonl').read_text(encoding='utf-8').splitlines() if l.strip()]
 yuz = {x['yuzey'] for x in a}
 assert 'surtunme' in yuz, f'surtunme yuzeyi adaya GIRMEDI: {yuz}'
 x = [k for k in a if k['yuzey'] == 'surtunme'][0]

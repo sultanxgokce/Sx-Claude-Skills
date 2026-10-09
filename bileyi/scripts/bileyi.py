@@ -51,26 +51,45 @@ class Durdu(RuntimeError):
 
 # ───────────────────────────────────────── K1 · kendi izi
 
-def kimlik(depo: Path) -> str:
+def kimlik(depo: Path, zorunlu: bool = True) -> str:
     """Kimliği SOR, türetme. Tek kaynak çıpa aracıdır.
 
-    🔴 Niçin ortam değişkenine de BAKILMIYOR: kimlik sırasının sahibi çıpa aracıdır;
-    ikinci bir türetme "tek kaynak" iddiasını çürütür ve kimlik taklidine kapı açar.
-    Ölçülmüş vaka: çivili bir yol, hangi ajan koşarsa koşsun başkasının izini
-    "dün nerede bıraktım" diye sunuyordu.
+    🔴 Niçin ortam değişkenine BAKILMIYOR: kimlik sırasının sahibi çıpa aracıdır;
+    ikinci bir türetme "tek kaynak" iddiasını çürütür ve kimlik taklidine kapı
+    açar. Ölçülmüş vaka: çivili bir yol, hangi ajan koşarsa koşsun başkasının
+    izini "dün nerede bıraktım" diye sunuyordu.
+
+    🔴 `zorunlu` AYRIMI — CI bir şeyi yakaladı ve haklıydı: ilk yazımda kimlik
+    HER yolda zorunluydu ve aracı olmayan bir ortamda (temiz bir koşucu) bütün
+    ölçüm rc=3 ile düşüyordu. Sınavım "hermetik" diyordu, DEĞİLDİ.
+    Daha önemlisi: o katılık **hiçbir şeyi korumuyordu.** Hangi odanın izinin
+    okunacağını kimlik DEĞİL `--depo` seçiyor; kimlik yalnız (a) ekrana basılan
+    beyan ve (b) YAZILAN kayıtların provenansı.
+    Doğru ayrım bu yüzden şudur:
+      **ölçmek için ada gerek YOK · YAZMAK için ad ŞART.**
+    `olc` kimliksiz de ölçer (ve bilinmediğini söyler); `tur`/`kart`/`devam`
+    gibi yazan yollar kimliksiz **ilerlemez** — provenans uydurulamaz, boş da
+    bırakılamaz.
     """
     arac = Path("/config/.claude/skills/gunluk-plan/scripts/cipa.sh")
     if not arac.exists():
-        raise Durdu(f"kimlik sorulamadı: çıpa aracı yok ({arac}) — ÖLÇEMEDİM", 3)
+        if zorunlu:
+            raise Durdu(f"kimlik sorulamadı: çıpa aracı yok ({arac}) — yazan yol "
+                        f"kimliksiz ilerlemez (provenans uydurulamaz)", 3)
+        return ""
     try:
         s = subprocess.run(["bash", str(arac), "ajan"], capture_output=True,
                            text=True, timeout=20, cwd=str(depo))
     except (OSError, subprocess.SubprocessError) as e:
-        raise Durdu(f"kimlik sorulamadı: {e} — ÖLÇEMEDİM", 3) from e
+        if zorunlu:
+            raise Durdu(f"kimlik sorulamadı: {e} — ÖLÇEMEDİM", 3) from e
+        return ""
     ad = (s.stdout or "").strip().splitlines()[-1].strip() if s.stdout.strip() else ""
     ad = re.sub(r"[^A-Za-zÇĞİÖŞÜçğıöşü0-9_-]", "", ad)
     if not ad:
-        raise Durdu("kimlik BOŞ döndü — başkasının defterine düşmemek için duruyorum", 3)
+        if zorunlu:
+            raise Durdu("kimlik BOŞ döndü — yazan yol kimliksiz ilerlemez", 3)
+        return ""
     return ad
 
 
@@ -432,7 +451,7 @@ def esik_dosyasi(n) -> Path:
 def olc_veri(n) -> dict:
     # Havuzlar HAVUZ deposunda, ölçüm oradan yapılır.
     depo = havuz_deposu(n)
-    kim = kimlik(depo)
+    kim = kimlik(depo, zorunlu=False)
     es = esik_oku(esik_dosyasi(n))
     # 🔴 BAĞIMSIZ GÖZÜN TUR-1 BULGUSU: komut satırı ezmesi dosyanın pozitif-tam-sayı
     #    kapısını AŞIYORDU — negatif bir eşik doğrudan kabul ediliyordu ve o eşikte
@@ -449,7 +468,11 @@ def olc_veri(n) -> dict:
     dedup, dedup_not = dedup_kaynaklari(depo)
     surt_hal, surt = surtunme_oku(depo)
 
-    print(f"🔪 BİLEYİ · iç-tarama · ajan={kim} · {datetime.now(timezone.utc).date().isoformat()}")
+    print(f"🔪 BİLEYİ · iç-tarama · ajan={kim or 'bilinmiyor (kimlik aracı yok)'}"
+          f" · {datetime.now(timezone.utc).date().isoformat()}")
+    # 🔴 ASIL ŞEFFAFLIK: hangi odanın izini okuduğumu YOL olarak basıyorum.
+    #    Odayı seçen şey kimlik değil bu yol; o yüzden gizli kalmamalı.
+    print(f"   iz: {havuz}")
     print(f"   havuz: {o['toplam']} kayıt" + (f" · {bozuk} BOZUK satır" if bozuk else ""))
     if pen_uyari:
         print(f"   {pen_uyari}")
@@ -674,7 +697,8 @@ def komut_tur(n) -> int:
         print("\n(kuru koşum — aday yazılmadı, durum bırakılmadı)")
         return 0
 
-    kim = o["kim"]
+    # 🔴 Yazan yol kimliksiz ilerlemez: provenans ne uydurulur ne boş bırakılır.
+    kim = o["kim"] or kimlik(depo, zorunlu=True)
     damga = datetime.now(timezone.utc).isoformat()
     with aday_yolu.open("a", encoding="utf-8") as f:
         for a in secilen:

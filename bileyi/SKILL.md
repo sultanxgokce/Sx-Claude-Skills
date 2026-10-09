@@ -229,8 +229,13 @@ durumdaydı).
 - 🔴 **Çelişki kapısı:** iki yüzey aynı aday hakkında zıt şey söylüyorsa (biri "N kez
   tekrar etti", öbürü "tek parti") o aday hüküm üretmez; hepsi çelişiyorsa **rc=3** —
   ne temiz ne kirli. Bu kapı da belgede yazılıp uygulanmamıştı; bağımsız göz yakaladı.
-- Kendi sınavı: `bash scripts/bileyi.test.sh` (**69 kapı**, hermetik — gerçek havuza,
-  gerçek anahtara dokunmaz). Kapılar mutasyonla sınandı: eşik dayanağı · havuz yokluğu ·
+- Kendi sınavı: `bash scripts/bileyi.test.sh` (**65 kapı**) — gerçek havuza ve gerçek
+  anahtara dokunmaz.
+  🔴 **"Hermetik" iddiam bir kez YANLIŞTI ve CI çürüttü.** Sınav, üretim kimliğini makineye
+  bağlı bir araçtan istiyordu; temiz bir koşucuda 23 kapı birden düştü. Yazan yolu sınayan
+  kapılar artık **işlev düzeyinde** (kimlik enjekte edilerek) koşuyor, kabuk düzeyinde değil.
+  Bağımsızlık artık **iddia değil ölçüm**: kimlik aracının yolu var olmayan bir yere
+  çevrilip sınav yeniden koşulur; iki hâlde de 65/65 geçmelidir. Kapılar mutasyonla sınandı: eşik dayanağı · havuz yokluğu ·
   boş kimlik · tek-parti · kapsama · sürtünme bilinmezliği · kill-switch · bozuk satır ·
   eşik sıfırı öldürülünce sınav **kırmızıya döner**.
 - 🔴 **Mutasyon düzeneğinin kendi pozitif kontrolü var** ve niçini utandırıcıdır: ilk
