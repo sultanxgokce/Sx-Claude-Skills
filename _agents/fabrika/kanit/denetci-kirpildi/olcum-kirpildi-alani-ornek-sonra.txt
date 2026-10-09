@@ -1,0 +1,5 @@
+$ bash -c python3 -c "import json;d=json.load(open(\"/config/projects/_wt/Nexus-kurye-hedef-dagitim/_agents/fabrika/kanit/kurye-hedef-dagitim/DENETIM-4.json\"));print(\"eski kayıtta kirpildi alanı var mı:\", \"kirpildi\" in d)"
+# rc=0 sure=0.0s zaman=2026-10-09T10:29:16+03:00
+--- stdout ---
+eski kayıtta kirpildi alanı var mı: False
+--- stderr ---
