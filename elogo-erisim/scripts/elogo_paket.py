@@ -216,8 +216,10 @@ def _main(argv: list[str]) -> int:
     import sys
     from pathlib import Path
 
-    if len(argv) < 2:
+    if len(argv) < 1:
         print("kullanım: elogo_paket.py <xml-yolu> [belge-adı]", file=sys.stderr)
+        print("   ad verilmezse belgenin kendi numarasından (cbc:ID, yoksa cbc:UUID) türer.",
+              file=sys.stderr)
         return 2
     yol = Path(argv[0])
     try:

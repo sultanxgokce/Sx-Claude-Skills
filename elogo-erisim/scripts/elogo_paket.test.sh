@@ -156,6 +156,16 @@ kapi "I2 · gönderici türeticiyi fiilen çağırıyor" 0 "$O
 k = open('elogo_gonder.py', encoding='utf-8').read()
 assert 'belge_adini_turet' in k, 'turetici cagrilmiyor — kurdum ama kosmuyor'
 assert 'or belge_adini_turet(ham)' in k, 'varsayilan yola baglanmamis'"
+kapi "I4 · kuru koşumda ad-türetme dalı ÖLÜ DEĞİL (tek argümanla çağrılabilir)" 0 "$O
+import tempfile, pathlib, io, contextlib, elogo_paket
+f = pathlib.Path(tempfile.mkdtemp()) / 'alakasiz-uzun-dosya-adi.xml'
+f.write_bytes(b'<Invoice $NS><cbc:ID>FTR0000000000009</cbc:ID></Invoice>')
+t = io.StringIO()
+with contextlib.redirect_stdout(t):
+    rc = elogo_paket._main([str(f)])          # ad VERİLMEDİ — türetme dalı
+assert rc == 0, rc
+assert 'FTR0000000000009.zip' in t.getvalue(), t.getvalue()
+assert 'alakasiz' not in t.getvalue()"
 kapi "I3 · paketleyicinin kendi kuru koşumu da dosya adına düşmüyor" 0 "$O
 import re, inspect, elogo_paket
 k = inspect.getsource(elogo_paket)
