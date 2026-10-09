@@ -4,7 +4,7 @@ type: agent
 version: 0.4.0
 description: >
   Koşu kaydı sarmalayıcısı: her cron/zamanlı iş kendi komutunu `kosu-sar.sh <is> [--nobetci [--gozlem <komut>]] [--kilit <dosya>] -- <komut>` ile sarar; her koşu
-  TAM BİR satır yazar (/config/.kosu-kaydi/<kutu>.<YYYY-MM>.jsonl, kutu-yerel, 15 alan — Nexus kokpit-ux/05 şeması sürüm 1.1).
+  TAM BİR satır yazar (/config/.kosu-kaydi/<kutu>.<YYYY-MM>.jsonl, kutu-yerel, 15 alan — Nexus kokpit-ux/05 şeması sürüm 1.2).
   Sessiz başarı yalnız beyanla ($KOSU_BEYAN dosyası ya da kanon satırında --nobetci; --gozlem ile ölçü stdout değil önce/sonra gözlemdir) ayrı sonuç olur; kilitte atlanan koşu
   (flock -n -E 75) `atlandi-kilit`; sahip etiketi satır üstü ya da satır sonu. Sonraki koşu canlı crontab'dan GÖZLEM, kanon
   dosyasından TAHMİN olarak iki alan, çelişki kokpitte sarı; hesap paketsiz saf python. Global beceri: cloudtop deposu izole
@@ -19,7 +19,7 @@ tags: [kosu-kaydi, cron, sarmalayici, kokpit, headless, agentic-os, jsonl]
 ## Niçin var
 Kokpit, kutularda koşan zamanlı işleri (cron) **göremez**: her iş kendi kütüğüne yazar ya da hiç yazmaz; "koştu mu,
 ne zaman, ne oldu, bir sonraki ne zaman" sorusunun tek cevabı yok. Şema Nexus `_agents/handoff/kokpit-ux/05-kosu-kaydi.md`
-(sürüm 1.1) — bu beceri onun **yazıcısı**dır. Okuyucu (kokpit) ayrı iştir.
+(sürüm 1.2) — bu beceri onun **yazıcısı**dır. Okuyucu (kokpit) ayrı iştir.
 
 **Niçin global beceri (A290, 9 Eki 2026):** ilk sürüm cloudtop deposunda yaşıyordu. Ölçüldü: nazir kutusu `/config/projects`
 altında yalnız `cortex · nazir · Nexus · _wt-nazir` görüyor, cloudtop YOK; `/config/.claude/skills` ise merkezle **aynı dizin**

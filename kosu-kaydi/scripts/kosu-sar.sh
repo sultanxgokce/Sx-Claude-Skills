@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# kosu-sar.sh — koşu kaydı sarmalayıcısı (Nexus kokpit-ux/05 şema sürüm 1.1, K1-K6). Sürüm 0.3 (global beceri, A290-A293).
+# kosu-sar.sh — koşu kaydı sarmalayıcısı (Nexus kokpit-ux/05 şema sürüm 1.2, K1-K6). Sürüm 0.4 (global beceri, A290-A293, A300).
 #   Kullanım (kanon satırında):  bash /config/.claude/skills/kosu-kaydi/scripts/kosu-sar.sh <is> [--nobetci [--gozlem <komut>]] [--kilit <dosya>] -- <eski komut…>
 #   Her koşu TAM BİR SATIR yazar (K1): /config/.kosu-kaydi/<kutu>.<YYYY-MM>.jsonl (kutu-yerel; /config/.claude ortak bağ) — özet yok.
 #   sonuc: tamam · hata · ayakta-dokunmadim (K4: işin $KOSU_BEYAN dosyasına 'dokunmadim' yazmasıyla YA DA kanon satırında --nobetci
@@ -91,12 +91,16 @@ if [ "$ATLANDI" -eq 1 ]; then RC="$KILIT_RC"; CIKTI_VAR=0   # kilit dolu: komut 
 elif [ "$KILIT_SORUN" -eq 1 ]; then RC=127; CIKTI_VAR=0        # kilit alınabilir mi bilinmiyor: komut KOŞMADI, ölçülemedi
 elif [ "$NOBETCI" -eq 1 ] && [ -n "$GOZLEM" ]; then   # nöbetçi kipi, GÖZLEMLİ (0.4, şema 1.2): ölçü stdout değil, gözlem komutunun önce/sonra çıktısı
   # Niçin: sessiz nöbetçi yeniden başlatırken de sessiz olabilir (nazir sunucu.sh, A300); "boş çıktı = iş yok" orada çıkarıma dönerdi.
-  _kirp() { sed -e ':a;N;$!ba' -e 's/^[[:space:]]*//;s/[[:space:]]*$//'; }   # bütünün baş/son boşluğu kırpılır; içteki boşluk anlamlı (şema 1.2)
-  ONCE="$(bash -c "$GOZLEM" 2>/dev/null | _kirp; exit "${PIPESTATUS[0]}")"; GRC1=$?
+  # gözlem çıktıları DOSYADA tutulur ve cmp ile bayt bayt karşılaştırılır (kabuk değişkeni NUL taşımaz — bağımsız göz);
+  # kırpma: bütünün baş/son boşluk+satır sonu (python, bayt düzeyinde; içteki boşluk/NUL anlamlı) — şema 1.2 bağlayıcı tanım
+  _gozle() { bash -c "$GOZLEM" 2>/dev/null > "$1.ham"; local r=$?; python3 -c 'import sys;sys.stdout.buffer.write(open(sys.argv[1],"rb").read().strip())' "$1.ham" > "$1"; rm -f "$1.ham"; return $r; }
+  G_ONCE="$(mktemp)"; G_SONRA="$(mktemp)"
+  _gozle "$G_ONCE"; GRC1=$?
   if "$@"; then RC=0; else RC=$?; fi
-  SONRA="$(bash -c "$GOZLEM" 2>/dev/null | _kirp; exit "${PIPESTATUS[0]}")"; GRC2=$?
+  _gozle "$G_SONRA"; GRC2=$?
   if [ "$GRC1" -ne 0 ] || [ "$GRC2" -ne 0 ]; then GOZLEM_SORUN=1; CIKTI_VAR=1   # önce YA DA sonra gözlem düştü → ölçülemedi (kısmi hata, şema 1.2)
-  elif [ "$ONCE" = "$SONRA" ]; then CIKTI_VAR=0; else CIKTI_VAR=1; fi   # bayt bayt aynı = dokunmadı · değişti = iş yaptı (ör. dinleyen pid)
+  elif cmp -s "$G_ONCE" "$G_SONRA"; then CIKTI_VAR=0; else CIKTI_VAR=1; fi   # bayt bayt aynı = dokunmadı · değişti = iş yaptı (ör. dinleyen pid)
+  rm -f "$G_ONCE" "$G_SONRA"
 elif [ "$NOBETCI" -eq 1 ]; then   # nöbetçi kipi, gözlemsiz: beyan KANON satırında (--nobetci); çıktı boş + rc 0 = ayaktaydı, dokunmadı (K4, A291)
   CIKTI_DOSYA="$(mktemp)"; if "$@" | tee "$CIKTI_DOSYA"; then RC=0; else RC=$?; fi
   # "çıktı" = yalnız stdout; yalnız boşluk/sekme/yeni satır BOŞ sayılır; stderr sınıflamaya girmez (şema K4, bağlayıcı tanım)

@@ -71,6 +71,10 @@ ol "baş/son boşluk kırpılır: aynı → ayakta-dokunmadim" "$(alan sonuc)" "
 printf 'pid-100\n' > "$T/dinleyen"
 bash "$S" nobetci --nobetci --gozlem "cat $T/dinleyen" -- bash -c "printf 'pid-1 00\n' > $T/dinleyen" >/dev/null
 ol "içteki boşluk anlamlı: farklı → tamam" "$(alan sonuc)" "tamam"
+printf 'a\0b' > "$T/nul1"; bash "$S" nobetci --nobetci --gozlem "cat $T/nul1" -- true >/dev/null
+ol "NUL baytlı gözlem, aynı → ayakta-dokunmadim (dosya+cmp, değişken değil)" "$(alan sonuc)" "ayakta-dokunmadim"
+bash "$S" nobetci --nobetci --gozlem "cat $T/nul1" -- bash -c "printf 'a\0c' > $T/nul1" >/dev/null
+ol "NUL baytlı gözlem, yalnız NUL sonrası farklı → tamam (bayt bayt)" "$(alan sonuc)" "tamam"
 rm -f "$T/ilk"; bash "$S" nobetci --nobetci --gozlem "test -e $T/ilk && exit 1; touch $T/ilk; echo x" -- true >/dev/null 2>&1; rc=$?
 ol "kısmi hata (önce ok, sonra düştü) → olculemedi, iş rc 0 geçer" "$(alan sonuc)/$rc" "olculemedi/0"
 bash "$S" nobetci --nobetci --gozlem "/yok/gozlem-komutu" -- bash -c 'exit 4' >/dev/null 2>&1; rc=$?

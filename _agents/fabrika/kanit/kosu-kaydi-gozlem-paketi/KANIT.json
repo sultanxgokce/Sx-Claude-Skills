@@ -1,29 +1,29 @@
 {
   "is": "kosu-kaydi-gozlem-paketi",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-09T20:56:22+03:00",
+  "guncelleme": "2026-10-09T20:58:58+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "7986db63c6d78251be1c5b7f90cb933a40340032059ea0d31509c61c8e4667c1",
+      "sha256": "fb9e097516e8a13650b5b74147a3e4ac01bbd64adcc9f9ca1c6a48010df8f29a",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/kosu-sar.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T20:56:11+03:00",
-      "sure_sn": 12.4
+      "zaman": "2026-10-09T20:58:46+03:00",
+      "sure_sn": 11.6
     },
     {
       "tur": "olcum",
       "etiket": "nazir-sinav",
       "asama": "sonra",
       "dosya": "olcum-nazir-sinav-sonra.txt",
-      "sha256": "02af9389ac722ea2f760f352e74d800b015a443d5c9b6416266945f0a1217861",
+      "sha256": "30dde7edcd45f133cb4a306bb2f840eab64aff261baa3925ea2666a59e2a1796",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/hedef-kutu-sinav.sh",
@@ -31,15 +31,15 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T20:56:22+03:00",
-      "sure_sn": 11.0
+      "zaman": "2026-10-09T20:58:58+03:00",
+      "sure_sn": 11.9
     },
     {
       "tur": "olcum",
       "etiket": "sema-parite",
       "asama": "sonra",
       "dosya": "olcum-sema-parite-sonra.txt",
-      "sha256": "84eaf516650b4fbe3aaa1a7a48717e91cf4c58b50be40096c8b42e4d79272cef",
+      "sha256": "d6818f2d9d0a150df9f491e6acfbf6bd3af19879089871cf39660a2ee5a14118",
       "komut": [
         "bash",
         "-c",
@@ -47,9 +47,9 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T20:56:22+03:00",
+      "zaman": "2026-10-09T20:58:58+03:00",
       "sure_sn": 0.1
     }
   ],
-  "imza": "fd0b3338d122a45bfbca93c725db37d095e444d12b44b207e8f05d0da1de1e2d"
+  "imza": "6f5c4dd83b237ae4803cfd7f6f50d4a04a478db5d85248f5473dfbf41c255a53"
 }

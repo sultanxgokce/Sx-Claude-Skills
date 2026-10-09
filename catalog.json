@@ -1625,7 +1625,7 @@
       "type": "agent",
       "name": "/kosu-kaydi — koşu kaydı sarmalayıcısı (GLOBAL · Agentic OS zemin B0-b)",
       "version": "0.4.0",
-      "description": "Her cron/zamanlı iş komutunu kosu-sar.sh <is> -- <komut> ile sarar; her koşu TAM BİR satır yazar (/config/.kosu-kaydi/<kutu>.<YYYY-MM>.jsonl kutu-yerel, 15 alan, Nexus kokpit-ux/05 şeması sürüm 1.1). Sessiz başarı yalnız beyanla ($KOSU_BEYAN dosyası ya da kanon satırında --nobetci; --gozlem <komut> ile ölçü stdout değil önce/sonra gözlem — A300); kilitte atlanan koşu 'atlandi-kilit' (flock -n -E 75); sahip etiketi satır üstü ya da satır sonu; sonraki koşu canlı crontab'dan gözlem + kanon dosyasından tahmin, çelişki kokpitte sarı. Sonraki-koşu hesabı bağımsız saf python (croniter nazir'de yoktu). Global: cloudtop deposu izole kutularda görünmez (A290).",
+      "description": "Her cron/zamanlı iş komutunu kosu-sar.sh <is> -- <komut> ile sarar; her koşu TAM BİR satır yazar (/config/.kosu-kaydi/<kutu>.<YYYY-MM>.jsonl kutu-yerel, 15 alan, Nexus kokpit-ux/05 şeması sürüm 1.2). Sessiz başarı yalnız beyanla ($KOSU_BEYAN dosyası ya da kanon satırında --nobetci; --gozlem <komut> ile ölçü stdout değil önce/sonra gözlem — A300); kilitte atlanan koşu 'atlandi-kilit' (flock -n -E 75); sahip etiketi satır üstü ya da satır sonu; sonraki koşu canlı crontab'dan gözlem + kanon dosyasından tahmin, çelişki kokpitte sarı. Sonraki-koşu hesabı bağımsız saf python (croniter nazir'de yoktu). Global: cloudtop deposu izole kutularda görünmez (A290).",
       "prerequisites": {
         "system": [
           "bash",
