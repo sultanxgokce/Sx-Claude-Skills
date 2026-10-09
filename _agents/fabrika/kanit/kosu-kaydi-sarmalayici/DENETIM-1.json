@@ -1,0 +1,28 @@
+{
+  "tur": 1,
+  "is": "kosu-kaydi-sarmalayici",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-09T13:01:59+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 57723,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sarmalayıcı, 1500 günlük paketsiz sonraki-koşu hesabı ve katalog/_global kaydı karta uygun teslim edilmiş; nazir kutusunda croniter olmadan 63 sınav geçmiştir. Önce `flock` yokluğunun kilit çatışması gibi kaydedilmesini çöz ve bağımlılığı katalogda açık et; bu haliyle yalnız sınanan kutuda güvence var, global paket üretime hazır değil.",
+    "bulgular": [
+      {
+        "ne": "`flock` çalıştırılamazsa sarmalayıcı bunu kilidin dolu olmasıyla ayırt etmiyor; komutu koşturmadan `atlandi-kilit` ve rc 75 yazıyor. Üstelik global katalog `flock` bağımlılığını önkoşullarda saymıyor.",
+        "kanit": "Kilit dalında `flock -n 8 || ATLANDI=1` bütün başarısızlıkları aynı sınıfa topluyor; devamında `ATLANDI=1` doğrudan `RC=\"$KILIT_RC\"` oluyor. Catalog önkoşulları yalnız `bash`, `python3` ve `crontab` içeriyor; sınavlar kilit dolu/boş durumlarını kapsasa da `flock` bulunamadığı durumu kapsamıyor.",
+        "konum": "kosu-kaydi/scripts/kosu-sar.sh:57-61; kosu-kaydi/scripts/kosu-sar.test.sh:62-79; catalog.json kosu-kaydi prerequisites",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; dört kaydın tamamı yeşil, sarı kayıt yok. Yerel ve nazir ölçümleri 63/0, kaynak-hedef md5 listeleri eşit, hedefte croniter yok ve şema/katalog paritesi temizdir. Klasik önce/sonra davranış ölçüm çifti yoktur; dizin kaydı iki uçta aynı aygıt:inode değerini verir, kabul davranışı ise yalnız sonrası sınavlarıyla desteklenir. Yeşil sınav `flock` aracının bulunmadığı yolu sınamadığından bulguyu kapatmaz."
+  }
+}

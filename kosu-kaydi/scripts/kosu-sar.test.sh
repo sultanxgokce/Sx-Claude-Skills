@@ -58,7 +58,7 @@ bash "$S" supur --kilit "$T/kilit" -- bash -c 'echo KOSTU > "'"$T"'/iz"' >/dev/n
 ol "--kilit dolu → atlandi-kilit (hata değil)" "$(alan sonuc)" "atlandi-kilit"
 ol "kilit doluyken komut HİÇ koşmadı" "$(test -e "$T/iz" && echo kostu || echo kosmadi)" "kosmadi"
 ol "rc = kilit kodu 75" "$rc/$(alan rc)" "75/75"
-( KOSU_KILIT_RC=99 bash "$S" supur --kilit "$T/kilit" -- true >/dev/null; echo "rc=$?" > "$T/rc99" ); ol "kilit kodu dikişle değişir (99)" "$(alan rc)/$(cat "$T/rc99")" "99/rc=99"
+( KOSU_KILIT_RC=99 bash "$S" supur --kilit "$T/kilit" -- true >/dev/null; echo "rc=$?" > "$T/rc99" ); ol "kilit kodu ortamla DEĞİŞMEZ (şema sabit 75)" "$(alan rc)/$(cat "$T/rc99")" "75/rc=75"
 bash "$S" supur -- bash -c 'exit 75' >/dev/null
 ol "--kilit YOKKEN işin kendi 75'i → hata (sezgi yok)" "$(alan sonuc)" "hata"
 flock -u 9; exec 9>&-
@@ -67,6 +67,9 @@ ol "kilit BOŞKEN alt komutun 75'i → hata (kilit atlaması sanılmaz)" "$(alan
 bash "$S" supur --kilit "$T/kilit" -- bash -c 'echo KOSTU > "'"$T"'/iz"' >/dev/null
 ol "kilit boşken iş koşar: tamam" "$(alan sonuc)/$(test -e "$T/iz" && echo kostu)" "tamam/kostu"
 bash "$S" supur --kilit -- true >/dev/null 2>&1; ol "--kilit dosyasız rc=2" "$?" "2"
+rm -f "$T/iz"; ( KOSU_FLOCK_KOMUT=/yok/flock bash "$S" supur --kilit "$T/kilit" -- bash -c 'echo KOSTU > "'"$T"'/iz"' >/dev/null 2>&1; echo "rc=$?" > "$T/rcf" )
+ol "flock YOKSA → olculemedi (atlandı DENMEZ), rc 127" "$(alan sonuc)/$(cat "$T/rcf")" "olculemedi/rc=127"
+ol "flock yokken komut koşturulmadı (kilitsiz koşmaz)" "$(test -e "$T/iz" && echo kostu || echo kosmadi)" "kosmadi"
 
 echo "════ K5 · çelişki: canlı tablo ≠ kanon ════"
 sed -i 's/^35 \* \* \* \* flock/40 * * * * flock/' "$T/canli"

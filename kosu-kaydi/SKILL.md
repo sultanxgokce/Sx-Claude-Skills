@@ -53,7 +53,7 @@ KOSU_KANON=/config/projects/nazir/.oda/cron            # verilmezse drift ölç�
 |---|---|
 | `tamam` | rc 0 (nöbetçi kipinde: rc 0 **ve** çıktı var — iş yaptı) |
 | `ayakta-dokunmadim` | rc 0 **ve** beyan: iş `$KOSU_BEYAN` dosyasına `dokunmadim` yazdı **ya da** satır `--nobetci` taşıyor ve çıktı boş. Bayraksız satırda çıkarım yok |
-| `atlandi-kilit` | satır `--kilit <dosya>` taşıyor ve sarmalayıcı kilidi (`flock -n`) **alamadı**: komut hiç koşmadı, rc = `KOSU_KILIT_RC` (75) yazılır — hata değil (A293). Çıkış kodundan çıkarım yok: işin kendi 75'i (kilit boşken de) `hata`dır |
+| `atlandi-kilit` | satır `--kilit <dosya>` taşıyor ve sarmalayıcı kilidi (`flock -n`) **alamadı**: komut hiç koşmadı, rc **75** (EX_TEMPFAIL, sabit) yazılır — hata değil (A293). Çıkış kodundan çıkarım yok: işin kendi 75'i (kilit boşken de) `hata`dır. `flock` yoksa ya da bozuksa kilit durumu bilinmez → `olculemedi`, komut koşmaz (atlandı denmez) |
 | `hata` | diğer rc ≠ 0 (beyan olsa da) |
 | `olculemedi` | komut bulunamadı (127) ya da çalıştırılamadı (126) |
 Sarmalayıcı işin çıkış kodunu **olduğu gibi** geçirir (126/127/75 dahil); kayıt yazılamasa bile iş engellenmez.
@@ -67,7 +67,9 @@ dokunmadan K4 ölçülür. Bedeli: nöbetçinin çıktısı sarmalayıcıdan ge�
 kısıtlıysa OR). Tarama 1500 gün (29 Şubat gibi seyrek ama geçerli ifadeler sığar); bulunamazsa (31 Şubat) rc 3.
 
 ## Dikişler (sınav için)
-`KOSU_KAYIT_DIZ` · `KOSU_KANON` · `KOSU_CRONTAB_KOMUT` (varsayılan `crontab -l`) · `KOSU_KUTU` · `KOSU_SIMDI` · `KOSU_KILIT_RC` (75).
+`KOSU_KAYIT_DIZ` · `KOSU_KANON` · `KOSU_CRONTAB_KOMUT` (varsayılan `crontab -l`) · `KOSU_KUTU` · `KOSU_SIMDI` · `KOSU_FLOCK_KOMUT` (varsayılan `flock`; 'flock yok' sınavı için).
+
+Ön koşul: `bash` · `python3` · `crontab` (yoksa gözlem null) · `flock` (util-linux; yalnız `--kilit` için).
 
 ## Sınav
 - `bash scripts/kosu-sar.test.sh` — hermetik (sahte kanon, sahte crontab, geçici dizin). Ölçtüğü: 15 alan geçerli JSON · beyan

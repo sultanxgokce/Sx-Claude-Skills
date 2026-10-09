@@ -3,7 +3,7 @@
 #   Kullanım (kanon satırında):  bash /config/.claude/skills/kosu-kaydi/scripts/kosu-sar.sh <is> [--nobetci] -- <eski komut…>
 #   Her koşu TAM BİR SATIR yazar (K1): /config/.kosu-kaydi/<kutu>.<YYYY-MM>.jsonl (kutu-yerel; /config/.claude ortak bağ) — özet yok.
 #   sonuc: tamam · hata · ayakta-dokunmadim (K4: işin $KOSU_BEYAN dosyasına 'dokunmadim' yazmasıyla YA DA kanon satırında --nobetci
-#          bayrağı varken rc 0 + boş çıktı) · atlandi-kilit (rc = KOSU_KILIT_RC, varsayılan 75: 'flock -n -E 75') · olculemedi (126/127)
+#          bayrağı varken rc 0 + boş çıktı) · atlandi-kilit (--kilit <dosya>: kilidi sarmalayıcı alır, alamazsa komut koşmaz, rc 75 sabit) · olculemedi (126/127)
 #   sonraki_planli = CANLI crontab'daki kendi satırının ifadesinden · ifadeden_tahmin = KANON dosyasındaki satırdan (K5);
 #   ikisi cron-sonraki.py ile (bağımsız, paket istemez); türetilemezse null + turetilemedi:true. Çelişki kokpitte sarı (A267).
 #   sahip = kanon satırının üstündeki '# sahip:' notu (K3), yoksa "bilinmiyor"; kutuk = '# damga:' notu, yoksa null.
@@ -23,7 +23,7 @@ done
 [ "${1:-}" = "--" ] || { echo "$KULLANIM" >&2; exit 2; }; shift
 [[ "$IS" =~ ^[a-z0-9-]+$ ]] || { echo "geçersiz iş adı: $IS" >&2; exit 2; }
 [ $# -gt 0 ] || { echo "komut yok" >&2; exit 2; }
-KILIT_RC="${KOSU_KILIT_RC:-75}"   # --kilit ile kilit alınamayınca yazılan rc (EX_TEMPFAIL); komut hiç koşmaz → atlandi-kilit
+KILIT_RC=75   # --kilit ile kilit alınamayınca yazılan rc (EX_TEMPFAIL) — şema K4b sabit, ayar yok; komut hiç koşmaz → atlandi-kilit
 # Kilidi SARMALAYICI alır (sezgi yok): kanon satırındaki 'flock -n' yerine '--kilit <dosya>'. flock alt komutun rc'sini olduğu gibi
 # geçirdiği için "75 geldi → kilitti" çıkarımı kesin değildi (bağımsız göz, tur 4); burada kilit alınamadığını flock'un kendisi söyler.
 _kutu_adi() {  # KOSU_KUTU → DEFAULT_WORKSPACE son parçası (kapimda ile aynı türetme) → bilinmiyor
@@ -69,12 +69,19 @@ SAHIP="${KANON_BILGI%%|*}"; REST="${KANON_BILGI#*|}"; DAMGA="${REST%%|*}"; KANON
 [ -n "$SAHIP" ] || SAHIP="bilinmiyor"
 
 BEYAN_DOSYA="$(mktemp)"; export KOSU_BEYAN="$BEYAN_DOSYA"
-BASLANGIC="$(_an)"; T0=$(date +%s); ATLANDI=0
+BASLANGIC="$(_an)"; T0=$(date +%s); ATLANDI=0; KILIT_SORUN=0
 if [ -n "$KILIT" ]; then
-  exec 8>>"$KILIT" || { echo "kilit dosyası açılamadı: $KILIT" >&2; exit 2; }
-  flock -n 8 || ATLANDI=1
+  FLOCK="${KOSU_FLOCK_KOMUT:-flock}"   # dikiş: sınav 'flock yok' hâlini taklit eder
+  if ! command -v "$FLOCK" >/dev/null 2>&1; then
+    echo "kilit istendi ama flock yok (util-linux) — komut koşturulmadı, olculemedi" >&2; KILIT_SORUN=1
+  else
+    exec 8>>"$KILIT" || { echo "kilit dosyası açılamadı: $KILIT" >&2; exit 2; }
+    "$FLOCK" -n -E "$KILIT_RC" 8; frc=$?   # 75 = kilit DOLU (ayırt edici kod); 0 = alındı; başka = flock hatası
+    if [ "$frc" -eq "$KILIT_RC" ]; then ATLANDI=1; elif [ "$frc" -ne 0 ]; then echo "flock hatası rc=$frc — komut koşturulmadı" >&2; KILIT_SORUN=1; fi
+  fi
 fi
 if [ "$ATLANDI" -eq 1 ]; then RC="$KILIT_RC"; CIKTI_VAR=0   # kilit dolu: komut KOŞMADI
+elif [ "$KILIT_SORUN" -eq 1 ]; then RC=127; CIKTI_VAR=0        # kilit alınabilir mi bilinmiyor: komut KOŞMADI, ölçülemedi
 elif [ "$NOBETCI" -eq 1 ]; then   # nöbetçi kipi: beyan KANON satırında (--nobetci); çıktı boş + rc 0 = ayaktaydı, dokunmadı (K4, NÂZIR A291)
   CIKTI_DOSYA="$(mktemp)"; if "$@" | tee "$CIKTI_DOSYA"; then RC=0; else RC=$?; fi
   [ -s "$CIKTI_DOSYA" ] && CIKTI_VAR=1 || CIKTI_VAR=0; rm -f "$CIKTI_DOSYA"
@@ -84,6 +91,7 @@ fi
 BITIS="$(_an)"; SURE=$(( $(date +%s) - T0 ))
 BEYAN="$(tr -d '[:space:]' < "$BEYAN_DOSYA" 2>/dev/null || true)"; rm -f "$BEYAN_DOSYA"
 if [ "$ATLANDI" -eq 1 ]; then SONUC="atlandi-kilit"   # kilit dolu, komut koşmadı — hata DEĞİL (A293); yalnız sarmalayıcının kendi kilidi sayılır
+elif [ "$KILIT_SORUN" -eq 1 ]; then SONUC="olculemedi"   # flock yok ya da bozuk: kilit durumu bilinmiyor, "atlandı" DENMEZ
 elif [ "$RC" -eq 0 ] && { [ "$BEYAN" = "dokunmadim" ] || { [ "$NOBETCI" -eq 1 ] && [ "$CIKTI_VAR" -eq 0 ]; }; }; then SONUC="ayakta-dokunmadim"
 elif [ "$RC" -eq 0 ]; then SONUC="tamam"
 elif [ "$RC" -eq 127 ] || [ "$RC" -eq 126 ]; then SONUC="olculemedi"   # rc olduğu gibi kalır (126 ≠ 127), yalnız sonuç sınıfı

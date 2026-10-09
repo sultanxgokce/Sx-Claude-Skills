@@ -1630,7 +1630,8 @@
         "system": [
           "bash",
           "python3",
-          "crontab (yoksa gözlem null)"
+          "crontab (yoksa gözlem null)",
+          "flock (util-linux; --kilit için — yoksa kilitli satır olculemedi, komut koşmaz)"
         ]
       },
       "tags": [
