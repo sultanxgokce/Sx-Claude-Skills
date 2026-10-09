@@ -53,19 +53,20 @@ bash "$S" nobetci --nobetci -- bash -c 'exit 2' >/dev/null; rc=$?
 ol "--nobetci + rc≠0 → hata, rc geçer" "$(alan sonuc)/$rc" "hata/2"
 bash "$S" nobetci --bilinmeyen -- true >/dev/null 2>&1; ol "bilinmeyen bayrak rc=2" "$?" "2"
 echo "════ atlandi-kilit · flock -n -E 75 (NÂZIR A293) ════"
-exec 9>"$T/kilit"; flock 9   # kilidi bu kabuk tutar → flock -n içeride koşmadan döner
-bash "$S" supur -- flock -n -E 75 "$T/kilit" echo koştu >/dev/null; rc=$?
-ol "flock -n -E 75 kilit doluyken → atlandi-kilit (hata değil)" "$(alan sonuc)" "atlandi-kilit"
-ol "rc 75 olduğu gibi geçer" "$rc/$(alan rc)" "75/75"
-bash "$S" supur -- flock -n "$T/kilit" echo koştu >/dev/null
-ol "-E verilmemiş flock -n → rc 1 hata (ayrım yok — belgede yazılı)" "$(alan sonuc)" "hata"
+exec 9>"$T/kilit"; flock 9   # kilidi bu kabuk tutar → sarmalayıcı alamaz
+bash "$S" supur --kilit "$T/kilit" -- bash -c 'echo KOSTU > "'"$T"'/iz"' >/dev/null; rc=$?
+ol "--kilit dolu → atlandi-kilit (hata değil)" "$(alan sonuc)" "atlandi-kilit"
+ol "kilit doluyken komut HİÇ koşmadı" "$(test -e "$T/iz" && echo kostu || echo kosmadi)" "kosmadi"
+ol "rc = kilit kodu 75" "$rc/$(alan rc)" "75/75"
+( KOSU_KILIT_RC=99 bash "$S" supur --kilit "$T/kilit" -- true >/dev/null; echo "rc=$?" > "$T/rc99" ); ol "kilit kodu dikişle değişir (99)" "$(alan rc)/$(cat "$T/rc99")" "99/rc=99"
 bash "$S" supur -- bash -c 'exit 75' >/dev/null
-ol "flock OLMAYAN komutun kendi 75'i → hata (kilit sanılmaz)" "$(alan sonuc)" "hata"
-( KOSU_KILIT_RC=99 bash "$S" supur -- flock -n -E 75 "$T/kilit" true >/dev/null ); ol "kilit kodu dikişle değişir: -E 75 artık hata" "$(alan sonuc)" "hata"
-( KOSU_KILIT_RC=99 bash "$S" supur -- flock -n -E 99 "$T/kilit" true >/dev/null ); ol "dikişle -E 99 → atlandi-kilit" "$(alan sonuc)" "atlandi-kilit"
+ol "--kilit YOKKEN işin kendi 75'i → hata (sezgi yok)" "$(alan sonuc)" "hata"
 flock -u 9; exec 9>&-
-bash "$S" supur -- flock -n -E 75 "$T/kilit" echo koştu >/dev/null
-ol "kilit boşken flock altındaki iş normal: tamam" "$(alan sonuc)" "tamam"
+bash "$S" supur --kilit "$T/kilit" -- bash -c 'exit 75' >/dev/null
+ol "kilit BOŞKEN alt komutun 75'i → hata (kilit atlaması sanılmaz)" "$(alan sonuc)" "hata"
+bash "$S" supur --kilit "$T/kilit" -- bash -c 'echo KOSTU > "'"$T"'/iz"' >/dev/null
+ol "kilit boşken iş koşar: tamam" "$(alan sonuc)/$(test -e "$T/iz" && echo kostu)" "tamam/kostu"
+bash "$S" supur --kilit -- true >/dev/null 2>&1; ol "--kilit dosyasız rc=2" "$?" "2"
 
 echo "════ K5 · çelişki: canlı tablo ≠ kanon ════"
 sed -i 's/^35 \* \* \* \* flock/40 * * * * flock/' "$T/canli"
@@ -129,7 +130,8 @@ PYTHONPATH="$T/zehir" python3 -c 'import croniter' >/dev/null 2>&1; ol "zehir ge
 python3 "$HERE/cron-sonraki.py" '@daily' >/dev/null 2>&1; ol "@daily rc=3 (türetilemedi)" "$?" "3"
 python3 "$HERE/cron-sonraki.py" '1 2 3' >/dev/null 2>&1; ol "3 alan rc=3" "$?" "3"
 python3 "$HERE/cron-sonraki.py" '99 * * * *' >/dev/null 2>&1; ol "aralık dışı rc=3 (uydurma yok)" "$?" "3"
-python3 "$HERE/cron-sonraki.py" '30 2 29 2 *' 2026-10-09T12:00:00+03:00 >/dev/null 2>&1; ol "366 gün içinde yok (29 Şubat) rc=3" "$?" "3"
+ol "seyrek ama geçerli: 29 Şubat → 2028 (366 gün yetmezdi)" "$(CS '30 2 29 2 *')" "2028-02-29T02:30:00+03:00"
+python3 "$HERE/cron-sonraki.py" '0 0 31 2 *' 2026-10-09T12:00:00+03:00 >/dev/null 2>&1; ol "hiç gelmeyen gün (31 Şubat) rc=3" "$?" "3"
 
 echo ""; echo "── SONUÇ: $gecti geçti · $dusen düştü ──"
 [ "$dusen" -eq 0 ]

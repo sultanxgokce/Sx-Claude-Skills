@@ -1,6 +1,0 @@
-$ bash -c echo "merkez skills dizini aygıt:inode $(stat -c %d:%i /config/.claude/skills)"; ssh -o BatchMode=yes -o ConnectTimeout=10 hostsrv "docker exec -u abc cloudtop-nazir stat -c \"nazir  skills dizini aygıt:inode %d:%i\" /config/.claude/skills"
-# rc=0 sure=0.4s zaman=2026-10-09T12:40:13+03:00
---- stdout ---
-merkez skills dizini aygıt:inode 2306:7735764
-nazir  skills dizini aygıt:inode 2306:7735764
---- stderr ---

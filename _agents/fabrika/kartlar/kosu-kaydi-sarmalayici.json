@@ -1,0 +1,19 @@
+{
+  "is": "kosu-kaydi-sarmalayici",
+  "cumle": "kosu-kaydi beceri paketi (Sx #278): sarmalayıcı + paketsiz sonraki-koşu + katalog/_global kaydı. Kilit: sarmalayıcı --kilit <dosya> ile flock -n'i KENDİSİ alır; alamazsa komutu koşturmaz, atlandi-kilit + rc 75 yazar (sezgi yok). Sonraki-koşu taraması 1500 gün (29 Şubat türetilir). Kabul: sınav hedef kutuda (nazir, croniter yok) geçer. Kurulum/görünürlük ayrı kart kosu-kaydi-kurulum",
+  "istedi": "SERDAR (kosu-kaydi-paketi 4 tur tıkandı → daralt)",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-09T12:59:07+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

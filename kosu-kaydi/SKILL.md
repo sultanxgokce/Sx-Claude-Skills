@@ -35,7 +35,7 @@ KOSU_KUTU=nazir
 KOSU_KANON=/config/projects/nazir/.oda/cron            # verilmezse drift ölçülemez (aşağıda)
 # sahip: NAZIR                                          # (a) satır ÜSTÜ not — cloudtop kanonunun deseni
 # damga: /config/.claude/supur.log
-35 * * * * bash /config/.claude/skills/kosu-kaydi/scripts/kosu-sar.sh supur -- flock -n -E 75 /x bash .../supur.sh
+35 * * * * bash /config/.claude/skills/kosu-kaydi/scripts/kosu-sar.sh supur --kilit /x.lock -- bash .../supur.sh   # eski: flock -n /x.lock bash …
 */5 * * * * bash /config/.claude/skills/kosu-kaydi/scripts/kosu-sar.sh bulgu-defteri --nobetci -- bash /config/.ic-sayfa/sunucu.sh # bulgu-defteri sahip:NAZIR
 ```
 - `sahip` (K3): satır üstü `# sahip:` **ya da** satır sonu `# <ad> sahip:<ROL> [damga:<yol>]`; ikisi varsa satır sonu kazanır
@@ -44,14 +44,16 @@ KOSU_KANON=/config/projects/nazir/.oda/cron            # verilmezse drift ölç�
   (konteyner hostname'i onaltılık bir kimliktir, kutu adı değil — basılmaz).
 - Kanon dosyasının yolu biliniyorsa `KOSU_KANON=<yol>`. **Verilmezse kanon = canlı crontab**: sahip okunur ama
   `ifadeden_tahmin` gözlemle aynı olur, yani **drift ölçülemez** — bu dürüstçe böyledir, "drift yok" demek değildir.
-- Sarmalayıcı `flock`'un **dışında** durur; içinde dursa kilitli koşu hiç satır yazmaz ve kokpit "koşmadı" der.
+- Kilit: satırdaki `flock -n <dosya>` **sarmalayıcıya taşınır** (`--kilit <dosya>`); kilidi sarmalayıcı alır, alamazsa komut koşmaz ve
+  `atlandi-kilit` yazılır. `flock` sarmalayıcının içinde kalsa alt komutun rc'sini olduğu gibi geçirdiği için "75 = kilit" çıkarımı
+  kesin olmazdı (bağımsız göz); dışında kalsa kilitli koşu hiç satır yazmaz, kokpit "koşmadı" derdi.
 
 ### Sonuç kümesi (K4 · K4b)
 | `sonuc` | Ne zaman |
 |---|---|
 | `tamam` | rc 0 (nöbetçi kipinde: rc 0 **ve** çıktı var — iş yaptı) |
 | `ayakta-dokunmadim` | rc 0 **ve** beyan: iş `$KOSU_BEYAN` dosyasına `dokunmadim` yazdı **ya da** satır `--nobetci` taşıyor ve çıktı boş. Bayraksız satırda çıkarım yok |
-| `atlandi-kilit` | komut `flock` ile başlıyor, `-E <kilit kodu>` taşıyor **ve** rc = `KOSU_KILIT_RC` (varsayılan 75): kilit doluydu, komut koşmadı — hata değil (A293). `-E` yoksa rc 1 `hata` kalır; flock olmayan bir işin kendi 75'i de `hata` kalır (kaynağına bakılır, sayıya değil) |
+| `atlandi-kilit` | satır `--kilit <dosya>` taşıyor ve sarmalayıcı kilidi (`flock -n`) **alamadı**: komut hiç koşmadı, rc = `KOSU_KILIT_RC` (75) yazılır — hata değil (A293). Çıkış kodundan çıkarım yok: işin kendi 75'i (kilit boşken de) `hata`dır |
 | `hata` | diğer rc ≠ 0 (beyan olsa da) |
 | `olculemedi` | komut bulunamadı (127) ya da çalıştırılamadı (126) |
 Sarmalayıcı işin çıkış kodunu **olduğu gibi** geçirir (126/127/75 dahil); kayıt yazılamasa bile iş engellenmez.
@@ -62,7 +64,7 @@ dokunmadan K4 ölçülür. Bedeli: nöbetçinin çıktısı sarmalayıcıdan ge�
 `sonraki_planli` = **canlı** `crontab -l`'deki kendi satırının ifadesinden · `ifadeden_tahmin` = **kanon** dosyasındaki satırdan,
 `tahmin:true` damgalı. `@reboot` ve 5 alanlı olmayan ifade → `null` + `turetilemedi:true`. Hesap `scripts/cron-sonraki.py`
 (vixie kuralları: `*` · sayı · `a-b` · liste · `/adım` · ay/gün adı · hafta günü 0=7=Pazar · gün-ay ve hafta-günü ikisi
-kısıtlıysa OR). Tarama 366 gün; bulunamazsa rc 3.
+kısıtlıysa OR). Tarama 1500 gün (29 Şubat gibi seyrek ama geçerli ifadeler sığar); bulunamazsa (31 Şubat) rc 3.
 
 ## Dikişler (sınav için)
 `KOSU_KAYIT_DIZ` · `KOSU_KANON` · `KOSU_CRONTAB_KOMUT` (varsayılan `crontab -l`) · `KOSU_KUTU` · `KOSU_SIMDI` · `KOSU_KILIT_RC` (75).
@@ -79,6 +81,6 @@ kısıtlıysa OR). Tarama 366 gün; bulunamazsa rc 3.
   bu defterde görünmez (K6 listesi okuyucunun işi).
 - Kurulum bu paketin işi değil: merge sonrası `sync-skills.mjs --skill kosu-kaydi --apply` (yalnız bu beceri; toplu `--force` yasak) ve
   kutularda görünürlük ölçümü ayrı karttır (`kosu-kaydi-kurulum`).
-- Kanon yolu verilmeyen kutuda drift (A267) ölçülemez. `-E 75` verilmeyen `flock -n` satırında kilit/hata ayrımı yoktur.
+- Kanon yolu verilmeyen kutuda drift (A267) ölçülemez. `--kilit`'e taşınmamış (içeride `flock -n` kalan) satırda kilit/hata ayrımı yoktur.
 - Saat dilimi: kayıt `date -Iseconds` yerel dilimle; `KOSU_SIMDI` verilirse dilimi onunla gider. DST geçişleri özel ele alınmaz.
 - `defter_ref` alanı şimdilik hep `null` (headless defter B0-d ayrı kart).

@@ -4,7 +4,7 @@
 Kullanım: cron-sonraki.py "<dk> <saat> <gün> <ay> <hafta-günü>" [<an ISO>]   (an verilmezse şimdi)
 Bağımsız: hiçbir paket istemez (croniter nazir kutusunda YOKTU, A290). Vixie-cron kuralları:
   alan = * | sayı | a-b | liste(,) | adım(/) | ay/gün adı (jan…dec · sun…sat); hafta günü 0 ve 7 = Pazar;
-  gün-ay ve hafta-günü İKİSİ de kısıtlıysa biri tutunca ateşler (cron'un OR kuralı). Tarama 366 gün; bulunamazsa rc 3.
+  gün-ay ve hafta-günü İKİSİ de kısıtlıysa biri tutunca ateşler (cron'un OR kuralı). Tarama 1500 gün (29 Şubat sığar); bulunamazsa rc 3.
 """
 import sys, datetime
 
@@ -56,7 +56,7 @@ def sonraki(ifade, an):
         raise ValueError("5 alan değil")
     dk, sa, gun, ay, hg = (alan_coz(a, i) for i, a in enumerate(alanlar))
     t = (an + datetime.timedelta(minutes=1)).replace(second=0, microsecond=0)
-    son = an + datetime.timedelta(days=366)
+    son = an + datetime.timedelta(days=1500)   # 4 yıl+: 29 Şubat gibi seyrek ama geçerli ifadeler türetilsin (366 gün yetmiyordu)
     while t <= son:
         if ay is not None and t.month not in ay:
             y, m = (t.year + t.month // 12, t.month % 12 + 1)

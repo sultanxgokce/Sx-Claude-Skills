@@ -14,18 +14,18 @@
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SURUM="kosu-sar 0.3"
-KULLANIM="kullanım: kosu-sar.sh <is> [--nobetci] -- <komut…>"
-IS="${1:-}"; shift || true; NOBETCI=0
+KULLANIM="kullanım: kosu-sar.sh <is> [--nobetci] [--kilit <dosya>] -- <komut…>"
+IS="${1:-}"; shift || true; NOBETCI=0; KILIT=""
 while [ $# -gt 0 ] && [ "$1" != "--" ]; do
-  case "$1" in --nobetci) NOBETCI=1;; *) echo "$KULLANIM (bilinmeyen: $1)" >&2; exit 2;; esac; shift
+  case "$1" in --nobetci) NOBETCI=1;; --kilit) KILIT="${2:-}"; [ -n "$KILIT" ] || { echo "$KULLANIM (--kilit dosya ister)" >&2; exit 2; }; shift;;
+    *) echo "$KULLANIM (bilinmeyen: $1)" >&2; exit 2;; esac; shift
 done
 [ "${1:-}" = "--" ] || { echo "$KULLANIM" >&2; exit 2; }; shift
 [[ "$IS" =~ ^[a-z0-9-]+$ ]] || { echo "geçersiz iş adı: $IS" >&2; exit 2; }
 [ $# -gt 0 ] || { echo "komut yok" >&2; exit 2; }
-KILIT_RC="${KOSU_KILIT_RC:-75}"   # kanon satırı 'flock -n -E 75 …' yazar; 75 = kilit doluydu, komut hiç koşmadı (atlandi-kilit)
-# 75 yalnız komut gerçekten flock ile başlıyor ve -E <kilit kodu> taşıyorsa kilit sayılır; sıradan bir işin kendi 75'i hata kalır
-KILITLI=0; if [ "$(basename -- "$1")" = "flock" ]; then
-  _onceki=""; for _a in "$@"; do if [ "$_onceki" = "-E" ] && [ "$_a" = "$KILIT_RC" ]; then KILITLI=1; fi; case "$_a" in -E*) [ "${_a#-E}" = "$KILIT_RC" ] && KILITLI=1;; esac; _onceki="$_a"; done; fi
+KILIT_RC="${KOSU_KILIT_RC:-75}"   # --kilit ile kilit alınamayınca yazılan rc (EX_TEMPFAIL); komut hiç koşmaz → atlandi-kilit
+# Kilidi SARMALAYICI alır (sezgi yok): kanon satırındaki 'flock -n' yerine '--kilit <dosya>'. flock alt komutun rc'sini olduğu gibi
+# geçirdiği için "75 geldi → kilitti" çıkarımı kesin değildi (bağımsız göz, tur 4); burada kilit alınamadığını flock'un kendisi söyler.
 _kutu_adi() {  # KOSU_KUTU → DEFAULT_WORKSPACE son parçası (kapimda ile aynı türetme) → bilinmiyor
   if [ -n "${KOSU_KUTU:-}" ]; then printf '%s' "$KOSU_KUTU"; return; fi
   local ws="${DEFAULT_WORKSPACE:-}"; ws="${ws%/}"
@@ -69,8 +69,13 @@ SAHIP="${KANON_BILGI%%|*}"; REST="${KANON_BILGI#*|}"; DAMGA="${REST%%|*}"; KANON
 [ -n "$SAHIP" ] || SAHIP="bilinmiyor"
 
 BEYAN_DOSYA="$(mktemp)"; export KOSU_BEYAN="$BEYAN_DOSYA"
-BASLANGIC="$(_an)"; T0=$(date +%s)
-if [ "$NOBETCI" -eq 1 ]; then   # nöbetçi kipi: beyan KANON satırında (--nobetci); çıktı boş + rc 0 = ayaktaydı, dokunmadı (K4, NÂZIR A291)
+BASLANGIC="$(_an)"; T0=$(date +%s); ATLANDI=0
+if [ -n "$KILIT" ]; then
+  exec 8>>"$KILIT" || { echo "kilit dosyası açılamadı: $KILIT" >&2; exit 2; }
+  flock -n 8 || ATLANDI=1
+fi
+if [ "$ATLANDI" -eq 1 ]; then RC="$KILIT_RC"; CIKTI_VAR=0   # kilit dolu: komut KOŞMADI
+elif [ "$NOBETCI" -eq 1 ]; then   # nöbetçi kipi: beyan KANON satırında (--nobetci); çıktı boş + rc 0 = ayaktaydı, dokunmadı (K4, NÂZIR A291)
   CIKTI_DOSYA="$(mktemp)"; if "$@" | tee "$CIKTI_DOSYA"; then RC=0; else RC=$?; fi
   [ -s "$CIKTI_DOSYA" ] && CIKTI_VAR=1 || CIKTI_VAR=0; rm -f "$CIKTI_DOSYA"
 else
@@ -78,7 +83,7 @@ else
 fi
 BITIS="$(_an)"; SURE=$(( $(date +%s) - T0 ))
 BEYAN="$(tr -d '[:space:]' < "$BEYAN_DOSYA" 2>/dev/null || true)"; rm -f "$BEYAN_DOSYA"
-if [ "$KILITLI" -eq 1 ] && [ "$RC" -eq "$KILIT_RC" ]; then SONUC="atlandi-kilit"   # flock -n -E 75: kilit dolu, komut koşmadı — hata DEĞİL (A293)
+if [ "$ATLANDI" -eq 1 ]; then SONUC="atlandi-kilit"   # kilit dolu, komut koşmadı — hata DEĞİL (A293); yalnız sarmalayıcının kendi kilidi sayılır
 elif [ "$RC" -eq 0 ] && { [ "$BEYAN" = "dokunmadim" ] || { [ "$NOBETCI" -eq 1 ] && [ "$CIKTI_VAR" -eq 0 ]; }; }; then SONUC="ayakta-dokunmadim"
 elif [ "$RC" -eq 0 ]; then SONUC="tamam"
 elif [ "$RC" -eq 127 ] || [ "$RC" -eq 126 ]; then SONUC="olculemedi"   # rc olduğu gibi kalır (126 ≠ 127), yalnız sonuç sınıfı
