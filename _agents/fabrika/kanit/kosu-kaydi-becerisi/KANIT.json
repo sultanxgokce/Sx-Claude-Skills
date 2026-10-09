@@ -1,0 +1,60 @@
+{
+  "is": "kosu-kaydi-becerisi",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-09T12:30:54+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "nazir-gorunurluk",
+      "asama": "once",
+      "dosya": "olcum-nazir-gorunurluk-once.txt",
+      "sha256": "2b1ef69fd75a15d68aaf6f1ad35d1e0c7da1100e4c92dd4def883af8e622992a",
+      "komut": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "ConnectTimeout=10",
+        "hostsrv",
+        "docker exec -u abc cloudtop-nazir sh -c \"ls -d /config/projects/*; ls /config/.claude/skills | wc -l; python3 -c \\\"import croniter\\\" 2>&1 | tail -1\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T12:30:50+03:00",
+      "sure_sn": 0.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "9ba95e582392f35d42b81a2e0d993975195ee775b24fa28c74a746a40b3de207",
+      "komut": [
+        "bash",
+        "kosu-kaydi/scripts/kosu-sar.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T12:30:54+03:00",
+      "sure_sn": 3.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sema-parite",
+      "asama": "sonra",
+      "dosya": "olcum-sema-parite-sonra.txt",
+      "sha256": "6a5c52e7073f73fd17f47e726f2de4a39534a2dda3d809b3571972a8ed5b9a50",
+      "komut": [
+        "node",
+        "ahi/schema/validate-repo.mjs",
+        ".",
+        "--strict"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T12:30:54+03:00",
+      "sure_sn": 0.0
+    }
+  ],
+  "imza": "d286345f26981ce729460543cf7dad55a02496b20f6e9662c5c88012fef7c95a"
+}

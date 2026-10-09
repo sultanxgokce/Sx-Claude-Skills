@@ -1,6 +1,6 @@
 {
   "version": "2.1",
-  "updated": "2026-10-07",
+  "updated": "2026-10-09",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -1618,6 +1618,29 @@
         "olcum",
         "workflow",
         "global"
+      ]
+    },
+    {
+      "id": "kosu-kaydi",
+      "type": "agent",
+      "name": "/kosu-kaydi — koşu kaydı sarmalayıcısı (GLOBAL · Agentic OS zemin B0-b)",
+      "version": "0.2.0",
+      "description": "Her cron/zamanlı iş komutunu kosu-sar.sh <is> -- <komut> ile sarar; her koşu TAM BİR satır yazar (/config/.claude/kosu-kaydi/<kutu>.<YYYY-MM>.jsonl, 15 alan, Nexus kokpit-ux/05 şeması K1-K6). Sessiz başarı yalnız işin beyanıyla ('dokunmadim') ayrı sonuç; sonraki koşu canlı crontab'dan gözlem + kanon dosyasından tahmin, çelişki kokpitte sarı. Sonraki-koşu hesabı bağımsız saf python (croniter nazir'de yoktu). Global: cloudtop deposu izole kutularda görünmez (A290).",
+      "prerequisites": {
+        "system": [
+          "bash",
+          "python3",
+          "crontab (yoksa gözlem null)"
+        ]
+      },
+      "tags": [
+        "kosu-kaydi",
+        "cron",
+        "sarmalayici",
+        "kokpit",
+        "headless",
+        "agentic-os",
+        "jsonl"
       ]
     }
   ]

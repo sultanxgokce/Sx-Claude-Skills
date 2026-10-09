@@ -1,0 +1,10 @@
+$ ssh -o BatchMode=yes -o ConnectTimeout=10 hostsrv docker exec -u abc cloudtop-nazir sh -c "ls -d /config/projects/*; ls /config/.claude/skills | wc -l; python3 -c \"import croniter\" 2>&1 | tail -1"
+# rc=0 sure=0.4s zaman=2026-10-09T12:30:50+03:00
+--- stdout ---
+/config/projects/cortex
+/config/projects/nazir
+/config/projects/Nexus
+/config/projects/_wt-nazir
+90
+ModuleNotFoundError: No module named 'croniter'
+--- stderr ---
