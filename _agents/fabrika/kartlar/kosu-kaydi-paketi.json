@@ -15,5 +15,14 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": []
+  "gecmis": [],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "SERDAR",
+      "oturum": "session_013fuJSNg65VkgQE4sJsQURS",
+      "gerekce": "Üç turda ilerledi: H→E, 3→2 bulgu, biri rötuş; kalan tek uygulama bulgusu dar (75 yalnız flock satırında kilit sayılmalı) ve tek turda kapanır. Kurulum zaten ayrı kartta.",
+      "zaman": "2026-10-09T12:54:38+03:00"
+    }
+  ]
 }

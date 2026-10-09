@@ -1,7 +1,7 @@
 {
   "is": "kosu-kaydi-paketi",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-09T12:51:59+03:00",
+  "guncelleme": "2026-10-09T12:56:18+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -24,22 +24,22 @@
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "ad4309517736ea064dcd9513b2ee80f7061159a102a3ec813a97a59f53022eb6",
+      "sha256": "22d723baea9896491d71785b162999a24ceebd46ff12dd228490db2fecf67717",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/kosu-sar.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T12:51:53+03:00",
-      "sure_sn": 5.4
+      "zaman": "2026-10-09T12:56:10+03:00",
+      "sure_sn": 8.4
     },
     {
       "tur": "olcum",
       "etiket": "nazir-sinav",
       "asama": "sonra",
       "dosya": "olcum-nazir-sinav-sonra.txt",
-      "sha256": "06f3e2b375ad98f40f63dfd4ed1547530c06505e9938ccc2de9f2639e2f1a8da",
+      "sha256": "4972e25f8aecb01b64c9b44bab22dfb4815a3b7b57c9cbae01d8c27a367eb981",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/hedef-kutu-sinav.sh",
@@ -47,15 +47,15 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T12:51:59+03:00",
-      "sure_sn": 6.3
+      "zaman": "2026-10-09T12:56:18+03:00",
+      "sure_sn": 8.5
     },
     {
       "tur": "olcum",
       "etiket": "sema-parite",
       "asama": "sonra",
       "dosya": "olcum-sema-parite-sonra.txt",
-      "sha256": "a554ed18cafa2046dcaeacdb501aa223e9826cb9c9223a1af3644f0c7c0eae5a",
+      "sha256": "075853bd313d1771587b1aa15ef6555317f1a3fd1be410dd6f2c62df6e8deba4",
       "komut": [
         "bash",
         "-c",
@@ -63,7 +63,7 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T12:51:59+03:00",
+      "zaman": "2026-10-09T12:56:18+03:00",
       "sure_sn": 0.1
     },
     {
@@ -83,5 +83,5 @@
       "sure_sn": 0.4
     }
   ],
-  "imza": "e1f9383f98c02655ebc0100f6b7ad82e8bde53583aa15bf1f7365d5803b5e9a2"
+  "imza": "37e2c90308b21de9167a2039dcdbd1f1bd571360715e6b6c907934c06cb1f0ba"
 }

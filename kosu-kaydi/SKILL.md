@@ -51,7 +51,7 @@ KOSU_KANON=/config/projects/nazir/.oda/cron            # verilmezse drift ölç�
 |---|---|
 | `tamam` | rc 0 (nöbetçi kipinde: rc 0 **ve** çıktı var — iş yaptı) |
 | `ayakta-dokunmadim` | rc 0 **ve** beyan: iş `$KOSU_BEYAN` dosyasına `dokunmadim` yazdı **ya da** satır `--nobetci` taşıyor ve çıktı boş. Bayraksız satırda çıkarım yok |
-| `atlandi-kilit` | rc = `KOSU_KILIT_RC` (varsayılan 75): kanon satırı `flock -n -E 75` yazar, kilit doluydu, komut koşmadı — hata değil (A293). `-E` yoksa rc 1 `hata` kalır |
+| `atlandi-kilit` | komut `flock` ile başlıyor, `-E <kilit kodu>` taşıyor **ve** rc = `KOSU_KILIT_RC` (varsayılan 75): kilit doluydu, komut koşmadı — hata değil (A293). `-E` yoksa rc 1 `hata` kalır; flock olmayan bir işin kendi 75'i de `hata` kalır (kaynağına bakılır, sayıya değil) |
 | `hata` | diğer rc ≠ 0 (beyan olsa da) |
 | `olculemedi` | komut bulunamadı (127) ya da çalıştırılamadı (126) |
 Sarmalayıcı işin çıkış kodunu **olduğu gibi** geçirir (126/127/75 dahil); kayıt yazılamasa bile iş engellenmez.

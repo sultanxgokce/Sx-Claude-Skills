@@ -53,12 +53,19 @@ bash "$S" nobetci --nobetci -- bash -c 'exit 2' >/dev/null; rc=$?
 ol "--nobetci + rc≠0 → hata, rc geçer" "$(alan sonuc)/$rc" "hata/2"
 bash "$S" nobetci --bilinmeyen -- true >/dev/null 2>&1; ol "bilinmeyen bayrak rc=2" "$?" "2"
 echo "════ atlandi-kilit · flock -n -E 75 (NÂZIR A293) ════"
-bash "$S" supur -- bash -c 'exit 75' >/dev/null; rc=$?
-ol "rc 75 → sonuc atlandi-kilit (hata değil)" "$(alan sonuc)" "atlandi-kilit"
+exec 9>"$T/kilit"; flock 9   # kilidi bu kabuk tutar → flock -n içeride koşmadan döner
+bash "$S" supur -- flock -n -E 75 "$T/kilit" echo koştu >/dev/null; rc=$?
+ol "flock -n -E 75 kilit doluyken → atlandi-kilit (hata değil)" "$(alan sonuc)" "atlandi-kilit"
 ol "rc 75 olduğu gibi geçer" "$rc/$(alan rc)" "75/75"
-bash "$S" supur -- bash -c 'exit 1' >/dev/null
-ol "rc 1 hâlâ hata (flock -E verilmemişse ayrım yok — belgede yazılı)" "$(alan sonuc)" "hata"
-( KOSU_KILIT_RC=99 bash "$S" supur -- bash -c 'exit 75' >/dev/null ); ol "kilit kodu dikişle değişir: 75 artık hata" "$(alan sonuc)" "hata"
+bash "$S" supur -- flock -n "$T/kilit" echo koştu >/dev/null
+ol "-E verilmemiş flock -n → rc 1 hata (ayrım yok — belgede yazılı)" "$(alan sonuc)" "hata"
+bash "$S" supur -- bash -c 'exit 75' >/dev/null
+ol "flock OLMAYAN komutun kendi 75'i → hata (kilit sanılmaz)" "$(alan sonuc)" "hata"
+( KOSU_KILIT_RC=99 bash "$S" supur -- flock -n -E 75 "$T/kilit" true >/dev/null ); ol "kilit kodu dikişle değişir: -E 75 artık hata" "$(alan sonuc)" "hata"
+( KOSU_KILIT_RC=99 bash "$S" supur -- flock -n -E 99 "$T/kilit" true >/dev/null ); ol "dikişle -E 99 → atlandi-kilit" "$(alan sonuc)" "atlandi-kilit"
+flock -u 9; exec 9>&-
+bash "$S" supur -- flock -n -E 75 "$T/kilit" echo koştu >/dev/null
+ol "kilit boşken flock altındaki iş normal: tamam" "$(alan sonuc)" "tamam"
 
 echo "════ K5 · çelişki: canlı tablo ≠ kanon ════"
 sed -i 's/^35 \* \* \* \* flock/40 * * * * flock/' "$T/canli"

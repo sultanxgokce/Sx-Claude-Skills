@@ -1,5 +1,5 @@
 $ bash kosu-kaydi/scripts/kosu-sar.test.sh
-# rc=0 sure=5.4s zaman=2026-10-09T12:51:53+03:00
+# rc=0 sure=8.4s zaman=2026-10-09T12:56:10+03:00
 --- stdout ---
 ════ K1 · her koşu tam satır, geçerli JSON, 15 alan ════
 ════ K4 · sessiz başarı YALNIZ beyanla ════
@@ -12,5 +12,5 @@ $ bash kosu-kaydi/scripts/kosu-sar.test.sh
 ════ kanon bildirilmemiş · kutu adı türetimi (A290: her kutunun kanon yolu başka) ════
 ════ cron-sonraki.py tek başına (bağımsız hesap, paket yok) ════
 
-── SONUÇ: 58 geçti · 0 düştü ──
+── SONUÇ: 61 geçti · 0 düştü ──
 --- stderr ---

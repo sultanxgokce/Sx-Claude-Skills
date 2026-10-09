@@ -23,6 +23,9 @@ done
 [[ "$IS" =~ ^[a-z0-9-]+$ ]] || { echo "geçersiz iş adı: $IS" >&2; exit 2; }
 [ $# -gt 0 ] || { echo "komut yok" >&2; exit 2; }
 KILIT_RC="${KOSU_KILIT_RC:-75}"   # kanon satırı 'flock -n -E 75 …' yazar; 75 = kilit doluydu, komut hiç koşmadı (atlandi-kilit)
+# 75 yalnız komut gerçekten flock ile başlıyor ve -E <kilit kodu> taşıyorsa kilit sayılır; sıradan bir işin kendi 75'i hata kalır
+KILITLI=0; if [ "$(basename -- "$1")" = "flock" ]; then
+  _onceki=""; for _a in "$@"; do if [ "$_onceki" = "-E" ] && [ "$_a" = "$KILIT_RC" ]; then KILITLI=1; fi; case "$_a" in -E*) [ "${_a#-E}" = "$KILIT_RC" ] && KILITLI=1;; esac; _onceki="$_a"; done; fi
 _kutu_adi() {  # KOSU_KUTU → DEFAULT_WORKSPACE son parçası (kapimda ile aynı türetme) → bilinmiyor
   if [ -n "${KOSU_KUTU:-}" ]; then printf '%s' "$KOSU_KUTU"; return; fi
   local ws="${DEFAULT_WORKSPACE:-}"; ws="${ws%/}"
@@ -75,7 +78,7 @@ else
 fi
 BITIS="$(_an)"; SURE=$(( $(date +%s) - T0 ))
 BEYAN="$(tr -d '[:space:]' < "$BEYAN_DOSYA" 2>/dev/null || true)"; rm -f "$BEYAN_DOSYA"
-if [ "$RC" -eq "$KILIT_RC" ]; then SONUC="atlandi-kilit"   # flock -n -E 75: kilit dolu, komut koşmadı — hata DEĞİL (A293)
+if [ "$KILITLI" -eq 1 ] && [ "$RC" -eq "$KILIT_RC" ]; then SONUC="atlandi-kilit"   # flock -n -E 75: kilit dolu, komut koşmadı — hata DEĞİL (A293)
 elif [ "$RC" -eq 0 ] && { [ "$BEYAN" = "dokunmadim" ] || { [ "$NOBETCI" -eq 1 ] && [ "$CIKTI_VAR" -eq 0 ]; }; }; then SONUC="ayakta-dokunmadim"
 elif [ "$RC" -eq 0 ]; then SONUC="tamam"
 elif [ "$RC" -eq 127 ] || [ "$RC" -eq 126 ]; then SONUC="olculemedi"   # rc olduğu gibi kalır (126 ≠ 127), yalnız sonuç sınıfı
