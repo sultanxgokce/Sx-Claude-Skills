@@ -1,18 +1,18 @@
 $ bash kosu-kaydi/scripts/hedef-kutu-sinav.sh cloudtop-nazir
-# rc=0 sure=14.6s zaman=2026-10-09T13:10:15+03:00
+# rc=0 sure=9.1s zaman=2026-10-09T13:12:44+03:00
 --- stdout ---
-kutu: cloudtop-nazir · host: hostsrv · hedef: /tmp/kosu-kaydi-sinav-2306474 · kaynak: /config/projects/_wt/Sx-Claude-Skills-kosu-kaydi-becerisi/kosu-kaydi
+kutu: cloudtop-nazir · host: hostsrv · hedef: /tmp/kosu-kaydi-sinav-2322958 · kaynak: /config/projects/_wt/Sx-Claude-Skills-kosu-kaydi-becerisi/kosu-kaydi
 ── kaynak md5:
   cf5a9369b5276010f3a4b696bcf00b33  kosu-kaydi/scripts/cron-sonraki.py
   5b8c9feebcf7b7f411de1e9e3af5c2c1  kosu-kaydi/scripts/hedef-kutu-sinav.sh
-  7c1b7018c05adea0661a99794576b60a  kosu-kaydi/scripts/kosu-sar.sh
-  a19daa12b53822c3e034bca3ba90cd9b  kosu-kaydi/scripts/kosu-sar.test.sh
+  53d2065815fad5b712ab9fe4dc7603fd  kosu-kaydi/scripts/kosu-sar.sh
+  4c4da78bee22f47197a260dbb47fd6d0  kosu-kaydi/scripts/kosu-sar.test.sh
   7c2b2a43dfe89a906d753a1cceeebe53  kosu-kaydi/SKILL.md
 ── hedef md5:
   cf5a9369b5276010f3a4b696bcf00b33  kosu-kaydi/scripts/cron-sonraki.py
   5b8c9feebcf7b7f411de1e9e3af5c2c1  kosu-kaydi/scripts/hedef-kutu-sinav.sh
-  7c1b7018c05adea0661a99794576b60a  kosu-kaydi/scripts/kosu-sar.sh
-  a19daa12b53822c3e034bca3ba90cd9b  kosu-kaydi/scripts/kosu-sar.test.sh
+  53d2065815fad5b712ab9fe4dc7603fd  kosu-kaydi/scripts/kosu-sar.sh
+  4c4da78bee22f47197a260dbb47fd6d0  kosu-kaydi/scripts/kosu-sar.test.sh
   7c2b2a43dfe89a906d753a1cceeebe53  kosu-kaydi/SKILL.md
 ── hedef ortam: bash 5.2.21(1)-release · Python 3.12.3 · croniter: ModuleNotFoundError: No module named 'cr
 ════ K1 · her koşu tam satır, geçerli JSON, 15 alan ════
@@ -27,7 +27,7 @@ kutu: cloudtop-nazir · host: hostsrv · hedef: /tmp/kosu-kaydi-sinav-2306474 ·
 ════ kayıt dizini yazılamıyor → iş yine koşar, satır YEDEK dizine düşer, stderr uyarı ════
 ════ cron-sonraki.py tek başına (bağımsız hesap, paket yok) ════
 
-── SONUÇ: 72 geçti · 0 düştü ──
+── SONUÇ: 75 geçti · 0 düştü ──
 temizlik: silindi
 hedef kutu sınav rc=0
 --- stderr ---

@@ -1,14 +1,14 @@
 {
-  "is": "kosu-kaydi-sarmalayici",
+  "is": "kosu-kaydi-sarmalayici-son",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-09T13:10:15+03:00",
+  "guncelleme": "2026-10-09T13:12:44+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "dagitim-yolu-dizin",
       "asama": "once",
       "dosya": "olcum-dagitim-yolu-dizin-once.txt",
-      "sha256": "78b7cb64cfc4e332d7fe0b1df25a73bc975c01ab16acac8eb8afbcfec09b5bd3",
+      "sha256": "825eeeff10e5cbca209a19a0753839c89ac111b81ed730962cbd31ae5ca160ad",
       "komut": [
         "bash",
         "-c",
@@ -16,30 +16,30 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T13:01:03+03:00",
-      "sure_sn": 0.4
+      "zaman": "2026-10-09T13:12:27+03:00",
+      "sure_sn": 0.3
     },
     {
       "tur": "olcum",
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "f8738a1ff9aec07d5c4ff5a55286fbdfadbf4a01745925a62b01e38316721d0c",
+      "sha256": "233858e0dce1d0bf5abd48c382524837ba7540e829ae1d14d8b1803ebea66f73",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/kosu-sar.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T13:10:00+03:00",
-      "sure_sn": 7.7
+      "zaman": "2026-10-09T13:12:35+03:00",
+      "sure_sn": 8.2
     },
     {
       "tur": "olcum",
       "etiket": "nazir-sinav",
       "asama": "sonra",
       "dosya": "olcum-nazir-sinav-sonra.txt",
-      "sha256": "16659452fa1cfdd51ee85ffa844415ce523199ad9b96a59dcedfe0f3717781af",
+      "sha256": "341d616aed6f0a265e9a23bab99673c092f26c9da332354c2555ed964a788b36",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/hedef-kutu-sinav.sh",
@@ -47,15 +47,15 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T13:10:15+03:00",
-      "sure_sn": 14.6
+      "zaman": "2026-10-09T13:12:44+03:00",
+      "sure_sn": 9.1
     },
     {
       "tur": "olcum",
       "etiket": "sema-parite",
       "asama": "sonra",
       "dosya": "olcum-sema-parite-sonra.txt",
-      "sha256": "81e85bc1666a02aef1f6ffa65d87d04b2b9372856ef19f71ffc03912417d6cea",
+      "sha256": "ec7ffcecdc6cba7cd16bc4a3c548114cc497f8f6372a249eb0b4ed0d8e53006a",
       "komut": [
         "bash",
         "-c",
@@ -63,9 +63,9 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T13:10:15+03:00",
+      "zaman": "2026-10-09T13:12:44+03:00",
       "sure_sn": 0.1
     }
   ],
-  "imza": "5b22020acac424f0a5b932f1fe2a11c262b1ea40e5afe9fb9499e58f7a5b8bdd"
+  "imza": "6dd7f19556b90f140e0f27d9685375261ed9fc824d803baa7a632253582b9bdb"
 }

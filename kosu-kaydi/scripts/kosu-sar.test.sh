@@ -126,6 +126,13 @@ touch "$T/engel"; rm -f "$T/iz"
 ol "iş koştu, rc 0" "$(test -e "$T/iz" && echo kostu)/$(cat "$T/rcy")" "kostu/rc=0"
 ol "satır yedek dizine yazıldı" "$(cat "$T/yedek"/sinav.*.jsonl 2>/dev/null | wc -l | tr -d ' ')" "1"
 ol "stderr uyarı var" "$(grep -c 'yazılamıyor' "$T/err")" "1"
+mkdir -p "$T/yazilabilir"; touch "$T/yazilabilir/sinav.$(date +%Y-%m).jsonl"; chmod 444 "$T/yazilabilir/sinav.$(date +%Y-%m).jsonl"
+( KOSU_KAYIT_DIZ="$T/yazilabilir" KOSU_YEDEK_DIZ="$T/yedek2" bash "$S" supur -- true >/dev/null 2>"$T/err2"; echo "rc=$?" > "$T/rcy2" )
+ol "dizin yazılabilir ama dosya salt-okunur → satır yedeğe, iş rc 0" "$(cat "$T/yedek2"/sinav.*.jsonl 2>/dev/null | wc -l | tr -d ' ')/$(cat "$T/rcy2")" "1/rc=0"
+ol "stderr: yedeğe yazıldı" "$(grep -c 'yedeğe yazıldı' "$T/err2")" "1"
+( KOSU_KAYIT_DIZ="$T/yazilabilir" KOSU_YEDEK_DIZ="$T/engel/y" bash "$S" supur -- true >/dev/null 2>"$T/err3" )
+ol "ikisi de düşerse stderr KAYIT YAZILAMADI (sessiz değil)" "$(grep -c 'KAYIT YAZILAMADI' "$T/err3")" "1"
+chmod 644 "$T/yazilabilir/sinav.$(date +%Y-%m).jsonl"
 echo "════ cron-sonraki.py tek başına (bağımsız hesap, paket yok) ════"
 CS() { python3 "$HERE/cron-sonraki.py" "$1" 2026-10-09T12:00:00+03:00 2>/dev/null; }   # 9 Eki 2026 Cuma
 ol "5 alan → sonraki (hafta içi 09:00 → Pzt)" "$(CS '0 9 * * 1-5')" "2026-10-12T09:00:00+03:00"

@@ -109,11 +109,15 @@ PLANLI="$(_sonraki "$CANLI_IFADE")"; TAHMIN="$(_sonraki "$KANON_IFADE")"
 if [ -n "$TAHMIN" ]; then TAHMIN_B=true; else TAHMIN_B=false; fi
 if [ -z "$PLANLI" ] || [ -z "$TAHMIN" ]; then TURETILEMEDI=true; else TURETILEMEDI=false; fi
 
-DOSYA="$DIZ/$KUTU.$(date +%Y-%m).jsonl"
+DOSYA="$DIZ/$KUTU.$(date +%Y-%m).jsonl"; SATIR_TMP="$(mktemp)"
 printf '{"is":%s,"kutu":%s,"sahip":%s,"baslangic":%s,"bitis":%s,"sure_sn":%s,"rc":%s,"sonuc":%s,"kutuk":%s,"sonraki_planli":%s,"ifadeden_tahmin":%s,"tahmin":%s,"turetilemedi":%s,"defter_ref":null,"sarmalayici":%s}\n' \
   "$(_json "$IS")" "$(_json "$KUTU")" "$(_json "$SAHIP")" "$(_json "$BASLANGIC")" "$(_json "$BITIS")" "$SURE" "$RC" "$(_json "$SONUC")" \
-  "$(_jnull "$DAMGA")" "$(_jnull "$PLANLI")" "$(_jnull "$TAHMIN")" "$TAHMIN_B" "$TURETILEMEDI" "$(_json "$SURUM")" > "$DOSYA.satir.$$" \
-  && cat "$DOSYA.satir.$$" >> "$DOSYA" || echo "kosu-sar: KAYIT YAZILAMADI ($DOSYA) — koşu izsiz kaldı; iş rc=$RC değişmedi" >&2
-rm -f "$DOSYA.satir.$$"
+  "$(_jnull "$DAMGA")" "$(_jnull "$PLANLI")" "$(_jnull "$TAHMIN")" "$TAHMIN_B" "$TURETILEMEDI" "$(_json "$SURUM")" > "$SATIR_TMP"
+if ! cat "$SATIR_TMP" >> "$DOSYA" 2>/dev/null; then   # dizin yazılabilir görünse de dosyaya ekleme düşebilir → yedek dizine ikinci deneme
+  mkdir -p "$YEDEK_DIZ" 2>/dev/null; YDOSYA="$YEDEK_DIZ/$KUTU.$(date +%Y-%m).jsonl"
+  if cat "$SATIR_TMP" >> "$YDOSYA" 2>/dev/null; then echo "kosu-sar: kayıt dosyasına yazılamadı ($DOSYA) — satır yedeğe yazıldı: $YDOSYA" >&2
+  else echo "kosu-sar: KAYIT YAZILAMADI ($DOSYA ve $YDOSYA) — koşu izsiz kaldı; iş rc=$RC değişmedi" >&2; fi
+fi
+rm -f "$SATIR_TMP"
 [ -n "$KANON_GECICI" ] && rm -f "$KANON_GECICI"
 exit "$RC"
