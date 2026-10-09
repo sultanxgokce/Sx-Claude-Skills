@@ -1,0 +1,34 @@
+{
+  "tur": 2,
+  "is": "kosu-kaydi-gozlem-paketi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-09T20:56:46+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 35610,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Gözlemli nöbetçi akışı, gözlem arızasının iş rc’sinden bağımsız biçimde `olculemedi` sayılması ve iki ortamlı sınavla karttaki doğru hedef uygulanmış. Ancak stdout kabuk değişkenlerinde tutulduğu için NUL baytları korunmuyor; “bayt bayt” karşılaştırma şartı tam karşılanmadığından önce bunu çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "Gözlem çıktısı Bash değişkenlerine alındığından NUL baytları kaybolur; farklı ham stdout akışları kırpma sonrasında aynı sanılabilir ve karşılaştırma bayt bayt değildir.",
+        "kanit": "`ONCE=\"$(...)\"` ve `SONRA=\"$(...)\"` komut ikamesi sonuçlarını kabuk değişkenlerinde saklıyor, ardından `[ \"$ONCE\" = \"$SONRA\" ]` ile karşılaştırıyor. Bash değişkenleri NUL baytını taşıyamaz; sınavlarda da yalnız metinsel boşluk örnekleri var, NUL içeren çıktı yok.",
+        "konum": "kosu-kaydi/scripts/kosu-sar.sh:93-98; kosu-kaydi/scripts/kosu-sar.test.sh:56-78",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Sürüm ve şema açıklamaları kendi içinde güncel değil; 0.4/şema 1.2 özelliğine rağmen bazı görünür tanımlar hâlâ şema 1.1 ve sürüm 0.3 diyor.",
+        "kanit": "Yeni belge metni ve sınav başlığı gözlem kipini “0.4 / şema 1.2” olarak tanımlarken katalog açıklaması 15 alan için “şeması sürüm 1.1”, betik üst açıklaması da “Sürüm 0.3” bırakılmış.",
+        "konum": "catalog.json:1629; kosu-kaydi/scripts/kosu-sar.sh:2; kosu-kaydi/SKILL.md:62",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Hermetik sınav ile aynı sınavın Nâzır kutusunda `/tmp` üzerinden çalışması ayrı yeşil ölçümlerle, kaynak-hedef md5 eşliği ve croniter yokluğu da kutu kaydıyla gösterilmiş; birleşik “gözlem düştü + iş rc≠0” durumu artık açıkça sınanıyor ve 86/86 geçiyor. Yalnız sonra ölçümleri bulunduğundan önce/sonra ölçüm çifti yok; ayrıca yeşil sınav, açıkta kalan NUL-baytı davranışını sınamıyor."
+  }
+}

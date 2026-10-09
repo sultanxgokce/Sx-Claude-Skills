@@ -1,0 +1,55 @@
+{
+  "is": "kosu-kaydi-gozlem-paketi",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-09T20:58:58+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "fb9e097516e8a13650b5b74147a3e4ac01bbd64adcc9f9ca1c6a48010df8f29a",
+      "komut": [
+        "bash",
+        "kosu-kaydi/scripts/kosu-sar.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T20:58:46+03:00",
+      "sure_sn": 11.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "nazir-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-nazir-sinav-sonra.txt",
+      "sha256": "30dde7edcd45f133cb4a306bb2f840eab64aff261baa3925ea2666a59e2a1796",
+      "komut": [
+        "bash",
+        "kosu-kaydi/scripts/hedef-kutu-sinav.sh",
+        "cloudtop-nazir"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T20:58:58+03:00",
+      "sure_sn": 11.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sema-parite",
+      "asama": "sonra",
+      "dosya": "olcum-sema-parite-sonra.txt",
+      "sha256": "d6818f2d9d0a150df9f491e6acfbf6bd3af19879089871cf39660a2ee5a14118",
+      "komut": [
+        "bash",
+        "-c",
+        "node ahi/schema/validate-repo.mjs . --strict && node ahi/schema/version-lint.mjs ."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T20:58:58+03:00",
+      "sure_sn": 0.1
+    }
+  ],
+  "imza": "6f5c4dd83b237ae4803cfd7f6f50d4a04a478db5d85248f5473dfbf41c255a53"
+}

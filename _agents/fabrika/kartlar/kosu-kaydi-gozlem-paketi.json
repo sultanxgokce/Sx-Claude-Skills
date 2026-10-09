@@ -1,0 +1,19 @@
+{
+  "is": "kosu-kaydi-gozlem-paketi",
+  "cumle": "kosu-kaydi 0.4 PAKETİ: --nobetci için --gozlem <komut> — önce/sonra gözlem stdout'u (baş/son boşluk kırpık, bayt bayt) aynı = ayakta-dokunmadim, değişti = tamam; önce YA DA sonra gözlem rc≠0 = olculemedi; --nobetci'siz etkisiz. Kabul: hermetik sınav + aynı sınav nazir kutusunda /tmp üzerinden (hedef-kutu-sinav.sh, croniter yok). Kurulum ve kurulu yoldan sınav AYRI kart (kosu-kaydi-kurulum).",
+  "istedi": "SERDAR (kosu-kaydi-gozlem tıkandı→daralt)",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-09T20:53:44+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}
