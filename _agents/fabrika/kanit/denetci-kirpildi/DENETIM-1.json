@@ -1,0 +1,23 @@
+{
+  "tur": 1,
+  "is": "denetci-kirpildi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-09T10:30:08+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Serdar, kırpma hâlini her turda DENETIM kaydına geçirip ekrana vurmuş; sınav dikişi, iki yanlı sınama, mutant ve sürüm eşitlemesi de doğru hedefe yönelmiş. Lakin kartın buyurduğu “+7 kapı” yerine görünen değişiklikte altı yeni sınav kapısı var; önce bu kabul açığını kapatın.",
+    "bulgular": [
+      {
+        "ne": "İş kartı “sınav +7 kapı iki yanlı + mutant” isterken T9c bölümünde yalnız altı yeni doğrulama kapısı bulunuyor.",
+        "kanit": "T9c diffinde `g $?` ile biten doğrulamalar: kırpılmayan JSON, küçük istemde uyarı yok, kırpılan JSON, istem uyarısı, ekran uyarısı ve gerçek boyut kontrolü olmak üzere toplam 6 adettir; mutant ayrıca ayrı eklenmiştir.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.test.sh:T9c",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve kayıtlar yeşildir. Sonraki sınav rc=0 olsa da sunulan ilk 60 satır T9c ile yeni mutant sonucuna ulaşmadığından bu kapıların çalıştığı doğrudan görünmüyor; önce/sonra iki sınav da rc=0 olduğundan ölçüm çifti davranış farkını göstermiyor. Ek örnek ölçüm ise eski DENETIM-4 kaydında `kirpildi` alanının bulunmadığını doğruluyor, yeni kaydın alanlarını göstermiyor."
+  }
+}

@@ -15,5 +15,14 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": []
+  "gecmis": [],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "SERDAR",
+      "oturum": "session_013fuJSNg65VkgQE4sJsQURS",
+      "gerekce": "Kart cümlesi yanlış sayıyordu: '+7 kapı + mutant' değil, '+6 sınav kapısı (T9c, iki yanlı) + 1 mutant = 7 yeni ölçüm'. Denetçi doğru saydı (6). Kapsam: kirpildi alanı · ekran satırı · DENETCI_KIRP_ESIK dikişi · sınav 94→101 · catalog sürüm eşitleme.",
+      "zaman": "2026-10-09T10:30:33+03:00"
+    }
+  ]
 }
