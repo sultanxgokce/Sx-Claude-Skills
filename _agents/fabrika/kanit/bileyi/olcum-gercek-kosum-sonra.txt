@@ -1,0 +1,46 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-olc.sh
+# rc=0 sure=16.5s zaman=2026-10-09T22:34:13+03:00
+--- stdout ---
+🔪 BİLEYİ · iç-tarama · ajan=muavin · 2026-10-09
+   havuz: 177 kayıt
+   dedup kaynakları: aday havuzu: 308 kayıt · kurulu beceri: 91
+   🔴 KAPSAMA · sınıf alanı dolu: 61/177 (%34) → sınıfa dayanan sayım havuzun %66'ine KÖR
+   eşik: ikili≥4 · sınıf≥2 · dayanak 2026-10-09
+
+── YÜZEY 1 · sınıf alanı (kesin, kısmi kapsama)
+     2 × olcum-korlugu
+     2 × sinav-hijyeni
+     2 × kapi-kapsami
+
+── YÜZEY 2 · ikili söz öbeği (tüm havuz, gürültülü)
+     8 × vekil olcut                        [b0130,b0151,b0154]
+     5 × sahte yesil                        [b0091,b0150,b0158]
+     4 × ders paperclip                     [b0029,b0030,b0031] ⚠ TEK PARTİ (bir olay, tekrar değil)
+     4 × emsalden ders                      [b0029,b0030,b0031] ⚠ TEK PARTİ (bir olay, tekrar değil)
+     4 × paperclip bize                     [b0029,b0030,b0031] ⚠ TEK PARTİ (bir olay, tekrar değil)
+
+── YÜZEY 3 · sürtünme raporu
+   === Ajan friction-report (son 14 gün · /config/.claude/projects/-config-projects-Nexus) ===
+     SINIF              OLAY  OTURUM  TREND
+     dosya-bulunamadı     25       4    ↑
+     destructive-blok     30       4    ↑
+     commit-lint reddi     3       2    ↓
+     invalid-tool-param    0       0    →
+     auto-mode izin-reddi    4       1    ↑
+     kullanıcı-reddi       1       1    ↑
+     py-traceback         13       5    ↓
+     ağ-hatası             0       0    →
+     Read-limit-aşımı      0       0    →
+     API/oturum-limiti     7       5    ↓
+
+   ⚠ 3 söz öbeği TEK PARTİ sayıldı ve tekrar sayılmadı —
+     ardışık kimlikler aynı oturumun tek olayıdır. (Yanlış-negatif verebilir:
+     ardışık olmayan ama aynı oturumdan gelen kayıtları bu ölçü göremez.)
+🔪 eşiği aşan 5 tekrar var · tavan 2 yetenek/tur
+   🔴 Bu bir GİRDİdir, hüküm değil: hangi cinsten yetenek üretileceği
+      (kural · yapılandırma · beceri) muhakeme ister — ÖNCE 'kural var mı,
+      koşuyor mu' sorulur; var olanı kapıya bağlamak yeni beceri yazmaktan ucuzdur.
+   🔴 ÖLÇMEDİĞİM: bu sürtünmelerin MALİYETİ. Kaç kez olduğunu saydım,
+      kaç dakika yediğini bilmiyorum ve oraya temiz demiyorum.
+rc=0
+--- stderr ---

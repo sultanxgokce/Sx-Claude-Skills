@@ -1,0 +1,16 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-mutasyon.sh
+# rc=0 sure=19.2s zaman=2026-10-09T22:35:03+03:00
+--- stdout ---
+POZITIF KONTROL · temiz hal (ONCE) rc=0
+  OK  M1 dayanaksiz esigi kabul etmek -> KIRMIZI
+  OK  M2 havuz yokken temiz demek -> KIRMIZI
+  OK  M3 bos kimligi kabul etmek -> KIRMIZI
+  OK  M4 tek-partiyi tekrar saymak -> KIRMIZI
+  OK  M5 kapsamayi basmamak -> KIRMIZI
+  OK  M6 surtunme yoksa yok demek -> KIRMIZI
+  OK  M7 kill-switch i yok saymak -> KIRMIZI
+  OK  M8 bozuk satiri sessizce atlamak -> KIRMIZI
+  OK  M9 esik 0 i kabul etmek -> KIRMIZI
+POZITIF KONTROL · temiz hal (SONRA) rc=0
+sus-kapi=0
+--- stderr ---
