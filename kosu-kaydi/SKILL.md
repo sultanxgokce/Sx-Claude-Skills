@@ -56,7 +56,9 @@ KOSU_KANON=/config/projects/nazir/.oda/cron            # verilmezse drift ölç�
 | `atlandi-kilit` | satır `--kilit <dosya>` taşıyor ve sarmalayıcı kilidi (`flock -n`) **alamadı**: komut hiç koşmadı, rc **75** (EX_TEMPFAIL, sabit) yazılır — hata değil (A293). Çıkış kodundan çıkarım yok: işin kendi 75'i (kilit boşken de) `hata`dır. `flock` yoksa ya da bozuksa kilit durumu bilinmez → `olculemedi`, komut koşmaz (atlandı denmez) |
 | `hata` | diğer rc ≠ 0 (beyan olsa da) |
 | `olculemedi` | komut bulunamadı (127) ya da çalıştırılamadı (126) |
-Sarmalayıcı işin çıkış kodunu **olduğu gibi** geçirir (126/127/75 dahil); kayıt yazılamasa bile iş engellenmez.
+Sarmalayıcı işin çıkış kodunu **olduğu gibi** geçirir (126/127/75 dahil); kayıt yazılamasa bile iş engellenmez — ama izsiz de kalmaz:
+kayıt dizini açılamaz/yazılamazsa satır **yedek dizine** düşer (`KOSU_YEDEK_DIZ`, varsayılan `$TMPDIR/kosu-kaydi`) ve stderr'e uyarı basılır
+(cron bunu kütüğe/postaya taşır); satır hiç yazılamazsa stderr'de `KAYIT YAZILAMADI`.
 `--nobetci`: beyan betikte değil **kanon satırında** yaşar — sürümsüz bir nöbetçi betiğine (A291: nazir'inki hiçbir depoda değil)
 dokunmadan K4 ölçülür. Bedeli: nöbetçinin çıktısı sarmalayıcıdan geçer (`tee`), kütüğe yine düşer.
 
@@ -67,7 +69,7 @@ dokunmadan K4 ölçülür. Bedeli: nöbetçinin çıktısı sarmalayıcıdan ge�
 kısıtlıysa OR). Tarama 1500 gün (29 Şubat gibi seyrek ama geçerli ifadeler sığar); bulunamazsa (31 Şubat) rc 3.
 
 ## Dikişler (sınav için)
-`KOSU_KAYIT_DIZ` · `KOSU_KANON` · `KOSU_CRONTAB_KOMUT` (varsayılan `crontab -l`) · `KOSU_KUTU` · `KOSU_SIMDI` · `KOSU_FLOCK_KOMUT` (varsayılan `flock`; 'flock yok' sınavı için).
+`KOSU_KAYIT_DIZ` · `KOSU_KANON` · `KOSU_CRONTAB_KOMUT` (varsayılan `crontab -l`) · `KOSU_KUTU` · `KOSU_SIMDI` · `KOSU_YEDEK_DIZ` · `KOSU_FLOCK_KOMUT` (varsayılan `flock`; 'flock yok' sınavı için).
 
 Ön koşul: `bash` · `python3` · `crontab` (yoksa gözlem null) · `flock` (util-linux; yalnız `--kilit` için).
 

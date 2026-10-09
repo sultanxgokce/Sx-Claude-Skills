@@ -35,7 +35,11 @@ _kutu_adi() {  # KOSU_KUTU → DEFAULT_WORKSPACE son parçası (kapimda ile ayn�
   printf '%s' "${ad:-bilinmiyor}"
 }
 KUTU="$(_kutu_adi)"
-DIZ="${KOSU_KAYIT_DIZ:-/config/.kosu-kaydi}"; mkdir -p "$DIZ"   # KUTU-YEREL: /config/.claude ortak bağdır (nazir'de Sultan kapısı, A291)
+DIZ="${KOSU_KAYIT_DIZ:-/config/.kosu-kaydi}"   # KUTU-YEREL: /config/.claude ortak bağdır (nazir'de Sultan kapısı, A291)
+YEDEK_DIZ="${KOSU_YEDEK_DIZ:-${TMPDIR:-/tmp}/kosu-kaydi}"   # kayıt dizini yazılamazsa satır buraya düşer (iz kaybolmaz), stderr'e uyarı
+if ! mkdir -p "$DIZ" 2>/dev/null || [ ! -w "$DIZ" ]; then
+  echo "kosu-sar: kayıt dizini yazılamıyor ($DIZ) — satır yedek dizine yazılacak: $YEDEK_DIZ" >&2; DIZ="$YEDEK_DIZ"; mkdir -p "$DIZ" 2>/dev/null || true
+fi
 CRONTAB_KOMUT="${KOSU_CRONTAB_KOMUT:-crontab -l}"
 KANON="${KOSU_KANON:-}"; KANON_GECICI=""
 if [ -z "$KANON" ]; then  # kanon bildirilmemiş → canlı crontab kanon yerine geçer (drift ölçülemez, sahip okunur)
@@ -108,6 +112,8 @@ if [ -z "$PLANLI" ] || [ -z "$TAHMIN" ]; then TURETILEMEDI=true; else TURETILEME
 DOSYA="$DIZ/$KUTU.$(date +%Y-%m).jsonl"
 printf '{"is":%s,"kutu":%s,"sahip":%s,"baslangic":%s,"bitis":%s,"sure_sn":%s,"rc":%s,"sonuc":%s,"kutuk":%s,"sonraki_planli":%s,"ifadeden_tahmin":%s,"tahmin":%s,"turetilemedi":%s,"defter_ref":null,"sarmalayici":%s}\n' \
   "$(_json "$IS")" "$(_json "$KUTU")" "$(_json "$SAHIP")" "$(_json "$BASLANGIC")" "$(_json "$BITIS")" "$SURE" "$RC" "$(_json "$SONUC")" \
-  "$(_jnull "$DAMGA")" "$(_jnull "$PLANLI")" "$(_jnull "$TAHMIN")" "$TAHMIN_B" "$TURETILEMEDI" "$(_json "$SURUM")" >> "$DOSYA"
+  "$(_jnull "$DAMGA")" "$(_jnull "$PLANLI")" "$(_jnull "$TAHMIN")" "$TAHMIN_B" "$TURETILEMEDI" "$(_json "$SURUM")" > "$DOSYA.satir.$$" \
+  && cat "$DOSYA.satir.$$" >> "$DOSYA" || echo "kosu-sar: KAYIT YAZILAMADI ($DOSYA) — koşu izsiz kaldı; iş rc=$RC değişmedi" >&2
+rm -f "$DOSYA.satir.$$"
 [ -n "$KANON_GECICI" ] && rm -f "$KANON_GECICI"
 exit "$RC"

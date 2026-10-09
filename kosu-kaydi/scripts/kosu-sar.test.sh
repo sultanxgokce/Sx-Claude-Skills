@@ -120,6 +120,12 @@ ol "kutu: DEFAULT_WORKSPACE son parçası küçük harf" "$(ls "$T/kayit2" | sed
 ( unset KOSU_KUTU DEFAULT_WORKSPACE; KOSU_KAYIT_DIZ="$T/kayit3" bash "$S" supur -- true >/dev/null )
 ol "kutu: hiçbiri yoksa bilinmiyor (hostname uydurulmaz)" "$(ls "$T/kayit3" | sed 's/\..*//')" "bilinmiyor"
 
+echo "════ kayıt dizini yazılamıyor → iş yine koşar, satır YEDEK dizine düşer, stderr uyarı ════"
+touch "$T/engel"; rm -f "$T/iz"
+( KOSU_KAYIT_DIZ="$T/engel/alt" KOSU_YEDEK_DIZ="$T/yedek" bash "$S" supur -- bash -c 'echo KOSTU > "'"$T"'/iz"' >/dev/null 2>"$T/err"; echo "rc=$?" > "$T/rcy" )
+ol "iş koştu, rc 0" "$(test -e "$T/iz" && echo kostu)/$(cat "$T/rcy")" "kostu/rc=0"
+ol "satır yedek dizine yazıldı" "$(cat "$T/yedek"/sinav.*.jsonl 2>/dev/null | wc -l | tr -d ' ')" "1"
+ol "stderr uyarı var" "$(grep -c 'yazılamıyor' "$T/err")" "1"
 echo "════ cron-sonraki.py tek başına (bağımsız hesap, paket yok) ════"
 CS() { python3 "$HERE/cron-sonraki.py" "$1" 2026-10-09T12:00:00+03:00 2>/dev/null; }   # 9 Eki 2026 Cuma
 ol "5 alan → sonraki (hafta içi 09:00 → Pzt)" "$(CS '0 9 * * 1-5')" "2026-10-12T09:00:00+03:00"

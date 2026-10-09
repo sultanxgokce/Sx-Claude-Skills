@@ -1,0 +1,28 @@
+{
+  "tur": 3,
+  "is": "kosu-kaydi-sarmalayici",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-09T13:08:00+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 67024,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sarmalayıcı kilit çakışmasını alt komutun 75 kodundan ayırmış, açılamayan kilit dosyası yolunu kayda bağlamış, 1500 günlük paketsiz hesabı ve katalog/_global kaydını karta uygun tamamlamış; nazir kutusunda croniter olmadan 69 sınav geçmiştir. Önce kayıt dizini oluşturulamadığında veya JSONL dosyasına yazılamadığında komutun yine koşup kayıtsız kalmasını çöz; sarmalayıcının temel vaadi bu hata yolunda bozulduğu için üretime henüz hazır değildir.",
+    "bulgular": [
+      {
+        "ne": "Kayıt dizini oluşturulamazsa ya da kayıt dosyasına ekleme başarısız olursa sarmalayıcı alt komutu yine çalıştırıyor ve kayıt yazma hatasını çıkış durumuna yansıtmıyor; böylece koşu tamamen kayıtsız kalabiliyor.",
+        "kanit": "`mkdir -p \"$DIZ\"` sonucu denetlenmeden akış komuta devam ediyor; sondaki JSON `printf ... >> \"$DOSYA\"` işleminin sonucu da denetlenmiyor ve hemen ardından `exit \"$RC\"` ile yalnız alt komutun kodu döndürülüyor. 69 geçişli sınav geçici, yazılabilir dizin kullanıyor; oluşturulamayan/yazılamayan kayıt dizini için kapı göstermiyor.",
+        "konum": "kosu-kaydi/scripts/kosu-sar.sh:42,112-113; kosu-kaydi/scripts/kosu-sar.test.sh:6,22",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; dört kaydın tamamı yeşil, sarı kayıt yok. Yerel ve nazir sınavları 69/0 geçiyor, kaynak/hedef md5 değerleri eşit, hedefte croniter bulunmuyor ve şema/katalog paritesi temiz; 29 Şubat, kilit doluluğu, alt komutun 75 dönmesi, flock yokluğu ve açılamayan kilit dosyası açıkça sınanmış. Davranış için klasik önce/sonra ölçüm çifti yoktur; yalnız dağıtım yolu için önce ölçümü ve uygulama için sonrası sınavları vardır. Yeşil sınav yazılamayan kayıt hedefini kapsamadığından bulguyu kapatmaz."
+  }
+}

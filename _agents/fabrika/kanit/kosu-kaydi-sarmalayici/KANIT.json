@@ -1,7 +1,7 @@
 {
   "is": "kosu-kaydi-sarmalayici",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-09T13:07:26+03:00",
+  "guncelleme": "2026-10-09T13:10:15+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -24,22 +24,22 @@
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "888a9ccd3673d4328f2c590a00b35f18d94063998a988c03c3e2e6105325b950",
+      "sha256": "f8738a1ff9aec07d5c4ff5a55286fbdfadbf4a01745925a62b01e38316721d0c",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/kosu-sar.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T13:07:14+03:00",
-      "sure_sn": 9.8
+      "zaman": "2026-10-09T13:10:00+03:00",
+      "sure_sn": 7.7
     },
     {
       "tur": "olcum",
       "etiket": "nazir-sinav",
       "asama": "sonra",
       "dosya": "olcum-nazir-sinav-sonra.txt",
-      "sha256": "6836080d337603bc4b1b1e295a869f1edcc9339bbc45cb3b14c1e476b8f05c3f",
+      "sha256": "16659452fa1cfdd51ee85ffa844415ce523199ad9b96a59dcedfe0f3717781af",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/hedef-kutu-sinav.sh",
@@ -47,15 +47,15 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T13:07:26+03:00",
-      "sure_sn": 12.5
+      "zaman": "2026-10-09T13:10:15+03:00",
+      "sure_sn": 14.6
     },
     {
       "tur": "olcum",
       "etiket": "sema-parite",
       "asama": "sonra",
       "dosya": "olcum-sema-parite-sonra.txt",
-      "sha256": "9cc3c2f65d580925060f77fddafa4a3128633d9aa12ee3dbfc311e3a74836785",
+      "sha256": "81e85bc1666a02aef1f6ffa65d87d04b2b9372856ef19f71ffc03912417d6cea",
       "komut": [
         "bash",
         "-c",
@@ -63,9 +63,9 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T13:07:26+03:00",
+      "zaman": "2026-10-09T13:10:15+03:00",
       "sure_sn": 0.1
     }
   ],
-  "imza": "2081942ad6e960a113a61d2f8106eb6d9e902dd4efb7c6c9626206e3160771fa"
+  "imza": "5b22020acac424f0a5b932f1fe2a11c262b1ea40e5afe9fb9499e58f7a5b8bdd"
 }
