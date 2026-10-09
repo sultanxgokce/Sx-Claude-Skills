@@ -1,0 +1,28 @@
+{
+  "is": "denetci-kirpildi",
+  "cumle": "denetci.sh kırpmayı DENETIM-<tur>.json'a kalıcı yazar (kirpildi: oldu · istem_bayt · esik; kırpılmamışta oldu=false); ekran satırı; DENETCI_KIRP_ESIK sınav dikişi; sınav +7 kapı iki yanlı + mutant; SKILL 0.5.4, catalog sürümü eşitlendi (0.5.1 bayattı)",
+  "istedi": "NÂZIR/RASATÇI (dört not §2, 8 Eki)",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-09T10:26:29+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "SERDAR",
+      "oturum": "session_013fuJSNg65VkgQE4sJsQURS",
+      "gerekce": "Kart cümlesi yanlış sayıyordu: '+7 kapı + mutant' değil, '+6 sınav kapısı (T9c, iki yanlı) + 1 mutant = 7 yeni ölçüm'. Denetçi doğru saydı (6). Kapsam: kirpildi alanı · ekran satırı · DENETCI_KIRP_ESIK dikişi · sınav 94→101 · catalog sürüm eşitleme.",
+      "zaman": "2026-10-09T10:30:33+03:00"
+    }
+  ]
+}

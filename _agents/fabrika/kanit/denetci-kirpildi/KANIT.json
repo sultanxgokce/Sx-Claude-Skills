@@ -1,0 +1,54 @@
+{
+  "is": "denetci-kirpildi",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-09T10:29:16+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "d16c521f78ea853b0e08dfb52cbf2d18926c570d7310647ce44143a393bee1cb",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T10:27:54+03:00",
+      "sure_sn": 84.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-once",
+      "asama": "once",
+      "dosya": "olcum-sinav-once-once.txt",
+      "sha256": "e96b09a1aebacaa679ab5ab82ba82670e3ff9abebc3408001f96466d4a72c8dd",
+      "komut": [
+        "bash",
+        "/config/.claude/skills/yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T10:29:15+03:00",
+      "sure_sn": 81.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kirpildi-alani-ornek",
+      "asama": "sonra",
+      "dosya": "olcum-kirpildi-alani-ornek-sonra.txt",
+      "sha256": "a9a0218eed737e78f0fd5d9f40dae84581ec37a68d2e4895da83a1f20f1b5f6c",
+      "komut": [
+        "bash",
+        "-c",
+        "python3 -c \"import json;d=json.load(open(\\\"/config/projects/_wt/Nexus-kurye-hedef-dagitim/_agents/fabrika/kanit/kurye-hedef-dagitim/DENETIM-4.json\\\"));print(\\\"eski kayıtta kirpildi alanı var mı:\\\", \\\"kirpildi\\\" in d)\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T10:29:16+03:00",
+      "sure_sn": 0.0
+    }
+  ],
+  "imza": "781b2b438fb7dc938d79280046e722fbc02857b4701963cd05cc13305ca4fbd1"
+}
