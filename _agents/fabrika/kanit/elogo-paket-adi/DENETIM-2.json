@@ -1,0 +1,21 @@
+{
+  "tur": 2,
+  "is": "elogo-paket-adi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-09T22:14:11+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 53596,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İstenen iki iş de yerli yerine oturmuş: varsayılan paket adı kökteki cbc:ID’den, o yoksa cbc:UUID’den türetiliyor; 47 hanelik ölçülmüş geçen değer üstündeki adlar ağa çıkmadan duruyor. Önceki turun ölçülmemiş kesinlik kusuru giderilmiş, çağıran bağlantısı ve kritik kapılar mutasyon sınavıyla da doğrulanmış; üretime engel bulgu kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam, sarı kayıt yok. Önce/sonra ölçüm çifti eski dosya-adı davranışının ve 56 hanelik adın değişimini gösteriyor; pozitif/negatif kontroller cbc:ID yolunu, sınavlar cbc:UUID geri dönüşünü, 47 kabulü ile 48 ve 56 reddini, mutasyon kaydı da göndericinin yeni yolu gerçekten kullandığını destekliyor. Gerçek servis sınırının 48–55 aralığındaki kesin yeri hâlâ ölçülmemiştir; kod, yorum ve hata metni bunu açıkça söyleyip yalnız ölçülmüş güvenli tavanı uyguluyor."
+  }
+}
