@@ -63,6 +63,19 @@ bash "$S" nobetci --nobetci --gozlem "cat $T/dinleyen" -- bash -c "echo bir şey
 ol "gözlem aynı ama stdout dolu → yine ayakta-dokunmadim (ölçü gözlemdir, çıktı değil)" "$(alan sonuc)" "ayakta-dokunmadim"
 bash "$S" nobetci --nobetci --gozlem "cat $T/dinleyen" -- bash -c 'exit 4' >/dev/null; rc=$?
 ol "gözlemli + rc≠0 → hata, rc geçer" "$(alan sonuc)/$rc" "hata/4"
+echo "════ K4-d · altı hâl (0.4.1 / şema 1.3): BOŞ gözlem = gözlenen şey yok — NÂZIR ölçümü ════"
+: > "$T/dinleyen"; bash "$S" nobetci --nobetci --gozlem "cat $T/dinleyen" -- true >/dev/null
+ol "boş→boş (yoktu, hâlâ yok) → hata, iş rc 0 geçer" "$(alan sonuc)/$(alan rc)" "hata/0"
+: > "$T/dinleyen"; bash "$S" nobetci --nobetci --gozlem "cat $T/dinleyen" -- bash -c "echo pid-300 > $T/dinleyen" >/dev/null
+ol "boş→dolu (düştü, kaldırıldı) → tamam" "$(alan sonuc)" "tamam"
+bash "$S" nobetci --nobetci --gozlem "cat $T/dinleyen" -- bash -c ": > $T/dinleyen" >/dev/null
+ol "dolu→boş (nöbetçi düşürdü) → hata" "$(alan sonuc)" "hata"
+printf '  \n\t\n' > "$T/dinleyen"; bash "$S" nobetci --nobetci --gozlem "cat $T/dinleyen" -- true >/dev/null
+ol "yalnız boşluk/satır sonu = boş → hata (kırpma sonrası ölçülür)" "$(alan sonuc)" "hata"
+: > "$T/dinleyen"; bash "$S" nobetci --nobetci --gozlem "cat $T/dinleyen" -- bash -c 'exit 127' >/dev/null
+ol "boş→boş ama iş rc 127 → olculemedi (bulunamayan komut hata sayılmaz, rc geçer)" "$(alan sonuc)/$(alan rc)" "olculemedi/127"
+case "$(alan baslangic)" in *+00:00) ol "A303 damga UTC (+00:00)" ok ok;; *) ol "A303 damga UTC (+00:00)" "$(alan baslangic)" "…+00:00";; esac
+printf 'pid-100\n' > "$T/dinleyen"   # sonraki kapılar dolu gözlemle sürer
 bash "$S" nobetci --nobetci --gozlem "/yok/gozlem-komutu" -- true >/dev/null 2>&1
 ol "gözlem komutu çalışmıyor → olculemedi (dokunmadı DENMEZ)" "$(alan sonuc)" "olculemedi"
 printf 'pid-100\n' > "$T/dinleyen"

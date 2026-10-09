@@ -1,0 +1,9 @@
+$ bash /config/.claude/jobs/d69a1b07/tmp/alti-hal-once.sh
+# rc=0 sure=12.3s zaman=2026-10-09T22:24:38+03:00
+--- stdout ---
+  ✗ boş→boş (yoktu, hâlâ yok) → hata, iş rc 0 geçer: beklenen[hata/0] gelen[ayakta-dokunmadim/0]
+  ✗ dolu→boş (nöbetçi düşürdü) → hata: beklenen[hata] gelen[tamam]
+  ✗ yalnız boşluk/satır sonu = boş → hata (kırpma sonrası ölçülür): beklenen[hata] gelen[ayakta-dokunmadim]
+  ✗ A303 damga UTC (+00:00): beklenen[…+00:00] gelen[2026-10-09T22:24:30+03:00]
+── SONUÇ: 90 geçti · 4 düştü ──
+--- stderr ---
