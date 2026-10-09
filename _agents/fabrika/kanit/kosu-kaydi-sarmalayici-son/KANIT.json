@@ -1,0 +1,71 @@
+{
+  "is": "kosu-kaydi-sarmalayici-son",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-09T13:12:44+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "dagitim-yolu-dizin",
+      "asama": "once",
+      "dosya": "olcum-dagitim-yolu-dizin-once.txt",
+      "sha256": "825eeeff10e5cbca209a19a0753839c89ac111b81ed730962cbd31ae5ca160ad",
+      "komut": [
+        "bash",
+        "-c",
+        "echo \"merkez skills dizini aygıt:inode $(stat -c %d:%i /config/.claude/skills)\"; ssh -o BatchMode=yes -o ConnectTimeout=10 hostsrv \"docker exec -u abc cloudtop-nazir sh -c \\\"stat -c \\\\\\\"nazir  skills dizini aygıt:inode %d:%i\\\\\\\" /config/.claude/skills; ls -d /config/projects/*; python3 -c \\\\\\\"import croniter\\\\\\\" 2>&1 | tail -1\\\"\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T13:12:27+03:00",
+      "sure_sn": 0.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "233858e0dce1d0bf5abd48c382524837ba7540e829ae1d14d8b1803ebea66f73",
+      "komut": [
+        "bash",
+        "kosu-kaydi/scripts/kosu-sar.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T13:12:35+03:00",
+      "sure_sn": 8.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "nazir-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-nazir-sinav-sonra.txt",
+      "sha256": "341d616aed6f0a265e9a23bab99673c092f26c9da332354c2555ed964a788b36",
+      "komut": [
+        "bash",
+        "kosu-kaydi/scripts/hedef-kutu-sinav.sh",
+        "cloudtop-nazir"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T13:12:44+03:00",
+      "sure_sn": 9.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sema-parite",
+      "asama": "sonra",
+      "dosya": "olcum-sema-parite-sonra.txt",
+      "sha256": "ec7ffcecdc6cba7cd16bc4a3c548114cc497f8f6372a249eb0b4ed0d8e53006a",
+      "komut": [
+        "bash",
+        "-c",
+        "node ahi/schema/validate-repo.mjs . --strict && node ahi/schema/version-lint.mjs ."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T13:12:44+03:00",
+      "sure_sn": 0.1
+    }
+  ],
+  "imza": "6dd7f19556b90f140e0f27d9685375261ed9fc824d803baa7a632253582b9bdb"
+}

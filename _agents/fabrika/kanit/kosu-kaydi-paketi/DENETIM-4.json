@@ -1,0 +1,34 @@
+{
+  "tur": 4,
+  "is": "kosu-kaydi-paketi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-09T12:56:48+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 67286,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Sarmalayıcı, paketsiz sonraki-koşu hesabı ve _global katalog kaydı doğru karta teslim edilmiş; nazir sınavı da croniter olmadan 61/61 geçiyor. Önce kilit kodu ile alt komutun aynı dönüş kodunun karıştırılmasını ve geçerli seyrek cron ifadelerinin 366 günlük sınır yüzünden türetilememesini çöz; bunlar üretime hazır sayılmasını engelliyor.",
+    "bulgular": [
+      {
+        "ne": "Kilit alınabildiği halde flock altındaki gerçek komut 75 dönerse kayıt yanlış biçimde `atlandi-kilit` olur; yalnız komutun ilk öğesinin flock olması ve `-E 75` taşıması, 75'in kilit çatışmasından geldiğini kanıtlamaz.",
+        "kanit": "Kod `KILITLI=1` yaptıktan sonra sınıflandırmayı yalnız `RC == KILIT_RC` ile gerçekleştiriyor. Oysa `flock`, kilit alındıktan sonra çalıştırdığı komutun çıkış kodunu da geçirir; sınav kilit dolu ve kilit boşken başarı durumlarını kapsıyor fakat kilit boşken alt komutun 75 dönmesini kapsamıyor.",
+        "konum": "kosu-kaydi/scripts/kosu-sar.sh:31-33 ve 76; kosu-kaydi/scripts/kosu-sar.test.sh:62-75",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Paketsiz sonraki-koşu hesabı, geçerli fakat bir yıldan daha seyrek cron ifadelerinde yanlışlıkla `türetilemedi` sonucuna varıyor.",
+        "kanit": "Arama üst sınırı `an + 366 gün`; sınav da geçerli `30 2 29 2 *` ifadesinin 2026-10-09'dan sonraki gerçek çalışması 2028-02-29 olmasına rağmen rc=3 bekliyor. Böylece geçerli bir cron planı için sonraki koşu hesaplanmıyor ve kusur sınava sabitleniyor.",
+        "konum": "kosu-kaydi/scripts/cron-sonraki.py:60; kosu-kaydi/scripts/kosu-sar.test.sh:131",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; beş kaydın tamamı yeşil, sarı kayıt yok. Yerel ve nazir sınavları 61/61 geçiyor, kaynak/hedef paket özetleri eşit, hedefte croniter bulunmuyor ve şema/katalog paritesi temiz. Dağıtım yolu için merkez ve nazir `/config/.claude/skills` dizinlerinin aynı aygıt:inode çifti ölçülmüş; bu, karttaki ortak dosya yolu iddiasını destekliyor. Ancak yeşil sınavlar yukarıdaki iki sınır durumunu doğru davranış olarak sınamadığından kod kusurlarını kapatmıyor."
+  }
+}

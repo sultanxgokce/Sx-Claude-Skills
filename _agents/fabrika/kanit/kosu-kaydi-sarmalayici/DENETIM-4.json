@@ -1,0 +1,28 @@
+{
+  "tur": 4,
+  "is": "kosu-kaydi-sarmalayici",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-09T13:10:38+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 72653,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sarmalayıcı, 1500 günlük paketsiz sonraki-koşu hesabı, kilit davranışı ve katalog/_global kaydını karta uygun teslim etmiş; nazir kutusunda croniter olmadan 72 sınav geçmiştir. Önce asıl kayıt dizini başlangıçta yazılabilir olduğu halde son JSONL eklemesi başarısız olduğunda yedek dizine gerçekten geçilmemesini çöz; önceki turun izsiz koşu kusuru yalnız dizin oluşturma hatası için kapanmış, genel yazma hatası için kapanmamıştır.",
+    "bulgular": [
+      {
+        "ne": "Asıl kayıt dizini başlangıçta yazılabilir görünürken hedef JSONL dosyasına ekleme sonradan başarısız olursa satır yedek dizine yazılmıyor; yalnız stderr uyarısı kalıyor ve koşu izsiz kalabiliyor. Bu, belgelenen “dizin açılamaz/yazılamazsa satır yedek dizine düşer” davranışını eksik uygular.",
+        "kanit": "Yedek dizine geçiş yalnız `mkdir -p \"$DIZ\"` başarısızsa veya `[ ! -w \"$DIZ\" ]` doğruysa yapılıyor. Sonraki `cat ... >> \"$DOSYA\"` başarısızlığında kod yalnız `KAYIT YAZILAMADI` basıyor; `YEDEK_DIZ` altında ikinci yazma denemesi yok. Eklenen sınav da yalnız `$T/engel/alt` ile dizin oluşturma hatasını ölçüyor, başlangıçta yazılabilir dizin içindeki yazılamayan mevcut JSONL hedefini kapsamıyor.",
+        "konum": "kosu-kaydi/scripts/kosu-sar.sh:43-45,114-117; kosu-kaydi/scripts/kosu-sar.test.sh:135-140",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; dört kaydın tamamı yeşil, sarı kayıt yok. Yerel ve nazir sınavları 72/0 geçiyor, kaynak/hedef md5 değerleri eşit, hedefte croniter bulunmuyor ve şema/katalog paritesi temizdir. Klasik davranış önce/sonra ölçüm çifti yoktur; dağıtım yolu için yalnız önce ölçümü, uygulama için yalnız sonrası sınavları vardır. Yeni sınav kayıt dizininin oluşturulamadığı yolu doğruluyor fakat son JSONL ekleme hatasında yedeğe geçişi sınamadığından bulguyu kapatmıyor."
+  }
+}

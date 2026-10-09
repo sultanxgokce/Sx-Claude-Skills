@@ -1,0 +1,19 @@
+{
+  "is": "kosu-kaydi-sarmalayici-son",
+  "cumle": "kosu-kaydi beceri paketi (Sx #278) — kosu-kaydi-sarmalayici'nin daraltılmışı: aynı kapsam + kayıt yazma hatasında (dizin yazılabilir ama dosyaya ekleme düşer) satır YEDEK dizine yazılır, ikisi de düşerse stderr KAYIT YAZILAMADI. Kabul: sınav hedef kutuda (nazir) geçer. Kurulum ayrı kart kosu-kaydi-kurulum",
+  "istedi": "SERDAR (kosu-kaydi-sarmalayici 4 tur tıkandı → daralt)",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-09T13:11:30+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}
