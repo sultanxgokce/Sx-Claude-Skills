@@ -1,7 +1,7 @@
 {
   "is": "kosu-kaydi-sarmalayici",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-09T13:04:24+03:00",
+  "guncelleme": "2026-10-09T13:07:26+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -24,22 +24,22 @@
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "c6f28d240d0ac680f3378450044c5ed5abf17495514c063f5e348f2c8f65f344",
+      "sha256": "888a9ccd3673d4328f2c590a00b35f18d94063998a988c03c3e2e6105325b950",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/kosu-sar.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T13:04:16+03:00",
-      "sure_sn": 7.3
+      "zaman": "2026-10-09T13:07:14+03:00",
+      "sure_sn": 9.8
     },
     {
       "tur": "olcum",
       "etiket": "nazir-sinav",
       "asama": "sonra",
       "dosya": "olcum-nazir-sinav-sonra.txt",
-      "sha256": "16226b49263fce25599af22caaf2210187ff759217f0917d92388a9e5246cd43",
+      "sha256": "6836080d337603bc4b1b1e295a869f1edcc9339bbc45cb3b14c1e476b8f05c3f",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/hedef-kutu-sinav.sh",
@@ -47,15 +47,15 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T13:04:24+03:00",
-      "sure_sn": 8.3
+      "zaman": "2026-10-09T13:07:26+03:00",
+      "sure_sn": 12.5
     },
     {
       "tur": "olcum",
       "etiket": "sema-parite",
       "asama": "sonra",
       "dosya": "olcum-sema-parite-sonra.txt",
-      "sha256": "50649e1ed2425e24d65efb88a1a9da57589f9ab06155c121da699c2a0f63d804",
+      "sha256": "9cc3c2f65d580925060f77fddafa4a3128633d9aa12ee3dbfc311e3a74836785",
       "komut": [
         "bash",
         "-c",
@@ -63,9 +63,9 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-09T13:04:24+03:00",
+      "zaman": "2026-10-09T13:07:26+03:00",
       "sure_sn": 0.1
     }
   ],
-  "imza": "a59291448bb499dcdc5c9dca8b85598f821191446c69816b4c05780a767507f4"
+  "imza": "2081942ad6e960a113a61d2f8106eb6d9e902dd4efb7c6c9626206e3160771fa"
 }

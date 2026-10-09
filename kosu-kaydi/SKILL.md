@@ -52,7 +52,7 @@ KOSU_KANON=/config/projects/nazir/.oda/cron            # verilmezse drift ölç�
 | `sonuc` | Ne zaman |
 |---|---|
 | `tamam` | rc 0 (nöbetçi kipinde: rc 0 **ve** çıktı var — iş yaptı) |
-| `ayakta-dokunmadim` | rc 0 **ve** beyan: iş `$KOSU_BEYAN` dosyasına `dokunmadim` yazdı **ya da** satır `--nobetci` taşıyor ve çıktı boş. Bayraksız satırda çıkarım yok |
+| `ayakta-dokunmadim` | rc 0 **ve** beyan: iş `$KOSU_BEYAN` dosyasına `dokunmadim` yazdı **ya da** satır `--nobetci` taşıyor ve çıktı boş. "Çıktı" = yalnız **stdout**; yalnız boşluk/yeni satır **boş** sayılır; **stderr sınıflamaya girmez** (kütüğe gider). Bayraksız satırda çıkarım yok |
 | `atlandi-kilit` | satır `--kilit <dosya>` taşıyor ve sarmalayıcı kilidi (`flock -n`) **alamadı**: komut hiç koşmadı, rc **75** (EX_TEMPFAIL, sabit) yazılır — hata değil (A293). Çıkış kodundan çıkarım yok: işin kendi 75'i (kilit boşken de) `hata`dır. `flock` yoksa ya da bozuksa kilit durumu bilinmez → `olculemedi`, komut koşmaz (atlandı denmez) |
 | `hata` | diğer rc ≠ 0 (beyan olsa da) |
 | `olculemedi` | komut bulunamadı (127) ya da çalıştırılamadı (126) |

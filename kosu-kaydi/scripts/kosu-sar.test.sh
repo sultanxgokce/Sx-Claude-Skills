@@ -49,6 +49,10 @@ bash "$S" nobetci --nobetci -- true >/dev/null
 ol "--nobetci + rc0 + boş çıktı → ayakta-dokunmadim" "$(alan sonuc)" "ayakta-dokunmadim"
 bash "$S" nobetci --nobetci -- echo "sunucu yeniden başlatıldı" >/dev/null
 ol "--nobetci + rc0 + çıktı VAR → tamam (iş yaptı)" "$(alan sonuc)" "tamam"
+bash "$S" nobetci --nobetci -- bash -c 'printf "\n  \n"' >/dev/null
+ol "--nobetci + yalnız boşluk/yeni satır stdout → boş sayılır: ayakta-dokunmadim" "$(alan sonuc)" "ayakta-dokunmadim"
+bash "$S" nobetci --nobetci -- bash -c 'echo uyarı >&2' >/dev/null 2>&1
+ol "--nobetci + yalnız stderr → sınıflamaya girmez: ayakta-dokunmadim" "$(alan sonuc)" "ayakta-dokunmadim"
 bash "$S" nobetci --nobetci -- bash -c 'exit 2' >/dev/null; rc=$?
 ol "--nobetci + rc≠0 → hata, rc geçer" "$(alan sonuc)/$rc" "hata/2"
 bash "$S" nobetci --bilinmeyen -- true >/dev/null 2>&1; ol "bilinmeyen bayrak rc=2" "$?" "2"
@@ -70,6 +74,9 @@ bash "$S" supur --kilit -- true >/dev/null 2>&1; ol "--kilit dosyasız rc=2" "$?
 rm -f "$T/iz"; ( KOSU_FLOCK_KOMUT=/yok/flock bash "$S" supur --kilit "$T/kilit" -- bash -c 'echo KOSTU > "'"$T"'/iz"' >/dev/null 2>&1; echo "rc=$?" > "$T/rcf" )
 ol "flock YOKSA → olculemedi (atlandı DENMEZ), rc 127" "$(alan sonuc)/$(cat "$T/rcf")" "olculemedi/rc=127"
 ol "flock yokken komut koşturulmadı (kilitsiz koşmaz)" "$(test -e "$T/iz" && echo kostu || echo kosmadi)" "kosmadi"
+n0=$(satir_sayisi); bash "$S" supur --kilit "$T/yok/dizin/kilit" -- bash -c 'echo KOSTU > "'"$T"'/iz"' >/dev/null 2>&1; rc=$?
+ol "kilit dosyası açılamazsa → satır YİNE yazılır (K1), olculemedi, rc 127" "$(( $(satir_sayisi) - n0 ))/$(alan sonuc)/$rc" "1/olculemedi/127"
+ol "kilit dosyası açılamazsa komut koşmaz" "$(test -e "$T/iz" && echo kostu || echo kosmadi)" "kosmadi"
 
 echo "════ K5 · çelişki: canlı tablo ≠ kanon ════"
 sed -i 's/^35 \* \* \* \* flock/40 * * * * flock/' "$T/canli"

@@ -75,16 +75,19 @@ if [ -n "$KILIT" ]; then
   if ! command -v "$FLOCK" >/dev/null 2>&1; then
     echo "kilit istendi ama flock yok (util-linux) — komut koşturulmadı, olculemedi" >&2; KILIT_SORUN=1
   else
-    exec 8>>"$KILIT" || { echo "kilit dosyası açılamadı: $KILIT" >&2; exit 2; }
-    "$FLOCK" -n -E "$KILIT_RC" 8; frc=$?   # 75 = kilit DOLU (ayırt edici kod); 0 = alındı; başka = flock hatası
-    if [ "$frc" -eq "$KILIT_RC" ]; then ATLANDI=1; elif [ "$frc" -ne 0 ]; then echo "flock hatası rc=$frc — komut koşturulmadı" >&2; KILIT_SORUN=1; fi
+    if ! exec 8>>"$KILIT" 2>/dev/null; then echo "kilit dosyası açılamadı: $KILIT — komut koşturulmadı, olculemedi" >&2; KILIT_SORUN=1   # satır YİNE yazılır (K1)
+    else
+      "$FLOCK" -n -E "$KILIT_RC" 8; frc=$?   # 75 = kilit DOLU (ayırt edici kod); 0 = alındı; başka = flock hatası
+      if [ "$frc" -eq "$KILIT_RC" ]; then ATLANDI=1; elif [ "$frc" -ne 0 ]; then echo "flock hatası rc=$frc — komut koşturulmadı" >&2; KILIT_SORUN=1; fi
+    fi
   fi
 fi
 if [ "$ATLANDI" -eq 1 ]; then RC="$KILIT_RC"; CIKTI_VAR=0   # kilit dolu: komut KOŞMADI
 elif [ "$KILIT_SORUN" -eq 1 ]; then RC=127; CIKTI_VAR=0        # kilit alınabilir mi bilinmiyor: komut KOŞMADI, ölçülemedi
 elif [ "$NOBETCI" -eq 1 ]; then   # nöbetçi kipi: beyan KANON satırında (--nobetci); çıktı boş + rc 0 = ayaktaydı, dokunmadı (K4, NÂZIR A291)
   CIKTI_DOSYA="$(mktemp)"; if "$@" | tee "$CIKTI_DOSYA"; then RC=0; else RC=$?; fi
-  [ -s "$CIKTI_DOSYA" ] && CIKTI_VAR=1 || CIKTI_VAR=0; rm -f "$CIKTI_DOSYA"
+  # "çıktı" = yalnız stdout; yalnız boşluk/sekme/yeni satır BOŞ sayılır; stderr sınıflamaya girmez (şema K4, bağlayıcı tanım)
+  if [ -n "$(tr -d '[:space:]' < "$CIKTI_DOSYA")" ]; then CIKTI_VAR=1; else CIKTI_VAR=0; fi; rm -f "$CIKTI_DOSYA"
 else
   if "$@"; then RC=0; else RC=$?; fi; CIKTI_VAR=1
 fi
