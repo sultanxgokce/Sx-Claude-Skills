@@ -27,7 +27,7 @@ done
 KILIT_RC=75   # --kilit ile kilit alınamayınca yazılan rc (EX_TEMPFAIL) — şema K4b sabit, ayar yok; komut hiç koşmaz → atlandi-kilit
 # 0.5.1 — K1 öz-denetim (lint'in en ağır kuralı, koşu anında da uyarır; oda kancası lint'i henüz çağırmıyor): --kilit verilmiş VE
 # komutun kendisi flock çağırıyorsa iç kilit ebeveyne çarpar, her koşu atlanır. İş engellenmez (satır yine yazılır), stderr'e uyarı.
-if [ -n "$KILIT" ]; then for _a in "$@"; do case "$_a" in flock|*/flock) echo "kosu-sar: UYARI kanon-lint K1 — '--kilit' ile sarılı komutun içinde flock var ($IS): iç kilit ebeveynin kilidine çarpar, iş hiç koşmaz (hata ya da sahte atlandi-kilit); içteki flock'u kaldır" >&2; break;; esac; done; fi
+OZ_K1=0; if [ -n "$KILIT" ]; then for _a in "$@"; do case "$_a" in flock|*/flock) OZ_K1=1; break;; esac; done; fi   # uyarı aşağıda TEK özet satırda (bağımsız göz: çift bildirim yok)
 # Kilidi SARMALAYICI alır (sezgi yok): kanon satırındaki 'flock -n' yerine '--kilit <dosya>'. flock alt komutun rc'sini olduğu gibi
 # geçirdiği için "75 geldi → kilitti" çıkarımı kesin değildi (bağımsız göz, tur 4); burada kilit alınamadığını flock'un kendisi söyler.
 _kutu_adi() {  # KOSU_KUTU → DEFAULT_WORKSPACE son parçası (kapimda ile aynı türetme) → bilinmiyor
@@ -52,13 +52,16 @@ fi
 # 0.5.1 — kanon lint'inin ÇAĞIRANI: oda kancası henüz çağırmıyor (ayrı kart), bu yüzden sarmalayıcı her koşuda kanonu lint'ler;
 # KIRMIZI varsa stderr'e TEK özet satır (cron kütüğüne/postasına düşer). İş engellenmez, kayıt değişmez — lint kanonun kusurudur, koşunun değil.
 # Kapatmak: KOSU_KANON_LINT=0 (sınav/dikiş). Lint betiği yoksa sessiz geçer (yokluk ≠ arıza).
+KR=0; K6=0
 if [ "${KOSU_KANON_LINT:-1}" != 0 ] && [ -f "$HERE/kanon-lint.sh" ]; then
   # sarmalayıcı kutunun İÇİNDE koşar → --kutu-ici: K6 (gözlem komutu bu kutuda yok) da ölçülür (bağımsız göz tur 3)
-  LINT_CIKTI="$(bash "$HERE/kanon-lint.sh" "$KANON" --kutu-ici 2>/dev/null)"; LINT_RC=$?
-  K6=$(printf '%s\n' "$LINT_CIKTI" | grep -c 'SARI    K6')
-  if [ "$LINT_RC" -eq 1 ] || [ "$K6" -gt 0 ]; then   # kırmızı YA DA kendi kutusunda çalışmayan gözlem komutu (her koşu olculemedi olur): özet satır
-    KR=$(printf '%s\n' "$LINT_CIKTI" | grep -c 'KIRMIZI')   # renkler ayrı yazılır: K6 sarıdır, kırmızı değil (bağımsız göz tur 4)
-    echo "kosu-sar: kanon-lint — $([ "$KR" -gt 0 ] && printf 'KIRMIZI %s' "$KR" || printf 'kırmızı yok')$([ "$K6" -gt 0 ] && printf ' · SARI K6 gözlem komutu bu kutuda yok %s' "$K6") — bak: kanon-lint.sh ${KOSU_KANON:-<canlı crontab>} --kutu-ici" >&2; fi
+  LINT_CIKTI="$(bash "$HERE/kanon-lint.sh" "$KANON" --kutu-ici 2>/dev/null)"
+  KR=$(printf '%s\n' "$LINT_CIKTI" | grep -c 'KIRMIZI'); K6=$(printf '%s\n' "$LINT_CIKTI" | grep -c 'SARI    K6')
+fi
+# TEK özet satır (çift bildirim yok): kanonda kırmızı · kendi kutusunda çalışmayan gözlem komutu (K6) · bu koşunun kendi K1'i (--kilit + içte flock,
+# kanonda görünmese de — çağrı kanondan farklı olabilir). Renkler ayrı: K6 sarıdır. İş engellenmez, kayıt değişmez.
+if [ "$KR" -gt 0 ] || [ "$K6" -gt 0 ] || [ "$OZ_K1" -eq 1 ]; then
+  echo "kosu-sar: kanon-lint — $([ "$KR" -gt 0 ] && printf 'KIRMIZI %s' "$KR" || printf 'kırmızı yok')$([ "$K6" -gt 0 ] && printf ' · SARI K6 gözlem komutu bu kutuda yok %s' "$K6")$([ "$OZ_K1" -eq 1 ] && printf ' · K1 öz-denetim: bu koşuda --kilit ile komutun içinde flock (%s) — iş hiç koşmaz, içteki flock kalksın' "$IS") — bak: kanon-lint.sh ${KOSU_KANON:-<canlı crontab>} --kutu-ici" >&2
 fi
 _an() { date -u -Iseconds; }   # 0.4.1: damga HEP UTC (+00:00) — cron satırları UTC, elle koşu +03:00 çıkıyordu, aynı dosyada iki dilim (A303)
 

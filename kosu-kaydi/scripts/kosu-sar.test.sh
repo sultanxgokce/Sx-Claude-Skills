@@ -120,9 +120,10 @@ ol "kilit doluyken komut HİÇ koşmadı" "$(test -e "$T/iz" && echo kostu || ec
 ol "rc = kilit kodu 75" "$rc/$(alan rc)" "75/75"
 bash "$S" supur --kilit "$T/kilit2" -- flock -n "$T/kilit2" true 2>"$T/k1-err" >/dev/null; rc=$?
 # iç flock ebeveynin (sarmalayıcının) kilidine çarpar: iş koşmaz, rc 1 → hata (iç flock -E 75 verseydi sahte atlandi-kilit olurdu) — NÂZIR/SEYYAH fikstürü
-ol "0.5.1 K1 öz-denetim: --kilit + içte flock → stderr uyarı; iş düşer (hata), engellenmez" "$(grep -c 'kanon-lint K1' "$T/k1-err")/$(alan sonuc)/$rc" "1/hata/1"
+ol "0.5.1 K1 öz-denetim: --kilit + içte flock → stderr uyarı; iş düşer (hata), engellenmez" "$(grep -c 'K1 öz-denetim' "$T/k1-err")/$(alan sonuc)/$rc" "1/hata/1"
+ol "K1 + kırmızı kanon aynı koşuda → stderr'de TEK kanon-lint satırı (çift bildirim yok)" "$(grep -c 'kosu-sar: kanon-lint' "$T/k1-err")" "1"
 bash "$S" supur --kilit "$T/kilit3" -- true 2>"$T/k1-err2" >/dev/null
-ol "K1 öz-denetim altın: içte flock yoksa uyarı yok" "$(grep -c 'kanon-lint K1' "$T/k1-err2")" "0"
+ol "K1 öz-denetim altın: içte flock yoksa K1 uyarısı yok" "$(grep -c 'K1 öz-denetim' "$T/k1-err2")" "0"
 echo "════ kanon lint'inin çağıranı: sarmalayıcı her koşuda kanonu lint'ler, KIRMIZI varsa stderr'e tek özet satır ════"
 printf '%s\n' "*/5 * * * * bash kosu-sar.sh sahipsiz -- true" > "$T/kanon-kirmizi"   # K3: sahip etiketi yok
 KOSU_KANON="$T/kanon-kirmizi" bash "$S" sahipsiz -- true 2>"$T/lint-err" >/dev/null; rc=$?

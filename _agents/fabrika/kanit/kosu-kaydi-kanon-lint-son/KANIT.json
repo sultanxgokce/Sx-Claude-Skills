@@ -1,7 +1,7 @@
 {
   "is": "kosu-kaydi-kanon-lint-son",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-10T12:49:16+03:00",
+  "guncelleme": "2026-10-10T12:51:46+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -39,29 +39,29 @@
       "etiket": "sarmalayici",
       "asama": "sonra",
       "dosya": "olcum-sarmalayici-sonra.txt",
-      "sha256": "6bac4bf6864b61a305d4fdd962bbf1335faa77f18b3ef9bb2bc6fa58840fcb6b",
+      "sha256": "cdc54f60d328380410ea89beb12b7148d856fec327266371b62130c774bc09b6",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/kosu-sar.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T12:49:16+03:00",
-      "sure_sn": 31.4
+      "zaman": "2026-10-10T12:51:46+03:00",
+      "sure_sn": 22.5
     },
     {
       "tur": "olcum",
       "etiket": "cagiran",
       "asama": "sonra",
       "dosya": "olcum-cagiran-sonra.txt",
-      "sha256": "c921851b01d6aa5fba3e0625ce49d02754512849e7aa3e13c789a065dd085cd2",
+      "sha256": "f34e94d5c12e828a1d07f77cfd06d4b1a9e2ba2285812e055106dbbecb4a5d1b",
       "komut": [
         "bash",
         "/config/.claude/jobs/d69a1b07/tmp/lint-cagiran-kanit.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T12:45:26+03:00",
+      "zaman": "2026-10-10T12:51:46+03:00",
       "sure_sn": 0.3
     },
     {
@@ -81,5 +81,5 @@
       "sure_sn": 0.0
     }
   ],
-  "imza": "082618b60d297b404760030096c1eac1d374e094996910e084528b875a0278dc"
+  "imza": "4cd337d5d36dd7586b6c3675d4ad8c969fad443bd3275adef476667cf6185924"
 }

@@ -1,0 +1,28 @@
+{
+  "tur": 2,
+  "is": "kosu-kaydi-kanon-lint-son",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-10T12:49:48+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 44923,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Serdar, K1–K6 lint’ini ve her koşudaki çağıranı kurmuş; 40 lint ve 108 sarmalayıcı kapısının tamamı yeşil, dolayısıyla doğru şey yapılmış. Lakin K1’de aynı koşu stderr’e hem öz-denetim uyarısı hem lint özeti basabildiği için “tek özet satır” sözleşmesi tam kapanmamış; önce bu çift bildirimi teke indir.",
+    "bulgular": [
+      {
+        "ne": "K1 bulunan bir koşuda stderr tek satırla sınırlı değil: sarmalayıcı önce ayrı K1 öz-denetim uyarısı, ardından kanon lint’inin özetini yazabilir.",
+        "kanit": "kosu-sar.sh ekinde ilk blok `echo \"kosu-sar: UYARI kanon-lint K1 ...\"` ile ayrı satır basıyor; sonraki lint bloğu aynı kırmızı kanon için `echo \"kosu-sar: kanon-lint — ...\"` ile ikinci satırı basıyor. Sınav yalnız ilk uyarının varlığını ve özetin ayrı senaryoda varlığını ölçüyor, aynı K1 koşusunda toplam stderr satırının bir olduğunu sınamıyor.",
+        "konum": "kosu-kaydi/scripts/kosu-sar.sh: KILIT_RC sonrasındaki K1 öz-denetim bloğu ve KANON_GECICI sonrasındaki lint çağıran bloğu; kosu-kaydi/scripts/kosu-sar.test.sh K1/çağıran ekleri",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü lint dosyasının origin/main’de bulunmadığını, sonra ölçümleri lint sınavında 40/40 ve sarmalayıcı sınavında 108/108 geçişi gösteriyor; gerçekçi sahipsiz kanon örneği de çağıranın kırmızı özeti ürettiğini doğruluyor. Bununla birlikte mevcut sınavlar K1 öz-denetim uyarısı ile lint özetinin aynı koşuda birleşip tek stderr satırı kaldığını ölçmediğinden, iş kartındaki “tek özet satır” iddiası bütünüyle kanıtlanmış değil."
+  }
+}
