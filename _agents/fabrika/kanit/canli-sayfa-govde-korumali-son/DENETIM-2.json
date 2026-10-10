@@ -1,0 +1,21 @@
+{
+  "tur": 2,
+  "is": "canli-sayfa-govde-korumali-son",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-10T12:43:56+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 34082,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İstenen üçüncü hâl eksiksiz kurulmuş: --imza ile gövde ölçülüyor, imza yoksa sarı kayıt ve rc 5 üretiliyor, liste ile dogrula bunu yeşile çevirmeden ayrı gösteriyor; gövde okunamazsa rc 3 ile kayıt yazılmıyor. Önceki turun büyük gövdede yanlış sarıya düşme kusuru borusuz aramayla giderilmiş ve 400 KB gövdede imzanın başta olduğu sınavla ölçülmüş; üretimi durduracak sorun görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; aynı sınavın önce/sonra ölçüm çifti önce 20 hata, sonra rc 0 gösteriyor. Sonraki sınav çıktısında sarı kayıt, rc 5, liste, dogrula, sarıdan açığa değişim ve açık gövde yolları doğrudan görülüyor; tam komutun rc 0 kaydı, 60 satırdan sonra kalan 400 KB gövde ve okunamayan gövde kontrollerinin de geçtiğini topluca kanıtlıyor. Sürüm 1.2.0 hem SKILL.md hem katalog için ayrıca ölçülmüş; manifestte sarı kayıt yok ve CLI işi olduğundan ekran karesi gerekmiyor."
+  }
+}
