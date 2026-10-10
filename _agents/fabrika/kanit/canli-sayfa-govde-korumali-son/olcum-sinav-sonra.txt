@@ -1,5 +1,5 @@
 $ bash canli-sayfa/scripts/canli-sayfa.test.sh
-# rc=0 sure=12.7s zaman=2026-10-10T12:32:32+03:00
+# rc=0 sure=13.4s zaman=2026-10-10T12:41:12+03:00
 --- stdout ---
 == T1: kapı arkasındaki canlı sayfa kayda girer ==
   ✓ rc 0
@@ -46,8 +46,10 @@ $ bash canli-sayfa/scripts/canli-sayfa.test.sh
   ✓ yeşil tik basmıyor
   ✓ listede sarı hâl görünür
   ✓ listede kapı arkasında demiyor
-  ✓ dogrula aynı imzayla yeniden ölçer → rc 0
-  ✓ doğrulandı
+  ✓ dogrula aynı imzayla yeniden ölçer → hâlâ sarı → rc 5 (yeşil değil)
+  ✓ sarı satır
+  ✓ yeşil tik yok
+  ✓ özet sarı sayar
   ✓ imza anonimde göründü → rc 1
   ✓ kapı değişti yazar
   ✓ imzasız: eski kural, 2xx = açık → rc 4
@@ -240,5 +242,5 @@ $ bash canli-sayfa/scripts/canli-sayfa.test.sh
   ✓ kayıt dizini yokken liste rc 0
   ✓ sıfır sayfa
 
-════════ SONUÇ: PASS=223 · FAIL=0 ════════
+════════ SONUÇ: PASS=225 · FAIL=0 ════════
 --- stderr ---

@@ -1,44 +1,44 @@
 {
-  "is": "canli-sayfa-govde-korumali",
+  "is": "canli-sayfa-govde-korumali-son",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-10T12:32:32+03:00",
+  "guncelleme": "2026-10-10T12:41:12+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "sinav",
       "asama": "once",
       "dosya": "olcum-sinav-once.txt",
-      "sha256": "92d7f2c6ad4ee144807594e4721c44a859c4279b09ac5793a8c15998a420745c",
+      "sha256": "05d7b63708155d7d8c69bc8c6d4688dae5ea014006d5e428fabea80aee679a64",
       "komut": [
         "bash",
         "/config/.claude/jobs/d69a1b07/tmp/canli-govde-once.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T12:30:34+03:00",
-      "sure_sn": 11.8
+      "zaman": "2026-10-10T12:40:59+03:00",
+      "sure_sn": 11.9
     },
     {
       "tur": "olcum",
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "d6d67189ad45cbffd9346dfcbe4823ef7b86021f391a23b3b4cbe7cbdfbb2c1f",
+      "sha256": "03f988d0f1da5b85a0eff845c143e41b2f7ef1ff7016b84c4ed488443f8ca706",
       "komut": [
         "bash",
         "canli-sayfa/scripts/canli-sayfa.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T12:32:32+03:00",
-      "sure_sn": 12.7
+      "zaman": "2026-10-10T12:41:12+03:00",
+      "sure_sn": 13.4
     },
     {
       "tur": "olcum",
       "etiket": "surum",
       "asama": "sonra",
       "dosya": "olcum-surum-sonra.txt",
-      "sha256": "0c40da1d05d2400f3a6180b6ce740d750450965e0970816320ac36d8e91d0154",
+      "sha256": "205f09dc81ccd1ff79c92891d1361f84c5f4fb4e9859267ed38a268c294bfaae",
       "komut": [
         "bash",
         "-c",
@@ -46,9 +46,9 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T12:20:23+03:00",
+      "zaman": "2026-10-10T12:41:12+03:00",
       "sure_sn": 0.0
     }
   ],
-  "imza": "6839c027bc6063bd153733b558202575793607d35057238cd66bd7d40be5b0a9"
+  "imza": "5ee8901719bfec3d69d12282ffe7246d5520f775d1d918daef216ecdf3fcf523"
 }

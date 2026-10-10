@@ -258,18 +258,20 @@ PY
     ;;
   dogrula)
     t="$(topla 0)" || hata "kayıt okunamadı" 3
-    k=0; n=0
+    k=0; n=0; sari=0
     while IFS=$'\t' read -r a g im ad; do
       [ -n "$a" ] || continue; n=$((n + 1)); [ "$im" = "-" ] && im=""   # boş imza "-" taşınır: ardışık sekme read'de çöker, sütun kayardı
       o="$(olc "$a" "$im")"; r=$?; y="${o%% *}"   # kayıttaki imzayla: gövde korumalı sayfa yine gövdeden ölçülür
       if [ "$r" -ne 0 ]; then echo "✗ AÇILMIYOR   $ad · $a ($o)"; k=1
       elif [ "$y" != "$g" ]; then echo "✗ KAPI DEĞİŞTİ $ad · $a (kayıtta: $g · şimdi: $y)"; k=1
+      elif [ "$y" = olculemedi ]; then echo "△ ÖLÇÜLEMEDİ  $ad · $a ($o) — sarı: canlı ama kapı bilinmiyor, yeşil değil"; sari=$((sari + 1))
       else echo "✓ $ad · $a ($o)"; fi
     done < <(printf '%s' "$t" | python3 -c 'import json,sys
 for k in json.load(sys.stdin)["sayfalar"]: print(k["adres"], k["giris"], k.get("imza") or "-", k["ad"], sep="\t")')
     b="$(printf '%s' "$t" | python3 -c 'import json,sys; print(len(json.load(sys.stdin)["bozuk"]))')"
     [ "$b" -eq 0 ] || { echo "✗ bozuk kayıt: $b"; k=1; }
-    echo "── $n sayfa ölçüldü"
+    echo "── $n sayfa ölçüldü$([ "$sari" -gt 0 ] && printf ' · %s sarı (giriş ölçülemedi)' "$sari")"
+    [ "$k" -eq 0 ] && [ "$sari" -gt 0 ] && exit 5   # sorun yok ama sarı var: yeşil basılmaz (rc 5)
     exit "$k"
     ;;
   *) echo "kullanım: canli-sayfa.sh ekle|liste|emekli|dogrula  (ayrıntı: dosyanın başı)" >&2; exit 2 ;;

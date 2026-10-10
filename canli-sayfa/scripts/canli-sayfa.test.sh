@@ -100,7 +100,8 @@ icerir "SARI olduğunu söyler" "$CIKTI" "ÖLÇÜLEMEDİ (SARI)"; icerir "kapal�
 icermez "yeşil tik basmıyor" "$CIKTI" "✓ kayda girdi"
 cag liste; icerir "listede sarı hâl görünür" "$CIKTI" "GİRİŞ ÖLÇÜLEMEDİ (sarı: gövde korumalı, kapı bilinmiyor) · gövdeden ölçüldü"
 icermez "listede kapı arkasında demiyor" "$CIKTI" "kapı arkasında"
-cag dogrula; esit "dogrula aynı imzayla yeniden ölçer → rc 0" 0 "$RC"; icerir "doğrulandı" "$CIKTI" "✓ Karne Sayfası"
+cag dogrula; esit "dogrula aynı imzayla yeniden ölçer → hâlâ sarı → rc 5 (yeşil değil)" 5 "$RC"
+icerir "sarı satır" "$CIKTI" "△ ÖLÇÜLEMEDİ  Karne Sayfası"; icermez "yeşil tik yok" "$CIKTI" "✓ Karne Sayfası"; icerir "özet sarı sayar" "$CIKTI" "1 sarı (giriş ölçülemedi)"
 # gövde değişip imza anonimde görünür olursa KAPI DEĞİŞTİ (artık gerçekten açık)
 sed -i 's|https://karne.ornek.com) printf .*|https://karne.ornek.com) printf "<title>Karne Raporu</title>" ;;|' "$T/govde.sh"
 cag dogrula; esit "imza anonimde göründü → rc 1" 1 "$RC"; icerir "kapı değişti yazar" "$CIKTI" "KAPI DEĞİŞTİ"
