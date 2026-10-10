@@ -25,20 +25,21 @@ bul() { # bul <renk> <kural> <satır no> <mesaj>
 }
 declare -A IS_SATIR=()
 n=0; onceki=""
-while IFS= read -r satir || [ -n "$satir" ]; do
-  n=$((n+1))
+while IFS= read -r ham || [ -n "$ham" ]; do
+  n=$((n+1)); satir="$(printf '%s' "$ham" | tr '\t' ' ')"   # crontab alan ayracı sekme de olabilir: ayrıştırma boşlukla (bağımsız göz tur 1)
   case "$satir" in
     KOSU_KUTU=*|KOSU_KANON=*) bul S K5 "$n" "ortam satırı ($(printf '%s' "$satir" | cut -d= -f1)) — oda kancası bu satırı canlıya taşımaz, recreate'te kaybolur; değişkeni sarılı satırın içine taşı" ;;
   esac
-  if printf '%s' "$satir" | grep -qE '^[[:space:]]*[0-9*@]' && printf '%s' "$satir" | grep -q 'kosu-sar\.sh '; then
+  if printf '%s' "$satir" | grep -qE '^[[:space:]]*[0-9*@]' && printf '%s' "$satir" | grep -qE 'kosu-sar\.sh[[:space:]]'; then   # boşluk YA DA sekme (crontab ikisini de ayraç sayar)
     SARILI=$((SARILI+1))
     is="$(printf '%s' "$satir" | sed -nE 's/.*kosu-sar\.sh[[:space:]]+([a-z0-9-]+).*/\1/p')"
     sarmal="${satir%% -- *}"; komut="${satir#* -- }"; [ "$komut" = "$satir" ] && komut=""
     # sahip: satır üstü '# sahip:' (hemen önceki yorum satırı) ya da satır sonu 'sahip:<ROL>'
-    if ! printf '%s' "$satir" | grep -qE '#.*sahip:[^[:space:]]+' && ! printf '%s' "$onceki" | grep -qE '^#[[:space:]]*sahip:'; then
+    # iki biçimde de etiketin DEĞERİ olmalı: boş '# sahip:' etiket değildir (bağımsız göz tur 1)
+    if ! printf '%s' "$satir" | grep -qE '#.*sahip:[^[:space:]]+' && ! printf '%s' "$onceki" | grep -qE '^#[[:space:]]*sahip:[[:space:]]*[^[:space:]]'; then
       bul K K3 "$n" "sahip etiketi yok (iş: ${is:-?}) — satır sonuna '# ${is:-<is>} sahip:<ROL>' ekle"; fi
     if printf '%s' "$sarmal" | grep -q -- '--kilit' && printf '%s' "$komut" | grep -qE '(^|[[:space:];&|])flock([[:space:]]|$)'; then
-      bul K K1 "$n" "--kilit VE komut içinde flock (iş: ${is:-?}) — iç kilit ebeveyne çarpar, HER koşu atlandi-kilit, iş hiç koşmaz; önce içteki flock kalkar"; fi
+      bul K K1 "$n" "--kilit VE komut içinde flock (iş: ${is:-?}) — iç kilit ebeveynin kilidine çarpar, iş HİÇ koşmaz (iç flock -E 75 ise sahte atlandi-kilit, değilse her koşu hata); önce içteki flock kalkar"; fi
     if ! printf '%s' "$sarmal" | grep -q -- '--kilit' && printf '%s' "$komut" | grep -qE '(^|[[:space:];&|])flock[[:space:]]+-n'; then
       bul S K2 "$n" "flock -n sarmalayıcının İÇİNDE (iş: ${is:-?}) — kilit/hata ayrımı yok; --kilit <dosya>'ya taşı"; fi
     if [ -n "$is" ]; then

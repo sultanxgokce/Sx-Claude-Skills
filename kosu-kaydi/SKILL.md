@@ -86,7 +86,7 @@ kısıtlıysa OR). Tarama 1500 gün (29 Şubat gibi seyrek ama geçerli ifadeler
 `bash scripts/kanon-lint.sh <kanon-dosyası|-> [--kutu-ici]` — yalnız **sarılı** satırlara bakar (sarılmamış iş K6 listesinin, okuyucunun konusu):
 | | Kural | Niçin |
 |---|---|---|
-| K1 🔴 | `--kilit` **ve** komut içinde `flock` | iç kilit ebeveynin kilidine çarpar → **her koşu** `atlandi-kilit`, iş hiç koşmaz (SEYYAH fikstürü, A309). Önce içteki `flock` kalkar |
+| K1 🔴 | `--kilit` **ve** komut içinde `flock` | iç kilit ebeveynin kilidine çarpar → iş **hiç koşmaz**: iç `flock -E 75` ise her koşu sahte `atlandi-kilit`, değilse her koşu `hata` (SEYYAH fikstürü, A309). Önce içteki `flock` kalkar. Sarmalayıcı 0.5.1 bunu koşu anında stderr'e de uyarır |
 | K2 △ | `flock -n` içeride, `--kilit` yok | kilit/hata ayrımı yok (K4b) |
 | K3 🔴 | sahip etiketi yok (satır üstü/sonu) | kayıt `bilinmiyor` yazar; kanon düzeltilmeli (K3) |
 | K4 🔴 | aynı iş iki sarılı satırda | ikileme — restart'ta iki kez koşar (A313) |

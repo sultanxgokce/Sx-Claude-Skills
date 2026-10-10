@@ -25,6 +25,9 @@ done
 [[ "$IS" =~ ^[a-z0-9-]+$ ]] || { echo "geçersiz iş adı: $IS" >&2; exit 2; }
 [ $# -gt 0 ] || { echo "komut yok" >&2; exit 2; }
 KILIT_RC=75   # --kilit ile kilit alınamayınca yazılan rc (EX_TEMPFAIL) — şema K4b sabit, ayar yok; komut hiç koşmaz → atlandi-kilit
+# 0.5.1 — K1 öz-denetim (lint'in en ağır kuralı, koşu anında da uyarır; oda kancası lint'i henüz çağırmıyor): --kilit verilmiş VE
+# komutun kendisi flock çağırıyorsa iç kilit ebeveyne çarpar, her koşu atlanır. İş engellenmez (satır yine yazılır), stderr'e uyarı.
+if [ -n "$KILIT" ]; then for _a in "$@"; do case "$_a" in flock|*/flock) echo "kosu-sar: UYARI kanon-lint K1 — '--kilit' ile sarılı komutun içinde flock var ($IS): iç kilit ebeveynin kilidine çarpar, iş hiç koşmaz (hata ya da sahte atlandi-kilit); içteki flock'u kaldır" >&2; break;; esac; done; fi
 # Kilidi SARMALAYICI alır (sezgi yok): kanon satırındaki 'flock -n' yerine '--kilit <dosya>'. flock alt komutun rc'sini olduğu gibi
 # geçirdiği için "75 geldi → kilitti" çıkarımı kesin değildi (bağımsız göz, tur 4); burada kilit alınamadığını flock'un kendisi söyler.
 _kutu_adi() {  # KOSU_KUTU → DEFAULT_WORKSPACE son parçası (kapimda ile aynı türetme) → bilinmiyor

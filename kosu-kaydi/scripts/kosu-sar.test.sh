@@ -118,6 +118,11 @@ bash "$S" supur --kilit "$T/kilit" -- bash -c 'echo KOSTU > "'"$T"'/iz"' >/dev/n
 ol "--kilit dolu → atlandi-kilit (hata değil)" "$(alan sonuc)" "atlandi-kilit"
 ol "kilit doluyken komut HİÇ koşmadı" "$(test -e "$T/iz" && echo kostu || echo kosmadi)" "kosmadi"
 ol "rc = kilit kodu 75" "$rc/$(alan rc)" "75/75"
+bash "$S" supur --kilit "$T/kilit2" -- flock -n "$T/kilit2" true 2>"$T/k1-err" >/dev/null; rc=$?
+# iç flock ebeveynin (sarmalayıcının) kilidine çarpar: iş koşmaz, rc 1 → hata (iç flock -E 75 verseydi sahte atlandi-kilit olurdu) — NÂZIR/SEYYAH fikstürü
+ol "0.5.1 K1 öz-denetim: --kilit + içte flock → stderr uyarı; iş düşer (hata), engellenmez" "$(grep -c 'kanon-lint K1' "$T/k1-err")/$(alan sonuc)/$rc" "1/hata/1"
+bash "$S" supur --kilit "$T/kilit3" -- true 2>"$T/k1-err2" >/dev/null
+ol "K1 öz-denetim altın: içte flock yoksa uyarı yok" "$(grep -c 'kanon-lint K1' "$T/k1-err2")" "0"
 ( KOSU_KILIT_RC=99 bash "$S" supur --kilit "$T/kilit" -- true >/dev/null; echo "rc=$?" > "$T/rc99" ); ol "kilit kodu ortamla DEĞİŞMEZ (şema sabit 75)" "$(alan rc)/$(cat "$T/rc99")" "75/rc=75"
 bash "$S" supur -- bash -c 'exit 75' >/dev/null
 ol "--kilit YOKKEN işin kendi 75'i → hata (sezgi yok)" "$(alan sonuc)" "hata"

@@ -37,6 +37,15 @@ printf '%s\n' "# sahip: MUAVIN" "# damga: /x/log" "35 * * * * $W supur -- bash /
 kos "$T/k3b"; ol "K3: sahip notu araya başka yorum girince satır üstü sayılmaz → rc 1 (sarmalayıcı da yalnız hemen üstteki bloğu okur)" "$RC" "1"
 printf '%s\n' "35 * * * * $W supur -- bash /x/supur.sh # supur damga:/x/log" > "$T/k3c"
 kos "$T/k3c"; ol "K3: satır sonunda damga var sahip yok → rc 1" "$RC" "1"
+printf '%s\n' "# sahip:" "35 * * * * $W supur -- bash /x/supur.sh" > "$T/k3d"
+kos "$T/k3d"; ol "K3: satır üstü '# sahip:' DEĞERSİZ → etiket sayılmaz, rc 1" "$RC" "1"
+printf '%s\n' "35 * * * * $W supur -- bash /x/supur.sh # supur sahip:" > "$T/k3e"
+kos "$T/k3e"; ol "K3: satır sonu 'sahip:' değersiz → rc 1" "$RC" "1"
+
+echo "════ sekmeli crontab satırları (alan ayracı sekme) — bütün kurallar yine işler ════"
+printf '35\t*\t*\t*\t*\t%s\tsupur\t--kilit\t/x.lock\t--\tflock -n /x.lock bash /x/supur.sh\n' "$W" > "$T/sekme"
+kos "$T/sekme"; ol "sekmeli: sarılı satır tanındı" "$(printf '%s' "$CIKTI" | grep -c 'sarılı satır: 1')" "1"
+ol "sekmeli: K1 ve K3 kırmızı" "$(printf '%s' "$CIKTI" | grep -cE 'KIRMIZI K[13]')" "2"; ol "sekmeli rc 1" "$RC" "1"
 
 echo "════ K4 · aynı iş iki sarılı satırda (KIRMIZI, ikileme) ════"
 printf '%s\n' "*/5 * * * * $W bulgu -- bash /x/a.sh # bulgu sahip:NAZIR" "@reboot $W bulgu -- bash /x/a.sh # bulgu sahip:NAZIR" > "$T/k4"
