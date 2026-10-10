@@ -106,6 +106,7 @@ elif [ "$NOBETCI" -eq 1 ] && [ -n "$GOZLEM" ]; then   # nöbetçi kipi, GÖZLEML
   elif cmp -s "$G_ONCE" "$G_SONRA"; then CIKTI_VAR=0; else CIKTI_VAR=1; fi   # bayt bayt aynı = dokunmadı · değişti = iş yaptı (ör. dinleyen pid)
   # 0.5 / şema 1.4 (A310, NÂZIR): hüküm dayanağıyla okunsun — kırpılmış gözlemin İLK 120 BAYTI satıra girer (uzun/çok satırlı çıktı kaydı şişirmesin);
   # geçersiz UTF-8/NUL JSON'u bozmaz (replace). Gözlemsiz kipte iki alan null kalır. Gözlem komutu düştüyse eline ne geçtiyse o (çoğu kez boş dizge).
+  # SIRA: $G_ONCE/$G_SONRA dosyaları _gozle'nin KIRPILMIŞ çıktısıdır (ham dosya orada silinir) → kırpma önce, 120 bayt sonra (bağımsız göz tur 2 sorusu).
   _gozlem_j() { python3 -c 'import json,sys;print(json.dumps(open(sys.argv[1],"rb").read()[:120].decode("utf-8","replace"),ensure_ascii=False))' "$1" 2>/dev/null || echo null; }
   G_ONCE_J="$(_gozlem_j "$G_ONCE")"; G_SONRA_J="$(_gozlem_j "$G_SONRA")"
   rm -f "$G_ONCE" "$G_SONRA"

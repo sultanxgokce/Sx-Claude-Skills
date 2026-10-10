@@ -87,7 +87,8 @@ printf 'a\0b' > "$T/nul1"; bash "$S" nobetci --nobetci --gozlem "cat $T/nul1" --
 ol "NUL'lu gözlem → satır geçerli JSON, alan dolu" "$(tail -1 "$T"/kayit/sinav.*.jsonl | python3 -c 'import json,sys;d=json.loads(sys.stdin.read());print(len(d), len(d["gozlem_once"])>0)')" "17 True"
 bash "$S" nobetci --nobetci --gozlem "/yok/gozlem-komutu" -- true >/dev/null 2>&1
 ol "gözlem komutu düştü → olculemedi, alanlar boş dizge" "$(alan sonuc)/[$(alan gozlem_once)]" "olculemedi/[]"
-printf 'pid-100\n' > "$T/dinleyen"
+printf '  pid-300  \n\n' > "$T/dinleyen"; bash "$S" nobetci --nobetci --gozlem "cat $T/dinleyen" -- true >/dev/null
+ol "baş/son boşluklu gözlem → alanlar KIRPILMIŞ (kırpma 120 bayttan ÖNCE)" "[$(alan gozlem_once)][$(alan gozlem_sonra)]" "[pid-300][pid-300]"
 printf 'pid-100\n' > "$T/dinleyen"   # sonraki kapılar dolu gözlemle sürer
 bash "$S" nobetci --nobetci --gozlem "/yok/gozlem-komutu" -- true >/dev/null 2>&1
 ol "gözlem komutu çalışmıyor → olculemedi (dokunmadı DENMEZ)" "$(alan sonuc)" "olculemedi"

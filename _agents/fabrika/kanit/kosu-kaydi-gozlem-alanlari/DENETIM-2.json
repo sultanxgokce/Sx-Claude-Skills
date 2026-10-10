@@ -1,0 +1,34 @@
+{
+  "tur": 2,
+  "is": "kosu-kaydi-gozlem-alanlari",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-10T10:58:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 24237,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İstenen şema 1.4 alanları, gözlemsiz kipte null davranışı ve ilk 120 bayt sınırı eklenmiş; araç imzalı önce/sonra ölçümü ana senaryoların geçtiğini gösteriyor. Ancak satıra yazılan değer kırpılmış gözlem değil doğrudan ham dosyanın ilk 120 baytı; boşluk kırpma davranışı alanlar üzerinde sınanmadığından önce bu sözleşme açığı çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "gozlem_once/gozlem_sonra değerleri kırpılmış çıktıdan değil ham gözlem dosyasından üretiliyor; baştaki/sondaki boşluklar ve satır sonları kayda taşınabilir, ayrıca kırpma öncesi 120 bayt kesildiği için talep edilen değer değişebilir.",
+        "kanit": "`_gozlem_j()` doğrudan `open(sys.argv[1],\"rb\").read()[:120]` sonucunu JSON'a çeviriyor; herhangi bir kırpma işlemi yok. Sınav boş dosyayı ve `pid-100\\n` örneğini deniyor, fakat alanların yalnız boşluk/satır sonu içeren gözlemde boş dizge olduğunu doğrulamıyor; komut ikamesi de sondaki satır sonunu karşılaştırma sırasında gizliyor.",
+        "konum": "kosu-kaydi/scripts/kosu-sar.sh: `_gozlem_j` tanımı; kosu-kaydi/scripts/kosu-sar.test.sh: şema 1.4 gözlem değerleri sınavları",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Sınav hazırlığında aynı `pid-100` yazımı art arda iki kez yapılmış.",
+        "kanit": "Diff sonunda `printf 'pid-100\\n' > \"$T/dinleyen\"` satırı biri açıklamasız, biri `# sonraki kapılar...` açıklamalı olarak peş peşe bulunuyor.",
+        "konum": "kosu-kaydi/scripts/kosu-sar.test.sh: şema 1.4 sınav bloğunun sonu",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok; sınav için önce 94/6, sonra 100/0 ölçüm çifti mevcut. Kanıt 17 alanı, null/boş ayrımını, 120 bayt sınırını, NUL ile geçerli JSON'u ve gözlem komutu hata hâlini ölçüyor; fakat talepteki “kırpılmış gözlem çıktısı” için boşluklu çıktının kaydedilen alan değerini sınamadığından bu iddiayı bütünüyle kanıtlamıyor."
+  }
+}
