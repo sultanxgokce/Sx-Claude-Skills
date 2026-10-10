@@ -1,0 +1,21 @@
+{
+  "tur": 3,
+  "is": "elogo-depoya-tasima",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-10T18:18:35+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 26037,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "MUHASİP canlı düzeltmeleri gizlenmiş depo kopyasına taşınmış, #280 tabanı üstüne uygulanmış ve kurulum kapsam dışında tutulmuş; önceki CI yanlış-yol açığı da artık yalnız gerçekten verilmeyen varsayılan yolu atlayacak biçimde kapanmış. Açık yanlış yolun kırmızıya düştüğü, temiz CI davranışı, 37/37 bayt eşitliği, gizlilik ve sınavlar araç imzalı ölçümlerle gösterildiğinden üretime engel bulgu kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam, sarı kayıt yok. Önce/sonra sınav çifti 384→407; bayt eşitliği 37/37, gizlilik pozitif kontrolü, mutasyonlar, yükleme yolu ve açık yanlış yolun i1 rc=1 üretmesi taşıma ile tur-2 düzeltmesini destekliyor. Gerçek CI kaydı varsayılan kutu-yerel türev denetimini açıkça “ÖLÇÜLEMEDİ” diye ayırıyor; bu bölüm başarı kanıtı değildir, fakat açık yanlış yol ayrıca ölçülmüş ve söz konusu kutu-yerel denetimin temiz CI’da ölçülememesi tasarlanan davranıştır. Kurulum kanıtı aranmaması doğrudur; kart bunu açıkça kapsam dışında bırakmıştır."
+  }
+}
