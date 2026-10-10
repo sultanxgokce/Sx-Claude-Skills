@@ -1,7 +1,7 @@
 {
   "is": "kosu-kaydi-gozlem-alanlari",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-10T10:55:41+03:00",
+  "guncelleme": "2026-10-10T10:58:06+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -23,15 +23,15 @@
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "fb0b4c17ddc3495055d681af733746118f93b58c8d4c1fd7c684fa370e95d7f7",
+      "sha256": "c4363ebd19e635fd070d0a68aa979139bac46cefca34a7c99a7833112a10a7d6",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/kosu-sar.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T10:55:41+03:00",
-      "sure_sn": 17.4
+      "zaman": "2026-10-10T10:58:06+03:00",
+      "sure_sn": 16.0
     },
     {
       "tur": "olcum",
@@ -50,5 +50,5 @@
       "sure_sn": 0.0
     }
   ],
-  "imza": "41282ca580e43422bfbf10b3a1643445909f35c436942f4260540cc261109861"
+  "imza": "00f4108b70da2f35924e9065315721c7b5661f42262b165549ce800f1f049f84"
 }
