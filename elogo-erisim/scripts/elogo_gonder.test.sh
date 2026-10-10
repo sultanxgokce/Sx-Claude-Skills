@@ -86,7 +86,11 @@ sys.path.insert(0, ".")
 import elogo_soap
 elogo_soap._cagir = lambda *a, **k: (_ for _ in ()).throw(AssertionError("AĞA ÇIKTI"))
 import elogo_gonder
-f = pathlib.Path(tempfile.mkdtemp()) / "a.xml"; f.write_bytes(b"<Invoice/>")
+NS = ('xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" '
+      'xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"')
+f = pathlib.Path(tempfile.mkdtemp()) / "a.xml"
+# Numarali sentetik belge: ad artik DOSYA ADINDAN degil cbc:ID den turuyor.
+f.write_bytes(f"<Invoice {NS}><cbc:ID>FTR0000000000001</cbc:ID></Invoice>".encode())
 rc = elogo_gonder._main([str(f)])            # bayraksız
 raise SystemExit(0 if rc == 0 else 1)
 PY
@@ -114,7 +118,7 @@ elogo_soap._cagir = lambda *a, **k: (_ for _ in ()).throw(AssertionError("AĞA �
 elogo_soap.login = lambda *a, **k: (_ for _ in ()).throw(AssertionError("AĞA ÇIKTI"))
 import elogo_gonder
 bek = int(sys.argv[1])
-f = pathlib.Path(tempfile.mkdtemp()) / "a.xml"; f.write_bytes(b"<Invoice/>")
+f = pathlib.Path(tempfile.mkdtemp()) / "a.xml"; f.write_bytes(b'<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"><cbc:ID>FTR0000000000001</cbc:ID></Invoice>')  # numarali: ad belgeden turer (#280)
 rc = elogo_gonder._main([str(f), "--gercekten-gonder", *sys.argv[2:]])
 raise SystemExit(0 if rc == bek else 1)
 RETPY
@@ -157,7 +161,7 @@ import elogo_soap
 for f in ("_cagir", "login", "kimlik_env"):
     setattr(elogo_soap, f, lambda *a, **k: (_ for _ in ()).throw(AssertionError("AGA-CIKTI")))
 import elogo_gonder
-x = pathlib.Path(tempfile.mkdtemp()) / "a.xml"; x.write_bytes(b"<Invoice/>")
+x = pathlib.Path(tempfile.mkdtemp()) / "a.xml"; x.write_bytes(b'<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"><cbc:ID>FTR0000000000001</cbc:ID></Invoice>')  # numarali: ad belgeden turer (#280)
 sys.exit(elogo_gonder._main([str(x), "--canli", "--gercekten-gonder",
                              "--alias", "urn:mail:defaultpk@ornekfirma",
                              "--sultan-onayi", "23.08.2026 Sultan: sinav"]))
@@ -179,6 +183,61 @@ kilit_vaka "demo"             "demo"    0
 # 🔴 Karşı-vaka: tanınan 'canli' değeri GEÇMELİ. Yoksa muhafızı 'her şeyi reddet' yapıp
 #    sınav yeşile boyanır — aşırı-daraltma kapanı (muhafiz.test.sh C bölümünün kardeşi).
 kilit_vaka "canli"            "canli"   1
+
+echo "AD · 🔴 paket adı belgeden türer, dosya adına düşmez (gövde kusuru)"
+python3 - <<'PY' >/dev/null 2>&1
+import sys, pathlib, tempfile
+sys.path.insert(0, ".")
+import elogo_soap
+elogo_soap._cagir = lambda *a, **k: (_ for _ in ()).throw(AssertionError("AĞA ÇIKTI"))
+import elogo_gonder
+# Numarasız/kimliksiz belge: eskiden dosya adına düşerdi (kusur), şimdi DURUR.
+f = pathlib.Path(tempfile.mkdtemp()) / "cok-uzun-bir-dosya-adi.xml"
+f.write_bytes(b"<Invoice/>")
+rc = elogo_gonder._main([str(f)])
+raise SystemExit(0 if rc == 1 else 1)
+PY
+rc=$?
+if [[ $rc -eq 0 ]]; then GECEN=$((GECEN+1)); echo "  ✓ numarasız belgede ad UYDURULMADI, gönderim DURDU"
+else DUSEN=$((DUSEN+1)); echo "  ✗ numarasız belgede dosya adına düşülmüş (rc=$rc)"; fi
+
+python3 - <<'PY' >/dev/null 2>&1
+import sys, pathlib, tempfile
+sys.path.insert(0, ".")
+import elogo_soap
+elogo_soap._cagir = lambda *a, **k: (_ for _ in ()).throw(AssertionError("AĞA ÇIKTI"))
+import elogo_gonder
+# Açıkça verilmiş UZUN ad: ret ağa çıkmadan, numara harcanmadan düşer.
+f = pathlib.Path(tempfile.mkdtemp()) / "a.xml"
+f.write_bytes(b"<Invoice/>")
+rc = elogo_gonder._main([str(f), "--belge-adi", "A" * 52])
+raise SystemExit(0 if rc == 1 else 1)
+PY
+rc=$?
+if [[ $rc -eq 0 ]]; then GECEN=$((GECEN+1)); echo "  ✓ uzun ad AĞA ÇIKMADAN reddedildi"
+else DUSEN=$((DUSEN+1)); echo "  ✗ uzun ad kapıdan geçti (rc=$rc)"; fi
+
+python3 - <<'PY' >/dev/null 2>&1
+import sys, pathlib, tempfile
+sys.path.insert(0, ".")
+import elogo_soap
+elogo_soap._cagir = lambda *a, **k: (_ for _ in ()).throw(AssertionError("AĞA ÇIKTI"))
+import elogo_gonder, io, contextlib
+NS = ('xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" '
+      'xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"')
+f = pathlib.Path(tempfile.mkdtemp()) / "alakasiz-dosya-adi.xml"
+f.write_bytes(f"<Invoice {NS}><cbc:ID>FTR0000000000007</cbc:ID></Invoice>".encode())
+tampon = io.StringIO()
+with contextlib.redirect_stdout(tampon):
+    rc = elogo_gonder._main([str(f)])
+# Dosya adı "alakasiz-dosya-adi" ama paket adı belgenin numarası olmalı.
+ok = rc == 0 and "FTR0000000000007.zip" in tampon.getvalue() \
+     and "alakasiz" not in tampon.getvalue()
+raise SystemExit(0 if ok else 1)
+PY
+rc=$?
+if [[ $rc -eq 0 ]]; then GECEN=$((GECEN+1)); echo "  ✓ dosya adı alakasızken bile paket adı BELGENİN NUMARASI"
+else DUSEN=$((DUSEN+1)); echo "  ✗ paket adı belgenin numarasından türemiyor (rc=$rc)"; fi
 
 echo
 echo "toplam=$((GECEN+DUSEN)) geçen=$GECEN düşen=$DUSEN"

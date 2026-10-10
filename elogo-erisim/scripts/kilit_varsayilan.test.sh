@@ -61,7 +61,9 @@ import elogo_gonder
 ev = tempfile.mkdtemp()
 kilit = Path(ev) / "kilit"; kilit.write_text("demo")
 os.environ["ELOGO_ORTAM_KILIDI"] = str(kilit)
-xml = Path(ev) / "belge.xml"; xml.write_text("<Invoice/>", encoding="utf-8")
+xml = Path(ev) / "belge.xml"; xml.write_text('<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" '
+               'xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">'
+               '<cbc:ID>FTR0000000000001</cbc:ID></Invoice>', encoding="utf-8")  # numarali: ad belgeden turer
 
 # V8 — kilit 'demo' derken --canli istenirse ÜRETİM YOLU durmalı (rc=6)
 rc = elogo_gonder._main([str(xml), "--canli"])

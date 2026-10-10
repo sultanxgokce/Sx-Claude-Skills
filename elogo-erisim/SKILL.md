@@ -1,7 +1,7 @@
 ---
 name: elogo-erisim
 type: agent
-version: 1.7.0
+version: 1.8.0
 description: e-Logo (Logo e-Fatura entegratörü) işlerini PANELE GİRMEDEN, saf SOAP WS ile yapar: UBL-TR satış/iade belgesi KUR (ağsız · kontörsüz · kuruş kapılı), fatura durumu sorgula, e-Arşiv PDF/UBL indir, demo ya da canlı ortama bağlan, belgeyi GÖNDER. 🔴 Gönderim DÖRT kapıdan geçer ve varsayılan KURU KOŞUMdur: ortam kilidi fail-closed (tanınmayan değer → rc=6) · alıcı etiketi zorunlu, irsaliye kutusu reddedilir (rc=7) · tarihli insan onayı beyanı (rc=3) · kuruş kapısı BİREBİR, tolerans parametresi YOK. Belge üretildikten sonra ÜRÜN KAPISI belgenin kendisini yeniden sınar. Sır-hijyenik: kimlik kasadan gelir, değer basılmaz. Gövde ŞİRKETSİZDİR — ünvan/VKN/etiket kutu-yerel türevden çağrı parametresi olarak gelir.
 ---
 
