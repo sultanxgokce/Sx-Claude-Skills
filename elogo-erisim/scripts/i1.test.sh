@@ -99,11 +99,18 @@ fi
 
 echo
 echo "İ1c · KUTU-YEREL TÜREV YERİNDE Mİ"
-TUREV="/config/projects/MMEx/_agents/fatura"
+TUREV="${ELOGO_TUREV:-/config/projects/MMEx/_agents/fatura}"
+# 🔴 Bu bölüm KUTU kapısıdır: türev yalnız MMEx kutusunda yaşar. Temiz CI makinesinde (CI=true) dizin
+#    hiç yoksa ölçülemez → "ÖLÇÜLEMEDİ" basılır ve sayılmaz. Başka HER yerde (kutu dahil) dizin yoksa
+#    KIRMIZI kalır — yoksa türevin taşınması/silinmesi sessizce yeşile döner.
+if [[ ! -d "$TUREV" && "${CI:-}" == "true" ]]; then
+  echo "  ⚠ ÖLÇÜLEMEDİ: kutu-yerel türev dizini bu makinede yok (CI) — İ1c sayılmadı"
+else
 for f in taraflar.py mmex_fatura.py numara_olcum.py OKU-BENI.md; do
   if [[ -f "$TUREV/$f" ]]; then GECEN=$((GECEN+1)); echo "  ✓ türev: $f"
   else DUSEN=$((DUSEN+1)); echo "  ✗ türev EKSİK: $f — kimlik nereye gitti?"; fi
 done
+fi
 # 🔴 Türev, gövdeyi import EDER; gövde türevi ETMEZ. Ters bağımlılık İ1'i geri getirir.
 # 🔴 Desen DAR olmalı: ilk hâli çıplak 'taraflar' arıyordu ve Türkçe bir yorum
 #    cümlesindeki "taraflardan ÖNCE" ifadesini bulguya çevirdi (yalancı-pozitif).

@@ -10,13 +10,17 @@
    KDV'mizi yok sayıyor → 1 kuruş sapma (ölçüldü, üç kombinasyon da denendi). Servis
    yolunda tutarın sahibi BİZ'iz: ne yazarsak o gider.
 """
+import os
 import re
 import sys
 import xml.etree.ElementTree as ET
 from decimal import Decimal as D, ROUND_HALF_UP, InvalidOperation
 from typing import NamedTuple
 
-sys.path.insert(0, "/config/.claude/skills/elogo-erisim/scripts")
+# 🔴 Kendi dizini — sabit kurulu yol DEĞİL (2026-10-10): sabit yol en öne eklendiği için depodan/dal
+#    kopyasından koşan sınavlar KURULU modülleri yüklüyordu; ölçülen şey dal değil kurulu kopyaydı.
+#    Kurulu konumda bu ifade aynı dizine çözülür → canlı davranış değişmez.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from ubl_satis import SatisFaturasi, kur, Kalem, Taraf   # noqa: E402
 from ubl_iade import IadeFaturasi, kur as kur_iade       # noqa: E402
 from ubl_ortak import Dayanak, EARSIV_SENARYO            # noqa: E402

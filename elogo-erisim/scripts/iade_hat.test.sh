@@ -12,9 +12,12 @@ gec=0; dus=0
 gec(){ gec=$((gec+1)); echo "GEC  $*"; }
 dus(){ dus=$((dus+1)); echo "DUS  $*"; }
 
-ciktilar="$(cd /config/projects/MMEx/backend && python3 - <<PY 2>/dev/null
+# 🔴 Hermetik (2026-10-10, depoya taşınırken CI'da 8/8 düştü): eskiden MMEx kutusunun backend'ine
+#    `cd` ediyor ve kutu-yerel türevi yola ekliyordu; ikisine de ihtiyaç YOK (fatura_hazirla yalnız
+#    beceri modüllerini içe alır). Temiz makinede `cd` düşünce betik HİÇ koşmuyordu ("çıktı YOK").
+ciktilar="$(cd "$K" && python3 - <<PY 2>/dev/null
 import sys
-sys.path.insert(0, "$K"); sys.path.insert(0, "/config/projects/MMEx/_agents/fatura")
+sys.path.insert(0, "$K")
 import fatura_hazirla as fh
 from fatura_hazirla import belge_kur, Dayanak, KurusHatasi
 from ubl_ortak import Taraf   # VKN sentetiktir: ortak rafa gercek VKN yazilmaz (I1)
