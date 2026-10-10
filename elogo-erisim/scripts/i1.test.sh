@@ -103,7 +103,9 @@ TUREV="${ELOGO_TUREV:-/config/projects/MMEx/_agents/fatura}"
 # 🔴 Bu bölüm KUTU kapısıdır: türev yalnız MMEx kutusunda yaşar. Temiz CI makinesinde (CI=true) dizin
 #    hiç yoksa ölçülemez → "ÖLÇÜLEMEDİ" basılır ve sayılmaz. Başka HER yerde (kutu dahil) dizin yoksa
 #    KIRMIZI kalır — yoksa türevin taşınması/silinmesi sessizce yeşile döner.
-if [[ ! -d "$TUREV" && "${CI:-}" == "true" ]]; then
+#    Atlama YALNIZ üç koşul birlikteyken: CI=true · ELOGO_TUREV AÇIKÇA VERİLMEMİŞ · varsayılan dizin yok.
+#    Açıkça verilmiş ama yanlış/eksik yol yapılandırma hatasıdır → CI'da da KIRMIZI (denetçi tur 2).
+if [[ ! -d "$TUREV" && "${CI:-}" == "true" && -z "${ELOGO_TUREV:-}" ]]; then
   echo "  ⚠ ÖLÇÜLEMEDİ: kutu-yerel türev dizini bu makinede yok (CI) — İ1c sayılmadı"
 else
 for f in taraflar.py mmex_fatura.py numara_olcum.py OKU-BENI.md; do
