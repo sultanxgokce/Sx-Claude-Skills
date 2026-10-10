@@ -1,0 +1,54 @@
+{
+  "is": "canli-sayfa-govde-korumali",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-10T12:20:23+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "once",
+      "dosya": "olcum-sinav-once.txt",
+      "sha256": "730fda8b3a06b9e2bdb7ae2ef772dba838530e5f663d055a0b1806d852d5203c",
+      "komut": [
+        "bash",
+        "/config/.claude/jobs/d69a1b07/tmp/canli-govde-once.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-10T12:20:11+03:00",
+      "sure_sn": 15.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "26b049fce97330175f32314692e5cc519098bd3dd144cd3784b26f0043c3544f",
+      "komut": [
+        "bash",
+        "canli-sayfa/scripts/canli-sayfa.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-10T12:20:23+03:00",
+      "sure_sn": 12.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "surum",
+      "asama": "sonra",
+      "dosya": "olcum-surum-sonra.txt",
+      "sha256": "0c40da1d05d2400f3a6180b6ce740d750450965e0970816320ac36d8e91d0154",
+      "komut": [
+        "bash",
+        "-c",
+        "grep -c \"version: 1.2.0\" canli-sayfa/SKILL.md; python3 -c \"import json;c=json.load(open(\\\"catalog.json\\\"));print([s[\\\"version\\\"] for s in c[\\\"skills\\\"] if s[\\\"id\\\"]==\\\"canli-sayfa\\\"])\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-10T12:20:23+03:00",
+      "sure_sn": 0.0
+    }
+  ],
+  "imza": "40f34ce7e8c2137e0355daf4aca18d87735a6ec65f706f62df9c3e5c305c85eb"
+}

@@ -1,0 +1,22 @@
+$ bash /config/.claude/jobs/d69a1b07/tmp/canli-govde-once.sh
+# rc=0 sure=15.4s zaman=2026-10-10T12:20:11+03:00
+--- stdout ---
+  ✗ gövde korumalı + imza → rc 0 (beklenen '0' · gelen '2')
+  ✗ kayıt oluştu (beklenen '1' · gelen '0')
+  ✗ giriş kapalı (beklenen 'kapali' · gelen '')
+  ✗ ölçü gövde (beklenen 'govde' · gelen '')
+  ✗ imza kayda yazıldı (beklenen 'Karne Raporu' · gelen '')
+  ✗ sebebi söylüyor (yok: gövde korumalı)
+  ✗ listede gövdeden ölçüldüğü görünür (yok: kapı arkasında · gövdeden ölçüldü)
+  ✗ doğrulandı (yok: ✓ Karne Sayfası)
+  ✗ imza anonimde göründü → rc 1 (beklenen '1' · gelen '0')
+  ✗ kapı değişti yazar (yok: KAPI DEĞİŞTİ)
+  ✗ imza yolunu söylüyor (yok: --imza)
+  ✗ imza anonim gövdede VAR → gerçekten açık → onaysız rc 4 (beklenen '4' · gelen '2')
+  ✗ onayla → rc 0 (beklenen '0' · gelen '2')
+  ✗ giriş açık (beklenen 'acik' · gelen '')
+  ✗ ölçü gövde (beklenen 'govde' · gelen '')
+  ✗ gövde okunamıyor → ölçülemedi rc 3 (kapalı DENMEZ) (beklenen '3' · gelen '2')
+  ✗ sebep (yok: govde-okunamadi)
+════════ SONUÇ: PASS=203 · FAIL=17 ════════
+--- stderr ---

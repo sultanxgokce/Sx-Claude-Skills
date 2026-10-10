@@ -1,0 +1,6 @@
+$ bash -c grep -c "version: 1.2.0" canli-sayfa/SKILL.md; python3 -c "import json;c=json.load(open(\"catalog.json\"));print([s[\"version\"] for s in c[\"skills\"] if s[\"id\"]==\"canli-sayfa\"])"
+# rc=0 sure=0.0s zaman=2026-10-10T12:20:23+03:00
+--- stdout ---
+1
+['1.2.0']
+--- stderr ---
