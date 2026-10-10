@@ -1,0 +1,83 @@
+{
+  "is": "elogo-depoya-tasima",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-10T17:55:53+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinavlar",
+      "asama": "once",
+      "dosya": "olcum-sinavlar-once.txt",
+      "sha256": "d55142b19a03581f82db593c5371f9487d1f01cd992cf8269b179644c5760f05",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/sinav-kos.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/once-1791643826/elogo-erisim/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-10T17:55:20+03:00",
+      "sure_sn": 10.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinavlar",
+      "asama": "sonra",
+      "dosya": "olcum-sinavlar-sonra.txt",
+      "sha256": "b32600148272a2fc1bfe504200afc6641fcfb6d8817a4e4cc3020106cef0fe3d",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/sinav-kos.sh",
+        "elogo-erisim/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-10T17:55:33+03:00",
+      "sure_sn": 13.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-sonra.txt",
+      "sha256": "97fd9ca5a1e8b79052a36555425886451a37ca2cb6b831fd837e35c51a2a9d46",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutasyon.sh",
+        "elogo-erisim/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-10T17:55:52+03:00",
+      "sure_sn": 18.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gizlilik",
+      "asama": "sonra",
+      "dosya": "olcum-gizlilik-sonra.txt",
+      "sha256": "056fd4e956ee03597bfb31f182accc821bbd8259a795a393f2be0574c8176c3a",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/gizlilik.sh",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-10T17:55:52+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bayt-esitligi",
+      "asama": "sonra",
+      "dosya": "olcum-bayt-esitligi-sonra.txt",
+      "sha256": "dc019956946d2d0d9aeb9c14493ccb6ceb9615c8d197ecae9e2f7a466de3b69e",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bayt-esit.sh",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-10T17:55:53+03:00",
+      "sure_sn": 1.1
+    }
+  ],
+  "imza": "0f68763796e9638b005f8e7b85a4a897168c5270b3edf77d2ffe71c77803858d"
+}

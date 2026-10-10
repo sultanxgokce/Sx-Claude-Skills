@@ -1,0 +1,11 @@
+$ /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bayt-esit.sh .
+# rc=0 sure=1.1s zaman=2026-10-10T17:55:53+03:00
+--- stdout ---
+dosya sayisi: commit=37 kurulu=37
+IKAMELI kurulu == commit: BAYT-AYNI  (diff rc=0, 0 beklenir)
+POZITIF KONTROL ikamesiz kurulu vs commit: FARKLI (beklenen) · farkli dosya: 4
+Files ham/elogo-erisim/scripts/fatura_hazirla.py and commit/elogo-erisim/scripts/fatura_hazirla.py differ
+Files ham/elogo-erisim/scripts/iade_hat.test.sh and commit/elogo-erisim/scripts/iade_hat.test.sh differ
+Files ham/elogo-erisim/scripts/yanit_hazirla.py and commit/elogo-erisim/scripts/yanit_hazirla.py differ
+Files ham/elogo-erisim/SKILL.md and commit/elogo-erisim/SKILL.md differ
+--- stderr ---
