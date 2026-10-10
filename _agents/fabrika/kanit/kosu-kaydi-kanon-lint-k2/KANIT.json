@@ -1,14 +1,14 @@
 {
-  "is": "kosu-kaydi-kanon-lint-son",
+  "is": "kosu-kaydi-kanon-lint-k2",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-10T12:54:08+03:00",
+  "guncelleme": "2026-10-10T12:57:03+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "lint",
       "asama": "once",
       "dosya": "olcum-lint-once.txt",
-      "sha256": "8f756a0a90882b65b5ffa5e52463edcc8c5176b1b1eb4168a7fc0b21be9964c8",
+      "sha256": "ec9fb6e5a05863a9f1be2d9abdc62bd5f8630c10d3dfbe91ccf45fb1538414fd",
       "komut": [
         "bash",
         "-c",
@@ -16,7 +16,7 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T12:44:57+03:00",
+      "zaman": "2026-10-10T12:56:38+03:00",
       "sure_sn": 0.0
     },
     {
@@ -24,14 +24,14 @@
       "etiket": "lint",
       "asama": "sonra",
       "dosya": "olcum-lint-sonra.txt",
-      "sha256": "f1143db8645fa88b53c471f57485aa18e1e7fa5e12294bff213160931b17e4e8",
+      "sha256": "0c6f7a13049f458f276537d6a901e6f981e4979ec69b62d315edacefafb6c488",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/kanon-lint.test.sh"
       ],
-      "rc": 1,
-      "renk": "kirmizi",
-      "zaman": "2026-10-10T12:54:08+03:00",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-10T12:56:39+03:00",
       "sure_sn": 0.7
     },
     {
@@ -39,37 +39,37 @@
       "etiket": "sarmalayici",
       "asama": "sonra",
       "dosya": "olcum-sarmalayici-sonra.txt",
-      "sha256": "cdc54f60d328380410ea89beb12b7148d856fec327266371b62130c774bc09b6",
+      "sha256": "c62124230f2b31b6798e073ded9ecacb7d2e451d1eb54c04df633fadc9de6934",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/kosu-sar.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T12:51:46+03:00",
-      "sure_sn": 22.5
+      "zaman": "2026-10-10T12:57:02+03:00",
+      "sure_sn": 23.0
     },
     {
       "tur": "olcum",
       "etiket": "cagiran",
       "asama": "sonra",
       "dosya": "olcum-cagiran-sonra.txt",
-      "sha256": "f34e94d5c12e828a1d07f77cfd06d4b1a9e2ba2285812e055106dbbecb4a5d1b",
+      "sha256": "f6389a565e11a49e6c253aa10f9b9624662057514ac54af4918b82d347143498",
       "komut": [
         "bash",
         "/config/.claude/jobs/d69a1b07/tmp/lint-cagiran-kanit.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T12:51:46+03:00",
-      "sure_sn": 0.3
+      "zaman": "2026-10-10T12:57:03+03:00",
+      "sure_sn": 0.7
     },
     {
       "tur": "olcum",
       "etiket": "nazir-ornegi",
       "asama": "sonra",
       "dosya": "olcum-nazir-ornegi-sonra.txt",
-      "sha256": "2dda80695aa6288386d103838c33354eff067383f91c7e16425e6e1cbc57d045",
+      "sha256": "cd273e3363753673bda3a700e568810112115c100038e601138cd328adb54c2f",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/kanon-lint.sh",
@@ -77,9 +77,9 @@
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-10-10T12:45:26+03:00",
-      "sure_sn": 0.0
+      "zaman": "2026-10-10T12:57:03+03:00",
+      "sure_sn": 0.1
     }
   ],
-  "imza": "66473b8954575563c1d967b4d911e514c25023001efe63aef7368f774b7fce53"
+  "imza": "63e1c2e8af14baba161a1c174fed3458cb43e35c7c6ba78ee51d8c5460c576bd"
 }

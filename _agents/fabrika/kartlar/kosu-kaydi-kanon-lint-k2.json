@@ -1,0 +1,19 @@
+{
+  "is": "kosu-kaydi-kanon-lint-k2",
+  "cumle": "kosu-kaydi 0.5.1 son dilim: kanon-lint K2 deseni — flock ile nonblock bayrağı arasında değerli seçenekler (-E 75, -w 0) serbest, uzun biçim tanınır, bloklayan flock sarı değil; lint sınavı 44/44 YEŞİL kanıtla. Paketin kalanı (K1-K6, çağıran, talimat) önceki iki kartta 4+4 turda olgunlaştı",
+  "istedi": "NAZIR",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-10T12:55:18+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}
