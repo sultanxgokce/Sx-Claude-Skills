@@ -1,0 +1,54 @@
+{
+  "is": "kosu-kaydi-gozlem-alanlari",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-10T10:55:41+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "once",
+      "dosya": "olcum-sinav-once.txt",
+      "sha256": "ed929a9d7aae26ce426ea5c61069d50009dc24ce1dd4c625775e4a87a8116493",
+      "komut": [
+        "bash",
+        "/config/.claude/jobs/d69a1b07/tmp/gozlem-alanlari-once.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-10T10:55:23+03:00",
+      "sure_sn": 25.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "fb0b4c17ddc3495055d681af733746118f93b58c8d4c1fd7c684fa370e95d7f7",
+      "komut": [
+        "bash",
+        "kosu-kaydi/scripts/kosu-sar.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-10T10:55:41+03:00",
+      "sure_sn": 17.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "surum",
+      "asama": "sonra",
+      "dosya": "olcum-surum-sonra.txt",
+      "sha256": "549f6d295af6d8551c8084e08b887352439a86ca77734e5ac690ab3bfe3da824",
+      "komut": [
+        "bash",
+        "-c",
+        "grep -c \"version: 0.5.0\" kosu-kaydi/SKILL.md; grep -c \"kosu-sar 0.5\" kosu-kaydi/scripts/kosu-sar.sh; grep -c \"\\\"version\\\": \\\"0.5.0\\\"\" catalog.json"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-10T10:55:41+03:00",
+      "sure_sn": 0.0
+    }
+  ],
+  "imza": "41282ca580e43422bfbf10b3a1643445909f35c436942f4260540cc261109861"
+}

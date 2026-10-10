@@ -1,0 +1,11 @@
+$ bash /config/.claude/jobs/d69a1b07/tmp/gozlem-alanlari-once.sh
+# rc=0 sure=25.3s zaman=2026-10-10T10:55:23+03:00
+--- stdout ---
+  ✗ K1 17 alan (şema 1.4): beklenen[17] gelen[15]
+  ✗ gözlem değişti → gozlem_once/gozlem_sonra kırpılmış değerler: beklenen[pid-100/pid-200] gelen[null/null]
+  ✗ boş→boş → alanlar boş dizge (null DEĞİL: gözlem koştu, bir şey yoktu): beklenen[[][]/hata] gelen[[null][null]/hata]
+  ✗ uzun gözlem → ilk 120 bayt: beklenen[121] gelen[5]
+  ✗ NUL'lu gözlem → satır geçerli JSON, alan dolu: beklenen[17 True] gelen[]
+  ✗ gözlem komutu düştü → olculemedi, alanlar boş dizge: beklenen[olculemedi/[]] gelen[olculemedi/[null]]
+── SONUÇ: 94 geçti · 6 düştü ──
+--- stderr ---

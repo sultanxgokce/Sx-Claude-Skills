@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # kosu-sar.test.sh — koşu kaydı sarmalayıcısının sınavı (hermetik: sahte kanon, sahte crontab, geçici kayıt dizini).
 # Ölçtüğü (Nexus kokpit-ux/05 K1-K6): her koşu tam satır · sonuc kümesi · beyan protokolü (K4) · gözlem/tahmin iki kaynak ve
-# çelişki (K5) · @reboot türetilemez · sahip/damga yoksa bilinmiyor/null (K3) · satır şeması 15 alan, geçerli JSON · komut yoksa olculemedi.
+# çelişki (K5) · @reboot türetilemez · sahip/damga yoksa bilinmiyor/null (K3) · satır şeması 17 alan, geçerli JSON · komut yoksa olculemedi.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"; S="$HERE/kosu-sar.sh"
 T="$(mktemp -d)"; trap 'find "$T" -depth -delete' EXIT
@@ -22,11 +22,12 @@ K
 cp "$T/kanon" "$T/canli"; printf '#!/usr/bin/env bash\ncat "%s/canli"\n' "$T" > "$T/ct.sh"; chmod +x "$T/ct.sh"
 export KOSU_KUTU=sinav KOSU_KAYIT_DIZ="$T/kayit" KOSU_KANON="$T/kanon" KOSU_CRONTAB_KOMUT="$T/ct.sh" KOSU_SIMDI="2026-10-09T12:00:00+03:00"
 
-echo "════ K1 · her koşu tam satır, geçerli JSON, 15 alan ════"
+echo "════ K1 · her koşu tam satır, geçerli JSON, 17 alan ════"
 bash "$S" supur -- echo merhaba >/dev/null; rc=$?
 ol "K1 komut rc geçirildi" "$rc" "0"
 ol "K1 bir satır yazıldı" "$(satir_sayisi)" "1"
-ol "K1 15 alan" "$(tail -1 "$T"/kayit/sinav.*.jsonl | python3 -c 'import json,sys;print(len(json.loads(sys.stdin.read())))')" "15"
+ol "K1 17 alan (şema 1.4)" "$(tail -1 "$T"/kayit/sinav.*.jsonl | python3 -c 'import json,sys;print(len(json.loads(sys.stdin.read())))')" "17"
+ol "K1 gözlemsiz kipte gozlem_once/gozlem_sonra null" "$(alan gozlem_once)/$(alan gozlem_sonra)" "null/null"
 ol "K1 sonuc=tamam" "$(alan sonuc)" "tamam"
 ol "K3 sahip kanondan" "$(alan sahip)" "NAZIR"
 ol "K3 kutuk damgadan" "$(alan kutuk)" "/tmp/supur.log"
@@ -75,6 +76,18 @@ ol "yalnız boşluk/satır sonu = boş → hata (kırpma sonrası ölçülür)" 
 : > "$T/dinleyen"; bash "$S" nobetci --nobetci --gozlem "cat $T/dinleyen" -- bash -c 'exit 127' >/dev/null
 ol "boş→boş ama iş rc 127 → olculemedi (bulunamayan komut hata sayılmaz, rc geçer)" "$(alan sonuc)/$(alan rc)" "olculemedi/127"
 case "$(alan baslangic)" in *+00:00) ol "A303 damga UTC (+00:00)" ok ok;; *) ol "A303 damga UTC (+00:00)" "$(alan baslangic)" "…+00:00";; esac
+echo "════ şema 1.4 · gözlem değerleri satırda (A310): hüküm dayanağıyla okunur ════"
+printf 'pid-100\n' > "$T/dinleyen"; bash "$S" nobetci --nobetci --gozlem "cat $T/dinleyen" -- bash -c "echo pid-200 > $T/dinleyen" >/dev/null
+ol "gözlem değişti → gozlem_once/gozlem_sonra kırpılmış değerler" "$(alan gozlem_once)/$(alan gozlem_sonra)" "pid-100/pid-200"
+: > "$T/dinleyen"; bash "$S" nobetci --nobetci --gozlem "cat $T/dinleyen" -- true >/dev/null
+ol "boş→boş → alanlar boş dizge (null DEĞİL: gözlem koştu, bir şey yoktu)" "[$(alan gozlem_once)][$(alan gozlem_sonra)]/$(alan sonuc)" "[][]/hata"
+head -c 300 /dev/zero | tr '\0' 'x' > "$T/dinleyen"; bash "$S" nobetci --nobetci --gozlem "cat $T/dinleyen" -- true >/dev/null
+ol "uzun gözlem → ilk 120 bayt" "$(alan gozlem_once | wc -c)" "121"
+printf 'a\0b' > "$T/nul1"; bash "$S" nobetci --nobetci --gozlem "cat $T/nul1" -- true >/dev/null
+ol "NUL'lu gözlem → satır geçerli JSON, alan dolu" "$(tail -1 "$T"/kayit/sinav.*.jsonl | python3 -c 'import json,sys;d=json.loads(sys.stdin.read());print(len(d), len(d["gozlem_once"])>0)')" "17 True"
+bash "$S" nobetci --nobetci --gozlem "/yok/gozlem-komutu" -- true >/dev/null 2>&1
+ol "gözlem komutu düştü → olculemedi, alanlar boş dizge" "$(alan sonuc)/[$(alan gozlem_once)]" "olculemedi/[]"
+printf 'pid-100\n' > "$T/dinleyen"
 printf 'pid-100\n' > "$T/dinleyen"   # sonraki kapılar dolu gözlemle sürer
 bash "$S" nobetci --nobetci --gozlem "/yok/gozlem-komutu" -- true >/dev/null 2>&1
 ol "gözlem komutu çalışmıyor → olculemedi (dokunmadı DENMEZ)" "$(alan sonuc)" "olculemedi"

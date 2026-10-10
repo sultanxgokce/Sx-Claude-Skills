@@ -1,0 +1,20 @@
+$ bash kosu-kaydi/scripts/kosu-sar.test.sh
+# rc=0 sure=17.4s zaman=2026-10-10T10:55:41+03:00
+--- stdout ---
+════ K1 · her koşu tam satır, geçerli JSON, 17 alan ════
+════ K4 · sessiz başarı YALNIZ beyanla ════
+════ K4 · nöbetçi kipi (--nobetci): beyan kanon satırında, dosyaya dokunulmaz (NÂZIR A291) ════
+════ K4 · GÖZLEMLİ nöbetçi (--gozlem, 0.4 / şema 1.2): ölçü stdout değil, önce/sonra gözlem ════
+════ K4-d · altı hâl (0.4.1 / şema 1.3): BOŞ gözlem = gözlenen şey yok — NÂZIR ölçümü ════
+════ şema 1.4 · gözlem değerleri satırda (A310): hüküm dayanağıyla okunur ════
+════ atlandi-kilit · flock -n -E 75 (NÂZIR A293) ════
+════ K5 · çelişki: canlı tablo ≠ kanon ════
+════ K5 · @reboot türetilemez · satırı olmayan iş ════
+════ K3 · satır SONU etiketi (canlıya taşınan tek yüzey, NÂZIR A292) ════
+════ olculemedi · hatalı kullanım ════
+════ kanon bildirilmemiş · kutu adı türetimi (A290: her kutunun kanon yolu başka) ════
+════ kayıt dizini yazılamıyor → iş yine koşar, satır YEDEK dizine düşer, stderr uyarı ════
+════ cron-sonraki.py tek başına (bağımsız hesap, paket yok) ════
+
+── SONUÇ: 100 geçti · 0 düştü ──
+--- stderr ---
