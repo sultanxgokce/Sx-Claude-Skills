@@ -42,10 +42,11 @@ while t and re.match(r"^[A-Za-z_][A-Za-z0-9_]*=",t[0]): t=t[1:]
 if t and os.path.basename(t[0]) in ("bash","sh"): t=t[1:]
 sys.exit(0 if t and os.path.basename(t[0])=="kosu-sar.sh" else 1)' "$1" 2>/dev/null
 }
-declare -A KANON_SATIR=() CANLI_SATIR=()
+# K7 çokluklu karşılaştırır (küme değil): aynı satır canlıda iki kez = iş iki kez koşar; küme bu farkı yutardı (bağımsız göz -son tur 1)
+declare -A KANON_SATIR=() KANON_ADET=() CANLI_ADET=()
 if [ -n "$KARSI" ]; then   # K7: karşı kanonun zamanlı satırları (kanon dosyası okunamıyorsa hüküm yok → rc 3, temiz denmez)
   [ -r "$KARSI" ] || { echo "olculemedi: kanon dosyası yok ya da okunamıyor: $KARSI"; exit 3; }
-  kn=0; while IFS= read -r k || [ -n "$k" ]; do kn=$((kn+1)); zamanli "$k" && KANON_SATIR["$(duz "$k")"]="$kn"; done < "$KARSI"
+  kn=0; while IFS= read -r k || [ -n "$k" ]; do kn=$((kn+1)); if zamanli "$k"; then dk="$(duz "$k")"; KANON_SATIR["$dk"]="${KANON_SATIR[$dk]:-$kn}"; KANON_ADET["$dk"]=$(( ${KANON_ADET[$dk]:-0} + 1 )); fi; done < "$KARSI"
 fi
 bul() { # bul <renk> <kural> <satır no> <mesaj>
   if [ "$1" = K ]; then KIRMIZI=$((KIRMIZI+1)); printf '✗ KIRMIZI %s satır %s: %s\n' "$2" "$3" "$4"
@@ -81,8 +82,11 @@ while IFS= read -r ham || [ -n "$ham" ]; do
   # bitişik yorum bloğu izi: '# sahip: <değer>' görüldü mü; yorum olmayan satır bloğu kapatır (satır işlendikten sonra sıfırlanır)
   if printf '%s' "$satir" | grep -qE '^[[:space:]]*#'; then printf '%s' "$satir" | grep -qE '^[[:space:]]*#[[:space:]]*sahip:[[:space:]]*[^[:space:]]' && BLOK_SAHIP=1; fi
   if zamanli "$satir"; then
-    d="$(duz "$satir")"; CANLI_SATIR["$d"]="$n"
-    [ -n "$KARSI" ] && [ -z "${KANON_SATIR[$d]:-}" ] && bul S K7 "$n" "kanon dışı: canlıda var, kanonda yok — elle kurulmuş, recreate'te kaybolur; ya kanona yaz ya kaldır"
+    d="$(duz "$satir")"; CANLI_ADET["$d"]=$(( ${CANLI_ADET[$d]:-0} + 1 ))
+    if [ -n "$KARSI" ] && [ "${CANLI_ADET[$d]}" -gt "${KANON_ADET[$d]:-0}" ]; then
+      if [ "${KANON_ADET[$d]:-0}" -eq 0 ]; then bul S K7 "$n" "kanon dışı: canlıda var, kanonda yok — elle kurulmuş, recreate'te kaybolur; ya kanona yaz ya kaldır"
+      else bul S K7 "$n" "fazla kopya: bu satır canlıda kanondakinden çok (kanon ${KANON_ADET[$d]}) — iş fazladan koşar; fazlayı kaldır"; fi
+    fi
     # flock komut ikamesi/alt kabuk/grup içinde de olabilir: $(flock …) · `flock …` · ( flock …) · { flock …; } · ! flock (bağımsız göz tur 3)
     # satır sonu yorumu (' # …') K8'e girmez: '# flock burada kullanılmaz' sahte sarı üretmesin (bağımsız göz tur 1)
     if ! dogrudan_sarili "$satir" && printf '%s' "$satir" | sed -E 's/[[:space:]]#.*$//' | grep -qE '(^|[[:space:];&|(`{!])(/[^[:space:]]*/)?flock([[:space:]]|$)'; then
@@ -118,7 +122,8 @@ while IFS= read -r ham || [ -n "$ham" ]; do
   onceki="$satir"; printf '%s' "$satir" | grep -qE '^[[:space:]]*#' || BLOK_SAHIP=0   # yorum dışı satır bloğu kapatır
 done <<< "$ICERIK"
 if [ -n "$KARSI" ]; then   # K7 öbür yön: kanonda olup canlıda olmayan zamanlı satır (satır no kanondaki)
-  for k in "${!KANON_SATIR[@]}"; do [ -n "${CANLI_SATIR[$k]:-}" ] || bul S K7 "kanon:${KANON_SATIR[$k]}" "kanonda var, canlıda yok — kanca indirmemiş; oda kancasını koştur"; done
+  for k in "${!KANON_ADET[@]}"; do eks=$(( ${KANON_ADET[$k]} - ${CANLI_ADET[$k]:-0} ))
+    [ "$eks" -gt 0 ] && bul S K7 "kanon:${KANON_SATIR[$k]}" "kanonda var, canlıda yok$([ "${CANLI_ADET[$k]:-0}" -gt 0 ] && printf ' (%s kopya eksik)' "$eks") — kanca indirmemiş; oda kancasını koştur"; done
 fi
 printf '── sarılı satır: %s · kırmızı: %s · sarı: %s%s%s\n' "$SARILI" "$KIRMIZI" "$SARI" "$([ "$KUTU_ICI" -eq 1 ] || printf ' · (K6 gözlem komutu bakılmadı: --kutu-ici yok)')" "$([ -n "$KARSI" ] && printf ' · kanonla karşılaştırıldı' || printf ' · (K7 kanon farkı bakılmadı: --kanon yok)')"
 [ "$KIRMIZI" -eq 0 ] || exit 1; exit 0
