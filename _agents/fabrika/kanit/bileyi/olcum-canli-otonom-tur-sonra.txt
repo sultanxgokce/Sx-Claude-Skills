@@ -1,0 +1,41 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-otonom.sh
+# rc=0 sure=15.1s zaman=2026-10-09T23:27:44+03:00
+--- stdout ---
+== 1 · OLC + ADAY SEC (gercek havuzlar: Nexus)
+── ADAY SEÇİMİ · 8 tekrar ölçüldü · tavan 2
+   ✓  15 × py-traceback                     [surtunme:py-traceback] (surtunme)
+   ✓   8 × vekil olcut                      [b0130,b0151,b0154,b0157] (ikili)
+   – surtunme:destructive-blok                atlandı: zaten aday
+   – surtunme:dosya-bulunamadı                atlandı: zaten aday
+   – ikili:sahte yesil                        atlandı: tavan doldu
+   – sinif:kapi-kapsami                       atlandı: tavan doldu
+   – sinif:olcum-korlugu                      atlandı: tavan doldu
+   – sinif:sinav-hijyeni                      atlandı: tavan doldu
+
+   ✓ aday havuzuna 2 satır yazıldı (layiha-aday-havuzu.jsonl)
+
+🔪 TUR AÇIK · aşama: yazım bekliyor · 2 aday
+
+== 2 · KAHIN: ayni yol, desen EKLENDIKTEN sonra
+   geri_alinamaz   = e
+   para            = h
+   dis_yuzey       = h
+   yetki           = h
+   gerekçe: geri_alinamaz=e · 'guvenli-sil' → bileyi/scripts/guvenli-sil.py
+(kuru koşum — kart açılmadı)
+
+== 3 · EMNIYET SUPABI: kart sinifsiz acilmisti, gercek diff olculuyor
+🔪 devam · iş=bileyi-guvenli-sil · dal=bileyi · 21 dosya
+   kart sınıfı   : sınıfsız
+   ölçülen sınıf : ['geri_alinamaz']  (geri_alinamaz=e · 'guvenli-sil' → bileyi/scripts/guvenli-sil.py)
+   🔴 SINIF YUKARI ÇIKTI: ['geri_alinamaz'] — kart açıldığında diff yoktu.
+      Birleştirme YOK. Bu iş Sultan'a gider; kart güncellenmeli.
+rc=0
+
+== 4 · POZITIF KONTROL: guvenli yol HALA sinifsiz donuyor (kahin her seye 'e' demiyor)
+   geri_alinamaz   = h
+   para            = h
+   dis_yuzey       = h
+   yetki           = h
+   gerekçe: tüm yollar güvenli önek içinde, desen tutmadı
+--- stderr ---

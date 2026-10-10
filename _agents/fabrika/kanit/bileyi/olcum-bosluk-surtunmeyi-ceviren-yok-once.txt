@@ -1,0 +1,24 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-bosluk.sh
+# rc=0 sure=6.2s zaman=2026-10-09T22:33:56+03:00
+--- stdout ---
+== 1 · surtunmeyi sayan arac
+-rwxr-xr-x 1 abc abc 14436 Aug 11 04:13 /config/projects/Nexus/scripts/friction-report.sh
+
+== 2 · onu CAGIRAN kac yer var (cron · kanca · beceri · betik)
+-- crontab:
+0
+0
+-- global beceriler (SKILL.md ve scripts):
+0
+-- Nexus betikleri (kendisi haric):
+2
+
+== 3 · POZITIF KONTROL: arac kor mu? Bilinen-var bir ad ayni yontemle aranir
+-- 'wait-ci' cagiran global beceri sayisi (bilinen-var olmali):
+2
+-- 'mucit-suz' cagiran global beceri sayisi (bilinen-var olmali):
+13
+
+== 4 · NEGATIF KONTROL: uydurma bir ad gorunmemeli
+0
+--- stderr ---

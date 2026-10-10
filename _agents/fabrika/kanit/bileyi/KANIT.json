@@ -1,0 +1,113 @@
+{
+  "is": "bileyi",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-09T23:27:48+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "bosluk-surtunmeyi-ceviren-yok",
+      "asama": "once",
+      "dosya": "olcum-bosluk-surtunmeyi-ceviren-yok-once.txt",
+      "sha256": "fab92a1e7711d54e5e6d51c11f415b3cc9e0477607ea9ba20b7218b045021bc1",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-bosluk.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T22:33:56+03:00",
+      "sure_sn": 6.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-kosum",
+      "asama": "sonra",
+      "dosya": "olcum-gercek-kosum-sonra.txt",
+      "sha256": "40ca0091271e48b5f25eac8ddae6334d0449f5a3a59c2f3f333eed58bb10b9db",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-olc.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T22:34:13+03:00",
+      "sure_sn": 16.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinavlar",
+      "asama": "sonra",
+      "dosya": "olcum-sinavlar-sonra.txt",
+      "sha256": "db84c188447601c1ec25f17a02e90e2d87ce23572e548045b80c12756dcaa874",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/gs-sinav.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T23:27:48+03:00",
+      "sure_sn": 3.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-sonra.txt",
+      "sha256": "e15d5f283f4d261d7ec5ff5be7fc2b0c79e2731092c4a1b5bf575a3be1c2b52e",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T23:10:27+03:00",
+      "sure_sn": 117.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinif-kahini",
+      "asama": "sonra",
+      "dosya": "olcum-sinif-kahini-sonra.txt",
+      "sha256": "62633466d4f8a43291d1eb1685049fa04d1fd7c92c5a1eee29362b3d611ea6ed",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-kahin.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T22:46:40+03:00",
+      "sure_sn": 0.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "aday-hatti",
+      "asama": "sonra",
+      "dosya": "olcum-aday-hatti-sonra.txt",
+      "sha256": "158c4a8809f46f74950cb485c8ff9bb741c8e3124ce84d78f9b84fb821341c62",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-aday.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T22:55:44+03:00",
+      "sure_sn": 0.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-otonom-tur",
+      "asama": "sonra",
+      "dosya": "olcum-canli-otonom-tur-sonra.txt",
+      "sha256": "42ff0386e63c0d15891119670c96c3db593325e437d69e92f44a8030e364f2f5",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-otonom.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T23:27:44+03:00",
+      "sure_sn": 15.1
+    }
+  ],
+  "imza": "82d21a7b7d95c595f25a605a625b70533c80f4f1021a63992f435748ade4e6b5"
+}

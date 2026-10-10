@@ -1,0 +1,126 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/gs-sinav.sh
+# rc=0 sure=3.9s zaman=2026-10-09T23:27:48+03:00
+--- stdout ---
+A · temel akış
+  ✓ A1 eşiği aşan tekrar VAR → rc=0
+  ✓ A2 ölçüm ajan kimliğini basar
+  ✓ A3 gerçek tekrar bulunur
+B · 🔴 eşik dayanağı (ölçmediğine temiz deme)
+  ✓ B1 dayanaksız eşik → rc=3 ÖLÇEMEDİM (yeşil DEĞİL)
+  ✓ B2 bozuk eşik dosyası → rc=2 yapılandırma hatası
+  ✓ B3 eşik dosyası YOK → rc=3 (eşik UYDURULMAZ)
+  ✓ B4 eşik 0 ya da negatif → rc=2 (her şey tekrar sayılamaz)
+C · 🔴 kapsama dürüstlüğü (vekil ölçüt panzehiri)
+  ✓ C1 sınıf alanının kaç kayıtta dolu olduğu basılır
+  ✓ C2 körlük YÜZDESİYLE söylenir
+  ✓ C3 ölçülmeyen boyut (maliyet) açıkça yazılır
+D · 🔴 havuz yok / bozuk (eksik veri rahatlatır)
+  ✓ D1 havuz YOK → rc=3, 'temiz' DEĞİL
+  ✓ D2 havuzun TAMAMI bozuk → rc=3
+  ✓ D3 bozuk satır SESSİZCE atlanmaz, sayısı basılır
+E · 🔴 tek parti ≠ tekrar (b0164 dersi)
+  ✓ E1 ardışık kimlikli öbek TEK PARTİ işaretlenir
+  ✓ E2 tek-parti ayrımı: ardışık kimlikler yardımcıda yakalanır
+E3 · 🔴 SONUÇ kapısı: yalnız tek-parti varsa hüküm TEMİZ olmalı
+  ✓ E3 yalnız tek-parti tekrarı varsa rc=1 (TEMİZ) — tekrar sayılmaz
+  ✓ E3b tek-parti elenince niçini yazılır
+F · pencere (fail-open panzehiri)
+  ✓ F1 pencere havuzu boşaltırsa pencere YOK SAYILIR, sessiz boş dönmez
+  ✓ F2 pencere boşken yine ölçüm yapılır (rc=0)
+G · sürtünme yüzeyi: unknown ≠ yok
+  ✓ G1 sürtünme aracı yoksa ÖLÇEMEDİM der, 'yok' DEMEZ
+  ✓ G2 'sürtünme yok' diye bir cümle BASMAZ
+H · kill-switch
+  ✓ H1 kapalıyken tam tur rc=4
+  ✓ H2 🔴 kapalıyken 'olc' YİNE çalışır (ölçüme erişim kesilmez)
+  ✓ H3 🔴 kapalıyken 'durum' YİNE çalışır
+  ✓ H4 durum kapalı olduğunu ve gerekçesini söyler
+  ✓ H5 açılınca tam tur yine koşar
+  ✓ H6 'dur' gerekçesiz çağrılamaz
+I · 🔴 kimlik kapısı (çivili yol / sızıntı panzehiri)
+  ✓ I1 kimlik aracı yoksa rc=3 — başkasının defterine DÜŞMEZ
+  ✓ I2 kimlik BOŞ dönerse de rc=3 (boş ad kabul edilmez)
+J · 🔴 yeni havuz KURULMAZ · A06
+  ✓ J1 🔴 araç BULGU havuzuna asla yazmaz (yeni havuz da kurmaz)
+  ✓ J2 araç ONAY alanı yazmaz (A06)
+  ✓ J3 kimlik ORTAM değişkeninden alınmaz (taklit panzehiri)
+  ✓ J4 süzme yeniden yazılmaz — mucit-suz'e devredilir (SKILL.md'de yazılı)
+K · 🔴 kill-switch ÜRETİM yolu (bağımsız gözün tur-1 bulgusu, ciddi)
+  ✓ K1 ortam değişkeni YOKken varsayılan DOSYA kullanılır (çalışma dizini DEĞİL)
+  ✓ K2 ortam değişkeni VERİLİRSE o yol kullanılır
+L · eşik ezmesi de kapıdan geçer (tur-1 bulgusu)
+  ✓ L1 negatif --ikili-esik → rc=2
+  ✓ L2 sıfır --ikili-esik → rc=2
+  ✓ L3 geçerli ezme çalışır
+M · 🔴 iki yüzey ÇELİŞİRSE hüküm YOK (tur-1 bulgusu)
+  ✓ M1 tüm adaylarda çelişki varsa rc=3 (ne temiz ne kirli)
+  ✓ M2 çelişki işaretlenir ve niçini yazılır
+N · 🔴 sınıf kâhini (otonom turun emniyeti)
+  ✓ N1 güvenli yol → dört sınıf da h
+  ✓ N2 yetki deseni tutarsa yetki=e
+  ✓ N3 🔴 BİLİNMEYEN yol → '?' → SULTAN'A GİDER (şüphede sınıf YUKARI)
+  ✓ N4 para deseni tutarsa para=e
+  ✓ N5 sınıf kurallarının dayanağı yoksa rc=3 — sınıf UYDURULMAZ
+  ✓ N6 sınıf kuralları dosyası yoksa rc=3
+O · 🔴 'tur' FİİLEN iş yapar (tur-1 bulgusu: eskiden ekrana basıyordu)
+  ✓ O1 aday havuzu YOKsa tur rc=3 — yeni havuz KURMAZ
+  ✓ O2 aday havuzu varsa tur koşar
+  ✓ O3 🔴 tur aday havuzuna GERÇEKTEN yazdı (basmakla yetinmedi)
+  ✓ O6 🔴 aday ÖLÇÜLEN tekrarı taşır (sabit metin DEĞİL — tur-2 bulgusu)
+  ✓ O7 🔴 TAVAN fiilen keser (rapor metni değil — tur-2 bulgusu)
+  ✓ O8 🔴 aynı tekrar İKİ KEZ aday olmaz (ikinci tur atlar)
+R · 🔴 kapanış damgası (bayat kayıt panzehiri · tur-2 bulgusu)
+  ✓ R1 tur durumu yoksa SESSİZ GEÇMEZ, söyler
+  ✓ R2 🔴 damga EKLER, satır ÜSTÜNE YAZMAZ (havuz salt-eklemedir)
+  ✓ O4 🔴 tur durum dosyası bıraktı (yazım aşaması bir DURUM, tavsiye değil)
+  ✓ O5 kuru tur HİÇBİR ŞEY yazmaz
+P · 🔴 'devam' birleştirme kilitleri
+  ✓ P1 kartsız iş birleştirilmez → rc=3
+  ✓ P1b 🔴 kart BİRİNCİL depoda da aranır (çalışma alanı kartı görmüyordu)
+  ✓ P2 kill-switch kapalıyken devam rc=4 (birleştirmez)
+  ✓ P3 🔴 sınıf YUKARI çıkarsa birleştirme YOK — hem rc hem SEBEP ölçülür
+S · 🔴 sürtünme yüzeyi ADAY HATTINA girer (tur-3 bulgusu, ciddi)
+  ✓ S1 rapor tablosu ayrıştırılır ve eşiği aşanlar aday olur
+  ✓ S2 ayrıştırılamayan satır SESSİZCE atlanmaz, sayılır
+  ✓ S3 eşiği aşmayan sürtünme sınıfı aday OLMAZ
+  ✓ S4 ölçüm çıktısı sürtünme eşiğini yazar
+  ✓ S5 🔴 SONUÇ: sürtünme sınıfı FİİLEN aday olur (yardımcı değil, HAT ölçülür)
+  ✓ S5b aday kaydı sürtünme yüzeyini ve sayısını taşır
+T · 🔴 damga YALNIZ bağlı adayı kapatır (tur-3 bulgusu, ciddi: yanlış kapanış)
+  ✓ T1 iki adaydan yalnız BAĞLI olanın kaynakları kapanır
+  ✓ T2 işe BAĞLI aday yoksa damga ATILMAZ ve sebebi yazılır
+  ✓ T3 tur ancak TÜM adaylar kapanınca kapanır
+  ✓ T4 --anahtar verilmezse kart bunu SÖYLER (sessiz kalmaz)
+
+toplam=70 geçen=70 düşen=0
+### bileyi/scripts/bileyi.test.sh rc=0
+A · asil is (meşru yol acildi mi)
+  ✓ A1 izinli kokun ALTINDAKI dizin silinir
+  ✓ A2 silindigi dogrulanir (geri okundu)
+  ✓ A3 zaten yok olan yol rc=0 (silmekle ayni sonuc)
+B · 🔴 yasakli deseni HIC kullanmaz (kancayi atlamanin sarti)
+  ✓ B1 kaynakta yasakli kabuk deseni YOK
+C · 🔴 K1/K4 — izinli kok kapisi
+  ✓ C1 izinli KOKUN KENDISI silinmez
+  ✓ C2 koklerin DISINDAKI yol silinmez
+  ✓ C3 dis yol HALA DURUYOR (pozitif kontrol: kapi sadece rc dondurmuyor)
+  ✓ C4 dosya (dizin degil) silinmez
+  ✓ C5 bos yol reddedilir
+  ✓ C6 kok '/' olsa bile izinli sayilmaz
+D · 🔴 K2/K3 — bag ve ust-yol kapisi
+  ✓ D1 sembolik BAG silinmez
+  ✓ D2 bagin HEDEFI duruyor (pozitif kontrol)
+  ✓ D3 ust-yolla kacis (..) kok disina cikamaz
+  ✓ D4 kardes dizin HALA DURUYOR (pozitif kontrol)
+  ✓ D5 ciplak /tmp izinli kok DEGIL (kendi sinavimin buldugu daralma)
+E · olcemedigine yesil demez
+  ✓ E1 hicbir izinli kok yoksa rc=3 (OLCEMEDIM, silmez)
+  ✓ E2 kullanimsiz cagri rc=2
+  ✓ E3 iki arguman rc=2 (sessizce ilkini silmez)
+
+toplam=18 geçen=18 düşen=0
+### bileyi/scripts/guvenli-sil.test.sh rc=0
+### parity rc=0
+### versiyon rc=0
+dusen=0
+--- stderr ---

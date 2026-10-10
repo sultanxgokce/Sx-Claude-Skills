@@ -1,0 +1,40 @@
+{
+  "tur": 3,
+  "is": "bileyi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-09T22:58:27+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": true,
+    "istem_bayt": 126004,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "H",
+    "ozet": "Bileyi; tekrarları ölçüp aday havuzuna taşıyan, sınıf kapıları ve mutasyon sınavları bulunan kapsamlı bir hat kurmuş, fakat sürtünme raporunu yalnız ekrana basıp aday üretimine katmıyor ve bir adayın tamamlanmasıyla aynı turdaki bütün adayları kapatabiliyor. Bunlar çekirdek işlevde ciddi doğruluk boşluklarıdır; ayrıca iş kartı yok ve diff kırpılmış olduğundan yapılanın talep edilen doğru şey olduğu doğrulanamaz.",
+    "bulgular": [
+      {
+        "ne": "Sürtünme raporu ölçülüyor fakat sonuçları aday üretim hattına hiç girmiyor; rapordaki tekrar eden sürtünmeler yeteneğe çevrilemiyor.",
+        "kanit": "`olc_veri`, `surtunme_oku` sonucunu yalnız “YÜZEY 3” altında yazdırıyor; `bulunan` listesine yalnız sınıf ve ikili söz öbeği yüzeylerinden kayıt ekleniyor. Gerçek koşumda raporda çok sayıda olay görünmesine rağmen aday-hattı çıktısındaki beş aday yalnız `sinif` ve `ikili` kaynaklıdır.",
+        "konum": "bileyi/scripts/bileyi.py:429; olcum-gercek-kosum-sonra.txt; olcum-aday-hatti-sonra.txt",
+        "agirlik": "ciddi"
+      },
+      {
+        "ne": "Bir iş başarıyla birleşince kapanış damgası yalnız tamamlanan adaya değil, tur durumundaki bütün adayların kaynak bulgularına atılıyor.",
+        "kanit": "`komut_tur` tek durum dosyasına seçilen tüm adayları yazar. `_kapanis_damgasi` ise kendisine verilen `is_` ile aday eşleştirmesi yapmadan `d.get(\"adaylar\", [])` içindeki bütün `kaynak_bulgular` değerlerini birleştirip kapatır; kanıtlı aday koşumunda aynı turda iki ayrı aday bulunmaktadır.",
+        "konum": "bileyi/scripts/bileyi.py:632 ve bileyi/scripts/bileyi.py:757; olcum-aday-hatti-sonra.txt",
+        "agirlik": "ciddi"
+      },
+      {
+        "ne": "“Tam otonom” uçtan uca sonuç kanıtlanmamış; kanıt yalnız aday yazımı ve ayrı kapıları gösteriyor.",
+        "kanit": "Aday-hattı ölçümü `aşama: yazım bekliyor` noktasında biter. Sınıf-kâhini ölçümü açıkça kuru koşumdur; manifestte kart açma, gerçek yazım, bağımsız göz ve başarılı birleştirmeyi tek akışta gösteren kayıt yoktur.",
+        "konum": "olcum-aday-hatti-sonra.txt; olcum-sinif-kahini-sonra.txt; KANIT.json",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam, sarı kayıt yok; gerçek havuz koşumu, 59 sınav, 23 mutasyon ve aday yazımı güçlü parça kanıtları sunuyor. Ancak önce/sonra kayıtları aynı iddiayı ölçen bir çift değil, uçtan uca otonom dönüşüm ve birleştirme ölçülmemiş; ayrıca verilen diff 126004 bayttan 110000 bayta kırpıldığı için görünmeyen test ve dosyalar hakkında olumlu hüküm kurulamaz."
+  }
+}

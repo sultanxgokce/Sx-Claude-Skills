@@ -1643,6 +1643,22 @@
         "agentic-os",
         "jsonl"
       ]
+    },
+    {
+      "id": "bileyi",
+      "type": "agent",
+      "name": "/bileyi — bıçağı bile: kendi izini tara, tekrar edeni yeteneğe çevir",
+      "version": "0.1.0",
+      "description": "İÇ-tarama hattı: bulgu havuzu + sürtünme raporu + aday havuzunu tarar, TEKRAR EDEN sürtünmeyi bulur ve yeteneğe çevirir (kural · yapılandırma · beceri). kasif-tara DIŞA bakar, bu İÇE. Yeni havuz kurmaz, süzmeyi mucit-suz'e devreder, inşayı yazilim-fabrikasi hattına sokar. Tam otonom: sınıfsız işi kendi birleştirir, sınıflı işi Sultan'a bırakır. Eşik dosyadan ve ÖLÇÜLMÜŞ dayanakla okunur; dayanaksız eşik rc=3. Kill-switch'li.",
+      "tags": [
+        "bileyi",
+        "ic-tarama",
+        "surtunme",
+        "yetenek-uretimi",
+        "otonom",
+        "kill-switch",
+        "global"
+      ]
     }
   ]
 }
