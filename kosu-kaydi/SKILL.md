@@ -105,7 +105,7 @@ yazmadan ÖNCE lint'i çağırıp kırmızıda yazmaması ayrı iş (cloudtop ka
 - `bash scripts/kosu-sar.test.sh` — hermetik (sahte kanon, sahte crontab, geçici dizin). Ölçtüğü: 17 alan geçerli JSON · gözlem değerleri (120 bayt, NUL, null/boş ayrımı) · beyan
   protokolü (dosya + `--nobetci`) · satır sonu etiketi · `atlandi-kilit` · kanon/canlı çelişkisi · @reboot · kanonsuz kip · kutu adı
   türetimi · rc 126/127 geçişi · gözlem altı hâl (boş→boş/dolu→boş hata) · UTC damga · cron-sonraki 10 ifade + 4 ret · croniter zehirli-modül kapısı (pakete bağımlılık yok).
-- `bash scripts/kanon-lint.test.sh` — lint'in sınavı (45 kapı; her kural için kırmızı + altın çift; sekmeli satır; mutlak yollu flock; -n sırası ve --nonblock; değersiz etiket; bitişik yorum bloğu; stdin, rc 2/3).
+- `bash scripts/kanon-lint.test.sh` — lint'in sınavı (44 kapı; her kural için kırmızı + altın çift; sekmeli satır; mutlak yollu flock; -n sırası ve --nonblock; değersiz etiket; bitişik yorum bloğu; stdin, rc 2/3).
 - `bash scripts/hedef-kutu-sinav.sh <konteyner> [<ssh-host>|-]` — aynı sınavı **hedef kutuda** koşturur (tar → `/tmp`, orada koş, sil;
   kaynak/hedef md5'leri basılır). Kurulumdan önce "bu kutuda çalışır" iddiasının ölçümü.
 

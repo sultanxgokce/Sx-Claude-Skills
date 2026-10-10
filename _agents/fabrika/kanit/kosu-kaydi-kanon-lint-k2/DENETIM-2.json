@@ -1,0 +1,34 @@
+{
+  "tur": 2,
+  "is": "kosu-kaydi-kanon-lint-k2",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-10T12:59:27+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 48140,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "K2 taraması seçenek değerlerini aşacak biçimde geliştirilmiş ve önceki `grep -n` yanlış pozitifi için sınav eklenmiş; ancak kabuk alıntılarını korumayan belirteç ayrıştırması bloklayan bir `flock -c` çağrısını hâlâ sarıya çevirebilir. Ayrıca NÂZIR’ın açık 44/44 fermanına karşı kanıt 45/45 gösterdiği için teslim doğru kabul kanıtını sunmuyor; önce bunlar çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "K2 ayrıştırıcısı alıntılı `-c/--command` değerini tek belirteç olarak korumuyor; bu değerin içindeki `-n`, gerçek flock seçeneği sanılarak bloklayan flock yanlış biçimde K2 sarısı yapılabilir.",
+        "kanit": "`for tok in $seg` kabuk alıntılarını yeniden ayrıştırmaz, boşluklardan böler; `-c` sonrasında yalnız ilk parçayı `deger=1` ile atlar. Örneğin bloklayan `flock -c 'grep -n desen /x/dosya' /x.lock` dizisinde `'grep` atlandıktan sonra `-n` dalı `return 0` verir. Eklenen altın sınav yalnız kilit dosyasından sonraki `grep -n` biçimini kapsıyor.",
+        "konum": "kosu-kaydi/scripts/kanon-lint.sh:28-40; kosu-kaydi/scripts/kanon-lint.test.sh:39-40",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "İş kartının açık kabul ölçütü olan 44/44 YEŞİL kanıtlanmamış; teslim farklı bir sınav sayısı sunuyor.",
+        "kanit": "Kart `lint sınavı 44/44 YEŞİL kanıtla` diyor; araç imzalı `olcum-lint-sonra.txt` ise `SONUÇ: 45 geçti · 0 düştü`, SKILL.md de `45 kapı` bildiriyor. Bu, istenen sabit kabul kümesinin 44/44 çalıştırıldığına kanıt değildir.",
+        "konum": "olcum-lint-sonra.txt; kosu-kaydi/SKILL.md:108",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; önce/sonra lint ölçüm çifti mevcut, lint sonrası kayıt yeşil ve sarı kayıt yok. Buna rağmen yeşil kayıt yalnız mevcut 45 kapının geçtiğini kanıtlıyor, kartın istediği 44/44 kabul kümesini değil; ayrıca sınav, alıntılı değer taşıyan bloklayan flock karşı örneğini ölçmüyor. NÂZIR örneği rc=1 kırmızı olduğundan başarı kanıtı sayılamaz."
+  }
+}

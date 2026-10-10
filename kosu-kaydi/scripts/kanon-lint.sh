@@ -24,10 +24,15 @@ bul() { # bul <renk> <kural> <satır no> <mesaj>
   else SARI=$((SARI+1)); printf '△ SARI    %s satır %s: %s\n' "$2" "$3" "$4"; fi
 }
 flock_nonblock() {  # <komut metni> → komut parçasındaki flock çağrısının KENDİ seçeneklerinde nonblock var mı (rc 0 var)
-  local seg="$1" tok gor=0 deger=0
+  local seg="$1" tok deger=0 tokens
   seg="${seg#*flock}"; [ "$seg" = "$1" ] && return 1              # flock yok
   case "$1" in *[[:space:]\;\&\|/]flock*|flock*) ;; *) return 1 ;; esac   # 'flock' bir belirteç başlangıcı olmalı
-  for tok in $seg; do
+  # kabuk alıntıları korunur (flock -c 'grep -n …' /x.lock: alıntının içindeki -n flock seçeneği DEĞİL) — bağımsız göz -k2 tur 2;
+  # python3 beceri ön koşuludur; alıntı bozuksa (shlex hata) boşluk bölmesine düşülür
+  tokens="$(python3 -c 'import shlex,sys
+try: print("\n".join(shlex.split(sys.argv[1])))
+except Exception: print("\n".join(sys.argv[1].split()))' "$seg" 2>/dev/null)" || tokens="$(printf '%s\n' $seg)"
+  while IFS= read -r tok; do [ -n "$tok" ] || continue
     if [ "$deger" -eq 1 ]; then deger=0; continue; fi               # önceki seçeneğin ayrı değeri
     case "$tok" in
       -n|--nonblock|--nb) return 0 ;;
@@ -36,7 +41,7 @@ flock_nonblock() {  # <komut metni> → komut parçasındaki flock çağrısın�
       -*) ;;                                                      # başka bayrak (-s, -x, -u, -o, -F, -e, --verbose…)
       *) return 1 ;;                                              # ilk seçenek-dışı belirteç = kilit dosyası → tarama biter
     esac
-  done; return 1
+  done <<< "$tokens"; return 1
 }
 declare -A IS_SATIR=()
 n=0; onceki=""; BLOK_SAHIP=0

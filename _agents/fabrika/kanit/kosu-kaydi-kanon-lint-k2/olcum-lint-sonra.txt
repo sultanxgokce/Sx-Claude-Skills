@@ -1,5 +1,5 @@
 $ bash kosu-kaydi/scripts/kanon-lint.test.sh
-# rc=0 sure=0.7s zaman=2026-10-10T12:58:43+03:00
+# rc=0 sure=0.9s zaman=2026-10-10T13:01:27+03:00
 --- stdout ---
 ════ temiz kanon: satır sonu etiketi · --kilit doğru · gözlemli ════
 ════ K1 · --kilit + iç flock = her koşu atlanır (KIRMIZI) ════
@@ -11,5 +11,5 @@ $ bash kosu-kaydi/scripts/kanon-lint.test.sh
 ════ K6 · gözlem komutu kutuda yok (SARI, yalnız --kutu-ici) ════
 ════ giriş / rc ════
 
-── SONUÇ: 45 geçti · 0 düştü ──
+── SONUÇ: 44 geçti · 0 düştü ──
 --- stderr ---
