@@ -118,6 +118,8 @@ printf '%s\n' "0 3 * * * bash /x/gece.sh" "0 3 * * * bash /x/gece.sh" > "$T/canl
 kos "$T/canli7c" --kanon "$T/kanon7c"; ol "K7 çokluk: canlıda iki kopya, kanonda bir → fazla kopya sarısı (satır 2)" "$(printf '%s' "$CIKTI" | grep -c 'SARI    K7 satır 2: fazla kopya')" "1"
 kos "$T/kanon7c" --kanon "$T/canli7c"; ol "K7 çokluk öbür yön: kanonda iki, canlıda bir → '1 kopya eksik'" "$(printf '%s' "$CIKTI" | grep -c 'kanonda var, canlıda yok (1 kopya eksik)')" "1"
 kos "$T/canli7c" --kanon "$T/canli7c"; ol "K7 çokluk altın: iki tarafta da iki kopya → fark yok" "$(printf '%s' "$CIKTI" | grep -c 'SARI    K7')" "0"
+printf '%s\n' "0 3 * * * bash -c 'printf \"%s\" \"a  b\"'" > "$T/canli7q"; printf '%s\n' "0  3 * * *	bash -c 'printf \"%s\" \"a b\"'" > "$T/kanon7q"
+kos "$T/canli7q" --kanon "$T/kanon7q"; ol "K7: komut içindeki (tırnaklı) boşluk farkı EZİLMEZ → iki yönde fark" "$(printf '%s' "$CIKTI" | grep -c 'SARI    K7')" "2"
 kos "$T/canli7"; ol "K7 --kanon verilmeden bakılmaz, söylenir" "$(printf '%s' "$CIKTI" | grep -c 'SARI    K7')/$(printf '%s' "$CIKTI" | grep -c 'K7 kanon farkı bakılmadı')" "0/1"
 kos "$T/canli7" --kanon "$T/yok-kanon"; ol "K7 kanon okunamıyor → rc 3 (temiz denmez)" "$RC" "3"
 kos "$T/canli7" --kanon; ol "--kanon değersiz → rc 2" "$RC" "2"

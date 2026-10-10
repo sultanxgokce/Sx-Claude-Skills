@@ -1,0 +1,28 @@
+{
+  "tur": 2,
+  "is": "kosu-kaydi-kanon-canli-son",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-10T23:17:22+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 48489,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "0.5.2, K7/K8’i canlı-kanon hattına bağlamış, yinelenen satır çokluğunu korumuş ve rc 3’ü “ölçülemedi” diye görünür kılmıştır. Talep doğru tutulmuş ve ölçüler kuvvetlidir; lâkin K7’nin bütün satırdaki boşlukları ezmesi farklı komutları eşit sayabildiğinden önce bu uygulama kusuru çözülmelidir.",
+    "bulgular": [
+      {
+        "ne": "K7 normalleştirmesi yalnız cron alan ayraçlarını değil, komutun tırnak içindeki anlamlı çoklu boşluklarını da teke indiriyor; böylece semantik olarak farklı iki cron satırı aynı anahtara dönüşüp canlı-kanon farkı gizlenebilir.",
+        "kanit": "`duz()` tüm satıra `tr '\\t' ' '` ve `sed -E 's/ +/ /g'` uyguluyor. Bu nedenle örneğin `bash -c 'printf \"%s\" \"a  b\"'` ile `bash -c 'printf \"%s\" \"a b\"'` aynı karşılaştırma anahtarına iner; sınavdaki boşluk altını ise yalnız zaman alanlarındaki sekme/çift boşluk örneğini kapsıyor.",
+        "konum": "kosu-kaydi/scripts/kanon-lint.sh: `duz()` tanımı; kosu-kaydi/scripts/kanon-lint.test.sh: “K7 altın: sekme/çift boşluk farkı” sınavı",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; kayıtların hiçbiri sarı/rc=3 değil. Gerçekçi nâzır verisindeki önce/sonra ölçüm çifti eski sürümün sıfır sarısından yeni sürümün K7 iki + K8 iki sonucuna geçişini gösteriyor; ayrıca 67 ve 116 geçişli sınavlar çokluk farkını ve rc 3’ün yutulmayıp “ölçülemedi” denmesini açıkça yokluyor. Ancak yeşil sınavlar komut gövdesindeki anlamlı çoklu boşlukların korunmasını ölçmüyor."
+  }
+}

@@ -1,7 +1,7 @@
 {
   "is": "kosu-kaydi-kanon-canli-son",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-10T23:16:45+03:00",
+  "guncelleme": "2026-10-10T23:19:06+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -24,7 +24,7 @@
       "etiket": "nazir-ornegi",
       "asama": "sonra",
       "dosya": "olcum-nazir-ornegi-sonra.txt",
-      "sha256": "80781c513bd91e48a2d748f1e8b31b4a295b2b153ffdc908fb41e64911651f7e",
+      "sha256": "afd2a7d0df8642acf397bd67e73a0a3c22e60379b68c323b21a83b9eb28b4d3d",
       "komut": [
         "bash",
         "-c",
@@ -32,39 +32,39 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T23:15:58+03:00",
-      "sure_sn": 0.2
+      "zaman": "2026-10-10T23:18:08+03:00",
+      "sure_sn": 0.5
     },
     {
       "tur": "olcum",
       "etiket": "lint-sinavi",
       "asama": "sonra",
       "dosya": "olcum-lint-sinavi-sonra.txt",
-      "sha256": "2c92943e45d55ed74d40420f1bf565c7fef5613a01b8020a6e4b40c8d1d5c373",
+      "sha256": "387db3da126fef34b6ddac5c3e25e211dd817c3bb7838db4e8497baf5b2f9d9c",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/kanon-lint.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T23:16:01+03:00",
-      "sure_sn": 3.0
+      "zaman": "2026-10-10T23:18:13+03:00",
+      "sure_sn": 4.7
     },
     {
       "tur": "olcum",
       "etiket": "sarmalayici-sinavi",
       "asama": "sonra",
       "dosya": "olcum-sarmalayici-sinavi-sonra.txt",
-      "sha256": "a6afcaec1e4db0165a5a710a5361f2e531039acb92e395a65c2538a1a8d0c3cb",
+      "sha256": "bbb26327e262012e9ba2f61323f3e507375f9e5c8956b9a79573ecec2240d4b1",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/kosu-sar.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T23:16:45+03:00",
-      "sure_sn": 44.0
+      "zaman": "2026-10-10T23:19:06+03:00",
+      "sure_sn": 53.6
     }
   ],
-  "imza": "d3bb013441037745654a5b741ab8d3a5883465971c7efa33675fa54f90de0b27"
+  "imza": "3f60476f2972f7df4b47d8072fedc9482e8f4899e9538f0676ab36a2c7c4d7da"
 }

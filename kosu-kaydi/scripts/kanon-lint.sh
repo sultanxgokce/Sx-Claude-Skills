@@ -29,7 +29,11 @@ if [ "$G" = "-" ]; then ICERIK="$(cat)" || { echo "olculemedi: stdin okunamadı"
 else [ -r "$G" ] || { echo "olculemedi: dosya yok ya da okunamıyor: $G"; exit 3; }; ICERIK="$(cat "$G")"; fi
 KIRMIZI=0; SARI=0; SARILI=0
 zamanli() { printf '%s' "$1" | grep -qE '^[[:space:]]*[0-9*@]'; }       # cron zaman ifadesiyle başlayan satır
-duz() { printf '%s' "$1" | tr '\t' ' ' | sed -E 's/ +/ /g; s/^ //; s/ $//'; }   # karşılaştırma biçimi: sekme/çoklu boşluk tek boşluk
+# karşılaştırma biçimi: YALNIZ zaman alanlarının ayracı (sekme/çoklu boşluk) teke iner; komut kısmı olduğu gibi kalır (yalnız
+# baş/son boşluk kırpılır) — komutun tırnak içindeki boşlukları anlamlıdır, ezilirse iki farklı komut eşit görünür (bağımsız göz -son tur 2)
+duz() { python3 -c 'import re,sys
+s=sys.argv[1]; m=re.match(r"\s*(@\S+|\S+\s+\S+\s+\S+\s+\S+\s+\S+)\s+(.*?)\s*$", s, re.S)
+print((" ".join(m.group(1).split())+" "+m.group(2)) if m else s.strip())' "$1"; }
 dogrudan_sarili() {  # <zamanlı satır> → rc 0: cron'un çalıştırdığı program SARMALAYICININ KENDİSİ (yapısal; alt dizge değil — bağımsız göz tur 2)
   # zaman alanları (5 ya da @ifade) atlanır, baştaki VAR=değer atamaları ve bash/sh yorumlayıcısı geçilir; ilk program kosu-sar.sh olmalı.
   # 'flock -n x bash kosu-sar.sh …' (kilit sarmalayıcının DIŞINDA) ya da 'bash -c "echo kosu-sar.sh; flock …"' sarılı SAYILMAZ.

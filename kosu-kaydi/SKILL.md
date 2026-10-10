@@ -92,7 +92,7 @@ kısıtlıysa OR). Tarama 1500 gün (29 Şubat gibi seyrek ama geçerli ifadeler
 | K4 🔴 | aynı iş iki sarılı satırda | ikileme — restart'ta iki kez koşar (A313) |
 | K5 △ | crontab başına `KOSU_KUTU=`/`KOSU_KANON=` satırı | kanca taşımaz, recreate'te kaybolur → satır içine (A313) |
 | K6 △ | `--gozlem` komutu bu kutuda yok (yalnız `--kutu-ici`) | her koşu `olculemedi` olur (`ss` nazir'de yoktu) |
-| K7 △ | (yalnız `--kanon <dosya>`, girdi = canlı) zamanlı satır canlıda var kanonda yok — ya da kanonda var canlıda yok | elle kurulan satır recreate'te kaybolur; kanonda olup inmeyen satır hiç koşmaz. nazir'de canlı 7 / kanon 5 farkını 0.5.1 görmüyordu (A320). Karşılaştırma tam satır, sekme/çoklu boşluk tek boşluk |
+| K7 △ | (yalnız `--kanon <dosya>`, girdi = canlı) zamanlı satır canlıda var kanonda yok — ya da kanonda var canlıda yok | elle kurulan satır recreate'te kaybolur; kanonda olup inmeyen satır hiç koşmaz. nazir'de canlı 7 / kanon 5 farkını 0.5.1 görmüyordu (A320). Karşılaştırma tam satır ve çokluklu (fazla/eksik kopya da fark); yalnız zaman alanlarının ayracı teke iner, komut olduğu gibi kalır |
 | K8 △ | **sarılmamış** zamanlı satırda `flock` (sarılı = cron'un çalıştırdığı program sarmalayıcının kendisi; `flock … kosu-sar.sh` dışarıdan kilit sarılı sayılmaz) | kilitli iş kayıt dışı: atlandı mı koştu mu hiçbir yerde görünmez → `kosu-sar --kilit` ile sar (A320) |
 Canlıyı kanona karşı elle ölçmek: `crontab -l | bash scripts/kanon-lint.sh - --kutu-ici --kanon <kanon>`.
 rc: 0 temiz/yalnız sarı · 1 kırmızı var · 3 ölçülemedi (kanon da okunamazsa). **Çağıran:** sarmalayıcı **her koşuda** kanonu (ya da canlı crontab'ı) lint'ler; 0.5.2'den beri

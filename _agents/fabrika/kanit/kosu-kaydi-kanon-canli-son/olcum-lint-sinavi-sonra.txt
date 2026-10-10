@@ -1,5 +1,5 @@
 $ bash kosu-kaydi/scripts/kanon-lint.test.sh
-# rc=0 sure=3.0s zaman=2026-10-10T23:16:01+03:00
+# rc=0 sure=4.7s zaman=2026-10-10T23:18:13+03:00
 --- stdout ---
 ════ temiz kanon: satır sonu etiketi · --kilit doğru · gözlemli ════
 ════ K1 · --kilit + iç flock = her koşu atlanır (KIRMIZI) ════
@@ -14,5 +14,5 @@ $ bash kosu-kaydi/scripts/kanon-lint.test.sh
 ════ nazir biçimi: kanon 5 / canlı 7, farkı iki federe flock satırı → K7 iki + K8 iki ════
 ════ giriş / rc ════
 
-── SONUÇ: 67 geçti · 0 düştü ──
+── SONUÇ: 68 geçti · 0 düştü ──
 --- stderr ---
