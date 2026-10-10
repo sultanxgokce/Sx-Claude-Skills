@@ -23,6 +23,21 @@ bul() { # bul <renk> <kural> <satır no> <mesaj>
   if [ "$1" = K ]; then KIRMIZI=$((KIRMIZI+1)); printf '✗ KIRMIZI %s satır %s: %s\n' "$2" "$3" "$4"
   else SARI=$((SARI+1)); printf '△ SARI    %s satır %s: %s\n' "$2" "$3" "$4"; fi
 }
+flock_nonblock() {  # <komut metni> → komut parçasındaki flock çağrısının KENDİ seçeneklerinde nonblock var mı (rc 0 var)
+  local seg="$1" tok gor=0 deger=0
+  seg="${seg#*flock}"; [ "$seg" = "$1" ] && return 1              # flock yok
+  case "$1" in *[[:space:]\;\&\|/]flock*|flock*) ;; *) return 1 ;; esac   # 'flock' bir belirteç başlangıcı olmalı
+  for tok in $seg; do
+    if [ "$deger" -eq 1 ]; then deger=0; continue; fi               # önceki seçeneğin ayrı değeri
+    case "$tok" in
+      -n|--nonblock|--nb) return 0 ;;
+      -E|-w|-c|--conflict-exit-code|--timeout|--command) deger=1 ;;   # değer alan seçenekler (ayrı belirteç)
+      -E*|-w*|-c*|--conflict-exit-code=*|--timeout=*|--command=*) ;;  # bitişik değer
+      -*) ;;                                                      # başka bayrak (-s, -x, -u, -o, -F, -e, --verbose…)
+      *) return 1 ;;                                              # ilk seçenek-dışı belirteç = kilit dosyası → tarama biter
+    esac
+  done; return 1
+}
 declare -A IS_SATIR=()
 n=0; onceki=""; BLOK_SAHIP=0
 while IFS= read -r ham || [ -n "$ham" ]; do
@@ -45,8 +60,10 @@ while IFS= read -r ham || [ -n "$ham" ]; do
     if printf '%s' "$sarmal" | grep -q -- '--kilit' && printf '%s' "$komut" | grep -qE '(^|[[:space:];&|])(/[^[:space:]]*/)?flock([[:space:]]|$)'; then
       bul K K1 "$n" "--kilit VE komut içinde flock (iş: ${is:-?}) — iç kilit ebeveynin kilidine çarpar, iş HİÇ koşmaz (iç flock -E 75 ise sahte atlandi-kilit, değilse her koşu hata); önce içteki flock kalkar"; fi
     # -n flock'tan hemen sonra olmayabilir (flock -E 75 -n …, flock -w 0 -n …, --nonblock): araya giren seçeneklere izin ver (bağımsız göz -son tur 3)
-    # seçeneklerin DEĞERİ ayrı belirteç olabilir (-E 75, -w 0): flock ile nonblock bayrağı arasında aynı komut parçasında her şey serbest
-    if ! printf '%s' "$sarmal" | grep -q -- '--kilit' && printf '%s' "$komut" | grep -qE '(^|[[:space:];&|])(/[^[:space:]]*/)?flock[^;&|]*[[:space:]](-n|--nonblock|--nb)([[:space:]]|$)'; then
+    # nonblock bayrağı flock'un KENDİ seçenekleri arasında aranır: flock'tan sonra belirteçler okunur, '-' ile başlayanlar seçenektir
+    # (-E/-w/-c değer alır, ayrı belirteç ya da bitişik), ilk seçenek-dışı belirteç kilit dosyasıdır ve tarama orada biter —
+    # çalıştırılan komutun kendi '-n'si (flock /x.lock grep -n …) K2 değildir (bağımsız göz -k2 tur 1)
+    if ! printf '%s' "$sarmal" | grep -q -- '--kilit' && flock_nonblock "$komut"; then
       bul S K2 "$n" "flock -n sarmalayıcının İÇİNDE (iş: ${is:-?}) — kilit/hata ayrımı yok; --kilit <dosya>'ya taşı"; fi
     if [ -n "$is" ]; then
       if [ -n "${IS_SATIR[$is]:-}" ]; then bul K K4 "$n" "iş '$is' ikinci kez sarılı (ilk: satır ${IS_SATIR[$is]}) — ikileme; restart'ta iki kez koşar"

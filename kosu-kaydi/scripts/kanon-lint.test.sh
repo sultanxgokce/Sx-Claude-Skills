@@ -33,6 +33,10 @@ printf '%s\n' "35 * * * * $W supur -- flock --nonblock /x.lock bash /x/supur.sh 
 kos "$T/k2d"; ol "K2: --nonblock uzun biçimi → sarı" "$(printf '%s' "$CIKTI" | grep -c 'SARI    K2')" "1"
 printf '%s\n' "35 * * * * $W supur -- flock /x.lock bash /x/supur.sh # supur sahip:MUAVIN" > "$T/k2e"
 kos "$T/k2e"; ol "K2 altın: bloklayan flock (-n yok) sarı değil (kilit bekler, atlamaz)" "$(printf '%s' "$CIKTI" | grep -c 'SARI    K2')" "0"
+printf '%s\n' "35 * * * * $W supur -- flock /x.lock grep -n desen /x/dosya # supur sahip:MUAVIN" > "$T/k2f"
+kos "$T/k2f"; ol "K2 altın: çalıştırılan komutun kendi -n'si (flock /x.lock grep -n) K2 DEĞİL" "$(printf '%s' "$CIKTI" | grep -c 'SARI    K2')" "0"
+printf '%s\n' "35 * * * * $W supur -- flock -E75 -w 0 -n /x.lock bash /x/supur.sh # supur sahip:MUAVIN" > "$T/k2g"
+kos "$T/k2g"; ol "K2: bitişik değer (-E75) + ayrı değer (-w 0) + -n → sarı" "$(printf '%s' "$CIKTI" | grep -c 'SARI    K2')" "1"
 
 echo "════ K2 · flock -n sarmalayıcının içinde, --kilit yok (SARI) ════"
 printf '%s\n' "35 * * * * $W supur -- flock -n /x.lock bash /x/supur.sh # supur sahip:MUAVIN" > "$T/k2"
