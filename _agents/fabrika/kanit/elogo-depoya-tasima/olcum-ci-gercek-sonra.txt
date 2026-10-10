@@ -1,0 +1,12 @@
+$ /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/ci-gercek.sh /config/projects/_wt/sx-elogo-uzlas
+# rc=0 sure=1.8s zaman=2026-10-10T18:15:47+03:00
+--- stdout ---
+kosu sonucu: success
+── ./elogo-erisim/scripts/i1.test.sh
+  ⚠ ÖLÇÜLEMEDİ: kutu-yerel türev dizini bu makinede yok (CI) — İ1c sayılmadı
+toplam=8 geçen=8 düşen=0
+   ✓ ./elogo-erisim/scripts/i1.test.sh
+── ./elogo-erisim/scripts/iade_hat.test.sh
+── iade_hat: geçen=8 düşen=0
+   ✓ ./elogo-erisim/scripts/iade_hat.test.sh
+--- stderr ---

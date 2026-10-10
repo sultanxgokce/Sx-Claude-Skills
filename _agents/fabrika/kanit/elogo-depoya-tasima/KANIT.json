@@ -1,7 +1,7 @@
 {
   "is": "elogo-depoya-tasima",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-10T18:07:45+03:00",
+  "guncelleme": "2026-10-10T18:15:47+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -122,7 +122,22 @@
       "renk": "yesil",
       "zaman": "2026-10-10T18:07:36+03:00",
       "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-gercek",
+      "asama": "sonra",
+      "dosya": "olcum-ci-gercek-sonra.txt",
+      "sha256": "48aa3b2092e1819db782859958049da2be6a33dd70ca222d9e46c6d1da8a8aa9",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/ci-gercek.sh",
+        "/config/projects/_wt/sx-elogo-uzlas"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-10T18:15:47+03:00",
+      "sure_sn": 1.8
     }
   ],
-  "imza": "30ab1d775368c5d7b88b9fdc4469ee8fcdb8f12bf47950f52b730b6057665187"
+  "imza": "ee247bb9aba360364de0d34f70cc932cc4f56d16da878a73d01ad2e969e05da1"
 }
