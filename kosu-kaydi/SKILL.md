@@ -1,7 +1,7 @@
 ---
 name: kosu-kaydi
 type: agent
-version: 0.5.0
+version: 0.5.1
 description: >
   Koşu kaydı sarmalayıcısı: her cron/zamanlı iş kendi komutunu `kosu-sar.sh <is> [--nobetci [--gozlem <komut>]] [--kilit <dosya>] -- <komut>` ile sarar; her koşu
   TAM BİR satır yazar (/config/.kosu-kaydi/<kutu>.<YYYY-MM>.jsonl, kutu-yerel, 17 alan — Nexus kokpit-ux/05 şeması sürüm 1.4; gözlemli kipte gozlem_once/gozlem_sonra ilk 120 bayt).
@@ -41,10 +41,14 @@ KOSU_KANON=/config/projects/nazir/.oda/cron            # verilmezse drift ölç�
 ```
 - `sahip` (K3): satır üstü `# sahip:` **ya da** satır sonu `# <ad> sahip:<ROL> [damga:<yol>]`; ikisi varsa satır sonu kazanır
   (A292: bazı kanon üreticileri yorum satırlarını canlıya taşımaz, satır sonu etiketi taşınır); yoksa `bilinmiyor` (uydurma yok).
-- Kutunun adı: crontab başına `KOSU_KUTU=<kutu>`. Yoksa `DEFAULT_WORKSPACE`'ten türer; o da yoksa `bilinmiyor`
-  (konteyner hostname'i onaltılık bir kimliktir, kutu adı değil — basılmaz).
-- Kanon dosyasının yolu biliniyorsa `KOSU_KANON=<yol>`. **Verilmezse kanon = canlı crontab**: sahip okunur ama
-  `ifadeden_tahmin` gözlemle aynı olur, yani **drift ölçülemez** — bu dürüstçe böyledir, "drift yok" demek değildir.
+- Kutunun adı `KOSU_KUTU=<kutu>`, kanon yolu `KOSU_KANON=<yol>` — **ikisini de SATIR İÇİNDE ver** (yukarıdaki pilot satırı gibi:
+  `*/5 * * * * KOSU_KUTU=nazir KOSU_KANON=/… bash …/kosu-sar.sh …`). 0.4'e kadar "crontab başına ortam satırı" deniyordu;
+  NÂZIR ölçtü (A313): oda kancası (`36-oda-cron.sh`, kanon→canlı) bu satırları **geçersiz sayıp atlıyor**, recreate'te kaybolur,
+  kutu adı `bilinmiyor`a düşer. `KOSU_KUTU` yoksa `DEFAULT_WORKSPACE`'ten türer; o da yoksa `bilinmiyor` (hostname basılmaz).
+- `KOSU_KANON` **verilmezse kanon = canlı crontab**: sahip okunur ama `ifadeden_tahmin` gözlemle aynı olur, yani **drift
+  ölçülemez** — bu dürüstçe böyledir, "drift yok" demek değildir.
+- **Satırı KANONA yaz, canlıya elle değil KANCAYLA indir** (A313): elle kurulup sonra kanona da yazılan satır restart'ta ikilenir
+  (nazir'de iki satır böyleydi, nöbetçi beş dakikada iki kez koşacaktı). Kanonu düzenledikten sonra kutunun kancasını çağır.
 - Kilit: satırdaki `flock -n <dosya>` **sarmalayıcıya taşınır** (`--kilit <dosya>`); kilidi sarmalayıcı alır, alamazsa komut koşmaz ve
   `atlandi-kilit` yazılır. `flock` sarmalayıcının içinde kalsa alt komutun rc'sini olduğu gibi geçirdiği için "75 = kilit" çıkarımı
   kesin olmazdı (bağımsız göz); dışında kalsa kilitli koşu hiç satır yazmaz, kokpit "koşmadı" derdi.
@@ -78,6 +82,18 @@ dokunmadan K4 ölçülür. Bedeli: nöbetçinin çıktısı sarmalayıcıdan ge�
 (vixie kuralları: `*` · sayı · `a-b` · liste · `/adım` · ay/gün adı · hafta günü 0=7=Pazar · gün-ay ve hafta-günü ikisi
 kısıtlıysa OR). Tarama 1500 gün (29 Şubat gibi seyrek ama geçerli ifadeler sığar); bulunamazsa (31 Şubat) rc 3.
 
+### Kanon lint'i (0.5.1 — şema K4b'nin "lint kırmızı yapar" dediği, A309'a kadar olmayan araç)
+`bash scripts/kanon-lint.sh <kanon-dosyası|-> [--kutu-ici]` — yalnız **sarılı** satırlara bakar (sarılmamış iş K6 listesinin, okuyucunun konusu):
+| | Kural | Niçin |
+|---|---|---|
+| K1 🔴 | `--kilit` **ve** komut içinde `flock` | iç kilit ebeveynin kilidine çarpar → **her koşu** `atlandi-kilit`, iş hiç koşmaz (SEYYAH fikstürü, A309). Önce içteki `flock` kalkar |
+| K2 △ | `flock -n` içeride, `--kilit` yok | kilit/hata ayrımı yok (K4b) |
+| K3 🔴 | sahip etiketi yok (satır üstü/sonu) | kayıt `bilinmiyor` yazar; kanon düzeltilmeli (K3) |
+| K4 🔴 | aynı iş iki sarılı satırda | ikileme — restart'ta iki kez koşar (A313) |
+| K5 △ | crontab başına `KOSU_KUTU=`/`KOSU_KANON=` satırı | kanca taşımaz, recreate'te kaybolur → satır içine (A313) |
+| K6 △ | `--gozlem` komutu bu kutuda yok (yalnız `--kutu-ici`) | her koşu `olculemedi` olur (`ss` nazir'de yoktu) |
+rc: 0 temiz/yalnız sarı · 1 kırmızı var · 3 ölçülemedi. Kanon üreticisi (oda kancası) çağırmıyor henüz — kutu sahibi elle koşturur; kancaya bağlamak ayrı iş.
+
 ## Dikişler (sınav için)
 `KOSU_KAYIT_DIZ` · `KOSU_KANON` · `KOSU_CRONTAB_KOMUT` (varsayılan `crontab -l`) · `KOSU_KUTU` · `KOSU_SIMDI` · `KOSU_YEDEK_DIZ` · `KOSU_FLOCK_KOMUT` (varsayılan `flock`; 'flock yok' sınavı için).
 
@@ -87,6 +103,7 @@ kısıtlıysa OR). Tarama 1500 gün (29 Şubat gibi seyrek ama geçerli ifadeler
 - `bash scripts/kosu-sar.test.sh` — hermetik (sahte kanon, sahte crontab, geçici dizin). Ölçtüğü: 17 alan geçerli JSON · gözlem değerleri (120 bayt, NUL, null/boş ayrımı) · beyan
   protokolü (dosya + `--nobetci`) · satır sonu etiketi · `atlandi-kilit` · kanon/canlı çelişkisi · @reboot · kanonsuz kip · kutu adı
   türetimi · rc 126/127 geçişi · gözlem altı hâl (boş→boş/dolu→boş hata) · UTC damga · cron-sonraki 10 ifade + 4 ret · croniter zehirli-modül kapısı (pakete bağımlılık yok).
+- `bash scripts/kanon-lint.test.sh` — lint'in sınavı (30 kapı; her kural için kırmızı + altın çift; stdin, rc 2/3).
 - `bash scripts/hedef-kutu-sinav.sh <konteyner> [<ssh-host>|-]` — aynı sınavı **hedef kutuda** koşturur (tar → `/tmp`, orada koş, sil;
   kaynak/hedef md5'leri basılır). Kurulumdan önce "bu kutuda çalışır" iddiasının ölçümü.
 

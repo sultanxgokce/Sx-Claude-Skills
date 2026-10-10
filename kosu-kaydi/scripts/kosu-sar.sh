@@ -13,7 +13,7 @@
 #   Dikişler (sınav): KOSU_KAYIT_DIZ · KOSU_KANON · KOSU_CRONTAB_KOMUT (varsayılan 'crontab -l') · KOSU_KUTU · KOSU_SIMDI.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SURUM="kosu-sar 0.5"
+SURUM="kosu-sar 0.5.1"
 KULLANIM="kullanım: kosu-sar.sh <is> [--nobetci [--gozlem <komut>]] [--kilit <dosya>] -- <komut…>"
 IS="${1:-}"; shift || true; NOBETCI=0; KILIT=""; GOZLEM=""
 while [ $# -gt 0 ] && [ "$1" != "--" ]; do

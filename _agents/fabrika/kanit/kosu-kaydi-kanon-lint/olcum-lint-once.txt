@@ -1,0 +1,5 @@
+$ bash -c git show origin/main:kosu-kaydi/scripts/kanon-lint.sh >/dev/null 2>&1 && echo "VAR" || echo "kanon-lint.sh origin/main'de YOK (rc $?)"
+# rc=0 sure=0.0s zaman=2026-10-10T12:24:18+03:00
+--- stdout ---
+kanon-lint.sh origin/main'de YOK (rc 128)
+--- stderr ---
