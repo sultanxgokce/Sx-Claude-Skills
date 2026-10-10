@@ -139,6 +139,26 @@ ol "temiz kanon → lint satırı yok" "$(grep -c 'kanon-lint KIRMIZI' "$T/lint-
 # sınavın kendi kanonu bilerek sahipsiz bir iş taşır (nobetci): oradan koşan her satır tek özet uyarı alır — bu da ölçülü
 bash "$S" supur -- true 2>"$T/lint-err2" >/dev/null
 ol "sınav kanonu (sahipsiz 'nobetci' var) → özet satırı 1" "$(grep -c 'kanon-lint — KIRMIZI 1 ' "$T/lint-err2")" "1"
+echo "════ 0.5.2 · kanon ∪ canlı: canlıda kanon dışı satır (K7) + sarılmamış kilitli iş (K8) özet satırında (A320) ════"
+printf '%s\n' "35 * * * * bash kosu-sar.sh supur -- true # supur sahip:NAZIR" > "$T/kanon-52"
+{ cat "$T/kanon-52"; echo "*/2 * * * * flock -n /x/f.lock bash /x/federe.sh"; } > "$T/canli-52"
+printf '#!/usr/bin/env bash\ncat "%s/canli-52"\n' "$T" > "$T/ct52.sh"; chmod +x "$T/ct52.sh"
+KOSU_KANON="$T/kanon-52" KOSU_CRONTAB_KOMUT="$T/ct52.sh" bash "$S" supur -- true 2>"$T/lint-52" >/dev/null; rc=$?
+ol "canlıda kanon dışı federe flock satırı → özet: kırmızı yok · K7 1 · K8 1, iş koşar (rc 0)" "$(grep -c 'kanon-lint — kırmızı yok · SARI K7 canlı ile kanon farklı 1 · SARI K8 sarılmamış kilitli iş 1' "$T/lint-52")/$rc" "1/0"
+ol "özet satırı canlı lint komutunu da gösterir" "$(grep -c 'crontab -l | kanon-lint.sh - --kanon ' "$T/lint-52")" "1"
+cp "$T/kanon-52" "$T/canli-52"
+KOSU_KANON="$T/kanon-52" KOSU_CRONTAB_KOMUT="$T/ct52.sh" bash "$S" supur -- true 2>"$T/lint-52a" >/dev/null
+ol "altın: canlı = kanon (temiz) → lint satırı YOK" "$(grep -c 'kanon-lint' "$T/lint-52a")" "0"
+{ cat "$T/kanon-52"; echo "*/2 * * * * flock -n /x/f.lock bash /x/federe.sh"; } > "$T/canli-52"
+KOSU_KANON= KOSU_CRONTAB_KOMUT="$T/ct52.sh" bash "$S" supur -- true 2>"$T/lint-52b" >/dev/null
+ol "kanon bildirilmemiş → canlı tek lint: K8 var, K7 YOK (karşılaştıracak kanon yok)" "$(grep -c 'SARI K8 sarılmamış kilitli iş 1' "$T/lint-52b")/$(grep -c 'SARI K7' "$T/lint-52b")" "1/0"
+printf '#!/usr/bin/env bash\necho "no crontab" >&2; exit 1\n' > "$T/ct-hata.sh"; chmod +x "$T/ct-hata.sh"
+KOSU_KANON="$T/kanon-52" KOSU_CRONTAB_KOMUT="$T/ct-hata.sh" bash "$S" supur -- true 2>"$T/lint-52d" >/dev/null; rc=$?
+ol "canlı crontab okunamıyor → 'ölçülemedi' denir, sahte K7 YOK, iş koşar" "$(grep -c 'canlı crontab okunamadı: K7/K8 ölçülemedi' "$T/lint-52d")/$(grep -c 'SARI K7' "$T/lint-52d")/$rc" "1/0/0"
+KOSU_KANON="$T/yok-boyle-kanon" KOSU_CRONTAB_KOMUT="$T/ct52.sh" bash "$S" supur -- true 2>"$T/lint-52e" >/dev/null; rc=$?
+ol "KOSU_KANON okunamıyor → lint rc 3 yutulmaz, 'kanon okunamadı: lint ölçülemedi' denir; iş koşar" "$(grep -c 'kanon okunamadı: lint ölçülemedi' "$T/lint-52e")/$rc" "1/0"
+KOSU_KANON="$T/kanon-52" KOSU_CRONTAB_KOMUT="$T/ct52.sh" KOSU_KANON_LINT=0 bash "$S" supur -- true 2>"$T/lint-52c" >/dev/null
+ol "KOSU_KANON_LINT=0 → canlı lint de susar" "$(grep -c 'kanon-lint' "$T/lint-52c")" "0"
 ( KOSU_KILIT_RC=99 bash "$S" supur --kilit "$T/kilit" -- true >/dev/null; echo "rc=$?" > "$T/rc99" ); ol "kilit kodu ortamla DEĞİŞMEZ (şema sabit 75)" "$(alan rc)/$(cat "$T/rc99")" "75/rc=75"
 bash "$S" supur -- bash -c 'exit 75' >/dev/null
 ol "--kilit YOKKEN işin kendi 75'i → hata (sezgi yok)" "$(alan sonuc)" "hata"

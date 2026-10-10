@@ -1,0 +1,5 @@
+$ bash -c bash /config/.claude/jobs/d69a1b07/tmp/k52/kanon-lint-051.sh - --kutu-ici < /config/.claude/jobs/d69a1b07/tmp/k52/canli
+# rc=0 sure=0.1s zaman=2026-10-10T23:13:52+03:00
+--- stdout ---
+── sarılı satır: 1 · kırmızı: 0 · sarı: 0
+--- stderr ---

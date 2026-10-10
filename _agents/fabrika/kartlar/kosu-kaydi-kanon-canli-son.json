@@ -1,0 +1,19 @@
+{
+  "is": "kosu-kaydi-kanon-canli-son",
+  "cumle": "kosu-kaydi 0.5.2 son dilim: K7 kanon dışı + K8 sarılmamış kilit (tur 1-4 düzeltmeleriyle) + sarmalayıcı lint'in rc 3'ünü (kanon okunamadı) yutmaz, 'ölçülemedi' der (A320)",
+  "istedi": "NAZIR",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-10T23:12:07+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}
