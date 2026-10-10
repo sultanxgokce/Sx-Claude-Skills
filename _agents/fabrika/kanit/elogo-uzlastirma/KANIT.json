@@ -1,0 +1,68 @@
+{
+  "is": "elogo-uzlastirma",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-10T17:52:10+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinavlar",
+      "asama": "once",
+      "dosya": "olcum-sinavlar-once.txt",
+      "sha256": "4fd5422783869d9b2c40b40d34722062828359b740962631bd49b6172d356f12",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/sinav-kos.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/once-1791643826/elogo-erisim/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-10T17:50:56+03:00",
+      "sure_sn": 8.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinavlar",
+      "asama": "sonra",
+      "dosya": "olcum-sinavlar-sonra.txt",
+      "sha256": "a1c41a8219db5bd0c755a28043392a28500d0bf2a22afad15ee48d886b5052ed",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/sinav-kos.sh",
+        "elogo-erisim/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-10T17:50:41+03:00",
+      "sure_sn": 8.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-sonra.txt",
+      "sha256": "d49441f684302f35d74a613ca5e8e10d2e0d6b043d1fb17490dbfab785a23691",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutasyon.sh",
+        "elogo-erisim/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-10T17:51:21+03:00",
+      "sure_sn": 12.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gizlilik",
+      "asama": "sonra",
+      "dosya": "olcum-gizlilik-sonra.txt",
+      "sha256": "f5aaee41ad1cb07b0634ec720369942ac39a3b79dd67b0824602a49f6777c5a5",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/gizlilik.sh",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-10T17:52:10+03:00",
+      "sure_sn": 0.1
+    }
+  ],
+  "imza": "9326336b7fcde4a60c12670f43b8c3f4079a78500b5c0659f3994b46bc155d91"
+}
