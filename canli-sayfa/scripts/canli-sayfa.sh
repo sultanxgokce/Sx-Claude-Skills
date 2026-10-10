@@ -33,7 +33,7 @@
 #   CANLI_SAYFA_OLCER   adresi ölçen komut; adres son argüman olarak verilir, "<kod> <yönlenilen adres>" basar
 #   CANLI_SAYFA_GOVDE   anonim gövdeyi basan komut; adres son argüman (varsayılan curl, 2 MB tavan, yönlenme izlenmez)
 #   CANLI_SAYFA_KILIT_SURE  aynı sayfanın kilidini en çok kaç saniye beklesin (varsayılan 10)
-# rc: 0 tamam · 1 doğrulamada sorunlu kayıt var / bozuk kayıt var · 2 kullanım ya da kural ihlali
+# rc: 0 tamam · 1 doğrulamada sorunlu kayıt var / bozuk kayıt var · 2 kullanım ya da kural ihlali · 5 kayıt yazıldı ama giriş ölçülemedi (sarı, yalnız --imza)
 #     3 ölçülemedi ya da canlı değil · 4 kapısız sayfa onaysız
 set -uo pipefail
 DIZIN="${CANLI_SAYFA_DIZIN:-/config/.claude/canli-sayfalar}"

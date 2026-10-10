@@ -1,7 +1,7 @@
 {
   "is": "canli-sayfa-govde-korumali",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-10T12:30:34+03:00",
+  "guncelleme": "2026-10-10T12:32:32+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -23,15 +23,15 @@
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "854f2532d78d048062fea8f88506195923b2c68db55d7c9809f7a3b8a7ed8708",
+      "sha256": "d6d67189ad45cbffd9346dfcbe4823ef7b86021f391a23b3b4cbe7cbdfbb2c1f",
       "komut": [
         "bash",
         "canli-sayfa/scripts/canli-sayfa.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T12:30:22+03:00",
-      "sure_sn": 23.5
+      "zaman": "2026-10-10T12:32:32+03:00",
+      "sure_sn": 12.7
     },
     {
       "tur": "olcum",
@@ -50,5 +50,5 @@
       "sure_sn": 0.0
     }
   ],
-  "imza": "4a707b2a135681f84fe114aecebdef2e1725dabed64008b7c1dd919dc2ee2e74"
+  "imza": "6839c027bc6063bd153733b558202575793607d35057238cd66bd7d40be5b0a9"
 }

@@ -1,5 +1,5 @@
 $ bash canli-sayfa/scripts/canli-sayfa.test.sh
-# rc=0 sure=23.5s zaman=2026-10-10T12:30:22+03:00
+# rc=0 sure=12.7s zaman=2026-10-10T12:32:32+03:00
 --- stdout ---
 == T1: kapı arkasındaki canlı sayfa kayda girer ==
   ✓ rc 0

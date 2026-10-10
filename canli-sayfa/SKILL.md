@@ -59,7 +59,7 @@ Sayfa kalktıysa: `canli-sayfa.sh emekli --adres … --gerekce "…"`. Adı ya d
 
 | Komut | Ne yapar | rc |
 |---|---|---|
-| `ekle --adres --ad --ne --kutu --ekleyen [--herkese-acik evet] [--imza "<dize>"]` | adresi ölçer, kurallardan geçirir, kaydı yazar; aynı adres varsa günceller (ilk tarih korunur). `--imza`: sayfanın kendi içeriğinden bir dize (4-80 karakter); 2xx dönen adreste anonim gövde okunur, imza yoksa **giriş ölçülemedi (SARI: ne kapalı ne açık)** — kayıt yazılır, **rc 5** | 0 · 2 kural · 3 canlı değil/ölçülemedi · 4 kapısız sayfa onaysız |
+| `ekle --adres --ad --ne --kutu --ekleyen [--herkese-acik evet] [--imza "<dize>"]` | adresi ölçer, kurallardan geçirir, kaydı yazar; aynı adres varsa günceller (ilk tarih korunur). `--imza`: sayfanın kendi içeriğinden bir dize (4-80 karakter); 2xx dönen adreste anonim gövde okunur, imza yoksa **giriş ölçülemedi (SARI: ne kapalı ne açık)** — kayıt yazılır, **rc 5** | 0 · 2 kural · 3 canlı değil/ölçülemedi (kayıt yok) · 4 kapısız sayfa onaysız · **5 kayıt yazıldı ama giriş ölçülemedi (sarı, yalnız `--imza`)** |
 | `liste [--hepsi] [--json]` | canlı kayıtlar; `--hepsi` emeklileri de; `--json` menünün okuduğu biçim | 0 · 1 bozuk kayıt var |
 | `emekli --adres --gerekce` | kaydı silmez, menüden kaldırır | 0 · 1 kayıt yok · 2 |
 | `dogrula` | canlı kayıtların hepsini yeniden ölçer: açılmayan ve giriş kapısı değişen sayfayı yazar; kaydı değiştirmez | 0 · 1 sorunlu kayıt var |
