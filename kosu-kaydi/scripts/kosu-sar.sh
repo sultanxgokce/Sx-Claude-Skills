@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# kosu-sar.sh — koşu kaydı sarmalayıcısı (Nexus kokpit-ux/05 şema sürüm 1.3, K1-K6). Sürüm 0.4.1 (global beceri, A290-A293, A300, A303; K4-d altı hâl).
+# kosu-sar.sh — koşu kaydı sarmalayıcısı (Nexus kokpit-ux/05 şema sürüm 1.4, K1-K6). Sürüm 0.5 (global beceri, A290-A293, A300, A303; K4-d altı hâl; gözlem değerleri satırda, A310).
 #   Kullanım (kanon satırında):  bash /config/.claude/skills/kosu-kaydi/scripts/kosu-sar.sh <is> [--nobetci [--gozlem <komut>]] [--kilit <dosya>] -- <eski komut…>
 #   Her koşu TAM BİR SATIR yazar (K1): /config/.kosu-kaydi/<kutu>.<YYYY-MM>.jsonl (kutu-yerel; /config/.claude ortak bağ) — özet yok.
 #   sonuc: tamam · hata · ayakta-dokunmadim (K4: işin $KOSU_BEYAN dosyasına 'dokunmadim' yazmasıyla YA DA kanon satırında --nobetci
@@ -13,7 +13,7 @@
 #   Dikişler (sınav): KOSU_KAYIT_DIZ · KOSU_KANON · KOSU_CRONTAB_KOMUT (varsayılan 'crontab -l') · KOSU_KUTU · KOSU_SIMDI.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SURUM="kosu-sar 0.4.1"
+SURUM="kosu-sar 0.5"
 KULLANIM="kullanım: kosu-sar.sh <is> [--nobetci [--gozlem <komut>]] [--kilit <dosya>] -- <komut…>"
 IS="${1:-}"; shift || true; NOBETCI=0; KILIT=""; GOZLEM=""
 while [ $# -gt 0 ] && [ "$1" != "--" ]; do
@@ -74,7 +74,7 @@ SAHIP="${KANON_BILGI%%|*}"; REST="${KANON_BILGI#*|}"; DAMGA="${REST%%|*}"; KANON
 [ -n "$SAHIP" ] || SAHIP="bilinmiyor"
 
 BEYAN_DOSYA="$(mktemp)"; export KOSU_BEYAN="$BEYAN_DOSYA"
-BASLANGIC="$(_an)"; T0=$(date +%s); ATLANDI=0; KILIT_SORUN=0; GOZLEM_SORUN=0; GOZLEM_HATA=0
+BASLANGIC="$(_an)"; T0=$(date +%s); ATLANDI=0; KILIT_SORUN=0; GOZLEM_SORUN=0; GOZLEM_HATA=0; G_ONCE_J=null; G_SONRA_J=null
 if [ -n "$KILIT" ]; then
   FLOCK="${KOSU_FLOCK_KOMUT:-flock}"   # dikiş: sınav 'flock yok' hâlini taklit eder
   if ! command -v "$FLOCK" >/dev/null 2>&1; then
@@ -104,6 +104,11 @@ elif [ "$NOBETCI" -eq 1 ] && [ -n "$GOZLEM" ]; then   # nöbetçi kipi, GÖZLEML
   elif [ ! -s "$G_ONCE" ] && [ ! -s "$G_SONRA" ]; then GOZLEM_HATA=1; CIKTI_VAR=1   # boş→boş: yoktu, hâlâ yok
   elif [ -s "$G_ONCE" ] && [ ! -s "$G_SONRA" ]; then GOZLEM_HATA=1; CIKTI_VAR=1     # dolu→boş: nöbetçi gözleneni düşürdü
   elif cmp -s "$G_ONCE" "$G_SONRA"; then CIKTI_VAR=0; else CIKTI_VAR=1; fi   # bayt bayt aynı = dokunmadı · değişti = iş yaptı (ör. dinleyen pid)
+  # 0.5 / şema 1.4 (A310, NÂZIR): hüküm dayanağıyla okunsun — kırpılmış gözlemin İLK 120 BAYTI satıra girer (uzun/çok satırlı çıktı kaydı şişirmesin);
+  # geçersiz UTF-8/NUL JSON'u bozmaz (replace). Gözlemsiz kipte iki alan null kalır. Gözlem komutu düştüyse eline ne geçtiyse o (çoğu kez boş dizge).
+  # SIRA: $G_ONCE/$G_SONRA dosyaları _gozle'nin KIRPILMIŞ çıktısıdır (ham dosya orada silinir) → kırpma önce, 120 bayt sonra (bağımsız göz tur 2 sorusu).
+  _gozlem_j() { python3 -c 'import json,sys;print(json.dumps(open(sys.argv[1],"rb").read()[:120].decode("utf-8","replace"),ensure_ascii=False))' "$1" 2>/dev/null || echo null; }
+  G_ONCE_J="$(_gozlem_j "$G_ONCE")"; G_SONRA_J="$(_gozlem_j "$G_SONRA")"
   rm -f "$G_ONCE" "$G_SONRA"
 elif [ "$NOBETCI" -eq 1 ]; then   # nöbetçi kipi, gözlemsiz: beyan KANON satırında (--nobetci); çıktı boş + rc 0 = ayaktaydı, dokunmadı (K4, A291)
   CIKTI_DOSYA="$(mktemp)"; if "$@" | tee "$CIKTI_DOSYA"; then RC=0; else RC=$?; fi
@@ -129,9 +134,9 @@ if [ -n "$TAHMIN" ]; then TAHMIN_B=true; else TAHMIN_B=false; fi
 if [ -z "$PLANLI" ] || [ -z "$TAHMIN" ]; then TURETILEMEDI=true; else TURETILEMEDI=false; fi
 
 DOSYA="$DIZ/$KUTU.$(date +%Y-%m).jsonl"; SATIR_TMP="$(mktemp)"
-printf '{"is":%s,"kutu":%s,"sahip":%s,"baslangic":%s,"bitis":%s,"sure_sn":%s,"rc":%s,"sonuc":%s,"kutuk":%s,"sonraki_planli":%s,"ifadeden_tahmin":%s,"tahmin":%s,"turetilemedi":%s,"defter_ref":null,"sarmalayici":%s}\n' \
+printf '{"is":%s,"kutu":%s,"sahip":%s,"baslangic":%s,"bitis":%s,"sure_sn":%s,"rc":%s,"sonuc":%s,"kutuk":%s,"sonraki_planli":%s,"ifadeden_tahmin":%s,"tahmin":%s,"turetilemedi":%s,"gozlem_once":%s,"gozlem_sonra":%s,"defter_ref":null,"sarmalayici":%s}\n' \
   "$(_json "$IS")" "$(_json "$KUTU")" "$(_json "$SAHIP")" "$(_json "$BASLANGIC")" "$(_json "$BITIS")" "$SURE" "$RC" "$(_json "$SONUC")" \
-  "$(_jnull "$DAMGA")" "$(_jnull "$PLANLI")" "$(_jnull "$TAHMIN")" "$TAHMIN_B" "$TURETILEMEDI" "$(_json "$SURUM")" > "$SATIR_TMP"
+  "$(_jnull "$DAMGA")" "$(_jnull "$PLANLI")" "$(_jnull "$TAHMIN")" "$TAHMIN_B" "$TURETILEMEDI" "$G_ONCE_J" "$G_SONRA_J" "$(_json "$SURUM")" > "$SATIR_TMP"
 if ! cat "$SATIR_TMP" >> "$DOSYA" 2>/dev/null; then   # dizin yazılabilir görünse de dosyaya ekleme düşebilir → yedek dizine ikinci deneme
   mkdir -p "$YEDEK_DIZ" 2>/dev/null; YDOSYA="$YEDEK_DIZ/$KUTU.$(date +%Y-%m).jsonl"
   if cat "$SATIR_TMP" >> "$YDOSYA" 2>/dev/null; then echo "kosu-sar: kayıt dosyasına yazılamadı ($DOSYA) — satır yedeğe yazıldı: $YDOSYA" >&2

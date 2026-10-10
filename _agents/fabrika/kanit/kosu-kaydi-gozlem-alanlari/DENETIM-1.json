@@ -1,0 +1,28 @@
+{
+  "tur": 1,
+  "is": "kosu-kaydi-gozlem-alanlari",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-10T10:56:42+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 22609,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İstenen iki gözlem alanı şema 1.4 ile eklenmiş; gözlemsiz kip, boş gözlem, 120 bayt sınırı ve JSON güvenliği sınavlarla ölçülmüş. Önce 6 kapının düştüğü, sonra 100 sınavın geçtiği araç imzalı ölçüm çifti üretime hazır bir değişikliği destekliyor; yalnız sınavda etkisiz bir tekrar satırı var.",
+    "bulgular": [
+      {
+        "ne": "Sınav hazırlığında aynı `pid-100` yazma işlemi art arda iki kez bulunuyor; davranışı bozmuyor ancak gereksiz tekrar temizlenmeli.",
+        "kanit": "Diff sonunda `printf 'pid-100\\n' > \"$T/dinleyen\"` satırı açıklamalı ve açıklamasız biçimde peş peşe yer alıyor.",
+        "konum": "kosu-kaydi/scripts/kosu-sar.test.sh: şema 1.4 sınav bloğunun sonu",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. `sinav` için önce/sonra ölçüm çifti mevcut: önce 94 geçti/6 düştü, sonra 100 geçti/0 düştü; çıktılar 17 alanı, null/boş ayrımını, 120 bayt sınırını, NUL içeren geçerli JSON'u ve gözlem komutu hata hâlini doğrudan sınayıp gösteriyor. Ayrıca sürüm kaydı yeşil, ancak asıl işlev kanıtı sınav ölçüm çiftidir."
+  }
+}

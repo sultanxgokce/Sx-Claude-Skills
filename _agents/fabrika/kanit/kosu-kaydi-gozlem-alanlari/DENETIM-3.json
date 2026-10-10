@@ -1,0 +1,21 @@
+{
+  "tur": 3,
+  "is": "kosu-kaydi-gozlem-alanlari",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-10T11:01:46+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 25526,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Şema 1.4’e iki gözlem alanı eklenmiş; gözlemsiz kipte null, ölçülmüş boş gözlemde boş dizge ve kırpılmış çıktının ilk 120 baytı davranışları uygulanıp belgelenmiş. Önceki turdaki kırpma kuşkusu, baş/son boşluklu gerçekçi örneği doğrudan sınayan yeni test ve 101/0 sonucu ile giderilmiş; üretimi engelleyen bir kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Önce 94 geçti/6 düştü, sonra 101 geçti/0 düştü ölçüm çifti değişimin etkisini açıkça gösteriyor. Sonraki sınav 17 alanı, gözlemsiz null değerlerini, null/boş ayrımını, değişen gözlemleri, kırpmanın 120 bayttan önce yapılmasını, NUL/geçersiz metin karşısında geçerli JSON'u ve gözlem komutu hata hâlini ölçüyor; sürüm 0.5 ve şema 1.4 güncellemeleri için ayrıca yeşil sürüm kaydı bulunuyor."
+  }
+}
