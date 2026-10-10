@@ -1,0 +1,19 @@
+{
+  "is": "kosu-kaydi-kanon-lint-son",
+  "cumle": "kosu-kaydi 0.5.1: kanon-lint.sh (K1 iç flock+--kilit kırmızı · K2 içte flock -n sarı · K3 sahipsiz kırmızı · K4 ikileme kırmızı · K5 ortam satırı sarı · K6 gözlem komutu kutuda yok sarı) + sarmalayıcı her koşuda --kutu-ici lint'ler, kırmızı/K6 varsa stderr'e renkleri AYRI yazan tek özet satır; talimat: değişkenler satır içinde, kanona yaz kancayla indir (A309/A313 NÂZIR; önceki kart 4 turda daraltıldı)",
+  "istedi": "NAZIR",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-10T12:44:27+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

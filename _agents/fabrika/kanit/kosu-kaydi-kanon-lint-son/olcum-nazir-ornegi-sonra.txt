@@ -1,5 +1,5 @@
 $ bash kosu-kaydi/scripts/kanon-lint.sh /config/.claude/jobs/d69a1b07/tmp/nazir-ornek-kanon
-# rc=1 sure=0.0s zaman=2026-10-10T12:24:34+03:00
+# rc=1 sure=0.0s zaman=2026-10-10T12:45:26+03:00
 --- stdout ---
 △ SARI    K5 satır 1: ortam satırı (KOSU_KUTU) — oda kancası bu satırı canlıya taşımaz, recreate'te kaybolur; değişkeni sarılı satırın içine taşı
 △ SARI    K5 satır 2: ortam satırı (KOSU_KANON) — oda kancası bu satırı canlıya taşımaz, recreate'te kaybolur; değişkeni sarılı satırın içine taşı
