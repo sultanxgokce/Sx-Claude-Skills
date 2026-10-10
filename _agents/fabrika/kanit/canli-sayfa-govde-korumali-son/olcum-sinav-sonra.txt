@@ -1,5 +1,5 @@
 $ bash canli-sayfa/scripts/canli-sayfa.test.sh
-# rc=0 sure=13.4s zaman=2026-10-10T12:41:12+03:00
+# rc=0 sure=12.2s zaman=2026-10-10T12:43:37+03:00
 --- stdout ---
 == T1: kapı arkasındaki canlı sayfa kayda girer ==
   ✓ rc 0
@@ -60,6 +60,8 @@ $ bash canli-sayfa/scripts/canli-sayfa.test.sh
   ✓ onayla → rc 0
   ✓ giriş açık
   ✓ ölçü gövde
+  ✓ 400 KB gövde, imza başta → yine AÇIK (boru hattı erken kapanınca sarıya düşmez)
+  ✓ giriş açık
   ✓ gövde okunamıyor → ölçülemedi rc 3 (kapalı DENMEZ)
   ✓ kayıt yok
   ✓ sebep
@@ -242,5 +244,5 @@ $ bash canli-sayfa/scripts/canli-sayfa.test.sh
   ✓ kayıt dizini yokken liste rc 0
   ✓ sıfır sayfa
 
-════════ SONUÇ: PASS=225 · FAIL=0 ════════
+════════ SONUÇ: PASS=227 · FAIL=0 ════════
 --- stderr ---

@@ -1,0 +1,28 @@
+{
+  "tur": 1,
+  "is": "canli-sayfa-govde-korumali-son",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-10T12:41:45+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 31427,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İstenen üçüncü sarı hâl; rc 5, kayıt, liste ve doğrulama davranışlarıyla kurulmuş, sürüm de 1.2.0’a taşınmış. Ancak gerçekçi büyüklükte bir gövdede imza bulunduğu hâlde boru hattı hatasıyla “ölçülemedi” sonucu üretme riski var; önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "İmza araması `set -o pipefail` altında `printf ... | grep -qF` ile yapılıyor; grep eşleşmede erken çıkınca büyük gövdelerde `printf` SIGPIPE alabilir ve tüm boru hattı başarısız sayılarak mevcut imza yokmuş gibi sarı kayıt yazılabilir. Küçük sahte gövdeli sınav bu durumu kapsamıyor.",
+        "kanit": "Kodda `set -uo pipefail` etkin; 2xx dalındaki karar doğrudan `if printf '%s' \"$g\" | grep -qF -- \"$im\"` boru hattının durumuna bağlı. Sınav gövdeleri yalnız kısa `<title>`/HTML dizeleridir.",
+        "konum": "canli-sayfa/scripts/canli-sayfa.sh:34,54; canli-sayfa/scripts/canli-sayfa.test.sh:T3b govde.sh",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; önce/sonra ölçüm çifti, önce 20 hata ve sonra rc 0 ile belirgin ilerleme gösteriyor. Sarı manifest kaydı yok. Sonraki çıktı 60 satırda kesildiği için gövde-okunamıyor ve girdi doğrulama kontrolleri metinde görünmüyor; yine de tam sınav komutunun yeşil rc 0 kaydı bunların geçtiğine dair toplu kanıt sağlıyor. CLI işi olduğundan kare gerekmiyor; ancak kullanılan küçük yapay HTML gövdeleri büyük gerçekçi gövdedeki boru hattı davranışını ölçmüyor."
+  }
+}

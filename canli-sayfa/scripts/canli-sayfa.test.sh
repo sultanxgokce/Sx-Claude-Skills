@@ -28,6 +28,7 @@ https://yonsuz.ornek.com 302
 https://karne.ornek.com 200
 https://gercek-acik.ornek.com 200
 https://govdesiz.ornek.com 200
+https://buyuk.ornek.com 200
 C
   cat > "$T/olcer.sh" <<'O'
 s="$(grep -m1 "^$1 " "$(dirname "$0")/cevaplar")" || { echo "000"; exit 0; }
@@ -38,6 +39,7 @@ O
 case "$1" in
   https://karne.ornek.com) printf '<!doctype html><html><head><title>Claude Artifact</title></head><body><div id="root"></div><script src="/app.js"></script></body></html>' ;;
   https://gercek-acik.ornek.com) printf '<html><head><title>Karne Raporu</title></head><body><h1>Karne Raporu</h1><p>MÜCESSEM · 12 ölçüm</p></body></html>' ;;
+  https://buyuk.ornek.com) printf '<title>Karne Raporu</title>'; head -c 400000 /dev/zero | tr '\0' 'x' ;;   # imza başta, ardından 400 KB — SIGPIPE tuzağı
   *) exit 7 ;;
 esac
 G
@@ -112,6 +114,8 @@ kur; ekle https://gercek-acik.ornek.com "Tanıtım Sayfası" "Herkesin görebild
 esit "imza anonim gövdede VAR → gerçekten açık → onaysız rc 4" 4 "$RC"; esit "kayıt yok" 0 "$(say)"
 kur; ekle https://gercek-acik.ornek.com "Tanıtım Sayfası" "Herkesin görebildiği tanıtım sayfası" merkez SERDAR --imza "Karne Raporu" --herkese-acik evet
 esit "onayla → rc 0" 0 "$RC"; esit "giriş açık" acik "$(alan "$D/gercek-acik.ornek.com.json" giris)"; esit "ölçü gövde" govde "$(alan "$D/gercek-acik.ornek.com.json" giris_olcu)"
+kur; ekle https://buyuk.ornek.com "Tanıtım Sayfası" "Herkesin görebildiği tanıtım sayfası" merkez SERDAR --imza "Karne Raporu" --herkese-acik evet
+esit "400 KB gövde, imza başta → yine AÇIK (boru hattı erken kapanınca sarıya düşmez)" 0 "$RC"; esit "giriş açık" acik "$(alan "$D/buyuk.ornek.com.json" giris)"
 kur; ekle https://govdesiz.ornek.com "Karne Sayfası" "Ajan karnelerinin canlı sayfası" tellal MUCESSEM --imza "Karne Raporu"
 esit "gövde okunamıyor → ölçülemedi rc 3 (kapalı DENMEZ)" 3 "$RC"; esit "kayıt yok" 0 "$(say)"; icerir "sebep" "$CIKTI" "govde-okunamadi"
 kur; ekle https://karne.ornek.com "Karne Sayfası" "Ajan karnelerinin canlı sayfası" tellal MUCESSEM --imza "ab"

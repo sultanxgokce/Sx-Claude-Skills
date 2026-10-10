@@ -58,7 +58,8 @@ olc() {  # olc <adres> [imza] → "<giris> <kod>" basar; rc 0 canlı · 3 canlı
       # 1.2: imza verildiyse kod yetmez, gövde okunur. Okunamadı → ölçülemedi ("kapalı" sayılmaz: yanlış-yeşil kapısı).
       g="$(govde "$a")" || { echo "olculemedi $kod-govde-okunamadi"; return 3; }
       # imza yok → giriş ÖLÇÜLEMEDİ (sarı): sayfa canlı ama kapı var mı bilinmiyor — ne kapalı (yanlış imza da buraya düşer) ne açık (içerik gelmedi)
-      if printf '%s' "$g" | grep -qF -- "$im"; then echo "acik $kod"; else echo "olculemedi $kod-govde-korumali"; fi; return 0 ;;
+      # boru YOK (pipefail altında grep erken çıkınca printf SIGPIPE alır, boru düşer, imza VARKEN sarı yazılırdı — bağımsız göz): burada-dizge
+      if grep -qF -- "$im" <<<"$g"; then echo "acik $kod"; else echo "olculemedi $kod-govde-korumali"; fi; return 0 ;;
     401|403) echo "kapali $kod"; return 0 ;;
     30[1-8]) case "$yon" in
                https://*.cloudflareaccess.com/*|*/cdn-cgi/access/login*) echo "kapali $kod"; return 0 ;;
