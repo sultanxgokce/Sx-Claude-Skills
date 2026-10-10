@@ -1,7 +1,7 @@
 {
   "is": "kosu-kaydi-kanon-canli",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-10T23:09:18+03:00",
+  "guncelleme": "2026-10-10T23:11:21+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -24,7 +24,7 @@
       "etiket": "nazir-ornegi",
       "asama": "sonra",
       "dosya": "olcum-nazir-ornegi-sonra.txt",
-      "sha256": "0ea4a2c75ab273bce91850ec9e0a17b8e88567ad8e6e91a7b3bc1f726f3a4c68",
+      "sha256": "f7634d87793f78114b9b50492c0f829027b12b2b564528a3331d55bba4df4c27",
       "komut": [
         "bash",
         "-c",
@@ -32,39 +32,39 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T23:08:32+03:00",
-      "sure_sn": 0.3
+      "zaman": "2026-10-10T23:10:38+03:00",
+      "sure_sn": 0.2
     },
     {
       "tur": "olcum",
       "etiket": "lint-sinavi",
       "asama": "sonra",
       "dosya": "olcum-lint-sinavi-sonra.txt",
-      "sha256": "c2ca4fbe6e95df27418c961ce771d0d57960d6abd756ad84bfa4300fb63017ff",
+      "sha256": "c38e1469ed654c3b56e62ca2600b5049d399c6da7399714731ec39f7656bd941",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/kanon-lint.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T23:08:36+03:00",
-      "sure_sn": 3.5
+      "zaman": "2026-10-10T23:10:41+03:00",
+      "sure_sn": 2.9
     },
     {
       "tur": "olcum",
       "etiket": "sarmalayici-sinavi",
       "asama": "sonra",
       "dosya": "olcum-sarmalayici-sinavi-sonra.txt",
-      "sha256": "4d3233ae50313a785242c558525b2dc6c04b1e259a7b1fe413e3d754c244dc30",
+      "sha256": "9896205d24c2d4f1db91e827aec5dffdc15e23d2f1cd6a2229f6937383493dd9",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/kosu-sar.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T23:09:18+03:00",
-      "sure_sn": 42.4
+      "zaman": "2026-10-10T23:11:21+03:00",
+      "sure_sn": 40.3
     }
   ],
-  "imza": "869249ca0219863e3dbe724406f77f6da950918247a3709abb87cb2c806bd077"
+  "imza": "acee08ee15cf3bd5a39692c0fbb0a372be305ae1581b91e24ea8a28711120441"
 }

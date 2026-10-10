@@ -83,8 +83,9 @@ while IFS= read -r ham || [ -n "$ham" ]; do
   if zamanli "$satir"; then
     d="$(duz "$satir")"; CANLI_SATIR["$d"]="$n"
     [ -n "$KARSI" ] && [ -z "${KANON_SATIR[$d]:-}" ] && bul S K7 "$n" "kanon dışı: canlıda var, kanonda yok — elle kurulmuş, recreate'te kaybolur; ya kanona yaz ya kaldır"
+    # flock komut ikamesi/alt kabuk/grup içinde de olabilir: $(flock …) · `flock …` · ( flock …) · { flock …; } · ! flock (bağımsız göz tur 3)
     # satır sonu yorumu (' # …') K8'e girmez: '# flock burada kullanılmaz' sahte sarı üretmesin (bağımsız göz tur 1)
-    if ! dogrudan_sarili "$satir" && printf '%s' "$satir" | sed -E 's/[[:space:]]#.*$//' | grep -qE '(^|[[:space:];&|])(/[^[:space:]]*/)?flock([[:space:]]|$)'; then
+    if ! dogrudan_sarili "$satir" && printf '%s' "$satir" | sed -E 's/[[:space:]]#.*$//' | grep -qE '(^|[[:space:];&|(`{!])(/[^[:space:]]*/)?flock([[:space:]]|$)'; then
       bul S K8 "$n" "sarılmamış kilitli iş (flock) — atlandı mı koştu mu kayıtta görünmez; kosu-sar --kilit <dosya> ile sar"; fi
   fi
   if printf '%s' "$satir" | grep -qE '^[[:space:]]*[0-9*@]' && printf '%s' "$satir" | grep -qE 'kosu-sar\.sh[[:space:]]'; then   # boşluk YA DA sekme (crontab ikisini de ayraç sayar)

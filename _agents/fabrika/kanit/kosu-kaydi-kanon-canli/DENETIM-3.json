@@ -1,0 +1,28 @@
+{
+  "tur": 3,
+  "is": "kosu-kaydi-kanon-canli",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-10T23:09:52+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 45928,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "K7/K8 denetimi canlı zamanlayıcıya bağlanmış, önceki turun alt-dizge kusuru yapısal ayrıştırmayla giderilmiş ve gerçekçi Nâzır örneğinde istenen iki K7 ile iki K8 gösterilmiş. Ancak K8’in flock sözcüğü için kullandığı sınır deseni kabukta geçerli bazı kullanımları kaçırır; üretimden önce bu kapsama açığı çözülmelidir.",
+    "bulgular": [
+      {
+        "ne": "K8 taraması, `flock` öncesinde yalnız satır başı, boşluk, `;`, `&` veya `|` kabul ediyor; parantez ya da ters tırnakla başlayan komut ikamesindeki kilitli işi sarılmamış olarak işaretlemez.",
+        "kanit": "Koşul `grep -qE '(^|[[:space:];&|])(/[^[:space:]]*/)?flock([[:space:]]|$)'` biçiminde. Bu nedenle örneğin `*/5 * * * * x=$(flock -n /x.lock bash /x/is.sh)` satırında `flock` öncesindeki `(` kabul edilmez ve K8 üretilmez; eklenen K8 sınav grubunda komut ikamesi veya parantezli kabuk biçimi ölçülmüyor.",
+        "konum": "kosu-kaydi/scripts/kanon-lint.sh: K8 flock eşleştirme koşulu; kosu-kaydi/scripts/kanon-lint.test.sh: K8 sınav grubu",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı/rc=3 kayıt içermiyor. Önce/sonra ölçüm çifti gerçekçi canlı 7/kanon 5 verisinde 0 sarıdan iki K7 ve iki K8’e geçişi gösteriyor; lint sınavı 63/63, sarmalayıcı sınavı 115/115 geçiyor ve önceki turun `kosu-sar.sh` alt-dizge yanlış negatifi artık özel sınavla ölçülüyor. Bununla birlikte yeşil sınavlar K8’in kabuk sözdizimindeki tüm geçerli flock konumlarını kapsadığını kanıtlamıyor."
+  }
+}

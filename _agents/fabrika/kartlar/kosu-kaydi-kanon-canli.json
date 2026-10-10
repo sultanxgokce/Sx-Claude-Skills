@@ -15,5 +15,14 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": []
+  "gecmis": [],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "SERDAR",
+      "oturum": "session_013fuJSNg65VkgQE4sJsQURS",
+      "gerekce": "iş ilerliyor: bulgu 2→1→1, her tur farklı ve daralan kapsam açığı (tur 3: komut ikamesindeki flock sınırı), düzeltme tek satır + mutasyonlu sınav",
+      "zaman": "2026-10-10T23:10:24+03:00"
+    }
+  ]
 }

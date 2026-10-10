@@ -101,6 +101,8 @@ printf '%s\n' "35 * * * * flock -n /x.lock bash $W.bak supur -- true" "35 * * * 
 kos "$T/k8e"; ol "K8: kilit sarmalayıcının DIŞINDA (flock … kosu-sar.sh) → K8 (atlanan koşu kayda düşmez)" "$(printf '%s' "$CIKTI" | grep -c 'SARI    K8')" "2"
 printf '%s\n' "*/5 * * * * KOSU_KUTU=nazir /usr/bin/bash $W supur --kilit /x.lock -- bash /x/flockcu.sh # supur sahip:NAZIR" > "$T/k8f"
 kos "$T/k8f"; ol "K8 altın: ortam ataması + mutlak yollu bash + sarmalayıcı → sarılı, K8 yok" "$(printf '%s' "$CIKTI" | grep -c 'SARI    K8')" "0"
+printf '%s\n' '*/5 * * * * x=$(flock -n /x.lock bash /x/is.sh)' '*/5 * * * * echo `flock -n /y.lock bash /x/is.sh`' '*/5 * * * * (flock -n /z.lock bash /x/is.sh)' '*/5 * * * * { flock -n /w.lock bash /x/is.sh; }' > "$T/k8g"
+kos "$T/k8g"; ol "K8: komut ikamesi \$( · ters tırnak · alt kabuk ( · grup { içindeki flock da K8" "$(printf '%s' "$CIKTI" | grep -c 'SARI    K8')" "4"
 kos "$T/k2"; ol "K8 altın: SARILI satırdaki flock K8 değil (K2'nin konusu)" "$(printf '%s' "$CIKTI" | grep -c 'SARI    K8')/$(printf '%s' "$CIKTI" | grep -c 'SARI    K2')" "0/1"
 
 echo "════ K7 · canlı ↔ kanon farkı (SARI, yalnız --kanon) ════"
