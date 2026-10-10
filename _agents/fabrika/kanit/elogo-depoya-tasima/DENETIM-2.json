@@ -1,0 +1,28 @@
+{
+  "tur": 2,
+  "is": "elogo-depoya-tasima",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-10T18:06:48+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 26615,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kurulu MUHASİP kopyası gizlenerek depoya taşınmış, doğru dal modüllerinin yüklenmesi sağlanmış ve temiz-makine sınavları onarılmış; kurulum da istendiği gibi kapsam dışında kalmış. Ancak CI=true iken türev dizininin yokluğu sınavı başarılı sonuçlandırıyor; açıkça verilen ELOGO_TUREV yolunun yanlış veya eksik olması dahi kapıyı düşürmediğinden önce bu uygulama sorununu çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "İ1c kapısı, CI=true olduğunda eksik türev dizinini hata saymadan atlıyor; koşul ELOGO_TUREV değerinin özellikle verilmiş olup olmadığını ayırmadığı için CI'daki yanlış yapılandırma da yeşil sonuç verebilir.",
+        "kanit": "i1.test.sh değişikliğinde `! -d \"$TUREV\" && \"${CI:-}\" == \"true\"` dalı yalnız “ÖLÇÜLEMEDİ” yazıp DUSEN artırmıyor. CI benzetimi bu nedenle i1.test.sh için 12 yerine 8 geçen kapı bildirmesine rağmen rc=0 ve genel kirmizi=0 üretiyor.",
+        "konum": "elogo-erisim/scripts/i1.test.sh:102; olcum-ci-benzetimi-sonra.txt (i1.test.sh rc=0 gecen=8)",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra sınav çifti 384→407, bayt eşitliği 37/37, gizlilik pozitif kontrolü, mutasyon kontrolleri ve dal içindeki ubl_satis.py yükleme yolu ana taşıma iddialarını güçlü biçimde destekliyor. Bununla birlikte CI ölçümü i1.test.sh içindeki dört kontrolün ölçülmediğini gösterdiği halde kayıt yeşil olduğundan bu bölüm tam başarı kanıtı sayılamaz; kurulum kanıtının bulunmaması ise kartta açıkça kapsam dışı bırakıldığı için kusur değildir."
+  }
+}

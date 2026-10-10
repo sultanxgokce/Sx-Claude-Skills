@@ -1,0 +1,21 @@
+{
+  "tur": 1,
+  "is": "elogo-depoya-tasima",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-10T17:56:45+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 53678,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kurulu MUHASİP kopyası müşteri ve gerçek belge izlerinden arındırılarak depoya taşınmış, #280 paket-adı düzeltmesi yeniden uygulanmış; kurulum ise kartın söylediği gibi dışarıda bırakılmış. Sınav, mutasyon, gizlilik ve bayt-eşitliği ölçümleri değişikliğin hem çalıştığını hem de doğru tabana uygulandığını gösterdiğinden üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra sınav çifti 384→407 kapıyı ve sıfır kırmızıyı gösteriyor; ayrıca mutasyon ölçümü çağıran yolları, gizlilik ölçümü gerçekçi pozitif kontrolü, bayt-eşitliği ölçümü de ikameli kurulu kopyanın commit ile 37/37 dosyada aynı olduğunu doğruluyor. Kurulum kanıtı bulunmaması kusur değil, çünkü iş kartı kurulumu açıkça kapsam dışında bırakmış."
+  }
+}

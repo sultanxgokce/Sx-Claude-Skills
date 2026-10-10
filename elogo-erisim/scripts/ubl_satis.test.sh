@@ -109,6 +109,41 @@ f = sozlukten({'duzenleyen':{'unvan':'A','vkn':'1234567890','vergi_dairesi':'VD'
 assert f.eksikleri_bul() == [], f.eksikleri_bul()
 assert 'SATIS' in kur(f)"
 
+
+echo "R · YUVARLAMA KİPİ — kapı ⟂ gövde aynı kipte mi (regresyon)"
+echo "    🔴 ÖLÇÜLMÜŞ KUSUR (2026-08-23): kapı ROUND_HALF_UP, gövde argümansız quantize"
+echo "    (= bağlam varsayılanı ROUND_HALF_EVEN = bankacı yuvarlaması) kullanıyordu."
+echo "    %20'de beraberlik matematiksel olarak DOĞMADIĞI için hiç görünmedi — yani hattın"
+echo "    güvenliği kayıt dışı bir tesadüfe dayanıyordu. %10'da 1000, %1'de 100 değer sapıyordu."
+python3 - <<'RPY' >/dev/null 2>&1
+import sys
+sys.path.insert(0, ".")
+from decimal import Decimal as D, ROUND_HALF_UP, getcontext
+from ubl_ortak import Kalem
+
+# 1) Bağlam varsayılanı HÂLÂ bankacı yuvarlaması olmalı — yani kipimiz "şans eseri" değil,
+#    AÇIKÇA yazıldığı için doğru. Varsayılan bir gün değişirse bu satır bize haber verir.
+assert getcontext().rounding == "ROUND_HALF_EVEN", "bağlam varsayılanı değişmiş — notu güncelle"
+
+# 2) Beraberlik (.5 kuruş) üreten değerlerde gövde YUKARI yuvarlamalı.
+#    %10 · net 10,05 TL → ham KDV 100,5 kr → 101 olmalı (bankacıda 100 çıkardı)
+#    %1  · net 2,50 TL  → ham KDV 2,5 kr   → 3 olmalı   (bankacıda 2 çıkardı)
+for kurus, oran, beklenen in ((1005, 10, 101), (250, 1, 3), (50, 1, 1), (150, 1, 2)):
+    k = Kalem(ad="x", miktar=D(1), birim="C62", birim_fiyat_kurus=kurus, kdv_orani=oran)
+    assert k.kdv_kurus() == beklenen, f"{kurus}kr %{oran}: {k.kdv_kurus()} != {beklenen}"
+
+# 3) TARAMA: üç oran için de gövde ile açık HALF_UP hesabı birebir aynı olmalı.
+for oran in (20, 10, 1):
+    for kurus in range(1, 20001):
+        k = Kalem(ad="x", miktar=D(1), birim="C62", birim_fiyat_kurus=kurus, kdv_orani=oran)
+        beklenen = int((D(kurus) * D(oran) / D(100)).quantize(D("1"), rounding=ROUND_HALF_UP))
+        if k.kdv_kurus() != beklenen:
+            raise SystemExit(f"%{oran} · {kurus}kr: gövde={k.kdv_kurus()} beklenen={beklenen}")
+raise SystemExit(0)
+RPY
+if [[ $? -eq 0 ]]; then GECEN=$((GECEN+1)); echo "  ✓ kapı ile gövde AYNI kipte (%20·%10·%1, 60.000 değer tarandı)"
+else DUSEN=$((DUSEN+1)); echo "  ✗ kapı ile gövde farklı yuvarlıyor — sessiz 1 kuruş riski"; fi
+
 echo
 echo "toplam=$((GECEN+DUSEN)) geçen=$GECEN düşen=$DUSEN"
 [[ $DUSEN -eq 0 ]]

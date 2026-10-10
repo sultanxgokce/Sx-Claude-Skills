@@ -113,6 +113,11 @@ def sozlukten(veri: dict[str, Any]) -> SatisFaturasi:
             for k in veri.get("kalemler", [])
         ],
         para_birimi=str(veri.get("para_birimi", "TRY")),
+        # 🔴 Ölçüldü 2026-08-23: bu iki alan JSON'da verilse bile SESSİZCE yok sayılıyordu.
+        #    Senaryo düzeltmesi (TEMELFATURA→TICARIFATURA) bu yüzden yalnız Python'dan
+        #    çağıran hatta ulaşmıştı; JSON'dan kuran her türev varsayılana mahkûmdu.
+        senaryo=str(veri.get("senaryo", "TICARIFATURA")),
+        uuid=str(veri.get("uuid", "")),
         numara_modu=str(veri.get("numara_modu", "elogo")),
         fatura_no=str(veri.get("fatura_no", "")),
         notlar=[str(n) for n in veri.get("notlar", [])],

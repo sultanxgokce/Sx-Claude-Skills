@@ -1,0 +1,22 @@
+{
+  "is": "elogo-uzlastirma",
+  "cumle": "e-Logo yeteneginin kurulu kopyasi (MUHASIP'in canli duzeltmeleri) depoya geri tasinir; paket-adi duzeltmesi (#280) ustune konur; kurulum MUHASIP kuru kosumundan sonra",
+  "istedi": "Sultan",
+  "aldi": "MUAVIN",
+  "zaman": "2026-10-10T17:36:26+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "e",
+    "dis_yuzey": "e",
+    "yetki": "h"
+  },
+  "siniflar": [
+    "para",
+    "dis_yuzey"
+  ],
+  "sultan": true,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

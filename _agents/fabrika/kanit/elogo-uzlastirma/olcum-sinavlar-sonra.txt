@@ -1,0 +1,25 @@
+$ /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/sinav-kos.sh elogo-erisim/scripts
+# rc=0 sure=8.9s zaman=2026-10-10T17:50:41+03:00
+--- stdout ---
+belge_turu.test.sh rc=0 gecen=13
+coklu_kdv.test.sh rc=0 gecen=17
+dayanak.test.sh rc=0 gecen=16
+earsiv.test.sh rc=0 gecen=20
+elogo_gonder.test.sh rc=0 gecen=39
+elogo_onek.test.sh rc=0 gecen=19
+elogo_paket.test.sh rc=0 gecen=54
+i1.test.sh rc=0 gecen=12
+iade_hat.test.sh rc=0 gecen=8
+iskonto.test.sh rc=0 gecen=29
+kilit_varsayilan.test.sh rc=0 gecen=9
+kurus.test.sh rc=0 gecen=16
+miktar_birim.test.sh rc=0 gecen=13
+onizleme.test.sh rc=0 gecen=6
+sahis.test.sh rc=0 gecen=17
+tevkifat_teshis.test.sh rc=0 gecen=12
+ubl_iade.test.sh rc=0 gecen=56
+ubl_iskonto_orani.test.sh rc=0 gecen=9
+ubl_satis.test.sh rc=0 gecen=25
+yanit_hatti.test.sh rc=0 gecen=17
+OZET dosya=20 kirmizi=0 gecen_kapi=407
+--- stderr ---

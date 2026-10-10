@@ -1,0 +1,7 @@
+$ /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/acik-yanlis-yol.sh elogo-erisim/scripts
+# rc=0 sure=0.1s zaman=2026-10-10T18:07:36+03:00
+--- stdout ---
+toplam=12 geçen=8 düşen=4
+atlama satiri: 0
+i1 rc=1 (0 OLMAYAN beklenir — yanlis yapilandirma yesil uretmemeli)
+--- stderr ---

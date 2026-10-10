@@ -137,3 +137,95 @@ Risk asimetrisi: serviste yanlış ortam **hata kodu döndürür**, panelde "Gö
 - Kanonik bilgi (şirket verisi dahil, merkezde): `Nexus/_agents/bilgi/elogo-entegrasyon-bilgisi.md`
 - Üretici belgesi + aranabilir metni: `Nexus/_agents/bilgi/kaynak/`
 - Bu yeteneğin kullanımı: `SKILL.md`
+
+---
+
+## 2026-08-23/25 · CANLI KOŞUMDAN ÇIKAN TUZAKLAR
+
+> Bunlar üç gerçek faturanın kesildiği koşumda **ölçülerek** bulundu. Her biri bir kez
+> bize bedel ödetti ya da ödetmesine ramak kaldı.
+
+### T9 · Görsel tasarım: `varsayilan` doğru, `gomulu` HATA
+
+`--tasarim` üç yol sunar ama **doğrusu tektir**: `varsayilan` (= `UseDefaultXSLT=1`,
+hesabın kendi öndeğer tasarımı). `gomulu` (XSLT'yi belgeye base64 gömmek) **çalışır ve
+kabul edilir** — ama fatura **SADE** görünür, hesabın tasarımını kullanmaz.
+
+🔴 Bu, "hata dönmeyen kabul ≠ doğru çıktı" sınıfının en pahalı örneği: `resultCode=1`
+geldi, belge geçerliydi, ve **yanlış görünümlü bir CANLI fatura** gitti. Geri alınamadı.
+
+**Kural:** görünümü etkileyen her parametre, gönderim öncesi **görsel kanıt** ister.
+Tasarım hesapta tanımlı değilse `resultCode=-1 · "Kayıtlı müşterinin tanımlı xslt
+bilgisine ulaşılamadı"` gelir — bu, parametrenin YANLIŞ olduğunu değil, HESAP tanımının
+eksik olduğunu söyler. İkisini karıştırma.
+
+### T10 · `cbc:IssueTime` (fatura saati) UBL'de YOK
+
+Elle kesilen faturayla karşılaştırıldığında **tek görünen fark** buydu. Kozmetik, ama
+bilinmezse "görünüm niye farklı" diye saatlerce XSLT'de aranır.
+UBL'de olmayan, tasarımın isteyebileceği diğer alanlar: satıcı telefon/e-posta ·
+ticaret sicil no · iskonto toplamı · IBAN bloğu · "Yalnız … yazıyla" satırı.
+
+### T11 · 🔴 `GetDocumentPreView` "çalışmıyor" kaydı KANITSIZDI
+
+Bir dönem kayıtlarda *"GetDocumentPreView boş dönüyor, çalışmıyor"* yazıyordu. **Yanlış.**
+Yapılan tek deneme **şema-dışı** bir alanla (`documentUuid`) yapılmıştı; WCF bilinmeyen
+elemanı **sessizce yutar** ve boş yanıt döner. Üstelik yanıtın gövdesi hiç basılmamıştı.
+
+XSD'ye göre imza: `GetDocumentPreView(sessionID, paramList, **document**) → (Result,
+**outDocument**)` — yani **verdiğin belgeyi** render eder, gönderilmiş belge ÇEKMEZ.
+
+**İki ders:** (a) boş/anlamsız yanıtı yorumlamadan önce girdiyi **XSD'ye karşı** doğrula;
+WCF bilinmeyen elemanı yutar. (b) Yanıt gövdesini **bas**; yalnız regex uygulayıp "yok"
+demek, ölçümü kanıtsız bırakır.
+
+⏸ Doğru kullanımı **hâlâ denenmedi** — denenirse gönderim öncesi görüntü, kontörsüz ve
+geri alınamaz iş yapmadan alınabilir. Bu hattın en büyük açık fırsatı.
+
+### T12 · Numara defteri TEK TANIK DEĞİLDİR — kesim defteri ikinci tanıktır
+
+Numara üretimi ve iptali, **kesim defterine** (`arcelik-fatura-kesim`) çapraz sorar:
+- `iptal_et` → numara kesim defterinde `kesildi` ise iptal **REDDEDİLİR**
+- `numara_ver` → üretilen numara kesim defterinde varsa **DURUR**; sayaç tabanı iki
+  defterin **büyüğüdür**
+
+🔴 Niçin: numara defteri **yedekten geri yüklenirse** sayaç geriye düşer ve canlıda gitmiş
+bir numarayı "sıradaki" sanar. Boş-defter kapısı bunu **yakalamaz** (defter dolu görünür).
+Ölçüldü: ikinci tanık kaldırıldığında bayat defter, gönderilmiş bir numarayı yeniden verdi.
+
+⚠️ Bu, iki beceri arasında **bilinçli** bir bağımlılıktır ve manifestte beyan edilmelidir.
+
+### T13 · Kapı GİRDİYİ sınar, ÜRÜNÜ sınamaz — ikinci kapı şart
+
+`kurus_kapisi` kalem listesini dayanakla karşılaştırır; sonra **ayrı bir kod yolu** UBL
+üretir. Aradaki her kusur kapının **arkasından** geçer.
+
+Ölçülmüş vaka: kapı `ROUND_HALF_UP`, gövde argümansız `quantize()` (= bağlam varsayılanı
+**ROUND_HALF_EVEN**, yani bankacı yuvarlaması) kullanıyordu. %20'de beraberlik hiç
+doğmadığı için **görünmedi**; %10'da 1000, %1'de 100 değer sapıyordu. Yani hattın
+güvenliği kayıt dışı bir tesadüfe dayanıyordu.
+
+**Panzehir:** `urun_kapisi()` — üretilen belgeyi geri okur ve altı şeyi **birebir** sınar
+(ödenecek · KDV · matrah · satır kırılımı · satır sayısı · tek para birimi).
+Genel kural: **kaynaktan değil üründen doğrula.**
+
+🔴 En tehlikeli hâli: **tevkifat**. Kapı da gövde de `PayableAmount = matrah + KDV`
+varsayıyor; tevkifatta bu yanlıştır ve **iki tanık aynı yanlışta hemfikir olur**.
+Tevkifatlı belge bugünkü hattan geçirilmez.
+
+### T14 · Kontör — GELEN belgeler de harcar, üstelik harcamanın büyük kısmı orada
+
+`Raporlar → Kontör Kullanım Raporu` belge tipi ve **yön** kırılımı verir. Ölçülmüş bir gün:
+
+```
+e-Fatura Gelen : −19
+e-Fatura Giden : −1
+```
+
+Yani kontör tüketimi bizim kestiğimiz faturalarla değil, **gelen belge trafiğiyle**
+orantılıdır. "Az fatura kesiyoruz, kontör yetmez mi" akıl yürütmesi yanlıştır.
+
+⚠️ **Panelde iki farklı "kontör" sayısı var** ve aynı şeyi saymıyorlar: üst banttaki
+"Kalan Kontör" ile `Kontör Bilgileri → Kontör Paketleri` ekranındaki kalan **farklıdır**
+(ölçülen bir anda 2,5 ⟂ 305). **Üst banttaki sayıyı bakiye sanma** — paket ekranı esastır.
+İkisinin ilişkisi ölçülmedi; e-Logo'ya soruldu.

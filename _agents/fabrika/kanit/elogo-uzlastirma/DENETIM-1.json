@@ -1,0 +1,40 @@
+{
+  "tur": 1,
+  "is": "elogo-uzlastirma",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-10T17:53:29+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 49283,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Kurulu e-Logo gövdesi gizlenerek depoya taşınmış, #280 paket-adı düzeltmesi yeniden bağlanmış ve sınavlar 384 kapıdan 407 kapıya yeşil kalmıştır. Önce MUHASİP kuru koşumu ile ardından kurulumun gerçekten yapıldığını kanıtlayın; iş kartının açık teslim sırası mevcut kayıtlarda gösterilmediği için üretime hazır diyemem.",
+    "bulgular": [
+      {
+        "ne": "İş kartının istediği “MUHASİP kuru koşumundan sonra kurulum” teslimi kanıtlanmamış; kayıtlar yalnız depo içindeki sınav, mutasyon ve gizlilik ölçümlerini gösteriyor, kurulum çağrısı veya kurulu hedefte son ölçüm yok.",
+        "kanit": "Manifestteki dört komutun tamamı sinav-kos.sh, mutasyon.sh veya gizlilik.sh çağrısıdır; hiçbir kayıtta MUHASİP kuru koşumu, kurulum komutu ya da kurulum-sonrası hedef sınaması bulunmuyor.",
+        "konum": "KANIT.json:kayitlar[0..3]",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Kurulu kopyanın depoya aynen taşındığı iddiası araç kanıtıyla ölçülmemiş; bu kritik uzlaştırma yalnız diff üstündeki beyana dayanıyor.",
+        "kanit": "Manifestte kurulu kopya ile commit 1 için dosya/bayt karşılaştırması kaydı yok; “sinavlar” ölçümü iki tarafın sınavlarını geçiriyor fakat içerik eşitliğini sınamıyor.",
+        "konum": "KANIT.json:kayitlar; ODAKLI DIFF denetçiye not",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Gizlilik ölçümü yayımlanacak dalda bir telefon dizgisinin kaldığını açıkça bildiriyor; bunun sentetik veri olduğu kanıtta doğrulanmadığından yayımdan önce sınıflandırılmalı veya gizlenmeli.",
+        "kanit": "Gizlilik çıktısı: “DAL (yayimlanacak): musteri_adi=0 gercek_belge_no=0 telefon=['+90 555 111 22 33']”.",
+        "konum": "olcum-gizlilik-sonra.txt:4",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Sınavlar için önce/sonra ölçüm çifti var; 20 dosyada 384→407 geçen kapı ve 0 kırmızı görülüyor, ayrıca üç hedefli mutasyon düzeltmenin sınavlarca yakalandığını destekliyor. Buna karşılık kurulu-kopya bayt eşliği, MUHASİP kuru koşumu ve kurulum-sonrası durum için ölçüm çifti ya da gerçek hedef kaydı yok; gizlilik kaydı da dalda kalan telefonu gösteriyor."
+  }
+}

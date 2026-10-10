@@ -211,7 +211,46 @@ Not: TASLAK (kesilmemiş) faturalar WS'te YOKTUR → get/xml 'NOTFOUND' döner.
 EOF
 }
 
+
+# ── ortam kilidi: SIKMAK tek komut, GEVŞETMEK el emeği (MUAVİN kararı 2026-08-23) ──────
+# 🔴 CIRCIR (ratchet). Yön önemli, simetri YOK:
+#   `ortam demo`  → VAR.  Sıkılaştırma yönü; kolaylaştırmanın hiçbir riski yok, tersine
+#                          kilidi demoya çekmeyi kolay yapmak onu daha SIK yaptırır.
+#   `ortam canli` → YOK.  Gevşetme yönü. Kolaylaştırırsak refleks olur; canlıya geçmek
+#                          bilinçli bir FİİL olarak kalsın — dosya elle yazılır.
+# Bu, "koruma kurala değil yeteneksizliğe dayanır" ilkesinin ergonomik hâli:
+# gevşetme komutu YOKTUR, dolayısıyla yanlışlıkla çağrılamaz.
+cmd_ortam(){
+  local hedef="${1:-}"
+  case "$hedef" in
+    demo)
+      printf 'demo\n' > "$ORTAM_KILIDI"; chmod 600 "$ORTAM_KILIDI"
+      grn "✓ ortam kilidi DEMO'ya çekildi ($ORTAM_KILIDI)"
+      echo "  Canlı gönderim ve gerçek panel artık rc=6 ile reddedilir."
+      ;;
+    canli)
+      red "⛔ 'ortam canli' komutu YOKTUR — bilerek."
+      echo "   Gevşetme yönü kolaylaştırılmaz: tek tuşla canlıya geçmek refleks üretir," >&2
+      echo "   ve bu hattın gönderimi GERİ ALINAMAZ." >&2
+      echo "   Canlıya geçmek bilinçli bir fiildir, elle yazılır:" >&2
+      echo "       echo canli > $ORTAM_KILIDI" >&2
+      return 2
+      ;;
+    ""|durum)
+      echo "ortam kilidi : ${KILIT:-<okunamadı/boş>}  ($ORTAM_KILIDI)"
+      case "${KILIT:-}" in
+        demo)  echo "  → canlı gönderim REDDEDİLİR (rc=6)";;
+        canli) echo "  🔴 canlı gönderim AÇIK. İş bitince: $CAGRI ortam demo";;
+        *)     echo "  → tanınmayan/boş: fail-closed, canlı gönderim REDDEDİLİR (rc=6)";;
+      esac
+      ;;
+    *)
+      red "⛔ bilinmeyen ortam: '$hedef' (yalnız 'demo' ya da argümansız durum)"; return 2;;
+  esac
+}
+
 case "${1:-}" in
+  ortam)  shift; cmd_ortam "$@" ;;
   login)  cmd_login ;;
   doctor) cmd_doctor ;;
   status) shift; cmd_status "$@" ;;

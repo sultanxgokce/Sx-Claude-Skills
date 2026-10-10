@@ -1,0 +1,5 @@
+$ /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/yukleme-yolu.sh elogo-erisim/scripts
+# rc=0 sure=0.0s zaman=2026-10-10T18:05:54+03:00
+--- stdout ---
+yuklenen: /config/projects/_wt/sx-elogo-uzlas/elogo-erisim/scripts/ubl_satis.py
+--- stderr ---

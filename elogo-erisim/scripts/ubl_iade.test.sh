@@ -120,11 +120,26 @@ kapi   "E4 · tam veride denetle RC=0"     "0" "$?"
 icerir "E5 · tam veride 'eksik yok'"      "eksik alan yok" "$E4"
 
 echo "── F · ŞİRKETSİZ — gövdede firma/iş verisi OLMAMALI (paketleme md.1) ────"
+# 🔴 BU BÖLÜM 2026-08-23'te YENİDEN YAZILDI ve sebebi kendisiydi.
+#    Eski hâli, aramak istediği GERÇEK değerleri desen olarak GÖMÜYORDU:
+#    gerçek VKN · gerçek firma adı · gerçek cari adı · kutu adı — dördü de ortak rafta,
+#    yani "sızıntı arayan sınav"ın kendisi bir sızıntıydı. (Raporda "sınavın kendisi ihlal"
+#    diye geçen satır buydu; MUAVİN'in adopsiyonu durduran ölçümünde de sayıldı.)
+#    Yeni hâl DESENE bakar, DEĞERE değil: gerçek bir değer bilmeye gerek yok ve kapsam
+#    daha geniş — bugün bilmediğimiz bir kimlik gövdeye kaçarsa da yakalar.
 GOVDE="$(cat ubl_iade.py)"
-icermez "F1 · VKN gövdeye kaçmamış"       "3840044863" "$GOVDE"
-icermez "F2 · firma adı gövdeye kaçmamış" "FAHRİ" "$GOVDE"
-icermez "F3 · cari adı gövdeye kaçmamış"  "Baloğlu" "$GOVDE"
-icermez "F4 · kutu adı gövdeye kaçmamış"  "sedir" "$GOVDE"
+desen_yok(){  # desen_yok "<ad>" "<ERE>"
+  if grep -qE "$2" <<<"$GOVDE"; then
+    DUSEN=$((DUSEN+1)); echo "  ✗ $1 — gövdede kuruma-özel desen VAR"
+  else
+    GECEN=$((GECEN+1)); echo "  ✓ $1"
+  fi
+}
+desen_yok "F1 · VKN/TCKN sınıfı sayı yok"      '\b[0-9]{10,11}\b'
+desen_yok "F2 · tüzel kişi eki yok"            '(LİMİTED|LIMITED|ANONİM) (ŞİRKET|SIRKET)|LTD\.? ?ŞTİ|A\.Ş\.'
+desen_yok "F3 · posta kutusu etiketi yok"      'urn:mail:'
+desen_yok "F4 · e-posta adresi yok"            '[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.(com|tr|net|org)'
+desen_yok "F5 · SAP belge no yok"              '\b[0-9]{15,20}\b'
 
 echo "── G · AĞSIZ — bu modül hiçbir kapıya çıkmaz ────────────────────────────"
 icermez "G1 · requests yok"               "import requests" "$GOVDE"

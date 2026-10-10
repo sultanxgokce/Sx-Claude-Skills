@@ -90,6 +90,64 @@ import elogo_paket, inspect, re
 k = inspect.getsource(elogo_paket)
 assert not re.search(r'\b[0-9]{10,11}\b', k), 'VKN/TCKN benzeri sayı var'"
 
+# ── E · 🔴 YARIM PAKET AĞA ÇIKMAZ (kapı: _paketi_dogrula) ────────────────────
+# NİÇİN SONRADAN EKLENDİ (dürüst kayıt, 2026-09-09): bu kapı yazılmıştı, üretim
+# yolundan ÇAĞRILIYORDU, ama HİÇBİR sınav ona dokunmuyordu. `kapi-sinavi kayitsiz`
+# kapıyı sicilde bulamayınca ortaya çıktı; ardından üç mutasyonun ÜÇÜ DE sessizce
+# geçti — yani kapı vardı, kanıtı yoktu.
+#
+# 🔴 Sınav hem BİRİM (kapıyı doğrudan çağırır) hem BÜTÜNLEŞME (zarf_kur üzerinden)
+#    vakası taşır. Yalnız birim olsaydı "yer-kaydırma" mutasyonu (çağrının
+#    silinmesi) görünmezdi — bu tam da bugün üç kez düştüğümüz tuzaktır.
+G='import sys; sys.path.insert(0,"."); from elogo_gonder import _paketi_dogrula, zarf_kur, GonderimHatasi'
+_TAM="{'fileName':'a.zip','binaryData':'eA==','contentType':'base64','hash':'0123456789ABCDEF0123456789ABCDEF','currentDate':'2026-01-01'}"
+
+echo "E · yarım paket ağa çıkmaz"
+kapi "tam paket geçer (izin yolu)" 0 "$G
+_paketi_dogrula($_TAM)"
+
+for alan in fileName binaryData contentType hash currentDate; do
+  kapi "eksik '$alan' REDDEDİLİR" 0 "$G
+p = dict($_TAM); del p['$alan']
+try:
+    _paketi_dogrula(p); raise SystemExit(1)
+except GonderimHatasi as e:
+    assert '$alan' in str(e), str(e)"
+  kapi "boş '$alan' REDDEDİLİR (yalnız boşluk da eksiktir)" 0 "$G
+p = dict($_TAM); p['$alan'] = '   '
+try:
+    _paketi_dogrula(p); raise SystemExit(1)
+except GonderimHatasi: pass"
+done
+
+kapi "özet 32 haneden KISA → RED" 0 "$G
+p = dict($_TAM); p['hash'] = 'ABC'
+try:
+    _paketi_dogrula(p); raise SystemExit(1)
+except GonderimHatasi: pass"
+kapi "özet 32 haneden UZUN (SHA-256) → RED" 0 "$G
+p = dict($_TAM); p['hash'] = 'A'*64
+try:
+    _paketi_dogrula(p); raise SystemExit(1)
+except GonderimHatasi: pass"
+kapi "özet 32 hane ama HEX DEĞİL → RED" 0 "$G
+p = dict($_TAM); p['hash'] = 'Z'*32
+try:
+    _paketi_dogrula(p); raise SystemExit(1)
+except GonderimHatasi: pass"
+kapi "küçük harfli hex kabul edilir (yanlış-RED yok)" 0 "$G
+p = dict($_TAM); p['hash'] = '0123456789abcdef0123456789abcdef'
+_paketi_dogrula(p)"
+
+# 🔴 BÜTÜNLEŞME — kapı ÜRETİM YOLUNDAN kalkarsa bu vaka kırmızı yakar
+kapi "BAĞ · zarf_kur yarım paketi ağa ÇIKARMAZ" 0 "$G
+p = dict($_TAM); p['hash'] = ''
+try:
+    zarf_kur('sid', p); raise SystemExit(1)
+except GonderimHatasi: pass"
+kapi "BAĞ · zarf_kur tam paketle zarfı kurar" 0 "$G
+z = zarf_kur('sid', $_TAM)
+assert 'SendDocument' in z or 'sid' in z, z[:120]"
 echo "G · 🔴 paket adı belgenin KENDİ kimliğinden türer (gövde kusuru)"
 kapi "G1 · kökteki cbc:ID ad olur" 0 "$O
 x = b'<Invoice $NS><cbc:ID>FTR0000000000001</cbc:ID></Invoice>'

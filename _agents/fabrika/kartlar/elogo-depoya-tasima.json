@@ -1,0 +1,22 @@
+{
+  "is": "elogo-depoya-tasima",
+  "cumle": "e-Logo yeteneginin kurulu kopyasi (MUHASIP canli duzeltmeleri) gizlenerek depoya tasinir ve paket-adi duzeltmesi (#280) ustune yeniden uygulanir. KURULUM BU ISIN DISINDA: elogo-uzlastirma kartinda acik kalir (MUHASIP kuru kosumu -> kurulum). Daraltma sebebi: DENETIM-1 bulgu 1.",
+  "istedi": "Sultan",
+  "aldi": "MUAVIN",
+  "zaman": "2026-10-10T17:54:17+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "e",
+    "dis_yuzey": "e",
+    "yetki": "h"
+  },
+  "siniflar": [
+    "para",
+    "dis_yuzey"
+  ],
+  "sultan": true,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

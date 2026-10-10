@@ -71,6 +71,19 @@ IADE_TIPI = "IADE"
 #: VUK 229 gereği iade faturası bu şerhi taşır (mali müşavir teyidi bekleyen madde).
 IADE_SERHI = "İADE FATURASIDIR"
 
+#: 🔴 İADE tipinde İZİN VERİLEN senaryolar (cbc:ProfileID) — KAPALI KÜME.
+#: Kaynak ÖLÇÜM, tahmin değil: canlı `SendDocument` 2026-08-27'de `resultCode=-1` ile
+#: reddetti ve izin verilen kümeyi kendi mesajında saydı:
+#:   "Fatura tipi (cbc:InvoiceTypeCode) IADE iken fatura senaryosu sadece TEMELFATURA,
+#:    ILAC_TIBBICIHAZ, YATIRIMTESVIK veya IDIS olabilir."
+#: ⚠️ `GetDocumentPreView` bu belgeye `resultCode=1` VERDİ ve görselini üretti.
+#:    Yani ÖNİZLEME BİR DOĞRULAMA KAPISI DEĞİLDİR: senaryo–tip uyumunu sınamıyor.
+#:    "Önizleme geçti" cümlesi "gönderim geçer" anlamına GELMEZ; ikisi ayrı kapıdır.
+#: 🔴 Bunun bir de İŞ sonucu var: satışta TICARIFATURA kullanıyoruz, iadede kullanamayız.
+#:    TEMEL faturada alıcı ticari uygulama yanıtı (kabul/red) VEREMEZ — itiraz yolu değişir.
+#:    Bu bizim tercihimiz değil, GİB/e-Logo şartı; ama sessiz geçilmemesi gereken bir farktır.
+IADE_SENARYOLARI = frozenset({"TEMELFATURA", "ILAC_TIBBICIHAZ", "YATIRIMTESVIK", "IDIS"})
+
 
 @dataclass
 class IadeFaturasi(FaturaGovdesi):
@@ -81,6 +94,8 @@ class IadeFaturasi(FaturaGovdesi):
     """
 
     dayanaklar: list[Dayanak] = field(default_factory=list)
+    #: 🔴 Gövdenin varsayılanı TICARIFATURA'dır; iadede o senaryo REDDEDİLİR (yukarı bak).
+    senaryo: str = "TEMELFATURA"
 
     # ── ölçüm: neyi kuramıyoruz ve NİÇİN ─────────────────────────────────────
     def eksikleri_bul(self) -> list[str]:
@@ -89,6 +104,12 @@ class IadeFaturasi(FaturaGovdesi):
         Ortak alanları gövde denetler; burada YALNIZ iadeye özel kapı vardır.
         """
         eksik = self.ortak_eksikler()
+
+        # 🔴 Senaryo kapısı: iade + yanlış senaryo, e-Logo'da rc=-1 ile döner. Kapıyı
+        #    BURAYA koyuyoruz ki hata AĞA ÇIKMADAN, belge kurulurken görünsün.
+        if self.senaryo not in IADE_SENARYOLARI:
+            eksik.append(f"senaryo '{self.senaryo}' İADE tipinde kullanılamaz "
+                         f"(izinli: {' · '.join(sorted(IADE_SENARYOLARI))})")
 
         # Şematron kapısı: iade faturası dayanaksız olmaz.
         if not self.dayanaklar:
@@ -149,6 +170,13 @@ def sozlukten(veri: dict[str, Any]) -> IadeFaturasi:
             for d in veri.get("dayanaklar", [])
         ],
         para_birimi=str(veri.get("para_birimi", "TRY")),
+        # 🔴 Ölçüldü 2026-08-23: bu iki alan JSON'da verilse bile SESSİZCE yok sayılıyordu.
+        #    Senaryo düzeltmesi (TEMELFATURA→TICARIFATURA) bu yüzden yalnız Python'dan
+        #    çağıran hatta ulaşmıştı; JSON'dan kuran her türev varsayılana mahkûmdu.
+        # 🔴 Iadede varsayilan TEMELFATURA (IADE_SENARYOLARI). Burada "TICARIFATURA"
+        #    yaziliydi ve dataclass varsayilanini EZIYORDU — sinav bunu yakaladi.
+        senaryo=str(veri.get("senaryo", "TEMELFATURA")),
+        uuid=str(veri.get("uuid", "")),
         numara_modu=str(veri.get("numara_modu", "elogo")),
         fatura_no=str(veri.get("fatura_no", "")),
         notlar=[str(n) for n in veri.get("notlar", [])],
