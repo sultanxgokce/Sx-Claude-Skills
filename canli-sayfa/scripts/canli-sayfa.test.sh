@@ -25,14 +25,27 @@ https://baska.ornek.com 301 https://baska-yer.ornek.com/
 https://yok.ornek.com 404
 https://bozuk.ornek.com 502
 https://yonsuz.ornek.com 302
+https://karne.ornek.com 200
+https://gercek-acik.ornek.com 200
+https://govdesiz.ornek.com 200
+https://buyuk.ornek.com 200
 C
   cat > "$T/olcer.sh" <<'O'
 s="$(grep -m1 "^$1 " "$(dirname "$0")/cevaplar")" || { echo "000"; exit 0; }
 echo "${s#* }"
 O
+  # sahte gövde (1.2): karne = betikle yüklenen korumalı sayfanın anonim kabuğu (içerik yok) · gercek-acik = içerik anonimde de var · govdesiz = okunamıyor
+  cat > "$T/govde.sh" <<'G'
+case "$1" in
+  https://karne.ornek.com) printf '<!doctype html><html><head><title>Claude Artifact</title></head><body><div id="root"></div><script src="/app.js"></script></body></html>' ;;
+  https://gercek-acik.ornek.com) printf '<html><head><title>Karne Raporu</title></head><body><h1>Karne Raporu</h1><p>MÜCESSEM · 12 ölçüm</p></body></html>' ;;
+  https://buyuk.ornek.com) printf '<title>Karne Raporu</title>'; head -c 400000 /dev/zero | tr '\0' 'x' ;;   # imza başta, ardından 400 KB — SIGPIPE tuzağı
+  *) exit 7 ;;
+esac
+G
 }
 # her çağrı 20 saniyeyle sınırlı: asılı kalan araç sınavı kilitlemez, rc 124 ile kırmızı olur
-cag() { CIKTI="$(CANLI_SAYFA_DIZIN="$D" CANLI_SAYFA_OLCER="bash $T/olcer.sh" timeout 20 bash "$SUT" "$@" 2>&1)"; RC=$?; }
+cag() { CIKTI="$(CANLI_SAYFA_DIZIN="$D" CANLI_SAYFA_OLCER="bash $T/olcer.sh" CANLI_SAYFA_GOVDE="bash $T/govde.sh" timeout 20 bash "$SUT" "$@" 2>&1)"; RC=$?; }
 ekle() { cag ekle --adres "$1" --ad "${2:-Bulgu Defteri}" --ne "${3:-Kutulardan gelen bulguların tek listesi}" --kutu "${4:-merkez}" --ekleyen "${5:-SERDAR}" "${@:6}"; }
 say() { find "$D" -maxdepth 1 -name '*.json' 2>/dev/null | wc -l; }
 alan() { python3 -c 'import json,sys; print(json.load(open(sys.argv[1],encoding="utf-8")).get(sys.argv[2],""))' "$1" "$2"; }
@@ -77,6 +90,40 @@ kur; ekle https://acik.ornek.com "Tanıtım Sayfası" "Herkesin görebildiği ta
 esit "onay 'evet' değilse → rc 4" 4 "$RC"
 kur; ekle https://bulgu.ornek.com "Bulgu Defteri" "Bulguların listesi" merkez SERDAR --herkese-acik evet
 esit "kapalı sayfada onay bayrağı kapıyı değiştirmez" kapali "$(alan "$D/bulgu.ornek.com.json" giris)"
+
+echo "== T3b (1.2, A314): 200 dönen ama GÖVDESİ KORUMALI sayfa — üçüncü SARI hâl: ne kapalı ne açık, yanlış beyan gerekmez =="
+kur; ekle https://karne.ornek.com "Karne Sayfası" "Ajan karnelerinin canlı sayfası" tellal MUCESSEM --imza "Karne Raporu"
+esit "gövde korumalı + imza → rc 5 (kayıt var, giriş ÖLÇÜLEMEDİ — yeşil değil)" 5 "$RC"
+esit "kayıt oluştu (kayıtsız canlı sayfa ihlaldir)" 1 "$(say)"
+esit "giriş olculemedi (kapali DEĞİL, acik DEĞİL)" olculemedi "$(alan "$D/karne.ornek.com.json" giris)"
+esit "ölçü gövde" govde "$(alan "$D/karne.ornek.com.json" giris_olcu)"
+esit "imza kayda yazıldı" "Karne Raporu" "$(alan "$D/karne.ornek.com.json" imza)"
+icerir "SARI olduğunu söyler" "$CIKTI" "ÖLÇÜLEMEDİ (SARI)"; icerir "kapalı sayılmaz der" "$CIKTI" "'kapalı' sayılmaz"
+icermez "yeşil tik basmıyor" "$CIKTI" "✓ kayda girdi"
+cag liste; icerir "listede sarı hâl görünür" "$CIKTI" "GİRİŞ ÖLÇÜLEMEDİ (sarı: gövde korumalı, kapı bilinmiyor) · gövdeden ölçüldü"
+icermez "listede kapı arkasında demiyor" "$CIKTI" "kapı arkasında"
+cag dogrula; esit "dogrula aynı imzayla yeniden ölçer → hâlâ sarı → rc 5 (yeşil değil)" 5 "$RC"
+icerir "sarı satır" "$CIKTI" "△ ÖLÇÜLEMEDİ  Karne Sayfası"; icermez "yeşil tik yok" "$CIKTI" "✓ Karne Sayfası"; icerir "özet sarı sayar" "$CIKTI" "1 sarı (giriş ölçülemedi)"
+# gövde değişip imza anonimde görünür olursa KAPI DEĞİŞTİ (artık gerçekten açık)
+sed -i 's|https://karne.ornek.com) printf .*|https://karne.ornek.com) printf "<title>Karne Raporu</title>" ;;|' "$T/govde.sh"
+cag dogrula; esit "imza anonimde göründü → rc 1" 1 "$RC"; icerir "kapı değişti yazar" "$CIKTI" "KAPI DEĞİŞTİ"
+kur; ekle https://karne.ornek.com "Karne Sayfası" "Ajan karnelerinin canlı sayfası" tellal MUCESSEM
+esit "imzasız: eski kural, 2xx = açık → rc 4" 4 "$RC"; esit "kayıt yok" 0 "$(say)"
+icerir "imza yolunu söylüyor" "$CIKTI" "--imza"
+kur; ekle https://gercek-acik.ornek.com "Tanıtım Sayfası" "Herkesin görebildiği tanıtım sayfası" merkez SERDAR --imza "Karne Raporu"
+esit "imza anonim gövdede VAR → gerçekten açık → onaysız rc 4" 4 "$RC"; esit "kayıt yok" 0 "$(say)"
+kur; ekle https://gercek-acik.ornek.com "Tanıtım Sayfası" "Herkesin görebildiği tanıtım sayfası" merkez SERDAR --imza "Karne Raporu" --herkese-acik evet
+esit "onayla → rc 0" 0 "$RC"; esit "giriş açık" acik "$(alan "$D/gercek-acik.ornek.com.json" giris)"; esit "ölçü gövde" govde "$(alan "$D/gercek-acik.ornek.com.json" giris_olcu)"
+kur; ekle https://buyuk.ornek.com "Tanıtım Sayfası" "Herkesin görebildiği tanıtım sayfası" merkez SERDAR --imza "Karne Raporu" --herkese-acik evet
+esit "400 KB gövde, imza başta → yine AÇIK (boru hattı erken kapanınca sarıya düşmez)" 0 "$RC"; esit "giriş açık" acik "$(alan "$D/buyuk.ornek.com.json" giris)"
+kur; ekle https://govdesiz.ornek.com "Karne Sayfası" "Ajan karnelerinin canlı sayfası" tellal MUCESSEM --imza "Karne Raporu"
+esit "gövde okunamıyor → ölçülemedi rc 3 (kapalı DENMEZ)" 3 "$RC"; esit "kayıt yok" 0 "$(say)"; icerir "sebep" "$CIKTI" "govde-okunamadi"
+kur; ekle https://karne.ornek.com "Karne Sayfası" "Ajan karnelerinin canlı sayfası" tellal MUCESSEM --imza "ab"
+esit "imza çok kısa → rc 2" 2 "$RC"
+kur; ekle https://karne.ornek.com "Karne Sayfası" "Ajan karnelerinin canlı sayfası" tellal MUCESSEM --imza "token=abcdefghijklmnop"
+esit "imza sır deseni → rc 2" 2 "$RC"; icermez "değer basılmadı" "$CIKTI" "abcdefghijklmnop"
+kur; cag ekle --adres https://karne.ornek.com --ad "Karne" --ne "Karne sayfası" --kutu tellal --ekleyen MUCESSEM --imza
+esit "--imza değersiz → rc 2" 2 "$RC"
 
 echo "== T4: kendi kilidi olan ve başka yere yönlenen sayfa =="
 kur; ekle https://kilitli.ornek.com "Kilitli Sayfa" "Kendi parolasıyla açılan sayfa"

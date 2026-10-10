@@ -1,7 +1,7 @@
 ---
 name: canli-sayfa
 type: tool
-version: 1.1.0
+version: 1.2.0
 description: >
   Sultan bir kutudan ya da ajandan CANLI bir UI, sayfa, pano, ekran, demo ya da rapor sayfası istediğinde
   (tarayıcıdan adresle açılan her şey) uyulacak FİLO KURALI ve onun aracı. Kural (Sultan, 1 Ekim 2026):
@@ -59,10 +59,10 @@ Sayfa kalktıysa: `canli-sayfa.sh emekli --adres … --gerekce "…"`. Adı ya d
 
 | Komut | Ne yapar | rc |
 |---|---|---|
-| `ekle --adres --ad --ne --kutu --ekleyen [--herkese-acik evet]` | adresi ölçer, kurallardan geçirir, kaydı yazar; aynı adres varsa günceller (ilk tarih korunur) | 0 · 2 kural · 3 canlı değil/ölçülemedi · 4 kapısız sayfa onaysız |
+| `ekle --adres --ad --ne --kutu --ekleyen [--herkese-acik evet] [--imza "<dize>"]` | adresi ölçer, kurallardan geçirir, kaydı yazar; aynı adres varsa günceller (ilk tarih korunur). `--imza`: sayfanın kendi içeriğinden bir dize (4-80 karakter); 2xx dönen adreste anonim gövde okunur, imza yoksa **giriş ölçülemedi (SARI: ne kapalı ne açık)** — kayıt yazılır, **rc 5** | 0 · 2 kural · 3 canlı değil/ölçülemedi (kayıt yok) · 4 kapısız sayfa onaysız · **5 kayıt yazıldı ama giriş ölçülemedi (sarı, yalnız `--imza`)** |
 | `liste [--hepsi] [--json]` | canlı kayıtlar; `--hepsi` emeklileri de; `--json` menünün okuduğu biçim | 0 · 1 bozuk kayıt var |
 | `emekli --adres --gerekce` | kaydı silmez, menüden kaldırır | 0 · 1 kayıt yok · 2 |
-| `dogrula` | canlı kayıtların hepsini yeniden ölçer: açılmayan ve giriş kapısı değişen sayfayı yazar; kaydı değiştirmez | 0 · 1 sorunlu kayıt var |
+| `dogrula` | canlı kayıtların hepsini yeniden ölçer: açılmayan ve giriş kapısı değişen sayfayı yazar; giriş ölçülemeyen (sarı) kaydı `△` ile ayrı sayar; kaydı değiştirmez | 0 · 1 sorunlu kayıt var · 5 sorun yok ama sarı kayıt var |
 
 ## Kayıt kuralları (araç uygular, geçmeyen kayıt yazılmaz)
 
@@ -77,6 +77,17 @@ Sayfa kalktıysa: `canli-sayfa.sh emekli --adres … --gerekce "…"`. Adı ya d
 **Giriş kapısı ölçülür, beyan edilmez.** Araç adresi açar: giriş kapısına yönleniyorsa ya da kendi kilidi varsa
 `kapalı`, kapısız açılıyorsa `açık` yazar. `açık` çıkan sayfa yalnız `--herkese-acik evet` ile kaydedilir.
 Bu bayrak Sultan'ın "bu sayfa herkese açık olsun" kararının karşılığıdır; ajan kendi kararıyla vermez.
+
+**Üçüncü hâl — gövde korumalı (1.2, A314, MÜCESSEM ölçtü):** tarayıcıda betikle yüklenen korumalı sayfa (ör. claude.ai
+artifact) anonim isteğe **200 + boş kabuk** döner: kod "açık" der, içerik yoktur. Kapı yalnız koda baksa operatörü iki yanlışa
+sıkıştırır (kaydı atla ya da `--herkese-acik evet` yanlış beyanı). Çare: `--imza "<dize>"` — sayfanın **kendi içeriğinden** bir
+dize. 2xx'te araç anonim gövdeyi okur: imza **varsa** gerçekten açık (yine `--herkese-acik evet` ister); **yoksa** üçüncü hâl
+**giriş `olculemedi` — SARI**: "kapalı" **denmez** (kapının varlığı anonim istekle ölçülemez; yanlış yazılmış bir imza da aynı
+sonucu verir, o yüzden bu hâl kapı kanıtı değildir), "açık" da denmez (içerik gelmedi). Sayfa canlı olduğu için **kayıt yazılır**
+(kayıtsız canlı sayfa ihlaldir; `giris: olculemedi`, `giris_olcu: govde`) ama komut **rc 5** döner — yeşil değil — ve listede
+"GİRİŞ ÖLÇÜLEMEDİ (sarı: gövde korumalı, kapı bilinmiyor)" görünür. Gövde hiç okunamazsa rc 3, kayıt yok.
+İmza verilmediyse eski kural aynen (2xx = açık). `dogrula` kayıttaki imzayla yeniden ölçer: imza anonimde görünür olursa
+"KAPI DEĞİŞTİ" (sarıdan açığa). İmza sır olamaz (parola/token deseni reddedilir, değer basılmaz).
 
 ## Mahremiyet
 Kayıt ortak dizindedir, bütün kutular okur. Kayda yalnız **ad, tek cümle, adres** girer. Mahrem bir kutunun
