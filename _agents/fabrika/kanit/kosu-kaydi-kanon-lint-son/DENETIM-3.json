@@ -1,0 +1,28 @@
+{
+  "tur": 3,
+  "is": "kosu-kaydi-kanon-lint-son",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-10T12:52:12+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 45288,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Serdar, K1–K6 lint’ini ve sarmalayıcının her koşudaki tek özet çağrısını kurmuş; araç imzalı ölçümlerde lint 40/40, sarmalayıcı 109/109 geçiyor ve önceki çift bildirim kapanmış. Ancak K2 denetimi yalnız `flock -n` sözcüklerini bitişik görünce çalışıyor; geçerli başka seçenek dizilimlerini kaçırdığı için önce bu ayrıştırmayı ve sınavını tamamla.",
+    "bulgular": [
+      {
+        "ne": "K2 denetimi, `-n` seçeneği flock’tan hemen sonra değilse geçerli nonblocking flock kullanımını kaçırır; örneğin `flock -E 75 -n /x.lock ...` sarı üretilmeden temiz geçer.",
+        "kanit": "K2 koşulu komut metnini `flock[[:space:]]+-n` deseniyle arıyor; bu desen flock ile `-n` arasına başka bir seçenek girmesine izin vermiyor. Sunulan sınavlar da yalnız `flock -n` ve `/usr/bin/flock -n` biçimlerini ölçüyor.",
+        "konum": "kosu-kaydi/scripts/kanon-lint.sh: K2 grep koşulu; kosu-kaydi/scripts/kanon-lint.test.sh: K2 senaryoları",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü aracın origin/main’de bulunmadığını, sonra ölçümleri lint sınavının 40/40 ve sarmalayıcı sınavının 109/109 geçtiğini gösteriyor; çağıran kaydı tek stderr özetini, gerçekçi NÂZIR örneği de K4/K5 bulgularını doğruluyor. Bununla birlikte yeşil sınavlar K2’nin seçenek sırası çeşitlerini kapsamadığından bu uygulama açığını kapatmıyor."
+  }
+}

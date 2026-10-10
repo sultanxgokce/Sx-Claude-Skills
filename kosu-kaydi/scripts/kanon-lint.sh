@@ -44,7 +44,8 @@ while IFS= read -r ham || [ -n "$ham" ]; do
     # flock çıplak ya da mutlak yollu (/usr/bin/flock) olabilir — ikisi de yakalanır (bağımsız göz tur 2)
     if printf '%s' "$sarmal" | grep -q -- '--kilit' && printf '%s' "$komut" | grep -qE '(^|[[:space:];&|])(/[^[:space:]]*/)?flock([[:space:]]|$)'; then
       bul K K1 "$n" "--kilit VE komut içinde flock (iş: ${is:-?}) — iç kilit ebeveynin kilidine çarpar, iş HİÇ koşmaz (iç flock -E 75 ise sahte atlandi-kilit, değilse her koşu hata); önce içteki flock kalkar"; fi
-    if ! printf '%s' "$sarmal" | grep -q -- '--kilit' && printf '%s' "$komut" | grep -qE '(^|[[:space:];&|])(/[^[:space:]]*/)?flock[[:space:]]+-n'; then
+    # -n flock'tan hemen sonra olmayabilir (flock -E 75 -n …, flock -w 0 -n …, --nonblock): araya giren seçeneklere izin ver (bağımsız göz -son tur 3)
+    if ! printf '%s' "$sarmal" | grep -q -- '--kilit' && printf '%s' "$komut" | grep -qE '(^|[[:space:];&|])(/[^[:space:]]*/)?flock([[:space:]]+-[^[:space:]]+)*[[:space:]]+(-n|--nonblock|--nb)([[:space:]]|$)'; then
       bul S K2 "$n" "flock -n sarmalayıcının İÇİNDE (iş: ${is:-?}) — kilit/hata ayrımı yok; --kilit <dosya>'ya taşı"; fi
     if [ -n "$is" ]; then
       if [ -n "${IS_SATIR[$is]:-}" ]; then bul K K4 "$n" "iş '$is' ikinci kez sarılı (ilk: satır ${IS_SATIR[$is]}) — ikileme; restart'ta iki kez koşar"

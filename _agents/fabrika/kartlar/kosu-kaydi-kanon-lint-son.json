@@ -15,5 +15,14 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": []
+  "gecmis": [],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "SERDAR",
+      "oturum": "session_013fuJSNg65VkgQE4sJsQURS",
+      "gerekce": "Daraltılmış kartta üç turda bulgu 2→1→1 ve son bulgu yalnız K2 düzenli ifadesinin -n sırası (flock -E 75 -n); düzeltildi, üç kapı eklendi; bir tur daha yalnız bunu teyit eder",
+      "zaman": "2026-10-10T12:52:52+03:00"
+    }
+  ]
 }
