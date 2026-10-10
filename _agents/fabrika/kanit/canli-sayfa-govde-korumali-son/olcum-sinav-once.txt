@@ -1,0 +1,25 @@
+$ bash /config/.claude/jobs/d69a1b07/tmp/canli-govde-once.sh
+# rc=0 sure=11.9s zaman=2026-10-10T12:40:59+03:00
+--- stdout ---
+  ✗ gövde korumalı + imza → rc 5 (kayıt var, giriş ÖLÇÜLEMEDİ — yeşil değil) (beklenen '5' · gelen '2')
+  ✗ kayıt oluştu (kayıtsız canlı sayfa ihlaldir) (beklenen '1' · gelen '0')
+  ✗ giriş olculemedi (kapali DEĞİL, acik DEĞİL) (beklenen 'olculemedi' · gelen '')
+  ✗ ölçü gövde (beklenen 'govde' · gelen '')
+  ✗ imza kayda yazıldı (beklenen 'Karne Raporu' · gelen '')
+  ✗ SARI olduğunu söyler (yok: ÖLÇÜLEMEDİ (SARI))
+  ✗ kapalı sayılmaz der (yok: 'kapalı' sayılmaz)
+  ✗ listede sarı hâl görünür (yok: GİRİŞ ÖLÇÜLEMEDİ (sarı: gövde korumalı, kapı bilinmiyor) · gövdeden ölçüldü)
+  ✗ dogrula aynı imzayla yeniden ölçer → hâlâ sarı → rc 5 (yeşil değil) (beklenen '5' · gelen '0')
+  ✗ sarı satır (yok: △ ÖLÇÜLEMEDİ  Karne Sayfası)
+  ✗ özet sarı sayar (yok: 1 sarı (giriş ölçülemedi))
+  ✗ imza anonimde göründü → rc 1 (beklenen '1' · gelen '0')
+  ✗ kapı değişti yazar (yok: KAPI DEĞİŞTİ)
+  ✗ imza yolunu söylüyor (yok: --imza)
+  ✗ imza anonim gövdede VAR → gerçekten açık → onaysız rc 4 (beklenen '4' · gelen '2')
+  ✗ onayla → rc 0 (beklenen '0' · gelen '2')
+  ✗ giriş açık (beklenen 'acik' · gelen '')
+  ✗ ölçü gövde (beklenen 'govde' · gelen '')
+  ✗ gövde okunamıyor → ölçülemedi rc 3 (kapalı DENMEZ) (beklenen '3' · gelen '2')
+  ✗ sebep (yok: govde-okunamadi)
+════════ SONUÇ: PASS=205 · FAIL=20 ════════
+--- stderr ---

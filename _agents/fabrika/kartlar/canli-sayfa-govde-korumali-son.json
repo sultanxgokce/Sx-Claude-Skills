@@ -1,0 +1,19 @@
+{
+  "is": "canli-sayfa-govde-korumali-son",
+  "cumle": "canli-sayfa 1.2: giriş kapısı ölçümüne üçüncü hâl — --imza ile anonim gövde okunur; imza gövdede yoksa giriş 'olculemedi' (SARI): kayıt yazılır, ekle rc 5, liste sarı gösterir, dogrula △ ile sayar ve rc 5 döner; asla kapalı/açık (yeşil) sayılmaz. Gövde okunamazsa rc 3 kayıt yok. (A314 MÜCESSEM; önceki kart 4 turda daraltıldı)",
+  "istedi": "MUCESSEM",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-10T12:39:10+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

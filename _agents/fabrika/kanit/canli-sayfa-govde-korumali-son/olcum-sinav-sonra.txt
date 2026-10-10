@@ -1,0 +1,248 @@
+$ bash canli-sayfa/scripts/canli-sayfa.test.sh
+# rc=0 sure=12.2s zaman=2026-10-10T12:43:37+03:00
+--- stdout ---
+== T1: kapı arkasındaki canlı sayfa kayda girer ==
+  ✓ rc 0
+  ✓ kayıt dosyası oluştu
+  ✓ giriş kapalı yazıldı
+  ✓ durum canlı
+  ✓ kutu yazıldı
+  ✓ kayda girdiğini söylüyor
+  ✓ kurulmamış bir yüzey hakkında söz vermiyor
+  ✓ liste rc 0
+  ✓ listede adı var
+  ✓ listede adresi var
+  ✓ listede kapı bilgisi var
+  ✓ sayı doğru
+  ✓ json okunuyor ve bir sayfa taşıyor
+== T2: canlı olmayan ya da ölçülemeyen sayfa KAYDEDİLMEZ ==
+  ✓ https://yok.ornek.com → rc 3
+  ✓ https://yok.ornek.com → kayıt yok
+  ✓ https://bozuk.ornek.com → rc 3
+  ✓ https://bozuk.ornek.com → kayıt yok
+  ✓ https://hic-yok.ornek.com → rc 3
+  ✓ https://hic-yok.ornek.com → kayıt yok
+  ✓ https://yonsuz.ornek.com → rc 3
+  ✓ https://yonsuz.ornek.com → kayıt yok
+  ✓ ölçer hiç cevap vermiyor → rc 3
+  ✓ kayıt yok
+== T3: kapısız açılan sayfa onaysız kayda girmez ==
+  ✓ onaysız → rc 4
+  ✓ kayıt yok
+  ✓ sebebi söylüyor
+  ✓ onaylı → rc 0
+  ✓ giriş açık yazıldı
+  ✓ listede herkese açık diye görünüyor
+  ✓ onay 'evet' değilse → rc 4
+  ✓ kapalı sayfada onay bayrağı kapıyı değiştirmez
+== T3b (1.2, A314): 200 dönen ama GÖVDESİ KORUMALI sayfa — üçüncü SARI hâl: ne kapalı ne açık, yanlış beyan gerekmez ==
+  ✓ gövde korumalı + imza → rc 5 (kayıt var, giriş ÖLÇÜLEMEDİ — yeşil değil)
+  ✓ kayıt oluştu (kayıtsız canlı sayfa ihlaldir)
+  ✓ giriş olculemedi (kapali DEĞİL, acik DEĞİL)
+  ✓ ölçü gövde
+  ✓ imza kayda yazıldı
+  ✓ SARI olduğunu söyler
+  ✓ kapalı sayılmaz der
+  ✓ yeşil tik basmıyor
+  ✓ listede sarı hâl görünür
+  ✓ listede kapı arkasında demiyor
+  ✓ dogrula aynı imzayla yeniden ölçer → hâlâ sarı → rc 5 (yeşil değil)
+  ✓ sarı satır
+  ✓ yeşil tik yok
+  ✓ özet sarı sayar
+  ✓ imza anonimde göründü → rc 1
+  ✓ kapı değişti yazar
+  ✓ imzasız: eski kural, 2xx = açık → rc 4
+  ✓ kayıt yok
+  ✓ imza yolunu söylüyor
+  ✓ imza anonim gövdede VAR → gerçekten açık → onaysız rc 4
+  ✓ kayıt yok
+  ✓ onayla → rc 0
+  ✓ giriş açık
+  ✓ ölçü gövde
+  ✓ 400 KB gövde, imza başta → yine AÇIK (boru hattı erken kapanınca sarıya düşmez)
+  ✓ giriş açık
+  ✓ gövde okunamıyor → ölçülemedi rc 3 (kapalı DENMEZ)
+  ✓ kayıt yok
+  ✓ sebep
+  ✓ imza çok kısa → rc 2
+  ✓ imza sır deseni → rc 2
+  ✓ değer basılmadı
+  ✓ --imza değersiz → rc 2
+== T4: kendi kilidi olan ve başka yere yönlenen sayfa ==
+  ✓ 401 → kapalı
+  ✓ başka yere yönlenme → yönleniyor
+== T5: adres kuralları ==
+  ✓ kurala uymayan adres 'http://bulgu.ornek.com' → rc 2
+  ✓ kayıt yok
+  ✓ kurala uymayan adres 'https://bulgu.ornek.com/?anahtar=1' → rc 2
+  ✓ kayıt yok
+  ✓ kurala uymayan adres 'https://bulgu.ornek.com/#x' → rc 2
+  ✓ kayıt yok
+  ✓ kurala uymayan adres 'https://kim:parola@bulgu.ornek.com' → rc 2
+  ✓ kayıt yok
+  ✓ kurala uymayan adres 'https://bulgu.ornek.com:8443' → rc 2
+  ✓ kayıt yok
+  ✓ kurala uymayan adres 'https://bulgu' → rc 2
+  ✓ kayıt yok
+  ✓ kurala uymayan adres 'https://bulgu.ornek.com/a b' → rc 2
+  ✓ kayıt yok
+  ✓ kurala uymayan adres 'https://bulgu.ornek.com/../x' → rc 2
+  ✓ kayıt yok
+  ✓ kurala uymayan adres 'bulgu.ornek.com' → rc 2
+  ✓ kayıt yok
+  ✓ kurala uymayan adres '' → rc 2
+  ✓ kayıt yok
+  ✓ büyük harf ve sondaki eğik çizgi düzeltilir → rc 0
+  ✓ düzeltilmiş adres yazıldı
+  ✓ yollu adres ayrı kayıt
+  ✓ yollu adres olduğu gibi
+  ✓ iki ayrı kayıt dosyası
+  ✓ birinci sayfa kayıtta duruyor
+  ✓ ikinci sayfa kayıtta duruyor
+  ✓ başka adresin kaydının üzerine yazılmaz → rc 3
+  ✓ o dosyadaki kayıt olduğu gibi
+  ✓ emekli de başka adresin kaydına dokunmaz → rc 3
+  ✓ durum değişmedi
+== T6: metin kuralları (Sultan'ın okuyacağı dil · sır · uzunluk) ==
+  ✓ ad beş kelime → rc 2
+  ✓ ad beş kelime → kayıt yok
+  ✓ ad boş → rc 2
+  ✓ ad boş → kayıt yok
+  ✓ ad çok uzun → rc 2
+  ✓ ad çok uzun → kayıt yok
+  ✓ açıklama çok uzun → rc 2
+  ✓ açıklama çok uzun → kayıt yok
+  ✓ açıklamada dosya yolu → rc 2
+  ✓ açıklamada dosya yolu → kayıt yok
+  ✓ açıklamada dosya adı → rc 2
+  ✓ açıklamada dosya adı → kayıt yok
+  ✓ açıklamada adres → rc 2
+  ✓ açıklamada adres → kayıt yok
+  ✓ açıklamada kod imi → rc 2
+  ✓ açıklamada kod imi → kayıt yok
+  ✓ açıklama iki satır → rc 2
+  ✓ açıklama iki satır → kayıt yok
+  ✓ kutu yok → rc 2
+  ✓ kutu yok → kayıt yok
+  ✓ kutu adı düzgün değil → rc 2
+  ✓ kutu adı düzgün değil → kayıt yok
+  ✓ ekleyen yok → rc 2
+  ✓ ekleyen yok → kayıt yok
+  ✓ tanınmayan bayrak → rc 2
+  ✓ tanınmayan bayrak → kayıt yok
+  ✓ açıklamada sır → rc 2
+  ✓ sır değeri çıktıya basılmadı
+  ✓ kayıt yok
+  ✓ uzun anahtar gibi değer → rc 2
+== T6b: açıklama tek cümle (denetim tur 4 bulgusu) ==
+  ✓ iki cümle → rc 2
+  ✓ sebep: tek cümle
+  ✓ kayıt yok
+  ✓ soru + ikinci söz → rc 2
+  ✓ noktalı virgül zinciri → rc 2
+  ✓ sonda nokta olan tek cümle geçer
+  ✓ ondalık sayı cümle sayılmaz
+  ✓ virgülle bağlı tek cümle geçer
+== T7: aynı adres yeniden eklenirse kayıt güncellenir, ilk tarih korunur ==
+  ✓ rc 0
+  ✓ tek kayıt
+  ✓ ad güncellendi
+  ✓ ilk tarih korundu
+  ✓ geçici dosya kalmadı
+== T8: emekli — kayıt silinmez, menüden kalkar ==
+  ✓ gerekçe kısa → rc 2
+  ✓ durum değişmedi
+  ✓ kurala uymayan gerekçe → rc 2
+  ✓ durum değişmedi
+  ✓ sır değeri çıktıya basılmadı
+  ✓ kurala uymayan gerekçe → rc 2
+  ✓ durum değişmedi
+  ✓ sır değeri çıktıya basılmadı
+  ✓ kurala uymayan gerekçe → rc 2
+  ✓ durum değişmedi
+  ✓ sır değeri çıktıya basılmadı
+  ✓ kurala uymayan gerekçe → rc 2
+  ✓ durum değişmedi
+  ✓ sır değeri çıktıya basılmadı
+  ✓ kurala uymayan gerekçe → rc 2
+  ✓ durum değişmedi
+  ✓ sır değeri çıktıya basılmadı
+  ✓ kayıt dosyasına sır yazılmadı
+  ✓ olmayan kayıt → rc 1
+  ✓ rc 0
+  ✓ kayıt dosyası duruyor
+  ✓ durum emekli
+  ✓ emekli sayfa listede yok
+  ✓ öbür sayfa listede
+  ✓ --hepsi emekliyi de gösterir
+  ✓ emekli sayfa yeniden eklenince canlıya döner
+== T9: bozuk kayıt sessizce yutulmaz ==
+  ✓ liste rc 1
+  ✓ bozuk kayıtlar adıyla yazıldı
+  ✓ sağlam kayıt yine listede
+  ✓ json sağlam kaydı taşıyor
+  ✓ json bozukları sayıyor
+  ✓ adı ve açıklaması olmayan kayıt menüye geçmez
+  ✓ bozuk diye sayılır
+  ✓ https olmayan adresli kayıt menüye geçmez
+== T9b: hedef dosyadaki bozuk kayıt delildir, üstüne yazılmaz (denetim tur 1) ==
+  ✓ ekle rc 3
+  ✓ sebep: bozuk kayıt
+  ✓ bozuk dosya aynen duruyor
+  ✓ başka dosya açılmadı
+  ✓ emekli rc 3
+  ✓ emekli de dokunmadı
+  ✓ şemasız hedef {} → ekle rc 3
+  ✓ dosya aynen duruyor ({})
+  ✓ şemasız hedef {"adres":null} → ekle rc 3
+  ✓ dosya aynen duruyor ({"adres":null})
+  ✓ şemasız hedef [] → ekle rc 3
+  ✓ dosya aynen duruyor ([])
+  ✓ şemasız hedef {"ad":"Bulgu","ne":"x"} → ekle rc 3
+  ✓ dosya aynen duruyor ({"ad":"Bulgu","ne":"x"})
+== T9c: aynı sayfaya eşzamanlı yazım sıraya girer (denetim tur 3) ==
+  ✓ kilit başkasındayken beklemesiz ekle rc 3
+  ✓ sebep: kilit
+  ✓ yazmadı
+  ✓ kilit düşünce ekle rc 0
+  ✓ kayıt yazıldı
+  ✓ altı eşzamanlı yazım hepsi rc 0
+  ✓ tek kayıt dosyası
+  ✓ kayıt okunur ve sağlam
+  ✓ emekli de kilide uyar → rc 3
+  ✓ durum değişmedi
+== T10: dogrula — kayıtlı sayfalar yeniden ölçülür ==
+  ✓ hepsi açılıyor → rc 0
+  ✓ sayı doğru
+  ✓ biri açılmıyor → rc 1
+  ✓ hangisinin açılmadığı yazıyor
+  ✓ kapı kalkmış → rc 1
+  ✓ kapının değiştiği yazıyor
+  ✓ dogrula kaydı değiştirmez
+  ✓ kayıt yokken rc 0
+== T11: kullanım ==
+  ✓ komutsuz → rc 2
+  ✓ silme komutu yok → rc 2
+  ✓ değersiz --adres → rc 2 (asılı kalmaz)
+  ✓ değersiz --adres → sebebi söylüyor
+  ✓ değersiz --ad → rc 2 (asılı kalmaz)
+  ✓ değersiz --ad → sebebi söylüyor
+  ✓ değersiz --ne → rc 2 (asılı kalmaz)
+  ✓ değersiz --ne → sebebi söylüyor
+  ✓ değersiz --kutu → rc 2 (asılı kalmaz)
+  ✓ değersiz --kutu → sebebi söylüyor
+  ✓ değersiz --ekleyen → rc 2 (asılı kalmaz)
+  ✓ değersiz --ekleyen → sebebi söylüyor
+  ✓ değersiz --herkese-acik → rc 2 (asılı kalmaz)
+  ✓ değersiz --herkese-acik → sebebi söylüyor
+  ✓ değersiz --gerekce → rc 2 (asılı kalmaz)
+  ✓ değersiz --gerekce → sebebi söylüyor
+  ✓ sondaki seçenek değersiz → rc 2
+  ✓ kayıt yok
+  ✓ girdiyi yutan ölçerle de iki sayfa ölçüldü
+  ✓ kayıt dizini yokken liste rc 0
+  ✓ sıfır sayfa
+
+════════ SONUÇ: PASS=227 · FAIL=0 ════════
+--- stderr ---

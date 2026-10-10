@@ -19,27 +19,47 @@
 #   · giriş kapısına yönleniyor ya da 401/403 → giriş: kapalı
 #   · kapısız açılıyor (2xx)                  → giriş: açık; YALNIZ --herkese-acik evet ile kaydedilir (rc 4).
 #     Sebep: kapı arkasında olması gereken bir sayfa kapısız yayına çıkmışsa bunu kayıt anında yakalamak.
+#   · 2xx ama GÖVDE KORUMALI (1.2, A314 — MÜCESSEM ölçtü): tarayıcıda betikle yüklenen sayfa (ör. claude.ai artifact)
+#     anonim isteğe 200 + boş kabuk döner; kod "açık" der, içerik yoktur. Çare: kaydeden `--imza "<dize>"` verir
+#     (sayfanın KENDİ içeriğinden bir dize); araç anonim gövdeyi okur: imza gövdede VARSA → gerçekten açık (yine
+#     --herkese-acik evet ister); YOKSA → giriş: olculemedi — ÜÇÜNCÜ, SARI hâl: "kapalı" DENMEZ (yanlış imza da aynı
+#     sonucu verir; kapının varlığı anonim istekle ölçülemez), "açık" da denmez (içerik gelmedi). Sayfa canlı olduğu için
+#     KAYIT yazılır (kayıtsız canlı sayfa ihlaldir) ama rc 5 döner (yeşil değil) ve listede sarı görünür. İmza verilmediyse
+#     2xx eski kural (açık). Gövde hiç okunamazsa → rc 3, kayıt yok.
+# rc 5: kayıt yazıldı, giriş ölçülemedi (sarı) — yalnız --imza ile.
 #
 # ORTAM (yalnız sınav ve kurulum için)
 #   CANLI_SAYFA_DIZIN   kayıt dizini
 #   CANLI_SAYFA_OLCER   adresi ölçen komut; adres son argüman olarak verilir, "<kod> <yönlenilen adres>" basar
+#   CANLI_SAYFA_GOVDE   anonim gövdeyi basan komut; adres son argüman (varsayılan curl, 2 MB tavan, yönlenme izlenmez)
 #   CANLI_SAYFA_KILIT_SURE  aynı sayfanın kilidini en çok kaç saniye beklesin (varsayılan 10)
-# rc: 0 tamam · 1 doğrulamada sorunlu kayıt var / bozuk kayıt var · 2 kullanım ya da kural ihlali
+# rc: 0 tamam · 1 doğrulamada sorunlu kayıt var / bozuk kayıt var · 2 kullanım ya da kural ihlali · 5 kayıt yazıldı ama giriş ölçülemedi (sarı, yalnız --imza)
 #     3 ölçülemedi ya da canlı değil · 4 kapısız sayfa onaysız
 set -uo pipefail
 DIZIN="${CANLI_SAYFA_DIZIN:-/config/.claude/canli-sayfalar}"
 hata() { echo "✗ $1" >&2; exit "${2:-2}"; }
 command -v python3 >/dev/null 2>&1 || hata "ÖLÇÜLEMEDİ · python3 yok; kayıt okunamaz/yazılamaz" 3
 
-olc() {  # olc <adres> → "<giris> <kod>" basar; rc 0 canlı · 3 canlı değil/ölçülemedi
-  local a="$1" c kod yon
+govde() {  # govde <adres> → anonim gövdeyi stdout'a basar; rc≠0 = okunamadı. Girdi okumaz (dogrula döngüsü).
+  if [ -n "${CANLI_SAYFA_GOVDE:-}" ]; then bash -c "$CANLI_SAYFA_GOVDE \"\$1\"" _ "$1" 2>/dev/null </dev/null
+  else command -v curl >/dev/null 2>&1 || return 3
+       curl -s -m 15 --max-filesize 2000000 "$1" 2>/dev/null </dev/null; fi
+}
+olc() {  # olc <adres> [imza] → "<giris> <kod>" basar; rc 0 canlı · 3 canlı değil/ölçülemedi
+  local a="$1" im="${2:-}" c kod yon g
   # ölçer girdiyi OKUYAMAZ: dogrula kayıtları satır satır okurken ölçer o satırları yutmasın
   if [ -n "${CANLI_SAYFA_OLCER:-}" ]; then c="$(bash -c "$CANLI_SAYFA_OLCER \"\$1\"" _ "$a" 2>/dev/null </dev/null)"
   else command -v curl >/dev/null 2>&1 || { echo "olculemedi curl-yok"; return 3; }
        c="$(curl -s -o /dev/null -m 15 -w '%{http_code} %{redirect_url}' "$a" 2>/dev/null </dev/null)"; fi
   kod="${c%% *}"; yon="${c#* }"; [ "$yon" = "$c" ] && yon=""
   case "$kod" in
-    2[0-9][0-9]) echo "acik $kod"; return 0 ;;
+    2[0-9][0-9])
+      [ -n "$im" ] || { echo "acik $kod"; return 0; }
+      # 1.2: imza verildiyse kod yetmez, gövde okunur. Okunamadı → ölçülemedi ("kapalı" sayılmaz: yanlış-yeşil kapısı).
+      g="$(govde "$a")" || { echo "olculemedi $kod-govde-okunamadi"; return 3; }
+      # imza yok → giriş ÖLÇÜLEMEDİ (sarı): sayfa canlı ama kapı var mı bilinmiyor — ne kapalı (yanlış imza da buraya düşer) ne açık (içerik gelmedi)
+      # boru YOK (pipefail altında grep erken çıkınca printf SIGPIPE alır, boru düşer, imza VARKEN sarı yazılırdı — bağımsız göz): burada-dizge
+      if grep -qF -- "$im" <<<"$g"; then echo "acik $kod"; else echo "olculemedi $kod-govde-korumali"; fi; return 0 ;;
     401|403) echo "kapali $kod"; return 0 ;;
     30[1-8]) case "$yon" in
                https://*.cloudflareaccess.com/*|*/cdn-cgi/access/login*) echo "kapali $kod"; return 0 ;;
@@ -144,15 +164,15 @@ PY
 }
 
 komut="${1:-}"; [ "$#" -gt 0 ] && shift
-adres=""; ad=""; ne=""; kutu=""; ekleyen=""; acik=""; gerekce=""; hepsi=0; json=0
+adres=""; ad=""; ne=""; kutu=""; ekleyen=""; acik=""; gerekce=""; imza=""; hepsi=0; json=0
 while [ "$#" -gt 0 ]; do
   # değer isteyen seçenek değersiz verilirse DUR (denetim tur 3: kaydırma düşüyor, döngü aynı seçenekte dönüyordu)
-  case "$1" in --adres|--ad|--ne|--kutu|--ekleyen|--herkese-acik|--gerekce) [ "$#" -ge 2 ] || hata "$1 bir değer ister" ;; esac
+  case "$1" in --adres|--ad|--ne|--kutu|--ekleyen|--herkese-acik|--gerekce|--imza) [ "$#" -ge 2 ] || hata "$1 bir değer ister" ;; esac
   case "$1" in
     --adres) adres="${2:-}"; shift 2 ;;   --ad) ad="${2:-}"; shift 2 ;;
     --ne) ne="${2:-}"; shift 2 ;;         --kutu) kutu="${2:-}"; shift 2 ;;
     --ekleyen) ekleyen="${2:-}"; shift 2 ;; --herkese-acik) acik="${2:-}"; shift 2 ;;
-    --gerekce) gerekce="${2:-}"; shift 2 ;; --hepsi) hepsi=1; shift ;;
+    --gerekce) gerekce="${2:-}"; shift 2 ;; --imza) imza="${2:-}"; shift 2 ;; --hepsi) hepsi=1; shift ;;
     --json) json=1; shift ;;
     *) hata "tanınmayan bayrak: $1" ;;
   esac
@@ -166,28 +186,39 @@ case "$komut" in
     [ "$(printf '%s' "$ad" | wc -w)" -le 4 ] || hata "ad en çok dört kelime olabilir"
     printf '%s' "$kutu" | grep -qE '^[a-z0-9][a-z0-9-]{0,30}$' || hata "--kutu gerekli (küçük harf, rakam, tire): hangi kutunun sayfası"
     printf '%s' "$ekleyen" | grep -qE '^[A-Za-zÇĞİÖŞÜÂÎÛçğıöşüâîû-]{2,24}$' || hata "--ekleyen gerekli: kaydı yazan ajanın adı"
-    o="$(olc "$a")"; r=$?
+    if [ -n "$imza" ]; then   # imza: sayfanın kendi içeriğinden bir dize; tek satır, kısa, sır değil (gövdede aranır, kayda yazılır)
+      [ "${#imza}" -ge 4 ] && [ "${#imza}" -le 80 ] || hata "--imza 4-80 karakter olmalı: sayfanın kendi içeriğinden, anonim gövdede aranacak bir dize"
+      case "$imza" in *$'\n'*|*$'\t'*) hata "--imza tek satır olmalı" ;; esac
+      if printf '%s' "$imza" | grep -qEi '(parola|sifre|şifre|password|token|secret|apikey|api_key)[[:space:]]*[:=]|sk-[A-Za-z0-9]{16,}|[A-Za-z0-9+/_-]{32,}'; then
+        hata "--imza sır gibi görünen bir değer içeriyor (değer basılmadı)"; fi
+    fi
+    o="$(olc "$a" "$imza")"; r=$?
     [ "$r" -eq 0 ] || hata "CANLI DEĞİL ya da ölçülemedi ($o): $a — sayfa açılmadan kayda girmez" 3
-    giris="${o%% *}"
+    giris="${o%% *}"; olcu="kod"; [ -n "$imza" ] && olcu="govde"   # imza verildiyse hüküm koddan değil gövdeden (açık ya da gövde-korumalı)
     if [ "$giris" = acik ] && [ "$acik" != evet ]; then
-      hata "bu sayfa GİRİŞ KAPISI OLMADAN açılıyor ($o): $a — bilerek herkese açıksa --herkese-acik evet ile yeniden kaydet; değilse önce giriş kapısını kur" 4
+      hata "bu sayfa GİRİŞ KAPISI OLMADAN açılıyor ($o): $a — bilerek herkese açıksa --herkese-acik evet ile yeniden kaydet; değilse önce giriş kapısını kur (betikle yüklenen korumalı sayfaysa --imza ile içerik imzası ver)" 4
     fi
     f="$DIZIN/$(dosya_adi "$a").json"
     kilit_al "$f"    # hedef okuma + yazma tek kilit altında: aynı sayfaya eşzamanlı yazım sıraya girer
     hedef_kontrol "$f" "$a" "üzerine yazılmadı"
-    j="$(python3 - "$f" "$a" "$ad" "$ne" "$kutu" "$ekleyen" "$giris" <<'PY'
+    j="$(python3 - "$f" "$a" "$ad" "$ne" "$kutu" "$ekleyen" "$giris" "$olcu" "$imza" <<'PY'
 import json, sys, datetime
-f, a, ad, ne, kutu, ek, giris = sys.argv[1:8]
+f, a, ad, ne, kutu, ek, giris, olcu, imza = sys.argv[1:10]
 simdi = datetime.datetime.now().astimezone().isoformat(timespec="seconds")
 try: eski = json.load(open(f, encoding="utf-8"))
 except Exception: eski = {}
-k = {"v": 1, "adres": a, "ad": ad, "ne": ne, "kutu": kutu, "ekleyen": ek, "giris": giris, "durum": "canli",
+k = {"v": 1, "adres": a, "ad": ad, "ne": ne, "kutu": kutu, "ekleyen": ek, "giris": giris, "giris_olcu": olcu, "durum": "canli",
      "eklendi": eski.get("eklendi") if isinstance(eski.get("eklendi"), str) and eski.get("eklendi") else simdi,
      "olculdu": simdi}
+if imza: k["imza"] = imza   # dogrula aynı imzayla yeniden ölçer
 print(json.dumps(k, ensure_ascii=False))
 PY
     )" || hata "kayıt üretilemedi" 3
     yaz "$f" "$j"
+    if [ "$giris" = olculemedi ]; then
+      echo "△ kayda girdi, giriş ÖLÇÜLEMEDİ (SARI): $ad · $a — anonim gövde imzayı taşımıyor (gövde korumalı); kapı var mı bilinmiyor, 'kapalı' sayılmaz · kutu: $kutu"
+      exit 5   # yeşil değil: kayıt var ama kapı hükmü yok (rc 5 — çağıran sarıyı görür)
+    fi
     echo "✓ kayda girdi: $ad · $a · giriş: $giris · kutu: $kutu"
     ;;
   emekli)
@@ -216,7 +247,9 @@ import json, sys
 t = json.loads(sys.argv[1])
 print(f"canlı sayfalar · kayıt: {sys.argv[2]}")
 for k in t["sayfalar"]:
-    im = {"kapali": "kapı arkasında", "acik": "HERKESE AÇIK", "yonleniyor": "yönleniyor"}.get(k["giris"], k["giris"])
+    im = {"kapali": "kapı arkasında", "acik": "HERKESE AÇIK", "yonleniyor": "yönleniyor",
+          "olculemedi": "GİRİŞ ÖLÇÜLEMEDİ (sarı: gövde korumalı, kapı bilinmiyor)"}.get(k["giris"], k["giris"])
+    if k.get("giris_olcu") == "govde": im += " · gövdeden ölçüldü"
     print(f"  {k['kutu']:<10} {k['ad']:<28} {k['adres']}  ({im}{' · emekli' if k['durum'] == 'emekli' else ''})")
     print(f"  {'':<10} {k['ne']}")
 print(f"── {len(t['sayfalar'])} sayfa" + (f" · BOZUK KAYIT: {len(t['bozuk'])} ({', '.join(t['bozuk'])})" if t["bozuk"] else ""))
@@ -226,18 +259,20 @@ PY
     ;;
   dogrula)
     t="$(topla 0)" || hata "kayıt okunamadı" 3
-    k=0; n=0
-    while IFS=$'\t' read -r a g ad; do
-      [ -n "$a" ] || continue; n=$((n + 1))
-      o="$(olc "$a")"; r=$?; y="${o%% *}"
+    k=0; n=0; sari=0
+    while IFS=$'\t' read -r a g im ad; do
+      [ -n "$a" ] || continue; n=$((n + 1)); [ "$im" = "-" ] && im=""   # boş imza "-" taşınır: ardışık sekme read'de çöker, sütun kayardı
+      o="$(olc "$a" "$im")"; r=$?; y="${o%% *}"   # kayıttaki imzayla: gövde korumalı sayfa yine gövdeden ölçülür
       if [ "$r" -ne 0 ]; then echo "✗ AÇILMIYOR   $ad · $a ($o)"; k=1
       elif [ "$y" != "$g" ]; then echo "✗ KAPI DEĞİŞTİ $ad · $a (kayıtta: $g · şimdi: $y)"; k=1
+      elif [ "$y" = olculemedi ]; then echo "△ ÖLÇÜLEMEDİ  $ad · $a ($o) — sarı: canlı ama kapı bilinmiyor, yeşil değil"; sari=$((sari + 1))
       else echo "✓ $ad · $a ($o)"; fi
     done < <(printf '%s' "$t" | python3 -c 'import json,sys
-for k in json.load(sys.stdin)["sayfalar"]: print(k["adres"], k["giris"], k["ad"], sep="\t")')
+for k in json.load(sys.stdin)["sayfalar"]: print(k["adres"], k["giris"], k.get("imza") or "-", k["ad"], sep="\t")')
     b="$(printf '%s' "$t" | python3 -c 'import json,sys; print(len(json.load(sys.stdin)["bozuk"]))')"
     [ "$b" -eq 0 ] || { echo "✗ bozuk kayıt: $b"; k=1; }
-    echo "── $n sayfa ölçüldü"
+    echo "── $n sayfa ölçüldü$([ "$sari" -gt 0 ] && printf ' · %s sarı (giriş ölçülemedi)' "$sari")"
+    [ "$k" -eq 0 ] && [ "$sari" -gt 0 ] && exit 5   # sorun yok ama sarı var: yeşil basılmaz (rc 5)
     exit "$k"
     ;;
   *) echo "kullanım: canli-sayfa.sh ekle|liste|emekli|dogrula  (ayrıntı: dosyanın başı)" >&2; exit 2 ;;
