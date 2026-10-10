@@ -1,0 +1,54 @@
+{
+  "is": "kosu-kaydi-alti-hal",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-09T22:27:24+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "once",
+      "dosya": "olcum-sinav-once.txt",
+      "sha256": "847db98fd93388316fb9064efae743be11ba0fd312e697af406fa80b6837dff4",
+      "komut": [
+        "bash",
+        "/config/.claude/jobs/d69a1b07/tmp/alti-hal-once.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T22:24:38+03:00",
+      "sure_sn": 12.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "8fa641ec30822d9f38b0412b7b9defb69abe8af184f1e5e7afa36a336da21bca",
+      "komut": [
+        "bash",
+        "kosu-kaydi/scripts/kosu-sar.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T22:27:24+03:00",
+      "sure_sn": 13.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "surum",
+      "asama": "sonra",
+      "dosya": "olcum-surum-sonra.txt",
+      "sha256": "9f6d6c4b5712880d14f2ba7b4c26a53e9fc24c9e1c05c0f5c18e82c60a42456c",
+      "komut": [
+        "bash",
+        "-c",
+        "grep -c \"version: 0.4.1\" kosu-kaydi/SKILL.md; grep -c \"kosu-sar 0.4.1\" kosu-kaydi/scripts/kosu-sar.sh; grep -c \"\\\"version\\\": \\\"0.4.1\\\"\" catalog.json; grep -c \"/proc/net/tcp\" kosu-kaydi/SKILL.md"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-09T22:25:47+03:00",
+      "sure_sn": 0.0
+    }
+  ],
+  "imza": "b4624243a48bbaa860b0dc80ca7441529d63aa11f7f91113d25eb43ec5aecd13"
+}

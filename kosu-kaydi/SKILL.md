@@ -1,10 +1,10 @@
 ---
 name: kosu-kaydi
 type: agent
-version: 0.4.0
+version: 0.4.1
 description: >
   Koşu kaydı sarmalayıcısı: her cron/zamanlı iş kendi komutunu `kosu-sar.sh <is> [--nobetci [--gozlem <komut>]] [--kilit <dosya>] -- <komut>` ile sarar; her koşu
-  TAM BİR satır yazar (/config/.kosu-kaydi/<kutu>.<YYYY-MM>.jsonl, kutu-yerel, 15 alan — Nexus kokpit-ux/05 şeması sürüm 1.2).
+  TAM BİR satır yazar (/config/.kosu-kaydi/<kutu>.<YYYY-MM>.jsonl, kutu-yerel, 15 alan — Nexus kokpit-ux/05 şeması sürüm 1.3).
   Sessiz başarı yalnız beyanla ($KOSU_BEYAN dosyası ya da kanon satırında --nobetci; --gozlem ile ölçü stdout değil önce/sonra gözlemdir) ayrı sonuç olur; kilitte atlanan koşu
   (flock -n -E 75) `atlandi-kilit`; sahip etiketi satır üstü ya da satır sonu. Sonraki koşu canlı crontab'dan GÖZLEM, kanon
   dosyasından TAHMİN olarak iki alan, çelişki kokpitte sarı; hesap paketsiz saf python. Global beceri: cloudtop deposu izole
@@ -19,7 +19,7 @@ tags: [kosu-kaydi, cron, sarmalayici, kokpit, headless, agentic-os, jsonl]
 ## Niçin var
 Kokpit, kutularda koşan zamanlı işleri (cron) **göremez**: her iş kendi kütüğüne yazar ya da hiç yazmaz; "koştu mu,
 ne zaman, ne oldu, bir sonraki ne zaman" sorusunun tek cevabı yok. Şema Nexus `_agents/handoff/kokpit-ux/05-kosu-kaydi.md`
-(sürüm 1.2) — bu beceri onun **yazıcısı**dır. Okuyucu (kokpit) ayrı iştir.
+(sürüm 1.3) — bu beceri onun **yazıcısı**dır. Okuyucu (kokpit) ayrı iştir.
 
 **Niçin global beceri (A290, 9 Eki 2026):** ilk sürüm cloudtop deposunda yaşıyordu. Ölçüldü: nazir kutusu `/config/projects`
 altında yalnız `cortex · nazir · Nexus · _wt-nazir` görüyor, cloudtop YOK; `/config/.claude/skills` ise merkezle **aynı dizin**
@@ -36,7 +36,8 @@ KOSU_KANON=/config/projects/nazir/.oda/cron            # verilmezse drift ölç�
 # sahip: NAZIR                                          # (a) satır ÜSTÜ not — cloudtop kanonunun deseni
 # damga: /config/.claude/supur.log
 35 * * * * bash /config/.claude/skills/kosu-kaydi/scripts/kosu-sar.sh supur --kilit /x.lock -- bash .../supur.sh   # eski: flock -n /x.lock bash …
-*/5 * * * * bash /config/.claude/skills/kosu-kaydi/scripts/kosu-sar.sh bulgu-defteri --nobetci --gozlem "ss -ltnpH sport = :8790" -- bash /config/.ic-sayfa/sunucu.sh # bulgu-defteri sahip:NAZIR
+*/5 * * * * bash /config/.claude/skills/kosu-kaydi/scripts/kosu-sar.sh bulgu-defteri --nobetci --gozlem "awk '\$2 ~ /:2256\$/ && \$4==\"0A\" {print \$10}' /proc/net/tcp" -- bash /config/.ic-sayfa/sunucu.sh # bulgu-defteri sahip:NAZIR
+# gözlem = 8790'ı (2256 onaltılık) dinleyen soketin inode'u. `ss` nazir'de YOK (0.4.0 örneği `ss -ltnpH` oradaki her koşuyu olculemedi yapardı); `pgrep -f` kendi dışındakileri de sayar (A306)
 ```
 - `sahip` (K3): satır üstü `# sahip:` **ya da** satır sonu `# <ad> sahip:<ROL> [damga:<yol>]`; ikisi varsa satır sonu kazanır
   (A292: bazı kanon üreticileri yorum satırlarını canlıya taşımaz, satır sonu etiketi taşınır); yoksa `bilinmiyor` (uydurma yok).
@@ -62,6 +63,9 @@ kayıt dizini açılamaz/yazılamazsa satır **yedek dizine** düşer (`KOSU_YED
 `--nobetci --gozlem <komut>` (0.4, şema 1.2): nöbetçi **yeniden başlatırken de sessizse** (nazir `sunucu.sh` iki kolda da rc 0 + boş stdout, A300)
 "boş çıktı = iş yok" çıkarıma döner. Gözlemli kipte ölçü stdout değildir: gözlem komutu koşudan **önce** ve **sonra** koşar; çıktı aynıysa
 `ayakta-dokunmadim`, değiştiyse `tamam` (ör. dinleyen pid değişti = yeniden başlattı). Karşılaştırma: gözlem stdout'u, bütünün baş/son boşluğu kırpılıp bayt bayt; içteki boşluk anlamlı. Önce ya da sonra gözlemden biri rc≠0 → `olculemedi` — iş rc'si ne olursa olsun (koşulsuz; `hata` bile denmez, çünkü sınıf ölçülememiştir); iş rc'si olduğu gibi geçer.
+**Altı hâl (0.4.1, şema 1.3 K4-d — NÂZIR ölçtü):** kırpılmış gözlem **boşsa gözlenen şey yoktur**. boş→boş = `hata` (yoktu, hâlâ yok — "ayakta" değil) ·
+dolu→boş = `hata` (nöbetçi düşürdü — "iş yaptı" değil) · boş→dolu = `tamam` (düştü, kaldırıldı) · dolu→aynı = `ayakta-dokunmadim` · dolu→farklı = `tamam` ·
+gözlem rc≠0 = `olculemedi`. 0.4.0 ilk ikisini yeşil basıyordu. İş rc'si 126/127 ise gözlem ne olursa olsun `olculemedi` (komut yok/çalışmaz).
 `--nobetci`: beyan betikte değil **kanon satırında** yaşar — sürümsüz bir nöbetçi betiğine (A291: nazir'inki hiçbir depoda değil)
 dokunmadan K4 ölçülür. Bedeli: nöbetçinin çıktısı sarmalayıcıdan geçer (`tee`), kütüğe yine düşer.
 
@@ -79,7 +83,7 @@ kısıtlıysa OR). Tarama 1500 gün (29 Şubat gibi seyrek ama geçerli ifadeler
 ## Sınav
 - `bash scripts/kosu-sar.test.sh` — hermetik (sahte kanon, sahte crontab, geçici dizin). Ölçtüğü: 15 alan geçerli JSON · beyan
   protokolü (dosya + `--nobetci`) · satır sonu etiketi · `atlandi-kilit` · kanon/canlı çelişkisi · @reboot · kanonsuz kip · kutu adı
-  türetimi · rc 126/127 geçişi · cron-sonraki 10 ifade + 4 ret · croniter zehirli-modül kapısı (pakete bağımlılık yok).
+  türetimi · rc 126/127 geçişi · gözlem altı hâl (boş→boş/dolu→boş hata) · UTC damga · cron-sonraki 10 ifade + 4 ret · croniter zehirli-modül kapısı (pakete bağımlılık yok).
 - `bash scripts/hedef-kutu-sinav.sh <konteyner> [<ssh-host>|-]` — aynı sınavı **hedef kutuda** koşturur (tar → `/tmp`, orada koş, sil;
   kaynak/hedef md5'leri basılır). Kurulumdan önce "bu kutuda çalışır" iddiasının ölçümü.
 
@@ -89,5 +93,5 @@ kısıtlıysa OR). Tarama 1500 gün (29 Şubat gibi seyrek ama geçerli ifadeler
 - Kurulum bu paketin işi değil: merge sonrası `sync-skills.mjs --skill kosu-kaydi --apply` (yalnız bu beceri; toplu `--force` yasak) ve
   kutularda görünürlük ölçümü ayrı karttır (`kosu-kaydi-kurulum`).
 - Kanon yolu verilmeyen kutuda drift (A267) ölçülemez. `--kilit`'e taşınmamış (içeride `flock -n` kalan) satırda kilit/hata ayrımı yoktur.
-- Saat dilimi: kayıt `date -Iseconds` yerel dilimle; `KOSU_SIMDI` verilirse dilimi onunla gider. DST geçişleri özel ele alınmaz.
+- Saat dilimi (0.4.1, A303): `baslangic`/`bitis` **hep UTC** (`+00:00`) — nazir'de cron satırları UTC, elle koşu +03:00 yazıyordu, aynı dosyada iki dilim. Sonraki-koşu alanları cron ifadesinin dilimindedir (`KOSU_SIMDI` verilirse onunla). DST geçişleri özel ele alınmaz.
 - `defter_ref` alanı şimdilik hep `null` (headless defter B0-d ayrı kart).

@@ -1,0 +1,21 @@
+{
+  "tur": 2,
+  "is": "kosu-kaydi-alti-hal",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-09T22:27:48+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 24744,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Hünkârım, değişiklik boş gözlemi “gözlenen şey yok” sayarak boş→boş ve dolu→boş hâllerini hata sınıfına almış, damgaları UTC’ye çekmiş ve Nâzır’da bulunmayan ss örneğini /proc/net/tcp ile değiştirmiştir. Araç imzalı ölçüm çifti önceki dört kusurun kapandığını, altı hâli içeren sınavın 94/94 geçtiğini ve sürüm-belge güncellemelerini gösterdiğinden iş üretime hazırdır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt içermiyor. Önce ölçümü boş→boş, dolu→boş, yalnız boşluktan oluşan gözlem ve UTC damgasındaki dört eski kusuru gösterirken sonra ölçümü gerçek sınav betiğinde 94 geçti · 0 düştü sonucunu veriyor; ayrıca sürüm 0.4.1 ve /proc/net/tcp belgesi ayrı yeşil ölçümle doğrulanıyor. Komut satırı davranışı için önce/sonra ölçüm çifti yeterli ve hedeflenen iddiaları doğrudan sınayan içerikte."
+  }
+}

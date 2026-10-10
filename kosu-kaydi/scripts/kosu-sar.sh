@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# kosu-sar.sh — koşu kaydı sarmalayıcısı (Nexus kokpit-ux/05 şema sürüm 1.2, K1-K6). Sürüm 0.4 (global beceri, A290-A293, A300).
+# kosu-sar.sh — koşu kaydı sarmalayıcısı (Nexus kokpit-ux/05 şema sürüm 1.3, K1-K6). Sürüm 0.4.1 (global beceri, A290-A293, A300, A303; K4-d altı hâl).
 #   Kullanım (kanon satırında):  bash /config/.claude/skills/kosu-kaydi/scripts/kosu-sar.sh <is> [--nobetci [--gozlem <komut>]] [--kilit <dosya>] -- <eski komut…>
 #   Her koşu TAM BİR SATIR yazar (K1): /config/.kosu-kaydi/<kutu>.<YYYY-MM>.jsonl (kutu-yerel; /config/.claude ortak bağ) — özet yok.
 #   sonuc: tamam · hata · ayakta-dokunmadim (K4: işin $KOSU_BEYAN dosyasına 'dokunmadim' yazmasıyla YA DA kanon satırında --nobetci
@@ -13,7 +13,7 @@
 #   Dikişler (sınav): KOSU_KAYIT_DIZ · KOSU_KANON · KOSU_CRONTAB_KOMUT (varsayılan 'crontab -l') · KOSU_KUTU · KOSU_SIMDI.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SURUM="kosu-sar 0.4"
+SURUM="kosu-sar 0.4.1"
 KULLANIM="kullanım: kosu-sar.sh <is> [--nobetci [--gozlem <komut>]] [--kilit <dosya>] -- <komut…>"
 IS="${1:-}"; shift || true; NOBETCI=0; KILIT=""; GOZLEM=""
 while [ $# -gt 0 ] && [ "$1" != "--" ]; do
@@ -46,7 +46,7 @@ KANON="${KOSU_KANON:-}"; KANON_GECICI=""
 if [ -z "$KANON" ]; then  # kanon bildirilmemiş → canlı crontab kanon yerine geçer (drift ölçülemez, sahip okunur)
   KANON_GECICI="$(mktemp)"; $CRONTAB_KOMUT > "$KANON_GECICI" 2>/dev/null || true; KANON="$KANON_GECICI"
 fi
-_an() { date -Iseconds; }
+_an() { date -u -Iseconds; }   # 0.4.1: damga HEP UTC (+00:00) — cron satırları UTC, elle koşu +03:00 çıkıyordu, aynı dosyada iki dilim (A303)
 
 # kanon satırı → sahip · damga · ifade (satırın hemen üstündeki yorum bloğundan)
 _kanon_oku() {  # <dosya> → "sahip|damga|ifade"
@@ -74,7 +74,7 @@ SAHIP="${KANON_BILGI%%|*}"; REST="${KANON_BILGI#*|}"; DAMGA="${REST%%|*}"; KANON
 [ -n "$SAHIP" ] || SAHIP="bilinmiyor"
 
 BEYAN_DOSYA="$(mktemp)"; export KOSU_BEYAN="$BEYAN_DOSYA"
-BASLANGIC="$(_an)"; T0=$(date +%s); ATLANDI=0; KILIT_SORUN=0; GOZLEM_SORUN=0
+BASLANGIC="$(_an)"; T0=$(date +%s); ATLANDI=0; KILIT_SORUN=0; GOZLEM_SORUN=0; GOZLEM_HATA=0
 if [ -n "$KILIT" ]; then
   FLOCK="${KOSU_FLOCK_KOMUT:-flock}"   # dikiş: sınav 'flock yok' hâlini taklit eder
   if ! command -v "$FLOCK" >/dev/null 2>&1; then
@@ -99,6 +99,10 @@ elif [ "$NOBETCI" -eq 1 ] && [ -n "$GOZLEM" ]; then   # nöbetçi kipi, GÖZLEML
   if "$@"; then RC=0; else RC=$?; fi
   _gozle "$G_SONRA"; GRC2=$?
   if [ "$GRC1" -ne 0 ] || [ "$GRC2" -ne 0 ]; then GOZLEM_SORUN=1; CIKTI_VAR=1   # önce YA DA sonra gözlem düştü → ölçülemedi (kısmi hata, şema 1.2)
+  # 0.4.1 / şema 1.3 K4-d — BOŞ gözlem = gözlenen şey YOK (NÂZIR altı hâl ölçümü): boş→boş ve dolu→boş "aynı/değişti" değil HATA'dır;
+  # 0.4.0 ikisini de yeşil basıyordu (boş→boş "ayakta", dolu→boş "iş yaptı"). Ayırt edici gözlemin rc'si değil çıktının boşluğudur; boş→dolu = tamam (düştü, kaldırıldı).
+  elif [ ! -s "$G_ONCE" ] && [ ! -s "$G_SONRA" ]; then GOZLEM_HATA=1; CIKTI_VAR=1   # boş→boş: yoktu, hâlâ yok
+  elif [ -s "$G_ONCE" ] && [ ! -s "$G_SONRA" ]; then GOZLEM_HATA=1; CIKTI_VAR=1     # dolu→boş: nöbetçi gözleneni düşürdü
   elif cmp -s "$G_ONCE" "$G_SONRA"; then CIKTI_VAR=0; else CIKTI_VAR=1; fi   # bayt bayt aynı = dokunmadı · değişti = iş yaptı (ör. dinleyen pid)
   rm -f "$G_ONCE" "$G_SONRA"
 elif [ "$NOBETCI" -eq 1 ]; then   # nöbetçi kipi, gözlemsiz: beyan KANON satırında (--nobetci); çıktı boş + rc 0 = ayaktaydı, dokunmadı (K4, A291)
@@ -113,10 +117,11 @@ BEYAN="$(tr -d '[:space:]' < "$BEYAN_DOSYA" 2>/dev/null || true)"; rm -f "$BEYAN
 if [ "$ATLANDI" -eq 1 ]; then SONUC="atlandi-kilit"   # kilit dolu, komut koşmadı — hata DEĞİL (A293); yalnız sarmalayıcının kendi kilidi sayılır
 elif [ "$KILIT_SORUN" -eq 1 ]; then SONUC="olculemedi"   # flock yok ya da bozuk: kilit durumu bilinmiyor, "atlandı" DENMEZ
 elif [ "${GOZLEM_SORUN:-0}" -eq 1 ]; then SONUC="olculemedi"   # gözlem komutu (önce ya da sonra) çalışmadı: sınıf ölçülemedi — iş rc'si ne olursa olsun; rc olduğu gibi geçer
+elif [ "$RC" -eq 127 ] || [ "$RC" -eq 126 ]; then SONUC="olculemedi"   # iş komutu bulunamadı/çalıştırılamadı: gözlem boş kalsa da "hata" denmez, sınıf ölçülemedi
+elif [ "$GOZLEM_HATA" -eq 1 ]; then SONUC="hata"   # 0.4.1 K4-d: gözlenen şey yok (boş→boş) ya da düşürüldü (dolu→boş) — iş rc 0 olsa bile hata; rc olduğu gibi geçer
 elif [ "$RC" -eq 0 ] && { [ "$BEYAN" = "dokunmadim" ] || { [ "$NOBETCI" -eq 1 ] && [ "$CIKTI_VAR" -eq 0 ]; }; }; then SONUC="ayakta-dokunmadim"
 elif [ "$RC" -eq 0 ]; then SONUC="tamam"
-elif [ "$RC" -eq 127 ] || [ "$RC" -eq 126 ]; then SONUC="olculemedi"   # rc olduğu gibi kalır (126 ≠ 127), yalnız sonuç sınıfı
-else SONUC="hata"; fi
+else SONUC="hata"; fi   # 126/127 yukarıda olculemedi oldu (rc olduğu gibi kalır, 126 ≠ 127); bağımsız göz tur 1: ikinci dal erişilemezdi, kaldırıldı
 
 CANLI_IFADE="$(_canli_ifade)"
 PLANLI="$(_sonraki "$CANLI_IFADE")"; TAHMIN="$(_sonraki "$KANON_IFADE")"

@@ -1,0 +1,19 @@
+{
+  "is": "kosu-kaydi-alti-hal",
+  "cumle": "kosu-kaydi 0.4.1: --gozlem altı hâl (boş gözlem = gözlenen şey yok → boş→boş ve dolu→boş hata), zaman damgası UTC (A303), SKILL.md örneği ss→/proc/net/tcp (nazir'de ss yok); sınava altı hâl",
+  "istedi": "NAZIR",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-09T22:18:25+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}
