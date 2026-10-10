@@ -21,9 +21,10 @@
 #     Sebep: kapı arkasında olması gereken bir sayfa kapısız yayına çıkmışsa bunu kayıt anında yakalamak.
 #   · 2xx ama GÖVDE KORUMALI (1.2, A314 — MÜCESSEM ölçtü): tarayıcıda betikle yüklenen sayfa (ör. claude.ai artifact)
 #     anonim isteğe 200 + boş kabuk döner; kod "açık" der, içerik yoktur. Çare: kaydeden `--imza "<dize>"` verir
-#     (sayfanın KENDİ içeriğinden bir dize); araç anonim gövdeyi okur: imza gövdede YOKSA → giriş: kapalı (gövde
-#     korumalı), VARSA → gerçekten açık (yine --herkese-acik evet ister). İmza verilmediyse 2xx eski kural (açık).
-#     Gövde okunamazsa → ölçülemedi (rc 3); "kapalı" denmez — yanlış-yeşil üretmemek için.
+#     (sayfanın KENDİ içeriğinden bir dize); araç anonim gövdeyi okur: imza gövdede VARSA → gerçekten açık (yine
+#     --herkese-acik evet ister); YOKSA → giriş: govde-korumali — ÜÇÜNCÜ, SARI hâl: "kapalı" DENMEZ (yanlış imza da aynı
+#     sonucu verir; kapının varlığı anonim istekle ölçülemez), "açık" da denmez (içerik gelmedi). Kayıt yazılır, listede
+#     sarı görünür. İmza verilmediyse 2xx eski kural (açık). Gövde okunamazsa → ölçülemedi (rc 3), kayıt yok.
 #
 # ORTAM (yalnız sınav ve kurulum için)
 #   CANLI_SAYFA_DIZIN   kayıt dizini
@@ -54,7 +55,8 @@ olc() {  # olc <adres> [imza] → "<giris> <kod>" basar; rc 0 canlı · 3 canlı
       [ -n "$im" ] || { echo "acik $kod"; return 0; }
       # 1.2: imza verildiyse kod yetmez, gövde okunur. Okunamadı → ölçülemedi ("kapalı" sayılmaz: yanlış-yeşil kapısı).
       g="$(govde "$a")" || { echo "olculemedi $kod-govde-okunamadi"; return 3; }
-      if printf '%s' "$g" | grep -qF -- "$im"; then echo "acik $kod"; else echo "kapali $kod-govde-korumali"; fi; return 0 ;;
+      # imza yok → SARI hâl "govde-korumali": ne kapalı (kapı ölçülmedi; yanlış imza da buraya düşer) ne açık (içerik gelmedi)
+      if printf '%s' "$g" | grep -qF -- "$im"; then echo "acik $kod"; else echo "govde-korumali $kod"; fi; return 0 ;;
     401|403) echo "kapali $kod"; return 0 ;;
     30[1-8]) case "$yon" in
                https://*.cloudflareaccess.com/*|*/cdn-cgi/access/login*) echo "kapali $kod"; return 0 ;;
@@ -189,8 +191,7 @@ case "$komut" in
     fi
     o="$(olc "$a" "$imza")"; r=$?
     [ "$r" -eq 0 ] || hata "CANLI DEĞİL ya da ölçülemedi ($o): $a — sayfa açılmadan kayda girmez" 3
-    giris="${o%% *}"; olcu="kod"; case "$o" in *-govde-korumali) olcu="govde" ;; esac
-    [ -n "$imza" ] && [ "$giris" = acik ] && olcu="govde"   # imza gövdede bulundu: açıklık koddan değil içerikten ölçüldü
+    giris="${o%% *}"; olcu="kod"; [ -n "$imza" ] && olcu="govde"   # imza verildiyse hüküm koddan değil gövdeden (açık ya da gövde-korumalı)
     if [ "$giris" = acik ] && [ "$acik" != evet ]; then
       hata "bu sayfa GİRİŞ KAPISI OLMADAN açılıyor ($o): $a — bilerek herkese açıksa --herkese-acik evet ile yeniden kaydet; değilse önce giriş kapısını kur (betikle yüklenen korumalı sayfaysa --imza ile içerik imzası ver)" 4
     fi
@@ -211,7 +212,7 @@ print(json.dumps(k, ensure_ascii=False))
 PY
     )" || hata "kayıt üretilemedi" 3
     yaz "$f" "$j"
-    if [ "$olcu" = govde ] && [ "$giris" = kapali ]; then echo "✓ kayda girdi: $ad · $a · giriş: kapali (gövde korumalı: imza anonim gövdede yok) · kutu: $kutu"
+    if [ "$giris" = govde-korumali ]; then echo "✓ kayda girdi: $ad · $a · giriş: govde-korumali (SARI: anonim gövde imzayı taşımıyor — kapı var mı ölçülemedi, 'kapalı' sayılmaz) · kutu: $kutu"
     else echo "✓ kayda girdi: $ad · $a · giriş: $giris · kutu: $kutu"; fi
     ;;
   emekli)
@@ -240,7 +241,8 @@ import json, sys
 t = json.loads(sys.argv[1])
 print(f"canlı sayfalar · kayıt: {sys.argv[2]}")
 for k in t["sayfalar"]:
-    im = {"kapali": "kapı arkasında", "acik": "HERKESE AÇIK", "yonleniyor": "yönleniyor"}.get(k["giris"], k["giris"])
+    im = {"kapali": "kapı arkasında", "acik": "HERKESE AÇIK", "yonleniyor": "yönleniyor",
+          "govde-korumali": "GÖVDE KORUMALI (sarı: kapı ölçülemedi)"}.get(k["giris"], k["giris"])
     if k.get("giris_olcu") == "govde": im += " · gövdeden ölçüldü"
     print(f"  {k['kutu']:<10} {k['ad']:<28} {k['adres']}  ({im}{' · emekli' if k['durum'] == 'emekli' else ''})")
     print(f"  {'':<10} {k['ne']}")

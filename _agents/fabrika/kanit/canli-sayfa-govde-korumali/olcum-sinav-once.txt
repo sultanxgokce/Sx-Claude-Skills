@@ -1,13 +1,14 @@
 $ bash /config/.claude/jobs/d69a1b07/tmp/canli-govde-once.sh
-# rc=0 sure=15.4s zaman=2026-10-10T12:20:11+03:00
+# rc=0 sure=11.7s zaman=2026-10-10T12:25:55+03:00
 --- stdout ---
-  ✗ gövde korumalı + imza → rc 0 (beklenen '0' · gelen '2')
+  ✗ gövde korumalı + imza → rc 0 (kayıt yazılır) (beklenen '0' · gelen '2')
   ✗ kayıt oluştu (beklenen '1' · gelen '0')
-  ✗ giriş kapalı (beklenen 'kapali' · gelen '')
+  ✗ giriş govde-korumali (kapali DEĞİL: kapı ölçülmedi) (beklenen 'govde-korumali' · gelen '')
   ✗ ölçü gövde (beklenen 'govde' · gelen '')
   ✗ imza kayda yazıldı (beklenen 'Karne Raporu' · gelen '')
-  ✗ sebebi söylüyor (yok: gövde korumalı)
-  ✗ listede gövdeden ölçüldüğü görünür (yok: kapı arkasında · gövdeden ölçüldü)
+  ✗ SARI olduğunu söyler (yok: SARI)
+  ✗ kapalı sayılmaz der (yok: 'kapalı' sayılmaz)
+  ✗ listede sarı hâl görünür (yok: GÖVDE KORUMALI (sarı: kapı ölçülemedi) · gövdeden ölçüldü)
   ✗ doğrulandı (yok: ✓ Karne Sayfası)
   ✗ imza anonimde göründü → rc 1 (beklenen '1' · gelen '0')
   ✗ kapı değişti yazar (yok: KAPI DEĞİŞTİ)
@@ -18,5 +19,5 @@ $ bash /config/.claude/jobs/d69a1b07/tmp/canli-govde-once.sh
   ✗ ölçü gövde (beklenen 'govde' · gelen '')
   ✗ gövde okunamıyor → ölçülemedi rc 3 (kapalı DENMEZ) (beklenen '3' · gelen '2')
   ✗ sebep (yok: govde-okunamadi)
-════════ SONUÇ: PASS=203 · FAIL=17 ════════
+════════ SONUÇ: PASS=205 · FAIL=18 ════════
 --- stderr ---

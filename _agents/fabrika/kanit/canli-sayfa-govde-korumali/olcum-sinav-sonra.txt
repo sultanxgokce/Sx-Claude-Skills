@@ -1,5 +1,5 @@
 $ bash canli-sayfa/scripts/canli-sayfa.test.sh
-# rc=0 sure=12.4s zaman=2026-10-10T12:20:23+03:00
+# rc=0 sure=12.1s zaman=2026-10-10T12:25:43+03:00
 --- stdout ---
 == T1: kapı arkasındaki canlı sayfa kayda girer ==
   ✓ rc 0
@@ -35,14 +35,17 @@ $ bash canli-sayfa/scripts/canli-sayfa.test.sh
   ✓ listede herkese açık diye görünüyor
   ✓ onay 'evet' değilse → rc 4
   ✓ kapalı sayfada onay bayrağı kapıyı değiştirmez
-== T3b (1.2, A314): 200 dönen ama GÖVDESİ KORUMALI sayfa — imzayla kapalı sayılır, yanlış beyan gerekmez ==
-  ✓ gövde korumalı + imza → rc 0
+== T3b (1.2, A314): 200 dönen ama GÖVDESİ KORUMALI sayfa — üçüncü SARI hâl: ne kapalı ne açık, yanlış beyan gerekmez ==
+  ✓ gövde korumalı + imza → rc 0 (kayıt yazılır)
   ✓ kayıt oluştu
-  ✓ giriş kapalı
+  ✓ giriş govde-korumali (kapali DEĞİL: kapı ölçülmedi)
   ✓ ölçü gövde
   ✓ imza kayda yazıldı
-  ✓ sebebi söylüyor
-  ✓ listede gövdeden ölçüldüğü görünür
+  ✓ SARI olduğunu söyler
+  ✓ kapalı sayılmaz der
+  ✓ kapı arkasında demiyor
+  ✓ listede sarı hâl görünür
+  ✓ listede kapı arkasında demiyor
   ✓ dogrula aynı imzayla yeniden ölçer → rc 0
   ✓ doğrulandı
   ✓ imza anonimde göründü → rc 1
@@ -237,5 +240,5 @@ $ bash canli-sayfa/scripts/canli-sayfa.test.sh
   ✓ kayıt dizini yokken liste rc 0
   ✓ sıfır sayfa
 
-════════ SONUÇ: PASS=220 · FAIL=0 ════════
+════════ SONUÇ: PASS=223 · FAIL=0 ════════
 --- stderr ---

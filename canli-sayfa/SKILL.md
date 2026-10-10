@@ -59,7 +59,7 @@ Sayfa kalktıysa: `canli-sayfa.sh emekli --adres … --gerekce "…"`. Adı ya d
 
 | Komut | Ne yapar | rc |
 |---|---|---|
-| `ekle --adres --ad --ne --kutu --ekleyen [--herkese-acik evet] [--imza "<dize>"]` | adresi ölçer, kurallardan geçirir, kaydı yazar; aynı adres varsa günceller (ilk tarih korunur). `--imza`: sayfanın kendi içeriğinden bir dize (4-80 karakter); 2xx dönen adreste anonim gövde okunur, imza yoksa **gövde korumalı → kapalı** | 0 · 2 kural · 3 canlı değil/ölçülemedi · 4 kapısız sayfa onaysız |
+| `ekle --adres --ad --ne --kutu --ekleyen [--herkese-acik evet] [--imza "<dize>"]` | adresi ölçer, kurallardan geçirir, kaydı yazar; aynı adres varsa günceller (ilk tarih korunur). `--imza`: sayfanın kendi içeriğinden bir dize (4-80 karakter); 2xx dönen adreste anonim gövde okunur, imza yoksa **gövde korumalı (SARI: ne kapalı ne açık)** | 0 · 2 kural · 3 canlı değil/ölçülemedi · 4 kapısız sayfa onaysız |
 | `liste [--hepsi] [--json]` | canlı kayıtlar; `--hepsi` emeklileri de; `--json` menünün okuduğu biçim | 0 · 1 bozuk kayıt var |
 | `emekli --adres --gerekce` | kaydı silmez, menüden kaldırır | 0 · 1 kayıt yok · 2 |
 | `dogrula` | canlı kayıtların hepsini yeniden ölçer: açılmayan ve giriş kapısı değişen sayfayı yazar; kaydı değiştirmez | 0 · 1 sorunlu kayıt var |
@@ -81,10 +81,12 @@ Bu bayrak Sultan'ın "bu sayfa herkese açık olsun" kararının karşılığıd
 **Üçüncü hâl — gövde korumalı (1.2, A314, MÜCESSEM ölçtü):** tarayıcıda betikle yüklenen korumalı sayfa (ör. claude.ai
 artifact) anonim isteğe **200 + boş kabuk** döner: kod "açık" der, içerik yoktur. Kapı yalnız koda baksa operatörü iki yanlışa
 sıkıştırır (kaydı atla ya da `--herkese-acik evet` yanlış beyanı). Çare: `--imza "<dize>"` — sayfanın **kendi içeriğinden** bir
-dize. 2xx'te araç anonim gövdeyi okur: imza **yoksa** `kapalı` (kayıtta `giris_olcu: govde`, listede "gövdeden ölçüldü"), **varsa**
-gerçekten açık (yine `--herkese-acik evet` ister). Gövde okunamazsa `ölçülemedi` (rc 3) — "kapalı" denmez, yanlış-yeşil
-üretilmez. İmza verilmediyse eski kural aynen (2xx = açık). `dogrula` kayıttaki imzayla yeniden ölçer: imza anonimde görünür
-olursa "KAPI DEĞİŞTİ". İmza sır olamaz (parola/token deseni reddedilir, değer basılmaz).
+dize. 2xx'te araç anonim gövdeyi okur: imza **varsa** gerçekten açık (yine `--herkese-acik evet` ister); **yoksa** üçüncü hâl
+**`govde-korumali` — SARI**: "kapalı" **denmez** (kapının varlığı anonim istekle ölçülemez; yanlış yazılmış bir imza da aynı
+sonucu verir, o yüzden bu hâl kapı kanıtı değildir), "açık" da denmez (içerik gelmedi). Kayıt yazılır (`giris: govde-korumali`,
+`giris_olcu: govde`), listede "GÖVDE KORUMALI (sarı: kapı ölçülemedi)". Gövde okunamazsa `ölçülemedi` (rc 3), kayıt yok.
+İmza verilmediyse eski kural aynen (2xx = açık). `dogrula` kayıttaki imzayla yeniden ölçer: imza anonimde görünür olursa
+"KAPI DEĞİŞTİ" (sarıdan açığa). İmza sır olamaz (parola/token deseni reddedilir, değer basılmaz).
 
 ## Mahremiyet
 Kayıt ortak dizindedir, bütün kutular okur. Kayda yalnız **ad, tek cümle, adres** girer. Mahrem bir kutunun
