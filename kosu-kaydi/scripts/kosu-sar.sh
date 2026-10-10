@@ -53,8 +53,11 @@ fi
 # KIRMIZI varsa stderr'e TEK özet satır (cron kütüğüne/postasına düşer). İş engellenmez, kayıt değişmez — lint kanonun kusurudur, koşunun değil.
 # Kapatmak: KOSU_KANON_LINT=0 (sınav/dikiş). Lint betiği yoksa sessiz geçer (yokluk ≠ arıza).
 if [ "${KOSU_KANON_LINT:-1}" != 0 ] && [ -f "$HERE/kanon-lint.sh" ]; then
-  LINT_CIKTI="$(bash "$HERE/kanon-lint.sh" "$KANON" 2>/dev/null)"; LINT_RC=$?
-  [ "$LINT_RC" -eq 1 ] && echo "kosu-sar: kanon-lint KIRMIZI ($(printf '%s\n' "$LINT_CIKTI" | grep -c 'KIRMIZI') bulgu) — bak: kanon-lint.sh ${KOSU_KANON:-<canlı crontab>}" >&2
+  # sarmalayıcı kutunun İÇİNDE koşar → --kutu-ici: K6 (gözlem komutu bu kutuda yok) da ölçülür (bağımsız göz tur 3)
+  LINT_CIKTI="$(bash "$HERE/kanon-lint.sh" "$KANON" --kutu-ici 2>/dev/null)"; LINT_RC=$?
+  K6=$(printf '%s\n' "$LINT_CIKTI" | grep -c 'SARI    K6')
+  if [ "$LINT_RC" -eq 1 ] || [ "$K6" -gt 0 ]; then   # kırmızı YA DA kendi kutusunda çalışmayan gözlem komutu (her koşu olculemedi olur): özet satır
+    echo "kosu-sar: kanon-lint KIRMIZI $(printf '%s\n' "$LINT_CIKTI" | grep -c 'KIRMIZI') · K6 gözlem-komutu-yok $K6 — bak: kanon-lint.sh ${KOSU_KANON:-<canlı crontab>} --kutu-ici" >&2; fi
 fi
 _an() { date -u -Iseconds; }   # 0.4.1: damga HEP UTC (+00:00) — cron satırları UTC, elle koşu +03:00 çıkıyordu, aynı dosyada iki dilim (A303)
 

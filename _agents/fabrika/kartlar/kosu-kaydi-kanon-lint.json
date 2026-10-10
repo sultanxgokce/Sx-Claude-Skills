@@ -15,5 +15,14 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": []
+  "gecmis": [],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "SERDAR",
+      "oturum": "session_013fuJSNg65VkgQE4sJsQURS",
+      "gerekce": "Üç turda bulgu 4→3→1 düştü, kalan tek bulgu sarmalayıcının lint çağrısında --kutu-ici eksikliği (K6 ölçülmüyordu) — düzeltildi ve kapıya bağlandı; bir tur daha yalnız bunu teyit eder",
+      "zaman": "2026-10-10T12:40:46+03:00"
+    }
+  ]
 }

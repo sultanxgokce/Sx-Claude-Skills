@@ -1,0 +1,34 @@
+{
+  "tur": 3,
+  "is": "kosu-kaydi-kanon-lint",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-10T12:39:02+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 43333,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "İstenen kanon lint’i ve onu her koşuda çağıran sarmalayıcı eklenmiş; K1–K6 kuralları hermetik sınavda 38/38 geçiyor. Ancak mevcut sarmalayıcı sınavı 106 geçti, 1 düştü ve otomatik çağrı K6’yı hiç etkinleştirmiyor; önce bu uygulama sorunları çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Değişiklik mevcut sarmalayıcı sınav takımını kırıyor; teslimat üretime hazır değil.",
+        "kanit": "Araç imzalı `sarmalayici/sonra` ölçümü rc=1 ve “106 geçti · 1 düştü” veriyor. Düşen kapıda sahipsiz `nobetci` için bir özet beklenirken sıfır özet alınmış; aynı çıktıda lint diğer koşularda 2 veya 3 kırmızı bulgu bildiriyor.",
+        "konum": "olcum-sarmalayici-sonra.txt; kosu-kaydi/scripts/kosu-sar.test.sh:136-138",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Sarmalayıcının otomatik lint çağrısı `--kutu-ici` vermediği için K6 gözlem-komutu denetimi normal çalışma yolunda devre dışı kalıyor.",
+        "kanit": "K6 kodu yalnız `KUTU_ICI=1` iken çalışıyor; sarmalayıcı ise lint’i sadece kanon yolu ile çağırıyor. Lint sınavı da bayrak verilmeden K6 için “bakılmaz” sonucunu özellikle doğruluyor.",
+        "konum": "kosu-kaydi/scripts/kanon-lint.sh:52-54; kosu-kaydi/scripts/kosu-sar.sh:55-58; kosu-kaydi/scripts/kanon-lint.test.sh:66-68",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önce/sonra çifti lint betiğinin origin/main’de bulunmadığını ve yeni hermetik sınavın 38/38 geçtiğini gösteriyor; ayrıca gerçek çağıran ölçümü K3 kırmızısının sarmalayıcıdan raporlandığını kanıtlıyor. Buna karşılık bütünleşik sarmalayıcı ölçümü kırmızı ve 106/107; NÂZIR örneği de lint’in çalıştığını gösterse de kartın çekirdek K1/K2/K3/K6 örneklerinin tamamını gerçek kutu verisiyle ölçmüyor."
+  }
+}
