@@ -1,37 +1,37 @@
 {
   "is": "canli-sayfa-govde-korumali",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-10T12:25:55+03:00",
+  "guncelleme": "2026-10-10T12:30:34+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "sinav",
       "asama": "once",
       "dosya": "olcum-sinav-once.txt",
-      "sha256": "3b3c3c8e51f6f6f457d00cbd418708bc25676bdafed72e4e82b132946352f818",
+      "sha256": "92d7f2c6ad4ee144807594e4721c44a859c4279b09ac5793a8c15998a420745c",
       "komut": [
         "bash",
         "/config/.claude/jobs/d69a1b07/tmp/canli-govde-once.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T12:25:55+03:00",
-      "sure_sn": 11.7
+      "zaman": "2026-10-10T12:30:34+03:00",
+      "sure_sn": 11.8
     },
     {
       "tur": "olcum",
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "be41635b1b188b30982e49658b9cccd68c6799017f2628802033722f48e115f0",
+      "sha256": "854f2532d78d048062fea8f88506195923b2c68db55d7c9809f7a3b8a7ed8708",
       "komut": [
         "bash",
         "canli-sayfa/scripts/canli-sayfa.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T12:25:43+03:00",
-      "sure_sn": 12.1
+      "zaman": "2026-10-10T12:30:22+03:00",
+      "sure_sn": 23.5
     },
     {
       "tur": "olcum",
@@ -50,5 +50,5 @@
       "sure_sn": 0.0
     }
   ],
-  "imza": "3dfd555cb1ef3ab11c3b3cbc10c91127abe93e8e7a741e682c077c97e2a36fa8"
+  "imza": "4a707b2a135681f84fe114aecebdef2e1725dabed64008b7c1dd919dc2ee2e74"
 }

@@ -22,9 +22,11 @@
 #   · 2xx ama GÖVDE KORUMALI (1.2, A314 — MÜCESSEM ölçtü): tarayıcıda betikle yüklenen sayfa (ör. claude.ai artifact)
 #     anonim isteğe 200 + boş kabuk döner; kod "açık" der, içerik yoktur. Çare: kaydeden `--imza "<dize>"` verir
 #     (sayfanın KENDİ içeriğinden bir dize); araç anonim gövdeyi okur: imza gövdede VARSA → gerçekten açık (yine
-#     --herkese-acik evet ister); YOKSA → giriş: govde-korumali — ÜÇÜNCÜ, SARI hâl: "kapalı" DENMEZ (yanlış imza da aynı
-#     sonucu verir; kapının varlığı anonim istekle ölçülemez), "açık" da denmez (içerik gelmedi). Kayıt yazılır, listede
-#     sarı görünür. İmza verilmediyse 2xx eski kural (açık). Gövde okunamazsa → ölçülemedi (rc 3), kayıt yok.
+#     --herkese-acik evet ister); YOKSA → giriş: olculemedi — ÜÇÜNCÜ, SARI hâl: "kapalı" DENMEZ (yanlış imza da aynı
+#     sonucu verir; kapının varlığı anonim istekle ölçülemez), "açık" da denmez (içerik gelmedi). Sayfa canlı olduğu için
+#     KAYIT yazılır (kayıtsız canlı sayfa ihlaldir) ama rc 5 döner (yeşil değil) ve listede sarı görünür. İmza verilmediyse
+#     2xx eski kural (açık). Gövde hiç okunamazsa → rc 3, kayıt yok.
+# rc 5: kayıt yazıldı, giriş ölçülemedi (sarı) — yalnız --imza ile.
 #
 # ORTAM (yalnız sınav ve kurulum için)
 #   CANLI_SAYFA_DIZIN   kayıt dizini
@@ -55,8 +57,8 @@ olc() {  # olc <adres> [imza] → "<giris> <kod>" basar; rc 0 canlı · 3 canlı
       [ -n "$im" ] || { echo "acik $kod"; return 0; }
       # 1.2: imza verildiyse kod yetmez, gövde okunur. Okunamadı → ölçülemedi ("kapalı" sayılmaz: yanlış-yeşil kapısı).
       g="$(govde "$a")" || { echo "olculemedi $kod-govde-okunamadi"; return 3; }
-      # imza yok → SARI hâl "govde-korumali": ne kapalı (kapı ölçülmedi; yanlış imza da buraya düşer) ne açık (içerik gelmedi)
-      if printf '%s' "$g" | grep -qF -- "$im"; then echo "acik $kod"; else echo "govde-korumali $kod"; fi; return 0 ;;
+      # imza yok → giriş ÖLÇÜLEMEDİ (sarı): sayfa canlı ama kapı var mı bilinmiyor — ne kapalı (yanlış imza da buraya düşer) ne açık (içerik gelmedi)
+      if printf '%s' "$g" | grep -qF -- "$im"; then echo "acik $kod"; else echo "olculemedi $kod-govde-korumali"; fi; return 0 ;;
     401|403) echo "kapali $kod"; return 0 ;;
     30[1-8]) case "$yon" in
                https://*.cloudflareaccess.com/*|*/cdn-cgi/access/login*) echo "kapali $kod"; return 0 ;;
@@ -212,8 +214,11 @@ print(json.dumps(k, ensure_ascii=False))
 PY
     )" || hata "kayıt üretilemedi" 3
     yaz "$f" "$j"
-    if [ "$giris" = govde-korumali ]; then echo "✓ kayda girdi: $ad · $a · giriş: govde-korumali (SARI: anonim gövde imzayı taşımıyor — kapı var mı ölçülemedi, 'kapalı' sayılmaz) · kutu: $kutu"
-    else echo "✓ kayda girdi: $ad · $a · giriş: $giris · kutu: $kutu"; fi
+    if [ "$giris" = olculemedi ]; then
+      echo "△ kayda girdi, giriş ÖLÇÜLEMEDİ (SARI): $ad · $a — anonim gövde imzayı taşımıyor (gövde korumalı); kapı var mı bilinmiyor, 'kapalı' sayılmaz · kutu: $kutu"
+      exit 5   # yeşil değil: kayıt var ama kapı hükmü yok (rc 5 — çağıran sarıyı görür)
+    fi
+    echo "✓ kayda girdi: $ad · $a · giriş: $giris · kutu: $kutu"
     ;;
   emekli)
     [ -n "$adres" ] || hata "--adres gerekli"
@@ -242,7 +247,7 @@ t = json.loads(sys.argv[1])
 print(f"canlı sayfalar · kayıt: {sys.argv[2]}")
 for k in t["sayfalar"]:
     im = {"kapali": "kapı arkasında", "acik": "HERKESE AÇIK", "yonleniyor": "yönleniyor",
-          "govde-korumali": "GÖVDE KORUMALI (sarı: kapı ölçülemedi)"}.get(k["giris"], k["giris"])
+          "olculemedi": "GİRİŞ ÖLÇÜLEMEDİ (sarı: gövde korumalı, kapı bilinmiyor)"}.get(k["giris"], k["giris"])
     if k.get("giris_olcu") == "govde": im += " · gövdeden ölçüldü"
     print(f"  {k['kutu']:<10} {k['ad']:<28} {k['adres']}  ({im}{' · emekli' if k['durum'] == 'emekli' else ''})")
     print(f"  {'':<10} {k['ne']}")

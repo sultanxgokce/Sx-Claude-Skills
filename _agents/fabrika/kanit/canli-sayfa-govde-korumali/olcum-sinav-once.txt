@@ -1,14 +1,14 @@
 $ bash /config/.claude/jobs/d69a1b07/tmp/canli-govde-once.sh
-# rc=0 sure=11.7s zaman=2026-10-10T12:25:55+03:00
+# rc=0 sure=11.8s zaman=2026-10-10T12:30:34+03:00
 --- stdout ---
-  ✗ gövde korumalı + imza → rc 0 (kayıt yazılır) (beklenen '0' · gelen '2')
-  ✗ kayıt oluştu (beklenen '1' · gelen '0')
-  ✗ giriş govde-korumali (kapali DEĞİL: kapı ölçülmedi) (beklenen 'govde-korumali' · gelen '')
+  ✗ gövde korumalı + imza → rc 5 (kayıt var, giriş ÖLÇÜLEMEDİ — yeşil değil) (beklenen '5' · gelen '2')
+  ✗ kayıt oluştu (kayıtsız canlı sayfa ihlaldir) (beklenen '1' · gelen '0')
+  ✗ giriş olculemedi (kapali DEĞİL, acik DEĞİL) (beklenen 'olculemedi' · gelen '')
   ✗ ölçü gövde (beklenen 'govde' · gelen '')
   ✗ imza kayda yazıldı (beklenen 'Karne Raporu' · gelen '')
-  ✗ SARI olduğunu söyler (yok: SARI)
+  ✗ SARI olduğunu söyler (yok: ÖLÇÜLEMEDİ (SARI))
   ✗ kapalı sayılmaz der (yok: 'kapalı' sayılmaz)
-  ✗ listede sarı hâl görünür (yok: GÖVDE KORUMALI (sarı: kapı ölçülemedi) · gövdeden ölçüldü)
+  ✗ listede sarı hâl görünür (yok: GİRİŞ ÖLÇÜLEMEDİ (sarı: gövde korumalı, kapı bilinmiyor) · gövdeden ölçüldü)
   ✗ doğrulandı (yok: ✓ Karne Sayfası)
   ✗ imza anonimde göründü → rc 1 (beklenen '1' · gelen '0')
   ✗ kapı değişti yazar (yok: KAPI DEĞİŞTİ)
