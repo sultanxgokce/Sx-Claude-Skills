@@ -1,0 +1,114 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/elogo-sinav.sh
+# rc=0 sure=2.4s zaman=2026-10-09T22:13:17+03:00
+--- stdout ---
+A · alan sözleşmesi
+  ✓ dört alan da üretilir
+  ✓ zip adı belge adından türer
+  ✓ contentType sabit 'base64'
+B · 🔴 özetin doğru tarafı (asıl kapı)
+  ✓ P3 · MD5 ZIP baytları üstünde, base64 üstünde DEĞİL
+  ✓ P4 · özet MD5, SHA-256 değil (32 hane hex)
+C · determinizm (aynı fatura → aynı özet)
+  ✓ iki paketleme aynı hash verir
+  ✓ içerik değişince hash değişir
+D · zip gerçekten zip mi
+  ✓ çıktı açılabilir bir zip ve XML içeriyor
+E · fail-closed (eksikse paket ÜRETİLMEZ)
+  ✓ boş xml reddedilir
+  ✓ boşluk-xml reddedilir
+  ✓ boş belge adı reddedilir
+  ✓ adda yol ayracı reddedilir
+  ✓ str verilirse reddedilir (kodlama belirsizliği)
+  ✓ boş zip reddedilir
+  ✓ boş içerikli belge reddedilir
+F · ağsızlık ve şirketsizlik (mutasyon kanıtı)
+  ✓ modül ağ kitaplığı import ETMEZ
+  ✓ modülde firma/VKN izi YOK
+G · 🔴 paket adı belgenin KENDİ kimliğinden türer (gövde kusuru)
+  ✓ G1 · kökteki cbc:ID ad olur
+  ✓ G2 · 🔴 İÇ İÇE cbc:ID yutulmaz — kalem sıra numarası ad OLMAZ
+  ✓ G2b · 🔴 AYIRT EDİCİ: kökte numara yoksa iç içe olana UZANILMAZ, kimliğe düşülür
+  ✓ G3 · numara yoksa tekil kimliğe (cbc:UUID) düşer
+  ✓ G4 · 🔴 BOŞ numara = YOK numara (boş ad üretilmez)
+  ✓ G5 · numara VARSA kimliğe bakılmaz (sıra kilitli)
+  ✓ G6 · 🔴 ikisi de yoksa DURUR — dosya adına DÜŞMEZ
+  ✓ G7 · yalnız boşluktan oluşan numara yok sayılır
+  ✓ G8 · bozuk XML anlaşılır hata verir (çıplak çökme değil)
+H · 🔴 uzunluk kapısı — ret ağa çıkmadan ÖNCE düşer
+  ✓ H1 · ölçülmüş GEÇEN uzunluk (47, .zip dahil) kabul edilir
+  ✓ H2 · tavanın bir hane üstü REDDEDİLİR
+  ✓ H3 · ölçülmüş RET uzunluğu (56) reddedilir
+  ✓ H4 · tavan ölçülmüş değerde, tahminle yükseltilmemiş
+  ✓ H4b · 🔴 hata metni ÖLÇMEDİĞİ kesinliği iddia etmez (K01)
+  ✓ H5 · adda zarfı bozacak karakter reddedilir (ad artık XML'den geliyor)
+  ✓ H6 · adda yazdırılamaz karakter reddedilir
+I · 🔴 ÇAĞIRAN KİM — gövde fiilen bu yolu kullanıyor mu (mutasyon)
+  ✓ I1 · gönderici dosya adına (yol.stem) DÜŞMÜYOR
+  ✓ I2 · gönderici türeticiyi fiilen çağırıyor
+  ✓ I4 · kuru koşumda ad-türetme dalı ÖLÜ DEĞİL (tek argümanla çağrılabilir)
+  ✓ I3 · paketleyicinin kendi kuru koşumu da dosya adına düşmüyor
+
+toplam=37 geçen=37 düşen=0
+### elogo_paket.test.sh rc=0
+K3 · onay kapısı (yer-tutucu geçmez)
+  ✓ reddedilir: ""
+  ✓ reddedilir: "   "
+  ✓ reddedilir: "yok"
+  ✓ reddedilir: "evet"
+  ✓ reddedilir: "test"
+  ✓ reddedilir: "n/a"
+  ✓ reddedilir: "onay"
+  ✓ tarihsiz beyan reddedilir ('tamam gönder' tam 12 karakter — uzunluk yetmez)
+  ✓ tarihsiz uzun beyan da reddedilir
+  ✓ gerçek beyan KABUL edilir
+K4 · paket bütünlüğü (yarım paket ağa çıkmaz)
+  ✓ eksik alan reddedilir
+  ✓ boş alan reddedilir
+  ✓ MD5 olmayan özet reddedilir (SHA-256 kazası)
+  ✓ XML'i bozacak etiket reddedilir
+Zarf sözleşmesi (ölçülen belgeye uygunluk)
+  ✓ DOCUMENTTYPE=EINVOICE hep var
+  ✓ etiket verilmezse ALIAS satırı YOK (belge s.5 kuralı)
+  ✓ etiket verilirse ALIAS satırı var
+  ✓ dizi ad-alanı yerinde bildirilir
+  ✓ dört belge alanı da zarfta
+🔴 e-Arşiv 2FA yolu bilerek YOK
+  ✓ EARCHIVETYPE2 kodda geçmiyor (Sultan kararı 21.08.2026)
+CLI · kuru koşum varsayılan (en pahalı kapı)
+  ✓ bayraksız çağrı ağa ÇIKMADI ve rc=0
+  ✓ onaysız --gercekten-gonder rc=3 ile DURDU (ağa çıkmadan)
+AD · 🔴 paket adı belgeden türer, dosya adına düşmez (gövde kusuru)
+  ✓ numarasız belgede ad UYDURULMADI, gönderim DURDU
+  ✓ uzun ad AĞA ÇIKMADAN reddedildi
+  ✓ dosya adı alakasızken bile paket adı BELGENİN NUMARASI
+
+toplam=25 geçen=25 düşen=0
+### elogo_gonder.test.sh rc=0
+Önek seçimi
+  ✓ bayraksız → CANLI önek
+  ✓ --demo → DEMO önek
+  ✓ başka bayrak canlıyı bozmaz
+  ✓ 🔴 varsayılan DEMO DEĞİL
+Kaynak dosya sözleşmesi
+  ✓ ONEK değişkeni tanımlı
+  ✓ --demo ilk argümanda ayrıştırılır
+  ✓ kimlik adları önekten türer
+  ✓ demo yolu zeep/uv İSTEMEZ
+  ✓ demo doğrulayıcı elogo_soap.py
+  ✓ yardımda --demo görünür
+🔴 Yönlendirme satırları bayrağı TAŞIYOR (MUHASİP bulgusu, 2026-08-22)
+  ✓ CAGRI değişkeni tanımlı
+  ✓ demo modunda CAGRI bayrak taşır
+  ✓ 🔴 bayrak-düşüren yönlendirme YOK
+🔒 ORTAM KİLİDİ (Sultan kararı 2026-08-22)
+  ✓ kilit DEMO iken --canli reddedildi
+  ✓ kilit kodu okunuyor (kabuk)
+  ✓ kilit kodu okunuyor (gönderici)
+  ✓ 🔴 kilit sessizce demoya DÜŞÜRMÜYOR
+🔴 Sabit canlı-önek sızıntısı KALMADI (asıl regresyon kapısı)
+  ✓ çıplak canlı-önek 3 satır (tavan 4, canlı dal bilerek)
+
+toplam=18 geçen=18 düşen=0
+### elogo_onek.test.sh rc=0
+dusen-suite=0
+--- stderr ---

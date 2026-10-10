@@ -159,7 +159,9 @@ def _main(argv: list[str]) -> int:
 
     a = argparse.ArgumentParser(description="e-Logo'ya e-Fatura gönderir (varsayılan: KURU KOŞUM)")
     a.add_argument("xml", help="gönderilecek UBL XML dosyası")
-    a.add_argument("--belge-adi", help="zip/belge adı (varsayılan: dosya adı)")
+    a.add_argument("--belge-adi",
+                   help="zip/belge adı (varsayılan: belgenin kendi numarası — cbc:ID, "
+                        "yoksa cbc:UUID; ikisi de yoksa gönderim YAPILMAZ)")
     a.add_argument("--alias", help="alıcı etiketi (opsiyonel — tek etiketliyse gerekmez)")
     a.add_argument("--tasarim", default="varsayilan",
                    help="görsel tasarım: varsayilan | <uuid> | gomulu (varsayılan: varsayilan)")
@@ -169,12 +171,18 @@ def _main(argv: list[str]) -> int:
     a.add_argument("--sultan-onayi", default="", help="K3 — onay beyanı (gönderim için şart)")
     n = a.parse_args(argv)
 
-    from elogo_paket import paketle, PaketHatasi
+    from elogo_paket import paketle, belge_adini_turet, PaketHatasi
 
     yol = Path(n.xml)
-    ad = n.belge_adi or yol.stem
     try:
-        paket = paketle(yol.read_bytes(), ad)
+        ham = yol.read_bytes()
+        # 🔴 VARSAYILAN AD DOSYA ADI DEĞİL, BELGENİN KENDİ NUMARASI.
+        #    Eski satır `ad = n.belge_adi or yol.stem` idi ve kusur buydu:
+        #    dosya adı belgenin değil, onu diske yazan tarafın özelliğidir.
+        #    Türetme ve uzunluk kapısı `elogo_paket`te yaşar — orası ağsız,
+        #    kimliksiz, sonuna kadar sınanabilir yüzeydir.
+        ad = n.belge_adi or belge_adini_turet(ham)
+        paket = paketle(ham, ad)
     except (PaketHatasi, OSError) as e:
         print(f"⛔ paketlenemedi: {e}", file=sys.stderr)
         return 1

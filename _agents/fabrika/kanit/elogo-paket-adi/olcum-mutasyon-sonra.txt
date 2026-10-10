@@ -1,0 +1,14 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/elogo-mutasyon.sh
+# rc=0 sure=17.5s zaman=2026-10-09T22:13:35+03:00
+--- stdout ---
+  OK  M1 dosya adina geri dusmek -> KIRMIZI (paket=1 gonder=1)
+  OK  M2 tavani tahminle yukseltmek 47->60 -> KIRMIZI (paket=1 gonder=1)
+  OK  M3 uzunluk kapisini kaldirmak -> KIRMIZI (paket=1 gonder=1)
+  OK  M4 agacta arama (ic ice ID yutmak) -> KIRMIZI (paket=1 gonder=0)
+  OK  M5 bos numarayi dolu saymak -> KIRMIZI (paket=1 gonder=1)
+  OK  M6 turetici cagrisini sokmek -> KIRMIZI (paket=1 gonder=1)
+--- TEMIZ HAL (kontrol: mutasyonsuz yesil olmali)
+  paket rc=0
+  gonder rc=0
+sus-kapi=0
+--- stderr ---

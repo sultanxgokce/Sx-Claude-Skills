@@ -1,0 +1,22 @@
+{
+  "is": "elogo-paket-adi",
+  "cumle": "e-Logo gönderiminde paket adı varsayılanı dosya adından geliyor; uzun adda karşı taraf belgeyi reddediyor (56 kr ret, 47 kr emsal geçmiş) ve belge numarası boşa yanıyor — sıralı gönderimde numara dizisinde boşluk riski. İki parça: (1) varsayılan ad belgenin kendi numarasından (cbc:ID, yoksa UUID) türesin, (2) paketleyicide gönderim öncesi uzunluk kapısı — eşik ölçülmüş GEÇEN değer, gerçek sınır ölçülmedi ve yorumda böyle yazacak.",
+  "istedi": "MUHASIP",
+  "aldi": "MUAVIN",
+  "zaman": "2026-10-08T22:07:19+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "e",
+    "dis_yuzey": "e",
+    "yetki": "h"
+  },
+  "siniflar": [
+    "para",
+    "dis_yuzey"
+  ],
+  "sultan": true,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

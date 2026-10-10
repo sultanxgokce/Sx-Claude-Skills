@@ -1,0 +1,28 @@
+{
+  "tur": 1,
+  "is": "elogo-paket-adi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-09T22:12:09+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 48081,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İstenen iki kapı kurulmuş: varsayılan paket adı kökteki cbc:ID/UUID alanından türetiliyor ve 47 karakterlik ölçülmüş geçen değerin üstü ağdan önce durduruluyor. Önce hata metnindeki ölçülmemiş kesinlik düzeltilmeli; işlev doğru olsa da 48–55 karakter için e-Logo’nun kesin reddedeceği söylenemez.",
+    "bulgular": [
+      {
+        "ne": "Uzunluk kapısının hata mesajı, gerçek sınır ölçülmediği halde 47 üzerindeki her adı e-Logo’nun reddedeceğini kesin dille söylüyor; mesaj yalnızca güvenli ölçülmüş tavanın aşıldığını belirtmeli.",
+        "kanit": "İş kartı ve AD_TAVANI yorumu gerçek sınırın ölçülmediğini, yalnız 47’nin geçtiğini ve 56’nın reddedildiğini söylüyor; buna karşılık PaketHatasi metni koşulsuz olarak “e-Logo bu adı reddeder” diyor.",
+        "konum": "elogo-erisim/scripts/elogo_paket.py:194",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; sarı kayıt yok. Önce/sonra ölçüm çifti dosya adına düşüşün ve 56 karakterlik adın davranış değişimini gösteriyor; pozitif/negatif kontroller, 36+25 test ve mutasyon kaydı çağıranın yeni yolu gerçekten kullandığını destekliyor. Veriler sentetik fakat talep edilen dalları gerçekçi biçimde temsil ediyor; gerçek servis sınırının 47–56 arasındaki kesin noktası ölçülmemiş ve kanıt da bunu iddia etmiyor."
+  }
+}

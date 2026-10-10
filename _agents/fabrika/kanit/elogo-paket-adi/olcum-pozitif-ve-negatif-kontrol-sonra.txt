@@ -1,0 +1,17 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/elogo-pozitif.sh
+# rc=0 sure=0.1s zaman=2026-10-09T22:10:20+03:00
+--- stdout ---
+== numarali belge, ad verilmedi
+ortam : demo
+belge : FTR0000000000123.zip · özet 32835624CF08CBF823EA2B29B426AEDD
+etiket: (verilmedi — alıcının tek etiketi varsa oraya gider, birden fazlaysa e-Logo hata döndürür)
+
+✓ KURU KOŞUM — zarf kuruldu, ağa çıkılmadı, hiçbir fatura gönderilmedi.
+  Gerçekten göndermek için: --gercekten-gonder --sultan-onayi "…"
+rc=0
+
+== NEGATIF KONTROL · uydurma bir alan ad vermez
+⛔ paketlenemedi: paket adı türetilemedi: belgenin kökünde ne numara (cbc:ID) ne tekil kimlik (cbc:UUID) var.
+   Ad UYDURULMADI ve dosya adına DÜŞÜLMEDİ — düzeltilen kusur tam o idi.
+rc=1
+--- stderr ---

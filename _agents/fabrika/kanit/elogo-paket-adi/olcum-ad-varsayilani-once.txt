@@ -1,0 +1,19 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/elogo-prob.sh /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/elogo-once-220912
+# rc=0 sure=0.1s zaman=2026-10-09T22:10:05+03:00
+--- stdout ---
+== SORU 1 · numarasiz belge, --belge-adi VERILMEDI: paket adi ne olur?
+ortam : demo
+belge : FGW-benzeri-cok-uzun-bir-dosya-adi.zip · özet 21ABBA7E1F270E7C5633B34BC459C4F4
+etiket: (verilmedi — alıcının tek etiketi varsa oraya gider, birden fazlaysa e-Logo hata döndürür)
+
+✓ KURU KOŞUM — zarf kuruldu, ağa çıkılmadı, hiçbir fatura gönderilmedi.
+  Gerçekten göndermek için: --gercekten-gonder --sultan-onayi "…"
+rc=0
+
+== SORU 2 · acikca verilmis 52 haneli ad (.zip ile 56 = olculmus RET uzunlugu)
+dosya : AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA.zip
+özet  : 7EDCCBC6E7F05AF8271A44D009516127  (MD5, zip baytları üstünde)
+tarih : 2026-10-09
+boyut : 296 karakter base64
+rc=0
+--- stderr ---
