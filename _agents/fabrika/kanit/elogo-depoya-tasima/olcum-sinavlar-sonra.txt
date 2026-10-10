@@ -1,5 +1,5 @@
 $ /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/sinav-kos.sh elogo-erisim/scripts
-# rc=0 sure=9.1s zaman=2026-10-10T18:05:46+03:00
+# rc=0 sure=8.2s zaman=2026-10-10T18:07:45+03:00
 --- stdout ---
 belge_turu.test.sh rc=0 gecen=13
 coklu_kdv.test.sh rc=0 gecen=17

@@ -1,7 +1,7 @@
 {
   "is": "elogo-depoya-tasima",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-10T18:06:08+03:00",
+  "guncelleme": "2026-10-10T18:07:45+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -23,15 +23,15 @@
       "etiket": "sinavlar",
       "asama": "sonra",
       "dosya": "olcum-sinavlar-sonra.txt",
-      "sha256": "f520de9348af18ce6f93d095c780fbc8a19d21d12c1a0e7b3b2024866f85b71a",
+      "sha256": "954d3d9ec937acf41630d836150dcd8964309ba9275b02e81dd8c8e202db4137",
       "komut": [
         "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/sinav-kos.sh",
         "elogo-erisim/scripts"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T18:05:46+03:00",
-      "sure_sn": 9.1
+      "zaman": "2026-10-10T18:07:45+03:00",
+      "sure_sn": 8.2
     },
     {
       "tur": "olcum",
@@ -107,7 +107,22 @@
       "renk": "yesil",
       "zaman": "2026-10-10T18:05:54+03:00",
       "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "acik-yanlis-yol",
+      "asama": "sonra",
+      "dosya": "olcum-acik-yanlis-yol-sonra.txt",
+      "sha256": "6291469ac746c5d9492730905317a78da39b6832f682e9d9292b0e517836c9be",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/acik-yanlis-yol.sh",
+        "elogo-erisim/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-10T18:07:36+03:00",
+      "sure_sn": 0.1
     }
   ],
-  "imza": "35dae3992d4f602e020c3a10ba11d1350ec875769ab4f3b54a4816f8410941cb"
+  "imza": "30ab1d775368c5d7b88b9fdc4469ee8fcdb8f12bf47950f52b730b6057665187"
 }
