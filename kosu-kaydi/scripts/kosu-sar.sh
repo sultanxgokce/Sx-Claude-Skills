@@ -49,6 +49,13 @@ KANON="${KOSU_KANON:-}"; KANON_GECICI=""
 if [ -z "$KANON" ]; then  # kanon bildirilmemiş → canlı crontab kanon yerine geçer (drift ölçülemez, sahip okunur)
   KANON_GECICI="$(mktemp)"; $CRONTAB_KOMUT > "$KANON_GECICI" 2>/dev/null || true; KANON="$KANON_GECICI"
 fi
+# 0.5.1 — kanon lint'inin ÇAĞIRANI: oda kancası henüz çağırmıyor (ayrı kart), bu yüzden sarmalayıcı her koşuda kanonu lint'ler;
+# KIRMIZI varsa stderr'e TEK özet satır (cron kütüğüne/postasına düşer). İş engellenmez, kayıt değişmez — lint kanonun kusurudur, koşunun değil.
+# Kapatmak: KOSU_KANON_LINT=0 (sınav/dikiş). Lint betiği yoksa sessiz geçer (yokluk ≠ arıza).
+if [ "${KOSU_KANON_LINT:-1}" != 0 ] && [ -f "$HERE/kanon-lint.sh" ]; then
+  LINT_CIKTI="$(bash "$HERE/kanon-lint.sh" "$KANON" 2>/dev/null)"; LINT_RC=$?
+  [ "$LINT_RC" -eq 1 ] && echo "kosu-sar: kanon-lint KIRMIZI ($(printf '%s\n' "$LINT_CIKTI" | grep -c 'KIRMIZI') bulgu) — bak: kanon-lint.sh ${KOSU_KANON:-<canlı crontab>}" >&2
+fi
 _an() { date -u -Iseconds; }   # 0.4.1: damga HEP UTC (+00:00) — cron satırları UTC, elle koşu +03:00 çıkıyordu, aynı dosyada iki dilim (A303)
 
 # kanon satırı → sahip · damga · ifade (satırın hemen üstündeki yorum bloğundan)

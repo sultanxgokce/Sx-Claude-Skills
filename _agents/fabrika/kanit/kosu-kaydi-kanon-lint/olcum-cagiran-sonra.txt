@@ -1,0 +1,13 @@
+$ bash /config/.claude/jobs/d69a1b07/tmp/lint-cagiran-kanit.sh
+# rc=0 sure=0.3s zaman=2026-10-10T12:38:37+03:00
+--- stdout ---
+is rc=0
+stderr:
+kosu-sar: kanon-lint KIRMIZI (1 bulgu) — bak: kanon-lint.sh /tmp/tmp.ffsPCyVR6Z/kanon
+satir:
+{"is":"sahipsiz","kutu":"sinav","sahip":"bilinmiyor","baslangic":"2026-10-10T09:38:37+00:00","bitis":"2026-10-10T09:38:37+00:00","sure_sn":0,"rc":0,"sonuc":"tam
+lint dogrudan:
+✗ KIRMIZI K3 satır 1: sahip etiketi yok (iş: sahipsiz) — satır sonuna '# sahipsiz sahip:<ROL>' ekle
+── sarılı satır: 1 · kırmızı: 1 · sarı: 0 · (K6 gözlem komutu bakılmadı: --kutu-ici yok)
+lint rc=1
+--- stderr ---

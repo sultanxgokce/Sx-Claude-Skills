@@ -38,9 +38,10 @@ while IFS= read -r ham || [ -n "$ham" ]; do
     # iki biçimde de etiketin DEĞERİ olmalı: boş '# sahip:' etiket değildir (bağımsız göz tur 1)
     if ! printf '%s' "$satir" | grep -qE '#.*sahip:[^[:space:]]+' && ! printf '%s' "$onceki" | grep -qE '^#[[:space:]]*sahip:[[:space:]]*[^[:space:]]'; then
       bul K K3 "$n" "sahip etiketi yok (iş: ${is:-?}) — satır sonuna '# ${is:-<is>} sahip:<ROL>' ekle"; fi
-    if printf '%s' "$sarmal" | grep -q -- '--kilit' && printf '%s' "$komut" | grep -qE '(^|[[:space:];&|])flock([[:space:]]|$)'; then
+    # flock çıplak ya da mutlak yollu (/usr/bin/flock) olabilir — ikisi de yakalanır (bağımsız göz tur 2)
+    if printf '%s' "$sarmal" | grep -q -- '--kilit' && printf '%s' "$komut" | grep -qE '(^|[[:space:];&|])(/[^[:space:]]*/)?flock([[:space:]]|$)'; then
       bul K K1 "$n" "--kilit VE komut içinde flock (iş: ${is:-?}) — iç kilit ebeveynin kilidine çarpar, iş HİÇ koşmaz (iç flock -E 75 ise sahte atlandi-kilit, değilse her koşu hata); önce içteki flock kalkar"; fi
-    if ! printf '%s' "$sarmal" | grep -q -- '--kilit' && printf '%s' "$komut" | grep -qE '(^|[[:space:];&|])flock[[:space:]]+-n'; then
+    if ! printf '%s' "$sarmal" | grep -q -- '--kilit' && printf '%s' "$komut" | grep -qE '(^|[[:space:];&|])(/[^[:space:]]*/)?flock[[:space:]]+-n'; then
       bul S K2 "$n" "flock -n sarmalayıcının İÇİNDE (iş: ${is:-?}) — kilit/hata ayrımı yok; --kilit <dosya>'ya taşı"; fi
     if [ -n "$is" ]; then
       if [ -n "${IS_SATIR[$is]:-}" ]; then bul K K4 "$n" "iş '$is' ikinci kez sarılı (ilk: satır ${IS_SATIR[$is]}) — ikileme; restart'ta iki kez koşar"

@@ -1,7 +1,7 @@
 {
   "is": "kosu-kaydi-kanon-lint",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-10T12:31:19+03:00",
+  "guncelleme": "2026-10-10T12:38:37+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -24,14 +24,14 @@
       "etiket": "lint",
       "asama": "sonra",
       "dosya": "olcum-lint-sonra.txt",
-      "sha256": "6bbc64210f8f33ed734476755b6bb68ef574820a51e71df7b70be55340311f2b",
+      "sha256": "2741d7643154a0fcd8d6b61172c8563075ee4c56eef30149999132796880a8c1",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/kanon-lint.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T12:31:03+03:00",
+      "zaman": "2026-10-10T12:38:16+03:00",
       "sure_sn": 0.5
     },
     {
@@ -39,15 +39,15 @@
       "etiket": "sarmalayici",
       "asama": "sonra",
       "dosya": "olcum-sarmalayici-sonra.txt",
-      "sha256": "f1b5c2d0fd2ec21bce6e77ca54f779407926b0e9ea01315852f9391c2c0717c8",
+      "sha256": "ee8709da1d54cf65378f999810625d8516f357b69fb27212d4e10d9d7db27910",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/kosu-sar.test.sh"
       ],
-      "rc": 0,
-      "renk": "yesil",
-      "zaman": "2026-10-10T12:31:19+03:00",
-      "sure_sn": 16.2
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-10T12:38:37+03:00",
+      "sure_sn": 20.6
     },
     {
       "tur": "olcum",
@@ -64,7 +64,22 @@
       "renk": "kirmizi",
       "zaman": "2026-10-10T12:24:34+03:00",
       "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cagiran",
+      "asama": "sonra",
+      "dosya": "olcum-cagiran-sonra.txt",
+      "sha256": "a27267161107b8252c34ef70a2cfcf6c945d7b135bf4de2ee71c3862f5658f25",
+      "komut": [
+        "bash",
+        "/config/.claude/jobs/d69a1b07/tmp/lint-cagiran-kanit.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-10T12:38:37+03:00",
+      "sure_sn": 0.3
     }
   ],
-  "imza": "e186dac3de64200ca36ab57c1e8b8eb5d197c3ff8830aaf9be6f34a840bfd32b"
+  "imza": "61ce08927f1e069630baa20de626d835bcf3d20d82a601bde47e8651d7c6918f"
 }

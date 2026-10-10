@@ -123,6 +123,18 @@ bash "$S" supur --kilit "$T/kilit2" -- flock -n "$T/kilit2" true 2>"$T/k1-err" >
 ol "0.5.1 K1 öz-denetim: --kilit + içte flock → stderr uyarı; iş düşer (hata), engellenmez" "$(grep -c 'kanon-lint K1' "$T/k1-err")/$(alan sonuc)/$rc" "1/hata/1"
 bash "$S" supur --kilit "$T/kilit3" -- true 2>"$T/k1-err2" >/dev/null
 ol "K1 öz-denetim altın: içte flock yoksa uyarı yok" "$(grep -c 'kanon-lint K1' "$T/k1-err2")" "0"
+echo "════ kanon lint'inin çağıranı: sarmalayıcı her koşuda kanonu lint'ler, KIRMIZI varsa stderr'e tek özet satır ════"
+printf '%s\n' "*/5 * * * * bash kosu-sar.sh sahipsiz -- true" > "$T/kanon-kirmizi"   # K3: sahip etiketi yok
+KOSU_KANON="$T/kanon-kirmizi" bash "$S" sahipsiz -- true 2>"$T/lint-err" >/dev/null; rc=$?
+ol "kırmızı kanon → stderr özet satırı, iş yine koşar (rc 0)" "$(grep -c 'kanon-lint KIRMIZI (1 bulgu)' "$T/lint-err")/$rc" "1/0"
+KOSU_KANON="$T/kanon-kirmizi" KOSU_KANON_LINT=0 bash "$S" sahipsiz -- true 2>"$T/lint-err0" >/dev/null
+ol "KOSU_KANON_LINT=0 → lint susar" "$(grep -c 'kanon-lint' "$T/lint-err0")" "0"
+printf '%s\n' "35 * * * * bash kosu-sar.sh supur -- true # supur sahip:NAZIR" > "$T/kanon-temiz"
+KOSU_KANON="$T/kanon-temiz" bash "$S" supur -- true 2>"$T/lint-err1" >/dev/null
+ol "temiz kanon → lint satırı yok" "$(grep -c 'kanon-lint KIRMIZI' "$T/lint-err1")" "0"
+# sınavın kendi kanonu bilerek sahipsiz bir iş taşır (nobetci): oradan koşan her satır tek özet uyarı alır — bu da ölçülü
+bash "$S" supur -- true 2>"$T/lint-err2" >/dev/null
+ol "sınav kanonu (sahipsiz 'nobetci' var) → özet satırı 1" "$(grep -c 'kanon-lint KIRMIZI (1 bulgu)' "$T/lint-err2")" "1"
 ( KOSU_KILIT_RC=99 bash "$S" supur --kilit "$T/kilit" -- true >/dev/null; echo "rc=$?" > "$T/rc99" ); ol "kilit kodu ortamla DEĞİŞMEZ (şema sabit 75)" "$(alan rc)/$(cat "$T/rc99")" "75/rc=75"
 bash "$S" supur -- bash -c 'exit 75' >/dev/null
 ol "--kilit YOKKEN işin kendi 75'i → hata (sezgi yok)" "$(alan sonuc)" "hata"

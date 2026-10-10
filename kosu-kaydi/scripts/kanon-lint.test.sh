@@ -23,6 +23,10 @@ printf '%s\n' "35 * * * * $W supur --kilit /x.lock -- bash /x/supur.sh # supur s
 kos "$T/k1a"; ol "K1 altın: --kilit doğru → rc 0" "$RC" "0"
 printf '%s\n' "35 * * * * $W supur --kilit /x.lock -- bash /x/flockluk.sh # supur sahip:MUAVIN" > "$T/k1b"
 kos "$T/k1b"; ol "K1 altın: 'flock' alt dizge olarak geçen dosya adı yakalanmaz" "$RC" "0"
+printf '%s\n' "35 * * * * $W supur --kilit /x.lock -- /usr/bin/flock -n /x.lock bash /x/supur.sh # supur sahip:MUAVIN" > "$T/k1c"
+kos "$T/k1c"; ol "K1: mutlak yollu /usr/bin/flock da yakalanır → rc 1" "$RC" "1"; ol "K1 mesajı (mutlak yol)" "$(printf '%s' "$CIKTI" | grep -c 'KIRMIZI K1')" "1"
+printf '%s\n' "35 * * * * $W supur -- /usr/bin/flock -n /x.lock bash /x/supur.sh # supur sahip:MUAVIN" > "$T/k2b"
+kos "$T/k2b"; ol "K2: mutlak yollu flock -n içeride → sarı" "$(printf '%s' "$CIKTI" | grep -c 'SARI    K2')" "1"
 
 echo "════ K2 · flock -n sarmalayıcının içinde, --kilit yok (SARI) ════"
 printf '%s\n' "35 * * * * $W supur -- flock -n /x.lock bash /x/supur.sh # supur sahip:MUAVIN" > "$T/k2"

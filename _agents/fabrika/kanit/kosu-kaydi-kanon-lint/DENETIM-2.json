@@ -1,0 +1,40 @@
+{
+  "tur": 2,
+  "is": "kosu-kaydi-kanon-lint",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-10T12:31:47+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 35656,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "İstenen kanon lint’i yazılmış; önceki turdaki sekmeli satır ve boş sahip etiketi açıkları sınavlarla kapatılmış. Ancak lint hâlâ hiçbir üreticiye veya kurulum kancasına bağlanmadığı için kırmızı kusurlar canlıya geçmeden zorunlu olarak denetlenmiyor; ayrıca mutlak yollu flock çağrıları lint’i atlatabildiğinden önce bunlar çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Lint yazılmış fakat işletilen bir kapı olarak kurulmamış; kanon üreticisi veya oda kancası tarafından çağrılmıyor ve elle çalıştırmaya bırakılıyor.",
+        "kanit": "Belge açıkça “Kanon üreticisi (oda kancası) çağırmıyor henüz — kutu sahibi elle koşturur” diyor. Manifestte yalnız hermetik test, sarmalayıcı testi ve tek seferlik NÂZIR örneği var; gerçek üretim/kanca çağrısını gösteren ölçüm yok.",
+        "konum": "kosu-kaydi/SKILL.md:96; kanıt kayıtları lint/sonra, sarmalayici/sonra ve nazir-ornegi/sonra",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "K1 ve K2 denetimleri mutlak yolla çağrılan flock’u kaçırıyor; aynı dosyadaki çalışma zamanı uyarısı ise bu biçimi özellikle tanıyor.",
+        "kanit": "Lint düzenli ifadesi flock öncesinde yalnız satır başı veya boşluk/`; & |` kabul ediyor; `/usr/bin/flock -n ...` içindeki flock öncesinde `/` bulunduğundan eşleşmez. Buna karşılık kosu-sar.sh öz-denetimi `flock|*/flock` kalıbını kullanıyor; testlerde mutlak yol vakası yok.",
+        "konum": "kosu-kaydi/scripts/kanon-lint.sh:39-42; kosu-kaydi/scripts/kosu-sar.sh:30; kosu-kaydi/scripts/kanon-lint.test.sh:20-29",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Belgedeki lint sınav sayısı güncel ölçümle uyuşmuyor.",
+        "kanit": "SKILL.md sınavı “30 kapı” diye tanımlarken araç imzalı sonraki ölçüm “35 geçti · 0 düştü” sonucunu veriyor.",
+        "konum": "kosu-kaydi/SKILL.md:106; olcum-lint-sonra.txt",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt içermiyor. Önce/sonra çifti aracın daha önce bulunmadığını ve yeni hermetik sınavların 35/35 geçtiğini gösteriyor; sekme ve boş sahip düzeltmeleri ölçülmüş. NÂZIR örneği gerçekçi veriyle çalıştırılmış olsa da yalnız K4/K5 buluyor; kartın K1/K2/K3/K6 hükümlerini gerçek kutu verisiyle ve lint’in kurulum akışında gerçekten çağrıldığını gösteren ölçüm yok."
+  }
+}

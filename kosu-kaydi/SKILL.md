@@ -92,7 +92,9 @@ kısıtlıysa OR). Tarama 1500 gün (29 Şubat gibi seyrek ama geçerli ifadeler
 | K4 🔴 | aynı iş iki sarılı satırda | ikileme — restart'ta iki kez koşar (A313) |
 | K5 △ | crontab başına `KOSU_KUTU=`/`KOSU_KANON=` satırı | kanca taşımaz, recreate'te kaybolur → satır içine (A313) |
 | K6 △ | `--gozlem` komutu bu kutuda yok (yalnız `--kutu-ici`) | her koşu `olculemedi` olur (`ss` nazir'de yoktu) |
-rc: 0 temiz/yalnız sarı · 1 kırmızı var · 3 ölçülemedi. Kanon üreticisi (oda kancası) çağırmıyor henüz — kutu sahibi elle koşturur; kancaya bağlamak ayrı iş.
+rc: 0 temiz/yalnız sarı · 1 kırmızı var · 3 ölçülemedi. **Çağıran:** sarmalayıcı **her koşuda** kanonu (ya da canlı crontab'ı) lint'ler; KIRMIZI varsa
+stderr'e tek özet satır düşer (cron kütüğü/postası) — iş engellenmez, kayıt değişmez (`KOSU_KANON_LINT=0` susturur). Oda kancasının bloğu
+yazmadan ÖNCE lint'i çağırıp kırmızıda yazmaması ayrı iş (cloudtop kartı `oda-cron-kanon-lint-kancasi`); kutu sahibi elle de koşturabilir.
 
 ## Dikişler (sınav için)
 `KOSU_KAYIT_DIZ` · `KOSU_KANON` · `KOSU_CRONTAB_KOMUT` (varsayılan `crontab -l`) · `KOSU_KUTU` · `KOSU_SIMDI` · `KOSU_YEDEK_DIZ` · `KOSU_FLOCK_KOMUT` (varsayılan `flock`; 'flock yok' sınavı için).
@@ -103,7 +105,7 @@ rc: 0 temiz/yalnız sarı · 1 kırmızı var · 3 ölçülemedi. Kanon üretici
 - `bash scripts/kosu-sar.test.sh` — hermetik (sahte kanon, sahte crontab, geçici dizin). Ölçtüğü: 17 alan geçerli JSON · gözlem değerleri (120 bayt, NUL, null/boş ayrımı) · beyan
   protokolü (dosya + `--nobetci`) · satır sonu etiketi · `atlandi-kilit` · kanon/canlı çelişkisi · @reboot · kanonsuz kip · kutu adı
   türetimi · rc 126/127 geçişi · gözlem altı hâl (boş→boş/dolu→boş hata) · UTC damga · cron-sonraki 10 ifade + 4 ret · croniter zehirli-modül kapısı (pakete bağımlılık yok).
-- `bash scripts/kanon-lint.test.sh` — lint'in sınavı (30 kapı; her kural için kırmızı + altın çift; stdin, rc 2/3).
+- `bash scripts/kanon-lint.test.sh` — lint'in sınavı (38 kapı; her kural için kırmızı + altın çift; sekmeli satır; mutlak yollu flock; değersiz etiket; stdin, rc 2/3).
 - `bash scripts/hedef-kutu-sinav.sh <konteyner> [<ssh-host>|-]` — aynı sınavı **hedef kutuda** koşturur (tar → `/tmp`, orada koş, sil;
   kaynak/hedef md5'leri basılır). Kurulumdan önce "bu kutuda çalışır" iddiasının ölçümü.
 
