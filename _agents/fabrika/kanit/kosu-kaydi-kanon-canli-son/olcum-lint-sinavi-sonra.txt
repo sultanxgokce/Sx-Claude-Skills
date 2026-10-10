@@ -1,5 +1,5 @@
 $ bash kosu-kaydi/scripts/kanon-lint.test.sh
-# rc=0 sure=2.9s zaman=2026-10-10T23:10:41+03:00
+# rc=0 sure=2.9s zaman=2026-10-10T23:13:55+03:00
 --- stdout ---
 ════ temiz kanon: satır sonu etiketi · --kilit doğru · gözlemli ════
 ════ K1 · --kilit + iç flock = her koşu atlanır (KIRMIZI) ════

@@ -1,14 +1,14 @@
 {
-  "is": "kosu-kaydi-kanon-canli",
+  "is": "kosu-kaydi-kanon-canli-son",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-10T23:11:21+03:00",
+  "guncelleme": "2026-10-10T23:14:35+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "nazir-ornegi",
       "asama": "once",
       "dosya": "olcum-nazir-ornegi-once.txt",
-      "sha256": "259531fc847e9b8426787ecf66a108786afc182c0b1c123a1b2763ccfe2f8d21",
+      "sha256": "7fb93ccd79eaafe49201fc578d85f980958cd86bbaafd3851beab1b28183c7a1",
       "komut": [
         "bash",
         "-c",
@@ -16,7 +16,7 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T23:02:45+03:00",
+      "zaman": "2026-10-10T23:13:52+03:00",
       "sure_sn": 0.1
     },
     {
@@ -24,7 +24,7 @@
       "etiket": "nazir-ornegi",
       "asama": "sonra",
       "dosya": "olcum-nazir-ornegi-sonra.txt",
-      "sha256": "f7634d87793f78114b9b50492c0f829027b12b2b564528a3331d55bba4df4c27",
+      "sha256": "872eceb02ba8c40bcf31b4f430f4c6ab54670d2a20dd910178fe481d3025d3cc",
       "komut": [
         "bash",
         "-c",
@@ -32,7 +32,7 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T23:10:38+03:00",
+      "zaman": "2026-10-10T23:13:52+03:00",
       "sure_sn": 0.2
     },
     {
@@ -40,14 +40,14 @@
       "etiket": "lint-sinavi",
       "asama": "sonra",
       "dosya": "olcum-lint-sinavi-sonra.txt",
-      "sha256": "c38e1469ed654c3b56e62ca2600b5049d399c6da7399714731ec39f7656bd941",
+      "sha256": "90ce3305175772bf24eca0f18f582c83761b44ec18f3b880a38e5d6176a7e34a",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/kanon-lint.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T23:10:41+03:00",
+      "zaman": "2026-10-10T23:13:55+03:00",
       "sure_sn": 2.9
     },
     {
@@ -55,16 +55,16 @@
       "etiket": "sarmalayici-sinavi",
       "asama": "sonra",
       "dosya": "olcum-sarmalayici-sinavi-sonra.txt",
-      "sha256": "9896205d24c2d4f1db91e827aec5dffdc15e23d2f1cd6a2229f6937383493dd9",
+      "sha256": "dbe1cd162d5ec400672563c6b5edf923628fcc903e77b308dffc4c80c145c0b9",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/kosu-sar.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T23:11:21+03:00",
-      "sure_sn": 40.3
+      "zaman": "2026-10-10T23:14:35+03:00",
+      "sure_sn": 40.0
     }
   ],
-  "imza": "acee08ee15cf3bd5a39692c0fbb0a372be305ae1581b91e24ea8a28711120441"
+  "imza": "ffdaf6d8281155bbc6d2cba43df0c92396006cc4deb42160750daf6826f32252"
 }
