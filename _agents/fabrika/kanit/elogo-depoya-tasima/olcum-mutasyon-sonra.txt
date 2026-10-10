@@ -1,5 +1,5 @@
 $ /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutasyon.sh elogo-erisim/scripts
-# rc=0 sure=18.2s zaman=2026-10-10T17:55:52+03:00
+# rc=0 sure=13.8s zaman=2026-10-10T18:06:08+03:00
 --- stdout ---
 POZITIF KONTROL (mutasyonsuz): gonder=0 paket=0 kilit=0  (0 beklenir)
 M1 yol.stem geri: paket=1 gonder=1 (0 olmayan beklenir)

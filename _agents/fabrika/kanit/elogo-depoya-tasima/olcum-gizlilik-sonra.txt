@@ -1,6 +1,7 @@
 $ /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/gizlilik.sh .
-# rc=0 sure=0.1s zaman=2026-10-10T17:55:52+03:00
+# rc=0 sure=0.1s zaman=2026-10-10T18:05:54+03:00
 --- stdout ---
-DAL (yayimlanacak): musteri_adi=0 gercek_belge_no=0 telefon=[]
-POZITIF KONTROL (gizlenmemis kurulu kopya): musteri_adi=9 gercek_belge_no=5 telefon=['+90 555 111 22 33']
+DAL (yayimlanacak): musteri_adi(duzyazi)=0 beceri_kimligi=5 gercek_belge_no=0 telefon=0
+ZATEN YAYIMLI (origin/main'de ar[cç]elik geçen dosya): 14
+POZITIF KONTROL (gizlenmemis kurulu kopya): musteri_adi(duzyazi)=9 beceri_kimligi=0 gercek_belge_no=5 telefon=2
 --- stderr ---
