@@ -1,0 +1,21 @@
+{
+  "tur": 3,
+  "is": "kosu-kaydi-kanon-lint-k2",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-10T13:01:53+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 49055,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "K2 ayrıştırması kabuk alıntılarını koruyacak biçimde düzeltilmiş; `-E 75` ve `-w 0` gibi değerli seçenekleri aşarak `-n`/`--nonblock` bayrağını buluyor, bloklayan flock’u sarıya boyamıyor. Araç imzalı ölçüm de kartın istediği 44/44 YEŞİL sonucu birebir gösterdiğinden üretime engel bir kusur kanıtlanmıyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sha’ları tutuyor; lint için önce/sonra ölçüm çifti var ve sonrası rc=0 YEŞİL olarak tam 44 geçti · 0 düştü gösteriyor. Sınav çıktısı değerli seçenekleri, uzun nonblock biçimini, komutun kendi `-n` seçeneğini, alıntılı `-c` içeriğini ve bloklayan flock karşı örneğini kapsıyor; sarı kayıt yok. Sarmalayıcı çağıranı ayrıca 109/109 YEŞİL ölçülmüş; NÂZIR örneğinin rc=1 kırmızı kaydı başarı kanıtı değil, gerçekçi kusurlu veri üzerinde K4/K5 teşhisinin gözlemi olarak değerlendirilmiştir."
+  }
+}

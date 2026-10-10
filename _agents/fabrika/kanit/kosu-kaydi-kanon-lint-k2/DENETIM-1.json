@@ -1,0 +1,34 @@
+{
+  "tur": 1,
+  "is": "kosu-kaydi-kanon-lint-k2",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-10T12:57:23+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 44062,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "K2 deseni genişletilmiş, uzun biçim ve bloklayan flock için sınavlar eklenmiş; ancak teslimin kendi kanıtı istenen 44/44 yerine 43/43 gösteriyor. Üstelik K2 eşlemesi nonblock bayrağını flock seçenekleriyle sınırlamayıp komut parçasının ilerleyen herhangi bir `-n` belirtecini yakalayabildiği için önce bu yanlış pozitif ve eksik kabul kanıtı çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "İş kartının açık kabul ölçütü olan 44/44 YEŞİL sağlanmamış; test çıktısı 43 geçti diyor ve dokümantasyon da 43 kapı olarak değiştirilmiş.",
+        "kanit": "`olcum-lint-sonra.txt` çıktısı `SONUÇ: 43 geçti · 0 düştü`; SKILL.md eklenen sınav satırı da `lint'in sınavı (43 kapı...)` diyor. Talep ise açıkça `44/44 YEŞİL` istiyor.",
+        "konum": "olcum-lint-sonra.txt; kosu-kaydi/SKILL.md:108",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "K2 regex'i gerçek nonblock seçeneği yerine flock'tan sonraki aynı kabuk parçasında bulunan herhangi bir `-n`, `--nonblock` veya `--nb` belirtecini kabul ediyor; böylece bloklayan flock'un çalıştırdığı komuta ait `-n` seçeneği yanlış biçimde K2 sarısı olabilir.",
+        "kanit": "Koşul `flock[^;&|]*[[:space:]](-n|--nonblock|--nb)` biçiminde ve kilit dosyası/çalıştırılan komut sınırını ayırmıyor. Mevcut altın sınav yalnız `flock /x.lock bash ...` örneğini ölçüyor; örneğin `flock /x.lock grep -n ...` karşılığı yok.",
+        "konum": "kosu-kaydi/scripts/kanon-lint.sh:48; kosu-kaydi/scripts/kanon-lint.test.sh:36-37",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; önce/sonra ölçüm çifti var, sarı kayıt yok. Ancak yeşil lint kaydı yalnız çalıştırılan 43 sınavın geçtiğini kanıtlıyor, kartın istediği 44/44'ü kanıtlamıyor; ayrıca NÂZIR örneği kırmızı rc=1 olduğundan başarı kanıtı sayılamaz."
+  }
+}

@@ -1,0 +1,8 @@
+$ bash kosu-kaydi/scripts/kanon-lint.sh /config/.claude/jobs/d69a1b07/tmp/nazir-ornek-kanon
+# rc=1 sure=0.1s zaman=2026-10-10T12:57:03+03:00
+--- stdout ---
+△ SARI    K5 satır 1: ortam satırı (KOSU_KUTU) — oda kancası bu satırı canlıya taşımaz, recreate'te kaybolur; değişkeni sarılı satırın içine taşı
+△ SARI    K5 satır 2: ortam satırı (KOSU_KANON) — oda kancası bu satırı canlıya taşımaz, recreate'te kaybolur; değişkeni sarılı satırın içine taşı
+✗ KIRMIZI K4 satır 4: iş 'bulgu-defteri' ikinci kez sarılı (ilk: satır 3) — ikileme; restart'ta iki kez koşar
+── sarılı satır: 2 · kırmızı: 1 · sarı: 2 · (K6 gözlem komutu bakılmadı: --kutu-ici yok)
+--- stderr ---
