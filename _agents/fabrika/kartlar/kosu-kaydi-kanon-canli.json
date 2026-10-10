@@ -1,0 +1,19 @@
+{
+  "is": "kosu-kaydi-kanon-canli",
+  "cumle": "kosu-kaydi 0.5.2: kanon lint'i canlı zamanlayıcıyı da okusun — canlıda olup kanonda olmayan satır 'kanon dışı' sarısı (K7), sarmalayıcısız kilitli iş 'sarılmamış kilit' sarısı (K8); sarmalayıcı KOSU_KANON verilince kanon ∪ canlı lint'ler (A320)",
+  "istedi": "NAZIR",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-10T22:52:14+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

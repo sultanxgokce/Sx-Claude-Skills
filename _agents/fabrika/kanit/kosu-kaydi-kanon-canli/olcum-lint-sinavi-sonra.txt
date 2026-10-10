@@ -1,0 +1,18 @@
+$ bash kosu-kaydi/scripts/kanon-lint.test.sh
+# rc=0 sure=1.6s zaman=2026-10-10T23:02:53+03:00
+--- stdout ---
+════ temiz kanon: satır sonu etiketi · --kilit doğru · gözlemli ════
+════ K1 · --kilit + iç flock = her koşu atlanır (KIRMIZI) ════
+════ K2 · flock -n sarmalayıcının içinde, --kilit yok (SARI) ════
+════ K3 · sahip etiketi (KIRMIZI) — satır sonu ya da satır üstü ════
+════ sekmeli crontab satırları (alan ayracı sekme) — bütün kurallar yine işler ════
+════ K4 · aynı iş iki sarılı satırda (KIRMIZI, ikileme) ════
+════ K5 · crontab başına ortam satırı (SARI, A313) ════
+════ K6 · gözlem komutu kutuda yok (SARI, yalnız --kutu-ici) ════
+════ K8 · sarılmamış zamanlı satırda flock (SARI, A320) ════
+════ K7 · canlı ↔ kanon farkı (SARI, yalnız --kanon) ════
+════ nazir biçimi: kanon 5 / canlı 7, farkı iki federe flock satırı → K7 iki + K8 iki ════
+════ giriş / rc ════
+
+── SONUÇ: 59 geçti · 0 düştü ──
+--- stderr ---
