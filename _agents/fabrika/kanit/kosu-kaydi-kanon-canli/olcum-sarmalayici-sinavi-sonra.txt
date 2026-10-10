@@ -1,5 +1,5 @@
 $ bash kosu-kaydi/scripts/kosu-sar.test.sh
-# rc=0 sure=32.6s zaman=2026-10-10T23:06:36+03:00
+# rc=0 sure=42.4s zaman=2026-10-10T23:09:18+03:00
 --- stdout ---
 ════ K1 · her koşu tam satır, geçerli JSON, 17 alan ════
 ════ K4 · sessiz başarı YALNIZ beyanla ════
@@ -20,43 +20,43 @@ $ bash kosu-kaydi/scripts/kosu-sar.test.sh
 
 ── SONUÇ: 115 geçti · 0 düştü ──
 --- stderr ---
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 · SARI K7 canlı ile kanon farklı 2 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 · SARI K7 canlı ile kanon farklı 2 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 1 · SARI K7 canlı ile kanon farklı 2 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 2 · SARI K7 canlı ile kanon farklı 2 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 2 · SARI K7 canlı ile kanon farklı 2 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh <canlı crontab> --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 · SARI K7 canlı ile kanon farklı 2 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
-kosu-sar: kanon-lint — KIRMIZI 2 · SARI K7 canlı ile kanon farklı 2 — bak: kanon-lint.sh /tmp/tmp.KWoOynWFr7/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.KWoOynWFr7/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K7 canlı ile kanon farklı 2 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K7 canlı ile kanon farklı 2 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 1 · SARI K7 canlı ile kanon farklı 2 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 2 · SARI K7 canlı ile kanon farklı 2 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 2 · SARI K7 canlı ile kanon farklı 2 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 2 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh <canlı crontab> --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 2 · SARI K7 canlı ile kanon farklı 2 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon
+kosu-sar: kanon-lint — KIRMIZI 2 · SARI K7 canlı ile kanon farklı 2 · SARI K8 sarılmamış kilitli iş 1 — bak: kanon-lint.sh /tmp/tmp.H0xQSuQlua/kanon --kutu-ici · crontab -l | kanon-lint.sh - --kanon /tmp/tmp.H0xQSuQlua/kanon

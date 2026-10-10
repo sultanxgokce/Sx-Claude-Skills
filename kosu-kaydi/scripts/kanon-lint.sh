@@ -30,6 +30,18 @@ else [ -r "$G" ] || { echo "olculemedi: dosya yok ya da okunamıyor: $G"; exit 3
 KIRMIZI=0; SARI=0; SARILI=0
 zamanli() { printf '%s' "$1" | grep -qE '^[[:space:]]*[0-9*@]'; }       # cron zaman ifadesiyle başlayan satır
 duz() { printf '%s' "$1" | tr '\t' ' ' | sed -E 's/ +/ /g; s/^ //; s/ $//'; }   # karşılaştırma biçimi: sekme/çoklu boşluk tek boşluk
+dogrudan_sarili() {  # <zamanlı satır> → rc 0: cron'un çalıştırdığı program SARMALAYICININ KENDİSİ (yapısal; alt dizge değil — bağımsız göz tur 2)
+  # zaman alanları (5 ya da @ifade) atlanır, baştaki VAR=değer atamaları ve bash/sh yorumlayıcısı geçilir; ilk program kosu-sar.sh olmalı.
+  # 'flock -n x bash kosu-sar.sh …' (kilit sarmalayıcının DIŞINDA) ya da 'bash -c "echo kosu-sar.sh; flock …"' sarılı SAYILMAZ.
+  python3 -c 'import shlex,sys,re,os
+s=sys.argv[1].split(" #")[0]
+try: t=shlex.split(s)
+except Exception: t=s.split()
+t=t[1:] if t and t[0].startswith("@") else t[5:]
+while t and re.match(r"^[A-Za-z_][A-Za-z0-9_]*=",t[0]): t=t[1:]
+if t and os.path.basename(t[0]) in ("bash","sh"): t=t[1:]
+sys.exit(0 if t and os.path.basename(t[0])=="kosu-sar.sh" else 1)' "$1" 2>/dev/null
+}
 declare -A KANON_SATIR=() CANLI_SATIR=()
 if [ -n "$KARSI" ]; then   # K7: karşı kanonun zamanlı satırları (kanon dosyası okunamıyorsa hüküm yok → rc 3, temiz denmez)
   [ -r "$KARSI" ] || { echo "olculemedi: kanon dosyası yok ya da okunamıyor: $KARSI"; exit 3; }
@@ -72,7 +84,7 @@ while IFS= read -r ham || [ -n "$ham" ]; do
     d="$(duz "$satir")"; CANLI_SATIR["$d"]="$n"
     [ -n "$KARSI" ] && [ -z "${KANON_SATIR[$d]:-}" ] && bul S K7 "$n" "kanon dışı: canlıda var, kanonda yok — elle kurulmuş, recreate'te kaybolur; ya kanona yaz ya kaldır"
     # satır sonu yorumu (' # …') K8'e girmez: '# flock burada kullanılmaz' sahte sarı üretmesin (bağımsız göz tur 1)
-    if ! printf '%s' "$satir" | grep -qE 'kosu-sar\.sh[[:space:]]' && printf '%s' "$satir" | sed -E 's/[[:space:]]#.*$//' | grep -qE '(^|[[:space:];&|])(/[^[:space:]]*/)?flock([[:space:]]|$)'; then
+    if ! dogrudan_sarili "$satir" && printf '%s' "$satir" | sed -E 's/[[:space:]]#.*$//' | grep -qE '(^|[[:space:];&|])(/[^[:space:]]*/)?flock([[:space:]]|$)'; then
       bul S K8 "$n" "sarılmamış kilitli iş (flock) — atlandı mı koştu mu kayıtta görünmez; kosu-sar --kilit <dosya> ile sar"; fi
   fi
   if printf '%s' "$satir" | grep -qE '^[[:space:]]*[0-9*@]' && printf '%s' "$satir" | grep -qE 'kosu-sar\.sh[[:space:]]'; then   # boşluk YA DA sekme (crontab ikisini de ayraç sayar)
