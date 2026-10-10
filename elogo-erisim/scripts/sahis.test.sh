@@ -35,10 +35,10 @@ def belge(muhatap):
 
 print("Ş1 · ŞAHIS — TCKN + ad/soyad + iletişim blokları üretiliyor mu")
 sahis = Taraf(unvan="AYSE YILMAZ", vkn="12345678901", il="I", ilce="C", adres="A",
-              telefon="+90 555 111 22 33", eposta="ornek@ornek.com", ad="AYŞE", soyad="YILMAZ")
+              telefon="+90 000 000 00 00", eposta="ornek@ornek.com", ad="AYŞE", soyad="YILMAZ")
 x = belge(sahis)
 for etiket, desen in (("TCKN şeması", r'schemeID="TCKN">12345678901'),
-                      ("Contact/Telephone", r"<cbc:Telephone>\+90 555 111 22 33"),
+                      ("Contact/Telephone", r"<cbc:Telephone>\+90 000 000 00 00"),
                       ("Contact/ElectronicMail", r"<cbc:ElectronicMail>ornek@ornek\.com"),
                       ("Person/FirstName", r"<cbc:FirstName>AYŞE"),
                       ("Person/FamilyName", r"<cbc:FamilyName>YILMAZ")):
