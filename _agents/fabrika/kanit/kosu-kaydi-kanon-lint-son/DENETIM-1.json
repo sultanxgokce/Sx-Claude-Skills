@@ -1,0 +1,34 @@
+{
+  "tur": 1,
+  "is": "kosu-kaydi-kanon-lint-son",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-10T12:45:52+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 41832,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Serdar, istenen K1–K6 kanon lint’ini ve sarmalayıcının her koşuda renkleri ayrı özetlemesini hedefe uygun biçimde kurmuş. Lakin ana sarmalayıcı sınavı 107/108’de kırmızı kaldığı için bu hâliyle üretime çıkmaz; önce çağıran sınavındaki kopukluk çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Sarmalayıcının mevcut kanonu her koşuda lint’leyip özet üretmesi beklenen senaryoda çalışmıyor; teslimin kendi ana sınavı başarısız.",
+        "kanit": "olcum-sarmalayici-sonra.txt rc=1; çıktı “sınav kanonu (sahipsiz 'nobetci' var) → özet satırı 1: beklenen[1] gelen[0]” ve sonuç “107 geçti · 1 düştü” diyor.",
+        "konum": "olcum-sarmalayici-sonra.txt — çağıran sınavı / SONUÇ",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Yeni lint’in bağımsız sınavı başarılı olsa da bu, sarmalayıcı entegrasyonundaki başarısızlığı kapatmıyor.",
+        "kanit": "olcum-lint-sonra.txt rc=0 ve “38 geçti · 0 düştü”; buna karşılık ayrı entegrasyon ölçümü olcum-sarmalayici-sonra.txt rc=1.",
+        "konum": "olcum-lint-sonra.txt ve olcum-sarmalayici-sonra.txt",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü yalnız dosyanın origin/main’de bulunmadığını, sonra lint ölçümü 38 kapının geçtiğini gösteriyor. Çağıran için gerçekçi sahipsiz satır örneği özetin üretilebildiğini kanıtlıyor; ancak ana sarmalayıcı ölçümü kırmızı ve 1 düşen sınav içerdiğinden teslim bütünü için yeşil kanıt yok. Hedef kutuya kurulumu gösteren ayrıca bir kurulum/hedef-kutu ölçümü de sunulmamış."
+  }
+}

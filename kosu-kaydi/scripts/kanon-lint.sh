@@ -24,19 +24,22 @@ bul() { # bul <renk> <kural> <satır no> <mesaj>
   else SARI=$((SARI+1)); printf '△ SARI    %s satır %s: %s\n' "$2" "$3" "$4"; fi
 }
 declare -A IS_SATIR=()
-n=0; onceki=""
+n=0; onceki=""; BLOK_SAHIP=0
 while IFS= read -r ham || [ -n "$ham" ]; do
   n=$((n+1)); satir="$(printf '%s' "$ham" | tr '\t' ' ')"   # crontab alan ayracı sekme de olabilir: ayrıştırma boşlukla (bağımsız göz tur 1)
   case "$satir" in
     KOSU_KUTU=*|KOSU_KANON=*) bul S K5 "$n" "ortam satırı ($(printf '%s' "$satir" | cut -d= -f1)) — oda kancası bu satırı canlıya taşımaz, recreate'te kaybolur; değişkeni sarılı satırın içine taşı" ;;
   esac
+  # bitişik yorum bloğu izi: '# sahip: <değer>' görüldü mü; yorum olmayan satır bloğu kapatır (satır işlendikten sonra sıfırlanır)
+  if printf '%s' "$satir" | grep -qE '^[[:space:]]*#'; then printf '%s' "$satir" | grep -qE '^[[:space:]]*#[[:space:]]*sahip:[[:space:]]*[^[:space:]]' && BLOK_SAHIP=1; fi
   if printf '%s' "$satir" | grep -qE '^[[:space:]]*[0-9*@]' && printf '%s' "$satir" | grep -qE 'kosu-sar\.sh[[:space:]]'; then   # boşluk YA DA sekme (crontab ikisini de ayraç sayar)
     SARILI=$((SARILI+1))
     is="$(printf '%s' "$satir" | sed -nE 's/.*kosu-sar\.sh[[:space:]]+([a-z0-9-]+).*/\1/p')"
     sarmal="${satir%% -- *}"; komut="${satir#* -- }"; [ "$komut" = "$satir" ] && komut=""
     # sahip: satır üstü '# sahip:' (hemen önceki yorum satırı) ya da satır sonu 'sahip:<ROL>'
-    # iki biçimde de etiketin DEĞERİ olmalı: boş '# sahip:' etiket değildir (bağımsız göz tur 1)
-    if ! printf '%s' "$satir" | grep -qE '#.*sahip:[^[:space:]]+' && ! printf '%s' "$onceki" | grep -qE '^#[[:space:]]*sahip:[[:space:]]*[^[:space:]]'; then
+    # iki biçimde de etiketin DEĞERİ olmalı: boş '# sahip:' etiket değildir (bağımsız göz tur 1). Satır üstü = hemen üstteki
+    # BİTİŞİK yorum bloğunun herhangi bir satırı (sarmalayıcı _kanon_oku da bloğun tamamını okur; '# damga:' araya girebilir)
+    if ! printf '%s' "$satir" | grep -qE '#.*sahip:[^[:space:]]+' && [ "$BLOK_SAHIP" -eq 0 ]; then
       bul K K3 "$n" "sahip etiketi yok (iş: ${is:-?}) — satır sonuna '# ${is:-<is>} sahip:<ROL>' ekle"; fi
     # flock çıplak ya da mutlak yollu (/usr/bin/flock) olabilir — ikisi de yakalanır (bağımsız göz tur 2)
     if printf '%s' "$sarmal" | grep -q -- '--kilit' && printf '%s' "$komut" | grep -qE '(^|[[:space:];&|])(/[^[:space:]]*/)?flock([[:space:]]|$)'; then
@@ -52,7 +55,7 @@ while IFS= read -r ham || [ -n "$ham" ]; do
       if [ -n "$gk" ] && ! command -v "$gk" >/dev/null 2>&1; then bul S K6 "$n" "gözlem komutu '$gk' bu kutuda yok (iş: ${is:-?}) — her koşu olculemedi olur"; fi
     fi
   fi
-  onceki="$satir"
+  onceki="$satir"; printf '%s' "$satir" | grep -qE '^[[:space:]]*#' || BLOK_SAHIP=0   # yorum dışı satır bloğu kapatır
 done <<< "$ICERIK"
 printf '── sarılı satır: %s · kırmızı: %s · sarı: %s%s\n' "$SARILI" "$KIRMIZI" "$SARI" "$([ "$KUTU_ICI" -eq 1 ] || printf ' · (K6 gözlem komutu bakılmadı: --kutu-ici yok)')"
 [ "$KIRMIZI" -eq 0 ] || exit 1; exit 0

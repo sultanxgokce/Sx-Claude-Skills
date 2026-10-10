@@ -1,5 +1,5 @@
 $ bash kosu-kaydi/scripts/kosu-sar.test.sh
-# rc=1 sure=27.6s zaman=2026-10-10T12:45:26+03:00
+# rc=0 sure=31.4s zaman=2026-10-10T12:49:16+03:00
 --- stdout ---
 ════ K1 · her koşu tam satır, geçerli JSON, 17 alan ════
 ════ K4 · sessiz başarı YALNIZ beyanla ════
@@ -9,7 +9,6 @@ $ bash kosu-kaydi/scripts/kosu-sar.test.sh
 ════ şema 1.4 · gözlem değerleri satırda (A310): hüküm dayanağıyla okunur ════
 ════ atlandi-kilit · flock -n -E 75 (NÂZIR A293) ════
 ════ kanon lint'inin çağıranı: sarmalayıcı her koşuda kanonu lint'ler, KIRMIZI varsa stderr'e tek özet satır ════
-  ✗ sınav kanonu (sahipsiz 'nobetci' var) → özet satırı 1: beklenen[1] gelen[0]
 ════ K5 · çelişki: canlı tablo ≠ kanon ════
 ════ K5 · @reboot türetilemez · satırı olmayan iş ════
 ════ K3 · satır SONU etiketi (canlıya taşınan tek yüzey, NÂZIR A292) ════
@@ -18,45 +17,45 @@ $ bash kosu-kaydi/scripts/kosu-sar.test.sh
 ════ kayıt dizini yazılamıyor → iş yine koşar, satır YEDEK dizine düşer, stderr uyarı ════
 ════ cron-sonraki.py tek başına (bağımsız hesap, paket yok) ════
 
-── SONUÇ: 107 geçti · 1 düştü ──
+── SONUÇ: 108 geçti · 0 düştü ──
 --- stderr ---
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 3 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 3 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 3 — bak: kanon-lint.sh <canlı crontab> --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 3 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
-kosu-sar: kanon-lint — KIRMIZI 3 — bak: kanon-lint.sh /tmp/tmp.n8UMRUWjo7/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 1 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh <canlı crontab> --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
+kosu-sar: kanon-lint — KIRMIZI 2 — bak: kanon-lint.sh /tmp/tmp.eVKUhGaICi/kanon --kutu-ici
