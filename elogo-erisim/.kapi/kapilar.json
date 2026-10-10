@@ -1,0 +1,106 @@
+{
+  "v": 1,
+  "kapilar": [
+    {
+      "ad": "kurus-kapisi",
+      "dosya": "scripts/fatura_hazirla.py",
+      "cagri": "kurus_kapisi",
+      "sinav": "scripts/kurus.test.sh",
+      "girisler": [
+        "scripts/fatura_hazirla.py"
+      ],
+      "mutasyon": "python"
+    },
+    {
+      "ad": "alias-kapisi",
+      "dosya": "scripts/elogo_gonder.py",
+      "cagri": "alias_dogrula",
+      "sinav": "scripts/elogo_gonder.test.sh",
+      "girisler": [
+        "scripts/elogo_gonder.py"
+      ],
+      "mutasyon": "python"
+    },
+    {
+      "ad": "onay-beyani",
+      "dosya": "scripts/elogo_gonder.py",
+      "cagri": "onayi_dogrula",
+      "sinav": "scripts/elogo_gonder.test.sh",
+      "girisler": [
+        "scripts/elogo_gonder.py"
+      ],
+      "mutasyon": "python"
+    },
+    {
+      "ad": "servis-ortam-kilidi",
+      "dosya": "scripts/elogo_gonder.py",
+      "cagri": "ortam_kilidi_dogrula",
+      "sinav": "scripts/elogo_gonder.test.sh",
+      "girisler": [
+        "scripts/elogo_gonder.py"
+      ],
+      "mutasyon": "python"
+    },
+    {
+      "ad": "numara-ver",
+      "dosya": "scripts/numara_defteri.py",
+      "cagri": "numara_ver",
+      "sinav": "scripts/elogo_onek.test.sh",
+      "girisler": [
+        "scripts/mmex_fatura.py"
+      ],
+      "mutasyon": "python",
+      "_not": "ÇAĞIRAN BAŞKA DEPODA: tek üretim çağrısı MMEx `_agents/fatura/mmex_fatura.py` içinde. Bu ağaçtan bağlılık ÖLÇÜLEMEZ (RC=3, YEŞİL DEĞİL). MMEx sicilinden de ölçülemez: oradan buraya `../..` ile yol vermek mutasyonu GERÇEK beceri dosyasına taşırdı. Bilerek ölçülemedi bırakıldı; uydurma yeşil basılmadı."
+    },
+    {
+      "ad": "defter-degismezi",
+      "dosya": "scripts/numara_defteri.py",
+      "cagri": "dogrula",
+      "sinav": "scripts/elogo_onek.test.sh",
+      "girisler": [
+        "scripts/numara_defteri.py"
+      ],
+      "mutasyon": "python"
+    },
+    {
+      "ad": "urun-kapisi",
+      "dosya": "scripts/fatura_hazirla.py",
+      "cagri": "urun_kapisi",
+      "sinav": "scripts/kurus.test.sh",
+      "girisler": [
+        "scripts/fatura_hazirla.py"
+      ],
+      "mutasyon": "python"
+    },
+    {
+      "ad": "onizleme-dayanak",
+      "dosya": "scripts/onizleme.py",
+      "cagri": "dayanak_coz",
+      "sinav": "scripts/onizleme.test.sh",
+      "girisler": [
+        "scripts/onizleme.py"
+      ],
+      "mutasyon": "python"
+    },
+    {
+      "ad": "belge-turu-kapisi",
+      "dosya": "scripts/fatura_hazirla.py",
+      "cagri": "belge_turu_kapisi",
+      "sinav": "scripts/belge_turu.test.sh",
+      "girisler": [
+        "scripts/fatura_hazirla.py"
+      ],
+      "mutasyon": "python"
+    },
+    {
+      "ad": "paket-butunlugu",
+      "dosya": "scripts/elogo_gonder.py",
+      "cagri": "_paketi_dogrula",
+      "sinav": "scripts/elogo_paket.test.sh",
+      "girisler": [
+        "scripts/elogo_gonder.py"
+      ],
+      "mutasyon": "python"
+    }
+  ]
+}

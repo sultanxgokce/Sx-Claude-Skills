@@ -16,9 +16,7 @@ kapi() { # kapi <ad> <beklenen-rc> <python-ifade>
   if [[ $rc -eq $bek ]]; then GECEN=$((GECEN+1)); echo "  ✓ $ad"
   else DUSEN=$((DUSEN+1)); echo "  ✗ $ad (rc=$rc, beklenen=$bek)"; fi
 }
-O='import sys; sys.path.insert(0,"."); from elogo_paket import paketle, zip_kur, belge_adini_turet, AD_TAVANI, PaketHatasi'
-# Sentetik UBL: gerçek bir faturaya, gerçek numaraya, gerçek müşteriye DOKUNMAZ.
-NS='xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"'
+O='import sys; sys.path.insert(0,"."); from elogo_paket import paketle, zip_kur, PaketHatasi'
 
 echo "A · alan sözleşmesi"
 kapi "dört alan da üretilir" 0 "$O
@@ -90,97 +88,64 @@ import elogo_paket, inspect, re
 k = inspect.getsource(elogo_paket)
 assert not re.search(r'\b[0-9]{10,11}\b', k), 'VKN/TCKN benzeri sayı var'"
 
-echo "G · 🔴 paket adı belgenin KENDİ kimliğinden türer (gövde kusuru)"
-kapi "G1 · kökteki cbc:ID ad olur" 0 "$O
-x = b'<Invoice $NS><cbc:ID>FTR0000000000001</cbc:ID></Invoice>'
-assert belge_adini_turet(x) == 'FTR0000000000001', belge_adini_turet(x)"
-kapi "G2 · 🔴 İÇ İÇE cbc:ID yutulmaz — kalem sıra numarası ad OLMAZ" 0 "$O
-x = b'<Invoice $NS><cbc:ID>FTR0000000000001</cbc:ID>'
-x += b'<InvoiceLine><cbc:ID>1</cbc:ID></InvoiceLine></Invoice>'
-assert belge_adini_turet(x) == 'FTR0000000000001', belge_adini_turet(x)"
-kapi "G2b · 🔴 AYIRT EDİCİ: kökte numara yoksa iç içe olana UZANILMAZ, kimliğe düşülür" 0 "$O
-x = b'<Invoice $NS><cbc:UUID>aaaa-bbbb</cbc:UUID>'
-x += b'<AccountingSupplierParty><Party><cbc:ID>9999</cbc:ID></Party></AccountingSupplierParty>'
-x += b'</Invoice>'
-# Agacta arama yapan bir uygulama burada '9999' dondururdu — satici kimligini
-# fatura numarasi sanmak, YANLIS ADLA GECEN bir gonderim demektir (sessiz hata).
-assert belge_adini_turet(x) == 'aaaa-bbbb', belge_adini_turet(x)"
-kapi "G3 · numara yoksa tekil kimliğe (cbc:UUID) düşer" 0 "$O
-x = b'<Invoice $NS><cbc:UUID>aaaa-bbbb</cbc:UUID></Invoice>'
-assert belge_adini_turet(x) == 'aaaa-bbbb'"
-kapi "G4 · 🔴 BOŞ numara = YOK numara (boş ad üretilmez)" 0 "$O
-x = b'<Invoice $NS><cbc:ID/><cbc:UUID>aaaa-bbbb</cbc:UUID></Invoice>'
-assert belge_adini_turet(x) == 'aaaa-bbbb', belge_adini_turet(x)"
-kapi "G5 · numara VARSA kimliğe bakılmaz (sıra kilitli)" 0 "$O
-x = b'<Invoice $NS><cbc:UUID>aaaa</cbc:UUID><cbc:ID>FTR0000000000002</cbc:ID></Invoice>'
-assert belge_adini_turet(x) == 'FTR0000000000002'"
-kapi "G6 · 🔴 ikisi de yoksa DURUR — dosya adına DÜŞMEZ" 1 "$O
-try: belge_adini_turet(b'<Invoice $NS/>')
-except PaketHatasi: raise SystemExit(1)"
-kapi "G7 · yalnız boşluktan oluşan numara yok sayılır" 1 "$O
-try: belge_adini_turet(b'<Invoice $NS><cbc:ID>   </cbc:ID></Invoice>')
-except PaketHatasi: raise SystemExit(1)"
-kapi "G8 · bozuk XML anlaşılır hata verir (çıplak çökme değil)" 1 "$O
-try: belge_adini_turet(b'<Invoice')
-except PaketHatasi: raise SystemExit(1)"
+# ── E · 🔴 YARIM PAKET AĞA ÇIKMAZ (kapı: _paketi_dogrula) ────────────────────
+# NİÇİN SONRADAN EKLENDİ (dürüst kayıt, 2026-09-09): bu kapı yazılmıştı, üretim
+# yolundan ÇAĞRILIYORDU, ama HİÇBİR sınav ona dokunmuyordu. `kapi-sinavi kayitsiz`
+# kapıyı sicilde bulamayınca ortaya çıktı; ardından üç mutasyonun ÜÇÜ DE sessizce
+# geçti — yani kapı vardı, kanıtı yoktu.
+#
+# 🔴 Sınav hem BİRİM (kapıyı doğrudan çağırır) hem BÜTÜNLEŞME (zarf_kur üzerinden)
+#    vakası taşır. Yalnız birim olsaydı "yer-kaydırma" mutasyonu (çağrının
+#    silinmesi) görünmezdi — bu tam da bugün üç kez düştüğümüz tuzaktır.
+G='import sys; sys.path.insert(0,"."); from elogo_gonder import _paketi_dogrula, zarf_kur, GonderimHatasi'
+_TAM="{'fileName':'a.zip','binaryData':'eA==','contentType':'base64','hash':'0123456789ABCDEF0123456789ABCDEF','currentDate':'2026-01-01'}"
 
-echo "H · 🔴 uzunluk kapısı — ret ağa çıkmadan ÖNCE düşer"
-kapi "H1 · ölçülmüş GEÇEN uzunluk (47, .zip dahil) kabul edilir" 0 "$O
-ad = 'A' * (AD_TAVANI - 4)
-assert paketle(b'<x/>', ad)['fileName'] == ad + '.zip'
-assert len(ad + '.zip') == AD_TAVANI"
-kapi "H2 · tavanın bir hane üstü REDDEDİLİR" 1 "$O
-try: paketle(b'<x/>', 'A' * (AD_TAVANI - 3))
-except PaketHatasi: raise SystemExit(1)"
-kapi "H3 · ölçülmüş RET uzunluğu (56) reddedilir" 1 "$O
-try: paketle(b'<x/>', 'A' * 52)
-except PaketHatasi: raise SystemExit(1)"
-kapi "H4 · tavan ölçülmüş değerde, tahminle yükseltilmemiş" 0 "$O
-assert AD_TAVANI == 47, AD_TAVANI"
-kapi "H4b · 🔴 hata metni ÖLÇMEDİĞİ kesinliği iddia etmez (K01)" 0 "$O
+echo "E · yarım paket ağa çıkmaz"
+kapi "tam paket geçer (izin yolu)" 0 "$G
+_paketi_dogrula($_TAM)"
+
+for alan in fileName binaryData contentType hash currentDate; do
+  kapi "eksik '$alan' REDDEDİLİR" 0 "$G
+p = dict($_TAM); del p['$alan']
 try:
-    paketle(b'<x/>', 'A' * 52)
-except PaketHatasi as e:
-    m = str(e)
-else:
-    raise SystemExit(1)
-assert 'ÖLÇÜLMEDİ' in m, m
-# Bagimsiz gozun tur-1 bulgusu: eski metin 'e-Logo bu adi reddeder' diyordu —
-# 48-55 arasi icin elimizde olcum YOK, kapi guvenli tarafta duruyor, o kadar.
-assert 'reddeder' not in m, 'olculmemis kesinlik geri gelmis: ' + m"
-kapi "H5 · adda zarfı bozacak karakter reddedilir (ad artık XML'den geliyor)" 1 "$O
-try: paketle(b'<x/>', 'a&b')
-except PaketHatasi: raise SystemExit(1)"
-kapi "H6 · adda yazdırılamaz karakter reddedilir" 1 "$O
-try: paketle(b'<x/>', 'a\\nb')
-except PaketHatasi: raise SystemExit(1)"
+    _paketi_dogrula(p); raise SystemExit(1)
+except GonderimHatasi as e:
+    assert '$alan' in str(e), str(e)"
+  kapi "boş '$alan' REDDEDİLİR (yalnız boşluk da eksiktir)" 0 "$G
+p = dict($_TAM); p['$alan'] = '   '
+try:
+    _paketi_dogrula(p); raise SystemExit(1)
+except GonderimHatasi: pass"
+done
 
-echo "I · 🔴 ÇAĞIRAN KİM — gövde fiilen bu yolu kullanıyor mu (mutasyon)"
-kapi "I1 · gönderici dosya adına (yol.stem) DÜŞMÜYOR" 0 "$O
-import re
-ham = open('elogo_gonder.py', encoding='utf-8').read().splitlines()
-# 🔴 Yorumlar AYIKLANIR: eski kusurlu satır belgelemek için yorumda anılıyor.
-#    Desen-eşlemesi niyet görmez, dizgi görür — bu filoda ölçülmüş sahte-blok sınıfı.
-k = '\\n'.join(l for l in ham if not l.lstrip().startswith('#'))
-assert 'yol.stem' not in k, 'eski kusurlu varsayilan KODDA geri gelmis'"
-kapi "I2 · gönderici türeticiyi fiilen çağırıyor" 0 "$O
-k = open('elogo_gonder.py', encoding='utf-8').read()
-assert 'belge_adini_turet' in k, 'turetici cagrilmiyor — kurdum ama kosmuyor'
-assert 'or belge_adini_turet(ham)' in k, 'varsayilan yola baglanmamis'"
-kapi "I4 · kuru koşumda ad-türetme dalı ÖLÜ DEĞİL (tek argümanla çağrılabilir)" 0 "$O
-import tempfile, pathlib, io, contextlib, elogo_paket
-f = pathlib.Path(tempfile.mkdtemp()) / 'alakasiz-uzun-dosya-adi.xml'
-f.write_bytes(b'<Invoice $NS><cbc:ID>FTR0000000000009</cbc:ID></Invoice>')
-t = io.StringIO()
-with contextlib.redirect_stdout(t):
-    rc = elogo_paket._main([str(f)])          # ad VERİLMEDİ — türetme dalı
-assert rc == 0, rc
-assert 'FTR0000000000009.zip' in t.getvalue(), t.getvalue()
-assert 'alakasiz' not in t.getvalue()"
-kapi "I3 · paketleyicinin kendi kuru koşumu da dosya adına düşmüyor" 0 "$O
-import re, inspect, elogo_paket
-k = inspect.getsource(elogo_paket)
-assert not re.search(r'else\\s+yol\\.stem', k), 'kuru kosumda eski varsayilan duruyor'"
+kapi "özet 32 haneden KISA → RED" 0 "$G
+p = dict($_TAM); p['hash'] = 'ABC'
+try:
+    _paketi_dogrula(p); raise SystemExit(1)
+except GonderimHatasi: pass"
+kapi "özet 32 haneden UZUN (SHA-256) → RED" 0 "$G
+p = dict($_TAM); p['hash'] = 'A'*64
+try:
+    _paketi_dogrula(p); raise SystemExit(1)
+except GonderimHatasi: pass"
+kapi "özet 32 hane ama HEX DEĞİL → RED" 0 "$G
+p = dict($_TAM); p['hash'] = 'Z'*32
+try:
+    _paketi_dogrula(p); raise SystemExit(1)
+except GonderimHatasi: pass"
+kapi "küçük harfli hex kabul edilir (yanlış-RED yok)" 0 "$G
+p = dict($_TAM); p['hash'] = '0123456789abcdef0123456789abcdef'
+_paketi_dogrula(p)"
+
+# 🔴 BÜTÜNLEŞME — kapı ÜRETİM YOLUNDAN kalkarsa bu vaka kırmızı yakar
+kapi "BAĞ · zarf_kur yarım paketi ağa ÇIKARMAZ" 0 "$G
+p = dict($_TAM); p['hash'] = ''
+try:
+    zarf_kur('sid', p); raise SystemExit(1)
+except GonderimHatasi: pass"
+kapi "BAĞ · zarf_kur tam paketle zarfı kurar" 0 "$G
+z = zarf_kur('sid', $_TAM)
+assert 'SendDocument' in z or 'sid' in z, z[:120]"
 
 echo
 echo "toplam=$((GECEN+DUSEN)) geçen=$GECEN düşen=$DUSEN"
