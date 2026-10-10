@@ -55,21 +55,25 @@ fi
 # 0.5.2 (A320, NÂZIR): KOSU_KANON verilmişse CANLI crontab da kanona karşı lint'lenir — canlıda olup kanonda olmayan satır (K7)
 # ve sarılmamış kilitli iş (K8) yalnız canlıda görünür (nazir: canlı 7 / kanon 5, iki federe flock satırı hiç anılmıyordu).
 # Kırmızılar yalnız kanondan sayılır (canlı lint aynı satırları ikinci kez saymasın); K7/K8 canlıdan. Kanon yoksa tek lint = canlı.
-KR=0; K6=0; K7=0; K8=0
+KR=0; K6=0; K7=0; K8=0; CANLI_YOK=0
 if [ "${KOSU_KANON_LINT:-1}" != 0 ] && [ -f "$HERE/kanon-lint.sh" ]; then
   # sarmalayıcı kutunun İÇİNDE koşar → --kutu-ici: K6 (gözlem komutu bu kutuda yok) da ölçülür (bağımsız göz tur 3)
   LINT_CIKTI="$(bash "$HERE/kanon-lint.sh" "$KANON" --kutu-ici 2>/dev/null)"
   KR=$(printf '%s\n' "$LINT_CIKTI" | grep -c 'KIRMIZI'); K6=$(printf '%s\n' "$LINT_CIKTI" | grep -c 'SARI    K6')
   if [ -n "$KANON_GECICI" ]; then K8=$(printf '%s\n' "$LINT_CIKTI" | grep -c 'SARI    K8')
   else
-    CANLI_LINT="$($CRONTAB_KOMUT 2>/dev/null | bash "$HERE/kanon-lint.sh" - --kanon "$KANON" 2>/dev/null)"
-    K7=$(printf '%s\n' "$CANLI_LINT" | grep -c 'SARI    K7'); K8=$(printf '%s\n' "$CANLI_LINT" | grep -c 'SARI    K8')
+    # canlı okunamazsa (crontab rc≠0) boş tablo lint'e verilmez: kanondaki her satır sahte "canlıda yok" K7 olurdu (bağımsız göz tur 1).
+    # Ölçülemedi diye söylenir, K7/K8 sayılmaz.
+    if CANLI_TABLO="$($CRONTAB_KOMUT 2>/dev/null)"; then
+      CANLI_LINT="$(printf '%s\n' "$CANLI_TABLO" | bash "$HERE/kanon-lint.sh" - --kanon "$KANON" 2>/dev/null)"
+      K7=$(printf '%s\n' "$CANLI_LINT" | grep -c 'SARI    K7'); K8=$(printf '%s\n' "$CANLI_LINT" | grep -c 'SARI    K8')
+    else CANLI_YOK=1; fi
   fi
 fi
 # TEK özet satır (çift bildirim yok): kanonda kırmızı · kendi kutusunda çalışmayan gözlem komutu (K6) · bu koşunun kendi K1'i (--kilit + içte flock,
 # kanonda görünmese de — çağrı kanondan farklı olabilir). Renkler ayrı: K6 sarıdır. İş engellenmez, kayıt değişmez.
-if [ "$KR" -gt 0 ] || [ "$K6" -gt 0 ] || [ "$K7" -gt 0 ] || [ "$K8" -gt 0 ] || [ "$OZ_K1" -eq 1 ]; then
-  echo "kosu-sar: kanon-lint — $([ "$KR" -gt 0 ] && printf 'KIRMIZI %s' "$KR" || printf 'kırmızı yok')$([ "$K6" -gt 0 ] && printf ' · SARI K6 gözlem komutu bu kutuda yok %s' "$K6")$([ "$K7" -gt 0 ] && printf ' · SARI K7 canlı ile kanon farklı %s' "$K7")$([ "$K8" -gt 0 ] && printf ' · SARI K8 sarılmamış kilitli iş %s' "$K8")$([ "$OZ_K1" -eq 1 ] && printf ' · K1 öz-denetim: bu koşuda --kilit ile komutun içinde flock (%s) — iş hiç koşmaz, içteki flock kalksın' "$IS") — bak: kanon-lint.sh ${KOSU_KANON:-<canlı crontab>} --kutu-ici$([ -n "${KOSU_KANON:-}" ] && printf ' · crontab -l | kanon-lint.sh - --kanon %s' "$KOSU_KANON")" >&2
+if [ "$KR" -gt 0 ] || [ "$K6" -gt 0 ] || [ "$K7" -gt 0 ] || [ "$K8" -gt 0 ] || [ "$CANLI_YOK" -eq 1 ] || [ "$OZ_K1" -eq 1 ]; then
+  echo "kosu-sar: kanon-lint — $([ "$KR" -gt 0 ] && printf 'KIRMIZI %s' "$KR" || printf 'kırmızı yok')$([ "$K6" -gt 0 ] && printf ' · SARI K6 gözlem komutu bu kutuda yok %s' "$K6")$([ "$K7" -gt 0 ] && printf ' · SARI K7 canlı ile kanon farklı %s' "$K7")$([ "$K8" -gt 0 ] && printf ' · SARI K8 sarılmamış kilitli iş %s' "$K8")$([ "$CANLI_YOK" -eq 1 ] && printf ' · canlı crontab okunamadı: K7/K8 ölçülemedi')$([ "$OZ_K1" -eq 1 ] && printf ' · K1 öz-denetim: bu koşuda --kilit ile komutun içinde flock (%s) — iş hiç koşmaz, içteki flock kalksın' "$IS") — bak: kanon-lint.sh ${KOSU_KANON:-<canlı crontab>} --kutu-ici$([ -n "${KOSU_KANON:-}" ] && printf ' · crontab -l | kanon-lint.sh - --kanon %s' "$KOSU_KANON")" >&2
 fi
 _an() { date -u -Iseconds; }   # 0.4.1: damga HEP UTC (+00:00) — cron satırları UTC, elle koşu +03:00 çıkıyordu, aynı dosyada iki dilim (A303)
 

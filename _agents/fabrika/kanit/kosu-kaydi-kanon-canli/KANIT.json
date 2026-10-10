@@ -1,7 +1,7 @@
 {
   "is": "kosu-kaydi-kanon-canli",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-10T23:03:26+03:00",
+  "guncelleme": "2026-10-10T23:06:36+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -24,7 +24,7 @@
       "etiket": "nazir-ornegi",
       "asama": "sonra",
       "dosya": "olcum-nazir-ornegi-sonra.txt",
-      "sha256": "c8913f747f55cd7dd5c5ea9ea101624aa2974cbabcf856057a8f5ca4a9f0fbb3",
+      "sha256": "5427e546f4996b901c3e43b1184f652c3b5736a801cef2a61a167f105f44cfc5",
       "komut": [
         "bash",
         "-c",
@@ -32,7 +32,7 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T23:02:51+03:00",
+      "zaman": "2026-10-10T23:06:01+03:00",
       "sure_sn": 0.1
     },
     {
@@ -40,31 +40,31 @@
       "etiket": "lint-sinavi",
       "asama": "sonra",
       "dosya": "olcum-lint-sinavi-sonra.txt",
-      "sha256": "67e2934fc3c998bb379990bc071bc2e7261ff76e6b766828d6adf23ebf4a8137",
+      "sha256": "f3eea606b0c5bbba610f897d4350afa9ee4b9924c76959708d7c3b16fd64d265",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/kanon-lint.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T23:02:53+03:00",
-      "sure_sn": 1.6
+      "zaman": "2026-10-10T23:06:03+03:00",
+      "sure_sn": 2.5
     },
     {
       "tur": "olcum",
       "etiket": "sarmalayici-sinavi",
       "asama": "sonra",
       "dosya": "olcum-sarmalayici-sinavi-sonra.txt",
-      "sha256": "253fadd9bff2c5339dee688b405a7ea1081ce48e156f33330e0230f251e5f517",
+      "sha256": "ab5bda320322589bfaf778fd110c845a010f6fcaa90d4db6bf12682ed66c7d7b",
       "komut": [
         "bash",
         "kosu-kaydi/scripts/kosu-sar.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-10T23:03:26+03:00",
-      "sure_sn": 33.6
+      "zaman": "2026-10-10T23:06:36+03:00",
+      "sure_sn": 32.6
     }
   ],
-  "imza": "fca70123c1e20fcb8fdd75280c16ebb2844a7d7dde2d1cce59f60d4c09d0576f"
+  "imza": "6dc538f635ccec3254a972e1b8c54b498ed5c7afb789d988ef586d2e456af2b0"
 }

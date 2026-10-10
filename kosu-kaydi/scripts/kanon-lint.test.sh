@@ -93,6 +93,8 @@ printf '%s\n' "*/5 * * * * /usr/bin/flock -n /x/fed.lock bash /x/federe.sh" > "$
 kos "$T/k8a"; ol "K8: mutlak yollu flock da" "$(printf '%s' "$CIKTI" | grep -c 'SARI    K8')" "1"
 printf '%s\n' "*/5 * * * * bash /x/flockluk.sh" "# flock -n /x.lock yorumda" > "$T/k8b"
 kos "$T/k8b"; ol "K8 altın: alt dizge 'flock' ve yorum satırı K8 değil" "$(printf '%s' "$CIKTI" | grep -c 'SARI    K8')" "0"
+printf '%s\n' "*/5 * * * * bash /x/a.sh # flock burada kullanılmaz" > "$T/k8c"
+kos "$T/k8c"; ol "K8 altın: satır SONU yorumundaki flock K8 değil" "$(printf '%s' "$CIKTI" | grep -c 'SARI    K8')" "0"
 kos "$T/k2"; ol "K8 altın: SARILI satırdaki flock K8 değil (K2'nin konusu)" "$(printf '%s' "$CIKTI" | grep -c 'SARI    K8')/$(printf '%s' "$CIKTI" | grep -c 'SARI    K2')" "0/1"
 
 echo "════ K7 · canlı ↔ kanon farkı (SARI, yalnız --kanon) ════"

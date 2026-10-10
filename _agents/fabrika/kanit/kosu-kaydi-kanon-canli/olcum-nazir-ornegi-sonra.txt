@@ -1,5 +1,5 @@
 $ bash -c bash kosu-kaydi/scripts/kanon-lint.sh - --kutu-ici --kanon /config/.claude/jobs/d69a1b07/tmp/k52/kanon < /config/.claude/jobs/d69a1b07/tmp/k52/canli
-# rc=0 sure=0.1s zaman=2026-10-10T23:02:51+03:00
+# rc=0 sure=0.1s zaman=2026-10-10T23:06:01+03:00
 --- stdout ---
 △ SARI    K7 satır 6: kanon dışı: canlıda var, kanonda yok — elle kurulmuş, recreate'te kaybolur; ya kanona yaz ya kaldır
 △ SARI    K8 satır 6: sarılmamış kilitli iş (flock) — atlandı mı koştu mu kayıtta görünmez; kosu-sar --kilit <dosya> ile sar
