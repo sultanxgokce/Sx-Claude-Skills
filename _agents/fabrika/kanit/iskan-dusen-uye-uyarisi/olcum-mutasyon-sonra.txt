@@ -1,0 +1,8 @@
+$ bash -c echo 'uyarı çağrısı silinince (mutasyon):'; bash /config/.claude/jobs/d69a1b07/tmp/mut-iskan/iskan.test.sh 2>&1 | grep -E 'A323' | cut -c1-110
+# rc=0 sure=34.3s zaman=2026-10-11T10:05:02+03:00
+--- stdout ---
+uyarı çağrısı silinince (mutasyon):
+  FAIL - A323: düşen üye uyarısı yok ya da rc bozuk (rc=3)
+  FAIL - A323: ISKAN_EY_DUSME=ret fail-closed değil (rc=3)
+  ok - A323 altın: roster Gama'yı taşıyınca uyarı yok, rezerv-uuid mevcut kayıttan yeniden kullanıldı
+--- stderr ---

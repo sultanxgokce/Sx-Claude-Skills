@@ -657,6 +657,86 @@ rc=$?
   && ok "ekip-yerlestir roster-kaynaksız: dürüst-kırmızı rc=1 + 'roster-kaynağı yok' + sahte-ekip adı basılmadı (D6 tuzak-fix)" \
   || bad "ekip-yerlestir roster-kaynaksız: dürüst-kırmızı sözleşmesi kırık (rc=$rc)"
 
+# 24c. A323 (BASİRET/ENİS 2026-10-10): mevcut kayıtta olup roster'da olmayan üye SESSİZCE düşmesin —
+#      repo-kiracı kaydında denekGama var, roster'da yok → '[sarı] uye-dusuyor: denekGama'; ISKAN_EY_DUSME=ret → rc=1;
+#      altın: roster Gama'yı da taşıyorsa uyarı yok.
+mkdir -p "$EY_REPO/infra/iskan-registry"
+cat > "$EY_REPO/infra/iskan-registry/eytest.yaml" <<'EOF'
+proje: eytest
+uyeler:
+  - id: denekAlfa
+    session_id: 11111111-1111-4111-8111-111111111111
+  - id: denekBeta
+    session_id: 22222222-2222-4222-8222-222222222222
+  - id: denekGama
+    session_id: 33333333-3333-4333-8333-333333333333
+EOF
+git -C "$EY_REPO" -c user.email=t@t -c user.name=t add -A 2>/dev/null
+git -C "$EY_REPO" -c user.email=t@t -c user.name=t commit -qm reg 2>/dev/null
+out="$(ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye" ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --dry-run 2>&1)"; rc=$?
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q '\[sarı\] uye-dusuyor: denekGama' \
+  && ok "A323: roster dışı mevcut üye (denekGama) düşerken SARI uyarı basıldı, dry-run rc=3 korundu" \
+  || bad "A323: düşen üye uyarısı yok ya da rc bozuk (rc=$rc)"
+out="$(ISKAN_EY_DUSME=ret ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye" ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --dry-run 2>&1)"; rc=$?
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'uye-dusme-reddi' \
+  && ok "A323: ISKAN_EY_DUSME=ret → fail-closed rc=1 + 'uye-dusme-reddi'" \
+  || bad "A323: ISKAN_EY_DUSME=ret fail-closed değil (rc=$rc)"
+out="$(ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye denekGama:uye" ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --dry-run 2>&1)"; rc=$?
+[ "$rc" = "3" ] && ! printf '%s' "$out" | grep -q 'uye-dusuyor' && printf '%s' "$out" | grep -q 'denekGama.*rezerv-uuid: mevcut' \
+  && ok "A323 altın: roster Gama'yı taşıyınca uyarı yok, rezerv-uuid mevcut kayıttan yeniden kullanıldı" \
+  || bad "A323 altın bozuk (rc=$rc)"
+# 24d. A323 APPLY yolu (bağımsız göz tur 1): --apply + ISKAN_EY_DUSME=ret → rc=1 + 'uye-dusme-reddi' VE repo
+#      kaydı BAYT-değişmedi (kayıt yazılmadı kanıtı md5 ile); --apply ret'siz → SARI uyarı apply çıktısında da var,
+#      kayıt yine değişmedi (host bilinçli-bozuk: scaffold host-taşıması düşer, dokunuş sıfır).
+reg_md5_once="$(md5sum "$EY_REPO/infra/iskan-registry/eytest.yaml" | cut -d' ' -f1)"
+out="$(ISKAN_EY_DUSME=ret ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye" ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --apply 2>&1)"; rc=$?
+reg_md5_sonra="$(md5sum "$EY_REPO/infra/iskan-registry/eytest.yaml" | cut -d' ' -f1)"
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'uye-dusme-reddi' && [ "$reg_md5_once" = "$reg_md5_sonra" ] \
+  && ok "A323 apply+ret: rc=1 + 'uye-dusme-reddi' + repo kaydı bayt-değişmedi (md5 eş)" \
+  || bad "A323 apply+ret: kayıt değişti ya da sözleşme kırık (rc=$rc, md5 $reg_md5_once→$reg_md5_sonra)"
+out="$(ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye" ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --apply 2>&1)"; rc=$?
+reg_md5_sonra="$(md5sum "$EY_REPO/infra/iskan-registry/eytest.yaml" | cut -d' ' -f1)"
+printf '%s' "$out" | grep -q '\[sarı\] uye-dusuyor: denekGama' && [ "$reg_md5_once" = "$reg_md5_sonra" ] \
+  && ok "A323 apply (ret'siz): SARI uyarı apply çıktısında da basıldı; kayıt değişmedi (host bozuk, dokunuş sıfır)" \
+  || bad "A323 apply (ret'siz): uyarı apply yolunda yok ya da kayıt değişti (rc=$rc)"
+# 24e. A323 'kayıt biçimi değişmez': üretici (_ey_iskan_registry_icerik) sabit girdiyle ALTIN çıktıya bayt-eş.
+#      Üretici bu işte DEĞİŞMEDİ; altın biçim donduruldu ki ileride sessizce değişirse burası kırmızıya dönsün.
+reg_uretim="$(EY_PROJE=eytest EY_CNAME=cloudtop-eytest EY_HOSTNAME=eytest.mmepanel.com EY_PORT=9449 EY_HOST_CFG=/opt/cloudtop/config-eytest \
+  EY_HEDEF_ICI=/config/projects/eytest EY_REG_MEVCUT="$(cat "$EY_REPO/infra/iskan-registry/eytest.yaml")" \
+  bash -c "source <(sed -n '/^_ey_registry_alan()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); source <(sed -n '/^_ey_iskan_registry_icerik()/,/^}/p' '$SCRIPT_DIR/iskan.sh'); printf 'denekAlfa\tyonetici\t11111111-1111-4111-8111-111111111111\ndenekBeta\tuye\t22222222-2222-4222-8222-222222222222\n' | _ey_iskan_registry_icerik" | grep -vE '^#')"
+reg_altin='proje: eytest
+container_adi: cloudtop-eytest
+hostname: eytest.mmepanel.com
+port: 9449
+config_dir: /opt/cloudtop/config-eytest
+repo_yolu: /config/projects/eytest
+ekip_registry_pointer: _agents/handoff/ekip-registry.yaml
+cf_access_app: eytest.mmepanel.com
+machine_identity_ref: null
+uyeler:
+  - id: denekAlfa
+    tmux: "denekAlfa:0"
+    cwd: /config/projects/eytest
+    worktree_branch: null
+    session_id: 11111111-1111-4111-8111-111111111111
+    permission_mode: default
+  - id: denekBeta
+    tmux: "denekBeta:0"
+    cwd: /config/projects/eytest
+    worktree_branch: null
+    session_id: 22222222-2222-4222-8222-222222222222
+    permission_mode: default'
+[ "$reg_uretim" = "$reg_altin" ] \
+  && ok "A323 kayıt-biçimi: üretici çıktısı altın biçime bayt-eş (biçim değişmedi)" \
+  || { bad "A323 kayıt-biçimi: üretici çıktısı altından sapıyor"; diff <(printf '%s\n' "$reg_altin") <(printf '%s\n' "$reg_uretim") | head -8; }
+git -C "$EY_REPO" rm -q -r --cached infra/iskan-registry >/dev/null 2>&1; find "$EY_REPO/infra/iskan-registry" -depth -delete
+git -C "$EY_REPO" -c user.email=t@t -c user.name=t commit -qm temizle >/dev/null 2>&1
+
 # 25. ekip-yerlestir NEGATİF-KAPI (K4 TAM-STRING): bilinmeyen ad → rc≠0 + 'kayitsiz-proje' marker;
 #     önek ('eytes') ve case-farkı ('EYTEST') da reddedilir (fuzzy yasak)
 out="$(ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \

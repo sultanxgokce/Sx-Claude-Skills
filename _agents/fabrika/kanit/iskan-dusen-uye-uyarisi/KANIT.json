@@ -1,0 +1,56 @@
+{
+  "is": "iskan-dusen-uye-uyarisi",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-11T10:07:46+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-taban",
+      "asama": "once",
+      "dosya": "olcum-sinav-taban-once.txt",
+      "sha256": "60b9eb0e3fabdfe81bf3a4aa5e8cb8b4c154079f1d11a3ec1aa0d82717a95eaa",
+      "komut": [
+        "bash",
+        "-c",
+        "echo 'değişmemiş kopya (origin/main = kurulu, bayt-eş):'; grep -E 'FAIL|== .* geçti' /config/.claude/jobs/d69a1b07/tmp/iskan-test-baseline.out | cut -c1-110; echo '(5 kırmızı bu işten ÖNCE de var: kur dry-run zinciri · slug-kapısı · baslat-claude stub — ortam/kur hattı, ekip-yerlestir değil)'"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-11T10:04:28+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-taban",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-taban-sonra.txt",
+      "sha256": "6ed76214b866a5b5cc1e5f8b7c204ec21a20ceeb295bd5370423442962234969",
+      "komut": [
+        "bash",
+        "-c",
+        "echo 'değişik kopya (tur 2):'; grep -E 'A323|FAIL|== .* geçti' /config/.claude/jobs/d69a1b07/tmp/iskan-test2.out | cut -c1-120; echo '(kalan 4 kırmızı taban kümesinin alt kümesi — kur hattı/stub, bu işten önce de var; A323 6/6: dry-run · ret · altın · apply+ret md5-eş · apply uyarı · kayıt-biçimi altın)'"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-11T10:07:46+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-sonra.txt",
+      "sha256": "ba88e787547bc0690f88d8143b513540c6bebf0c82396b93c85a09ba0563c603",
+      "komut": [
+        "bash",
+        "-c",
+        "echo 'uyarı çağrısı silinince (mutasyon):'; bash /config/.claude/jobs/d69a1b07/tmp/mut-iskan/iskan.test.sh 2>&1 | grep -E 'A323' | cut -c1-110"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-11T10:05:02+03:00",
+      "sure_sn": 34.3
+    }
+  ],
+  "imza": "d79fdbdbff29a48f0f8de3808ad64eb7abc0622b47044399097fd150918d58fb"
+}

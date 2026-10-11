@@ -1,0 +1,19 @@
+{
+  "is": "iskan-dusen-uye-uyarisi",
+  "cumle": "iskan.sh ekip-yerlestir: mevcut kayıtta olup roster'da olmayan üye SESSİZCE düşüyor (A323, BASİRET/ENİS). İlk dilim: düşen her üye adıyla SARI uyarı (dry-run + apply), ISKAN_EY_DUSME=ret ile fail-closed; kayıt biçimi değişmez",
+  "istedi": "BASIRET",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-11T10:00:27+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

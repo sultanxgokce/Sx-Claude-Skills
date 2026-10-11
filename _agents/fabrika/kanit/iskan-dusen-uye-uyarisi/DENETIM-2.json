@@ -1,0 +1,21 @@
+{
+  "tur": 2,
+  "is": "iskan-dusen-uye-uyarisi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-11T10:08:09+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 20333,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Roster dışında kalan mevcut üyeleri adlarıyla SARI bildiren ve ISKAN_EY_DUSME=ret ile yazım öncesinde rc=1 dönen mekanizma dry-run ile apply yollarına eklenmiş. Önceki turun eksikleri apply, bayt-değişmezliği ve kayıt biçimi sınavlarıyla kapatılmış; yalnız bu işle ilgisiz eski kırmızılar kaldığından değişiklik üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt içermiyor. Önce/sonra ölçüm çifti A323 kapsamının 0 doğrulanmış durumdan 6/6 yeşile çıktığını; gerçekçi üç üyeli kayıtla dry-run uyarısını, ret kapısını, apply uyarısını, apply+ret öncesi/sonrası MD5 eşitliğini ve kayıt biçiminin altın çıktıya bayt-eşliğini gösteriyor. Mutasyon ölçümü uyarı çağrısı kaldırıldığında uyarı ve fail-closed sınavlarının kırıldığını doğruluyor. Genel sınavdaki dört kırmızı, önceki taban kümesindeki bu kartla ilgisiz kur/stub sorunlarının alt kümesi."
+  }
+}
