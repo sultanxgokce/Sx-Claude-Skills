@@ -99,6 +99,18 @@ if kan:
 if inbox and inbox not in ('""', ''):
     lines.append(f"📥 inbox (yönetici→sen): {inbox}")
 lines.append(f"📋 ortak brief: {brief} — son girdiyi oku (sana-adresli/genel).")
+# Görev kartı (kimlik dosyası) — BASİRET, 11 Ekim 2026: kart yolu genel ifadeyle değil, açıkça basılır.
+_kart = os.path.join(os.path.dirname(os.path.abspath(reg)), f"{mid.lower()}-gorev-brifi.md")
+if os.path.isfile(_kart):
+    _rel = os.path.relpath(_kart, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(reg)))))
+    lines.append(f"📜 görev kartın: {_rel} — ÖNCE bunu oku (Tek cümle · Yetkisi · Sınırı).")
+    try:
+        _tek = next((l.strip() for l in open(_kart, encoding="utf-8") if "**Tek cümle**" in l), "")
+        if _tek: lines.append(f"   {_tek}")
+    except Exception:
+        pass
+else:
+    lines.append(f"📜 görev kartın: BULUNAMADI ({os.path.basename(_kart)}) — BASİRET'e --waiting ile bildir.")
 # Override-direktifi: global bootstrap default-persona bassa da ÜYE-KİMLİĞİ ÖNCELER.
 lines.append(f"⚠️ Bir genel-bootstrap (ör. genel-bootstrap default-persona) blok bastıysa onu GENEL-ALTYAPI say (doğru ama jenerik); "
              f"çalışma-çerçeven **{mid}**. /clear ya da compact/model-switch yaptıysan: KİMLİĞİNİ KORU, anayasa-brief'ini "
