@@ -1611,6 +1611,30 @@ print(" ".join(out))
 '
 }
 
+# _ey_dusen_uyeler <reg_mevcut> <roster> — mevcut kayıtta olup roster'da OLMAYAN üyeleri basar (A323, BASİRET/ENİS
+# 2026-10-10): kayıt roster'dan yeniden üretildiği için roster dışı üye (ör. koltuğu açılmamış REZERVE kimlik) SESSİZCE
+# düşüyordu; koltuk açıldığı gün kimlik uydurulurdu (K3). Her düşen üye adıyla SARI uyarı (dry-run + apply);
+# ISKAN_EY_DUSME=ret verilirse fail-closed rc=1 (kayıt yazılmaz). Yan-etki: EY_DUSEN_UYELER (boşlukla ayrık).
+_ey_dusen_uyeler() {
+  local reg="$1" roster="$2" id girdi var
+  EY_DUSEN_UYELER=""
+  [ -n "$reg" ] || return 0
+  while IFS= read -r id; do
+    [ -n "$id" ] || continue
+    var=0; for girdi in $roster; do [ "${girdi%%:*}" = "$id" ] && { var=1; break; }; done
+    [ "$var" -eq 1 ] || EY_DUSEN_UYELER="${EY_DUSEN_UYELER}${EY_DUSEN_UYELER:+ }$id"
+  done < <(printf '%s\n' "$reg" | sed -nE 's/^[[:space:]]*-[[:space:]]*id:[[:space:]]*([^[:space:]]+)[[:space:]]*$/\1/p')
+  [ -n "$EY_DUSEN_UYELER" ] || return 0
+  for id in $EY_DUSEN_UYELER; do
+    echo "[sarı] uye-dusuyor: $id — mevcut kayıtta var, roster'da YOK; yeni kayıtta olmayacak (session_id dahil). Rezerve koltuksa roster'a/ISKAN_EY_ROSTER'a ekle (A323)"
+  done
+  if [ "${ISKAN_EY_DUSME:-}" = "ret" ]; then
+    echo "[kırmızı] uye-dusme-reddi: ISKAN_EY_DUSME=ret — $(printf '%s' "$EY_DUSEN_UYELER" | wc -w | tr -d ' ') üye düşecekti, kayıt YAZILMADI" >&2
+    return 1
+  fi
+  return 0
+}
+
 # _ey_uye_satirlari <roster> <reg_mevcut> — roster'ı "rol\tgorev\tuuid\tkaynak" satırlarına açar;
 # uuid mevcut-kayıttan YENİDEN-KULLANILIR (asla yeniden-üretilmez), yoksa uuid4 üretilir (küçük-harf).
 # Yan-etki (bilinçli — subshell'de yan-etki kaybolur): EY_UYE_SATIRLARI + EY_YONETICI + EY_UYE_SAYISI.
@@ -1805,6 +1829,7 @@ cmd_ekip_yerlestir() {
 
   # roster satırları: "rol<TAB>gorev<TAB>uuid<TAB>kaynak" (uuid: mevcut-kayıttan YENİDEN-KULLAN, yoksa üret)
   _ey_uye_satirlari "$roster" "$reg_mevcut" || exit 1
+  _ey_dusen_uyeler "$reg_mevcut" "$roster" || exit 1   # A323: roster dışı mevcut üye sessiz düşmez
   local rol gorev sid kaynak
 
   # ── DRY-RUN: tam-önizleme, SIFIR-yazım (plan-exit=3) ─────────────────────────────────────

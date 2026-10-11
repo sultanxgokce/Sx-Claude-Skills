@@ -657,6 +657,40 @@ rc=$?
   && ok "ekip-yerlestir roster-kaynaksız: dürüst-kırmızı rc=1 + 'roster-kaynağı yok' + sahte-ekip adı basılmadı (D6 tuzak-fix)" \
   || bad "ekip-yerlestir roster-kaynaksız: dürüst-kırmızı sözleşmesi kırık (rc=$rc)"
 
+# 24c. A323 (BASİRET/ENİS 2026-10-10): mevcut kayıtta olup roster'da olmayan üye SESSİZCE düşmesin —
+#      repo-kiracı kaydında denekGama var, roster'da yok → '[sarı] uye-dusuyor: denekGama'; ISKAN_EY_DUSME=ret → rc=1;
+#      altın: roster Gama'yı da taşıyorsa uyarı yok.
+mkdir -p "$EY_REPO/infra/iskan-registry"
+cat > "$EY_REPO/infra/iskan-registry/eytest.yaml" <<'EOF'
+proje: eytest
+uyeler:
+  - id: denekAlfa
+    session_id: 11111111-1111-4111-8111-111111111111
+  - id: denekBeta
+    session_id: 22222222-2222-4222-8222-222222222222
+  - id: denekGama
+    session_id: 33333333-3333-4333-8333-333333333333
+EOF
+git -C "$EY_REPO" -c user.email=t@t -c user.name=t add -A 2>/dev/null
+git -C "$EY_REPO" -c user.email=t@t -c user.name=t commit -qm reg 2>/dev/null
+out="$(ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye" ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --dry-run 2>&1)"; rc=$?
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q '\[sarı\] uye-dusuyor: denekGama' \
+  && ok "A323: roster dışı mevcut üye (denekGama) düşerken SARI uyarı basıldı, dry-run rc=3 korundu" \
+  || bad "A323: düşen üye uyarısı yok ya da rc bozuk (rc=$rc)"
+out="$(ISKAN_EY_DUSME=ret ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye" ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --dry-run 2>&1)"; rc=$?
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'uye-dusme-reddi' \
+  && ok "A323: ISKAN_EY_DUSME=ret → fail-closed rc=1 + 'uye-dusme-reddi'" \
+  || bad "A323: ISKAN_EY_DUSME=ret fail-closed değil (rc=$rc)"
+out="$(ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye denekGama:uye" ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --dry-run 2>&1)"; rc=$?
+[ "$rc" = "3" ] && ! printf '%s' "$out" | grep -q 'uye-dusuyor' && printf '%s' "$out" | grep -q 'denekGama.*rezerv-uuid: mevcut' \
+  && ok "A323 altın: roster Gama'yı taşıyınca uyarı yok, rezerv-uuid mevcut kayıttan yeniden kullanıldı" \
+  || bad "A323 altın bozuk (rc=$rc)"
+git -C "$EY_REPO" rm -q -r --cached infra/iskan-registry >/dev/null 2>&1; find "$EY_REPO/infra/iskan-registry" -depth -delete
+git -C "$EY_REPO" -c user.email=t@t -c user.name=t commit -qm temizle >/dev/null 2>&1
+
 # 25. ekip-yerlestir NEGATİF-KAPI (K4 TAM-STRING): bilinmeyen ad → rc≠0 + 'kayitsiz-proje' marker;
 #     önek ('eytes') ve case-farkı ('EYTEST') da reddedilir (fuzzy yasak)
 out="$(ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \

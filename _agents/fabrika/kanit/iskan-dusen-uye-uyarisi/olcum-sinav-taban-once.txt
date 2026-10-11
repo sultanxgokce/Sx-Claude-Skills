@@ -1,0 +1,12 @@
+$ bash -c echo 'değişmemiş kopya (origin/main = kurulu, bayt-eş):'; grep -E 'FAIL|== .* geçti' /config/.claude/jobs/d69a1b07/tmp/iskan-test-baseline.out | cut -c1-110; echo '(5 kırmızı bu işten ÖNCE de var: kur dry-run zinciri · slug-kapısı · baslat-claude stub — ortam/kur hattı, ekip-yerlestir değil)'
+# rc=0 sure=0.0s zaman=2026-10-11T10:04:28+03:00
+--- stdout ---
+değişmemiş kopya (origin/main = kurulu, bayt-eş):
+  FAIL - baslat-claude.sh: exec-argümanları sözleşme-dışı (rc=0: STUB-CLAUDE --resume 12345678-1234-123
+  FAIL - kur --dry-run: zincir-planında eksik adım: [1/8: yeni-proje] [2/8: durak1-cloudtop-pr] [3/8: iskan-
+  FAIL - kur --dry-run: DURAK-1 planda yok
+  FAIL - kur slug-kapısı: dry-run uyarı-sözleşmesi kırık (rc=3)
+  FAIL - kur slug-kapısı: --dry-run --benimse mesajı yanıltıcı (rc=3)
+== 254 geçti / 5 kaldı ==
+(5 kırmızı bu işten ÖNCE de var: kur dry-run zinciri · slug-kapısı · baslat-claude stub — ortam/kur hattı, ekip-yerlestir değil)
+--- stderr ---

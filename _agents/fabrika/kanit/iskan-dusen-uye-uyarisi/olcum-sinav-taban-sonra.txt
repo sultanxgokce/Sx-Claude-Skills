@@ -1,0 +1,13 @@
+$ bash -c echo 'değişik kopya:'; grep -E 'A323|FAIL|== .* geçti' /config/.claude/jobs/d69a1b07/tmp/iskan-test.out | cut -c1-110; echo '(kalan 3 kırmızı taban kümesinin alt kümesi; A323 3/3 yeşil; +3 kapı)'
+# rc=0 sure=0.0s zaman=2026-10-11T10:04:28+03:00
+--- stdout ---
+değişik kopya:
+  ok - A323: roster dışı mevcut üye (denekGama) düşerken SARI uyarı basıldı, dry-run rc=3 korundu
+  ok - A323: ISKAN_EY_DUSME=ret → fail-closed rc=1 + 'uye-dusme-reddi'
+  ok - A323 altın: roster Gama'yı taşıyınca uyarı yok, rezerv-uuid mevcut kayıttan yeniden kullanıldı
+  FAIL - kur --dry-run: zincir-planında eksik adım: [1/8: yeni-proje]
+  FAIL - kur slug-kapısı: dry-run uyarı-sözleşmesi kırık (rc=3)
+  FAIL - kur slug-kapısı: --dry-run --benimse mesajı yanıltıcı (rc=3)
+== 259 geçti / 3 kaldı ==
+(kalan 3 kırmızı taban kümesinin alt kümesi; A323 3/3 yeşil; +3 kapı)
+--- stderr ---
