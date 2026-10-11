@@ -1,7 +1,7 @@
-$ bash -c cd ekip-kur/templates && bash kimlik-bekcisi.test.sh | tail -1; bash ekip-canli.test.sh | tail -1; bash ekip-notify.test.sh | tail -1
-# rc=0 sure=20.8s zaman=2026-10-11T21:26:10+03:00
+$ bash -o pipefail -c cd ekip-kur/templates && bash kimlik-bekcisi.test.sh | tail -1 && bash ekip-canli.test.sh | tail -1 && bash ekip-notify.test.sh | tail -1
+# rc=0 sure=22.4s zaman=2026-10-11T21:28:13+03:00
 --- stdout ---
 SONUÇ: 12 geçti · 0 düştü
 SONUÇ: 21 geçti · 0 düştü
-SONUÇ: 15 geçti · 0 düştü
+SONUÇ: 17 geçti · 0 düştü
 --- stderr ---

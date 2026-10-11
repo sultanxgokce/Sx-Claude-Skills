@@ -64,4 +64,8 @@ OUT="$(bash "$D/ekip-notify.sh" SINIR "$MSG" 2>&1)"; RC=$?
 grep -q "engellendi=1" <<<"$OUT" && [ $RC = 1 ] && ok "sınırdaki koltuk → gönderilmedi (engellendi), rc=1" || no "sinir-ozet" "$OUT rc=$RC"
 grep -q "|ping|.*|SINIR|sinirda|" "$EKIP_SINYAL_LOG" && ok "defter: ping=sinirda (iletildi DEĞİL)" || no "sinir-defter" "$(cat "$EKIP_SINYAL_LOG")"
 sleep 0.3; tm capture-pane -p -t SINIR:0 | grep -q "SINAV-MESAJI" && no "sinir-yazildi" "mesaj sınırdaki koltuğa yazıldı" || ok "sınırdaki koltuğa hiçbir şey yazılmadı"
+: > "$EKIP_SINYAL_LOG"
+OUT="$(bash "$D/ekip-notify.sh" --force SINIR "$MSG" 2>&1)"; RC=$?
+grep -q "engellendi=1" <<<"$OUT" && [ $RC = 1 ] && grep -q "|ping|.*|SINIR|sinirda|" "$EKIP_SINYAL_LOG" && ok "--force bile sınırdaki koltuğu açmaz (koşulsuz kural)" || no "sinir-force" "$OUT rc=$RC"
+sleep 0.3; tm capture-pane -p -t SINIR:0 | grep -q "SINAV-MESAJI" && no "sinir-force-yazildi" "--force ile sınırdaki koltuğa yazıldı" || ok "--force ile de sınırdaki koltuğa hiçbir şey yazılmadı"
 echo; echo "SONUÇ: $G geçti · $F düştü"; [ $F = 0 ]

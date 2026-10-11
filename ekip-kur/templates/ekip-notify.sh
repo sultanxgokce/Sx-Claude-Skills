@@ -246,8 +246,10 @@ while IFS=$'\t' read -r ID TARGET INBOX; do
   fi
   # sinirda (BASİRET, 11 Ekim): ajan var ama kullanım sınırında — mesaj gitse de iş yapamaz, "iletildi" yanıltır.
   #   GÖNDERİLMEZ, defterde ayrı hüküm: sinirda. Yönetici bunu ekip-durum/defterden görür; açmak Sultan'ın elidir (model/kota).
-  if [ "${CANLI%% *}" = sinirda ] && [ "$FORCE" -eq 0 ]; then
-    echo "ENGEL: $ID kullanım sınırında (${CANLI#* }) — göndermiyorum; mesaj iş üretmez. Açmak: o pencerede model değişimi (Sultan)" >&2
+  #   KOŞULSUZ (Sultan, 11 Ekim: "sınırda koltuğa mesaj gitmesin"): --force da aşamaz — sınırdaki koltuk mesajı
+  #   okuyamaz, zorlamak yalnız defteri yanıltır. Kutuyu açmak insan elidir (model/kota), bayrak değil.
+  if [ "${CANLI%% *}" = sinirda ]; then
+    echo "ENGEL: $ID kullanım sınırında (${CANLI#* }) — göndermiyorum (--force da aşmaz); mesaj iş üretmez. Açmak: o pencerede model değişimi (Sultan)" >&2
     BLOCKED=$((BLOCKED+1))
     sinyal_yaz ping "${FROM_ID:-HARICI}" "$ID" sinirda "$MESAJ" >/dev/null 2>&1 || true
     sinyal_yaz canli "${FROM_ID:-HARICI}" "$ID" sinirda "${CANLI#* }" >/dev/null 2>&1 || true

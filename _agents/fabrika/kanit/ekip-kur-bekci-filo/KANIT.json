@@ -1,7 +1,7 @@
 {
   "is": "ekip-kur-bekci-filo",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-11T21:26:10+03:00",
+  "guncelleme": "2026-10-11T21:28:13+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -40,17 +40,19 @@
       "etiket": "sinavlar",
       "asama": "sonra",
       "dosya": "olcum-sinavlar-sonra.txt",
-      "sha256": "435c27c1ff58370abc6e30411a7686134d0d7417d4dff54d980966457be9d6d2",
+      "sha256": "881b0a60a38f41d3469c363188663f9495d432284824b652a9f05c9da916750c",
       "komut": [
         "bash",
+        "-o",
+        "pipefail",
         "-c",
-        "cd ekip-kur/templates && bash kimlik-bekcisi.test.sh | tail -1; bash ekip-canli.test.sh | tail -1; bash ekip-notify.test.sh | tail -1"
+        "cd ekip-kur/templates && bash kimlik-bekcisi.test.sh | tail -1 && bash ekip-canli.test.sh | tail -1 && bash ekip-notify.test.sh | tail -1"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-11T21:26:10+03:00",
-      "sure_sn": 20.8
+      "zaman": "2026-10-11T21:28:13+03:00",
+      "sure_sn": 22.4
     }
   ],
-  "imza": "acf42ae44dfd82a16858c380de88f916645f005c27d21893df7b1dd82a19e929"
+  "imza": "5c3b1ac1baa6fd18eca9fb587755c0496ab72df9a2f197ac5bc387b9617f2339"
 }
