@@ -1,0 +1,21 @@
+{
+  "tur": 3,
+  "is": "ekip-kur-bekci-filo",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-11T21:28:42+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 65923,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Üç kontrol aracı 1.8.0 şablonuna alınmış, scaffold iki yeni dosyayı kuruyor; sınırdaki koltuğa `--force` ile dahi mesaj gitmiyor ve önceki turun kanıt zinciri kusuru giderilmiş. Araç imzalı ölçümde üç sınav da eksiksiz geçiyor; üretimi durduracak bir kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam, sarı kayıt yok. Dosya kurulumu için kırmızı/yeşil ölçüm çifti var; sonraki toplu sınav komutu `pipefail` ve `&&` kullanarak her sınavın başarısızlığını rc'ye taşıyor, sonuçlar 12/12, 21/21 ve 17/17. `--force SINIR`, dış çağrı, aksanlı kimlik ve ölçülememe yolları doğrudan sınanmış; CLI işi olduğundan gerçekçi hermetik tmux ölçümleri yeterli kanıt oluşturuyor."
+  }
+}
