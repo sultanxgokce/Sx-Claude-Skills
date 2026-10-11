@@ -72,14 +72,22 @@ else kirmizi "kanca bağlı değil: settings.json'da SessionStart → ekip-self-
 C="$KOK/CLAUDE.md"
 if [ ! -f "$C" ]; then kirmizi "proje yönergesi yok (CLAUDE.md)"
 else
-  eksik=""; for id in $UYELER; do grep -qF "**$id**" <(python3 -I -c "import unicodedata,sys;print(unicodedata.normalize('NFKD',open(sys.argv[1],encoding='utf-8').read()).encode('ascii','ignore').decode().upper())" "$C") || eksik="$eksik $id"; done
+  # Kimlik de yönergeyle AYNI sadeleştirmeden geçer (NFKD → ASCII → BÜYÜK): aksanlı kimlik (MAİŞET, NİŞANCI)
+  #   yönergede doğru yazılsa bile sadeleşmiş metinde ham hâliyle aranınca bulunamıyordu → yanlış kırmızı
+  #   (bağımsız göz, tur 1; filo ölçümünde mihenk'in altı koltuğu bu yüzden eksik görünmüş olabilir).
+  sade() { python3 -I -c "import unicodedata,sys;print(unicodedata.normalize('NFKD',sys.argv[1].replace('ı','i').replace('İ','I')).encode('ascii','ignore').decode().upper())" "$1"; }
+  CSADE="$(python3 -I -c "import unicodedata,sys;print(unicodedata.normalize('NFKD',open(sys.argv[1],encoding='utf-8').read().replace('ı','i').replace('İ','I')).encode('ascii','ignore').decode().upper())" "$C")"
+  eksik=""; for id in $UYELER; do grep -qF "**$(sade "$id")**" <<<"$CSADE" || eksik="$eksik $id"; done
   if [ -n "$eksik" ]; then kirmizi "yönerge şu koltukları anmıyor:$eksik"
   else yesil "proje yönergesi beş koltuğa hitap ediyor"; fi
 fi
 
 # 4 · kartlar
 kartsiz=""; for id in $UYELER; do
-  k="$KOK/_agents/handoff/$(tr '[:upper:]' '[:lower:]' <<<"$id")-gorev-brifi.md"
+  # küçük harf python'la: tr çok baytlı harfi (Ü Ş İ) çevirmez → aksanlı kimliğin kartı "yok" görünüyordu
+  #   Python'da "İ".lower() = "i"+birleşik nokta (iki kod noktası) → dosya adı tutmaz; İ önce düz i yapılır.
+  #   ASCII I → i kalır (kart adları ASCII gelenekli: basiret-gorev-brifi.md). Kanca da aynı kuralla arar.
+  k="$KOK/_agents/handoff/$(python3 -I -c 'import sys;print(sys.argv[1].replace("İ","i").lower())' "$id")-gorev-brifi.md"
   { [ -f "$k" ] && grep -qF '**Tek cümle**' "$k"; } || kartsiz="$kartsiz $id"
 done
 if [ -n "$kartsiz" ]; then kirmizi "görev kartı yok/eksik:$kartsiz"; else yesil "görev kartları yerinde ($SAYI/$SAYI)"; fi

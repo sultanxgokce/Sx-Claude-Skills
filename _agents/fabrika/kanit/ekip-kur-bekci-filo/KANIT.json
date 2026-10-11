@@ -1,7 +1,7 @@
 {
   "is": "ekip-kur-bekci-filo",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-11T21:21:54+03:00",
+  "guncelleme": "2026-10-11T21:26:10+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -40,7 +40,7 @@
       "etiket": "sinavlar",
       "asama": "sonra",
       "dosya": "olcum-sinavlar-sonra.txt",
-      "sha256": "cc5f424b2fba535a7a9a0f96b225e49500917095b18e7489bd6e93e713184ea1",
+      "sha256": "435c27c1ff58370abc6e30411a7686134d0d7417d4dff54d980966457be9d6d2",
       "komut": [
         "bash",
         "-c",
@@ -48,9 +48,9 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-11T21:21:54+03:00",
-      "sure_sn": 18.6
+      "zaman": "2026-10-11T21:26:10+03:00",
+      "sure_sn": 20.8
     }
   ],
-  "imza": "94bc392480601b24a1596dbe70a4c59c69776a08641d2755f2f9978623e1ec2f"
+  "imza": "acf42ae44dfd82a16858c380de88f916645f005c27d21893df7b1dd82a19e929"
 }

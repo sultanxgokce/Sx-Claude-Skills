@@ -24,13 +24,17 @@ uyeler:
     tmux: "kalfa:0"
     mod: kod
     rol: "işi yapar, reise rapor verir"
+  - id: MÜŞİR
+    tmux: "musir:0"
+    mod: salt-okur
+    rol: "aksanlı kimlik — yönergede doğru yazılınca yeşil kalmalı"
 Y
   python3 -I - "$D/settings-hook-snippet.json" "$d/.claude/settings.json" <<'PY'
 import json,sys
 d=json.load(open(sys.argv[1])); json.dump({"hooks":d["hooks"]},open(sys.argv[2],"w"))
 PY
-  printf '# Sınav ekibi\n\nKoltuklar: **REIS** (yönetir) · **KALFA** (yapar).\n' > "$d/CLAUDE.md"
-  for id in reis kalfa; do
+  printf '# Sınav ekibi\n\nKoltuklar: **REIS** (yönetir) · **KALFA** (yapar) · **MÜŞİR** (danışır).\n' > "$d/CLAUDE.md"
+  for id in reis kalfa müşir; do
     printf '# %s görev kartı\n\n**Tek cümle**: sınav koltuğu.\n' "$id" > "$d/_agents/handoff/$id-gorev-brifi.md"
   done
   cp "$D/ekip-self-recognition.sh" "$d/scripts/"
@@ -71,6 +75,12 @@ bekle "M8 kanca kartı basmayı bıraktı → KIRMIZI" 1 "$d"
 
 d=$(yeni); command rm "$d/_agents/handoff/ekip-registry.yaml"
 bekle "M9 registry yok → ÖLÇEMEDİM (yeşil değil)" 3 "$d"
+
+d=$(yeni); sed -i 's/\*\*MÜŞİR\*\* (danışır)/**MUSIR** (danışır)/' "$d/CLAUDE.md"
+bekle "M10 aksanlı kimlik yönergede sadeleşmiş yazılmış (MUSIR) → yine hitap, YEŞİL" 0 "$d"
+
+d=$(yeni); sed -i 's/ · \*\*MÜŞİR\*\* (danışır)//' "$d/CLAUDE.md"
+bekle "M11 aksanlı kimlik yönergeden silindi → KIRMIZI" 1 "$d"
 
 echo "SONUÇ: $GECTI geçti · $DUSTU düştü"
 [ "$DUSTU" -eq 0 ]

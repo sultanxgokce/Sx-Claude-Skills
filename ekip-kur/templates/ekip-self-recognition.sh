@@ -100,7 +100,8 @@ if inbox and inbox not in ('""', ''):
     lines.append(f"📥 inbox (yönetici→sen): {inbox}")
 lines.append(f"📋 ortak brief: {brief} — son girdiyi oku (sana-adresli/genel).")
 # Görev kartı (kimlik dosyası) — BASİRET, 11 Ekim 2026: kart yolu genel ifadeyle değil, açıkça basılır.
-_kart = os.path.join(os.path.dirname(os.path.abspath(reg)), f"{mid.lower()}-gorev-brifi.md")
+# "İ".lower() iki kod noktası üretir (i + birleşik nokta) → aksanlı kimliğin kartı bulunamıyordu; İ önce düz i (bekçiyle aynı kural)
+_kart = os.path.join(os.path.dirname(os.path.abspath(reg)), f"{mid.replace('İ','i').lower()}-gorev-brifi.md")
 if os.path.isfile(_kart):
     _rel = os.path.relpath(_kart, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(reg)))))
     lines.append(f"📜 görev kartın: {_rel} — ÖNCE bunu oku (Tek cümle · Yetkisi · Sınırı).")

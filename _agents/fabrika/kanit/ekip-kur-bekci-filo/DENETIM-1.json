@@ -1,0 +1,34 @@
+{
+  "tur": 1,
+  "is": "ekip-kur-bekci-filo",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-11T21:23:42+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 52903,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Üç kontrol aracı 1.8.0 şablonuna alınmış, scaffold iki yeni çalışma dosyasını kuruyor ve hedef davranışlar için sınavlar eklenmiş. Lakin canlılık kapısı dış çağrıda açık kalabiliyor ve kimlik bekçisi Türkçe kimliklerde yanlış kırmızı verebiliyor; önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "Bildirim dışarıdan çağrıldığında FROM_ID ve EKIP_CANLI_KONTROL yoksa pozitif kontrol kurulamaz; prob “olcemedim” döndürür ve notify eski davranışla mesajı yine gönderir. Böylece boş kabuğa veya ölçülemeyen sınırdaki koltuğa mesaj gitmeme güvencesi genel kullanımda sağlanmıyor; sınav bu yolu sabit EKIP_CANLI_KONTROL=DOLU ile örtüyor.",
+        "kanit": "ekip-canli.sh kontrolsüz çağrıda KOR oluşturup rc=3 verir (satır 127-140); ekip-notify.sh yalnız “yok” ve forcesuz “sinirda” durumlarını engeller, “olcemedim” için gönderime devam eder (satır 227-255). Notify sınavı satır 25'te EKIP_CANLI_KONTROL=DOLU dışa aktararak güvenli kontrolü yapay biçimde daima sağlar; satır 44-48 de kör probda gönderimin sürdüğünü açıkça bekler.",
+        "konum": "ekip-kur/templates/ekip-canli.sh:127; ekip-kur/templates/ekip-notify.sh:227; ekip-kur/templates/ekip-notify.test.sh:25",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Kimlik bekçisinin CLAUDE.md hitap denetimi metni ASCII'ye dönüştürüyor fakat aranan üye kimliğini aynı biçimde dönüştürmüyor; MAİŞET gibi aksanlı gerçek kimlikler yönergede doğru yazılsa bile eksik sayılabilir.",
+        "kanit": "Proje yönergesi kapısında dosya NFKD+ASCII+upper ile “MAİŞET”→“MAISET” yapılırken grep deseni doğrudan “**$id**” olarak kalıyor. Sınav fikstürü yalnız ASCII REIS/KALFA kimliklerini kullanıyor ve bu gerçek durumu sınamıyor.",
+        "konum": "ekip-kur/templates/kimlik-bekcisi.sh:71; ekip-kur/templates/kimlik-bekcisi.test.sh:17",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Dosya varlığı için kırmızı/yeşil ölçüm çifti mevcut, üç sınavın özetleri 10/10, 21/21 ve 13/13 yeşil. Ancak sınav komutu ardışık komutlarda yalnız son komutun çıkış kodunu taşır ve gerçekçi filo karesi/video yoktur; ayrıca bildirimin kontrolsüz dış çağrısı ile Türkçe kimlik yolu sınanmamıştır."
+  }
+}

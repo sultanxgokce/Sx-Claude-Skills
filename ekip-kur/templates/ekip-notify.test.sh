@@ -30,6 +30,12 @@ grep -q "|ping|.*|BOS|oturum-yok|ajan-yok:" "$EKIP_SINYAL_LOG" && ok "defter: pi
 grep -q "|canli|.*|BOS|yok|" "$EKIP_SINYAL_LOG" && ok "defter: canli=yok satırı" || no "bos-canli" "$(cat "$EKIP_SINYAL_LOG")"
 sleep 0.5; tm capture-pane -p -t BOS:0 | grep -q "SINAV-MESAJI" && no "bos-kabuk" "MESAJ KABUĞA YAZILDI" || ok "kabuğa hiçbir şey yazılmadı (asıl tehlike)"
 
+# --- dışarıdan çağrı (tmux dışı, kontrol değişkeni YOK): pozitif kontrol registry yöneticisinden (DOLU) çözülmeli ---
+: > "$EKIP_SINYAL_LOG"
+OUT="$(env -u EKIP_CANLI_KONTROL bash "$D/ekip-notify.sh" BOS "$MSG" 2>&1)"; RC=$?
+grep -q "eksik_oturum=1" <<<"$OUT" && grep -q "|canli|.*|BOS|yok|" "$EKIP_SINYAL_LOG" && ok "kontrol değişkeni yokken yönetici koltuğu pozitif kontrol → boş koltuk yine YOK (olcemedim değil)" || no "dis-cagri-yonetici" "$OUT $(cat "$EKIP_SINYAL_LOG")"
+sleep 0.3; tm capture-pane -p -t BOS:0 | grep -q "SINAV-MESAJI" && no "dis-cagri-kabuk" "MESAJ KABUĞA YAZILDI" || ok "dış çağrıda da kabuğa hiçbir şey yazılmadı"
+
 OUT="$(bash "$D/ekip-notify.sh" --force BOS "$MSG" 2>&1)"; RC=$?
 [ $RC = 1 ] && ! tm capture-pane -p -t BOS:0 | grep -q "SINAV-MESAJI" && ok "--force bile kabuğa yazdırmaz" || no "bos-force" "$OUT rc=$RC"
 

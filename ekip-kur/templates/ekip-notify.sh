@@ -230,7 +230,10 @@ while IFS=$'\t' read -r ID TARGET INBOX; do
   #     olcemedim = kapı kör → eski davranış (gönder, defterde olcemedim yazar); asla "yok" uydurulmaz.
   CANLI="olcemedim - canli-prob yok"
   if [ -x "$SCRIPT_DIR/ekip-canli.sh" ]; then
-    _k="${FROM_ID:-${EKIP_CANLI_KONTROL:-}}"
+    # Pozitif kontrol sırası: çağıran koltuk → EKIP_CANLI_KONTROL → registry YÖNETİCİSİ. Üçüncü basamak olmadan
+    #   dışarıdan (tmux dışı, ör. cron/kurye) çağrıda prob "olcemedim" diyor ve boş kabuğa mesaj gidebiliyordu
+    #   (bağımsız göz, tur 1). Yönetici koltuğu da canlı değilse kapı gerçekten kördür → eski davranış kalır.
+    _k="${FROM_ID:-${EKIP_CANLI_KONTROL:-$YONETICI}}"
     CANLI="$(bash "$SCRIPT_DIR/ekip-canli.sh" "$ID" ${_k:+--kontrol "$_k"} 2>/dev/null | awk -F'\t' 'NR==1{print $2" "$3" "$4}')" || true
     [ -n "$CANLI" ] || CANLI="olcemedim - canli-prob çalışmadı"
   fi
