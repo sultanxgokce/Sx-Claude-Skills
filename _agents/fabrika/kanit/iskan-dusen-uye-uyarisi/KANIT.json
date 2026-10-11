@@ -1,7 +1,7 @@
 {
   "is": "iskan-dusen-uye-uyarisi",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-11T10:05:02+03:00",
+  "guncelleme": "2026-10-11T10:07:46+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -24,15 +24,15 @@
       "etiket": "sinav-taban",
       "asama": "sonra",
       "dosya": "olcum-sinav-taban-sonra.txt",
-      "sha256": "aa5b233136ccff93b007187c75e863ba533ef7e88e9af028083a220c0b6ee03e",
+      "sha256": "6ed76214b866a5b5cc1e5f8b7c204ec21a20ceeb295bd5370423442962234969",
       "komut": [
         "bash",
         "-c",
-        "echo 'değişik kopya:'; grep -E 'A323|FAIL|== .* geçti' /config/.claude/jobs/d69a1b07/tmp/iskan-test.out | cut -c1-110; echo '(kalan 3 kırmızı taban kümesinin alt kümesi; A323 3/3 yeşil; +3 kapı)'"
+        "echo 'değişik kopya (tur 2):'; grep -E 'A323|FAIL|== .* geçti' /config/.claude/jobs/d69a1b07/tmp/iskan-test2.out | cut -c1-120; echo '(kalan 4 kırmızı taban kümesinin alt kümesi — kur hattı/stub, bu işten önce de var; A323 6/6: dry-run · ret · altın · apply+ret md5-eş · apply uyarı · kayıt-biçimi altın)'"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-11T10:04:28+03:00",
+      "zaman": "2026-10-11T10:07:46+03:00",
       "sure_sn": 0.0
     },
     {
@@ -52,5 +52,5 @@
       "sure_sn": 34.3
     }
   ],
-  "imza": "0393c8dac0fc6fb832d91e0b622962a3cc5a187ae6e9ac6dcea5e865b06f166d"
+  "imza": "d79fdbdbff29a48f0f8de3808ad64eb7abc0622b47044399097fd150918d58fb"
 }

@@ -1,13 +1,17 @@
-$ bash -c echo 'değişik kopya:'; grep -E 'A323|FAIL|== .* geçti' /config/.claude/jobs/d69a1b07/tmp/iskan-test.out | cut -c1-110; echo '(kalan 3 kırmızı taban kümesinin alt kümesi; A323 3/3 yeşil; +3 kapı)'
-# rc=0 sure=0.0s zaman=2026-10-11T10:04:28+03:00
+$ bash -c echo 'değişik kopya (tur 2):'; grep -E 'A323|FAIL|== .* geçti' /config/.claude/jobs/d69a1b07/tmp/iskan-test2.out | cut -c1-120; echo '(kalan 4 kırmızı taban kümesinin alt kümesi — kur hattı/stub, bu işten önce de var; A323 6/6: dry-run · ret · altın · apply+ret md5-eş · apply uyarı · kayıt-biçimi altın)'
+# rc=0 sure=0.0s zaman=2026-10-11T10:07:46+03:00
 --- stdout ---
-değişik kopya:
+değişik kopya (tur 2):
   ok - A323: roster dışı mevcut üye (denekGama) düşerken SARI uyarı basıldı, dry-run rc=3 korundu
   ok - A323: ISKAN_EY_DUSME=ret → fail-closed rc=1 + 'uye-dusme-reddi'
   ok - A323 altın: roster Gama'yı taşıyınca uyarı yok, rezerv-uuid mevcut kayıttan yeniden kullanıldı
-  FAIL - kur --dry-run: zincir-planında eksik adım: [1/8: yeni-proje]
+  ok - A323 apply+ret: rc=1 + 'uye-dusme-reddi' + repo kaydı bayt-değişmedi (md5 eş)
+  ok - A323 apply (ret'siz): SARI uyarı apply çıktısında da basıldı; kayıt değişmedi (host bozuk, dokunuş sı
+  ok - A323 kayıt-biçimi: üretici çıktısı altın biçime bayt-eş (biçim değişmedi)
+  FAIL - baslat-claude.sh: exec-argümanları sözleşme-dışı (rc=0: STUB-CLAUDE --resume 12345678-1234-1234-1234-123
+  FAIL - kur --dry-run: zincir-planında eksik adım: [2/8: durak1-cloudtop-pr] [3/8: iskan-host]
   FAIL - kur slug-kapısı: dry-run uyarı-sözleşmesi kırık (rc=3)
   FAIL - kur slug-kapısı: --dry-run --benimse mesajı yanıltıcı (rc=3)
-== 259 geçti / 3 kaldı ==
-(kalan 3 kırmızı taban kümesinin alt kümesi; A323 3/3 yeşil; +3 kapı)
+== 261 geçti / 4 kaldı ==
+(kalan 4 kırmızı taban kümesinin alt kümesi — kur hattı/stub, bu işten önce de var; A323 6/6: dry-run · ret · altın · apply+ret md5-eş · apply uyarı · kayıt-biçimi altın)
 --- stderr ---

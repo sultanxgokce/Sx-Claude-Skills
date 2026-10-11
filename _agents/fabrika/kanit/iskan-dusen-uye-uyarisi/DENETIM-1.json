@@ -1,0 +1,40 @@
+{
+  "tur": 1,
+  "is": "iskan-dusen-uye-uyarisi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-11T10:05:37+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 13449,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Mevcut kayıttan roster dışı üyeleri çıkarıp adlarıyla SARI uyarı veren ve ISKAN_EY_DUSME=ret durumunda yazım yoluna girmeden rc=1 dönen doğru mekanizma eklenmiş. Ancak sınav yalnız --dry-run akışını doğruluyor; kartın açıkça istediği apply davranışı ile kayıt biçiminin değişmediği kanıtlanmadığından önce bu kapsama yönelik sınavları tamamlayın.",
+    "bulgular": [
+      {
+        "ne": "Apply akışında SARI uyarı ve fail-closed davranışı için sınav yok; üç A323 çağrısının tamamı --dry-run kullanıyor.",
+        "kanit": "Eklenen üç test komutunun her birinde `ekip-yerlestir eytest --dry-run` var; apply çağrısı bulunmuyor. Kart ise uyarıyı açıkça “dry-run + apply” için istiyor.",
+        "konum": "iskan/scripts/iskan.test.sh:675",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "`ISKAN_EY_DUSME=ret` sınavı kaydın gerçekten yazılmadığını doğrulamıyor; yalnız rc=1 ve hata metnini denetliyor.",
+        "kanit": "Koşul `[ \"$rc\" = \"1\" ]` ve `grep -q 'uye-dusme-reddi'` ile sınırlı; çağrı öncesi/sonrası registry içeriği veya hash karşılaştırması yok.",
+        "konum": "iskan/scripts/iskan.test.sh:681",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "“Kayıt biçimi değişmez” kabul ölçütü doğrudan sınanmamış.",
+        "kanit": "A323 testleri uyarı metni, dönüş kodu ve mevcut UUID'nin yeniden kullanımını denetliyor; üretilen kayıt biçiminin önce/sonra eşdeğerliğine ilişkin karşılaştırma yok.",
+        "konum": "iskan/scripts/iskan.test.sh:663",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Önce/sonra ölçümü A323 testlerinin eklendiğini ve 3/3 geçtiğini, mutasyon ölçümü de uyarı çağrısı kaldırılınca ilgili kapıların kırıldığını gösteriyor. Buna karşılık ölçümler gerçek apply yolunu veya kayıt dosyasının yazılmamasını/biçiminin korunmasını ölçmüyor; ayrıca genel sınavda iş öncesinden gelen kırmızılar sürüyor."
+  }
+}
