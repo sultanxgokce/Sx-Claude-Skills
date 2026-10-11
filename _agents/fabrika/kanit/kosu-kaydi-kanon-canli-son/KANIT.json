@@ -1,0 +1,70 @@
+{
+  "is": "kosu-kaydi-kanon-canli-son",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-10T23:19:06+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "nazir-ornegi",
+      "asama": "once",
+      "dosya": "olcum-nazir-ornegi-once.txt",
+      "sha256": "7fb93ccd79eaafe49201fc578d85f980958cd86bbaafd3851beab1b28183c7a1",
+      "komut": [
+        "bash",
+        "-c",
+        "bash /config/.claude/jobs/d69a1b07/tmp/k52/kanon-lint-051.sh - --kutu-ici < /config/.claude/jobs/d69a1b07/tmp/k52/canli"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-10T23:13:52+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "nazir-ornegi",
+      "asama": "sonra",
+      "dosya": "olcum-nazir-ornegi-sonra.txt",
+      "sha256": "afd2a7d0df8642acf397bd67e73a0a3c22e60379b68c323b21a83b9eb28b4d3d",
+      "komut": [
+        "bash",
+        "-c",
+        "bash kosu-kaydi/scripts/kanon-lint.sh - --kutu-ici --kanon /config/.claude/jobs/d69a1b07/tmp/k52/kanon < /config/.claude/jobs/d69a1b07/tmp/k52/canli"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-10T23:18:08+03:00",
+      "sure_sn": 0.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "lint-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-lint-sinavi-sonra.txt",
+      "sha256": "387db3da126fef34b6ddac5c3e25e211dd817c3bb7838db4e8497baf5b2f9d9c",
+      "komut": [
+        "bash",
+        "kosu-kaydi/scripts/kanon-lint.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-10T23:18:13+03:00",
+      "sure_sn": 4.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sarmalayici-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-sarmalayici-sinavi-sonra.txt",
+      "sha256": "bbb26327e262012e9ba2f61323f3e507375f9e5c8956b9a79573ecec2240d4b1",
+      "komut": [
+        "bash",
+        "kosu-kaydi/scripts/kosu-sar.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-10T23:19:06+03:00",
+      "sure_sn": 53.6
+    }
+  ],
+  "imza": "3f60476f2972f7df4b47d8072fedc9482e8f4899e9538f0676ab36a2c7c4d7da"
+}

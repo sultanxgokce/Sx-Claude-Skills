@@ -1,7 +1,7 @@
 ---
 name: kosu-kaydi
 type: agent
-version: 0.5.1
+version: 0.5.2
 description: >
   Koşu kaydı sarmalayıcısı: her cron/zamanlı iş kendi komutunu `kosu-sar.sh <is> [--nobetci [--gozlem <komut>]] [--kilit <dosya>] -- <komut>` ile sarar; her koşu
   TAM BİR satır yazar (/config/.kosu-kaydi/<kutu>.<YYYY-MM>.jsonl, kutu-yerel, 17 alan — Nexus kokpit-ux/05 şeması sürüm 1.4; gözlemli kipte gozlem_once/gozlem_sonra ilk 120 bayt).
@@ -83,7 +83,7 @@ dokunmadan K4 ölçülür. Bedeli: nöbetçinin çıktısı sarmalayıcıdan ge�
 kısıtlıysa OR). Tarama 1500 gün (29 Şubat gibi seyrek ama geçerli ifadeler sığar); bulunamazsa (31 Şubat) rc 3.
 
 ### Kanon lint'i (0.5.1 — şema K4b'nin "lint kırmızı yapar" dediği, A309'a kadar olmayan araç)
-`bash scripts/kanon-lint.sh <kanon-dosyası|-> [--kutu-ici]` — yalnız **sarılı** satırlara bakar (sarılmamış iş K6 listesinin, okuyucunun konusu):
+`bash scripts/kanon-lint.sh <kanon-dosyası|-> [--kutu-ici] [--kanon <dosya>]` — K1-K6 **sarılı** satırlara bakar; K7-K8 (0.5.2) bütün zamanlı satırlara:
 | | Kural | Niçin |
 |---|---|---|
 | K1 🔴 | `--kilit` **ve** komut içinde `flock` | iç kilit ebeveynin kilidine çarpar → iş **hiç koşmaz**: iç `flock -E 75` ise her koşu sahte `atlandi-kilit`, değilse her koşu `hata` (SEYYAH fikstürü, A309). Önce içteki `flock` kalkar. Sarmalayıcı 0.5.1 bunu koşu anında stderr'e de uyarır |
@@ -92,7 +92,11 @@ kısıtlıysa OR). Tarama 1500 gün (29 Şubat gibi seyrek ama geçerli ifadeler
 | K4 🔴 | aynı iş iki sarılı satırda | ikileme — restart'ta iki kez koşar (A313) |
 | K5 △ | crontab başına `KOSU_KUTU=`/`KOSU_KANON=` satırı | kanca taşımaz, recreate'te kaybolur → satır içine (A313) |
 | K6 △ | `--gozlem` komutu bu kutuda yok (yalnız `--kutu-ici`) | her koşu `olculemedi` olur (`ss` nazir'de yoktu) |
-rc: 0 temiz/yalnız sarı · 1 kırmızı var · 3 ölçülemedi. **Çağıran:** sarmalayıcı **her koşuda** kanonu (ya da canlı crontab'ı) lint'ler; KIRMIZI varsa
+| K7 △ | (yalnız `--kanon <dosya>`, girdi = canlı) zamanlı satır canlıda var kanonda yok — ya da kanonda var canlıda yok | elle kurulan satır recreate'te kaybolur; kanonda olup inmeyen satır hiç koşmaz. nazir'de canlı 7 / kanon 5 farkını 0.5.1 görmüyordu (A320). Karşılaştırma tam satır ve çokluklu (fazla/eksik kopya da fark); yalnız zaman alanlarının ayracı teke iner, komut olduğu gibi kalır |
+| K8 △ | **sarılmamış** zamanlı satırda `flock` (sarılı = cron'un çalıştırdığı program sarmalayıcının kendisi; `flock … kosu-sar.sh` dışarıdan kilit sarılı sayılmaz) | kilitli iş kayıt dışı: atlandı mı koştu mu hiçbir yerde görünmez → `kosu-sar --kilit` ile sar (A320) |
+Canlıyı kanona karşı elle ölçmek: `crontab -l | bash scripts/kanon-lint.sh - --kutu-ici --kanon <kanon>`.
+rc: 0 temiz/yalnız sarı · 1 kırmızı var · 3 ölçülemedi (kanon da okunamazsa). **Çağıran:** sarmalayıcı **her koşuda** kanonu (ya da canlı crontab'ı) lint'ler; 0.5.2'den beri
+`KOSU_KANON` verilmişse **canlı crontab'ı da kanona karşı** lint'ler (K7/K8 canlıdan, kırmızılar yalnız kanondan — aynı satır iki kez sayılmaz); KIRMIZI ya da K6/K7/K8 varsa
 stderr'e tek özet satır düşer (cron kütüğü/postası) — iş engellenmez, kayıt değişmez (`KOSU_KANON_LINT=0` susturur). Oda kancasının bloğu
 yazmadan ÖNCE lint'i çağırıp kırmızıda yazmaması ayrı iş (cloudtop kartı `oda-cron-kanon-lint-kancasi`); kutu sahibi elle de koşturabilir.
 
@@ -105,7 +109,7 @@ yazmadan ÖNCE lint'i çağırıp kırmızıda yazmaması ayrı iş (cloudtop ka
 - `bash scripts/kosu-sar.test.sh` — hermetik (sahte kanon, sahte crontab, geçici dizin). Ölçtüğü: 17 alan geçerli JSON · gözlem değerleri (120 bayt, NUL, null/boş ayrımı) · beyan
   protokolü (dosya + `--nobetci`) · satır sonu etiketi · `atlandi-kilit` · kanon/canlı çelişkisi · @reboot · kanonsuz kip · kutu adı
   türetimi · rc 126/127 geçişi · gözlem altı hâl (boş→boş/dolu→boş hata) · UTC damga · cron-sonraki 10 ifade + 4 ret · croniter zehirli-modül kapısı (pakete bağımlılık yok).
-- `bash scripts/kanon-lint.test.sh` — lint'in sınavı (44 kapı; her kural için kırmızı + altın çift; sekmeli satır; mutlak yollu flock; -n sırası ve --nonblock; değersiz etiket; bitişik yorum bloğu; stdin, rc 2/3).
+- `bash scripts/kanon-lint.test.sh` — lint'in sınavı (her kural için kırmızı + altın çift; sekmeli satır; mutlak yollu flock; -n sırası ve --nonblock; değersiz etiket; bitişik yorum bloğu; stdin, rc 2/3; K7 iki yön + boşluk farkı altını + nazir biçimi fikstürü; K8 sarılı/sarılmamış ayrımı).
 - `bash scripts/hedef-kutu-sinav.sh <konteyner> [<ssh-host>|-]` — aynı sınavı **hedef kutuda** koşturur (tar → `/tmp`, orada koş, sil;
   kaynak/hedef md5'leri basılır). Kurulumdan önce "bu kutuda çalışır" iddiasının ölçümü.
 

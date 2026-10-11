@@ -10,15 +10,48 @@
 #               recreate'te kaybolur; değişkenler satır içinde verilir (A313)
 #   K6 SARI     --gozlem "<komut>" verilmiş ama komutun ilk kelimesi bu kutuda yok (ss nazir'de yoktu) → her koşu olculemedi olur;
 #               yalnız kutu içinde anlamlı: --kutu-ici verilmezse bakılmaz (başka kutunun kanonunu merkezden okurken yanlış sarı olmasın)
-# Kullanım: kanon-lint.sh <kanon-dosyası|-> [--kutu-ici]      ('-' = stdin, ör. crontab -l | kanon-lint.sh -)
+#   K7 SARI     (yalnız --kanon <dosya> ile; girdi = CANLI crontab) zamanlı satır canlıda var kanonda yok ("kanon dışı": elle
+#               kurulmuş, recreate'te kaybolur) ya da kanonda var canlıda yok (kanca indirmemiş). nazir'de canlı 7 / kanon 5 farkını
+#               0.5.1 görmüyordu: iki federe flock satırı hiç anılmadı (A320, NÂZIR). Karşılaştırma tam satırdır (sekme/çoklu boşluk tek boşluk).
+#   K8 SARI     sarılmamış zamanlı satırda flock var → kilitli iş kayıt dışı: atlandı mı, koştu mu hiçbir yerde görünmez (A320);
+#               kosu-sar --kilit ile sarılması önerilir. Sarılı satırdaki flock K1/K2'nin konusudur, K8 değil.
+# Kullanım: kanon-lint.sh <kanon-dosyası|-> [--kutu-ici] [--kanon <dosya>]   ('-' = stdin, ör. crontab -l | kanon-lint.sh - --kanon <kanon>)
 # rc: 0 temiz ya da yalnız sarı · 1 kırmızı var · 2 kullanım · 3 ölçülemedi (dosya yok/okunamadı)
 set -uo pipefail
-G="${1:-}"; shift || true; KUTU_ICI=0
-for a in "$@"; do case "$a" in --kutu-ici) KUTU_ICI=1;; *) echo "kullanım: kanon-lint.sh <dosya|-> [--kutu-ici]" >&2; exit 2;; esac; done
-[ -n "$G" ] || { echo "kullanım: kanon-lint.sh <dosya|-> [--kutu-ici]" >&2; exit 2; }
+KUL="kullanım: kanon-lint.sh <dosya|-> [--kutu-ici] [--kanon <dosya>]"
+G="${1:-}"; shift || true; KUTU_ICI=0; KARSI=""
+while [ $# -gt 0 ]; do case "$1" in
+  --kutu-ici) KUTU_ICI=1;;
+  --kanon) KARSI="${2:-}"; [ -n "$KARSI" ] || { echo "$KUL (--kanon dosya ister)" >&2; exit 2; }; shift;;
+  *) echo "$KUL" >&2; exit 2;; esac; shift; done
+[ -n "$G" ] || { echo "$KUL" >&2; exit 2; }
 if [ "$G" = "-" ]; then ICERIK="$(cat)" || { echo "olculemedi: stdin okunamadı"; exit 3; }
 else [ -r "$G" ] || { echo "olculemedi: dosya yok ya da okunamıyor: $G"; exit 3; }; ICERIK="$(cat "$G")"; fi
 KIRMIZI=0; SARI=0; SARILI=0
+zamanli() { printf '%s' "$1" | grep -qE '^[[:space:]]*[0-9*@]'; }       # cron zaman ifadesiyle başlayan satır
+# karşılaştırma biçimi: YALNIZ zaman alanlarının ayracı (sekme/çoklu boşluk) teke iner; komut kısmı olduğu gibi kalır (yalnız
+# baş/son boşluk kırpılır) — komutun tırnak içindeki boşlukları anlamlıdır, ezilirse iki farklı komut eşit görünür (bağımsız göz -son tur 2)
+duz() { python3 -c 'import re,sys
+s=sys.argv[1]; m=re.match(r"\s*(@\S+|\S+\s+\S+\s+\S+\s+\S+\s+\S+)\s+(.*?)\s*$", s, re.S)
+print((" ".join(m.group(1).split())+" "+m.group(2)) if m else s.strip())' "$1"; }
+dogrudan_sarili() {  # <zamanlı satır> → rc 0: cron'un çalıştırdığı program SARMALAYICININ KENDİSİ (yapısal; alt dizge değil — bağımsız göz tur 2)
+  # zaman alanları (5 ya da @ifade) atlanır, baştaki VAR=değer atamaları ve bash/sh yorumlayıcısı geçilir; ilk program kosu-sar.sh olmalı.
+  # 'flock -n x bash kosu-sar.sh …' (kilit sarmalayıcının DIŞINDA) ya da 'bash -c "echo kosu-sar.sh; flock …"' sarılı SAYILMAZ.
+  python3 -c 'import shlex,sys,re,os
+s=sys.argv[1].split(" #")[0]
+try: t=shlex.split(s)
+except Exception: t=s.split()
+t=t[1:] if t and t[0].startswith("@") else t[5:]
+while t and re.match(r"^[A-Za-z_][A-Za-z0-9_]*=",t[0]): t=t[1:]
+if t and os.path.basename(t[0]) in ("bash","sh"): t=t[1:]
+sys.exit(0 if t and os.path.basename(t[0])=="kosu-sar.sh" else 1)' "$1" 2>/dev/null
+}
+# K7 çokluklu karşılaştırır (küme değil): aynı satır canlıda iki kez = iş iki kez koşar; küme bu farkı yutardı (bağımsız göz -son tur 1)
+declare -A KANON_SATIR=() KANON_ADET=() CANLI_ADET=()
+if [ -n "$KARSI" ]; then   # K7: karşı kanonun zamanlı satırları (kanon dosyası okunamıyorsa hüküm yok → rc 3, temiz denmez)
+  [ -r "$KARSI" ] || { echo "olculemedi: kanon dosyası yok ya da okunamıyor: $KARSI"; exit 3; }
+  kn=0; while IFS= read -r k || [ -n "$k" ]; do kn=$((kn+1)); if zamanli "$k"; then dk="$(duz "$k")"; KANON_SATIR["$dk"]="${KANON_SATIR[$dk]:-$kn}"; KANON_ADET["$dk"]=$(( ${KANON_ADET[$dk]:-0} + 1 )); fi; done < "$KARSI"
+fi
 bul() { # bul <renk> <kural> <satır no> <mesaj>
   if [ "$1" = K ]; then KIRMIZI=$((KIRMIZI+1)); printf '✗ KIRMIZI %s satır %s: %s\n' "$2" "$3" "$4"
   else SARI=$((SARI+1)); printf '△ SARI    %s satır %s: %s\n' "$2" "$3" "$4"; fi
@@ -52,6 +85,17 @@ while IFS= read -r ham || [ -n "$ham" ]; do
   esac
   # bitişik yorum bloğu izi: '# sahip: <değer>' görüldü mü; yorum olmayan satır bloğu kapatır (satır işlendikten sonra sıfırlanır)
   if printf '%s' "$satir" | grep -qE '^[[:space:]]*#'; then printf '%s' "$satir" | grep -qE '^[[:space:]]*#[[:space:]]*sahip:[[:space:]]*[^[:space:]]' && BLOK_SAHIP=1; fi
+  if zamanli "$satir"; then
+    d="$(duz "$satir")"; CANLI_ADET["$d"]=$(( ${CANLI_ADET[$d]:-0} + 1 ))
+    if [ -n "$KARSI" ] && [ "${CANLI_ADET[$d]}" -gt "${KANON_ADET[$d]:-0}" ]; then
+      if [ "${KANON_ADET[$d]:-0}" -eq 0 ]; then bul S K7 "$n" "kanon dışı: canlıda var, kanonda yok — elle kurulmuş, recreate'te kaybolur; ya kanona yaz ya kaldır"
+      else bul S K7 "$n" "fazla kopya: bu satır canlıda kanondakinden çok (kanon ${KANON_ADET[$d]}) — iş fazladan koşar; fazlayı kaldır"; fi
+    fi
+    # flock komut ikamesi/alt kabuk/grup içinde de olabilir: $(flock …) · `flock …` · ( flock …) · { flock …; } · ! flock (bağımsız göz tur 3)
+    # satır sonu yorumu (' # …') K8'e girmez: '# flock burada kullanılmaz' sahte sarı üretmesin (bağımsız göz tur 1)
+    if ! dogrudan_sarili "$satir" && printf '%s' "$satir" | sed -E 's/[[:space:]]#.*$//' | grep -qE '(^|[[:space:];&|(`{!])(/[^[:space:]]*/)?flock([[:space:]]|$)'; then
+      bul S K8 "$n" "sarılmamış kilitli iş (flock) — atlandı mı koştu mu kayıtta görünmez; kosu-sar --kilit <dosya> ile sar"; fi
+  fi
   if printf '%s' "$satir" | grep -qE '^[[:space:]]*[0-9*@]' && printf '%s' "$satir" | grep -qE 'kosu-sar\.sh[[:space:]]'; then   # boşluk YA DA sekme (crontab ikisini de ayraç sayar)
     SARILI=$((SARILI+1))
     is="$(printf '%s' "$satir" | sed -nE 's/.*kosu-sar\.sh[[:space:]]+([a-z0-9-]+).*/\1/p')"
@@ -81,5 +125,9 @@ while IFS= read -r ham || [ -n "$ham" ]; do
   fi
   onceki="$satir"; printf '%s' "$satir" | grep -qE '^[[:space:]]*#' || BLOK_SAHIP=0   # yorum dışı satır bloğu kapatır
 done <<< "$ICERIK"
-printf '── sarılı satır: %s · kırmızı: %s · sarı: %s%s\n' "$SARILI" "$KIRMIZI" "$SARI" "$([ "$KUTU_ICI" -eq 1 ] || printf ' · (K6 gözlem komutu bakılmadı: --kutu-ici yok)')"
+if [ -n "$KARSI" ]; then   # K7 öbür yön: kanonda olup canlıda olmayan zamanlı satır (satır no kanondaki)
+  for k in "${!KANON_ADET[@]}"; do eks=$(( ${KANON_ADET[$k]} - ${CANLI_ADET[$k]:-0} ))
+    [ "$eks" -gt 0 ] && bul S K7 "kanon:${KANON_SATIR[$k]}" "kanonda var, canlıda yok$([ "${CANLI_ADET[$k]:-0}" -gt 0 ] && printf ' (%s kopya eksik)' "$eks") — kanca indirmemiş; oda kancasını koştur"; done
+fi
+printf '── sarılı satır: %s · kırmızı: %s · sarı: %s%s%s\n' "$SARILI" "$KIRMIZI" "$SARI" "$([ "$KUTU_ICI" -eq 1 ] || printf ' · (K6 gözlem komutu bakılmadı: --kutu-ici yok)')" "$([ -n "$KARSI" ] && printf ' · kanonla karşılaştırıldı' || printf ' · (K7 kanon farkı bakılmadı: --kanon yok)')"
 [ "$KIRMIZI" -eq 0 ] || exit 1; exit 0

@@ -1,0 +1,28 @@
+{
+  "tur": 3,
+  "is": "kosu-kaydi-kanon-canli-son",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-10T23:19:32+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 49132,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "0.5.2, canlı-kanon farkını K7, sarılmamış kilidi K8 olarak ölçüyor; sarmalayıcı da kanon veya canlı okunamadığında rc 3’ü temiz saymayıp “ölçülemedi” diye bildiriyor. Talep gerçekçi önce/sonra ölçümü ve doğrudan sınavlarla karşılanmış; yalnız belge başlığında eski 0.5.1 etiketi kalmış küçük bir rötuş var.",
+    "bulgular": [
+      {
+        "ne": "Kanon lint'i bölüm başlığı hâlâ 0.5.1 diyor; aynı bölüm K7/K8’i 0.5.2 özelliği olarak anlatıyor.",
+        "kanit": "Diffte sürüm üstbilgisi 0.5.2’ye çıkarılmış ve bölüm gövdesine “K7-K8 (0.5.2)” eklenmişken başlık değişmeden “Kanon lint'i (0.5.1 …)” kalmış.",
+        "konum": "kosu-kaydi/SKILL.md: “### Kanon lint'i (0.5.1 …)” başlığı",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı/rc=3 kanıt kaydı yok. Gerçekçi nâzır örneğinin önce/sonra çifti eski sürümde sıfır sarıdan yeni sürümde iki K7 ve iki K8’e geçişi gösteriyor; lint sınavı 68/68, sarmalayıcı sınavı 116/116 geçiyor. Sınavlar K7’nin iki yönünü ve çokluğunu, komut içindeki anlamlı boşlukların korunmasını, K8 sarılı/sarılmamış ayrımını, canlı crontab ile kanon okunamadığında “ölçülemedi” bildirimini doğrudan yokluyor."
+  }
+}

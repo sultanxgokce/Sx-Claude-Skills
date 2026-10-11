@@ -1,0 +1,28 @@
+{
+  "tur": 1,
+  "is": "kosu-kaydi-kanon-canli-son",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-10T23:15:12+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 44952,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "0.5.2, canlı ile kanonu K7 üzerinden karşılaştırıyor, sarılmamış flock satırlarını K8 diye bildiriyor ve lint rc 3 olduğunda bunu temize çıkarmayıp “ölçülemedi” diyor. Talep doğru yerden tutulmuş ve sınavlar güçlü; ancak K7 karşılaştırmasının kümeye indirgenmesi yinelenmiş satır farkını saklayabildiği için önce bu uygulama kusuru çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "K7 karşılaştırması satırları çokluklarıyla değil küme olarak tutuyor; aynı zamanlı satır canlıda veya kanonda fazladan yinelenirse associative-array ataması önceki kaydı ezer ve K7 fark üretmez. Bu, “canlı crontab kanona karşı” tam satır karşılaştırmasının yinelenmiş satır durumunda yanlış temiz görünmesine yol açar.",
+        "kanit": "Her iki taraf `declare -A KANON_SATIR=() CANLI_SATIR=()` ile tutuluyor; okuma sırasında `KANON_SATIR[\"$(duz \"$k\")\"]=\"$kn\"` ve `CANLI_SATIR[\"$d\"]=\"$n\"` aynı anahtarı yeniden yazar. Son karşılaştırma yalnız anahtarın varlığına bakıyor; eklenen K7 sınavları iki tarafta yinelenen aynı satırın adet farkını sınamıyor.",
+        "konum": "kosu-kaydi/scripts/kanon-lint.sh: KANON_SATIR/CANLI_SATIR tanımları, doldurma döngüleri ve K7 öbür-yön döngüsü",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı/rc=3 kanıt kaydı yok. Nâzır örneğinde gerçekçi canlı 7/kanon 5 verisiyle önce/sonra ölçüm çifti, K7 iki ve K8 iki çıktısını doğrudan gösteriyor; ayrıca 64 ve 116 kapılı iki yeşil sınav K7/K8 ile rc 3’ün “ölçülemedi” diye aktarılmasını açıkça yokluyor. Bununla birlikte yeşil sınavlar yinelenmiş özdeş satırların çokluk farkını kapsamıyor."
+  }
+}
