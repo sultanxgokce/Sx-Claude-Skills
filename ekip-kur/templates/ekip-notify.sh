@@ -37,6 +37,7 @@ SINYAL_LOG="${EKIP_SINYAL_LOG:-$COMMON_ROOT/_agents/handoff/ekip-sinyal.log}" # 
 LEDGER_PARENT="$(dirname "$SINYAL_LOG")"
 [ -d "$LEDGER_PARENT" ] \
   || { echo "HATA: ledger dizini yok: $LEDGER_PARENT" >&2; exit 1; }
+tmux() { command tmux ${EKIP_TMUX_SOCK:+-L "$EKIP_TMUX_SOCK"} "$@"; }   # sınav ayrı tmux sunucusunda koşar (EKIP_TMUX_SOCK)
 PREFLIGHT_LIB="$SCRIPT_DIR/ekip-preflight.lib.sh"
 # shellcheck source=/dev/null
 [ -f "$PREFLIGHT_LIB" ] && . "$PREFLIGHT_LIB"
@@ -223,6 +224,37 @@ while IFS=$'\t' read -r ID TARGET INBOX; do
     sinyal_yaz ping "${FROM_ID:-HARICI}" "$ID" oturum-yok "$MESAJ" >/dev/null 2>&1 || true
     continue
   fi
+  # --- CANLILIK KAPISI (DÜLGER, 10 Ekim; BASİRET kotası): "iletildi" hükmü canlı-ölçüme bağlı. 8 Ekim'de DÜLGER pane'i
+  #     bash satırındayken ping "iletildi✓" demişti — oysa tuşlar bir KABUĞA gitti; Enter'la mesaj komut olarak koşabilirdi.
+  #     yok (ajan süreci yok) = oturum-yok, GÖNDERİLMEZ (--force bile aşamaz: kabuk hiçbir zaman meşru hedef değildir).
+  #     olcemedim = kapı kör → eski davranış (gönder, defterde olcemedim yazar); asla "yok" uydurulmaz.
+  CANLI="olcemedim - canli-prob yok"
+  if [ -x "$SCRIPT_DIR/ekip-canli.sh" ]; then
+    # Pozitif kontrol sırası: çağıran koltuk → EKIP_CANLI_KONTROL → registry YÖNETİCİSİ. Üçüncü basamak olmadan
+    #   dışarıdan (tmux dışı, ör. cron/kurye) çağrıda prob "olcemedim" diyor ve boş kabuğa mesaj gidebiliyordu
+    #   (bağımsız göz, tur 1). Yönetici koltuğu da canlı değilse kapı gerçekten kördür → eski davranış kalır.
+    _k="${FROM_ID:-${EKIP_CANLI_KONTROL:-$YONETICI}}"
+    CANLI="$(bash "$SCRIPT_DIR/ekip-canli.sh" "$ID" ${_k:+--kontrol "$_k"} 2>/dev/null | awk -F'\t' 'NR==1{print $2" "$3" "$4}')" || true
+    [ -n "$CANLI" ] || CANLI="olcemedim - canli-prob çalışmadı"
+  fi
+  if [ "${CANLI%% *}" = yok ]; then
+    echo "UYARI: $ID oturumu var ama AJAN YOK (bash satırı: ${CANLI#* }) — ping atlandı; kabuğa yazılmaz" >&2
+    MISSING=$((MISSING+1))
+    sinyal_yaz ping "${FROM_ID:-HARICI}" "$ID" oturum-yok "ajan-yok: $MESAJ" >/dev/null 2>&1 || true
+    sinyal_yaz canli "${FROM_ID:-HARICI}" "$ID" yok "${CANLI#* }" >/dev/null 2>&1 || true
+    continue
+  fi
+  # sinirda (BASİRET, 11 Ekim): ajan var ama kullanım sınırında — mesaj gitse de iş yapamaz, "iletildi" yanıltır.
+  #   GÖNDERİLMEZ, defterde ayrı hüküm: sinirda. Yönetici bunu ekip-durum/defterden görür; açmak Sultan'ın elidir (model/kota).
+  #   KOŞULSUZ (Sultan, 11 Ekim: "sınırda koltuğa mesaj gitmesin"): --force da aşamaz — sınırdaki koltuk mesajı
+  #   okuyamaz, zorlamak yalnız defteri yanıltır. Kutuyu açmak insan elidir (model/kota), bayrak değil.
+  if [ "${CANLI%% *}" = sinirda ]; then
+    echo "ENGEL: $ID kullanım sınırında (${CANLI#* }) — göndermiyorum (--force da aşmaz); mesaj iş üretmez. Açmak: o pencerede model değişimi (Sultan)" >&2
+    BLOCKED=$((BLOCKED+1))
+    sinyal_yaz ping "${FROM_ID:-HARICI}" "$ID" sinirda "$MESAJ" >/dev/null 2>&1 || true
+    sinyal_yaz canli "${FROM_ID:-HARICI}" "$ID" sinirda "${CANLI#* }" >/dev/null 2>&1 || true
+    continue
+  fi
   # --- P2 preflight + R2 ghost-vs-draft (send'den ÖNCE oku; belirsiz→DUR; otomatik-interrupt ASLA) ---
   if [ "$FORCE" -eq 0 ] && declare -F preflight_state >/dev/null; then
     PF="$(preflight_state "$TARGET")"
@@ -285,6 +317,10 @@ while IFS=$'\t' read -r ID TARGET INBOX; do
     UNVERIFIED=$((UNVERIFIED+1)); echo "gönderildi: $ID → $TARGET (iletim-DOĞRULANAMADI — pane'e bak)" >&2
   fi
   sinyal_yaz ping "${FROM_ID:-HARICI}" "$ID" "$DURUM_ILETIM" "$MESAJ" >/dev/null 2>&1 || true
+  # --- canlılık (DÜLGER, 10 Ekim; MUAVİN şartlı-kabul): "iletildi" ≠ "ajan yaşıyor". Ayrı defter-satırı (tip=canli),
+  #     ping-satırı ve çıkış-kodu DEĞİŞMEZ; ölçemezse "olcemedim" yazar, asla "yok" uydurmaz; gönderimi hiç engellemez.
+  sinyal_yaz canli "${FROM_ID:-HARICI}" "$ID" "${CANLI%% *}" "${CANLI#* }" >/dev/null 2>&1 || true
+  case "${CANLI%% *}" in canli) ;; *) echo "canlılık: $ID → ${CANLI%% *} (${CANLI#* })" >&2 ;; esac
 done <<< "$SECILEN"
 
 # --- özet + exit (6-alan; eski 3-alan adı/sırası korunur) ---

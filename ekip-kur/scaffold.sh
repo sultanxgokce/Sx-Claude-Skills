@@ -40,6 +40,12 @@ put "$TMPL/ekip-durum.sh"           "$TARGET/scripts/ekip-durum.sh"
 chmod +x "$TARGET/scripts/ekip-durum.sh" 2>/dev/null || true
 put "$TMPL/ekip-self-recognition.sh" "$TARGET/scripts/ekip-self-recognition.sh"
 chmod +x "$TARGET/scripts/ekip-self-recognition.sh" 2>/dev/null || true
+# 1.8.0 (MAİŞET/BASİRET 11 Ekim 2026, filoya MUAVİN aldı): canlılık probu (sinirda/yok/bekliyor; notify "iletildi"
+#   hükmünü buna bağlar) + kimlik bekçisi (beş kapı: rol gerçek · kanca bağlı · yönerge hitap · kart var · kanca basıyor)
+put "$TMPL/ekip-canli.sh"           "$TARGET/scripts/ekip-canli.sh"
+chmod +x "$TARGET/scripts/ekip-canli.sh" 2>/dev/null || true
+put "$TMPL/kimlik-bekcisi.sh"       "$TARGET/scripts/kimlik-bekcisi.sh"
+chmod +x "$TARGET/scripts/kimlik-bekcisi.sh" 2>/dev/null || true
 put "$TMPL/ekip-hooks/ctx-nudge.sh" "$TARGET/scripts/ekip-hooks/ctx-nudge.sh"
 chmod +x "$TARGET/scripts/ekip-hooks/ctx-nudge.sh" 2>/dev/null || true
 # öz-servis-compact paketi (detached-watcher deseni): ctx-nudge DANGER-mesajı EKIP_SELFCOMPACT_PATH set olunca bunu önerir.

@@ -1,0 +1,8 @@
+$ bash -c ls ekip-kur/templates/kimlik-bekcisi.sh ekip-kur/templates/ekip-canli.sh && grep -c sinirda ekip-kur/templates/ekip-notify.sh && grep -c "ekip-canli\|kimlik-bekcisi" ekip-kur/scaffold.sh
+# rc=0 sure=0.0s zaman=2026-10-11T21:21:36+03:00
+--- stdout ---
+ekip-kur/templates/ekip-canli.sh
+ekip-kur/templates/kimlik-bekcisi.sh
+5
+4
+--- stderr ---

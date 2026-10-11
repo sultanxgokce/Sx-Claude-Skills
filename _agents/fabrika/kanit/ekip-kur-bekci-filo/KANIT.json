@@ -1,0 +1,58 @@
+{
+  "is": "ekip-kur-bekci-filo",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-11T21:28:13+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sablon-dosyalari",
+      "asama": "once",
+      "dosya": "olcum-sablon-dosyalari-once.txt",
+      "sha256": "8dd01c0b48568c49d6fff1ae206add0f8181f8fc0311766007964afc794dc5fb",
+      "komut": [
+        "bash",
+        "-c",
+        "git show origin/main:ekip-kur/templates/kimlik-bekcisi.sh >/dev/null 2>&1 && echo VAR || echo \"YOK: origin/main şablonunda kimlik-bekcisi.sh ve ekip-canli.sh yok\"; git show origin/main:ekip-kur/templates/ekip-notify.sh | grep -c sinirda"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-11T21:21:36+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sablon-dosyalari",
+      "asama": "sonra",
+      "dosya": "olcum-sablon-dosyalari-sonra.txt",
+      "sha256": "539e06d8e780763a0ff74967b3ba12c000e850ff63b42a38359b24e3debbbb61",
+      "komut": [
+        "bash",
+        "-c",
+        "ls ekip-kur/templates/kimlik-bekcisi.sh ekip-kur/templates/ekip-canli.sh && grep -c sinirda ekip-kur/templates/ekip-notify.sh && grep -c \"ekip-canli\\|kimlik-bekcisi\" ekip-kur/scaffold.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-11T21:21:36+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinavlar",
+      "asama": "sonra",
+      "dosya": "olcum-sinavlar-sonra.txt",
+      "sha256": "881b0a60a38f41d3469c363188663f9495d432284824b652a9f05c9da916750c",
+      "komut": [
+        "bash",
+        "-o",
+        "pipefail",
+        "-c",
+        "cd ekip-kur/templates && bash kimlik-bekcisi.test.sh | tail -1 && bash ekip-canli.test.sh | tail -1 && bash ekip-notify.test.sh | tail -1"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-11T21:28:13+03:00",
+      "sure_sn": 22.4
+    }
+  ],
+  "imza": "5c3b1ac1baa6fd18eca9fb587755c0496ab72df9a2f197ac5bc387b9617f2339"
+}

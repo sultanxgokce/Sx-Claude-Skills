@@ -1,0 +1,40 @@
+{
+  "tur": 2,
+  "is": "ekip-kur-bekci-filo",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-11T21:27:04+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 61628,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Üç kontrol aracı 1.8.0 şablonuna alınmış; önceki turun dış çağrı ve aksanlı kimlik kusurları yönetici kontrolü, ortak sadeleştirme ve yeni sınavlarla giderilmiş. Lakin Sultan’ın “sınırda koltuğa mesaj gitmesin” buyruğu koşulsuzken `--force` bu kapıyı açıyor ve toplu sınav kaydı ilk iki sınavın başarısızlığını çıkış koduna taşımıyor; önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "Sınırdaki koltuğa mesaj göndermeme talebi koşulsuz olduğu halde uygulama `--force` kullanıldığında engeli atlayıp gönderime devam ediyor; iş kartında bu istisnaya izin veren bir hüküm yok.",
+        "kanit": "Sınır kapısı yalnız `CANLI=sinirda` ve `FORCE=0` birlikteyken `continue` ediyor; `FORCE=1` halinde kod gönderim bölümüne düşüyor. Sınav da yalnız forcesuz SINIR çağrısını doğruluyor, `--force SINIR` yolunu sınamıyor.",
+        "konum": "ekip-kur/templates/ekip-notify.sh:248; ekip-kur/templates/ekip-notify.test.sh:61",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Üç sınavı yeşil gösteren kanıt komutu ilk iki sınavın çıkış kodunu güvenceye almıyor; bu nedenle manifestteki rc=0 bütün sınavların başarılı olduğunu tek başına kanıtlamıyor.",
+        "kanit": "Kayıt komutu `bash kimlik-bekcisi.test.sh | tail -1; bash ekip-canli.test.sh | tail -1; bash ekip-notify.test.sh | tail -1` biçiminde ve dış kabukta `set -o pipefail`/`&&` yok; nihai rc yalnız son `tail` hattından gelir. Çıktıda 12/12, 21/21 ve 15/15 görünmesi olumlu olsa da komut başarısız çıkışları toplamıyor.",
+        "konum": "kanıt kaydı: olcum-sinavlar-sonra.txt",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Sürüm açıklamasındaki sınav adetleri güncel sonuçlarla uyuşmuyor.",
+        "kanit": "SKILL.md kimlik sınavını 10 ve notify sınavını 13 diye tanıtıyor; araç imzalı ölçüm çıktısı sırasıyla 12 geçti ve 15 geçti gösteriyor.",
+        "konum": "ekip-kur/SKILL.md:57; kanıt kaydı: olcum-sinavlar-sonra.txt",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam, sarı kayıt yok; dosya kurulumu için kırmızı/yeşil ölçüm çifti var. Sınav çıktıları 12/12, 21/21 ve 15/15 olumlu, önceki turun dış çağrı ve Türkçe kimlik yolları da artık sınanıyor; ancak toplu komut ilk iki sınavın rc değerini yuttuğu ve `--force SINIR` yolu ölçülmediği için üretim güvencesi tamam değil."
+  }
+}
