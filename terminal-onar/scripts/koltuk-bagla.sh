@@ -50,17 +50,20 @@ claude_var_mi() {  # $1 = oturum → 0 ise koltukta Claude çalışıyor
 #    tür  : ajan  = Claude çalışan oturum ya da ana oturum (<kutu>-ana) · diğer = geçici/arka plan (cc-* · dash* ·
 #           imglistener* · *-kurtarici) ya da Claude'suz oturum
 #    hâl  : son ekran satırlarından, filo yoklamasıyla AYNI desenler (Nexus scripts/filo.py hal()): sıra meşgul > soru >
-#           sınır > girdi > boş; hiçbiri tutmazsa "bilinmiyor" (uydurulmaz). Claude'suz oturumun hâli "yok" (ölçülmez).
+#           sınır > girdi > boş; hiçbiri tutmazsa "bilinmiyor" (uydurulmaz). Claude'suz oturumun hâli ölçülmez → "bilinmiyor".
 diger_mi() { case "$1" in cc-*|dash*|imglistener*|*-kurtarici) return 0 ;; esac; return 1; }
 koltuk_turu() {  # $1 = oturum · $2 = claude(1|0) · $3 = ana(1|0)
   if diger_mi "$1"; then echo diger; elif [ "$2" = 1 ] || [ "$3" = 1 ]; then echo ajan; else echo diger; fi
 }
-koltuk_hali() {  # $1 = oturum → calisiyor|soru|sinirda|girdi|bos|bilinmiyor  (son 15 satır, boş satırlar atılır)
+koltuk_hali() {  # $1 = oturum → calisiyor|soru|sinirda|girdi|bos|bilinmiyor  (SON 15 dolu satır; eskisi sayılmaz)
   local ekran
-  ekran="$(tmux capture-pane -p -t "=$1" -S -15 2>/dev/null | sed '/^[[:space:]]*$/d')" || { echo bilinmiyor; return; }
+  # 🔴 tmux -S -15 görünür panenin ÜSTÜNE 15 geçmiş satır ekler, sonunu sınırlamaz (bağımsız göz #298 tur 1): sınır tail ile.
+  ekran="$(tmux capture-pane -p -t "=$1" -S -15 2>/dev/null | sed '/^[[:space:]]*$/d' | tail -n 15)" || { echo bilinmiyor; return; }
   [ -n "$ekran" ] || { echo bilinmiyor; return; }
-  if printf '%s' "$ekran" | grep -qiE 'esc to interrupt|esc to cancel\)|\([0-9]+s ·|Running…|Waiting…' && ! printf '%s' "$ekran" | grep -q 'Enter to select'; then echo calisiyor; return; fi
+  # Sıra: soru > meşgul > sınır > girdi > boş — soru en üstte: bekleyen bir soru, ekranda "esc to cancel" gibi meşgul izi taşısa
+  # da sorudur; Sultan'ın görmesi gereken odur (filo yoklaması aynı deseni "Enter to select" istisnasıyla kuruyordu).
   if printf '%s' "$ekran" | grep -qE 'Enter to select|Do you want to|❯ [0-9]+\. '; then echo soru; return; fi
+  if printf '%s' "$ekran" | grep -qiE 'esc to interrupt|esc to cancel\)|\([0-9]+s ·|Running…|Waiting…'; then echo calisiyor; return; fi
   if printf '%s' "$ekran" | grep -qiE 'usage limit|limit reached|5-hour limit'; then echo sinirda; return; fi
   local satir
   satir="$(printf '%s\n' "$ekran" | grep -E '^[[:space:]]*❯' | tail -1 | sed 's/^[[:space:]]*❯[[:space:]]*//')"
@@ -79,7 +82,7 @@ if [ "${1:-}" = "--liste" ]; then
     if claude_var_mi "$s"; then c=1; else c=0; fi
     a=0; [ -n "$ANA_AD" ] && [ "$s" = "$ANA_AD" ] && a=1
     tur="$(koltuk_turu "$s" "$c" "$a")"
-    if [ "$c" = 1 ]; then hal="$(koltuk_hali "$s")"; else hal=yok; fi
+    if [ "$c" = 1 ]; then hal="$(koltuk_hali "$s")"; else hal=bilinmiyor; fi   # Claude'suz oturumda hâl ölçülmez → bilinmiyor (altı değerin dışına çıkılmaz)
     printf '%s\t%s\t%s\t%s\t%s\n' "$s" "${son:-0}" "$c" "$tur" "$hal"
   done
   exit 0

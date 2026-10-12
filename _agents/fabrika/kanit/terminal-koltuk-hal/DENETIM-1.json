@@ -1,0 +1,40 @@
+{
+  "tur": 1,
+  "is": "terminal-koltuk-hal",
+  "pr": "298",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T23:00:33+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 23915,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Muavin, koltuk türü ile hâlini betikten API'ye taşımış ve eski betiğe karşı geriye uyumu korumuş. Lakin her koltuk için istenen altı hâlin dışına `yok` diye yedinci bir değer çıkarmış; ayrıca ekranın yalnız son 15 satırını ölçme şartı uygulanmadığından önce bunları çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "Claude'suz koltuklara `yok` hâli dönülüyor; iş kartı ise her koltuk için yalnız çalışıyor, soru bekliyor, girdi bekliyor, boş, sınırda veya bilinmiyor değerlerinden birini istiyor. Bu yüzden teslim talebin veri sözleşmesini karşılamıyor.",
+        "kanit": "`if [ \"$c\" = 1 ]; then ... else hal=yok; fi` açıkça yedinci değeri üretiyor; D10 sınavı da bunu doğru davranış diye sabitliyor. Sunucu bu değeri süzmeden `hal` alanına aktarıyor.",
+        "konum": "terminal-onar/scripts/koltuk-bagla.sh: --liste dalı; terminal-onar/scripts/koltuk-bagla.test.sh: D10",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Hâl sınıflandırması yalnız son 15 ekran satırıyla sınırlandırılmamış; daha eski görünür satırlardaki bir desen güncel hâli yanlış belirleyebilir.",
+        "kanit": "Kod `tmux capture-pane -p -t \"=$1\" -S -15` çağırıyor fakat bitişi son 15 satırla sınırlayan bir `-E` değeri veya sonradan `tail -n 15` kullanmıyor; ardından bütün yakalanan metinde desen arıyor. D5-D9 sahtesi yalnız kısa ekran içerikleri verdiği için bu sınırı sınamıyor.",
+        "konum": "terminal-onar/scripts/koltuk-bagla.sh: koltuk_hali; terminal-onar/scripts/koltuk-bagla.test.sh: D5-D9",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Soru ile çalışma desenlerinin önceliği genel durumda sınav açıklamasındaki gibi değil; çalışma kontrolü önce yapılıyor ve yalnız `Enter to select` varsa geri çekiliyor.",
+        "kanit": "İlk koşul çalışma desenini bulunca, metinde `Enter to select` yoksa hemen `calisiyor` döndürüyor; `Do you want to` ve `❯ 1. ` soru desenleri daha sonra değerlendiriliyor. D6 yalnız `Enter to select` içeren örneği kapsıyor.",
+        "konum": "terminal-onar/scripts/koltuk-bagla.sh: koltuk_hali; terminal-onar/scripts/koltuk-bagla.test.sh: D6",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sağlam ve sarı kayıt yok. Altı sınavın toplu ölçümü rc=0; mutasyon ölçümü eski betikte tür/hâl olmayınca D1-D11'in düştüğünü gösteriyor. Ancak verilen toplu çıktı ilk 60 satırda kesildiği için yeni D ve Y10 sonuçları doğrudan görünmüyor; ayrıca önce/sonra gerçekçi ekran karesi veya gerçek filo desenleriyle ölçüm çifti yok, testler kısa sahte veriye dayanıyor."
+  }
+}

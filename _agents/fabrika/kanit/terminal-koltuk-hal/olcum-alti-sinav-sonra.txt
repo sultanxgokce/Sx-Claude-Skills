@@ -1,5 +1,5 @@
 $ bash -c cd terminal-onar && k=0; for t in kutu-adi kur-bag onar koltuk-bagla kabuk-kapisi; do echo "══ $t"; bash scripts/$t.test.sh 2>&1; r=$?; echo "rc=$r"; [ $r -eq 0 ] || k=1; done; echo "══ sunucu"; node kapi/sunucu.test.mjs 2>&1; r=$?; echo "rc=$r"; [ $r -eq 0 ] || k=1; exit $k
-# rc=0 sure=13.7s zaman=2026-10-12T22:58:36+03:00
+# rc=0 sure=14.0s zaman=2026-10-12T23:02:48+03:00
 --- stdout ---
 ══ kutu-adi
 ── kurulu olduğu yerden türetme
@@ -109,11 +109,13 @@ D · tür ve hâl (2.2.0: ajan ⟂ diğer · hâl son ekrandan, filo desenleri)
   ✓ D3 Claude'suz oturum ve dash* 'diğer'
   ✓ D4 cc-* Claude çalışsa da 'diğer' (geçici oturum)
   ✓ D5 'esc to interrupt' → çalışıyor
-  ✓ D6 'Enter to select' → soru (çalışıyor deseni olsa bile soru kazanır)
+  ✓ D6 'Do you want to' + 'Esc to cancel' birlikte → SORU kazanır (meşgul izi soruyu gizlemez)
   ✓ D7 'usage limit' → sınırda
   ✓ D8 istemde yazı → girdi bekliyor · boş istem → boş
   ✓ D9 hiçbir desen tutmazsa 'bilinmiyor' (uydurma yok)
-  ✓ D10 Claude'suz oturumun hâli ölçülmez: 'yok'
+  ✓ D10 Claude'suz oturumun hâli ölçülmez: 'bilinmiyor' (altı değer dışına çıkılmaz)
+  ✓ D12 eski satırdaki meşgul izi sayılmaz: son 15 satırda boş istem → boş
+  ✓ D12b güncel meşgul izi (son satırlarda) → çalışıyor (D12 tautoloji değil)
   ✓ D11 ana adı bildirilmezse ana 'ajan' sayılmaz (D2 tautoloji değil)
 C · liste (tek kaynak)
   ✓ C1 --liste rc=0
@@ -125,7 +127,7 @@ C · liste (tek kaynak)
   ✓ C7 tmux sunucusu hiç yoksa gerçekten boş: rc=0
   ✓ C8 liste alınamazken koltuğa da BAĞLANILMAZ (yanlış 'yok' demez, red basar)
 
-toplam=41 geçen=41 düşen=0
+toplam=43 geçen=43 düşen=0
 rc=0
 ══ kabuk-kapisi
 ── sahte kabukta DURMALI

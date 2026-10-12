@@ -47,7 +47,7 @@ writeFileSync(KOLTUK_SAHTE, '#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\n
 // 2.2.0: betik 5 alan döner (… tür · hâl) ve ANA adını ortamdan (KOLTUK_ANA) alır — sahte, aldığı adı ilk satıra yazar
 const KOLTUK_SAHTE5 = join(T, 'koltuk-sahte5.sh');
 writeFileSync(KOLTUK_SAHTE5, '#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\n'
-  + 'printf "%s\\t1760000000\\t0\\tajan\\tyok\\nBASIRET\\t1760000100\\t1\\tajan\\tsoru\\ncc-1\\t5\\t1\\tdiger\\tbilinmiyor\\n" "${KOLTUK_ANA:-ana-yok}"\n');
+  + 'printf "%s\\t1760000000\\t0\\tajan\\tbilinmiyor\\nBASIRET\\t1760000100\\t1\\tajan\\tsoru\\ncc-1\\t5\\t1\\tdiger\\tbilinmiyor\\n" "${KOLTUK_ANA:-ana-yok}"\n');
 const KOLTUK_BOZUK = join(T, 'koltuk-bozuk.sh');
 writeFileSync(KOLTUK_BOZUK, '#!/usr/bin/env bash\nexit 1\n');
 

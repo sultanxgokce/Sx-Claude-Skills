@@ -1,14 +1,14 @@
 {
   "is": "terminal-koltuk-hal",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-12T22:58:37+03:00",
+  "guncelleme": "2026-10-12T23:02:48+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "alti-sinav",
       "asama": "sonra",
       "dosya": "olcum-alti-sinav-sonra.txt",
-      "sha256": "8e414b2641871569ad9d3a728c00916a4ec6206bac0b4ab03824a22979188356",
+      "sha256": "14e737eed618ad75d906dda790859d3a2a383bbd3144dd0461cb65d4c6a756b7",
       "komut": [
         "bash",
         "-c",
@@ -16,25 +16,25 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-12T22:58:36+03:00",
-      "sure_sn": 13.7
+      "zaman": "2026-10-12T23:02:48+03:00",
+      "sure_sn": 14.0
     },
     {
       "tur": "olcum",
       "etiket": "D-mutasyon-tur-hal-yok",
       "asama": "tek",
       "dosya": "olcum-D-mutasyon-tur-hal-yok-tek.txt",
-      "sha256": "57b821a5f82bc9e197fdf93edf8eff490c3ad54a9f91da54c58356a628949e5d",
+      "sha256": "d7308284ccfbb1731644a14ba275f5507610e7ddf6d4d62f26f5e811c3ccea62",
       "komut": [
         "bash",
         "-c",
-        "M=/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut-khal; mkdir -p $M && cp -r terminal-onar/scripts $M/ && git show origin/main:terminal-onar/scripts/koltuk-bagla.sh > $M/scripts/koltuk-bagla.sh && sed \"s#^B=.*#B=$M/scripts/koltuk-bagla.sh#\" terminal-onar/scripts/koltuk-bagla.test.sh > $M/t.sh; grep -n \"^B=\" terminal-onar/scripts/koltuk-bagla.test.sh | head -2; bash $M/t.sh 2>&1 | grep -E \"D[0-9]+ |toplam\"; r=${PIPESTATUS[0]}; echo \"sinav-rc=$r (eski betik: tür/hâl yok; beklenen kırmızı)\"; test $r -ne 0"
+        "M=/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut-khal; mkdir -p $M && cp -r terminal-onar/scripts $M/ && git show origin/main:terminal-onar/scripts/koltuk-bagla.sh > $M/scripts/koltuk-bagla.sh && sed \"s#^B=.*#B=$M/scripts/koltuk-bagla.sh#\" terminal-onar/scripts/koltuk-bagla.test.sh > $M/t.sh; bash $M/t.sh 2>&1 | grep -E \"D[0-9]+b? |toplam\"; r=${PIPESTATUS[0]}; echo \"sinav-rc=$r (eski betik: tür/hâl yok; beklenen kırmızı)\"; test $r -ne 0"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-12T22:58:37+03:00",
-      "sure_sn": 0.5
+      "zaman": "2026-10-12T23:02:48+03:00",
+      "sure_sn": 0.6
     }
   ],
-  "imza": "4598c4499520bba868b2a4df58356e9bb5b8c7ab25198161f6cf4560e60a388a"
+  "imza": "52e5586199ac4a336df21846a210dc97a3df1197e3181cb0d0a7508f76011659"
 }
