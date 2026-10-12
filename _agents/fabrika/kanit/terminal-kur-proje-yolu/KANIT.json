@@ -1,7 +1,7 @@
 {
   "is": "terminal-kur-proje-yolu",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-12T22:20:34+03:00",
+  "guncelleme": "2026-10-12T22:28:54+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -39,15 +39,15 @@
       "etiket": "kur-bag-davranis-sinavi",
       "asama": "sonra",
       "dosya": "olcum-kur-bag-davranis-sinavi-sonra.txt",
-      "sha256": "c4613694182fc1a811902650d1de7c988cd0f853a6e6a097eb3cbf9d895fc9c2",
+      "sha256": "241ac0944a77d6f7c39a8b6a473d847523442049b20b0cf6924acb243d82f6d4",
       "komut": [
         "bash",
         "terminal-onar/scripts/kur-bag.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-12T22:20:25+03:00",
-      "sure_sn": 0.4
+      "zaman": "2026-10-12T22:28:45+03:00",
+      "sure_sn": 0.5
     },
     {
       "tur": "olcum",
@@ -70,7 +70,7 @@
       "etiket": "terminal-onar-bes-sinav",
       "asama": "sonra",
       "dosya": "olcum-terminal-onar-bes-sinav-sonra.txt",
-      "sha256": "aaefc8469e74acea1f207898ea1aa77d8c5e8e789fd28c76e2e0d1413918f620",
+      "sha256": "7964e03bcd99a85b10619bb1142673072822cec1d941f4ae6fd1d1a95b4261a8",
       "komut": [
         "bash",
         "-c",
@@ -78,8 +78,8 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-12T22:20:33+03:00",
-      "sure_sn": 8.5
+      "zaman": "2026-10-12T22:28:54+03:00",
+      "sure_sn": 8.6
     },
     {
       "tur": "olcum",
@@ -97,5 +97,5 @@
       "sure_sn": 0.1
     }
   ],
-  "imza": "d598f0c7503180fa1249e2997eb673ecedc5b6d35c0e81c4173523f2f7147d36"
+  "imza": "8a2b9e4c8f164062ac771f8cb30793f5359b7adc46f2932f5e3a2624ce99f3d3"
 }

@@ -74,6 +74,13 @@ kapi "B10e ilk yedeğin içine taşınmadı (ilk yedek yalnız kendi dosyasını
 kapi "B10f ikinci yedeğin içeriği kendi dosyası" "1" "$(n=$(find "$BAG".eski-* -name eski2.txt | wc -l | tr -d ' '); echo "$n")"
 kapi "B10g bağ yine doğru hedefte, rc=0" "$ORTAK:0" "$(hedef):$rc"
 
+echo "── proje yolunda beklenmedik DÜZ DOSYA: silinmez, kurulum durur (fail-closed)"
+rm -f "$BAG"; echo "beklenmedik" > "$BAG"
+rc=$(kur "$ORTAK/scripts/kur.sh")
+kapi "B16 düz dosya SİLİNMEDİ (içeriği yerinde)" "beklenmedik" "$(cat "$BAG" 2>/dev/null)"
+kapi "B16b kurulum durdu rc=4 ve sebebi söylendi" "4:e" "$rc:$(grep -q 'ne bağ ne dizin' "$T/son" && echo e || echo h)"
+rm -f "$BAG"
+
 echo "── YÜKSELTME: canlıdaki eski ortak-yollu cron satırları (12 Eki, 15 kutu) proje yoluna ÇEVRİLİR"
 rm -f "$BAG"; rm -r -- "$PROJE/.oda" 2>/dev/null; mkdir -p "$PROJE/.oda"
 cat > "$PROJE/.oda/cron" <<CR

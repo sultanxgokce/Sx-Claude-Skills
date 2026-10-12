@@ -91,6 +91,9 @@ elif [ -d "$PROJE_BECERI" ]; then
     mv "$PROJE_BECERI" "$eski" && _bilgi "· eski kopya kenara alındı: $eski"
     _bag_kur
   fi
+elif [ -e "$PROJE_BECERI" ]; then
+  # Ne bağ ne dizin (düz dosya vb.): SİLİNMEZ, kurulum durur — beklenmedik bir şeyi yedeksiz silmek onarımın işi değil (bağımsız göz, tur 4)
+  _hata "proje-yolu bağı kurulamadı: $PROJE_BECERI ne bağ ne dizin ($(stat -c %F "$PROJE_BECERI" 2>/dev/null)); elle bak, silinmedi"; exit 4
 else
   _bag_kur
 fi

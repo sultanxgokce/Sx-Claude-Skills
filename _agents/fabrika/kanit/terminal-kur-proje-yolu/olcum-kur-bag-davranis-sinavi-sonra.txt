@@ -1,5 +1,5 @@
 $ bash terminal-onar/scripts/kur-bag.test.sh
-# rc=0 sure=0.4s zaman=2026-10-12T22:20:25+03:00
+# rc=0 sure=0.5s zaman=2026-10-12T22:28:45+03:00
 --- stdout ---
 ── sıfırdan: bağ yok
   ✓ B1 kur.sh ortak dizinden koşunca bağ kurulur → ortak kopyaya
@@ -25,6 +25,9 @@ $ bash terminal-onar/scripts/kur-bag.test.sh
   ✓ B10e ilk yedeğin içine taşınmadı (ilk yedek yalnız kendi dosyasını taşır)
   ✓ B10f ikinci yedeğin içeriği kendi dosyası
   ✓ B10g bağ yine doğru hedefte, rc=0
+── proje yolunda beklenmedik DÜZ DOSYA: silinmez, kurulum durur (fail-closed)
+  ✓ B16 düz dosya SİLİNMEDİ (içeriği yerinde)
+  ✓ B16b kurulum durdu rc=4 ve sebebi söylendi
 ── YÜKSELTME: canlıdaki eski ortak-yollu cron satırları (12 Eki, 15 kutu) proje yoluna ÇEVRİLİR
   ✓ B13 eski ortak-yollu bekçi+açılış satırları proje yoluna çevrildi
   ✓ B13b eski ortak yol kalmadı
@@ -41,5 +44,5 @@ $ bash terminal-onar/scripts/kur-bag.test.sh
   ✓ B11 bekçi satırı (ortak.sh tek kaynak) PROJE yolunu taşır
   ✓ B12 bekçi satırı ortak dizini taşımaz
 
-SONUÇ: 31 geçti · 0 kaldı
+SONUÇ: 33 geçti · 0 kaldı
 --- stderr ---

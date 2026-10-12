@@ -1,5 +1,5 @@
 $ bash -c cd terminal-onar && k=0; for t in kutu-adi kur-bag onar koltuk-bagla kabuk-kapisi; do echo "══════ $t.test.sh (tam çıktı)"; bash scripts/$t.test.sh 2>&1; r=$?; echo "rc=$r"; [ $r -eq 0 ] || k=1; done; exit $k
-# rc=0 sure=8.5s zaman=2026-10-12T22:20:33+03:00
+# rc=0 sure=8.6s zaman=2026-10-12T22:28:54+03:00
 --- stdout ---
 ══════ kutu-adi.test.sh (tam çıktı)
 ── kurulu olduğu yerden türetme
@@ -42,6 +42,9 @@ rc=0
   ✓ B10e ilk yedeğin içine taşınmadı (ilk yedek yalnız kendi dosyasını taşır)
   ✓ B10f ikinci yedeğin içeriği kendi dosyası
   ✓ B10g bağ yine doğru hedefte, rc=0
+── proje yolunda beklenmedik DÜZ DOSYA: silinmez, kurulum durur (fail-closed)
+  ✓ B16 düz dosya SİLİNMEDİ (içeriği yerinde)
+  ✓ B16b kurulum durdu rc=4 ve sebebi söylendi
 ── YÜKSELTME: canlıdaki eski ortak-yollu cron satırları (12 Eki, 15 kutu) proje yoluna ÇEVRİLİR
   ✓ B13 eski ortak-yollu bekçi+açılış satırları proje yoluna çevrildi
   ✓ B13b eski ortak yol kalmadı
@@ -58,7 +61,7 @@ rc=0
   ✓ B11 bekçi satırı (ortak.sh tek kaynak) PROJE yolunu taşır
   ✓ B12 bekçi satırı ortak dizini taşımaz
 
-SONUÇ: 31 geçti · 0 kaldı
+SONUÇ: 33 geçti · 0 kaldı
 rc=0
 ══════ onar.test.sh (tam çıktı)
 ── B · bekleme bütçesi (gerçek bekle_saglam)
