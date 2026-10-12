@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/izin-olc.sh
+# rc=0 sure=11.4s zaman=2026-10-12T11:03:45+03:00
+--- stdout ---
+dosya=20 gecti=20 kaldi=0 izinsiz=0
+git-modu-644=0
+--- stderr ---

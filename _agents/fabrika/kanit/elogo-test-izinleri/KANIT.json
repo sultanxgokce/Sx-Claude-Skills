@@ -1,0 +1,38 @@
+{
+  "is": "elogo-test-izinleri",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-12T11:03:45+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "dogrudan-cagri",
+      "asama": "once",
+      "dosya": "olcum-dogrudan-cagri-once.txt",
+      "sha256": "6340664fc836a2865991dd9d67c5bc471321c09600bd9646a7ee6dfd7e7fde82",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/izin-olc.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-12T11:03:25+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dogrudan-cagri",
+      "asama": "sonra",
+      "dosya": "olcum-dogrudan-cagri-sonra.txt",
+      "sha256": "bb355aacb8a7c1af47682716999491884b0b397bd50d2be0714346138aa939c5",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/izin-olc.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T11:03:45+03:00",
+      "sure_sn": 11.4
+    }
+  ],
+  "imza": "37af175d30d3272fa1fe828ad39e7e20c99ee10ef0252b0429fc60ad87663b67"
+}
