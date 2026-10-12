@@ -1,0 +1,40 @@
+{
+  "tur": 3,
+  "is": "iskan-dusme-varsayilan-ret",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T11:16:51+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 88332,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Varsayılan yol rc=1 ile kayıt yazmadan duruyor; ISKAN_EY_DUSME=uyar eski davranışı açıkça seçiyor ve BASİRET ile ENİS/SIHHAT ölçümleri talebi doğruluyor. Ancak aynı değişiklik, iş kartı dışındaki bütün sınav düzenini etkileyen 218 noktalık A340 dönüşümünü taşıyor ve yerel tam sınav hâlâ 267/1 kırmızı; önce bu kapsam kaymasını ayırın ve sınav yardımcısının yan etkisini giderin.",
+    "bulgular": [
+      {
+        "ne": "İş kartı dışına taşan A340 onarımı, tek davranış değişikliğiyle birlikte 218 sınav kapısını topluca değiştiriyor.",
+        "kanit": "Diff, SKILL.md içinde açıkça “Aynı sürümde sınav onarımı (A340)” ve “218 yer _icerik yardımcısına geçti” diyor; iskan.test.sh boyunca çok sayıda printf|grep kapısı _icerik ile değiştirilmiş. İş kartının talebi yalnız ekip-yerlestir düşen-üye varsayılanı ve BASİRET/ENİS ölçümleridir.",
+        "konum": "iskan/SKILL.md:47; iskan/scripts/iskan.test.sh:10 ve diffteki 218 dönüşüm",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "_icerik yardımcısı PIPE sinyalini yalnız çağrı süresince değil, sınav kabuğunun kalanında da yok sayacak biçimde global trap bırakıyor; bu, sınanan süreçlerin davranışını değiştirebilir.",
+        "kanit": "Yardımcı `_icerik() { trap '' PIPE; printf '%s' \"$1\" 2>/dev/null; return 0; }` olarak tanımlı ve önceki PIPE durumunu geri yüklemiyor. İlk çağrıdan sonra aynı kabukta yürütülen sonraki sınavlar bu değiştirilmiş sinyal durumuyla devam eder.",
+        "konum": "iskan/scripts/iskan.test.sh:10",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Dalın doğrudan yerel tam sınavı hâlâ başarıyla bitmiyor.",
+        "kanit": "`olcum-sinav-dal-a340-sonra.txt` rc=1 ve `267 geçti / 1 kaldı` gösteriyor; kalan hata baslat-claude.sh sözleşme hatasıdır. Temiz CI ölçümü 268/0 olsa da sunulan dal ölçümünün kendisi kırmızıdır.",
+        "konum": "olcum-sinav-dal-a340-sonra.txt; olcum-ci-temiz-makine-iskan-sinavi-sonra.txt",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sha'ları tutuyor. BASİRET önce/sonra çifti 0.10.2'de planın SIHHAT olmadan ilerlediğini, 0.10.3'te rc=1 ve plan=0 ile durduğunu; ENİS/SIHHAT varsayılan ölçümü de rc=1 ve kayıt YAZILMADI sonucunu gösteriyor. Uyar davranışının ham rc=3 kayıtları sarıdır ve tek başına kanıt değildir; fakat `emsal-0103-uyar` doğrulayıcı ölçümü rc=0 yeşil olarak rc=3, plan=1 ve uyar-modu=1 koşullarını sınamaktadır. Temiz CI 268/0 yeşildir, buna karşılık doğrudan yerel dal sınavı 267/1 kırmızıdır."
+  }
+}

@@ -1,0 +1,18 @@
+$ bash -c bash iskan/scripts/iskan.test.sh 2>&1 | grep -E "A323|geçti|kaldı|FAIL|✗|toplam" | tail -14
+# rc=0 sure=23.7s zaman=2026-10-12T10:15:59+03:00
+--- stdout ---
+  ok - A323/0.10.3 VARSAYILAN: anahtarsız koşum → rc=1 + 'uye-dusme-reddi' + düşen üye adıyla SARI satır (fail-closed)
+  ok - A323/0.10.3 uyar modu: ISKAN_EY_DUSME=uyar → SARI uyarı + 'uyari-modu' satırı, dry-run rc=3 korundu
+  ok - A323/0.10.3 bilinmeyen değer: ISKAN_EY_DUSME=bozuk → rc=2 yapılandırma hatası (sessizce 'uyar' sayılmaz)
+  ok - A323: ISKAN_EY_DUSME=ret → fail-closed rc=1 + 'uye-dusme-reddi'
+  ok - A323 altın: roster Gama'yı taşıyınca uyarı yok, rezerv-uuid mevcut kayıttan yeniden kullanıldı
+  ok - A323 apply+ret: rc=1 + 'uye-dusme-reddi' + repo kaydı bayt-değişmedi (md5 eş)
+  ok - A323/0.10.3 apply VARSAYILAN (anahtarsız): rc=1 + 'uye-dusme-reddi' + repo kaydı bayt-değişmedi
+  ok - A323 apply (uyar modu): SARI uyarı apply çıktısında da basıldı; kayıt değişmedi (host bozuk, dokunuş sıfır)
+  ok - A323 kayıt-biçimi: üretici çıktısı altın biçime bayt-eş (biçim değişmedi)
+  FAIL - baslat-claude.sh: exec-argümanları sözleşme-dışı (rc=0: STUB-CLAUDE --resume 12345678-1234-1234-1234-123456789abc --name denekAlfa --permission-mode default)
+  FAIL - kur --dry-run: zincir-planında eksik adım: [4/8: provizyon] [6/8: ekip-yerlestir]
+  ok - kur --devam ilerleme: durum-dosyası 'durak1-cloudtop-pr'a ilerledi (GO-sonrası kaldığı yerden)
+  ok - cycle-4 .bak-temizlik: .bak'lar silindi + orijinaller BAYT-korundu + .bak-yok sessiz-geçti
+== 266 geçti / 2 kaldı ==
+--- stderr ---

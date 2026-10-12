@@ -1,0 +1,12 @@
+$ bash /config/.claude/jobs/d69a1b07/tmp/ci-iskan-dogrula.sh 38221524666
+# rc=0 sure=1.8s zaman=2026-10-12T11:15:07+03:00
+--- stdout ---
+koşu=38221524666 · commit=27c6d0ce7b5651783966ef9a2befe33f80d962e4
+iskan özet: == 268 geçti / 0 kaldı ==
+iskan FAIL satırı: yok
+  ok - baslat-claude.sh: claude yokken dürüst-kırmızı (rc=1 + 'claude-binary yok' marker)
+  ok - baslat-claude.sh: rol-kayıtsız → rc≠0 (1)
+  ok - baslat-claude.sh: claude-varken rezerve-id+rol+permission-mode ile exec (K3 disiplini)
+sonuç satırı:    ✓ ./iskan/scripts/iskan.test.sh
+── HÜKÜM: CI'da iskan.test.sh YEŞİL
+--- stderr ---

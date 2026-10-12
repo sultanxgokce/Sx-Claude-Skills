@@ -1614,7 +1614,10 @@ print(" ".join(out))
 # _ey_dusen_uyeler <reg_mevcut> <roster> — mevcut kayıtta olup roster'da OLMAYAN üyeleri basar (A323, BASİRET/ENİS
 # 2026-10-10): kayıt roster'dan yeniden üretildiği için roster dışı üye (ör. koltuğu açılmamış REZERVE kimlik) SESSİZCE
 # düşüyordu; koltuk açıldığı gün kimlik uydurulurdu (K3). Her düşen üye adıyla SARI uyarı (dry-run + apply);
-# ISKAN_EY_DUSME=ret verilirse fail-closed rc=1 (kayıt yazılmaz). Yan-etki: EY_DUSEN_UYELER (boşlukla ayrık).
+# 0.10.3 (ENİS/SIHHAT emsali 11 Eki): VARSAYILAN fail-closed rc=1 (kayıt yazılmaz) — 0.10.2'de yalnız uyarıyordu ve
+# anahtarı hatırlamayan koşum rezerve koltuğu üç kopyadan da düşürürdü. Eski sarı-uyarı modu ISKAN_EY_DUSME=uyar ile
+# AÇIKÇA seçilir; 'ret' de kabul (geri uyumlu). Başka değer → yapılandırma hatası rc=2 (sessizce 'uyar' sayılmaz).
+# Yan-etki: EY_DUSEN_UYELER (boşlukla ayrık).
 _ey_dusen_uyeler() {
   local reg="$1" roster="$2" id girdi var
   EY_DUSEN_UYELER=""
@@ -1628,11 +1631,11 @@ _ey_dusen_uyeler() {
   for id in $EY_DUSEN_UYELER; do
     echo "[sarı] uye-dusuyor: $id — mevcut kayıtta var, roster'da YOK; yeni kayıtta olmayacak (session_id dahil). Rezerve koltuksa roster'a/ISKAN_EY_ROSTER'a ekle (A323)"
   done
-  if [ "${ISKAN_EY_DUSME:-}" = "ret" ]; then
-    echo "[kırmızı] uye-dusme-reddi: ISKAN_EY_DUSME=ret — $(printf '%s' "$EY_DUSEN_UYELER" | wc -w | tr -d ' ') üye düşecekti, kayıt YAZILMADI" >&2
-    return 1
-  fi
-  return 0
+  case "${ISKAN_EY_DUSME:-ret}" in
+    uyar) echo "[sarı] uye-dusme-uyari-modu: ISKAN_EY_DUSME=uyar — düşen üyeyle devam ediliyor (bilinçli seçim)"; return 0 ;;
+    ret)  echo "[kırmızı] uye-dusme-reddi: $(printf '%s' "$EY_DUSEN_UYELER" | wc -w | tr -d ' ') üye düşecekti, kayıt YAZILMADI (varsayılan fail-closed; devam için ISKAN_EY_DUSME=uyar)" >&2; return 1 ;;
+    *)    echo "[kırmızı] ISKAN_EY_DUSME='${ISKAN_EY_DUSME}' tanınmıyor (ret|uyar) — yapılandırma hatası, hiçbir yere dokunulmadı" >&2; return 2 ;;
+  esac
 }
 
 # _ey_uye_satirlari <roster> <reg_mevcut> — roster'ı "rol\tgorev\tuuid\tkaynak" satırlarına açar;
@@ -1829,7 +1832,7 @@ cmd_ekip_yerlestir() {
 
   # roster satırları: "rol<TAB>gorev<TAB>uuid<TAB>kaynak" (uuid: mevcut-kayıttan YENİDEN-KULLAN, yoksa üret)
   _ey_uye_satirlari "$roster" "$reg_mevcut" || exit 1
-  _ey_dusen_uyeler "$reg_mevcut" "$roster" || exit 1   # A323: roster dışı mevcut üye sessiz düşmez
+  _ey_dusen_uyeler "$reg_mevcut" "$roster" || exit $?  # A323: roster dışı mevcut üye sessiz düşmez (1 ret · 2 yapılandırma)
   local rol gorev sid kaynak
 
   # ── DRY-RUN: tam-önizleme, SIFIR-yazım (plan-exit=3) ─────────────────────────────────────

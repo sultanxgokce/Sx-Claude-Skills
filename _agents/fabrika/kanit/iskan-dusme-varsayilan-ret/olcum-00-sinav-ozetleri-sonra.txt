@@ -1,0 +1,14 @@
+$ bash /config/.claude/jobs/d69a1b07/tmp/sinav-ozet.sh
+# rc=0 sure=0.0s zaman=2026-10-12T11:15:49+03:00
+--- stdout ---
+--- olcum-sinav-ana-borusuz-once.txt (# rc=1 sure=26.4s zaman=2026-10-12T11:04:36+03:00)
+  FAIL - baslat-claude.sh: exec-argümanları sözleşme-dışı (rc=0: STUB-CLAUDE --resume 12345678-1234-1234-1234-123456789abc --name denekAlfa --permission-mode default)
+== 264 geçti / 1 kaldı ==
+--- olcum-sinav-dal-a340-sonra.txt (# rc=1 sure=23.1s zaman=2026-10-12T11:05:00+03:00)
+  FAIL - baslat-claude.sh: exec-argümanları sözleşme-dışı (rc=0: STUB-CLAUDE --resume 12345678-1234-1234-1234-123456789abc --name denekAlfa --permission-mode default)
+== 267 geçti / 1 kaldı ==
+--- olcum-sinav-sonra.txt (# rc=0 sure=23.7s zaman=2026-10-12T10:15:59+03:00)
+  FAIL - baslat-claude.sh: exec-argümanları sözleşme-dışı (rc=0: STUB-CLAUDE --resume 12345678-1234-1234-1234-123456789abc --name denekAlfa --permission-mode default)
+  FAIL - kur --dry-run: zincir-planında eksik adım: [4/8: provizyon] [6/8: ekip-yerlestir]
+== 266 geçti / 2 kaldı ==
+--- stderr ---

@@ -673,11 +673,23 @@ uyeler:
 EOF
 git -C "$EY_REPO" -c user.email=t@t -c user.name=t add -A 2>/dev/null
 git -C "$EY_REPO" -c user.email=t@t -c user.name=t commit -qm reg 2>/dev/null
+# 0.10.3 (ENİS/SIHHAT 11 Eki): VARSAYILAN fail-closed — anahtarsız koşum düşen üyeyi görünce rc=1 + 'uye-dusme-reddi';
+#        SARI 'uye-dusuyor' satırı yine basılır (hangi üye, görünür). Eski devam-et davranışı yalnız ISKAN_EY_DUSME=uyar ile.
 out="$(ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye" ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --dry-run 2>&1)"; rc=$?
-[ "$rc" = "3" ] && printf '%s' "$out" | grep -q '\[sarı\] uye-dusuyor: denekGama' \
-  && ok "A323: roster dışı mevcut üye (denekGama) düşerken SARI uyarı basıldı, dry-run rc=3 korundu" \
-  || bad "A323: düşen üye uyarısı yok ya da rc bozuk (rc=$rc)"
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q '\[sarı\] uye-dusuyor: denekGama' && printf '%s' "$out" | grep -q 'uye-dusme-reddi' \
+  && ok "A323/0.10.3 VARSAYILAN: anahtarsız koşum → rc=1 + 'uye-dusme-reddi' + düşen üye adıyla SARI satır (fail-closed)" \
+  || bad "A323/0.10.3 VARSAYILAN fail-closed değil ya da üye adı basılmadı (rc=$rc)"
+out="$(ISKAN_EY_DUSME=uyar ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye" ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --dry-run 2>&1)"; rc=$?
+[ "$rc" = "3" ] && printf '%s' "$out" | grep -q '\[sarı\] uye-dusuyor: denekGama' && printf '%s' "$out" | grep -q 'uye-dusme-uyari-modu' \
+  && ok "A323/0.10.3 uyar modu: ISKAN_EY_DUSME=uyar → SARI uyarı + 'uyari-modu' satırı, dry-run rc=3 korundu" \
+  || bad "A323/0.10.3 uyar modu bozuk (rc=$rc)"
+out="$(ISKAN_EY_DUSME=bozuk ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye" ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --dry-run 2>&1)"; rc=$?
+[ "$rc" = "2" ] && printf '%s' "$out" | grep -q "ISKAN_EY_DUSME='bozuk' tanınmıyor" \
+  && ok "A323/0.10.3 bilinmeyen değer: ISKAN_EY_DUSME=bozuk → rc=2 yapılandırma hatası (sessizce 'uyar' sayılmaz)" \
+  || bad "A323/0.10.3 bilinmeyen değer sessizce yutuldu (rc=$rc)"
 out="$(ISKAN_EY_DUSME=ret ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye" ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --dry-run 2>&1)"; rc=$?
 [ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'uye-dusme-reddi' \
@@ -701,9 +713,15 @@ reg_md5_sonra="$(md5sum "$EY_REPO/infra/iskan-registry/eytest.yaml" | cut -d' ' 
 out="$(ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye" ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
   bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --apply 2>&1)"; rc=$?
 reg_md5_sonra="$(md5sum "$EY_REPO/infra/iskan-registry/eytest.yaml" | cut -d' ' -f1)"
+[ "$rc" = "1" ] && printf '%s' "$out" | grep -q 'uye-dusme-reddi' && [ "$reg_md5_once" = "$reg_md5_sonra" ] \
+  && ok "A323/0.10.3 apply VARSAYILAN (anahtarsız): rc=1 + 'uye-dusme-reddi' + repo kaydı bayt-değişmedi" \
+  || bad "A323/0.10.3 apply VARSAYILAN: kayıt değişti ya da fail-closed değil (rc=$rc)"
+out="$(ISKAN_EY_DUSME=uyar ISKAN_EY_ROSTER="denekAlfa:yonetici denekBeta:uye" ISKAN_CLOUDTOP_REPO_DIR="$EY_REPO" ISKAN_SSH_HOST="bilinçli-bozuk-host.invalid" \
+  bash "$SCRIPT_DIR/iskan.sh" ekip-yerlestir eytest --apply 2>&1)"; rc=$?
+reg_md5_sonra="$(md5sum "$EY_REPO/infra/iskan-registry/eytest.yaml" | cut -d' ' -f1)"
 printf '%s' "$out" | grep -q '\[sarı\] uye-dusuyor: denekGama' && [ "$reg_md5_once" = "$reg_md5_sonra" ] \
-  && ok "A323 apply (ret'siz): SARI uyarı apply çıktısında da basıldı; kayıt değişmedi (host bozuk, dokunuş sıfır)" \
-  || bad "A323 apply (ret'siz): uyarı apply yolunda yok ya da kayıt değişti (rc=$rc)"
+  && ok "A323 apply (uyar modu): SARI uyarı apply çıktısında da basıldı; kayıt değişmedi (host bozuk, dokunuş sıfır)" \
+  || bad "A323 apply (uyar modu): uyarı apply yolunda yok ya da kayıt değişti (rc=$rc)"
 # 24e. A323 'kayıt biçimi değişmez': üretici (_ey_iskan_registry_icerik) sabit girdiyle ALTIN çıktıya bayt-eş.
 #      Üretici bu işte DEĞİŞMEDİ; altın biçim donduruldu ki ileride sessizce değişirse burası kırmızıya dönsün.
 reg_uretim="$(EY_PROJE=eytest EY_CNAME=cloudtop-eytest EY_HOSTNAME=eytest.mmepanel.com EY_PORT=9449 EY_HOST_CFG=/opt/cloudtop/config-eytest \
