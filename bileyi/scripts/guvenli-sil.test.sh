@@ -104,6 +104,18 @@ tempfile.mkdtemp=sahte
 rc,_=g.yeni('y8-')
 sys.exit(0 if rc==3 and acilan and not os.path.exists(acilan[0]) else 1)"
 rmdir "$Y8D" 2>/dev/null || true
+# Y9 · geri kaldırma BAŞARISIZSA mesaj "kaldırıldı" demez (bağımsız göz tur 2)
+Y9D="$DIS/y9-dis"; mkdir -p "$Y9D"
+kapi "Y9 geri kaldırılamayan dizin için dürüst mesaj + rc=3" 0 env TMPDIR="$KOK" Y9D="$Y9D" python3 -c "
+import importlib.util,sys,os,tempfile
+sp=importlib.util.spec_from_file_location('g','$A'); g=importlib.util.module_from_spec(sp); sp.loader.exec_module(g)
+yer=os.environ['Y9D']
+def sahte(prefix='',dir=None):
+    d=os.path.join(yer,prefix+'dolu'); os.mkdir(d); open(os.path.join(d,'x'),'w').close(); return d
+tempfile.mkdtemp=sahte
+rc,m=g.yeni('y9-')
+sys.exit(0 if rc==3 and 'KALDIRILAMADI' in m and 'geri kaldırıldı' not in m else 1)"
+python3 -c "import shutil,sys;shutil.rmtree(sys.argv[1],ignore_errors=True)" "$Y9D"
 
 rm -r "$KOK/../kardes-$$" 2>/dev/null || true
 python3 "$A" "$DIS" >/dev/null 2>&1 || true

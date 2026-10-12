@@ -150,7 +150,9 @@ def yeni(onek: str = "gs-") -> tuple[int, str]:
                 d.rmdir()
             except OSError:
                 pass
-            return 3, f"açılan dizin izinli kökün altında DEĞİL ({d}) — geri kaldırıldı, ÖLÇEMEDİM"
+            # 🔴 "geri kaldırıldı" YALNIZ geri okunarak söylenir (bağımsız göz tur 2)
+            durum = "geri kaldırıldı" if not d.exists() else f"GERİ KALDIRILAMADI, elle bak: {d}"
+            return 3, f"açılan dizin izinli kökün altında DEĞİL ({d}) — {durum} · ÖLÇEMEDİM"
         return 0, str(d)
     return 3, "izinli kökte dizin AÇILAMADI — ÖLÇEMEDİM (hiçbir kök yazılabilir değil)"
 
