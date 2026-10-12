@@ -18,5 +18,15 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": []
+  "gecmis": [],
+  "sultan_kararlari": [
+    {
+      "karar": "devam",
+      "oturum": "session_013fuJSNg65VkgQE4sJsQURS",
+      "soz": "karar: önerin kabul edildi",
+      "beyan": "SERDAR",
+      "gerekce": "Y0005-A: üç turun her bulgusu küçüldü ve kapandı (3/5·H→4/5·E); 3. tur bulgusu düzeltildi (30/30, CI yeşil); #592 bu PR'a bağımlı — son bir tur 5·E'ye götürür",
+      "zaman": "2026-10-12T20:55:37+03:00"
+    }
+  ]
 }

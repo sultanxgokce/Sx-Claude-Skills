@@ -1,0 +1,21 @@
+{
+  "tur": 4,
+  "is": "terminal-koltuk-secici",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T20:56:02+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 80833,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kutu kapısına koltuk seçici ve giriş korumalı /api/koltuklar ucu eklenmiş; adresten gelen oturum adı yalnız kutudaki görünür oturumlarla tam eşleştiğinde kabul ediliyor. Önceki turun ölçüm-hatasını boş listeye çeviren kusuru da rc=3 ayrımı ve karşıt sınavlarla kapanmış; eldeki kanıta göre üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önce/sonra telefon karesi mevcut; Chromium akışı seçimi, yerel bellek doğrulamasını ve gecikme yarışını 10/10 ölçüyor, bağlanma betiği 30/30 ile yanlış ad, çoklu argüman, gizli oturum ve tmux ölçüm arızası yüzlerini kapsıyor; kapı sınavı 50/50 ve eski sınavlar rc=0. Karelerde sahte fakat gerçekçi koltuk verisi kullanılmış; gerçek tmux/ttyd davranışı ayrıca araç kayıtlı canlı ttyd çıktısıyla destekleniyor."
+  }
+}
