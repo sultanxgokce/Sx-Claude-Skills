@@ -1,0 +1,21 @@
+{
+  "tur": 1,
+  "is": "elogo-test-izinleri",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T11:04:51+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 10092,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, 20 sınav dosyasının çalıştırma izinleri 644'ten çalıştırılabilir moda alınmış ve doğrudan çağrıların tamamı geçmiştir. Araç imzalı önce/sonra ölçümü izinsiz dosya sayısının 20'den 0'a, geçen sınav sayısının 0'dan 20'ye döndüğünü gösterdiği için değişiklik üretime hazırdır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve SHA değerleri tutuyor; sarı kayıt yok. Aynı doğrudan çağrı için kırmızı önce ve yeşil sonra ölçüm çifti mevcut: önce dosya=20, gecti=0, izinsiz=20 ve git-modu-644=20; sonra dosya=20, gecti=20, kaldi=0, izinsiz=0 ve git-modu-644=0. Ölçüm, talepteki 20 sınavın hem çalıştırılabilir olduğunu hem de gerçekten başarıyla çağrıldığını sınamaktadır."
+  }
+}
