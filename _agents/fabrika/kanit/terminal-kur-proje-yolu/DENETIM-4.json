@@ -1,0 +1,28 @@
+{
+  "tur": 4,
+  "is": "terminal-kur-proje-yolu",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T22:27:11+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 75244,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Fail-closed kutu adı, açık TO_KUTU muafiyeti, proje bağı ve eski cron göçü doğru yere konmuş; önceki turun iki açığı da davranış ölçümleriyle kapanmış. Ancak proje beceri yolunda beklenmedik bir normal dosya varsa kurulum onu yedeklemeden silebilir; üretime çıkmadan önce bunu fail-closed ya da yedekli hâle getirin.",
+    "bulgular": [
+      {
+        "ne": "Proje beceri yolu sembolik bağ veya dizin değilse genel `else` kolu `_bag_kur` çağırıyor; `_bag_kur` içindeki `rm -f` normal dosyayı sessizce ve yedeksiz siliyor.",
+        "kanit": "Değişiklikte `_bag_kur() { rm -f \"$PROJE_BECERI\" && ln -s ...; }` tanımlı; yalnız `-L` ve `-d` durumları ayrılıyor, kalan türlerin tamamı doğrudan `_bag_kur` koluna gidiyor. B1-B10g ölçümleri yok, doğru/yanlış/kırık bağ ve dizin kopyasını kapsıyor fakat normal dosya vakasını kapsamıyor.",
+        "konum": "terminal-onar/scripts/kur.sh:76-99; olcum-kur-bag-davranis-sinavi-sonra.txt B1-B10g",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Son ölçümler gerçekçi kum havuzunda K5c dahil kutu adı kapısını 9/9, bağ/cron davranışını 31/31 ve tüm paketi yeşil gösteriyor; eski kur.sh mutasyonu 13 hedefli sınavda kırmızı olduğundan anlamlı karşılaştırma da var. Ayrı bir klasik önce/sonra çifti yok, ancak mutasyon kaydı işlevsel karşı örnek sağlıyor; kalan normal-dosya silme kolu ölçülmemiş."
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "is": "terminal-kur-dosya-kapisi",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-12T22:31:48+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kur-bag-sinavi-B16",
+      "asama": "sonra",
+      "dosya": "olcum-kur-bag-sinavi-B16-sonra.txt",
+      "sha256": "098c8a726297cd7276bc1c6e860c44bfce061e5600900e8751c8f18c3e63100e",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/kur-bag.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T22:31:48+03:00",
+      "sure_sn": 0.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "B16-mutasyon-eski-kur",
+      "asama": "tek",
+      "dosya": "olcum-B16-mutasyon-eski-kur-tek.txt",
+      "sha256": "5125e0fb1157cbdae6bbae9808bad11976485dba91eae5b3bf947fdb9b4db978",
+      "komut": [
+        "bash",
+        "-c",
+        "M=/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut-297b; mkdir -p $M && cp -r terminal-onar/scripts $M/ && git show 8001633:terminal-onar/scripts/kur.sh > $M/scripts/kur.sh && KUR_BAG_KOK=$M bash terminal-onar/scripts/kur-bag.test.sh 2>&1 | grep -E \"B16|SONUÇ\"; r=${PIPESTATUS[0]}; echo \"sinav-rc=$r (kur.sh = 8001633, düz dosya kapısı yok; beklenen: B16 kırmızı)\"; test $r -ne 0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T22:31:48+03:00",
+      "sure_sn": 0.5
+    }
+  ],
+  "imza": "3f573178462ae923404a699bf756f10d6821cbf5ffaca620fe908aeddf03ccd2"
+}

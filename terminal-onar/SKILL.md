@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.0.0
+version: 2.1.1
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -83,6 +83,49 @@ Sessizce üretilen parola kayıtsız bir sırdır: sıfırdan kurulumda geri gel
 
 🔴 **Host tarafına DOKUNMAZ.** Tünel · Access · merkez kaydı kutu ajanının işi değildir;
 betik yalnız merkeze iletilecek satırı basar, onu MUAVİN işler.
+
+## 🆕 Koltuk seçici — her oturum bir koltuk (2.1.0)
+
+Sultan'ın hedefi (12 Ekim): *"tüm kutuları ve içlerinde çalışan claude sessionların terminal akışlarını
+terminalde claude kullanır gibi birebir görüp sohbet edebilmem lazım."* Kapı bugüne dek tek oturuma
+(`<kutu>-ana`) bağlıydı; oysa kutularda koltuk = tmux oturumu (maiset 5 · tellal 7 · nazir 10 · vekatip 12).
+
+| Parça | Nerede | Ne yapar |
+|---|---|---|
+| ekran | `/<kutu>/tty/?arg=<oturum>` | ttyd `-a` adresteki `arg`ı komuta son argüman olarak ekler; argümansız → ana oturum (eski davranış bayt bayt aynı) |
+| karar | `scripts/koltuk-bagla.sh <ana> <proje> [koltuk]` | **tek kaynak**: ad dar kümeden mi (harf·rakam·`_`·`-`, ≤64) · kutuda **şu an var** mı (`tmux ls`) · gizli değil mi (`ttyd-*` · `kapi-*` · `*-kurtarici` · `imglistener`) — üçünden biri düşerse **red basılır, yeni oturum açılmaz, ana oturuma sessizce düşülmez** |
+| seçici | telefon ekranı başlığı (`#koltuk`) | kutudaki koltuklar açılır listede (● = Claude çalışıyor); seçince tam terminal o koltukla açılır; tek koltuk varsa gizli; liste ölçülemezse gizli ("koltuk yok" demez) |
+| liste | `GET /api/koltuklar` (girişli) | aynı betiğin `--liste`si: ad · son etkinlik · Claude var mı · ekran adresi; betik düşerse **500 "ölçülemedi"**, boş liste basılmaz |
+
+🔴 **Niçin tek kaynak:** ttyd'nin kabul ettiği ad ile listede görünen ad iki ayrı yerden türeseydi ilk değişiklikte
+ayrışırdı. Kapı betiğe sorar, kendisi türetmez; betiğin verdiği bozuk adı da süzer.
+🔴 **Adres güvenilmez girdidir:** `BASIRET:0`, `=ad`, `../x`, 70 karakter — hepsi red (tmux hedef sözdizimi giremez).
+Birden çok `arg` (belirsiz adres) ve ana oturumun adının **açıkça** verilip kutuda bulunmaması da reddedilir —
+yalnız argümansız yol oturum yaratır (bağımsız göz, tur 1).
+🔴 **Ölçemediğine "boş" demez** (bağımsız göz, tur 3): tmux listesi alınamazsa `--liste` rc=3 "ölçülemedi" döner, kapı 500 basar;
+boş liste yalnız tmux sunucusu hiç yokken doğrudur. Liste alınamazken koltuğa da bağlanılmaz.
+Sınav: `scripts/koltuk-bagla.test.sh` (30 kapı, sahte tmux) + kapı `Y1-Y10` + telefon ekranı **gerçek Chromium**
+(`kapi/tarayici-sinav.mjs`, 10 kapı, CI dışı — kütüphane yoksa rc=4): seçici · seçince tam terminal `?arg=` ·
+yerel bellekteki ad **doğrulanmadan terminale konmaz** (liste gecikirse ana koltukta açılır, liste gelince yeniden kurulur;
+geçersiz ad hiçbir anda girmez). Mutasyon: beyaz liste silinince 4 kapı,
+gizli süzgeci silinince 1 kapı, kapıda "boş liste" kaçağı 1 kapı, ad süzgeci 2 kapı kırmızıya döner.
+🔴 **Dürüst sınır:** `--liste` Claude'u pane komutundan tanır; başka bir kabuğun içine gömülü Claude'u görmeyebilir
+(yanlış-negatif). Son etkinlik tmux'un `session_activity` damgasıdır, konuşmanın değil.
+
+## 🔴 Ortak dizinden çağrı = makine kimliği tuzağı (2.1.1 · 12 Ekim canlı dersi)
+
+Beceri `/config/.claude/skills` ortak dizininde yaşar; oradan çağrılınca yol kutuyu söylemez ve ad **kabın rastgele
+kimliğine** (12 hex) düşer — 15 kutuda ölçüldü: ttyd yanlış yolda, kapı "bozuk", başsız kurtarıcı doğdu. Artık: (1) böyle bir ad
+**fail-closed** reddedilir (`TO_KUTU` ver ya da kutunun yolundan çağır); (2) `kur.sh` kutuya `/config/projects/<kutu>/.claude/skills/terminal-onar → ortak`
+bağını kurar — **var olan bağ "var" sayılmaz**: hedefi koşan becerinin gerçek yeriyle karşılaştırılır, yanlış ya da kırıksa
+yeniden bağlanır, gerçek eski kopya `.eski-<tarih>` altına alınır (bağımsız göz, tur 1); (3) bekçi/açılış cron satırları
+**proje yoluyla** yazılır. Sınav: `kutu-adi.test.sh` K5-K7 (ad çözümü) + `kur-bag.test.sh` B1-B12 — kur.sh kum havuzunda
+**çalıştırılarak** ölçülür (sıfırdan · yanlış bağ · kırık bağ · eski kopya · idempotent · cron satırı diskten okunur;
+bekçi satırı tek kaynaktan okunur). **Yükseltme göçü (tur 2):** bekçi/açılış satırları `ortak.sh`'ta tek kaynaktır
+(`bekci_kur`); işaretleyicili her satır kanonik biçime **yeniden yazılır** — canlıdaki eski ortak-yollu satırlar `.oda/cron`'da
+(kur.sh) ve canlı crontab'da (onar.sh) proje yoluna çevrilir, öteki satırlar korunur (B13-B15, crontab sahte dikiş `TO_CRONTAB`).
+**Açık beyan muafiyeti (tur 2):** `TO_KUTU` verilmişse makine-kimliği kapısı uygulanmaz — iletinin vaat ettiği çıkış yolu çalışır
+(K5c). Mutasyon: tur-1 hâliyle (bağ doğrulamasız, göçsüz) B8/B9/B13/B14 kırmızı.
 
 ## Kutudan türeyen adlar (hiçbiri koda gömülü değil)
 | Değişken | Varsayılan | Ezmek için |

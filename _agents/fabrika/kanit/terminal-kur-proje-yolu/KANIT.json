@@ -1,0 +1,101 @@
+{
+  "is": "terminal-kur-proje-yolu",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-12T22:28:54+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kutu-adi-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kutu-adi-sinav-sonra.txt",
+      "sha256": "e34edd6772c21ec0face17c9d7f7ac0133b4f8db6eb00c40356bd6160bc0a368",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/kutu-adi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T21:33:12+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "onar-ve-kabuk-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-onar-ve-kabuk-sinav-sonra.txt",
+      "sha256": "a87ff07e7da85049cf530bda28aa8e2e9e6a0f300d1df9da7a9e7d61611e73ff",
+      "komut": [
+        "bash",
+        "-c",
+        "bash terminal-onar/scripts/onar.test.sh >/dev/null 2>&1; echo onar=$?; bash terminal-onar/scripts/kabuk-kapisi.test.sh >/dev/null 2>&1; echo kabuk=$?"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T21:33:20+03:00",
+      "sure_sn": 7.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kur-bag-davranis-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kur-bag-davranis-sinavi-sonra.txt",
+      "sha256": "241ac0944a77d6f7c39a8b6a473d847523442049b20b0cf6924acb243d82f6d4",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/kur-bag.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T22:28:45+03:00",
+      "sure_sn": 0.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kur-bag-mutasyon-eski-kur-sh",
+      "asama": "tek",
+      "dosya": "olcum-kur-bag-mutasyon-eski-kur-sh-tek.txt",
+      "sha256": "5014a0921e9e16de33f52a65a0999ec0f22c05e03206967e93edf5fd6a919cca",
+      "komut": [
+        "bash",
+        "-c",
+        "KUR_BAG_KOK=/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut-297 bash terminal-onar/scripts/kur-bag.test.sh; r=$?; echo \"sinav-rc=$r (tur-1 hâli bf3b31c; beklenen: kırmızı)\"; test \"$r\" -ne 0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T22:20:34+03:00",
+      "sure_sn": 0.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "terminal-onar-bes-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-terminal-onar-bes-sinav-sonra.txt",
+      "sha256": "7964e03bcd99a85b10619bb1142673072822cec1d941f4ae6fd1d1a95b4261a8",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar && k=0; for t in kutu-adi kur-bag onar koltuk-bagla kabuk-kapisi; do echo \"══════ $t.test.sh (tam çıktı)\"; bash scripts/$t.test.sh 2>&1; r=$?; echo \"rc=$r\"; [ $r -eq 0 ] || k=1; done; exit $k"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T22:28:54+03:00",
+      "sure_sn": 8.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kutu-adi-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kutu-adi-sinavi-sonra.txt",
+      "sha256": "18cb6423d0d8b6a61f3b228161bd2f923b7c5f8a5c6e362af9b08f42d5935429",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/kutu-adi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T22:20:24+03:00",
+      "sure_sn": 0.1
+    }
+  ],
+  "imza": "8a2b9e4c8f164062ac771f8cb30793f5359b7adc46f2932f5e3a2624ce99f3d3"
+}

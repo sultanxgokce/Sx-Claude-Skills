@@ -1,0 +1,34 @@
+{
+  "tur": 2,
+  "is": "terminal-kur-proje-yolu",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T22:01:18+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 44241,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Makine kimliği benzeri ad için fail-closed davranışı, proje bağı ve proje-yollu yeni cron satırları eklenmiş; yanlış/kırık bağ onarımı da önceki turun talebine uygun biçimde sınanmış. Ancak canlıdaki mevcut kurulumların eski ortak-yollu cron satırları yerinde bırakılıyor; önce yükseltme göçünü ve açık TO_KUTU davranışını çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "Mevcut cron kaydı yalnız işaretleyici bulunduğu için doğru kabul ediliyor; eski ortak-dizin yolunu kullanan bekçi/açılış satırları proje yoluna dönüştürülmüyor. Bu, kartın canlıdaki mevcut 15 kutuyu düzeltme hedefini eksik bırakır.",
+        "kanit": "kur.sh değişikliğinde `grep -q 'terminal-onar-bekci'` başarılıysa yazma kolu tamamen atlanıyor; onar.sh da `grep -q '# terminal-onar-bekci' ... ||` ile yalnız eksik satır ekliyor. `kur-bag` ölçümü yalnız sıfırdan oluşturulan yeni cron'u ve ikinci koşumda çoğalmamayı sınıyor; eski ortak-yollu cron ile başlayan bir yükseltme senaryosu yok.",
+        "konum": "terminal-onar/scripts/kur.sh:106; terminal-onar/scripts/onar.sh:144; olcum-kur-bag-davranis-sinavi-sonra.txt B3-B7",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Fail-closed denetimi adın nereden geldiğini ayırmadığı için açıkça verilmiş 12 onaltılık TO_KUTU değerini de reddediyor; hata mesajındaki “TO_KUTU ver” çıkış yolu bu durumda çalışmıyor.",
+        "kanit": "KUTU önce `TO_KUTU` öncelikli hesaplanıyor, ardından kaynağına bakılmadan `????????????` deseni reddediliyor. K6 yalnız `TO_KUTU=maiset` kullanıyor; makine kimliğine benzeyen açık TO_KUTU senaryosu ölçülmemiş.",
+        "konum": "terminal-onar/scripts/ortak.sh:29-40; terminal-onar/scripts/kutu-adi.test.sh K6",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Sonraki davranış ölçümleri ile yanlış/kırık bağ mutasyonu güçlü ve hedefe dönük, beş sınav da yeşil; fakat önce/sonra ölçüm çifti yok. En önemli kanıt boşluğu canlı yükseltmedir: sınavlar eski ortak-yollu cron satırları bulunan gerçekçi başlangıç durumunu ve 12 onaltılık açık TO_KUTU değerini kapsamıyor."
+  }
+}

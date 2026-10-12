@@ -21,6 +21,8 @@ const BETIK = path.resolve(KOK, '../scripts');
 const PORT = +(process.env.KAPI_PORT || 7681);
 const TTYD_SOKET = process.env.KAPI_TTYD_SOKET || path.join(process.env.TO_DURUM_DIZ || '/config/.terminal-onar', 'ttyd.sock');
 const ANA_TMUX = process.env.TO_ANA_TMUX || 'sedir-ana';
+// Koltuk listesinin TEK kaynağı (ttyd de aynı betiği çalıştırır). Sınav başka bir betik verebilir.
+const KOLTUK_BETIK = process.env.KAPI_KOLTUK_BETIK || path.join(BETIK, 'koltuk-bagla.sh');
 // ── TABAN YOLU ───────────────────────────────────────────────────────────────
 // 🔴 NİÇİN: merkez sayfa (terminal.mmepanel.com) kutuları YOL ile ayırır — /sedir/ ·
 //    /akar/ … Kapı tabanı bilmezse döndürdüğü her mutlak yol (302 → /giris, çerez
@@ -349,6 +351,17 @@ const sunucu = http.createServer(async (req, res) => {
         const adet = Math.min(Math.max(+(url.searchParams.get('adet') || 30), 1), 200);
         const m = gecmisOku(adet);
         return m ? json(res, 200, { mesajlar: m }) : json(res, 404, { hata: 'Konuşma kaydı bulunamadı.' });
+      }
+      // Koltuklar: kutudaki görünür tmux oturumları. Liste betikten gelir (ttyd'nin kabul ettiğiyle
+      // AYNI liste); kapı ad türetmez. Ekran adresi: <taban>/tty/?arg=<ad>.
+      if (y === '/api/koltuklar') {
+        const r = await calistir('bash', [KOLTUK_BETIK, '--liste']);
+        if (r.kod !== 0) return json(res, 500, { hata: 'Koltuklar ölçülemedi.' });
+        const koltuklar = r.out.split('\n').filter(Boolean).map((l) => {
+          const [ad, son, claude] = l.split('\t');
+          return { ad, son: +son || 0, claude: claude === '1', ana: ad === ANA_TMUX, ekran: T('/tty/') + '?arg=' + encodeURIComponent(ad) };
+        }).filter((k) => /^[A-Za-z0-9_-]{1,64}$/.test(k.ad));
+        return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, koltuklar });
       }
       if (y === '/api/surum') {
         // telefon eski sayfada kalmasın: dosyalar değişince sürüm değişir, sayfa kendini yeniler

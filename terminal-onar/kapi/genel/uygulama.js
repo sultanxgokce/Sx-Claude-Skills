@@ -289,17 +289,49 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) { ek
 //      Uygulama arka plana geçince bağlantı KESİLİR (Mac ekranı telefona göre daralmış kalmasın),
 //      öne gelince yeniden kurulur. ttyd "Press ⏎ to Reconnect" derse telefonda Enter'a basılamaz →
 //      kendimiz yeniden bağlarız.
+// ---- koltuk seçici (12 Ekim, Sultan: her kutudaki her oturumu görüp konuşabilmek):
+//      liste kutunun kendi /api/koltuklar ucundan gelir (ttyd'nin kabul ettiğiyle AYNI liste).
+//      Seçilen koltuk tam terminali ?arg=<koltuk> ile açar; ana koltuk argümansız (eski yol).
+//      Okuma görünümü yalnız ANA oturumu gösterir — bu dürüst sınır sayfada da söylenir.
+const KOLTUK_ANAHTAR = ((window.__KUTU || 'kutu') + '-koltuk');
+let koltukSecili = ''; let koltukAna = '';
+// 🔴 Yerel bellekteki ad bir İDDİADIR, ölçüm değil (bağımsız göz tur 2): liste kutudan gelip onu
+//    doğrulamadan terminale KONMAZ. Doğrulanmamışken açılan terminal ana koltuğa gider; liste gelince
+//    hedef değişmişse terminal yeniden kurulur — kullanıcı reddedilmiş bir ekranda bırakılmaz.
+let koltukDogrulandi = false; let ttyArg = null;
+try { koltukSecili = localStorage.getItem(KOLTUK_ANAHTAR) || ''; } catch {}
+function istenenArg() { return (koltukDogrulandi && koltukSecili && koltukSecili !== koltukAna) ? '?arg=' + encodeURIComponent(koltukSecili) : ''; }
+async function koltuklariYukle() {
+  const sec = $('koltuk'); if (!sec) return;
+  let j; try { j = await api(Y('/api/koltuklar')); } catch { sec.hidden = true; koltukDogrulandi = false; return; }   // ölçülemedi → seçici gizli, "koltuk yok" denmez
+  const liste = Array.isArray(j.koltuklar) ? j.koltuklar : [];
+  koltukAna = j.ana || '';
+  if (!liste.some((k) => k.ad === koltukSecili)) koltukSecili = '';
+  koltukDogrulandi = true;
+  sec.innerHTML = liste.map((k) => `<option value="${k.ad}"${(koltukSecili ? k.ad === koltukSecili : k.ana) ? ' selected' : ''}>${k.ad}${k.claude ? ' ●' : ''}</option>`).join('');
+  sec.hidden = liste.length < 2;   // tek koltuk varsa seçecek bir şey yok
+  if ($('tty') && ttyArg !== istenenArg()) { ttySok(); ttyKur(); }   // açık terminal yanlış koltuktaysa düzelt
+}
 function ttyKur() {
   if ($('tty')) return;
-  const f = document.createElement('iframe'); f.id = 'tty'; f.src = Y('/tty/'); f.title = 'Canlı terminal';
-  $('ekran').append(f);
+  const arg = istenenArg();
+  const f = document.createElement('iframe'); f.id = 'tty'; f.src = Y('/tty/') + arg; f.title = 'Canlı terminal';
+  $('ekran').append(f); ttyArg = arg;
 }
-function ttySok() { $('tty')?.remove(); }
+$('koltuk')?.addEventListener('change', (e) => {
+  koltukSecili = e.target.value || '';
+  try { localStorage.setItem(KOLTUK_ANAHTAR, koltukSecili); } catch {}
+  if (gorunumTerminal) { ttySok(); ttyKur(); } else gorunumAyarla(true);   // koltuk seçmek = o koltuğun terminalini açmak
+  if (koltukSecili && koltukSecili !== koltukAna) bildir('Okuma görünümü yalnız ana koltuğu gösterir; bu koltuk tam terminalde.');
+});
+koltuklariYukle();
+document.addEventListener('visibilitychange', () => { if (!document.hidden) koltuklariYukle(); });
+function ttySok() { $('tty')?.remove(); ttyArg = null; }
 function gorunumAyarla(terminal) {
   gorunumTerminal = terminal;
   $('gorunum').setAttribute('aria-pressed', String(terminal));
   $('gorunum').textContent = terminal ? 'Okuma' : 'Terminal';
-  if (terminal) { ttyKur(); kaydir.hidden = true; enAlta.hidden = true; }
+  if (terminal) { koltuklariYukle(); ttyKur(); kaydir.hidden = true; enAlta.hidden = true; }
   else { ttySok(); kaydir.hidden = false; ekranH = ''; ekranCek(); }
   try { localStorage.setItem(GORUNUM_ANAHTAR, terminal ? 'terminal' : 'okuma'); } catch {}
 }

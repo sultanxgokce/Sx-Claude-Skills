@@ -101,10 +101,13 @@ if [ $WEB_YENILE = 1 ] || ! ttyd_saglam; then
   pkill -u "$(id -u)" -f "ttyd .*-p $KAPI_PORT " 2>/dev/null   # eski düzen (parolalı ttyd :7681) kalıntısı
   pkill -u "$(id -u)" -f "ttyd .*$TTYD_SOKET" 2>/dev/null; sleep 1
   rm -f "$TTYD_SOKET"; chmod 700 "$DURUM_DIZ" 2>/dev/null
-  tmux new-session -d -s "$TTYD_TMUX" "exec $TTYD_BIN -W -i $TTYD_SOKET -b $TABAN/tty \
-    -t fontSize=12 -t disableLeaveAlert=true -t disableResizeOverlay=true -t titleFixed=Sedir \
+  # KOLTUK SEÇİCİ: `-a` adresteki ?arg=<koltuk>'u komuta SON argüman olarak ekler; hangi adın kabul
+  # edileceğine koltuk-bagla.sh karar verir (beyaz liste = kutunun kendi tmux listesi). Argümansız
+  # bağlantı bugünkü gibi ana oturuma gider.
+  tmux new-session -d -s "$TTYD_TMUX" "exec $TTYD_BIN -W -a -i $TTYD_SOKET -b $TABAN/tty \
+    -t fontSize=12 -t disableLeaveAlert=true -t disableResizeOverlay=true -t titleFixed=$KUTU \
     -t 'theme={\"background\":\"#15120e\",\"foreground\":\"#ede5d7\",\"cursor\":\"#c9914f\"}' \
-    tmux new-session -A -s $ANA_TMUX -c $PROJE"
+    bash $BETIK_DIZ/koltuk-bagla.sh $ANA_TMUX $PROJE"
   bekle_saglam ttyd_saglam "$TTYD_BEKLE" || true
   ttyd_saglam && gunluk "K0 terminal (ttyd) başlatıldı" || gunluk "K0 HATA: terminal ayağa kalkmadı ($(ttyd_kod))"
 fi
@@ -138,12 +141,8 @@ fi
 
 [ -n "${TO_BEKCI_YOK:-}" ] || {
 # 5 · bekçi — kalıcı kopya (.oda/cron, kutu yeniden kurulunca yüklenir) + canlı crontab
-BEKCI_SATIR="* * * * * bash $BETIK_DIZ/bekci.sh # terminal-onar-bekci"
-ODA_CRON="$PROJE/.oda/cron"
-grep -q '# terminal-onar-bekci' "$ODA_CRON" 2>/dev/null || { printf '%s\n' "$BEKCI_SATIR" >> "$ODA_CRON"; gunluk "K0 bekçi .oda/cron'a yazıldı"; }
-if ! bekci_kurulu; then
-  { crontab -l 2>/dev/null; printf '%s\n' "$BEKCI_SATIR"; } | crontab - && gunluk "K0 bekçi crontab'a kuruldu"
-fi
+# Satır ve göç ortak.sh'ta (bekci_kur): eksikse kurar, eski ortak-yollu satırı proje yoluna çevirir — .oda/cron VE canlı crontab.
+gunluk "K0 bekçi: $(bekci_kur "$ODA_CRON" canli)"
 }
 
 if bash "$BETIK_DIZ/durum.sh" >/dev/null; then gunluk "K0 bitti: sağlam"; exit 0; fi

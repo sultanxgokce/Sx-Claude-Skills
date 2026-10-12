@@ -1,0 +1,39 @@
+$ bash terminal-onar/scripts/koltuk-bagla.test.sh
+# rc=0 sure=0.3s zaman=2026-10-12T20:24:29+03:00
+--- stdout ---
+A · bağlanma (kabul yüzü)
+  ✓ A1 argümansız → ana oturum (bugünkü davranış aynı)
+  ✓ A2 var olan koltuk → TAM eşleşmeli hedefle (=ad) bağlanır
+  ✓ A3 ana oturumun adı açıkça verilirse de beyaz listeden geçer (VAR → bağlanır, yaratmaz)
+  ✓ A4 🔴 ana oturum YOKKEN adı açıkça verilirse YARATILMAZ (beyaz liste delinmez)
+  ✓ A5 ... ama argümansız yol ana oturumu yine açar (A4 tautoloji değil)
+B · red yüzü (adres güvenilmez girdi)
+  ✓ B1 kutuda olmayan ad → rc=3, YENİ OTURUM AÇILMAZ
+  ✓ B2 red sessiz değil: sebebi ekrana basılır
+  ✓ B3 altyapı oturumu açılamaz: ttyd-maiset
+  ✓ B3 altyapı oturumu açılamaz: kapi-maiset
+  ✓ B3 altyapı oturumu açılamaz: maiset-kurtarici
+  ✓ B3 altyapı oturumu açılamaz: imglistener
+  ✓ B4 tmux hedef sözdizimi/kaçış reddedilir: 'BASIRET:0'
+  ✓ B4 tmux hedef sözdizimi/kaçış reddedilir: 'BASIRET.1'
+  ✓ B4 tmux hedef sözdizimi/kaçış reddedilir: '=BASIRET'
+  ✓ B4 tmux hedef sözdizimi/kaçış reddedilir: '^'
+  ✓ B4 tmux hedef sözdizimi/kaçış reddedilir: 'a b'
+  ✓ B4 tmux hedef sözdizimi/kaçış reddedilir: '../x'
+  ✓ B4 tmux hedef sözdizimi/kaçış reddedilir: 'xxxxxxxxxxxx'
+  ✓ B7 🔴 birden çok arg (?arg=X&arg=Y) → red, ilki seçilmez
+  ✓ B8 aynı ad iki kez de belirsizdir, red
+  ✓ B5 harf büyüklüğü tam eşleşir (basiret ≠ BASIRET)
+  ✓ B6 önek eşleşmez (BASIRE ≠ BASIRET)
+C · liste (tek kaynak)
+  ✓ C1 --liste rc=0
+  ✓ C2 gizliler listede YOK, görünürler sırasıyla var
+  ✓ C3 Claude çalışan koltuk işaretli, çalışmayan değil
+  ✓ C4 son etkinlik tmux'tan okunur
+  ✓ C5 hiç oturum yoksa boş liste (uydurma yok)
+  ✓ C6 🔴 tmux listesi ALINAMAZSA boş liste DEĞİL rc=3 'ölçülemedi' (C5 tautoloji değil)
+  ✓ C7 tmux sunucusu hiç yoksa gerçekten boş: rc=0
+  ✓ C8 liste alınamazken koltuğa da BAĞLANILMAZ (yanlış 'yok' demez, red basar)
+
+toplam=30 geçen=30 düşen=0
+--- stderr ---
