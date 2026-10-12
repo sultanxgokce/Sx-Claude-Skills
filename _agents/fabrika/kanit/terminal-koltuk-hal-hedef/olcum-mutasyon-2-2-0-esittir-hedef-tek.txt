@@ -1,0 +1,12 @@
+$ bash -c M=/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut-khh; mkdir -p $M && cp -r terminal-onar/scripts $M/ && git show origin/main:terminal-onar/scripts/koltuk-bagla.sh > $M/scripts/koltuk-bagla.sh && sed "s#^B=.*#B=$M/scripts/koltuk-bagla.sh#" terminal-onar/scripts/koltuk-bagla.test.sh > $M/t.sh; bash $M/t.sh 2>&1 | grep -E "✗|toplam"; r=${PIPESTATUS[0]}; echo "sinav-rc=$r (2.2.0 betiği: =ad hedefi; beklenen D5-D12 kırmızı)"; test $r -ne 0
+# rc=0 sure=0.8s zaman=2026-10-12T23:13:51+03:00
+--- stdout ---
+  ✗ D5 — bilinmiyor
+  ✗ D6 — bilinmiyor
+  ✗ D7 — bilinmiyor
+  ✗ D8 — bilinmiyor/bilinmiyor
+  ✗ D12 — bilinmiyor
+  ✗ D12b — bilinmiyor
+toplam=43 geçen=37 düşen=6
+sinav-rc=1 (2.2.0 betiği: =ad hedefi; beklenen D5-D12 kırmızı)
+--- stderr ---

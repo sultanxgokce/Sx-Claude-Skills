@@ -1,0 +1,32 @@
+{
+  "tur": 1,
+  "is": "terminal-koltuk-hal-hedef",
+  "pr": "299",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T23:14:21+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 14189,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, bölme yoklaması `=ad` yerine `ad:` ile yapılmış, sahte tmux eski biçimi reddedecek şekilde sıkılaştırılmış ve mutasyon sınavı eski sürümde altı hâl sınavının düştüğünü göstermiş. Önce canlı kabulü iş kartındaki özgül sonucu gerçekten sınasın ve “basiret boş” çelişkisi çözülsün; mevcut kanıt düzeltmenin özünü doğruluyor ama üretime hazır 5 için bu boşluk kapanmalı.",
+    "bulgular": [
+      {
+        "ne": "Canlı kabul ölçümü iş kartındaki “serdar çalışıyor, basiret boş” sonucunu doğrulamıyor; yalnız `bilinmiyor` olmayan kayıt sayısının en az iki olmasını sınıyor ve çıktı basiret için `girdi` gösteriyor.",
+        "kanit": "Canlı ölçüm komutu `test \"$n\" -ge 2` ile yalnız toplamı denetliyor; stdout satırları `basiret ... girdi` ve `serdar ... calisiyor`, iş kartı ise basiret için `boş` diyor.",
+        "konum": "kanıt:canli-olcum-bu-kutu / olcum-canli-olcum-bu-kutu-sonra.txt",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Sonraki 43/43 sınav ile eski 2.2.0 betiğinde 6 hâl sınavının düşmesi güçlü bir önce/sonra ölçüm çifti oluşturuyor; canlı ölçüm de gerçekçi oturum verisi içeriyor. Ancak canlı sınav özgül serdar/basiret beklentisini ölçmüyor ve basiret çıktısı karttaki “boş” iddiasıyla çelişiyor."
+  }
+}

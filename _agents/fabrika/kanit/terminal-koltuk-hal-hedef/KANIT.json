@@ -1,0 +1,66 @@
+{
+  "is": "terminal-koltuk-hal-hedef",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-12T23:15:21+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-bagla-43",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-bagla-43-sonra.txt",
+      "sha256": "1b29dc541034ef236003073cddee2787d41953b23bd49eb2beea4df46b7de966",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T23:13:50+03:00",
+      "sure_sn": 0.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-2-2-0-esittir-hedef",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-2-2-0-esittir-hedef-tek.txt",
+      "sha256": "86bd685572bc1fa786f69f7f98cfa13470c4967c76c8c98c796ac3c56f6749c1",
+      "komut": [
+        "bash",
+        "-c",
+        "M=/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut-khh; mkdir -p $M && cp -r terminal-onar/scripts $M/ && git show origin/main:terminal-onar/scripts/koltuk-bagla.sh > $M/scripts/koltuk-bagla.sh && sed \"s#^B=.*#B=$M/scripts/koltuk-bagla.sh#\" terminal-onar/scripts/koltuk-bagla.test.sh > $M/t.sh; bash $M/t.sh 2>&1 | grep -E \"✗|toplam\"; r=${PIPESTATUS[0]}; echo \"sinav-rc=$r (2.2.0 betiği: =ad hedefi; beklenen D5-D12 kırmızı)\"; test $r -ne 0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T23:13:51+03:00",
+      "sure_sn": 0.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-olcum-bu-kutu",
+      "asama": "sonra",
+      "dosya": "olcum-canli-olcum-bu-kutu-sonra.txt",
+      "sha256": "ccde7360308876e2c39a2ac35b484070022b9c639bee50d222cbf3e55682b464",
+      "komut": [
+        "bash",
+        "-c",
+        "L=$(bash terminal-onar/scripts/koltuk-bagla.sh --liste); printf \"%s\\n\" \"$L\" | cut -f1,3,4,5; s=$(printf \"%s\\n\" \"$L\" | awk -F\"\\t\" \"\\$1==\\\"serdar\\\"{print \\$5}\"); b=$(printf \"%s\\n\" \"$L\" | awk -F\"\\t\" \"\\$1==\\\"basiret\\\"{print \\$5}\"); m=$(printf \"%s\\n\" \"$L\" | awk -F\"\\t\" \"\\$1==\\\"muavin\\\"{print \\$5}\"); echo \"serdar=$s basiret=$b muavin=$m (kart 00:1x anlık görüntüsü: serdar çalışıyor, basiret boş — canlı hâl dakika dakika değişir; kapı: ÖLÇÜLÜYOR mu?)\"; [ \"$s\" != bilinmiyor ] && [ \"$b\" != bilinmiyor ] && [ \"$m\" = calisiyor ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T23:15:21+03:00",
+      "sure_sn": 0.3
+    },
+    {
+      "tur": "dosya",
+      "etiket": "canli-olcum-notu",
+      "asama": "tek",
+      "dosya": "dosya-canli-olcum-notu-tek.txt",
+      "sha256": "a41d310d0ffa53223d8131f057cf0b63b9261488d311d9c346f7f2d45b2ebdb0",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/khh-not.txt",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T23:15:21+03:00"
+    }
+  ],
+  "imza": "ed7cda7916d290c6f4decd4429c80a4b9fe85eb6effe82319070c323a8ffdb55"
+}

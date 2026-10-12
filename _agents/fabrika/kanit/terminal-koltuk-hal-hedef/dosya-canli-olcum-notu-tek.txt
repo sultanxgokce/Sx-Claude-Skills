@@ -1,0 +1,4 @@
+Kart cümlesindeki "serdar çalışıyor, basiret boş" 13 Eki 00:1x'te elle alınmış ANLIK görüntüdür (tmux capture-pane 'ad:' ile);
+canlı koltuk hâli dakika dakika değişir (basiret sonra 'girdi bekliyor'a geçti). Bu yüzden canlı kabul ölçümü belirli bir
+hâli değil, ÖLÇÜLEBİLİRLİĞİ sınar: serdar ve basiret 'bilinmiyor' DEĞİL (2.2.0'da ikisi de bilinmiyordu) ve bu betiği
+koşturan oturum (muavin) 'çalışıyor'. Hâl desenlerinin doğruluğu hermetik D5-D12 ile sabit ekranlarda sınanır.

@@ -59,7 +59,9 @@ koltuk_turu() {  # $1 = oturum · $2 = claude(1|0) → ajan yalnız Claude çal�
 koltuk_hali() {  # $1 = oturum → calisiyor|soru|sinirda|girdi|bos|bilinmiyor  (SON 15 dolu satır; eskisi sayılmaz)
   local ekran
   # 🔴 tmux -S -15 görünür panenin ÜSTÜNE 15 geçmiş satır ekler, sonunu sınırlamaz (bağımsız göz #298 tur 1): sınır tail ile.
-  ekran="$(tmux capture-pane -p -t "=$1" -S -15 2>/dev/null | sed '/^[[:space:]]*$/d' | tail -n 15)" || { echo bilinmiyor; return; }
+  # 🔴 capture-pane BÖLME hedefi ister: "=ad" oturum biçimi burada GEÇERSİZDİR ("can't find pane") → her koltuk 'bilinmiyor'
+  #    çıkıyordu (canlıda ölçüldü, 13 Eki). Doğru biçim "ad:" (oturumun etkin penceresi/bölmesi).
+  ekran="$(tmux capture-pane -p -t "$1:" -S -15 2>/dev/null | sed '/^[[:space:]]*$/d' | tail -n 15)" || { echo bilinmiyor; return; }
   [ -n "$ekran" ] || { echo bilinmiyor; return; }
   # Sıra: soru > meşgul > sınır > girdi > boş — soru en üstte: bekleyen bir soru, ekranda "esc to cancel" gibi meşgul izi taşısa
   # da sorudur; Sultan'ın görmesi gereken odur (filo yoklaması aynı deseni "Enter to select" istisnasıyla kuruyordu).
