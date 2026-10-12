@@ -1,0 +1,19 @@
+{
+  "is": "terminal-kur-dosya-kapisi",
+  "cumle": "terminal-kur-proje-yolu kartının DARALTILMASI (4 tur dolu, 4/5·E, tek bulgu): kur.sh proje beceri yolunda beklenmedik düz dosya varsa silmez, durur (fail-closed) — yalnız bu delta",
+  "istedi": "bağımsız göz tur 4 bulgusu (terminal-kur-proje-yolu)",
+  "aldi": "MUAVIN",
+  "zaman": "2026-10-12T22:31:47+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

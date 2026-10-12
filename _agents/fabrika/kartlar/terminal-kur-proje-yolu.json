@@ -15,5 +15,14 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": []
+  "gecmis": [],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "MUAVIN",
+      "oturum": "muavin/4390ad1f",
+      "gerekce": "Puan 3→4 yükseldi, tur 3'ün iki bulgusu küçük ve kapatıldı: K5c artık araç imzalı ölçümde (kutu-adi 9/9 tam çıktı), eski kopya yedeği saniye+sayaç ile benzersiz (B10d-g). Canlıdaki 15 kutunun kalıcılığı bu düzeltmeye bağlı; dördüncü tur yalnız bu iki kapanışı ölçer.",
+      "zaman": "2026-10-12T22:26:42+03:00"
+    }
+  ]
 }
