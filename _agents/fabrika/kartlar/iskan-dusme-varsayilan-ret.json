@@ -1,0 +1,19 @@
+{
+  "is": "iskan-dusme-varsayilan-ret",
+  "cumle": "iskan 0.10.3: ekip-yerlestir'de roster dışı mevcut üye (rezerve koltuk) düşerse varsayılan davranış KAYIT YAZMAMAK (rc 1) olsun; ISKAN_EY_DUSME=uyar ile eski sarı-uyarı modu açıkça seçilir. ENİS/SIHHAT emsali 11 Eki: uyarı basıldı ama üç kopya da düşmüş yazılacaktı.",
+  "istedi": "BASİRET (A323 drift mektubu 11 Eki) + ENİS iki ölçüm",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-12T10:12:56+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

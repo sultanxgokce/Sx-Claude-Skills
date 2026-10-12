@@ -1,7 +1,7 @@
 ---
 name: iskan
 type: agent
-version: 0.10.2
+version: 0.10.3
 description: >
   Container + ekip yaşam-döngüsü master-skill. Bir hedef (yeni-proje / mevcut-ekip-yeniden-doğuşu / tek-üye-ekleme)
   için host-provizyon (UC1), oturum-kurtarma (UC2, deterministik session-id), üye-ekleme (UC3) akışlarını
@@ -44,7 +44,11 @@ oto-yazımı. Dördü BESTELEDİĞİ kardeşlerin (aşağı) çalışma-kopyası
   izole-hedef dry-run'ı koşulsuz 'sultan-bildirim' satırı basar. Roster-köprüsü: ekip-yerlestir roster'ı
   `ISKAN_EY_ROSTER` (açık-override) ya da container-içi `_agents/handoff/ekip-registry.yaml`'dan okur;
   kaynak yoksa DÜRÜST-KIRMIZI rc=1 'roster-kaynağı yok' (D6 tuzak-fix — eski hardcoded denekAlfa/denekBeta
-  fallback'i sahte-ekip doğuruyordu, KALDIRILDI).
+  fallback'i sahte-ekip doğuruyordu, KALDIRILDI). **Düşen-üye kapısı (A323 · 0.10.2→0.10.3):** mevcut kayıtta
+  olup roster'da OLMAYAN üye (ör. rezerve koltuk) adıyla `[sarı] uye-dusuyor:` basılır ve VARSAYILAN
+  **fail-closed** rc=1 `uye-dusme-reddi` — kayıt yazılmaz. 0.10.2 yalnız uyarıyordu; ENİS/SIHHAT'ta (11 Eki)
+  anahtarı hatırlamayan koşum rezerve kimliği üç kopyadan da düşürecekti. Devam etmek bilinçli seçimdir:
+  `ISKAN_EY_DUSME=uyar` (eski davranış); `ret` de kabul; başka değer rc=2 (sessizce uyar sayılmaz).
 - `ekip-pong` (FAZ-6b, CANLI · P3 pong-kablosu): `ekip-pong <proje> --dry-run|--apply [--no-ping]` —
   ekip-yerlestir'in YERLEŞTİRDİĞİ her seat'in GERÇEKTEN canlı+doğru-kimlikli+yanıt-verir olduğunu kanıtlar
   (tenant-pong-proof delegesi; session-var + kimlik-banner bayt-eş + KENDİ-KORUMALI PONG üç-kapı; SAHTE-YEŞİL

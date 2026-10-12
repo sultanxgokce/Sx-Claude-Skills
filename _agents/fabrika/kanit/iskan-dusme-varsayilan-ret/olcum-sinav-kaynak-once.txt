@@ -1,0 +1,13 @@
+$ bash -c cd /config/.claude/jobs/d69a1b07/tmp/iskan-once-1016 && bash iskan/scripts/iskan.test.sh 2>&1 | grep -E '^  FAIL|geçti|A323' | tail -14
+# rc=0 sure=30.0s zaman=2026-10-12T10:20:26+03:00
+--- stdout ---
+  ok - A323: roster dışı mevcut üye (denekGama) düşerken SARI uyarı basıldı, dry-run rc=3 korundu
+  ok - A323: ISKAN_EY_DUSME=ret → fail-closed rc=1 + 'uye-dusme-reddi'
+  ok - A323 altın: roster Gama'yı taşıyınca uyarı yok, rezerv-uuid mevcut kayıttan yeniden kullanıldı
+  ok - A323 apply+ret: rc=1 + 'uye-dusme-reddi' + repo kaydı bayt-değişmedi (md5 eş)
+  ok - A323 apply (ret'siz): SARI uyarı apply çıktısında da basıldı; kayıt değişmedi (host bozuk, dokunuş sıfır)
+  ok - A323 kayıt-biçimi: üretici çıktısı altın biçime bayt-eş (biçim değişmedi)
+  FAIL - baslat-claude.sh: exec-argümanları sözleşme-dışı (rc=0: STUB-CLAUDE --resume 12345678-1234-1234-1234-123456789abc --name denekAlfa --permission-mode default)
+  ok - cycle-4 .bak-temizlik: .bak'lar silindi + orijinaller BAYT-korundu + .bak-yok sessiz-geçti
+== 264 geçti / 1 kaldı ==
+--- stderr ---

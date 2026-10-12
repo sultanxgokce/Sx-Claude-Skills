@@ -1,0 +1,67 @@
+{
+  "is": "iskan-dusme-varsayilan-ret",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-12T10:20:56+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "337aa1954e4bd3a06a2bcee567b6c80dfa36e629affc2cd7ab06c31e9720fddf",
+      "komut": [
+        "bash",
+        "-c",
+        "bash iskan/scripts/iskan.test.sh 2>&1 | grep -E \"A323|geçti|kaldı|FAIL|✗|toplam\" | tail -14"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T10:15:59+03:00",
+      "sure_sn": 23.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-kaynak",
+      "asama": "once",
+      "dosya": "olcum-sinav-kaynak-once.txt",
+      "sha256": "64c5bd6f96085992cbe035b54894065c7c7bbf6387d24d6c63655dda1d9fd354",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/.claude/jobs/d69a1b07/tmp/iskan-once-1016 && bash iskan/scripts/iskan.test.sh 2>&1 | grep -E '^  FAIL|geçti|A323' | tail -14"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T10:20:26+03:00",
+      "sure_sn": 30.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "enis-dry-run",
+      "asama": "sonra",
+      "dosya": "olcum-enis-dry-run-sonra.txt",
+      "sha256": "e78722ea8b4bf8d0e547a530b390111e0f2068774a79e4316c5d1e4dad95bfc8",
+      "komut": [
+        "bash",
+        "-c",
+        "ISKAN_CLOUDTOP_REPO_DIR=/config/projects/cloudtop bash iskan/scripts/iskan.sh ekip-yerlestir enis --dry-run 2>&1 | sed -E 's/\\(([0-9a-f]{8})[0-9a-f-]+\\)/(\\1…)/' | grep -E 'roster-kaynağı|uye-dus|SIHHAT|dry-run:'"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T10:20:30+03:00",
+      "sure_sn": 2.8
+    },
+    {
+      "tur": "dosya",
+      "etiket": "sinav-sonra-2-tam",
+      "asama": "tek",
+      "dosya": "dosya-sinav-sonra-2-tam-tek.txt",
+      "sha256": "57523b13917f3f3a7022948c77006539b4bc252d1c892674c51526a3e2ab0e36",
+      "kaynak": "/config/projects/_wt/Sx-Claude-Skills-iskan-dusme-varsayilan-ret/_agents/fabrika/kanit/iskan-dusme-varsayilan-ret/sinav-sonra-2-tam.txt",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T10:20:56+03:00"
+    }
+  ],
+  "imza": "8624635204dbe595a958ab8117da83d190a8e3b67618e85c634f9901ff245493"
+}

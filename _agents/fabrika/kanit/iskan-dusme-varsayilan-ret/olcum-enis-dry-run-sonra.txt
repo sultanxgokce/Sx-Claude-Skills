@@ -1,0 +1,7 @@
+$ bash -c ISKAN_CLOUDTOP_REPO_DIR=/config/projects/cloudtop bash iskan/scripts/iskan.sh ekip-yerlestir enis --dry-run 2>&1 | sed -E 's/\(([0-9a-f]{8})[0-9a-f-]+\)/(\1…)/' | grep -E 'roster-kaynağı|uye-dus|SIHHAT|dry-run:'
+# rc=0 sure=2.8s zaman=2026-10-12T10:20:30+03:00
+--- stdout ---
+[yeşil] roster-kaynağı: container-içi ekip-registry.yaml (3 üye)
+     - SIHHAT (uye) · rezerv-uuid: mevcut (443d8b5b…) · tmux: yeni-oturum açılacak
+== dry-run: hiçbir yazım yapılmadı (plan-exit sözleşmesi, exit=3) ==
+--- stderr ---
