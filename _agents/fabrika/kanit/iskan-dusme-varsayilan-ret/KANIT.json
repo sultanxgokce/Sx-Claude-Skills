@@ -1,7 +1,7 @@
 {
   "is": "iskan-dusme-varsayilan-ret",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-12T11:15:49+03:00",
+  "guncelleme": "2026-10-12T11:19:27+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -326,7 +326,42 @@
       "renk": "yesil",
       "zaman": "2026-10-12T11:15:49+03:00",
       "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-daraltilmis-hermetik",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-daraltilmis-hermetik-sonra.txt",
+      "sha256": "ca8198f8a1ef6dd7fbdc5e54607214ff2d561eb6235f6b8f7d82f346b959411f",
+      "komut": [
+        "env",
+        "BASLAT_IZ_DIR=/config/.claude/jobs/d69a1b07/tmp/tmp.hq2ohsFq44",
+        "bash",
+        "iskan/scripts/iskan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T11:18:57+03:00",
+      "sure_sn": 22.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-ana-hermetik",
+      "asama": "once",
+      "dosya": "olcum-sinav-ana-hermetik-once.txt",
+      "sha256": "9572ab33e3464c7a7678875a7b306c8d7e0908c4a719f676512df66e0ee98887",
+      "komut": [
+        "env",
+        "BASLAT_IZ_DIR=/config/.claude/jobs/d69a1b07/tmp/tmp.4EDL30Tl9t",
+        "bash",
+        "-c",
+        "cd /config/.claude/jobs/d69a1b07/tmp/iskan-ana-1104 && bash iskan/scripts/iskan.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-12T11:19:27+03:00",
+      "sure_sn": 21.5
     }
   ],
-  "imza": "7186b4a184a4b12942352dbee07e874d06690df376b4d1ff8c03058316090538"
+  "imza": "75fc9b7d57b649f77e171a3393caebfb93321f5c9213c6111c96f2a2908ecd3e"
 }

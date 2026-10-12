@@ -49,8 +49,6 @@ oto-yazımı. Dördü BESTELEDİĞİ kardeşlerin (aşağı) çalışma-kopyası
   **fail-closed** rc=1 `uye-dusme-reddi` — kayıt yazılmaz. 0.10.2 yalnız uyarıyordu; ENİS/SIHHAT'ta (11 Eki)
   anahtarı hatırlamayan koşum rezerve kimliği üç kopyadan da düşürecekti. Devam etmek bilinçli seçimdir:
   `ISKAN_EY_DUSME=uyar` (eski davranış); `ret` de kabul; başka değer rc=2 (sessizce uyar sayılmaz).
-  Aynı sürümde sınav onarımı (A340): `printf "$out" | grep -q` pipefail altında SIGPIPE ile RASTGELE kırmızı
-  veriyordu (kur hattında eksik küme koşudan koşuya değişiyordu); 218 yer `_icerik` yardımcısına geçti.
 - `ekip-pong` (FAZ-6b, CANLI · P3 pong-kablosu): `ekip-pong <proje> --dry-run|--apply [--no-ping]` —
   ekip-yerlestir'in YERLEŞTİRDİĞİ her seat'in GERÇEKTEN canlı+doğru-kimlikli+yanıt-verir olduğunu kanıtlar
   (tenant-pong-proof delegesi; session-var + kimlik-banner bayt-eş + KENDİ-KORUMALI PONG üç-kapı; SAHTE-YEŞİL
