@@ -1,0 +1,12 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/ekip-iki-sinav.sh
+# rc=1 sure=24.2s zaman=2026-10-12T11:14:46+03:00
+--- stdout ---
+KIRMIZI ekip-kur/templates/ekip-notify.test.sh
+  ✗ bos-ozet — gönderildi: BOS → BOS:0 (iletim-DOĞRULANAMADI — pane'e bak)
+  ✗ bos-defter — 1791792865-HARICI-1856793|2026-10-12T11:14:25+03:00|ping|HARICI|BOS|dogrulanamadi|SINAV-MESAJI-1856625 echo tehlikeli
+  ✗ bos-canli — 1791792865-HARICI-1856793|2026-10-12T11:14:25+03:00|ping|HARICI|BOS|dogrulanamadi|SINAV-MESAJI-1856625 echo tehlikeli
+  ✗ bos-kabuk — MESAJ KABUĞA YAZILDI
+KIRMIZI ekip-kur/update-immutable.test.sh
+not ok - README version matches ekip-kur frontmatter (want=1.8.0 got=1.7.0)
+dusen=2
+--- stderr ---

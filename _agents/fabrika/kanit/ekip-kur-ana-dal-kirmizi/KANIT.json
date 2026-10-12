@@ -1,0 +1,38 @@
+{
+  "is": "ekip-kur-ana-dal-kirmizi",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-12T11:15:23+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "iki-sinav",
+      "asama": "once",
+      "dosya": "olcum-iki-sinav-once.txt",
+      "sha256": "cc4248ce26cc598584f343310af94c04c3f5c2cca943d368207733acac2a7c10",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/ekip-iki-sinav.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-12T11:14:46+03:00",
+      "sure_sn": 24.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "iki-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-iki-sinav-sonra.txt",
+      "sha256": "cd70c58c404ad6d36c1e136eccac5a16fbfa347a26895b0d6aac5a5855c2da0c",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/ekip-iki-sinav.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T11:15:23+03:00",
+      "sure_sn": 18.1
+    }
+  ],
+  "imza": "3ba5c185e9b6c8fb8c295c9ea43a5a3ae2fb5dce7d30aabc8fdb27fd74bb614f"
+}

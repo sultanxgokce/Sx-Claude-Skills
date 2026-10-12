@@ -1,0 +1,21 @@
+{
+  "tur": 1,
+  "is": "ekip-kur-ana-dal-kirmizi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T11:15:49+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 10049,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Ana daldaki üç kırıklık giderilmiş: canlılık ölçeri ile kimlik bekçisine çalıştırma izni verilmiş, README sürümü 1.8.0'a çıkarılmış. Araç imzalı önce/sonra ölçümü aynı iki sınavın kırmızıdan yeşile döndüğünü gösterdiği için iş üretime hazırdır.",
+    "bulgular": [],
+    "kanit_gorusu": "Kanıt manifesti sağlam ve araç imzalı; sarı kayıt yok. Aynı komutla alınmış ölçüm çifti önce rc=1/kırmızı ve iki düşen sınav, sonra rc=0/yeşil ve sıfır düşen sınav gösteriyor. Kare yok, ancak bu izin ve sürüm düzeltmesi için ayrıntılı önce çıktısı ile eşleşen ölçüm çifti yeterli kanıt sağlıyor."
+  }
+}
