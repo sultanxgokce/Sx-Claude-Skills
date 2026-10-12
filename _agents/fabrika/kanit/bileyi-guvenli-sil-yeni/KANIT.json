@@ -1,7 +1,7 @@
 {
   "is": "bileyi-guvenli-sil-yeni",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-12T15:51:25+03:00",
+  "guncelleme": "2026-10-12T15:52:15+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -48,7 +48,23 @@
       "renk": "yesil",
       "zaman": "2026-10-12T15:51:25+03:00",
       "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-paketleri",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-paketleri-sonra.txt",
+      "sha256": "99fac6d7f8c0ef679458221974fa7a87c2874849aab3aa529211619a19f7bf43",
+      "komut": [
+        "bash",
+        "-c",
+        "cd bileyi/scripts && bash guvenli-sil.test.sh 2>&1 | tail -1 && timeout 600 bash bileyi.test.sh 2>&1 | tail -1; set -o pipefail; bash guvenli-sil.test.sh >/dev/null 2>&1 && timeout 600 bash bileyi.test.sh >/dev/null 2>&1"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T15:52:15+03:00",
+      "sure_sn": 8.0
     }
   ],
-  "imza": "178397b9a556beecf6604c6e2f3f29d33c942ff17f2796178cb1ea4acd240aed"
+  "imza": "d78e4d5c1c397fb865b6e0009b66f66032a019a4566a83ffdca8bb1ab825a05f"
 }
