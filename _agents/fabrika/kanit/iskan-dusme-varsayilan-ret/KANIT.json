@@ -1,7 +1,7 @@
 {
   "is": "iskan-dusme-varsayilan-ret",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-12T11:05:31+03:00",
+  "guncelleme": "2026-10-12T11:15:49+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -269,7 +269,64 @@
       "renk": "yesil",
       "zaman": "2026-10-12T11:05:31+03:00",
       "sure_sn": 2.5
+    },
+    {
+      "tur": "dosya",
+      "etiket": "ci-iskan-dogrula-betigi",
+      "asama": "tek",
+      "dosya": "dosya-ci-iskan-dogrula-betigi-tek.sh",
+      "sha256": "8d7054e78f7e149e5ab372735192f97f981853cc3f306b24a50a86950eb247a5",
+      "kaynak": "/config/.claude/jobs/d69a1b07/tmp/ci-iskan-dogrula.sh",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T11:15:05+03:00"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-temiz-makine-iskan-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-ci-temiz-makine-iskan-sinavi-sonra.txt",
+      "sha256": "a5fd153447c11e1a77cb769e9160f523a3f3418c46812ec22044d2b100e1f6c3",
+      "komut": [
+        "bash",
+        "/config/.claude/jobs/d69a1b07/tmp/ci-iskan-dogrula.sh",
+        "38221524666"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T11:15:07+03:00",
+      "sure_sn": 1.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "00-sinav-ozetleri",
+      "asama": "sonra",
+      "dosya": "olcum-00-sinav-ozetleri-sonra.txt",
+      "sha256": "c0b14ac6294cd3b8d1951528a69fd6c45a30dcf91e7852e8bbe2080a7b4d3ed3",
+      "komut": [
+        "bash",
+        "/config/.claude/jobs/d69a1b07/tmp/sinav-ozet.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T11:15:49+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "00-tur2-cevap",
+      "asama": "sonra",
+      "dosya": "olcum-00-tur2-cevap-sonra.txt",
+      "sha256": "8fc236efd9dbadd0d9d3c0d7e8418f8d3431f2b3a919a14a2925f0733e2a2532",
+      "komut": [
+        "cat",
+        "/config/.claude/jobs/d69a1b07/tmp/iskan-0103-tur2-cevap.md"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T11:15:49+03:00",
+      "sure_sn": 0.0
     }
   ],
-  "imza": "8984fad610835288cd674772f11c4c212faee1356b575c959e14b7350beff549"
+  "imza": "7186b4a184a4b12942352dbee07e874d06690df376b4d1ff8c03058316090538"
 }

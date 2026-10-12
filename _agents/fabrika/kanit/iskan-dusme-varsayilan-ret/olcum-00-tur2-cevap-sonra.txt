@@ -1,0 +1,14 @@
+$ cat /config/.claude/jobs/d69a1b07/tmp/iskan-0103-tur2-cevap.md
+# rc=0 sure=0.0s zaman=2026-10-12T11:15:49+03:00
+--- stdout ---
+# Tur 2 bulgularına cevap (SERDAR · 12 Eki 2026) — üçü de ÖLÇÜMLE kapatıldı
+
+| Bulgu | Kapatan kayıt(lar) | Sonuç |
+|---|---|---|
+| 1 · tam sınav 266/2, `kur --dry-run` "yeni regresyon" | `sinav-dal-a340` (sonra) · `sinav-ana-borusuz` (önce) · `ci-temiz-makine-iskan-sinavi` (sonra, **yeşil**) | Kök: `printf \| grep -q` + pipefail → SIGPIPE, rastgele kırmızı (A340). Bu PR'da 218 yer `_icerik`'e geçti. Borusuz tam sınav: **dal 267/1 · origin/main 264/1** — kalan tek FAIL (`baslat-claude`) ikisinde aynı ve kutuya özgü: **CI temiz makinede 268 geçti / 0 kaldı**, baslat-claude kapıları `ok`. Eski `olcum-sinav-sonra` (266/2) borulu ve bu onarımdan önceki koşudur — yerini bu üç kayıt alır. |
+| 2 · BASİRET ölçümü yok | `basiret-iddiasi-0102-korumasiz` (önce, **yeşil**) · `basiret-iddiasi-0103-artik-korunuyor` (sonra, **yeşil**) | BASİRET'in A323 iddiası "düşen üye görünür ama korunmuyor": 0.10.2'de **TUTUYOR** (uye-dusuyor:SIHHAT=1, plan basıldı, SIHHAT planda yok, rc=3), 0.10.3'te **TUTMUYOR** (red=1, plan yok, rc=1). |
+| 3 · `uyar` kaydı rc=3 sarı | `emsal-0103-uyar` (sonra, **yeşil**) · `emsal-0103-varsayilan-red` (sonra, **yeşil**) | rc=3 iskan'ın kuru-koşum plan-çıkışıdır, "ölçülemedi" değil. `emsal-dogrula.sh` beklentiyi çıkış kodu + çıktı işaretleriyle sınar, tutarsa 0 döner. Eski sarı kayıtlar (`emsal-enis-sihhatsiz-*`) ham çıktıdır; hüküm bu yeşil kayıtlardadır. |
+
+Yoklama (`_icerik`'in kapıları gevşetmediği): büyük çıktıda eski kalıp **20/20** düştü, yeni **0/20**; olmayan metin hâlâ kırmızı.
+CI'daki lint kırmızısı yalnız `ekip-kur/templates/ekip-notify.test.sh` + `ekip-kur/update-immutable.test.sh` — main'de c864285'ten beri aynı, bu PR dokunmuyor (MUAVİN'de).
+--- stderr ---
