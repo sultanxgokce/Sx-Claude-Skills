@@ -144,6 +144,12 @@ console.log('\n── Y · KOLTUKLAR (koltuk seçici) ──');
   const c3 = 'kapi=' + ((ok3.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1];
   const rb = await iste(P3, '/sedir/api/koltuklar', { cerez: c3 });
   kapi('Y8 betik düşerse 500 "ölçülemedi" — boş liste ("hiç koltuk yok") BASILMAZ', rb.status === 500, `→ ${rb.status}`);
+  // Kullanıcı yüzü (bağımsız göz, tur 1): seçici sayfada ve betikte var, listeyi aynı uçtan çeker, tam terminali ?arg= ile açar.
+  const sayfa = await (await iste(P1, '/sedir/', { cerez })).text();
+  const js = await (await iste(P1, '/sedir/uygulama.js', { cerez })).text();
+  kapi('Y9 telefon ekranı koltuk seçici TAŞIR (başlıkta seçim kutusu)', sayfa.includes('id="koltuk"'));
+  kapi('Y10 seçici listeyi kutunun /api/koltuklar ucundan çeker ve tam terminali ?arg= ile açar',
+    js.includes("/api/koltuklar") && js.includes("'?arg='"));
   kb.kill();
 }
 

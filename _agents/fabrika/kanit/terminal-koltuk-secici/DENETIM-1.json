@@ -1,0 +1,40 @@
+{
+  "tur": 1,
+  "is": "terminal-koltuk-secici",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T19:58:35+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 43383,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Koltukları listeleyen girişli API, ad doğrulaması ve ttyd üzerinden oturuma bağlanma yolu kurulmuş; sınavlar red ve hata yüzlerini anlamlı biçimde ölçüyor. Lakin kapıda kullanıcının göreceği bir koltuk seçici sunulmamış ve açıkça verilen fakat mevcut olmayan ana oturum adı yeniden yaratıldığı için önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "İş kartındaki “kutu kapısında koltuk seçici” kullanıcı yüzü yapılmamış; değişiklik yalnız API, bağlanma betiği ve sunucu sınavları getiriyor, koltukları gösterip seçtiren istemci değişikliği yok.",
+        "kanit": "Diff envanterinde sunucu.mjs, kabuk betikleri, sınavlar ve belge değişiyor; kapı/PWA istemci dosyasında seçici değişikliği bulunmuyor. Ölçümde Y1-Y8 yalnız /api/koltuklar ve ttyd yönlendirmesini sınıyor; gerçekçi bir seçici karesi veya kullanıcı akışı yok.",
+        "konum": "DEĞİŞİKLİK diff envanteri; olcum-kapi-sinav-sonra.txt:Y1-Y8",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Açıkça verilen ana oturum adı kutuda mevcut olmasa bile beyaz liste denetimine girmeden `tmux new-session -A` ile oluşturuluyor; bu, “yalnız kutuda var olan oturumlar” ve yanlış adın reddi şartını deliyor.",
+        "kanit": "`if [ -z \"$ISTEK\" ] || [ \"$ISTEK\" = \"$ANA\" ]; then exec tmux new-session -A ...` dalı, `LISTE` ve `grep -qxF` denetimlerinden önce çalışıyor. A3 sınavı da ana adın mevcut olmadığı vakayı kurmadan doğrudan yeni oturum komutunu başarı sayıyor.",
+        "konum": "terminal-onar/scripts/koltuk-bagla.sh:57; terminal-onar/scripts/koltuk-bagla.test.sh:38",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Birden çok `arg` gönderildiğinde ttyd'nin birden çok komut argümanı ürettiği bilindiği halde betik yalnız üçüncü argümanı okuyup kalanları yok sayıyor; belirsiz adres reddedilmiyor.",
+        "kanit": "Canlı çıktı `?arg=X&arg=Y → ARGS=[X Y]` gösteriyor; betik `ISTEK=\"${3:-}\"` kullanıyor ve `$4` için ret yok. Sınavlarda çoklu arg vakası bulunmuyor.",
+        "konum": "olcum-ttyd-a-canli.txt; terminal-onar/scripts/koltuk-bagla.sh:55",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve üç yeşil sonrasında ölçümü kayıtlı; sarı kayıt yok. 23/23 yeni betik sınavı, 48/48 kapı sınavı ve eski sınavların rc=0 sonuçları güçlüdür; ancak önce/sonra ölçüm çifti ve gerçek kullanıcı seçici karesi yoktur. Mutasyon ve canlı ttyd dosyaları manifest kayıtlarına dahil edilmediğinden araç-imzalı kanıt sayılmaz; yalnız verilen teknik çıktılar olarak yardımcı bağlam sağlar."
+  }
+}

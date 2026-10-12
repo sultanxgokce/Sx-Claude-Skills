@@ -1,10 +1,12 @@
 $ bash terminal-onar/scripts/koltuk-bagla.test.sh
-# rc=0 sure=0.3s zaman=2026-10-12T19:54:17+03:00
+# rc=0 sure=0.3s zaman=2026-10-12T20:03:28+03:00
 --- stdout ---
 A · bağlanma (kabul yüzü)
   ✓ A1 argümansız → ana oturum (bugünkü davranış aynı)
   ✓ A2 var olan koltuk → TAM eşleşmeli hedefle (=ad) bağlanır
-  ✓ A3 ana oturum adı açıkça verilirse de ana yola gider
+  ✓ A3 ana oturumun adı açıkça verilirse de beyaz listeden geçer (VAR → bağlanır, yaratmaz)
+  ✓ A4 🔴 ana oturum YOKKEN adı açıkça verilirse YARATILMAZ (beyaz liste delinmez)
+  ✓ A5 ... ama argümansız yol ana oturumu yine açar (A4 tautoloji değil)
 B · red yüzü (adres güvenilmez girdi)
   ✓ B1 kutuda olmayan ad → rc=3, YENİ OTURUM AÇILMAZ
   ✓ B2 red sessiz değil: sebebi ekrana basılır
@@ -19,6 +21,8 @@ B · red yüzü (adres güvenilmez girdi)
   ✓ B4 tmux hedef sözdizimi/kaçış reddedilir: 'a b'
   ✓ B4 tmux hedef sözdizimi/kaçış reddedilir: '../x'
   ✓ B4 tmux hedef sözdizimi/kaçış reddedilir: 'xxxxxxxxxxxx'
+  ✓ B7 🔴 birden çok arg (?arg=X&arg=Y) → red, ilki seçilmez
+  ✓ B8 aynı ad iki kez de belirsizdir, red
   ✓ B5 harf büyüklüğü tam eşleşir (basiret ≠ BASIRET)
   ✓ B6 önek eşleşmez (BASIRE ≠ BASIRET)
 C · liste (tek kaynak)
@@ -28,5 +32,5 @@ C · liste (tek kaynak)
   ✓ C4 son etkinlik tmux'tan okunur
   ✓ C5 hiç oturum yoksa boş liste (uydurma yok)
 
-toplam=23 geçen=23 düşen=0
+toplam=27 geçen=27 düşen=0
 --- stderr ---

@@ -1,5 +1,5 @@
 $ node terminal-onar/kapi/sunucu.test.mjs
-# rc=0 sure=4.7s zaman=2026-10-12T19:54:21+03:00
+# rc=0 sure=4.7s zaman=2026-10-12T20:03:33+03:00
 --- stdout ---
 
 ── T · TABAN YOLU (kapı /sedir altında) ──
@@ -27,6 +27,8 @@ $ node terminal-onar/kapi/sunucu.test.mjs
   ✓ Y6 ana koltuk işaretli
   ✓ Y7 ttyd vekili ?arg= sorgusunu OLDUĞU GİBİ iletir (koltuk ttyd'ye ulaşır)
   ✓ Y8 betik düşerse 500 "ölçülemedi" — boş liste ("hiç koltuk yok") BASILMAZ
+  ✓ Y9 telefon ekranı koltuk seçici TAŞIR (başlıkta seçim kutusu)
+  ✓ Y10 seçici listeyi kutunun /api/koltuklar ucundan çeker ve tam terminali ?arg= ile açar
 
 ── K · KÖK DAVRANIŞI (taban boş — geriye dönük) ──
   ✓ K1 taban boşken giriş kök yolda açılır
@@ -61,5 +63,5 @@ $ node terminal-onar/kapi/sunucu.test.mjs
   ✓ A4 BAŞKA kutu KENDİ adını gösterir (A1 tautoloji değil)
 
 ────────────────────────────────────────────────────────
-GECEN: 48  ·  KALAN: 0
+GECEN: 50  ·  KALAN: 0
 --- stderr ---

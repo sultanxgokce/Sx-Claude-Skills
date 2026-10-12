@@ -35,7 +35,13 @@ kos maiset-ana /p
 kos maiset-ana /p BASIRET
 [ "$(iz)" = "attach-session -t =BASIRET" ] && ok "A2 var olan koltuk → TAM eşleşmeli hedefle (=ad) bağlanır" || bad A2 "$(iz)"
 kos maiset-ana /p maiset-ana
-[ "$(iz)" = "new-session -A -s maiset-ana -c /p" ] && ok "A3 ana oturum adı açıkça verilirse de ana yola gider" || bad A3 "$(iz)"
+[ "$(iz)" = "attach-session -t =maiset-ana" ] && ok "A3 ana oturumun adı açıkça verilirse de beyaz listeden geçer (VAR → bağlanır, yaratmaz)" || bad A3 "$(iz)"
+printf '%s\n' BASIRET CARSI imglistener > "$S/oturumlar"
+kos maiset-ana /p maiset-ana
+[ "$(rc)" = 3 ] && [ -z "$(iz)" ] && ok "A4 🔴 ana oturum YOKKEN adı açıkça verilirse YARATILMAZ (beyaz liste delinmez)" || bad A4 "rc=$(rc) iz=$(iz)"
+kos maiset-ana /p
+[ "$(iz)" = "new-session -A -s maiset-ana -c /p" ] && ok "A5 ... ama argümansız yol ana oturumu yine açar (A4 tautoloji değil)" || bad A5 "$(iz)"
+printf '%s\n' maiset-ana BASIRET CARSI imglistener ttyd-maiset kapi-maiset maiset-kurtarici > "$S/oturumlar"
 
 echo "B · red yüzü (adres güvenilmez girdi)"
 kos maiset-ana /p YOKKOLTUK
@@ -49,6 +55,10 @@ for k in 'BASIRET:0' 'BASIRET.1' '=BASIRET' '^' 'a b' '../x' "$(printf 'x%.0s' {
   kos maiset-ana /p "$k"
   [ "$(rc)" = 3 ] && [ -z "$(iz)" ] && ok "B4 tmux hedef sözdizimi/kaçış reddedilir: '${k:0:12}'" || bad "B4 $k" "rc=$(rc) iz=$(iz)"
 done
+kos maiset-ana /p BASIRET CARSI
+[ "$(rc)" = 3 ] && [ -z "$(iz)" ] && grep -q "birden çok" "$S/cikti" && ok "B7 🔴 birden çok arg (?arg=X&arg=Y) → red, ilki seçilmez" || bad B7 "rc=$(rc) iz=$(iz)"
+kos maiset-ana /p BASIRET BASIRET
+[ "$(rc)" = 3 ] && ok "B8 aynı ad iki kez de belirsizdir, red" || bad B8 "rc=$(rc)"
 kos maiset-ana /p basiret
 [ "$(rc)" = 3 ] && ok "B5 harf büyüklüğü tam eşleşir (basiret ≠ BASIRET)" || bad B5 "rc=$(rc)"
 kos maiset-ana /p 'BASIRE'

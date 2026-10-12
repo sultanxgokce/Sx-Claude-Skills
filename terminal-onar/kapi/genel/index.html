@@ -112,6 +112,9 @@
   .gunluk:empty { display: none; }
   .eylemler { display: flex; gap: var(--a2); }
   .eylemler .dugme { flex: 1; }
+  /* Koltuk seçici (12 Ekim): kutudaki oturumlar; seçilen koltuk tam terminalde açılır. */
+  #koltuk { max-width: 38vw; appearance: auto; }
+  #koltuk[hidden] { display: none; }
 </style>
 </head>
 <body>
@@ -123,6 +126,7 @@
       <span class="durum-yazi" id="durumYazi">ölçülüyor…</span>
     </div>
     <div class="baslik">
+      <select class="dugme" id="koltuk" aria-label="Koltuk (oturum)" title="Koltuk" hidden></select>
       <button class="dugme" id="gorunum" type="button" aria-pressed="false">Terminal</button>
       <button class="dugme" id="onarAc" type="button">Onar</button>
     </div>

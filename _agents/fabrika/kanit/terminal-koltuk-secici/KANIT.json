@@ -1,21 +1,21 @@
 {
   "is": "terminal-koltuk-secici",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-12T19:54:33+03:00",
+  "guncelleme": "2026-10-12T20:03:33+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "koltuk-sinav",
       "asama": "sonra",
       "dosya": "olcum-koltuk-sinav-sonra.txt",
-      "sha256": "b543d3f1c0d2141b567db6bca15909dca4991ae1447c557ea5ff953ea6a974fd",
+      "sha256": "fc7ed0b875371c1c9d4fd03661bb6aa34d54bbd327a02c590810bf29c769185d",
       "komut": [
         "bash",
         "terminal-onar/scripts/koltuk-bagla.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-12T19:54:17+03:00",
+      "zaman": "2026-10-12T20:03:28+03:00",
       "sure_sn": 0.3
     },
     {
@@ -23,14 +23,14 @@
       "etiket": "kapi-sinav",
       "asama": "sonra",
       "dosya": "olcum-kapi-sinav-sonra.txt",
-      "sha256": "bf42e41ca52b99c7b081365fbcd73629ca3a21c992a3e388245f6ffa806a76e7",
+      "sha256": "eb4f65688d865ea55e21259b6528b7937ac14b905c69338cd358ad7e512b779d",
       "komut": [
         "node",
         "terminal-onar/kapi/sunucu.test.mjs"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-12T19:54:21+03:00",
+      "zaman": "2026-10-12T20:03:33+03:00",
       "sure_sn": 4.7
     },
     {
@@ -50,5 +50,5 @@
       "sure_sn": 11.6
     }
   ],
-  "imza": "aa95680c1dea50157dcb5d6c6698d05514d8a4f8e536186df82cb79c1195b1c6"
+  "imza": "d235fdebbd68043275b77a84c136274f9c7fd92a2f4dcf3aac7561e1aad0dd5b"
 }

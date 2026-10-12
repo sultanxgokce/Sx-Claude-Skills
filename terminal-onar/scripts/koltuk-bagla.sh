@@ -47,6 +47,9 @@ fi
 ANA="${1:?kullanım: koltuk-bagla.sh <ana-oturum> <proje-dizini> [koltuk] | --liste}"
 PROJE="${2:?proje dizini eksik}"
 ISTEK="${3:-}"
+# 🔴 Birden çok arg (?arg=X&arg=Y) ttyd'de birden çok argüman olur (canlı ölçüldü: ARGS=[X Y]).
+#    Belirsiz adres SEÇİLMEZ, reddedilir — ilkini alıp gerisini yutmak sessiz bir karar olurdu.
+COK_ARG=$(( $# > 3 ))
 
 red() {
   printf '\r\n  \033[1;31m⛔ %s\033[0m\r\n' "$1"
@@ -54,8 +57,11 @@ red() {
   exit 3
 }
 
-if [ -z "$ISTEK" ] || [ "$ISTEK" = "$ANA" ]; then
-  # Bugünkü davranış BAYT BAYT aynı: ana oturuma bağlan, yoksa aç.
+[ "$COK_ARG" = 1 ] && red "Adreste birden çok koltuk var; tek koltuk ver."
+if [ -z "$ISTEK" ]; then
+  # Argümansız: bugünkü davranış BAYT BAYT aynı — ana oturuma bağlan, yoksa aç.
+  # 🔴 Yalnız ARGÜMANSIZ yol oturum YARATIR. Ana oturumun adı adresle açıkça verilirse o da
+  #    öteki koltuklar gibi beyaz listeden geçer (bağımsız göz, tur 1: açık ad listeyi deliyordu).
   exec tmux new-session -A -s "$ANA" -c "$PROJE"
 fi
 gecerli_ad "$ISTEK" || red "Geçersiz koltuk adı."
