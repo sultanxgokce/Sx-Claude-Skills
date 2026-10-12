@@ -3,7 +3,8 @@
 #
 #   koltuk-bagla.sh <ana-oturum> <proje-dizini> [koltuk]   ttyd'nin çalıştırdığı komut (ttyd -a: adresteki
 #                                                          ?arg=<koltuk> buraya SON argüman olarak eklenir)
-#   koltuk-bagla.sh --liste                                görünür koltuklar, sekmeyle: ad · son-etkinlik(epoch) · claude(1|0)
+#   koltuk-bagla.sh --liste                                görünür koltuklar, sekmeyle: ad · son-etkinlik(epoch) · claude(1|0) · tür(ajan|diger) · hâl
+#                                                          (KOLTUK_ANA=<ana oturum> verilirse ana oturum 'ajan' sayılır)
 #
 # 🔴 NİÇİN TEK KAYNAK: "hangi oturum görünür" sorusunu hem ekran (ttyd) hem liste ucu (/api/koltuklar)
 #    soruyor. İki ayrı liste yazılsaydı ilk değişiklikte ayrışırdı: listede görünmeyen bir oturuma adresle
@@ -44,13 +45,42 @@ claude_var_mi() {  # $1 = oturum → 0 ise koltukta Claude çalışıyor
   return 1
 }
 
+# ── TÜR ve HÂL (2.2.0 · dilim 4, Sultan: "düzenli net sade"): ekran yalnız AJAN koltuklarını önde gösterir,
+#    gerisi "diğer" altında katlanır; hâl noktası koltuk başına. İkisi de BURADA ölçülür (kapı sormakla yetinir).
+#    tür  : ajan  = Claude çalışan oturum ya da ana oturum (<kutu>-ana) · diğer = geçici/arka plan (cc-* · dash* ·
+#           imglistener* · *-kurtarici) ya da Claude'suz oturum
+#    hâl  : son ekran satırlarından, filo yoklamasıyla AYNI desenler (Nexus scripts/filo.py hal()): sıra meşgul > soru >
+#           sınır > girdi > boş; hiçbiri tutmazsa "bilinmiyor" (uydurulmaz). Claude'suz oturumun hâli "yok" (ölçülmez).
+diger_mi() { case "$1" in cc-*|dash*|imglistener*|*-kurtarici) return 0 ;; esac; return 1; }
+koltuk_turu() {  # $1 = oturum · $2 = claude(1|0) · $3 = ana(1|0)
+  if diger_mi "$1"; then echo diger; elif [ "$2" = 1 ] || [ "$3" = 1 ]; then echo ajan; else echo diger; fi
+}
+koltuk_hali() {  # $1 = oturum → calisiyor|soru|sinirda|girdi|bos|bilinmiyor  (son 15 satır, boş satırlar atılır)
+  local ekran
+  ekran="$(tmux capture-pane -p -t "=$1" -S -15 2>/dev/null | sed '/^[[:space:]]*$/d')" || { echo bilinmiyor; return; }
+  [ -n "$ekran" ] || { echo bilinmiyor; return; }
+  if printf '%s' "$ekran" | grep -qiE 'esc to interrupt|esc to cancel\)|\([0-9]+s ·|Running…|Waiting…' && ! printf '%s' "$ekran" | grep -q 'Enter to select'; then echo calisiyor; return; fi
+  if printf '%s' "$ekran" | grep -qE 'Enter to select|Do you want to|❯ [0-9]+\. '; then echo soru; return; fi
+  if printf '%s' "$ekran" | grep -qiE 'usage limit|limit reached|5-hour limit'; then echo sinirda; return; fi
+  local satir
+  satir="$(printf '%s\n' "$ekran" | grep -E '^[[:space:]]*❯' | tail -1 | sed 's/^[[:space:]]*❯[[:space:]]*//')"
+  if printf '%s\n' "$ekran" | grep -qE '^[[:space:]]*❯'; then
+    if [ -n "$satir" ]; then echo girdi; else echo bos; fi; return
+  fi
+  echo bilinmiyor
+}
+
 if [ "${1:-}" = "--liste" ]; then
   LISTE="$(koltuklar)" || exit 3
+  ANA_AD="${TO_ANA_TMUX:-${KOLTUK_ANA:-}}"
   printf '%s\n' "$LISTE" | while IFS= read -r s; do
     [ -n "$s" ] || continue
     son=$(tmux display-message -p -t "=$s" '#{session_activity}' 2>/dev/null || echo 0)
     if claude_var_mi "$s"; then c=1; else c=0; fi
-    printf '%s\t%s\t%s\n' "$s" "${son:-0}" "$c"
+    a=0; [ -n "$ANA_AD" ] && [ "$s" = "$ANA_AD" ] && a=1
+    tur="$(koltuk_turu "$s" "$c" "$a")"
+    if [ "$c" = 1 ]; then hal="$(koltuk_hali "$s")"; else hal=yok; fi
+    printf '%s\t%s\t%s\t%s\t%s\n' "$s" "${son:-0}" "$c" "$tur" "$hal"
   done
   exit 0
 fi

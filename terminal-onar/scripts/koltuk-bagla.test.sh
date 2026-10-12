@@ -16,8 +16,9 @@ case "$1" in
   list-sessions) [ -n "${SAHTE_BOZUK:-}" ] && { echo "error connecting to /tmp/tmux-1000/default (Permission denied)" >&2; exit 1; }
                  [ -n "${SAHTE_SUNUCU_YOK:-}" ] && { echo "no server running on /tmp/tmux-1000/default" >&2; exit 1; }
                  cat "$SAHTE/oturumlar" ;;
-  list-panes)    t="${4#=}"; [ "$t" = BASIRET ] && echo "100 claude" || echo "200 bash" ;;
+  list-panes)    t="${4#=}"; case "$t" in BASIRET|cc-1|ZAKIR|KALFA|NEDIM|MUHASIP) echo "100 claude" ;; *) echo "200 bash" ;; esac ;;
   display-message) echo 1760000000 ;;
+  capture-pane)  t="${4#=}"; [ -f "$SAHTE/ekran-$t" ] && cat "$SAHTE/ekran-$t" || exit 1 ;;
   list-windows)  echo "@1" ;;
   set-option)    : ;;
   new-session|attach-session) echo "$*" >> "$SAHTE/iz"; exit 0 ;;
@@ -65,6 +66,30 @@ kos maiset-ana /p basiret
 [ "$(rc)" = 3 ] && ok "B5 harf büyüklüğü tam eşleşir (basiret ≠ BASIRET)" || bad B5 "rc=$(rc)"
 kos maiset-ana /p 'BASIRE'
 [ "$(rc)" = 3 ] && ok "B6 önek eşleşmez (BASIRE ≠ BASIRET)" || bad B6 "rc=$(rc)"
+
+echo "D · tür ve hâl (2.2.0: ajan ⟂ diğer · hâl son ekrandan, filo desenleri)"
+printf '%s\n' maiset-ana BASIRET CARSI cc-1 dash ZAKIR KALFA NEDIM MUHASIP imglistener > "$S/oturumlar"
+printf '%s\n' "⏺ Düşünüyor…" "esc to interrupt" > "$S/ekran-BASIRET"
+printf '%s\n' "Do you want to proceed?" "❯ 1. Yes" "  2. No" "Enter to select" > "$S/ekran-ZAKIR"
+printf '%s\n' "You've hit your usage limit · limit reached" "❯ " > "$S/ekran-KALFA"
+printf '%s\n' "önceki çıktı" "❯ yarım kalmış bir cümle" > "$S/ekran-NEDIM"
+printf '%s\n' "bitti." "" "❯ " > "$S/ekran-MUHASIP"
+printf '%s\n' "sadece metin, istem yok" > "$S/ekran-cc-1"
+KOLTUK_ANA=maiset-ana SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste"; lrc=$?
+al() { grep -P "^$1\t" "$S/liste" | cut -f"$2"; }
+[ "$lrc" = 0 ] && [ "$(head -1 "$S/liste" | awk -F'\t' '{print NF}')" = 5 ] && ok "D1 liste 5 alan: ad · son · claude · tür · hâl" || bad D1 "rc=$lrc $(head -1 "$S/liste")"
+[ "$(al BASIRET 4)" = ajan ] && [ "$(al maiset-ana 4)" = ajan ] && ok "D2 Claude çalışan ve ANA oturum 'ajan'" || bad D2 "$(al BASIRET 4)/$(al maiset-ana 4)"
+[ "$(al CARSI 4)" = diger ] && [ "$(al dash 4)" = diger ] && ok "D3 Claude'suz oturum ve dash* 'diğer'" || bad D3 "$(al CARSI 4)/$(al dash 4)"
+[ "$(al cc-1 4)" = diger ] && ok "D4 cc-* Claude çalışsa da 'diğer' (geçici oturum)" || bad D4 "$(al cc-1 4)"
+[ "$(al BASIRET 5)" = calisiyor ] && ok "D5 'esc to interrupt' → çalışıyor" || bad D5 "$(al BASIRET 5)"
+[ "$(al ZAKIR 5)" = soru ] && ok "D6 'Enter to select' → soru (çalışıyor deseni olsa bile soru kazanır)" || bad D6 "$(al ZAKIR 5)"
+[ "$(al KALFA 5)" = sinirda ] && ok "D7 'usage limit' → sınırda" || bad D7 "$(al KALFA 5)"
+[ "$(al NEDIM 5)" = girdi ] && [ "$(al MUHASIP 5)" = bos ] && ok "D8 istemde yazı → girdi bekliyor · boş istem → boş" || bad D8 "$(al NEDIM 5)/$(al MUHASIP 5)"
+[ "$(al cc-1 5)" = bilinmiyor ] && ok "D9 hiçbir desen tutmazsa 'bilinmiyor' (uydurma yok)" || bad D9 "$(al cc-1 5)"
+[ "$(al CARSI 5)" = yok ] && ok "D10 Claude'suz oturumun hâli ölçülmez: 'yok'" || bad D10 "$(al CARSI 5)"
+SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste2"
+[ "$(grep -P '^maiset-ana\t' "$S/liste2" | cut -f4)" = diger ] && ok "D11 ana adı bildirilmezse ana 'ajan' sayılmaz (D2 tautoloji değil)" || bad D11 "$(grep -P '^maiset-ana\t' "$S/liste2" | cut -f4)"
+printf '%s\n' maiset-ana BASIRET CARSI imglistener ttyd-maiset kapi-maiset maiset-kurtarici > "$S/oturumlar"; rm -f "$S"/ekran-*
 
 echo "C · liste (tek kaynak)"
 SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste"; lrc=$?

@@ -1,0 +1,40 @@
+{
+  "is": "terminal-koltuk-hal",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-12T22:58:37+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "alti-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-alti-sinav-sonra.txt",
+      "sha256": "8e414b2641871569ad9d3a728c00916a4ec6206bac0b4ab03824a22979188356",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar && k=0; for t in kutu-adi kur-bag onar koltuk-bagla kabuk-kapisi; do echo \"══ $t\"; bash scripts/$t.test.sh 2>&1; r=$?; echo \"rc=$r\"; [ $r -eq 0 ] || k=1; done; echo \"══ sunucu\"; node kapi/sunucu.test.mjs 2>&1; r=$?; echo \"rc=$r\"; [ $r -eq 0 ] || k=1; exit $k"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T22:58:36+03:00",
+      "sure_sn": 13.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "D-mutasyon-tur-hal-yok",
+      "asama": "tek",
+      "dosya": "olcum-D-mutasyon-tur-hal-yok-tek.txt",
+      "sha256": "57b821a5f82bc9e197fdf93edf8eff490c3ad54a9f91da54c58356a628949e5d",
+      "komut": [
+        "bash",
+        "-c",
+        "M=/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut-khal; mkdir -p $M && cp -r terminal-onar/scripts $M/ && git show origin/main:terminal-onar/scripts/koltuk-bagla.sh > $M/scripts/koltuk-bagla.sh && sed \"s#^B=.*#B=$M/scripts/koltuk-bagla.sh#\" terminal-onar/scripts/koltuk-bagla.test.sh > $M/t.sh; grep -n \"^B=\" terminal-onar/scripts/koltuk-bagla.test.sh | head -2; bash $M/t.sh 2>&1 | grep -E \"D[0-9]+ |toplam\"; r=${PIPESTATUS[0]}; echo \"sinav-rc=$r (eski betik: tür/hâl yok; beklenen kırmızı)\"; test $r -ne 0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T22:58:37+03:00",
+      "sure_sn": 0.5
+    }
+  ],
+  "imza": "4598c4499520bba868b2a4df58356e9bb5b8c7ab25198161f6cf4560e60a388a"
+}

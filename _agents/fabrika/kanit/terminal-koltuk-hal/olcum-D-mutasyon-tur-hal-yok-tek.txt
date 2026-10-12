@@ -1,0 +1,18 @@
+$ bash -c M=/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut-khal; mkdir -p $M && cp -r terminal-onar/scripts $M/ && git show origin/main:terminal-onar/scripts/koltuk-bagla.sh > $M/scripts/koltuk-bagla.sh && sed "s#^B=.*#B=$M/scripts/koltuk-bagla.sh#" terminal-onar/scripts/koltuk-bagla.test.sh > $M/t.sh; grep -n "^B=" terminal-onar/scripts/koltuk-bagla.test.sh | head -2; bash $M/t.sh 2>&1 | grep -E "D[0-9]+ |toplam"; r=${PIPESTATUS[0]}; echo "sinav-rc=$r (eski betik: tür/hâl yok; beklenen kırmızı)"; test $r -ne 0
+# rc=0 sure=0.5s zaman=2026-10-12T22:58:37+03:00
+--- stdout ---
+6:B="$PWD/koltuk-bagla.sh"
+  ✗ D1 — rc=0 maiset-ana	1760000000	0
+  ✗ D2 — /
+  ✗ D3 — /
+  ✗ D4 — 
+  ✗ D5 — 
+  ✗ D6 — 
+  ✗ D7 — 
+  ✗ D8 — /
+  ✗ D9 — 
+  ✗ D10 — 
+  ✗ D11 — 
+toplam=41 geçen=30 düşen=11
+sinav-rc=1 (eski betik: tür/hâl yok; beklenen kırmızı)
+--- stderr ---
