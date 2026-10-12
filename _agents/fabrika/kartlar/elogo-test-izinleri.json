@@ -1,0 +1,19 @@
+{
+  "is": "elogo-test-izinleri",
+  "cumle": "e-Logo becerisinin 20 sınav dosyasına çalıştırma izni ver; kurulumdan sonra duman sınavı düşüyordu",
+  "istedi": "MUAVIN",
+  "aldi": "MUAVIN",
+  "zaman": "2026-10-12T11:03:01+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

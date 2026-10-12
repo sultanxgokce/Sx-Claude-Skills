@@ -43,7 +43,7 @@ Mekanik detay → aşağıdaki [Senkron](#senkron--güncellemeleri-yay-sync-skil
 | [seyir-defteri](seyir-defteri/SKILL.md) | agent | * (stack bağımsız) | ~1min | 1.0.0 | stable |
 | [federe-os-cekirdek](federe-os-cekirdek/SKILL.md) | agent | * (stack bağımsız) | ~1min | 0.1.0 | v0.1-mvp |
 | [erisim-skill-fabrikasi](erisim-skill-fabrikasi/SKILL.md) | agent (meta) | * (stack bağımsız) | ~5min/platform | 1.1.0 | stable |
-| [ekip-kur](ekip-kur/SKILL.md) | agent (scaffold) | * (stack bağımsız) | ~5min | 1.7.0 | v1.7-mvp |
+| [ekip-kur](ekip-kur/SKILL.md) | agent (scaffold) | * (stack bağımsız) | ~5min | 1.8.0 | v1.7-mvp |
 | [kapi-yolu](kapi-yolu/SKILL.md) | agent (usta/bileşik) | * (stack bağımsız) | ~2min | 1.0.0 | v1.0-usta |
 | [yazilim-fabrikasi](yazilim-fabrikasi/SKILL.md) | agent (çalışma hattı) | * (stack bağımsız) | ~2min | 0.5.1 | v0.5 |
 

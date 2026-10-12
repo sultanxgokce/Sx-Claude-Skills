@@ -1,0 +1,28 @@
+{
+  "tur": 2,
+  "is": "bileyi-guvenli-sil-yeni",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T15:50:57+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 23223,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İstenen --yeni kipi eklenmiş; imzalı önce-sonra ölçümü, izinli kökte dizin açıldığını, bu dizinin araçla silinebildiğini ve bilinmeyen bayrağın reddedildiğini gösteriyor. Ancak kök dışına düşen dizinin geri kaldırılması başarısız olsa bile hata yutulup “geri kaldırıldı” deniyor; önce bu başarısız temizleme durumunu dürüstçe ve güvenli biçimde ele alın.",
+    "bulgular": [
+      {
+        "ne": "Kök doğrulaması başarısız olduğunda d.rmdir() hatası sessizce yutuluyor ve dizin kalmış olsa bile dönüş mesajı “geri kaldırıldı” diyor; böylece önceki turdaki artık dizin riski yalnız başarılı rmdir durumu için çözülmüş oluyor.",
+        "kanit": "ValueError kolunda d.rmdir() çağrısının OSError'ı yalnız pass ile karşılanıyor; hemen ardından koşulsuz olarak rc=3 ve “geri kaldırıldı” mesajı dönülüyor. Eklenen Y8 testi de yalnız rmdir'in başarılı olduğu boş dizin senaryosunu sınıyor.",
+        "konum": "bileyi/scripts/guvenli-sil.py:148",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. yeni-kip için kırmızı/yeşil önce-sonra ölçüm çifti temel talebi doğruluyor; ancak kalıcı guvenli-sil.test.sh takımının çalıştırıldığına ve özellikle rmdir başarısızlığında artık dizin ile doğru hata mesajının sınandığına dair imzalı ölçüm yok."
+  }
+}

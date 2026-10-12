@@ -1,0 +1,70 @@
+{
+  "is": "bileyi-guvenli-sil-yeni",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-12T15:52:15+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "mktemp-yolu",
+      "asama": "once",
+      "dosya": "olcum-mktemp-yolu-once.txt",
+      "sha256": "c7fd14e0d5881e276b34349b3ca97b7ce3cbd63196be778b7aaad2e451dbf6b2",
+      "komut": [
+        "bash",
+        "-c",
+        "T=$(mktemp -d); bash bileyi/scripts/guvenli-sil.sh \"$T\" >/dev/null 2>&1; rc=$?; echo \"mktemp_varsayilan=$T sil_rc=$rc\"; python3 -c \"import shutil,sys;shutil.rmtree(sys.argv[1],ignore_errors=True)\" \"$T\"; Y=$(bash bileyi/scripts/guvenli-sil.sh --yeni 2>/dev/null); yrc=$?; echo \"yeni_kip_rc=$yrc\"; [ $rc -eq 0 ] && [ $yrc -eq 0 ]"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-12T15:45:36+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "yeni-kip",
+      "asama": "once",
+      "dosya": "olcum-yeni-kip-once.txt",
+      "sha256": "cf2abc35dc7e6be88af23377f5adb2bba97456239e4e6c1052d8a5ee89d206a2",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/gs-olc.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-12T15:45:51+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "yeni-kip",
+      "asama": "sonra",
+      "dosya": "olcum-yeni-kip-sonra.txt",
+      "sha256": "19784f8a726ed685c63c092d58b59eb256a348a002941b30676789d79ecb0295",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/gs-olc.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T15:51:25+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-paketleri",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-paketleri-sonra.txt",
+      "sha256": "99fac6d7f8c0ef679458221974fa7a87c2874849aab3aa529211619a19f7bf43",
+      "komut": [
+        "bash",
+        "-c",
+        "cd bileyi/scripts && bash guvenli-sil.test.sh 2>&1 | tail -1 && timeout 600 bash bileyi.test.sh 2>&1 | tail -1; set -o pipefail; bash guvenli-sil.test.sh >/dev/null 2>&1 && timeout 600 bash bileyi.test.sh >/dev/null 2>&1"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T15:52:15+03:00",
+      "sure_sn": 8.0
+    }
+  ],
+  "imza": "d78e4d5c1c397fb865b6e0009b66f66032a019a4566a83ffdca8bb1ab825a05f"
+}

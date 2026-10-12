@@ -1,0 +1,6 @@
+$ bash -c cd bileyi/scripts && bash guvenli-sil.test.sh 2>&1 | tail -1 && timeout 600 bash bileyi.test.sh 2>&1 | tail -1; set -o pipefail; bash guvenli-sil.test.sh >/dev/null 2>&1 && timeout 600 bash bileyi.test.sh >/dev/null 2>&1
+# rc=0 sure=8.0s zaman=2026-10-12T15:52:15+03:00
+--- stdout ---
+toplam=27 geçen=27 düşen=0
+toplam=65 geçen=65 düşen=0
+--- stderr ---
