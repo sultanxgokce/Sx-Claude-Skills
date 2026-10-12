@@ -1,0 +1,19 @@
+$ node terminal-onar/kapi/tarayici-sinav.mjs
+# rc=0 sure=7.4s zaman=2026-10-12T20:17:44+03:00
+--- stdout ---
+── S · seçici
+  ✓ S1 başlıkta koltuk seçici var, 4 koltuk, ● = Claude
+  ✓ S2 koltuk seçince tam terminal O koltukla açılır (?arg=BASIRET)
+  ✓ S3 görünüm terminale geçti
+  ✓ S4 ana koltuk argümansız açılır (eski yol)
+── B · yerel bellekteki ad doğrulanmadan kullanılmaz
+  ✓ B1 kayıtlı GEÇERLİ koltuk doğrulanınca kullanılır (?arg=CARSI)
+  ✓ B2 kayıtlı GEÇERSİZ koltuk terminale KONMAZ (ana koltuğa düşer)
+  ✓ B3 seçici de ana koltuğu gösterir (eski ad sessizce kalmaz)
+── Y · YARIŞ: liste gecikirken terminal açılır
+  ✓ Y1 liste gelmeden açılan terminal doğrulanmamış adı KULLANMAZ
+  ✓ Y2 liste gelince terminal doğrulanan koltuğa YENİDEN kurulur (?arg=PEYK)
+  ✓ Y3 liste gecikse de GEÇERSİZ ad hiçbir anda terminale girmez
+
+GEÇEN: 10 · KALAN: 0
+--- stderr ---

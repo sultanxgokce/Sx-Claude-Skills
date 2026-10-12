@@ -1,0 +1,28 @@
+{
+  "tur": 2,
+  "is": "terminal-koltuk-secici",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T20:08:16+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 62085,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kapıya koltuk seçici, giriş korumalı /api/koltuklar ucu ve yalnız mevcut görünür oturumlara bağlanan red kapıları eklenmiş; önceki turun üç kusuru da sınavlarla kapatılmış. Ancak yerel bellekte kalmış artık-geçersiz koltuk, liste doğrulanmadan terminale uygulanabildiği ve doğrulama sonrasında iframe yenilenmediği için önce bu açılış yarışını çöz.",
+    "bulgular": [
+      {
+        "ne": "Yerel bellekteki eski koltuk adı, asenkron liste doğrulaması tamamlanmadan tty iframe adresine konabiliyor; liste adı geçersiz bulup seçimi temizlese bile açık iframe yeniden kurulmadığından kullanıcı reddedilmiş terminal ekranında kalabilir.",
+        "kanit": "`koltukSecili` önce localStorage'dan doğrudan okunuyor, `koltuklariYukle()` beklenmeden çağrılıyor ve `ttyKur()` bu değeri hemen `?arg=` adresine ekleyebiliyor. Liste yanıtı geldiğinde geçersiz değer yalnız `koltukSecili = ''` ile temizleniyor; mevcut iframe için `ttySok()`/`ttyKur()` çağrısı yapılmıyor. Y9-Y10 sınavları yalnız HTML/JS içinde belirli metinlerin bulunduğunu denetliyor, bu zamanlamayı yürütmüyor.",
+        "konum": "terminal-onar/kapi/genel/uygulama.js:296-315; terminal-onar/kapi/sunucu.test.mjs:Y9-Y10",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok; 27/27 koltuk sınavı, 50/50 kapı sınavı, eski sınavlar, mutasyon kayıtları ve canlı ttyd arg ölçümü güçlü kapsama sağlıyor. Önce/sonra telefon kareleri mevcut olsa da not bunların sahte koltuk listesiyle üretildiğini söylüyor; dolayısıyla gerçek kutu verisiyle uçtan uca kullanıcı akışını kanıtlamıyor ve ölçümler yalnız “sonra” aşamasında."
+  }
+}

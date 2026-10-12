@@ -40,10 +40,18 @@ function sahteTtyd(yol) {
   return new Promise((r) => s.listen(yol, () => r(s)));
 }
 
-async function kapiAc(taban, port) {
+// Sahte koltuk betiği: --liste'ye sabit liste döner (biri bozuk adlı — kapı onu süzmeli).
+const KOLTUK_SAHTE = join(T, 'koltuk-sahte.sh');
+writeFileSync(KOLTUK_SAHTE, '#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\n'
+  + 'printf "sinavkutu-ana\\t1760000000\\t0\\nBASIRET\\t1760000100\\t1\\nkotu:ad\\t1\\t1\\n"\n');
+const KOLTUK_BOZUK = join(T, 'koltuk-bozuk.sh');
+writeFileSync(KOLTUK_BOZUK, '#!/usr/bin/env bash\nexit 1\n');
+
+async function kapiAc(taban, port, ek = {}) {
   const p = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], {
     env: { ...process.env, KAPI_PORT: String(port), KAPI_TABAN: taban, TO_KUTU: 'sinavkutu',
-           KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE },
+           KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE,
+           TO_ANA_TMUX: 'sinavkutu-ana', KAPI_KOLTUK_BETIK: KOLTUK_SAHTE, ...ek },
     stdio: ['ignore', 'pipe', 'pipe'],
   });
   for (let i = 0; i < 50; i++) {
@@ -62,7 +70,7 @@ const iste = (port, yol, { cerez, metot = 'GET', govde } = {}) =>
   });
 
 const ttyd = await sahteTtyd(join(T, 'ttyd.sock'));
-const P1 = 18771, P2 = 18772;
+const P1 = 18771, P2 = 18772, P3 = 18773;
 const kapiTaban = await kapiAc('/sedir', P1);
 const kapiKok = await kapiAc('', P2);
 
@@ -112,6 +120,37 @@ console.log('\n── T · TABAN YOLU (kapı /sedir altında) ──');
   const tj = await tt.json();
   kapi('T14 ttyd vekili tabanlı yolu OLDUĞU GİBİ iletir (ttyd -b ile eşleşsin)',
     tj.ttyd === true && tj.yol === '/sedir/tty/', `→ ${JSON.stringify(tj)}`);
+}
+
+console.log('\n── Y · KOLTUKLAR (koltuk seçici) ──');
+{
+  const yok = await iste(P1, '/sedir/api/koltuklar');
+  kapi('Y1 girişsiz koltuk listesi 401 (kutunun oturum adları açık değil)', yok.status === 401, `→ ${yok.status}`);
+  const ok = await iste(P1, '/sedir/giris', { metot: 'POST', govde: { parola: SIFRE } });
+  const cerez = 'kapi=' + ((ok.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1];
+  const r = await iste(P1, '/sedir/api/koltuklar', { cerez });
+  const j = await r.json();
+  kapi('Y2 girişli liste 200 ve betiğin söylediği koltukları taşır',
+    r.status === 200 && j.koltuklar?.map((k) => k.ad).join(',') === 'sinavkutu-ana,BASIRET', `→ ${JSON.stringify(j).slice(0, 160)}`);
+  kapi('Y3 bozuk adlı satır SÜZÜLÜR (kapı betiğe körü körüne güvenmez)', !JSON.stringify(j).includes('kotu'));
+  const b = j.koltuklar?.find((k) => k.ad === 'BASIRET') || {};
+  kapi('Y4 Claude işareti ve son etkinlik taşınır', b.claude === true && b.son === 1760000100, `→ ${JSON.stringify(b)}`);
+  kapi('Y5 ekran adresi TABANLI ve ?arg= ile (ttyd -a sözleşmesi)', b.ekran === '/sedir/tty/?arg=BASIRET', `→ ${b.ekran}`);
+  kapi('Y6 ana koltuk işaretli', j.koltuklar?.[0]?.ana === true && b.ana === false && j.ana === 'sinavkutu-ana');
+  const tt = await (await iste(P1, '/sedir/tty/?arg=BASIRET', { cerez })).json();
+  kapi('Y7 ttyd vekili ?arg= sorgusunu OLDUĞU GİBİ iletir (koltuk ttyd\'ye ulaşır)', tt.yol === '/sedir/tty/?arg=BASIRET', `→ ${tt.yol}`);
+  const kb = await kapiAc('/sedir', P3, { KAPI_KOLTUK_BETIK: KOLTUK_BOZUK });
+  const ok3 = await iste(P3, '/sedir/giris', { metot: 'POST', govde: { parola: SIFRE } });
+  const c3 = 'kapi=' + ((ok3.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1];
+  const rb = await iste(P3, '/sedir/api/koltuklar', { cerez: c3 });
+  kapi('Y8 betik düşerse 500 "ölçülemedi" — boş liste ("hiç koltuk yok") BASILMAZ', rb.status === 500, `→ ${rb.status}`);
+  // Kullanıcı yüzü (bağımsız göz, tur 1): seçici sayfada ve betikte var, listeyi aynı uçtan çeker, tam terminali ?arg= ile açar.
+  const sayfa = await (await iste(P1, '/sedir/', { cerez })).text();
+  const js = await (await iste(P1, '/sedir/uygulama.js', { cerez })).text();
+  kapi('Y9 telefon ekranı koltuk seçici TAŞIR (başlıkta seçim kutusu)', sayfa.includes('id="koltuk"'));
+  kapi('Y10 seçici listeyi kutunun /api/koltuklar ucundan çeker ve tam terminali ?arg= ile açar',
+    js.includes("/api/koltuklar") && js.includes("'?arg='"));
+  kb.kill();
 }
 
 console.log('\n── K · KÖK DAVRANIŞI (taban boş — geriye dönük) ──');

@@ -1,0 +1,9 @@
+$ bash -c for t in scripts/onar.test.sh scripts/kabuk-kapisi.test.sh scripts/kutu-adi.test.sh kapi/rapor-kapi.test.sh; do (cd terminal-onar && bash $t >/dev/null 2>&1); echo "$t rc=$?"; done; (cd terminal-onar && node kapi/rapor.test.mjs >/dev/null 2>&1); echo "rapor.test.mjs rc=$?"
+# rc=0 sure=11.6s zaman=2026-10-12T19:54:33+03:00
+--- stdout ---
+scripts/onar.test.sh rc=0
+scripts/kabuk-kapisi.test.sh rc=0
+scripts/kutu-adi.test.sh rc=0
+kapi/rapor-kapi.test.sh rc=0
+rapor.test.mjs rc=0
+--- stderr ---

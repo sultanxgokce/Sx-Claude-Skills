@@ -1,0 +1,8 @@
+# kapi/sunucu.mjs mutasyonları — sınav kapi/sunucu.test.mjs (temiz hâl 48/48)
+== K-M1 betik düşünce 500 yerine boş liste (200) basılıyor
+  ✗ Y8 betik düşerse 500 "ölçülemedi" — boş liste ("hiç koltuk yok") BASILMAZ → 200
+GECEN: 47  ·  KALAN: 1
+== K-M2 bozuk adlı satır süzgeci silindi
+  ✗ Y2 girişli liste 200 ve betiğin söylediği koltukları taşır → {... "kotu:ad" listede}
+  ✗ Y3 bozuk adlı satır SÜZÜLÜR (kapı betiğe körü körüne güvenmez)
+GECEN: 46  ·  KALAN: 2
