@@ -1,0 +1,18 @@
+$ bash -c bash terminal-onar/scripts/koltuk-bagla.sh --liste | cut -f1,3,4,5; n=$(bash terminal-onar/scripts/koltuk-bagla.sh --liste | cut -f5 | grep -vc bilinmiyor); echo "bilinmiyor-olmayan=$n"; test "$n" -ge 2
+# rc=0 sure=0.7s zaman=2026-10-12T23:13:52+03:00
+--- stdout ---
+MIRAHUR	1	ajan	girdi
+bani	1	ajan	girdi
+basiret	1	ajan	girdi
+cc-19986388	0	diger	bilinmiyor
+code-ana	1	ajan	girdi
+dash	0	diger	bilinmiyor
+dashproxy	0	diger	bilinmiyor
+dashwatch	0	diger	bilinmiyor
+muavin	1	ajan	calisiyor
+mumeyyiz	1	ajan	girdi
+nakkas	1	ajan	soru
+pazarbasi	1	ajan	girdi
+serdar	1	ajan	calisiyor
+bilinmiyor-olmayan=9
+--- stderr ---

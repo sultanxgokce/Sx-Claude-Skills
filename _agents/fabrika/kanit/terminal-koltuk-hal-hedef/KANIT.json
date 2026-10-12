@@ -1,0 +1,55 @@
+{
+  "is": "terminal-koltuk-hal-hedef",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-12T23:13:52+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-bagla-43",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-bagla-43-sonra.txt",
+      "sha256": "1b29dc541034ef236003073cddee2787d41953b23bd49eb2beea4df46b7de966",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T23:13:50+03:00",
+      "sure_sn": 0.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-2-2-0-esittir-hedef",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-2-2-0-esittir-hedef-tek.txt",
+      "sha256": "86bd685572bc1fa786f69f7f98cfa13470c4967c76c8c98c796ac3c56f6749c1",
+      "komut": [
+        "bash",
+        "-c",
+        "M=/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut-khh; mkdir -p $M && cp -r terminal-onar/scripts $M/ && git show origin/main:terminal-onar/scripts/koltuk-bagla.sh > $M/scripts/koltuk-bagla.sh && sed \"s#^B=.*#B=$M/scripts/koltuk-bagla.sh#\" terminal-onar/scripts/koltuk-bagla.test.sh > $M/t.sh; bash $M/t.sh 2>&1 | grep -E \"✗|toplam\"; r=${PIPESTATUS[0]}; echo \"sinav-rc=$r (2.2.0 betiği: =ad hedefi; beklenen D5-D12 kırmızı)\"; test $r -ne 0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T23:13:51+03:00",
+      "sure_sn": 0.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-olcum-bu-kutu",
+      "asama": "sonra",
+      "dosya": "olcum-canli-olcum-bu-kutu-sonra.txt",
+      "sha256": "e2c290e32a911b95c25b0b4edeaa5a1a5e60801faeba216b8730fd9a8c3f9878",
+      "komut": [
+        "bash",
+        "-c",
+        "bash terminal-onar/scripts/koltuk-bagla.sh --liste | cut -f1,3,4,5; n=$(bash terminal-onar/scripts/koltuk-bagla.sh --liste | cut -f5 | grep -vc bilinmiyor); echo \"bilinmiyor-olmayan=$n\"; test \"$n\" -ge 2"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T23:13:52+03:00",
+      "sure_sn": 0.7
+    }
+  ],
+  "imza": "65b4c5367f9b26664a9347a8d2f270c3e2561a3b8347130606c17ac510b007a7"
+}

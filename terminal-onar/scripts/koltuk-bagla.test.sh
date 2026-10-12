@@ -18,7 +18,8 @@ case "$1" in
                  cat "$SAHTE/oturumlar" ;;
   list-panes)    t="${4#=}"; case "$t" in BASIRET|cc-1|ZAKIR|KALFA|NEDIM|MUHASIP) echo "100 claude" ;; *) echo "200 bash" ;; esac ;;
   display-message) echo 1760000000 ;;
-  capture-pane)  t="${4#=}"; [ -f "$SAHTE/ekran-$t" ] && cat "$SAHTE/ekran-$t" || exit 1 ;;
+  capture-pane)  case "$4" in =*) echo "can't find pane: $4" >&2; exit 1 ;; esac   # gerçek tmux gibi: bölme hedefinde '=ad' geçersiz
+                 t="${4%:}"; [ -f "$SAHTE/ekran-$t" ] && cat "$SAHTE/ekran-$t" || exit 1 ;;
   list-windows)  echo "@1" ;;
   set-option)    : ;;
   new-session|attach-session) echo "$*" >> "$SAHTE/iz"; exit 0 ;;
