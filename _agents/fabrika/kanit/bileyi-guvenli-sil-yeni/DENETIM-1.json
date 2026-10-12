@@ -1,0 +1,28 @@
+{
+  "tur": 1,
+  "is": "bileyi-guvenli-sil-yeni",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T15:49:50+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 18454,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İstenen --yeni kipi eklenmiş; ölçüm, izinli kökte dizin açıldığını, aracın kendi açtığını silebildiğini ve bilinmeyen bayrağı reddettiğini gösteriyor. Ancak kök doğrulaması başarısız olduğunda yeni açılmış dizin ortada bırakılabildiği için önce bu temizleme açığını kapatın.",
+    "bulgular": [
+      {
+        "ne": "yeni(), mkdtemp ile dizini açtıktan sonra d.relative_to(k) doğrulaması başarısız olursa dizini silmeden sonraki köke geçiyor; özellikle çözülmemiş veya yarış sırasında değişen köklerde artık geçici dizin bırakabilir.",
+        "kanit": "Dizin önce tempfile.mkdtemp(...) ile oluşturuluyor; ardından relative_to(k) ValueError yakalanınca yalnız continue çalışıyor, oluşturulan d için temizleme yok.",
+        "konum": "bileyi/scripts/guvenli-sil.py:139",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. yeni-kip için kırmızı/yeşil önce-sonra ölçüm çifti temel talebi gerçekçi biçimde doğruluyor; fakat kalıcı guvenli-sil.test.sh takımının çalıştırıldığına dair kayıt ve başarısız doğrulama sonrasında artık dizin kalmadığını sınayan ölçüm yok."
+  }
+}

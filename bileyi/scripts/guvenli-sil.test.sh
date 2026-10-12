@@ -92,6 +92,19 @@ Y7="$(env -u TMPDIR CLAUDE_SCRATCHPAD="$KOK" python3 "$A" --yeni y7- 2>/dev/null
 kapi "Y7 TMPDIR yokken de dizin izinli kökün altında (çıplak /tmp'ye düşmez)" 0 sh -c "case '$Y7' in '$KOK'/y7-*|/tmp/claude-1000/y7-*) test -d '$Y7';; *) exit 1;; esac"
 env -u TMPDIR CLAUDE_SCRATCHPAD="$KOK" python3 "$A" "$Y7" >/dev/null 2>&1 || true
 
+# Y8 · açılan dizin kökün dışına düşerse GERİ KALDIRILIR ve rc=3 (bağımsız göz tur 1)
+Y8D="$DIS/y8-dis"; mkdir -p "$Y8D"
+kapi "Y8 kök dışına düşen dizin geri kaldırılır + rc=3" 0 env TMPDIR="$KOK" Y8D="$Y8D" python3 -c "
+import importlib.util,sys,os,tempfile,pathlib
+sp=importlib.util.spec_from_file_location('g','$A'); g=importlib.util.module_from_spec(sp); sp.loader.exec_module(g)
+yer=os.environ['Y8D']; acilan=[]
+def sahte(prefix='',dir=None):
+    d=os.path.join(yer,prefix+'kacak'); os.mkdir(d); acilan.append(d); return d
+tempfile.mkdtemp=sahte
+rc,_=g.yeni('y8-')
+sys.exit(0 if rc==3 and acilan and not os.path.exists(acilan[0]) else 1)"
+rmdir "$Y8D" 2>/dev/null || true
+
 rm -r "$KOK/../kardes-$$" 2>/dev/null || true
 python3 "$A" "$DIS" >/dev/null 2>&1 || true
 rmdir "$KOK" 2>/dev/null || true

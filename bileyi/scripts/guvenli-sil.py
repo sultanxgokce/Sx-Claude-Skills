@@ -138,13 +138,20 @@ def yeni(onek: str = "gs-") -> tuple[int, str]:
             d = Path(tempfile.mkdtemp(prefix=onek, dir=str(k))).resolve()
         except OSError:
             continue
-        # açtığımız yol GERÇEKTEN kökün altında mı — silme kapılarıyla aynı ölçüt
+        # açtığımız yol GERÇEKTEN kökün altında mı — silme kapılarıyla aynı ölçüt.
+        # 🔴 Değilse açtığımızı GERİ KALDIR ve DUR (bağımsız göz tur 1): sessizce sonraki
+        #    köke geçmek, beklenmedik bir yolda boş dizin bırakırdı. Beklenmedik = ÖLÇEMEDİM.
         try:
             d.relative_to(k)
+            if d == k:
+                raise ValueError("kökün kendisi")
         except ValueError:
-            continue
-        if d != k:
-            return 0, str(d)
+            try:
+                d.rmdir()
+            except OSError:
+                pass
+            return 3, f"açılan dizin izinli kökün altında DEĞİL ({d}) — geri kaldırıldı, ÖLÇEMEDİM"
+        return 0, str(d)
     return 3, "izinli kökte dizin AÇILAMADI — ÖLÇEMEDİM (hiçbir kök yazılabilir değil)"
 
 

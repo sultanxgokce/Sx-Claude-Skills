@@ -1,7 +1,7 @@
 {
   "is": "bileyi-guvenli-sil-yeni",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-12T15:46:11+03:00",
+  "guncelleme": "2026-10-12T15:50:10+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -39,16 +39,16 @@
       "etiket": "yeni-kip",
       "asama": "sonra",
       "dosya": "olcum-yeni-kip-sonra.txt",
-      "sha256": "6c999b198bd49c3932a5930dd9d3663aad9cb9d259ab22afc0f7fee7438fbf81",
+      "sha256": "d87e37f39b14a9fc749844e9ea313cb81f2c44019606a37146f514121ca79d58",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/gs-olc.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-12T15:46:11+03:00",
+      "zaman": "2026-10-12T15:50:10+03:00",
       "sure_sn": 0.1
     }
   ],
-  "imza": "836dfedb886d935dbcb404fe74ed5229d03def47e350b21cd13eaebb14704549"
+  "imza": "8988993226d7ee9d327d61f0191ba28ab24a93a03129a20a19aadf42d66ec0cd"
 }
