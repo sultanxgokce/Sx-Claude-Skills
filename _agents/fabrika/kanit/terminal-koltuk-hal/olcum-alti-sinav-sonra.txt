@@ -1,5 +1,5 @@
 $ bash -c cd terminal-onar && k=0; for t in kutu-adi kur-bag onar koltuk-bagla kabuk-kapisi; do echo "══ $t"; bash scripts/$t.test.sh 2>&1; r=$?; echo "rc=$r"; [ $r -eq 0 ] || k=1; done; echo "══ sunucu"; node kapi/sunucu.test.mjs 2>&1; r=$?; echo "rc=$r"; [ $r -eq 0 ] || k=1; exit $k
-# rc=0 sure=14.0s zaman=2026-10-12T23:02:48+03:00
+# rc=0 sure=14.0s zaman=2026-10-12T23:07:32+03:00
 --- stdout ---
 ══ kutu-adi
 ── kurulu olduğu yerden türetme
@@ -105,7 +105,8 @@ B · red yüzü (adres güvenilmez girdi)
   ✓ B6 önek eşleşmez (BASIRE ≠ BASIRET)
 D · tür ve hâl (2.2.0: ajan ⟂ diğer · hâl son ekrandan, filo desenleri)
   ✓ D1 liste 5 alan: ad · son · claude · tür · hâl
-  ✓ D2 Claude çalışan ve ANA oturum 'ajan'
+  ✓ D2 Claude çalışan oturum 'ajan'
+  ✓ D2b Claude'suz ANA oturum da 'diğer' (istisna yok; önde durması 'ana' bayrağının işi)
   ✓ D3 Claude'suz oturum ve dash* 'diğer'
   ✓ D4 cc-* Claude çalışsa da 'diğer' (geçici oturum)
   ✓ D5 'esc to interrupt' → çalışıyor
@@ -116,7 +117,6 @@ D · tür ve hâl (2.2.0: ajan ⟂ diğer · hâl son ekrandan, filo desenleri)
   ✓ D10 Claude'suz oturumun hâli ölçülmez: 'bilinmiyor' (altı değer dışına çıkılmaz)
   ✓ D12 eski satırdaki meşgul izi sayılmaz: son 15 satırda boş istem → boş
   ✓ D12b güncel meşgul izi (son satırlarda) → çalışıyor (D12 tautoloji değil)
-  ✓ D11 ana adı bildirilmezse ana 'ajan' sayılmaz (D2 tautoloji değil)
 C · liste (tek kaynak)
   ✓ C1 --liste rc=0
   ✓ C2 gizliler listede YOK, görünürler sırasıyla var
@@ -174,7 +174,7 @@ rc=0
   ✓ Y7 ttyd vekili ?arg= sorgusunu OLDUĞU GİBİ iletir (koltuk ttyd'ye ulaşır)
   ✓ Y8 betik düşerse 500 "ölçülemedi" — boş liste ("hiç koltuk yok") BASILMAZ
   ✓ Y10 tür ve hâl taşınır (BASIRET ajan/soru · cc-1 diğer/bilinmiyor)
-  ✓ Y10b ANA adı betiğe ortamdan gider (ilk satır = sinavkutu-ana, ana:true)
+  ✓ Y10b ana bayrağı kapıdan (betikten değil): sahte ana adını bilmez, kapı yine ana:true işaretler
   ✓ Y10c eski 3 alanlı betikte tür/hâl alanı YOK (uydurulmaz)
   ✓ Y9 telefon ekranı koltuk seçici TAŞIR (başlıkta seçim kutusu)
   ✓ Y10 seçici listeyi kutunun /api/koltuklar ucundan çeker ve tam terminali ?arg= ile açar

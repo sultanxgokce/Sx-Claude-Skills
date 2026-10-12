@@ -1,14 +1,14 @@
 {
   "is": "terminal-koltuk-hal",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-12T23:02:48+03:00",
+  "guncelleme": "2026-10-12T23:07:33+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "alti-sinav",
       "asama": "sonra",
       "dosya": "olcum-alti-sinav-sonra.txt",
-      "sha256": "14e737eed618ad75d906dda790859d3a2a383bbd3144dd0461cb65d4c6a756b7",
+      "sha256": "d3e2160aa39bfbafe7ad31b34d7b85f1c0870c30a379771b8556662b2189a23a",
       "komut": [
         "bash",
         "-c",
@@ -16,7 +16,7 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-12T23:02:48+03:00",
+      "zaman": "2026-10-12T23:07:32+03:00",
       "sure_sn": 14.0
     },
     {
@@ -24,7 +24,7 @@
       "etiket": "D-mutasyon-tur-hal-yok",
       "asama": "tek",
       "dosya": "olcum-D-mutasyon-tur-hal-yok-tek.txt",
-      "sha256": "d7308284ccfbb1731644a14ba275f5507610e7ddf6d4d62f26f5e811c3ccea62",
+      "sha256": "48b5ce173df943051b369e011fe2005a5cd70f5cc3921d348b3d81a337a96414",
       "komut": [
         "bash",
         "-c",
@@ -32,9 +32,9 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-12T23:02:48+03:00",
-      "sure_sn": 0.6
+      "zaman": "2026-10-12T23:07:33+03:00",
+      "sure_sn": 0.8
     }
   ],
-  "imza": "52e5586199ac4a336df21846a210dc97a3df1197e3181cb0d0a7508f76011659"
+  "imza": "20380606504ffea6b6189a84fa0e8becd808387aa2ccecd3130c6bfdbe9c3bb3"
 }

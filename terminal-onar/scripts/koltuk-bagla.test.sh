@@ -75,10 +75,11 @@ printf '%s\n' "You've hit your usage limit · limit reached" "❯ " > "$S/ekran-
 printf '%s\n' "önceki çıktı" "❯ yarım kalmış bir cümle" > "$S/ekran-NEDIM"
 printf '%s\n' "bitti." "" "❯ " > "$S/ekran-MUHASIP"
 printf '%s\n' "sadece metin, istem yok" > "$S/ekran-cc-1"
-KOLTUK_ANA=maiset-ana SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste"; lrc=$?
+SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste"; lrc=$?
 al() { grep -P "^$1\t" "$S/liste" | cut -f"$2"; }
 [ "$lrc" = 0 ] && [ "$(head -1 "$S/liste" | awk -F'\t' '{print NF}')" = 5 ] && ok "D1 liste 5 alan: ad · son · claude · tür · hâl" || bad D1 "rc=$lrc $(head -1 "$S/liste")"
-[ "$(al BASIRET 4)" = ajan ] && [ "$(al maiset-ana 4)" = ajan ] && ok "D2 Claude çalışan ve ANA oturum 'ajan'" || bad D2 "$(al BASIRET 4)/$(al maiset-ana 4)"
+[ "$(al BASIRET 4)" = ajan ] && ok "D2 Claude çalışan oturum 'ajan'" || bad D2 "$(al BASIRET 4)"
+[ "$(al maiset-ana 4)" = diger ] && ok "D2b Claude'suz ANA oturum da 'diğer' (istisna yok; önde durması 'ana' bayrağının işi)" || bad D2b "$(al maiset-ana 4)"
 [ "$(al CARSI 4)" = diger ] && [ "$(al dash 4)" = diger ] && ok "D3 Claude'suz oturum ve dash* 'diğer'" || bad D3 "$(al CARSI 4)/$(al dash 4)"
 [ "$(al cc-1 4)" = diger ] && ok "D4 cc-* Claude çalışsa da 'diğer' (geçici oturum)" || bad D4 "$(al cc-1 4)"
 [ "$(al BASIRET 5)" = calisiyor ] && ok "D5 'esc to interrupt' → çalışıyor" || bad D5 "$(al BASIRET 5)"
@@ -89,13 +90,11 @@ al() { grep -P "^$1\t" "$S/liste" | cut -f"$2"; }
 [ "$(al CARSI 5)" = bilinmiyor ] && ok "D10 Claude'suz oturumun hâli ölçülmez: 'bilinmiyor' (altı değer dışına çıkılmaz)" || bad D10 "$(al CARSI 5)"
 # D12: yalnız SON 15 dolu satır sayılır — 20 satır yukarıdaki eski 'esc to interrupt' güncel boş istemi 'çalışıyor' yapamaz
 { echo "esc to interrupt"; for i in $(seq 1 20); do echo "çıktı satırı $i"; done; echo "❯ "; } > "$S/ekran-BASIRET"
-KOLTUK_ANA=maiset-ana SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste3"
+SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste3"
 [ "$(grep -P '^BASIRET\t' "$S/liste3" | cut -f5)" = bos ] && ok "D12 eski satırdaki meşgul izi sayılmaz: son 15 satırda boş istem → boş" || bad D12 "$(grep -P '^BASIRET\t' "$S/liste3" | cut -f5)"
 { for i in $(seq 1 20); do echo "çıktı satırı $i"; done; echo "⏺ Düşünüyor…"; echo "esc to interrupt"; } > "$S/ekran-BASIRET"
-KOLTUK_ANA=maiset-ana SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste4"
+SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste4"
 [ "$(grep -P '^BASIRET\t' "$S/liste4" | cut -f5)" = calisiyor ] && ok "D12b güncel meşgul izi (son satırlarda) → çalışıyor (D12 tautoloji değil)" || bad D12b "$(grep -P '^BASIRET\t' "$S/liste4" | cut -f5)"
-SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste2"
-[ "$(grep -P '^maiset-ana\t' "$S/liste2" | cut -f4)" = diger ] && ok "D11 ana adı bildirilmezse ana 'ajan' sayılmaz (D2 tautoloji değil)" || bad D11 "$(grep -P '^maiset-ana\t' "$S/liste2" | cut -f4)"
 printf '%s\n' maiset-ana BASIRET CARSI imglistener ttyd-maiset kapi-maiset maiset-kurtarici > "$S/oturumlar"; rm -f "$S"/ekran-*
 
 echo "C · liste (tek kaynak)"

@@ -355,7 +355,7 @@ const sunucu = http.createServer(async (req, res) => {
       // Koltuklar: kutudaki görünür tmux oturumları. Liste betikten gelir (ttyd'nin kabul ettiğiyle
       // AYNI liste); kapı ad türetmez. Ekran adresi: <taban>/tty/?arg=<ad>.
       if (y === '/api/koltuklar') {
-        const r = await calistir('env', ['KOLTUK_ANA=' + ANA_TMUX, 'bash', KOLTUK_BETIK, '--liste']);   // ana adı betiğe: ana oturum 'ajan' sayılsın (2.2.0)
+        const r = await calistir('bash', [KOLTUK_BETIK, '--liste']);
         if (r.kod !== 0) return json(res, 500, { hata: 'Koltuklar ölçülemedi.' });
         const koltuklar = r.out.split('\n').filter(Boolean).map((l) => {
           const [ad, son, claude, tur, hal] = l.split('\t');

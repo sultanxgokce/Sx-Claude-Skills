@@ -47,7 +47,7 @@ writeFileSync(KOLTUK_SAHTE, '#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\n
 // 2.2.0: betik 5 alan döner (… tür · hâl) ve ANA adını ortamdan (KOLTUK_ANA) alır — sahte, aldığı adı ilk satıra yazar
 const KOLTUK_SAHTE5 = join(T, 'koltuk-sahte5.sh');
 writeFileSync(KOLTUK_SAHTE5, '#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\n'
-  + 'printf "%s\\t1760000000\\t0\\tajan\\tbilinmiyor\\nBASIRET\\t1760000100\\t1\\tajan\\tsoru\\ncc-1\\t5\\t1\\tdiger\\tbilinmiyor\\n" "${KOLTUK_ANA:-ana-yok}"\n');
+  + 'printf "sinavkutu-ana\\t1760000000\\t0\\tdiger\\tbilinmiyor\\nBASIRET\\t1760000100\\t1\\tajan\\tsoru\\ncc-1\\t5\\t1\\tdiger\\tbilinmiyor\\n"\n');
 const KOLTUK_BOZUK = join(T, 'koltuk-bozuk.sh');
 writeFileSync(KOLTUK_BOZUK, '#!/usr/bin/env bash\nexit 1\n');
 
@@ -155,7 +155,7 @@ console.log('\n── Y · KOLTUKLAR (koltuk seçici) ──');
   const j5 = await (await iste(P4, '/sedir/api/koltuklar', { cerez: c5 })).json();
   const b5 = j5.koltuklar?.find((k) => k.ad === 'BASIRET') || {}, cc5 = j5.koltuklar?.find((k) => k.ad === 'cc-1') || {};
   kapi('Y10 tür ve hâl taşınır (BASIRET ajan/soru · cc-1 diğer/bilinmiyor)', b5.tur === 'ajan' && b5.hal === 'soru' && cc5.tur === 'diger' && cc5.hal === 'bilinmiyor', `→ ${JSON.stringify(j5).slice(0, 200)}`);
-  kapi('Y10b ANA adı betiğe ortamdan gider (ilk satır = sinavkutu-ana, ana:true)', j5.koltuklar?.[0]?.ad === 'sinavkutu-ana' && j5.koltuklar?.[0]?.ana === true, `→ ${j5.koltuklar?.[0]?.ad}`);
+  kapi('Y10b ana bayrağı kapıdan (betikten değil): sahte ana adını bilmez, kapı yine ana:true işaretler', j5.koltuklar?.find((k) => k.ad === 'sinavkutu-ana')?.ana === true, `→ ${JSON.stringify(j5.koltuklar?.map((k) => [k.ad, k.ana]))}`);
   kapi('Y10c eski 3 alanlı betikte tür/hâl alanı YOK (uydurulmaz)', !('tur' in b) && !('hal' in b));
   k5.kill();
   // Kullanıcı yüzü (bağımsız göz, tur 1): seçici sayfada ve betikte var, listeyi aynı uçtan çeker, tam terminali ?arg= ile açar.

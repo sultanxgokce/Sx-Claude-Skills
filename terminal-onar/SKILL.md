@@ -115,8 +115,8 @@ gizli süzgeci silinince 1 kapı, kapıda "boş liste" kaçağı 1 kapı, ad sü
 ## Koltuk türü ve hâli (2.2.0 · dilim 4, Sultan: "düzenli net sade")
 
 `/api/koltuklar` her koltuk için iki alan daha döndürür; ikisi de `koltuk-bagla.sh --liste`'de ölçülür (kapı sormakla yetinir):
-- **tür** `ajan` = Claude çalışan oturum ya da ana oturum · `diger` = geçici/arka plan (`cc-*`, `dash*`, `imglistener*`,
-  `*-kurtarici`) ya da Claude'suz oturum. Merkez ekran varsayılanda yalnız ajanları gösterir, diğerleri katlıdır.
+- **tür** `ajan` = Claude çalışan oturum · `diger` = geçici/arka plan (`cc-*`, `dash*`, `imglistener*`, `*-kurtarici`) ya da
+  Claude'suz oturum (ana dahil — ana'nın önde durması türün değil `ana` bayrağının işi). Merkez varsayılanda ajanları + ana'yı gösterir, diğerleri katlıdır.
 - **hâl** son 15 ekran satırından, filo yoklamasıyla AYNI desenler (`Nexus/scripts/filo.py hal()`): `calisiyor` ·
   `soru` · `sinirda` · `girdi` · `bos`; hiçbiri tutmazsa `bilinmiyor` (uydurulmaz); Claude'suz oturumda hâl ölçülmez → `bilinmiyor` (altı değer dışına çıkılmaz). Yalnız SON 15 dolu satır sayılır; soru deseni meşgul izini yener.
 Eski 3 alanlı betikle kapı alan eklemez (tür/hâl uydurulmaz). Sınav: `koltuk-bagla.test.sh` D1-D11 · `sunucu.test.mjs` Y10.
