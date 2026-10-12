@@ -277,8 +277,16 @@ chmod +x "$FAKE"/*
 printf 'diff --git a/y b/y\n+satir\n' > "$T/y.patch"   # d.patch önceki bölümlerde kaldırılabiliyor; kendi diffimiz
 YP="$FAKE:$(dirname "$(command -v python3)"):/usr/bin:/bin"   # codex YOK, sahte claude VAR; python3 bu kutuda ayrı dizinde olabilir
 bash "$K" olcum is-y olc --asama tek -- echo 1 >/dev/null 2>&1
-( unset DENETCI_KOMUT; PATH="$YP" SAHTE_JSON="$(J 5 E "")" bash "$D" is-y --diff "$T/y.patch" --kart "$T/kart.md" >"$T/y0.out" 2>&1 ); RC=$?
-[ "$RC" -eq 3 ] && grep -q "DENETCI_YAZAN_MODEL" "$T/y0.out" && [ ! -e "$T/_agents/fabrika/kanit/is-y/DENETIM-1.json" ]; g $? "Y0 🔴 yazanın modeli bildirilmeden yedek KOŞMAZ: rc=3, yeniden koşma satırı basılır, kayıt yazılmaz (K1 ölçülemeden yeşil yok)"
+( unset DENETCI_KOMUT CLAUDE_PID; PATH="$YP" HOME="$T/evsiz" SAHTE_JSON="$(J 5 E "")" bash "$D" is-y --diff "$T/y.patch" --kart "$T/kart.md" >"$T/y0.out" 2>&1 ); RC=$?
+[ "$RC" -eq 3 ] && grep -q "DENETCI_YAZAN_MODEL" "$T/y0.out" && [ ! -e "$T/_agents/fabrika/kanit/is-y/DENETIM-1.json" ]; g $? "Y0 🔴 yazanın modeli hiçbir yüzeyden ÖLÇÜLEMEZSE yedek KOŞMAZ: rc=3, yeniden koşma satırı basılır, kayıt yazılmaz (K1 ölçülemeden yeşil yok)"
+# Y0b/Y0c: model BİLDİRİLMEDEN de ölçülür (iş durmaz) — oturum komut satırı ve ayar dosyası (tur 4 bulgusu)
+bash "$K" olcum is-y0 olc --asama tek -- echo 1 >/dev/null 2>&1
+mkdir -p "$T/ev/.claude"; printf '{"model":"opus"}' > "$T/ev/.claude/settings.json"
+( unset DENETCI_KOMUT CLAUDE_PID; PATH="$YP" HOME="$T/ev" CLAUDE_ARGV_LOG="$T/cl0.log" SAHTE_JSON="$(J 5 E "")" bash "$D" is-y0 --diff "$T/y.patch" --kart "$T/kart.md" >"$T/y0b.out" 2>&1 ); RC=$?
+[ "$RC" -eq 0 ] && grep -q -- "--model sonnet" "$T/cl0.log" && python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y0/DENETIM-1.json'));assert d['yazan_model']=='opus' and d['yazan_model_kaynak']=='ayar-dosyasi' and d['yedek_model']=='sonnet'"; g $? "Y0b bildirim yokken AYAR DOSYASINDAKİ model yazanın modeli sayılır (opus) → yedek sonnet, kaynak kayıtta; iş DURMAZ"
+bash -c 'sleep 20; :' claude --model sonnet & SP=$!; sleep 0.2   # ':' eklenmezse bash tek komutu exec eder, argv kaybolur
+( unset DENETCI_KOMUT; PATH="$YP" HOME="$T/ev" CLAUDE_PID="$SP" CLAUDE_ARGV_LOG="$T/cl0c.log" SAHTE_JSON="$(J 5 E "")" bash "$D" is-y0 --diff "$T/y.patch" --kart "$T/kart.md" >"$T/y0c.out" 2>&1 ); RC=$?; kill "$SP" 2>/dev/null
+[ "$RC" -eq 0 ] && grep -q -- "--model haiku" "$T/cl0c.log" && python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y0/DENETIM-2.json'));assert d['yazan_model']=='sonnet' and d['yazan_model_kaynak']=='oturum-komutu'"; g $? "Y0c oturum sürecinin komut satırındaki --model (sonnet) ayar dosyasını EZER → yedek haiku, kaynak=oturum-komutu"
 ( unset DENETCI_KOMUT; PATH="$YP" DENETCI_YAZAN_MODEL=fable SAHTE_JSON="$(J 5 E "")" bash "$D" is-y --diff "$T/y.patch" --kart "$T/kart.md" >"$T/y1.out" 2>&1 ); RC=$?
 [ "$RC" -eq 0 ]; g $? "Y1 codex yokken auto kipi DURMAZ: yazan modeli bildirilince yedek claude puanlar (5/E → rc=0)"
 python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y/DENETIM-1.json'));assert d['yedek']=='codex yok' and 'YEDEK' in d['denetci'] and d['sonuc']['kod_puani']==5"; g $? "Y1b kayıtta yedek='codex yok' ve denetçi adında YEDEK GÖZ (codex puanı sanılmaz)"
