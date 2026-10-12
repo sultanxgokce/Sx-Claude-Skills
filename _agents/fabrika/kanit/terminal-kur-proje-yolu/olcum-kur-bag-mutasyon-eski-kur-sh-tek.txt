@@ -1,0 +1,30 @@
+$ bash -c KUR_BAG_KOK=/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut-297 bash terminal-onar/scripts/kur-bag.test.sh; r=$?; echo "sinav-rc=$r (eski kur.sh = bağ doğrulamasız; beklenen: kırmızı)"; test "$r" -ne 0
+# rc=0 sure=0.2s zaman=2026-10-12T21:59:55+03:00
+--- stdout ---
+── sıfırdan: bağ yok
+  ✓ B1 kur.sh ortak dizinden koşunca bağ kurulur → ortak kopyaya
+  ✓ B2 kurulum rc=0
+  ✓ B3 cron satırları (bekçi + açılış) PROJE yolunu kullanır
+  ✓ B4 cron'da ORTAK yol yok
+  ✓ B5 onar.sh (kum havuzundaki) gerçekten çağrıldı
+── ikinci koşum, bu kez PROJE yolundan (bağ üzerinden)
+  ✓ B6 bağ değişmedi (idempotent)
+  ✓ B7 cron satırları çoğalmadı
+  ✓ B7b rc=0
+── var olan bağ YANLIŞ hedefte (eski kurulum başka yere bağlamış)
+  ✗ B8 yanlış hedefli bağ (çalışır görünse de) doğru hedefe çevrilir — beklenen=/tmp/tmp.r3QuBchz2w/ortak/skills/terminal-onar gerçek=/tmp/tmp.r3QuBchz2w/yanlis
+  ✓ B8b rc=0
+── var olan bağ KIRIK
+  ✗ B9 kırık bağ onarılır (hata verip durmaz) — beklenen=/tmp/tmp.r3QuBchz2w/ortak/skills/terminal-onar gerçek=/tmp/tmp.r3QuBchz2w/yok-boyle-bir-yer
+  ✗ B9b rc=0 — beklenen=0 gerçek=4
+── proje yolunda GERÇEK eski kopya (dizin)
+  ✓ B10 eski kopya kenara alınır, bağ kurulur
+  ✓ B10b eski kopya silinmedi (.eski-* altında)
+  ✓ B10c rc=0
+── onar.sh'ın bekçi satırı (gerçek değişkenlerle üretilip okunur; tam onar.sh tmux/ttyd ister, burada koşmaz)
+  ✓ B11 onar.sh bekçi satırı PROJE yolunu taşır
+  ✓ B12 onar.sh bekçi satırı ortak dizini taşımaz
+
+SONUÇ: 14 geçti · 3 kaldı
+sinav-rc=1 (eski kur.sh = bağ doğrulamasız; beklenen: kırmızı)
+--- stderr ---

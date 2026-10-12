@@ -1,0 +1,19 @@
+$ bash -c cd terminal-onar && k=0; for t in kutu-adi kur-bag onar koltuk-bagla kabuk-kapisi; do echo "== $t"; bash scripts/$t.test.sh > /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/t-$t.txt 2>&1; r=$?; tail -1 /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/t-$t.txt; echo "rc=$r"; [ $r -eq 0 ] || k=1; done; exit $k
+# rc=0 sure=16.6s zaman=2026-10-12T22:00:16+03:00
+--- stdout ---
+== kutu-adi
+SONUÇ: 8 geçti · 0 kaldı
+rc=0
+== kur-bag
+SONUÇ: 17 geçti · 0 kaldı
+rc=0
+== onar
+SONUÇ: 9 geçti · 0 kaldı
+rc=0
+== koltuk-bagla
+toplam=30 geçen=30 düşen=0
+rc=0
+== kabuk-kapisi
+SONUÇ: 9 geçti · 0 kaldı
+rc=0
+--- stderr ---

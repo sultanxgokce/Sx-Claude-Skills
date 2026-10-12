@@ -69,12 +69,30 @@ _bilgi "✓ parola kasadan okundu ($SIFRE_ANAHTAR) — değeri hiçbir yere bas�
 
 # ── 2b · proje-yolu bağı (12 Eki dersi) ─────────────────────────────────────
 # Beceri ortak dizinde yaşar ama kutudan KENDİ yoluyla çağrılmalı: /config/projects/<kutu>/.claude/skills/terminal-onar → ortak.
+# 🔴 Bağın HEDEFİ bu betiğin kendi gerçek yeridir (koşan beceri), BECERI_KOK değil: ortak.sh proje yolunu
+#    önce seçer, yani yanlış hedefli bir bağ varken BECERI_KOK o bağın kendisidir ve "doğru" görünür (bağımsız
+#    göz, tur 1). Var olan bağ hedefiyle KARŞILAŞTIRILIR; yanlış ya da kırıksa yeniden bağlanır, "var" sayılmaz.
+BAG_HEDEF="${TO_BAG_HEDEF:-$(readlink -f "$HERE/..")}"
 mkdir -p "$(dirname "$PROJE_BECERI")"
-if [ ! -L "$PROJE_BECERI" ]; then
-  [ -d "$PROJE_BECERI" ] && mv "$PROJE_BECERI" "$PROJE_BECERI.eski-$(date +%Y%m%d)"
-  ln -s "$BECERI_KOK" "$PROJE_BECERI"
+_bag_kur() { rm -f "$PROJE_BECERI" && ln -s "$BAG_HEDEF" "$PROJE_BECERI"; }
+if [ -L "$PROJE_BECERI" ]; then
+  mevcut="$(readlink -f "$PROJE_BECERI" 2>/dev/null || true)"
+  if [ "$mevcut" != "$BAG_HEDEF" ] || [ ! -x "$PROJE_BECERI/scripts/kur.sh" ]; then
+    _bilgi "· mevcut bağ yanlış ya da kırık: $PROJE_BECERI → $(readlink "$PROJE_BECERI") — yeniden bağlanıyor"
+    _bag_kur
+  fi
+elif [ -d "$PROJE_BECERI" ]; then
+  if [ "$(readlink -f "$PROJE_BECERI")" = "$BAG_HEDEF" ]; then
+    _bilgi "· beceri zaten proje yolunda yaşıyor (kutu-yerel kopya) — bağ gerekmez"
+  else
+    mv "$PROJE_BECERI" "$PROJE_BECERI.eski-$(date +%Y%m%d)" && _bilgi "· eski kopya kenara alındı: $PROJE_BECERI.eski-$(date +%Y%m%d)"
+    _bag_kur
+  fi
+else
+  _bag_kur
 fi
 [ -x "$PROJE_BETIK/kur.sh" ] || { _hata "proje-yolu bağı kurulamadı: $PROJE_BECERI"; exit 4; }
+[ "$(readlink -f "$PROJE_BECERI")" = "$BAG_HEDEF" ] || { _hata "proje-yolu bağı yanlış hedefte: $(readlink -f "$PROJE_BECERI") ≠ $BAG_HEDEF"; exit 4; }
 _bilgi "✓ proje-yolu bağı: $PROJE_BECERI → $(readlink -f "$PROJE_BECERI")"
 
 # ── 3 · kurulum (onar.sh sıfırdan kurulumu da yapar) ────────────────────────

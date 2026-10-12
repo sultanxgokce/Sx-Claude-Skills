@@ -1,7 +1,7 @@
 {
   "is": "terminal-kur-proje-yolu",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-12T21:33:20+03:00",
+  "guncelleme": "2026-10-12T22:00:16+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -33,7 +33,54 @@
       "renk": "yesil",
       "zaman": "2026-10-12T21:33:20+03:00",
       "sure_sn": 7.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kur-bag-davranis-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kur-bag-davranis-sinavi-sonra.txt",
+      "sha256": "e0bd3d3b8aff0a3120e46de678976cc4c425ec8f1d99c3da26239da571b126a3",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/kur-bag.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T21:59:51+03:00",
+      "sure_sn": 0.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kur-bag-mutasyon-eski-kur-sh",
+      "asama": "tek",
+      "dosya": "olcum-kur-bag-mutasyon-eski-kur-sh-tek.txt",
+      "sha256": "4c9aeeb8a3503e9026b9a84c9901189208a34dc8fed94613724027349b6f35fb",
+      "komut": [
+        "bash",
+        "-c",
+        "KUR_BAG_KOK=/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut-297 bash terminal-onar/scripts/kur-bag.test.sh; r=$?; echo \"sinav-rc=$r (eski kur.sh = bağ doğrulamasız; beklenen: kırmızı)\"; test \"$r\" -ne 0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T21:59:55+03:00",
+      "sure_sn": 0.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "terminal-onar-bes-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-terminal-onar-bes-sinav-sonra.txt",
+      "sha256": "9a7458bec77dd0d86921c252f27cfb647df2b864d57cc5892519b925706e18f3",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar && k=0; for t in kutu-adi kur-bag onar koltuk-bagla kabuk-kapisi; do echo \"== $t\"; bash scripts/$t.test.sh > /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/t-$t.txt 2>&1; r=$?; tail -1 /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/t-$t.txt; echo \"rc=$r\"; [ $r -eq 0 ] || k=1; done; exit $k"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T22:00:16+03:00",
+      "sure_sn": 16.6
     }
   ],
-  "imza": "2ec46a09cfcafdbcbfd85663c82199e2edba1745505c45d4c6f5443ee116b35e"
+  "imza": "fe3db16cb86286e4abb39a75d8a282150096ca1d30528900b29ebe4d9445763a"
 }

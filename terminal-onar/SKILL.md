@@ -117,7 +117,11 @@ gizli süzgeci silinince 1 kapı, kapıda "boş liste" kaçağı 1 kapı, ad sü
 Beceri `/config/.claude/skills` ortak dizininde yaşar; oradan çağrılınca yol kutuyu söylemez ve ad **kabın rastgele
 kimliğine** (12 hex) düşer — 15 kutuda ölçüldü: ttyd yanlış yolda, kapı "bozuk", başsız kurtarıcı doğdu. Artık: (1) böyle bir ad
 **fail-closed** reddedilir (`TO_KUTU` ver ya da kutunun yolundan çağır); (2) `kur.sh` kutuya `/config/projects/<kutu>/.claude/skills/terminal-onar → ortak`
-bağını kurar; (3) bekçi/açılış cron satırları **proje yoluyla** yazılır. Sınav K5-K9.
+bağını kurar — **var olan bağ "var" sayılmaz**: hedefi koşan becerinin gerçek yeriyle karşılaştırılır, yanlış ya da kırıksa
+yeniden bağlanır, gerçek eski kopya `.eski-<tarih>` altına alınır (bağımsız göz, tur 1); (3) bekçi/açılış cron satırları
+**proje yoluyla** yazılır. Sınav: `kutu-adi.test.sh` K5-K7 (ad çözümü) + `kur-bag.test.sh` B1-B12 — kur.sh kum havuzunda
+**çalıştırılarak** ölçülür (sıfırdan · yanlış bağ · kırık bağ · eski kopya · idempotent · cron satırı diskten okunur;
+onar.sh'ın bekçi satırı gerçek değişkenlerle üretilip okunur). Mutasyon: bağ doğrulamasız eski kur.sh'la B8/B9 kırmızı.
 
 ## Kutudan türeyen adlar (hiçbiri koda gömülü değil)
 | Değişken | Varsayılan | Ezmek için |

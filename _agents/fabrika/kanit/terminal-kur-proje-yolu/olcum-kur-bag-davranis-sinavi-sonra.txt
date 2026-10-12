@@ -1,0 +1,29 @@
+$ bash terminal-onar/scripts/kur-bag.test.sh
+# rc=0 sure=0.2s zaman=2026-10-12T21:59:51+03:00
+--- stdout ---
+── sıfırdan: bağ yok
+  ✓ B1 kur.sh ortak dizinden koşunca bağ kurulur → ortak kopyaya
+  ✓ B2 kurulum rc=0
+  ✓ B3 cron satırları (bekçi + açılış) PROJE yolunu kullanır
+  ✓ B4 cron'da ORTAK yol yok
+  ✓ B5 onar.sh (kum havuzundaki) gerçekten çağrıldı
+── ikinci koşum, bu kez PROJE yolundan (bağ üzerinden)
+  ✓ B6 bağ değişmedi (idempotent)
+  ✓ B7 cron satırları çoğalmadı
+  ✓ B7b rc=0
+── var olan bağ YANLIŞ hedefte (eski kurulum başka yere bağlamış)
+  ✓ B8 yanlış hedefli bağ (çalışır görünse de) doğru hedefe çevrilir
+  ✓ B8b rc=0
+── var olan bağ KIRIK
+  ✓ B9 kırık bağ onarılır (hata verip durmaz)
+  ✓ B9b rc=0
+── proje yolunda GERÇEK eski kopya (dizin)
+  ✓ B10 eski kopya kenara alınır, bağ kurulur
+  ✓ B10b eski kopya silinmedi (.eski-* altında)
+  ✓ B10c rc=0
+── onar.sh'ın bekçi satırı (gerçek değişkenlerle üretilip okunur; tam onar.sh tmux/ttyd ister, burada koşmaz)
+  ✓ B11 onar.sh bekçi satırı PROJE yolunu taşır
+  ✓ B12 onar.sh bekçi satırı ortak dizini taşımaz
+
+SONUÇ: 17 geçti · 0 kaldı
+--- stderr ---
