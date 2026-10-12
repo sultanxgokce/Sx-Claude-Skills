@@ -1,0 +1,40 @@
+{
+  "tur": 2,
+  "is": "iskan-dusme-varsayilan-ret",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T11:02:53+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 28740,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Varsayılan düşme davranışı rc=1 ile kayıt yazmadan duruyor; ISKAN_EY_DUSME=uyar eski devam yolunu açık seçime bağlıyor ve ENİS/SIHHAT varsayılan ölçümü bunu gerçekçi veriyle gösteriyor. Ancak tam sınav önce 264/1 iken sonra 266/2 olmuş, yeni kur --dry-run regresyonu bırakılmış ve kartın istediği BASİRET ölçümü hâlâ sunulmamış; önce bunları çözün.",
+    "bulgular": [
+      {
+        "ne": "Tam sınav değişiklik sonrasında yeni bir başarısızlık içeriyor; paket üretime hazır değil.",
+        "kanit": "Önceki ölçümde \"264 geçti / 1 kaldı\" ve yalnız baslat-claude.sh hatası varken sonraki ölçüm \"266 geçti / 2 kaldı\" ve ayrıca \"FAIL - kur --dry-run: zincir-planında eksik adım: [4/8: provizyon] [6/8: ekip-yerlestir]\" gösteriyor.",
+        "konum": "olcum-sinav-kaynak-once.txt; olcum-sinav-sonra.txt",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "İş kartında açıkça istenen BASİRET ölçümü kanıt paketinde yok.",
+        "kanit": "Araç imzalı manifestteki kayıt etiketleri arasında BASİRET bulunmuyor; emsal ölçümleri yalnız ENİS/SIHHAT senaryosuna ait.",
+        "konum": "kanıt manifesti:kayitlar",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Eski uyar modunun gerçek ENİS emsalindeki ölçümü kanıt sayılmıyor.",
+        "kanit": "\"emsal-enis-sihhatsiz-uyar\" kaydı rc=3 ve renk=sari; rubriğe göre sarı kayıt \"ölçülemedi\" demektir ve desteklediği iddia kanıtsızdır.",
+        "konum": "kanıt manifesti:emsal-enis-sihhatsiz-uyar",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalıdır. ENİS/SIHHAT varsayılan-sonra kaydı rc=1 ile uye-dusme-reddi ve kayıt YAZILMADI sonucunu doğrudan gösteriyor; sentetik sınavlar da varsayılan, uyar, bozuk değer ve apply yazmama yollarını kapsıyor. Buna karşılık önce ve uyar emsal kayıtları sarı/rc=3 olduğundan ölçüm kanıtı sayılamaz, BASİRET kaydı yoktur ve tam sınav çifti yeni bir başarısızlık gösterir."
+  }
+}

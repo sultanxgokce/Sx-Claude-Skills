@@ -1,7 +1,7 @@
 {
   "is": "iskan-dusme-varsayilan-ret",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-12T11:01:10+03:00",
+  "guncelleme": "2026-10-12T11:05:31+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -158,7 +158,118 @@
       "rc": 0,
       "renk": "yesil",
       "zaman": "2026-10-12T11:01:10+03:00"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-ana-borusuz",
+      "asama": "once",
+      "dosya": "olcum-sinav-ana-borusuz-once.txt",
+      "sha256": "44054bc190f2d31f7b95a8d581c486c9af12e1a0e85f79d2d44d3d2cde7989fb",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/.claude/jobs/d69a1b07/tmp/iskan-ana-1104 && bash iskan/scripts/iskan.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-12T11:04:36+03:00",
+      "sure_sn": 26.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-dal-a340",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-dal-a340-sonra.txt",
+      "sha256": "35a12d946db5adc3a285f24b9ec6962b00cba4b86de51debcb1aa0d9cb1995b9",
+      "komut": [
+        "bash",
+        "iskan/scripts/iskan.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-12T11:05:00+03:00",
+      "sure_sn": 23.1
+    },
+    {
+      "tur": "dosya",
+      "etiket": "emsal-dogrula-betigi",
+      "asama": "tek",
+      "dosya": "dosya-emsal-dogrula-betigi-tek.sh",
+      "sha256": "5dcac23440ec6f3105ec2b5007abdf2c14e1415db9ec073f296f6062b91d55d5",
+      "kaynak": "/config/.claude/jobs/d69a1b07/tmp/emsal-dogrula.sh",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T11:05:20+03:00"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "basiret-iddiasi-0102-korumasiz",
+      "asama": "once",
+      "dosya": "olcum-basiret-iddiasi-0102-korumasiz-once.txt",
+      "sha256": "de1db7c29af571064e1bd9a0e6834dcc445c9a8d3aa63f643dba7ad4e9332a63",
+      "komut": [
+        "bash",
+        "/config/.claude/jobs/d69a1b07/tmp/emsal-dogrula.sh",
+        "/config/.claude/jobs/d69a1b07/tmp/iskan-ana-1104/iskan/scripts/iskan.sh",
+        "korumasiz"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T11:05:23+03:00",
+      "sure_sn": 2.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "emsal-0103-varsayilan-red",
+      "asama": "sonra",
+      "dosya": "olcum-emsal-0103-varsayilan-red-sonra.txt",
+      "sha256": "34a3033055f5f7c26ec29d5a5dd3aa43f7aa2e436ccf912b7385d4ca80177e3e",
+      "komut": [
+        "bash",
+        "/config/.claude/jobs/d69a1b07/tmp/emsal-dogrula.sh",
+        "iskan/scripts/iskan.sh",
+        "red"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T11:05:26+03:00",
+      "sure_sn": 2.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "emsal-0103-uyar",
+      "asama": "sonra",
+      "dosya": "olcum-emsal-0103-uyar-sonra.txt",
+      "sha256": "1ec75ccfff42324f322bfe2ef9ea1fdde4e87ad1e9f5ae522f08d5feaed5e764",
+      "komut": [
+        "env",
+        "BEK_ENV=ISKAN_EY_DUSME=uyar",
+        "bash",
+        "/config/.claude/jobs/d69a1b07/tmp/emsal-dogrula.sh",
+        "iskan/scripts/iskan.sh",
+        "uyar"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T11:05:28+03:00",
+      "sure_sn": 2.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "basiret-iddiasi-0103-artik-korunuyor",
+      "asama": "sonra",
+      "dosya": "olcum-basiret-iddiasi-0103-artik-korunuyor-sonra.txt",
+      "sha256": "b2aea1f0f360f25ec5fb86383d82de2d07e1e9230011594e543ca5fa42474a9d",
+      "komut": [
+        "bash",
+        "-c",
+        "! bash /config/.claude/jobs/d69a1b07/tmp/emsal-dogrula.sh iskan/scripts/iskan.sh korumasiz"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T11:05:31+03:00",
+      "sure_sn": 2.5
     }
   ],
-  "imza": "7ccd56e8168db417e0cb76b0e384476a6925d219175a2a6c8cae3f26d713d90e"
+  "imza": "8984fad610835288cd674772f11c4c212faee1356b575c959e14b7350beff549"
 }
