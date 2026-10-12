@@ -1,7 +1,7 @@
 {
   "is": "terminal-kur-proje-yolu",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-12T22:00:16+03:00",
+  "guncelleme": "2026-10-12T22:12:32+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -39,48 +39,48 @@
       "etiket": "kur-bag-davranis-sinavi",
       "asama": "sonra",
       "dosya": "olcum-kur-bag-davranis-sinavi-sonra.txt",
-      "sha256": "e0bd3d3b8aff0a3120e46de678976cc4c425ec8f1d99c3da26239da571b126a3",
+      "sha256": "5af0147384545c2889ad7e361d1caa73d2057412f09e8cc16974dc29ba7145f2",
       "komut": [
         "bash",
         "terminal-onar/scripts/kur-bag.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-12T21:59:51+03:00",
-      "sure_sn": 0.2
+      "zaman": "2026-10-12T22:12:23+03:00",
+      "sure_sn": 0.4
     },
     {
       "tur": "olcum",
       "etiket": "kur-bag-mutasyon-eski-kur-sh",
       "asama": "tek",
       "dosya": "olcum-kur-bag-mutasyon-eski-kur-sh-tek.txt",
-      "sha256": "4c9aeeb8a3503e9026b9a84c9901189208a34dc8fed94613724027349b6f35fb",
+      "sha256": "ab62c612f4b1376be86a70d666ce86a8c8822ac3cf264cc11b56871f636c4abe",
       "komut": [
         "bash",
         "-c",
-        "KUR_BAG_KOK=/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut-297 bash terminal-onar/scripts/kur-bag.test.sh; r=$?; echo \"sinav-rc=$r (eski kur.sh = bağ doğrulamasız; beklenen: kırmızı)\"; test \"$r\" -ne 0"
+        "KUR_BAG_KOK=/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut-297 bash terminal-onar/scripts/kur-bag.test.sh; r=$?; echo \"sinav-rc=$r (tur-1 hâli bf3b31c: bağ doğrulamasız, göçsüz; beklenen: kırmızı)\"; test \"$r\" -ne 0"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-12T21:59:55+03:00",
-      "sure_sn": 0.2
+      "zaman": "2026-10-12T22:12:23+03:00",
+      "sure_sn": 0.3
     },
     {
       "tur": "olcum",
       "etiket": "terminal-onar-bes-sinav",
       "asama": "sonra",
       "dosya": "olcum-terminal-onar-bes-sinav-sonra.txt",
-      "sha256": "9a7458bec77dd0d86921c252f27cfb647df2b864d57cc5892519b925706e18f3",
+      "sha256": "aa355dd00921ca7fe8a2f0895a2f606163899bb481b05a5fd8f9e4ea7eedc378",
       "komut": [
         "bash",
         "-c",
-        "cd terminal-onar && k=0; for t in kutu-adi kur-bag onar koltuk-bagla kabuk-kapisi; do echo \"== $t\"; bash scripts/$t.test.sh > /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/t-$t.txt 2>&1; r=$?; tail -1 /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/t-$t.txt; echo \"rc=$r\"; [ $r -eq 0 ] || k=1; done; exit $k"
+        "cd terminal-onar && k=0; for t in kutu-adi kur-bag onar koltuk-bagla kabuk-kapisi; do echo \"== $t\"; bash scripts/$t.test.sh 2>&1 | tail -1; r=${PIPESTATUS[0]}; echo \"rc=$r\"; [ $r -eq 0 ] || k=1; done; exit $k"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-12T22:00:16+03:00",
-      "sure_sn": 16.6
+      "zaman": "2026-10-12T22:12:32+03:00",
+      "sure_sn": 8.6
     }
   ],
-  "imza": "fe3db16cb86286e4abb39a75d8a282150096ca1d30528900b29ebe4d9445763a"
+  "imza": "1abe847c3d0bd031a81ac711113b8f9d2243c93b0dfa0c4d7e8881daca1667f4"
 }

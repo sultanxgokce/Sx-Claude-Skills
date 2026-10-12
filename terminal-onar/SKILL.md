@@ -121,7 +121,11 @@ bağını kurar — **var olan bağ "var" sayılmaz**: hedefi koşan becerinin g
 yeniden bağlanır, gerçek eski kopya `.eski-<tarih>` altına alınır (bağımsız göz, tur 1); (3) bekçi/açılış cron satırları
 **proje yoluyla** yazılır. Sınav: `kutu-adi.test.sh` K5-K7 (ad çözümü) + `kur-bag.test.sh` B1-B12 — kur.sh kum havuzunda
 **çalıştırılarak** ölçülür (sıfırdan · yanlış bağ · kırık bağ · eski kopya · idempotent · cron satırı diskten okunur;
-onar.sh'ın bekçi satırı gerçek değişkenlerle üretilip okunur). Mutasyon: bağ doğrulamasız eski kur.sh'la B8/B9 kırmızı.
+bekçi satırı tek kaynaktan okunur). **Yükseltme göçü (tur 2):** bekçi/açılış satırları `ortak.sh`'ta tek kaynaktır
+(`bekci_kur`); işaretleyicili her satır kanonik biçime **yeniden yazılır** — canlıdaki eski ortak-yollu satırlar `.oda/cron`'da
+(kur.sh) ve canlı crontab'da (onar.sh) proje yoluna çevrilir, öteki satırlar korunur (B13-B15, crontab sahte dikiş `TO_CRONTAB`).
+**Açık beyan muafiyeti (tur 2):** `TO_KUTU` verilmişse makine-kimliği kapısı uygulanmaz — iletinin vaat ettiği çıkış yolu çalışır
+(K5c). Mutasyon: tur-1 hâliyle (bağ doğrulamasız, göçsüz) B8/B9/B13/B14 kırmızı.
 
 ## Kutudan türeyen adlar (hiçbiri koda gömülü değil)
 | Değişken | Varsayılan | Ezmek için |

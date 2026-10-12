@@ -99,18 +99,9 @@ _bilgi "✓ proje-yolu bağı: $PROJE_BECERI → $(readlink -f "$PROJE_BECERI")"
 bash "$BETIK_DIZ/onar.sh" || { _hata "kurulum düştü — günlük: $GUNLUK"; exit 6; }
 
 # ── 4 · bekçi (kutunun kalıcı cron'u) ───────────────────────────────────────
-ODA_CRON="${TO_ODA_CRON:-$PROJE/.oda/cron}"
-mkdir -p "$(dirname "$ODA_CRON")" 2>/dev/null
-if [ -f "$ODA_CRON" ] && grep -q 'terminal-onar-bekci' "$ODA_CRON" 2>/dev/null; then
-  _bilgi "· bekçi satırları zaten var"
-else
-  {
-    printf 'TZ=Europe/Istanbul\n'
-    printf '* * * * * bash %s/bekci.sh  # terminal-onar-bekci\n' "$PROJE_BETIK"
-    printf '@reboot sleep 15; bash %s/komut.sh onar  # terminal-onar-acilis\n' "$PROJE_BETIK"
-  } >> "$ODA_CRON"
-  _bilgi "✓ bekçi kutunun kalıcı cron'una yazıldı: $ODA_CRON"
-fi
+# Satırlar ortak.sh'ta tek kaynaktır (bekci_kur): eksikse yazılır, eski ortak-yollu satır proje yoluna ÇEVRİLİR
+# (bağımsız göz, tur 2: işaretleyici var diye yanlış yollu satır yerinde kalıyordu). Canlı crontab'ı onar.sh (3. adım) kurdu.
+_bilgi "✓ bekçi ($ODA_CRON): $(bekci_kur "$ODA_CRON")"
 
 # ── 5 · ölçüm (kurdum demek yetmez) ─────────────────────────────────────────
 if ! bash "$BETIK_DIZ/durum.sh" >/dev/null 2>&1; then

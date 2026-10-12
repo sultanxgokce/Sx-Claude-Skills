@@ -33,10 +33,12 @@ KUTU="${TO_KUTU:-$(
 #    çağrılınca yol kutuyu söylemez, makine adı da kabın rastgele kimliğidir (12 hex) → tmux adları, kasa anahtarı, TABAN
 #    yanlış türer; ttyd yanlış yolda açılır, "bozuk" sanılıp başsız kurtarıcı doğar. Böyle bir ad FAIL-CLOSED reddedilir:
 #    ya TO_KUTU verilir ya beceri /config/projects/<kutu>/.claude/skills/terminal-onar yolundan çağrılır.
-case "$KUTU" in
+#    Açık beyan (TO_KUTU) bu kapıdan MUAFTIR: hata iletisi "TO_KUTU ver" diyor, o çıkış yolu çalışmalı (bağımsız göz, tur 2);
+#    kapı yalnız TÜRETİLMİŞ ada bakar.
+if [ -z "${TO_KUTU:-}" ]; then case "$KUTU" in
   *[!0-9a-f]*) ;;   # harf/tire içeren gerçek ad
   ????????????) echo "terminal-onar: KUTU='$KUTU' bir makine kimliğine benziyor, kutu adı değil — TO_KUTU ver ya da beceriyi /config/projects/<kutu>/.claude/skills/terminal-onar yolundan çağır" >&2; return 1 2>/dev/null || exit 1 ;;
-esac
+esac; fi
 KUTU_BUYUK="$(printf '%s' "$KUTU" | tr '[:lower:]-' '[:upper:]_')"
 
 PROJE="${TO_PROJE:-/config/projects/$KUTU}"
@@ -149,7 +151,37 @@ bekle_saglam() {
   return 1
 }
 
-bekci_kurulu() { crontab -l 2>/dev/null | grep -q '# terminal-onar-bekci'; }
+bekci_kurulu() { ${TO_CRONTAB:-crontab} -l 2>/dev/null | grep -q '# terminal-onar-bekci'; }
+# ── BEKÇİ SATIRLARI — tek kaynak, PROJE yoluyla; eski (ortak-dizin yollu) satırlar GÖÇÜRÜLÜR ──────────────────────
+# 🔴 Bağımsız göz (tur 2): işaretleyici varsa satır "doğru" sayılıyordu; 15 kutudaki eski ortak-yollu satırlar yerinde
+#    kalıyordu. Artık işaretleyicili her satır KANONİK biçime yeniden yazılır (yol proje yolu); eksikse eklenir.
+ODA_CRON="${TO_ODA_CRON:-$PROJE/.oda/cron}"
+BEKCI_SATIR="* * * * * bash $PROJE_BETIK/bekci.sh  # terminal-onar-bekci"
+ACILIS_SATIR="@reboot sleep 15; bash $PROJE_BETIK/komut.sh onar  # terminal-onar-acilis"
+bekci_satirlari_duzelt() {  # stdin → stdout: işaretleyicili satırlar kanonik, gerisi olduğu gibi
+  awk -v b="$BEKCI_SATIR" -v a="$ACILIS_SATIR" '
+    /# terminal-onar-bekci/  { print b; next }
+    /# terminal-onar-acilis/ { print a; next }
+    { print }'
+}
+bekci_kur() {  # $1 = kalıcı cron dosyası (.oda/cron) · $2 = "canli" ise canlı crontab da düzeltilir → stdout: ne yapıldı
+  local oda="$1" tmp sonuc="zaten var" ct="${TO_CRONTAB:-crontab}" eski yeni
+  mkdir -p "$(dirname "$oda")" 2>/dev/null
+  tmp="$(mktemp)"
+  if [ -f "$oda" ]; then bekci_satirlari_duzelt < "$oda" > "$tmp"; else printf 'TZ=Europe/Istanbul\n' > "$tmp"; fi
+  grep -q '# terminal-onar-bekci'  "$tmp" || printf '%s\n' "$BEKCI_SATIR"  >> "$tmp"
+  grep -q '# terminal-onar-acilis' "$tmp" || printf '%s\n' "$ACILIS_SATIR" >> "$tmp"
+  if [ ! -f "$oda" ]; then sonuc="yazıldı"; cat "$tmp" > "$oda"
+  elif ! cmp -s "$oda" "$tmp"; then sonuc="eski yol proje yoluna çevrildi"; cat "$tmp" > "$oda"; fi
+  rm -f "$tmp"
+  if [ "${2:-}" = canli ]; then
+    eski="$($ct -l 2>/dev/null)"; yeni="$(printf '%s\n' "$eski" | bekci_satirlari_duzelt)"
+    printf '%s\n' "$yeni" | grep -q '# terminal-onar-bekci' || yeni="${yeni:+$yeni
+}$BEKCI_SATIR"
+    if [ "$eski" != "$yeni" ]; then printf '%s\n' "$yeni" | $ct - && sonuc="$sonuc · canlı crontab düzeltildi"; fi
+  fi
+  printf '%s\n' "$sonuc"
+}
 # Kapı ve ttyd TABAN'ı ortamdan okur; tek yerden verilir ki ikisi ayrışmasın.
 export KAPI_TABAN="$TABAN"
 

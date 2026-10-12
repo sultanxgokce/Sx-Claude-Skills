@@ -1,5 +1,5 @@
 $ bash terminal-onar/scripts/kur-bag.test.sh
-# rc=0 sure=0.2s zaman=2026-10-12T21:59:51+03:00
+# rc=0 sure=0.4s zaman=2026-10-12T22:12:23+03:00
 --- stdout ---
 ── sıfırdan: bağ yok
   ✓ B1 kur.sh ortak dizinden koşunca bağ kurulur → ortak kopyaya
@@ -21,9 +21,21 @@ $ bash terminal-onar/scripts/kur-bag.test.sh
   ✓ B10 eski kopya kenara alınır, bağ kurulur
   ✓ B10b eski kopya silinmedi (.eski-* altında)
   ✓ B10c rc=0
-── onar.sh'ın bekçi satırı (gerçek değişkenlerle üretilip okunur; tam onar.sh tmux/ttyd ister, burada koşmaz)
-  ✓ B11 onar.sh bekçi satırı PROJE yolunu taşır
-  ✓ B12 onar.sh bekçi satırı ortak dizini taşımaz
+── YÜKSELTME: canlıdaki eski ortak-yollu cron satırları (12 Eki, 15 kutu) proje yoluna ÇEVRİLİR
+  ✓ B13 eski ortak-yollu bekçi+açılış satırları proje yoluna çevrildi
+  ✓ B13b eski ortak yol kalmadı
+  ✓ B13c başka iş satırı ve TZ olduğu gibi (4 satır, çoğalma yok)
+  ✓ B13d rc=0
+── canlı crontab göçü (onar.sh'ın kullandığı bekci_kur … canli; crontab sahte, gerçek crontab'a DOKUNULMAZ)
+  ✓ B14 canlı crontab'daki eski ortak-yollu bekçi satırı proje yoluna çevrildi
+  ✓ B14b crontab'da ortak yol kalmadı
+  ✓ B14c crontab'daki öteki satırlar korundu (3 satır)
+  ✓ B14d bekci_kur 'canlı crontab düzeltildi' dedi
+  ✓ B14e ikinci çağrı: değişiklik yok, crontab'a yazılmaz (idempotent)
+  ✓ B15 onar.sh canlı crontab için aynı bekci_kur'u çağırır (tam onar.sh tmux/ttyd ister)
+── bekçi satırının kendisi
+  ✓ B11 bekçi satırı (ortak.sh tek kaynak) PROJE yolunu taşır
+  ✓ B12 bekçi satırı ortak dizini taşımaz
 
-SONUÇ: 17 geçti · 0 kaldı
+SONUÇ: 27 geçti · 0 kaldı
 --- stderr ---

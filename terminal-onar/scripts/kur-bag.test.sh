@@ -67,11 +67,39 @@ kapi "B10 eski kopya kenara alınır, bağ kurulur" "$ORTAK" "$(hedef)"
 kapi "B10b eski kopya silinmedi (.eski-* altında)" "1" "$(ls -d "$BAG".eski-* 2>/dev/null | wc -l | tr -d ' ')"
 kapi "B10c rc=0" "0" "$rc"
 
-echo "── onar.sh'ın bekçi satırı (gerçek değişkenlerle üretilip okunur; tam onar.sh tmux/ttyd ister, burada koşmaz)"
+echo "── YÜKSELTME: canlıdaki eski ortak-yollu cron satırları (12 Eki, 15 kutu) proje yoluna ÇEVRİLİR"
+rm -f "$BAG"; rm -r -- "$PROJE/.oda" 2>/dev/null; mkdir -p "$PROJE/.oda"
+cat > "$PROJE/.oda/cron" <<CR
+TZ=Europe/Istanbul
+0 3 * * * bash /config/projects/sinav/scripts/baska-is.sh  # baska-is
+* * * * * bash /config/.claude/skills/terminal-onar/scripts/bekci.sh  # terminal-onar-bekci
+@reboot sleep 15; bash /config/.claude/skills/terminal-onar/scripts/komut.sh onar  # terminal-onar-acilis
+CR
+rc=$(kur "$ORTAK/scripts/kur.sh")
+kapi "B13 eski ortak-yollu bekçi+açılış satırları proje yoluna çevrildi" "2" "$(cron_proje)"
+kapi "B13b eski ortak yol kalmadı" "0" "$(n=$(grep -c '/config/.claude/skills/terminal-onar' "$PROJE/.oda/cron"); echo "${n:-0}")"
+kapi "B13c başka iş satırı ve TZ olduğu gibi (4 satır, çoğalma yok)" "4" "$(wc -l < "$PROJE/.oda/cron" | tr -d ' ')"
+kapi "B13d rc=0" "0" "$rc"
+
+echo "── canlı crontab göçü (onar.sh'ın kullandığı bekci_kur … canli; crontab sahte, gerçek crontab'a DOKUNULMAZ)"
+CT="$T/ct.txt"; printf '%s\n' "MAILTO=x" "* * * * * bash /config/.claude/skills/terminal-onar/scripts/bekci.sh # terminal-onar-bekci" "5 * * * * echo baska" > "$CT"
+printf '#!/usr/bin/env bash\nif [ "$1" = -l ]; then cat "%s"; else cat > "%s"; fi\n' "$CT" "$CT" > "$T/bin/crontab"; chmod +x "$T/bin/crontab"
+cikti=$(env -u TO_KUTU TO_PROJE="$PROJE" TO_BECERI_KOK="$ORTAK" TO_DURUM_DIZ="$T/durum" TO_CRONTAB="$T/bin/crontab" HOME="$T" bash -c '
+  set +u; . "$1/scripts/ortak.sh" >/dev/null 2>&1; bekci_kur "$ODA_CRON" canli' _ "$ORTAK" 2>/dev/null)
+kapi "B14 canlı crontab'daki eski ortak-yollu bekçi satırı proje yoluna çevrildi" "1" "$(n=$(grep -c "bash $BAG/scripts/bekci.sh" "$CT"); echo "${n:-0}")"
+kapi "B14b crontab'da ortak yol kalmadı" "0" "$(n=$(grep -c '/config/.claude/skills' "$CT"); echo "${n:-0}")"
+kapi "B14c crontab'daki öteki satırlar korundu (3 satır)" "3" "$(wc -l < "$CT" | tr -d ' ')"
+kapi "B14d bekci_kur 'canlı crontab düzeltildi' dedi" "e" "$(case "$cikti" in *"canlı crontab düzeltildi"*) echo e;; *) echo "h ($cikti)";; esac)"
+cikti2=$(env -u TO_KUTU TO_PROJE="$PROJE" TO_BECERI_KOK="$ORTAK" TO_DURUM_DIZ="$T/durum" TO_CRONTAB="$T/bin/crontab" HOME="$T" bash -c '
+  set +u; . "$1/scripts/ortak.sh" >/dev/null 2>&1; bekci_kur "$ODA_CRON" canli' _ "$ORTAK" 2>/dev/null)
+kapi "B14e ikinci çağrı: değişiklik yok, crontab'a yazılmaz (idempotent)" "zaten var" "$cikti2"
+kapi "B15 onar.sh canlı crontab için aynı bekci_kur'u çağırır (tam onar.sh tmux/ttyd ister)" "1" "$(n=$(grep -c 'bekci_kur "\$ODA_CRON" canli' "$KOK/scripts/onar.sh"); echo "${n:-0}")"
+
+echo "── bekçi satırının kendisi"
 satir=$(env -u TO_KUTU TO_PROJE="$PROJE" TO_DURUM_DIZ="$T/durum" HOME="$T" bash -c '
-  set +u; . "$1/scripts/ortak.sh" >/dev/null 2>&1; eval "$(grep "^BEKCI_SATIR=" "$1/scripts/onar.sh")"; printf "%s" "$BEKCI_SATIR"' _ "$KOK" 2>/dev/null)
-kapi "B11 onar.sh bekçi satırı PROJE yolunu taşır" "e" "$(case "$satir" in *"$BAG/scripts/bekci.sh"*) echo e;; *) echo "h ($satir)";; esac)"
-kapi "B12 onar.sh bekçi satırı ortak dizini taşımaz" "e" "$(case "$satir" in */config/.claude/skills/*) echo h;; *) echo e;; esac)"
+  set +u; . "$1/scripts/ortak.sh" >/dev/null 2>&1; printf "%s" "$BEKCI_SATIR"' _ "$KOK" 2>/dev/null)
+kapi "B11 bekçi satırı (ortak.sh tek kaynak) PROJE yolunu taşır" "e" "$(case "$satir" in *"$BAG/scripts/bekci.sh"*) echo e;; *) echo "h ($satir)";; esac)"
+kapi "B12 bekçi satırı ortak dizini taşımaz" "e" "$(case "$satir" in */config/.claude/skills/*) echo h;; *) echo e;; esac)"
 
 rm -r -- "$T" 2>/dev/null
 echo

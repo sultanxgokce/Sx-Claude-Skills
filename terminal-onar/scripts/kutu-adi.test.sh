@@ -39,6 +39,7 @@ okuG() { env -u TO_KUTU -u TO_PROJE HOME=/tmp PATH="$T/bin:$PATH" bash -c 'set +
 kapi "K5 🔴 ortak dizinden + makine kimliği → FAIL-CLOSED (RED), 0ee2fa8a0370 kutu adı sayılmaz" "RED" "$(okuG "$T/ortak/skills/terminal-onar/scripts/ortak.sh")"
 MSJ="$(env -u TO_KUTU -u TO_PROJE HOME=/tmp PATH="$T/bin:$PATH" bash -c 'set +u; . "$1"' _ "$T/ortak/skills/terminal-onar/scripts/ortak.sh" 2>&1 | tail -1)"
 kapi "K5b red sebebi söylenir (TO_KUTU ya da proje yolu)" "e" "$(case "$MSJ" in *"makine kimliğine benziyor"*TO_KUTU*) echo e;; *) echo h;; esac)"
+kapi "K5c AÇIK BEYAN kapıdan muaf: TO_KUTU=0ee2fa8a0370 verilirse reddedilmez (iletinin vaat ettiği çıkış yolu çalışır)" "0ee2fa8a0370" "$(env -u TO_PROJE TO_KUTU=0ee2fa8a0370 HOME=/tmp PATH="$T/bin:$PATH" bash -c 'set +u; . "$1" >/dev/null 2>&1 && echo "${KUTU:-?}" || echo RED' _ "$T/ortak/skills/terminal-onar/scripts/ortak.sh" 2>/dev/null | tail -1)"
 kapi "K6 TO_KUTU verilince ortak dizinden de çözülür" "maiset" "$(env -u TO_PROJE TO_KUTU=maiset HOME=/tmp PATH="$T/bin:$PATH" bash -c 'set +u; . "$1" >/dev/null 2>&1; echo "${KUTU:-?}"' _ "$T/ortak/skills/terminal-onar/scripts/ortak.sh" 2>/dev/null | tail -1)"
 printf '#!/usr/bin/env bash\necho cloudtop-huzur\n' > "$T/bin/hostname"
 kapi "K7 gerçek makine adı (cloudtop-huzur) yine çözülür (K5 tautoloji değil)" "huzur" "$(okuG "$T/ortak/skills/terminal-onar/scripts/ortak.sh")"
