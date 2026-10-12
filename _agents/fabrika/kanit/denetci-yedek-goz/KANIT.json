@@ -1,0 +1,85 @@
+{
+  "is": "denetci-yedek-goz",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-12T22:37:53+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "b11b42ca93c0101c45ebc49474abefef695c54774b0e64cf1c51acd102d026e3",
+      "komut": [
+        "timeout",
+        "900",
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T21:26:38+03:00",
+      "sure_sn": 122.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinav-113-kapi-yedek-model",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-sinav-113-kapi-yedek-model-sonra.txt",
+      "sha256": "c063929821c1c7d915e41e18c670496d290472435f85129f4751a798aa51bdc2",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T22:11:46+03:00",
+      "sure_sn": 108.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinav-118-kapi-yazan-model-farki",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-sinav-118-kapi-yazan-model-farki-sonra.txt",
+      "sha256": "e3eb5cac07f05153acdb120d4cb3f068e42219754052481f694d3be21e80cebf",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T22:19:10+03:00",
+      "sure_sn": 113.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinav-119-kapi-yazan-modeli-sart",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-sinav-119-kapi-yazan-modeli-sart-sonra.txt",
+      "sha256": "48f44fe28d639eded27b5d12c53aa2392f2df3c2b0c03210681d7e1ea61c4f6d",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T22:25:47+03:00",
+      "sure_sn": 110.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinav-121-kapi-yazan-modeli-olculur",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-sinav-121-kapi-yazan-modeli-olculur-sonra.txt",
+      "sha256": "28cf08de5be3462f55bbe3e80ad7c5163315fccdc7262c9def4374e508cc6c26",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T22:37:53+03:00",
+      "sure_sn": 130.6
+    }
+  ],
+  "imza": "128906f3ed9533282ee54ebe2fdc96bad8945f04d8696ba58bf5cd4211bbd6b7"
+}

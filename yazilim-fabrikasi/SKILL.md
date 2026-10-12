@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.5.4
+version: 0.6.0
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -92,3 +92,11 @@ Bu tablo "yazılmış ≠ kurulmuş" kanununun beceriye uygulanmış hâlidir: o
 - Codex bu konteynerde kum havuzu (bwrap) açamıyor → istem argüman olarak verilir, denetçi komut koşmaz; >120 KB istem 110 KB'a kırpılır, denetçiye söylenir ve **DENETIM-<tur>.json `kirpildi` alanına yazılır** (oldu · istem_bayt · esik; 0.5.4 — NÂZIR/RASATÇI 8 Eki: kırpma kaydı ekranla birlikte kayboluyordu, kırpılan denetim "tamamını gördü" sanılıyordu). Sınav dikişi `DENETCI_KIRP_ESIK` (sahte denetçi yolunda da kırpar).
 - Defter yerleşimi: kartlar + karne + gün-sonu BİRİNCİL depoda (`_agents/fabrika/kartlar|karne.jsonl|gun-sonu`), kanıt + denetim İŞİN worktree'sinde (`_agents/fabrika/kanit/<iş>/`, PR ile gider).
 - Sınav: `is-alani.test.sh` · `fabrika-kur.test.sh` · `kanit.test.sh` (playwright varsa gerçek kare) · `denetci.test.sh` (sahte denetçi) · `karne.test.sh` · `kart.test.sh` (kart + gün sonu + zincir).
+
+## Yedek göz — Codex düşerse iş durmaz (Sultan Y0006, 12 Ekim 2026)
+
+Sultan: *"codex kurulabilir ama eğer codex çalışmazsa claude ile puanlanabilir iş durmamalı."* `denetci.sh` **auto** kipinde
+Codex yoksa ya da iki denemede de düşerse, **yazandan farklı yeni bir Claude oturumu** (`claude -p`) yedek göz olur; iş
+"ölçemedim" diye durmaz. Kayıtta `yedek` alanı sebebi taşır ("codex yok" · "codex düştü (2 deneme)") ve denetçi adında
+**YEDEK GÖZ** yazar — yedekle alınan puan Codex puanı sanılmaz. Açık `--denetci codex` isteğinde eski sert davranış (rc=3)
+sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kaldırılınca kırmızı).

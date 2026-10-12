@@ -1,0 +1,28 @@
+{
+  "tur": 3,
+  "is": "denetci-yedek-goz",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T22:20:05+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 63933,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Auto kipinde Codex yokluğu veya iki düşüş sonrası Claude yedeği, sebep kaydı ve açık Codex isteğinde yedeğe geçmeme uygulanmış. Ancak yazar modeli bilinmediğinde kod farklılığı garanti etmeden denetimi sürdürüyor; Sultan’ın “yazandan farklı” şartı böylece hâlâ delinbildiği için önce bu çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Yazarın Claude modeli bildirilmezse yedek model varsayımla seçiliyor ve aynı model olma ihtimaline rağmen denetim kabul edilip puan kaydediliyor.",
+        "kanit": "Kod YAZAN_MODEL değerini yalnız isteğe bağlı DENETCI_YAZAN_MODEL ortam değişkeninden alıyor; boşken sonnet/haiku/opus merdiveninden ilk adayı seçiyor ve yalnız “farkı GARANTİ EDİLEMEDİ” uyarısı vererek claude -p çağrısını sürdürüyor. Y6c ve Y6d sınavları da bu durumda yazan_model=null kaydını ve uyarıyı başarı sayıyor; aynı modelle çalışmayı engelleyen bir kapı sınanmıyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:206, yazilim-fabrikasi/scripts/denetci.sh:242-258; yazilim-fabrikasi/scripts/denetci.test.sh:286-287",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sha’ları tutarlı ve üç kayıt da yeşil; son ölçüm 118/118 ile Codex yokluğu, iki düşüş, sebep kaydı, açık Codex davranışı ve bildirilen yazar modeliyle farklı kademe seçimini sınamış. Ancak bütün ölçümler yalnız “sonra” aşamasında, önce/sonra çifti yok; ayrıca yeşil Y6c-Y6d, talebin zorunlu tuttuğu model farkını ölçmek yerine ölçülemediği halde devam edilmesini doğruluyor."
+  }
+}

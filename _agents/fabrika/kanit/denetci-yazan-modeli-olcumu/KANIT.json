@@ -1,0 +1,23 @@
+{
+  "is": "denetci-yazan-modeli-olcumu",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-12T22:40:15+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinav-121-Y0b-Y0c",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-sinav-121-Y0b-Y0c-sonra.txt",
+      "sha256": "e212354fad457f277ead801d26a92f0f3423b7c9ff3e847c5ffd16f3b65293bc",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T22:40:15+03:00",
+      "sure_sn": 139.7
+    }
+  ],
+  "imza": "29a097eaacb869072db5db00b895dd81c891c1c2351419487e54fd38a2d4eb84"
+}

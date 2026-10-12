@@ -1,0 +1,28 @@
+{
+  "tur": 1,
+  "is": "denetci-yedek-goz",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T21:28:00+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 28914,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Auto kipine Codex yokluğu ve iki başarısız deneme sonrası Claude yedeği, sebep kaydı ve açık Codex isteğinin sert davranışı eklenmiş. Ancak yazar Claude olduğunda seçim önce Codex diye K1 denetimini geçiyor, sonra yedek yine Claude oluyor; bağımsız gözün yazandan farklı model olması şartı fiilen delinmiş, önce bu çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Yazar Claude olduğunda yedek göz de Claude olabiliyor; gerçek denetçi seçildikten sonra K1 yeniden doğrulanmadığı için aynı-model denetim kaydedilebiliyor.",
+        "kanit": "K1 kontrolü denetçi hâlâ Codex iken yapılıyor (satır 203); Codex yok/düşmüşse daha sonra kos_claude çağrılıyor (satırlar 242-250). kos_claude yalnız yeni oturum açıklaması yazıyor, DENETCI ile YAZAN eşitliğini yeniden sınamıyor (satırlar 231-236). Y1-Y5 sınavlarında da yazarın Claude olduğu ve aynı-model K1 ihlalinin reddedildiği bir vaka bulunmuyor (test satırları 264-295).",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:203",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sağlam ve yeşil; 111/111 sonuç ile yedek kaldırma mutasyonu yararlı kanıt sağlıyor. Fakat yalnız 'sonra' ölçümü var, önce/sonra ölçüm çifti yok; daha önemlisi sınav, yazar=Claude iken Codex yedeğinin yine Claude'a dönmesiyle oluşan K1 senaryosunu ölçmüyor, dolayısıyla 'yazandan farklı' iddiası tam kanıtlanmış değil."
+  }
+}

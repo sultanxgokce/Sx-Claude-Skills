@@ -1,0 +1,28 @@
+{
+  "tur": 4,
+  "is": "denetci-yedek-goz",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T22:26:49+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 80510,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Auto kipine Codex yokluğu veya iki düşüş sonrası Claude yedeği, sebep/model kaydı ve açık Codex isteğinin sert davranışı eklenmiş. Fakat yazar modeli ayrıca bildirilmemişse yedek çalıştırılmadan rc=3 ile çıkılıyor; bu, Sultan’ın “iş durmamalı” şartını doğrudan bozuyor, önce bunu çözün.",
+    "bulgular": [
+      {
+        "ne": "Auto kipindeki yedek, yazanın modeli DENETCI_YAZAN_MODEL ile ayrıca verilmediyse hiç çalışmıyor; Codex yokluğu/düşüşü halinde iş duruyor ve kullanıcıdan yeniden koşum bekleniyor.",
+        "kanit": "kos_claude içindeki boş YAZAN_MODEL dalı `exit 3` yapıyor. Eklenen Y0 sınavı da model bildirilmeden rc=3, kayıt yok sonucunu başarı sayıyor; buna karşılık iş kartı Codex yoksa/düşerse auto kipinde işin durmamasını istiyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:242-248; yazilim-fabrikasi/scripts/denetci.test.sh:276-278; ölçüm-denetci-sinav-119-kapi-yazan-modeli-sart-sonra.txt:Y0",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sağlam ve dört kayıt da yeşil; son ölçüm 119/119 ile yedek sebebini, model alanlarını, iki Codex denemesini ve açık --denetci codex davranışını sınamış. Ancak yalnız “sonra” kayıtları var, önce/sonra ölçüm çifti yok; daha önemlisi Y0 talebe aykırı rc=3 duruşunu özellikle yeşil saydığı için yeşil sonuç doğru hedefi kanıtlamıyor."
+  }
+}

@@ -198,8 +198,28 @@ else echo "(iş kartı verilmedi — talep bilinmiyor; DOĞRU ŞEY Mİ sorusu H'
 } > "$TMP/istem.md"
 
 # ── 4 · denetçiyi seç ve koş (yazan ≠ denetleyen) ───────────────────────────────
-if [ "$DENETCI" = "auto" ]; then case "$YAZAN" in codex) DENETCI="claude" ;; *) DENETCI="codex" ;; esac; fi
+SEC_AUTO=0
+if [ "$DENETCI" = "auto" ]; then SEC_AUTO=1; case "$YAZAN" in codex) DENETCI="claude" ;; *) DENETCI="codex" ;; esac; fi
 [ "$DENETCI" != "$YAZAN" ] || { _hata "denetleyen ($DENETCI) yazanla ($YAZAN) AYNI — K1 ihlali; --denetci ile farklı model seç"; exit 1; }
+# ── YEDEK GÖZ (Sultan Y0006, 12 Eki 2026): "codex kurulabilir ama eğer codex çalışmazsa claude ile puanlanabilir iş durmamalı."
+#    Yalnız AUTO kipinde: codex YOKSA ya da iki denemede de DÜŞERSE, yazandan farklı YENİ bir Claude oturumu (claude -p) yedek
+#    göz olur; iş "ölçemedim" diye durmaz. Kayıtta `yedek` alanı sebebi taşır — yedekle alınan puan, codex puanı sanılmaz.
+#    Açık `--denetci codex` isteğinde eski sert davranış sürer (rc=3); DENETCI_YEDEK=0 yedeği kapatır.
+#    Yedek yalnız yazanın modeli BİLDİRİLMİŞSE koşar (DENETCI_YAZAN_MODEL) ve ondan FARKLI bir kademe seçer; bildirilmemişse
+#    rc=3 ve yeniden koşma satırı basılır — "farklı" iddiası ölçülmeden yeşil basılmaz (tur 2-3 bulguları).
+YEDEK=""; YEDEK_MODEL=""; YAZAN_MODEL="${DENETCI_YAZAN_MODEL:-}"; YAZAN_MODEL_KAYNAK="${YAZAN_MODEL:+bildirim}"
+# 🔴 Tur 4 (bağımsız göz #296): yazanın modeli ayrıca BİLDİRİLMESE de iş durmaz — ÖLÇÜLÜR. Denetçi hemen her zaman
+#    yazanın kendi oturumundan çağrılır; o oturumun modeli iki yüzeyden okunur: (1) oturum sürecinin komut satırındaki
+#    --model (CLAUDE_PID), (2) kullanıcı ayar dosyasındaki model. İkisi de yoksa ölçülemez → yedek koşmaz (rc=3, satır basılır).
+if [ -z "$YAZAN_MODEL" ] && [ -n "${CLAUDE_PID:-}" ] && [ -r "/proc/$CLAUDE_PID/cmdline" ]; then
+  YAZAN_MODEL="$(tr '\0' ' ' < "/proc/$CLAUDE_PID/cmdline" 2>/dev/null | grep -oE -- '--model[ =][^ ]+' | head -1 | sed 's/^--model[ =]//')"
+  [ -n "$YAZAN_MODEL" ] && YAZAN_MODEL_KAYNAK="oturum-komutu"
+fi
+if [ -z "$YAZAN_MODEL" ] && [ -r "${DENETCI_AYAR_DOSYASI:-$HOME/.claude/settings.json}" ]; then
+  YAZAN_MODEL="$(python3 -c "import json,sys;d=json.load(open(sys.argv[1]));m=d.get('model');print(m if isinstance(m,str) else '')" "${DENETCI_AYAR_DOSYASI:-$HOME/.claude/settings.json}" 2>/dev/null)"
+  [ -n "$YAZAN_MODEL" ] && YAZAN_MODEL_KAYNAK="ayar-dosyasi"
+fi
+_ayni_model() { case "$1" in *"$2"*) return 0 ;; esac; case "$2" in *"$1"*) return 0 ;; esac; return 1; }   # "sonnet" ≈ "claude-sonnet-5"
 HAM="$TMP/ham.json"
 # ── KIRPMA KAYDI (NÂZIR/RASATÇI 8 Eki 2026): kırpma eskiden yalnız istemin sonuna ve ekrana düşüyordu, ikisi de
 #    kayboluyordu; DENETIM-<tur>.json'da alan yoktu. Artık her turda `kirpildi` {oldu · istem_bayt · esik} yazılır —
@@ -217,16 +237,55 @@ if { [ "$DENETCI" = "codex" ] || [ -n "${DENETCI_KIRP_ESIK:-}" ]; } && [ "$ISTEM
 fi
 if [ -n "${DENETCI_KOMUT:-}" ]; then
   DENETCI_AD="$DENETCI_KOMUT (sınav)"; $DENETCI_KOMUT "$TMP/istem.md" > "$HAM" 2>"$TMP/err"; DRC=$?
-elif [ "$DENETCI" = "codex" ]; then
-  command -v codex >/dev/null || { _hata "codex yok — denetçi ölçemedi"; exit 3; }
-  DENETCI_AD="codex${MODEL:+ ($MODEL)}"
-  codex exec -s read-only --skip-git-repo-check --ephemeral -C "$TMP" ${MODEL:+-m "$MODEL"} \
-    --output-schema "$SEMA" -o "$HAM" "$(printf 'Hiçbir komut koşma, dosya okuma; gereken her şey aşağıda. Talimata göre YALNIZ JSON üret.\n\n'; cat "$TMP/istem.md")" >"$TMP/log" 2>"$TMP/err"; DRC=$?
 else
-  command -v claude >/dev/null || { _hata "claude yok — denetçi ölçemedi"; exit 3; }
-  DENETCI_AD="claude${MODEL:+ ($MODEL)}"
-  claude -p ${MODEL:+--model "$MODEL"} --output-format json --json-schema "$(cat "$SEMA")" < "$TMP/istem.md" > "$TMP/claude.json" 2>"$TMP/err"; DRC=$?
-  python3 -c "import json,sys;d=json.load(open('$TMP/claude.json'));r=d.get('structured_output') or d.get('result');print(r if isinstance(r,str) else json.dumps(r,ensure_ascii=False))" > "$HAM" 2>/dev/null || cp "$TMP/claude.json" "$HAM"
+  kos_codex() {
+    codex exec -s read-only --skip-git-repo-check --ephemeral -C "$TMP" ${MODEL:+-m "$MODEL"} \
+      --output-schema "$SEMA" -o "$HAM" "$(printf 'Hiçbir komut koşma, dosya okuma; gereken her şey aşağıda. Talimata göre YALNIZ JSON üret.\n\n'; cat "$TMP/istem.md")" >"$TMP/log" 2>"$TMP/err"; DRC=$?
+  }
+  kos_claude() {   # yeni oturum: claude -p her çağrıda sıfırdan açılır → yazanın oturumu değildir
+    command -v claude >/dev/null || { _hata "claude yok — denetçi ölçemedi"; exit 3; }
+    # 🔴 K1 YENİDEN (bağımsız göz #296 tur 1): yazan claude ise yedek göz de claude olur — AYNI MODELİ aynı oturumda
+    #    kullanmak K1 ihlali olurdu. Y0006 şartı "yazandan farklı oturum/model" der; yedek bu yüzden (1) yeni oturum ve
+    #    (2) AÇIKÇA farklı bir model kademesi (DENETCI_YEDEK_MODEL, varsayılan sonnet) ile koşar; kademe kayda yazılır.
+    #    🔴 Tur 2 (bağımsız göz #296): "farklı kademe" varsayılan bir adla ÖRTÜLMEZ, yazanın modeliyle KARŞILAŞTIRILIR.
+    #    Yazanın modeli DENETCI_YAZAN_MODEL ile bildirilir; seçilen yedek ona eşitse merdivende bir sonrakine geçilir
+    #    (tercih: DENETCI_YEDEK_MODEL > --model > sonnet > haiku > opus). Bildirilmediyse fark GARANTİ EDİLEMEZ: kayda
+    #    yazan_model=null yazılır ve ekranda söylenir — "farklı" iddiası ölçülmemişken yeşil basılmaz.
+    local ymodel="$MODEL" aday
+    if [ -n "$YEDEK" ] && [ "$YAZAN" = "claude" ]; then
+      # 🔴 Tur 3 (bağımsız göz #296): yazanın modeli BİLİNMEDEN yedek koşmaz — "farklı" iddiası ölçülemiyorsa kapı KAPALIDIR
+      #    (K1 yazan ≠ denetleyen). İş durmaz: aynı komut DENETCI_YAZAN_MODEL=<yazanın modeli> ile yeniden koşulur (tek satır).
+      if [ -z "$YAZAN_MODEL" ]; then
+        _hata "yedek göz için yazanın modeli ÖLÇÜLEMEDİ (oturum komut satırında --model yok, ayar dosyasında model yok): DENETCI_YAZAN_MODEL=<model> ile yeniden koş (ör. DENETCI_YAZAN_MODEL=fable) — 'yazandan farklı' ölçülmeden yedek koşmaz (K1)"
+        exit 3
+      fi
+      ymodel=""
+      for aday in "${DENETCI_YEDEK_MODEL:-}" "${MODEL:-}" sonnet haiku opus; do
+        [ -n "$aday" ] || continue
+        if [ -n "$YAZAN_MODEL" ] && _ayni_model "$aday" "$YAZAN_MODEL"; then continue; fi
+        ymodel="$aday"; break
+      done
+      YEDEK_MODEL="$ymodel"
+      [ -n "$ymodel" ] && ! _ayni_model "$ymodel" "$YAZAN_MODEL" || { _hata "yazandan farklı yedek model bulunamadı (yazan: $YAZAN_MODEL)"; exit 3; }
+      _bilgi "· yedek kademe: yazan $YAZAN_MODEL ($YAZAN_MODEL_KAYNAK) ≠ yedek $ymodel (ölçüldü)"
+    fi
+    DENETCI_AD="claude${ymodel:+ ($ymodel)}${YEDEK:+ (YEDEK GÖZ: $YEDEK · yazandan farklı yeni oturum + farklı model kademesi${YAZAN_MODEL:+ [yazan: $YAZAN_MODEL]} · Sultan Y0006)}"
+    claude -p ${ymodel:+--model "$ymodel"} --output-format json --json-schema "$(cat "$SEMA")" < "$TMP/istem.md" > "$TMP/claude.json" 2>"$TMP/err"; DRC=$?
+    python3 -c "import json,sys;d=json.load(open('$TMP/claude.json'));r=d.get('structured_output') or d.get('result');print(r if isinstance(r,str) else json.dumps(r,ensure_ascii=False))" > "$HAM" 2>/dev/null || cp "$TMP/claude.json" "$HAM"
+  }
+  yedek_olur_mu() { [ "$SEC_AUTO" = 1 ] && [ "${DENETCI_YEDEK:-1}" != 0 ]; }
+  if [ "$DENETCI" = "codex" ]; then
+    if ! command -v codex >/dev/null; then
+      if yedek_olur_mu; then YEDEK="codex yok"; _bilgi "⚠ codex yok → YEDEK GÖZ: yazandan farklı yeni Claude oturumu (Sultan Y0006)"; kos_claude
+      else _hata "codex yok — denetçi ölçemedi"; exit 3; fi
+    else
+      DENETCI_AD="codex${MODEL:+ ($MODEL)}"; kos_codex
+      if [ "$DRC" -ne 0 ]; then _bilgi "⚠ codex düştü (rc=$DRC) — bir kez daha deneniyor"; kos_codex; fi
+      if [ "$DRC" -ne 0 ] && yedek_olur_mu; then
+        YEDEK="codex düştü (2 deneme, rc=$DRC)"; _bilgi "⚠ codex iki denemede düştü → YEDEK GÖZ: yazandan farklı yeni Claude oturumu (Sultan Y0006)"; kos_claude
+      fi
+    fi
+  else kos_claude; fi
 fi
 if [ "$DRC" -ne 0 ]; then _hata "denetçi ($DENETCI_AD) düştü rc=$DRC"; head -5 "$TMP/err" >&2; cp "$HAM" "$DZ/DENETIM-$TUR-HAM.txt" 2>/dev/null; exit 3; fi
 
@@ -250,11 +309,14 @@ json.dump(d,open(sys.argv[2],"w",encoding="utf-8"),ensure_ascii=False)
 PY
 SRC=$?
 if [ "$SRC" -ne 0 ]; then _hata "denetçi çıktısı geçersiz — ölçemedi"; cp "$HAM" "$DZ/DENETIM-$TUR-HAM.txt"; exit 3; fi
-python3 - "$DZ/DENETIM-$TUR.json" "$TUR" "$IS" "$PR" "$YAZAN" "$DENETCI_AD" "$KANIT_DURUM" "$DOGRULANMIS" "$KIRPILDI" "$ISTEM_BAYT" "$KIRP_ESIK" <<'PY'
+python3 - "$DZ/DENETIM-$TUR.json" "$TUR" "$IS" "$PR" "$YAZAN" "$DENETCI_AD" "$KANIT_DURUM" "$DOGRULANMIS" "$KIRPILDI" "$ISTEM_BAYT" "$KIRP_ESIK" "$YEDEK" "$YAZAN_MODEL" "$YEDEK_MODEL" "$YAZAN_MODEL_KAYNAK" <<'PY'
 import json,sys,datetime
-yol,tur,is_,pr,yazan,den,kd,sonuc_yolu,kirp,bayt,esik=sys.argv[1:]
+yol,tur,is_,pr,yazan,den,kd,sonuc_yolu,kirp,bayt,esik,yedek,yazan_model,yedek_model,ym_kaynak=sys.argv[1:]
 json.dump({"tur":int(tur),"is":is_,"pr":pr,"yazan":yazan,"denetci":den,"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
            "kanit_durumu":kd,
+           "yedek":(yedek or None),   # Sultan Y0006: yedek gözle alınan puan codex puanı sanılmasın; sebebi kayıtta
+           "yazan_model":(yazan_model or None), "yazan_model_kaynak":(ym_kaynak or None), "yedek_model":(yedek_model or None),   # yedek koşumunda dolu (ölçülemezse yedek koşmaz, rc=3)
+
            "kirpildi":{"oldu":kirp=="1","istem_bayt":int(bayt),"esik":int(esik)},   # kalıcı kayıt: kırpılan denetim "tam gördü" sanılmasın
            "sonuc":json.load(open(sonuc_yolu,encoding="utf-8"))},open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
 PY

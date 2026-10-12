@@ -1,0 +1,28 @@
+{
+  "tur": 2,
+  "is": "denetci-yedek-goz",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T22:12:29+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 46100,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Codex yokluğu ve iki düşüşten sonra auto kipinde Claude yedeğine geçiş, sebep kaydı ve açık Codex isteğinin sert kalması uygulanmış. Ancak önceki K1 açığı yalnız yedeğe varsayılan bir kademe adı verilerek örtülmüş; yazarın gerçek Claude modeli bilinmediğinden yedeğin yazandan farklı olduğu garanti edilmiyor, önce bu çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Yedek model seçimi yazarın modelini karşılaştırmıyor; yazar da sonnet ise varsayılan yedek yine sonnet oluyor, ayrıca MODEL doluysa DENETCI_YEDEK_MODEL tamamen devre dışı kalıyor.",
+        "kanit": "kos_claude içinde yazar Claude olduğunda seçim `ymodel=\"${MODEL:-${DENETCI_YEDEK_MODEL:-sonnet}}\"` biçiminde; kodda yazarın modelini taşıyan veya seçilen ymodel ile karşılaştıran bir alan/kontrol yok. Y6 sınavı da yalnız çağrıda `--model sonnet` bulunduğunu ve kayıt metninin “farklı model kademesi” dediğini doğruluyor; yazarın modelini kurup farklılığı ölçmüyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:231; yazilim-fabrikasi/scripts/denetci.test.sh:282",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve iki kayıt da yeşil; 113/113 sınav ile yedek kaldırma mutasyonu geçiş mekanizmasını destekliyor. Bununla birlikte iki kayıt da yalnız “sonra” ölçümü, önce/sonra çifti yok; Y6 gerçek bir yazar-model/yedek-model karşılaştırması yapmadığı için “yazandan farklı” iddiası kanıtlanmış değil."
+  }
+}
