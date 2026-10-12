@@ -1,0 +1,34 @@
+{
+  "tur": 3,
+  "is": "terminal-kur-proje-yolu",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T22:14:02+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 57384,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İstenen fail-closed ad çözümü, proje bağı ve eski cron yollarının göçü doğru hedefe uygulanmış; yanlış/kırık bağ ile yükseltme senaryoları da davranış sınavında geçiyor. Ancak açık TO_KUTU muafiyetinin kanıtı değişiklikle tutarsız ve eski kopyanın aynı gün yeniden yedeklenmesi güvenli değil; önce bunları çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "Açıkça verilmiş 12 onaltılık TO_KUTU muafiyetini sınayan K5c değişiklikte bulunuyor, fakat araç imzalı ölçüm çıktılarında hiç çalıştırılmamış; bu nedenle önceki turun uygulama kusurunun kapandığı kanıtlanmıyor.",
+        "kanit": "Değişiklikte kutu-adi.test.sh içine K5c eklenmişken olcum-kutu-adi-sinavi-sonra.txt K5b'den doğrudan K6'ya geçiyor. Daha geç tarihli toplu ölçüm de kutu-adi için 9 test bildiriyor; sunulan tekil çıktı 10 test bildiriyor fakat yine K5c satırı yok.",
+        "konum": "terminal-onar/scripts/kutu-adi.test.sh K5c; olcum-kutu-adi-sinavi-sonra.txt; olcum-terminal-onar-bes-sinav-sonra.txt",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Gerçek eski kopya aynı gün ikinci kez bulunduğunda sabit `.eski-YYYYMMDD` hedefi çakışabilir; `mv` mevcut yedek dizinin içine taşıyarak beklenmeyen iç içe yapı oluşturur ve günlükte bildirilen hedef gerçeği yansıtmaz.",
+        "kanit": "Yedek hedefi yalnız gün hassasiyetinde `\"$PROJE_BECERI.eski-$(date +%Y%m%d)\"` olarak kuruluyor ve önceden var olup olmadığı denetlenmiyor. B10 yalnız tek bir eski kopya ve tek kurulum çalıştırması ölçüyor.",
+        "konum": "terminal-onar/scripts/kur.sh:88; terminal-onar/scripts/kur-bag.test.sh B10-B10c",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sağlam ve sarı kayıt içermiyor. kur-bag davranış ölçümü gerçekçi kum havuzunda bağ, cron göçü, idempotentlik ve eski sürüm mutasyonunu güçlü biçimde gösteriyor; ancak önce/sonra çifti yok ve açık TO_KUTU için eklenen K5c, imzalı çıktılarda görünmediğinden bu iddia kanıtsız kalıyor."
+  }
+}

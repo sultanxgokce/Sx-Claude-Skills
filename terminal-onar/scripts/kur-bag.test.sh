@@ -66,6 +66,13 @@ rc=$(kur "$ORTAK/scripts/kur.sh")
 kapi "B10 eski kopya kenara alınır, bağ kurulur" "$ORTAK" "$(hedef)"
 kapi "B10b eski kopya silinmedi (.eski-* altında)" "1" "$(ls -d "$BAG".eski-* 2>/dev/null | wc -l | tr -d ' ')"
 kapi "B10c rc=0" "0" "$rc"
+eski1="$(ls -d "$BAG".eski-* | head -1)"
+rm -f "$BAG"; mkdir -p "$BAG/scripts"; echo eski2 > "$BAG/scripts/eski2.txt"      # AYNI GÜN ikinci eski kopya
+rc=$(kur "$ORTAK/scripts/kur.sh")
+kapi "B10d aynı gün ikinci eski kopya AYRI yedeğe alınır (iki .eski-*, iç içe değil)" "2" "$(ls -d "$BAG".eski-* 2>/dev/null | wc -l | tr -d ' ')"
+kapi "B10e ilk yedeğin içine taşınmadı (ilk yedek yalnız kendi dosyasını taşır)" "1" "$(find "$eski1" -type f | wc -l | tr -d ' ')"
+kapi "B10f ikinci yedeğin içeriği kendi dosyası" "1" "$(n=$(find "$BAG".eski-* -name eski2.txt | wc -l | tr -d ' '); echo "$n")"
+kapi "B10g bağ yine doğru hedefte, rc=0" "$ORTAK:0" "$(hedef):$rc"
 
 echo "── YÜKSELTME: canlıdaki eski ortak-yollu cron satırları (12 Eki, 15 kutu) proje yoluna ÇEVRİLİR"
 rm -f "$BAG"; rm -r -- "$PROJE/.oda" 2>/dev/null; mkdir -p "$PROJE/.oda"

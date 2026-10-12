@@ -1,5 +1,5 @@
-$ bash -c KUR_BAG_KOK=/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut-297 bash terminal-onar/scripts/kur-bag.test.sh; r=$?; echo "sinav-rc=$r (tur-1 hâli bf3b31c: bağ doğrulamasız, göçsüz; beklenen: kırmızı)"; test "$r" -ne 0
-# rc=0 sure=0.3s zaman=2026-10-12T22:12:23+03:00
+$ bash -c KUR_BAG_KOK=/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut-297 bash terminal-onar/scripts/kur-bag.test.sh; r=$?; echo "sinav-rc=$r (tur-1 hâli bf3b31c; beklenen: kırmızı)"; test "$r" -ne 0
+# rc=0 sure=0.3s zaman=2026-10-12T22:20:34+03:00
 --- stdout ---
 ── sıfırdan: bağ yok
   ✓ B1 kur.sh ortak dizinden koşunca bağ kurulur → ortak kopyaya
@@ -12,15 +12,19 @@ $ bash -c KUR_BAG_KOK=/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086
   ✓ B7 cron satırları çoğalmadı
   ✓ B7b rc=0
 ── var olan bağ YANLIŞ hedefte (eski kurulum başka yere bağlamış)
-  ✗ B8 yanlış hedefli bağ (çalışır görünse de) doğru hedefe çevrilir — beklenen=/tmp/tmp.TASMzkgDDq/ortak/skills/terminal-onar gerçek=/tmp/tmp.TASMzkgDDq/yanlis
+  ✗ B8 yanlış hedefli bağ (çalışır görünse de) doğru hedefe çevrilir — beklenen=/tmp/tmp.4YYFvdVxDr/ortak/skills/terminal-onar gerçek=/tmp/tmp.4YYFvdVxDr/yanlis
   ✓ B8b rc=0
 ── var olan bağ KIRIK
-  ✗ B9 kırık bağ onarılır (hata verip durmaz) — beklenen=/tmp/tmp.TASMzkgDDq/ortak/skills/terminal-onar gerçek=/tmp/tmp.TASMzkgDDq/yok-boyle-bir-yer
+  ✗ B9 kırık bağ onarılır (hata verip durmaz) — beklenen=/tmp/tmp.4YYFvdVxDr/ortak/skills/terminal-onar gerçek=/tmp/tmp.4YYFvdVxDr/yok-boyle-bir-yer
   ✗ B9b rc=0 — beklenen=0 gerçek=4
 ── proje yolunda GERÇEK eski kopya (dizin)
   ✓ B10 eski kopya kenara alınır, bağ kurulur
   ✓ B10b eski kopya silinmedi (.eski-* altında)
   ✓ B10c rc=0
+  ✗ B10d aynı gün ikinci eski kopya AYRI yedeğe alınır (iki .eski-*, iç içe değil) — beklenen=2 gerçek=1
+  ✗ B10e ilk yedeğin içine taşınmadı (ilk yedek yalnız kendi dosyasını taşır) — beklenen=1 gerçek=2
+  ✓ B10f ikinci yedeğin içeriği kendi dosyası
+  ✓ B10g bağ yine doğru hedefte, rc=0
 ── YÜKSELTME: canlıdaki eski ortak-yollu cron satırları (12 Eki, 15 kutu) proje yoluna ÇEVRİLİR
   ✗ B13 eski ortak-yollu bekçi+açılış satırları proje yoluna çevrildi — beklenen=2 gerçek=0
   ✗ B13b eski ortak yol kalmadı — beklenen=0 gerçek=2
@@ -37,6 +41,6 @@ $ bash -c KUR_BAG_KOK=/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086
   ✗ B11 bekçi satırı (ortak.sh tek kaynak) PROJE yolunu taşır — beklenen=e gerçek=h ()
   ✓ B12 bekçi satırı ortak dizini taşımaz
 
-SONUÇ: 16 geçti · 11 kaldı
-sinav-rc=1 (tur-1 hâli bf3b31c: bağ doğrulamasız, göçsüz; beklenen: kırmızı)
+SONUÇ: 18 geçti · 13 kaldı
+sinav-rc=1 (tur-1 hâli bf3b31c; beklenen: kırmızı)
 --- stderr ---

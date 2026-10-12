@@ -1,19 +1,132 @@
-$ bash -c cd terminal-onar && k=0; for t in kutu-adi kur-bag onar koltuk-bagla kabuk-kapisi; do echo "== $t"; bash scripts/$t.test.sh 2>&1 | tail -1; r=${PIPESTATUS[0]}; echo "rc=$r"; [ $r -eq 0 ] || k=1; done; exit $k
-# rc=0 sure=8.6s zaman=2026-10-12T22:12:32+03:00
+$ bash -c cd terminal-onar && k=0; for t in kutu-adi kur-bag onar koltuk-bagla kabuk-kapisi; do echo "══════ $t.test.sh (tam çıktı)"; bash scripts/$t.test.sh 2>&1; r=$?; echo "rc=$r"; [ $r -eq 0 ] || k=1; done; exit $k
+# rc=0 sure=8.5s zaman=2026-10-12T22:20:33+03:00
 --- stdout ---
-== kutu-adi
+══════ kutu-adi.test.sh (tam çıktı)
+── kurulu olduğu yerden türetme
+  ✓ K1 kutu adı kurulum yolundan çözülür
+  ✓ K2 başka bir kutuda o kutunun adı çözülür
+  ✓ K3 makine adına DÜŞMÜYOR (rastgele kimlikli kap)
+── ORTAK dizinden çağrı (12 Eki canlı vakası): makine kimliği kutu adı DEĞİLDİR
+  ✓ K5 🔴 ortak dizinden + makine kimliği → FAIL-CLOSED (RED), 0ee2fa8a0370 kutu adı sayılmaz
+  ✓ K5b red sebebi söylenir (TO_KUTU ya da proje yolu)
+  ✓ K5c AÇIK BEYAN kapıdan muaf: TO_KUTU=0ee2fa8a0370 verilirse reddedilmez (iletinin vaat ettiği çıkış yolu çalışır)
+  ✓ K6 TO_KUTU verilince ortak dizinden de çözülür
+  ✓ K7 gerçek makine adı (cloudtop-huzur) yine çözülür (K5 tautoloji değil)
+── açık beyan her şeyin üstünde
+  ✓ K4 TO_KUTU verilirse o kazanır
+
 SONUÇ: 9 geçti · 0 kaldı
 rc=0
-== kur-bag
-SONUÇ: 27 geçti · 0 kaldı
+══════ kur-bag.test.sh (tam çıktı)
+── sıfırdan: bağ yok
+  ✓ B1 kur.sh ortak dizinden koşunca bağ kurulur → ortak kopyaya
+  ✓ B2 kurulum rc=0
+  ✓ B3 cron satırları (bekçi + açılış) PROJE yolunu kullanır
+  ✓ B4 cron'da ORTAK yol yok
+  ✓ B5 onar.sh (kum havuzundaki) gerçekten çağrıldı
+── ikinci koşum, bu kez PROJE yolundan (bağ üzerinden)
+  ✓ B6 bağ değişmedi (idempotent)
+  ✓ B7 cron satırları çoğalmadı
+  ✓ B7b rc=0
+── var olan bağ YANLIŞ hedefte (eski kurulum başka yere bağlamış)
+  ✓ B8 yanlış hedefli bağ (çalışır görünse de) doğru hedefe çevrilir
+  ✓ B8b rc=0
+── var olan bağ KIRIK
+  ✓ B9 kırık bağ onarılır (hata verip durmaz)
+  ✓ B9b rc=0
+── proje yolunda GERÇEK eski kopya (dizin)
+  ✓ B10 eski kopya kenara alınır, bağ kurulur
+  ✓ B10b eski kopya silinmedi (.eski-* altında)
+  ✓ B10c rc=0
+  ✓ B10d aynı gün ikinci eski kopya AYRI yedeğe alınır (iki .eski-*, iç içe değil)
+  ✓ B10e ilk yedeğin içine taşınmadı (ilk yedek yalnız kendi dosyasını taşır)
+  ✓ B10f ikinci yedeğin içeriği kendi dosyası
+  ✓ B10g bağ yine doğru hedefte, rc=0
+── YÜKSELTME: canlıdaki eski ortak-yollu cron satırları (12 Eki, 15 kutu) proje yoluna ÇEVRİLİR
+  ✓ B13 eski ortak-yollu bekçi+açılış satırları proje yoluna çevrildi
+  ✓ B13b eski ortak yol kalmadı
+  ✓ B13c başka iş satırı ve TZ olduğu gibi (4 satır, çoğalma yok)
+  ✓ B13d rc=0
+── canlı crontab göçü (onar.sh'ın kullandığı bekci_kur … canli; crontab sahte, gerçek crontab'a DOKUNULMAZ)
+  ✓ B14 canlı crontab'daki eski ortak-yollu bekçi satırı proje yoluna çevrildi
+  ✓ B14b crontab'da ortak yol kalmadı
+  ✓ B14c crontab'daki öteki satırlar korundu (3 satır)
+  ✓ B14d bekci_kur 'canlı crontab düzeltildi' dedi
+  ✓ B14e ikinci çağrı: değişiklik yok, crontab'a yazılmaz (idempotent)
+  ✓ B15 onar.sh canlı crontab için aynı bekci_kur'u çağırır (tam onar.sh tmux/ttyd ister)
+── bekçi satırının kendisi
+  ✓ B11 bekçi satırı (ortak.sh tek kaynak) PROJE yolunu taşır
+  ✓ B12 bekçi satırı ortak dizini taşımaz
+
+SONUÇ: 31 geçti · 0 kaldı
 rc=0
-== onar
+══════ onar.test.sh (tam çıktı)
+── B · bekleme bütçesi (gerçek bekle_saglam)
+  ✓ B1 ttyd bütçesi ≥20 sn
+  ✓ B2 kapı bütçesi ≥40 sn
+  ✓ B3 28 turda açılan kapı SAĞLIKLI sayılır
+  ✓ B4 açılır açılmaz döner (boş yere beklemez)
+  ✓ B5 ESKİ 6 sn'lik bütçe aynı kapıyı KAÇIRIR (mutasyon kanıtı)
+  ✓ B6 gerçekten bozuksa kırmızı döner
+── K · çağıran gerçekten bu kapıyı kullanıyor mu
+  ✓ K1 onar.sh ttyd beklemesini helper'dan çağırır
+  ✓ K2 onar.sh kapı beklemesini helper'dan çağırır
+  ✓ K3 elle sayılı eski döngü kalmadı
+
 SONUÇ: 9 geçti · 0 kaldı
 rc=0
-== koltuk-bagla
+══════ koltuk-bagla.test.sh (tam çıktı)
+A · bağlanma (kabul yüzü)
+  ✓ A1 argümansız → ana oturum (bugünkü davranış aynı)
+  ✓ A2 var olan koltuk → TAM eşleşmeli hedefle (=ad) bağlanır
+  ✓ A3 ana oturumun adı açıkça verilirse de beyaz listeden geçer (VAR → bağlanır, yaratmaz)
+  ✓ A4 🔴 ana oturum YOKKEN adı açıkça verilirse YARATILMAZ (beyaz liste delinmez)
+  ✓ A5 ... ama argümansız yol ana oturumu yine açar (A4 tautoloji değil)
+B · red yüzü (adres güvenilmez girdi)
+  ✓ B1 kutuda olmayan ad → rc=3, YENİ OTURUM AÇILMAZ
+  ✓ B2 red sessiz değil: sebebi ekrana basılır
+  ✓ B3 altyapı oturumu açılamaz: ttyd-maiset
+  ✓ B3 altyapı oturumu açılamaz: kapi-maiset
+  ✓ B3 altyapı oturumu açılamaz: maiset-kurtarici
+  ✓ B3 altyapı oturumu açılamaz: imglistener
+  ✓ B4 tmux hedef sözdizimi/kaçış reddedilir: 'BASIRET:0'
+  ✓ B4 tmux hedef sözdizimi/kaçış reddedilir: 'BASIRET.1'
+  ✓ B4 tmux hedef sözdizimi/kaçış reddedilir: '=BASIRET'
+  ✓ B4 tmux hedef sözdizimi/kaçış reddedilir: '^'
+  ✓ B4 tmux hedef sözdizimi/kaçış reddedilir: 'a b'
+  ✓ B4 tmux hedef sözdizimi/kaçış reddedilir: '../x'
+  ✓ B4 tmux hedef sözdizimi/kaçış reddedilir: 'xxxxxxxxxxxx'
+  ✓ B7 🔴 birden çok arg (?arg=X&arg=Y) → red, ilki seçilmez
+  ✓ B8 aynı ad iki kez de belirsizdir, red
+  ✓ B5 harf büyüklüğü tam eşleşir (basiret ≠ BASIRET)
+  ✓ B6 önek eşleşmez (BASIRE ≠ BASIRET)
+C · liste (tek kaynak)
+  ✓ C1 --liste rc=0
+  ✓ C2 gizliler listede YOK, görünürler sırasıyla var
+  ✓ C3 Claude çalışan koltuk işaretli, çalışmayan değil
+  ✓ C4 son etkinlik tmux'tan okunur
+  ✓ C5 hiç oturum yoksa boş liste (uydurma yok)
+  ✓ C6 🔴 tmux listesi ALINAMAZSA boş liste DEĞİL rc=3 'ölçülemedi' (C5 tautoloji değil)
+  ✓ C7 tmux sunucusu hiç yoksa gerçekten boş: rc=0
+  ✓ C8 liste alınamazken koltuğa da BAĞLANILMAZ (yanlış 'yok' demez, red basar)
+
 toplam=30 geçen=30 düşen=0
 rc=0
-== kabuk-kapisi
+══════ kabuk-kapisi.test.sh (tam çıktı)
+── sahte kabukta DURMALI
+  ✓ S1 /bin/false ile onarım durur (rc=3)
+  ✓ S2 günlükte sebep yazılı
+  ✓ S3 günlükte ÇARE satırı var
+── gerçek kabukta DURMAMALI (kapı süs olmasın)
+  ✓ S4 /bin/bash ile kapı DURDURMAZ (fikstür tuttu mu önce o ölçüldü)
+  ✓ S4b aynı ölçü SAHTE kabukta DUR yazar (S4 boş kapı değil)
+── hemen ÇIKAN sahte kabuk da sahtedir (bağımsız göz, tur 1)
+  ✓ S5 /bin/true ile de onarım durur (çıkış kodu yetmez, çıktı ölçülür)
+  ✓ S5b /bin/true ile onarım ASILMADI (124 başarı sayılmaz)
+── tmux SUNUCUSU YOKKEN hesabın kabuğu okunur (asıl vaka: yeni doğmuş kutu)
+  ✓ S6 sunucu yok + hesabın kabuğu /bin/false → kapı DURDURUR ($SHELL geçerli olsa bile)
+  ✓ S7 sunucu yok + hesabın kabuğu /bin/bash → kapı GEÇİRİR (S6 tautoloji değil)
+
 SONUÇ: 9 geçti · 0 kaldı
 rc=0
 --- stderr ---

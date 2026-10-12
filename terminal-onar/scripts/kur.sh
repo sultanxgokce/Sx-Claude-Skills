@@ -85,7 +85,10 @@ elif [ -d "$PROJE_BECERI" ]; then
   if [ "$(readlink -f "$PROJE_BECERI")" = "$BAG_HEDEF" ]; then
     _bilgi "· beceri zaten proje yolunda yaşıyor (kutu-yerel kopya) — bağ gerekmez"
   else
-    mv "$PROJE_BECERI" "$PROJE_BECERI.eski-$(date +%Y%m%d)" && _bilgi "· eski kopya kenara alındı: $PROJE_BECERI.eski-$(date +%Y%m%d)"
+    # Yedek adı saniye hassasiyetli ve BENZERSİZ: aynı gün ikinci kopya, var olan yedeğin İÇİNE taşınmaz (bağımsız göz, tur 3)
+    eski="$PROJE_BECERI.eski-$(date +%Y%m%d-%H%M%S)"; n=0
+    while [ -e "$eski" ]; do n=$((n+1)); eski="$PROJE_BECERI.eski-$(date +%Y%m%d-%H%M%S)-$n"; done
+    mv "$PROJE_BECERI" "$eski" && _bilgi "· eski kopya kenara alındı: $eski"
     _bag_kur
   fi
 else
