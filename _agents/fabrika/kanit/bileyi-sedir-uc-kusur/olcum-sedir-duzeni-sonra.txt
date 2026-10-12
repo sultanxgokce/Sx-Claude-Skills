@@ -1,0 +1,30 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/sedir-olc.sh /config/projects/_wt/Sx-Claude-Skills-bileyi-sedir-uc-kusur/bileyi/scripts/bileyi.py
+# rc=0 sure=0.2s zaman=2026-10-12T18:30:22+03:00
+--- stdout ---
+🔪 BİLEYİ · iç-tarama · ajan=muavin · 2026-10-12
+   iz: /tmp/claude-1000/sedir-f10hgy1a/oda/_agents/havuz/bulgu-havuzu.jsonl
+   havuz: 4 kayıt
+   pencere 30 gün: 4/6 kayıt
+   dedup kaynakları: 🔴 aday havuzu YOK — 'zaten önerilmiş mi' sorusu ÖLÇÜLEMEDİ · kurulu beceri: 94
+   🔴 KAPSAMA · sınıf alanı dolu: 0/4 (%0) → sınıfa dayanan sayım havuzun %100'ine KÖR
+   eşik: ikili≥4 · sınıf≥2 · dayanak 2026-01-01
+
+── YÜZEY 1 · sınıf alanı (kesin, kısmi kapsama)
+   eşiği aşan tekrar yok
+
+── YÜZEY 2 · ikili söz öbeği (tüm havuz, gürültülü)
+     4 × kayitta yok                        [s1,s5,s11]
+     4 × bey kayitta                        [s1,s5,s11]
+     4 × ridvan bey                         [s1,s5,s11]
+
+── YÜZEY 3 · sürtünme raporu (olay ≥ 10)
+   🟡 sürtünme raporu bu depoda yok (friction-report.sh) — ÖLÇEMEDİM, 'yok' demiyorum
+
+🔪 eşiği aşan 3 tekrar var · tavan 2 yetenek/tur
+   🔴 Bu bir GİRDİdir, hüküm değil: hangi cinsten yetenek üretileceği
+      (kural · yapılandırma · beceri) muhakeme ister — ÖNCE 'kural var mı,
+      koşuyor mu' sorulur; var olanı kapıya bağlamak yeni beceri yazmaktan ucuzdur.
+   🔴 ÖLÇMEDİĞİM: bu sürtünmelerin MALİYETİ. Kaç kez olduğunu saydım,
+      kaç dakika yediğini bilmiyorum ve oraya temiz demiyorum.
+rc=0
+--- stderr ---

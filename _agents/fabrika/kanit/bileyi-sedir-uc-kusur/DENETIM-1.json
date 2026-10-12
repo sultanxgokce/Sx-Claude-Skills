@@ -1,0 +1,21 @@
+{
+  "tur": 1,
+  "is": "bileyi-sedir-uc-kusur",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T18:31:59+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 66600,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Üç kusur da hedefinden vurulmuş: alternatif havuz düzeni bulunuyor, noktasız ı doğru katlanıyor ve ts alanı tarih penceresine giriyor. SEDİR önce/sonra ölçümü ile 73/73 sınav bunu üretime hazır düzeyde destekliyor; talep dışı ciddi bir kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve SHA'lar tutuyor. sedir-duzeni önce/sonra çifti gerçekçi 6 kayıtla önce rc=3 iken sonra _agents/havuz yolu, 4/6 tarih süzmesi ve 'ridvan bey' çıktısını birlikte gösteriyor; ayrıca manifestli sınav 73/73 geçiyor. Sonra çıktısındaki sarı sürtünme kaydı yalnız ayrı sürtünme raporunun ölçülemediğini bildiriyor ve iş kartındaki üç iddiayı zayıflatmıyor. Manifestte yer almayan mutasyon dosyaları ek kanıt sayılmadı."
+  }
+}

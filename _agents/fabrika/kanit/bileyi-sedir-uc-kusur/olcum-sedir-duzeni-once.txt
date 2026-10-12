@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/sedir-olc.sh /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-main.py
+# rc=0 sure=0.2s zaman=2026-10-12T18:30:22+03:00
+--- stdout ---
+⛔ bulgu havuzu yok: /tmp/claude-1000/sedir-_yksnkin/oda/_agents/handoff/bulgu-havuzu.jsonl — ÖLÇEMEDİM
+rc=3
+--- stderr ---

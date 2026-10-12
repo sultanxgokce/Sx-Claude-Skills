@@ -604,6 +604,37 @@ assert 'kapanış damgası ATILAMAZ' in cik, cik
 assert rc == 0, rc
 "
 
+echo "U · SEDİR düzeni (12 Eki bulgusu: çivili yol · noktasız ı · ts alanı)"
+SED="$KOK/sedir"; mkdir -p "$SED/_agents/havuz"
+python3 - "$SED/_agents/havuz/bulgu-havuzu.jsonl" <<'PY'
+import json, sys
+from datetime import date, timedelta
+b = date.today().isoformat(); eski = (date.today()-timedelta(days=200)).isoformat()
+k = [{"id": no, "ts": b+"T10:00:00+03:00", "baslik": "Rıdvan Bey kayıtta yok", "gercek": "x"}
+     for no in ("s1", "s5", "s11", "s30")]
+k += [{"id": no, "ts": eski+"T10:00:00+03:00", "baslik": "eski tek seferlik konu", "gercek": "y"}
+      for no in ("s40", "s41")]
+with open(sys.argv[1], "w", encoding="utf-8") as f:
+    for r in k: f.write(json.dumps(r, ensure_ascii=False) + "\n")
+PY
+U=(python3 "$B" --depo "$SED" --esik-dosya "$ES")
+kapi   "U1 havuz _agents/havuz/ altındaysa da bulunur (rc=3 değil)" 0 "${U[@]}" olc
+iceren "U2 🔴 noktasız ı kelimeyi bölmez — ALTIN: 'Rıdvan Bey' tek öbek" "ridvan bey" "${U[@]}" olc
+icermeyen "U3 🔴 bölünmüş sahte öbek ÜRETİLMEZ ('dvan bey')" "× dvan bey" "${U[@]}" olc
+iceren "U4 🔴 ts alanı okunur — pencere gerçekten süzer (4/6)" "4/6 kayıt" "${U[@]}" olc
+kapi "U5 tarih alanı HİÇ yoksa pencere ÖLÇÜLEMEDİ der, 'kayıt yok' demez" 0 python3 -c "
+import importlib.util as u, pathlib, json
+s=u.spec_from_file_location('b','$B'); m=u.module_from_spec(s); s.loader.exec_module(m)
+y=pathlib.Path('$KOK/tarihsiz.jsonl')
+y.write_text(''.join(json.dumps({'id':f'x{i}','baslik':'a b c'})+chr(10) for i in range(3)), encoding='utf-8')
+k, bozuk, uy = m.havuz_oku(y, 30)
+assert 'ÖLÇÜLEMEDİ' in uy and len(k)==3, uy
+"
+kapi "U6 iki havuz düzeni birden varsa SEÇMEZ → rc=3" 3 sh -c \
+  "mkdir -p '$SED/_agents/handoff' && cp '$SED/_agents/havuz/bulgu-havuzu.jsonl' '$SED/_agents/handoff/' && python3 '$B' --depo '$SED' --esik-dosya '$ES' olc"
+kapi "U7 --havuz-yolu açıkça verilince belirsizlik kalkar" 0 "${U[@]}" --havuz-yolu _agents/havuz/bulgu-havuzu.jsonl olc
+kapi "U8 açık yol yoksa yedeğe DÜŞMEZ → rc=3" 3 "${U[@]}" --havuz-yolu _agents/yok/bulgu-havuzu.jsonl olc
+
 echo
 echo "toplam=$((GECEN+DUSEN)) geçen=$GECEN düşen=$DUSEN"
 [[ $DUSEN -eq 0 ]]
