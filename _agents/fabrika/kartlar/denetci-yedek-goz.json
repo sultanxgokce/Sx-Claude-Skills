@@ -14,6 +14,32 @@
   "sultan": false,
   "kanit_nerede": "",
   "oda": "",
-  "durum": "acik",
-  "gecmis": []
+  "durum": "tikandi",
+  "gecmis": [
+    {
+      "zaman": "2026-10-12T22:37:55+03:00",
+      "olay": "tikandi"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "MUAVIN",
+      "oturum": "muavin/4390ad1f",
+      "gerekce": "Üç turun her bulgusu tek köke indi (yedek göz yazandan gerçekten farklı mı); tur 3 bulgusu kapatıldı: yazanın modeli bildirilmeden yedek koşmaz (rc=3), bildirilince farklı kademe seçilir, ikisi kayıtta (119 kapı, Y0 mutasyon). Dördüncü tur yalnız bu kapanışı ölçer; Sultan şartı (Y0006) karşılanıyor, iş durmuyor.",
+      "zaman": "2026-10-12T22:26:34+03:00"
+    }
+  ],
+  "bitis": "2026-10-12T22:37:55+03:00",
+  "pr": "",
+  "puan": {
+    "kod": 3,
+    "dogru": "H",
+    "tur": 4
+  },
+  "kanit_var": true,
+  "tikanma": {
+    "yol": "daralt",
+    "neden": "4 tur doldu (3/5·H); tek bulgu kaldı: yazanın modeli bildirilmezse yedek durmasın. Delta ayrı karta: yazan modeli oturumdan ölçülür (denetci-yazan-modeli-olcumu)"
+  }
 }

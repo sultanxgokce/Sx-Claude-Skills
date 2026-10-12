@@ -1,0 +1,19 @@
+{
+  "is": "denetci-yazan-modeli-olcumu",
+  "cumle": "denetci-yedek-goz kartının DARALTILMASI: yedek göz için yazanın modeli ayrıca bildirilmese de oturumdan (komut satırı --model > ayar dosyası) ölçülür, kaynağı kayda yazılır; ölçülemezse yedek koşmaz (rc=3) — yalnız bu delta",
+  "istedi": "bağımsız göz tur 4 bulgusu (denetci-yedek-goz)",
+  "aldi": "MUAVIN",
+  "zaman": "2026-10-12T22:37:55+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}
