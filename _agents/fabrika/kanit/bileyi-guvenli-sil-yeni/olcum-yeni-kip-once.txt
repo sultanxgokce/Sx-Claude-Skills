@@ -1,0 +1,5 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/gs-olc.sh
+# rc=1 sure=0.1s zaman=2026-10-12T15:45:51+03:00
+--- stdout ---
+yeni_rc=0 yeni_dizin_izinli_ve_var=0 kendi_sildi_rc=9 taninmayan_bayrak_rc=0
+--- stderr ---

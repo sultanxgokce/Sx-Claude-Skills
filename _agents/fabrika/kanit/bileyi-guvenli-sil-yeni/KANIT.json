@@ -1,0 +1,54 @@
+{
+  "is": "bileyi-guvenli-sil-yeni",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-12T15:46:11+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "mktemp-yolu",
+      "asama": "once",
+      "dosya": "olcum-mktemp-yolu-once.txt",
+      "sha256": "c7fd14e0d5881e276b34349b3ca97b7ce3cbd63196be778b7aaad2e451dbf6b2",
+      "komut": [
+        "bash",
+        "-c",
+        "T=$(mktemp -d); bash bileyi/scripts/guvenli-sil.sh \"$T\" >/dev/null 2>&1; rc=$?; echo \"mktemp_varsayilan=$T sil_rc=$rc\"; python3 -c \"import shutil,sys;shutil.rmtree(sys.argv[1],ignore_errors=True)\" \"$T\"; Y=$(bash bileyi/scripts/guvenli-sil.sh --yeni 2>/dev/null); yrc=$?; echo \"yeni_kip_rc=$yrc\"; [ $rc -eq 0 ] && [ $yrc -eq 0 ]"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-12T15:45:36+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "yeni-kip",
+      "asama": "once",
+      "dosya": "olcum-yeni-kip-once.txt",
+      "sha256": "cf2abc35dc7e6be88af23377f5adb2bba97456239e4e6c1052d8a5ee89d206a2",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/gs-olc.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-12T15:45:51+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "yeni-kip",
+      "asama": "sonra",
+      "dosya": "olcum-yeni-kip-sonra.txt",
+      "sha256": "6c999b198bd49c3932a5930dd9d3663aad9cb9d259ab22afc0f7fee7438fbf81",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/gs-olc.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T15:46:11+03:00",
+      "sure_sn": 0.1
+    }
+  ],
+  "imza": "836dfedb886d935dbcb404fe74ed5229d03def47e350b21cd13eaebb14704549"
+}

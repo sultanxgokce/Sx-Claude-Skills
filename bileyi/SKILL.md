@@ -1,7 +1,7 @@
 ---
 name: bileyi
 type: agent
-version: 0.1.0
+version: 0.2.0
 description: >
   Bıçağı bileyen komut: kendi izimizi (bulgu havuzu · sürtünme raporu · aday havuzu) tarar,
   TEKRAR EDEN sürtünmeyi bulur ve onu yeteneğe çevirir — beceri · kural · yapılandırma.
@@ -209,6 +209,7 @@ bileyi.sh devam --is <ad> --dal <dal>     kanıt + bağımsız göz + SINIFSIZSA
 | Yetenek | Hangi tekrardan doğdu | Ne yapar |
 |---|---|---|
 | `scripts/guvenli-sil.sh` | **engellenen silme girişimi · 30 olay / 14 gün · yükselen** | geçici dizini meşru yolla siler: yasaklı deseni hiç kullanmaz, karşılığında dört kendi kapısını koyar (izinli kök · bağ değil · üst-yol yok · kökün kendisi değil) |
+| `guvenli-sil.sh --yeni [önek]` | **betik içi geçici dizin temizliği engelleniyor · 14 günde 15, araç sonrası 7 · azalmadı** (12 Eki turu) | izinli kökte geçici dizin **AÇAR** ve yolunu basar. Kök neden: `mktemp -d` varsayılan olarak çıplak /tmp'ye açıyor, K1 orayı bilerek reddediyor → meşru yol yoktu. Kalıp: `T=$(guvenli-sil.sh --yeni) ; trap 'guvenli-sil.sh "$T"' EXIT`. Yan onarım: tanınmayan bayrak artık yol sayılmıyor (eskiden `--yeni` bile "zaten yok" deyip **rc=0** basıyordu). |
 
 🔴 **Koruma gevşetilmedi.** Kanca haklıdır ve haklı kalmalı: desen niyeti değil dizgiyi
 eşler, bir kez gevşerse gerçek bir kaza geçer. Çare korumayı delmek değil **meşru bir yol

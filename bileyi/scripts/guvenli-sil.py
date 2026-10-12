@@ -119,11 +119,48 @@ def sil(hedef: str) -> tuple[int, str]:
     return 0, f"silindi: {gercek} ({sayi} girdi) · kök {uygun}"
 
 
+def yeni(onek: str = "gs-") -> tuple[int, str]:
+    """İzinli kökte geçici dizin AÇAR; yolunu döner. (rc, yol|mesaj)
+
+    NİÇİN (12 Eki 2026, /bileyi turu · MUAVİN): betiklerin en sık kalıbı `mktemp -d` +
+    sonda temizlik. `mktemp` varsayılan olarak çıplak /tmp altına açıyor, bu araç orayı
+    BİLEREK reddediyor (K1) → meşru yol yoktu, ajan düz silme komutu yazıyor, kanca
+    blokluyordu: 14 günde 15 engel, bu araç kurulduktan sonra 7 — azalmadı. Açan ile
+    kapatan aynı araç olunca yol kendiliğinden izinli köke düşer.
+    """
+    import tempfile
+    onek = "".join(c for c in (onek or "gs-") if c.isalnum() or c in "-_.")[:40] or "gs-"
+    for k in izinli_kokler():
+        try:
+            k.mkdir(mode=0o700, parents=True, exist_ok=True)
+            if not (k.is_dir() and os.access(k, os.W_OK)):
+                continue
+            d = Path(tempfile.mkdtemp(prefix=onek, dir=str(k))).resolve()
+        except OSError:
+            continue
+        # açtığımız yol GERÇEKTEN kökün altında mı — silme kapılarıyla aynı ölçüt
+        try:
+            d.relative_to(k)
+        except ValueError:
+            continue
+        if d != k:
+            return 0, str(d)
+    return 3, "izinli kökte dizin AÇILAMADI — ÖLÇEMEDİM (hiçbir kök yazılabilir değil)"
+
+
 def _main(argv: list[str]) -> int:
-    if len(argv) != 1 or argv[0] in ("-h", "--help"):
+    if argv[:1] == ["--yeni"] and len(argv) <= 2:
+        rc, mesaj = yeni(argv[1] if len(argv) == 2 else "gs-")
+        print(mesaj, file=sys.stdout if rc == 0 else sys.stderr)
+        return rc
+    # 🔴 Tanınmayan bayrak YOL SAYILMAZ: eskiden '--yeni' bile "zaten yok" deyip rc=0
+    #    dönüyordu — yanlış yazılmış bir komut sessizce başarı basıyordu (12 Eki, ölçüldü).
+    if len(argv) != 1 or argv[0] in ("-h", "--help") or argv[0].startswith("-"):
         print("kullanım: guvenli-sil.py <geçici-dizin>", file=sys.stderr)
+        print("          guvenli-sil.py --yeni [önek]   # izinli kökte geçici dizin AÇ, yolunu bas", file=sys.stderr)
         print("   yalnız geçici köklerin ALTINDAKİ dizinleri siler;", file=sys.stderr)
         print("   kökün kendisini, bağları ve kök dışındaki yolları REDDEDER.", file=sys.stderr)
+        print("   betik kalıbı: T=$(guvenli-sil.sh --yeni) ; trap 'guvenli-sil.sh \"$T\"' EXIT", file=sys.stderr)
         return 2
     rc, mesaj = sil(argv[0])
     print(("✓ " if rc == 0 else "⛔ ") + mesaj, file=sys.stderr if rc else sys.stdout)
