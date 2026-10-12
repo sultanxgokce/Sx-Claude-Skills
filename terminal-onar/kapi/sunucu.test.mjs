@@ -44,6 +44,10 @@ function sahteTtyd(yol) {
 const KOLTUK_SAHTE = join(T, 'koltuk-sahte.sh');
 writeFileSync(KOLTUK_SAHTE, '#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\n'
   + 'printf "sinavkutu-ana\\t1760000000\\t0\\nBASIRET\\t1760000100\\t1\\nkotu:ad\\t1\\t1\\n"\n');
+// 2.2.0: betik 5 alan döner (… tür · hâl) ve ANA adını ortamdan (KOLTUK_ANA) alır — sahte, aldığı adı ilk satıra yazar
+const KOLTUK_SAHTE5 = join(T, 'koltuk-sahte5.sh');
+writeFileSync(KOLTUK_SAHTE5, '#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\n'
+  + 'printf "sinavkutu-ana\\t1760000000\\t0\\tdiger\\tbilinmiyor\\nBASIRET\\t1760000100\\t1\\tajan\\tsoru\\ncc-1\\t5\\t1\\tdiger\\tbilinmiyor\\n"\n');
 const KOLTUK_BOZUK = join(T, 'koltuk-bozuk.sh');
 writeFileSync(KOLTUK_BOZUK, '#!/usr/bin/env bash\nexit 1\n');
 
@@ -70,7 +74,7 @@ const iste = (port, yol, { cerez, metot = 'GET', govde } = {}) =>
   });
 
 const ttyd = await sahteTtyd(join(T, 'ttyd.sock'));
-const P1 = 18771, P2 = 18772, P3 = 18773;
+const P1 = 18771, P2 = 18772, P3 = 18773, P4 = 18774;
 const kapiTaban = await kapiAc('/sedir', P1);
 const kapiKok = await kapiAc('', P2);
 
@@ -144,6 +148,16 @@ console.log('\n── Y · KOLTUKLAR (koltuk seçici) ──');
   const c3 = 'kapi=' + ((ok3.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1];
   const rb = await iste(P3, '/sedir/api/koltuklar', { cerez: c3 });
   kapi('Y8 betik düşerse 500 "ölçülemedi" — boş liste ("hiç koltuk yok") BASILMAZ', rb.status === 500, `→ ${rb.status}`);
+  // 2.2.0 · tür ve hâl betikten taşınır; eski 3 alanlı betikte alanlar YOKTUR (uydurulmaz); ana adı betiğe ortamdan gider
+  const k5 = await kapiAc('/sedir', P4, { KAPI_KOLTUK_BETIK: KOLTUK_SAHTE5 });
+  const ok5 = await iste(P4, '/sedir/giris', { metot: 'POST', govde: { parola: SIFRE } });
+  const c5 = 'kapi=' + ((ok5.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1];
+  const j5 = await (await iste(P4, '/sedir/api/koltuklar', { cerez: c5 })).json();
+  const b5 = j5.koltuklar?.find((k) => k.ad === 'BASIRET') || {}, cc5 = j5.koltuklar?.find((k) => k.ad === 'cc-1') || {};
+  kapi('Y10 tür ve hâl taşınır (BASIRET ajan/soru · cc-1 diğer/bilinmiyor)', b5.tur === 'ajan' && b5.hal === 'soru' && cc5.tur === 'diger' && cc5.hal === 'bilinmiyor', `→ ${JSON.stringify(j5).slice(0, 200)}`);
+  kapi('Y10b ana bayrağı kapıdan (betikten değil): sahte ana adını bilmez, kapı yine ana:true işaretler', j5.koltuklar?.find((k) => k.ad === 'sinavkutu-ana')?.ana === true, `→ ${JSON.stringify(j5.koltuklar?.map((k) => [k.ad, k.ana]))}`);
+  kapi('Y10c eski 3 alanlı betikte tür/hâl alanı YOK (uydurulmaz)', !('tur' in b) && !('hal' in b));
+  k5.kill();
   // Kullanıcı yüzü (bağımsız göz, tur 1): seçici sayfada ve betikte var, listeyi aynı uçtan çeker, tam terminali ?arg= ile açar.
   const sayfa = await (await iste(P1, '/sedir/', { cerez })).text();
   const js = await (await iste(P1, '/sedir/uygulama.js', { cerez })).text();

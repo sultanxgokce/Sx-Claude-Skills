@@ -1,0 +1,32 @@
+{
+  "is": "terminal-koltuk-hal",
+  "cumle": "terminal-onar 2.2.0: /api/koltuklar her koltuk için tür (ajan|diğer: cc-*, dash*, imglistener, kurtarıcı, Claude'suz) ve hâl (çalışıyor · soru bekliyor · girdi bekliyor · boş · sınırda · bilinmiyor; kaynak son ekran satırları, filo yoklamasıyla aynı desenler) döndürür — dilim 4 UX'in veri tarafı",
+  "istedi": "Sultan (dilim 4 UX, SERDAR mektubu 12 Eki)",
+  "aldi": "MUAVIN",
+  "zaman": "2026-10-12T22:40:29+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "bitti",
+  "gecmis": [
+    {
+      "zaman": "2026-10-12T23:09:49+03:00",
+      "olay": "bitti"
+    }
+  ],
+  "bitis": "2026-10-12T23:09:49+03:00",
+  "pr": "298",
+  "puan": {
+    "kod": 5,
+    "dogru": "E",
+    "tur": 3
+  },
+  "kanit_var": true
+}

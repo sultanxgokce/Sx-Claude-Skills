@@ -358,8 +358,10 @@ const sunucu = http.createServer(async (req, res) => {
         const r = await calistir('bash', [KOLTUK_BETIK, '--liste']);
         if (r.kod !== 0) return json(res, 500, { hata: 'Koltuklar ölçülemedi.' });
         const koltuklar = r.out.split('\n').filter(Boolean).map((l) => {
-          const [ad, son, claude] = l.split('\t');
-          return { ad, son: +son || 0, claude: claude === '1', ana: ad === ANA_TMUX, ekran: T('/tty/') + '?arg=' + encodeURIComponent(ad) };
+          const [ad, son, claude, tur, hal] = l.split('\t');
+          // tür/hâl betikten gelir (2.2.0); eski betik vermezse alanlar YOK (undefined) — "ajan"/"boş" uydurulmaz
+          return { ad, son: +son || 0, claude: claude === '1', ana: ad === ANA_TMUX, ekran: T('/tty/') + '?arg=' + encodeURIComponent(ad),
+                   ...(tur ? { tur } : {}), ...(hal ? { hal } : {}) };
         }).filter((k) => /^[A-Za-z0-9_-]{1,64}$/.test(k.ad));
         return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, koltuklar });
       }

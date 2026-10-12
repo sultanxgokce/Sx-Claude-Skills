@@ -3,7 +3,7 @@
 #
 #   koltuk-bagla.sh <ana-oturum> <proje-dizini> [koltuk]   ttyd'nin çalıştırdığı komut (ttyd -a: adresteki
 #                                                          ?arg=<koltuk> buraya SON argüman olarak eklenir)
-#   koltuk-bagla.sh --liste                                görünür koltuklar, sekmeyle: ad · son-etkinlik(epoch) · claude(1|0)
+#   koltuk-bagla.sh --liste                                görünür koltuklar, sekmeyle: ad · son-etkinlik(epoch) · claude(1|0) · tür(ajan|diger) · hâl
 #
 # 🔴 NİÇİN TEK KAYNAK: "hangi oturum görünür" sorusunu hem ekran (ttyd) hem liste ucu (/api/koltuklar)
 #    soruyor. İki ayrı liste yazılsaydı ilk değişiklikte ayrışırdı: listede görünmeyen bir oturuma adresle
@@ -44,13 +44,45 @@ claude_var_mi() {  # $1 = oturum → 0 ise koltukta Claude çalışıyor
   return 1
 }
 
+# ── TÜR ve HÂL (2.2.0 · dilim 4, Sultan: "düzenli net sade"): ekran yalnız AJAN koltuklarını önde gösterir,
+#    gerisi "diğer" altında katlanır; hâl noktası koltuk başına. İkisi de BURADA ölçülür (kapı sormakla yetinir).
+#    tür  : ajan  = Claude çalışan oturum · diğer = geçici/arka plan (cc-* · dash* · imglistener* · *-kurtarici) ya da
+#           Claude'suz oturum (ana dahil; ana'nın önde durması `ana` bayrağının işi)
+#    hâl  : son ekran satırlarından, filo yoklamasıyla AYNI desenler (Nexus scripts/filo.py hal()): sıra meşgul > soru >
+#           sınır > girdi > boş; hiçbiri tutmazsa "bilinmiyor" (uydurulmaz). Claude'suz oturumun hâli ölçülmez → "bilinmiyor".
+diger_mi() { case "$1" in cc-*|dash*|imglistener*|*-kurtarici) return 0 ;; esac; return 1; }
+koltuk_turu() {  # $1 = oturum · $2 = claude(1|0) → ajan yalnız Claude çalışan, adı geçici olmayan oturum; gerisi diğer
+  # 🔴 ANA oturum için istisna YOK (bağımsız göz #298 tur 2): Claude'suz ana da "diğer"dir. Ana'nın ekranda hep önde
+  #    durması türün değil `ana` bayrağının işidir (kapı onu ayrıca verir; merkez ana'yı türünden bağımsız önde çizer).
+  if diger_mi "$1"; then echo diger; elif [ "$2" = 1 ]; then echo ajan; else echo diger; fi
+}
+koltuk_hali() {  # $1 = oturum → calisiyor|soru|sinirda|girdi|bos|bilinmiyor  (SON 15 dolu satır; eskisi sayılmaz)
+  local ekran
+  # 🔴 tmux -S -15 görünür panenin ÜSTÜNE 15 geçmiş satır ekler, sonunu sınırlamaz (bağımsız göz #298 tur 1): sınır tail ile.
+  ekran="$(tmux capture-pane -p -t "=$1" -S -15 2>/dev/null | sed '/^[[:space:]]*$/d' | tail -n 15)" || { echo bilinmiyor; return; }
+  [ -n "$ekran" ] || { echo bilinmiyor; return; }
+  # Sıra: soru > meşgul > sınır > girdi > boş — soru en üstte: bekleyen bir soru, ekranda "esc to cancel" gibi meşgul izi taşısa
+  # da sorudur; Sultan'ın görmesi gereken odur (filo yoklaması aynı deseni "Enter to select" istisnasıyla kuruyordu).
+  if printf '%s' "$ekran" | grep -qE 'Enter to select|Do you want to|❯ [0-9]+\. '; then echo soru; return; fi
+  if printf '%s' "$ekran" | grep -qiE 'esc to interrupt|esc to cancel\)|\([0-9]+s ·|Running…|Waiting…'; then echo calisiyor; return; fi
+  if printf '%s' "$ekran" | grep -qiE 'usage limit|limit reached|5-hour limit'; then echo sinirda; return; fi
+  local satir
+  satir="$(printf '%s\n' "$ekran" | grep -E '^[[:space:]]*❯' | tail -1 | sed 's/^[[:space:]]*❯[[:space:]]*//')"
+  if printf '%s\n' "$ekran" | grep -qE '^[[:space:]]*❯'; then
+    if [ -n "$satir" ]; then echo girdi; else echo bos; fi; return
+  fi
+  echo bilinmiyor
+}
+
 if [ "${1:-}" = "--liste" ]; then
   LISTE="$(koltuklar)" || exit 3
   printf '%s\n' "$LISTE" | while IFS= read -r s; do
     [ -n "$s" ] || continue
     son=$(tmux display-message -p -t "=$s" '#{session_activity}' 2>/dev/null || echo 0)
     if claude_var_mi "$s"; then c=1; else c=0; fi
-    printf '%s\t%s\t%s\n' "$s" "${son:-0}" "$c"
+    tur="$(koltuk_turu "$s" "$c")"
+    if [ "$c" = 1 ]; then hal="$(koltuk_hali "$s")"; else hal=bilinmiyor; fi   # Claude'suz oturumda hâl ölçülmez → bilinmiyor (altı değerin dışına çıkılmaz)
+    printf '%s\t%s\t%s\t%s\t%s\n' "$s" "${son:-0}" "$c" "$tur" "$hal"
   done
   exit 0
 fi
