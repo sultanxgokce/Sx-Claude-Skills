@@ -1,0 +1,3 @@
+# Telefon ekranı kareleri (gerçek Chromium 390×844 @2x, başlık kesiti; sahte koltuk listesi: sedir-ana● BASIRET● CARSI PEYK●)
+once : eski kapı (origin/main) — başlıkta yalnız "Terminal · Onar"; seçici yok           → secici_gorunur=false
+sonra: yeni kapı — başlıkta koltuk açılır listesi, seçenekler: ["sedir-ana ●","BASIRET ●","CARSI","PEYK ●"] → secici_gorunur=true
