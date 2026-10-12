@@ -1,0 +1,25 @@
+{
+  "is": "denetci-yedek-goz",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-12T21:26:38+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "b11b42ca93c0101c45ebc49474abefef695c54774b0e64cf1c51acd102d026e3",
+      "komut": [
+        "timeout",
+        "900",
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T21:26:38+03:00",
+      "sure_sn": 122.2
+    }
+  ],
+  "imza": "4ac7211079a2076d89508a030275171260f3e0eac1bfeec987400084bcb1232d"
+}
