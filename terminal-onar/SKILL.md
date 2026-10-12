@@ -102,7 +102,10 @@ ayrışırdı. Kapı betiğe sorar, kendisi türetmez; betiğin verdiği bozuk a
 🔴 **Adres güvenilmez girdidir:** `BASIRET:0`, `=ad`, `../x`, 70 karakter — hepsi red (tmux hedef sözdizimi giremez).
 Birden çok `arg` (belirsiz adres) ve ana oturumun adının **açıkça** verilip kutuda bulunmaması da reddedilir —
 yalnız argümansız yol oturum yaratır (bağımsız göz, tur 1).
-Sınav: `scripts/koltuk-bagla.test.sh` (27 kapı, sahte tmux) + kapı `Y1-Y10`. Mutasyon: beyaz liste silinince 4 kapı,
+Sınav: `scripts/koltuk-bagla.test.sh` (27 kapı, sahte tmux) + kapı `Y1-Y10` + telefon ekranı **gerçek Chromium**
+(`kapi/tarayici-sinav.mjs`, 10 kapı, CI dışı — kütüphane yoksa rc=4): seçici · seçince tam terminal `?arg=` ·
+yerel bellekteki ad **doğrulanmadan terminale konmaz** (liste gecikirse ana koltukta açılır, liste gelince yeniden kurulur;
+geçersiz ad hiçbir anda girmez). Mutasyon: beyaz liste silinince 4 kapı,
 gizli süzgeci silinince 1 kapı, kapıda "boş liste" kaçağı 1 kapı, ad süzgeci 2 kapı kırmızıya döner.
 🔴 **Dürüst sınır:** `--liste` Claude'u pane komutundan tanır; başka bir kabuğun içine gömülü Claude'u görmeyebilir
 (yanlış-negatif). Son etkinlik tmux'un `session_activity` damgasıdır, konuşmanın değil.

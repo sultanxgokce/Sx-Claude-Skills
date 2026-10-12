@@ -1,7 +1,7 @@
 {
   "is": "terminal-koltuk-secici",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-12T20:07:20+03:00",
+  "guncelleme": "2026-10-12T20:17:49+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -23,15 +23,15 @@
       "etiket": "kapi-sinav",
       "asama": "sonra",
       "dosya": "olcum-kapi-sinav-sonra.txt",
-      "sha256": "eb4f65688d865ea55e21259b6528b7937ac14b905c69338cd358ad7e512b779d",
+      "sha256": "be5f843513913997500d0dbc54824e0f4dfd0a839ecf733fc067cdc78cbf6966",
       "komut": [
         "node",
         "terminal-onar/kapi/sunucu.test.mjs"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-12T20:03:33+03:00",
-      "sure_sn": 4.7
+      "zaman": "2026-10-12T20:17:49+03:00",
+      "sure_sn": 4.8
     },
     {
       "tur": "olcum",
@@ -114,7 +114,33 @@
       "rc": 0,
       "renk": "yesil",
       "zaman": "2026-10-12T20:07:20+03:00"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "telefon-ekrani-tarayici",
+      "asama": "sonra",
+      "dosya": "olcum-telefon-ekrani-tarayici-sonra.txt",
+      "sha256": "6ba2c65570ec16a35a84e481c7244cd383962428accc68a6ad861cafb8db6403",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/tarayici-sinav.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T20:17:44+03:00",
+      "sure_sn": 7.4
+    },
+    {
+      "tur": "dosya",
+      "etiket": "kare-telefon-ekrani-secici-chromium",
+      "asama": "sonra",
+      "dosya": "dosya-kare-telefon-ekrani-secici-chromium-sonra.png",
+      "sha256": "e3d8f0c6cbd29732ddbb38112b9cffdd49fb38600d706383c6c725d242aa0685",
+      "kaynak": "/tmp/claude-1000/pwa-baslik.png",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T20:17:44+03:00"
     }
   ],
-  "imza": "e285d5d81e019b8542c7a456c420b41bb8f1262b2d71b3bcc4c8cfe8c5305b71"
+  "imza": "9eee406db6ad32654008433e10a26721a3c77faf40b709a7b3eafc95df71d487"
 }
