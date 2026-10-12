@@ -1,7 +1,7 @@
 {
   "is": "iskan-dusme-varsayilan-ret",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-12T10:20:56+03:00",
+  "guncelleme": "2026-10-12T11:01:10+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -61,7 +61,104 @@
       "rc": 0,
       "renk": "yesil",
       "zaman": "2026-10-12T10:20:56+03:00"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "emsal-enis-sihhatsiz-0102",
+      "asama": "once",
+      "dosya": "olcum-emsal-enis-sihhatsiz-0102-once.txt",
+      "sha256": "d88cf0a96f76d9fc724dbbb0887d22f4e58a6429d0da3cd7a6e2cb797446df8c",
+      "komut": [
+        "env",
+        "ISKAN_EY_ROSTER=ENIS:yonetici MURSIT:uye",
+        "ISKAN_CLOUDTOP_REPO_DIR=/config/projects/cloudtop",
+        "bash",
+        "/config/.claude/jobs/d69a1b07/tmp/iskan-once-1016/iskan/scripts/iskan.sh",
+        "ekip-yerlestir",
+        "enis",
+        "--dry-run"
+      ],
+      "rc": 3,
+      "renk": "sari",
+      "zaman": "2026-10-12T10:58:33+03:00",
+      "sure_sn": 3.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "emsal-enis-sihhatsiz-varsayilan",
+      "asama": "sonra",
+      "dosya": "olcum-emsal-enis-sihhatsiz-varsayilan-sonra.txt",
+      "sha256": "6f0a11ab7c06815ebada86c5b6dcb521b81010b559b62ebb5786ccb6dc7ba7e1",
+      "komut": [
+        "env",
+        "ISKAN_EY_ROSTER=ENIS:yonetici MURSIT:uye",
+        "ISKAN_CLOUDTOP_REPO_DIR=/config/projects/cloudtop",
+        "bash",
+        "iskan/scripts/iskan.sh",
+        "ekip-yerlestir",
+        "enis",
+        "--dry-run"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-12T10:58:37+03:00",
+      "sure_sn": 2.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "emsal-enis-sihhatsiz-uyar",
+      "asama": "sonra",
+      "dosya": "olcum-emsal-enis-sihhatsiz-uyar-sonra.txt",
+      "sha256": "002c7db7f0736cd3a4067679ebf356849f43bfd3c5fcac343d397016dfb9fb76",
+      "komut": [
+        "env",
+        "ISKAN_EY_DUSME=uyar",
+        "ISKAN_EY_ROSTER=ENIS:yonetici MURSIT:uye",
+        "ISKAN_CLOUDTOP_REPO_DIR=/config/projects/cloudtop",
+        "bash",
+        "iskan/scripts/iskan.sh",
+        "ekip-yerlestir",
+        "enis",
+        "--dry-run"
+      ],
+      "rc": 3,
+      "renk": "sari",
+      "zaman": "2026-10-12T10:58:41+03:00",
+      "sure_sn": 2.5
+    },
+    {
+      "tur": "dosya",
+      "etiket": "kur-zincir-borusuz-prob",
+      "asama": "tek",
+      "dosya": "dosya-kur-zincir-borusuz-prob-tek.out",
+      "sha256": "35f7d6d12cbc1b00611b7a9ec4ce520886b86221e22c80a853689d58544927b3",
+      "kaynak": "/config/.claude/jobs/d69a1b07/tmp/kur-zincir-prob.out",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T11:00:47+03:00"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "kur-zincir-prob-betigi",
+      "asama": "tek",
+      "dosya": "dosya-kur-zincir-prob-betigi-tek.sh",
+      "sha256": "9167c56b0f28dc503f32b8a0b5e410cc84604f5aff3258b8997791a46a40068c",
+      "kaynak": "/config/.claude/jobs/d69a1b07/tmp/kur-zincir-prob.sh",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T11:00:47+03:00"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "tur1-cevap",
+      "asama": "tek",
+      "dosya": "dosya-tur1-cevap-tek.md",
+      "sha256": "38ea38a2e78acbf09a7a3d8a4fbf701c5cf86dde70d7bd517e3e5c7d50fda545",
+      "kaynak": "/config/.claude/jobs/d69a1b07/tmp/iskan-0103-tur1-cevap.md",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T11:01:10+03:00"
     }
   ],
-  "imza": "8624635204dbe595a958ab8117da83d190a8e3b67618e85c634f9901ff245493"
+  "imza": "7ccd56e8168db417e0cb76b0e384476a6925d219175a2a6c8cae3f26d713d90e"
 }

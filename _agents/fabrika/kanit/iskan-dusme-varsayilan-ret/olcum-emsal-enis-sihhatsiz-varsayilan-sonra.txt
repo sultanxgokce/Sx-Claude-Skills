@@ -1,0 +1,9 @@
+$ env ISKAN_EY_ROSTER=ENIS:yonetici MURSIT:uye ISKAN_CLOUDTOP_REPO_DIR=/config/projects/cloudtop bash iskan/scripts/iskan.sh ekip-yerlestir enis --dry-run
+# rc=1 sure=2.6s zaman=2026-10-12T10:58:37+03:00
+--- stdout ---
+[yeşil] proje-çözümü: 'enis' → cloudtop-enis (origin/main compose, TAM-STRING) · port=8472
+[yeşil] hedef-yol çözümü (mount-farkında): /config/projects/enis (container) → /opt/cloudtop/config-enis/projects/enis (host)
+[yeşil] roster-kaynağı: ISKAN_EY_ROSTER (açık-override)
+[sarı] uye-dusuyor: SIHHAT — mevcut kayıtta var, roster'da YOK; yeni kayıtta olmayacak (session_id dahil). Rezerve koltuksa roster'a/ISKAN_EY_ROSTER'a ekle (A323)
+--- stderr ---
+[kırmızı] uye-dusme-reddi: 1 üye düşecekti, kayıt YAZILMADI (varsayılan fail-closed; devam için ISKAN_EY_DUSME=uyar)

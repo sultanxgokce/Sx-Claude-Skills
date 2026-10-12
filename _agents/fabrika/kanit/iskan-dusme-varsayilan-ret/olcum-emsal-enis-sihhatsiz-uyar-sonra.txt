@@ -1,0 +1,22 @@
+$ env ISKAN_EY_DUSME=uyar ISKAN_EY_ROSTER=ENIS:yonetici MURSIT:uye ISKAN_CLOUDTOP_REPO_DIR=/config/projects/cloudtop bash iskan/scripts/iskan.sh ekip-yerlestir enis --dry-run
+# rc=3 sure=2.5s zaman=2026-10-12T10:58:41+03:00
+--- stdout ---
+[yeşil] proje-çözümü: 'enis' → cloudtop-enis (origin/main compose, TAM-STRING) · port=8472
+[yeşil] hedef-yol çözümü (mount-farkında): /config/projects/enis (container) → /opt/cloudtop/config-enis/projects/enis (host)
+[yeşil] roster-kaynağı: ISKAN_EY_ROSTER (açık-override)
+[sarı] uye-dusuyor: SIHHAT — mevcut kayıtta var, roster'da YOK; yeni kayıtta olmayacak (session_id dahil). Rezerve koltuksa roster'a/ISKAN_EY_ROSTER'a ekle (A323)
+[sarı] uye-dusme-uyari-modu: ISKAN_EY_DUSME=uyar — düşen üyeyle devam ediliyor (bilinçli seçim)
+== İSKÂN ekip-yerlestir — KURU-KOŞU (DEFAULT; host'a/container'a/dosyaya SIFIR-dokunuş) ==
+proje: enis · container: cloudtop-enis · hedef-dizin (container-içi): /config/projects/enis
+[yeşil] hostsrv-probe: taze ssh exit=0 (canlı-durum aşağıda 'mevcut → atla' olarak işaretlendi)
+
+-- PLAN (apply'da sırayla; her adım idempotent) --
+  1. scaffold-iskelet (ekip-kur/scaffold.sh headless → /opt/cloudtop/config-enis/projects/enis): (mevcut → atla)
+  2. roster (SABİT, GEREKLILIK-bağlayıcı; tmux-oturum adları BİREBİR bu casing):
+     - ENIS (yonetici) · rezerv-uuid: mevcut (030e2c7c-fc98-4250-8f01-5ae2e5e6e0cb) · tmux: mevcut → atla
+     - MURSIT (uye) · rezerv-uuid: mevcut (bcaceccc-d8df-459f-bc85-6e9406819f5b) · tmux: mevcut → atla
+  3. kimlik-banner (her pane'de kalıcı: İSKÂN-imzası + rol + rezerve-uuid ≤80-kolon-tek-satır + permission-mode)
+  4. baslat-claude.sh sarmalayıcısı (b0019 panzehiri: registry'den rol-kaydı çözer; claude yoksa dürüst-kırmızı 'claude-binary yok')
+  5. iskan-registry.yaml K2 tam-şema yazımı: host-co-locate (/opt/cloudtop/infra/iskan-registry.yaml) + repo (/config/projects/cloudtop/infra/) + container-içi kopya — üçü bayt-eş
+== dry-run: hiçbir yazım yapılmadı (plan-exit sözleşmesi, exit=3) ==
+--- stderr ---

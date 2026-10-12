@@ -1,0 +1,9 @@
+dal#1:   ok - kur --dry-run: 8 adımın hepsi zincir-planında (FAZ-sırasıyla; P3 ekip-pong 7/8 dahil)   ok - cycle-4 .bak-temizlik: .bak'lar silindi + orijinaller BAYT-korundu + .bak-yok sessiz-geçti == 267 geçti / 1 kaldı == 
+dal#2:   ok - kur --dry-run: 8 adımın hepsi zincir-planında (FAZ-sırasıyla; P3 ekip-pong 7/8 dahil)   ok - cycle-4 .bak-temizlik: .bak'lar silindi + orijinaller BAYT-korundu + .bak-yok sessiz-geçti == 267 geçti / 1 kaldı == 
+dal#3:   ok - kur --dry-run: 8 adımın hepsi zincir-planında (FAZ-sırasıyla; P3 ekip-pong 7/8 dahil)   ok - cycle-4 .bak-temizlik: .bak'lar silindi + orijinaller BAYT-korundu + .bak-yok sessiz-geçti == 267 geçti / 1 kaldı == 
+ana#1:   ok - kur --dry-run: 8 adımın hepsi zincir-planında (FAZ-sırasıyla; P3 ekip-pong 7/8 dahil)   ok - cycle-4 .bak-temizlik: .bak'lar silindi + orijinaller BAYT-korundu + .bak-yok sessiz-geçti == 264 geçti / 1 kaldı == 
+ana#2:   ok - kur --dry-run: 8 adımın hepsi zincir-planında (FAZ-sırasıyla; P3 ekip-pong 7/8 dahil)   ok - cycle-4 .bak-temizlik: .bak'lar silindi + orijinaller BAYT-korundu + .bak-yok sessiz-geçti == 264 geçti / 1 kaldı == 
+ana#3:   ok - kur --dry-run: 8 adımın hepsi zincir-planında (FAZ-sırasıyla; P3 ekip-pong 7/8 dahil)   ok - cycle-4 .bak-temizlik: .bak'lar silindi + orijinaller BAYT-korundu + .bak-yok sessiz-geçti == 263 geçti / 2 kaldı == 
+exit=0
+
+[exited with code 0]

@@ -1,0 +1,34 @@
+{
+  "tur": 1,
+  "is": "iskan-dusme-varsayilan-ret",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T10:56:54+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 18214,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Varsayılan davranış rc=1 ve yazmama olarak çevrilmiş, eski sarı-uyarı yolu da ISKAN_EY_DUSME=uyar seçimine bağlanmış; yani talep edilen kapı doğru yere konmuş. Ancak tam sınav 264/1'den 266/2'ye gerileyip yeni bir kur --dry-run hatası üretmiş ve özellikle istenen BASİRET + ENİS iki ölçümü sunulmamış; önce regresyonu ve gerçek emsal kanıtını çözün.",
+    "bulgular": [
+      {
+        "ne": "Değişiklik tam sınavda yeni bir regresyon bırakıyor; üretime hazır sayılamaz.",
+        "kanit": "Önceki ölçüm \"264 geçti / 1 kaldı\" ve yalnız baslat-claude.sh hatasını gösterirken sonraki ölçüm \"266 geçti / 2 kaldı\" diyor ve ek olarak \"FAIL - kur --dry-run: zincir-planında eksik adım: [4/8: provizyon] [6/8: ekip-yerlestir]\" kaydını içeriyor.",
+        "konum": "olcum-sinav-kaynak-once.txt; olcum-sinav-sonra.txt",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "İş kartında açıkça istenen BASİRET + ENİS iki ölçüm karşılanmamış; ENİS kaydı da düşen-üye reddini ölçmüyor.",
+        "kanit": "Manifestte BASİRET etiketli hiçbir kayıt yok; yalnız bir ENİS kaydı var. olcum-enis-dry-run-sonra.txt çıktısı roster kaynağı, SIHHAT rezerv UUID'si ve olağan dry-run exit=3 satırını gösteriyor; uye-dusuyor, uye-dusme-reddi veya rc=1 göstermiyor.",
+        "konum": "kanıt manifesti:kayitlar; olcum-enis-dry-run-sonra.txt",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı/rc=3 manifest kaydı yok. A323 sentetik sınavları varsayılan rc=1, uyar modu, bilinmeyen değer ve apply sırasında bayt-değişmeme iddialarını ölçüyor; fakat ölçüm çifti tam sınav sayıları bakımından gerileme gösteriyor, gerçek BASİRET kanıtı yok ve tek ENİS ölçümü hedeflenen düşme senaryosunu sınamıyor."
+  }
+}
