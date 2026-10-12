@@ -1,0 +1,8 @@
+$ bash -c M=/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut-297b; mkdir -p $M && cp -r terminal-onar/scripts $M/ && git show 8001633:terminal-onar/scripts/kur.sh > $M/scripts/kur.sh && KUR_BAG_KOK=$M bash terminal-onar/scripts/kur-bag.test.sh 2>&1 | grep -E "B16|SONUÇ"; r=${PIPESTATUS[0]}; echo "sinav-rc=$r (kur.sh = 8001633, düz dosya kapısı yok; beklenen: B16 kırmızı)"; test $r -ne 0
+# rc=0 sure=0.5s zaman=2026-10-12T22:31:48+03:00
+--- stdout ---
+  ✗ B16 düz dosya SİLİNMEDİ (içeriği yerinde) — beklenen=beklenmedik gerçek=
+  ✗ B16b kurulum durdu rc=4 ve sebebi söylendi — beklenen=4:e gerçek=0:h
+SONUÇ: 31 geçti · 2 kaldı
+sinav-rc=1 (kur.sh = 8001633, düz dosya kapısı yok; beklenen: B16 kırmızı)
+--- stderr ---

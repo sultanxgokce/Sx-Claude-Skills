@@ -1,0 +1,34 @@
+{
+  "tur": 1,
+  "is": "terminal-kur-proje-yolu",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T21:35:08+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19591,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Makine kimliğine benzeyen 12 onaltılık kutu adını kapatmış, açık TO_KUTU yolunu korumuş ve cron çağrılarını proje yoluna çevirmiş; talebin doğru yerine dokunuyor. Önce mevcut fakat yanlış ya da kırık proje bağına karşı kurulumun kendini onarmasını ve cron/link davranışını gerçek çalıştırmayla sınamasını çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "kur.sh, PROJE_BECERI konumunda herhangi bir sembolik bağ varsa hedefini doğrulamadan doğru kabul ediyor; yanlış veya kırık eski bağ düzeltilmiyor, kırık bağda kurulum yalnızca hata verip duruyor.",
+        "kanit": "Bağ oluşturma yalnızca `[ ! -L \"$PROJE_BECERI\" ]` koşulunda yapılıyor; mevcut bağ için `readlink` hedef karşılaştırması ya da yeniden bağlama yok. Hemen sonraki çalıştırılabilirlik kontrolü kırık bağı onarmak yerine exit 4 üretiyor.",
+        "konum": "terminal-onar/scripts/kur.sh:73",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "K8 ve K9 sınavları cron davranışını ya da kurulan proje bağını çalıştırarak ölçmüyor; yalnızca kaynak dosyada belirli metinlerin geçtiğini sayıyor, dolayısıyla yanlış hedefli mevcut bağ ve üretilen gerçek cron satırı kapsanmıyor.",
+        "kanit": "K8 `grep -c ... \"$KOK/scripts/kur.sh\"`, K9 ise `grep -c 'PROJE_BETIK/bekci.sh' \"$KOK/scripts/onar.sh\"` sonucunu denetliyor; kur.sh/onar.sh çalıştırılıp oluşan bağ ve cron çıktısı okunmuyor.",
+        "konum": "terminal-onar/scripts/kutu-adi.test.sh:43",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok, iki kayıt da rc=0 yeşil. Kutu adı/fail-closed senaryoları hedefe dönük sonrasında ölçülmüş, ancak önce/sonra çifti yok; cron ve proje bağı iddiası gerçek dosya sistemi çıktısıyla değil kaynak metni grep’leyen sınavlarla destekleniyor. İkinci regresyon kaydı yalnız onar=0 ve kabuk=0 verdiği için ayrıntılı davranış kanıtı sınırlı."
+  }
+}

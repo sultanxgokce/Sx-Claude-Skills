@@ -1,0 +1,48 @@
+$ bash terminal-onar/scripts/kur-bag.test.sh
+# rc=0 sure=0.5s zaman=2026-10-12T22:28:45+03:00
+--- stdout ---
+── sıfırdan: bağ yok
+  ✓ B1 kur.sh ortak dizinden koşunca bağ kurulur → ortak kopyaya
+  ✓ B2 kurulum rc=0
+  ✓ B3 cron satırları (bekçi + açılış) PROJE yolunu kullanır
+  ✓ B4 cron'da ORTAK yol yok
+  ✓ B5 onar.sh (kum havuzundaki) gerçekten çağrıldı
+── ikinci koşum, bu kez PROJE yolundan (bağ üzerinden)
+  ✓ B6 bağ değişmedi (idempotent)
+  ✓ B7 cron satırları çoğalmadı
+  ✓ B7b rc=0
+── var olan bağ YANLIŞ hedefte (eski kurulum başka yere bağlamış)
+  ✓ B8 yanlış hedefli bağ (çalışır görünse de) doğru hedefe çevrilir
+  ✓ B8b rc=0
+── var olan bağ KIRIK
+  ✓ B9 kırık bağ onarılır (hata verip durmaz)
+  ✓ B9b rc=0
+── proje yolunda GERÇEK eski kopya (dizin)
+  ✓ B10 eski kopya kenara alınır, bağ kurulur
+  ✓ B10b eski kopya silinmedi (.eski-* altında)
+  ✓ B10c rc=0
+  ✓ B10d aynı gün ikinci eski kopya AYRI yedeğe alınır (iki .eski-*, iç içe değil)
+  ✓ B10e ilk yedeğin içine taşınmadı (ilk yedek yalnız kendi dosyasını taşır)
+  ✓ B10f ikinci yedeğin içeriği kendi dosyası
+  ✓ B10g bağ yine doğru hedefte, rc=0
+── proje yolunda beklenmedik DÜZ DOSYA: silinmez, kurulum durur (fail-closed)
+  ✓ B16 düz dosya SİLİNMEDİ (içeriği yerinde)
+  ✓ B16b kurulum durdu rc=4 ve sebebi söylendi
+── YÜKSELTME: canlıdaki eski ortak-yollu cron satırları (12 Eki, 15 kutu) proje yoluna ÇEVRİLİR
+  ✓ B13 eski ortak-yollu bekçi+açılış satırları proje yoluna çevrildi
+  ✓ B13b eski ortak yol kalmadı
+  ✓ B13c başka iş satırı ve TZ olduğu gibi (4 satır, çoğalma yok)
+  ✓ B13d rc=0
+── canlı crontab göçü (onar.sh'ın kullandığı bekci_kur … canli; crontab sahte, gerçek crontab'a DOKUNULMAZ)
+  ✓ B14 canlı crontab'daki eski ortak-yollu bekçi satırı proje yoluna çevrildi
+  ✓ B14b crontab'da ortak yol kalmadı
+  ✓ B14c crontab'daki öteki satırlar korundu (3 satır)
+  ✓ B14d bekci_kur 'canlı crontab düzeltildi' dedi
+  ✓ B14e ikinci çağrı: değişiklik yok, crontab'a yazılmaz (idempotent)
+  ✓ B15 onar.sh canlı crontab için aynı bekci_kur'u çağırır (tam onar.sh tmux/ttyd ister)
+── bekçi satırının kendisi
+  ✓ B11 bekçi satırı (ortak.sh tek kaynak) PROJE yolunu taşır
+  ✓ B12 bekçi satırı ortak dizini taşımaz
+
+SONUÇ: 33 geçti · 0 kaldı
+--- stderr ---

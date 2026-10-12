@@ -1,0 +1,18 @@
+$ bash terminal-onar/scripts/kutu-adi.test.sh
+# rc=0 sure=0.1s zaman=2026-10-12T22:20:24+03:00
+--- stdout ---
+── kurulu olduğu yerden türetme
+  ✓ K1 kutu adı kurulum yolundan çözülür
+  ✓ K2 başka bir kutuda o kutunun adı çözülür
+  ✓ K3 makine adına DÜŞMÜYOR (rastgele kimlikli kap)
+── ORTAK dizinden çağrı (12 Eki canlı vakası): makine kimliği kutu adı DEĞİLDİR
+  ✓ K5 🔴 ortak dizinden + makine kimliği → FAIL-CLOSED (RED), 0ee2fa8a0370 kutu adı sayılmaz
+  ✓ K5b red sebebi söylenir (TO_KUTU ya da proje yolu)
+  ✓ K5c AÇIK BEYAN kapıdan muaf: TO_KUTU=0ee2fa8a0370 verilirse reddedilmez (iletinin vaat ettiği çıkış yolu çalışır)
+  ✓ K6 TO_KUTU verilince ortak dizinden de çözülür
+  ✓ K7 gerçek makine adı (cloudtop-huzur) yine çözülür (K5 tautoloji değil)
+── açık beyan her şeyin üstünde
+  ✓ K4 TO_KUTU verilirse o kazanır
+
+SONUÇ: 9 geçti · 0 kaldı
+--- stderr ---

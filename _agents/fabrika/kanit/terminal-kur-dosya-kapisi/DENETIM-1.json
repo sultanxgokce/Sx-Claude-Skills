@@ -1,0 +1,21 @@
+{
+  "tur": 1,
+  "is": "terminal-kur-dosya-kapisi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T22:32:19+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 9355,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kurulum, proje beceri yolunda bağ veya dizin olmayan bir nesne gördüğünde onu silmeden açıklayıcı hatayla ve rc=4 ile duracak biçimde daraltılmış; buna odaklı B16/B16b sınavı da eklenmiş. Üretime engel bir kusur görünmüyor: güncel sürüm 33/33 geçerken kapısız eski kur.sh aynı yeni sınavda 2 maddeyi kırıyor ve değişiklik yalnız istenen deltayı kapsıyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Sonra ölçümü B16/B16b dahil 33/33 başarıyı gösteriyor, eski kur.sh mutasyonu ise aynı kapının gerçekten eksik davranışı yakaladığını 31 geçti/2 kaldı ve sınav rc=1 ile kanıtlıyor. Ayrı bir önce karesi/ölçümü yok, fakat hedefli eski-sürüm mutasyon karşılaştırması ile dosya içeriğinin korunması, rc=4 ve hata sebebi birlikte ölçüldüğünden kanıt yeterli."
+  }
+}
