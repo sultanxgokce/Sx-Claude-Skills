@@ -205,6 +205,8 @@ if [ "$DENETCI" = "auto" ]; then SEC_AUTO=1; case "$YAZAN" in codex) DENETCI="cl
 #    Yalnız AUTO kipinde: codex YOKSA ya da iki denemede de DÜŞERSE, yazandan farklı YENİ bir Claude oturumu (claude -p) yedek
 #    göz olur; iş "ölçemedim" diye durmaz. Kayıtta `yedek` alanı sebebi taşır — yedekle alınan puan, codex puanı sanılmaz.
 #    Açık `--denetci codex` isteğinde eski sert davranış sürer (rc=3); DENETCI_YEDEK=0 yedeği kapatır.
+#    Yedek yalnız yazanın modeli BİLDİRİLMİŞSE koşar (DENETCI_YAZAN_MODEL) ve ondan FARKLI bir kademe seçer; bildirilmemişse
+#    rc=3 ve yeniden koşma satırı basılır — "farklı" iddiası ölçülmeden yeşil basılmaz (tur 2-3 bulguları).
 YEDEK=""; YEDEK_MODEL=""; YAZAN_MODEL="${DENETCI_YAZAN_MODEL:-}"
 _ayni_model() { case "$1" in *"$2"*) return 0 ;; esac; case "$2" in *"$1"*) return 0 ;; esac; return 1; }   # "sonnet" ≈ "claude-sonnet-5"
 HAM="$TMP/ham.json"
@@ -240,6 +242,12 @@ else
     #    yazan_model=null yazılır ve ekranda söylenir — "farklı" iddiası ölçülmemişken yeşil basılmaz.
     local ymodel="$MODEL" aday
     if [ -n "$YEDEK" ] && [ "$YAZAN" = "claude" ]; then
+      # 🔴 Tur 3 (bağımsız göz #296): yazanın modeli BİLİNMEDEN yedek koşmaz — "farklı" iddiası ölçülemiyorsa kapı KAPALIDIR
+      #    (K1 yazan ≠ denetleyen). İş durmaz: aynı komut DENETCI_YAZAN_MODEL=<yazanın modeli> ile yeniden koşulur (tek satır).
+      if [ -z "$YAZAN_MODEL" ]; then
+        _hata "yedek göz için yazanın modeli gerekli: DENETCI_YAZAN_MODEL=<model> ile yeniden koş (ör. DENETCI_YAZAN_MODEL=fable) — model bildirilmeden 'yazandan farklı' ölçülemez, ölçülemeyen yedek koşmaz (K1)"
+        exit 3
+      fi
       ymodel=""
       for aday in "${DENETCI_YEDEK_MODEL:-}" "${MODEL:-}" sonnet haiku opus; do
         [ -n "$aday" ] || continue
@@ -247,10 +255,10 @@ else
         ymodel="$aday"; break
       done
       YEDEK_MODEL="$ymodel"
-      if [ -n "$YAZAN_MODEL" ]; then _bilgi "· yedek kademe: yazan $YAZAN_MODEL ≠ yedek $ymodel (ölçüldü)"
-      else _bilgi "⚠ yazanın modeli bildirilmedi (DENETCI_YAZAN_MODEL) — yedek $ymodel; kademe farkı GARANTİ EDİLEMEDİ, kayda yazan_model=null yazılır"; fi
+      [ -n "$ymodel" ] && ! _ayni_model "$ymodel" "$YAZAN_MODEL" || { _hata "yazandan farklı yedek model bulunamadı (yazan: $YAZAN_MODEL)"; exit 3; }
+      _bilgi "· yedek kademe: yazan $YAZAN_MODEL ≠ yedek $ymodel (ölçüldü)"
     fi
-    DENETCI_AD="claude${ymodel:+ ($ymodel)}${YEDEK:+ (YEDEK GÖZ: $YEDEK · yazandan farklı yeni oturum + farklı model kademesi${YAZAN_MODEL:+ [yazan: $YAZAN_MODEL]}${YAZAN_MODEL:- [yazan modeli bilinmiyor]} · Sultan Y0006)}"
+    DENETCI_AD="claude${ymodel:+ ($ymodel)}${YEDEK:+ (YEDEK GÖZ: $YEDEK · yazandan farklı yeni oturum + farklı model kademesi${YAZAN_MODEL:+ [yazan: $YAZAN_MODEL]} · Sultan Y0006)}"
     claude -p ${ymodel:+--model "$ymodel"} --output-format json --json-schema "$(cat "$SEMA")" < "$TMP/istem.md" > "$TMP/claude.json" 2>"$TMP/err"; DRC=$?
     python3 -c "import json,sys;d=json.load(open('$TMP/claude.json'));r=d.get('structured_output') or d.get('result');print(r if isinstance(r,str) else json.dumps(r,ensure_ascii=False))" > "$HAM" 2>/dev/null || cp "$TMP/claude.json" "$HAM"
   }
@@ -296,7 +304,7 @@ yol,tur,is_,pr,yazan,den,kd,sonuc_yolu,kirp,bayt,esik,yedek,yazan_model,yedek_mo
 json.dump({"tur":int(tur),"is":is_,"pr":pr,"yazan":yazan,"denetci":den,"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
            "kanit_durumu":kd,
            "yedek":(yedek or None),   # Sultan Y0006: yedek gözle alınan puan codex puanı sanılmasın; sebebi kayıtta
-           "yazan_model":(yazan_model or None), "yedek_model":(yedek_model or None),   # null = bildirilmedi → fark ölçülmedi
+           "yazan_model":(yazan_model or None), "yedek_model":(yedek_model or None),   # yedek koşumunda ikisi de DOLU (boşsa yedek koşmaz, rc=3)
 
            "kirpildi":{"oldu":kirp=="1","istem_bayt":int(bayt),"esik":int(esik)},   # kalıcı kayıt: kırpılan denetim "tam gördü" sanılmasın
            "sonuc":json.load(open(sonuc_yolu,encoding="utf-8"))},open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)

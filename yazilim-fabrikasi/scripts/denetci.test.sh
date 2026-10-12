@@ -277,18 +277,21 @@ chmod +x "$FAKE"/*
 printf 'diff --git a/y b/y\n+satir\n' > "$T/y.patch"   # d.patch önceki bölümlerde kaldırılabiliyor; kendi diffimiz
 YP="$FAKE:$(dirname "$(command -v python3)"):/usr/bin:/bin"   # codex YOK, sahte claude VAR; python3 bu kutuda ayrı dizinde olabilir
 bash "$K" olcum is-y olc --asama tek -- echo 1 >/dev/null 2>&1
-( unset DENETCI_KOMUT; PATH="$YP" SAHTE_JSON="$(J 5 E "")" bash "$D" is-y --diff "$T/y.patch" --kart "$T/kart.md" >"$T/y1.out" 2>&1 ); RC=$?
-[ "$RC" -eq 0 ]; g $? "Y1 codex yokken auto kipi DURMAZ: yedek claude puanlar (5/E → rc=0)"
+( unset DENETCI_KOMUT; PATH="$YP" SAHTE_JSON="$(J 5 E "")" bash "$D" is-y --diff "$T/y.patch" --kart "$T/kart.md" >"$T/y0.out" 2>&1 ); RC=$?
+[ "$RC" -eq 3 ] && grep -q "DENETCI_YAZAN_MODEL" "$T/y0.out" && [ ! -e "$T/_agents/fabrika/kanit/is-y/DENETIM-1.json" ]; g $? "Y0 🔴 yazanın modeli bildirilmeden yedek KOŞMAZ: rc=3, yeniden koşma satırı basılır, kayıt yazılmaz (K1 ölçülemeden yeşil yok)"
+( unset DENETCI_KOMUT; PATH="$YP" DENETCI_YAZAN_MODEL=fable SAHTE_JSON="$(J 5 E "")" bash "$D" is-y --diff "$T/y.patch" --kart "$T/kart.md" >"$T/y1.out" 2>&1 ); RC=$?
+[ "$RC" -eq 0 ]; g $? "Y1 codex yokken auto kipi DURMAZ: yazan modeli bildirilince yedek claude puanlar (5/E → rc=0)"
 python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y/DENETIM-1.json'));assert d['yedek']=='codex yok' and 'YEDEK' in d['denetci'] and d['sonuc']['kod_puani']==5"; g $? "Y1b kayıtta yedek='codex yok' ve denetçi adında YEDEK GÖZ (codex puanı sanılmaz)"
 grep -q "YEDEK GÖZ" "$T/y1.out"; g $? "Y1c ekranda da söylenir (sessiz yedek yok)"
 # Y6/Y6b kendi işinde (is-y6) koşar: is-y'nin üç turluk tavanını yemesin (ölçüldü: Y2/Y5 "tavan doldu" rc=4 alıyordu)
 bash "$K" olcum is-y6 olc --asama tek -- echo 1 >/dev/null 2>&1
-( unset DENETCI_KOMUT; PATH="$YP" CLAUDE_ARGV_LOG="$T/cl.log" SAHTE_JSON="$(J 5 E "")" bash "$D" is-y6 --diff "$T/y.patch" --kart "$T/kart.md" >/dev/null 2>&1 )
+( unset DENETCI_KOMUT; PATH="$YP" CLAUDE_ARGV_LOG="$T/cl.log" DENETCI_YAZAN_MODEL=fable SAHTE_JSON="$(J 5 E "")" bash "$D" is-y6 --diff "$T/y.patch" --kart "$T/kart.md" >/dev/null 2>&1 )
 grep -q -- "--model sonnet" "$T/cl.log" && python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y6/DENETIM-1.json'));assert '(sonnet)' in d['denetci'] and 'farklı model kademesi' in d['denetci']"; g $? "Y6 🔴 yedek göz yazanla AYNI modelde koşmaz: farklı kademe (sonnet) + yeni oturum, kayda yazılı (K1 yeniden)"
-( unset DENETCI_KOMUT; PATH="$YP" CLAUDE_ARGV_LOG="$T/cl2.log" DENETCI_YEDEK_MODEL=haiku SAHTE_JSON="$(J 5 E "")" bash "$D" is-y6 --diff "$T/y.patch" --kart "$T/kart.md" >/dev/null 2>&1 )
+( unset DENETCI_KOMUT; PATH="$YP" CLAUDE_ARGV_LOG="$T/cl2.log" DENETCI_YAZAN_MODEL=fable DENETCI_YEDEK_MODEL=haiku SAHTE_JSON="$(J 5 E "")" bash "$D" is-y6 --diff "$T/y.patch" --kart "$T/kart.md" >/dev/null 2>&1 )
 grep -q -- "--model haiku" "$T/cl2.log"; g $? "Y6b yedek kademesi DENETCI_YEDEK_MODEL ile seçilir"
-python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y6/DENETIM-2.json'));assert d['yazan_model'] is None and d['yedek_model']=='haiku'"; g $? "Y6c yazan modeli bildirilmeyince kayıt yazan_model=null (fark ölçülmedi, gizlenmez)"
-grep -q "bildirilmedi" "$T/y6c.out" 2>/dev/null || ( unset DENETCI_KOMUT; PATH="$YP" SAHTE_JSON="$(J 5 E "")" bash "$D" is-y6 --diff "$T/y.patch" --kart "$T/kart.md" >"$T/y6c.out" 2>&1 ); grep -q "GARANTİ EDİLEMEDİ" "$T/y6c.out"; g $? "Y6d ekranda da söylenir: kademe farkı garanti edilemedi"
+python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y6/DENETIM-2.json'));assert d['yazan_model']=='fable' and d['yedek_model']=='haiku'"; g $? "Y6c kayıtta yazan_model ve yedek_model ikisi de dolu (yedek koşumunda boş olamaz)"
+( unset DENETCI_KOMUT; PATH="$YP" DENETCI_YAZAN_MODEL=haiku DENETCI_YEDEK_MODEL=haiku SAHTE_JSON="$(J 5 E "")" bash "$D" is-y6 --diff "$T/y.patch" --kart "$T/kart.md" >"$T/y6d.out" 2>&1 ); RC=$?
+[ "$RC" -eq 0 ] && ! grep -q -- "--model haiku" "$T/y6d.out"; g $? "Y6d yazanla aynı yedek istenirse merdiven onu ATLAR (haiku→sonnet), aynı modelle koşmaz"
 # Y7: yazanın modeli BİLDİRİLİNCE yedek ona EŞİT OLAMAZ (tur 2 bulgusu: varsayılan ad farkı örtmesin)
 bash "$K" olcum is-y7 olc --asama tek -- echo 1 >/dev/null 2>&1
 ( unset DENETCI_KOMUT; PATH="$YP" CLAUDE_ARGV_LOG="$T/cl3.log" DENETCI_YAZAN_MODEL=sonnet SAHTE_JSON="$(J 5 E "")" bash "$D" is-y7 --diff "$T/y.patch" --kart "$T/kart.md" >/dev/null 2>&1 )
@@ -300,7 +303,7 @@ grep -q -- "--model haiku" "$T/cl5.log"; g $? "Y7c --model doluyken DENETCI_YEDE
 ( unset DENETCI_KOMUT; PATH="$YP" SAHTE_JSON="$(J 5 E "")" bash "$D" is-y --diff "$T/y.patch" --kart "$T/kart.md" --denetci codex >/dev/null 2>&1 ); [ $? -eq 3 ]; g $? "Y2 açık --denetci codex isteğinde codex yoksa eski sert davranış: rc=3"
 ( unset DENETCI_KOMUT; PATH="$YP" DENETCI_YEDEK=0 SAHTE_JSON="$(J 5 E "")" bash "$D" is-y --diff "$T/y.patch" --kart "$T/kart.md" >/dev/null 2>&1 ); [ $? -eq 3 ]; g $? "Y5 DENETCI_YEDEK=0 ile yedek kapalı: rc=3"
 cp "$FAKE/codex.sahte" "$FAKE/codex"; : > "$T/csay"
-( unset DENETCI_KOMUT; PATH="$YP" CODEX_SAYAC="$T/csay" CODEX_DUSME=2 SAHTE_JSON="$(J 5 E "")" bash "$D" is-y --diff "$T/y.patch" --kart "$T/kart.md" >"$T/y3.out" 2>&1 ); RC=$?
+( unset DENETCI_KOMUT; PATH="$YP" CODEX_SAYAC="$T/csay" CODEX_DUSME=2 DENETCI_YAZAN_MODEL=fable SAHTE_JSON="$(J 5 E "")" bash "$D" is-y --diff "$T/y.patch" --kart "$T/kart.md" >"$T/y3.out" 2>&1 ); RC=$?
 [ "$RC" -eq 0 ] && [ "$(wc -l < "$T/csay")" -eq 2 ]; g $? "Y3 codex iki denemede de düşerse (2 çağrı sayıldı) yedek claude devralır, rc=0"
 python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y/DENETIM-2.json'));assert d['yedek'].startswith('codex düştü') and 'YEDEK' in d['denetci']"; g $? "Y3b kayıtta yedek='codex düştü…'"
 : > "$T/csay"

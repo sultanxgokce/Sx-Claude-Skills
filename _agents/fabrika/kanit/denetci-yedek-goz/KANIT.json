@@ -1,7 +1,7 @@
 {
   "is": "denetci-yedek-goz",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-12T22:19:10+03:00",
+  "guncelleme": "2026-10-12T22:25:47+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -49,7 +49,22 @@
       "renk": "yesil",
       "zaman": "2026-10-12T22:19:10+03:00",
       "sure_sn": 113.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinav-119-kapi-yazan-modeli-sart",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-sinav-119-kapi-yazan-modeli-sart-sonra.txt",
+      "sha256": "48f44fe28d639eded27b5d12c53aa2392f2df3c2b0c03210681d7e1ea61c4f6d",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T22:25:47+03:00",
+      "sure_sn": 110.2
     }
   ],
-  "imza": "5cb3d7e03d773438c931f1aeef7235906ccbd4f5c0b2ede8c402f1d08e0c341b"
+  "imza": "1d35430ee745a6e4395f49247f7b67c4f4bfc92c7b6c632d5f79bc7b5332b822"
 }
