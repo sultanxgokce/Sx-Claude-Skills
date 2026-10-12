@@ -1,0 +1,21 @@
+{
+  "tur": 1,
+  "is": "denetci-yazan-modeli-olcumu",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T23:04:07+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 15499,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, yazanın modeli bildirim yokken önce oturum komutundan, sonra ayar dosyasından ölçülüyor; kaynak denetim kaydına işleniyor ve ölçüm yoksa yedek rc=3 ile kapalı kalıyor. Talep edilen dar delta iki kaynak, öncelik sırası ve ölçülememe haliyle sınanmış; üretimi durduracak kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve yeşil rc=0 kaydı mevcut. Y0, Y0b ve Y0c sınamaları sırasıyla ölçülememe halinde rc=3/kayıt yok, ayar dosyasından ölçüm ve oturum komutunun ayarı ezmesi iddialarını gerçek süreç komut satırı ile doğruluyor; ancak manifest yalnız 'sonra' ölçümü içeriyor, ayrı bir önce/sonra ölçüm çifti yok."
+  }
+}

@@ -14,6 +14,19 @@
   "sultan": false,
   "kanit_nerede": "",
   "oda": "",
-  "durum": "acik",
-  "gecmis": []
+  "durum": "bitti",
+  "gecmis": [
+    {
+      "zaman": "2026-10-12T23:05:13+03:00",
+      "olay": "bitti"
+    }
+  ],
+  "bitis": "2026-10-12T23:05:13+03:00",
+  "pr": "296",
+  "puan": {
+    "kod": 5,
+    "dogru": "E",
+    "tur": 1
+  },
+  "kanit_var": true
 }

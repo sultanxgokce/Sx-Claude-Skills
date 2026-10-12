@@ -14,11 +14,15 @@
   "sultan": false,
   "kanit_nerede": "",
   "oda": "",
-  "durum": "tikandi",
+  "durum": "bitti",
   "gecmis": [
     {
       "zaman": "2026-10-12T22:37:55+03:00",
       "olay": "tikandi"
+    },
+    {
+      "zaman": "2026-10-12T23:05:13+03:00",
+      "olay": "bitti"
     }
   ],
   "reis_kararlari": [
@@ -30,8 +34,8 @@
       "zaman": "2026-10-12T22:26:34+03:00"
     }
   ],
-  "bitis": "2026-10-12T22:37:55+03:00",
-  "pr": "",
+  "bitis": "2026-10-12T23:05:13+03:00",
+  "pr": "296",
   "puan": {
     "kod": 3,
     "dogru": "H",
