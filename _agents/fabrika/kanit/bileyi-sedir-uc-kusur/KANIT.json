@@ -1,0 +1,99 @@
+{
+  "is": "bileyi-sedir-uc-kusur",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-12T18:31:23+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sedir-duzeni",
+      "asama": "once",
+      "dosya": "olcum-sedir-duzeni-once.txt",
+      "sha256": "2bde0b0b8aae64546321de6c0995d0af167f458465a757b65049e31d4f37891c",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/sedir-olc.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-main.py"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T18:30:22+03:00",
+      "sure_sn": 0.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sedir-duzeni",
+      "asama": "sonra",
+      "dosya": "olcum-sedir-duzeni-sonra.txt",
+      "sha256": "c3ebf954363f2264fe1ec410e0507bb8dd91499e8d5789312f7e0e4d1e87fd17",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/sedir-olc.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-bileyi-sedir-uc-kusur/bileyi/scripts/bileyi.py"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T18:30:22+03:00",
+      "sure_sn": 0.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "25c95f92b29eba1ea089e05ea5209dffb25d8e1ee6be7ef633ae137329a88c7f",
+      "komut": [
+        "bash",
+        "bileyi/scripts/bileyi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T18:30:27+03:00",
+      "sure_sn": 4.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "nexus-esik-dayanagi",
+      "asama": "once",
+      "dosya": "olcum-nexus-esik-dayanagi-once.txt",
+      "sha256": "eb3bcd4306dc042b833a936a24cabae6e919f39453b272dbcc59cb9550427bcc",
+      "komut": [
+        "python3",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bileyi-main.py",
+        "--depo",
+        "/config/projects/Nexus",
+        "--esik-dosya",
+        "bileyi/esik.json",
+        "olc",
+        "--gun",
+        "0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T18:30:58+03:00",
+      "sure_sn": 20.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "nexus-esik-dayanagi",
+      "asama": "sonra",
+      "dosya": "olcum-nexus-esik-dayanagi-sonra.txt",
+      "sha256": "a20f7c692d829f3d3fc8ddcc745e8af8e0769f50bc72d9ce5ae9662dc9cd435b",
+      "komut": [
+        "python3",
+        "bileyi/scripts/bileyi.py",
+        "--depo",
+        "/config/projects/Nexus",
+        "--esik-dosya",
+        "bileyi/esik.json",
+        "olc",
+        "--gun",
+        "0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T18:31:23+03:00",
+      "sure_sn": 25.3
+    }
+  ],
+  "imza": "9ab930680e83707d70a2a49aeb5c1138e5b40d963cf0f8a309b1d7567fd8fa4d"
+}

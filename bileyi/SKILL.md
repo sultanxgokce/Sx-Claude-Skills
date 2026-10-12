@@ -1,7 +1,7 @@
 ---
 name: bileyi
 type: agent
-version: 0.2.0
+version: 0.2.1
 description: >
   Bıçağı bileyen komut: kendi izimizi (bulgu havuzu · sürtünme raporu · aday havuzu) tarar,
   TEKRAR EDEN sürtünmeyi bulur ve onu yeteneğe çevirir — beceri · kural · yapılandırma.
@@ -225,12 +225,20 @@ durumdaydı).
   yetenek üretileceği (kural · yapılandırma · beceri) muhakeme ister.
 - İkili söz öbeği ölçütü **dile bağlıdır**; başlıkları başka bir dilde yazan bir oda için
   aynı eşik geçerli değildir ve araç bunu her koşuda söyler.
+- 🔴 **Başka bir odada ilk koşum üç kusur buldu (SEDİR, 12 Ekim 2026), üçü onarıldı:**
+  (1) havuz yolu `_agents/handoff/` diye çiviliydi → artık `_agents/havuz/` de aranır, ya da
+  `--havuz-yolu` verilir; iki düzen birden varsa araç **seçmez** (rc=3). (2) noktasız **ı**
+  kelimeyi bölüyordu ("Rıdvan Bey" → "dvan bey"): ç ğ ş ö ü sadeleşip ASCII'ye iniyor, ı inmiyordu.
+  (3) tarih yalnız `tarih` alanından okunuyordu, sedir'de alan `ts` → pencere hep "boş" görünüyordu;
+  artık ikisi de okunur, hiçbiri yoksa pencere **ölçülemedi** denir. Eşik dayanağı onarımdan sonra
+  Nexus havuzunda (200 kayıt) yeniden ölçüldü: dağılımın biçimi aynı (tepe 8, sonra 6 ve 5, ardından
+  4 bandı) — eşik değişmedi. Sınav U1-U8; ı onarımı tek başına geri alınınca U2-U3 kırmızıya döner.
 - 🔴 **Ölçmediğini söyler:** bir sürtünmenin *maliyeti* bu aracın konusu değildir. Kaç kez
   olduğunu sayar, kaç dakika yediğini **bilmez** ve oraya "temiz" demez — hiç bakmaz.
 - 🔴 **Çelişki kapısı:** iki yüzey aynı aday hakkında zıt şey söylüyorsa (biri "N kez
   tekrar etti", öbürü "tek parti") o aday hüküm üretmez; hepsi çelişiyorsa **rc=3** —
   ne temiz ne kirli. Bu kapı da belgede yazılıp uygulanmamıştı; bağımsız göz yakaladı.
-- Kendi sınavı: `bash scripts/bileyi.test.sh` (**65 kapı**) — gerçek havuza ve gerçek
+- Kendi sınavı: `bash scripts/bileyi.test.sh` (**73 kapı**) — gerçek havuza ve gerçek
   anahtara dokunmaz.
   🔴 **"Hermetik" iddiam bir kez YANLIŞTI ve CI çürüttü.** Sınav, üretim kimliğini makineye
   bağlı bir araçtan istiyordu; temiz bir koşucuda 23 kapı birden düştü. Yazan yolu sınayan

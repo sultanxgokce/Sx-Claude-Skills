@@ -1,0 +1,19 @@
+{
+  "is": "bileyi-sedir-uc-kusur",
+  "cumle": "SEDİR'in bulduğu üç kusur: havuz yolu çivili, noktasız ı kelimeyi bölüyor, ts tarih alanı okunmuyor",
+  "istedi": "BILEYI",
+  "aldi": "muavin",
+  "zaman": "2026-10-12T18:25:20+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/bileyi-sedir-uc-kusur",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

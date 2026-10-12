@@ -117,9 +117,27 @@ def esik_oku(yol: Path) -> dict:
 # ───────────────────────────────────────── ölçüm
 
 def _sadelestir(metin: str) -> list[str]:
-    t = metin.lower()
+    # 🔴 SEDİR'in bulgusu (12 Eki): ç ğ ş ö ü NFKD ile sadeleşip ASCII'ye iner, ama
+    #    noktasız ı (U+0131) AYRIŞMAZ — `[a-z]` onu ayırıcı sayıyor ve kelimeyi
+    #    bölüyordu: "Rıdvan Bey" → "dvan bey", "kayıtta" → "kay"+"tta". Sahte öbek
+    #    üretiyor, gerçeğini bölüyordu. ı → i katlaması öteki harflerle aynı yöne iner.
+    t = metin.lower().replace("ı", "i")
     t = "".join(c for c in unicodedata.normalize("NFKD", t) if not unicodedata.combining(c))
     return [w for w in re.findall(r"[a-z]{3,}", t) if w not in DURAK]
+
+
+def kayit_tarihi(k: dict) -> str:
+    """Kaydın günü (YYYY-AA-GG) ya da "" — okunamıyorsa UYDURULMAZ.
+
+    🔴 SEDİR'in bulgusu (12 Eki): araç yalnız `tarih` alanını okuyordu; sedir
+    havuzunda alan `ts` (215/215) ve pencere HER ZAMAN boş görünüyordu — aslında
+    doluydu. İki ad da okunur; ikisi de yoksa kayıt tarihsizdir ve öyle sayılır.
+    """
+    for alan in ("tarih", "ts"):
+        v = str(k.get(alan) or "").strip()
+        if re.match(r"\d{4}-\d{2}-\d{2}", v):
+            return v[:10]
+    return ""
 
 
 def havuz_oku(yol: Path, pencere_gun: int) -> tuple[list[dict], int, str]:
@@ -144,10 +162,19 @@ def havuz_oku(yol: Path, pencere_gun: int) -> tuple[list[dict], int, str]:
     uyari = ""
     if pencere_gun > 0:
         sinir = (date.today() - timedelta(days=pencere_gun)).isoformat()
-        pencereli = [k for k in kayit if str(k.get("tarih", "")) >= sinir]
+        tarihli = [k for k in kayit if kayit_tarihi(k)]
+        tarihsiz = len(kayit) - len(tarihli)
+        pencereli = [k for k in tarihli if kayit_tarihi(k) >= sinir]
+        # 🔴 Tarih HİÇ okunamıyorsa pencere ÖLÇÜLEMEDİ — "pencerede kayıt yok" demek
+        #    yanlış olur (SEDİR vakası: alan adı farklıydı, pencere aslında doluydu).
+        if not tarihli:
+            uyari = (f"🟡 tarih alanı okunamadı (ne 'tarih' ne 'ts') — pencere ÖLÇÜLEMEDİ, "
+                     f"tüm havuz ({len(kayit)}) ölçüldü")
         # 🔴 Pencere havuzu BOŞALTIRSA pencere yanlıştır, havuz boş değildir.
-        if pencereli:
+        elif pencereli:
             uyari = f"pencere {pencere_gun} gün: {len(pencereli)}/{len(kayit)} kayıt"
+            if tarihsiz:
+                uyari += f" · {tarihsiz} kayıt tarihsiz, pencere dışı kaldı"
             kayit = pencereli
         else:
             uyari = (f"🔴 pencere {pencere_gun} gün içinde kayıt YOK — pencere yok sayıldı, "
@@ -403,6 +430,29 @@ def havuz_deposu(n) -> Path:
     return Path(h).resolve() if h else Path(n.depo).resolve()
 
 
+# 🔴 SEDİR'in bulgusu (12 Eki): yol `_agents/handoff/` diye çiviliydi; sedir'in havuzu
+#    `_agents/havuz/` altında ve araç rc=3 veriyordu — `--havuz-depo` da aynı alt yolu
+#    eklediği için düzeltmenin meşru yolu yoktu. Artık bilinen iki düzen aranır,
+#    ya da yol açıkça verilir.
+HAVUZ_ADAYLARI = ("_agents/handoff/bulgu-havuzu.jsonl", "_agents/havuz/bulgu-havuzu.jsonl")
+
+
+def bulgu_havuzu(depo: Path, acik: str | None = None) -> Path:
+    """Odanın bulgu havuzu. Açık yol verilmişse YALNIZ o (yedeğe düşmez).
+
+    🔴 İki düzen birden varsa hangisinin odanın izi olduğunu SEÇMEM — rc=3.
+    Sessizce birini seçmek, yanlış odanın izini ölçmenin en kısa yoludur.
+    """
+    if acik:
+        p = Path(acik)
+        return p if p.is_absolute() else depo / p
+    var = [depo / a for a in HAVUZ_ADAYLARI if (depo / a).exists()]
+    if len(var) > 1:
+        raise Durdu("iki bulgu havuzu birden var (" + " · ".join(str(v) for v in var)
+                    + ") — hangisi odanın izi, SEÇMİYORUM; --havuz-yolu ver", 3)
+    return var[0] if var else depo / HAVUZ_ADAYLARI[0]
+
+
 FABRIKA = Path("/config/.claude/skills/yazilim-fabrikasi/scripts")
 
 # ───────────────────────────────────────── kill-switch
@@ -462,7 +512,7 @@ def olc_veri(n) -> dict:
     sn_esik = es["sinif_esik"]
     pencere = n.gun if n.gun is not None else es.get("pencere_gun", 30)
 
-    havuz = depo / "_agents" / "handoff" / "bulgu-havuzu.jsonl"
+    havuz = bulgu_havuzu(depo, getattr(n, "havuz_yolu", None))
     kayit, bozuk, pen_uyari = havuz_oku(havuz, pencere)
     o = tekrar_say(kayit)
     dedup, dedup_not = dedup_kaynaklari(depo)
@@ -901,10 +951,10 @@ def komut_devam(n) -> int:
         print("   🔴 birleştirme başarısız — el değmeden bırakıldı.")
         return 1
     print("\n✓ SINIFSIZ iş otonom birleştirildi.")
-    return _kapanis_damgasi(havuz_deposu(n), n.is_, cik4)
+    return _kapanis_damgasi(havuz_deposu(n), n.is_, cik4, getattr(n, "havuz_yolu", None))
 
 
-def _kapanis_damgasi(depo: Path, is_: str, kanit: str) -> int:
+def _kapanis_damgasi(depo: Path, is_: str, kanit: str, havuz_yolu: str | None = None) -> int:
     """Kapatılan tekrarı bulgu havuzuna EKLEYEREK damgalar.
 
     🔴 Niçin satır ÜSTÜNE yazılmıyor: bulgu havuzu salt-eklemedir. Var olan
@@ -944,7 +994,12 @@ def _kapanis_damgasi(depo: Path, is_: str, kanit: str) -> int:
     if not idler:
         print("   🟡 eşleşen adayda kaynak bulgu yok — damga atılmadı.")
         return 0
-    havuz = depo / "_agents" / "handoff" / "bulgu-havuzu.jsonl"
+    # Damga ÖLÇÜLEN havuza düşer — başka bir havuza düşen damga bir sonraki turda görünmez.
+    try:
+        havuz = bulgu_havuzu(depo, havuz_yolu)
+    except Durdu as e:
+        print(f"   🟡 {e} — damga atılmadı.")
+        return 0
     if not havuz.exists():
         print("   🟡 bulgu havuzu yok — damga atılmadı.")
         return 0
@@ -977,6 +1032,9 @@ def main(argv: list[str]) -> int:
                    help="ölçülecek odanın deposu (vars. içinde bulunduğun)")
     a.add_argument("--havuz-depo", default=os.environ.get("BILEYI_HAVUZ_DEPO"),
                    help="havuzların yaşadığı depo (KOD deposundan ayrıysa)")
+    a.add_argument("--havuz-yolu", default=os.environ.get("BILEYI_HAVUZ_YOLU"),
+                   help="bulgu havuzunun yolu (göreliyse havuz deposuna göre); "
+                        "verilmezse _agents/handoff/ ve _agents/havuz/ aranır")
     a.add_argument("--esik-dosya", default=None, help="eşik dosyası (vars. becerinin yanındaki)")
     alt = a.add_subparsers(dest="komut", required=True)
 

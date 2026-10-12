@@ -1,0 +1,43 @@
+$ python3 bileyi/scripts/bileyi.py --depo /config/projects/Nexus --esik-dosya bileyi/esik.json olc --gun 0
+# rc=0 sure=25.3s zaman=2026-10-12T18:31:23+03:00
+--- stdout ---
+🔪 BİLEYİ · iç-tarama · ajan=muavin · 2026-10-12
+   iz: /config/projects/Nexus/_agents/handoff/bulgu-havuzu.jsonl
+   havuz: 200 kayıt
+   dedup kaynakları: aday havuzu: 350 kayıt · kurulu beceri: 94
+   🔴 KAPSAMA · sınıf alanı dolu: 84/200 (%42) → sınıfa dayanan sayım havuzun %58'ine KÖR
+   eşik: ikili≥4 · sınıf≥2 · dayanak 2026-10-09
+
+── YÜZEY 1 · sınıf alanı (kesin, kısmi kapsama)
+     2 × olcum-korlugu
+     2 × sinav-hijyeni
+     2 × kapi-kapsami
+     2 × yasayan kapi / sessiz durma
+     2 × sahip düzeltme
+
+── YÜZEY 2 · ikili söz öbeği (tüm havuz, gürültülü)
+     8 × vekil olcut                        [b0130,b0151,b0154] ⟲ benzeri zaten kayıtlı
+     6 × sahte yesil                        [b0091,b0150,b0158] ⟲ benzeri zaten kayıtlı
+     5 × yasayan kapi                       [b0158,b0172,b0189]
+     4 × acisi bize                         [b0029,b0030,b0031] ⚠ TEK PARTİ (bir olay, tekrar değil)
+     4 × emsalden ders                      [b0029,b0030,b0031] ⚠ TEK PARTİ (bir olay, tekrar değil)
+     4 × ders paperclip                     [b0029,b0030,b0031] ⚠ TEK PARTİ (bir olay, tekrar değil)
+     4 × paperclip acisi                    [b0029,b0030,b0031] ⚠ TEK PARTİ (bir olay, tekrar değil)
+
+── YÜZEY 3 · sürtünme raporu (olay ≥ 10)
+    44 × dosya-bulunamadı                 trend ↑
+    39 × destructive-blok                 trend ↑
+    17 × py-traceback                     trend ↑
+    12 × API/oturum-limiti                trend ↑
+    10 × pr-gate-blok                     trend ↑
+
+   ⚠ 4 söz öbeği TEK PARTİ sayıldı ve tekrar sayılmadı —
+     ardışık kimlikler aynı oturumun tek olayıdır. (Yanlış-negatif verebilir:
+     ardışık olmayan ama aynı oturumdan gelen kayıtları bu ölçü göremez.)
+🔪 eşiği aşan 13 tekrar var · tavan 2 yetenek/tur
+   🔴 Bu bir GİRDİdir, hüküm değil: hangi cinsten yetenek üretileceği
+      (kural · yapılandırma · beceri) muhakeme ister — ÖNCE 'kural var mı,
+      koşuyor mu' sorulur; var olanı kapıya bağlamak yeni beceri yazmaktan ucuzdur.
+   🔴 ÖLÇMEDİĞİM: bu sürtünmelerin MALİYETİ. Kaç kez olduğunu saydım,
+      kaç dakika yediğini bilmiyorum ve oraya temiz demiyorum.
+--- stderr ---
