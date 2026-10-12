@@ -1,5 +1,5 @@
-$ bash -c bash terminal-onar/scripts/koltuk-bagla.sh --liste | cut -f1,3,4,5; n=$(bash terminal-onar/scripts/koltuk-bagla.sh --liste | cut -f5 | grep -vc bilinmiyor); echo "bilinmiyor-olmayan=$n"; test "$n" -ge 2
-# rc=0 sure=0.7s zaman=2026-10-12T23:13:52+03:00
+$ bash -c L=$(bash terminal-onar/scripts/koltuk-bagla.sh --liste); printf "%s\n" "$L" | cut -f1,3,4,5; s=$(printf "%s\n" "$L" | awk -F"\t" "\$1==\"serdar\"{print \$5}"); b=$(printf "%s\n" "$L" | awk -F"\t" "\$1==\"basiret\"{print \$5}"); m=$(printf "%s\n" "$L" | awk -F"\t" "\$1==\"muavin\"{print \$5}"); echo "serdar=$s basiret=$b muavin=$m (kart 00:1x anlık görüntüsü: serdar çalışıyor, basiret boş — canlı hâl dakika dakika değişir; kapı: ÖLÇÜLÜYOR mu?)"; [ "$s" != bilinmiyor ] && [ "$b" != bilinmiyor ] && [ "$m" = calisiyor ]
+# rc=0 sure=0.3s zaman=2026-10-12T23:15:21+03:00
 --- stdout ---
 MIRAHUR	1	ajan	girdi
 bani	1	ajan	girdi
@@ -14,5 +14,5 @@ mumeyyiz	1	ajan	girdi
 nakkas	1	ajan	soru
 pazarbasi	1	ajan	girdi
 serdar	1	ajan	calisiyor
-bilinmiyor-olmayan=9
+serdar=calisiyor basiret=girdi muavin=calisiyor (kart 00:1x anlık görüntüsü: serdar çalışıyor, basiret boş — canlı hâl dakika dakika değişir; kapı: ÖLÇÜLÜYOR mu?)
 --- stderr ---
