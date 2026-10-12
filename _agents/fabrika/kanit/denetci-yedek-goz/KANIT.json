@@ -1,7 +1,7 @@
 {
   "is": "denetci-yedek-goz",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-12T22:11:46+03:00",
+  "guncelleme": "2026-10-12T22:19:10+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -34,7 +34,22 @@
       "renk": "yesil",
       "zaman": "2026-10-12T22:11:46+03:00",
       "sure_sn": 108.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinav-118-kapi-yazan-model-farki",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-sinav-118-kapi-yazan-model-farki-sonra.txt",
+      "sha256": "e3eb5cac07f05153acdb120d4cb3f068e42219754052481f694d3be21e80cebf",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T22:19:10+03:00",
+      "sure_sn": 113.2
     }
   ],
-  "imza": "7e9f52dee2fbb109a36134567053d839886fc3d71f42811c92745534b881d2bd"
+  "imza": "5cb3d7e03d773438c931f1aeef7235906ccbd4f5c0b2ede8c402f1d08e0c341b"
 }

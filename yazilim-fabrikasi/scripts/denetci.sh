@@ -205,7 +205,8 @@ if [ "$DENETCI" = "auto" ]; then SEC_AUTO=1; case "$YAZAN" in codex) DENETCI="cl
 #    Yalnız AUTO kipinde: codex YOKSA ya da iki denemede de DÜŞERSE, yazandan farklı YENİ bir Claude oturumu (claude -p) yedek
 #    göz olur; iş "ölçemedim" diye durmaz. Kayıtta `yedek` alanı sebebi taşır — yedekle alınan puan, codex puanı sanılmaz.
 #    Açık `--denetci codex` isteğinde eski sert davranış sürer (rc=3); DENETCI_YEDEK=0 yedeği kapatır.
-YEDEK=""
+YEDEK=""; YEDEK_MODEL=""; YAZAN_MODEL="${DENETCI_YAZAN_MODEL:-}"
+_ayni_model() { case "$1" in *"$2"*) return 0 ;; esac; case "$2" in *"$1"*) return 0 ;; esac; return 1; }   # "sonnet" ≈ "claude-sonnet-5"
 HAM="$TMP/ham.json"
 # ── KIRPMA KAYDI (NÂZIR/RASATÇI 8 Eki 2026): kırpma eskiden yalnız istemin sonuna ve ekrana düşüyordu, ikisi de
 #    kayboluyordu; DENETIM-<tur>.json'da alan yoktu. Artık her turda `kirpildi` {oldu · istem_bayt · esik} yazılır —
@@ -233,9 +234,23 @@ else
     # 🔴 K1 YENİDEN (bağımsız göz #296 tur 1): yazan claude ise yedek göz de claude olur — AYNI MODELİ aynı oturumda
     #    kullanmak K1 ihlali olurdu. Y0006 şartı "yazandan farklı oturum/model" der; yedek bu yüzden (1) yeni oturum ve
     #    (2) AÇIKÇA farklı bir model kademesi (DENETCI_YEDEK_MODEL, varsayılan sonnet) ile koşar; kademe kayda yazılır.
-    local ymodel="$MODEL"
-    if [ -n "$YEDEK" ] && [ "$YAZAN" = "claude" ]; then ymodel="${MODEL:-${DENETCI_YEDEK_MODEL:-sonnet}}"; fi
-    DENETCI_AD="claude${ymodel:+ ($ymodel)}${YEDEK:+ (YEDEK GÖZ: $YEDEK · yazandan farklı yeni oturum + farklı model kademesi · Sultan Y0006)}"
+    #    🔴 Tur 2 (bağımsız göz #296): "farklı kademe" varsayılan bir adla ÖRTÜLMEZ, yazanın modeliyle KARŞILAŞTIRILIR.
+    #    Yazanın modeli DENETCI_YAZAN_MODEL ile bildirilir; seçilen yedek ona eşitse merdivende bir sonrakine geçilir
+    #    (tercih: DENETCI_YEDEK_MODEL > --model > sonnet > haiku > opus). Bildirilmediyse fark GARANTİ EDİLEMEZ: kayda
+    #    yazan_model=null yazılır ve ekranda söylenir — "farklı" iddiası ölçülmemişken yeşil basılmaz.
+    local ymodel="$MODEL" aday
+    if [ -n "$YEDEK" ] && [ "$YAZAN" = "claude" ]; then
+      ymodel=""
+      for aday in "${DENETCI_YEDEK_MODEL:-}" "${MODEL:-}" sonnet haiku opus; do
+        [ -n "$aday" ] || continue
+        if [ -n "$YAZAN_MODEL" ] && _ayni_model "$aday" "$YAZAN_MODEL"; then continue; fi
+        ymodel="$aday"; break
+      done
+      YEDEK_MODEL="$ymodel"
+      if [ -n "$YAZAN_MODEL" ]; then _bilgi "· yedek kademe: yazan $YAZAN_MODEL ≠ yedek $ymodel (ölçüldü)"
+      else _bilgi "⚠ yazanın modeli bildirilmedi (DENETCI_YAZAN_MODEL) — yedek $ymodel; kademe farkı GARANTİ EDİLEMEDİ, kayda yazan_model=null yazılır"; fi
+    fi
+    DENETCI_AD="claude${ymodel:+ ($ymodel)}${YEDEK:+ (YEDEK GÖZ: $YEDEK · yazandan farklı yeni oturum + farklı model kademesi${YAZAN_MODEL:+ [yazan: $YAZAN_MODEL]}${YAZAN_MODEL:- [yazan modeli bilinmiyor]} · Sultan Y0006)}"
     claude -p ${ymodel:+--model "$ymodel"} --output-format json --json-schema "$(cat "$SEMA")" < "$TMP/istem.md" > "$TMP/claude.json" 2>"$TMP/err"; DRC=$?
     python3 -c "import json,sys;d=json.load(open('$TMP/claude.json'));r=d.get('structured_output') or d.get('result');print(r if isinstance(r,str) else json.dumps(r,ensure_ascii=False))" > "$HAM" 2>/dev/null || cp "$TMP/claude.json" "$HAM"
   }
@@ -275,12 +290,13 @@ json.dump(d,open(sys.argv[2],"w",encoding="utf-8"),ensure_ascii=False)
 PY
 SRC=$?
 if [ "$SRC" -ne 0 ]; then _hata "denetçi çıktısı geçersiz — ölçemedi"; cp "$HAM" "$DZ/DENETIM-$TUR-HAM.txt"; exit 3; fi
-python3 - "$DZ/DENETIM-$TUR.json" "$TUR" "$IS" "$PR" "$YAZAN" "$DENETCI_AD" "$KANIT_DURUM" "$DOGRULANMIS" "$KIRPILDI" "$ISTEM_BAYT" "$KIRP_ESIK" "$YEDEK" <<'PY'
+python3 - "$DZ/DENETIM-$TUR.json" "$TUR" "$IS" "$PR" "$YAZAN" "$DENETCI_AD" "$KANIT_DURUM" "$DOGRULANMIS" "$KIRPILDI" "$ISTEM_BAYT" "$KIRP_ESIK" "$YEDEK" "$YAZAN_MODEL" "$YEDEK_MODEL" <<'PY'
 import json,sys,datetime
-yol,tur,is_,pr,yazan,den,kd,sonuc_yolu,kirp,bayt,esik,yedek=sys.argv[1:]
+yol,tur,is_,pr,yazan,den,kd,sonuc_yolu,kirp,bayt,esik,yedek,yazan_model,yedek_model=sys.argv[1:]
 json.dump({"tur":int(tur),"is":is_,"pr":pr,"yazan":yazan,"denetci":den,"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
            "kanit_durumu":kd,
            "yedek":(yedek or None),   # Sultan Y0006: yedek gözle alınan puan codex puanı sanılmasın; sebebi kayıtta
+           "yazan_model":(yazan_model or None), "yedek_model":(yedek_model or None),   # null = bildirilmedi → fark ölçülmedi
 
            "kirpildi":{"oldu":kirp=="1","istem_bayt":int(bayt),"esik":int(esik)},   # kalıcı kayıt: kırpılan denetim "tam gördü" sanılmasın
            "sonuc":json.load(open(sonuc_yolu,encoding="utf-8"))},open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
