@@ -29,6 +29,14 @@ KUTU="${TO_KUTU:-$(
 )}"
 # Kutu adı ÇÖZÜLEMEZSE kurulum yapılmaz: yanlış kutunun adına yazmaktansa durmak yeğdir.
 [ -n "${KUTU:-}" ] || { echo "terminal-onar: KUTU adı çözülemedi — TO_KUTU ver" >&2; return 1 2>/dev/null || exit 1; }
+# 🔴 MAKİNE KİMLİĞİ KUTU ADI DEĞİLDİR (12 Eki 2026 canlı: 15 kutuda ölçüldü). Beceri ORTAK dizinden (/config/.claude/skills)
+#    çağrılınca yol kutuyu söylemez, makine adı da kabın rastgele kimliğidir (12 hex) → tmux adları, kasa anahtarı, TABAN
+#    yanlış türer; ttyd yanlış yolda açılır, "bozuk" sanılıp başsız kurtarıcı doğar. Böyle bir ad FAIL-CLOSED reddedilir:
+#    ya TO_KUTU verilir ya beceri /config/projects/<kutu>/.claude/skills/terminal-onar yolundan çağrılır.
+case "$KUTU" in
+  *[!0-9a-f]*) ;;   # harf/tire içeren gerçek ad
+  ????????????) echo "terminal-onar: KUTU='$KUTU' bir makine kimliğine benziyor, kutu adı değil — TO_KUTU ver ya da beceriyi /config/projects/<kutu>/.claude/skills/terminal-onar yolundan çağır" >&2; return 1 2>/dev/null || exit 1 ;;
+esac
 KUTU_BUYUK="$(printf '%s' "$KUTU" | tr '[:lower:]-' '[:upper:]_')"
 
 PROJE="${TO_PROJE:-/config/projects/$KUTU}"
@@ -51,6 +59,10 @@ TTYD_BIN="${TO_TTYD_BIN:-/config/.local/bin/ttyd}"
 ENV_DOSYA="${CORTEX_ACCESS_ENV:-$HOME/.config/cortex-access.env}"
 SIFRE_ANAHTAR="${TO_SIFRE_ANAHTAR:-${KUTU_BUYUK}__TERMINAL_SIFRE}"
 BETIK_DIZ="$BECERI_KOK/scripts"
+# 🔴 CRON/ÇAĞRI YOLU = PROJE YOLU: cron satırları ve yeniden çağrılar beceriyi KUTUNUN yolundan çağırmalı ki KUTU yoldan
+#    türesin (ortak dizinden çağrı yukarıdaki tuzağa düşer). kur.sh bu bağı kurar; satırlar bu yolu kullanır.
+PROJE_BECERI="${TO_PROJE_BECERI:-$PROJE/.claude/skills/terminal-onar}"
+PROJE_BETIK="$PROJE_BECERI/scripts"
 ANA_AD="${TO_ANA_AD:-$KUTU-yon}"
 KURT_AD="${TO_KURT_AD:-$KUTU-kurtarici}"
 

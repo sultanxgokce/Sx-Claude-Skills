@@ -141,7 +141,7 @@ fi
 
 [ -n "${TO_BEKCI_YOK:-}" ] || {
 # 5 · bekçi — kalıcı kopya (.oda/cron, kutu yeniden kurulunca yüklenir) + canlı crontab
-BEKCI_SATIR="* * * * * bash $BETIK_DIZ/bekci.sh # terminal-onar-bekci"
+BEKCI_SATIR="* * * * * bash $PROJE_BETIK/bekci.sh # terminal-onar-bekci"   # proje yolu: KUTU yoldan türesin (12 Eki)
 ODA_CRON="$PROJE/.oda/cron"
 grep -q '# terminal-onar-bekci' "$ODA_CRON" 2>/dev/null || { printf '%s\n' "$BEKCI_SATIR" >> "$ODA_CRON"; gunluk "K0 bekçi .oda/cron'a yazıldı"; }
 if ! bekci_kurulu; then

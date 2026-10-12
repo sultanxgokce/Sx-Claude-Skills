@@ -67,6 +67,16 @@ SON
 fi
 _bilgi "✓ parola kasadan okundu ($SIFRE_ANAHTAR) — değeri hiçbir yere basılmadı"
 
+# ── 2b · proje-yolu bağı (12 Eki dersi) ─────────────────────────────────────
+# Beceri ortak dizinde yaşar ama kutudan KENDİ yoluyla çağrılmalı: /config/projects/<kutu>/.claude/skills/terminal-onar → ortak.
+mkdir -p "$(dirname "$PROJE_BECERI")"
+if [ ! -L "$PROJE_BECERI" ]; then
+  [ -d "$PROJE_BECERI" ] && mv "$PROJE_BECERI" "$PROJE_BECERI.eski-$(date +%Y%m%d)"
+  ln -s "$BECERI_KOK" "$PROJE_BECERI"
+fi
+[ -x "$PROJE_BETIK/kur.sh" ] || { _hata "proje-yolu bağı kurulamadı: $PROJE_BECERI"; exit 4; }
+_bilgi "✓ proje-yolu bağı: $PROJE_BECERI → $(readlink -f "$PROJE_BECERI")"
+
 # ── 3 · kurulum (onar.sh sıfırdan kurulumu da yapar) ────────────────────────
 bash "$BETIK_DIZ/onar.sh" || { _hata "kurulum düştü — günlük: $GUNLUK"; exit 6; }
 
@@ -78,8 +88,8 @@ if [ -f "$ODA_CRON" ] && grep -q 'terminal-onar-bekci' "$ODA_CRON" 2>/dev/null; 
 else
   {
     printf 'TZ=Europe/Istanbul\n'
-    printf '* * * * * bash %s/bekci.sh  # terminal-onar-bekci\n' "$BETIK_DIZ"
-    printf '@reboot sleep 15; bash %s/komut.sh onar  # terminal-onar-acilis\n' "$BETIK_DIZ"
+    printf '* * * * * bash %s/bekci.sh  # terminal-onar-bekci\n' "$PROJE_BETIK"
+    printf '@reboot sleep 15; bash %s/komut.sh onar  # terminal-onar-acilis\n' "$PROJE_BETIK"
   } >> "$ODA_CRON"
   _bilgi "✓ bekçi kutunun kalıcı cron'una yazıldı: $ODA_CRON"
 fi

@@ -1,0 +1,6 @@
+$ bash -c bash terminal-onar/scripts/onar.test.sh >/dev/null 2>&1; echo onar=$?; bash terminal-onar/scripts/kabuk-kapisi.test.sh >/dev/null 2>&1; echo kabuk=$?
+# rc=0 sure=7.6s zaman=2026-10-12T21:33:20+03:00
+--- stdout ---
+onar=0
+kabuk=0
+--- stderr ---

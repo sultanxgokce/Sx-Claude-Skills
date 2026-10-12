@@ -1,0 +1,39 @@
+{
+  "is": "terminal-kur-proje-yolu",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-12T21:33:20+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kutu-adi-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kutu-adi-sinav-sonra.txt",
+      "sha256": "e34edd6772c21ec0face17c9d7f7ac0133b4f8db6eb00c40356bd6160bc0a368",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/kutu-adi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T21:33:12+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "onar-ve-kabuk-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-onar-ve-kabuk-sinav-sonra.txt",
+      "sha256": "a87ff07e7da85049cf530bda28aa8e2e9e6a0f300d1df9da7a9e7d61611e73ff",
+      "komut": [
+        "bash",
+        "-c",
+        "bash terminal-onar/scripts/onar.test.sh >/dev/null 2>&1; echo onar=$?; bash terminal-onar/scripts/kabuk-kapisi.test.sh >/dev/null 2>&1; echo kabuk=$?"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T21:33:20+03:00",
+      "sure_sn": 7.6
+    }
+  ],
+  "imza": "2ec46a09cfcafdbcbfd85663c82199e2edba1745505c45d4c6f5443ee116b35e"
+}
