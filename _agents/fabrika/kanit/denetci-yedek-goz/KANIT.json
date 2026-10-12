@@ -1,7 +1,7 @@
 {
   "is": "denetci-yedek-goz",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-12T21:26:38+03:00",
+  "guncelleme": "2026-10-12T22:11:46+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -19,7 +19,22 @@
       "renk": "yesil",
       "zaman": "2026-10-12T21:26:38+03:00",
       "sure_sn": 122.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinav-113-kapi-yedek-model",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-sinav-113-kapi-yedek-model-sonra.txt",
+      "sha256": "c063929821c1c7d915e41e18c670496d290472435f85129f4751a798aa51bdc2",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T22:11:46+03:00",
+      "sure_sn": 108.1
     }
   ],
-  "imza": "4ac7211079a2076d89508a030275171260f3e0eac1bfeec987400084bcb1232d"
+  "imza": "7e9f52dee2fbb109a36134567053d839886fc3d71f42811c92745534b881d2bd"
 }

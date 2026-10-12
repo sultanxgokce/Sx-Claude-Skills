@@ -265,6 +265,7 @@ echo "════ Y · YEDEK GÖZ (Sultan Y0006): auto kipinde codex yoksa/dü�
 FAKE="$T/bin"; mkdir -p "$FAKE"
 cat > "$FAKE/claude" <<'SH'
 #!/usr/bin/env bash
+printf '%s\n' "ARGV: $*" >> "${CLAUDE_ARGV_LOG:-/dev/null}"
 printf '{"structured_output":%s}' "$SAHTE_JSON"
 SH
 cat > "$FAKE/codex.sahte" <<'SH'
@@ -280,6 +281,12 @@ bash "$K" olcum is-y olc --asama tek -- echo 1 >/dev/null 2>&1
 [ "$RC" -eq 0 ]; g $? "Y1 codex yokken auto kipi DURMAZ: yedek claude puanlar (5/E → rc=0)"
 python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y/DENETIM-1.json'));assert d['yedek']=='codex yok' and 'YEDEK' in d['denetci'] and d['sonuc']['kod_puani']==5"; g $? "Y1b kayıtta yedek='codex yok' ve denetçi adında YEDEK GÖZ (codex puanı sanılmaz)"
 grep -q "YEDEK GÖZ" "$T/y1.out"; g $? "Y1c ekranda da söylenir (sessiz yedek yok)"
+# Y6/Y6b kendi işinde (is-y6) koşar: is-y'nin üç turluk tavanını yemesin (ölçüldü: Y2/Y5 "tavan doldu" rc=4 alıyordu)
+bash "$K" olcum is-y6 olc --asama tek -- echo 1 >/dev/null 2>&1
+( unset DENETCI_KOMUT; PATH="$YP" CLAUDE_ARGV_LOG="$T/cl.log" SAHTE_JSON="$(J 5 E "")" bash "$D" is-y6 --diff "$T/y.patch" --kart "$T/kart.md" >/dev/null 2>&1 )
+grep -q -- "--model sonnet" "$T/cl.log" && python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y6/DENETIM-1.json'));assert '(sonnet)' in d['denetci'] and 'farklı model kademesi' in d['denetci']"; g $? "Y6 🔴 yedek göz yazanla AYNI modelde koşmaz: farklı kademe (sonnet) + yeni oturum, kayda yazılı (K1 yeniden)"
+( unset DENETCI_KOMUT; PATH="$YP" CLAUDE_ARGV_LOG="$T/cl2.log" DENETCI_YEDEK_MODEL=haiku SAHTE_JSON="$(J 5 E "")" bash "$D" is-y6 --diff "$T/y.patch" --kart "$T/kart.md" >/dev/null 2>&1 )
+grep -q -- "--model haiku" "$T/cl2.log"; g $? "Y6b yedek kademesi DENETCI_YEDEK_MODEL ile seçilir"
 ( unset DENETCI_KOMUT; PATH="$YP" SAHTE_JSON="$(J 5 E "")" bash "$D" is-y --diff "$T/y.patch" --kart "$T/kart.md" --denetci codex >/dev/null 2>&1 ); [ $? -eq 3 ]; g $? "Y2 açık --denetci codex isteğinde codex yoksa eski sert davranış: rc=3"
 ( unset DENETCI_KOMUT; PATH="$YP" DENETCI_YEDEK=0 SAHTE_JSON="$(J 5 E "")" bash "$D" is-y --diff "$T/y.patch" --kart "$T/kart.md" >/dev/null 2>&1 ); [ $? -eq 3 ]; g $? "Y5 DENETCI_YEDEK=0 ile yedek kapalı: rc=3"
 cp "$FAKE/codex.sahte" "$FAKE/codex"; : > "$T/csay"

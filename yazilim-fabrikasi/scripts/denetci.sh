@@ -230,8 +230,13 @@ else
   }
   kos_claude() {   # yeni oturum: claude -p her çağrıda sıfırdan açılır → yazanın oturumu değildir
     command -v claude >/dev/null || { _hata "claude yok — denetçi ölçemedi"; exit 3; }
-    DENETCI_AD="claude${MODEL:+ ($MODEL)}${YEDEK:+ (YEDEK GÖZ: $YEDEK · yazandan farklı yeni oturum · Sultan Y0006)}"
-    claude -p ${MODEL:+--model "$MODEL"} --output-format json --json-schema "$(cat "$SEMA")" < "$TMP/istem.md" > "$TMP/claude.json" 2>"$TMP/err"; DRC=$?
+    # 🔴 K1 YENİDEN (bağımsız göz #296 tur 1): yazan claude ise yedek göz de claude olur — AYNI MODELİ aynı oturumda
+    #    kullanmak K1 ihlali olurdu. Y0006 şartı "yazandan farklı oturum/model" der; yedek bu yüzden (1) yeni oturum ve
+    #    (2) AÇIKÇA farklı bir model kademesi (DENETCI_YEDEK_MODEL, varsayılan sonnet) ile koşar; kademe kayda yazılır.
+    local ymodel="$MODEL"
+    if [ -n "$YEDEK" ] && [ "$YAZAN" = "claude" ]; then ymodel="${MODEL:-${DENETCI_YEDEK_MODEL:-sonnet}}"; fi
+    DENETCI_AD="claude${ymodel:+ ($ymodel)}${YEDEK:+ (YEDEK GÖZ: $YEDEK · yazandan farklı yeni oturum + farklı model kademesi · Sultan Y0006)}"
+    claude -p ${ymodel:+--model "$ymodel"} --output-format json --json-schema "$(cat "$SEMA")" < "$TMP/istem.md" > "$TMP/claude.json" 2>"$TMP/err"; DRC=$?
     python3 -c "import json,sys;d=json.load(open('$TMP/claude.json'));r=d.get('structured_output') or d.get('result');print(r if isinstance(r,str) else json.dumps(r,ensure_ascii=False))" > "$HAM" 2>/dev/null || cp "$TMP/claude.json" "$HAM"
   }
   yedek_olur_mu() { [ "$SEC_AUTO" = 1 ] && [ "${DENETCI_YEDEK:-1}" != 0 ]; }
