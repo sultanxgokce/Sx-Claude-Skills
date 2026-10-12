@@ -1,0 +1,6 @@
+$ bash -c T=$(mktemp -d); bash bileyi/scripts/guvenli-sil.sh "$T" >/dev/null 2>&1; rc=$?; echo "mktemp_varsayilan=$T sil_rc=$rc"; python3 -c "import shutil,sys;shutil.rmtree(sys.argv[1],ignore_errors=True)" "$T"; Y=$(bash bileyi/scripts/guvenli-sil.sh --yeni 2>/dev/null); yrc=$?; echo "yeni_kip_rc=$yrc"; [ $rc -eq 0 ] && [ $yrc -eq 0 ]
+# rc=1 sure=0.1s zaman=2026-10-12T15:45:36+03:00
+--- stdout ---
+mktemp_varsayilan=/tmp/tmp.sMf2QWlqm1 sil_rc=2
+yeni_kip_rc=0
+--- stderr ---

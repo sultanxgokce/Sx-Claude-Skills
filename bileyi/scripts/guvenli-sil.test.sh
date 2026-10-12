@@ -73,6 +73,50 @@ PY"
 kapi "E2 kullanimsiz cagri rc=2" 2 python3 "$A"
 kapi "E3 iki arguman rc=2 (sessizce ilkini silmez)" 2 python3 "$A" "$KOK/a" "$KOK/b"
 
+# E · --yeni kipi (12 Eki 2026 /bileyi: mktemp çıplak /tmp'ye açıyordu, K1 reddediyordu)
+Y="$(env TMPDIR="$KOK" python3 "$A" --yeni sinav- 2>/dev/null)"
+kapi "Y1 --yeni izinli kökün ALTINDA dizin açar" 0 sh -c "case '$Y' in '$KOK'/sinav-*) test -d '$Y';; *) exit 1;; esac"
+kapi "Y2 --yeni ile açılan dizini araç KENDİSİ siler" 0 env TMPDIR="$KOK" python3 "$A" "$Y"
+kapi "Y3 silindiği geri okunur" 0 test ! -e "$Y"
+kapi "Y4 tanınmayan bayrak SESSİZ BAŞARI değil (eskiden rc=0)" 2 python3 "$A" --boyle-bir-bayrak-yok
+kapi "Y5 önek temizlenir — yol ayırıcı kök dışına taşımaz" 0 sh -c "Y2=\$(env TMPDIR='$KOK' python3 '$A' --yeni '../../kacis'); case \"\$Y2\" in '$KOK'/*) python3 '$A' \"\$Y2\" >/dev/null 2>&1; env TMPDIR='$KOK' python3 '$A' \"\$Y2\" >/dev/null;; *) exit 1;; esac"
+kapi "Y6 hiçbir kök yazılabilir değilse rc=3 ÖLÇEMEDİM (yeşil değil)" 3 env TMPDIR=/proc/1/kok-yok CLAUDE_SCRATCHPAD=/proc/1/kok-yok2 HOME=/nonexistent python3 -c "
+import importlib.util,sys
+sp=importlib.util.spec_from_file_location('g','$A'); g=importlib.util.module_from_spec(sp); sp.loader.exec_module(g)
+g.izinli_kokler=lambda: [__import__('pathlib').Path('/proc/1/kok-yok')]
+sys.exit(g.yeni()[0])"
+
+# Y7 · TMPDIR yokken de izinli köke açar (mkdtemp'in varsayılanı çıplak /tmp'dir — Y1 bunu göremezdi:
+#      orada TMPDIR zaten izinli kökü gösteriyor; mutasyonla ölçüldü, 12 Eki)
+Y7="$(env -u TMPDIR CLAUDE_SCRATCHPAD="$KOK" python3 "$A" --yeni y7- 2>/dev/null)"
+kapi "Y7 TMPDIR yokken de dizin izinli kökün altında (çıplak /tmp'ye düşmez)" 0 sh -c "case '$Y7' in '$KOK'/y7-*|/tmp/claude-1000/y7-*) test -d '$Y7';; *) exit 1;; esac"
+env -u TMPDIR CLAUDE_SCRATCHPAD="$KOK" python3 "$A" "$Y7" >/dev/null 2>&1 || true
+
+# Y8 · açılan dizin kökün dışına düşerse GERİ KALDIRILIR ve rc=3 (bağımsız göz tur 1)
+Y8D="$DIS/y8-dis"; mkdir -p "$Y8D"
+kapi "Y8 kök dışına düşen dizin geri kaldırılır + rc=3" 0 env TMPDIR="$KOK" Y8D="$Y8D" python3 -c "
+import importlib.util,sys,os,tempfile,pathlib
+sp=importlib.util.spec_from_file_location('g','$A'); g=importlib.util.module_from_spec(sp); sp.loader.exec_module(g)
+yer=os.environ['Y8D']; acilan=[]
+def sahte(prefix='',dir=None):
+    d=os.path.join(yer,prefix+'kacak'); os.mkdir(d); acilan.append(d); return d
+tempfile.mkdtemp=sahte
+rc,_=g.yeni('y8-')
+sys.exit(0 if rc==3 and acilan and not os.path.exists(acilan[0]) else 1)"
+rmdir "$Y8D" 2>/dev/null || true
+# Y9 · geri kaldırma BAŞARISIZSA mesaj "kaldırıldı" demez (bağımsız göz tur 2)
+Y9D="$DIS/y9-dis"; mkdir -p "$Y9D"
+kapi "Y9 geri kaldırılamayan dizin için dürüst mesaj + rc=3" 0 env TMPDIR="$KOK" Y9D="$Y9D" python3 -c "
+import importlib.util,sys,os,tempfile
+sp=importlib.util.spec_from_file_location('g','$A'); g=importlib.util.module_from_spec(sp); sp.loader.exec_module(g)
+yer=os.environ['Y9D']
+def sahte(prefix='',dir=None):
+    d=os.path.join(yer,prefix+'dolu'); os.mkdir(d); open(os.path.join(d,'x'),'w').close(); return d
+tempfile.mkdtemp=sahte
+rc,m=g.yeni('y9-')
+sys.exit(0 if rc==3 and 'KALDIRILAMADI' in m and 'geri kaldırıldı' not in m else 1)"
+python3 -c "import shutil,sys;shutil.rmtree(sys.argv[1],ignore_errors=True)" "$Y9D"
+
 rm -r "$KOK/../kardes-$$" 2>/dev/null || true
 python3 "$A" "$DIS" >/dev/null 2>&1 || true
 rmdir "$KOK" 2>/dev/null || true
