@@ -102,7 +102,9 @@ ayrışırdı. Kapı betiğe sorar, kendisi türetmez; betiğin verdiği bozuk a
 🔴 **Adres güvenilmez girdidir:** `BASIRET:0`, `=ad`, `../x`, 70 karakter — hepsi red (tmux hedef sözdizimi giremez).
 Birden çok `arg` (belirsiz adres) ve ana oturumun adının **açıkça** verilip kutuda bulunmaması da reddedilir —
 yalnız argümansız yol oturum yaratır (bağımsız göz, tur 1).
-Sınav: `scripts/koltuk-bagla.test.sh` (27 kapı, sahte tmux) + kapı `Y1-Y10` + telefon ekranı **gerçek Chromium**
+🔴 **Ölçemediğine "boş" demez** (bağımsız göz, tur 3): tmux listesi alınamazsa `--liste` rc=3 "ölçülemedi" döner, kapı 500 basar;
+boş liste yalnız tmux sunucusu hiç yokken doğrudur. Liste alınamazken koltuğa da bağlanılmaz.
+Sınav: `scripts/koltuk-bagla.test.sh` (30 kapı, sahte tmux) + kapı `Y1-Y10` + telefon ekranı **gerçek Chromium**
 (`kapi/tarayici-sinav.mjs`, 10 kapı, CI dışı — kütüphane yoksa rc=4): seçici · seçince tam terminal `?arg=` ·
 yerel bellekteki ad **doğrulanmadan terminale konmaz** (liste gecikirse ana koltukta açılır, liste gelince yeniden kurulur;
 geçersiz ad hiçbir anda girmez). Mutasyon: beyaz liste silinince 4 kapı,

@@ -1,0 +1,28 @@
+{
+  "tur": 3,
+  "is": "terminal-koltuk-secici",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T20:18:56+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 75676,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kutu kapısına koltuk seçici, giriş korumalı /api/koltuklar ucu ve yalnız mevcut oturumlara bağlanma kapıları eklenmiş; önceki turdaki yerel bellek yarışı da gerçek Chromium sınavıyla kapatılmış. Ancak tmux oturum listesi ölçülemediğinde liste betiği hatayı boş ve başarılı listeye çevirebildiği için önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "`tmux list-sessions` başarısız olduğunda `--liste` yolu yine rc=0 ile boş liste dönebilir; böylece /api/koltuklar 500 “ölçülemedi” yerine 200 ve boş koltuklar basar.",
+        "kanit": "`koltuklar()` içindeki `tmux list-sessions` hatası pipefail nedeniyle başarısız olabilse de `--liste` dalı dış boru hattından sonra koşulsuz `exit 0` çalıştırıyor. Y8 yalnız tüm KOLTUK_BETIK sürecini `exit 1` yapan sahte betiği sınadığından gerçek betik içindeki tmux arızasını ölçmüyor; C5 ise boş fakat başarılı oturum listesini sınıyor.",
+        "konum": "terminal-onar/scripts/koltuk-bagla.sh:25-29,41-48; terminal-onar/kapi/sunucu.test.mjs:Y8; terminal-onar/scripts/koltuk-bagla.test.sh:C5",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. 27/27 bağlanma sınavı, 50/50 kapı sınavı, 10/10 gerçek Chromium sınavı ve eski sınavların rc=0 sonuçları güçlü kanıt sağlıyor; özellikle önceki turdaki yarış doğrudan gecikmeli listeyle ölçülmüş. Telefon karesi sahte koltuk verisi kullanıyor ve ölçümlerin çoğu yalnız “sonra” aşamasında; ayrıca gerçek betikte tmux listeleme arızası sınanmamış."
+  }
+}

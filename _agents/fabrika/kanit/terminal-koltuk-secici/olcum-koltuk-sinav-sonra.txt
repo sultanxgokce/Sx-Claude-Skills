@@ -1,5 +1,5 @@
 $ bash terminal-onar/scripts/koltuk-bagla.test.sh
-# rc=0 sure=0.3s zaman=2026-10-12T20:03:28+03:00
+# rc=0 sure=0.3s zaman=2026-10-12T20:24:29+03:00
 --- stdout ---
 A · bağlanma (kabul yüzü)
   ✓ A1 argümansız → ana oturum (bugünkü davranış aynı)
@@ -31,6 +31,9 @@ C · liste (tek kaynak)
   ✓ C3 Claude çalışan koltuk işaretli, çalışmayan değil
   ✓ C4 son etkinlik tmux'tan okunur
   ✓ C5 hiç oturum yoksa boş liste (uydurma yok)
+  ✓ C6 🔴 tmux listesi ALINAMAZSA boş liste DEĞİL rc=3 'ölçülemedi' (C5 tautoloji değil)
+  ✓ C7 tmux sunucusu hiç yoksa gerçekten boş: rc=0
+  ✓ C8 liste alınamazken koltuğa da BAĞLANILMAZ (yanlış 'yok' demez, red basar)
 
-toplam=27 geçen=27 düşen=0
+toplam=30 geçen=30 düşen=0
 --- stderr ---

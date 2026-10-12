@@ -20,10 +20,19 @@ set -uo pipefail
 gizli() { case "$1" in ttyd-*|kapi-*|*-kurtarici|imglistener*) return 0 ;; esac; return 1; }
 gecerli_ad() { [[ "$1" =~ ^[A-Za-z0-9_-]{1,64}$ ]]; }   # tmux oturum adında . ve : olamaz
 
-koltuklar() {  # görünür oturum adları, satır satır
-  tmux list-sessions -F '#{session_name}' 2>/dev/null | while IFS= read -r s; do
-    [ -n "$s" ] && ! gizli "$s" && printf '%s\n' "$s"
+# 🔴 ÖLÇEMEDİĞİNE "boş" DEMEZ (bağımsız göz, tur 3): tmux listesi ALINAMAZSA bu "0 koltuk" değil
+#    "ölçülemedi"dir → rc=3. Tek istisna tmux sunucusunun hiç çalışmaması ("no server running"):
+#    o kutuda gerçekten koltuk yoktur, boş liste doğrudur.
+koltuklar() {  # görünür oturum adları, satır satır · rc 3 = ölçülemedi
+  local ham hata
+  if ! ham="$(tmux list-sessions -F '#{session_name}' 2>&1)"; then
+    case "$ham" in *"no server running"*|*"No such file or directory"*) return 0 ;; esac
+    printf 'koltuklar ölçülemedi: %s\n' "$ham" >&2; return 3
+  fi
+  printf '%s\n' "$ham" | while IFS= read -r s; do
+    if [ -n "$s" ] && ! gizli "$s"; then printf '%s\n' "$s"; fi
   done
+  return 0   # son satır gizliyse döngü 1 döner; o bir ölçüm hatası değil
 }
 
 claude_var_mi() {  # $1 = oturum → 0 ise koltukta Claude çalışıyor
@@ -36,7 +45,9 @@ claude_var_mi() {  # $1 = oturum → 0 ise koltukta Claude çalışıyor
 }
 
 if [ "${1:-}" = "--liste" ]; then
-  koltuklar | while IFS= read -r s; do
+  LISTE="$(koltuklar)" || exit 3
+  printf '%s\n' "$LISTE" | while IFS= read -r s; do
+    [ -n "$s" ] || continue
     son=$(tmux display-message -p -t "=$s" '#{session_activity}' 2>/dev/null || echo 0)
     if claude_var_mi "$s"; then c=1; else c=0; fi
     printf '%s\t%s\t%s\n' "$s" "${son:-0}" "$c"
@@ -68,7 +79,7 @@ gecerli_ad "$ISTEK" || red "Geçersiz koltuk adı."
 gizli "$ISTEK" && red "Bu oturum bir koltuk değil (altyapı)."
 # 🔴 Liste ÖNCE alınır: `koltuklar | grep -q` biçiminde grep erken çıkınca üretici SIGPIPE alır ve
 #    pipefail altında var olan koltuk da "yok" sayılırdı (sınav A2 yakaladı).
-LISTE="$(koltuklar)"
+LISTE="$(koltuklar)" || red "Koltuklar ölçülemedi (tmux listesi alınamadı) — bağlanmıyorum."
 grep -qxF -- "$ISTEK" <<< "$LISTE" || red "Bu kutuda '$ISTEK' adlı bir koltuk yok."
 # Telefon bağlanınca masaüstü kalıcı daralmasın (onar.sh'taki ana oturum ayarının aynısı).
 for w in $(tmux list-windows -t "=$ISTEK" -F '#{window_id}' 2>/dev/null); do

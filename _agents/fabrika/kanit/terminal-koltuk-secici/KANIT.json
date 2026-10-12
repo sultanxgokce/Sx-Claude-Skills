@@ -1,21 +1,21 @@
 {
   "is": "terminal-koltuk-secici",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-12T20:17:49+03:00",
+  "guncelleme": "2026-10-12T20:24:29+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "koltuk-sinav",
       "asama": "sonra",
       "dosya": "olcum-koltuk-sinav-sonra.txt",
-      "sha256": "fc7ed0b875371c1c9d4fd03661bb6aa34d54bbd327a02c590810bf29c769185d",
+      "sha256": "273a3697c31dad465b6292314ab1a2b76353e74a65a95ba29ccb29b41c967021",
       "komut": [
         "bash",
         "terminal-onar/scripts/koltuk-bagla.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-12T20:03:28+03:00",
+      "zaman": "2026-10-12T20:24:29+03:00",
       "sure_sn": 0.3
     },
     {
@@ -142,5 +142,5 @@
       "zaman": "2026-10-12T20:17:44+03:00"
     }
   ],
-  "imza": "9eee406db6ad32654008433e10a26721a3c77faf40b709a7b3eafc95df71d487"
+  "imza": "d51a64dee43eb4054759b8ba3bc06f8c5d04e60e9856adfb06eb621962ee3ddd"
 }
