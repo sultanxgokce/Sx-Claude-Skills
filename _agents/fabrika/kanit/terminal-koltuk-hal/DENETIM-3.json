@@ -1,0 +1,28 @@
+{
+  "tur": 3,
+  "is": "terminal-koltuk-hal",
+  "pr": "298",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-12T23:08:20+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 26936,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Muavin, Claude'suz ana oturum istisnasını kaldırmış; tür ve hâl artık betikte üretilip API'ye taşınıyor, hâl altı izinli değerle ve son 15 dolu satırla sınırlandırılıyor. Kod üretime hazır görünüyor; kalan tek mesele, belgede sınav aralığının uygulamadaki adlarla uyuşmayan küçük bir yazım rötuşu.",
+    "bulgular": [
+      {
+        "ne": "Beceri belgesi sınavları `D1-D11` diye gösteriyor; değişiklikte D11 adlı sınav yok, buna karşılık D12 ve D12b var.",
+        "kanit": "Diffte SKILL.md satırı `Sınav: koltuk-bagla.test.sh D1-D11` diyor; test ekleri D1, D2, D2b, D3-D10, D12 ve D12b adlarını taşıyor. Mutasyon ölçümü de düşenleri D1-D10, D12 ve D12b olarak listeliyor.",
+        "konum": "terminal-onar/SKILL.md: “Eski 3 alanlı…” paragrafı; terminal-onar/scripts/koltuk-bagla.test.sh: D sınavları; ölçüm-D-mutasyon-tur-hal-yok-tek.txt",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Toplu ölçüm rc=0 ile bütün paketlerin geçtiğini, mutasyon ölçümü ise eski betiğin tür/hâl sınavlarında 13 kez kırıldığını gösteriyor; böylece sınavların değişikliği gerçekten yokladığına dair anlamlı bir önce/sonra çifti var. Bununla birlikte toplu çıktının ilk 60 satırı D ve Y10 sonuçlarına ulaşmıyor; ayrıca gerçek tmux ekranları ve gerçekçi oturum adlarıyla alınmış ayrı bir çalışma karesi/ölçümü sunulmamış."
+  }
+}
