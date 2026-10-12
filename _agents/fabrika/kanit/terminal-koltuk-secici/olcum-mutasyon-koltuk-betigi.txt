@@ -1,0 +1,10 @@
+# koltuk-bagla.sh mutasyonları — sınav koltuk-bagla.test.sh (temiz hâl 23/23)
+== M1 beyaz liste kontrolü silindi (grep -qxF satırı)
+  ✗ B1 — rc=0 iz=attach-session -t =YOKKOLTUK
+  ✗ B2 —
+  ✗ B5 — rc=0
+  ✗ B6 — rc=0
+toplam=23 geçen=19 düşen=4
+== M2 liste gizlileri süzmüyor (! gizli "$s" kaldırıldı)
+  ✗ C2 — maiset-ana BASIRET CARSI imglistener ttyd-maiset kapi-maiset maiset-kurtarici
+toplam=23 geçen=22 düşen=1

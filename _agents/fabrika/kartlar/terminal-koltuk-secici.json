@@ -1,0 +1,22 @@
+{
+  "is": "terminal-koltuk-secici",
+  "cumle": "Kutu kapısında koltuk seçici: adresten oturum adı (yalnız kutuda var olan oturumlar), /api/koltuklar ucu; yanlış oturum adı reddedilir",
+  "istedi": "Sultan (/goal terminal-her-koltuk, SERDAR devri)",
+  "aldi": "MUAVIN",
+  "zaman": "2026-10-12T19:48:49+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "e",
+    "yetki": "e"
+  },
+  "siniflar": [
+    "dis_yuzey",
+    "yetki"
+  ],
+  "sultan": true,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

@@ -1,0 +1,7 @@
+# ttyd -a canlı kanıtı — sedir kutusunda, geçici 127.0.0.1:18799, WebSocket istemcisi node v24 (gerçek oturuma dokunulmadı)
+ttyd: ttyd version 1.7.7-40e79c7 · node: v24.18.0
+komut: bash -c 'printf "ARGS=[%s]\n" "$*"; sleep 1' probe   (ttyd -W -a -p 18799 -i 127.0.0.1 -b /t)
+argsız        → ARGS=[]
+?arg=BASIRET  → ARGS=[BASIRET]
+?arg=X&arg=Y  → ARGS=[X Y]
+Sonuç: ttyd 1.7.7 adresteki arg'ı komuta son argüman olarak ekliyor; koltuk-bagla.sh üçüncü argümanı buradan alır.

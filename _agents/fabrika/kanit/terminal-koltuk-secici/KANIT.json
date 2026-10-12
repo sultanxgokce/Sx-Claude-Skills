@@ -1,0 +1,54 @@
+{
+  "is": "terminal-koltuk-secici",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-12T19:54:33+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-sinav-sonra.txt",
+      "sha256": "b543d3f1c0d2141b567db6bca15909dca4991ae1447c557ea5ff953ea6a974fd",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T19:54:17+03:00",
+      "sure_sn": 0.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinav-sonra.txt",
+      "sha256": "bf42e41ca52b99c7b081365fbcd73629ca3a21c992a3e388245f6ffa806a76e7",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T19:54:21+03:00",
+      "sure_sn": 4.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "eski-sinavlar",
+      "asama": "sonra",
+      "dosya": "olcum-eski-sinavlar-sonra.txt",
+      "sha256": "768e1fed2fece9ec00a214b67238381cf0fea2f2e96e3afabb544956f47e03ae",
+      "komut": [
+        "bash",
+        "-c",
+        "for t in scripts/onar.test.sh scripts/kabuk-kapisi.test.sh scripts/kutu-adi.test.sh kapi/rapor-kapi.test.sh; do (cd terminal-onar && bash $t >/dev/null 2>&1); echo \"$t rc=$?\"; done; (cd terminal-onar && node kapi/rapor.test.mjs >/dev/null 2>&1); echo \"rapor.test.mjs rc=$?\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-12T19:54:33+03:00",
+      "sure_sn": 11.6
+    }
+  ],
+  "imza": "aa95680c1dea50157dcb5d6c6698d05514d8a4f8e536186df82cb79c1195b1c6"
+}
