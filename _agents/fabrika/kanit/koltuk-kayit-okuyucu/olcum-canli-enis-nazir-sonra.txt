@@ -1,0 +1,8 @@
+$ timeout 90 bash _agents/fabrika/kanit/koltuk-kayit-okuyucu/sonra-olc.sh terminal-onar/scripts/koltuk-ac.sh
+# rc=0 sure=2.6s zaman=2026-10-13T18:40:57+03:00
+--- stdout ---
+enis/ENIS: {"ad":"ENIS","durum":"claude-yok","tmux":true,"claude":false,"hal":"bilinmiyor","son":1791885389,"rol":"ENIS","resume":true,"yol":"baslat","ana":false}
+enis/MURSIT: {"ad":"MURSIT","durum":"claude-yok","tmux":true,"claude":false,"hal":"bilinmiyor","son":1791729119,"rol":"MURSIT","resume":true,"yol":"baslat","ana":false}
+nazir/nazir-yon: {"ad":"nazir-yon","durum":"canli","tmux":true,"claude":true,"hal":"girdi","son":1791890376,"rol":"nazir-yon","resume":true,"yol":"baslat","ana":false}
+akar/MUTEVELLI: {"ad":"MUTEVELLI","durum":"canli","tmux":true,"claude":true,"hal":"soru","son":1791889509,"rol":"MUTEVELLI","resume":true,"yol":"baslat","ana":false}
+--- stderr ---

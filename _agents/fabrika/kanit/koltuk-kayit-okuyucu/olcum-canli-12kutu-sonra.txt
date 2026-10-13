@@ -1,0 +1,16 @@
+$ timeout 200 bash _agents/fabrika/kanit/koltuk-kayit-okuyucu/on-iki-kutu.sh terminal-onar/scripts/koltuk-ac.sh
+# rc=0 sure=11.4s zaman=2026-10-13T18:45:05+03:00
+--- stdout ---
+akar    MUTEVELLI    yol=baslat   rol=MUTEVELLI    durum=canli
+enis    ENIS         yol=baslat   rol=ENIS         durum=claude-yok
+huzur   huzur-yon    yol=baslat   rol=huzur-yon    durum=claude-yok
+maiset  BASIRET      yol=baslat   rol=BASIRET      durum=claude-yok
+menzil  MENZILCI     yol=baslat   rol=MENZILCI     durum=canli
+mmex    SINAN        yol=yok      rol=-            durum=yok
+nazir   nazir-yon    yol=baslat   rol=nazir-yon    durum=canli
+nova    nova-kalfa   yol=baslat   rol=nova-kalfa   durum=canli
+s02     s02-yon      yol=baslat   rol=s02-yon      durum=yok
+sedir   sedir-yon    yol=baslat   rol=sedir-yon    durum=yok
+tellal  MEDDAH       yol=baslat   rol=MEDDAH       durum=canli
+tez     tez-yon      yol=baslat   rol=tez-yon      durum=yok
+--- stderr ---

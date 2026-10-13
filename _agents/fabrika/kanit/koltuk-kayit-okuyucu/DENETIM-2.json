@@ -1,0 +1,32 @@
+{
+  "tur": 2,
+  "is": "koltuk-kayit-okuyucu",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T18:46:59+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 54430,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Değişiklik, genişletilmiş karttaki İSKÂN/merkez ayrımını, 11 kutuyu, mmex istisnasını ve telefon davranışını uygulamış; canlı önce/sonra ölçümleri ile öldürücü mutasyonlar da hedefi doğruluyor. Ancak merkez açıcısını betiğin gerçek yeteneğiyle değil kaynak metninde “--resume-if-known” dizesi geçmesiyle tanımak kırılgan ve yanlış sınıflamada Claude’suz oturumu kapatıp doğurmayan betiğe teslim edebileceği için önce bu seçim mekanizması sağlamlaştırılmalı.",
+    "bulgular": [
+      {
+        "ne": "Merkezdeki doğuran ekip-ac.sh ile İSKÂN’daki grid ekip-ac.sh ayrımı, betik içeriğinde “--resume-if-known” metni arayarak yapılıyor; yorum veya ilgisiz metin yanlış pozitif üretebilir ve işlevsel arayüzü kanıtlamaz.",
+        "kanit": "Seçim `_ea=\"$(cat \"$EKIP_AC\")\"; case \"$_ea\" in *--resume-if-known*) ACICI=ekip-ac` biçiminde. Sınavdaki sahte merkez betiği de bu özelliği gerçek bir arayüz denetimiyle değil özellikle eklenen `# ... --resume-if-known bilir` yorumuyla geçiriyor; dolayısıyla yeşil G1-G2 bu yanlış-pozitif sınıfını sınamıyor. Yanlış sınıflama halinde `ac` dalı önce Claude’suz/takılı oturumu öldürüyor, ardından seçilen ekip-ac.sh’yi çağırıyor.",
+        "konum": "terminal-onar/scripts/koltuk-ac.sh:31-38, 136-151; terminal-onar/scripts/koltuk-ac.test.sh:21-27",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. `canli-12kutu` önce/sonra çifti karttaki 11 İSKÂN kutusunun `yol=yok`tan `yol=baslat`a geçtiğini ve mmex’in `yol=yok` kaldığını gösteriyor; enis/nazir ayrıntılı çifti, merkez-serdar ölçümü, 35 betik sınavı, 21 tarayıcı sınavı ve sekiz öldürücü mutasyon hedef davranışları güçlü biçimde kapsıyor. İlk `canli-12-kutu` kaydı kırmızı olsa da aynı ölçümün düzeltilmiş etiketli çifti mevcut; kare bulunmaması bu komut ve durum-JSON ağırlıklı işte ölçüm çiftleri nedeniyle engel değil."
+  }
+}

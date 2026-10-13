@@ -1,0 +1,8 @@
+$ timeout 200 bash _agents/fabrika/kanit/koltuk-kayit-okuyucu/on-iki-kutu.sh
+# rc=1 sure=0.3s zaman=2026-10-13T18:44:32+03:00
+--- stdout ---
+--- stderr ---
+  File "<string>", line 5
+    try: j = json.loads(p[2]); print(f"{p[0]:7} {p[1]:12} yol={j[\"yol\"]:8} rol={j[\"rol\"] or \"-\":12} durum={j[\"durum\"]}")
+                                                                  ^
+SyntaxError: unexpected character after line continuation character

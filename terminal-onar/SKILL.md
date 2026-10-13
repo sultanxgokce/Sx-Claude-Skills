@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.4.0
+version: 2.4.2
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -125,16 +125,29 @@ Eski 3 alanlı betikle kapı alan eklemez (tür/hâl uydurulmaz). Sınav: `koltu
 Telefon ekranında **Koltuk** düğmesi → pencere: seçili koltuğun durumu ÜÇ AYRI hâlde (`yok` · `claude-yok` · `takili` · `canli`)
 ve tek eylem (Aç / Yeniden aç / Eski sohbete dön). Ölçüm ve iş `scripts/koltuk-ac.sh`'de (`durum <ad>` JSON · `ac <ad> [--eski]`);
 kapı yalnız taşır: `GET /api/koltuk/<ad>` · `POST /api/koltuk/<ad>/ac {eski}` (rc 0→200 · 3→202 merdiven · 4→409 kayıtsız · 1→502).
-- **Yol (kim açar):** kutuda `scripts/ekip-ac.sh` + aile kaydı varsa ve koltuk kayıtlı bir rolün tmux'uysa → `ekip-ac.sh <ROL>`
+- **Yol (kim açar) — açıcı ve kayıt BİRLİKTE seçilir (2.4.2):** kayıt, koltuğu fiilen açacak betiğin okuduğu dosyadır (tek kaynak).
+  **İSKÂN kutusu** (`scripts/baslat-claude.sh` + `iskan-registry.yaml`) → koltuk kayıtlı bir rolün tmux'uysa yeni tmux oturumunda
+  `baslat-claude.sh <rol>`, kayıttaki `cwd`'de: ayrılmış kimlik, konuşma varsa ona döner (bu yolda ayrı "Eski sohbete dön" düğmesi
+  yok — Aç zaten oraya döner); `TO_BASLAT_BEKLE` (3 sn) sonra oturum yaşamıyorsa "açıldı" DENMEZ (rc 1).
+  **Merkez** (`scripts/ekip-ac.sh` DOĞURAN sürüm + `aile-registry.yaml`) → `ekip-ac.sh <ROL>`. Doğuran sürüm YAPISINDAN tanınır:
+  argüman çözücüsünde `--resume-if-known)` VE `--dry-run)` kolları satır başında (yorumdaki geçiş sayılmaz; grid sürümü bayrakla
+  yoklanmaz, yan etkisi var). Betik rc 0 dese de koltuk oturumu yoksa "açıldı" denmez
   (**tek kanonik kapı:** canlıysa ikinci kopya AÇMAZ; `--eski` → `--resume-if-known`, eski sohbete dönüş; Claude'suz/takılı oturum
-  önce kapatılır, sonra doğar). Koltuk **ana** ise → `onar.sh` (K0), düşerse merdiven (`kademe.sh`). İkisi de değilse → **kayıtsız
-  koltuk AÇILMAZ**, sebebi söylenir: kimliksiz Claude başka kimliğe düşer (ölçülmüş vaka); önce işe alma (madde 6).
-- **Ölçüldü (13 Eki):** `ekip-ac.sh` 18 kutunun 3'ünde var (Nexus · huma · mihenk), aile kaydı 8'inde → öteki kutularda yalnız ana
-  koltuk açılır, gerisi dürüstçe "kayıtsız" döner. `takili` = Claude var ∧ ekran `TO_TAKILI_SN` (900 s) süredir değişmemiş ∧ soru/girdi
+  önce kapatılır, sonra doğar). 🔴 İSKÂN kutularındaki **aynı adlı `ekip-ac.sh` başka betiktir** (var olanı tek pencerede toplar,
+  oturum doğurmaz, rol almaz) → açıcı SAYILMAZ; sayılsaydı Aç Claude'suz oturumu kapatıp geri getirmezdi. Koltuk **ana** ise →
+  `onar.sh` (K0), düşerse merdiven (`kademe.sh`). Hiçbiri değilse → **kayıtsız koltuk AÇILMAZ**, sebebi söylenir: kimliksiz Claude
+  başka kimliğe düşer (ölçülmüş vaka); önce işe alma (madde 6).
+- **Ölçüldü (13 Eki, 2.4.2 ile düzeltildi):** 2.4.0 notu "`ekip-ac.sh` 3 kutuda" diyordu, yanlıştı. Kutuların kendi proje
+  dizininde: **11 kutu İSKÂN** (`baslat-claude.sh` + `iskan-registry.yaml`: akar · enis · huzur · maiset · menzil · nazir · nova ·
+  s02 · sedir · tellal · tez; mmex'te host dizininde dosyalar var ama kutunun içinde `MMEx` başka bir bağlamayla örtülü — kutu
+  içinden açıcı yok, `yol=yok` doğru), **doğuran `ekip-ac.sh` yalnız merkezde**. 2.4.0 bu 11 kutuda yalnız ana koltuğu açabiliyordu
+  (canlı: enis ENIS/MURSIT `rol=""` `yol=yok`). `takili` = Claude var ∧ ekran `TO_TAKILI_SN` (900 s) süredir değişmemiş ∧ soru/girdi
   beklemiyor. 🔴 **Ölçülemeyen koltuk fail-closed:** liste betiği düşer/satır yoksa `olculemedi` — "Claude yok" sanılmaz, zorlasız dokunulmaz (yedek göz tur 3: eski hâl yaşayan oturumu kapatabilirdi). 🔴 **Ana koltuk da aynı kapıdan geçer:** takılı/ölçülemeyen ana koltukta zorlasız rc 5, `--zorla` oturumu kapatır ve onar.sh K0 kayıtlı konuşmaya döner (yedek göz tur 4: eski hâl onar.sh'yi doğrudan çağırıyor, o da "Claude zaten çalışıyor" deyip rc 0 dönüyordu → telefon yanlış "Açıldı" yazıyordu). 🔴 **Takılı = görünüş:** uzun araç koşan sağlam bir Claude da öyle görünür (canlıda ölçüldü: BÂNİ'nin kendi koltuğu) → `ac`
   takılı oturumu zorlasız KAPATMAZ (rc 5 / kapı 428); telefon penceresi önce sorar, onayla `--zorla` gider. (2.4.0: `koltuk-bagla.sh --liste` son-etkinlik alanı hep 0 basıyordu — `display-message -t =ad` bölme hedefi boş döner; `ad:` ile düzeltildi, 2.2.1 hâl düzeltmesinin ikizi.)
 - Sınav: `scripts/koltuk-ac.test.sh` (gerçek tmux, sahte ekip-ac: öldür→geri gel · eski sohbet · ikinci kopya yok · kayıtsız ret) ·
-  `sunucu.test.mjs` KA0-KA10 · `kapi/tarayici-sinav.mjs` KD1-KD5 · mutasyon M20-M22.
+  `sunucu.test.mjs` KA0-KA10 · `kapi/tarayici-sinav.mjs` KD1-KD8 + KI1-KI3 · mutasyon M20-M22. 2.4.2: koltuk-ac.test.sh I1-I7 (İSKÂN:
+  baslat yolu, üç kaydın birlikte durduğu kutuda iskan kaydı seçilir, düşen baslat "açıldı" dedirtmez) + G1-G2 (grid ekip-ac açıcı değil) + Y1-Y5 (yorumdaki bayrak açıcı yapmaz, tek kol yetmez, oturumsuz rc 0 "açıldı"
+  dedirtmez); mutasyon `_agents/fabrika/kanit/koltuk-kayit-okuyucu/mutasyon.sh` KO1-KO11.
 
 ## Pano köprüsü — resim yapıştır · seçimi panoya al (2.3.1 · 13 Ekim — ana dalda 2.3.0 REVAK gerilemelerine (#303) gitti, pano köprüsü #304 ile 2.4.0 içinde iner; Sultan: "Cmd+C kopyalamıyor, resmi Cmd+V yapıştıramıyorum")
 Kapı, ttyd'nin HTML sayfasına `kapi/genel/pano.js`'i gömer (`ttydVekil`: yalnız 200 + `text/html` + düz gövde;
@@ -244,6 +257,10 @@ süreci **11 gün** yoktu, gösterge crontab satırına bakıp "ok" diyordu. Sı
 hermetik, sahte crontab/tmux; B11 mutasyon: eski gösterge geri gelince B2 yakalar).
 
 ## Sürüm notları
+- **2.4.2 (2026-10-13, BÂNİ · G-BANI-0002/4 ilk dilim — #304'ün kusuru):** Aç, merkez dışındaki 11 İSKÂN kutusunda kayıtlı
+  koltuğu "kayıtsız" sanıyordu: `koltuk-ac.sh` yalnız `aile-registry.yaml` okuyordu, bu kutuların açıcısı ise
+  `baslat-claude.sh` + `iskan-registry.yaml`. Açıcı ve kayıt artık birlikte seçilir; İSKÂN'daki grid `ekip-ac.sh` açıcı sayılmaz.
+  Ekran: İSKÂN koltuğunda "açılınca kendi sohbetine döner", ayrı "Eski sohbete dön" gizli.
 - **2.3.0 (2026-10-13, MUAVİN · REVAK gerilemelerinin ortak koda taşınması):** 12 Ekim'de 18 kutuyu ortak beceriye
   bağlarken REVAK-KURTARICI'nın kendi geliştirdiği üç iyileştirme ezildi (canlı "Usta Defteri" sayfası 404 oldu).
   Üçü ortak koda taşındı: (1) rapor dizini kutudan türer ve kapıya verilir; (2) `.defter-yayin` işaretli klasör

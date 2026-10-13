@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "koltuk-kayit-okuyucu",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T18:43:48+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 44981,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Değişiklik İSKÂN koltuklarını canlı ölçümde yeniden görünür ve açılabilir kılmış; sınavlar da eski kusuru öldüren mutasyonlarla desteklenmiş. Lakin iş kartı okuyucunun kaynağını “aile-registry.yaml ya da ekip-registry.yaml” diye sınırlar ve 7 kutu derken uygulama üçüncü bir kaynak olan iskan-registry.yaml’a, 12 kutuya, açıcı davranışına ve ekrana yayılmış; önce talep-kapsam uyuşmazlığı çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Talep edilen kayıt kaynağı uygulanmamış; çözüm aile/ekip kayıtlarından birini seçmek yerine iskan-registry.yaml adlı üçüncü kaynağı kanonik kabul ediyor.",
+        "kanit": "İş kartı “tek yerde: aile-registry.yaml ya da ekip-registry.yaml” diyor; diffte ISKAN=\"$PROJE/iskan-registry.yaml\" ve İSKÂN halinde KAYIT=\"$ISKAN\" atanıyor. I1 sınavı da rolün özellikle iskan kaydından, AILEZ/EKIPZ’den değil okunmasını şart koşuyor.",
+        "konum": "terminal-onar/scripts/koltuk-ac.sh:22-38; terminal-onar/scripts/koltuk-ac.test.sh:I1",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "İlk dilim, kayıt okuyucusu düzeltmesinin dışına taşıp koltuk açma yaşam döngüsünü ve telefon arayüzü davranışını da değiştiriyor.",
+        "kanit": "Diff yeni baslat dalında tmux oturumu kuruyor, eski oturumu öldürüyor, çalışma dizini seçiyor ve başarısız açılışı yorumluyor; uygulama.js ayrıca “Eski sohbete dön” düğmesini baslat yolunda gizliyor. Kanıttaki I3-I7 ve KI1-KI3 bu ek davranışları doğruluyor, fakat iş kartında bunlar talep edilmiyor.",
+        "konum": "terminal-onar/scripts/koltuk-ac.sh:138-151; terminal-onar/kapi/genel/uygulama.js:337-344; kanıt I3-I7 ve KI1-KI3",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Kapsam sayısı iş kartıyla tutarsız: kart 7 İSKÂN kutusu derken sürüm notu ve çözüm anlatısı 12 kutuyu hedefliyor.",
+        "kanit": "İş kartı “İSKÂN kutularında (7)” der; SKILL.md ölçüm notu “12 kutu İSKÂN” diyerek akar, enis, huzur, maiset, menzil, mmex, nazir, nova, s02, sedir, tellal ve tez’i listeliyor. Sunulan ölçüm ise yalnız enis/nazir örneklerini gösteriyor.",
+        "konum": "iş kartı cumle; terminal-onar/SKILL.md:135-139; ölçüm canli-enis-nazir",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra canlı ölçüm çifti, yeşil birim/tarayıcı sınavları ve sekiz öldürücü mutasyon güçlü biçimde kusurun giderildiğini gösteriyor. Ancak canlı önce/sonra yalnız enis ve nazir örneklerini kapsıyor; iddia edilen 7 ya da 12 kutunun tamamını ve iş kartındaki aile/ekip kaynağı hedefini ölçmüyor. Kare yok, fakat bu komut satırı işi için ölçüm çifti yeterli; asıl eksik kanıt değil, talep ile uygulanan hedefin uyuşmaması."
+  }
+}
