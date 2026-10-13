@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "terminal-pano",
+  "pr": "301",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T11:17:58+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": true,
+    "istem_bayt": 128726,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kutu kapısına resim yapıştırma ile tmux seçimini tarayıcı panosuna aktaran köprü eklenmiş; gerçek ttyd, tmux ve Chromium üzerinden talebin iki ana yolu ölçülmüş. Önce üretim hedefinde kurulumu ve Sultan’ın gerçek tarayıcı yolunu doğrulayın; diff kırpıldığı ve kanıt iş alanındaki :17681 kapısını ölçtüğü için üretime hazır anlamında 5 verilemez.",
+    "bulgular": [
+      {
+        "ne": "Değişiklik terminal.mmepanel.com üzerindeki kurulu üretim kapısında doğrulanmamış; canlı ölçüm iş alanındaki yeni kapıyı :17681 üzerinde çalıştırıyor. Yazılmış kodun hedef dış yüzeye kurulmuş olduğu böylece kanıtlanmıyor.",
+        "kanit": "Canlı ölçüm çıktısı C0-C4 işlevleri geçiriyor; ancak canli-olcum.mjs başındaki P değeri http://127.0.0.1:17681 ve KAPSAM-SINIRI açıkça ortak kurulu kapıya birleşme, senkron ve yeniden başlatma olmadan kodun inmeyeceğini söylüyor.",
+        "konum": "_agents/fabrika/kanit/terminal-pano/canli-olcum.mjs:5; terminal-onar/KAPSAM-SINIRI.md — YOK bölümü",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Sultan’ın gerçek tarayıcısı ve kurulu Tampermonkey sürümü sınanmamış; eski 0.9 eklentisi ttyd sayfasında geri çekilmeyip yanlış /proxy/8391 isteği ve kırmızı 404 bildirimi üretiyor. Köprü çalışsa da hedef kullanıcıda kusurlu birlikte yaşama, 0.10 dağıtılana kadar sürüyor.",
+        "kanit": "Önce ölçümü E1, E2 ve E4’te kırmızı olup 19/22 kalıyor; KAPSAM-SINIRI da Sultan’ın tarayıcısının eski 0.9’u çalıştıracağını ve 0.10’un dağıtılmadığını açıkça kaydediyor. Sonra ölçümü yalnız yeni eklenti dosyası verilince 22/22 geçiyor.",
+        "konum": "olcum-ucuca-eski-eklenti-once.txt:E1-E4; olcum-ucuca-yeni-eklenti-sonra.txt:E1-E4; terminal-onar/KAPSAM-SINIRI.md — YOK bölümü",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Sunulan diff 110000 baytta kırpıldığı için pano-sinav.mjs’nin sonu ve devamındaki olası değişiklikler incelenemiyor; tam değişiklik üzerinde bağımsız kod denetimi yapılamaz.",
+        "kanit": "İstemin sonundaki araç uyarısı diff’in 128726 bayttan 110000 baytta kırpıldığını ve sonunun görülmediğini bildiriyor; görünen pano-sinav.mjs de Shift-sürükle adımının ortasında kesiliyor.",
+        "konum": "kanıt kaydı: istem sonu kırpılma uyarısı; terminal-onar/kapi/pano-sinav.mjs görünen diff sonu",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Talebin çekirdek yolları için eski/yeni ölçüm çifti, gerçekçi resim, gerçek ttyd+tmux+Chromium ölçümü, olumsuz kontrol ve kare kayıtları var; ancak karelerin içeriği burada görülemiyor, üretim terminal.mmepanel.com kurulumu ile Sultan’ın gerçek tarayıcısı ölçülmemiş ve diff kırpılmış."
+  }
+}

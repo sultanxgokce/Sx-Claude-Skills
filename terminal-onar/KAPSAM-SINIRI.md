@@ -50,3 +50,15 @@ geçişte üretilecek ve o gün üç yüzeyden ölçülüp yazılacak.
 - Sultan'ın kendi tarayıcısı/Tampermonkey kurulumu: eklenti 0.10 kutuların `.cc-images/` dinleyici kopyasına dağıtılmadan
   tarayıcı eski 0.9'u koşar (ttyd sayfasında yalnız fazladan kırmızı bildirim; köprü yine çalışır).
 - Kokpit çerçevesi içinde pano yazma izni (`allow="clipboard-write"`) — kokpit tarafı.
+
+## Birleşme SONRASI doğrulama adımı (üretim kapısı — bu PR'ın yapısal olarak yapamadığı)
+Kurulu kapı ortak `/config/.claude/skills/terminal-onar` dizininden koşar (bütün kutular aynı dizini görür); bir kutuya
+"deneme" diye kurmak hepsine kurmaktır → birleşmeden önce üretim kapısında ölçüm **yapılamaz**, bu bir eksiklik değil
+sınıfın tanımıdır (dış yüzey → karar Sultan'ın). Birleşince sırayla:
+1. `node sync-skills.mjs --dry-run` → yalnız `terminal-onar` kur (toplu `--apply --force` YASAK, bkz. known-errors "Beceri senkronu").
+2. Mahrem olmayan bir kutuda (maiset) kapıyı yeniden başlat: `komut.sh onar --web-yenile` (ya da bekçi 1 dk içinde).
+3. Ölç: `curl -s https://terminal.mmepanel.com/maiset/tty/` (girişli) gövdesinde `data-kapi-pano` VAR mı; sonra
+   `_agents/fabrika/kanit/terminal-pano/canli-olcum.mjs` başındaki `P`'yi o kutunun kapısına çevirip koş (C0-C4).
+4. Eklenti 0.10'u kutuların `.cc-images/cloudtop-terminal-image.user.js` kopyasına dağıt (cloudtop PR #600 birleşince);
+   Sultan'ın tarayıcısı `@updateURL` ile çeker. 0.9 kaldığı sürece ttyd sayfasında fazladan "✗ HTTP 404" bildirimi görünür,
+   köprü yine çalışır.
