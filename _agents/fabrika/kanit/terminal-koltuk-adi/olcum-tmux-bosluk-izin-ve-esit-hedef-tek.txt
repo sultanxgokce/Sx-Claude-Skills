@@ -1,0 +1,11 @@
+$ bash -c L=bani-olc3; tmux -L $L new -d -s "a b" "sleep 30" && echo "tmux boşluklu ad \"a b\" oturumunu AÇTI (süzgecin boşluk reddi tmux kuralı değil, bizim tercihimiz)"; tmux -L $L new -d -s "x/y" "sleep 30"; tmux -L $L new -d -s "\$1" "sleep 30"; tmux -L $L ls -F "#{session_id} #{session_name}"; echo "-t \"x/y:\" → $(tmux -L $L display-message -p -t "x/y:" "#{session_name}")"; echo "-t \"=\$1:\" (tam ad) → $(tmux -L $L display-message -p -t "=\$1:" "#{session_name}")"; echo "capture-pane -t \"=x/y:\" rc=$(tmux -L $L capture-pane -p -t "=x/y:" >/dev/null; echo $?)"; tmux -L $L kill-server
+# rc=0 sure=0.0s zaman=2026-10-13T14:00:37+03:00
+--- stdout ---
+tmux boşluklu ad "a b" oturumunu AÇTI (süzgecin boşluk reddi tmux kuralı değil, bizim tercihimiz)
+$2 $1
+$0 a b
+$1 x/y
+-t "x/y:" → x/y
+-t "=$1:" (tam ad) → x/y
+capture-pane -t "=x/y:" rc=0
+--- stderr ---

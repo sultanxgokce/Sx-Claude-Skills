@@ -121,10 +121,10 @@ gizli süzgeci silinince 1 kapı, kapıda "boş liste" kaçağı 1 kapı, ad sü
   `soru` · `sinirda` · `girdi` · `bos`; hiçbiri tutmazsa `bilinmiyor` (uydurulmaz); Claude'suz oturumda hâl ölçülmez → `bilinmiyor` (altı değer dışına çıkılmaz). Yalnız SON 15 dolu satır sayılır; soru deseni meşgul izini yener. **2.2.1:** capture-pane hedefi `ad:` (bölme hedefinde `=ad` geçersizdi → canlıda her koltuk 'bilinmiyor' çıkıyordu; sahte tmux artık `=` biçimini reddeder, D5-D12 bu hatayı ısırır).
 Eski 3 alanlı betikle kapı alan eklemez (tür/hâl uydurulmaz). Sınav: `koltuk-bagla.test.sh` D1-D12b · `sunucu.test.mjs` Y10.
 
-## Koltuk adı süzgeci = tmux'un kendi kuralı (2.4.1 · dilim 5/7, SERDAR 13 Eki ölçtü)
+## Koltuk adı süzgeci: tmux'un kuralı + bizim tek tercihimiz (2.4.1 · dilim 5/7, SERDAR 13 Eki ölçtü)
 Kapı `/api/koltuklar` adı `^[A-Za-z0-9_-]$` ile süzüyordu → adında `/` olan oturum (vekatip `2026/85`) listeden **düşüyordu**
-(17 oturumun 1'i); `koltuk-bagla.sh`'de aynı desen yalnız ATTACH yolundaydı (liste süzmüyordu, bağlanma reddediyordu). Süzgeç tmux'un kuralına indirildi: boşluk · `:` · `.` dışında her ad geçerli (tmux `.` ve `:`'yi
-zaten `_` yapar — ölçüldü). Ad HTML'de kaçışlı, adreste `encodeURIComponent` (`?arg=2026%2F85`; ttyd kabuğa **çözülmüş** iletir —
+(17 oturumun 1'i); `koltuk-bagla.sh`'de aynı desen yalnız ATTACH yolundaydı (liste süzmüyordu, bağlanma reddediyordu). Süzgeç indirildi: `:` · `.` dışında (tmux ikisini zaten `_` yapar — ölçüldü) ve **boşluk** dışında her ad geçerli. Boşluk tmux kuralı DEĞİL
+**bizim tercihimizdir** (yedek göz tur 2 ölçtü: tmux 3.4 `a b` oturumunu açar): kabuk/URL yollarında tek-sözcük ad daha güvenli, filoda boşluklu koltuk yok. Liste artık `-t ad` kullanmaz: `$1` gibi bir ad `-t '$1:'` ile de `-t '=$1:'` ile de oturum KİMLİĞİ sanılıyor (ölçüldü) → bölmeler bir kez listelenir, ada tam eşleşen oturumun etkin bölme kimliğiyle (`%N`) ölçülür; son etkinlik `list-sessions` eşlemesinden. Bağlanma `attach -t =ad` kaldı: `$`+sayı biçimli ad bağlanmada kimlik sanılabilir — filoda böyle ad yok, bilinen sınır. Ad HTML'de kaçışlı, adreste `encodeURIComponent` (`?arg=2026%2F85`; ttyd kabuğa **çözülmüş** iletir —
 gerçek ttyd+Chromium ile ölçüldü), `/api/koltuk/<kodlu-ad>` yolda çözülür, attach `=ad` tam eşleşme. Güvenlik desenden değil
 tmux'un beyaz listesinden (var olan oturum) gelir. Sınav: koltuk-bagla E1-E3 · sunucu SL1-SL4. Merkez sayfanın `guv()` süzgeci
 (cloudtop) ayrı PR.

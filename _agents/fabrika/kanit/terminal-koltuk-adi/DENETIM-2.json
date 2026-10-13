@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "terminal-koltuk-adi",
+  "pr": "305",
+  "yazan": "fable",
+  "denetci": "claude",
+  "zaman": "2026-10-13T13:57:37+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 57450,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Tur 1'in dört bulgusu da kapanmış: ':' ve '.' tmux ölçümü manifeste girdi (a.b→a_b, c:d→c_d), başıboş kopya betik silindi, 'liste süzmüyordu, bağlanma reddediyordu' anlatımı düzeltildi, tavan 64→200 oldu; '/' içeren oturum gerçek tmux'ta listede ve ?arg ile kabuğa çözülmüş gidiyor, 46+82 sınav bende de yeşil. Puan 5 değil çünkü 'boşluk tmux kuralıdır' iddiası ölçüldüğünde yanlış çıkıyor (tmux 3.4 'a b' oturumunu açıyor) — süzgeç hâlâ tmux'un izin verdiği bir adı düşürüyor ve bu yanlış kural SKILL.md ile iki sınava yazılmış; ayrıca '$' ile başlayan ad 'ad:' hedefinde başka oturuma çözülüyor.",
+    "bulgular": [
+      {
+        "ne": "'Süzgeç tmux'un kendi kuralı: boşluk · : · . dışında her ad geçerli' iddiası boşluk için YANLIŞ. tmux 3.4 'a b' adlı oturumu olduğu gibi açıyor (yalnız : ve . → _). Yani kapı /api/koltuklar ve koltuk-bagla.sh attach yolu, tmux'un izin verdiği boşluklu bir adı yine düşürür/reddeder — kartın kapattığı hata sınıfının ('tmux izin verir, biz düşürürüz') bir kalıntısı. Kart yalnız / . : saydığı için ciddi değil; ama 'tmux kuralı' diye yazılan ve E3/SL4 sınavlarına kazınan kural ölçülmüş gerçekle çelişiyor — ya boşluk da geçirilmeli (liste tab ayrımlı, encodeURIComponent %20 verir, ttyd tek arg iletir) ya da yorum 'bizim tercihimiz' olarak düzeltilmeli.",
+        "kanit": "Bağımsız ölçüm (tmux 3.4): `tmux -L dg new -d -s \"a b\"` → hata yok; `ls -F '#{session_name}'` çıktısında 'a b' satırı var. Manifestteki tmux-nokta-ikinokta-altcizgi kaydı yalnız . ve : ölçüyor, boşluk ölçülmemiş.",
+        "konum": "terminal-onar/SKILL.md:126 · terminal-onar/scripts/koltuk-bagla.sh:23 · terminal-onar/scripts/koltuk-bagla.test.sh:79 (E3) · terminal-onar/kapi/sunucu.test.mjs:459 (SL4)",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Süzgeç genişleyince '$' ile başlayan adlar da geçiyor; ama liste yolundaki display-message/capture-pane hedefi '$s:' biçiminde (= öneki yok) ve tmux '$1:'i oturum KİMLİĞİ sayıyor → '$1' adlı oturumun son-etkinlik ve hâli BAŞKA oturumdan okunur. Attach '=ad' kullandığı için bağlanma doğru; yalnız liste alanları yanlış. Eski desen $'ı dışlıyordu, bu dilimle açığa çıktı. Böyle bir ad filoda yok; rötuş.",
+        "kanit": "Ölçüm: oturumlar sırayla '$1'(id $0), 'x/y'… açıkken `tmux display-message -p -t '$1:' '#{session_name}'` → 'x/y' döndü ('$1' değil). Kod: koltuk-bagla.sh:68 `-t \"$1:\"`, :87 `-t \"$s:\"`.",
+        "konum": "terminal-onar/scripts/koltuk-bagla.sh:87",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı (kanit.py/0.3.0), sha'lar tutuyor, sarı kayıt yok, beş kayıt da yeşil ve gerçekten iddia ediyor: koltuk-bagla 46/46 ve kapı 82/82 (bende de aynı sonuç), gerçek tmux'ta '2026/85' listede (eski betik için 'sayısı: 1' çıktısı artık anlatımla tutarlı — eski betiğin listesi süzmüyordu, kapı süzüyordu), gerçek ttyd+Chromium ile ?arg çözme çifti (%2F ve /), tur 1'in istediği ':' ve '.' tmux ölçümü eklendi (a_b, c_d). Başıboş kopya betik yok. Eksik: 'boşluk' kuralı ölçülmeden tmux'a atfedilmiş (tmux 3.4 boşluğu kabul ediyor); kapı-birim çıktısı 60 satırda kesilse de dosyada SL1-SL4 ve GECEN 82 görünüyor. Merkez sayfanın guv() süzgeci ayrı PR — Sultan'ın telefonunda '2026/85' için o da gerekli, bu dilim kutu ucu için doğru."
+  }
+}

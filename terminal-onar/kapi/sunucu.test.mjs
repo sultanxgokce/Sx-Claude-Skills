@@ -456,7 +456,7 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   const r = await iste(18787, '/sedir/api/koltuk/2026%2F85', { cerez }); const jr = await r.json();
   kapi('SL3 /api/koltuk/<kodlu ad> → yol çözülür, betiğe "durum 2026/85" gider', r.status === 200 && jr.ad === '2026/85' && readFileSync(DEF2, 'utf8').trim() === 'durum 2026/85', `→ ${r.status} ${JSON.stringify(jr)}`);
   const r2 = await iste(18787, '/sedir/api/koltuk/a%20b', { cerez });
-  kapi('SL4 boşluklu/geçersiz ad yola GİRMEZ → 404 (tmux kuralı; betik çağrılmaz)', r2.status === 404 && !/a b/.test(readFileSync(DEF2, 'utf8')));
+  kapi('SL4 boşluklu ad yola GİRMEZ → 404 (bizim tercihimiz, tmux kuralı değil; betik çağrılmaz)', r2.status === 404 && !/a b/.test(readFileSync(DEF2, 'utf8')));
   p6.kill();
 }
 

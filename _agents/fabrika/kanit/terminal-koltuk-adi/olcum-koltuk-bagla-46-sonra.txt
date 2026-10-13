@@ -1,5 +1,5 @@
 $ bash terminal-onar/scripts/koltuk-bagla.test.sh
-# rc=0 sure=2.0s zaman=2026-10-13T13:09:02+03:00
+# rc=0 sure=0.9s zaman=2026-10-13T14:03:05+03:00
 --- stdout ---
 A · bağlanma (kabul yüzü)
   ✓ A1 argümansız → ana oturum (bugünkü davranış aynı)
@@ -28,7 +28,7 @@ B · red yüzü (adres güvenilmez girdi)
 D · tür ve hâl (2.2.0: ajan ⟂ diğer · hâl son ekrandan, filo desenleri)
   ✓ E1 '/' içeren koltuk TAM eşleşmeli hedefle (=2026/85) bağlanır (eski desen reddediyordu)
   ✓ E2 '/' içeren koltuk LİSTEDE (düşmez)
-  ✓ E3 boşluklu ad yine reddedilir (tmux kuralı)
+  ✓ E3 boşluklu ad reddedilir (bizim tercihimiz — tmux izin verir, ölçüldü; kabuk/URL güvenliği)
   ✓ D1 liste 5 alan: ad · son · claude · tür · hâl
   ✓ D2 Claude çalışan oturum 'ajan'
   ✓ D2b Claude'suz ANA oturum da 'diğer' (istisna yok; önde durması 'ana' bayrağının işi)

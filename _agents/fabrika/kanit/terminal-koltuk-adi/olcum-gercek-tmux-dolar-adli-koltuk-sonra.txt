@@ -1,0 +1,14 @@
+$ bash _agents/fabrika/kanit/terminal-koltuk-adi/dolar-ad-olcum.sh
+# rc=0 sure=1.5s zaman=2026-10-13T14:05:41+03:00
+--- stdout ---
+oturumlar (kimlik ad etkinlik):
+$1 $1 1791889541
+$0 x/y 1791889540
+ESKİ betik (ad son):
+$1	0
+x/y	0
+YENİ betik (ad son):
+$1	1791889541
+x/y	1791889540
+beklenen: yeni betikte '$1' satırının son değeri kendi list-sessions değeri; eski betikte x/y'ninkiyle aynı (kimlik karışması)
+--- stderr ---

@@ -1,5 +1,5 @@
 $ bash -c cd terminal-onar/kapi && node sunucu.test.mjs
-# rc=0 sure=6.2s zaman=2026-10-13T13:09:08+03:00
+# rc=0 sure=5.3s zaman=2026-10-13T14:03:11+03:00
 --- stdout ---
 
 ── T · TABAN YOLU (kapı /sedir altında) ──
@@ -92,7 +92,7 @@ $ bash -c cd terminal-onar/kapi && node sunucu.test.mjs
   ✓ SL1 "/" içeren koltuk listede (eski süzgeç düşürüyordu)
   ✓ SL2 ekran adresi encodeURIComponent ile (?arg=2026%2F85)
   ✓ SL3 /api/koltuk/<kodlu ad> → yol çözülür, betiğe "durum 2026/85" gider
-  ✓ SL4 boşluklu/geçersiz ad yola GİRMEZ → 404 (tmux kuralı; betik çağrılmaz)
+  ✓ SL4 boşluklu ad yola GİRMEZ → 404 (bizim tercihimiz, tmux kuralı değil; betik çağrılmaz)
 
 ────────────────────────────────────────────────────────
 GECEN: 82  ·  KALAN: 0

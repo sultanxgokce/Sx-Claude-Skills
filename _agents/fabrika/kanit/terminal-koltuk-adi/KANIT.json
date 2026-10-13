@@ -1,29 +1,29 @@
 {
   "is": "terminal-koltuk-adi",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-13T13:42:29+03:00",
+  "guncelleme": "2026-10-13T14:05:41+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "koltuk-bagla-46",
       "asama": "sonra",
       "dosya": "olcum-koltuk-bagla-46-sonra.txt",
-      "sha256": "10e305991d53c1202b4bc84c4a189ab60e8d529feaafcc3a07ae4be2adb7b1bb",
+      "sha256": "74f195e52923b0884fd8776c4ec727b2b5f33c789c656d4e5c76b7378f0406cb",
       "komut": [
         "bash",
         "terminal-onar/scripts/koltuk-bagla.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T13:09:02+03:00",
-      "sure_sn": 2.0
+      "zaman": "2026-10-13T14:03:05+03:00",
+      "sure_sn": 0.9
     },
     {
       "tur": "olcum",
       "etiket": "kapi-birim-82",
       "asama": "sonra",
       "dosya": "olcum-kapi-birim-82-sonra.txt",
-      "sha256": "54852f969dde0340c9884b695991c5f7d7bf0aab1f961ab8268e38a36b0a722c",
+      "sha256": "063363b20099fb0fd8c217cffcdab1bd2e9e6b13bafd9a0add67a2cdea4e6c13",
       "komut": [
         "bash",
         "-c",
@@ -31,8 +31,8 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T13:09:08+03:00",
-      "sure_sn": 6.2
+      "zaman": "2026-10-13T14:03:11+03:00",
+      "sure_sn": 5.3
     },
     {
       "tur": "olcum",
@@ -80,7 +80,38 @@
       "renk": "yesil",
       "zaman": "2026-10-13T13:42:29+03:00",
       "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tmux-bosluk-izin-ve-esit-hedef",
+      "asama": "tek",
+      "dosya": "olcum-tmux-bosluk-izin-ve-esit-hedef-tek.txt",
+      "sha256": "f55ea82d4605cbdcc3310bbca49089770e0468d17d4147fbe8317869e0b88298",
+      "komut": [
+        "bash",
+        "-c",
+        "L=bani-olc3; tmux -L $L new -d -s \"a b\" \"sleep 30\" && echo \"tmux boşluklu ad \\\"a b\\\" oturumunu AÇTI (süzgecin boşluk reddi tmux kuralı değil, bizim tercihimiz)\"; tmux -L $L new -d -s \"x/y\" \"sleep 30\"; tmux -L $L new -d -s \"\\$1\" \"sleep 30\"; tmux -L $L ls -F \"#{session_id} #{session_name}\"; echo \"-t \\\"x/y:\\\" → $(tmux -L $L display-message -p -t \"x/y:\" \"#{session_name}\")\"; echo \"-t \\\"=\\$1:\\\" (tam ad) → $(tmux -L $L display-message -p -t \"=\\$1:\" \"#{session_name}\")\"; echo \"capture-pane -t \\\"=x/y:\\\" rc=$(tmux -L $L capture-pane -p -t \"=x/y:\" >/dev/null; echo $?)\"; tmux -L $L kill-server"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T14:00:37+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-tmux-dolar-adli-koltuk",
+      "asama": "sonra",
+      "dosya": "olcum-gercek-tmux-dolar-adli-koltuk-sonra.txt",
+      "sha256": "3262b9b357fadd927d1714f2bc418003664e9212a7734d220bd28121a98c1363",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/terminal-koltuk-adi/dolar-ad-olcum.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T14:05:41+03:00",
+      "sure_sn": 1.5
     }
   ],
-  "imza": "bed280bdffa6280c6751fd45ad9611d11ba4d4649ef0a0fa48f03987aa281c1c"
+  "imza": "0a0994082219fedb5db7913edf117c462ede16d45b0dbd3c56df69c13c6be9c7"
 }
