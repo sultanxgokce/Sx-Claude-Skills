@@ -1,0 +1,19 @@
+{
+  "is": "koltuk-fark",
+  "cumle": "G-BANI-0007 madde 1 (SERDAR mektubu Nexus _agents/handoff/SERDAR-BANI-gorev-terminal-tam-kontrol-20261013.md): kutu başına tmux list-sessions ⟷ /api/koltuklar farkı — her oturum görünür | gizli:altyapı (gerekçeli) | gizli:ad-süzgeci | DÜŞEN; düşen>0 kırmızı (SESSİZ DÜŞÜRME YOK). Gizleme kararının tek kaynağı koltuk-bagla.sh (--gizli), ad kuralı kapıyla tek modül. Ayrıca istemci-attach hedefi ≠ oturum adı (code-server sekmesi, YargiYenileme vakası) bilgi olarak gösterilir. Filo koşucusu 18 kutuda salt-okur (ssh hostsrv docker exec). Bekçiye bağlama ayrı adım.",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-13T21:34:48+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

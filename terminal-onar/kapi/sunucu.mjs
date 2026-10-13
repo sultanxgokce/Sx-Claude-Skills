@@ -17,7 +17,7 @@ import zlib from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 // Koltuk adı kuralı — kabuktaki TEK kopyası scripts/koltuk-adi.sh; iki dilin eşdeğerliği scripts/koltuk-adi.test.sh'de ölçülür.
 // '.' · ':' · kontrol karakteri yok; boşluk arada serbest, başta/sonda yok; ilk karakter '$' '@' '%' '=' olamaz (tmux kimlik önekleri).
-const KOLTUK_AD_DESEN = /^(?![\s$@%=])(?!.*\s$)[^\x00-\x1f\x7f:.]{1,200}$/u;   // /u: uzunluk KOD NOKTASI sayılır (kabukla aynı; emoji 2 değil 1)
+import { KOLTUK_AD_DESEN, koltukSatirlari } from './koltuklar.mjs';   // ad kuralı + liste çözümü TEK yerde (fark ölçeri de aynısını çağırır)
 
 const KOK = path.dirname(fileURLToPath(import.meta.url));
 const GENEL = path.join(KOK, 'genel');
@@ -417,12 +417,8 @@ const sunucu = http.createServer(async (req, res) => {
       if (y === '/api/koltuklar') {
         const r = await calistir('bash', [KOLTUK_BETIK, '--liste']);
         if (r.kod !== 0) return json(res, 500, { hata: 'Koltuklar ölçülemedi.' });
-        const koltuklar = r.out.split('\n').filter(Boolean).map((l) => {
-          const [ad, son, claude, tur, hal] = l.split('\t');
-          // tür/hâl betikten gelir (2.2.0); eski betik vermezse alanlar YOK (undefined) — "ajan"/"boş" uydurulmaz
-          return { ad, son: +son || 0, claude: claude === '1', ana: ad === ANA_TMUX, ekran: T('/tty/') + '?arg=' + encodeURIComponent(ad),
-                   ...(tur ? { tur } : {}), ...(hal ? { hal } : {}) };
-        }).filter((k) => KOLTUK_AD_DESEN.test(k.ad));   // tmux kuralı (. ve :) + tek tercihimiz (boşluk; tmux izin verir, ölçüldü): '/' gibi adlar DÜŞMEZ; ad HTML'de kaçışlı, adreste encodeURIComponent
+        // satır çözümü + ad süzgeci kapi/koltuklar.mjs'te (tek kaynak); ad HTML'de kaçışlı, adreste encodeURIComponent
+        const koltuklar = koltukSatirlari(r.out).map((k) => ({ ...k, ana: k.ad === ANA_TMUX, ekran: T('/tty/') + '?arg=' + encodeURIComponent(k.ad) }));
         return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, koltuklar });
       }
       // ── KOLTUK AÇ / YENİDEN AÇ / ESKİ SOHBETE DÖN (2.4.0 · dilim 5/5, Sultan: "oturum kapandı/bozuldu/silindi —

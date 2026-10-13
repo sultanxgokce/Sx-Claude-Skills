@@ -3,6 +3,8 @@
 #
 #   koltuk-bagla.sh <ana-oturum> <proje-dizini> [koltuk]   ttyd'nin çalıştırdığı komut (ttyd -a: adresteki
 #                                                          ?arg=<koltuk> buraya SON argüman olarak eklenir)
+#   koltuk-bagla.sh --gizli                                listede OLMAYAN oturumlar, gerekçesiyle: ad · neden (G-BANI-0007:
+#                                                          sessiz düşürme yok — gizlenen her oturum adıyla ve nedeniyle sayılır)
 #   koltuk-bagla.sh --liste                                görünür koltuklar, sekmeyle: ad · son-etkinlik(epoch) · claude(1|0) · tür(ajan|diger) · hâl
 #
 # 🔴 NİÇİN TEK KAYNAK: "hangi oturum görünür" sorusunu hem ekran (ttyd) hem liste ucu (/api/koltuklar)
@@ -18,6 +20,8 @@
 set -uo pipefail
 
 gizli() { case "$1" in ttyd-*|kapi-*|*-kurtarici|imglistener*) return 0 ;; esac; return 1; }
+gizli_neden() { case "$1" in ttyd-*) echo "altyapı: web terminali (ttyd)" ;; kapi-*) echo "altyapı: kutu kapısı" ;;
+  *-kurtarici) echo "altyapı: kurtarıcı ajan" ;; imglistener*) echo "altyapı: görsel dinleyici" ;; esac; }
 # 🔴 AD SÜZGECİ: tek kaynak koltuk-adi.sh (kural ve gerekçesi orada; kapı aynı kuralı KOLTUK_AD_DESEN'de taşır, eşdeğerlik sınavlı).
 . "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/koltuk-adi.sh"
 gecerli_ad() { koltuk_adi_gecerli "$1"; }
@@ -83,6 +87,17 @@ koltuk_hali() {  # $1 = oturum → calisiyor|soru|sinirda|girdi|bos|bilinmiyor  
   fi
   echo bilinmiyor
 }
+
+if [ "${1:-}" = "--gizli" ]; then
+  if ! TUM="$(tmux list-sessions -F '#{session_name}' 2>&1)"; then
+    case "$TUM" in *"no server running"*|*"No such file or directory"*) exit 0 ;; esac
+    printf 'oturumlar ölçülemedi: %s\n' "$TUM" >&2; exit 3
+  fi
+  printf '%s\n' "$TUM" | while IFS= read -r s; do
+    [ -n "$s" ] && gizli "$s" && printf '%s\t%s\n' "$s" "$(gizli_neden "$s")"
+  done
+  exit 0
+fi
 
 if [ "${1:-}" = "--liste" ]; then
   LISTE="$(koltuklar)" || exit 3
