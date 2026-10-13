@@ -1,0 +1,38 @@
+{
+  "tur": 3,
+  "is": "terminal-onar-revak-gerilemeleri",
+  "pr": "303",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T12:35:33+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 72511,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Talep edilen üç davranış ortak koda taşınmış; canlı son ölçüm gerçek yerel 2.3.0 kopyasını, kapı ve cron yollarını, Usta Defteri 200 sonucunu, kum havuzunu, salt-okur kapısını ve bekçi izini birlikte gösteriyor. Ancak karttaki 404 → 200 iddiasının önce ayağı HTTP ile ölçülmemiş ve önce kaydının bekçi açıklaması kendi çıktısıyla çelişiyor; üretime hazır demeden önce kanıt çifti düzeltilmeli.",
+    "bulgular": [
+      {
+        "ne": "Usta Defteri için ileri sürülen 404 → 200 dönüşümünde önceki HTTP durumu ölçülmemiş; önce kaydı yalnız KAPI_RAPOR_DIZ değişkeninin süreç ortamında bulunmadığını ve yayın dizininin mevcut olduğunu gösteriyor. Bu veriler 404 sonucunu kuvvetle düşündürse de doğrudan kanıtlamıyor.",
+        "kanit": "Önce çıktısında `kapi_ortaminda_KAPI_RAPOR_DIZ=0` ve `yayin_dizini=.../usta-defteri` var, fakat `usta_defteri_http=404` ölçümü yok; sonra çıktısında `usta_defteri_http=200` bulunuyor.",
+        "konum": "kanıt: canli-revak-kapi-rapor-dizini-ve-bekci-izi/once ve /sonra",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Önce ölçümünün insan açıklaması bekçi izinin yok olduğunu söylüyor, fakat aynı kaydın gerçek çıktısında sayısal bir bekçi izi var; bu nedenle bekçi için önce durumu güvenilir biçimde tarif etmiyor.",
+        "kanit": "Aynı çıktı `bekci_izi=1791828721` değerini verirken son satır `bekçi izi yok` diyor ve durum JSON'u `bekci:\"ok\"` gösteriyor.",
+        "konum": "kanıt: canli-revak-kapi-rapor-dizini-ve-bekci-izi/once",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Son canlı ölçüm gerçek proje yolundaki 2.3.0'ın kurulduğunu, kapı ile cronun bu kopyayı çağırdığını, KAPI_RAPOR_DIZ aktarımını, Usta Defteri 200 sonucunu, CSP'yi, gizli yol 404'ünü, yazma 405'ini ve elle çağrılmamış cron izini gösteriyor; ortak davranış, mutasyon, kabuk-kaçışı, bekçi ve eski gerileme sınavları da yeşil. Buna karşılık 404 → 200 için tam HTTP önce/sonra ölçüm çifti yok ve önce kaydındaki bekçi anlatımı ölçümle çelişiyor."
+  }
+}

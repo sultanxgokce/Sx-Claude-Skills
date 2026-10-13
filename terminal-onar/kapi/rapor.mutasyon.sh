@@ -26,9 +26,9 @@ dene "M4 JSON doğrulaması kalktı" "JSON.parse(g.toString('utf8'));" ""
 dene "M5 yalnız veri.json şartı kalktı" "if (req.method === 'PUT' && ic === 'veri.json') {" "if (req.method === 'PUT') {"
 dene "M6 1 MB tavanı kalktı" "govde(req, 1024 * 1024)" "govde(req, 64 * 1024 * 1024)"
 dene "M7 atomik yazım bozuldu" "fs.renameSync(gecici, yol);" ""
-dene "M8 önbellek yasağı kalktı" "'cache-control': 'no-store' });
-    return fs.createReadStream(yol).pipe(res);" "'cache-control': 'max-age=3600' });
-    return fs.createReadStream(yol).pipe(res);"
+dene "M8 önbellek yasağı kalktı" "'cache-control': 'no-store',
+      ...(yayin" "'cache-control': 'max-age=3600',
+      ...(yayin"
 # 🔴 M10 TURA SAYILIR — kaçışın ÖLÇÜLEBİLİR yarısı (bağımsız göz, tur 2 rötuşu).
 # Bağ üzerinden kök dışına çıkış HTTP'den tetiklenebiliyor; o yüzden bu koruma bilgi değil KAPIDIR.
 # Belgeye "öldürülünce sızıyor, ölçüldü" diye yazmıştım ama TUR bunu koşturmuyordu — iddia
@@ -49,5 +49,11 @@ import os;p='sunucu.mjs';s=open(p,encoding='utf-8').read();open(p,'w',encoding='
   node rapor.test.mjs >/dev/null 2>&1 && echo "  · M9 (bilgi) kaçış kontrolü kalkınca sınav yeşil — HTTP'den erişilemiyor, beklenen" || echo "  · M9 (bilgi) kırmızı"
   mv sunucu.mjs.yedek sunucu.mjs; }
 bilgi "if (!yol.startsWith(kok + path.sep)) { res.writeHead(404); return res.end('yok'); }" ""
+# ── YAYIN KİPİ (2.3.0) — her koruma tek tek öldürülür; Y kapıları kırmızıya dönmeli
+dene "M13 yayın kipi: kum havuzu başlığı kalktı" "...(yayin ? { 'content-security-policy': RAPOR_CSP } : {}) });" "});"
+dene "M14 yayın kipi: yazma yöntemi reddi (405) kalktı" "if (yayin && req.method !== 'GET' && req.method !== 'HEAD') { res.writeHead(405, { allow: 'GET, HEAD' }); return res.end(); }" ""
+dene "M15 gizli ad reddi kalktı" "if (ad.startsWith('.') || parca.some((p) => p.startsWith('.'))) { res.writeHead(404); return res.end('yok'); }" ""
+dene "M16 yayın işareti hiç okunmuyor (her klasör işaretsiz)" "const yayin = fs.existsSync(path.join(kokGercek, '.defter-yayin'));" "const yayin = false;"
+dene "M17 her klasör yayın sayılırsa SEDİR gerilemesi (işaretsiz klasör de kum havuzuna girer)" "const yayin = fs.existsSync(path.join(kokGercek, '.defter-yayin'));" "const yayin = true;"
 echo "── $gecti kırmızıya döndü · $dusen yeşil kaldı/uygulanamadı"
 [ "$dusen" = 0 ]

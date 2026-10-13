@@ -20,7 +20,16 @@
 set -u
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DEPO="${IS_ALANI_DEPO:-$(git rev-parse --show-toplevel 2>/dev/null || echo "")}"
+# 🔴 BİRİNCİL depo (13 Eki): `--show-toplevel` bağlı bir worktree'nin İÇİNDEN çağrılınca worktree'nin kendisini
+#    döndürür → DEPO_AD "cloudtop-<iş>" olur, `kapat` yolu "<kök>/cloudtop-<iş>-<iş>" diye arar, "zaten yok" der.
+#    Birincil depo git-common-dir'in üstüdür; linked worktree'de de aynı yere çıkar.
+_birincil_depo() {
+  local c
+  c="$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)" || return 1
+  [ -n "$c" ] || return 1
+  case "$c" in */.git) printf '%s' "${c%/.git}" ;; *) git rev-parse --show-toplevel 2>/dev/null ;; esac
+}
+DEPO="${IS_ALANI_DEPO:-$(_birincil_depo || echo "")}"
 KOK="${IS_ALANI_KOK:-/config/projects/_wt}"
 ANA="${IS_ALANI_ANA:-main}"
 KANCA_SABLON="$HERE/../sablon/pre-commit"
@@ -146,7 +155,10 @@ kapat() {
     git -C "$DEPO" worktree remove "$yol" || { _hata "worktree kaldırılamadı"; exit 1; }
     _bilgi "✓ çalışma alanı kaldırıldı: $yol"
   else
-    _bilgi "· çalışma alanı zaten yok: $yol"
+    # 🔴 Olmayan alanı "kapattım" diye yeşil basmak sahte başarıdır (13 Eki): adı yanlış yazılmış ya da yol yanlış
+    #    türetilmiş olabilir. Dal silmeye de geçilmez; çağıran yolu görür ve karar verir.
+    _hata "çalışma alanı YOK: $yol — kapatılacak bir şey bulunamadı (ad doğru mu? alanlar: $(ls -d "$KOK/$DEPO_AD-"* 2>/dev/null | xargs -n1 basename 2>/dev/null | tr '\n' ' '))"
+    exit 2
   fi
   git -C "$DEPO" branch -d "$is" 2>/dev/null && _bilgi "✓ dal silindi: $is" \
     || _bilgi "· dal silinmedi (squash-merge sonrası -d reddeder; iş merge olduysa: git branch -D $is)"

@@ -1,7 +1,7 @@
 {
   "is": "terminal-koltuk-ac",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-13T13:47:11+03:00",
+  "guncelleme": "2026-10-13T14:11:13+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -154,7 +154,69 @@
       "renk": "yesil",
       "zaman": "2026-10-13T13:47:11+03:00",
       "sure_sn": 6.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "birlesme-sonrasi-koltuk-ac-26",
+      "asama": "sonra",
+      "dosya": "olcum-birlesme-sonrasi-koltuk-ac-26-sonra.txt",
+      "sha256": "a3cc8b98e807664f3fcff744d9a719d034bdc90b883a56111ee6c12df532c025",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-ac.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T14:10:14+03:00",
+      "sure_sn": 3.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "birlesme-sonrasi-koltuk-bagla",
+      "asama": "sonra",
+      "dosya": "olcum-birlesme-sonrasi-koltuk-bagla-sonra.txt",
+      "sha256": "081026941f8b8dd0189707857f4dae9306e5176dcf7c3d1c4045b8af8a020b68",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T14:10:15+03:00",
+      "sure_sn": 0.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "birlesme-sonrasi-kapi-birim",
+      "asama": "sonra",
+      "dosya": "olcum-birlesme-sonrasi-kapi-birim-sonra.txt",
+      "sha256": "2b206c413b09379b8ba1ceda48bdc0d75aa77b6c8e29db2b3466601127d07ee8",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/kapi && node sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T14:10:21+03:00",
+      "sure_sn": 5.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "birlesme-sonrasi-tarayici",
+      "asama": "sonra",
+      "dosya": "olcum-birlesme-sonrasi-tarayici-sonra.txt",
+      "sha256": "655a1589fb44a78ba0e58a4f52467e8f2af28bb633254ca69823ae1612c6b302",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/kapi && node tarayici-sinav.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T14:11:13+03:00",
+      "sure_sn": 10.4
     }
   ],
-  "imza": "836ce37343e046eae8baad27e644640a78bcb5419c33769d24e5d28318bade4a"
+  "imza": "95585433edbca2471d71fc8156ed79f504f56dab22ae60c57438f05a14dcf324"
 }

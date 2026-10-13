@@ -38,6 +38,11 @@ kapi "K1 onar.sh ttyd beklemesini helper'dan çağırır" "1" \
   "$(grep -c 'bekle_saglam ttyd_saglam "\$TTYD_BEKLE"' "$KOK/scripts/onar.sh")"
 kapi "K2 onar.sh kapı beklemesini helper'dan çağırır" "1" \
   "$(grep -c 'bekle_saglam kapi_saglam "\$KAPI_BEKLE"' "$KOK/scripts/onar.sh")"
+kapi "K4 kapı komutunda rapor dizini kabuk-kaçışlı girer (printf %q)" "1" \
+  "$(grep -c 'KAPI_RAPOR_DIZ=$(printf %q "$RAPOR_DIZ")' "$KOK/scripts/onar.sh")"
+_x='/tmp/bo şluk;echo PATLADI'
+kapi "K4b boşluk ve metakarakter içeren dizin kapıya BİREBİR ulaşır, komutu bölmez" "$_x" \
+  "$(eval "KAPI_RAPOR_DIZ=$(printf %q "$_x") sh -c 'printf %s \"\$KAPI_RAPOR_DIZ\"'" 2>/dev/null)"
 kapi "K3 elle sayılı eski döngü kalmadı" "0" \
   "$(grep -c 'for i in 1 2 3 4 5' "$KOK/scripts/onar.sh")"
 

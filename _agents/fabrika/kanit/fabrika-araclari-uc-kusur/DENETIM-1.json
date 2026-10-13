@@ -1,0 +1,32 @@
+{
+  "tur": 1,
+  "is": "fabrika-araclari-uc-kusur",
+  "pr": "302",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T11:47:11+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 34683,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Üç kusurun ikisi doğrudan kapatılmış; çalışma alanı yolu ve olmayan alanın rc=2 davranışı güçlü sınavlarla, bulgu hâl kapısı da olumsuz yollarıyla birlikte ölçülmüş. Ancak günlük plan, kartın açıkça istediği `cipa.sh oku` sözleşmesini kullanmayıp `yol` çıktısındaki dosyayı kendi okuyarak araç sınırını deliyor; önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "Günlük planın 6. kaynağı kartta istenen `cipa.sh oku` fiilini çağırmıyor; `cipa.sh yol` ile dosya yolunu alıp tarih denetimini ve içeriği doğrudan `head`/`tail` ile kendisi okuyor. Bu, çıpa aracının okuma sözleşmesini atlayan uygulama ve talep sapmasıdır; sınav da yalnız `yol` destekleyen sahte araç kurarak bu sapmayı doğrulamak yerine mevcut uygulamaya göre yazılmış.",
+        "kanit": "Diffte `gunluk-plan/scripts/olc.sh` eklenen bölüm `_cy=\"$(bash ... cipa.sh yol ...)\"`, ardından `head -3` ve `tail -14` kullanıyor; iş kartı ise açıkça “bugünün çıpasını (`cipa.sh oku`) ilk sırada okur” diyor. `gunluk-plan/scripts/olc.test.sh` içindeki `yeni_arac` yalnız `ajan` ve `yol` fiillerini taklit ediyor, `oku` fiilini hiç sınamıyor.",
+        "konum": "gunluk-plan/scripts/olc.sh:77; gunluk-plan/scripts/olc.test.sh:26; iş kartı madde 3",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. `is-alani` için son-testin yanında eski davranışı geri getirince T10'un kırıldığını gösteren mutasyon ölçümü güçlüdür; buna karşılık `bulgu hal` ve günlük çıpa iddialarında yalnız “sonra” ölçümü vardır, önce/sonra ölçüm çifti yoktur. Ayrıca O11 yeşil olsa da sınav karttaki `cipa.sh oku` hedefini ölçmediği için doğru hedefe ulaşıldığını kanıtlamaz."
+  }
+}

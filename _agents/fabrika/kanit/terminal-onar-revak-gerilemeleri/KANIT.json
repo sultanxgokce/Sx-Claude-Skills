@@ -1,0 +1,119 @@
+{
+  "is": "terminal-onar-revak-gerilemeleri",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-13T12:39:19+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "canli-revak-kapi-rapor-dizini-ve-bekci-izi",
+      "asama": "once",
+      "dosya": "olcum-canli-revak-kapi-rapor-dizini-ve-bekci-izi-once.txt",
+      "sha256": "37183a816cfc72442383599e073e44012df82be36e77803f99a7111832c57b98",
+      "komut": [
+        "bash",
+        "-c",
+        "ssh -o BatchMode=yes hostsrv 'sudo -n docker exec -i -u abc -e HOME=/config cloudtop-revak bash -s' < /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/revak-once-olc.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T12:37:59+03:00",
+      "sure_sn": 79.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "rapor-sinavi-yayin-kipi",
+      "asama": "sonra",
+      "dosya": "olcum-rapor-sinavi-yayin-kipi-sonra.txt",
+      "sha256": "7f57c42d687e3772c1c8d5546442966a47e7f71be4be23d9569d63ebed4ce9a6",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/kapi && node rapor.test.mjs 2>&1 | grep -E \"^── Y|Y1[0-5]|Y[1-9] |geçti\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T12:31:24+03:00",
+      "sure_sn": 0.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "rapor-mutasyon-turu",
+      "asama": "sonra",
+      "dosya": "olcum-rapor-mutasyon-turu-sonra.txt",
+      "sha256": "068f3817a1ce2ac16ff9dcc0a94b924f36ef52c57d050b9ab258187f8450785d",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/kapi && bash rapor.mutasyon.sh 2>&1 | grep -E \"M1[3-7]|kırmızıya döndü\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T12:22:52+03:00",
+      "sure_sn": 7.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bekci-izi-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-bekci-izi-sinavi-tek.txt",
+      "sha256": "602dab90d804b6d9da7aedbd037b8eb2b66d6b869f1ecc21e7264feea7bbd788",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/bekci-iz.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T12:22:53+03:00",
+      "sure_sn": 1.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "eski-sinavlar-gerilemesiz",
+      "asama": "tek",
+      "dosya": "olcum-eski-sinavlar-gerilemesiz-tek.txt",
+      "sha256": "2d8d067d07bddcd0b33a27c6b26812b9a09cf1badc1cbee7bb70565f5a0b6c76",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar && (cd kapi && node sunucu.test.mjs 2>&1 | tail -1) && (cd scripts && bash kur-bag.test.sh 2>&1 | tail -1 && bash onar.test.sh 2>&1 | tail -1 && bash sifre-yukle.test.sh 2>&1 | tail -1 && bash kutu-adi.test.sh 2>&1 | tail -1 && bash koltuk-bagla.test.sh 2>&1 | tail -1) && (cd kapi && bash mutasyon.sh 2>&1 | tail -1)"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T12:24:13+03:00",
+      "sure_sn": 79.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-revak-kapi-rapor-dizini-ve-bekci-izi",
+      "asama": "sonra",
+      "dosya": "olcum-canli-revak-kapi-rapor-dizini-ve-bekci-izi-sonra.txt",
+      "sha256": "0d49ef38c61694cbcb2471830fedca593dae3c69668b5ba44c383a5d93263fb1",
+      "komut": [
+        "bash",
+        "-c",
+        "ssh -o BatchMode=yes hostsrv 'sudo -n docker exec -i -u abc -e HOME=/config cloudtop-revak bash -s' < /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/revak-yerel-kurulum-olc.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T12:39:19+03:00",
+      "sure_sn": 80.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "onar-sinavi-rapor-dizini-kacisi",
+      "asama": "tek",
+      "dosya": "olcum-onar-sinavi-rapor-dizini-kacisi-tek.txt",
+      "sha256": "8657e87ae52950d4d939d467a014543097fc5141207cde70021905afb9c07bbb",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/scripts && bash onar.test.sh 2>&1 | grep -E \"K4|geçti\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T12:31:26+03:00",
+      "sure_sn": 2.0
+    }
+  ],
+  "imza": "66e0729b662de545329aa9c16c798626413f91740caacda29334e1082db1002b"
+}

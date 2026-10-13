@@ -1,0 +1,7 @@
+$ bash -c cd gunluk-plan/scripts && bash olc.test.sh 2>&1 | grep -E "O11|🔴|SONUÇ"
+# rc=0 sure=11.3s zaman=2026-10-13T11:48:36+03:00
+--- stdout ---
+  🟢 O11 bugünün çıpası 6. kaynakta ÖNCE basılır (cipa.sh oku ile; dosya kendimiz okunmaz), defter/konum basılmaz
+  🟢 O11b dünün çıpası SAYILMAZ: kendi defterine düşer (bayat plan basılmaz)
+SONUÇ: 14 geçti · 0 kaldı
+--- stderr ---

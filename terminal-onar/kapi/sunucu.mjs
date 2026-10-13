@@ -81,7 +81,17 @@ const cokDeneme = () => { const t = Date.now(); while (denemeler.length && t - d
 // ---- yardımcılar
 const RAPOR_DIZ = process.env.KAPI_RAPOR_DIZ || '/config/.terminal-onar/rapor';
 const RAPOR_TIP = { '.html': 'text/html; charset=utf-8', '.json': 'application/json; charset=utf-8', '.jpg': 'image/jpeg',
-  '.jpeg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8' };
+  '.jpeg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
+  '.txt': 'text/plain; charset=utf-8', '.pdf': 'application/pdf' };
+// ── YAYIN KİPİ (2.3.0 · REVAK-KURTARICI'nın 12 Eki tasarımı, ortak koda 13 Eki taşındı) ────────────────────────
+// Rapor klasöründe `.defter-yayin` işareti varsa (defter-sayfasi'nın yayımladığı salt-okur sayfa) klasör YAYIN kipindedir:
+// 🔴 Rapor kapıyla AYNI KÖKENDEN sunulur: içindeki bir betik /api/gonder'e ulaşsa tmux'a tuş yazabilirdi. Yayın kipinde her
+//    cevap CSP kum havuzunda (opak köken) ve ağ erişimsiz (connect-src/form-action 'none') döner — sayfa çizer, kapıya istek atamaz;
+//    yazma yöntemleri 405 (veri.json dahil). İşaretsiz klasör (SEDİR: ev/ridvan, sayfası veri.json'u tarayıcıdan PUT'lar)
+//    bayt bayt eski davranıştadır — kum havuzu onun yazma kolunu keserdi. Gizli adlar (.defter-yayin, .gecici…) iki kipte de sunulmaz.
+const RAPOR_CSP = "sandbox allow-scripts allow-popups allow-popups-to-escape-sandbox allow-downloads; default-src 'none'; "
+  + "script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; form-action 'none'; "
+  + "base-uri 'none'; frame-ancestors 'self' https://kokpit.mmepanel.com";
 
 const TIPLER = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8',
   '.webmanifest': 'application/manifest+json', '.png': 'image/png', '.svg': 'image/svg+xml', '.ttf': 'font/ttf' };
@@ -309,6 +319,8 @@ const sunucu = http.createServer(async (req, res) => {
     const kok = path.join(RAPOR_DIZ, ad);
     if (!parca.length) { res.writeHead(302, { location: T(`/rapor/${ad}/`) }); return res.end(); }
     const ic = parca.join('/') || 'index.html';
+    // gizli ad (yayın işareti, geçici dosya) sunulmaz — kök ad zaten ^[a-z0-9-]$ kısıtından geçti (nokta giremez), burada açıkça da sorulur
+    if (ad.startsWith('.') || parca.some((p) => p.startsWith('.'))) { res.writeHead(404); return res.end('yok'); }
     const yol = path.join(kok, ic);
     // 🔴 METİNSEL ÖNEK YETMEZ — SEMBOLİK BAĞ (bağımsız göz, tur 1).
     //    Önek kontrolü yolun YAZIMINA bakar; dosya sisteminin nereye baktığına değil.
@@ -329,6 +341,8 @@ const sunucu = http.createServer(async (req, res) => {
     if (!tabanGercek || !kokGercek) { res.writeHead(404); return res.end('yok'); }
     const _icinde = (p0) => !!p0 && (p0 === tabanGercek || p0.startsWith(tabanGercek + path.sep));
     if (!_icinde(kokGercek)) { res.writeHead(404); return res.end('yok'); }
+    const yayin = fs.existsSync(path.join(kokGercek, '.defter-yayin'));
+    if (yayin && req.method !== 'GET' && req.method !== 'HEAD') { res.writeHead(405, { allow: 'GET, HEAD' }); return res.end(); }
     // 🔴 YAZMA KOLU DA BAĞ KONTROLÜNDEN GEÇER (bağımsız göz, tur 4 — okuma korunmuş,
     //    YAZMA korunmamıştı). Sıra yüzünden PUT, aşağıdaki gerçek-yol sınamasından ÖNCE
     //    çalışıyordu: `veri.json` kökün dışına bakan bir bağ olsaydı, yazma o dosyayı
@@ -346,12 +360,14 @@ const sunucu = http.createServer(async (req, res) => {
         return json(res, 200, { tamam: true, zaman: new Date().toISOString() });
       } catch (e) { return json(res, e.kod || 400, { hata: e.kod === 413 ? 'Çok büyük.' : 'Geçersiz veri.' }); }
     }
-    if (req.method !== 'GET' || !fs.existsSync(yol)) { res.writeHead(404); return res.end('yok'); }
+    if ((req.method !== 'GET' && !(yayin && req.method === 'HEAD')) || !fs.existsSync(yol)) { res.writeHead(404); return res.end('yok'); }
     const yolGercek = _gercek(yol);
     //    Bağ izlendikten SONRA hâlâ kökün içinde mi? Değilse 404 — dosya var olsa bile.
     if (!_icinde(yolGercek)) { res.writeHead(404); return res.end('yok'); }
     if (!fs.statSync(yolGercek).isFile()) { res.writeHead(404); return res.end('yok'); }
-    res.writeHead(200, { 'content-type': RAPOR_TIP[path.extname(yol)] || 'application/octet-stream', 'cache-control': 'no-store' });
+    res.writeHead(200, { 'content-type': RAPOR_TIP[path.extname(yol).toLowerCase()] || 'application/octet-stream', 'cache-control': 'no-store',
+      ...(yayin ? { 'content-security-policy': RAPOR_CSP } : {}) });
+    if (req.method === 'HEAD') return res.end();
     return fs.createReadStream(yol).pipe(res);
   }
 

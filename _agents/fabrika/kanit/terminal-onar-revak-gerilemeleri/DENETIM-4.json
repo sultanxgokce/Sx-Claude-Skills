@@ -1,0 +1,25 @@
+{
+  "tur": 4,
+  "is": "terminal-onar-revak-gerilemeleri",
+  "pr": "303",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T12:41:42+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 75187,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Talep edilen üç REVAK davranışı ortak 2.3.0 koduna taşınmış; gerçek yerel kurulumda rapor dizini 404 → 200, yayın kipi kapıları ve cron kaynaklı bekçi izi birlikte ölçülmüş. Önceki turun kanıt açıkları giderilmiş, sınavlar ile mutasyon turu da korumaların gerçekten çalıştığını gösteriyor; üretimi durduracak bulgu kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Aynı etiketli canlı önce/sonra çifti ortak 2.2.2'de Usta Defteri 404 ve yenilenmeyen izi, gerçek proje yolundaki 2.3.0 sonrasında ise KAPI_RAPOR_DIZ aktarımını, Usta Defteri 200'ü, CSP kum havuzunu, gizli yol 404'ünü, yazma 405'ini ve elle çağrılmadan cron tarafından yenilenen izi ölçüyor. Ortak rapor sınavları 51/51, bekçi sınavları 12/12, kabuk-kaçışı sınavları ve eski gerileme takımı yeşil; 16 mutasyonun tamamı sınavı kırmızıya çeviriyor. Karttaki R/M adları ortak depoda Y/M eşlemesine dönüştürülmüş ve SKILL.md içinde R1-R11 ile M14-M18 karşılıkları açıkça belgelenmiş."
+  }
+}
