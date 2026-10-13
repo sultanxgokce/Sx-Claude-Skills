@@ -1,7 +1,7 @@
 {
   "is": "fabrika-araclari-uc-kusur",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-13T11:48:36+03:00",
+  "guncelleme": "2026-10-13T11:49:14+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -71,17 +71,17 @@
       "etiket": "olc-arac-siniri-kanit",
       "asama": "tek",
       "dosya": "olcum-olc-arac-siniri-kanit-tek.txt",
-      "sha256": "f082f7e8514a4d80c2fc15af450d6c3f6eee626c44ffc6ff97ff89f02fb74e18",
+      "sha256": "270b3281dea362df4abc532daf2adef8217ad043d730003b66c9c5bddb7bc7b1",
       "komut": [
         "bash",
         "-c",
-        "echo \"olc.sh içinde cipa.sh yol çağrısı: $(grep -c \"cipa.sh.* yol\" gunluk-plan/scripts/olc.sh) · cipa.sh oku çağrısı: $(grep -c \"cipa.sh.* oku\\|}\\\" oku\" gunluk-plan/scripts/olc.sh) · çıpa dosyasını doğrudan okuyan head/tail: $(grep -cE \"(head|tail) -[0-9]+ \\\"\\\\\\$_cy\\\"\" gunluk-plan/scripts/olc.sh)\"; test \"$(grep -c \"cipa.sh.* yol\" gunluk-plan/scripts/olc.sh)\" -eq 0"
+        "f=gunluk-plan/scripts/olc.sh; kod=$(grep -vE \"^\\s*#\" \"$f\"); y=$(printf \"%s\\n\" \"$kod\" | grep -c \"cipa.sh.* yol\\|}\\\" yol\"); o=$(printf \"%s\\n\" \"$kod\" | grep -c \"}\\\" oku\"); h=$(printf \"%s\\n\" \"$kod\" | grep -cE \"(head|tail) -[0-9]+ \\\"\\$_cy\\\"\"); echo \"olc.sh KOD satırlarında (yorumlar hariç): cipa.sh yol çağrısı: $y · cipa.sh oku çağrısı: $o · çıpa dosyasını doğrudan okuyan head/tail: $h\"; test \"$y\" -eq 0 -a \"$o\" -ge 1 -a \"$h\" -eq 0"
       ],
-      "rc": 1,
-      "renk": "kirmizi",
-      "zaman": "2026-10-13T11:48:36+03:00",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T11:49:14+03:00",
       "sure_sn": 0.0
     }
   ],
-  "imza": "e1352f37577a3a83d055473bc58cd7da8fe00178b39cf896efd6fe4585bd6ee4"
+  "imza": "eeb1489866d994a70eab58fc000540605cec91cc9cd3a59b7a3bbd22c47026fc"
 }
