@@ -14,6 +14,43 @@
   "sultan": false,
   "kanit_nerede": "",
   "oda": "",
-  "durum": "acik",
-  "gecmis": []
+  "durum": "bitti",
+  "gecmis": [
+    {
+      "zaman": "2026-10-13T12:40:13+03:00",
+      "olay": "tikandi"
+    },
+    {
+      "zaman": "2026-10-13T12:42:29+03:00",
+      "olay": "bitti"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "MUAVIN",
+      "oturum": "muavin/4390ad1f",
+      "gerekce": "İlerleyen iş: 3/5·H(3 bulgu) → 4/5·E(1) → 4/5·E(2, ikisi de ÖNCE kaydının anlatımına dair). ÖNCE artık HTTP ile ölçüldü (404) ve bekçi açıklaması çıktısıyla tutarlı; sınıfsız iş, dördüncü tur yalnız kanıt çiftinin doğrulanması.",
+      "zaman": "2026-10-13T12:39:41+03:00"
+    },
+    {
+      "karar": "devam",
+      "reis": "MUAVIN",
+      "oturum": "muavin/4390ad1f",
+      "gerekce": "Sınıfsız iş, ilerliyor (puan 3→4, kod bulgusu 3→0); kalan bulgular kanıt anlatımıydı ve ölçümle kapatıldı",
+      "zaman": "2026-10-13T12:40:13+03:00"
+    }
+  ],
+  "bitis": "2026-10-13T12:42:29+03:00",
+  "pr": "303",
+  "puan": {
+    "kod": 5,
+    "dogru": "E",
+    "tur": 4
+  },
+  "kanit_var": true,
+  "tikanma": {
+    "yol": "devam",
+    "neden": "3 tur: 3/5·H(3) → 4/5·E(1) → 4/5·E(2); son iki bulgu yalnız ÖNCE kaydının anlatımına dairdi, ÖNCE artık aynı kutuda HTTP ile ölçüldü (404→200, iz yenilenmiyor→cron'dan). Dördüncü tur kanıt çiftinin doğrulanması."
+  }
 }
