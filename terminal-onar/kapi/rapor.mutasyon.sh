@@ -52,7 +52,7 @@ bilgi "if (!yol.startsWith(kok + path.sep)) { res.writeHead(404); return res.end
 # ── YAYIN KİPİ (2.3.0) — her koruma tek tek öldürülür; Y kapıları kırmızıya dönmeli
 dene "M13 yayın kipi: kum havuzu başlığı kalktı" "...(yayin ? { 'content-security-policy': RAPOR_CSP } : {}) });" "});"
 dene "M14 yayın kipi: yazma yöntemi reddi (405) kalktı" "if (yayin && req.method !== 'GET' && req.method !== 'HEAD') { res.writeHead(405, { allow: 'GET, HEAD' }); return res.end(); }" ""
-dene "M15 gizli ad reddi kalktı" "if (parca.some((p) => p.startsWith('.'))) { res.writeHead(404); return res.end('yok'); }" ""
+dene "M15 gizli ad reddi kalktı" "if (ad.startsWith('.') || parca.some((p) => p.startsWith('.'))) { res.writeHead(404); return res.end('yok'); }" ""
 dene "M16 yayın işareti hiç okunmuyor (her klasör işaretsiz)" "const yayin = fs.existsSync(path.join(kokGercek, '.defter-yayin'));" "const yayin = false;"
 dene "M17 her klasör yayın sayılırsa SEDİR gerilemesi (işaretsiz klasör de kum havuzuna girer)" "const yayin = fs.existsSync(path.join(kokGercek, '.defter-yayin'));" "const yayin = true;"
 echo "── $gecti kırmızıya döndü · $dusen yeşil kaldı/uygulanamadı"

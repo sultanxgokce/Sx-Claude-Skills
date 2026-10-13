@@ -1,0 +1,18 @@
+$ bash -c ssh -o BatchMode=yes hostsrv 'sudo -n docker exec -i -u abc -e HOME=/config cloudtop-revak bash -s' < /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/revak-prova-olc.sh
+# rc=0 sure=8.0s zaman=2026-10-13T12:31:06+03:00
+--- stdout ---
+onar_rc=0
+kapi_pid=3432537
+kapi_kodu=terminal-onar.prova-230/kapi
+kapi_ortaminda_KAPI_RAPOR_DIZ=1
+sifre_kaynagi=ortam-dosyasi(tek anahtar)
+giris_http=200
+usta_defteri_http=200
+csp=content-security-policy: sandbox allow-scripts allow-popups allow-popups-to-escape-sandbox allow-downloads; de
+gizli_http=404
+post_http=405
+bekci_elle_rc=0 (cron ortak 2.2.2'yi çağırıyor; cron'dan iz ortak kurulumdan sonra ölçülür)
+bekci_izi_yasi_sn=0
+{"saglam":true,"ana_tmux":"ok","ana_claude":"ok","web_terminal":"ok","kurtarici":"ok","bekci":"ok","ana_oturum":"<kimlik>","zaman":"2026-10-13T12:31:06+03:00"}
+SONRA: kapı rapor dizinini ortamdan aldı, Usta Defteri 200 (kum havuzunda), gizli 404, yazma 405, bekçi izi taze
+--- stderr ---

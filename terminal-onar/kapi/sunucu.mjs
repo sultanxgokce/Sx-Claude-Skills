@@ -278,7 +278,8 @@ const sunucu = http.createServer(async (req, res) => {
     const kok = path.join(RAPOR_DIZ, ad);
     if (!parca.length) { res.writeHead(302, { location: T(`/rapor/${ad}/`) }); return res.end(); }
     const ic = parca.join('/') || 'index.html';
-    if (parca.some((p) => p.startsWith('.'))) { res.writeHead(404); return res.end('yok'); }   // gizli ad (yayın işareti, geçici dosya) sunulmaz
+    // gizli ad (yayın işareti, geçici dosya) sunulmaz — kök ad zaten ^[a-z0-9-]$ kısıtından geçti (nokta giremez), burada açıkça da sorulur
+    if (ad.startsWith('.') || parca.some((p) => p.startsWith('.'))) { res.writeHead(404); return res.end('yok'); }
     const yol = path.join(kok, ic);
     // 🔴 METİNSEL ÖNEK YETMEZ — SEMBOLİK BAĞ (bağımsız göz, tur 1).
     //    Önek kontrolü yolun YAZIMINA bakar; dosya sisteminin nereye baktığına değil.

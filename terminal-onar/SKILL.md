@@ -192,7 +192,11 @@ Rapor klasöründe **`.defter-yayin`** işareti varsa (defter-sayfasi'nın yayı
 `onar.sh` bunu kapıya `KAPI_RAPOR_DIZ` olarak **verir**. 🔴 Gerileme dersi: REVAK sayfaları `projects/revak/veri/rapor`'daydı,
 ortak `onar.sh` değişkeni kapıya vermiyordu → kapı ortak varsayılana baktı → canlı sayfa 404 (12-13 Eki).
 
-Kanıt: `kapi/rapor.test.mjs` (**48 kapı**: R serisi + yayın kipi **Y1-Y14**, Y12-Y14 SEDİR gerileme zırhı) ·
+REVAK'ın kendi sınavlarıyla eşleme (adlar ortak depoda çakışmasın diye değişti; davranış aynı): R1→Y1 · R2→Y2 · R3→Y3 ·
+R4→Y4 · R5→Y5 · R6→Y6 · R7→Y7 · R8→Y8 · R9→Y9 · R10→Y10+Y10b · R11→Y15 · (ek: Y12-Y14 SEDİR zırhı, Y13b kök gizli ad);
+mutasyon M14(bağ sınırı)→M10/M11 · M15(gizli ad)→M15 · M16(kum havuzu)→M13 · M17(girişin arkasında)→M1 · M18(yazma reddi)→M14.
+
+Kanıt: `kapi/rapor.test.mjs` (**51 kapı**: R serisi + yayın kipi **Y1-Y15**, Y12-Y14 SEDİR gerileme zırhı) ·
 `kapi/rapor.mutasyon.sh` (**16 koruma** öldürüldü, 16'sı da sınavı kırmızıya çevirdi — M13-M17 yayın kipi; M16 "işaret
 okunmuyor" ve M17 "her klasör yayın" iki yönlü) · `kapi/rapor-kapi.test.sh` (koşucunun gördüğü çağıran — depo kapısı
 yalnız kabuk sınavlarını keşfediyor).

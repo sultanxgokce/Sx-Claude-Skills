@@ -1,5 +1,5 @@
-$ bash -c cd terminal-onar/kapi && node rapor.test.mjs 2>&1 | grep -E "^── Y|Y1[0-4]|Y[1-9] |geçti"
-# rc=0 sure=0.4s zaman=2026-10-13T12:22:45+03:00
+$ bash -c cd terminal-onar/kapi && node rapor.test.mjs 2>&1 | grep -E "^── Y|Y1[0-5]|Y[1-9] |geçti"
+# rc=0 sure=0.4s zaman=2026-10-13T12:31:24+03:00
 --- stdout ---
 ── Y · YAYIN KİPİ (.defter-yayin işaretli klasör: salt-okur + kum havuzu — REVAK tasarımı, 2.3.0) ──
   ✓ Y1 girişsiz yayın sayfası AÇILMAZ (girişe yönlenir)
@@ -16,5 +16,8 @@ $ bash -c cd terminal-onar/kapi && node rapor.test.mjs 2>&1 | grep -E "^── Y
   ✓ Y12 işaretsiz klasör kum havuzuna ALINMAZ (SEDİR sayfası veri.json yazabilsin)
   ✓ Y13 gizli ad işaretsiz klasörde de sunulmaz
   ✓ Y14 işaretsiz klasörde yazma yöntemi eskisi gibi 404 (405 yalnız yayın kipi)
-48 geçti · 0 kaldı
+  ✓ Y10b rapor kökü listelenmez (404)
+  ✓ Y13b KÖK adı gizli olan klasör (RAPOR_DIZ/.gizli, var olsa da) sunulmaz
+  ✓ Y15 rapor dizini verilmeyen/olmayan kapıda yol HİÇ YOK (404, kum havuzu başlığı yok)
+51 geçti · 0 kaldı
 --- stderr ---

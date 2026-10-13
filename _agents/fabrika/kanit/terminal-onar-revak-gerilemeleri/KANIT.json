@@ -1,7 +1,7 @@
 {
   "is": "terminal-onar-revak-gerilemeleri",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-13T12:24:13+03:00",
+  "guncelleme": "2026-10-13T12:31:26+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -24,15 +24,15 @@
       "etiket": "rapor-sinavi-yayin-kipi",
       "asama": "sonra",
       "dosya": "olcum-rapor-sinavi-yayin-kipi-sonra.txt",
-      "sha256": "5b72f54d48cda4332a236d89c29c5221396587114e691fdb2f1ef9e01d3d1a21",
+      "sha256": "7f57c42d687e3772c1c8d5546442966a47e7f71be4be23d9569d63ebed4ce9a6",
       "komut": [
         "bash",
         "-c",
-        "cd terminal-onar/kapi && node rapor.test.mjs 2>&1 | grep -E \"^── Y|Y1[0-4]|Y[1-9] |geçti\""
+        "cd terminal-onar/kapi && node rapor.test.mjs 2>&1 | grep -E \"^── Y|Y1[0-5]|Y[1-9] |geçti\""
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T12:22:45+03:00",
+      "zaman": "2026-10-13T12:31:24+03:00",
       "sure_sn": 0.4
     },
     {
@@ -81,7 +81,39 @@
       "renk": "yesil",
       "zaman": "2026-10-13T12:24:13+03:00",
       "sure_sn": 79.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-revak-kapi-rapor-dizini-ve-bekci-izi",
+      "asama": "sonra",
+      "dosya": "olcum-canli-revak-kapi-rapor-dizini-ve-bekci-izi-sonra.txt",
+      "sha256": "19faa884247414c416407f7faeeeef8c84a19bc1a6e33664f99b0e71becf5ee6",
+      "komut": [
+        "bash",
+        "-c",
+        "ssh -o BatchMode=yes hostsrv 'sudo -n docker exec -i -u abc -e HOME=/config cloudtop-revak bash -s' < /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/revak-prova-olc.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T12:31:06+03:00",
+      "sure_sn": 8.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "onar-sinavi-rapor-dizini-kacisi",
+      "asama": "tek",
+      "dosya": "olcum-onar-sinavi-rapor-dizini-kacisi-tek.txt",
+      "sha256": "8657e87ae52950d4d939d467a014543097fc5141207cde70021905afb9c07bbb",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/scripts && bash onar.test.sh 2>&1 | grep -E \"K4|geçti\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T12:31:26+03:00",
+      "sure_sn": 2.0
     }
   ],
-  "imza": "6b28b4cb29e4e536971c03a0e0079e6ec988003a0c44d464aee5f9d77859e6da"
+  "imza": "5a4c91387a9650481de367f1ec636cf51d4272963d4770b27d7b82b395611551"
 }

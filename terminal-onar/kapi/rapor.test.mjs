@@ -48,6 +48,7 @@ writeFileSync(join(RD, 'usta', 'veri.json'), '{"surum":1}');
 writeFileSync(join(RD, 'usta', 'belgeler', 'b.txt'), 'BELGE');
 writeFileSync(join(RD, 'usta', '.defter-yayin'), 'isaret');
 writeFileSync(join(RD, 'ornek', '.gizli'), 'GIZLI');
+mkdirSync(join(RD, '.gizli'), { recursive: true }); writeFileSync(join(RD, '.gizli', 'index.html'), 'GIZLI-KOK');
 symlinkSync(join(T, 'gizli.txt'), join(RD, 'usta', 'kacak.txt'));
 mkdirSync(join(RD, 'BUYUK_ad'), { recursive: true }); writeFileSync(join(RD, 'BUYUK_ad', 'index.html'), 'SIZDI');
 
@@ -193,6 +194,20 @@ try {
     kapi('Y13 gizli ad işaretsiz klasörde de sunulmaz', e2.status === 404, `→ ${e2.status}`);
     const e3 = await iste('/rapor/ornek/', { cerez, metot: 'POST' });
     kapi('Y14 işaretsiz klasörde yazma yöntemi eskisi gibi 404 (405 yalnız yayın kipi)', e3.status === 404, `→ ${e3.status}`);
+    const k0 = await iste('/rapor/', { cerez });
+    kapi('Y10b rapor kökü listelenmez (404)', k0.status === 404, `→ ${k0.status}`);
+    const k1 = await iste('/rapor/.gizli/', { cerez }); const k1b = await iste('/rapor/.gizli/index.html', { cerez });
+    kapi('Y13b KÖK adı gizli olan klasör (RAPOR_DIZ/.gizli, var olsa da) sunulmaz', k1.status === 404 && k1b.status === 404 && !(await k1b.text()).includes('GIZLI-KOK'), `→ ${k1.status} ${k1b.status}`);
+    // R11 karşılığı: rapor dizini var olmayan bir yere işaret ediyorsa yol fiilen YOKTUR (404, kum havuzu başlığı da yok) — ikinci kapı
+    const P2 = 18782; const p2 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], {
+      env: { ...process.env, KAPI_PORT: String(P2), KAPI_TABAN: '/sinavkutu', TO_KUTU: 'sinavkutu', KAPI_RAPOR_DIZ: join(T, 'yok-boyle-dizin'),
+             KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE }, stdio: ['ignore', 'pipe', 'pipe'] });
+    for (let i = 0; i < 50; i++) { await new Promise((r) => setTimeout(r, 100)); try { if ((await fetch(`http://127.0.0.1:${P2}/sinavkutu/giris`)).status === 200) break; } catch {} }
+    const g2 = await fetch(`http://127.0.0.1:${P2}/sinavkutu/giris`, { method: 'POST', redirect: 'manual', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ parola: SIFRE }) });
+    const c2 = (g2.headers.get('set-cookie') || '').split(';')[0];
+    const r2 = await fetch(`http://127.0.0.1:${P2}/sinavkutu/rapor/usta/`, { redirect: 'manual', headers: { cookie: c2 } });
+    kapi('Y15 rapor dizini verilmeyen/olmayan kapıda yol HİÇ YOK (404, kum havuzu başlığı yok)', r2.status === 404 && !/sandbox/.test(r2.headers.get('content-security-policy') || ''), `→ ${r2.status}`);
+    p2.kill();
   }
 } finally {
   p.kill();
