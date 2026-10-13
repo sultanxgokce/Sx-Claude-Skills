@@ -1,0 +1,13 @@
+$ bash -c cd yazilim-fabrikasi/scripts && cp is-alani.sh /tmp/ia.bak && sed -i "s/    exit 2\n  fi/XX/" is-alani.sh && python3 - <<PY
+s=open("is-alani.sh").read(); s=s.replace("""    _hata "çalışma alanı YOK: \$yol""","""    _bilgi "· çalışma alanı zaten yok: \$yol"; : "\$yol""",1); s=s.replace("""    exit 2
+  fi
+  git -C "\$DEPO" branch -d""","""  fi
+  git -C "\$DEPO" branch -d""",1); open("is-alani.sh","w").write(s)
+PY
+o=$(bash is-alani.test.sh 2>&1); cp /tmp/ia.bak is-alani.sh; rm -f /tmp/ia.bak; printf "%s\n" "$o" | grep -E "✗|SONUÇ"; k=$(printf "%s\n" "$o" | grep -c "✗ olmayan alan"); echo "eski sahte-yeşil davranış geri gelince T10 kırmızı: $k (beklenen 1)"; test "$k" -eq 1
+# rc=0 sure=1.4s zaman=2026-10-13T11:46:22+03:00
+--- stdout ---
+  ✗ olmayan alan → rc 2 + 'YOK' (eskiden rc 0 'zaten yok')
+── SONUÇ: 34 geçti · 1 kaldı ──
+eski sahte-yeşil davranış geri gelince T10 kırmızı: 1 (beklenen 1)
+--- stderr ---

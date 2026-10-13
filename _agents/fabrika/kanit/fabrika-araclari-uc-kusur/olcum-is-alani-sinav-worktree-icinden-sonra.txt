@@ -1,0 +1,7 @@
+$ bash -c cd yazilim-fabrikasi/scripts && bash is-alani.test.sh 2>&1 | grep -E "T9|T10|✗|SONUÇ"
+# rc=0 sure=2.3s zaman=2026-10-13T11:46:07+03:00
+--- stdout ---
+════ T9 · worktree İÇİNDEN çağrı: birincil depo bulunur, yol çift ad almaz (13 Eki) ════
+════ T10 · olmayan alanı kapatmak YEŞİL değil (rc 2, sahte başarı yok) ════
+── SONUÇ: 35 geçti · 0 kaldı ──
+--- stderr ---

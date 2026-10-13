@@ -1,0 +1,71 @@
+{
+  "is": "fabrika-araclari-uc-kusur",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-13T11:46:22+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "is-alani-sinav-worktree-icinden",
+      "asama": "sonra",
+      "dosya": "olcum-is-alani-sinav-worktree-icinden-sonra.txt",
+      "sha256": "0329ec4b3c952bab21642be5cd81b92e19fa83c5ebc6ee1b72366c74b72130c9",
+      "komut": [
+        "bash",
+        "-c",
+        "cd yazilim-fabrikasi/scripts && bash is-alani.test.sh 2>&1 | grep -E \"T9|T10|✗|SONUÇ\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T11:46:07+03:00",
+      "sure_sn": 2.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "olc-sinav-bugunun-cipasi",
+      "asama": "sonra",
+      "dosya": "olcum-olc-sinav-bugunun-cipasi-sonra.txt",
+      "sha256": "d9aea39bb301474ef46fc55a4a111e424cc9edcaae8e584f5641cbe7c3f8157c",
+      "komut": [
+        "bash",
+        "-c",
+        "cd gunluk-plan/scripts && bash olc.test.sh 2>&1 | grep -E \"O11|🔴|SONUÇ\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T11:46:21+03:00",
+      "sure_sn": 13.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bulgu-hal-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-bulgu-hal-sinav-sonra.txt",
+      "sha256": "1d9e764cf0921ce060e17147b4b6722db25a3c11bf83a3b694c9f57fbd6ff953",
+      "komut": [
+        "bash",
+        "bulgu/scripts/bulgu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T11:46:21+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-olmayan-alan-yesil",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-olmayan-alan-yesil-tek.txt",
+      "sha256": "3bfb8b9fe4f57e10ba9bfaa03915b1a4310c96407e0784373ed08cd44f3b02f2",
+      "komut": [
+        "bash",
+        "-c",
+        "cd yazilim-fabrikasi/scripts && cp is-alani.sh /tmp/ia.bak && sed -i \"s/    exit 2\\n  fi/XX/\" is-alani.sh && python3 - <<PY\ns=open(\"is-alani.sh\").read(); s=s.replace(\"\"\"    _hata \"çalışma alanı YOK: \\$yol\"\"\",\"\"\"    _bilgi \"· çalışma alanı zaten yok: \\$yol\"; : \"\\$yol\"\"\",1); s=s.replace(\"\"\"    exit 2\n  fi\n  git -C \"\\$DEPO\" branch -d\"\"\",\"\"\"  fi\n  git -C \"\\$DEPO\" branch -d\"\"\",1); open(\"is-alani.sh\",\"w\").write(s)\nPY\no=$(bash is-alani.test.sh 2>&1); cp /tmp/ia.bak is-alani.sh; rm -f /tmp/ia.bak; printf \"%s\\n\" \"$o\" | grep -E \"✗|SONUÇ\"; k=$(printf \"%s\\n\" \"$o\" | grep -c \"✗ olmayan alan\"); echo \"eski sahte-yeşil davranış geri gelince T10 kırmızı: $k (beklenen 1)\"; test \"$k\" -eq 1"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T11:46:22+03:00",
+      "sure_sn": 1.4
+    }
+  ],
+  "imza": "ec22c1aa211ab8446a42486cf79d3de993054499ed20786304d49dc5e09fb2aa"
+}

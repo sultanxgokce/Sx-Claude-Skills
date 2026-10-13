@@ -74,14 +74,23 @@ if [ -z "$_ajan6" ] || [ "$_ajan6" = "bilinmiyor" ]; then
   olcemedim "kimliğimi soramadım (çıpa aracı eski ya da yok) — BAŞKASININ defterini basmıyorum"
 else
   _d=""
-  for _y in "$KOK/_agents/handoff/$_ajan6-defter.md" \
+  # 🔴 BUGÜNÜN ÇIPASI ÖNCE (13 Eki): dünden kalan plan + kapanış çıpada yaşar (`cipa.sh yaz/tazele`); eski konum
+  #    dosyası (<ajan>-konum-*.md) 3 hafta bayat olabilir ve araç onu "dün nerede bıraktım" diye basıyordu.
+  #    Çıpanın yolu da aracın kendisinden sorulur (`cipa.sh yol`), burada türetilmez. Çıpa bugünün değilse düşmez.
+  _cy="$(bash "${GUNLUK_PLAN_CIPA_ARAC:-$SK/gunluk-plan/scripts/cipa.sh}" yol 2>/dev/null)" || _cy=""
+  if [ -n "$_cy" ] && [ -f "$_cy" ] && head -3 "$_cy" | grep -q "$(date +%Y-%m-%d)"; then
+    printf '  kaynak: %s (BUGÜNÜN çıpası · ajan: %s)\n' "$(basename "$_cy")" "$_ajan6"
+    tail -14 "$_cy"
+    _d="$_cy"
+  fi
+  [ -n "$_d" ] || for _y in "$KOK/_agents/handoff/$_ajan6-defter.md" \
             "$(ls -t "$KOK/_agents/handoff/$_ajan6-konum-"*.md 2>/dev/null | head -1)"; do
     [ -n "$_y" ] && [ -f "$_y" ] && { _d="$_y"; break; }
   done
-  if [ -n "$_d" ]; then
+  if [ -n "$_d" ] && [ "$_d" != "$_cy" ]; then
     printf '  kaynak: %s (ajan: %s)\n' "$(basename "$_d")" "$_ajan6"
     tail -12 "$_d"
-  else
+  elif [ -z "$_d" ]; then
     olcemedim "bu ajanın ($_ajan6) kendi izi bulunamadı — aradığım: $_ajan6-defter.md · $_ajan6-konum-*.md"
     printf '  ℹ️ başka bir ajanın defteri BİLEREK basılmadı (yanlış iz + sızıntı).\n'
   fi
