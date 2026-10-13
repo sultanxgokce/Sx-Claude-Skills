@@ -1,0 +1,32 @@
+{
+  "tur": 4,
+  "is": "koltuk-fark",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T21:48:08+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 65429,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Araç, kaynak yoluyla 18 terminalli kutuda farkı ölçüyor; DÜŞEN/hayalet, gerekçeli gizleme, ortak ad kuralı ve istemci-hedef farkı sınavlarla ve gerçekçi filo verisiyle gösterilmiş. Ancak filo koşucusu her rc=127 sonucunu “node yok, terminalsiz” diye yorumlayarak tar/ssh/çalıştırma arızalarını ölçüm dışı bırakabilir; önce bu sessiz yanlış sınıflamayı çöz.",
+    "bulgular": [
+      {
+        "ne": "Filo koşucusu rc=127’nin nedenini doğrulamadan kutuyu terminalsiz sayıyor. `--kaynak` yolunda eksik `tar` gibi bir komut veya başka bir “command not found” arızası da rc=127 üretip ölçülemedi yerine terminalsiz sınıfına girebilir; bu, kartın sessiz düşürmeme ilkesini zedeler.",
+        "kanit": "Koşucunun sonuç ayrımında `3:terminalsiz*|127:*` dalı bütün rc=127 sonuçlarını doğrudan `terminalsiz (node yok)` kabul ediyor; rc=127’nin gerçekten seçilen Node yürütücüsünden geldiğini sınayan bir koşul yok. İlk filo taramasındaki cloudtop ve cloudtop-kilavuz rc=127 kayıtlarının sonraki sürümde “node yok” diye sınıflandırılması bu dalın fiilen kullanıldığını gösteriyor.",
+        "konum": "terminal-onar/scripts/koltuk-fark-filo.sh:45",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Fark sınavı 14/14, mutasyon 12/12, ad eşdeğerliği 5/5; iki başarılı kaynak taramasında 24 kaptan terminalli 18’i gerçekçi verilerle temiz ölçülmüş, YargiYenileme benzeri hedef farkları gösterilmiş ve bir kutuda geçici kaynak kalıntısının önce=0 sonra=0 olduğu ölçülmüş. Kayıtların tamamı “sonra” olduğundan biçimsel önce/sonra çifti yok; buna karşın daraltılmış kart yalnız araç ile `--kaynak` ölçümünü istediği için canlı kurulu kopyanın salt-okur ölçümünün bulunmaması artık bu kartın eksiği değildir."
+  }
+}

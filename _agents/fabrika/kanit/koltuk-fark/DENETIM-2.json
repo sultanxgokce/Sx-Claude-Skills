@@ -1,0 +1,32 @@
+{
+  "tur": 2,
+  "is": "koltuk-fark",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T21:44:27+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 60762,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Fark ölçeri; DÜŞEN/hayalet kırmızısı, gerekçeli gizleme, ortak ad modülü ve istemci-hedef farkı dahil talebin esasını karşılıyor; önceki turdaki iki istemci ölçüm açığı da sınav ve mutasyonlarla kapatılmış. Ancak “salt-okur” denilen filo koşucusu kanıtlanan --kaynak yolunda kutu içinde geçici dizin ve dosya yazıyor; üretime hazır demeden önce bu sözleşme ya gerçekten salt-okur yapılmalı ya da iş kartı açıkça “kalıcı yazmaz” diye düzeltilmeli.",
+    "bulgular": [
+      {
+        "ne": "Filo koşucusunun --kaynak yolu iş kartındaki “18 kutuda salt-okur” şartına uymuyor: uzak kutuda geçici dizin oluşturuyor, tar arşivini buraya açıyor ve ardından siliyor. Yazma kalıcı olmasa da salt-okur değildir; ayrıca temizlik yalnız normal komut zincirinde olduğundan kesinti halinde geçici içerik kalabilir.",
+        "kanit": "Kod uzak kabukta `d=$(mktemp -d) && tar -x -C $d` ile kutunun dosya sistemine dört dosya yazıyor, sonra `rm -r $d` çalıştırıyor. Manifestteki üç filo kaydının komutu da `--kaynak .../terminal-onar` kullandığından sunulan gerçek filo kanıtı tam olarak bu yazan yolu çalıştırmıştır.",
+        "konum": "terminal-onar/scripts/koltuk-fark-filo.sh:24",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. İlk filo taraması kırmızı rc=2 iken sonraki iki tarama yeşil rc=0 olmuş; 24 kaptan terminalli 18’inde gerçekçi oturum sayıları, DÜŞEN/hayalet sıfırı ve YargiYenileme örneği görülüyor. Hermetik fark sınavı 14/14, mutasyon 12/12 ve ad eşdeğerliği 5/5 yeşil; önceki turdaki `=hedef`, list-clients hatası ve okunamayan /proc yolları artık doğrudan ölçülüyor. Bununla birlikte kayıtların hepsi “sonra” etiketli olduğundan biçimsel bir önce/sonra ölçüm çifti yok; ayrıca yeşil filo kanıtı salt-okur iddiasını desteklemiyor, tersine --kaynak komutu geçici yazma yapan yolu çağırıyor."
+  }
+}

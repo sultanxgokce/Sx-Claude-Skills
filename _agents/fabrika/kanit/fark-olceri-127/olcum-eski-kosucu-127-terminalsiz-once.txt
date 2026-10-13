@@ -1,0 +1,11 @@
+$ env FILO_BETIK=/tmp/tmp.ClnqBbHuj4/eski.sh bash terminal-onar/scripts/koltuk-fark-filo.test.sh
+# rc=1 sure=0.2s zaman=2026-10-13T21:51:11+03:00
+--- stdout ---
+  ✓ N1 temiz kutu temiz sayılır
+  ✓ N2 kutunun kendi beyanı (tmux yok / node yok) → terminalsiz
+  ✗ N3 rc 127 (tar yok) → ÖLÇÜLEMEDİ, terminalsiz DEĞİL → beklenen [1|0] olan [0|1]
+  ✓ N4 tanınmayan rc → ÖLÇÜLEMEDİ
+  ✓ N5 ölçülemeyen varken genel rc 2 (temiz sayılmaz)
+  ✗ N6 özet: terminalli 3 (1 temiz + 2 ölçülemedi) · terminalsiz 2 → beklenen [1] olan [0]
+GEÇEN: 4 · KALAN: 2
+--- stderr ---

@@ -11,13 +11,16 @@ E200="$(printf '😀%.0s' $(seq 1 200))"; E201="${E200}😀"   # astral: JS'te 2
 DERLEM=( '2026/85' 'serdar' 'muavin-2' 'a_b' 'ş-ğ' '<img/src=x/onerror=alert(7)>' "o'reilly" 'x"y' '-bas' '/kok' "$U200" 'a b' '😀x' "$E200"
          'a.b' 'a:b' '$1' '@x' '%y' '=z' '' "$U201" "$E201" ' bas' 'son ' $'a\tb' )
 BEK=(     1 1 1 1 1 1 1 1 1 1 1 1 1 1   0 0 0 0 0 0 0 0 0 0 0 0 )
-R="$(cd "$D/../kapi" && node -e '
-const s=require("fs").readFileSync("sunucu.mjs","utf8"); const m=s.match(/const KOLTUK_AD_DESEN = (\/.*?\/[a-z]*);/); if(!m){console.log("DESEN-YOK");process.exit(0)}
-const re=eval(m[1]); const a=JSON.parse(process.argv[1]); console.log(a.map(x=>re.test(x)?1:0).join(""))' "$(python3 -c 'import json,sys;print(json.dumps(sys.argv[1:]))' "${DERLEM[@]}")")"
+# Kapı kuralı artık modülden İÇE ALINIR (metinden ayıklanmaz): sunucu.mjs ve fark ölçeri aynı modülü kullanır.
+R="$(cd "$D/../kapi" && node --input-type=module -e '
+import { KOLTUK_AD_DESEN as re } from "./koltuklar.mjs";
+const a=JSON.parse(process.argv[1]); console.log(a.map(x=>re.test(x)?1:0).join(""))' "$(python3 -c 'import json,sys;print(json.dumps(sys.argv[1:]))' "${DERLEM[@]}")" 2>&1)"
+grep -q "from './koltuklar.mjs'" "$D/../kapi/sunucu.mjs" && ! grep -q '^const KOLTUK_AD_DESEN' "$D/../kapi/sunucu.mjs"
+kapi "K0 kapı ad kuralını modülden alır (ikinci kopya yok)" "0" "$?"
 B=""; for x in "${DERLEM[@]}"; do koltuk_adi_gecerli "$x" && B="${B}1" || B="${B}0"; done
 E="$(printf '%s' "${BEK[@]}")"
 kapi "K1 kabuk kuralı beklenen hükmü verir (${#DERLEM[@]} ad)" "$E" "$B"
-kapi "K2 kapı (sunucu.mjs KOLTUK_AD_DESEN) kabukla AYNI hükmü verir" "$B" "$R"
+kapi "K2 kapı (koltuklar.mjs KOLTUK_AD_DESEN) kabukla AYNI hükmü verir" "$B" "$R"
 S="kadi-sinav-$$"; t=0; f=""
 for i in "${!DERLEM[@]}"; do [ "${BEK[$i]}" = 1 ] || continue; n="${DERLEM[$i]}"
   if tmux -L "$S" new-session -d -s "$n" 2>/dev/null && tmux -L "$S" has-session -t "=$n" 2>/dev/null \

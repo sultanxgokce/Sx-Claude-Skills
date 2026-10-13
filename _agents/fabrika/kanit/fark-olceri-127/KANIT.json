@@ -1,0 +1,57 @@
+{
+  "is": "fark-olceri-127",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-13T21:51:24+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "eski-kosucu-127-terminalsiz",
+      "asama": "once",
+      "dosya": "olcum-eski-kosucu-127-terminalsiz-once.txt",
+      "sha256": "a3dfd5af1721fda86b36e204457541e85671fb9a4fbf2d8963561898bdb3d652",
+      "komut": [
+        "env",
+        "FILO_BETIK=/tmp/tmp.ClnqBbHuj4/eski.sh",
+        "bash",
+        "terminal-onar/scripts/koltuk-fark-filo.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-13T21:51:11+03:00",
+      "sure_sn": 0.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "yeni-kosucu",
+      "asama": "sonra",
+      "dosya": "olcum-yeni-kosucu-sonra.txt",
+      "sha256": "d6ab2b8776fe48d03df6295dcec34bacc9ff4ceb70a462717934ab1951ff1d8d",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-fark-filo.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T21:51:11+03:00",
+      "sure_sn": 0.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-filo-acik-beyan",
+      "asama": "sonra",
+      "dosya": "olcum-canli-filo-acik-beyan-sonra.txt",
+      "sha256": "48d4b37b67bd940cc0cbfbff12081dcecef121b67ec24db6b0d838749028c330",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-fark-filo.sh",
+        "--kaynak",
+        "/config/projects/_wt/Sx-Claude-Skills-koltuk-fark/terminal-onar"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T21:51:24+03:00",
+      "sure_sn": 13.2
+    }
+  ],
+  "imza": "5c93e26edc68e719039af819b6a4cc5578240cffafd3b6241dadb1b5b9f89a9b"
+}

@@ -1,0 +1,25 @@
+{
+  "tur": 1,
+  "is": "fark-olceri-127",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T21:51:54+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 13496,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Filo koşucusu artık yalnız rc=3 ile gelen açık terminalsiz beyanını terminalsiz sayıyor; rc=127 ve tanınmayan dönüşler ölçülemediye gidiyor. İstenen dar değişiklik, önce/sonra ölçümü ve canlı filo koşusuyla doğrulanmış; üretimi engelleyen bir bulgu yok.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önce ölçümü eski davranışta N3 ve N6'nın kaldığını, sonra ölçümü altı sınavın da geçtiğini gösteriyor; canlı filo kaydı da gerçekçi veride node yok ve tmux yok açık beyanlarının terminalsiz sınıflandığını gösteriyor. Ölçüm çifti mevcut ve doğrudan iş kartındaki rc=127 ayrımını sınıyor."
+  }
+}

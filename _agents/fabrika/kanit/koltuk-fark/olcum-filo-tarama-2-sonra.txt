@@ -1,0 +1,34 @@
+$ bash terminal-onar/scripts/koltuk-fark-filo.sh --kaynak /config/projects/_wt/Sx-Claude-Skills-koltuk-fark/terminal-onar
+# rc=0 sure=14.1s zaman=2026-10-13T21:41:03+03:00
+--- stdout ---
+– cloudtop: terminalsiz (node yok)
+✓ cloudtop-akar: 6 oturum · görünür 2 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-code: 17 oturum · görünür 13 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+– cloudtop-codex: terminalsiz (tmux kurulu değil)
+✓ cloudtop-enis: 7 oturum · görünür 3 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-huma: 10 oturum · görünür 6 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 1
+      ⓘ 'cc-37b0bec7' adıyla açılmış istemci → bugün 'Huma'
+✓ cloudtop-huzur: 7 oturum · görünür 3 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+– cloudtop-kilavuz: terminalsiz (node yok)
+✓ cloudtop-maiset: 10 oturum · görünür 6 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-medigate: 11 oturum · görünür 7 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-menzil: 6 oturum · görünür 2 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-mihenk: 12 oturum · görünür 8 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-mmex: 9 oturum · görünür 5 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-nazir: 15 oturum · görünür 11 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-nova: 12 oturum · görünür 8 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+– cloudtop-pano: terminalsiz (tmux kurulu değil)
+✓ cloudtop-revak: 9 oturum · görünür 5 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 2
+      ⓘ 'revak-ana' adıyla açılmış istemci → bugün 'revak-kol1'
+      ⓘ 'revak-kurtarici' adıyla açılmış istemci → bugün 'revak-ana'
+✓ cloudtop-s02: 5 oturum · görünür 1 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-sedir: 6 oturum · görünür 2 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-tellal: 12 oturum · görünür 8 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-tez: 5 oturum · görünür 1 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-vekatip: 17 oturum · görünür 13 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 2
+      ⓘ 'yenileme' adıyla açılmış istemci → bugün '2026/85'
+      ⓘ 'yenileme' adıyla açılmış istemci → bugün '2026/85'
+– cloudtop-wa: terminalsiz (tmux kurulu değil)
+– cloudtop-wa-sultan: terminalsiz (tmux kurulu değil)
+== 24 kap · terminalli 18: temiz 18 · DÜŞEN/hayalet olan 0 · ölçülemedi 0 · terminalsiz 6 ==
+--- stderr ---

@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.4.3
+version: 2.4.4
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -264,6 +264,14 @@ süreci **11 gün** yoktu, gösterge crontab satırına bakıp "ok" diyordu. Sı
 hermetik, sahte crontab/tmux; B11 mutasyon: eski gösterge geri gelince B2 yakalar).
 
 ## Sürüm notları
+- **2.4.4 (2026-10-13, BÂNİ · G-BANI-0007 madde 1 — "sessiz düşürme yok"):** fark ölçeri. `kapi/koltuk-fark.mjs` kutudaki her tmux
+  oturumuna tek hüküm verir: görünür · gizli:<neden> · gizli:ad-süzgeci · **DÜŞEN** (gerekçesiz → rc 1). Listede olup tmux'ta olmayan
+  (hayalet) da rc 1. Başka adla bağlı istemci (code-server sekmesi `tmux attach -t yenileme` açılmış, oturum sonra `2026/85` olmuş —
+  vekatip'teki "YargiYenileme" vakası) bilgi olarak raporlanır. Görünür liste `/api/koltuklar` ile AYNI koddan: ad kuralı + satır
+  çözümü `kapi/koltuklar.mjs`'e taşındı (kapı ve ölçer içe alır), gizleme kararı `koltuk-bagla.sh --gizli` (gerekçeli). Filo:
+  `scripts/koltuk-fark-filo.sh` (varsayılan yol SALT-OKUR: kurulu kopya; `--kaynak` kurulmamış sürüm için kutunun /tmp'sine geçici açar,
+  çıkışta siler — salt-okur değildir, kalıcı yazmaz). Canlı iniş sonrası salt-okur filo ölçümü ayrı adım (kart daraltıldı). İlk tarama 13 Eki:
+  terminalli 18 kutu · düşen 0 · hayalet 0; terminalsiz 6 kap (tmux/node yok) ayrı sayılır. Sınav `kapi/koltuk-fark.test.sh` 14 kapı; istemci listesi/komut satırı okunamazsa sessiz değil, sayılır.
 - **2.4.3 (2026-10-13, BÂNİ · A357 koltuk adı süzgeci, #308):** adında `/`, arada boşluk ya da emoji olan koltuk listeden düşmez; `/api/koltuklar` ile `/api/koltuk/<ad>` tek kurala bağlandı (`koltuk-adi.sh` ⟷ `KOLTUK_AD_DESEN`), uzunluk iki dilde kod noktası, seçici adı kaçışlı. (Dal 2.4.1 olarak açılmıştı; 2.4.2 önce birleştiği için 2.4.3.)
 - **2.4.2 (2026-10-13, BÂNİ · G-BANI-0002/4 ilk dilim — #304'ün kusuru):** Aç, merkez dışındaki 11 İSKÂN kutusunda kayıtlı
   koltuğu "kayıtsız" sanıyordu: `koltuk-ac.sh` yalnız `aile-registry.yaml` okuyordu, bu kutuların açıcısı ise

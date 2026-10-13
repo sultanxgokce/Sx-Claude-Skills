@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "koltuk-fark",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T21:42:00+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 49466,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Fark ölçeri, ortak liste/ad kuralı, gerekçeli gizleme ve 18 terminalli kutunun filo taraması uygulanmış; talebin ana gövdesi doğru karşılanmış. Önce istemci-hedef bilgisinin hata ve kesin hedef biçimlerinde sessizce kaybolmasını çöz; bu yüzden üretime hazır 5 değil.",
+    "bulgular": [
+      {
+        "ne": "İstemci-hedef denetimi ölçülemediğinde sessizce atlanıyor: list-clients başarısızsa hiçbir hata üretilmiyor, /proc/<pid>/cmdline okunamazsa istemci yok sayılıyor; böylece istenen “attach hedefi ≠ oturum adı” bilgisi eksik olduğu halde sonuç temiz ve rc=0 olabilir.",
+        "kanit": "koltuk-fark.mjs satır 42 yalnız c.rc===0 durumunu işler; satır 45 okuma hatasında catch { continue; } yapar. F7/F7b yalnız list-sessions hatasını, F5 ise başarılı /proc okumasını sınar; manifestte bu başarısızlık yollarını ölçen kayıt yok.",
+        "konum": "terminal-onar/kapi/koltuk-fark.mjs:42",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Başlangıç hedefi “=ad” biçimindeyse farklı hedef bilgisi özellikle bastırılıyor; talep hedef ile güncel oturum adının farklılığını isterken kod hedef.startsWith('=') olan tüm vakaları dışlıyor.",
+        "kanit": "Koşul satır 47’de hedef !== oturum olmasına rağmen !hedef.startsWith('=') şartı nedeniyle örneğin açılış hedefi '=yenileme', güncel oturum '2026/85' kayda girmez. F5 ve M7 kanıtları yalnız düz 'yenileme' hedefini kapsıyor.",
+        "konum": "terminal-onar/kapi/koltuk-fark.mjs:47",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Son filo taraması gerçekçi filo verisiyle 24 kaptan terminalli 18’ini temiz, 6’sını terminalsiz gösteriyor; ilk kırmızı taramanın ardından yeşil tekrar ölçümü de iyileşmeyi destekliyor. Ancak klasik önce/sonra ölçüm çifti yok ve istemci listesi/proc okuma arızası ile '=hedef' vakası kanıt kapsamı dışında."
+  }
+}

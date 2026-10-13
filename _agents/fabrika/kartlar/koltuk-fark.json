@@ -1,0 +1,35 @@
+{
+  "is": "koltuk-fark",
+  "cumle": "G-BANI-0007 madde 1 (SERDAR mektubu Nexus _agents/handoff/SERDAR-BANI-gorev-terminal-tam-kontrol-20261013.md): kutu başına tmux list-sessions ⟷ /api/koltuklar farkı — her oturum görünür | gizli:altyapı (gerekçeli) | gizli:ad-süzgeci | DÜŞEN; düşen>0 kırmızı (SESSİZ DÜŞÜRME YOK). Gizleme kararının tek kaynağı koltuk-bagla.sh (--gizli), ad kuralı kapıyla tek modül. Ayrıca istemci-attach hedefi ≠ oturum adı (code-server sekmesi, YargiYenileme vakası) bilgi olarak gösterilir. Filo koşucusu 18 kutuda salt-okur (ssh hostsrv docker exec). Bekçiye bağlama ayrı adım. || NETLEŞTİRME (BANI, bağımsız göz tur 2): filo koşucusunun varsayılan yolu salt-okurdur (kurulu kopya); kurulmamış sürümü ölçen --kaynak yolu kutunun /tmp'sine geçici açar ve çıkışta siler (kalıcı yazmaz). || DARALTMA (SERDAR reis kararı 13 Eki ~22:35): bu kart = araç + kaynak (--kaynak) ölçümü; canlı iniş sonrası salt-okur filo ölçümü AYRI adım (BANI iner, SERDAR'a raporlar).",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-13T21:34:48+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "BANI",
+      "oturum": "serdar:0 aile-notify 2026-10-13 ~22:35",
+      "gerekce": "SERDAR (reis) kararı: kart = araç + kaynak ölçümü; canlı sonrası salt-okur filo ölçümü ayrı adım, BANI iner ve raporlar",
+      "zaman": "2026-10-13T21:47:12+03:00"
+    },
+    {
+      "karar": "devam",
+      "reis": "BANI",
+      "oturum": "serdar:0 aile-notify 2026-10-13 ~22:35",
+      "gerekce": "SERDAR (reis): 'daraltılmış kartla tek tur denetim' — kalan tek bulgu daraltmayla kapsam dışına çıktı",
+      "zaman": "2026-10-13T21:47:35+03:00"
+    }
+  ]
+}
