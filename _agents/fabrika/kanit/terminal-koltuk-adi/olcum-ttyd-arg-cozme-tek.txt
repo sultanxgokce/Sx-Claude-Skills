@@ -1,0 +1,6 @@
+$ node _agents/fabrika/kanit/terminal-koltuk-adi/ttyd-arg-olcum.mjs
+# rc=0 sure=1.3s zaman=2026-10-13T13:09:10+03:00
+--- stdout ---
+?arg=2026%2F85 → kabuk: ARG=[2026/85] N=1
+?arg=2026/85 → kabuk: ARG=[2026/85] N=1
+--- stderr ---

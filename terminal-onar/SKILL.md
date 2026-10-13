@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.4.0
+version: 2.4.1
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -120,6 +120,14 @@ gizli süzgeci silinince 1 kapı, kapıda "boş liste" kaçağı 1 kapı, ad sü
 - **hâl** son 15 ekran satırından, filo yoklamasıyla AYNI desenler (`Nexus/scripts/filo.py hal()`): `calisiyor` ·
   `soru` · `sinirda` · `girdi` · `bos`; hiçbiri tutmazsa `bilinmiyor` (uydurulmaz); Claude'suz oturumda hâl ölçülmez → `bilinmiyor` (altı değer dışına çıkılmaz). Yalnız SON 15 dolu satır sayılır; soru deseni meşgul izini yener. **2.2.1:** capture-pane hedefi `ad:` (bölme hedefinde `=ad` geçersizdi → canlıda her koltuk 'bilinmiyor' çıkıyordu; sahte tmux artık `=` biçimini reddeder, D5-D12 bu hatayı ısırır).
 Eski 3 alanlı betikle kapı alan eklemez (tür/hâl uydurulmaz). Sınav: `koltuk-bagla.test.sh` D1-D12b · `sunucu.test.mjs` Y10.
+
+## Koltuk adı süzgeci = tmux'un kendi kuralı (2.4.1 · dilim 5/7, SERDAR 13 Eki ölçtü)
+`koltuk-bagla.sh` ve kapı `/api/koltuklar`, adı `^[A-Za-z0-9_-]$` ile süzüyordu → adında `/` olan oturum (vekatip `2026/85`) listeden
+**düşüyordu** (17 oturumun 1'i). Süzgeç tmux'un kuralına indirildi: boşluk · `:` · `.` dışında her ad geçerli (tmux `.` ve `:`'yi
+zaten `_` yapar — ölçüldü). Ad HTML'de kaçışlı, adreste `encodeURIComponent` (`?arg=2026%2F85`; ttyd kabuğa **çözülmüş** iletir —
+gerçek ttyd+Chromium ile ölçüldü), `/api/koltuk/<kodlu-ad>` yolda çözülür, attach `=ad` tam eşleşme. Güvenlik desenden değil
+tmux'un beyaz listesinden (var olan oturum) gelir. Sınav: koltuk-bagla E1-E3 · sunucu SL1-SL4. Merkez sayfanın `guv()` süzgeci
+(cloudtop) ayrı PR.
 
 ## Koltuk aç / yeniden aç / eski sohbete dön — tek tuş (2.4.0 · 13 Ekim, Sultan: "oturum kapandı/bozuldu/silindi — tekrar açmak çok basit, çok sağlam olmalı")
 Telefon ekranında **Koltuk** düğmesi → pencere: seçili koltuğun durumu ÜÇ AYRI hâlde (`yok` · `claude-yok` · `takili` · `canli`)

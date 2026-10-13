@@ -69,6 +69,14 @@ kos maiset-ana /p 'BASIRE'
 [ "$(rc)" = 3 ] && ok "B6 önek eşleşmez (BASIRE ≠ BASIRET)" || bad B6 "rc=$(rc)"
 
 echo "D · tür ve hâl (2.2.0: ajan ⟂ diğer · hâl son ekrandan, filo desenleri)"
+# ── E · adında '/' olan oturum (dilim 5/7 · SERDAR ölçtü: vekatip '2026/85' listeden düşmüştü) ──
+printf '%s\n' maiset-ana BASIRET '2026/85' imglistener > "$S/oturumlar"
+: > "$S/iz"; : > "$S/rc"; SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" maiset-ana /proje '2026/85' >/dev/null 2>&1
+[ "$(iz)" = "attach-session -t =2026/85" ] && ok "E1 '/' içeren koltuk TAM eşleşmeli hedefle (=2026/85) bağlanır (eski desen reddediyordu)" || bad E1 "$(iz)"
+SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste-e"
+grep -qP '^2026/85\t' "$S/liste-e" && ok "E2 '/' içeren koltuk LİSTEDE (düşmez)" || bad E2 "$(cat "$S/liste-e")"
+: > "$S/iz"; : > "$S/rc"; SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" maiset-ana /proje 'a b' >/dev/null 2>&1
+[ -z "$(iz)" ] && ok "E3 boşluklu ad yine reddedilir (tmux kuralı)" || bad E3 "$(iz)"
 printf '%s\n' maiset-ana BASIRET CARSI cc-1 dash ZAKIR KALFA NEDIM MUHASIP imglistener > "$S/oturumlar"
 printf '%s\n' "⏺ Düşünüyor…" "esc to interrupt" > "$S/ekran-BASIRET"
 printf '%s\n' "Do you want to proceed?" "❯ 1. Yes" "  2. No" "Esc to cancel)" > "$S/ekran-ZAKIR"   # meşgul izi (esc to cancel) + soru → SORU kazanır

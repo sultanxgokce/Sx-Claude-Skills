@@ -1,0 +1,7 @@
+$ bash -c tmux new-session -d -s 2026/85 "sleep 120"; echo "liste (yeni betik):"; bash terminal-onar/scripts/koltuk-bagla.sh --liste | grep -P "^2026/85\t"; git show origin/main:terminal-onar/scripts/koltuk-bagla.sh > /tmp/claude-1000/kb-eski.sh; echo "eski betikte listede sayısı: $(bash /tmp/claude-1000/kb-eski.sh --liste | grep -cP "^2026/85\t")"; tmux kill-session -t =2026/85
+# rc=0 sure=0.9s zaman=2026-10-13T13:09:11+03:00
+--- stdout ---
+liste (yeni betik):
+2026/85	1791886150	0	diger	bilinmiyor
+eski betikte listede sayısı: 1
+--- stderr ---

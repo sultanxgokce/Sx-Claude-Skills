@@ -1,0 +1,70 @@
+{
+  "is": "terminal-koltuk-adi",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-13T13:09:11+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-bagla-46",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-bagla-46-sonra.txt",
+      "sha256": "10e305991d53c1202b4bc84c4a189ab60e8d529feaafcc3a07ae4be2adb7b1bb",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T13:09:02+03:00",
+      "sure_sn": 2.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-birim-82",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-birim-82-sonra.txt",
+      "sha256": "54852f969dde0340c9884b695991c5f7d7bf0aab1f961ab8268e38a36b0a722c",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/kapi && node sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T13:09:08+03:00",
+      "sure_sn": 6.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ttyd-arg-cozme",
+      "asama": "tek",
+      "dosya": "olcum-ttyd-arg-cozme-tek.txt",
+      "sha256": "365ac565f13f74375bf06733c7b3ef61354a2d2b8ebc90f7967c0aa4fa7f9cb1",
+      "komut": [
+        "node",
+        "_agents/fabrika/kanit/terminal-koltuk-adi/ttyd-arg-olcum.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T13:09:10+03:00",
+      "sure_sn": 1.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-slash-oturum",
+      "asama": "sonra",
+      "dosya": "olcum-canli-slash-oturum-sonra.txt",
+      "sha256": "bac260e6640b992d4d71f4d66ad1f6ce6447ab8bec605b9ecd02cf45eee19447",
+      "komut": [
+        "bash",
+        "-c",
+        "tmux new-session -d -s 2026/85 \"sleep 120\"; echo \"liste (yeni betik):\"; bash terminal-onar/scripts/koltuk-bagla.sh --liste | grep -P \"^2026/85\\t\"; git show origin/main:terminal-onar/scripts/koltuk-bagla.sh > /tmp/claude-1000/kb-eski.sh; echo \"eski betikte listede sayısı: $(bash /tmp/claude-1000/kb-eski.sh --liste | grep -cP \"^2026/85\\t\")\"; tmux kill-session -t =2026/85"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T13:09:11+03:00",
+      "sure_sn": 0.9
+    }
+  ],
+  "imza": "16ea33e678207abcf52cbc950ac732e53d03f1a76f593739ad20ca1f4bac6145"
+}

@@ -18,7 +18,11 @@
 set -uo pipefail
 
 gizli() { case "$1" in ttyd-*|kapi-*|*-kurtarici|imglistener*) return 0 ;; esac; return 1; }
-gecerli_ad() { [[ "$1" =~ ^[A-Za-z0-9_-]{1,64}$ ]]; }   # tmux oturum adında . ve : olamaz
+# 🔴 AD SÜZGECİ = tmux'un KENDİ kuralı (dilim 5/7, SERDAR 13 Eki ölçtü: vekatip'te '2026/85' listeden DÜŞMÜŞTÜ — 17 oturumun 1'i
+#    görünmüyordu). Eski desen ^[A-Za-z0-9_-]$ tmux'un izin verdiği '/' gibi adları yutuyordu. tmux '.' ve ':'yi zaten '_' yapar
+#    (ölçüldü); boşluk ve bu ikisi dışında her ad geçerlidir. Güvenlik tmux'un beyaz listesinden (var olan oturum) gelir, desenden değil.
+gecerli_ad() { [[ "$1" =~ ^[^[:space:]:.]{1,64}$ ]]; }
+# ttyd ?arg=2026%2F85 değerini kabuğa ÇÖZÜLMÜŞ ('2026/85') iletir — gerçek ttyd+Chromium ile ölçüldü (13 Eki); burada çözme YOK.
 
 # 🔴 ÖLÇEMEDİĞİNE "boş" DEMEZ (bağımsız göz, tur 3): tmux listesi ALINAMAZSA bu "0 koltuk" değil
 #    "ölçülemedi"dir → rc=3. Tek istisna tmux sunucusunun hiç çalışmaması ("no server running"):

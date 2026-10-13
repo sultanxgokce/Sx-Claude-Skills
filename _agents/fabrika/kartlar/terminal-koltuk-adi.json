@@ -1,0 +1,31 @@
+{
+  "is": "terminal-koltuk-adi",
+  "cumle": "Kutu kapısı /api/koltuklar ve koltuk-bagla.sh oturum adını ^[A-Za-z0-9_-]{1,64}$ ile süzüp adında / . : olan oturumları listeden DÜŞÜRÜYOR (vekatip 17→16, Sultan '2026/85' yok dedi): adı düşürme, güvenli göster (HTML kaçış + encodeURIComponent ?arg=), ttyd attach tam eşleşme (=ad); tmux için sorunlu : ve . ayrıca ölç",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-13T13:05:05+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "e",
+    "yetki": "h"
+  },
+  "siniflar": [
+    "dis_yuzey"
+  ],
+  "sultan": true,
+  "kanit_nerede": "_agents/fabrika/kanit/terminal-koltuk-adi (gerçek tmux: '/' içeren oturum listede + ?arg ile açılıyor; : ve . ölçümü)",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "sultan_kararlari": [
+    {
+      "karar": "devam",
+      "oturum": "session_013fuJSNg65VkgQE4sJsQURS",
+      "soz": "tamamdır önerin kabul edildi go",
+      "beyan": "BANI",
+      "gerekce": "Sultan dilim 5 paketini onayladı (SERDAR iletti); madde 7 eki: SERDAR 13 Eki ölçtü (vekatip 17 oturumun 1'i düştü)",
+      "zaman": "2026-10-13T13:05:05+03:00"
+    }
+  ]
+}
