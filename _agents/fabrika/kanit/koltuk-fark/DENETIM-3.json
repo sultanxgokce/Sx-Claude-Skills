@@ -1,0 +1,32 @@
+{
+  "tur": 3,
+  "is": "koltuk-fark",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T21:45:50+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 64369,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Fark ölçeri DÜŞEN/hayalet, gerekçeli gizleme, ortak ad kuralı ve istemci-hedef farkını kapsıyor; sınavlar ile kaynak-kopyası filo taraması güçlü. Önce canlıya inişten sonra varsayılan salt-okur yoldan filo kanıtı alınmalı; mevcut kanıt yalnız `--kaynak` yolunu ölçtüğü için yazılan sürümün 18 kutuda kurulu ve çalışan sürüm olduğunu göstermiyor.",
+    "bulgular": [
+      {
+        "ne": "İş kartının netleştirilmiş kabul şartındaki canlı iniş sonrası salt-okur filo ölçümü sunulmamış; üç filo kaydı da kurulmamış kaynak sürümünü kutuların `/tmp` alanına geçici açan `--kaynak` yolunu kullanıyor. Bu nedenle kaynak kodun çalıştığı kanıtlı olsa da kurulu kopyanın aynı davranışı verdiği kanıtsızdır; önce bunu çöz.",
+        "kanit": "Manifestte `filo-ilk-tarama`, `filo-tarama-2` ve `filo-tarama-3` komutlarının tamamı `terminal-onar/scripts/koltuk-fark-filo.sh --kaynak /config/projects/_wt/Sx-Claude-Skills-koltuk-fark/terminal-onar`; varsayılan, `--kaynak` içermeyen salt-okur filo kaydı yok. İş kartı ise açıkça “canlı iniş sonrası filo kanıtı salt-okur yoldan alınır” diyor.",
+        "konum": "kanıt manifesti: filo-ilk-tarama, filo-tarama-2, filo-tarama-3",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Hermetik fark sınavı 14/14, mutasyon 12/12, ad eşdeğerliği 5/5 ve ilgili sunucu/bağlama sınavları yeşil; gerçekçi filo çıktısında 24 kaptan terminalli 18’i temiz, YargiYenileme benzeri hedef farkları da görünür. Ancak bütün kayıtlar yalnız “sonra” ve filo ölçümlerinin tamamı `--kaynak`; biçimsel önce/sonra çifti ile özellikle istenen canlı kurulu kopya üzerinden salt-okur ölçüm yok."
+  }
+}
