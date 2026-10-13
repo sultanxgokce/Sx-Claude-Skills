@@ -9,6 +9,9 @@
 #   Güvenlik yine tmux'un beyaz listesinden (var olan oturum) gelir; ad her yerde tırnaklı/kodlu taşınır.
 KOLTUK_AD_DESEN='^[^[:cntrl:]:.]{1,200}$'
 koltuk_adi_gecerli() {
+  # Sayım KARAKTER (kod noktası) olmalı — kapı JS'te /u ile aynısını yapar. Yerel ayar C ise bash BAYT sayar ('ş😀' = 6, ölçüldü)
+  # ve iki dil ayrışır (bağımsız göz tur 2) → eşleme her zaman UTF-8 yerel ayarında yapılır.
+  local LC_ALL=C.UTF-8
   [[ "$1" =~ $KOLTUK_AD_DESEN ]] || return 1
   case "${1:0:1}" in [[:space:]]|'$'|'@'|'%'|'=') return 1 ;; esac
   case "${1: -1}" in [[:space:]]) return 1 ;; esac
