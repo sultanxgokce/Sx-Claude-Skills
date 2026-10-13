@@ -23,6 +23,13 @@
       "oturum": "serdar:0 aile-notify 2026-10-13 ~22:35",
       "gerekce": "SERDAR (reis) kararı: kart = araç + kaynak ölçümü; canlı sonrası salt-okur filo ölçümü ayrı adım, BANI iner ve raporlar",
       "zaman": "2026-10-13T21:47:12+03:00"
+    },
+    {
+      "karar": "devam",
+      "reis": "BANI",
+      "oturum": "serdar:0 aile-notify 2026-10-13 ~22:35",
+      "gerekce": "SERDAR (reis): 'daraltılmış kartla tek tur denetim' — kalan tek bulgu daraltmayla kapsam dışına çıktı",
+      "zaman": "2026-10-13T21:47:35+03:00"
     }
   ]
 }
