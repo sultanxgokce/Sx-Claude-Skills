@@ -1,0 +1,222 @@
+{
+  "is": "terminal-koltuk-ac",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-13T14:11:13+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "betik-gercek-tmux-12",
+      "asama": "sonra",
+      "dosya": "olcum-betik-gercek-tmux-12-sonra.txt",
+      "sha256": "27ef26a3c42bc72cb2217fa06e6dc0337b807b747200a0ce9a9fbc4ea46f65b5",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-ac.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T13:37:44+03:00",
+      "sure_sn": 2.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-birim-78",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-birim-78-sonra.txt",
+      "sha256": "d88c0ce52dd8bd6747eb355810cadacc3e22e24a0e2382646abcd83429d31d6a",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/kapi && node sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T13:37:49+03:00",
+      "sure_sn": 5.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "telefon-pencere-15",
+      "asama": "sonra",
+      "dosya": "olcum-telefon-pencere-15-sonra.txt",
+      "sha256": "5f6032914cdc4ef6b20c2158642d077379454d6dd9f204683b76890fb7cee0e9",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/tarayici-sinav.mjs",
+        "--kare",
+        "/tmp/claude-1000/koltuk"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T13:38:00+03:00",
+      "sure_sn": 10.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-code-kutusu-durum",
+      "asama": "sonra",
+      "dosya": "olcum-canli-code-kutusu-durum-sonra.txt",
+      "sha256": "11c7b564a0194d0b5b3bfefb2cc9a0569cbd88a0b9e3bf81c9915f63c5ccafd0",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/scripts && for k in bani code-ana cc-19986388 yokboyle; do TO_KUTU=code TO_PROJE=/config/projects/Nexus bash koltuk-ac.sh durum $k; done; echo \"son-etkinlik artık epoch (düzeltme sonrası); takili yalnız görünüş, zorlasız dokunulmaz\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T13:32:39+03:00",
+      "sure_sn": 1.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-22",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-22-sonra.txt",
+      "sha256": "9a72500900333ddeb8bb590b9a1b13c8d7478a371c4389e98bc641bbdc9e2e50",
+      "komut": [
+        "bash",
+        "terminal-onar/kapi/mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T13:40:24+03:00",
+      "sure_sn": 143.9
+    },
+    {
+      "tur": "dosya",
+      "etiket": "kare-koltuk-pencere",
+      "asama": "sonra",
+      "dosya": "dosya-kare-koltuk-pencere-sonra.png",
+      "sha256": "eba42c8b42473cde15a00ccc611df313f586551b9d5f731015e8325432282303",
+      "kaynak": "/tmp/claude-1000/koltuk-koltuk-pencere.png",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T13:40:24+03:00"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-eski-sohbete-don-gercek-ekip-ac",
+      "asama": "sonra",
+      "dosya": "olcum-canli-eski-sohbete-don-gercek-ekip-ac-sonra.txt",
+      "sha256": "4c4d42a4c6e0c687a04090642f10fc35b86b0479f8d968e6a31acdab18dd88b6",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/terminal-koltuk-ac/canli-eski-sohbet.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T13:33:04+03:00",
+      "sure_sn": 24.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "son-etkinlik-duzeltme",
+      "asama": "sonra",
+      "dosya": "olcum-son-etkinlik-duzeltme-sonra.txt",
+      "sha256": "4f00d2753694598ad3a711739c952a99cee62581f16f0aab86e8853503ab5c87",
+      "komut": [
+        "bash",
+        "-c",
+        "echo \"önce (=ad hedefi): [$(tmux display-message -p -t \"=bani\" \"#{session_activity}\" 2>/dev/null)]\"; echo \"sonra (ad: hedefi): [$(tmux display-message -p -t \"bani:\" \"#{session_activity}\")]\"; bash terminal-onar/scripts/koltuk-bagla.sh --liste | head -3; bash terminal-onar/scripts/koltuk-bagla.test.sh | tail -1"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T12:59:46+03:00",
+      "sure_sn": 0.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-ac-betik-26",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-ac-betik-26-sonra.txt",
+      "sha256": "5ff66d0dbcc98031d5bc72257335b141135d867193ae00ecd4729a6a069bd885",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-ac.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T13:47:05+03:00",
+      "sure_sn": 2.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-birim-83",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-birim-83-sonra.txt",
+      "sha256": "7266a362e3c79bed286ca2c09eda143b14d56513818482f9f2216a094a29f168",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/kapi && node sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T13:47:11+03:00",
+      "sure_sn": 6.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "birlesme-sonrasi-koltuk-ac-26",
+      "asama": "sonra",
+      "dosya": "olcum-birlesme-sonrasi-koltuk-ac-26-sonra.txt",
+      "sha256": "a3cc8b98e807664f3fcff744d9a719d034bdc90b883a56111ee6c12df532c025",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-ac.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T14:10:14+03:00",
+      "sure_sn": 3.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "birlesme-sonrasi-koltuk-bagla",
+      "asama": "sonra",
+      "dosya": "olcum-birlesme-sonrasi-koltuk-bagla-sonra.txt",
+      "sha256": "081026941f8b8dd0189707857f4dae9306e5176dcf7c3d1c4045b8af8a020b68",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T14:10:15+03:00",
+      "sure_sn": 0.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "birlesme-sonrasi-kapi-birim",
+      "asama": "sonra",
+      "dosya": "olcum-birlesme-sonrasi-kapi-birim-sonra.txt",
+      "sha256": "2b206c413b09379b8ba1ceda48bdc0d75aa77b6c8e29db2b3466601127d07ee8",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/kapi && node sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T14:10:21+03:00",
+      "sure_sn": 5.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "birlesme-sonrasi-tarayici",
+      "asama": "sonra",
+      "dosya": "olcum-birlesme-sonrasi-tarayici-sonra.txt",
+      "sha256": "655a1589fb44a78ba0e58a4f52467e8f2af28bb633254ca69823ae1612c6b302",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/kapi && node tarayici-sinav.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T14:11:13+03:00",
+      "sure_sn": 10.4
+    }
+  ],
+  "imza": "95585433edbca2471d71fc8156ed79f504f56dab22ae60c57438f05a14dcf324"
+}

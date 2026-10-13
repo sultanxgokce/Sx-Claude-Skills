@@ -14,6 +14,8 @@ import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import net from 'node:net';
+import zlib from 'node:zlib';
+import { readFileSync } from 'node:fs';
 
 const KOK = dirname(fileURLToPath(import.meta.url));
 const T = mkdtempSync(join(tmpdir(), 'kapi-sinav-'));
@@ -32,6 +34,11 @@ function sahteTtyd(yol) {
       b += d;
       if (!b.includes('\r\n\r\n')) return;
       const istenen = b.split(' ')[1] || '';
+      const ae = /\r\naccept-encoding:/i.test(b) ? '1' : '0';   // kapı accept-encoding'i sıyırdı mı (x-ae ile geri söylenir)
+      const HTML = '<html><head><meta charset="utf-8"></head><body><div id="ttyd">ttyd</div><script>window.sahte=1</script></body></html>';
+      if (/[?&]html=1/.test(istenen)) { c.end(`HTTP/1.1 200 OK\r\ncontent-type: text/html\r\nx-ae: ${ae}\r\ncontent-length: ${Buffer.byteLength(HTML)}\r\n\r\n${HTML}`); return; }
+      if (/[?&]html=2/.test(istenen)) { const h2 = HTML.replace('</body></html>', ''); c.end(`HTTP/1.1 200 OK\r\ncontent-type: text/html\r\ncontent-length: ${Buffer.byteLength(h2)}\r\n\r\n${h2}`); return; }
+      if (/[?&]html=3/.test(istenen)) { const gz = zlib.gzipSync(Buffer.from(HTML)); c.write(`HTTP/1.1 200 OK\r\ncontent-type: text/html\r\ncontent-encoding: gzip\r\ncontent-length: ${gz.length}\r\n\r\n`); c.end(gz); return; }
       const g = JSON.stringify({ ttyd: true, yol: istenen });
       c.end(`HTTP/1.1 200 OK\r\ncontent-type: application/json\r\ncontent-length: ${Buffer.byteLength(g)}\r\n\r\n${g}`);
     });
@@ -337,6 +344,117 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
        /<h1>Akar<\/h1>/.test(ak) && !/Sinavkutu/.test(ak),
        `→ ${(ak.match(/<h1>[^<]*<\/h1>/) || ['açılmadı'])[0]}`);
   p3.kill();
+}
+
+// ── K · PANO KÖPRÜSÜ (2.3.0 · Sultan 12 Eki: Cmd+C kopyalamıyor, resim Cmd+V yapıştırılamıyor) ─────
+// 🔴 NİÇİN: ttyd'nin HTML'ine genel/pano.js gömülür. Ölçüt içerik türüdür (yol tahmini değil); JSON, WebSocket,
+//    sıkıştırılmış ya da 200-dışı cevap OLDUĞU GİBİ akar. Her iddianın ateşleyen ve ateşlemeyen yüzü birlikte.
+{
+  const giris = async (port, taban) => { const ok = await iste(port, `${taban}/giris`, { metot: 'POST', govde: { parola: SIFRE } });
+    return 'kapi=' + ((ok.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1]; };
+  const cerez = await giris(P1, '/sedir');
+  const r1 = await iste(P1, '/sedir/tty/?html=1', { cerez }); const h1 = await r1.text();
+  kapi('PN1 ttyd HTML sayfasına pano köprüsü gömülür (data-kapi-pano işareti)', r1.status === 200 && h1.includes("setAttribute('data-kapi-pano'"), `→ ${r1.status} · ${h1.slice(0, 60)}`);
+  kapi('PN2 köprü TABANI taşır (window.__TABAN="/sedir") ve /api/resim\'e tabanla gider', /window\.__TABAN="\/sedir"/.test(h1) && h1.includes("TABAN + '/api/resim'"), '→ taban gömülü değil');
+  kapi('PN3 ekleme </body> ÖNÜNE girer, sayfa bütün (…</body></html> ile biter)', h1.trimEnd().endsWith('</body></html>') && h1.indexOf('data-kapi-pano') < h1.indexOf('</body>'), `→ …${h1.slice(-40)}`);
+  // fetch kendiliğinden gzip ister ve açar → başlık/gövde karşılaştırması DÜZ istekle yapılır
+  const r1d = await fetch(`http://127.0.0.1:${P1}/sedir/tty/?html=1`, { headers: { cookie: cerez, 'accept-encoding': 'identity' } }); const h1d = Buffer.from(await r1d.arrayBuffer());
+  kapi('PN4 content-length yeniden hesaplanır (düz istekte gövde bayt sayısı = başlık, gzip yok)', !r1d.headers.get('content-encoding') && +r1d.headers.get('content-length') === h1d.length && h1d.includes('data-kapi-pano'), `→ ${r1d.headers.get('content-length')} ≠ ${h1d.length} ce=${r1d.headers.get('content-encoding')}`);
+  kapi('PN5 ttyd\'den DÜZ gövde istenir (accept-encoding sıyrılır)', r1.headers.get('x-ae') === '0', `→ x-ae=${r1.headers.get('x-ae')}`);
+  kapi('PN6 ttyd\'nin kendi betiği yerinde (köprü sayfayı ezmez)', h1.includes('window.sahte=1') && h1.includes('id="ttyd"'), '→ orijinal gövde kayıp');
+  // gzip: istemci isterse EKLENMİŞ gövde sıkıştırılır
+  const r2 = await fetch(`http://127.0.0.1:${P1}/sedir/tty/?html=1`, { headers: { cookie: cerez, 'accept-encoding': 'gzip' } });
+  const h2 = await r2.text();   // fetch gövdeyi çözer; başlık korunur mu bakılır
+  kapi('PN7 istemci gzip istediyse cevap gzip\'lidir ve köprü içindedir', (r2.headers.get('content-encoding') || '') === 'gzip' && h2.includes('data-kapi-pano'), `→ ce=${r2.headers.get('content-encoding')}`);
+  // </body> yoksa sona eklenir
+  const h3 = await (await iste(P1, '/sedir/tty/?html=2', { cerez })).text();
+  kapi('PN8 </body> olmayan sayfada köprü SONA eklenir (sayfa yine açılır)', h3.includes('data-kapi-pano') && h3.indexOf('data-kapi-pano') > h3.indexOf('window.sahte=1'), '→ eklenmedi');
+  // sıkıştırılmış ttyd cevabına dokunulmaz
+  const r4 = await iste(P1, '/sedir/tty/?html=3', { cerez }); const b4 = Buffer.from(await r4.arrayBuffer());
+  let acik4 = ''; try { acik4 = zlib.gunzipSync(b4).toString('utf8'); } catch { acik4 = ''; }
+  // fetch gzip'i kendisi açmış olabilir (accept-encoding yollanmadı ama undici bazen çözer) → iki hâl de kabul: gövde sağlam ve köprüsüz
+  const b4Sag = acik4 ? acik4.includes('id="ttyd"') : b4.toString('utf8').includes('id="ttyd"');
+  const b4Kop = (acik4 || b4.toString('utf8')).includes('data-kapi-pano');
+  kapi('PN9 ttyd SIKIŞTIRILMIŞ cevap verirse gövde bozulmaz ve köprü EKLENMEZ', b4Sag && !b4Kop, `→ sağlam=${b4Sag} köprü=${b4Kop}`);
+  // JSON / tty dışı dokunulmaz (T14 zaten JSON'u ayrıştırıyor; burada açıkça)
+  const h5 = await (await iste(P1, '/sedir/tty/', { cerez })).text();
+  kapi('PN10 HTML olmayan ttyd cevabına (json) köprü girmez', !h5.includes('data-kapi-pano') && JSON.parse(h5).ttyd === true, '→ json bozuldu ya da köprü girdi');
+  // tabansız kutu
+  const ck = await giris(P2, ''); const h6 = await (await iste(P2, '/tty/?html=1', { cerez: ck })).text();
+  kapi('PN11 tabansız kutuda köprü __TABAN="" ile gömülür (K2 tautoloji değil)', /window\.__TABAN=""/.test(h6) && h6.includes('data-kapi-pano'), '→ yok');
+  // kapatma anahtarı: KAPI_PANO=0 → vekil eski hâli (ekleme yok, accept-encoding geçer)
+  const p0 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], {
+    env: { ...process.env, KAPI_PORT: '18783', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', KAPI_PANO: '0',
+           KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE }, stdio: 'ignore' });
+  let h7 = '', ae7 = '';
+  for (let i = 0; i < 50; i++) {
+    await new Promise((r) => setTimeout(r, 100));
+    try { const r = await fetch('http://127.0.0.1:18783/sedir/tty/?html=1', { headers: { cookie: cerez, 'accept-encoding': 'gzip' } });
+      if (r.status === 200) { h7 = await r.text(); ae7 = r.headers.get('x-ae') || ''; break; } } catch {}
+  }
+  kapi('PN12 KAPI_PANO=0 → köprü gömülmez, accept-encoding ttyd\'ye geçer (eski davranış bayt bayt)', h7.includes('id="ttyd"') && !h7.includes('data-kapi-pano') && ae7 === '1', `→ köprü=${h7.includes('data-kapi-pano')} x-ae=${ae7}`);
+  p0.kill();
+  // kaynak dosya kuralları: satır içi gömülür → kapanış script etiketi geçemez; replace değiştiricisi fonksiyon olmalı
+  const kaynak = readFileSync(join(KOK, 'genel', 'pano.js'), 'utf8');
+  kapi('PN13 pano.js kapanış script etiketi içermez (satır içi gömülüyor)', !/<\/script/i.test(kaynak), '→ gömülünce sayfa yarıda kesilir');
+  const sun = readFileSync(join(KOK, 'sunucu.mjs'), 'utf8');
+  kapi('PN14 ekleme replace\'i FONKSİYONLA yapılır (pano.js içindeki $ dizileri yorumlanmasın)', /h\.replace\('<\/body>', \(\) => ek \+ '<\/body>'\)/.test(sun), '→ düz dize değiştirici');
+}
+
+// ── KA · KOLTUK AÇ (2.4.0 · dilim 5/5) — kapı betiğe sorar, kendisi karar vermez; rc → HTTP eşlemesi ─────
+{
+  const giris = async (port, taban) => { const ok = await iste(port, `${taban}/giris`, { metot: 'POST', govde: { parola: SIFRE } });
+    return 'kapi=' + ((ok.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1]; };
+  // sahte koltuk-ac.sh: durum → JSON; ac → ada göre rc (canli:0 · merdiven:3 · kayitsiz:4 · bozuk:1); çağrıyı deftere yazar
+  const KA = join(T, 'koltuk-ac-sahte.sh'); const DEFTER = join(T, 'ka-defter');
+  writeFileSync(KA, '#!/usr/bin/env bash\necho "$*" >> ' + JSON.stringify(DEFTER) + '\n'
+    + 'if [ "$1" = durum ]; then printf \'{"ad":"%s","durum":"yok","tmux":false,"claude":false,"hal":"","son":0,"rol":"ROLX","resume":true,"yol":"ekip-ac","ana":false}\\n\' "$2"; exit 0; fi\n'
+    + 'case "$2" in canli) echo "açıldı: $2"; exit 0;; merdiven) echo "K0 yetmedi; onarım merdiveni başlatıldı"; exit 3;; kayitsiz) echo "açılamadı: kayıtlı bir koltuk değil" >&2; exit 4;; *) echo "açılamadı: rc=1" >&2; exit 1;; esac\n');
+  const p5 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], {
+    env: { ...process.env, KAPI_PORT: '18785', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', KAPI_KOLTUK_AC_BETIK: KA,
+           KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_KOLTUK_BETIK: KOLTUK_SAHTE5 }, stdio: 'ignore' });
+  for (let i = 0; i < 50; i++) { await new Promise((r) => setTimeout(r, 100)); try { if ((await fetch('http://127.0.0.1:18785/sedir/giris')).status === 200) break; } catch {} }
+  const cerez = await giris(18785, '/sedir');
+  const d = await iste(18785, '/sedir/koltuk/BASIRET', { cerez });
+  kapi('KA0 /koltuk/<ad> api altında değil → 404 (yol disiplini)', d.status === 404);
+  const r1 = await iste(18785, '/sedir/api/koltuk/BASIRET', { cerez }); const j1 = await r1.json();
+  kapi('KA1 GET /api/koltuk/<ad> betiğin durum JSON\'unu olduğu gibi taşır (durum·yol·rol·resume)', r1.status === 200 && j1.durum === 'yok' && j1.yol === 'ekip-ac' && j1.rol === 'ROLX' && j1.resume === true, `→ ${JSON.stringify(j1)}`);
+  kapi('KA2 betik "durum <ad>" ile çağrıldı', readFileSync(DEFTER, 'utf8').trim().split('\n').pop() === 'durum BASIRET');
+  const g = await iste(18785, '/sedir/api/koltuk/BASIRET', { cerez: '' });
+  kapi('KA3 girişsiz → 401', g.status === 401);
+  const a1 = await iste(18785, '/sedir/api/koltuk/canli/ac', { cerez, metot: 'POST', govde: {} }); const ja1 = await a1.json();
+  kapi('KA4 POST …/ac → betik "ac <ad>" (eski yok) · rc0 → 200 tamam, mesaj betikten', a1.status === 200 && ja1.tamam === true && /açıldı/.test(ja1.mesaj) && readFileSync(DEFTER, 'utf8').trim().split('\n').pop() === 'ac canli', `→ ${a1.status} ${JSON.stringify(ja1)}`);
+  await iste(18785, '/sedir/api/koltuk/canli/ac', { cerez, metot: 'POST', govde: { eski: true } });
+  kapi('KA5 {eski:true} → betiğe --eski geçer (eski sohbete dönüş)', readFileSync(DEFTER, 'utf8').trim().split('\n').pop() === 'ac canli --eski');
+  const a3 = await iste(18785, '/sedir/api/koltuk/merdiven/ac', { cerez, metot: 'POST', govde: {} }); const ja3 = await a3.json();
+  kapi('KA6 rc3 (merdiven başladı) → 202 tamam:true', a3.status === 202 && ja3.tamam === true && ja3.rc === 3, `→ ${a3.status}`);
+  const a4 = await iste(18785, '/sedir/api/koltuk/kayitsiz/ac', { cerez, metot: 'POST', govde: {} }); const ja4 = await a4.json();
+  kapi('KA7 rc4 (kayıtsız koltuk) → 409 tamam:false, sebep mesajda', a4.status === 409 && ja4.tamam === false && /kayıtlı bir koltuk değil/.test(ja4.mesaj), `→ ${a4.status} ${ja4.mesaj}`);
+  const a5 = await iste(18785, '/sedir/api/koltuk/bozuk/ac', { cerez, metot: 'POST', govde: {} });
+  kapi('KA8 rc1 (açılamadı) → 502', a5.status === 502);
+  const a6 = await fetch('http://127.0.0.1:18785/sedir/api/koltuk/canli/ac', { method: 'POST', headers: { cookie: cerez, 'content-type': 'application/json' }, body: '{}' });
+  kapi('KA9 x-kapi başlığı olmadan POST → 403 (CSRF kalkanı korunur)', a6.status === 403);
+  const a7 = await iste(18785, '/sedir/api/koltuk/kotu%3Aad/ac', { cerez, metot: 'POST', govde: {} });
+  kapi('KA10 bozuk ad (:) yola GİRMEZ → 404 (betik çağrılmaz)', a7.status === 404 && !/kotu/.test(readFileSync(DEFTER, 'utf8')));
+  p5.kill();
+  // takılı durumu + zaman aşımı (yedek göz tur 2): sahte betik 'takili' basar; 'yavas' koltuğu açma süresini aşar → 504 (502 'açılamadı' DEĞİL)
+  const KA3 = join(T, 'koltuk-ac-sahte3.sh');
+  writeFileSync(KA3, '#!/usr/bin/env bash\necho "$*" >> ' + JSON.stringify(join(T, 'ka3-defter')) + '\n[ "$1" = ac ] && [ "$2" = takili ] && [ "$3" != --zorla ] && { echo "takılı görünüyor: --zorla"; exit 5; }\nif [ "$1" = durum ]; then printf \'{"ad":"%s","durum":"takili","tmux":true,"claude":true,"hal":"calisiyor","son":1700000000,"rol":"ROLX","resume":true,"yol":"ekip-ac","ana":false}\\n\' "$2"; exit 0; fi\n[ "$2" = yavas ] && sleep 3\necho "açıldı: $2"; exit 0\n');
+  const p7 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: { ...process.env, KAPI_PORT: '18789', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', KAPI_KOLTUK_AC_BETIK: KA3, KAPI_AC_SURE_MS: '500',
+    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_KOLTUK_BETIK: KOLTUK_SAHTE5 }, stdio: 'ignore' });
+  for (let i = 0; i < 50; i++) { await new Promise((r) => setTimeout(r, 100)); try { if ((await fetch('http://127.0.0.1:18789/sedir/giris')).status === 200) break; } catch {} }
+  const c7 = await giris(18789, '/sedir');
+  const t1 = await (await iste(18789, '/sedir/api/koltuk/BASIRET', { cerez: c7 })).json();
+  kapi('KA11 üçüncü hâl "takili" kapıdan olduğu gibi geçer (son epoch dolu)', t1.durum === 'takili' && t1.son === 1700000000, `→ ${JSON.stringify(t1)}`);
+  const t2 = await iste(18789, '/sedir/api/koltuk/yavas/ac', { cerez: c7, metot: 'POST', govde: {} }); const jt2 = await t2.json();
+  kapi('KA12 açma süreyi aşarsa 504 + "arkada doğmuş olabilir" (502 açılamadı DEĞİL)', t2.status === 504 && jt2.rc === 124 && /arkada doğmuş/.test(jt2.mesaj), `→ ${t2.status} ${jt2.mesaj}`);
+  const t3 = await iste(18789, '/sedir/api/koltuk/hizli/ac', { cerez: c7, metot: 'POST', govde: {} });
+  kapi('KA13 süre içinde biten açma 200 (KA12 tautoloji değil)', t3.status === 200);
+  const t4 = await iste(18789, '/sedir/api/koltuk/takili/ac', { cerez: c7, metot: 'POST', govde: {} }); const jt4 = await t4.json();
+  kapi('KA14 takılı/ölçülemeyen koltuk zorlasız → rc5 → 428 tamam:false (dokunulmadı)', t4.status === 428 && jt4.tamam === false && jt4.rc === 5, `→ ${t4.status} ${JSON.stringify(jt4)}`);
+  await iste(18789, '/sedir/api/koltuk/takili/ac', { cerez: c7, metot: 'POST', govde: { zorla: true } });
+  kapi('KA15 {zorla:true} → betiğe --zorla geçer', /ac takili --zorla/.test(readFileSync(join(T, 'ka3-defter'), 'utf8')));
+  p7.kill();
 }
 
 kapiTaban.kill(); kapiKok.kill(); ttyd.close();

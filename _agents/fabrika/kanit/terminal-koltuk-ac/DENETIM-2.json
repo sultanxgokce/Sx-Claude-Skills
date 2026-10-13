@@ -1,0 +1,62 @@
+{
+  "tur": 2,
+  "is": "terminal-koltuk-ac",
+  "pr": "",
+  "yazan": "fable",
+  "denetci": "claude",
+  "zaman": "2026-10-13T13:27:21+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 69512,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Tek tuşla koltuk açma hattı (betik + kapı + telefon penceresi) kurulmuş; tur-1'in iki eksiği kapanmış: gerçek ekip-ac.sh ile aynı sohbet kimliğine dönüş ve ikinci kopya açılmaması canlı tmux'ta ölçülmüş, son-etkinlik alanı düzeltilmiş. Ama iş kartının üçüncü durumu 'takılı' hiçbir sınavda tetiklenmiyor, ana-koltuk onar.sh yolu gerçek betikle hiç koşulmamış ve kapının 20 sn zaman aşımı açma işini yarıda 'açılamadı' diye bildirebilir; önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "'takılı' durumu üç sınav dosyasının hiçbirinde ölçülmüyor: koltuk-bagla stub'ı her koltuk için son=0 basıyor, sunucu ve tarayıcı sahteleri de yalnız yok/claude-yok/canli üretiyor. İş kartının üçüncü durumu kâğıtta var, sınavda yok; canlı kayıtta da hiçbir koltuk takili çıkmıyor.",
+        "kanit": "grep -n 'takili|TAKILI' koltuk-ac.test.sh sunucu.test.mjs tarayici-sinav.mjs → boş; koltuk-ac.test.sh kb.sh stub satırı printf '%s\\t0\\t1...' (son=0); koltuk-ac.sh takili koşulu SON>0 ∧ simdi-SON≥900 ister.",
+        "konum": "terminal-onar/scripts/koltuk-ac.sh:70; terminal-onar/scripts/koltuk-ac.test.sh:33-37",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Ana koltuk yolu (onar.sh K0 → düşerse kademe.sh merdiveni) gerçek betikle hiç koşulmamış; koltuk-ac.test.sh yalnız D4'te yol=onar der, 'ac sinav-ana' çağrısı yok. Kapı tarafındaki 202 eşlemesi (KA6) sahte betiğin rc=3 basmasıyla sınanmış.",
+        "kanit": "grep -n 'onar.sh|kademe.sh' koltuk-ac.test.sh → boş; sunucu.test.mjs KA6 sahte 'merdiven) exit 3' dalıyla geçiyor.",
+        "konum": "terminal-onar/scripts/koltuk-ac.sh:95-98; terminal-onar/scripts/koltuk-ac.test.sh:46",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Kapı betiği execFile ile 20 sn zaman aşımıyla çalıştırıyor; ekip-ac.sh ya da onar.sh bu süreyi aşarsa süreç öldürülür, rc≠0 → 502 'açılamadı' döner, oysa oturum arkada doğmuş olabilir. Telefon 'açılamadı' derken koltuk açılmış olur; iş kartının 'çok sağlam' şartıyla çelişir. Hiçbir sınav yavaş betikle bunu ölçmüyor.",
+        "kanit": "sunucu.mjs:122 execFile(..., { timeout: 20000 }); canli-eski-sohbet.sh ölçümünde ekip-ac.sh hızlı döndü (toplam 24.5 sn'nin 20'si sleep) ama onar.sh süresi hiç ölçülmedi.",
+        "konum": "terminal-onar/kapi/sunucu.mjs:122; terminal-onar/kapi/sunucu.mjs:418-423",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Canlı 'eski sohbete dön' kanıt betiği depo dışı geçici duruma bağımlı: /tmp/claude-1000/resume-sinav/reg.yaml ve sabit sid 77a7c8f7… depoda üretilmiyor; betik tek başına yeniden koşturulamaz (reg.yaml yoksa durum=yok/yol=yok döner). Kanıt gerçek ama tekrarlanabilir değil.",
+        "kanit": "canli-eski-sohbet.sh:4 R=/tmp/claude-1000/resume-sinav/reg.yaml sabit; ls /tmp/claude-1000/resume-sinav → reg.yaml 12:59'da elle oluşturulmuş; depoda reg.yaml'ı kuran adım yok (grep resume-sinav yalnız bu dosyada).",
+        "konum": "_agents/fabrika/kanit/terminal-koltuk-ac/canli-eski-sohbet.sh:4",
+        "agirlik": "rotus"
+      },
+      {
+        "ne": "Canlı durum kaydı (canli-code-kutusu-durum, 12:32) son-etkinlik düzeltmesinden (12:59) ÖNCE alınmış; hepsinde son:0. Düzeltme sonrası gerçek koltuk için 'durum' JSON'u yeniden ölçülmemiş, yani koltuk-ac.sh'nin yeni son değerini doğru taşıdığı canlıda görülmüyor (yalnız koltuk-bagla --liste çıktısı görüldü).",
+        "kanit": "KANIT.json: canli-code-kutusu-durum zaman 12:32:49, son-etkinlik-duzeltme zaman 12:59:46; ilkinde bani/code-ana/cc-19986388 'son':0.",
+        "konum": "kanıt kaydı canli-code-kutusu-durum",
+        "agirlik": "rotus"
+      },
+      {
+        "ne": "Tek argümanla çağrıda (koltuk-ac.sh durum) shift 2 başarısız olunca $@ içinde 'durum' kalıyor ve kullanım mesajı yerine 'bilinmeyen argüman: durum' basılıyor; rc=2 doğru ama mesaj yanıltıcı.",
+        "kanit": "koltuk-ac.sh:75-77: shift 2 2>/dev/null || true ardından for a in \"$@\" döngüsü, AD boş kontrolü sonra geliyor.",
+        "konum": "terminal-onar/scripts/koltuk-ac.sh:75-77",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam, sarı kayıt yok, 8 kayıt yeşil. Tur-1'in asıl açığı kapanmış: canli-eski-sohbete-don kaydı GERÇEK ekip-ac.sh ile oturumu öldürüp --eski ile geri getiriyor, aynı sid'i oturum kaydında ve süreçte (--resume <sid>) gösteriyor, ekranda eski mesaj izi sayıyor, ikinci 'ac'ta oturum sayısı 1 kalıyor — bu iş kartındaki kurgunun doğrudan ölçümü. son-etkinlik kaydı da önce/sonra çifti veriyor (boş → epoch). Eksikler: 'takılı' hâli hiçbir kayıtta tetiklenmiyor, ana-koltuk onar yolu yalnız sahte rc ile sınanmış, kare tek ve sınav verisiyle; canlı durum kaydı düzeltmeden önce alınmış; canlı kanıt betiği /tmp'deki elle kurulmuş kayıt dosyasına bağımlı olduğundan bağımsız göz onu yeniden koşturup doğrulayamaz."
+  }
+}

@@ -1,0 +1,10 @@
+$ bash -c echo "önce (=ad hedefi): [$(tmux display-message -p -t "=bani" "#{session_activity}" 2>/dev/null)]"; echo "sonra (ad: hedefi): [$(tmux display-message -p -t "bani:" "#{session_activity}")]"; bash terminal-onar/scripts/koltuk-bagla.sh --liste | head -3; bash terminal-onar/scripts/koltuk-bagla.test.sh | tail -1
+# rc=0 sure=0.9s zaman=2026-10-13T12:59:46+03:00
+--- stdout ---
+önce (=ad hedefi): []
+sonra (ad: hedefi): [1791885496]
+MIRAHUR	1791882735	1	ajan	girdi
+bani	1791885496	1	ajan	calisiyor
+bani-sinav	1791884671	1	ajan	girdi
+toplam=43 geçen=43 düşen=0
+--- stderr ---

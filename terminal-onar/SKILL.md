@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.3.0
+version: 2.4.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -120,6 +120,39 @@ gizli süzgeci silinince 1 kapı, kapıda "boş liste" kaçağı 1 kapı, ad sü
 - **hâl** son 15 ekran satırından, filo yoklamasıyla AYNI desenler (`Nexus/scripts/filo.py hal()`): `calisiyor` ·
   `soru` · `sinirda` · `girdi` · `bos`; hiçbiri tutmazsa `bilinmiyor` (uydurulmaz); Claude'suz oturumda hâl ölçülmez → `bilinmiyor` (altı değer dışına çıkılmaz). Yalnız SON 15 dolu satır sayılır; soru deseni meşgul izini yener. **2.2.1:** capture-pane hedefi `ad:` (bölme hedefinde `=ad` geçersizdi → canlıda her koltuk 'bilinmiyor' çıkıyordu; sahte tmux artık `=` biçimini reddeder, D5-D12 bu hatayı ısırır).
 Eski 3 alanlı betikle kapı alan eklemez (tür/hâl uydurulmaz). Sınav: `koltuk-bagla.test.sh` D1-D12b · `sunucu.test.mjs` Y10.
+
+## Koltuk aç / yeniden aç / eski sohbete dön — tek tuş (2.4.0 · 13 Ekim, Sultan: "oturum kapandı/bozuldu/silindi — tekrar açmak çok basit, çok sağlam olmalı")
+Telefon ekranında **Koltuk** düğmesi → pencere: seçili koltuğun durumu ÜÇ AYRI hâlde (`yok` · `claude-yok` · `takili` · `canli`)
+ve tek eylem (Aç / Yeniden aç / Eski sohbete dön). Ölçüm ve iş `scripts/koltuk-ac.sh`'de (`durum <ad>` JSON · `ac <ad> [--eski]`);
+kapı yalnız taşır: `GET /api/koltuk/<ad>` · `POST /api/koltuk/<ad>/ac {eski}` (rc 0→200 · 3→202 merdiven · 4→409 kayıtsız · 1→502).
+- **Yol (kim açar):** kutuda `scripts/ekip-ac.sh` + aile kaydı varsa ve koltuk kayıtlı bir rolün tmux'uysa → `ekip-ac.sh <ROL>`
+  (**tek kanonik kapı:** canlıysa ikinci kopya AÇMAZ; `--eski` → `--resume-if-known`, eski sohbete dönüş; Claude'suz/takılı oturum
+  önce kapatılır, sonra doğar). Koltuk **ana** ise → `onar.sh` (K0), düşerse merdiven (`kademe.sh`). İkisi de değilse → **kayıtsız
+  koltuk AÇILMAZ**, sebebi söylenir: kimliksiz Claude başka kimliğe düşer (ölçülmüş vaka); önce işe alma (madde 6).
+- **Ölçüldü (13 Eki):** `ekip-ac.sh` 18 kutunun 3'ünde var (Nexus · huma · mihenk), aile kaydı 8'inde → öteki kutularda yalnız ana
+  koltuk açılır, gerisi dürüstçe "kayıtsız" döner. `takili` = Claude var ∧ ekran `TO_TAKILI_SN` (900 s) süredir değişmemiş ∧ soru/girdi
+  beklemiyor. 🔴 **Ölçülemeyen koltuk fail-closed:** liste betiği düşer/satır yoksa `olculemedi` — "Claude yok" sanılmaz, zorlasız dokunulmaz (yedek göz tur 3: eski hâl yaşayan oturumu kapatabilirdi). 🔴 **Ana koltuk da aynı kapıdan geçer:** takılı/ölçülemeyen ana koltukta zorlasız rc 5, `--zorla` oturumu kapatır ve onar.sh K0 kayıtlı konuşmaya döner (yedek göz tur 4: eski hâl onar.sh'yi doğrudan çağırıyor, o da "Claude zaten çalışıyor" deyip rc 0 dönüyordu → telefon yanlış "Açıldı" yazıyordu). 🔴 **Takılı = görünüş:** uzun araç koşan sağlam bir Claude da öyle görünür (canlıda ölçüldü: BÂNİ'nin kendi koltuğu) → `ac`
+  takılı oturumu zorlasız KAPATMAZ (rc 5 / kapı 428); telefon penceresi önce sorar, onayla `--zorla` gider. (2.4.0: `koltuk-bagla.sh --liste` son-etkinlik alanı hep 0 basıyordu — `display-message -t =ad` bölme hedefi boş döner; `ad:` ile düzeltildi, 2.2.1 hâl düzeltmesinin ikizi.)
+- Sınav: `scripts/koltuk-ac.test.sh` (gerçek tmux, sahte ekip-ac: öldür→geri gel · eski sohbet · ikinci kopya yok · kayıtsız ret) ·
+  `sunucu.test.mjs` KA0-KA10 · `kapi/tarayici-sinav.mjs` KD1-KD5 · mutasyon M20-M22.
+
+## Pano köprüsü — resim yapıştır · seçimi panoya al (2.3.1 · 13 Ekim — ana dalda 2.3.0 REVAK gerilemelerine (#303) gitti, pano köprüsü #304 ile 2.4.0 içinde iner; Sultan: "Cmd+C kopyalamıyor, resmi Cmd+V yapıştıramıyorum")
+Kapı, ttyd'nin HTML sayfasına `kapi/genel/pano.js`'i gömer (`ttydVekil`: yalnız 200 + `text/html` + düz gövde;
+JSON · WebSocket · sıkıştırılmış cevap olduğu gibi akar; istemci gzip istediyse eklenmiş gövdeyi kapı sıkıştırır).
+- **Yapıştır:** panoda resim varsa `paste` olayı yakalama fazında alınır → 2000px WebP'ye küçültülür (fail-open) →
+  `POST <taban>/api/resim` (kutunun 127.0.0.1:8391 dinleyicisine vekil) → dönen yol `window.term.paste()` ile
+  terminale yazılır. **Metin yapıştırmaya dokunulmaz** (xterm'in kendi yolu; 2026-08-26 akar regresyonu dersi).
+- **Kopyala:** tmux `set-clipboard on` seçimi **OSC 52** ile gönderir; ttyd'nin xterm paketinde bu komutu işleyen
+  YOKTU (ölçüldü: pakette `registerOscHandler(52` geçmiyor) → seçim hiçbir yere inmiyordu. Köprü
+  `term.parser.registerOscHandler(52, …)` ile metni tarayıcı panosuna yazar; fareyle seçtiğin an "📋 seçim panoya
+  kopyalandı". Cmd+C seçimsiz basılınca bir kez ipucu: Shift basılı sürükle → tarayıcı seçimi → Cmd+C.
+- **Niçin kapıda, eklentide değil:** ttyd `window.term`'i dışa verir; kapı tabanı bilir; Tampermonkey'siz tarayıcıda,
+  kokpit çerçevesinde, merkez yolunda ve doğrudan kutu adresinde aynı sayfa çalışır. Sayfa `<html data-kapi-pano>`
+  işareti taşır; tarayıcı eklentisi (`cloudtop-terminal-image.user.js`) bu işareti görünce ttyd sayfasında kendini çeker.
+- Kapatma: `KAPI_PANO=0` → vekil eski hâli bayt bayt. Sınav: `sunucu.test.mjs` PN1-PN14 · `pano-sinav.mjs`
+  (gerçek Chromium + ttyd + tmux + kapı; kütüphane yoksa rc=4 ÖLÇÜLEMEDİ) · mutasyon M14-M19.
+- **Sınır:** tarayıcı panosuna yazmak belge odakta ve izinliyken olur; kokpit başka alandan gömüyorsa çerçeveye
+  `allow="clipboard-write"` gerekir (kokpit tarafı, bu beceri değil). OSC 52 "?" sorgusu (panoyu OKUMA) desteklenmez.
 
 ## 🔴 Ortak dizinden çağrı = makine kimliği tuzağı (2.1.1 · 12 Ekim canlı dersi)
 

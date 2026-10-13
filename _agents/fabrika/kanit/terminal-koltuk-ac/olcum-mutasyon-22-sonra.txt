@@ -1,0 +1,28 @@
+$ bash terminal-onar/kapi/mutasyon.sh
+# rc=0 sure=143.9s zaman=2026-10-13T13:40:24+03:00
+--- stdout ---
+  ✓ M1 taban dışı reddi — kapı ölünce sınav KIRMIZI
+  ✓ M2 taban sonu yönlendirme — kapı ölünce sınav KIRMIZI
+  ✓ M3 çerez kapsamı — kapı ölünce sınav KIRMIZI
+  ✓ M4 giriş yönlendirmesi tabanlı — kapı ölünce sınav KIRMIZI
+  ✓ M5 sayfaya taban enjeksiyonu — kapı ölünce sınav KIRMIZI
+  ✓ M6 html varlık yolları — kapı ölünce sınav KIRMIZI
+  ✓ M7 PWA kimliği kutu başına — kapı ölünce sınav KIRMIZI
+  ✓ M10 giris sayfasi tabani tasir — kapı ölünce sınav KIRMIZI
+  ✓ M11 parola vekilligi — kapı ölünce sınav KIRMIZI
+  ✓ M12 onbellek siniri — kapı ölünce sınav KIRMIZI
+  ✓ M13 gorunen ad kutudan turer — kapı ölünce sınav KIRMIZI
+  ✓ M8 WS upgrade taban denetimi — kapı ölünce sınav KIRMIZI
+  ✓ M9 WS giris denetimi — kapı ölünce sınav KIRMIZI
+  ✓ M14 pano köprüsü gömülür — kapı ölünce sınav KIRMIZI
+  ✓ M15 ttyd'den düz gövde istenir — kapı ölünce sınav KIRMIZI
+  ✓ M16 content-length yeniden hesaplanır — kapı ölünce sınav KIRMIZI
+  ✓ M17 sıkıştırılmış ttyd cevabına dokunulmaz — kapı ölünce sınav KIRMIZI
+  ✓ M18 kapatma anahtarı (KAPI_PANO=0) — kapı ölünce sınav KIRMIZI
+  ✓ M19 köprü tabanı taşır — kapı ölünce sınav KIRMIZI
+  ✓ M20 rc→HTTP eşlemesi (409/202/428/502) — kapı ölünce sınav KIRMIZI
+  ✓ M21 --eski bayrağı betiğe geçer — kapı ölünce sınav KIRMIZI
+  ✓ M22 bozuk koltuk adı yola girmez — kapı ölünce sınav KIRMIZI
+─────────────
+MUTASYON: gecti=22 dusen=0
+--- stderr ---

@@ -1,0 +1,160 @@
+{
+  "is": "terminal-pano",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-13T11:16:00+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "ttyd-osc52-isleyici-yok",
+      "asama": "once",
+      "dosya": "olcum-ttyd-osc52-isleyici-yok-once.txt",
+      "sha256": "f58443d2e585df8ab521153bb0222f43852a1f292d4c6ad55b9b234d6d51ffdd",
+      "komut": [
+        "bash",
+        "-c",
+        "curl -s --unix-socket /config/.terminal-onar/ttyd.sock http://localhost/code/tty/ > /tmp/claude-1000/ttyd-canli.html; echo \"ttyd html bayt=$(wc -c < /tmp/claude-1000/ttyd-canli.html)\"; echo \"pozitif kontrol registerOscHandler( toplam=$(grep -o \"registerOscHandler(\" /tmp/claude-1000/ttyd-canli.html | wc -l)\"; echo \"OSC 52 isleyicisi registerOscHandler(52 = $(grep -o \"registerOscHandler(52\" /tmp/claude-1000/ttyd-canli.html | wc -l)\"; echo \"window.term disa verilmis = $(grep -o \"window.term=\" /tmp/claude-1000/ttyd-canli.html | wc -l)\"; echo \"tmux: $(tmux show -g set-clipboard) · $(tmux show -g mouse) · termfeatures=$(tmux display -p -t code-ana \"#{client_termfeatures}\")\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T11:08:56+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "birim-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-birim-sinav-sonra.txt",
+      "sha256": "bfa361d6dd43b27d9ae77f4c0a4b26de4030bf6fcec84c35944ba2c9058ee587",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T11:09:02+03:00",
+      "sure_sn": 5.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-sonra.txt",
+      "sha256": "8809500a914374a71787f0ce2e1a62c5ff9aab5a842edcfc5d84b8a9c7258e1e",
+      "komut": [
+        "bash",
+        "terminal-onar/kapi/mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T11:10:47+03:00",
+      "sure_sn": 105.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ucuca-eski-eklenti",
+      "asama": "once",
+      "dosya": "olcum-ucuca-eski-eklenti-once.txt",
+      "sha256": "ee620bd37dcc30ed958cc3c707ffd5405d4ee6c3bebc090389f7a2b3ec2e5da4",
+      "komut": [
+        "env",
+        "EKLENTI_YOL=/config/projects/_wt/Sx-Claude-Skills-terminal-pano/_agents/fabrika/kanit/terminal-pano/eklenti-eski-0.9.user.js",
+        "node",
+        "terminal-onar/kapi/pano-sinav.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-13T11:15:42+03:00",
+      "sure_sn": 19.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ucuca-yeni-eklenti",
+      "asama": "sonra",
+      "dosya": "olcum-ucuca-yeni-eklenti-sonra.txt",
+      "sha256": "10d29b8687318c1a28fb5d286da2dee38059df737b41f3bb6510face1ba8dff8",
+      "komut": [
+        "env",
+        "EKLENTI_YOL=/config/projects/_wt/cloudtop-terminal-pano-eklenti/infra/cloudtop-terminal-image.user.js",
+        "node",
+        "terminal-onar/kapi/pano-sinav.mjs",
+        "--kare",
+        "/tmp/claude-1000/pano"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T11:16:00+03:00",
+      "sure_sn": 18.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-code-kutusu",
+      "asama": "sonra",
+      "dosya": "olcum-canli-code-kutusu-sonra.txt",
+      "sha256": "55a3030cb9e1b41cc5a229fdee73ce2604e7fb91dfdabd4a8be2a09a3a14c331",
+      "komut": [
+        "node",
+        "/config/projects/_wt/Sx-Claude-Skills-terminal-pano/_agents/fabrika/kanit/terminal-pano/canli-olcum.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T11:11:33+03:00",
+      "sure_sn": 8.9
+    },
+    {
+      "tur": "dosya",
+      "etiket": "kare-yapistir",
+      "asama": "sonra",
+      "dosya": "dosya-kare-yapistir-sonra.png",
+      "sha256": "d17c7f876eb778faeafabb10e08a78ca5929e326af72d327a611374d7e336d1c",
+      "kaynak": "/tmp/claude-1000/pano-yapistir.png",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T11:16:00+03:00"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "kare-kopyala",
+      "asama": "sonra",
+      "dosya": "dosya-kare-kopyala-sonra.png",
+      "sha256": "57b8233c5d3c8e91d1702cded3737dc54a019449345740f22bfb95ca35dd940e",
+      "kaynak": "/tmp/claude-1000/pano-kopyala.png",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T11:16:00+03:00"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "kare-eklenti",
+      "asama": "sonra",
+      "dosya": "dosya-kare-eklenti-sonra.png",
+      "sha256": "05f962946bbc3626bc2160c4b6cb80d82e5e094504e37dbc177efbb5e72d59ec",
+      "kaynak": "/tmp/claude-1000/pano-eklenti.png",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T11:16:00+03:00"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "canli-yapistir",
+      "asama": "sonra",
+      "dosya": "dosya-canli-yapistir-sonra.png",
+      "sha256": "ffe6c541a92e9ba9a809bae8ffcc35337863e67e04cbef9e4ddce2e7ab893489",
+      "kaynak": "/tmp/claude-1000/canli-yapistir.png",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T11:11:33+03:00"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "canli-kopyala",
+      "asama": "sonra",
+      "dosya": "dosya-canli-kopyala-sonra.png",
+      "sha256": "0b60446329f73b449ae396b245cdaac40c7367a8fa3046b979e7c8f82d2413ba",
+      "kaynak": "/tmp/claude-1000/canli-kopyala.png",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T11:11:33+03:00"
+    }
+  ],
+  "imza": "3b7a53dca7fe0e2273e42b369aee14b3b218c58e1d7f535768f7b6e3845d26c5"
+}

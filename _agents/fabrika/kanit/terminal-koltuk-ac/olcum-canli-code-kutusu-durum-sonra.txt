@@ -1,0 +1,9 @@
+$ bash -c cd terminal-onar/scripts && for k in bani code-ana cc-19986388 yokboyle; do TO_KUTU=code TO_PROJE=/config/projects/Nexus bash koltuk-ac.sh durum $k; done; echo "son-etkinlik artık epoch (düzeltme sonrası); takili yalnız görünüş, zorlasız dokunulmaz"
+# rc=0 sure=1.4s zaman=2026-10-13T13:32:39+03:00
+--- stdout ---
+{"ad":"bani","durum":"canli","tmux":true,"claude":true,"hal":"girdi","son":1791885762,"rol":"B\u00c2N\u0130","resume":true,"yol":"ekip-ac","ana":false}
+{"ad":"code-ana","durum":"canli","tmux":true,"claude":true,"hal":"girdi","son":1791883891,"rol":"","resume":false,"yol":"onar","ana":true}
+{"ad":"cc-19986388","durum":"claude-yok","tmux":true,"claude":false,"hal":"bilinmiyor","son":1789549839,"rol":"","resume":false,"yol":"yok","ana":false}
+{"ad":"yokboyle","durum":"yok","tmux":false,"claude":false,"hal":"","son":0,"rol":"","resume":false,"yol":"yok","ana":false}
+son-etkinlik artık epoch (düzeltme sonrası); takili yalnız görünüş, zorlasız dokunulmaz
+--- stderr ---

@@ -80,7 +80,7 @@ if [ "${1:-}" = "--liste" ]; then
   LISTE="$(koltuklar)" || exit 3
   printf '%s\n' "$LISTE" | while IFS= read -r s; do
     [ -n "$s" ] || continue
-    son=$(tmux display-message -p -t "=$s" '#{session_activity}' 2>/dev/null || echo 0)
+    son=$(tmux display-message -p -t "$s:" '#{session_activity}' 2>/dev/null || echo 0)
     if claude_var_mi "$s"; then c=1; else c=0; fi
     tur="$(koltuk_turu "$s" "$c")"
     if [ "$c" = 1 ]; then hal="$(koltuk_hali "$s")"; else hal=bilinmiyor; fi   # Claude'suz oturumda hâl ölçülmez → bilinmiyor (altı değerin dışına çıkılmaz)

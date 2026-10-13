@@ -1,0 +1,16 @@
+$ node /config/projects/_wt/Sx-Claude-Skills-terminal-pano/_agents/fabrika/kanit/terminal-pano/canli-olcum.mjs
+# rc=0 sure=8.9s zaman=2026-10-13T11:11:33+03:00
+--- stdout ---
+   konsol: [kapi-pano] bağlandı: OSC 52 → pano · resim → /code/api/resim
+  ✓ C0 canlı ttyd sayfası (/code/tty/?arg=sinav-pano) açıldı, köprü bağlandı
+   konsol: [kapi-pano] küçültüldü 324546 → 197732 image/webp 1400x700
+   konsol: [kapi-pano] yazıldı term.paste /config/projects/akar/.cc-images/inbox/img-1791879088151-fe9085.webp
+   bildirim: ✓ resmin yolu terminale yazıldı — Enter ile gönder
+  ✓ C1 dönen yol GERÇEK tmux koltuğunda görünüyor (capture-pane)
+  ✓ C2 dosya kutunun gelen kutusunda VAR ve küçültülmüş (webp < kaynak PNG)
+   dosya: /config/projects/akar/.cc-images/inbox/img-1791879088151-fe9085.webp (197732 bayt · kaynak PNG 324546 bayt)
+  ✓ C3 canlı tmux içinden OSC 52 tarayıcı panosuna iner
+  ✓ C4 canlı tmux'ta FAREYLE SEÇİM (copy-mode) tarayıcı panosuna iner — Sultan'ın kırık yolu
+
+CANLI GEÇEN: 5 · KALAN: 0
+--- stderr ---

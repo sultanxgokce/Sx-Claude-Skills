@@ -1,0 +1,35 @@
+$ env EKLENTI_YOL=/config/projects/_wt/Sx-Claude-Skills-terminal-pano/_agents/fabrika/kanit/terminal-pano/eklenti-eski-0.9.user.js node terminal-onar/kapi/pano-sinav.mjs
+# rc=1 sure=19.9s zaman=2026-10-13T11:15:42+03:00
+--- stdout ---
+── Y · resim yapıştırma (Cmd+V)
+  ✓ Y0 gerçek ttyd+tmux sayfası açıldı, kabuk istemi göründü
+  ✓ Y1 köprü ttyd'nin xterm'ine bağlandı (window.__kapiPano.osc52)
+  ✓ Y2 resim /api/resim üzerinden dinleyiciye ULAŞTI (bayt bayt aynı · x-requested-with: dashboard)
+  ✓ Y3 dönen yol TERMİNALE yazıldı (kabuk satırında görünür)
+  ✓ Y4 kullanıcıya bildirildi: "resmin yolu terminale yazıldı — Enter ile gönder"
+  ✓ Y5 büyük PNG (348 KB, 2600px) 2000px WebP olarak küçültülür ve küçülür
+  ✓ Y6 ikinci yol da terminale yazıldı
+  ✓ Y7 METİN yapıştırma xterm'in kendi yoluyla aynen çalışır (köprü dokunmaz)
+── K · kopyalama (fare seçimi → tmux → OSC 52 → tarayıcı panosu)
+  ✓ K1 uygulamanın OSC 52'si tmux üzerinden tarayıcı panosuna İNER
+  ✓ K2 kullanıcıya "seçim panoya kopyalandı" denir
+  ✓ K3 seçilecek satır ekranda bulundu
+  ✓ K4 FAREYLE SEÇİM (tmux copy-mode) tarayıcı panosuna iner — Sultan'ın kırık yolu
+  ✓ K5 Cmd+C seçimsiz basılınca yol gösterilir (Shift basılı sürükle ipucu)
+  ✓ K6 Shift basılı sürükleme TARAYICI seçimi yapar (Cmd+C ile kopyalanabilir)
+── N · olumsuz kontrol: köprüsüz kapı (KAPI_PANO=0) aynı ölçümde KIRMIZI
+  ✓ N1 köprüsüz sayfada işaret ve bağ yok
+  ✓ N2 köprüsüz: OSC 52 panoya İNMEZ (ölçüm yokluğu görüyor; K1 tautoloji değil)
+  ✓ N3 köprüsüz: resim yapıştırma dinleyiciye ULAŞMAZ (Y2 tautoloji değil)
+── E · tarayıcı eklentisi aynı sayfada (/config/projects/_wt/Sx-Claude-Skills-terminal-pano/_agents/fabrika/kanit/terminal-pano/eklenti-eski-0.9.user.js)
+  ✓ E0 eklenti sayfaya yüklendi ([term-paste] günlüğü)
+  ✗ E1 eklenti ttyd sayfasında işareti görüp ÇEKİLDİ (günlük: "çekiliyorum") → [term-paste] mic button ready | [term-paste] upload failed null
+  ✗ E2 eklenti code-server yoluna (/proxy/8391/) HİÇ istek atmadı (merkezde "Böyle bir kutu yok" olurdu) → 1 istek
+  ✓ E3 yükleme TEK ve köprüden (çift yükleme yok)
+  ✗ E4 ekranda eklentiden kırmızı bildirim YOK → ✗ HTTP 404 | ✗ HTTP 404
+
+GEÇEN: 19 · KALAN: 3
+  · E1 eklenti ttyd sayfasında işareti görüp ÇEKİLDİ (günlük: "çekiliyorum")
+  · E2 eklenti code-server yoluna (/proxy/8391/) HİÇ istek atmadı (merkezde "Böyle bir kutu yok" olurdu)
+  · E4 ekranda eklentiden kırmızı bildirim YOK
+--- stderr ---

@@ -13,6 +13,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { execFile, spawn } from 'node:child_process';
+import zlib from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 
 const KOK = path.dirname(fileURLToPath(import.meta.url));
@@ -23,6 +24,7 @@ const TTYD_SOKET = process.env.KAPI_TTYD_SOKET || path.join(process.env.TO_DURUM
 const ANA_TMUX = process.env.TO_ANA_TMUX || 'sedir-ana';
 // Koltuk listesinin TEK kaynağı (ttyd de aynı betiği çalıştırır). Sınav başka bir betik verebilir.
 const KOLTUK_BETIK = process.env.KAPI_KOLTUK_BETIK || path.join(BETIK, 'koltuk-bagla.sh');
+const KOLTUK_AC_BETIK = process.env.KAPI_KOLTUK_AC_BETIK || path.join(BETIK, 'koltuk-ac.sh');
 // ── TABAN YOLU ───────────────────────────────────────────────────────────────
 // 🔴 NİÇİN: merkez sayfa (terminal.mmepanel.com) kutuları YOL ile ayırır — /sedir/ ·
 //    /akar/ … Kapı tabanı bilmezse döndürdüğü her mutlak yol (302 → /giris, çerez
@@ -37,6 +39,11 @@ const KUTU = process.env.TO_KUTU || (TABAN ? TABAN.slice(1) : '') || 'kutu';
 const KUTU_BAS = KUTU.charAt(0).toLocaleUpperCase('tr') + KUTU.slice(1);
 const DURUM_DIZ = process.env.TO_DURUM_DIZ || '/config/.terminal-onar';
 const RESIM_URL = process.env.KAPI_RESIM_URL || 'http://127.0.0.1:8391/upload';
+// ── PANO KÖPRÜSÜ (2.3.0 · Sultan 12 Eki: "Cmd+C kopyalamıyor, resmi Cmd+V yapıştıramıyorum") ──
+// ttyd'nin HTML sayfasına genel/pano.js gömülür: resim yapıştır → /api/resim → yol terminale; tmux seçimi (OSC 52)
+// → tarayıcı panosu. KAPI_PANO=0 ile kapatılır (geriye dönük: o zaman vekil bayt bayt eski hâli).
+const PANO_ACIK = process.env.KAPI_PANO !== '0';
+const PANO_JS = PANO_ACIK ? fs.readFileSync(path.join(GENEL, 'pano.js'), 'utf8') : '';
 // 🔴 Parola değişkeninin ADI kutudan türer (SEDIR__… · AKAR__…). Sert yazılsaydı
 //    beceri ikinci kutuda parolayı bulamaz, fail-closed açılmaz ve sebebi "parola yok"
 //    gibi görünürdü — oysa parola vardı, aranan ad yanlıştı. Ad da veri gibi taşınır.
@@ -120,9 +127,9 @@ function govde(req, sinir = 64 * 1024) {
     req.on('end', () => ok(Buffer.concat(parca))); req.on('error', red);
   });
 }
-function calistir(komut, arg, girdi) {
+function calistir(komut, arg, girdi, sure = 20000) {
   return new Promise((ok) => {
-    const c = execFile(komut, arg, { timeout: 20000, maxBuffer: 1 << 20 }, (h, out, err) => ok({ kod: h ? (h.code ?? 1) : 0, out: String(out), err: String(err) }));
+    const c = execFile(komut, arg, { timeout: sure, maxBuffer: 1 << 20 }, (h, out, err) => ok({ kod: h ? (h.code ?? 1) : 0, out: String(out), err: String(err), zamanAsimi: !!(h && h.killed) }));
     if (girdi != null) { c.stdin.end(girdi); }
   });
 }
@@ -140,10 +147,44 @@ async function tmuxGonder(metin) {
 const TUSLAR = new Set(['Escape', 'Up', 'Down', 'Left', 'Right', 'Enter', 'Tab', 'BTab', 'C-c', 'BSpace',
   '1', '2', '3', '4', '5', 'y', 'n']);
 
-// ---- ttyd'ye vekâlet (HTTP)
+// ---- ttyd'ye vekâlet (HTTP). ttyd'nin HTML sayfasına pano köprüsü (genel/pano.js) gömülür.
 function ttydVekil(req, res) {
-  const v = http.request({ socketPath: TTYD_SOKET, path: req.url, method: req.method, headers: { ...req.headers, host: 'localhost' } }, (yan) => {
-    res.writeHead(yan.statusCode, yan.headers); yan.pipe(res);
+  const bas = { ...req.headers, host: 'localhost' };
+  // 🔴 HTML'e EKLEME yapacağız → ttyd'den DÜZ gövde istenir (sıkıştırılmış gövdeye dokunulmaz; merkez.mjs'in
+  //    bağımsız-göz dersi: gzip baytını metin sanıp başlığı silmek sayfayı çöpe çevirir). Tel bütçesi korunur:
+  //    istemci gzip istediyse eklenmiş gövdeyi BİZ sıkıştırırız (ttyd sayfası ~730 KB düz · ~190 KB gzip).
+  const gzipIster = PANO_ACIK && /\bgzip\b/.test(String(req.headers['accept-encoding'] || ''));
+  if (PANO_ACIK && req.method === 'GET') delete bas['accept-encoding'];
+  const v = http.request({ socketPath: TTYD_SOKET, path: req.url, method: req.method, headers: bas }, (yan) => {
+    const tur = String(yan.headers['content-type'] || '');
+    const kodlama = String(yan.headers['content-encoding'] || '').trim().toLowerCase();
+    // Yalnız 200 + text/html + düz gövde eklenir; WebSocket, token, hata sayfası, sıkıştırılmış cevap OLDUĞU GİBİ akar.
+    if (!PANO_ACIK || req.method !== 'GET' || yan.statusCode !== 200 || !tur.includes('text/html') || (kodlama && kodlama !== 'identity')) {
+      res.writeHead(yan.statusCode, yan.headers); return yan.pipe(res);
+    }
+    // Gövde tavanı: aşılırsa eklemeden vazgeç, olduğu gibi akıt (sayfa kaybolmasın).
+    const TAVAN = 4 * 1024 * 1024; const parca = []; let boy = 0, akitiliyor = false;
+    yan.on('data', (c) => {
+      if (akitiliyor) return;
+      boy += c.length;
+      if (boy > TAVAN) {
+        akitiliyor = true; const b2 = { ...yan.headers }; delete b2['content-length'];
+        res.writeHead(yan.statusCode, b2); for (const p of parca) res.write(p); res.write(c); yan.pipe(res); return;
+      }
+      parca.push(c);
+    });
+    yan.on('end', () => {
+      if (akitiliyor) return;
+      let h = Buffer.concat(parca).toString('utf8');
+      const ek = `<script>window.__TABAN=${JSON.stringify(TABAN)};window.__KUTU=${JSON.stringify(KUTU)};</script><script>${PANO_JS}</script>`;
+      // Değiştirici FONKSİYON: düz dize verilse pano.js içindeki '$' dizileri replace tarafından yorumlanırdı.
+      h = h.includes('</body>') ? h.replace('</body>', () => ek + '</body>') : h + ek;
+      const b2 = { ...yan.headers }; delete b2['content-length']; delete b2['content-encoding'];
+      let govde = Buffer.from(h, 'utf8');
+      if (gzipIster) { govde = zlib.gzipSync(govde); b2['content-encoding'] = 'gzip'; }
+      b2['content-length'] = String(govde.length);
+      res.writeHead(yan.statusCode, b2); res.end(govde);
+    });
   });
   v.on('error', () => { if (!res.headersSent) { res.writeHead(502, { 'content-type': 'text/html; charset=utf-8' }); }
     res.end('<body style="background:#16130f;color:#e9e2d6;font:16px system-ui;padding:24px">Terminal şu an ulaşılamıyor — yukarıdaki <b>Onar</b> düğmesine bas.</body>'); });
@@ -380,6 +421,27 @@ const sunucu = http.createServer(async (req, res) => {
                    ...(tur ? { tur } : {}), ...(hal ? { hal } : {}) };
         }).filter((k) => /^[A-Za-z0-9_-]{1,64}$/.test(k.ad));
         return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, koltuklar });
+      }
+      // ── KOLTUK AÇ / YENİDEN AÇ / ESKİ SOHBETE DÖN (2.4.0 · dilim 5/5, Sultan: "oturum kapandı/bozuldu/silindi —
+      //    tekrar açmak çok basit ve çok sağlam olmalı"). Ölçüm ve iş betikte (scripts/koltuk-ac.sh): üç durum ayrı
+      //    (yok · claude-yok · takili), yol = ekip-ac.sh (tek kanonik kapı) | onar.sh (ana) | yok (kayıtsız → ret).
+      const km = y.match(/^\/api\/koltuk\/([A-Za-z0-9_-]{1,64})(\/ac)?$/);
+      if (km && !km[2] && req.method === 'GET') {
+        const r = await calistir('bash', [KOLTUK_AC_BETIK, 'durum', km[1]]);
+        try { return json(res, 200, JSON.parse(r.out)); } catch { return json(res, 500, { hata: 'Koltuk ölçülemedi.' }); }
+      }
+      if (km && km[2] && req.method === 'POST') {
+        let g = {}; try { g = JSON.parse((await govde(req, 4096)).toString('utf8') || '{}'); } catch { g = {}; }
+        const arg = [KOLTUK_AC_BETIK, 'ac', km[1]]; if (g.eski === true) arg.push('--eski'); if (g.zorla === true) arg.push('--zorla');
+        // Açma uzun sürebilir (ekip-ac canlılık teyidi · onar.sh): 20 sn değil 120 sn; zaman aşımı 'açılamadı' DEĞİL 504 —
+        // oturum arkada doğmuş olabilir, telefon durumu yeniler (yedek göz tur 2).
+        const sureMs = +(process.env.KAPI_AC_SURE_MS || 120000);   // sınav kısa süre verir
+        const r = await calistir('bash', arg, undefined, sureMs);
+        if (r.zamanAsimi) return json(res, 504, { tamam: false, rc: 124, mesaj: `Açma ${Math.round(sureMs / 1000)} sn'de bitmedi — koltuk arkada doğmuş olabilir; durumu yenileyip bak.` });   // mesaj gerçek süreyi söyler (yedek göz tur 4)
+        const mesaj = (r.out + r.err).trim().split('\n').filter(Boolean).pop() || '';
+        // rc: 0 açıldı/zaten canlı · 1 açılamadı · 3 merdiven başladı · 4 kayıtsız koltuk · 5 takılı: zorla gerek (dokunulmadı)
+        const kod = r.kod === 0 ? 200 : r.kod === 3 ? 202 : r.kod === 4 ? 409 : r.kod === 5 ? 428 : 502;
+        return json(res, kod, { tamam: r.kod === 0 || r.kod === 3, rc: r.kod, mesaj });
       }
       if (y === '/api/surum') {
         // telefon eski sayfada kalmasın: dosyalar değişince sürüm değişir, sayfa kendini yeniler
