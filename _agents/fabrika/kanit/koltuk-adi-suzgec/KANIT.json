@@ -1,0 +1,112 @@
+{
+  "is": "koltuk-adi-suzgec",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-13T17:19:37+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "esdegerlik-3",
+      "asama": "sonra",
+      "dosya": "olcum-esdegerlik-3-sonra.txt",
+      "sha256": "645b48205603b7af121c2a8b01f40f94dee20782b57f3bcb28e56b6985b0a2b8",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-adi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T17:19:20+03:00",
+      "sure_sn": 0.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "xss-tarayici-4",
+      "asama": "sonra",
+      "dosya": "olcum-xss-tarayici-4-sonra.txt",
+      "sha256": "9e31f304a2a5cefc0815765429e7cde0ba6ae1c54cf2bd152b438aea21545ade",
+      "komut": [
+        "env",
+        "KX_KARE=/tmp/claude-1000/-config-projects-Nexus/4239eb07-b22e-43d5-b3bb-0a9593e8a6bb/scratchpad/kx.png",
+        "bash",
+        "terminal-onar/kapi/koltuk-xss.tarayici.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T17:19:21+03:00",
+      "sure_sn": 1.4
+    },
+    {
+      "tur": "dosya",
+      "etiket": "xss-kare",
+      "asama": "sonra",
+      "dosya": "dosya-xss-kare-sonra.png",
+      "sha256": "c30ea92f031b06490f570d0f932acd632b4cf6cfcc7c85804540f06b0abfb031",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/4239eb07-b22e-43d5-b3bb-0a9593e8a6bb/scratchpad/kx.png",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T17:19:21+03:00"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-5",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-5-sonra.txt",
+      "sha256": "7937d6db70654e2d8cde9f06b6302e45893ed25ede0da0ec89bdbf47c34499be",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/koltuk-adi-suzgec/mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T17:19:27+03:00",
+      "sure_sn": 5.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-bagla-46",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-bagla-46-sonra.txt",
+      "sha256": "1393f377dece6030c97934994bfa689ff4217d99c8b0561426a7703ff250b904",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T17:19:28+03:00",
+      "sure_sn": 1.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-ac-26",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-ac-26-sonra.txt",
+      "sha256": "60918f02e519ead5a9789c05b4becf21523424369a0c46e54424fe3470f14e7f",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-ac.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T17:19:31+03:00",
+      "sure_sn": 2.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sunucu",
+      "asama": "sonra",
+      "dosya": "olcum-sunucu-sonra.txt",
+      "sha256": "4856595f418fb9d4c6f5c2a652973322d6c7d42e0e7cc712fe3e51643a91ef70",
+      "komut": [
+        "node",
+        "--test",
+        "terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T17:19:37+03:00",
+      "sure_sn": 6.2
+    }
+  ],
+  "imza": "57c68d9db5d17e3566d282b86693bdf0fb71db543432d7471159e7b18a0adc70"
+}

@@ -18,7 +18,10 @@
 set -uo pipefail
 
 gizli() { case "$1" in ttyd-*|kapi-*|*-kurtarici|imglistener*) return 0 ;; esac; return 1; }
-gecerli_ad() { [[ "$1" =~ ^[A-Za-z0-9_-]{1,64}$ ]]; }   # tmux oturum adında . ve : olamaz
+# 🔴 AD SÜZGECİ: tek kaynak koltuk-adi.sh (kural ve gerekçesi orada; kapı aynı kuralı KOLTUK_AD_DESEN'de taşır, eşdeğerlik sınavlı).
+. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/koltuk-adi.sh"
+gecerli_ad() { koltuk_adi_gecerli "$1"; }
+# ttyd ?arg=2026%2F85 değerini kabuğa ÇÖZÜLMÜŞ ('2026/85') iletir — gerçek ttyd+Chromium ile ölçüldü (13 Eki); burada çözme YOK.
 
 # 🔴 ÖLÇEMEDİĞİNE "boş" DEMEZ (bağımsız göz, tur 3): tmux listesi ALINAMAZSA bu "0 koltuk" değil
 #    "ölçülemedi"dir → rc=3. Tek istisna tmux sunucusunun hiç çalışmaması ("no server running"):
@@ -35,12 +38,16 @@ koltuklar() {  # görünür oturum adları, satır satır · rc 3 = ölçülemed
   return 0   # son satır gizliyse döngü 1 döner; o bir ölçüm hatası değil
 }
 
+# 🔴 HEDEF ADLA DEĞİL BÖLME KİMLİĞİYLE (yedek göz tur 2 ölçtü): '-t "$1:"' ve '-t "=$1:"' adı değil oturum KİMLİĞİNİ ($1) çözer →
+#    '$1' adlı koltuğun hâli/etkinliği BAŞKA oturumdan okunurdu. Tüm bölmeler bir kez listelenir, ada tam eşleşmeyle süzülür.
+bolmeler() { tmux list-panes -a -F '#{session_name}	#{window_active}	#{pane_active}	#{pane_id}	#{pane_pid}	#{pane_current_command}' 2>/dev/null; }
+bolme_bul() { bolmeler | awk -F'\t' -v s="$1" '$1==s && $2==1 && $3==1 {print $4; exit}'; }   # oturumun etkin bölmesi (%N)
 claude_var_mi() {  # $1 = oturum → 0 ise koltukta Claude çalışıyor
   local pid kom
   while read -r pid kom; do
     case "$kom" in claude|claude-*) return 0 ;; esac
     pgrep -P "$pid" -f '(^|/)claude( |$)' >/dev/null 2>&1 && return 0
-  done < <(tmux list-panes -s -t "=$1" -F '#{pane_pid} #{pane_current_command}' 2>/dev/null)
+  done < <(bolmeler | awk -F'\t' -v s="$1" '$1==s {print $5" "$6}')
   return 1
 }
 
@@ -59,9 +66,10 @@ koltuk_turu() {  # $1 = oturum · $2 = claude(1|0) → ajan yalnız Claude çal�
 koltuk_hali() {  # $1 = oturum → calisiyor|soru|sinirda|girdi|bos|bilinmiyor  (SON 15 dolu satır; eskisi sayılmaz)
   local ekran
   # 🔴 tmux -S -15 görünür panenin ÜSTÜNE 15 geçmiş satır ekler, sonunu sınırlamaz (bağımsız göz #298 tur 1): sınır tail ile.
-  # 🔴 capture-pane BÖLME hedefi ister: "=ad" oturum biçimi burada GEÇERSİZDİR ("can't find pane") → her koltuk 'bilinmiyor'
-  #    çıkıyordu (canlıda ölçüldü, 13 Eki). Doğru biçim "ad:" (oturumun etkin penceresi/bölmesi).
-  ekran="$(tmux capture-pane -p -t "$1:" -S -15 2>/dev/null | sed '/^[[:space:]]*$/d' | tail -n 15)" || { echo bilinmiyor; return; }
+  # 🔴 capture-pane BÖLME hedefi ister: "=ad" oturum biçimi GEÇERSİZDİR ("can't find pane" — canlıda ölçüldü, 13 Eki); "ad:" ise
+  #    '$1' gibi adı kimlik sanır (yedek göz tur 2). Hedef = ada tam eşleşen oturumun etkin bölme kimliği (%N).
+  local hedef; hedef="$(bolme_bul "$1")"; [ -n "$hedef" ] || { echo bilinmiyor; return; }
+  ekran="$(tmux capture-pane -p -t "$hedef" -S -15 2>/dev/null | sed '/^[[:space:]]*$/d' | tail -n 15)" || { echo bilinmiyor; return; }
   [ -n "$ekran" ] || { echo bilinmiyor; return; }
   # Sıra: soru > meşgul > sınır > girdi > boş — soru en üstte: bekleyen bir soru, ekranda "esc to cancel" gibi meşgul izi taşısa
   # da sorudur; Sultan'ın görmesi gereken odur (filo yoklaması aynı deseni "Enter to select" istisnasıyla kuruyordu).
@@ -78,9 +86,10 @@ koltuk_hali() {  # $1 = oturum → calisiyor|soru|sinirda|girdi|bos|bilinmiyor  
 
 if [ "${1:-}" = "--liste" ]; then
   LISTE="$(koltuklar)" || exit 3
+  AKT="$(tmux list-sessions -F '#{session_name}	#{session_activity}' 2>/dev/null)"   # son etkinlik: ada tam eşleşme, -t yok
   printf '%s\n' "$LISTE" | while IFS= read -r s; do
     [ -n "$s" ] || continue
-    son=$(tmux display-message -p -t "$s:" '#{session_activity}' 2>/dev/null || echo 0)
+    son=$(printf '%s\n' "$AKT" | awk -F'\t' -v n="$s" '$1==n {print $2; exit}'); son="${son:-0}"
     if claude_var_mi "$s"; then c=1; else c=0; fi
     tur="$(koltuk_turu "$s" "$c")"
     if [ "$c" = 1 ]; then hal="$(koltuk_hali "$s")"; else hal=bilinmiyor; fi   # Claude'suz oturumda hâl ölçülmez → bilinmiyor (altı değerin dışına çıkılmaz)

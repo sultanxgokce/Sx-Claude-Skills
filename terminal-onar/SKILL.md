@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.4.0
+version: 2.4.1
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -120,6 +120,14 @@ gizli süzgeci silinince 1 kapı, kapıda "boş liste" kaçağı 1 kapı, ad sü
 - **hâl** son 15 ekran satırından, filo yoklamasıyla AYNI desenler (`Nexus/scripts/filo.py hal()`): `calisiyor` ·
   `soru` · `sinirda` · `girdi` · `bos`; hiçbiri tutmazsa `bilinmiyor` (uydurulmaz); Claude'suz oturumda hâl ölçülmez → `bilinmiyor` (altı değer dışına çıkılmaz). Yalnız SON 15 dolu satır sayılır; soru deseni meşgul izini yener. **2.2.1:** capture-pane hedefi `ad:` (bölme hedefinde `=ad` geçersizdi → canlıda her koltuk 'bilinmiyor' çıkıyordu; sahte tmux artık `=` biçimini reddeder, D5-D12 bu hatayı ısırır).
 Eski 3 alanlı betikle kapı alan eklemez (tür/hâl uydurulmaz). Sınav: `koltuk-bagla.test.sh` D1-D12b · `sunucu.test.mjs` Y10.
+
+## Koltuk adı süzgeci: tmux'un kuralı + bizim tek tercihimiz (2.4.1 · dilim 5/7, SERDAR 13 Eki ölçtü)
+Kapı `/api/koltuklar` adı `^[A-Za-z0-9_-]$` ile süzüyordu → adında `/` olan oturum (vekatip `2026/85`) listeden **düşüyordu**
+(17 oturumun 1'i); `koltuk-bagla.sh`'de aynı desen yalnız ATTACH yolundaydı (liste süzmüyordu, bağlanma reddediyordu). Süzgeç indirildi: `:` · `.` dışında (tmux ikisini zaten `_` yapar — ölçüldü) ve **boşluk** dışında her ad geçerli. Boşluk tmux kuralı DEĞİL
+**bizim tercihimizdir** (yedek göz tur 2 ölçtü: tmux 3.4 `a b` oturumunu açar): kabuk/URL yollarında tek-sözcük ad daha güvenli, filoda boşluklu koltuk yok. Liste artık `-t ad` kullanmaz: `$1` gibi bir ad `-t '$1:'` ile de `-t '=$1:'` ile de oturum KİMLİĞİ sanılıyor (ölçüldü) → bölmeler bir kez listelenir, ada tam eşleşen oturumun etkin bölme kimliğiyle (`%N`) ölçülür; son etkinlik `list-sessions` eşlemesinden. Bağlanma `attach -t =ad` kaldı. **İlk karakter `$` `@` `%` `=` OLAMAZ**: tmux hedefinde bunlar oturum/pencere/bölme kimliği ve tam-eşleşme önekidir (`$1` adlı koltuk `-t` ile başka oturuma çözülüyordu — ölçüldü). Kural TEK yerde yazılı: kabukta `scripts/koltuk-adi.sh` (koltuk-bagla ve koltuk-ac yükler), kapıda `KOLTUK_AD_DESEN`. Ad HTML'de kaçışlı, adreste `encodeURIComponent` (`?arg=2026%2F85`; ttyd kabuğa **çözülmüş** iletir —
+gerçek ttyd+Chromium ile ölçüldü), `/api/koltuk/<kodlu-ad>` yolda çözülür, attach `=ad` tam eşleşme. Güvenlik desenden değil
+tmux'un beyaz listesinden (var olan oturum) gelir. Sınav: koltuk-bagla E1-E3 · sunucu SL1-SL4 · **`scripts/koltuk-adi.test.sh`** (23 adlık derlem: kabuk ⟷ kapı aynı hüküm + GERÇEK tmux'ta kabul edilen her ad `=ad` ile kendine çözülür) · **`kapi/koltuk-xss.tarayici.sh`** (gerçek kapı + Chromium: `<img/src=x/onerror=alert(7)>` ve `x"y` adları seçicide metin, alert yok, option değeri = ad). Merkez sayfanın `guv()` süzgeci
+(cloudtop) ayrı PR.
 
 ## Koltuk aç / yeniden aç / eski sohbete dön — tek tuş (2.4.0 · 13 Ekim, Sultan: "oturum kapandı/bozuldu/silindi — tekrar açmak çok basit, çok sağlam olmalı")
 Telefon ekranında **Koltuk** düğmesi → pencere: seçili koltuğun durumu ÜÇ AYRI hâlde (`yok` · `claude-yok` · `takili` · `canli`)
