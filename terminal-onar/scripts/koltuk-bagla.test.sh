@@ -73,13 +73,15 @@ kos maiset-ana /p 'BASIRE'
 
 echo "D · tür ve hâl (2.2.0: ajan ⟂ diğer · hâl son ekrandan, filo desenleri)"
 # ── E · adında '/' olan oturum (dilim 5/7 · SERDAR ölçtü: vekatip '2026/85' listeden düşmüştü) ──
-printf '%s\n' maiset-ana BASIRET '2026/85' imglistener > "$S/oturumlar"
+printf '%s\n' maiset-ana BASIRET '2026/85' 'a b' imglistener > "$S/oturumlar"
 : > "$S/iz"; : > "$S/rc"; SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" maiset-ana /proje '2026/85' >/dev/null 2>&1
 [ "$(iz)" = "attach-session -t =2026/85" ] && ok "E1 '/' içeren koltuk TAM eşleşmeli hedefle (=2026/85) bağlanır (eski desen reddediyordu)" || bad E1 "$(iz)"
 SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste-e"
 grep -qP '^2026/85\t' "$S/liste-e" && ok "E2 '/' içeren koltuk LİSTEDE (düşmez)" || bad E2 "$(cat "$S/liste-e")"
 : > "$S/iz"; : > "$S/rc"; SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" maiset-ana /proje 'a b' >/dev/null 2>&1
-[ -z "$(iz)" ] && ok "E3 boşluklu ad reddedilir (bizim tercihimiz — tmux izin verir, ölçüldü; kabuk/URL güvenliği)" || bad E3 "$(iz)"
+[ "$(iz)" = "attach-session -t =a b" ] && ok "E3 arada boşluklu ad TAM eşleşmeli hedefle bağlanır (tmux izin verir — bağımsız göz tur 1)" || bad E3 "$(iz)"
+: > "$S/iz"; : > "$S/rc"; SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" maiset-ana /proje ' a' >/dev/null 2>&1
+[ -z "$(iz)" ] && ok "E3b başta boşluklu ad reddedilir (kesilip başka ada dönüşür)" || bad E3b "$(iz)"
 printf '%s\n' maiset-ana BASIRET CARSI cc-1 dash ZAKIR KALFA NEDIM MUHASIP imglistener > "$S/oturumlar"
 printf '%s\n' "⏺ Düşünüyor…" "esc to interrupt" > "$S/ekran-BASIRET"
 printf '%s\n' "Do you want to proceed?" "❯ 1. Yes" "  2. No" "Esc to cancel)" > "$S/ekran-ZAKIR"   # meşgul izi (esc to cancel) + soru → SORU kazanır

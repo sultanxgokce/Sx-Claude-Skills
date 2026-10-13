@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "koltuk-adi-suzgec",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T17:21:05+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 47257,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Sultanım, '/' taşıyan olağan adlar listeye, bağlanma yoluna ve kaçışlı HTML seçicisine alınmış; gerçek tmux, Chromium ve mutasyon sınavları da ana yolu ısırıyor. Lakin API yolundaki kodlu adı çözmeden önce 200 karakterle kesmek tek kural sözünü bozuyor; ayrıca tmux'un izin verdiği boşluklu ad bilinçli olarak reddedildiği için talep bütünüyle karşılanmış değil, önce bunlar çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Liste süzgecinin kabul ettiği bazı adlar ayrıntı API'sine giremez: yol deseni URL-kodlu parçayı çözmeden önce en çok 200 karakter kabul ediyor. Örneğin 200 karakterlik geçerli bir adda bulunan '/' '%2F' olduğunda kodlu parça 202 karaktere çıkar; /api/koltuklar adı döndürürken /api/koltuk/<ad> 404 verir ve vaat edilen tek kural bozulur.",
+        "kanit": "Liste doğrudan KOLTUK_AD_DESEN ile süzülüyor; ayrıntı yolu ise önce /^\\/api\\/koltuk\\/([^/]{1,200})(\\/ac)?$/ ile kodlu parçanın uzunluğunu sınıyor, ancak bundan sonra decodeURIComponent uyguluyor. SL2-SL3 yalnız kısa '2026/85' örneğini ölçüyor; 200 karakter sınırı ile kodlama genişlemesini sınamıyor.",
+        "konum": "terminal-onar/kapi/sunucu.mjs:425 ve terminal-onar/kapi/sunucu.mjs:431; terminal-onar/kapi/sunucu.test.mjs:SL2-SL3",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "İş kartındaki “tmux'un izin verdiği diğer karakterler” kapsamı karşılanmıyor; boşluklu adın tmux tarafından kabul edildiği bizzat belgelenmesine rağmen ürün tercihiyle reddedilmiş. Talep bu daraltmayı vermediğinden uygulama açık bir varsayımla yanlış kapsam seçmiş.",
+        "kanit": "SKILL ekinde tmux 3.4'ün 'a b' oturumunu açtığının ölçüldüğü, buna rağmen boşluğun 'bizim tercihimiz' olarak dışlandığı yazıyor; E3 ve SL4 de kabulü değil bu reddi doğruluyor.",
+        "konum": "terminal-onar/SKILL.md koltuk adı süzgeci bölümü; terminal-onar/scripts/koltuk-bagla.test.sh:E3; terminal-onar/kapi/sunucu.test.mjs:SL4",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek tmux eşdeğerlik ölçümü, gerçek kapı+Chromium XSS ölçümü, kare ve mutasyon sınavı güçlü kanıt sağlıyor; ancak kayıtların tamamı 'sonra', önce/sonra ölçüm çifti yok. Kare gerçekçi saldırı adlarıyla üretilmiş olsa da burada yalnız manifesti ve ölçüm özeti sunulmuş; ayrıca uzun URL-kodlu ad sınırı ile tmux'un kabul ettiği boşluklu ad için talebi doğrulayan uçtan uca kabul kanıtı bulunmuyor."
+  }
+}

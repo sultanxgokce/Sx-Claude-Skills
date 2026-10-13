@@ -7,9 +7,9 @@ D="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"; g=0; k=0
 kapi(){ if [ "$2" = "$3" ]; then g=$((g+1)); echo "  ✓ $1"; else k=$((k+1)); echo "  ✗ $1 → beklenen [$2] olan [$3]"; fi; }
 . "$D/koltuk-adi.sh"
 U200="$(printf 'a%.0s' $(seq 1 200))"; U201="${U200}a"
-DERLEM=( '2026/85' 'serdar' 'muavin-2' 'a_b' 'ş-ğ' '<img/src=x/onerror=alert(7)>' "o'reilly" 'x"y' '-bas' '/kok' "$U200"
-         'a b' 'a.b' 'a:b' '$1' '@x' '%y' '=z' '' "$U201" ' bas' 'son ' $'a\tb' )
-BEK=(     1 1 1 1 1 1 1 1 1 1 1   0 0 0 0 0 0 0 0 0 0 0 0 )
+DERLEM=( '2026/85' 'serdar' 'muavin-2' 'a_b' 'ş-ğ' '<img/src=x/onerror=alert(7)>' "o'reilly" 'x"y' '-bas' '/kok' "$U200" 'a b'
+         'a.b' 'a:b' '$1' '@x' '%y' '=z' '' "$U201" ' bas' 'son ' $'a\tb' )
+BEK=(     1 1 1 1 1 1 1 1 1 1 1 1   0 0 0 0 0 0 0 0 0 0 0 )
 R="$(cd "$D/../kapi" && node -e '
 const s=require("fs").readFileSync("sunucu.mjs","utf8"); const m=s.match(/const KOLTUK_AD_DESEN = (\/.*\/);/); if(!m){console.log("DESEN-YOK");process.exit(0)}
 const re=eval(m[1]); const a=JSON.parse(process.argv[1]); console.log(a.map(x=>re.test(x)?1:0).join(""))' "$(python3 -c 'import json,sys;print(json.dumps(sys.argv[1:]))' "${DERLEM[@]}")")"
@@ -23,5 +23,5 @@ for i in "${!DERLEM[@]}"; do [ "${BEK[$i]}" = 1 ] || continue; n="${DERLEM[$i]}"
      && [ "$(tmux -L "$S" display-message -p -t "=$n:" '#{session_name}' 2>/dev/null)" = "$n" ]; then t=$((t+1)); else f="$f [$n]"; fi
 done
 tmux -L "$S" kill-server 2>/dev/null
-kapi "K3 GERÇEK tmux: kuralın kabul ettiği her ad oturum olur ve '=ad' ile kendisine çözülür${f:+ (düşen:$f)}" "11" "$t"
+kapi "K3 GERÇEK tmux: kuralın kabul ettiği her ad oturum olur ve '=ad' ile kendisine çözülür${f:+ (düşen:$f)}" "12" "$t"
 echo; echo "GEÇEN: $g · KALAN: $k"; [ "$k" = 0 ]

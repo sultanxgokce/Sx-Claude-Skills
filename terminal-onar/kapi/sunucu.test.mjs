@@ -474,7 +474,12 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   const r = await iste(18787, '/sedir/api/koltuk/2026%2F85', { cerez }); const jr = await r.json();
   kapi('SL3 /api/koltuk/<kodlu ad> → yol çözülür, betiğe "durum 2026/85" gider', r.status === 200 && jr.ad === '2026/85' && readFileSync(DEF2, 'utf8').trim() === 'durum 2026/85', `→ ${r.status} ${JSON.stringify(jr)}`);
   const r2 = await iste(18787, '/sedir/api/koltuk/a%20b', { cerez });
-  kapi('SL4 boşluklu ad yola GİRMEZ → 404 (bizim tercihimiz, tmux kuralı değil; betik çağrılmaz)', r2.status === 404 && !/a b/.test(readFileSync(DEF2, 'utf8')));
+  kapi('SL4 arada boşluklu ad yola girer → betiğe "durum a b" (tmux izin verir — bağımsız göz tur 1)', r2.status === 200 && /^durum a b$/m.test(readFileSync(DEF2, 'utf8')), `→ ${r2.status}`);
+  const uzun = 'u'.repeat(195) + '/2026';   // 200 karakter, kodlu hâli 202 → eski yol deseni 404 veriyordu
+  const r5 = await iste(18787, '/sedir/api/koltuk/' + encodeURIComponent(uzun), { cerez });
+  kapi('SL5 200 karakterlik "/"lı ad: kodlu parça 200\'ü aşsa da tekil uç ÇÖZÜMDEN SONRA aynı kuralla sınar → 200', r5.status === 200 && readFileSync(DEF2, 'utf8').includes('durum ' + uzun), `→ ${r5.status}`);
+  const r6 = await iste(18787, '/sedir/api/koltuk/' + encodeURIComponent('u'.repeat(201)), { cerez });
+  kapi('SL6 201 karakter → 404 (sınır çözülmüş ada uygulanır)', r6.status === 404, `→ ${r6.status}`);
   p6.kill();
 }
 

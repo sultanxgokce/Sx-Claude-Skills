@@ -16,8 +16,8 @@ import { execFile, spawn } from 'node:child_process';
 import zlib from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 // Koltuk adı kuralı — kabuktaki TEK kopyası scripts/koltuk-adi.sh; iki dilin eşdeğerliği scripts/koltuk-adi.test.sh'de ölçülür.
-// Boşluk · '.' · ':' yok; ilk karakter '$' '@' '%' '=' olamaz (tmux kimlik/tam-eşleşme önekleri — '$1' başka oturuma çözülür).
-const KOLTUK_AD_DESEN = /^[^\s:.$@%=][^\s:.]{0,199}$/;
+// '.' · ':' · kontrol karakteri yok; boşluk arada serbest, başta/sonda yok; ilk karakter '$' '@' '%' '=' olamaz (tmux kimlik önekleri).
+const KOLTUK_AD_DESEN = /^(?![\s$@%=])(?!.*\s$)[^\x00-\x1f\x7f:.]{1,200}$/;
 
 const KOK = path.dirname(fileURLToPath(import.meta.url));
 const GENEL = path.join(KOK, 'genel');
@@ -428,7 +428,7 @@ const sunucu = http.createServer(async (req, res) => {
       // ── KOLTUK AÇ / YENİDEN AÇ / ESKİ SOHBETE DÖN (2.4.0 · dilim 5/5, Sultan: "oturum kapandı/bozuldu/silindi —
       //    tekrar açmak çok basit ve çok sağlam olmalı"). Ölçüm ve iş betikte (scripts/koltuk-ac.sh): üç durum ayrı
       //    (yok · claude-yok · takili), yol = ekip-ac.sh (tek kanonik kapı) | onar.sh (ana) | yok (kayıtsız → ret).
-      const km0 = y.match(/^\/api\/koltuk\/([^/]{1,200})(\/ac)?$/);   // ad yolda encodeURIComponent ile gelir (%2F); çözülüp aynı süzgeçle sınanır
+      const km0 = y.match(/^\/api\/koltuk\/([^/]{1,1800})(\/ac)?$/);   // KODLU parça: 200 karakterlik ad %XX ile 9 katına çıkabilir (UTF-8) — sınır ÇÖZÜMDEN SONRA desenle   // ad yolda encodeURIComponent ile gelir (%2F); çözülüp aynı süzgeçle sınanır
       let kmAd = ''; try { kmAd = km0 ? decodeURIComponent(km0[1]) : ''; } catch { kmAd = ''; }
       const km = km0 && KOLTUK_AD_DESEN.test(kmAd) ? [km0[0], kmAd, km0[2]] : null;
       if (km && !km[2] && req.method === 'GET') {
