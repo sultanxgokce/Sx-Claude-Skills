@@ -1,7 +1,7 @@
 {
   "is": "koltuk-fark",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-13T21:48:57+03:00",
+  "guncelleme": "2026-10-13T22:06:26+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -209,7 +209,22 @@
       "renk": "yesil",
       "zaman": "2026-10-13T21:48:57+03:00",
       "sure_sn": 13.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-salt-okur-filo-kurulu-2-4-4",
+      "asama": "sonra",
+      "dosya": "olcum-canli-salt-okur-filo-kurulu-2-4-4-sonra.txt",
+      "sha256": "9bebf371019f27b86b1dd85a0814c5e63cb2887df34281c7bc07ee12148f0f5a",
+      "komut": [
+        "bash",
+        "/config/.claude/skills/terminal-onar/scripts/koltuk-fark-filo.sh"
+      ],
+      "rc": 2,
+      "renk": "kirmizi",
+      "zaman": "2026-10-13T22:06:26+03:00",
+      "sure_sn": 13.8
     }
   ],
-  "imza": "0f69fbd88c2ac69abd97ed07b4673bbcc618dfa11c7ae495617f369be5f372b0"
+  "imza": "87c6eabfd5885b3d36fd1280b19a41689cd9327a4d929b75a97f4165fda3bd02"
 }

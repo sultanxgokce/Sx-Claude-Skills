@@ -1,0 +1,33 @@
+$ bash /config/.claude/skills/terminal-onar/scripts/koltuk-fark-filo.sh
+# rc=2 sure=13.8s zaman=2026-10-13T22:06:26+03:00
+--- stdout ---
+– cloudtop: terminalsiz (node yok)
+✓ cloudtop-akar: 6 oturum · görünür 2 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-code: 17 oturum · görünür 13 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+? cloudtop-codex: ölçülemedi (rc=1) ?
+✓ cloudtop-enis: 7 oturum · görünür 3 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-huma: 10 oturum · görünür 6 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 1
+      ⓘ 'cc-37b0bec7' adıyla açılmış istemci → bugün 'Huma'
+✓ cloudtop-huzur: 7 oturum · görünür 3 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+– cloudtop-kilavuz: terminalsiz (node yok)
+✓ cloudtop-maiset: 10 oturum · görünür 6 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-medigate: 11 oturum · görünür 7 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-menzil: 6 oturum · görünür 2 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-mihenk: 12 oturum · görünür 8 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-mmex: 9 oturum · görünür 5 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-nazir: 15 oturum · görünür 11 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-nova: 12 oturum · görünür 8 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+? cloudtop-pano: ölçülemedi (rc=1) ?
+✓ cloudtop-revak: 9 oturum · görünür 5 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 2
+      ⓘ 'revak-ana' adıyla açılmış istemci → bugün 'revak-kol1'
+      ⓘ 'revak-kurtarici' adıyla açılmış istemci → bugün 'revak-ana'
+✓ cloudtop-s02: 5 oturum · görünür 1 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-sedir: 7 oturum · görünür 3 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-tellal: 12 oturum · görünür 8 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-tez: 5 oturum · görünür 1 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 0
+✓ cloudtop-vekatip: 17 oturum · görünür 13 · gizli 4 · DÜŞEN 0 · hayalet 0 · başka adla bağlı 1
+      ⓘ 'yenileme' adıyla açılmış istemci → bugün '2026/85'
+? cloudtop-wa: ölçülemedi (rc=1) ?
+? cloudtop-wa-sultan: ölçülemedi (rc=1) ?
+== 24 kap · terminalli 22: temiz 18 · DÜŞEN/hayalet olan 0 · ölçülemedi 4 · terminalsiz 2 ==
+--- stderr ---
