@@ -1,6 +1,6 @@
 {
   "is": "koltuk-fark",
-  "cumle": "G-BANI-0007 madde 1 (SERDAR mektubu Nexus _agents/handoff/SERDAR-BANI-gorev-terminal-tam-kontrol-20261013.md): kutu başına tmux list-sessions ⟷ /api/koltuklar farkı — her oturum görünür | gizli:altyapı (gerekçeli) | gizli:ad-süzgeci | DÜŞEN; düşen>0 kırmızı (SESSİZ DÜŞÜRME YOK). Gizleme kararının tek kaynağı koltuk-bagla.sh (--gizli), ad kuralı kapıyla tek modül. Ayrıca istemci-attach hedefi ≠ oturum adı (code-server sekmesi, YargiYenileme vakası) bilgi olarak gösterilir. Filo koşucusu 18 kutuda salt-okur (ssh hostsrv docker exec). Bekçiye bağlama ayrı adım.",
+  "cumle": "G-BANI-0007 madde 1 (SERDAR mektubu Nexus _agents/handoff/SERDAR-BANI-gorev-terminal-tam-kontrol-20261013.md): kutu başına tmux list-sessions ⟷ /api/koltuklar farkı — her oturum görünür | gizli:altyapı (gerekçeli) | gizli:ad-süzgeci | DÜŞEN; düşen>0 kırmızı (SESSİZ DÜŞÜRME YOK). Gizleme kararının tek kaynağı koltuk-bagla.sh (--gizli), ad kuralı kapıyla tek modül. Ayrıca istemci-attach hedefi ≠ oturum adı (code-server sekmesi, YargiYenileme vakası) bilgi olarak gösterilir. Filo koşucusu 18 kutuda salt-okur (ssh hostsrv docker exec). Bekçiye bağlama ayrı adım. || NETLEŞTİRME (BANI, bağımsız göz tur 2): filo koşucusunun varsayılan yolu salt-okurdur (kurulu kopya); kurulmamış sürümü ölçen --kaynak yolu kutunun /tmp'sine geçici açar ve çıkışta siler (kalıcı yazmaz) — canlı iniş sonrası filo kanıtı salt-okur yoldan alınır.",
   "istedi": "SERDAR",
   "aldi": "BANI",
   "zaman": "2026-10-13T21:34:48+03:00",
@@ -15,5 +15,12 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": []
+  "gecmis": [
+    {
+      "zaman": "2026-10-13T22:20:00+03:00",
+      "olay": "netlestirme",
+      "kim": "BANI",
+      "dayanak": "DENETIM-2 bulgusu; SERDAR'a bildirilecek"
+    }
+  ]
 }

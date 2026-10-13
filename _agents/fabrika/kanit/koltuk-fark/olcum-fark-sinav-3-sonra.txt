@@ -1,0 +1,19 @@
+$ bash terminal-onar/kapi/koltuk-fark.test.sh
+# rc=0 sure=3.0s zaman=2026-10-13T21:45:14+03:00
+--- stdout ---
+  ✓ F1 temiz kutu: rc 0 · görünür 2 (ana, 2026/85) · gizli 4 (altyapı) · düşen 0
+  ✓ F1b gizlenen her oturumun gerekçesi var
+  ✓ F2 gerekçesiz düşen oturum → rc 1, DÜŞEN=kayip
+  ✓ F3 kapı ad kuralına takılan oturum gerekçeli gizli (ad süzgeci), rc 0
+  ✓ F4 listede var tmux'ta yok → rc 1, hayalet=hayal
+  ✓ F5 sekme adı ≠ oturum adı bilgi olarak raporlanır, kırmızı DEĞİL
+  ✓ F5b '=yenileme' ile açılmış istemci → 'yenileme' > 2026/85
+  ✓ F5c okunamayan istemci sayılır (sekme_okunamayan=1)
+  ✓ F5d list-clients hatası → sekme_olculemedi dolu
+  ✓ F6 tmux kurulu değil → rc 3 terminalsiz
+  ✓ F7 tmux hatası → rc 2 ölçülemedi
+  ✓ F7b betik sağlamken tmux hatası → yine rc 2 (ölçerin kendi kapısı)
+  ✓ F8 --gizli bilmeyen eski betik → rc 2 (sessiz yeşil yok)
+  ✓ F9 ölçer ile kapı aynı liste modülünü içe alır
+GEÇEN: 14 · KALAN: 0
+--- stderr ---

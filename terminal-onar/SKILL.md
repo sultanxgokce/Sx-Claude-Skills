@@ -269,7 +269,8 @@ hermetik, sahte crontab/tmux; B11 mutasyon: eski gösterge geri gelince B2 yakal
   (hayalet) da rc 1. Başka adla bağlı istemci (code-server sekmesi `tmux attach -t yenileme` açılmış, oturum sonra `2026/85` olmuş —
   vekatip'teki "YargiYenileme" vakası) bilgi olarak raporlanır. Görünür liste `/api/koltuklar` ile AYNI koddan: ad kuralı + satır
   çözümü `kapi/koltuklar.mjs`'e taşındı (kapı ve ölçer içe alır), gizleme kararı `koltuk-bagla.sh --gizli` (gerekçeli). Filo:
-  `scripts/koltuk-fark-filo.sh` (salt-okur ssh + docker exec; `--kaynak` ile kurulmamış sürüm geçici dizinden). İlk tarama 13 Eki:
+  `scripts/koltuk-fark-filo.sh` (varsayılan yol SALT-OKUR: kurulu kopya; `--kaynak` kurulmamış sürüm için kutunun /tmp'sine geçici açar,
+  çıkışta siler — salt-okur değildir, kalıcı yazmaz). İlk tarama 13 Eki:
   terminalli 18 kutu · düşen 0 · hayalet 0; terminalsiz 6 kap (tmux/node yok) ayrı sayılır. Sınav `kapi/koltuk-fark.test.sh` 14 kapı; istemci listesi/komut satırı okunamazsa sessiz değil, sayılır.
 - **2.4.3 (2026-10-13, BÂNİ · A357 koltuk adı süzgeci, #308):** adında `/`, arada boşluk ya da emoji olan koltuk listeden düşmez; `/api/koltuklar` ile `/api/koltuk/<ad>` tek kurala bağlandı (`koltuk-adi.sh` ⟷ `KOLTUK_AD_DESEN`), uzunluk iki dilde kod noktası, seçici adı kaçışlı. (Dal 2.4.1 olarak açılmıştı; 2.4.2 önce birleştiği için 2.4.3.)
 - **2.4.2 (2026-10-13, BÂNİ · G-BANI-0002/4 ilk dilim — #304'ün kusuru):** Aç, merkez dışındaki 11 İSKÂN kutusunda kayıtlı

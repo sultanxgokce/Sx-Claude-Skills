@@ -1,7 +1,7 @@
 {
   "is": "koltuk-fark",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-13T21:43:53+03:00",
+  "guncelleme": "2026-10-13T21:45:14+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -160,7 +160,39 @@
       "renk": "yesil",
       "zaman": "2026-10-13T21:43:53+03:00",
       "sure_sn": 12.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kaynak-iz-kalmadi",
+      "asama": "sonra",
+      "dosya": "olcum-kaynak-iz-kalmadi-sonra.txt",
+      "sha256": "24298d4c6fca4a09e69015254ee028d1f1aa749c6d73bbc53e7c951be8335152",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/koltuk-fark/iz-olc.sh",
+        "cloudtop-vekatip",
+        "/config/projects/_wt/Sx-Claude-Skills-koltuk-fark/terminal-onar"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T21:45:11+03:00",
+      "sure_sn": 2.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "fark-sinav-3",
+      "asama": "sonra",
+      "dosya": "olcum-fark-sinav-3-sonra.txt",
+      "sha256": "e9207b7b11404b971cb9fd728a4263d87c4048bdf3cd17df75151031a05824b7",
+      "komut": [
+        "bash",
+        "terminal-onar/kapi/koltuk-fark.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T21:45:14+03:00",
+      "sure_sn": 3.0
     }
   ],
-  "imza": "595a65d949fdb73fc10139111e4fd40e276373d5c0e7473c36c376bb3b96781f"
+  "imza": "939fb2296decc241d2dff633630751d64add5f128c61a2e9bd964ec53c417ee4"
 }

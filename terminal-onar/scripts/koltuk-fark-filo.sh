@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # koltuk-fark-filo.sh — 18 kutu × koltuk-fark.mjs (G-BANI-0007): her kutuda tmux oturumları ⟷ terminal sayfası listesi.
-# SALT-OKUR: ssh <host> docker exec … ; kutuda kalıcı hiçbir şey yazılmaz.
-#   --kaynak <terminal-onar dizini>  kurulmamış sürümü ölçmek için: dört dosya stdin'den kutuda GEÇİCİ dizine açılır, koşulur, silinir
-#   (verilmezse kutunun kurulu kopyası: /config/.claude/skills/terminal-onar)
+# VARSAYILAN YOL SALT-OKUR: ssh <host> docker exec … kutunun KURULU kopyasını (/config/.claude/skills/terminal-onar) koşturur;
+#   kutuda hiçbir dosya yazılmaz.
+#   --kaynak <terminal-onar dizini>  YALNIZ kurulmamış sürümü ölçmek için — SALT-OKUR DEĞİLDİR (bağımsız göz tur 2): dört dosya
+#   stdin'den kutunun /tmp'sinde geçici dizine açılır, koşulur, çıkışta (kesinti dahil: trap) silinir. Kalıcı yazmaz.
 #   [kutu…]  verilmezse host'taki bütün cloudtop-* kutuları (altyapı hariç)
 # Terminalsiz kap (tmux ya da node yok — masaüstü, köprüler) ayrı sayılır: ne temiz ne kirli, ölçülemedi de değil.
 # rc: 0 hepsi temiz · 1 en az bir kutuda DÜŞEN/hayalet · 2 en az bir kutu ölçülemedi (temiz sayılmaz)
@@ -21,7 +22,7 @@ for k in "${KUTULAR[@]}"; do
   [[ "$k" =~ ^[a-z0-9-]+$ ]] || { echo "✗ $k: geçersiz kutu adı"; olcmedi=$((olcmedi+1)); continue; }
   if [ -n "$KAYNAK" ]; then
     out="$(tar -C "$KAYNAK" -cf - kapi/koltuk-fark.mjs kapi/koltuklar.mjs scripts/koltuk-bagla.sh scripts/koltuk-adi.sh \
-      | ssh_ "docker exec -i -u 1000 $k sh -c 'n=\$(command -v node || echo /app/code-server/lib/node); d=\$(mktemp -d) && tar -x -C \$d && \$n \$d/kapi/koltuk-fark.mjs --json; r=\$?; rm -r \$d; exit \$r'" 2>&1)"; rc=$?
+      | ssh_ "docker exec -i -u 1000 $k sh -c 'n=\$(command -v node || echo /app/code-server/lib/node); d=\$(mktemp -d) || exit 2; trap \"rm -r \$d\" EXIT INT TERM HUP; tar -x -C \$d && \$n \$d/kapi/koltuk-fark.mjs --json'" 2>&1)"; rc=$?
   else
     out="$(ssh_ "docker exec -u 1000 $k sh -c 'n=\$(command -v node || echo /app/code-server/lib/node); \$n /config/.claude/skills/terminal-onar/kapi/koltuk-fark.mjs --json'" 2>&1)"; rc=$?
   fi
