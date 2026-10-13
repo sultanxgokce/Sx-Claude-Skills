@@ -115,6 +115,10 @@
   /* Koltuk seçici (12 Ekim): kutudaki oturumlar; seçilen koltuk tam terminalde açılır. */
   #koltuk { max-width: 38vw; appearance: auto; }
   #koltuk[hidden] { display: none; }
+  .koltuk-durum { margin: 0 0 12px; color: var(--soluk); line-height: 1.45; }
+  .koltuk-durum b { color: var(--metin); font-weight: 600; }
+  #koltukEski[hidden] { display: none; }
+  #koltukBasla:disabled, #koltukEski:disabled { opacity: .45; cursor: not-allowed; }
 </style>
 </head>
 <body>
@@ -128,6 +132,7 @@
     <div class="baslik">
       <select class="dugme" id="koltuk" aria-label="Koltuk (oturum)" title="Koltuk" hidden></select>
       <button class="dugme" id="gorunum" type="button" aria-pressed="false">Terminal</button>
+      <button class="dugme" id="koltukAc" type="button" title="Koltuğu aç / yeniden aç / eski sohbete dön">Koltuk</button>
       <button class="dugme" id="onarAc" type="button">Onar</button>
     </div>
   </header>
@@ -174,6 +179,16 @@
 </div>
 
 <div class="bildirim" id="bildirim" role="status" aria-live="polite"></div>
+
+<dialog id="koltukP" aria-labelledby="koltukBaslik">
+  <h2 id="koltukBaslik">Koltuk</h2>
+  <p class="koltuk-durum" id="koltukDurum" aria-live="polite">ölçülüyor…</p>
+  <div class="eylemler">
+    <button class="dugme" type="button" id="koltukKapat">Kapat</button>
+    <button class="dugme" type="button" id="koltukEski" hidden>Eski sohbete dön</button>
+    <button class="dugme birincil" type="button" id="koltukBasla">Aç</button>
+  </div>
+</dialog>
 
 <dialog id="onarim" aria-labelledby="onarBaslik">
   <h2 id="onarBaslik">Düzenin durumu</h2>

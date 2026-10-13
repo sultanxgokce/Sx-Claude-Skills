@@ -1,0 +1,21 @@
+$ bash terminal-onar/scripts/koltuk-ac.test.sh
+# rc=0 sure=2.1s zaman=2026-10-13T12:32:29+03:00
+--- stdout ---
+── D · durum üç ayrı
+  ✓ D1 oturum yok → durum=yok, yol=ekip-ac, rol çözüldü, resume mümkün
+  ✓ D2 oturum var, Claude yok → durum=claude-yok; sid boş → resume yok
+  ✓ D3 kayıtsız koltuk → yol=yok (açılmaz), rol boş
+  ✓ D4 ana koltuk kayıtsız olsa da yol=onar, ana=true
+── A · aç / yeniden aç / eski sohbet
+  ✓ A1 ölü koltuk tek komutla geri geldi (tmux oturumu var)
+  ✓ A2 ekip-ac.sh ROL ile çağrıldı, --resume-if-known YOK (taze aç)
+  ✓ A3 canlıyken yeniden 'aç' → ikinci kopya AÇILMAZ ('zaten canlı')
+  ✓ A4 'eski sohbete dön' → ekip-ac.sh --resume-if-known ile çağrıldı
+  ✓ A5 Claude'suz oturum önce kapatılır sonra doğar (rc 0, tek oturum)
+  ✓ A6 kayıtsız koltuk AÇILMAZ (rc 4) ve sebebi söylenir
+  ✓ A7 kayıtsız denemede tmux'ta oturum doğmadı
+── N · olumsuz kontrol: ekip-ac.sh yoksa kayıtlı rol de açılmaz
+  ✓ N1 betik yokken yol=yok (sessizce başka yola düşmez)
+
+GEÇEN: 12 · KALAN: 0
+--- stderr ---

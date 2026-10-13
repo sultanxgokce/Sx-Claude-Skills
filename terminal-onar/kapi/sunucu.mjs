@@ -24,6 +24,7 @@ const TTYD_SOKET = process.env.KAPI_TTYD_SOKET || path.join(process.env.TO_DURUM
 const ANA_TMUX = process.env.TO_ANA_TMUX || 'sedir-ana';
 // Koltuk listesinin TEK kaynağı (ttyd de aynı betiği çalıştırır). Sınav başka bir betik verebilir.
 const KOLTUK_BETIK = process.env.KAPI_KOLTUK_BETIK || path.join(BETIK, 'koltuk-bagla.sh');
+const KOLTUK_AC_BETIK = process.env.KAPI_KOLTUK_AC_BETIK || path.join(BETIK, 'koltuk-ac.sh');
 // ── TABAN YOLU ───────────────────────────────────────────────────────────────
 // 🔴 NİÇİN: merkez sayfa (terminal.mmepanel.com) kutuları YOL ile ayırır — /sedir/ ·
 //    /akar/ … Kapı tabanı bilmezse döndürdüğü her mutlak yol (302 → /giris, çerez
@@ -404,6 +405,23 @@ const sunucu = http.createServer(async (req, res) => {
                    ...(tur ? { tur } : {}), ...(hal ? { hal } : {}) };
         }).filter((k) => /^[A-Za-z0-9_-]{1,64}$/.test(k.ad));
         return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, koltuklar });
+      }
+      // ── KOLTUK AÇ / YENİDEN AÇ / ESKİ SOHBETE DÖN (2.4.0 · dilim 5/5, Sultan: "oturum kapandı/bozuldu/silindi —
+      //    tekrar açmak çok basit ve çok sağlam olmalı"). Ölçüm ve iş betikte (scripts/koltuk-ac.sh): üç durum ayrı
+      //    (yok · claude-yok · takili), yol = ekip-ac.sh (tek kanonik kapı) | onar.sh (ana) | yok (kayıtsız → ret).
+      const km = y.match(/^\/api\/koltuk\/([A-Za-z0-9_-]{1,64})(\/ac)?$/);
+      if (km && !km[2] && req.method === 'GET') {
+        const r = await calistir('bash', [KOLTUK_AC_BETIK, 'durum', km[1]]);
+        try { return json(res, 200, JSON.parse(r.out)); } catch { return json(res, 500, { hata: 'Koltuk ölçülemedi.' }); }
+      }
+      if (km && km[2] && req.method === 'POST') {
+        let g = {}; try { g = JSON.parse((await govde(req, 4096)).toString('utf8') || '{}'); } catch { g = {}; }
+        const arg = [KOLTUK_AC_BETIK, 'ac', km[1]]; if (g.eski === true) arg.push('--eski');
+        const r = await calistir('bash', arg);
+        const mesaj = (r.out + r.err).trim().split('\n').filter(Boolean).pop() || '';
+        // rc: 0 açıldı/zaten canlı · 1 açılamadı · 3 merdiven başladı · 4 kayıtsız koltuk
+        const kod = r.kod === 0 ? 200 : r.kod === 3 ? 202 : r.kod === 4 ? 409 : 502;
+        return json(res, kod, { tamam: r.kod === 0 || r.kod === 3, rc: r.kod, mesaj });
       }
       if (y === '/api/surum') {
         // telefon eski sayfada kalmasın: dosyalar değişince sürüm değişir, sayfa kendini yeniler

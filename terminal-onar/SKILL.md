@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.3.0
+version: 2.4.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -120,6 +120,20 @@ gizli süzgeci silinince 1 kapı, kapıda "boş liste" kaçağı 1 kapı, ad sü
 - **hâl** son 15 ekran satırından, filo yoklamasıyla AYNI desenler (`Nexus/scripts/filo.py hal()`): `calisiyor` ·
   `soru` · `sinirda` · `girdi` · `bos`; hiçbiri tutmazsa `bilinmiyor` (uydurulmaz); Claude'suz oturumda hâl ölçülmez → `bilinmiyor` (altı değer dışına çıkılmaz). Yalnız SON 15 dolu satır sayılır; soru deseni meşgul izini yener. **2.2.1:** capture-pane hedefi `ad:` (bölme hedefinde `=ad` geçersizdi → canlıda her koltuk 'bilinmiyor' çıkıyordu; sahte tmux artık `=` biçimini reddeder, D5-D12 bu hatayı ısırır).
 Eski 3 alanlı betikle kapı alan eklemez (tür/hâl uydurulmaz). Sınav: `koltuk-bagla.test.sh` D1-D12b · `sunucu.test.mjs` Y10.
+
+## Koltuk aç / yeniden aç / eski sohbete dön — tek tuş (2.4.0 · 13 Ekim, Sultan: "oturum kapandı/bozuldu/silindi — tekrar açmak çok basit, çok sağlam olmalı")
+Telefon ekranında **Koltuk** düğmesi → pencere: seçili koltuğun durumu ÜÇ AYRI hâlde (`yok` · `claude-yok` · `takili` · `canli`)
+ve tek eylem (Aç / Yeniden aç / Eski sohbete dön). Ölçüm ve iş `scripts/koltuk-ac.sh`'de (`durum <ad>` JSON · `ac <ad> [--eski]`);
+kapı yalnız taşır: `GET /api/koltuk/<ad>` · `POST /api/koltuk/<ad>/ac {eski}` (rc 0→200 · 3→202 merdiven · 4→409 kayıtsız · 1→502).
+- **Yol (kim açar):** kutuda `scripts/ekip-ac.sh` + aile kaydı varsa ve koltuk kayıtlı bir rolün tmux'uysa → `ekip-ac.sh <ROL>`
+  (**tek kanonik kapı:** canlıysa ikinci kopya AÇMAZ; `--eski` → `--resume-if-known`, eski sohbete dönüş; Claude'suz/takılı oturum
+  önce kapatılır, sonra doğar). Koltuk **ana** ise → `onar.sh` (K0), düşerse merdiven (`kademe.sh`). İkisi de değilse → **kayıtsız
+  koltuk AÇILMAZ**, sebebi söylenir: kimliksiz Claude başka kimliğe düşer (ölçülmüş vaka); önce işe alma (madde 6).
+- **Ölçüldü (13 Eki):** `ekip-ac.sh` 18 kutunun 3'ünde var (Nexus · huma · mihenk), aile kaydı 8'inde → öteki kutularda yalnız ana
+  koltuk açılır, gerisi dürüstçe "kayıtsız" döner. `takili` = Claude var ∧ ekran `TO_TAKILI_SN` (900 s) süredir değişmemiş ∧ soru/girdi
+  beklemiyor; ⚠️ `koltuk-bagla.sh --liste`'nin "son etkinlik" alanı bugün hep 0 basıyor → takılı tespiti canlıda tetiklenmez (madde 7).
+- Sınav: `scripts/koltuk-ac.test.sh` (gerçek tmux, sahte ekip-ac: öldür→geri gel · eski sohbet · ikinci kopya yok · kayıtsız ret) ·
+  `sunucu.test.mjs` KA0-KA10 · `kapi/tarayici-sinav.mjs` KD1-KD5 · mutasyon M20-M22.
 
 ## Pano köprüsü — resim yapıştır · seçimi panoya al (2.3.0 · 13 Ekim, Sultan: "Cmd+C kopyalamıyor, resmi Cmd+V yapıştıramıyorum")
 Kapı, ttyd'nin HTML sayfasına `kapi/genel/pano.js`'i gömer (`ttydVekil`: yalnız 200 + `text/html` + düz gövde;

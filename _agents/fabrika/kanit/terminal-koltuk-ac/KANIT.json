@@ -1,0 +1,97 @@
+{
+  "is": "terminal-koltuk-ac",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-13T12:52:55+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "betik-gercek-tmux-12",
+      "asama": "sonra",
+      "dosya": "olcum-betik-gercek-tmux-12-sonra.txt",
+      "sha256": "6578508be806b02597104d6e8dc0133344e4873e5ced2ac22b81c6b4ce34392d",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-ac.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T12:32:29+03:00",
+      "sure_sn": 2.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-birim-78",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-birim-78-sonra.txt",
+      "sha256": "e6ccce2476b180cbd8414a19be9110326e39f85db8a62ca663e0b3268a50f2b1",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T12:32:35+03:00",
+      "sure_sn": 6.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "telefon-pencere-15",
+      "asama": "sonra",
+      "dosya": "olcum-telefon-pencere-15-sonra.txt",
+      "sha256": "43206b96bf2a234653841d2601d4af80fed5095f871234e7b44ec2493682a7d1",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/tarayici-sinav.mjs",
+        "--kare",
+        "/tmp/claude-1000/koltuk"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T12:52:55+03:00",
+      "sure_sn": 9.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-code-kutusu-durum",
+      "asama": "sonra",
+      "dosya": "olcum-canli-code-kutusu-durum-sonra.txt",
+      "sha256": "0a4c1ae9c978eb6a6072ba61409870587f0c2b07393c9bbfed7f168eb50c67c7",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/scripts && for k in bani code-ana cc-19986388 yokboyle; do TO_KUTU=code TO_PROJE=/config/projects/Nexus bash koltuk-ac.sh durum $k; done; echo \"ekip-ac.sh olan kutular: $(ls /config/projects/*/scripts/ekip-ac.sh 2>/dev/null | wc -l) / aile kaydı olan: $(find /config/projects -maxdepth 4 -name aile-registry.yaml -not -path \"*/_wt/*\" | wc -l)\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T12:32:49+03:00",
+      "sure_sn": 2.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-22",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-22-sonra.txt",
+      "sha256": "80843c5f4a2007a59f63d0d3ff72990d7c4806dbaf2728f89def37168751eb39",
+      "komut": [
+        "bash",
+        "terminal-onar/kapi/mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T12:35:00+03:00",
+      "sure_sn": 130.8
+    },
+    {
+      "tur": "dosya",
+      "etiket": "kare-koltuk-pencere",
+      "asama": "sonra",
+      "dosya": "dosya-kare-koltuk-pencere-sonra.png",
+      "sha256": "b9ab973d3da3e06e67f3d94ce7c0f3afe46a87d98d9e09aa9284f53a957285f9",
+      "kaynak": "/tmp/claude-1000/koltuk-koltuk-pencere.png",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T12:52:55+03:00"
+    }
+  ],
+  "imza": "19af39519d5d0b75155ed2e9595ff43671d9d913b63dc1e40ff078eecb7e494e"
+}

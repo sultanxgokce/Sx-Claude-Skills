@@ -401,6 +401,44 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   kapi('PN14 ekleme replace\'i FONKSİYONLA yapılır (pano.js içindeki $ dizileri yorumlanmasın)', /h\.replace\('<\/body>', \(\) => ek \+ '<\/body>'\)/.test(sun), '→ düz dize değiştirici');
 }
 
+// ── KA · KOLTUK AÇ (2.4.0 · dilim 5/5) — kapı betiğe sorar, kendisi karar vermez; rc → HTTP eşlemesi ─────
+{
+  const giris = async (port, taban) => { const ok = await iste(port, `${taban}/giris`, { metot: 'POST', govde: { parola: SIFRE } });
+    return 'kapi=' + ((ok.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1]; };
+  // sahte koltuk-ac.sh: durum → JSON; ac → ada göre rc (canli:0 · merdiven:3 · kayitsiz:4 · bozuk:1); çağrıyı deftere yazar
+  const KA = join(T, 'koltuk-ac-sahte.sh'); const DEFTER = join(T, 'ka-defter');
+  writeFileSync(KA, '#!/usr/bin/env bash\necho "$*" >> ' + JSON.stringify(DEFTER) + '\n'
+    + 'if [ "$1" = durum ]; then printf \'{"ad":"%s","durum":"yok","tmux":false,"claude":false,"hal":"","son":0,"rol":"ROLX","resume":true,"yol":"ekip-ac","ana":false}\\n\' "$2"; exit 0; fi\n'
+    + 'case "$2" in canli) echo "açıldı: $2"; exit 0;; merdiven) echo "K0 yetmedi; onarım merdiveni başlatıldı"; exit 3;; kayitsiz) echo "açılamadı: kayıtlı bir koltuk değil" >&2; exit 4;; *) echo "açılamadı: rc=1" >&2; exit 1;; esac\n');
+  const p5 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], {
+    env: { ...process.env, KAPI_PORT: '18785', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', KAPI_KOLTUK_AC_BETIK: KA,
+           KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_KOLTUK_BETIK: KOLTUK_SAHTE5 }, stdio: 'ignore' });
+  for (let i = 0; i < 50; i++) { await new Promise((r) => setTimeout(r, 100)); try { if ((await fetch('http://127.0.0.1:18785/sedir/giris')).status === 200) break; } catch {} }
+  const cerez = await giris(18785, '/sedir');
+  const d = await iste(18785, '/sedir/koltuk/BASIRET', { cerez });
+  kapi('KA0 /koltuk/<ad> api altında değil → 404 (yol disiplini)', d.status === 404);
+  const r1 = await iste(18785, '/sedir/api/koltuk/BASIRET', { cerez }); const j1 = await r1.json();
+  kapi('KA1 GET /api/koltuk/<ad> betiğin durum JSON\'unu olduğu gibi taşır (durum·yol·rol·resume)', r1.status === 200 && j1.durum === 'yok' && j1.yol === 'ekip-ac' && j1.rol === 'ROLX' && j1.resume === true, `→ ${JSON.stringify(j1)}`);
+  kapi('KA2 betik "durum <ad>" ile çağrıldı', readFileSync(DEFTER, 'utf8').trim().split('\n').pop() === 'durum BASIRET');
+  const g = await iste(18785, '/sedir/api/koltuk/BASIRET', { cerez: '' });
+  kapi('KA3 girişsiz → 401', g.status === 401);
+  const a1 = await iste(18785, '/sedir/api/koltuk/canli/ac', { cerez, metot: 'POST', govde: {} }); const ja1 = await a1.json();
+  kapi('KA4 POST …/ac → betik "ac <ad>" (eski yok) · rc0 → 200 tamam, mesaj betikten', a1.status === 200 && ja1.tamam === true && /açıldı/.test(ja1.mesaj) && readFileSync(DEFTER, 'utf8').trim().split('\n').pop() === 'ac canli', `→ ${a1.status} ${JSON.stringify(ja1)}`);
+  await iste(18785, '/sedir/api/koltuk/canli/ac', { cerez, metot: 'POST', govde: { eski: true } });
+  kapi('KA5 {eski:true} → betiğe --eski geçer (eski sohbete dönüş)', readFileSync(DEFTER, 'utf8').trim().split('\n').pop() === 'ac canli --eski');
+  const a3 = await iste(18785, '/sedir/api/koltuk/merdiven/ac', { cerez, metot: 'POST', govde: {} }); const ja3 = await a3.json();
+  kapi('KA6 rc3 (merdiven başladı) → 202 tamam:true', a3.status === 202 && ja3.tamam === true && ja3.rc === 3, `→ ${a3.status}`);
+  const a4 = await iste(18785, '/sedir/api/koltuk/kayitsiz/ac', { cerez, metot: 'POST', govde: {} }); const ja4 = await a4.json();
+  kapi('KA7 rc4 (kayıtsız koltuk) → 409 tamam:false, sebep mesajda', a4.status === 409 && ja4.tamam === false && /kayıtlı bir koltuk değil/.test(ja4.mesaj), `→ ${a4.status} ${ja4.mesaj}`);
+  const a5 = await iste(18785, '/sedir/api/koltuk/bozuk/ac', { cerez, metot: 'POST', govde: {} });
+  kapi('KA8 rc1 (açılamadı) → 502', a5.status === 502);
+  const a6 = await fetch('http://127.0.0.1:18785/sedir/api/koltuk/canli/ac', { method: 'POST', headers: { cookie: cerez, 'content-type': 'application/json' }, body: '{}' });
+  kapi('KA9 x-kapi başlığı olmadan POST → 403 (CSRF kalkanı korunur)', a6.status === 403);
+  const a7 = await iste(18785, '/sedir/api/koltuk/kotu%3Aad/ac', { cerez, metot: 'POST', govde: {} });
+  kapi('KA10 bozuk ad (:) yola GİRMEZ → 404 (betik çağrılmaz)', a7.status === 404 && !/kotu/.test(readFileSync(DEFTER, 'utf8')));
+  p5.kill();
+}
+
 kapiTaban.kill(); kapiKok.kill(); ttyd.close();
 console.log(`\n${'─'.repeat(56)}`);
 console.log(`GECEN: ${gecen}  ·  KALAN: ${kalan}`);

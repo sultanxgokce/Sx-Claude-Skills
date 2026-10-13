@@ -1,0 +1,9 @@
+$ bash -c cd terminal-onar/scripts && for k in bani code-ana cc-19986388 yokboyle; do TO_KUTU=code TO_PROJE=/config/projects/Nexus bash koltuk-ac.sh durum $k; done; echo "ekip-ac.sh olan kutular: $(ls /config/projects/*/scripts/ekip-ac.sh 2>/dev/null | wc -l) / aile kaydı olan: $(find /config/projects -maxdepth 4 -name aile-registry.yaml -not -path "*/_wt/*" | wc -l)"
+# rc=0 sure=2.9s zaman=2026-10-13T12:32:49+03:00
+--- stdout ---
+{"ad":"bani","durum":"canli","tmux":true,"claude":true,"hal":"calisiyor","son":0,"rol":"B\u00c2N\u0130","resume":true,"yol":"ekip-ac","ana":false}
+{"ad":"code-ana","durum":"canli","tmux":true,"claude":true,"hal":"girdi","son":0,"rol":"","resume":false,"yol":"onar","ana":true}
+{"ad":"cc-19986388","durum":"claude-yok","tmux":true,"claude":false,"hal":"bilinmiyor","son":0,"rol":"","resume":false,"yol":"yok","ana":false}
+{"ad":"yokboyle","durum":"yok","tmux":false,"claude":false,"hal":"","son":0,"rol":"","resume":false,"yol":"yok","ana":false}
+ekip-ac.sh olan kutular: 3 / aile kaydı olan: 8
+--- stderr ---
