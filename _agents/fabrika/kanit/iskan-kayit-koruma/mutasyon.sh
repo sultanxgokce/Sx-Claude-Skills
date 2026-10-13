@@ -41,6 +41,7 @@ kos M5-dry-run-durur   'if [ "$mod" = "dry-run" ]; then' 'if [ "$mod" = "HIC" ];
 kos M6-olculemedi-yesil '[ "$olculemedi" -gt 0 ] && exit 2' ':'
 kos M7-fark-yonu-ters  '<(printf '"'"'%s\n'"'"' "$kanon") <(printf '"'"'%s\n'"'"' "$kutu")' '<(printf '"'"'%s\n'"'"' "$kutu") <(printf '"'"'%s\n'"'"' "$kanon")'
 kos M8-kanonsuz-ayni   'echo "  ✗ $p: kanon-yok' 'ayni=$((ayni+1)); echo "  ✓ $p: kanon-yok'
+kos M10-fetch-geri-geldi '  local kanon_sha kanon_zaman' '  git -C "$EY_REPO_DIR" fetch -q origin main 2>/dev/null; local kanon_sha kanon_zaman'
 # desen-eksik kapısı: var olmayan desen kapıyı DÜŞÜRMELİ (bu satırın kendisi kırmızı beklenir → tersine sayılır)
 kos_beklenen_red=$kalan; kos M9-desen-eksik 'BU_DESEN_YOK_123' 'x' >/dev/null
 if [ "$kalan" -eq $((kos_beklenen_red+1)) ]; then echo "  ✓ M9 desen-eksik kapısı: uygulanmayan mutasyon DÜŞTÜ (sessiz yeşil yok)"; kalan=$((kalan-1)); gecen=$((gecen+1)); else echo "  ✗ M9 desen-eksik kapısı çalışmıyor"; kalan=$((kalan+1)); fi

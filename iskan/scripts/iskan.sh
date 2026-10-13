@@ -1806,7 +1806,7 @@ _ey_kayit_koru() {
   return 1
 }
 
-# cmd_kayit_fark [proje…] — SALT-OKUR rapor: kutudaki çalışan iskan-registry.yaml ⟷ cloudtop
+# cmd_kayit_fark [proje…] — SALT-OKUR rapor (diske de .git'e de yazmaz): kutudaki çalışan iskan-registry.yaml ⟷ cloudtop
 # origin/main infra/iskan-registry/<proje>.yaml (kanon). HİÇBİR şey yazmaz; kanonu ezmez.
 # NİÇİN (SERDAR 13 Eki): koltuk ekranı kutudaki kopyaya yazacak; "kanon = kutudan hasat" yön
 #   değişikliği NÂZIR/KONAKÇI görüşünü bekliyor. O gelene kadar hasat yalnız bu raporu üretir.
@@ -1819,11 +1819,14 @@ cmd_kayit_fark() {
   EY_REPO_DIR="${ISKAN_CLOUDTOP_REPO_DIR:-/config/projects/cloudtop}"
   local projeler=("$@") p
   for p in "${projeler[@]}"; do _ey_ad_hijyeni "$p" "kayitsiz-proje" || exit 2; done
-  git -C "$EY_REPO_DIR" fetch -q origin main 2>/dev/null || echo "[sarı] cloudtop fetch başarısız — kanon yerel origin/main'den okunuyor"
-  if ! git -C "$EY_REPO_DIR" rev-parse -q --verify origin/main >/dev/null 2>&1; then
+  # fetch YOK: rapor .git'e de yazmaz (FETCH_HEAD/izleme ref'i). Kanon yereldeki origin/main'dir;
+  # tazeliği okuyana bırakılmaz — hangi commit, ne zaman, çıktının ilk satırında yazar.
+  local kanon_sha kanon_zaman
+  if ! kanon_sha="$(git -C "$EY_REPO_DIR" rev-parse -q --verify origin/main 2>/dev/null)"; then
     echo "[kırmızı] kanon okunamadı: $EY_REPO_DIR origin/main yok" >&2
     exit 2
   fi
+  kanon_zaman="$(git -C "$EY_REPO_DIR" log -1 --format=%cI origin/main 2>/dev/null)"
   local ssh_ok=0
   _ey_ssh true >/dev/null 2>&1 && ssh_ok=1
   if [ "${#projeler[@]}" -eq 0 ]; then
@@ -1839,6 +1842,7 @@ $(_ey_ssh "ls -1 /opt/cloudtop/config-*/projects/*/iskan-registry.yaml 2>/dev/nu
     mapfile -t projeler < <(printf '%s\n' "$liste" | grep -v '^$' | sort -u)
   fi
   echo "== İSKÂN kayit-fark — SALT-OKUR (kutu ⟷ kanon; hiçbir yere yazılmaz) =="
+  echo "kanon: $EY_REPO_DIR origin/main ${kanon_sha:0:12} ($kanon_zaman) — yerel kopya, fetch edilmedi; tazelemek için önce: git -C $EY_REPO_DIR fetch origin main"
   [ "$ssh_ok" = "1" ] || echo "[doğrulanmadı] hostsrv erişilemedi — kutu kopyaları ölçülemiyor"
   local ayni=0 farkli=0 kanonsuz=0 kutusuz=0 olculemedi=0 kanon kutu fark
   for p in "${projeler[@]}"; do

@@ -1,7 +1,7 @@
 {
   "is": "iskan-kayit-koruma",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-13T20:56:00+03:00",
+  "guncelleme": "2026-10-13T21:04:11+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -95,7 +95,84 @@
       "renk": "kirmizi",
       "zaman": "2026-10-13T20:56:00+03:00",
       "sure_sn": 22.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "iskan-sinav-dal-2",
+      "asama": "sonra",
+      "dosya": "olcum-iskan-sinav-dal-2-sonra.txt",
+      "sha256": "416257079514f94e869400a8370c6a792cfa47eb10b3a749d389120242db676b",
+      "komut": [
+        "bash",
+        "iskan/scripts/iskan.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-13T21:00:21+03:00",
+      "sure_sn": 34.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kayit-koru-sinav-2",
+      "asama": "sonra",
+      "dosya": "olcum-kayit-koru-sinav-2-sonra.txt",
+      "sha256": "285431673c7096ad314b714e3bb58763a12e31f6dfa645d4c417a75ecdf5d12c",
+      "komut": [
+        "bash",
+        "iskan/scripts/kayit-koru.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T21:00:26+03:00",
+      "sure_sn": 4.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-2",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-2-sonra.txt",
+      "sha256": "04a363c88ee1031751bc2f94beb690f1d40469ab6120be9e8389dcb22664b743",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/iskan-kayit-koruma/mutasyon.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-iskan-kayit-koruma"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T21:01:15+03:00",
+      "sure_sn": 49.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kayit-fark-canli-2",
+      "asama": "sonra",
+      "dosya": "olcum-kayit-fark-canli-2-sonra.txt",
+      "sha256": "1ea68bf6009a3319171925216623742de30130f17f491a7c62b9af35c1a611f8",
+      "komut": [
+        "bash",
+        "iskan/scripts/iskan.sh",
+        "kayit-fark"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-13T21:01:20+03:00",
+      "sure_sn": 4.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "iskan-sinav-dal-3",
+      "asama": "sonra",
+      "dosya": "olcum-iskan-sinav-dal-3-sonra.txt",
+      "sha256": "ef8b6c6e226bb2d0659e8a70ee2271c8cdbd61bade27f6b88e576587a0469c55",
+      "komut": [
+        "bash",
+        "iskan/scripts/iskan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T21:04:11+03:00",
+      "sure_sn": 22.0
     }
   ],
-  "imza": "f8d861ff7f0ce98b77b888be1583489a5e5b5394716292fbadcedf429bc87b91"
+  "imza": "0123eaee46af7044c2c0cec3f21907c6ac6e2068f38027847ad4e9af7e0341fe"
 }

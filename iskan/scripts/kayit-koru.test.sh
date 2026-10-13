@@ -158,6 +158,8 @@ mkdir -p "$R/infra/iskan-registry"
 uretim > "$R/infra/iskan-registry/eytest.yaml"
 printf 'proje: kanontek\n' > "$R/infra/iskan-registry/kanontek.yaml"
 git -C "$R" -c user.email=t@t -c user.name=t add -A; git -C "$R" -c user.email=t@t -c user.name=t commit -qm kanon; git -C "$R" update-ref refs/remotes/origin/main HEAD
+git -C "$R" remote add origin "$R"   # fetch koşsaydı başarır ve .git'e yazardı — F3 bunu yakalamalı
+git_iz() { { git -C "$R" for-each-ref; stat -c '%n %s %Y' "$R"/.git/* 2>/dev/null; cat "$R/.git/FETCH_HEAD" 2>/dev/null; } | md5sum; }
 kf() { env PATH="$T/stub:$PATH" ISKAN_SSH_HOST=stubhost ISKAN_CLOUDTOP_REPO_DIR="$R" bash "$SUT" kayit-fark "$@"; }
 
 # rapor /opt/cloudtop altını okur → sahte ssh'e yol çevirisi ekle
@@ -187,9 +189,10 @@ out="$(kf eytest 2>&1)"; rc=$?
   || { bad "F2 fark raporu bozuk (rc=$rc)"; printf '%s\n' "$out"; }
 m1="$(find "$H" "$R/infra" -type f -exec md5sum {} + | sort | md5sum)"
 [ "$m0" != "$m1" ] || bad "F (düzenek) kutu değişikliği md5'e yansımadı"
-m2="$(find "$H" "$R/infra" -type f -exec md5sum {} + | sort | md5sum)"; : > "$KK_LOG"; kf >/dev/null 2>&1
-[ "$m2" = "$(find "$H" "$R/infra" -type f -exec md5sum {} + | sort | md5sum)" ] && [ -s "$KK_LOG" ] && ! sed 's#2>/dev/null##g' "$KK_LOG" | grep -qE '>|tee |cp |mv |rm |mkdir|chown' \
-  && ok "F3 salt-okur: rapor sonrası kutu+kanon ağaçları bayt-eş, yazan komut yok" \
+sleep 1   # stat %Y saniye çözünürlüklü: aynı saniyedeki yazım görünmez olmasın
+m2="$(find "$H" "$R/infra" -type f -exec md5sum {} + | sort | md5sum)"; g2="$(git_iz)"; : > "$KK_LOG"; kf >/dev/null 2>&1
+[ "$m2" = "$(find "$H" "$R/infra" -type f -exec md5sum {} + | sort | md5sum)" ] && [ "$g2" = "$(git_iz)" ] && [ -s "$KK_LOG" ] && ! sed 's#2>/dev/null##g' "$KK_LOG" | grep -qE '>|tee |cp |mv |rm |mkdir|chown' \
+  && ok "F3 salt-okur: kutu+kanon ağaçları ve .git (ref + FETCH_HEAD) bayt-eş, yazan uzak komut yok" \
   || bad "F3 rapor bir şey yazdı"
 
 mkdir -p "$T/stub-yok"; printf '#!/usr/bin/env bash\nexit 255\n' > "$T/stub-yok/ssh"; chmod +x "$T/stub-yok/ssh"
@@ -197,6 +200,11 @@ out="$(env PATH="$T/stub-yok:$PATH" ISKAN_SSH_HOST=stubhost ISKAN_CLOUDTOP_REPO_
 [ "$rc" = 2 ] && printf '%s' "$out" | grep -q 'olculemedi' && ! printf '%s' "$out" | grep -q '✓ eytest' \
   && ok "F4 ssh yok → rc=2 'olculemedi' (ölçülemeyen 'ayni' sayılmaz)" \
   || { bad "F4 ssh yokken sahte-yeşil (rc=$rc)"; printf '%s\n' "$out"; }
+
+out="$(kf eytest 2>&1)"
+printf '%s' "$out" | grep -q "kanon: .* origin/main $(git -C "$R" rev-parse --short=12 origin/main) " \
+  && ok "F6 kanon tazeliği görünür: hangi commit'ten okunduğu çıktıda" \
+  || bad "F6 kanonun commit'i çıktıda yok"
 
 out="$(kf 'kötü;ad' 2>&1)"; rc=$?
 [ "$rc" = 2 ] && ok "F5 ad hijyeni: kabuk karakterli proje adı rc=2" || bad "F5 kötü ad kabul edildi (rc=$rc)"
