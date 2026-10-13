@@ -1,0 +1,25 @@
+{
+  "tur": 4,
+  "is": "koltuk-adi-suzgec",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T20:44:47+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 95555,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, önceki turdaki 2400 sınırı düzeltilmiş; 200 emojilik en uzun kodlu ad ile 201 emojilik ret sınırı artık tekil uçta doğrudan ölçülüyor. '/'lı ve tmux’un desteklediği seçilmiş diğer adlar liste, tekil API, bağlanma ve kaçış yüzlerinde ortak hükümle çalıştığından üretime engel bulgu kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı, sha’lar tutuyor ve sarı kayıt yok. `esdegerlik-26` kabuk-kapı hükmünü ve gerçek tmux kabulünü, `koltuk-bagla-47b` '/' ile aradaki boşluğu, `main-birlesik-sunucu` tekil ve liste API’lerini, `main-birlesik-xss` gerçek kapı+Chromium kaçışını ölçüyor; `mutasyon-10` eski desen, kaçış, Unicode/yerel ayar ve kodlu-yol kusurlarının sınavlarca yakalandığını gösteriyor. Klasik önce/sonra ölçüm çifti yok; ancak önceki hatayı temsil eden mutasyon kontrolleri ile son durum ölçümleri birlikte yeterli karşı-kanıt sağlıyor."
+  }
+}
