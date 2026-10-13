@@ -1,7 +1,7 @@
 {
   "is": "terminal-onar-revak-gerilemeleri",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-13T12:31:26+03:00",
+  "guncelleme": "2026-10-13T12:34:30+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -87,16 +87,16 @@
       "etiket": "canli-revak-kapi-rapor-dizini-ve-bekci-izi",
       "asama": "sonra",
       "dosya": "olcum-canli-revak-kapi-rapor-dizini-ve-bekci-izi-sonra.txt",
-      "sha256": "19faa884247414c416407f7faeeeef8c84a19bc1a6e33664f99b0e71becf5ee6",
+      "sha256": "4814b5a56bac7736afce5177444baa359e946b99aa7eeda57a77ec0adb5eb976",
       "komut": [
         "bash",
         "-c",
-        "ssh -o BatchMode=yes hostsrv 'sudo -n docker exec -i -u abc -e HOME=/config cloudtop-revak bash -s' < /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/revak-prova-olc.sh"
+        "ssh -o BatchMode=yes hostsrv 'sudo -n docker exec -i -u abc -e HOME=/config cloudtop-revak bash -s' < /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/revak-yerel-kurulum-olc.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T12:31:06+03:00",
-      "sure_sn": 8.0
+      "zaman": "2026-10-13T12:34:30+03:00",
+      "sure_sn": 80.3
     },
     {
       "tur": "olcum",
@@ -115,5 +115,5 @@
       "sure_sn": 2.0
     }
   ],
-  "imza": "5a4c91387a9650481de367f1ec636cf51d4272963d4770b27d7b82b395611551"
+  "imza": "172b5ffb3b8b36cb0a754654b57815368812cafcfba4b4016b9a1c64d9b1bcb9"
 }
