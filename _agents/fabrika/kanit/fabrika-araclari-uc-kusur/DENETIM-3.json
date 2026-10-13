@@ -1,0 +1,25 @@
+{
+  "tur": 3,
+  "is": "fabrika-araclari-uc-kusur",
+  "pr": "302",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T12:40:37+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 51206,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Üç kusur da talebin söylediği yerden kapatılmış: çalışma alanı yolu birincil depodan türetiliyor ve yokluk rc=2 oluyor, `hal` kapısı insan onayını koruyarak yazıcıya gidiyor, günlük plan da bugünün çıpasını `cipa.sh oku` ile önce okuyor. Önceki turdaki değersiz seçenek kilidi açık denetim ve sınavla giderilmiş; eldeki kod ve sağlam ölçümler içinde üretimi durduracak kusur kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. `is-alani` için 35/35 davranış sınavı ve eski sahte başarıyı geri getirince T10'un kırıldığı mutasyon, `bulgu hal` için 10/10 sınav ve eski değersiz-seçenek davranışını geri getirince H9'un kırıldığı mutasyon güçlü kanıt sağlıyor; günlük plan için O11/O11b davranışı ile `oku=1, yol=0, doğrudan head/tail=0` araç-sınırı ölçümü talebi doğrudan karşılıyor. Tam önce/sonra ölçüm çiftleri bulunmuyor, fakat hedeflenmiş son durum ve mutasyon kayıtları bu değişiklik için yeterli."
+  }
+}

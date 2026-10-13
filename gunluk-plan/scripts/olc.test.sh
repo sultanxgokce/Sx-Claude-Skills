@@ -23,7 +23,7 @@ printf 'KONUM-YENI\n'  > "$KOK/_agents/handoff/konumlu-konum-20260202.md"
 
 # ── sahte beceri dizini: çıpa aracı yerine güdük bir betik (kimliği O söyler)
 SK="$TMP/sk"; mkdir -p "$SK/gunluk-plan/scripts"
-yeni_arac(){ printf '#!/usr/bin/env bash\ncase "${1:-}" in ajan) echo "%s";; *) exit 2;; esac\n' "$1" \
+yeni_arac(){ printf '#!/usr/bin/env bash\ncase "${1:-}" in ajan) echo "%s";; oku) cat "%s" 2>/dev/null || exit 1;; *) exit 2;; esac\n' "$1" "${2:-$TMP/yok-cipa.md}" \
   > "$SK/gunluk-plan/scripts/cipa.sh"; }
 eski_arac(){ printf '#!/usr/bin/env bash\nexit 2\n' > "$SK/gunluk-plan/scripts/cipa.sh"; }
 
@@ -88,6 +88,19 @@ for kim in deneme izsiz bilinmiyor konumlu; do
   sizinti=$((sizinti + n2))
 done
 kapi "O7 dört kimlik × (araç + ortam-taklidi) toplam sızıntı satırı" "$sizinti" "0"
+
+
+# ── O11 · BUGÜNÜN çıpası varsa 6. kaynak ONU okur (eski konum dosyasına düşmez) · dünün çıpası sayılmaz
+printf '# ⚓ GÜNÜN PLANI ÇIPASI · %s\n\n- [ ] 1) CIPA-BUGUN-MADDE\n' "$(date +%Y-%m-%d)" > "$TMP/cipa-bugun.md"
+yeni_arac deneme "$TMP/cipa-bugun.md"
+O="$(alti "$(kos)")"
+kapi "O11 bugünün çıpası 6. kaynakta ÖNCE basılır (cipa.sh oku ile; dosya kendimiz okunmaz), defter/konum basılmaz" \
+     "$(grep -c 'CIPA-BUGUN-MADDE' <<<"$O")/$(grep -c 'cipa.sh oku · BUGÜNÜN' <<<"$O")/$(grep -c 'DENEME-KENDI-IZIM' <<<"$O")" "1/1/0"
+printf '# ⚓ GÜNÜN PLANI ÇIPASI · 2001-01-01\n\n- [ ] 1) CIPA-DUN-MADDE\n' > "$TMP/cipa-dun.md"
+yeni_arac deneme "$TMP/cipa-dun.md"
+O="$(alti "$(kos)")"
+kapi "O11b dünün çıpası SAYILMAZ: kendi defterine düşer (bayat plan basılmaz)" \
+     "$(grep -c 'CIPA-DUN-MADDE' <<<"$O")/$(grep -c 'DENEME-KENDI-IZIM-2' <<<"$O")" "0/1"
 
 # ── O9/O10 · KİMLİK TAKLİDİ: ortam değişkeni ikinci bir türetme OLARAK kullanılamaz
 #    (bağımsız göz tur-1, 2026-10-06). Güdük araç ortamı bilerek YOK SAYAR; eğer olc.sh

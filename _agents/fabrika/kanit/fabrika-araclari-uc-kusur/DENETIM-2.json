@@ -1,0 +1,32 @@
+{
+  "tur": 2,
+  "is": "fabrika-araclari-uc-kusur",
+  "pr": "302",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T11:49:59+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 43700,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Üç kusur da talepteki yöne çevrilmiş; önceki turdaki çıpa araç sınırı düzeltilmiş ve `cipa.sh oku` doğrudan sınanmış. Ancak `bulgu.sh hal` komutunda değersiz `--kim` veya `--gerekce` girdisi döngüyü ilerletmeyerek komutu kilitleyebilir; üretimden önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "`hal` seçenek ayrıştırıcısı, `--kim` ya da `--gerekce` son argüman olarak değersiz verilirse `shift 2` başarısız olduğu halde döngüden çıkmıyor; aynı argüman yeniden işlendiği için süreç sonsuz döngüye giriyor. Eksik değer kullanım hatasıyla rc=2 dönmelidir.",
+        "kanit": "`while [ $# -gt 0 ]` içinde `--kim) kim=\"${2:-}\"; shift 2 ;; --gerekce) gerekce=\"${2:-}\"; shift 2 ;;` bulunuyor; betikte `set -e` yok ve başarısız `shift 2` sonrasında `$#` değişmediğinden döngü ilerlemiyor. H5 ve H6 yalnız seçeneğin tamamen yokluğunu ölçüyor, değersiz seçeneği sınamıyor.",
+        "konum": "bulgu/scripts/bulgu.sh:38-42; bulgu/scripts/bulgu.test.sh:19-22",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. `is-alani` için davranış testi ile eski davranışı geri getiren mutasyon ölçümü güçlü; günlük plan ölçümü ve ayrıca araç-sınırı kaydı `cipa.sh oku` çağrısını, `yol` kullanılmadığını ve doğrudan dosya okunmadığını doğruluyor. `bulgu hal` için sekiz olumlu/olumsuz yol ölçülmüş olsa da değersiz seçenek kaynaklı kilitlenme kapsanmamış; ayrıca kayıtların çoğu yalnız “sonra/tek”, tam önce-sonra ölçüm çifti yok."
+  }
+}

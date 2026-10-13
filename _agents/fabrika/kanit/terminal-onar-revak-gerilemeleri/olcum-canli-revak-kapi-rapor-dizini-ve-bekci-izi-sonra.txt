@@ -1,0 +1,18 @@
+$ bash -c ssh -o BatchMode=yes hostsrv 'sudo -n docker exec -i -u abc -e HOME=/config cloudtop-revak bash -s' < /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/revak-yerel-kurulum-olc.sh
+# rc=0 sure=80.0s zaman=2026-10-13T12:39:19+03:00
+--- stdout ---
+proje_yolu_turu=gercek-dizin surum=2.3.0
+onar_rc=0
+cron_satiri=1
+kapi_kodu=/config/projects/revak/.claude/skills/terminal-onar/kapi
+kapi_ortaminda_KAPI_RAPOR_DIZ=1
+sifre_kaynagi=ortam-dosyasi(tek anahtar, basılmaz)
+giris_http=200
+usta_defteri_http=200
+csp=content-security-policy: sandbox allow-scripts allow-popups allow-popups-to-escape-sandbox allow-dow
+gizli_http=404
+post_http=405
+bekci_izi_onar_sonrasi=evet yas_sn=17 (elle çağrı YOK; cron proje yolundaki 2.3.0 bekci.sh'ı çağırdı)
+{"saglam":true,"ana_tmux":"ok","ana_claude":"ok","web_terminal":"ok","kurtarici":"ok","bekci":"ok","ana_oturum":"<kimlik>","zaman":"2026-10-13T12:39:19+03:00"}
+SONRA: kutu-yerel 2.3.0 kuruldu; kapı ve cron bu kopyayı çağırıyor; Usta Defteri 200 (kum havuzu), gizli 404, yazma 405, bekçi izi cron'dan
+--- stderr ---

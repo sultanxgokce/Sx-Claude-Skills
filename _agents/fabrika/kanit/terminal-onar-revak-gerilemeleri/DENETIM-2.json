@@ -1,0 +1,32 @@
+{
+  "tur": 2,
+  "is": "terminal-onar-revak-gerilemeleri",
+  "pr": "303",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T12:32:10+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 70638,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Talep edilen rapor dizini aktarımı, yayın kipi kapıları ve bekçi izi ortak koda taşınmış; önceki turun üç uygulama bulgusu da sınav ve kod değişiklikleriyle kapatılmış. Lakin canlı son ölçüm kurulu ortak 2.3.0'ı değil prova kopyasını çalıştırıyor ve bekçiyi elle çağırıyor; üretime hazır demeden önce gerçek ortak kurulumun aynı sonucu verdiği gösterilmeli.",
+    "bulgular": [
+      {
+        "ne": "Canlı son ölçüm, davranışların kurulu ortak 2.3.0 üzerinden çalıştığını kanıtlamıyor: kapı prova kopyasından başlatılmış, cron hâlâ ortak 2.2.2'yi çağırıyor ve bekçi izi elle çalıştırılarak üretilmiş. Önce ortak sürümü gerçekten kurup kapı ile zamanlayıcının onu çağırdığı ölçülmeli.",
+        "kanit": "Son ölçümde `kapi_kodu=terminal-onar.prova-230/kapi` ve `bekci_elle_rc=0 (cron ortak 2.2.2'yi çağırıyor...)` yazıyor; dolayısıyla görülen 200/CSP/405 sonuçları prova koduna, taze bekçi izi de elle çağrıya ait.",
+        "konum": "kanıt: canli-revak-kapi-rapor-dizini-ve-bekci-izi/sonra",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önce/sonra ölçümü Usta Defteri için 404 durumunun nedenini ve prova koduyla 200, CSP, gizli-ad 404, yazma 405 sonuçlarını gösteriyor; ortak sınavlar, mutasyonlar, kabuk kaçışı, kök gizli ad ve bekçi durumları da yeşil. Ancak son kayıt gerçek ortak 2.3.0 kurulumu değildir: kapı prova kopyasındadır, cron 2.2.2'yi çağırmaktadır ve bekçi elle koşturulmuştur; bu nedenle yazılmış davranış güçlü biçimde ölçülmüş olsa da kurulmuş ortak davranış henüz kanıtlanmamıştır."
+  }
+}

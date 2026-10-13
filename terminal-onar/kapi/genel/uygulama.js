@@ -328,7 +328,8 @@ $('koltuk')?.addEventListener('change', (e) => {
 koltuklariYukle();
 document.addEventListener('visibilitychange', () => { if (!document.hidden) koltuklariYukle(); });
 // ── Koltuk penceresi (2.4.0 · dilim 5/5): seçili koltuğun üç durumu ayrı, tek tuşla aç / yeniden aç / eski sohbete dön ──
-const DURUM_AD = { yok: ['Oturum yok', 'Aç'], 'claude-yok': ['Oturum var, içinde Claude yok', 'Yeniden aç'], takili: ['Claude takılı görünüyor (uzun süredir ekran değişmedi)', 'Yeniden aç'], canli: ['Canlı', 'Zaten açık'] };
+const DURUM_AD = { yok: ['Oturum yok', 'Aç'], 'claude-yok': ['Oturum var, içinde Claude yok', 'Yeniden aç'], takili: ['Claude takılı görünüyor — uzun bir iş de olabilir (ekran 15 dk değişmedi)', 'Yeniden aç'], olculemedi: ['Ölçülemedi — Claude çalışıyor olabilir', 'Yeniden aç'], canli: ['Canlı', 'Zaten açık'] };
+const kacAd = (t) => String(t == null ? '' : t).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));   // rol/ad kayıttan gelir → kaçışlı
 let koltukSon = null;
 function koltukHedef() { return koltukSecili || koltukAna || ''; }
 async function koltukOlc() {
@@ -337,17 +338,20 @@ async function koltukOlc() {
   try {
     const j = await api(Y('/api/koltuk/' + encodeURIComponent(ad))); koltukSon = j;
     const [ad2, eylem] = DURUM_AD[j.durum] || ['Bilinmiyor', 'Aç'];
-    const yol = j.yol === 'ekip-ac' ? `kayıtlı rol <b>${j.rol}</b>` : j.yol === 'onar' ? 'ana koltuk (onarım betiği)' : 'kayıtsız koltuk — açılamaz, önce işe alma';
-    d.innerHTML = `<b>${ad}</b> · ${ad2}${j.hal ? ' · hâl: ' + j.hal : ''}<br>${yol}`;
+    const yol = j.yol === 'ekip-ac' ? `kayıtlı rol <b>${kacAd(j.rol)}</b>` : j.yol === 'onar' ? 'ana koltuk (onarım betiği)' : 'kayıtsız koltuk — açılamaz, önce işe alma';
+    d.innerHTML = `<b>${kacAd(ad)}</b> · ${ad2}${j.hal ? ' · hâl: ' + kacAd(j.hal) : ''}<br>${yol}`;
     $('koltukBasla').textContent = eylem; $('koltukBasla').disabled = j.durum === 'canli' || j.yol === 'yok';
     $('koltukEski').hidden = !(j.resume === true && j.durum !== 'canli');
   } catch (h) { d.textContent = 'Ölçülemedi: ' + h.message; }
 }
 async function koltukAcGonder(eski) {
   const ad = koltukHedef(); if (!ad) return;
+  // takılı GÖRÜNEN koltuk çalışıyor olabilir (uzun araç): kapatmak işi keser → önce sor, sonra zorla
+  let zorla = false;
+  if (koltukSon && (koltukSon.durum === 'takili' || koltukSon.durum === 'olculemedi')) { if (!confirm(ad + ' takılı görünüyor ama çalışıyor olabilir. Oturum KAPATILIP yeniden açılsın mı? (süren iş kesilir)')) return; zorla = true; }
   $('koltukBasla').disabled = true; $('koltukEski').disabled = true; $('koltukDurum').textContent = (eski ? 'Eski sohbete dönülüyor' : 'Açılıyor') + '…';
-  try { const j = await api(Y('/api/koltuk/' + encodeURIComponent(ad) + '/ac'), { eski: !!eski }); bildir(j.mesaj || 'Açıldı.'); }
-  catch (h) { bildir(h.message); }
+  try { const j = await api(Y('/api/koltuk/' + encodeURIComponent(ad) + '/ac'), { eski: !!eski, zorla }); bildir(j.mesaj || 'Açıldı.'); }
+  catch (h) { bildir(h.message); }   // 504: 'arkada doğmuş olabilir' — aşağıdaki yenileme gerçek durumu gösterir
   finally { $('koltukEski').disabled = false; setTimeout(() => { koltukOlc(); koltuklariYukle(); if (gorunumTerminal) { ttySok(); ttyKur(); } }, 1500); }
 }
 $('koltukAc')?.addEventListener('click', () => { $('koltukP').showModal(); koltukOlc(); });

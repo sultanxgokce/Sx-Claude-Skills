@@ -2,10 +2,11 @@
 # koltuk-ac.sh — bir KOLTUĞU (tmux oturumu) tek komutla ölç ve aç/yeniden aç (dilim 5/5 · 13 Ekim 2026).
 #
 #   koltuk-ac.sh durum <ad>              → JSON: {"ad","durum","tmux","claude","hal","son","rol","resume","yol"}
-#   koltuk-ac.sh ac <ad> [--eski]        → açar; --eski = eski sohbete dön (ekip-ac.sh --resume-if-known)
+#   koltuk-ac.sh ac <ad> [--eski] [--zorla] → açar; --eski = eski sohbete dön (ekip-ac.sh --resume-if-known); --zorla = takılı görünen
+#                                          oturumu KAPATIP yeniden doğur (zorlasız: rc 5, dokunmaz — çalışıyor olabilir)
 #
 # DURUM (üçü ayrı gösterilir, Sultan: "oturum kapandı/bozuldu/silindi — tekrar açmak çok basit olmalı"):
-#   yok          = tmux oturumu yok
+#   yok          = tmux oturumu yok · olculemedi = oturum var ama liste ölçümü düştü (Claude yok SANILMAZ; zorlasız dokunulmaz)
 #   claude-yok   = oturum var, içinde Claude yok (kabuk/ölü)
 #   takili       = Claude var ama TAKILI_SN (vars. 900 s) süredir ekran değişmedi ve soru/girdi beklemiyor
 #   canli        = Claude var, hâl normal
@@ -18,7 +19,9 @@ set -uo pipefail
 TAKILI_SN="${TO_TAKILI_SN:-900}"
 EKIP_AC="${TO_EKIP_AC:-$PROJE/scripts/ekip-ac.sh}"
 KAYIT="${AILE_REGISTRY:-$PROJE/_agents/handoff/aile-registry.yaml}"
-KOLTUK_BETIK="${TO_KOLTUK_BETIK:-$BETIK_DIZ/koltuk-bagla.sh}"
+# 🔴 Liste betiği BU dosyanın yanındakidir (yedek göz tur 2 canlı bulgusu: BETIK_DIZ ortak kurulu kopyaya çözülüyor, eski
+#    koltuk-bagla son=0 basıyordu — iş alanındaki düzeltme hiç çağrılmıyordu). Aynı beceri kopyası, aynı sürüm.
+KOLTUK_BETIK="${TO_KOLTUK_BETIK:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/koltuk-bagla.sh}"
 
 json_s() { printf '%s' "$1" | python3 -c 'import json,sys;print(json.dumps(sys.stdin.read()),end="")'; }
 gecerli() { [[ "$1" =~ ^[^[:space:]:.]{1,200}$ ]]; }   # tmux'un kendi kuralı (dilim 5/7)
@@ -59,7 +62,10 @@ durum_olc() {  # $1 ad → DURUM CLAUDE HAL SON değişkenleri
   DURUM=yok; CLAUDE=0; HAL=""; SON=0; TMUX_VAR=0
   tmux_var "$1" || return 0
   TMUX_VAR=1
-  local satir; satir="$(bash "$KOLTUK_BETIK" --liste 2>/dev/null | awk -F'\t' -v a="$1" '$1==a')"
+  # 🔴 FAIL-CLOSED (yedek göz tur 3): liste ölçümü düşerse (rc≠0 / satır yok) "Claude yok" SANILMAZ — eski hâl kayıtlı bir
+  #    koltuğu zorlasız KAPATIRDI. Ölçülemeyen → durum=olculemedi; 'ac' zorlasız dokunmaz.
+  local liste satir; liste="$(bash "$KOLTUK_BETIK" --liste 2>/dev/null)" || { DURUM=olculemedi; return 0; }
+  satir="$(printf '%s\n' "$liste" | awk -F'\t' -v a="$1" '$1==a')"; [ -n "$satir" ] || { DURUM=olculemedi; return 0; }
   SON="$(printf '%s' "$satir" | cut -f2)"; CLAUDE="$(printf '%s' "$satir" | cut -f3)"; HAL="$(printf '%s' "$satir" | cut -f5)"
   [ "${CLAUDE:-0}" = 1 ] || { DURUM=claude-yok; return 0; }
   local simdi; simdi=$(date +%s)
@@ -72,9 +78,9 @@ yol_bul() {  # $1 ad → YOL ∈ ekip-ac | onar | yok ; ROL
   else YOL=yok; fi
 }
 
-KOMUT="${1:-}"; AD="${2:-}"; shift 2 2>/dev/null || true
-ESKI=0; for a in "$@"; do case "$a" in --eski) ESKI=1 ;; *) echo "bilinmeyen argüman: $a" >&2; exit 2 ;; esac; done
-[ -n "$AD" ] && gecerli "$AD" || { echo 'kullanım: koltuk-ac.sh durum|ac <ad> [--eski]' >&2; exit 2; }
+KOMUT="${1:-}"; AD="${2:-}"; shift $(( $# >= 2 ? 2 : $# ))   # tek argümanda $@ temiz kalır (yedek göz tur 2: "bilinmeyen argüman: durum" basıyordu)
+ESKI=0; ZORLA=0; for a in "$@"; do case "$a" in --eski) ESKI=1 ;; --zorla) ZORLA=1 ;; *) echo "bilinmeyen argüman: $a" >&2; exit 2 ;; esac; done
+[ -n "$AD" ] && gecerli "$AD" || { echo 'kullanım: koltuk-ac.sh durum|ac <ad> [--eski] [--zorla]' >&2; exit 2; }
 
 case "$KOMUT" in
   durum)
@@ -87,20 +93,28 @@ case "$KOMUT" in
   ac)
     durum_olc "$AD"; yol_bul "$AD"
     gunluk "koltuk-ac: $AD durum=$DURUM yol=$YOL eski=$ESKI"
+    case "$YOL" in yok)
+      echo "açılamadı: '$AD' kayıtlı bir koltuk değil (aile kaydında rolü yok ya da kutuda ekip-ac.sh yok) — kimliksiz Claude açılmaz; önce işe alma (madde 6)" >&2; exit 4 ;;
+    esac
+    # ORTAK KAPI — ekip-ac yolu ve ana koltuk (onar) yolu AYNI kapıdan geçer (yedek göz tur 4: ana koltukta --zorla hiç okunmuyordu;
+    # onar.sh içinde Claude varsa "zaten çalışıyor — yazılmadı" deyip rc 0 dönüyor → telefon "Açıldı" yazıyor, takılı Claude duruyordu).
+    # 🔴 TAKILI = görünüş (ekran değişmedi); uzun araç koşan sağlam bir Claude da öyle görünür (canlıda ölçüldü: BÂNİ'nin
+    #    kendi koltuğu). Kapatmak işi keser → yalnız açık --zorla ile; telefon penceresi önce sorar.
+    if [ "$DURUM" = takili ] && [ $ZORLA = 0 ]; then echo "takılı görünüyor ama çalışıyor olabilir (uzun bir iş): kapatıp yeniden açmak için --zorla (işi keser)"; exit 5; fi
+    if [ "$DURUM" = olculemedi ] && [ $ZORLA = 0 ]; then echo "koltuk ÖLÇÜLEMEDİ (liste betiği düştü) — Claude çalışıyor olabilir; dokunmadım. Zorlamak için --zorla"; exit 5; fi
+    if [ "$DURUM" = canli ]; then echo "zaten canlı: $AD (ikinci kopya açılmaz)"; exit 0; fi
+    # takılı/Claude'suz/ölçülemeyen oturum önce KAPATILIR — ekip-ac.sh ve onar.sh ikisi de "oturum var" görünce Claude'u geri getirmez
+    if [ "$DURUM" = claude-yok ] || [ "$DURUM" = takili ] || [ "$DURUM" = olculemedi ]; then tmux kill-session -t "=$AD" 2>/dev/null; gunluk "koltuk-ac: $AD ($DURUM) kapatıldı, yeniden doğacak (zorla=$ZORLA yol=$YOL)"; fi
     case "$YOL" in
       ekip-ac)
-        # takılı/Claude'suz oturumu önce kapat — ekip-ac.sh "canlı" sanıp yalnız attach komutunu basar, Claude geri gelmez
-        if [ "$DURUM" = claude-yok ] || [ "$DURUM" = takili ]; then tmux kill-session -t "=$AD" 2>/dev/null; gunluk "koltuk-ac: $AD ($DURUM) kapatıldı, yeniden doğacak"; fi
-        if [ "$DURUM" = canli ]; then echo "zaten canlı: $AD (ikinci kopya açılmaz)"; exit 0; fi
         ARG=(); [ $ESKI = 1 ] && ARG=(--resume-if-known)
         if bash "$EKIP_AC" "$ROL" "${ARG[@]}"; then echo "açıldı: $AD ← ekip-ac.sh $ROL ${ARG[*]:-}"; exit 0
         else echo "açılamadı: ekip-ac.sh $ROL rc=$?" >&2; exit 1; fi ;;
       onar)
+        # ana koltuk: onar.sh K0 oturumu yeniden kurar ve kayıtlı ana konuşmaya döner (kapatıldıysa yukarıda kapatıldı)
         if bash "$BETIK_DIZ/onar.sh" >/dev/null 2>&1; then echo "açıldı: $AD (onar.sh K0)"; exit 0; fi
         setsid nohup bash "$BETIK_DIZ/kademe.sh" --kaynak dugme >/dev/null 2>&1 < /dev/null &
         echo "K0 yetmedi; onarım merdiveni başlatıldı (K1→K3)"; exit 3 ;;
-      *)
-        echo "açılamadı: '$AD' kayıtlı bir koltuk değil (aile kaydında rolü yok ya da kutuda ekip-ac.sh yok) — kimliksiz Claude açılmaz; önce işe alma (madde 6)" >&2; exit 4 ;;
     esac ;;
-  *) echo 'kullanım: koltuk-ac.sh durum|ac <ad> [--eski]' >&2; exit 2 ;;
+  *) echo 'kullanım: koltuk-ac.sh durum|ac <ad> [--eski] [--zorla]' >&2; exit 2 ;;
 esac

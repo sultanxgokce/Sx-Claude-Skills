@@ -437,6 +437,24 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   const a7 = await iste(18785, '/sedir/api/koltuk/kotu%3Aad/ac', { cerez, metot: 'POST', govde: {} });
   kapi('KA10 bozuk ad (:) yola GİRMEZ → 404 (betik çağrılmaz)', a7.status === 404 && !/kotu/.test(readFileSync(DEFTER, 'utf8')));
   p5.kill();
+  // takılı durumu + zaman aşımı (yedek göz tur 2): sahte betik 'takili' basar; 'yavas' koltuğu açma süresini aşar → 504 (502 'açılamadı' DEĞİL)
+  const KA3 = join(T, 'koltuk-ac-sahte3.sh');
+  writeFileSync(KA3, '#!/usr/bin/env bash\necho "$*" >> ' + JSON.stringify(join(T, 'ka3-defter')) + '\n[ "$1" = ac ] && [ "$2" = takili ] && [ "$3" != --zorla ] && { echo "takılı görünüyor: --zorla"; exit 5; }\nif [ "$1" = durum ]; then printf \'{"ad":"%s","durum":"takili","tmux":true,"claude":true,"hal":"calisiyor","son":1700000000,"rol":"ROLX","resume":true,"yol":"ekip-ac","ana":false}\\n\' "$2"; exit 0; fi\n[ "$2" = yavas ] && sleep 3\necho "açıldı: $2"; exit 0\n');
+  const p7 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: { ...process.env, KAPI_PORT: '18789', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', KAPI_KOLTUK_AC_BETIK: KA3, KAPI_AC_SURE_MS: '500',
+    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_KOLTUK_BETIK: KOLTUK_SAHTE5 }, stdio: 'ignore' });
+  for (let i = 0; i < 50; i++) { await new Promise((r) => setTimeout(r, 100)); try { if ((await fetch('http://127.0.0.1:18789/sedir/giris')).status === 200) break; } catch {} }
+  const c7 = await giris(18789, '/sedir');
+  const t1 = await (await iste(18789, '/sedir/api/koltuk/BASIRET', { cerez: c7 })).json();
+  kapi('KA11 üçüncü hâl "takili" kapıdan olduğu gibi geçer (son epoch dolu)', t1.durum === 'takili' && t1.son === 1700000000, `→ ${JSON.stringify(t1)}`);
+  const t2 = await iste(18789, '/sedir/api/koltuk/yavas/ac', { cerez: c7, metot: 'POST', govde: {} }); const jt2 = await t2.json();
+  kapi('KA12 açma süreyi aşarsa 504 + "arkada doğmuş olabilir" (502 açılamadı DEĞİL)', t2.status === 504 && jt2.rc === 124 && /arkada doğmuş/.test(jt2.mesaj), `→ ${t2.status} ${jt2.mesaj}`);
+  const t3 = await iste(18789, '/sedir/api/koltuk/hizli/ac', { cerez: c7, metot: 'POST', govde: {} });
+  kapi('KA13 süre içinde biten açma 200 (KA12 tautoloji değil)', t3.status === 200);
+  const t4 = await iste(18789, '/sedir/api/koltuk/takili/ac', { cerez: c7, metot: 'POST', govde: {} }); const jt4 = await t4.json();
+  kapi('KA14 takılı/ölçülemeyen koltuk zorlasız → rc5 → 428 tamam:false (dokunulmadı)', t4.status === 428 && jt4.tamam === false && jt4.rc === 5, `→ ${t4.status} ${JSON.stringify(jt4)}`);
+  await iste(18789, '/sedir/api/koltuk/takili/ac', { cerez: c7, metot: 'POST', govde: { zorla: true } });
+  kapi('KA15 {zorla:true} → betiğe --zorla geçer', /ac takili --zorla/.test(readFileSync(join(T, 'ka3-defter'), 'utf8')));
+  p7.kill();
 }
 
 // ── SL · adında '/' olan koltuk (dilim 5/7): listeden DÜŞMEZ, adres encodeURIComponent, /api/koltuk yolu çözülür ──

@@ -1,0 +1,8 @@
+$ bash -c cp bulgu/scripts/bulgu.sh /tmp/b.bak; sed -i "s/--kim) \[ \$# -ge 2 \] || { echo \"--kim değersiz\" >\&2; exit 2; }; kim=\"\$2\"; shift 2 ;;/--kim) kim=\"\${2:-}\"; shift 2 ;;/" bulgu/scripts/bulgu.sh; grep -c "kim=\"\${2:-}\"; shift 2" bulgu/scripts/bulgu.sh; o=$(bash bulgu/scripts/bulgu.test.sh 2>&1); cp /tmp/b.bak bulgu/scripts/bulgu.sh; rm -f /tmp/b.bak; printf "%s\n" "$o" | grep -E "✗|geçti"; k=$(printf "%s\n" "$o" | grep -c "✗ H9 "); echo "eski shift davranışı geri gelince H9 kırmızı: $k (beklenen 1)"; test "$k" -eq 1
+# rc=0 sure=5.1s zaman=2026-10-13T11:51:09+03:00
+--- stdout ---
+2
+  ✗ H9 🔴 --kim son argüman ve DEĞERSİZ: rc 2, sonsuz döngü YOK (5 sn zaman aşımı değil), yazıcı çağrılmadı
+bulgu.test: 9 geçti · 1 kaldı
+eski shift davranışı geri gelince H9 kırmızı: 1 (beklenen 1)
+--- stderr ---
