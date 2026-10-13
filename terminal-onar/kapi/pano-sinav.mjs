@@ -11,6 +11,7 @@ import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import http from 'node:http';
+import net from 'node:net';
 const KOK = dirname(fileURLToPath(import.meta.url));
 const PW = process.env.KANIT_PLAYWRIGHT_DIR || '/config/projects/Nexus/ui/node_modules';
 let chromium; try { ({ chromium } = await import(pathToFileURL(join(PW, 'playwright/index.mjs')).href)); }
@@ -64,7 +65,9 @@ async function kapiAc(port, ek = {}) {
   for (let k = 0; k < 50; k++) { await bekle(100); try { if ((await fetch(`http://127.0.0.1:${port}/sinav/giris`)).status === 200) return p; } catch {} }
   throw new Error('kapı açılmadı');
 }
-const P1 = 18795, P2 = 18796;
+// Portlar DİNAMİK: boş port işletim sisteminden alınır (bağımsız göz tur 2: sabit port eşzamanlı koşuda sınavı ürün sağlamken bozardı)
+const bosPort = () => new Promise((r) => { const s = net.createServer(); s.listen(0, '127.0.0.1', () => { const p = s.address().port; s.close(() => r(p)); }); });
+const P1 = await bosPort(), P2 = await bosPort();
 const k1 = await kapiAc(P1), k2 = await kapiAc(P2, { KAPI_PANO: '0' });
 const giris = async (port) => { const r = await fetch(`http://127.0.0.1:${port}/sinav/giris`, { method: 'POST', headers: { 'content-type': 'application/json', 'x-kapi': '1' }, body: JSON.stringify({ parola: SIFRE }) });
   return ((r.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1]; };

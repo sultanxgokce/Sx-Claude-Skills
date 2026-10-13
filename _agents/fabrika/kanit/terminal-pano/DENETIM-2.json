@@ -1,0 +1,44 @@
+{
+  "tur": 2,
+  "is": "terminal-pano",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T12:25:40+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 90738,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kutu kapısına resim yapıştırma ve tmux seçimini tarayıcı panosuna aktarma köprüsü eklenmiş; gerçek ttyd, tmux ve Chromium ölçümleri talebin ana yollarını geçiriyor. Önce üretim terminal.mmepanel.com kurulumu ile mevcut 0.9 eklentisinin uyumsuzluğunu çözün; hedef dış yüzey henüz çalışır ve temiz hâliyle kanıtlanmadığı için üretime hazır anlamında 5 değildir.",
+    "bulgular": [
+      {
+        "ne": "Değişiklik hedeflenen terminal.mmepanel.com üretim kapısında kurulup ölçülmemiş; canlı sınav iş alanındaki yerel :17681 kapısını kullanıyor.",
+        "kanit": "Canlı ölçüm C0-C4'ü geçiriyor, fakat canli-olcum.mjs P değerini http://127.0.0.1:17681 olarak tanımlıyor. KAPSAM-SINIRI da birleşme, senkron ve yeniden başlatma öncesinde kodun ortak üretim kapısına inmeyeceğini açıkça söylüyor.",
+        "konum": "_agents/fabrika/kanit/terminal-pano/canli-olcum.mjs:5; terminal-onar/KAPSAM-SINIRI.md — YOK ve Birleşme SONRASI bölümleri",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Hedef kullanıcının mevcut 0.9 tarayıcı eklentisi yeni kapı işaretini tanımıyor; yanlış /proxy/8391 isteği atıp kırmızı 404 bildirimi gösteriyor. 0.10 ayrıca dağıtılmadan kullanıcı deneyimi kusurlu kalıyor.",
+        "kanit": "Eski eklenti ölçümünde E1, E2 ve E4 başarısız ve toplam 19/22; yeni eklenti dosyasıyla aynı sınav 22/22 geçiyor. KAPSAM-SINIRI, Sultan'ın tarayıcısında 0.9'un çalışacağını ve 0.10'un henüz dağıtılmadığını doğruluyor.",
+        "konum": "olcum-ucuca-eski-eklenti-once.txt:E1-E4; olcum-ucuca-yeni-eklenti-sonra.txt:E1-E4; terminal-onar/KAPSAM-SINIRI.md — YOK bölümü",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Tarayıcı uçtan uca sınavı sabit 18795 ve 18796 portlarını kullanıyor; eşzamanlı veya portun dolu olduğu çalıştırmalarda ürün sağlamken sınav ölçüm dışı biçimde bozulabilir.",
+        "kanit": "Sınav iki kapıyı dinamik port seçmeden `const P1 = 18795, P2 = 18796` ile başlatıyor; resim dinleyicisi için ise doğru biçimde `listen(0)` kullanılmış.",
+        "konum": "terminal-onar/kapi/pano-sinav.mjs:79-80",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Gerçekçi resimle gerçek ttyd+tmux+Chromium ölçümü, olumsuz kontrol, eski/yeni eklenti karşılaştırması ve kayıtlı kareler bulunuyor; ancak kare içerikleri sunulan metinde görülemiyor ve üretim terminal.mmepanel.com ile Sultan'ın gerçek tarayıcısı ölçülmemiş. Önce/sonra çifti eklenti uyumluluğunu gösteriyor, çekirdek özelliğin öncesi ise OSC 52 yokluğu ölçümü ve köprüsüz olumsuz kontrolle destekleniyor."
+  }
+}

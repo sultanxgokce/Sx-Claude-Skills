@@ -1,7 +1,7 @@
 {
   "is": "terminal-pano",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-13T11:16:00+03:00",
+  "guncelleme": "2026-10-13T12:27:29+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -54,7 +54,7 @@
       "etiket": "ucuca-eski-eklenti",
       "asama": "once",
       "dosya": "olcum-ucuca-eski-eklenti-once.txt",
-      "sha256": "ee620bd37dcc30ed958cc3c707ffd5405d4ee6c3bebc090389f7a2b3ec2e5da4",
+      "sha256": "e4833284b435fbcc90576c447463ff396598687e94694f85f468be5d26b82345",
       "komut": [
         "env",
         "EKLENTI_YOL=/config/projects/_wt/Sx-Claude-Skills-terminal-pano/_agents/fabrika/kanit/terminal-pano/eklenti-eski-0.9.user.js",
@@ -63,27 +63,25 @@
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-10-13T11:15:42+03:00",
-      "sure_sn": 19.9
+      "zaman": "2026-10-13T12:27:10+03:00",
+      "sure_sn": 20.4
     },
     {
       "tur": "olcum",
       "etiket": "ucuca-yeni-eklenti",
       "asama": "sonra",
       "dosya": "olcum-ucuca-yeni-eklenti-sonra.txt",
-      "sha256": "10d29b8687318c1a28fb5d286da2dee38059df737b41f3bb6510face1ba8dff8",
+      "sha256": "a0a48be3e38bd8725fc8541ea64ae99c98fab79a6112f01acc3acf9be28fc40f",
       "komut": [
         "env",
         "EKLENTI_YOL=/config/projects/_wt/cloudtop-terminal-pano-eklenti/infra/cloudtop-terminal-image.user.js",
         "node",
-        "terminal-onar/kapi/pano-sinav.mjs",
-        "--kare",
-        "/tmp/claude-1000/pano"
+        "terminal-onar/kapi/pano-sinav.mjs"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T11:16:00+03:00",
-      "sure_sn": 18.2
+      "zaman": "2026-10-13T12:27:29+03:00",
+      "sure_sn": 18.8
     },
     {
       "tur": "olcum",
@@ -156,5 +154,5 @@
       "zaman": "2026-10-13T11:11:33+03:00"
     }
   ],
-  "imza": "3b7a53dca7fe0e2273e42b369aee14b3b218c58e1d7f535768f7b6e3845d26c5"
+  "imza": "301e7939cf6a15c9b404a03e6314590c51b2247bdd5b7d4bc75079d1f3205d2b"
 }

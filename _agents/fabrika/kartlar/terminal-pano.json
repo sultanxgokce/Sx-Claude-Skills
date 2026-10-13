@@ -17,5 +17,15 @@
   "kanit_nerede": "_agents/fabrika/kanit/terminal-pano (başsız Chromium uçtan uca: gerçek ttyd+tmux+kapı)",
   "oda": "",
   "durum": "acik",
-  "gecmis": []
+  "gecmis": [],
+  "sultan_kararlari": [
+    {
+      "karar": "devam",
+      "oturum": "session_013fuJSNg65VkgQE4sJsQURS",
+      "soz": "tamamdır önerin kabul edildi go",
+      "beyan": "BANI",
+      "gerekce": "Sultan dilim 5 paketini (7 madde) ve işe alma akışı tasarımını onayladı; madde 1→2 sırasıyla inşa devam eder (SERDAR iletti, 13 Eki)",
+      "zaman": "2026-10-13T12:18:14+03:00"
+    }
+  ]
 }
