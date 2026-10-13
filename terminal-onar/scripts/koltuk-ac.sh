@@ -30,13 +30,16 @@ BASLAT_BEKLE="${TO_BASLAT_BEKLE:-3}"   # açılıştan sonra oturumun yaşadığ
 #   kendi sohbetine kendiliğinden döner). Oralarda kayıtlı koltuk "kayıtsız" görünüyor, Aç çalışmıyordu (enis ENIS/MURSIT).
 #   Aynı adlı `ekip-ac.sh` İSKÂN kutularında BAŞKA bir betiktir: var olan oturumları tek pencerede toplar, oturum DOĞURMAZ
 #   ve rol argümanı almaz — açıcı sayılsaydı Aç, Claude'suz oturumu kapatıp geri getirmezdi (koltuk kaybolurdu).
-#   Bu yüzden ekip-ac.sh yalnız DOĞURAN sürümse (merkez: --resume-if-known bilir) açıcıdır.
+#   Bu yüzden ekip-ac.sh yalnız DOĞURAN sürümse açıcıdır: argüman çözücüsünde `--resume-if-known)` VE `--dry-run)` KOLLARI
+#   olmalı (satır başında, kol olarak — yorumdaki ya da metindeki geçiş SAYILMAZ; yedek göz tur 2). Grid sürümü argüman
+#   çözmez; onu bayrakla yoklamak yan etki doğurur (pencere kurar), o yüzden yoklanmaz, yapısından tanınır.
 ISKAN="${ISKAN_REGISTRY:-$PROJE/iskan-registry.yaml}"
 if [ -f "$BASLAT" ] && [ -f "$ISKAN" ]; then
   ACICI=baslat; KAYIT="$ISKAN"
 else
   ACICI=""; KAYIT="${AILE_REGISTRY:-$PROJE/_agents/handoff/aile-registry.yaml}"
-  if [ -x "$EKIP_AC" ]; then _ea="$(cat "$EKIP_AC" 2>/dev/null)"; case "$_ea" in *--resume-if-known*) ACICI=ekip-ac ;; esac; fi
+  if [ -x "$EKIP_AC" ] && grep -Eq '^[[:space:]]*--resume-if-known\)' "$EKIP_AC" && grep -Eq '^[[:space:]]*--dry-run\)' "$EKIP_AC"; then
+    ACICI=ekip-ac; fi
 fi
 # 🔴 Liste betiği BU dosyanın yanındakidir (yedek göz tur 2 canlı bulgusu: BETIK_DIZ ortak kurulu kopyaya çözülüyor, eski
 #    koltuk-bagla son=0 basıyordu — iş alanındaki düzeltme hiç çağrılmıyordu). Aynı beceri kopyası, aynı sürüm.
@@ -148,7 +151,10 @@ case "$KOMUT" in
         echo "açılamadı: baslat-claude.sh $ROL ${BASLAT_BEKLE} sn içinde düştü (claude yok ya da kayıt eksik olabilir — kutu günlüğüne bak)" >&2; exit 1 ;;
       ekip-ac)
         ARG=(); [ $ESKI = 1 ] && ARG=(--resume-if-known)
-        if bash "$EKIP_AC" "$ROL" "${ARG[@]}"; then echo "açıldı: $AD ← ekip-ac.sh $ROL ${ARG[*]:-}"; exit 0
+        if bash "$EKIP_AC" "$ROL" "${ARG[@]}"; then
+          # ölçmeden "açıldı" denmez: betik rc 0 dese de koltuk oturumu yoksa (yanlış betik/yarım doğum) dürüst hata
+          if tmux_var "$AD"; then echo "açıldı: $AD ← ekip-ac.sh $ROL ${ARG[*]:-}"; exit 0; fi
+          echo "açılamadı: ekip-ac.sh $ROL rc 0 döndü ama '$AD' oturumu yok" >&2; exit 1
         else echo "açılamadı: ekip-ac.sh $ROL rc=$?" >&2; exit 1; fi ;;
       onar)
         # ana koltuk: onar.sh K0 oturumu yeniden kurar ve kayıtlı ana konuşmaya döner (kapatıldıysa yukarıda kapatıldı)

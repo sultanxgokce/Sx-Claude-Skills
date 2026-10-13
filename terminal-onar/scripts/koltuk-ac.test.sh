@@ -21,8 +21,11 @@ uyeler:
 Y
 cat > "$T/proje/scripts/ekip-ac.sh" <<S
 #!/usr/bin/env bash
-# doğuran sürüm (merkez): ROL alır, --resume-if-known bilir
-rol="\$1"; shift; ad="\$(printf '%s' "\$rol" | tr 'A-Z' 'a-z')"
+# doğuran sürüm (merkez): argüman çözücüsü --resume-if-known ve --dry-run kollarını taşır (gerçek merkez betiğiyle aynı yapı)
+rol="\$1"; shift; for a in "\$@"; do case "\$a" in
+  --resume-if-known) : ;;
+  --dry-run) exit 0 ;;
+esac; done; ad="\$(printf '%s' "\$rol" | tr 'A-Z' 'a-z')"
 echo "\$rol \$*" >> "$T/defter"
 if tmux -L "$L" has-session -t "=\$ad" 2>/dev/null; then echo "canlı: tmux attach -t \$ad"; exit 0; fi
 tmux -L "$L" new-session -d -s "\$ad" "sleep 300"; echo "doğdu: \$ad"
@@ -158,4 +161,23 @@ cp "$IK/scripts/ekip-ac.sh" "$GK/scripts/ekip-ac.sh"; : > "$T/defter"
 kapi "G1 yalnız GRID ekip-ac varken kayıtlı rol bile yol=yok (koltuğu kapatıp geri getirmeyen yola düşmez)" "yok|ROLG" "$(KP="$GK" KA durum rolg | j 'j["yol"]+"|"+j["rol"]')"
 tmux -L "$L" new-session -d -s rolg "sleep 300"; out="$(KP="$GK" KA ac rolg 2>&1)"; rc=$?
 kapi "G2 'ac' rc 4, oturum KAPATILMADI, grid çağrılmadı" "4|1|0" "$rc|$(tmux -L "$L" has-session -t =rolg 2>/dev/null && echo 1 || echo 0)|$(grep -c '^grid' "$T/defter")"
+echo "── Y · yorumda geçen bayrak açıcı yapmaz; betik rc 0 dese de oturum yoksa 'açıldı' denmez (yedek göz tur 2)"
+YK="$T/yorum"; mkdir -p "$YK/scripts" "$YK/_agents/handoff"
+printf 'uyeler:\n  - id: ROLY2\n    tmux: "roly2:0"\n' > "$YK/_agents/handoff/aile-registry.yaml"
+printf '#!/usr/bin/env bash\n# not: merkez sürümü --resume-if-known ve --dry-run bilir, bu grid sürümü bilmez\necho "grid $*" >> "%s"\n' "$T/defter" > "$YK/scripts/ekip-ac.sh"; chmod +x "$YK/scripts/ekip-ac.sh"; : > "$T/defter"
+kapi "Y1 bayrak yalnız YORUMDA geçen ekip-ac.sh açıcı sayılmaz (yol=yok)" "yok" "$(KP="$YK" KA durum roly2 | j 'j["yol"]')"
+tmux -L "$L" new-session -d -s roly2 "sleep 300"; out="$(KP="$YK" KA ac roly2 2>&1)"; rc=$?
+kapi "Y2 o koltukta 'ac' rc 4, oturum KAPATILMADI, betik çağrılmadı" "4|1|0" "$rc|$(tmux -L "$L" has-session -t =roly2 2>/dev/null && echo 1 || echo 0)|$(grep -c '^grid' "$T/defter")"
+YD="$T/yarim"; mkdir -p "$YD/scripts" "$YD/_agents/handoff"
+printf 'uyeler:\n  - id: ROLV\n    tmux: "rolv:0"\n' > "$YD/_agents/handoff/aile-registry.yaml"
+printf '#!/usr/bin/env bash\nfor a in "$@"; do case "$a" in\n  --resume-if-known) : ;;\n  --dry-run) exit 0 ;;\nesac; done\necho "yarim $*" >> "%s"; exit 0\n' "$T/defter" > "$YD/scripts/ekip-ac.sh"; chmod +x "$YD/scripts/ekip-ac.sh"
+out="$(KP="$YD" KA ac rolv 2>&1)"; rc=$?
+kapi "Y3 doğuran görünen betik rc 0 döner ama oturum doğmaz → 'açıldı' DENMEZ, rc 1, sebep söylenir" "1|1|1" "$rc|$(echo "$out" | grep -c "oturumu yok")|$(grep -c '^yarim ROLV' "$T/defter")"
+# iki kol BİRLİKTE şart: biri çözücüde, öteki yalnız yorumdaysa açıcı DEĞİL (iki koşul birbirini örtmesin — mutasyon KO9 dersi)
+YT="$T/tekkol"; mkdir -p "$YT/scripts" "$YT/_agents/handoff"
+printf 'uyeler:\n  - id: ROLT\n    tmux: "rolt:0"\n' > "$YT/_agents/handoff/aile-registry.yaml"
+printf '#!/usr/bin/env bash\n# --resume-if-known burada yalnız yorum\nfor a in "$@"; do case "$a" in\n  --dry-run) exit 0 ;;\nesac; done\n' > "$YT/scripts/ekip-ac.sh"; chmod +x "$YT/scripts/ekip-ac.sh"
+kapi "Y4 --dry-run kolu var, --resume-if-known yalnız yorumda → açıcı değil (yol=yok)" "yok" "$(KP="$YT" KA durum rolt | j 'j["yol"]')"
+printf '#!/usr/bin/env bash\n# --dry-run burada yalnız yorum\nfor a in "$@"; do case "$a" in\n  --resume-if-known) : ;;\nesac; done\n' > "$YT/scripts/ekip-ac.sh"
+kapi "Y5 --resume-if-known kolu var, --dry-run yalnız yorumda → açıcı değil (yol=yok)" "yok" "$(KP="$YT" KA durum rolt | j 'j["yol"]')"
 echo; echo "GEÇEN: $gecen · KALAN: $kalan"; [ "$kalan" = 0 ]

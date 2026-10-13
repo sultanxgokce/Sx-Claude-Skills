@@ -1,0 +1,5 @@
+$ env TO_KUTU=Nexus bash terminal-onar/scripts/koltuk-ac.sh durum serdar
+# rc=0 sure=0.5s zaman=2026-10-13T18:48:01+03:00
+--- stdout ---
+{"ad":"serdar","durum":"canli","tmux":true,"claude":true,"hal":"girdi","son":1791897184,"rol":"SERDAR","resume":true,"yol":"ekip-ac","ana":false}
+--- stderr ---

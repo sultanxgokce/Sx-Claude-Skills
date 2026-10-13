@@ -12,7 +12,10 @@ open(p,"w").write(s.replace(a,b,1))' "$M/$1" "$2" "$3" || { echo "  ✗ $4 → d
   if kos "${5:-scripts/koltuk-ac.test.sh}"; then echo "  ✗ $4 → YEŞİL kaldı"; r=1; else echo "  ✓ $4 → kırmızı"; fi; }
 mut scripts/koltuk-ac.sh 'if [ -f "$BASLAT" ] && [ -f "$ISKAN" ]; then' 'if false; then' "KO1 İSKÂN açıcısı hiç seçilmiyor (2.4.0 hâli: kayıtlı koltuk 'kayıtsız')"
 mut scripts/koltuk-ac.sh '  ACICI=baslat; KAYIT="$ISKAN"' '  ACICI=baslat; KAYIT="$PROJE/_agents/handoff/aile-registry.yaml"' "KO2 İSKÂN'da kayıt aile-registry'den okunuyor (iki kopya → yanlış rol)"
-mut scripts/koltuk-ac.sh 'case "$_ea" in *--resume-if-known*) ACICI=ekip-ac ;; esac' 'ACICI=ekip-ac' "KO3 grid ekip-ac.sh da açıcı sayılıyor (koltuk kapanır, geri gelmez)"
+mut scripts/koltuk-ac.sh "  if [ -x \"\$EKIP_AC\" ] && grep -Eq" "  if [ -x \"\$EKIP_AC\" ]; then ACICI=ekip-ac; fi; if false && grep -Eq" "KO3 her çalıştırılabilir ekip-ac.sh açıcı sayılıyor (grid: koltuk kapanır, geri gelmez)"
+mut scripts/koltuk-ac.sh "grep -Eq '^[[:space:]]*--dry-run\\)' \"\$EKIP_AC\"" "grep -q 'dry-run' \"\$EKIP_AC\"" "KO11 --dry-run kolu metin aramasına döndü"
+mut scripts/koltuk-ac.sh "grep -Eq '^[[:space:]]*--resume-if-known\\)' \"\$EKIP_AC\"" "grep -q 'resume-if-known' \"\$EKIP_AC\"" "KO9 bayrak metin aramasına döndü (yorumdaki geçiş açıcı yapar)"
+mut scripts/koltuk-ac.sh '          if tmux_var "$AD"; then echo "açıldı: $AD ← ekip-ac.sh' '          if true; then echo "açıldı: $AD ← ekip-ac.sh' "KO10 ekip-ac rc 0 deyince oturum ölçülmeden 'açıldı'"
 mut scripts/koltuk-ac.sh '        if tmux_var "$AD"; then echo "açıldı:' '        if true; then echo "açıldı:' "KO4 düşen baslat-claude'a 'açıldı' deniyor"
 mut scripts/koltuk-ac.sh '{ [ "$YOL" = ekip-ac ] || [ "$YOL" = baslat ]; } && resume_var' '[ "$YOL" = ekip-ac ] && resume_var' "KO5 İSKÂN koltuğunda konuşma varken resume=false"
 mut scripts/koltuk-ac.sh 'CWD="$(cwd_bul "$ROL")"; [ -d "${CWD:-}" ] || CWD="$PROJE"' 'CWD="$PROJE"' "KO6 kayıttaki çalışma dizini yok sayılıyor"

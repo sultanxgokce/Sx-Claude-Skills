@@ -129,7 +129,9 @@ kapı yalnız taşır: `GET /api/koltuk/<ad>` · `POST /api/koltuk/<ad>/ac {eski
   **İSKÂN kutusu** (`scripts/baslat-claude.sh` + `iskan-registry.yaml`) → koltuk kayıtlı bir rolün tmux'uysa yeni tmux oturumunda
   `baslat-claude.sh <rol>`, kayıttaki `cwd`'de: ayrılmış kimlik, konuşma varsa ona döner (bu yolda ayrı "Eski sohbete dön" düğmesi
   yok — Aç zaten oraya döner); `TO_BASLAT_BEKLE` (3 sn) sonra oturum yaşamıyorsa "açıldı" DENMEZ (rc 1).
-  **Merkez** (`scripts/ekip-ac.sh` DOĞURAN sürüm — `--resume-if-known` bilir — + `aile-registry.yaml`) → `ekip-ac.sh <ROL>`
+  **Merkez** (`scripts/ekip-ac.sh` DOĞURAN sürüm + `aile-registry.yaml`) → `ekip-ac.sh <ROL>`. Doğuran sürüm YAPISINDAN tanınır:
+  argüman çözücüsünde `--resume-if-known)` VE `--dry-run)` kolları satır başında (yorumdaki geçiş sayılmaz; grid sürümü bayrakla
+  yoklanmaz, yan etkisi var). Betik rc 0 dese de koltuk oturumu yoksa "açıldı" denmez
   (**tek kanonik kapı:** canlıysa ikinci kopya AÇMAZ; `--eski` → `--resume-if-known`, eski sohbete dönüş; Claude'suz/takılı oturum
   önce kapatılır, sonra doğar). 🔴 İSKÂN kutularındaki **aynı adlı `ekip-ac.sh` başka betiktir** (var olanı tek pencerede toplar,
   oturum doğurmaz, rol almaz) → açıcı SAYILMAZ; sayılsaydı Aç Claude'suz oturumu kapatıp geri getirmezdi. Koltuk **ana** ise →
@@ -144,7 +146,8 @@ kapı yalnız taşır: `GET /api/koltuk/<ad>` · `POST /api/koltuk/<ad>/ac {eski
   takılı oturumu zorlasız KAPATMAZ (rc 5 / kapı 428); telefon penceresi önce sorar, onayla `--zorla` gider. (2.4.0: `koltuk-bagla.sh --liste` son-etkinlik alanı hep 0 basıyordu — `display-message -t =ad` bölme hedefi boş döner; `ad:` ile düzeltildi, 2.2.1 hâl düzeltmesinin ikizi.)
 - Sınav: `scripts/koltuk-ac.test.sh` (gerçek tmux, sahte ekip-ac: öldür→geri gel · eski sohbet · ikinci kopya yok · kayıtsız ret) ·
   `sunucu.test.mjs` KA0-KA10 · `kapi/tarayici-sinav.mjs` KD1-KD8 + KI1-KI3 · mutasyon M20-M22. 2.4.2: koltuk-ac.test.sh I1-I7 (İSKÂN:
-  baslat yolu, üç kaydın birlikte durduğu kutuda iskan kaydı seçilir, düşen baslat "açıldı" dedirtmez) + G1-G2 (grid ekip-ac açıcı değil).
+  baslat yolu, üç kaydın birlikte durduğu kutuda iskan kaydı seçilir, düşen baslat "açıldı" dedirtmez) + G1-G2 (grid ekip-ac açıcı değil) + Y1-Y5 (yorumdaki bayrak açıcı yapmaz, tek kol yetmez, oturumsuz rc 0 "açıldı"
+  dedirtmez); mutasyon `_agents/fabrika/kanit/koltuk-kayit-okuyucu/mutasyon.sh` KO1-KO11.
 
 ## Pano köprüsü — resim yapıştır · seçimi panoya al (2.3.1 · 13 Ekim — ana dalda 2.3.0 REVAK gerilemelerine (#303) gitti, pano köprüsü #304 ile 2.4.0 içinde iner; Sultan: "Cmd+C kopyalamıyor, resmi Cmd+V yapıştıramıyorum")
 Kapı, ttyd'nin HTML sayfasına `kapi/genel/pano.js`'i gömer (`ttydVekil`: yalnız 200 + `text/html` + düz gövde;
