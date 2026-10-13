@@ -6,7 +6,7 @@
 #                                          oturumu KAPATIP yeniden doğur (zorlasız: rc 5, dokunmaz — çalışıyor olabilir)
 #
 # DURUM (üçü ayrı gösterilir, Sultan: "oturum kapandı/bozuldu/silindi — tekrar açmak çok basit olmalı"):
-#   yok          = tmux oturumu yok
+#   yok          = tmux oturumu yok · olculemedi = oturum var ama liste ölçümü düştü (Claude yok SANILMAZ; zorlasız dokunulmaz)
 #   claude-yok   = oturum var, içinde Claude yok (kabuk/ölü)
 #   takili       = Claude var ama TAKILI_SN (vars. 900 s) süredir ekran değişmedi ve soru/girdi beklemiyor
 #   canli        = Claude var, hâl normal
@@ -62,7 +62,10 @@ durum_olc() {  # $1 ad → DURUM CLAUDE HAL SON değişkenleri
   DURUM=yok; CLAUDE=0; HAL=""; SON=0; TMUX_VAR=0
   tmux_var "$1" || return 0
   TMUX_VAR=1
-  local satir; satir="$(bash "$KOLTUK_BETIK" --liste 2>/dev/null | awk -F'\t' -v a="$1" '$1==a')"
+  # 🔴 FAIL-CLOSED (yedek göz tur 3): liste ölçümü düşerse (rc≠0 / satır yok) "Claude yok" SANILMAZ — eski hâl kayıtlı bir
+  #    koltuğu zorlasız KAPATIRDI. Ölçülemeyen → durum=olculemedi; 'ac' zorlasız dokunmaz.
+  local liste satir; liste="$(bash "$KOLTUK_BETIK" --liste 2>/dev/null)" || { DURUM=olculemedi; return 0; }
+  satir="$(printf '%s\n' "$liste" | awk -F'\t' -v a="$1" '$1==a')"; [ -n "$satir" ] || { DURUM=olculemedi; return 0; }
   SON="$(printf '%s' "$satir" | cut -f2)"; CLAUDE="$(printf '%s' "$satir" | cut -f3)"; HAL="$(printf '%s' "$satir" | cut -f5)"
   [ "${CLAUDE:-0}" = 1 ] || { DURUM=claude-yok; return 0; }
   local simdi; simdi=$(date +%s)
@@ -95,7 +98,9 @@ case "$KOMUT" in
         # takılı/Claude'suz oturumu önce kapat — ekip-ac.sh "canlı" sanıp yalnız attach komutunu basar, Claude geri gelmez
         # 🔴 TAKILI = görünüş (ekran değişmedi); uzun araç koşan sağlam bir Claude da öyle görünür (canlıda ölçüldü: BÂNİ'nin
         #    kendi koltuğu). Kapatmak işi keser → yalnız açık --zorla ile; telefon penceresi önce sorar.
-        if [ "$DURUM" = takili ] && [ $ZORLA = 0 ]; then echo "takılı görünüyor ama çalışıyor olabilir: kapatıp yeniden açmak için --zorla (işi keser)"; exit 5; fi
+        if [ "$DURUM" = takili ] && [ $ZORLA = 0 ]; then echo "takılı görünüyor ama çalışıyor olabilir (uzun bir iş): kapatıp yeniden açmak için --zorla (işi keser)"; exit 5; fi
+        if [ "$DURUM" = olculemedi ] && [ $ZORLA = 0 ]; then echo "koltuk ÖLÇÜLEMEDİ (liste betiği düştü) — Claude çalışıyor olabilir; dokunmadım. Zorlamak için --zorla"; exit 5; fi
+        [ "$DURUM" = olculemedi ] && [ $ZORLA = 1 ] && { tmux kill-session -t "=$AD" 2>/dev/null; gunluk "koltuk-ac: $AD (ölçülemedi) zorla kapatıldı"; }
         if [ "$DURUM" = claude-yok ] || [ "$DURUM" = takili ]; then tmux kill-session -t "=$AD" 2>/dev/null; gunluk "koltuk-ac: $AD ($DURUM) kapatıldı, yeniden doğacak (zorla=$ZORLA)"; fi
         if [ "$DURUM" = canli ]; then echo "zaten canlı: $AD (ikinci kopya açılmaz)"; exit 0; fi
         ARG=(); [ $ESKI = 1 ] && ARG=(--resume-if-known)

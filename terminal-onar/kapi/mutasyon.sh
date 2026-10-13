@@ -48,7 +48,7 @@ dene "M17 sıkıştırılmış ttyd cevabına dokunulmaz" sunucu.mjs "s=s.replac
 dene "M18 kapatma anahtarı (KAPI_PANO=0)" sunucu.mjs "s=s.replace(\"const PANO_ACIK = process.env.KAPI_PANO !== '0';\",\"const PANO_ACIK = true;\")"
 dene "M19 köprü tabanı taşır" sunucu.mjs "s=s.replace('const ek = \`<script>window.__TABAN=\${JSON.stringify(TABAN)};','const ek = \`<script>window.__TABAN=\"\";')"
 # ── Koltuk aç mutantları (2.4.0 · 13 Ekim)
-dene "M20 rc→HTTP eşlemesi (409/202/502)" sunucu.mjs "s=s.replace(\"const kod = r.kod === 0 ? 200 : r.kod === 3 ? 202 : r.kod === 4 ? 409 : 502;\",\"const kod = 200;\")"
+dene "M20 rc→HTTP eşlemesi (409/202/428/502)" sunucu.mjs "s=s.replace(\"const kod = r.kod === 0 ? 200 : r.kod === 3 ? 202 : r.kod === 4 ? 409 : r.kod === 5 ? 428 : 502;\",\"const kod = 200;\")"
 dene "M21 --eski bayrağı betiğe geçer" sunucu.mjs "s=s.replace(\"if (g.eski === true) arg.push('--eski');\",'')"
 dene "M22 bozuk koltuk adı yola girmez" sunucu.mjs "s=s.replace(\"/^\\\\/api\\\\/koltuk\\\\/([A-Za-z0-9_-]{1,64})(\\\\/ac)?$/\",\"/^\\\\/api\\\\/koltuk\\\\/([^/]{1,64})(\\\\/ac)?$/\")"
 echo "─────────────"

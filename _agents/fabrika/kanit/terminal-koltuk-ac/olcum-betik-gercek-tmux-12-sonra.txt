@@ -1,5 +1,5 @@
 $ bash terminal-onar/scripts/koltuk-ac.test.sh
-# rc=0 sure=2.0s zaman=2026-10-13T13:32:22+03:00
+# rc=0 sure=2.5s zaman=2026-10-13T13:37:44+03:00
 --- stdout ---
 ── D · durum üç ayrı
   ✓ D1 oturum yok → durum=yok, yol=ekip-ac, rol çözüldü, resume mümkün
@@ -23,8 +23,12 @@ $ bash terminal-onar/scripts/koltuk-ac.test.sh
   ✓ T7 takılı koltuğa zorlasız 'ac' → DOKUNMAZ (rc 5, oturum yaşıyor, 'çalışıyor olabilir')
   ✓ T8 --zorla ile takılı oturum kapatılıp ekip-ac ile yeniden doğar (rc 0, tek oturum)
   ✓ T6 tek argümanla çağrı → kullanım mesajı (bilinmeyen-argüman DEĞİL), rc 2
+── F · ölçüm düşerse FAIL-CLOSED (yedek göz tur 3: eski hâl yaşayan Claude'u kapatırdı)
+  ✓ F1 liste betiği düşerse durum=olculemedi (claude-yok DEĞİL)
+  ✓ F2 ölçülemeyen koltuğa zorlasız 'ac' DOKUNMAZ (rc 5, oturum yaşıyor)
+  ✓ F3 liste gelir ama satır yoksa da olculemedi
 ── N · olumsuz kontrol: ekip-ac.sh yoksa kayıtlı rol de açılmaz
   ✓ N1 betik yokken yol=yok (sessizce başka yola düşmez)
 
-GEÇEN: 20 · KALAN: 0
+GEÇEN: 23 · KALAN: 0
 --- stderr ---

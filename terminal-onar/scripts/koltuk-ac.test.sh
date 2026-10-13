@@ -45,7 +45,7 @@ mkdir -p "$T/beceri/scripts"; cp "$D/ortak.sh" "$T/beceri/scripts/"; cp "$D/kolt
 printf '#!/usr/bin/env bash\necho onar >> "%s"; exit "${ONAR_RC:-0}"\n' "$T/defter" > "$T/beceri/scripts/onar.sh"
 printf '#!/usr/bin/env bash\necho "kademe $*" >> "%s"\n' "$T/defter" > "$T/beceri/scripts/kademe.sh"; chmod +x "$T/beceri/scripts/"*.sh
 mkdir -p "$T/ev/.claude/projects/p" && : > "$T/ev/.claude/projects/p/11111111-2222-4333-8444-555555555555.jsonl"
-KA() { HOME="$T/ev" TO_KUTU=sinav TO_PROJE="$T/proje" TO_DURUM_DIZ="$T/durum" TO_KOLTUK_BETIK="$T/kb.sh" TO_ANA_TMUX=sinav-ana TO_BECERI_KOK="$T/beceri" \
+KA() { HOME="$T/ev" TO_KUTU=sinav TO_PROJE="$T/proje" TO_DURUM_DIZ="$T/durum" TO_KOLTUK_BETIK="${KB_OVERRIDE:-$T/kb.sh}" TO_ANA_TMUX=sinav-ana TO_BECERI_KOK="$T/beceri" \
        TMUX= bash -c "tmux() { command tmux -L '$L' \"\$@\"; }; export -f tmux; bash '$D/koltuk-ac.sh' \"\$@\"" _ "$@"; }
 j() { python3 -c "import json,sys;j=json.load(sys.stdin);print($1)"; }
 echo "── D · durum üç ayrı"
@@ -79,6 +79,15 @@ kapi "T7 takılı koltuğa zorlasız 'ac' → DOKUNMAZ (rc 5, oturum yaşıyor, 
 out="$(KA ac takili --zorla 2>&1)"; rc=$?
 kapi "T8 --zorla ile takılı oturum kapatılıp ekip-ac ile yeniden doğar (rc 0, tek oturum)" "0|1|1" "$rc|$(tmux -L "$L" list-sessions -F '#{session_name}' | grep -c '^takili$')|$(grep -c '^TAKILI' "$T/defter")"
 kapi "T6 tek argümanla çağrı → kullanım mesajı (bilinmeyen-argüman DEĞİL), rc 2" "1|2" "$(KA durum 2>&1 | grep -c 'kullanım:')|$(KA durum >/dev/null 2>&1; echo $?)"
+echo "── F · ölçüm düşerse FAIL-CLOSED (yedek göz tur 3: eski hâl yaşayan Claude'u kapatırdı)"
+printf '#!/usr/bin/env bash\nexit 3\n' > "$T/kb-bozuk.sh"; chmod +x "$T/kb-bozuk.sh"
+KAB() { KB_OVERRIDE="$T/kb-bozuk.sh" KA "$@"; }
+KA ac rolx >/dev/null 2>&1   # rolx canlı olsun
+kapi "F1 liste betiği düşerse durum=olculemedi (claude-yok DEĞİL)" "olculemedi" "$(KAB durum rolx | j 'j["durum"]')"
+out="$(KAB ac rolx 2>&1)"; rc=$?
+kapi "F2 ölçülemeyen koltuğa zorlasız 'ac' DOKUNMAZ (rc 5, oturum yaşıyor)" "5|1" "$rc|$(tmux -L "$L" has-session -t =rolx 2>/dev/null && echo 1 || echo 0)"
+printf '#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\nprintf "baska\\t0\\t1\\tajan\\tcalisiyor\\n"\n' > "$T/kb-eksik.sh"; chmod +x "$T/kb-eksik.sh"
+kapi "F3 liste gelir ama satır yoksa da olculemedi" "olculemedi" "$(KB_OVERRIDE="$T/kb-eksik.sh" KA durum rolx | j 'j["durum"]')"
 echo "── N · olumsuz kontrol: ekip-ac.sh yoksa kayıtlı rol de açılmaz"
 mv "$T/proje/scripts/ekip-ac.sh" "$T/proje/scripts/ekip-ac.sh.kapali"
 kapi "N1 betik yokken yol=yok (sessizce başka yola düşmez)" "yok" "$(KA durum rolx | j 'j["yol"]')"

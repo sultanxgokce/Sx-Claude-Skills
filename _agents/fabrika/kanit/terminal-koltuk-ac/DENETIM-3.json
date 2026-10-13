@@ -1,0 +1,50 @@
+{
+  "tur": 3,
+  "is": "terminal-koltuk-ac",
+  "pr": "",
+  "yazan": "fable",
+  "denetci": "claude",
+  "zaman": "2026-10-13T13:34:56+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 87550,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Tek tuşla koltuk açma hattı (betik + kapı + telefon penceresi) kurulmuş; tur-2'nin açıkları kapanmış: takılı hâli gerçek tmux'ta tetikleniyor, ana koltuk onar/merdiven yolu koşuyor, 120 sn + 504, canlı durum kaydı düzeltme sonrası yeniden alınmış, canlı eski-sohbet kanıtı kendi kaydını üretiyor. Ama 'ölçülemedi' ile 'Claude yok' aynı kaba konmuş: liste betiği düşünce kayıtlı canlı koltuk 'claude-yok' okunur ve zorlasız 'ac' o oturumu KAPATIR — 'çok sağlam' şartını delen açık-kapı; önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "Ölçüm hatası 'Claude yok' sayılıyor (fail-open): koltuk-bagla.sh --liste düşünce (rc 3 / boş satır) CLAUDE boş kalır → durum=claude-yok; kayıtlı bir rolse 'ac' --zorla OLMADAN tmux kill-session çalıştırır ve yaşayan Claude oturumunu kapatır. Takılı için kurulan 'sorulmadan dokunma' kalkanı bu yolda yok.",
+        "kanit": "Kendim ölçtüm: TO_KOLTUK_BETIK=<exit 3 betiği> ile `koltuk-ac.sh durum bani` → {\"durum\":\"claude-yok\",\"claude\":false,\"rol\":\"BÂNİ\",\"yol\":\"ekip-ac\"} (gerçek liste ile aynı koltuk claude:true). durum_olc satırı: `bash \"$KOLTUK_BETIK\" --liste 2>/dev/null | awk …` — çıkış kodu boruda kaybolur, `[ \"${CLAUDE:-0}\" = 1 ] || DURUM=claude-yok`. ac dalı: `if [ \"$DURUM\" = claude-yok ] || [ \"$DURUM\" = takili ]; then tmux kill-session -t \"=$AD\"`. Hiçbir sınav liste-betiği-düşerken 'ac' senaryosunu ölçmüyor (koltuk-ac.test.sh N1 yalnız ekip-ac yokluğunu sınar).",
+        "konum": "terminal-onar/scripts/koltuk-ac.sh:64-67 (durum_olc) ve :97-98 (kill-session)",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Takılı → rc 5 → 428 yolu kapıda ve telefonda sınavsız: sunucu.test.mjs'de rc5/428 vakası yok, mutasyon M20 eşlemesi 428'i kapsamıyor; tarayıcı KD6 yalnız düğmenin etkin olduğunu doğrular, confirm → {zorla:true} gönderimi hiç tıklanmıyor.",
+        "kanit": "grep -n '428|rc === 5|zorla' sunucu.test.mjs tarayici-sinav.mjs → boş; mutasyon.sh M20 dizesi yalnız 409/202/502; tarayici-sinav.mjs KD6 satırı `#koltukBasla` textContent+disabled ölçer, click yok.",
+        "konum": "terminal-onar/kapi/sunucu.test.mjs:445-456; terminal-onar/kapi/mutasyon.sh:51; terminal-onar/kapi/tarayici-sinav.mjs:88-90",
+        "agirlik": "rotus"
+      },
+      {
+        "ne": "Pencere, kapıdan gelen `rol` alanını innerHTML'e kaçışsız basıyor; rol aile-registry YAML'ından `\\S+` ile okunuyor, '<' içerebilir.",
+        "kanit": "uygulama.js: `kayıtlı rol <b>${j.rol}</b>` → d.innerHTML; koltuk-ac.sh rol_bul: `re.match(r'\\s*-\\s*id:\\s*(\\S+)')` süzgeçsiz.",
+        "konum": "terminal-onar/kapi/genel/uygulama.js:340-341",
+        "agirlik": "rotus"
+      },
+      {
+        "ne": "Takılı sezgisi canlıda yazanın kendi aktif koltuğunu 'takılı' okuyor (hal=calisiyor + 900 sn ekran değişmemiş): uzun araç koşan sağlam Claude ile asılı Claude ayırt edilmiyor; 'çalışıyor' hâli en azından pencerede ayrıca söylenmeli, eşik belgelenmiş ama ölçülmüş bir değer değil.",
+        "kanit": "Kendim ölçtüm (13:5x): `koltuk-ac.sh durum bani` → {\"durum\":\"takili\",\"hal\":\"calisiyor\",\"son\":1791885762} — bu denetimi yazan BÂNİ oturumu o anda çalışıyordu. SKILL.md de 'canlıda ölçüldü: BÂNİ'nin kendi koltuğu' diye kabul ediyor; 900 sn eşiği için ölçüm kaydı yok.",
+        "konum": "terminal-onar/scripts/koltuk-ac.sh:69; terminal-onar/SKILL.md:135-137",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam, 8 kayıt yeşil, sarı yok; koltuk-ac.test.sh'yi kendim koşturdum: 20/20. Tur-2 bulguları kapanmış: T1-T3 gerçek tmux'ta takılı/soru/eşik, T4-T5 onar.sh K0 ve kademe merdiveni (sahte onar.sh ile, kabul edilebilir), T7-T8 zorlasız-dokunmaz/zorla-yeniden-doğar, KA11-KA13 takılı geçişi ve 504; canli-code-kutusu-durum 13:32'de düzeltme SONRASI yeniden alınmış (son=epoch, bani=canli/girdi), canli-eski-sohbet.sh artık reg.yaml'ı kendi üretiyor ve gerçek ekip-ac.sh ile aynı sid'e dönüşü + tek oturumu gösteriyor. Eksikler: kare tek ve sınav verisiyle; kayıtların hemen hepsi yalnız 'sonra' aşamasında (önce/sonra çifti yalnız son-etkinlik kaydında); liste-ölçümü düşerken 'ac' davranışı ve 428/zorla yolu hiçbir kayıtta ölçülmemiş — ilk bulgu tam bu boşluktan çıktı."
+  }
+}

@@ -88,6 +88,10 @@ try {
   await pg.evaluate(() => document.getElementById('koltukP').close()); await pg.selectOption('#koltuk', 'sedir-ana'); await pg.waitForTimeout(200); await pg.click('#koltukAc'); await pg.waitForFunction(() => /takılı/.test(document.getElementById('koltukDurum').textContent), null, { timeout: 5000 }).catch(() => {});
   dm = await pg.$eval('#koltukDurum', (e) => e.textContent);
   kapi('KD6 TAKILI koltuk (üçüncü hâl): "Claude takılı görünüyor" + ana koltuk (onarım betiği), eylem "Yeniden aç" etkin', /takılı görünüyor/.test(dm) && /ana koltuk/.test(dm) && (await pg.$eval('#koltukBasla', (e) => e.textContent + '|' + e.disabled)) === 'Yeniden aç|false', `→ ${dm}`);
+  pg.once('dialog', (d) => d.dismiss()); await pg.click('#koltukBasla'); await pg.waitForTimeout(400);
+  kapi('KD7 takılıda "Yeniden aç" → onay sorulur; VAZGEÇ → hiçbir şey gönderilmez', !/ac sedir-ana/.test(readFileSync(KA_DEFTER, 'utf8')));
+  pg.once('dialog', (d) => d.accept()); await pg.click('#koltukBasla'); await pg.waitForTimeout(400);
+  kapi('KD8 onaylanınca {zorla:true} → betik "ac sedir-ana --zorla"', readFileSync(KA_DEFTER, 'utf8').trim().split('\n').includes('ac sedir-ana --zorla'), `→ ${readFileSync(KA_DEFTER, 'utf8').trim().split('\n').slice(-2).join(' | ')}`);
   if (KARE) await pg.screenshot({ path: `${KARE}-koltuk-pencere.png` });
 } finally { await b.close(); k1.kill(); k2.kill(); }
 console.log(`\nGEÇEN: ${gecen} · KALAN: ${kalan}`); process.exit(kalan ? 1 : 0);

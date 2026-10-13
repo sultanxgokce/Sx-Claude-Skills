@@ -1,5 +1,5 @@
 $ bash -c cd terminal-onar/kapi && node sunucu.test.mjs
-# rc=0 sure=5.8s zaman=2026-10-13T13:32:28+03:00
+# rc=0 sure=5.8s zaman=2026-10-13T13:37:49+03:00
 --- stdout ---
 
 ── T · TABAN YOLU (kapı /sedir altında) ──
@@ -92,7 +92,9 @@ $ bash -c cd terminal-onar/kapi && node sunucu.test.mjs
   ✓ KA11 üçüncü hâl "takili" kapıdan olduğu gibi geçer (son epoch dolu)
   ✓ KA12 açma süreyi aşarsa 504 + "arkada doğmuş olabilir" (502 açılamadı DEĞİL)
   ✓ KA13 süre içinde biten açma 200 (KA12 tautoloji değil)
+  ✓ KA14 takılı/ölçülemeyen koltuk zorlasız → rc5 → 428 tamam:false (dokunulmadı)
+  ✓ KA15 {zorla:true} → betiğe --zorla geçer
 
 ────────────────────────────────────────────────────────
-GECEN: 81  ·  KALAN: 0
+GECEN: 83  ·  KALAN: 0
 --- stderr ---

@@ -1,29 +1,29 @@
 {
   "is": "terminal-koltuk-ac",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-13T13:33:04+03:00",
+  "guncelleme": "2026-10-13T13:40:24+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "betik-gercek-tmux-12",
       "asama": "sonra",
       "dosya": "olcum-betik-gercek-tmux-12-sonra.txt",
-      "sha256": "c14fb12a8e7b96573b81d0bafb9512a9b282c375b91528c13f997f316f7ea42f",
+      "sha256": "27ef26a3c42bc72cb2217fa06e6dc0337b807b747200a0ce9a9fbc4ea46f65b5",
       "komut": [
         "bash",
         "terminal-onar/scripts/koltuk-ac.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T13:32:22+03:00",
-      "sure_sn": 2.0
+      "zaman": "2026-10-13T13:37:44+03:00",
+      "sure_sn": 2.5
     },
     {
       "tur": "olcum",
       "etiket": "kapi-birim-78",
       "asama": "sonra",
       "dosya": "olcum-kapi-birim-78-sonra.txt",
-      "sha256": "01a30adff6e5e8d72316bec3db27169304c4d2bc5df9f3d45d4cb5768bb46f2a",
+      "sha256": "d88c0ce52dd8bd6747eb355810cadacc3e22e24a0e2382646abcd83429d31d6a",
       "komut": [
         "bash",
         "-c",
@@ -31,7 +31,7 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T13:32:28+03:00",
+      "zaman": "2026-10-13T13:37:49+03:00",
       "sure_sn": 5.8
     },
     {
@@ -39,7 +39,7 @@
       "etiket": "telefon-pencere-15",
       "asama": "sonra",
       "dosya": "olcum-telefon-pencere-15-sonra.txt",
-      "sha256": "ec352e0c0aa5249f8cc6c6c378e3e4adbcc6b639af56fb02bc0ba841e1bd5d08",
+      "sha256": "5f6032914cdc4ef6b20c2158642d077379454d6dd9f204683b76890fb7cee0e9",
       "komut": [
         "node",
         "terminal-onar/kapi/tarayici-sinav.mjs",
@@ -48,8 +48,8 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T13:32:38+03:00",
-      "sure_sn": 10.0
+      "zaman": "2026-10-13T13:38:00+03:00",
+      "sure_sn": 10.7
     },
     {
       "tur": "olcum",
@@ -72,26 +72,26 @@
       "etiket": "mutasyon-22",
       "asama": "sonra",
       "dosya": "olcum-mutasyon-22-sonra.txt",
-      "sha256": "80843c5f4a2007a59f63d0d3ff72990d7c4806dbaf2728f89def37168751eb39",
+      "sha256": "9a72500900333ddeb8bb590b9a1b13c8d7478a371c4389e98bc641bbdc9e2e50",
       "komut": [
         "bash",
         "terminal-onar/kapi/mutasyon.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T12:35:00+03:00",
-      "sure_sn": 130.8
+      "zaman": "2026-10-13T13:40:24+03:00",
+      "sure_sn": 143.9
     },
     {
       "tur": "dosya",
       "etiket": "kare-koltuk-pencere",
       "asama": "sonra",
       "dosya": "dosya-kare-koltuk-pencere-sonra.png",
-      "sha256": "110f97fa96e23c53aa6c10bd842b3d37adfc672dd91789e7e775ba99d3a77070",
+      "sha256": "eba42c8b42473cde15a00ccc611df313f586551b9d5f731015e8325432282303",
       "kaynak": "/tmp/claude-1000/koltuk-koltuk-pencere.png",
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T13:33:04+03:00"
+      "zaman": "2026-10-13T13:40:24+03:00"
     },
     {
       "tur": "olcum",
@@ -125,5 +125,5 @@
       "sure_sn": 0.9
     }
   ],
-  "imza": "8e0b1898cda3554b566bac6157d1aa6d0f3e9405c1cc6416aaf8ca9bd1f6bbab"
+  "imza": "ec871e1f9e7dcc40cd341aded22bbad065a8b017fd2ca1531703a7675be4ebc6"
 }

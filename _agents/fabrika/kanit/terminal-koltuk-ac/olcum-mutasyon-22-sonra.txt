@@ -1,5 +1,5 @@
 $ bash terminal-onar/kapi/mutasyon.sh
-# rc=0 sure=130.8s zaman=2026-10-13T12:35:00+03:00
+# rc=0 sure=143.9s zaman=2026-10-13T13:40:24+03:00
 --- stdout ---
   ✓ M1 taban dışı reddi — kapı ölünce sınav KIRMIZI
   ✓ M2 taban sonu yönlendirme — kapı ölünce sınav KIRMIZI
@@ -20,7 +20,7 @@ $ bash terminal-onar/kapi/mutasyon.sh
   ✓ M17 sıkıştırılmış ttyd cevabına dokunulmaz — kapı ölünce sınav KIRMIZI
   ✓ M18 kapatma anahtarı (KAPI_PANO=0) — kapı ölünce sınav KIRMIZI
   ✓ M19 köprü tabanı taşır — kapı ölünce sınav KIRMIZI
-  ✓ M20 rc→HTTP eşlemesi (409/202/502) — kapı ölünce sınav KIRMIZI
+  ✓ M20 rc→HTTP eşlemesi (409/202/428/502) — kapı ölünce sınav KIRMIZI
   ✓ M21 --eski bayrağı betiğe geçer — kapı ölünce sınav KIRMIZI
   ✓ M22 bozuk koltuk adı yola girmez — kapı ölünce sınav KIRMIZI
 ─────────────
