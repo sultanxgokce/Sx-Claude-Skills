@@ -1,0 +1,11 @@
+$ bash -c cd terminal-onar && (cd kapi && node sunucu.test.mjs 2>&1 | tail -1) && (cd scripts && bash kur-bag.test.sh 2>&1 | tail -1 && bash onar.test.sh 2>&1 | tail -1 && bash sifre-yukle.test.sh 2>&1 | tail -1 && bash kutu-adi.test.sh 2>&1 | tail -1 && bash koltuk-bagla.test.sh 2>&1 | tail -1) && (cd kapi && bash mutasyon.sh 2>&1 | tail -1)
+# rc=0 sure=79.6s zaman=2026-10-13T12:24:13+03:00
+--- stdout ---
+GECEN: 53  ·  KALAN: 0
+SONUÇ: 33 geçti · 0 kaldı
+SONUÇ: 9 geçti · 0 kaldı
+sifre-yukle.test: 6 geçti · 0 kaldı
+SONUÇ: 9 geçti · 0 kaldı
+toplam=43 geçen=43 düşen=0
+MUTASYON: gecti=13 dusen=0
+--- stderr ---

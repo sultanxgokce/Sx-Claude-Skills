@@ -1,0 +1,7 @@
+$ bash -c cd terminal-onar/scripts && bash onar.test.sh 2>&1 | grep -E "K4|geçti"
+# rc=0 sure=2.0s zaman=2026-10-13T12:31:26+03:00
+--- stdout ---
+  ✓ K4 kapı komutunda rapor dizini kabuk-kaçışlı girer (printf %q)
+  ✓ K4b boşluk ve metakarakter içeren dizin kapıya BİREBİR ulaşır, komutu bölmez
+SONUÇ: 11 geçti · 0 kaldı
+--- stderr ---
