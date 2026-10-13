@@ -1,6 +1,6 @@
 {
   "is": "koltuk-kayit-okuyucu",
-  "cumle": "koltuk-ac.sh kayıt okuyucusu tek yerde: aile-registry.yaml ya da ekip-registry.yaml — İSKÂN kutularında (7) kayıtlı koltukta Aç rol bulamıyordu (#304 kusuru) — G-BANI-0002/4 ilk dilim",
+  "cumle": "koltuk-ac.sh kayıt okuyucusu tek yerde: aile-registry.yaml ya da ekip-registry.yaml — İSKÂN kutularında (7) kayıtlı koltukta Aç rol bulamıyordu (#304 kusuru) — G-BANI-0002/4 ilk dilim || ÖLÇÜM SONRASI KAPSAM (SERDAR onayı, 2026-10-13 aile-notify, tmux serdar:0: 'kart metnini ölçülen kapsama genişlet', beyan:BANI): açıcı ve kayıt BİRLİKTE seçilir — İSKÂN kutusu → scripts/baslat-claude.sh <rol> + iskan-registry.yaml (yeni tmux oturumu, kayıttaki cwd, oturum yaşamıyorsa 'açıldı' denmez); merkez → doğuran ekip-ac.sh (--resume-if-known) + aile-registry.yaml; İSKÂN'daki grid ekip-ac.sh açıcı sayılmaz. Etkilenen 11 kutu: akar · enis · huzur · maiset · menzil · nazir · nova · s02 · sedir · tellal · tez (mmex kutu içinden açıcısız, yol=yok). Ekranda 1 satır: İSKÂN koltuğunda 'açılınca kendi sohbetine döner', ayrı 'Eski sohbete dön' gizli. Gerekçe (SERDAR): #304'ün hedefi 'Aç her koltukta çalışsın'; genişleme o hedefin içinde, yeni yetki yok.",
   "istedi": "SERDAR",
   "aldi": "BANI",
   "zaman": "2026-10-13T18:33:09+03:00",
@@ -15,5 +15,12 @@
   "kanit_nerede": "_agents/fabrika/kanit/koltuk-kayit-okuyucu",
   "oda": "merkez",
   "durum": "acik",
-  "gecmis": []
+  "gecmis": [
+    {
+      "zaman": "2026-10-13T19:05:00+03:00",
+      "olay": "kapsam-genisletme",
+      "kim": "BANI",
+      "dayanak": "SERDAR onayı (aile-notify, serdar:0)"
+    }
+  ]
 }

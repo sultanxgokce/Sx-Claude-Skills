@@ -25,7 +25,7 @@ EKIP_AC="${TO_EKIP_AC:-$PROJE/scripts/ekip-ac.sh}"
 BASLAT="${TO_BASLAT:-$PROJE/scripts/baslat-claude.sh}"
 BASLAT_BEKLE="${TO_BASLAT_BEKLE:-3}"   # açılıştan sonra oturumun yaşadığını ölçmeden "açıldı" denmez
 # AÇICI ve KAYIT BİRLİKTE seçilir — kayıt, koltuğu FİİLEN açacak betiğin okuduğu dosyadır (tek kaynak, iki kopya yok).
-#   🔴 13 Eki 2026 canlı ölçüm (G-BANI-0002/4): 2.4.0 yalnız aile-registry.yaml okuyordu. Merkez dışındaki 12 kutu İSKÂN
+#   🔴 13 Eki 2026 canlı ölçüm (G-BANI-0002/4): 2.4.0 yalnız aile-registry.yaml okuyordu. Merkez dışındaki 11 kutu İSKÂN
 #   doğumlu: koltuğu `scripts/baslat-claude.sh <rol>` açar, rolü `iskan-registry.yaml`'dan çözer (ayrılmış oturum kimliği →
 #   kendi sohbetine kendiliğinden döner). Oralarda kayıtlı koltuk "kayıtsız" görünüyor, Aç çalışmıyordu (enis ENIS/MURSIT).
 #   Aynı adlı `ekip-ac.sh` İSKÂN kutularında BAŞKA bir betiktir: var olan oturumları tek pencerede toplar, oturum DOĞURMAZ

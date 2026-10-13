@@ -1,7 +1,7 @@
 {
   "is": "koltuk-kayit-okuyucu",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-13T18:42:37+03:00",
+  "guncelleme": "2026-10-13T18:45:05+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -102,7 +102,59 @@
       "renk": "yesil",
       "zaman": "2026-10-13T18:42:37+03:00",
       "sure_sn": 70.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-12-kutu",
+      "asama": "once",
+      "dosya": "olcum-canli-12-kutu-once.txt",
+      "sha256": "4da1afc8ccef0ccfc07b50df23f2ccf79030909f7b37a08435f910f40b20def6",
+      "komut": [
+        "timeout",
+        "200",
+        "bash",
+        "_agents/fabrika/kanit/koltuk-kayit-okuyucu/on-iki-kutu.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-13T18:44:32+03:00",
+      "sure_sn": 0.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-12kutu",
+      "asama": "once",
+      "dosya": "olcum-canli-12kutu-once.txt",
+      "sha256": "4d965fbd2ac5e6c6f576f0008086d334481d8f8819a529eeab7428a98b861b63",
+      "komut": [
+        "timeout",
+        "200",
+        "bash",
+        "_agents/fabrika/kanit/koltuk-kayit-okuyucu/on-iki-kutu.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T18:44:49+03:00",
+      "sure_sn": 8.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-12kutu",
+      "asama": "sonra",
+      "dosya": "olcum-canli-12kutu-sonra.txt",
+      "sha256": "9cf9805ff1955af20e0e9e976ac4d4493dc274c854f5701d565fd5cfe16f9350",
+      "komut": [
+        "timeout",
+        "200",
+        "bash",
+        "_agents/fabrika/kanit/koltuk-kayit-okuyucu/on-iki-kutu.sh",
+        "terminal-onar/scripts/koltuk-ac.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T18:45:05+03:00",
+      "sure_sn": 11.4
     }
   ],
-  "imza": "99afe6b4ba455d49564a8e2aaf9fafa236503e9009eb40c5110c6bbce8b2f682"
+  "imza": "d9e3a0a20f546662694a896d4281f6dfa0dbddd9d45d2329bd266e1436ecfe86"
 }

@@ -1,0 +1,16 @@
+$ timeout 200 bash _agents/fabrika/kanit/koltuk-kayit-okuyucu/on-iki-kutu.sh
+# rc=0 sure=8.9s zaman=2026-10-13T18:44:49+03:00
+--- stdout ---
+akar    MUTEVELLI    yol=yok      rol=-            durum=canli
+enis    ENIS         yol=yok      rol=-            durum=claude-yok
+huzur   huzur-yon    yol=yok      rol=huzur-yon    durum=claude-yok
+maiset  BASIRET      yol=yok      rol=-            durum=claude-yok
+menzil  MENZILCI     yol=yok      rol=-            durum=canli
+mmex    SINAN        yol=yok      rol=-            durum=yok
+nazir   nazir-yon    yol=ekip-ac  rol=nazir-yon    durum=canli
+nova    nova-kalfa   yol=yok      rol=-            durum=canli
+s02     s02-yon      yol=yok      rol=-            durum=yok
+sedir   sedir-yon    yol=yok      rol=sedir-yon    durum=yok
+tellal  MEDDAH       yol=yok      rol=-            durum=canli
+tez     tez-yon      yol=yok      rol=tez-yon      durum=yok
+--- stderr ---

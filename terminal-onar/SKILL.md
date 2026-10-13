@@ -136,8 +136,9 @@ kapı yalnız taşır: `GET /api/koltuk/<ad>` · `POST /api/koltuk/<ad>/ac {eski
   `onar.sh` (K0), düşerse merdiven (`kademe.sh`). Hiçbiri değilse → **kayıtsız koltuk AÇILMAZ**, sebebi söylenir: kimliksiz Claude
   başka kimliğe düşer (ölçülmüş vaka); önce işe alma (madde 6).
 - **Ölçüldü (13 Eki, 2.4.2 ile düzeltildi):** 2.4.0 notu "`ekip-ac.sh` 3 kutuda" diyordu, yanlıştı. Kutuların kendi proje
-  dizininde: **12 kutu İSKÂN** (`baslat-claude.sh` + `iskan-registry.yaml`: akar · enis · huzur · maiset · menzil · mmex · nazir · nova ·
-  s02 · sedir · tellal · tez), **doğuran `ekip-ac.sh` yalnız merkezde**. 2.4.0 bu 12 kutuda yalnız ana koltuğu açabiliyordu
+  dizininde: **11 kutu İSKÂN** (`baslat-claude.sh` + `iskan-registry.yaml`: akar · enis · huzur · maiset · menzil · nazir · nova ·
+  s02 · sedir · tellal · tez; mmex'te host dizininde dosyalar var ama kutunun içinde `MMEx` başka bir bağlamayla örtülü — kutu
+  içinden açıcı yok, `yol=yok` doğru), **doğuran `ekip-ac.sh` yalnız merkezde**. 2.4.0 bu 11 kutuda yalnız ana koltuğu açabiliyordu
   (canlı: enis ENIS/MURSIT `rol=""` `yol=yok`). `takili` = Claude var ∧ ekran `TO_TAKILI_SN` (900 s) süredir değişmemiş ∧ soru/girdi
   beklemiyor. 🔴 **Ölçülemeyen koltuk fail-closed:** liste betiği düşer/satır yoksa `olculemedi` — "Claude yok" sanılmaz, zorlasız dokunulmaz (yedek göz tur 3: eski hâl yaşayan oturumu kapatabilirdi). 🔴 **Ana koltuk da aynı kapıdan geçer:** takılı/ölçülemeyen ana koltukta zorlasız rc 5, `--zorla` oturumu kapatır ve onar.sh K0 kayıtlı konuşmaya döner (yedek göz tur 4: eski hâl onar.sh'yi doğrudan çağırıyor, o da "Claude zaten çalışıyor" deyip rc 0 dönüyordu → telefon yanlış "Açıldı" yazıyordu). 🔴 **Takılı = görünüş:** uzun araç koşan sağlam bir Claude da öyle görünür (canlıda ölçüldü: BÂNİ'nin kendi koltuğu) → `ac`
   takılı oturumu zorlasız KAPATMAZ (rc 5 / kapı 428); telefon penceresi önce sorar, onayla `--zorla` gider. (2.4.0: `koltuk-bagla.sh --liste` son-etkinlik alanı hep 0 basıyordu — `display-message -t =ad` bölme hedefi boş döner; `ad:` ile düzeltildi, 2.2.1 hâl düzeltmesinin ikizi.)
@@ -253,7 +254,7 @@ süreci **11 gün** yoktu, gösterge crontab satırına bakıp "ok" diyordu. Sı
 hermetik, sahte crontab/tmux; B11 mutasyon: eski gösterge geri gelince B2 yakalar).
 
 ## Sürüm notları
-- **2.4.2 (2026-10-13, BÂNİ · G-BANI-0002/4 ilk dilim — #304'ün kusuru):** Aç, merkez dışındaki 12 İSKÂN kutusunda kayıtlı
+- **2.4.2 (2026-10-13, BÂNİ · G-BANI-0002/4 ilk dilim — #304'ün kusuru):** Aç, merkez dışındaki 11 İSKÂN kutusunda kayıtlı
   koltuğu "kayıtsız" sanıyordu: `koltuk-ac.sh` yalnız `aile-registry.yaml` okuyordu, bu kutuların açıcısı ise
   `baslat-claude.sh` + `iskan-registry.yaml`. Açıcı ve kayıt artık birlikte seçilir; İSKÂN'daki grid `ekip-ac.sh` açıcı sayılmaz.
   Ekran: İSKÂN koltuğunda "açılınca kendi sohbetine döner", ayrı "Eski sohbete dön" gizli.
