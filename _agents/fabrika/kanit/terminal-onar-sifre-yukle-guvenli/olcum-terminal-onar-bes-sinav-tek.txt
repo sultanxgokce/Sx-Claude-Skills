@@ -1,0 +1,9 @@
+$ bash -c for t in kutu-adi kur-bag onar koltuk-bagla kabuk-kapisi; do printf "%s: " "$t"; bash $t.test.sh 2>&1 | tail -1; done; for t in kutu-adi kur-bag onar koltuk-bagla kabuk-kapisi; do bash $t.test.sh >/dev/null 2>&1 || exit 1; done
+# rc=0 sure=18.8s zaman=2026-10-13T11:11:19+03:00
+--- stdout ---
+kutu-adi: SONUÇ: 9 geçti · 0 kaldı
+kur-bag: SONUÇ: 33 geçti · 0 kaldı
+onar: SONUÇ: 9 geçti · 0 kaldı
+koltuk-bagla: toplam=43 geçen=43 düşen=0
+kabuk-kapisi: SONUÇ: 9 geçti · 0 kaldı
+--- stderr ---

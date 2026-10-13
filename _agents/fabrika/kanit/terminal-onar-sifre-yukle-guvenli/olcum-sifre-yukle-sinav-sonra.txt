@@ -1,0 +1,12 @@
+$ bash sifre-yukle.test.sh
+# rc=0 sure=0.0s zaman=2026-10-13T11:12:08+03:00
+--- stdout ---
+     rc=0 bozuk=3 sifre_uzunluk=15 tek=a=b bos=[] sifre_var=1
+  ✓ E1 AD=değer satırları yüklendi (tırnak soyuldu, export öneki kabul)
+  ✓ E2 parola anahtarı kutu adından türedi ve doldu (sifre_var_mi=1)
+  ✓ E3 bozuk satır KOMUT gibi KOŞMADI (touch işareti yok)
+  ✓ E4 stderr'e değer parçası/command-not-found düşmedi
+  ✓ E5 bozuk satırlar SAYILDI (3: touch · çıplak değer · token_type), içerik basılmadı
+  ✓ E6 dosya yoksa rc=1, ortam dokunulmadı
+sifre-yukle.test: 6 geçti · 0 kaldı
+--- stderr ---

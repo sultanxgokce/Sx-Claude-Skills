@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.2.1
+version: 2.2.2
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -179,3 +179,10 @@ savunma odur. "Ölçemedim" ile "gerek yok" aynı şey değildir.
 Kanıt: `kapi/rapor.test.mjs` (**30 kapı**, gerçek süreç + gerçek HTTP) · `kapi/rapor.mutasyon.sh`
 (8 koruma öldürüldü, 8'i de sınavı kırmızıya çevirdi) · `kapi/rapor-kapi.test.sh` (koşucunun
 gördüğü çağıran — depo kapısı yalnız kabuk sınavlarını keşfediyor).
+
+## Sürüm notları
+- **2.2.2 (2026-10-13, MUAVİN · sır-hijyeni):** `sifre_yukle` erişim ortam dosyasını artık **source etmiyor**; yalnız
+  `AD=değer` satırlarını okuyor (`ortam_yukle`, çevreleyen tırnak soyulur, `export` öneki kabul). Niçin: 13 Ekim onarım
+  turunda üç kutuda (code 135 · tellal 7 · mmex 1) dosyada ad=değer olmayan satırlar vardı; `. dosya` onları KOMUT gibi
+  koşturdu ve "command not found" ile değer parçaları stderr'e düştü. Bozuk satırlar sayılır (`ORTAM_BOZUK_SATIR`), içeriği
+  basılmaz. Sınav `sifre-yukle.test.sh` (6 kapı, hermetik); mutasyon: eski source yolu geri gelince E3/E4 kırmızı.
