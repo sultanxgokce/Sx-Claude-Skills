@@ -1,0 +1,16 @@
+$ bash _agents/fabrika/kanit/iskan-kayit-koruma/mutasyon.sh /config/projects/_wt/Sx-Claude-Skills-iskan-kayit-koruma
+# rc=0 sure=49.4s zaman=2026-10-13T21:01:15+03:00
+--- stdout ---
+  ✓ P0 pozitif kontrol: mutasyonsuz kopya yeşil
+  ✓ M1-ey-kapisi-yok: kırmızı (8 kapı düştü)
+  ✓ M2-ue-kapisi-yok: kırmızı (2 kapı düştü)
+  ✓ M3-hep-ekleme-say: kırmızı (7 kapı düştü)
+  ✓ M4-varsayilan-kabul: kırmızı (5 kapı düştü)
+  ✓ M5-dry-run-durur: kırmızı (1 kapı düştü)
+  ✓ M6-olculemedi-yesil: kırmızı (1 kapı düştü)
+  ✓ M7-fark-yonu-ters: kırmızı (2 kapı düştü)
+  ✓ M8-kanonsuz-ayni: kırmızı (2 kapı düştü)
+  ✓ M10-fetch-geri-geldi: kırmızı (1 kapı düştü)
+  ✓ M9 desen-eksik kapısı: uygulanmayan mutasyon DÜŞTÜ (sessiz yeşil yok)
+== mutasyon: 11 geçti / 0 kaldı ==
+--- stderr ---

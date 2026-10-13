@@ -809,6 +809,10 @@ find "$EY_REPO" -type f -delete 2>/dev/null; find "$EY_REPO" -depth -type d -del
 #     (exit≠0 + 'claude-binary yok' marker, G9 sözleşmesi); rol-kayıtsız → exit≠0
 BC_DIR="/tmp/iskan-test-bc.$$"
 mkdir -p "$BC_DIR/scripts"
+# Hermetik iz dizini: baslat-claude.sh ilk açılışta $HOME/.claude-baslat/<sid>.acildi yazar ve VARSA
+# --resume dener. Eskiden bu vaka GERÇEK ev dizinine iz bırakıyordu → ikinci yerel koşudan itibaren
+# 29. vaka hep kırmızıydı (CI ev dizini taze olduğu için orada görünmüyordu).
+export BASLAT_IZ_DIR="$BC_DIR/.iz"
 cp "$SCRIPT_DIR/../templates/baslat-claude.sh" "$BC_DIR/scripts/baslat-claude.sh"
 cat > "$BC_DIR/iskan-registry.yaml" <<'EOF'
 proje: bctest

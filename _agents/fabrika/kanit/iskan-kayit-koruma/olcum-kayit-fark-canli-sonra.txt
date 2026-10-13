@@ -1,0 +1,251 @@
+$ bash iskan/scripts/iskan.sh kayit-fark
+# rc=1 sure=5.0s zaman=2026-10-13T20:50:20+03:00
+--- stdout ---
+== İSKÂN kayit-fark — SALT-OKUR (kutu ⟷ kanon; hiçbir yere yazılmaz) ==
+  ✗ akar: farkli (3 satır yalnız kanonda · 64 satır yalnız kutuda)
+      --- kanon:infra/iskan-registry/akar.yaml
+      +++ kutu:/config/projects/akar/iskan-registry.yaml
+      @@ -14,15 +14,76 @@
+       uyeler:
+         - id: MUTEVELLI
+           tmux: "MUTEVELLI:0"
+      +    cwd: /config/projects/_wt/akar-claude
+      +    worktree_branch: akar-claude
+      +    session_id: 2ea074e6-fd87-486d-bcaa-2f53f2f7dd93
+      +    permission_mode: bypassPermissions
+      +  # 2026-09-15 Sultan kararı: Cuma demosu için iki geçici ajan, MÜTEVELLİ'nin emrinde, bypass izniyle.
+      +  - id: KATIP
+      +    tmux: "KATIP:0"
+      +    cwd: /config/projects/_wt/akar-katip
+      +    worktree_branch: katip
+      +    session_id: 68538e96-4f79-4df4-9be1-217cc8fda4bf
+      +    permission_mode: bypassPermissions
+      +  - id: SEYYAH
+      +    tmux: "SEYYAH:0"
+      +    cwd: /config/projects/_wt/akar-seyyah
+      +    worktree_branch: seyyah
+      +    session_id: 56fe1c9c-a6d2-4c82-8808-42418cd7d48e
+      +    permission_mode: bypassPermissions
+      +  # 2026-09-15 Sultan kararı: Röleve/Tasarım modülü için yeni ajan (ad "Mimar olmasın"); Cuma vitrini + modül inşası.
+      +  - id: NAKKAS
+      +    tmux: "NAKKAS:0"
+      +    cwd: /config/projects/_wt/akar-nakkas
+      +    worktree_branch: nakkas
+      +    session_id: 928f7f8b-e362-4106-9387-1b9097375360
+      +    permission_mode: bypassPermissions
+      +  - id: BESIR
+      +    tmux: "BESIR:0"
+           cwd: /config/projects/akar
+           worktree_branch: null
+      -    session_id: 4c7b2fb1-de74-42b5-9d36-e6bcb2252cc3
+      +    session_id: 5a118f6b-8c82-4858-bf7a-56f28f431115
+      +    permission_mode: default
+      +  - id: BESIR-CODEX
+      +    tmux: "BESIR-CODEX:0"
+      +    cwd: /config/projects/akar
+      +    worktree_branch: null
+      +    session_id: c1909a00-9b5d-43b9-8226-7ebc5e4a5239
+      +    permission_mode: default
+      +  - id: MUSAVVIR
+      +    tmux: "MUSAVVIR:0"
+      +    cwd: /config/projects/_wt/akar-musavvir
+      +    worktree_branch: musavvir
+      +    session_id: 903e93cf-28d2-4897-857f-305df7085421
+      +    permission_mode: bypassPermissions
+      +  - id: DAVAVEKILI
+      +    tmux: "DAVAVEKILI:0"
+      +    cwd: /config/projects/_wt/akar-davavekili
+      +    worktree_branch: davavekili
+      +    session_id: 78d921b1-f46d-407e-b4a7-1c396d1e4132
+      +    permission_mode: bypassPermissions
+      +  - id: ARZUHALCI
+      +    tmux: "ARZUHALCI:0"
+      +    cwd: /config/projects/_wt/akar-arzuhalci
+      +    worktree_branch: arzuhalci
+      +    session_id: 485d19ea-73e0-41ce-a6bc-1c75a8f56e52
+           permission_mode: default
+      -  # GEÇİCİ — Codex pilot haftası (2026-09-07 → 2026-09-14). Süre dolunca Sultan kararı:
+      -  # emeklilik ya da kalıcılaşma. Rol tanımı akar ROLLER.yaml, kapı scripts/denetim-kapisi.sh.
+         - id: MUHTESIP
+           tmux: "MUHTESIP:0"
+           cwd: /config/projects/akar
+           worktree_branch: null
+           session_id: aa4b1e32-5183-493d-ad5f-9960d6a4660c
+           permission_mode: bypassPermissions
+      +  - id: SIMA-CODEX
+      +    tmux: "SIMA-CODEX:0"
+      +    cwd: /config/projects/akar
+      +    worktree_branch: null
+      +    session_id: cc54f092-d9b1-4bde-bcee-ad88a3860d5d
+      +    permission_mode: default
+      +  - id: EHLIVUKUF
+      +    tmux: "EHLIVUKUF:0"
+      +    cwd: /config/projects/akar
+      +    worktree_branch: null
+      +    session_id: 1d4df522-0d1f-451d-b100-cd8176a4bbe8
+      +    permission_mode: default
+      +    settings_file: /config/projects/akar/_agents/EHLIVUKUF/izin.json
+  ✓ enis: ayni
+  ✓ huzur: ayni
+  ✓ maiset: ayni
+  ✓ menzil: ayni
+  ✗ mihenk: kutu-yok (kanonda var, kutuda iskan-registry.yaml yok)
+  ✗ mmex: kanon-yok (kutuda var, cloudtop infra/iskan-registry/mmex.yaml yok)
+  ✗ nazir: farkli (6 satır yalnız kanonda · 18 satır yalnız kutuda)
+      --- kanon:infra/iskan-registry/nazir.yaml
+      +++ kutu:/config/projects/nazir/iskan-registry.yaml
+      @@ -17,34 +17,46 @@
+           cwd: /config/projects/nazir
+           worktree_branch: null
+           session_id: 7a61ad16-4e38-4048-8141-5636100e441f
+      -    permission_mode: default
+      +    permission_mode: bypassPermissions
+         - id: nazir-motor1
+           tmux: "nazir-motor1:0"
+           cwd: /config/projects/nazir
+           worktree_branch: null
+           session_id: 83c6a733-3b97-4945-a075-aa85023a468e
+      -    permission_mode: default
+      +    permission_mode: bypassPermissions
+         - id: nazir-mim
+           tmux: "nazir-mim:0"
+           cwd: /config/projects/nazir
+           worktree_branch: null
+           session_id: a98eff93-efe5-48d4-9258-53d1372670a5
+      -    permission_mode: default
+      +    permission_mode: bypassPermissions
+         - id: nazir-rasatci
+           tmux: "nazir-rasatci:0"
+           cwd: /config/projects/nazir
+           worktree_branch: null
+           session_id: a254a25b-b3c6-414d-a52d-5dcc124ddf30
+      -    permission_mode: default
+      +    permission_mode: bypassPermissions
+         - id: nazir-seyyah
+           tmux: "nazir-seyyah:0"
+           cwd: /config/projects/nazir
+           worktree_branch: null
+           session_id: cec2021e-c3f8-488c-bbdf-4f6313aadc13
+      -    permission_mode: default
+      +    permission_mode: bypassPermissions
+         - id: nazir-hafizadar
+           tmux: "nazir-hafizadar:0"
+           cwd: /config/projects/nazir
+           worktree_branch: null
+           session_id: 3088311f-ee40-4b7c-bd26-31f7394156a8
+      -    permission_mode: default
+      +    permission_mode: bypassPermissions
+      +  - id: nazir-seritdar
+      +    tmux: "nazir-seritdar:0"
+      +    cwd: /config/projects/_wt-nazir/nazir-seritdar
+      +    worktree_branch: uye/nazir-seritdar
+      +    session_id: bb26bf9f-abd2-4752-bf52-6fb407146bc1
+      +    permission_mode: bypassPermissions
+      +  - id: nazir-mizanci
+      +    tmux: "nazir-mizanci:0"
+      +    cwd: /config/projects/_wt-nazir/nazir-mizanci
+      +    worktree_branch: uye/nazir-mizanci
+      +    session_id: 33e83c72-d1c8-46a4-849f-e738bcd813de
+      +    permission_mode: bypassPermissions
+  ✗ nova: farkli (12 satır yalnız kanonda · 12 satır yalnız kutuda)
+      --- kanon:infra/iskan-registry/nova.yaml
+      +++ kutu:/config/projects/nova/iskan-registry.yaml
+      @@ -17,40 +17,40 @@
+           cwd: /config/projects/nova
+           worktree_branch: null
+           session_id: 8a01f853-7c71-444e-bf48-17db2099b9f6
+      -    permission_mode: default
+      +    permission_mode: bypassPermissions
+         - id: nova-web
+           tmux: "nova-web:0"
+           cwd: /config/projects/nova
+           worktree_branch: null
+           session_id: 24bb771d-79e0-405a-b5b1-cf0dd73a72ae
+      -    permission_mode: default
+      +    permission_mode: bypassPermissions
+         - id: nova-kesif
+           tmux: "nova-kesif:0"
+           cwd: /config/projects/nova
+           worktree_branch: null
+      -    session_id: 627df0ed-8f71-4f56-a555-859e73b9a967
+      -    permission_mode: default
+      +    session_id: 3840b554-3137-48d3-8dca-f444212f271b
+      +    permission_mode: bypassPermissions
+         - id: nova-mecra
+           tmux: "nova-mecra:0"
+           cwd: /config/projects/nova
+           worktree_branch: null
+      -    session_id: c2586379-ae59-4698-8ffc-60964b1a69f5
+      -    permission_mode: default
+      +    session_id: 13afff6c-e12d-4ed7-8ff3-f5ea874ca6b2
+      +    permission_mode: bypassPermissions
+         - id: nova-icerik
+           tmux: "nova-icerik:0"
+           cwd: /config/projects/nova
+           worktree_branch: null
+      -    session_id: 2b004f7a-1130-4534-9034-c91eb14a1c65
+      -    permission_mode: default
+      +    session_id: d9461caf-f157-4e6b-8517-de18ae2ddf4a
+      +    permission_mode: bypassPermissions
+         - id: nova-cizim
+           tmux: "nova-cizim:0"
+           cwd: /config/projects/nova
+           worktree_branch: null
+      -    session_id: 75ef1f42-b5b2-48ac-856c-6a64b1557eb7
+      -    permission_mode: default
+      +    session_id: f38f5646-3708-467f-94f3-b3897bce4173
+      +    permission_mode: bypassPermissions
+         - id: nova-pazar
+           tmux: "nova-pazar:0"
+           cwd: /config/projects/nova
+           worktree_branch: null
+      -    session_id: 7757bbd1-847b-45fc-ad04-d4ee3f9d52d9
+      -    permission_mode: default
+      +    session_id: 8a87c10d-d008-4c81-a99e-402acb12e150
+      +    permission_mode: bypassPermissions
+  ✗ s02: farkli (34 satır yalnız kanonda · 0 satır yalnız kutuda)
+      --- kanon:infra/iskan-registry/s02.yaml
+      +++ kutu:/config/projects/s02/iskan-registry.yaml
+      @@ -30,37 +30,3 @@
+           worktree_branch: null
+           session_id: 60f88b5c-1625-4a9b-bd4b-f3d3cff3b0d4
+           permission_mode: default
+      -proje: tez
+      -container_adi: cloudtop-tez
+      -hostname: tez.mmepanel.com
+      -port: 8453
+      -config_dir: /opt/cloudtop/config-tez
+      -repo_yolu: /config/projects/tez
+      -ekip_registry_pointer: _agents/handoff/ekip-registry.yaml
+      -cf_access_app: tez.mmepanel.com
+      -machine_identity_ref: null
+      -uyeler:
+      -  - id: tez-yon
+      -    tmux: "tez-yon:0"
+      -    cwd: /config/projects/tez
+      -    worktree_branch: null
+      -    session_id: d64e9b15-5c55-4564-9614-bd2507538276
+      -    permission_mode: default
+      -  - id: tez-motor1
+      -    tmux: "tez-motor1:0"
+      -    cwd: /config/projects/tez
+      -    worktree_branch: null
+      -    session_id: 01a15fb0-feca-4459-91d3-02c5f34d1619
+      -    permission_mode: default
+      -  - id: tez-mim
+      -    tmux: "tez-mim:0"
+      -    cwd: /config/projects/tez
+      -    worktree_branch: null
+      -    session_id: 0085bf8c-3099-4123-8664-b578d44e3032
+      -    permission_mode: default
+      -  - id: tez-muharrir
+      -    tmux: "tez-muharrir:0"
+      -    cwd: /config/projects/tez
+      -    worktree_branch: null
+      -    session_id: a972bac9-7555-4ac7-bf68-d48770b85d02
+      -    permission_mode: default
+  ✓ sedir: ayni
+  ✓ tellal: ayni
+  ✗ tez: kanon-yok (kutuda var, cloudtop infra/iskan-registry/tez.yaml yok)
+== özet: 13 kutu · ayni=6 farkli=4 kanon-yok=2 kutu-yok=1 olculemedi=0 · yazılan: 0 ==
+--- stderr ---

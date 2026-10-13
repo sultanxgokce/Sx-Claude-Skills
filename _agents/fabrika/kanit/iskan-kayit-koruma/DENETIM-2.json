@@ -1,0 +1,32 @@
+{
+  "tur": 2,
+  "is": "iskan-kayit-koruma",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T21:04:50+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 75222,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kutu kaydını yazımdan önce koruyan kapı ile salt-okur kutu↔kanon raporu talep edildiği yönde kurulmuş; bilinçli geçiş, kuru koşu, sıfır-yazım ve hata sınıfları dişli sınavlarla ölçülmüş. Son genel sınav da yeşile dönmüş ve önceki salt-okurluk açığı `.git` dâhil kapatılmış; yalnız belge üzerindeki sınav sayısı eskimiş bir küçük rötuş kalmış.",
+    "bulgular": [
+      {
+        "ne": "SKILL.md yeni sınavı 16 kapı diye belgeliyor, fakat güncel sınav çıktısı 17 geçti gösteriyor.",
+        "kanit": "Değişiklikte SKILL.md satırı “Sınav ... 16 kapı” derken araç imzalı `kayit-koru-sinav-2` çıktısının son satırı `== 17 geçti / 0 kaldı ==` ve F6 kanon tazeliği kapısını da içeriyor.",
+        "konum": "iskan/SKILL.md: yeni Durum bölümü; kanıt kaydı: kayit-koru-sinav-2",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Komutun önce rc=2 iken sonra canlı gerçek kutu verisiyle fark raporlaması; 17/17 hermetik davranış sınavı; `.git` ref/FETCH_HEAD dâhil salt-okurluk ölçümü; 11/11 mutasyon sınavı ve son genel İSKÂN sınavının rc=0 olması birbirini tamamlıyor. CLI işi olduğundan kare yerine ölçümler uygundur; canlı rapor gerçekçi veri kullanıyor ve önceki turdaki iki uygulama sorununun kapandığı doğrudan kanıtlanıyor."
+  }
+}

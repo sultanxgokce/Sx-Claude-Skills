@@ -1,0 +1,19 @@
+{
+  "is": "iskan-kayit-koruma",
+  "cumle": "İSKÂN kutu kaydı (iskan-registry.yaml) ezilmesin + kutu↔kanon fark raporu (SERDAR kısmi onay 13 Eki ~19:45, madde 1+3). (1) iskan.sh ekip-yerlestir / uye-ekle --apply: kutudaki çalışan kopya yeni üretimden farklıysa ve fark yalnız ekleme değilse farkı (diff) basar, HİÇBİR yere yazmadan durur (rc=1, kayit-farki); bilinçli geçiş yalnız ISKAN_EY_KAYIT_FARK=kabul ile ve kayda geçer; --dry-run farkı gösterir, durmaz. (2) iskan.sh kayit-fark [proje…]: salt-okur rapor — her kutu için kutudaki kopya ⟷ cloudtop origin/main infra/iskan-registry/<proje>.yaml: ayni / farkli (diff) / kanon-yok / kutu-yok / olculemedi; HİÇBİR şey yazmaz, kanonu ezmez (hasat yönü kararı NÂZIR/KONAKÇI görüşünü bekliyor). Kod Sx iskan becerisinde olduğu için kart Sx'te.",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-13T20:48:36+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

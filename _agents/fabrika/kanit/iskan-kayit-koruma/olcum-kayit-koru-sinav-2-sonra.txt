@@ -1,0 +1,25 @@
+$ bash iskan/scripts/kayit-koru.test.sh
+# rc=0 sure=4.9s zaman=2026-10-13T21:00:26+03:00
+--- stdout ---
+── K: ekip-yerlestir kutu kaydını ezmez ──
+  ✓ K1 pozitif kontrol: kutu = üretim → apply rc=0, host+repo kopyaları YAZILDI (düzenek yazımı görebiliyor)
+  ✓ K2 kutuda elle alan → apply rc=1 + 'kayit-farki' + silinecek satır diff'te görünür
+  ✓ K2 sıfır-yazım: kutu kopyası bayt-değişmez, host ve repo kopyası YAZILMADI
+  ✓ K2 sıfır-yazım (ssh günlüğü): hiçbir yazan uzak komut koşmadı (scaffold/git init/tmux dahil)
+  ✓ K3 kutudaki değer farklı (cwd) → rc=1, değişecek satır gösterildi
+  ✓ K4 dry-run: fark gösterildi + 'apply bu farkla DURUR', rc=3
+  ✓ K5 ISKAN_EY_KAYIT_FARK=kabul → bilinçli geçiş görünür, kutu yeni üretime döndü
+  ✓ K6 ISKAN_EY_KAYIT_FARK=evet → rc=2 yapılandırma hatası
+  ✓ K7 kutuda kayıt yok → apply rc=0, kutu kopyası yazıldı (ilk doğum yolu)
+── U: uye-ekle de ezmez; yalnız-ekleme geçer ──
+  ✓ U1 uye-ekle yalnız-ekleme → rc=0, Gama eklendi, eski üyenin kimliği korundu
+  ✓ U2 uye-ekle kutuda elle alan → rc=1, AGENT.md yazılmadı, ekip-registry bayt-değişmez
+── F: kayit-fark salt-okur raporu ──
+  ✓ F1 keşif iki yönlü: aynı · kutu-yok (yalnız kanonda) · kanon-yok (yalnız kutuda) ayrı ayrı; rc=1
+  ✓ F2 fark: yön doğru ('+' = yalnız kutuda), sayım doğru, diff basıldı
+  ✓ F3 salt-okur: kutu+kanon ağaçları ve .git (ref + FETCH_HEAD) bayt-eş, yazan uzak komut yok
+  ✓ F4 ssh yok → rc=2 'olculemedi' (ölçülemeyen 'ayni' sayılmaz)
+  ✓ F6 kanon tazeliği görünür: hangi commit'ten okunduğu çıktıda
+  ✓ F5 ad hijyeni: kabuk karakterli proje adı rc=2
+== 17 geçti / 0 kaldı ==
+--- stderr ---

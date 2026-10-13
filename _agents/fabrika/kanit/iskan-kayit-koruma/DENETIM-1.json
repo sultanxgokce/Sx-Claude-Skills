@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "iskan-kayit-koruma",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T20:57:07+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 53368,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "İstenen kayıt koruma kapısı ile kutu↔kanon raporu kurulmuş; hermetik ve mutasyon sınavları ana davranışları güçlü biçimde yokluyor. Lâkin salt-okur diye sunulan rapor diske yazıyor ve genel İSKÂN sınavı hâlâ kırmızı; önce bunlar çözülmeden üretim mührü vurulmaz.",
+    "bulgular": [
+      {
+        "ne": "`kayit-fark` salt-okur ve “HİÇBİR şey yazmaz” sözleşmesine rağmen koşulsuz `git fetch` çalıştırıyor; bu işlem `.git/FETCH_HEAD` ile uzak izleme ref'lerini değiştirebilir. Salt-okurluk sınavı yalnız çalışma ağaçlarını ölçtüğü için bu yazımı görmüyor.",
+        "kanit": "Değişiklikte `cmd_kayit_fark` başında `git -C \"$EY_REPO_DIR\" fetch -q origin main` bulunuyor. F3 ölçümü ise `find \"$H\" \"$R/infra\" -type f` ile yalnız host ve `infra` dosyalarını karşılaştırıyor; `$R/.git` ölçüm dışında.",
+        "konum": "iskan/scripts/iskan.sh:cmd_kayit_fark; iskan/scripts/kayit-koru.test.sh:F3",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Dalın genel İSKÂN sınavı başarılı değil; yeni odak sınavının yeşil olması tüm becerinin üretime hazır olduğunu kanıtlamıyor.",
+        "kanit": "Araç imzalı `iskan-sinav-dal` kaydı rc=1/kırmızı. Taban da rc=1 olduğundan bunun yeni bir gerileme olduğu kanıtlanmıyor, fakat dalın genel doğrulaması yine de yeşil değil ve verilen ilk 60 satır gerçek arızayı göstermiyor.",
+        "konum": "kanıt kaydı: iskan-sinav-dal; olcum-iskan-sinav-dal-sonra.txt",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. `kayit-koru-sinav` ile mutasyon ölçümleri yeşil ve gerçekçi hermetik düzenekte koruma, sıfır-yazım, diff yönü, sınıflandırma ve hata yollarını sınıyor; canlı rapor da gerçek kutu verisiyle fark gösteriyor. Ancak genel sınavın önce/sonra çifti iki tarafta da rc=1 ve çıktı arıza satırına ulaşmıyor; ayrıca salt-okurluk ölçümü `.git` yazılarını kapsamıyor. Görsel kare gerekmeyen CLI işi için ölçümler uygun olsa da kanıt bütünü üretime hazır hükmüne yetmiyor."
+  }
+}

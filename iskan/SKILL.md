@@ -1,7 +1,7 @@
 ---
 name: iskan
 type: agent
-version: 0.10.3
+version: 0.11.0
 description: >
   Container + ekip yaşam-döngüsü master-skill. Bir hedef (yeni-proje / mevcut-ekip-yeniden-doğuşu / tek-üye-ekleme)
   için host-provizyon (UC1), oturum-kurtarma (UC2, deterministik session-id), üye-ekleme (UC3) akışlarını
@@ -116,6 +116,24 @@ izole-container hedefinde `ise-alim`/KÂHYA DOĞRUDAN invoke EDİLMEZ — İSKÂ
 Usta (S3 · bileşik), born-at-Usta (`ahi new usta iskan`). generic-goal: "container + ekip yaşam-döngüsünü
 (doğuş/yeniden-doğuş/üye-ekleme) tek-komutla yöneten fabrika". Terfi-olgunluk şerhi: DOCTRINE.md → "Manuel-beyan".
 Doğrula: `ahi check iskan` · Kanon: `ahi doctrine` · İş-planı: `Nexus/_agents/handoff/help2serdar-iskan-is-plani.md`.
+
+## Durum (2026-10-13, kutu kaydı ezilmez + `kayit-fark` raporu — v0.11.0 · BÂNİ, SERDAR kısmi onayı)
+- **Kutudaki çalışan kayıt ezilmez.** `baslat-claude.sh` kutudaki `iskan-registry.yaml`'ı okur; koltuk ekranı da
+  oraya (flock'lu) yazacak. `ekip-yerlestir` / `uye-ekle --apply` kaydı şemadan yeniden ürettiği için şemada olmayan
+  alanı, elle verilmiş cwd/tmux'u, yorumu sessizce silebiliyordu. Artık **hiçbir yazımdan önce** `_ey_kayit_koru`
+  kutu kopyasını yeni üretimle karşılaştırır: yoksa/bayt-eşse/fark yalnız eklemeyse (ör. yeni üye bloğu) geçer;
+  kutudan bir satır silinecek ya da değişecekse **farkı basar, host · repo · kutu hiçbir kopyaya yazmadan durur**
+  (rc=1, `kayit-farki`). Bilinçli geçiş yalnız `ISKAN_EY_KAYIT_FARK=kabul` (kayda geçer; bilinmeyen değer rc=2).
+  `--dry-run` aynı farkı gösterir, durmaz.
+- **`iskan.sh kayit-fark [proje…]` — SALT-OKUR rapor:** kutudaki kopya ⟷ cloudtop `origin/main`
+  `infra/iskan-registry/<proje>.yaml`. Sınıflar: `ayni` · `farkli` (diff; `-` yalnız kanonda, `+` yalnız kutuda) ·
+  `kanon-yok` · `kutu-yok` · `olculemedi`. Proje verilmezse liste iki yönden keşfedilir (kanon dosyaları ∪ host'ta kayıt
+  taşıyan kutular). **Hiçbir şey yazmaz, kanonu ezmez** — "kanon = kutudan hasat" yön kararı NÂZIR/KONAKÇI görüşünü
+  bekliyor. rc: 0 hepsi aynı · 1 fark/eksik · 2 ölçülemedi (ölçülemeyen "aynı" sayılmaz).
+- **Canlı ilk koşu (13 Eki):** 13 kutu · aynı 6 (enis huzur maiset menzil sedir tellal) · farklı 4 (akar nazir nova s02) ·
+  kanon-yok 2 (mmex tez) · kutu-yok 1 (mihenk). Rapor fetch etmez; kanonun commit'i ilk satırda.
+- Sınav `scripts/kayit-koru.test.sh` 17 kapı (hermetik: sahte ssh, geçici host kökü; K1 pozitif kontrol yazımı görür; F3 .git dahil salt-okur).
+  Mutasyon M1-M8 + M10 (fetch geri gelirse) + desen-eksik kapısı: `_agents/fabrika/kanit/iskan-kayit-koruma/mutasyon.sh`.
 
 ## Durum (2026-07-20, CYCLE-5 FIX#2 Tier-C YAZMA-hedefi redirect — v0.7.3)
 ✓ Cycle-4 FRICTION#2 kapatıldı (verify-fan-out kararı=a, high-conf). **Kök-neden:** doğum ADIM-6 (registry
