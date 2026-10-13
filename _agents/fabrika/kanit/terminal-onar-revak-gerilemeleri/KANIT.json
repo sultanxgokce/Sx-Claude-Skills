@@ -1,23 +1,23 @@
 {
   "is": "terminal-onar-revak-gerilemeleri",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-13T12:34:30+03:00",
+  "guncelleme": "2026-10-13T12:39:19+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "canli-revak-kapi-rapor-dizini-ve-bekci-izi",
       "asama": "once",
       "dosya": "olcum-canli-revak-kapi-rapor-dizini-ve-bekci-izi-once.txt",
-      "sha256": "07b5a2d51eeac73baea0e96c14d479a24b65f3cd9186e00effacc5fe7b18043f",
+      "sha256": "37183a816cfc72442383599e073e44012df82be36e77803f99a7111832c57b98",
       "komut": [
         "bash",
         "-c",
-        "ssh -o BatchMode=yes hostsrv \"sudo -n docker exec -u abc cloudtop-revak bash -c 'p=\\$(pgrep -u abc -f \\\"node .*sunucu.mjs\\\" | head -1); echo \\\"kapi_pid=\\$p\\\"; echo \\\"kapi_ortaminda_KAPI_RAPOR_DIZ=\\$(tr \\\"\\\\0\\\" \\\"\\\\n\\\" < /proc/\\$p/environ 2>/dev/null | grep -c ^KAPI_RAPOR_DIZ=)\\\"; echo \\\"yayin_dizini=\\$(ls -d /config/projects/revak/veri/rapor/usta-defteri 2>/dev/null || echo yok)\\\"; echo \\\"bekci_izi=\\$(cat /config/.terminal-onar/bekci.son 2>/dev/null || echo yok)\\\"; bash /config/projects/revak/.claude/skills/terminal-onar/scripts/komut.sh durum --json 2>/dev/null | sed -E \\\"s/\\\\\\\"ana_oturum\\\\\\\":\\\\\\\"[^\\\\\\\"]*\\\\\\\"/\\\\\\\"ana_oturum\\\\\\\":\\\\\\\"<kimlik>\\\\\\\"/\\\"; v=\\$(sed -n \\\"s/^version: //p\\\" /config/projects/revak/.claude/skills/terminal-onar/SKILL.md); echo \\\"surum=\\$v\\\"'\"; echo \"ÖNCE: kapı rapor dizinini ortamdan almıyor (0 bekleniyor), bekçi izi yok, sürüm 2.2.2\""
+        "ssh -o BatchMode=yes hostsrv 'sudo -n docker exec -i -u abc -e HOME=/config cloudtop-revak bash -s' < /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/revak-once-olc.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T12:22:04+03:00",
-      "sure_sn": 0.5
+      "zaman": "2026-10-13T12:37:59+03:00",
+      "sure_sn": 79.9
     },
     {
       "tur": "olcum",
@@ -87,7 +87,7 @@
       "etiket": "canli-revak-kapi-rapor-dizini-ve-bekci-izi",
       "asama": "sonra",
       "dosya": "olcum-canli-revak-kapi-rapor-dizini-ve-bekci-izi-sonra.txt",
-      "sha256": "4814b5a56bac7736afce5177444baa359e946b99aa7eeda57a77ec0adb5eb976",
+      "sha256": "0d49ef38c61694cbcb2471830fedca593dae3c69668b5ba44c383a5d93263fb1",
       "komut": [
         "bash",
         "-c",
@@ -95,8 +95,8 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T12:34:30+03:00",
-      "sure_sn": 80.3
+      "zaman": "2026-10-13T12:39:19+03:00",
+      "sure_sn": 80.0
     },
     {
       "tur": "olcum",
@@ -115,5 +115,5 @@
       "sure_sn": 2.0
     }
   ],
-  "imza": "172b5ffb3b8b36cb0a754654b57815368812cafcfba4b4016b9a1c64d9b1bcb9"
+  "imza": "66e0729b662de545329aa9c16c798626413f91740caacda29334e1082db1002b"
 }

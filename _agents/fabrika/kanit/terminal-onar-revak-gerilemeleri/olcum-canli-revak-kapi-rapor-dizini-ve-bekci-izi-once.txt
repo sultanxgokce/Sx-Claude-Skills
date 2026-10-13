@@ -1,11 +1,14 @@
-$ bash -c ssh -o BatchMode=yes hostsrv "sudo -n docker exec -u abc cloudtop-revak bash -c 'p=\$(pgrep -u abc -f \"node .*sunucu.mjs\" | head -1); echo \"kapi_pid=\$p\"; echo \"kapi_ortaminda_KAPI_RAPOR_DIZ=\$(tr \"\\0\" \"\\n\" < /proc/\$p/environ 2>/dev/null | grep -c ^KAPI_RAPOR_DIZ=)\"; echo \"yayin_dizini=\$(ls -d /config/projects/revak/veri/rapor/usta-defteri 2>/dev/null || echo yok)\"; echo \"bekci_izi=\$(cat /config/.terminal-onar/bekci.son 2>/dev/null || echo yok)\"; bash /config/projects/revak/.claude/skills/terminal-onar/scripts/komut.sh durum --json 2>/dev/null | sed -E \"s/\\\"ana_oturum\\\":\\\"[^\\\"]*\\\"/\\\"ana_oturum\\\":\\\"<kimlik>\\\"/\"; v=\$(sed -n \"s/^version: //p\" /config/projects/revak/.claude/skills/terminal-onar/SKILL.md); echo \"surum=\$v\"'"; echo "ÖNCE: kapı rapor dizinini ortamdan almıyor (0 bekleniyor), bekçi izi yok, sürüm 2.2.2"
-# rc=0 sure=0.5s zaman=2026-10-13T12:22:04+03:00
+$ bash -c ssh -o BatchMode=yes hostsrv 'sudo -n docker exec -i -u abc -e HOME=/config cloudtop-revak bash -s' < /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/revak-once-olc.sh
+# rc=0 sure=79.9s zaman=2026-10-13T12:37:59+03:00
 --- stdout ---
-kapi_pid=3377453
+proje_yolu_turu=bag surum=2.2.2
+onar_rc=0
+kapi_kodu=/config/projects/revak/.claude/skills/terminal-onar/kapi
 kapi_ortaminda_KAPI_RAPOR_DIZ=0
-yayin_dizini=/config/projects/revak/veri/rapor/usta-defteri
-bekci_izi=1791828721
-{"saglam":true,"ana_tmux":"ok","ana_claude":"ok","web_terminal":"ok","kurtarici":"ok","bekci":"ok","ana_oturum":"<kimlik>","zaman":"2026-10-13T12:22:04+03:00"}
-surum=2.2.2
-ÖNCE: kapı rapor dizinini ortamdan almıyor (0 bekleniyor), bekçi izi yok, sürüm 2.2.2
+giris_http=200
+usta_defteri_http=404
+csp=content-security-policy: frame-ancestors 'self' https://kokpit.mmepanel.com
+bekci_izi: dosya var · onar sonrası yenilendi mi=HAYIR · yaş_sn=117 (2.2.2 bekci.sh iz yazmaz; var olan iz REVAK'ın eski yerel sürümünden kalmadır)
+{"saglam":true,"ana_tmux":"ok","ana_claude":"ok","web_terminal":"ok","kurtarici":"ok","bekci":"ok","ana_oturum":"<kimlik>","zaman":"2026-10-13T12:37:59+03:00"}
+ÖNCE: ortak 2.2.2 ile Usta Defteri 404 (kapı rapor dizinini almıyor); bekçi izi onardan sonra YENİLENMİYOR ama durum 'ok' diyor (satıra bakıyor)
 --- stderr ---
