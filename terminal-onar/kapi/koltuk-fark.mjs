@@ -42,22 +42,29 @@ const oturumlar = tum.map((ad) => {
 const hayalet = [...gorunur].filter((ad) => !tum.includes(ad));
 
 // istemci ⟷ oturum: sekme açılırken verilen hedef ad bugünkü oturum adından farklı mı?
-const sekme = [];
+// Bilgi katmanıdır (rc'yi değiştirmez) ama SESSİZCE kaybolmaz (bağımsız göz tur 1): istemci listesi alınamazsa
+// 'sekme_olculemedi', tek bir istemcinin komut satırı okunamazsa 'sekme_okunamayan' sayısı görünür.
+const sekme = []; let sekme_okunamayan = 0, sekme_olculemedi = '';
 const c = kos(TMUX[0], [...TMUX.slice(1), 'list-clients', '-F', '#{client_pid}\t#{session_name}']);
-if (c.rc === 0) for (const s of c.out.split('\n').filter(Boolean)) {
+if (c.rc !== 0 && !/no server running|No such file or directory/.test(c.err || '')) sekme_olculemedi = (c.err || 'list-clients rc=' + c.rc).trim();
+else for (const s of c.out.split('\n').filter(Boolean)) {
   const [pid, oturum] = s.split('\t'); let av = [];
-  try { av = readFileSync(`/proc/${pid}/cmdline`, 'utf8').split('\0').filter(Boolean); } catch { continue; }
-  const i = av.findIndex((x) => x === '-t' || x === '-s'); const hedef = i >= 0 ? av[i + 1] : '';
-  if (hedef && hedef !== oturum && !hedef.startsWith('=')) sekme.push({ pid: +pid, acilis_adi: hedef, oturum });
+  try { av = readFileSync(`/proc/${pid}/cmdline`, 'utf8').split('\0').filter(Boolean); } catch { sekme_okunamayan++; continue; }
+  const i = av.findIndex((x) => x === '-t' || x === '-s');
+  const hedef = (i >= 0 ? av[i + 1] || '' : '').replace(/^=/, '');   // '=ad' kesin eşleşme biçimi: karşılaştırmada önek sökülür
+  if (hedef && hedef !== oturum) sekme.push({ pid: +pid, acilis_adi: hedef, oturum });
 }
 
 const say = (h) => oturumlar.filter((o) => o.hukum === h).length;
-const ozet = { toplam: tum.length, gorunur: say('gorunur'), gizli: say('gizli'), dusen: say('DUSEN'), hayalet: hayalet.length, sekme: sekme.length };
+const ozet = { toplam: tum.length, gorunur: say('gorunur'), gizli: say('gizli'), dusen: say('DUSEN'), hayalet: hayalet.length, sekme: sekme.length,
+  sekme_okunamayan, ...(sekme_olculemedi ? { sekme_olculemedi } : {}) };
 if (JSONC) console.log(JSON.stringify({ ozet, oturumlar, hayalet, sekme }));
 else {
   for (const o of oturumlar) console.log(`  ${o.hukum === 'gorunur' ? '✓' : o.hukum === 'gizli' ? '·' : '✗'} ${o.ad}${o.neden ? '  — ' + (o.hukum === 'gizli' ? 'gizli: ' : '') + o.neden : ''}`);
   for (const h of hayalet) console.log(`  ✗ ${h}  — HAYALET: listede var, tmux'ta yok`);
   for (const s of sekme) console.log(`  ⓘ istemci ${s.pid}: '${s.acilis_adi}' adıyla açılmış → bugün '${s.oturum}' oturumunda (sekme adı ≠ oturum adı)`);
+  if (sekme_olculemedi) console.log(`  ? istemci listesi ölçülemedi (sekme bilgisi YOK, temiz sayılmaz): ${sekme_olculemedi}`);
+  if (sekme_okunamayan) console.log(`  ? ${sekme_okunamayan} istemcinin açılış komutu okunamadı (sekme bilgisi eksik)`);
   console.log(`== ${ozet.toplam} oturum · görünür ${ozet.gorunur} · gizli ${ozet.gizli} · DÜŞEN ${ozet.dusen} · hayalet ${ozet.hayalet} · başka adla bağlı istemci ${ozet.sekme} ==`);
 }
 process.exit(ozet.dusen || ozet.hayalet ? 1 : 0);

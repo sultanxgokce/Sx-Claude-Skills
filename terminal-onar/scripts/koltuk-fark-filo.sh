@@ -34,7 +34,9 @@ o=d["ozet"]; print("%d oturum · görünür %d · gizli %d · DÜŞEN %d · haya
 for x in d["oturumlar"]:
     if x["hukum"]=="DUSEN": print("      ✗ DÜŞEN: "+x["ad"])
 for h in d["hayalet"]: print("      ✗ HAYALET: "+h)
-for s in d["sekme"]: print("      ⓘ \x27%s\x27 adıyla açılmış istemci → bugün \x27%s\x27" % (s["acilis_adi"], s["oturum"]))')"
+for s in d["sekme"]: print("      ⓘ \x27%s\x27 adıyla açılmış istemci → bugün \x27%s\x27" % (s["acilis_adi"], s["oturum"]))
+if o.get("sekme_olculemedi"): print("      ? istemci listesi ölçülemedi: "+o["sekme_olculemedi"][:80])
+if o.get("sekme_okunamayan"): print("      ? %d istemcinin açılış komutu okunamadı" % o["sekme_okunamayan"])')"
   case "$rc:$ozet" in
     0:[0-9]*) echo "✓ $k: $ozet"; temiz=$((temiz+1)) ;;
     1:[0-9]*) echo "✗ $k: $ozet"; kirli=$((kirli+1)) ;;

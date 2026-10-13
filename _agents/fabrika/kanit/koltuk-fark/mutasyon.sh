@@ -15,6 +15,9 @@ kos M4-gizli-betik-sorulmaz kapi/koltuk-fark.mjs "if (g.rc !== 0) olculemedi(" "
 kos M5-altyapi-gerekcesiz scripts/koltuk-bagla.sh 'gizli "$s" && printf' 'false && printf'
 kos M6-kapi-kendi-kopyasi kapi/sunucu.mjs "import { KOLTUK_AD_DESEN, koltukSatirlari } from './koltuklar.mjs';" "const KOLTUK_AD_DESEN = /x/; const koltukSatirlari = () => [];"
 kos M7-sekme-hedefi-kayboldu kapi/koltuk-fark.mjs "if (hedef && hedef !== oturum" "if (false && hedef !== oturum"
+kos M8-esittir-oneki-dislanir kapi/koltuk-fark.mjs ".replace(/^=/, '')" ""
+kos M10-okunamayan-sessiz kapi/koltuk-fark.mjs "catch { sekme_okunamayan++; continue; }" "catch { continue; }"
+kos M11-list-clients-hatasi-sessiz kapi/koltuk-fark.mjs "if (c.rc !== 0 && !/no server" "if (false && !/no server"
 before=$k; kos M9-desen-eksik kapi/koltuk-fark.mjs 'BU_DESEN_YOK_42' x >/dev/null
 if [ "$k" -eq $((before+1)) ]; then k=$before; g=$((g+1)); echo "  ✓ M9 desen-eksik kapısı: uygulanmayan mutasyon düştü"; else echo "  ✗ M9 desen-eksik kapısı çalışmıyor"; k=$((k+1)); fi
 echo "== mutasyon: $g geçti / $k kaldı =="; [ "$k" -eq 0 ]

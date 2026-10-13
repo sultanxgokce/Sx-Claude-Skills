@@ -1,0 +1,17 @@
+$ bash _agents/fabrika/kanit/koltuk-fark/mutasyon.sh /config/projects/_wt/Sx-Claude-Skills-koltuk-fark
+# rc=0 sure=21.1s zaman=2026-10-13T21:43:40+03:00
+--- stdout ---
+  ✓ P0 pozitif kontrol yeşil
+  ✓ M1-dusen-gorunur-sayilir: kırmızı (1 kapı)
+  ✓ M2-hayalet-yok-sayilir: kırmızı (1 kapı)
+  ✓ M3-tmux-hatasi-temiz: kırmızı (1 kapı)
+  ✓ M4-gizli-betik-sorulmaz: kırmızı (1 kapı)
+  ✓ M5-altyapi-gerekcesiz: kırmızı (2 kapı)
+  ✓ M6-kapi-kendi-kopyasi: kırmızı (1 kapı)
+  ✓ M7-sekme-hedefi-kayboldu: kırmızı (2 kapı)
+  ✓ M8-esittir-oneki-dislanir: kırmızı (1 kapı)
+  ✓ M10-okunamayan-sessiz: kırmızı (1 kapı)
+  ✓ M11-list-clients-hatasi-sessiz: kırmızı (1 kapı)
+  ✓ M9 desen-eksik kapısı: uygulanmayan mutasyon düştü
+== mutasyon: 12 geçti / 0 kaldı ==
+--- stderr ---

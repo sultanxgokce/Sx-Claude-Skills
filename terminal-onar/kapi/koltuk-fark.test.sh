@@ -47,6 +47,18 @@ python3 -c 'import time; time.sleep(60)' attach -t yenileme & ip=$!; sleep 0.3
 printf '%s\t%s\n' "$ip" '2026/85' > "$T/istemciler"
 OLC >/dev/null; rc=$?
 kapi "F5 sekme adı ≠ oturum adı bilgi olarak raporlanır, kırmızı DEĞİL" "0|yenileme>2026/85" "$rc|$(node "$D/koltuk-fark.mjs" --json | python3 -c 'import json,sys;s=json.load(sys.stdin)["sekme"][0];print(s["acilis_adi"]+">"+s["oturum"])')"
+# F5b '=ad' kesin-eşleşme biçimi de yakalanır (bağımsız göz tur 1: önek yüzünden dışlanıyordu)
+python3 -c 'import time; time.sleep(60)' attach -t =yenileme & ip2=$!; sleep 0.3
+printf '%s\t%s\n' "$ip2" '2026/85' > "$T/istemciler"
+kapi "F5b '=yenileme' ile açılmış istemci → 'yenileme' > 2026/85" "yenileme>2026/85" "$(node "$D/koltuk-fark.mjs" --json | python3 -c 'import json,sys;s=json.load(sys.stdin)["sekme"];print(s[0]["acilis_adi"]+">"+s[0]["oturum"] if s else "YOK")')"
+kill $ip2 2>/dev/null
+# F5c komut satırı okunamayan istemci (ölmüş pid) SAYILIR, sessizce atlanmaz
+printf '%s\t%s\n' 999999 '2026/85' > "$T/istemciler"
+kapi "F5c okunamayan istemci sayılır (sekme_okunamayan=1)" "1" "$(J 'o["sekme_okunamayan"]')"
+# F5d istemci listesi alınamazsa 'sekme_olculemedi' görünür (sessiz boş liste değil)
+mv "$T/istemciler" "$T/istemciler.x"; printf '#!/usr/bin/env bash\ncase "$*" in *list-clients*) echo "istemci hatası" >&2; exit 1 ;; *) exec %s "$@" ;; esac\n' "$T/bin/tmux" > "$T/tmux2"; chmod +x "$T/tmux2"
+kapi "F5d list-clients hatası → sekme_olculemedi dolu" "1" "$(KOLTUK_FARK_TMUX="$T/tmux2" node "$D/koltuk-fark.mjs" --json | python3 -c 'import json,sys;print(int(bool(json.load(sys.stdin)["ozet"].get("sekme_olculemedi"))))')"
+mv "$T/istemciler.x" "$T/istemciler"
 kill $ip 2>/dev/null; : > "$T/istemciler"
 # F6 terminalsiz: tmux yok → rc 3 (temiz SAYILMAZ, kirli de değil)
 KOLTUK_FARK_TMUX="$T/yok/tmux" OLC >/dev/null; kapi "F6 tmux kurulu değil → rc 3 terminalsiz" "3" "$?"

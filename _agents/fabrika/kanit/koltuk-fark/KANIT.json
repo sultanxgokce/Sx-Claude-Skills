@@ -1,7 +1,7 @@
 {
   "is": "koltuk-fark",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-13T21:41:03+03:00",
+  "guncelleme": "2026-10-13T21:43:53+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -112,7 +112,55 @@
       "renk": "yesil",
       "zaman": "2026-10-13T21:41:03+03:00",
       "sure_sn": 14.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "fark-sinav-2",
+      "asama": "sonra",
+      "dosya": "olcum-fark-sinav-2-sonra.txt",
+      "sha256": "f8af286131620e423b416318cb07344206c792dc7cd9a0ccc6b0bf58641a67cd",
+      "komut": [
+        "bash",
+        "terminal-onar/kapi/koltuk-fark.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T21:43:19+03:00",
+      "sure_sn": 1.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-2",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-2-sonra.txt",
+      "sha256": "b740ddf6c2cae5d4995c39c26b2734a5698cea342c9a1f1c72a3edd289f67d39",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/koltuk-fark/mutasyon.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-koltuk-fark"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T21:43:40+03:00",
+      "sure_sn": 21.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "filo-tarama-3",
+      "asama": "sonra",
+      "dosya": "olcum-filo-tarama-3-sonra.txt",
+      "sha256": "67d2c35385b537551df580ce8f90ad1b97b6d51df1c874b0f71c81a1a7fb5842",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-fark-filo.sh",
+        "--kaynak",
+        "/config/projects/_wt/Sx-Claude-Skills-koltuk-fark/terminal-onar"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T21:43:53+03:00",
+      "sure_sn": 12.8
     }
   ],
-  "imza": "81c4415fc357c158c921d9c9dc8026270d0f91efc8dc4ab7881a7084e206793f"
+  "imza": "595a65d949fdb73fc10139111e4fd40e276373d5c0e7473c36c376bb3b96781f"
 }
