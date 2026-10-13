@@ -32,12 +32,20 @@ cat > "$T/kb.sh" <<S
 #!/usr/bin/env bash
 [ "\$1" = --liste ] || exit 2
 tmux -L "$L" list-sessions -F '#{session_name}' 2>/dev/null | while read -r s; do
-  if [ "\$s" = rolx ]; then printf '%s\t0\t1\tajan\tcalisiyor\n' "\$s"; else printf '%s\t0\t0\tdiger\tbilinmiyor\n' "\$s"; fi
+  case "\$s" in
+    rolx)   printf '%s\t%s\t1\tajan\tcalisiyor\n' "\$s" "\$(date +%s)" ;;
+    takili) printf '%s\t%s\t1\tajan\tcalisiyor\n' "\$s" "\$(( \$(date +%s) - 2000 ))" ;;   # Claude var, 2000 sn'dir ekran değişmedi
+    sorulu) printf '%s\t%s\t1\tajan\tsoru\n' "\$s" "\$(( \$(date +%s) - 2000 ))" ;;        # eski ama SORU bekliyor → takılı değil
+    *)      printf '%s\t0\t0\tdiger\tbilinmiyor\n' "\$s" ;;
+  esac
 done; exit 0
 S
 chmod +x "$T/kb.sh"
+mkdir -p "$T/beceri/scripts"; cp "$D/ortak.sh" "$T/beceri/scripts/"; cp "$D/koltuk-ac.sh" "$T/beceri/scripts/"
+printf '#!/usr/bin/env bash\necho onar >> "%s"; exit "${ONAR_RC:-0}"\n' "$T/defter" > "$T/beceri/scripts/onar.sh"
+printf '#!/usr/bin/env bash\necho "kademe $*" >> "%s"\n' "$T/defter" > "$T/beceri/scripts/kademe.sh"; chmod +x "$T/beceri/scripts/"*.sh
 mkdir -p "$T/ev/.claude/projects/p" && : > "$T/ev/.claude/projects/p/11111111-2222-4333-8444-555555555555.jsonl"
-KA() { HOME="$T/ev" TO_KUTU=sinav TO_PROJE="$T/proje" TO_DURUM_DIZ="$T/durum" TO_KOLTUK_BETIK="$T/kb.sh" TO_ANA_TMUX=sinav-ana \
+KA() { HOME="$T/ev" TO_KUTU=sinav TO_PROJE="$T/proje" TO_DURUM_DIZ="$T/durum" TO_KOLTUK_BETIK="$T/kb.sh" TO_ANA_TMUX=sinav-ana TO_BECERI_KOK="$T/beceri" \
        TMUX= bash -c "tmux() { command tmux -L '$L' \"\$@\"; }; export -f tmux; bash '$D/koltuk-ac.sh' \"\$@\"" _ "$@"; }
 j() { python3 -c "import json,sys;j=json.load(sys.stdin);print($1)"; }
 echo "── D · durum üç ayrı"
@@ -55,6 +63,22 @@ KA ac rolx --eski >/dev/null; kapi "A4 'eski sohbete dön' → ekip-ac.sh --resu
 out="$(KA ac roly 2>&1)"; rc=$?; kapi "A5 Claude'suz oturum önce kapatılır sonra doğar (rc 0, tek oturum)" "0|1" "$rc|$(tmux -L "$L" list-sessions -F '#{session_name}' | grep -c '^roly$')"
 out="$(KA ac kayitsiz 2>&1)"; rc=$?; kapi "A6 kayıtsız koltuk AÇILMAZ (rc 4) ve sebebi söylenir" "4|1" "$rc|$(echo "$out" | grep -c 'kayıtlı bir koltuk değil')"
 kapi "A7 kayıtsız denemede tmux'ta oturum doğmadı" "0" "$(tmux -L "$L" list-sessions -F '#{session_name}' 2>/dev/null | grep -c '^kayitsiz$')"
+echo "── T · takılı durumu (üçüncü hâl) ve ana koltuk yolu"
+tmux -L "$L" new-session -d -s takili "sleep 300"; tmux -L "$L" new-session -d -s sorulu "sleep 300"
+kapi "T1 Claude var + 2000 sn ekran değişmedi + soru/girdi beklemiyor → durum=takili" "takili" "$(KA durum takili | j 'j["durum"]')"
+kapi "T2 aynı eskilik ama SORU bekliyor → takılı DEĞİL (canli)" "canli" "$(KA durum sorulu | j 'j["durum"]')"
+kapi "T3 TO_TAKILI_SN=5000 → aynı koltuk canli (eşik ortamdan)" "canli" "$(TO_TAKILI_SN=5000 KA durum takili | j 'j["durum"]')"
+: > "$T/defter"; out="$(KA ac sinav-ana 2>&1)"; rc=$?
+kapi "T4 ana koltuk 'ac' → onar.sh (K0) çağrılır, rc 0 'açıldı'" "0|1|1" "$rc|$(grep -c '^onar$' "$T/defter")|$(echo "$out" | grep -c 'K0')"
+: > "$T/defter"; out="$(ONAR_RC=1 KA ac sinav-ana 2>&1)"; rc=$?; sleep 0.5
+kapi "T5 onar.sh düşerse merdiven (kademe.sh --kaynak dugme) başlar, rc 3" "3|1" "$rc|$(grep -c '^kademe --kaynak dugme' "$T/defter")"
+sed -i 's/^  - id: ROLY/  - id: TAKILI\n    tmux: "takili:0"\n    session_id: ""\n  - id: ROLY/' "$T/proje/_agents/handoff/aile-registry.yaml"
+out="$(KA ac takili 2>&1)"; rc=$?
+kapi "T7 takılı koltuğa zorlasız 'ac' → DOKUNMAZ (rc 5, oturum yaşıyor, 'çalışıyor olabilir')" "5|1|1" "$rc|$(tmux -L "$L" has-session -t =takili 2>/dev/null && echo 1 || echo 0)|$(echo "$out" | grep -c 'çalışıyor olabilir')"
+: > "$T/defter"
+out="$(KA ac takili --zorla 2>&1)"; rc=$?
+kapi "T8 --zorla ile takılı oturum kapatılıp ekip-ac ile yeniden doğar (rc 0, tek oturum)" "0|1|1" "$rc|$(tmux -L "$L" list-sessions -F '#{session_name}' | grep -c '^takili$')|$(grep -c '^TAKILI' "$T/defter")"
+kapi "T6 tek argümanla çağrı → kullanım mesajı (bilinmeyen-argüman DEĞİL), rc 2" "1|2" "$(KA durum 2>&1 | grep -c 'kullanım:')|$(KA durum >/dev/null 2>&1; echo $?)"
 echo "── N · olumsuz kontrol: ekip-ac.sh yoksa kayıtlı rol de açılmaz"
 mv "$T/proje/scripts/ekip-ac.sh" "$T/proje/scripts/ekip-ac.sh.kapali"
 kapi "N1 betik yokken yol=yok (sessizce başka yola düşmez)" "yok" "$(KA durum rolx | j 'j["yol"]')"

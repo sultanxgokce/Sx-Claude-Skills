@@ -117,9 +117,9 @@ function govde(req, sinir = 64 * 1024) {
     req.on('end', () => ok(Buffer.concat(parca))); req.on('error', red);
   });
 }
-function calistir(komut, arg, girdi) {
+function calistir(komut, arg, girdi, sure = 20000) {
   return new Promise((ok) => {
-    const c = execFile(komut, arg, { timeout: 20000, maxBuffer: 1 << 20 }, (h, out, err) => ok({ kod: h ? (h.code ?? 1) : 0, out: String(out), err: String(err) }));
+    const c = execFile(komut, arg, { timeout: sure, maxBuffer: 1 << 20 }, (h, out, err) => ok({ kod: h ? (h.code ?? 1) : 0, out: String(out), err: String(err), zamanAsimi: !!(h && h.killed) }));
     if (girdi != null) { c.stdin.end(girdi); }
   });
 }
@@ -416,11 +416,14 @@ const sunucu = http.createServer(async (req, res) => {
       }
       if (km && km[2] && req.method === 'POST') {
         let g = {}; try { g = JSON.parse((await govde(req, 4096)).toString('utf8') || '{}'); } catch { g = {}; }
-        const arg = [KOLTUK_AC_BETIK, 'ac', km[1]]; if (g.eski === true) arg.push('--eski');
-        const r = await calistir('bash', arg);
+        const arg = [KOLTUK_AC_BETIK, 'ac', km[1]]; if (g.eski === true) arg.push('--eski'); if (g.zorla === true) arg.push('--zorla');
+        // Açma uzun sürebilir (ekip-ac canlılık teyidi · onar.sh): 20 sn değil 120 sn; zaman aşımı 'açılamadı' DEĞİL 504 —
+        // oturum arkada doğmuş olabilir, telefon durumu yeniler (yedek göz tur 2).
+        const r = await calistir('bash', arg, undefined, +(process.env.KAPI_AC_SURE_MS || 120000));   // sınav kısa süre verir
+        if (r.zamanAsimi) return json(res, 504, { tamam: false, rc: 124, mesaj: 'Açma 120 sn\'de bitmedi — koltuk arkada doğmuş olabilir; durumu yenileyip bak.' });
         const mesaj = (r.out + r.err).trim().split('\n').filter(Boolean).pop() || '';
-        // rc: 0 açıldı/zaten canlı · 1 açılamadı · 3 merdiven başladı · 4 kayıtsız koltuk
-        const kod = r.kod === 0 ? 200 : r.kod === 3 ? 202 : r.kod === 4 ? 409 : 502;
+        // rc: 0 açıldı/zaten canlı · 1 açılamadı · 3 merdiven başladı · 4 kayıtsız koltuk · 5 takılı: zorla gerek (dokunulmadı)
+        const kod = r.kod === 0 ? 200 : r.kod === 3 ? 202 : r.kod === 4 ? 409 : r.kod === 5 ? 428 : 502;
         return json(res, kod, { tamam: r.kod === 0 || r.kod === 3, rc: r.kod, mesaj });
       }
       if (y === '/api/surum') {

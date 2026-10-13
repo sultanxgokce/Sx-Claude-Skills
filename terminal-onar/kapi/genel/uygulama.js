@@ -344,9 +344,12 @@ async function koltukOlc() {
 }
 async function koltukAcGonder(eski) {
   const ad = koltukHedef(); if (!ad) return;
+  // takılı GÖRÜNEN koltuk çalışıyor olabilir (uzun araç): kapatmak işi keser → önce sor, sonra zorla
+  let zorla = false;
+  if (koltukSon && koltukSon.durum === 'takili') { if (!confirm(ad + ' takılı görünüyor ama çalışıyor olabilir. Oturum KAPATILIP yeniden açılsın mı? (süren iş kesilir)')) return; zorla = true; }
   $('koltukBasla').disabled = true; $('koltukEski').disabled = true; $('koltukDurum').textContent = (eski ? 'Eski sohbete dönülüyor' : 'Açılıyor') + '…';
-  try { const j = await api(Y('/api/koltuk/' + encodeURIComponent(ad) + '/ac'), { eski: !!eski }); bildir(j.mesaj || 'Açıldı.'); }
-  catch (h) { bildir(h.message); }
+  try { const j = await api(Y('/api/koltuk/' + encodeURIComponent(ad) + '/ac'), { eski: !!eski, zorla }); bildir(j.mesaj || 'Açıldı.'); }
+  catch (h) { bildir(h.message); }   // 504: 'arkada doğmuş olabilir' — aşağıdaki yenileme gerçek durumu gösterir
   finally { $('koltukEski').disabled = false; setTimeout(() => { koltukOlc(); koltuklariYukle(); if (gorunumTerminal) { ttySok(); ttyKur(); } }, 1500); }
 }
 $('koltukAc')?.addEventListener('click', () => { $('koltukP').showModal(); koltukOlc(); });

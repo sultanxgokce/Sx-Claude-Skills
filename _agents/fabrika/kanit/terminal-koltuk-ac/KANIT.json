@@ -1,44 +1,45 @@
 {
   "is": "terminal-koltuk-ac",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-13T12:59:47+03:00",
+  "guncelleme": "2026-10-13T13:33:04+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "betik-gercek-tmux-12",
       "asama": "sonra",
       "dosya": "olcum-betik-gercek-tmux-12-sonra.txt",
-      "sha256": "de66112617b97d11cfd6c781ceba79c996391ee804ba37aa569856492c135dca",
+      "sha256": "c14fb12a8e7b96573b81d0bafb9512a9b282c375b91528c13f997f316f7ea42f",
       "komut": [
         "bash",
         "terminal-onar/scripts/koltuk-ac.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T12:59:47+03:00",
-      "sure_sn": 0.9
+      "zaman": "2026-10-13T13:32:22+03:00",
+      "sure_sn": 2.0
     },
     {
       "tur": "olcum",
       "etiket": "kapi-birim-78",
       "asama": "sonra",
       "dosya": "olcum-kapi-birim-78-sonra.txt",
-      "sha256": "e6ccce2476b180cbd8414a19be9110326e39f85db8a62ca663e0b3268a50f2b1",
+      "sha256": "01a30adff6e5e8d72316bec3db27169304c4d2bc5df9f3d45d4cb5768bb46f2a",
       "komut": [
-        "node",
-        "terminal-onar/kapi/sunucu.test.mjs"
+        "bash",
+        "-c",
+        "cd terminal-onar/kapi && node sunucu.test.mjs"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T12:32:35+03:00",
-      "sure_sn": 6.0
+      "zaman": "2026-10-13T13:32:28+03:00",
+      "sure_sn": 5.8
     },
     {
       "tur": "olcum",
       "etiket": "telefon-pencere-15",
       "asama": "sonra",
       "dosya": "olcum-telefon-pencere-15-sonra.txt",
-      "sha256": "43206b96bf2a234653841d2601d4af80fed5095f871234e7b44ec2493682a7d1",
+      "sha256": "ec352e0c0aa5249f8cc6c6c378e3e4adbcc6b639af56fb02bc0ba841e1bd5d08",
       "komut": [
         "node",
         "terminal-onar/kapi/tarayici-sinav.mjs",
@@ -47,24 +48,24 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T12:52:55+03:00",
-      "sure_sn": 9.9
+      "zaman": "2026-10-13T13:32:38+03:00",
+      "sure_sn": 10.0
     },
     {
       "tur": "olcum",
       "etiket": "canli-code-kutusu-durum",
       "asama": "sonra",
       "dosya": "olcum-canli-code-kutusu-durum-sonra.txt",
-      "sha256": "0a4c1ae9c978eb6a6072ba61409870587f0c2b07393c9bbfed7f168eb50c67c7",
+      "sha256": "11c7b564a0194d0b5b3bfefb2cc9a0569cbd88a0b9e3bf81c9915f63c5ccafd0",
       "komut": [
         "bash",
         "-c",
-        "cd terminal-onar/scripts && for k in bani code-ana cc-19986388 yokboyle; do TO_KUTU=code TO_PROJE=/config/projects/Nexus bash koltuk-ac.sh durum $k; done; echo \"ekip-ac.sh olan kutular: $(ls /config/projects/*/scripts/ekip-ac.sh 2>/dev/null | wc -l) / aile kaydı olan: $(find /config/projects -maxdepth 4 -name aile-registry.yaml -not -path \"*/_wt/*\" | wc -l)\""
+        "cd terminal-onar/scripts && for k in bani code-ana cc-19986388 yokboyle; do TO_KUTU=code TO_PROJE=/config/projects/Nexus bash koltuk-ac.sh durum $k; done; echo \"son-etkinlik artık epoch (düzeltme sonrası); takili yalnız görünüş, zorlasız dokunulmaz\""
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T12:32:49+03:00",
-      "sure_sn": 2.9
+      "zaman": "2026-10-13T13:32:39+03:00",
+      "sure_sn": 1.4
     },
     {
       "tur": "olcum",
@@ -86,26 +87,26 @@
       "etiket": "kare-koltuk-pencere",
       "asama": "sonra",
       "dosya": "dosya-kare-koltuk-pencere-sonra.png",
-      "sha256": "b9ab973d3da3e06e67f3d94ce7c0f3afe46a87d98d9e09aa9284f53a957285f9",
+      "sha256": "110f97fa96e23c53aa6c10bd842b3d37adfc672dd91789e7e775ba99d3a77070",
       "kaynak": "/tmp/claude-1000/koltuk-koltuk-pencere.png",
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T12:52:55+03:00"
+      "zaman": "2026-10-13T13:33:04+03:00"
     },
     {
       "tur": "olcum",
       "etiket": "canli-eski-sohbete-don-gercek-ekip-ac",
       "asama": "sonra",
       "dosya": "olcum-canli-eski-sohbete-don-gercek-ekip-ac-sonra.txt",
-      "sha256": "999a2914617c076de79f69aa4c1529749d3beb1c309f33daee18e05310ea011f",
+      "sha256": "4c4d42a4c6e0c687a04090642f10fc35b86b0479f8d968e6a31acdab18dd88b6",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/terminal-koltuk-ac/canli-eski-sohbet.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T12:59:45+03:00",
-      "sure_sn": 24.5
+      "zaman": "2026-10-13T13:33:04+03:00",
+      "sure_sn": 24.6
     },
     {
       "tur": "olcum",
@@ -124,5 +125,5 @@
       "sure_sn": 0.9
     }
   ],
-  "imza": "aa0e64f60e8edd4c7f7c344ae45a30dd09aec04c91b49c62865958da93137a08"
+  "imza": "8e0b1898cda3554b566bac6157d1aa6d0f3e9405c1cc6416aaf8ca9bd1f6bbab"
 }

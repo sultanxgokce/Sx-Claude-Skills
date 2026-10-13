@@ -2,7 +2,8 @@
 # koltuk-ac.sh — bir KOLTUĞU (tmux oturumu) tek komutla ölç ve aç/yeniden aç (dilim 5/5 · 13 Ekim 2026).
 #
 #   koltuk-ac.sh durum <ad>              → JSON: {"ad","durum","tmux","claude","hal","son","rol","resume","yol"}
-#   koltuk-ac.sh ac <ad> [--eski]        → açar; --eski = eski sohbete dön (ekip-ac.sh --resume-if-known)
+#   koltuk-ac.sh ac <ad> [--eski] [--zorla] → açar; --eski = eski sohbete dön (ekip-ac.sh --resume-if-known); --zorla = takılı görünen
+#                                          oturumu KAPATIP yeniden doğur (zorlasız: rc 5, dokunmaz — çalışıyor olabilir)
 #
 # DURUM (üçü ayrı gösterilir, Sultan: "oturum kapandı/bozuldu/silindi — tekrar açmak çok basit olmalı"):
 #   yok          = tmux oturumu yok
@@ -18,7 +19,9 @@ set -uo pipefail
 TAKILI_SN="${TO_TAKILI_SN:-900}"
 EKIP_AC="${TO_EKIP_AC:-$PROJE/scripts/ekip-ac.sh}"
 KAYIT="${AILE_REGISTRY:-$PROJE/_agents/handoff/aile-registry.yaml}"
-KOLTUK_BETIK="${TO_KOLTUK_BETIK:-$BETIK_DIZ/koltuk-bagla.sh}"
+# 🔴 Liste betiği BU dosyanın yanındakidir (yedek göz tur 2 canlı bulgusu: BETIK_DIZ ortak kurulu kopyaya çözülüyor, eski
+#    koltuk-bagla son=0 basıyordu — iş alanındaki düzeltme hiç çağrılmıyordu). Aynı beceri kopyası, aynı sürüm.
+KOLTUK_BETIK="${TO_KOLTUK_BETIK:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/koltuk-bagla.sh}"
 
 json_s() { printf '%s' "$1" | python3 -c 'import json,sys;print(json.dumps(sys.stdin.read()),end="")'; }
 gecerli() { [[ "$1" =~ ^[A-Za-z0-9_-]{1,64}$ ]]; }
@@ -72,9 +75,9 @@ yol_bul() {  # $1 ad → YOL ∈ ekip-ac | onar | yok ; ROL
   else YOL=yok; fi
 }
 
-KOMUT="${1:-}"; AD="${2:-}"; shift 2 2>/dev/null || true
-ESKI=0; for a in "$@"; do case "$a" in --eski) ESKI=1 ;; *) echo "bilinmeyen argüman: $a" >&2; exit 2 ;; esac; done
-[ -n "$AD" ] && gecerli "$AD" || { echo 'kullanım: koltuk-ac.sh durum|ac <ad> [--eski]' >&2; exit 2; }
+KOMUT="${1:-}"; AD="${2:-}"; shift $(( $# >= 2 ? 2 : $# ))   # tek argümanda $@ temiz kalır (yedek göz tur 2: "bilinmeyen argüman: durum" basıyordu)
+ESKI=0; ZORLA=0; for a in "$@"; do case "$a" in --eski) ESKI=1 ;; --zorla) ZORLA=1 ;; *) echo "bilinmeyen argüman: $a" >&2; exit 2 ;; esac; done
+[ -n "$AD" ] && gecerli "$AD" || { echo 'kullanım: koltuk-ac.sh durum|ac <ad> [--eski] [--zorla]' >&2; exit 2; }
 
 case "$KOMUT" in
   durum)
@@ -90,7 +93,10 @@ case "$KOMUT" in
     case "$YOL" in
       ekip-ac)
         # takılı/Claude'suz oturumu önce kapat — ekip-ac.sh "canlı" sanıp yalnız attach komutunu basar, Claude geri gelmez
-        if [ "$DURUM" = claude-yok ] || [ "$DURUM" = takili ]; then tmux kill-session -t "=$AD" 2>/dev/null; gunluk "koltuk-ac: $AD ($DURUM) kapatıldı, yeniden doğacak"; fi
+        # 🔴 TAKILI = görünüş (ekran değişmedi); uzun araç koşan sağlam bir Claude da öyle görünür (canlıda ölçüldü: BÂNİ'nin
+        #    kendi koltuğu). Kapatmak işi keser → yalnız açık --zorla ile; telefon penceresi önce sorar.
+        if [ "$DURUM" = takili ] && [ $ZORLA = 0 ]; then echo "takılı görünüyor ama çalışıyor olabilir: kapatıp yeniden açmak için --zorla (işi keser)"; exit 5; fi
+        if [ "$DURUM" = claude-yok ] || [ "$DURUM" = takili ]; then tmux kill-session -t "=$AD" 2>/dev/null; gunluk "koltuk-ac: $AD ($DURUM) kapatıldı, yeniden doğacak (zorla=$ZORLA)"; fi
         if [ "$DURUM" = canli ]; then echo "zaten canlı: $AD (ikinci kopya açılmaz)"; exit 0; fi
         ARG=(); [ $ESKI = 1 ] && ARG=(--resume-if-known)
         if bash "$EKIP_AC" "$ROL" "${ARG[@]}"; then echo "açıldı: $AD ← ekip-ac.sh $ROL ${ARG[*]:-}"; exit 0
@@ -102,5 +108,5 @@ case "$KOMUT" in
       *)
         echo "açılamadı: '$AD' kayıtlı bir koltuk değil (aile kaydında rolü yok ya da kutuda ekip-ac.sh yok) — kimliksiz Claude açılmaz; önce işe alma (madde 6)" >&2; exit 4 ;;
     esac ;;
-  *) echo 'kullanım: koltuk-ac.sh durum|ac <ad> [--eski]' >&2; exit 2 ;;
+  *) echo 'kullanım: koltuk-ac.sh durum|ac <ad> [--eski] [--zorla]' >&2; exit 2 ;;
 esac

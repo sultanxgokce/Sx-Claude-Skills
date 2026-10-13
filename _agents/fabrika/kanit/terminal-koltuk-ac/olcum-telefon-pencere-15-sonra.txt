@@ -1,5 +1,5 @@
 $ node terminal-onar/kapi/tarayici-sinav.mjs --kare /tmp/claude-1000/koltuk
-# rc=0 sure=9.9s zaman=2026-10-13T12:52:55+03:00
+# rc=0 sure=10.0s zaman=2026-10-13T13:32:38+03:00
 --- stdout ---
 ── S · seçici
   ✓ S1 başlıkta koltuk seçici var, 4 koltuk, ● = Claude
@@ -20,6 +20,7 @@ $ node terminal-onar/kapi/tarayici-sinav.mjs --kare /tmp/claude-1000/koltuk
   ✓ KD3 "Eski sohbete dön" tek tık → kapıya {eski:true} → betik "ac CARSI --eski"
   ✓ KD4 canlı koltuk: "Canlı · hâl: soru", eylem devre dışı (ikinci kopya açılmaz)
   ✓ KD5 kayıtsız koltuk: "açılamaz, önce işe alma" — Aç devre dışı ve soluk, "Eski sohbete dön" GÖRÜNMEZ (hidden fiilen gizler)
+  ✓ KD6 TAKILI koltuk (üçüncü hâl): "Claude takılı görünüyor" + ana koltuk (onarım betiği), eylem "Yeniden aç" etkin
 
-GEÇEN: 15 · KALAN: 0
+GEÇEN: 16 · KALAN: 0
 --- stderr ---
