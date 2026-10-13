@@ -50,6 +50,11 @@ TTYD_TMUX="${TO_TTYD_TMUX:-ttyd-$KUTU}"
 KAPI_TMUX="${TO_KAPI_TMUX:-kapi-$KUTU}"
 KAPI_PORT="${TO_KAPI_PORT:-7681}"
 TTYD_SOKET="${TO_TTYD_SOKET:-${TO_DURUM_DIZ:-/config/.terminal-onar}/ttyd.sock}"
+# Rapor dizini — kapıya KAPI_RAPOR_DIZ olarak GİDER. 🔴 2.3.0 / REVAK gerilemesi (12-13 Eki): kutu yayın sayfalarını kendi
+#    dizininde ($PROJE/veri/rapor — defter-sayfasi oraya yazar) tutuyordu; ortak koda bağlanınca onar.sh bu değişkeni kapıya
+#    vermiyordu, kapı ortak varsayılana baktı, sayfa 404 oldu. Sıra: açık beyan > kutunun veri/rapor dizini (varsa) > ortak varsayılan.
+RAPOR_DIZ="${TO_RAPOR_DIZ:-}"
+[ -n "$RAPOR_DIZ" ] || { [ -d "$PROJE/veri/rapor" ] && RAPOR_DIZ="$PROJE/veri/rapor" || RAPOR_DIZ="$DURUM_DIZ/rapor"; }
 # Beceri GLOBAL dizinde yaşar (tek kopya, 14 kutuda ortak); kutu-yerel kopya varsa o kazanır.
 BECERI_KOK="${TO_BECERI_KOK:-$(
   for d in "$PROJE/.claude/skills/terminal-onar" "/config/.claude/skills/terminal-onar"; do

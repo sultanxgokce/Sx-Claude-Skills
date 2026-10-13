@@ -1,0 +1,87 @@
+{
+  "is": "terminal-onar-revak-gerilemeleri",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-13T12:24:13+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "canli-revak-kapi-rapor-dizini-ve-bekci-izi",
+      "asama": "once",
+      "dosya": "olcum-canli-revak-kapi-rapor-dizini-ve-bekci-izi-once.txt",
+      "sha256": "07b5a2d51eeac73baea0e96c14d479a24b65f3cd9186e00effacc5fe7b18043f",
+      "komut": [
+        "bash",
+        "-c",
+        "ssh -o BatchMode=yes hostsrv \"sudo -n docker exec -u abc cloudtop-revak bash -c 'p=\\$(pgrep -u abc -f \\\"node .*sunucu.mjs\\\" | head -1); echo \\\"kapi_pid=\\$p\\\"; echo \\\"kapi_ortaminda_KAPI_RAPOR_DIZ=\\$(tr \\\"\\\\0\\\" \\\"\\\\n\\\" < /proc/\\$p/environ 2>/dev/null | grep -c ^KAPI_RAPOR_DIZ=)\\\"; echo \\\"yayin_dizini=\\$(ls -d /config/projects/revak/veri/rapor/usta-defteri 2>/dev/null || echo yok)\\\"; echo \\\"bekci_izi=\\$(cat /config/.terminal-onar/bekci.son 2>/dev/null || echo yok)\\\"; bash /config/projects/revak/.claude/skills/terminal-onar/scripts/komut.sh durum --json 2>/dev/null | sed -E \\\"s/\\\\\\\"ana_oturum\\\\\\\":\\\\\\\"[^\\\\\\\"]*\\\\\\\"/\\\\\\\"ana_oturum\\\\\\\":\\\\\\\"<kimlik>\\\\\\\"/\\\"; v=\\$(sed -n \\\"s/^version: //p\\\" /config/projects/revak/.claude/skills/terminal-onar/SKILL.md); echo \\\"surum=\\$v\\\"'\"; echo \"ÖNCE: kapı rapor dizinini ortamdan almıyor (0 bekleniyor), bekçi izi yok, sürüm 2.2.2\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T12:22:04+03:00",
+      "sure_sn": 0.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "rapor-sinavi-yayin-kipi",
+      "asama": "sonra",
+      "dosya": "olcum-rapor-sinavi-yayin-kipi-sonra.txt",
+      "sha256": "5b72f54d48cda4332a236d89c29c5221396587114e691fdb2f1ef9e01d3d1a21",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/kapi && node rapor.test.mjs 2>&1 | grep -E \"^── Y|Y1[0-4]|Y[1-9] |geçti\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T12:22:45+03:00",
+      "sure_sn": 0.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "rapor-mutasyon-turu",
+      "asama": "sonra",
+      "dosya": "olcum-rapor-mutasyon-turu-sonra.txt",
+      "sha256": "068f3817a1ce2ac16ff9dcc0a94b924f36ef52c57d050b9ab258187f8450785d",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/kapi && bash rapor.mutasyon.sh 2>&1 | grep -E \"M1[3-7]|kırmızıya döndü\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T12:22:52+03:00",
+      "sure_sn": 7.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bekci-izi-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-bekci-izi-sinavi-tek.txt",
+      "sha256": "602dab90d804b6d9da7aedbd037b8eb2b66d6b869f1ecc21e7264feea7bbd788",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/bekci-iz.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T12:22:53+03:00",
+      "sure_sn": 1.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "eski-sinavlar-gerilemesiz",
+      "asama": "tek",
+      "dosya": "olcum-eski-sinavlar-gerilemesiz-tek.txt",
+      "sha256": "2d8d067d07bddcd0b33a27c6b26812b9a09cf1badc1cbee7bb70565f5a0b6c76",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar && (cd kapi && node sunucu.test.mjs 2>&1 | tail -1) && (cd scripts && bash kur-bag.test.sh 2>&1 | tail -1 && bash onar.test.sh 2>&1 | tail -1 && bash sifre-yukle.test.sh 2>&1 | tail -1 && bash kutu-adi.test.sh 2>&1 | tail -1 && bash koltuk-bagla.test.sh 2>&1 | tail -1) && (cd kapi && bash mutasyon.sh 2>&1 | tail -1)"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T12:24:13+03:00",
+      "sure_sn": 79.6
+    }
+  ],
+  "imza": "6b28b4cb29e4e536971c03a0e0079e6ec988003a0c44d464aee5f9d77859e6da"
+}

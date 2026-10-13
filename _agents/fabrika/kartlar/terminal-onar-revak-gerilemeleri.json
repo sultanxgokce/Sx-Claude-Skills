@@ -1,0 +1,19 @@
+{
+  "is": "terminal-onar-revak-gerilemeleri",
+  "cumle": "REVAK'ın yerel terminal-onar kopyasındaki sınavlı davranışlar ortak koda taşınır: (a) KAPI_RAPOR_DIZ kutu yapılandırmasından onar.sh'a geçer (usta-defteri 404 → 200), (b) rapor yanıtında CSP kum havuzu + .defter-yayin/veri.json salt-okur kapıları (R1-R11, M14-M18 ortak sınava), (c) bekçi son-koşu izi durum.sh'a; 12 Eki kur.sh 2b bağı yerel kopyayı ezdi (kayıtsız — MUAVİN payı)",
+  "istedi": "REVAK-KURTARICI (13 Eki mektubu, Sultan onayıyla)",
+  "aldi": "MUAVIN",
+  "zaman": "2026-10-13T11:56:26+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

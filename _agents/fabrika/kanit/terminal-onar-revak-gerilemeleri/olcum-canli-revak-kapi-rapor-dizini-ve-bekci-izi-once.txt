@@ -1,0 +1,11 @@
+$ bash -c ssh -o BatchMode=yes hostsrv "sudo -n docker exec -u abc cloudtop-revak bash -c 'p=\$(pgrep -u abc -f \"node .*sunucu.mjs\" | head -1); echo \"kapi_pid=\$p\"; echo \"kapi_ortaminda_KAPI_RAPOR_DIZ=\$(tr \"\\0\" \"\\n\" < /proc/\$p/environ 2>/dev/null | grep -c ^KAPI_RAPOR_DIZ=)\"; echo \"yayin_dizini=\$(ls -d /config/projects/revak/veri/rapor/usta-defteri 2>/dev/null || echo yok)\"; echo \"bekci_izi=\$(cat /config/.terminal-onar/bekci.son 2>/dev/null || echo yok)\"; bash /config/projects/revak/.claude/skills/terminal-onar/scripts/komut.sh durum --json 2>/dev/null | sed -E \"s/\\\"ana_oturum\\\":\\\"[^\\\"]*\\\"/\\\"ana_oturum\\\":\\\"<kimlik>\\\"/\"; v=\$(sed -n \"s/^version: //p\" /config/projects/revak/.claude/skills/terminal-onar/SKILL.md); echo \"surum=\$v\"'"; echo "ÖNCE: kapı rapor dizinini ortamdan almıyor (0 bekleniyor), bekçi izi yok, sürüm 2.2.2"
+# rc=0 sure=0.5s zaman=2026-10-13T12:22:04+03:00
+--- stdout ---
+kapi_pid=3377453
+kapi_ortaminda_KAPI_RAPOR_DIZ=0
+yayin_dizini=/config/projects/revak/veri/rapor/usta-defteri
+bekci_izi=1791828721
+{"saglam":true,"ana_tmux":"ok","ana_claude":"ok","web_terminal":"ok","kurtarici":"ok","bekci":"ok","ana_oturum":"<kimlik>","zaman":"2026-10-13T12:22:04+03:00"}
+surum=2.2.2
+ÖNCE: kapı rapor dizinini ortamdan almıyor (0 bekleniyor), bekçi izi yok, sürüm 2.2.2
+--- stderr ---

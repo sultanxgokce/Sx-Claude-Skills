@@ -1,0 +1,20 @@
+$ bash -c cd terminal-onar/kapi && node rapor.test.mjs 2>&1 | grep -E "^── Y|Y1[0-4]|Y[1-9] |geçti"
+# rc=0 sure=0.4s zaman=2026-10-13T12:22:45+03:00
+--- stdout ---
+── Y · YAYIN KİPİ (.defter-yayin işaretli klasör: salt-okur + kum havuzu — REVAK tasarımı, 2.3.0) ──
+  ✓ Y1 girişsiz yayın sayfası AÇILMAZ (girişe yönlenir)
+  ✓ Y2 girişli yayın sayfası açılır (Y1 tautoloji değil)
+  ✓ Y3 kokpit içinde açılabilir (frame-ancestors kokpit), X-Frame-Options YOK
+  ✓ Y4 yayın sayfası KUM HAVUZUNDA ve ağsız (kapı uçlarına istek atamaz)
+  ✓ Y5 eğik çizgisiz yayın adı TABANLI yola yönlenir
+  ✓ Y6 belge (txt) sunulur, o da kum havuzunda
+  ✓ Y7 gizli ad (yayın işareti) sunulmaz
+  ✓ Y8 yol kaçışı (%2e%2e, kodlu eğik çizgi) dizin dışına çıkamaz
+  ✓ Y9 sembolik bağ dizin dışını SUNMAZ
+  ✓ Y10 yayın kipinde yazma yöntemi REDDEDİLİR (405) — veri.json dahil, dosya değişmedi
+  ✓ Y11 HEAD yayın kipinde 200 ve kum havuzu başlığı taşır
+  ✓ Y12 işaretsiz klasör kum havuzuna ALINMAZ (SEDİR sayfası veri.json yazabilsin)
+  ✓ Y13 gizli ad işaretsiz klasörde de sunulmaz
+  ✓ Y14 işaretsiz klasörde yazma yöntemi eskisi gibi 404 (405 yalnız yayın kipi)
+48 geçti · 0 kaldı
+--- stderr ---

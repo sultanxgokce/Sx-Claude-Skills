@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.2.2
+version: 2.3.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -176,11 +176,43 @@ sadeleştiriyor, `%2f` ise tek parça ad olarak kalıyor. Mutasyon turu bu korum
 olarak koşturur ve tura saymaz. Kontrol yine durmalıdır: ayrıştırıcı bir gün değişirse tek
 savunma odur. "Ölçemedim" ile "gerek yok" aynı şey değildir.
 
-Kanıt: `kapi/rapor.test.mjs` (**30 kapı**, gerçek süreç + gerçek HTTP) · `kapi/rapor.mutasyon.sh`
-(8 koruma öldürüldü, 8'i de sınavı kırmızıya çevirdi) · `kapi/rapor-kapi.test.sh` (koşucunun
-gördüğü çağıran — depo kapısı yalnız kabuk sınavlarını keşfediyor).
+### Yayın kipi — `.defter-yayin` işaretli klasör salt-okur ve kum havuzunda (2.3.0)
+
+REVAK-KURTARICI'nın 12 Ekim tasarımı (ortak koda 13 Ekim'de taşındı — kutuya bağlanırken ezilmişti, bkz. sürüm notu).
+Rapor klasöründe **`.defter-yayin`** işareti varsa (defter-sayfasi'nın yayımladığı sayfa) o klasör **yayın kipindedir**:
+- her cevap **CSP kum havuzunda** (`sandbox` · opak köken) ve **ağsız** (`connect-src 'none'` · `form-action 'none'`):
+  sayfa çizer ama kapıya hiçbir istek atamaz. 🔴 Niçin: rapor kapıyla **aynı kökenden** sunulur; içindeki bir betik
+  `/api/gonder`'e ulaşsa tmux'a tuş yazabilirdi.
+- yazma yöntemleri **405** (`veri.json` dahil), `HEAD` 200; kokpit çerçevesi (`frame-ancestors`) korunur.
+- **işaretsiz klasör bayt bayt eski davranışta** — SEDİR'in `ev/ridvan` sayfaları `veri.json`'u tarayıcıdan PUT'lar;
+  kum havuzu onun yazma kolunu keserdi (ölçüldü: ridvan/index.html'de x-kapi PUT var). Bu yüzden kip klasör-başına.
+- gizli adlar (`.defter-yayin`, `.gecici`…) **iki kipte de** sunulmaz.
+
+**Rapor dizini kutudan türer (2.3.0):** `TO_RAPOR_DIZ` > kutunun `<proje>/veri/rapor` dizini (varsa) > ortak varsayılan;
+`onar.sh` bunu kapıya `KAPI_RAPOR_DIZ` olarak **verir**. 🔴 Gerileme dersi: REVAK sayfaları `projects/revak/veri/rapor`'daydı,
+ortak `onar.sh` değişkeni kapıya vermiyordu → kapı ortak varsayılana baktı → canlı sayfa 404 (12-13 Eki).
+
+Kanıt: `kapi/rapor.test.mjs` (**48 kapı**: R serisi + yayın kipi **Y1-Y14**, Y12-Y14 SEDİR gerileme zırhı) ·
+`kapi/rapor.mutasyon.sh` (**16 koruma** öldürüldü, 16'sı da sınavı kırmızıya çevirdi — M13-M17 yayın kipi; M16 "işaret
+okunmuyor" ve M17 "her klasör yayın" iki yönlü) · `kapi/rapor-kapi.test.sh` (koşucunun gördüğü çağıran — depo kapısı
+yalnız kabuk sınavlarını keşfediyor).
+
+## Bekçi koşu izi — "kurulu" ≠ "koşuyor" (2.3.0)
+
+`bekci.sh` her koşuda `<durum>/bekci.son`'a damga bırakır (duraklatmadan ÖNCE: duraklatılmış bekçi de canlıdır).
+`durum.sh` bekçiyi **satıra değil ize** göre ölçer: iz ≤5 dk → ok · iz yok → `izsiz(…)` · iz eski → `durgun(N dk koşmadı)`.
+Tek istisna: `onar.sh` bekçiyi az önce kurduysa/doğruladıysa (`bekci.kuruldu` damgası ≤2 dk) ilk koşu beklenir — iz
+**uydurulmaz**, yalnız pencere açılır; pencere dolunca kırmızı. 🔴 Niçin (REVAK hata defteri, 29 Eyl–10 Eki): cron
+süreci **11 gün** yoktu, gösterge crontab satırına bakıp "ok" diyordu. Sınav: `scripts/bekci-iz.test.sh` (12 kapı,
+hermetik, sahte crontab/tmux; B11 mutasyon: eski gösterge geri gelince B2 yakalar).
 
 ## Sürüm notları
+- **2.3.0 (2026-10-13, MUAVİN · REVAK gerilemelerinin ortak koda taşınması):** 12 Ekim'de 18 kutuyu ortak beceriye
+  bağlarken REVAK-KURTARICI'nın kendi geliştirdiği üç iyileştirme ezildi (canlı "Usta Defteri" sayfası 404 oldu).
+  Üçü ortak koda taşındı: (1) rapor dizini kutudan türer ve kapıya verilir; (2) `.defter-yayin` işaretli klasör
+  salt-okur + kum havuzu (klasör-başına: SEDİR'in yazan sayfaları eski davranışta); (3) bekçi koşu izi + durum.sh'ın
+  ize bakması. 🔴 Ders: **bağlamadan önce fark ölçülür** — kutunun yerel kopyası ortak sürümden YENİ olabilir;
+  `.eski-<tarih>` yedeği kurtardı, ölçmeyen kurulum gerilemeyi görmezdi.
 - **2.2.2 (2026-10-13, MUAVİN · sır-hijyeni):** `sifre_yukle` erişim ortam dosyasını artık **source etmiyor**; yalnız
   `AD=değer` satırlarını okuyor (`ortam_yukle`, çevreleyen tırnak soyulur, `export` öneki kabul). Niçin: 13 Ekim onarım
   turunda üç kutuda (code 135 · tellal 7 · mmex 1) dosyada ad=değer olmayan satırlar vardı; `. dosya` onları KOMUT gibi

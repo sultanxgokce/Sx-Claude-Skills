@@ -120,7 +120,7 @@ if [ $WEB_YENILE = 1 ] || ! kapi_saglam; then
     pkill -u "$(id -u)" -f "node $KAPI_DIZ/sunucu.mjs" 2>/dev/null; sleep 1
     # Parola tmux komutuna YAZILMAZ: kapıyı başlatan kabuk onu env dosyasından kendisi okur.
     tmux new-session -d -s "$KAPI_TMUX" \
-      "set -a; . $ENV_DOSYA; set +a; KAPI_PORT=$KAPI_PORT KAPI_TTYD_SOKET=$TTYD_SOKET TO_ANA_TMUX=$ANA_TMUX TO_DURUM_DIZ=$DURUM_DIZ KAPI_TABAN=$TABAN TO_KUTU=$KUTU exec node $KAPI_DIZ/sunucu.mjs >> $DURUM_DIZ/kapi.log 2>&1"
+      "set -a; . $ENV_DOSYA; set +a; KAPI_PORT=$KAPI_PORT KAPI_TTYD_SOKET=$TTYD_SOKET TO_ANA_TMUX=$ANA_TMUX TO_DURUM_DIZ=$DURUM_DIZ KAPI_TABAN=$TABAN KAPI_RAPOR_DIZ=$RAPOR_DIZ TO_KUTU=$KUTU exec node $KAPI_DIZ/sunucu.mjs >> $DURUM_DIZ/kapi.log 2>&1"
     bekle_saglam kapi_saglam "$KAPI_BEKLE" || true
     kapi_saglam && gunluk "K0 kapı başlatıldı" || gunluk "K0 HATA: kapı ayağa kalkmadı ($(kapi_kod))"
   fi
@@ -143,6 +143,8 @@ fi
 # 5 · bekçi — kalıcı kopya (.oda/cron, kutu yeniden kurulunca yüklenir) + canlı crontab
 # Satır ve göç ortak.sh'ta (bekci_kur): eksikse kurar, eski ortak-yollu satırı proje yoluna çevirir — .oda/cron VE canlı crontab.
 gunluk "K0 bekçi: $(bekci_kur "$ODA_CRON" canli)"
+# Pencere damgası: bekçi az önce kuruldu/doğrulandı; durum.sh ilk koşu izi için 2 dk tanır (iz UYDURULMAZ, yalnız pencere açılır).
+date +%s > "$DURUM_DIZ/bekci.kuruldu" 2>/dev/null
 }
 
 if bash "$BETIK_DIZ/durum.sh" >/dev/null; then gunluk "K0 bitti: sağlam"; exit 0; fi

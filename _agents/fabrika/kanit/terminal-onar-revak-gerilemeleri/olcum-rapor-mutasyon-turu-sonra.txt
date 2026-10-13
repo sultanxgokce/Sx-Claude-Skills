@@ -1,0 +1,10 @@
+$ bash -c cd terminal-onar/kapi && bash rapor.mutasyon.sh 2>&1 | grep -E "M1[3-7]|kırmızıya döndü"
+# rc=0 sure=7.0s zaman=2026-10-13T12:22:52+03:00
+--- stdout ---
+  ✓ M13 yayın kipi: kum havuzu başlığı kalktı — sınav KIRMIZI
+  ✓ M14 yayın kipi: yazma yöntemi reddi (405) kalktı — sınav KIRMIZI
+  ✓ M15 gizli ad reddi kalktı — sınav KIRMIZI
+  ✓ M16 yayın işareti hiç okunmuyor (her klasör işaretsiz) — sınav KIRMIZI
+  ✓ M17 her klasör yayın sayılırsa SEDİR gerilemesi (işaretsiz klasör de kum havuzuna girer) — sınav KIRMIZI
+── 16 kırmızıya döndü · 0 yeşil kaldı/uygulanamadı
+--- stderr ---

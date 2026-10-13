@@ -15,7 +15,18 @@ else D[web_terminal]="yok(terminal=$(ttyd_kod),kapı=$(kapi_kod))"; fi
 if kid=$(claude_oturumu "$KURT_TMUX"); then
   D[kurtarici]=ok; [ "$kid" != "?" ] && printf '%s\n' "$kid" > "$DURUM_DIZ/kurtarici-oturum"
 else D[kurtarici]=yok; fi
-{ bekci_kurulu || [ -n "${TO_BEKCI_YOK:-}" ]; } && D[bekci]=ok || D[bekci]=yok
+# Bekçi (2.3.0): satır KURULU mu değil, son 5 dakikada gerçekten KOŞTU mu (bekci.sh her koşuda iz bırakır; REVAK hata defteri
+# 29 Eyl–10 Eki: cron süreci 11 gün yoktu, gösterge satıra bakıp "ok" diyordu). İz yoksa/bayatsa yalnız onar.sh'ın bekçiyi
+# az önce kurduğu/doğruladığı 2 dakikalık pencerede "ok" (ilk koşu bekleniyor) — iz uydurulmaz, pencere dolunca kırmızı.
+if [ -n "${TO_BEKCI_YOK:-}" ]; then D[bekci]=ok
+elif ! bekci_kurulu; then D[bekci]=yok
+else
+  _son=$(cat "$DURUM_DIZ/bekci.son" 2>/dev/null); _kur=$(cat "$DURUM_DIZ/bekci.kuruldu" 2>/dev/null); _simdi=$(date +%s); _yeni=0
+  [[ "$_kur" =~ ^[0-9]+$ ]] && [ $((_simdi - _kur)) -le 120 ] && _yeni=1
+  if ! [[ "$_son" =~ ^[0-9]+$ ]]; then [ $_yeni = 1 ] && D[bekci]=ok || D[bekci]="izsiz(kurulu ama hiç koşmadı — zamanlayıcı servisi?)"
+  elif [ $((_simdi - _son)) -gt 300 ]; then [ $_yeni = 1 ] && D[bekci]=ok || D[bekci]="durgun($(( (_simdi - _son) / 60 )) dk koşmadı — zamanlayıcı servisi?)"
+  else D[bekci]=ok; fi
+fi
 
 rc=0; for k in "${!D[@]}"; do [ "${D[$k]}" = ok ] || rc=1; done
 
