@@ -131,9 +131,9 @@ Doğrula: `ahi check iskan` · Kanon: `ahi doctrine` · İş-planı: `Nexus/_age
   taşıyan kutular). **Hiçbir şey yazmaz, kanonu ezmez** — "kanon = kutudan hasat" yön kararı NÂZIR/KONAKÇI görüşünü
   bekliyor. rc: 0 hepsi aynı · 1 fark/eksik · 2 ölçülemedi (ölçülemeyen "aynı" sayılmaz).
 - **Canlı ilk koşu (13 Eki):** 13 kutu · aynı 6 (enis huzur maiset menzil sedir tellal) · farklı 4 (akar nazir nova s02) ·
-  kanon-yok 2 (mmex tez) · kutu-yok 1 (mihenk).
-- Sınav `scripts/kayit-koru.test.sh` 16 kapı (hermetik: sahte ssh, geçici host kökü; K1 pozitif kontrol yazımı görür).
-  Mutasyon M1-M8 + desen-eksik kapısı: `_agents/fabrika/kanit/iskan-kayit-koruma/mutasyon.sh`.
+  kanon-yok 2 (mmex tez) · kutu-yok 1 (mihenk). Rapor fetch etmez; kanonun commit'i ilk satırda.
+- Sınav `scripts/kayit-koru.test.sh` 17 kapı (hermetik: sahte ssh, geçici host kökü; K1 pozitif kontrol yazımı görür; F3 .git dahil salt-okur).
+  Mutasyon M1-M8 + M10 (fetch geri gelirse) + desen-eksik kapısı: `_agents/fabrika/kanit/iskan-kayit-koruma/mutasyon.sh`.
 
 ## Durum (2026-07-20, CYCLE-5 FIX#2 Tier-C YAZMA-hedefi redirect — v0.7.3)
 ✓ Cycle-4 FRICTION#2 kapatıldı (verify-fan-out kararı=a, high-conf). **Kök-neden:** doğum ADIM-6 (registry
