@@ -1,0 +1,38 @@
+{
+  "tur": 3,
+  "is": "terminal-pano",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T12:30:16+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 94861,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kutu kapısına resim yapıştırma ve tmux seçimini tarayıcı panosuna aktarma köprüsü eklenmiş; gerçek ttyd, tmux ve Chromium sınavları iki ana talebi ve Shift-sürükle ipucunu geçiriyor. Önce terminal.mmepanel.com üretim kurulumu ile Sultan’ın mevcut eklenti uyumsuzluğunu çözün; hedef dış yüzey henüz temiz ve çalışır hâliyle kanıtlanmadığından üretime hazır anlamında 5 değildir.",
+    "bulgular": [
+      {
+        "ne": "Değişiklik hedeflenen terminal.mmepanel.com üretim kapısına kurulup orada ölçülmemiş; sunulan canlı sınav yalnız iş alanındaki yerel kapıyı doğruluyor.",
+        "kanit": "Canlı ölçüm C0-C4’ü geçiriyor, ancak canli-olcum.mjs P değerini http://127.0.0.1:17681 olarak tanımlıyor. KAPSAM-SINIRI, ortak üretim kapısına kodun ancak birleşme, senkron ve yeniden başlatma sonrasında ineceğini ve üretim ölçümünün daha sonra yapılacağını söylüyor.",
+        "konum": "_agents/fabrika/kanit/terminal-pano/canli-olcum.mjs:5; terminal-onar/KAPSAM-SINIRI.md — YOK ve Birleşme SONRASI bölümleri",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Sultan’ın halen kullandığı belirtilen 0.9 tarayıcı eklentisi yeni kapı işaretini tanımıyor; yanlış /proxy/8391 isteği gönderip kırmızı 404 bildirimi çıkarıyor. 0.10 ayrıca dağıtılmadan hedef kullanıcı deneyimi kusurlu kalıyor.",
+        "kanit": "Eski eklenti ölçümünde E1, E2 ve E4 başarısız, sonuç 19/22; yeni eklenti dosyasıyla aynı sınav 22/22 geçiyor. KAPSAM-SINIRI da Sultan’ın tarayıcısının dağıtım öncesinde 0.9’u çalıştıracağını kaydediyor.",
+        "konum": "olcum-ucuca-eski-eklenti-once.txt:E1-E4; olcum-ucuca-yeni-eklenti-sonra.txt:E1-E4; terminal-onar/KAPSAM-SINIRI.md — YOK bölümü",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Gerçekçi resimle gerçek ttyd+tmux+Chromium ölçümü, köprüsüz olumsuz kontrol, eski/yeni eklenti ölçüm çifti ve kayıtlı kareler var; önceki turdaki sabit port kusuru dinamik port seçimiyle giderilmiş. Bununla birlikte kare içerikleri sunulan metinde görülemiyor; terminal.mmepanel.com üretim kurulumu ve Sultan’ın gerçek tarayıcısı ölçülmemiş."
+  }
+}

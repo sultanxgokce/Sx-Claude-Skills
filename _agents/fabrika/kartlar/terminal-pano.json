@@ -16,8 +16,13 @@
   "sultan": true,
   "kanit_nerede": "_agents/fabrika/kanit/terminal-pano (başsız Chromium uçtan uca: gerçek ttyd+tmux+kapı)",
   "oda": "",
-  "durum": "acik",
-  "gecmis": [],
+  "durum": "tikandi",
+  "gecmis": [
+    {
+      "zaman": "2026-10-13T12:32:24+03:00",
+      "olay": "tikandi"
+    }
+  ],
   "sultan_kararlari": [
     {
       "karar": "devam",
@@ -27,5 +32,13 @@
       "gerekce": "Sultan dilim 5 paketini (7 madde) ve işe alma akışı tasarımını onayladı; madde 1→2 sırasıyla inşa devam eder (SERDAR iletti, 13 Eki)",
       "zaman": "2026-10-13T12:18:14+03:00"
     }
-  ]
+  ],
+  "bitis": "2026-10-13T12:32:24+03:00",
+  "pr": "",
+  "puan": null,
+  "kanit_var": false,
+  "tikanma": {
+    "yol": "devam",
+    "neden": "Bağımsız göz 3 turda 4/5-E'de kaldı; kalan iki bulgu yapısal: (1) üretim kapısında (terminal.mmepanel.com) ölçüm birleşme öncesi yapılamaz — kurulu kapı ortak dizinden koşar; (2) 0.9 tarayıcı eklentisi 0.10 dağıtılana dek ttyd sayfasında fazladan 404 bildirimi basar (köprü yine çalışır). Önerilen yol: DEVAM — #301 + cloudtop #600 birlikte birleşir, sonra KAPSAM-SINIRI'daki 4 adımla canlı doğrulama (maiset) ve eklenti dağıtımı. Kod bulgusu kalmadı (tur 2-3 rötuşları kapatıldı: dinamik port)."
+  }
 }
