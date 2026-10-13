@@ -1,0 +1,11 @@
+$ bash terminal-onar/scripts/koltuk-fark-filo.test.sh
+# rc=0 sure=0.2s zaman=2026-10-13T21:51:11+03:00
+--- stdout ---
+  ✓ N1 temiz kutu temiz sayılır
+  ✓ N2 kutunun kendi beyanı (tmux yok / node yok) → terminalsiz
+  ✓ N3 rc 127 (tar yok) → ÖLÇÜLEMEDİ, terminalsiz DEĞİL
+  ✓ N4 tanınmayan rc → ÖLÇÜLEMEDİ
+  ✓ N5 ölçülemeyen varken genel rc 2 (temiz sayılmaz)
+  ✓ N6 özet: terminalli 3 (1 temiz + 2 ölçülemedi) · terminalsiz 2
+GEÇEN: 6 · KALAN: 0
+--- stderr ---
