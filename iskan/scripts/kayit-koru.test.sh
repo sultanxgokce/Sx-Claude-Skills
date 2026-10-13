@@ -21,7 +21,7 @@ case "$cmd" in
   *"docker exec"*"command -v"*) exit 0 ;;
   *"tmux list-sessions"*) printf 'denekAlfa\ndenekBeta\n' ;;
   *"docker exec"*) exit 0 ;;
-  *) bash -c "$cmd" ;;
+  *) bash -c "${cmd//chown /: }" ;;   # chown 1000:1000 yalnız uid 1000'de geçer (CI koşucusu değil); düzenek sahipliği sınamaz
 esac
 STUB
 chmod +x "$T/stub/ssh"
