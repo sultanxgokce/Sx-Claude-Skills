@@ -1,0 +1,32 @@
+{
+  "is": "terminal-onar-sifre-yukle-guvenli",
+  "cumle": "terminal-onar sifre_yukle erişim ortam dosyasını 'source' etmek yerine yalnız AD=değer satırlarını okur (fail-closed); bozuk satır komut gibi çalıştırılmaz, değer parçası stderr'e düşmez (13 Eki: code 135 · tellal 7 · mmex 1 bozuk satır, onarım koşusunda değer parçası çıktıya düştü)",
+  "istedi": "MUAVİN ölçümü (bulgu S-?, 13 Eki) · sır-hijyeni",
+  "aldi": "MUAVIN",
+  "zaman": "2026-10-13T11:09:04+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "bitti",
+  "gecmis": [
+    {
+      "zaman": "2026-10-13T11:13:47+03:00",
+      "olay": "bitti"
+    }
+  ],
+  "bitis": "2026-10-13T11:13:47+03:00",
+  "pr": "300",
+  "puan": {
+    "kod": 5,
+    "dogru": "E",
+    "tur": 1
+  },
+  "kanit_var": true
+}

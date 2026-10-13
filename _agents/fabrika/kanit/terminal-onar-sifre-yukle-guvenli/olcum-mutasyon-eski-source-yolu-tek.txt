@@ -1,0 +1,16 @@
+$ bash -c cp ortak.sh /tmp/o.bak; python3 - <<PY
+s=open("ortak.sh").read(); s=s.replace("  ortam_yukle \"\$ENV_DOSYA\"\n  sifre_var_mi && return 0","  if [ -f \"\$ENV_DOSYA\" ]; then set -a; . \"\$ENV_DOSYA\"; set +a; fi\n  sifre_var_mi && return 0",1); open("ortak.sh","w").write(s)
+PY
+grep -c "set -a; . \"\$ENV_DOSYA\"" ortak.sh; o=$(bash sifre-yukle.test.sh 2>&1); cp /tmp/o.bak ortak.sh; rm -f /tmp/o.bak; printf "%s\n" "$o" | grep -E "✗|geçti"; echo "NOT: mutasyon sifre_yukle içindeydi; sınav ortam_yukle fonksiyonunu doğrudan çağırdığı için bu mutasyon onu ISIRMAZ — ikinci mutasyon aşağıda"; sed -i "s/^ortam_yukle() {.*/ortam_yukle() { set -a; . \"\$1\"; set +a; return 0; }\nortam_yukle_eski() {/" ortak.sh; o2=$(bash sifre-yukle.test.sh 2>&1); git checkout -q -- ortak.sh 2>/dev/null || cp /tmp/o.bak ortak.sh; printf "%s\n" "$o2" | grep -E "✗|geçti"; k=$(printf "%s\n" "$o2" | grep -c "✗ E[345]"); echo "ortam_yukle source yoluna döndürülünce kırmızıya dönen kapı: $k (beklenen ≥2)"; test "$k" -ge 2
+# rc=0 sure=0.1s zaman=2026-10-13T11:11:19+03:00
+--- stdout ---
+1
+sifre-yukle.test: 6 geçti · 0 kaldı
+NOT: mutasyon sifre_yukle içindeydi; sınav ortam_yukle fonksiyonunu doğrudan çağırdığı için bu mutasyon onu ISIRMAZ — ikinci mutasyon aşağıda
+  ✗ E3 bozuk satır KOMUT gibi KOŞMADI (touch işareti yok)
+  ✗ E4 stderr'e değer parçası/command-not-found düşmedi
+  ✗ E5 bozuk satırlar SAYILDI (3: touch · çıplak değer · token_type), içerik basılmadı
+  ✗ E6 dosya yoksa rc=1, ortam dokunulmadı
+sifre-yukle.test: 2 geçti · 4 kaldı
+ortam_yukle source yoluna döndürülünce kırmızıya dönen kapı: 3 (beklenen ≥2)
+--- stderr ---
