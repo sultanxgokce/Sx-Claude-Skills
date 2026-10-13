@@ -1,0 +1,25 @@
+{
+  "tur": 3,
+  "is": "koltuk-kayit-okuyucu",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T18:54:09+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 75267,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Açıcı ile kayıt kaynağı birlikte seçilmiş; 11 İSKÂN kutusu baslat-claude.sh + iskan-registry.yaml yoluna, merkez ise doğuran ekip-ac.sh + aile-registry.yaml yoluna bağlanmış, mmex de dürüstçe yol=yok kalmış. Son yeşil sınavlar, canlı önce/sonra ölçümü ve mutasyon deneyi kartın açma, oturum doğrulama ve ekran davranışını kapsadığından yalnız rötuş düzeyi risk kalıyor ve iş üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. canli-12kutu önce/sonra çifti 11 hedef kutunun yol=yok/ekip-ac durumundan yol=baslat durumuna geçtiğini ve mmex'in yol=yok kaldığını gösteriyor; enis/nazir çifti rol ve resume seçimini, merkez-serdar kaydı merkez yolunu doğruluyor. Son koltuk-ac-sinav-3 40/40, tarayıcı sınavı 21/21 ve mutasyon-3 KO1-KO11 sonuçları yeşil. Önceki kırmızı canli-12-kutu kaydı ölçüm aracındaki sözdizimi hatası, mutasyon-2 kırmızısı ise sonradan eklenen olumsuz kontrollerin yakaladığı ara durum; ikisi de daha sonraki aynı kapsamlı yeşil kayıtlarla açıkça karşılanmış. Kare yok, ancak bu komut/durum ağırlıklı iş için gerçekçi canlı veriyle ölçüm çifti ve davranış sınavları yeterli."
+  }
+}
