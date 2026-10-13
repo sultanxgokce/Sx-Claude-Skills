@@ -93,25 +93,28 @@ case "$KOMUT" in
   ac)
     durum_olc "$AD"; yol_bul "$AD"
     gunluk "koltuk-ac: $AD durum=$DURUM yol=$YOL eski=$ESKI"
+    case "$YOL" in yok)
+      echo "açılamadı: '$AD' kayıtlı bir koltuk değil (aile kaydında rolü yok ya da kutuda ekip-ac.sh yok) — kimliksiz Claude açılmaz; önce işe alma (madde 6)" >&2; exit 4 ;;
+    esac
+    # ORTAK KAPI — ekip-ac yolu ve ana koltuk (onar) yolu AYNI kapıdan geçer (yedek göz tur 4: ana koltukta --zorla hiç okunmuyordu;
+    # onar.sh içinde Claude varsa "zaten çalışıyor — yazılmadı" deyip rc 0 dönüyor → telefon "Açıldı" yazıyor, takılı Claude duruyordu).
+    # 🔴 TAKILI = görünüş (ekran değişmedi); uzun araç koşan sağlam bir Claude da öyle görünür (canlıda ölçüldü: BÂNİ'nin
+    #    kendi koltuğu). Kapatmak işi keser → yalnız açık --zorla ile; telefon penceresi önce sorar.
+    if [ "$DURUM" = takili ] && [ $ZORLA = 0 ]; then echo "takılı görünüyor ama çalışıyor olabilir (uzun bir iş): kapatıp yeniden açmak için --zorla (işi keser)"; exit 5; fi
+    if [ "$DURUM" = olculemedi ] && [ $ZORLA = 0 ]; then echo "koltuk ÖLÇÜLEMEDİ (liste betiği düştü) — Claude çalışıyor olabilir; dokunmadım. Zorlamak için --zorla"; exit 5; fi
+    if [ "$DURUM" = canli ]; then echo "zaten canlı: $AD (ikinci kopya açılmaz)"; exit 0; fi
+    # takılı/Claude'suz/ölçülemeyen oturum önce KAPATILIR — ekip-ac.sh ve onar.sh ikisi de "oturum var" görünce Claude'u geri getirmez
+    if [ "$DURUM" = claude-yok ] || [ "$DURUM" = takili ] || [ "$DURUM" = olculemedi ]; then tmux kill-session -t "=$AD" 2>/dev/null; gunluk "koltuk-ac: $AD ($DURUM) kapatıldı, yeniden doğacak (zorla=$ZORLA yol=$YOL)"; fi
     case "$YOL" in
       ekip-ac)
-        # takılı/Claude'suz oturumu önce kapat — ekip-ac.sh "canlı" sanıp yalnız attach komutunu basar, Claude geri gelmez
-        # 🔴 TAKILI = görünüş (ekran değişmedi); uzun araç koşan sağlam bir Claude da öyle görünür (canlıda ölçüldü: BÂNİ'nin
-        #    kendi koltuğu). Kapatmak işi keser → yalnız açık --zorla ile; telefon penceresi önce sorar.
-        if [ "$DURUM" = takili ] && [ $ZORLA = 0 ]; then echo "takılı görünüyor ama çalışıyor olabilir (uzun bir iş): kapatıp yeniden açmak için --zorla (işi keser)"; exit 5; fi
-        if [ "$DURUM" = olculemedi ] && [ $ZORLA = 0 ]; then echo "koltuk ÖLÇÜLEMEDİ (liste betiği düştü) — Claude çalışıyor olabilir; dokunmadım. Zorlamak için --zorla"; exit 5; fi
-        [ "$DURUM" = olculemedi ] && [ $ZORLA = 1 ] && { tmux kill-session -t "=$AD" 2>/dev/null; gunluk "koltuk-ac: $AD (ölçülemedi) zorla kapatıldı"; }
-        if [ "$DURUM" = claude-yok ] || [ "$DURUM" = takili ]; then tmux kill-session -t "=$AD" 2>/dev/null; gunluk "koltuk-ac: $AD ($DURUM) kapatıldı, yeniden doğacak (zorla=$ZORLA)"; fi
-        if [ "$DURUM" = canli ]; then echo "zaten canlı: $AD (ikinci kopya açılmaz)"; exit 0; fi
         ARG=(); [ $ESKI = 1 ] && ARG=(--resume-if-known)
         if bash "$EKIP_AC" "$ROL" "${ARG[@]}"; then echo "açıldı: $AD ← ekip-ac.sh $ROL ${ARG[*]:-}"; exit 0
         else echo "açılamadı: ekip-ac.sh $ROL rc=$?" >&2; exit 1; fi ;;
       onar)
+        # ana koltuk: onar.sh K0 oturumu yeniden kurar ve kayıtlı ana konuşmaya döner (kapatıldıysa yukarıda kapatıldı)
         if bash "$BETIK_DIZ/onar.sh" >/dev/null 2>&1; then echo "açıldı: $AD (onar.sh K0)"; exit 0; fi
         setsid nohup bash "$BETIK_DIZ/kademe.sh" --kaynak dugme >/dev/null 2>&1 < /dev/null &
         echo "K0 yetmedi; onarım merdiveni başlatıldı (K1→K3)"; exit 3 ;;
-      *)
-        echo "açılamadı: '$AD' kayıtlı bir koltuk değil (aile kaydında rolü yok ya da kutuda ekip-ac.sh yok) — kimliksiz Claude açılmaz; önce işe alma (madde 6)" >&2; exit 4 ;;
     esac ;;
   *) echo 'kullanım: koltuk-ac.sh durum|ac <ad> [--eski] [--zorla]' >&2; exit 2 ;;
 esac

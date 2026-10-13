@@ -1,0 +1,50 @@
+{
+  "tur": 4,
+  "is": "terminal-koltuk-ac",
+  "pr": "",
+  "yazan": "fable",
+  "denetci": "claude",
+  "zaman": "2026-10-13T13:42:26+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 96345,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Tek tuşla koltuk açma hattı (koltuk-ac.sh + kapı ucu + telefon penceresi) kurulmuş ve tur-3'ün açığı kapanmış: ölçülemeyen koltuk artık fail-closed (olculemedi, zorlasız dokunulmaz), 428/zorla yolu kapıda ve tarayıcıda sınanıyor, rol kaçışlı; sınavları kendim koşturdum (betik 23/23, kapı 83/83). Kalan tek uygulama sorunu ana koltukta: takılı ana koltuğa onay verip 'Yeniden aç' denince --zorla betiğin onar yolunda yok sayılıyor, onar.sh K0 çalışan Claude'a dokunmayıp rc 0 dönüyor ve telefona 'Açıldı' yazılıyor — hiçbir şey değişmemişken; önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "Ana koltuk takılıyken onay sonrası gönderilen --zorla etkisiz: koltuk-ac.sh'nin onar dalı ZORLA'yı hiç okumuyor, onar.sh K0 ise içinde Claude varsa 'zaten çalışıyor — yazılmadı' deyip rc 0 çıkıyor. Sonuç: kullanıcı 'oturum KAPATILIP yeniden açılsın mı?' sorusuna evet der, telefon 'açıldı: sedir-ana (onar.sh K0)' gösterir, takılı Claude olduğu gibi kalır. Sultan'ın 'çok sağlam' şartıyla çelişen yanlış-yeşil.",
+        "kanit": "koltuk-ac.sh:109-112 onar dalı yalnız `bash onar.sh` çağırır, $ZORLA ve kill-session yok (ekip-ac dalındaki :104 kapatma burada yok). onar.sh:55 `claude_pid ... && gunluk 'K0 DUR: ... Claude zaten çalışıyor — yazılmadı'; return 0` ve :78 `if ! claude_oturumu` → Claude varken hiçbir şey yapmaz, rc 0. uygulama.js:350-352 takılı için confirm → {zorla:true} gönderir; tarayici-sinav KD8 'ac sedir-ana --zorla' çağrısını doğrular ama koltuk-ac.test.sh T4 sahte onar.sh ile yalnız rc 0 ölçer, 'ana + takılı + --zorla' senaryosu hiçbir kayıtta yok.",
+        "konum": "terminal-onar/scripts/koltuk-ac.sh:109-112",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "504 mesajı '120 sn' sabit yazılı; süre KAPI_AC_SURE_MS ile değiştirilebilir, mesaj gerçek süreyi yansıtmaz.",
+        "kanit": "sunucu.mjs:421 `+(process.env.KAPI_AC_SURE_MS || 120000)` · :423 mesaj dizesi 'Açma 120 sn\\'de bitmedi' sabit.",
+        "konum": "terminal-onar/kapi/sunucu.mjs:423",
+        "agirlik": "rotus"
+      },
+      {
+        "ne": "Ana koltuk yolu (onar.sh K0 → kademe.sh merdiveni) yalnız sahte onar.sh ile sınanmış; gerçek onar.sh'nin koltuk-ac üzerinden koşumu hiçbir kanıt kaydında yok (tur-2 bulgusu kısmen açık kaldı).",
+        "kanit": "koltuk-ac.test.sh:46-47 onar.sh/kademe.sh stub (printf ile üretilir, ONAR_RC ile rc ayarlanır); manifestte ana koltuk için canlı 'ac' kaydı yok, canli-code-kutusu-durum yalnız 'durum code-ana' ölçer.",
+        "konum": "terminal-onar/scripts/koltuk-ac.test.sh:46-47",
+        "agirlik": "rotus"
+      },
+      {
+        "ne": "Tek ekran karesi sınav verisiyle (sahte koltuk listesi BASIRET/CARSI/PEYK) üretilmiş; gerçek kutudaki telefon penceresinin karesi yok.",
+        "kanit": "kare-koltuk-pencere kaynağı tarayici-sinav.mjs --kare çıktısı; LISTE sabiti tarayici-sinav.mjs:21 sahte adlar.",
+        "konum": "kanıt kaydı kare-koltuk-pencere",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam, 8 kayıt yeşil, sarı kayıt yok. İki sınav paketini kendim koşturdum: koltuk-ac.test.sh 23/23 (F1-F3 fail-closed, T7-T8 zorla, gerçek tmux), sunucu.test.mjs 83/83 (KA14 428, KA15 --zorla, KA12 504); mutasyon M20 artık 428'i kapsıyor. canli-eski-sohbete-don kaydı GERÇEK ekip-ac.sh ile aynı sid'e dönüşü ve tek oturumu gösteriyor; canli-code-kutusu-durum düzeltme sonrası (13:32) alınmış, son=epoch. Eksikler: önce/sonra çifti yalnız son-etkinlik kaydında, kare tek ve sınav verisiyle, ana koltuk yolu yalnız sahte onar.sh ile ölçülmüş — ilk bulgu (takılı ana + zorla → sahte 'açıldı') tam bu ölçülmemiş boşluktan çıkıyor."
+  }
+}

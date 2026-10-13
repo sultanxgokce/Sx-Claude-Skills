@@ -1,7 +1,7 @@
 {
   "is": "terminal-koltuk-ac",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-13T13:40:24+03:00",
+  "guncelleme": "2026-10-13T13:47:11+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -123,7 +123,38 @@
       "renk": "yesil",
       "zaman": "2026-10-13T12:59:46+03:00",
       "sure_sn": 0.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-ac-betik-26",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-ac-betik-26-sonra.txt",
+      "sha256": "5ff66d0dbcc98031d5bc72257335b141135d867193ae00ecd4729a6a069bd885",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-ac.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T13:47:05+03:00",
+      "sure_sn": 2.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-birim-83",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-birim-83-sonra.txt",
+      "sha256": "7266a362e3c79bed286ca2c09eda143b14d56513818482f9f2216a094a29f168",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/kapi && node sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T13:47:11+03:00",
+      "sure_sn": 6.2
     }
   ],
-  "imza": "ec871e1f9e7dcc40cd341aded22bbad065a8b017fd2ca1531703a7675be4ebc6"
+  "imza": "836ce37343e046eae8baad27e644640a78bcb5419c33769d24e5d28318bade4a"
 }

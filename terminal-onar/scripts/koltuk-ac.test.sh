@@ -79,6 +79,19 @@ kapi "T7 takılı koltuğa zorlasız 'ac' → DOKUNMAZ (rc 5, oturum yaşıyor, 
 out="$(KA ac takili --zorla 2>&1)"; rc=$?
 kapi "T8 --zorla ile takılı oturum kapatılıp ekip-ac ile yeniden doğar (rc 0, tek oturum)" "0|1|1" "$rc|$(tmux -L "$L" list-sessions -F '#{session_name}' | grep -c '^takili$')|$(grep -c '^TAKILI' "$T/defter")"
 kapi "T6 tek argümanla çağrı → kullanım mesajı (bilinmeyen-argüman DEĞİL), rc 2" "1|2" "$(KA durum 2>&1 | grep -c 'kullanım:')|$(KA durum >/dev/null 2>&1; echo $?)"
+echo "── Z · ANA koltuk aynı kapıdan geçer (yedek göz tur 4: --zorla onar dalında yok sayılıyor, onar.sh rc 0 → yanlış 'Açıldı')"
+# ana oturum var ve liste onu TAKILI gösteriyor (Claude var, 2000 sn'dir ekran değişmedi)
+tmux -L "$L" new-session -d -s sinav-ana "sleep 300"
+printf '#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\nprintf "sinav-ana\\t%%s\\t1\\tajan\\tcalisiyor\\n" "$(( $(date +%%s) - 2000 ))"\n' > "$T/kb-ana-takili.sh"; chmod +x "$T/kb-ana-takili.sh"
+printf '#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\nprintf "sinav-ana\\t%%s\\t1\\tajan\\tcalisiyor\\n" "$(date +%%s)"\n' > "$T/kb-ana-canli.sh"; chmod +x "$T/kb-ana-canli.sh"
+: > "$T/defter"; out="$(KB_OVERRIDE="$T/kb-ana-takili.sh" KA ac sinav-ana 2>&1)"; rc=$?
+kapi "Z1 takılı ANA koltuğa zorlasız 'ac' → rc 5, oturum yaşıyor, onar.sh ÇAĞRILMAZ" "5|1|0" "$rc|$(tmux -L "$L" has-session -t =sinav-ana 2>/dev/null && echo 1 || echo 0)|$(grep -c '^onar$' "$T/defter")"
+: > "$T/defter"; out="$(KB_OVERRIDE="$T/kb-ana-takili.sh" KA ac sinav-ana --zorla 2>&1)"; rc=$?
+kapi "Z2 takılı ANA koltuk --zorla → oturum KAPATILDI, onar.sh K0 çağrıldı, rc 0 (eski hâl: dokunmadan 'açıldı')" "0|0|1" "$rc|$(tmux -L "$L" has-session -t =sinav-ana 2>/dev/null && echo 1 || echo 0)|$(grep -c '^onar$' "$T/defter")"
+tmux -L "$L" new-session -d -s sinav-ana "sleep 300"
+: > "$T/defter"; out="$(KB_OVERRIDE="$T/kb-ana-canli.sh" KA ac sinav-ana 2>&1)"; rc=$?
+kapi "Z3 canlı ANA koltuğa 'ac' → 'zaten canlı' rc 0, onar.sh çağrılmaz, oturum durur" "0|1|1|0" "$rc|$(echo "$out" | grep -c 'zaten canlı')|$(tmux -L "$L" has-session -t =sinav-ana 2>/dev/null && echo 1 || echo 0)|$(grep -c '^onar$' "$T/defter")"
+tmux -L "$L" kill-session -t =sinav-ana 2>/dev/null
 echo "── F · ölçüm düşerse FAIL-CLOSED (yedek göz tur 3: eski hâl yaşayan Claude'u kapatırdı)"
 printf '#!/usr/bin/env bash\nexit 3\n' > "$T/kb-bozuk.sh"; chmod +x "$T/kb-bozuk.sh"
 KAB() { KB_OVERRIDE="$T/kb-bozuk.sh" KA "$@"; }

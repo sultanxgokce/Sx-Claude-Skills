@@ -419,8 +419,9 @@ const sunucu = http.createServer(async (req, res) => {
         const arg = [KOLTUK_AC_BETIK, 'ac', km[1]]; if (g.eski === true) arg.push('--eski'); if (g.zorla === true) arg.push('--zorla');
         // Açma uzun sürebilir (ekip-ac canlılık teyidi · onar.sh): 20 sn değil 120 sn; zaman aşımı 'açılamadı' DEĞİL 504 —
         // oturum arkada doğmuş olabilir, telefon durumu yeniler (yedek göz tur 2).
-        const r = await calistir('bash', arg, undefined, +(process.env.KAPI_AC_SURE_MS || 120000));   // sınav kısa süre verir
-        if (r.zamanAsimi) return json(res, 504, { tamam: false, rc: 124, mesaj: 'Açma 120 sn\'de bitmedi — koltuk arkada doğmuş olabilir; durumu yenileyip bak.' });
+        const sureMs = +(process.env.KAPI_AC_SURE_MS || 120000);   // sınav kısa süre verir
+        const r = await calistir('bash', arg, undefined, sureMs);
+        if (r.zamanAsimi) return json(res, 504, { tamam: false, rc: 124, mesaj: `Açma ${Math.round(sureMs / 1000)} sn'de bitmedi — koltuk arkada doğmuş olabilir; durumu yenileyip bak.` });   // mesaj gerçek süreyi söyler (yedek göz tur 4)
         const mesaj = (r.out + r.err).trim().split('\n').filter(Boolean).pop() || '';
         // rc: 0 açıldı/zaten canlı · 1 açılamadı · 3 merdiven başladı · 4 kayıtsız koltuk · 5 takılı: zorla gerek (dokunulmadı)
         const kod = r.kod === 0 ? 200 : r.kod === 3 ? 202 : r.kod === 4 ? 409 : r.kod === 5 ? 428 : 502;
