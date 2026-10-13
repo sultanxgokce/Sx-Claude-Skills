@@ -1,0 +1,32 @@
+{
+  "tur": 3,
+  "is": "koltuk-adi-suzgec",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T17:28:48+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 77765,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Sultanım, '/'lı ad, kabuk-kapı eşdeğerliği, gerçek tmux ve HTML kaçışı güçlü sınavlarla çalışıyor; önceki astral Unicode ayrışması da /u ve C.UTF-8 ile kapatılmış. Lakin tekil API’nin kodlu yol sınırı 200 emojilik geçerli adı daha çözmeden reddeder; “TEK kural” hâlâ bütün geçerli adlarda sağlanmadığından önce bunu çözün.",
+    "bulgular": [
+      {
+        "ne": "Tekil API, geçerli 200 astral karakterlik adı çözülmüş ortak kurala ulaştırmadan reddeder. `encodeURIComponent` bir emojiyi 12 karakterlik `%F0%9F%98%80` biçimine dönüştürür; 200 emoji 2400 karakter eder, fakat rota kodlu parçayı en çok 1800 karakter kabul ediyor. Böylece kabuk ve `KOLTUK_AD_DESEN` tarafından kabul edilen E200 adı `/api/koltuk/<ad>` yüzünde 404 olur.",
+        "kanit": "`E200` 200 emojiden kurulup BEK dizisinde kabul ediliyor ve eşdeğerlik ölçümü K1-K4 yeşil. Buna karşılık tekil rota çözmeden önce `[^/]{1,1800}` sınırı koyuyor; SL5 yalnız 202 karakterlik kodlu ASCII+'/' örneğini, SL6 ise 201 ASCII karakterini sınıyor ve 2400 karakterlik kodlu E200 yolunu sınamıyor.",
+        "konum": "terminal-onar/scripts/koltuk-adi.test.sh:10-13; terminal-onar/kapi/sunucu.mjs:431; terminal-onar/kapi/sunucu.test.mjs:477-481",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Gerçek tmux, gerçek kapı+Chromium, XSS ölçümü, ekran karesi ve mutasyon sınavları güçlü; astral Unicode için kabuk-kapı ölçümü de mevcut. Ancak kayıtların tamamı yalnız “sonra”, önce/sonra ölçüm çifti yok; ayrıca tekil API’de 200 emojinin kodlu yol uzunluğu sınanmadığı için TEK kural iddiasının bu ucu kanıtsız ve fiilen hatalı."
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "tur": 2,
+  "is": "koltuk-adi-suzgec",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T17:25:29+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 63273,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Sultanım, '/' ve aradaki boşluk artık liste, tekil API ve kaçışlı HTML yolunda çalışıyor; önceki iki kusur da uzun kodlu ad ve boşluk sınavlarıyla kapatılmış. Lakin kabuk karakter sayarken JavaScript UTF-16 kod birimi sayıyor; emoji gibi tmux adlarında iki süzgeç ayrışabildiğinden “TEK kural” henüz doğru değil, önce bunu çözün.",
+    "bulgular": [
+      {
+        "ne": "Kabuk ve kapı kuralları astral Unicode karakterlerinde eşdeğer değil: kabuktaki {1,200} yerel ayarda karakter sayarken JavaScript regexindeki {1,200} UTF-16 kod birimi sayar. Bu nedenle örneğin 101 emojilik bir ad kabukta 101 karakter olarak kabul edilebilirken kapıda 202 kod birimi sayılıp reddedilir; /api/koltuklar ile kabuk yüzü aynı kuralı uygulamaz.",
+        "kanit": "Kabuk deseni `^[^[:cntrl:]:.]{1,200}$`, kapı deseni ise `/^(?![\\s$@%=])(?!.*\\s$)[^\\x00-\\x1f\\x7f:.]{1,200}$/`; eşdeğerlik derlemesindeki 23 ad arasında emoji/astral Unicode örneği yok, yalnız BMP karakterleri olan `ş-ğ` bulunuyor. Dolayısıyla yeşil K2 bu ayrışmayı sınamıyor.",
+        "konum": "terminal-onar/scripts/koltuk-adi.sh:10; terminal-onar/kapi/sunucu.mjs:20; terminal-onar/scripts/koltuk-adi.test.sh:10-13",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Gerçek tmux, gerçek kapı+Chromium, saldırı adları içeren kare ve mutasyon ölçümleri güçlü; SL5-SL6 ile önceki kodlama-uzunluk kusuru ve E3/SL4 ile boşluk kapsamı sınanmış. Ancak bütün kayıtlar yalnız “sonra”; önce/sonra ölçüm çifti yok ve eşdeğerlik derlemesi astral Unicode sınırını kapsamadığı için TEK kural iddiasını bütünüyle kanıtlamıyor."
+  }
+}

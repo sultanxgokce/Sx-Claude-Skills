@@ -1,0 +1,14 @@
+$ bash _agents/fabrika/kanit/koltuk-adi-suzgec/mutasyon.sh
+# rc=0 sure=18.7s zaman=2026-10-13T17:24:16+03:00
+--- stdout ---
+  ✓ pozitif kontrol (sunucu) YEŞİL
+  ✓ pozitif kontrol (tarayıcı) YEŞİL
+  ✓ pozitif kontrol YEŞİL
+  ✓ KA1 kapı eski desene döndü ('/' düşer) → kırmızı
+  ✓ KA2 kabuk '$1' önekine izin verdi → kırmızı
+  ✓ KA6 tekil uç sınırı yine ÇÖZÜMDEN ÖNCE (200'lük '/'lı ad 404) → kırmızı
+  ✓ KA7 kabuk sondaki boşluğa izin verdi (iki dil ayrışır) → kırmızı
+  ✓ KA3 kapı '.'ya izin verdi (iki dil ayrıştı) → kırmızı
+  ✓ KA4 seçici option değeri kaçışsız (x"y adı kırılır) → kırmızı
+  ✓ KA5 ad metni HTML olarak yorumlanıyor (<img> doğar) → kırmızı
+--- stderr ---

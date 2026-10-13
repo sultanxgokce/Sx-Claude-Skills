@@ -15,11 +15,14 @@ cat > "$S/bin/tmux" <<'T'
 case "$1" in
   list-sessions) [ -n "${SAHTE_BOZUK:-}" ] && { echo "error connecting to /tmp/tmux-1000/default (Permission denied)" >&2; exit 1; }
                  [ -n "${SAHTE_SUNUCU_YOK:-}" ] && { echo "no server running on /tmp/tmux-1000/default" >&2; exit 1; }
-                 cat "$SAHTE/oturumlar" ;;
-  list-panes)    t="${4#=}"; case "$t" in BASIRET|cc-1|ZAKIR|KALFA|NEDIM|MUHASIP) echo "100 claude" ;; *) echo "200 bash" ;; esac ;;
+                 case "$3" in *session_activity*) sed 's/$/\t1760000000/' "$SAHTE/oturumlar" ;; *) cat "$SAHTE/oturumlar" ;; esac ;;
+  list-panes)    if [ "$2" = -a ]; then   # tüm bölmeler: ad·pencere-etkin·bölme-etkin·kimlik·pid·komut (kimlik = %ad, sahte)
+                   while IFS= read -r n; do case "$n" in BASIRET|cc-1|ZAKIR|KALFA|NEDIM|MUHASIP) k=claude; p=100 ;; *) k=bash; p=200 ;; esac
+                     printf '%s\t1\t1\t%%%s\t%s\t%s\n' "$n" "$n" "$p" "$k"; done < "$SAHTE/oturumlar"
+                 else t="${4#=}"; case "$t" in BASIRET|cc-1|ZAKIR|KALFA|NEDIM|MUHASIP) echo "100 claude" ;; *) echo "200 bash" ;; esac; fi ;;
   display-message) echo 1760000000 ;;
   capture-pane)  case "$4" in =*) echo "can't find pane: $4" >&2; exit 1 ;; esac   # gerçek tmux gibi: bölme hedefinde '=ad' geçersiz
-                 t="${4%:}"; [ -f "$SAHTE/ekran-$t" ] && cat "$SAHTE/ekran-$t" || exit 1 ;;
+                 case "$4" in %*) t="${4#%}" ;; *) t="${4%:}" ;; esac; [ -f "$SAHTE/ekran-$t" ] && cat "$SAHTE/ekran-$t" || exit 1 ;;
   list-windows)  echo "@1" ;;
   set-option)    : ;;
   new-session|attach-session) echo "$*" >> "$SAHTE/iz"; exit 0 ;;
@@ -69,6 +72,16 @@ kos maiset-ana /p 'BASIRE'
 [ "$(rc)" = 3 ] && ok "B6 önek eşleşmez (BASIRE ≠ BASIRET)" || bad B6 "rc=$(rc)"
 
 echo "D · tür ve hâl (2.2.0: ajan ⟂ diğer · hâl son ekrandan, filo desenleri)"
+# ── E · adında '/' olan oturum (dilim 5/7 · SERDAR ölçtü: vekatip '2026/85' listeden düşmüştü) ──
+printf '%s\n' maiset-ana BASIRET '2026/85' 'a b' imglistener > "$S/oturumlar"
+: > "$S/iz"; : > "$S/rc"; SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" maiset-ana /proje '2026/85' >/dev/null 2>&1
+[ "$(iz)" = "attach-session -t =2026/85" ] && ok "E1 '/' içeren koltuk TAM eşleşmeli hedefle (=2026/85) bağlanır (eski desen reddediyordu)" || bad E1 "$(iz)"
+SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste-e"
+grep -qP '^2026/85\t' "$S/liste-e" && ok "E2 '/' içeren koltuk LİSTEDE (düşmez)" || bad E2 "$(cat "$S/liste-e")"
+: > "$S/iz"; : > "$S/rc"; SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" maiset-ana /proje 'a b' >/dev/null 2>&1
+[ "$(iz)" = "attach-session -t =a b" ] && ok "E3 arada boşluklu ad TAM eşleşmeli hedefle bağlanır (tmux izin verir — bağımsız göz tur 1)" || bad E3 "$(iz)"
+: > "$S/iz"; : > "$S/rc"; SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" maiset-ana /proje ' a' >/dev/null 2>&1
+[ -z "$(iz)" ] && ok "E3b başta boşluklu ad reddedilir (kesilip başka ada dönüşür)" || bad E3b "$(iz)"
 printf '%s\n' maiset-ana BASIRET CARSI cc-1 dash ZAKIR KALFA NEDIM MUHASIP imglistener > "$S/oturumlar"
 printf '%s\n' "⏺ Düşünüyor…" "esc to interrupt" > "$S/ekran-BASIRET"
 printf '%s\n' "Do you want to proceed?" "❯ 1. Yes" "  2. No" "Esc to cancel)" > "$S/ekran-ZAKIR"   # meşgul izi (esc to cancel) + soru → SORU kazanır

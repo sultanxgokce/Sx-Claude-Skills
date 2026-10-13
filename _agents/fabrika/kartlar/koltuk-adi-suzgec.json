@@ -1,0 +1,31 @@
+{
+  "is": "koltuk-adi-suzgec",
+  "cumle": "A357: adında '/' (ve tmux'un izin verdiği diğer karakterler) olan koltuk terminal listesinden düşmesin; /api/koltuklar ve /api/koltuk/<ad> TEK kural (koltuk-adi.sh ⟷ KOLTUK_AD_DESEN, eşdeğerlik sınavlı), ad HTML'de kaçışlı — kapanan #305'in main'e göre tazelenmesi",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-13T17:16:24+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "e",
+    "yetki": "h"
+  },
+  "siniflar": [
+    "dis_yuzey"
+  ],
+  "sultan": true,
+  "kanit_nerede": "_agents/fabrika/kanit/koltuk-adi-suzgec (eşdeğerlik + gerçek tmux '/'lı koltuk + tarayıcı XSS kapısı)",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "sultan_kararlari": [
+    {
+      "karar": "devam",
+      "oturum": "serdar:0 aile-notify 2026-10-13 ~19:50 (SERDAR aktarımı)",
+      "soz": "karar: önerini kabul ettim",
+      "beyan": "BANI",
+      "gerekce": "Tur 3 bulgusu (2400 sınırı) düzeltildi; son tur 5·E + CI yeşilse birleşir — terminal paketi a, SERDAR aktardı",
+      "zaman": "2026-10-13T20:42:36+03:00"
+    }
+  ]
+}

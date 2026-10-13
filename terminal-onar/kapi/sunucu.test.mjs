@@ -54,7 +54,7 @@ writeFileSync(KOLTUK_SAHTE, '#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\n
 // 2.2.0: betik 5 alan döner (… tür · hâl) ve ANA adını ortamdan (KOLTUK_ANA) alır — sahte, aldığı adı ilk satıra yazar
 const KOLTUK_SAHTE5 = join(T, 'koltuk-sahte5.sh');
 writeFileSync(KOLTUK_SAHTE5, '#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\n'
-  + 'printf "sinavkutu-ana\\t1760000000\\t0\\tdiger\\tbilinmiyor\\nBASIRET\\t1760000100\\t1\\tajan\\tsoru\\ncc-1\\t5\\t1\\tdiger\\tbilinmiyor\\n"\n');
+  + 'printf "sinavkutu-ana\\t1760000000\\t0\\tdiger\\tbilinmiyor\\nBASIRET\\t1760000100\\t1\\tajan\\tsoru\\ncc-1\\t5\\t1\\tdiger\\tbilinmiyor\\n2026/85\\t7\\t1\\tajan\\tgirdi\\n"\n');
 const KOLTUK_BOZUK = join(T, 'koltuk-bozuk.sh');
 writeFileSync(KOLTUK_BOZUK, '#!/usr/bin/env bash\nexit 1\n');
 
@@ -455,6 +455,36 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   await iste(18789, '/sedir/api/koltuk/takili/ac', { cerez: c7, metot: 'POST', govde: { zorla: true } });
   kapi('KA15 {zorla:true} → betiğe --zorla geçer', /ac takili --zorla/.test(readFileSync(join(T, 'ka3-defter'), 'utf8')));
   p7.kill();
+}
+
+// ── SL · adında '/' olan koltuk (dilim 5/7): listeden DÜŞMEZ, adres encodeURIComponent, /api/koltuk yolu çözülür ──
+{
+  const giris = async (port, taban) => { const ok = await iste(port, `${taban}/giris`, { metot: 'POST', govde: { parola: SIFRE } });
+    return 'kapi=' + ((ok.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1]; };
+  const KA2 = join(T, 'ka2.sh'); const DEF2 = join(T, 'ka2-defter');
+  writeFileSync(KA2, '#!/usr/bin/env bash\necho "$*" >> ' + JSON.stringify(DEF2) + '\nprintf \'{"ad":"%s","durum":"yok","tmux":false,"claude":false,"hal":"","son":0,"rol":"","resume":false,"yol":"yok","ana":false}\\n\' "$2"\n');
+  const p6 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: { ...process.env, KAPI_PORT: '18787', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu',
+    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_KOLTUK_BETIK: KOLTUK_SAHTE5, KAPI_KOLTUK_AC_BETIK: KA2 }, stdio: 'ignore' });
+  for (let i = 0; i < 50; i++) { await new Promise((r) => setTimeout(r, 100)); try { if ((await fetch('http://127.0.0.1:18787/sedir/giris')).status === 200) break; } catch {} }
+  const cerez = await giris(18787, '/sedir');
+  const j = await (await iste(18787, '/sedir/api/koltuklar', { cerez })).json();
+  const k = (j.koltuklar || []).find((x) => x.ad === '2026/85');
+  kapi('SL1 "/" içeren koltuk listede (eski süzgeç düşürüyordu)', !!k, `→ ${(j.koltuklar || []).map((x) => x.ad).join(',')}`);
+  kapi('SL2 ekran adresi encodeURIComponent ile (?arg=2026%2F85)', !!k && k.ekran === '/sedir/tty/?arg=2026%2F85', `→ ${k && k.ekran}`);
+  const r = await iste(18787, '/sedir/api/koltuk/2026%2F85', { cerez }); const jr = await r.json();
+  kapi('SL3 /api/koltuk/<kodlu ad> → yol çözülür, betiğe "durum 2026/85" gider', r.status === 200 && jr.ad === '2026/85' && readFileSync(DEF2, 'utf8').trim() === 'durum 2026/85', `→ ${r.status} ${JSON.stringify(jr)}`);
+  const r2 = await iste(18787, '/sedir/api/koltuk/a%20b', { cerez });
+  kapi('SL4 arada boşluklu ad yola girer → betiğe "durum a b" (tmux izin verir — bağımsız göz tur 1)', r2.status === 200 && /^durum a b$/m.test(readFileSync(DEF2, 'utf8')), `→ ${r2.status}`);
+  const uzun = 'u'.repeat(195) + '/2026';   // 200 karakter, kodlu hâli 202 → eski yol deseni 404 veriyordu
+  const r5 = await iste(18787, '/sedir/api/koltuk/' + encodeURIComponent(uzun), { cerez });
+  kapi('SL5 200 karakterlik "/"lı ad: kodlu parça 200\'ü aşsa da tekil uç ÇÖZÜMDEN SONRA aynı kuralla sınar → 200', r5.status === 200 && readFileSync(DEF2, 'utf8').includes('durum ' + uzun), `→ ${r5.status}`);
+  const r6 = await iste(18787, '/sedir/api/koltuk/' + encodeURIComponent('u'.repeat(201)), { cerez });
+  kapi('SL6 201 karakter → 404 (sınır çözülmüş ada uygulanır)', r6.status === 404, `→ ${r6.status}`);
+  const e200 = '😀'.repeat(200);   // kodlu 2400 karakter — kuralın kabul ettiği EN UZUN kodlu ad
+  const r7 = await iste(18787, '/sedir/api/koltuk/' + encodeURIComponent(e200), { cerez });
+  kapi('SL7 200 emojilik ad (kodlu 2400) tekil uca girer → 200; 201 emoji → 404', r7.status === 200 && readFileSync(DEF2, 'utf8').includes('durum ' + e200)
+    && (await iste(18787, '/sedir/api/koltuk/' + encodeURIComponent('😀'.repeat(201)), { cerez })).status === 404, `→ ${r7.status}`);
+  p6.kill();
 }
 
 kapiTaban.kill(); kapiKok.kill(); ttyd.close();

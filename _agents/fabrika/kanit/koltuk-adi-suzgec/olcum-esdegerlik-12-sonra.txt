@@ -1,0 +1,9 @@
+$ bash terminal-onar/scripts/koltuk-adi.test.sh
+# rc=0 sure=0.3s zaman=2026-10-13T17:23:48+03:00
+--- stdout ---
+  ✓ K1 kabuk kuralı beklenen hükmü verir (23 ad)
+  ✓ K2 kapı (sunucu.mjs KOLTUK_AD_DESEN) kabukla AYNI hükmü verir
+  ✓ K3 GERÇEK tmux: kuralın kabul ettiği her ad oturum olur ve '=ad' ile kendisine çözülür
+
+GEÇEN: 3 · KALAN: 0
+--- stderr ---

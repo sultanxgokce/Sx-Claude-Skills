@@ -1,0 +1,38 @@
+$ bash terminal-onar/scripts/koltuk-ac.test.sh
+# rc=0 sure=2.7s zaman=2026-10-13T17:19:31+03:00
+--- stdout ---
+── D · durum üç ayrı
+  ✓ D1 oturum yok → durum=yok, yol=ekip-ac, rol çözüldü, resume mümkün
+  ✓ D2 oturum var, Claude yok → durum=claude-yok; sid boş → resume yok
+  ✓ D3 kayıtsız koltuk → yol=yok (açılmaz), rol boş
+  ✓ D4 ana koltuk kayıtsız olsa da yol=onar, ana=true
+── A · aç / yeniden aç / eski sohbet
+  ✓ A1 ölü koltuk tek komutla geri geldi (tmux oturumu var)
+  ✓ A2 ekip-ac.sh ROL ile çağrıldı, --resume-if-known YOK (taze aç)
+  ✓ A3 canlıyken yeniden 'aç' → ikinci kopya AÇILMAZ ('zaten canlı')
+  ✓ A4 'eski sohbete dön' → ekip-ac.sh --resume-if-known ile çağrıldı
+  ✓ A5 Claude'suz oturum önce kapatılır sonra doğar (rc 0, tek oturum)
+  ✓ A6 kayıtsız koltuk AÇILMAZ (rc 4) ve sebebi söylenir
+  ✓ A7 kayıtsız denemede tmux'ta oturum doğmadı
+── T · takılı durumu (üçüncü hâl) ve ana koltuk yolu
+  ✓ T1 Claude var + 2000 sn ekran değişmedi + soru/girdi beklemiyor → durum=takili
+  ✓ T2 aynı eskilik ama SORU bekliyor → takılı DEĞİL (canli)
+  ✓ T3 TO_TAKILI_SN=5000 → aynı koltuk canli (eşik ortamdan)
+  ✓ T4 ana koltuk 'ac' → onar.sh (K0) çağrılır, rc 0 'açıldı'
+  ✓ T5 onar.sh düşerse merdiven (kademe.sh --kaynak dugme) başlar, rc 3
+  ✓ T7 takılı koltuğa zorlasız 'ac' → DOKUNMAZ (rc 5, oturum yaşıyor, 'çalışıyor olabilir')
+  ✓ T8 --zorla ile takılı oturum kapatılıp ekip-ac ile yeniden doğar (rc 0, tek oturum)
+  ✓ T6 tek argümanla çağrı → kullanım mesajı (bilinmeyen-argüman DEĞİL), rc 2
+── Z · ANA koltuk aynı kapıdan geçer (yedek göz tur 4: --zorla onar dalında yok sayılıyor, onar.sh rc 0 → yanlış 'Açıldı')
+  ✓ Z1 takılı ANA koltuğa zorlasız 'ac' → rc 5, oturum yaşıyor, onar.sh ÇAĞRILMAZ
+  ✓ Z2 takılı ANA koltuk --zorla → oturum KAPATILDI, onar.sh K0 çağrıldı, rc 0 (eski hâl: dokunmadan 'açıldı')
+  ✓ Z3 canlı ANA koltuğa 'ac' → 'zaten canlı' rc 0, onar.sh çağrılmaz, oturum durur
+── F · ölçüm düşerse FAIL-CLOSED (yedek göz tur 3: eski hâl yaşayan Claude'u kapatırdı)
+  ✓ F1 liste betiği düşerse durum=olculemedi (claude-yok DEĞİL)
+  ✓ F2 ölçülemeyen koltuğa zorlasız 'ac' DOKUNMAZ (rc 5, oturum yaşıyor)
+  ✓ F3 liste gelir ama satır yoksa da olculemedi
+── N · olumsuz kontrol: ekip-ac.sh yoksa kayıtlı rol de açılmaz
+  ✓ N1 betik yokken yol=yok (sessizce başka yola düşmez)
+
+GEÇEN: 26 · KALAN: 0
+--- stderr ---

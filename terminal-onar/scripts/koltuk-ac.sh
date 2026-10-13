@@ -46,7 +46,8 @@ fi
 KOLTUK_BETIK="${TO_KOLTUK_BETIK:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/koltuk-bagla.sh}"
 
 json_s() { printf '%s' "$1" | python3 -c 'import json,sys;print(json.dumps(sys.stdin.read()),end="")'; }
-gecerli() { [[ "$1" =~ ^[A-Za-z0-9_-]{1,64}$ ]]; }
+. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/koltuk-adi.sh"   # ad süzgecinin TEK kabuk kopyası
+gecerli() { koltuk_adi_gecerli "$1"; }
 
 # tmux adı → kayıttaki rol (aile-registry: `- id: X` … `tmux: "x:0"`); kayıt yoksa boş
 rol_bul() {
