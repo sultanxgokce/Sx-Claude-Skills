@@ -1,0 +1,6 @@
+$ bash _agents/fabrika/kanit/terminal-onar-izin/duman.sh /config/projects/_wt/Sx-Claude-Skills-terminal-onar-izin
+# rc=0 sure=0.1s zaman=2026-10-13T21:03:21+03:00
+--- stdout ---
+  özet: 1 uygulandı · 0 güncel · 0 drift-uyarı · 0 eksik · 0 duman-düştü
+sync-skills rc=0
+--- stderr ---
