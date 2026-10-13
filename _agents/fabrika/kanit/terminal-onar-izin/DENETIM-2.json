@@ -1,0 +1,25 @@
+{
+  "tur": 2,
+  "is": "terminal-onar-izin",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T21:03:58+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 14949,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "terminal-onar altındaki dokuz adet 100644 kipli .sh dosyası yalnız kip değişikliğiyle 100755 yapılmış. Birleşik son duman ölçümü kırmızıdan yeşile dönmüş ve aracın izin onarımını kapsayan 10 sınavı geçtiği için üretime engel bir sorun görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Aynı gerçek kurulum duman komutunun birleşik önce/sonra çifti rc=1/kırmızıdan rc=0/yeşile geçişi ölçüyor; sync-skills.test.sh de 10/10 geçiyor. Ancak 20:45 tarihli git-kip çıktısı, daha sonra 21:03'te onarıldığı anlaşılan koltuk-adi dosyalarını ve diffteki koltuk-xss.tarayici.sh dosyasını göstermediğinden nihai kiplerin tamamı için tek başına eksiksiz kanıt değildir; bu boşluğu diff ile birleşik son duman ölçümü birlikte kapatıyor."
+  }
+}

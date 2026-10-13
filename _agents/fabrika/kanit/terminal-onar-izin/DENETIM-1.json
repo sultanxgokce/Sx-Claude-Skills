@@ -1,0 +1,25 @@
+{
+  "tur": 1,
+  "is": "terminal-onar-izin",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T20:46:20+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 11532,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "terminal-onar altındaki 100644 kipli altı .sh dosyası 100755 yapılmış; son git kip dökümü .sh dosyalarının çalıştırılabilir olduğunu gösteriyor. Gerçek kurulum dumanı kırmızıdan yeşile dönmüş ve aracın 10 kapılı kendi sınavı da geçtiği için değişiklik üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Aynı duman komutunun önce rc=1/kırmızı ve sonra rc=0/yeşil ölçüm çifti gerçekçi kurulum verisiyle verilmiş; ayrıca git-kip kaydı hedef dosya kiplerini ve sync-skills.test.sh kaydı izin onarımı dahil 10 davranış kapısını doğruluyor."
+  }
+}
