@@ -1,7 +1,7 @@
 {
   "is": "koltuk-fark",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-13T21:45:14+03:00",
+  "guncelleme": "2026-10-13T21:48:57+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -192,7 +192,24 @@
       "renk": "yesil",
       "zaman": "2026-10-13T21:45:14+03:00",
       "sure_sn": 3.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "filo-tarama-4-acik-beyan",
+      "asama": "sonra",
+      "dosya": "olcum-filo-tarama-4-acik-beyan-sonra.txt",
+      "sha256": "6a07a6acca62ed65a487b4d62c5bb2060557c28e1e73a7673e4b799dfd12119b",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-fark-filo.sh",
+        "--kaynak",
+        "/config/projects/_wt/Sx-Claude-Skills-koltuk-fark/terminal-onar"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T21:48:57+03:00",
+      "sure_sn": 13.6
     }
   ],
-  "imza": "939fb2296decc241d2dff633630751d64add5f128c61a2e9bd964ec53c417ee4"
+  "imza": "0f69fbd88c2ac69abd97ed07b4673bbcc618dfa11c7ae495617f369be5f372b0"
 }

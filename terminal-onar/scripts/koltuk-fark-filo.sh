@@ -22,9 +22,9 @@ for k in "${KUTULAR[@]}"; do
   [[ "$k" =~ ^[a-z0-9-]+$ ]] || { echo "✗ $k: geçersiz kutu adı"; olcmedi=$((olcmedi+1)); continue; }
   if [ -n "$KAYNAK" ]; then
     out="$(tar -C "$KAYNAK" -cf - kapi/koltuk-fark.mjs kapi/koltuklar.mjs scripts/koltuk-bagla.sh scripts/koltuk-adi.sh \
-      | ssh_ "docker exec -i -u 1000 $k sh -c 'n=\$(command -v node || echo /app/code-server/lib/node); d=\$(mktemp -d) || exit 2; trap \"rm -r \$d\" EXIT INT TERM HUP; tar -x -C \$d && \$n \$d/kapi/koltuk-fark.mjs --json'" 2>&1)"; rc=$?
+      | ssh_ "docker exec -i -u 1000 $k sh -c 'n=\$(command -v node || { [ -x /app/code-server/lib/node ] && echo /app/code-server/lib/node; }); [ -n \"\$n\" ] || { echo {\\\"terminalsiz\\\":\\\"node yok\\\"}; exit 3; }; d=\$(mktemp -d) || exit 2; trap \"rm -r \$d\" EXIT INT TERM HUP; tar -x -C \$d && \$n \$d/kapi/koltuk-fark.mjs --json'" 2>&1)"; rc=$?
   else
-    out="$(ssh_ "docker exec -u 1000 $k sh -c 'n=\$(command -v node || echo /app/code-server/lib/node); \$n /config/.claude/skills/terminal-onar/kapi/koltuk-fark.mjs --json'" 2>&1)"; rc=$?
+    out="$(ssh_ "docker exec -u 1000 $k sh -c 'n=\$(command -v node || { [ -x /app/code-server/lib/node ] && echo /app/code-server/lib/node; }); [ -n \"\$n\" ] || { echo {\\\"terminalsiz\\\":\\\"node yok\\\"}; exit 3; }; \$n /config/.claude/skills/terminal-onar/kapi/koltuk-fark.mjs --json'" 2>&1)"; rc=$?
   fi
   ozet="$(printf '%s\n' "$out" | tail -n 1 | python3 -c 'import json,sys
 try: d=json.loads(sys.stdin.read())
@@ -41,7 +41,7 @@ if o.get("sekme_okunamayan"): print("      ? %d istemcinin açılış komutu oku
   case "$rc:$ozet" in
     0:[0-9]*) echo "✓ $k: $ozet"; temiz=$((temiz+1)) ;;
     1:[0-9]*) echo "✗ $k: $ozet"; kirli=$((kirli+1)) ;;
-    3:terminalsiz*|127:*) echo "– $k: terminalsiz ($([ "$rc" = 127 ] && echo 'node yok' || echo "${ozet#terminalsiz: }"))"; terminalsiz=$((terminalsiz+1)) ;;
+    3:terminalsiz*) echo "– $k: terminalsiz (${ozet#terminalsiz: })"; terminalsiz=$((terminalsiz+1)) ;;   # yalnız kutunun KENDİ beyanı; rc 127 vb. → ölçülemedi
     *) echo "? $k: ölçülemedi (rc=$rc) ${ozet:-$(printf '%s' "$out" | tail -n 1 | cut -c1-120)}"; olcmedi=$((olcmedi+1)) ;;
   esac
 done
