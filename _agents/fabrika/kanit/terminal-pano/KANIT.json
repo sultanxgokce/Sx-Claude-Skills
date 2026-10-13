@@ -1,7 +1,7 @@
 {
   "is": "terminal-pano",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-13T11:11:33+03:00",
+  "guncelleme": "2026-10-13T11:16:00+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -54,7 +54,7 @@
       "etiket": "ucuca-eski-eklenti",
       "asama": "once",
       "dosya": "olcum-ucuca-eski-eklenti-once.txt",
-      "sha256": "928e32c6c50aa47edc8d8b078414ae1bfebc7896717051399277ae92336b0f2f",
+      "sha256": "ee620bd37dcc30ed958cc3c707ffd5405d4ee6c3bebc090389f7a2b3ec2e5da4",
       "komut": [
         "env",
         "EKLENTI_YOL=/config/projects/_wt/Sx-Claude-Skills-terminal-pano/_agents/fabrika/kanit/terminal-pano/eklenti-eski-0.9.user.js",
@@ -63,15 +63,15 @@
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-10-13T11:11:06+03:00",
-      "sure_sn": 18.4
+      "zaman": "2026-10-13T11:15:42+03:00",
+      "sure_sn": 19.9
     },
     {
       "tur": "olcum",
       "etiket": "ucuca-yeni-eklenti",
       "asama": "sonra",
       "dosya": "olcum-ucuca-yeni-eklenti-sonra.txt",
-      "sha256": "c10454b22151df4c8eaef7de3f66256eb39bd676f9f315f909dc9e813dc34ce3",
+      "sha256": "10d29b8687318c1a28fb5d286da2dee38059df737b41f3bb6510face1ba8dff8",
       "komut": [
         "env",
         "EKLENTI_YOL=/config/projects/_wt/cloudtop-terminal-pano-eklenti/infra/cloudtop-terminal-image.user.js",
@@ -82,8 +82,8 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T11:11:24+03:00",
-      "sure_sn": 18.1
+      "zaman": "2026-10-13T11:16:00+03:00",
+      "sure_sn": 18.2
     },
     {
       "tur": "olcum",
@@ -109,7 +109,7 @@
       "kaynak": "/tmp/claude-1000/pano-yapistir.png",
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T11:11:33+03:00"
+      "zaman": "2026-10-13T11:16:00+03:00"
     },
     {
       "tur": "dosya",
@@ -120,7 +120,7 @@
       "kaynak": "/tmp/claude-1000/pano-kopyala.png",
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T11:11:33+03:00"
+      "zaman": "2026-10-13T11:16:00+03:00"
     },
     {
       "tur": "dosya",
@@ -131,7 +131,7 @@
       "kaynak": "/tmp/claude-1000/pano-eklenti.png",
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T11:11:33+03:00"
+      "zaman": "2026-10-13T11:16:00+03:00"
     },
     {
       "tur": "dosya",
@@ -156,5 +156,5 @@
       "zaman": "2026-10-13T11:11:33+03:00"
     }
   ],
-  "imza": "c003a657da5e761b6e469d4d8f7e80185ef4908962923cc0b07aff4b0a7ed446"
+  "imza": "3b7a53dca7fe0e2273e42b369aee14b3b218c58e1d7f535768f7b6e3845d26c5"
 }

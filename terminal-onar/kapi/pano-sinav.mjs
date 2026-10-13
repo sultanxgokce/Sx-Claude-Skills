@@ -141,7 +141,9 @@ try {
   if (KARE) await pg.screenshot({ path: `${KARE}-kopyala.png` });
   // fareyle seçim: tmux copy-mode (mouse on) → MouseDragEnd1Pane copy-selection-and-cancel → OSC 52
   await pg.evaluate(() => navigator.clipboard.writeText('pano-bos'));
-  await komut(pg, 'echo SECILECEK-SATIR-ABC'); await ekranda(pg, 'SECILECEK-SATIR-ABC');
+  await komut(pg, 'echo SECILECEK-SATIR-ABC');
+  // Komut satırı da aynı metni taşır → ÇIKTI satırı (tek başına, tam eşit) beklenir; yoksa yarış (ölçüldü: 1/3 koşuda satir=-1)
+  await pg.waitForFunction(() => { const bf = window.term.buffer.active; for (let i = 0; i < bf.length; i++) { const l = bf.getLine(i); if (l && l.translateToString(true).trim() === 'SECILECEK-SATIR-ABC') return true; } return false; }, null, { timeout: 8000 }).catch(() => {});
   const geo = await pg.evaluate(() => { const t = window.term; const bf = t.buffer.active; let satir = -1; for (let i = bf.length - 1; i >= 0; i--) { const l = bf.getLine(i); if (l && l.translateToString(true).trim() === 'SECILECEK-SATIR-ABC') { satir = i; break; } }
     const r = document.querySelector('.xterm-screen').getBoundingClientRect(); return { satir: satir - bf.viewportY, x: r.left, y: r.top, w: r.width / t.cols, h: r.height / t.rows }; });
   kapi('K3 seçilecek satır ekranda bulundu', geo.satir >= 0, `→ ${JSON.stringify(geo)}`);
