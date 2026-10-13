@@ -428,7 +428,7 @@ const sunucu = http.createServer(async (req, res) => {
       // ── KOLTUK AÇ / YENİDEN AÇ / ESKİ SOHBETE DÖN (2.4.0 · dilim 5/5, Sultan: "oturum kapandı/bozuldu/silindi —
       //    tekrar açmak çok basit ve çok sağlam olmalı"). Ölçüm ve iş betikte (scripts/koltuk-ac.sh): üç durum ayrı
       //    (yok · claude-yok · takili), yol = ekip-ac.sh (tek kanonik kapı) | onar.sh (ana) | yok (kayıtsız → ret).
-      const km0 = y.match(/^\/api\/koltuk\/([^/]{1,1800})(\/ac)?$/);   // KODLU parça: 200 karakterlik ad %XX ile 9 katına çıkabilir (UTF-8) — sınır ÇÖZÜMDEN SONRA desenle   // ad yolda encodeURIComponent ile gelir (%2F); çözülüp aynı süzgeçle sınanır
+      const km0 = y.match(/^\/api\/koltuk\/([^/]{1,2400})(\/ac)?$/);   // KODLU parça: 4 baytlık UTF-8 karakter (emoji) %XX×4 = 12 karakter → 200 kod noktası en çok 2400; sınır ÇÖZÜMDEN SONRA desenle (bağımsız göz tur 3)   // ad yolda encodeURIComponent ile gelir (%2F); çözülüp aynı süzgeçle sınanır
       let kmAd = ''; try { kmAd = km0 ? decodeURIComponent(km0[1]) : ''; } catch { kmAd = ''; }
       const km = km0 && KOLTUK_AD_DESEN.test(kmAd) ? [km0[0], kmAd, km0[2]] : null;
       if (km && !km[2] && req.method === 'GET') {

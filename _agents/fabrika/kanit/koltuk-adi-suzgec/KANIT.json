@@ -1,7 +1,7 @@
 {
   "is": "koltuk-adi-suzgec",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-13T17:28:09+03:00",
+  "guncelleme": "2026-10-13T17:30:39+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -273,7 +273,38 @@
       "renk": "yesil",
       "zaman": "2026-10-13T17:28:09+03:00",
       "sure_sn": 23.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sunucu-sl7",
+      "asama": "sonra",
+      "dosya": "olcum-sunucu-sl7-sonra.txt",
+      "sha256": "1230908e67255bc483e363a77222651548d68ccb0264a675624bd14fc855c032",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/kapi && node --test sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T17:30:09+03:00",
+      "sure_sn": 11.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-10",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-10-sonra.txt",
+      "sha256": "3d532b0ff3617c22451c7cf7a5c039970a8910fd422cb506a7054ddd5f995dc2",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/koltuk-adi-suzgec/mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T17:30:39+03:00",
+      "sure_sn": 30.0
     }
   ],
-  "imza": "fedc07aea43f98b63019437a51054f1bb12cd64b080f37caa07c045e4471ba2b"
+  "imza": "ce9536fa936d9124c30abc3220cf60aa0580d2371d87b2f81aec502107dc7dd9"
 }

@@ -480,6 +480,10 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   kapi('SL5 200 karakterlik "/"lı ad: kodlu parça 200\'ü aşsa da tekil uç ÇÖZÜMDEN SONRA aynı kuralla sınar → 200', r5.status === 200 && readFileSync(DEF2, 'utf8').includes('durum ' + uzun), `→ ${r5.status}`);
   const r6 = await iste(18787, '/sedir/api/koltuk/' + encodeURIComponent('u'.repeat(201)), { cerez });
   kapi('SL6 201 karakter → 404 (sınır çözülmüş ada uygulanır)', r6.status === 404, `→ ${r6.status}`);
+  const e200 = '😀'.repeat(200);   // kodlu 2400 karakter — kuralın kabul ettiği EN UZUN kodlu ad
+  const r7 = await iste(18787, '/sedir/api/koltuk/' + encodeURIComponent(e200), { cerez });
+  kapi('SL7 200 emojilik ad (kodlu 2400) tekil uca girer → 200; 201 emoji → 404', r7.status === 200 && readFileSync(DEF2, 'utf8').includes('durum ' + e200)
+    && (await iste(18787, '/sedir/api/koltuk/' + encodeURIComponent('😀'.repeat(201)), { cerez })).status === 404, `→ ${r7.status}`);
   p6.kill();
 }
 
