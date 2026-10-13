@@ -1,7 +1,7 @@
 ---
 name: donus
 type: agent
-version: 1.0.0
+version: 1.0.1
 description: >
   Tek dönüş sözleşmesi: işi bitiren, tıkanan ya da soru soran ajan TEK komutla döner, işi AÇAN anında uyanır.
   "dönüş yap · görevi bitirdim · G0034 bitti · tıkandım · işi açana haber ver" tetiğinde. Kutuda (izole oda) dönüşü
