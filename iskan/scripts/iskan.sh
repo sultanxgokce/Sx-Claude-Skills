@@ -1760,6 +1760,123 @@ _ey_registry_dagit() {
   fi
 }
 
+# _ey_kayit_koru <reg_yeni> <mod> — kutudaki ÇALIŞAN kopyayı ezmeden önce farkı ölçer (SERDAR 13 Eki).
+# NİÇİN: baslat-claude.sh kutudaki iskan-registry.yaml'ı okur; koltuk ekranı oraya yazar (flock'lu).
+#   ekip-yerlestir/uye-ekle ise kaydı ŞEMADAN yeniden üretir — şemada olmayan alan, elle verilmiş
+#   cwd/tmux, yorum satırı sessizce silinirdi (ölçüldü 13 Eki: 11 kutunun 5'inde kutu ≠ kanon).
+# KURAL: kutuda kopya yoksa ya da yeni üretimle bayt-eşse → geç. Fark YALNIZ ekleme ise (ör. uye-ekle
+#   yeni üye bloğu) → geç. Kutudan bir satır silinecek/değişecekse → farkı bas, HİÇBİR YERE YAZMADAN dur.
+#   Bilinçli geçiş: ISKAN_EY_KAYIT_FARK=kabul (kayda geçer). <mod>=dry-run → yalnız gösterir, durmaz.
+# rc: 0 geç · 1 dur (kayit-farki) · 2 yapılandırma hatası
+_ey_kayit_koru() {
+  local reg_yeni="$1" mod="$2" mevcut fark
+  case "${ISKAN_EY_KAYIT_FARK:-dur}" in
+    dur|kabul) ;;
+    *) echo "[kırmızı] ISKAN_EY_KAYIT_FARK='${ISKAN_EY_KAYIT_FARK}' tanınmıyor (dur|kabul) — hiçbir yere dokunulmadı" >&2; return 2 ;;
+  esac
+  mevcut="$(_ey_ssh "cat '$EY_HOST_PROJ/iskan-registry.yaml' 2>/dev/null" 2>/dev/null || true)"
+  if [ -z "$mevcut" ]; then
+    echo "[yeşil] kutu kaydı: kutuda iskan-registry.yaml yok → yeni yazılacak"
+    return 0
+  fi
+  fark="$(diff -u --label "kutu:$EY_HEDEF_ICI/iskan-registry.yaml" --label "yeni-uretim" \
+    <(printf '%s\n' "$mevcut") <(printf '%s\n' "$reg_yeni") || true)"
+  if [ -z "$fark" ]; then
+    echo "[yeşil] kutu kaydı: yeni üretimle bayt-eş → ezme yok"
+    return 0
+  fi
+  if ! printf '%s\n' "$fark" | sed '1,2d' | grep -q '^-'; then
+    echo "[yeşil] kutu kaydı: fark yalnız EKLEME (kutudaki hiçbir satır silinmiyor) → geç"
+    printf '%s\n' "$fark" | sed 's/^/    /'
+    return 0
+  fi
+  echo "[sarı] kayit-farki: kutudaki iskan-registry.yaml yeni üretimden FARKLI — kutudan silinecek/değişecek satır var:"
+  printf '%s\n' "$fark" | sed 's/^/    /'
+  if [ "$mod" = "dry-run" ]; then
+    echo "    (kuru-koşu: yalnız gösterildi; --apply bu farkla DURUR)"
+    return 0
+  fi
+  if [ "${ISKAN_EY_KAYIT_FARK:-dur}" = "kabul" ]; then
+    echo "[sarı] kayit-farki bilinçli geçildi (ISKAN_EY_KAYIT_FARK=kabul) — kutudaki kayıt yeni üretimle değiştirilecek"
+    return 0
+  fi
+  echo "[kırmızı] kayit-farki: kutudaki çalışan kayıt EZİLMEDİ — hiçbir kopyaya (host · repo · kutu) yazılmadı." >&2
+  echo "    çare: farkı oku; kutudaki değer doğruysa kaynağa (ekip-registry / kanon) taşı ve yeniden koş;" >&2
+  echo "          yeni üretim doğruysa ISKAN_EY_KAYIT_FARK=kabul ile bilinçli geç." >&2
+  return 1
+}
+
+# cmd_kayit_fark [proje…] — SALT-OKUR rapor: kutudaki çalışan iskan-registry.yaml ⟷ cloudtop
+# origin/main infra/iskan-registry/<proje>.yaml (kanon). HİÇBİR şey yazmaz; kanonu ezmez.
+# NİÇİN (SERDAR 13 Eki): koltuk ekranı kutudaki kopyaya yazacak; "kanon = kutudan hasat" yön
+#   değişikliği NÂZIR/KONAKÇI görüşünü bekliyor. O gelene kadar hasat yalnız bu raporu üretir.
+# Proje verilmezse liste iki yönden keşfedilir: kanondaki dosyalar ∪ host'ta kayıt taşıyan kutular
+#   (/opt/cloudtop/config-<p>/projects/<p>/iskan-registry.yaml) — kanonsuz kutu da görünür.
+# Diff yönü: '-' = yalnız kanonda · '+' = yalnız kutuda.
+# rc: 0 hepsi ayni · 1 en az bir fark/eksik · 2 en az biri ölçülemedi (ölçülemeyen 'ayni' sayılmaz)
+cmd_kayit_fark() {
+  EY_SSH_HOST="${ISKAN_SSH_HOST:-hostsrv}"
+  EY_REPO_DIR="${ISKAN_CLOUDTOP_REPO_DIR:-/config/projects/cloudtop}"
+  local projeler=("$@") p
+  for p in "${projeler[@]}"; do _ey_ad_hijyeni "$p" "kayitsiz-proje" || exit 2; done
+  git -C "$EY_REPO_DIR" fetch -q origin main 2>/dev/null || echo "[sarı] cloudtop fetch başarısız — kanon yerel origin/main'den okunuyor"
+  if ! git -C "$EY_REPO_DIR" rev-parse -q --verify origin/main >/dev/null 2>&1; then
+    echo "[kırmızı] kanon okunamadı: $EY_REPO_DIR origin/main yok" >&2
+    exit 2
+  fi
+  local ssh_ok=0
+  _ey_ssh true >/dev/null 2>&1 && ssh_ok=1
+  if [ "${#projeler[@]}" -eq 0 ]; then
+    local liste
+    liste="$(git -C "$EY_REPO_DIR" ls-tree --name-only origin/main infra/iskan-registry/ 2>/dev/null \
+      | sed -n 's#^infra/iskan-registry/\([A-Za-z0-9_-]*\)\.yaml$#\1#p')"
+    if [ "$ssh_ok" = "1" ]; then
+      liste="$liste
+$(_ey_ssh "ls -1 /opt/cloudtop/config-*/projects/*/iskan-registry.yaml 2>/dev/null" 2>/dev/null \
+        | sed -n 's#^/opt/cloudtop/config-\([A-Za-z0-9_-]*\)/projects/\([A-Za-z0-9_-]*\)/iskan-registry\.yaml$#\1 \2#p' \
+        | awk '$1==$2{print $1}')"
+    fi
+    mapfile -t projeler < <(printf '%s\n' "$liste" | grep -v '^$' | sort -u)
+  fi
+  echo "== İSKÂN kayit-fark — SALT-OKUR (kutu ⟷ kanon; hiçbir yere yazılmaz) =="
+  [ "$ssh_ok" = "1" ] || echo "[doğrulanmadı] hostsrv erişilemedi — kutu kopyaları ölçülemiyor"
+  local ayni=0 farkli=0 kanonsuz=0 kutusuz=0 olculemedi=0 kanon kutu fark
+  for p in "${projeler[@]}"; do
+    kanon="$(git -C "$EY_REPO_DIR" show "origin/main:infra/iskan-registry/$p.yaml" 2>/dev/null || true)"
+    if [ "$ssh_ok" != "1" ]; then
+      echo "  ? $p: olculemedi (ssh yok)"; olculemedi=$((olculemedi+1)); continue
+    fi
+    if ! kutu="$(_ey_ssh "f=/opt/cloudtop/config-$p/projects/$p/iskan-registry.yaml; if [ -f \"\$f\" ]; then cat \"\$f\"; else echo __KUTU_YOK__; fi" 2>/dev/null)"; then
+      echo "  ? $p: olculemedi (kutu kopyası okunamadı)"; olculemedi=$((olculemedi+1)); continue
+    fi
+    if [ "$kutu" = "__KUTU_YOK__" ]; then
+      if [ -z "$kanon" ]; then
+        echo "  ? $p: olculemedi (ne kutuda ne kanonda kayıt var)"; olculemedi=$((olculemedi+1))
+      else
+        echo "  ✗ $p: kutu-yok (kanonda var, kutuda iskan-registry.yaml yok)"; kutusuz=$((kutusuz+1))
+      fi
+      continue
+    fi
+    if [ -z "$kanon" ]; then
+      echo "  ✗ $p: kanon-yok (kutuda var, cloudtop infra/iskan-registry/$p.yaml yok)"; kanonsuz=$((kanonsuz+1))
+      continue
+    fi
+    fark="$(diff -u --label "kanon:infra/iskan-registry/$p.yaml" --label "kutu:/config/projects/$p/iskan-registry.yaml" \
+      <(printf '%s\n' "$kanon") <(printf '%s\n' "$kutu") || true)"
+    if [ -z "$fark" ]; then
+      echo "  ✓ $p: ayni"; ayni=$((ayni+1))
+    else
+      echo "  ✗ $p: farkli ($(printf '%s\n' "$fark" | sed '1,2d' | grep -c '^-') satır yalnız kanonda · $(printf '%s\n' "$fark" | sed '1,2d' | grep -c '^+') satır yalnız kutuda)"
+      printf '%s\n' "$fark" | sed 's/^/      /'
+      farkli=$((farkli+1))
+    fi
+  done
+  echo "== özet: ${#projeler[@]} kutu · ayni=$ayni farkli=$farkli kanon-yok=$kanonsuz kutu-yok=$kutusuz olculemedi=$olculemedi · yazılan: 0 =="
+  [ "$olculemedi" -gt 0 ] && exit 2
+  [ $((farkli + kanonsuz + kutusuz)) -gt 0 ] && exit 1
+  exit 0
+}
+
 cmd_ekip_yerlestir() {
   local proje="" mode=""
   while [ $# -gt 0 ]; do
@@ -1862,6 +1979,12 @@ cmd_ekip_yerlestir() {
     echo "  3. kimlik-banner (her pane'de kalıcı: İSKÂN-imzası + rol + rezerve-uuid ≤80-kolon-tek-satır + permission-mode)"
     echo "  4. baslat-claude.sh sarmalayıcısı (b0019 panzehiri: registry'den rol-kaydı çözer; claude yoksa dürüst-kırmızı 'claude-binary yok')"
     echo "  5. iskan-registry.yaml K2 tam-şema yazımı: host-co-locate ($EY_HOST_REGISTRY) + repo ($EY_REPO_DIR/infra/) + container-içi kopya — üçü bayt-eş"
+    echo "     (kutudaki çalışan kopyadan satır silinecekse apply DURUR — bkz _ey_kayit_koru)"
+    if [ "$ssh_ok" = "1" ]; then
+      _ey_kayit_koru "$(_ey_iskan_registry_icerik < <(printf '%s' "$EY_UYE_SATIRLARI" | cut -f1-3))" dry-run || exit $?
+    else
+      echo "[doğrulanmadı] kutu kaydı farkı ölçülemedi (hostsrv erişilemedi)"
+    fi
     echo "== dry-run: hiçbir yazım yapılmadı (plan-exit sözleşmesi, exit=3) =="
     exit 3
   fi
@@ -1870,6 +1993,10 @@ cmd_ekip_yerlestir() {
   echo "== İSKÂN ekip-yerlestir — APPLY (hedef-container-içi; idempotent; diğer container'lara dokunmaz) =="
 
   _ey_on_kapilar "$ssh_ok" || exit 1
+
+  # ── KUTU KAYDI KORUMASI: HİÇBİR yazımdan ÖNCE (kutudaki çalışan kopya ezilmez) ───────────
+  local reg_yeni; reg_yeni="$(_ey_iskan_registry_icerik < <(printf '%s' "$EY_UYE_SATIRLARI" | cut -f1-3))"
+  _ey_kayit_koru "$reg_yeni" apply || exit $?
 
   # ── ADIM-1: scaffold-iskelet (yoksa kur; varsa atla) ─────────────────────────────────────
   if [ -n "$scaffold_var" ]; then
@@ -1918,7 +2045,7 @@ cmd_ekip_yerlestir() {
   echo "[yeşil] ADIM-3 git init: tamam (mevcut ise atlandı)"
 
   # ── ADIM-4: iskan-registry.yaml K2 tam-şema — host + repo + container-içi ÜÇÜ BAYT-EŞ ────
-  local reg_yeni; reg_yeni="$(_ey_iskan_registry_icerik < <(printf '%s' "$EY_UYE_SATIRLARI" | cut -f1-3))"
+  # (reg_yeni koruma kapısında üretildi ve onaylandı — aynı içerik dağıtılır)
   _ey_registry_dagit "$reg_yeni" "$reg_host" || exit 1
 
   # ── ADIM-5: kimlik-banner dosyaları + tmux-oturumları (üye-bazlı idempotent) ─────────────
@@ -2256,6 +2383,12 @@ cmd_uye_ekle() {
       echo "  4. iskan-registry.yaml K2 yeniden-üretim (tüm-roster): host-co-locate + repo + container-içi — üçü bayt-eş"
       echo "     mevcut-kayıt kaynağı: $EY_REG_KAYNAK (yalnız '$proje' kiracısının kaydı kabul edilir; izin kipleri + izin dosyaları korunur)"
       [ -z "$EY_YENI_SETTINGS" ] || echo "  5. koltuğa özel izin dosyası: $EY_YENI_SETTINGS → kayıtta settings_file (baslat-claude.sh --settings geçirir; dosya okunamazsa koltuk AÇILMAZ)"
+      echo "     (kutudaki çalışan kopyadan satır silinecekse apply DURUR — bkz _ey_kayit_koru)"
+      if [ "$ssh_ok" = "1" ] && _ey_uye_satirlari "$roster_mevcut $uye:$gorev" "$reg_mevcut"; then
+        _ey_kayit_koru "$(_ey_iskan_registry_icerik < <(printf '%s' "$EY_UYE_SATIRLARI" | cut -f1-3))" dry-run || exit $?
+      else
+        echo "[doğrulanmadı] kutu kaydı farkı ölçülemedi (hostsrv erişilemedi ya da roster çözülemedi)"
+      fi
     fi
     echo "== dry-run: hiçbir yazım yapılmadı (plan-exit sözleşmesi, exit=3) =="
     exit 3
@@ -2290,6 +2423,10 @@ cmd_uye_ekle() {
   # tam-roster (mevcut + yeni-üye) → satırlar (uuid'ler mevcut-kayıttan YENİDEN-KULLANILIR)
   _ey_uye_satirlari "$roster_mevcut $uye:$gorev" "$reg_mevcut" || exit 1
   [ -n "$sid" ] || sid="$(printf '%s' "$EY_UYE_SATIRLARI" | awk -F'\t' -v u="$uye" '$1==u{print $3}')"
+
+  # ── KUTU KAYDI KORUMASI: HİÇBİR yazımdan ÖNCE (kutudaki çalışan kopya ezilmez) ───────────
+  local reg_yeni; reg_yeni="$(_ey_iskan_registry_icerik < <(printf '%s' "$EY_UYE_SATIRLARI" | cut -f1-3))"
+  _ey_kayit_koru "$reg_yeni" apply || exit $?
 
   # ── ADIM-1: hafif-kimlik-dosyası (İ1: KÂHYA/ise-alim ÇAĞRILMAZ; dosya-bazlı idempotent) ──
   if _ey_ssh "test -f '$EY_HOST_PROJ/_agents/$uye/AGENT.md'" 2>/dev/null; then
@@ -2349,7 +2486,7 @@ PYEOF
   fi
 
   # ── ADIM-4: iskan-registry K2 yeniden-üretim (tüm-roster) → 3-kopya bayt-eş ───────────────
-  local reg_yeni; reg_yeni="$(_ey_iskan_registry_icerik < <(printf '%s' "$EY_UYE_SATIRLARI" | cut -f1-3))"
+  # (reg_yeni koruma kapısında üretildi ve onaylandı — aynı içerik dağıtılır)
   _ey_registry_dagit "$reg_yeni" "$reg_host" || exit 1
 
   echo ""
@@ -3753,6 +3890,10 @@ case "${1:-}" in
     shift
     cmd_uye_ekle "$@"
     ;;
+  kayit-fark)
+    shift
+    cmd_kayit_fark "$@"
+    ;;
   evergreen-kaydet)
     shift
     cmd_evergreen_kaydet "$@"
@@ -3770,7 +3911,7 @@ case "${1:-}" in
     cmd_kur "$@"
     ;;
   *)
-    echo "kullanım: iskan.sh doctor | iskan.sh seans-getir --container <ad> [--apply] | iskan.sh yeni-proje <ad> [--mem-limit <val>] [--port <n>] --dry-run|--apply | iskan.sh cf-yayin <proje> --dry-run|--apply | iskan.sh ekip-yerlestir <proje> --dry-run|--apply | iskan.sh ekip-pong <proje> --dry-run|--apply [--no-ping] | iskan.sh uye-ekle <proje> <uye> [--gorev <görev>] --dry-run|--apply | iskan.sh evergreen-kaydet <proje> --dry-run|--apply | iskan.sh provizyon <proje> [--apply] | iskan.sh sokum <proje> [--dry-run|--apply] | iskan.sh kur <proje> [--dry-run|--devam|--durum] [--benimse]" >&2
+    echo "kullanım: iskan.sh doctor | iskan.sh seans-getir --container <ad> [--apply] | iskan.sh yeni-proje <ad> [--mem-limit <val>] [--port <n>] --dry-run|--apply | iskan.sh cf-yayin <proje> --dry-run|--apply | iskan.sh ekip-yerlestir <proje> --dry-run|--apply | iskan.sh ekip-pong <proje> --dry-run|--apply [--no-ping] | iskan.sh uye-ekle <proje> <uye> [--gorev <görev>] --dry-run|--apply | iskan.sh kayit-fark [proje…] | iskan.sh evergreen-kaydet <proje> --dry-run|--apply | iskan.sh provizyon <proje> [--apply] | iskan.sh sokum <proje> [--dry-run|--apply] | iskan.sh kur <proje> [--dry-run|--devam|--durum] [--benimse]" >&2
     exit 2
     ;;
 esac

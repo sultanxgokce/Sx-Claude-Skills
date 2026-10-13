@@ -1,0 +1,5 @@
+$ bash iskan/scripts/iskan.sh kayit-fark
+# rc=2 sure=0.0s zaman=2026-10-13T20:48:47+03:00
+--- stdout ---
+--- stderr ---
+kullanım: iskan.sh doctor | iskan.sh seans-getir --container <ad> [--apply] | iskan.sh yeni-proje <ad> [--mem-limit <val>] [--port <n>] --dry-run|--apply | iskan.sh cf-yayin <proje> --dry-run|--apply | iskan.sh ekip-yerlestir <proje> --dry-run|--apply | iskan.sh ekip-pong <proje> --dry-run|--apply [--no-ping] | iskan.sh uye-ekle <proje> <uye> [--gorev <görev>] --dry-run|--apply | iskan.sh evergreen-kaydet <proje> --dry-run|--apply | iskan.sh provizyon <proje> [--apply] | iskan.sh sokum <proje> [--dry-run|--apply] | iskan.sh kur <proje> [--dry-run|--devam|--durum] [--benimse]
