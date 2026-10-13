@@ -4,6 +4,7 @@
 #   --kaynak <terminal-onar dizini>  kurulmamış sürümü ölçmek için: dört dosya stdin'den kutuda GEÇİCİ dizine açılır, koşulur, silinir
 #   (verilmezse kutunun kurulu kopyası: /config/.claude/skills/terminal-onar)
 #   [kutu…]  verilmezse host'taki bütün cloudtop-* kutuları (altyapı hariç)
+# Terminalsiz kap (tmux ya da node yok — masaüstü, köprüler) ayrı sayılır: ne temiz ne kirli, ölçülemedi de değil.
 # rc: 0 hepsi temiz · 1 en az bir kutuda DÜŞEN/hayalet · 2 en az bir kutu ölçülemedi (temiz sayılmaz)
 set -uo pipefail
 HOST="${KOLTUK_FARK_HOST:-hostsrv}"; KAYNAK=""; KUTULAR=()
@@ -15,7 +16,7 @@ if [ "${#KUTULAR[@]}" -eq 0 ]; then
   l="$(ssh_ "docker ps --format '{{.Names}}'")" || { echo "ÖLÇÜLEMEDİ: kutu listesi alınamadı ($HOST)"; exit 2; }
   mapfile -t KUTULAR < <(printf '%s\n' "$l" | grep -E '^cloudtop(-|$)' | grep -vE "$ALTYAPI" | sort)
 fi
-temiz=0; kirli=0; olcmedi=0
+temiz=0; kirli=0; olcmedi=0; terminalsiz=0
 for k in "${KUTULAR[@]}"; do
   [[ "$k" =~ ^[a-z0-9-]+$ ]] || { echo "✗ $k: geçersiz kutu adı"; olcmedi=$((olcmedi+1)); continue; }
   if [ -n "$KAYNAK" ]; then
@@ -28,6 +29,7 @@ for k in "${KUTULAR[@]}"; do
 try: d=json.loads(sys.stdin.read())
 except Exception: print("?"); sys.exit()
 if "olculemedi" in d: print("ÖLÇÜLEMEDİ: "+d["olculemedi"]); sys.exit()
+if "terminalsiz" in d: print("terminalsiz: "+d["terminalsiz"]); sys.exit()
 o=d["ozet"]; print("%d oturum · görünür %d · gizli %d · DÜŞEN %d · hayalet %d · başka adla bağlı %d" % (o["toplam"],o["gorunur"],o["gizli"],o["dusen"],o["hayalet"],o["sekme"]))
 for x in d["oturumlar"]:
     if x["hukum"]=="DUSEN": print("      ✗ DÜŞEN: "+x["ad"])
@@ -36,10 +38,11 @@ for s in d["sekme"]: print("      ⓘ \x27%s\x27 adıyla açılmış istemci →
   case "$rc:$ozet" in
     0:[0-9]*) echo "✓ $k: $ozet"; temiz=$((temiz+1)) ;;
     1:[0-9]*) echo "✗ $k: $ozet"; kirli=$((kirli+1)) ;;
+    3:terminalsiz*|127:*) echo "– $k: terminalsiz ($([ "$rc" = 127 ] && echo 'node yok' || echo "${ozet#terminalsiz: }"))"; terminalsiz=$((terminalsiz+1)) ;;
     *) echo "? $k: ölçülemedi (rc=$rc) ${ozet:-$(printf '%s' "$out" | tail -n 1 | cut -c1-120)}"; olcmedi=$((olcmedi+1)) ;;
   esac
 done
-echo "== ${#KUTULAR[@]} kutu · temiz $temiz · DÜŞEN/hayalet olan $kirli · ölçülemedi $olcmedi =="
+echo "== ${#KUTULAR[@]} kap · terminalli $((temiz+kirli+olcmedi)): temiz $temiz · DÜŞEN/hayalet olan $kirli · ölçülemedi $olcmedi · terminalsiz $terminalsiz =="
 [ "$olcmedi" -gt 0 ] && exit 2
 [ "$kirli" -gt 0 ] && exit 1
 exit 0

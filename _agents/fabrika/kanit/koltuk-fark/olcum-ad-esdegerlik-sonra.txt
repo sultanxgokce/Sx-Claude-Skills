@@ -1,0 +1,11 @@
+$ bash terminal-onar/scripts/koltuk-adi.test.sh
+# rc=0 sure=1.1s zaman=2026-10-13T21:40:47+03:00
+--- stdout ---
+  ✓ K0 kapı ad kuralını modülden alır (ikinci kopya yok)
+  ✓ K1 kabuk kuralı beklenen hükmü verir (26 ad)
+  ✓ K2 kapı (koltuklar.mjs KOLTUK_AD_DESEN) kabukla AYNI hükmü verir
+  ✓ K3 GERÇEK tmux: kuralın kabul ettiği her ad oturum olur ve '=ad' ile kendisine çözülür
+  ✓ K4 çağıranın yerel ayarı C olsa da (cron/ttyd) kabuk aynı hükmü verir — bayt değil karakter sayar
+
+GEÇEN: 5 · KALAN: 0
+--- stderr ---

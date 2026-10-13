@@ -8,6 +8,7 @@
  * 'tmux attach -t yenileme' açılmış, oturum sonradan '2026/85' olmuş → sekme adı ≠ oturum adı; YargiYenileme vakası). Bilgi, hata değil.
  *   node koltuk-fark.mjs [--json]
  * rc: 0 düşen=0 ∧ hayalet=0 · 1 en az bir düşen ya da hayalet · 2 ölçülemedi (ölçülemeyen "temiz" sayılmaz)
+ *     · 3 terminalsiz kutu (tmux kurulu değil — koltuk kavramı yok; ne temiz ne kirli)
  */
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
@@ -24,6 +25,7 @@ const olculemedi = (n) => { if (JSONC) console.log(JSON.stringify({ olculemedi: 
 
 const t = kos(TMUX[0], [...TMUX.slice(1), 'list-sessions', '-F', '#{session_name}']);
 let tum = [];
+if (/ENOENT/.test(t.err || '')) { if (JSONC) console.log(JSON.stringify({ terminalsiz: 'tmux kurulu değil' })); else console.log('TERMİNALSİZ: tmux kurulu değil'); process.exit(3); }
 if (t.rc === 0) tum = t.out.split('\n').filter(Boolean);
 else if (!/no server running|No such file or directory/.test(t.err)) olculemedi('tmux listesi alınamadı: ' + t.err.trim());
 const l = kos('bash', [BETIK, '--liste']); if (l.rc !== 0) olculemedi('koltuk-bagla.sh --liste rc=' + l.rc);
