@@ -1,0 +1,103 @@
+{
+  "is": "fabrika-araclari-uc-kusur",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-13T11:51:09+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "is-alani-sinav-worktree-icinden",
+      "asama": "sonra",
+      "dosya": "olcum-is-alani-sinav-worktree-icinden-sonra.txt",
+      "sha256": "0329ec4b3c952bab21642be5cd81b92e19fa83c5ebc6ee1b72366c74b72130c9",
+      "komut": [
+        "bash",
+        "-c",
+        "cd yazilim-fabrikasi/scripts && bash is-alani.test.sh 2>&1 | grep -E \"T9|T10|✗|SONUÇ\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T11:46:07+03:00",
+      "sure_sn": 2.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "olc-sinav-bugunun-cipasi",
+      "asama": "sonra",
+      "dosya": "olcum-olc-sinav-bugunun-cipasi-sonra.txt",
+      "sha256": "92da8748e3ea7d712631f09bd3230a9554f246e806e6dcdea1a290dfeab36845",
+      "komut": [
+        "bash",
+        "-c",
+        "cd gunluk-plan/scripts && bash olc.test.sh 2>&1 | grep -E \"O11|🔴|SONUÇ\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T11:48:36+03:00",
+      "sure_sn": 11.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bulgu-hal-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-bulgu-hal-sinav-sonra.txt",
+      "sha256": "87dd88d5d98336009e7a2d8a019f49ed06304af81fe5fd050c40b1fba3a5440f",
+      "komut": [
+        "bash",
+        "bulgu/scripts/bulgu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T11:51:04+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-olmayan-alan-yesil",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-olmayan-alan-yesil-tek.txt",
+      "sha256": "3bfb8b9fe4f57e10ba9bfaa03915b1a4310c96407e0784373ed08cd44f3b02f2",
+      "komut": [
+        "bash",
+        "-c",
+        "cd yazilim-fabrikasi/scripts && cp is-alani.sh /tmp/ia.bak && sed -i \"s/    exit 2\\n  fi/XX/\" is-alani.sh && python3 - <<PY\ns=open(\"is-alani.sh\").read(); s=s.replace(\"\"\"    _hata \"çalışma alanı YOK: \\$yol\"\"\",\"\"\"    _bilgi \"· çalışma alanı zaten yok: \\$yol\"; : \"\\$yol\"\"\",1); s=s.replace(\"\"\"    exit 2\n  fi\n  git -C \"\\$DEPO\" branch -d\"\"\",\"\"\"  fi\n  git -C \"\\$DEPO\" branch -d\"\"\",1); open(\"is-alani.sh\",\"w\").write(s)\nPY\no=$(bash is-alani.test.sh 2>&1); cp /tmp/ia.bak is-alani.sh; rm -f /tmp/ia.bak; printf \"%s\\n\" \"$o\" | grep -E \"✗|SONUÇ\"; k=$(printf \"%s\\n\" \"$o\" | grep -c \"✗ olmayan alan\"); echo \"eski sahte-yeşil davranış geri gelince T10 kırmızı: $k (beklenen 1)\"; test \"$k\" -eq 1"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T11:46:22+03:00",
+      "sure_sn": 1.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "olc-arac-siniri-kanit",
+      "asama": "tek",
+      "dosya": "olcum-olc-arac-siniri-kanit-tek.txt",
+      "sha256": "270b3281dea362df4abc532daf2adef8217ad043d730003b66c9c5bddb7bc7b1",
+      "komut": [
+        "bash",
+        "-c",
+        "f=gunluk-plan/scripts/olc.sh; kod=$(grep -vE \"^\\s*#\" \"$f\"); y=$(printf \"%s\\n\" \"$kod\" | grep -c \"cipa.sh.* yol\\|}\\\" yol\"); o=$(printf \"%s\\n\" \"$kod\" | grep -c \"}\\\" oku\"); h=$(printf \"%s\\n\" \"$kod\" | grep -cE \"(head|tail) -[0-9]+ \\\"\\$_cy\\\"\"); echo \"olc.sh KOD satırlarında (yorumlar hariç): cipa.sh yol çağrısı: $y · cipa.sh oku çağrısı: $o · çıpa dosyasını doğrudan okuyan head/tail: $h\"; test \"$y\" -eq 0 -a \"$o\" -ge 1 -a \"$h\" -eq 0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T11:49:14+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-bulgu-degersiz-secenek",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-bulgu-degersiz-secenek-tek.txt",
+      "sha256": "cd2117dacc5b913e66c2dbdc746a18814bc53c58918f2894253c43e93513bb27",
+      "komut": [
+        "bash",
+        "-c",
+        "cp bulgu/scripts/bulgu.sh /tmp/b.bak; sed -i \"s/--kim) \\[ \\$# -ge 2 \\] || { echo \\\"--kim değersiz\\\" >\\&2; exit 2; }; kim=\\\"\\$2\\\"; shift 2 ;;/--kim) kim=\\\"\\${2:-}\\\"; shift 2 ;;/\" bulgu/scripts/bulgu.sh; grep -c \"kim=\\\"\\${2:-}\\\"; shift 2\" bulgu/scripts/bulgu.sh; o=$(bash bulgu/scripts/bulgu.test.sh 2>&1); cp /tmp/b.bak bulgu/scripts/bulgu.sh; rm -f /tmp/b.bak; printf \"%s\\n\" \"$o\" | grep -E \"✗|geçti\"; k=$(printf \"%s\\n\" \"$o\" | grep -c \"✗ H9 \"); echo \"eski shift davranışı geri gelince H9 kırmızı: $k (beklenen 1)\"; test \"$k\" -eq 1"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T11:51:09+03:00",
+      "sure_sn": 5.1
+    }
+  ],
+  "imza": "d1a5d9679095776d5ee0c8b55622e97635c6ebb927e058de23256adf22d34eb7"
+}

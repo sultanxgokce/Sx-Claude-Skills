@@ -1,0 +1,5 @@
+$ bash -c f=gunluk-plan/scripts/olc.sh; kod=$(grep -vE "^\s*#" "$f"); y=$(printf "%s\n" "$kod" | grep -c "cipa.sh.* yol\|}\" yol"); o=$(printf "%s\n" "$kod" | grep -c "}\" oku"); h=$(printf "%s\n" "$kod" | grep -cE "(head|tail) -[0-9]+ \"\$_cy\""); echo "olc.sh KOD satırlarında (yorumlar hariç): cipa.sh yol çağrısı: $y · cipa.sh oku çağrısı: $o · çıpa dosyasını doğrudan okuyan head/tail: $h"; test "$y" -eq 0 -a "$o" -ge 1 -a "$h" -eq 0
+# rc=0 sure=0.0s zaman=2026-10-13T11:49:14+03:00
+--- stdout ---
+olc.sh KOD satırlarında (yorumlar hariç): cipa.sh yol çağrısı: 0 · cipa.sh oku çağrısı: 1 · çıpa dosyasını doğrudan okuyan head/tail: 0
+--- stderr ---

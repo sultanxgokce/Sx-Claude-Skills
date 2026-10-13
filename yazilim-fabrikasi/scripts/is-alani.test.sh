@@ -108,7 +108,22 @@ CIKTI="$( cd "$T/depo" && PATH="$BOZUK:$PATH" bash "$IS" ac ghsiz --kartsiz --do
 grep -q "YAPILAMADI" <<<"$CIKTI"; g $? "kapsam kontrolü yapılamadığını söyledi"
 [ -d "$T/alan/depo-ghsiz" ]; g $? "alan yine açıldı"
 
+echo "════ T9 · worktree İÇİNDEN çağrı: birincil depo bulunur, yol çift ad almaz (13 Eki) ════"
+( cd "$T/depo" && bash "$IS" ac icerden-is --kartsiz >/dev/null 2>&1 )
+( cd "$T/alan/depo-icerden-is" && IS_ALANI_DEPO= bash "$IS" ac ikinci-is --kartsiz >/dev/null 2>&1 ); r=$?
+[ $r -eq 0 ] && [ -d "$T/alan/depo-ikinci-is" ] && [ ! -d "$T/alan/depo-icerden-is-ikinci-is" ]; g $? "worktree içinden 'ac': alan <depo>-<iş> (çift ad değil)"
+git -C "$T/alan/depo-ikinci-is" add -A >/dev/null 2>&1; git -C "$T/alan/depo-ikinci-is" -c user.email=t@t -c user.name=t commit -q -m "kart" >/dev/null 2>&1
+( cd "$T/alan/depo-icerden-is" && IS_ALANI_DEPO= bash "$IS" kapat ikinci-is >/dev/null 2>&1 ); r=$?
+[ $r -eq 0 ] && [ ! -d "$T/alan/depo-ikinci-is" ]; g $? "worktree içinden 'kapat': doğru alanı buldu ve kaldırdı"
+( cd "$T/depo" && bash "$IS" kapat icerden-is >/dev/null 2>&1 )
+
+echo "════ T10 · olmayan alanı kapatmak YEŞİL değil (rc 2, sahte başarı yok) ════"
+CIKTI="$( cd "$T/depo" && bash "$IS" kapat boyle-bir-is-yok 2>&1 )"; r=$?
+[ $r -eq 2 ] && grep -q "YOK" <<<"$CIKTI"; g $? "olmayan alan → rc 2 + 'YOK' (eskiden rc 0 'zaten yok')"
+
+
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""
+
 echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]
