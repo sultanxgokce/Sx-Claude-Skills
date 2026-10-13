@@ -1,0 +1,19 @@
+{
+  "is": "koltuk-kayit-okuyucu",
+  "cumle": "koltuk-ac.sh kayıt okuyucusu tek yerde: aile-registry.yaml ya da ekip-registry.yaml — İSKÂN kutularında (7) kayıtlı koltukta Aç rol bulamıyordu (#304 kusuru) — G-BANI-0002/4 ilk dilim",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-13T18:33:09+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/koltuk-kayit-okuyucu",
+  "oda": "merkez",
+  "durum": "acik",
+  "gecmis": []
+}

@@ -1,0 +1,14 @@
+$ bash _agents/fabrika/kanit/koltuk-kayit-okuyucu/mutasyon.sh
+# rc=0 sure=70.1s zaman=2026-10-13T18:42:37+03:00
+--- stdout ---
+  ✓ pozitif kontrol (koltuk-ac) YEŞİL
+  ✓ pozitif kontrol (tarayıcı) YEŞİL
+  ✓ KO1 İSKÂN açıcısı hiç seçilmiyor (2.4.0 hâli: kayıtlı koltuk 'kayıtsız') → kırmızı
+  ✓ KO2 İSKÂN'da kayıt aile-registry'den okunuyor (iki kopya → yanlış rol) → kırmızı
+  ✓ KO3 grid ekip-ac.sh da açıcı sayılıyor (koltuk kapanır, geri gelmez) → kırmızı
+  ✓ KO4 düşen baslat-claude'a 'açıldı' deniyor → kırmızı
+  ✓ KO5 İSKÂN koltuğunda konuşma varken resume=false → kırmızı
+  ✓ KO6 kayıttaki çalışma dizini yok sayılıyor → kırmızı
+  ✓ KO7 İSKÂN koltuğunda iki düğme aynı işi yapıyor (Eski görünür) → kırmızı
+  ✓ KO8 ekran İSKÂN koltuğunu 'kayıtsız' yazıyor → kırmızı
+--- stderr ---

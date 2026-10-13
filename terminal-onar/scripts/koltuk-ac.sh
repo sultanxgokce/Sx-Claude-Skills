@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # koltuk-ac.sh — bir KOLTUĞU (tmux oturumu) tek komutla ölç ve aç/yeniden aç (dilim 5/5 · 13 Ekim 2026).
 #
-#   koltuk-ac.sh durum <ad>              → JSON: {"ad","durum","tmux","claude","hal","son","rol","resume","yol"}
+#   koltuk-ac.sh durum <ad>              → JSON: {"ad","durum","tmux","claude","hal","son","rol","resume","yol","ana"}
 #   koltuk-ac.sh ac <ad> [--eski] [--zorla] → açar; --eski = eski sohbete dön (ekip-ac.sh --resume-if-known); --zorla = takılı görünen
 #                                          oturumu KAPATIP yeniden doğur (zorlasız: rc 5, dokunmaz — çalışıyor olabilir)
 #
@@ -10,15 +10,34 @@
 #   claude-yok   = oturum var, içinde Claude yok (kabuk/ölü)
 #   takili       = Claude var ama TAKILI_SN (vars. 900 s) süredir ekran değişmedi ve soru/girdi beklemiyor
 #   canli        = Claude var, hâl normal
-# YOL (kim açar): kutuda `scripts/ekip-ac.sh` + aile kaydı varsa ve koltuk kayıtlı bir rolün tmux'uysa → ekip-ac.sh
-#   (TEK-KANONİK KAPI: ikinci kopya açmaz; --eski → --resume-if-known). Koltuk ANA ise → onar.sh (K0), düşerse
-#   merdiven (kademe.sh). İkisi de değilse → kayıtsız koltuk: AÇILMAZ, sebebi söylenir (kimliksiz Claude başka
-#   kimliğe düşer — ölçülmüş vaka). Sır değeri yok; yazma yalnız ekip-ac.sh'nin kendi flock'lu kaydına.
+# YOL (kim açar) — kutunun KENDİ açıcısı, kayıt da onun okuduğu dosya (2.4.2):
+#   baslat  = İSKÂN kutusu (`scripts/baslat-claude.sh` + `iskan-registry.yaml`): koltuk kayıtlı bir rolün tmux'uysa yeni tmux
+#             oturumunda baslat-claude.sh <rol> — ayrılmış kimlik, konuşma varsa ona döner
+#   ekip-ac = merkez (`scripts/ekip-ac.sh` DOĞURAN sürüm + `aile-registry.yaml`): TEK-KANONİK KAPI, ikinci kopya açmaz;
+#             --eski → --resume-if-known
+#   onar    = koltuk ANA ise → onar.sh (K0), düşerse merdiven (kademe.sh)
+#   yok     = kayıtsız koltuk: AÇILMAZ, sebebi söylenir (kimliksiz Claude başka kimliğe düşer — ölçülmüş vaka)
+#   Sır değeri yok; bu betik kayda YAZMAZ (yazan açıcının kendisi).
 set -uo pipefail
 . "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/ortak.sh"
 TAKILI_SN="${TO_TAKILI_SN:-900}"
 EKIP_AC="${TO_EKIP_AC:-$PROJE/scripts/ekip-ac.sh}"
-KAYIT="${AILE_REGISTRY:-$PROJE/_agents/handoff/aile-registry.yaml}"
+BASLAT="${TO_BASLAT:-$PROJE/scripts/baslat-claude.sh}"
+BASLAT_BEKLE="${TO_BASLAT_BEKLE:-3}"   # açılıştan sonra oturumun yaşadığını ölçmeden "açıldı" denmez
+# AÇICI ve KAYIT BİRLİKTE seçilir — kayıt, koltuğu FİİLEN açacak betiğin okuduğu dosyadır (tek kaynak, iki kopya yok).
+#   🔴 13 Eki 2026 canlı ölçüm (G-BANI-0002/4): 2.4.0 yalnız aile-registry.yaml okuyordu. Merkez dışındaki 12 kutu İSKÂN
+#   doğumlu: koltuğu `scripts/baslat-claude.sh <rol>` açar, rolü `iskan-registry.yaml`'dan çözer (ayrılmış oturum kimliği →
+#   kendi sohbetine kendiliğinden döner). Oralarda kayıtlı koltuk "kayıtsız" görünüyor, Aç çalışmıyordu (enis ENIS/MURSIT).
+#   Aynı adlı `ekip-ac.sh` İSKÂN kutularında BAŞKA bir betiktir: var olan oturumları tek pencerede toplar, oturum DOĞURMAZ
+#   ve rol argümanı almaz — açıcı sayılsaydı Aç, Claude'suz oturumu kapatıp geri getirmezdi (koltuk kaybolurdu).
+#   Bu yüzden ekip-ac.sh yalnız DOĞURAN sürümse (merkez: --resume-if-known bilir) açıcıdır.
+ISKAN="${ISKAN_REGISTRY:-$PROJE/iskan-registry.yaml}"
+if [ -f "$BASLAT" ] && [ -f "$ISKAN" ]; then
+  ACICI=baslat; KAYIT="$ISKAN"
+else
+  ACICI=""; KAYIT="${AILE_REGISTRY:-$PROJE/_agents/handoff/aile-registry.yaml}"
+  if [ -x "$EKIP_AC" ]; then _ea="$(cat "$EKIP_AC" 2>/dev/null)"; case "$_ea" in *--resume-if-known*) ACICI=ekip-ac ;; esac; fi
+fi
 # 🔴 Liste betiği BU dosyanın yanındakidir (yedek göz tur 2 canlı bulgusu: BETIK_DIZ ortak kurulu kopyaya çözülüyor, eski
 #    koltuk-bagla son=0 basıyordu — iş alanındaki düzeltme hiç çağrılmıyordu). Aynı beceri kopyası, aynı sürüm.
 KOLTUK_BETIK="${TO_KOLTUK_BETIK:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/koltuk-bagla.sh}"
@@ -71,9 +90,22 @@ durum_olc() {  # $1 ad → DURUM CLAUDE HAL SON değişkenleri
   local simdi; simdi=$(date +%s)
   if [ "${SON:-0}" -gt 0 ] && [ $((simdi - SON)) -ge "$TAKILI_SN" ] && [ "$HAL" != soru ] && [ "$HAL" != girdi ]; then DURUM=takili; else DURUM=canli; fi
 }
-yol_bul() {  # $1 ad → YOL ∈ ekip-ac | onar | yok ; ROL
+# İSKÂN kaydında rolün çalışma dizini (yoksa proje kökü) — baslat-claude.sh orada açılır
+cwd_bul() {
+  python3 - "$KAYIT" "$1" <<'PY2'
+import re, sys
+reg, rol = sys.argv[1], sys.argv[2]
+cur=None
+for line in open(reg, encoding='utf-8'):
+    m = re.match(r'\s*-\s*id:\s*(\S+)', line)
+    if m: cur = m.group(1); continue
+    m = re.match(r'\s*cwd:\s*["\']?([^"\'#\s]+)', line)
+    if m and cur == rol: print(m.group(1)); break
+PY2
+}
+yol_bul() {  # $1 ad → YOL ∈ baslat | ekip-ac | onar | yok ; ROL
   ROL="$(rol_bul "$1")"
-  if [ -n "$ROL" ] && [ -x "$EKIP_AC" ]; then YOL=ekip-ac
+  if [ -n "$ROL" ] && [ -n "$ACICI" ]; then YOL="$ACICI"
   elif [ "$1" = "$ANA_TMUX" ]; then YOL=onar
   else YOL=yok; fi
 }
@@ -85,7 +117,7 @@ ESKI=0; ZORLA=0; for a in "$@"; do case "$a" in --eski) ESKI=1 ;; --zorla) ZORLA
 case "$KOMUT" in
   durum)
     durum_olc "$AD"; yol_bul "$AD"
-    RES=false; [ "$YOL" = ekip-ac ] && resume_var "$ROL" && RES=true
+    RES=false; { [ "$YOL" = ekip-ac ] || [ "$YOL" = baslat ]; } && resume_var "$ROL" && RES=true
     printf '{"ad":%s,"durum":"%s","tmux":%s,"claude":%s,"hal":%s,"son":%s,"rol":%s,"resume":%s,"yol":"%s","ana":%s}\n' \
       "$(json_s "$AD")" "$DURUM" "$([ $TMUX_VAR = 1 ] && echo true || echo false)" "$([ "${CLAUDE:-0}" = 1 ] && echo true || echo false)" \
       "$(json_s "${HAL:-}")" "${SON:-0}" "$(json_s "${ROL:-}")" "$RES" "$YOL" "$([ "$AD" = "$ANA_TMUX" ] && echo true || echo false)"
@@ -94,7 +126,7 @@ case "$KOMUT" in
     durum_olc "$AD"; yol_bul "$AD"
     gunluk "koltuk-ac: $AD durum=$DURUM yol=$YOL eski=$ESKI"
     case "$YOL" in yok)
-      echo "açılamadı: '$AD' kayıtlı bir koltuk değil (aile kaydında rolü yok ya da kutuda ekip-ac.sh yok) — kimliksiz Claude açılmaz; önce işe alma (madde 6)" >&2; exit 4 ;;
+      echo "açılamadı: '$AD' kayıtlı bir koltuk değil (kutunun kaydında rolü yok ya da kutuda koltuk açan betik yok) — kimliksiz Claude açılmaz; önce işe alma (madde 6)" >&2; exit 4 ;;
     esac
     # ORTAK KAPI — ekip-ac yolu ve ana koltuk (onar) yolu AYNI kapıdan geçer (yedek göz tur 4: ana koltukta --zorla hiç okunmuyordu;
     # onar.sh içinde Claude varsa "zaten çalışıyor — yazılmadı" deyip rc 0 dönüyor → telefon "Açıldı" yazıyor, takılı Claude duruyordu).
@@ -106,6 +138,14 @@ case "$KOMUT" in
     # takılı/Claude'suz/ölçülemeyen oturum önce KAPATILIR — ekip-ac.sh ve onar.sh ikisi de "oturum var" görünce Claude'u geri getirmez
     if [ "$DURUM" = claude-yok ] || [ "$DURUM" = takili ] || [ "$DURUM" = olculemedi ]; then tmux kill-session -t "=$AD" 2>/dev/null; gunluk "koltuk-ac: $AD ($DURUM) kapatıldı, yeniden doğacak (zorla=$ZORLA yol=$YOL)"; fi
     case "$YOL" in
+      baslat)
+        # İSKÂN: ayrılmış kimlikle açılır; konuşma varsa ona döner, yoksa taze başlar (--eski ayrıca bir şey değiştirmez)
+        CWD="$(cwd_bul "$ROL")"; [ -d "${CWD:-}" ] || CWD="$PROJE"
+        tmux new-session -d -s "$AD" -c "$CWD" "bash $(printf '%q' "$BASLAT") $(printf '%q' "$ROL")" \
+          || { echo "açılamadı: tmux oturumu kurulamadı ($AD)" >&2; exit 1; }
+        sleep "$BASLAT_BEKLE"
+        if tmux_var "$AD"; then echo "açıldı: $AD ← baslat-claude.sh $ROL (kayıtlı sohbetine döner)"; exit 0; fi
+        echo "açılamadı: baslat-claude.sh $ROL ${BASLAT_BEKLE} sn içinde düştü (claude yok ya da kayıt eksik olabilir — kutu günlüğüne bak)" >&2; exit 1 ;;
       ekip-ac)
         ARG=(); [ $ESKI = 1 ] && ARG=(--resume-if-known)
         if bash "$EKIP_AC" "$ROL" "${ARG[@]}"; then echo "açıldı: $AD ← ekip-ac.sh $ROL ${ARG[*]:-}"; exit 0
