@@ -1,0 +1,11 @@
+$ bash terminal-onar/kapi/koltuk-xss.tarayici.sh
+# rc=0 sure=1.5s zaman=2026-10-13T20:44:05+03:00
+--- stdout ---
+  ölçüm: {"diyalog":0,"img":0,"metin":["sinavkutu-ana","<img/src=x/onerror=alert(7)>","x\"y","2026/85"],"deger":["sinavkutu-ana","<img/src=x/onerror=alert(7)>","x\"y","2026/85"]}
+  ✓ X1 hiçbir diyalog/alert açılmadı
+  ✓ X2 seçicide <img> öğesi DOĞMADI
+  ✓ X3 adlar seçicide METİN olarak birebir
+  ✓ X4 option değeri = ad (adres doğru koltuğa gider)
+
+GEÇEN: 4 · KALAN: 0
+--- stderr ---
