@@ -338,10 +338,11 @@ async function koltukOlc() {
   try {
     const j = await api(Y('/api/koltuk/' + encodeURIComponent(ad))); koltukSon = j;
     const [ad2, eylem] = DURUM_AD[j.durum] || ['Bilinmiyor', 'Aç'];
-    const yol = j.yol === 'ekip-ac' ? `kayıtlı rol <b>${kacAd(j.rol)}</b>` : j.yol === 'onar' ? 'ana koltuk (onarım betiği)' : 'kayıtsız koltuk — açılamaz, önce işe alma';
+    // baslat = İSKÂN kutusu: koltuk ayrılmış kimliğiyle açılır, konuşması varsa ona döner → ayrı "eski sohbet" düğmesi yok
+    const yol = j.yol === 'ekip-ac' ? `kayıtlı rol <b>${kacAd(j.rol)}</b>` : j.yol === 'baslat' ? `kayıtlı rol <b>${kacAd(j.rol)}</b>${j.resume === true ? ' · açılınca kendi sohbetine döner' : ''}` : j.yol === 'onar' ? 'ana koltuk (onarım betiği)' : 'kayıtsız koltuk — açılamaz, önce işe alma';
     d.innerHTML = `<b>${kacAd(ad)}</b> · ${ad2}${j.hal ? ' · hâl: ' + kacAd(j.hal) : ''}<br>${yol}`;
     $('koltukBasla').textContent = eylem; $('koltukBasla').disabled = j.durum === 'canli' || j.yol === 'yok';
-    $('koltukEski').hidden = !(j.resume === true && j.durum !== 'canli');
+    $('koltukEski').hidden = !(j.resume === true && j.durum !== 'canli' && j.yol !== 'baslat');
   } catch (h) { d.textContent = 'Ölçülemedi: ' + h.message; }
 }
 async function koltukAcGonder(eski) {

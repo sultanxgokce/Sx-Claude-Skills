@@ -1,0 +1,7 @@
+$ timeout 60 ssh hostsrv for k in "enis ENIS" "enis MURSIT" "nazir nazir-yon"; do set -- $k; printf "%s/%s: " $1 $2; docker exec -u abc cloudtop-$1 bash -c "TO_KUTU=$1 bash /config/.claude/skills/terminal-onar/scripts/koltuk-ac.sh durum $2"; done
+# rc=0 sure=1.1s zaman=2026-10-13T18:40:30+03:00
+--- stdout ---
+enis/ENIS: {"ad":"ENIS","durum":"claude-yok","tmux":true,"claude":false,"hal":"bilinmiyor","son":1791885389,"rol":"","resume":false,"yol":"yok","ana":false}
+enis/MURSIT: {"ad":"MURSIT","durum":"claude-yok","tmux":true,"claude":false,"hal":"bilinmiyor","son":1791729119,"rol":"","resume":false,"yol":"yok","ana":false}
+nazir/nazir-yon: {"ad":"nazir-yon","durum":"canli","tmux":true,"claude":true,"hal":"girdi","son":1791890376,"rol":"nazir-yon","resume":false,"yol":"ekip-ac","ana":false}
+--- stderr ---

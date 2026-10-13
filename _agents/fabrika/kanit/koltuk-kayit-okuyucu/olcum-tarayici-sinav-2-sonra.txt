@@ -1,0 +1,32 @@
+$ node terminal-onar/kapi/tarayici-sinav.mjs
+# rc=0 sure=11.1s zaman=2026-10-13T18:48:24+03:00
+--- stdout ---
+── S · seçici
+  ✓ S1 başlıkta koltuk seçici var, 4 koltuk, ● = Claude
+  ✓ S2 koltuk seçince tam terminal O koltukla açılır (?arg=BASIRET)
+  ✓ S3 görünüm terminale geçti
+  ✓ S4 ana koltuk argümansız açılır (eski yol)
+── B · yerel bellekteki ad doğrulanmadan kullanılmaz
+  ✓ B1 kayıtlı GEÇERLİ koltuk doğrulanınca kullanılır (?arg=CARSI)
+  ✓ B2 kayıtlı GEÇERSİZ koltuk terminale KONMAZ (ana koltuğa düşer)
+  ✓ B3 seçici de ana koltuğu gösterir (eski ad sessizce kalmaz)
+── Y · YARIŞ: liste gecikirken terminal açılır
+  ✓ Y1 liste gelmeden açılan terminal doğrulanmamış adı KULLANMAZ
+  ✓ Y2 liste gelince terminal doğrulanan koltuğa YENİDEN kurulur (?arg=PEYK)
+  ✓ Y3 liste gecikse de GEÇERSİZ ad hiçbir anda terminale girmez
+── KD · koltuk penceresi (2.4.0): üç durum ayrı, tek tuş
+  ✓ KD1 Claude'suz koltuk: pencere "Oturum var, içinde Claude yok" + kayıtlı rol gösterir
+  ✓ KD2 eylem "Yeniden aç" etkin · "Eski sohbete dön" görünür (resume mümkün)
+  ✓ KD3 "Eski sohbete dön" tek tık → kapıya {eski:true} → betik "ac CARSI --eski"
+  ✓ KD4 canlı koltuk: "Canlı · hâl: soru", eylem devre dışı (ikinci kopya açılmaz)
+  ✓ KD5 kayıtsız koltuk: "açılamaz, önce işe alma" — Aç devre dışı ve soluk, "Eski sohbete dön" GÖRÜNMEZ (hidden fiilen gizler)
+  ✓ KD6 TAKILI koltuk (üçüncü hâl): "Claude takılı görünüyor" + ana koltuk (onarım betiği), eylem "Yeniden aç" etkin
+  ✓ KD7 takılıda "Yeniden aç" → onay sorulur; VAZGEÇ → hiçbir şey gönderilmez
+  ✓ KD8 onaylanınca {zorla:true} → betik "ac sedir-ana --zorla"
+── KI · İSKÂN koltuğu (2.4.2): açıcı baslat-claude.sh — Aç kendi sohbetine döner, ayrı "eski sohbet" düğmesi yok
+  ✓ KI1 İSKÂN koltuğu: "kayıtlı rol CARSI · açılınca kendi sohbetine döner" (kayıtsız DEĞİL), "Yeniden aç" etkin
+  ✓ KI2 "Eski sohbete dön" GÖRÜNMEZ (resume var ama Aç zaten ona döner — iki düğme aynı işi yapmaz)
+  ✓ KI3 tek tık → betik "ac CARSI" (--eski YOK)
+
+GEÇEN: 21 · KALAN: 0
+--- stderr ---

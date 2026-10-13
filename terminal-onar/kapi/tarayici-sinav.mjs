@@ -22,7 +22,7 @@ const LISTE = 'printf "sedir-ana\\t1760000000\\t1\\nBASIRET\\t1760000100\\t1\\nC
 const HIZLI = join(T, 'hizli.sh'); writeFileSync(HIZLI, `#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\n${LISTE}\n`); chmodSync(HIZLI, 0o755);
 // sahte koltuk-ac.sh (2.4.0): BASIRET canlı · CARSI Claude'suz (resume var) · PEYK yok (kayıtsız); ac → deftere yazar, rc0
 const KA = join(T, 'ka.sh'); const KA_DEFTER = join(T, 'ka-defter');
-writeFileSync(KA, `#!/usr/bin/env bash\necho "$*" >> ${JSON.stringify(KA_DEFTER)}\nif [ "$1" = durum ]; then case "$2" in BASIRET) echo '{"ad":"BASIRET","durum":"canli","tmux":true,"claude":true,"hal":"soru","son":0,"rol":"BASIRET","resume":true,"yol":"ekip-ac","ana":false}';; CARSI) echo '{"ad":"CARSI","durum":"claude-yok","tmux":true,"claude":false,"hal":"","son":0,"rol":"CARSI","resume":true,"yol":"ekip-ac","ana":false}';; sedir-ana) echo '{"ad":"sedir-ana","durum":"takili","tmux":true,"claude":true,"hal":"calisiyor","son":1700000000,"rol":"","resume":false,"yol":"onar","ana":true}';; *) echo '{"ad":"'"$2"'","durum":"yok","tmux":false,"claude":false,"hal":"","son":0,"rol":"","resume":false,"yol":"yok","ana":false}';; esac; exit 0; fi\necho "açıldı: $2"; exit 0\n`); chmodSync(KA, 0o755);
+writeFileSync(KA, `#!/usr/bin/env bash\necho "$*" >> ${JSON.stringify(KA_DEFTER)}\nif [ "$1" = durum ] && [ "$2" = CARSI ] && [ -f ${JSON.stringify(KA_DEFTER + '.iskan')} ]; then echo '{"ad":"CARSI","durum":"claude-yok","tmux":true,"claude":false,"hal":"","son":0,"rol":"CARSI","resume":true,"yol":"baslat","ana":false}'; exit 0; fi\nif [ "$1" = durum ]; then case "$2" in BASIRET) echo '{"ad":"BASIRET","durum":"canli","tmux":true,"claude":true,"hal":"soru","son":0,"rol":"BASIRET","resume":true,"yol":"ekip-ac","ana":false}';; CARSI) echo '{"ad":"CARSI","durum":"claude-yok","tmux":true,"claude":false,"hal":"","son":0,"rol":"CARSI","resume":true,"yol":"ekip-ac","ana":false}';; sedir-ana) echo '{"ad":"sedir-ana","durum":"takili","tmux":true,"claude":true,"hal":"calisiyor","son":1700000000,"rol":"","resume":false,"yol":"onar","ana":true}';; *) echo '{"ad":"'"$2"'","durum":"yok","tmux":false,"claude":false,"hal":"","son":0,"rol":"","resume":false,"yol":"yok","ana":false}';; esac; exit 0; fi\necho "açıldı: $2"; exit 0\n`); chmodSync(KA, 0o755);
 const YAVAS = join(T, 'yavas.sh'); writeFileSync(YAVAS, `#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\nsleep 1.5\n${LISTE}\n`); chmodSync(YAVAS, 0o755);
 async function kapiAc(port, betik) {
   const p = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: { ...process.env, KAPI_PORT: String(port), KAPI_TABAN: '/sedir', TO_KUTU: 'sedir',
@@ -93,5 +93,13 @@ try {
   pg.once('dialog', (d) => d.accept()); await pg.click('#koltukBasla'); await pg.waitForTimeout(400);
   kapi('KD8 onaylanınca {zorla:true} → betik "ac sedir-ana --zorla"', readFileSync(KA_DEFTER, 'utf8').trim().split('\n').includes('ac sedir-ana --zorla'), `→ ${readFileSync(KA_DEFTER, 'utf8').trim().split('\n').slice(-2).join(' | ')}`);
   if (KARE) await pg.screenshot({ path: `${KARE}-koltuk-pencere.png` });
+  console.log('── KI · İSKÂN koltuğu (2.4.2): açıcı baslat-claude.sh — Aç kendi sohbetine döner, ayrı "eski sohbet" düğmesi yok');
+  writeFileSync(KA_DEFTER + '.iskan', '');
+  await pg.evaluate(() => document.getElementById('koltukP').close()); await pg.selectOption('#koltuk', 'CARSI'); await pg.waitForTimeout(200); await pg.click('#koltukAc'); await pg.waitForFunction(() => /kendi sohbetine/.test(document.getElementById('koltukDurum').textContent), null, { timeout: 5000 }).catch(() => {});
+  dm = await pg.$eval('#koltukDurum', (e) => e.textContent);
+  kapi('KI1 İSKÂN koltuğu: "kayıtlı rol CARSI · açılınca kendi sohbetine döner" (kayıtsız DEĞİL), "Yeniden aç" etkin', /kayıtlı rol CARSI/.test(dm) && /kendi sohbetine döner/.test(dm) && !/kayıtsız/.test(dm) && (await pg.$eval('#koltukBasla', (e) => e.textContent + '|' + e.disabled)) === 'Yeniden aç|false', `→ ${dm}`);
+  kapi('KI2 "Eski sohbete dön" GÖRÜNMEZ (resume var ama Aç zaten ona döner — iki düğme aynı işi yapmaz)', await pg.$eval('#koltukEski', (e) => e.offsetParent === null));
+  await pg.click('#koltukBasla'); await pg.waitForTimeout(400);
+  kapi('KI3 tek tık → betik "ac CARSI" (--eski YOK)', readFileSync(KA_DEFTER, 'utf8').trim().split('\n').slice(-3).includes('ac CARSI'), `→ ${readFileSync(KA_DEFTER, 'utf8').trim().split('\n').slice(-2).join(' | ')}`);
 } finally { await b.close(); k1.kill(); k2.kill(); }
 console.log(`\nGEÇEN: ${gecen} · KALAN: ${kalan}`); process.exit(kalan ? 1 : 0);

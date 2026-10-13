@@ -17,5 +17,15 @@
   "kanit_nerede": "_agents/fabrika/kanit/koltuk-adi-suzgec (eşdeğerlik + gerçek tmux '/'lı koltuk + tarayıcı XSS kapısı)",
   "oda": "",
   "durum": "acik",
-  "gecmis": []
+  "gecmis": [],
+  "sultan_kararlari": [
+    {
+      "karar": "devam",
+      "oturum": "serdar:0 aile-notify 2026-10-13 ~19:50 (SERDAR aktarımı)",
+      "soz": "karar: önerini kabul ettim",
+      "beyan": "BANI",
+      "gerekce": "Tur 3 bulgusu (2400 sınırı) düzeltildi; son tur 5·E + CI yeşilse birleşir — terminal paketi a, SERDAR aktardı",
+      "zaman": "2026-10-13T20:42:36+03:00"
+    }
+  ]
 }
