@@ -23,7 +23,7 @@ printf 'KONUM-YENI\n'  > "$KOK/_agents/handoff/konumlu-konum-20260202.md"
 
 # ── sahte beceri dizini: çıpa aracı yerine güdük bir betik (kimliği O söyler)
 SK="$TMP/sk"; mkdir -p "$SK/gunluk-plan/scripts"
-yeni_arac(){ printf '#!/usr/bin/env bash\ncase "${1:-}" in ajan) echo "%s";; yol) echo "%s";; *) exit 2;; esac\n' "$1" "${2:-$TMP/yok-cipa.md}" \
+yeni_arac(){ printf '#!/usr/bin/env bash\ncase "${1:-}" in ajan) echo "%s";; oku) cat "%s" 2>/dev/null || exit 1;; *) exit 2;; esac\n' "$1" "${2:-$TMP/yok-cipa.md}" \
   > "$SK/gunluk-plan/scripts/cipa.sh"; }
 eski_arac(){ printf '#!/usr/bin/env bash\nexit 2\n' > "$SK/gunluk-plan/scripts/cipa.sh"; }
 
@@ -94,8 +94,8 @@ kapi "O7 dört kimlik × (araç + ortam-taklidi) toplam sızıntı satırı" "$s
 printf '# ⚓ GÜNÜN PLANI ÇIPASI · %s\n\n- [ ] 1) CIPA-BUGUN-MADDE\n' "$(date +%Y-%m-%d)" > "$TMP/cipa-bugun.md"
 yeni_arac deneme "$TMP/cipa-bugun.md"
 O="$(alti "$(kos)")"
-kapi "O11 bugünün çıpası 6. kaynakta ÖNCE basılır, defter/konum basılmaz" \
-     "$(grep -c 'CIPA-BUGUN-MADDE' <<<"$O")/$(grep -c 'BUGÜNÜN çıpası' <<<"$O")/$(grep -c 'DENEME-KENDI-IZIM' <<<"$O")" "1/1/0"
+kapi "O11 bugünün çıpası 6. kaynakta ÖNCE basılır (cipa.sh oku ile; dosya kendimiz okunmaz), defter/konum basılmaz" \
+     "$(grep -c 'CIPA-BUGUN-MADDE' <<<"$O")/$(grep -c 'cipa.sh oku · BUGÜNÜN' <<<"$O")/$(grep -c 'DENEME-KENDI-IZIM' <<<"$O")" "1/1/0"
 printf '# ⚓ GÜNÜN PLANI ÇIPASI · 2001-01-01\n\n- [ ] 1) CIPA-DUN-MADDE\n' > "$TMP/cipa-dun.md"
 yeni_arac deneme "$TMP/cipa-dun.md"
 O="$(alti "$(kos)")"

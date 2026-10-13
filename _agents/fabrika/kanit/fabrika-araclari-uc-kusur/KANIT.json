@@ -1,7 +1,7 @@
 {
   "is": "fabrika-araclari-uc-kusur",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-13T11:46:22+03:00",
+  "guncelleme": "2026-10-13T11:48:36+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -24,7 +24,7 @@
       "etiket": "olc-sinav-bugunun-cipasi",
       "asama": "sonra",
       "dosya": "olcum-olc-sinav-bugunun-cipasi-sonra.txt",
-      "sha256": "d9aea39bb301474ef46fc55a4a111e424cc9edcaae8e584f5641cbe7c3f8157c",
+      "sha256": "92da8748e3ea7d712631f09bd3230a9554f246e806e6dcdea1a290dfeab36845",
       "komut": [
         "bash",
         "-c",
@@ -32,8 +32,8 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T11:46:21+03:00",
-      "sure_sn": 13.2
+      "zaman": "2026-10-13T11:48:36+03:00",
+      "sure_sn": 11.3
     },
     {
       "tur": "olcum",
@@ -65,7 +65,23 @@
       "renk": "yesil",
       "zaman": "2026-10-13T11:46:22+03:00",
       "sure_sn": 1.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "olc-arac-siniri-kanit",
+      "asama": "tek",
+      "dosya": "olcum-olc-arac-siniri-kanit-tek.txt",
+      "sha256": "f082f7e8514a4d80c2fc15af450d6c3f6eee626c44ffc6ff97ff89f02fb74e18",
+      "komut": [
+        "bash",
+        "-c",
+        "echo \"olc.sh içinde cipa.sh yol çağrısı: $(grep -c \"cipa.sh.* yol\" gunluk-plan/scripts/olc.sh) · cipa.sh oku çağrısı: $(grep -c \"cipa.sh.* oku\\|}\\\" oku\" gunluk-plan/scripts/olc.sh) · çıpa dosyasını doğrudan okuyan head/tail: $(grep -cE \"(head|tail) -[0-9]+ \\\"\\\\\\$_cy\\\"\" gunluk-plan/scripts/olc.sh)\"; test \"$(grep -c \"cipa.sh.* yol\" gunluk-plan/scripts/olc.sh)\" -eq 0"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-13T11:48:36+03:00",
+      "sure_sn": 0.0
     }
   ],
-  "imza": "ec22c1aa211ab8446a42486cf79d3de993054499ed20786304d49dc5e09fb2aa"
+  "imza": "e1352f37577a3a83d055473bc58cd7da8fe00178b39cf896efd6fe4585bd6ee4"
 }

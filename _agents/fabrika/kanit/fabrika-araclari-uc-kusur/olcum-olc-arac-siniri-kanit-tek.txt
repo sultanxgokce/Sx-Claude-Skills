@@ -1,0 +1,5 @@
+$ bash -c echo "olc.sh içinde cipa.sh yol çağrısı: $(grep -c "cipa.sh.* yol" gunluk-plan/scripts/olc.sh) · cipa.sh oku çağrısı: $(grep -c "cipa.sh.* oku\|}\" oku" gunluk-plan/scripts/olc.sh) · çıpa dosyasını doğrudan okuyan head/tail: $(grep -cE "(head|tail) -[0-9]+ \"\\\$_cy\"" gunluk-plan/scripts/olc.sh)"; test "$(grep -c "cipa.sh.* yol" gunluk-plan/scripts/olc.sh)" -eq 0
+# rc=1 sure=0.0s zaman=2026-10-13T11:48:36+03:00
+--- stdout ---
+olc.sh içinde cipa.sh yol çağrısı: 2 · cipa.sh oku çağrısı: 3 · çıpa dosyasını doğrudan okuyan head/tail: 0
+--- stderr ---

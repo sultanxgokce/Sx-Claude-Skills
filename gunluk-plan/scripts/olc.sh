@@ -77,11 +77,14 @@ else
   # 🔴 BUGÜNÜN ÇIPASI ÖNCE (13 Eki): dünden kalan plan + kapanış çıpada yaşar (`cipa.sh yaz/tazele`); eski konum
   #    dosyası (<ajan>-konum-*.md) 3 hafta bayat olabilir ve araç onu "dün nerede bıraktım" diye basıyordu.
   #    Çıpanın yolu da aracın kendisinden sorulur (`cipa.sh yol`), burada türetilmez. Çıpa bugünün değilse düşmez.
-  _cy="$(bash "${GUNLUK_PLAN_CIPA_ARAC:-$SK/gunluk-plan/scripts/cipa.sh}" yol 2>/dev/null)" || _cy=""
-  if [ -n "$_cy" ] && [ -f "$_cy" ] && head -3 "$_cy" | grep -q "$(date +%Y-%m-%d)"; then
-    printf '  kaynak: %s (BUGÜNÜN çıpası · ajan: %s)\n' "$(basename "$_cy")" "$_ajan6"
-    tail -14 "$_cy"
-    _d="$_cy"
+  #    Çıpa aracın OKUMA sözleşmesiyle (`cipa.sh oku`) okunur — dosya yolu alıp kendimiz okumayız (bağımsız göz tur 1:
+  #    araç sınırı delinmez; tazelik/katlama kuralları çıpa aracının içinde yaşar).
+  _co="$(bash "${GUNLUK_PLAN_CIPA_ARAC:-$SK/gunluk-plan/scripts/cipa.sh}" oku 2>/dev/null)" || _co=""
+  _cy=""
+  if [ -n "$_co" ] && printf '%s\n' "$_co" | head -3 | grep -q "$(date +%Y-%m-%d)"; then
+    printf '  kaynak: çıpa (cipa.sh oku · BUGÜNÜN · ajan: %s)\n' "$_ajan6"
+    printf '%s\n' "$_co" | tail -14
+    _cy="cipa-oku"; _d="$_cy"
   fi
   [ -n "$_d" ] || for _y in "$KOK/_agents/handoff/$_ajan6-defter.md" \
             "$(ls -t "$KOK/_agents/handoff/$_ajan6-konum-"*.md 2>/dev/null | head -1)"; do
