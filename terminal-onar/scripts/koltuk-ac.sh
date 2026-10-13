@@ -21,7 +21,7 @@ KAYIT="${AILE_REGISTRY:-$PROJE/_agents/handoff/aile-registry.yaml}"
 KOLTUK_BETIK="${TO_KOLTUK_BETIK:-$BETIK_DIZ/koltuk-bagla.sh}"
 
 json_s() { printf '%s' "$1" | python3 -c 'import json,sys;print(json.dumps(sys.stdin.read()),end="")'; }
-gecerli() { [[ "$1" =~ ^[^[:space:]:.]{1,64}$ ]]; }   # tmux'un kendi kuralı (dilim 5/7)
+gecerli() { [[ "$1" =~ ^[^[:space:]:.]{1,200}$ ]]; }   # tmux'un kendi kuralı (dilim 5/7)
 
 # tmux adı → kayıttaki rol (aile-registry: `- id: X` … `tmux: "x:0"`); kayıt yoksa boş
 rol_bul() {

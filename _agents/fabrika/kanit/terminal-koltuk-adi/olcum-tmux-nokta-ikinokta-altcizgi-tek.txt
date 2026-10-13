@@ -1,0 +1,7 @@
+$ bash -c tmux -L bani-olc new -d -s a.b; tmux -L bani-olc new -d -s c:d; echo "oluşturulan adlar: a.b ve c:d → tmux listesi:"; tmux -L bani-olc ls -F "#{session_name}"; tmux -L bani-olc kill-server
+# rc=0 sure=0.0s zaman=2026-10-13T13:42:29+03:00
+--- stdout ---
+oluşturulan adlar: a.b ve c:d → tmux listesi:
+a_b
+c_d
+--- stderr ---

@@ -122,8 +122,8 @@ gizli süzgeci silinince 1 kapı, kapıda "boş liste" kaçağı 1 kapı, ad sü
 Eski 3 alanlı betikle kapı alan eklemez (tür/hâl uydurulmaz). Sınav: `koltuk-bagla.test.sh` D1-D12b · `sunucu.test.mjs` Y10.
 
 ## Koltuk adı süzgeci = tmux'un kendi kuralı (2.4.1 · dilim 5/7, SERDAR 13 Eki ölçtü)
-`koltuk-bagla.sh` ve kapı `/api/koltuklar`, adı `^[A-Za-z0-9_-]$` ile süzüyordu → adında `/` olan oturum (vekatip `2026/85`) listeden
-**düşüyordu** (17 oturumun 1'i). Süzgeç tmux'un kuralına indirildi: boşluk · `:` · `.` dışında her ad geçerli (tmux `.` ve `:`'yi
+Kapı `/api/koltuklar` adı `^[A-Za-z0-9_-]$` ile süzüyordu → adında `/` olan oturum (vekatip `2026/85`) listeden **düşüyordu**
+(17 oturumun 1'i); `koltuk-bagla.sh`'de aynı desen yalnız ATTACH yolundaydı (liste süzmüyordu, bağlanma reddediyordu). Süzgeç tmux'un kuralına indirildi: boşluk · `:` · `.` dışında her ad geçerli (tmux `.` ve `:`'yi
 zaten `_` yapar — ölçüldü). Ad HTML'de kaçışlı, adreste `encodeURIComponent` (`?arg=2026%2F85`; ttyd kabuğa **çözülmüş** iletir —
 gerçek ttyd+Chromium ile ölçüldü), `/api/koltuk/<kodlu-ad>` yolda çözülür, attach `=ad` tam eşleşme. Güvenlik desenden değil
 tmux'un beyaz listesinden (var olan oturum) gelir. Sınav: koltuk-bagla E1-E3 · sunucu SL1-SL4. Merkez sayfanın `guv()` süzgeci

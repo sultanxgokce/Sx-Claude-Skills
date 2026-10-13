@@ -1,7 +1,7 @@
 {
   "is": "terminal-koltuk-adi",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-13T13:09:11+03:00",
+  "guncelleme": "2026-10-13T13:42:29+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -64,7 +64,23 @@
       "renk": "yesil",
       "zaman": "2026-10-13T13:09:11+03:00",
       "sure_sn": 0.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tmux-nokta-ikinokta-altcizgi",
+      "asama": "tek",
+      "dosya": "olcum-tmux-nokta-ikinokta-altcizgi-tek.txt",
+      "sha256": "2de7bd4c0695079208991aed73cfc11e35e78a124dbf2f828f36e59c7ac1a433",
+      "komut": [
+        "bash",
+        "-c",
+        "tmux -L bani-olc new -d -s a.b; tmux -L bani-olc new -d -s c:d; echo \"oluşturulan adlar: a.b ve c:d → tmux listesi:\"; tmux -L bani-olc ls -F \"#{session_name}\"; tmux -L bani-olc kill-server"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T13:42:29+03:00",
+      "sure_sn": 0.0
     }
   ],
-  "imza": "16ea33e678207abcf52cbc950ac732e53d03f1a76f593739ad20ca1f4bac6145"
+  "imza": "bed280bdffa6280c6751fd45ad9611d11ba4d4649ef0a0fa48f03987aa281c1c"
 }

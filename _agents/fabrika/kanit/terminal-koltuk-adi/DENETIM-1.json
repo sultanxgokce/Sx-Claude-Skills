@@ -1,0 +1,50 @@
+{
+  "tur": 1,
+  "is": "terminal-koltuk-adi",
+  "pr": "",
+  "yazan": "fable",
+  "denetci": "claude",
+  "zaman": "2026-10-13T13:37:59+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 35379,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Koltuk adı süzgeci dört yerde (kapı liste ucu, /api/koltuk yolu, koltuk-bagla.sh, koltuk-ac.sh) tmux kuralına indirildi; ad HTML'de kaçışlı, adreste encodeURIComponent, attach ve kill '=ad' tam eşleşme, beyaz liste grep -F ile sabit metin — kod sağlam ve iş kartının istediği şeyi yapıyor. Puan 5 değil çünkü kartın açıkça istediği ': ve . ölçümü' manifestte yok (ben ölçtüm, doğru çıkıyor ama kanıt dosyada değil), kanıt dizininin köküne başıboş bir kopya betik bırakılmış ve 'eski betik de düşürüyordu' anlatısı kendi kanıtıyla çelişiyor.",
+    "bulgular": [
+      {
+        "ne": "Kart 'tmux için sorunlu : ve . ayrıca ölç' diyor; SKILL.md ve betik yorumu 'tmux . ve :'yi zaten _ yapar — ölçüldü' iddia ediyor ama manifestte bu ölçümün kaydı yok. Bağımsız ölçüm (tmux 3.4): new-session -s a.b → a_b, -s c:d → c_d; iddia doğru, kanıt eksik.",
+        "kanit": "KANIT.json 4 kayıt: koltuk-bagla-46, kapi-birim-82, ttyd-arg-cozme, canli-slash-oturum — hiçbirinde ':' / '.' adlı oturum yaratılıp tmux çıktısı okunmuyor; B4 sınavı yalnız süzgecin reddini sınar, tmux davranışını değil",
+        "konum": "terminal-onar/SKILL.md:126-127 · terminal-onar/scripts/koltuk-bagla.sh:22-23 · _agents/fabrika/kanit/terminal-koltuk-adi/KANIT.json",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Kanıt dizininin KÖKÜNE, iş klasörünün dışına, birebir aynı içerikli ikinci bir ttyd-arg.mjs kopyası eklenmiş; hiçbir yerden referans edilmiyor (manifest iş klasöründeki kopyayı çağırıyor). Başıboş dosya = kapsam kayması / hijyen.",
+        "kanit": "diff: _agents/fabrika/kanit/ttyd-arg.mjs (index db7f5a0) ile _agents/fabrika/kanit/terminal-koltuk-adi/ttyd-arg-olcum.mjs (index db7f5a0) aynı blob; grep -rn 'ttyd-arg.mjs' depoda 0 sonuç",
+        "konum": "_agents/fabrika/kanit/ttyd-arg.mjs:1",
+        "agirlik": "rotus"
+      },
+      {
+        "ne": "'koltuk-bagla.sh ... listeden DÜŞÜRÜYOR' anlatısı yanlış: eski betiğin --liste yolu gecerli_ad uygulamıyordu, yalnız attach yolunda ve kapıda süzgeç vardı. Canlı kanıt bunu kendisi gösteriyor ('eski betikte listede sayısı: 1'), yani E2 eski davranışa karşı regresyon yakalamaz; gerçek düşürme kapıdaki filter idi ve orada düzeltildi (SL1 doğru hedef).",
+        "kanit": "olcum-canli-slash-oturum-sonra.txt satır 'eski betikte listede sayısı: 1'; origin/main koltuk-bagla.sh:79-90 --liste dalında gecerli_ad çağrısı yok, :112'de yalnız ISTEK süzülür; origin/main sunucu.mjs:381 eski filter",
+        "konum": "terminal-onar/scripts/koltuk-bagla.sh:19-21 (yorum) · terminal-onar/scripts/koltuk-bagla.test.sh:76 (E2)",
+        "agirlik": "rotus"
+      },
+      {
+        "ne": "{1,64} uzunluk tavanı korunmuş; tmux'ta böyle bir sınır yok, 65+ karakterli oturum yine listeden düşer. Kart 'adı düşürme' diyor; bugün böyle bir oturum olduğuna dair kanıt yok, o yüzden rötuş.",
+        "kanit": "sunucu.mjs filter /^[^\\s:.]{1,64}$/ ve /api/koltuk eşleşmesi; koltuk-bagla.sh:24 ve koltuk-ac.sh:24 aynı tavan; tmux 3.4'te uzun ad kabul edilir",
+        "konum": "terminal-onar/kapi/sunucu.mjs:406",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sha'lar tutuyor, sarı kayıt yok; dört kayıt da yeşil ve gerçekten iddia ediyor: 46 kabuk sınavı (E1-E3 yeni, eski desenle E1 düşerdi), kapı sınavında SL1-SL4 (eski filter satırı origin/main'de görülüyor → SL1 gerçek önce/sonra), ttyd+Chromium ile ?arg çözme ölçümü (gerçek araçla, varsayım değil), gerçek tmux'ta '2026/85' oturumu listede. Eksikler: kartın açıkça istediği ':' ve '.' tmux ölçümü manifestte yok (kendim ölçtüm: a.b→a_b, c:d→c_d); canlı kayıtta 'eski betikte sayı 1' çıktısı anlatıyla çelişiyor ve açıklanmamış; kapı-birim çıktısı 60 satırda kesildiği için SL satırları ve toplam özeti görünmüyor (sınav dosyasında SL1-SL4 var, rc=0). Merkez sayfanın guv() süzgeci ayrı PR'a bırakıldı — Sultan'ın telefon ekranında '2026/85' görünmesi için o PR'ın da gelmesi gerekir; bu dilimde kutu kapısı ucu doğru."
+  }
+}
