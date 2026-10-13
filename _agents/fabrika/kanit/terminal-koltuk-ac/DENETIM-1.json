@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "terminal-koltuk-ac",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T12:53:50+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 56492,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Kapı, telefon penceresi ve açma betiği kurulmuş; yok, Claude’suz, canlı, kayıtsız ret ve ikinci kopyayı engelleme yolları sınanmış. Ancak istenen “takılı” hâli canlıda fiilen ölçülemiyor ve eski sohbetin gerçekten geri geldiği gösterilmiyor; önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "“Takılı” durumu kâğıt üzerinde var, fakat canlı veri son etkinliği 0 verdiği için üretimde tetiklenmiyor; iş kartındaki üç durumu ayrı gösterme talebi tamamlanmış değil.",
+        "kanit": "Canlı ölçümde bani, code-ana ve cc-19986388 kayıtlarının tamamında \"son\":0 görülüyor; eklenen SKILL metni de “son etkinlik alanı bugün hep 0 basıyor → takılı tespiti canlıda tetiklenmez” diye açıkça kabul ediyor. Betikte takılı olmak için SON>0 koşulu aranıyor.",
+        "konum": "terminal-onar/scripts/koltuk-ac.sh:70; terminal-onar/SKILL.md:131; kanıt kaydı canli-code-kutusu-durum",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "“Eski sohbete dön” için kanıt yalnız bayrağın sahte ekip betiğine iletildiğini gösteriyor; gerçek Claude konuşmasının aynı oturum kimliğiyle geri geldiği ölçülmemiş.",
+        "kanit": "A4 yalnız defterde “ROLX --resume-if-known” satırını doğruluyor; test başlığı ve kurulumunda ekip-ac.sh açıkça sahte. KD3 de yalnız “ac CARSI --eski” çağrısını doğruluyor; gerçek Claude/transkript devamlılığına ait önce-sonra ölçümü yok.",
+        "konum": "terminal-onar/scripts/koltuk-ac.test.sh:14-31,55; kanıt kayıtları betik-gercek-tmux-12 ve telefon-pencere-15",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sağlam ve tüm kayıtlar yeşil; sarı kayıt yok. Gerçek tmux kullanımı ve API/arayüz/mutasyon sınavları güçlü, fakat ekip açma ve sohbet sürdürme kısmı sahte betikle sınanmış; tek ekran karesi de sınav verisiyle üretilmiş. Kayıtların tamamı yalnız “sonra” aşamasında olduğundan önce/sonra ölçüm çifti yok; özellikle gerçek Claude’un aynı sohbete döndüğü ve canlıda “takılı” hâlinin oluştuğu kanıtlanmıyor."
+  }
+}

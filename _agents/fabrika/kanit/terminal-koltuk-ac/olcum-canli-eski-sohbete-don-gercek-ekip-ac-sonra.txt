@@ -1,0 +1,14 @@
+$ bash _agents/fabrika/kanit/terminal-koltuk-ac/canli-eski-sohbet.sh
+# rc=0 sure=24.5s zaman=2026-10-13T12:59:45+03:00
+--- stdout ---
+önce: {"ad":"bani-sinav2","durum":"yok","tmux":false,"claude":false,"hal":"","son":0,"rol":"SINAVROL","resume":true,"yol":"ekip-ac","ana":false}
+↩️ --resume-if-known: 'SINAVROL' için kayıtlı sid + transcript bulundu → eski sohbete dönülecek.
+🐣 'SINAVROL' doğdu (tmux: bani-sinav2 · sid registry'ye yazıldı) → bağlanmak için:
+açıldı: bani-sinav2 ← ekip-ac.sh SINAVROL --resume-if-known
+rc=0
+sonra: {"ad":"bani-sinav2","durum":"canli","tmux":true,"claude":true,"hal":"girdi","son":0,"rol":"SINAVROL","resume":true,"yol":"ekip-ac","ana":false}
+oturum kaydında aynı sid (77a7c8f7-f8e1-4fcf-8070-9dd6a416f327): EVET
+süreçte --resume 77a7c8f7-f8e1-4fcf-8070-9dd6a416f327: 1
+ekranda önceki sohbetin izi (sınav mesajı sayısı): 6
+ikinci 'ac' → ikinci kopya açılmaz: zaten canlı: bani-sinav2 (ikinci kopya açılmaz) · oturum sayısı: 1
+--- stderr ---

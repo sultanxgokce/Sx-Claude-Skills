@@ -131,7 +131,7 @@ kapı yalnız taşır: `GET /api/koltuk/<ad>` · `POST /api/koltuk/<ad>/ac {eski
   koltuk AÇILMAZ**, sebebi söylenir: kimliksiz Claude başka kimliğe düşer (ölçülmüş vaka); önce işe alma (madde 6).
 - **Ölçüldü (13 Eki):** `ekip-ac.sh` 18 kutunun 3'ünde var (Nexus · huma · mihenk), aile kaydı 8'inde → öteki kutularda yalnız ana
   koltuk açılır, gerisi dürüstçe "kayıtsız" döner. `takili` = Claude var ∧ ekran `TO_TAKILI_SN` (900 s) süredir değişmemiş ∧ soru/girdi
-  beklemiyor; ⚠️ `koltuk-bagla.sh --liste`'nin "son etkinlik" alanı bugün hep 0 basıyor → takılı tespiti canlıda tetiklenmez (madde 7).
+  beklemiyor. (2.4.0: `koltuk-bagla.sh --liste` son-etkinlik alanı hep 0 basıyordu — `display-message -t =ad` bölme hedefi boş döner; `ad:` ile düzeltildi, 2.2.1 hâl düzeltmesinin ikizi.)
 - Sınav: `scripts/koltuk-ac.test.sh` (gerçek tmux, sahte ekip-ac: öldür→geri gel · eski sohbet · ikinci kopya yok · kayıtsız ret) ·
   `sunucu.test.mjs` KA0-KA10 · `kapi/tarayici-sinav.mjs` KD1-KD5 · mutasyon M20-M22.
 

@@ -1,5 +1,5 @@
 $ bash terminal-onar/scripts/koltuk-ac.test.sh
-# rc=0 sure=2.1s zaman=2026-10-13T12:32:29+03:00
+# rc=0 sure=0.9s zaman=2026-10-13T12:59:47+03:00
 --- stdout ---
 ── D · durum üç ayrı
   ✓ D1 oturum yok → durum=yok, yol=ekip-ac, rol çözüldü, resume mümkün

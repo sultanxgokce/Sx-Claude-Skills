@@ -1,22 +1,22 @@
 {
   "is": "terminal-koltuk-ac",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-13T12:52:55+03:00",
+  "guncelleme": "2026-10-13T12:59:47+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "betik-gercek-tmux-12",
       "asama": "sonra",
       "dosya": "olcum-betik-gercek-tmux-12-sonra.txt",
-      "sha256": "6578508be806b02597104d6e8dc0133344e4873e5ced2ac22b81c6b4ce34392d",
+      "sha256": "de66112617b97d11cfd6c781ceba79c996391ee804ba37aa569856492c135dca",
       "komut": [
         "bash",
         "terminal-onar/scripts/koltuk-ac.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T12:32:29+03:00",
-      "sure_sn": 2.1
+      "zaman": "2026-10-13T12:59:47+03:00",
+      "sure_sn": 0.9
     },
     {
       "tur": "olcum",
@@ -91,7 +91,38 @@
       "rc": 0,
       "renk": "yesil",
       "zaman": "2026-10-13T12:52:55+03:00"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-eski-sohbete-don-gercek-ekip-ac",
+      "asama": "sonra",
+      "dosya": "olcum-canli-eski-sohbete-don-gercek-ekip-ac-sonra.txt",
+      "sha256": "999a2914617c076de79f69aa4c1529749d3beb1c309f33daee18e05310ea011f",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/terminal-koltuk-ac/canli-eski-sohbet.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T12:59:45+03:00",
+      "sure_sn": 24.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "son-etkinlik-duzeltme",
+      "asama": "sonra",
+      "dosya": "olcum-son-etkinlik-duzeltme-sonra.txt",
+      "sha256": "4f00d2753694598ad3a711739c952a99cee62581f16f0aab86e8853503ab5c87",
+      "komut": [
+        "bash",
+        "-c",
+        "echo \"önce (=ad hedefi): [$(tmux display-message -p -t \"=bani\" \"#{session_activity}\" 2>/dev/null)]\"; echo \"sonra (ad: hedefi): [$(tmux display-message -p -t \"bani:\" \"#{session_activity}\")]\"; bash terminal-onar/scripts/koltuk-bagla.sh --liste | head -3; bash terminal-onar/scripts/koltuk-bagla.test.sh | tail -1"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T12:59:46+03:00",
+      "sure_sn": 0.9
     }
   ],
-  "imza": "19af39519d5d0b75155ed2e9595ff43671d9d913b63dc1e40ff078eecb7e494e"
+  "imza": "aa0e64f60e8edd4c7f7c344ae45a30dd09aec04c91b49c62865958da93137a08"
 }
