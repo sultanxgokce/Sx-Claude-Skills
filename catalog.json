@@ -1673,6 +1673,30 @@
         "workflow",
         "global"
       ]
+    },
+    {
+      "id": "donus",
+      "name": "donus — işi açana tek komutla dönüş",
+      "version": "1.0.0",
+      "type": "agent",
+      "sync_dagitim": true,
+      "description": "Tek dönüş sözleşmesi: işi bitiren/tıkanan/soran ajan donus.sh <G####|G-AJAN-####> bitti|tikandi|soru '<tek satır>' ile döner, işi AÇAN anında uyanır. Kutuda dönüşü adında numara taşıyan bir dosya olarak giden kutusuna bırakır (merkez ≤60 sn içinde alır); merkezde açanı görev defterinden/mektubundan bulup ortak göndericiyle çalar ve durumu /filo gorevler'e işler.",
+      "prerequisites": [
+        "bash",
+        "python3"
+      ],
+      "tags": [
+        "filo",
+        "gorev",
+        "donus",
+        "zil",
+        "teslimat"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "merkez (BÂNİ, G-BANI-0006 · Sultan 13 Eki 2026)"
     }
   ]
 }

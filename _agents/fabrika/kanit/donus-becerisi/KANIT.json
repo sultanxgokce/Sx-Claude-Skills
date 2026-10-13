@@ -1,0 +1,40 @@
+{
+  "is": "donus-becerisi",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-13T15:34:38+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "donus-21",
+      "asama": "sonra",
+      "dosya": "olcum-donus-21-sonra.txt",
+      "sha256": "b8438a776dde229885fc426bc9960f94881fbeba36b698dd7b087988362d147d",
+      "komut": [
+        "bash",
+        "donus/scripts/donus.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T15:34:38+03:00",
+      "sure_sn": 0.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "repo-parity",
+      "asama": "sonra",
+      "dosya": "olcum-repo-parity-sonra.txt",
+      "sha256": "6a37b9d0d7566940667b7198c544a03d770f57215690c740582bb7c02e159e84",
+      "komut": [
+        "node",
+        "ahi/schema/validate-repo.mjs",
+        ".",
+        "--strict"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T15:34:38+03:00",
+      "sure_sn": 0.0
+    }
+  ],
+  "imza": "b8f7dd4b720be421080e5532e7483a218b5b4796017623be22331efb3ea6a9c9"
+}
