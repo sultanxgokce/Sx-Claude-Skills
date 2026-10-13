@@ -1,0 +1,72 @@
+{
+  "is": "terminal-onar-izin",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-13T20:45:51+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "duman-644",
+      "asama": "once",
+      "dosya": "olcum-duman-644-once.txt",
+      "sha256": "f86e08d48263a7bcd1b1e79087ca01e4f16b646947016b483d0ed1a0c4cfbe42",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/terminal-onar-izin/duman.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-terminal-onar-izin"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-13T20:45:36+03:00",
+      "sure_sn": 0.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "duman-755",
+      "asama": "sonra",
+      "dosya": "olcum-duman-755-sonra.txt",
+      "sha256": "cc6ebc546623befaa96a13080f0ed25b20982bb9c685f5cd979e95fe6a79c02e",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/terminal-onar-izin/duman.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-terminal-onar-izin"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T20:45:50+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "arac-kendi-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-arac-kendi-sinavi-sonra.txt",
+      "sha256": "8e1b71e5b804513c480b6d419133a0b6d0de1fc94f8eed906a021fb04d1eee2e",
+      "komut": [
+        "bash",
+        "sync-skills.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T20:45:51+03:00",
+      "sure_sn": 0.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "git-kip",
+      "asama": "sonra",
+      "dosya": "olcum-git-kip-sonra.txt",
+      "sha256": "d9e0de5144b41d7a73a5c4c016038679563e8190813ba756e5bbcbe101adcd2e",
+      "komut": [
+        "git",
+        "ls-files",
+        "-s",
+        "terminal-onar"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T20:45:51+03:00",
+      "sure_sn": 0.0
+    }
+  ],
+  "imza": "84177f915f508721dd017e7e67e78721282ac0984cfd298934b6a2aa286e06f9"
+}

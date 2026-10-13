@@ -1,0 +1,17 @@
+$ bash sync-skills.test.sh
+# rc=0 sure=0.6s zaman=2026-10-13T20:45:51+03:00
+--- stdout ---
+── dağıtım duman kapıları ──
+  ✓ G1 kaynak çalıştırılabilirse hedef de çalıştırılabilir
+  ✓ G2 sağlam dağıtımda duman testi sessiz, exit 0
+  ✓ G3 çalıştırılamaz dosya → duman düşer, exit≠0
+  ✓ G4 bozuk sözdizimi → duman düşer, exit≠0
+  ✓ G5 özet satırında duman sayacı görünür
+  ✓ G6 scripts'siz skill duman-düşmez (yanlış alarm yok)
+  ✓ G7 duman testi script'i KOŞMAZ (yan-etki yok)
+  ✓ G8 içerik aynıyken bile bozuk kurulu kopya yakalanır
+  ✓ G9 --apply izni onarır, içeriği DEĞİŞTİRMEZ
+  ✓ G10 dry-run onarmaz (yalnız --apply yazar)
+
+10 geçti · 0 kaldı
+--- stderr ---

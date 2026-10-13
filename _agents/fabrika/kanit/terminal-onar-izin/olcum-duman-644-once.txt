@@ -1,0 +1,12 @@
+$ bash _agents/fabrika/kanit/terminal-onar-izin/duman.sh /config/projects/_wt/Sx-Claude-Skills-terminal-onar-izin
+# rc=1 sure=0.2s zaman=2026-10-13T20:45:36+03:00
+--- stdout ---
+     🔴 DUMAN TESTİ DÜŞTÜ — terminal-onar → _t:
+        • bekci-iz.test.sh: ÇALIŞTIRILAMAZ (izin yok)
+        • koltuk-ac.sh: ÇALIŞTIRILAMAZ (izin yok)
+        • koltuk-ac.test.sh: ÇALIŞTIRILAMAZ (izin yok)
+        • kur-bag.test.sh: ÇALIŞTIRILAMAZ (izin yok)
+        • sifre-yukle.test.sh: ÇALIŞTIRILAMAZ (izin yok)
+  özet: 1 uygulandı · 0 güncel · 0 drift-uyarı · 0 eksik · 1 duman-düştü
+sync-skills rc=1
+--- stderr ---
