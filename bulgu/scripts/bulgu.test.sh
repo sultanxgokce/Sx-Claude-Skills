@@ -23,4 +23,8 @@ o=$(BULGU_KOK="$T/yok" bash "$B" hal S-1 canli --kim X --gerekce y 2>&1); r=$?
 ok "H7 defter kurulu değilse rc 3, hiçbir şey yazılmaz" '[ $r -eq 3 ]'
 o=$(BULGU_KOK="$T/kok" bash "$B" yaz "deneme başlık" --kim X 2>&1); r=$?
 ok "H8 eski 'yaz' yolu değişmedi (yazıcıya 'yeni --baslik … --kim X --kok')" '[ $r -eq 0 ] && [[ "$o" == "ARGV:yeni|--baslik|deneme başlık|--kim|X|--kok|"* ]]'
+o=$(timeout 5 env BULGU_KOK="$T/kok" bash "$B" hal S-1 canli --gerekce y --kim 2>&1); r=$?
+ok "H9 🔴 --kim son argüman ve DEĞERSİZ: rc 2, sonsuz döngü YOK (5 sn zaman aşımı değil), yazıcı çağrılmadı" '[ $r -eq 2 ] && [[ "$o" != *ARGV* ]] && [[ "$o" == *"değersiz"* ]]'
+o=$(timeout 5 env BULGU_KOK="$T/kok" bash "$B" yaz "b" --kim X --not 2>&1); r=$?
+ok "H9b yaz: --not değersiz → rc 2, döngü yok" '[ $r -eq 2 ] && [[ "$o" != *ARGV* ]]'
 echo "bulgu.test: $g geçti · $k kaldı"; [ $k -eq 0 ]

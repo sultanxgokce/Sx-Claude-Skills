@@ -1,7 +1,7 @@
 {
   "is": "fabrika-araclari-uc-kusur",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-13T11:49:14+03:00",
+  "guncelleme": "2026-10-13T11:51:09+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -40,14 +40,14 @@
       "etiket": "bulgu-hal-sinav",
       "asama": "sonra",
       "dosya": "olcum-bulgu-hal-sinav-sonra.txt",
-      "sha256": "1d9e764cf0921ce060e17147b4b6722db25a3c11bf83a3b694c9f57fbd6ff953",
+      "sha256": "87dd88d5d98336009e7a2d8a019f49ed06304af81fe5fd050c40b1fba3a5440f",
       "komut": [
         "bash",
         "bulgu/scripts/bulgu.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-13T11:46:21+03:00",
+      "zaman": "2026-10-13T11:51:04+03:00",
       "sure_sn": 0.1
     },
     {
@@ -81,7 +81,23 @@
       "renk": "yesil",
       "zaman": "2026-10-13T11:49:14+03:00",
       "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-bulgu-degersiz-secenek",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-bulgu-degersiz-secenek-tek.txt",
+      "sha256": "cd2117dacc5b913e66c2dbdc746a18814bc53c58918f2894253c43e93513bb27",
+      "komut": [
+        "bash",
+        "-c",
+        "cp bulgu/scripts/bulgu.sh /tmp/b.bak; sed -i \"s/--kim) \\[ \\$# -ge 2 \\] || { echo \\\"--kim değersiz\\\" >\\&2; exit 2; }; kim=\\\"\\$2\\\"; shift 2 ;;/--kim) kim=\\\"\\${2:-}\\\"; shift 2 ;;/\" bulgu/scripts/bulgu.sh; grep -c \"kim=\\\"\\${2:-}\\\"; shift 2\" bulgu/scripts/bulgu.sh; o=$(bash bulgu/scripts/bulgu.test.sh 2>&1); cp /tmp/b.bak bulgu/scripts/bulgu.sh; rm -f /tmp/b.bak; printf \"%s\\n\" \"$o\" | grep -E \"✗|geçti\"; k=$(printf \"%s\\n\" \"$o\" | grep -c \"✗ H9 \"); echo \"eski shift davranışı geri gelince H9 kırmızı: $k (beklenen 1)\"; test \"$k\" -eq 1"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-13T11:51:09+03:00",
+      "sure_sn": 5.1
     }
   ],
-  "imza": "eeb1489866d994a70eab58fc000540605cec91cc9cd3a59b7a3bbd22c47026fc"
+  "imza": "d1a5d9679095776d5ee0c8b55622e97635c6ebb927e058de23256adf22d34eb7"
 }

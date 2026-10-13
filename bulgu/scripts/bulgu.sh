@@ -16,7 +16,8 @@ case "$k" in
     [ -n "$baslik" ] || { echo "kullanım: bulgu.sh yaz \"<başlık>\" --kim <AJAN> [--not \"…\"]" >&2; exit 2; }
     kim=""; notu=""
     while [ $# -gt 0 ]; do case "$1" in
-      --kim) kim="${2:-}"; shift 2 ;; --not) notu="${2:-}"; shift 2 ;;
+      --kim) [ $# -ge 2 ] || { echo "--kim değersiz" >&2; exit 2; }; kim="$2"; shift 2 ;;
+      --not) [ $# -ge 2 ] || { echo "--not değersiz" >&2; exit 2; }; notu="$2"; shift 2 ;;
       *) echo "bilinmeyen: $1" >&2; exit 2 ;; esac; done
     [ -n "$kim" ] || { echo "--kim zorunlu (kaydı kim açıyor?)" >&2; exit 2; }
     if [ -n "$notu" ]; then python3 "$YAZ" yeni --baslik "$baslik" --kim "$kim" --not "$notu" --kok "$KOK"
@@ -32,7 +33,8 @@ case "$k" in
     [[ "$no" =~ ^S-[0-9]+$ ]] || { echo "kayıt numarası S-N biçiminde olmalı: $no" >&2; exit 2; }
     kim=""; gerekce=""
     while [ $# -gt 0 ]; do case "$1" in
-      --kim) kim="${2:-}"; shift 2 ;; --gerekce) gerekce="${2:-}"; shift 2 ;;
+      --kim) [ $# -ge 2 ] || { echo "--kim değersiz" >&2; exit 2; }; kim="$2"; shift 2 ;;
+      --gerekce) [ $# -ge 2 ] || { echo "--gerekce değersiz" >&2; exit 2; }; gerekce="$2"; shift 2 ;;
       *) echo "bilinmeyen: $1" >&2; exit 2 ;; esac; done
     [ -n "$kim" ] || { echo "--kim zorunlu (geçişi kim yapıyor?)" >&2; exit 2; }
     [ -n "$gerekce" ] || { echo "--gerekce zorunlu (niçin bu hâle geçti? kanıt/PR/commit)" >&2; exit 2; }
