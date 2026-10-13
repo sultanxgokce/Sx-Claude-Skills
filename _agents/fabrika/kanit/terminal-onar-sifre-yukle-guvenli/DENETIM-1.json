@@ -1,0 +1,25 @@
+{
+  "tur": 1,
+  "is": "terminal-onar-sifre-yukle-guvenli",
+  "pr": "300",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-13T11:12:48+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 23085,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, erişim ortam dosyası source edilmekten çıkarılmış; yalnız geçerli AD=değer satırları güvenle aktarılıyor, bozuk içerik çalıştırılmadan ve ifşa edilmeden sayılıyor. Hedef sınavı, eski source yolunu geri getiren mutasyon ve beş gerileme sınavı yeşil; üretimi durduracak kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Sonra ölçümü gerçekçi üç bozuk satırla 6/6 geçiyor, stderr boş kalıyor ve komut yan etkisi oluşmuyor; ayrıca eski source uygulamasına dönen kontrollü mutasyon E3-E5 kapılarını kırmızıya çevirerek sınavın iddiayı gerçekten ölçtüğünü gösteriyor. Ayrı bir önce kaydı yok, ancak çalışan sürüm ile eski davranış mutasyonu anlamlı bir ölçüm çifti oluşturuyor; beş mevcut sınavın tamamı da gerilemesiz geçiyor."
+  }
+}
