@@ -14,6 +14,8 @@ import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import net from 'node:net';
+import zlib from 'node:zlib';
+import { readFileSync } from 'node:fs';
 
 const KOK = dirname(fileURLToPath(import.meta.url));
 const T = mkdtempSync(join(tmpdir(), 'kapi-sinav-'));
@@ -32,6 +34,11 @@ function sahteTtyd(yol) {
       b += d;
       if (!b.includes('\r\n\r\n')) return;
       const istenen = b.split(' ')[1] || '';
+      const ae = /\r\naccept-encoding:/i.test(b) ? '1' : '0';   // kapı accept-encoding'i sıyırdı mı (x-ae ile geri söylenir)
+      const HTML = '<html><head><meta charset="utf-8"></head><body><div id="ttyd">ttyd</div><script>window.sahte=1</script></body></html>';
+      if (/[?&]html=1/.test(istenen)) { c.end(`HTTP/1.1 200 OK\r\ncontent-type: text/html\r\nx-ae: ${ae}\r\ncontent-length: ${Buffer.byteLength(HTML)}\r\n\r\n${HTML}`); return; }
+      if (/[?&]html=2/.test(istenen)) { const h2 = HTML.replace('</body></html>', ''); c.end(`HTTP/1.1 200 OK\r\ncontent-type: text/html\r\ncontent-length: ${Buffer.byteLength(h2)}\r\n\r\n${h2}`); return; }
+      if (/[?&]html=3/.test(istenen)) { const gz = zlib.gzipSync(Buffer.from(HTML)); c.write(`HTTP/1.1 200 OK\r\ncontent-type: text/html\r\ncontent-encoding: gzip\r\ncontent-length: ${gz.length}\r\n\r\n`); c.end(gz); return; }
       const g = JSON.stringify({ ttyd: true, yol: istenen });
       c.end(`HTTP/1.1 200 OK\r\ncontent-type: application/json\r\ncontent-length: ${Buffer.byteLength(g)}\r\n\r\n${g}`);
     });
@@ -337,6 +344,61 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
        /<h1>Akar<\/h1>/.test(ak) && !/Sinavkutu/.test(ak),
        `→ ${(ak.match(/<h1>[^<]*<\/h1>/) || ['açılmadı'])[0]}`);
   p3.kill();
+}
+
+// ── K · PANO KÖPRÜSÜ (2.3.0 · Sultan 12 Eki: Cmd+C kopyalamıyor, resim Cmd+V yapıştırılamıyor) ─────
+// 🔴 NİÇİN: ttyd'nin HTML'ine genel/pano.js gömülür. Ölçüt içerik türüdür (yol tahmini değil); JSON, WebSocket,
+//    sıkıştırılmış ya da 200-dışı cevap OLDUĞU GİBİ akar. Her iddianın ateşleyen ve ateşlemeyen yüzü birlikte.
+{
+  const giris = async (port, taban) => { const ok = await iste(port, `${taban}/giris`, { metot: 'POST', govde: { parola: SIFRE } });
+    return 'kapi=' + ((ok.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1]; };
+  const cerez = await giris(P1, '/sedir');
+  const r1 = await iste(P1, '/sedir/tty/?html=1', { cerez }); const h1 = await r1.text();
+  kapi('PN1 ttyd HTML sayfasına pano köprüsü gömülür (data-kapi-pano işareti)', r1.status === 200 && h1.includes("setAttribute('data-kapi-pano'"), `→ ${r1.status} · ${h1.slice(0, 60)}`);
+  kapi('PN2 köprü TABANI taşır (window.__TABAN="/sedir") ve /api/resim\'e tabanla gider', /window\.__TABAN="\/sedir"/.test(h1) && h1.includes("TABAN + '/api/resim'"), '→ taban gömülü değil');
+  kapi('PN3 ekleme </body> ÖNÜNE girer, sayfa bütün (…</body></html> ile biter)', h1.trimEnd().endsWith('</body></html>') && h1.indexOf('data-kapi-pano') < h1.indexOf('</body>'), `→ …${h1.slice(-40)}`);
+  // fetch kendiliğinden gzip ister ve açar → başlık/gövde karşılaştırması DÜZ istekle yapılır
+  const r1d = await fetch(`http://127.0.0.1:${P1}/sedir/tty/?html=1`, { headers: { cookie: cerez, 'accept-encoding': 'identity' } }); const h1d = Buffer.from(await r1d.arrayBuffer());
+  kapi('PN4 content-length yeniden hesaplanır (düz istekte gövde bayt sayısı = başlık, gzip yok)', !r1d.headers.get('content-encoding') && +r1d.headers.get('content-length') === h1d.length && h1d.includes('data-kapi-pano'), `→ ${r1d.headers.get('content-length')} ≠ ${h1d.length} ce=${r1d.headers.get('content-encoding')}`);
+  kapi('PN5 ttyd\'den DÜZ gövde istenir (accept-encoding sıyrılır)', r1.headers.get('x-ae') === '0', `→ x-ae=${r1.headers.get('x-ae')}`);
+  kapi('PN6 ttyd\'nin kendi betiği yerinde (köprü sayfayı ezmez)', h1.includes('window.sahte=1') && h1.includes('id="ttyd"'), '→ orijinal gövde kayıp');
+  // gzip: istemci isterse EKLENMİŞ gövde sıkıştırılır
+  const r2 = await fetch(`http://127.0.0.1:${P1}/sedir/tty/?html=1`, { headers: { cookie: cerez, 'accept-encoding': 'gzip' } });
+  const h2 = await r2.text();   // fetch gövdeyi çözer; başlık korunur mu bakılır
+  kapi('PN7 istemci gzip istediyse cevap gzip\'lidir ve köprü içindedir', (r2.headers.get('content-encoding') || '') === 'gzip' && h2.includes('data-kapi-pano'), `→ ce=${r2.headers.get('content-encoding')}`);
+  // </body> yoksa sona eklenir
+  const h3 = await (await iste(P1, '/sedir/tty/?html=2', { cerez })).text();
+  kapi('PN8 </body> olmayan sayfada köprü SONA eklenir (sayfa yine açılır)', h3.includes('data-kapi-pano') && h3.indexOf('data-kapi-pano') > h3.indexOf('window.sahte=1'), '→ eklenmedi');
+  // sıkıştırılmış ttyd cevabına dokunulmaz
+  const r4 = await iste(P1, '/sedir/tty/?html=3', { cerez }); const b4 = Buffer.from(await r4.arrayBuffer());
+  let acik4 = ''; try { acik4 = zlib.gunzipSync(b4).toString('utf8'); } catch { acik4 = ''; }
+  // fetch gzip'i kendisi açmış olabilir (accept-encoding yollanmadı ama undici bazen çözer) → iki hâl de kabul: gövde sağlam ve köprüsüz
+  const b4Sag = acik4 ? acik4.includes('id="ttyd"') : b4.toString('utf8').includes('id="ttyd"');
+  const b4Kop = (acik4 || b4.toString('utf8')).includes('data-kapi-pano');
+  kapi('PN9 ttyd SIKIŞTIRILMIŞ cevap verirse gövde bozulmaz ve köprü EKLENMEZ', b4Sag && !b4Kop, `→ sağlam=${b4Sag} köprü=${b4Kop}`);
+  // JSON / tty dışı dokunulmaz (T14 zaten JSON'u ayrıştırıyor; burada açıkça)
+  const h5 = await (await iste(P1, '/sedir/tty/', { cerez })).text();
+  kapi('PN10 HTML olmayan ttyd cevabına (json) köprü girmez', !h5.includes('data-kapi-pano') && JSON.parse(h5).ttyd === true, '→ json bozuldu ya da köprü girdi');
+  // tabansız kutu
+  const ck = await giris(P2, ''); const h6 = await (await iste(P2, '/tty/?html=1', { cerez: ck })).text();
+  kapi('PN11 tabansız kutuda köprü __TABAN="" ile gömülür (K2 tautoloji değil)', /window\.__TABAN=""/.test(h6) && h6.includes('data-kapi-pano'), '→ yok');
+  // kapatma anahtarı: KAPI_PANO=0 → vekil eski hâli (ekleme yok, accept-encoding geçer)
+  const p0 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], {
+    env: { ...process.env, KAPI_PORT: '18783', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', KAPI_PANO: '0',
+           KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE }, stdio: 'ignore' });
+  let h7 = '', ae7 = '';
+  for (let i = 0; i < 50; i++) {
+    await new Promise((r) => setTimeout(r, 100));
+    try { const r = await fetch('http://127.0.0.1:18783/sedir/tty/?html=1', { headers: { cookie: cerez, 'accept-encoding': 'gzip' } });
+      if (r.status === 200) { h7 = await r.text(); ae7 = r.headers.get('x-ae') || ''; break; } } catch {}
+  }
+  kapi('PN12 KAPI_PANO=0 → köprü gömülmez, accept-encoding ttyd\'ye geçer (eski davranış bayt bayt)', h7.includes('id="ttyd"') && !h7.includes('data-kapi-pano') && ae7 === '1', `→ köprü=${h7.includes('data-kapi-pano')} x-ae=${ae7}`);
+  p0.kill();
+  // kaynak dosya kuralları: satır içi gömülür → kapanış script etiketi geçemez; replace değiştiricisi fonksiyon olmalı
+  const kaynak = readFileSync(join(KOK, 'genel', 'pano.js'), 'utf8');
+  kapi('PN13 pano.js kapanış script etiketi içermez (satır içi gömülüyor)', !/<\/script/i.test(kaynak), '→ gömülünce sayfa yarıda kesilir');
+  const sun = readFileSync(join(KOK, 'sunucu.mjs'), 'utf8');
+  kapi('PN14 ekleme replace\'i FONKSİYONLA yapılır (pano.js içindeki $ dizileri yorumlanmasın)', /h\.replace\('<\/body>', \(\) => ek \+ '<\/body>'\)/.test(sun), '→ düz dize değiştirici');
 }
 
 kapiTaban.kill(); kapiKok.kill(); ttyd.close();

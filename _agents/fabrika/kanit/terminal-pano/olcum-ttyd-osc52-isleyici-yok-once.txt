@@ -1,0 +1,9 @@
+$ bash -c curl -s --unix-socket /config/.terminal-onar/ttyd.sock http://localhost/code/tty/ > /tmp/claude-1000/ttyd-canli.html; echo "ttyd html bayt=$(wc -c < /tmp/claude-1000/ttyd-canli.html)"; echo "pozitif kontrol registerOscHandler( toplam=$(grep -o "registerOscHandler(" /tmp/claude-1000/ttyd-canli.html | wc -l)"; echo "OSC 52 isleyicisi registerOscHandler(52 = $(grep -o "registerOscHandler(52" /tmp/claude-1000/ttyd-canli.html | wc -l)"; echo "window.term disa verilmis = $(grep -o "window.term=" /tmp/claude-1000/ttyd-canli.html | wc -l)"; echo "tmux: $(tmux show -g set-clipboard) · $(tmux show -g mouse) · termfeatures=$(tmux display -p -t code-ana "#{client_termfeatures}")"
+# rc=0 sure=0.0s zaman=2026-10-13T11:08:56+03:00
+--- stdout ---
+ttyd html bayt=729693
+pozitif kontrol registerOscHandler( toplam=21
+OSC 52 isleyicisi registerOscHandler(52 = 0
+window.term disa verilmis = 1
+tmux: set-clipboard on · mouse on · termfeatures=bpaste,ccolour,clipboard,cstyle,focus,RGB,title
+--- stderr ---

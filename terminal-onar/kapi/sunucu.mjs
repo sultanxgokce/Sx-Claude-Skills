@@ -13,6 +13,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { execFile, spawn } from 'node:child_process';
+import zlib from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 
 const KOK = path.dirname(fileURLToPath(import.meta.url));
@@ -37,6 +38,11 @@ const KUTU = process.env.TO_KUTU || (TABAN ? TABAN.slice(1) : '') || 'kutu';
 const KUTU_BAS = KUTU.charAt(0).toLocaleUpperCase('tr') + KUTU.slice(1);
 const DURUM_DIZ = process.env.TO_DURUM_DIZ || '/config/.terminal-onar';
 const RESIM_URL = process.env.KAPI_RESIM_URL || 'http://127.0.0.1:8391/upload';
+// ── PANO KÖPRÜSÜ (2.3.0 · Sultan 12 Eki: "Cmd+C kopyalamıyor, resmi Cmd+V yapıştıramıyorum") ──
+// ttyd'nin HTML sayfasına genel/pano.js gömülür: resim yapıştır → /api/resim → yol terminale; tmux seçimi (OSC 52)
+// → tarayıcı panosu. KAPI_PANO=0 ile kapatılır (geriye dönük: o zaman vekil bayt bayt eski hâli).
+const PANO_ACIK = process.env.KAPI_PANO !== '0';
+const PANO_JS = PANO_ACIK ? fs.readFileSync(path.join(GENEL, 'pano.js'), 'utf8') : '';
 // 🔴 Parola değişkeninin ADI kutudan türer (SEDIR__… · AKAR__…). Sert yazılsaydı
 //    beceri ikinci kutuda parolayı bulamaz, fail-closed açılmaz ve sebebi "parola yok"
 //    gibi görünürdü — oysa parola vardı, aranan ad yanlıştı. Ad da veri gibi taşınır.
@@ -130,10 +136,44 @@ async function tmuxGonder(metin) {
 const TUSLAR = new Set(['Escape', 'Up', 'Down', 'Left', 'Right', 'Enter', 'Tab', 'BTab', 'C-c', 'BSpace',
   '1', '2', '3', '4', '5', 'y', 'n']);
 
-// ---- ttyd'ye vekâlet (HTTP)
+// ---- ttyd'ye vekâlet (HTTP). ttyd'nin HTML sayfasına pano köprüsü (genel/pano.js) gömülür.
 function ttydVekil(req, res) {
-  const v = http.request({ socketPath: TTYD_SOKET, path: req.url, method: req.method, headers: { ...req.headers, host: 'localhost' } }, (yan) => {
-    res.writeHead(yan.statusCode, yan.headers); yan.pipe(res);
+  const bas = { ...req.headers, host: 'localhost' };
+  // 🔴 HTML'e EKLEME yapacağız → ttyd'den DÜZ gövde istenir (sıkıştırılmış gövdeye dokunulmaz; merkez.mjs'in
+  //    bağımsız-göz dersi: gzip baytını metin sanıp başlığı silmek sayfayı çöpe çevirir). Tel bütçesi korunur:
+  //    istemci gzip istediyse eklenmiş gövdeyi BİZ sıkıştırırız (ttyd sayfası ~730 KB düz · ~190 KB gzip).
+  const gzipIster = PANO_ACIK && /\bgzip\b/.test(String(req.headers['accept-encoding'] || ''));
+  if (PANO_ACIK && req.method === 'GET') delete bas['accept-encoding'];
+  const v = http.request({ socketPath: TTYD_SOKET, path: req.url, method: req.method, headers: bas }, (yan) => {
+    const tur = String(yan.headers['content-type'] || '');
+    const kodlama = String(yan.headers['content-encoding'] || '').trim().toLowerCase();
+    // Yalnız 200 + text/html + düz gövde eklenir; WebSocket, token, hata sayfası, sıkıştırılmış cevap OLDUĞU GİBİ akar.
+    if (!PANO_ACIK || req.method !== 'GET' || yan.statusCode !== 200 || !tur.includes('text/html') || (kodlama && kodlama !== 'identity')) {
+      res.writeHead(yan.statusCode, yan.headers); return yan.pipe(res);
+    }
+    // Gövde tavanı: aşılırsa eklemeden vazgeç, olduğu gibi akıt (sayfa kaybolmasın).
+    const TAVAN = 4 * 1024 * 1024; const parca = []; let boy = 0, akitiliyor = false;
+    yan.on('data', (c) => {
+      if (akitiliyor) return;
+      boy += c.length;
+      if (boy > TAVAN) {
+        akitiliyor = true; const b2 = { ...yan.headers }; delete b2['content-length'];
+        res.writeHead(yan.statusCode, b2); for (const p of parca) res.write(p); res.write(c); yan.pipe(res); return;
+      }
+      parca.push(c);
+    });
+    yan.on('end', () => {
+      if (akitiliyor) return;
+      let h = Buffer.concat(parca).toString('utf8');
+      const ek = `<script>window.__TABAN=${JSON.stringify(TABAN)};window.__KUTU=${JSON.stringify(KUTU)};</script><script>${PANO_JS}</script>`;
+      // Değiştirici FONKSİYON: düz dize verilse pano.js içindeki '$' dizileri replace tarafından yorumlanırdı.
+      h = h.includes('</body>') ? h.replace('</body>', () => ek + '</body>') : h + ek;
+      const b2 = { ...yan.headers }; delete b2['content-length']; delete b2['content-encoding'];
+      let govde = Buffer.from(h, 'utf8');
+      if (gzipIster) { govde = zlib.gzipSync(govde); b2['content-encoding'] = 'gzip'; }
+      b2['content-length'] = String(govde.length);
+      res.writeHead(yan.statusCode, b2); res.end(govde);
+    });
   });
   v.on('error', () => { if (!res.headersSent) { res.writeHead(502, { 'content-type': 'text/html; charset=utf-8' }); }
     res.end('<body style="background:#16130f;color:#e9e2d6;font:16px system-ui;padding:24px">Terminal şu an ulaşılamıyor — yukarıdaki <b>Onar</b> düğmesine bas.</body>'); });

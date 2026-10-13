@@ -40,6 +40,13 @@ dene "M12 onbellek siniri" genel/sw.js "s=s.replace('(TABAN || \'-kok\') + \'-v\
 dene "M13 gorunen ad kutudan turer" genel/giris.html "s=s.replace('<h1>{{KUTU}}</h1>','<h1>Sedir</h1>')"
 dene "M8 WS upgrade taban denetimi" sunucu.mjs "s=s.replace('_yol === _tty ||','true ||')"
 dene "M9 WS giris denetimi" sunucu.mjs "s=s.replace('!girisli(req) ||','false ||')"
+# ── Pano köprüsü mutantları (2.3.0 · 13 Ekim) — her biri PN sınavını kırmızıya çevirmeli
+dene "M14 pano köprüsü gömülür" sunucu.mjs "s=s.replace(\"h = h.includes('</body>') ? h.replace('</body>', () => ek + '</body>') : h + ek;\",'')"
+dene "M15 ttyd'den düz gövde istenir" sunucu.mjs "s=s.replace(\"if (PANO_ACIK && req.method === 'GET') delete bas['accept-encoding'];\",'')"
+dene "M16 content-length yeniden hesaplanır" sunucu.mjs "s=s.replace(\"b2['content-length'] = String(govde.length);\",\"b2['content-length'] = String(govde.length - 10);\")"
+dene "M17 sıkıştırılmış ttyd cevabına dokunulmaz" sunucu.mjs "s=s.replace(\" || (kodlama && kodlama !== 'identity')) {\",\") {\")"
+dene "M18 kapatma anahtarı (KAPI_PANO=0)" sunucu.mjs "s=s.replace(\"const PANO_ACIK = process.env.KAPI_PANO !== '0';\",\"const PANO_ACIK = true;\")"
+dene "M19 köprü tabanı taşır" sunucu.mjs "s=s.replace('const ek = \`<script>window.__TABAN=\${JSON.stringify(TABAN)};','const ek = \`<script>window.__TABAN=\"\";')"
 echo "─────────────"
 echo "MUTASYON: gecti=$gecti dusen=$dusen"
 [ "$dusen" = 0 ] || exit 1

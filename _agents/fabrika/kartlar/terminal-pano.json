@@ -1,0 +1,21 @@
+{
+  "is": "terminal-pano",
+  "cumle": "terminal.mmepanel.com ttyd sayfasında resim yapıştırma (Cmd+V → kutu inbox'ına yükle, yolu terminale yaz) ve kopyalama (tmux seçimi → tarayıcı panosu, Shift-sürükle ipucu) — kutu kapısı tarafında",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-13T10:41:54+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "e",
+    "yetki": "h"
+  },
+  "siniflar": [
+    "dis_yuzey"
+  ],
+  "sultan": true,
+  "kanit_nerede": "_agents/fabrika/kanit/terminal-pano (başsız Chromium uçtan uca: gerçek ttyd+tmux+kapı)",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

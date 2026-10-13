@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.2.1
+version: 2.3.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -120,6 +120,24 @@ gizli süzgeci silinince 1 kapı, kapıda "boş liste" kaçağı 1 kapı, ad sü
 - **hâl** son 15 ekran satırından, filo yoklamasıyla AYNI desenler (`Nexus/scripts/filo.py hal()`): `calisiyor` ·
   `soru` · `sinirda` · `girdi` · `bos`; hiçbiri tutmazsa `bilinmiyor` (uydurulmaz); Claude'suz oturumda hâl ölçülmez → `bilinmiyor` (altı değer dışına çıkılmaz). Yalnız SON 15 dolu satır sayılır; soru deseni meşgul izini yener. **2.2.1:** capture-pane hedefi `ad:` (bölme hedefinde `=ad` geçersizdi → canlıda her koltuk 'bilinmiyor' çıkıyordu; sahte tmux artık `=` biçimini reddeder, D5-D12 bu hatayı ısırır).
 Eski 3 alanlı betikle kapı alan eklemez (tür/hâl uydurulmaz). Sınav: `koltuk-bagla.test.sh` D1-D12b · `sunucu.test.mjs` Y10.
+
+## Pano köprüsü — resim yapıştır · seçimi panoya al (2.3.0 · 13 Ekim, Sultan: "Cmd+C kopyalamıyor, resmi Cmd+V yapıştıramıyorum")
+Kapı, ttyd'nin HTML sayfasına `kapi/genel/pano.js`'i gömer (`ttydVekil`: yalnız 200 + `text/html` + düz gövde;
+JSON · WebSocket · sıkıştırılmış cevap olduğu gibi akar; istemci gzip istediyse eklenmiş gövdeyi kapı sıkıştırır).
+- **Yapıştır:** panoda resim varsa `paste` olayı yakalama fazında alınır → 2000px WebP'ye küçültülür (fail-open) →
+  `POST <taban>/api/resim` (kutunun 127.0.0.1:8391 dinleyicisine vekil) → dönen yol `window.term.paste()` ile
+  terminale yazılır. **Metin yapıştırmaya dokunulmaz** (xterm'in kendi yolu; 2026-08-26 akar regresyonu dersi).
+- **Kopyala:** tmux `set-clipboard on` seçimi **OSC 52** ile gönderir; ttyd'nin xterm paketinde bu komutu işleyen
+  YOKTU (ölçüldü: pakette `registerOscHandler(52` geçmiyor) → seçim hiçbir yere inmiyordu. Köprü
+  `term.parser.registerOscHandler(52, …)` ile metni tarayıcı panosuna yazar; fareyle seçtiğin an "📋 seçim panoya
+  kopyalandı". Cmd+C seçimsiz basılınca bir kez ipucu: Shift basılı sürükle → tarayıcı seçimi → Cmd+C.
+- **Niçin kapıda, eklentide değil:** ttyd `window.term`'i dışa verir; kapı tabanı bilir; Tampermonkey'siz tarayıcıda,
+  kokpit çerçevesinde, merkez yolunda ve doğrudan kutu adresinde aynı sayfa çalışır. Sayfa `<html data-kapi-pano>`
+  işareti taşır; tarayıcı eklentisi (`cloudtop-terminal-image.user.js`) bu işareti görünce ttyd sayfasında kendini çeker.
+- Kapatma: `KAPI_PANO=0` → vekil eski hâli bayt bayt. Sınav: `sunucu.test.mjs` PN1-PN14 · `pano-sinav.mjs`
+  (gerçek Chromium + ttyd + tmux + kapı; kütüphane yoksa rc=4 ÖLÇÜLEMEDİ) · mutasyon M14-M19.
+- **Sınır:** tarayıcı panosuna yazmak belge odakta ve izinliyken olur; kokpit başka alandan gömüyorsa çerçeveye
+  `allow="clipboard-write"` gerekir (kokpit tarafı, bu beceri değil). OSC 52 "?" sorgusu (panoyu OKUMA) desteklenmez.
 
 ## 🔴 Ortak dizinden çağrı = makine kimliği tuzağı (2.1.1 · 12 Ekim canlı dersi)
 
