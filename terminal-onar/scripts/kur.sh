@@ -12,7 +12,16 @@
 #    onaysız çalışmayı denemez, sebebini söyler ve durur. (SEDİR dersi §7.3)
 set -uo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
-. "$HERE/ortak.sh"
+# S-11 (revak 13 Eki): ortak.sh kutu adını reddedince (makine kimliği) kurulum sürüyor ve 'TTYD_BIN: unbound variable' ile
+# düşüyordu. Fail-closed: sebep tek satır, rc 3 — ortak.sh'ın kendi iletisi zaten stderr'de ("TO_KUTU ver …").
+# TEK SATIR (bağımsız göz tur 1): ortak.sh'ın kendi iletisi yakalanır ve kur.sh'ın satırına katılır — iki ayrı satır basılmaz;
+# başarıda yakalanan stderr (varsa) olduğu gibi geri verilir.
+_oe="$(mktemp)"
+if ! . "$HERE/ortak.sh" 2>"$_oe"; then
+  printf '✗ kurulum durdu: kutu adı çözülemedi/reddedildi (%s) — TO_KUTU=<kutu> ver ya da beceriyi /config/projects/<kutu>/.claude/skills/terminal-onar yolundan çağır\n' \
+    "$(tr '\n' ' ' < "$_oe" | sed 's/^terminal-onar: //; s/ *$//')" >&2; rm -f "$_oe"; exit 3
+fi
+cat "$_oe" >&2; rm -f "$_oe"
 
 _bilgi() { printf '%s\n' "$*"; }
 _hata()  { printf '✗ %s\n' "$*" >&2; }
@@ -85,6 +94,23 @@ elif [ -d "$PROJE_BECERI" ]; then
   if [ "$(readlink -f "$PROJE_BECERI")" = "$BAG_HEDEF" ]; then
     _bilgi "· beceri zaten proje yolunda yaşıyor (kutu-yerel kopya) — bağ gerekmez"
   else
+    # S-7 (REVAK 12 Eki): bağlama turu kutunun SINAVLI yerel değişikliklerini (863 satır: rapor dizini · CSP · salt-okur yayın ·
+    #   bekçi izi) kenara alıp ezdi; canlı sayfa 404 oldu, kayıt düşülmedi. Kural: bağ kurmadan ÖNCE yerel kopya ile ortak kod
+    #   arasındaki fark ÖLÇÜLÜR; fark varsa kurulum DURUR ve farkı listeler (rc 8). Fark önce ortak koda taşınır; bilinçli ezmek
+    #   için TERMINAL_KUR_FARK_KABUL=1 (o zaman kopya yine .eski-* altında saklanır, silinmez).
+    # diff rc: 0 aynı · 1 farklı · ≥2 ÖLÇÜLEMEDİ (okunamayan dosya vb.) → ölçülemeyen fark "fark yok" sayılmaz (bağımsız göz tur 1)
+    _ft="$(mktemp)"; diff -rq "$PROJE_BECERI" "$BAG_HEDEF" > "$_ft" 2>&1; _drc=$?   # PIPESTATUS komut-ikamesinde dışarı çıkmaz
+    _fark="$(grep -vE '\.eski-|/\.git/' "$_ft" || true)"; rm -f "$_ft"
+    if [ "$_drc" -ge 2 ] && [ "${TERMINAL_KUR_FARK_KABUL:-0}" != 1 ]; then
+      _hata "yerel kopya ile ortak kod arasındaki fark ÖLÇÜLEMEDİ (diff rc $_drc) — bağlama DURDU, kopya yerinde:"
+      printf '%s\n' "$_fark" | sed 's/^/    /' >&2
+      exit 8
+    fi
+    if [ -n "$_fark" ] && [ "${TERMINAL_KUR_FARK_KABUL:-0}" != 1 ]; then
+      _hata "yerel kopya ortak koddan FARKLI — bağlama DURDU (yerel değişiklik ezilmez; önce ortak koda taşı ya da TERMINAL_KUR_FARK_KABUL=1):"
+      printf '%s\n' "$_fark" | sed 's/^/    /' >&2
+      exit 8
+    fi
     # Yedek adı saniye hassasiyetli ve BENZERSİZ: aynı gün ikinci kopya, var olan yedeğin İÇİNE taşınmaz (bağımsız göz, tur 3)
     eski="$PROJE_BECERI.eski-$(date +%Y%m%d-%H%M%S)"; n=0
     while [ -e "$eski" ]; do n=$((n+1)); eski="$PROJE_BECERI.eski-$(date +%Y%m%d-%H%M%S)-$n"; done

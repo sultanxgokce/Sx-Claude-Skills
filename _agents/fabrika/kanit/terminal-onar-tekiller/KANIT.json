@@ -1,0 +1,42 @@
+{
+  "is": "terminal-onar-tekiller",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-14T21:44:22+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kur-bag-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kur-bag-sinavi-once.txt",
+      "sha256": "adaaeca8bb8022f36aebd0eec0d72e84866c71b60f88ca356c781f92880c7055",
+      "komut": [
+        "env",
+        "ESKI=1",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mutasyon-sx2.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-14T21:44:21+03:00",
+      "sure_sn": 0.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kur-bag-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kur-bag-sinavi-sonra.txt",
+      "sha256": "ad94d148071ef7d0f8d61c20213ad6b47a8e34ff04e3b22b53dce6150e0a91f9",
+      "komut": [
+        "env",
+        "ESKI=0",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mutasyon-sx2.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-14T21:44:22+03:00",
+      "sure_sn": 0.7
+    }
+  ],
+  "imza": "1260d843ffad8db5cb26c7d794a8982f40cea4df3d9018f595f972320b9fa530"
+}

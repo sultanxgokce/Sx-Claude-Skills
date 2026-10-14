@@ -1,0 +1,19 @@
+{
+  "is": "terminal-onar-tekiller",
+  "cumle": "terminal-onar tekiller: kutu adı reddedilince kur.sh tek satır sebeple durur (S-11); yerel kopya ortak koddan farklıysa bağlama DURUR, fark listelenir (S-7)",
+  "istedi": "SERDAR 15 Eki (bulgu paketi 3 tekiller)",
+  "aldi": "BÂNİ",
+  "zaman": "2026-10-14T21:38:24+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/terminal-onar-tekiller/",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}
