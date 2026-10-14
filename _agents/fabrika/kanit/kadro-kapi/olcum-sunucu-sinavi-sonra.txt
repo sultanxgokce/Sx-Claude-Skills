@@ -1,5 +1,5 @@
 $ node terminal-onar/kapi/sunucu.test.mjs
-# rc=0 sure=6.8s zaman=2026-10-15T00:49:46+03:00
+# rc=0 sure=6.3s zaman=2026-10-15T00:53:16+03:00
 --- stdout ---
 
 ── T · TABAN YOLU (kapı /sedir altında) ──
@@ -108,7 +108,8 @@ $ node terminal-onar/kapi/sunucu.test.mjs
   ✓ KD4 hal: emekli → geçici/emekli; kayıtsız "2026/85" kodlu ekran adresiyle
   ✓ KD5 proje dizini yanıtta (hangi kayıt okundu, izlenebilir)
   ✓ KD6 koltuk listesi ölçülemezse 500 (uydurma kadro yok)
+  ✓ KD7 kayıt var ama okunamıyor → 500 + hangi dosya
 
 ────────────────────────────────────────────────────────
-GECEN: 97  ·  KALAN: 0
+GECEN: 98  ·  KALAN: 0
 --- stderr ---

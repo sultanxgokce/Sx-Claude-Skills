@@ -69,7 +69,9 @@ export function kayitOku(proje, ortam = process.env) {
   return { kaynak, okunamadi, uyeler: birlestir(listeler) };
 }
 
-const norm = (s) => String(s || '').trim().toLowerCase().replace(/^[0-9-]+/, '');   // ekip-ac.sh / reconcile norm()
+// Yalnız büyük/küçük harf farkı tolere edilir (berid ↔ BERID). Baştaki rakamı SOYMA: '20' ile '2026' aynı boş anahtara düşüp
+// yanlış personele bağlanırdı (bağımsız göz tur 1) — ad kimliktir, kırpılmaz.
+const norm = (s) => String(s || '').trim().toLowerCase();
 
 // Kayıt + canlı koltuklar → kadro. koltuklar: koltukSatirlari() çıktısı ({ad, son, claude, tur?, hal?, ne?}); ana: ana koltuk adı.
 export function kadroBirlestir({ uyeler = [], koltuklar = [], ana = '' } = {}) {
@@ -77,7 +79,7 @@ export function kadroBirlestir({ uyeler = [], koltuklar = [], ana = '' } = {}) {
   const bul = (tmux) => {
     const ad = String(tmux || '').split(':')[0]; if (!ad) return null;
     if (kalan.has(ad)) { const k = kalan.get(ad); kalan.delete(ad); return k; }
-    const n = norm(ad); for (const [a, k] of kalan) if (norm(a) === n) { kalan.delete(a); return k; }   // casing/önek varyantı
+    const n = norm(ad); for (const [a, k] of kalan) if (norm(a) === n) { kalan.delete(a); return k; }   // yalnız casing varyantı
     return null;
   };
   const oturumSade = (k) => k ? { ad: k.ad, claude: !!k.claude, hal: k.hal || 'bilinmiyor', ne: k.ne || '', son: k.son || 0, tur: k.tur || '' } : null;

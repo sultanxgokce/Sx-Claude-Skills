@@ -1,5 +1,5 @@
 $ bash terminal-onar/kapi/kapi-sinav.test.sh
-# rc=0 sure=7.0s zaman=2026-10-15T00:49:53+03:00
+# rc=0 sure=7.2s zaman=2026-10-15T00:53:23+03:00
 --- stdout ---
 ── kadro birleşimi (kadro.test.mjs)
 ── A · kayıt ayrıştırma
@@ -25,8 +25,11 @@ $ bash terminal-onar/kapi/kapi-sinav.test.sh
   ✓ C9 sayılar gruba göre
   ✓ C10 kayıt yoksa herkes kayıtsız (ana hariç) — kayıt uydurulmaz
   ✓ C11 aynı tmux iki kayıtta: oturum İLKİNE bağlanır, ikincisi oturumsuz (bir koltuk iki kişiye verilmez)
+  ✓ C12 sayısal adlar kırpılmaz: "2026:0" yalnız "2026"a bağlanır, "17" hiçbir koltuğa; "20" kayıtsız kalır (göz tur 1)
+── D · okunamayan kayıt dosyası
+  ✓ D1 var olan ama okunamayan kayıt → okunamadi dolu, kaynak boş (sessiz boş kadro yok; uç 500 verir)
 
-SONUÇ: 20 geçti · 0 kaldı
+SONUÇ: 22 geçti · 0 kaldı
 ── kapı birim sınavı (sunucu.test.mjs)
 
 ── T · TABAN YOLU (kapı /sedir altında) ──
@@ -135,8 +138,9 @@ SONUÇ: 20 geçti · 0 kaldı
   ✓ KD4 hal: emekli → geçici/emekli; kayıtsız "2026/85" kodlu ekran adresiyle
   ✓ KD5 proje dizini yanıtta (hangi kayıt okundu, izlenebilir)
   ✓ KD6 koltuk listesi ölçülemezse 500 (uydurma kadro yok)
+  ✓ KD7 kayıt var ama okunamıyor → 500 + hangi dosya
 
 ────────────────────────────────────────────────────────
-GECEN: 97  ·  KALAN: 0
+GECEN: 98  ·  KALAN: 0
 SONUÇ: kapı birim sınavı geçti
 --- stderr ---

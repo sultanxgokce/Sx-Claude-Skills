@@ -9,7 +9,7 @@
  * Her iddianın ATEŞLEYEN ve ATEŞLEMEYEN yüzü birlikte ölçülür (SEDİR/MEDDAH kuralı).
  */
 import { spawn } from 'node:child_process';
-import { mkdtempSync, writeFileSync, mkdirSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, mkdirSync, chmodSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -515,6 +515,15 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   const c9 = await giris(18793, '/sedir');
   kapi('KD6 koltuk listesi ölçülemezse 500 (uydurma kadro yok)', (await iste(18793, '/sedir/api/kadro', { cerez: c9 })).status === 500);
   p9.kill();
+  // KD7: kayıt dosyası VAR ama okunamıyor → 500 (boş kayıtla "herkes kayıtsız" demez — göz tur 1)
+  const KILIT = join(T, 'kilit-proje'); mkdirSync(join(KILIT, '_agents/handoff'), { recursive: true });
+  writeFileSync(join(KILIT, '_agents/handoff/aile-registry.yaml'), 'uyeler:\n  - id: X\n    tmux: "x:0"\n'); chmodSync(join(KILIT, '_agents/handoff/aile-registry.yaml'), 0o000);
+  const p10 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: { ...process.env, KAPI_PORT: '18795', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', TO_PROJE: KILIT,
+    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_KOLTUK_BETIK: K6 }, stdio: 'ignore' });
+  for (let i = 0; i < 50; i++) { await new Promise((r) => setTimeout(r, 100)); try { if ((await fetch('http://127.0.0.1:18795/sedir/giris')).status === 200) break; } catch {} }
+  const c10 = await giris(18795, '/sedir'); const r10 = await iste(18795, '/sedir/api/kadro', { cerez: c10 }); const j10 = await r10.json();
+  kapi('KD7 kayıt var ama okunamıyor → 500 + hangi dosya', (process.getuid && process.getuid() === 0) || (r10.status === 500 && /Kayıt okunamadı: .*aile-registry\.yaml/.test(j10.hata || '')), `→ ${r10.status} ${JSON.stringify(j10)}`);
+  chmodSync(join(KILIT, '_agents/handoff/aile-registry.yaml'), 0o600); p10.kill();
 }
 
 kapiTaban.kill(); kapiKok.kill(); ttyd.close();

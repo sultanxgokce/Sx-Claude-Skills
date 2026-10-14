@@ -454,6 +454,8 @@ const sunucu = http.createServer(async (req, res) => {
         const r = await calistir('bash', [KOLTUK_BETIK, '--liste']);
         if (r.kod !== 0) return json(res, 500, { hata: 'Koltuklar ölçülemedi.' });
         const kayit = kayitOku(PROJE);
+        // Var olan ama OKUNAMAYAN kayıt dosyası hata sayılır (göz tur 1): boş kayıtla devam etmek herkesi "kayıtsız" gösterirdi — yalan.
+        if (kayit.okunamadi.length) return json(res, 500, { hata: 'Kayıt okunamadı: ' + kayit.okunamadi.join(', ') });
         const kd = kadroBirlestir({ uyeler: kayit.uyeler, koltuklar: koltukSatirlari(r.out), ana: ANA_TMUX });
         const ekranla = (o) => o ? { ...o, ekran: T('/tty/') + '?arg=' + encodeURIComponent(o.ad) } : null;
         return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, proje: PROJE, kaynak: kayit.kaynak, okunamadi: kayit.okunamadi, zaman: new Date().toISOString(),
