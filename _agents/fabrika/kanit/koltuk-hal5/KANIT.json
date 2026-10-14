@@ -1,7 +1,7 @@
 {
   "is": "koltuk-hal5",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T00:14:58+03:00",
+  "guncelleme": "2026-10-15T00:22:07+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -36,7 +36,22 @@
       "renk": "yesil",
       "zaman": "2026-10-15T00:14:58+03:00",
       "sure_sn": 5.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-bagla-54",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-bagla-54-sonra.txt",
+      "sha256": "392ce726541a1b9eabb32a83a5085d74d8c8bfbaf8c92fb95a59ae0bd6fe56fb",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T00:22:07+03:00",
+      "sure_sn": 5.6
     }
   ],
-  "imza": "e4c130705a6de777ec4c5d5abbbeeeab3ffa0c9cc00326d9d13a6d113cb839f3"
+  "imza": "d1f84e43cb811fd3904fe09aa035a763d36fc37ce4eca22bbbf6ed21302e1477"
 }
