@@ -1,0 +1,29 @@
+{
+  "is": "bulgu-gorev-koprusu",
+  "cumle": "S-17 K1 köprüsü (Sultan 14 Eki: bulgu = türü bug/özellik olan görev, tek defter): bulgu.sh yaz, kutuda defter jetonu varsa merkezî Görev Defteri'ne (cloudtop-defter:8791, tür gorev, etiket bug/ozellik, kaynak_nereden 'bulgu komutu', kutu jetondan) yazar; jeton yoksa eski kutu defterine düşer ve bunu söyler. sema/liste/hal eski defter için aynen. Hermetik sınav + mutasyon.",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-14T11:04:24+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "sultan_kararlari": [
+    {
+      "karar": "devam",
+      "oturum": "session_013fuJSNg65VkgQE4sJsQURS",
+      "soz": "karar evet kurgun mantıklı bence kabul ediyorum",
+      "beyan": "SERDAR",
+      "gerekce": "Sultan Görev Defteri kurgusunu kabul etti; K1 tek defter: bulgu, etiketi bug/özellik olan görevdir (SERDAR 14 Eki aktardı).",
+      "zaman": "2026-10-14T11:04:24+03:00"
+    }
+  ]
+}

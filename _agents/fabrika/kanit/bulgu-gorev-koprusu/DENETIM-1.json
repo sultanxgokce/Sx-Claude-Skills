@@ -1,0 +1,32 @@
+{
+  "tur": 1,
+  "is": "bulgu-gorev-koprusu",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-14T11:08:18+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19572,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, bulgu yazımı jeton varsa merkezî Görev Defteri’ne, yoksa uyarıyla eski deftere yönlendirilmiş; tek-defter, etiket, kaynak ve hata yolları hermetik sınav ile mutasyonda ölçülmüş. Üretime engel kusur görünmüyor; yalnız beceri açıklamasının eski “kutunun Bulgu Defteri” söylemi yeni merkezî davranışla hizalanmalı.",
+    "bulgular": [
+      {
+        "ne": "SKILL ön bilgisindeki açıklama hâlâ her kaydın kutunun Bulgu Defteri’ne yazıldığını söylüyor; yeni merkezî Görev Defteri davranışıyla çelişiyor.",
+        "kanit": "Diffte bulgu/SKILL.md satır 4 değişmeden kalırken aynı dosyaya eklenen 0.3.0 bölümü jeton varsa tek defterin merkezî Görev Defteri olduğunu açıkça belirtiyor.",
+        "konum": "bulgu/SKILL.md:4",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; iki kayıt da yeşil, sarı kayıt yok. Hermetik sınav gerçekçi başlık, ajan, not, jeton, HTTP kabul/ret ve erişilememe senaryolarını ölçüyor; yedi mutasyonun her biri sınavı kırıyor ve pozitif kontrol de var. Manifestte biçimsel bir önce/sonra ölçüm çifti bulunmuyor; buna karşılık pozitif kontrol ile mutasyonlar davranışsal karşılaştırma sağlıyor."
+  }
+}

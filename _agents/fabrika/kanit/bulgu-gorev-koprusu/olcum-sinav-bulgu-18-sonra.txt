@@ -1,0 +1,23 @@
+$ bash bulgu/scripts/bulgu.test.sh
+# rc=0 sure=0.6s zaman=2026-10-14T11:07:13+03:00
+--- stdout ---
+  ✓ H1 hal: yazıcıya 'hal S-12 --hal uygulandi --gerekce … --kim MUAVİN --kok' gider, rc 0
+  ✓ H2 🔴 'onaylandi' ajan tarafından yazılamaz (A06): rc 2, yazıcı ÇAĞRILMADI
+  ✓ H3 numara S-N değilse rc 2
+  ✓ H4 bilinmeyen hâl rc 2
+  ✓ H5 --kim eksik rc 2
+  ✓ H6 --gerekce eksik rc 2
+  ✓ H7 defter kurulu değilse rc 3, hiçbir şey yazılmaz
+  ✓ H8 eski 'yaz' yolu (jetonsuz kutu) değişmedi (yazıcıya 'yeni --baslik … --kim X --kok')
+  ✓ H9 🔴 --kim son argüman ve DEĞERSİZ: rc 2, sonsuz döngü YOK (5 sn zaman aşımı değil), yazıcı çağrılmadı
+  ✓ H9b yaz: --not değersiz → rc 2, döngü yok
+  ✓ K1a jeton yoksa eski yol + 'jetonu yok' uyarısı
+  ✓ K1b jeton varsa MERKEZE yazar: tür gorev · etiket bug · kaynak_kim · kaynak_nereden 'bulgu komutu' · kanıt adımı; tek-format cevap
+  ✓ K1c eski kutu yazıcısı ÇAĞRILMADI (tek defter, ikilik yok)
+  ✓ K1d jeton değeri çıktıda YOK
+  ✓ K1e --etiket ozellik geçer
+  ✓ K1f bilinmeyen etiket rc 2, hiçbir yere gitmez
+  ✓ K1g merkez reddederse rc 1 + http kodu/sebep; eski deftere DÜŞMEZ
+  ✓ K1h merkeze ulaşılamazsa rc 1, kayıt HİÇBİR yere yazılmaz ve söylenir
+bulgu.test: 18 geçti · 0 kaldı
+--- stderr ---

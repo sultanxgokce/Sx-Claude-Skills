@@ -21,10 +21,46 @@ o=$(BULGU_KOK="$T/kok" bash "$B" hal S-1 canli --kim X 2>&1); r=$?
 ok "H6 --gerekce eksik rc 2" '[ $r -eq 2 ] && [[ "$o" == *"--gerekce zorunlu"* ]]'
 o=$(BULGU_KOK="$T/yok" bash "$B" hal S-1 canli --kim X --gerekce y 2>&1); r=$?
 ok "H7 defter kurulu değilse rc 3, hiçbir şey yazılmaz" '[ $r -eq 3 ]'
-o=$(BULGU_KOK="$T/kok" bash "$B" yaz "deneme başlık" --kim X 2>&1); r=$?
-ok "H8 eski 'yaz' yolu değişmedi (yazıcıya 'yeni --baslik … --kim X --kok')" '[ $r -eq 0 ] && [[ "$o" == "ARGV:yeni|--baslik|deneme başlık|--kim|X|--kok|"* ]]'
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton-yok" bash "$B" yaz "deneme başlık" --kim X 2>&1); r=$?
+ok "H8 eski 'yaz' yolu (jetonsuz kutu) değişmedi (yazıcıya 'yeni --baslik … --kim X --kok')" '[ $r -eq 0 ] && [[ "$o" == *"ARGV:yeni|--baslik|deneme başlık|--kim|X|--kok|"* ]]'
 o=$(timeout 5 env BULGU_KOK="$T/kok" bash "$B" hal S-1 canli --gerekce y --kim 2>&1); r=$?
 ok "H9 🔴 --kim son argüman ve DEĞERSİZ: rc 2, sonsuz döngü YOK (5 sn zaman aşımı değil), yazıcı çağrılmadı" '[ $r -eq 2 ] && [[ "$o" != *ARGV* ]] && [[ "$o" == *"değersiz"* ]]'
-o=$(timeout 5 env BULGU_KOK="$T/kok" bash "$B" yaz "b" --kim X --not 2>&1); r=$?
+o=$(timeout 5 env BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton-yok" bash "$B" yaz "b" --kim X --not 2>&1); r=$?
 ok "H9b yaz: --not değersiz → rc 2, döngü yok" '[ $r -eq 2 ] && [[ "$o" != *ARGV* ]]'
+# ── K1 (0.3.0): jeton varsa MERKEZE, yoksa eski deftere ──
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton-yok" bash "$B" yaz "jetonsuz" --kim X 2>&1); r=$?
+ok "K1a jeton yoksa eski yol + 'jetonu yok' uyarısı" '[ $r -eq 0 ] && [[ "$o" == *"ARGV:yeni|--baslik|jetonsuz"* ]] && [[ "$o" == *"jetonu yok"* ]]'
+printf 'sinav-jeton-ABC\n' > "$T/jeton"
+python3 - "$T" <<'PY' &
+import sys, json, http.server, socketserver, os
+T=sys.argv[1]
+class H(http.server.BaseHTTPRequestHandler):
+    def log_message(self,*a): pass
+    def do_POST(self):
+        n=int(self.headers.get("content-length") or 0); b=json.loads(self.rfile.read(n) or b"{}")
+        open(os.path.join(T,"gelen.json"),"w").write(json.dumps({"yol":self.path,"jeton":self.headers.get("x-defter-jeton"),"govde":b}))
+        if self.headers.get("x-defter-jeton")!="sinav-jeton-ABC": self.send_response(401); self.end_headers(); self.wfile.write(b'{"ok":false,"hata":"jeton_gecersiz"}'); return
+        if b.get("etiket")=="kirmizi": self.send_response(400); self.end_headers(); self.wfile.write(b'{"ok":false,"hata":"alan_degeri_gecersiz","bekleniyor":"etiket: bug|ozellik"}'); return
+        self.send_response(201); self.end_headers()
+        self.wfile.write(json.dumps({"ok":True,"kayit":{"id":"gorev_SINAV0000000001","ekleyen_kutu":"maiset","adlar":[{"deger":b["adlar"][0]}],"canli":{"kutu":"maiset","etiket":b.get("etiket"),"kaynak_kim":b.get("kaynak_kim")}}}).encode())
+with socketserver.TCPServer(("127.0.0.1",0),H) as s:
+    open(os.path.join(T,"port"),"w").write(str(s.server_address[1])); s.serve_forever()
+PY
+SRV=$!; for i in 1 2 3 4 5 6 7 8 9 10; do [ -f "$T/port" ] && break; sleep 0.2; done; PORT=$(cat "$T/port")
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "Fatura ekranı donuyor" --kim BASIRET --not "3 kez ölçüldü" 2>&1); r=$?
+ok "K1b jeton varsa MERKEZE yazar: tür gorev · etiket bug · kaynak_kim · kaynak_nereden 'bulgu komutu' · kanıt adımı; tek-format cevap" '[ $r -eq 0 ] && [[ "$o" == *"📌 gorev_SINAV0000000001 · maiset · bug — Fatura ekranı donuyor (açan: BASIRET) · Görev Defteri"* ]] && python3 -c "
+import json,sys; g=json.load(open(sys.argv[1])); b=g[\"govde\"]
+assert g[\"yol\"]==\"/kayit\" and b[\"tur\"]==\"gorev\" and b[\"etiket\"]==\"bug\" and b[\"kaynak_kim\"]==\"BASIRET\" and b[\"kaynak_nereden\"]==\"bulgu komutu\" and b[\"adimlar\"]==[\"[kanıt] 3 kez ölçüldü\"] and \"kutu\" not in b" "$T/gelen.json"'
+ok "K1c eski kutu yazıcısı ÇAĞRILMADI (tek defter, ikilik yok)" '[[ "$o" != *ARGV* ]]'
+ok "K1d jeton değeri çıktıda YOK" '[[ "$o" != *sinav-jeton-ABC* ]]'
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "fikir" --kim X --etiket ozellik 2>&1); r=$?
+ok "K1e --etiket ozellik geçer" '[ $r -eq 0 ] && python3 -c "import json,sys; assert json.load(open(sys.argv[1]))[\"govde\"][\"etiket\"]==\"ozellik\"" "$T/gelen.json"'
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "x" --kim X --etiket kusur 2>&1); r=$?
+ok "K1f bilinmeyen etiket rc 2, hiçbir yere gitmez" '[ $r -eq 2 ] && [[ "$o" == *"bug ya da ozellik"* ]]'
+printf 'yanlis-jeton\n' > "$T/jeton2"
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton2" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "x" --kim X 2>&1); r=$?
+ok "K1g merkez reddederse rc 1 + http kodu/sebep; eski deftere DÜŞMEZ" '[ $r -eq 1 ] && [[ "$o" == *"reddetti http=401"* ]] && [[ "$o" != *ARGV* ]]'
+kill $SRV 2>/dev/null; wait $SRV 2>/dev/null
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "x" --kim X 2>&1); r=$?
+ok "K1h merkeze ulaşılamazsa rc 1, kayıt HİÇBİR yere yazılmaz ve söylenir" '[ $r -eq 1 ] && [[ "$o" == *"ulaşılamadı"* ]] && [[ "$o" != *ARGV* ]]'
 echo "bulgu.test: $g geçti · $k kaldı"; [ $k -eq 0 ]

@@ -1,0 +1,15 @@
+$ bash _agents/fabrika/kanit/bulgu-gorev-koprusu/mutasyon.sh
+# rc=0 sure=7.1s zaman=2026-10-14T11:07:20+03:00
+--- stdout ---
+  ✓ pozitif kontrol: bozulmamış kopyada YEŞİL
+  ✓ öz-sınav: olmayan desen reddedildi
+  ✓ M1 jeton varken de eski deftere yazar (köprü yok) → sınav kırmızı
+  ✓ M2 merkez reddedince sessizce 0 döner → sınav kırmızı
+  ✓ M3 merkeze ulaşılamayınca eski deftere düşer (ikilik) → sınav kırmızı
+  ✓ M4 etiket kapısı kalkar → sınav kırmızı
+  ✓ M5 kaynak_nereden yazılmaz → sınav kırmızı
+  ✓ M6 kanıt adım olmaz → sınav kırmızı
+  ✓ M7 jeton başlığa değil argv'ye düşer → sınav kırmızı
+
+MUTASYON: hepsi ölçüldü
+--- stderr ---
