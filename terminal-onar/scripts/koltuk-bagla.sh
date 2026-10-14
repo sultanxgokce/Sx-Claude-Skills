@@ -5,6 +5,9 @@
 #                                                          ?arg=<koltuk> buraya SON argüman olarak eklenir)
 #   koltuk-bagla.sh --gizli                                listede OLMAYAN oturumlar, gerekçesiyle: ad · neden (G-BANI-0007:
 #                                                          sessiz düşürme yok — gizlenen her oturum adıyla ve nedeniyle sayılır)
+#   koltuk-bagla.sh --bos                                  BOŞ KABUK oturumlar (2.5.0): hiçbir bölmesinde Claude yok VE her bölmede
+#                                                          yalnız kabuk istemi var (altında hiçbir süreç yok). Sunucu/izleme koşan
+#                                                          Claude'suz oturum boş DEĞİLDİR (ör. nova/kesif-ui web sunucusu).
 #   koltuk-bagla.sh --liste                                görünür koltuklar, sekmeyle: ad · son-etkinlik(epoch) · claude(1|0) · tür(ajan|diger) · hâl
 #
 # 🔴 NİÇİN TEK KAYNAK: "hangi oturum görünür" sorusunu hem ekran (ttyd) hem liste ucu (/api/koltuklar)
@@ -44,13 +47,31 @@ koltuklar() {  # görünür oturum adları, satır satır · rc 3 = ölçülemed
 
 # 🔴 HEDEF ADLA DEĞİL BÖLME KİMLİĞİYLE (yedek göz tur 2 ölçtü): '-t "$1:"' ve '-t "=$1:"' adı değil oturum KİMLİĞİNİ ($1) çözer →
 #    '$1' adlı koltuğun hâli/etkinliği BAŞKA oturumdan okunurdu. Tüm bölmeler bir kez listelenir, ada tam eşleşmeyle süzülür.
-bolmeler() { tmux list-panes -a -F '#{session_name}	#{window_active}	#{pane_active}	#{pane_id}	#{pane_pid}	#{pane_current_command}' 2>/dev/null; }
+bolmeler() { if [ -n "${BOLMELER_ONBELLEK+x}" ]; then printf '%s\n' "$BOLMELER_ONBELLEK"; return 0; fi
+  tmux list-panes -a -F '#{session_name}	#{window_active}	#{pane_active}	#{pane_id}	#{pane_pid}	#{pane_current_command}' 2>/dev/null; }
 bolme_bul() { bolmeler | awk -F'\t' -v s="$1" '$1==s && $2==1 && $3==1 {print $4; exit}'; }   # oturumun etkin bölmesi (%N)
-claude_var_mi() {  # $1 = oturum → 0 ise koltukta Claude çalışıyor
-  local pid kom
+# 🔴 2.5.0 (SERDAR 14 Eki ölçümü): Claude yalnız ÇOCUK süreçte aranıyordu. Kutuların çoğu ajanı bir başlatma betiğiyle açar
+#    (bölme: bash → baslat-claude.sh → claude): Claude TORUN süreçtir, eski arama onu görmez → koltuk "Claude yok" sayılırdı
+#    (tellal/HAYALI, nova-kesif). Artık bölmenin bütün alt ağacı (derinlik sınırı yok) taranır; komut satırı claude ile başlayan
+#    ya da …/claude olan süreç bulunursa koltukta Claude VAR.
+altta_claude() {  # $1 = kök pid → 0 ise alt ağacın HERHANGİ bir katında Claude süreci var (derinlik sınırı YOK — bağımsız göz tur 1)
+  # Tek anlık süreç tablosu (ps) üzerinde kökten aşağı yürünür; tablo alınamazsa rc 2 (ÖLÇÜLEMEDİ — "yok" sayılmaz).
+  local tablo; tablo="$(ps -e -o pid=,ppid=,args= 2>/dev/null)" || return 2
+  [ -n "$tablo" ] || return 2
+  printf '%s\n' "$tablo" | awk -v kok="$1" '
+    { pid=$1; pp=$2; $1=""; $2=""; sub(/^  /,""); a[pid]=$0; c[pp]=c[pp] " " pid }
+    END { n=split(c[kok], q, " "); i=1
+      while (i<=n) { p=q[i++]; if (p=="" || gor[p]++) continue
+        # YALNIZ çalıştırılan program (argv[0]) sayılır — argümanında "…/claude" geçen başlatıcı kabuk Claude DEĞİL (bağımsız göz tur 2)
+        x=a[p]; sub(/ .*/, "", x); sub(/.*\//, "", x); if (x == "claude" || x == "claude.exe") { bulundu=1; exit }
+        m=split(c[p], r, " "); for (k=1;k<=m;k++) q[++n]=r[k] }
+      exit (bulundu ? 0 : 1) }'
+}
+claude_var_mi() {  # $1 = oturum → 0 Claude var · 1 yok · 2 ölçülemedi (süreç tablosu alınamadı)
+  local pid kom r
   while read -r pid kom; do
-    case "$kom" in claude|claude-*) return 0 ;; esac
-    pgrep -P "$pid" -f '(^|/)claude( |$)' >/dev/null 2>&1 && return 0
+    case "$kom" in claude|claude-*|claude.exe) return 0 ;; esac   # claude.exe: yerel kurucunun ikilisi (medigate/SAYMAN, 14 Eki)
+    altta_claude "$pid"; r=$?; [ $r = 0 ] && return 0; [ $r = 2 ] && return 2
   done < <(bolmeler | awk -F'\t' -v s="$1" '$1==s {print $5" "$6}')
   return 1
 }
@@ -87,6 +108,35 @@ koltuk_hali() {  # $1 = oturum → calisiyor|soru|sinirda|girdi|bos|bilinmiyor  
   fi
   echo bilinmiyor
 }
+
+bos_kabuk_mu() {  # $1 = oturum → 0 ise BOŞ KABUK: Claude yok ve her bölme yalnız kabuk istemi (altında süreç yok)
+  local pid kom n=0 r
+  claude_var_mi "$1"; r=$?; [ $r = 0 ] && return 1; [ $r = 2 ] && return 2
+  while read -r pid kom; do
+    n=$((n+1))
+    case "$kom" in bash|sh|zsh|fish|dash|-bash|-sh) ;; *) return 1 ;; esac
+    pgrep -P "$pid" >/dev/null 2>&1 && return 1
+  done < <(bolmeler | awk -F'\t' -v s="$1" '$1==s {print $5" "$6}')
+  [ $n -gt 0 ]
+}
+
+if [ "${1:-}" = "--bos" ]; then
+  if ! TUM="$(tmux list-sessions -F '#{session_name}' 2>&1)"; then
+    case "$TUM" in *"no server running"*|*"No such file or directory"*) exit 0 ;; esac
+    printf 'oturumlar ölçülemedi: %s\n' "$TUM" >&2; exit 3
+  fi
+  # 🔴 Bölme listesi ve süreç tablosu alınamazsa ölçüm YOK (bağımsız göz tur 1): boş liste "hiç boş koltuk yok" sayılmaz → rc 3.
+  BOLMELER_ONBELLEK="$(tmux list-panes -a -F '#{session_name}	#{window_active}	#{pane_active}	#{pane_id}	#{pane_pid}	#{pane_current_command}' 2>&1)" \
+    || { printf 'bölmeler ölçülemedi: %s\n' "$BOLMELER_ONBELLEK" >&2; exit 3; }
+  ps -e -o pid= >/dev/null 2>&1 || { echo 'süreç tablosu ölçülemedi (ps)' >&2; exit 3; }
+  printf '%s\n' "$TUM" | while IFS= read -r s; do
+    [ -n "$s" ] || continue
+    bos_kabuk_mu "$s"; r=$?
+    [ $r = 0 ] && printf '%s\n' "$s"
+    if [ $r = 2 ]; then printf 'ölçülemedi: %s\n' "$s" >&2; exit 3; fi
+  done || exit 3
+  exit 0
+fi
 
 if [ "${1:-}" = "--gizli" ]; then
   if ! TUM="$(tmux list-sessions -F '#{session_name}' 2>&1)"; then

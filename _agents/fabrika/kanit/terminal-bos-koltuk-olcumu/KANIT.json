@@ -1,0 +1,70 @@
+{
+  "is": "terminal-bos-koltuk-olcumu",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-14T12:44:53+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "canli-filo-bos-koltuk",
+      "asama": "once",
+      "dosya": "olcum-canli-filo-bos-koltuk-once.txt",
+      "sha256": "36678c901ade867f1c568249c42795d4060cfbdffde37fd41ab7180dc1c91f83",
+      "komut": [
+        "bash",
+        "-c",
+        "bash /config/.claude/skills/terminal-onar/scripts/koltuk-fark-filo.sh cloudtop-medigate cloudtop-mihenk cloudtop-tellal cloudtop-huzur cloudtop-nova 2>&1 | grep -vE \"^\\s*$\" | tail -8; echo \"(önce: kurulu 2.4.4 — BOŞ kavramı yok)\"; true"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-14T11:13:21+03:00",
+      "sure_sn": 2.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-filo-bos-koltuk",
+      "asama": "sonra",
+      "dosya": "olcum-canli-filo-bos-koltuk-sonra.txt",
+      "sha256": "7770722076c803ffa1e95d086518871d2e648b0bb3252848948b58287bc044e1",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bos-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-14T12:44:53+03:00",
+      "sure_sn": 3.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-iki-koruma",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-iki-koruma-tek.txt",
+      "sha256": "5dbd56793a69482f4bd0e34b8368c5b3e7d4c3dc217a10cab9c83d408a07b89d",
+      "komut": [
+        "python3",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut.py",
+        "/config/projects/_wt/Sx-Claude-Skills-terminal-bos-koltuk-olcumu/terminal-onar"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-14T12:43:05+03:00",
+      "sure_sn": 484.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "eski-sinavlar",
+      "asama": "tek",
+      "dosya": "olcum-eski-sinavlar-tek.txt",
+      "sha256": "3827f19f3c3fdc98ed540c68e1aecc1506424e3757d66dd43fe12efb9a3a765b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/eski-sinavlar.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-14T12:44:39+03:00",
+      "sure_sn": 90.7
+    }
+  ],
+  "imza": "883ad0e5e70c30a5716e88a508c2d00aa6c337d8afccde73c666e89430cf88e1"
+}

@@ -1,0 +1,32 @@
+{
+  "tur": 2,
+  "is": "terminal-bos-koltuk-olcumu",
+  "pr": "314",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-14T12:33:23+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 49917,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "BOŞ hükmü, ölçüm hatalarının taşınması ve sınırsız alt-ağaç yürüyüşü talep edilen yere eklenmiş; önceki iki engel giderilmiş. Ancak Claude tanıma yürütülen programı değil tüm argüman metnini eşlediğinden başlatıcı kabuklar yanlış ajan sayılabilir; önce bu yanlış-pozitif yolu çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "Alt-ağaç taraması, gerçekten Claude olan süreç yerine komut satırının herhangi bir yerinde `/claude` geçen süreci Claude sayıyor. Claude komutunu yalnız metin veya argüman olarak taşıyan bir başlatıcı kabuk, gerçek ajan kapanmış olsa bile koltuğu dolu gösterebilir.",
+        "kanit": "`ps ... args=` çıktısının tamamı `a[pid]` içine alınıyor ve `x ~ /\\/(claude|claude\\.exe)( |$)/` ile herhangi bir konumda eşleştiriliyor; yürütülebilir ad/argv[0] ayrıştırılmıyor. F19'un kurduğu iç içe `bash -c` komutlarının argümanlarında da aşağıdaki `/claude 60` metni bulunduğundan bu sınav gerçek derinlik yürüyüşünü tek başına kanıtlamıyor.",
+        "konum": "terminal-onar/scripts/koltuk-bagla.sh: altta_claude; terminal-onar/kapi/koltuk-fark.test.sh: F19",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Canlı sonra ölçümü bulunan dokuz BOŞ koltuğu elle ölçüm beklentisiyle eşliyor; F20 ile bölme-listesi hata yolu, F19 ve mutasyon kaydıyla derin arama niyeti, eski sınavlarla gerileme yüzeyi sınanmış. Ancak önce kaydı `true` ile rc 0'a zorluyor ve derinlik sınavı başlatıcıların argümanlarında `/claude` metni taşıması nedeniyle yürütülebilir kimliği ile gerçek derinliği birbirinden ayırmıyor."
+  }
+}
