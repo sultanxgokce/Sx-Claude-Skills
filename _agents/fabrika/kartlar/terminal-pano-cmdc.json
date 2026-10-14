@@ -1,0 +1,19 @@
+{
+  "is": "terminal-pano-cmdc",
+  "cumle": "Terminal sayfasında kopyalama 'kopyalandı' diyor ama Mac panosuna düşmüyor (gorev_01M4XM9MCBR01PF0S6ETWR2EQD, Sultan 15 Eki 01:45): tmux seçimi OSC52 ile panoya iniyor, ardından seçimsiz ⌘C xterm'in kopya işleyicisiyle panoyu BOŞ metinle eziyor (şüphe, ölçülecek); ⌘C seçimsizken son OSC52 metnini panoya yazsın + doğrulama",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-10-15T02:01:15+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

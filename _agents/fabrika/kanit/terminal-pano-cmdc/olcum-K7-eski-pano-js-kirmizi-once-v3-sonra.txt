@@ -1,0 +1,9 @@
+$ bash -c node terminal-onar/kapi/pano-sinav.mjs 2>&1 | grep -E "K7|bilgi|geçti|kaldı|ÖLÇÜLEMEDİ"; rc=${PIPESTATUS[0]}; echo "rc=$rc (eski pano.js ile K7 KIRMIZI beklenir)"; [ $rc = 1 ]
+# rc=0 sure=13.9s zaman=2026-10-15T02:04:38+03:00
+--- stdout ---
+  ✓ K7a tarayıcı kopya kısayolu gerçekten copy olayı üretti (ölçüm aracı çalışıyor)
+     (bilgi) copy olayı sonrası: engellendi=false olayın metni="" pano="pano-baska-seyle-doldu"
+  ✗ K7 seçimsiz ⌘C son tmux seçimini panoya GERİ yazar (pano başka şeyle dolmuş olsa da) → pano="pano-baska-seyle-doldu"
+  · K7 seçimsiz ⌘C son tmux seçimini panoya GERİ yazar (pano başka şeyle dolmuş olsa da)
+rc=1 (eski pano.js ile K7 KIRMIZI beklenir)
+--- stderr ---

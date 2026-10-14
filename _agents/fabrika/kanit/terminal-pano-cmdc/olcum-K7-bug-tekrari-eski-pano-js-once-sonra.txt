@@ -1,0 +1,15 @@
+$ bash -c node terminal-onar/kapi/pano-sinav.mjs 2>&1 | grep -E "K[0-9]|N[0-9]|geçti|kaldı|ÖLÇÜLEMEDİ|✗"; rc=${PIPESTATUS[0]}; echo "rc=$rc (eski pano.js ile K7 KIRMIZI beklenir → bug tekrarlandı)"; [ $rc = 1 ]
+# rc=1 sure=13.8s zaman=2026-10-15T02:02:41+03:00
+--- stdout ---
+  ✓ K1 uygulamanın OSC 52'si tmux üzerinden tarayıcı panosuna İNER
+  ✓ K2 kullanıcıya "seçim panoya kopyalandı" denir
+  ✓ K3 seçilecek satır ekranda bulundu
+  ✓ K4 FAREYLE SEÇİM (tmux copy-mode) tarayıcı panosuna iner — Sultan'ın kırık yolu
+  ✓ K7 seçimsiz ⌘C (copy olayı) az önce panoya inen tmux seçimini SİLMEZ
+  ✓ K5 Cmd+C seçimsiz basılınca yol gösterilir (Shift basılı sürükle ipucu)
+  ✓ K6 Shift basılı sürükleme TARAYICI seçimi yapar (Cmd+C ile kopyalanabilir)
+  ✓ N1 köprüsüz sayfada işaret ve bağ yok
+  ✓ N2 köprüsüz: OSC 52 panoya İNMEZ (ölçüm yokluğu görüyor; K1 tautoloji değil)
+  ✓ N3 köprüsüz: resim yapıştırma dinleyiciye ULAŞMAZ (Y2 tautoloji değil)
+rc=0 (eski pano.js ile K7 KIRMIZI beklenir → bug tekrarlandı)
+--- stderr ---

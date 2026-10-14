@@ -1,0 +1,119 @@
+{
+  "is": "terminal-pano-cmdc",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T02:08:35+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "K7-bug-tekrari-eski-pano-js-once",
+      "asama": "sonra",
+      "dosya": "olcum-K7-bug-tekrari-eski-pano-js-once-sonra.txt",
+      "sha256": "667b95ed0c6aad58e17aade4d5630d01b2320cec1492a618f56284df089f26c7",
+      "komut": [
+        "bash",
+        "-c",
+        "node terminal-onar/kapi/pano-sinav.mjs 2>&1 | grep -E \"K[0-9]|N[0-9]|geçti|kaldı|ÖLÇÜLEMEDİ|✗\"; rc=${PIPESTATUS[0]}; echo \"rc=$rc (eski pano.js ile K7 KIRMIZI beklenir → bug tekrarlandı)\"; [ $rc = 1 ]"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T02:02:41+03:00",
+      "sure_sn": 13.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "K7-bug-tekrari-eski-pano-js-once-v2",
+      "asama": "sonra",
+      "dosya": "olcum-K7-bug-tekrari-eski-pano-js-once-v2-sonra.txt",
+      "sha256": "6b8ae632037dbb7638ebc1625f6df3c953a63af97b3c19b83cd0482a8bef7112",
+      "komut": [
+        "bash",
+        "-c",
+        "node terminal-onar/kapi/pano-sinav.mjs 2>&1 | grep -E \"K7|geçti|kaldı|ÖLÇÜLEMEDİ\"; rc=${PIPESTATUS[0]}; echo \"rc=$rc (eski pano.js ile K7 KIRMIZI beklenir → bug tekrarlandı)\"; [ $rc = 1 ]"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T02:03:30+03:00",
+      "sure_sn": 13.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "K7-eski-pano-js-kirmizi-once-v3",
+      "asama": "sonra",
+      "dosya": "olcum-K7-eski-pano-js-kirmizi-once-v3-sonra.txt",
+      "sha256": "b9367ad4350448931036319bbb212e547832e63803df116e20736dcbaa1f5492",
+      "komut": [
+        "bash",
+        "-c",
+        "node terminal-onar/kapi/pano-sinav.mjs 2>&1 | grep -E \"K7|bilgi|geçti|kaldı|ÖLÇÜLEMEDİ\"; rc=${PIPESTATUS[0]}; echo \"rc=$rc (eski pano.js ile K7 KIRMIZI beklenir)\"; [ $rc = 1 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T02:04:38+03:00",
+      "sure_sn": 13.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "pano-sinav-yeni-kopru-K7-yesil-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-pano-sinav-yeni-kopru-K7-yesil-sonra-sonra.txt",
+      "sha256": "912d61476ac74a322105f522afa6a4a1309e03962bb69ccc80004e2424e9a9fc",
+      "komut": [
+        "bash",
+        "-c",
+        "node terminal-onar/kapi/pano-sinav.mjs 2>&1 | grep -E \"✗|K7|bilgi|geçti|kaldı|ÖLÇÜLEMEDİ|kapı\"; exit ${PIPESTATUS[0]}"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T02:05:42+03:00",
+      "sure_sn": 13.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "pano-sinav-yeni-kopru-K7-yesil-v2-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-pano-sinav-yeni-kopru-K7-yesil-v2-sonra-sonra.txt",
+      "sha256": "7731b41f232079de64c75a56b9d321fbf90073e4bcef9de82f33fadb4ec7ac82",
+      "komut": [
+        "bash",
+        "-c",
+        "node terminal-onar/kapi/pano-sinav.mjs 2>&1 | grep -E \"✗|K[5-7]|bilgi|geçti|kaldı|ÖLÇÜLEMEDİ|kapı:\"; exit ${PIPESTATUS[0]}"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T02:07:28+03:00",
+      "sure_sn": 12.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "MUTASYON-KANITI-beklenen-kirmizi-K7",
+      "asama": "sonra",
+      "dosya": "olcum-MUTASYON-KANITI-beklenen-kirmizi-K7-sonra.txt",
+      "sha256": "d0d1f4e8d59a5913237dc1bf87a3126ea2748e6fdc00d90835b1ac8c66e7b85e",
+      "komut": [
+        "bash",
+        "-c",
+        "echo \"=== MUTASYON KANITI: pano.js BİLEREK bozuldu (seçimsiz Cmd+C köprüsü kaldırıldı). Aşağıdaki ✗ K7 BEKLENENDİR; rc=0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-pano-sinav-yeni-kopru-K7-yesil-v2-sonra ===\"; node terminal-onar/kapi/pano-sinav.mjs 2>&1 | grep -E \"✗|K7 |kaldı\"; [ ${PIPESTATUS[0]} = 1 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T02:08:18+03:00",
+      "sure_sn": 12.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinav-hizli",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinav-hizli-sonra.txt",
+      "sha256": "370ceb46e94b0e728ce86fcd0a4e2ce6d237db6c192b93529c6d3da01d359997",
+      "komut": [
+        "bash",
+        "terminal-onar/kapi/kapi-sinav.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T02:08:35+03:00",
+      "sure_sn": 5.9
+    }
+  ],
+  "imza": "c53f1abe549a913c8a222b3b17b8dcea0d9cf187ba60d3a8b6e37a2c460a6617"
+}

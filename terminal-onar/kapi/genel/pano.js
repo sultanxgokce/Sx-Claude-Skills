@@ -113,14 +113,27 @@
     for (var i = 0; i < bin.length; i++) b[i] = bin.charCodeAt(i);
     return new TextDecoder('utf-8').decode(b);
   }
-  var panoyaIndi = 0;
+  var panoyaIndi = 0, sonMetin = '';   // sonMetin: son tmux seçimi — seçimsiz Cmd+C onu panoya GERİ yazar (Sultan 15 Eki 01:45)
   function panoyaYaz(metin) {
+    sonMetin = metin;
     if (!navigator.clipboard || !navigator.clipboard.writeText) {
-      bildir('✗ tarayıcı panoya izin vermiyor — Shift basılı sürükleyip Cmd+C ile kopyala', '#ff7b72', 6000); return;
+      bildir('✗ tarayıcı panoya izin vermiyor — Cmd+C\'ye bas (seçim panoya yazılır) ya da Shift basılı sürükleyip Cmd+C', '#ff7b72', 6000); return;
     }
-    navigator.clipboard.writeText(metin).then(function () { panoyaIndi = Date.now(); bildir('📋 seçim panoya kopyalandı', '#7ee787', 1800); },
-      function (e) { bildir('✗ panoya yazılamadı (' + ((e && e.message) || 'izin') + ') — Shift basılı sürükle, sonra Cmd+C', '#ff7b72', 6000); });
+    navigator.clipboard.writeText(metin).then(function () { panoyaIndi = Date.now(); bildir('📋 seçim panoya kopyalandı — yapışmazsa Cmd+C\'ye bas', '#7ee787', 2400); },
+      function (e) { bildir('✗ panoya yazılamadı (' + ((e && e.message) || 'izin') + ') — Cmd+C\'ye bas: seçim panoya yazılır', '#ff7b72', 6000); });
   }
+  // ── seçimsiz Cmd+C / Ctrl+Insert = 'copy' olayı: son tmux seçimini panoya yaz (Sultan 15 Eki: "kopyalandı diyor ama kopyalanmıyor").
+  //    xterm.js'in kopya işleyicisi seçim yokken olayı kendi (boş) seçimiyle doldurur; önce biz görürüz (yakalama fazı) ve
+  //    panoya son seçimi koyarız. Tarayıcı seçimi (Shift/Option+sürükle) varsa DOKUNMAYIZ — o yol xterm'in/tarayıcının.
+  document.addEventListener('copy', function (e) {
+    var t = window.term;
+    var xsec = t && typeof t.hasSelection === 'function' && t.hasSelection();
+    var ssec = !!(window.getSelection && String(window.getSelection()));
+    if (xsec || ssec || !sonMetin || !e.clipboardData) return;
+    e.preventDefault(); e.stopImmediatePropagation();
+    e.clipboardData.setData('text/plain', sonMetin); panoyaIndi = Date.now();
+    bildir('📋 son seçim panoya yazıldı (Cmd+C)', '#7ee787', 1800);
+  }, true);
   function osc52(veri) {                       // veri: "c;<base64>" · "?" sorgusu desteklenmez (pano OKUNMAZ)
     var s = String(veri || ''); var i = s.indexOf(';'); if (i < 0) return false;
     var icerik = s.slice(i + 1); if (!icerik || icerik === '?') return false;
@@ -132,7 +145,7 @@
     var t = window.term;
     if (!t || !t.parser || typeof t.parser.registerOscHandler !== 'function') return false;
     t.parser.registerOscHandler(52, osc52);
-    window.__kapiPano = { surum: '1.0.0', osc52: true, taban: TABAN };   // ölçüm yüzeyi (sınav bunu okur)
+    window.__kapiPano = { surum: '1.1.0', osc52: true, cmdc: true, taban: TABAN };   // ölçüm yüzeyi (sınav bunu okur)
     log('bağlandı: OSC 52 → pano · resim → ' + RESIM_URL);
     return true;
   }
@@ -146,7 +159,7 @@
     var t = window.term;
     var secim = t && typeof t.hasSelection === 'function' ? t.hasSelection() : !!(window.getSelection && String(window.getSelection()));
     if (secim) return;                              // tarayıcı seçimi var → Cmd+C normal kopyalar
-    if (Date.now() - panoyaIndi < 3000) return;     // tmux seçimi zaten panoya indi
+    if (sonMetin) return;                           // son tmux seçimi var → 'copy' olayı onu panoya yazar (yukarıda)
     if (ipucu) return; ipucu = true;
     bildir('Kopyalamak için: fareyle seçtiğin an panoya iner (Cmd+C gerekmez).\nTarayıcı seçimi istersen Shift basılı tutup sürükle, sonra Cmd+C.', '#ede5d7', 8000);
   }, true);
