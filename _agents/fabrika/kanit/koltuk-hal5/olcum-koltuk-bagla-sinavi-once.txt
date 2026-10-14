@@ -1,0 +1,8 @@
+$ env ESKI=1 bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mutasyon-sx3.sh
+# rc=1 sure=1.7s zaman=2026-10-15T00:09:57+03:00
+--- stdout ---
+  ✗ D1 — rc=0 maiset-ana	1760000000	0	diger	bilinmiyor
+  ✗ D13 — bos
+  ✗ D13b — 
+toplam=51 geçen=48 düşen=3
+--- stderr ---

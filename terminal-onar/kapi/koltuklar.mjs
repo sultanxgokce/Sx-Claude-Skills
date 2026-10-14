@@ -10,7 +10,8 @@ export const KOLTUK_AD_DESEN = /^(?![\s$@%=])(?!.*\s$)[^\x00-\x1f\x7f:.]{1,200}$
 // koltuk-bagla.sh --liste çıktısı → koltuklar. Satır: ad · son · claude(1|0) · tür · hâl (tür/hâl eski betikte yok → alan yok, uydurulmaz).
 export function koltukSatirlari(cikti) {
   return String(cikti || '').split('\n').filter(Boolean).map((l) => {
-    const [ad, son, claude, tur, hal] = l.split('\t');
-    return { ad, son: +son || 0, claude: claude === '1', ...(tur ? { tur } : {}), ...(hal ? { hal } : {}) };
+    const [ad, son, claude, tur, hal, ne] = l.split('\t');
+    // ne: dış olay bekliyorsa NE beklediği (2.7.0); başka hâlde yok (uydurulmaz)
+    return { ad, son: +son || 0, claude: claude === '1', ...(tur ? { tur } : {}), ...(hal ? { hal } : {}), ...(ne ? { ne } : {}) };
   }).filter((k) => KOLTUK_AD_DESEN.test(k.ad));
 }

@@ -1,0 +1,42 @@
+{
+  "is": "koltuk-hal5",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T00:09:59+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-bagla-sinavi",
+      "asama": "once",
+      "dosya": "olcum-koltuk-bagla-sinavi-once.txt",
+      "sha256": "a44b9adf99a58fa634f14a3b3ebaa926e0d0d290259abb9cc0e92acaf12f6ec0",
+      "komut": [
+        "env",
+        "ESKI=1",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mutasyon-sx3.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T00:09:57+03:00",
+      "sure_sn": 1.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-bagla-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-bagla-sinavi-sonra.txt",
+      "sha256": "5f4a04f8e950851abf738d716662669ea7b70528b3884d7a41fec515b9032f40",
+      "komut": [
+        "env",
+        "ESKI=0",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mutasyon-sx3.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T00:09:59+03:00",
+      "sure_sn": 2.1
+    }
+  ],
+  "imza": "692fe83c4e21a5df2ced8df72f78279800e213d3b8133c3017e1ab08e10828a2"
+}

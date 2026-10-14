@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.6.1
+version: 2.7.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -294,6 +294,10 @@ yazılır. İşaretli satır çiftse **tekilleşir**. Sınav: S10a-f (sahte cron
 mutasyon: eski `ortak.sh` ile 7 kapı kırmızı.
 
 ## Sürüm notları
+- **2.7.0 (2026-10-15, BÂNİ · Sultan eki 15 Eki 20:40 — 5. hâl):** koltuk hâline **⏳ `dis-olay` "dış olay bekliyor"**: yazı kutusu boş ama
+  ekranda "N shells running" ya da "bekleniyor / bildirim gelince / CI … bekl" kalıbı → ajan çalışıyor sanılmaz, boşta da sayılmaz.
+  `--liste` 6. sütun: ne beklediği (yalnız bu hâlde; rozet üstüne gelince). Öncelik: soru > çalışıyor > sınırda > girdi > dış olay > boş.
+  `kapi/koltuklar.mjs` `ne` alanını taşır. Sınav: koltuk-bagla D1 (6 alan) · D13a-d. Boş kutu ölçümünde U+00A0 boşluk sayılır.
 - **2.6.1 (2026-10-15, BÂNİ · SERDAR bulgu paketi 3 tekiller S-11 + S-7):** `kur.sh` ortak.sh kutu adını reddedince tek satır
   sebeple durur (rc 3; eskiden 'TTYD_BIN: unbound variable'). Yerel kopya ortak koddan FARKLIYSA bağlama DURUR ve farkı listeler
   (rc 8; REVAK 12 Eki: 863 satırlık sınavlı yerel değişiklik ezilmişti) — bilinçli ezmek `TERMINAL_KUR_FARK_KABUL=1`, kopya yine

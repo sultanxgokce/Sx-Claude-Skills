@@ -88,7 +88,7 @@ koltuk_turu() {  # $1 = oturum · $2 = claude(1|0) → ajan yalnız Claude çal�
   #    durması türün değil `ana` bayrağının işidir (kapı onu ayrıca verir; merkez ana'yı türünden bağımsız önde çizer).
   if diger_mi "$1"; then echo diger; elif [ "$2" = 1 ]; then echo ajan; else echo diger; fi
 }
-koltuk_hali() {  # $1 = oturum → calisiyor|soru|sinirda|girdi|bos|bilinmiyor  (SON 15 dolu satır; eskisi sayılmaz)
+koltuk_hali() {  # $1 = oturum → calisiyor|soru|sinirda|girdi|dis-olay|bos|bilinmiyor  (SON 15 dolu satır; eskisi sayılmaz)
   local ekran
   # 🔴 tmux -S -15 görünür panenin ÜSTÜNE 15 geçmiş satır ekler, sonunu sınırlamaz (bağımsız göz #298 tur 1): sınır tail ile.
   # 🔴 capture-pane BÖLME hedefi ister: "=ad" oturum biçimi GEÇERSİZDİR ("can't find pane" — canlıda ölçüldü, 13 Eki); "ad:" ise
@@ -102,12 +102,20 @@ koltuk_hali() {  # $1 = oturum → calisiyor|soru|sinirda|girdi|bos|bilinmiyor  
   if printf '%s' "$ekran" | grep -qiE 'esc to interrupt|esc to cancel\)|\([0-9]+s ·|Running…|Waiting…'; then echo calisiyor; return; fi
   if printf '%s' "$ekran" | grep -qiE 'usage limit|limit reached|5-hour limit'; then echo sinirda; return; fi
   local satir
-  satir="$(printf '%s\n' "$ekran" | grep -E '^[[:space:]]*❯' | tail -1 | sed 's/^[[:space:]]*❯[[:space:]]*//')"
+  # U+00A0 (yeni TUI boş kutuyu '❯'+kırılmaz boşluk çizer) boşluk sayılır — koltuk-gonder 15 Eki dersi
+  satir="$(printf '%s\n' "$ekran" | sed 's/\xc2\xa0/ /g' | grep -E '^[[:space:]]*❯' | tail -1 | sed 's/^[[:space:]]*❯[[:space:]]*//')"
   if printf '%s\n' "$ekran" | grep -qE '^[[:space:]]*❯'; then
-    if [ -n "$satir" ]; then echo girdi; else echo bos; fi; return
+    if [ -n "$satir" ]; then echo girdi; return; fi
+    # 5. HÂL — DIŞ OLAY BEKLİYOR (Sultan 15 Eki 20:40): yazı kutusu BOŞ ama ajan bir dış olayı bekliyor (CI, arka plan izleyici,
+    #   zamanlayıcı). "çalışıyor" DEĞİL (esc to interrupt yok), "boşta" da değil — Sultan onu takılı sanmasın. Kaynak: Claude Code
+    #   alt çubuğundaki "N shells running" ya da son mesajdaki bekleme kalıbı. Ne beklediği KH_NE'ye düşer (rozet üstüne gelince).
+    local ne; ne="$(printf '%s\n' "$ekran" | grep -iE '[0-9]+ (background )?shells?( still)? running|bekleniyor|bildirim gelince|CI [^ ]*bekl|bekleyici|arka plan(da)? (bekl|izl)|izleniyor' | tail -1 | sed 's/^[[:space:]]*//' | cut -c1-80)"
+    if [ -n "$ne" ]; then KH_NE="$ne"; echo dis-olay; return; fi
+    echo bos; return
   fi
   echo bilinmiyor
 }
+KH_NE=""   # koltuk_hali 'dis-olay' dediğinde ne beklediği (tek satır, ≤80); başka hâlde boş
 
 bos_kabuk_mu() {  # $1 = oturum → 0 ise BOŞ KABUK: Claude yok ve her bölme yalnız kabuk istemi (altında süreç yok)
   local pid kom n=0 r
@@ -157,8 +165,11 @@ if [ "${1:-}" = "--liste" ]; then
     son=$(printf '%s\n' "$AKT" | awk -F'\t' -v n="$s" '$1==n {print $2; exit}'); son="${son:-0}"
     if claude_var_mi "$s"; then c=1; else c=0; fi
     tur="$(koltuk_turu "$s" "$c")"
-    if [ "$c" = 1 ]; then hal="$(koltuk_hali "$s")"; else hal=bilinmiyor; fi   # Claude'suz oturumda hâl ölçülmez → bilinmiyor (altı değerin dışına çıkılmaz)
-    printf '%s\t%s\t%s\t%s\t%s\n' "$s" "${son:-0}" "$c" "$tur" "$hal"
+    KH_NE=""
+    if [ "$c" = 1 ]; then hal="$(koltuk_hali "$s"; printf '\x1f%s' "$KH_NE")"; else hal=bilinmiyor; fi   # Claude'suz oturumda hâl ölçülmez → bilinmiyor
+    ne="${hal#*$'\x1f'}"; hal="${hal%%$'\x1f'*}"; hal="${hal%$'\n'}"; [ "$ne" = "$hal" ] && ne=""   # echo'nun satır sonu ayraçtan önce kalır
+    # 6. sütun: ne beklediği (yalnız dis-olay'da dolu); sekme/satır sonu taşımaz
+    printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$s" "${son:-0}" "$c" "$tur" "$hal" "$(printf '%s' "$ne" | tr '\t\n' '  ')"
   done
   exit 0
 fi

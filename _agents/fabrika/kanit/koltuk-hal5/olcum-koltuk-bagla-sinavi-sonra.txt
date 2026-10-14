@@ -1,0 +1,5 @@
+$ env ESKI=0 bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mutasyon-sx3.sh
+# rc=0 sure=2.1s zaman=2026-10-15T00:09:59+03:00
+--- stdout ---
+toplam=51 geçen=51 düşen=0
+--- stderr ---
