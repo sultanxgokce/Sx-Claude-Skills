@@ -16,4 +16,6 @@ mut "M4 tanınmayan argüman kutu sayılır (uydurma kapsam)" '" >&2; exit 2 ;;'
 mut "M5 filo seçiminde özet komutu verilmez" 'echo "KOMUT_OZET=bash $FILO_SH gunluk-plan-ozet"' 'true'
 mut "M6 --kos planı koşturmaz (karar yazılır, zincir kopar)" 'if [ $KOS = 1 ]; then echo "── PLAN' 'if false; then echo "── PLAN'
 mut "M7 --kos uygula da koşturur (SERDAR adımı atlanır)" 'bash "$FILO_SH" gunluk-plan --hepsi; exit $?; fi ;;' 'bash "$FILO_SH" gunluk-plan --hepsi --uygula; exit $?; fi ;;'
+mut "M8 --uygula bayrağı yok sayılır (mektup gitmez, özet yok)" 'if [ $KOS = 1 ] && [ $UYG = 1 ]; then' 'if false; then'
+mut "M9 --kos tek başına da mektup gönderir (açık bayrak kalkar)" '[ $KOS = 1 ] && [ $UYG = 1 ]; then' '[ $KOS = 1 ]; then'
 echo; [ $r = 0 ] && echo "MUTASYON: hepsi ölçüldü" || echo "MUTASYON: en az biri ölçülmedi/yeşil kaldı"; exit $r

@@ -1,7 +1,7 @@
 {
   "is": "gunluk-plan-kapsam",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-14T11:43:15+03:00",
+  "guncelleme": "2026-10-14T11:44:56+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -144,7 +144,54 @@
       "renk": "yesil",
       "zaman": "2026-10-14T11:43:15+03:00",
       "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-kapsam-15",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-kapsam-15-sonra.txt",
+      "sha256": "875fbea12e0e741c9198062d6b9a7d06c2605d512e9eb73d3ab33fc06b3d09d8",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/kapsam.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-14T11:44:54+03:00",
+      "sure_sn": 0.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-1-9",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-1-9-sonra.txt",
+      "sha256": "695764d59d0174b236087eefa990c45ee553c9f43ba376222c508a56cae6921f",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/gunluk-plan-kapsam/mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-14T11:44:56+03:00",
+      "sure_sn": 1.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "lint-sema-d",
+      "asama": "sonra",
+      "dosya": "olcum-lint-sema-d-sonra.txt",
+      "sha256": "3c90038e97b83a8e82d9ee1e4b19265bf0b316dff229c8becb021cd2862404a8",
+      "komut": [
+        "node",
+        "ahi/schema/validate-repo.mjs",
+        ".",
+        "--strict"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-14T11:44:56+03:00",
+      "sure_sn": 0.0
     }
   ],
-  "imza": "4548f5c56038c66419d750da3ca2fb4cd33ba57d8f5a67c9a659fc5d7967b389"
+  "imza": "314d5159439af8169d9cf38df442c559b59b36e4e61e11c1ada0b4667034790b"
 }

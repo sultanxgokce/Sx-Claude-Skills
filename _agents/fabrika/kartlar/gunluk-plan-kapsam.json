@@ -15,5 +15,14 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": []
+  "gecmis": [],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "BANI",
+      "oturum": "denetçi tur 3 · 2026-10-14 18:2x",
+      "gerekce": "Bulgu 3→1→1, son bulgu kartın 'tüm filo → --uygula + özet' zincirinin tek kapıdan koşması; eklendi: kapsam.sh --kos --uygula (mektup gönderme açık bayrak, ardından ilk özet) + K8-K8d + M8-M9. 4. tur bu kapsamla.",
+      "zaman": "2026-10-14T11:44:41+03:00"
+    }
+  ]
 }

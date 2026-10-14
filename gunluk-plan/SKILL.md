@@ -50,8 +50,10 @@ Karar koddadır, metinde değil: **`bash scripts/kapsam.sh [<argüman>]`** → `
 | her yer | başka bir şey | rc 2 — kapsam uydurulmaz |
 
 Merkezde çağrı: **`bash scripts/kapsam.sh --kos [<argüman>]`** — SOR ise soruyu sorar (yukarıdaki iki şık), cevabı argüman olarak yeniden
-çağırırsın; filo ise PLAN komutunu da koşturur (hiçbir mektup gitmez). Göndermek (`--uygula`) ve özet SERDAR'ın açık adımlarıdır, kendiliğinden koşmaz.
-Sınavı: `bash scripts/kapsam.test.sh` (K1-K7c, hermetik; merkez/kutu ayrımı ve zincirin icrası sahte filo.sh ile).
+çağırırsın; filo ise PLAN komutunu koşturur (hiçbir mektup gitmez). **Tam zincir** — mektuplar reislere gider ve ilk özet alınır —
+`bash scripts/kapsam.sh --kos --uygula tüm filo`: `--uygula` açık bayraktır (mektup göndermek bir eylemdir; Sultan/SERDAR "tüm filo" dedikten
+sonra bu bayrakla koşulur). Dönüşler zille geldikçe `gunluk-plan-ozet` yeniden koşturulur.
+Sınavı: `bash scripts/kapsam.test.sh` (K1-K8d, hermetik; merkez/kutu ayrımı ve zincirin icrası sahte filo.sh ile).
 
 **"tüm filo" seçilince — yeni kanal YOK, iki mevcut komut:**
 ```bash
