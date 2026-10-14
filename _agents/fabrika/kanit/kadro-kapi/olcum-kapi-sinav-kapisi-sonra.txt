@@ -1,5 +1,5 @@
 $ bash terminal-onar/kapi/kapi-sinav.test.sh
-# rc=0 sure=6.4s zaman=2026-10-15T00:57:52+03:00
+# rc=0 sure=6.3s zaman=2026-10-15T01:02:42+03:00
 --- stdout ---
 ── kadro birleşimi (kadro.test.mjs)
 ── A · kayıt ayrıştırma
@@ -10,6 +10,7 @@ $ bash terminal-onar/kapi/kapi-sinav.test.sh
 ── B · kayıt dosyaları (İSKÂN + işaretli ekip kaydı · merkez aile kaydı · hiç yok)
   ✓ B1 iki kaynak okundu (iskan + işaretli ekip kaydı)
   ✓ B2 tmux İSKÂN kaydından (ilk kaynak kazanır), rol/mod/hal ekip kaydından
+  ✓ B2b ÇATIŞMADA alan önceliği: tmux İSKÂN'dan kalır, rol/hal ekip kaydı ÜSTÜNE yazar ("bayat rol"/emekli → "başkâtip"/calisiyor) (göz tur 3)
   ✓ B3 yalnız ekip kaydında olan üye de kadroda
   ✓ B4 merkez: aile kaydı tek kaynak
   ✓ B5 kayıt yok → kaynak boş, üye boş (uydurma yok)
@@ -29,7 +30,7 @@ $ bash terminal-onar/kapi/kapi-sinav.test.sh
 ── D · okunamayan kayıt dosyası
   ✓ D1 var olan ama okunamayan kayıt → okunamadi dolu, kaynak boş (sessiz boş kadro yok; uç 500 verir)
 
-SONUÇ: 22 geçti · 0 kaldı
+SONUÇ: 23 geçti · 0 kaldı
 ── kapı birim sınavı (sunucu.test.mjs)
 
 ── T · TABAN YOLU (kapı /sedir altında) ──

@@ -309,7 +309,8 @@ ile kutunun personel **kaydını** canlı **koltuklarla** birleştirir (`kapi/ka
 
 **Kayıt alanı `hal:`** (önkoşul 1): `calisiyor | gecici | yedek | emekli`; alanı olmayan kişi `bilinmiyor` görünür — hiçbir şey
 uydurulmaz; 40 kişiyi "düştü" diye kırmızı basmak yalan alarm olurdu. Kayıt TEK kalır, ikinci liste açılmaz. Kayıt dosyaları
-koltuk-ac.sh ile aynı sırada: İSKÂN kutusu `iskan-registry.yaml` (id/tmux) + işaret ettiği `ekip-registry.yaml` (rol/mod/hal);
+koltuk-ac.sh ile aynı sırada: İSKÂN kutusu `iskan-registry.yaml` (id/tmux) + işaret ettiği `ekip-registry.yaml` (rol/mod/hal — çatışmada
+ekip kaydı üstün, tmux İSKÂN'dan);
 merkez `_agents/handoff/aile-registry.yaml` (önkoşul 3: merkez kadrosu da aynı uçtan). Proje dizini `TO_PROJE` ya da
 `/config/projects/<kutu>` (ortak.sh kuralı). Koltuk listesi ölçülemezse 500 — uydurma kadro yok. Çizim ve eylemler (kaldır ·
 bağla · emekli et · personel al) merkez ekranında ve ayrı uçlarda (E1-E4, cloudtop).

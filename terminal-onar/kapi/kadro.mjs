@@ -35,13 +35,17 @@ export function kayitAyristir(metin) {
   return uyeler;
 }
 
-// id'ye göre birleştir: ilk kaynak tmux'u, sonraki kaynaklar boş alanları doldurur (rol/mod/hal ekip kaydından gelir).
+// id'ye göre birleştir. ÖNCELİK ALANA GÖRE (göz tur 3): `tmux` İLK kaynaktan (İSKÂN doğum kaydı canlı oturumu bilir);
+// rol · mod · hal · durum · arz_adi · cwd SONRAKİ kaynaktan (ekip kaydı kimliği/hâli bilir) — dolu geldiyse ÜSTÜNE yazar.
+// Eski "yalnız boşu doldur" kuralı İSKÂN'daki bayat rol/hâl'i ekip kaydının önüne geçiriyordu.
+const ILK_KAZANIR = new Set(['tmux']);
 function birlestir(listeler) {
   const h = new Map();
   for (const l of listeler) for (const u of l) {
     const k = u.id; if (!k) continue;
     if (!h.has(k)) { h.set(k, { ...u }); continue; }
-    const v = h.get(k); for (const [a, b] of Object.entries(u)) if (b && !v[a]) v[a] = b;
+    const v = h.get(k);
+    for (const [a, b] of Object.entries(u)) { if (!b) continue; if (ILK_KAZANIR.has(a)) { if (!v[a]) v[a] = b; } else v[a] = b; }
   }
   return [...h.values()];
 }

@@ -17,12 +17,13 @@ kapi('A4 HAL_KAYIT kapalı küme: calisiyor gecici yedek emekli', HAL_KAYIT.join
 console.log('── B · kayıt dosyaları (İSKÂN + işaretli ekip kaydı · merkez aile kaydı · hiç yok)');
 const T = mkdtempSync(join(tmpdir(), 'kadro-'));
 const iskan = join(T, 'iskan'); mkdirSync(join(iskan, '_agents/handoff'), { recursive: true });
-writeFileSync(join(iskan, 'iskan-registry.yaml'), `proje: iskan\nekip_registry_pointer: _agents/handoff/ekip-registry.yaml\nuyeler:\n  - id: REIS\n    tmux: "cc-aee5:0"\n    cwd: /x\n  - id: KATIP\n    tmux: "katip:0"\n`);
+writeFileSync(join(iskan, 'iskan-registry.yaml'), `proje: iskan\nekip_registry_pointer: _agents/handoff/ekip-registry.yaml\nuyeler:\n  - id: REIS\n    tmux: "cc-aee5:0"\n    cwd: /x\n    rol: "bayat rol"\n    hal: emekli\n  - id: KATIP\n    tmux: "katip:0"\n`);
 writeFileSync(join(iskan, '_agents/handoff/ekip-registry.yaml'), `uyeler:\n  - id: REIS\n    tmux: "reis:0"\n    mod: motor\n    rol: "başkâtip"\n    hal: calisiyor\n  - id: KATIP\n    mod: kod\n    rol: "kâtip"\n    hal: gecici\n  - id: YALNIZ_EKIPTE\n    tmux: "ye:0"\n    rol: "ekipte var iskanda yok"\n`);
 const b = kayitOku(iskan);
 kapi('B1 iki kaynak okundu (iskan + işaretli ekip kaydı)', b.kaynak.length === 2 && b.kaynak[0].endsWith('iskan-registry.yaml') && b.kaynak[1].endsWith('ekip-registry.yaml'), JSON.stringify(b.kaynak));
 const reis = b.uyeler.find((u) => u.id === 'REIS'), katip = b.uyeler.find((u) => u.id === 'KATIP');
 kapi('B2 tmux İSKÂN kaydından (ilk kaynak kazanır), rol/mod/hal ekip kaydından', reis.tmux === 'cc-aee5:0' && reis.rol === 'başkâtip' && reis.mod === 'motor' && katip.tmux === 'katip:0' && katip.hal === 'gecici', JSON.stringify(b.uyeler));
+kapi('B2b ÇATIŞMADA alan önceliği: tmux İSKÂN\'dan kalır, rol/hal ekip kaydı ÜSTÜNE yazar ("bayat rol"/emekli → "başkâtip"/calisiyor) (göz tur 3)', reis.tmux === 'cc-aee5:0' && reis.rol === 'başkâtip' && reis.hal === 'calisiyor' && reis.cwd === '/x', JSON.stringify(reis));
 kapi('B3 yalnız ekip kaydında olan üye de kadroda', !!b.uyeler.find((u) => u.id === 'YALNIZ_EKIPTE'));
 const merkez = join(T, 'merkez'); mkdirSync(join(merkez, '_agents/handoff'), { recursive: true }); writeFileSync(join(merkez, '_agents/handoff/aile-registry.yaml'), AILE);
 const c = kayitOku(merkez);

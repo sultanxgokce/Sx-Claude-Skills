@@ -1,5 +1,5 @@
 $ node terminal-onar/kapi/sunucu.test.mjs
-# rc=0 sure=6.3s zaman=2026-10-15T00:57:45+03:00
+# rc=0 sure=6.3s zaman=2026-10-15T01:02:36+03:00
 --- stdout ---
 
 ── T · TABAN YOLU (kapı /sedir altında) ──

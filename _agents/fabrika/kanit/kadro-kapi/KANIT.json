@@ -1,36 +1,36 @@
 {
   "is": "kadro-kapi",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T00:57:52+03:00",
+  "guncelleme": "2026-10-15T01:02:42+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "kadro-sinavi",
       "asama": "sonra",
       "dosya": "olcum-kadro-sinavi-sonra.txt",
-      "sha256": "84b923341b700e17a59f4278d33db17c78ffd0910cb3b7ee94f301be23e73c4b",
+      "sha256": "4fe00244ee1b4501de184c28a96320a8ecd56b0dc9d6d80ccb68bf27bf24e51b",
       "komut": [
         "node",
         "terminal-onar/kapi/kadro.test.mjs"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-15T00:57:39+03:00",
-      "sure_sn": 0.1
+      "zaman": "2026-10-15T01:02:30+03:00",
+      "sure_sn": 0.0
     },
     {
       "tur": "olcum",
       "etiket": "sunucu-sinavi",
       "asama": "sonra",
       "dosya": "olcum-sunucu-sinavi-sonra.txt",
-      "sha256": "7640d594c6a2cfd45cd2cab563f4f6447173cadf5e3475ce20718722b37a06d2",
+      "sha256": "52ea7a1222a80c9168d678dfd23876a791042a6a6fb57e70d747928389fdf180",
       "komut": [
         "node",
         "terminal-onar/kapi/sunucu.test.mjs"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-15T00:57:45+03:00",
+      "zaman": "2026-10-15T01:02:36+03:00",
       "sure_sn": 6.3
     },
     {
@@ -38,15 +38,15 @@
       "etiket": "kapi-sinav-kapisi",
       "asama": "sonra",
       "dosya": "olcum-kapi-sinav-kapisi-sonra.txt",
-      "sha256": "3159db3dba7025980b82f104ada38fcde3132f8e2274cfebf91ce6d036018e19",
+      "sha256": "b510beefa1360c9beea12a2ca44823fdc86e7593e1173d6c8cb35dfda05ec255",
       "komut": [
         "bash",
         "terminal-onar/kapi/kapi-sinav.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-15T00:57:52+03:00",
-      "sure_sn": 6.4
+      "zaman": "2026-10-15T01:02:42+03:00",
+      "sure_sn": 6.3
     },
     {
       "tur": "olcum",
@@ -70,5 +70,5 @@
       "sure_sn": 0.5
     }
   ],
-  "imza": "7ed9bdaa40113b8697aa960d832ad1682051feaca526273260c59590b981ed11"
+  "imza": "99b45fee73749733b74f40883abbbad8c9fcdce6b2ab54d162b930168847a987"
 }
