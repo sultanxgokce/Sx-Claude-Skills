@@ -296,7 +296,8 @@ mutasyon: eski `ortak.sh` ile 7 kapı kırmızı.
 ## Sürüm notları
 - **2.7.0 (2026-10-15, BÂNİ · Sultan eki 15 Eki 20:40 — 5. hâl):** koltuk hâline **⏳ `dis-olay` "dış olay bekliyor"**: yazı kutusu boş ama
   ekranda "N shells running" ya da "bekleniyor / bildirim gelince / CI … bekl" kalıbı → ajan çalışıyor sanılmaz, boşta da sayılmaz.
-  `--liste` 6. sütun: ne beklediği (yalnız bu hâlde; rozet üstüne gelince). Öncelik: soru > çalışıyor > sınırda > girdi > dış olay > boş.
+  `--liste` 6. sütun: ne beklediği (yalnız bu hâlde) — **bu beceri yalnız ÖLÇER ve veriyi kapıya verir; görünür çizim (⏳ ikon,
+  üstüne gelince "ne bekliyor") terminal-merkez şeridindedir (cloudtop #621), bu PR'ın kapsamı değildir.** Öncelik: soru > çalışıyor > sınırda > girdi > dış olay > boş.
   `kapi/koltuklar.mjs` `ne` alanını taşır. Sınav: koltuk-bagla D1 (6 alan) · D13a-d. Boş kutu ölçümünde U+00A0 boşluk sayılır.
 - **2.6.1 (2026-10-15, BÂNİ · SERDAR bulgu paketi 3 tekiller S-11 + S-7):** `kur.sh` ortak.sh kutu adını reddedince tek satır
   sebeple durur (rc 3; eskiden 'TTYD_BIN: unbound variable'). Yerel kopya ortak koddan FARKLIYSA bağlama DURUR ve farkı listeler
