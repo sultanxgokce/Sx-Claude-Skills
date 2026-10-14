@@ -1,5 +1,5 @@
 // kadro.test.mjs — kayıt ⟂ koltuk birleşimi (hermetik: fikstür metin + geçici dizin; tmux yok, ağ yok)
-import { mkdtempSync, writeFileSync, mkdirSync, rmSync, chmodSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { kayitAyristir, kayitOku, kadroBirlestir, HAL_KAYIT } from './kadro.mjs';
@@ -54,9 +54,9 @@ kapi('C11 aynı tmux iki kayıtta: oturum İLKİNE bağlanır, ikincisi oturumsu
 const r4 = kadroBirlestir({ uyeler: kayitAyristir(`uyeler:\n  - id: YIL\n    tmux: "2026:0"\n  - id: ONYEDI\n    tmux: "17:0"\n`), koltuklar: koltukSatirlari('20\t1\t1\tajan\tbos\t\n2026\t2\t1\tajan\tbos\t\n'), ana: '' });
 kapi('C12 sayısal adlar kırpılmaz: "2026:0" yalnız "2026"a bağlanır, "17" hiçbir koltuğa; "20" kayıtsız kalır (göz tur 1)', r4.kisiler[0].oturum && r4.kisiler[0].oturum.ad === '2026' && r4.kisiler[1].oturum === null && r4.kayitsiz.length === 1 && r4.kayitsiz[0].ad === '20', JSON.stringify(r4));
 console.log('── D · okunamayan kayıt dosyası');
-const kilit = join(T, 'kilit'); mkdirSync(join(kilit, '_agents/handoff'), { recursive: true }); writeFileSync(join(kilit, '_agents/handoff/aile-registry.yaml'), AILE); chmodSync(join(kilit, '_agents/handoff/aile-registry.yaml'), 0o000);
+// kayıt YOLU var ama okunamıyor: dosya yerine DİZİN (EISDIR) — root dahil her kullanıcıda deterministik (göz tur 2: chmod 000 root'ta işlemiyordu)
+const kilit = join(T, 'kilit'); mkdirSync(join(kilit, '_agents/handoff/aile-registry.yaml'), { recursive: true });
 const e = kayitOku(kilit);
-kapi('D1 var olan ama okunamayan kayıt → okunamadi dolu, kaynak boş (sessiz boş kadro yok; uç 500 verir)', process.getuid && process.getuid() === 0 ? true : (e.okunamadi.length === 1 && e.kaynak.length === 0 && e.uyeler.length === 0), JSON.stringify(e));
-chmodSync(join(kilit, '_agents/handoff/aile-registry.yaml'), 0o600);
+kapi('D1 var olan ama okunamayan kayıt → okunamadi dolu, kaynak boş (sessiz boş kadro yok; uç 500 verir)', e.okunamadi.length === 1 && e.kaynak.length === 0 && e.uyeler.length === 0, JSON.stringify(e));
 rmSync(T, { recursive: true, force: true });
 console.log(`\nSONUÇ: ${g} geçti · ${k} kaldı`); process.exit(k ? 1 : 0);

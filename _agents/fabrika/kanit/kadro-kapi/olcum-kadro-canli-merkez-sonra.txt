@@ -1,7 +1,7 @@
-$ node /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/kadro-canli.mjs
-# rc=0 sure=0.5s zaman=2026-10-15T00:49:54+03:00
+$ node terminal-onar/kapi/kadro-canli.mjs --kutu code --proje /config/projects/Nexus --ana code-ana
+# rc=0 sure=0.5s zaman=2026-10-15T00:57:52+03:00
 --- stdout ---
-kaynak: /config/projects/Nexus/_agents/handoff/aile-registry.yaml
+kutu: code · proje: /config/projects/Nexus · kaynak: /config/projects/Nexus/_agents/handoff/aile-registry.yaml
 sayilar: {"calisan":10,"dusen":0,"kayitta-var-calismiyor":6,"gecici-emekli":0,"kayitsiz":4}
 calisan                  SERDAR       rol=motor/governance/ölçüm gelişti hal_kayit=bilinmiyor oturum=serdar/bos
 kayitta-var-calismiyor   UISERDAR     rol=Nexus ui/ Agentic-OS panelleri hal_kayit=bilinmiyor oturum=-

@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "kadro-kapi",
+  "pr": "319",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T00:55:04+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 79276,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, iki önceki uygulama kusuru giderilmiş; /api/kadro kayıt ile canlı koltukları istenen gruplara ayırıyor, okunamayan kaydı hata yapıyor ve sayısal adları kırpmıyor. Ana iş doğru, fakat okunamayan-dosya sınavı root altında iddiayı hiç ölçmeden yeşile dönebildiği ve canlı ölçüm kalıcı betikten üretilmediği için üretime hazır damgasından önce kanıt düzeneği düzeltilmeli.",
+    "bulgular": [
+      {
+        "ne": "Okunamayan kayıt dosyası davranışını doğrulayan iki sınav root kullanıcısında koşulsuz başarı veriyor; bu ortamda 500 davranışı bozulsa bile sınav yeşil kalabilir.",
+        "kanit": "D1 koşulu process.getuid() === 0 olduğunda doğrudan true; KD7 koşulu da aynı durumda HTTP durumunu ve hata metnini denetlemeden geçiyor. Sunulan yeşil çıktılar bu dalların gerçekten sınandığını göstermiyor.",
+        "konum": "terminal-onar/kapi/kadro.test.mjs:D1; terminal-onar/kapi/sunucu.test.mjs:KD7",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Depoya eklenen canlı ölçüm betiği, manifestte çalıştırılan betik değil ve geçici çalışma ağacına gömülü mutlak yollar taşıyor; kanıt yeniden üretilebilir değil.",
+        "kanit": "Manifest komutu /tmp/claude-1000/.../scratchpad/kadro-canli.mjs çağırıyor; eklenen kadro-canli-olcum.mjs ise /config/projects/_wt/Sx-Claude-Skills-kadro-kapi/... yollarını kullanıyor. Dolayısıyla araç imzalı çıktı, diffteki kalıcı ölçüm dosyasının çalıştığını kanıtlamıyor.",
+        "konum": "KANIT.json:kadro-canli-merkez komutu; _agents/fabrika/kanit/kadro-kapi/kadro-canli-olcum.mjs:1-4",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok; 22/22 kadro ve 98/98 kapı sonuçları ile gerçek merkez verili bir sonra ölçümü var. Ancak önce/sonra ölçüm çifti bulunmuyor; ayrıca okunamayan-dosya kontrolleri root altında etkisiz ve canlı ölçüm manifestte depodaki kalıcı betik yerine scratchpad betiğine bağlı."
+  }
+}
