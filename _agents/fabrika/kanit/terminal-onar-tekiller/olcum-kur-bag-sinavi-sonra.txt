@@ -1,0 +1,5 @@
+$ env ESKI=0 bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mutasyon-sx2.sh
+# rc=0 sure=0.7s zaman=2026-10-14T21:39:59+03:00
+--- stdout ---
+SONUÇ: 49 geçti · 0 kaldı
+--- stderr ---

@@ -66,19 +66,29 @@ rc=$(kur "$ORTAK/scripts/kur.sh")
 kapi "B9 kırık bağ onarılır (hata verip durmaz)" "$ORTAK" "$(hedef)"
 kapi "B9b rc=0" "0" "$rc"
 
-echo "── proje yolunda GERÇEK eski kopya (dizin)"
+echo "── proje yolunda GERÇEK eski kopya (dizin) · S-7: FARKLIYSA bağlama DURUR, bilinçli kabulle kenara alınır"
 rm -f "$BAG"; mkdir -p "$BAG/scripts"; echo eski > "$BAG/scripts/eski.txt"
 rc=$(kur "$ORTAK/scripts/kur.sh")
-kapi "B10 eski kopya kenara alınır, bağ kurulur" "$ORTAK" "$(hedef)"
+kapi "S7a yerel kopya ortak koddan farklı → kurulum DURUR rc 8, bağ kurulmaz, kopya yerinde" "8|dizin|1" "$rc|$([ -L "$BAG" ] && echo bağ || echo dizin)|$(test -f "$BAG/scripts/eski.txt" && echo 1 || echo 0)"
+kapi "S7b fark LİSTELENİR (hangi dosya) — alarm değil soru" "1" "$(grep -c 'eski.txt' "$T/son")"
+kapi "S7c .eski-* yedeği AÇILMADI (dokunulmadı)" "0" "$(ls -d "$BAG".eski-* 2>/dev/null | wc -l | tr -d ' ')"
+rc=$(TERMINAL_KUR_FARK_KABUL=1 kur "$ORTAK/scripts/kur.sh")
+kapi "B10 bilinçli kabulle eski kopya kenara alınır, bağ kurulur" "$ORTAK" "$(hedef)"
 kapi "B10b eski kopya silinmedi (.eski-* altında)" "1" "$(ls -d "$BAG".eski-* 2>/dev/null | wc -l | tr -d ' ')"
 kapi "B10c rc=0" "0" "$rc"
 eski1="$(ls -d "$BAG".eski-* | head -1)"
 rm -f "$BAG"; mkdir -p "$BAG/scripts"; echo eski2 > "$BAG/scripts/eski2.txt"      # AYNI GÜN ikinci eski kopya
-rc=$(kur "$ORTAK/scripts/kur.sh")
+rc=$(TERMINAL_KUR_FARK_KABUL=1 kur "$ORTAK/scripts/kur.sh")
 kapi "B10d aynı gün ikinci eski kopya AYRI yedeğe alınır (iki .eski-*, iç içe değil)" "2" "$(ls -d "$BAG".eski-* 2>/dev/null | wc -l | tr -d ' ')"
 kapi "B10e ilk yedeğin içine taşınmadı (ilk yedek yalnız kendi dosyasını taşır)" "1" "$(find "$eski1" -type f | wc -l | tr -d ' ')"
 kapi "B10f ikinci yedeğin içeriği kendi dosyası" "1" "$(n=$(find "$BAG".eski-* -name eski2.txt | wc -l | tr -d ' '); echo "$n")"
 kapi "B10g bağ yine doğru hedefte, rc=0" "$ORTAK:0" "$(hedef):$rc"
+
+echo "── S-11 · kutu adı reddedilince kur.sh tek satır sebeple DURUR (revak 13 Eki: 'TTYD_BIN: unbound variable' ile düşüyordu)"
+MK="$T/mk/0ee2fa8a0370/.claude/skills/terminal-onar"; mkdir -p "$MK"; cp -r "$KOK/scripts" "$MK/"
+o=$(env -u TO_KUTU -u TO_PROJE HOME="$T" bash "$MK/scripts/kur.sh" 2>&1); rc=$?
+kapi "S11a makine-kimliği yolundan TO_KUTU'suz → rc 3" "3" "$rc"
+kapi "S11b sebep tek satır ('TO_KUTU' geçer), 'unbound variable' YOK" "1|0" "$(echo "$o" | grep -c 'kurulum durdu: kutu adı')|$(echo "$o" | grep -c 'unbound variable')"
 
 echo "── proje yolunda beklenmedik DÜZ DOSYA: silinmez, kurulum durur (fail-closed)"
 rm -f "$BAG"; echo "beklenmedik" > "$BAG"
