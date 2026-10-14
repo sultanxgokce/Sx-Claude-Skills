@@ -27,6 +27,8 @@ case "$k" in
   filo) echo "KOMUT_PLAN=bash $FILO_SH gunluk-plan --hepsi"; echo "KOMUT_UYGULA=bash $FILO_SH gunluk-plan --hepsi --uygula"; echo "KOMUT_OZET=bash $FILO_SH gunluk-plan-ozet"
         if [ $KOS = 1 ] && [ $UYG = 1 ]; then
           echo "── UYGULA (mektuplar reislere gidiyor) ──"; bash "$FILO_SH" gunluk-plan --hepsi --uygula; rc=$?
-          echo "── İLK ÖZET (dönüşler geldikçe yeniden: KOMUT_OZET) ──"; bash "$FILO_SH" gunluk-plan-ozet; exit $rc
+          echo "── İLK ÖZET (dönüşler geldikçe yeniden: KOMUT_OZET) ──"; bash "$FILO_SH" gunluk-plan-ozet; rc2=$?
+          # zincirin çıkış kodu İKİ adımın en kötüsü: özet düşerse "başarılı" görünmez (bağımsız göz tur 4)
+          [ $rc2 -gt $rc ] && rc=$rc2; [ $rc -ne 0 ] && echo "⚠ zincir tam başarılı değil (uygula/özet rc=$rc) — Sultan'a tek özet VERİLEMEDİ, yeniden: KOMUT_OZET" >&2; exit $rc
         elif [ $KOS = 1 ]; then echo "── PLAN (koşturuldu, hiçbir mektup gitmedi; göndermek: --kos --uygula) ──"; bash "$FILO_SH" gunluk-plan --hepsi; exit $?; fi ;;
 esac

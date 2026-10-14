@@ -1,0 +1,18 @@
+$ bash _agents/fabrika/kanit/gunluk-plan-kapsam/mutasyon.sh
+# rc=0 sure=1.8s zaman=2026-10-14T11:46:26+03:00
+--- stdout ---
+  ✓ pozitif kontrol: bozulmamış kopyada YEŞİL
+  ✓ öz-sınav: olmayan desen reddedildi
+  ✓ M1 merkezde soru sorulmaz (varsayılan filo) → sınav kırmızı
+  ✓ M2 kutuda da soru sorulur → sınav kırmızı
+  ✓ M3 kutuda tüm filo kabul edilir → sınav kırmızı
+  ✓ M4 tanınmayan argüman kutu sayılır (uydurma kapsam) → sınav kırmızı
+  ✓ M5 filo seçiminde özet komutu verilmez → sınav kırmızı
+  ✓ M6 --kos planı koşturmaz (karar yazılır, zincir kopar) → sınav kırmızı
+  ✓ M7 --kos uygula da koşturur (SERDAR adımı atlanır) → sınav kırmızı
+  ✓ M8 --uygula bayrağı yok sayılır (mektup gitmez, özet yok) → sınav kırmızı
+  ✓ M9 --kos tek başına da mektup gönderir (açık bayrak kalkar) → sınav kırmızı
+  ✓ M10 özet düşünce zincir yine başarılı çıkar → sınav kırmızı
+
+MUTASYON: hepsi ölçüldü
+--- stderr ---

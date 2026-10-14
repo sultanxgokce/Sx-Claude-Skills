@@ -20,4 +20,6 @@ o=$(M --kos --uygula tüm filo 2>&1); r=$?; ok "K8 --kos --uygula ile filo: mekt
 o=$(M --uygula --kos tüm filo 2>&1); r=$?; ok "K8b bayrak sırası fark etmez" '[ $r -eq 0 ] && [[ "$o" == *"--hepsi --uygula"* ]]'
 o=$(M --uygula tüm filo 2>&1); r=$?; ok "K8c --uygula tek başına (--kos yok) hiçbir şey koşturmaz: yalnız karar" '[ $r -eq 0 ] && [[ "$o" != *sahte-filo* ]] && [[ "$o" == *"KAPSAM=filo"* ]]'
 o=$(M --kos --uygula 2>&1); r=$?; ok "K8d argümansız merkezde --uygula olsa da SOR; hiçbir mektup gitmez" '[ $r -eq 0 ] && [[ "$o" == *"KAPSAM=SOR"* ]] && [[ "$o" != *sahte-filo* ]]'
+printf '#!/bin/bash\necho sahte-filo "$@"; case "$*" in *ozet*) exit 1;; esac\n' > "$T/filo-ozet-duser.sh"; chmod +x "$T/filo-ozet-duser.sh"
+o=$(GUNLUK_PLAN_FILO_SH="$T/filo-ozet-duser.sh" bash "$K" --kos --uygula tüm filo 2>&1); r=$?; ok "K8e uygula geçip ÖZET düşerse zincir rc≠0 ve söylenir (sahte yeşil yok)" '[ $r -ne 0 ] && [[ "$o" == *"tek özet VERİLEMEDİ"* ]]'
 echo "kapsam.test: $g geçti · $k kaldı"; [ $k -eq 0 ]

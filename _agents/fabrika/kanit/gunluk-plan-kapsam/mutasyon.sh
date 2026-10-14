@@ -18,4 +18,5 @@ mut "M6 --kos planı koşturmaz (karar yazılır, zincir kopar)" 'if [ $KOS = 1 
 mut "M7 --kos uygula da koşturur (SERDAR adımı atlanır)" 'bash "$FILO_SH" gunluk-plan --hepsi; exit $?; fi ;;' 'bash "$FILO_SH" gunluk-plan --hepsi --uygula; exit $?; fi ;;'
 mut "M8 --uygula bayrağı yok sayılır (mektup gitmez, özet yok)" 'if [ $KOS = 1 ] && [ $UYG = 1 ]; then' 'if false; then'
 mut "M9 --kos tek başına da mektup gönderir (açık bayrak kalkar)" '[ $KOS = 1 ] && [ $UYG = 1 ]; then' '[ $KOS = 1 ]; then'
+mut "M10 özet düşünce zincir yine başarılı çıkar" '[ $rc2 -gt $rc ] && rc=$rc2;' 'true;'
 echo; [ $r = 0 ] && echo "MUTASYON: hepsi ölçüldü" || echo "MUTASYON: en az biri ölçülmedi/yeşil kaldı"; exit $r
