@@ -1,7 +1,7 @@
 ---
 name: gunluk-plan
 description: Günün planı — elimizdeki işleri ÖLÇ, katma değer katacakları süz, Sultan-dilinde plan sun, onaydan sonra icra et. Sultan'ın her gün verdiği "işleri analiz et, bugün ne yapalım" isteğinin tek komutlu karşılığı.
-version: 1.3.1
+version: 1.4.0
 ---
 
 # /gunluk-plan — günün planı (ölç → süz → sun → icra)
@@ -30,6 +30,43 @@ bırakmaktır** — plan yalnız oraya giden yoldur.
    göstergesi bilir. Mekanik olarak güvence altına alınan şey **sıradır**: çıpa diskte
    değilse öneri aracı **üretmeyi reddeder** (çıkış 3). Yani "önce yaz, sonra öner"
    iyi niyete değil kapıya bağlıdır.
+
+## ADIM 0-a — KAPSAM: bu kutu mu, tüm filo mu? (yalnız MERKEZDE · S-15, Sultan 14 Ekim 2026)
+
+Sultan'ın bulgusu: SERDAR'da `/gunluk-plan` yalnız merkez kutunun planını çıkarıyordu; Sultan **filonun** gününü istiyor.
+Beceri **merkez kutuda** (SERDAR'ın koltuğu) çağrıldığında, ölçmeye başlamadan ÖNCE tek soru sorulur:
+
+> **"Bu kutu mu, tüm filo mu?"** — şıklar: `tüm filo (önerim)` · `bu kutu`
+
+Karar koddadır, metinde değil: **`bash scripts/kapsam.sh [<argüman>]`** → `KAPSAM=filo|kutu|SOR` (+ filo ise koşulacak komutlar). Kural:
+
+| Nerede | Argüman | Sonuç |
+|---|---|---|
+| merkez (filo motoru var) | yok | **SOR** — tek soru, iki şık: `tüm filo (önerim)` · `bu kutu` |
+| merkez | `tüm filo` / `filo` / `hepsi` | filo (soru yok) |
+| merkez | `bu kutu` / `kutu` / `kapanis` | kutu (soru yok) |
+| kutu (merkez değil) | yok / `bu kutu` / `kapanis` | kutu — soru **sorulmaz**, kutunun planı kendi işidir |
+| kutu | `tüm filo` | rc 2 — filo motoru yok, söylenir |
+| her yer | başka bir şey | rc 2 — kapsam uydurulmaz |
+
+Merkezde çağrı: **`bash scripts/kapsam.sh --kos [<argüman>]`** — SOR ise soruyu sorar (yukarıdaki iki şık), cevabı argüman olarak yeniden
+çağırırsın; filo ise PLAN komutunu koşturur (hiçbir mektup gitmez). **Tam zincir** — mektuplar reislere gider ve ilk özet alınır —
+`bash scripts/kapsam.sh --kos --uygula tüm filo`: `--uygula` açık bayraktır (mektup göndermek bir eylemdir; Sultan/SERDAR "tüm filo" dedikten
+sonra bu bayrakla koşulur). Dönüşler zille geldikçe `gunluk-plan-ozet` yeniden koşturulur.
+Sınavı: `bash scripts/kapsam.test.sh` (K1-K8d, hermetik; merkez/kutu ayrımı ve zincirin icrası sahte filo.sh ile).
+
+**"tüm filo" seçilince — yeni kanal YOK, iki mevcut komut:**
+```bash
+bash scripts/filo.sh gunluk-plan --hepsi            # PLAN: hangi kutuya hangi reis; reissiz kutu söylenir
+bash scripts/filo.sh gunluk-plan --hepsi --uygula   # her kutu reisine mektup: "kendi kutunda /gunluk-plan koş, tek satır dön"
+bash scripts/filo.sh gunluk-plan-ozet               # dönüşlerden Sultan'a TEK filo özeti (✅ döndü · ⏳ bekliyor · ⛔ tıkandı · ❓ soru · ⚠️ ölçülemedi)
+```
+(Nexus deposunda; komutlar `/filo` becerisinde de yazılı.) Her reis **kendi kutusunda bu beceriyi** koşar ve `donus.sh <no> bitti "<tek satır>"`
+ile döner; dönüş zili SERDAR'ı uyandırır. Aynı gün aynı kutuya ikinci mektup gitmez (parti = tarih).
+
+**Sultan'a sunum:** merkez kendi planını da ADIM 1-3 ile çıkarır; filo özeti `gunluk-plan-ozet` çıktısıdır, **kutu başına bir satır, aynen**
+(reisin cümlesi düzeltilmez, uydurma madde eklenmez). Bekleyen kutu varsa "⏳ N kutu henüz dönmedi" denir; sonra `gunluk-plan-ozet` yeniden.
+🔴 Dürüst sınır: özet dönüşlerden gelir; dönmeyen kutunun planı YOKTUR, "herhalde şudur" yazılmaz. Mektup hedefte görülmediyse (⚠️) bu da söylenir.
 
 ## ADIM 0 — ÇIPAYI AÇ (plan sunulur sunulmaz, onay beklenmeden)
 
@@ -137,6 +174,8 @@ için **kapandı / yarım / açılmadı** basar ve yarım kalanı ertesi güne b
 plan bir dilek listesidir — ve çıpa olmadan kapanış **hafızadan** yazılır, yani bayattır.
 
 ## Sınırlar / dürüstlük
+- Filo kapsamı (ADIM 0-a) merkezde bir SORUDUR, bir varsayılan değil; "tüm filo" Sultan/SERDAR'ın seçimidir. Kararın kapısı bu becerinin
+  `scripts/kapsam.sh`'ında ve sınavı `scripts/kapsam.test.sh`'ta; mektup/dönüş/özet motorunun sınavı Nexus'ta (`scripts/filo.test.py` GP1-GP9 + mutasyon M46-M55).
 
 - Bu skill iş ÜRETMEZ, var olanı süzer. Ölçüm boşsa plan da boştur — uydurma madde yazma.
 - Süzme bir yargıdır, mekanik değil; gerekçesi her zaman yazılır ki ertesi gün tartışılabilsin.

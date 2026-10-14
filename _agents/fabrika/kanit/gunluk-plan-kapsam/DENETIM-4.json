@@ -1,0 +1,32 @@
+{
+  "tur": 4,
+  "is": "gunluk-plan-kapsam",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-14T11:45:39+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 31518,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, merkez/kutu kararı ile açık uygulama kapısı kurulmuş; tüm filo seçiminde mektup ve ilk özet zinciri de sahte motor ve mutasyonlarla ölçülmüş. Önce özet komutunun hatasını yutmayan dönüş davranışını tamamlayın; bu haliyle üretime hazır diyemem.",
+    "bulgular": [
+      {
+        "ne": "Uygulama başarılı olup `gunluk-plan-ozet` başarısız olduğunda komut yine başarı koduyla çıkıyor; böylece Sultan’a tek özet üretilememesi üst katmana bildirilmeden zincir başarılı görünebilir.",
+        "kanit": "Tam zincir dalında uygulamanın dönüş kodu `rc=$?` ile saklanıyor, ardından özet çalıştırılıyor ve en sonunda yalnız `exit $rc` kullanılıyor. K8 yalnız iki çağrının çıktıda bulunmasını ve toplam rc=0 olmasını sınıyor; özetin başarısız olduğu yol için sınav yok.",
+        "konum": "gunluk-plan/scripts/kapsam.sh:27; gunluk-plan/scripts/kapsam.test.sh:19; kanıt kaydı sinav-kapsam-15/K8",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Son işlev sınavı 15/15, mutasyon sınavı 9/9 yeşil; K8 ile uygulama ve özet çağrıları gerçekten sahte motor üzerinden görülüyor, M8-M9 da açık bayrak kapısını ölçüyor. Ancak yalnız “sonra” ölçümleri var, önce/sonra ölçüm çifti yok; ayrıca özet arızasının dönüş koduna yansıdığı ölçülmemiş."
+  }
+}

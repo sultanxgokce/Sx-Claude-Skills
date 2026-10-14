@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "gunluk-plan-kapsam",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-14T11:39:11+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 9456,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Sultan’ım, merkezde kapsam sorusu ve tüm filo komut akışı beceri metnine eklenmiş, sürüm kayıtları da güncellenmiş. Ancak iş kartının istediği sınav değişiklikte yok; sunulan yeşiller yalnız şema ve sürüm düzenini ölçüyor, davranışın gerçekten çalıştığını göstermiyor—önce sınavı ve davranış kanıtını tamamlayın.",
+    "bulgular": [
+      {
+        "ne": "Talep edilen davranış sınavı eklenmemiş; metin, Nexus’taki mevcut GP1-GP9 ve M46-M55 sınavlarına yalnız atıf yapıyor.",
+        "kanit": "Diffte değişen davranış dosyası gunluk-plan/SKILL.md ve eklenen karttır; hiçbir test dosyası değişikliği yoktur. SKILL.md içindeki “Motorun sınavı Nexus'ta (`scripts/filo.test.py` GP1-GP9 + mutasyon M46-M55)” ifadesi yeni akışın sınandığına dair ölçüm sunmaz.",
+        "konum": "gunluk-plan/SKILL.md:160",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Merkezde sorulması, kutu içinde sorulmaması ve “tüm filo” seçiminin uygulama ile özete bağlanması çalıştırılarak doğrulanmamış.",
+        "kanit": "Manifestte yalnız `validate-repo.mjs --strict` ve `version-lint.mjs` kayıtları vardır; çıktılar sırasıyla repo paritesi ile SKILL.md/sürüm tamlığını bildirir, GP1-GP9/M46-M55 veya gerçek kapsam yönlendirmesini çalıştırmaz.",
+        "konum": "kanıt kayıtları: lint-sema, lint-surum",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Argümanlı çağrı kuralı eksik tanımlanmış: metin argüman varsa soru sorulmayacağını söylüyor fakat yalnız “tüm filo” argümanının sonucunu tarif ediyor; merkezde `/gunluk-plan bu kutu` ve tanınmayan argümanların davranışı açık değil.",
+        "kanit": "“Argüman verilmişse soru sorulmaz: `/gunluk-plan tüm filo` → filo, `/gunluk-plan` (başka kutuda) → bu kutu” satırında merkezdeki `bu kutu` veya geçersiz argüman için eşleme bulunmuyor.",
+        "konum": "gunluk-plan/SKILL.md:42",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve iki kayıt yeşildir; sarı kayıt yoktur. Ancak kayıtlar yalnız şema/parite ve sürüm bütünlüğünü ölçüyor. İstenen davranışa ait gerçekçi önce/sonra kare, çağrı dizisi veya davranış ölçüm çifti bulunmadığından kapsam sorusu, filo uygulaması ve tek özet iddiaları kanıtsızdır."
+  }
+}

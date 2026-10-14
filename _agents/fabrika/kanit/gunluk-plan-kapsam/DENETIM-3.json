@@ -1,0 +1,32 @@
+{
+  "tur": 3,
+  "is": "gunluk-plan-kapsam",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-14T11:43:55+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 25334,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Sultan’ım, merkez/kutu ayrımı ile soru davranışı sağlam sınanmış; fakat “tüm filo” seçiminin kartta istenen uygulama ve özet zinciri bilerek çalıştırılmıyor. Önce bu akışı talebe uygun bağlayıp uygulama ile özet çağrılarını gerçek sahte motor üzerinden ölçün.",
+    "bulgular": [
+      {
+        "ne": "“Tüm filo” seçimi iş kartındaki `--uygula` ve ardından `gunluk-plan-ozet` akışını gerçekleştirmiyor; yalnız plansız-etkisiz önizleme komutunu çalıştırıyor ve kalan iki adımı SERDAR’a bırakıyor.",
+        "kanit": "Kart, “tüm filo” sonucunu `filo.sh gunluk-plan --hepsi --uygula` ve `filo.sh gunluk-plan-ozet` olarak isterken `kapsam.sh` içindeki `--kos` dalı yalnız `bash \"$FILO_SH\" gunluk-plan --hepsi` çalıştırıyor. K7 ölçümü de açıkça “uygula KOŞMAZ” sonucunu başarı kabul ediyor; uygulama ve özetin gerçekten çağrıldığı hiçbir sınav yok.",
+        "konum": "İş kartı `cumle`; gunluk-plan/scripts/kapsam.sh:23-24; gunluk-plan/scripts/kapsam.test.sh:16; kanıt kaydı sinav-kapsam-11/K7",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Son sınav 11/11 ve mutasyon 7/7 yeşil, ayrıca önceki kırmızı M4 açığının sonraki ölçümlerde kapandığı görülüyor; ancak bunlar talebe aykırı biçimde uygulamanın çalışmamasını başarı sayıyor. Önce/sonra ölçüm çifti ve istenen uygulama+mektup+özet zincirinin gerçekçi çağrı kaydı bulunmuyor."
+  }
+}
