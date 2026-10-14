@@ -109,7 +109,9 @@ koltuk_hali() {  # $1 = oturum → calisiyor|soru|sinirda|girdi|dis-olay|bos|bil
     # 5. HÂL — DIŞ OLAY BEKLİYOR (Sultan 15 Eki 20:40): yazı kutusu BOŞ ama ajan bir dış olayı bekliyor (CI, arka plan izleyici,
     #   zamanlayıcı). "çalışıyor" DEĞİL (esc to interrupt yok), "boşta" da değil — Sultan onu takılı sanmasın. Kaynak: Claude Code
     #   alt çubuğundaki "N shells running" ya da son mesajdaki bekleme kalıbı. Ne beklediği KH_NE'ye düşer (rozet üstüne gelince).
-    local ne; ne="$(printf '%s\n' "$ekran" | grep -iE '[0-9]+ (background )?shells?( still)? running|bekleniyor|bildirim gelince|CI [^ ]*bekl|bekleyici|arka plan(da)? (bekl|izl)|izleniyor' | tail -1 | sed 's/^[[:space:]]*//' | cut -c1-80)"
+    # 🔴 YALNIZ GÜNCEL iz (bağımsız göz tur 1): eski bir açıklama "bekleniyor" diyebilir; ölçü son 5 dolu satırdır (alt çubuk +
+    #    son mesajın kuyruğu). "N shells running" alt çubuk sinyalidir ve en güçlüsü; metin kalıpları da aynı pencerede aranır.
+    local ne; ne="$(printf '%s\n' "$ekran" | tail -n 5 | grep -iE '[0-9]+ (background )?shells?( still)? running|bekleniyor|bildirim gelince|CI [^ ]*bekl|bekleyici|arka plan(da)? (bekl|izl)|izleniyor' | tail -1 | sed 's/^[[:space:]]*//' | cut -c1-80)"
     if [ -n "$ne" ]; then KH_NE="$ne"; echo dis-olay; return; fi
     echo bos; return
   fi

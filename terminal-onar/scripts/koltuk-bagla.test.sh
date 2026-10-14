@@ -119,6 +119,10 @@ SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste5"
 { echo "❯ "; echo "  2 shells still running"; echo "⏺ Düşünüyor…"; echo "esc to interrupt"; } > "$S/ekran-BASIRET"
 SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste6"
 [ "$(grep -P '^BASIRET\t' "$S/liste6" | cut -f5)" = calisiyor ] && ok "D13d meşgul izi varken 'shells running' çalışıyor'u GİZLEMEZ (öncelik: çalışıyor > dış olay)" || bad D13d "$(grep -P '^BASIRET\t' "$S/liste6" | cut -f5)"
+# D13e: ESKİ bir "bekleniyor" (10 satır yukarıda) güncel boş istemi dış olay YAPMAZ — yalnız son 5 satır sayılır (bağımsız göz tur 1)
+{ echo "⏺ CI bekleniyor; bildirim gelince devam."; for i in $(seq 1 10); do echo "çıktı satırı $i"; done; echo "⏺ Bitti, kapattım."; echo "❯ "; } > "$S/ekran-BASIRET"
+SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste7"
+[ "$(grep -P '^BASIRET\t' "$S/liste7" | cut -f5)" = bos ] && ok "D13e eski 'bekleniyor' satırı (son 5 dışı) dış olay sayılmaz → boş" || bad D13e "$(grep -P '^BASIRET\t' "$S/liste7" | cut -f5)"
 printf '%s\n' maiset-ana BASIRET CARSI imglistener ttyd-maiset kapi-maiset maiset-kurtarici > "$S/oturumlar"; rm -f "$S"/ekran-*
 
 echo "C · liste (tek kaynak)"

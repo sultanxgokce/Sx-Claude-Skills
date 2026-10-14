@@ -1,14 +1,14 @@
 {
   "is": "koltuk-hal5",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T00:09:59+03:00",
+  "guncelleme": "2026-10-15T00:14:58+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "koltuk-bagla-sinavi",
       "asama": "once",
       "dosya": "olcum-koltuk-bagla-sinavi-once.txt",
-      "sha256": "a44b9adf99a58fa634f14a3b3ebaa926e0d0d290259abb9cc0e92acaf12f6ec0",
+      "sha256": "a66cb5717511380e8bf78143eeae795e537ddb086136448cd90e54cad972559f",
       "komut": [
         "env",
         "ESKI=1",
@@ -17,15 +17,15 @@
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-10-15T00:09:57+03:00",
-      "sure_sn": 1.7
+      "zaman": "2026-10-15T00:14:52+03:00",
+      "sure_sn": 2.4
     },
     {
       "tur": "olcum",
       "etiket": "koltuk-bagla-sinavi",
       "asama": "sonra",
       "dosya": "olcum-koltuk-bagla-sinavi-sonra.txt",
-      "sha256": "5f4a04f8e950851abf738d716662669ea7b70528b3884d7a41fec515b9032f40",
+      "sha256": "e319cfe6cd9bf7d29bd79a2d6a5d5dc25568ada5b0aee0d65454fe7a245c3a4c",
       "komut": [
         "env",
         "ESKI=0",
@@ -34,9 +34,9 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-15T00:09:59+03:00",
-      "sure_sn": 2.1
+      "zaman": "2026-10-15T00:14:58+03:00",
+      "sure_sn": 5.7
     }
   ],
-  "imza": "692fe83c4e21a5df2ced8df72f78279800e213d3b8133c3017e1ab08e10828a2"
+  "imza": "e4c130705a6de777ec4c5d5abbbeeeab3ffa0c9cc00326d9d13a6d113cb839f3"
 }
