@@ -38,8 +38,18 @@ Beceri **merkez kutuda** (SERDAR'ın koltuğu) çağrıldığında, ölçmeye ba
 
 > **"Bu kutu mu, tüm filo mu?"** — şıklar: `tüm filo (önerim)` · `bu kutu`
 
-Argüman verilmişse soru sorulmaz: `/gunluk-plan tüm filo` → filo, `/gunluk-plan` (başka kutuda) → bu kutu (eski akış).
-Kutu içinde (merkez değil) soru **sorulmaz**; kutunun planı kendi işidir.
+Karar koddadır, metinde değil: **`bash scripts/kapsam.sh [<argüman>]`** → `KAPSAM=filo|kutu|SOR` (+ filo ise koşulacak komutlar). Kural:
+
+| Nerede | Argüman | Sonuç |
+|---|---|---|
+| merkez (filo motoru var) | yok | **SOR** — tek soru, iki şık: `tüm filo (önerim)` · `bu kutu` |
+| merkez | `tüm filo` / `filo` / `hepsi` | filo (soru yok) |
+| merkez | `bu kutu` / `kutu` / `kapanis` | kutu (soru yok) |
+| kutu (merkez değil) | yok / `bu kutu` / `kapanis` | kutu — soru **sorulmaz**, kutunun planı kendi işidir |
+| kutu | `tüm filo` | rc 2 — filo motoru yok, söylenir |
+| her yer | başka bir şey | rc 2 — kapsam uydurulmaz |
+
+Sınavı: `bash scripts/kapsam.test.sh` (K1-K6, hermetik; merkez/kutu ayrımı sahte filo.sh ile).
 
 **"tüm filo" seçilince — yeni kanal YOK, iki mevcut komut:**
 ```bash
@@ -160,8 +170,8 @@ için **kapandı / yarım / açılmadı** basar ve yarım kalanı ertesi güne b
 plan bir dilek listesidir — ve çıpa olmadan kapanış **hafızadan** yazılır, yani bayattır.
 
 ## Sınırlar / dürüstlük
-- Filo kapsamı (ADIM 0-a) merkezde bir SORUDUR, bir varsayılan değil; "tüm filo" Sultan/SERDAR'ın seçimidir. Motorun sınavı Nexus'ta
-  (`scripts/filo.test.py` GP1-GP9 + mutasyon M46-M55); bu dosya yalnız akışı ve soruyu tanımlar.
+- Filo kapsamı (ADIM 0-a) merkezde bir SORUDUR, bir varsayılan değil; "tüm filo" Sultan/SERDAR'ın seçimidir. Kararın kapısı bu becerinin
+  `scripts/kapsam.sh`'ında ve sınavı `scripts/kapsam.test.sh`'ta; mektup/dönüş/özet motorunun sınavı Nexus'ta (`scripts/filo.test.py` GP1-GP9 + mutasyon M46-M55).
 
 - Bu skill iş ÜRETMEZ, var olanı süzer. Ölçüm boşsa plan da boştur — uydurma madde yazma.
 - Süzme bir yargıdır, mekanik değil; gerekçesi her zaman yazılır ki ertesi gün tartışılabilsin.

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# kapsam.test.sh — hermetik: merkez/kutu ayrımı sahte filo.sh ile; soru yalnız merkezde ve yalnız argümansız; tanınmayan argüman rc 2.
+set -u
+H="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"; T="$(mktemp -d)"; trap 'rm -r -- "$T"' EXIT
+printf '#!/bin/bash\necho sahte-filo "$@"\n' > "$T/filo.sh"; chmod +x "$T/filo.sh"
+g=0; k=0; ok(){ if eval "$2"; then g=$((g+1)); echo "  ✓ $1"; else k=$((k+1)); echo "  ✗ $1"; fi; }
+K="$H/kapsam.sh"; M(){ GUNLUK_PLAN_FILO_SH="$T/filo.sh" bash "$K" "$@"; }; U(){ GUNLUK_PLAN_FILO_SH="$T/yok.sh" bash "$K" "$@"; }
+o=$(M 2>&1); r=$?; ok "K1 merkezde argümansız → SOR (tek soru, iki şık, önerim tüm filo)" '[ $r -eq 0 ] && [[ "$o" == *"KAPSAM=SOR"* ]] && [[ "$o" == *"SORU=Bu kutu mu, tüm filo mu?"* ]] && [[ "$o" == *"tüm filo (önerim)|bu kutu"* ]]'
+o=$(U 2>&1); r=$?; ok "K2 kutuda argümansız → kutu, SORU YOK" '[ $r -eq 0 ] && [[ "$o" == *"KAPSAM=kutu"* ]] && [[ "$o" != *SORU* ]]'
+o=$(M tüm filo 2>&1); r=$?; ok "K3 merkezde 'tüm filo' → filo + üç komut (plan · uygula · özet) filo.sh'a bağlı" '[ $r -eq 0 ] && [[ "$o" == *"KAPSAM=filo"* ]] && [[ "$o" == *"gunluk-plan --hepsi"* ]] && [[ "$o" == *"--hepsi --uygula"* ]] && [[ "$o" == *"gunluk-plan-ozet"* ]] && [[ "$o" != *SORU* ]]'
+o=$(M "Tüm Filo" 2>&1); r=$?; ok "K3b büyük harf de tanınır" '[ $r -eq 0 ] && [[ "$o" == *"KAPSAM=filo"* ]]'
+o=$(M bu kutu 2>&1); r=$?; ok "K4 merkezde 'bu kutu' → kutu, soru yok, filo komutu yok" '[ $r -eq 0 ] && [[ "$o" == *"KAPSAM=kutu"* ]] && [[ "$o" != *KOMUT* ]]'
+o=$(M kapanis 2>&1); r=$?; ok "K4b 'kapanis' → kutu (gün sonu kendi kutusunun işi)" '[ $r -eq 0 ] && [[ "$o" == *"KAPSAM=kutu"* ]]'
+o=$(U tüm filo 2>&1); r=$?; ok "K5 kutuda 'tüm filo' → rc 2, söylenir (filo motoru yok)" '[ $r -eq 2 ] && [[ "$o" == *"yalnız merkezde"* ]]'
+o=$(M yarım filo 2>&1); r=$?; ok "K6 tanınmayan argüman → rc 2, kapsam UYDURULMAZ" '[ $r -eq 2 ] && [[ "$o" == *"tanınmayan kapsam"* ]] && [[ "$o" != *KAPSAM=* ]]'
+echo "kapsam.test: $g geçti · $k kaldı"; [ $k -eq 0 ]

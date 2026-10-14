@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# kapsam.sh — /gunluk-plan'ın İLK kararı: bu kutu mu, tüm filo mu? (S-15, Sultan 14 Ekim 2026). Beceri metni bunu çağırır; karar koddadır.
+#   bash kapsam.sh [<argüman…>]      → stdout: KAPSAM=filo|kutu|SOR  (+ filo ise koşulacak komutlar)   · rc 0 karar verildi · 2 tanınmayan argüman
+# Kural: argüman "tüm filo"|"filo"|"hepsi" → filo · "bu kutu"|"kutu"|"kapanis" → kutu · boş: MERKEZDE → SOR (tek soru: tüm filo (önerim) / bu kutu),
+#        kutuda → kutu (soru yok) · başka argüman → rc 2 (uydurma kapsam yok).
+# Merkez = filo motorunun bulunduğu kutu: $GUNLUK_PLAN_FILO_SH (varsayılan /config/projects/Nexus/scripts/filo.sh) çalıştırılabilirse.
+set -u
+FILO_SH="${GUNLUK_PLAN_FILO_SH:-/config/projects/Nexus/scripts/filo.sh}"
+merkez=0; [ -x "$FILO_SH" ] && merkez=1
+arg="$(printf '%s' "$*" | tr '[:upper:]' '[:lower:]' | sed 's/^ *//; s/ *$//')"
+case "$arg" in
+  "tüm filo"|"tum filo"|filo|hepsi) k=filo ;;
+  "bu kutu"|kutu|kapanis) k=kutu ;;
+  "") if [ $merkez = 1 ]; then k=SOR; else k=kutu; fi ;;
+  *) echo "⛔ tanınmayan kapsam: '$*' — 'tüm filo' ya da 'bu kutu' (argümansız: merkezde sorulur)" >&2; exit 2 ;;
+esac
+if [ "$k" = filo ] && [ $merkez = 0 ]; then echo "⛔ 'tüm filo' yalnız merkezde (filo motoru yok: $FILO_SH) — bu kutuda yalnız kendi planın" >&2; exit 2; fi
+echo "KAPSAM=$k"
+case "$k" in
+  SOR)  echo "SORU=Bu kutu mu, tüm filo mu?"; echo "SIKLAR=tüm filo (önerim)|bu kutu" ;;
+  filo) echo "KOMUT_PLAN=bash $FILO_SH gunluk-plan --hepsi"; echo "KOMUT_UYGULA=bash $FILO_SH gunluk-plan --hepsi --uygula"; echo "KOMUT_OZET=bash $FILO_SH gunluk-plan-ozet" ;;
+esac

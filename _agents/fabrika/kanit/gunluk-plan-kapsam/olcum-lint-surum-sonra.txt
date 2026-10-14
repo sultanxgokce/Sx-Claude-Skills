@@ -1,0 +1,5 @@
+$ node ahi/schema/version-lint.mjs .
+# rc=0 sure=0.0s zaman=2026-10-14T11:38:20+03:00
+--- stdout ---
+✓ install-listesi 64 skill: SKILL.md + version tam
+--- stderr ---
