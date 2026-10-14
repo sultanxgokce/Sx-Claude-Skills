@@ -98,7 +98,12 @@ kapi "S7 sunucu yok + hesabın kabuğu /bin/bash → kapı GEÇİRİR (S6 tautol
 echo "── kalkan: gerçek onar.sh deneme yolundan canlı crontab'a dokunmadı mı?"
 # Okuma (-l) serbest: durum.sh bekçi satırına bakar. Yasak olan YAZMA ('-' ile biten çağrı).
 kapi "K0 sınav boyunca çıplak crontab YAZMA çağrısı 0 (deneme kopyası canlı crontab'a dokunamaz — S-10)" "0" "$(n=$(grep -cE 'CAGRILDI.* -$' "$GERCEK_CRONTAB_IZ" 2>/dev/null); echo "${n:-0}")"
-kapi "K0b pozitif kontrol: kalkan çalışıyor (okuma çağrısı en az 1 kez kaydedildi)" "e" "$([ "$(grep -c 'CAGRILDI' "$GERCEK_CRONTAB_IZ" 2>/dev/null)" -ge 1 ] && echo e || echo h)"
+# Pozitif kontrol kalkanın KENDİSİNİ ölçer (onar.sh'ın o ortamda crontab'a ulaşıp ulaşmadığına bağlı değil — CI'da ttyd yok,
+# yol oraya varmıyor; 15 Eki CI kırmızısı). Çocuk bash'ten çıplak çağrı kalkana düşmeli, gerçek crontab'a değil.
+n0=$(grep -c 'CAGRILDI' "$GERCEK_CRONTAB_IZ" 2>/dev/null); n0=${n0:-0}
+bash -c 'crontab -l >/dev/null 2>&1; printf "x" | crontab - 2>/dev/null' || true
+n1=$(grep -c 'CAGRILDI' "$GERCEK_CRONTAB_IZ" 2>/dev/null); n1=${n1:-0}
+kapi "K0b pozitif kontrol: çocuk kabuktan okuma+yazma çağrısı kalkana düştü (+2), gerçek crontab'a gitmedi" "2" "$((n1-n0))"
 echo
 echo "SONUÇ: $gecen geçti · $kalan kaldı"
 [ "$kalan" -eq 0 ]
