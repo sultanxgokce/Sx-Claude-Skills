@@ -170,6 +170,15 @@ try {
   kapi('K7a tarayıcı kopya kısayolu gerçekten copy olayı üretti (ölçüm aracı çalışıyor)', kopya.olay >= 1, `→ ${JSON.stringify(kopya)}`);
   console.log(`     (bilgi) copy olayı sonrası: engellendi=${kopya.engellendi} olayın metni=${JSON.stringify(kopya.metin)} pano=${JSON.stringify(pano)}`);
   kapi('K7 seçimsiz ⌘C son tmux seçimini panoya GERİ yazar (pano başka şeyle dolmuş olsa da)', pano === 'SECILECEK-SATIR-ABC', `→ pano="${pano}"`);
+  // K7b · bayat seçim (10 dk+) panoyu EZMEZ (göz tur 1): sınav son seçimi bayatlatır, panoya başka şey koyar, kopya kısayolu → pano değişmez
+  await pg.evaluate(() => { window.__kapiPano._eskit(); return navigator.clipboard.writeText('pano-guncel-icerik'); });
+  await pg.focus('.xterm-helper-textarea'); await pg.keyboard.press('Control+Insert'); await bekle(400);
+  pano = await pg.evaluate(() => navigator.clipboard.readText()).catch((e) => 'HATA:' + e.message);
+  kapi('K7b 10 dk\'dan eski tmux seçimi seçimsiz ⌘C\'de panoya YAZILMAZ (güncel içerik korunur)', pano === 'pano-guncel-icerik', `→ pano="${pano}"`);
+  const omur = await pg.evaluate(() => window.__kapiPano.sonMetinOmruMs);
+  kapi('K7c ömür 10 dk olarak ilan edilir', omur === 600000, `→ ${omur}`);
+  // sonraki kapılar (K5a) taze seçim ister: yeniden seç
+  await pg.mouse.move(geo.x + 0.5 * geo.w, y); await pg.mouse.down(); await pg.mouse.move(geo.x + 19.5 * geo.w, y, { steps: 8 }); await pg.mouse.up(); await bekle(1200);
   // Cmd+C ipucu: seçim de son tmux seçimi de yokken bir kez (son seçim varken ipucu YOK — copy olayı onu panoya yazar, K7).
   await pg.keyboard.press('Meta+c'); await bekle(200);
   const ip0 = await bildirim(pg);

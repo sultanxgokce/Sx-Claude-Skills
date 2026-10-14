@@ -113,9 +113,11 @@
     for (var i = 0; i < bin.length; i++) b[i] = bin.charCodeAt(i);
     return new TextDecoder('utf-8').decode(b);
   }
-  var panoyaIndi = 0, sonMetin = '';   // sonMetin: son tmux seçimi — seçimsiz Cmd+C onu panoya GERİ yazar (Sultan 15 Eki 01:45)
+  var panoyaIndi = 0, sonMetin = '', sonMetinAn = 0;   // sonMetin: son tmux seçimi — seçimsiz Cmd+C onu panoya GERİ yazar (Sultan 15 Eki 01:45)
+  var SON_METIN_OMRU = 10 * 60 * 1000;   // bağımsız göz tur 1: süresiz tutulan seçim saatler sonra panoyu ezerdi → 10 dk; sonrası ipucu
+  function sonMetinTaze() { return !!sonMetin && (Date.now() - sonMetinAn) < SON_METIN_OMRU; }
   function panoyaYaz(metin) {
-    sonMetin = metin;
+    sonMetin = metin; sonMetinAn = Date.now();
     if (!navigator.clipboard || !navigator.clipboard.writeText) {
       bildir('✗ tarayıcı panoya izin vermiyor — Cmd+C\'ye bas (seçim panoya yazılır) ya da Shift basılı sürükleyip Cmd+C', '#ff7b72', 6000); return;
     }
@@ -129,7 +131,7 @@
     var t = window.term;
     var xsec = t && typeof t.hasSelection === 'function' && t.hasSelection();
     var ssec = !!(window.getSelection && String(window.getSelection()));
-    if (xsec || ssec || !sonMetin || !e.clipboardData) return;
+    if (xsec || ssec || !sonMetinTaze() || !e.clipboardData) return;   // bayat seçim (>10 dk) panoya YAZILMAZ — olay tarayıcıya kalır
     e.preventDefault(); e.stopImmediatePropagation();
     e.clipboardData.setData('text/plain', sonMetin); panoyaIndi = Date.now();
     bildir('📋 son seçim panoya yazıldı (Cmd+C)', '#7ee787', 1800);
@@ -145,7 +147,8 @@
     var t = window.term;
     if (!t || !t.parser || typeof t.parser.registerOscHandler !== 'function') return false;
     t.parser.registerOscHandler(52, osc52);
-    window.__kapiPano = { surum: '1.1.0', osc52: true, cmdc: true, taban: TABAN };   // ölçüm yüzeyi (sınav bunu okur)
+    window.__kapiPano = { surum: '1.1.0', osc52: true, cmdc: true, taban: TABAN, sonMetinOmruMs: SON_METIN_OMRU,
+      _eskit: function () { sonMetinAn = 0; } };   // ölçüm yüzeyi (sınav okur; _eskit: sınav son seçimi bayatlatır)
     log('bağlandı: OSC 52 → pano · resim → ' + RESIM_URL);
     return true;
   }
@@ -159,7 +162,7 @@
     var t = window.term;
     var secim = t && typeof t.hasSelection === 'function' ? t.hasSelection() : !!(window.getSelection && String(window.getSelection()));
     if (secim) return;                              // tarayıcı seçimi var → Cmd+C normal kopyalar
-    if (sonMetin) return;                           // son tmux seçimi var → 'copy' olayı onu panoya yazar (yukarıda)
+    if (sonMetinTaze()) return;                     // taze tmux seçimi var → 'copy' olayı onu panoya yazar (yukarıda)
     if (ipucu) return; ipucu = true;
     bildir('Kopyalamak için: fareyle seçtiğin an panoya iner (Cmd+C gerekmez).\nTarayıcı seçimi istersen Shift basılı tutup sürükle, sonra Cmd+C.', '#ede5d7', 8000);
   }, true);

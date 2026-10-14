@@ -1,7 +1,7 @@
 {
   "is": "terminal-pano-cmdc",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T02:08:35+03:00",
+  "guncelleme": "2026-10-15T02:15:45+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -113,7 +113,39 @@
       "renk": "yesil",
       "zaman": "2026-10-15T02:08:35+03:00",
       "sure_sn": 5.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "pano-sinav-K7b-omur-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-pano-sinav-K7b-omur-tur2-sonra.txt",
+      "sha256": "81389a074dc04ad5b5b607c4499e647995b45973a866800d846ec9b0e4913a52",
+      "komut": [
+        "bash",
+        "-c",
+        "node terminal-onar/kapi/pano-sinav.mjs 2>&1 | grep -E \"✗|K7|K5|kapı:|geçti|kaldı|ÖLÇÜLEMEDİ\"; exit ${PIPESTATUS[0]}"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T02:14:45+03:00",
+      "sure_sn": 14.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "MUTASYON-KANITI-beklenen-kirmizi-K7b-omur",
+      "asama": "sonra",
+      "dosya": "olcum-MUTASYON-KANITI-beklenen-kirmizi-K7b-omur-sonra.txt",
+      "sha256": "cd914bc1716f48c446b0646086021144f20840600c15b4a8f56c796e92a5a4c4",
+      "komut": [
+        "bash",
+        "-c",
+        "echo \"=== MUTASYON KANITI: pano.js BİLEREK bozuldu (son seçim ömrü kaldırıldı). Aşağıdaki ✗ K7b BEKLENENDİR; rc=0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-pano-sinav-K7b-omur-tur2 ===\"; node terminal-onar/kapi/pano-sinav.mjs 2>&1 | grep -E \"✗|K7b|kaldı\"; [ ${PIPESTATUS[0]} = 1 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T02:15:45+03:00",
+      "sure_sn": 15.7
     }
   ],
-  "imza": "c53f1abe549a913c8a222b3b17b8dcea0d9cf187ba60d3a8b6e37a2c460a6617"
+  "imza": "23343ab82469d7a2693f5275285fd54ef480077859d645aaa007e2c73463cf6c"
 }
