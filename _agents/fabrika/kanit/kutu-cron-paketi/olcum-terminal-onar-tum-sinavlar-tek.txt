@@ -1,0 +1,14 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/tum-sinavlar-sx.sh
+# rc=0 sure=13.5s zaman=2026-10-14T20:23:25+03:00
+--- stdout ---
+bekci-iz.test.sh rc=0
+koltuk-ac.test.sh rc=0
+koltuk-adi.test.sh rc=0
+koltuk-bagla.test.sh rc=0
+koltuk-fark-filo.test.sh rc=0
+kur-bag.test.sh rc=0
+kutu-adi.test.sh rc=0
+onar.test.sh rc=0
+sifre-yukle.test.sh rc=0
+düşen=0
+--- stderr ---

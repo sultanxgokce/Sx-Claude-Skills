@@ -1,0 +1,85 @@
+{
+  "is": "kutu-cron-paketi",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-14T20:23:25+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kur-bag-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kur-bag-sinavi-once.txt",
+      "sha256": "ea7da2f7a7b529b3306428e2e8c476c91bb0a3400419c818fd9942e96c12cebe",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mutasyon-sx.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-14T20:23:11+03:00",
+      "sure_sn": 1.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kur-bag-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kur-bag-sinavi-sonra.txt",
+      "sha256": "0545671cc76a8819ad5a0f6e4ae349090650c98c42fd8e35025c6bba24108d25",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/kur-bag.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-14T20:23:11+03:00",
+      "sure_sn": 0.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-crontab-code",
+      "asama": "once",
+      "dosya": "olcum-canli-crontab-code-once.txt",
+      "sha256": "3c3a3d59b753b9911e8e73003627bed819ee7e35c28c10a2a448a58caba1d730",
+      "komut": [
+        "sh",
+        "-c",
+        "crontab -l | grep -n \"terminal-onar-bekci\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-14T20:18:29+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-crontab-code",
+      "asama": "sonra",
+      "dosya": "olcum-canli-crontab-code-sonra.txt",
+      "sha256": "764a2c41d81fb9b764b19f5ce386e0a1399374c0dc13a2b21440c52678d8fa2c",
+      "komut": [
+        "sh",
+        "-c",
+        "crontab -l | grep -n \"terminal-onar-bekci\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-14T20:18:29+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "terminal-onar-tum-sinavlar",
+      "asama": "tek",
+      "dosya": "olcum-terminal-onar-tum-sinavlar-tek.txt",
+      "sha256": "948414c038f078c07570532522aa01c7372799bd72574102d10bfbb2bc01d810",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/tum-sinavlar-sx.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-14T20:23:25+03:00",
+      "sure_sn": 13.5
+    }
+  ],
+  "imza": "3de9881d06b3146d4e418a92c6a311c894b364237e8e0058724a43b64855477e"
+}

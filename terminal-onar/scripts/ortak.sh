@@ -160,15 +160,30 @@ bekci_kurulu() { ${TO_CRONTAB:-crontab} -l 2>/dev/null | grep -q '# terminal-ona
 # ── BEKÇİ SATIRLARI — tek kaynak, PROJE yoluyla; eski (ortak-dizin yollu) satırlar GÖÇÜRÜLÜR ──────────────────────
 # 🔴 Bağımsız göz (tur 2): işaretleyici varsa satır "doğru" sayılıyordu; 15 kutudaki eski ortak-yollu satırlar yerinde
 #    kalıyordu. Artık işaretleyicili her satır KANONİK biçime yeniden yazılır (yol proje yolu); eksikse eklenir.
+# 🔴 YEDEK DAL (2.6.0 · S-9, 13 Eki ölçümü): proje-yolu bağı (<proje>/.claude/skills/terminal-onar) git'te DEĞİL, kur.sh'ın
+#    kutuya bıraktığı kayıtsız bir bağdır — depoya yazma yasağı olan kutuda (maiset) hiç kurulamadı, sıfırdan kurulan her
+#    kutuda da kaybolur; satır her dakika rc 127 ile düşüyor ve bekçi "kurulu" görünüyordu. Satır artık bağ yoksa ORTAK
+#    yola düşer ve kutuyu AÇIK BEYANLA (TO_KUTU=<kutu>) söyler — makine-kimliği tuzağına (2.1.1) düşmez. Bağ varsa eski
+#    davranış birebir (proje yolu kazanır). Değişmez: satır işaretleyiciyle bitmeli (bekci_kurulu + kanon bayt-bayt eşleşir).
 ODA_CRON="${TO_ODA_CRON:-$PROJE/.oda/cron}"
-BEKCI_SATIR="* * * * * bash $PROJE_BETIK/bekci.sh  # terminal-onar-bekci"
-ACILIS_SATIR="@reboot sleep 15; bash $PROJE_BETIK/komut.sh onar  # terminal-onar-acilis"
-bekci_satirlari_duzelt() {  # stdin → stdout: işaretleyicili satırlar kanonik, gerisi olduğu gibi
+ORTAK_BECERI="${TO_ORTAK_BECERI:-/config/.claude/skills/terminal-onar}"
+_cron_komut() {  # $1 = betik adı · $2 = ek argüman → proje yolu varsa oradan, yoksa ortak yoldan TO_KUTU ile
+  printf 'if [ -x %s/%s ]; then bash %s/%s%s; else TO_KUTU=%s bash %s/scripts/%s%s; fi' \
+    "$PROJE_BETIK" "$1" "$PROJE_BETIK" "$1" "${2:+ $2}" "$KUTU" "$ORTAK_BECERI" "$1" "${2:+ $2}"
+}
+BEKCI_SATIR="* * * * * $(_cron_komut bekci.sh)  # terminal-onar-bekci"
+ACILIS_SATIR="@reboot sleep 15; $(_cron_komut komut.sh onar)  # terminal-onar-acilis"
+bekci_satirlari_duzelt() {  # stdin → stdout: işaretleyicili satırlar kanonik ve TEK (çift kopya tekilleşir), gerisi olduğu gibi
   awk -v b="$BEKCI_SATIR" -v a="$ACILIS_SATIR" '
-    /# terminal-onar-bekci/  { print b; next }
-    /# terminal-onar-acilis/ { print a; next }
+    /# terminal-onar-bekci/  { if (!bg) { print b; bg=1 }; next }
+    /# terminal-onar-acilis/ { if (!ag) { print a; ag=1 }; next }
     { print }'
 }
+# 🔴 CANLI CRONTAB KİLİDİ (2.6.0 · S-10, 13 Eki): bir sınav onar.sh'ı TO_PROJE=<geçici dizin> ile ve TO_CRONTAB vermeden
+#    koşturdu; bekci_kur canlı crontab'daki bekçi satırını /tmp/... yoluna çevirdi, bekçi o kutuda sessizce öldü (iki kez).
+#    Kural: PROJE gerçek kutu yolu (/config/projects/<kutu>) değilse canlı crontab'a YALNIZ açıkça verilen TO_CRONTAB ile
+#    dokunulur; verilmemişse dokunulmaz ve söylenir. Deneme kopyası gerçek crontab'ı bozamaz.
+canli_crontab_izinli() { [ -n "${TO_CRONTAB:-}" ] || [ "$PROJE" = "/config/projects/$KUTU" ]; }
 bekci_kur() {  # $1 = kalıcı cron dosyası (.oda/cron) · $2 = "canli" ise canlı crontab da düzeltilir → stdout: ne yapıldı
   local oda="$1" tmp sonuc="zaten var" ct="${TO_CRONTAB:-crontab}" eski yeni
   mkdir -p "$(dirname "$oda")" 2>/dev/null
@@ -180,10 +195,14 @@ bekci_kur() {  # $1 = kalıcı cron dosyası (.oda/cron) · $2 = "canli" ise can
   elif ! cmp -s "$oda" "$tmp"; then sonuc="eski yol proje yoluna çevrildi"; cat "$tmp" > "$oda"; fi
   rm -f "$tmp"
   if [ "${2:-}" = canli ]; then
-    eski="$($ct -l 2>/dev/null)"; yeni="$(printf '%s\n' "$eski" | bekci_satirlari_duzelt)"
-    printf '%s\n' "$yeni" | grep -q '# terminal-onar-bekci' || yeni="${yeni:+$yeni
+    if ! canli_crontab_izinli; then
+      sonuc="$sonuc · canlı crontab'a DOKUNULMADI (deneme yolu: $PROJE — gerçek crontab için TO_CRONTAB ver)"
+    else
+      eski="$($ct -l 2>/dev/null)"; yeni="$(printf '%s\n' "$eski" | bekci_satirlari_duzelt)"
+      printf '%s\n' "$yeni" | grep -q '# terminal-onar-bekci' || yeni="${yeni:+$yeni
 }$BEKCI_SATIR"
-    if [ "$eski" != "$yeni" ]; then printf '%s\n' "$yeni" | $ct - && sonuc="$sonuc · canlı crontab düzeltildi"; fi
+      if [ "$eski" != "$yeni" ]; then printf '%s\n' "$yeni" | $ct - && sonuc="$sonuc · canlı crontab düzeltildi"; fi
+    fi
   fi
   printf '%s\n' "$sonuc"
 }
