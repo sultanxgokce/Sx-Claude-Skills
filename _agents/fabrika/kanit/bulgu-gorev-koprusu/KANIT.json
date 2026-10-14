@@ -1,0 +1,38 @@
+{
+  "is": "bulgu-gorev-koprusu",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-14T11:07:20+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-bulgu-18",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-bulgu-18-sonra.txt",
+      "sha256": "df098679f276e786180260cb9921df9a2a24b201c72955b75161c83dfe0012df",
+      "komut": [
+        "bash",
+        "bulgu/scripts/bulgu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-14T11:07:13+03:00",
+      "sure_sn": 0.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-1-7",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-1-7-sonra.txt",
+      "sha256": "0dfa37fd4b286d52f96123cc61ee48e1aad2ee935c7764a7d0e201d1fed96e75",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/bulgu-gorev-koprusu/mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-14T11:07:20+03:00",
+      "sure_sn": 7.1
+    }
+  ],
+  "imza": "71136909bbda0258ba95bf0701a8f1380cdf45de84884819e51522e75bf5c2a4"
+}

@@ -1,6 +1,6 @@
 ---
 name: bulgu
-version: 0.2.0
+version: 0.3.0
 description: "Filonun TEK bulgu komutu — hangi kutuda olursan ol, gördüğün kusuru ya da fikri aynı komutla, aynı şemayla kutunun Bulgu Defteri'ne yaz (bulgu.mmepanel.com'da Sultan'ın tek sayfasında görünür). 'bulgu yaz', 'kusur kaydet', 'deftere düş' dendiğinde kullan."
 allowed-tools: Bash
 ---
@@ -11,9 +11,16 @@ allowed-tools: Bash
 Bulgu Defteri · NÂZIR havuzu) ve kutular deftere ya hiç yazmıyor ya elle yazıp şemayı bozuyordu (AKAR'ın 274
 kaydı eski biçimde). Yazma aracı 10 kutuda kuruluydu ama hiçbir ajan bulamıyordu. Bu beceri o aracın kapısıdır.
 
+## 0.3.0 — bulgu = GÖREV (Sultan 14 Ekim 2026, S-17 K1)
+Bulgu artık ayrı bir kavram değil: **türü bug ya da özellik olan bir görevdir** ve TEK defter merkezî Görev Defteri'dir
+(`cloudtop-defter:8791`, tür `gorev`; Sultan'ın görev ekranı 8794). `bulgu.sh yaz` kutuda defter jetonu (`/config/defter-jeton`)
+varsa kaydı ORAYA yazar (kutu jetondan türer, `kaynak_nereden: bulgu komutu`, `--not` kanıt adımı olur, `--etiket bug|ozellik`,
+varsayılan bug). Jeton yoksa eski kutu defterine düşer ve bunu söyler. Merkeze ulaşılamazsa kayıt HİÇBİR yere yazılmaz (ikilik olmasın)
+ve rc 1 ile söylenir. `liste · hal · sema` eski kutu defteri içindir (taşıma: cloudtop `defter-gecit/gorev/tasima.py`).
+
 ## Komut (her kutuda AYNI)
 ```bash
-bash /config/.claude/skills/bulgu/scripts/bulgu.sh yaz "<tek cümle başlık>" --kim <AJAN> [--not "<ayrıntı/kanıt>"]
+bash /config/.claude/skills/bulgu/scripts/bulgu.sh yaz "<tek cümle başlık>" --kim <AJAN> [--not "<ayrıntı/kanıt>"] [--etiket bug|ozellik]
 bash /config/.claude/skills/bulgu/scripts/bulgu.sh liste            # bu kutunun defteri
 bash /config/.claude/skills/bulgu/scripts/bulgu.sh hal S-12 uygulandi --kim <AJAN> --gerekce "PR #N birleşti"   # hâl geçişi (acik|uygulandi|canli)
 bash /config/.claude/skills/bulgu/scripts/bulgu.sh sema             # bu kutunun kayıtları ortak şemayı geçiyor mu
