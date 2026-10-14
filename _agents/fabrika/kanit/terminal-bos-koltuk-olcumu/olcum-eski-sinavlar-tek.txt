@@ -1,0 +1,10 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/eski-sinavlar.sh
+# rc=0 sure=87.0s zaman=2026-10-14T11:33:41+03:00
+--- stdout ---
+toplam=47 geçen=47 düşen=0
+GEÇEN: 6 · KALAN: 0
+GEÇEN: 23 · KALAN: 0
+GECEN: 90  ·  KALAN: 0
+SONUÇ: 33 geçti · 0 kaldı
+hepsi rc=0 (her sınav ayrıca çıplak koşuldu, set -e)
+--- stderr ---

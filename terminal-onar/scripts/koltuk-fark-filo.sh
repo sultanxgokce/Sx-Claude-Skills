@@ -6,7 +6,7 @@
 #   stdin'den kutunun /tmp'sinde geçici dizine açılır, koşulur, çıkışta (kesinti dahil: trap) silinir. Kalıcı yazmaz.
 #   [kutu…]  verilmezse host'taki bütün cloudtop-* kutuları (altyapı hariç)
 # Terminalsiz kap (tmux ya da node yok — masaüstü, köprüler) ayrı sayılır: ne temiz ne kirli, ölçülemedi de değil.
-# rc: 0 hepsi temiz · 1 en az bir kutuda DÜŞEN/hayalet · 2 en az bir kutu ölçülemedi (temiz sayılmaz)
+# rc: 0 hepsi temiz · 1 en az bir kutuda DÜŞEN/BOŞ/hayalet · 2 en az bir kutu ölçülemedi (temiz sayılmaz)
 set -uo pipefail
 HOST="${KOLTUK_FARK_HOST:-hostsrv}"; KAYNAK=""; KUTULAR=()
 while [ $# -gt 0 ]; do case "$1" in --kaynak) KAYNAK="$2"; shift 2 ;; *) KUTULAR+=("$1"); shift ;; esac; done
@@ -31,9 +31,10 @@ try: d=json.loads(sys.stdin.read())
 except Exception: print("?"); sys.exit()
 if "olculemedi" in d: print("ÖLÇÜLEMEDİ: "+d["olculemedi"]); sys.exit()
 if "terminalsiz" in d: print("terminalsiz: "+d["terminalsiz"]); sys.exit()
-o=d["ozet"]; print("%d oturum · görünür %d · gizli %d · DÜŞEN %d · hayalet %d · başka adla bağlı %d" % (o["toplam"],o["gorunur"],o["gizli"],o["dusen"],o["hayalet"],o["sekme"]))
+o=d["ozet"]; print("%d oturum · görünür %d · gizli %d · DÜŞEN %d · BOŞ %d · hayalet %d · başka adla bağlı %d" % (o["toplam"],o["gorunur"],o["gizli"],o["dusen"],o.get("bos",0),o["hayalet"],o["sekme"]))
 for x in d["oturumlar"]:
     if x["hukum"]=="DUSEN": print("      ✗ DÜŞEN: "+x["ad"])
+    if x["hukum"]=="BOS": print("      ○ BOŞ (içinde Claude yok): "+x["ad"])
 for h in d["hayalet"]: print("      ✗ HAYALET: "+h)
 for s in d["sekme"]: print("      ⓘ \x27%s\x27 adıyla açılmış istemci → bugün \x27%s\x27" % (s["acilis_adi"], s["oturum"]))
 if o.get("sekme_olculemedi"): print("      ? istemci listesi ölçülemedi: "+o["sekme_olculemedi"][:80])
@@ -45,7 +46,7 @@ if o.get("sekme_okunamayan"): print("      ? %d istemcinin açılış komutu oku
     *) echo "? $k: ölçülemedi (rc=$rc) ${ozet:-$(printf '%s' "$out" | tail -n 1 | cut -c1-120)}"; olcmedi=$((olcmedi+1)) ;;
   esac
 done
-echo "== ${#KUTULAR[@]} kap · terminalli $((temiz+kirli+olcmedi)): temiz $temiz · DÜŞEN/hayalet olan $kirli · ölçülemedi $olcmedi · terminalsiz $terminalsiz =="
+echo "== ${#KUTULAR[@]} kap · terminalli $((temiz+kirli+olcmedi)): temiz $temiz · DÜŞEN/BOŞ/hayalet olan $kirli · ölçülemedi $olcmedi · terminalsiz $terminalsiz =="
 [ "$olcmedi" -gt 0 ] && exit 2
 [ "$kirli" -gt 0 ] && exit 1
 exit 0

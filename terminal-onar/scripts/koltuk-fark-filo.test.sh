@@ -24,5 +24,5 @@ kapi "N2 kutunun kendi beyanı (tmux yok / node yok) → terminalsiz" "2" "$(gre
 kapi "N3 rc 127 (tar yok) → ÖLÇÜLEMEDİ, terminalsiz DEĞİL" "1|0" "$(grep -c '^? cloudtop-tarsiz' <<<"$o")|$(grep -c '^– cloudtop-tarsiz' <<<"$o")"
 kapi "N4 tanınmayan rc → ÖLÇÜLEMEDİ" "1" "$(grep -c '^? cloudtop-bozuk' <<<"$o")"
 kapi "N5 ölçülemeyen varken genel rc 2 (temiz sayılmaz)" "2" "$rc"
-kapi "N6 özet: terminalli 3 (1 temiz + 2 ölçülemedi) · terminalsiz 2" "1" "$(grep -c 'terminalli 3: temiz 1 · DÜŞEN/hayalet olan 0 · ölçülemedi 2 · terminalsiz 2' <<<"$o")"
+kapi "N6 özet: terminalli 3 (1 temiz + 2 ölçülemedi) · terminalsiz 2" "1" "$(grep -c 'terminalli 3: temiz 1 · DÜŞEN/BOŞ/hayalet olan 0 · ölçülemedi 2 · terminalsiz 2' <<<"$o")"
 echo "GEÇEN: $g · KALAN: $k"; [ "$k" -eq 0 ]

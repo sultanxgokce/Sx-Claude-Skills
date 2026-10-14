@@ -5,6 +5,9 @@
 #                                                          ?arg=<koltuk> buraya SON argüman olarak eklenir)
 #   koltuk-bagla.sh --gizli                                listede OLMAYAN oturumlar, gerekçesiyle: ad · neden (G-BANI-0007:
 #                                                          sessiz düşürme yok — gizlenen her oturum adıyla ve nedeniyle sayılır)
+#   koltuk-bagla.sh --bos                                  BOŞ KABUK oturumlar (2.5.0): hiçbir bölmesinde Claude yok VE her bölmede
+#                                                          yalnız kabuk istemi var (altında hiçbir süreç yok). Sunucu/izleme koşan
+#                                                          Claude'suz oturum boş DEĞİLDİR (ör. nova/kesif-ui web sunucusu).
 #   koltuk-bagla.sh --liste                                görünür koltuklar, sekmeyle: ad · son-etkinlik(epoch) · claude(1|0) · tür(ajan|diger) · hâl
 #
 # 🔴 NİÇİN TEK KAYNAK: "hangi oturum görünür" sorusunu hem ekran (ttyd) hem liste ucu (/api/koltuklar)
@@ -46,11 +49,28 @@ koltuklar() {  # görünür oturum adları, satır satır · rc 3 = ölçülemed
 #    '$1' adlı koltuğun hâli/etkinliği BAŞKA oturumdan okunurdu. Tüm bölmeler bir kez listelenir, ada tam eşleşmeyle süzülür.
 bolmeler() { tmux list-panes -a -F '#{session_name}	#{window_active}	#{pane_active}	#{pane_id}	#{pane_pid}	#{pane_current_command}' 2>/dev/null; }
 bolme_bul() { bolmeler | awk -F'\t' -v s="$1" '$1==s && $2==1 && $3==1 {print $4; exit}'; }   # oturumun etkin bölmesi (%N)
+# 🔴 2.5.0 (SERDAR 14 Eki ölçümü): Claude yalnız ÇOCUK süreçte aranıyordu. Kutuların çoğu ajanı bir başlatma betiğiyle açar
+#    (bölme: bash → baslat-claude.sh → claude): Claude TORUN süreçtir, eski arama onu görmez → koltuk "Claude yok" sayılırdı
+#    (tellal/HAYALI, nova-kesif). Artık bölmenin bütün alt ağacı (en çok 6 kat) taranır; komut satırı claude ile başlayan
+#    ya da …/claude olan süreç bulunursa koltukta Claude VAR.
+altta_claude() {  # $1 = kök pid → 0 ise alt ağacın herhangi bir katında Claude süreci var
+  local kat=0 sira="$1" yeni c av
+  while [ -n "$sira" ] && [ $kat -lt 6 ]; do
+    yeni=""
+    for c in $(for p in $sira; do pgrep -P "$p" 2>/dev/null; done); do
+      av="$(tr '\0' ' ' < /proc/$c/cmdline 2>/dev/null)"
+      case "$av" in claude|claude\ *|*/claude|*/claude\ *|claude.exe|claude.exe\ *|*/claude.exe|*/claude.exe\ *) return 0 ;; esac
+      yeni="$yeni $c"
+    done
+    sira="$yeni"; kat=$((kat+1))
+  done
+  return 1
+}
 claude_var_mi() {  # $1 = oturum → 0 ise koltukta Claude çalışıyor
   local pid kom
   while read -r pid kom; do
-    case "$kom" in claude|claude-*) return 0 ;; esac
-    pgrep -P "$pid" -f '(^|/)claude( |$)' >/dev/null 2>&1 && return 0
+    case "$kom" in claude|claude-*|claude.exe) return 0 ;; esac   # claude.exe: yerel kurucunun ikilisi (medigate/SAYMAN, 14 Eki)
+    altta_claude "$pid" && return 0
   done < <(bolmeler | awk -F'\t' -v s="$1" '$1==s {print $5" "$6}')
   return 1
 }
@@ -87,6 +107,26 @@ koltuk_hali() {  # $1 = oturum → calisiyor|soru|sinirda|girdi|bos|bilinmiyor  
   fi
   echo bilinmiyor
 }
+
+bos_kabuk_mu() {  # $1 = oturum → 0 ise BOŞ KABUK: Claude yok ve her bölme yalnız kabuk istemi (altında süreç yok)
+  local pid kom n=0
+  claude_var_mi "$1" && return 1
+  while read -r pid kom; do
+    n=$((n+1))
+    case "$kom" in bash|sh|zsh|fish|dash|-bash|-sh) ;; *) return 1 ;; esac
+    pgrep -P "$pid" >/dev/null 2>&1 && return 1
+  done < <(bolmeler | awk -F'\t' -v s="$1" '$1==s {print $5" "$6}')
+  [ $n -gt 0 ]
+}
+
+if [ "${1:-}" = "--bos" ]; then
+  if ! TUM="$(tmux list-sessions -F '#{session_name}' 2>&1)"; then
+    case "$TUM" in *"no server running"*|*"No such file or directory"*) exit 0 ;; esac
+    printf 'oturumlar ölçülemedi: %s\n' "$TUM" >&2; exit 3
+  fi
+  printf '%s\n' "$TUM" | while IFS= read -r s; do [ -n "$s" ] && bos_kabuk_mu "$s" && printf '%s\n' "$s"; done
+  exit 0
+fi
 
 if [ "${1:-}" = "--gizli" ]; then
   if ! TUM="$(tmux list-sessions -F '#{session_name}' 2>&1)"; then

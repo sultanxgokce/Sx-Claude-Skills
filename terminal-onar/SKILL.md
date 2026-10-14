@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.4.4
+version: 2.5.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -263,7 +263,21 @@ Tek istisna: `onar.sh` bekçiyi az önce kurduysa/doğruladıysa (`bekci.kuruldu
 süreci **11 gün** yoktu, gösterge crontab satırına bakıp "ok" diyordu. Sınav: `scripts/bekci-iz.test.sh` (12 kapı,
 hermetik, sahte crontab/tmux; B11 mutasyon: eski gösterge geri gelince B2 yakalar).
 
+## Boş kabuk koltuk — BOŞ hükmü (2.5.0)
+
+Fark ölçeri (`kapi/koltuk-fark.mjs`, filo: `scripts/koltuk-fark-filo.sh`) artık görünür koltuklarda **BOŞ** hükmü verir: hiçbir
+bölmesinde Claude yok **ve** her bölmede yalnız kabuk istemi var, altında hiçbir süreç yok (`koltuk-bagla.sh --bos`, tek kaynak).
+Tıklayan boş kabuğa düşer; kirli sayılır (rc 1). 🔴 Niçin (SERDAR 14 Eki): 15 koltuk "görünür = temiz" sayılıyordu, DÜŞEN 0.
+- **Claude araması alt ağacın tamamında** (en çok 6 kat): kutuların çoğu ajanı başlatma betiğiyle açar (bölme → `baslat-claude.sh` →
+  `claude`); eski arama yalnız çocuk sürece bakıyordu, torun Claude "yok" sayılıyordu (tellal/HAYALI, nova-kesif, huzur-yon).
+- **`claude.exe` de Claude'dur** (yerel kurucunun ikilisi; medigate/SAYMAN yanlış "boş" görünüyordu).
+- **Boş ≠ Claude'suz:** sunucu/izleme koşan oturum (nova/kesif-ui web sunucusu) boş DEĞİL; geçici adlar (cc-* · dash* · imglistener*) muaf.
+- Canlı ölçüm (14 Eki, 5 kutu): BOŞ = medigate 4 · mihenk 4 · tellal 3 · huzur 1 — ikinci yüzeyle (elle süreç ağacı) birebir.
+Sınav: `kapi/koltuk-fark.test.sh` F10-F18 (gerçek süreç ağaçları); mutasyon: alt-ağaç araması · BOŞ hükmü · claude.exe tanıma
+ayrı ayrı kaldırılınca sınav kırmızı.
+
 ## Sürüm notları
+- **2.5.0 (2026-10-14, MUAVİN · SERDAR bulgusu):** boş kabuk koltuk BOŞ hükmü + alt ağaçta Claude araması + claude.exe (yukarıda).
 - **2.4.4 (2026-10-13, BÂNİ · G-BANI-0007 madde 1 — "sessiz düşürme yok"):** fark ölçeri. `kapi/koltuk-fark.mjs` kutudaki her tmux
   oturumuna tek hüküm verir: görünür · gizli:<neden> · gizli:ad-süzgeci · **DÜŞEN** (gerekçesiz → rc 1). Listede olup tmux'ta olmayan
   (hayalet) da rc 1. Başka adla bağlı istemci (code-server sekmesi `tmux attach -t yenileme` açılmış, oturum sonra `2026/85` olmuş —

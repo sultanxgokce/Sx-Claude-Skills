@@ -11,6 +11,8 @@ case "$*" in
   *list-sessions*) [ -f "$KF/hata" ] && { echo "beklenmedik tmux hatası" >&2; exit 1; }
     case "$*" in *session_activity*) awk '{print $0"\t0"}' "$KF/oturumlar" ;; *) cat "$KF/oturumlar" ;; esac ;;
   *list-clients*) cat "$KF/istemciler" 2>/dev/null ;;
+  *list-panes*) # bölmeler: ad · pencere-etkin · bölme-etkin · %kimlik · pid · komut. Dosya yoksa: her oturum Claude'lu (eski sınavların varsayımı)
+    if [ -f "$KF/bolmeler" ]; then cat "$KF/bolmeler"; else while IFS= read -r n; do printf '%s\t1\t1\t%%1\t1\tclaude\n' "$n"; done < "$KF/oturumlar"; fi ;;
   *) exit 0 ;;
 esac
 S
@@ -81,4 +83,29 @@ KAPI_KOLTUK_BETIK="$T/betik-eski.sh" OLC >/dev/null; kapi "F8 --gizli bilmeyen e
 # F9 tek kaynak: ölçer ve /api/koltuklar aynı modülü kullanır
 grep -q "from './koltuklar.mjs'" "$D/koltuk-fark.mjs" && grep -q "from './koltuklar.mjs'" "$D/sunucu.mjs"
 kapi "F9 ölçer ile kapı aynı liste modülünü içe alır" "0" "$?"
+# ── F10-F13 · BOŞ koltuk (2.5.0 · SERDAR 14 Eki: 15 koltuk "görünür = temiz" sayılıyordu) ──────────────────────────────
+# Gerçek süreç ağaçları kurulur: 'claude' adlı bir bekleme süreci (sleep'e bağ) — komut satırı …/claude ile biter.
+ln -sf "$(command -v sleep)" "$T/bin/claude"
+bash -c "exec sleep 60" & KABUK=$!                                   # içinde hiçbir şey yok
+bash -c "bash -c '\"$T/bin/claude\" 60; true'; true" & TORUN=$!; sleep 0.4    # bölme → betik → claude (TORUN; '; true' kabuğun exec ile kendini claude'a çevirmesini önler — gerçek başlatma betiği gibi)
+bash -c "exec sleep 60" & GECICI=$!
+bash -c "sleep 60; true" & SUNUCU=$!; sleep 0.3                     # Claude'suz ama altında süreç koşan oturum (web sunucusu gibi)
+bash -c "exec sleep 60" & EXE=$!                                     # bölme komutu claude.exe, ALTINDA hiçbir şey yok (pid 1 KULLANILMAZ: altında
+                                                                     # kutunun bütün süreçleri — gerçek Claude'lar dahil — vardır, kapıyı kör eder)
+printf '%s\n' ana kabuk torun cc-9 sunucu exe > "$T/oturumlar"
+printf 'ana\t1\t1\t%%1\t1\tclaude\nkabuk\t1\t1\t%%2\t%s\tbash\ntorun\t1\t1\t%%3\t%s\tbash\ncc-9\t1\t1\t%%4\t%s\tbash\nsunucu\t1\t1\t%%5\t%s\tbash\nexe\t1\t1\t%%6\t%s\tclaude.exe\n' "$KABUK" "$TORUN" "$GECICI" "$SUNUCU" "$EXE" > "$T/bolmeler"
+OLC >/dev/null; rc=$?
+H() { node "$D/koltuk-fark.mjs" --json | python3 -c "import json,sys;d=json.load(sys.stdin);print({x['ad']:x['hukum'] for x in d['oturumlar']}.get('$1'))"; }
+kapi "F10 görünür ama içinde Claude yok → BOS, rc 1" "1|BOS|1" "$rc|$(H kabuk)|$(J 'o["bos"]')"
+kapi "F11 Claude TORUN süreçte (başlatma betiği altında) → görünür, BOŞ değil" "gorunur" "$(H torun)"
+kapi "F12 geçici ad (cc-*) Claude'suz da muaf → görünür" "gorunur" "$(H cc-9)"
+kapi "F13 Claude doğrudan bölmede → görünür (F10 tautoloji değil)" "gorunur" "$(H ana)"
+kapi "F14 Claude'suz ama altında süreç koşan oturum (sunucu) BOŞ DEĞİL → görünür" "gorunur" "$(H sunucu)"
+kapi "F15 'claude.exe' (yerel kurucu ikilisi) Claude sayılır → görünür (medigate/SAYMAN vakası)" "gorunur" "$(H exe)"
+kapi "F16 BOŞ sayısı yalnız gerçek boş kabuk: 1 (kabuk)" "1" "$(J 'o["bos"]')"
+# F17/F18 koltuk listesindeki ajan işareti (tür·hâl buna bağlı): Claude TORUN süreçte ve 'claude.exe' adıyla da tanınır
+L() { bash "$D/../scripts/koltuk-bagla.sh" --liste | awk -F'\t' -v a="$1" '$1==a {print $3}'; }
+kapi "F17 başlatma betiği altındaki (torun) Claude listede ajan işaretli (claude=1)" "1" "$(L torun)"
+kapi "F18 'claude.exe' listede ajan işaretli (claude=1)" "1" "$(L exe)"
+kill $KABUK $TORUN $GECICI $SUNUCU $EXE 2>/dev/null; pkill -P $TORUN 2>/dev/null; pkill -P $SUNUCU 2>/dev/null; rm -f "$T/bolmeler"
 echo "GEÇEN: $g · KALAN: $k"; [ "$k" -eq 0 ]
