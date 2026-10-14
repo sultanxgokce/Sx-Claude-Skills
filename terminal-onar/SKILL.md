@@ -272,7 +272,7 @@ Tıklayan boş kabuğa düşer; kirli sayılır (rc 1). Bölme listesi ya da sü
   `claude`); eski arama yalnız çocuk sürece bakıyordu, torun Claude "yok" sayılıyordu (tellal/HAYALI, nova-kesif, huzur-yon).
 - **`claude.exe` de Claude'dur** (yerel kurucunun ikilisi; medigate/SAYMAN yanlış "boş" görünüyordu).
 - **Boş ≠ Claude'suz:** sunucu/izleme koşan oturum (nova/kesif-ui web sunucusu) boş DEĞİL; geçici adlar (cc-* · dash* · imglistener*) muaf.
-- Canlı ölçüm (14 Eki, 5 kutu): BOŞ = medigate 4 · mihenk 4 · tellal 3 · huzur 1 — ikinci yüzeyle (elle süreç ağacı) birebir.
+- Canlı ölçüm (14 Eki, 5 kutu): ilk koşu (`--kaynak`) BOŞ = medigate 4 · mihenk 4 · tellal 3 · huzur 1 — ikinci yüzeyle (elle süreç ağacı) birebir. Ardından reisler 12'sini kapattı (tellal MEDDAH; medigate + mihenk reis kararıyla MUAVİN); son koşu yalnız huzur-motor1. 🔴 Önce/sonra çifti aynı filo durumunu ölçmez (arada oturum kapandı); kodun etkisi sınavda (F10-F21) ölçülür, canlı çift yalnız gerçek kutuda çalıştığını gösterir.
 Sınav: `kapi/koltuk-fark.test.sh` F10-F18 (gerçek süreç ağaçları); mutasyon: alt-ağaç araması · BOŞ hükmü · claude.exe tanıma
 ayrı ayrı kaldırılınca sınav kırmızı.
 

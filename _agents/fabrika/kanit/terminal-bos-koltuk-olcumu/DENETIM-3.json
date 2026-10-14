@@ -1,0 +1,38 @@
+{
+  "tur": 3,
+  "is": "terminal-bos-koltuk-olcumu",
+  "pr": "314",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-14T12:45:34+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 53917,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Süreç ağacının tamamında gerçek yürütülen program adına göre Claude/claude.exe aranmış, görünür boş kabuk BOŞ ve kirli sayılmış, ölçüm hataları da temiz sonuca çevrilmeden taşınmış. Önceki yanlış-pozitif kapatılmış ve mutasyon sınavı bunu ayrıca öldürdüğü için üretimi durduracak bir kusur görünmüyor; yalnız kanıt anlatımında küçük tutarsızlıklar var.",
+    "bulgular": [
+      {
+        "ne": "Canlı kanıtın açıklaması ile belgelenen filo sonucu aynı sayımı anlatmıyor: SKILL.md canlı ölçümde toplam 12 BOŞ bildirirken son ölçüm yalnız huzur-motor1 adlı 1 BOŞ gösteriyor.",
+        "kanit": "Sonra çıktısında medigate, mihenk ve tellal için BOŞ 0; huzur için BOŞ 1 ve genel toplamda kirli 1 yazıyor. Buna karşılık SKILL.md satırı “BOŞ = medigate 4 · mihenk 4 · tellal 3 · huzur 1” diyor.",
+        "konum": "terminal-onar/SKILL.md: Boş kabuk koltuk bölümü; olcum-canli-filo-bos-koltuk-sonra.txt:4-12",
+        "agirlik": "rotus"
+      },
+      {
+        "ne": "Önce/sonra canlı ölçüm çifti aynı filo durumunu karşılaştırmıyor; arada 12 oturum kapatıldığı açıklandığından değişimin ne kadarının koddan geldiği ölçülemiyor.",
+        "kanit": "Önce çıktısında beş kutuda toplam 55 oturum, sonra çıktısında 43 oturum var; sonra kaydı tellal 4, medigate 4 ve mihenk 4 oturumun kapatıldığını belirtiyor. Önce komutu ayrıca sonuna `true` ekleyerek rc değerini zorla 0 yapıyor.",
+        "konum": "olcum-canli-filo-bos-koltuk-once.txt:1-10; olcum-canli-filo-bos-koltuk-sonra.txt:4-12",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Mutasyon kaydı alt-ağaç yürüyüşü, BOŞ hükmü, claude.exe, list-panes hata aktarımı ve argüman-metni yanlış-pozitifine karşı korumaların sınav tarafından gerçekten çağrıldığını gösteriyor; eski sınavlar da yeşil. Canlı sonra karesi gerçek filo adları ve elle beklenen sonuç içeriyor, fakat önce/sonra arasında filo nüfusu değiştiği ve önce rc değeri `true` ile maskelendiği için bu kayıt kusursuz bir ölçüm çifti değil."
+  }
+}
