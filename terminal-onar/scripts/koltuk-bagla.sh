@@ -62,7 +62,8 @@ altta_claude() {  # $1 = kök pid → 0 ise alt ağacın HERHANGİ bir katında 
     { pid=$1; pp=$2; $1=""; $2=""; sub(/^  /,""); a[pid]=$0; c[pp]=c[pp] " " pid }
     END { n=split(c[kok], q, " "); i=1
       while (i<=n) { p=q[i++]; if (p=="" || gor[p]++) continue
-        x=a[p]; if (x ~ /^(claude|claude\.exe)( |$)/ || x ~ /\/(claude|claude\.exe)( |$)/) { bulundu=1; exit }
+        # YALNIZ çalıştırılan program (argv[0]) sayılır — argümanında "…/claude" geçen başlatıcı kabuk Claude DEĞİL (bağımsız göz tur 2)
+        x=a[p]; sub(/ .*/, "", x); sub(/.*\//, "", x); if (x == "claude" || x == "claude.exe") { bulundu=1; exit }
         m=split(c[p], r, " "); for (k=1;k<=m;k++) q[++n]=r[k] }
       exit (bulundu ? 0 : 1) }'
 }

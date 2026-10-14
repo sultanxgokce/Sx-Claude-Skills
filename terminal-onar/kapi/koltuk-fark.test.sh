@@ -125,6 +125,11 @@ def ara(p,d):
 print(ara($DERIN,0))")
 kapi "F19 Claude $kat kat aşağıda (≥7) → listede ajan işaretli, BOŞ değil" "1|gorunur|1" "$([ "$kat" -ge 7 ] && echo 1 || echo 0)|$(H derin)|$(L derin)"
 pkill -P $DERIN 2>/dev/null; kill $DERIN 2>/dev/null
+# F21 argümanında "…/claude" geçen ama Claude ÇALIŞTIRMAYAN başlatıcı → ajan DEĞİL (bağımsız göz tur 2: yanlış-pozitif)
+bash -c "bash -c 'echo $T/bin/claude --resume x >/dev/null; sleep 60; true'; true" & SAHTE=$!; sleep 0.4
+printf '%s\n' sahte > "$T/oturumlar"; printf 'sahte\t1\t1\t%%8\t%s\tbash\n' "$SAHTE" > "$T/bolmeler"
+kapi "F21 argümanda /claude geçen başlatıcı (Claude yok) → listede ajan DEĞİL (claude=0)" "0" "$(L sahte)"
+pkill -P $SAHTE 2>/dev/null; kill $SAHTE 2>/dev/null
 # F20 bölme listesi alınamazsa ölçüm YOK: --bos rc 3, ölçer rc 2 (boş liste 'temiz' sayılmaz)
 printf '%s\n' ana > "$T/oturumlar"; : > "$T/bolme-hata"
 bash "$D/../scripts/koltuk-bagla.sh" --bos >/dev/null 2>&1; rb=$?; OLC >/dev/null 2>&1; ro=$?; rm -f "$T/bolme-hata"
