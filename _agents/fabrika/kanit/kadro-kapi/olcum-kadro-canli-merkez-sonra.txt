@@ -1,0 +1,23 @@
+$ node /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/kadro-canli.mjs
+# rc=0 sure=0.5s zaman=2026-10-15T00:49:54+03:00
+--- stdout ---
+kaynak: /config/projects/Nexus/_agents/handoff/aile-registry.yaml
+sayilar: {"calisan":10,"dusen":0,"kayitta-var-calismiyor":6,"gecici-emekli":0,"kayitsiz":4}
+calisan                  SERDAR       rol=motor/governance/ölçüm gelişti hal_kayit=bilinmiyor oturum=serdar/bos
+kayitta-var-calismiyor   UISERDAR     rol=Nexus ui/ Agentic-OS panelleri hal_kayit=bilinmiyor oturum=-
+calisan                  PAZARBASI    rol=freelance/pazaryeri hattı — Fr hal_kayit=bilinmiyor oturum=pazarbasi/bos
+calisan                  MUMEYYIZ     rol=başvuru elemesi — satış person hal_kayit=bilinmiyor oturum=mumeyyiz/girdi
+kayitta-var-calismiyor   BUGSERDAR    rol=sistem-bütünlük denetçisi (kur hal_kayit=bilinmiyor oturum=-
+kayitta-var-calismiyor   AHENKSERDAR  rol=koordinasyon sync-katmanı (ail hal_kayit=bilinmiyor oturum=-
+kayitta-var-calismiyor   MIMSERDAR    rol=mimar — uygulanabilir mimari-p hal_kayit=bilinmiyor oturum=-
+kayitta-var-calismiyor   MOTORSERDAR  rol=backend/motor implementasyon b hal_kayit=bilinmiyor oturum=-
+calisan                  MUAVİN       rol=SERDAR'ın ast-muavini — ops Q& hal_kayit=bilinmiyor oturum=muavin/bos
+kayitta-var-calismiyor   YAVER        rol=günlük düzen + yükümlülük taki hal_kayit=bilinmiyor oturum=-
+calisan                  NAKKAŞ       rol="tasarım-sistemi sahibi meta-p hal_kayit=bilinmiyor oturum=nakkas/soru
+calisan                  BASİRET      rol="Kariyer: LinkedIn profili · C hal_kayit=bilinmiyor oturum=basiret/girdi
+calisan                  BÂNİ         rol=merkez (s01) inşa ajanı — SERD hal_kayit=bilinmiyor oturum=bani/calisiyor
+calisan                  BERİD        rol=sohbet (koç sohbeti geçidi) sa hal_kayit=bilinmiyor oturum=berid/girdi
+calisan                  MİRAHUR      rol=cloudtop platform nöbetçisi —  hal_kayit=bilinmiyor oturum=MIRAHUR/girdi
+calisan                  code-ana     rol=(kimliği yok)                  hal_kayit=bilinmiyor oturum=code-ana/bos
+kayitsiz: cc-19986388/bilinmiyor · dash/bilinmiyor · dashproxy/bilinmiyor · dashwatch/bilinmiyor
+--- stderr ---

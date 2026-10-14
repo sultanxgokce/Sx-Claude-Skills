@@ -1,0 +1,10 @@
+import { execFileSync } from 'node:child_process';
+import { kayitOku, kadroBirlestir } from '/config/projects/_wt/Sx-Claude-Skills-kadro-kapi/terminal-onar/kapi/kadro.mjs';
+import { koltukSatirlari } from '/config/projects/_wt/Sx-Claude-Skills-kadro-kapi/terminal-onar/kapi/koltuklar.mjs';
+const out = execFileSync('bash', ['/config/projects/_wt/Sx-Claude-Skills-kadro-kapi/terminal-onar/scripts/koltuk-bagla.sh', '--liste'], { env: { ...process.env, TO_KUTU: 'code' }, encoding: 'utf8' });
+const kayit = kayitOku('/config/projects/Nexus');
+const k = kadroBirlestir({ uyeler: kayit.uyeler, koltuklar: koltukSatirlari(out), ana: 'code-ana' });
+console.log('kaynak:', kayit.kaynak.join(', '));
+console.log('sayilar:', JSON.stringify(k.sayilar));
+for (const p of k.kisiler) console.log(`${p.grup.padEnd(24)} ${(p.id || p.tmux).padEnd(12)} rol=${p.rol.slice(0, 30).padEnd(30)} hal_kayit=${p.hal_kayit.padEnd(10)} oturum=${p.oturum ? p.oturum.ad + '/' + p.oturum.hal + (p.oturum.ne ? ' (' + p.oturum.ne + ')' : '') : '-'}`);
+console.log('kayitsiz:', k.kayitsiz.map((x) => x.ad + '/' + x.hal).join(' · '));

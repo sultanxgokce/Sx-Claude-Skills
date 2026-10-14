@@ -9,7 +9,7 @@
  * Her iddianın ATEŞLEYEN ve ATEŞLEMEYEN yüzü birlikte ölçülür (SEDİR/MEDDAH kuralı).
  */
 import { spawn } from 'node:child_process';
-import { mkdtempSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, mkdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -485,6 +485,36 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   kapi('SL7 200 emojilik ad (kodlu 2400) tekil uca girer → 200; 201 emoji → 404', r7.status === 200 && readFileSync(DEF2, 'utf8').includes('durum ' + e200)
     && (await iste(18787, '/sedir/api/koltuk/' + encodeURIComponent('😀'.repeat(201)), { cerez })).status === 404, `→ ${r7.status}`);
   p6.kill();
+}
+
+// ── KD · /api/kadro (2.8.0): kayıt (TO_PROJE/_agents/handoff/aile-registry.yaml) ⟂ 6 sütunlu koltuk listesi ──
+{
+  const giris = async (port, taban) => { const ok = await iste(port, `${taban}/giris`, { metot: 'POST', govde: { parola: SIFRE } });
+    return 'kapi=' + ((ok.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1]; };
+  const PROJE = join(T, 'proje'); mkdirSync(join(PROJE, '_agents/handoff'), { recursive: true });
+  writeFileSync(join(PROJE, '_agents/handoff/aile-registry.yaml'), 'uyeler:\n  - id: BASIRET\n    tmux: "BASIRET:0"\n    rol: "gözcü"\n    hal: calisiyor\n  - id: KALFA\n    tmux: "kalfa:0"\n    rol: "kalfa"\n  - id: MIMAR\n    tmux: "mimar:0"\n    hal: emekli\n');
+  const K6 = join(T, 'koltuk-sahte6.sh');
+  writeFileSync(K6, '#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\n'
+    + 'printf "sinavkutu-ana\\t1760000000\\t0\\tdiger\\tbilinmiyor\\t\\nBASIRET\\t1760000100\\t1\\tajan\\tdis-olay\\tCI bekleniyor\\nkalfa\\t5\\t0\\tajan\\tbilinmiyor\\t\\n2026/85\\t7\\t1\\tajan\\tgirdi\\t\\n"\n');
+  const p8 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: { ...process.env, KAPI_PORT: '18791', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', TO_PROJE: PROJE,
+    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_KOLTUK_BETIK: K6, TO_ANA_TMUX: 'sinavkutu-ana' }, stdio: 'ignore' });
+  for (let i = 0; i < 50; i++) { await new Promise((r) => setTimeout(r, 100)); try { if ((await fetch('http://127.0.0.1:18791/sedir/giris')).status === 200) break; } catch {} }
+  kapi('KD0 girişsiz /api/kadro 401', (await iste(18791, '/sedir/api/kadro')).status === 401);
+  const cerez = await giris(18791, '/sedir');
+  const r = await iste(18791, '/sedir/api/kadro', { cerez }); const j = await r.json();
+  const K = (id) => (j.kisiler || []).find((x) => x.id === id);
+  kapi('KD1 200 + kaynak aile kaydı + sayılar', r.status === 200 && j.kaynak.length === 1 && j.kaynak[0].endsWith('aile-registry.yaml') && JSON.stringify(j.sayilar) === JSON.stringify({ calisan: 1, dusen: 2, 'kayitta-var-calismiyor': 0, 'gecici-emekli': 1, kayitsiz: 1 }), `→ ${r.status} ${JSON.stringify(j.sayilar)} ${JSON.stringify(j.kaynak)}`);
+  kapi('KD2 çalışan: BASIRET ⏳ dış olay + ne + ekran adresi', K('BASIRET').grup === 'calisan' && K('BASIRET').oturum.hal === 'dis-olay' && K('BASIRET').oturum.ne === 'CI bekleniyor' && K('BASIRET').oturum.ekran === '/sedir/tty/?arg=BASIRET', JSON.stringify(K('BASIRET')));
+  kapi('KD3 düşen: kalfa (oturum açık, Claude yok) · ana koltuk kimliksiz ve boş kabuk → düşen', K('KALFA').grup === 'dusen' && j.kisiler.some((x) => x.ana && x.grup === 'dusen' && x.rol === '(kimliği yok)'));
+  kapi('KD4 hal: emekli → geçici/emekli; kayıtsız "2026/85" kodlu ekran adresiyle', K('MIMAR').grup === 'gecici-emekli' && j.kayitsiz.length === 1 && j.kayitsiz[0].ekran === '/sedir/tty/?arg=2026%2F85', JSON.stringify(j.kayitsiz));
+  kapi('KD5 proje dizini yanıtta (hangi kayıt okundu, izlenebilir)', j.proje === PROJE);
+  p8.kill();
+  const p9 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: { ...process.env, KAPI_PORT: '18793', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', TO_PROJE: join(T, 'yok-proje'),
+    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_KOLTUK_BETIK: KOLTUK_BOZUK }, stdio: 'ignore' });
+  for (let i = 0; i < 50; i++) { await new Promise((r) => setTimeout(r, 100)); try { if ((await fetch('http://127.0.0.1:18793/sedir/giris')).status === 200) break; } catch {} }
+  const c9 = await giris(18793, '/sedir');
+  kapi('KD6 koltuk listesi ölçülemezse 500 (uydurma kadro yok)', (await iste(18793, '/sedir/api/kadro', { cerez: c9 })).status === 500);
+  p9.kill();
 }
 
 kapiTaban.kill(); kapiKok.kill(); ttyd.close();

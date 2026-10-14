@@ -1,0 +1,68 @@
+{
+  "is": "kadro-kapi",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T00:49:54+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kadro-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kadro-sinavi-sonra.txt",
+      "sha256": "53262697c2424955d4ef2992bd620ec1ca861040bd2072ed12a3d51f9d599f51",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/kadro.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T00:49:39+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sunucu-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-sunucu-sinavi-sonra.txt",
+      "sha256": "b6584acdac48cc954f03f252b2f9475de6c0058328c8cc0853c67d88671fac45",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T00:49:46+03:00",
+      "sure_sn": 6.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinav-kapisi",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinav-kapisi-sonra.txt",
+      "sha256": "2ad66c00ce47f51d35b62bdd5509190c168c55ececb5da8b62cec09f2a24b9ac",
+      "komut": [
+        "bash",
+        "terminal-onar/kapi/kapi-sinav.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T00:49:53+03:00",
+      "sure_sn": 7.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kadro-canli-merkez",
+      "asama": "sonra",
+      "dosya": "olcum-kadro-canli-merkez-sonra.txt",
+      "sha256": "47e4ae47b99d7a63ea6b8febd53c1b5500d2fc80d73138c529ae57b7eabfe525",
+      "komut": [
+        "node",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/kadro-canli.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T00:49:54+03:00",
+      "sure_sn": 0.5
+    }
+  ],
+  "imza": "701b36876d0c8eac81c340eafcaf13552cdf1311d07ba16d3c90bc6dd4dc9a00"
+}
