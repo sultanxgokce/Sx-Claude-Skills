@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "terminal-bos-koltuk-olcumu",
+  "pr": "314",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-14T11:34:46+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 40499,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "BOŞ hükmü, torun ajan tanıma ve claude.exe desteği eklenmiş; canlı ölçüm ile mutasyon sınavları ana örnekleri doğruluyor. Ancak talep edilen süreç ağacının tamamı yerine yalnız altı kat taranıyor ve bölme ölçümü başarısız olduğunda --bos temiz sonuç verebildiği için önce bu yanlış-negatif yolları çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "Süreç ağacının tamamı taranmıyor; arama altı katla sınırlandırılmış. Daha derindeki ajan yine yok sanılacağından iş kartındaki açık talep tam karşılanmıyor.",
+        "kanit": "altta_claude döngüsü `kat -lt 6` koşuluyla duruyor; SKILL açıklaması da “en çok 6 kat” diyor. İş kartı ise “süreç ağacının tamamı”nı istiyor.",
+        "konum": "terminal-onar/scripts/koltuk-bagla.sh: altta_claude; terminal-onar/SKILL.md: Boş kabuk koltuk bölümü",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "`tmux list-panes` başarısızlığı BOŞ ölçümünde hata olarak taşınmıyor; ölçer boş listeyi geçerli kabul edip koltukları temiz gösterebilir.",
+        "kanit": "`bolmeler()` stderr'i bastırıyor; `bos_kabuk_mu` içindeki süreç yönlendirmesinde komut başarısız olsa da `n=0` ile yalnız yanlış dönüyor. `--bos` dalı yalnız `list-sessions` hatasını rc 3 yapıp döngü sonunda koşulsuz rc 0 veriyor.",
+        "konum": "terminal-onar/scripts/koltuk-bagla.sh: bolmeler, bos_kabuk_mu ve --bos dalları",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Sonra ölçümü gerçek filo adlarıyla 12 BOŞ sonucunu ikinci yüzey beklentisiyle eşliyor; mutasyon kaydı üç korumanın gerçekten sınandığını, eski sınav kaydı gerileme olmadığını gösteriyor. Buna karşılık önce kaydı komutu `true` ile yeşile zorluyor ve yalnız eski sürümde BOŞ kavramının bulunmadığını gösteriyor; ayrıca altı kat sınırı ile list-panes hata yolunu kapsayan ölçüm yok."
+  }
+}

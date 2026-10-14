@@ -1,12 +1,10 @@
-$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutasyon-bos.sh
-# rc=0 sure=221.5s zaman=2026-10-14T11:32:14+03:00
+$ python3 /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mut.py /config/projects/_wt/Sx-Claude-Skills-terminal-bos-koltuk-olcumu/terminal-onar
+# rc=0 sure=408.4s zaman=2026-10-14T11:52:30+03:00
 --- stdout ---
-M1 alt-ağaç araması kaldırıldı (eski çocuk-araması): değişti=evet
-  ✗ F17 başlatma betiği altındaki (torun) Claude listede ajan işaretli (claude=1) → beklenen [1] olan [0]
-M2 BOŞ hükmü kaldırıldı
-  ✗ F10 görünür ama içinde Claude yok → BOS, rc 1 → beklenen [1|BOS|1] olan [0|gorunur|0]
-  ✗ F16 BOŞ sayısı yalnız gerçek boş kabuk: 1 (kabuk) → beklenen [1] olan [0]
-M3 claude.exe tanıma kaldırıldı: değişti=evet
-  ✗ F18 'claude.exe' listede ajan işaretli (claude=1) → beklenen [1] olan [0]
-mutasyon rc: M1=1 M2=1 M3=1 (≠0 olmalı) · temiz hâl=0 (0 olmalı)
+M1 alt-ağaç araması → eski çocuk araması: sınav rc=1 | ✗ F17 başlatma betiği altındaki (torun) Claude listede ajan işaretli (claude=1) → beklenen ; ✗ F19 Claude 8 kat aşağıda (≥7) → listede ajan işaretli, BOŞ değil → beklenen [1|gorunur|1
+M2 BOŞ hükmü kaldırıldı: sınav rc=1 | ✗ F10 görünür ama içinde Claude yok → BOS, rc 1 → beklenen [1|BOS|1] olan [0|gorunur|0] ; ✗ F16 BOŞ sayısı yalnız gerçek boş kabuk: 1 (kabuk) → beklenen [1] olan [0]
+M3 claude.exe tanıma kaldırıldı: sınav rc=1 | ✗ F18 'claude.exe' listede ajan işaretli (claude=1) → beklenen [1] olan [0]
+M4 bölme listesi hatası yutuldu: sınav rc=1 | ✗ F20 bölme listesi hatası → --bos rc 3 · ölçer rc 2 (ÖLÇÜLEMEDİ) → beklenen [3|2] olan [0
+M5 derin aramada ikinci katın altı kesildi: sınav rc=1 | ✗ F17 başlatma betiği altındaki (torun) Claude listede ajan işaretli (claude=1) → beklenen ; ✗ F19 Claude 8 kat aşağıda (≥7) → listede ajan işaretli, BOŞ değil → beklenen [1|gorunur|1
+temiz hâl rc= 0
 --- stderr ---

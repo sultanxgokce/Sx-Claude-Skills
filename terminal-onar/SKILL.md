@@ -267,8 +267,8 @@ hermetik, sahte crontab/tmux; B11 mutasyon: eski gösterge geri gelince B2 yakal
 
 Fark ölçeri (`kapi/koltuk-fark.mjs`, filo: `scripts/koltuk-fark-filo.sh`) artık görünür koltuklarda **BOŞ** hükmü verir: hiçbir
 bölmesinde Claude yok **ve** her bölmede yalnız kabuk istemi var, altında hiçbir süreç yok (`koltuk-bagla.sh --bos`, tek kaynak).
-Tıklayan boş kabuğa düşer; kirli sayılır (rc 1). 🔴 Niçin (SERDAR 14 Eki): 15 koltuk "görünür = temiz" sayılıyordu, DÜŞEN 0.
-- **Claude araması alt ağacın tamamında** (en çok 6 kat): kutuların çoğu ajanı başlatma betiğiyle açar (bölme → `baslat-claude.sh` →
+Tıklayan boş kabuğa düşer; kirli sayılır (rc 1). Bölme listesi ya da süreç tablosu alınamazsa `--bos` rc 3 → ölçer ÖLÇÜLEMEDİ der (boş liste "temiz" sayılmaz). 🔴 Niçin (SERDAR 14 Eki): 15 koltuk "görünür = temiz" sayılıyordu, DÜŞEN 0.
+- **Claude araması alt ağacın tamamında** (derinlik sınırı yok; süreç tablosu alınamazsa ÖLÇÜLEMEDİ): kutuların çoğu ajanı başlatma betiğiyle açar (bölme → `baslat-claude.sh` →
   `claude`); eski arama yalnız çocuk sürece bakıyordu, torun Claude "yok" sayılıyordu (tellal/HAYALI, nova-kesif, huzur-yon).
 - **`claude.exe` de Claude'dur** (yerel kurucunun ikilisi; medigate/SAYMAN yanlış "boş" görünüyordu).
 - **Boş ≠ Claude'suz:** sunucu/izleme koşan oturum (nova/kesif-ui web sunucusu) boş DEĞİL; geçici adlar (cc-* · dash* · imglistener*) muaf.

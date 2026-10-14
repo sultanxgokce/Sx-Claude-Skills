@@ -11,7 +11,8 @@ case "$*" in
   *list-sessions*) [ -f "$KF/hata" ] && { echo "beklenmedik tmux hatası" >&2; exit 1; }
     case "$*" in *session_activity*) awk '{print $0"\t0"}' "$KF/oturumlar" ;; *) cat "$KF/oturumlar" ;; esac ;;
   *list-clients*) cat "$KF/istemciler" 2>/dev/null ;;
-  *list-panes*) # bölmeler: ad · pencere-etkin · bölme-etkin · %kimlik · pid · komut. Dosya yoksa: her oturum Claude'lu (eski sınavların varsayımı)
+  *list-panes*) [ -f "$KF/bolme-hata" ] && { echo "bölme listesi hatası" >&2; exit 1; }
+    # bölmeler: ad · pencere-etkin · bölme-etkin · %kimlik · pid · komut. Dosya yoksa: her oturum Claude'lu (eski sınavların varsayımı)
     if [ -f "$KF/bolmeler" ]; then cat "$KF/bolmeler"; else while IFS= read -r n; do printf '%s\t1\t1\t%%1\t1\tclaude\n' "$n"; done < "$KF/oturumlar"; fi ;;
   *) exit 0 ;;
 esac
@@ -107,5 +108,26 @@ kapi "F16 BOŞ sayısı yalnız gerçek boş kabuk: 1 (kabuk)" "1" "$(J 'o["bos"
 L() { bash "$D/../scripts/koltuk-bagla.sh" --liste | awk -F'\t' -v a="$1" '$1==a {print $3}'; }
 kapi "F17 başlatma betiği altındaki (torun) Claude listede ajan işaretli (claude=1)" "1" "$(L torun)"
 kapi "F18 'claude.exe' listede ajan işaretli (claude=1)" "1" "$(L exe)"
+# F19 derinlik sınırı YOK (bağımsız göz tur 1): Claude 8 kat aşağıda da bulunur
+d="\"$T/bin/claude\" 60"; for i in 1 2 3 4 5 6 7; do d="bash -c '$(printf '%s' "$d" | sed "s/'/'\\\\''/g"); true'"; done
+bash -c "$d; true" & DERIN=$!; sleep 0.6
+printf '%s\n' derin > "$T/oturumlar"; printf 'derin\t1\t1\t%%7\t%s\tbash\n' "$DERIN" > "$T/bolmeler"
+kat=$(python3 -c "
+import os
+def cocuk(p): return [int(x) for x in open(f'/proc/{p}/task/{p}/children').read().split()]
+def ara(p,d):
+    for c in cocuk(p):
+        a=open(f'/proc/{c}/cmdline','rb').read().split(b'\\0')[0]
+        if a.endswith(b'/claude'): return d+1
+        r=ara(c,d+1)
+        if r: return r
+    return 0
+print(ara($DERIN,0))")
+kapi "F19 Claude $kat kat aşağıda (≥7) → listede ajan işaretli, BOŞ değil" "1|gorunur|1" "$([ "$kat" -ge 7 ] && echo 1 || echo 0)|$(H derin)|$(L derin)"
+pkill -P $DERIN 2>/dev/null; kill $DERIN 2>/dev/null
+# F20 bölme listesi alınamazsa ölçüm YOK: --bos rc 3, ölçer rc 2 (boş liste 'temiz' sayılmaz)
+printf '%s\n' ana > "$T/oturumlar"; : > "$T/bolme-hata"
+bash "$D/../scripts/koltuk-bagla.sh" --bos >/dev/null 2>&1; rb=$?; OLC >/dev/null 2>&1; ro=$?; rm -f "$T/bolme-hata"
+kapi "F20 bölme listesi hatası → --bos rc 3 · ölçer rc 2 (ÖLÇÜLEMEDİ)" "3|2" "$rb|$ro"
 kill $KABUK $TORUN $GECICI $SUNUCU $EXE 2>/dev/null; pkill -P $TORUN 2>/dev/null; pkill -P $SUNUCU 2>/dev/null; rm -f "$T/bolmeler"
 echo "GEÇEN: $g · KALAN: $k"; [ "$k" -eq 0 ]
