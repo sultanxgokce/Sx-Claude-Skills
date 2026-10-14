@@ -14,4 +14,6 @@ mut "M2 kutuda da soru sorulur" '"") if [ $merkez = 1 ]; then k=SOR; else k=kutu
 mut "M3 kutuda tüm filo kabul edilir" 'if [ "$k" = filo ] && [ $merkez = 0 ]; then' 'if false; then'
 mut "M4 tanınmayan argüman kutu sayılır (uydurma kapsam)" '" >&2; exit 2 ;;' '" >&2; k=kutu ;;'
 mut "M5 filo seçiminde özet komutu verilmez" 'echo "KOMUT_OZET=bash $FILO_SH gunluk-plan-ozet"' 'true'
+mut "M6 --kos planı koşturmaz (karar yazılır, zincir kopar)" 'if [ $KOS = 1 ]; then echo "── PLAN' 'if false; then echo "── PLAN'
+mut "M7 --kos uygula da koşturur (SERDAR adımı atlanır)" 'bash "$FILO_SH" gunluk-plan --hepsi; exit $?; fi ;;' 'bash "$FILO_SH" gunluk-plan --hepsi --uygula; exit $?; fi ;;'
 echo; [ $r = 0 ] && echo "MUTASYON: hepsi ölçüldü" || echo "MUTASYON: en az biri ölçülmedi/yeşil kaldı"; exit $r

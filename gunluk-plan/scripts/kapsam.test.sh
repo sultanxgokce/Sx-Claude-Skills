@@ -13,4 +13,7 @@ o=$(M bu kutu 2>&1); r=$?; ok "K4 merkezde 'bu kutu' → kutu, soru yok, filo ko
 o=$(M kapanis 2>&1); r=$?; ok "K4b 'kapanis' → kutu (gün sonu kendi kutusunun işi)" '[ $r -eq 0 ] && [[ "$o" == *"KAPSAM=kutu"* ]]'
 o=$(U tüm filo 2>&1); r=$?; ok "K5 kutuda 'tüm filo' → rc 2, söylenir (filo motoru yok)" '[ $r -eq 2 ] && [[ "$o" == *"yalnız merkezde"* ]]'
 o=$(M yarım filo 2>&1); r=$?; ok "K6 tanınmayan argüman → rc 2, kapsam UYDURULMAZ" '[ $r -eq 2 ] && [[ "$o" == *"tanınmayan kapsam"* ]] && [[ "$o" != *KAPSAM=* ]]'
+o=$(M --kos tüm filo 2>&1); r=$?; ok "K7 --kos ile filo: karar + PLAN komutu GERÇEKTEN koşar (sahte filo.sh 'gunluk-plan --hepsi' aldı), uygula KOŞMAZ" '[ $r -eq 0 ] && [[ "$o" == *"KAPSAM=filo"* ]] && [[ "$o" == *"sahte-filo gunluk-plan --hepsi"* ]] && [[ "$o" != *"sahte-filo gunluk-plan --hepsi --uygula"* ]]'
+o=$(M --kos 2>&1); r=$?; ok "K7b --kos argümansız merkezde yine SOR (soru koşturulmaz, hiçbir komut gitmez)" '[ $r -eq 0 ] && [[ "$o" == *"KAPSAM=SOR"* ]] && [[ "$o" != *sahte-filo* ]]'
+o=$(M --kos bu kutu 2>&1); r=$?; ok "K7c --kos bu kutu → kutu, filo komutu koşmaz" '[ $r -eq 0 ] && [[ "$o" == *"KAPSAM=kutu"* ]] && [[ "$o" != *sahte-filo* ]]'
 echo "kapsam.test: $g geçti · $k kaldı"; [ $k -eq 0 ]

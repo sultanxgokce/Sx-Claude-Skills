@@ -1,0 +1,16 @@
+$ bash gunluk-plan/scripts/kapsam.test.sh
+# rc=0 sure=0.1s zaman=2026-10-14T11:43:14+03:00
+--- stdout ---
+  ✓ K1 merkezde argümansız → SOR (tek soru, iki şık, önerim tüm filo)
+  ✓ K2 kutuda argümansız → kutu, SORU YOK
+  ✓ K3 merkezde 'tüm filo' → filo + üç komut (plan · uygula · özet) filo.sh'a bağlı
+  ✓ K3b büyük harf de tanınır
+  ✓ K4 merkezde 'bu kutu' → kutu, soru yok, filo komutu yok
+  ✓ K4b 'kapanis' → kutu (gün sonu kendi kutusunun işi)
+  ✓ K5 kutuda 'tüm filo' → rc 2, söylenir (filo motoru yok)
+  ✓ K6 tanınmayan argüman → rc 2, kapsam UYDURULMAZ
+  ✓ K7 --kos ile filo: karar + PLAN komutu GERÇEKTEN koşar (sahte filo.sh 'gunluk-plan --hepsi' aldı), uygula KOŞMAZ
+  ✓ K7b --kos argümansız merkezde yine SOR (soru koşturulmaz, hiçbir komut gitmez)
+  ✓ K7c --kos bu kutu → kutu, filo komutu koşmaz
+kapsam.test: 11 geçti · 0 kaldı
+--- stderr ---

@@ -49,7 +49,9 @@ Karar koddadır, metinde değil: **`bash scripts/kapsam.sh [<argüman>]`** → `
 | kutu | `tüm filo` | rc 2 — filo motoru yok, söylenir |
 | her yer | başka bir şey | rc 2 — kapsam uydurulmaz |
 
-Sınavı: `bash scripts/kapsam.test.sh` (K1-K6, hermetik; merkez/kutu ayrımı sahte filo.sh ile).
+Merkezde çağrı: **`bash scripts/kapsam.sh --kos [<argüman>]`** — SOR ise soruyu sorar (yukarıdaki iki şık), cevabı argüman olarak yeniden
+çağırırsın; filo ise PLAN komutunu da koşturur (hiçbir mektup gitmez). Göndermek (`--uygula`) ve özet SERDAR'ın açık adımlarıdır, kendiliğinden koşmaz.
+Sınavı: `bash scripts/kapsam.test.sh` (K1-K7c, hermetik; merkez/kutu ayrımı ve zincirin icrası sahte filo.sh ile).
 
 **"tüm filo" seçilince — yeni kanal YOK, iki mevcut komut:**
 ```bash

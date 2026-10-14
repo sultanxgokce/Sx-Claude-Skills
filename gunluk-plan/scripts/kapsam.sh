@@ -4,8 +4,11 @@
 # Kural: argüman "tüm filo"|"filo"|"hepsi" → filo · "bu kutu"|"kutu"|"kapanis" → kutu · boş: MERKEZDE → SOR (tek soru: tüm filo (önerim) / bu kutu),
 #        kutuda → kutu (soru yok) · başka argüman → rc 2 (uydurma kapsam yok).
 # Merkez = filo motorunun bulunduğu kutu: $GUNLUK_PLAN_FILO_SH (varsayılan /config/projects/Nexus/scripts/filo.sh) çalıştırılabilirse.
+#   --kos : kararı yalnız YAZMAZ, filo ise PLAN komutunu da koşturur (bash $FILO_SH gunluk-plan --hepsi) — uygula ASLA kendiliğinden değil,
+#           o SERDAR'ın açık adımıdır. Beceri metni merkezde bunu --kos ile çağırır; böylece "soru → karar → plan" zinciri tek kapıdan geçer.
 set -u
 FILO_SH="${GUNLUK_PLAN_FILO_SH:-/config/projects/Nexus/scripts/filo.sh}"
+KOS=0; if [ "${1:-}" = "--kos" ]; then KOS=1; shift; fi
 merkez=0; [ -x "$FILO_SH" ] && merkez=1
 arg="$(printf '%s' "$*" | tr '[:upper:]' '[:lower:]' | sed 's/^ *//; s/ *$//')"
 case "$arg" in
@@ -18,5 +21,6 @@ if [ "$k" = filo ] && [ $merkez = 0 ]; then echo "⛔ 'tüm filo' yalnız merkez
 echo "KAPSAM=$k"
 case "$k" in
   SOR)  echo "SORU=Bu kutu mu, tüm filo mu?"; echo "SIKLAR=tüm filo (önerim)|bu kutu" ;;
-  filo) echo "KOMUT_PLAN=bash $FILO_SH gunluk-plan --hepsi"; echo "KOMUT_UYGULA=bash $FILO_SH gunluk-plan --hepsi --uygula"; echo "KOMUT_OZET=bash $FILO_SH gunluk-plan-ozet" ;;
+  filo) echo "KOMUT_PLAN=bash $FILO_SH gunluk-plan --hepsi"; echo "KOMUT_UYGULA=bash $FILO_SH gunluk-plan --hepsi --uygula"; echo "KOMUT_OZET=bash $FILO_SH gunluk-plan-ozet"
+        if [ $KOS = 1 ]; then echo "── PLAN (koşturuldu, hiçbir mektup gitmedi; göndermek SERDAR'ın adımı: KOMUT_UYGULA) ──"; bash "$FILO_SH" gunluk-plan --hepsi; exit $?; fi ;;
 esac

@@ -1,0 +1,32 @@
+{
+  "tur": 2,
+  "is": "gunluk-plan-kapsam",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-14T11:42:24+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 21131,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, merkez/kutu kapsam kararı kodlanmış, beceri metnine bağlanmış ve sekiz davranış sınavı ile beş mutasyonda ölçülmüş; önceki turun temel eksikleri kapanmış. Ancak sınav karar betiğini doğrudan çağırıyor, gerçek `/gunluk-plan` yürütücüsünün bu betiği çağırdığını ve üretilen filo komutlarını gerçekten işlettiğini ölçmüyor; üretim öncesi bu entegrasyon kapısını çözün.",
+    "bulgular": [
+      {
+        "ne": "Sınav yalnız `kapsam.sh` çıktısını doğruluyor; gerçek `/gunluk-plan` çağrısının kapsam kararını çalıştırdığı ve filo seçiminde komut zincirini icra ettiği uçtan uca sınanmıyor.",
+        "kanit": "`kapsam.test.sh` içindeki `K=\"$H/kapsam.sh\"` ile M/U yardımcıları doğrudan `bash \"$K\"` çağırıyor. K3 ise yalnız çıktıda `gunluk-plan --hepsi`, `--uygula` ve `gunluk-plan-ozet` dizgelerini arıyor; sahte `filo.sh`ın gerçekten çağrıldığına ilişkin sayaç/çağrı kaydı yok. Yeşil `sinav-kapsam-8` ve `mutasyon-1-5-tekrar` kayıtları da bu aynı sınav yüzeyini ölçüyor.",
+        "konum": "gunluk-plan/scripts/kapsam.test.sh:6-10; kanıt kayıtları sinav-kapsam-8, mutasyon-1-5-tekrar",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Davranış sınavı 8/8 yeşil, ilk kırmızı mutasyon ölçümündeki M4 açığı sonraki araç imzalı ölçümde kapanmış ve beş mutasyonun tamamı sınavı kırmış; bu güçlü bir sonra kanıtıdır. Buna karşın önce/sonra ölçüm çifti yoktur ve gerçek `/gunluk-plan` girişinden filo motorunun çağrılmasına kadar uçtan uca ölçüm bulunmadığı için entegrasyon iddiası tam kanıtlanmış değildir."
+  }
+}
