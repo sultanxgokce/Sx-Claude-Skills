@@ -1,7 +1,7 @@
 ---
 name: gunluk-plan
 description: Günün planı — elimizdeki işleri ÖLÇ, katma değer katacakları süz, Sultan-dilinde plan sun, onaydan sonra icra et. Sultan'ın her gün verdiği "işleri analiz et, bugün ne yapalım" isteğinin tek komutlu karşılığı.
-version: 1.3.1
+version: 1.4.0
 ---
 
 # /gunluk-plan — günün planı (ölç → süz → sun → icra)
@@ -30,6 +30,29 @@ bırakmaktır** — plan yalnız oraya giden yoldur.
    göstergesi bilir. Mekanik olarak güvence altına alınan şey **sıradır**: çıpa diskte
    değilse öneri aracı **üretmeyi reddeder** (çıkış 3). Yani "önce yaz, sonra öner"
    iyi niyete değil kapıya bağlıdır.
+
+## ADIM 0-a — KAPSAM: bu kutu mu, tüm filo mu? (yalnız MERKEZDE · S-15, Sultan 14 Ekim 2026)
+
+Sultan'ın bulgusu: SERDAR'da `/gunluk-plan` yalnız merkez kutunun planını çıkarıyordu; Sultan **filonun** gününü istiyor.
+Beceri **merkez kutuda** (SERDAR'ın koltuğu) çağrıldığında, ölçmeye başlamadan ÖNCE tek soru sorulur:
+
+> **"Bu kutu mu, tüm filo mu?"** — şıklar: `tüm filo (önerim)` · `bu kutu`
+
+Argüman verilmişse soru sorulmaz: `/gunluk-plan tüm filo` → filo, `/gunluk-plan` (başka kutuda) → bu kutu (eski akış).
+Kutu içinde (merkez değil) soru **sorulmaz**; kutunun planı kendi işidir.
+
+**"tüm filo" seçilince — yeni kanal YOK, iki mevcut komut:**
+```bash
+bash scripts/filo.sh gunluk-plan --hepsi            # PLAN: hangi kutuya hangi reis; reissiz kutu söylenir
+bash scripts/filo.sh gunluk-plan --hepsi --uygula   # her kutu reisine mektup: "kendi kutunda /gunluk-plan koş, tek satır dön"
+bash scripts/filo.sh gunluk-plan-ozet               # dönüşlerden Sultan'a TEK filo özeti (✅ döndü · ⏳ bekliyor · ⛔ tıkandı · ❓ soru · ⚠️ ölçülemedi)
+```
+(Nexus deposunda; komutlar `/filo` becerisinde de yazılı.) Her reis **kendi kutusunda bu beceriyi** koşar ve `donus.sh <no> bitti "<tek satır>"`
+ile döner; dönüş zili SERDAR'ı uyandırır. Aynı gün aynı kutuya ikinci mektup gitmez (parti = tarih).
+
+**Sultan'a sunum:** merkez kendi planını da ADIM 1-3 ile çıkarır; filo özeti `gunluk-plan-ozet` çıktısıdır, **kutu başına bir satır, aynen**
+(reisin cümlesi düzeltilmez, uydurma madde eklenmez). Bekleyen kutu varsa "⏳ N kutu henüz dönmedi" denir; sonra `gunluk-plan-ozet` yeniden.
+🔴 Dürüst sınır: özet dönüşlerden gelir; dönmeyen kutunun planı YOKTUR, "herhalde şudur" yazılmaz. Mektup hedefte görülmediyse (⚠️) bu da söylenir.
 
 ## ADIM 0 — ÇIPAYI AÇ (plan sunulur sunulmaz, onay beklenmeden)
 
@@ -137,6 +160,8 @@ için **kapandı / yarım / açılmadı** basar ve yarım kalanı ertesi güne b
 plan bir dilek listesidir — ve çıpa olmadan kapanış **hafızadan** yazılır, yani bayattır.
 
 ## Sınırlar / dürüstlük
+- Filo kapsamı (ADIM 0-a) merkezde bir SORUDUR, bir varsayılan değil; "tüm filo" Sultan/SERDAR'ın seçimidir. Motorun sınavı Nexus'ta
+  (`scripts/filo.test.py` GP1-GP9 + mutasyon M46-M55); bu dosya yalnız akışı ve soruyu tanımlar.
 
 - Bu skill iş ÜRETMEZ, var olanı süzer. Ölçüm boşsa plan da boştur — uydurma madde yazma.
 - Süzme bir yargıdır, mekanik değil; gerekçesi her zaman yazılır ki ertesi gün tartışılabilsin.
