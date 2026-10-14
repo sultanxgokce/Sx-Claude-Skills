@@ -1,0 +1,13 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mutasyon-sx.sh
+# rc=1 sure=1.6s zaman=2026-10-14T20:23:11+03:00
+--- stdout ---
+  ✗ B12 ortak yol yalnız YEDEK dalda ve kutu AÇIK BEYANLA (TO_KUTU=sinav) — makine-kimliği tuzağı yok — beklenen=e gerçek=h (* * * * * bash /tmp/tmp.JC095K6rZA/projects/sinav/.claude/skills/terminal-onar/scripts/bekci.sh  # terminal-onar-bekci)
+  ✗ B12b proje yolu ÖNCE sınanır, varsa o kazanır (if [ -x <proje>/bekci.sh ]) — beklenen=e gerçek=h (* * * * * bash /tmp/tmp.JC095K6rZA/projects/sinav/.claude/skills/terminal-onar/scripts/bekci.sh  # terminal-onar-bekci)
+  ✗ S9a bağ YOKKEN satır rc 0 (eski hâl: rc 127, bekçi sessiz ölü) — beklenen=0 gerçek=127
+  ✗ S9b yedek dal koştu ve kutuyu AÇIK BEYANLA aldı — beklenen=ORTAK kutu=sinav gerçek=
+  ✗ S10a TO_CRONTAB yokken geçici PROJE ile crontab komutu HİÇ çağrılmadı — beklenen=0 gerçek=2
+  ✗ S10b ve bunu SÖYLEDİ (sessiz atlama yok) — beklenen=e gerçek=h (zaten var · canlı crontab düzeltildi)
+  ✗ S10e iki işaretli satır → TEK kanonik satır — beklenen=1 gerçek=2
+  ✗ S10f eski /tmp.X ve /tmp.Y yolları kalmadı, öteki satırlar korundu (3 satır) — beklenen=0|3 gerçek=0|4
+SONUÇ: 36 geçti · 8 kaldı
+--- stderr ---

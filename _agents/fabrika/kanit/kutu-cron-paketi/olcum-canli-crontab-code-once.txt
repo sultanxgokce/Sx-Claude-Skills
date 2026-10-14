@@ -1,0 +1,6 @@
+$ sh -c crontab -l | grep -n "terminal-onar-bekci"
+# rc=0 sure=0.0s zaman=2026-10-14T20:18:29+03:00
+--- stdout ---
+676:* * * * * bash /tmp/tmp.Eei6mn5jVc/projects/sinav/.claude/skills/terminal-onar/scripts/bekci.sh  # terminal-onar-bekci
+677:* * * * * bash /tmp/tmp.Eei6mn5jVc/projects/sinav/.claude/skills/terminal-onar/scripts/bekci.sh  # terminal-onar-bekci
+--- stderr ---

@@ -14,6 +14,12 @@ kapi(){ if [ "$2" = "$3" ]; then gecen=$((gecen+1)); echo "  ✓ $1"; else kalan
 command -v tmux >/dev/null || { echo "ÖLÇÜLEMEDİ: tmux yok"; exit 3; }
 
 T=$(mktemp -d); S="$T/sok"
+# 🔴 GERÇEK crontab'a KALKAN (S-10, 13 Eki): bu sınav GERÇEK onar.sh'ı TO_PROJE=<geçici> ile koşturur; eskiden 5. adım
+#    (bekci_kur canli) canlı crontab'daki bekçi satırını /tmp yoluna çeviriyordu. ortak.sh artık deneme yolundan canlıya
+#    dokunmaz (canli_crontab_izinli); bu kalkan o kural gerilese bile gerçek crontab'ı korur ve çağrıyı SAYAR (son kapı 0 ister).
+GERCEK_CRONTAB_IZ="$T/gercek-crontab-cagri"; export GERCEK_CRONTAB_IZ
+crontab() { printf 'CAGRILDI %s\n' "$*" >> "$GERCEK_CRONTAB_IZ"; [ "${!#}" = "-l" ] && return 0; cat >/dev/null; return 0; }
+export -f crontab
 # 🔴 Temizlik ÇIKIŞA bağlı (bağımsız göz, tur 2 rötuşu): eski hâlde yalnız son satırda
 #    temizleniyordu; sınav yarıda kesilirse tmux sunucusu ve geçici dizin ARTIK kalıyordu.
 temizle() { for k in "$T"/sok*; do [ -S "$k" ] && tmux -S "$k" kill-server 2>/dev/null; done; rm -r -- "$T" 2>/dev/null; }
@@ -89,6 +95,15 @@ kapi "S6 sunucu yok + hesabın kabuğu /bin/false → kapı DURDURUR (\$SHELL ge
 kapi "S7 sunucu yok + hesabın kabuğu /bin/bash → kapı GEÇİRİR (S6 tautoloji değil)" \
      "0" "$(govde_olc /bin/bash | tail -1)"
 
+echo "── kalkan: gerçek onar.sh deneme yolundan canlı crontab'a dokunmadı mı?"
+# Okuma (-l) serbest: durum.sh bekçi satırına bakar. Yasak olan YAZMA ('-' ile biten çağrı).
+kapi "K0 sınav boyunca çıplak crontab YAZMA çağrısı 0 (deneme kopyası canlı crontab'a dokunamaz — S-10)" "0" "$(n=$(grep -cE 'CAGRILDI.* -$' "$GERCEK_CRONTAB_IZ" 2>/dev/null); echo "${n:-0}")"
+# Pozitif kontrol kalkanın KENDİSİNİ ölçer (onar.sh'ın o ortamda crontab'a ulaşıp ulaşmadığına bağlı değil — CI'da ttyd yok,
+# yol oraya varmıyor; 15 Eki CI kırmızısı). Çocuk bash'ten çıplak çağrı kalkana düşmeli, gerçek crontab'a değil.
+n0=$(grep -c 'CAGRILDI' "$GERCEK_CRONTAB_IZ" 2>/dev/null); n0=${n0:-0}
+bash -c 'crontab -l >/dev/null 2>&1; printf "x" | crontab - 2>/dev/null' || true
+n1=$(grep -c 'CAGRILDI' "$GERCEK_CRONTAB_IZ" 2>/dev/null); n1=${n1:-0}
+kapi "K0b pozitif kontrol: çocuk kabuktan okuma+yazma çağrısı kalkana düştü (+2), gerçek crontab'a gitmedi" "2" "$((n1-n0))"
 echo
 echo "SONUÇ: $gecen geçti · $kalan kaldı"
 [ "$kalan" -eq 0 ]

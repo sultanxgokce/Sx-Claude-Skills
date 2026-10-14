@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.5.0
+version: 2.6.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -13,7 +13,7 @@ version: 2.5.0
 | web kapısı | `kapi/sunucu.mjs` `:7681` → merkez (`terminal.mmepanel.com/<kutu>/`) — telefon ekranı (PWA), giriş (parola, imzalı çerez), mesaj/foto/tuş/Onar API'si. tmux `kapi-<kutu>` | `<taban>/giris` 200 · `<taban>/` girişsiz 302 |
 | terminal | ttyd yalnız UNIX soketinde (`/config/.terminal-onar/ttyd.sock`, TCP portu yok), kapı `<taban>/tty/` altında sunar. tmux `ttyd-<kutu>` | soket `/tty/` 200 |
 | kurtarıcı ajan | tmux `<kutu>-kurtarici` içinde ayrı Claude | aynı ölçü |
-| bekçi | crontab `* * * * * … bekci.sh # terminal-onar-bekci` (+ kalıcı kopya `.oda/cron`) | satır var |
+| bekçi | crontab `* * * * * if [ -x <proje>/…/bekci.sh ]; then bash <proje>/…/bekci.sh; else TO_KUTU=<kutu> bash /config/.claude/skills/terminal-onar/scripts/bekci.sh; fi  # terminal-onar-bekci` (+ kalıcı kopya `.oda/cron`) | koşu izi ≤5 dk |
 
 code-server terminali ve web terminali **aynı tmux oturumuna** bağlanır → birebir, canlı senkron.
 Web terminali `tmux new-session -A` ile açılır: oturum yoksa kendisi kurar, boş ekrana bakmaz.
@@ -276,7 +276,27 @@ Tıklayan boş kabuğa düşer; kirli sayılır (rc 1). Bölme listesi ya da sü
 Sınav: `kapi/koltuk-fark.test.sh` F10-F18 (gerçek süreç ağaçları); mutasyon: alt-ağaç araması · BOŞ hükmü · claude.exe tanıma
 ayrı ayrı kaldırılınca sınav kırmızı.
 
+## Bekçi satırı bağsız da yaşar · deneme kopyası canlı crontab'a dokunamaz (2.6.0 · S-9 + S-10)
+
+**Yedek dal (S-9).** Proje-yolu bağı (`<proje>/.claude/skills/terminal-onar`) git'te değil, `kur.sh`'ın kutuya bıraktığı kayıtsız
+bir bağdır: depoya yazma yasağı olan kutuda (maiset, 13 Eki) hiç kurulamadı, sıfırdan kurulan her kutuda da kaybolur — satır her
+dakika rc 127 ile düşüyor, bekçi "kurulu" görünüyordu. Satır artık önce proje yolunu sınar, yoksa ORTAK yola düşer ve kutuyu **açık
+beyanla** söyler (`TO_KUTU=<kutu>`), yani makine-kimliği tuzağına (2.1.1) düşmez. Bağ varsa eski davranış birebir. Açılış satırı
+(`@reboot … komut.sh onar`) aynı kalıpta. İşaretleyici değişmedi: `bekci_kurulu` ve cloudtop kanonu (`crontab-abc`) bayt-bayt eşleşir.
+Sınav: `kur-bag.test.sh` S9a-c — cron'un koşturacağı komut `sh -c` ile **birebir** koşulur: bağ yokken rc 0 + yedek dal `kutu=sinav`,
+bağ varken yalnız proje yolu.
+
+**Canlı crontab kilidi (S-10).** Bir sınav `onar.sh`'ı `TO_PROJE=<geçici>` ile ve `TO_CRONTAB` vermeden koşturdu; `bekci_kur canli`
+canlı crontab'daki bekçi satırını `/tmp/tmp.…/proje/…` yoluna çevirdi (code kutusunda iki kez; 14 Eki'de satır çift kopyaydı).
+Kural: `PROJE` gerçek kutu yolu (`/config/projects/<kutu>`) değilse canlı crontab'a **yalnız açıkça verilen** `TO_CRONTAB` ile
+dokunulur; verilmemişse dokunulmaz ve söylenir ("canlı crontab'a DOKUNULMADI (deneme yolu …)"). Kalıcı kopya (`.oda/cron`) yine
+yazılır. İşaretli satır çiftse **tekilleşir**. Sınav: S10a-f (sahte crontab PATH'te hiç çağrılmaz · pozitif kontrol · tekilleşme);
+mutasyon: eski `ortak.sh` ile 7 kapı kırmızı.
+
 ## Sürüm notları
+- **2.6.0 (2026-10-15, BÂNİ · SERDAR bulgu paketi S-9 + S-10):** bekçi/açılış satırı bağ yokken ortak yola `TO_KUTU` ile düşer
+  (rc 127 ölümü bitti); deneme kopyası canlı crontab'a dokunamaz (`canli_crontab_izinli`); çift işaretli satır tekilleşir.
+  cloudtop kanonu (`infra/cron/crontab-abc`) aynı pakette yeni biçime geçti. Sınav: `kur-bag.test.sh` 44 kapı (S9a-c · S10a-f · K0 kalkan).
 - **2.5.0 (2026-10-14, MUAVİN · SERDAR bulgusu):** boş kabuk koltuk BOŞ hükmü + alt ağaçta Claude araması + claude.exe (yukarıda).
 - **2.4.4 (2026-10-13, BÂNİ · G-BANI-0007 madde 1 — "sessiz düşürme yok"):** fark ölçeri. `kapi/koltuk-fark.mjs` kutudaki her tmux
   oturumuna tek hüküm verir: görünür · gizli:<neden> · gizli:ad-süzgeci · **DÜŞEN** (gerekçesiz → rc 1). Listede olup tmux'ta olmayan
