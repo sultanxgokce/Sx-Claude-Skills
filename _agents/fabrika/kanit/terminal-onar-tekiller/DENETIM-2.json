@@ -1,0 +1,25 @@
+{
+  "tur": 2,
+  "is": "terminal-onar-tekiller",
+  "pr": "317",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-14T22:31:22+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 24353,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "S-11’de ortak hata iletisi yakalanıp tek satırlık sebeple rc 3 üzerinden durdurulmuş; S-7’de fark ve ölçüm hatası bağlamadan önce rc 8 ile kesilip ayrıntı listelenmiş. Önce kırmızı, sonra 50/50 yeşil ölçüm ve doğrudan ilgili sınav kapıları talebi karşılıyor; üretimi durduracak bir kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; kırmızı önce/yeşil sonra ölçüm çifti var, sarı kayıt yok. Sonra çıktısı yalnız toplam 50/50 sonucunu gösterse de diff içindeki S7a-d ve S11a-b sınavları rc, bağın oluşmaması, kopyanın korunması, farkın listelenmesi, diff hatasında fail-closed davranışı ve toplam çıktının tek satır olması iddialarını açıkça ölçüyor."
+  }
+}
