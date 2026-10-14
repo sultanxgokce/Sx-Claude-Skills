@@ -296,7 +296,7 @@ mutasyon: eski `ortak.sh` ile 7 kapı kırmızı.
 ## Sürüm notları
 - **2.6.0 (2026-10-15, BÂNİ · SERDAR bulgu paketi S-9 + S-10):** bekçi/açılış satırı bağ yokken ortak yola `TO_KUTU` ile düşer
   (rc 127 ölümü bitti); deneme kopyası canlı crontab'a dokunamaz (`canli_crontab_izinli`); çift işaretli satır tekilleşir.
-  cloudtop kanonu (`infra/cron/crontab-abc`) aynı pakette yeni biçime geçti. Sınav: `kur-bag.test.sh` 43 kapı.
+  cloudtop kanonu (`infra/cron/crontab-abc`) aynı pakette yeni biçime geçti. Sınav: `kur-bag.test.sh` 44 kapı (S9a-c · S10a-f · K0 kalkan).
 - **2.5.0 (2026-10-14, MUAVİN · SERDAR bulgusu):** boş kabuk koltuk BOŞ hükmü + alt ağaçta Claude araması + claude.exe (yukarıda).
 - **2.4.4 (2026-10-13, BÂNİ · G-BANI-0007 madde 1 — "sessiz düşürme yok"):** fark ölçeri. `kapi/koltuk-fark.mjs` kutudaki her tmux
   oturumuna tek hüküm verir: görünür · gizli:<neden> · gizli:ad-süzgeci · **DÜŞEN** (gerekçesiz → rc 1). Listede olup tmux'ta olmayan
