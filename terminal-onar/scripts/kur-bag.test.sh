@@ -90,7 +90,8 @@ kapi "B10f ikinci yedeğin içeriği kendi dosyası" "1" "$(n=$(find "$BAG".eski
 kapi "B10g bağ yine doğru hedefte, rc=0" "$ORTAK:0" "$(hedef):$rc"
 
 echo "── S-11 · kutu adı reddedilince kur.sh tek satır sebeple DURUR (revak 13 Eki: 'TTYD_BIN: unbound variable' ile düşüyordu)"
-MK="$T/mk/0ee2fa8a0370/.claude/skills/terminal-onar"; mkdir -p "$MK"; cp -r "$KOK/scripts" "$MK/"
+# kutu adı YOLDAN türer: /projects/<hex>/ olunca her makinede reddedilir (CI makine adı hex değil)
+MK="$T/mk/projects/0ee2fa8a0370/.claude/skills/terminal-onar"; mkdir -p "$MK"; cp -r "$KOK/scripts" "$MK/"
 o=$(env -u TO_KUTU -u TO_PROJE HOME="$T" bash "$MK/scripts/kur.sh" 2>&1); rc=$?
 kapi "S11a makine-kimliği yolundan TO_KUTU'suz → rc 3" "3" "$rc"
 kapi "S11b sebep TEK satır (toplam çıktı 1 satır, ortak.sh iletisi içinde), 'unbound variable' YOK" "1|1|1|0" "$(echo "$o" | grep -c .)|$(echo "$o" | grep -c 'kurulum durdu: kutu adı')|$(echo "$o" | grep -c 'makine kimliğine benziyor')|$(echo "$o" | grep -c 'unbound variable')"
