@@ -72,6 +72,11 @@ rc=$(kur "$ORTAK/scripts/kur.sh")
 kapi "S7a yerel kopya ortak koddan farklı → kurulum DURUR rc 8, bağ kurulmaz, kopya yerinde" "8|dizin|1" "$rc|$([ -L "$BAG" ] && echo bağ || echo dizin)|$(test -f "$BAG/scripts/eski.txt" && echo 1 || echo 0)"
 kapi "S7b fark LİSTELENİR (hangi dosya) — alarm değil soru" "1" "$(grep -c 'eski.txt' "$T/son")"
 kapi "S7c .eski-* yedeği AÇILMADI (dokunulmadı)" "0" "$(ls -d "$BAG".eski-* 2>/dev/null | wc -l | tr -d ' ')"
+# S7d: fark ÖLÇÜLEMEZSE (okunamayan dosya) "fark yok" sayılmaz — yine durur (bağımsız göz tur 1)
+# iki tarafta da olan bir dosya okunamaz yapılır (yalnız yerelde olan dosyayı diff açmaz, "Only in" der — rc 1 kalırdı)
+cp "$ORTAK/scripts/durum.sh" "$BAG/scripts/durum.sh"; chmod 000 "$BAG/scripts/durum.sh"
+rc=$(kur "$ORTAK/scripts/kur.sh"); chmod 644 "$BAG/scripts/durum.sh"; rm -f "$BAG/scripts/durum.sh"
+kapi "S7d diff hata verirse (rc≥2) bağlama DURUR rc 8 ve 'ÖLÇÜLEMEDİ' der" "8|1" "$rc|$(grep -c 'ÖLÇÜLEMEDİ' "$T/son")"
 rc=$(TERMINAL_KUR_FARK_KABUL=1 kur "$ORTAK/scripts/kur.sh")
 kapi "B10 bilinçli kabulle eski kopya kenara alınır, bağ kurulur" "$ORTAK" "$(hedef)"
 kapi "B10b eski kopya silinmedi (.eski-* altında)" "1" "$(ls -d "$BAG".eski-* 2>/dev/null | wc -l | tr -d ' ')"
@@ -88,7 +93,7 @@ echo "── S-11 · kutu adı reddedilince kur.sh tek satır sebeple DURUR (rev
 MK="$T/mk/0ee2fa8a0370/.claude/skills/terminal-onar"; mkdir -p "$MK"; cp -r "$KOK/scripts" "$MK/"
 o=$(env -u TO_KUTU -u TO_PROJE HOME="$T" bash "$MK/scripts/kur.sh" 2>&1); rc=$?
 kapi "S11a makine-kimliği yolundan TO_KUTU'suz → rc 3" "3" "$rc"
-kapi "S11b sebep tek satır ('TO_KUTU' geçer), 'unbound variable' YOK" "1|0" "$(echo "$o" | grep -c 'kurulum durdu: kutu adı')|$(echo "$o" | grep -c 'unbound variable')"
+kapi "S11b sebep TEK satır (toplam çıktı 1 satır, ortak.sh iletisi içinde), 'unbound variable' YOK" "1|1|1|0" "$(echo "$o" | grep -c .)|$(echo "$o" | grep -c 'kurulum durdu: kutu adı')|$(echo "$o" | grep -c 'makine kimliğine benziyor')|$(echo "$o" | grep -c 'unbound variable')"
 
 echo "── proje yolunda beklenmedik DÜZ DOSYA: silinmez, kurulum durur (fail-closed)"
 rm -f "$BAG"; echo "beklenmedik" > "$BAG"

@@ -297,7 +297,7 @@ mutasyon: eski `ortak.sh` ile 7 kapı kırmızı.
 - **2.6.1 (2026-10-15, BÂNİ · SERDAR bulgu paketi 3 tekiller S-11 + S-7):** `kur.sh` ortak.sh kutu adını reddedince tek satır
   sebeple durur (rc 3; eskiden 'TTYD_BIN: unbound variable'). Yerel kopya ortak koddan FARKLIYSA bağlama DURUR ve farkı listeler
   (rc 8; REVAK 12 Eki: 863 satırlık sınavlı yerel değişiklik ezilmişti) — bilinçli ezmek `TERMINAL_KUR_FARK_KABUL=1`, kopya yine
-  `.eski-*` altında saklanır. Sınav: `kur-bag.test.sh` S7a-c · S11a-b (49 kapı); mutasyon: eski kur.sh ile 4 kapı kırmızı.
+  `.eski-*` altında saklanır. Sınav: `kur-bag.test.sh` S7a-d · S11a-b (50 kapı; S11b çıktı TEK satır, S7d diff hatası = ÖLÇÜLEMEDİ → durur); mutasyon: eski kur.sh ile 5 kapı kırmızı.
 - **2.6.0 (2026-10-15, BÂNİ · SERDAR bulgu paketi S-9 + S-10):** bekçi/açılış satırı bağ yokken ortak yola `TO_KUTU` ile düşer
   (rc 127 ölümü bitti); deneme kopyası canlı crontab'a dokunamaz (`canli_crontab_izinli`); çift işaretli satır tekilleşir.
   cloudtop kanonu (`infra/cron/crontab-abc`) aynı pakette yeni biçime geçti. Sınav: `kur-bag.test.sh` 44 kapı (S9a-c · S10a-f · K0 kalkan).

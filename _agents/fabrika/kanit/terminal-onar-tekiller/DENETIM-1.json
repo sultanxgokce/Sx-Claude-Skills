@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "terminal-onar-tekiller",
+  "pr": "317",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-14T21:41:52+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 16940,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "S-7 için farklı yerel kopyada bağlamayı durduran ve farkı gösteren koruma eklenmiş; ölçüm de bu kapıların geçtiğini gösteriyor. Ancak S-11’in “tek satır sebep” talebi gerçekten sınanmıyor ve uygulama iki ayrı hata satırı üretebildiği için önce bu uyumsuzluk çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "S-11 tek satır hata şartını karşılamıyor: ortak.sh başarısızlık iletisini stderr’e yazdıktan sonra kur.sh ikinci bir açıklama daha yazıyor.",
+        "kanit": "Eklenen yorum ortak.sh’ın kendi iletisinin zaten stderr’de olduğunu açıkça söylüyor; hemen sonraki hata kolu ayrıca printf ile yeni bir satır basıyor. S11b ise yalnız belirli ifadenin bir kez geçmesini ve “unbound variable” bulunmamasını ölçüyor, toplam çıktı satırı sayısını ölçmüyor.",
+        "konum": "terminal-onar/scripts/kur.sh:15-17; terminal-onar/scripts/kur-bag.test.sh:91-94",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Fark ölçümü hata verirse güvenli biçimde durmak yerine hatayı yutup bağlamaya devam edebilir.",
+        "kanit": "diff stderr’i /dev/null’a yönlendiriliyor ve boru hattı “|| true” ile daima başarılı yapılıyor; okunamayan dosya veya başka diff hatasında _fark boş kalırsa rc 8 koruması çalışmaz.",
+        "konum": "terminal-onar/scripts/kur.sh:93-94",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; kırmızı önce/yeşil sonra ölçüm çifti mevcut, sarı kayıt yok. Sonra kaydı 49/49 sonucu veriyor fakat ayrıntılı kapı çıktısını göstermiyor; ayrıca S11 sınavı “tek satır” iddiasını gerçekten ölçmediğinden yeşil sonuç bu talebi kanıtlamıyor."
+  }
+}

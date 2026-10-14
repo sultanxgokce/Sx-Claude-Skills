@@ -1,9 +1,13 @@
 $ env ESKI=1 bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mutasyon-sx2.sh
-# rc=1 sure=0.7s zaman=2026-10-14T21:39:58+03:00
+# rc=1 sure=0.7s zaman=2026-10-14T21:44:21+03:00
 --- stdout ---
   ✗ S7a yerel kopya ortak koddan farklı → kurulum DURUR rc 8, bağ kurulmaz, kopya yerinde — beklenen=8|dizin|1 gerçek=0|bağ|0
   ✗ S7b fark LİSTELENİR (hangi dosya) — alarm değil soru — beklenen=1 gerçek=0
   ✗ S7c .eski-* yedeği AÇILMADI (dokunulmadı) — beklenen=0 gerçek=1
-  ✗ S11b sebep tek satır ('TO_KUTU' geçer), 'unbound variable' YOK — beklenen=1|0 gerçek=0|0
-SONUÇ: 45 geçti · 4 kaldı
+  ✗ S7d diff hata verirse (rc≥2) bağlama DURUR rc 8 ve 'ÖLÇÜLEMEDİ' der — beklenen=8|1 gerçek=7|0
+  ✗ B10c rc=0 — beklenen=0 gerçek=7
+  ✗ B10g bağ yine doğru hedefte, rc=0 — beklenen=/tmp/tmp.6tEkY0oO0s/ortak/skills/terminal-onar:0 gerçek=/tmp/tmp.6tEkY0oO0s/ortak/skills/terminal-onar:7
+  ✗ S11b sebep TEK satır (toplam çıktı 1 satır, ortak.sh iletisi içinde), 'unbound variable' YOK — beklenen=1|1|1|0 gerçek=6|0|1|0
+  ✗ B13d rc=0 — beklenen=0 gerçek=7
+SONUÇ: 42 geçti · 8 kaldı
 --- stderr ---
