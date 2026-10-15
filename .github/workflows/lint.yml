@@ -77,6 +77,19 @@ jobs:
           #   ⚠️ Bu, "yeşilin ne zamanki veriye ait olduğu sorulmuyor" sınıfının bir vakasıdır —
           #     kapı-sinavi becerisinin `bayat-mi` kapısının fikstür tarafındaki karşılığı.
           KARANTINA=" ./mucit-suz/scripts/mucit-t1.test.sh ./kasif-tara/scripts/kasif-hafiza.test.sh "
+          # Süre-tavanı: varsayılan 300 sn sabitti; yazilim-fabrikasi/denetci.test.sh (15 mutant,
+          # her biri TÜM süiti yeniden koşuyor) CI'da üst üste 300 sn'de Terminated oldu (2026-10-15,
+          # ölç: #38724018436 vb. — 'bayat-kopya-geri-donusu' mutantında kesildi). Nexus'un
+          # kabuk-testleri.sh'teki AYNI desen: ilk 15 satırda `# kabuk-testleri: sure=N` isteyen
+          # sınama varsayılanı aşabilir, tavan 900 — istek kapıyı süresiz bekletmenin kılıfı olamaz.
+          KABUK_SURE_VARSAYILAN=300; KABUK_SURE_TAVAN=900
+          sure_sec(){
+            local t="$1" n
+            n="$(head -15 "$t" 2>/dev/null | sed -n 's/^# *kabuk-testleri: *sure=\([0-9]\{1,5\}\) *$/\1/p' | head -1)"
+            if [ -z "$n" ] || [ "$n" -lt 1 ]; then echo "$KABUK_SURE_VARSAYILAN"; return 0; fi
+            if [ "$n" -gt "$KABUK_SURE_TAVAN" ]; then echo "::warning::$t sure=$n istedi, tavan $KABUK_SURE_TAVAN uygulandı"; echo "$KABUK_SURE_TAVAN"; return 0; fi
+            echo "$n"
+          }
           mapfile -t T < <(find . -name '*.test.sh' -not -path './.git/*' | sort)
           if [ "${#T[@]}" -eq 0 ]; then echo "::error::hiç *.test.sh bulunamadı — keşif bozuk"; exit 1; fi
           echo "bulunan sınama: ${#T[@]}"
@@ -86,7 +99,8 @@ jobs:
               *" $t "*) echo "::warning::KARANTİNA — atlandı: $t"; atlanan=$((atlanan+1)); continue ;;
             esac
             echo "── $t"
-            if timeout 300 bash "$t"; then echo "   ✓ $t"; else echo "::error::$t KIRMIZI"; dusen=$((dusen+1)); fi
+            sure="$(sure_sec "$t")"
+            if timeout "$sure" bash "$t"; then echo "   ✓ $t"; else echo "::error::$t KIRMIZI (süre tavanı ${sure}sn)"; dusen=$((dusen+1)); fi
           done
           echo "toplam=${#T[@]} koşan=$(( ${#T[@]} - atlanan )) atlanan=$atlanan düşen=$dusen"
           # karantina listesindeki bir dosya artık YOKSA liste bayatlamıştır → kırmızı
