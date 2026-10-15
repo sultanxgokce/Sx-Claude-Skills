@@ -1,0 +1,5 @@
+$ python3 -c from PIL import Image; im=Image.open('/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/a7.png'); im.load(); print('bağımsız okuyucu (PIL) açtı:', im.size, 'interlace=', im.info.get('interlace'))
+# rc=0 sure=0.0s zaman=2026-10-15T17:30:46+03:00
+--- stdout ---
+bağımsız okuyucu (PIL) açtı: (3, 3) interlace= 1
+--- stderr ---

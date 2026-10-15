@@ -419,13 +419,24 @@ PYP
   head -c 40 "$T/k1.png" > "$T/k4-kesik.png"; printf '\xff\xd8\xff\xe0%s' "sahte-kare-2" > "$T/k5-sahte.jpg"
   # göz #331 tur 2: işaretleri TAŞIYAN ama görüntü olmayan dosyalar (yapı ölçülür, işaret araması değil)
   printf '\xff\xd8duz veri \xff\xc0 serpistirilmis \xff\xd9' > "$T/k6-isaretli.jpg"
-  python3 - "$T/k7-idatsiz.png" "$T/k8-boy.png" <<'PYP'
+  python3 - "$T/k7-idatsiz.png" "$T/k8-boy.png" "$T/k9-adam7.png" "$T/k10-adam7-kisa.png" <<'PYP'
 import sys,struct,zlib
 def y(t,d): return struct.pack('>I',len(d))+t+d+struct.pack('>I',zlib.crc32(t+d)&0xffffffff)
 ih=y(b'IHDR',struct.pack('>IIBBBBB',2,2,8,2,0,0,0))
 open(sys.argv[1],'wb').write(b'\x89PNG\r\n\x1a\n'+ih+y(b'IEND',b''))
 open(sys.argv[2],'wb').write(b'\x89PNG\r\n\x1a\n'+ih+y(b'IDAT',zlib.compress(b'\x00\x01\x02'))+y(b'IEND',b''))
+# göz #331 tur 3: Adam7 geçişli 3x3 gri — doğru akış (ALTIN, geçmeli) ve 1 bayt eksik akış (KIRMIZI)
+ia=y(b'IHDR',struct.pack('>IIBBBBB',3,3,8,0,0,0,1))
+dogru=b''.join(b'\x00'+b'\x80'*pw for pw,ph in ((1,1),(1,1),(2,1),(1,2),(3,1)) for _ in range(ph))   # 3x3: geçiş 1,4,5,6,7 dolu (2 ve 3 boş) — 1+1+2+2+3 = 9 piksel
+open(sys.argv[3],'wb').write(b'\x89PNG\r\n\x1a\n'+ia+y(b'IDAT',zlib.compress(dogru))+y(b'IEND',b''))
+open(sys.argv[4],'wb').write(b'\x89PNG\r\n\x1a\n'+ia+y(b'IDAT',zlib.compress(dogru[:-1]))+y(b'IEND',b''))
 PYP
+  # SOS'tan hemen sonra EOI: gerçek JPEG'in (k2) SOS bölümünü alıp entropi verisini sil
+  python3 - "$T/k2.jpg" "$T/k11-bostarama.jpg" <<'PYJ'
+import sys
+b=open(sys.argv[1],'rb').read(); i=b.index(b'\xff\xda'); L=(b[i+2]<<8)|b[i+3]
+open(sys.argv[2],'wb').write(b[:i+2+L]+b'\xff\xd9')
+PYJ
   bash "$K" olcum is-k olc --asama tek -- echo 1 >/dev/null 2>&1
   SAHTE_JSON="$(J 5 E "")" bash "$D" is-k --diff "$T/y.patch" --kart "$T/kart.md" --kare "$T/yok.png" >"$T/k0.out" 2>&1; RC=$?
   [ "$RC" -eq 2 ] && grep -q "dosyası yok" "$T/k0.out" && [ ! -e "$T/_agents/fabrika/kanit/is-k/DENETIM-1.json" ]; g $? "K1 --kare dosyası yoksa rc=2, denetim AÇILMAZ (sessiz atlama yok)"
@@ -435,10 +446,14 @@ PYP
   [ "$RC" -eq 2 ] && grep -q "kesik" "$T/k0d.out"; g $? "K2b 🔴 imzası doğru ama KESİK PNG → rc=2 (yapı ölçülür, ilk baytlar değil — göz #331 tur 1)"
   SAHTE_JSON="$(J 5 E "")" bash "$D" is-k --diff "$T/y.patch" --kart "$T/kart.md" --kare "$T/k5-sahte.jpg" >"$T/k0e.out" 2>&1; RC=$?
   [ "$RC" -eq 2 ] && grep -q "geçerli görsel değil" "$T/k0e.out"; g $? "K2c 🔴 JPEG başlığı + düz metin (EOI/SOF yok) → rc=2"
-  for _s in "k6-isaretli.jpg:K2d 🔴 SOI + serpiştirilmiş SOF işareti + EOI ama bölüm yapısı yok → rc=2 (göz #331 tur 2)" "k7-idatsiz.png:K2e 🔴 CRC'leri doğru IHDR+IEND, piksel verisi (IDAT) yok → rc=2" "k8-boy.png:K2f 🔴 IDAT açılıyor ama boyutu 2×2 RGB'ye tutmuyor → rc=2"; do
+  for _s in "k6-isaretli.jpg:K2d 🔴 SOI + serpiştirilmiş SOF işareti + EOI ama bölüm yapısı yok → rc=2 (göz #331 tur 2)" "k7-idatsiz.png:K2e 🔴 CRC'leri doğru IHDR+IEND, piksel verisi (IDAT) yok → rc=2" "k8-boy.png:K2f 🔴 IDAT açılıyor ama boyutu 2×2 RGB'ye tutmuyor → rc=2" "k10-adam7-kisa.png:K2g 🔴 Adam7 geçişli PNG, akış 1 bayt kısa → rc=2 (göz #331 tur 3)" "k11-bostarama.jpg:K2h 🔴 JPEG SOS'tan hemen sonra EOI (piksel verisi yok) → rc=2 (göz #331 tur 3)"; do
     SAHTE_JSON="$(J 5 E "")" bash "$D" is-k --diff "$T/y.patch" --kart "$T/kart.md" --kare "$T/${_s%%:*}" >"$T/k0f.out" 2>&1; RC=$?
     [ "$RC" -eq 2 ] && grep -q "geçerli görsel değil" "$T/k0f.out"; g $? "${_s#*:}"
   done
+  # kendi iş adıyla (is-k2i): tam denetim koşar ve DENETIM-1 yazar — is-k'nin tur sayacına dokunmasın (K4/K5/K7 tur 1'i okur)
+  bash "$K" olcum is-k2i olc --asama tek -- echo 1 >/dev/null 2>&1
+  SAHTE_JSON="$(J 5 E "")" bash "$D" is-k2i --diff "$T/y.patch" --kart "$T/kart.md" --kare "$T/k9-adam7.png" >"$T/k0g.out" 2>&1; RC=$?
+  [ "$RC" -eq 0 ] && ! grep -q "geçerli görsel değil" "$T/k0g.out" && [ -f "$T/_agents/fabrika/kanit/is-k2i/DENETIM-1.json" ]; g $? "K2i ALTIN: doğru Adam7 geçişli PNG kapıdan GEÇER ve denetim tamamlanır (kapı katılaşıp gerçek görseli reddetmesin)"
   ( K9=(); for i in 1 2 3 4 5 6 7 8 9; do K9+=(--kare "$T/k1.png"); done; SAHTE_JSON="$(J 5 E "")" bash "$D" is-k --diff "$T/y.patch" --kart "$T/kart.md" "${K9[@]}" >"$T/k0c.out" 2>&1; echo $? > "$T/k0c.rc" )
   [ "$(cat "$T/k0c.rc")" -eq 2 ] && grep -q "en çok 8" "$T/k0c.out"; g $? "K3 9 kare → rc=2 (tavan 8)"
   SAHTE_ISTEM_KOPYA="$T/k-istem.md" SAHTE_JSON="$(J 5 E "")" bash "$D" is-k --diff "$T/y.patch" --kart "$T/kart.md" --kare "$T/k1.png" --kare "$T/k2.jpg" >"$T/k4.out" 2>&1; RC=$?

@@ -73,11 +73,18 @@ def png(b):
     if not idat: return 'IDAT yok (piksel verisi yok)'
     try: ham=zlib.decompress(idat)
     except zlib.error: return 'piksel akışı açılmıyor'
-    if il==0:
-        sb=(w*kanal*bd+7)//8
-        if len(ham)!=h*(1+sb): return 'piksel akışı boyutu tutmuyor'
-        if any(ham[r*(1+sb)]>4 for r in range(h)): return 'satır süzgeci geçersiz'
-    elif not ham: return 'piksel akışı boş'
+    # satır düzeni: geçişsiz = tek alt-görüntü; Adam7 (göz #331 tur 3) = yedi geçiş, her biri kendi genişliği/yüksekliğiyle
+    gecis=[(0,0,1,1)] if il==0 else [(0,0,8,8),(4,0,8,8),(0,4,4,8),(2,0,4,4),(0,2,2,4),(1,0,2,2),(0,1,1,2)]
+    j=0
+    for xs,ys,dx,dy in gecis:
+        pw=(w-xs+dx-1)//dx if w>xs else 0; ph=(h-ys+dy-1)//dy if h>ys else 0
+        if not pw or not ph: continue
+        sb=(pw*kanal*bd+7)//8
+        for _ in range(ph):
+            if j>=len(ham): return 'piksel akışı boyutu tutmuyor (kısa)'
+            if ham[j]>4: return 'satır süzgeci geçersiz'
+            j+=1+sb
+    if j!=len(ham): return 'piksel akışı boyutu tutmuyor'
     return ''
 def jpg(b):
     # göz #331 tur 2: işaret aramak yetmez — bölümler SIRAYLA okunur: SOI → (uzunluklu bölümler) → geçerli SOF → SOS → entropi verisi → … → EOI tam sonda
@@ -101,9 +108,10 @@ def jpg(b):
         i+=2+L
         if m==0xda:
             if not sof: return 'SOF olmadan SOS'
-            sos+=1
+            sos+=1; bas=i
             while i+1<n and not (b[i]==0xff and b[i+1]!=0x00 and not 0xd0<=b[i+1]<=0xd7): i+=1
             if i+1>=n: return 'EOI ile bitmiyor (kesik)'
+            if i==bas: return 'tarama boş (piksel verisi yok)'   # göz #331 tur 3: SOS'tan hemen sonra işaret = görüntü yok
 print(png(b) if b[:4]==b'\x89PNG' else jpg(b) if b[:2]==b'\xff\xd8' else 'PNG/JPG imzası yok')
 PYK
 )"
