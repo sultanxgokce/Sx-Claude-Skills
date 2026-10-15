@@ -1,0 +1,72 @@
+{
+  "is": "koltuk-hal5",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T03:58:05+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-bagla-sinavi",
+      "asama": "once",
+      "dosya": "olcum-koltuk-bagla-sinavi-once.txt",
+      "sha256": "a66cb5717511380e8bf78143eeae795e537ddb086136448cd90e54cad972559f",
+      "komut": [
+        "env",
+        "ESKI=1",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mutasyon-sx3.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T00:14:52+03:00",
+      "sure_sn": 2.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-bagla-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-bagla-sinavi-sonra.txt",
+      "sha256": "e319cfe6cd9bf7d29bd79a2d6a5d5dc25568ada5b0aee0d65454fe7a245c3a4c",
+      "komut": [
+        "env",
+        "ESKI=0",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mutasyon-sx3.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T00:14:58+03:00",
+      "sure_sn": 5.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-bagla-54",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-bagla-54-sonra.txt",
+      "sha256": "392ce726541a1b9eabb32a83a5085d74d8c8bfbaf8c92fb95a59ae0bd6fe56fb",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T00:22:07+03:00",
+      "sure_sn": 5.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-bagla-55-kapi-ne-neden",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-bagla-55-kapi-ne-neden-sonra.txt",
+      "sha256": "63a71767025f3ca28b2f3919afcf93a238c227728571bd0bc643423e73551a2e",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T03:58:05+03:00",
+      "sure_sn": 4.7
+    }
+  ],
+  "imza": "93e1638dd909c8f757b1903269aa3fa1c5f65d6fe89df7b9b6ae90d203c67022"
+}

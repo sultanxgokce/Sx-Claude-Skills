@@ -1,0 +1,52 @@
+{
+  "is": "koltuk-hal5",
+  "cumle": "Koltuk hâline 5. durum: ⏳ 'dış olay bekliyor' (yazı kutusu boş + ekranda 'N shells running' ya da 'bekleniyor/bildirim gelince' kalıbı) ve ne beklediği; çalışıyor sanılan ajanın CI beklediği görünür",
+  "istedi": "SERDAR 15 Eki 00:55 (Sultan eki 15 Eki 20:40)",
+  "aldi": "BÂNİ",
+  "zaman": "2026-10-15T00:06:15+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/koltuk-hal5/",
+  "oda": "",
+  "durum": "tikandi",
+  "gecmis": [
+    {
+      "zaman": "2026-10-15T00:22:07+03:00",
+      "olay": "tikandi"
+    }
+  ],
+  "bitis": "2026-10-15T00:22:07+03:00",
+  "pr": "",
+  "puan": {
+    "kod": 3,
+    "dogru": "H",
+    "tur": 3
+  },
+  "kanit_var": true,
+  "tikanma": {
+    "yol": "devam",
+    "neden": "Göz 3 turda aynı kapsam bulgusunu yineledi (⏳ çizimi cloudtop #621'de, bu beceri yalnız ölçer); tur 3'ün gerçek bulgusu (bitmiş bekleme dış olay sayılıyordu) 870d805 ile giderildi, 54/54 + mutasyon kırmızı. Reis SERDAR: kapsam açıklamasıyla devam"
+  },
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "BÂNİ",
+      "oturum": "NOTES 2026-10-15 03:35",
+      "gerekce": "SERDAR kararı NOTES 03:35/06:40 — her tur bulgusu giderildi, son hâl yeşil; önkoşul (40 kişiye hal yazmak) Sultan kararı, bekletmez",
+      "zaman": "2026-10-15T03:25:29+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "BÂNİ",
+      "oturum": "NOTES 2026-10-15 12:00",
+      "gerekce": "SERDAR kararı NOTES 12:00 — PR 'koltuk hâli ölçüm katmanı' (dis-olay sınıfı + 6. sütun); görünür çizim cloudtop #621'de; bulgu 2 ('ne' alanı kabuk sayısı yerine nedeni taşısın) aynı PR'da küçük düzeltme; 5/E kaçışı Sultan sabah paketi, #319 onunla iner",
+      "zaman": "2026-10-15T03:56:49+03:00"
+    }
+  ]
+}

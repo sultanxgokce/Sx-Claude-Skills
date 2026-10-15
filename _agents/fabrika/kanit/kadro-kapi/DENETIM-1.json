@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "kadro-kapi",
+  "pr": "319",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T00:51:32+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 69627,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, istenen /api/kadro ucu kayıt ile canlı koltukları birleştiriyor; erişim, gruplar, hâl, kayıtsızlar ve ölçüm hatası sınavları da talebin ana gövdesini karşılıyor. Lakin kayıt okunamadığında sessizce boş kadro üretmesi ve ad normalleştirmenin sayısal adları aynı kimliğe indirebilmesi yanlış personel durumu gösterebilir; önce bunları çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "Var olan fakat okunamayan kayıt dosyası hata sayılmıyor; uç 500 yerine boş kayıtla birleşime devam edip canlı koltukları kayıtsız gösterebilir.",
+        "kanit": "oku() yakalamasında okuma hatası yalnız okunamadi dizisine eklenip null dönüyor; kayitOku yine uyeler üretiyor ve /api/kadro yalnız koltuk betiğinin rc değerini hata kabul ederek 200 yanıtlıyor. KD6 sınavı da yalnız koltuk listesinin ölçülememesini kapsıyor.",
+        "konum": "terminal-onar/kapi/kadro.mjs:58-60; terminal-onar/kapi/sunucu.mjs:453-459; terminal-onar/kapi/sunucu.test.mjs:KD6",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Koltuk adı normalleştirmesi bütün baştaki rakam ve tireleri siliyor; örneğin yalnız rakamlardan oluşan farklı adlar aynı boş anahtara düşerek yanlış personele bağlanabilir.",
+        "kanit": "norm ifadesi /^[0-9-]+/ bölümünü tamamen kaldırıyor ve bul() kesin eşleşme yoksa kalan tüm koltuklarda bu değeri karşılaştırıyor; mevcut C11 yalnız aynı tmux tekrarını ölçüyor, bu çakışmayı ölçmüyor.",
+        "konum": "terminal-onar/kapi/kadro.mjs:74-83; terminal-onar/kapi/kadro.test.mjs:C11",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sağlam ve bütün kayıtlar yeşil; kadro birim sınavı 20/20, kapı sınavı 97/97 ve gerçekçi merkez verisiyle canlı çıktı mevcut. Ancak önce/sonra ya da başka bir ölçüm çifti yok; ayrıca canlı kaydın manifest komutu scratchpad içindeki kadro-canli.mjs dosyasını çağırırken diffte sunulan kalıcı ölçüm betiği farklı mutlak çalışma ağacı yolları taşıyor, dolayısıyla canlı ölçümün yeniden üretilebilirliği zayıf."
+  }
+}

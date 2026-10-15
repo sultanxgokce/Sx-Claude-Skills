@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "koltuk-hal5",
+  "pr": "318",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T00:13:16+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19719,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "5. hâl `dis-olay` eklenmiş, bekleme sebebi altıncı alana taşınmış ve hedefli sınav önce 48/51 iken sonra 51/51 geçmiştir. Lâkin Sultan’ın göreceği rozet/üzerine gelince görünümü bu değişiklikte kurulup ölçülmemiş; ayrıca geniş bekleme kalıbı bitmiş bir konuşmayı da bekliyor diye gösterebilir, önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "“Ne beklediği rozet üstüne gelince görünür” kısmı uygulanmış olarak gösterilemiyor: değişiklik yalnız kabuk çıktısına `ne` sütunu ve kapı veri nesnesine `ne` alanı ekliyor; görünür arayüz/rozet işleyicisinde değişiklik yok.",
+        "kanit": "Diffte `printf` ile 6. sütun üretiliyor ve `koltukSatirlari` bunu nesneye alıyor; buna karşılık görünür rozet ya da hover çizimini değiştiren hiçbir dosya/kare bulunmuyor. D13b de yalnız `cut -f6` ile veri sütununu sınar.",
+        "konum": "terminal-onar/scripts/koltuk-bagla.sh:165; terminal-onar/kapi/koltuklar.mjs:13; terminal-onar/scripts/koltuk-bagla.test.sh:115",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Dış olay tespiti güncel bekleme durumuna bağlanmıyor; son 15 satırdaki herhangi bir `bekleniyor`, `bildirim gelince`, `bekleyici` veya `izleniyor` sözü, istem kutusu boşsa oturumu `dis-olay` yapabilir. Böylece tamamlanmış/eski bir açıklama yanlış pozitif üretebilir.",
+        "kanit": "Koşul bütün `$ekran` üzerinde geniş bir `grep -iE` çalıştırıp yalnız son eşleşmeyi alıyor; eşleşmenin alt çubukta veya istemden sonraki etkin durumda olduğunu doğrulayan sınır yok. Eklenen D13a-d sınavlarında bu olumsuz senaryo bulunmuyor.",
+        "konum": "terminal-onar/scripts/koltuk-bagla.sh:112; terminal-onar/scripts/koltuk-bagla.test.sh:111",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kırmızı 48/51 ile yeşil 51/51 ölçüm çifti, kabuk sınıflandırması ile altıncı sütunun hedefli sınavını destekliyor. Ancak çıktı yalnız sentetik sınav özeti; gerçekçi ekran karesi/kare dizisi ve görünür rozet-hover ölçümü olmadığı için iş kartındaki kullanıcıya görünür sonucun kanıtı eksik."
+  }
+}

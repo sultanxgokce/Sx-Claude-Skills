@@ -91,7 +91,7 @@ printf '%s\n' "bitti." "" "❯ " > "$S/ekran-MUHASIP"
 printf '%s\n' "sadece metin, istem yok" > "$S/ekran-cc-1"
 SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste"; lrc=$?
 al() { grep -P "^$1\t" "$S/liste" | cut -f"$2"; }
-[ "$lrc" = 0 ] && [ "$(head -1 "$S/liste" | awk -F'\t' '{print NF}')" = 5 ] && ok "D1 liste 5 alan: ad · son · claude · tür · hâl" || bad D1 "rc=$lrc $(head -1 "$S/liste")"
+[ "$lrc" = 0 ] && [ "$(head -1 "$S/liste" | awk -F'\t' '{print NF}')" = 6 ] && ok "D1 liste 6 alan: ad · son · claude · tür · hâl · ne (2.7.0)" || bad D1 "rc=$lrc $(head -1 "$S/liste")"
 [ "$(al BASIRET 4)" = ajan ] && ok "D2 Claude çalışan oturum 'ajan'" || bad D2 "$(al BASIRET 4)"
 [ "$(al maiset-ana 4)" = diger ] && ok "D2b Claude'suz ANA oturum da 'diğer' (istisna yok; önde durması 'ana' bayrağının işi)" || bad D2b "$(al maiset-ana 4)"
 [ "$(al CARSI 4)" = diger ] && [ "$(al dash 4)" = diger ] && ok "D3 Claude'suz oturum ve dash* 'diğer'" || bad D3 "$(al CARSI 4)/$(al dash 4)"
@@ -109,6 +109,31 @@ SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste3"
 { for i in $(seq 1 20); do echo "çıktı satırı $i"; done; echo "⏺ Düşünüyor…"; echo "esc to interrupt"; } > "$S/ekran-BASIRET"
 SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste4"
 [ "$(grep -P '^BASIRET\t' "$S/liste4" | cut -f5)" = calisiyor ] && ok "D12b güncel meşgul izi (son satırlarda) → çalışıyor (D12 tautoloji değil)" || bad D12b "$(grep -P '^BASIRET\t' "$S/liste4" | cut -f5)"
+# D13 · 5. HÂL ⏳ dış olay bekliyor (Sultan 15 Eki): yazı kutusu boş + "2 shells running" → dis-olay, 6. sütun ne beklediği
+{ echo "⏺ CI bekleniyor; bildirim gelince devam."; echo "❯ "; echo "──────"; echo "  2 shells still running · ⏵⏵ auto mode"; } > "$S/ekran-BASIRET"
+printf '%s\n' "Bitti." "❯ " > "$S/ekran-KALFA"
+SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste5"
+[ "$(grep -P '^BASIRET\t' "$S/liste5" | cut -f5)" = dis-olay ] && ok "D13 boş kutu + 'shells running' → ⏳ dış olay bekliyor (çalışıyor DEĞİL, boş DEĞİL)" || bad D13 "$(grep -P '^BASIRET\t' "$S/liste5" | cut -f5)"
+[ "$(grep -P '^BASIRET\t' "$S/liste5" | cut -f6)" = "CI bekleniyor; bildirim gelince devam." ] && ok "D13b ne beklediği --liste 6. sütununda NEDEN olarak (açıklayıcı son mesaj kabuk sayısından önce; göz tur 4); çizim cloudtop #621'in" || bad D13b "$(grep -P '^BASIRET\t' "$S/liste5" | cut -f6)"
+{ echo "⏺ Bitti."; echo "❯ "; echo "──────"; echo "  2 shells still running · ⏵⏵ auto mode"; } > "$S/ekran-BASIRET"
+SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste5b"
+[ "$(grep -P '^BASIRET\t' "$S/liste5b" | cut -f5)" = dis-olay ] && [[ "$(grep -P '^BASIRET\t' "$S/liste5b" | cut -f6)" == *"2 shells still running"* ]] && ok "D13b2 açıklayıcı mesaj yoksa 'ne' kabuk sayısını taşır (hâl yine dış olay)" || bad D13b2 "$(grep -P '^BASIRET\t' "$S/liste5b" | cut -f5-6)"
+[ "$(grep -P '^KALFA\t' "$S/liste5" | cut -f5)" = bos ] && [ -z "$(grep -P '^KALFA\t' "$S/liste5" | cut -f6)" ] && ok "D13c boş kutu, bekleme izi yok → boş; ne sütunu BOŞ (uydurulmaz)" || bad D13c "$(grep -P '^KALFA\t' "$S/liste5" | cut -f5-6)"
+{ echo "❯ "; echo "  2 shells still running"; echo "⏺ Düşünüyor…"; echo "esc to interrupt"; } > "$S/ekran-BASIRET"
+SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste6"
+[ "$(grep -P '^BASIRET\t' "$S/liste6" | cut -f5)" = calisiyor ] && ok "D13d meşgul izi varken 'shells running' çalışıyor'u GİZLEMEZ (öncelik: çalışıyor > dış olay)" || bad D13d "$(grep -P '^BASIRET\t' "$S/liste6" | cut -f5)"
+# D13e: ESKİ bir "bekleniyor" (10 satır yukarıda) güncel boş istemi dış olay YAPMAZ — yalnız son 5 satır sayılır (bağımsız göz tur 1)
+{ echo "⏺ CI bekleniyor; bildirim gelince devam."; for i in $(seq 1 10); do echo "çıktı satırı $i"; done; echo "⏺ Bitti, kapattım."; echo "❯ "; } > "$S/ekran-BASIRET"
+SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste7"
+[ "$(grep -P '^BASIRET\t' "$S/liste7" | cut -f5)" = bos ] && ok "D13e eski 'bekleniyor' satırı (son 5 dışı) dış olay sayılmaz → boş" || bad D13e "$(grep -P '^BASIRET\t' "$S/liste7" | cut -f5)"
+# D13f: son 5 satır İÇİNDE "bekleniyor" ama ardından "⏺ Bitti" + boş istem → bekleme bitmiş, dış olay DEĞİL → boş (bağımsız göz tur 3)
+{ for i in $(seq 1 10); do echo "çıktı satırı $i"; done; echo "⏺ CI bekleniyor; bildirim gelince devam."; echo "⏺ Bitti, kapattım."; echo "❯ "; } > "$S/ekran-BASIRET"
+SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste8"
+[ "$(grep -P '^BASIRET\t' "$S/liste8" | cut -f5)" = bos ] && [ -z "$(grep -P '^BASIRET\t' "$S/liste8" | cut -f6)" ] && ok "D13f son 5 satırda 'bekleniyor' + sonra '⏺ Bitti' + boş istem → boş (bitmiş bekleme dış olay sayılmaz)" || bad D13f "$(grep -P '^BASIRET\t' "$S/liste8" | cut -f5-6)"
+# D13g: alt çubuk sinyali mesajdan bağımsız — "⏺ Bitti" sonrası bile "2 shells still running" çubuğu varsa dış olay (çubuk istemin ALTINDADIR)
+{ echo "⏺ Bitti, kapattım."; echo "❯ "; echo "──────"; echo "  2 shells still running"; } > "$S/ekran-BASIRET"
+SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste9"
+[ "$(grep -P '^BASIRET\t' "$S/liste9" | cut -f5)" = dis-olay ] && ok "D13g 'shells running' çubuğu son mesaja bakmaz → dış olay" || bad D13g "$(grep -P '^BASIRET\t' "$S/liste9" | cut -f5)"
 printf '%s\n' maiset-ana BASIRET CARSI imglistener ttyd-maiset kapi-maiset maiset-kurtarici > "$S/oturumlar"; rm -f "$S"/ekran-*
 
 echo "C · liste (tek kaynak)"

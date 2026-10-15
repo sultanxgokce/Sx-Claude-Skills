@@ -1,0 +1,38 @@
+{
+  "tur": 4,
+  "is": "koltuk-hal5",
+  "pr": "318",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T03:27:12+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 45206,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Efendim, `dis-olay` hâli ile altıncı veri alanı eklenmiş; bitmiş bekleme yanılgısı giderilmiş ve hedefli sınav 49/52’den 52/52’ye, bütün takım da 54/54’e dönmüştür. Lâkin kartın istediği kullanıcıya görünür CI bekleme sunumu bu değişiklikte yoktur ve kabuk göstergesi bulunduğunda gerçek bekleme nedeni yerine yalnız “2 shells still running” taşınmaktadır; önce bunları çözünüz.",
+    "bulgular": [
+      {
+        "ne": "Kartın asıl kullanıcı sonucu olan “çalışıyor sanılan ajanın CI beklediği görünür” davranışı uygulanmamış; değişiklik yalnız sınıflandırma ve veri taşıma katmanını hazırlıyor.",
+        "kanit": "Diff, `koltuk-bagla.sh` içinde altıncı sütunu üretip `koltuklar.mjs` içinde `ne` alanına çeviriyor; görünür arayüzü çizen değişiklik bulunmuyor. Sürüm notu da görünür çizimin cloudtop #621’de olduğunu ve bu PR kapsamına girmediğini açıkça söylüyor; D13b yalnız altıncı sütunu sınıyor.",
+        "konum": "terminal-onar/scripts/koltuk-bagla.sh:175; terminal-onar/kapi/koltuklar.mjs:13; terminal-onar/SKILL.md:297; terminal-onar/scripts/koltuk-bagla.test.sh:115",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Kabuk göstergesi ile açıklayıcı CI mesajı birlikteyken `ne` alanı neyin beklendiğini değil, yalnız çalışan kabuk sayısını bildiriyor.",
+        "kanit": "Kod önce `N shells running` eşleşmesini `ne` değişkenine koyuyor ve açıklayıcı metin kalıbını yalnız bu değer boşsa arıyor. D13 verisi hem “CI bekleniyor; bildirim gelince devam” hem “2 shells still running” içerdiği hâlde D13b özellikle altıncı alanda `shells still running` sonucunu doğruluyor.",
+        "konum": "terminal-onar/scripts/koltuk-bagla.sh:116; terminal-onar/scripts/koltuk-bagla.test.sh:111",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlamdır; sarı kayıt yoktur. Kırmızı 49/52 ile yeşil 52/52 ölçüm çifti ve 54/54 son takım, sınıflandırma ile veri alanındaki değişikliği destekliyor; D13f önceki turun bitmiş-bekleme bulgusunun giderildiğini de ölçüyor. Ancak gerçekçi önce/sonra ekran karesi veya görünür kullanıcı arayüzü ölçümü bulunmadığından kartın görünür sonuç iddiası kanıtsızdır."
+  }
+}

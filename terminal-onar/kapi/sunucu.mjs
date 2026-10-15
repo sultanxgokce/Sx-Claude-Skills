@@ -17,7 +17,8 @@ import zlib from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 // Koltuk adı kuralı — kabuktaki TEK kopyası scripts/koltuk-adi.sh; iki dilin eşdeğerliği scripts/koltuk-adi.test.sh'de ölçülür.
 // '.' · ':' · kontrol karakteri yok; boşluk arada serbest, başta/sonda yok; ilk karakter '$' '@' '%' '=' olamaz (tmux kimlik önekleri).
-import { KOLTUK_AD_DESEN, koltukSatirlari } from './koltuklar.mjs';   // ad kuralı + liste çözümü TEK yerde (fark ölçeri de aynısını çağırır)
+import { KOLTUK_AD_DESEN, koltukSatirlari } from './koltuklar.mjs';
+import { kayitOku, kadroBirlestir } from './kadro.mjs';   // 2.8.0 Kadro: kayıt ⟂ koltuk birleşimi (dosya okur, yazmaz)   // ad kuralı + liste çözümü TEK yerde (fark ölçeri de aynısını çağırır)
 
 const KOK = path.dirname(fileURLToPath(import.meta.url));
 const GENEL = path.join(KOK, 'genel');
@@ -25,6 +26,8 @@ const BETIK = path.resolve(KOK, '../scripts');
 const PORT = +(process.env.KAPI_PORT || 7681);
 const TTYD_SOKET = process.env.KAPI_TTYD_SOKET || path.join(process.env.TO_DURUM_DIZ || '/config/.terminal-onar', 'ttyd.sock');
 const ANA_TMUX = process.env.TO_ANA_TMUX || 'sedir-ana';
+// Kutunun proje dizini — ortak.sh ile AYNI kural (TO_PROJE ya da /config/projects/<kutu>); kadro kayıt dosyaları buradan okunur
+const PROJE = process.env.TO_PROJE || ('/config/projects/' + (process.env.TO_KUTU || (process.env.KAPI_TABAN || '').replace(/^\/+|\/+$/g, '') || 'kutu'));
 // Koltuk listesinin TEK kaynağı (ttyd de aynı betiği çalıştırır). Sınav başka bir betik verebilir.
 const KOLTUK_BETIK = process.env.KAPI_KOLTUK_BETIK || path.join(BETIK, 'koltuk-bagla.sh');
 const KOLTUK_AC_BETIK = process.env.KAPI_KOLTUK_AC_BETIK || path.join(BETIK, 'koltuk-ac.sh');
@@ -443,6 +446,20 @@ const sunucu = http.createServer(async (req, res) => {
         // rc: 0 açıldı/zaten canlı · 1 açılamadı · 3 merdiven başladı · 4 kayıtsız koltuk · 5 takılı: zorla gerek (dokunulmadı)
         const kod = r.kod === 0 ? 200 : r.kod === 3 ? 202 : r.kod === 4 ? 409 : r.kod === 5 ? 428 : 502;
         return json(res, kod, { tamam: r.kod === 0 || r.kod === 3, rc: r.kod, mesaj });
+      }
+      // ── KADRO (2.8.0 · Kadro E1 önkoşul 1+3, gorev_01M4WVHD00GF5MAQD1J7G74RZ4): kutunun personel KAYDI ⟂ canlı KOLTUKLAR.
+      //    Dört grup + kayıtsız (kapi/kadro.mjs tek kaynak). Yalnız okur; kaldır/bağla/emekli ayrı uçlardır (E2-E4). Ekran adresi
+      //    koltuk listesiyle aynı kuralla (encodeURIComponent).
+      if (y === '/api/kadro') {
+        const r = await calistir('bash', [KOLTUK_BETIK, '--liste']);
+        if (r.kod !== 0) return json(res, 500, { hata: 'Koltuklar ölçülemedi.' });
+        const kayit = kayitOku(PROJE);
+        // Var olan ama OKUNAMAYAN kayıt dosyası hata sayılır (göz tur 1): boş kayıtla devam etmek herkesi "kayıtsız" gösterirdi — yalan.
+        if (kayit.okunamadi.length) return json(res, 500, { hata: 'Kayıt okunamadı: ' + kayit.okunamadi.join(', ') });
+        const kd = kadroBirlestir({ uyeler: kayit.uyeler, koltuklar: koltukSatirlari(r.out), ana: ANA_TMUX });
+        const ekranla = (o) => o ? { ...o, ekran: T('/tty/') + '?arg=' + encodeURIComponent(o.ad) } : null;
+        return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, proje: PROJE, kaynak: kayit.kaynak, okunamadi: kayit.okunamadi, zaman: new Date().toISOString(),
+          sayilar: kd.sayilar, kisiler: kd.kisiler.map((k) => ({ ...k, oturum: ekranla(k.oturum) })), kayitsiz: kd.kayitsiz.map(ekranla) });
       }
       if (y === '/api/surum') {
         // telefon eski sayfada kalmasın: dosyalar değişince sürüm değişir, sayfa kendini yeniler
