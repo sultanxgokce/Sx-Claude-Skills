@@ -1,0 +1,8 @@
+$ bash kabuk-biti.test.sh
+# rc=0 sure=0.0s zaman=2026-10-15T12:52:44+03:00
+--- stdout ---
+  ✓ beceri betikleri bulundu (araç görüyor): 220 dosya
+  ✓ pozitif kontrol: en az bir 100755 betik var (220)
+  ✓ 🔴 çalıştırma biti olmayan beceri betiği YOK (sync-skills duman testi bu yüzden düşüyordu)
+── SONUÇ: 3 geçti · 0 kaldı ──
+--- stderr ---
