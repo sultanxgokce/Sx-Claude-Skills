@@ -1,0 +1,74 @@
+{
+  "is": "kadro-kapi",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T01:02:42+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kadro-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kadro-sinavi-sonra.txt",
+      "sha256": "4fe00244ee1b4501de184c28a96320a8ecd56b0dc9d6d80ccb68bf27bf24e51b",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/kadro.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T01:02:30+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sunucu-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-sunucu-sinavi-sonra.txt",
+      "sha256": "52ea7a1222a80c9168d678dfd23876a791042a6a6fb57e70d747928389fdf180",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T01:02:36+03:00",
+      "sure_sn": 6.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinav-kapisi",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinav-kapisi-sonra.txt",
+      "sha256": "b510beefa1360c9beea12a2ca44823fdc86e7593e1173d6c8cb35dfda05ec255",
+      "komut": [
+        "bash",
+        "terminal-onar/kapi/kapi-sinav.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T01:02:42+03:00",
+      "sure_sn": 6.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kadro-canli-merkez",
+      "asama": "sonra",
+      "dosya": "olcum-kadro-canli-merkez-sonra.txt",
+      "sha256": "81e1f3bd9167b54ae6c13b2771206f8656f6b9bd73e02556731122e2e0703b30",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/kadro-canli.mjs",
+        "--kutu",
+        "code",
+        "--proje",
+        "/config/projects/Nexus",
+        "--ana",
+        "code-ana"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T00:57:52+03:00",
+      "sure_sn": 0.5
+    }
+  ],
+  "imza": "99b45fee73749733b74f40883abbbad8c9fcdce6b2ab54d162b930168847a987"
+}

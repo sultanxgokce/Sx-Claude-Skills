@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.7.0
+version: 2.8.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -293,7 +293,31 @@ dokunulur; verilmemişse dokunulmaz ve söylenir ("canlı crontab'a DOKUNULMADI 
 yazılır. İşaretli satır çiftse **tekilleşir**. Sınav: S10a-f (sahte crontab PATH'te hiç çağrılmaz · pozitif kontrol · tekilleşme);
 mutasyon: eski `ortak.sh` ile 7 kapı kırmızı.
 
+## Kadro — kayıt ⟂ koltuk tek uçta (2.8.0 · Kadro E1 önkoşul 1+3, gorev_01M4WVHD00GF5MAQD1J7G74RZ4)
+
+Sultan 14 Eki: "kutu içindeki personellerin durumu … düştü ise ayağa kaldırmak". SERDAR'ın 18 kutuluk ölçümü (14 Eki):
+39 çalışıyor · 40 kayıtta var oturumu yok · **15 oturum açık içi boş (asıl düşenler)** · 22 kayıtsız. Kapı artık `GET /api/kadro`
+ile kutunun personel **kaydını** canlı **koltuklarla** birleştirir (`kapi/kadro.mjs`, yalnız okur):
+
+| Grup | Kural |
+|---|---|
+| `calisan` | kayıtlı · oturumu var · içinde Claude var (hâl + ne beklediği koltuk listesinden) |
+| `dusen` | kayıtlı · oturumu AÇIK · içinde Claude YOK — bekçinin "canlı" saydığı boş kabuk |
+| `kayitta-var-calismiyor` | kayıtlı · oturumu yok · kayıt hâli boş/çalışıyor |
+| `gecici-emekli` | kaydın `hal:` alanı `gecici` · `yedek` · `emekli` (oturumu olsa da düşen/çalışan sayılmaz) |
+| `kayitsiz` | oturum var, kayıtta yok (ana koltuk hariç: o "(kimliği yok)" diye kişilerde durur) |
+
+**Kayıt alanı `hal:`** (önkoşul 1): `calisiyor | gecici | yedek | emekli`; alanı olmayan kişi `bilinmiyor` görünür — hiçbir şey
+uydurulmaz; 40 kişiyi "düştü" diye kırmızı basmak yalan alarm olurdu. Kayıt TEK kalır, ikinci liste açılmaz. Kayıt dosyaları
+koltuk-ac.sh ile aynı sırada: İSKÂN kutusu `iskan-registry.yaml` (id/tmux) + işaret ettiği `ekip-registry.yaml` (rol/mod/hal — çatışmada
+ekip kaydı üstün, tmux İSKÂN'dan);
+merkez `_agents/handoff/aile-registry.yaml` (önkoşul 3: merkez kadrosu da aynı uçtan). Proje dizini `TO_PROJE` ya da
+`/config/projects/<kutu>` (ortak.sh kuralı). Koltuk listesi ölçülemezse 500 — uydurma kadro yok. Çizim ve eylemler (kaldır ·
+bağla · emekli et · personel al) merkez ekranında ve ayrı uçlarda (E1-E4, cloudtop).
+
 ## Sürüm notları
+- **2.8.0 (2026-10-15, BÂNİ · Kadro E1 önkoşul):** `GET /api/kadro` (kapi/kadro.mjs: kayıt ayrıştırma + dört grup + kayıtsız + ana);
+  kayıt alanı `hal:` tanımlandı. Sınav kadro.test.mjs 20, sunucu.test.mjs KD0-KD6 (97). Koltuk hâli/`ne` 2.7.0'dan gelir.
 - **2.7.0 (2026-10-15, BÂNİ · Sultan eki 15 Eki 20:40 — 5. hâl):** koltuk hâline **⏳ `dis-olay` "dış olay bekliyor"**: yazı kutusu boş ama
   ekranda "N shells running" ya da "bekleniyor / bildirim gelince / CI … bekl" kalıbı → ajan çalışıyor sanılmaz, boşta da sayılmaz.
   `--liste` 6. sütun: ne beklediği (yalnız bu hâlde) — **bu beceri yalnız ÖLÇER ve veriyi kapıya verir; görünür çizim (⏳ ikon,
