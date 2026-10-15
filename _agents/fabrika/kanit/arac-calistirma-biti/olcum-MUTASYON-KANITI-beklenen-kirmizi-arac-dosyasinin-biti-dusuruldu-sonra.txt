@@ -1,0 +1,12 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut-arac-1792059996/mut.sh
+# rc=0 sure=0.0s zaman=2026-10-15T13:26:41+03:00
+--- stdout ---
+=== MUTASYON KANITI: commit sonrası geçici klonda arac/ altındaki tik-kaydet.sh biti 100644e DÜŞÜRÜLDÜ; aşağıdaki KIRMIZI BEKLENENDİR; rc=0 = kapı bozuk durumu YAKALADI. Gerçek ölçüm: kabuk-biti-test-3-kapi-kapsam-scripts-arac-kapi ===
+  ✓ beceri betikleri bulundu (araç görüyor): 220 dosya
+  ✓ pozitif kontrol: en az bir 100755 betik var (219)
+  ✗ 🔴 çalıştırma biti olmayan beceri betiği YOK (sync-skills duman testi bu yüzden düşüyordu)
+     bitsiz:
+       ui-tasarim-akisi/arac/tik-kaydet.sh
+     düzeltme: git update-index --chmod=+x <dosya>
+── SONUÇ: 2 geçti · 1 kaldı ──
+--- stderr ---
