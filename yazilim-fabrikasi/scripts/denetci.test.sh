@@ -517,7 +517,10 @@ mut "gerekce-zorunlulugunu-kaldir" 's@^if len(x.get("gerekce") or "") < 20: rais
 mut "karti-okumayi-kaldir" 's@^  if \[ -z "$GEREKCE" \]; then@  if false; then@'
 mut "defter-dogrulamasini-kaldir" 's@^  grep -qF "$SATIR" "$DEF"@  true@'
 mut "reis-sinif-citini-kaldir" 's@^if k.get("sultan") or k.get("siniflar"): raise SystemExit(3)@pass@'
-mut "mutlak-tavani-kaldir" 's@^if \[ "$TUR" -gt "$MUTLAK" \]; then@if false; then@'
+# 🔴 ÇAPA TAZELENDİ (görev WC3VBZAA): mutlak tavan artık HAM tura değil SAYILI tura bakıyor
+# (bulgularının hepsi kutu-dışı olan tur tavandan düşmez). Eski çapa `$TUR -gt $MUTLAK` idi ve
+# değişiklikten sonra hiçbir şey eşleşmiyordu — süitin "çapa bayatlamış" bekçisi bunu yakaladı.
+mut "mutlak-tavani-kaldir" 's@^if \[ "$SAYILI" -ge "$MUTLAK" \]; then@if false; then@'
 mut "yedek-gozu-kaldir" 's@if yedek_olur_mu; then YEDEK="codex yok";@if false; then YEDEK="codex yok";@'
 mut "kart-tek-kaynagi-kaldir" 's@^\[ -n "$KART_DEPO" \] || KART_DEPO="$DEPO"@KART_DEPO="$DEPO"@'
 mut "codex-stdin-acik" 's@"$TMP/istem.md")" </dev/null >"$TMP/log"@"$TMP/istem.md")" >"$TMP/log"@'
@@ -539,6 +542,17 @@ if bash "$(dirname "$0")/denetci-fark-ayikla.test.sh"; then
   gecen=$((gecen+1)); echo "  ✓ kanıt-ayıklama kapıları (denetci-fark-ayikla.test.sh) GEÇTİ"
 else
   kalan=$((kalan+1)); echo "  ✗ kanıt-ayıklama kapıları (denetci-fark-ayikla.test.sh) DÜŞTÜ"
+fi
+
+# ── KUTU-DIŞI SINIF KAPILARI (gorev WC3VBZAA)
+# Gövde AYRI dosyadadır (denetci-kutu-disi.test.sh) çünkü bu dosya o sırada açık PR #331'in
+# (--kare, 0.6.5) elindeydi. "Test yazmak onu koşturmaz": asıl sınav o dosyayı ÇAĞIRIR, böylece
+# denetci.test.sh kırmızıysa kutu-dışı kapıları da kırmızıdır. #331 inince gövde buraya taşınır.
+echo ""; echo "── KUTU-DIŞI SINIF (ayrı dosya, buradan çağrılır) ──"
+if bash "$(dirname "$0")/denetci-kutu-disi.test.sh"; then
+  gecen=$((gecen+1)); echo "  ✓ kutu-dışı sınıf kapıları (denetci-kutu-disi.test.sh) GEÇTİ"
+else
+  kalan=$((kalan+1)); echo "  ✗ kutu-dışı sınıf kapıları (denetci-kutu-disi.test.sh) DÜŞTÜ"
 fi
 
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"

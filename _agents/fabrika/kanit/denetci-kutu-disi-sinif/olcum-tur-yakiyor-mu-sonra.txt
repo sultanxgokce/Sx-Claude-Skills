@@ -1,0 +1,5 @@
+$ bash /tmp/claude-1000/kd-prob/prob.sh /config/projects/_wt/Sx-Claude-Skills-denetci-kutu-disi-sinif/yazilim-fabrikasi/scripts/denetci.sh
+# rc=0 sure=1.8s zaman=2026-10-15T17:08:15+03:00
+--- stdout ---
+SONUC: 6 tur boyunca TIKANMADI — kutu-disi bulgular tavandan dusmuyor (sonsuz dongu freni bu olcumde 99)
+--- stderr ---
