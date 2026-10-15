@@ -148,6 +148,37 @@ cd "$KOK" || exit 1
 mapfile -t T < <(find . -name "*.test.sh" -not -path "./.git/*" | sort)
 printf "%s\n" "${T[@]}" | grep -qx "./yazilim-fabrikasi/scripts/denetci-fark-ayikla.test.sh"'
 
+echo "G · 🔴 tur-2 bulgusu: boşluklu ve tırnaklı yollar ayıklayıcıdan KAÇMASIN"
+# git, özel karakterli yolu tırnaklar: diff --git "a/x y" "b/x y". Eski desen (\S+) boşlukta kesilir
+# ve tırnaklı biçimi hiç tanımaz → eşleşme düşer, blok korunur, istem yeniden şişer.
+{ printf 'diff --git "a/_agents/fabrika/kanit/%s/olcum bosluklu.txt" "b/_agents/fabrika/kanit/%s/olcum bosluklu.txt"\n' "$IS" "$IS"
+  printf -- '--- /dev/null\n+++ "b/_agents/fabrika/kanit/%s/olcum bosluklu.txt"\n@@ -0,0 +1 @@\n+TIRNAKLI-KANIT\n' "$IS"
+  printf 'diff --git a/_agents/fabrika/kanit/%s/olcum duz bosluk.txt b/_agents/fabrika/kanit/%s/olcum duz bosluk.txt\n' "$IS" "$IS"
+  printf -- '--- /dev/null\n+++ b/_agents/fabrika/kanit/%s/olcum duz bosluk.txt\n@@ -0,0 +1 @@\n+BOSLUKLU-KANIT\n' "$IS"
+  printf 'diff --git a/uretim/kod.py b/uretim/kod.py\n--- a/uretim/kod.py\n+++ b/uretim/kod.py\n@@ -1 +1 @@\n-e\n+URETIM-KODU-BURADA\n'
+} > "$KOK/bosluk.patch"
+rm -f "$KOK/istem-izi.txt" "$DZ"/DENETIM-*.json
+kapi "G1 boşluklu/tırnaklı yollu farkta denetim koşar" 0 \
+  env KANIT_DEPO="$KOK" DENETCI_KOMUT="$KOK/sahte-denetci.sh" ISTEM_IZI="$KOK/istem-izi.txt" \
+      bash "$D" "$IS" --diff "$KOK/bosluk.patch" --depo "$KOK"
+icermeyen "G2 🔴 TIRNAKLI kanıt yolu ayıklanır (eski desen bunu hiç tanımıyordu)" "TIRNAKLI-KANIT" "$KOK/istem-izi.txt"
+icermeyen "G3 🔴 BOŞLUKLU kanıt yolu ayıklanır (eski desen boşlukta kesiliyordu)" "BOSLUKLU-KANIT" "$KOK/istem-izi.txt"
+iceren "G4 üretim kodu yine ULAŞIR" "URETIM-KODU-BURADA" "$KOK/istem-izi.txt"
+kapi "G5 kayıt iki kanıt dosyasını da sayar (dosya=2)" 0 python3 -c "
+import json,glob
+d=json.load(open(sorted(glob.glob('$DZ/DENETIM-*.json'))[-1],encoding='utf-8'))
+assert (d.get('kanit_ayiklandi') or {}).get('dosya')==2, d.get('kanit_ayiklandi')
+"
+# G6: yol ÖLÇÜLEMEZSE ayıklama ŞÜPHEDE AYIKLAMAZ — blok korunur (yanlış ayıklama daha pahalı)
+{ printf 'diff --git garip-baslik-yol-okunamaz\n'
+  printf '@@ -0,0 +1 @@\n+YOLU-OKUNAMAYAN-BLOK\n'
+} > "$KOK/okunamaz.patch"
+rm -f "$KOK/istem-izi.txt"
+kapi "G6 yolu okunamayan blokta denetim koşar" 0 \
+  env KANIT_DEPO="$KOK" DENETCI_KOMUT="$KOK/sahte-denetci.sh" ISTEM_IZI="$KOK/istem-izi.txt" \
+      bash "$D" "$IS" --diff "$KOK/okunamaz.patch" --depo "$KOK"
+iceren "G7 🔴 yol ÖLÇÜLEMEDİYSE blok KORUNUR (şüphede ayıklamaz)" "YOLU-OKUNAMAYAN-BLOK" "$KOK/istem-izi.txt"
+
 echo
 echo "toplam=$((GECEN+DUSEN)) geçen=$GECEN düşen=$DUSEN"
 [[ $DUSEN -eq 0 ]]

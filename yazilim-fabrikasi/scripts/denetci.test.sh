@@ -462,5 +462,17 @@ mut "kart-json-hatasi-yutulur" 's@denetim açılmaz"; exit 3; }@denetim açılma
 mut "kirpma-kaydini-kaldir" 's@"kirpildi":{"oldu":kirp=="1","istem_bayt":int(bayt),"esik":int(esik)},@"kirpildi":{"oldu":False,"istem_bayt":int(bayt),"esik":int(esik)},@'
 mut_kos
 
+# ── KANIT-AYIKLAMA KAPILARI (gorev_01M4ZSKHD1Y1FFT8P6Z5YMPTF9)
+# Gövde AYRI dosyadadır (denetci-fark-ayikla.test.sh) çünkü bu dosya o sırada açık PR #327'nin
+# elindeydi; 30 kapıyı buraya yazmak onun değişikliğini ezerdi. Ama "test yazmak onu koşturmaz":
+# asıl sınav o dosyayı ÇAĞIRIR, böylece denetci.test.sh kırmızıysa ayıklama kapıları da kırmızıdır.
+# #327 indikten sonra gövde buraya taşınır ve bu çağrı düşer.
+echo ""; echo "── KANIT-AYIKLAMA (ayrı dosya, buradan çağrılır) ──"
+if bash "$(dirname "$0")/denetci-fark-ayikla.test.sh"; then
+  gecen=$((gecen+1)); echo "  ✓ kanıt-ayıklama kapıları (denetci-fark-ayikla.test.sh) GEÇTİ"
+else
+  kalan=$((kalan+1)); echo "  ✗ kanıt-ayıklama kapıları (denetci-fark-ayikla.test.sh) DÜŞTÜ"
+fi
+
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]

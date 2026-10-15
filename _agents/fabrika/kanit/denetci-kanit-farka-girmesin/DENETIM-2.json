@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "denetci-kanit-farka-girmesin",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T15:58:55+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 38168,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Kanıt farkını ayıran davranış ana, yalnız-kanıt ve benzer-yol vakalarında çalışmış; istem 110139 bayttan 3302 bayta inerken üretim kodu yeniden denetçiye ulaşmış. Lakin kartın açıkça istediği kapılar denetci.test.sh içine kurulmamış ve boşluklu/alıntılanmış Git yolları ayıklayıcıdan kaçabildiği için önce bunlar çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "İş kartındaki “denetci.test.sh yeni kapılar” talebi yerine ayrı bir test betiği eklenmiş; CI keşfi dosyayı bulsa da talep edilen sınavın içine kapı kurulmamış.",
+        "kanit": "Diff, denetci.test.sh üzerinde hiçbir değişiklik göstermiyor; yeni dosyanın 1-8. satırlarındaki açıklama kapıların denetci.test.sh'e taşınmasını gelecekteki başka bir göreve bırakıyor. F1 yalnız find listesinin ayrı dosyayı bulduğunu sınıyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci-fark-ayikla.test.sh:1-8,146-151; ölçüm `kapilar-tur2` F1",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Ayıklayıcı, boşluk veya Git alıntılaması içeren kanıt dosyası yollarını tanımaz; böyle bir kanıt farkta kalıp istemi yeniden şişirebilir.",
+        "kanit": "Dosya başlığını çözen `^diff --git a/(\\S+) b/(\\S+)` deseni boşlukta kesilir ve Git'in tırnaklı yol biçimini kabul etmez; başarısız eşleşme doğrudan `tut.append(blok)` ile bloğu korur. Sunulan 23 kapıda boşluklu ya da tırnaklı yol vakası yoktur.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:210-218; ölçüm `kapilar-tur2` A-F listesi",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. 110139→3302 bayt önce/sonra çifti, iki yeşil 23/23 koşum ve ayrı mutasyonların beklenen kırmızısı ana davranış ile tur-1 düzeltmelerini güçlü biçimde ölçüyor; ancak kapının özellikle denetci.test.sh içine kurulması ve boşluklu/alıntılanmış Git yollarının ayıklanması ölçülmemiş."
+  }
+}

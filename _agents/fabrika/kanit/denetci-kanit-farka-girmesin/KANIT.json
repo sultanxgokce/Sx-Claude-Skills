@@ -1,7 +1,7 @@
 {
   "is": "denetci-kanit-farka-girmesin",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T15:57:58+03:00",
+  "guncelleme": "2026-10-15T16:24:29+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -110,7 +110,52 @@
       "renk": "kirmizi",
       "zaman": "2026-10-15T15:57:58+03:00",
       "sure_sn": 8.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ayikla-kapilar-tur3",
+      "asama": "sonra",
+      "dosya": "olcum-ayikla-kapilar-tur3-sonra.txt",
+      "sha256": "b9e51869dd632069b959230f99643b9504ba383e026dbf2065f3858f2c13c6ed",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-fark-ayikla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T16:10:30+03:00",
+      "sure_sn": 17.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-tur3-beklenen-kirmizi",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-tur3-beklenen-kirmizi-tek.txt",
+      "sha256": "74356f0dde45c4f62d56e0ffab36e7e9ec190c97b9309fe386d067c40a48460f",
+      "komut": [
+        "bash",
+        "/tmp/tmp.NINKRXlDgu/kos.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T16:13:33+03:00",
+      "sure_sn": 71.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ana-sinav-cagiranla",
+      "asama": "sonra",
+      "dosya": "olcum-ana-sinav-cagiranla-sonra.txt",
+      "sha256": "f9cdeba24d6437d2d95be7a1bc6b895307e745aee6ea4571c6ba1b0b73ba3f3a",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T16:24:29+03:00",
+      "sure_sn": 875.7
     }
   ],
-  "imza": "a4cf67a7099366815e28ffbb83533ad0ffc1fa7553b104eb57623859053dd678"
+  "imza": "ff35a181220a66218603175b1e084a646b5b50fcb9cbe0012d5dfd464bfeb74f"
 }

@@ -213,16 +213,55 @@ ham = open(sys.argv[1], encoding="utf-8", errors="replace").read()
 # Birleşik farkı dosya bloklarına böl: her blok "diff --git " ile başlar. Baştaki başlık (varsa) korunur.
 parcalar = re.split(r'(?m)^(?=diff --git )', ham)
 tut, at = [], []
-DESEN = re.compile(r'^diff --git a/(\S+) b/(\S+)')
-for i, blok in enumerate(parcalar):
-    m = DESEN.match(blok)
-    if m is None:
+
+# 🔴 TUR-2 BULGUSU (uygulama): yol yalnız `^diff --git a/(\S+) b/(\S+)` ile okunuyordu. `\S+` BOŞLUKTA
+#    kesilir ve git'in tırnaklı yol biçimini (`diff --git "a/x y" "b/x y"`) hiç tanımaz; eşleşme düşünce
+#    blok korunuyordu, yani boşluklu ya da tırnaklı bir kanıt dosyası farkta kalıp istemi yeniden
+#    şişirebilirdi. `+++ b/<yol>` satırı tek anlamlıdır (sekmeye kadar); silinen dosyada `--- a/<yol>`
+#    kullanılır. Üçü sırayla denenir ve tırnaklı biçim C-kaçışlarıyla çözülür.
+BASLIK = re.compile(r'(?m)^(?:\+\+\+ |--- )(?!/dev/null$)(.+?)(?:\t.*)?$')
+GIT = re.compile(r'(?m)^diff --git (?:"((?:[^"\\]|\\.)*)"|(\S+)) (?:"((?:[^"\\]|\\.)*)"|(\S+))\s*$')
+
+
+def _coz(y):
+    """Tırnaklı/kaçışlı git yolunu çöz, a/ · b/ önekini at."""
+    y = y.strip()
+    if len(y) >= 2 and y[0] == '"' and y[-1] == '"':
+        y = y[1:-1]
+        if "\\" in y:
+            try:
+                y = y.encode("latin-1", "backslashreplace").decode("unicode_escape")
+            except Exception:
+                pass
+    return y[2:] if y[:2] in ("a/", "b/") else y
+
+
+def blok_yolu(blok):
+    for m in BASLIK.finditer(blok):
+        y = _coz(m.group(1))
+        if y and y != "/dev/null":
+            return y
+    m = GIT.search(blok)
+    if m:
+        for g in (m.group(3), m.group(4), m.group(1), m.group(2)):
+            if g:
+                return _coz(g if g.startswith(('"', "a/", "b/")) else '"' + g + '"')
+    return None
+
+
+for blok in parcalar:
+    if not blok.startswith("diff --git "):
         tut.append(blok)            # fark olmayan baş kısım: dokunulmaz
         continue
-    yol = m.group(2)
+    yol = blok_yolu(blok)
+    # 🔴 Yol ÖLÇÜLEMEDİYSE blok KORUNUR: ayıklama şüphede ayıklamaz. Yanlış ayıklama, ayıklamamaktan
+    #    pahalıdır — sessizce üretim kodunu gizler.
+    if yol is None:
+        tut.append(blok)
+        continue
     # 🔴 TUR-1 BULGUSU (uygulama): koşul alt dize arıyordu — `docs/_agents/fabrika/kanit/x` adlı bir
     #    ÜRETİM dosyası da sessizce denetçiden çıkardı. Fark yolları depo köküne göredir; eşleşme de
-    #    kökten olmalı. Ayıklamanın sessiz olması, yanlış ayıklamayı iki kat tehlikeli yapar.
+    #    kökten olmalı.
     if yol.startswith("_agents/fabrika/kanit/"):
         at.append((yol, len(blok.encode("utf-8"))))
     else:
