@@ -1,7 +1,7 @@
 {
   "is": "denetci-kare",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T16:15:37+03:00",
+  "guncelleme": "2026-10-15T16:26:37+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -32,7 +32,22 @@
       "renk": "yesil",
       "zaman": "2026-10-15T16:15:37+03:00",
       "sure_sn": 385.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tur2-yapi-dogrulamasi-K2b-K2c-158",
+      "asama": "sonra",
+      "dosya": "olcum-tur2-yapi-dogrulamasi-K2b-K2c-158-sonra.txt",
+      "sha256": "e61da0c9bc25f79fe69254d939f7751585e1b19c304dd12142d67924575fa103",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/kare-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T16:26:37+03:00",
+      "sure_sn": 204.5
     }
   ],
-  "imza": "b6db8dc7843098afa23ce9bc024ab4ffd3c415d37fd99aea50c1507b50a741f0"
+  "imza": "b24e0848f56f95c17ff4df57cb48546cb9ce12e3972486a57484ac4606b50ea8"
 }

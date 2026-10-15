@@ -46,7 +46,31 @@ KARE_TAVAN=8
 [ "${#KARELER[@]}" -le "$KARE_TAVAN" ] || { _hata "--kare en çok $KARE_TAVAN (verilen ${#KARELER[@]}) — en çok tartışılacak kareleri seç"; exit 2; }
 for _k in "${KARELER[@]}"; do
   [ -f "$_k" ] || { _hata "--kare dosyası yok: $_k (sessiz atlanmaz)"; exit 2; }
-  case "$(head -c 8 "$_k" | od -An -tx1 | tr -d ' \n')" in 89504e470d0a1a0a*|ffd8ff*) ;; *) _hata "--kare görsel değil (PNG/JPG imzası yok): $_k"; exit 2 ;; esac
+  # Yapı TAM doğrulanır (göz #331 tur 1: yalnız ilk baytlar bozuk/kesik dosyayı geçiriyordu): PNG = imza + IHDR + her yığının CRC'si
+  #   tutar + IEND ile biter; JPEG = SOI + en az bir SOF + EOI ile biter. Yalnız standart kütüphane (CI'da PIL yok).
+  _kd="$(python3 - "$_k" <<'PYK'
+import sys,struct,zlib
+b=open(sys.argv[1],'rb').read()
+def png(b):
+    if b[:8]!=b'\x89PNG\r\n\x1a\n': return 'png imzası yok'
+    i=8; ilk=True; son=None
+    while i+12<=len(b):
+        n,=struct.unpack('>I',b[i:i+4]); t=b[i+4:i+8]
+        if i+12+n>len(b): return 'kesik yığın ('+t.decode('latin1')+')'
+        if zlib.crc32(t+b[i+8:i+8+n])&0xffffffff!=struct.unpack('>I',b[i+8+n:i+12+n])[0]: return 'CRC tutmuyor ('+t.decode('latin1')+')'
+        if ilk and t!=b'IHDR': return 'ilk yığın IHDR değil'
+        ilk=False; son=t; i+=12+n
+        if t==b'IEND': break
+    return '' if son==b'IEND' and i==len(b) else 'IEND ile bitmiyor (kesik)'
+def jpg(b):
+    if b[:3]!=b'\xff\xd8\xff': return 'jpeg imzası yok'
+    if b[-2:]!=b'\xff\xd9': return 'EOI ile bitmiyor (kesik)'
+    if not any(m in b for m in (b'\xff\xc0',b'\xff\xc1',b'\xff\xc2')): return 'SOF yok (görüntü çerçevesi yok)'
+    return ''
+print(png(b) if b[:4]==b'\x89PNG' else jpg(b) if b[:2]==b'\xff\xd8' else 'PNG/JPG imzası yok')
+PYK
+)"
+  [ -z "$_kd" ] || { _hata "--kare geçerli görsel değil ($_kd): $_k"; exit 2; }
 done
 [ -n "$PR$DIFF" ] || { _hata "--pr N ya da --diff DOSYA gerekiyor"; exit 1; }
 [ -n "$DEPO" ] || DEPO="$(git rev-parse --show-toplevel 2>/dev/null || echo "")"

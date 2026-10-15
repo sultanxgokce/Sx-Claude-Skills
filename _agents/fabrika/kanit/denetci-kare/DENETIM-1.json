@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "denetci-kare",
+  "pr": "331",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T16:18:16+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 21177,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Kareleri Codex’e ekleme, isteme ve DENETIM kaydına işleme ile yedek gözün görsel alamadığını belirtme yönü talebi karşılıyor. Ancak kabuldeki 300 saniye sınırı ölçümde açıkça aşılmış ve yalnız dosya başlığını kontrol eden doğrulama bozuk/kesik veriyi görsel kabul ediyor; önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "CI süresi kabul ölçütünü karşılamıyor: istenen 300 saniyenin altıyken sunulan koşum 385,8 saniye sürmüş.",
+        "kanit": "Araç imzalı “kare-sinavi-K1-K7-paralel-ana-dalda” kaydı sure_sn=385.8 gösteriyor; ölçüm çıktısında da “15 mutant · 4 paralel · 366 sn” yazıyor.",
+        "konum": "kanıt kaydı: kare-sinavi-K1-K7-paralel-ana-dalda / olcum-kare-sinavi-K1-K7-paralel-ana-dalda-sonra.txt",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "“Görsel değilse rc 2” kapısı gerçek görüntü doğrulaması yapmıyor; yalnız ilk 8 bayttaki sihirli öneke bakıyor. Testte oluşturulan JPG yalnız dört başlık baytı ve düz metinden oluşmasına rağmen geçerli kare sayılıyor, dolayısıyla bozuk veya kesik dosyalar bağımsız göze gönderilebilir.",
+        "kanit": "Doğrulama deseni `ffd8ff*` gördüğünde kabul ediyor; K testi `printf '\\xff\\xd8\\xff\\xe0%s' \"sahte-kare-2\"` ile gerçek JPEG olmayan dosya üretip bunu K4-K6 başarılı akışında kullanıyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:45; yazilim-fabrikasi/scripts/denetci.test.sh:405-419",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Sonra ölçümü yeni K1-K7 kapılarını ve 156/156 sonucu gösteriyor, fakat aynı ölçüm CI süre kabulünün başarısız olduğunu da kanıtlıyor. Önce/sonra kayıtları aynı metriğin ölçüm çifti değil: önce yalnız özelliğin yokluğunu, sonra tüm sınavı ölçüyor; ayrıca gerçekçi görüntü yerine yalnız sahte başlık baytları kullanıldığı için görsel-geçerlilik kanıtı zayıf."
+  }
+}
