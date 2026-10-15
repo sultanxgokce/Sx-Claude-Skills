@@ -1,7 +1,7 @@
 {
   "is": "pr-kip-olcum-araci",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T18:07:34+03:00",
+  "guncelleme": "2026-10-15T20:33:36+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -86,7 +86,53 @@
       "renk": "yesil",
       "zaman": "2026-10-15T18:07:34+03:00",
       "sure_sn": 0.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "CI-KIRMIZI-DUZELTMESI-kabuk-biti-kapisi-yerelde-yesil",
+      "asama": "sonra",
+      "dosya": "olcum-CI-KIRMIZI-DUZELTMESI-kabuk-biti-kapisi-yerelde-yesil-sonra.txt",
+      "sha256": "26857900e4788307ffceacbdda4177b9af7a14a5cee1109e0217ddd5ebc775c9",
+      "komut": [
+        "bash",
+        "kabuk-biti.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:17:41+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "TUR3-BULGU1-KAPANDI-git-kacisli-TURKCE-yol-26-kapi",
+      "asama": "sonra",
+      "dosya": "olcum-TUR3-BULGU1-KAPANDI-git-kacisli-TURKCE-yol-26-kapi-sonra.txt",
+      "sha256": "e998623976573fa9d9b24dc017afc9fa2380b93fbd14a5c16838834fa15344ac",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/pr-kip-olc.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T20:33:36+03:00",
+      "sure_sn": 3.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "GERCEK-GIT-CIKTISI-kacis-bicimi-olculdu-fikstur-uydurma-degil",
+      "asama": "once",
+      "dosya": "olcum-GERCEK-GIT-CIKTISI-kacis-bicimi-olculdu-fikstur-uydurma-degil-once.txt",
+      "sha256": "167828fd666ed1f1ea89c9b424caaf959089beef74246f78cf17f13c3e01cf5c",
+      "komut": [
+        "bash",
+        "-c",
+        "T=\"$(mktemp -d)\"; cd \"$T\"; git init -q .; printf \"x\\n\" > \"ölçüm dosyası.sh\"; git add -A; git -c user.email=a@b -c user.name=c commit -qm ilk; chmod +x \"ölçüm dosyası.sh\"; git add -A; echo \"git bu dosyayi diff basliginda boyle yaziyor:\"; git diff --cached | head -1"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T20:33:36+03:00",
+      "sure_sn": 0.1
     }
   ],
-  "imza": "9ca8e95bd6d10d7a510139908e7fea43a16e6d68bb5010f6d1d4dd290c300970"
+  "imza": "4f56e7354b9af06424c1bef6907f33209077b1955af407b8b7091c79cb3e595c"
 }

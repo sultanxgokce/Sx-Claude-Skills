@@ -26,6 +26,8 @@
 # ÇIKIŞ: 0 = yalnız KİP (çakışma sayılmaz, uyarı yeter) · 1 = GERÇEK dokunuş (çakışma)
 #        3 = ÖLÇÜLEMEDİ (gh yok · diff alınamadı · bölüm bulunamadı) — "temiz" DEĞİL
 set -uo pipefail
+BURASI="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+GECICI_FARK="$(mktemp)"; trap 'rm -f "$GECICI_FARK"' EXIT
 
 _kullanim() {
   sed -n '2,30p' "$0" | sed 's/^# \{0,1\}//'
@@ -65,30 +67,15 @@ fi
 # ── o dosyanın bölümünü kes ────────────────────────────────────────────────────────────
 # `diff --git a/<yol> b/<yol>` satırından bir SONRAKİ `diff --git ` satırına kadar.
 # Yol birebir eşleşir (grep -F mantığı): kısmi ad eşleşmesi yanlış bölüm keser.
-# 🔴 Yol ALAN BÖLMEKLE çıkarılmaz (bağımsız göz bulgusu): git, boşluk ya da özel karakter
-#    içeren yolları diff başlığında TIRNAKLAR (`diff --git "a/iki kelime.sh" "b/iki kelime.sh"`).
-#    `$3`/`$4` ile bölmek o satırı parçalar ve geçerli bir yalnız-kip dosyası rc=3'e düşer.
-#    Bunun yerine dört olası jeton (a/P · "a/P" · b/P · "b/P") jeton SINIRIYLA aranır:
-#    eşleşmenin solu satır başı ya da boşluk, sağı satır sonu ya da boşluk olmalı — kısmi ad
-#    eşleşmesi (denetle.test.sh ⟂ yogunluk-denetle.test.sh) hâlâ TUTMAZ.
-BOLUM="$(printf '%s\n' "$FARK" | awk -v yol="$YOL" '
-  function jeton(s, t,   i, sol, sag) {
-    i = index(s, t)
-    while (i > 0) {
-      sol = (i == 1) ? " " : substr(s, i - 1, 1)
-      sag = substr(s, i + length(t), 1)
-      if ((sol == " " || i == 1) && (sag == "" || sag == " ")) return 1
-      s = substr(s, i + 1); i = index(s, t)
-    }
-    return 0
-  }
-  $0 ~ /^diff --git / {
-    kalan = substr($0, 12)
-    bas = (jeton(kalan, "a/" yol) || jeton(kalan, "b/" yol) \
-           || jeton(kalan, "\"a/" yol "\"") || jeton(kalan, "\"b/" yol "\""))
-  }
-  bas { print }
-')"
+# 🔴 Yol ALAN BÖLMEKLE ÇIKARILMAZ ve HAM yolla da aranmaz (bağımsız göz, tur 1 ve tur 3):
+#    git, boşluklu yolları TIRNAKLAR; `core.quotePath` açıkken (varsayılan) ASCII dışı yolları
+#    ayrıca C biçiminde KAÇIŞLAR. Gerçek git çıktısıyla ölçüldü:
+#        diff --git "a/\303\266l\303\247\303\274m dosyas\304\261.sh" "b/..."
+#    ( = `ölçüm dosyası.sh` ). Bu filoda dosya adları Türkçedir; ham yolu arayan bir eşleştirici
+#    geçerli bir yalnız-kip dosyasını bulamaz ve rc=3'e düşerdi — fail-closed tarafta, ama yanlış.
+#    Ayrıştırma bu yüzden ayrı ve sınanabilir bir araçta: bolum-ayikla.py (tırnağı ve kaçışı çözer,
+#    kısmi ad eşleşmesini hâlâ tutmaz).
+BOLUM="$(printf '%s\n' "$FARK" > "$GECICI_FARK" && python3 "$BURASI/bolum-ayikla.py" "$GECICI_FARK" "$YOL")"
 
 if [ -z "$BOLUM" ]; then
   echo "ÖLÇÜLEMEDİ: '$YOL' bu diff'te bir bölüm olarak bulunamadı" >&2

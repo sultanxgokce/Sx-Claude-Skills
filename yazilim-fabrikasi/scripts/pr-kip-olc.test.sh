@@ -98,6 +98,24 @@ index 1111111..2222222 100755
 +iki
 EOF
 
+# 🔴 GERÇEK git çıktısı (uydurma değil): `core.quotePath` açıkken Türkçe ad böyle yazılır.
+#    Ölçüldü: git init + "ölçüm dosyası.sh" + chmod +x → aşağıdaki başlık birebir budur.
+cat > "$T/kacisli.diff" <<'EOF'
+diff --git "a/\303\266l\303\247\303\274m dosyas\304\261.sh" "b/\303\266l\303\247\303\274m dosyas\304\261.sh"
+old mode 100644
+new mode 100755
+EOF
+
+cat > "$T/kacisli-icerik.diff" <<'EOF'
+diff --git "a/\303\266l\303\247\303\274m dosyas\304\261.sh" "b/\303\266l\303\247\303\274m dosyas\304\261.sh"
+index 1111111..2222222 100755
+--- "a/\303\266l\303\247\303\274m dosyas\304\261.sh"
++++ "b/\303\266l\303\247\303\274m dosyas\304\261.sh"
+@@ -1 +1,2 @@
+ bir
++iki
+EOF
+
 echo "── 1 · YALNIZ KİP ucuza iner (kusurun kendisi: PR #326 vakası)"
 kapi "yalnız kip → rc=0" 0 "$T/yalniz-kip.diff" "ui-tasarim-akisi/arac/yogunluk-denetle.test.sh"
 icerir "içerik farkının SIFIR olduğu söylenir" "içerik farkı YOK"
@@ -141,6 +159,13 @@ else printf '  ✗ %-46s beklenen rc=2, gelen rc=%s\n' "--fark değersiz → kul
 cikti="$(bash "$ARAC" 326 x.sh --depo 2>&1)"; rc=$?
 if [ "$rc" = "2" ]; then printf '  ✓ %-46s (rc=2)\n' "--depo değersiz → kullanım hatası"; GECTI=$((GECTI+1))
 else printf '  ✗ %-46s beklenen rc=2, gelen rc=%s\n' "--depo değersiz → kullanım hatası" "$rc"; KALDI=$((KALDI+1)); fi
+
+
+echo "── 7 · GİT KAÇIŞLI YOL (core.quotePath · Türkçe ad) — bu filonun gerçek hâli"
+kapi "kaçışlı Türkçe yol · yalnız kip → rc=0" 0 "$T/kacisli.diff" "ölçüm dosyası.sh"
+icerir "kip olarak tanınır" "YALNIZ KİP"
+kapi "kaçışlı Türkçe yol · içerik → rc=1" 1 "$T/kacisli-icerik.diff" "ölçüm dosyası.sh"
+kapi "kaçışlı yolda kısmi ad TUTMAZ → rc=3" 3 "$T/kacisli.diff" "dosyası.sh"
 
 echo "────────────────────────────────────────────"
 printf 'TOPLAM: %d geçti · %d kaldı\n' "$GECTI" "$KALDI"
