@@ -128,6 +128,25 @@ CIKTI="$(SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-r2 --diff "$T/d.patch" 2>&1)"; 
 CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-r2 --diff "$T/d.patch" --reis-devam 2>&1)"; RC=$?
 [ "$RC" -eq 1 ]; g $? "🔴 kartta reis kararı yokken bayrak kapıyı AÇMIYOR (rc=1)"
 grep -q "reis-dedi" <<<"$CIKTI"; g $? "ne yapılacağı komutla yazılı"
+
+echo "════ TW · kart TEK kaynak (15 Eki): iş alanından (worktree) koşan denetçi kartı BİRİNCİL depodan okur ════"
+# NİÇİN: kart.sh birincil depoya yazar; denetçi iş alanındaki BAYAT kopyayı okuyordu → reis-dedi işlenmişken kapı "karar YOK" dedi
+#        (bir günde 4 koşum boşa, elle kopyalama gerekti). Kart artık birincilden okunur, PR'a kanıt dizinindeki KART.json ile gider.
+( cd "$T" && git add -A >/dev/null 2>&1; git -c user.email=t@t -c user.name=T commit -qm "chore: defter" >/dev/null 2>&1 )
+W="$T/alan-is-w"; git -C "$T" worktree add -q -b is-w "$W" >/dev/null 2>&1; [ -d "$W" ]; g $? "iş alanı (worktree) açıldı"
+bash "$KT" ac is-w --is x --istedi SULTAN --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+mkdir -p "$W/_agents/fabrika/kartlar"; cp "$T/_agents/fabrika/kartlar/is-w.json" "$W/_agents/fabrika/kartlar/"   # eski aracın bıraktığı kopya
+KANIT_DEPO="$W" bash "$K" olcum is-w olc --asama tek -- echo 1 >/dev/null 2>&1
+for i in 1 2 3; do SAHTE_JSON="$(J 2 H "$B")" KANIT_DEPO="$W" bash "$D" is-w --diff "$T/d.patch" >/dev/null 2>&1; done
+bash "$KT" reis-dedi is-w --karar devam --reis MUAVIN --oturum ref-w-birincil --gerekce "bulgular kapandi, dorduncu tur ilerlemeyi olcer" >/dev/null 2>&1; g $? "reis kararı BİRİNCİL karta işlendi (kart.sh)"
+python3 -c "import json;assert not json.load(open('$W/_agents/fabrika/kartlar/is-w.json')).get('reis_kararlari')"; g $? "iş alanındaki kopya BAYAT (reis kararı yok) — eski araç bunu okur, kapıyı kapalı sanırdı"
+CIKTI="$(SAHTE_JSON="$(J 5 E "")" SAHTE_ISTEM_KOPYA="$T/istem-w.txt" KANIT_DEPO="$W" bash "$D" is-w --diff "$T/d.patch" --reis-devam 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "TAVAN AÇILDI" <<<"$CIKTI"; g $? "🔴 iş alanından koşan --reis-devam kapıyı BİRİNCİL karttan AÇTI (elle kopyalama yok, rc=0)"
+grep -q "ref-w-birincil" "$T/istem-w.txt"; g $? "denetçi istemindeki iş kartı da BİRİNCİL kart (reis kararı görünüyor)"
+python3 -c "import json;assert json.load(open('$W/_agents/fabrika/kanit/is-w/KART.json')).get('reis_kararlari')[0]['oturum']=='ref-w-birincil'"; g $? "kartın anlık kopyası kanıt dizinine düştü (KART.json) — PR'a kart bununla gider, kartlar/ kopyasıyla değil"
+SAHTE_JSON="$(J 5 E "")" KANIT_DEPO="$W" bash "$D" is-w --diff "$T/d.patch" >/dev/null 2>&1; [ $? -ne 2 ]; g $? "KART.json kanıt manifestini BOZMAZ (sonraki koşum kanıt kapısında düşmüyor)"
+rm -f "$W/_agents/fabrika/kartlar/is-w.json"
+SAHTE_JSON="$(J 5 E "")" KANIT_DEPO="$W" bash "$D" is-w --diff "$T/d.patch" --reis-devam >/dev/null 2>&1; [ $? -ne 1 ]; g $? "iş alanında kart kopyası HİÇ yokken de birincil kart okunur (kapı 'karar YOK' demez)"
 bash "$KT" reis-dedi is-r2 --karar devam --oturum ref-r2 --gerekce "yirmi karakterden uzun bir gerekce metni" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "--reis eksikken REDDEDİLDİ"
 bash "$KT" reis-dedi is-r2 --karar devam --reis MUAVIN --gerekce "yirmi karakterden uzun bir gerekce metni" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "--oturum eksikken REDDEDİLDİ"
 bash "$KT" reis-dedi is-r2 --karar devam --reis MUAVIN --oturum ref-r2 --gerekce "kisa" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "kısa gerekçe REDDEDİLDİ"
@@ -346,6 +365,7 @@ mut "defter-dogrulamasini-kaldir" 's@^  grep -qF "$SATIR" "$DEF"@  true@'
 mut "reis-sinif-citini-kaldir" 's@^if k.get("sultan") or k.get("siniflar"): raise SystemExit(3)@pass@'
 mut "mutlak-tavani-kaldir" 's@^if \[ "$TUR" -gt "$MUTLAK" \]; then@if false; then@'
 mut "yedek-gozu-kaldir" 's@if yedek_olur_mu; then YEDEK="codex yok";@if false; then YEDEK="codex yok";@'
+mut "kart-tek-kaynagi-kaldir" 's@^\[ -n "$KART_DEPO" \] || KART_DEPO="$DEPO"@KART_DEPO="$DEPO"@'
 mut "kirpma-kaydini-kaldir" 's@"kirpildi":{"oldu":kirp=="1","istem_bayt":int(bayt),"esik":int(esik)},@"kirpildi":{"oldu":False,"istem_bayt":int(bayt),"esik":int(esik)},@'
 
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"

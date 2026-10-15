@@ -55,6 +55,8 @@ g $? "PAYLASILAN_COMMIT=1 ile geçilebiliyor"
 
 echo "════ T4 · ac: kendi alanı, origin/main'den, <depo>-<iş> adıyla ════"
 CIKTI="$( cd "$T/depo" && bash "$IS" ac yeni-is --kartsiz 2>&1 )"; g $? "alan açıldı"
+[ ! -e "$T/alan/depo-yeni-is/_agents/fabrika/kartlar" ]; g $? "kart iş alanına KOPYALANMADI (tek kaynak birincil; 15 Eki — kopya bayatlıyor ve PR'la birincil pull'unu tıkıyordu)"
+grep -q "kopyalanmadı" <<<"$CIKTI"; g $? "açılış mesajı kartın birincilde kaldığını söylüyor"
 grep -q "TAZE" <<<"$CIKTI"; g $? "origin/main üstünde açtığını söylüyor"
 grep -q "PAYLAŞILAN KAYNAĞI izole etmez" <<<"$CIKTI"; g $? "paylaşılan-kaynak uyarısı basıldı"
 grep -q "dosya listesi verilmedi" <<<"$CIKTI"; g $? "kapsam bakılmadığını SÖYLÜYOR (sessiz atlama yok)"
@@ -78,8 +80,9 @@ echo kirli > "$T/alan/depo-yeni-is/kirli.txt"
 ( cd "$T/depo" && bash "$IS" kapat yeni-is >/dev/null 2>&1 ); [ $? -ne 0 ]; g $? "kayıtsız değişiklik varken KAPATMADI"
 [ -d "$T/alan/depo-yeni-is" ]; g $? "alan yerinde (iş kaybı yok)"
 rm -f "$T/alan/depo-yeni-is/kirli.txt"
-( cd "$T/depo" && bash "$IS" kapat yeni-is ) >/dev/null 2>&1
-[ ! -d "$T/alan/depo-yeni-is" ]; g $? "temizken kapatıldı"
+mkdir -p "$T/alan/depo-yeni-is/_agents/fabrika/kartlar"; echo '{"is":"yeni-is"}' > "$T/alan/depo-yeni-is/_agents/fabrika/kartlar/yeni-is.json"   # eski aracın bıraktığı kayıtsız kart kopyası
+( cd "$T/depo" && bash "$IS" kapat yeni-is ) >/dev/null 2>&1; RC=$?
+[ "$RC" -eq 0 ] && [ ! -d "$T/alan/depo-yeni-is" ]; g $? "temizken kapatıldı — kartlar/ altındaki kayıtsız kopya 'kayıtsız iş' SAYILMADI (kart birincilde)"
 
 echo "════ T7 · kapsam kontrolü (sahte gh): çakışma → rc=2, açmaz; temiz → açar ════"
 SAHTE="$T/sahte-bin"; mkdir -p "$SAHTE"

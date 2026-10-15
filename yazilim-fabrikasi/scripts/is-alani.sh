@@ -115,8 +115,11 @@ PY
   mkdir -p "$KOK"
   [ -e "$yol" ] && { _hata "$yol zaten var"; exit 1; }
   git -C "$DEPO" worktree add -q -b "$is" "$yol" "origin/$ANA" || { _hata "worktree açılamadı"; exit 1; }
-  mkdir -p "$yol/_agents/fabrika/kartlar" && cp "$kart" "$yol/_agents/fabrika/kartlar/"   # kart PR ile birlikte gider
-  _bilgi "✓ çalışma alanı hazır (origin/$ANA üstünde, TAZE) · kart kopyalandı"
+  # 🔴 KART KOPYALANMAZ (15 Eki 2026): kart TEK kaynaktır, birincil depoda yaşar (kart.sh oraya yazar, denetci.sh oradan okur).
+  #    Eskiden buraya kopyalanıyordu → kopya bayatlıyor (reis-dedi/bitti birincile düşüyor), PR kartlar/ dosyasını taşıyınca
+  #    birincildeki kayıtsız kart "untracked would be overwritten" ile ana dal pull'unu tıkıyordu. PR'a kart, denetci.sh'ın kanıt
+  #    dizinine yazdığı KART.json anlık kopyasıyla gider.
+  _bilgi "✓ çalışma alanı hazır (origin/$ANA üstünde, TAZE) · kart birincil depoda ($kart), kopyalanmadı"
   _bilgi "  cd $yol"
   _bilgi "  ⚠ worktree PAYLAŞILAN KAYNAĞI izole etmez: port · veritabanı · kilit dosyası ortaktır;"
   _bilgi "    port cevap veriyorsa SENİN süreç mi bak; kilit çakışırsa elle birleştirme, yeniden üret."
@@ -147,10 +150,15 @@ kapat() {
   local yol="$KOK/$DEPO_AD-$is"
   if [ -d "$yol" ]; then
     local kirli
-    kirli="$(git -C "$yol" status --porcelain 2>/dev/null | wc -l)"
+    kirli="$(git -C "$yol" status --porcelain -uall 2>/dev/null | grep -v ' _agents/fabrika/kartlar/' | wc -l)"   # kartlar/ kopyası kayıtsız iş DEĞİL (kart birincilde; eski alanların kopyası sayılmaz)
     if [ "$kirli" -gt 0 ]; then
       _hata "$yol içinde $kirli kayıtsız değişiklik var — önce commit'le ya da bilinçli sil (iş kaybı yok)"
       exit 1
+    fi
+    # kartlar/ altındaki kayıtsız kopyalar (eski aracın bıraktığı) iş değildir ama `worktree remove`yi engeller → önce onlar kaldırılır
+    if [ -n "$(git -C "$yol" status --porcelain -uall 2>/dev/null | grep ' _agents/fabrika/kartlar/')" ]; then
+      git -C "$yol" status --porcelain -uall | grep ' _agents/fabrika/kartlar/' | sed 's/^...//' | while IFS= read -r f; do rm -f "$yol/$f"; done
+      _bilgi "· kartlar/ kayıtsız kopyası kaldırıldı (kart birincil depoda, iş kaybı yok)"
     fi
     git -C "$DEPO" worktree remove "$yol" || { _hata "worktree kaldırılamadı"; exit 1; }
     _bilgi "✓ çalışma alanı kaldırıldı: $yol"

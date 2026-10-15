@@ -1,0 +1,70 @@
+{
+  "is": "fabrika-kart-tek-kaynak",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T06:37:22+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "denetci-test-130-kapi-TW-ve-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-test-130-kapi-TW-ve-mutant-sonra.txt",
+      "sha256": "f4a0982824cea59699c3d485ab744e6bf5475e53b4b6a31ad34d7fc416d6075c",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T06:36:49+03:00",
+      "sure_sn": 152.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "is-alani-test-37-kapi",
+      "asama": "sonra",
+      "dosya": "olcum-is-alani-test-37-kapi-sonra.txt",
+      "sha256": "f9b4830bbd0fd7355a5cd25c4550d1caa6c13aed05bfab7eba703ea9ab874022",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/is-alani.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T06:36:50+03:00",
+      "sure_sn": 0.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-kart-kanit-birlestirme-kapisi",
+      "asama": "sonra",
+      "dosya": "olcum-gerileme-kart-kanit-birlestirme-kapisi-sonra.txt",
+      "sha256": "c0a98bbdd986ff2edefefce506433ea5fba0135124fff71f7fcdb720582f29f8",
+      "komut": [
+        "bash",
+        "-c",
+        "bash yazilim-fabrikasi/scripts/kart.test.sh | tail -1; bash yazilim-fabrikasi/scripts/kanit.test.sh | tail -1; bash yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh | tail -1"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T06:37:22+03:00",
+      "sure_sn": 6.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "MUTASYON-KANITI-beklenen-kirmizi-is-alani-kart-kopyasi-geri-kondu",
+      "asama": "sonra",
+      "dosya": "olcum-MUTASYON-KANITI-beklenen-kirmizi-is-alani-kart-kopyasi-geri-kondu-sonra.txt",
+      "sha256": "81131ab7f2bc7c6be8d55970371b4edd707c5e4ab233acab2d13eb3585b2750e",
+      "komut": [
+        "bash",
+        "-c",
+        "echo \"=== MUTASYON KANITI: kod BİLEREK bozuldu (geçici kopyada is-alani ac kartı yine kopyalıyor, kapat kopyayı yine kayıtsız iş sayıyor). Aşağıdaki KIRMIZI satırlar BEKLENENDİR; rc=0 = sınav bozuk kodu YAKALADI. Gerçek ölçüm: is-alani-test-37-kapi ===\"; bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut-fab-4108331/yazilim-fabrikasi/scripts/is-alani.test.sh; [ $? = 1 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T06:36:58+03:00",
+      "sure_sn": 0.6
+    }
+  ],
+  "imza": "51b8c6bdd0e6fd3c68e3814ef090901e9304a738674df199c39c3daca2273375"
+}
