@@ -18,7 +18,8 @@ import { fileURLToPath } from 'node:url';
 // Koltuk adı kuralı — kabuktaki TEK kopyası scripts/koltuk-adi.sh; iki dilin eşdeğerliği scripts/koltuk-adi.test.sh'de ölçülür.
 // '.' · ':' · kontrol karakteri yok; boşluk arada serbest, başta/sonda yok; ilk karakter '$' '@' '%' '=' olamaz (tmux kimlik önekleri).
 import { KOLTUK_AD_DESEN, koltukSatirlari } from './koltuklar.mjs';
-import { kayitOku, kadroBirlestir } from './kadro.mjs';   // 2.8.0 Kadro: kayıt ⟂ koltuk birleşimi (dosya okur, yazmaz)   // ad kuralı + liste çözümü TEK yerde (fark ölçeri de aynısını çağırır)
+import { kayitOku, kadroBirlestir, altyapiNeden } from './kadro.mjs';
+import { kadroYaz, KadroHata } from './kadro-yaz.mjs';   // E2: kayda durum yazan TEK yer (emekli et · dondur · geri aç)   // 2.8.0 Kadro: kayıt ⟂ koltuk birleşimi (dosya okur, yazmaz)   // ad kuralı + liste çözümü TEK yerde (fark ölçeri de aynısını çağırır)
 
 const KOK = path.dirname(fileURLToPath(import.meta.url));
 const GENEL = path.join(KOK, 'genel');
@@ -459,7 +460,65 @@ const sunucu = http.createServer(async (req, res) => {
         const kd = kadroBirlestir({ uyeler: kayit.uyeler, koltuklar: koltukSatirlari(r.out), ana: ANA_TMUX });
         const ekranla = (o) => o ? { ...o, ekran: T('/tty/') + '?arg=' + encodeURIComponent(o.ad) } : null;
         return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, proje: PROJE, kaynak: kayit.kaynak, okunamadi: kayit.okunamadi, zaman: new Date().toISOString(),
-          sayilar: kd.sayilar, kisiler: kd.kisiler.map((k) => ({ ...k, oturum: ekranla(k.oturum) })), kayitsiz: kd.kayitsiz.map(ekranla) });
+          sayilar: kd.sayilar, kisiler: kd.kisiler.map((k) => ({ ...k, oturum: ekranla(k.oturum) })), kayitsiz: kd.kayitsiz.map(ekranla),
+          altyapi: kd.altyapi.map(ekranla), eylemler: true });   // eylemler: bu kapı E2 ucunu taşıyor (merkez düğmeleri buna bakar)
+      }
+      // ── KADRO E2 (Sultan onaylı, SERDAR 16 Eki 00:3x): dört eylem, hepsi geri alınabilir.
+      //    emekli · dondur → kayda durum (kadro-yaz.mjs; önceki değer durum_once) + oturum açıksa kapatılır (kapatılamazsa kayıt GERİ ALINIR)
+      //    geri-ac         → durum_once geri konur; dondurulmuştuysa oturum kutunun kendi açıcısıyla eski sohbetine döner (koltuk-ac --eski)
+      //    kapat           → YALNIZ kayıtsız oturum (kayıtlı kişi dondurulur, kapatılmaz)
+      // 🔴 A06: emeklilik Sultan kararıdır, düğmeyi insan basar. Uç yalnız kapı oturumu çereziyle açılır (yukarıdaki girisli kapısı —
+      //    o çerezi yalnız kutu parolası ya da merkez üretir; merkezin önünde Access + merkez parolası). Jeton taşıyan istek REDDEDİLİR:
+      //    bu kapının jeton yolu yok; jetonla gelen istek bir ajandır ve "bir gün jeton kabul edilir" diye sessizce açılmasın.
+      // 🔴 ALTYAPI oturumları (ana · dash* · ttyd-* · kapi-* · *-kurtarici · imglistener*) hiçbir eylemle kapatılamaz: 403, tmux'a dokunulmaz.
+      if (y === '/api/kadro/hal' && req.method === 'POST') {
+        if (req.headers.authorization || req.headers['x-defter-jeton']) return json(res, 403, { hata: 'Bu uç jetonla çağrılamaz — kadro kararını Sultan ekrandan verir.' });
+        let g; try { g = JSON.parse((await govde(req, 4096)).toString('utf8') || '{}'); } catch { return json(res, 400, { hata: 'Geçersiz istek.' }); }
+        const eylem = String(g.eylem || '');
+        if (!['emekli', 'dondur', 'geri-ac', 'kapat'].includes(eylem)) return json(res, 400, { hata: 'Eylem: emekli · dondur · geri-ac · kapat.' });
+        // Altyapı kontrolü HER ŞEYDEN ÖNCE ve yalnız adla: liste ölçülemese bile altyapıya dokunulmaz
+        if (eylem === 'kapat' && altyapiNeden(String(g.oturum || ''), ANA_TMUX)) return json(res, 403, { hata: `Altyapı oturumu (${altyapiNeden(String(g.oturum), ANA_TMUX)}) kapatılamaz.` });
+        const r = await calistir('bash', [KOLTUK_BETIK, '--liste']);
+        if (r.kod !== 0) return json(res, 500, { hata: 'Koltuklar ölçülemedi — hiçbir şey yapılmadı.' });
+        const kayit = kayitOku(PROJE);
+        if (kayit.okunamadi.length) return json(res, 500, { hata: 'Kayıt okunamadı: ' + kayit.okunamadi.join(', ') });
+        const kd = kadroBirlestir({ uyeler: kayit.uyeler, koltuklar: koltukSatirlari(r.out), ana: ANA_TMUX });
+        const izYaz = (satir) => { try { fs.appendFileSync(path.join(DURUM_DIZ, 'kadro-hal.log'), new Date().toISOString() + ' ' + satir + '\n'); } catch {} };
+        const kapat = async (ad) => (await calistir('tmux', ['kill-session', '-t', '=' + ad])).kod === 0;   // '=' tam ad eşleşmesi (önek değil)
+        if (eylem === 'kapat') {
+          const ad = String(g.oturum || '');
+          if (!KOLTUK_AD_DESEN.test(ad)) return json(res, 400, { hata: 'Oturum adı geçersiz.' });
+          if (kd.kisiler.some((k) => k.oturum && k.oturum.ad === ad)) return json(res, 409, { hata: 'Bu oturum kayıtlı bir kişinin — kapatmak yerine dondur.' });
+          if (!kd.kayitsiz.some((o) => o.ad === ad)) return json(res, 404, { hata: 'Böyle bir kayıtsız oturum yok (kapanmış olabilir).' });
+          if (!(await kapat(ad))) return json(res, 502, { hata: 'Oturum kapatılamadı.' });
+          izYaz(`kapat ${JSON.stringify(ad)}`);
+          return json(res, 200, { tamam: true, mesaj: `${ad} kapatıldı.` });
+        }
+        const id = String(g.id || '');
+        const kisi = kd.kisiler.find((k) => k.id === id);
+        if (!id || !kisi) return json(res, 404, { hata: 'Kayıtta böyle bir kişi yok.' });
+        if (kisi.altyapi) return json(res, 403, { hata: `Altyapı oturumu (${kisi.altyapi}) — kadro eylemi uygulanamaz.` });
+        const onceHal = kisi.hal_kayit;
+        let sonuc;
+        try { sonuc = kadroYaz({ proje: PROJE, id, eylem }); }
+        catch (e) { if (e instanceof KadroHata) return json(res, e.kod, { hata: e.message }); throw e; }
+        izYaz(`${eylem} ${JSON.stringify(id)} ${sonuc.onceki || '-'}→${sonuc.yeni || '-'} ${sonuc.dosya}${sonuc.uretilmis ? ' (derlendi)' : ''}`);
+        if (eylem === 'emekli' || eylem === 'dondur') {
+          if (kisi.oturum && !(await kapat(kisi.oturum.ad))) {
+            // Kayıt "kapalı" derken oturum çalışıyorsa ekran yalan söyler → kaydı geri al
+            try { kadroYaz({ proje: PROJE, id, eylem: 'geri-ac' }); izYaz(`geri-al ${JSON.stringify(id)} (oturum kapatılamadı)`); } catch {}
+            return json(res, 502, { hata: 'Oturum kapatılamadı — kayıt eski hâline döndürüldü.' });
+          }
+          return json(res, 200, { tamam: true, mesaj: `${id} ${eylem === 'emekli' ? 'emekli edildi' : 'donduruldu'}${kisi.oturum ? ', oturumu kapandı' : ''}.` });
+        }
+        // geri-ac: dondurulmuşsa oturum yeniden doğar (eski sohbetine döner); emekliyse yalnız kayıt geri gelir
+        if (onceHal === 'dondurulmus' && kisi.tmux && !kisi.oturum) {
+          const a = await calistir('bash', [KOLTUK_AC_BETIK, 'ac', kisi.tmux, '--eski'], undefined, +(process.env.KAPI_AC_SURE_MS || 120000));
+          const msj = (a.out + a.err).trim().split('\n').filter(Boolean).pop() || '';
+          if (a.kod === 0 || a.kod === 3) return json(res, 200, { tamam: true, oturum: true, mesaj: `${id} geri açıldı, oturumu eski sohbetiyle açılıyor.` });
+          return json(res, 200, { tamam: true, oturum: false, mesaj: `${id} kaydı geri açıldı ama oturum açılamadı: ${msj || 'açıcı cevap vermedi'} — Kaldır ile yeniden dene.` });
+        }
+        return json(res, 200, { tamam: true, mesaj: `${id} geri açıldı.` });
       }
       if (y === '/api/surum') {
         // telefon eski sayfada kalmasın: dosyalar değişince sürüm değişir, sayfa kendini yeniler

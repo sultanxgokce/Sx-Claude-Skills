@@ -7,11 +7,31 @@
 // 🔴 Kayıt dosyaları kutuya göre (koltuk-ac.sh ile aynı sıra): İSKÂN kutusu `iskan-registry.yaml` (id/tmux) + işaret ettiği
 //    `ekip-registry.yaml` (rol/mod/hal); merkez `_agents/handoff/aile-registry.yaml`. Hiçbiri yoksa kayıt yok → herkes "kayıtsız".
 // 🔴 Bu modül DOSYA OKUR, hiçbir şey yazmaz, tmux'a dokunmaz; koltuk listesi dışarıdan (koltuk-bagla --liste) verilir.
+//    Yazma (E2: emekli et · geri aç · dondur) ayrı modülde: kapi/kadro-yaz.mjs — kayda `durum:` + `durum_once:` yazar, `hal:` açmaz.
 import fs from 'node:fs';
 import path from 'node:path';
 
 export const HAL_KAYIT = ['calisiyor', 'gecici', 'yedek', 'emekli'];   // kaydın `hal:` alanı — kapalı küme; dışı 'bilinmiyor'
 export const GRUPLAR = ['calisan', 'dusen', 'kayitta-var-calismiyor', 'gecici-emekli'];
+// E2 (SERDAR 16 Eki · BÂNİ 15 Eki 18:31 ölçümü): kadro eylemleri `hal:` AÇMAZ (ekipc derleyicisi taşımıyor) — kaydın `durum:` alanına
+// yazar. Bu iki değer `hal:`'dan ÖNCE gelir: E2 yazdıysa o kayıt dondurulmuş/emeklidir, eski `hal: calisiyor` satırı onu örtemez.
+export const DURUM_HAL = { emekli: 'emekli', dondurulmus: 'dondurulmus' };
+
+// ── ALTYAPI (E2 · SERDAR 16 Eki): kutunun KENDİ işleyişini taşıyan oturumlar personel değildir. Sultan'ın karesinde bunlar kırmızı
+//    "ajan yok — boş oturum" görünüyordu — yanlış mesaj: içlerinde ajan olması beklenmez. 'altyapı' etiketiyle ayrı listelenir ve
+//    kadro eylemleri (kapat · dondur · emekli) onlara UYGULANAMAZ (uç 403). koltuk-bagla.sh gizli() listesi bunun alt kümesidir
+//    (o oturumlar ekranda hiç görünmez; burada yine de korunur — liste değişirse koruma düşmesin). Eşdeğerlik kadro.test.mjs'te ölçülür.
+export function altyapiNeden(ad, ana = '') {
+  const a = String(ad || '');
+  if (!a) return '';
+  if (ana && a === ana) return 'ana oturum';
+  if (a === 'dash' || a === 'dashproxy' || a === 'dashwatch') return 'mobil panel';
+  if (a.startsWith('ttyd-')) return 'web terminali';
+  if (a.startsWith('kapi-')) return 'kutu kapısı';
+  if (a.endsWith('-kurtarici')) return 'kurtarıcı ajan';
+  if (a.startsWith('imglistener')) return 'görsel dinleyici';
+  return '';
+}
 
 // `key: "v"` · `key: 'v'` · `key: v   # yorum` — ekip-ac.sh'nin skaler() kuralıyla aynı (üç biçim; yoksa null)
 function skaler(line, key) {
@@ -20,14 +40,16 @@ function skaler(line, key) {
   m = line.match(new RegExp('^\\s*' + key + ':\\s*([^#\\s][^#]*?)\\s*(?:#.*)?$')); if (m) return m[1];
   return null;
 }
-const ALANLAR = ['tmux', 'rol', 'mod', 'durum', 'hal', 'arz_adi', 'cwd'];
+const ALANLAR = ['tmux', 'rol', 'mod', 'durum', 'durum_once', 'hal', 'arz_adi', 'cwd'];
 
 // YAML metni → üyeler. Satır tabanlı: `- id: X` blok açar; blok içindeki bilinen skalerler alınır. `uyeler:` dışı
 // `- id:` (ör. meta) yoktur; `tmux: null` → ''. Bilinmeyen anahtar yok sayılır (şema genişlemesi kırmaz).
-export function kayitAyristir(metin) {
+// anahtar: blok açan alan — kayıtlarda `id`, ekip modelinde (`_agents/ekip-modeli.yaml` örnekleri) `kayit` (E2).
+export function kayitAyristir(metin, anahtar = 'id') {
   const uyeler = []; let cur = null;
+  const ac = new RegExp('^\\s*-\\s*' + anahtar + ':\\s*("([^"]*)"|\'([^\']*)\'|(\\S+))');
   for (const line of String(metin || '').split('\n')) {
-    const m = line.match(/^\s*-\s*id:\s*("([^"]*)"|'([^']*)'|(\S+))/);
+    const m = line.match(ac);
     if (m) { cur = { id: m[2] ?? m[3] ?? m[4] }; uyeler.push(cur); continue; }
     if (!cur) continue;
     for (const k of ALANLAR) { const v = skaler(line, k); if (v !== null) { cur[k] = v === 'null' || v === '~' ? '' : v; break; } }
@@ -39,13 +61,15 @@ export function kayitAyristir(metin) {
 // rol · mod · hal · durum · arz_adi · cwd SONRAKİ kaynaktan (ekip kaydı kimliği/hâli bilir) — dolu geldiyse ÜSTÜNE yazar.
 // Eski "yalnız boşu doldur" kuralı İSKÂN'daki bayat rol/hâl'i ekip kaydının önüne geçiriyordu.
 const ILK_KAZANIR = new Set(['tmux']);
+// Listenin `yalniz` kümesi verilmişse (E2: aile dalındaki üretilmiş ekip kaydı) o listeden YALNIZ bu alanlar alınır ve yalnız var
+// olan üyelere işlenir — yeni üye eklemez, rol/tmux'u değiştirmez (kutunun bugünkü görünümü bayt bayt aynı kalır).
 function birlestir(listeler) {
   const h = new Map();
   for (const l of listeler) for (const u of l) {
     const k = u.id; if (!k) continue;
-    if (!h.has(k)) { h.set(k, { ...u }); continue; }
+    if (!h.has(k)) { if (!l.yalniz) h.set(k, { ...u }); continue; }
     const v = h.get(k);
-    for (const [a, b] of Object.entries(u)) { if (!b) continue; if (ILK_KAZANIR.has(a)) { if (!v[a]) v[a] = b; } else v[a] = b; }
+    for (const [a, b] of Object.entries(u)) { if (!b || (l.yalniz && !l.yalniz.includes(a))) continue; if (ILK_KAZANIR.has(a)) { if (!v[a]) v[a] = b; } else v[a] = b; }
   }
   return [...h.values()];
 }
@@ -65,10 +89,21 @@ export function kayitOku(proje, ortam = process.env) {
     }
   } else if (fs.existsSync(aile)) {
     const l = oku(aile); if (l) listeler.push(l);
+    // 🔴 E2: üretilmiş kutularda (s02 · sedir · nova …) `durum:` aile kaydında DEĞİL, ekipc'nin ürettiği ekip kaydında durur
+    //    (kaynağı ekip-modeli.yaml). Okunmazsa E2'nin yazdığı 'dondurulmus'/'emekli' bu kutularda hiç görünmezdi. Yalnız durum alanları.
+    for (const y of [path.join(proje, '_agents/ekip-os/ekip-registry.yaml'), path.join(proje, '_agents/handoff/ekip-registry.yaml')]) {
+      if (fs.existsSync(y)) { const l2 = oku(y); if (l2) { l2.yalniz = ['durum', 'durum_once']; listeler.push(l2); break; } }
+    }
   } else {
     for (const y of [path.join(proje, '_agents/handoff/ekip-registry.yaml'), path.join(proje, '_agents/ekip-os/ekip-registry.yaml')]) {
       if (fs.existsSync(y)) { const l = oku(y); if (l) listeler.push(l); break; }
     }
+  }
+  // E2: üretilmiş kayıtta `durum_once` YOKTUR (derleyici taşımıyor) — kaynağı ekip modelidir. Yalnız o alan, yalnız var olan üyeye.
+  //    Okunmazsa üretilmiş kutuda 'geri aç' hiç sunulmazdı. Model yoksa ya da okunamazsa sessiz geçilir (bu alan kadroyu değiştirmez).
+  const model = path.join(proje, '_agents/ekip-modeli.yaml');
+  if (listeler.length && fs.existsSync(model)) {
+    try { const l3 = kayitAyristir(fs.readFileSync(model, 'utf8'), 'kayit'); l3.yalniz = ['durum_once']; listeler.push(l3); } catch {}
   }
   return { kaynak, okunamadi, uyeler: birlestir(listeler) };
 }
@@ -89,21 +124,25 @@ export function kadroBirlestir({ uyeler = [], koltuklar = [], ana = '' } = {}) {
   const oturumSade = (k) => k ? { ad: k.ad, claude: !!k.claude, hal: k.hal || 'bilinmiyor', ne: k.ne || '', son: k.son || 0, tur: k.tur || '' } : null;
   const kisiler = uyeler.map((u) => {
     const o = bul(u.tmux);
-    const hal = (u.hal && HAL_KAYIT.includes(u.hal)) ? u.hal : (u.durum === 'emekli' ? 'emekli' : '');
+    const hal = DURUM_HAL[u.durum] || ((u.hal && HAL_KAYIT.includes(u.hal)) ? u.hal : '');
     let grup;
-    if (hal === 'gecici' || hal === 'yedek' || hal === 'emekli') grup = 'gecici-emekli';
+    if (hal === 'gecici' || hal === 'yedek' || hal === 'emekli' || hal === 'dondurulmus') grup = 'gecici-emekli';
     else if (o && o.claude) grup = 'calisan';
     else if (o) grup = 'dusen';                       // oturum açık, içinde ajan yok — ASIL düşen; bekçi bunu kaldırmıyordu
     else grup = 'kayitta-var-calismiyor';
-    return { id: u.id, rol: u.rol || '', mod: u.mod || '', hal_kayit: hal || 'bilinmiyor', tmux: String(u.tmux || '').split(':')[0], oturum: oturumSade(o), grup };
+    const tmux = String(u.tmux || '').split(':')[0];
+    // geri_acilir: E2'nin yazdığı önceki değer kayıtta duruyor mu — yoksa 'geri aç' neyi geri koyacağını bilemez (uç 409)
+    const geri = (hal === 'emekli' || hal === 'dondurulmus') && !!u.durum_once;
+    return { id: u.id, rol: u.rol || '', mod: u.mod || '', hal_kayit: hal || 'bilinmiyor', tmux, oturum: oturumSade(o), grup,
+      geri_acilir: geri, ...(altyapiNeden(tmux, ana) ? { altyapi: altyapiNeden(tmux, ana) } : {}) };
   });
-  // ana koltuk kayıtta yoksa "kimliği yok" diye kişilerde durur (taslak: "● ana — (kimliği yok)"), kayıtsızlara düşmez
-  if (ana && kalan.has(ana)) {
-    const k = kalan.get(ana); kalan.delete(ana);
-    kisiler.push({ id: '', rol: '(kimliği yok)', mod: '', hal_kayit: 'bilinmiyor', tmux: ana, oturum: oturumSade(k), grup: k.claude ? 'calisan' : 'dusen', ana: true });
-  }
+  // E2: kayıtta olmayan ALTYAPI oturumları (ana dahil) kayıtsızlara düşmez, ayrı listelenir — kapatılamaz/emekli edilemez.
+  // (Eski davranış: ana "(kimliği yok)" diye kişilerde, boş kabuksa DÜŞEN sayılıyordu; dash/dashproxy kırmızı kayıtsızdı.)
+  const altyapi = [];
+  for (const [ad, k] of [...kalan]) { const n = altyapiNeden(ad, ana); if (n) { kalan.delete(ad); altyapi.push({ ...oturumSade(k), altyapi: n, ...(ad === ana ? { ana: true } : {}) }); } }
   const kayitsiz = [...kalan.values()].map(oturumSade);
   const sayilar = Object.fromEntries(GRUPLAR.map((g) => [g, kisiler.filter((k) => k.grup === g).length]));
   sayilar.kayitsiz = kayitsiz.length;
-  return { kisiler, kayitsiz, sayilar };
+  sayilar.altyapi = altyapi.length;
+  return { kisiler, kayitsiz, altyapi, sayilar };
 }

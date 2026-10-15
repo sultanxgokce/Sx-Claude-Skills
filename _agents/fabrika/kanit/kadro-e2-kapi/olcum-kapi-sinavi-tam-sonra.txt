@@ -1,0 +1,217 @@
+$ bash terminal-onar/kapi/kapi-sinav.test.sh
+# rc=0 sure=7.1s zaman=2026-10-16T00:35:27+03:00
+--- stdout ---
+── kadro birleşimi (kadro.test.mjs)
+── A · kayıt ayrıştırma
+  ✓ A1 dört üye, üç tırnak biçimi de okunur
+  ✓ A2 rol/mod/hal alanları; yorum atılır
+  ✓ A3 tmux: null → boş; bilinmeyen hal metni olduğu gibi (küme kapısı birleşimde)
+  ✓ A4 HAL_KAYIT kapalı küme: calisiyor gecici yedek emekli
+── B · kayıt dosyaları (İSKÂN + işaretli ekip kaydı · merkez aile kaydı · hiç yok)
+  ✓ B1 iki kaynak okundu (iskan + işaretli ekip kaydı)
+  ✓ B2 tmux İSKÂN kaydından (ilk kaynak kazanır), rol/mod/hal ekip kaydından
+  ✓ B2b ÇATIŞMADA alan önceliği: tmux İSKÂN'dan kalır, rol/hal ekip kaydı ÜSTÜNE yazar ("bayat rol"/emekli → "başkâtip"/calisiyor) (göz tur 3)
+  ✓ B3 yalnız ekip kaydında olan üye de kadroda
+  ✓ B4 merkez: aile kaydı tek kaynak
+  ✓ B5 kayıt yok → kaynak boş, üye boş (uydurma yok)
+── C · birleşim: dört grup + kayıtsız + ana
+  ✓ C1 kayıtlı + oturum var + Claude var → çalışan (hâl ve ne taşınır)
+  ✓ C2 tmux adı casing farkı (berid ↔ BERID) yine eşleşir; dış olay hâli + ne
+  ✓ C3 kayıtlı + oturum açık + Claude YOK → DÜŞEN (asıl düşen; bekçinin canlı saydığı)
+  ✓ C4 kayıtlı + oturum yok + hal yok → kayıtta var çalışmıyor, hal_kayit bilinmiyor (uydurma yok)
+  ✓ C5 hal: emekli → geçici/emekli grubu — oturumu olsa bile düşen/çalışan sayılmaz
+  ✓ C6 geçersiz hal metni (saçma) → bilinmiyor; tmux yok → kayıtta var çalışmıyor
+  ✓ C7 ana koltuk kayıtta yok → ALTYAPI listesinde (ana oturum), ne kişilerde ne kayıtsızlarda (E2: kırmızı "boş oturum" değil)
+  ✓ C8 kayıtsız oturumlar: revak-yon (Claude var, soru) ve 20 (boş kabuk)
+  ✓ C9 sayılar gruba göre
+  ✓ C10 kayıt yoksa herkes kayıtsız (ana altyapıda) — kayıt uydurulmaz
+  ✓ C11 aynı tmux iki kayıtta: oturum İLKİNE bağlanır, ikincisi oturumsuz (bir koltuk iki kişiye verilmez)
+  ✓ C12 sayısal adlar kırpılmaz: "2026:0" yalnız "2026"a bağlanır, "17" hiçbir koltuğa; "20" kayıtsız kalır (göz tur 1)
+── E · E2: altyapı etiketi · dondurulmuş · üretilmiş kayıt durumu
+  ✓ E1 sekiz altyapı oturumu ayrı listede, gerekçeli; kayıtsız yalnız "dashboard-deneme" (önek benzerliği altyapı sayılmaz)
+  ✓ E2 durum: dondurulmus kaydın hal: calisiyor satırını ÖRTER → geçici/emekli grubu, oturumu açık olsa bile; geri_acilir (durum_once var)
+  ✓ E3 durum: emekli ama durum_once yok → geri_acilir false (neyin geri konacağı bilinmiyor)
+  ✓ E4 sayılar: altyapı ayrı sayılır, kayıtsız 1
+  ✓ E5 koltuk-bagla gizli() kalıplarının hepsi altyapı (eşdeğerlik; kalıp okunamazsa kırmızı)
+  ✓ E6 aile dalı + üretilmiş ekip kaydı: durum ekip kaydından, rol/tmux aile kaydından KALIR, yeni üye EKLENMEZ
+  ✓ E7 durum_once ekip modelinden (derleyici taşımıyor) → geri_acilir
+── D · okunamayan kayıt dosyası
+  ✓ D1 var olan ama okunamayan kayıt → okunamadi dolu, kaynak boş (sessiz boş kadro yok; uç 500 verir)
+
+SONUÇ: 30 geçti · 0 kaldı
+── kadro E2 kayıt yazıcısı (kadro-yaz.test.mjs)
+── Y · saf dönüşüm (durumDegistir)
+  ✓ Y1 durum değeri yerinde değişir (satır yorumu kalır), önceki değer durum_once satırına; başka satır DEĞİŞMEZ
+  ✓ Y2 geri aç önceki değeri koyar, durum_once satırı kalkar → BAYT BAYT ilk hâl (satır yorumu korunur)
+  ✓ Y3 durum satırı yoksa id satırının ALTINA iki satır, bloğun girintisiyle (iç içe liste bozulmaz)
+  ✓ Y4 "yok" geri açılınca iki satır da kalkar → BAYT BAYT ilk hâl
+  ✓ Y5 zaten dondurulmuşu dondur/emekli et → 409 (üstüne yazıp önceki değeri kaybetmez)
+  ✓ Y6 dondurulmamışı geri aç → 409; durum_once'suz emekliyi geri aç → 409
+  ✓ Y7 aynı id iki kez → 409 (hangisine yazılacağı belirsiz)
+  ✓ Y8 kayıtta olmayan id → 404; düzenli ifade karakterli id ("A.*") başka kişiye eşleşmez
+  ✓ Y9 tuhaf şu anki değer ("can li") → 409 (satıra ham değer geri yazılmaz)
+  ✓ Y10 tuhaf durum_once ("a b") geri konmaz → 409
+  ✓ Y11 ekip modeli (`- kayit:` örnekleri, derin girinti) aynı kuralla
+  ✓ Y12 K13: adet yalnız kişinin KENDİ rolünde bir azalır/artar (yorum kalır; başka rolün adet'i dokunulmaz); adet satırı yoksa metin aynen
+── Z · dosya: elle kayıt (İSKÂN kutusu + merkez)
+  ✓ Z1 yazma sırası okuyucuyla aynı: [iskan, ekip kaydı]
+  ✓ Z2 SON kaynağa (ekip kaydı) yazıldı ve OKUYUCU onu görüyor: dondurulmus + geri açılır
+  ✓ Z3 dosya kipi korunur (0640); iskan kaydına dokunulmadı
+  ✓ Z4 geri aç → dosya bayt bayt ilk hâl
+── U · üretilmiş kayıt: kaynak model + derleyici
+  ✓ U1 derleyici yok → 503, model ve üretilmiş kayıt BAYT BAYT aynı (yarım yazma yok)
+  ✓ U2 üretilmiş bölgedeki kişi → yazım MODELE gider, derleyici KUTUNUN aile kaydıyla (--aile) --apply koşar; üretilmiş kayıt elle yazılmadı
+  ✓ U2b derleyicinin KAYIT DIŞI farkları (başka kimlik dosyası, yeni dosya) uygulanmaz, sayısı söylenir
+  ✓ U3 okuyucu: durum üretilmiş kayıttan (dondurulmus), durum_once modelden → geri açılır; rol aile kaydından
+  ✓ U4 geri aç → model ve üretilmiş kayıt BAYT BAYT ilk hâl
+  ✓ U5 derleyici düşerse 502 + model geri alındı (bayt eşit)
+  ✓ U6 derleyici "başarılı" ama üretilmiş kayıt değişmedi → 502 + geri alındı (ekranda görünmeyecek yazım kabul edilmez)
+  ✓ U7 aynı dosyanın ELLE bölgesindeki kişi → derleyicisiz doğrudan yazılır
+
+SONUÇ: 24 geçti · 0 kaldı
+── kadro E2 ucu uçtan uca (kadro-hal.test.mjs)
+── KH-A · kimlik: yalnız Sultan oturumu (çerez + başlık), jeton yolu yok
+  ✓ KH1 çerezsiz → 401
+  ✓ KH2 çerezsiz + Bearer jeton → 401 (jeton kimlik sayılmaz)
+  ✓ KH3 çerez VAR ama Bearer/defter jetonu da taşıyor → 403 (jetonla gelen istek ajandır)
+  ✓ KH4 x-kapi başlığı yok → 403 (sayfa dışı form gönderimi)
+  ✓ KH5 bu dört istekte tmux'a HİÇ dokunulmadı
+── KH-B · altyapı negatif: kapat/dondur/emekli 403, tmux'a dokunulmaz
+  ✓ KH6 kapat: dash · ana · ttyd-* (listede bile yok) · *-kurtarici → 403, gerekçe Sultan dilinde
+  ✓ KH7 kayıtlı ama koltuğu altyapı (dashwatch) olan kişiyi dondur/emekli → 403, kayıt değişmedi
+  ✓ KH8 altyapı isteklerinde tmux'a HİÇ dokunulmadı
+  ✓ KH9 /api/kadro: altyapı ayrı (ana · dash; kayıtlı dashwatch kişide altyapı etiketli), kayıtsızlar yalnız gezgin; eylemler: true
+── KH-C · kayıtsız oturumu kapat
+  ✓ KH10 kayıtlı kişinin oturumunu "kapat" → 409 (dondur yolu), tmux'a dokunulmadı
+  ✓ KH11 kayıtsız "gezgin" → 200, tmux kill-session -t =gezgin (tam ad eşleşmesi)
+  ✓ KH12 kapanmış oturumu tekrar kapat → 404
+── KH-D · dondur → geri aç (uçtan uca)
+  ✓ KH13 dondur BASIRET → 200; kayıtta durum: dondurulmus + durum_once: yok; oturum kapatıldı
+  ✓ KH14 kadroda: geçici/emekli grubunda, hâl dondurulmus, geri açılır, oturumu yok
+  ✓ KH15 dondurulmuşu yeniden dondur → 409
+  ✓ KH16 geri aç → 200 oturum:true; açıcı "ac BASIRET --eski" (eski sohbetine döner)
+  ✓ KH17 kayıt BAYT BAYT ilk hâl
+  ✓ KH18 kadroda yeniden çalışan (oturum açık, hal_kayit kaydın hal: alanından)
+── KH-E · emekli et → geri aç (oturum yeniden AÇILMAZ) · satır yorumu korunur
+  ✓ KH19 emekli KALFA → 200; durum: emekli (yorum kaldı) + durum_once: canli; oturumu kapatıldı
+  ✓ KH20 emekliyi geri aç → kayıt BAYT BAYT ilk hâl, açıcı ÇAĞRILMADI (emeklilik oturum kararı değil)
+── KH-F · oturum kapatılamazsa kayıt geri alınır · geçersiz istekler
+  ✓ KH21 kill-session düşer → 502 ve kayıt BAYT BAYT ilk hâl (ekran "dondurulmuş" deyip oturum çalışmaz)
+  ✓ KH22 dondurulmamışı geri aç → 409 · bilinmeyen kişi → 404 · bilinmeyen eylem → 400
+  ✓ KH23 iz kaydı: her eylem tek satır (kapat · dondur · geri-ac · emekli · geri-al)
+
+SONUÇ: 23 geçti · 0 kaldı
+── kapı birim sınavı (sunucu.test.mjs)
+
+── T · TABAN YOLU (kapı /sedir altında) ──
+  ✓ T1 giriş sayfası TABAN altında açılır
+  ✓ T2 taban DIŞI istek reddedilir (404) — kapı başkasının yoluna cevap vermez
+  ✓ T3 tabanın kendisi sondaki eğik çizgiye yönlenir
+  ✓ T4 girişsiz kök TABANLI giriş sayfasına yönlenir (kök yola DEĞİL)
+  ✓ T5 girişsiz API 401 döner (yönlendirme değil)
+  ✓ T6 yanlış parola REDDEDİLİR
+  ✓ T7 doğru parola KABUL (T6 tautoloji değil)
+  ✓ T8 çerez YALNIZ kendi tabanında geçerli (Path=/sedir)
+  ✓ T9 çerez HttpOnly+Secure+SameSite korunur
+  ✓ T10 sayfa kendi tabanını TAŞIR (sunucudan öğrenir, tahmin etmez)
+  ✓ T11 sayfadaki mutlak varlık yolları tabana taşınmış
+  ✓ T12 PWA kimliği KUTU BAŞINA üretilir (kapsam tabanda, ad kutudan)
+  ✓ T13 PWA ikon yolları da tabanlı
+  ✓ T14 ttyd vekili tabanlı yolu OLDUĞU GİBİ iletir (ttyd -b ile eşleşsin)
+
+── Y · KOLTUKLAR (koltuk seçici) ──
+  ✓ Y1 girişsiz koltuk listesi 401 (kutunun oturum adları açık değil)
+  ✓ Y2 girişli liste 200 ve betiğin söylediği koltukları taşır
+  ✓ Y3 bozuk adlı satır SÜZÜLÜR (kapı betiğe körü körüne güvenmez)
+  ✓ Y4 Claude işareti ve son etkinlik taşınır
+  ✓ Y5 ekran adresi TABANLI ve ?arg= ile (ttyd -a sözleşmesi)
+  ✓ Y6 ana koltuk işaretli
+  ✓ Y7 ttyd vekili ?arg= sorgusunu OLDUĞU GİBİ iletir (koltuk ttyd'ye ulaşır)
+  ✓ Y8 betik düşerse 500 "ölçülemedi" — boş liste ("hiç koltuk yok") BASILMAZ
+  ✓ Y10 tür ve hâl taşınır (BASIRET ajan/soru · cc-1 diğer/bilinmiyor)
+  ✓ Y10b ana bayrağı kapıdan (betikten değil): sahte ana adını bilmez, kapı yine ana:true işaretler
+  ✓ Y10c eski 3 alanlı betikte tür/hâl alanı YOK (uydurulmaz)
+  ✓ Y9 telefon ekranı koltuk seçici TAŞIR (başlıkta seçim kutusu)
+  ✓ Y10 seçici listeyi kutunun /api/koltuklar ucundan çeker ve tam terminali ?arg= ile açar
+
+── K · KÖK DAVRANIŞI (taban boş — geriye dönük) ──
+  ✓ K1 taban boşken giriş kök yolda açılır
+  ✓ K2 girişsiz kök → /giris (eski davranış BAYT BAYT aynı)
+  ✓ K3 taban boşken çerez Path=/ kalır
+  ✓ K4 taban boşken sayfa yolları DEĞİŞTİRİLMEZ
+  ✓ K5 taban boşken ttyd yolu kök kalır
+
+── M · MAHREMİYET (iki kutu aynı kaynağı paylaşıyor) ──
+  ✓ M1 geçerli oturumla BAŞKA kutunun yoluna gidilemez (404)
+  ✓ M2 ... kendi yolu çalışıyor (M1 "her şey 404" değil)
+
+── W · WEBSOCKET (tam terminal bağlantısı) ──
+  ✓ W1 tabanlı WS yolu ttyd'ye ULAŞIR
+  ✓ W2 taban DIŞI WS yolu REDDEDİLİR (401) — geçerli oturumla bile
+  ✓ W3 çerezsiz WS REDDEDİLİR (401)
+  ✓ W4 tty dışı yola upgrade REDDEDİLİR
+  ✓ B1 giriş sayfası tabanı TAŞIR (window.__TABAN gömülü)
+  ✓ B2 giriş sayfasında KÖK-mutlak varlık yolu kalmadı
+  ✓ B3 başarılı girişten sonra taban altına dönülür (köke DEĞİL)
+  ✓ B4 tabansız kutuda sayfa yine çalışır (B1 tautoloji değil)
+  ✓ P1 kutunun kendi parolası yokken BAŞKASININKİYLE açılmaz (fail-closed)
+  ✓ P2 kendi parolası varken AÇILIR (P1 tautoloji değil)
+  ✓ F1 biçem dosyasında kök-mutlak yazı tipi adresi yok
+  ✓ F2 yazı tipi taban altından İNİYOR (F1 tautoloji değil)
+  ✓ C1 kısa adlı kutu UZUN adlının önbelleğini silmez
+  ✓ C2 ... ama kendi eski kabını siler (C1 tautoloji değil)
+  ✓ C3 kutu kendi eski sürümünü temizler, komşununkine dokunmaz
+  ✓ A1 giriş ekranı KUTUNUN adını gösterir
+  ✓ A2 sayfada doldurulmamış yuva kalmadı
+  ✓ A3 kaynakta sabit kutu adı kalmadı
+  ✓ A4 BAŞKA kutu KENDİ adını gösterir (A1 tautoloji değil)
+  ✓ PN1 ttyd HTML sayfasına pano köprüsü gömülür (data-kapi-pano işareti)
+  ✓ PN2 köprü TABANI taşır (window.__TABAN="/sedir") ve /api/resim'e tabanla gider
+  ✓ PN3 ekleme </body> ÖNÜNE girer, sayfa bütün (…</body></html> ile biter)
+  ✓ PN4 content-length yeniden hesaplanır (düz istekte gövde bayt sayısı = başlık, gzip yok)
+  ✓ PN5 ttyd'den DÜZ gövde istenir (accept-encoding sıyrılır)
+  ✓ PN6 ttyd'nin kendi betiği yerinde (köprü sayfayı ezmez)
+  ✓ PN7 istemci gzip istediyse cevap gzip'lidir ve köprü içindedir
+  ✓ PN8 </body> olmayan sayfada köprü SONA eklenir (sayfa yine açılır)
+  ✓ PN9 ttyd SIKIŞTIRILMIŞ cevap verirse gövde bozulmaz ve köprü EKLENMEZ
+  ✓ PN10 HTML olmayan ttyd cevabına (json) köprü girmez
+  ✓ PN11 tabansız kutuda köprü __TABAN="" ile gömülür (K2 tautoloji değil)
+  ✓ PN12 KAPI_PANO=0 → köprü gömülmez, accept-encoding ttyd'ye geçer (eski davranış bayt bayt)
+  ✓ PN13 pano.js kapanış script etiketi içermez (satır içi gömülüyor)
+  ✓ PN14 ekleme replace'i FONKSİYONLA yapılır (pano.js içindeki $ dizileri yorumlanmasın)
+  ✓ KA0 /koltuk/<ad> api altında değil → 404 (yol disiplini)
+  ✓ KA1 GET /api/koltuk/<ad> betiğin durum JSON'unu olduğu gibi taşır (durum·yol·rol·resume)
+  ✓ KA2 betik "durum <ad>" ile çağrıldı
+  ✓ KA3 girişsiz → 401
+  ✓ KA4 POST …/ac → betik "ac <ad>" (eski yok) · rc0 → 200 tamam, mesaj betikten
+  ✓ KA5 {eski:true} → betiğe --eski geçer (eski sohbete dönüş)
+  ✓ KA6 rc3 (merdiven başladı) → 202 tamam:true
+  ✓ KA7 rc4 (kayıtsız koltuk) → 409 tamam:false, sebep mesajda
+  ✓ KA8 rc1 (açılamadı) → 502
+  ✓ KA9 x-kapi başlığı olmadan POST → 403 (CSRF kalkanı korunur)
+  ✓ KA10 bozuk ad (:) yola GİRMEZ → 404 (betik çağrılmaz)
+  ✓ KA11 üçüncü hâl "takili" kapıdan olduğu gibi geçer (son epoch dolu)
+  ✓ KA12 açma süreyi aşarsa 504 + "arkada doğmuş olabilir" (502 açılamadı DEĞİL)
+  ✓ KA13 süre içinde biten açma 200 (KA12 tautoloji değil)
+  ✓ KA14 takılı/ölçülemeyen koltuk zorlasız → rc5 → 428 tamam:false (dokunulmadı)
+  ✓ KA15 {zorla:true} → betiğe --zorla geçer
+  ✓ SL1 "/" içeren koltuk listede (eski süzgeç düşürüyordu)
+  ✓ SL2 ekran adresi encodeURIComponent ile (?arg=2026%2F85)
+  ✓ SL3 /api/koltuk/<kodlu ad> → yol çözülür, betiğe "durum 2026/85" gider
+  ✓ SL4 arada boşluklu ad yola girer → betiğe "durum a b" (tmux izin verir — bağımsız göz tur 1)
+  ✓ SL5 200 karakterlik "/"lı ad: kodlu parça 200'ü aşsa da tekil uç ÇÖZÜMDEN SONRA aynı kuralla sınar → 200
+  ✓ SL6 201 karakter → 404 (sınır çözülmüş ada uygulanır)
+  ✓ SL7 200 emojilik ad (kodlu 2400) tekil uca girer → 200; 201 emoji → 404
+  ✓ KD0 girişsiz /api/kadro 401
+  ✓ KD1 200 + kaynak aile kaydı + sayılar
+  ✓ KD2 çalışan: BASIRET ⏳ dış olay + ne + ekran adresi
+  ✓ KD3 düşen: kalfa (oturum açık, Claude yok) · ana koltuk boş kabuk olsa da DÜŞEN değil, altyapı (E2: "ana oturum")
+  ✓ KD4 hal: emekli → geçici/emekli; kayıtsız "2026/85" kodlu ekran adresiyle
+  ✓ KD5 proje dizini yanıtta (hangi kayıt okundu, izlenebilir)
+  ✓ KD6 koltuk listesi ölçülemezse 500 (uydurma kadro yok)
+  ✓ KD7 kayıt var ama okunamıyor → 500 + hangi dosya
+
+────────────────────────────────────────────────────────
+GECEN: 98  ·  KALAN: 0
+SONUÇ: kapı birim sınavı geçti
+--- stderr ---

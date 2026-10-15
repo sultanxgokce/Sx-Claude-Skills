@@ -23,3 +23,4 @@ console.log('kutu: ' + KUTU + ' · proje: ' + PROJE + ' · kaynak: ' + (kayit.ka
 console.log('sayilar: ' + JSON.stringify(k.sayilar));
 for (const p of k.kisiler) console.log(`${p.grup.padEnd(24)} ${(p.id || p.tmux).padEnd(12)} rol=${p.rol.slice(0, 30).padEnd(30)} hal_kayit=${p.hal_kayit.padEnd(10)} oturum=${p.oturum ? p.oturum.ad + '/' + p.oturum.hal + (p.oturum.ne ? ' (' + p.oturum.ne + ')' : '') : '-'}`);
 console.log('kayitsiz: ' + (k.kayitsiz.map((x) => x.ad + '/' + x.hal).join(' · ') || '-'));
+console.log('altyapi: ' + (k.altyapi.map((x) => x.ad + ' (' + x.altyapi + ')').join(' · ') || '-'));

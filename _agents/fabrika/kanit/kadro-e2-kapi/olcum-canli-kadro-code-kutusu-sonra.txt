@@ -1,0 +1,25 @@
+$ node terminal-onar/kapi/kadro-canli.mjs --kutu code --proje /config/projects/Nexus --ana code-ana
+# rc=0 sure=0.4s zaman=2026-10-16T00:36:22+03:00
+--- stdout ---
+kutu: code · proje: /config/projects/Nexus · kaynak: /config/projects/Nexus/_agents/handoff/aile-registry.yaml
+sayilar: {"calisan":7,"dusen":0,"kayitta-var-calismiyor":10,"gecici-emekli":0,"kayitsiz":0,"altyapi":4}
+calisan                  SERDAR       rol=motor/governance/ölçüm gelişti hal_kayit=bilinmiyor oturum=serdar/calisiyor
+kayitta-var-calismiyor   UISERDAR     rol=Nexus ui/ Agentic-OS panelleri hal_kayit=bilinmiyor oturum=-
+kayitta-var-calismiyor   PAZARBASI    rol=freelance/pazaryeri hattı — Fr hal_kayit=bilinmiyor oturum=-
+kayitta-var-calismiyor   MUMEYYIZ     rol=başvuru elemesi — satış person hal_kayit=bilinmiyor oturum=-
+kayitta-var-calismiyor   BUGSERDAR    rol=sistem-bütünlük denetçisi (kur hal_kayit=bilinmiyor oturum=-
+kayitta-var-calismiyor   AHENKSERDAR  rol=koordinasyon sync-katmanı (ail hal_kayit=bilinmiyor oturum=-
+kayitta-var-calismiyor   MIMSERDAR    rol=mimar — uygulanabilir mimari-p hal_kayit=bilinmiyor oturum=-
+kayitta-var-calismiyor   MOTORSERDAR  rol=backend/motor implementasyon b hal_kayit=bilinmiyor oturum=-
+calisan                  MUAVİN       rol=SERDAR'ın ast-muavini — ops Q& hal_kayit=bilinmiyor oturum=muavin/bos
+kayitta-var-calismiyor   YAVER        rol=günlük düzen + yükümlülük taki hal_kayit=bilinmiyor oturum=-
+kayitta-var-calismiyor   NAKKAŞ       rol="tasarım-sistemi sahibi meta-p hal_kayit=bilinmiyor oturum=-
+kayitta-var-calismiyor   BASİRET      rol="Kariyer: LinkedIn profili · C hal_kayit=bilinmiyor oturum=-
+calisan                  BÂNİ         rol=merkez (s01) inşa ajanı — SERD hal_kayit=bilinmiyor oturum=bani/bos
+calisan                  BERİD        rol=sohbet (koç sohbeti geçidi) sa hal_kayit=bilinmiyor oturum=berid/calisiyor
+calisan                  MUHAKKIK     rol=kanıt doğrulayıcı — Sultan ona hal_kayit=bilinmiyor oturum=muhakkik/bos
+calisan                  MİRAHUR      rol=cloudtop platform nöbetçisi —  hal_kayit=bilinmiyor oturum=MIRAHUR/soru
+calisan                  HENDESE      rol=araştırma ve mimari ajanı — AI hal_kayit=bilinmiyor oturum=hendese/girdi
+kayitsiz: -
+altyapi: code-ana (ana oturum) · dash (mobil panel) · dashproxy (mobil panel) · dashwatch (mobil panel)
+--- stderr ---

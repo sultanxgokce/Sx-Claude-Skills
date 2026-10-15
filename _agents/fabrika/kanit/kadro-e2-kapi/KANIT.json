@@ -1,0 +1,144 @@
+{
+  "is": "kadro-e2-kapi",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-16T00:36:22+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "uc-uctan-uca-ana-dal",
+      "asama": "once",
+      "dosya": "olcum-uc-uctan-uca-ana-dal-once.txt",
+      "sha256": "4ffd59055de80a33777490fe5a7d0e20d4143bf74008222bdbaa9667fd215699",
+      "komut": [
+        "node",
+        "/tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/kapi-once/terminal-onar/kapi/kadro-hal.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-16T00:35:20+03:00",
+      "sure_sn": 0.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "uc-uctan-uca",
+      "asama": "sonra",
+      "dosya": "olcum-uc-uctan-uca-sonra.txt",
+      "sha256": "7cf920328915c51474918781438bbd8b2a3f5f1c07492bfd02edafbe59cda5e2",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/kadro-hal.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T00:35:20+03:00",
+      "sure_sn": 0.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kayit-yazici-gercek-kopyalar",
+      "asama": "sonra",
+      "dosya": "olcum-kayit-yazici-gercek-kopyalar-sonra.txt",
+      "sha256": "cb3d4dd65df2b326580a5ec2e43ac36ce90e5b80ecb637ffa00c6148722fbdb9",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/kadro-yaz.test.mjs",
+        "--gercek"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T00:35:20+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi-tam",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-tam-sonra.txt",
+      "sha256": "ad64ff5223c5f83d3a54dbeb27546f70466705c09cf4b48c597fbd8b0218679d",
+      "komut": [
+        "bash",
+        "terminal-onar/kapi/kapi-sinav.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T00:35:27+03:00",
+      "sure_sn": 7.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-ekipc-s02-kopyasi",
+      "asama": "sonra",
+      "dosya": "olcum-gercek-ekipc-s02-kopyasi-sonra.txt",
+      "sha256": "8f92b4efceaa6e92b233aca2ecd02ef2ec7b90ddc0fe07aaa4b037008642fc94",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/ekipc-s02c && git checkout -q -- . && node /tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/ekipc-gercek.mjs /tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/ekipc-s02c && echo '--- git status (dondur→geri aç sonrası, satır sayısı):' && git status --short | wc -l"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T00:35:28+03:00",
+      "sure_sn": 0.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-turu",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-turu-sonra.txt",
+      "sha256": "e965b8bff62087a40945a376dade4e0330f2d72288ce9414ca1cdc4312d0c1c7",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/kadro-mutasyon.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-kadro-e2-kapi",
+        "/tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T00:35:57+03:00",
+      "sure_sn": 3.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-kadro-code-kutusu",
+      "asama": "once",
+      "dosya": "olcum-canli-kadro-code-kutusu-once.txt",
+      "sha256": "28d73bb5d0704bab980c806eb39405e5e05af1d45556e00388de205d5a29c1c7",
+      "komut": [
+        "node",
+        "/tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/kapi-once/terminal-onar/kapi/kadro-canli.mjs",
+        "--kutu",
+        "code",
+        "--proje",
+        "/config/projects/Nexus",
+        "--ana",
+        "code-ana"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T00:36:22+03:00",
+      "sure_sn": 0.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-kadro-code-kutusu",
+      "asama": "sonra",
+      "dosya": "olcum-canli-kadro-code-kutusu-sonra.txt",
+      "sha256": "9e0de1db7e010cfb6e1c9fe46ad0ba0d1198801bd85ee150c4ecd384226d6dc4",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/kadro-canli.mjs",
+        "--kutu",
+        "code",
+        "--proje",
+        "/config/projects/Nexus",
+        "--ana",
+        "code-ana"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T00:36:22+03:00",
+      "sure_sn": 0.4
+    }
+  ],
+  "imza": "34292d8afe12aef3d2a676226db843d6dc0d5632c5cc0ee0bfda1712fb0cf735"
+}

@@ -1,0 +1,11 @@
+$ bash -c cd /tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/ekipc-s02c && git checkout -q -- . && node /tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/ekipc-gercek.mjs /tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/ekipc-s02c && echo '--- git status (dondur→geri aç sonrası, satır sayısı):' && git status --short | wc -l
+# rc=0 sure=0.4s zaman=2026-10-16T00:35:28+03:00
+--- stdout ---
+önce: bilinmiyor kayitta-var-calismiyor geri_acilir=false
+dondur: {"dosya":"/tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/ekipc-s02c/_agents/ekip-modeli.yaml","uretilmis":true,"onceki":"canli","yeni":"dondurulmus","uygulanmayan_fark":2}
+sonra: dondurulmus gecici-emekli geri_acilir=true
+geri-ac: {"dosya":"/tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/ekipc-s02c/_agents/ekip-modeli.yaml","uretilmis":true,"onceki":"dondurulmus","yeni":"canli","uygulanmayan_fark":1}
+geri: bilinmiyor kayitta-var-calismiyor geri_acilir=false
+--- git status (dondur→geri aç sonrası, satır sayısı):
+0
+--- stderr ---
