@@ -1,0 +1,38 @@
+{
+  "tur": 3,
+  "is": "kadro-kimlik-eslesme",
+  "pr": "342",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-16T01:10:05+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 65703,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 38072
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İstenen session_id → kullanıcı adı → tmux sırası kadro genelinde uygulanmış; ana oturumdaki kişi tek çalışan satırına bağlanıyor ve altyapı eylemi 403 ile korunuyor. Ancak oturum dosyasının adı ile içindeki pid bağlanmadığı için yanlış veya bayat bir dosya canlı Claude sürecinin kimliğini üstlenebilir; önce bunu çözün.",
+    "bulgular": [
+      {
+        "ne": "Oturum dosyasının `<pid>.json` adı ile JSON içindeki `pid` değerinin aynı olduğu doğrulanmıyor. Örneğin `999.json` içine yaşayan bir Claude sürecinin pid'i yazılmışsa dosya kabul edilir ve gerçek kimlik dosyasından önce okunursa `gorulen` süzgeci gerçek kaydı da dışlayabilir; bu, kişiyi yanlış session_id veya tmux oturumuna bağlayabilir.",
+        "kanit": "Kod dosya adında yalnız `^\\d+\\.json$` denetimi yapıyor, ardından süreç denetimleri ve `gorulen` anahtarı için doğrudan `j.pid` kullanıyor; `f === pid + '.json'` koşulu yok. K2 sınavı başka pid alanı, ölü süreç, başka program ve bozuk JSON'u kapsıyor fakat dosya-adı/iç-pid uyuşmazlığını ölçmüyor.",
+        "konum": "terminal-onar/kapi/kimlik.mjs:29-37; terminal-onar/kapi/kimlik.test.mjs:17-30 (K2)",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kırmızı önce ölçümü 8 geçti/6 kaldıdan yeşil sonra ölçümü 17/17'ye çıkarıyor, tam kapı sınavı yeşil, mutasyon turu 8/8 ve canlı code-kutusu gerçekçi veride kimlikle bağlanan kişileri gösteriyor. Ölçüm çifti talebin ana davranışını güçlü biçimde kanıtlıyor; ancak dosya adı ile iç pid uyuşmazlığı sınanmamış."
+  }
+}

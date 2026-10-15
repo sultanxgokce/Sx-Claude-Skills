@@ -4,7 +4,7 @@
 // { pid, sessionId, tmux:"<oturum>:@N.%N", name, nameSource, pidDomain }. Kimlik tanıma kancası (aile-self-recognition) da kişinin
 // kayıt satırına `session_id:` yazar. İkisi buluşunca kişi, adı ne olursa olsun çalıştığı oturuma bağlanır.
 // 🔴 Ortak dizin: /config/.claude birçok kutuda paylaşılır → başka kutunun ya da ölmüş sürecin dosyası SAYILMAZ:
-//    pidDomain bu sürecin pid alanı olmalı · /proc/<pid> yaşamalı · /proc/<pid>/cmdline'ın programı claude olmalı (pid yeniden kullanımı).
+//    dosya adı = içindeki pid · pidDomain bu sürecin pid alanı olmalı · /proc/<pid> yaşamalı · /proc/<pid>/cmdline'ın programı claude olmalı (pid yeniden kullanımı).
 // 🔴 Hiçbir şey yazmaz; dizin okunamazsa boş döner (kimlik izi yoksa eşleşme tmux adına düşer — bugünkü davranış, uydurma yok).
 import fs from 'node:fs';
 import path from 'node:path';
@@ -27,7 +27,8 @@ export function oturumKimlikleri({ dizinler = oturumDizinleri(), procKok = '/pro
     for (const f of adlar) {
       if (!/^\d+\.json$/.test(f)) continue;
       let j; try { j = JSON.parse(fs.readFileSync(path.join(d, f), 'utf8')); } catch { continue; }
-      const pid = String(j.pid || ''); if (!/^\d+$/.test(pid) || gorulen.has(pid)) continue;
+      // dosya adı ile içindeki pid aynı olmalı (bağımsız göz tur 3): başka adla yazılmış bir dosya yaşayan bir sürecin kimliğini taklit edemez
+      const pid = String(j.pid || ''); if (!/^\d+$/.test(pid) || f !== pid + '.json' || gorulen.has(pid)) continue;
       if (!alan || !String(j.pidDomain || '').endsWith(alan)) continue;                         // başka kutunun süreci
       let arg0 = ''; try { arg0 = fs.readFileSync(path.join(procKok, pid, 'cmdline'), 'utf8').split('\0')[0]; } catch { continue; }   // ölmüş
       if (!/(^|\/)claude$/.test(arg0)) continue;                                                 // pid başka programa geçmiş

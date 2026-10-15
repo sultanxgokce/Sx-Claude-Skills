@@ -20,12 +20,15 @@ dosya(103, { sessionId: 'S-BASKA', tmux: 'baska:@3.%3', name: 'x', nameSource: '
 dosya(104, { sessionId: 'S-OLU', tmux: 'olu:@4.%4', name: 'x', nameSource: 'derived' });                                                         // süreç yok
 dosya(105, { sessionId: 'S-YENI', tmux: 'yeni:@5.%5', name: 'x', nameSource: 'derived' }); surec(105, 'bash');                                    // pid başka programa geçmiş
 writeFileSync(join(OT, 'bozuk.json'), '{'); writeFileSync(join(OT, '106.json'), '{bozuk');
+// 999.json içine YAŞAYAN 101'in pid'i yazılmış taklit (başka oturum adıyla), dizin sırasında gerçek 101.json'dan ÖNCE okunsa bile sayılmaz
+writeFileSync(join(OT, '099.json'), JSON.stringify({ pid: '101', pidDomain: 'linux::' + ALAN, sessionId: 'S-TAKLIT', tmux: 'taklit:@9.%9', name: 'x', nameSource: 'derived' }));
 
 console.log('── K · oturum kimlikleri (kimlik.mjs)');
 const kim = oturumKimlikleri({ dizinler: [OT, join(T, 'yok')], procKok: PROC, pidAlani: ALAN });
 kapi('K1 yalnız bu kutunun, yaşayan, programı claude olan süreçleri: kutu-ana + serdar', [...kim.keys()].sort().join() === 'kutu-ana,serdar', JSON.stringify([...kim]));
 kapi('K2 başka pid alanı · ölmüş süreç · pid\'i başka programa geçmiş · bozuk dosya SAYILMAZ', !kim.has('baska') && !kim.has('olu') && !kim.has('yeni'));
 kapi('K3 tmux "oturum:@N.%N" → oturum adı; sessionId + ad + ad kaynağı taşınır', kim.get('kutu-ana')[0].sessionId === 'S-YON' && kim.get('serdar')[0].adKaynak === 'user');
+kapi('K2b dosya adı ≠ içindeki pid (099.json içinde 101) → sayılmaz ve gerçek 101.json\'u gölgelemez', !kim.has('taklit') && kim.get('kutu-ana')[0].sessionId === 'S-YON');
 kapi('K4 pid alanı okunamazsa (boş) HİÇBİR dosya sayılmaz (ortak dizinde başka kutuya bağlanmaz)', oturumKimlikleri({ dizinler: [OT], procKok: PROC, pidAlani: '' }).size === 0);
 
 console.log('── E · eşleşme: önce kimlik, sonra tmux adı');
