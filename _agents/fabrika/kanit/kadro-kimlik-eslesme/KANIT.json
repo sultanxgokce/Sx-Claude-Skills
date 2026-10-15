@@ -1,7 +1,7 @@
 {
   "is": "kadro-kimlik-eslesme",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-16T01:06:00+03:00",
+  "guncelleme": "2026-10-16T01:07:41+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -23,30 +23,30 @@
       "etiket": "kimlik-sinavi",
       "asama": "sonra",
       "dosya": "olcum-kimlik-sinavi-sonra.txt",
-      "sha256": "562c6851edd68d606463a28a8585b50d3259e0bc2be3592b47fd53846de1a206",
+      "sha256": "519320105589f3e8d2be4809ddc623f27ed962462c93d0d2a75c970d860af828",
       "komut": [
         "node",
         "terminal-onar/kapi/kimlik.test.mjs"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-16T01:05:34+03:00",
-      "sure_sn": 0.5
+      "zaman": "2026-10-16T01:07:31+03:00",
+      "sure_sn": 1.4
     },
     {
       "tur": "olcum",
       "etiket": "kapi-sinavi-tam",
       "asama": "sonra",
       "dosya": "olcum-kapi-sinavi-tam-sonra.txt",
-      "sha256": "52b5042cd65eac9fa7f8aff12f8c40d8f5a2e0975fcda4dac9a57d1dca65560b",
+      "sha256": "ec0ee43168dade031fc597bcb757cf1a926ad3c390451da7a21f6e47f8e12349",
       "komut": [
         "bash",
         "terminal-onar/kapi/kapi-sinav.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-16T01:05:43+03:00",
-      "sure_sn": 8.8
+      "zaman": "2026-10-16T01:07:41+03:00",
+      "sure_sn": 9.8
     },
     {
       "tur": "olcum",
@@ -74,18 +74,18 @@
       "etiket": "mutasyon-turu",
       "asama": "sonra",
       "dosya": "olcum-mutasyon-turu-sonra.txt",
-      "sha256": "d2aa206df307ca49b912aecff3ca3f8aa9a7a57f417363ba23531b9aefe23307",
+      "sha256": "3c911f00280049d11c11836b8fbc967d8a0bbccab06ac611ac9d8476f341b015",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/kimlik-mutasyon.sh",
         "/config/projects/_wt/Sx-Claude-Skills-kadro-kimlik-eslesme",
         "/tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad"
       ],
-      "rc": 0,
-      "renk": "yesil",
-      "zaman": "2026-10-16T01:06:00+03:00",
-      "sure_sn": 2.8
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-16T01:07:29+03:00",
+      "sure_sn": 3.9
     }
   ],
-  "imza": "fe192e5271fd9db654a7fb72a3c615d676a0e715ca8b3e57a7204e74f89df48f"
+  "imza": "865d2cfb9e24866e014a494250f0f34ee275177cc98f471272aa418679dae955"
 }

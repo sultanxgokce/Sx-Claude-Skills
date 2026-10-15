@@ -120,12 +120,16 @@ const norm = (s) => String(s || '').trim().toLowerCase();
 //   3) tmux adı (eski kural). Kimlik tek bir koltuğa çıkmalı; iki koltuğa çıkarsa kimlik eşleşmesi YAPILMAZ (tahmin yok), 3'e düşülür.
 export function kadroBirlestir({ uyeler = [], koltuklar = [], ana = '', kimlikler = null } = {}) {
   const kalan = new Map(koltuklar.map((k) => [k.ad, k]));
+  // Basamaklar SIRAYLA (bağımsız göz tur 1): session_id bir oturuma çıkıyorsa o kazanır, ad bakılmaz; çıkmıyorsa ada bakılır.
+  // Her basamakta aday tek olmalı — iki aday tahmin gerektirir, o basamak atlanır.
   const kimlikBul = (u) => {
     if (!kimlikler || !kimlikler.size) return null;
-    const aday = [...kalan.keys()].filter((ad) => (kimlikler.get(ad) || []).some((c) =>
-      (u.session_id && c.sessionId === u.session_id) || (c.adKaynak === 'user' && c.ad && norm(c.ad) === norm(u.id))));
-    if (aday.length !== 1) return null;
-    const k = kalan.get(aday[0]); kalan.delete(aday[0]); return k;
+    const basamaklar = [(c) => !!u.session_id && c.sessionId === u.session_id, (c) => c.adKaynak === 'user' && !!c.ad && norm(c.ad) === norm(u.id)];
+    for (const uyar of basamaklar) {
+      const aday = [...kalan.keys()].filter((ad) => (kimlikler.get(ad) || []).some(uyar));
+      if (aday.length === 1) { const k = kalan.get(aday[0]); kalan.delete(aday[0]); return k; }
+    }
+    return null;
   };
   const kimlikle = new Map();
   for (const u of uyeler) { const k = kimlikBul(u); if (k) kimlikle.set(u, k); }

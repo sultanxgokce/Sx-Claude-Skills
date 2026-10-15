@@ -43,6 +43,11 @@ kapi('E6 kimlik verilmezse bugünkü davranış: kutu-yon "kayıtta var, çalı�
 const iki = new Map([['a', [{ sessionId: 'S', ad: '', adKaynak: '' }]], ['b', [{ sessionId: 'S', ad: '', adKaynak: '' }]]]);
 const r2 = kadroBirlestir({ uyeler: kayitAyristir('uyeler:\n  - id: X\n    tmux: "a:0"\n    session_id: "S"\n'), koltuklar: koltukSatirlari('a\t1\t1\tajan\tbos\t\nb\t1\t1\tajan\tbos\t\n'), ana: '', kimlikler: iki });
 kapi('E7 aynı kimlik İKİ oturumda → kimlik eşleşmesi yapılmaz (tahmin yok), tmux adına düşer', r2.kisiler[0].oturum.ad === 'a' && !r2.kisiler[0].eslesme);
+const cak = new Map([['a', [{ sessionId: 'S', ad: 'x', adKaynak: 'derived' }]], ['b', [{ sessionId: 'Q', ad: 'X', adKaynak: 'user' }]]]);
+const r5 = kadroBirlestir({ uyeler: kayitAyristir('uyeler:\n  - id: X\n    tmux: "c:0"\n    session_id: "S"\n'), koltuklar: koltukSatirlari('a\t1\t1\tajan\tbos\t\nb\t1\t1\tajan\tbos\t\n'), ana: '', kimlikler: cak });
+kapi('E7b session_id A oturumunu, verilen ad B oturumunu gösteriyor → session_id KAZANIR (basamaklar sıralı), B kayıtsız kalır', r5.kisiler[0].oturum && r5.kisiler[0].oturum.ad === 'a' && r5.kisiler[0].eslesme === 'kimlik' && r5.kayitsiz.map((x) => x.ad).join() === 'b', JSON.stringify(r5));
+const r6 = kadroBirlestir({ uyeler: kayitAyristir('uyeler:\n  - id: X\n    tmux: "c:0"\n    session_id: "YOK"\n'), koltuklar: koltukSatirlari('b\t1\t1\tajan\tbos\t\n'), ana: '', kimlikler: cak });
+kapi('E7c session_id hiçbir canlı oturumda yoksa (bayat) ad basamağına inilir', r6.kisiler[0].oturum && r6.kisiler[0].oturum.ad === 'b' && r6.kisiler[0].eslesme === 'kimlik');
 const r3 = kadroBirlestir({ uyeler: kayitAyristir('uyeler:\n  - id: Y\n    tmux: "y:0"\n'), koltuklar: koltukSatirlari('y\t1\t1\tajan\tbos\t\n'), ana: '', kimlikler: new Map([['y', [{ sessionId: 'Q', ad: 'Y', adKaynak: 'derived' }]]]) });
 kapi('E8 türetilmiş (derived) ad kimlik sayılmaz — yalnız kullanıcının verdiği ad', !r3.kisiler[0].eslesme && r3.kisiler[0].oturum.ad === 'y');
 
