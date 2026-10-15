@@ -382,6 +382,8 @@ python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y/DENETIM-
 [ "$RC" -eq 0 ] && [ "$(wc -l < "$T/csay")" -eq 2 ]; g $? "Y4 codex bir kez düşüp toparlarsa yedek YOK: ikinci deneme codex (2 çağrı)"
 python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y/DENETIM-3.json'));assert d['yedek'] is None and d['denetci'].startswith('codex')"; g $? "Y4b kayıtta yedek=null, denetçi codex (Y1b tautoloji değil)"
 rm -f "$FAKE/codex"
+# Y8 yalnız ANA koşumda ve kendi mutantında (codex-stdin-acik) koşar: her mutant iç koşumunda tekrarlanınca CI'nın 300 sn tavanı aşıldı (ölçüldü: tam 300 sn'de Terminated)
+if [ -z "${IC_KOSUM:-}" ] || [[ "${MUTANT_D:-}" == *codex-stdin-acik* ]]; then
 echo "════ Y8 · codex STDIN KAPALI: çağıranın stdin'i hiç kapanmasa da denetçi biter (15 Eki, 68 dk asılı kaldı) ════"
 cat > "$FAKE/codex" <<'SH'
 #!/usr/bin/env bash
@@ -391,9 +393,10 @@ for ((i=1;i<=$#;i++)); do if [ "${!i}" = -o ]; then j=$((i+1)); printf '%s' "$SA
 SH
 chmod +x "$FAKE/codex"
 bash "$K" olcum is-y8 olc --asama tek -- echo 1 >/dev/null 2>&1
-( unset DENETCI_KOMUT; PATH="$YP" DENETCI_YAZAN_MODEL=fable SAHTE_JSON="$(J 5 E "")" timeout 20 bash "$D" is-y8 --diff "$T/y.patch" --kart "$T/kart.md" < <(sleep 60) >"$T/y8.out" 2>&1 ); RC=$?
-[ "$RC" -eq 0 ] && python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y8/DENETIM-1.json'));assert d['denetci'].startswith('codex')"; g $? "🔴 stdin 60 sn açık boruyken denetçi 20 sn içinde BİTTİ (rc=0), codex puanladı — stdin'e bağımlı değil"
+( unset DENETCI_KOMUT; PATH="$YP" DENETCI_YAZAN_MODEL=fable SAHTE_JSON="$(J 5 E "")" timeout 10 bash "$D" is-y8 --diff "$T/y.patch" --kart "$T/kart.md" < <(sleep 30) >"$T/y8.out" 2>&1 ); RC=$?
+[ "$RC" -eq 0 ] && python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y8/DENETIM-1.json'));assert d['denetci'].startswith('codex')"; g $? "🔴 stdin 30 sn açık boruyken denetçi 10 sn içinde BİTTİ (rc=0), codex puanladı — stdin'e bağımlı değil"
 rm -f "$FAKE/codex"
+fi
 
 if [ -n "${IC_KOSUM:-}" ]; then echo "(ic)"; [ "$kalan" -eq 0 ]; exit $?; fi
 echo "════ T11 · MUTASYON: Sultan kapısını bozunca sınav kırmızı veriyor mu ════"

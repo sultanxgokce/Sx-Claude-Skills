@@ -1,0 +1,10 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/olc-y8.sh
+# rc=0 sure=315.7s zaman=2026-10-15T11:23:03+03:00
+--- stdout ---
+=== Y8 ana koşumda + yalnız kendi mutantında (CI 300 sn tavanı; #322 CI süresi 264 sn, yerel kutu CI koşucusundan yavaş) ===
+════ Y8 · codex STDIN KAPALI: çağıranın stdin'i hiç kapanmasa da denetçi biter (15 Eki, 68 dk asılı kaldı) ════
+  ✓ 🔴 stdin 30 sn açık boruyken denetçi 10 sn içinde BİTTİ (rc=0), codex puanladı — stdin'e bağımlı değil
+  ✓ mutant 'codex-stdin-acik' sınavı KIRMIZI yapıyor
+── SONUÇ: 149 geçti · 0 kaldı ──
+yerel süre: 315 sn
+--- stderr ---

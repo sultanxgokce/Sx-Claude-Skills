@@ -1,7 +1,7 @@
 {
   "is": "denetci-codex-stdin",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T10:56:44+03:00",
+  "guncelleme": "2026-10-15T11:23:03+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -49,7 +49,39 @@
       "renk": "yesil",
       "zaman": "2026-10-15T10:56:44+03:00",
       "sure_sn": 328.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "Y8-yalniz-ana-kosum-ve-kendi-mutanti-10sn-CI-300sn-tavani",
+      "asama": "sonra",
+      "dosya": "olcum-Y8-yalniz-ana-kosum-ve-kendi-mutanti-10sn-CI-300sn-tavani-sonra.txt",
+      "sha256": "4263000f5f3bdddab138e26f1d8039eb33ec0b1ed3ef35e614e953eefe54f65c",
+      "komut": [
+        "bash",
+        "-c",
+        "echo \"=== Y8 ana koşumda + yalnız kendi mutantında (CI 300 sn tavanı: önceki sürüm 300 sn de Terminated) ===\"; s=$(date +%s); bash yazilim-fabrikasi/scripts/denetci.test.sh 2>&1 | grep -E \"Y8|stdin 30 sn|codex-stdin-acik|SONUÇ\"; rc=${PIPESTATUS[0]}; echo \"yerel süre: $(( $(date +%s) - s )) sn (yerel kutu CI runnerdan",
+        "yavaş"
+      ],
+      "rc": 2,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T11:17:16+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "Y8-ana-kosum-ve-kendi-mutanti-CI-tavani-yeniden",
+      "asama": "sonra",
+      "dosya": "olcum-Y8-ana-kosum-ve-kendi-mutanti-CI-tavani-yeniden-sonra.txt",
+      "sha256": "44cb587b8d94ceab25613211cc2c120737190ccb76fa6112dacf045afa688ada",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/olc-y8.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T11:23:03+03:00",
+      "sure_sn": 315.7
     }
   ],
-  "imza": "156d93e1cfc36eb0db0c2a4a0e9f59efa0c68b95a0ad1342ac5d67054a03f1e0"
+  "imza": "a76feace5b1628c0ea7c92241c3dcd72227b28d7645361d11d3cb0b666531829"
 }
