@@ -1,7 +1,7 @@
 {
   "is": "kutu-ici-compact",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T04:34:31+03:00",
+  "guncelleme": "2026-10-15T04:39:31+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -102,7 +102,55 @@
       "renk": "yesil",
       "zaman": "2026-10-15T04:34:05+03:00",
       "sure_sn": 12.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "compact-test-tur2-28-kapi-json-yolu",
+      "asama": "sonra",
+      "dosya": "olcum-compact-test-tur2-28-kapi-json-yolu-sonra.txt",
+      "sha256": "4cda9ab3ce3f8b6c60fd0ae1eef01f9274ab6d1c9e371007284d5cf2ad107187",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/compact.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T04:39:18+03:00",
+      "sure_sn": 6.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "compact-test-tur2-28-kapi-gomulu-yolu",
+      "asama": "sonra",
+      "dosya": "olcum-compact-test-tur2-28-kapi-gomulu-yolu-sonra.txt",
+      "sha256": "b74c26c76e05947ebd747751f43f45241df977c7de833b57d75cbd41337cf890",
+      "komut": [
+        "env",
+        "TO_CTX_WINDOWS=/yok",
+        "bash",
+        "terminal-onar/scripts/compact.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T04:39:25+03:00",
+      "sure_sn": 6.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "MUTASYON-KANITI-beklenen-kirmizi-kuyruk-yetki-sinamasi-kaldirildi",
+      "asama": "sonra",
+      "dosya": "olcum-MUTASYON-KANITI-beklenen-kirmizi-kuyruk-yetki-sinamasi-kaldirildi-sonra.txt",
+      "sha256": "88dc18dce59c766ebcddfc7f8f1dd87487c5388498263e59e9d8aca1782fc6af",
+      "komut": [
+        "bash",
+        "-c",
+        "echo \"=== MUTASYON KANITI: kod BİLEREK bozuldu (geçici kopyada kuyruk kaydı yetki sınaması kaldırıldı → reis-dışı/kimliksiz kayıt da /compact gönderir). Aşağıdaki KIRMIZI satırlar BEKLENENDİR; rc=0 = sınav bozuk kodu YAKALADI. Gerçek ölçüm: compact-test-tur2-28-kapi-json-yolu ===\"; bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut-cmp3-3458228/terminal-onar/scripts/compact.test.sh; [ $? = 1 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T04:39:31+03:00",
+      "sure_sn": 5.9
     }
   ],
-  "imza": "7bf18cd5222cafacb6fef07c18455f037966b4a110a9eec85b06dacbf1ccbf74"
+  "imza": "6481320e3deb1c7519b0d1e32b9d5c109388a625010dc4fa265d6c924448f28b"
 }

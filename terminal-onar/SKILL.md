@@ -331,8 +331,10 @@ ssh yok, kayıtlar yerel, tek komut.
   `compact-bekle --uygula` koşar: boşalınca gider; bu arada eşiğin altına inmişse ya da koltuk kapanmışsa düşer; 24 sa / 60 deneme →
   **VAZGEÇİLDİ** (ekrana kırmızı + günlük; sessiz değil).
 - **Yetki:** `--uygula` `AGENT_NAME` ister (kimliksiz ret, rc 5); reis adı biliniyorsa (`TO_REIS` ya da `$DURUM_DIZ/reis`) yalnız o
-  uygular; başkası ölçer, uygulayamaz. Kuyruk kaydı yazanın adını taşır. MUAVİN'in filo-geneli yetkisi merkezde (`filo.py`), burada değil.
-- Sınav: `scripts/compact.test.sh` (25 kapı, hermetik: sahte tmux + sahte kayıt; mutasyon: boş-koltuk kapısı kalkınca taslaklı koltuğa tuş gider → U1 kırmızı).
+  uygular; başkası ölçer, uygulayamaz. Kuyruk kaydı yazanın adını (`kim`) taşır ve **bekçi turu onu her turda yeniden sınar**: reis
+  biliniyorsa `kim == reis`, bilinmiyorsa `kim` dolu; tutmayan kayıt gönderilmeden düşer (göz tur 1: bekçi kimliksiz koşar, yetki
+  kayıttan gelir — kayıt yazılırken reis kapısından geçmiştir). MUAVİN'in filo-geneli yetkisi merkezde (`filo.py`), burada değil.
+- Sınav: `scripts/compact.test.sh` (28 kapı, hermetik: sahte tmux + sahte kayıt; mutasyon: boş-koltuk kapısı kalkınca taslaklı koltuğa tuş gider → U1 kırmızı).
 
 ## Sürüm notları
 - **2.9.0 (2026-10-15, BÂNİ · zorunlu compact kutu-içi):** `komut.sh compact` / `compact-bekle` + `kapi/compact-olc.mjs` + bekçi kuyruk turu (yukarıda).

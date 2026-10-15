@@ -11,8 +11,9 @@
 #       Kuyruk turu (bekçi her dakika kuyruk doluysa çağırır): koltuk boşaldıysa /compact; bu arada eşiğin altına inmişse (biri
 #       compact etmiş) ya da koltuk kapanmışsa kuyruktan düşer; 24 saat / 60 deneme sonra VAZGEÇİLİR (ekrana + günlüğe, sessiz değil).
 #
-# 🔴 YETKİ: --uygula (ve bekle --uygula) AGENT_NAME ister; kimliksiz RET. Reis adı biliniyorsa (TO_REIS ya da $DURUM_DIZ/reis)
-#    yalnız o ad uygular; başkası "ölçebilir, uygulayamaz". Kuyruk turu, kuyruğa yazanın yetkisiyle koşar (kayıtta `kim`).
+# 🔴 YETKİ: --uygula AGENT_NAME ister; kimliksiz RET. Reis adı biliniyorsa (TO_REIS ya da $DURUM_DIZ/reis) yalnız o ad uygular;
+#    başkası "ölçebilir, uygulayamaz". Kuyruk turu (bekçi, kimliksiz) kaydın `kim` alanıyla koşar ve onu HER TURDA yeniden sınar:
+#    reis biliniyorsa kim == reis, değilse kim dolu; tutmayan kayıt gönderilmeden düşer (göz tur 1).
 # 🔴 ÖLÇÜLEMEYEN KOLTUK compact EDİLMEZ: oturum kaydı bulunamazsa (sid yok / dosya yok) "ölçülemedi" basılır, tuş gitmez.
 # 🔴 PAYDA TAHMİNİ: kayıt model adını "[1m]" eki olmadan yazabiliyor → yüzde 200k paydayla tahmindir, satırda "~" ile işaretli.
 set -u
@@ -57,12 +58,20 @@ once() {  # epoch → "2 sa önce"
 }
 
 # ── /compact gönderimi: C-u · metin · 0,5 sn · Enter (aile-compact-core dersi: gömülü Enter TUI'de göndermez) ──
-compact_gonder() {  # $1 = koltuk (tmux oturumu)
+compact_gonder() {  # $1 = koltuk (tmux oturumu) · $2 = kim adına (yetkili ad; kuyruk turunda kaydın sahibi)
   tmux send-keys -t "=$1" C-u 2>/dev/null || return 1
   tmux send-keys -t "=$1" -- "/compact" 2>/dev/null || return 1
   sleep "${TO_COMPACT_BEKLE_SN:-0.5}"
   tmux send-keys -t "=$1" Enter 2>/dev/null || return 1
-  gunluk "compact gönderildi: $1 (kim: ${AGENT_NAME:-?})"
+  gunluk "compact gönderildi: $1 (kim: ${2:-?})"
+}
+# Kuyruk kaydının yetkisi (göz tur 1 · ciddi): bekçi kimliksiz koşar, yetki KAYITTAN gelir — kayıt yazılırken reis kapısından geçmişti.
+# Yine de her turda yeniden sınanır: reis biliniyorsa kim == reis, bilinmiyorsa kim dolu ve '?' değil. Tutmayan kayıt GÖNDERİLMEDEN düşer.
+kayit_yetkili() {  # $1 = kim → 0 yetkili, 1 değil
+  local kim="$1" reis; reis="$(reis_adi)"
+  [ -n "$kim" ] && [ "$kim" != "?" ] && [ "$kim" != null ] || return 1
+  [ -z "$reis" ] || [ "$kim" = "$reis" ] || return 1
+  return 0
 }
 kuyruga_al() {  # $1 ad · $2 yuzde · $3 hal · $4 kim
   mkdir -p "$(dirname "$KUYRUK")"
@@ -96,7 +105,7 @@ if [ "$MOD" = olc ]; then
     elif [ "$y" -ge "$ESIK" ]; then
       gerek=$((gerek+1))
       if [ "$UYGULA" = 1 ]; then
-        if [ "$hal" = bos ]; then compact_gonder "$ad" && { gonderildi=$((gonderildi+1)); karar="⟳ /compact GÖNDERİLDİ"; } || karar="⛔ gönderilemedi (tmux)"
+        if [ "$hal" = bos ]; then compact_gonder "$ad" "${AGENT_NAME:-?}" && { gonderildi=$((gonderildi+1)); karar="⟳ /compact GÖNDERİLDİ"; } || karar="⛔ gönderilemedi (tmux)"
         else kuyruga_al "$ad" "$y" "$hal" "${AGENT_NAME:-?}"; kuyruk=$((kuyruk+1)); karar="⏳ KUYRUKTA ($hal — boşalınca)"; fi
       else karar="⚠ compact gerek$([ "$hal" = bos ] && echo " (boş: --uygula ile gider)" || echo " ($hal: --uygula ile kuyruğa)")"; fi
     else karar="tamam"; fi
@@ -116,13 +125,14 @@ SIMDI=$(date +%s); KAL=""; gonderildi=0; dustu=0; kalan=0; vaz=0
 while IFS= read -r satir; do
   [ -n "$satir" ] || continue
   ad="$(j "$satir" .koltuk)"; den="$(j "$satir" .deneme)"; ep="$(j "$satir" .epoch)"; kim="$(j "$satir" .kim)"
+  if ! kayit_yetkili "$kim"; then echo "  ⛔ $ad · kuyruk kaydı YETKİSİZ (kim: ${kim:-yok}, reis: $(reis_adi || echo bilinmiyor)) — gönderilmeden düştü" >&2; dustu=$((dustu+1)); gunluk "compact kuyruk yetkisiz düştü: $ad (kim: ${kim:-yok})"; continue; fi
   cur="$(printf '%s\n' "$OLC" | awk -F'\t' -v a="$ad" '$1==a')"
   if [ -z "$cur" ]; then echo "  $ad · kuyruktan düştü (koltuk artık yok ya da Claude kapalı)"; dustu=$((dustu+1)); gunluk "compact kuyruk düştü: $ad (koltuk yok)"; continue; fi
   hal="$(printf '%s' "$cur" | cut -f2)"; y="$(printf '%s' "$cur" | cut -f3)"
   if [ "$y" != "-" ] && [ "$y" -lt "$ESIK" ]; then echo "  $ad · kuyruktan düştü (bu arada compact edilmiş: %$y)"; dustu=$((dustu+1)); gunluk "compact kuyruk düştü: $ad (artık %$y)"; continue; fi
   if [ "$hal" = bos ]; then
     if [ "$UYGULA" = 1 ]; then
-      if compact_gonder "$ad"; then echo "  $ad · ⟳ /compact GÖNDERİLDİ (kuyruktan, deneme $((den+1)))"; gonderildi=$((gonderildi+1)); continue; fi
+      if compact_gonder "$ad" "$kim"; then echo "  $ad · ⟳ /compact GÖNDERİLDİ (kuyruktan, $kim adına, deneme $((den+1)))"; gonderildi=$((gonderildi+1)); continue; fi
       echo "  $ad · gönderilemedi (tmux), kuyrukta kalır"
     else echo "  $ad · BOŞ, gönderilebilir (--uygula yok)"; fi
   else echo "  $ad · hâlâ $hal, bekliyor (deneme $((den+1)))"; fi

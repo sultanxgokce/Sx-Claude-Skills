@@ -78,17 +78,27 @@ grep -q 'compact gönderildi: BASIRET (kim: MUTEVELLI)' "$S/durum/gunluk.log" &&
 AGENT_NAME=MUTEVELLI TO_REIS=MUTEVELLI kos --uygula
 [ "$(grep -c . "$KQ")" = 2 ] && ok "U4 ikinci --uygula kuyruğu ŞİŞİRMEZ (aynı koltuk tek satır)" || bad U4 "$(cat "$KQ")"
 
-echo "B · kuyruk turu (bekçi): boşalınca gider, bu arada compact edilmişse düşer, tavan → vazgeç"
+echo "B · kuyruk turu (bekçi): kayıt yetkisi her turda, boşalınca gider, bu arada compact edilmişse düşer, tavan → vazgeç"
+cp "$KQ" "$S/kq.yedek"
+printf '{"an":"x","epoch":%s,"koltuk":"KALFA","yuzde":65,"hal":"girdi","deneme":0,"kim":"BASKA"}\n{"an":"x","epoch":%s,"koltuk":"ZAKIR","yuzde":75,"hal":"calisiyor","deneme":0,"kim":"?"}\n' "$SIMDI" "$SIMDI" > "$KQ"
+printf '❯ \n' > "$S/ekran-KALFA"; printf '❯ \n' > "$S/ekran-ZAKIR"
+TO_REIS=MUTEVELLI kos --bekle --uygula
+[ -z "$(iz)" ] && [ ! -s "$KQ" ] && grep -q 'KALFA · kuyruk kaydı YETKİSİZ (kim: BASKA, reis: MUTEVELLI)' "$S/hata" && grep -q 'ZAKIR · kuyruk kaydı YETKİSİZ (kim: ?' "$S/hata" && ok "B0 kuyruk kaydı reis-dışı (BASKA) ya da kimliksiz (?) → koltuk boş olsa da tuş GİTMEZ, kayıt düşer (bekçi yolu yetkiyi atlamaz)" || bad B0 "iz=$(iz) | $(h) | $(cat "$KQ")"
+grep -q 'compact kuyruk yetkisiz düştü: KALFA (kim: BASKA)' "$S/durum/gunluk.log" && ok "B0b yetkisiz düşüş günlüğe" || bad B0b "$(cat "$S/durum/gunluk.log")"
+printf '{"an":"x","epoch":%s,"koltuk":"KALFA","yuzde":65,"hal":"girdi","deneme":0,"kim":"HERHANGI"}\n' "$SIMDI" > "$KQ"
 kos --bekle --uygula
+[ "$(iz)" = "$(printf 'send-keys -t =KALFA C-u\nsend-keys -t =KALFA -- /compact\nsend-keys -t =KALFA Enter')" ] && grep -q 'compact gönderildi: KALFA (kim: HERHANGI)' "$S/durum/gunluk.log" && ok "B0c reis bilinmiyorsa dolu kim yeter; gönderim kaydın sahibi adına günlüğe" || bad B0c "$(iz) $(tail -2 "$S/durum/gunluk.log")"
+cp "$S/kq.yedek" "$KQ"; printf '⏺ Düşünüyor…\nesc to interrupt\n' > "$S/ekran-ZAKIR"; printf '❯ yarım kalmış yazı\n' > "$S/ekran-KALFA"
+TO_REIS=MUTEVELLI kos --bekle --uygula
 grep -q 'ZAKIR · hâlâ calisiyor, bekliyor (deneme 1)' "$S/cikti" && grep -q 'KALFA · hâlâ girdi' "$S/cikti" && [ -z "$(iz)" ] && [ "$(grep -c '"deneme":1' "$KQ")" = 2 ] && ok "B1 ikisi de meşgul: tuş yok, deneme 1" || bad B1 "$(c) $(cat "$KQ")"
 printf '❯ \n' > "$S/ekran-KALFA"   # KALFA boşaldı
-kos --bekle --uygula
-[ "$(iz)" = "$(printf 'send-keys -t =KALFA C-u\nsend-keys -t =KALFA -- /compact\nsend-keys -t =KALFA Enter')" ] && [ "$(grep -c . "$KQ")" = 1 ] && grep -q ZAKIR "$KQ" && ok "B2 KALFA boşalınca /compact gitti, kuyruktan düştü; ZAKIR kaldı" || bad B2 "$(iz) | $(cat "$KQ")"
+TO_REIS=MUTEVELLI kos --bekle --uygula
+[ "$(iz)" = "$(printf 'send-keys -t =KALFA C-u\nsend-keys -t =KALFA -- /compact\nsend-keys -t =KALFA Enter')" ] && [ "$(grep -c . "$KQ")" = 1 ] && grep -q ZAKIR "$KQ" && grep -q 'KALFA · ⟳ /compact GÖNDERİLDİ (kuyruktan, MUTEVELLI adına' "$S/cikti" && ok "B2 KALFA boşalınca /compact gitti (MUTEVELLI adına), kuyruktan düştü; ZAKIR kaldı" || bad B2 "$(iz) | $(cat "$KQ")"
 kayit ZAKIR 40000 bilinmeyen-model $((SIMDI-60))   # biri ZAKIR'ı bu arada compact etmiş
-kos --bekle --uygula
+TO_REIS=MUTEVELLI kos --bekle --uygula
 grep -q 'ZAKIR · kuyruktan düştü (bu arada compact edilmiş: %20)' "$S/cikti" && [ ! -s "$KQ" ] && [ -z "$(iz)" ] && ok "B3 eşik altına inmiş koltuk kuyruktan düşer, tuş gitmez" || bad B3 "$(c) $(cat "$KQ")"
 printf '{"an":"x","epoch":%s,"koltuk":"ZAKIR","yuzde":75,"hal":"calisiyor","deneme":3,"kim":"MUTEVELLI"}\n' $((SIMDI-90000)) > "$KQ"; kayit ZAKIR 150000 bilinmeyen-model
-kos --bekle --uygula
+TO_REIS=MUTEVELLI kos --bekle --uygula
 grep -q 'VAZGEÇİLDİ' "$S/hata" && [ ! -s "$KQ" ] && grep -q 'compact VAZGEÇİLDİ: ZAKIR' "$S/durum/gunluk.log" && ok "B4 25 saattir meşgul → VAZGEÇİLDİ (ekrana kırmızı + günlük), kuyruktan düşer" || bad B4 "$(h) $(cat "$KQ")"
 printf '{"an":"x","epoch":%s,"koltuk":"YOKBOYLE","yuzde":75,"hal":"calisiyor","deneme":0,"kim":"MUTEVELLI"}\n' "$SIMDI" > "$KQ"
 kos --bekle --uygula
