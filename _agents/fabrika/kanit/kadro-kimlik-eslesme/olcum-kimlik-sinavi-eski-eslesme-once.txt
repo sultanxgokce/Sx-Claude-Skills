@@ -1,0 +1,23 @@
+$ node /tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/kimlik-once/terminal-onar/kapi/kimlik.test.mjs
+# rc=1 sure=0.8s zaman=2026-10-16T01:05:34+03:00
+--- stdout ---
+── K · oturum kimlikleri (kimlik.mjs)
+  ✓ K1 yalnız bu kutunun, yaşayan, programı claude olan süreçleri: kutu-ana + serdar
+  ✓ K2 başka pid alanı · ölmüş süreç · pid'i başka programa geçmiş · bozuk dosya SAYILMAZ
+  ✓ K3 tmux "oturum:@N.%N" → oturum adı; sessionId + ad + ad kaynağı taşınır
+  ✓ K4 pid alanı okunamazsa (boş) HİÇBİR dosya sayılmaz (ortak dizinde başka kutuya bağlanmaz)
+── E · eşleşme: önce kimlik, sonra tmux adı
+  ✗ E1 (SERDAR negatif sınavı) kimliği ANA oturumda olan kişi "çalışıyor", oturumu kutu-ana, eşleşme kimlikle — "oturumu yok" DEĞİL {"id":"kutu-yon","rol":"","mod":"","hal_kayit":"bilinmiyor","tmux":"kutu-yon","oturum":null,"grup":"kayitta-var-calismiyor","geri_acilir":false}
+  ✗ E2 ana ikinci satır OLMAZ: ne altyapıda ne kayıtsızlarda "kutu-ana"; tek satır {"a":[{"ad":"kutu-ana","claude":true,"hal":"calisiyor","ne":"","son":1,"tur":"ajan","altyapi":"ana oturum","ana":true},{"ad":"dash","claude":false,"hal":"bilinmiyor","ne":"","son":1,"tur":"diger","altyapi":"mobil panel"}],"ks":[{"ad":"serdar","claude":true,"hal":"soru","ne":"","son":1,"tur":"ajan"}]}
+  ✗ E3 kişi ana oturumda çalışıyorsa altyapı korumalı ("ana oturum") — dondur/emekli onu kapatamaz 
+  ✗ E4 kullanıcının verdiği Claude adı (serdar, nameSource user) kayıttaki tmux eski olsa da bağlar 
+  ✓ E5 kimlik izi olmayan kişi eski kuralla (tmux adı) bağlanır, eslesme alanı yok
+  ✓ E6 kimlik verilmezse bugünkü davranış: kutu-yon "kayıtta var, çalışmıyor", ana altyapıda (iki satır — düzeltilen kusur)
+  ✓ E7 aynı kimlik İKİ oturumda → kimlik eşleşmesi yapılmaz (tahmin yok), tmux adına düşer
+  ✓ E8 türetilmiş (derived) ad kimlik sayılmaz — yalnız kullanıcının verdiği ad
+── U · uçtan uca: gerçek kapı süreci, sahte oturum dizini + sahte /proc
+  ✗ U1 /api/kadro: kutu-yon çalışan, oturumu kutu-ana (kimlikle), ana ikinci satır değil; düşen/kayıtta-var sayısı 0 {"Y":{"id":"kutu-yon","rol":"","mod":"","hal_kayit":"bilinmiyor","tmux":"kutu-yon","oturum":null,"grup":"kayitta-var-calismiyor","geri_acilir":false},"s":{"calisan":1,"dusen":0,"kayitta-var-calismiyor":2,"gecici-emekli":0,"kayitsiz":1,"altyapi":2}}
+  ✗ U2 ana oturumda çalışan kişiyi dondur → 403 (ana kapatılmaz), kayıt ve tmux dokunulmadı 200
+
+SONUÇ: 8 geçti · 6 kaldı
+--- stderr ---

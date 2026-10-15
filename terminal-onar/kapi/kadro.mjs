@@ -40,7 +40,7 @@ function skaler(line, key) {
   m = line.match(new RegExp('^\\s*' + key + ':\\s*([^#\\s][^#]*?)\\s*(?:#.*)?$')); if (m) return m[1];
   return null;
 }
-const ALANLAR = ['tmux', 'rol', 'mod', 'durum', 'durum_once', 'hal', 'arz_adi', 'cwd'];
+const ALANLAR = ['tmux', 'rol', 'mod', 'durum', 'durum_once', 'hal', 'arz_adi', 'cwd', 'session_id'];
 
 // YAML metni → üyeler. Satır tabanlı: `- id: X` blok açar; blok içindeki bilinen skalerler alınır. `uyeler:` dışı
 // `- id:` (ör. meta) yoktur; `tmux: null` → ''. Bilinmeyen anahtar yok sayılır (şema genişlemesi kırmaz).
@@ -113,8 +113,22 @@ export function kayitOku(proje, ortam = process.env) {
 const norm = (s) => String(s || '').trim().toLowerCase();
 
 // Kayıt + canlı koltuklar → kadro. koltuklar: koltukSatirlari() çıktısı ({ad, son, claude, tur?, hal?, ne?}); ana: ana koltuk adı.
-export function kadroBirlestir({ uyeler = [], koltuklar = [], ana = '' } = {}) {
+// kimlikler (kimlik.mjs oturumKimlikleri): Map<koltuk adı, [{sessionId, ad, adKaynak}]> — verilirse eşleşme ÖNCE kimlikle yapılır
+// (SERDAR 16 Eki 00:4x: huzur-yon huzur-ana'da çalışırken "oturumu yok" + ana "kimliği yok" — aynı kişi iki satır):
+//   1) kayıttaki session_id (kimlik tanıma kancasının yazdığı) == oturumdaki Claude'un sessionId'si
+//   2) Claude'a kullanıcının verdiği ad (nameSource user: `claude -n X`) == kayıt id'si
+//   3) tmux adı (eski kural). Kimlik tek bir koltuğa çıkmalı; iki koltuğa çıkarsa kimlik eşleşmesi YAPILMAZ (tahmin yok), 3'e düşülür.
+export function kadroBirlestir({ uyeler = [], koltuklar = [], ana = '', kimlikler = null } = {}) {
   const kalan = new Map(koltuklar.map((k) => [k.ad, k]));
+  const kimlikBul = (u) => {
+    if (!kimlikler || !kimlikler.size) return null;
+    const aday = [...kalan.keys()].filter((ad) => (kimlikler.get(ad) || []).some((c) =>
+      (u.session_id && c.sessionId === u.session_id) || (c.adKaynak === 'user' && c.ad && norm(c.ad) === norm(u.id))));
+    if (aday.length !== 1) return null;
+    const k = kalan.get(aday[0]); kalan.delete(aday[0]); return k;
+  };
+  const kimlikle = new Map();
+  for (const u of uyeler) { const k = kimlikBul(u); if (k) kimlikle.set(u, k); }
   const bul = (tmux) => {
     const ad = String(tmux || '').split(':')[0]; if (!ad) return null;
     if (kalan.has(ad)) { const k = kalan.get(ad); kalan.delete(ad); return k; }
@@ -123,7 +137,7 @@ export function kadroBirlestir({ uyeler = [], koltuklar = [], ana = '' } = {}) {
   };
   const oturumSade = (k) => k ? { ad: k.ad, claude: !!k.claude, hal: k.hal || 'bilinmiyor', ne: k.ne || '', son: k.son || 0, tur: k.tur || '' } : null;
   const kisiler = uyeler.map((u) => {
-    const o = bul(u.tmux);
+    const ok = kimlikle.get(u), o = ok || bul(u.tmux);
     const hal = DURUM_HAL[u.durum] || ((u.hal && HAL_KAYIT.includes(u.hal)) ? u.hal : '');
     let grup;
     if (hal === 'gecici' || hal === 'yedek' || hal === 'emekli' || hal === 'dondurulmus') grup = 'gecici-emekli';
@@ -133,8 +147,10 @@ export function kadroBirlestir({ uyeler = [], koltuklar = [], ana = '' } = {}) {
     const tmux = String(u.tmux || '').split(':')[0];
     // geri_acilir: E2'nin yazdığı önceki değer kayıtta duruyor mu — yoksa 'geri aç' neyi geri koyacağını bilemez (uç 409)
     const geri = (hal === 'emekli' || hal === 'dondurulmus') && !!u.durum_once;
+    // altyapı: kayıttaki koltuk ya da FİİLEN bağlandığı oturum altyapıysa (ör. kişi ana oturumda çalışıyor) kadro eylemi uygulanmaz
+    const alt = altyapiNeden(o ? o.ad : '', ana) || altyapiNeden(tmux, ana);
     return { id: u.id, rol: u.rol || '', mod: u.mod || '', hal_kayit: hal || 'bilinmiyor', tmux, oturum: oturumSade(o), grup,
-      geri_acilir: geri, ...(altyapiNeden(tmux, ana) ? { altyapi: altyapiNeden(tmux, ana) } : {}) };
+      geri_acilir: geri, ...(ok ? { eslesme: 'kimlik' } : {}), ...(alt ? { altyapi: alt } : {}) };
   });
   // E2: kayıtta olmayan ALTYAPI oturumları (ana dahil) kayıtsızlara düşmez, ayrı listelenir — kapatılamaz/emekli edilemez.
   // (Eski davranış: ana "(kimliği yok)" diye kişilerde, boş kabuksa DÜŞEN sayılıyordu; dash/dashproxy kırmızı kayıtsızdı.)
