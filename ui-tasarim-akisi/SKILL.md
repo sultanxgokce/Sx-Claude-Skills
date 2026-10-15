@@ -1,7 +1,7 @@
 ---
 name: ui-tasarim-akisi
 type: agent
-version: 0.5.0
+version: 0.5.1
 description: >
   UI/arayüz tasarım işinin ZORUNLU akış kapısı. Bir ürünün ekranlarını tek tek değil dizi
   hâlinde tasarlatır: ürün niyeti → sayfa envanteri → kullanıcı senaryoları (tık bütçesi) →
@@ -506,3 +506,30 @@ kapalı-küme dışı değer REDDEDİLİYOR (havuz yorum defterine dönmüyor).
 İnşa sırasında iki kendi hatam yakalandı ve düzeltildi: (a) alanlar şemaya eklenmişti ama
 `yaz` onları hiç okumuyordu — yani ölçü süstü; (b) KAPI 6 önce KAPI 5'in içine gömülmüştü,
 gerekçe kapısı kapatılınca ayırt kapısı da susardı.
+
+## Sürüm notu — 0.5.1 (2026-10-15 · NAKKAŞ) — 0.5.0'ın tazelenmesi
+
+0.5.0 (PR #213) **51 gün açık kaldı ve bugün ölçüldüğünde KIRMIZI'ydı**: dalda `havuz` 80/1,
+`prompt-yap` 36/7; aynı suitler ana dalda 81/0 ve 43/0 (iki yüzey). Sebep mekanik olarak
+doğrulandı — `UI_AKIS_AYIRT_KAPISI=0` ile ikisi de tam yeşile dönüyordu, yani sekiz düşüşün
+tamamı yeni KAPI 6'nın yargısız fikstürlerde ateşlenmesindendi. Üç ayrı kusur çıktı:
+
+1. 🔴 **Ölçüm yargıdan önce gelir.** KAPI 5 (gerekçe) ve KAPI 6 (ayırt) yoğunluk hükmünden
+   ÖNCE çıkıp `rc=1` döndürüyordu; **ölçülemeyen** sayfa (rc=2/3) "yargı yazılmamış" gibi
+   görünüyor, operatöre yanlış işi gösteriyordu ve *ölçülemedi* bilgisi kayboluyordu.
+   İkisi de artık yalnız ölçüm TEMİZ iken koşar — KAPI 4 (tık) bu korumayı zaten taşıyordu,
+   aynı kalıp uygulandı. Ölçümün deftere düşmesi etkilenmedi (koşulsuz).
+   Bu bir gevşeme DEĞİL: kırmızı ölçümde çıkış kodu yine 1, yalnız mesajı ölçümün kendisi verir.
+2. 🔴 **Kapının çağıranı ölçülmemişti.** 0.5.0 bu dosyaya *"çağıranı prompt-yap.sh KAPI 6"*
+   yazdı ama `havuz.test.sh`'te `ayirt` kelimesi HİÇ geçmiyordu: kaydın DOĞRULANMASI
+   sınanmış, kapının FİİLEN ÇAĞRILMASI sınanmamıştı — tam da bu belgenin yasakladığı hâl.
+   Eklendi (§17, iki yön): yargı yokken prompt üretilmiyor · yargı yazılınca üretiliyor.
+   Mutantla kanıtlandı: KAPI 6 kapatılınca bu iki kapı kırmızıya dönüyor.
+3. **"Prompt üretilir" diyen sınav bütün ön-koşulları sağlamalı.** Etkilenen vakalarda kapı
+   kapatılmadı, **yargı yazıldı** — kapıyı kapatmak sınavı yeşile boyar ama ölçtüğü şeyi
+   değiştirir. Ayrıca sınavın havuz anahtarı `basename $PWD`den türüyordu (hüküm çalışma
+   dizinine göre değişiyordu); anahtar sabitlendi.
+
+Ölçüm: dört suit **214 kapı** yeşil (havuz 84 · prompt-yap 43 · yoğunluk 41 · yargı 49).
+Kurulu beceri kopyası ile dal, tazelemeden önce 56 dosyada **birebir aynıydı** (pozitif
+kontrollü ölçüm) — yani filo bu kırmızı sürümü koşuyordu ve ezilecek elle değişiklik YOKTU.

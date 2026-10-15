@@ -218,6 +218,11 @@ kapi "gerekçesiz kırmızıdan sonra devam promptu ÜRETİLMEZ → rc=1" 1 \
 icerir "sebep Sultan-dilinde söylenir" "önceki tur KIRMIZI ve gerekçesiz"
 KID3="$(python3 "$H" oku --havuz "$J8" 2>/dev/null | head -1 | cut -d' ' -f1)"
 python3 "$H" gerekce --havuz "$J8" "$KID3" --dusen-karar tasarim-duzeltildi >/dev/null 2>&1
+# KAPI 6 ön-koşulu (L77): "prompt ÜRETİLİR" diyen sınav, ürünün BÜTÜN ön-koşullarını
+# sağlamak zorundadır — gerekçe bağlanması yetmez, ayırt yargısı da yazılı olmalı. Kapıyı
+# kapatmak sınavı yeşile boyar ama ölçtüğü şeyi değiştirir; o yüzden yargı YAZILIYOR.
+python3 "$H" yaz --havuz "$J8" --kutu akar --urun akar --ekran "$_EKAD" \
+     --kapi ayirt --hukum temiz --klise yok --imza tipografi --arac 0.3.1 >/dev/null 2>&1
 kapi "gerekçe bağlanınca devam promptu ÜRETİLİR → rc=0" 0 \
      env UI_AKIS_HAVUZ="$J8" UI_AKIS_KUTU=akar bash "$ARAC/prompt-yap.sh" \
      "$T/proje/sablon.md" --onceki "$ILK" --dil "$T/proje/dil.md" --estetik "$T/proje/est.md"
@@ -225,6 +230,24 @@ kapi "kaçış yolu açık ama sessiz değil (UI_AKIS_GEREKCE_KAPISI=0)" 0 \
      env UI_AKIS_HAVUZ="$T/kacis.jsonl" UI_AKIS_KUTU=akar UI_AKIS_GEREKCE_KAPISI=0 \
      bash "$ARAC/prompt-yap.sh" "$T/proje/sablon.md" --onceki "$ILK" \
      --dil "$T/proje/dil.md" --estetik "$T/proje/est.md"
+
+echo "── 17 · KAPI 6'NIN ÇAĞIRANI GERÇEK Mİ (0.5.0'ın kanıtsız kalan yarısı)"
+# 🔴 Niçin eklendi: 0.5.0 ayırt kapısını kurdu ve SKILL.md'ye "çağıranı prompt-yap.sh KAPI 6"
+#    yazdı, ama bu suitte `ayirt` kelimesi HİÇ geçmiyordu — yani kaydın DOĞRULANMASI
+#    sınanmış, kapının FİİLEN ÇAĞRILMASI sınanmamıştı. Tam da kendi kanonumun yasakladığı
+#    hâl: "kapı var" denip çağıranı ölçülmemiş. İki yön de burada ölçülür.
+J9="$T/kapi6.jsonl"
+python3 "$H" yaz --havuz "$J9" --kutu akar --urun akar --ekran "$_EKAD" \
+     --kapi yogunluk --hukum temiz --arac 0.3.1 >/dev/null 2>&1
+kapi "ayırt yargısı YOKken devam promptu ÜRETİLMEZ → rc=1" 1 \
+     env UI_AKIS_HAVUZ="$J9" UI_AKIS_KUTU=akar bash "$ARAC/prompt-yap.sh" \
+     "$T/proje/sablon.md" --onceki "$ILK" --dil "$T/proje/dil.md" --estetik "$T/proje/est.md"
+icerir "sebep AYIRT-EDİCİLİK olarak söylenir" "AYIRT-EDİCİLİK"
+python3 "$H" yaz --havuz "$J9" --kutu akar --urun akar --ekran "$_EKAD" \
+     --kapi ayirt --hukum temiz --klise yok --imza tipografi --arac 0.3.1 >/dev/null 2>&1
+kapi "yargı yazılınca kapı AÇILIR → rc=0" 0 \
+     env UI_AKIS_HAVUZ="$J9" UI_AKIS_KUTU=akar bash "$ARAC/prompt-yap.sh" \
+     "$T/proje/sablon.md" --onceki "$ILK" --dil "$T/proje/dil.md" --estetik "$T/proje/est.md"
 
 echo
 echo "TOPLAM: $GECTI geçti · $KALDI kaldı"
