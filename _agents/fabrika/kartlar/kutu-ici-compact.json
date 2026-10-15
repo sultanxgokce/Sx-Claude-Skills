@@ -19,19 +19,23 @@
     {
       "zaman": "2026-10-15T04:48:32+03:00",
       "olay": "tikandi"
+    },
+    {
+      "zaman": "2026-10-15T04:56:47+03:00",
+      "olay": "tikandi"
     }
   ],
-  "bitis": "2026-10-15T04:48:32+03:00",
+  "bitis": "2026-10-15T04:56:47+03:00",
   "pr": "",
   "puan": {
     "kod": 4,
     "dogru": "E",
-    "tur": 3
+    "tur": 4
   },
   "kanit_var": true,
   "tikanma": {
     "yol": "devam",
-    "neden": "3 turda 5/E yok ama ilerleme gerçek (2→2→4): iki ciddi yetki bulgusu kapatıldı, kalan tek bulgu kuyruk turu kilidi (oda-tetik tur kilidi deseni), düzeltmesi hazır; 4. (mutlak) tur bu düzeltmeyle"
+    "neden": "4 (mutlak) turda 5/E yok: tur 4 4/5 E tek bulgu — elle --uygula ile bekçi kuyruk turu aynı boş koltuğa eşzamanlı gönderebilir (dar yarış); düzeltme ortak kilitle yapıldı, ama tavan mutlak → birleştirme kararı reis/SERDAR'ın (#320 emsali: 4/E ile birleştir)"
   },
   "reis_kararlari": [
     {
@@ -40,6 +44,13 @@
       "oturum": "NOTES 2026-10-15 04:55",
       "gerekce": "SERDAR kararı NOTES 04:55 — gidiş 2→2→4, iki ciddi yetki bulgusu kapatıldı, kalan tek bulgu kuyruk kilidi 190bdd9 ile kapandı (33/33 + mutasyon); 4. tur yalnız kod yolu diff'iyle",
       "zaman": "2026-10-15T04:55:21+03:00"
+    },
+    {
+      "karar": "devam",
+      "reis": "BÂNİ",
+      "oturum": "NOTES 2026-10-15 05:25",
+      "gerekce": "SERDAR kararı NOTES 05:25 — mutlak tavan, SEÇENEK 1: 4/E ile birleştir (#320 emsali; kod bulgusu kalmadı, 815a970 kanıtlı, 35/35 + 4 mutasyon); canlı --uygula kanıtını code reisi #318 indikten sonra koşturacak",
+      "zaman": "2026-10-15T05:26:00+03:00"
     }
   ]
 }
