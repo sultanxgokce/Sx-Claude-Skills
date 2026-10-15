@@ -1,0 +1,19 @@
+{
+  "is": "denetci-kare",
+  "cumle": "denetci.sh --kare <png|jpg> (tekrarlanabilir, en çok 8): kareler bağımsız göze (codex exec -i) EK olarak gider; istemde 'ekte N kare: adlar' yazar; dosya yoksa/görsel değilse rc 2 (sessiz atlama yok); yedek göz (claude -p) kare alamıyorsa bunu istemde ve DENETIM kaydında söyler; kayıt kare adları + sha256 taşır. Kabul: denetci.test.sh yeni kapılar (sahte codex argv'de -i <kare> · eksik dosya rc 2 · kayıtta kareler) + CI 300 sn altı.",
+  "istedi": "BÂNİ (bağımsız göz #637 tur 2-3: 'kare sunulmadı'; SERDAR NOTES 17:20 bilgilendirildi)",
+  "aldi": "BÂNİ",
+  "zaman": "2026-10-15T15:38:16+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

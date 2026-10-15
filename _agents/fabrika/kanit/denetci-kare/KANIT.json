@@ -1,0 +1,152 @@
+{
+  "is": "denetci-kare",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T17:30:46+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "main-denetcide-kare-yok",
+      "asama": "once",
+      "dosya": "olcum-main-denetcide-kare-yok-once.txt",
+      "sha256": "740d38c7c6ce9f14c501b94e080d87e02fbea9caf3e9283d58de1daded99e92f",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/kare-once.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T16:09:06+03:00",
+      "sure_sn": 0.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kare-sinavi-K1-K7-paralel-ana-dalda",
+      "asama": "sonra",
+      "dosya": "olcum-kare-sinavi-K1-K7-paralel-ana-dalda-sonra.txt",
+      "sha256": "19d43e7f19580fb7a868b69b7b4d0c0a373040f21214621eaf595c0f31e602fa",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/kare-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T16:15:37+03:00",
+      "sure_sn": 385.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tur2-yapi-dogrulamasi-K2b-K2c-158",
+      "asama": "sonra",
+      "dosya": "olcum-tur2-yapi-dogrulamasi-K2b-K2c-158-sonra.txt",
+      "sha256": "e61da0c9bc25f79fe69254d939f7751585e1b19c304dd12142d67924575fa103",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/kare-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T16:26:37+03:00",
+      "sure_sn": 204.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-denetci-test-suresi-116sn-tavan-300-degmedi-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-ci-denetci-test-suresi-116sn-tavan-300-degmedi-tur2-sonra.txt",
+      "sha256": "e9845f5f4f76c95ee999268cd174c5255a276e5e7e3ba5ce79fbbf0a2483a8fa",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/ci-denetci-sure.sh",
+        "38742763849",
+        "pr331-tur2"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T17:09:58+03:00",
+      "sure_sn": 1.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "rebase-sonrasi-332-ile-birlesik-denetci-test-ve-ayikla-yesil",
+      "asama": "sonra",
+      "dosya": "olcum-rebase-sonrasi-332-ile-birlesik-denetci-test-ve-ayikla-yesil-sonra.txt",
+      "sha256": "4873b8f7c617cc6397fbe8576ee1d1206252eda0f18760add517f2c9c5b352ec",
+      "komut": [
+        "bash",
+        "-c",
+        "tail -4 /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/sx331-test.txt; tail -2 /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/sx331-ayikla.txt"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T17:14:54+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tur3-yapisal-ayristirma-K2d-K2e-K2f-162",
+      "asama": "sonra",
+      "dosya": "olcum-tur3-yapisal-ayristirma-K2d-K2e-K2f-162-sonra.txt",
+      "sha256": "805396b4e77d11345110b5e560339090f417c72d223eccf415b7af40b371f7e9",
+      "komut": [
+        "grep",
+        "-E",
+        "K2|SONUÇ|real",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/sx331-test3.txt"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T17:21:31+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tur3-gercek-gorseller-gecer-sahte-duser",
+      "asama": "sonra",
+      "dosya": "olcum-tur3-gercek-gorseller-gecer-sahte-duser-sonra.txt",
+      "sha256": "451c19b2440315f4a812d93dbcb6ca4f6e9db3525871e8d2ff35a3d5c403f480",
+      "komut": [
+        "bash",
+        "-c",
+        "P=/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad; for f in /config/evraklar/Sultan/0-Gelen/nexus_panel-bakinca-anlasilsin-kareler/sonra-e1-1440.png /config/evraklar/Sultan/0-Gelen/nexus_panel-bakinca-anlasilsin-kareler/sonra-e3-390.png $(find /config/evraklar -name \"*.jpg\" -size +5k -size -400k 2>/dev/null | head -3) $P/s.jpg; do echo \"$(basename $f): [$(python3 $P/dogrula.py $f)] (boş = geçerli görsel)\"; done"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T17:21:31+03:00",
+      "sure_sn": 0.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tur4-bos-tarama-adam7-K2g-K2h-K2i-165",
+      "asama": "sonra",
+      "dosya": "olcum-tur4-bos-tarama-adam7-K2g-K2h-K2i-165-sonra.txt",
+      "sha256": "ee610e82c72ee6bb840b10159e42fbbaba2ba051a188a71bfa7dd1c3590f27ba",
+      "komut": [
+        "grep",
+        "-E",
+        "K2|K5|K7|SONUÇ|real",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/sx331-test5.txt"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T17:30:46+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tur4-adam7-fikstur-PIL-capraz-acar",
+      "asama": "sonra",
+      "dosya": "olcum-tur4-adam7-fikstur-PIL-capraz-acar-sonra.txt",
+      "sha256": "c8e05a714aa785dcf9d3508ed18dcf3ffce3eae665a0e1389122c1ee8912ec6f",
+      "komut": [
+        "python3",
+        "-c",
+        "from PIL import Image; im=Image.open('/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/a7.png'); im.load(); print('bağımsız okuyucu (PIL) açtı:', im.size, 'interlace=', im.info.get('interlace'))"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T17:30:46+03:00",
+      "sure_sn": 0.0
+    }
+  ],
+  "imza": "60c1b552089e4b038a60efb38a6b470e16d9088472aabc1a669a5ee903830064"
+}

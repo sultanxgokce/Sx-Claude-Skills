@@ -1,0 +1,42 @@
+{
+  "tur": 3,
+  "is": "denetci-kare",
+  "pr": "331",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T17:23:14+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 38609,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İstenen hat kurulmuş: kare Codex’e ek gidiyor, istem ile DENETIM kaydında künyeleniyor, eksik/sahte dosya ve sekiz kare sınırı kapılanıyor, yedek gözün göremediği de açıkça kaydediliyor. Lakin “görsel değilse rc 2” kapısı hâlâ bazı bozuk dosyaları geçirebilir; üretime çıkmadan doğrulayıcıdaki bu açıkları ve bunların sınavlarını tamamlayın.",
+    "bulgular": [
+      {
+        "ne": "JPEG ayrıştırıcısı SOS sonrasında gerçek entropi verisi bulunduğunu doğrulamıyor; SOS bölümünün hemen ardından EOI gelen, piksel taşımayan bir dosya geçerli kabul edilebilir.",
+        "kanit": "`jpg()` SOS bölümünden sonra `i+=2+L` yapıp bir sonraki işarete kadar tarıyor; en az bir entropi baytı şartı koymuyor. Sonraki işaret EOI ise `sof and sos and i+2==n` koşuluyla boş taramayı başarı sayıyor. K2c/K2d yalnız düz veya bölüm sırası bozuk sahteleri ölçüyor; boş taramalı yapısal JPEG sınavı yok.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:64-96; yazilim-fabrikasi/scripts/denetci.test.sh:421-430",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Adam7 geçişli PNG için açılmış piksel akışı yalnız boş olmama koşuluyla kabul ediliyor; tarama geçişlerinin satır uzunlukları ve filtre baytları doğrulanmadığından çizilemeyen interlaced PNG kapıdan geçebilir.",
+        "kanit": "`png()` içinde `il==0` dalı açılmış verinin tam boyutunu ve filtrelerini ölçerken `elif not ham` dalı `il==1` için yalnız verinin boş olup olmadığına bakıyor. K2e/K2f sınavları IDAT yokluğunu ve geçişsiz 2×2 boyut uyuşmazlığını kapsıyor, Adam7 bozuk akışını kapsamıyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:55-63; yazilim-fabrikasi/scripts/denetci.test.sh:424-430",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü özelliğin bulunmadığını, sonra ölçümleri K1-K7 ile K2b-K2f kapılarının geçtiğini, sahte Codex argv’sinde iki `-i` ekini, kayıttaki kare alanlarını ve CI’ın 116 saniyede kaldığını gösteriyor; gerçek PNG/JPEG örnekleri de kullanılmış. Ancak görsel geçerliliği için ölçüm çifti tam değildir: boş JPEG taraması ve bozuk Adam7 akışı sınanmadığından yukarıdaki iki iddia kanıtlanmış değildir."
+  }
+}
