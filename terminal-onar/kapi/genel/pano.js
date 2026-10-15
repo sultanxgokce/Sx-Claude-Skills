@@ -5,6 +5,9 @@
 //   1) YAPIŞTIR — panoda resim varsa: küçült (2000px webp) → POST <taban>/api/resim → dönen yolu terminale yaz.
 //      Metin yapıştırmaya DOKUNULMAZ (xterm kendi yolu; 2026-08-26 akar regresyonunun dersi).
 //   2) KOPYALA — tmux `set-clipboard on` seçimi OSC 52 ("\e]52;c;<base64>\a") ile gönderir; ttyd'nin xterm paketinde
+//      (1.2.0, Safari — Sultan 15 Eki: "request is not allowed by the user agent"): yazım hareket anında başlar (mouseup'ta
+//      clipboard.write'a SÖZ), OSC 52 gelince söz çözülür; reddedilirse tıklanabilir Kopyala düğmesi; Shift+sürükle seçimini
+//      copy olayında köprü kendisi yazar (odaktan bağımsız).
 //      bu komutu işleyen YOK (ölçüldü 2026-10-13: pakette `registerOscHandler(52` geçmiyor) → seçim hiçbir yere
 //      inmiyordu. Burada işlenir: metin tarayıcı panosuna yazılır. Cmd+C'ye basıp seçimi olmayana bir kez ipucu.
 //
@@ -116,14 +119,61 @@
   var panoyaIndi = 0, sonMetin = '', sonMetinAn = 0;   // sonMetin: son tmux seçimi — seçimsiz Cmd+C onu panoya GERİ yazar (Sultan 15 Eki 01:45)
   var SON_METIN_OMRU = 10 * 60 * 1000;   // bağımsız göz tur 1: süresiz tutulan seçim saatler sonra panoyu ezerdi → 10 dk; sonrası ipucu
   function sonMetinTaze() { return !!sonMetin && (Date.now() - sonMetinAn) < SON_METIN_OMRU; }
+  var sonYol = '';                        // ölçüm: son pano yazımı hangi yoldan indi (soz · writeText · copy · dugme)
+  var indi = function (yol) { panoyaIndi = Date.now(); sonYol = yol; dugmeGizle(); bildir('📋 seçim panoya kopyalandı — yapışmazsa Cmd+C\'ye bas', '#7ee787', 2400); };
+  // ── Kopyala düğmesi: pano yazımı reddedilince (Safari: hareket dışı yazım yasak) tıklama = kullanıcı hareketi → writeText o anda geçer
+  var dugme = null, dugmeZaman = 0;
+  function dugmeGizle() { if (dugme) dugme.style.display = 'none'; clearTimeout(dugmeZaman); }
+  function kopyaDugmesi(metin, neden) {
+    if (!document.body) return;
+    if (!dugme) {
+      dugme = document.createElement('button'); dugme.id = 'kapi-pano-kopyala'; dugme.type = 'button'; dugme.textContent = '📋 Kopyala';
+      dugme.style.cssText = 'position:fixed;right:14px;bottom:64px;z-index:2147483647;padding:9px 14px;border-radius:8px;cursor:pointer;' +
+        'background:#c9914f;border:1px solid #e0b070;color:#1e1a14;font:600 13px/1.2 system-ui,-apple-system,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.45)';
+      dugme.addEventListener('mousedown', function (e) { e.preventDefault(); });   // odak terminalden kaçmasın
+      dugme.addEventListener('click', function () {
+        var m = dugme.getAttribute('data-metin') || ''; if (!m) return;
+        if (!navigator.clipboard || !navigator.clipboard.writeText) { bildir('✗ tarayıcı panoya izin vermiyor — Shift basılı sürükleyip Cmd+C', '#ff7b72', 6000); return; }
+        navigator.clipboard.writeText(m).then(function () { indi('dugme'); },     // tıklama içinde EŞZAMANLI çağrı: Safari geçirir
+          function (e) { bildir('✗ panoya yine yazılamadı (' + ((e && e.message) || 'izin') + ') — Shift basılı sürükleyip Cmd+C', '#ff7b72', 7000); });
+      });
+      document.body.appendChild(dugme);
+    }
+    dugme.setAttribute('data-metin', metin); dugme.style.display = 'block';
+    clearTimeout(dugmeZaman); dugmeZaman = setTimeout(dugmeGizle, 20000);
+    bildir('✗ pano yazımı reddedildi (' + neden + ') — Kopyala düğmesine bas ya da Cmd+C', '#ff7b72', 8000);
+  }
+  // ── Safari: pano yazımı yalnız kullanıcı hareketi İÇİNDE geçer; tmux seçimi OSC 52 ile GEÇ gelir (WebSocket) → writeText
+  //    'request is not allowed by the user agent' ile düşer (Sultan 15 Eki). WebKit'in bu iş için tanımladığı yol: hareket anında
+  //    (mouseup) clipboard.write'a bir SÖZ (Promise) verilir; metin sonra gelince söz çözülür. Söz 1500 ms'de çözülmezse reddedilir
+  //    ve pano DEĞİŞMEZ. Chromium da sözü kabul eder; aynı yol her tarayıcıda.
+  var bekleyen = null, SOZ_OMRU = 1500;
   function panoyaYaz(metin) {
     sonMetin = metin; sonMetinAn = Date.now();
-    if (!navigator.clipboard || !navigator.clipboard.writeText) {
-      bildir('✗ tarayıcı panoya izin vermiyor — Cmd+C\'ye bas (seçim panoya yazılır) ya da Shift basılı sürükleyip Cmd+C', '#ff7b72', 6000); return;
-    }
-    navigator.clipboard.writeText(metin).then(function () { panoyaIndi = Date.now(); bildir('📋 seçim panoya kopyalandı — yapışmazsa Cmd+C\'ye bas', '#7ee787', 2400); },
-      function (e) { bildir('✗ panoya yazılamadı (' + ((e && e.message) || 'izin') + ') — Cmd+C\'ye bas: seçim panoya yazılır', '#ff7b72', 6000); });
+    if (bekleyen) { var b = bekleyen; bekleyen = null; clearTimeout(b.zaman); b.metin = metin; b.cozuldu = true; b.coz(metin); return; }
+    if (!navigator.clipboard || !navigator.clipboard.writeText) { kopyaDugmesi(metin, 'tarayıcı izin vermiyor'); return; }
+    navigator.clipboard.writeText(metin).then(function () { indi('writeText'); },
+      function (e) { kopyaDugmesi(metin, (e && e.message) || 'izin'); });
   }
+  var basX = 0, basY = 0;
+  document.addEventListener('mousedown', function (e) { basX = e.clientX; basY = e.clientY; }, true);
+  document.addEventListener('mouseup', function (e) {
+    if (e.button !== 0 || e.shiftKey || e.altKey || e.metaKey || e.ctrlKey) return;   // tarayıcı seçimi (Shift/Option): OSC 52 gelmez, copy olayı yolu
+    var surukle = Math.abs(e.clientX - basX) + Math.abs(e.clientY - basY) >= 3, cift = e.detail >= 2;
+    if (!surukle && !cift) return;                                                   // düz tık: seçim yok, pano'ya dokunulmaz
+    if (!navigator.clipboard || typeof navigator.clipboard.write !== 'function' || typeof ClipboardItem !== 'function') return;
+    if (bekleyen) { clearTimeout(bekleyen.zaman); bekleyen.red(new Error('yeni seçim')); bekleyen = null; }
+    var b = { cozuldu: false, metin: '' };
+    var soz = new Promise(function (coz, red) { b.coz = function (m) { coz(new Blob([m], { type: 'text/plain' })); }; b.red = red; });
+    soz.catch(function () { /* süre doldu ya da yeni seçim: sessiz */ });
+    b.zaman = setTimeout(function () { if (bekleyen === b) { bekleyen = null; b.red(new Error('OSC 52 gelmedi')); } }, SOZ_OMRU);
+    bekleyen = b;
+    try {
+      navigator.clipboard.write([new ClipboardItem({ 'text/plain': soz })]).then(function () { indi('soz'); },
+        function (e) { if (bekleyen === b) { bekleyen = null; clearTimeout(b.zaman); }
+          if (b.cozuldu) kopyaDugmesi(b.metin, (e && e.message) || 'izin'); });   // metin geldi ama yazım reddedildi → düğme; süre dolduysa sessiz
+    } catch (err) { if (bekleyen === b) bekleyen = null; clearTimeout(b.zaman); }   // ClipboardItem söz kabul etmiyor (eski tarayıcı): writeText yolu kalır
+  }, true);
   // ── seçimsiz Cmd+C / Ctrl+Insert = 'copy' olayı: son tmux seçimini panoya yaz (Sultan 15 Eki: "kopyalandı diyor ama kopyalanmıyor").
   //    xterm.js'in kopya işleyicisi seçim yokken olayı kendi (boş) seçimiyle doldurur; önce biz görürüz (yakalama fazı) ve
   //    panoya son seçimi koyarız. Tarayıcı seçimi (Shift/Option+sürükle) varsa DOKUNMAYIZ — o yol xterm'in/tarayıcının.
@@ -131,9 +181,16 @@
     var t = window.term;
     var xsec = t && typeof t.hasSelection === 'function' && t.hasSelection();
     var ssec = !!(window.getSelection && String(window.getSelection()));
-    if (xsec || ssec || !sonMetinTaze() || !e.clipboardData) return;   // bayat seçim (>10 dk) panoya YAZILMAZ — olay tarayıcıya kalır
+    if (!e.clipboardData) return;
+    if (xsec) {   // Shift/Option+sürükle seçimi: odak nerede olursa olsun köprü yazar (Safari'de odak textarea'dan kaçınca xterm'in işleyicisi olayı görmüyordu)
+      var m = t.getSelection(); if (!m) return;
+      e.preventDefault(); e.stopImmediatePropagation();
+      e.clipboardData.setData('text/plain', m); panoyaIndi = Date.now(); sonYol = 'copy'; dugmeGizle();
+      bildir('📋 seçim panoya yazıldı (Cmd+C)', '#7ee787', 1800); return;
+    }
+    if (ssec || !sonMetinTaze()) return;   // bayat seçim (>10 dk) panoya YAZILMAZ — olay tarayıcıya kalır
     e.preventDefault(); e.stopImmediatePropagation();
-    e.clipboardData.setData('text/plain', sonMetin); panoyaIndi = Date.now();
+    e.clipboardData.setData('text/plain', sonMetin); panoyaIndi = Date.now(); sonYol = 'copy'; dugmeGizle();
     bildir('📋 son seçim panoya yazıldı (Cmd+C)', '#7ee787', 1800);
   }, true);
   function osc52(veri) {                       // veri: "c;<base64>" · "?" sorgusu desteklenmez (pano OKUNMAZ)
@@ -147,8 +204,9 @@
     var t = window.term;
     if (!t || !t.parser || typeof t.parser.registerOscHandler !== 'function') return false;
     t.parser.registerOscHandler(52, osc52);
-    window.__kapiPano = { surum: '1.1.0', osc52: true, cmdc: true, taban: TABAN, sonMetinOmruMs: SON_METIN_OMRU,
-      _eskit: function () { sonMetinAn = 0; } };   // ölçüm yüzeyi (sınav okur; _eskit: sınav son seçimi bayatlatır)
+    window.__kapiPano = { surum: '1.2.0', osc52: true, cmdc: true, soz: true, dugme: true, taban: TABAN, sonMetinOmruMs: SON_METIN_OMRU,
+      _eskit: function () { sonMetinAn = 0; }, _sonYol: function () { return sonYol; }, _sozBekliyor: function () { return !!bekleyen; },
+      _sozOmru: function (ms) { SOZ_OMRU = ms; } };   // ölçüm yüzeyi (sınav okur; _eskit: son seçimi bayatlatır; _sozOmru: sınav süreyi kısaltır)
     log('bağlandı: OSC 52 → pano · resim → ' + RESIM_URL);
     return true;
   }

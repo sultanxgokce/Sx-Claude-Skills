@@ -193,6 +193,62 @@ try {
   const sec = await pg.evaluate(() => window.term.getSelection());
   kapi('K6 Shift basılı sürükleme TARAYICI seçimi yapar (Cmd+C ile kopyalanabilir)', sec.trim() === 'SECILECEK-SATIR-ABC', `→ "${sec}"`);
 
+  console.log('── S · Safari yolu (1.2.0): hareket anında SÖZ · Kopyala düğmesi · copy olayında xterm seçimi');
+  // S1 · fareyle seçim artık SÖZ yolundan iner (mouseup'ta clipboard.write(ClipboardItem{Promise}); OSC 52 gelince çözülür) — Safari'nin izin verdiği tek yol
+  await pg.evaluate(() => navigator.clipboard.writeText('pano-bos'));
+  await komut(pg, 'echo SECILECEK-SATIR-ABC');
+  await pg.waitForFunction(() => { const bf = window.term.buffer.active; for (let i = 0; i < bf.length; i++) { const l = bf.getLine(i); if (l && l.translateToString(true).trim() === 'SECILECEK-SATIR-ABC') return true; } return false; }, null, { timeout: 8000 }).catch(() => {});
+  const geo2 = await pg.evaluate(() => { const t = window.term; const bf = t.buffer.active; let satir = -1; for (let i = bf.length - 1; i >= 0; i--) { const l = bf.getLine(i); if (l && l.translateToString(true).trim() === 'SECILECEK-SATIR-ABC') { satir = i; break; } }
+    const r = document.querySelector('.xterm-screen').getBoundingClientRect(); return { satir: satir - bf.viewportY, x: r.left, y: r.top, w: r.width / t.cols, h: r.height / t.rows }; });
+  const y2s = geo2.y + (geo2.satir + 0.5) * geo2.h;
+  await pg.mouse.move(geo2.x + 0.5 * geo2.w, y2s); await pg.mouse.down(); await pg.mouse.move(geo2.x + 19.5 * geo2.w, y2s, { steps: 8 }); await pg.mouse.up();
+  await bekle(1200);
+  pano = await pg.evaluate(() => navigator.clipboard.readText()).catch((e) => 'HATA:' + e.message);
+  const yol1 = await pg.evaluate(() => window.__kapiPano._sonYol());
+  kapi('S1 fare seçimi SÖZ yolundan panoya indi (yazım mouseup içinde başladı, OSC 52 sözü çözdü)', pano === 'SECILECEK-SATIR-ABC' && yol1 === 'soz', `→ pano="${pano}" yol=${yol1}`);
+  // S2 · düz tık (sürükleme yok) pano'ya DOKUNMAZ (söz açılmaz)
+  await pg.evaluate(() => navigator.clipboard.writeText('pano-dokunulmadi'));
+  await pg.mouse.click(geo2.x + 30 * geo2.w, y2s); await bekle(600);
+  pano = await pg.evaluate(() => navigator.clipboard.readText()).catch((e) => 'HATA:' + e.message);
+  const bekliyor = await pg.evaluate(() => window.__kapiPano._sozBekliyor());
+  kapi('S2 düz tık söz açmaz, pano değişmez', pano === 'pano-dokunulmadi' && !bekliyor, `→ pano="${pano}" bekliyor=${bekliyor}`);
+  // S3 · OSC 52 HİÇ gelmezse (tmux set-clipboard off) söz süresi dolar, reddedilir ve pano DEĞİŞMEZ (seçimsiz sürüklemede pano bozulmaz)
+  await komut(pg, 'tmux set -g set-clipboard off'); await bekle(300);
+  await pg.evaluate(() => { window.__kapiPano._sozOmru(400); return navigator.clipboard.writeText('pano-korundu'); });
+  await pg.mouse.move(geo2.x + 0.5 * geo2.w, y2s); await pg.mouse.down(); await pg.mouse.move(geo2.x + 19.5 * geo2.w, y2s, { steps: 8 }); await pg.mouse.up();
+  await bekle(1200);
+  pano = await pg.evaluate(() => navigator.clipboard.readText()).catch((e) => 'HATA:' + e.message);
+  const bekliyor3 = await pg.evaluate(() => window.__kapiPano._sozBekliyor());
+  kapi('S3 OSC 52 gelmeyince söz süresi dolar: pano DEĞİŞMEZ, bekleyen söz kalmaz', pano === 'pano-korundu' && !bekliyor3, `→ pano="${pano}" bekliyor=${bekliyor3}`);
+  await komut(pg, 'tmux set -g set-clipboard on'); await pg.evaluate(() => window.__kapiPano._sozOmru(1500)); await bekle(300);
+  // S4 · Safari taklidi: writeText VE write reddediyor → Kopyala düğmesi çıkar; tıklama (hareket) içinde writeText geçer
+  await pg.evaluate(() => { window.__pano = { wt: navigator.clipboard.writeText.bind(navigator.clipboard), w: navigator.clipboard.write.bind(navigator.clipboard) };
+    const red = () => Promise.reject(new DOMException('The request is not allowed by the user agent or the platform in the current context, possibly because the user denied permission.', 'NotAllowedError'));
+    navigator.clipboard.writeText = red; navigator.clipboard.write = red; return window.__pano.wt('pano-bos'); });
+  await komut(pg, 'printf "\\033]52;c;$(printf safari-metni | base64)\\a"'); await bekle(1200);
+  const dg = await pg.$eval('#kapi-pano-kopyala', (e) => ({ gorunur: e.style.display !== 'none', metin: e.getAttribute('data-metin'), yazi: e.textContent })).catch(() => null);
+  const bd4 = await bildirim(pg);
+  kapi('S4 yazım reddedilince KOPYALA düğmesi çıkar (metni taşır) ve bildirim nedenini söyler', !!dg && dg.gorunur && dg.metin === 'safari-metni' && /Kopyala/.test(dg.yazi) && /reddedildi/.test(bd4), `→ ${JSON.stringify(dg)} "${bd4}"`);
+  await pg.evaluate(() => { navigator.clipboard.writeText = window.__pano.wt; navigator.clipboard.write = window.__pano.w; });   // tıklama anında izin var (Safari'de hareket içi)
+  await pg.click('#kapi-pano-kopyala'); await bekle(400);
+  pano = await pg.evaluate(() => navigator.clipboard.readText()).catch((e) => 'HATA:' + e.message);
+  const dg2 = await pg.$eval('#kapi-pano-kopyala', (e) => e.style.display !== 'none').catch(() => null);
+  kapi('S4b düğmeye tık → metin panoda, düğme gizlenir, yol=dugme', pano === 'safari-metni' && dg2 === false && (await pg.evaluate(() => window.__kapiPano._sonYol())) === 'dugme', `→ pano="${pano}" gorunur=${dg2}`);
+  // S5 · Shift+sürükle (xterm seçimi) + copy olayı, ODAK TERMİNALDE DEĞİLKEN: köprü copy olayında seçimi kendisi yazar.
+  //    Olay belgeye sentetik ClipboardEvent('copy') ile verilir (Chromium'da odaksız kopya kısayolu copy üretmeyebiliyor — ölçüldü,
+  //    bir koşuda üretti bir koşuda üretmedi); ölçülen şey köprünün olayı odaktan bağımsız yakalayıp doldurmasıdır.
+  await komut(pg, 'echo SHIFT-SECIM-XYZ');
+  await pg.waitForFunction(() => { const bf = window.term.buffer.active; for (let i = 0; i < bf.length; i++) { const l = bf.getLine(i); if (l && l.translateToString(true).trim() === 'SHIFT-SECIM-XYZ') return true; } return false; }, null, { timeout: 8000 }).catch(() => {});
+  const geo5 = await pg.evaluate(() => { const t = window.term; const bf = t.buffer.active; let satir = -1; for (let i = bf.length - 1; i >= 0; i--) { const l = bf.getLine(i); if (l && l.translateToString(true).trim() === 'SHIFT-SECIM-XYZ') { satir = i; break; } }
+    const r = document.querySelector('.xterm-screen').getBoundingClientRect(); return { satir: satir - bf.viewportY, x: r.left, y: r.top, w: r.width / t.cols, h: r.height / t.rows }; });
+  const y5 = geo5.y + (geo5.satir + 0.5) * geo5.h;
+  await pg.keyboard.down('Shift'); await pg.mouse.move(geo5.x + 0.5 * geo5.w, y5); await pg.mouse.down(); await pg.mouse.move(geo5.x + 15.5 * geo5.w, y5, { steps: 8 }); await pg.mouse.up(); await pg.keyboard.up('Shift');
+  const s5 = await pg.evaluate(() => { const sec = window.term.getSelection(); document.querySelector('.xterm-helper-textarea').blur(); document.body.focus();
+    const dt = new DataTransfer(); const ev = new ClipboardEvent('copy', { clipboardData: dt, bubbles: true, cancelable: true }); document.dispatchEvent(ev);
+    return { sec, odak: document.activeElement && document.activeElement.tagName, engellendi: ev.defaultPrevented, metin: dt.getData('text/plain'), yol: window.__kapiPano._sonYol() }; });
+  kapi('S5 Shift+sürükle seçimi, odak terminalden kaçmışken copy olayında köprü tarafından yazılır (preventDefault + metin)', s5.sec.trim() === 'SHIFT-SECIM-XYZ' && s5.odak === 'BODY' && s5.engellendi && s5.metin.trim() === 'SHIFT-SECIM-XYZ' && s5.yol === 'copy', `→ ${JSON.stringify(s5)}`);
+  kapi('S6 köprü 1.2.0 söz ve düğme yolunu ilan eder', await pg.evaluate(() => window.__kapiPano.surum === '1.2.0' && window.__kapiPano.soz === true && window.__kapiPano.dugme === true));
+
   console.log('── N · olumsuz kontrol: köprüsüz kapı (KAPI_PANO=0) aynı ölçümde KIRMIZI');
   await pg.context().close();   // köprülü sayfa AYNI tmux oturumuna bağlı kalırsa OSC 52'yi o alır ve panoyu doldurur → kontrol kirlenir
   ({ pg, hazir } = await sayfa(P2));

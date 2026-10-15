@@ -1,0 +1,8 @@
+$ bash -c echo '=== MUTASYON KANITI: copy olayında xterm seçimi yazma yolu KAPATILDI (eski davranış); aşağıdaki KIRMIZI BEKLENENDİR; rc=0 = sınav bozuk kodu YAKALADI. Gerçek ölçüm: pano-sinav-29-kapi ==='; node /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut-pano-1792054149/kapi/pano-sinav.mjs 2>&1 | grep -E '✗|GEÇEN'; [ ${PIPESTATUS[0]} = 1 ]
+# rc=0 sure=24.7s zaman=2026-10-15T11:49:58+03:00
+--- stdout ---
+=== MUTASYON KANITI: copy olayında xterm seçimi yazma yolu KAPATILDI (eski davranış); aşağıdaki KIRMIZI BEKLENENDİR; rc=0 = sınav bozuk kodu YAKALADI. Gerçek ölçüm: pano-sinav-29-kapi ===
+  ✗ S3 söz süresi dolunca reddedilen yazım panoyu BOZMAZ; geç gelen OSC 52 writeText ile iner (Chromium geri düşüşü) → pano="SECILECEK-SATIR-ABC" yol=soz
+  ✗ S5 Shift+sürükle seçimi, odak terminalden kaçmışken kopya kısayoluyla panoya iner (köprü copy olayını kendisi yazar) → seçim="SHIFT-SECIM-XYZ" pano="pano-bos"
+GEÇEN: 27 · KALAN: 2
+--- stderr ---

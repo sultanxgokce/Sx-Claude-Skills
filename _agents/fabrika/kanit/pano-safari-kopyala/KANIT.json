@@ -1,0 +1,100 @@
+{
+  "is": "pano-safari-kopyala",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T11:53:38+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "pano-sinav-29-kapi-S1-S6-gercek-ttyd-tmux-Chromium",
+      "asama": "sonra",
+      "dosya": "olcum-pano-sinav-29-kapi-S1-S6-gercek-ttyd-tmux-Chromium-sonra.txt",
+      "sha256": "c4df61bff091c9be68242bee14c36563e143426095e38c4b7d53ad32c9cdca2c",
+      "komut": [
+        "node",
+        "kapi/pano-sinav.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T11:49:09+03:00",
+      "sure_sn": 28.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "MUTASYON-KANITI-beklenen-kirmizi-soz-yolu-kapali",
+      "asama": "sonra",
+      "dosya": "olcum-MUTASYON-KANITI-beklenen-kirmizi-soz-yolu-kapali-sonra.txt",
+      "sha256": "4baa9c01294c720fbc88d77150ccbf066eead703418805af1aa4382d71c8cfde",
+      "komut": [
+        "bash",
+        "-c",
+        "echo '=== MUTASYON KANITI: mouseup söz yolu KAPATILDI (eski davranış); aşağıdaki KIRMIZI BEKLENENDİR; rc=0 = sınav bozuk kodu YAKALADI. Gerçek ölçüm: pano-sinav-29-kapi ==='; node /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut-pano-1792054149/kapi/pano-sinav.mjs 2>&1 | grep -E '✗|GEÇEN'; [ ${PIPESTATUS[0]} = 1 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T11:49:33+03:00",
+      "sure_sn": 24.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "MUTASYON-KANITI-beklenen-kirmizi-copy-olayinda-xterm-secimi-yazilmaz",
+      "asama": "sonra",
+      "dosya": "olcum-MUTASYON-KANITI-beklenen-kirmizi-copy-olayinda-xterm-secimi-yazilmaz-sonra.txt",
+      "sha256": "69c20d805b972ce955d5a47d3203ceff752b0081a0f912d3443a83f4700c0a97",
+      "komut": [
+        "bash",
+        "-c",
+        "echo '=== MUTASYON KANITI: copy olayında xterm seçimi yazma yolu KAPATILDI (eski davranış); aşağıdaki KIRMIZI BEKLENENDİR; rc=0 = sınav bozuk kodu YAKALADI. Gerçek ölçüm: pano-sinav-29-kapi ==='; node /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut-pano-1792054149/kapi/pano-sinav.mjs 2>&1 | grep -E '✗|GEÇEN'; [ ${PIPESTATUS[0]} = 1 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T11:49:58+03:00",
+      "sure_sn": 24.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "pano-sinav-29-kapi-S1-S6-belirleyici",
+      "asama": "sonra",
+      "dosya": "olcum-pano-sinav-29-kapi-S1-S6-belirleyici-sonra.txt",
+      "sha256": "8945ad64dfee1a7960f74bd34744e5a04d8b021ed34570007a581b0d04f1629a",
+      "komut": [
+        "node",
+        "kapi/pano-sinav.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T11:52:35+03:00",
+      "sure_sn": 23.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "MUTASYON-KANITI-beklenen-kirmizi-soz-yolu-kapali-2",
+      "asama": "sonra",
+      "dosya": "olcum-MUTASYON-KANITI-beklenen-kirmizi-soz-yolu-kapali-2-sonra.txt",
+      "sha256": "6fe937a7e4645111f310843d46035ae601f302c94c715bb8595869c691e82bb8",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut2-pano-1792054355/mutA.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T11:53:03+03:00",
+      "sure_sn": 27.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "MUTASYON-KANITI-beklenen-kirmizi-copy-olayinda-xterm-secimi-yazilmaz-2",
+      "asama": "sonra",
+      "dosya": "olcum-MUTASYON-KANITI-beklenen-kirmizi-copy-olayinda-xterm-secimi-yazilmaz-2-sonra.txt",
+      "sha256": "bcd94fd49a45f39182812fc03b6130df52db6cbed5ec240d237b56509f47b101",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut2-pano-1792054355/mutB.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T11:53:38+03:00",
+      "sure_sn": 35.4
+    }
+  ],
+  "imza": "5c393ad12842f302734984276a72a2f593225ad749153895c7d7c6115ed39000"
+}
