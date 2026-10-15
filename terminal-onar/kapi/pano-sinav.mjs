@@ -152,11 +152,42 @@ try {
   await bekle(1200);
   pano = await pg.evaluate(() => navigator.clipboard.readText()).catch((e) => 'HATA:' + e.message);
   kapi('K4 FAREYLE SEÇİM (tmux copy-mode) tarayıcı panosuna iner — Sultan\'ın kırık yolu', pano === 'SECILECEK-SATIR-ABC', `→ pano="${pano}"`);
-  // Cmd+C ipucu: seçim yokken bir kez
-  await pg.focus('.xterm-helper-textarea'); await bekle(3200);   // "zaten panoda" penceresi geçsin
+  // K7 · Sultan'ın kırık yolu (15 Eki 01:45, "kopyalandı yazıyor ama kopyalanmıyor"): tmux seçimi panoya indikten sonra alışkanlıkla ⌘C.
+  //    xterm.js'in copyHandler'ı seçim yokken panoya BOŞ metin yazıp olayı yutar → az önce inen metin silinir. Tarayıcının ⌘C'de
+  //    yaptığı şey 'copy' olayıdır; burada aynı olay gerçek tuş etkinliğinin hemen ardından execCommand ile üretilir (Linux Chromium'da
+  //    ⌘C kopya kısayolu değildir; olay zinciri aynıdır: copy → xterm copyHandler → clipboardData).
+  //    Linux Chromium'da tarayıcının kopya kısayolu Ctrl+Insert'tir (xterm.js onu yutmaz); Mac'teki ⌘C ile aynı 'copy' olayını üretir.
+  //    Kurgu: pano bu arada başka bir şeyle dolmuş olsun (Sultan'ın gördüğü: "kopyalandı dedi, yapıştırınca gelmedi"); seçimsiz ⌘C
+  //    son tmux seçimini panoya GERİ yazmalı (yeni davranış). Eski köprü olaya dokunmaz → xterm boş seçimi yazar / pano değişmez.
+  //    Sayaç WINDOW yakalama fazında (köprü document yakalamada olayı durdurur; sayaç ondan ÖNCE görmeli).
+  await pg.evaluate(() => { window.__kopya = { olay: 0, engellendi: null, metin: null };
+    window.addEventListener('copy', () => { window.__kopya.olay++; }, true);
+    window.addEventListener('copy', (e) => { window.__kopya.engellendi = e.defaultPrevented; window.__kopya.metin = e.clipboardData ? e.clipboardData.getData('text/plain') : null; }); });
+  await pg.evaluate(() => navigator.clipboard.writeText('pano-baska-seyle-doldu'));
+  await pg.focus('.xterm-helper-textarea'); await pg.keyboard.press('Control+Insert'); await bekle(400);
+  const kopya = await pg.evaluate(() => window.__kopya);
+  pano = await pg.evaluate(() => navigator.clipboard.readText()).catch((e) => 'HATA:' + e.message);
+  kapi('K7a tarayıcı kopya kısayolu gerçekten copy olayı üretti (ölçüm aracı çalışıyor)', kopya.olay >= 1, `→ ${JSON.stringify(kopya)}`);
+  console.log(`     (bilgi) copy olayı sonrası: engellendi=${kopya.engellendi} olayın metni=${JSON.stringify(kopya.metin)} pano=${JSON.stringify(pano)}`);
+  kapi('K7 seçimsiz ⌘C son tmux seçimini panoya GERİ yazar (pano başka şeyle dolmuş olsa da)', pano === 'SECILECEK-SATIR-ABC', `→ pano="${pano}"`);
+  // K7b · bayat seçim (10 dk+) panoyu EZMEZ (göz tur 1): sınav son seçimi bayatlatır, panoya başka şey koyar, kopya kısayolu → pano değişmez
+  await pg.evaluate(() => { window.__kapiPano._eskit(); return navigator.clipboard.writeText('pano-guncel-icerik'); });
+  await pg.focus('.xterm-helper-textarea'); await pg.keyboard.press('Control+Insert'); await bekle(400);
+  pano = await pg.evaluate(() => navigator.clipboard.readText()).catch((e) => 'HATA:' + e.message);
+  kapi('K7b 10 dk\'dan eski tmux seçimi seçimsiz ⌘C\'de panoya YAZILMAZ (güncel içerik korunur)', pano === 'pano-guncel-icerik', `→ pano="${pano}"`);
+  const omur = await pg.evaluate(() => window.__kapiPano.sonMetinOmruMs);
+  kapi('K7c ömür 10 dk olarak ilan edilir', omur === 600000, `→ ${omur}`);
+  // sonraki kapılar (K5a) taze seçim ister: yeniden seç
+  await pg.mouse.move(geo.x + 0.5 * geo.w, y); await pg.mouse.down(); await pg.mouse.move(geo.x + 19.5 * geo.w, y, { steps: 8 }); await pg.mouse.up(); await bekle(1200);
+  // Cmd+C ipucu: seçim de son tmux seçimi de yokken bir kez (son seçim varken ipucu YOK — copy olayı onu panoya yazar, K7).
   await pg.keyboard.press('Meta+c'); await bekle(200);
+  const ip0 = await bildirim(pg);
+  kapi('K5a son tmux seçimi varken Cmd+C ipucu BASILMAZ (yol zaten çalışıyor)', !/Shift basılı/.test(ip0), `→ "${ip0}"`);
+  await pg.reload(); await pg.waitForFunction(() => window.__kapiPano && window.__kapiPano.osc52, null, { timeout: 15000 }); await bekle(500);
+  await pg.focus('.xterm-helper-textarea'); await pg.keyboard.press('Meta+c'); await bekle(200);
   const ip = await bildirim(pg);
-  kapi('K5 Cmd+C seçimsiz basılınca yol gösterilir (Shift basılı sürükle ipucu)', /Shift basılı/.test(ip), `→ "${ip}"`);
+  kapi('K5 Cmd+C seçimsiz ve son seçimsiz basılınca yol gösterilir (Shift basılı sürükle ipucu)', /Shift basılı/.test(ip), `→ "${ip}"`);
+  await komut(pg, 'echo SECILECEK-SATIR-ABC'); await bekle(600);   // K6 için satır yeniden ekranda
   // Shift-sürükle → tarayıcı seçimi (fare tmux\'a gitmez)
   await pg.keyboard.down('Shift'); await pg.mouse.move(geo.x + 0.5 * geo.w, y); await pg.mouse.down(); await pg.mouse.move(geo.x + 19.5 * geo.w, y, { steps: 8 }); await pg.mouse.up(); await pg.keyboard.up('Shift');
   const sec = await pg.evaluate(() => window.term.getSelection());
