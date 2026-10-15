@@ -1,7 +1,7 @@
 {
   "is": "imar-filo-becerisi",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T18:49:19+03:00",
+  "guncelleme": "2026-10-15T18:59:39+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -223,7 +223,39 @@
       "renk": "kirmizi",
       "zaman": "2026-10-15T18:49:04+03:00",
       "sure_sn": 5.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "yedi-sinav-tur4",
+      "asama": "sonra",
+      "dosya": "olcum-yedi-sinav-tur4-sonra.txt",
+      "sha256": "b53c8d5926fa0ca07c69bc601f570ce0654516b869b3a23876945862479e238b",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts/imar-sinav-hepsi.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:59:35+03:00",
+      "sure_sn": 8.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "atlanan-tek-kapi-kutu-disi",
+      "asama": "tek",
+      "dosya": "olcum-atlanan-tek-kapi-kutu-disi-tek.txt",
+      "sha256": "e6c8856d9a76b4cfc2bce3c3bf18c319e84b16639149ab3c037040eff0fb4880",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/atlanan.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:59:39+03:00",
+      "sure_sn": 3.5
     }
   ],
-  "imza": "5a85b6f922eded65e8ebef1b32a14da465f225c4da76c19b95aa29737cf5874e"
+  "imza": "dd1e88346c278938035c8637510d13faa7a59373f4c9e11ac357b6df537af975"
 }
