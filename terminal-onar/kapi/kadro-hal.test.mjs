@@ -3,7 +3,7 @@
 // sohbetiyle açılır · altyapı oturumuna kapat 403 ve tmux'a HİÇ dokunulmaz · jeton/çerezsiz/başlıksız ret · kapatılamayan oturumda
 // kayıt geri alınır. Hermetik: geçici dizin, gerçek tmux'a ve gerçek kayda dokunmaz.
 import { spawn } from 'node:child_process';
-import { mkdtempSync, writeFileSync, mkdirSync, readFileSync, existsSync, rmSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, mkdirSync, readFileSync, existsSync, rmSync, chmodSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -14,11 +14,13 @@ let g = 0, k = 0; const kapi = (ad, ok, ek = '') => { if (ok) { g++; console.log
 
 // Kutunun "tmux"u: oturumlar bir dosyada (ad · claude). Liste betiği ve sahte tmux aynı dosyayı okur/yazar.
 const OTURUM = join(T, 'oturumlar'), TMUX_DEFTER = join(T, 'tmux-defter'), AC_DEFTER = join(T, 'ac-defter');
-const ILK_OTURUM = 'sinavkutu-ana\t1\ndash\t0\ndashwatch\t0\nBASIRET\t1\nkalfa\t0\ngezgin\t0\ninatci\t1\n';
+const ILK_OTURUM = 'sinavkutu-ana\t1\ndash\t0\ndashwatch\t0\nBASIRET\t1\nkalfa\t0\ngezgin\t0\ninatci\t1\ninatci2\t1\n';
 writeFileSync(OTURUM, ILK_OTURUM);
 const BIN = join(T, 'bin'); mkdirSync(BIN);
 writeFileSync(join(BIN, 'tmux'), `#!/usr/bin/env bash\necho "$*" >> ${JSON.stringify(TMUX_DEFTER)}\n`
   + `if [ "$1" = kill-session ] && [ "$2" = -t ]; then ad="\${3#=}"; [ "$ad" = inatci ] && exit 1\n`
+  // inatci2: kapatma düşer VE kayıt dizini salt-okur olur → geri alma da düşer (bağımsız göz tur 1: hata yutuluyordu)
+  + `  [ "$ad" = inatci2 ] && { chmod a-w ${JSON.stringify(join(T, 'proje/_agents/handoff'))}; exit 1; }\n`
   + `  grep -q "^$ad\t" ${JSON.stringify(OTURUM)} || exit 1; grep -v "^$ad\t" ${JSON.stringify(OTURUM)} > ${JSON.stringify(OTURUM)}.y; mv ${JSON.stringify(OTURUM)}.y ${JSON.stringify(OTURUM)}; exit 0; fi\nexit 0\n`, { mode: 0o755 });
 const LISTE = join(T, 'liste.sh');
 writeFileSync(LISTE, `#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\nwhile IFS=$'\\t' read -r ad c; do [ -n "$ad" ] && printf '%s\\t5\\t%s\\tajan\\tbos\\t\\n' "$ad" "$c"; done < ${JSON.stringify(OTURUM)}\n`, { mode: 0o755 });
@@ -26,7 +28,7 @@ const AC = join(T, 'koltuk-ac.sh');
 writeFileSync(AC, `#!/usr/bin/env bash\necho "$*" >> ${JSON.stringify(AC_DEFTER)}\n[ "$1" = ac ] && printf '%s\\t1\\n' "$2" >> ${JSON.stringify(OTURUM)}\necho "açıldı: $2"\n`, { mode: 0o755 });
 const PROJE = join(T, 'proje'), KAYIT = join(PROJE, '_agents/handoff/aile-registry.yaml');
 mkdirSync(dirname(KAYIT), { recursive: true });
-const ILK_KAYIT = 'uyeler:\n  - id: BASIRET\n    tmux: "BASIRET:0"\n    rol: "gözcü"\n    hal: calisiyor\n  - id: KALFA\n    tmux: "kalfa:0"\n    durum: canli   # elle not\n  - id: INATCI\n    tmux: "inatci:0"\n  - id: PANELCI\n    tmux: "dashwatch:0"\n';
+const ILK_KAYIT = 'uyeler:\n  - id: BASIRET\n    tmux: "BASIRET:0"\n    rol: "gözcü"\n    hal: calisiyor\n  - id: KALFA\n    tmux: "kalfa:0"\n    durum: canli   # elle not\n  - id: INATCI\n    tmux: "inatci:0"\n  - id: PANELCI\n    tmux: "dashwatch:0"\n  - id: INATCI2\n    tmux: "inatci2:0"\n';
 writeFileSync(KAYIT, ILK_KAYIT);
 
 const p = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: { ...process.env, PATH: BIN + ':' + process.env.PATH, KAPI_PORT: String(PORT), KAPI_TABAN: '/sedir',
@@ -96,9 +98,13 @@ kapi('KH20 emekliyi geri aç → kayıt BAYT BAYT ilk hâl, açıcı ÇAĞRILMAD
 console.log('── KH-F · oturum kapatılamazsa kayıt geri alınır · geçersiz istekler');
 const f1 = await hal({ eylem: 'dondur', id: 'INATCI' });
 kapi('KH21 kill-session düşer → 502 ve kayıt BAYT BAYT ilk hâl (ekran "dondurulmuş" deyip oturum çalışmaz)', f1.s === 502 && kayit() === ILK_KAYIT, f1.s + ' ' + JSON.stringify(f1.j));
+const f2 = await hal({ eylem: 'dondur', id: 'INATCI2' });
+chmodSync(dirname(KAYIT), 0o755);
+kapi('KH21b kapatma düşer + geri alma da düşer → 500 ve DÜRÜST cümle ("geri alınamadı … elle düzeltilmeli"), "döndürüldü" DENMEZ; iz kaydında GERI-ALINAMADI', f2.s === 500 && /geri alınamadı/.test(f2.j.hata) && /elle düzeltilmeli/.test(f2.j.hata) && !/döndürüldü/.test(f2.j.hata) && kayit().includes('  - id: INATCI2\n    durum: dondurulmus'), f2.s + ' ' + JSON.stringify(f2.j));
+writeFileSync(KAYIT, ILK_KAYIT);
 kapi('KH22 dondurulmamışı geri aç → 409 · bilinmeyen kişi → 404 · bilinmeyen eylem → 400', (await hal({ eylem: 'geri-ac', id: 'INATCI' })).s === 409 && (await hal({ eylem: 'dondur', id: 'YOK' })).s === 404 && (await hal({ eylem: 'sil', id: 'INATCI' })).s === 400);
 const iz = existsSync(join(T, 'kadro-hal.log')) ? readFileSync(join(T, 'kadro-hal.log'), 'utf8') : '';
-kapi('KH23 iz kaydı: her eylem tek satır (kapat · dondur · geri-ac · emekli · geri-al)', /kapat "gezgin"/.test(iz) && /dondur "BASIRET" -→dondurulmus/.test(iz) && /geri-ac "BASIRET" dondurulmus→-/.test(iz) && /emekli "KALFA" canli→emekli/.test(iz) && /geri-al "INATCI"/.test(iz), iz);
+kapi('KH23 iz kaydı: her eylem tek satır (kapat · dondur · geri-ac · emekli · geri-al)', /kapat "gezgin"/.test(iz) && /dondur "BASIRET" -→dondurulmus/.test(iz) && /geri-ac "BASIRET" dondurulmus→-/.test(iz) && /emekli "KALFA" canli→emekli/.test(iz) && /geri-al "INATCI"/.test(iz) && /GERI-ALINAMADI "INATCI2"/.test(iz), iz);
 p.kill();
 if (k && hataCikti) console.log('kapı stderr:\n' + hataCikti.slice(-800));
 rmSync(T, { recursive: true, force: true });

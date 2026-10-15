@@ -505,8 +505,11 @@ const sunucu = http.createServer(async (req, res) => {
         izYaz(`${eylem} ${JSON.stringify(id)} ${sonuc.onceki || '-'}→${sonuc.yeni || '-'} ${sonuc.dosya}${sonuc.uretilmis ? ' (derlendi)' : ''}`);
         if (eylem === 'emekli' || eylem === 'dondur') {
           if (kisi.oturum && !(await kapat(kisi.oturum.ad))) {
-            // Kayıt "kapalı" derken oturum çalışıyorsa ekran yalan söyler → kaydı geri al
-            try { kadroYaz({ proje: PROJE, id, eylem: 'geri-ac' }); izYaz(`geri-al ${JSON.stringify(id)} (oturum kapatılamadı)`); } catch {}
+            // Kayıt "kapalı" derken oturum çalışıyorsa ekran yalan söyler → kaydı geri al. Geri alma DA düşerse bunu söyle (bağımsız göz
+            // tur 1: hata yutulup "döndürüldü" deniyordu) — kayıt şu an yanlış hâldedir ve elle düzeltilmelidir.
+            try { kadroYaz({ proje: PROJE, id, eylem: 'geri-ac' }); izYaz(`geri-al ${JSON.stringify(id)} (oturum kapatılamadı)`); }
+            catch (e) { izYaz(`GERI-ALINAMADI ${JSON.stringify(id)} ${String(e.message || e)}`);
+              return json(res, 500, { hata: `Oturum kapatılamadı VE kayıt geri alınamadı (${e.message || e}) — kayıt şu an "${sonuc.yeni}" diyor, oturum çalışıyor; elle düzeltilmeli.` }); }
             return json(res, 502, { hata: 'Oturum kapatılamadı — kayıt eski hâline döndürüldü.' });
           }
           return json(res, 200, { tamam: true, mesaj: `${id} ${eylem === 'emekli' ? 'emekli edildi' : 'donduruldu'}${kisi.oturum ? ', oturumu kapandı' : ''}.` });

@@ -1,5 +1,5 @@
 $ bash /tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/kadro-mutasyon.sh /config/projects/_wt/Sx-Claude-Skills-kadro-e2-kapi /tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad
-# rc=0 sure=3.8s zaman=2026-10-16T00:35:57+03:00
+# rc=0 sure=7.3s zaman=2026-10-16T00:50:13+03:00
 --- stdout ---
   ✓ yakalandı · altyapı adı kontrolü sökülür (kapat) → ✗ KH6
   ✓ yakalandı · kişinin altyapı koltuğu kontrolü sökülür → ✗ KH7
@@ -11,5 +11,7 @@ $ bash /tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a2
   ✓ yakalandı · K13 adet ayarı sökülür → ✗ GERCEK
   ✓ yakalandı · okuyucu üretilmiş kayıttan durumu almaz → ✗ E6
   ✓ yakalandı · durum dondurulmus hal:'i örtmez → ✗ E2
-SONUÇ: 10 / 10 mutant yakalandı
+  ✓ yakalandı · kayıt dosyası içi yabancı fark denetimi sökülür → ✗ U8
+  ✓ yakalandı · geri alma hatası yeniden yutulur → ✗ KH21b
+SONUÇ: 12 / 12 mutant yakalandı
 --- stderr ---

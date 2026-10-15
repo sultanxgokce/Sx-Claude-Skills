@@ -48,7 +48,7 @@ kapi('Z4 geri aç → dosya bayt bayt ilk hâl', readFileSync(join(isk, '_agents
 console.log('── U · üretilmiş kayıt: kaynak model + derleyici');
 const ur = join(T, 'uretilmis');
 const AILE = 'uyeler:\n- id: u-yon\n  tmux: u-yon:0\n  rol: defteri akıtmak\n';
-const URETILEN = (d) => '# <!-- ekipc:uretilen:basla surum=1 hash=x -->\nuyeler:\n  - id: u-yon\n    rol: MÜDÜR\n    durum: ' + d + '\n    tmux: null\n# <!-- ekipc:uretilen:bitti -->\n\n# ## ELLE (ekipc dokunmaz)\n';
+const URETILEN = (d) => '# <!-- ekipc:uretilen:basla surum=1 hash=' + d + ' -->\nuyeler:\n  - id: u-yon\n    rol: MÜDÜR\n    durum: ' + d + '\n    tmux: null\n# <!-- ekipc:uretilen:bitti -->\n\n# ## ELLE (ekipc dokunmaz)\n';
 const kur = () => { yaz(join(ur, '_agents/ekip-os/mudur/AGENT.md'), '# MÜDÜR\n'); yaz(join(ur, '_agents/handoff/aile-registry.yaml'), AILE); yaz(join(ur, '_agents/ekip-os/ekip-registry.yaml'), URETILEN('canli')); yaz(join(ur, '_agents/ekip-modeli.yaml'), MODEL.replace(/u-yon/g, 'u-yon')); };
 kur();
 const ilk = { m: readFileSync(join(ur, '_agents/ekip-modeli.yaml'), 'utf8'), r: readFileSync(join(ur, '_agents/ekip-os/ekip-registry.yaml'), 'utf8') };
@@ -56,7 +56,7 @@ const yok = hata(() => kadroYaz({ proje: ur, id: 'u-yon', eylem: 'dondur', ortam
 kapi('U1 derleyici yok → 503, model ve üretilmiş kayıt BAYT BAYT aynı (yarım yazma yok)', yok?.kod === 503 && readFileSync(join(ur, '_agents/ekip-modeli.yaml'), 'utf8') === ilk.m && readFileSync(join(ur, '_agents/ekip-os/ekip-registry.yaml'), 'utf8') === ilk.r, String(yok?.message));
 // Sahte derleyici: argümanları kaydeder, modeldeki u-yon durumunu üretilmiş kayda taşır (ekipc'nin bu alandaki işi)
 const DERLE = join(T, 'ekipc-sahte.sh'), DEFTER = join(T, 'ekipc-defter');
-writeFileSync(DERLE, `#!/usr/bin/env bash\necho "$*" >> ${JSON.stringify(DEFTER)}\n[ -n "$SAHTE_DUS" ] && { echo "lint kırmızı" >&2; exit 4; }\nm="$3"; h="$5"\nd=$(awk '/- kayit: u-yon/{f=1;next} f&&/durum:/{print $2;exit}' "$m")\n[ -n "$SAHTE_UNUT" ] && exit 0\nsed -i "s/^    durum: .*/    durum: $d/" "$h/ekip-registry.yaml"\necho "derleyicinin bekleyen farkı" >> "$h/mudur/AGENT.md"; echo yeni > "$h/yeni-dosya.md"\n`);
+writeFileSync(DERLE, `#!/usr/bin/env bash\necho "$*" >> ${JSON.stringify(DEFTER)}\n[ -n "$SAHTE_DUS" ] && { echo "lint kırmızı" >&2; exit 4; }\nm="$3"; h="$5"\nd=$(awk '/- kayit: u-yon/{f=1;next} f&&/durum:/{print $2;exit}' "$m")\n[ -n "$SAHTE_UNUT" ] && exit 0\nawk -v d="$d" '/- id: /{b=($3=="u-yon")} b&&/^    durum: /{$0="    durum: " d} {print}' "$h/ekip-registry.yaml" > "$h/r.y" && mv "$h/r.y" "$h/ekip-registry.yaml"\nsed -i "s/hash=[a-z0-9]*/hash=$d/" "$h/ekip-registry.yaml"\n[ -n "$SAHTE_BASKA" ] && awk '/- id: u-baska/{b=1} b&&/durum: canli/{sub(/canli/,"emekli");b=0} {print}' "$h/ekip-registry.yaml" > "$h/r.y" && mv "$h/r.y" "$h/ekip-registry.yaml"\necho "derleyicinin bekleyen farkı" >> "$h/mudur/AGENT.md"; echo yeni > "$h/yeni-dosya.md"\n`);
 const ortam = { KAPI_EKIPC: DERLE };
 const u2 = kadroYaz({ proje: ur, id: 'u-yon', eylem: 'dondur', ortam });
 const okU = kadroBirlestir({ uyeler: kayitOku(ur).uyeler, koltuklar: [], ana: '' }).kisiler.find((x) => x.id === 'u-yon');
@@ -69,6 +69,14 @@ const dus = hata(() => kadroYaz({ proje: ur, id: 'u-yon', eylem: 'emekli', ortam
 kapi('U5 derleyici düşerse 502 + model geri alındı (bayt eşit)', dus?.kod === 502 && readFileSync(join(ur, '_agents/ekip-modeli.yaml'), 'utf8') === ilk.m, String(dus?.message));
 const unut = hata(() => kadroYaz({ proje: ur, id: 'u-yon', eylem: 'emekli', ortam: { ...ortam, SAHTE_UNUT: '1' } }));
 kapi('U6 derleyici "başarılı" ama üretilmiş kayıt değişmedi → 502 + geri alındı (ekranda görünmeyecek yazım kabul edilmez)', unut?.kod === 502 && readFileSync(join(ur, '_agents/ekip-modeli.yaml'), 'utf8') === ilk.m, String(unut?.message));
+// Derleyici AYNI kayıt dosyasında başka kişinin satırını da değiştirirse (bekleyen fark) yazım kabul edilmez (bağımsız göz tur 1)
+yaz(join(ur, '_agents/ekip-os/ekip-registry.yaml'), URETILEN('canli').replace('# <!-- ekipc:uretilen:bitti -->', '  - id: u-baska\n    rol: KÂŞİF\n    durum: canli\n# <!-- ekipc:uretilen:bitti -->'));
+const ilk2 = { m: readFileSync(join(ur, '_agents/ekip-modeli.yaml'), 'utf8'), r: readFileSync(join(ur, '_agents/ekip-os/ekip-registry.yaml'), 'utf8') };
+const bas = hata(() => kadroYaz({ proje: ur, id: 'u-yon', eylem: 'dondur', ortam: { ...ortam, SAHTE_BASKA: '1' } }));
+kapi('U8 derleyici aynı dosyada BAŞKA kişinin satırını değiştirdi → 409, model ve kayıt BAYT BAYT ilk hâl', bas?.kod === 409 && /ilgisiz bekleyen derleme farkı/.test(bas.message) && readFileSync(join(ur, '_agents/ekip-modeli.yaml'), 'utf8') === ilk2.m && readFileSync(join(ur, '_agents/ekip-os/ekip-registry.yaml'), 'utf8') === ilk2.r, String(bas?.message));
+const tam = kadroYaz({ proje: ur, id: 'u-yon', eylem: 'dondur', ortam });
+kapi('U9 aynı dosyada yalnız kişinin bloğu + hash satırı değişirse kabul (sahte derleyici hash satırını da yeniler)', tam.uretilmis && readFileSync(join(ur, '_agents/ekip-os/ekip-registry.yaml'), 'utf8').includes('hash=dondurulmus'));
+kadroYaz({ proje: ur, id: 'u-yon', eylem: 'geri-ac', ortam }); kur();
 // Üretilmiş dosyanın ELLE bölgesindeki kişi elle yazılır (derleyici o bölgeye dokunmaz)
 yaz(join(ur, '_agents/ekip-os/ekip-registry.yaml'), URETILEN('canli') + 'uyeler_elle:\n  - id: u-elle\n    durum: canli\n');
 yaz(join(ur, '_agents/handoff/aile-registry.yaml'), AILE + '- id: u-elle\n  tmux: u-elle:0\n');

@@ -1,7 +1,7 @@
 {
   "is": "kadro-e2-kapi",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-16T00:36:22+03:00",
+  "guncelleme": "2026-10-16T00:50:13+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -23,14 +23,14 @@
       "etiket": "uc-uctan-uca",
       "asama": "sonra",
       "dosya": "olcum-uc-uctan-uca-sonra.txt",
-      "sha256": "7cf920328915c51474918781438bbd8b2a3f5f1c07492bfd02edafbe59cda5e2",
+      "sha256": "6d93b8597bf7b5a9dfae54c7ee84acdf1b579ecc03c915d8f8f6e53f899de825",
       "komut": [
         "node",
         "terminal-onar/kapi/kadro-hal.test.mjs"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-16T00:35:20+03:00",
+      "zaman": "2026-10-16T00:49:42+03:00",
       "sure_sn": 0.6
     },
     {
@@ -38,7 +38,7 @@
       "etiket": "kayit-yazici-gercek-kopyalar",
       "asama": "sonra",
       "dosya": "olcum-kayit-yazici-gercek-kopyalar-sonra.txt",
-      "sha256": "cb3d4dd65df2b326580a5ec2e43ac36ce90e5b80ecb637ffa00c6148722fbdb9",
+      "sha256": "8fb1b3e1bd8f20ed47a91a71fb5d2bf07e5a1ebfcea1e91c14e457ba00ee40a6",
       "komut": [
         "node",
         "terminal-onar/kapi/kadro-yaz.test.mjs",
@@ -46,7 +46,7 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-16T00:35:20+03:00",
+      "zaman": "2026-10-16T00:49:42+03:00",
       "sure_sn": 0.1
     },
     {
@@ -54,14 +54,14 @@
       "etiket": "kapi-sinavi-tam",
       "asama": "sonra",
       "dosya": "olcum-kapi-sinavi-tam-sonra.txt",
-      "sha256": "ad64ff5223c5f83d3a54dbeb27546f70466705c09cf4b48c597fbd8b0218679d",
+      "sha256": "4ee7a397c3c48bd50433745332129e3af398f5f934796e2e011d940aa658947f",
       "komut": [
         "bash",
         "terminal-onar/kapi/kapi-sinav.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-16T00:35:27+03:00",
+      "zaman": "2026-10-16T00:49:49+03:00",
       "sure_sn": 7.1
     },
     {
@@ -69,7 +69,7 @@
       "etiket": "gercek-ekipc-s02-kopyasi",
       "asama": "sonra",
       "dosya": "olcum-gercek-ekipc-s02-kopyasi-sonra.txt",
-      "sha256": "8f92b4efceaa6e92b233aca2ecd02ef2ec7b90ddc0fe07aaa4b037008642fc94",
+      "sha256": "8ae7fdc038d7b639f4c71d15fdfcd41ece06a696ec4d9a8d76104917f3311d92",
       "komut": [
         "bash",
         "-c",
@@ -77,7 +77,7 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-16T00:35:28+03:00",
+      "zaman": "2026-10-16T00:49:50+03:00",
       "sure_sn": 0.4
     },
     {
@@ -85,7 +85,7 @@
       "etiket": "mutasyon-turu",
       "asama": "sonra",
       "dosya": "olcum-mutasyon-turu-sonra.txt",
-      "sha256": "e965b8bff62087a40945a376dade4e0330f2d72288ce9414ca1cdc4312d0c1c7",
+      "sha256": "326008b4db85811ed8d4b7bee7521a178c4afbd7d3f766e5fd9131af1769f496",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/kadro-mutasyon.sh",
@@ -94,8 +94,8 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-16T00:35:57+03:00",
-      "sure_sn": 3.8
+      "zaman": "2026-10-16T00:50:13+03:00",
+      "sure_sn": 7.3
     },
     {
       "tur": "olcum",
@@ -140,5 +140,5 @@
       "sure_sn": 0.4
     }
   ],
-  "imza": "34292d8afe12aef3d2a676226db843d6dc0d5632c5cc0ee0bfda1712fb0cf735"
+  "imza": "4ee24785111a1a3b2e9c0a572511ff97abf3c1036c2638d3eebb72c7140fa344"
 }

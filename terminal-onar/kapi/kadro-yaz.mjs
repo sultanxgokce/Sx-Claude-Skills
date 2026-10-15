@@ -179,13 +179,27 @@ export function kadroYaz({ proje, id, eylem, ortam = process.env, calistir = exe
     for (const [y, m] of foto) if (!simdi.has(y)) { fs.writeFileSync(y, m); geri++; }
     return geri;
   };
-  const geriAl = () => { atomikYaz(model, eski); try { derle(); } catch {} try { sinirla(); } catch {} };
+  // Geri alma derleyicisiz: model + hedef dizin derleme ÖNCESİ fotoğraftan bayt bayt geri konur (derleyiciyi yeniden koşturmak
+  // bekleyen yabancı farkı tekrar yazıyordu — bağımsız göz tur 1 bulgusunun sınavında ölçüldü).
+  const geriAl = () => {
+    atomikYaz(model, eski);
+    const simdi = dizinFoto(hedefDiz);
+    for (const [y, m] of foto) if (simdi.get(y) !== m) { if (simdi.has(y)) atomikYaz(y, m); else fs.writeFileSync(y, m); }
+    for (const y of simdi.keys()) if (!foto.has(y)) fs.unlinkSync(y);
+  };
   try { derle(); }
   catch (e) { geriAl(); throw new KadroHata(502, 'Derleyici düştü, kaynak geri alındı: ' + String(e.stderr || e.message || '').trim().split('\n').pop()); }
   const baskaFark = sinirla();
   // Doğrula: üretilen kayıt yeni değeri taşıyor mu (taşımıyorsa ekranda görünmez → geri al)
   const s2 = fs.readFileSync(hedef, 'utf8').split('\n'); const b2 = blokBul(s2, 'id', id); const d2 = b2 && alanBul(s2, b2, 'durum');
   if ((d2 ? d2.deger : '') !== r.yeni) { geriAl(); throw new KadroHata(502, 'Derleme sonrası kayıt beklenen değeri taşımıyor, kaynak geri alındı.'); }
+  // 🔴 KAYIT DOSYASININ İÇİ de sınırlı (bağımsız göz tur 1): derleyici aynı dosyada BAŞKA kişilerin satırlarını da değiştirdiyse
+  //    (bekleyen derleme farkı) yazım kabul edilmez. Yalnız bu kişinin bloğu + üretilmiş bölgenin hash satırı değişebilir.
+  //    Kısmi birleştirme YAPILMAZ: hash bütün üretilmiş gövdeyi kapsar, yarısını geri koymak bir sonraki derlemeyi "elle dokunulmuş"a
+  //    düşürürdü. Dürüst yol: geri al, söyle (önce kutuda tam derleme gerekir — o Sultan'ın ayrı kararı).
+  const s1 = foto.get(hedef).split('\n');
+  const yabanci = s1.length !== s2.length ? -1 : s2.filter((l, i) => l !== s1[i] && !(i >= b2.bas && i <= b2.son) && !l.includes(URETILEN_BAS)).length;
+  if (yabanci !== 0) { geriAl(); throw new KadroHata(409, 'Kayıt dosyasında bu kişiyle ilgisiz bekleyen derleme farkı var (' + (yabanci < 0 ? 'satır sayısı değişti' : yabanci + ' satır') + ') — hiçbir şey yazılmadı; önce kutuda tam derleme gerekir.'); }
   return { dosya: model, uretilmis: true, onceki: r.onceki, yeni: r.yeni, uygulanmayan_fark: baskaFark };
 }
 

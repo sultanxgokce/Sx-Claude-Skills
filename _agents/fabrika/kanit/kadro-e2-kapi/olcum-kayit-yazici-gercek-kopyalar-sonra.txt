@@ -1,5 +1,5 @@
 $ node terminal-onar/kapi/kadro-yaz.test.mjs --gercek
-# rc=0 sure=0.1s zaman=2026-10-16T00:35:20+03:00
+# rc=0 sure=0.1s zaman=2026-10-16T00:49:42+03:00
 --- stdout ---
 ── Y · saf dönüşüm (durumDegistir)
   ✓ Y1 durum değeri yerinde değişir (satır yorumu kalır), önceki değer durum_once satırına; başka satır DEĞİŞMEZ
@@ -27,6 +27,8 @@ $ node terminal-onar/kapi/kadro-yaz.test.mjs --gercek
   ✓ U4 geri aç → model ve üretilmiş kayıt BAYT BAYT ilk hâl
   ✓ U5 derleyici düşerse 502 + model geri alındı (bayt eşit)
   ✓ U6 derleyici "başarılı" ama üretilmiş kayıt değişmedi → 502 + geri alındı (ekranda görünmeyecek yazım kabul edilmez)
+  ✓ U8 derleyici aynı dosyada BAŞKA kişinin satırını değiştirdi → 409, model ve kayıt BAYT BAYT ilk hâl
+  ✓ U9 aynı dosyada yalnız kişinin bloğu + hash satırı değişirse kabul (sahte derleyici hash satırını da yeniler)
   ✓ U7 aynı dosyanın ELLE bölgesindeki kişi → derleyicisiz doğrudan yazılır
 ── G · gerçek kayıtların KOPYALARI: dondur → geri aç bayt eşitliği (kaynağa dokunulmaz)
   ✓ G huma: 8/8 kişi dondur→geri aç bayt eşit (0 atlandı: zaten emekli/belirsiz)
@@ -35,5 +37,5 @@ $ node terminal-onar/kapi/kadro-yaz.test.mjs --gercek
   ✓ G s02: 3/3 kişi dondur→geri aç bayt eşit (0 atlandı: zaten emekli/belirsiz)
   ✓ G sedir: 3/3 kişi dondur→geri aç bayt eşit (0 atlandı: zaten emekli/belirsiz)
 
-SONUÇ: 29 geçti · 0 kaldı
+SONUÇ: 31 geçti · 0 kaldı
 --- stderr ---

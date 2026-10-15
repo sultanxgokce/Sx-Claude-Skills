@@ -1,5 +1,5 @@
 $ node terminal-onar/kapi/kadro-hal.test.mjs
-# rc=0 sure=0.6s zaman=2026-10-16T00:35:20+03:00
+# rc=0 sure=0.6s zaman=2026-10-16T00:49:42+03:00
 --- stdout ---
 ── KH-A · kimlik: yalnız Sultan oturumu (çerez + başlık), jeton yolu yok
   ✓ KH1 çerezsiz → 401
@@ -28,8 +28,9 @@ $ node terminal-onar/kapi/kadro-hal.test.mjs
   ✓ KH20 emekliyi geri aç → kayıt BAYT BAYT ilk hâl, açıcı ÇAĞRILMADI (emeklilik oturum kararı değil)
 ── KH-F · oturum kapatılamazsa kayıt geri alınır · geçersiz istekler
   ✓ KH21 kill-session düşer → 502 ve kayıt BAYT BAYT ilk hâl (ekran "dondurulmuş" deyip oturum çalışmaz)
+  ✓ KH21b kapatma düşer + geri alma da düşer → 500 ve DÜRÜST cümle ("geri alınamadı … elle düzeltilmeli"), "döndürüldü" DENMEZ; iz kaydında GERI-ALINAMADI
   ✓ KH22 dondurulmamışı geri aç → 409 · bilinmeyen kişi → 404 · bilinmeyen eylem → 400
   ✓ KH23 iz kaydı: her eylem tek satır (kapat · dondur · geri-ac · emekli · geri-al)
 
-SONUÇ: 23 geçti · 0 kaldı
+SONUÇ: 24 geçti · 0 kaldı
 --- stderr ---

@@ -1,0 +1,45 @@
+{
+  "tur": 1,
+  "is": "kadro-e2-kapi",
+  "pr": "341",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-16T00:48:15+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 103217,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 39304
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, istenen dört eylem, yalnız Sultan çerezi, altyapı koruması, kaynağa yazım ve durum_once geri dönüşü uygulanmış; uçtan uca ölçüm de önce kırmızıdan sonra 23/23 yeşile dönmüş. Ancak üretilmiş kayıtta aynı hedef dosyadaki kapsam dışı derleyici farkları korunabiliyor ve oturum kapatma sonrası geri alma hatası yutuluyor; önce bu iki işlem bütünlüğü sorununu çözün.",
+    "bulgular": [
+      {
+        "ne": "Üretilmiş kayıt derlenirken kapsam sınırlaması hedef kayıt dosyasını bütünüyle hariç tutuyor; derleyicinin aynı ekip-registry.yaml içinde yaptığı, seçilen kişiden bağımsız değişiklikler geri alınmadan kalabilir.",
+        "kanit": "sinirla() döngüsündeki `if (y !== hedef && foto.get(y) !== m)` koşulu hedef dosyadaki bütün farkları denetim dışında bırakıyor. U2b sınavı yalnız `mudur/AGENT.md` ve `yeni-dosya.md` gibi başka dosyalardaki farkları ölçüyor; hedef dosya içindeki ilgisiz fark için sınav yok.",
+        "konum": "terminal-onar/kapi/kadro-yaz.mjs: kadroYaz/sinirla; terminal-onar/kapi/kadro-yaz.test.mjs: U2b",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Oturum kapatılamadığında kayıt geri alma başarısızlığı sessizce yutuluyor; uç yine de kullanıcıya kaydın eski hâline döndürüldüğünü kesin olarak bildiriyor.",
+        "kanit": "Kapatma hatası dalında `try { kadroYaz(... geri-ac ...); ... } catch {}` kullanılıyor ve ardından koşulsuz olarak `Oturum kapatılamadı — kayıt eski hâline döndürüldü.` yanıtı veriliyor. KH21 yalnız geri almanın başarıyla sonuçlandığı elle kayıt senaryosunu ölçüyor; üretilmiş kayıtta geri derlemenin düşmesi ölçülmüyor.",
+        "konum": "terminal-onar/kapi/sunucu.mjs: POST /api/kadro/hal kapatma-hatası geri alma dalı; terminal-onar/kapi/kadro-hal.test.mjs: KH21",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Ana uçtan uca ölçüm önce rc=1/kırmızı, sonra rc=0 ve 23/23 yeşil; tam kapı sınavı 30+29 test, gerçek kayıt kopyaları ve 10/10 mutasyon turuyla destekleniyor. Kanıt güçlü ve gerçekçi kopyalar içeriyor, fakat hedef dosya içi kapsam farkı ile üretilmiş kayıtta başarısız geri alma senaryolarını kapsamıyor."
+  }
+}
