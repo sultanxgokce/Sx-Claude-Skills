@@ -1,0 +1,55 @@
+{
+  "tur": 1,
+  "is": "kapsam-kapisi-hunk",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T18:02:21+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19120,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "H",
+    "ozet": "Nakkaş, PR diff’inde yalnız kip değişikliğini gerçek içerik dokunuşundan ayıran bağımsız bir ölçüm aracı ve 16 denetim yazmış; fakat istenen kapsam kapısını değiştirmemiştir. Önce kapsam_kontrol() ile ac() çağrısını düzeltmek gerekir: mevcut değişiklik ne kapıya kurulmuş ne de iki tarafın hunk örtüşmesini ölçüyor, ayrıca ilan edilen sınırın dışına taşıyor.",
+    "bulgular": [
+      {
+        "ne": "Talebin çalışacağı yer olan kapsam_kontrol() ve ac() çağrısı hiç değiştirilmemiş; yeni araç hiçbir üretim çağrısına bağlanmadığı için yalnız-kip PR hâlâ alan açmayı engelleyebilir.",
+        "kanit": "Diff yalnızca iki yeni dosya içeriyor: pr-kip-olc.sh ve pr-kip-olc.test.sh. kapsam_kontrol() ya da ac() içinde pr-kip-olc.sh çağrısı gösteren hiçbir değişiklik yok.",
+        "konum": "DEĞİŞİKLİK: iki new file diff’i; is-alani.sh değişikliği yok",
+        "agirlik": "ciddi"
+      },
+      {
+        "ne": "Çözüm hunk örtüşmesini değil, PR tarafında seçilen dosyada herhangi bir hunk bulunup bulunmadığını ölçüyor; işin dokunacağı satırlarla PR hunk’larını karşılaştırmıyor.",
+        "kanit": "BOLUM içinden yalnız `grep -c '^@@'` ile hunk sayılıyor ve sayı sıfırdan büyükse koşulsuz GERÇEK/rc=1 dönülüyor; iş tarafına ait satır veya hunk girdisi bulunmuyor.",
+        "konum": "yazilim-fabrikasi/scripts/pr-kip-olc.sh:82-89",
+        "agirlik": "ciddi"
+      },
+      {
+        "ne": "İlan edilen değişiklik sınırı aşılmış: kart yalnız kapsam_kontrol() ve ac() içindeki çağrısını izinli sayarken iki ayrı yeni betik eklenmiş.",
+        "kanit": "İş kartındaki `SINIR ILANI: yalniz kapsam_kontrol() + ac() icindeki cagrisi`; diff ise pr-kip-olc.sh ve pr-kip-olc.test.sh dosyalarını ekliyor.",
+        "konum": "İŞ KARTI cumle alanı; DEĞİŞİKLİK dosya başlıkları",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "“Önce” ölçümü eski kapının yol eşleşmesi yüzünden blokladığını ölçmemiş; komut daha erken aşamada iş kartı bulunamadığı için rc=1 olmuş.",
+        "kanit": "ONCE kaydının stderr’i `iş kartı yok: olcum-denemesi` diyor; `KAPSAM ÇAKIŞMASI` çıktısı bulunmuyor.",
+        "konum": "olcum-ONCE-kapi-YOL-karsilastiriyor-kip-only-PR-alani-bloklamis-BEKLENEN-KIRMIZI-once.txt",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Sonra ölçümleri yeni yardımcı aracın yalnız-kip için rc=0, içerik değişikliği için rc=1 verdiğini ve 16 araç sınavının geçtiğini gösteriyor. Ancak önce kaydı hedef kusuru değil eksik iş kartını ölçüyor; ölçüm çifti geçerli bir kapı öncesi/sonrası çifti değil. En önemlisi hiçbir kayıt gerçek is-alani.sh ac akışında yeni davranışı göstermiyor ve sınavlar hunk örtüşmesini değil yalnız PR dosya-bölümü sınıflandırmasını doğruluyor."
+  }
+}

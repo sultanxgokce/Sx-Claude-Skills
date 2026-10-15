@@ -1,7 +1,7 @@
 {
   "is": "kapsam-kapisi-hunk",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T18:01:23+03:00",
+  "guncelleme": "2026-10-15T18:03:19+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -71,7 +71,23 @@
       "renk": "kirmizi",
       "zaman": "2026-10-15T18:01:23+03:00",
       "sure_sn": 0.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "DUZELTME-onceki-ONCE-kaydi-GECERSIZDI-kapiya-varmadan-dustu-bu-kayit-onun-yerine",
+      "asama": "once",
+      "dosya": "olcum-DUZELTME-onceki-ONCE-kaydi-GECERSIZDI-kapiya-varmadan-dustu-bu-kayit-onun-yerine-once.txt",
+      "sha256": "debab036d6002cf2c038d3b13a70ccfa739236288e9b5fb6e22e57b16aef6402",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/projects/Sx-Claude-Skills; echo \"--- 1) ESKI KAPININ GORDUGU (gh pr diff --name-only): dosya LISTEDE ---\"; gh pr diff 326 --name-only | grep -F \"ui-tasarim-akisi/arac/yogunluk-denetle.test.sh\"; echo \"rc_name_only=$?\"; echo \"--- 2) GERCEK (yeni arac): ayni dosyada SATIR farki ---\"; bash /config/projects/_wt/Sx-Claude-Skills-kapsam-kapisi-hunk/yazilim-fabrikasi/scripts/pr-kip-olc.sh 326 ui-tasarim-akisi/arac/yogunluk-denetle.test.sh --depo /config/projects/Sx-Claude-Skills; echo \"rc_kip_olc=$?\"; echo \"--- KUSUR: eski kapi (1) ile karar veriyordu, (2) sifir satir diyor ---\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:03:19+03:00",
+      "sure_sn": 2.3
     }
   ],
-  "imza": "8c4694042a11c44d8e6bee9a7364ac8b216c84217104235c7c0794de4866835c"
+  "imza": "c978d47b02788b8602e1e93f18c700377eb8ba89fa14cf01dde0d08b4b7d4670"
 }

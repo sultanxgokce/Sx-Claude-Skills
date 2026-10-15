@@ -14,6 +14,19 @@
   "sultan": false,
   "kanit_nerede": "",
   "oda": "",
-  "durum": "acik",
-  "gecmis": []
+  "durum": "tikandi",
+  "gecmis": [
+    {
+      "zaman": "2026-10-15T18:04:07+03:00",
+      "olay": "tikandi"
+    }
+  ],
+  "bitis": "2026-10-15T18:04:07+03:00",
+  "pr": "",
+  "puan": null,
+  "kanit_var": false,
+  "tikanma": {
+    "yol": "daralt",
+    "neden": "Bagimsiz goz tur 1: KOD 2/5, DOGRU SEY MI H, 4 bulgu. UCUNU KABUL EDIYORUM ve kart bu damgayla DARALIYOR. (1) Arac hicbir uretim cagirisina BAGLI DEGIL -> kartin hedefi (kapiyi duzeltmek) karsilanmadi; sebep: is-alani.sh'de MIRAHUR'un kapat() isi var, SERDAR 'cakisirsa bana yaz' dedi, yazdim, cevap gelmedi; baglama tek satir ve o ayri karta kaliyor. (2) SINIR ILANIM ASILDI: kart 'yalniz kapsam_kontrol()+ac()' diyordu, ben iki YENI dosya getirdim -- yaklasimi degistirdim ama karti guncellemedim; kartta ilan edilen sinir ile teslim edilen is ayrismis, bu benim hatam. (3) ONCE olcumum GECERSIZDI: komut kapsam kapisina hic varmadan 'is karti yok' ile dustu, yani rc=1 baska bir reddin rc'siydi -- tam da kendi yasakladigim sinif. Yerine gecerli olcum kaydedildi: eski kapinin GORDUGU (gh pr diff --name-only dosyayi listeliyor) ile GERCEGIN (ayni dosyada sifir satir) yan yana konuldu. (4) 'Hunk ORTUSMESI olcsun' bulgusunu REDDEDIYORUM, gerekcesiyle: o ifade benim kendi oneri metnimden geliyor ve YANLIS yazilmis. is-alani ac ANINDA isin dokunacagi satirlar HENUZ YOK -- kiyaslanacak ikinci taraf mevcut degil; o anda bilinebilen tek sey PR'in dokunusunun ICERIK mi KIP mi oldugudur. Dogru ifade: 'PR dokunusu gercek mi kip mi' ikinci yuzeyi. Oneri metnimi defterde duzeltiyorum. TESLIM EDILEN VE INCELENEN IS: pr-kip-olc.sh + 16 kapili cift yonlu sinavi; canli kontrol PR #326 ile; iki mutant gecici kopyada. Baglama ve kapinin kendisi YENI KARTA."
+  }
 }

@@ -1,0 +1,77 @@
+{
+  "is": "pr-kip-olcum-araci",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T18:04:55+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "ONCE-eski-kapi-YOL-gorur-GERCEK-sifir-satir-yan-yana",
+      "asama": "once",
+      "dosya": "olcum-ONCE-eski-kapi-YOL-gorur-GERCEK-sifir-satir-yan-yana-once.txt",
+      "sha256": "89427c49cff21d8a83d9347f751bd55d125f4de6120095dcd0dc982dd08014a4",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/projects/Sx-Claude-Skills; echo \"1) ESKI KAPININ GIRDISI (gh pr diff --name-only):\"; gh pr diff 326 --name-only | grep -F \"ui-tasarim-akisi/arac/yogunluk-denetle.test.sh\"; echo \"2) GERCEK:\"; bash /config/projects/_wt/Sx-Claude-Skills-kapsam-kapisi-hunk/yazilim-fabrikasi/scripts/pr-kip-olc.sh 326 ui-tasarim-akisi/arac/yogunluk-denetle.test.sh --depo /config/projects/Sx-Claude-Skills"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:04:52+03:00",
+      "sure_sn": 2.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "SONRA-arac-16-kapi-cift-yonlu",
+      "asama": "sonra",
+      "dosya": "olcum-SONRA-arac-16-kapi-cift-yonlu-sonra.txt",
+      "sha256": "9ce534073b512e3d2c4d2b2957438e652cb7906e2012a2a235e7d929ec26fe07",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/pr-kip-olc.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:04:52+03:00",
+      "sure_sn": 0.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "CANLI-PR326-kip-only-rc0",
+      "asama": "sonra",
+      "dosya": "olcum-CANLI-PR326-kip-only-rc0-sonra.txt",
+      "sha256": "211350fad80842c25e61601e5898b8a1b4696b1a1a18e1e9aca0e751b5c36b80",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/pr-kip-olc.sh",
+        "326",
+        "ui-tasarim-akisi/arac/yogunluk-denetle.test.sh",
+        "--depo",
+        "/config/projects/Sx-Claude-Skills"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:04:53+03:00",
+      "sure_sn": 1.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "CANLI-PR326-icerik-rc1-BEKLENEN-KIRMIZI",
+      "asama": "sonra",
+      "dosya": "olcum-CANLI-PR326-icerik-rc1-BEKLENEN-KIRMIZI-sonra.txt",
+      "sha256": "94ffc371f3dec93e8d4e3d93e256811ff306e85836b290b724e0963f9ee1580b",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/pr-kip-olc.sh",
+        "326",
+        "kabuk-biti.test.sh",
+        "--depo",
+        "/config/projects/Sx-Claude-Skills"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T18:04:55+03:00",
+      "sure_sn": 1.3
+    }
+  ],
+  "imza": "1632a98e7a913b7383eba6e32e9e1b9e371174926b8cb90ef6f255b2d6359dea"
+}
