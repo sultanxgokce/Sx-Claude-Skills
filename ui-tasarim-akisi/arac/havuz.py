@@ -182,6 +182,23 @@ def yaz(argv, yol):
         for a in ("klise", "imza"):
             if a not in kayit:
                 hata.append("kapi=ayirt için --%s ZORUNLU (yargısız ayırt-ölçümü olmaz)" % a)
+        # 🔴 RUBRİKLE TUTARLILIK (bağımsız göz bulgusu, 2026-10-15): alanların DOLU olması
+        #    yargının VERİLDİĞİ anlamına gelmiyordu. `hukum=temiz` + `imza=yok` kaydı şemadan
+        #    geçiyor ve kapıyı açıyordu — oysa rubrik (sablonlar/estetik-guc-v1.md §"Hüküm
+        #    nasıl verilir") temiz için `klise=yok` VE `imza≠yok` şartı koyuyor. Yani şema ile
+        #    kural arasında ANLAM KAÇAĞI vardı: form doluydu, hüküm kendisiyle çelişikti.
+        #    Rubrik tek kaynaktır; kapı ona uyduruldu (kuralı gevşetmek değil, kodu hizalamak).
+        h, kl, im = kayit.get("hukum"), kayit.get("klise"), kayit.get("imza")
+        if h == "temiz" and (kl != "yok" or im == "yok"):
+            hata.append("rubrik çelişkisi: hukum=temiz için klise=yok VE imza≠yok şart "
+                        "(gelen: klise=%s · imza=%s) — bir yön seçilmemişse temiz değildir" % (kl, im))
+        if h == "kirmizi" and kl == "yok" and im != "yok":
+            hata.append("rubrik çelişkisi: hukum=kirmizi ya klişeye düşmeyi ya imzasızlığı "
+                        "gösterir (gelen: klise=yok · imza=%s) — düşen madde YOK" % im)
+        if h == "olcemedi":
+            hata.append("kapi=ayirt için hukum=olcemedi KABUL EDİLMEZ: ayırt-edicilik bir "
+                        "YARGIDIR, ölçüm değil — bakılacak şey sayfanın kendisidir. Rubrik üç "
+                        "hüküm tanır: temiz · kirmizi · emin-degilim")
     if hata:
         sys.stderr.write("HAVUZ REDDETTİ — kayıt yazılmadı:\n")
         for h in hata:
@@ -386,8 +403,21 @@ def ayirt_kapisi(argv, yol):
               and k["ekran"] == alan["ekran"]]
     if not onceki:
         return 0            # ilk sayfa: kıyaslanacak öncesi yok
-    if any(k["kapi"] == "ayirt" for k in onceki):
+    # 🔴 KARARLI yargı açar (bağımsız göz bulgusu, 2026-10-15): eski hâlde `kapi == "ayirt"`
+    #    olan HER kayıt kapıyı açıyordu — `emin-degilim` de dâhil. Oysa rubrik onu
+    #    *"meşrudur ama bir sonraki turda çözülmeli, KALICI SIĞINAK DEĞİLDİR"* diye tanımlıyor;
+    #    kapıyı açarsa tam da kalıcı sığınağa dönüşür ve kapı adının söylediği şeyi ölçmez.
+    #    Kayıt yazılabilir ve defterde görünür — ama sonraki sayfayı açmaz.
+    kararli = [k for k in onceki if k["kapi"] == "ayirt" and k["hukum"] in ("temiz", "kirmizi")]
+    if kararli:
         return 0
+    kararsiz = [k for k in onceki if k["kapi"] == "ayirt"]
+    if kararsiz:
+        sys.stderr.write("KAPI KAPALI — '%s' için ayırt yargısı var ama KARARSIZ (%s).\n"
+                         % (alan["ekran"], kararsiz[-1]["hukum"]))
+        sys.stderr.write("  Rubrik: 'emin-degilim meşrudur ama bir sonraki turda çözülmeli,\n")
+        sys.stderr.write("  kalıcı sığınak değildir.' Bu tur o sonraki tur.\n")
+        return 1
     sys.stderr.write("KAPI KAPALI — '%s' sayfası için AYIRT-EDİCİLİK yargısı yok.\n"
                      % alan["ekran"])
     sys.stderr.write("  Sözleşmeye uyan ama birbirinin aynısı ekranlar tam burada doğar.\n")

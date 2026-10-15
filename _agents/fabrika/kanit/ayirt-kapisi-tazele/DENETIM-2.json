@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "ayirt-kapisi-tazele",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T16:05:33+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 54040,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "NAKKAŞ, ölçüm sonucunun yargı kapıları tarafından maskelenmesini önlemiş, KAPI 6’nın gerçek çağıranını iki yönlü sınamış ve önceki turun kanıt açıklarını kapatmış. Önce şema ile kapı arasındaki anlam kaçağı çözülmeli: rubriğin kırmızı veya kararsız saydığı ayırt kayıtları bugün kapıyı açabiliyor.",
+    "bulgular": [
+      {
+        "ne": "Ayırt kaydının hükmü ile klişe/imza seçimleri arasındaki rubrik kuralları kodda doğrulanmıyor; örneğin `hukum=temiz, imza=yok` kaydedilebilir ve kapıyı açar.",
+        "kanit": "Rubrik `temiz` için `klise=yok` ve `imza≠yok`, `kirmizi` için klişe veya imzasızlık şartı koyuyor. Buna karşılık `yaz` yalnız `klise` ile `imza` alanlarının varlığını denetliyor; `ayirt_kapisi` ise içerik ve hükme bakmadan herhangi bir `kapi == ayirt` kaydında 0 döndürüyor.",
+        "konum": "ui-tasarim-akisi/arac/havuz.py: yaz içindeki kapi=ayirt zorunluluk denetimi ve ayirt_kapisi içindeki `any(k[\"kapi\"] == \"ayirt\" ...)`; ui-tasarim-akisi/sablonlar/estetik-guc-v1.md: “Hüküm nasıl verilir”",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "`olcemedi` veya `emin-degilim` hükümlü ayırt kaydı da tamamlanmış yargı gibi kabul edilerek sonraki sayfanın kapısını açıyor.",
+        "kanit": "Genel `hukum` kümesi `olcemedi|emin-degilim` değerlerini kabul ediyor; ayırt kaydında bunları reddeden bir koşul yok. Kapı yalnız ayırt türünde kayıt bulunmasını arıyor, oysa rubrik `emin-degilim` kararının sonraki turda çözülmesini ve kalıcı sığınak olmamasını söylüyor.",
+        "konum": "ui-tasarim-akisi/arac/havuz.py: ANAHTARLAR.hukum, yaz ve ayirt_kapisi; ui-tasarim-akisi/sablonlar/estetik-guc-v1.md: “Hüküm nasıl verilir”",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Gerçek önce ölçümleri havuz 80/1 ile prompt-yap 36/7, sonralar 84/0 ile 43/0 olarak eşleşiyor; yoğunluk 41/0 ve yargı 49/0 da ayrıca kayıtlı, böylece dört suit toplamı 217 olarak doğrulanıyor. Mutant koşusu rc=1 ile kapının gerçekten sınandığını destekliyor; ancak verilen ilk 60 satır mutantın hangi iki alt sınavda düştüğünü göstermediğinden “iki kapı düşüyor” ayrıntısı doğrudan çıktıdan bağımsız doğrulanamıyor."
+  }
+}

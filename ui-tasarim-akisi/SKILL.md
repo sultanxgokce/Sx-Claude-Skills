@@ -530,7 +530,19 @@ tamamı yeni KAPI 6'nın yargısız fikstürlerde ateşlenmesindendi. Üç ayrı
    değiştirir. Ayrıca sınavın havuz anahtarı `basename $PWD`den türüyordu (hüküm çalışma
    dizinine göre değişiyordu); anahtar sabitlendi.
 
-Ölçüm: dört suit **217 kapı** yeşil (havuz 84 · prompt-yap 43 · yoğunluk 41 · yargı 49).
+4. 🔴 **Şema ⟂ kural: anlam kaçağı.** Alanların DOLU olması yargının VERİLDİĞİ anlamına
+   gelmiyordu — `hukum=temiz` + `imza=yok` kaydı şemadan geçip kapıyı açıyordu, oysa rubrik
+   temiz için `klise=yok` **ve** `imza≠yok` şartı koyuyor. Form doluydu, hüküm kendisiyle
+   çelişikti. Kayıt artık rubrikle tutarlılık denetiminden geçer (iki yönde), ve ayırt
+   kaydında `hukum=olcemedi` kabul edilmez: ayırt-edicilik bir **yargıdır**, ölçüm değil.
+5. 🔴 **Kararsız yargı kapıyı AÇMAZ.** `emin-degilim` olan her kayıt da kapıyı açıyordu;
+   rubrik onu *"meşrudur ama bir sonraki turda çözülmeli, kalıcı sığınak değildir"* diye
+   tanımlıyor — kapıyı açarsa tam da kalıcı sığınağa dönüşür. Yazılabilir ve defterde
+   görünür, ama sonraki sayfayı açmaz; gerekçe rubriğin kendi cümlesiyle basılır.
+
+Bu iki madde rubriği GEVŞETMEDİ, **kodu rubriğe hizaladı** — rubrik tek kaynaktır.
+
+Ölçüm: dört suit **228 kapı** yeşil (havuz 95 · prompt-yap 43 · yoğunluk 41 · yargı 49).
 Önce/sonra çifti ve dördünün hepsi kanıt manifestinde kayıtlı; toplam elle yazılmıyor,
 koşumların çıktısından toplanıyor (bağımsız gözün tur-1 bulgusu: 214 yazmıştım, 217'ydi).
 Ayrıca `havuz.py` her koşuda `utcnow()` için DeprecationWarning basıyordu ve bu uyarı

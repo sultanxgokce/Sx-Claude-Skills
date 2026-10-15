@@ -1,7 +1,7 @@
 {
   "is": "ayirt-kapisi-tazele",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T16:04:26+03:00",
+  "guncelleme": "2026-10-15T16:07:58+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -109,7 +109,22 @@
       "renk": "yesil",
       "zaman": "2026-10-15T16:04:26+03:00",
       "sure_sn": 4.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "SONRA-havuz-95-kapi-rubrik-tutarliligi-ve-kararsiz-yargi",
+      "asama": "sonra",
+      "dosya": "olcum-SONRA-havuz-95-kapi-rubrik-tutarliligi-ve-kararsiz-yargi-sonra.txt",
+      "sha256": "7ef1766cc6db25e6b3c08929da342e4c3dcdcda7b214b04d9ed16c4573bbb988",
+      "komut": [
+        "bash",
+        "ui-tasarim-akisi/arac/havuz.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T16:07:58+03:00",
+      "sure_sn": 4.2
     }
   ],
-  "imza": "d137c4fe638134b8c655b5b8834983eb83f83b986d46a3434e8aa8864054c746"
+  "imza": "b1aa516dd4366ec4cd94ff41c7d3d2f13d21a8a774c787e729d404486fa06b0d"
 }
