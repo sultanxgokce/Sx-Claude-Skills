@@ -13,13 +13,13 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["ne", "kanit", "konum", "agirlik"],
+        "required": ["ne", "kanit", "konum", "agirlik", "kutu_disi_yuzey"],
         "properties": {
           "ne": { "type": "string" },
           "kanit": { "type": "string", "description": "Bulgunun kanıtı: satır, kare, ölçüm — 'bulgu da kanıt ister'" },
           "konum": { "type": "string", "description": "dosya:satır ya da kanıt kaydı etiketi" },
           "agirlik": { "type": "string", "enum": ["ciddi", "uygulama", "rotus", "kutu-disi"], "description": "kutu-disi = bulgu GERCEK olabilir ama bu konteynerde OLCULEMEZ/DUZELTILEMEZ (Sultan'in Mac'i · canli yetki · dis hesap · fiziksel cihaz). Ayri siniftir: kod puanini DUSURMEZ ve tavan turu YAKMAZ." },
-          "kutu_disi_yuzey": { "type": "string", "description": "YALNIZ agirlik=kutu-disi iken: bu bulgunun olculebilmesi icin HANGI yuzey gerekiyor (ornek: 'Sultan'in Mac'i', 'canli site + yetki', 'saglayici panosu'). Yuzey yazilmazsa bulgu kutu-disi sayilmaz." }
+          "kutu_disi_yuzey": { "type": ["string", "null"], "description": "YALNIZ agirlik=kutu-disi iken: bu bulgunun olculebilmesi icin HANGI yuzey gerekiyor (ornek: 'Sultan'in Mac'i', 'canli site + yetki', 'saglayici panosu'). Yuzey yazilmazsa bulgu kutu-disi sayilmaz." }
         }
       }
     },
