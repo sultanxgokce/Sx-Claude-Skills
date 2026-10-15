@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "x1-dar-ekran-muafiyeti",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T15:42:35+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 72135,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "X1 kıyası genişlik bantlarına taşınmış; dar bant muafiyeti, zorunlu genişlik beyanı ve hatalı yapılandırmada kapalı kalma davranışı ölçülmüş. Lakin tek kareli bant gezinmesiz olsa bile muaf ilan edilmeden RC=0 alabiliyor; üretimden önce bu muafiyet deliği kapanmalı.",
+    "bulgular": [
+      {
+        "ne": "Muaf olmayan tek kareli bantta Gezinme yokluğu ihlal sayılmıyor; kod yalnız kapsam uyarısı ekleyip RC=0 dönebiliyor. Böylece kareleri tek üyeli bantlara ayıran profil, açık bir muafiyet tanımlamadan X1'i fiilen devre dışı bırakabilir.",
+        "kanit": "X1 dalında muaf olmayan bant yalnız `len(uyeler) > 1` iken denetleniyor; `elif bantli` tek kare için sadece `kapsama.append(...)` yapıyor. Son dönüş kodu yalnız `kirmizi` sayısına bağlı (`return 1 if kirmizi else 0`); kapsam uyarısı sonucu başarısız yapmıyor.",
+        "konum": "ui-tasarim-akisi/arac/yogunluk-denetle.py: X1 bant döngüsündeki `elif len(uyeler) > 1` / `elif bantli` dalları ve `return 1 if kirmizi else 0`",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Belge ve sürüm notundaki sınav sayısı gerçek ölçümle uyuşmuyor: metin 50 kapı derken araç imzalı koşu 51 test geçtiğini gösteriyor.",
+        "kanit": "SKILL.md ekinde `arac/yogunluk-denetle.test.sh 50 kapı` ve `Sınav 41 → 50 kapı` yazıyor; araç imzalı `SINAV-51-kapi-41-eski-dokunulmadan-gecti-10-yeni` ölçümü `TOPLAM: 51 geçti · 0 kaldı` bildiriyor.",
+        "konum": "ui-tasarim-akisi/SKILL.md genişlik bantları kanıt paragrafı ve 0.6.0 sürüm notu; kanıt kaydı `SINAV-51-kapi-41-eski-dokunulmadan-gecti-10-yeni`",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Aynı fikstürün önce RC=1, sonra RC=0 ölçüm çifti talep edilen 390 px muafiyetini doğrudan gösteriyor; ayrıca RC=2 beyansız kare, karışık muaf bantta beklenen kırmızı ve 51/51 sınav kaydı var. Ancak ölçümler muaf olmayan tek kareli bantta Gezinme yokluğu senaryosunu kapsamıyor; mevcut yeşil kayıt bu deliği çürütmüyor."
+  }
+}

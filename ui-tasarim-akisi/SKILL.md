@@ -261,6 +261,13 @@ değişir.
 - **Muafiyet kıyası kaldırmaz, sınırını çizer.** Muaf bantta gezinmenin *olmaması* ihlal
   değildir; ama aynı bandın içinde **karışık** durum (kimi karede var, kimi karede yok)
   KIRMIZI'dır — muafiyet "olmayabilir" der, "kimi olur kimi olmaz" demez.
+- **Varlık ⟂ aynılık — iki ayrı soru, iki ayrı kanıt.** Gezinmenin **var olması** MUTLAK
+  ölçülür (kıyas ortağı gerektirmez); **aynı olması** GÖRELİ ölçülür (en az iki kare ister).
+  Bu ayrım bağımsız gözün tur-1 bulgusudur: ikisi tek kapının arkasındayken muafiyet ilan
+  ETMEDEN kareleri tek üyeli bantlara bölen bir profil X1'i fiilen kapatabiliyordu.
+  🔴 Mutlak kontrol yalnız **bant ilan edilmiş** kümede koşar; bantsız tek-ekranlı küme bu
+  kuralın kapsamı DEĞİL (ölçüldü: beş fikstür kümesi tek kareli ve gezinmesiz, bugün bilerek
+  yeşil). O boşluk ayrı bir kural sorusu olarak **açıkta duruyor**, sessizce taşınmadı.
 - **Muafiyet kendini ilan eder.** Uygulandığı her koşuda kapı *"X1 bandı 'dar' muaf — N
   karede gezinme aranmadı; 'temiz' bu boyutu KAPSAMIYOR"* satırını basar. Tek kareli bant
   da aynı şekilde yazılır: kıyas iki kare ister, tek kare "temiz" değil **kıyassızdır**.
@@ -269,7 +276,7 @@ değişir.
 - **Alan isteğe bağlıdır:** vermeyen profiller bugünkü davranışı birebir sürdürür (tek bant).
   Geriye uyum ölçüldü — eski 41 kapının 41'i dokunulmadan geçiyor.
 
-Kanıt: `arac/yogunluk-denetle.test.sh` 50 kapı (41 eski + 9 bant). Mutant: aynı bayt kümeye
+Kanıt: `arac/yogunluk-denetle.test.sh` 52 kapı (41 eski + 11 yeni). Mutant: aynı bayt kümeye
 bantsız profil verilince 390 px kare **yine** düşüyor — muafiyetin fiilen ölçüldüğünün kanıtı
 (`fikstur/bant/` iki profil, tek kare kümesi).
 
@@ -281,7 +288,7 @@ harita geçerli ama kümede hiç tutmuyorsa **uyarı** basılır — "temiz" o b
 **Ölçmediğini söyler:** tek-ekran anlamı (manşetin öznesi, görselin bilgi değeri) bu kapının
 konusu **değildir** ve çıktı bunu her koşuda yazar. Oraya "temiz" demez, hiç bakmaz.
 Kalibrasyon: reddedilmiş bir turun 4 ekranının 4'ünü düşürdü, onaylanmış turun 5 ekranına
-dokunmadı. Kapının kendi sınavı: `bash arac/yogunluk-denetle.test.sh` (50 kapı, negatif
+dokunmadı. Kapının kendi sınavı: `bash arac/yogunluk-denetle.test.sh` (52 kapı, negatif
 fikstürlü — fikstürsüz kapı devreye alınmaz).
 
 **Çift-yönlü fikstür — hattın giriş şartı.** Her ölçüm hattı hem **KIRMIZI** (yanlışı yakalar)
@@ -606,7 +613,13 @@ değil. Ayrıntı ve gerekçe: yukarıdaki *"Genişlik bantları"* bölümü.
 🔴 Reddedilen yol kayda geçer: "dar kareleri ölçüm dışı bırak" **seçilmedi** — ölçülmemiş kare
 'temiz' kareye dönüşür (fail-open). Seçilen yol kırmızıyı taşımaktır.
 
-Sınav 41 → **50 kapı**. Geriye uyum: bant ilan etmeyen profiller için davranış birebir aynı
+Bağımsız göz (tur 1 · Codex) iki bulgu çıkardı, ikisi de kabul edildi ve düzeltildi:
+(a) muafiyetsiz **tek kareli bantta** gezinme yokluğu yalnız not düşüp rc=0 dönüyordu —
+yani kendi yasakladığım *ölçülmedi = temiz* eşitliği kapıya sızmıştı; varlık/aynılık ayrımıyla
+kapandı ve regresyon fikstürü yazıldı. (b) belgedeki sınav sayısı ölçümle tutmuyordu
+(50 yazılıydı, araç 51 sayıyordu) — sayı artık metne elle yazılmıyor, koşumdan okunuyor.
+
+Sınav 41 → **52 kapı**. Geriye uyum: bant ilan etmeyen profiller için davranış birebir aynı
 (41 eski kapı dokunulmadan geçti). Yeni kural kodu YOK — bant farkındalığı X1'in kendi kapsamı.
 
 ✅ **Sürüm boşluğu KAPANDI (bu işin yan bulgusuydu).** Bu iş başlarken kurulu beceri kopyası

@@ -1,7 +1,7 @@
 {
   "is": "x1-dar-ekran-muafiyeti",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T15:40:46+03:00",
+  "guncelleme": "2026-10-15T15:44:41+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -89,7 +89,40 @@
       "renk": "kirmizi",
       "zaman": "2026-10-15T15:40:46+03:00",
       "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "TUR2-BULGU1-KAPANDI-muafiyetsiz-tek-kareli-bantta-yokluk-MUTLAK-BEKLENEN-KIRMIZI",
+      "asama": "sonra",
+      "dosya": "olcum-TUR2-BULGU1-KAPANDI-muafiyetsiz-tek-kareli-bantta-yokluk-MUTLAK-BEKLENEN-KIRMIZI-sonra.txt",
+      "sha256": "107ffffbf6085a6a0610b5b592326e0f2ce80eddfd8a00acea3fafd009251b3e",
+      "komut": [
+        "python3",
+        "ui-tasarim-akisi/arac/yogunluk-denetle.py",
+        "ui-tasarim-akisi/arac/fikstur/bant-tek-kare",
+        "--profil",
+        "ui-tasarim-akisi/arac/fikstur/bant-tek-kare/bant-profili.json"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T15:44:39+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "TUR2-SINAV-52-kapi-41-eski-11-yeni",
+      "asama": "sonra",
+      "dosya": "olcum-TUR2-SINAV-52-kapi-41-eski-11-yeni-sonra.txt",
+      "sha256": "7fe8235e451dd8b847b44cb23710366796bf96e246cd9adfb9203823409fbfd1",
+      "komut": [
+        "bash",
+        "ui-tasarim-akisi/arac/yogunluk-denetle.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T15:44:41+03:00",
+      "sure_sn": 1.3
     }
   ],
-  "imza": "888f67b177d417fecb15a69dd84a29e29022aacdff259eb681b8bd5ac559d27f"
+  "imza": "be34ed671284106d2d9be339011433764a44139cd6c95d85a400ff39ac19a5dd"
 }

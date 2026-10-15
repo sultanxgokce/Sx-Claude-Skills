@@ -523,24 +523,45 @@ def main(argv):
                         s["ihlaller"].append("X1 gezinme iskeleti bant '%s' içinde "
                                              "çoğunluktan sapıyor: %s ≠ taban %s"
                                              % (bant, s["gezinme"], taban))
-        elif len(uyeler) > 1:
-            sayim = {}
-            for _, s in uyeler:
-                sayim[s["gezinme"]] = sayim.get(s["gezinme"], 0) + 1
-            taban = max(sayim, key=sayim.get)
-            for ad, s in uyeler:
-                if s["gezinme"] is None:
-                    s["ihlaller"].append("X1 gezinme: %s bileşeni YOK" % rol(P, "gezinme"))
-                elif sayim[taban] == 1:
-                    s["notlar"].append("X1: her ekranın gezinmesi FARKLI — küme tutarsız")
-                elif s["gezinme"] != taban:
-                    s["ihlaller"].append("X1 gezinme iskeleti çoğunluktan sapıyor: %s ≠ taban %s"
-                                         % (s["gezinme"], taban))
-        elif bantli:
-            # Tek kareli bant: kıyas YAPILAMADI. Bu 'temiz' değil, 'kıyassız'dır —
-            # yazılmazsa bir kutu kareleri banda bölerek X1'i sessizce kapatabilir.
-            kapsama.append("X1 bandı '%s' tek kareli — iskelet KIYASLANAMADI (kıyas en az "
-                           "iki kare ister); 'temiz' bu boyutu KAPSAMIYOR" % bant)
+        else:
+            # 🔴 VARLIK ⟂ AYNILIK (bağımsız göz bulgusu, tur 1 · Codex): bu iki soru AYRI
+            #    ölçülür ve ayrı kanıt ister.
+            #      · gezinmenin VAR OLMASI → MUTLAK: kıyas ortağı gerektirmez.
+            #      · gezinmenin AYNI olması → GÖRELİ: en az iki kare ister.
+            #    Eski hâlde ikisi tek `len(uyeler) > 1` kapısının arkasındaydı; tek kareli
+            #    bantta yokluk yalnız NOT olup rc=0 dönüyordu → kareleri tek üyeli bantlara
+            #    bölen bir profil, muafiyet ilan ETMEDEN X1'i fiilen kapatabiliyordu.
+            #    Kendi yasakladığım eşitliğin (ölçülmedi = temiz) kapıya sızmış hâliydi.
+            # 🔴 Mutlak kontrol YALNIZ bant ilan edilmiş kümede koşar: bantsız tek-ekranlı
+            #    küme bu işin kapsamı DEĞİL (ölçüldü: beş fikstür kümesi tek kareli ve
+            #    gezinmesiz, bugün bilerek yeşil). O boşluk ayrı bir kural sorusudur ve
+            #    kapsam dışı olduğu burada yazılıdır — sessizce taşınmadı.
+            if bantli:
+                for ad, s in uyeler:
+                    if s["gezinme"] is None:
+                        s["ihlaller"].append("X1 gezinme: %s bileşeni YOK (bant '%s' muaf "
+                                             "DEĞİL)" % (rol(P, "gezinme"), bant))
+            var = [(a, s) for a, s in uyeler if s["gezinme"] is not None]
+            if len(uyeler) > 1:
+                sayim = {}
+                for _, s in uyeler:
+                    sayim[s["gezinme"]] = sayim.get(s["gezinme"], 0) + 1
+                taban = max(sayim, key=sayim.get)
+                for ad, s in uyeler:
+                    if s["gezinme"] is None:
+                        if not bantli:
+                            s["ihlaller"].append("X1 gezinme: %s bileşeni YOK"
+                                                 % rol(P, "gezinme"))
+                    elif sayim[taban] == 1:
+                        s["notlar"].append("X1: her ekranın gezinmesi FARKLI — küme tutarsız")
+                    elif s["gezinme"] != taban:
+                        s["ihlaller"].append("X1 gezinme iskeleti çoğunluktan sapıyor: "
+                                             "%s ≠ taban %s" % (s["gezinme"], taban))
+            elif bantli and var:
+                # Tek kareli bant: gezinme VAR ama AYNILIK kıyaslanamadı — 'temiz' değil
+                # 'kıyassız'. Yazılmazsa bant bölmesi kıyası sessizce kapatır.
+                kapsama.append("X1 bandı '%s' tek kareli — iskelet KIYASLANAMADI (kıyas en az "
+                               "iki kare ister); 'temiz' bu boyutu KAPSAMIYOR" % bant)
 
     tum = {}
     for s in sonuc.values():

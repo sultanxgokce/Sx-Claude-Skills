@@ -1,0 +1,19 @@
+{
+  "is": "x1-dar-ekran-muafiyeti",
+  "cumle": "ui-tasarim-akisi yogunluk kapisi X1 (gezinme iskeleti) dar ekranlarda muafiyet tanimiyor: '720px alti tam ekran' kurali olan uronde 390px kareler zorunlu kirmizi. Kural+sayi NAKKAS'ta.",
+  "istedi": "SERDAR",
+  "aldi": "NAKKAŞ",
+  "zaman": "2026-10-15T15:27:24+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

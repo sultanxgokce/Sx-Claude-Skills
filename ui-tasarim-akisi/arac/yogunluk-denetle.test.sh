@@ -279,6 +279,17 @@ else
   kaldi "bant-ici-sapma" "rc=$rc — bant içinde iskelet sapması yakalanmadı"
 fi
 
+# Bağımsız göz bulgusu (tur 1): MUAFİYETSİZ tek kareli bantta gezinme yokluğu MUTLAK ihlal.
+# Niçin kapı: aksi hâlde kareleri tek üyeli bantlara bölen profil, muafiyet İLAN ETMEDEN
+# X1'i fiilen kapatırdı — "ölçülmedi = temiz" eşitliğinin kapıya sızmış hâli.
+cikti="$(python3 "$KAPI" "$FIK/bant-tek-kare" --profil "$FIK/bant-tek-kare/bant-profili.json" 2>&1)"
+rc=$?
+if [ "$rc" = "1" ] && printf '%s' "$cikti" | grep -q "muaf DEĞİL"; then
+  gecti "bant-tek-kare-mutlak" "muafiyetsiz tek kareli bantta yokluk KIRMIZI (varlık ⟂ aynılık)"
+else
+  kaldi "bant-tek-kare-mutlak" "rc=$rc — bant bölmesiyle X1 sessizce kapatılabiliyor"
+fi
+
 for p in bant-yabanci-muaf bant-cift-ust; do
   python3 "$KAPI" "$FIK/bant" --profil "$FIK/bant/$p-profili.json" >/dev/null 2>&1; rc=$?
   [ "$rc" = "2" ] && gecti "profil-$p-rc2" "geçersiz bant yapılandırması rc=2" \
