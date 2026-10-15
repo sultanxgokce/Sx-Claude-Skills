@@ -15,5 +15,14 @@
   "kanit_nerede": "bileyi.test.sh yeni kapılar: iki kaynak birleşir · biri okunamazsa dürüst kısmi · hiçbiri yoksa rc=3",
   "oda": "",
   "durum": "acik",
-  "gecmis": []
+  "gecmis": [],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "MUMEYYIZ",
+      "oturum": "mumeyyiz-oda-b5/5ae0f123",
+      "gerekce": "SERDAR devam kararı (oturum session_01Ge4BawKcUrcm1pdV8WANyF, 15:46 TR, aile-brief + kanal mektubu): bulgu 2→1→0, doğru şey E; tur 3'teki 4/5'in tek sebebi istemin 135.913 baytta kırpılıp kod farkının denetçiye hiç ulaşmaması. Tur 4 kanıt dizini hariç kod farkıyla koşulacak. Karar SERDAR'ındır; kart sahibi adı araç şartı.",
+      "zaman": "2026-10-15T15:47:16+03:00"
+    }
+  ]
 }

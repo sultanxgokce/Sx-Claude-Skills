@@ -1,0 +1,25 @@
+{
+  "tur": 3,
+  "is": "bileyi-kutu-defteri",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T15:41:47+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": true,
+    "istem_bayt": 135913,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Merkez ile kutunun kendi defterinin birlikte okunduğu, kapsamın kaynak kaynak ve okunan/toplam biçiminde yazıldığı; kısmi erişim ile hiçbir kaynağın okunamaması yollarının da sınandığı görülüyor. Lakin istem 110000 baytta kırpıldığı ve üretim kodu değişikliği görünmediği için kodun kendisi bağımsız gözle bütünüyle denetlenemedi; bu eksikle üretime hazır 5 verilemez.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; kırmızı önce/yeşil sonra ölçüm çifti gerçekçi merkez ve kutu defterleriyle davranış farkını gösteriyor. Son turda 91/91 kapı geçiyor; V kapıları iki kaynağın birleşmesini, kaynak izlerini, dürüst kısmi okumayı ve hiçbir defter okunamazsa rc=3 sonucunu, W kapıları kimlik/parmak izi çakışmalarını ve doğru okunan/toplam sayımını ölçüyor. Mutasyon kayıtlarının rc=1 olması sınavın hedef davranışlara duyarlı olduğuna ek kanıt sağlıyor. Sarı rc=3 önce kaydı başarı kanıtı sayılmadı. Ancak diff kırpıldığı için üretim kodunun son hali, kapsam kayması ve satır düzeyi uygulama kusurları doğrudan doğrulanamıyor."
+  }
+}

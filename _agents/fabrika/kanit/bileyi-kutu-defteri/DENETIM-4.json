@@ -1,0 +1,25 @@
+{
+  "tur": 4,
+  "is": "bileyi-kutu-defteri",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T15:47:51+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 63359,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Bileyi artık merkez havuzuyla kutunun kendi bulgu defterini birlikte okuyor; her kaynağın yolunu ve okunma durumunu ayrı yazıyor, kısmi erişimde dürüstçe sürüyor ve hiçbir kaynak okunamazsa rc=3 veriyor. Üretim farkı, gerçekçi önce/sonra ölçümü, hedefli V/W kapıları ve davranışın geri alınmasına duyarlı mutasyon kayıtları yan yana geldiğinde üretime engel doğrulanmış bir kusur kalmıyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sha'ları sağlam. Önce ölçümünde eski sürüm yalnız merkezdeki 3 kaydı görüp kutu tekrarını kaçırırken, sonra ölçümünde merkez 3 + kutu 4 kayıt birleşiyor, 2/2 kaynak OKUNDU bilgisi ve kutuya özgü tekrar açıkça çıkıyor; bu geçerli bir ölçüm çiftidir. Kapı koşuları rc=0; V1-V10 iki kaynak, ayrı izler, kısmi erişim, hiçbir kaynak yokken rc=3, ayna tekilleştirmesi ve açık yol davranışını; W1-W8 kimlik çakışması, kayıpsız gövde parmak izi ve okunan/toplam kapsam sayımını sınar. Mutasyon koşularının beklenen rc=1 sonucu sınavın hedef davranışa duyarlı olduğunu destekler. Sarı rc=3 önce kaydı başarı kanıtı sayılmamış, yalnız eski körlüğün ölçülemediği durum olarak değerlendirilmiştir."
+  }
+}
