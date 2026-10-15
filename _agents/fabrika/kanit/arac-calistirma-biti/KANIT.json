@@ -1,7 +1,7 @@
 {
   "is": "arac-calistirma-biti",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T13:26:03+03:00",
+  "guncelleme": "2026-10-15T13:26:41+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -17,7 +17,22 @@
       "renk": "yesil",
       "zaman": "2026-10-15T13:26:03+03:00",
       "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "MUTASYON-KANITI-beklenen-kirmizi-arac-dosyasinin-biti-dusuruldu",
+      "asama": "sonra",
+      "dosya": "olcum-MUTASYON-KANITI-beklenen-kirmizi-arac-dosyasinin-biti-dusuruldu-sonra.txt",
+      "sha256": "6b1d2b81a34d78b76e784968a47e436043b8bd927c2d3dc9480d660b69d6ad26",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut-arac-1792059996/mut.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T13:26:41+03:00",
+      "sure_sn": 0.0
     }
   ],
-  "imza": "2404ea8212d76d148c69e6289566251aff54453965eace0396a500b8e07c23e3"
+  "imza": "8e71ac6247d5af8164fb90e278ad1eb8d3fc0e8736371675a4b680578464b64c"
 }
