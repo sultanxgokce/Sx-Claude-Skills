@@ -1,0 +1,163 @@
+$ bash yazilim-fabrikasi/scripts/denetci.test.sh
+# rc=0 sure=238.3s zaman=2026-10-15T08:26:27+03:00
+--- stdout ---
+════ T1 · kanıt yok → rc=2, denetim dosyası yok ════
+  ✓ kanıtsız adım 4 açılmadı (rc=2)
+  ✓ DENETIM yazılmadı
+════ T2 · kanıt var, 3/H → rc=1, tur 1 ════
+  ✓ rc=1 (adım 2'ye dön)
+  ✓ DENETIM-1.json araç yazdı, tur=1, alanlar doğru
+════ T3 · 5/E → rc=0 GEÇTİ, tur 2 ════
+  ✓ rc=0
+  ✓ GEÇTİ ve tur 2 yazılı
+════ T4 · 5 ama H → geçmez (doğru şey sütunu puanı ezer) ════
+  ✓ 5/H → rc=1
+════ T5 · yazan=denetleyen reddedilir (K1) ════
+  ✓ aynı model → rc=1
+  ✓ denetim koşulmadı
+════ T6 · tavan: üç düşük tur ilerlemeden → 3. turda tıkandı (rc=4), 4. çağrı reddedilir ════
+  ✓ tur1 rc=1
+  ✓ tur2 rc=1
+  ✓ tur3 ilerlemeyince rc=4
+  ✓ tıkandı + üç yol raporu
+  ✓ 4. çağrı koşulmadı (rc=4)
+  ✓ DENETIM-4 yazılmadı
+════ T7 · ilerleyen iş +1 tur alır; 4 mutlak ════
+  ✓ tur3 ilerliyor → rc=1 (tıkandı değil)
+  ✓ +1 tur payı yazılı
+  ✓ tur4 (pay) 5/E → GEÇTİ
+  ✓ payın gerekçesi yazılı
+  ✓ tur5 mutlak tavan → rc=4
+════ T7b · 🚪 SULTAN KAPISI: karar KARTTAN okunur, serbest metinle açılmaz ════
+  ✓ puan düşünce tur3 tıkandı (rc=4)
+  ✓ 🔴 kartta karar yokken bayrak kapıyı AÇMIYOR (rc=1)
+  ✓ sebebi yazılı
+  ✓ ne yapılacağı komutla yazılı
+  ✓ denetim KOŞULMADI
+  ✓ deftere de yazılmadı
+  ✓ --beyan eksikken kart kaydı REDDEDİLDİ
+  ✓ --oturum eksikken REDDEDİLDİ
+  ✓ 🔴 --gerekce eksikken REDDEDİLDİ
+  ✓ 20 karakterden kısa gerekçe REDDEDİLDİ
+  ✓ tam D1 kaydı (gerekçeli) karta işlendi
+  ✓ karttaki kararla tur4 koştu ve GEÇTİ
+  ✓ tavanın açıldığını SÖYLÜYOR (sessiz değil)
+  ✓ oturum referansı çıktıda görünüyor
+  ✓ GEREKÇE de çıktıda görünüyor (niçin bir tur daha)
+════ T7c · 🚪 REİS KAPISI: sınıfsız işte sahip kararı KARTTAN; sınıflı kartta KAPALI ════
+  ✓ sınıflı iş tur3 tıkandı (rc=4)
+  ✓ 🔴 SINIFLI karta reis kararı YAZILAMADI (merci Sultan)
+  ✓ kartta reis_kararlari alanı oluşmadı
+  ✓ 🔴 sınıflı karta ELLE yazılmış reis kararı bile kapıyı AÇMIYOR (rc=1)
+  ✓ sebebi yazılı: kart sınıflı, merci Sultan
+  ✓ doğru yol gösterildi (sultan-dedi)
+  ✓ denetim KOŞULMADI
+  ✓ deftere de yazılmadı
+  ✓ sınıfsız iş tur3 tıkandı (rc=4)
+  ✓ tıkandı raporu sınıfsız iş için reis yolunu da söylüyor
+  ✓ 🔴 kartta reis kararı yokken bayrak kapıyı AÇMIYOR (rc=1)
+  ✓ ne yapılacağı komutla yazılı
+════ TW · kart TEK kaynak (15 Eki): iş alanından (worktree) koşan denetçi kartı BİRİNCİL depodan okur ════
+  ✓ iş alanı (worktree) açıldı
+  ✓ reis kararı BİRİNCİL karta işlendi (kart.sh)
+  ✓ iş alanındaki kopya BAYAT (reis kararı yok) — eski araç bunu okur, kapıyı kapalı sanırdı
+  ✓ 🔴 iş alanından koşan --reis-devam kapıyı BİRİNCİL karttan AÇTI (elle kopyalama yok, rc=0)
+  ✓ denetçi istemindeki iş kartı da BİRİNCİL kart (reis kararı görünüyor)
+  ✓ kartın anlık kopyası kanıt dizinine düştü (KART.json) — PR'a kart bununla gider, kartlar/ kopyasıyla değil
+  ✓ KART.json kanıt manifestini BOZMAZ (sonraki koşum kanıt kapısında düşmüyor)
+  ✓ iş alanında kart kopyası HİÇ yokken de birincil kart okunur (kapı 'karar YOK' demez)
+  ✓ 🔴 birincilde kart YOKKEN alandaki kopya OKUNMAZ: rc=3 + 'OKUNMAZ' (eski geri-dönüş kapandı)
+  ✓ denetçiye istem HİÇ gitmedi, kayıt yazılmadı (bayat kartla puanlama yok)
+  ✓ 🔴 tavanda --reis-devam + bayat kopya: rc=3 'OKUNMAZ' (kapı reddi 'karar yok' DEĞİL — hata bastırılmıyor)
+  ✓ aynı durumda --sultan-devam da rc=3 'OKUNMAZ'
+  ✓ 🔴 KART.json yazılamayınca rc=3 + 'YAZILAMADI', kayıt yok (sahte başarı yok)
+  ✓ dizin yazılabilir olunca KART.json düşer ve tur 1 geçer (rc=0)
+  ✓ 🔴 --kart dosyası yoksa rc=3 + 'okunamadı' (kartsız sessiz puanlama kapandı)
+  ✓ --reis eksikken REDDEDİLDİ
+  ✓ --oturum eksikken REDDEDİLDİ
+  ✓ kısa gerekçe REDDEDİLDİ
+  ✓ 🔴 kartın sahibi olmayan ad REDDEDİLDİ (aldi MUAVIN)
+  ✓ 🔴 küme dışı karar REDDEDİLDİ
+  ✓ '|' içeren alan REDDEDİLDİ (defter ayracı)
+  ✓ tam reis kaydı karta işlendi
+  ✓ 🔴 kayıt reis_kararlari'nda; sultan_kararlari'na HİÇ dokunulmadı (A06)
+  ✓ karttaki reis kararıyla tur4 koştu ve GEÇTİ
+  ✓ açılışın REİS kararıyla olduğu yazılı (Sultan kararı DEĞİL)
+  ✓ oturum referansı çıktıda
+  ✓ defter satırı TAVAN-ACILDI-REIS (Sultan satırından ayırt edilir)
+  ✓ reis kararı MUTLAK tavanı (4) AÇMIYOR → tur5 rc=4
+  ✓ tavan defteri GERÇEKTEN yazıldı
+  ✓ Sultan'ın kırpık sözü defterde
+  ✓ beyan eden ajan defterde (kim aktardı)
+  ✓ gerekçe defterde (Sultan gün sonunda niçin'i görür)
+  ✓ 🔴 deftere yazılamıyorsa kapı AÇILMIYOR
+  ✓ sebebi yazılı
+  ✓ 🔴 yazma başarılı ama satır kaybolduysa kapı AÇILMIYOR
+  ✓ kaybolduğunu söylüyor
+  ✓ 🔴 elle yazılmış GEREKÇESİZ kart kapıyı AÇMIYOR
+  ✓ sebebi yazılı
+  ✓ elle yazılmış KISA gerekçe de AÇMIYOR
+  ✓ 🔴 '|' içeren alan kartta REDDEDİLDİ
+  ✓ satır sonu içeren alan REDDEDİLDİ
+  ✓ elle yazılmış kirli kartla kapı açıldı (gerekçe tam)
+  ✓ 🔴 defterde damgasız (enjekte) satır YOK
+  ✓ enjekte edilen ayraçlar temizlenmiş
+  ✓ 🔴 5. tur: Sultan kapısı MUTLAK tavanı açmıyor (rc=4)
+  ✓ mutlak olduğunu söylüyor
+════ T8 · geçersiz çıktı → rc=3 ölçemedi, ham saklanır ════
+  ✓ JSON değil → rc=3
+  ✓ ham çıktı saklandı
+  ✓ puan 9 → rc=3 (şema dışı)
+════ T9 · istem: kart + manifest + diff + rubrik içeriyor ════
+  ✓ kart · manifest · diff · rubrik · ölçüm çıktısı istemde
+════ T9b · Türkçe metin + KESME İŞARETİ çıktıyı kırmıyor (23 Eyl canlı hatası) ════
+  ✓ rc=1 (3/H) — kesme işaretli metinde de karar verildi
+  ✓ puan satırı basıldı
+  ✓ özet kesme işaretiyle birlikte basıldı
+  ✓ bulgu satırı basıldı
+  ✓ kayıt dosyası doğru yazıldı
+════ T9c · KIRPMA KAYDI: kırpılan tur DENETIM json'da kirpildi.oldu=true + bayt + eşik; kırpılmayan tur false (NÂZIR/RASATÇI 8 Eki) ════
+  ✓ kırpılmayan tur: kirpildi.oldu=false, bayt ve eşik yazılı
+  ✓ küçük istemde kırpma uyarısı YOK
+  ✓ 🔴 kırpılan tur: kirpildi.oldu=true, gerçek bayt ve eşik KALICI kayıtta
+  ✓ denetçiye kırpıldığı söylendi (istem sonunda uyarı)
+  ✓ ekranda da yazıldı
+  ✓ istem gerçekten eşiğe kırpıldı
+════ T10 · bozuk manifest → rc=2 ════
+  ✓ elle boyanmış manifestle denetim açılmaz
+════ Y · YEDEK GÖZ (Sultan Y0006): auto kipinde codex yoksa/düşerse yazandan farklı yeni Claude oturumu ════
+  ✓ Y0 🔴 yazanın modeli hiçbir yüzeyden ÖLÇÜLEMEZSE yedek KOŞMAZ: rc=3, yeniden koşma satırı basılır, kayıt yazılmaz (K1 ölçülemeden yeşil yok)
+  ✓ Y0b bildirim yokken AYAR DOSYASINDAKİ model yazanın modeli sayılır (opus) → yedek sonnet, kaynak kayıtta; iş DURMAZ
+  ✓ Y0c oturum sürecinin komut satırındaki --model (sonnet) ayar dosyasını EZER → yedek haiku, kaynak=oturum-komutu
+  ✓ Y1 codex yokken auto kipi DURMAZ: yazan modeli bildirilince yedek claude puanlar (5/E → rc=0)
+  ✓ Y1b kayıtta yedek='codex yok' ve denetçi adında YEDEK GÖZ (codex puanı sanılmaz)
+  ✓ Y1c ekranda da söylenir (sessiz yedek yok)
+  ✓ Y6 🔴 yedek göz yazanla AYNI modelde koşmaz: farklı kademe (sonnet) + yeni oturum, kayda yazılı (K1 yeniden)
+  ✓ Y6b yedek kademesi DENETCI_YEDEK_MODEL ile seçilir
+  ✓ Y6c kayıtta yazan_model ve yedek_model ikisi de dolu (yedek koşumunda boş olamaz)
+  ✓ Y6d yazanla aynı yedek istenirse merdiven onu ATLAR (haiku→sonnet), aynı modelle koşmaz
+  ✓ Y7 yazan sonnet ise varsayılan yedek sonnet OLMAZ → merdivende haiku; ikisi de kayıtta
+  ✓ Y7b istenen yedek (haiku) yazanın modeline (claude-haiku-4-5) eşitse atlanır → sonnet (ad eşlemesi alt-dizgiyle)
+  ✓ Y7c --model doluyken DENETCI_YEDEK_MODEL devre dışı kalmaz (yedek tercihi önce gelir)
+  ✓ Y2 açık --denetci codex isteğinde codex yoksa eski sert davranış: rc=3
+  ✓ Y5 DENETCI_YEDEK=0 ile yedek kapalı: rc=3
+  ✓ Y3 codex iki denemede de düşerse (2 çağrı sayıldı) yedek claude devralır, rc=0
+  ✓ Y3b kayıtta yedek='codex düştü…'
+  ✓ Y4 codex bir kez düşüp toparlarsa yedek YOK: ikinci deneme codex (2 çağrı)
+  ✓ Y4b kayıtta yedek=null, denetçi codex (Y1b tautoloji değil)
+════ T11 · MUTASYON: Sultan kapısını bozunca sınav kırmızı veriyor mu ════
+  ✓ mutant 'ayrac-temizligini-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'gerekce-zorunlulugunu-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'karti-okumayi-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'defter-dogrulamasini-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'reis-sinif-citini-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'mutlak-tavani-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'yedek-gozu-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'kart-tek-kaynagi-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'kapi-kart-hatasini-bastirir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'bayat-kopya-geri-donusu' sınavı KIRMIZI yapıyor
+  ✓ mutant 'kart-json-hatasi-yutulur' sınavı KIRMIZI yapıyor
+  ✓ mutant 'kirpma-kaydini-kaldir' sınavı KIRMIZI yapıyor
+
+── SONUÇ: 140 geçti · 0 kaldı ──
+--- stderr ---

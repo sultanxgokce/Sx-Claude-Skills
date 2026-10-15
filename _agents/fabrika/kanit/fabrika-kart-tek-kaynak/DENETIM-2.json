@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "fabrika-kart-tek-kaynak",
+  "pr": "322",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T08:17:31+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 50575,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Hünkârım, önceki turun üç açığı kapatılmış: bayat iş-alanı kartı artık okunmuyor, KART.json yazma hatası denetimi durduruyor ve kapatma yalnız kayıtsız kart kopyalarını yok sayarken izlenen değişiklikleri koruyor. Talebin özü doğru yapılmış ve ölçülmüş; ancak reis/Sultan kapılarında kart bulma hatasının bastırılması bazı çağrılarda açık rc=3 yerine kapı reddi üretebildiğinden üretim öncesi bu uygulama pürüzü çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Reis ve Sultan kapıları `kart_yolu` hatasını ve hata iletisini bastırıyor; birincil kart yok, iş alanında bayat kopya var ve devam kapısı istenmişse bayat kart okunmasa da açık “ölçülemedi” rc=3 yerine karar yokmuş gibi kapı reddi oluşabilir.",
+        "kanit": "Her iki kapıda `KARTYOL=\"$(kart_yolu 2>/dev/null)\"; [ -n \"$KARTYOL\" ] || KARTYOL=\"/nonexistent\"` kullanılıyor. `kart_yolu` bu durumda `_hata ...; return 3` üretmesine rağmen komut ikamesinin dönüşü denetlenmiyor ve stderr `/dev/null`a atılıyor; sağlanan yeni rc=3 ölçümü ise `--reis-devam` veya `--sultan-devam` kullanmayan is-w2 çağrısını kapsıyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:100,142; denetci.test.sh TW is-w2 rc=3 vakası",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "SKILL açıklaması uygulamayla çelişerek birincil kart yoksa eski iş alanı kopyasına uyarıyla dönüleceğini söylüyor; kod ve iş kartı ise bu kopyanın hiç okunmamasını şart koşuyor.",
+        "kanit": "Eklenen SKILL maddesinde “iş alanındaki kopya yalnız birincilde kart yoksa (eski alanlar) ve uyarıyla” yazarken `kart_yolu` aynı durumda “BAYAT sayılır, OKUNMAZ” hatasıyla 3 dönüyor; iş kartı da açıkça “iş alanındaki bayat kopya okunmaz” diyor.",
+        "konum": "yazilim-fabrikasi/SKILL.md:94; yazilim-fabrikasi/scripts/denetci.sh:50-55",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. 137 kapılı denetçi ve 40 kapılı iş-alanı ölçümleri talebin ana yollarını kapsıyor; ayrıca bayat geri dönüşü, KART.json yazma hatası, kart kopyalamanın geri gelmesi ve kapatma süzgeci için mutasyon kanıtları var. Önce/sonra ölçüm çifti bulunmuyor; ikinci kapatma mutasyonu ortamdan kaynaklanan başka kırmızılarla kirli olsa da hedeflenen izlenen/eklenmiş kart koruması doğrudan yeşil ölçümde sınanmış."
+  }
+}

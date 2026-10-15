@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "fabrika-kart-tek-kaynak",
+  "pr": "322",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T07:48:53+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32217,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "H",
+    "ozet": "Hünkârım, denetçi olağan durumda birincil kartı okuyup kanıta KART.json bırakıyor; sınavlar da bu ana yolu ve mutasyonu yakaladığını gösteriyor. Lakin talebin “bayat kopya okunmaz” hükmüne rağmen eski iş alanı kopyasına dönüş var, üstelik kapatma kodu yalnız kayıtsızları değil kartlar/ altındaki izlenen değişiklikleri de yok sayıp silebildiğinden bu hâliyle önce bunlar çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Talep açıkça iş alanındaki bayat kartın okunmamasını isterken kart_yolu, birincil kart bulunamazsa iş alanındaki kopyayı okuyarak yanlış davranışı sürdürüyor; bu nedenle yapılan iş talebi tam karşılamıyor.",
+        "kanit": "İş kartı “iş alanındaki bayat kopya okunmaz” diyor; eklenen elif dalı ise `$DEPO/_agents/fabrika/kartlar/$IS.json` dosyasını seçip okuyor. TW ölçümü yalnız birincil kart mevcutken bayat kopyanın tercih edilmediğini sınıyor; birincil kart yokken bayat kopyanın reddedilmesini sınamıyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:52-55; denetci.test.sh TW",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "is-alani kapat, kartlar/ altındaki izlenen veya değiştirilmiş dosyaları da kir hesabından çıkarıp rm ile silebilir; kapsam yalnız kayıtsız eski kopyalar olmalıydı ve mevcut kod iş kaybı riski taşıyor.",
+        "kanit": "Her iki süzgeç yalnız yol metnini `grep ' _agents/fabrika/kartlar/'` ile eşliyor, porcelain durumunun `??` olmasını denetlemiyor; ardından eşleşen her yol `rm -f \"$yol/$f\"` ile kaldırılıyor. Sağlanan T6 ölçümü sadece `echo ... > .../kartlar/yeni-is.json` ile oluşturulan kayıtsız dosyayı kapsıyor, izlenen/değiştirilmiş kart vakasını kapsamıyor.",
+        "konum": "yazilim-fabrikasi/scripts/is-alani.sh:153-162; is-alani.test.sh T6",
+        "agirlik": "ciddi"
+      },
+      {
+        "ne": "KART.json anlık kopyasının yazılması başarısız olursa hata yutuluyor; buna rağmen denetim devam ederek PR kanıtında istenen kart kopyasının bulunmadığı sahte başarı üretebilir.",
+        "kanit": "Kopyalama `cp \"$KART\" \"$DZ/KART.json\" 2>/dev/null || true` biçiminde ve dönüş kodu denetlenmiyor. Yeşil TW ölçümü yalnız yazılabilir normal dizinde KART.json oluştuğunu doğruluyor; yazma hatası davranışı ölçülmemiş.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:198",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; dört kayıt da yeşil, sarı kayıt yok. Ana yol için 130 denetçi sınavı, 37 iş-alanı sınavı ve 34/3 beklenen kırmızı üreten mutasyon ölçümü güçlüdür; ancak önce/sonra ölçüm çifti yoktur ve kritik boşluklar olan “birincil kart yokken bayat kopyayı reddetme”, izlenen kart dosyasını koruma ve KART.json yazma hatası ölçülmemiştir."
+  }
+}

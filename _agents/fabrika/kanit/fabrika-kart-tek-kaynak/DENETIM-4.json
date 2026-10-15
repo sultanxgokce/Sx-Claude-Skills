@@ -1,0 +1,32 @@
+{
+  "tur": 4,
+  "is": "fabrika-kart-tek-kaynak",
+  "pr": "322",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T09:45:16+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 60741,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Hünkârım, önceki turdaki farklı içerikli `--kart` kaçışı kapatılmış; birincil kart, kapılar, KART.json anlık kopyası ve iş alanı kapatma davranışları sınavlarla kuvvetlendirilmiş. Lakin denetçi, birincil kartla aynı içeriğe sahip başka bir `--kart` yolunu kabul edip o dosyadan okumaya devam ediyor; “yalnız birincil depodan okur” hükmü hâlâ tam sağlanmadığından önce bunu çözünüz.",
+    "bulgular": [
+      {
+        "ne": "`--kart` için yolun birincil kart olması şart koşulmuyor; yalnız içerik `cmp -s` ile karşılaştırılıyor. Birincil kartın birebir kopyası olan başka bir dosya kabul edilir ve ardından iş kartı ile KART.json kaynağı olarak bu harici yol kullanılır; böylece tek kaynak kuralı yol düzeyinde hâlâ aşılabilir.",
+        "kanit": "Diffte `if [ -n \"$BIRINCIL\" ] && ! cmp -s \"$KART\" \"$BIRINCIL\"` yalnız içerik farklıysa rc=3 veriyor; sonrasında `cp \"$KART\" \"$DZ/KART.json\"` ve `cp \"$KART\" \"$TMP/kart.md\"` doğrudan verilen yolu okuyor. Eklenen sınav farklı içerikli `$T/kart.md` dosyasını reddetmeyi ve birincil yolun kendisini kabul etmeyi ölçüyor, aynı içerikli fakat farklı yoldaki kopyayı ölçmüyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:196 sonrası `--kart`/`cmp` ve kopyalama bloğu; yazilim-fabrikasi/scripts/denetci.test.sh: TW bölümündeki `kart-secenegi-tek-kaynagi-asamaz` vakaları",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. İş alanı için yeşil ölçüm ve mutasyon çıktıları davranışı görünür biçimde doğruluyor; son 143-kapı kaydı yeni `--kart` sınavını ve mutantı adında bildiriyor. Ancak sunulan 143-kapı çıktısı TW ayrıntılarına ulaşmadan ilk 60 satırda kesiliyor, önce/sonra ölçüm çifti yok ve aynı içerikli farklı `--kart` yolu için ölçüm bulunmuyor."
+  }
+}

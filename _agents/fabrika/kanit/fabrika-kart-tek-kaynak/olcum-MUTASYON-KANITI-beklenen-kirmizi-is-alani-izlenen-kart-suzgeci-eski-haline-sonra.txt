@@ -1,0 +1,16 @@
+$ bash -c echo '=== MUTASYON KANITI: kapat süzgeci eski hâline (yol metni eşlemesi) BOZULDU; aşağıdaki KIRMIZI BEKLENENDİR; rc=0 = sınav bozuk kodu YAKALADI. Gerçek ölçüm: is-alani-test-40-kapi ==='; bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut2-isalani-1792039903/is-alani.test.sh 2>&1 | grep -E '✗|SONUÇ'; [ ${PIPESTATUS[0]} = 1 ]
+# rc=0 sure=0.7s zaman=2026-10-15T07:51:44+03:00
+--- stdout ---
+=== MUTASYON KANITI: kapat süzgeci eski hâline (yol metni eşlemesi) BOZULDU; aşağıdaki KIRMIZI BEKLENENDİR; rc=0 = sınav bozuk kodu YAKALADI. Gerçek ölçüm: is-alani-test-40-kapi ===
+  ✗ kanca kuruldu
+  ✗ pre-commit dosyası var ve çalıştırılabilir
+  ✗ core.hooksPath=.githooks
+  ✗ ikinci kurulum: dokunmadı (idempotent)
+  ✗ commit ENGELLENDİ (rc=0)
+  ✗ ne yapılacağı komutla yazılı
+  ✗ commit gerçekten düşmedi
+  ✗ PAYLASILAN_COMMIT=1 ile geçilebiliyor
+  ✗ izlenen kart dosyası SİLİNMEDİ, değişiklik yerinde (iş kaybı yok)
+  ✗ indekse EKLENMİŞ (A) kart dosyası da iş: kapatmadı, silmedi
+── SONUÇ: 30 geçti · 10 kaldı ──
+--- stderr ---

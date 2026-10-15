@@ -42,6 +42,19 @@ done
 [ -n "$DEPO" ] || DEPO="$(git rev-parse --show-toplevel 2>/dev/null || echo "")"
 [ -n "$DEPO" ] || { _hata "depo kökü bulunamadı"; exit 3; }
 DZ="$DEPO/_agents/fabrika/kanit/$IS"
+# 🔴 KART TEK KAYNAK (15 Eki 2026, gorev_01M4Y4JX3NM4WFTQ9RG3YC1T2A): kart.sh kartı BİRİNCİL depoya yazar (git-common-dir); bu betik
+#    iş alanındaki (worktree) kopyayı okuyordu → reis-dedi/sultan-dedi kapısı kopyalanmadan açılmıyordu (bir günde 4 koşum boşa).
+#    Kart artık YALNIZ birincil depodan okunur; iş alanındaki kopya BAYAT sayılır ve HİÇ okunmaz (göz tur 1: "yoksa kopyayı oku"
+#    geri-dönüşü yanlış davranışı sürdürüyordu) — birincilde kart yokken alanda kopya varsa denetim rc=3 ile durur. Kanıt için kartın
+#    o anki hâli $DZ/KART.json'a kopyalanır — PR'a kart bununla gider, kartlar/ dizinindeki kopyayla değil; kopya yazılamazsa rc=3.
+KART_DEPO="${KART_DEPO:-$(c="$(git -C "$DEPO" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)" && [ -n "$c" ] && dirname "$c")}"
+[ -n "$KART_DEPO" ] || KART_DEPO="$DEPO"
+kart_yolu() {  # birincil depodaki kart; yoksa boş. İş alanındaki kopya OKUNMAZ: birincilde yokken alanda kopya varsa rc=3 (bayat kart kapıyı yanıltır)
+  if [ -f "$KART_DEPO/_agents/fabrika/kartlar/$IS.json" ]; then printf '%s' "$KART_DEPO/_agents/fabrika/kartlar/$IS.json"
+  elif [ "$KART_DEPO" != "$DEPO" ] && [ -f "$DEPO/_agents/fabrika/kartlar/$IS.json" ]; then
+    _hata "kart birincil depoda YOK ($KART_DEPO/_agents/fabrika/kartlar/$IS.json); iş alanındaki kopya BAYAT sayılır, OKUNMAZ — kart.sh ile birincile yaz, sonra denetçiyi koştur"; return 3
+  fi
+}
 
 # ── 1 · kanıt kapısı ─────────────────────────────────────────────────────────────
 KANIT_CIKTI="$(KANIT_DEPO="$DEPO" python3 "$HERE/kanit.py" dogrula "$IS" 2>&1)"; KRC=$?
@@ -84,7 +97,7 @@ sultan_kapisi() {
   [ "$SULTAN_DEVAM" = "1" ] || return 1
   # Karar KARTTAN okunur, komut satırından DEĞİL. (Bağımsız göz 23 Eyl, ciddi: serbest metinle
   # açılan yetki kapısı, kapı değildir.) Kartta D1 kaydı yoksa kapı AÇILMAZ.
-  KARTYOL="$DEPO/_agents/fabrika/kartlar/$IS.json"
+  KARTYOL="$(kart_yolu)" || exit 3; [ -n "$KARTYOL" ] || KARTYOL="/nonexistent"   # göz tur 2: bayat kopya hatası (rc=3) bastırılmaz, "karar YOK" reddine dönüşmez
   GEREKCE="$(python3 - "$KARTYOL" "devam" 2>/dev/null <<'PY'
 import json,sys
 try: k=json.load(open(sys.argv[1],encoding="utf-8"))
@@ -126,7 +139,7 @@ PY
 #    sınıflı kartta reis kararı yok sayılır ve Sultan yolu gösterilir. Mutlak tavanı (4) yine AÇMAZ.
 reis_kapisi() {
   [ "$REIS_DEVAM" = "1" ] || return 1
-  KARTYOL="$DEPO/_agents/fabrika/kartlar/$IS.json"
+  KARTYOL="$(kart_yolu)" || exit 3; [ -n "$KARTYOL" ] || KARTYOL="/nonexistent"   # göz tur 2: bayat kopya hatası (rc=3) bastırılmaz, "karar YOK" reddine dönüşmez
   GEREKCE="$(python3 - "$KARTYOL" "devam" 2>/dev/null <<'PY'
 import json,sys
 try: k=json.load(open(sys.argv[1],encoding="utf-8"))
@@ -183,7 +196,17 @@ fi
 TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
 if [ -n "$DIFF" ]; then cp "$DIFF" "$TMP/diff.patch" || { _hata "diff okunamadı"; exit 3; }
 else (cd "$DEPO" && gh pr diff "$PR" > "$TMP/diff.patch") || { _hata "gh pr diff $PR düştü"; exit 3; }; fi
-if [ -z "$KART" ] && [ -f "$DEPO/_agents/fabrika/kartlar/$IS.json" ]; then KART="$DEPO/_agents/fabrika/kartlar/$IS.json"; fi   # 0. adım kartı varsa o
+if [ -z "$KART" ]; then KART="$(kart_yolu)" || exit 3; fi   # 0. adım kartı varsa o (YALNIZ birincil depodan; alandaki bayat kopya → rc=3)
+[ -z "$KART" ] || [ -r "$KART" ] || { _hata "--kart dosyası okunamadı: $KART (verilen kart yoksa denetim kartsız SÜRMEZ)"; exit 3; }   # eskiden cp hatası sessizce yutuluyordu
+# göz tur 3: --kart "kart TEK kaynak"ı aşamaz — birincil kart VARKEN içeriği farklı bir dosya iş kartı olamaz (rc=3); birincil yokken serbest
+if [ -n "$KART" ]; then BIRINCIL="$(kart_yolu)" || exit 3
+  if [ -n "$BIRINCIL" ] && ! cmp -s "$KART" "$BIRINCIL"; then _hata "kart TEK kaynak: --kart ($KART) birincil karttan ($BIRINCIL) FARKLI — birincil kart varken başka dosya iş kartı olamaz; --kart'ı bırak"; exit 3; fi
+  # göz tur 4: içerik aynı olsa da OKUNAN YOL birincil karttır — harici kopya iş kartı/KART.json kaynağı olmaz (yol düzeyinde tek kaynak)
+  if [ -n "$BIRINCIL" ] && [ "$KART" != "$BIRINCIL" ]; then KART="$BIRINCIL"; _bilgi "· --kart harici kopya (aynı içerik); okunan yol birincil kart: $KART"; fi
+fi
+if [ -n "$KART" ] && [ -d "$DZ" ]; then   # kanıt dizinine anlık kopya: PR'a kart bununla gider — yazılamadıysa sessiz geçilmez (göz tur 1)
+  cp "$KART" "$DZ/KART.json" 2>/dev/null || { _hata "kartın anlık kopyası kanıt dizinine YAZILAMADI ($DZ/KART.json) — PR'a kart gitmezdi, denetim açılmaz"; exit 3; }
+fi
 if [ -n "$KART" ]; then cp "$KART" "$TMP/kart.md"
 elif [ -n "$PR" ]; then (cd "$DEPO" && gh pr view "$PR" --json title,body --jq '"# \(.title)\n\n\(.body)"' > "$TMP/kart.md") || echo "(iş kartı okunamadı)" > "$TMP/kart.md"
 else echo "(iş kartı verilmedi — talep bilinmiyor; DOĞRU ŞEY Mİ sorusu H'ye yakın değerlendirilir)" > "$TMP/kart.md"; fi

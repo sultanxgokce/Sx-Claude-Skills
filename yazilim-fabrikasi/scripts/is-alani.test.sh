@@ -55,6 +55,8 @@ g $? "PAYLASILAN_COMMIT=1 ile geçilebiliyor"
 
 echo "════ T4 · ac: kendi alanı, origin/main'den, <depo>-<iş> adıyla ════"
 CIKTI="$( cd "$T/depo" && bash "$IS" ac yeni-is --kartsiz 2>&1 )"; g $? "alan açıldı"
+[ ! -e "$T/alan/depo-yeni-is/_agents/fabrika/kartlar" ]; g $? "kart iş alanına KOPYALANMADI (tek kaynak birincil; 15 Eki — kopya bayatlıyor ve PR'la birincil pull'unu tıkıyordu)"
+grep -q "kopyalanmadı" <<<"$CIKTI"; g $? "açılış mesajı kartın birincilde kaldığını söylüyor"
 grep -q "TAZE" <<<"$CIKTI"; g $? "origin/main üstünde açtığını söylüyor"
 grep -q "PAYLAŞILAN KAYNAĞI izole etmez" <<<"$CIKTI"; g $? "paylaşılan-kaynak uyarısı basıldı"
 grep -q "dosya listesi verilmedi" <<<"$CIKTI"; g $? "kapsam bakılmadığını SÖYLÜYOR (sessiz atlama yok)"
@@ -78,8 +80,18 @@ echo kirli > "$T/alan/depo-yeni-is/kirli.txt"
 ( cd "$T/depo" && bash "$IS" kapat yeni-is >/dev/null 2>&1 ); [ $? -ne 0 ]; g $? "kayıtsız değişiklik varken KAPATMADI"
 [ -d "$T/alan/depo-yeni-is" ]; g $? "alan yerinde (iş kaybı yok)"
 rm -f "$T/alan/depo-yeni-is/kirli.txt"
-( cd "$T/depo" && bash "$IS" kapat yeni-is ) >/dev/null 2>&1
-[ ! -d "$T/alan/depo-yeni-is" ]; g $? "temizken kapatıldı"
+# 🔴 göz tur 1: kartlar/ altındaki İZLENEN ve DEĞİŞTİRİLMİŞ dosya iş'tir — kapat onu ne kir dışı sayar ne siler
+WT="$T/alan/depo-yeni-is"; mkdir -p "$WT/_agents/fabrika/kartlar"; echo '{"is":"izlenen"}' > "$WT/_agents/fabrika/kartlar/izlenen.json"
+( cd "$WT" && git add _agents/fabrika/kartlar/izlenen.json && git -c user.email=t@t -c user.name=T commit -qm "chore: izlenen kart" ) >/dev/null 2>&1
+echo '{"is":"izlenen","degisti":1}' > "$WT/_agents/fabrika/kartlar/izlenen.json"
+( cd "$T/depo" && bash "$IS" kapat yeni-is >/dev/null 2>&1 ); [ $? -ne 0 ]; g $? "🔴 kartlar/ altında İZLENEN+DEĞİŞMİŞ dosya varken KAPATMADI (iş sayıldı)"
+[ -d "$WT" ] && grep -q '"degisti":1' "$WT/_agents/fabrika/kartlar/izlenen.json"; g $? "izlenen kart dosyası SİLİNMEDİ, değişiklik yerinde (iş kaybı yok)"
+echo '{"is":"eklenen"}' > "$WT/_agents/fabrika/kartlar/eklenen.json"; ( cd "$WT" && git add _agents/fabrika/kartlar/eklenen.json ) >/dev/null 2>&1
+( cd "$T/depo" && bash "$IS" kapat yeni-is >/dev/null 2>&1 ); [ $? -ne 0 ] && [ -f "$WT/_agents/fabrika/kartlar/eklenen.json" ]; g $? "indekse EKLENMİŞ (A) kart dosyası da iş: kapatmadı, silmedi"
+( cd "$WT" && git reset -q HEAD _agents/fabrika/kartlar/eklenen.json && git checkout -- _agents/fabrika/kartlar/izlenen.json ) >/dev/null 2>&1; rm -f "$WT/_agents/fabrika/kartlar/eklenen.json"
+mkdir -p "$T/alan/depo-yeni-is/_agents/fabrika/kartlar"; echo '{"is":"yeni-is"}' > "$T/alan/depo-yeni-is/_agents/fabrika/kartlar/yeni-is.json"   # eski aracın bıraktığı kayıtsız kart kopyası
+( cd "$T/depo" && bash "$IS" kapat yeni-is ) >/dev/null 2>&1; RC=$?
+[ "$RC" -eq 0 ] && [ ! -d "$T/alan/depo-yeni-is" ]; g $? "temizken kapatıldı — kartlar/ altındaki kayıtsız kopya 'kayıtsız iş' SAYILMADI (kart birincilde)"
 
 echo "════ T7 · kapsam kontrolü (sahte gh): çakışma → rc=2, açmaz; temiz → açar ════"
 SAHTE="$T/sahte-bin"; mkdir -p "$SAHTE"
