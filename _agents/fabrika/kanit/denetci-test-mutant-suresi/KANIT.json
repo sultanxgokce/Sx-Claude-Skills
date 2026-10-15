@@ -1,7 +1,7 @@
 {
   "is": "denetci-test-mutant-suresi",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T13:50:38+03:00",
+  "guncelleme": "2026-10-15T13:54:20+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -84,7 +84,57 @@
       "renk": "yesil",
       "zaman": "2026-10-15T13:50:38+03:00",
       "sure_sn": 1.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "CI-ONCE-PR326-tavan-dogrudan-olcum",
+      "asama": "once",
+      "dosya": "olcum-CI-ONCE-PR326-tavan-dogrudan-olcum-once.txt",
+      "sha256": "95d634223abdae5d73e23d4d901061e9cc3fb4f04bdce418198f1b480073496e",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/ci-denetci-sure.sh",
+        "38720425177",
+        "PR #326, sıralı"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T13:54:18+03:00",
+      "sure_sn": 1.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "CI-SONRA-PR327-tavan-dogrudan-olcum",
+      "asama": "sonra",
+      "dosya": "olcum-CI-SONRA-PR327-tavan-dogrudan-olcum-sonra.txt",
+      "sha256": "4f8a3acbe49edbf9b456e31cb5209fa4862cf9a37a7c33f57d5990ddfc7d232d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/ci-denetci-sure.sh",
+        "38721932338",
+        "PR #327, paralel"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T13:54:20+03:00",
+      "sure_sn": 1.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "KART-SAYIM-DUZELTMESI-mutant-sayisi-15",
+      "asama": "sonra",
+      "dosya": "olcum-KART-SAYIM-DUZELTMESI-mutant-sayisi-15-sonra.txt",
+      "sha256": "0edb109e6c4b8d957a03859662f821d94feefa6f1cdd0097e92d7eafde7a3b6c",
+      "komut": [
+        "bash",
+        "-c",
+        "echo \"İş kartının kabul cümlesindeki \\\"18 mutant\\\" BENİM (BÂNİ, kartı açan) sayım hatamdı; istek (SERDAR NOTES 13:24) sayı vermez:\"; grep -n \"\\[SERDAR → BÂNİ\\] 13:24\" /config/projects/Nexus/_agents/bani/NOTES.md | cut -c1-260; echo \"Kart açıldığı andaki ana dal (origin/main, bu işin tabanı $(git merge-base HEAD origin/main | cut -c1-8)) mutant sayısı:\"; git show $(git merge-base HEAD origin/main):yazilim-fabrikasi/scripts/denetci.test.sh | grep -c \"^mut \\\"\"; echo \"Bu daldaki mutant sayısı (eklenen/çıkarılan mutant YOK):\"; grep -c \"^mut \\\"\" yazilim-fabrikasi/scripts/denetci.test.sh; echo \"Sonuç: kabul ölçütü \\\"kapı sayısı ve mutant yakalama DEĞİŞMEZ\\\" = 149/149 + 15/15 kırmızı (ölçümler önce/sonra kayıtlarında).\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T13:54:20+03:00",
+      "sure_sn": 0.0
     }
   ],
-  "imza": "dd79135745baefc5c7a85116a5f646456363b21021f64d05cef841f69aab9604"
+  "imza": "4f5190568001939e92056c1417028dbb89bdd4df04ff19b6c5f74e34afdef6a3"
 }
