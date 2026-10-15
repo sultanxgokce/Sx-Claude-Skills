@@ -1,0 +1,8 @@
+$ bash -c echo "lint.yml Kabuk sınamaları adımının keşif komutu (birebir): find . -name *.test.sh -not -path ./.git/* | sort — listede kabuk-biti var mı:"; find . -name "*.test.sh" -not -path "./.git/*" | sort | grep -n "kabuk-biti"; echo "toplam keşfedilen: $(find . -name "*.test.sh" -not -path "./.git/*" | wc -l)"; grep -n "mapfile -t T < <(find . -name" .github/workflows/lint.yml
+# rc=0 sure=0.1s zaman=2026-10-15T12:57:09+03:00
+--- stdout ---
+lint.yml Kabuk sınamaları adımının keşif komutu (birebir): find . -name *.test.sh -not -path ./.git/* | sort — listede kabuk-biti var mı:
+51:./kabuk-biti.test.sh
+toplam keşfedilen: 115
+80:          mapfile -t T < <(find . -name '*.test.sh' -not -path './.git/*' | sort)
+--- stderr ---

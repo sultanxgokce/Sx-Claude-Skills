@@ -1,7 +1,7 @@
 {
   "is": "compact-calistirma-biti",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T12:53:26+03:00",
+  "guncelleme": "2026-10-15T12:57:09+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -63,7 +63,23 @@
       "renk": "yesil",
       "zaman": "2026-10-15T12:53:26+03:00",
       "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "CI-kesif-komutu-kabuk-biti-kapisini-listeler-lint-yml",
+      "asama": "sonra",
+      "dosya": "olcum-CI-kesif-komutu-kabuk-biti-kapisini-listeler-lint-yml-sonra.txt",
+      "sha256": "df1b00341fce914f946ff7a2af3ff72f85e5c55ae666a405545cf34fdd0a0371",
+      "komut": [
+        "bash",
+        "-c",
+        "echo \"lint.yml Kabuk sınamaları adımının keşif komutu (birebir): find . -name *.test.sh -not -path ./.git/* | sort — listede kabuk-biti var mı:\"; find . -name \"*.test.sh\" -not -path \"./.git/*\" | sort | grep -n \"kabuk-biti\"; echo \"toplam keşfedilen: $(find . -name \"*.test.sh\" -not -path \"./.git/*\" | wc -l)\"; grep -n \"mapfile -t T < <(find . -name\" .github/workflows/lint.yml"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T12:57:09+03:00",
+      "sure_sn": 0.1
     }
   ],
-  "imza": "90c5f0b4e5898724eb59fbaec89c93c4d6a21b475069ec9ce3414d004559abe3"
+  "imza": "e82d304720f8da960933d0483b6affcaa88aac21188f2d0d44218dfe0d6f3a9b"
 }
