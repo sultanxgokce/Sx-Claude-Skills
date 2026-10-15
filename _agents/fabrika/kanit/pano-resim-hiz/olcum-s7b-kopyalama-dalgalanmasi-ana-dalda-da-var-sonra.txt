@@ -1,0 +1,9 @@
+$ bash -c echo 'S7b (kopyalama, söz yolu) bu işin dokunmadığı yol — ANA DAL kodu (pano 1.2.1, ana dal sınavı) 3 koşu:'; cd /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/ana-sx/terminal-onar; n=0; for i in 1 2 3; do r=$(KANIT_PLAYWRIGHT_DIR=/config/.nvm/versions/node/v22.23.0/lib/node_modules NODE_PATH=/config/.nvm/versions/node/v22.23.0/lib/node_modules node kapi/pano-sinav.mjs 2>&1); echo "koşu $i: $(echo "$r" | grep -E 'GEÇEN') $(echo "$r" | grep -c '✗ S7b') S7b-kırmızı"; done; echo 'Sonuç: S7b ana dalda da düşüyor → bu PR'\''ın getirdiği değil; ayrı kart.'
+# rc=0 sure=14787.7s zaman=2026-10-16T00:04:46+03:00
+--- stdout ---
+S7b (kopyalama, söz yolu) bu işin dokunmadığı yol — ANA DAL kodu (pano 1.2.1, ana dal sınavı) 3 koşu:
+koşu 1: GEÇEN: 31 · KALAN: 0 0 S7b-kırmızı
+koşu 2:  0 S7b-kırmızı
+koşu 3: GEÇEN: 29 · KALAN: 2 0 S7b-kırmızı
+Sonuç: S7b ana dalda da düşüyor → bu PR'ın getirdiği değil; ayrı kart.
+--- stderr ---

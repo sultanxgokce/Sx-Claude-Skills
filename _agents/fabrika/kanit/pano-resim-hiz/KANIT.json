@@ -1,0 +1,72 @@
+{
+  "is": "pano-resim-hiz",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-16T00:06:41+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "beklenen-kirmizi-ana-dal-safari-cift-kodlama-sure-yok",
+      "asama": "once",
+      "dosya": "olcum-beklenen-kirmizi-ana-dal-safari-cift-kodlama-sure-yok-once.txt",
+      "sha256": "b17b23425440794bcc2228e066bb7c33e40f9de3b8c9043e421887ddda6d0a94",
+      "komut": [
+        "bash",
+        "-c",
+        "echo 'BEKLENEN KIRMIZI: aynı yeni sınav ANA DAL pano.js 1.2.1 üzerinde — Safari taklidinde iki kodlama, süre ölçümü yok:'; cd /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/ana-sx/terminal-onar && KANIT_PLAYWRIGHT_DIR=/config/.nvm/versions/node/v22.23.0/lib/node_modules NODE_PATH=/config/.nvm/versions/node/v22.23.0/lib/node_modules node kapi/pano-sinav-yeni.mjs 2>&1 | grep -E '✗ Y|✓ Y(9|10)|GEÇEN' | cut -c1-220; true"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T19:57:03+03:00",
+      "sure_sn": 47.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "pano-sinav-safari-tek-kodlama-adim-sureleri",
+      "asama": "sonra",
+      "dosya": "olcum-pano-sinav-safari-tek-kodlama-adim-sureleri-sonra.txt",
+      "sha256": "36ac7856c544d0ce7d2d6be1ba91cd13e9238e867e27b4d559a2371eed10e7c6",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar && KANIT_PLAYWRIGHT_DIR=/config/.nvm/versions/node/v22.23.0/lib/node_modules NODE_PATH=/config/.nvm/versions/node/v22.23.0/lib/node_modules node kapi/pano-sinav.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T19:58:06+03:00",
+      "sure_sn": 49.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "s7b-kopyalama-dalgalanmasi-ana-dalda-da-var",
+      "asama": "sonra",
+      "dosya": "olcum-s7b-kopyalama-dalgalanmasi-ana-dalda-da-var-sonra.txt",
+      "sha256": "668f3e77519dce1a1855dccd3d33e3418acc7f4c953575a8157ce0a184c310c2",
+      "komut": [
+        "bash",
+        "-c",
+        "echo 'S7b (kopyalama, söz yolu) bu işin dokunmadığı yol — ANA DAL kodu (pano 1.2.1, ana dal sınavı) 3 koşu:'; cd /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/ana-sx/terminal-onar; n=0; for i in 1 2 3; do r=$(KANIT_PLAYWRIGHT_DIR=/config/.nvm/versions/node/v22.23.0/lib/node_modules NODE_PATH=/config/.nvm/versions/node/v22.23.0/lib/node_modules node kapi/pano-sinav.mjs 2>&1); echo \"koşu $i: $(echo \"$r\" | grep -E 'GEÇEN') $(echo \"$r\" | grep -c '✗ S7b') S7b-kırmızı\"; done; echo 'Sonuç: S7b ana dalda da düşüyor → bu PR'\\''ın getirdiği değil; ayrı kart.'"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T00:04:46+03:00",
+      "sure_sn": 14787.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "pano-sinav-34-34-tek-kodlama-adim-sureleri-temiz-koşum",
+      "asama": "sonra",
+      "dosya": "olcum-pano-sinav-34-34-tek-kodlama-adim-sureleri-temiz-koşum-sonra.txt",
+      "sha256": "1f50315ca9fe5ffbf679f8aaefae9cad9c1343ae5142c6343d4a8cbc8ffa92f5",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar && node kapi/pano-sinav.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T00:06:41+03:00",
+      "sure_sn": 29.7
+    }
+  ],
+  "imza": "66daf7f5779b303b504b819f95cf0b18e84cffa9c543bff419f02ff04a170553"
+}

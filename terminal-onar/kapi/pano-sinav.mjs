@@ -121,11 +121,47 @@ try {
   let en = 0; if (y2) en = await pg.evaluate(async (b64) => { const bin = atob(b64); const u = new Uint8Array(bin.length); for (let j = 0; j < bin.length; j++) u[j] = bin.charCodeAt(j); const bm = await createImageBitmap(new Blob([u], { type: 'image/webp' })); return bm.width; }, y2.govde.toString('base64')).catch(() => 0);
   kapi(`Y5 büyük PNG (${Math.round(buyuk.boy / 1024)} KB, 2600px) 2000px WebP olarak küçültülür ve küçülür`, !!y2 && y2.tip === 'image/webp' && en === 2000 && y2.boy < buyuk.boy, `→ ${y2 ? `${y2.tip} ${en}px ${Math.round(y2.boy / 1024)} KB` : 'yükleme yok'}`);
   kapi('Y6 ikinci yol da terminale yazıldı', await ekranda(pg, '/sinav/inbox/img-2.webp'));
+  const bdBuyuk = await bildirim(pg);
   // metin yapıştırma DOKUNULMAZ
   const once3 = yuklemeler.length;
   await pg.keyboard.press('Control+u');   // satır temiz: sarılmış satırda alt dize bölünmesin
   await yapistir(pg, { metin: 'echo metin-yapistirma-calisiyor' });
   kapi('Y7 METİN yapıştırma xterm\'in kendi yoluyla aynen çalışır (köprü dokunmaz)', await ekranda(pg, 'echo metin-yapistirma-calisiyor') && yuklemeler.length === once3, '→ metin gelmedi ya da yükleme sayıldı');
+  // Y8 (1.2.2): adım süreleri bildirimde ve köprüde — "yavaş" olunca beklemenin küçültmede mi yüklemede mi olduğu okunur
+  const so = await pg.evaluate(() => window.__kapiPano.sonResim && window.__kapiPano.sonResim());
+  kapi('Y8 son resmin adım süreleri ölçülür (küçültme ms · yükleme ms · bayt) ve bildirim bunları yazar ("küçültme X sn · yükleme Y sn · Z KB")', !!so && so.kucultMs >= 0 && so.yukleMs >= 0 && so.bayt > 0 && so.ilkBayt === buyuk.boy && /küçültme \d+,\d sn · yükleme \d+,\d sn · \d+ (KB|MB)/.test(bdBuyuk), `→ ${JSON.stringify(so)} · "${bdBuyuk}"`);
+  // Y9-Y10 SAFARİ TAKLİDİ: Safari WebP KODLAYAMAZ — webp istenince PNG döner (toDataURL da PNG verir). Kodlama ÇAĞRILARI sayılır.
+  //   Eski kod: webp dener (PNG gelir) → JPEG'i ikinci kez kodlar = 2 kodlama. 1.2.2: destek yoklanır → doğrudan JPEG = 1 kodlama.
+  {
+    const cS = await b.newContext({ viewport: { width: 1100, height: 640 }, permissions: ['clipboard-read', 'clipboard-write'] });
+    await cS.addCookies([{ name: 'kapi', value: await giris(P1), domain: '127.0.0.1', path: '/sinav' }]);
+    await cS.addInitScript(() => {
+      window.__kodlama = [];
+      const td = HTMLCanvasElement.prototype.toDataURL;
+      HTMLCanvasElement.prototype.toDataURL = function (t, q) { return td.call(this, t === 'image/webp' ? 'image/png' : t, q); };
+      const cb = OffscreenCanvas.prototype.convertToBlob;
+      OffscreenCanvas.prototype.convertToBlob = function (o) { const t = (o && o.type) || 'image/png'; window.__kodlama.push(t); return cb.call(this, { ...(o || {}), type: t === 'image/webp' ? 'image/png' : t }); };
+    });
+    const pS = await cS.newPage(); await pS.goto(`http://127.0.0.1:${P1}/sinav/tty/`, { waitUntil: 'load' });
+    await pS.waitForSelector('.xterm-helper-textarea', { timeout: 15000 }); await ekranda(pS, 'sinav$', 15000);
+    await pS.waitForFunction(() => window.__kapiPano && window.__kapiPano.osc52 === true, null, { timeout: 8000 });
+    // ekran görüntüsüne benzer (geçişli zemin + yazı + düz alanlar): PNG büyük, JPEG küçük — gürültü karesi JPEG'de büyür, gerçeği temsil etmez
+    const ekranGor = await pS.evaluate(async () => { const cv = new OffscreenCanvas(2880, 1800); const c = cv.getContext('2d');
+      const g = c.createLinearGradient(0, 0, 2880, 1800); g.addColorStop(0, '#1d2433'); g.addColorStop(1, '#6b4f2a'); c.fillStyle = g; c.fillRect(0, 0, 2880, 1800);
+      for (let k = 0; k < 60; k++) { c.fillStyle = `hsl(${k * 37 % 360},40%,${40 + k % 30}%)`; c.fillRect((k * 131) % 2600, (k * 71) % 1600, 260, 120); c.fillStyle = '#eee'; c.font = '28px sans-serif'; c.fillText('ölçüm satırı ' + k + ' — terminal çıktısı örneği', (k * 97) % 2300, (k * 53) % 1750 + 30); }
+      const bl = await cv.convertToBlob({ type: 'image/png' }); const u = new Uint8Array(await bl.arrayBuffer()); let s = ''; for (let j = 0; j < u.length; j += 0x8000) s += String.fromCharCode.apply(null, u.subarray(j, j + 0x8000)); return { b64: btoa(s), boy: u.length }; });
+    await pS.evaluate(() => { window.__kodlama.length = 0; });   // sınavın KENDİ PNG üretimi sayılmasın: yalnız köprünün kodlamaları
+    const onceS = yuklemeler.length;
+    await yapistir(pS, { tip: 'image/png', b64: ekranGor.b64 });
+    for (let k = 0; k < 100 && yuklemeler.length === onceS; k++) await bekle(200);
+    await pS.waitForFunction(() => /yazıldı|✗/.test((document.getElementById('kapi-pano-bildirim') || {}).textContent || ''), null, { timeout: 20000 }).catch(() => {});
+    const kod = await pS.evaluate(() => window.__kodlama.slice()), yS = yuklemeler[onceS];
+    const soS = await pS.evaluate(() => window.__kapiPano.sonResim ? window.__kapiPano.sonResim() : null);
+    console.log('   ÖLÇÜ Safari taklidi: kodlama ' + JSON.stringify(kod) + ' · süreler ' + JSON.stringify(soS));
+    kapi('Y9 🔴 Safari (WebP kodlayamaz): resim TEK kez kodlanır, doğrudan JPEG (eski kod: webp→PNG + JPEG = 2 kodlama)', kod.length === 1 && kod[0] === 'image/jpeg', `→ kodlama ${JSON.stringify(kod)}`);
+    kapi(`Y10 Safari yolunda ekran görüntüsü (${Math.round(ekranGor.boy / 1024)} KB PNG, 2880 px) JPEG olarak küçülür; yol terminale yazıldı`, !!yS && yS.tip === 'image/jpeg' && yS.boy < ekranGor.boy && await ekranda(pS, '/sinav/inbox/img-' + (onceS + 1) + '.bin'), `→ ${yS ? yS.tip + ' ' + Math.round(yS.boy / 1024) + ' KB' : 'yükleme yok'}`);
+    await cS.close();
+  }
 
   console.log('── K · kopyalama (fare seçimi → tmux → OSC 52 → tarayıcı panosu)');
   // 🔴 Komut GERÇEK TUŞLARLA verilir, term.paste ile DEĞİL: bash köşeli-yapıştırma kipinde yapıştırılan satır sonu
@@ -247,7 +283,7 @@ try {
     const dt = new DataTransfer(); const ev = new ClipboardEvent('copy', { clipboardData: dt, bubbles: true, cancelable: true }); document.dispatchEvent(ev);
     return { sec, odak: document.activeElement && document.activeElement.tagName, engellendi: ev.defaultPrevented, metin: dt.getData('text/plain'), yol: window.__kapiPano._sonYol() }; });
   kapi('S5 Shift+sürükle seçimi, odak terminalden kaçmışken copy olayında köprü tarafından yazılır (preventDefault + metin)', s5.sec.trim() === 'SHIFT-SECIM-XYZ' && s5.odak === 'BODY' && s5.engellendi && s5.metin.trim() === 'SHIFT-SECIM-XYZ' && s5.yol === 'copy', `→ ${JSON.stringify(s5)}`);
-  kapi('S6 köprü 1.2.1 söz ve düğme yolunu ilan eder', await pg.evaluate(() => window.__kapiPano.surum === '1.2.1' && window.__kapiPano.soz === true && window.__kapiPano.dugme === true));
+  kapi('S6 köprü 1.2.2 söz ve düğme yolunu ilan eder', await pg.evaluate(() => window.__kapiPano.surum === '1.2.2' && window.__kapiPano.soz === true && window.__kapiPano.dugme === true));
   // S7 · Sultan Safari 13:33: seçim panoya İNDİKTEN sonra aynı metin için ikinci yazım (yinelenen OSC 52) reddedilince kırmızı uyarı + düğme
   //      çıkıyordu. Söz yoluyla indir → writeText'i reddedecek şekilde boz → aynı metnin OSC 52'si yeniden gelsin → düğme YOK, kırmızı YOK.
   const dgGor = () => pg.$eval('#kapi-pano-kopyala', (e) => e.style.display !== 'none').catch(() => false);
