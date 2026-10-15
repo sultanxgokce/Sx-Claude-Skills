@@ -104,19 +104,23 @@ PY
   # boşsa ya da modeller aynıysa eski string-match reddi geçerliliğini sürdürür). "$denetci"
   # alanı yedek kipinde "claude (…) (YEDEK GÖZ: …)" olduğundan $yazan ("claude") onun İÇİNDE
   # geçer — bu artık K1 ihlali DEĞİL, çünkü farklı model + farklı oturum ölçülmüştür.
-  bagimsiz_yedek="H"
-  if [ -n "$yedek" ] && [ -n "$yedek_model" ] && [ -n "$yazan_model" ] && [ "$yedek_model" != "$yazan_model" ]; then
-    bagimsiz_yedek="E"
+  # 🔴 KARAR "$denetci" METNİNİN BİÇİMİNE BAĞLI KALMASIN (bağımsız göz #339 tur 3): eski
+  # hâlde fail-closed red yalnız `case "$denetci" in *"$yazan"*)` dalında uygulanıyordu —
+  # yedek kaydı AYNI modelle gelse bile denetci metni yazanın adını İÇERMİYORSA (biçim
+  # farkı, gelecekteki bir format değişimi) kontrol hiç ÇALIŞMAZDI. Karar artık `yedek`
+  # ALANININ VARLIĞI üzerinden verilir — metin-eşleşmesinden bağımsız, dolayısıyla
+  # denetci'nin tam biçimine duyarlı değil.
+  if [ -n "$yedek" ]; then
+    if [ -n "$yedek_model" ] && [ -n "$yazan_model" ] && [ "$yedek_model" != "$yazan_model" ]; then
+      _y "  · yedek göz: $yedek · yazan modeli $yazan_model ≠ yedek modeli $yedek_model — K1 bağımsız SAYILDI (Sultan Y0006)"
+    else
+      _h "yedek göz AYNI modelle alınmış (yazan: ${yazan_model:-?} · yedek: ${yedek_model:-?}) — bağımsız göz değil (K1)"; eksik=$((eksik+1))
+    fi
+  else
+    case "$denetci" in
+      *"$yazan"*) _h "denetçi yazanla AYNI ($yazan) — bağımsız göz değil (K1)"; eksik=$((eksik+1)) ;;
+    esac
   fi
-  case "$denetci" in
-    *"$yazan"*)
-      if [ "$bagimsiz_yedek" = "E" ]; then
-        _y "  · yedek göz: $yedek · yazan modeli $yazan_model ≠ yedek modeli $yedek_model — K1 bağımsız SAYILDI (Sultan Y0006)"
-      else
-        _h "denetçi yazanla AYNI ($yazan) — bağımsız göz değil (K1)"; eksik=$((eksik+1))
-      fi
-      ;;
-  esac
 else
   _h "DENETİM kaydı YOK — bağımsız göz hiç koşmamış"; eksik=$((eksik+1))
 fi

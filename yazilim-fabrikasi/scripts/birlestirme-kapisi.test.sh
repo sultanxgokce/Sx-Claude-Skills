@@ -100,6 +100,17 @@ den is-b8 1 5 E claude "claude (sonnet-5) (YEDEK GOZ: codex yok)" $'codex yok\ni
 CIKTI="$(bash "$G" is-b8 2>&1)"; RC=$?
 [ "$RC" -eq 0 ]; g $? "yeni satır içeren yedek metni + FARKLI model → doğru okunur, bağımsız sayılır"
 
+echo "════ T5h · 🔧 karar denetçi METNİNİN BİÇİMİNE bağlı değil (bağımsız göz #339 tur 3, CİDDİ) ════"
+# 🔴 Eski hâl: fail-closed red yalnız `case "$denetci" in *"$yazan"*)` dalında uygulanıyordu.
+# denetci metni yazanın adını İÇERMİYORSA (biçim farkı) — AYNI modelle alınmış bir yedek kaydı
+# bile kontrolden geçip K1'i yanlışlıkla aşabilirdi. Karar artık `yedek` ALANININ VARLIĞI
+# üzerinden verilir, denetci'nin tam biçimine duyarlı DEĞİL.
+kart is-b9; bash "$K" olcum is-b9 olc --asama tek -- echo 1 >/dev/null 2>&1
+den is-b9 1 5 E claude "codex" "codex yok" "sonnet-5" "sonnet-5"
+CIKTI="$(bash "$G" is-b9 2>&1)"; RC=$?
+[ "$RC" -eq 1 ]; g $? "denetci metni yazanı İÇERMİYOR ama yedek AYNI modelle → hâlâ reddeder"
+grep -q "bağımsız göz değil" <<<"$CIKTI"; g $? "K1 gerekçesi yazılı"
+
 echo "════ T6 · kanıt manifesti elle boyanırsa → engeller ════"
 kart is-c; bash "$K" olcum is-c olc --asama tek -- echo 1 >/dev/null 2>&1; den is-c 1 5 E
 bash "$G" is-c --sessiz >/dev/null 2>&1; g $? "önce temiz: rc=0"
