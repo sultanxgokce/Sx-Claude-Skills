@@ -1,0 +1,38 @@
+{
+  "is": "denetci-kare",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T16:15:37+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "main-denetcide-kare-yok",
+      "asama": "once",
+      "dosya": "olcum-main-denetcide-kare-yok-once.txt",
+      "sha256": "740d38c7c6ce9f14c501b94e080d87e02fbea9caf3e9283d58de1daded99e92f",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/kare-once.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T16:09:06+03:00",
+      "sure_sn": 0.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kare-sinavi-K1-K7-paralel-ana-dalda",
+      "asama": "sonra",
+      "dosya": "olcum-kare-sinavi-K1-K7-paralel-ana-dalda-sonra.txt",
+      "sha256": "19d43e7f19580fb7a868b69b7b4d0c0a373040f21214621eaf595c0f31e602fa",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/kare-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T16:15:37+03:00",
+      "sure_sn": 385.8
+    }
+  ],
+  "imza": "b6db8dc7843098afa23ce9bc024ab4ffd3c415d37fd99aea50c1507b50a741f0"
+}

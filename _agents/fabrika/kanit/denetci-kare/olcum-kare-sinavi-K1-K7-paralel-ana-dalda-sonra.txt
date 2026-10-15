@@ -1,0 +1,15 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/kare-sonra.sh
+# rc=0 sure=385.8s zaman=2026-10-15T16:15:37+03:00
+--- stdout ---
+  ✓ Y0 🔴 yazanın modeli hiçbir yüzeyden ÖLÇÜLEMEZSE yedek KOŞMAZ: rc=3, yeniden koşma satırı basılır, kayıt yazılmaz (K1 ölçülemeden yeşil yok)
+  ✓ Y6 🔴 yedek göz yazanla AYNI modelde koşmaz: farklı kademe (sonnet) + yeni oturum, kayda yazılı (K1 yeniden)
+  ✓ K1 --kare dosyası yoksa rc=2, denetim AÇILMAZ (sessiz atlama yok)
+  ✓ K2 uzantısı .png ama içi görsel değil → rc=2 (imza ölçülür, ad değil)
+  ✓ K3 9 kare → rc=2 (tavan 8)
+  ✓ K4 istemde 'KARELER (2 adet …)' + ad + sha (göz neye bakacağını bilir)
+  ✓ K5 DENETIM kaydı kareleri taşır: adet · ad · sha256 · görsel verildi
+  ✓ K6 🔴 kareler codex'e GÖRSEL ek olarak gider (argv'de -i <kare> ×2)
+  ✓ K7 yedek göz (claude -p) kareyi GÖREMEZ → kayıtta gorsel_verildi=false (görmüş sanılmaz)
+  (bilgi) 15 mutant · 4 paralel · 366 sn
+── SONUÇ: 156 geçti · 0 kaldı ──
+--- stderr ---
