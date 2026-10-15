@@ -14,6 +14,19 @@
   "sultan": false,
   "kanit_nerede": "denetci.test.sh yeni kapilar: kutu-disi bulgu turu saymaz · tavan sayili tura bakar · sonsuz dongu kapali · ayri dosyaya yazilir",
   "oda": "",
-  "durum": "acik",
-  "gecmis": []
+  "durum": "bitti",
+  "gecmis": [
+    {
+      "zaman": "2026-10-15T17:30:39+03:00",
+      "olay": "bitti"
+    }
+  ],
+  "bitis": "2026-10-15T17:30:39+03:00",
+  "pr": "336",
+  "puan": {
+    "kod": 5,
+    "dogru": "E",
+    "tur": 2
+  },
+  "kanit_var": true
 }
