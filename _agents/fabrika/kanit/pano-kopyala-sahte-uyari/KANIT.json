@@ -1,0 +1,38 @@
+{
+  "is": "pano-kopyala-sahte-uyari",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T13:41:22+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "pano-sinav-31-kapi-S7-S7b-sahte-uyari-yok",
+      "asama": "sonra",
+      "dosya": "olcum-pano-sinav-31-kapi-S7-S7b-sahte-uyari-yok-sonra.txt",
+      "sha256": "6c067a8809c3e5433995aed94d2a810a54ea55858355377bba814896155e3057",
+      "komut": [
+        "node",
+        "kapi/pano-sinav.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T13:40:36+03:00",
+      "sure_sn": 29.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "MUTASYON-KANITI-beklenen-kirmizi-sahte-uyari-geri-kondu",
+      "asama": "sonra",
+      "dosya": "olcum-MUTASYON-KANITI-beklenen-kirmizi-sahte-uyari-geri-kondu-sonra.txt",
+      "sha256": "304dc9654b26614da96b5b39ec754ac2f853eb3e51a4834a7f11022f5a3a47b0",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut-121-1792060836/mut.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T13:41:22+03:00",
+      "sure_sn": 45.5
+    }
+  ],
+  "imza": "8c153aa7256f45340784a26c67461f19b504c8cffe18c14ade009609e846458f"
+}

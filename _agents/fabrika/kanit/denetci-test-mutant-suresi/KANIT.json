@@ -1,0 +1,140 @@
+{
+  "is": "denetci-test-mutant-suresi",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T13:54:20+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "ONCE-denetci-test-tam-sure-sn-mutantlar-sirali",
+      "asama": "once",
+      "dosya": "olcum-ONCE-denetci-test-tam-sure-sn-mutantlar-sirali-once.txt",
+      "sha256": "955b663e6904e0c310e1ef43da77078e8bb16ec64123aa9ffc4d6f4808665da3",
+      "komut": [
+        "bash",
+        "-c",
+        "s=$(date +%s); bash yazilim-fabrikasi/scripts/denetci.test.sh 2>&1 | grep -E \"SONUÇ|mutant\" | tail -20; echo \"yerel süre: $(( $(date +%s) - s )) sn (nproc=$(nproc))\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T13:34:16+03:00",
+      "sure_sn": 473.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "SONRA-denetci-test-tam-sure-sn-mutantlar-paralel",
+      "asama": "sonra",
+      "dosya": "olcum-SONRA-denetci-test-tam-sure-sn-mutantlar-paralel-sonra.txt",
+      "sha256": "45ebb17e1dd3991af71ffdede3252963f1cc0bfc19aecf84081e7b30d22b6ba3",
+      "komut": [
+        "bash",
+        "-c",
+        "s=$(date +%s); bash yazilim-fabrikasi/scripts/denetci.test.sh 2>&1 | grep -E \"SONUÇ|mutant|bilgi\" | tail -22; rc=${PIPESTATUS[0]}; echo \"yerel süre: $(( $(date +%s) - s )) sn (nproc=$(nproc), önce: 474 sn sıralı)\"; [ $rc = 0 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T13:39:23+03:00",
+      "sure_sn": 123.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "CI-ONCE-denetci-test-sure-PR326-run-38720425177-sirali",
+      "asama": "once",
+      "dosya": "olcum-CI-ONCE-denetci-test-sure-PR326-run-38720425177-sirali-once.txt",
+      "sha256": "16a85cff8db1f175bc71ecef70d01c6b2a37086beef4df5d54905ddc11095c65",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/ci-denetci-sure.sh",
+        "38720425177",
+        "PR #326, ana daldaki sıralı mutantlar"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T13:43:08+03:00",
+      "sure_sn": 1.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "MUT_PARALEL-sayi-degil-abc-sonsuz-dongu-yok-sirali-biter",
+      "asama": "sonra",
+      "dosya": "olcum-MUT_PARALEL-sayi-degil-abc-sonsuz-dongu-yok-sirali-biter-sonra.txt",
+      "sha256": "90728df935410142d20b22f813201f2cdfecb7e8193e6c7e3c646c2b9a6eac00",
+      "komut": [
+        "bash",
+        "-c",
+        "echo \"=== MUT_PARALEL=abc (sayı değil): eski kodda dış döngü sonsuza dek dönerdi; yeni kod uyarı basıp 1 (sıralı) ile BİTER. timeout 900 sn ===\"; s=$(date +%s); MUT_PARALEL=abc timeout 900 bash yazilim-fabrikasi/scripts/denetci.test.sh 2>&1 | grep -E \"uyarı|bilgi|SONUÇ\"; rc=${PIPESTATUS[0]}; echo \"rc=$rc süre=$(( $(date +%s) - s )) sn (124 = timeout = asılı kaldı)\"; [ $rc = 0 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T13:50:24+03:00",
+      "sure_sn": 419.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "CI-SONRA-denetci-test-sure-PR327-run-38721932338-paralel",
+      "asama": "sonra",
+      "dosya": "olcum-CI-SONRA-denetci-test-sure-PR327-run-38721932338-paralel-sonra.txt",
+      "sha256": "be6663834db9587bd4d5785cf3caf10f087cf67d57ac78c8120248c4c6876882",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/ci-denetci-sure.sh",
+        "38721932338",
+        "PR #327, paralel mutantlar"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T13:50:38+03:00",
+      "sure_sn": 1.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "CI-ONCE-PR326-tavan-dogrudan-olcum",
+      "asama": "once",
+      "dosya": "olcum-CI-ONCE-PR326-tavan-dogrudan-olcum-once.txt",
+      "sha256": "95d634223abdae5d73e23d4d901061e9cc3fb4f04bdce418198f1b480073496e",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/ci-denetci-sure.sh",
+        "38720425177",
+        "PR #326, sıralı"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T13:54:18+03:00",
+      "sure_sn": 1.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "CI-SONRA-PR327-tavan-dogrudan-olcum",
+      "asama": "sonra",
+      "dosya": "olcum-CI-SONRA-PR327-tavan-dogrudan-olcum-sonra.txt",
+      "sha256": "4f8a3acbe49edbf9b456e31cb5209fa4862cf9a37a7c33f57d5990ddfc7d232d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/ci-denetci-sure.sh",
+        "38721932338",
+        "PR #327, paralel"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T13:54:20+03:00",
+      "sure_sn": 1.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "KART-SAYIM-DUZELTMESI-mutant-sayisi-15",
+      "asama": "sonra",
+      "dosya": "olcum-KART-SAYIM-DUZELTMESI-mutant-sayisi-15-sonra.txt",
+      "sha256": "0edb109e6c4b8d957a03859662f821d94feefa6f1cdd0097e92d7eafde7a3b6c",
+      "komut": [
+        "bash",
+        "-c",
+        "echo \"İş kartının kabul cümlesindeki \\\"18 mutant\\\" BENİM (BÂNİ, kartı açan) sayım hatamdı; istek (SERDAR NOTES 13:24) sayı vermez:\"; grep -n \"\\[SERDAR → BÂNİ\\] 13:24\" /config/projects/Nexus/_agents/bani/NOTES.md | cut -c1-260; echo \"Kart açıldığı andaki ana dal (origin/main, bu işin tabanı $(git merge-base HEAD origin/main | cut -c1-8)) mutant sayısı:\"; git show $(git merge-base HEAD origin/main):yazilim-fabrikasi/scripts/denetci.test.sh | grep -c \"^mut \\\"\"; echo \"Bu daldaki mutant sayısı (eklenen/çıkarılan mutant YOK):\"; grep -c \"^mut \\\"\" yazilim-fabrikasi/scripts/denetci.test.sh; echo \"Sonuç: kabul ölçütü \\\"kapı sayısı ve mutant yakalama DEĞİŞMEZ\\\" = 149/149 + 15/15 kırmızı (ölçümler önce/sonra kayıtlarında).\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T13:54:20+03:00",
+      "sure_sn": 0.0
+    }
+  ],
+  "imza": "4f5190568001939e92056c1417028dbb89bdd4df04ff19b6c5f74e34afdef6a3"
+}

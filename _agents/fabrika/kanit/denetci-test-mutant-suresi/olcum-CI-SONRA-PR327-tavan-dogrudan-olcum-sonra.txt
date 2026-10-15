@@ -1,0 +1,5 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/ci-denetci-sure.sh 38721932338 PR #327, paralel
+# rc=0 sure=1.3s zaman=2026-10-15T13:54:20+03:00
+--- stdout ---
+CI run 38721932338 (PR #327, paralel): denetci.test başladı 2026-10-15T10:47:05.9951602Z · bitti 2026-10-15T10:49:16.9347843Z · süre 131 sn · sonuç YESIL · 300 sn tavanına değdi mi: hayir (lint.yml timeout 300)
+--- stderr ---

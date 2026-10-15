@@ -1,0 +1,10 @@
+$ bash -c echo "İş kartının kabul cümlesindeki \"18 mutant\" BENİM (BÂNİ, kartı açan) sayım hatamdı; istek (SERDAR NOTES 13:24) sayı vermez:"; grep -n "\[SERDAR → BÂNİ\] 13:24" /config/projects/Nexus/_agents/bani/NOTES.md | cut -c1-260; echo "Kart açıldığı andaki ana dal (origin/main, bu işin tabanı $(git merge-base HEAD origin/main | cut -c1-8)) mutant sayısı:"; git show $(git merge-base HEAD origin/main):yazilim-fabrikasi/scripts/denetci.test.sh | grep -c "^mut \""; echo "Bu daldaki mutant sayısı (eklenen/çıkarılan mutant YOK):"; grep -c "^mut \"" yazilim-fabrikasi/scripts/denetci.test.sh; echo "Sonuç: kabul ölçütü \"kapı sayısı ve mutant yakalama DEĞİŞMEZ\" = 149/149 + 15/15 kırmızı (ölçümler önce/sonra kayıtlarında)."
+# rc=0 sure=0.0s zaman=2026-10-15T13:54:20+03:00
+--- stdout ---
+İş kartının kabul cümlesindeki "18 mutant" BENİM (BÂNİ, kartı açan) sayım hatamdı; istek (SERDAR NOTES 13:24) sayı vermez:
+Kart açıldığı andaki ana dal (origin/main, bu işin tabanı 8594cbef) mutant sayısı:
+15
+Bu daldaki mutant sayısı (eklenen/çıkarılan mutant YOK):
+15
+Sonuç: kabul ölçütü "kapı sayısı ve mutant yakalama DEĞİŞMEZ" = 149/149 + 15/15 kırmızı (ölçümler önce/sonra kayıtlarında).
+--- stderr ---

@@ -1,0 +1,11 @@
+$ bash -c echo "=== MUT_PARALEL=abc (sayı değil): eski kodda dış döngü sonsuza dek dönerdi; yeni kod uyarı basıp 1 (sıralı) ile BİTER. timeout 900 sn ==="; s=$(date +%s); MUT_PARALEL=abc timeout 900 bash yazilim-fabrikasi/scripts/denetci.test.sh 2>&1 | grep -E "uyarı|bilgi|SONUÇ"; rc=${PIPESTATUS[0]}; echo "rc=$rc süre=$(( $(date +%s) - s )) sn (124 = timeout = asılı kaldı)"; [ $rc = 0 ]
+# rc=0 sure=419.0s zaman=2026-10-15T13:50:24+03:00
+--- stdout ---
+=== MUT_PARALEL=abc (sayı değil): eski kodda dış döngü sonsuza dek dönerdi; yeni kod uyarı basıp 1 (sıralı) ile BİTER. timeout 900 sn ===
+  ✓ küçük istemde kırpma uyarısı YOK
+  ✓ denetçiye kırpıldığı söylendi (istem sonunda uyarı)
+  (uyarı) MUT_PARALEL sayı değil ('abc') → 1 (sıralı)
+  (bilgi) 15 mutant · 1 paralel · 384 sn
+── SONUÇ: 149 geçti · 0 kaldı ──
+rc=0 süre=419 sn (124 = timeout = asılı kaldı)
+--- stderr ---

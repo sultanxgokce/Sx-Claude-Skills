@@ -1,0 +1,19 @@
+{
+  "is": "denetci-test-mutant-suresi",
+  "cumle": "yazilim-fabrikasi denetci.test.sh her mutant için sınav dosyasının TAMAMINI yeniden koşturuyor (18 mutant × tam koşum); CI'da 264–300 sn, 300 sn tavanında Terminated (ölçüldü 15 Eki, #323). Süreyi düşür: mutant koşumlarını paralel (nproc'a göre) ve/veya yalnız ilgili bölümle koştur; ölçüm: yerel ve CI süresi önce/sonra; kapı sayısı ve mutant yakalama DEĞİŞMEZ (149/149 + 18 mutant kırmızı).",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-10-15T13:25:26+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

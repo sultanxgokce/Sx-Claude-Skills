@@ -400,7 +400,17 @@ fi
 
 if [ -n "${IC_KOSUM:-}" ]; then echo "(ic)"; [ "$kalan" -eq 0 ]; exit $?; fi
 echo "════ T11 · MUTASYON: Sultan kapısını bozunca sınav kırmızı veriyor mu ════"
-mut() { # mut <ad> <sed-ifadesi> [hedef]
+# 🔴 MUTANT KOŞUMU PARALEL (15 Eki, göz #323: CI 300 sn tavanı): her mutant sınav dosyasının TAMAMINI yeniden koşturur
+#    (15 mutant × tam koşum — iş kartındaki "18" yanlış sayımdı, origin/main'de `^mut "` satırı 15); sırayla koşunca CI'da 264–300 sn, tavanda Terminated. Mutantlar birbirinden bağımsızdır (her iç
+#    koşum kendi mktemp dizininde, kendi .mutant-<ad>.sh dosyasıyla) → nproc kadar (tavan MUT_PARALEL, varsayılan 4) birlikte
+#    koşar; sonuçlar KAYIT SIRASIYLA rapor edilir (çıktı deterministik). Kapı sayısı ve mutant yakalama DEĞİŞMEZ.
+#    MUT_PARALEL=1 eski sıralı davranış (karşılaştırma/ölçüm için).
+MUT_PARALEL="${MUT_PARALEL:-$(nproc 2>/dev/null || echo 2)}"
+# göz tur 1: sayı olmayan değer -gt/-lt'de düşer, iç döngü hiç dönmez, dış döngü SONSUZA dek sürerdi → sayı değilse 1 (sıralı, güvenli)
+[[ "$MUT_PARALEL" =~ ^[0-9]+$ ]] || { echo "  (uyarı) MUT_PARALEL sayı değil ('$MUT_PARALEL') → 1 (sıralı)"; MUT_PARALEL=1; }
+[ "$MUT_PARALEL" -gt 4 ] && MUT_PARALEL=4; [ "$MUT_PARALEL" -lt 1 ] && MUT_PARALEL=1
+MUT_ADLAR=(); MUT_DOSYALAR=(); MUT_RC_DIZ="$(mktemp -d)"
+mut() { # mut <ad> <sed-ifadesi> [hedef] — mutantı ÜRETİR ve sıraya koyar; koşum mut_kos'ta (paralel)
   local hedef="${3:-$HERE/denetci.sh}" M="$HERE/.mutant-$1.sh"
   # 🔴 GEÇERSİZ MUTANT TUZAĞI (bağımsız göz 23 Eyl): sed ifadem hatalıydı, mutant üretilmedi ve
   #    sınav "kırmızı" verdi — ama kırmızının sebebi davranış değişikliği değil, bozuk sed'di.
@@ -411,10 +421,25 @@ mut() { # mut <ad> <sed-ifadesi> [hedef]
   if cmp -s "$M" "$hedef"; then
     kalan=$((kalan+1)); echo "  ✗ mutant '$1': orijinalden FARKSIZ (çapa bayatlamış) — ölçtüğü şey yok"; rm -f "$M" "$M.err"; return
   fi
-  chmod +x "$M"
-  IC_KOSUM=1 MUTANT_D="$M" bash "$0" >/dev/null 2>&1
-  [ $? -ne 0 ]; g $? "mutant '$1' sınavı KIRMIZI yapıyor"
-  rm -f "$M" "$M.err"
+  chmod +x "$M"; MUT_ADLAR+=("$1"); MUT_DOSYALAR+=("$M")
+}
+mut_kos() { # sıradaki mutantları en çok MUT_PARALEL koşumla birlikte koşturur; raporu kayıt sırasıyla basar
+  local i=0 n=${#MUT_ADLAR[@]} basladi=$(date +%s)
+  while [ "$i" -lt "$n" ]; do
+    local j=0
+    while [ "$j" -lt "$MUT_PARALEL" ] && [ "$i" -lt "$n" ]; do
+      ( IC_KOSUM=1 MUTANT_D="${MUT_DOSYALAR[$i]}" bash "$0" >/dev/null 2>&1; echo $? > "$MUT_RC_DIZ/${MUT_ADLAR[$i]}.rc" ) &
+      i=$((i+1)); j=$((j+1))
+    done
+    wait
+  done
+  local k; for ((k=0;k<n;k++)); do
+    local rc; rc="$(cat "$MUT_RC_DIZ/${MUT_ADLAR[$k]}.rc" 2>/dev/null || echo 0)"
+    [ "$rc" -ne 0 ]; g $? "mutant '${MUT_ADLAR[$k]}' sınavı KIRMIZI yapıyor"
+    rm -f "${MUT_DOSYALAR[$k]}" "${MUT_DOSYALAR[$k]}.err"
+  done
+  echo "  (bilgi) $n mutant · $MUT_PARALEL paralel · $(( $(date +%s) - basladi )) sn"
+  rm -rf "$MUT_RC_DIZ"
 }
 mut "ayrac-temizligini-kaldir" 's@^def tmz(v): return " ".join(str(v).replace("|","/").split())@def tmz(v): return str(v)@'
 mut "gerekce-zorunlulugunu-kaldir" 's@^if len(x.get("gerekce") or "") < 20: raise SystemExit(1)@pass@'
@@ -432,6 +457,7 @@ mut "kapi-kart-hatasini-bastirir" 's@KARTYOL="$(kart_yolu)" || exit 3;@KARTYOL="
 mut "bayat-kopya-geri-donusu" 's@OKUNMAZ — kart.sh ile birincile yaz, sonra denetçiyi koştur"; return 3@"; printf "%s" "$DEPO/_agents/fabrika/kartlar/$IS.json"@'
 mut "kart-json-hatasi-yutulur" 's@denetim açılmaz"; exit 3; }@denetim açılmaz"; true; }@'
 mut "kirpma-kaydini-kaldir" 's@"kirpildi":{"oldu":kirp=="1","istem_bayt":int(bayt),"esik":int(esik)},@"kirpildi":{"oldu":False,"istem_bayt":int(bayt),"esik":int(esik)},@'
+mut_kos
 
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]
