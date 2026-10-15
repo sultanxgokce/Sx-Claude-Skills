@@ -1,0 +1,43 @@
+$ node kapi/pano-sinav.mjs
+# rc=0 sure=29.6s zaman=2026-10-15T13:40:36+03:00
+--- stdout ---
+── Y · resim yapıştırma (Cmd+V)
+  ✓ Y0 gerçek ttyd+tmux sayfası açıldı, kabuk istemi göründü
+  ✓ Y1 köprü ttyd'nin xterm'ine bağlandı (window.__kapiPano.osc52)
+  ✓ Y2 resim /api/resim üzerinden dinleyiciye ULAŞTI (bayt bayt aynı · x-requested-with: dashboard)
+  ✓ Y3 dönen yol TERMİNALE yazıldı (kabuk satırında görünür)
+  ✓ Y4 kullanıcıya bildirildi: "resmin yolu terminale yazıldı — Enter ile gönder"
+  ✓ Y5 büyük PNG (344 KB, 2600px) 2000px WebP olarak küçültülür ve küçülür
+  ✓ Y6 ikinci yol da terminale yazıldı
+  ✓ Y7 METİN yapıştırma xterm'in kendi yoluyla aynen çalışır (köprü dokunmaz)
+── K · kopyalama (fare seçimi → tmux → OSC 52 → tarayıcı panosu)
+  ✓ K1 uygulamanın OSC 52'si tmux üzerinden tarayıcı panosuna İNER
+  ✓ K2 kullanıcıya "seçim panoya kopyalandı" denir
+  ✓ K3 seçilecek satır ekranda bulundu
+  ✓ K4 FAREYLE SEÇİM (tmux copy-mode) tarayıcı panosuna iner — Sultan'ın kırık yolu
+  ✓ K7a tarayıcı kopya kısayolu gerçekten copy olayı üretti (ölçüm aracı çalışıyor)
+     (bilgi) copy olayı sonrası: engellendi=null olayın metni=null pano="SECILECEK-SATIR-ABC"
+  ✓ K7 seçimsiz ⌘C son tmux seçimini panoya GERİ yazar (pano başka şeyle dolmuş olsa da)
+  ✓ K7b 10 dk'dan eski tmux seçimi seçimsiz ⌘C'de panoya YAZILMAZ (güncel içerik korunur)
+  ✓ K7c ömür 10 dk olarak ilan edilir
+  ✓ K5a son tmux seçimi varken Cmd+C ipucu BASILMAZ (yol zaten çalışıyor)
+  ✓ K5 Cmd+C seçimsiz ve son seçimsiz basılınca yol gösterilir (Shift basılı sürükle ipucu)
+  ✓ K6 Shift basılı sürükleme TARAYICI seçimi yapar (Cmd+C ile kopyalanabilir)
+── S · Safari yolu (1.2.0): hareket anında SÖZ · Kopyala düğmesi · copy olayında xterm seçimi
+  ✓ S1 fare seçimi SÖZ yolundan panoya indi (yazım mouseup içinde başladı, OSC 52 sözü çözdü)
+  ✓ S2 düz tık söz açmaz, pano değişmez
+  ✓ S3 OSC 52 gelmeyince söz süresi dolar: pano DEĞİŞMEZ, bekleyen söz kalmaz
+  ✓ S4 yazım reddedilince KOPYALA düğmesi çıkar (metni taşır) ve bildirim nedenini söyler
+  ✓ S4b düğmeye tık → metin panoda, düğme gizlenir, yol=dugme
+  ✓ S5 Shift+sürükle seçimi, odak terminalden kaçmışken copy olayında köprü tarafından yazılır (preventDefault + metin)
+  ✓ S6 köprü 1.2.1 söz ve düğme yolunu ilan eder
+  ✓ S7 seçim panoya indikten sonra AYNI metin için gelen yazım reddi sessiz: düğme YOK, kırmızı uyarı YOK, pano doğru
+  ✓ S7b söz yazımı sürerken gelen ret onun sonucunu bekler: söz inince düğme YOK, kırmızı YOK, pano doğru
+── N · olumsuz kontrol: köprüsüz kapı (KAPI_PANO=0) aynı ölçümde KIRMIZI
+  ✓ N1 köprüsüz sayfada işaret ve bağ yok
+  ✓ N2 köprüsüz: OSC 52 panoya İNMEZ (ölçüm yokluğu görüyor; K1 tautoloji değil)
+  ✓ N3 köprüsüz: resim yapıştırma dinleyiciye ULAŞMAZ (Y2 tautoloji değil)
+── E · eklenti sınavı ÖLÇÜLMEDİ (EKLENTI_YOL verilmedi) — yeşil sayılmaz
+
+GEÇEN: 31 · KALAN: 0
+--- stderr ---
