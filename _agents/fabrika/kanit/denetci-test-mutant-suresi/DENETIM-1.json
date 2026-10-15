@@ -1,0 +1,50 @@
+{
+  "tur": 1,
+  "is": "denetci-test-mutant-suresi",
+  "pr": "327",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T13:42:23+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 13657,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Mutant koşumları dörderli paralelleştirilmiş ve yerelde süre 474 saniyeden 123 saniyeye inerken 149 kapı ile mevcut 15 mutant korunmuş. Ancak kartın açıkça istediği 18 mutant ve CI önce/sonra ölçümü teslim edilmemiş; ayrıca geçersiz MUT_PARALEL değeri koşumu sonsuz döngüye sokabildiğinden önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "Talep edilen 18 mutant yerine yalnız 15 mutant çalıştırılıyor; bu nedenle mutant yakalamanın istenen 18/18 düzeyinde değişmeden kaldığı kanıtlanmıyor.",
+        "kanit": "SONRA ölçüm çıktısında “(bilgi) 15 mutant” yazıyor ve görünen mutant başarı satırlarının sayısı da 15; iş kartı ise “18 mutant kırmızı” istiyor.",
+        "konum": "olcum-SONRA-denetci-test-tam-sure-sn-mutantlar-paralel-sonra.txt",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "İş kartındaki CI süresi önce/sonra ölçümü yok; yalnız yerel ölçüm çifti sunulmuş.",
+        "kanit": "Manifestteki iki kaydın etiketleri ve çıktıları yerel koşuma ait; SONRA çıktısı “yerel süre: 123 sn” diyor ve hiçbir CI ölçüm kaydı bulunmuyor.",
+        "konum": "KANIT MANİFESTİ:kayitlar[0..1]",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "MUT_PARALEL sayısal olmayan bir değer aldığında doğrulama başarısız kalıyor ve dış döngü ilerlemeden sonsuza kadar sürebiliyor.",
+        "kanit": "Değer doğrudan `-gt/-lt` ve aritmetik karşılaştırmada kullanılıyor; iç döngü hiç çalışmazsa `i` artmıyor, dıştaki `while [ \"$i\" -lt \"$n\" ]` aynı durumla yineleniyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.test.sh:407-430",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Belgelerde 18 mutant ifadesi kullanılırken gerçek koşum 15 mutant; sürüm notu kendi içinde çelişkili.",
+        "kanit": "Betik yorumunda “18 mutant × tam koşum” yazıyor, SKILL.md eklenen notu “15 mutant sırayla” diyor ve SONRA ölçümü 15 mutant bildiriyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.test.sh:403-406; yazilim-fabrikasi/SKILL.md:92",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Yerel süre için gerçek koşumdan alınmış yeşil önce/sonra ölçüm çifti yeterli ve 474→123 saniye ile 149/149 sonucunu gösteriyor, fakat CI ölçüm çifti hiç yok ve kayıtlar yalnız 15 mutantı doğruladığı için karttaki 18 mutant iddiasını desteklemiyor."
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "denetci-test-mutant-suresi",
+  "pr": "327",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T13:53:13+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 21474,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Mutant koşumları en çok dörderli paralelleştirilmiş; yerel süre 474→123 saniye, CI süresi 300→131 saniye olmuş ve 149 kapı ile mevcut 15 mutant korunmuş. Önceki MUT_PARALEL ve CI kanıt açıkları giderilmiş, ancak iş kartının açık kabulü 18 kırmızı mutantken teslimat 15 mutantı koruyor; önce kartın yanlış sayımı resmen düzeltilmeli ya da eksik üç mutant tamamlanmalı.",
+    "bulgular": [
+      {
+        "ne": "Teslimat kartta istenen 18 mutantın değişmeden kaldığını göstermiyor; yalnız 15 mutant üretilip çalıştırılıyor.",
+        "kanit": "İş kartı “18 mutant kırmızı” kabulünü veriyor; SONRA yerel çıktısı “15 mutant · 4 paralel”, MUT_PARALEL=abc çıktısı da “15 mutant · 1 paralel” diyor. Diffte yalnız 15 `mut` çağrısı bulunuyor ve kod yorumu karttaki 18 sayısını tek taraflı olarak yanlış ilan ediyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.test.sh:403-460; olcum-SONRA-denetci-test-tam-sure-sn-mutantlar-paralel-sonra.txt",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "CI sonrası kayıtta hâlâ iki “Terminated” satırı raporlanıyor; bu gösterge önceki zaman aşımı belirtisini ayırt edemediği için belge metni yanıltıcı.",
+        "kanit": "CI-SONRA çıktısı koşumu 131 saniye ve YEŞİL bildirirken aynı satırda “günlükte Terminated satırı: 2 (tavan: lint.yml timeout 300)” yazıyor; dolayısıyla Terminated sayımı tavan kaynaklı kesilmeyi güvenilir biçimde ölçmüyor.",
+        "konum": "olcum-CI-SONRA-denetci-test-sure-PR327-run-38721932338-paralel-sonra.txt",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam, sarı kayıt yok. Yerel 474→123 saniye ve CI 300 saniye/KIRMIZI→131 saniye/YEŞİL ölçüm çiftleri mevcut; SONRA koşumu 149/149 ile mevcut 15 mutantın kırmızı kaldığını gösteriyor. Buna karşılık hiçbir kayıt karttaki 18 mutant kabulünü doğrulamıyor; ayrıca CI sonrası “Terminated: 2” sayımı zaman aşımı göstergesi olarak özgül değil."
+  }
+}
