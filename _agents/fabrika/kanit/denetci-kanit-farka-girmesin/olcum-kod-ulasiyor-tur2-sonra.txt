@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/ayikla-prob/prob.sh /config/projects/_wt/Sx-Claude-Skills-denetci-kanit-farka-girmesin/yazilim-fabrikasi/scripts/denetci.sh
+# rc=0 sure=0.4s zaman=2026-10-15T15:57:49+03:00
+--- stdout ---
+istem boyu: 3302 bayt
+SONUC: uretim kodu farki denetciye ULASTI
+--- stderr ---

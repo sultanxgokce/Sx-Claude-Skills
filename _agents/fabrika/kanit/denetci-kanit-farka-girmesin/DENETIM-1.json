@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "denetci-kanit-farka-girmesin",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T15:55:31+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 23167,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Kanıt dökümlerini ayıran üretim değişikliği ana vakada çalışıyor; 110139 bayttan 3302 bayta iniş ve kod farkının yeniden ulaşması ölçülmüş. Ancak ayıklama kapsamı yol köküne bağlanmadığı için üretim dosyasını gizleyebilir, yalnız-kanıt farkını hiç ayıklamaz ve kartın istediği denetci.test.sh kapısı kurulmadığından önce bunlar çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Ayıklama gerçek kanıt dizininin kökünü değil, yolun herhangi bir yerindeki metni eşliyor; örneğin docs/_agents/fabrika/kanit/x adlı üretim dosyası da denetçiden sessizce çıkarılır.",
+        "kanit": "Koşul `if \"_agents/fabrika/kanit/\" in yol` biçiminde alt dize arıyor; baştan eşleşme veya kesin kök denetimi yok. Sunulan 15 kapıda bu benzer adlı üretim yolu vakası bulunmuyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:214",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Fark yalnız kanıt dosyalarından oluşursa üretilen ayıklanmış fark boş kalıyor ve kod özgün farkı olduğu gibi gönderiyor; talep edilen ayıklama bu durumda devre dışı.",
+        "kanit": "Ayıklanmış dosya ancak `-s \"$TMP/diff-ayik.patch\"` olduğunda kabul ediliyor; boş sonuçta else kolu açıkça `fark olduğu gibi gider` diyor. Kapılar yalnız üç kanıt dosyasının yanında bir üretim dosyası olan fikstürü ve yalnız üretim dosyalı fikstürü ölçüyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:220-232; yazilim-fabrikasi/scripts/denetci-fark-ayikla.test.sh:58-72,104-115",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "İş kartının istediği `denetci.test.sh yeni kapılar` kurulmamış; kapılar ayrı, yeni bir betikte bırakılmış ve mevcut sınavın bunu çağırdığına dair değişiklik yok.",
+        "kanit": "Diff yeni `denetci-fark-ayikla.test.sh` dosyasını ekliyor fakat `denetci.test.sh` dosyasında veya başka bir çağırıcıda değişiklik göstermiyor; dosya başındaki yorum da taşımanın geleceğe bırakıldığını söylüyor. Manifestte yalnız yeni betiğin doğrudan çalıştırılması ölçülmüş.",
+        "konum": "yazilim-fabrikasi/scripts/denetci-fark-ayikla.test.sh:1-8; kanıt kaydı `kapilar`",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Ana davranış için gerçekçi şişkin farkla güçlü bir önce/sonra çifti var: eski koşum 110139 baytta kodu kaybediyor, yeni koşum 3302 baytta kodu ulaştırıyor; 15 kapı ve beklenen-kırmızı mutasyon da sınavın ana değişikliği yakaladığını gösteriyor. Buna karşılık yalnız-kanıt farkı, kanıt yolunu yalnız kökte eşleme ve yeni kapının mevcut denetci.test.sh tarafından çağrılması ölçülmemiş."
+  }
+}

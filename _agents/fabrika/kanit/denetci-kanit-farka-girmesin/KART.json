@@ -1,0 +1,19 @@
+{
+  "is": "denetci-kanit-farka-girmesin",
+  "cumle": "Denetci istemi kanit dokumleriyle sisip 110 KB'ta kirpiliyor ve uretim kodu farki denetciye hic ulasmiyor: kanit dizini farktan AYIKLANSIN (denetciye zaten ayri gidiyor)",
+  "istedi": "SERDAR",
+  "aldi": "MUMEYYIZ",
+  "zaman": "2026-10-15T15:49:33+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "denetci.test.sh yeni kapilar: kanit dosyalari farktan ayiklanir · ayiklandigi SOYLENIR · kirpilma esigin altina duser · kanit yine ayri gider · kod farki bozulmaz",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

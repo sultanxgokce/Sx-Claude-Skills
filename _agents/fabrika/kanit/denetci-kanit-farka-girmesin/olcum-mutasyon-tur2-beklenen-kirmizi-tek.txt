@@ -1,0 +1,76 @@
+$ bash /tmp/tmp.aX7iUHtUBe/kos.sh
+# rc=1 sure=8.9s zaman=2026-10-15T15:57:58+03:00
+--- stdout ---
+### BEKLENEN KIRMIZI — mutasyonlar AYRI AYRI kosuluyor.
+### Birlikte kosulunca birbirlerini MASKELIYORLAR (alt dize her seyi ayiklar -> ayiklanmis fark bos
+### kalir -> bos-fark mutasyonu geri donusu tetikler ve hicbir sey ayiklanmaz). Her duzeltme kendi
+### mutasyonuyla olculur; asagidaki iki blokta ilgili kapilar KIRMIZI olmali.
+
+== MUTASYON A: yol eslesmesi kokten DEGIL alt dize (benzer adli uretim dosyasi ayiklanir)
+A · 🔴 kanıt dosyaları farktan AYIKLANIR, üretim kodu KALIR
+  ✓ A1 denetim koşar ve geçer (5/E)
+  ✓ A2 🔴 ÜRETİM KODU farkı denetçiye ULAŞIR
+  ✓ A3 🔴 kanıt dosyasının farkı istemde İKİNCİ kez görünmez
+  ✓ A4 ayıklandığı denetçiye SÖYLENİR (sessiz ayıklama yok)
+  ✓ A5 kanıt manifesti yine AYRI gider
+B · 🔴 kırpılma: asıl zarar buydu
+  ✓ B1 ayıklamalı koşumda istem eşiğin ALTINA düşer (kırpılma yok)
+  ✓ B2 🔴 kırpılma uyarısı istemde YOK
+  ✓ B3 ayıklama KAPATILINCA (DENETCI_KANIT_AYIKLA=0) denetim yine koşar
+  ✓ B4 🔴 ayıklama kapalıyken istem KIRPILIR — eski davranış ölçülür
+  ✓ B5 🔴 ayıklama kapalıyken üretim kodu istemden DIŞARI itilir (yanan tur)
+C · 🔴 kayıt: 'fark eksikti' ile 'kanıt ayrı gitti' sonradan ayırt edilsin
+  ✓ C1 DENETIM kaydında kanit_ayiklandi.dosya = 3
+  ✓ C2 ayıklama kapalıyken kayıt dosya=0 ve kirpildi.oldu=true der
+D · 🔴 ayıklama farkı BOZMAZ (yalnız kanıt yolu düşer)
+  ✓ D1 kanıt dosyası HİÇ yoksa fark olduğu gibi geçer
+  ✓ D2 kanıtsız farkta kod yine ULAŞIR
+  ✓ D3 kanıtsız farkta 'ayıklandı' notu BASILMAZ (yalan söylemez)
+E · 🔴 bağımsız gözün tur-1 bulguları
+  ✓ E1 benzer adlı yolda denetim koşar
+  ✗ E2 🔴 docs/_agents/fabrika/kanit/… ÜRETİM dosyası AYIKLANMAZ (kökten eşleşme) ('BENZER-ADLI-URETIM' /tmp/tmp.Oek5oWQCq2/istem-izi.txt içinde yok)
+  ✓ E3 gerçek kanıt yolu yine ayıklanır
+  ✓ E4 yalnız-kanıt farkında denetim koşar (durmaz)
+  ✓ E5 🔴 yalnız-kanıt farkı AYIKLANIR (eski kapı burada devre dışı kalıyordu)
+  ✓ E6 🔴 kod farkının BOŞ olduğu denetçiye SÖYLENİR (eksik sanılmasın)
+  ✓ E7 yalnız-kanıt turunda kayıt dosya=1 der
+F · 🔴 bu sınavı kim çağırıyor (yazmak koşturmaz)
+  ✓ F1 CI keşfi bu dosyayı BULUR (find ile türetilen listede)
+
+toplam=23 geçen=22 düşen=1
+A rc=1
+
+== MUTASYON B: ayiklanmis fark BOS olunca ayiklama devre disi (yalniz-kanit farki sisik gider)
+A · 🔴 kanıt dosyaları farktan AYIKLANIR, üretim kodu KALIR
+  ✓ A1 denetim koşar ve geçer (5/E)
+  ✓ A2 🔴 ÜRETİM KODU farkı denetçiye ULAŞIR
+  ✓ A3 🔴 kanıt dosyasının farkı istemde İKİNCİ kez görünmez
+  ✓ A4 ayıklandığı denetçiye SÖYLENİR (sessiz ayıklama yok)
+  ✓ A5 kanıt manifesti yine AYRI gider
+B · 🔴 kırpılma: asıl zarar buydu
+  ✓ B1 ayıklamalı koşumda istem eşiğin ALTINA düşer (kırpılma yok)
+  ✓ B2 🔴 kırpılma uyarısı istemde YOK
+  ✓ B3 ayıklama KAPATILINCA (DENETCI_KANIT_AYIKLA=0) denetim yine koşar
+  ✓ B4 🔴 ayıklama kapalıyken istem KIRPILIR — eski davranış ölçülür
+  ✓ B5 🔴 ayıklama kapalıyken üretim kodu istemden DIŞARI itilir (yanan tur)
+C · 🔴 kayıt: 'fark eksikti' ile 'kanıt ayrı gitti' sonradan ayırt edilsin
+  ✓ C1 DENETIM kaydında kanit_ayiklandi.dosya = 3
+  ✓ C2 ayıklama kapalıyken kayıt dosya=0 ve kirpildi.oldu=true der
+D · 🔴 ayıklama farkı BOZMAZ (yalnız kanıt yolu düşer)
+  ✓ D1 kanıt dosyası HİÇ yoksa fark olduğu gibi geçer
+  ✓ D2 kanıtsız farkta kod yine ULAŞIR
+  ✓ D3 kanıtsız farkta 'ayıklandı' notu BASILMAZ (yalan söylemez)
+E · 🔴 bağımsız gözün tur-1 bulguları
+  ✓ E1 benzer adlı yolda denetim koşar
+  ✓ E2 🔴 docs/_agents/fabrika/kanit/… ÜRETİM dosyası AYIKLANMAZ (kökten eşleşme)
+  ✓ E3 gerçek kanıt yolu yine ayıklanır
+  ✓ E4 yalnız-kanıt farkında denetim koşar (durmaz)
+  ✗ E5 🔴 yalnız-kanıt farkı AYIKLANIR (eski kapı burada devre dışı kalıyordu) ('YALNIZ-KANIT-ICERIGI' var, olmamalı)
+  ✗ E6 🔴 kod farkının BOŞ olduğu denetçiye SÖYLENİR (eksik sanılmasın) ('ÜRETİM KODU farkı BOŞTUR' /tmp/tmp.Eru0TzA7vW/istem-izi.txt içinde yok)
+  ✗ E7 yalnız-kanıt turunda kayıt dosya=1 der (rc=1, beklenen=0)
+F · 🔴 bu sınavı kim çağırıyor (yazmak koşturmaz)
+  ✓ F1 CI keşfi bu dosyayı BULUR (find ile türetilen listede)
+
+toplam=23 geçen=20 düşen=3
+B rc=1
+--- stderr ---
