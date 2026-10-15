@@ -1,11 +1,11 @@
 $ node terminal-onar/kapi/kimlik.test.mjs
-# rc=0 sure=0.5s zaman=2026-10-16T01:10:36+03:00
+# rc=0 sure=0.5s zaman=2026-10-16T01:11:11+03:00
 --- stdout ---
 ── K · oturum kimlikleri (kimlik.mjs)
   ✓ K1 yalnız bu kutunun, yaşayan, programı claude olan süreçleri: kutu-ana + serdar
   ✓ K2 başka pid alanı · ölmüş süreç · pid'i başka programa geçmiş · bozuk dosya SAYILMAZ
   ✓ K3 tmux "oturum:@N.%N" → oturum adı; sessionId + ad + ad kaynağı taşınır
-  ✓ K2b dosya adı ≠ içindeki pid (099.json içinde 101) → sayılmaz ve gerçek 101.json'u gölgelemez
+  ✓ K2b dosya adı ≠ içindeki pid (099.json içinde yaşayan 101) → tek başına SAYILMAZ; taklit önce okunsa da gerçek 101.json gölgelenmez
   ✓ K4 pid alanı okunamazsa (boş) HİÇBİR dosya sayılmaz (ortak dizinde başka kutuya bağlanmaz)
 ── E · eşleşme: önce kimlik, sonra tmux adı
   ✓ E1 (SERDAR negatif sınavı) kimliği ANA oturumda olan kişi "çalışıyor", oturumu kutu-ana, eşleşme kimlikle — "oturumu yok" DEĞİL
