@@ -635,6 +635,101 @@ kapi "U6 iki havuz düzeni birden varsa SEÇMEZ → rc=3" 3 sh -c \
 kapi "U7 --havuz-yolu açıkça verilince belirsizlik kalkar" 0 "${U[@]}" --havuz-yolu _agents/havuz/bulgu-havuzu.jsonl olc
 kapi "U8 açık yol yoksa yedeğe DÜŞMEZ → rc=3" 3 "${U[@]}" --havuz-yolu _agents/yok/bulgu-havuzu.jsonl olc
 
+echo "V · 🔴 İZOLE KUTU KÖRLÜĞÜ (WBHZSJEA): kutunun KENDİ defteri de okunur"
+# Merkez odanın defteri $KOK/oda · izole kutunun kendi defteri $KOK/kutu — İKİ AYRI depo.
+mkdir -p "$KOK/kutu/_agents/handoff"
+: > "$KOK/kutu/_agents/handoff/layiha-aday-havuzu.jsonl"
+python3 - "$KOK/kutu/_agents/handoff/bulgu-havuzu.jsonl" <<'PY2'
+import json, sys
+from datetime import date
+bugun = date.today().isoformat()
+# Kutunun KENDİ tekrarı: merkezde HİÇ görünmeyen, eşiği aşan bir sınıf.
+k = [{"id": "kutu%02d" % i, "tarih": bugun, "baslik": "kutu ici kilit cakismasi",
+      "sinif": "kutu-kilit-cakismasi", "gercek": "q"} for i in (1, 7, 13, 25)]
+with open(sys.argv[1], "w", encoding="utf-8") as f:
+    for r in k:
+        f.write(json.dumps(r, ensure_ascii=False) + "\n")
+PY2
+V=(python3 "$B" --depo "$KOK/kutu" --havuz-depo "$KOK/oda" --esik-dosya "$ES")
+kapi "V1 iki kaynak birden okunur → ölçüm koşar" 0 "${V[@]}" olc --gun 0
+iceren "V2 merkez defteri iz satırında yazılır" "iz: merkez:" "${V[@]}" olc --gun 0
+iceren "V3 kutunun KENDİ defteri de iz satırında yazılır" "iz: kutu:" "${V[@]}" olc --gun 0
+iceren "V4 🔴 kutudan gelen kayıt sayısı SÖYLENİR (körlük ölçülebilsin)" "bu kutunun kendi defterinden" "${V[@]}" olc --gun 0
+iceren "V5 🔴 yalnız kutuda olan tekrar FİİLEN bulunur (eski sürüm bunu hiç görmezdi)" "kutu-kilit-cakismasi" "${V[@]}" olc --gun 0
+# Merkez GÖRÜNMÜYOR (izole kutunun gerçeği): iş DURMAZ, eksiklik SÖYLENİR
+V2=(python3 "$B" --depo "$KOK/kutu" --havuz-depo "$KOK/merkez-yok" --esik-dosya "$ES")
+kapi "V6 🔴 merkez görünmezken iş DURMAZ — kutunun izi ölçülür" 0 "${V2[@]}" olc --gun 0
+iceren "V7 🔴 okunamayan kaynak 🟡 ile SÖYLENİR (sessiz kısmi ölçüm yok)" "🟡 merkez:" "${V2[@]}" olc --gun 0
+# Hiçbir kaynak yok → rc=3 (D1'in çok-kaynaklı karşılığı)
+kapi "V8 🔴 hiçbir defter okunamazsa rc=3 — 'tekrar yok' DEMEZ" 3 \
+  python3 "$B" --depo "$KOK/hic-yok" --havuz-depo "$KOK/hic-yok-2" --esik-dosya "$ES" olc --gun 0
+# Aynı kayıt iki defterde: BİR kez sayılır (merkez ↔ kutu aynası)
+mkdir -p "$KOK/ayna/_agents/handoff"
+cp "$HAV" "$KOK/ayna/_agents/handoff/bulgu-havuzu.jsonl"
+: > "$KOK/ayna/_agents/handoff/layiha-aday-havuzu.jsonl"
+iceren "V9 🔴 iki defterde AYNI kayıt iki tekrar sanılmaz (bir kez sayıldı)" "öbür kaynakla AYNI" \
+  python3 "$B" --depo "$KOK/ayna" --havuz-depo "$KOK/oda" --esik-dosya "$ES" olc --gun 0
+# Açık yol eski değişmezi korur: YALNIZ o okunur, kutu defteri eklenmez
+icermeyen "V10 --havuz-yolu verilince kutu defteri EKLENMEZ (açık irade keşfi ezer)" "iz: kutu:" \
+  python3 "$B" --depo "$KOK/kutu" --havuz-depo "$KOK/oda" --esik-dosya "$ES" \
+  --havuz-yolu "$HAV" olc --gun 0
+
+echo "W · 🔴 bağımsız gözün tur-1 bulguları (kimlik uzayı · kapsama sayımı)"
+# W1-W2: merkez ve kutu KENDİ sayaçlarıyla aynı id'yi üretebilir — kimlik uzaylarının
+# ortak olduğu hiç ölçülmedi. Aynı id + FARKLI gövde İKİ bulgudur, biri yutulamaz.
+mkdir -p "$KOK/cakisma-m/_agents/handoff" "$KOK/cakisma-k/_agents/handoff"
+: > "$KOK/cakisma-m/_agents/handoff/layiha-aday-havuzu.jsonl"
+: > "$KOK/cakisma-k/_agents/handoff/layiha-aday-havuzu.jsonl"
+python3 - "$KOK/cakisma-m/_agents/handoff/bulgu-havuzu.jsonl" "$KOK/cakisma-k/_agents/handoff/bulgu-havuzu.jsonl" <<'PY2'
+import json, sys
+from datetime import date
+b = date.today().isoformat()
+# AYNI id'ler (b0001..b0004), tamamen FARKLI govde: iki ayri olay, tek kayda dusmemeli
+m = [{"id": "b000%d" % i, "tarih": b, "baslik": "merkez tarafi olayi", "sinif": "merkez-m%d" % i} for i in (1, 2, 3, 4)]
+k = [{"id": "b000%d" % i, "tarih": b, "baslik": "kutu ici kilit cakismasi", "sinif": "kutu-kilit-cakismasi"} for i in (1, 2, 3, 4)]
+for yol, kayit in ((sys.argv[1], m), (sys.argv[2], k)):
+    with open(yol, "w", encoding="utf-8") as f:
+        for r in kayit:
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+PY2
+W=(python3 "$B" --depo "$KOK/cakisma-k" --havuz-depo "$KOK/cakisma-m" --esik-dosya "$ES")
+iceren "W1 🔴 aynı id + FARKLI gövde yutulmaz: 8 kayıt birleşir (4 değil)" "havuz: 8 kayıt" "${W[@]}" olc --gun 0
+iceren "W2 🔴 id çakışmasına karşın kutunun tekrarı FİİLEN bulunur" "kutu-kilit-cakismasi" "${W[@]}" olc --gun 0
+icermeyen "W3 id çakışması 'öbür kaynakla AYNI' diye yanlış raporlanmaz" "öbür kaynakla AYNI" "${W[@]}" olc --gun 0
+# W4-W5: kapsama sayimi SATIR sayisi degil OKUNAN kaynak sayisidir
+iceren "W4 iki kaynak da okunduysa özet '2/2 kaynak OKUNDU' der" "2/2 kaynak OKUNDU" "${V[@]}" olc --gun 0
+iceren "W5 🔴 bir kaynak okunamadıysa özet kapsamayı GENİŞ göstermez ('1/2')" "1/2 kaynak OKUNDU" "${V2[@]}" olc --gun 0
+# W6-W7 (tur-2 bulgusu): parmak izi KAYIPSIZ olmali. Iki kayit ayni id tasir, secili
+# alanlarda ilk 16 sozcugu BIREBIR aynidir ve yalniz (a) 16. sozcukten SONRASI ile
+# (b) eski listede HIC OLMAYAN bir alan ile ayrilir. Kayipli parmak izi bunlari yutardi.
+mkdir -p "$KOK/kayipli-m/_agents/handoff" "$KOK/kayipli-k/_agents/handoff"
+: > "$KOK/kayipli-m/_agents/handoff/layiha-aday-havuzu.jsonl"
+: > "$KOK/kayipli-k/_agents/handoff/layiha-aday-havuzu.jsonl"
+python3 - "$KOK/kayipli-m/_agents/handoff/bulgu-havuzu.jsonl" "$KOK/kayipli-k/_agents/handoff/bulgu-havuzu.jsonl" <<'PY3'
+import json, sys
+from datetime import date
+b = date.today().isoformat()
+onek = " ".join("soz%02d" % i for i in range(1, 17))   # tam 16 sozcuk, iki tarafta BIREBIR ayni
+m, k = [], []
+for i in (1, 2, 3, 4):
+    # (a) 16. sozcukten SONRASI farkli
+    m.append({"id": "c000%d" % i, "tarih": b, "baslik": onek + " merkez-kuyruk",
+              "sinif": "kayipli-sinif", "gercek": "g"})
+    # (b) ayrica eski listede OLMAYAN bir alan farkli
+    k.append({"id": "c000%d" % i, "tarih": b, "baslik": onek + " kutu-kuyruk",
+              "sinif": "kayipli-sinif", "gercek": "g", "oda": "izole-kutu"})
+for yol, kayit in ((sys.argv[1], m), (sys.argv[2], k)):
+    with open(yol, "w", encoding="utf-8") as f:
+        for r in kayit:
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+PY3
+X=(python3 "$B" --depo "$KOK/kayipli-k" --havuz-depo "$KOK/kayipli-m" --esik-dosya "$ES")
+iceren "W6 🔴 ilk 16 sözcüğü AYNI olan farklı kayıtlar yutulmaz: 8 kayıt" "havuz: 8 kayıt" "${X[@]}" olc --gun 0
+icermeyen "W7 🔴 kayıpsız parmak izi: bu kayıtlar 'öbür kaynakla AYNI' sayılmaz" "öbür kaynakla AYNI" "${X[@]}" olc --gun 0
+# W8: GERCEK ayna (birebir ayni kayit) hala BIR kez sayilir — duzeltme dedup'u bozmadi
+iceren "W8 birebir aynı kayıt hâlâ bir kez sayılır (dedup bozulmadı)" "öbür kaynakla AYNI" \
+  python3 "$B" --depo "$KOK/ayna" --havuz-depo "$KOK/oda" --esik-dosya "$ES" olc --gun 0
+
 echo
 echo "toplam=$((GECEN+DUSEN)) geçen=$GECEN düşen=$DUSEN"
 [[ $DUSEN -eq 0 ]]

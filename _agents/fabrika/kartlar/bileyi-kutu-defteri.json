@@ -1,0 +1,19 @@
+{
+  "is": "bileyi-kutu-defteri",
+  "cumle": "bileyi izole kutularda kör: merkez havuzun yanında kutunun KENDİ bulgu defterini de okusun, kapsamayı kaynak kaynak yazsın",
+  "istedi": "SERDAR",
+  "aldi": "MUMEYYIZ",
+  "zaman": "2026-10-15T15:27:19+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "bileyi.test.sh yeni kapılar: iki kaynak birleşir · biri okunamazsa dürüst kısmi · hiçbiri yoksa rc=3",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

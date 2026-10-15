@@ -1,0 +1,31 @@
+$ python3 bileyi/scripts/bileyi.py --depo /tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/kutu --havuz-depo /tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/merkez --esik-dosya /tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/esik.json olc --gun 0
+# rc=0 sure=0.1s zaman=2026-10-15T15:34:15+03:00
+--- stdout ---
+🔪 BİLEYİ · iç-tarama · ajan=mumeyyiz · 2026-10-15
+   iz: merkez: /tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/merkez/_agents/handoff/bulgu-havuzu.jsonl — 3 kayıt
+   iz: kutu: /tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/kutu/_agents/handoff/bulgu-havuzu.jsonl — 4 kayıt
+   havuz: 7 kayıt (birleşik, 2 kaynak · 4 tanesi bu kutunun kendi defterinden)
+   dedup kaynakları: aday havuzu: 0 kayıt · kurulu beceri: 96
+   🔴 KAPSAMA · sınıf alanı dolu: 7/7 (%100) → sınıfa dayanan sayım havuzun %0'ine KÖR
+   eşik: ikili≥4 · sınıf≥2 · dayanak 2026-10-09
+
+── YÜZEY 1 · sınıf alanı (kesin, kısmi kapsama)
+     4 × kutu-kilit-cakismasi
+
+── YÜZEY 2 · ikili söz öbeği (tüm havuz, gürültülü)
+     4 × kilit cakismasi                    [k1,k7,k13]
+     4 × kutu kilit                         [k1,k7,k13]
+     4 × kutu ici                           [k1,k7,k13]
+     4 × ici kilit                          [k1,k7,k13]
+     4 × cakismasi kutu                     [k1,k7,k13]
+
+── YÜZEY 3 · sürtünme raporu (olay ≥ 10)
+   🟡 sürtünme raporu bu depoda yok (friction-report.sh) — ÖLÇEMEDİM, 'yok' demiyorum
+
+🔪 eşiği aşan 6 tekrar var · tavan 2 yetenek/tur
+   🔴 Bu bir GİRDİdir, hüküm değil: hangi cinsten yetenek üretileceği
+      (kural · yapılandırma · beceri) muhakeme ister — ÖNCE 'kural var mı,
+      koşuyor mu' sorulur; var olanı kapıya bağlamak yeni beceri yazmaktan ucuzdur.
+   🔴 ÖLÇMEDİĞİM: bu sürtünmelerin MALİYETİ. Kaç kez olduğunu saydım,
+      kaç dakika yediğini bilmiyorum ve oraya temiz demiyorum.
+--- stderr ---

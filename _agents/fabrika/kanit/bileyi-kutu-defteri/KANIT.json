@@ -1,0 +1,218 @@
+{
+  "is": "bileyi-kutu-defteri",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T15:41:11+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kutu-tekrari-gorunuyor-mu",
+      "asama": "once",
+      "dosya": "olcum-kutu-tekrari-gorunuyor-mu-once.txt",
+      "sha256": "411ff0e51dd9e2c140d63b8e2e4f7cd43c2efbc8c866cbe35d9f75ece7c2c42b",
+      "komut": [
+        "python3",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/bileyi-ESKI.py",
+        "--depo",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/kutu",
+        "--havuz-depo",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/merkez",
+        "--esik-dosya",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/esik.json",
+        "olc",
+        "--gun",
+        "0"
+      ],
+      "rc": 3,
+      "renk": "sari",
+      "zaman": "2026-10-15T15:33:35+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kutu-tekrari",
+      "asama": "once",
+      "dosya": "olcum-kutu-tekrari-once.txt",
+      "sha256": "50c1b4526743e3cbfecbff45b47ba5b396c794d1bf91896c9aef4893c509a91d",
+      "komut": [
+        "python3",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/bileyi-ESKI.py",
+        "--depo",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/kutu",
+        "--havuz-depo",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/merkez",
+        "--esik-dosya",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/esik.json",
+        "olc",
+        "--gun",
+        "0"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T15:33:49+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kutu-tekrari",
+      "asama": "sonra",
+      "dosya": "olcum-kutu-tekrari-sonra.txt",
+      "sha256": "0bde4c0cd757375fcf4badd13ddc8ceb803c2bb7ce879e0c0e9853a077dfab8f",
+      "komut": [
+        "python3",
+        "bileyi/scripts/bileyi.py",
+        "--depo",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/kutu",
+        "--havuz-depo",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/merkez",
+        "--esik-dosya",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/esik.json",
+        "olc",
+        "--gun",
+        "0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T15:34:15+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapilar",
+      "asama": "sonra",
+      "dosya": "olcum-kapilar-sonra.txt",
+      "sha256": "8d8f8d9270b9930987d24604a603a057676efe0456968e02cf0ac9d1b21eb19b",
+      "komut": [
+        "bash",
+        "bileyi/scripts/bileyi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T15:34:32+03:00",
+      "sure_sn": 6.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-beklenen-kirmizi",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-beklenen-kirmizi-tek.txt",
+      "sha256": "6432ad0394c5addcf9f280fc60637a89a1006751a8c6789d5fa8e7cef36c4bbb",
+      "komut": [
+        "bash",
+        "/tmp/tmp.8VsJg4Ffzb/kos.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T15:34:46+03:00",
+      "sure_sn": 6.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapilar-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-kapilar-tur2-sonra.txt",
+      "sha256": "fd56c5f4123edab233c0d48a1ab408b25692eb857deb54fea833ac6c02ac821a",
+      "komut": [
+        "bash",
+        "bileyi/scripts/bileyi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T15:37:51+03:00",
+      "sure_sn": 7.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kutu-tekrari-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-kutu-tekrari-tur2-sonra.txt",
+      "sha256": "e4cd53db7cfa93496af013d2a38f41f807b5c668e35b49461767c61c739ba71d",
+      "komut": [
+        "python3",
+        "bileyi/scripts/bileyi.py",
+        "--depo",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/kutu",
+        "--havuz-depo",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/merkez",
+        "--esik-dosya",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/esik.json",
+        "olc",
+        "--gun",
+        "0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T15:37:52+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-tur2-beklenen-kirmizi",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-tur2-beklenen-kirmizi-tek.txt",
+      "sha256": "44f4e517a3865ff5b787e52a57267a2ce7324c94b5915f899189f3a31994924d",
+      "komut": [
+        "bash",
+        "/tmp/tmp.UUK2XKEQ6y/kos.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T15:38:09+03:00",
+      "sure_sn": 17.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapilar-tur3",
+      "asama": "sonra",
+      "dosya": "olcum-kapilar-tur3-sonra.txt",
+      "sha256": "4e98e2322214a2e38b626e3b4be0dd89f3730591abaec613accc933b2537d29c",
+      "komut": [
+        "bash",
+        "bileyi/scripts/bileyi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T15:40:51+03:00",
+      "sure_sn": 15.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kutu-tekrari-tur3",
+      "asama": "sonra",
+      "dosya": "olcum-kutu-tekrari-tur3-sonra.txt",
+      "sha256": "e8ff4fdb8aa9f008d52ccd2dc3434b0b568101100493f9aafb326a13d143195b",
+      "komut": [
+        "python3",
+        "bileyi/scripts/bileyi.py",
+        "--depo",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/kutu",
+        "--havuz-depo",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/merkez",
+        "--esik-dosya",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/esik.json",
+        "olc",
+        "--gun",
+        "0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T15:40:52+03:00",
+      "sure_sn": 0.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-tur3-beklenen-kirmizi",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-tur3-beklenen-kirmizi-tek.txt",
+      "sha256": "e56b5f201d7b61d5324c13fea50258d0709c243e2480b79b8340ec63e4f10c4a",
+      "komut": [
+        "bash",
+        "/tmp/tmp.JmoUCnTlmb/kos.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T15:41:11+03:00",
+      "sure_sn": 19.6
+    }
+  ],
+  "imza": "00e2fa117b3df6360b79830db428ca5920ae980b64f0a88725e51d4b9dc5417d"
+}
