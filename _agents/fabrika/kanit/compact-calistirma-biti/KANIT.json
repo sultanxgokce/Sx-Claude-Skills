@@ -1,7 +1,7 @@
 {
   "is": "compact-calistirma-biti",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T12:52:59+03:00",
+  "guncelleme": "2026-10-15T12:53:26+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -48,7 +48,22 @@
       "renk": "yesil",
       "zaman": "2026-10-15T12:52:59+03:00",
       "sure_sn": 13.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "MUTASYON-KANITI-beklenen-kirmizi-bir-betigin-biti-dusuruldu-2",
+      "asama": "sonra",
+      "dosya": "olcum-MUTASYON-KANITI-beklenen-kirmizi-bir-betigin-biti-dusuruldu-2-sonra.txt",
+      "sha256": "aa975bbab06f6acd8b716f3d77822b430dcce241dffac29d3d802a917d6951a0",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut-biti2-1792058004/mut.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T12:53:26+03:00",
+      "sure_sn": 0.1
     }
   ],
-  "imza": "8e5a510c29a318fe61170b068fe915e15eeada0f2ad2669a2f2368a8287dae03"
+  "imza": "90c5f0b4e5898724eb59fbaec89c93c4d6a21b475069ec9ce3414d004559abe3"
 }
