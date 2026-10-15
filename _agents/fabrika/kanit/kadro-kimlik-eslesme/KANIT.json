@@ -1,7 +1,7 @@
 {
   "is": "kadro-kimlik-eslesme",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-16T01:07:41+03:00",
+  "guncelleme": "2026-10-16T01:08:06+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -74,18 +74,18 @@
       "etiket": "mutasyon-turu",
       "asama": "sonra",
       "dosya": "olcum-mutasyon-turu-sonra.txt",
-      "sha256": "3c911f00280049d11c11836b8fbc967d8a0bbccab06ac611ac9d8476f341b015",
+      "sha256": "cd76bc192cac75bc76caf84a2660b089fa466acfccdbb412327af74b9a4591bb",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/kimlik-mutasyon.sh",
         "/config/projects/_wt/Sx-Claude-Skills-kadro-kimlik-eslesme",
         "/tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad"
       ],
-      "rc": 1,
-      "renk": "kirmizi",
-      "zaman": "2026-10-16T01:07:29+03:00",
-      "sure_sn": 3.9
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T01:08:06+03:00",
+      "sure_sn": 3.6
     }
   ],
-  "imza": "865d2cfb9e24866e014a494250f0f34ee275177cc98f471272aa418679dae955"
+  "imza": "80a9dcf32e3d9115ad69bda7b945b8d3a911c7927a28b0d4fe94a882afdf0ce8"
 }
