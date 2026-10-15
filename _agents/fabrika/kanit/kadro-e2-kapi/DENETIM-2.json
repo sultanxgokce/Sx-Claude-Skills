@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "kadro-e2-kapi",
+  "pr": "341",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-16T00:50:57+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 111587,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 11,
+    "bayt": 44624
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, istenen dört eylem, kaynağa yazım, durum_once ile geri dönüş, yalnız Sultan oturumu ve altyapı koruması uygulanmış; önceki turun iki işlem bütünlüğü açığı da sınavlarıyla kapatılmış. Ancak kayıt değişikliklerinde eşzamanlı istekleri sıralayan bir kilit ya da yazmadan önce değişmedi denetimi yok; üretime çıkmadan önce kayıp güncelleme riski çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Aynı kişi veya kayıt dosyası için eşzamanlı iki istek kayıp güncellemeye yol açabilir; okuma-dönüştürme-yazma ve üretilmiş kayıt derleme akışları kilitsiz yürütülüyor.",
+        "kanit": "Elle kayıt yolunda hedef dosya okunup durumDegistir sonucuyla doğrudan atomikYaz yapılıyor; atomik rename yalnız yarım dosyayı önler, ilk okumadan sonra dosyanın değişmediğini doğrulamaz. Üretilmiş yolda da model ve hedef dizin fotoğrafı alındıktan sonra model yazılıp derleyici çalıştırılıyor; aynı anda başlayan başka istek bu fotoğraflardan birinin geriAl/sinirla işlemiyle ezilebilir. Sunucu ucu istekleri seri hale getiren kilit taşımıyor ve sunulan KH/Y/U sınavlarında paralel istek vakası yok.",
+        "konum": "terminal-onar/kapi/kadro-yaz.mjs: atomikYaz ve kadroYaz; terminal-onar/kapi/sunucu.mjs: POST /api/kadro/hal; terminal-onar/kapi/kadro-yaz.test.mjs: Y/Z/U sınavları",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Ana uçtan uca sınav önce rc=1/kırmızıdan sonra rc=0 ve 24/24 yeşile dönmüş; tam kapı sınavı, gerçek kayıt kopyaları ve 12/12 mutasyon turu önceki iki bulgunun kapandığını güçlü biçimde gösteriyor. Canlı kadro ölçüm çifti sınıflandırmayı gösteriyor, fakat canlı mutasyon yapmıyor; eşzamanlı iki yazma için de ölçüm bulunmuyor."
+  }
+}

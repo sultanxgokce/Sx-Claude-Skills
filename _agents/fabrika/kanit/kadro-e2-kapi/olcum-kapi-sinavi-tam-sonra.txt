@@ -1,5 +1,5 @@
 $ bash terminal-onar/kapi/kapi-sinav.test.sh
-# rc=0 sure=7.1s zaman=2026-10-16T00:49:49+03:00
+# rc=0 sure=9.7s zaman=2026-10-16T00:52:15+03:00
 --- stdout ---
 ── kadro birleşimi (kadro.test.mjs)
 ── A · kayıt ayrıştırma
@@ -100,10 +100,11 @@ SONUÇ: 26 geçti · 0 kaldı
 ── KH-F · oturum kapatılamazsa kayıt geri alınır · geçersiz istekler
   ✓ KH21 kill-session düşer → 502 ve kayıt BAYT BAYT ilk hâl (ekran "dondurulmuş" deyip oturum çalışmaz)
   ✓ KH21b kapatma düşer + geri alma da düşer → 500 ve DÜRÜST cümle ("geri alınamadı … elle düzeltilmeli"), "döndürüldü" DENMEZ; iz kaydında GERI-ALINAMADI
+  ✓ KH21c eşzamanlı iki eylem SIRAYLA: dondur → (kapatma düştü) geri-al → emekli; iz sırası dondur·geri-al·emekli, ilk 502 ikincisi de yine kapatılamadığı için 502, kayıt sonunda BAYT BAYT ilk hâl
   ✓ KH22 dondurulmamışı geri aç → 409 · bilinmeyen kişi → 404 · bilinmeyen eylem → 400
   ✓ KH23 iz kaydı: her eylem tek satır (kapat · dondur · geri-ac · emekli · geri-al)
 
-SONUÇ: 24 geçti · 0 kaldı
+SONUÇ: 25 geçti · 0 kaldı
 ── kapı birim sınavı (sunucu.test.mjs)
 
 ── T · TABAN YOLU (kapı /sedir altında) ──

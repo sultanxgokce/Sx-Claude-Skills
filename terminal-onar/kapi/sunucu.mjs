@@ -19,7 +19,11 @@ import { fileURLToPath } from 'node:url';
 // '.' · ':' · kontrol karakteri yok; boşluk arada serbest, başta/sonda yok; ilk karakter '$' '@' '%' '=' olamaz (tmux kimlik önekleri).
 import { KOLTUK_AD_DESEN, koltukSatirlari } from './koltuklar.mjs';
 import { kayitOku, kadroBirlestir, altyapiNeden } from './kadro.mjs';
-import { kadroYaz, KadroHata } from './kadro-yaz.mjs';   // E2: kayda durum yazan TEK yer (emekli et · dondur · geri aç)   // 2.8.0 Kadro: kayıt ⟂ koltuk birleşimi (dosya okur, yazmaz)   // ad kuralı + liste çözümü TEK yerde (fark ölçeri de aynısını çağırır)
+import { kadroYaz, KadroHata } from './kadro-yaz.mjs';
+// KADRO E2 eylemleri SIRAYLA yürür (bağımsız göz tur 2): bir eylem "kayda yaz → oturumu kapat (await) → gerekirse geri al" zinciridir;
+// araya giren ikinci eylem (ör. aynı kişiye 'geri aç') birincinin geri almasını bozar. Kapı tek süreç → süreç içi kuyruk yeter.
+let kadroSon = Promise.resolve();
+function kadroKilit() { let birak; const p = new Promise((r) => { birak = r; }); const once = kadroSon; kadroSon = once.then(() => p); return once.then(() => birak); }   // E2: kayda durum yazan TEK yer (emekli et · dondur · geri aç)   // 2.8.0 Kadro: kayıt ⟂ koltuk birleşimi (dosya okur, yazmaz)   // ad kuralı + liste çözümü TEK yerde (fark ölçeri de aynısını çağırır)
 
 const KOK = path.dirname(fileURLToPath(import.meta.url));
 const GENEL = path.join(KOK, 'genel');
@@ -478,6 +482,8 @@ const sunucu = http.createServer(async (req, res) => {
         if (!['emekli', 'dondur', 'geri-ac', 'kapat'].includes(eylem)) return json(res, 400, { hata: 'Eylem: emekli · dondur · geri-ac · kapat.' });
         // Altyapı kontrolü HER ŞEYDEN ÖNCE ve yalnız adla: liste ölçülemese bile altyapıya dokunulmaz
         if (eylem === 'kapat' && altyapiNeden(String(g.oturum || ''), ANA_TMUX)) return json(res, 403, { hata: `Altyapı oturumu (${altyapiNeden(String(g.oturum), ANA_TMUX)}) kapatılamaz.` });
+        const birak = await kadroKilit();
+        try {
         const r = await calistir('bash', [KOLTUK_BETIK, '--liste']);
         if (r.kod !== 0) return json(res, 500, { hata: 'Koltuklar ölçülemedi — hiçbir şey yapılmadı.' });
         const kayit = kayitOku(PROJE);
@@ -522,6 +528,7 @@ const sunucu = http.createServer(async (req, res) => {
           return json(res, 200, { tamam: true, oturum: false, mesaj: `${id} kaydı geri açıldı ama oturum açılamadı: ${msj || 'açıcı cevap vermedi'} — Kaldır ile yeniden dene.` });
         }
         return json(res, 200, { tamam: true, mesaj: `${id} geri açıldı.` });
+        } finally { birak(); }
       }
       if (y === '/api/surum') {
         // telefon eski sayfada kalmasın: dosyalar değişince sürüm değişir, sayfa kendini yeniler
