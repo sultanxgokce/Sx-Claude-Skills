@@ -76,7 +76,7 @@ bash imar/scripts/imar-kur.sh imar-profil.json          # --kuru ile önce kuru 
 `alarm.cihaz_teyidi` boşsa profil **reddedilir**: geçidin 200 dönmesi alarmın çalıştığını
 kanıtlamaz (abone olunmayan konuya da 200 gelir — ölçülmüş vaka).
 
-## Sınavlar (bu kutuda ÖLÇÜLEN 176 kapı · ATLANAN 2 · hepsi hermetik, çıplak koşulur)
+## Sınavlar (bu kutuda ÖLÇÜLEN 183 kapı · ATLANAN 1 · hepsi hermetik, çıplak koşulur)
 
 | sınav | kapı | ne ölçer |
 |---|---|---|
@@ -91,7 +91,7 @@ kanıtlamaz (abone olunmayan konuya da 200 gelir — ölçülmüş vaka).
 🔴 **"Hepsi koştu" DENMEZ.** Sınavlar bağımlılık yoksa bazı kapıları *"ATLANDI — ölçülemedi, geçti
 sayılmaz"* diye atlar ve süit **yine rc=0** döner; o hâlde toplam "geçti" sayısı tek başına kaç
 kapının fiilen koştuğunu söylemez. `imar-sinav-hepsi.sh` bu yüzden **üç sayıyı ayrı** basar:
-ölçülen · düşen · **atlanan**. Bu kutuda: ölçülen **176**, atlanan **2**, düşen **0**. Atlanan kapı
+ölçülen · düşen · **atlanan**. Bu kutuda: ölçülen **183**, atlanan **1**, düşen **0**. Atlanan kapı
 yeşil değildir; yalnız kırmızı da değildir — ölçülemedi.
 
 > `imar-defter.test.sh` 29 değil **28** sayar: "gerçek mezarlığa sızıntı" kapısı artık yol

@@ -1,0 +1,15 @@
+$ bash /config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts/imar-sinav-hepsi.sh /config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts
+# rc=0 sure=27.9s zaman=2026-10-15T20:36:27+03:00
+--- stdout ---
+imar.test.sh                     rc=0 geçti=18 atlanan=0
+imar-defter.test.sh              rc=0 geçti=29 atlanan=0
+devir-ayikla.test.sh             rc=0 geçti=39 atlanan=1
+betik-bekcisi.test.sh            rc=0 geçti=19 atlanan=0
+dersler-brif.test.sh             rc=0 geçti=16 atlanan=0
+imar-ikinci-goz.test.sh          rc=0 geçti=26 atlanan=0
+imar-kutu-bagimsizlik.test.sh    rc=0 geçti=36 atlanan=0
+
+ÖLÇÜLEN KAPI = 183 · ATLANAN (ölçülemedi, geçti SAYILMAZ) = 1 · DÜŞEN SINAV = 0
+🔴 1 kapı bu kutuda ÖLÇÜLEMEDİ (bağımlılık yok) — 'hepsi koştu' DENMEZ.
+✓ SKILL.md sayıları ölçümle uyuşuyor (183 · 1)
+--- stderr ---

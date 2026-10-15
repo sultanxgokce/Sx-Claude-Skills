@@ -1,7 +1,7 @@
 {
   "is": "imar-filo-becerisi",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T18:59:39+03:00",
+  "guncelleme": "2026-10-15T20:36:45+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -255,7 +255,38 @@
       "renk": "yesil",
       "zaman": "2026-10-15T18:59:39+03:00",
       "sure_sn": 3.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "yedi-sinav-tur5",
+      "asama": "sonra",
+      "dosya": "olcum-yedi-sinav-tur5-sonra.txt",
+      "sha256": "db8f3ef842686253f8524ee0b61046ca7d56cd06df1d70e1d5c82261ff3dd295",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts/imar-sinav-hepsi.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T20:36:27+03:00",
+      "sure_sn": 27.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-belge-bayat",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-belge-bayat-tek.txt",
+      "sha256": "061133253c24cbfc9334925efc9a260a8c4804d304f8bba745f18c929cf673f6",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/belge-mut.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T20:36:45+03:00",
+      "sure_sn": 17.0
     }
   ],
-  "imza": "dd1e88346c278938035c8637510d13faa7a59373f4c9e11ac357b6df537af975"
+  "imza": "fc47f5eba4e00c914a65b5b8fb5be91c0155bd105a7a5051fcf99702a93bea6d"
 }

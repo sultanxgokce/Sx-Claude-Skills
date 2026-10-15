@@ -12,6 +12,8 @@
 set -uo pipefail
 D="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
 cd "$D" || { echo "✗ dizin yok: $D" >&2; exit 3; }
+# 🔴 Göreli yol koşulduğu dizine göre kayar: cd'den SONRA mutlaklaştırılır, yoksa "$D/.." yanlış yere bakar.
+D="$PWD"
 SINAVLAR=(imar imar-defter devir-ayikla betik-bekcisi dersler-brif imar-ikinci-goz imar-kutu-bagimsizlik)
 TOP=0; DUSEN_S=0; ATLANAN=0
 for t in "${SINAVLAR[@]}"; do
@@ -30,4 +32,20 @@ done
 echo
 echo "ÖLÇÜLEN KAPI = $TOP · ATLANAN (ölçülemedi, geçti SAYILMAZ) = $ATLANAN · DÜŞEN SINAV = $DUSEN_S"
 [ "$ATLANAN" -gt 0 ] && echo "🔴 $ATLANAN kapı bu kutuda ÖLÇÜLEMEDİ (bağımlılık yok) — 'hepsi koştu' DENMEZ."
+# 🔴 BELGEDEKİ SAYI BAYATLAMASIN (gözün tur-4 bulgusu): SKILL.md "176 · 2" diyordu, araç "183 · 1"
+#    basıyordu — sayıyı bir kez yazıp sonra kapı ekleyince belgeyi tazelemeyi unutmuştum. Bayat sayı
+#    ölçülmemiş sayıdan KÖTÜDÜR, çünkü ölçülmüş gibi durur. Sayıyı BİLEN araç belgeyi denetler.
+#    🔴 Bu denetim neden SINAVDA değil BURADA: sınava koyunca kapı bu koşucuyu çağırıyordu, koşucu da
+#    o sınavı — sonsuz özyineleme (aynı tuzağa bugün İKİNCİ kez düştüm; birincisi F1/F2'ydi).
+SK="$(cd "$D/.." && pwd)/SKILL.md"
+if [ -r "$SK" ]; then
+  if grep -q "ÖLÇÜLEN $TOP kapı · ATLANAN $ATLANAN" "$SK"; then
+    echo "✓ SKILL.md sayıları ölçümle uyuşuyor ($TOP · $ATLANAN)"
+  else
+    echo "🔴 SKILL.md BAYAT: belgede \"$(grep -o 'ÖLÇÜLEN [0-9]* kapı · ATLANAN [0-9]*' "$SK" | head -1)\" · ölçülen \"ÖLÇÜLEN $TOP kapı · ATLANAN $ATLANAN\""
+    DUSEN_S=$((DUSEN_S + 1))
+  fi
+else
+  echo "⏭️  SKILL.md okunamadı — belge/ölçüm uyumu ÖLÇÜLEMEDİ"
+fi
 [ "$DUSEN_S" -eq 0 ]
