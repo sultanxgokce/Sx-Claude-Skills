@@ -1,0 +1,17 @@
+$ bash /tmp/claude-1000/atlanan.sh /config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts
+# rc=0 sure=2.1s zaman=2026-10-15T18:49:19+03:00
+--- stdout ---
+ATLANAN 2 KAPI HANGISI ve NICIN
+(gozun tur-2 bulgusu: suit rc=0 donmesi 'hepsi kostu' demek DEGILDIR)
+
+--- imar-defter.test.sh
+    ⏭️  gerçek mezarlığa sızıntı kapısı ATLANDI (IMAR_GERCEK_MEZARLIK yok ya da dosya yok) — ölçülemedi, geçti sayılmaz
+--- devir-ayikla.test.sh
+    ⏭️  sayfa-metin sınavı ATLANDI (tarayıcı ya da ws yok) — ölçülemedi, geçti sayılmaz
+
+Ikisi de BAGIMLILIK yoklugundan:
+  (1) IMAR_GERCEK_MEZARLIK verilmedi — kutuya ozel yol, bu sinav kosumunda bildirilmedi.
+  (2) sayfa-metin icin Chromium + ws yok. MIHENK kutusunda bu satir BES kapi olarak kosar.
+
+Atlanan kapi YESIL DEGILDIR; yalniz kirmizi da degildir — OLCULEMEDI.
+--- stderr ---

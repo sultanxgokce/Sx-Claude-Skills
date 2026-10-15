@@ -1,0 +1,49 @@
+{
+  "tur": 2,
+  "is": "imar-filo-becerisi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T18:45:44+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": true,
+    "istem_bayt": 205226,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "İMAR reçetesi profil, doğma, sahte kutu kurulumu ve taşınan sınavlarla filo becerisine çevrilmiş; kutu bağımsızlığı ile profil çözülmeden hüküm vermeme ölçülmüş. Lâkin kutu verisinin beceri/worktree köküne düşmesi hâlâ görünüyor, iki kapı ölçülemediği hâlde süit rc=0 ve değişikliğin sonu kırpıldığı için üretime hazır hükmü verilemez; önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "Mezarlık yolu sahte kutunun depo kökü yerine becerinin worktree köküne çözülüyor; bu, kutu verisi kutuda kalır ve kutu-bağımsız yollar talebini deliyor.",
+        "kanit": "Sonra ölçümünde imar.sh, sahte kutunun kendi serisini okurken aynı koşuda `/config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/hafiza/fikir-mezarligi.jsonl` için “No such file or directory” basıyor. Şemadaki ilan edilen varsayılan ise `<repo_kok>/hafiza/fikir-mezarligi.jsonl`.",
+        "konum": "olcum-kutu-bagimsiz-mi-sonra.txt; imar/profil-semasi.json:22",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Toplu sınav rc=0, bütün taşınan kapıların koştuğunu kanıtlamıyor; iki kapı açıkça atlanmış.",
+        "kanit": "`imar-sinav-hepsi.sh` çıktısı `ÖLÇÜLEN KAPI = 176 · ATLANAN ... = 2 · DÜŞEN SINAV = 0` ve `2 kapı ... ÖLÇÜLEMEDİ` diyor, buna rağmen manifest kaydı rc=0/yeşil. İş kartı ise taşınan sınavların çıplak rc=0 olmasını kanıt hedefi yapıyor; bu kayıt eksiksiz çalışmayı göstermiyor.",
+        "konum": "olcum-yedi-sinav-tur2-sonra.txt / yedi-sinav-tur2",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Değişikliğin tamamı görünmediği için üretime hazırlık ve kapsam kayması bütünüyle denetlenemiyor.",
+        "kanit": "Girdinin sonunda açıkça `istem ... KIRPILDI — diff'in sonu görülmedi` uyarısı bulunuyor; görünen diff `imar-fikir-kapisi.py` ortasında kesiliyor.",
+        "konum": "DEĞİŞİKLİK sonundaki kırpılma uyarısı",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kutu bağımsızlığı ve profil çözülmeden ölçmeme için kırmızı→yeşil ölçüm çiftleri, ayrıca mutasyonların beklenen kırmızıyı verdiği kayıtlar var. Ancak gerçekçi sahte-kutu ölçümü mezarlığın hâlâ beceri köküne çözüldüğünü açığa çıkarıyor; yedi sınav kaydı iki atlanan kapıyla rc=0 olduğundan tüm kapılar ölçülmüş sayılmaz ve kırpılmış diff tam kod denetimine yetmez."
+  }
+}

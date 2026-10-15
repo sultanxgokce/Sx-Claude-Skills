@@ -1,0 +1,49 @@
+$ bash -c cd /config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts && timeout 115 bash ./imar-kutu-bagimsizlik.test.sh
+# rc=0 sure=1.4s zaman=2026-10-15T18:48:59+03:00
+--- stdout ---
+A · 🔴 profil kapısı: ölçülmeden kurulum YOK
+  ✓ A1 geçerli profil kabul edilir
+  ✓ A2 🔴 cihaz teyidi BOŞ profil REDDEDİLİR (200 kanıt değildir)
+  ✓ A3 🔴 bilinmeyen alan REDDEDİLİR (sessizce atlanan alan ölçülmemiş alandır)
+  ✓ A4 🔴 göreli yol REDDEDİLİR (koşulduğu dizine göre kayar)
+  ✓ A5 profil dosyası YOKSA rc=2 (ölçemedim), 0 DEĞİL
+B · 🔴 SAHTE KUTUDA kurulum fiilen koşar
+  ✓ B1 kuru koşu geçer
+  ✓ B2 gerçek kurulum geçer
+  ✓ B3 🔴 şalter KAPALI doğdu (değişmez)
+  ✓ B4 kurulum şalterin kapalı doğduğunu SÖYLER
+  ✓ B5 Bulgu Defteri yokken ÖLÇÜLEMEDİ der, uydurmaz
+  ✓ B6 zamanlayıcı satırı ÜRETİLİR ama crontab'a dokunulmaz
+C · 🔴 SIZINTI: sahte kutu MİHENK'i hiç görmedi
+  ✓ C1 kurulum MİHENK deposuna dizin AÇMADI
+  ✓ C2 🔴 kurulum çıktısında 'mihenk' GEÇMEZ
+  ✓ C3 şalter sahte kutunun İÇİNE yazıldı
+  ✓ C4 araştırma serisi sahte kutunun evinde açıldı
+  ✓ C5 🔴 ÜRETİM kodunda çivili kutu adı YOK (sınav dosyaları hariç)
+G · 🔴 gözün tur-2 bulgusu: KUTU VERİSİ BECERİ DİZİNİNE DÜŞMESİN
+  ✓ G1 durum komutu sahte kutuda koşar
+  ✓ G2 🔴 çıktıda BECERİ dizini yolu GEÇMEZ (kutu verisi oraya düşmez)
+  ✓ G3 🔴 beceri dizininde hafiza/ AÇILMADI (sızıntı yok)
+  ✓ G4 🔴 IMAR_REPO yoksa şalter eksiğin ADINI söyler (beceri köküne yazmaz)
+  ✓ G5 karne IMAR_REPO yoksa rc=3
+  ✓ G6 üretim kodunda kutu verisi betik konumundan TÜRETİLMEZ
+D · 🔴 profil çözülmeden araç YEŞİL BASMAZ (fail-closed)
+  ✓ D1 IMAR_SERI yoksa karne ÖLÇEMEDİM der (rc=3)
+  ✓ D2 IMAR_SERI yoksa olgunluk ÖLÇEMEDİM der (rc=3)
+  ✓ D3 eksikliğin ADI söylenir (hangi değişken)
+E · 🔴 gözün tur-1 bulgusu: İLAN EDİLEN alan KODA BAĞLI mı (kayıt var, çağıran yok)
+  ✓ E1 çözücü IMAR_DEFTER_YAZ'ı profilden taşır
+  ✓ E2 çözücü BULGULAR_JSON taşır (profil ezebilir)
+  ✓ E3 çözücü IMAR_WA_GONDER taşır (alarm yolu kutudan kutuya değişir)
+  ✓ E4 🔴 defter aracı PROFİLDEN okunur: profilin gösterdiği yok dosya ÖLÇÜLEMEDİ üretir (rc=3)
+  ✓ E4b 🔴 ret mesajı PROFİLİN yolunu söyler (küresel varsayılanı değil)
+  ✓ E5 üretim kodunda küresel yol TEK BAŞINA kalmaz (profil ezebilir)
+F · 🔴 gözün tur-1 bulgusu: SAYIM DÜRÜST olsun (atlanan kapı yeşil değildir)
+  ✓ F1 toplu koşucu ATLANAN kapıyı AYRI sayar (metin kapısı, özyinelemesiz)
+  ✓ F2 🔴 atlanan varken 'hepsi koştu' DENMEZ uyarısı var
+  ✓ F2b koşucu ATLANDI/⏭ satırlarını fiilen sayar (grep -c)
+  ✓ F3 sınav dizini yoksa rc=3 (ölçemedim), 0 DEĞİL
+  ✓ F4 🔴 sayaç kapı satırlarını (✓/✗) atlama saymaz
+
+toplam=36 geçen=36 düşen=0
+--- stderr ---

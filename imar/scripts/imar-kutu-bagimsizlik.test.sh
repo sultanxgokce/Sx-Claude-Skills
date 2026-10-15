@@ -87,6 +87,29 @@ kapi "C5 🔴 ÜRETİM kodunda çivili kutu adı YOK (sınav dosyaları hariç)"
   done
   exit 0'
 
+echo "G · 🔴 gözün tur-2 bulgusu: KUTU VERİSİ BECERİ DİZİNİNE DÜŞMESİN"
+# Beceri BÜTÜN kutularda ORTAKTIR. Kutu verisi (hafiza · karne · mezarlık · DURUM) beceri
+# dizinine düşerse bir kutunun verisi ötekine karışır — bu bir SIZINTIDIR, hata mesajı değil.
+# Gözün kanıtı: `imar.sh durum` koşarken becerinin worktree kökünde fikir-mezarligi.jsonl arıyordu.
+BECERI_KOK="$(cd "$S/.." && pwd)"
+kapi "G1 durum komutu sahte kutuda koşar" 0 env IMAR_REPO="$REPO" IMAR_DURUM="$REPO/_agents/spec/imar/DURUM.json" \
+  IMAR_KUTUK="$REPO/hafiza/imar-kutuk.log" IMAR_SERI="$EV/arastirma-serisi" IMAR_KUTU="$KUTU" IMAR_AJAN="DENEME" \
+  bash "$S/imar.sh" durum
+icermeyen "G2 🔴 çıktıda BECERİ dizini yolu GEÇMEZ (kutu verisi oraya düşmez)" "$BECERI_KOK/hafiza" \
+  env IMAR_REPO="$REPO" IMAR_DURUM="$REPO/_agents/spec/imar/DURUM.json" IMAR_KUTUK="$REPO/hafiza/imar-kutuk.log" \
+  IMAR_SERI="$EV/arastirma-serisi" IMAR_KUTU="$KUTU" IMAR_AJAN="DENEME" bash "$S/imar.sh" durum
+kapi "G3 🔴 beceri dizininde hafiza/ AÇILMADI (sızıntı yok)" 1 test -d "$BECERI_KOK/hafiza"
+# Beklentiyi ilk yazımda ters koydum (grep -q BULDUĞUNDA 0 döner, 1 beklemiştim) — kapı niyetini
+# söyleyen biçime çevrildi: mesajın İÇİNDE eksik değişkenin adı geçiyor mu?
+iceren "G4 🔴 IMAR_REPO yoksa şalter eksiğin ADINI söyler (beceri köküne yazmaz)" "IMAR_REPO" \
+  env -u IMAR_REPO IMAR_SERI="$EV/arastirma-serisi" bash "$S/imar.sh" durum
+kapi "G5 karne IMAR_REPO yoksa rc=3" 3 env -u IMAR_REPO IMAR_SERI="$EV/arastirma-serisi" python3 "$S/imar-karne.py"
+kapi "G6 üretim kodunda kutu verisi betik konumundan TÜRETİLMEZ" 0 bash -c '
+  for f in '"$S"'/imar.sh '"$S"'/imar-karne.py '"$S"'/imar-olgunluk.py '"$S"'/imar-defter.py; do
+    grep -nE "dirname.*abspath\(__file__\)|BASH_SOURCE" "$f" | grep -qE "hafiza|karne|mezarlig|DURUM" && exit 1
+  done
+  exit 0'
+
 echo "D · 🔴 profil çözülmeden araç YEŞİL BASMAZ (fail-closed)"
 kapi "D1 IMAR_SERI yoksa karne ÖLÇEMEDİM der (rc=3)" 3 env -u IMAR_SERI IMAR_REPO="$REPO" python3 "$S/imar-karne.py"
 kapi "D2 IMAR_SERI yoksa olgunluk ÖLÇEMEDİM der (rc=3)" 3 env -u IMAR_SERI IMAR_REPO="$REPO" python3 "$S/imar-olgunluk.py"

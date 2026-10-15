@@ -13,7 +13,10 @@ else T="$(mktemp -d)"; trap 'rm -r "$T" 2>/dev/null' EXIT; fi
 # 🔴 Profil artık ZORUNLU: imar.sh kutuya özel yolu varsayamaz (filo becerisi). Sınav da onu
 #    kurar — eski sürümde IMAR_SERI varsayılanı mihenk kutusuna çiviliydi ve sınav farkına varmıyordu.
 export IMAR_DURUM="$T/DURUM.json" IMAR_KUTUK="$T/kutuk.log" IMAR_KIM="sinav"
-export IMAR_SERI="$T/arastirma-serisi" IMAR_KUTU="sinav-kutusu" IMAR_AJAN="SINAV"
+# 🔴 IMAR_REPO de ZORUNLU: kutu verisi (hafiza, DURUM, mezarlık) artık betiğin konumundan
+#    DEĞİL profilin gösterdiği depodan okunur — beceri bütün kutularda ortak olduğu için.
+export IMAR_SERI="$T/arastirma-serisi" IMAR_KUTU="sinav-kutusu" IMAR_AJAN="SINAV" IMAR_REPO="$T/kutu-deposu"
+mkdir -p "$IMAR_REPO/hafiza"
 mkdir -p "$IMAR_SERI/gunluk"
 S="$REPO/scripts/imar.sh"
 GEC=0; DUS=0

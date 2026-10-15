@@ -34,10 +34,10 @@ done
 
 # 3 · şalter KAPALI doğar
 if [ "$KURU" = 1 ]; then echo "  · (kuru) şalter KAPALI doğacak"; else
-  if IMAR_DURUM="$IMAR_DURUM" IMAR_KUTUK="$IMAR_KUTUK" IMAR_SERI="$IMAR_SERI" \
+  if IMAR_REPO="$IMAR_REPO" IMAR_DURUM="$IMAR_DURUM" IMAR_KUTUK="$IMAR_KUTUK" IMAR_SERI="$IMAR_SERI" \
      bash "$HERE/imar.sh" kur >/dev/null 2>&1; then echo "  ✓ şalter kuruldu (KAPALI doğdu)"
   else echo "  ✗ şalter kurulamadı" >&2; exit 1; fi
-  if IMAR_DURUM="$IMAR_DURUM" IMAR_KUTUK="$IMAR_KUTUK" IMAR_SERI="$IMAR_SERI" \
+  if IMAR_REPO="$IMAR_REPO" IMAR_DURUM="$IMAR_DURUM" IMAR_KUTUK="$IMAR_KUTUK" IMAR_SERI="$IMAR_SERI" \
      bash "$HERE/imar.sh" acik-mi >/dev/null 2>&1; then
     echo "  ✗ şalter AÇIK doğdu — değişmez ihlali (kapalı doğmalıydı)" >&2; exit 1
   else echo "  ✓ şalter kapalı doğdu (değişmez)"; fi

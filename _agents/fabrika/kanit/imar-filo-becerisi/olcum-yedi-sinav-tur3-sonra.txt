@@ -1,0 +1,14 @@
+$ bash /config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts/imar-sinav-hepsi.sh /config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts
+# rc=0 sure=5.4s zaman=2026-10-15T18:48:57+03:00
+--- stdout ---
+imar.test.sh                     rc=0 geçti=18 atlanan=0
+imar-defter.test.sh              rc=0 geçti=28 atlanan=1
+devir-ayikla.test.sh             rc=0 geçti=39 atlanan=1
+betik-bekcisi.test.sh            rc=0 geçti=19 atlanan=0
+dersler-brif.test.sh             rc=0 geçti=16 atlanan=0
+imar-ikinci-goz.test.sh          rc=0 geçti=26 atlanan=0
+imar-kutu-bagimsizlik.test.sh    rc=0 geçti=36 atlanan=0
+
+ÖLÇÜLEN KAPI = 182 · ATLANAN (ölçülemedi, geçti SAYILMAZ) = 2 · DÜŞEN SINAV = 0
+🔴 2 kapı bu kutuda ÖLÇÜLEMEDİ (bağımlılık yok) — 'hepsi koştu' DENMEZ.
+--- stderr ---

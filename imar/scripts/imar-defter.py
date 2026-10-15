@@ -131,7 +131,17 @@ def main():
         if simdi not in ("gelen", "seçildi"): print("kapı: %s '%s' — öldürme yalnız 'gelen' ya da 'seçildi' kayda uygulanır" % (no, simdi)); return 2
         if not (a.sultan and a.sultan.strip()): print("kapı (A06): öldürme Sultan'ın satırını ister (--sultan \"…\"); ajan fikir öldüremez, yazılmadı."); return 2
         sebep = (a.not_ or a.sultan).strip()
-        mezar = os.environ.get("FIKIR_MEZARLIGI") or os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "hafiza", "fikir-mezarligi.jsonl")
+        # 🔴 Mezarlık KUTUNUN verisidir: yol profilden gelir, beceri dizininden TÜRETİLMEZ
+        #    (beceri bütün kutularda ortaktır → bir kutunun mezarlığı ötekine karışırdı).
+        mezar = os.environ.get("FIKIR_MEZARLIGI") or os.environ.get("IMAR_MEZARLIK")
+        if not mezar:
+            repo = os.environ.get("IMAR_REPO", "").strip()
+            if not repo:
+                print("ÖLÇÜLEMEDİ: mezarlığın yeri bildirilmedi (IMAR_REPO ya da IMAR_MEZARLIK)",
+                      file=sys.stderr)
+                return 3
+            mezar = os.path.join(repo, "hafiza", "fikir-mezarligi.jsonl")
+        os.makedirs(os.path.dirname(mezar), exist_ok=True)
         import datetime
         kayit = {"tarih": datetime.date.today().isoformat(), "baslik": k.get("baslik", ""), "sebep": sebep,
                  "kayit": no, "kim": a.kim, "sultan": a.sultan.strip()}

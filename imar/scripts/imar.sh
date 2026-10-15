@@ -12,7 +12,11 @@
 # Çıkış (acik-mi): 0 açık · 1 kapalı · 3 ölçülemedi (dosya yok/bozuk → kapalı MUAMELESİ görür)
 set -uo pipefail
 
-REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# 🔴 İKİ KÖK AYRI (gözün tur-2 bulgusu): BECERI = betiklerin yeri (kod) · REPO = profilin
+#    gösterdiği kutu deposu (veri). Eskiden ikisi aynıydı ve beceri olarak kurulunca kutu verisi
+#    becerinin içine düşüyordu — beceri bütün kutularda ORTAK, yani sizinti.
+BECERI="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO="${IMAR_REPO:?IMAR_REPO yok — profil çözülmedi (imar-profil.py cozumle)}"
 DURUM="${IMAR_DURUM:-$REPO/_agents/spec/imar/DURUM.json}"
 KUTUK="${IMAR_KUTUK:-$REPO/hafiza/imar-kutuk.log}"
 EMIR="$REPO/_agents/spec/agentic-sistem/gun-emri.json"
@@ -89,10 +93,10 @@ case "$KOMUT" in
       echo "zamanlayıcı: KAYITLI DEĞİL — ÇARK kendiliğinden dönmez (cron satırı için: scripts/cark-tur.sh başlığı)"
     fi
     for f in cark-tur.sh muneccim-kos.sh imar-ikinci-goz.sh imar-fikir-kapisi.py devir-ayikla.py; do
-      [ -e "$REPO/scripts/$f" ] && echo "parça: $f ✓" || echo "parça: $f ✗ EKSİK"
+      [ -e "$BECERI/$f" ] && echo "parça: $f ✓" || echo "parça: $f ✗ EKSİK"
     done
     # PDF aracı (8 Ekim): node_modules git'te değil; sıfırdan kurulumda buradan yakalanır.
-    if [ -e "$REPO/scripts/pdf/node_modules/pdfjs-dist/legacy/build/pdf.mjs" ]; then echo "parça: pdf-metin (pdfjs-dist) ✓"
+    if [ -e "$BECERI/pdf/node_modules/pdfjs-dist/legacy/build/pdf.mjs" ]; then echo "parça: pdf-metin (pdfjs-dist) ✓"
     else echo "parça: pdf-metin ✗ EKSİK — kur: cd scripts/pdf && npm install --no-audit --no-fund"; fi
     echo "kütük: $KUTUK"
     exit 0;;
@@ -146,14 +150,14 @@ PY
       GOZLU="$(grep -c 'İkinci göz:' "$SERI/DERSLER.md")"
       # betik bekçisi: üç ölçülmüş tuzak (çift sıfır · kabuk öldürme · yasaklı silme).
       # 🔴 Kural CLAUDE.md'de ve reçetede YAZILIydı, koşan kapısı YOKTU — bileyi turu 12 Eki.
-      if [ -x "$REPO/scripts/betik-bekcisi.sh" ]; then
-        BB="$(bash "$REPO/scripts/betik-bekcisi.sh" 2>/dev/null | grep -m1 "^— kırmızı" || true)"
+      if [ -x "$BECERI/betik-bekcisi.sh" ]; then
+        BB="$(bash "$BECERI/betik-bekcisi.sh" 2>/dev/null | grep -m1 "^— kırmızı" || true)"
         echo "betik bekçisi : ${BB:-ÖLÇÜLEMEDİ}"
       else echo "betik bekçisi : ÖLÇÜLEMEDİ (betik yok)"; fi
       # demo açılış süresi: dosya beş günde 54→69 KB büyüdü, süre hiç ölçülmüyordu (13 Eki)
       DEMO="$REPO/tasarim/mobilyaci/ciktilar/defter-demo.html"
-      if [ -r "$DEMO" ] && [ -r "$REPO/scripts/tarayici/acilis-olc.mjs" ]; then
-        AC="$(node "$REPO/scripts/tarayici/acilis-olc.mjs" "$DEMO" --yavas 3g --json 2>/dev/null)"
+      if [ -r "$DEMO" ] && [ -r "$BECERI/tarayici/acilis-olc.mjs" ]; then
+        AC="$(node "$BECERI/tarayici/acilis-olc.mjs" "$DEMO" --yavas 3g --json 2>/dev/null)"
         if [ -n "$AC" ]; then
           echo "demo açılış   : $(printf '%s' "$AC" | python3 -c "import json,sys;d=json.load(sys.stdin);print('%.1f KB · ilk anlamlı boya %s ms (3g · 4x yavaş) · eşik %s ms → %s' % (d['boyut_bayt']/1024, d['ilk_anlamli_boya_ms'], d['esik_ms'], 'altında' if d['olcut_ms']<=d['esik_ms'] else 'AŞILDI'))")"
         else echo "demo açılış   : ÖLÇÜLEMEDİ (tarayıcı yok ya da sayfa boya üretmedi)"; fi
@@ -165,8 +169,8 @@ PY
     fi
     MEZ="$(wc -l < "$REPO/hafiza/fikir-mezarligi.jsonl" 2>/dev/null || echo 0)"; echo "mezarlık: $MEZ fikir"
     # M10: Sultan'ın önünde bekleyen fikir varsa SENDE satırı (seç/öldür: /imar-sec)
-    if [ -r "$REPO/scripts/imar-defter.py" ]; then
-      BEK="$(python3 "$REPO/scripts/imar-defter.py" gelen 2>/dev/null | head -1)"
+    if [ -r "$BECERI/imar-defter.py" ]; then
+      BEK="$(python3 "$BECERI/imar-defter.py" gelen 2>/dev/null | head -1)"
       case "$BEK" in *": 0") ;; "") ;; *) echo "SENDE · $BEK (seç/öldür: /imar-sec)";; esac
     fi
     [ -r "$KUTUK" ] && { echo "son kütük satırları:"; tail -3 "$KUTUK" | sed 's/^/  /'; }

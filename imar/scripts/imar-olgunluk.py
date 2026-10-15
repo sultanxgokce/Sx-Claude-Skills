@@ -17,7 +17,18 @@ rc: 0 hazır · 1 hazır değil · 3 ölçülemedi (bir eşik okunamadı → haz
 """
 import sys, os, re, json, glob, datetime, collections
 
-REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# 🔴 İKİ KÖK AYRI (bağımsız gözün tur-2 bulgusu): eski kod tek `REPO` kullanıyordu ve onu
+#    BETİĞİN KENDİ KONUMUNDAN türetiyordu. Tek kutuda yaşarken doğruydu; filo becerisi olarak
+#    kurulunca o kök BECERİ DİZİNİ oldu ve kutu verisi (hafiza, karne, mezarlık, DURUM) becerinin
+#    içine düştü — beceri BÜTÜN kutularda ORTAK olduğu için bu bir SIZINTIDIR.
+#    BECERI = betik komşuları (kodun yeri) · KUTU = profilin gösterdiği depo (verinin yeri).
+BECERI = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+KUTU = os.environ.get("IMAR_REPO", "").strip()
+if not KUTU:
+    print("✗ IMAR_REPO yok — İMAR profili çözülmedi (imar-profil.py cozumle); ÖLÇEMEDİM",
+          file=sys.stderr)
+    sys.exit(3)
+REPO = KUTU   # geriye dönük ad: kutu verisi yolları bunun altında
 def _gerek(ad):
     """Profilden gelmesi gereken ortam değişkeni yoksa ÖLÇEMEDİM der, varsayılan UYDURMAZ.
 
@@ -31,7 +42,7 @@ def _gerek(ad):
 SERI = os.environ["IMAR_SERI"] if os.environ.get("IMAR_SERI") else _gerek("IMAR_SERI")
 LOG = os.path.join(REPO, "hafiza", "cark-kosu.log")
 BULGULAR = os.environ.get("BULGULAR_JSON", "/config/.ic-sayfa/bulgu-defteri/bulgular.json")
-sys.path.insert(0, os.path.join(REPO, "scripts"))
+sys.path.insert(0, os.path.join(BECERI, "scripts"))
 
 args = sys.argv[1:]
 GUN = int(args[args.index("--gun") + 1]) if "--gun" in args else 14
@@ -41,7 +52,7 @@ sonuc = []  # (ad, durum: True/False/None, açıklama)
 # E1 + E2 — hâl zinciri ve kanıt sınıfı
 try:
     import importlib.util
-    spec = importlib.util.spec_from_file_location("imar_defter", os.path.join(REPO, "scripts", "imar-defter.py"))
+    spec = importlib.util.spec_from_file_location("imar_defter", os.path.join(BECERI, "scripts", "imar-defter.py"))
     idf = importlib.util.module_from_spec(spec); spec.loader.exec_module(idf)
     ks = idf.kayitlar()
     onayli = [k for k in ks if idf.konum(k) == "onaylandı"]

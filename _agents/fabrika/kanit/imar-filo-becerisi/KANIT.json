@@ -1,7 +1,7 @@
 {
   "is": "imar-filo-becerisi",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T18:44:08+03:00",
+  "guncelleme": "2026-10-15T18:49:19+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -160,7 +160,70 @@
       "renk": "kirmizi",
       "zaman": "2026-10-15T18:44:08+03:00",
       "sure_sn": 7.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "yedi-sinav-tur3",
+      "asama": "sonra",
+      "dosya": "olcum-yedi-sinav-tur3-sonra.txt",
+      "sha256": "329795ab94e1b0545d5dc68769dc6c4d8299aba05b4e54c5ec702ad6cff240ed",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts/imar-sinav-hepsi.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:48:57+03:00",
+      "sure_sn": 5.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "atlanan-iki-kapi-hangisi",
+      "asama": "tek",
+      "dosya": "olcum-atlanan-iki-kapi-hangisi-tek.txt",
+      "sha256": "987299e1e342283ae61034cea2bc0dac4e1997ffb6740e1ac5e765bcf27b1156",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/atlanan.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:49:19+03:00",
+      "sure_sn": 2.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sizinti-beceri-dizinine",
+      "asama": "sonra",
+      "dosya": "olcum-sizinti-beceri-dizinine-sonra.txt",
+      "sha256": "c10394a4b5c2d41796b935179cee1858f52367db5657c607ffa01d784469276f",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts && timeout 115 bash ./imar-kutu-bagimsizlik.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:48:59+03:00",
+      "sure_sn": 1.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-tur3-beklenen-kirmizi",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-tur3-beklenen-kirmizi-tek.txt",
+      "sha256": "a5a53613c96b28934644c82f1a8229074605b4adb5eec9f6b0f67d7630a8e761",
+      "komut": [
+        "bash",
+        "/tmp/tmp.7K2sZO8Lhy/kos.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T18:49:04+03:00",
+      "sure_sn": 5.2
     }
   ],
-  "imza": "953c5e44af99d0b227f743baf7d47a2d5579fd8b19ad92c1795e9816fecb43c4"
+  "imza": "5a85b6f922eded65e8ebef1b32a14da465f225c4da76c19b95aa29737cf5874e"
 }

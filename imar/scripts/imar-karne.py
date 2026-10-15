@@ -17,7 +17,18 @@ Kullanım: python3 scripts/imar-karne.py [--gun 7] [--yaz]   (--yaz: hafiza/karn
 """
 import sys, os, re, json, glob, datetime, collections, subprocess
 
-REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# 🔴 İKİ KÖK AYRI (bağımsız gözün tur-2 bulgusu): eski kod tek `REPO` kullanıyordu ve onu
+#    BETİĞİN KENDİ KONUMUNDAN türetiyordu. Tek kutuda yaşarken doğruydu; filo becerisi olarak
+#    kurulunca o kök BECERİ DİZİNİ oldu ve kutu verisi (hafiza, karne, mezarlık, DURUM) becerinin
+#    içine düştü — beceri BÜTÜN kutularda ORTAK olduğu için bu bir SIZINTIDIR.
+#    BECERI = betik komşuları (kodun yeri) · KUTU = profilin gösterdiği depo (verinin yeri).
+BECERI = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+KUTU = os.environ.get("IMAR_REPO", "").strip()
+if not KUTU:
+    print("✗ IMAR_REPO yok — İMAR profili çözülmedi (imar-profil.py cozumle); ÖLÇEMEDİM",
+          file=sys.stderr)
+    sys.exit(3)
+REPO = KUTU   # geriye dönük ad: kutu verisi yolları bunun altında
 def _gerek(ad):
     """Profilden gelmesi gereken ortam değişkeni yoksa ÖLÇEMEDİM der, varsayılan UYDURMAZ.
 
