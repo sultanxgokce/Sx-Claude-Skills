@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/ayikla-prob/prob.sh /tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/ayikla-prob/denetci-ESKI.sh
+# rc=1 sure=0.5s zaman=2026-10-15T15:53:51+03:00
+--- stdout ---
+istem boyu: 110139 bayt
+SONUC: uretim kodu farki denetciye ULASMADI — istem kirpildi, kod istemden disari itildi
+--- stderr ---

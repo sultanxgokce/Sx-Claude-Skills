@@ -1,0 +1,27 @@
+$ bash /tmp/tmp.ciqwQC8i1p/kos.sh
+# rc=1 sure=7.7s zaman=2026-10-15T15:53:06+03:00
+--- stdout ---
+### BEKLENEN KIRMIZI — mutasyon: ayiklama varsayilani kapatildi, eski davranis geri geldi.
+### A2 tam gercek arizayi gosterir: URETIM KODU farki denetciye HIC ulasmaz.
+A · 🔴 kanıt dosyaları farktan AYIKLANIR, üretim kodu KALIR
+  ✓ A1 denetim koşar ve geçer (5/E)
+  ✗ A2 🔴 ÜRETİM KODU farkı denetçiye ULAŞIR ('URETIM-KODU-BURADA' /tmp/tmp.Cs4XscZkOw/istem-izi.txt içinde yok)
+  ✗ A3 🔴 kanıt dosyasının farkı istemde İKİNCİ kez görünmez ('+++ b/_agents/fabrika/kanit/ayikla-sinavi/olcum-sisme-1.txt' var, olmamalı)
+  ✗ A4 ayıklandığı denetçiye SÖYLENİR (sessiz ayıklama yok) ('kanıt dosyası' /tmp/tmp.Cs4XscZkOw/istem-izi.txt içinde yok)
+  ✓ A5 kanıt manifesti yine AYRI gider
+B · 🔴 kırpılma: asıl zarar buydu
+  ✓ B1 ayıklamalı koşumda istem eşiğin ALTINA düşer (kırpılma yok)
+  ✗ B2 🔴 kırpılma uyarısı istemde YOK ('KIRPILDI' var, olmamalı)
+  ✓ B3 ayıklama KAPATILINCA (DENETCI_KANIT_AYIKLA=0) denetim yine koşar
+  ✓ B4 🔴 ayıklama kapalıyken istem KIRPILIR — eski davranış ölçülür
+  ✓ B5 🔴 ayıklama kapalıyken üretim kodu istemden DIŞARI itilir (yanan tur)
+C · 🔴 kayıt: 'fark eksikti' ile 'kanıt ayrı gitti' sonradan ayırt edilsin
+  ✗ C1 DENETIM kaydında kanit_ayiklandi.dosya = 3 (rc=1, beklenen=0)
+  ✓ C2 ayıklama kapalıyken kayıt dosya=0 ve kirpildi.oldu=true der
+D · 🔴 ayıklama farkı BOZMAZ (yalnız kanıt yolu düşer)
+  ✓ D1 kanıt dosyası HİÇ yoksa fark olduğu gibi geçer
+  ✓ D2 kanıtsız farkta kod yine ULAŞIR
+  ✓ D3 kanıtsız farkta 'ayıklandı' notu BASILMAZ (yalan söylemez)
+
+toplam=15 geçen=10 düşen=5
+--- stderr ---

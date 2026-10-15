@@ -196,6 +196,51 @@ fi
 TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
 if [ -n "$DIFF" ]; then cp "$DIFF" "$TMP/diff.patch" || { _hata "diff okunamadı"; exit 3; }
 else (cd "$DEPO" && gh pr diff "$PR" > "$TMP/diff.patch") || { _hata "gh pr diff $PR düştü"; exit 3; }; fi
+# ── KANIT FARKA İKİNCİ KEZ GİRMESİN (15 Eki 2026, gorev_01M4ZSKHD1Y1FFT8P6Z5YMPTF9)
+#    Ölçülmüş vaka (PR #329, aynı gün): istem 135.913 bayt oldu, 110.000'de kırpıldı ve denetçi ÜRETİM KODU
+#    farkını hiç göremedi — "kodun kendisi bütünüyle denetlenemedi, bu eksikle 5 verilemez" dedi. Bir tur
+#    yandı, kod kusursuzdu: aynı kod kırpılmamış farkla 5/5+E aldı. Şişkinliğin kaynağı şuydu: farkın
+#    136 KB'ının ~90 KB'ı `_agents/fabrika/kanit/` altındaki ölçüm dökümleriydi — oysa kanıt manifesti VE
+#    ölçüm çıktıları denetçiye aşağıda ZATEN AYRI gidiyor. Aynı veri farka ikinci kez giriyor ve asıl
+#    kanıtı, yani kodu, istemden dışarı itiyordu.
+#    Bu AYIKLAMA, saklama DEĞİL: ayıklanan şey denetçiye ayrı başlıklarla sunulur ve ayıklandığı hem ekrana
+#    hem DENETIM kaydına yazılır. Kapatmak için: DENETCI_KANIT_AYIKLA=0.
+AYIKLANAN_DOSYA=0; AYIKLANAN_BAYT=0
+if [ "${DENETCI_KANIT_AYIKLA:-1}" != 0 ]; then
+  python3 - "$TMP/diff.patch" "$TMP/diff-ayik.patch" <<'PYA'
+import re, sys
+ham = open(sys.argv[1], encoding="utf-8", errors="replace").read()
+# Birleşik farkı dosya bloklarına böl: her blok "diff --git " ile başlar. Baştaki başlık (varsa) korunur.
+parcalar = re.split(r'(?m)^(?=diff --git )', ham)
+tut, at = [], []
+DESEN = re.compile(r'^diff --git a/(\S+) b/(\S+)')
+for i, blok in enumerate(parcalar):
+    m = DESEN.match(blok)
+    if m is None:
+        tut.append(blok)            # fark olmayan baş kısım: dokunulmaz
+        continue
+    yol = m.group(2)
+    if "_agents/fabrika/kanit/" in yol:
+        at.append((yol, len(blok.encode("utf-8"))))
+    else:
+        tut.append(blok)
+open(sys.argv[2], "w", encoding="utf-8").write("".join(tut))
+sys.stderr.write("%d %d\n" % (len(at), sum(b for _, b in at)))
+PYA
+  if [ -s "$TMP/diff-ayik.patch" ] || [ ! -s "$TMP/diff.patch" ]; then
+    OLD_B=$(wc -c < "$TMP/diff.patch"); NEW_B=$(wc -c < "$TMP/diff-ayik.patch")
+    if [ "$NEW_B" -lt "$OLD_B" ]; then
+      AYIKLANAN_BAYT=$((OLD_B - NEW_B))
+      AYIKLANAN_DOSYA=$(grep -c '^diff --git ' "$TMP/diff.patch")
+      KALAN=$(grep -c '^diff --git ' "$TMP/diff-ayik.patch")
+      AYIKLANAN_DOSYA=$((AYIKLANAN_DOSYA - KALAN))
+      mv "$TMP/diff-ayik.patch" "$TMP/diff.patch"
+      _bilgi "· farktan AYIKLANDI: $AYIKLANAN_DOSYA kanıt dosyası ($AYIKLANAN_BAYT bayt) — kanıt manifesti ve ölçüm çıktıları denetçiye AYRI gidiyor, farka ikinci kez girmesin (kırpılma panzehiri)"
+    fi
+  else
+    _bilgi "· ⚠ kanıt ayıklaması atlandı (ayıklanmış fark boş çıktı) — fark olduğu gibi gider"
+  fi
+fi
 if [ -z "$KART" ]; then KART="$(kart_yolu)" || exit 3; fi   # 0. adım kartı varsa o (YALNIZ birincil depodan; alandaki bayat kopya → rc=3)
 [ -z "$KART" ] || [ -r "$KART" ] || { _hata "--kart dosyası okunamadı: $KART (verilen kart yoksa denetim kartsız SÜRMEZ)"; exit 3; }   # eskiden cp hatası sessizce yutuluyordu
 # göz tur 3: --kart "kart TEK kaynak"ı aşamaz — birincil kart VARKEN içeriği farklı bir dosya iş kartı olamaz (rc=3); birincil yokken serbest
@@ -216,7 +261,9 @@ else echo "(iş kartı verilmedi — talep bilinmiyor; DOĞRU ŞEY Mİ sorusu H'
   printf '\n\n===== KANIT MANİFESTİ — durum: %s =====\n' "$KANIT_DURUM"; cat "$DZ/KANIT.json"
   printf '\n\n===== ÖLÇÜM ÇIKTILARI (ilk 60 satır/dosya) =====\n'
   for f in "$DZ"/olcum-*.txt; do [ -f "$f" ] && { printf -- '--- %s ---\n' "$(basename "$f")"; head -60 "$f"; }; done
-  printf '\n\n===== DEĞİŞİKLİK (diff) =====\n'; cat "$TMP/diff.patch"
+  printf '\n\n===== DEĞİŞİKLİK (diff) =====\n'
+  [ "$AYIKLANAN_DOSYA" -gt 0 ] && printf '[NOT: bu farktan %s kanıt dosyası (%s bayt) AYIKLANDI — kanıt manifesti ve ölçüm çıktıları yukarıda AYRI başlıklarda duruyor; saklanan bir şey yok, aynı veri farka ikinci kez girmesin diye çıkarıldı. Aşağısı ÜRETİM KODU farkıdır, eksik değildir.]\n' "$AYIKLANAN_DOSYA" "$AYIKLANAN_BAYT"
+  cat "$TMP/diff.patch"
   [ "$TUR" -gt 1 ] && { printf '\n\n===== ÖNCEKİ TUR (%s) =====\n' "$ONCEKI"; cat "$DZ/DENETIM-$ONCEKI.json"; }
 } > "$TMP/istem.md"
 
@@ -335,15 +382,18 @@ json.dump(d,open(sys.argv[2],"w",encoding="utf-8"),ensure_ascii=False)
 PY
 SRC=$?
 if [ "$SRC" -ne 0 ]; then _hata "denetçi çıktısı geçersiz — ölçemedi"; cp "$HAM" "$DZ/DENETIM-$TUR-HAM.txt"; exit 3; fi
-python3 - "$DZ/DENETIM-$TUR.json" "$TUR" "$IS" "$PR" "$YAZAN" "$DENETCI_AD" "$KANIT_DURUM" "$DOGRULANMIS" "$KIRPILDI" "$ISTEM_BAYT" "$KIRP_ESIK" "$YEDEK" "$YAZAN_MODEL" "$YEDEK_MODEL" "$YAZAN_MODEL_KAYNAK" <<'PY'
+python3 - "$DZ/DENETIM-$TUR.json" "$TUR" "$IS" "$PR" "$YAZAN" "$DENETCI_AD" "$KANIT_DURUM" "$DOGRULANMIS" "$KIRPILDI" "$ISTEM_BAYT" "$KIRP_ESIK" "$YEDEK" "$YAZAN_MODEL" "$YEDEK_MODEL" "$YAZAN_MODEL_KAYNAK" "$AYIKLANAN_DOSYA" "$AYIKLANAN_BAYT" <<'PY'
 import json,sys,datetime
-yol,tur,is_,pr,yazan,den,kd,sonuc_yolu,kirp,bayt,esik,yedek,yazan_model,yedek_model,ym_kaynak=sys.argv[1:]
+yol,tur,is_,pr,yazan,den,kd,sonuc_yolu,kirp,bayt,esik,yedek,yazan_model,yedek_model,ym_kaynak,ayik_dosya,ayik_bayt=sys.argv[1:]
 json.dump({"tur":int(tur),"is":is_,"pr":pr,"yazan":yazan,"denetci":den,"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
            "kanit_durumu":kd,
            "yedek":(yedek or None),   # Sultan Y0006: yedek gözle alınan puan codex puanı sanılmasın; sebebi kayıtta
            "yazan_model":(yazan_model or None), "yazan_model_kaynak":(ym_kaynak or None), "yedek_model":(yedek_model or None),   # yedek koşumunda dolu (ölçülemezse yedek koşmaz, rc=3)
 
            "kirpildi":{"oldu":kirp=="1","istem_bayt":int(bayt),"esik":int(esik)},   # kalıcı kayıt: kırpılan denetim "tam gördü" sanılmasın
+           # Kanıt dökümleri farka ikinci kez girip kodu istemden dışarı itiyordu (PR #329 turu yandı).
+           # Ayıklama kayıtta durur: "fark eksikti" ile "kanıt ayrı gitti" sonradan ayırt edilsin.
+           "kanit_ayiklandi":{"dosya":int(ayik_dosya),"bayt":int(ayik_bayt)},
            "sonuc":json.load(open(sonuc_yolu,encoding="utf-8"))},open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
 PY
 _oku() { python3 -c "import json,sys;d=json.load(open(sys.argv[1],encoding='utf-8'));print(len(d['bulgular']) if sys.argv[2]=='n' else d[sys.argv[2]])" "$DOGRULANMIS" "$1"; }

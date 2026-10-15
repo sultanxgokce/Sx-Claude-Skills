@@ -1,0 +1,70 @@
+{
+  "is": "denetci-kanit-farka-girmesin",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T15:53:52+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapilar",
+      "asama": "sonra",
+      "dosya": "olcum-kapilar-sonra.txt",
+      "sha256": "6498a7e64c95592f5ea50296f91be209dddfd5f58888e882d8b7312702660ea7",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-fark-ayikla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T15:52:58+03:00",
+      "sure_sn": 5.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-beklenen-kirmizi",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-beklenen-kirmizi-tek.txt",
+      "sha256": "95ff18be1c24298395dabf651613958efc88629ca7acec0ebc9239a6b873e848",
+      "komut": [
+        "bash",
+        "/tmp/tmp.ciqwQC8i1p/kos.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T15:53:06+03:00",
+      "sure_sn": 7.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kod-denetciye-ulasiyor-mu",
+      "asama": "once",
+      "dosya": "olcum-kod-denetciye-ulasiyor-mu-once.txt",
+      "sha256": "3de43af4f211ff46d16b357b1dfb4895f1d85b78809f62d4bf08cfb1e096b8a4",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/ayikla-prob/prob.sh",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/ayikla-prob/denetci-ESKI.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T15:53:51+03:00",
+      "sure_sn": 0.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kod-denetciye-ulasiyor-mu",
+      "asama": "sonra",
+      "dosya": "olcum-kod-denetciye-ulasiyor-mu-sonra.txt",
+      "sha256": "12c9a542cfd6769cacbe4742d4d0a411de6ca3f96d3d518fe10c8fa53bc9d9a3",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/ayikla-prob/prob.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-denetci-kanit-farka-girmesin/yazilim-fabrikasi/scripts/denetci.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T15:53:52+03:00",
+      "sure_sn": 0.6
+    }
+  ],
+  "imza": "be4f873d7ce8888b5b6e09935486d671de957d29c110ef61deff32881e51c27c"
+}
