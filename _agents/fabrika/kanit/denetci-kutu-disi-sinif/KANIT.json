@@ -1,0 +1,85 @@
+{
+  "is": "denetci-kutu-disi-sinif",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T17:18:19+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapilar",
+      "asama": "sonra",
+      "dosya": "olcum-kapilar-sonra.txt",
+      "sha256": "8d595dd7db69072b06a07838abc2d8c0252ffce40b621bf56d7713402c28d1ed",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-kutu-disi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T17:07:51+03:00",
+      "sure_sn": 9.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tur-yakiyor-mu",
+      "asama": "once",
+      "dosya": "olcum-tur-yakiyor-mu-once.txt",
+      "sha256": "5e0ba1ae3301e95c972e8a74adf05300e7a8ef6b42307a96d6ebeb0c9d8c4a7b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/kd-prob/prob.sh",
+        "/tmp/claude-1000/kd-prob/denetci-ESKI.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T17:08:13+03:00",
+      "sure_sn": 1.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tur-yakiyor-mu",
+      "asama": "sonra",
+      "dosya": "olcum-tur-yakiyor-mu-sonra.txt",
+      "sha256": "4648e82ce8ae5544f06a655af6acc72d5ffa336e0c41068dd72063d3ff8392f9",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/kd-prob/prob.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-denetci-kutu-disi-sinif/yazilim-fabrikasi/scripts/denetci.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T17:08:15+03:00",
+      "sure_sn": 1.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-beklenen-kirmizi",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-beklenen-kirmizi-tek.txt",
+      "sha256": "ec423635355fa81ad0baa318aa1097052ec8b0c0fe2f527b0c941e875f78bde1",
+      "komut": [
+        "bash",
+        "/tmp/tmp.cihCli0osI/kos.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T17:09:28+03:00",
+      "sure_sn": 49.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ana-sinav-cagiranla",
+      "asama": "sonra",
+      "dosya": "olcum-ana-sinav-cagiranla-sonra.txt",
+      "sha256": "3b6f115df3b50015854656163edfdc27e5172ee91bd4cd7a203af1dac182c0cd",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T17:18:19+03:00",
+      "sure_sn": 220.7
+    }
+  ],
+  "imza": "f7e08f04135969b8bef4e90ccd18dd50f2b846cbabee7501e5c21a940851ddab"
+}

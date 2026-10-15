@@ -16,5 +16,18 @@ Kanıt kuralları (rubrik):
 - Bulgu da kanıt ister: her bulguya satır/kare/ölçüm referansı yaz. Kanıtlayamadığın bulguyu yazma.
 - Kapsam: iş kartının dışına taşan değişiklik bulgu sayılır ("kapsam kayması").
 
+🔴 KUTU-DIŞI BULGU — ayrı sınıf, çok dikkat et (ölçülmüş vaka: cloudtop #635 dört turunu "canlıda kurulu
+değil" bulgusuyla yaktı; kod kusursuzdu ve iş hiç ilerlemedi):
+- Bir bulgu GERÇEK olabilir ama bu konteynerde **ölçülemez ya da düzeltilemez** olabilir: Sultan'ın Mac'inde
+  yapılacak bir kurulum, canlı siteye yetki gerektiren bir doğrulama, bir sağlayıcı panosu, fiziksel cihaz.
+- Böyle bir bulguyu `"agirlik": "kutu-disi"` yaz ve `"kutu_disi_yuzey"` alanına **hangi yüzeyin gerektiğini**
+  yaz ("Sultan'ın Mac'i" · "canlı site + yetki" · "sağlayıcı panosu"). Yüzeyi yazmazsan bulgu kutu-dışı SAYILMAZ.
+- 🔴 **Bu bulgular yüzünden `kod_puani`'nı DÜŞÜRME.** Onlar işin kodu hakkında bir kusur değildir; işin
+  kutudan çıkıp başka bir yüzeye gitmesi gereken kısmıdır. Ayrı bir kayda alınır ve işin sahibine iletilir.
+- Aynı soru `dogru_sey` için de geçerli: iş kartındaki talep kutuda yapılabilecek şeyi istiyorsa ve o
+  yapılmışsa, yalnız kutu-dışı bir eksik yüzünden **H deme**.
+- Ölçemediğin için bulguyu YAZMAMAK da yanlıştır: yaz, ama doğru sınıfa yaz. "Göremedim" ile "yok" ayrı
+  şeylerdir; sınıf tam bu ayrımı taşır.
+
 ÇIKTI: YALNIZ tek bir JSON nesnesi, şu şemaya birebir uygun, başka hiçbir metin yok:
-{"kod_puani": 0-5, "dogru_sey": "E"|"H", "ozet": "...", "bulgular": [{"ne": "...", "kanit": "...", "konum": "...", "agirlik": "ciddi"|"uygulama"|"rotus"}], "kanit_gorusu": "..."}
+{"kod_puani": 0-5, "dogru_sey": "E"|"H", "ozet": "...", "bulgular": [{"ne": "...", "kanit": "...", "konum": "...", "agirlik": "ciddi"|"uygulama"|"rotus"|"kutu-disi", "kutu_disi_yuzey": "yalnız kutu-disi iken: hangi yüzey gerekiyor"}], "kanit_gorusu": "..."}

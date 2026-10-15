@@ -147,18 +147,38 @@ esac
 mkdir -p "$DZ"
 ONCEKI=$(ls "$DZ"/DENETIM-*.json 2>/dev/null | wc -l)
 TUR=$((ONCEKI+1))
+# ── SAYILI TUR (gorev WC3VBZAA · ölçülmüş vaka: cloudtop #635 DÖRT turunu "canlıda kurulu
+#    değil" bulgusuyla yaktı, kod kusursuzdu ve iş hiç ilerlemedi). Tavan ham tur sayısına değil,
+#    İŞIN KUTUDA İLERLETİLEBİLDİĞİ tur sayısına uygulanır. Bir tur, bulgularının HEPSİ kutu-dışıysa
+#    SAYILMAZ: o turda kutuda yapılacak bir şey söylenmemiştir, dolayısıyla tur yakmak haksızdır.
+#    🔴 Sıfır bulgulu tur SAYILIR — eski davranış korunur; "bulgu yok ama 5 de yok" ayrı bir vakadır
+#    ve bu kartın kapsamı değil (kapsam kayması olurdu).
+SAYILI=$(python3 - "$DZ" <<'PYSAY'
+import json,glob,os,sys
+n=0
+for y in sorted(glob.glob(os.path.join(sys.argv[1],"DENETIM-[0-9]*.json")),
+                key=lambda p:int(p.rsplit("-",1)[1].split(".")[0])):
+    try: b=json.load(open(y,encoding="utf-8"))["sonuc"]["bulgular"]
+    except Exception: n+=1; continue          # okunamayan tur SAYILIR (şüphede muafiyet YOK)
+    if not b or any(x.get("agirlik")!="kutu-disi" for x in b): n+=1
+print(n)
+PYSAY
+)
+case "$SAYILI" in ''|*[!0-9]*) SAYILI="$ONCEKI" ;; esac
 ilerliyor_mu() {  # önceki iki turu kıyasla: puan↑ VE açık bulgu↓
   [ "$ONCEKI" -ge 2 ] || return 1
   python3 - "$DZ" "$ONCEKI" <<'PY'
 import json,sys,os
 dz,n=sys.argv[1],int(sys.argv[2])
 a=json.load(open(os.path.join(dz,f"DENETIM-{n-1}.json")))["sonuc"]; b=json.load(open(os.path.join(dz,f"DENETIM-{n}.json")))["sonuc"]
-sys.exit(0 if (b["kod_puani"]>a["kod_puani"] and len(b["bulgular"])<len(a["bulgular"])) else 1)
+# Kutu-dışı bulgu "açık bulgu" değildir: kutuda kapatılamaz, o yüzden ilerleme ölçümüne girmez.
+ac=lambda r: len([x for x in r["bulgular"] if x.get("agirlik")!="kutu-disi"])
+sys.exit(0 if (b["kod_puani"]>a["kod_puani"] and ac(b)<ac(a)) else 1)
 PY
 }
 tikandi_raporu() {
   _bilgi ""
-  _bilgi "⛔ TIKANDI — $ONCEKI turda 5+E'ye ulaşılamadı (tavan $TAVAN, ilerleyene +1, $MUTLAK mutlak)."
+  _bilgi "⛔ TIKANDI — $ONCEKI turda 5+E'ye ulaşılamadı (tavan $TAVAN, ilerleyene +1, $MUTLAK mutlak; kutu-dışı bulgulu turlar sayılmaz)."
   _bilgi "   Üç yol (karar iş sahibinin/reisin, sınıf işiyse Sultan'ın):"
   _bilgi "   1) DEVAM — gerekçeyle: neden bir tur daha işe yarar?"
   _bilgi "   2) KAPSAMI DARALT — iş kartını küçült, geçen kısmı gönder, kalanı yeni kart"
@@ -252,8 +272,26 @@ PY
   _bilgi "⚠ TAVAN AÇILDI (tur $TUR) — REİS kararı karttan okundu ve deftere yazıldı (sınıfsız iş): $GEREKCE"
   return 0
 }
-if [ "$TUR" -gt "$MUTLAK" ]; then _hata "mutlak tavan ($MUTLAK) aşıldı — denetim koşulmadı"; tikandi_raporu; exit 4; fi
-if [ "$TUR" -gt "$TAVAN" ]; then
+# 🔴 ASIL YAKMA BURADA OLUYORDU (gorev WC3VBZAA): bu iki kapı denetçi HIÇ KOŞMADAN tavanı
+#    kapatıyor ve HAM tur sayısına bakıyordu. cloudtop #635'in dört turu böyle yandı: her tur
+#    "canlıda kurulu değil" bulgusu döndü, kutuda yapılacak bir şey söylenmedi, ama tur dolду.
+#    Artık SAYILI tura bakılıyor: bulgularının hepsi kutu-dışı olan turlar tavandan düşmez.
+KD_TAVAN="${DENETCI_KUTU_DISI_TAVAN:-2}"
+YAKMAYAN_ONCE=$((ONCEKI - SAYILI))
+# Muafiyet sınırsız değil: üst üste yalnız kutu-dışı bulgu dönen iş KUTUDA İLERLETİLEMİYOR demektir.
+# Bu kapı denetçiden ÖNCE: boşuna bir codex koşumu daha yapmayalım.
+if [ "$YAKMAYAN_ONCE" -gt "$KD_TAVAN" ]; then
+  _bilgi ""
+  _bilgi "⛔ KUTUDA İLERLETİLEMİYOR — $YAKMAYAN_ONCE tur üst üste yalnız kutu-dışı bulgu döndü (tavan $KD_TAVAN); denetim koşulmadı."
+  _bilgi "   Bu bir KOD tıkanması DEĞİLDİR; işin kalanı başka bir yüzeyde."
+  _bilgi "   Gereken yüzeyler: $DZ/KUTU-DISI.jsonl"
+  _bilgi "   Üç yol (karar iş sahibinin/reisin): 1) YÜZEYE GİT — o yüzeyde ölçen bir kart/görev aç"
+  _bilgi "   2) KAPSAMI DARALT — kutuda biteni gönder, kutu-dışını yeni kart yap"
+  _bilgi "   3) GERİ AL — alanı kapat, ders deftere"
+  exit 4
+fi
+if [ "$SAYILI" -ge "$MUTLAK" ]; then _hata "mutlak tavan ($MUTLAK) aşıldı — denetim koşulmadı"; tikandi_raporu; exit 4; fi
+if [ "$SAYILI" -ge "$TAVAN" ]; then
   if ilerliyor_mu; then _bilgi "· tur $TUR: tavan $TAVAN aşıldı ama iş İLERLİYOR (puan↑, bulgu↓) → +1 tur payı"
   else
     sultan_kapisi; sk=$?
@@ -509,9 +547,21 @@ try: d=json.loads(m.group(0) if m else ham)
 except Exception as e: print("GEÇERSİZ:"+str(e),file=sys.stderr); sys.exit(3)
 ok=isinstance(d.get("kod_puani"),int) and 0<=d["kod_puani"]<=5 and d.get("dogru_sey") in("E","H") and isinstance(d.get("bulgular"),list)
 if not ok: print("GEÇERSİZ: alanlar eksik/yanlış",file=sys.stderr); sys.exit(3)
+# 🔴 KUTU-DIŞI SINIFI FAIL-CLOSED (gorev WC3VBZAA): sınıf bir MUAFİYET taşıyor (puanı düşürmez, tur
+#    yakmaz). Muafiyeti bedelsiz vermek, her bulguyu "kutuda ölçemedim" diye etiketlemenin kapısını
+#    açardı. Bedel şudur: HANGİ yüzey gerekiyor, yazılmak zorunda. Yüzey yoksa sınıf DÜŞÜRÜLÜR
+#    (uygulama) ve düşürüldüğü kayda yazılır — sessizce kabul de, sessizce ret de etmiyoruz.
+dusurulen=[]
 for b in d["bulgular"]:
     if not all(k in b for k in("ne","kanit","konum","agirlik")): print("GEÇERSİZ: bulgu alanları eksik",file=sys.stderr); sys.exit(3)
+    if b.get("agirlik")=="kutu-disi":
+        yuzey=str(b.get("kutu_disi_yuzey","") or "").strip()
+        if len(yuzey)<3:
+            b["agirlik"]="uygulama"; b["_sinif_dusuruldu"]="kutu-disi → uygulama: kutu_disi_yuzey boş ya da çok kısa"
+            dusurulen.append(b.get("ne","?")[:60])
 json.dump(d,open(sys.argv[2],"w",encoding="utf-8"),ensure_ascii=False)
+if dusurulen:
+    sys.stderr.write("SINIF-DUSURULDU: "+" · ".join(dusurulen)+"\n")
 PY
 SRC=$?
 if [ "$SRC" -ne 0 ]; then _hata "denetçi çıktısı geçersiz — ölçemedi"; cp "$HAM" "$DZ/DENETIM-$TUR-HAM.txt"; exit 3; fi
@@ -542,13 +592,67 @@ python3 - "$DOGRULANMIS" <<'PY'
 import json,sys
 d=json.load(open(sys.argv[1],encoding="utf-8"))
 print("   özet: "+d["ozet"])
-for b in d["bulgular"]: print(f"   • [{b['agirlik']}] {b['ne']} — {b['konum']} — kanıt: {b['kanit']}")
+kd=[b for b in d["bulgular"] if b.get("agirlik")=="kutu-disi"]
+for b in d["bulgular"]:
+    if b.get("agirlik")=="kutu-disi": continue
+    ds=" ⚠ "+b["_sinif_dusuruldu"] if b.get("_sinif_dusuruldu") else ""
+    print(f"   • [{b['agirlik']}] {b['ne']} — {b['konum']} — kanıt: {b['kanit']}{ds}")
+if kd:
+    print(f"   ── KUTU-DIŞI ({len(kd)}) — bu kutuda ölçülemez/düzeltilemez; tur YAKMAZ, puanı DÜŞÜRMEZ:")
+    for b in kd:
+        print(f"   ⊗ {b['ne']} — gereken yüzey: {b.get('kutu_disi_yuzey','?')} — {b['konum']}")
+    print("   → bu bulgular işin SAHIBINE gider (ayrı kart/görev); kutuda kapatılamaz.")
 PY
 _bilgi "   kayıt: $DZ/DENETIM-$TUR.json"
+# 🔴 Kutu-dışı bulgu "tur yakmadı" diye KAYBOLMAMALI: muafiyetin karşılığı izlenebilirliktir.
+#    Ayrı bir deftere (append-only) yazılır; işin sahibi buradan kart/görev açar.
+python3 - "$DOGRULANMIS" "$DZ/KUTU-DISI.jsonl" "$TUR" "$IS" <<'PYKD'
+import json,sys,datetime
+sonuc,defter,tur,is_=sys.argv[1:]
+kd=[b for b in json.load(open(sonuc,encoding="utf-8"))["bulgular"] if b.get("agirlik")=="kutu-disi"]
+if kd:
+    var=set()
+    try:
+        for sat in open(defter,encoding="utf-8"):
+            sat=sat.strip()
+            if sat: var.add(json.loads(sat).get("ne",""))
+    except FileNotFoundError: pass
+    with open(defter,"a",encoding="utf-8") as f:
+        for b in kd:
+            if b.get("ne","") in var: continue      # aynı bulgu her turda yeniden yazılmaz
+            f.write(json.dumps({"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
+                                "is":is_,"tur":int(tur),"ne":b.get("ne"),
+                                "yuzey":b.get("kutu_disi_yuzey"),"konum":b.get("konum"),
+                                "kanit":b.get("kanit")},ensure_ascii=False)+"\n")
+    print(f"   kutu-dışı defteri: {defter}")
+PYKD
 if [ "$PUAN" -eq 5 ] && [ "$DOGRU" = "E" ]; then _bilgi "✓ GEÇTİ — merge kararı: sınıf işi Sultan, sınıfsız iş kutu reisi"; exit 0; fi
-if [ "$TUR" -ge "$TAVAN" ]; then
+# 🔴 Tavan SAYILI tura uygulanır (bu turun kendisi dahil edilerek yeniden hesaplanır).
+SAYILI_SON=$(python3 -c "
+import json,sys
+d=json.load(open(sys.argv[1],encoding='utf-8'))
+b=d['bulgular']
+print(int(sys.argv[2]) + (1 if (not b or any(x.get('agirlik')!='kutu-disi' for x in b)) else 0))
+" "$DOGRULANMIS" "$SAYILI")
+case "$SAYILI_SON" in ''|*[!0-9]*) SAYILI_SON="$TUR" ;; esac
+YAKMAYAN=$((TUR - SAYILI_SON))
+[ "$SAYILI_SON" -lt "$TUR" ] && _bilgi "   ℹ sayılı tur $SAYILI_SON/$TUR — $YAKMAYAN tur yakmadı (bulgularının hepsi kutu-dışıydı)"
+# 🔴 Muafiyet SıNIRSIZ değil: her tur kutu-dışı bulgu yazarak sonsuz döngü kurulabilirdi.
+#    Yakmayan tur $KD_TAVAN'ı geçerse iş tavanda değil ama KUTUDA İLERLETİLEMİYOR demektir —
+#    ayrı gerçekeçli rc=4 ve ayrı üç yol (devam demeğil: yüzeye git).
+if [ "$YAKMAYAN" -gt "$KD_TAVAN" ]; then
+  _bilgi ""
+  _bilgi "⛔ KUTUDA İLERLETİLEMİYOR — $YAKMAYAN tur üst üste yalnız kutu-dışı bulgu döndü (tavan $KD_TAVAN)."
+  _bilgi "   Bu bir KOD tıkanması DEĞİLDİR; işin kalanı başka bir yüzeyde."
+  _bilgi "   Gereken yüzeyler: $DZ/KUTU-DISI.jsonl"
+  _bilgi "   Üç yol (karar iş sahibinin/reisin): 1) YÜZEYE GİT — o yüzeyde ölçen bir kart/görev aç"
+  _bilgi "   2) KAPSAMI DARALT — kutuda biteni gönder, kutu-dışını yeni kart yap"
+  _bilgi "   3) GERİ AL — alanı kapat, ders deftere"
+  exit 4
+fi
+if [ "$SAYILI_SON" -ge "$TAVAN" ]; then
   ONCEKI=$TUR
-  if [ "$TUR" -lt "$MUTLAK" ] && ilerliyor_mu; then _bilgi "↩ adım 2'ye dön (tur $TUR/$TAVAN) — iş ilerliyor, +1 tur payı var"; exit 1; fi
+  if [ "$SAYILI_SON" -lt "$MUTLAK" ] && ilerliyor_mu; then _bilgi "↩ adım 2'ye dön (sayılı tur $SAYILI_SON/$TAVAN) — iş ilerliyor, +1 tur payı var"; exit 1; fi
   tikandi_raporu; exit 4
 fi
-_bilgi "↩ adım 2'ye dön: düzelt → yeniden kanıtla → yeniden gönder (tur $TUR/$TAVAN)"; exit 1
+_bilgi "↩ adım 2'ye dön: düzelt → yeniden kanıtla → yeniden gönder (sayılı tur $SAYILI_SON/$TAVAN)"; exit 1

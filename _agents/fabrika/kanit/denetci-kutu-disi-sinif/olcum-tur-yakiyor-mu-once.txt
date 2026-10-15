@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/kd-prob/prob.sh /tmp/claude-1000/kd-prob/denetci-ESKI.sh
+# rc=1 sure=1.0s zaman=2026-10-15T17:08:13+03:00
+--- stdout ---
+SONUC: tur 3'de TIKANDI (rc=4) — kutuda yapilacak bir sey soylenmedigi halde turlar yandi
+⛔ TIKANDI — 3 turda 5+E'ye ulaşılamadı (tavan 3, ilerleyene +1, 4 mutlak).
+--- stderr ---

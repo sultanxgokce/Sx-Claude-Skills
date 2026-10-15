@@ -1,0 +1,200 @@
+$ bash /tmp/tmp.cihCli0osI/kos.sh
+# rc=1 sure=49.7s zaman=2026-10-15T17:09:28+03:00
+--- stdout ---
+### BEKLENEN KIRMIZI — dort mekanizma AYRI AYRI mutasyonla olculuyor.
+### Ayri kosuluyorlar cunku birlikte kosulurlarsa ayni rc'yi uretip birbirlerini MASKELIYORLAR
+### (ornek: yuzey sarti kalkinca sonsuz-dongu freni ayni rc=4'u verir -> kapi kazara yesil kalir;
+### bu yuzden D5/D6 rc'ye degil MESAJA bakiyor).
+
+== MUT A: ERKEN tavan kapisi yine HAM tura bakiyor (denetci hic kosmadan yakan asil yer)
+A · 🔴 kutu-dışı bulgu TUR YAKMAZ (asıl talep)
+  ✓ A1 tur 1 (kutu-dışı bulgu) → düzelt-dön
+  ✓ A2 tur 2
+  ✓ A3 🔴 ham tur 3 = TAVAN ama SAYILI tur 0 → TIKANMAZ (rc=1)
+  ✗ A4 🔴 ham tur 4 = MUTLAK tavan ama yine tıkanmaz (rc=4, beklenen=1)
+  ✗ A5 🔴 'tur yakmadı' SÖYLENİR (sessiz muafiyet yok) (çıktıda 'tur yakmadı' yok)
+  ✗ A6 🔴 bu turlarda TIKANDI raporu BASILMAZ ('⛔ TIKANDI' çıktıda var, olmamalı)
+  ✗ A7 sayılı tur ekranda 0 olarak yazılır (çıktıda 'sayılı tur 0/' yok)
+B · 🔴 normal bulgu YİNE tur yakar (muafiyet sızmasın)
+  ✓ B1 tur 1 (normal bulgu)
+  ✓ B2 tur 2 (normal bulgu)
+  ✓ B3 🔴 tur 3'te TIKANIR (rc=4) — eski davranış korundu
+  ✓ B4 tıkanma raporu basılır
+C · 🔴 karışık tur SAYILIR (içinde bir normal bulgu varsa)
+  ✓ C1 tur 1 (karışık)
+  ✓ C2 tur 2 (karışık)
+  ✓ C3 🔴 tur 3'te TIKANIR — karışık tur muafiyet ALMAZ
+D · 🔴 muafiyet BEDELSİZ değil: yüzey yazılmazsa sınıf DÜŞÜRÜLÜR
+  ✓ D1 yüzeysiz kutu-dışı bulgu 'uygulama'ya DÜŞÜRÜLÜR
+  ✓ D2 düşürüldüğü SÖYLENİR
+  ✓ D3 tur 1 (yüzeysiz)
+  ✓ D4 tur 2 (yüzeysiz)
+  ✓ D5 🔴 yüzeysiz bulgu tur YAKAR → KOD tıkanması (etiket bedava muafiyet değil)
+  ✓ D6 🔴 yüzeysiz bulgu kutu-dışı MUAFİYETİ ALMAZ
+E · 🔴 sonsuz döngü KAPALI: muafiyet sınırsız değil
+  ✓ E1 tur 1
+  ✓ E2 tur 2
+  ✓ E3 tur 3 (yakmayan 3 > tavan 2) → rc=4
+  ✓ E4 🔴 bu ret KOD tıkanması DEĞİL diye söylenir
+  ✓ E5 çare 'yüzeye git' olarak verilir
+  ✓ E6 🔴 'DEVAM — gerekçeyle' yolu ÖNERİLMEZ (yanlış çare)
+  ✓ E7 tavan ortamla değiştirilebilir (DENETCI_KUTU_DISI_TAVAN=1 → tur 2'de rc=4)
+  ✓ E8 ikinci yakmayan turda rc=4
+F · 🔴 muafiyetin karşılığı İZLENEBİLİRLİK: ayrı deftere yazılır
+  ✓ F1 KUTU-DISI.jsonl yazıldı ve yüzeyi taşıyor
+  ✓ F2 🔴 aynı bulgu her turda YENİDEN yazılmaz (defter şişmez)
+  ✓ F3 defterin yolu ekrana basılır
+  ✓ F4 kutu-dışı bulgu YOKSA defter KURULMAZ (boş dosya bırakmaz)
+G · 🔴 geçiş ve ayrı yazdırma bozulmadı
+  ✓ G1 5+E yine GEÇER (rc=0)
+  ✓ G2 kutu-dışı bulgular AYRI başlıkta listelenir
+  ✓ G3 gereken yüzey yazdırılır
+  ✓ G4 işin sahibine gideceği söylenir
+
+toplam=36 geçen=32 düşen=4
+A rc=1
+
+== MUT B: SON karar blogu yine HAM tura bakiyor
+A · 🔴 kutu-dışı bulgu TUR YAKMAZ (asıl talep)
+  ✓ A1 tur 1 (kutu-dışı bulgu) → düzelt-dön
+  ✓ A2 tur 2
+  ✗ A3 🔴 ham tur 3 = TAVAN ama SAYILI tur 0 → TIKANMAZ (rc=1) (rc=4, beklenen=1)
+  ✗ A4 🔴 ham tur 4 = MUTLAK tavan ama yine tıkanmaz (rc=4, beklenen=1)
+  ✓ A5 🔴 'tur yakmadı' SÖYLENİR (sessiz muafiyet yok)
+  ✗ A6 🔴 bu turlarda TIKANDI raporu BASILMAZ ('⛔ TIKANDI' çıktıda var, olmamalı)
+  ✓ A7 sayılı tur ekranda 0 olarak yazılır
+B · 🔴 normal bulgu YİNE tur yakar (muafiyet sızmasın)
+  ✓ B1 tur 1 (normal bulgu)
+  ✓ B2 tur 2 (normal bulgu)
+  ✓ B3 🔴 tur 3'te TIKANIR (rc=4) — eski davranış korundu
+  ✓ B4 tıkanma raporu basılır
+C · 🔴 karışık tur SAYILIR (içinde bir normal bulgu varsa)
+  ✓ C1 tur 1 (karışık)
+  ✓ C2 tur 2 (karışık)
+  ✓ C3 🔴 tur 3'te TIKANIR — karışık tur muafiyet ALMAZ
+D · 🔴 muafiyet BEDELSİZ değil: yüzey yazılmazsa sınıf DÜŞÜRÜLÜR
+  ✓ D1 yüzeysiz kutu-dışı bulgu 'uygulama'ya DÜŞÜRÜLÜR
+  ✓ D2 düşürüldüğü SÖYLENİR
+  ✓ D3 tur 1 (yüzeysiz)
+  ✓ D4 tur 2 (yüzeysiz)
+  ✓ D5 🔴 yüzeysiz bulgu tur YAKAR → KOD tıkanması (etiket bedava muafiyet değil)
+  ✓ D6 🔴 yüzeysiz bulgu kutu-dışı MUAFİYETİ ALMAZ
+E · 🔴 sonsuz döngü KAPALI: muafiyet sınırsız değil
+  ✓ E1 tur 1
+  ✓ E2 tur 2
+  ✓ E3 tur 3 (yakmayan 3 > tavan 2) → rc=4
+  ✓ E4 🔴 bu ret KOD tıkanması DEĞİL diye söylenir
+  ✓ E5 çare 'yüzeye git' olarak verilir
+  ✓ E6 🔴 'DEVAM — gerekçeyle' yolu ÖNERİLMEZ (yanlış çare)
+  ✓ E7 tavan ortamla değiştirilebilir (DENETCI_KUTU_DISI_TAVAN=1 → tur 2'de rc=4)
+  ✓ E8 ikinci yakmayan turda rc=4
+F · 🔴 muafiyetin karşılığı İZLENEBİLİRLİK: ayrı deftere yazılır
+  ✓ F1 KUTU-DISI.jsonl yazıldı ve yüzeyi taşıyor
+  ✓ F2 🔴 aynı bulgu her turda YENİDEN yazılmaz (defter şişmez)
+  ✓ F3 defterin yolu ekrana basılır
+  ✓ F4 kutu-dışı bulgu YOKSA defter KURULMAZ (boş dosya bırakmaz)
+G · 🔴 geçiş ve ayrı yazdırma bozulmadı
+  ✓ G1 5+E yine GEÇER (rc=0)
+  ✓ G2 kutu-dışı bulgular AYRI başlıkta listelenir
+  ✓ G3 gereken yüzey yazdırılır
+  ✓ G4 işin sahibine gideceği söylenir
+
+toplam=36 geçen=33 düşen=3
+B rc=1
+
+== MUT C: kutu_disi_yuzey sarti kalkti (muafiyet BEDAVA)
+A · 🔴 kutu-dışı bulgu TUR YAKMAZ (asıl talep)
+  ✓ A1 tur 1 (kutu-dışı bulgu) → düzelt-dön
+  ✓ A2 tur 2
+  ✓ A3 🔴 ham tur 3 = TAVAN ama SAYILI tur 0 → TIKANMAZ (rc=1)
+  ✓ A4 🔴 ham tur 4 = MUTLAK tavan ama yine tıkanmaz
+  ✓ A5 🔴 'tur yakmadı' SÖYLENİR (sessiz muafiyet yok)
+  ✓ A6 🔴 bu turlarda TIKANDI raporu BASILMAZ
+  ✓ A7 sayılı tur ekranda 0 olarak yazılır
+B · 🔴 normal bulgu YİNE tur yakar (muafiyet sızmasın)
+  ✓ B1 tur 1 (normal bulgu)
+  ✓ B2 tur 2 (normal bulgu)
+  ✓ B3 🔴 tur 3'te TIKANIR (rc=4) — eski davranış korundu
+  ✓ B4 tıkanma raporu basılır
+C · 🔴 karışık tur SAYILIR (içinde bir normal bulgu varsa)
+  ✓ C1 tur 1 (karışık)
+  ✓ C2 tur 2 (karışık)
+  ✓ C3 🔴 tur 3'te TIKANIR — karışık tur muafiyet ALMAZ
+D · 🔴 muafiyet BEDELSİZ değil: yüzey yazılmazsa sınıf DÜŞÜRÜLÜR
+  ✗ D1 yüzeysiz kutu-dışı bulgu 'uygulama'ya DÜŞÜRÜLÜR (çıktıda '[uygulama]' yok)
+  ✗ D2 düşürüldüğü SÖYLENİR (çıktıda 'kutu-disi → uygulama' yok)
+  ✓ D3 tur 1 (yüzeysiz)
+  ✓ D4 tur 2 (yüzeysiz)
+  ✗ D5 🔴 yüzeysiz bulgu tur YAKAR → KOD tıkanması (etiket bedava muafiyet değil) (çıktıda '⛔ TIKANDI' yok)
+  ✗ D6 🔴 yüzeysiz bulgu kutu-dışı MUAFİYETİ ALMAZ ('KUTUDA İLERLETİLEMİYOR' çıktıda var, olmamalı)
+E · 🔴 sonsuz döngü KAPALI: muafiyet sınırsız değil
+  ✓ E1 tur 1
+  ✓ E2 tur 2
+  ✓ E3 tur 3 (yakmayan 3 > tavan 2) → rc=4
+  ✓ E4 🔴 bu ret KOD tıkanması DEĞİL diye söylenir
+  ✓ E5 çare 'yüzeye git' olarak verilir
+  ✓ E6 🔴 'DEVAM — gerekçeyle' yolu ÖNERİLMEZ (yanlış çare)
+  ✓ E7 tavan ortamla değiştirilebilir (DENETCI_KUTU_DISI_TAVAN=1 → tur 2'de rc=4)
+  ✓ E8 ikinci yakmayan turda rc=4
+F · 🔴 muafiyetin karşılığı İZLENEBİLİRLİK: ayrı deftere yazılır
+  ✓ F1 KUTU-DISI.jsonl yazıldı ve yüzeyi taşıyor
+  ✓ F2 🔴 aynı bulgu her turda YENİDEN yazılmaz (defter şişmez)
+  ✓ F3 defterin yolu ekrana basılır
+  ✓ F4 kutu-dışı bulgu YOKSA defter KURULMAZ (boş dosya bırakmaz)
+G · 🔴 geçiş ve ayrı yazdırma bozulmadı
+  ✓ G1 5+E yine GEÇER (rc=0)
+  ✓ G2 kutu-dışı bulgular AYRI başlıkta listelenir
+  ✓ G3 gereken yüzey yazdırılır
+  ✓ G4 işin sahibine gideceği söylenir
+
+toplam=36 geçen=32 düşen=4
+C rc=1
+
+== MUT D: sonsuz-dongu freni kalkti (muafiyet SINIRSIZ)
+A · 🔴 kutu-dışı bulgu TUR YAKMAZ (asıl talep)
+  ✓ A1 tur 1 (kutu-dışı bulgu) → düzelt-dön
+  ✓ A2 tur 2
+  ✓ A3 🔴 ham tur 3 = TAVAN ama SAYILI tur 0 → TIKANMAZ (rc=1)
+  ✓ A4 🔴 ham tur 4 = MUTLAK tavan ama yine tıkanmaz
+  ✓ A5 🔴 'tur yakmadı' SÖYLENİR (sessiz muafiyet yok)
+  ✓ A6 🔴 bu turlarda TIKANDI raporu BASILMAZ
+  ✓ A7 sayılı tur ekranda 0 olarak yazılır
+B · 🔴 normal bulgu YİNE tur yakar (muafiyet sızmasın)
+  ✓ B1 tur 1 (normal bulgu)
+  ✓ B2 tur 2 (normal bulgu)
+  ✓ B3 🔴 tur 3'te TIKANIR (rc=4) — eski davranış korundu
+  ✓ B4 tıkanma raporu basılır
+C · 🔴 karışık tur SAYILIR (içinde bir normal bulgu varsa)
+  ✓ C1 tur 1 (karışık)
+  ✓ C2 tur 2 (karışık)
+  ✓ C3 🔴 tur 3'te TIKANIR — karışık tur muafiyet ALMAZ
+D · 🔴 muafiyet BEDELSİZ değil: yüzey yazılmazsa sınıf DÜŞÜRÜLÜR
+  ✓ D1 yüzeysiz kutu-dışı bulgu 'uygulama'ya DÜŞÜRÜLÜR
+  ✓ D2 düşürüldüğü SÖYLENİR
+  ✓ D3 tur 1 (yüzeysiz)
+  ✓ D4 tur 2 (yüzeysiz)
+  ✓ D5 🔴 yüzeysiz bulgu tur YAKAR → KOD tıkanması (etiket bedava muafiyet değil)
+  ✓ D6 🔴 yüzeysiz bulgu kutu-dışı MUAFİYETİ ALMAZ
+E · 🔴 sonsuz döngü KAPALI: muafiyet sınırsız değil
+  ✓ E1 tur 1
+  ✓ E2 tur 2
+  ✗ E3 tur 3 (yakmayan 3 > tavan 2) → rc=4 (rc=1, beklenen=4)
+  ✗ E4 🔴 bu ret KOD tıkanması DEĞİL diye söylenir (çıktıda 'KUTUDA İLERLETİLEMİYOR' yok)
+  ✗ E5 çare 'yüzeye git' olarak verilir (çıktıda 'YÜZEYE GİT' yok)
+  ✓ E6 🔴 'DEVAM — gerekçeyle' yolu ÖNERİLMEZ (yanlış çare)
+  ✓ E7 tavan ortamla değiştirilebilir (DENETCI_KUTU_DISI_TAVAN=1 → tur 2'de rc=4)
+  ✗ E8 ikinci yakmayan turda rc=4 (rc=1, beklenen=4)
+F · 🔴 muafiyetin karşılığı İZLENEBİLİRLİK: ayrı deftere yazılır
+  ✓ F1 KUTU-DISI.jsonl yazıldı ve yüzeyi taşıyor
+  ✓ F2 🔴 aynı bulgu her turda YENİDEN yazılmaz (defter şişmez)
+  ✓ F3 defterin yolu ekrana basılır
+  ✓ F4 kutu-dışı bulgu YOKSA defter KURULMAZ (boş dosya bırakmaz)
+G · 🔴 geçiş ve ayrı yazdırma bozulmadı
+  ✓ G1 5+E yine GEÇER (rc=0)
+  ✓ G2 kutu-dışı bulgular AYRI başlıkta listelenir
+  ✓ G3 gereken yüzey yazdırılır
+  ✓ G4 işin sahibine gideceği söylenir
+
+toplam=36 geçen=32 düşen=4
+D rc=1
+--- stderr ---

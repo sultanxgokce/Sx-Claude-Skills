@@ -16,6 +16,18 @@
    Puan bağlamsaldır: ödeme akışındaki 3 ile bir betikteki 3 aynı değil; puan onay kutusu değil, sinyaldir.
 4. **5 ve E değilse adım 2'ye dön:** düzelt → yeniden kanıtla → yeniden gönder.
    - Tavan **3 tur**. İlerleyen işe (puan yükseldi **ve** açık bulgu azaldı) **+1**. **Dört mutlak.**
+   - 🔴 **Tavan SAYILI tura uygulanır** (15 Eki 2026, görev WC3VBZAA). Bir bulgu gerçek olabilir ama bu
+     kutuda **ölçülemez/düzeltilemez** olabilir: Sultan'ın Mac'i, canlı yetki, dış hesap, fiziksel cihaz.
+     Denetçi onu `agirlik: "kutu-disi"` + `kutu_disi_yuzey` ile yazar; o bulgu **puanı düşürmez** ve
+     bulgularının **hepsi** kutu-dışı olan tur **tavandan düşmez**. Ölçülmüş vaka: cloudtop #635 dört
+     turunu "canlıda kurulu değil" bulgusuyla yaktı, kod kusursuzdu ve iş hiç ilerlemedi.
+     · Muafiyet bedelsiz değil: **yüzey yazılmazsa sınıf `uygulama`ya düşürülür** ve düşürüldüğü kayda
+       geçer — "kutuda ölçemedim" etiketi bedava tur kazandırmaz.
+     · Muafiyetin karşılığı izlenebilirliktir: bulgular `KUTU-DISI.jsonl`'a (append-only, tekrarsız)
+       yazılır ve işin sahibine gider.
+     · Muafiyet sınırsız değil: üst üste **2**'den fazla yakmayan tur olursa iş "**kutuda
+       ilerletilemiyor**" ile durur (rc=4) — bu bir kod tıkanması değildir ve çaresi "devam" değil
+       **yüzeye gitmek**tir. Tavan: `DENETCI_KUTU_DISI_TAVAN`.
    - Üçte 5'e ulaşamayan iş "**tıkandı + üç yol**" raporuyla gelir: devam et (gerekçe) · kapsamı daralt · geri al.
      Sonsuz düzelt-kanıtla-gönder döngüsü yasak (3-strike'ın fabrikadaki karşılığı).
 5. **Merge:**
