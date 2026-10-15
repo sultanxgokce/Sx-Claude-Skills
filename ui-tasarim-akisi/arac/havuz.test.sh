@@ -273,6 +273,24 @@ kapi "geçerli kırmızı (klişeye düşmüş) KABUL → rc=0" 0 \
      python3 "$H" yaz --havuz "$JR" --kutu t --urun t --ekran e2 --kapi ayirt \
      --hukum kirmizi --klise mor-gradyan --imza tipografi --dusen S3 --arac 0.3.1
 
+# 🔴 DÜŞEN MADDE (bağımsız göz tur-4 bulgusu, ayri karta daraltilmisti): rubrik kirmizi icin
+#    "--dusen ile hangi maddeden dustugunu yaz" diyor; kod denetlemiyordu. Dort yon olculur:
+#    zorunluluk tutuyor mu · gecerli kayit hala geciyor mu · KURAL FAZLA GENIS MI (temiz ve
+#    yogunluk kirmizisi dusensiz gecmeye devam etmeli — asiri sikilastirma da bir kusurdur).
+kapi "ayırt kırmızısı --dusen'siz REDDEDİLİR → rc=1" 1 \
+     python3 "$H" yaz --havuz "$JR" --kutu t --urun t --ekran ed --kapi ayirt \
+     --hukum kirmizi --klise mor-gradyan --imza tipografi --arac 0.3.1
+icerir "rubriğin kendi cümlesiyle gerekçelenir" "hangi maddeden düştüğünü yaz"
+kapi "--dusen verilince KABUL → rc=0" 0 \
+     python3 "$H" yaz --havuz "$JR" --kutu t --urun t --ekran ed --kapi ayirt \
+     --hukum kirmizi --klise mor-gradyan --imza tipografi --dusen S3 --arac 0.3.1
+kapi "temiz hüküm --dusen'siz GEÇER (kural fazla geniş değil) → rc=0" 0 \
+     python3 "$H" yaz --havuz "$JR" --kutu t --urun t --ekran ed2 --kapi ayirt \
+     --hukum temiz --klise yok --imza oran --arac 0.3.1
+kapi "yoğunluk kırmızısı --dusen'siz GEÇER (kural ayırt kapısına özgü) → rc=0" 0 \
+     python3 "$H" yaz --havuz "$JR" --kutu t --urun t --ekran ed3 --kapi yogunluk \
+     --hukum kirmizi --arac 0.3.1
+
 echo "── 19 · KARARSIZ yargı kapıyı AÇMAZ (emin-degilim kalıcı sığınak değil)"
 JK="$T/kararsiz.jsonl"
 python3 "$H" yaz --havuz "$JK" --kutu t --urun t --ekran e --kapi yogunluk \
