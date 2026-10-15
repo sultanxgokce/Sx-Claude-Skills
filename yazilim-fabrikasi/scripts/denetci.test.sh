@@ -401,11 +401,14 @@ fi
 if [ -n "${IC_KOSUM:-}" ]; then echo "(ic)"; [ "$kalan" -eq 0 ]; exit $?; fi
 echo "════ T11 · MUTASYON: Sultan kapısını bozunca sınav kırmızı veriyor mu ════"
 # 🔴 MUTANT KOŞUMU PARALEL (15 Eki, göz #323: CI 300 sn tavanı): her mutant sınav dosyasının TAMAMINI yeniden koşturur
-#    (18 mutant × tam koşum); sırayla koşunca CI'da 264–300 sn, tavanda Terminated. Mutantlar birbirinden bağımsızdır (her iç
+#    (15 mutant × tam koşum — iş kartındaki "18" yanlış sayımdı, origin/main'de `^mut "` satırı 15); sırayla koşunca CI'da 264–300 sn, tavanda Terminated. Mutantlar birbirinden bağımsızdır (her iç
 #    koşum kendi mktemp dizininde, kendi .mutant-<ad>.sh dosyasıyla) → nproc kadar (tavan MUT_PARALEL, varsayılan 4) birlikte
 #    koşar; sonuçlar KAYIT SIRASIYLA rapor edilir (çıktı deterministik). Kapı sayısı ve mutant yakalama DEĞİŞMEZ.
 #    MUT_PARALEL=1 eski sıralı davranış (karşılaştırma/ölçüm için).
-MUT_PARALEL="${MUT_PARALEL:-$(nproc 2>/dev/null || echo 2)}"; [ "$MUT_PARALEL" -gt 4 ] && MUT_PARALEL=4; [ "$MUT_PARALEL" -lt 1 ] && MUT_PARALEL=1
+MUT_PARALEL="${MUT_PARALEL:-$(nproc 2>/dev/null || echo 2)}"
+# göz tur 1: sayı olmayan değer -gt/-lt'de düşer, iç döngü hiç dönmez, dış döngü SONSUZA dek sürerdi → sayı değilse 1 (sıralı, güvenli)
+[[ "$MUT_PARALEL" =~ ^[0-9]+$ ]] || { echo "  (uyarı) MUT_PARALEL sayı değil ('$MUT_PARALEL') → 1 (sıralı)"; MUT_PARALEL=1; }
+[ "$MUT_PARALEL" -gt 4 ] && MUT_PARALEL=4; [ "$MUT_PARALEL" -lt 1 ] && MUT_PARALEL=1
 MUT_ADLAR=(); MUT_DOSYALAR=(); MUT_RC_DIZ="$(mktemp -d)"
 mut() { # mut <ad> <sed-ifadesi> [hedef] — mutantı ÜRETİR ve sıraya koyar; koşum mut_kos'ta (paralel)
   local hedef="${3:-$HERE/denetci.sh}" M="$HERE/.mutant-$1.sh"

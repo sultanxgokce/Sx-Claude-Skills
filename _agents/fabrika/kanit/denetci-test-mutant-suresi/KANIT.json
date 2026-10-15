@@ -1,7 +1,7 @@
 {
   "is": "denetci-test-mutant-suresi",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T13:39:23+03:00",
+  "guncelleme": "2026-10-15T13:50:38+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -34,7 +34,57 @@
       "renk": "yesil",
       "zaman": "2026-10-15T13:39:23+03:00",
       "sure_sn": 123.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "CI-ONCE-denetci-test-sure-PR326-run-38720425177-sirali",
+      "asama": "once",
+      "dosya": "olcum-CI-ONCE-denetci-test-sure-PR326-run-38720425177-sirali-once.txt",
+      "sha256": "16a85cff8db1f175bc71ecef70d01c6b2a37086beef4df5d54905ddc11095c65",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/ci-denetci-sure.sh",
+        "38720425177",
+        "PR #326, ana daldaki sıralı mutantlar"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T13:43:08+03:00",
+      "sure_sn": 1.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "MUT_PARALEL-sayi-degil-abc-sonsuz-dongu-yok-sirali-biter",
+      "asama": "sonra",
+      "dosya": "olcum-MUT_PARALEL-sayi-degil-abc-sonsuz-dongu-yok-sirali-biter-sonra.txt",
+      "sha256": "90728df935410142d20b22f813201f2cdfecb7e8193e6c7e3c646c2b9a6eac00",
+      "komut": [
+        "bash",
+        "-c",
+        "echo \"=== MUT_PARALEL=abc (sayı değil): eski kodda dış döngü sonsuza dek dönerdi; yeni kod uyarı basıp 1 (sıralı) ile BİTER. timeout 900 sn ===\"; s=$(date +%s); MUT_PARALEL=abc timeout 900 bash yazilim-fabrikasi/scripts/denetci.test.sh 2>&1 | grep -E \"uyarı|bilgi|SONUÇ\"; rc=${PIPESTATUS[0]}; echo \"rc=$rc süre=$(( $(date +%s) - s )) sn (124 = timeout = asılı kaldı)\"; [ $rc = 0 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T13:50:24+03:00",
+      "sure_sn": 419.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "CI-SONRA-denetci-test-sure-PR327-run-38721932338-paralel",
+      "asama": "sonra",
+      "dosya": "olcum-CI-SONRA-denetci-test-sure-PR327-run-38721932338-paralel-sonra.txt",
+      "sha256": "be6663834db9587bd4d5785cf3caf10f087cf67d57ac78c8120248c4c6876882",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/ci-denetci-sure.sh",
+        "38721932338",
+        "PR #327, paralel mutantlar"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T13:50:38+03:00",
+      "sure_sn": 1.5
     }
   ],
-  "imza": "7321161271e806ea0cfc79304ce17552984e28d59808d34d4798122b6d3620c2"
+  "imza": "dd79135745baefc5c7a85116a5f646456363b21021f64d05cef841f69aab9604"
 }
