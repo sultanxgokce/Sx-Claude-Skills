@@ -40,6 +40,15 @@ KULLANIM
 """
 import hashlib, json, os, re, sys, datetime
 
+
+def _simdi_utc():
+    """UTC damgası — `utcnow()` DEPRECATED (3.12+) ve her koşuda stderr'e uyarı basıyordu.
+
+    Uyarı zararsız sanılır ama değil: bu araç KANIT dosyası üretiyor ve uyarı her kanıtın
+    stderr bölümüne giriyordu (bağımsız gözün bulgusu, 2026-10-15). Kanıt dosyası gürültü
+    taşırsa okuyan onu okumayı bırakır. Biçim değişmedi: aynı `...Z` dizgisi."""
+    return datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
 ANAHTARLAR = {
     "ts":     r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$",
     "kutu":   r"^[a-z0-9][a-z0-9-]{0,23}$",
@@ -146,7 +155,7 @@ def yaz(argv, yol):
 
     dusen = [p.strip() for p in (al("dusen") or "").split(",") if p.strip()]
     kayit = {
-        "ts":    al("ts") or datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "ts":    al("ts") or _simdi_utc(),
         "kutu":  al("kutu") or "",
         "urun":  al("urun") or "",
         "ekran": al("ekran") or "",
@@ -224,7 +233,7 @@ def iptal(argv, yol):
         print("zaten iptal edilmiş: %s (yeni mezar-taşı yazılmadı)" % hedef_id)
         return 0
     tas = {a: hedef[a] for a in ZORUNLU}
-    tas["ts"] = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    tas["ts"] = _simdi_utc()
     tas["dusen"] = []                       # mezar-taşı kural DÜŞÜRMEZ, sayaca girmez
     tas["iptal"] = hedef_id
     tas["sebep"] = sebep
@@ -293,7 +302,7 @@ def gerekce(argv, yol):
         sys.stderr.write("kayıt bulunamadı (ya da iptal edilmiş): %s\n" % hedef_id)
         return 1
     satir = {a: hedef[a] for a in ZORUNLU}
-    satir["ts"] = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    satir["ts"] = _simdi_utc()
     satir["dusen"] = []                     # gerekçe satırı kural DÜŞÜRMEZ
     satir["gerekce"] = hedef_id
     if ders:

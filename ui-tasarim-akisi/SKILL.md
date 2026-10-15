@@ -530,6 +530,13 @@ tamamı yeni KAPI 6'nın yargısız fikstürlerde ateşlenmesindendi. Üç ayrı
    değiştirir. Ayrıca sınavın havuz anahtarı `basename $PWD`den türüyordu (hüküm çalışma
    dizinine göre değişiyordu); anahtar sabitlendi.
 
-Ölçüm: dört suit **214 kapı** yeşil (havuz 84 · prompt-yap 43 · yoğunluk 41 · yargı 49).
+Ölçüm: dört suit **217 kapı** yeşil (havuz 84 · prompt-yap 43 · yoğunluk 41 · yargı 49).
+Önce/sonra çifti ve dördünün hepsi kanıt manifestinde kayıtlı; toplam elle yazılmıyor,
+koşumların çıktısından toplanıyor (bağımsız gözün tur-1 bulgusu: 214 yazmıştım, 217'ydi).
+Ayrıca `havuz.py` her koşuda `utcnow()` için DeprecationWarning basıyordu ve bu uyarı
+**her kanıt dosyasının** stderr bölümüne giriyordu (bağımsız gözün üçüncü bulgusu). Zararsız
+görünür ama değil: kanıt dosyası gürültü taşırsa okuyan onu okumayı bırakır. Üç çağrı
+zaman-dilimli hâle getirildi, damga biçimi değişmedi (`...Z`), uyarı dört suitte de 0.
+
 Kurulu beceri kopyası ile dal, tazelemeden önce 56 dosyada **birebir aynıydı** (pozitif
 kontrollü ölçüm) — yani filo bu kırmızı sürümü koşuyordu ve ezilecek elle değişiklik YOKTU.

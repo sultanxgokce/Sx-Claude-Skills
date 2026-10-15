@@ -1,7 +1,7 @@
 {
   "is": "ayirt-kapisi-tazele",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T16:01:59+03:00",
+  "guncelleme": "2026-10-15T16:04:26+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -49,7 +49,67 @@
       "renk": "kirmizi",
       "zaman": "2026-10-15T16:01:59+03:00",
       "sure_sn": 3.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ONCE-213-dalinda-havuz-80-gecti-1-KALDI-BEKLENEN-KIRMIZI",
+      "asama": "once",
+      "dosya": "olcum-ONCE-213-dalinda-havuz-80-gecti-1-KALDI-BEKLENEN-KIRMIZI-once.txt",
+      "sha256": "fedd1ccb38478ce1473ec85b9500aa56c60f77c5a2d2202b6a5b371677dcd240",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-213-once/ui-tasarim-akisi/arac/havuz.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T16:04:18+03:00",
+      "sure_sn": 5.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ONCE-213-dalinda-prompt-yap-36-gecti-7-KALDI-BEKLENEN-KIRMIZI",
+      "asama": "once",
+      "dosya": "olcum-ONCE-213-dalinda-prompt-yap-36-gecti-7-KALDI-BEKLENEN-KIRMIZI-once.txt",
+      "sha256": "3bc5967a6675a7b7d574b976d04a3ad6c54187d2aeff0181d94e605ceaccd707",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-213-once/ui-tasarim-akisi/arac/prompt-yap.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T16:04:21+03:00",
+      "sure_sn": 2.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "SONRA-yogunluk-41-kapi",
+      "asama": "sonra",
+      "dosya": "olcum-SONRA-yogunluk-41-kapi-sonra.txt",
+      "sha256": "ebed2420a1f51f8d132777ced7c276d5e748a955eb692b0a42a4c6509865cf5f",
+      "komut": [
+        "bash",
+        "ui-tasarim-akisi/arac/yogunluk-denetle.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T16:04:22+03:00",
+      "sure_sn": 1.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "SONRA-yargi-birlestir-49-kapi",
+      "asama": "sonra",
+      "dosya": "olcum-SONRA-yargi-birlestir-49-kapi-sonra.txt",
+      "sha256": "13c559af1380badda788da8db55d871790e34c6af24fb092c0ca3dc2ef676893",
+      "komut": [
+        "bash",
+        "ui-tasarim-akisi/arac/yargi-birlestir.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T16:04:26+03:00",
+      "sure_sn": 4.4
     }
   ],
-  "imza": "24a4ff4129a5ec0dffe8df4e82c7cd3efb77d2b7c7eabf72726d074b6327a0c5"
+  "imza": "d137c4fe638134b8c655b5b8834983eb83f83b986d46a3434e8aa8864054c746"
 }
