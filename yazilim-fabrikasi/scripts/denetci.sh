@@ -13,7 +13,10 @@
 #
 # Kullanım:
 #   denetci.sh <iş> (--pr N | --diff DOSYA) [--kart DOSYA] [--yazan claude|codex] [--denetci auto|codex|claude]
-#              [--model AD] [--depo KÖK]
+#              [--model AD] [--depo KÖK] [--kare PNG/JPG]...
+#   --kare : arayüz işinde kabul karesi (tekrarlanabilir, en çok 8). Kare bağımsız göze GÖRSEL olarak gider (codex exec -i);
+#            istemde "ekte N kare" yazar, DENETIM kaydı kare adı + sha256 taşır. Dosya yok / görsel değil → rc 2 (sessiz atlama yok).
+#            Neden (15 Eki, cloudtop #637 tur 2-3): göz "kabul karesi sunulmadı" diyordu; sha künyesi ve DOM tarifi kareyi görmenin yerini tutmuyor.
 # rc: 0 GEÇTİ (5+E) · 1 adım 2'ye dön · 2 kanıt yok/bozuk · 3 denetçi ölçemedi (çıktı geçersiz) · 4 tıkandı (tavan)
 # Ortam: DENETCI_KOMUT — denetçiyi değiştirir (sınav için): <komut> <istem-dosyası> → stdout'a JSON
 set -uo pipefail
@@ -25,12 +28,13 @@ TAVAN=3; MUTLAK=4
 _hata() { printf '✗ %s\n' "$*" >&2; }
 _bilgi() { printf '%s\n' "$*"; }
 
-IS=""; PR=""; DIFF=""; KART=""; YAZAN="claude"; DENETCI="auto"; MODEL=""; DEPO="${KANIT_DEPO:-}"; SULTAN_DEVAM=0; REIS_DEVAM=0
+KARELER=(); IS=""; PR=""; DIFF=""; KART=""; YAZAN="claude"; DENETCI="auto"; MODEL=""; DEPO="${KANIT_DEPO:-}"; SULTAN_DEVAM=0; REIS_DEVAM=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --pr) PR="$2"; shift 2 ;; --diff) DIFF="$2"; shift 2 ;; --kart) KART="$2"; shift 2 ;;
     --yazan) YAZAN="$2"; shift 2 ;; --denetci) DENETCI="$2"; shift 2 ;; --model) MODEL="$2"; shift 2 ;;
     --depo) DEPO="$2"; shift 2 ;;
+    --kare) KARELER+=("$2"); shift 2 ;;
     --sultan-devam) SULTAN_DEVAM=1; shift ;;
     --reis-devam) REIS_DEVAM=1; shift ;;
     -h|--help) sed -n '1,20p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
@@ -38,6 +42,12 @@ while [ $# -gt 0 ]; do
   esac
 done
 [ -n "$IS" ] || { _hata "iş adı gerekiyor"; exit 1; }
+KARE_TAVAN=8
+[ "${#KARELER[@]}" -le "$KARE_TAVAN" ] || { _hata "--kare en çok $KARE_TAVAN (verilen ${#KARELER[@]}) — en çok tartışılacak kareleri seç"; exit 2; }
+for _k in "${KARELER[@]}"; do
+  [ -f "$_k" ] || { _hata "--kare dosyası yok: $_k (sessiz atlanmaz)"; exit 2; }
+  case "$(head -c 8 "$_k" | od -An -tx1 | tr -d ' \n')" in 89504e470d0a1a0a*|ffd8ff*) ;; *) _hata "--kare görsel değil (PNG/JPG imzası yok): $_k"; exit 2 ;; esac
+done
 [ -n "$PR$DIFF" ] || { _hata "--pr N ya da --diff DOSYA gerekiyor"; exit 1; }
 [ -n "$DEPO" ] || DEPO="$(git rev-parse --show-toplevel 2>/dev/null || echo "")"
 [ -n "$DEPO" ] || { _hata "depo kökü bulunamadı"; exit 3; }
@@ -313,6 +323,10 @@ else echo "(iş kartı verilmedi — talep bilinmiyor; DOĞRU ŞEY Mİ sorusu H'
   [ "$AYIKLANAN_DOSYA" -gt 0 ] && [ -s "$TMP/diff.patch" ] && printf '[NOT: bu farktan %s kanıt dosyası (%s bayt) AYIKLANDI — kanıt manifesti ve ölçüm çıktıları yukarıda AYRI başlıklarda duruyor; saklanan bir şey yok, aynı veri farka ikinci kez girmesin diye çıkarıldı. Aşağısı ÜRETİM KODU farkıdır, eksik değildir.]\n' "$AYIKLANAN_DOSYA" "$AYIKLANAN_BAYT"
   cat "$TMP/diff.patch"
   [ "$TUR" -gt 1 ] && { printf '\n\n===== ÖNCEKİ TUR (%s) =====\n' "$ONCEKI"; cat "$DZ/DENETIM-$ONCEKI.json"; }
+  if [ "${#KARELER[@]}" -gt 0 ]; then
+    printf '\n\n===== KARELER (%s adet, bu isteme GÖRSEL olarak ekli — kabulün görsel kısmını bunlara bakarak değerlendir) =====\n' "${#KARELER[@]}"
+    _i=0; for _k in "${KARELER[@]}"; do _i=$((_i+1)); printf '%s. %s · sha256 %s\n' "$_i" "$(basename "$_k")" "$(sha256sum "$_k" | cut -c1-16)"; done
+  fi
 } > "$TMP/istem.md"
 
 # ── 4 · denetçiyi seç ve koş (yazan ≠ denetleyen) ───────────────────────────────
@@ -360,7 +374,8 @@ else
     # 🔴 STDIN KAPALI (15 Eki, 68 dk boşa): istem argümanla verildiği hâlde Codex stdin TTY değilse "Reading additional input
     #    from stdin..." deyip EOF bekler; arka plandan (run_in_background, cron) çağrıda stdin açık socket olunca denetim sonsuza
     #    dek asılı kalır (CPU 0, log boş). Girdi her koşulda /dev/null'dan: çağıranın stdin'i ne olursa olsun denetçi biter.
-    codex exec -s read-only --skip-git-repo-check --ephemeral -C "$TMP" ${MODEL:+-m "$MODEL"} \
+    local kare_arg=(); for _k in "${KARELER[@]}"; do kare_arg+=(-i "$_k"); done   # kareler GÖRSEL ek (codex exec -i)
+    codex exec -s read-only --skip-git-repo-check --ephemeral -C "$TMP" ${MODEL:+-m "$MODEL"} "${kare_arg[@]}" \
       --output-schema "$SEMA" -o "$HAM" "$(printf 'Hiçbir komut koşma, dosya okuma; gereken her şey aşağıda. Talimata göre YALNIZ JSON üret.\n\n'; cat "$TMP/istem.md")" </dev/null >"$TMP/log" 2>"$TMP/err"; DRC=$?
   }
   kos_claude() {   # yeni oturum: claude -p her çağrıda sıfırdan açılır → yazanın oturumu değildir
@@ -391,6 +406,7 @@ else
       _bilgi "· yedek kademe: yazan $YAZAN_MODEL ($YAZAN_MODEL_KAYNAK) ≠ yedek $ymodel (ölçüldü)"
     fi
     DENETCI_AD="claude${ymodel:+ ($ymodel)}${YEDEK:+ (YEDEK GÖZ: $YEDEK · yazandan farklı yeni oturum + farklı model kademesi${YAZAN_MODEL:+ [yazan: $YAZAN_MODEL]} · Sultan Y0006)}"
+    if [ "${#KARELER[@]}" -gt 0 ]; then printf '\n\n[UYARI: %s kare bu yedek göze GÖRSEL olarak verilemedi (claude -p kanalı görsel taşımıyor) — görsel kabul için yalnız adlara ve ölçüm çıktılarına bakabilirsin; bunu özete yaz]\n' "${#KARELER[@]}" >> "$TMP/istem.md"; KARE_VERILEMEDI=1; fi
     claude -p ${ymodel:+--model "$ymodel"} --output-format json --json-schema "$(cat "$SEMA")" < "$TMP/istem.md" > "$TMP/claude.json" 2>"$TMP/err"; DRC=$?
     python3 -c "import json,sys;d=json.load(open('$TMP/claude.json'));r=d.get('structured_output') or d.get('result');print(r if isinstance(r,str) else json.dumps(r,ensure_ascii=False))" > "$HAM" 2>/dev/null || cp "$TMP/claude.json" "$HAM"
   }
@@ -430,9 +446,11 @@ json.dump(d,open(sys.argv[2],"w",encoding="utf-8"),ensure_ascii=False)
 PY
 SRC=$?
 if [ "$SRC" -ne 0 ]; then _hata "denetçi çıktısı geçersiz — ölçemedi"; cp "$HAM" "$DZ/DENETIM-$TUR-HAM.txt"; exit 3; fi
-python3 - "$DZ/DENETIM-$TUR.json" "$TUR" "$IS" "$PR" "$YAZAN" "$DENETCI_AD" "$KANIT_DURUM" "$DOGRULANMIS" "$KIRPILDI" "$ISTEM_BAYT" "$KIRP_ESIK" "$YEDEK" "$YAZAN_MODEL" "$YEDEK_MODEL" "$YAZAN_MODEL_KAYNAK" "$AYIKLANAN_DOSYA" "$AYIKLANAN_BAYT" <<'PY'
+KARE_KAYIT="$(for _k in "${KARELER[@]}"; do printf '%s\t%s\n' "$(basename "$_k")" "$(sha256sum "$_k" | cut -d' ' -f1)"; done)"
+python3 - "$DZ/DENETIM-$TUR.json" "$TUR" "$IS" "$PR" "$YAZAN" "$DENETCI_AD" "$KANIT_DURUM" "$DOGRULANMIS" "$KIRPILDI" "$ISTEM_BAYT" "$KIRP_ESIK" "$YEDEK" "$YAZAN_MODEL" "$YEDEK_MODEL" "$YAZAN_MODEL_KAYNAK" "$AYIKLANAN_DOSYA" "$AYIKLANAN_BAYT" "$KARE_KAYIT" "${KARE_VERILEMEDI:-0}" <<'PY'
 import json,sys,datetime
-yol,tur,is_,pr,yazan,den,kd,sonuc_yolu,kirp,bayt,esik,yedek,yazan_model,yedek_model,ym_kaynak,ayik_dosya,ayik_bayt=sys.argv[1:]
+yol,tur,is_,pr,yazan,den,kd,sonuc_yolu,kirp,bayt,esik,yedek,yazan_model,yedek_model,ym_kaynak,ayik_dosya,ayik_bayt,kare_kayit,kare_verilemedi=sys.argv[1:]
+kareler=[{"ad":a,"sha256":h} for a,h in (l.split("\t") for l in kare_kayit.splitlines() if "\t" in l)]
 json.dump({"tur":int(tur),"is":is_,"pr":pr,"yazan":yazan,"denetci":den,"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
            "kanit_durumu":kd,
            "yedek":(yedek or None),   # Sultan Y0006: yedek gözle alınan puan codex puanı sanılmasın; sebebi kayıtta
@@ -442,6 +460,7 @@ json.dump({"tur":int(tur),"is":is_,"pr":pr,"yazan":yazan,"denetci":den,"zaman":d
            # Kanıt dökümleri farka ikinci kez girip kodu istemden dışarı itiyordu (PR #329 turu yandı).
            # Ayıklama kayıtta durur: "fark eksikti" ile "kanıt ayrı gitti" sonradan ayırt edilsin.
            "kanit_ayiklandi":{"dosya":int(ayik_dosya),"bayt":int(ayik_bayt)},
+           "kareler":({"adet":len(kareler),"gorsel_verildi":kare_verilemedi!="1","liste":kareler} if kareler else None),   # --kare: göz kareyi GÖRDÜ mü (yedek gözde hayır)
            "sonuc":json.load(open(sonuc_yolu,encoding="utf-8"))},open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
 PY
 _oku() { python3 -c "import json,sys;d=json.load(open(sys.argv[1],encoding='utf-8'));print(len(d['bulgular']) if sys.argv[2]=='n' else d[sys.argv[2]])" "$DOGRULANMIS" "$1"; }

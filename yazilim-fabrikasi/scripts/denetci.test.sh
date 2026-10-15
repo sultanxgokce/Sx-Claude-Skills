@@ -401,6 +401,32 @@ bash "$K" olcum is-y8 olc --asama tek -- echo 1 >/dev/null 2>&1
 rm -f "$FAKE/codex"
 fi
 
+# ════ K · KARE (--kare, 15 Eki: göz "kabul karesi sunulmadı" — kare codex'e GÖRSEL ek olarak gider) ════
+# Yalnız ANA koşumda (mutant iç koşumlarında tekrarlanırsa CI'nın 300 sn tavanı aşılır — Y8 emsali).
+if [ -z "${IC_KOSUM:-}" ]; then
+  echo "════ K · KARE ════"
+  # önceki bölümler $T'yi temizliyor (sahte.sh de gidiyor) → K kendi sahte denetçisini kurar
+  printf '#!/usr/bin/env bash\ncp "$1" "${SAHTE_ISTEM_KOPYA:-/dev/null}"; printf "%%s" "$SAHTE_JSON"\n' > "$T/sahte-k.sh"; chmod +x "$T/sahte-k.sh"; export DENETCI_KOMUT="$T/sahte-k.sh"
+  printf '\x89PNG\r\n\x1a\n%s' "sahte-kare-1" > "$T/k1.png"; printf '\xff\xd8\xff\xe0%s' "sahte-kare-2" > "$T/k2.jpg"; printf 'duz metin' > "$T/k3.png"
+  bash "$K" olcum is-k olc --asama tek -- echo 1 >/dev/null 2>&1
+  SAHTE_JSON="$(J 5 E "")" bash "$D" is-k --diff "$T/y.patch" --kart "$T/kart.md" --kare "$T/yok.png" >"$T/k0.out" 2>&1; RC=$?
+  [ "$RC" -eq 2 ] && grep -q "dosyası yok" "$T/k0.out" && [ ! -e "$T/_agents/fabrika/kanit/is-k/DENETIM-1.json" ]; g $? "K1 --kare dosyası yoksa rc=2, denetim AÇILMAZ (sessiz atlama yok)"
+  SAHTE_JSON="$(J 5 E "")" bash "$D" is-k --diff "$T/y.patch" --kart "$T/kart.md" --kare "$T/k3.png" >"$T/k0b.out" 2>&1; RC=$?
+  [ "$RC" -eq 2 ] && grep -q "görsel değil" "$T/k0b.out"; g $? "K2 uzantısı .png ama içi görsel değil → rc=2 (imza ölçülür, ad değil)"
+  ( K9=(); for i in 1 2 3 4 5 6 7 8 9; do K9+=(--kare "$T/k1.png"); done; SAHTE_JSON="$(J 5 E "")" bash "$D" is-k --diff "$T/y.patch" --kart "$T/kart.md" "${K9[@]}" >"$T/k0c.out" 2>&1; echo $? > "$T/k0c.rc" )
+  [ "$(cat "$T/k0c.rc")" -eq 2 ] && grep -q "en çok 8" "$T/k0c.out"; g $? "K3 9 kare → rc=2 (tavan 8)"
+  SAHTE_ISTEM_KOPYA="$T/k-istem.md" SAHTE_JSON="$(J 5 E "")" bash "$D" is-k --diff "$T/y.patch" --kart "$T/kart.md" --kare "$T/k1.png" --kare "$T/k2.jpg" >"$T/k4.out" 2>&1; RC=$?
+  [ "$RC" -eq 0 ] || { echo "   (K4 rc=$RC: $(grep -E '✗|rc|AÇIL|kart' "$T/k4.out" | head -3 | tr '\n' ' '))"; }
+  [ "$RC" -eq 0 ] && grep -q "KARELER (2 adet" "$T/k-istem.md" && grep -q "k1.png · sha256" "$T/k-istem.md"; g $? "K4 istemde 'KARELER (2 adet …)' + ad + sha (göz neye bakacağını bilir)"
+  python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-k/DENETIM-1.json'));k=d['kareler'];assert k['adet']==2 and k['gorsel_verildi'] is True and [x['ad'] for x in k['liste']]==['k1.png','k2.jpg'] and len(k['liste'][0]['sha256'])==64"; g $? "K5 DENETIM kaydı kareleri taşır: adet · ad · sha256 · görsel verildi"
+  cp "$FAKE/codex.sahte" "$FAKE/codex"; printf '%s\n' 'printf "%s\n" "ARGV: $*" >> "${CODEX_ARGV_LOG:-/dev/null}"' >> "$FAKE/codex"; : > "$T/csay"; : > "$T/k-argv.log"
+  ( unset DENETCI_KOMUT; PATH="$YP" CODEX_SAYAC="$T/csay" CODEX_ARGV_LOG="$T/k-argv.log" SAHTE_JSON="$(J 5 E "")" bash "$D" is-k --diff "$T/y.patch" --kart "$T/kart.md" --kare "$T/k1.png" --kare "$T/k2.jpg" >/dev/null 2>&1 ); RC=$?
+  grep -q -- "-i $T/k1.png -i $T/k2.jpg" "$T/k-argv.log"; g $? "K6 🔴 kareler codex'e GÖRSEL ek olarak gider (argv'de -i <kare> ×2)"
+  rm -f "$FAKE/codex"
+  ( unset DENETCI_KOMUT CLAUDE_PID; PATH="$YP" DENETCI_YAZAN_MODEL=fable SAHTE_JSON="$(J 5 E "")" bash "$D" is-k --diff "$T/y.patch" --kart "$T/kart.md" --kare "$T/k1.png" >/dev/null 2>&1 ); RC=$?
+  N="$(ls "$T/_agents/fabrika/kanit/is-k/" | grep -c '^DENETIM-[0-9]*.json$')"
+  python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-k/DENETIM-$N.json'));assert d['yedek'] and d['kareler']['gorsel_verildi'] is False"; g $? "K7 yedek göz (claude -p) kareyi GÖREMEZ → kayıtta gorsel_verildi=false (görmüş sanılmaz)"
+fi
 if [ -n "${IC_KOSUM:-}" ]; then echo "(ic)"; [ "$kalan" -eq 0 ]; exit $?; fi
 echo "════ T11 · MUTASYON: Sultan kapısını bozunca sınav kırmızı veriyor mu ════"
 # 🔴 MUTANT KOŞUMU PARALEL (15 Eki, göz #323: CI 300 sn tavanı): her mutant sınav dosyasının TAMAMINI yeniden koşturur
