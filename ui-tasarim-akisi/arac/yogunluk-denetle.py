@@ -517,8 +517,9 @@ def main(argv):
                 taban = max(sayim, key=sayim.get)
                 for a, s in var:
                     if sayim[taban] == 1:
-                        s["notlar"].append("X1: bant '%s' içinde her kare FARKLI — tutarsız"
-                                           % bant)
+                        s["ihlaller"].append("X1 bant '%s' içinde her karenin iskeleti FARKLI "
+                                             "— tutarsızlık KANITLI, taban belirlenemiyor"
+                                             % bant)
                     elif s["gezinme"] != taban:
                         s["ihlaller"].append("X1 gezinme iskeleti bant '%s' içinde "
                                              "çoğunluktan sapıyor: %s ≠ taban %s"
@@ -553,7 +554,14 @@ def main(argv):
                             s["ihlaller"].append("X1 gezinme: %s bileşeni YOK"
                                                  % rol(P, "gezinme"))
                     elif sayim[taban] == 1:
-                        s["notlar"].append("X1: her ekranın gezinmesi FARKLI — küme tutarsız")
+                        # 🔴 BERABERLİK İHLALDİR (bağımsız göz bulgusu, tur 2 · Codex):
+                        #    eski hâlde iki kare iki ayrı iskelet taşıyınca her imzanın
+                        #    sayısı 1 olup NOT'a düşüyor, rc=0 dönüyordu. Oysa X1'in ölçtüğü
+                        #    şey TUTARSIZLIK ve o burada kanıtlıdır; bilinmeyen tek şey
+                        #    KİMİN saptığı. "Hangisi yanlış bilemiyorum" ile "ikisi de doğru"
+                        #    aynı cümle değildir — kapı ikincisini söylüyordu.
+                        s["ihlaller"].append("X1 her ekranın gezinmesi FARKLI — tutarsızlık "
+                                             "KANITLI, taban belirlenemiyor")
                     elif s["gezinme"] != taban:
                         s["ihlaller"].append("X1 gezinme iskeleti çoğunluktan sapıyor: "
                                              "%s ≠ taban %s" % (s["gezinme"], taban))

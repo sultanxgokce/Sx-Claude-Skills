@@ -279,6 +279,17 @@ else
   kaldi "bant-ici-sapma" "rc=$rc — bant içinde iskelet sapması yakalanmadı"
 fi
 
+# Bağımsız göz bulgusu (tur 2): BERABERLİK. Aynı bantta iki kare, iki ayrı iskelet →
+# hiçbir imza çoğunluk kurmaz. Eski hâlde not düşüp rc=0 dönüyordu; tutarsızlık kanıtlıyken
+# kapı "ikisi de doğru" diyordu. Artık ikisi de KIRMIZI, taban belirlenemediği yazılı.
+cikti="$(python3 "$KAPI" "$FIK/bant-beraberlik" \
+         --profil "$FIK/bant-beraberlik/bant-profili.json" 2>&1)"; rc=$?
+if [ "$rc" = "1" ] && printf '%s' "$cikti" | grep -q "taban belirlenemiyor"; then
+  gecti "bant-beraberlik-rc1" "iskelet beraberliği KIRMIZI (not değil)"
+else
+  kaldi "bant-beraberlik-rc1" "rc=$rc — beraberlik hâlâ not: tutarsızlık yeşil geçiyor"
+fi
+
 # Bağımsız göz bulgusu (tur 1): MUAFİYETSİZ tek kareli bantta gezinme yokluğu MUTLAK ihlal.
 # Niçin kapı: aksi hâlde kareleri tek üyeli bantlara bölen profil, muafiyet İLAN ETMEDEN
 # X1'i fiilen kapatırdı — "ölçülmedi = temiz" eşitliğinin kapıya sızmış hâli.
