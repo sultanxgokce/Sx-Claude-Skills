@@ -1,0 +1,23 @@
+{
+  "is": "arac-calistirma-biti",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T13:26:03+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kabuk-biti-test-3-kapi-kapsam-scripts-arac-kapi-7-dosya-duzeltildi",
+      "asama": "sonra",
+      "dosya": "olcum-kabuk-biti-test-3-kapi-kapsam-scripts-arac-kapi-7-dosya-duzeltildi-sonra.txt",
+      "sha256": "888ff4396640b147aed0d5bf8c275dcd96911ad01341f5926aec0a47611ac2f3",
+      "komut": [
+        "bash",
+        "kabuk-biti.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T13:26:03+03:00",
+      "sure_sn": 0.0
+    }
+  ],
+  "imza": "2404ea8212d76d148c69e6289566251aff54453965eace0396a500b8e07c23e3"
+}

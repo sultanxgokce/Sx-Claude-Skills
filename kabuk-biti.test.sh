@@ -7,13 +7,14 @@
 # kurulan beceriyi görür, ötekiler sessizce bekliyordu. Bu kapı depo genelini her CI koşusunda ölçer
 # (.github/workflows/lint.yml "Kabuk sınamaları": her *.test.sh keşfedilir ve koşturulur — çağıranı CI'dır).
 #
-# Kapsam (iş kartı): üst düzey beceri dizinlerinin scripts/ altındaki *.sh. `arac/` ve `kapi/` altındaki 7 bitsiz dosya (ui-tasarim-akisi,
-# frontend-boost) AYRI kartın işi — burada ölçülmez, dokunulmadı; `_agents/` kanıt dizinleri de kapsam dışı (kayıt, koşturulmaz). Pozitif kontrol: en az bir 100755 betik GÖRÜLMELİ (araç kör değil).
+# Kapsam: üst düzey beceri dizinlerinin scripts/ · arac/ · kapi/ altındaki *.sh (#325 yalnız scripts/ idi; arac/ altındaki 7 dosya
+# arac-calistirma-biti kartıyla eklendi). `_agents/` kanıt dizinleri kapsam dışı (kayıt, koşturulmaz). Pozitif kontrol: en az bir
+# 100755 betik GÖRÜLMELİ (araç kör değil).
 set -uo pipefail
 cd "$(git rev-parse --show-toplevel 2>/dev/null || dirname "$0")" || exit 3
 gecen=0; kalan=0
 g() { if [ "$1" -eq 0 ]; then gecen=$((gecen+1)); echo "  ✓ $2"; else kalan=$((kalan+1)); echo "  ✗ $2"; fi; }
-DESEN='^[^_][^/]*/scripts/[^/]*\.sh$'
+DESEN='^[^_][^/]*/(scripts|arac|kapi)/[^/]*\.sh$'
 LISTE="$(git ls-files -s | awk -v d="$DESEN" '$4 ~ d {print $1, $4}')"
 [ -n "$LISTE" ]; g $? "beceri betikleri bulundu (araç görüyor): $(printf '%s\n' "$LISTE" | wc -l) dosya"
 OLAN=$(printf '%s\n' "$LISTE" | awk '$1=="100755"' | wc -l); [ "$OLAN" -ge 1 ]; g $? "pozitif kontrol: en az bir 100755 betik var ($OLAN)"
