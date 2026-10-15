@@ -1,0 +1,7 @@
+$ python3 ui-tasarim-akisi/arac/yogunluk-denetle.py ui-tasarim-akisi/arac/fikstur/bant-beyansiz --profil ui-tasarim-akisi/arac/fikstur/bant-beyansiz/bant-profili.json
+# rc=2 sure=0.1s zaman=2026-10-15T15:40:46+03:00
+--- stdout ---
+--- stderr ---
+RC=2 ÇALIŞTIRILAMADI — genişlik bandı ilan edilmiş ama kare(ler) bandına yerleştirilemedi:
+   · E3-mobil-beyansiz → genişlik BEYANI yok (işaret: <!-- ui-akis: genislik=390 -->)
+   X1 bu kümede ÖLÇÜLMEDİ; sonuç 'temiz' DEĞİL. Beyanı ekleyin ya da genislik_bantlari'nı profilden kaldırın (tek bant = eski davranış).

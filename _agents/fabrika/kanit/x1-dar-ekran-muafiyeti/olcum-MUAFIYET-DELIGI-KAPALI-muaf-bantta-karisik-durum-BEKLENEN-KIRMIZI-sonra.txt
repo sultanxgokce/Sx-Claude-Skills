@@ -1,0 +1,13 @@
+$ python3 ui-tasarim-akisi/arac/yogunluk-denetle.py ui-tasarim-akisi/arac/fikstur/bant-karisik --profil ui-tasarim-akisi/arac/fikstur/bant-karisik/bant-profili.json
+# rc=1 sure=0.0s zaman=2026-10-15T15:40:46+03:00
+--- stdout ---
+========================================================================
+❌ KIRMIZI  E3-mobil
+      · X1 bant 'dar' muaf ama KARIŞIK: 1 karede Gezinme var, 1 karede YOK — muafiyet 'olmayabilir' der, 'kimi olur kimi olmaz' demez
+❌ KIRMIZI  E4-mobil-gezinmeli
+      · X1 bant 'dar' muaf ama KARIŞIK: 1 karede Gezinme var, 1 karede YOK — muafiyet 'olmayabilir' der, 'kimi olur kimi olmaz' demez
+========================================================================
+BANTLAR: dar=2 kare · muaf: dar
+KÜME: 2 ekran · 2 kırmızı · profil: ui-tasarim-akisi/arac/fikstur/bant-karisik/bant-profili.json
+NOT: bu kapı tek-ekran ANLAMINI ölçmez (manşet, bilgi değeri) — ona hiç bakmadı.
+--- stderr ---

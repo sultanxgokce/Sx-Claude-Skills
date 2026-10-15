@@ -49,7 +49,33 @@ VARSAYILAN_CEKIRDEK = os.path.join(BURASI, "..", "cekirdek", "sozlesme.md")
 # yüzey-ayrıştırma kırık kalıyordu. Artık profil `rol_adlari` ile bunları yeniden bağlayabilir.
 # İSTEĞE BAĞLI alandır — vermeyen eski profiller aynen çalışır (varsayılan = çekirdek yazımı).
 ROL_VARSAYILAN = {"panel": "Yan panel", "gezinme": "Gezinme", "vitrin": "Örnek durumlar"}
-ISTEGE_BAGLI = {"rol_adlari"}
+ISTEGE_BAGLI = {"rol_adlari", "genislik_bantlari", "gezinme_muaf_bantlar"}
+
+# GENİŞLİK BANTLARI (0.6.0 · NAKKAŞ hükmü 2026-10-15) — X1'in dar-ekran muafiyeti.
+#
+# NİÇİN (ölçülmüş vaka): X1 "gezinme iskeleti ekrandan ekrana aynı mı" diye sorar ve tabanı
+# KÜMENİN ÇOĞUNLUĞUNDAN alır. Sözleşmesinde *"720 px altı tam ekran"* yazan bir üründe
+# 390 px'lik kareler o çoğunluğa göre zorunlu KIRMIZI düşüyordu: ürün kendi kuralına
+# uyduğu için cezalandırılıyordu — kapının ölçtüğü şey tutarsızlık değil, KÜMEYE KARIŞMIŞ
+# İKİ AYRI YÜZEY GENİŞLİĞİYDİ.
+#
+# 🔴 İki yol vardı, biri seçildi; gerekçe kalıcı olarak burada:
+#   (a) dar kareleri ölçüm DIŞI bırak  → REDDEDİLDİ. "Ölçülmedi" ile "temiz" aynı şeye
+#       döner; bu kapının bütün yazısı o eşitliğe karşı kuruldu (fail-open).
+#   (b) KIRMIZI'yı TAŞI → SEÇİLDİ. Kare ölçülmeye devam eder, yalnız KİMİNLE kıyaslandığı
+#       değişir: iskelet tutarlılığı her bandın İÇİNDE aranır, bantlar ARASI fark ihlal
+#       değildir. Dar kümede üç ayrı iskelet hâlâ KIRMIZI'dır — muafiyet kıyası kaldırmaz,
+#       kıyasın SINIRINI çizer.
+#
+# Sayı MARKA, kural ÇEKİRDEK: bantların kaç piksel olduğu profilde yazar, araçta yazmaz.
+# Alan İSTEĞE BAĞLIDIR; vermeyen profil bugünkü davranışı birebir sürdürür (tek bant).
+#
+# Beyan ZORUNLU, tahmin YASAK: bant ilan edilmişse her kare kendi genişliğini beyan eder.
+# CSS'ten genişlik tahmin etmek denenmedi ve bilerek denenmiyor — medya kuralı, kapsayıcı,
+# yüzde ve `max-width` birlikte okunduğunda tek bir "karenin genişliği" sayısı YOKTUR;
+# tahmin eden kapı yanlış bandı seçer ve sessizce yanlış kümeyle kıyaslar. Beyansız kare
+# bu yüzden "temiz" değil RC=2'dir.
+GENISLIK_ISARETI = re.compile(r"<!--\s*ui-akis:\s*genislik\s*=\s*(\d+)\s*(?:px)?\s*-->", re.I)
 
 ORNEK_PROFIL = {
     "_aciklama": "Kapının ölçtüğü sayılar. Kaynak: projenin tasarım dili sözleşmesi. "
@@ -70,6 +96,14 @@ ORNEK_PROFIL = {
     "yasak_dil": ["tasarruf", "kazan[cç]"],
     # İSTEĞE BAĞLI (bkz ROL_VARSAYILAN): kutunun kendi yazımı farklıysa buradan bağlanır.
     "rol_adlari": dict(ROL_VARSAYILAN),
+    # İSTEĞE BAĞLI (bkz GENISLIK_ISARETI) — şablona BİLEREK canlı olarak konmadı: bant ilan
+    # eden profil her kareden genişlik BEYANI ister; şablonu olduğu gibi kopyalayan kutu
+    # ilk koşuda RC=2 görürdü. Açmak isteyen iki satırı kendi sözleşmesinden yazar:
+    #   "genislik_bantlari":     {"dar": 719, "genis": 4000}   ← üst sınır (px)
+    #   "gezinme_muaf_bantlar":  ["dar"]                        ← bu bantta gezinme olmayabilir
+    # Sayılar MARKA'dır: ürünün kendi sözleşmesindeki kırılma noktasıyla aynı olmalı.
+    "_genislik_bantlari_nasil": "isteğe bağlı; açılınca her kare <!-- ui-akis: genislik=390 --> "
+                                "beyan eder, beyansız kare RC=2 (temiz DEĞİL)",
 }
 
 MARKER = re.compile(r"<!--\s*bilesen:\s*([^->]+?)\s*(?:—\s*([^->]*?)\s*)?-->")
@@ -110,6 +144,29 @@ def sozluk_kumesi(P):
 def rol(P, anahtar):
     """Koda gömülü bileşen adı yerine profilden türetilmiş rol adı (F4/G4)."""
     return dict(ROL_VARSAYILAN, **(P.get("rol_adlari") or {}))[anahtar]
+
+
+def genislik_beyani(ham):
+    """Karenin BEYAN ETTİĞİ genişlik (px) ya da None — tahmin YOK (bkz GENISLIK_ISARETI)."""
+    m = GENISLIK_ISARETI.search(ham)
+    return int(m.group(1)) if m else None
+
+
+def bant_adi(P, genislik):
+    """Genişliği profilin ilan ettiği banda yerleştir → (ad, hata).
+
+    Bant = ÜST SINIR. Genişlik, üst sınırı kendisinden küçük olmayan EN KÜÇÜK banda girer.
+    Hiçbir banda girmiyorsa bu 'temiz' değil ÖLÇÜLEMEDİ'dir: kare ölçülecek, ama hangi
+    kümeyle kıyaslanacağı ilan edilmemiştir."""
+    if genislik is None:
+        return None, "genişlik BEYANI yok (işaret: <!-- ui-akis: genislik=390 -->)"
+    uygun = sorted((ust, ad) for ad, ust in P["genislik_bantlari"].items() if genislik <= ust)
+    if not uygun:
+        return None, ("%d px hiçbir banda girmiyor (ilan edilen üst sınırlar: %s)"
+                      % (genislik, ", ".join("%s=%d" % (a, u) for a, u in
+                                             sorted(P["genislik_bantlari"].items(),
+                                                    key=lambda x: x[1]))))
+    return uygun[0][1], None
 
 
 def govde(icerik):
@@ -266,6 +323,7 @@ def ekran_denetle(yol, P):
     return {"ihlaller": ihlaller, "notlar": notlar, "blok_eslesme": blok_eslesme,
             "isaret": len(adlar),
             "gezinme": gezinme_imzasi(metin, rol(P, "gezinme")),
+            "genislik": genislik_beyani(ham),
             "rozetler": rozet_metinleri(ham)}
 
 
@@ -279,6 +337,34 @@ def profil_yukle(yol):
     if bilinmeyen:
         raise KeyError("rol_adlari'nda bilinmeyen rol: %s (izinli: %s)"
                        % (", ".join(sorted(bilinmeyen)), ", ".join(sorted(ROL_VARSAYILAN))))
+    bantlar = P.get("genislik_bantlari")
+    if bantlar is not None:
+        if not isinstance(bantlar, dict) or not bantlar:
+            raise KeyError("genislik_bantlari boş ya da sözlük değil — bant ilan edilecekse "
+                           "en az bir {ad: üst_sınır_px} çifti gerekir")
+        for ad, ust in bantlar.items():
+            if not isinstance(ad, str) or not ad.strip():
+                raise KeyError("genislik_bantlari'nda adsız bant var")
+            if not isinstance(ust, int) or isinstance(ust, bool) or ust <= 0:
+                raise KeyError("genislik_bantlari['%s'] üst sınırı pozitif tam sayı olmalı "
+                               "(gelen: %r)" % (ad, ust))
+        if len(set(bantlar.values())) != len(bantlar):
+            raise KeyError("genislik_bantlari'nda AYNI üst sınır iki banda verilmiş — "
+                           "bir genişlik iki banda girerse kıyas kümesi belirsizdir")
+    # Muafiyet BANTSIZ tanımlanamaz: neyin muaf olduğu ilan edilmemişse muafiyet bir
+    # kapsama iddiasıdır, ölçüm değil. Var olmayan bant adı da yazım hatasıdır (sessiz
+    # muafiyet = kapının en pahalı hatası).
+    muaf = P.get("gezinme_muaf_bantlar")
+    if muaf is not None:
+        if not isinstance(muaf, list):
+            raise KeyError("gezinme_muaf_bantlar liste olmalı (gelen: %r)" % type(muaf).__name__)
+        if not bantlar:
+            raise KeyError("gezinme_muaf_bantlar var ama genislik_bantlari YOK — "
+                           "hangi bandın muaf olduğu ilan edilmemiş")
+        yabanci = sorted(set(muaf) - set(bantlar))
+        if yabanci:
+            raise KeyError("gezinme_muaf_bantlar'da ilan edilmemiş bant: %s (ilan edilen: %s)"
+                           % (", ".join(yabanci), ", ".join(sorted(bantlar))))
     return P
 
 
@@ -377,19 +463,84 @@ def main(argv):
 
     sonuc = {d.rsplit("/", 1)[-1][:-5]: ekran_denetle(d, P) for d in dosyalar}
 
-    if len(dosyalar) > 1:
-        sayim = {}
+    # ── Bant ataması (0.6.0) ────────────────────────────────────────────────────────────
+    # Bant ilan EDİLMEMİŞSE tek bant: aşağıdaki X1 hattı bugünkü kodun BİREBİR aynısını
+    # koşar (geriye uyum; eski profiller hiç fark görmez).
+    bantli = bool(P.get("genislik_bantlari"))
+    if bantli:
+        eksik = []
+        for ad in sorted(sonuc):
+            b, hata = bant_adi(P, sonuc[ad]["genislik"])
+            sonuc[ad]["bant"] = b
+            if hata:
+                eksik.append("%s → %s" % (ad, hata))
+        if eksik:
+            print("RC=2 ÇALIŞTIRILAMADI — genişlik bandı ilan edilmiş ama kare(ler) "
+                  "bandına yerleştirilemedi:", file=sys.stderr)
+            for x in eksik:
+                print("   · %s" % x, file=sys.stderr)
+            print("   X1 bu kümede ÖLÇÜLMEDİ; sonuç 'temiz' DEĞİL. Beyanı ekleyin ya da "
+                  "genislik_bantlari'nı profilden kaldırın (tek bant = eski davranış).",
+                  file=sys.stderr)
+            return 2
+    else:
         for s in sonuc.values():
-            sayim[s["gezinme"]] = sayim.get(s["gezinme"], 0) + 1
-        taban = max(sayim, key=sayim.get)
-        for ad, s in sonuc.items():
-            if s["gezinme"] is None:
-                s["ihlaller"].append("X1 gezinme: %s bileşeni YOK" % rol(P, "gezinme"))
-            elif sayim[taban] == 1:
-                s["notlar"].append("X1: her ekranın gezinmesi FARKLI — küme tutarsız")
-            elif s["gezinme"] != taban:
-                s["ihlaller"].append("X1 gezinme iskeleti çoğunluktan sapıyor: %s ≠ taban %s"
-                                     % (s["gezinme"], taban))
+            s["bant"] = "tek"
+
+    muaf_bantlar = set(P.get("gezinme_muaf_bantlar") or ())
+    kapsama = []                                  # muafiyetin ÖLÇMEDİĞİNİ yazdığı satırlar
+    kumeler = {}
+    for ad, s in sonuc.items():
+        kumeler.setdefault(s["bant"], []).append((ad, s))
+
+    for bant, uyeler in sorted(kumeler.items()):
+        if bant in muaf_bantlar:
+            # MUAFİYET: bu bantta gezinmenin OLMAMASI ihlal değildir (ürünün kendi kuralı).
+            # 🔴 Ama muafiyet "kimi olur kimi olmaz" demez: aynı bandın içinde karışık
+            #    durum hâlâ tutarsızlıktır ve KIRMIZI'dır.
+            var = [(a, s) for a, s in uyeler if s["gezinme"] is not None]
+            yok = [a for a, s in uyeler if s["gezinme"] is None]
+            if var and yok:
+                for a, s in uyeler:
+                    s["ihlaller"].append(
+                        "X1 bant '%s' muaf ama KARIŞIK: %d karede %s var, %d karede YOK — "
+                        "muafiyet 'olmayabilir' der, 'kimi olur kimi olmaz' demez"
+                        % (bant, len(var), rol(P, "gezinme"), len(yok)))
+            elif yok:
+                kapsama.append("X1 bandı '%s' muaf (profil) — %d karede %s aranmadı; "
+                               "'temiz' bu boyutu KAPSAMIYOR"
+                               % (bant, len(yok), rol(P, "gezinme")))
+            if len(var) > 1:
+                sayim = {}
+                for _, s in var:
+                    sayim[s["gezinme"]] = sayim.get(s["gezinme"], 0) + 1
+                taban = max(sayim, key=sayim.get)
+                for a, s in var:
+                    if sayim[taban] == 1:
+                        s["notlar"].append("X1: bant '%s' içinde her kare FARKLI — tutarsız"
+                                           % bant)
+                    elif s["gezinme"] != taban:
+                        s["ihlaller"].append("X1 gezinme iskeleti bant '%s' içinde "
+                                             "çoğunluktan sapıyor: %s ≠ taban %s"
+                                             % (bant, s["gezinme"], taban))
+        elif len(uyeler) > 1:
+            sayim = {}
+            for _, s in uyeler:
+                sayim[s["gezinme"]] = sayim.get(s["gezinme"], 0) + 1
+            taban = max(sayim, key=sayim.get)
+            for ad, s in uyeler:
+                if s["gezinme"] is None:
+                    s["ihlaller"].append("X1 gezinme: %s bileşeni YOK" % rol(P, "gezinme"))
+                elif sayim[taban] == 1:
+                    s["notlar"].append("X1: her ekranın gezinmesi FARKLI — küme tutarsız")
+                elif s["gezinme"] != taban:
+                    s["ihlaller"].append("X1 gezinme iskeleti çoğunluktan sapıyor: %s ≠ taban %s"
+                                         % (s["gezinme"], taban))
+        elif bantli:
+            # Tek kareli bant: kıyas YAPILAMADI. Bu 'temiz' değil, 'kıyassız'dır —
+            # yazılmazsa bir kutu kareleri banda bölerek X1'i sessizce kapatabilir.
+            kapsama.append("X1 bandı '%s' tek kareli — iskelet KIYASLANAMADI (kıyas en az "
+                           "iki kare ister); 'temiz' bu boyutu KAPSAMIYOR" % bant)
 
     tum = {}
     for s in sonuc.values():
@@ -419,6 +570,16 @@ def main(argv):
         print("⚠️  UYARI: blok_turu haritası bu kümede HİÇ tutmadı (%s) — S2 blok-türü "
               "bütçesi ölçülmedi; 'temiz' bu boyutu KAPSAMIYOR (sahte-yeşil riski)."
               % ", ".join(sorted(P["blok_turu"])), file=sys.stderr)
+    # Muafiyetin/kıyassızlığın ÖLÇMEDİĞİ boyutlar — sessiz geçmez (bu kapının ana kuralı).
+    for satir in kapsama:
+        print("⚠️  %s" % satir)
+    if bantli:
+        dagilim = {}
+        for s in sonuc.values():
+            dagilim[s["bant"]] = dagilim.get(s["bant"], 0) + 1
+        print("BANTLAR: %s%s" % (
+            " · ".join("%s=%d kare" % (b, n) for b, n in sorted(dagilim.items())),
+            " · muaf: " + ", ".join(sorted(muaf_bantlar)) if muaf_bantlar else ""))
     print("KÜME: %d ekran · %d kırmızı · profil: %s" % (len(sonuc), kirmizi, pyol))
     print("NOT: bu kapı tek-ekran ANLAMINI ölçmez (manşet, bilgi değeri) — ona hiç bakmadı.")
     return 1 if kirmizi else 0

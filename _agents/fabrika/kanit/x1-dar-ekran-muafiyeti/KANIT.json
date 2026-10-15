@@ -1,0 +1,95 @@
+{
+  "is": "x1-dar-ekran-muafiyeti",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T15:40:46+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "ONCE-bant-yok-390px-kare-zorunlu-kirmizi-BEKLENEN-KIRMIZI",
+      "asama": "once",
+      "dosya": "olcum-ONCE-bant-yok-390px-kare-zorunlu-kirmizi-BEKLENEN-KIRMIZI-once.txt",
+      "sha256": "05837709eba8dd3db12171dde56553003cbbaa4a59038b06864b621f2472457e",
+      "komut": [
+        "python3",
+        "ui-tasarim-akisi/arac/yogunluk-denetle.py",
+        "ui-tasarim-akisi/arac/fikstur/bant",
+        "--profil",
+        "ui-tasarim-akisi/arac/fikstur/bant/bant-yalin-profili.json"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T15:40:26+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "SONRA-ayni-bayt-bant-ilan-edildi-390px-temiz-muafiyet-ilan-ediliyor",
+      "asama": "sonra",
+      "dosya": "olcum-SONRA-ayni-bayt-bant-ilan-edildi-390px-temiz-muafiyet-ilan-ediliyor-sonra.txt",
+      "sha256": "244b0ccb571204c7d39cac5e64b1175640b5116e8d2db48ec9169ed0a64a892e",
+      "komut": [
+        "python3",
+        "ui-tasarim-akisi/arac/yogunluk-denetle.py",
+        "ui-tasarim-akisi/arac/fikstur/bant",
+        "--profil",
+        "ui-tasarim-akisi/arac/fikstur/bant/bant-profili.json"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T15:40:35+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "SINAV-51-kapi-41-eski-dokunulmadan-gecti-10-yeni",
+      "asama": "sonra",
+      "dosya": "olcum-SINAV-51-kapi-41-eski-dokunulmadan-gecti-10-yeni-sonra.txt",
+      "sha256": "1be7a0cd0a6c8fcd1e0d49b20c7c74930128024c73ab58cb79cfcb095db4aa90",
+      "komut": [
+        "bash",
+        "ui-tasarim-akisi/arac/yogunluk-denetle.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T15:40:37+03:00",
+      "sure_sn": 2.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "MUAFIYET-DELIGI-KAPALI-muaf-bantta-karisik-durum-BEKLENEN-KIRMIZI",
+      "asama": "sonra",
+      "dosya": "olcum-MUAFIYET-DELIGI-KAPALI-muaf-bantta-karisik-durum-BEKLENEN-KIRMIZI-sonra.txt",
+      "sha256": "1526b77a35e6fbf8a0e7039920b68976dac22091fb685b0c9007a3858f4dd56b",
+      "komut": [
+        "python3",
+        "ui-tasarim-akisi/arac/yogunluk-denetle.py",
+        "ui-tasarim-akisi/arac/fikstur/bant-karisik",
+        "--profil",
+        "ui-tasarim-akisi/arac/fikstur/bant-karisik/bant-profili.json"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T15:40:46+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "BEYANSIZ-KARE-RC2-olculemedi-temiz-DEGIL-BEKLENEN-RC2",
+      "asama": "sonra",
+      "dosya": "olcum-BEYANSIZ-KARE-RC2-olculemedi-temiz-DEGIL-BEKLENEN-RC2-sonra.txt",
+      "sha256": "a9accd0bd533e4e7a68eda5a60ec75f5c55306d055caa5a2476402b66e70d4be",
+      "komut": [
+        "python3",
+        "ui-tasarim-akisi/arac/yogunluk-denetle.py",
+        "ui-tasarim-akisi/arac/fikstur/bant-beyansiz",
+        "--profil",
+        "ui-tasarim-akisi/arac/fikstur/bant-beyansiz/bant-profili.json"
+      ],
+      "rc": 2,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T15:40:46+03:00",
+      "sure_sn": 0.1
+    }
+  ],
+  "imza": "888f67b177d417fecb15a69dd84a29e29022aacdff259eb681b8bd5ac559d27f"
+}

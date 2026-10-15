@@ -1,0 +1,13 @@
+$ python3 ui-tasarim-akisi/arac/yogunluk-denetle.py ui-tasarim-akisi/arac/fikstur/bant --profil ui-tasarim-akisi/arac/fikstur/bant/bant-profili.json
+# rc=0 sure=0.1s zaman=2026-10-15T15:40:35+03:00
+--- stdout ---
+========================================================================
+✅ temiz  E1-liste
+✅ temiz  E2-detay
+✅ temiz  E3-mobil
+========================================================================
+⚠️  X1 bandı 'dar' muaf (profil) — 1 karede Gezinme aranmadı; 'temiz' bu boyutu KAPSAMIYOR
+BANTLAR: dar=1 kare · genis=2 kare · muaf: dar
+KÜME: 3 ekran · 0 kırmızı · profil: ui-tasarim-akisi/arac/fikstur/bant/bant-profili.json
+NOT: bu kapı tek-ekran ANLAMINI ölçmez (manşet, bilgi değeri) — ona hiç bakmadı.
+--- stderr ---

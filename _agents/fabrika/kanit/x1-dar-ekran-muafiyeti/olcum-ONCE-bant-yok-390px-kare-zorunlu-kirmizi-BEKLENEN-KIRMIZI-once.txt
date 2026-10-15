@@ -1,0 +1,12 @@
+$ python3 ui-tasarim-akisi/arac/yogunluk-denetle.py ui-tasarim-akisi/arac/fikstur/bant --profil ui-tasarim-akisi/arac/fikstur/bant/bant-yalin-profili.json
+# rc=1 sure=0.0s zaman=2026-10-15T15:40:26+03:00
+--- stdout ---
+========================================================================
+✅ temiz  E1-liste
+✅ temiz  E2-detay
+❌ KIRMIZI  E3-mobil
+      · X1 gezinme: Gezinme bileşeni YOK
+========================================================================
+KÜME: 3 ekran · 1 kırmızı · profil: ui-tasarim-akisi/arac/fikstur/bant/bant-yalin-profili.json
+NOT: bu kapı tek-ekran ANLAMINI ölçmez (manşet, bilgi değeri) — ona hiç bakmadı.
+--- stderr ---
