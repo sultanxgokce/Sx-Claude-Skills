@@ -79,19 +79,48 @@ fi
 # 3 · PUAN
 SON="$(ls "$DZ"/DENETIM-[0-9]*.json 2>/dev/null | sort -V | tail -1)"
 if [ -n "$SON" ]; then
+  # 🔴 SATIR-TEMELLİ AKTARIM DA KIRILGANDI (bağımsız göz #339 tur 1 pipe'ı çözdü, tur 2 yeni
+  #    satırı buldu): serbest-metin `yedek` alanı "\n" içerirse sabit satır-numarasıyla okuma
+  #    (sed -n Np) da kayar. Çözüm metinsel ayraç DEĞİL: python her değeri shlex.quote ile
+  #    KABUĞA GÜVENLİ tek-tırnaklı bir ifadeye çevirir, kabuk onu `eval` ile DEĞİŞKENE atar —
+  #    içinde "|" ya da "\n" olsa da shlex.quote kapatıp-yeniden-açarak kaçışlar, hiçbir
+  #    ayraç/satır-sayısı varsayımına dayanmaz.
   okuma="$(python3 - "$SON" <<'PY'
-import json,sys
+import json,sys,shlex
 d=json.load(open(sys.argv[1],encoding="utf-8")); s=d["sonuc"]
-print(f"{s['kod_puani']}|{s['dogru_sey']}|{d.get('yazan','?')}|{d.get('denetci','?')}|{d.get('tur','?')}|{len(s['bulgular'])}")
+vals={"puan":s["kod_puani"],"dogru":s["dogru_sey"],"yazan":d.get("yazan","?"),"denetci":d.get("denetci","?"),
+      "tur":d.get("tur","?"),"nb":len(s["bulgular"]),"yedek":d.get("yedek") or "",
+      "yazan_model":d.get("yazan_model") or "","yedek_model":d.get("yedek_model") or ""}
+for k,v in vals.items():
+    print(f"{k}={shlex.quote(str(v))}")
 PY
 )"
-  IFS='|' read -r puan dogru yazan denetci tur nb <<<"$okuma"
+  eval "$okuma"
   _y "  · denetim tur $tur · $puan/5 · doğru şey: $dogru · bulgu: $nb · yazan: $yazan → denetçi: $denetci"
   [ "$puan" = "5" ] || { _h "kod puanı 5 DEĞİL ($puan) — adım 2'ye dönülmeliydi"; eksik=$((eksik+1)); }
   [ "$dogru" = "E" ] || { _h "'doğru şey mi' EVET değil ($dogru) — kod doğru olsa da yanlış iş olabilir"; eksik=$((eksik+1)); }
-  case "$denetci" in
-    *"$yazan"*) _h "denetçi yazanla AYNI ($yazan) — bağımsız göz değil (K1)"; eksik=$((eksik+1)) ;;
-  esac
+  # Sultan Y0006: yedek göz (yazandan farklı YENİ oturum) de bağımsız sayılır — ama ancak
+  # yedek_model VE yazan_model İKİSİ DE ölçülmüş VE birbirinden FARKLIYSA (fail-closed: alan
+  # boşsa ya da modeller aynıysa eski string-match reddi geçerliliğini sürdürür). "$denetci"
+  # alanı yedek kipinde "claude (…) (YEDEK GÖZ: …)" olduğundan $yazan ("claude") onun İÇİNDE
+  # geçer — bu artık K1 ihlali DEĞİL, çünkü farklı model + farklı oturum ölçülmüştür.
+  # 🔴 KARAR "$denetci" METNİNİN BİÇİMİNE BAĞLI KALMASIN (bağımsız göz #339 tur 3): eski
+  # hâlde fail-closed red yalnız `case "$denetci" in *"$yazan"*)` dalında uygulanıyordu —
+  # yedek kaydı AYNI modelle gelse bile denetci metni yazanın adını İÇERMİYORSA (biçim
+  # farkı, gelecekteki bir format değişimi) kontrol hiç ÇALIŞMAZDI. Karar artık `yedek`
+  # ALANININ VARLIĞI üzerinden verilir — metin-eşleşmesinden bağımsız, dolayısıyla
+  # denetci'nin tam biçimine duyarlı değil.
+  if [ -n "$yedek" ]; then
+    if [ -n "$yedek_model" ] && [ -n "$yazan_model" ] && [ "$yedek_model" != "$yazan_model" ]; then
+      _y "  · yedek göz: $yedek · yazan modeli $yazan_model ≠ yedek modeli $yedek_model — K1 bağımsız SAYILDI (Sultan Y0006)"
+    else
+      _h "yedek göz AYNI modelle alınmış (yazan: ${yazan_model:-?} · yedek: ${yedek_model:-?}) — bağımsız göz değil (K1)"; eksik=$((eksik+1))
+    fi
+  else
+    case "$denetci" in
+      *"$yazan"*) _h "denetçi yazanla AYNI ($yazan) — bağımsız göz değil (K1)"; eksik=$((eksik+1)) ;;
+    esac
+  fi
 else
   _h "DENETİM kaydı YOK — bağımsız göz hiç koşmamış"; eksik=$((eksik+1))
 fi
