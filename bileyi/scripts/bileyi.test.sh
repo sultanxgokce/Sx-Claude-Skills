@@ -674,6 +674,32 @@ icermeyen "V10 --havuz-yolu verilince kutu defteri EKLENMEZ (açık irade keşfi
   python3 "$B" --depo "$KOK/kutu" --havuz-depo "$KOK/oda" --esik-dosya "$ES" \
   --havuz-yolu "$HAV" olc --gun 0
 
+echo "W · 🔴 bağımsız gözün tur-1 bulguları (kimlik uzayı · kapsama sayımı)"
+# W1-W2: merkez ve kutu KENDİ sayaçlarıyla aynı id'yi üretebilir — kimlik uzaylarının
+# ortak olduğu hiç ölçülmedi. Aynı id + FARKLI gövde İKİ bulgudur, biri yutulamaz.
+mkdir -p "$KOK/cakisma-m/_agents/handoff" "$KOK/cakisma-k/_agents/handoff"
+: > "$KOK/cakisma-m/_agents/handoff/layiha-aday-havuzu.jsonl"
+: > "$KOK/cakisma-k/_agents/handoff/layiha-aday-havuzu.jsonl"
+python3 - "$KOK/cakisma-m/_agents/handoff/bulgu-havuzu.jsonl" "$KOK/cakisma-k/_agents/handoff/bulgu-havuzu.jsonl" <<'PY2'
+import json, sys
+from datetime import date
+b = date.today().isoformat()
+# AYNI id'ler (b0001..b0004), tamamen FARKLI govde: iki ayri olay, tek kayda dusmemeli
+m = [{"id": "b000%d" % i, "tarih": b, "baslik": "merkez tarafi olayi", "sinif": "merkez-m%d" % i} for i in (1, 2, 3, 4)]
+k = [{"id": "b000%d" % i, "tarih": b, "baslik": "kutu ici kilit cakismasi", "sinif": "kutu-kilit-cakismasi"} for i in (1, 2, 3, 4)]
+for yol, kayit in ((sys.argv[1], m), (sys.argv[2], k)):
+    with open(yol, "w", encoding="utf-8") as f:
+        for r in kayit:
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+PY2
+W=(python3 "$B" --depo "$KOK/cakisma-k" --havuz-depo "$KOK/cakisma-m" --esik-dosya "$ES")
+iceren "W1 🔴 aynı id + FARKLI gövde yutulmaz: 8 kayıt birleşir (4 değil)" "havuz: 8 kayıt" "${W[@]}" olc --gun 0
+iceren "W2 🔴 id çakışmasına karşın kutunun tekrarı FİİLEN bulunur" "kutu-kilit-cakismasi" "${W[@]}" olc --gun 0
+icermeyen "W3 id çakışması 'öbür kaynakla AYNI' diye yanlış raporlanmaz" "öbür kaynakla AYNI" "${W[@]}" olc --gun 0
+# W4-W5: kapsama sayimi SATIR sayisi degil OKUNAN kaynak sayisidir
+iceren "W4 iki kaynak da okunduysa özet '2/2 kaynak OKUNDU' der" "2/2 kaynak OKUNDU" "${V[@]}" olc --gun 0
+iceren "W5 🔴 bir kaynak okunamadıysa özet kapsamayı GENİŞ göstermez ('1/2')" "1/2 kaynak OKUNDU" "${V2[@]}" olc --gun 0
+
 echo
 echo "toplam=$((GECEN+DUSEN)) geçen=$GECEN düşen=$DUSEN"
 [[ $DUSEN -eq 0 ]]

@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "bileyi-kutu-defteri",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T15:36:02+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 58907,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Merkez defteriyle kutunun kendi defteri birleştirilmiş, kaynaklar ayrı yazdırılmış; kısmi erişim, tüm kaynakların yokluğu ve mutasyon kapıları da sınanmış. Lakin kaynak-yerel kimlikler yalnız `id` üzerinden tekilleştirildiği için iki ayrı defterde aynı kimliği taşıyan farklı bulgular sessizce tek kayda düşebilir; önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "Tekilleştirme anahtarı, `id` bulunan kayıtlarda içerik ve kaynak ayrımını tamamen bırakıyor. İzole defterlerin kimlik uzaylarının ortak olduğu kanıtlanmadığından, merkezdeki ve kutudaki farklı kayıtlar aynı `id` değerini taşıdığında ikincisi sessizce kaybolur; V9 kapısı yalnız aynı dosyanın kopyasını sınadığı için bu çakışmayı yakalamıyor.",
+        "kanit": "`_kayit_anahtari` içinde dolu `id` doğrudan `id:` anahtarı oluyor; `havuzlar_oku` kaynakları sırayla dolaşıp bu anahtarı daha önce gördüyse kaydı atlıyor. V9 ise `cp \"$HAV\" .../bulgu-havuzu.jsonl` ile birebir aynı kayıtları çoğaltarak sadece ayna vakasını ölçüyor.",
+        "konum": "bileyi/scripts/bileyi.py:500",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Birleşik özet, okunamayan kaynakları da kaynak sayısına katıyor; tek defter gerçekten okunmuşken çıktı “2 kaynak” diyebilir. Sarı kaynak satırı gerçeği ayrıca söylese de üst özet kapsamayı olduğundan geniş gösteriyor.",
+        "kanit": "`havuzlar_oku` okunamayan kaynak için de `kaynak_satirlari`na satır ekliyor; çıktı daha sonra okunan kaynak sayısı yerine `len(kaynak_satirlari)` basıyor. V6–V7 yalnız rc=0 ve sarı uyarıyı sınıyor, özetin “1 kaynak” demesini sınamıyor.",
+        "konum": "bileyi/scripts/bileyi.py:626",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam. Kırmızı önce/yeşil sonra ölçüm çifti gerçekçi iki ayrı defterle davranış farkını gösteriyor; 83 kapının tamamı geçiyor ve mutasyon kaydı ilgili satır geri alınınca altı V kapısının düştüğünü kanıtlıyor. Sarı önce kaydı hüküm kanıtı sayılmamalı; burada başarı dayanağı olarak kullanılmasına ihtiyaç yok. Kanıt güçlü, fakat farklı kaynaklarda aynı `id` taşıyan farklı kayıt ve kısmi okumadaki doğru kaynak sayısı vakaları ölçülmemiş."
+  }
+}

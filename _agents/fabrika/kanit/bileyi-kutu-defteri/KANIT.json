@@ -1,7 +1,7 @@
 {
   "is": "bileyi-kutu-defteri",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T15:34:46+03:00",
+  "guncelleme": "2026-10-15T15:38:09+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -104,7 +104,61 @@
       "renk": "kirmizi",
       "zaman": "2026-10-15T15:34:46+03:00",
       "sure_sn": 6.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapilar-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-kapilar-tur2-sonra.txt",
+      "sha256": "fd56c5f4123edab233c0d48a1ab408b25692eb857deb54fea833ac6c02ac821a",
+      "komut": [
+        "bash",
+        "bileyi/scripts/bileyi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T15:37:51+03:00",
+      "sure_sn": 7.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kutu-tekrari-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-kutu-tekrari-tur2-sonra.txt",
+      "sha256": "e4cd53db7cfa93496af013d2a38f41f807b5c668e35b49461767c61c739ba71d",
+      "komut": [
+        "python3",
+        "bileyi/scripts/bileyi.py",
+        "--depo",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/kutu",
+        "--havuz-depo",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/merkez",
+        "--esik-dosya",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/esik.json",
+        "olc",
+        "--gun",
+        "0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T15:37:52+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-tur2-beklenen-kirmizi",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-tur2-beklenen-kirmizi-tek.txt",
+      "sha256": "44f4e517a3865ff5b787e52a57267a2ce7324c94b5915f899189f3a31994924d",
+      "komut": [
+        "bash",
+        "/tmp/tmp.UUK2XKEQ6y/kos.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T15:38:09+03:00",
+      "sure_sn": 17.6
     }
   ],
-  "imza": "f5198911b1faac736f72af78dd40a40e8636c46526edd1b108ded100ee7e2836"
+  "imza": "e3b39ed708e45f7d022d970169ff12a5389c2f8915c6d0ec16b2db7b17057cbb"
 }

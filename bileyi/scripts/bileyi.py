@@ -494,19 +494,31 @@ def bulgu_havuzlari(kod_depo: Path, havuz_depo: Path,
 
 
 def _kayit_anahtari(k: dict) -> str:
-    """Aynı bulgunun iki defterde birden görünmesini ayırt eder (merkez ↔ kutu aynası)."""
+    """Aynı bulgunun iki defterde birden görünmesini ayırt eder (merkez ↔ kutu aynası).
+
+    🔴 BAĞIMSIZ GÖZÜN TUR-1 BULGUSU (uygulama): ilk yazım dolu `id` varsa YALNIZ ona
+    bakıyordu. Oysa merkezin ve izole kutunun kimlik uzaylarının ortak olduğu HİÇ
+    ölçülmedi — iki defter kendi sayaçlarıyla `b0001` üretebilir. O hâlde iki AYRI
+    bulgu sessizce tek kayda düşerdi: eksik veri yine "daha az", yani rahatlatıcı
+    görünürdü. Anahtar artık kimlik VE gövde: ayna (aynı id + aynı gövde) bir kez
+    sayılır, çakışma (aynı id + farklı gövde) İKİ kayıt kalır.
+    """
     kid = str(k.get("id", "") or "").strip()
-    if kid:
-        return "id:" + kid
-    gov = " ".join(str(k.get(a, "") or "") for a in ("baslik", "sinif", "ts", "tarih"))
-    return "gov:" + " ".join(_sadelestir(gov)[:12])
+    gov = " ".join(str(k.get(a, "") or "") for a in ("baslik", "sinif", "gercek", "ts", "tarih"))
+    parmak = " ".join(_sadelestir(gov)[:16])
+    return f"id:{kid}|gov:{parmak}" if kid else f"gov:{parmak}"
 
 
 def havuzlar_oku(kaynaklar: list[tuple[str, Path]],
-                 pencere_gun: int) -> tuple[list[dict], int, str, list[str]]:
+                 pencere_gun: int) -> tuple[list[dict], int, str, list[str], int]:
     """Birden çok defteri okur, BİRLEŞTİRİR, kaynak kaynak kapsama yazar.
 
-    (kayitlar, bozuk, pencere_uyarisi, kaynak_satirlari) döner.
+    (kayitlar, bozuk, pencere_uyarisi, kaynak_satirlari, okunan_kaynak) döner.
+
+    🔴 BAĞIMSIZ GÖZÜN TUR-1 BULGUSU (uygulama): `okunan_kaynak` AYRI döner, çünkü
+    satır sayısı kapsama değildir — okunamayan kaynağın da bir satırı vardır ve
+    özet "2 kaynak" derse kapsamayı olduğundan GENİŞ gösterir. Sayılan şey kaç
+    deftere bakıldığı değil, kaç defterin fiilen OKUNDUĞUdur (K3).
 
     🔴 DÜRÜST KISMİ: bir kaynak okunamazsa (yok · tamamı bozuk) iş DURMAZ ama bu
     SÖYLENİR — satırında 🟡 taşır. Hiçbir kaynak okunamazsa rc=3 (ÖLÇEMEDİM);
@@ -547,7 +559,7 @@ def havuzlar_oku(kaynaklar: list[tuple[str, Path]],
     uyari = ""
     if pencere_gun > 0:
         birlesik, _b, uyari = _pencerele(birlesik, pencere_gun)
-    return birlesik, bozuk_top, uyari, satir
+    return birlesik, bozuk_top, uyari, satir, okunan
 
 
 FABRIKA = Path("/config/.claude/skills/yazilim-fabrikasi/scripts")
@@ -611,7 +623,7 @@ def olc_veri(n) -> dict:
 
     kaynaklar = bulgu_havuzlari(Path(n.depo).resolve(), depo,
                                 getattr(n, "havuz_yolu", None))
-    kayit, bozuk, pen_uyari, kaynak_satirlari = havuzlar_oku(kaynaklar, pencere)
+    kayit, bozuk, pen_uyari, kaynak_satirlari, okunan_kaynak = havuzlar_oku(kaynaklar, pencere)
     o = tekrar_say(kayit)
     dedup, dedup_not = dedup_kaynaklari(depo)
     surt_hal, surt = surtunme_oku(depo)
@@ -625,7 +637,7 @@ def olc_veri(n) -> dict:
     for sat in kaynak_satirlari:
         print(f"   iz: {sat}")
     kutu_sayi = sum(1 for k in kayit if k.get("_kaynak") == "kutu")
-    print(f"   havuz: {o['toplam']} kayıt (birleşik, {len(kaynak_satirlari)} kaynak"
+    print(f"   havuz: {o['toplam']} kayıt (birleşik, {okunan_kaynak}/{len(kaynak_satirlari)} kaynak OKUNDU"
           + (f" · {kutu_sayi} tanesi bu kutunun kendi defterinden" if kutu_sayi else "")
           + ")" + (f" · {bozuk} BOZUK satır" if bozuk else ""))
     if pen_uyari:
