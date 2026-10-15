@@ -15,5 +15,14 @@
   "kanit_nerede": "kutu-bagimsizlik sinavi: beceri MIHENK DISINDA bir sahte kutuda kurulur ve kosar · tasinan 6 sinav ciplak rc=0 · civili mihenk yolu sayisi 0",
   "oda": "",
   "durum": "acik",
-  "gecmis": []
+  "gecmis": [],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "MUMEYYIZ",
+      "oturum": "mumeyyiz-oda-b5/5ae0f123",
+      "gerekce": "SERDAR devam karari (kanal mektubu 18:55 TR, verbatim: 'O inince tikanan isin acilir'): tikanmanin tek sebebi Chromium+ws gerektiren 1 ATLANAN kapiydi, yani KUTUDA OLCULEMEZ bir bulgu. PR #336 (kutu-disi sinifi) 15:56Z'de ana dala indi ve kurulu kopyaya senkronlandi; denetci artik o sinifi taniyor. Uc turun BUTUN gercek bulgulari kapatildi. Karar SERDAR'indir; kart sahibi adi arac sartidir.",
+      "zaman": "2026-10-15T18:59:39+03:00"
+    }
+  ]
 }
