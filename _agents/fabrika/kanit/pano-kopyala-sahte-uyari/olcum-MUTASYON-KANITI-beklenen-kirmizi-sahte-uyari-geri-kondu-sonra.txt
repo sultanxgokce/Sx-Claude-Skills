@@ -1,0 +1,8 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut-121-1792060836/mut.sh
+# rc=0 sure=45.5s zaman=2026-10-15T13:41:22+03:00
+--- stdout ---
+=== MUTASYON KANITI: 1.2.0 davranışı geri kondu (indi kaydı + süren söz bekleme + yinelenen yazım süzgeci kaldırıldı); aşağıdaki KIRMIZI BEKLENENDİR; rc=0 = sınav sahte uyarıyı YAKALADI. Gerçek ölçüm: pano-sinav-31-kapi-S7-S7b ===
+  ✗ S7 seçim panoya indikten sonra AYNI metin için gelen yazım reddi sessiz: düğme YOK, kırmızı uyarı YOK, pano doğru → yol=soz düğme=true bildirim="✗ pano yazımı reddedildi (The request is not allowed by the user agent) — Kopyala düğmesine bas ya da Cmd+C" pano="SECILECEK-SATIR-ABC"
+  ✗ S7b söz yazımı sürerken gelen ret onun sonucunu bekler: söz inince düğme YOK, kırmızı YOK, pano doğru → düğme=true bildirim="✗ pano yazımı reddedildi (The request is not allowed by the user agent) — Kopyala düğmesine bas ya da Cmd+C" pano="YAVAS-PANO-SATIRI"
+GEÇEN: 29 · KALAN: 2
+--- stderr ---

@@ -247,7 +247,38 @@ try {
     const dt = new DataTransfer(); const ev = new ClipboardEvent('copy', { clipboardData: dt, bubbles: true, cancelable: true }); document.dispatchEvent(ev);
     return { sec, odak: document.activeElement && document.activeElement.tagName, engellendi: ev.defaultPrevented, metin: dt.getData('text/plain'), yol: window.__kapiPano._sonYol() }; });
   kapi('S5 Shift+sürükle seçimi, odak terminalden kaçmışken copy olayında köprü tarafından yazılır (preventDefault + metin)', s5.sec.trim() === 'SHIFT-SECIM-XYZ' && s5.odak === 'BODY' && s5.engellendi && s5.metin.trim() === 'SHIFT-SECIM-XYZ' && s5.yol === 'copy', `→ ${JSON.stringify(s5)}`);
-  kapi('S6 köprü 1.2.0 söz ve düğme yolunu ilan eder', await pg.evaluate(() => window.__kapiPano.surum === '1.2.0' && window.__kapiPano.soz === true && window.__kapiPano.dugme === true));
+  kapi('S6 köprü 1.2.1 söz ve düğme yolunu ilan eder', await pg.evaluate(() => window.__kapiPano.surum === '1.2.1' && window.__kapiPano.soz === true && window.__kapiPano.dugme === true));
+  // S7 · Sultan Safari 13:33: seçim panoya İNDİKTEN sonra aynı metin için ikinci yazım (yinelenen OSC 52) reddedilince kırmızı uyarı + düğme
+  //      çıkıyordu. Söz yoluyla indir → writeText'i reddedecek şekilde boz → aynı metnin OSC 52'si yeniden gelsin → düğme YOK, kırmızı YOK.
+  const dgGor = () => pg.$eval('#kapi-pano-kopyala', (e) => e.style.display !== 'none').catch(() => false);
+  await pg.evaluate(() => navigator.clipboard.writeText('pano-bos'));
+  await pg.mouse.move(geo2.x + 0.5 * geo2.w, y2s); await pg.mouse.down(); await pg.mouse.move(geo2.x + 19.5 * geo2.w, y2s, { steps: 8 }); await pg.mouse.up();
+  await bekle(1200);
+  const yol7 = await pg.evaluate(() => window.__kapiPano._sonYol());
+  await pg.evaluate(() => { window.__pano = { wt: navigator.clipboard.writeText.bind(navigator.clipboard), w: navigator.clipboard.write.bind(navigator.clipboard) };
+    navigator.clipboard.writeText = () => Promise.reject(new DOMException('The request is not allowed by the user agent', 'NotAllowedError')); });
+  await komut(pg, 'printf "\\033]52;c;$(printf SECILECEK-SATIR-ABC | base64)\\a"'); await bekle(1200);
+  const bd7 = await bildirim(pg); const dg7 = await dgGor();
+  await pg.evaluate(() => { navigator.clipboard.writeText = window.__pano.wt; });
+  pano = await pg.evaluate(() => navigator.clipboard.readText()).catch((e) => 'HATA:' + e.message);
+  kapi('S7 seçim panoya indikten sonra AYNI metin için gelen yazım reddi sessiz: düğme YOK, kırmızı uyarı YOK, pano doğru', yol7 === 'soz' && !dg7 && !/reddedildi/.test(bd7) && pano === 'SECILECEK-SATIR-ABC', `→ yol=${yol7} düğme=${dg7} bildirim="${bd7}" pano="${pano}"`);
+  // S7b · sıra tersi: söz yazımı SÜRERKEN (yavaş pano) aynı metnin yazımı reddedilir → ret söz sonucunu bekler; söz inince düğme/uyarı YOK
+  await pg.evaluate(() => { window.__kapiPano._indiOmru(1);
+    navigator.clipboard.write = (items) => new Promise((r, j) => setTimeout(() => window.__pano.w(items).then(r, j), 2500));
+    navigator.clipboard.writeText = () => Promise.reject(new DOMException('The request is not allowed by the user agent', 'NotAllowedError'));
+    return window.__pano.wt('pano-bos'); });
+  await komut(pg, 'echo YAVAS-PANO-SATIRI');
+  await pg.waitForFunction(() => { const bf = window.term.buffer.active; for (let i = 0; i < bf.length; i++) { const l = bf.getLine(i); if (l && l.translateToString(true).trim() === 'YAVAS-PANO-SATIRI') return true; } return false; }, null, { timeout: 8000 }).catch(() => {});
+  const g7 = await pg.evaluate(() => { const t = window.term; const bf = t.buffer.active; let satir = -1; for (let i = bf.length - 1; i >= 0; i--) { const l = bf.getLine(i); if (l && l.translateToString(true).trim() === 'YAVAS-PANO-SATIRI') { satir = i; break; } }
+    const r = document.querySelector('.xterm-screen').getBoundingClientRect(); return { satir: satir - bf.viewportY, x: r.left, y: r.top, w: r.width / t.cols, h: r.height / t.rows }; });
+  const y7 = g7.y + (g7.satir + 0.5) * g7.h;
+  await pg.mouse.move(g7.x + 0.5 * g7.w, y7); await pg.mouse.down(); await pg.mouse.move(g7.x + 17.5 * g7.w, y7, { steps: 8 }); await pg.mouse.up();
+  await bekle(700);
+  await komut(pg, 'printf "\\033]52;c;$(printf YAVAS-PANO-SATIRI | base64)\\a"'); await bekle(4000);
+  const bd7b = await bildirim(pg); const dg7b = await dgGor();
+  await pg.evaluate(() => { navigator.clipboard.writeText = window.__pano.wt; navigator.clipboard.write = window.__pano.w; window.__kapiPano._indiOmru(5000); });
+  pano = await pg.evaluate(() => navigator.clipboard.readText()).catch((e) => 'HATA:' + e.message);
+  kapi('S7b söz yazımı sürerken gelen ret onun sonucunu bekler: söz inince düğme YOK, kırmızı YOK, pano doğru', !dg7b && !/reddedildi/.test(bd7b) && pano === 'YAVAS-PANO-SATIRI', `→ düğme=${dg7b} bildirim="${bd7b}" pano="${pano}"`);
 
   console.log('── N · olumsuz kontrol: köprüsüz kapı (KAPI_PANO=0) aynı ölçümde KIRMIZI');
   await pg.context().close();   // köprülü sayfa AYNI tmux oturumuna bağlı kalırsa OSC 52'yi o alır ve panoyu doldurur → kontrol kirlenir
