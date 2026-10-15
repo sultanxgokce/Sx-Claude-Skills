@@ -1,7 +1,7 @@
 {
   "is": "denetci-kare",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T17:14:54+03:00",
+  "guncelleme": "2026-10-15T17:21:31+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -80,7 +80,40 @@
       "renk": "yesil",
       "zaman": "2026-10-15T17:14:54+03:00",
       "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tur3-yapisal-ayristirma-K2d-K2e-K2f-162",
+      "asama": "sonra",
+      "dosya": "olcum-tur3-yapisal-ayristirma-K2d-K2e-K2f-162-sonra.txt",
+      "sha256": "805396b4e77d11345110b5e560339090f417c72d223eccf415b7af40b371f7e9",
+      "komut": [
+        "grep",
+        "-E",
+        "K2|SONUÇ|real",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/sx331-test3.txt"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T17:21:31+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tur3-gercek-gorseller-gecer-sahte-duser",
+      "asama": "sonra",
+      "dosya": "olcum-tur3-gercek-gorseller-gecer-sahte-duser-sonra.txt",
+      "sha256": "451c19b2440315f4a812d93dbcb6ca4f6e9db3525871e8d2ff35a3d5c403f480",
+      "komut": [
+        "bash",
+        "-c",
+        "P=/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad; for f in /config/evraklar/Sultan/0-Gelen/nexus_panel-bakinca-anlasilsin-kareler/sonra-e1-1440.png /config/evraklar/Sultan/0-Gelen/nexus_panel-bakinca-anlasilsin-kareler/sonra-e3-390.png $(find /config/evraklar -name \"*.jpg\" -size +5k -size -400k 2>/dev/null | head -3) $P/s.jpg; do echo \"$(basename $f): [$(python3 $P/dogrula.py $f)] (boş = geçerli görsel)\"; done"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T17:21:31+03:00",
+      "sure_sn": 0.2
     }
   ],
-  "imza": "6b227e90aa525c2f2901bf7512ef520bface87dbe2924874495e5766b66dc639"
+  "imza": "10d75c20f1b43f166a178ab69db90244ae00922d501ce4a2265e7906ff62853f"
 }

@@ -1,0 +1,42 @@
+{
+  "tur": 2,
+  "is": "denetci-kare",
+  "pr": "331",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T17:17:02+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 31526,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kareler Codex’e görsel ek olarak bağlanmış, istem ve DENETIM kaydına işlenmiş; eksik dosya, sekiz kare sınırı ve yedek göz davranışı da talep yönünde kurulmuş. Ancak görsel geçerlilik kapısı özellikle JPEG’de gerçek bir görüntüyü doğrulamıyor; biçimsel işaretler serpiştirilmiş bozuk veri kabul edilebildiği için önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "JPEG doğrulaması dosyayı ayrıştırmıyor; SOI/EOI uçlarını ve herhangi bir yerde geçen üç SOF bayt dizisinden birini arıyor. Bu nedenle başı SOI, sonu EOI olan ve ortasına `ff c0` eklenmiş düz/bozuk veri görsel olmadığı hâlde kabul edilebilir.",
+        "kanit": "`jpg(b)` yalnız `b[:3]`, `b[-2:]` ve `any(m in b for m in (b'\\xff\\xc0', ...))` koşullarını denetliyor. Yeni K2c sınavı ise yalnız EOI/SOF bulunmayan sahte JPEG’i reddetmeyi ölçüyor; işaretleri taşıyan fakat geçersiz yapıdaki dosya için kapı yok.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:58-63; yazilim-fabrikasi/scripts/denetci.test.sh:414-426",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "PNG doğrulaması yığın CRC’leri ile IHDR/IEND sırasını denetlese de gerçek görüntü verisi bulunduğunu veya IHDR alanlarının geçerli olduğunu doğrulamıyor; geçerli CRC’li IHDR+IEND gibi çizilemeyen bir dosya kapıdan geçebilir.",
+        "kanit": "`png(b)` başarı için ilk yığının IHDR, son yığının IEND olmasını ve CRC’leri şart koşuyor; IDAT varlığına, IHDR uzunluğuna/boyutlarına ya da çözülebilir piksel akışına ilişkin koşul bulunmuyor. K2b yalnız kesik PNG’yi sınıyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:43-57; yazilim-fabrikasi/scripts/denetci.test.sh:413-424",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önce kaydı özelliğin yokluğunu, sonra kayıtları yeni K1-K7/K2b/K2c kapılarını ve 158/158 sonucu gösteriyor; ayrıca CI ölçümü 116 saniye ve birleşik koşum yaklaşık 202 saniye olduğundan 300 saniye kabulü destekleniyor. Gerçek küçük PNG/JPEG kullanılmış ve sahte Codex argv’sinde iki `-i` eki ölçülmüş; buna karşılık görsel-geçerlilik sınavları tam çözümleme yapmayan üretim doğrulayıcısının yukarıdaki kabul kaçaklarını kapsamıyor."
+  }
+}

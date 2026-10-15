@@ -1,0 +1,12 @@
+$ grep -E K2|SONUÇ|real /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/sx331-test3.txt
+# rc=0 sure=0.0s zaman=2026-10-15T17:21:31+03:00
+--- stdout ---
+  ✓ K2 uzantısı .png ama içi görsel değil → rc=2 (imza ölçülür, ad değil)
+  ✓ K2b 🔴 imzası doğru ama KESİK PNG → rc=2 (yapı ölçülür, ilk baytlar değil — göz #331 tur 1)
+  ✓ K2c 🔴 JPEG başlığı + düz metin (EOI/SOF yok) → rc=2
+  ✓ K2d 🔴 SOI + serpiştirilmiş SOF işareti + EOI ama bölüm yapısı yok → rc=2 (göz #331 tur 2)
+  ✓ K2e 🔴 CRC'leri doğru IHDR+IEND, piksel verisi (IDAT) yok → rc=2
+  ✓ K2f 🔴 IDAT açılıyor ama boyutu 2×2 RGB'ye tutmuyor → rc=2
+── SONUÇ: 162 geçti · 0 kaldı ──
+real	3m4.094s
+--- stderr ---

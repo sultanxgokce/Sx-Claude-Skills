@@ -46,27 +46,64 @@ KARE_TAVAN=8
 [ "${#KARELER[@]}" -le "$KARE_TAVAN" ] || { _hata "--kare en çok $KARE_TAVAN (verilen ${#KARELER[@]}) — en çok tartışılacak kareleri seç"; exit 2; }
 for _k in "${KARELER[@]}"; do
   [ -f "$_k" ] || { _hata "--kare dosyası yok: $_k (sessiz atlanmaz)"; exit 2; }
-  # Yapı TAM doğrulanır (göz #331 tur 1: yalnız ilk baytlar bozuk/kesik dosyayı geçiriyordu): PNG = imza + IHDR + her yığının CRC'si
-  #   tutar + IEND ile biter; JPEG = SOI + en az bir SOF + EOI ile biter. Yalnız standart kütüphane (CI'da PIL yok).
+  # Yapı TAM doğrulanır (göz #331 tur 1-2): PNG = imza + CRC'li yığınlar + geçerli IHDR + IDAT AÇILIR ve boyutu w×h'ye tutar + IEND;
+  #   JPEG = bölümler sırayla okunur (SOI → geçerli SOF → SOS → entropi → EOI tam sonda). Yalnız standart kütüphane (CI'da PIL yok).
   _kd="$(python3 - "$_k" <<'PYK'
 import sys,struct,zlib
 b=open(sys.argv[1],'rb').read()
 def png(b):
     if b[:8]!=b'\x89PNG\r\n\x1a\n': return 'png imzası yok'
-    i=8; ilk=True; son=None
+    i=8; ilk=True; son=None; ihdr=None; idat=b''
     while i+12<=len(b):
         n,=struct.unpack('>I',b[i:i+4]); t=b[i+4:i+8]
         if i+12+n>len(b): return 'kesik yığın ('+t.decode('latin1')+')'
         if zlib.crc32(t+b[i+8:i+8+n])&0xffffffff!=struct.unpack('>I',b[i+8+n:i+12+n])[0]: return 'CRC tutmuyor ('+t.decode('latin1')+')'
         if ilk and t!=b'IHDR': return 'ilk yığın IHDR değil'
+        if t==b'IHDR': ihdr=b[i+8:i+8+n]
+        if t==b'IDAT': idat+=b[i+8:i+8+n]
         ilk=False; son=t; i+=12+n
         if t==b'IEND': break
-    return '' if son==b'IEND' and i==len(b) else 'IEND ile bitmiyor (kesik)'
-def jpg(b):
-    if b[:3]!=b'\xff\xd8\xff': return 'jpeg imzası yok'
-    if b[-2:]!=b'\xff\xd9': return 'EOI ile bitmiyor (kesik)'
-    if not any(m in b for m in (b'\xff\xc0',b'\xff\xc1',b'\xff\xc2')): return 'SOF yok (görüntü çerçevesi yok)'
+    if not (son==b'IEND' and i==len(b)): return 'IEND ile bitmiyor (kesik)'
+    # göz #331 tur 2: CRC'li IHDR+IEND de "görüntü" değildir — başlık alanları geçerli olmalı ve piksel akışı AÇILIP boyutu tutmalı
+    if ihdr is None or len(ihdr)!=13: return 'IHDR 13 bayt değil'
+    w,h,bd,ct,cm,fm,il=struct.unpack('>IIBBBBB',ihdr)
+    kanal={0:1,2:3,3:1,4:2,6:4}.get(ct); izinli={0:(1,2,4,8,16),2:(8,16),3:(1,2,4,8),4:(8,16),6:(8,16)}
+    if not (0<w<=100000 and 0<h<=100000): return 'IHDR boyutu geçersiz'
+    if kanal is None or bd not in izinli[ct] or cm!=0 or fm!=0 or il not in (0,1): return 'IHDR alanları geçersiz'
+    if not idat: return 'IDAT yok (piksel verisi yok)'
+    try: ham=zlib.decompress(idat)
+    except zlib.error: return 'piksel akışı açılmıyor'
+    if il==0:
+        sb=(w*kanal*bd+7)//8
+        if len(ham)!=h*(1+sb): return 'piksel akışı boyutu tutmuyor'
+        if any(ham[r*(1+sb)]>4 for r in range(h)): return 'satır süzgeci geçersiz'
+    elif not ham: return 'piksel akışı boş'
     return ''
+def jpg(b):
+    # göz #331 tur 2: işaret aramak yetmez — bölümler SIRAYLA okunur: SOI → (uzunluklu bölümler) → geçerli SOF → SOS → entropi verisi → … → EOI tam sonda
+    if b[:2]!=b'\xff\xd8': return 'jpeg imzası yok'
+    SOF=set(range(0xc0,0xd0))-{0xc4,0xc8,0xcc}; i=2; sof=False; sos=0; n=len(b)
+    while True:
+        if i+2>n or b[i]!=0xff: return 'bölüm sırası bozuk (kesik ya da düz veri)'
+        while i+1<n and b[i+1]==0xff: i+=1
+        if i+2>n: return 'kesik'
+        m=b[i+1]
+        if m==0xd9: return '' if (sof and sos and i+2==n) else ('EOI tam sonda değil' if i+2!=n else 'SOF/SOS olmadan EOI')
+        if m==0x01 or 0xd0<=m<=0xd7: i+=2; continue
+        if i+4>n: return 'kesik bölüm'
+        L=(b[i+2]<<8)|b[i+3]
+        if L<2 or i+2+L>n: return 'bölüm uzunluğu taşıyor (kesik)'
+        if m in SOF:
+            if L<8: return 'SOF kısa'
+            hh=(b[i+5]<<8)|b[i+6]; ww=(b[i+7]<<8)|b[i+8]; nc=b[i+9]
+            if not (hh>0 and ww>0 and nc>=1 and L==8+3*nc): return 'SOF alanları geçersiz'
+            sof=True
+        i+=2+L
+        if m==0xda:
+            if not sof: return 'SOF olmadan SOS'
+            sos+=1
+            while i+1<n and not (b[i]==0xff and b[i+1]!=0x00 and not 0xd0<=b[i+1]<=0xd7): i+=1
+            if i+1>=n: return 'EOI ile bitmiyor (kesik)'
 print(png(b) if b[:4]==b'\x89PNG' else jpg(b) if b[:2]==b'\xff\xd8' else 'PNG/JPG imzası yok')
 PYK
 )"

@@ -417,6 +417,15 @@ PYP
   printf '%s' '/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA0JCgsKCA0LCgsODg0PEyAVExISEyccHhcgLikxMC4pLSwzOko+MzZGNywtQFdBRkxOUlNSMj5aYVpQYEpRUk//2wBDAQ4ODhMREyYVFSZPNS01T09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0//wAARCAACAAIDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDCooorzj7E/9k=' | base64 -d > "$T/k2.jpg"
   printf 'duz metin' > "$T/k3.png"
   head -c 40 "$T/k1.png" > "$T/k4-kesik.png"; printf '\xff\xd8\xff\xe0%s' "sahte-kare-2" > "$T/k5-sahte.jpg"
+  # göz #331 tur 2: işaretleri TAŞIYAN ama görüntü olmayan dosyalar (yapı ölçülür, işaret araması değil)
+  printf '\xff\xd8duz veri \xff\xc0 serpistirilmis \xff\xd9' > "$T/k6-isaretli.jpg"
+  python3 - "$T/k7-idatsiz.png" "$T/k8-boy.png" <<'PYP'
+import sys,struct,zlib
+def y(t,d): return struct.pack('>I',len(d))+t+d+struct.pack('>I',zlib.crc32(t+d)&0xffffffff)
+ih=y(b'IHDR',struct.pack('>IIBBBBB',2,2,8,2,0,0,0))
+open(sys.argv[1],'wb').write(b'\x89PNG\r\n\x1a\n'+ih+y(b'IEND',b''))
+open(sys.argv[2],'wb').write(b'\x89PNG\r\n\x1a\n'+ih+y(b'IDAT',zlib.compress(b'\x00\x01\x02'))+y(b'IEND',b''))
+PYP
   bash "$K" olcum is-k olc --asama tek -- echo 1 >/dev/null 2>&1
   SAHTE_JSON="$(J 5 E "")" bash "$D" is-k --diff "$T/y.patch" --kart "$T/kart.md" --kare "$T/yok.png" >"$T/k0.out" 2>&1; RC=$?
   [ "$RC" -eq 2 ] && grep -q "dosyası yok" "$T/k0.out" && [ ! -e "$T/_agents/fabrika/kanit/is-k/DENETIM-1.json" ]; g $? "K1 --kare dosyası yoksa rc=2, denetim AÇILMAZ (sessiz atlama yok)"
@@ -426,6 +435,10 @@ PYP
   [ "$RC" -eq 2 ] && grep -q "kesik" "$T/k0d.out"; g $? "K2b 🔴 imzası doğru ama KESİK PNG → rc=2 (yapı ölçülür, ilk baytlar değil — göz #331 tur 1)"
   SAHTE_JSON="$(J 5 E "")" bash "$D" is-k --diff "$T/y.patch" --kart "$T/kart.md" --kare "$T/k5-sahte.jpg" >"$T/k0e.out" 2>&1; RC=$?
   [ "$RC" -eq 2 ] && grep -q "geçerli görsel değil" "$T/k0e.out"; g $? "K2c 🔴 JPEG başlığı + düz metin (EOI/SOF yok) → rc=2"
+  for _s in "k6-isaretli.jpg:K2d 🔴 SOI + serpiştirilmiş SOF işareti + EOI ama bölüm yapısı yok → rc=2 (göz #331 tur 2)" "k7-idatsiz.png:K2e 🔴 CRC'leri doğru IHDR+IEND, piksel verisi (IDAT) yok → rc=2" "k8-boy.png:K2f 🔴 IDAT açılıyor ama boyutu 2×2 RGB'ye tutmuyor → rc=2"; do
+    SAHTE_JSON="$(J 5 E "")" bash "$D" is-k --diff "$T/y.patch" --kart "$T/kart.md" --kare "$T/${_s%%:*}" >"$T/k0f.out" 2>&1; RC=$?
+    [ "$RC" -eq 2 ] && grep -q "geçerli görsel değil" "$T/k0f.out"; g $? "${_s#*:}"
+  done
   ( K9=(); for i in 1 2 3 4 5 6 7 8 9; do K9+=(--kare "$T/k1.png"); done; SAHTE_JSON="$(J 5 E "")" bash "$D" is-k --diff "$T/y.patch" --kart "$T/kart.md" "${K9[@]}" >"$T/k0c.out" 2>&1; echo $? > "$T/k0c.rc" )
   [ "$(cat "$T/k0c.rc")" -eq 2 ] && grep -q "en çok 8" "$T/k0c.out"; g $? "K3 9 kare → rc=2 (tavan 8)"
   SAHTE_ISTEM_KOPYA="$T/k-istem.md" SAHTE_JSON="$(J 5 E "")" bash "$D" is-k --diff "$T/y.patch" --kart "$T/kart.md" --kare "$T/k1.png" --kare "$T/k2.jpg" >"$T/k4.out" 2>&1; RC=$?
