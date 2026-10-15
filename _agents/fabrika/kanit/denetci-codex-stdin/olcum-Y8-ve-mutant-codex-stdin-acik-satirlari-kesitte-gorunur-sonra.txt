@@ -1,0 +1,8 @@
+$ bash -c echo "=== Yalnız Y8 kapısı + codex-stdin-acik mutant satırı + toplam (göz tur 1: kesit 60 satırda kesiliyordu) ==="; bash yazilim-fabrikasi/scripts/denetci.test.sh 2>&1 | grep -E "Y8|codex-stdin-acik|SONUÇ"; [ ${PIPESTATUS[0]} = 0 ]
+# rc=0 sure=341.7s zaman=2026-10-15T10:51:00+03:00
+--- stdout ---
+=== Yalnız Y8 kapısı + codex-stdin-acik mutant satırı + toplam (göz tur 1: kesit 60 satırda kesiliyordu) ===
+════ Y8 · codex STDIN KAPALI: çağıranın stdin'i hiç kapanmasa da denetçi biter (15 Eki, 68 dk asılı kaldı) ════
+  ✓ mutant 'codex-stdin-acik' sınavı KIRMIZI yapıyor
+── SONUÇ: 149 geçti · 0 kaldı ──
+--- stderr ---

@@ -5,6 +5,15 @@ version: 2.9.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
+## 🆕 Pano köprüsü 1.2.0 — Safari'de kopyalama (2.6.3 · 15 Eki, Sultan: "Safari'de metin kopyalanmıyor")
+Safari pano yazımını yalnız kullanıcı hareketi İÇİNDE geçirir; tmux seçimi OSC 52 ile geç geldiğinden `writeText`
+"request is not allowed by the user agent" ile düşüyordu (Chrome geçiriyordu). Üç ayak: **(1)** sürükleme/çift tık biterken
+(`mouseup`) `clipboard.write(ClipboardItem{text/plain: Promise})` eşzamanlı çağrılır, OSC 52 gelince söz çözülür (1,5 sn'de
+gelmezse reddedilir, pano değişmez; Chromium'da da aynı yol); **(2)** yazım reddedilirse sağ altta tıklanabilir **Kopyala** düğmesi
+(tıklama = hareket, `writeText` o anda geçer); **(3)** Shift+sürükle seçimini `copy` olayında köprü kendisi yazar — odak terminalden
+kaçsa da. Sınav `kapi/pano-sinav.mjs` S1–S6 (gerçek ttyd+tmux, Chromium; Safari taklidi: `writeText`/`write` reddi). Kabul: Sultan'ın
+Safari'de 10 sn denemesi. ⚠ WebKit bu kutuda açılmıyor (kütüphane eksik); Safari'nin kendisi ölçülmedi.
+
 ## Düzen (neyi koruyoruz)
 | Parça | Ne | Sağlam sayılma ölçüsü |
 |---|---|---|
@@ -350,6 +359,11 @@ ssh yok, kayıtlar yerel, tek komut.
   `--liste` 6. sütun: ne beklediği (yalnız bu hâlde) — **bu beceri yalnız ÖLÇER ve veriyi kapıya verir; görünür çizim (⏳ ikon,
   üstüne gelince "ne bekliyor") terminal-merkez şeridindedir (cloudtop #621), bu PR'ın kapsamı değildir.** Öncelik: soru > çalışıyor > sınırda > girdi > dış olay > boş.
   `kapi/koltuklar.mjs` `ne` alanını taşır. Sınav: koltuk-bagla D1 (6 alan) · D13a-d. Boş kutu ölçümünde U+00A0 boşluk sayılır.
+- **2.6.2 (2026-10-15, BÂNİ · gorev_01M4XM9MCBR01PF0S6ETWR2EQD, Sultan 01:45 "kopyalandı yazıyor ama kopyalanmıyor"):** pano köprüsü 1.1.0 — seçimsiz
+  **Cmd+C (copy olayı) son tmux seçimini panoya GERİ yazar**; xterm.js'in boş seçimle olayı doldurması önce bizde yakalanır. Bildirim
+  "yapışmazsa Cmd+C'ye bas" der. Hermetik ölçümde (Linux Chromium) panonun silindiği DOĞRULANAMADI (copy olayı engellenmemiş, pano
+  değişmemiş); Mac Chrome'daki kök neden açık. Kapı: pano-sinav K7 (eski köprüde kırmızı, yeni köprüde yeşil). Son seçim **10 dk**
+  tutulur (K7b: bayat seçim panoyu ezmez) — göz tur 1.
 - **2.6.1 (2026-10-15, BÂNİ · SERDAR bulgu paketi 3 tekiller S-11 + S-7):** `kur.sh` ortak.sh kutu adını reddedince tek satır
   sebeple durur (rc 3; eskiden 'TTYD_BIN: unbound variable'). Yerel kopya ortak koddan FARKLIYSA bağlama DURUR ve farkı listeler
   (rc 8; REVAK 12 Eki: 863 satırlık sınavlı yerel değişiklik ezilmişti) — bilinçli ezmek `TERMINAL_KUR_FARK_KABUL=1`, kopya yine

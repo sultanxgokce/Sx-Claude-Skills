@@ -1,0 +1,32 @@
+{
+  "tur": 3,
+  "is": "fabrika-kart-tek-kaynak",
+  "pr": "322",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T08:28:39+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 55624,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Hünkârım, iş alanı kart kopyası kaldırılmış, olağan denetçi ve reis/Sultan yolları birincil karta bağlanmış, kanıt dizinine KART.json anlık kopyası eklenmiş ve kapatma süzgeci güvenli yönde daraltılmış. Lakin geçerli bir `--kart` verilince denetçi birincil depoyu bütünüyle aşarak başka dosyayı iş kartı ve KART.json kaynağı yapabiliyor; “kart TEK kaynak” hükmü bu açık kapıyla doğru şey olarak tamamlanmış sayılmaz, önce bunu çözünüz.",
+    "bulgular": [
+      {
+        "ne": "Geçerli `--kart` seçeneği tek-kaynak kuralını atlıyor: denetçi bu durumda `kart_yolu`nu hiç çağırmıyor, verilen herhangi bir okunabilir dosyayı değerlendirme istemine ve kanıt dizinindeki KART.json'a taşıyor.",
+        "kanit": "Kod yalnız `KART` boşsa `KART=\"$(kart_yolu)\"` çalıştırıyor; doluysa sadece `-r` denetimi yapıyor, ardından aynı dosyayı önce `$DZ/KART.json`, sonra `$TMP/kart.md` olarak kopyalıyor. Eklenen sınav da yalnız var olmayan `--kart` dosyasının rc=3 vermesini ölçüyor; okunabilir fakat birincil karttan farklı dosyanın reddedildiği bir sınav yok.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:196-202; yazilim-fabrikasi/scripts/denetci.test.sh: TW bölümündeki `--kart \"$T/yok-boyle-kart.md\"` vakası",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam, sarı kayıt yok; iş-alanı ölçümü ile iki mutasyon çıktısı kartın kopyalanmaması ve kapatma davranışını doğrudan gösteriyor. Ancak denetçi ölçüm dosyalarının verilen ilk 60 satırı yeni TW iddialarının yalnız başlığında kesiliyor; dolayısıyla birincil kart, KART.json ve reis/Sultan rc=3 savları ayrıntılı ölçüm çıktısıyla görünür değil, ayrıca önce/sonra ölçüm çifti yok. En önemlisi, geçerli fakat birincil olmayan `--kart` için olumlu ya da mutasyonlu bir ölçüm bulunmuyor."
+  }
+}

@@ -1,0 +1,57 @@
+$ bash yazilim-fabrikasi/scripts/is-alani.test.sh
+# rc=0 sure=0.7s zaman=2026-10-15T07:51:45+03:00
+--- stdout ---
+════ T0 · kanca-kur: şablondan kopyalar, hooksPath ayarlar, idempotent ════
+  ✓ kanca kuruldu
+  ✓ pre-commit dosyası var ve çalıştırılabilir
+  ✓ core.hooksPath=.githooks
+  ✓ ikinci kurulum: dokunmadı (idempotent)
+════ T1 · paylaşılan ağaç · main → SERBEST ════
+  ✓ main'e commit atılabildi
+  ✓ commit gerçekten düştü
+════ T2 · paylaşılan ağaç · özellik dalı → BLOKE ════
+  ✓ commit ENGELLENDİ (rc=1)
+  ✓ ne yapılacağı komutla yazılı
+  ✓ commit gerçekten düşmedi
+════ T3 · acil kaçış ════
+  ✓ PAYLASILAN_COMMIT=1 ile geçilebiliyor
+════ T4 · ac: kendi alanı, origin/main'den, <depo>-<iş> adıyla ════
+  ✓ alan açıldı
+  ✓ kart iş alanına KOPYALANMADI (tek kaynak birincil; 15 Eki — kopya bayatlıyor ve PR'la birincil pull'unu tıkıyordu)
+  ✓ açılış mesajı kartın birincilde kaldığını söylüyor
+  ✓ origin/main üstünde açtığını söylüyor
+  ✓ paylaşılan-kaynak uyarısı basıldı
+  ✓ kapsam bakılmadığını SÖYLÜYOR (sessiz atlama yok)
+  ✓ worktree dizini <depo>-<iş> adıyla var
+  ✓ İZOLE alanda özellik dalına commit SERBEST
+  ✓ commit düştü
+  ✓ aynı adla ikinci açılış REDDEDİLDİ
+════ T5 · kontrol üç durum ════
+  ✓ izole alanda: güvenli (IS_ALANI_DEPO dışarıdan verilmişken bile)
+  ✓ paylaşılan+main: güvenli
+  ✓ paylaşılan+özellik dalı: rc=1
+  ✓ riskli olduğunu söylüyor
+════ T6 · kapat: kirli alanı silmez ════
+  ✓ kayıtsız değişiklik varken KAPATMADI
+  ✓ alan yerinde (iş kaybı yok)
+  ✓ 🔴 kartlar/ altında İZLENEN+DEĞİŞMİŞ dosya varken KAPATMADI (iş sayıldı)
+  ✓ izlenen kart dosyası SİLİNMEDİ, değişiklik yerinde (iş kaybı yok)
+  ✓ indekse EKLENMİŞ (A) kart dosyası da iş: kapatmadı, silmedi
+  ✓ temizken kapatıldı — kartlar/ altındaki kayıtsız kopya 'kayıtsız iş' SAYILMADI (kart birincilde)
+════ T7 · kapsam kontrolü (sahte gh): çakışma → rc=2, açmaz; temiz → açar ════
+  ✓ çakışmada rc=2
+  ✓ hangi PR'la çakıştığı yazılı
+  ✓ alan AÇILMADI
+  ✓ çakışma yokken rc=0
+  ✓ kaç PR'a bakıldığı yazılı
+════ T8 · gh DÜŞÜNCE (yetkisiz/ağsız): ölçülemedi der, yine açar (sessiz atlama yok) ════
+  ✓ kapsam kontrolü yapılamadığını söyledi
+  ✓ alan yine açıldı
+════ T9 · worktree İÇİNDEN çağrı: birincil depo bulunur, yol çift ad almaz (13 Eki) ════
+  ✓ worktree içinden 'ac': alan <depo>-<iş> (çift ad değil)
+  ✓ worktree içinden 'kapat': doğru alanı buldu ve kaldırdı
+════ T10 · olmayan alanı kapatmak YEŞİL değil (rc 2, sahte başarı yok) ════
+  ✓ olmayan alan → rc 2 + 'YOK' (eskiden rc 0 'zaten yok')
+
+── SONUÇ: 40 geçti · 0 kaldı ──
+--- stderr ---

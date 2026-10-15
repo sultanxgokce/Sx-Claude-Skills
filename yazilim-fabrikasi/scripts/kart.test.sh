@@ -40,7 +40,7 @@ echo "════ T4 · is-alani ac kart ister; kartı worktree'ye taşır ═�
 bash "$IA" ac kartsiz-is >/dev/null 2>&1; [ $? -eq 1 ]; g $? "kartsız iş alanı açılmaz (rc=1)"
 bash "$IA" ac kartsiz-is --kartsiz >/dev/null 2>&1; g $? "--kartsiz kaçışıyla açılır (gerekçe loglanır)"
 bash "$IA" ac is-1 >/dev/null 2>&1; g $? "kartlı iş alanı açıldı"
-[ -f "$T/alan/depo-is-1/_agents/fabrika/kartlar/is-1.json" ]; g $? "kart worktree'de de var"
+[ ! -e "$T/alan/depo-is-1/_agents/fabrika/kartlar/is-1.json" ] && [ -f "$T/depo/_agents/fabrika/kartlar/is-1.json" ]; g $? "kart yalnız BİRİNCİL depoda, worktree'ye KOPYALANMADI (0.6.2 tek kaynak; kopya bayatlıyordu)"
 
 echo "════ T5 · worktree içinden bitti: denetim puanı ve kanıt karta işlenir (kart birincilde) ════"
 cd "$T/alan/depo-is-1"

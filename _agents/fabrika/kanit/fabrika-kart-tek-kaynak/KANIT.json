@@ -1,0 +1,161 @@
+{
+  "is": "fabrika-kart-tek-kaynak",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T10:00:29+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "denetci-test-130-kapi-TW-ve-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-test-130-kapi-TW-ve-mutant-sonra.txt",
+      "sha256": "f4a0982824cea59699c3d485ab744e6bf5475e53b4b6a31ad34d7fc416d6075c",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T06:36:49+03:00",
+      "sure_sn": 152.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "is-alani-test-37-kapi",
+      "asama": "sonra",
+      "dosya": "olcum-is-alani-test-37-kapi-sonra.txt",
+      "sha256": "f9b4830bbd0fd7355a5cd25c4550d1caa6c13aed05bfab7eba703ea9ab874022",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/is-alani.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T06:36:50+03:00",
+      "sure_sn": 0.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-kart-kanit-birlestirme-kapisi",
+      "asama": "sonra",
+      "dosya": "olcum-gerileme-kart-kanit-birlestirme-kapisi-sonra.txt",
+      "sha256": "c0a98bbdd986ff2edefefce506433ea5fba0135124fff71f7fcdb720582f29f8",
+      "komut": [
+        "bash",
+        "-c",
+        "bash yazilim-fabrikasi/scripts/kart.test.sh | tail -1; bash yazilim-fabrikasi/scripts/kanit.test.sh | tail -1; bash yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh | tail -1"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T06:37:22+03:00",
+      "sure_sn": 6.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "MUTASYON-KANITI-beklenen-kirmizi-is-alani-kart-kopyasi-geri-kondu",
+      "asama": "sonra",
+      "dosya": "olcum-MUTASYON-KANITI-beklenen-kirmizi-is-alani-kart-kopyasi-geri-kondu-sonra.txt",
+      "sha256": "81131ab7f2bc7c6be8d55970371b4edd707c5e4ab233acab2d13eb3585b2750e",
+      "komut": [
+        "bash",
+        "-c",
+        "echo \"=== MUTASYON KANITI: kod BİLEREK bozuldu (geçici kopyada is-alani ac kartı yine kopyalıyor, kapat kopyayı yine kayıtsız iş sayıyor). Aşağıdaki KIRMIZI satırlar BEKLENENDİR; rc=0 = sınav bozuk kodu YAKALADI. Gerçek ölçüm: is-alani-test-37-kapi ===\"; bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut-fab-4108331/yazilim-fabrikasi/scripts/is-alani.test.sh; [ $? = 1 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T06:36:58+03:00",
+      "sure_sn": 0.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "MUTASYON-KANITI-beklenen-kirmizi-is-alani-izlenen-kart-suzgeci-eski-haline",
+      "asama": "sonra",
+      "dosya": "olcum-MUTASYON-KANITI-beklenen-kirmizi-is-alani-izlenen-kart-suzgeci-eski-haline-sonra.txt",
+      "sha256": "a3b445d3d9f84f39dc978ae14423222761cd31f38a8aa01387d0c139d4df0d46",
+      "komut": [
+        "bash",
+        "-c",
+        "echo '=== MUTASYON KANITI: kapat süzgeci eski hâline (yol metni eşlemesi) BOZULDU; aşağıdaki KIRMIZI BEKLENENDİR; rc=0 = sınav bozuk kodu YAKALADI. Gerçek ölçüm: is-alani-test-40-kapi ==='; bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut2-isalani-1792039903/is-alani.test.sh 2>&1 | grep -E '✗|SONUÇ'; [ ${PIPESTATUS[0]} = 1 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T07:51:44+03:00",
+      "sure_sn": 0.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "is-alani-test-40-kapi-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-is-alani-test-40-kapi-tur2-sonra.txt",
+      "sha256": "77b5bb84dfd6b58fce9c3153393bfa37b75a1e4b8fc62b044a23f605d6555351",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/is-alani.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T07:51:45+03:00",
+      "sure_sn": 0.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-test-137-kapi-tur2-TW-bayat-kopya-KARTjson-kart-yok-ve-2-yeni-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-test-137-kapi-tur2-TW-bayat-kopya-KARTjson-kart-yok-ve-2-yeni-mutant-sonra.txt",
+      "sha256": "181c96342b4d692fb14cc25f94ff1beaf5c5ade13b03b4fa6450f52adec4880f",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T08:15:10+03:00",
+      "sure_sn": 253.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-test-140-kapi-tur3-reis-sultan-kapisi-bayat-kopya-rc3-ve-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-test-140-kapi-tur3-reis-sultan-kapisi-bayat-kopya-rc3-ve-mutant-sonra.txt",
+      "sha256": "21a4c54d8a34bf9455401c0d96fd67ae2a1d9683ca8d7f69a021be4329024f73",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T08:26:27+03:00",
+      "sure_sn": 238.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-test-143-kapi-tur4-kart-secenegi-tek-kaynagi-asamaz-ve-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-test-143-kapi-tur4-kart-secenegi-tek-kaynagi-asamaz-ve-mutant-sonra.txt",
+      "sha256": "482e6259666efb97c35445c1973dac62c2a576438707b3bddc9f93cb6e4c46af",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T08:39:06+03:00",
+      "sure_sn": 291.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-test-147-kapi-tur4-sonrasi-okunan-yol-birincil-ve-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-test-147-kapi-tur4-sonrasi-okunan-yol-birincil-ve-mutant-sonra.txt",
+      "sha256": "565e98c6e3cbf9d9a84b7f03fff9dd1a225ade05611f4ee8ff045c6be7c1215c",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T10:00:29+03:00",
+      "sure_sn": 265.4
+    }
+  ],
+  "imza": "1591e692505b7aa5f7eede6181bd233bc0988cd74c3dfcd764e0e6a6da4bbcbe"
+}

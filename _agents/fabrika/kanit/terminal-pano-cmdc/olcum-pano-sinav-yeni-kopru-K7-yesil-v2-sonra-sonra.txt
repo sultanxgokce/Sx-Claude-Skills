@@ -1,0 +1,10 @@
+$ bash -c node terminal-onar/kapi/pano-sinav.mjs 2>&1 | grep -E "✗|K[5-7]|bilgi|geçti|kaldı|ÖLÇÜLEMEDİ|kapı:"; exit ${PIPESTATUS[0]}
+# rc=0 sure=12.3s zaman=2026-10-15T02:07:28+03:00
+--- stdout ---
+  ✓ K7a tarayıcı kopya kısayolu gerçekten copy olayı üretti (ölçüm aracı çalışıyor)
+     (bilgi) copy olayı sonrası: engellendi=null olayın metni=null pano="SECILECEK-SATIR-ABC"
+  ✓ K7 seçimsiz ⌘C son tmux seçimini panoya GERİ yazar (pano başka şeyle dolmuş olsa da)
+  ✓ K5a son tmux seçimi varken Cmd+C ipucu BASILMAZ (yol zaten çalışıyor)
+  ✓ K5 Cmd+C seçimsiz ve son seçimsiz basılınca yol gösterilir (Shift basılı sürükle ipucu)
+  ✓ K6 Shift basılı sürükleme TARAYICI seçimi yapar (Cmd+C ile kopyalanabilir)
+--- stderr ---

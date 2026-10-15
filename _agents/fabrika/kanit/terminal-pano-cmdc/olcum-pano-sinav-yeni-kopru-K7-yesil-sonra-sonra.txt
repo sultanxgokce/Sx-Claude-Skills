@@ -1,0 +1,10 @@
+$ bash -c node terminal-onar/kapi/pano-sinav.mjs 2>&1 | grep -E "✗|K7|bilgi|geçti|kaldı|ÖLÇÜLEMEDİ|kapı"; exit ${PIPESTATUS[0]}
+# rc=1 sure=13.9s zaman=2026-10-15T02:05:42+03:00
+--- stdout ---
+  ✗ K7a tarayıcı kopya kısayolu gerçekten copy olayı üretti (ölçüm aracı çalışıyor) → {"olay":0,"engellendi":null,"metin":null}
+     (bilgi) copy olayı sonrası: engellendi=null olayın metni=null pano="SECILECEK-SATIR-ABC"
+  ✓ K7 seçimsiz ⌘C son tmux seçimini panoya GERİ yazar (pano başka şeyle dolmuş olsa da)
+  ✗ K5 Cmd+C seçimsiz basılınca yol gösterilir (Shift basılı sürükle ipucu) → ""
+── N · olumsuz kontrol: köprüsüz kapı (KAPI_PANO=0) aynı ölçümde KIRMIZI
+  · K7a tarayıcı kopya kısayolu gerçekten copy olayı üretti (ölçüm aracı çalışıyor)
+--- stderr ---

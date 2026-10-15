@@ -1,0 +1,7 @@
+$ bash -c echo "=== MUTASYON KANITI: pano.js BİLEREK bozuldu (seçimsiz Cmd+C köprüsü kaldırıldı). Aşağıdaki ✗ K7 BEKLENENDİR; rc=0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-pano-sinav-yeni-kopru-K7-yesil-v2-sonra ==="; node terminal-onar/kapi/pano-sinav.mjs 2>&1 | grep -E "✗|K7 |kaldı"; [ ${PIPESTATUS[0]} = 1 ]
+# rc=0 sure=12.4s zaman=2026-10-15T02:08:18+03:00
+--- stdout ---
+=== MUTASYON KANITI: pano.js BİLEREK bozuldu (seçimsiz Cmd+C köprüsü kaldırıldı). Aşağıdaki ✗ K7 BEKLENENDİR; rc=0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-pano-sinav-yeni-kopru-K7-yesil-v2-sonra ===
+  ✗ K7 seçimsiz ⌘C son tmux seçimini panoya GERİ yazar (pano başka şeyle dolmuş olsa da) → pano="pano-baska-seyle-doldu"
+  · K7 seçimsiz ⌘C son tmux seçimini panoya GERİ yazar (pano başka şeyle dolmuş olsa da)
+--- stderr ---

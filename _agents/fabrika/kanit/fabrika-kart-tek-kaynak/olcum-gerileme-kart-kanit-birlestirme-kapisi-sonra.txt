@@ -1,0 +1,7 @@
+$ bash -c bash yazilim-fabrikasi/scripts/kart.test.sh | tail -1; bash yazilim-fabrikasi/scripts/kanit.test.sh | tail -1; bash yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh | tail -1
+# rc=0 sure=6.7s zaman=2026-10-15T06:37:22+03:00
+--- stdout ---
+── SONUÇ: 37 geçti · 0 kaldı ──
+── SONUÇ: 62 geçti · 0 kaldı ──
+── SONUÇ: 24 geçti · 0 kaldı ──
+--- stderr ---
