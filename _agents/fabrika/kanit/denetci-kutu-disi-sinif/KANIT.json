@@ -1,7 +1,7 @@
 {
   "is": "denetci-kutu-disi-sinif",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T17:28:39+03:00",
+  "guncelleme": "2026-10-15T18:01:19+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -140,7 +140,53 @@
       "renk": "yesil",
       "zaman": "2026-10-15T17:28:39+03:00",
       "sure_sn": 255.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapilar-rebase-sonrasi",
+      "asama": "sonra",
+      "dosya": "olcum-kapilar-rebase-sonrasi-sonra.txt",
+      "sha256": "cf024115fdbc8040fb187867a32fad3995c2cea8951c8f24b40f1deee7e5668e",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-kutu-disi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T17:57:46+03:00",
+      "sure_sn": 19.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tur-yakiyor-mu-rebase-sonrasi",
+      "asama": "sonra",
+      "dosya": "olcum-tur-yakiyor-mu-rebase-sonrasi-sonra.txt",
+      "sha256": "199c37ddc51192c76e01ad0242c14b580308d41894a0acabd9f37e8c7c8acfd9",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/kd-prob/prob.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-denetci-kutu-disi-sinif/yazilim-fabrikasi/scripts/denetci.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T17:57:48+03:00",
+      "sure_sn": 2.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ana-sinav-rebase-sonrasi",
+      "asama": "sonra",
+      "dosya": "olcum-ana-sinav-rebase-sonrasi-sonra.txt",
+      "sha256": "71aa2c735c5336b14036c9c6ae9fc7ba2e1ae0c2b8311a2a833d07e1265f8bc6",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:01:19+03:00",
+      "sure_sn": 211.5
     }
   ],
-  "imza": "59ab8e5870b0e3be1845904e166c47a2e226d0577da979dfa78169b11874aa87"
+  "imza": "d6a10ce91336348145d710a614d755d4c56c63ff89deb6918a1d8b1f31d0afd5"
 }
