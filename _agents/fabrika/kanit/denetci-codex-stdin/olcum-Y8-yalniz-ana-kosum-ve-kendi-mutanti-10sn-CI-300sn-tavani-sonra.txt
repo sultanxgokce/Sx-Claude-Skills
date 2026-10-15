@@ -1,0 +1,5 @@
+$ bash -c echo "=== Y8 ana koşumda + yalnız kendi mutantında (CI 300 sn tavanı: önceki sürüm 300 sn de Terminated) ==="; s=$(date +%s); bash yazilim-fabrikasi/scripts/denetci.test.sh 2>&1 | grep -E "Y8|stdin 30 sn|codex-stdin-acik|SONUÇ"; rc=${PIPESTATUS[0]}; echo "yerel süre: $(( $(date +%s) - s )) sn (yerel kutu CI runnerdan yavaş
+# rc=2 sure=0.0s zaman=2026-10-15T11:17:16+03:00
+--- stdout ---
+--- stderr ---
+yavaş: -c: line 1: unexpected EOF while looking for matching `"'

@@ -1,0 +1,32 @@
+{
+  "tur": 1,
+  "is": "denetci-codex-stdin",
+  "pr": "323",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T10:45:04+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 13855,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "BÂNİ, kos_codex çağrısının stdin’ini /dev/null’a bağlamış; kapanmayan boru sınavını ve değişikliği öldüren mutantı da eklemiş, yani karttaki derde doğrudan vurmuş. Ancak sunulan ölçüm kesiti Y8 ile mutantın sonucunu göstermediğinden üretime hazır mührü için önce bu kanıt görünür kılınmalı.",
+    "bulgular": [
+      {
+        "ne": "Y8 ve codex-stdin-acik mutantının gerçekten başarıyla çalıştığı, verilen ölçüm çıktısından doğrulanamıyor; yeşil tüm-betik sonucu tek başına bu özel iddianın ölçüldüğünü göstermiyor.",
+        "kanit": "Araç imzalı kayıt rc=0 bildiriyor, fakat ölçümün sunulan ilk 60 satırı T7c sırasında kesiliyor; Y8 sonucu ve codex-stdin-acik mutant satırı kesitte yer almıyor.",
+        "konum": "olcum-denetci-test-149-kapi-Y8-stdin-acik-boru-20sn-biter-ve-mutant-codex-stdin-acik-sonra.txt (sunulan ilk 60 satır)",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve yeşil; fakat yalnız tek bir “sonra” ölçümü var ve görünür çıktı Y8/mutant bölümüne ulaşmıyor. Önce/sonra çifti yok; özel regresyon ile mutant iddiası etiket ve genel rc=0 dışında doğrudan görülemiyor."
+  }
+}
