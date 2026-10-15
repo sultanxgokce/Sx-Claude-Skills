@@ -8,13 +8,17 @@ g() { if [ "$1" -eq 0 ]; then gecen=$((gecen+1)); echo "  ✓ $2"; else kalan=$(
 T="$(mktemp -d)"; ( cd "$T" && git init -q -b main ) >/dev/null 2>&1
 export KANIT_DEPO="$T" FABRIKA_TETIK=/nonexistent
 kart() { bash "$KT" ac "$1" --is x --istedi S --aldi M --geri-alinamaz "${2:-h}" --para h --dis-yuzey h --yetki h >/dev/null 2>&1; }
-den() { # den <iş> <tur> <puan> <E/H> [yazan] [denetci]
+den() { # den <iş> <tur> <puan> <E/H> [yazan] [denetci] [yedek] [yazan_model] [yedek_model]
   mkdir -p "$T/_agents/fabrika/kanit/$1"
-  python3 - "$T/_agents/fabrika/kanit/$1/DENETIM-$2.json" "$2" "$1" "$3" "$4" "${5:-claude}" "${6:-codex}" <<'PY'
+  python3 - "$T/_agents/fabrika/kanit/$1/DENETIM-$2.json" "$2" "$1" "$3" "$4" "${5:-claude}" "${6:-codex}" "${7:-}" "${8:-}" "${9:-}" <<'PY'
 import json,sys,datetime
-p,tur,is_,puan,dogru,yazan,den=sys.argv[1:]
-json.dump({"tur":int(tur),"is":is_,"pr":"7","yazan":yazan,"denetci":den,"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
- "kanit_durumu":"sağlam","sonuc":{"kod_puani":int(puan),"dogru_sey":dogru,"ozet":"o","bulgular":[],"kanit_gorusu":"k"}},open(p,"w"))
+p,tur,is_,puan,dogru,yazan,den,yedek,yazan_model,yedek_model=sys.argv[1:]
+d={"tur":int(tur),"is":is_,"pr":"7","yazan":yazan,"denetci":den,"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
+ "kanit_durumu":"sağlam","sonuc":{"kod_puani":int(puan),"dogru_sey":dogru,"ozet":"o","bulgular":[],"kanit_gorusu":"k"}}
+if yedek: d["yedek"]=yedek
+if yazan_model: d["yazan_model"]=yazan_model
+if yedek_model: d["yedek_model"]=yedek_model
+json.dump(d,open(p,"w"))
 PY
 }
 
@@ -48,6 +52,26 @@ den is-b 1 5 E codex codex
 CIKTI="$(bash "$G" is-b 2>&1)"; RC=$?
 [ "$RC" -eq 1 ]; g $? "aynı model → rc=1"
 grep -q "bağımsız göz değil" <<<"$CIKTI"; g $? "K1 gerekçesi yazılı"
+
+echo "════ T5b · yedek göz + farklı model → bağımsız SAYILIR (Sultan Y0006) ════"
+kart is-b2; bash "$K" olcum is-b2 olc --asama tek -- echo 1 >/dev/null 2>&1
+den is-b2 1 5 E claude "claude (sonnet-5) (YEDEK GÖZ: codex yok)" "codex yok" "opus-4" "sonnet-5"
+CIKTI="$(bash "$G" is-b2 2>&1)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "farklı model → yedek göz bağımsız, rc=0"
+grep -q "K1 bağımsız SAYILDI" <<<"$CIKTI"; g $? "sebebi yazılı"
+
+echo "════ T5c · SAHTE yedek kaydı (yedek_model = yazan_model) → HÂLÂ ENGELLER (fail-closed) ════"
+kart is-b3; bash "$K" olcum is-b3 olc --asama tek -- echo 1 >/dev/null 2>&1
+den is-b3 1 5 E claude "claude (sonnet-5) (YEDEK GÖZ: codex yok)" "codex yok" "sonnet-5" "sonnet-5"
+CIKTI="$(bash "$G" is-b3 2>&1)"; RC=$?
+[ "$RC" -eq 1 ]; g $? "yedek_model = yazan_model → sahte-yedek, rc=1 (fail-closed)"
+grep -q "bağımsız göz değil" <<<"$CIKTI"; g $? "K1 gerekçesi yazılı"
+
+echo "════ T5d · yedek alanı dolu ama model bilgisi YOK → HÂLÂ ENGELLER (fail-closed) ════"
+kart is-b4; bash "$K" olcum is-b4 olc --asama tek -- echo 1 >/dev/null 2>&1
+den is-b4 1 5 E claude "claude (YEDEK GÖZ: codex yok)" "codex yok"
+CIKTI="$(bash "$G" is-b4 2>&1)"; RC=$?
+[ "$RC" -eq 1 ]; g $? "model alanları boş → ölçülemez, rc=1 (fail-closed)"
 
 echo "════ T6 · kanıt manifesti elle boyanırsa → engeller ════"
 kart is-c; bash "$K" olcum is-c olc --asama tek -- echo 1 >/dev/null 2>&1; den is-c 1 5 E

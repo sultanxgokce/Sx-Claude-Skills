@@ -82,15 +82,30 @@ if [ -n "$SON" ]; then
   okuma="$(python3 - "$SON" <<'PY'
 import json,sys
 d=json.load(open(sys.argv[1],encoding="utf-8")); s=d["sonuc"]
-print(f"{s['kod_puani']}|{s['dogru_sey']}|{d.get('yazan','?')}|{d.get('denetci','?')}|{d.get('tur','?')}|{len(s['bulgular'])}")
+print(f"{s['kod_puani']}|{s['dogru_sey']}|{d.get('yazan','?')}|{d.get('denetci','?')}|{d.get('tur','?')}|{len(s['bulgular'])}|{d.get('yedek') or ''}|{d.get('yazan_model') or ''}|{d.get('yedek_model') or ''}")
 PY
 )"
-  IFS='|' read -r puan dogru yazan denetci tur nb <<<"$okuma"
+  IFS='|' read -r puan dogru yazan denetci tur nb yedek yazan_model yedek_model <<<"$okuma"
   _y "  · denetim tur $tur · $puan/5 · doğru şey: $dogru · bulgu: $nb · yazan: $yazan → denetçi: $denetci"
   [ "$puan" = "5" ] || { _h "kod puanı 5 DEĞİL ($puan) — adım 2'ye dönülmeliydi"; eksik=$((eksik+1)); }
   [ "$dogru" = "E" ] || { _h "'doğru şey mi' EVET değil ($dogru) — kod doğru olsa da yanlış iş olabilir"; eksik=$((eksik+1)); }
+  # Sultan Y0006: yedek göz (yazandan farklı YENİ oturum) de bağımsız sayılır — ama ancak
+  # yedek_model VE yazan_model İKİSİ DE ölçülmüş VE birbirinden FARKLIYSA (fail-closed: alan
+  # boşsa ya da modeller aynıysa eski string-match reddi geçerliliğini sürdürür). "$denetci"
+  # alanı yedek kipinde "claude (…) (YEDEK GÖZ: …)" olduğundan $yazan ("claude") onun İÇİNDE
+  # geçer — bu artık K1 ihlali DEĞİL, çünkü farklı model + farklı oturum ölçülmüştür.
+  bagimsiz_yedek="H"
+  if [ -n "$yedek" ] && [ -n "$yedek_model" ] && [ -n "$yazan_model" ] && [ "$yedek_model" != "$yazan_model" ]; then
+    bagimsiz_yedek="E"
+  fi
   case "$denetci" in
-    *"$yazan"*) _h "denetçi yazanla AYNI ($yazan) — bağımsız göz değil (K1)"; eksik=$((eksik+1)) ;;
+    *"$yazan"*)
+      if [ "$bagimsiz_yedek" = "E" ]; then
+        _y "  · yedek göz: $yedek · yazan modeli $yazan_model ≠ yedek modeli $yedek_model — K1 bağımsız SAYILDI (Sultan Y0006)"
+      else
+        _h "denetçi yazanla AYNI ($yazan) — bağımsız göz değil (K1)"; eksik=$((eksik+1))
+      fi
+      ;;
   esac
 else
   _h "DENETİM kaydı YOK — bağımsız göz hiç koşmamış"; eksik=$((eksik+1))
