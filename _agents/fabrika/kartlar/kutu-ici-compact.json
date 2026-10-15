@@ -1,0 +1,19 @@
+{
+  "is": "kutu-ici-compact",
+  "cumle": "terminal-onar: kutu reisi kutu içinden tek komutla kutusundaki tüm Claude koltuklarını ölçer (bağlam %, son compact) ve eşiği aşan BOŞ koltuklara /compact gönderir; meşgul/taslaklı koltuk kuyruğa girer ve bekçi turu boşalınca uygular; kimliksiz/reis-dışı --uygula ret (Sultan 14 Eki: 'kutunun reisi o kutudaki tüm ajanları compact yapabilmeli'; gorev_01M4WYVAWEB3FNM5H0XFDMBAK9 eksik 1)",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-10-15T04:26:23+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

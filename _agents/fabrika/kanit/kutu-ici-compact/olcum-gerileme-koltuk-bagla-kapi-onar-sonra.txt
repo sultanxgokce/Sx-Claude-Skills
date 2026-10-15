@@ -1,0 +1,7 @@
+$ bash -c bash terminal-onar/scripts/koltuk-bagla.test.sh | tail -1; bash terminal-onar/kapi/kapi-sinav.test.sh | tail -1; bash terminal-onar/scripts/onar.test.sh | tail -1
+# rc=0 sure=12.0s zaman=2026-10-15T04:34:05+03:00
+--- stdout ---
+toplam=55 geçen=55 düşen=0
+SONUÇ: kapı birim sınavı geçti
+SONUÇ: 11 geçti · 0 kaldı
+--- stderr ---

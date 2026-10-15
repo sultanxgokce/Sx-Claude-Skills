@@ -1,0 +1,108 @@
+{
+  "is": "kutu-ici-compact",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T04:34:31+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "CANLI-code-kutusu-yalniz-olcum-tus-gitmez",
+      "asama": "sonra",
+      "dosya": "olcum-CANLI-code-kutusu-yalniz-olcum-tus-gitmez-sonra.txt",
+      "sha256": "88e349dd3714d8dfb9adc792f6925af9485f253b725c8c18aad2896e083ebd38",
+      "komut": [
+        "env",
+        "TO_KUTU=code",
+        "TO_DURUM_DIZ=/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/to-durum",
+        "bash",
+        "terminal-onar/scripts/compact.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T04:34:31+03:00",
+      "sure_sn": 1.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "MUTASYON-KANITI-beklenen-kirmizi-bos-koltuk-kapisi-kaldirildi",
+      "asama": "sonra",
+      "dosya": "olcum-MUTASYON-KANITI-beklenen-kirmizi-bos-koltuk-kapisi-kaldirildi-sonra.txt",
+      "sha256": "de6d0c13accd63791fb2c6e46585883da35e41f83caa3fd3b79ce9180facf6c9",
+      "komut": [
+        "bash",
+        "-c",
+        "echo \"=== MUTASYON KANITI: kod BİLEREK bozuldu (geçici kopyada boş-koltuk kapısı kaldırıldı → meşgul/taslaklı koltuğa da tuş gider). Aşağıdaki KIRMIZI satırlar BEKLENENDİR; rc=0 = sınav bozuk kodu YAKALADI. Gerçek ölçüm: compact-test-25-kapi-json-yolu ===\"; bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut-cmp2-3387642/terminal-onar/scripts/compact.test.sh; [ $? = 1 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T04:34:11+03:00",
+      "sure_sn": 5.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "CANLI-code-kutusu-yalniz-olcum-payda-kanondan",
+      "asama": "sonra",
+      "dosya": "olcum-CANLI-code-kutusu-yalniz-olcum-payda-kanondan-sonra.txt",
+      "sha256": "b62b4404082f5ac3780dd641d099cb9cbae25ed82934dc053d5d290786535afa",
+      "komut": [
+        "env",
+        "TO_KUTU=code",
+        "TO_DURUM_DIZ=/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/to-durum",
+        "bash",
+        "terminal-onar/scripts/compact.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T04:33:08+03:00",
+      "sure_sn": 2.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "compact-test-25-kapi-json-yolu",
+      "asama": "sonra",
+      "dosya": "olcum-compact-test-25-kapi-json-yolu-sonra.txt",
+      "sha256": "462c579e36c421c17c3dd63208aa784741eabf1f774539ae0072d0bb729ab5e1",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/compact.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T04:33:48+03:00",
+      "sure_sn": 6.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "compact-test-25-kapi-gomulu-yolu",
+      "asama": "sonra",
+      "dosya": "olcum-compact-test-25-kapi-gomulu-yolu-sonra.txt",
+      "sha256": "ae85ba9aa676c2a16eb1636ba4ae14981c7203fa248f11dc0a24f0a8d4267db5",
+      "komut": [
+        "env",
+        "TO_CTX_WINDOWS=/yok",
+        "bash",
+        "terminal-onar/scripts/compact.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T04:33:53+03:00",
+      "sure_sn": 5.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-koltuk-bagla-kapi-onar",
+      "asama": "sonra",
+      "dosya": "olcum-gerileme-koltuk-bagla-kapi-onar-sonra.txt",
+      "sha256": "dadd7fffa708e8f1a2d3963baded1c116334080a1830fea8e90a275acd4a1d20",
+      "komut": [
+        "bash",
+        "-c",
+        "bash terminal-onar/scripts/koltuk-bagla.test.sh | tail -1; bash terminal-onar/kapi/kapi-sinav.test.sh | tail -1; bash terminal-onar/scripts/onar.test.sh | tail -1"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T04:34:05+03:00",
+      "sure_sn": 12.0
+    }
+  ],
+  "imza": "7bf18cd5222cafacb6fef07c18455f037966b4a110a9eec85b06dacbf1ccbf74"
+}
