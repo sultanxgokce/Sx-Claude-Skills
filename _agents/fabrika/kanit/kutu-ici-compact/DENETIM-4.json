@@ -1,0 +1,32 @@
+{
+  "tur": 4,
+  "is": "kutu-ici-compact",
+  "pr": "321",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T04:55:57+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 93672,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kutu reisi için ölçüm, reis yetkisi, boş koltuğa gönderim, meşgul/taslaklı kuyruğu ve bekçi turu kurulmuş; 33/33 iki yol ve dört mutasyon kaydı talebin ana kapılarını sınamış. Önce doğrudan `compact --uygula` ile kuyruk turunun aynı boş koltuğa eşzamanlı `/compact` gönderebilmesi çözülmeli; bu yarış yüzünden üretime hazır 5 değil.",
+    "bulgular": [
+      {
+        "ne": "Tur kilidi yalnız `--bekle` dalını birbirine karşı koruyor; normal `compact --uygula` bu kilidi almadan boş koltuğa doğrudan gönderiyor. Kuyruktaki bir koltuk boşaldığı anda bekçi `compact-bekle --uygula` ile işlerken reis de ana komutu çalıştırırsa iki yol aynı koltuğa `/compact` gönderebilir; önce gönderim/koltuk sahiplenmesi ortak kilit altında birleştirilmeli.",
+        "kanit": "Normal ölçüm dalı boş koltukta doğrudan `compact_gonder` çağırıp 117. satırda çıkıyor; tur kilidi ise ancak bu dalın ardından 128-130. satırlarda alınıyor. K1 sınavı yalnız iki `--bekle --uygula` turunun çakışmasını kuruyor; normal `--uygula` ile bekçi turu çakışmasını sınamıyor.",
+        "konum": "terminal-onar/scripts/compact.sh:117; terminal-onar/scripts/compact.sh:128-130; terminal-onar/scripts/compact.test.sh:119-123",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Son durum JSON ve gömülü yollarında 33/33 geçiyor; yetki, boş/meşgul ayrımı, kuyruk, tur kilidi ve dört anlamlı mutasyon ölçülmüş. Ancak önce/sonra ölçüm çifti yok; canlı kayıt yalnız ölçüm modunda, gerçek ortamda `/compact` gönderimi ve bekçi kuyruğu uygulanmamış. Ayrıca mevcut eşzamanlılık kanıtı iki kuyruk turunu kapsıyor, ana `compact --uygula` ile bekçi turunun çakışmasını kapsamıyor."
+  }
+}

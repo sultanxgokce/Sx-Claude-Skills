@@ -1,0 +1,17 @@
+$ env TO_KUTU=code TO_DURUM_DIZ=/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/to-durum bash terminal-onar/scripts/compact.sh
+# rc=0 sure=1.8s zaman=2026-10-15T04:34:31+03:00
+--- stdout ---
+── compact ölçümü · kutu code · eşik %60 · yalnız ölçüm
+  MIRAHUR            girdi        %57  ⟳ 3 sa önce   tamam
+  bani               calisiyor    %47  ⟳ 2 sa önce   tamam
+  basiret            girdi        %16  ⟳ 6 sa önce   tamam
+  berid              bos          %52  ⟳ 3 sa önce   tamam
+  code-ana           bos           %6  ⟳ hiç         tamam
+  muavin             soru         %16  ⟳ 2 sa önce   tamam
+  mumeyyiz           girdi        %17  ⟳ 9 g önce    tamam
+  nakkas             soru         %80  ⟳ 25 g önce   ⚠ compact gerek (soru: --uygula ile kuyruğa)
+  pazarbasi          bos          %59  ⟳ 6 sa önce   tamam
+  serdar             bos          %53  ⟳ 6 sa önce   tamam
+── 1 compact gerek · 0 gönderildi · 0 kuyrukta · 0 ölçülemedi
+   uygulamak: komut.sh compact --uygula   (AGENT_NAME=<reis>)
+--- stderr ---

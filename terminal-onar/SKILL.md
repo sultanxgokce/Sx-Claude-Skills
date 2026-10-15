@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.8.0
+version: 2.9.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -25,6 +25,8 @@ bash .claude/skills/terminal-onar/scripts/komut.sh onar [--web-yenile]     # kad
 bash .claude/skills/terminal-onar/scripts/komut.sh merdiven [--arka]       # K0 → K1 → K2 → K3
 bash .claude/skills/terminal-onar/scripts/komut.sh duraklat "<sebep>" | devam
 bash .claude/skills/terminal-onar/scripts/komut.sh gunluk [N]
+bash .claude/skills/terminal-onar/scripts/komut.sh compact [--esik 60] [--koltuk ad] [--uygula] [--json]   # kutu-içi zorunlu compact
+bash .claude/skills/terminal-onar/scripts/komut.sh compact-bekle [--uygula]                                # kuyruk turu (bekçi çağırır)
 ```
 Argüman `onar` ile çağrıldıysan: önce `durum`, sonra `onar`, sonra yine `durum`. Sağlam değilse
 günlüğe bak, sebebi bul, `onar --web-yenile` dahil tekrar dene. Sağlam olmadan "bitti" deme.
@@ -315,7 +317,32 @@ merkez `_agents/handoff/aile-registry.yaml` (önkoşul 3: merkez kadrosu da ayn�
 `/config/projects/<kutu>` (ortak.sh kuralı). Koltuk listesi ölçülemezse 500 — uydurma kadro yok. Çizim ve eylemler (kaldır ·
 bağla · emekli et · personel al) merkez ekranında ve ayrı uçlarda (E1-E4, cloudtop).
 
+## Kutu-içi zorunlu compact (2.9.0 · Sultan 14 Eki · gorev_01M4WYVAWEB3FNM5H0XFDMBAK9 eksik 1)
+Sultan: *"bir kutunun reisi o kutudaki tüm ajanları compact yapabilmeli … contexti artmış uzun süredir compact yapmayanları
+mutlaka compact yapması gerekiyor."* Merkezdeki `filo.py compact-kurali` (MUAVİN, filo geneli, ssh) bu beceride kutu-içi ikizini bulur:
+ssh yok, kayıtlar yerel, tek komut.
+- **Ölçü** (`kapi/compact-olc.mjs`, damga icat etmez): bağlam % = son asistan yanıtının kullanımı ÷ pencere; son compact = kayıttaki
+  `compact_boundary` (sondan 1 MB bloklarla, tavan 64 MB). Pencere (payda): merkezin `ctx-windows.json` kuralları → ORTAK-MIMARI model
+  sözlüğünden gömülü tablo (fable/opus-5 1M · opus-4.8/sonnet 500k · haiku/glm 200k) → eşleşmeyen model 200k **varsayım**, satırda `~%85`.
+  (Canlı ders 15 Eki: `[1m]`-siz kayıt 200k sayılınca %226/%398 basıyordu — payda yanlışsa compact kararı da yanlış olur.)
+  Koltuk → oturum: `claude_oturumu` (süreç ağacı → sessionId → `<sid>.jsonl`). Kayıt bulunamayan koltuk **ölçülemedi**, tuş gitmez.
+- **Karar:** `%` ≥ eşik (60) → "compact gerek". `--uygula`: hâl **boş** → `/compact` (C-u · metin · 0,5 sn · **ayrı** Enter);
+  çalışıyor / girdi (taslak var) / dış-olay → **kuyruk** (`compact-bekleyen.jsonl`), tuş gitmez. Bekçi her dakika kuyruk doluysa
+  `compact-bekle --uygula` koşar: boşalınca gider; bu arada eşiğin altına inmişse ya da koltuk kapanmışsa düşer; 24 sa / 60 deneme →
+  **VAZGEÇİLDİ** (ekrana kırmızı + günlük; sessiz değil). **Tur kilidi** (göz tur 3): tur boyunca `flock`; bekçi ile elle çağrı çakışırsa
+  ikinci tur hiçbir koltuğa dokunmadan çıkar ("zaten koşuyor"); kuyruğa ekleme ayrı kısa kilitle, tur ortasında eklenen satır yeniden
+  yazımda kaybolmaz (oda-tetik `uyandir` ile aynı desen). Elle `compact --uygula` da **aynı kilidi** alır (göz tur 4): bekçi turu
+  koşuyorsa en çok 15 sn bekler, alamazsa ölçümü basar, tuş göndermez (rc 6) — iki yol aynı koltuğa aynı anda gönderemez.
+- **Yetki (kapalı-varsayılan):** `--uygula` `AGENT_NAME` ister (kimliksiz ret, rc 5). Reis adı `TO_REIS` ya da `$DURUM_DIZ/reis`
+  dosyasından okunur; **bilinmiyorsa kimse uygulayamaz** (rc 5, "kutu reisi BİLİNMİYOR") — reis-dışı ret koşulsuzdur, "dolu kimlik
+  yeter" yolu yoktur (göz tur 2). Biliniyorsa yalnız o ad uygular; başkası ölçer. Kuyruk kaydı yazanın adını (`kim`) taşır ve bekçi
+  turu onu **her turda aynı kuralla** sınar (reis yok → kayıt düşer; `kim ≠ reis` → düşer), gönderilmeden (göz tur 1). Kurulum: kutu
+  reisinin adını `echo <AD> > /config/.terminal-onar/reis` ile yazmak reisin işidir; yazılmadan compact uygulanamaz, yalnız ölçülür.
+  MUAVİN'in filo-geneli yetkisi merkezde (`filo.py`), burada değil.
+- Sınav: `scripts/compact.test.sh` (35 kapı, hermetik: sahte tmux + sahte kayıt; mutasyon: boş-koltuk kapısı kalkınca taslaklı koltuğa tuş gider → U1 kırmızı).
+
 ## Sürüm notları
+- **2.9.0 (2026-10-15, BÂNİ · zorunlu compact kutu-içi):** `komut.sh compact` / `compact-bekle` + `kapi/compact-olc.mjs` + bekçi kuyruk turu (yukarıda).
 - **2.8.0 (2026-10-15, BÂNİ · Kadro E1 önkoşul):** `GET /api/kadro` (kapi/kadro.mjs: kayıt ayrıştırma + dört grup + kayıtsız + ana);
   kayıt alanı `hal:` tanımlandı. Sınav kadro.test.mjs 20, sunucu.test.mjs KD0-KD6 (97). Koltuk hâli/`ne` 2.7.0'dan gelir.
 - **2.7.0 (2026-10-15, BÂNİ · Sultan eki 15 Eki 20:40 — 5. hâl):** koltuk hâline **⏳ `dis-olay` "dış olay bekliyor"**: yazı kutusu boş ama

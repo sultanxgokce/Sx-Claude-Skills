@@ -1,0 +1,32 @@
+{
+  "tur": 1,
+  "is": "kutu-ici-compact",
+  "pr": "321",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T04:37:06+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 68126,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "E",
+    "ozet": "Kutu içi ölçüm, boş koltuğa gönderim, meşgul/taslaklı koltuğu kuyruğa alma ve bekçi turu istenen işi karşılıyor. Lakin kuyruk turunda yetki kapısı tamamen atlanıyor; kimliksiz veya reis dışı çağrı /compact gönderebildiği için bu ciddi açık çözülmeden üretime çıkamaz.",
+    "bulgular": [
+      {
+        "ne": "`compact-bekle --uygula` kimlik ve reis denetimi yapmadan kuyruktaki koltuğa `/compact` gönderebiliyor. Kuyruk kaydındaki `kim` okunuyor ama doğrulanmıyor veya gönderimde kullanılmıyor; dolayısıyla iş kartındaki “kimliksiz/reis-dışı --uygula ret” şartı bekçi yolunda ihlal ediliyor.",
+        "kanit": "`yetki_kapisi` yalnız `MOD=olc` dalında çağrılıyor; kuyruk dalı doğrudan işleniyor. Sınavın B1-B4 adımları `kos --bekle --uygula` çağrısını AGENT_NAME ve TO_REIS olmadan başarıyla yürütüyor; B2’de KALFA’ya `/compact` gönderildiği açıkça doğrulanıyor. Bekçi entegrasyonu da herhangi bir kimlik vermeden `compact.sh --bekle --uygula` çağırıyor.",
+        "konum": "terminal-onar/scripts/compact.sh:89; terminal-onar/scripts/compact.sh:110; terminal-onar/scripts/compact.sh:116; terminal-onar/scripts/bekci.sh:11; terminal-onar/scripts/compact.test.sh:85",
+        "agirlik": "ciddi"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve tüm kayıtlar yeşil; iki uygulama yolu, gerileme sınavları ve anlamlı bir mutasyon sınavı mevcut. Önce/sonra ölçüm çifti yok ve canlı kayıtlar yalnız ölçüm modunu gösteriyor; uygulama/kuyruk davranışı hermetik sınavla destekleniyor. En önemlisi, yeşil sınav yetki iddiasını tam ölçmüyor: normal `--uygula` reddini sınarken kimliksiz kuyruk turunun gönderim yapmasını başarı sayarak ciddi açığı bizzat görünür kılıyor."
+  }
+}

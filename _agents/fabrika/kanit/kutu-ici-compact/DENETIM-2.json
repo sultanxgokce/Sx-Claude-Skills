@@ -1,0 +1,32 @@
+{
+  "tur": 2,
+  "is": "kutu-ici-compact",
+  "pr": "321",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T04:41:48+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 98215,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "E",
+    "ozet": "Kutu içi ölçüm, boş koltuğa gönderim, meşgul/taslaklı koltuğu kuyruğa alma ve bekçi turunda kayıt sahibini yeniden sınama kurulmuş. Lakin reis adı bulunamadığında herhangi bir dolu kimlik uygulama yetkisi kazanıyor; iş kartındaki reis-dışı `--uygula` reddi delinmiş olduğundan önce bu ciddi yetki açığı çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Reis kimliği bilinmiyorsa reis-dışı bir kimlik hem doğrudan uygulama kapısından geçebiliyor hem de kuyruk kaydı üzerinden `/compact` gönderebiliyor. `yetki_kapisi`, yalnız reis adı doluysa kimliği reisle karşılaştırıyor; `kayit_yetkili` de reis boşken herhangi bir dolu ve `?` olmayan kimliği yetkili sayıyor. Bu, karttaki koşulsuz “reis-dışı --uygula ret” talebini karşılamıyor.",
+        "kanit": "Kodda `yetki_kapisi` içindeki karşılaştırma `[ -n \"$reis\" ]` şartına bağlı; `kayit_yetkili` ise `[ -z \"$reis\" ] || [ \"$kim\" = \"$reis\" ]` ile bilinmeyen reis durumunda herkesi geçiriyor. 28 kapılı sınavın B0c adımı bunu açıkça başarı kabul ediyor: “reis bilinmiyorsa dolu kim yeter” ve `HERHANGI` adına KALFA'ya `/compact` gönderildiğini doğruluyor.",
+        "konum": "terminal-onar/scripts/compact.sh:44-51; terminal-onar/scripts/compact.sh:75-79; terminal-onar/scripts/compact.test.sh:89-91; kanıt kaydı compact-test-tur2-28-kapi-json-yolu/B0c",
+        "agirlik": "ciddi"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sha'ları sağlam ve sarı kayıt yok; hermetik sınavlar iki ölçüm yolunu, gönderim/kuyruk davranışını, gerilemeleri ve iki anlamlı mutasyonu kapsıyor. Canlı kayıtlar yalnız ölçüm modunda ve önce/sonra ölçüm çifti bulunmuyor; gerçek ortamda uygulama ile bekçi gönderimi gösterilmemiş. Üstelik yeşil 28/28 sonucu hedefin tamamını doğrulamıyor: B0c, iş kartına aykırı olarak reis bilinmezken herhangi bir dolu kimliği yetkili saymayı özellikle bekliyor."
+  }
+}

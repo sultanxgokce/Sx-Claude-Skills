@@ -1,0 +1,52 @@
+$ bash -c echo "=== MUTASYON KANITI: kod BİLEREK bozuldu (geçici kopyada elle --uygula ortak kilidi almıyor → bekçi turuyla aynı koltuğa gönderebilir). Aşağıdaki KIRMIZI satır BEKLENENDİR; rc=0 = sınav bozuk kodu YAKALADI. Gerçek ölçüm: compact-test-35-kapi-json-yolu ==="; bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut-cmp7-3643132/terminal-onar/scripts/compact.test.sh; [ $? = 1 ]
+# rc=0 sure=13.4s zaman=2026-10-15T04:57:40+03:00
+--- stdout ---
+=== MUTASYON KANITI: kod BİLEREK bozuldu (geçici kopyada elle --uygula ortak kilidi almıyor → bekçi turuyla aynı koltuğa gönderebilir). Aşağıdaki KIRMIZI satır BEKLENENDİR; rc=0 = sınav bozuk kodu YAKALADI. Gerçek ölçüm: compact-test-35-kapi-json-yolu ===
+C · ölçüm (yalnız ölçüm, tuş gitmez)
+  ✓ C1 BASIRET: ~%85 (payda tahmin işareti ~), hiç compact, boş → 'compact gerek (boş: --uygula ile gider)'
+  ✓ C1b ZAKIR: son compact '2 sa önce' kayıttan okunur; çalışıyor → '--uygula ile kuyruğa'
+  ✓ C1c KALFA: girdi (taslak var) → kuyruk adayı
+  ✓ C1d MUHASIP: sonnet-5 → kanondan 500k payda, %30 tamam, ~ işareti YOK (payda kanondan)
+  ✓ C1e NEDIM: kayıt yok → ölçülemedi (yüzde uydurulmaz)
+  ✓ C1f özet 3 gerek / 1 ölçülemedi; yalnız ölçümde tuş GİTMEDİ
+  ✓ C1g Claude'suz koltuk (maiset-ana) listede yok (compact'ı yok)
+  ✓ C2 --json: 5 koltuk, yüzde/payda_tahmin/null makine-okunur
+  ✓ C3 --koltuk BASIRET: tek koltuk satırı
+  ✓ C3b --esik 90: hiçbiri eşik üstü değil
+  ✓ C3c --esik sayı değilse rc 2
+Y · yetki (uygulamak reisin)
+  ✓ Y1 AGENT_NAME yokken --uygula RET (rc 5), tuş gitmedi
+  ✓ Y2 reis bilinirken başkası --uygula RET, tuş gitmedi
+  ✓ Y2b reis-dışı ÖLÇEBİLİR (yalnız uygulama kapalı)
+  ✓ Y3 reis adı bilinmiyorsa (TO_REIS/durum/reis yok) kimlikli çağrı bile --uygula YAPAMAZ (kapalı-varsayılan), tuş gitmedi
+  ✓ Y3b reis adı $DURUM_DIZ/reis dosyasından da okunur (TO_REIS yokken uygulama açılır)
+U · uygula: boşa tuş, meşgule kuyruk
+  ✓ U1 yalnız BASIRET'e /compact: C-u · metin · AYRI Enter (gömülü Enter yok); ZAKIR/KALFA/NEDIM/MUHASIP'e tuş YOK
+  ✓ U1b ekran: gönderildi / kuyrukta kararları
+  ✓ U2 kuyruk 2 satır (ZAKIR, KALFA), kim=MUTEVELLI (yetki kuyrukta taşınır)
+  ✓ U3 günlüğe düştü (kim)
+  ✓ U4 ikinci --uygula kuyruğu ŞİŞİRMEZ (aynı koltuk tek satır)
+B · kuyruk turu (bekçi): kayıt yetkisi her turda, boşalınca gider, bu arada compact edilmişse düşer, tavan → vazgeç
+  ✓ B0 kuyruk kaydı reis-dışı (BASKA) ya da kimliksiz (?) → koltuk boş olsa da tuş GİTMEZ, kayıt düşer (bekçi yolu yetkiyi atlamaz)
+  ✓ B0b yetkisiz düşüş günlüğe
+  ✓ B0c reis bilinmiyorsa DOLU kim de yetmez: kayıt gönderilmeden düşer (kapalı-varsayılan, göz tur 2)
+  ✓ B1 ikisi de meşgul: tuş yok, deneme 1
+  ✓ B2 KALFA boşalınca /compact gitti (MUTEVELLI adına), kuyruktan düştü; ZAKIR kaldı
+  ✓ B3 eşik altına inmiş koltuk kuyruktan düşer, tuş gitmez
+  ✓ B4 25 saattir meşgul → VAZGEÇİLDİ (ekrana kırmızı + günlük), kuyruktan düşer
+  ✓ B5 koltuk kapanmışsa kuyruktan düşer
+  ✓ B6 boş kuyruk: tek satır, iş yok
+K · tur kilidi (göz tur 3): bekçi ile elle çağrı çakışırsa ikinci tur dokunmaz; tur ortasında eklenen satır kaybolmaz
+  ✓ K1 kilit tutuluyorken tur: 'zaten koşuyor', tuş GİTMEDİ, kuyruk DEĞİŞMEDİ
+  ✓ K1b kilit düşünce aynı kuyruk işlenir (KALFA'ya gitti)
+  ✓ K2 tur sırasında eklenen BASIRET satırı yeniden yazımda KAYBOLMADI; ZAKIR deneme 1
+  ✗ K3 — rc=0 iz=send-keys -t =BASIRET C-u
+send-keys -t =BASIRET -- /compact
+send-keys -t =BASIRET Enter
+send-keys -t =KALFA C-u
+send-keys -t =KALFA -- /compact
+send-keys -t =KALFA Enter 
+  ✓ K3b kilit düşünce elle --uygula gönderir
+
+toplam=35 geçen=34 düşen=1
+--- stderr ---

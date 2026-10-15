@@ -5,6 +5,8 @@
 #   merdiven [--arka]      K0 → K1 başsız Claude → K2 kurtarıcı → K3 Sultan'a haber
 #   duraklat "<sebep>"     bekçiyi durdur (bilerek kapatırken) · devam  bekçiyi aç
 #   gunluk [N]             son N satır (varsayılan 30)
+#   compact [--esik N] [--koltuk ad] [--uygula] [--json]   kutudaki Claude koltuklarını ölç (bağlam % · son compact), eşik üstü BOŞ koltuğa /compact
+#   compact-bekle [--uygula]                               kuyruk turu: meşgulken kuyruğa alınan koltuk boşalınca /compact (bekçi çağırır)
 set -u
 D="$(cd "$(dirname "$0")" && pwd)"; . "$D/ortak.sh"
 case "${1:-durum}" in
@@ -14,5 +16,7 @@ case "${1:-durum}" in
   duraklat) printf '%s · %s\n' "$(date '+%F %T')" "${2:-sebep yazılmadı}" > "$DURUM_DIZ/duraklat"; gunluk "bekçi duraklatıldı: ${2:-}"; echo "bekçi duraklatıldı" ;;
   devam)    rm -f "$DURUM_DIZ/duraklat"; gunluk "bekçi yeniden açık"; echo "bekçi açık" ;;
   gunluk)   tail -n "${2:-30}" "$GUNLUK" 2>/dev/null || echo "günlük boş" ;;
-  *) sed -n '2,8p' "$0"; exit 2 ;;
+  compact)  shift; exec bash "$D/compact.sh" "$@" ;;
+  compact-bekle) shift; exec bash "$D/compact.sh" --bekle "$@" ;;
+  *) sed -n '2,10p' "$0"; exit 2 ;;
 esac

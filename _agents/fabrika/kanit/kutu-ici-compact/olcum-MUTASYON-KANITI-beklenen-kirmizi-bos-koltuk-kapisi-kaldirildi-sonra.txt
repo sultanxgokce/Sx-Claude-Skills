@@ -1,0 +1,57 @@
+$ bash -c echo "=== MUTASYON KANITI: kod BİLEREK bozuldu (geçici kopyada boş-koltuk kapısı kaldırıldı → meşgul/taslaklı koltuğa da tuş gider). Aşağıdaki KIRMIZI satırlar BEKLENENDİR; rc=0 = sınav bozuk kodu YAKALADI. Gerçek ölçüm: compact-test-25-kapi-json-yolu ==="; bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut-cmp2-3387642/terminal-onar/scripts/compact.test.sh; [ $? = 1 ]
+# rc=0 sure=5.0s zaman=2026-10-15T04:34:11+03:00
+--- stdout ---
+=== MUTASYON KANITI: kod BİLEREK bozuldu (geçici kopyada boş-koltuk kapısı kaldırıldı → meşgul/taslaklı koltuğa da tuş gider). Aşağıdaki KIRMIZI satırlar BEKLENENDİR; rc=0 = sınav bozuk kodu YAKALADI. Gerçek ölçüm: compact-test-25-kapi-json-yolu ===
+C · ölçüm (yalnız ölçüm, tuş gitmez)
+  ✓ C1 BASIRET: ~%85 (payda tahmin işareti ~), hiç compact, boş → 'compact gerek (boş: --uygula ile gider)'
+  ✓ C1b ZAKIR: son compact '2 sa önce' kayıttan okunur; çalışıyor → '--uygula ile kuyruğa'
+  ✓ C1c KALFA: girdi (taslak var) → kuyruk adayı
+  ✓ C1d MUHASIP: sonnet-5 → kanondan 500k payda, %30 tamam, ~ işareti YOK (payda kanondan)
+  ✓ C1e NEDIM: kayıt yok → ölçülemedi (yüzde uydurulmaz)
+  ✓ C1f özet 3 gerek / 1 ölçülemedi; yalnız ölçümde tuş GİTMEDİ
+  ✓ C1g Claude'suz koltuk (maiset-ana) listede yok (compact'ı yok)
+  ✓ C2 --json: 5 koltuk, yüzde/payda_tahmin/null makine-okunur
+  ✓ C3 --koltuk BASIRET: tek koltuk satırı
+  ✓ C3b --esik 90: hiçbiri eşik üstü değil
+  ✓ C3c --esik sayı değilse rc 2
+Y · yetki (uygulamak reisin)
+  ✓ Y1 AGENT_NAME yokken --uygula RET (rc 5), tuş gitmedi
+  ✓ Y2 reis bilinirken başkası --uygula RET, tuş gitmedi
+  ✓ Y2b reis-dışı ÖLÇEBİLİR (yalnız uygulama kapalı)
+U · uygula: boşa tuş, meşgule kuyruk
+  ✗ U1 — send-keys -t =BASIRET C-u
+send-keys -t =BASIRET -- /compact
+send-keys -t =BASIRET Enter
+send-keys -t =ZAKIR C-u
+send-keys -t =ZAKIR -- /compact
+send-keys -t =ZAKIR Enter
+send-keys -t =KALFA C-u
+send-keys -t =KALFA -- /compact
+send-keys -t =KALFA Enter
+  ✗ U1b — ── compact ölçümü · kutu maiset · eşik %60 · UYGULA (MUTEVELLI)
+  BASIRET            bos         ~%85  ⟳ hiç         ⟳ /compact GÖNDERİLDİ
+  ZAKIR              calisiyor   ~%75  ⟳ 2 sa önce   ⟳ /compact GÖNDERİLDİ
+  KALFA              girdi       ~%65  ⟳ hiç         ⟳ /compact GÖNDERİLDİ
+  NEDIM              bos          —  ⟳ hiç         ölçülemedi: sahte kayıt yok
+  MUHASIP            bos          %30  ⟳ hiç         tamam
+── 3 compact gerek · 3 gönderildi · 0 kuyrukta · 1 ölçülemedi
+  ✗ U2 — 
+  ✓ U3 günlüğe düştü (kim)
+  ✗ U4 — 
+B · kuyruk turu (bekçi): boşalınca gider, bu arada compact edilmişse düşer, tavan → vazgeç
+  ✗ B1 — compact kuyruğu boş 
+  ✗ B2 —  | 
+  ✗ B3 — compact kuyruğu boş 
+  ✓ B4 25 saattir meşgul → VAZGEÇİLDİ (ekrana kırmızı + günlük), kuyruktan düşer
+  ✓ B5 koltuk kapanmışsa kuyruktan düşer
+  ✓ B6 boş kuyruk: tek satır, iş yok
+
+toplam=25 geçen=18 düşen=7
+--- stderr ---
+grep: /tmp/tmp.8ZuPdchsai/durum/compact-bekleyen.jsonl: No such file or directory
+cat: /tmp/tmp.8ZuPdchsai/durum/compact-bekleyen.jsonl: No such file or directory
+grep: /tmp/tmp.8ZuPdchsai/durum/compact-bekleyen.jsonl: No such file or directory
+cat: /tmp/tmp.8ZuPdchsai/durum/compact-bekleyen.jsonl: No such file or directory
+cat: /tmp/tmp.8ZuPdchsai/durum/compact-bekleyen.jsonl: No such file or directory
+cat: /tmp/tmp.8ZuPdchsai/durum/compact-bekleyen.jsonl: No such file or directory
+cat: /tmp/tmp.8ZuPdchsai/durum/compact-bekleyen.jsonl: No such file or directory
