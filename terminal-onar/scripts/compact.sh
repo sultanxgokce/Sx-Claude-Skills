@@ -74,10 +74,11 @@ kayit_yetkili() {  # $1 = kim → 0 yetkili, 1 değil
   [ -n "$kim" ] && [ "$kim" != "?" ] && [ "$kim" != null ] && [ "$kim" = "$reis" ] || return 1
   return 0
 }
-kuyruga_al() {  # $1 ad · $2 yuzde · $3 hal · $4 kim
+kuyruga_al() {  # $1 ad · $2 yuzde · $3 hal · $4 kim — ekleme kilidi altında (tur yeniden yazımıyla çakışmaz)
   mkdir -p "$(dirname "$KUYRUK")"
-  grep -qF "\"koltuk\":\"$1\"" "$KUYRUK" 2>/dev/null && return 0   # zaten kuyrukta
-  printf '{"an":"%s","epoch":%s,"koltuk":"%s","yuzde":%s,"hal":"%s","deneme":0,"kim":"%s"}\n' "$(date -Iseconds)" "$(date +%s)" "$1" "$2" "$3" "$4" >> "$KUYRUK"
+  ( flock -w 10 9 && {
+      grep -qF "\"koltuk\":\"$1\"" "$KUYRUK" 2>/dev/null && exit 0   # zaten kuyrukta
+      printf '{"an":"%s","epoch":%s,"koltuk":"%s","yuzde":%s,"hal":"%s","deneme":0,"kim":"%s"}\n' "$(date -Iseconds)" "$(date +%s)" "$1" "$2" "$3" "$4" >> "$KUYRUK"; } ) 9>"$KUYRUK.ekle.kilit"
   gunluk "compact kuyruğa: $1 (%$2, $3)"
 }
 
@@ -120,8 +121,15 @@ if [ "$MOD" = olc ]; then
 fi
 
 # ── kuyruk turu ──
+# 🔴 TUR KİLİDİ (göz tur 3): bekçi (cron, her dakika) ile elle çağrı çakışırsa aynı boş koltuğa iki /compact gider ya da bir turun kuyruk
+#    yazımı ötekini ezer. Tur boyunca flock tutulur; ikinci tur HİÇBİR koltuğa dokunmadan çıkar (oda-tetik uyandir ile aynı desen).
+#    Kuyruğa EKLEME (olc dalı, kuyruga_al) de aynı kilidi kısa süre alır: tur ortasında eklenen satır turun yeniden yazımında kaybolmaz.
 [ -s "$KUYRUK" ] || { [ "$JSON" = 1 ] || echo "compact kuyruğu boş"; exit 0; }
+mkdir -p "$(dirname "$KUYRUK")"; exec 8>"$KUYRUK.tur.kilit"
+flock -n 8 || { echo "compact kuyruk turu zaten koşuyor — bu tur atlandı (hiçbir koltuğa dokunulmadı)"; exit 0; }
 OLC="$(TEK="" olc_hepsi)" || exit 3
+( flock -w 10 9 && cp "$KUYRUK" "$KUYRUK.tur.anlik" ) 9>"$KUYRUK.ekle.kilit"
+[ -n "${TO_COMPACT_SINAV_BEKLE_SN:-}" ] && sleep "$TO_COMPACT_SINAV_BEKLE_SN"   # yalnız sınav: tur ortasında ekleme yarışını deterministik kurar
 SIMDI=$(date +%s); KAL=""; gonderildi=0; dustu=0; kalan=0; vaz=0
 while IFS= read -r satir; do
   [ -n "$satir" ] || continue
@@ -140,6 +148,8 @@ while IFS= read -r satir; do
   if [ $((den+1)) -ge "$TAVAN_DENEME" ] || [ $((SIMDI - ep)) -ge "$TAVAN_SN" ]; then
     echo "  🔴 $ad · VAZGEÇİLDİ ($((den+1)) deneme / $(( (SIMDI-ep)/3600 )) sa) — koltuk hiç boşalmadı, elle bak" >&2; vaz=$((vaz+1)); gunluk "compact VAZGEÇİLDİ: $ad"; continue; fi
   kalan=$((kalan+1)); KAL="$KAL$(printf '%s' "$satir" | jq -c --argjson d "$((den+1))" '.deneme=$d')"$'\n'
-done < "$KUYRUK"
-printf '%s' "$KAL" > "$KUYRUK"
+done < "$KUYRUK.tur.anlik"
+# yeniden yazım: tur sırasında EKLENEN satırlar (kuyruga_al, ekleme kilidiyle) korunur — anlık görüntüde olmayan satırlar olduğu gibi kalır
+( flock -w 10 9 && { yeni="$(awk 'NR==FNR{a[$0]=1;next} !($0 in a)' "$KUYRUK.tur.anlik" "$KUYRUK" 2>/dev/null)"; printf '%s' "$KAL" > "$KUYRUK"; [ -n "$yeni" ] && printf '%s\n' "$yeni" >> "$KUYRUK"; } ) 9>"$KUYRUK.ekle.kilit"
+rm -f "$KUYRUK.tur.anlik"
 echo "── compact-bekle: $gonderildi gönderildi · $dustu düştü · $kalan kuyrukta · $vaz vazgeçildi"

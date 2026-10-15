@@ -329,14 +329,16 @@ ssh yok, kayıtlar yerel, tek komut.
 - **Karar:** `%` ≥ eşik (60) → "compact gerek". `--uygula`: hâl **boş** → `/compact` (C-u · metin · 0,5 sn · **ayrı** Enter);
   çalışıyor / girdi (taslak var) / dış-olay → **kuyruk** (`compact-bekleyen.jsonl`), tuş gitmez. Bekçi her dakika kuyruk doluysa
   `compact-bekle --uygula` koşar: boşalınca gider; bu arada eşiğin altına inmişse ya da koltuk kapanmışsa düşer; 24 sa / 60 deneme →
-  **VAZGEÇİLDİ** (ekrana kırmızı + günlük; sessiz değil).
+  **VAZGEÇİLDİ** (ekrana kırmızı + günlük; sessiz değil). **Tur kilidi** (göz tur 3): tur boyunca `flock`; bekçi ile elle çağrı çakışırsa
+  ikinci tur hiçbir koltuğa dokunmadan çıkar ("zaten koşuyor"); kuyruğa ekleme ayrı kısa kilitle, tur ortasında eklenen satır yeniden
+  yazımda kaybolmaz (oda-tetik `uyandir` ile aynı desen).
 - **Yetki (kapalı-varsayılan):** `--uygula` `AGENT_NAME` ister (kimliksiz ret, rc 5). Reis adı `TO_REIS` ya da `$DURUM_DIZ/reis`
   dosyasından okunur; **bilinmiyorsa kimse uygulayamaz** (rc 5, "kutu reisi BİLİNMİYOR") — reis-dışı ret koşulsuzdur, "dolu kimlik
   yeter" yolu yoktur (göz tur 2). Biliniyorsa yalnız o ad uygular; başkası ölçer. Kuyruk kaydı yazanın adını (`kim`) taşır ve bekçi
   turu onu **her turda aynı kuralla** sınar (reis yok → kayıt düşer; `kim ≠ reis` → düşer), gönderilmeden (göz tur 1). Kurulum: kutu
   reisinin adını `echo <AD> > /config/.terminal-onar/reis` ile yazmak reisin işidir; yazılmadan compact uygulanamaz, yalnız ölçülür.
   MUAVİN'in filo-geneli yetkisi merkezde (`filo.py`), burada değil.
-- Sınav: `scripts/compact.test.sh` (30 kapı, hermetik: sahte tmux + sahte kayıt; mutasyon: boş-koltuk kapısı kalkınca taslaklı koltuğa tuş gider → U1 kırmızı).
+- Sınav: `scripts/compact.test.sh` (33 kapı, hermetik: sahte tmux + sahte kayıt; mutasyon: boş-koltuk kapısı kalkınca taslaklı koltuğa tuş gider → U1 kırmızı).
 
 ## Sürüm notları
 - **2.9.0 (2026-10-15, BÂNİ · zorunlu compact kutu-içi):** `komut.sh compact` / `compact-bekle` + `kapi/compact-olc.mjs` + bekçi kuyruk turu (yukarıda).

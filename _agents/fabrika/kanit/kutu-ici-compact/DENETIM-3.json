@@ -1,0 +1,32 @@
+{
+  "tur": 3,
+  "is": "kutu-ici-compact",
+  "pr": "321",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T04:46:50+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": true,
+    "istem_bayt": 124917,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kutu içi ölçüm, eşik kararı, boş koltuğa gönderim, meşgul/taslaklı kuyruğu ve kapalı-varsayılan reis yetkisi iş kartındaki doğru işi karşılıyor; son 30 kapılı sınav ile üç mutasyon kaydı da ana güvenlik kapılarını gerçekten yokluyor. Önce kuyruk turunu eşzamanlı çalışmaya karşı güvenli hâle getirin; ayrıca diff kırpıldığı ve canlı kanıt yalnız ölçüm modunu gösterdiği için üretime hazır 5 verilemez.",
+    "bulgular": [
+      {
+        "ne": "Kuyruk tüketimi kilitsiz bir oku–işle–dosyanın tamamını yeniden yaz akışı kullanıyor; bekçi turu ile elle çağrı çakışırsa aynı boş koltuğa iki kez `/compact` gönderilebilir veya bir turun kuyruk güncellemesi diğerini ezebilir. Gönderim yan etkili olduğundan önce kuyruk için kilit ya da atomik sahiplenme kurulmalı.",
+        "kanit": "Kod kuyruğu doğrudan `done < \"$KUYRUK\"` ile okuyor, döngü içinde `compact_gonder` ile yan etkiyi gerçekleştiriyor ve sonunda `printf '%s' \"$KAL\" > \"$KUYRUK\"` ile aynı dosyayı kilit kullanmadan yeniden yazıyor; `bekci.sh` de dolu kuyruğu otomatik işlerken aynı komut elle çağrılabilir.",
+        "konum": "terminal-onar/scripts/compact.sh:120-145; terminal-onar/scripts/bekci.sh:11",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Hermetik son durum iki ölçüm yolunda 30/30 geçiyor; kimliksiz/reis-dışı ret, reis bilinmezken kapalı kalma, boş/meşgul ayrımı, kuyruk turu ve anlamlı mutasyonlar ölçülmüş. Bununla birlikte önce/sonra ölçüm çifti yok, canlı kayıtlar yalnız ölçüm modunda ve gerçek ortamda `/compact` gönderimi ile bekçi kuyruğu uygulanmamış; ayrıca istem 110000 baytta kırpıldığı için diff'in sonu ve özellikle halka açık tek-komut bağlamasının tamamı görülemiyor."
+  }
+}

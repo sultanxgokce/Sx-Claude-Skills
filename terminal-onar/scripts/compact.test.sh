@@ -110,5 +110,19 @@ TO_REIS=MUTEVELLI kos --bekle --uygula
 grep -q 'YOKBOYLE · kuyruktan düştü (koltuk artık yok' "$S/cikti" && [ ! -s "$KQ" ] && ok "B5 koltuk kapanmışsa kuyruktan düşer" || bad B5 "$(c)"
 kos --bekle; grep -q 'compact kuyruğu boş' "$S/cikti" && ok "B6 boş kuyruk: tek satır, iş yok" || bad B6 "$(c)"
 
+echo "K · tur kilidi (göz tur 3): bekçi ile elle çağrı çakışırsa ikinci tur dokunmaz; tur ortasında eklenen satır kaybolmaz"
+printf '{"an":"x","epoch":%s,"koltuk":"KALFA","yuzde":65,"hal":"girdi","deneme":0,"kim":"MUTEVELLI"}\n' "$SIMDI" > "$KQ"; printf '❯ \n' > "$S/ekran-KALFA"
+( exec 8>"$KQ.tur.kilit"; flock 8; sleep 2 ) & kp=$!; sleep 0.3
+TO_REIS=MUTEVELLI kos --bekle --uygula; r=$(rc); wait "$kp"
+[ "$r" = 0 ] && grep -q 'zaten koşuyor' "$S/cikti" && [ -z "$(iz)" ] && [ "$(grep -c . "$KQ")" = 1 ] && ok "K1 kilit tutuluyorken tur: 'zaten koşuyor', tuş GİTMEDİ, kuyruk DEĞİŞMEDİ" || bad K1 "rc=$r $(c) iz=$(iz)"
+TO_REIS=MUTEVELLI kos --bekle --uygula
+[ -n "$(iz)" ] && [ ! -s "$KQ" ] && ok "K1b kilit düşünce aynı kuyruk işlenir (KALFA'ya gitti)" || bad K1b "$(iz) $(cat "$KQ")"
+# tur ortasında ekleme: tmux sahte send-keys sırasında (gecikmeli) başka bir süreç kuyruğa satır ekler → yeniden yazım onu korur
+printf '{"an":"x","epoch":%s,"koltuk":"ZAKIR","yuzde":75,"hal":"calisiyor","deneme":0,"kim":"MUTEVELLI"}\n' "$SIMDI" > "$KQ"
+printf '⏺ Düşünüyor…\nesc to interrupt\n' > "$S/ekran-ZAKIR"
+( sleep 0.5; printf '{"an":"y","epoch":%s,"koltuk":"BASIRET","yuzde":85,"hal":"calisiyor","deneme":0,"kim":"MUTEVELLI"}\n' "$SIMDI" >> "$KQ" ) & ep=$!
+TO_COMPACT_SINAV_BEKLE_SN=1 TO_REIS=MUTEVELLI kos --bekle --uygula; wait "$ep"
+grep -q '"koltuk":"ZAKIR".*"deneme":1' "$KQ" && grep -q '"koltuk":"BASIRET"' "$KQ" && ok "K2 tur sırasında eklenen BASIRET satırı yeniden yazımda KAYBOLMADI; ZAKIR deneme 1" || bad K2 "$(cat "$KQ")"
+
 echo; echo "toplam=$((GECEN+DUSEN)) geçen=$GECEN düşen=$DUSEN"
 [ "$DUSEN" = 0 ]

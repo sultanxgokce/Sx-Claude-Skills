@@ -14,6 +14,23 @@
   "sultan": false,
   "kanit_nerede": "",
   "oda": "",
-  "durum": "acik",
-  "gecmis": []
+  "durum": "tikandi",
+  "gecmis": [
+    {
+      "zaman": "2026-10-15T04:48:32+03:00",
+      "olay": "tikandi"
+    }
+  ],
+  "bitis": "2026-10-15T04:48:32+03:00",
+  "pr": "",
+  "puan": {
+    "kod": 4,
+    "dogru": "E",
+    "tur": 3
+  },
+  "kanit_var": true,
+  "tikanma": {
+    "yol": "devam",
+    "neden": "3 turda 5/E yok ama ilerleme gerçek (2→2→4): iki ciddi yetki bulgusu kapatıldı, kalan tek bulgu kuyruk turu kilidi (oda-tetik tur kilidi deseni), düzeltmesi hazır; 4. (mutlak) tur bu düzeltmeyle"
+  }
 }
