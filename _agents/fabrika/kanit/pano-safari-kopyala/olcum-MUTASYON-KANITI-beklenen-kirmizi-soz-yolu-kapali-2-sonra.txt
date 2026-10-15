@@ -1,0 +1,7 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut2-pano-1792054355/mutA.sh
+# rc=0 sure=27.8s zaman=2026-10-15T11:53:03+03:00
+--- stdout ---
+=== MUTASYON KANITI: mouseup söz yolu KAPATILDI (eski davranış: OSC 52 gelince writeText); aşağıdaki KIRMIZI BEKLENENDİR; rc=0 = sınav bozuk kodu YAKALADI. Gerçek ölçüm: pano-sinav-29-kapi-S1-S6-belirleyici ===
+  ✗ S1 fare seçimi SÖZ yolundan panoya indi (yazım mouseup içinde başladı, OSC 52 sözü çözdü) → pano="SECILECEK-SATIR-ABC" yol=writeText
+GEÇEN: 28 · KALAN: 1
+--- stderr ---

@@ -1,9 +1,18 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.6.2
+version: 2.6.3
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 Pano köprüsü 1.2.0 — Safari'de kopyalama (2.6.3 · 15 Eki, Sultan: "Safari'de metin kopyalanmıyor")
+Safari pano yazımını yalnız kullanıcı hareketi İÇİNDE geçirir; tmux seçimi OSC 52 ile geç geldiğinden `writeText`
+"request is not allowed by the user agent" ile düşüyordu (Chrome geçiriyordu). Üç ayak: **(1)** sürükleme/çift tık biterken
+(`mouseup`) `clipboard.write(ClipboardItem{text/plain: Promise})` eşzamanlı çağrılır, OSC 52 gelince söz çözülür (1,5 sn'de
+gelmezse reddedilir, pano değişmez; Chromium'da da aynı yol); **(2)** yazım reddedilirse sağ altta tıklanabilir **Kopyala** düğmesi
+(tıklama = hareket, `writeText` o anda geçer); **(3)** Shift+sürükle seçimini `copy` olayında köprü kendisi yazar — odak terminalden
+kaçsa da. Sınav `kapi/pano-sinav.mjs` S1–S6 (gerçek ttyd+tmux, Chromium; Safari taklidi: `writeText`/`write` reddi). Kabul: Sultan'ın
+Safari'de 10 sn denemesi. ⚠ WebKit bu kutuda açılmıyor (kütüphane eksik); Safari'nin kendisi ölçülmedi.
 
 ## Düzen (neyi koruyoruz)
 | Parça | Ne | Sağlam sayılma ölçüsü |

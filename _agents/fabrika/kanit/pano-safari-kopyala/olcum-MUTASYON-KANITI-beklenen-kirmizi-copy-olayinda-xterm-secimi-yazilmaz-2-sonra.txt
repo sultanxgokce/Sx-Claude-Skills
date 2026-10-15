@@ -1,0 +1,7 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut2-pano-1792054355/mutB.sh
+# rc=0 sure=35.4s zaman=2026-10-15T11:53:38+03:00
+--- stdout ---
+=== MUTASYON KANITI: copy olayında xterm seçimi yazma yolu KAPATILDI (eski davranış); aşağıdaki KIRMIZI BEKLENENDİR; rc=0 = sınav bozuk kodu YAKALADI. Gerçek ölçüm: pano-sinav-29-kapi-S1-S6-belirleyici ===
+  ✗ S5 Shift+sürükle seçimi, odak terminalden kaçmışken copy olayında köprü tarafından yazılır (preventDefault + metin) → {"sec":"SHIFT-SECIM-XYZ","odak":"BODY","engellendi":true,"metin":"safari-metni","yol":"copy"}
+GEÇEN: 28 · KALAN: 1
+--- stderr ---
