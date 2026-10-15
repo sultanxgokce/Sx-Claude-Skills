@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "compact-calistirma-biti",
+  "pr": "325",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T12:56:10+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 14887,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İstenen iki compact betiğinin kipi 100755 yapılmış; depo kipini ölçen kapı yeşil koşmuş ve compact.sh biti düşürülünce kusuru yakalamıştır. Ancak kalıcı kapının gerçekten CI tarafından çağrıldığı kanıtlanmamış, ayrıca talepteki scripts/*.sh sınırı kapi/ ve arac/ dizinlerine genişletilmiştir; önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "Kalıcı kapının CI sınav zincirine kurulmuş olduğu gösterilmiyor; köke test dosyası eklemek tek başına çağrılacağını kanıtlamaz.",
+        "kanit": "Diffte yalnız yeni kabuk-biti.test.sh, kip değişiklikleri ve SKILL.md sürüm notu var; hiçbir CI/harness çağırıcı değişikliği yok. Ölçüm de kapıyı doğrudan `bash kabuk-biti.test.sh` ile çalıştırıyor.",
+        "konum": "diff:kabuk-biti.test.sh ve olcum-kabuk-biti-test-3-kapi-46-betik-duzeltildi-sonra.txt",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Kapı ve kip değişiklikleri iş kartındaki scripts/*.sh kapsamını arac/ ve kapi/ dizinlerine genişletiyor.",
+        "kanit": "Kapı deseni `/(scripts|kapi|arac)/` içeriyor; verilen kip listesinde frontend-boost/arac ve ui-tasarim-akisi/arac altında yedi dosya 100755 yapılmış. İş kartının sınav ifadesi scripts/*.sh ile sınırlı.",
+        "konum": "kabuk-biti.test.sh:14 ve diffteki mode change listesi",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Yeşil ana ölçüm 220 dosyanın kipi geçtiğini, ikinci mutasyon ölçümü compact.sh 100644 yapılınca kapının kırmızı sonucu yakaladığını gösteriyor. İlk mutasyon kaydı test dosyası bulunamadığı için iddiayı ölçmüyor, fakat sonraki mutasyon kaydı onun yerini yeterince dolduruyor. Kurulu kopya ölçümü compact.sh için -rwxr-xr-x ve compact.test.sh için 35/35 gösterse de kalıcı kapının CI tarafından otomatik çağrıldığına dair ölçüm yok."
+  }
+}

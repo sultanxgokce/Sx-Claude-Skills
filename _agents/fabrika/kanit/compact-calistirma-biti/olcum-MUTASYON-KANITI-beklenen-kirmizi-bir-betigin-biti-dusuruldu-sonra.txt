@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut-biti-1792057964/mut.sh
+# rc=1 sure=0.0s zaman=2026-10-15T12:52:45+03:00
+--- stdout ---
+=== MUTASYON KANITI: geçici klonda compact.sh biti 100644e DÜŞÜRÜLDÜ; aşağıdaki KIRMIZI BEKLENENDİR; rc=0 = kapı bozuk durumu YAKALADI. Gerçek ölçüm: kabuk-biti-test-3-kapi ===
+--- stderr ---
+bash: kabuk-biti.test.sh: No such file or directory

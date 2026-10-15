@@ -1,0 +1,85 @@
+{
+  "is": "compact-calistirma-biti",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T12:57:09+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kabuk-biti-test-3-kapi-46-betik-duzeltildi",
+      "asama": "sonra",
+      "dosya": "olcum-kabuk-biti-test-3-kapi-46-betik-duzeltildi-sonra.txt",
+      "sha256": "ddaaa0ec762e559707744229af29048579134764f6f354ce511d05d27b3ed504",
+      "komut": [
+        "bash",
+        "kabuk-biti.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T12:52:44+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "MUTASYON-KANITI-beklenen-kirmizi-bir-betigin-biti-dusuruldu",
+      "asama": "sonra",
+      "dosya": "olcum-MUTASYON-KANITI-beklenen-kirmizi-bir-betigin-biti-dusuruldu-sonra.txt",
+      "sha256": "0f30d4ca2d54cd6540d81182f63667d92465c7a441dcf0bf954295de0c7c4f23",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut-biti-1792057964/mut.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T12:52:45+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sync-skills-duman-testi-kurulu-kopya-yesil-ve-compact-test-35",
+      "asama": "sonra",
+      "dosya": "olcum-sync-skills-duman-testi-kurulu-kopya-yesil-ve-compact-test-35-sonra.txt",
+      "sha256": "a459dcbff731be0b61fc0fd9bc299b44267191627aabca1ff3945a91243e1333",
+      "komut": [
+        "bash",
+        "-c",
+        "ls -l /config/.claude/skills/terminal-onar/scripts/compact.sh | cut -c1-10; bash /config/.claude/skills/terminal-onar/scripts/compact.test.sh 2>&1 | tail -1"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T12:52:59+03:00",
+      "sure_sn": 13.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "MUTASYON-KANITI-beklenen-kirmizi-bir-betigin-biti-dusuruldu-2",
+      "asama": "sonra",
+      "dosya": "olcum-MUTASYON-KANITI-beklenen-kirmizi-bir-betigin-biti-dusuruldu-2-sonra.txt",
+      "sha256": "aa975bbab06f6acd8b716f3d77822b430dcce241dffac29d3d802a917d6951a0",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut-biti2-1792058004/mut.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T12:53:26+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "CI-kesif-komutu-kabuk-biti-kapisini-listeler-lint-yml",
+      "asama": "sonra",
+      "dosya": "olcum-CI-kesif-komutu-kabuk-biti-kapisini-listeler-lint-yml-sonra.txt",
+      "sha256": "df1b00341fce914f946ff7a2af3ff72f85e5c55ae666a405545cf34fdd0a0371",
+      "komut": [
+        "bash",
+        "-c",
+        "echo \"lint.yml Kabuk sınamaları adımının keşif komutu (birebir): find . -name *.test.sh -not -path ./.git/* | sort — listede kabuk-biti var mı:\"; find . -name \"*.test.sh\" -not -path \"./.git/*\" | sort | grep -n \"kabuk-biti\"; echo \"toplam keşfedilen: $(find . -name \"*.test.sh\" -not -path \"./.git/*\" | wc -l)\"; grep -n \"mapfile -t T < <(find . -name\" .github/workflows/lint.yml"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T12:57:09+03:00",
+      "sure_sn": 0.1
+    }
+  ],
+  "imza": "e82d304720f8da960933d0483b6affcaa88aac21188f2d0d44218dfe0d6f3a9b"
+}

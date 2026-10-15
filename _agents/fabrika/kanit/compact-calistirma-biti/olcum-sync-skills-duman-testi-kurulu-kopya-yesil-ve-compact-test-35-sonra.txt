@@ -1,0 +1,6 @@
+$ bash -c ls -l /config/.claude/skills/terminal-onar/scripts/compact.sh | cut -c1-10; bash /config/.claude/skills/terminal-onar/scripts/compact.test.sh 2>&1 | tail -1
+# rc=0 sure=13.5s zaman=2026-10-15T12:52:59+03:00
+--- stdout ---
+-rwxr-xr-x
+toplam=35 geçen=35 düşen=0
+--- stderr ---
