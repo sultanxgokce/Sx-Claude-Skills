@@ -15,5 +15,14 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": []
+  "gecmis": [],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "NAKKAŞ",
+      "oturum": "c455c2",
+      "gerekce": "SERDAR devam kararı (session_01Ge4BawKcUrcm1pdV8WANyF, 16:12): bulgu 3→2→1, doğru şey E sabit; tur 3'ün bulgusu gerçek kusurdu (son hüküm geçerli) ve kapandı; 230 kapı yeşil, kurulu kopya dalla 56 dosyada birebir; filo 51 gündür kırmızı sınavlı 0.5.0 koşuyor — kayıt hizası acil. Beyan: NAKKAS (karar SERDAR'in, karta isleyen ben)",
+      "zaman": "2026-10-15T16:25:50+03:00"
+    }
+  ]
 }
