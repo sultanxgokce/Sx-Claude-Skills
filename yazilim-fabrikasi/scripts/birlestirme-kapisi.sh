@@ -79,22 +79,23 @@ fi
 # 3 · PUAN
 SON="$(ls "$DZ"/DENETIM-[0-9]*.json 2>/dev/null | sort -V | tail -1)"
 if [ -n "$SON" ]; then
+  # 🔴 SATIR-TEMELLİ AKTARIM DA KIRILGANDI (bağımsız göz #339 tur 1 pipe'ı çözdü, tur 2 yeni
+  #    satırı buldu): serbest-metin `yedek` alanı "\n" içerirse sabit satır-numarasıyla okuma
+  #    (sed -n Np) da kayar. Çözüm metinsel ayraç DEĞİL: python her değeri shlex.quote ile
+  #    KABUĞA GÜVENLİ tek-tırnaklı bir ifadeye çevirir, kabuk onu `eval` ile DEĞİŞKENE atar —
+  #    içinde "|" ya da "\n" olsa da shlex.quote kapatıp-yeniden-açarak kaçışlar, hiçbir
+  #    ayraç/satır-sayısı varsayımına dayanmaz.
   okuma="$(python3 - "$SON" <<'PY'
-import json,sys
+import json,sys,shlex
 d=json.load(open(sys.argv[1],encoding="utf-8")); s=d["sonuc"]
-# 🔴 PİPE AYRACI KIRILGANDI (bağımsız göz #339 tur 1): serbest-metin alanlar (yedek gerekçesi)
-# içinde "|" geçerse IFS='|' read kaymaya yol açar, eşit modeller farklı okunabilirdi. Her
-# alan KENDİ satırında — bu dosyanın cagri_oku() fonksiyonundaki ÖLÇÜLMÜŞ desenle aynı.
-for v in (s['kod_puani'], s['dogru_sey'], d.get('yazan','?'), d.get('denetci','?'), d.get('tur','?'),
-          len(s['bulgular']), d.get('yedek') or '', d.get('yazan_model') or '', d.get('yedek_model') or ''):
-    print(v)
+vals={"puan":s["kod_puani"],"dogru":s["dogru_sey"],"yazan":d.get("yazan","?"),"denetci":d.get("denetci","?"),
+      "tur":d.get("tur","?"),"nb":len(s["bulgular"]),"yedek":d.get("yedek") or "",
+      "yazan_model":d.get("yazan_model") or "","yedek_model":d.get("yedek_model") or ""}
+for k,v in vals.items():
+    print(f"{k}={shlex.quote(str(v))}")
 PY
 )"
-  puan="$(printf '%s' "$okuma" | sed -n 1p)"; dogru="$(printf '%s' "$okuma" | sed -n 2p)"
-  yazan="$(printf '%s' "$okuma" | sed -n 3p)"; denetci="$(printf '%s' "$okuma" | sed -n 4p)"
-  tur="$(printf '%s' "$okuma" | sed -n 5p)"; nb="$(printf '%s' "$okuma" | sed -n 6p)"
-  yedek="$(printf '%s' "$okuma" | sed -n 7p)"; yazan_model="$(printf '%s' "$okuma" | sed -n 8p)"
-  yedek_model="$(printf '%s' "$okuma" | sed -n 9p)"
+  eval "$okuma"
   _y "  · denetim tur $tur · $puan/5 · doğru şey: $dogru · bulgu: $nb · yazan: $yazan → denetçi: $denetci"
   [ "$puan" = "5" ] || { _h "kod puanı 5 DEĞİL ($puan) — adım 2'ye dönülmeliydi"; eksik=$((eksik+1)); }
   [ "$dogru" = "E" ] || { _h "'doğru şey mi' EVET değil ($dogru) — kod doğru olsa da yanlış iş olabilir"; eksik=$((eksik+1)); }

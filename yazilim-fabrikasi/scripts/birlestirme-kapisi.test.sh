@@ -87,6 +87,19 @@ den is-b6 1 5 E claude "claude (sonnet-5) (YEDEK GOZ: codex|yok|iki|deneme)" "co
 CIKTI="$(bash "$G" is-b6 2>&1)"; RC=$?
 [ "$RC" -eq 0 ]; g $? "'|' içeren yedek metni + FARKLI model → doğru okunur, bağımsız sayılır"
 
+echo "════ T5g · 🔧 yedek gerekçesi YENİ SATIR İÇERİYOR → alan kaymıyor (bağımsız göz #339 tur 2) ════"
+# 🔴 Satır-temelli okuma (sed -n Np) da kırılgandı: yedek metninde "\n" varsa sabit satır
+# numaraları kayardı. shlex.quote + eval metinsel ayraca/satır-sayısına dayanmaz.
+kart is-b7; bash "$K" olcum is-b7 olc --asama tek -- echo 1 >/dev/null 2>&1
+den is-b7 1 5 E claude "claude (sonnet-5) (YEDEK GOZ: codex yok)" $'codex yok\niki deneme\nuc satir' "sonnet-5" "sonnet-5"
+CIKTI="$(bash "$G" is-b7 2>&1)"; RC=$?
+[ "$RC" -eq 1 ]; g $? "yeni satır içeren yedek metni + AYNI model → hâlâ reddeder (alan kaymadı)"
+grep -q "bağımsız göz değil" <<<"$CIKTI"; g $? "K1 gerekçesi yazılı (yanlışlıkla bağımsız sayılmadı)"
+kart is-b8; bash "$K" olcum is-b8 olc --asama tek -- echo 1 >/dev/null 2>&1
+den is-b8 1 5 E claude "claude (sonnet-5) (YEDEK GOZ: codex yok)" $'codex yok\niki deneme\nuc satir' "opus-4" "sonnet-5"
+CIKTI="$(bash "$G" is-b8 2>&1)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "yeni satır içeren yedek metni + FARKLI model → doğru okunur, bağımsız sayılır"
+
 echo "════ T6 · kanıt manifesti elle boyanırsa → engeller ════"
 kart is-c; bash "$K" olcum is-c olc --asama tek -- echo 1 >/dev/null 2>&1; den is-c 1 5 E
 bash "$G" is-c --sessiz >/dev/null 2>&1; g $? "önce temiz: rc=0"
