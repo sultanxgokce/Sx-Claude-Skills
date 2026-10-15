@@ -1,0 +1,32 @@
+{
+  "tur": 3,
+  "is": "x1-dar-ekran-muafiyeti",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T15:47:56+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": true,
+    "istem_bayt": 122241,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "X1 hükmü genişlik bantlarına taşınmış; 390 px dar bant muafiyeti, kapalı hata davranışı ve önceki iki denetim açığının kapanışı araç imzalı ölçümlerle gösterilmiş. Lakin değişiklik metni 110000 baytta kırpıldığı için uygulamanın ve sınav çağırıcısının son kısmı bağımsız gözce bütünüyle incelenemedi; üretim mühründen önce tam diff görülmeli.",
+    "bulgular": [
+      {
+        "ne": "Sunulan diff kırpıldığı için `yogunluk-denetle.py` değişikliğinin kalan kısmı ile test betiğindeki gerçek çağrı ve beklentiler denetlenemiyor; 53/53 yeşil koşu davranış kanıtıdır ama görünmeyen kodun statik incelemesinin yerini tutmaz.",
+        "kanit": "İstem sonundaki araç uyarısı değişikliğin 122241 bayt olduğunu, 110000 baytta kırpıldığını ve diff sonunun görülmediğini açıkça bildiriyor; görünen diff de `yogunluk-denetle.py` içindeki X1 dalının ortasında kesiliyor.",
+        "konum": "kanıt kaydı: istem kırpma uyarısı; diff `ui-tasarim-akisi/arac/yogunluk-denetle.py` sonu",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Aynı fikstürün önce RC=1, sonra RC=0 ölçüm çifti talep edilen 390 px muafiyetini doğrudan gösteriyor; beyansız kare RC=2, muafiyetsiz tek kare RC=1, karışık muaf bant RC=1, bant içi beraberlik RC=1 ve son 53/53 koşusu sınır davranışlarını destekliyor. Ancak diff kırpıldığı için kanıt güçlü olsa da kod incelemesi eksiksiz değil."
+  }
+}

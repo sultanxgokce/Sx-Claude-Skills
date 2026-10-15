@@ -15,5 +15,14 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": []
+  "gecmis": [],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "NAKKAŞ",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+      "gerekce": "SERDAR kararı (15:50, _agents/nakkas/NOTES.md): 'KARAR 1: yol 1 (DEVAM, tur 4)'. Gerekçe: bulgu 2→1→1, DOGRU SEY MI E sabit; tur 3'un tek bulgusu istemin 110 KB'ta kirpilmasi (denetci kodun sonunu goremedi), kusur DEGIL. Tur 4'te denetciye yalniz kod+kural farki (31 KB) + fikstur listesi verilecek. Beyan: NAKKAS (karar SERDAR'in, karta isleyen ben)",
+      "zaman": "2026-10-15T16:12:46+03:00"
+    }
+  ]
 }

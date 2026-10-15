@@ -1,7 +1,7 @@
 {
   "is": "x1-dar-ekran-muafiyeti",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T15:47:21+03:00",
+  "guncelleme": "2026-10-15T16:42:07+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -155,7 +155,23 @@
       "renk": "yesil",
       "zaman": "2026-10-15T15:47:21+03:00",
       "sure_sn": 9.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "REBASE-SONRASI-0.5.1-uzerinde-dort-suit-242-kapi",
+      "asama": "sonra",
+      "dosya": "olcum-REBASE-SONRASI-0.5.1-uzerinde-dort-suit-242-kapi-sonra.txt",
+      "sha256": "944191d6a0a40ea85545f365b0ec4924d2711dcce9f3c3ae0439c095c744f64b",
+      "komut": [
+        "bash",
+        "-c",
+        "cd ui-tasarim-akisi/arac && for t in yogunluk-denetle havuz prompt-yap yargi-birlestir; do bash $t.test.sh || exit 1; done"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T16:42:07+03:00",
+      "sure_sn": 12.5
     }
   ],
-  "imza": "594dcb356d7bb64bee193626ee8a783f0becb826cdd98609b882ca3abdc84aeb"
+  "imza": "9f2865c5aad5ce1d2bf9531e72ab4bf1c377fd5c4a46e0c8c344e219ed97e18a"
 }
