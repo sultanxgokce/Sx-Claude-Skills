@@ -1,0 +1,313 @@
+$ bash -c cd ui-tasarim-akisi/arac && for t in yogunluk-denetle havuz prompt-yap yargi-birlestir; do bash $t.test.sh || exit 1; done
+# rc=0 sure=12.5s zaman=2026-10-15T16:42:07+03:00
+--- stdout ---
+temiz-kume                   ✅ GEÇTİ  rc=0
+kirli-kume-rc                ✅ GEÇTİ  rc=1
+S1-yakalandi                 ✅ GEÇTİ  S1[sayfa] büyük-sayı: 4 adet 25px+ (bütçe 3)
+S2-yakalandi                 ✅ GEÇTİ  S2[sayfa] blok-türü: 3 tür (kart+liste+şerit) — bütçe 2
+S3-yakalandi                 ✅ GEÇTİ  S3[sayfa] birincil eylem: 2 KOŞULSUZ adet (tek olmalı)
+S4-yakalandi                 ✅ GEÇTİ  S4 köşe-yarıçapı küme-dışı: 4px (izinli: 0/8/10/999)
+S5-yakalandi                 ✅ GEÇTİ  S5 font-kademe küme-dışı: 44px (izinli: 12.5/14.5/16.5/21/25)
+X1-yakalandi                 ✅ GEÇTİ  X1 gezinme iskeleti çoğunluktan sapıyor: ('nav', ('Başka',)) ≠ taban ('header', ('Bugün', 'Kayıtlar'))
+X2-yakalandi                 ✅ GEÇTİ  X2 sözlük-dışı bileşen adı (sessiz icat): KPI vitrin şeridi
+X3-yakalandi                 ✅ GEÇTİ  X3 yasak dil: 'tasarruf' ×1
+X4-yakalandi                 ✅ GEÇTİ  durum-yazımı çatalı
+profilsiz-rc2                ✅ GEÇTİ  rc=2 çalıştırılamadı
+cift-yonlu-yesil             ✅ GEÇTİ  rc=0 — panel ayrı yüzey, iki bütçe de içeride
+cift-yonlu-kirmizi-rc        ✅ GEÇTİ  rc=1
+cift-yonlu-X2                ✅ GEÇTİ  yanlış yazım X2 ile yakalandı
+cift-yonlu-S1                ✅ GEÇTİ  yüzey açılmadı → bütçeler birleşti (canlı vakanın kendisi)
+bekci-hizali                 ✅ GEÇTİ  çekirdeğin her adı araç sözlüğünde
+bekci-negatif                ✅ GEÇTİ  bozuk çekirdekte rc=1 + harf-kasası teşhisi
+bekci-rc2                    ✅ GEÇTİ  Ç3 yoksa rc=2 (yanlış-yeşil vermez)
+altin-cekirdek-adlari        ✅ GEÇTİ  rc=0 — çekirdek ∪ profil
+birlesim-gevsemedi           ✅ GEÇTİ  ne çekirdekte ne markada olan ad hâlâ X2
+birlesim-tasiyici            ✅ GEÇTİ  çekirdekten ad düşünce ALTIN kırmızıya döndü
+cekirdeksiz-rc2              ✅ GEÇTİ  rc=2 (yanlış-yeşil/kırmızı vermez)
+profil-esitli-bicim          ✅ GEÇTİ  --profil=<yol> rc=0
+profil-degersiz-rc2          ✅ GEÇTİ  değeri eksik bayrak rc=2 (sessizce yutulmaz)
+fikstur-profili-hizali       ✅ GEÇTİ  çekirdeğin her adı fikstür profilinde
+rol-yesil                    ✅ GEÇTİ  rc=0 — panel/vitrin/gezinme profilden türedi
+rol-kirmizi-rc               ✅ GEÇTİ  rc=1
+rol-kirmizi-yuzey            ✅ GEÇTİ  panel rolü yok → yüzey açılmadı, bütçeler birleşti
+rol-kirmizi-gezinme          ✅ GEÇTİ  gezinme rolü yok → X1
+rol-kirmizi-vitrin           ✅ GEÇTİ  vitrin rolü yok → muafiyet düştü
+rol-bilinmeyen-rc2           ✅ GEÇTİ  bilinmeyen rol adı rc=2
+g5-oksuz-blok-rc2            ✅ GEÇTİ  öksüz blok_turu anahtarı rc=2 + teşhis
+g5-tutan-harita              ✅ GEÇTİ  eşleşen harita → uyarı yok, rc=0
+g5-olcumsuz-uyari            ✅ GEÇTİ  ölçülmemiş S2 sessiz kalmıyor
+punto-sifirsonu-altin        ✅ GEÇTİ  rc=0 — 20/12/14/16 küme içinde, sahte-kırmızı yok
+punto-sifirsonu-kirmizi      ✅ GEÇTİ  küme-dışı 30px S5 ile yakalandı
+scif-ic-ice-yesil            ✅ GEÇTİ  iç-içe sc-if: koşullu sayıldı, sahte-kırmızı yok
+scif-aralik-birim            ✅ GEÇTİ  kardeş + kapanmamış aralıklar korundu
+bant-yesil                   ✅ GEÇTİ  dar kare muaf bantta → rc=0 (sahte-kırmızı yok)
+bant-muafiyet-yazili         ✅ GEÇTİ  muafiyet ÖLÇMEDİĞİNİ ilan ediyor
+bant-mutant-yalin            ✅ GEÇTİ  BEKLENEN KIRMIZI — bant kaldırılınca 390 px kare yine düşüyor
+bant-beyansiz-rc2            ✅ GEÇTİ  beyansız kare ÖLÇÜLEMEDİ (temiz DEĞİL)
+bant-eksik-ust-rc2           ✅ GEÇTİ  bandına girmeyen genişlik → rc=2
+bant-karisik-rc1             ✅ GEÇTİ  muaf bantta çatallanma hâlâ KIRMIZI
+bant-ici-sapma               ✅ GEÇTİ  bant İÇİ sapma hâlâ KIRMIZI (muafiyet kıyası kaldırmıyor)
+bant-beraberlik-rc1          ✅ GEÇTİ  iskelet beraberliği KIRMIZI (not değil)
+bant-tek-kare-mutlak         ✅ GEÇTİ  muafiyetsiz tek kareli bantta yokluk KIRMIZI (varlık ⟂ aynılık)
+profil-bant-yabanci-muaf-rc2 ✅ GEÇTİ  geçersiz bant yapılandırması rc=2
+profil-bant-cift-ust-rc2     ✅ GEÇTİ  geçersiz bant yapılandırması rc=2
+cagiran-rc2-kapali           ✅ GEÇTİ  prompt-yap.sh rc=2'yi varsayılan dala (ölçülemedi) düşürüyor
+f5-fikstur-cifti             ✅ GEÇTİ  7 kural kodunun hepsinde kırmızı fikstür var
+f5-yesil-yari                ✅ GEÇTİ  çiftin yeşil yarısı mevcut (fikstur/temiz)
+────────────────────────────────────────────
+TOPLAM: 53 geçti · 0 kaldı
+── 1 · geçerli kayıt yazılır
+  ✓ temiz kayıt → rc=0 (rc=0)
+  ✓ kırmızı kayıt → rc=0 (rc=0)
+  ✓ düşen kodlar görünür
+── 2 · ŞEMA KAPALI: serbest metin alanı eklenemez
+  ✓ serbest metin bayrağı işe yaramaz → rc=1 (rc=1)
+  ✓ metin havuza girmedi
+── 3 · geçersiz değerler reddedilir (fail-closed)
+  ✓ bilinmeyen hüküm → rc=1 (rc=1)
+  ✓ sebep söylenir
+  ✓ bilinmeyen kapı → rc=1 (rc=1)
+  ✓ düşen alanına serbest metin → rc=1 (rc=1)
+  ✓ yalnız kod alır denir
+  ✓ kutu adında boşluk/uzunluk → rc=1 (rc=1)
+── 4 · reddedilen kayıt dosyaya DÜŞMEZ (yarım yazma yok)
+  ✓ satır sayısı değişmedi (2)
+── 5 · okuma ve özet
+  ✓ oku → rc=0 (rc=0)
+  ✓ kayıt görünür
+  ✓ ozet → rc=0 (rc=0)
+  ✓ en çok düşen kural listelenir
+── 6 · BOŞ havuz 'temiz' DEĞİL 'bakılmamış' der — METİN de KOD da
+  ✓ boş havuz → rc=3 ÖLÇÜLEMEDİ (rc=3)
+  ✓ dürüst dil
+  ✓ ölçüm yapılmış gibi tablo basmaz
+  ✓ sıfır-ihlal iddiası yok
+  ✓ kayıt VAR ama o kutuda yok → rc=3 (rc=3)
+── 7 · bozuk satır okumayı çökertmez, sessizce elenir
+  ✓ bozuk satırlı havuz → rc=0 (rc=0)
+── 8 · ÇAĞIRAN gerçek: ölçüm anında kayıt kendiliğinden düşer
+  ✓ devam promptu → rc=0 (rc=0)
+  ✓ havuza kendiliğinden yazıldı (kimse çağırmadı)
+── 9 · havuz yazılamasa bile prompt üretimi DÜŞMEZ (defter kapı değildir)
+  ✓ yazılamaz havuz → yine rc=0 (rc=0)
+── 10 · İPTAL: yanlış satır SİLİNMEDEN geçersiz kılınabilir (salt-ekleme korunur)
+  ✓ hedef kayıt yazılır (rc=0)
+  ✓ doğru kayıt da yazılır (rc=0)
+  ✓ oku/yaz kayıt-id basıyor (9a7f2260b2b7)
+  ✓ geçersiz sebep REDDEDİLİR (serbest metin yok) (rc=1)
+  ✓ kapalı küme söylenir
+  ✓ bilinmeyen kayıt-id → rc=1 (rc=1)
+  ✓ geçerli iptal → rc=0 (rc=0)
+  ✓ eski satırın durduğu söylenir
+  ✓ iptal sonrası özet → rc=0 (rc=0)
+  ✓ iptal edilen kural sayımdan DÜŞTÜ
+  ✓ geçerli kayıt sayımda KALDI
+  ✓ oku varsayılan görünüm → rc=0 (rc=0)
+  ✓ iptal edilen satır varsayılan görünümde yok
+  ✓ oku --iptaller-dahil → rc=0 (rc=0)
+  ✓ geçmiş DURUYOR (salt-ekleme)
+  ✓ mezar-taşı görünür
+  ✓ aynı kayıt ikinci kez iptal edilmez (rc=0)
+  ✓ ikinci mezar-taşı yazılmadı
+── 11 · profil_sha: 'ölçüm doğru, referans yanlış' vakasına karşı skalar parmak izi
+  ✓ profil_sha ile yazılır → rc=0 (rc=0)
+  ✓ desene uymayan profil_sha → rc=1 (rc=1)
+  ✓ sebep söylenir
+  ✓ parmak-izsiz ölçüm özette dürüstçe sayılır (rc=0)
+  ✓ eksik parmak-izi bildirilir
+── 12 · ders: kutunun kendi defterine opak işaretçi (F2 · L40-kalem-4)
+  ✓ serbest metin ders → rc=1 (İ1 kalkanı) (rc=1)
+  ✓ sebep söylenir
+  ✓ s0000 biçimli ders → rc=0 (rc=0)
+  ✓ gerekçesiz kırmızı da yazılabilir (ders opsiyonel) (rc=0)
+  ✓ ders alanlı özet → rc=0 (rc=0)
+  ✓ gerekçesi olan kırmızı sayılır
+── 13 · dusen_karar: kural mı zayıf tasarım mı zayıf (F4 · L40-kalem-4)
+  ✓ enum-dışı dusen_karar → rc=1 (kapalı küme) (rc=1)
+  ✓ sebep söylenir
+  ✓ kural-hatali yargısı → rc=0 (rc=0)
+  ✓ tasarim-duzeltildi yargısı → rc=0 (rc=0)
+  ✓ ikinci tasarim-duzeltildi (rc=0)
+  ✓ yargı-dağılımlı özet → rc=0 (rc=0)
+  ✓ kural NAKKAŞ'ın sorusuna cevap verir
+── 14 · GEREKÇE: kırmızıya sonradan ders bağlanır (salt-ekleme, hedefe dokunulmaz)
+  ✓ e20 kırmızı yazılır (gerekçesiz) (rc=0)
+  ✓ ÖLÇÜM KAYBOLMAZ: gerekçesiz kırmızıya rağmen yazma sürer (rc=0)
+  ✓ boş gerekçe reddedilir → rc=2 (rc=2)
+  ✓ boş gerekçe gerekçe değil
+  ✓ bilinmeyen hedef → rc=1 (rc=1)
+  ✓ geçerli gerekçe bağlanır → rc=0 (rc=0)
+  ✓ hedef bildirilir
+  ✓ gerekçeli özet → rc=0 (rc=0)
+  ✓ gerekçe satırı ÖLÇÜM sayılmaz (2 kırmızı, 1'i gerekçeli)
+── 15 · F3 KAPISI: sorulur, yazma yolunu kilitlemez (Sultan-kararı 2026-08-24)
+  ✓ hiç kayıt yoksa kapı AÇIK → rc=0 (rc=0)
+  ✓ eksik argüman → rc=2 (rc=2)
+  ✓ gerekçesiz kırmızıdan sonra kapı KAPALI → rc=1 (rc=1)
+  ✓ reçete verilir
+  ✓ BAŞKA ekran etkilenmez (grup bazlı) → rc=0 (rc=0)
+  ✓ gerekçe bağlanınca kapı AÇILIR → rc=0 (rc=0)
+  ✓ temiz hükümden sonra kapı AÇIK → rc=0 (rc=0)
+── 16 · ÇAĞIRAN GERÇEK Mİ: kapı prompt-yap.sh'te fiilen duruyor mu?
+  ✓ gerekçesiz kırmızıdan sonra devam promptu ÜRETİLMEZ → rc=1 (rc=1)
+  ✓ sebep Sultan-dilinde söylenir
+  ✓ gerekçe bağlanınca devam promptu ÜRETİLİR → rc=0 (rc=0)
+  ✓ kaçış yolu açık ama sessiz değil (UI_AKIS_GEREKCE_KAPISI=0) (rc=0)
+── 17 · KAPI 6'NIN ÇAĞIRANI GERÇEK Mİ (0.5.0'ın kanıtsız kalan yarısı)
+  ✓ ayırt yargısı YOKken devam promptu ÜRETİLMEZ → rc=1 (rc=1)
+  ✓ sebep AYIRT-EDİCİLİK olarak söylenir
+  ✓ yargı yazılınca kapı AÇILIR → rc=0 (rc=0)
+── 18 · AYIRT KAYDI RUBRİKLE TUTARLI MI (şema ⟂ kural anlam kaçağı)
+  ✓ çelişik temiz (imza=yok) REDDEDİLİR → rc=1 (rc=1)
+  ✓ çelişki rubrikle gerekçelenir
+  ✓ çelişik kırmızı (düşen madde yok) REDDEDİLİR → rc=1 (rc=1)
+  ✓ ayırt kaydında hukum=olcemedi REDDEDİLİR → rc=1 (rc=1)
+  ✓ ayırt bir YARGI olduğu söylenir
+  ✓ geçerli temiz KABUL → rc=0 (rc=0)
+  ✓ geçerli kırmızı (klişeye düşmüş) KABUL → rc=0 (rc=0)
+── 19 · KARARSIZ yargı kapıyı AÇMAZ (emin-degilim kalıcı sığınak değil)
+  ✓ ayırt yargısı hiç yokken KAPALI → rc=1 (rc=1)
+  ✓ emin-degilim YAZILABİLİR ama kapı KAPALI → rc=1 (rc=1)
+  ✓ rubriğin kendi cümlesiyle gerekçelenir
+  ✓ karar verilince kapı AÇILIR → rc=0 (rc=0)
+  ✓ kararlıdan SONRA emin-degilim → kapı yine KAPALI → rc=1 (rc=1)
+  ✓ son sözün geçerli olduğu söylenir
+
+TOPLAM: 97 geçti · 0 kaldı
+── 1 · Durak 0 dosyası yoksa prompt üretilmez
+  ✓ niyet dosyası yok → rc=2 (rc=2)
+  ✓ çözüm satırı gösterilir
+── 2 · boş 'Kendi cümlem:' → prompt üretilmez (şık seçmek yetmez)
+  ✓ yarım niyet → rc=2 (rc=2)
+  ✓ hangi satır boş söylenir
+── 3 · dolu niyet → üretilir ve gövdesi prompta GİRER
+  ✓ dolu niyet → rc=0 (rc=0)
+  ✓ niyet gövdesi gömüldü
+  ✓ sözleşme de gömüldü
+── 4 · ölçüm kapısı: ÖNCEKİ sayfa kırmızıysa devam promptu ÜRETİLMEZ
+  ✓ kırmızı önceki → rc=1 (rc=1)
+  ✓ sebep söylenir
+── 5 · TIK KAPISI: yoğunluk temiz olsa bile tık ölçülmeden geçilmez
+  ✓ tık ölçümü yok → rc=3 (rc=3)
+  ✓ iki şeyin farkı söylenir
+  ✓ çözüm aracı gösterilir
+── 5b · tık ölçülünce geçer
+  ✓ tık taze → rc=0 (rc=0)
+  ✓ önceki sayfa gövdesi gömüldü
+── 5c · BAYAT ölçüm 'temiz' sayılmaz (asıl saldırı yüzeyi)
+  ✓ sayfa değişti, ölçüm eski → rc=3 (rc=3)
+  ✓ bayat denir
+── 5d · bütçe AŞIMI ölçülmüştür → rc=1 (bu 'bakılamadı' değil)
+  ✓ aşım → rc=1 (rc=1)
+  ✓ hangi görev aştı söylenir
+── 5e · tik-kaydet biçim denetimi
+  ✓ bozuk biçim → rc=2 (rc=2)
+  ✓ hiç görev yok → rc=2 (rc=2)
+── 6 · profil yoksa 'temiz' DEĞİL 'ölçülemedi' (rc=3)
+  ✓ profilsiz → rc=3 (rc=3)
+  ✓ ölçülemedi denir, temiz denmez
+── 7 · REGRESYON: boş sözleşme hâlâ kaçamıyor (v0.1.1 kazanımı)
+  ✓ boş yuvalı sözleşme → rc=2 (rc=2)
+── 8 · REGRESYON: niyet yuvası OLMAYAN eski şablon çalışmaya devam eder
+  ✓ niyetsiz eski şablon → rc=0 (rc=0)
+── 9 · kanonik şablonlar Durak 0 yuvasını taşıyor
+  ✓ tasarim-promptu.md yuvayı taşıyor
+  ✓ devam-promptu.md yuvayı taşıyor
+  ✓ urun-niyeti.md zorunlu cümle satırlarını taşıyor
+── 10 · ÇEKİRDEK sözleşme çağrılmadan, kendiliğinden prompta girer
+  ✓ çekirdek otomatik → rc=0 (rc=0)
+  ✓ çekirdek işaret standardı girdi
+  ✓ çekirdek çıktı sözleşmesi girdi
+  ✓ marka değerleri de girdi
+── 11 · MARKA ":" ayraçlı liste olabilir (PATH gibi), sırayla eklenir
+  ✓ iki marka dosyası → rc=0 (rc=0)
+  ✓ birinci marka girdi
+  ✓ ikinci marka girdi
+── 12 · listede EKSİK dosya varsa hangisi olduğu söylenir
+  ✓ eksik marka parçası → rc=2 (rc=2)
+  ✓ eksik olan parça adlandırılır
+── 13 · HEX ÇİTİ: çekirdeğe renk DEĞERİ sızarsa koşu reddedilir
+  ✓ değerli çekirdek → rc=2 (rc=2)
+  ✓ sebep söylenir
+  ✓ sızan satır gösterilir
+── 14 · gerçek çekirdek dosyası hex çitinden GEÇER (kendi kuralına uyar)
+  ✓ çekirdekte sıfır renk değeri
+── 15 · REGRESYON: çekirdek yuvasız/slotsuz — dolmamış yuva taramasını tetiklemez
+  ✓ çekirdekte yuva yok
+── 16 · REGRESYON: sınav GERÇEK havuza yazmadı (sınav-verisi ⟂ saha-verisi)
+  ✓ canlı defterde sınav kaydı yok
+  ✓ sınav kendi geçici defterine yazdı
+
+TOPLAM: 43 geçti · 0 kaldı
+── 1 · temiz küme: hiçbir madde düşmüyor → rc=0
+  ✓ temiz küme rc=0 (rc=0)
+  ✓ hüküm KIRMIZI-DEĞİL
+── 2 · kırmızı çizgi: geçerli-alıntılı TEK 0, diğer ikisi 2 → madde 0
+  ✓ tek 0 madde-0 yapar, ekran RED değil (1<3) (rc=0)
+  ✓ M1 düşürüldü
+── 3 · alıntı kapısı: UYDURMA alıntılı 0 sayılmaz
+  ✓ uydurma alıntı hükmü düşürmez (rc=0)
+  ✓ M1 düşmedi
+  ✓ karnede alıntı-düşen sayıldı
+── 4 · RED: 3 madde 0 → rc=1
+  ✓ 3 düşen madde → RED rc=1 (rc=1)
+  ✓ hüküm RED
+── 5 · imza: sayısal puan İMZAYA GİRMEZ (dönme-freni sakatlanmasın)
+  ✓ imza okunuyor (rc=0)
+── 6 · yeter sayı: ayakta <2 oy → EMİN-DEĞİLİM, rc=2 (unknown ≠ pass)
+  ✓ tek yargıç → rc=2 (rc=2)
+  ✓ hüküm EMİN-DEĞİLİM
+── 7 · parse kapısı: şemasız cevap düşer (çıktı bozulması)
+  ✓ bozuk cevap düşer, kalan 2 oy yeter (rc=0)
+  ✓ karnede parse-düşen görünür
+── 8 · medyan AŞAĞI yuvarlar (ortalama değil)
+  ✓ 2 oy [1,2] → medyan 1 (rc=0)
+  ✓ M1=1 doğrulandı (rc=0)
+── 9 · MÜHÜR: rubrik sha uyuşmazsa koşu REDDEDİLİR
+  ✓ yanlış mühür → rc=2 (rc=2)
+  ✓ mühür uyuşmazlığı bildirildi
+  ✓ doğru mühür → geçer (rc=0)
+── 10 · rubriksiz koşu 'temiz' sayılmaz → rc=2
+  ✓ rubrik yok → rc=2 (rc=2)
+  ✓ yargı yapılmadı denir
+── 11 · yanıt yok → rc=2 (sessiz yeşil yok)
+  ✓ boş yanıt dizini → rc=2 (rc=2)
+── 12 · tescil kolu: --katman2 sözcesi üretilir
+  ✓ tescil sözcesi (RED→KALDI) (rc=1)
+  ✓ katman2 KALDI
+  ✓ tescil sözcesi (temiz→GECTI) (rc=0)
+  ✓ katman2 GECTI
+── 13 · panel süzgeci: --panel dışındaki yargıç sayılmaz
+  ✓ panel=kimi,glm → qwen'in 0'ı sayılmaz (rc=0)
+  ✓ kimi'nin M1=0'ı panelde yok
+── 14 · ekran HTML'i yoksa oy sayılmaz (alıntı doğrulanamaz)
+  ✓ öksüz yanıt → rc=2 (rc=2)
+  ✓ ekran HTML'i yok uyarısı
+── 15 · yargı fikstürleri MEKANİK olarak temiz (yargı-kırmızısı anlam boyutundandır)
+  ✓ ALTIN mekanik rc=0 (rc=0)
+  ✓ M2 KIRMIZI mekanik rc=0 (rc=0)
+── 16 · istek gövdesi: ÇEKİRDEK prompta fiilen giriyor mu (M1'in çatalı)
+  ✓ gövde kuruldu (rc=0)
+  ✓ çekirdek adı promptta: Liste satırı
+  ✓ çekirdek adı promptta: Form alanı
+  ✓ çekirdek adı promptta: Onay diyaloğu
+  ✓ çekirdek adı promptta: Sayfa başlığı
+  ✓ çekirdek bölümü etiketli (yargıç hangi parçanın filo kuralı olduğunu görür)
+  ✓ ekran gövdesi promptta
+── 16b · çekirdek okunamazsa gövde YAZILMAZ (yarım sözleşmeyle hüküm istenmez)
+  ✓ çekirdeksiz → rc=2 (rc=2)
+  ✓ gövde dosyası hiç oluşmadı
+── 17 · ÇİFT YÖNLÜ HÜKÜM: ALTIN ayakta kalır, M2 düşer (aynı oy şeması)
+  ✓ ALTIN → RED değil (rc=0) (rc=0)
+  ✓ M2 fikstürü → RED (rc=1) (rc=1)
+  ✓ düşen madde M2
+── 17b · EŞİK ALTI dürüstlüğü: tek M2=0 RED DEĞİLDİR ama sessiz de geçmez
+  ✓ tek sıfır → KIRMIZI-DEĞİL (rc=0) (rc=0)
+  ✓ rc=0 olsa da düşen madde raporlanır
+── L57-EK2 · ALTIN: yargı hükmü havuza REFERANS DAMGASIYLA düşer
+  ✓ havuza yazan yargı koşumu rc=0 (rc=0)
+  ✓ yargı kaydı 12-hane referans damgası taşıyor
+  ✓ damgalı ölçüm 'parmak-izi YOK' sayacına DÜŞMEZ
+
+TOPLAM: 49 geçti · 0 kaldı
+--- stderr ---

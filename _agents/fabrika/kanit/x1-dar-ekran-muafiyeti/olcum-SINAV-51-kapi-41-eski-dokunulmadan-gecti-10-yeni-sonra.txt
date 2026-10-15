@@ -1,0 +1,57 @@
+$ bash ui-tasarim-akisi/arac/yogunluk-denetle.test.sh
+# rc=0 sure=2.1s zaman=2026-10-15T15:40:37+03:00
+--- stdout ---
+temiz-kume                   ✅ GEÇTİ  rc=0
+kirli-kume-rc                ✅ GEÇTİ  rc=1
+S1-yakalandi                 ✅ GEÇTİ  S1[sayfa] büyük-sayı: 4 adet 25px+ (bütçe 3)
+S2-yakalandi                 ✅ GEÇTİ  S2[sayfa] blok-türü: 3 tür (kart+liste+şerit) — bütçe 2
+S3-yakalandi                 ✅ GEÇTİ  S3[sayfa] birincil eylem: 2 KOŞULSUZ adet (tek olmalı)
+S4-yakalandi                 ✅ GEÇTİ  S4 köşe-yarıçapı küme-dışı: 4px (izinli: 0/8/10/999)
+S5-yakalandi                 ✅ GEÇTİ  S5 font-kademe küme-dışı: 44px (izinli: 12.5/14.5/16.5/21/25)
+X1-yakalandi                 ✅ GEÇTİ  X1 gezinme iskeleti çoğunluktan sapıyor: ('nav', ('Başka',)) ≠ taban ('header', ('Bugün', 'Kayıtlar'))
+X2-yakalandi                 ✅ GEÇTİ  X2 sözlük-dışı bileşen adı (sessiz icat): KPI vitrin şeridi
+X3-yakalandi                 ✅ GEÇTİ  X3 yasak dil: 'tasarruf' ×1
+X4-yakalandi                 ✅ GEÇTİ  durum-yazımı çatalı
+profilsiz-rc2                ✅ GEÇTİ  rc=2 çalıştırılamadı
+cift-yonlu-yesil             ✅ GEÇTİ  rc=0 — panel ayrı yüzey, iki bütçe de içeride
+cift-yonlu-kirmizi-rc        ✅ GEÇTİ  rc=1
+cift-yonlu-X2                ✅ GEÇTİ  yanlış yazım X2 ile yakalandı
+cift-yonlu-S1                ✅ GEÇTİ  yüzey açılmadı → bütçeler birleşti (canlı vakanın kendisi)
+bekci-hizali                 ✅ GEÇTİ  çekirdeğin her adı araç sözlüğünde
+bekci-negatif                ✅ GEÇTİ  bozuk çekirdekte rc=1 + harf-kasası teşhisi
+bekci-rc2                    ✅ GEÇTİ  Ç3 yoksa rc=2 (yanlış-yeşil vermez)
+altin-cekirdek-adlari        ✅ GEÇTİ  rc=0 — çekirdek ∪ profil
+birlesim-gevsemedi           ✅ GEÇTİ  ne çekirdekte ne markada olan ad hâlâ X2
+birlesim-tasiyici            ✅ GEÇTİ  çekirdekten ad düşünce ALTIN kırmızıya döndü
+cekirdeksiz-rc2              ✅ GEÇTİ  rc=2 (yanlış-yeşil/kırmızı vermez)
+profil-esitli-bicim          ✅ GEÇTİ  --profil=<yol> rc=0
+profil-degersiz-rc2          ✅ GEÇTİ  değeri eksik bayrak rc=2 (sessizce yutulmaz)
+fikstur-profili-hizali       ✅ GEÇTİ  çekirdeğin her adı fikstür profilinde
+rol-yesil                    ✅ GEÇTİ  rc=0 — panel/vitrin/gezinme profilden türedi
+rol-kirmizi-rc               ✅ GEÇTİ  rc=1
+rol-kirmizi-yuzey            ✅ GEÇTİ  panel rolü yok → yüzey açılmadı, bütçeler birleşti
+rol-kirmizi-gezinme          ✅ GEÇTİ  gezinme rolü yok → X1
+rol-kirmizi-vitrin           ✅ GEÇTİ  vitrin rolü yok → muafiyet düştü
+rol-bilinmeyen-rc2           ✅ GEÇTİ  bilinmeyen rol adı rc=2
+g5-oksuz-blok-rc2            ✅ GEÇTİ  öksüz blok_turu anahtarı rc=2 + teşhis
+g5-tutan-harita              ✅ GEÇTİ  eşleşen harita → uyarı yok, rc=0
+g5-olcumsuz-uyari            ✅ GEÇTİ  ölçülmemiş S2 sessiz kalmıyor
+punto-sifirsonu-altin        ✅ GEÇTİ  rc=0 — 20/12/14/16 küme içinde, sahte-kırmızı yok
+punto-sifirsonu-kirmizi      ✅ GEÇTİ  küme-dışı 30px S5 ile yakalandı
+scif-ic-ice-yesil            ✅ GEÇTİ  iç-içe sc-if: koşullu sayıldı, sahte-kırmızı yok
+scif-aralik-birim            ✅ GEÇTİ  kardeş + kapanmamış aralıklar korundu
+bant-yesil                   ✅ GEÇTİ  dar kare muaf bantta → rc=0 (sahte-kırmızı yok)
+bant-muafiyet-yazili         ✅ GEÇTİ  muafiyet ÖLÇMEDİĞİNİ ilan ediyor
+bant-mutant-yalin            ✅ GEÇTİ  BEKLENEN KIRMIZI — bant kaldırılınca 390 px kare yine düşüyor
+bant-beyansiz-rc2            ✅ GEÇTİ  beyansız kare ÖLÇÜLEMEDİ (temiz DEĞİL)
+bant-eksik-ust-rc2           ✅ GEÇTİ  bandına girmeyen genişlik → rc=2
+bant-karisik-rc1             ✅ GEÇTİ  muaf bantta çatallanma hâlâ KIRMIZI
+bant-ici-sapma               ✅ GEÇTİ  bant İÇİ sapma hâlâ KIRMIZI (muafiyet kıyası kaldırmıyor)
+profil-bant-yabanci-muaf-rc2 ✅ GEÇTİ  geçersiz bant yapılandırması rc=2
+profil-bant-cift-ust-rc2     ✅ GEÇTİ  geçersiz bant yapılandırması rc=2
+cagiran-rc2-kapali           ✅ GEÇTİ  prompt-yap.sh rc=2'yi varsayılan dala (ölçülemedi) düşürüyor
+f5-fikstur-cifti             ✅ GEÇTİ  7 kural kodunun hepsinde kırmızı fikstür var
+f5-yesil-yari                ✅ GEÇTİ  çiftin yeşil yarısı mevcut (fikstur/temiz)
+────────────────────────────────────────────
+TOPLAM: 51 geçti · 0 kaldı
+--- stderr ---

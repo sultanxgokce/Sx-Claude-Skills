@@ -1,0 +1,32 @@
+{
+  "tur": 2,
+  "is": "x1-dar-ekran-muafiyeti",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T15:45:44+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 99563,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "X1 genişlik bantlarına ayrılmış; 390 px dar bant muafiyeti, beyan hataları ve önceki turdaki tek-kare açığı ölçümlü biçimde ele alınmış. Ancak aynı banttaki iki farklı gezinme iskeleti eşit oyda kalınca yalnız not üretilip RC=0 dönebiliyor; önce bu uygulama açığı çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Aynı bantta yalnız iki kare bulunup gezinme imzaları birbirinden farklıysa X1 tutarsızlığı kırmızıya dönüşmüyor. Her imzanın sayısı 1 olduğundan `sayim[taban] == 1` dalı iki kareye de yalnız not ekliyor; `kirmizi` artmadığı için sonuç RC=0 olabiliyor, oysa belge bant içi sapmanın hâlâ KIRMIZI olduğunu söylüyor.",
+        "kanit": "Kodda hem muaf bandın `var` kıyasında hem muaf olmayan bandın `uyeler` kıyasında `if sayim[taban] == 1: s[\"notlar\"].append(...)` kullanılıyor; ihlal ancak sonraki `elif s[\"gezinme\"] != taban` dalında ekleniyor. `bant-sapma` fikstürü bu eşitlik durumunu sınamıyor: üç kareden ikisi aynı imzayı taşıyarak çoğunluk kuruyor.",
+        "konum": "ui-tasarim-akisi/arac/yogunluk-denetle.py: X1 bant döngüsündeki iki `sayim[taban] == 1` dalı; ui-tasarim-akisi/arac/fikstur/bant-sapma/E1-liste.html, E2-sapan.html ve E3-ikinci-cogunluk.html",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Aynı baytın önce RC=1/sonra RC=0 çifti 390 px muafiyetini; RC=2 beyansız kare, muaf olmayan tek karede RC=1 ve 52/52 koşusu da önemli sınırları gösteriyor. Bununla birlikte bant içi sapma kanıtı yalnız 2'ye 1 çoğunluk senaryosunu ölçüyor; iki farklı imzanın 1'e 1 kaldığı ve kodun RC=0 verebildiği durum için ölçüm yok."
+  }
+}

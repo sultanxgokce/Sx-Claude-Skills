@@ -234,6 +234,97 @@ assert m.kapsayan(kardes.index("D"), m.araliklar(kardes, "sc-if")) is None, "kar
 assert m.kapsayan(acik.index("C"), m.araliklar(acik, "sc-if")) is not None, "kapanmamış: açık uç kayıp"
 PYEOF
 
+# 13b · GENİŞLİK BANTLARI — X1'in dar-ekran muafiyeti (0.6.0)
+# Niçin bu kadar kapı: muafiyet, bir kapıyı gevşetmenin en kolay yoludur. O yüzden muafiyetin
+# KENDİSİ de ölçülür — açıldığını söylüyor mu, bant İÇİ kıyası kaldırıyor mu, karışık durumu
+# yutuyor mu, beyansız kareyi "temiz" sayıyor mu, tek kareli bantla sessizce kapanıyor mu.
+# 🔴 Kapı SAYISI buraya YAZILMAZ: üç kez elle yazdım, üç kez bayatladı (bağımsız göz üçünü de
+#    yakaladı). Sayıyı suit'in kendisi basıyor — tek kaynak o.
+cikti="$(python3 "$KAPI" "$FIK/bant" --profil "$FIK/bant/bant-profili.json" 2>&1)"; rc=$?
+[ "$rc" = "0" ] && gecti "bant-yesil" "dar kare muaf bantta → rc=0 (sahte-kırmızı yok)" \
+  || kaldi "bant-yesil" "rc=$rc — bant ilan edildiği hâlde dar kare kırmızı"
+printf '%s' "$cikti" | grep -q "muaf (profil)" && printf '%s' "$cikti" | grep -q "KAPSAMIYOR" \
+  && gecti "bant-muafiyet-yazili" "muafiyet ÖLÇMEDİĞİNİ ilan ediyor" \
+  || kaldi "bant-muafiyet-yazili" "muafiyet sessiz geçti — 'temiz' kapsamadığı boyutu yutuyor"
+
+# Aynı bayt, bantsız profil = düzeltme ÖNCESİ davranış (mutant: muafiyeti geri al)
+cikti="$(python3 "$KAPI" "$FIK/bant" --profil "$FIK/bant/bant-yalin-profili.json" 2>&1)"; rc=$?
+if [ "$rc" = "1" ] && printf '%s' "$cikti" | grep -A3 'KIRMIZI  E3-mobil$' | grep -q '· X1'; then
+  gecti "bant-mutant-yalin" "BEKLENEN KIRMIZI — bant kaldırılınca 390 px kare yine düşüyor"
+else
+  kaldi "bant-mutant-yalin" "rc=$rc — mutant kıpırdamadı: muafiyet ölçülmüyor olabilir"
+fi
+
+python3 "$KAPI" "$FIK/bant-beyansiz" --profil "$FIK/bant-beyansiz/bant-profili.json" \
+  >/dev/null 2>&1; rc=$?
+[ "$rc" = "2" ] && gecti "bant-beyansiz-rc2" "beyansız kare ÖLÇÜLEMEDİ (temiz DEĞİL)" \
+  || kaldi "bant-beyansiz-rc2" "rc=$rc — beyansız kare 2 dönmedi (tahmine kapı açılır)"
+
+python3 "$KAPI" "$FIK/bant" --profil "$FIK/bant/bant-eksik-ust-profili.json" \
+  >/dev/null 2>&1; rc=$?
+[ "$rc" = "2" ] && gecti "bant-eksik-ust-rc2" "bandına girmeyen genişlik → rc=2" \
+  || kaldi "bant-eksik-ust-rc2" "rc=$rc — eksik bant listesi sessiz muafiyet üretiyor"
+
+cikti="$(python3 "$KAPI" "$FIK/bant-karisik" --profil "$FIK/bant-karisik/bant-profili.json" 2>&1)"
+rc=$?
+if [ "$rc" = "1" ] && printf '%s' "$cikti" | grep -q "muaf ama KARIŞIK"; then
+  gecti "bant-karisik-rc1" "muaf bantta çatallanma hâlâ KIRMIZI"
+else
+  kaldi "bant-karisik-rc1" "rc=$rc — muafiyet deliğe döndü: kimi olur kimi olmaz geçiyor"
+fi
+
+cikti="$(python3 "$KAPI" "$FIK/bant-sapma" --profil "$FIK/bant-sapma/bant-profili.json" 2>&1)"
+rc=$?
+if [ "$rc" = "1" ] && printf '%s' "$cikti" | grep -q "X1 gezinme iskeleti"; then
+  gecti "bant-ici-sapma" "bant İÇİ sapma hâlâ KIRMIZI (muafiyet kıyası kaldırmıyor)"
+else
+  kaldi "bant-ici-sapma" "rc=$rc — bant içinde iskelet sapması yakalanmadı"
+fi
+
+# Bağımsız göz bulgusu (tur 2): BERABERLİK. Aynı bantta iki kare, iki ayrı iskelet →
+# hiçbir imza çoğunluk kurmaz. Eski hâlde not düşüp rc=0 dönüyordu; tutarsızlık kanıtlıyken
+# kapı "ikisi de doğru" diyordu. Artık ikisi de KIRMIZI, taban belirlenemediği yazılı.
+cikti="$(python3 "$KAPI" "$FIK/bant-beraberlik" \
+         --profil "$FIK/bant-beraberlik/bant-profili.json" 2>&1)"; rc=$?
+if [ "$rc" = "1" ] && printf '%s' "$cikti" | grep -q "taban belirlenemiyor"; then
+  gecti "bant-beraberlik-rc1" "iskelet beraberliği KIRMIZI (not değil)"
+else
+  kaldi "bant-beraberlik-rc1" "rc=$rc — beraberlik hâlâ not: tutarsızlık yeşil geçiyor"
+fi
+
+# Bağımsız göz bulgusu (tur 1): MUAFİYETSİZ tek kareli bantta gezinme yokluğu MUTLAK ihlal.
+# Niçin kapı: aksi hâlde kareleri tek üyeli bantlara bölen profil, muafiyet İLAN ETMEDEN
+# X1'i fiilen kapatırdı — "ölçülmedi = temiz" eşitliğinin kapıya sızmış hâli.
+cikti="$(python3 "$KAPI" "$FIK/bant-tek-kare" --profil "$FIK/bant-tek-kare/bant-profili.json" 2>&1)"
+rc=$?
+if [ "$rc" = "1" ] && printf '%s' "$cikti" | grep -q "muaf DEĞİL"; then
+  gecti "bant-tek-kare-mutlak" "muafiyetsiz tek kareli bantta yokluk KIRMIZI (varlık ⟂ aynılık)"
+else
+  kaldi "bant-tek-kare-mutlak" "rc=$rc — bant bölmesiyle X1 sessizce kapatılabiliyor"
+fi
+
+for p in bant-yabanci-muaf bant-cift-ust; do
+  python3 "$KAPI" "$FIK/bant" --profil "$FIK/bant/$p-profili.json" >/dev/null 2>&1; rc=$?
+  [ "$rc" = "2" ] && gecti "profil-$p-rc2" "geçersiz bant yapılandırması rc=2" \
+    || kaldi "profil-$p-rc2" "rc=$rc — geçersiz bant yapılandırması kabul edildi"
+done
+
+# 13c · ÇAĞIRANIN SÖZLEŞMESİ — yeni RC=2 yolları prompt üretimini DURDURUYOR mu
+# Niçin: bant kuralı yeni RC=2 durumları doğurdu (beyansız kare, bandına girmeyen genişlik).
+# Kapı doğru dönse bile ÇAĞIRAN onu "temiz" sayarsa muafiyet fail-open olur. Çağıranın
+# anahtarında rc=2 için ayrı bir 'geç' dalı OLMAMALI — varsayılan dal ölçülemedi'ye düşer.
+# 🔴 Bu kapı STATİK (metin okur, koşturmaz); çağıranın kendi sınavı ayrı dosyadadır.
+CAGIRAN="$BURASI/prompt-yap.sh"
+if [ -f "$CAGIRAN" ]; then
+  if grep -qE '^\s*\*\)' "$CAGIRAN" && ! grep -qE '^\s*2\)\s*:' "$CAGIRAN"; then
+    gecti "cagiran-rc2-kapali" "prompt-yap.sh rc=2'yi varsayılan dala (ölçülemedi) düşürüyor"
+  else
+    kaldi "cagiran-rc2-kapali" "çağıranda rc=2 için 'geç' dalı var — muafiyet fail-open olur"
+  fi
+else
+  kaldi "cagiran-rc2-kapali" "çağıran bulunamadı: $CAGIRAN (kapının çağıranı yoksa kapı yoktur)"
+fi
+
 # 14 · F5 KAPISI — KURAL DEĞİŞİKLİĞİ KANITSIZ SÜRÜM ALAMAZ (Sultan-kararı 2026-08-24)
 # Niçin: S5 kapısının "sonu 0 olan font kademesinde kırılması" kuralın kendi hatasıydı; o vaka
 # ancak bir fikstür ÇİFTİ (kırmızı + yeşil) yazıldığında kapandı. Kural sonradan yazmak bedava;

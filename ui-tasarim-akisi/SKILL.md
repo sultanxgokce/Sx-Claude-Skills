@@ -1,7 +1,7 @@
 ---
 name: ui-tasarim-akisi
 type: agent
-version: 0.5.1
+version: 0.6.0
 description: >
   UI/arayüz tasarım işinin ZORUNLU akış kapısı. Bir ürünün ekranlarını tek tek değil dizi
   hâlinde tasarlatır: ürün niyeti → sayfa envanteri → kullanıcı senaryoları (tık bütçesi) →
@@ -205,7 +205,7 @@ insan oturumu 11 madde çıkardı. Eksik boyut renk/tipografi değil **yoğunluk
 | S2 | blok-türü bütçesi (yüzey başına) |
 | S3 | tek birincil eylem (koşulsuz olanlar sert) |
 | S4/S5 | köşe-yarıçapı ve font kademe kümesi — beşinci kademe icadı |
-| X1 | gezinme iskeleti ekrandan ekrana aynı mı |
+| X1 | gezinme iskeleti ekrandan ekrana aynı mı (genişlik bandı İÇİNDE — aşağı bak) |
 | X2 | sözlük-dışı bileşen adı (sessiz icat) |
 | X3 | ürünün yasak dili |
 | X4 | aynı durumun iki farklı yazımı (küme geneli) |
@@ -236,6 +236,55 @@ yazsa bile yüzey-ayrımı, X1 ve vitrin muafiyeti kırık kalıyordu. Alan verm
 aynen çalışır (varsayılan = çekirdek yazımı); bilinmeyen bir rol anahtarı **RC=2**'dir —
 yazım hatası, ölçülmemiş rol demektir.
 
+**Genişlik bantları — X1'in dar-ekran muafiyeti (`genislik_bantlari`, isteğe bağlı).**
+X1 tabanı kümenin ÇOĞUNLUĞUNDAN alıyordu; sözleşmesinde *"720 px altı tam ekran"* yazan bir
+ürünün 390 px'lik kareleri bu yüzden **zorunlu kırmızı** düşüyordu — ürün kendi kuralına
+uyduğu için cezalandırılıyordu. Ölçülen şey tutarsızlık değil, **kümeye karışmış iki ayrı
+yüzey genişliğiydi.**
+
+🔴 **Kareler ölçüm dışı BIRAKILMADI.** Önerilen iki yoldan "dar kareleri sayma" reddedildi:
+*ölçülmedi* ile *temiz* aynı şeye döner ve bu kapının bütün yazısı o eşitliğe karşı kurulu.
+Seçilen yol **kırmızıyı taşımak**: kare ölçülmeye devam eder, yalnız **kiminle kıyaslandığı**
+değişir.
+
+| Kural (çekirdek) | Sayı (marka) |
+|---|---|
+| iskelet tutarlılığı her bandın **içinde** aranır | bantların piksel sınırı profilde: `{"dar": 719, "genis": 4000}` (üst sınır) |
+| bantlar **arası** fark ihlal DEĞİLDİR | hangi bandın gezinmesiz olabileceği profilde: `gezinme_muaf_bantlar: ["dar"]` |
+| bant **içi** sapma hâlâ KIRMIZI | — |
+
+- **Beyan zorunlu, tahmin yasak.** Bant ilan edilmişse her kare genişliğini kendi içinde
+  beyan eder: `<!-- ui-akis: genislik=390 -->`. Beyanı olmayan ya da hiçbir banda girmeyen
+  kare **RC=2**'dir (ölçülemedi), "temiz" değil. Niçin CSS'ten tahmin edilmiyor: medya
+  kuralı · kapsayıcı · yüzde · `max-width` birlikte okunduğunda tek bir "karenin genişliği"
+  sayısı **yoktur**; tahmin eden kapı yanlış bandı seçer ve sessizce yanlış kümeyle kıyaslar.
+- **Muafiyet kıyası kaldırmaz, sınırını çizer.** Muaf bantta gezinmenin *olmaması* ihlal
+  değildir; ama aynı bandın içinde **karışık** durum (kimi karede var, kimi karede yok)
+  KIRMIZI'dır — muafiyet "olmayabilir" der, "kimi olur kimi olmaz" demez.
+- **Beraberlik ihlaldir.** Aynı bantta iki kare iki ayrı iskelet taşıyorsa hiçbir imza
+  çoğunluk kurmaz; eski hâlde kapı not düşüp **yeşil** dönüyordu. Oysa X1'in ölçtüğü şey
+  tutarsızlık ve o burada **kanıtlıdır**; bilinmeyen tek şey KİMİN saptığı. *"Hangisi yanlış
+  bilemiyorum"* ile *"ikisi de doğru"* aynı cümle değildir — kapı ikincisini söylüyordu.
+  Artık ikisi de kırmızı ve çıktıda *"taban belirlenemiyor"* yazar (bağımsız göz, tur 2).
+- **Varlık ⟂ aynılık — iki ayrı soru, iki ayrı kanıt.** Gezinmenin **var olması** MUTLAK
+  ölçülür (kıyas ortağı gerektirmez); **aynı olması** GÖRELİ ölçülür (en az iki kare ister).
+  Bu ayrım bağımsız gözün tur-1 bulgusudur: ikisi tek kapının arkasındayken muafiyet ilan
+  ETMEDEN kareleri tek üyeli bantlara bölen bir profil X1'i fiilen kapatabiliyordu.
+  🔴 Mutlak kontrol yalnız **bant ilan edilmiş** kümede koşar; bantsız tek-ekranlı küme bu
+  kuralın kapsamı DEĞİL (ölçüldü: beş fikstür kümesi tek kareli ve gezinmesiz, bugün bilerek
+  yeşil). O boşluk ayrı bir kural sorusu olarak **açıkta duruyor**, sessizce taşınmadı.
+- **Muafiyet kendini ilan eder.** Uygulandığı her koşuda kapı *"X1 bandı 'dar' muaf — N
+  karede gezinme aranmadı; 'temiz' bu boyutu KAPSAMIYOR"* satırını basar. Tek kareli bant
+  da aynı şekilde yazılır: kıyas iki kare ister, tek kare "temiz" değil **kıyassızdır**.
+- **Yapılandırma hataları RC=2:** ilan edilmemiş bant adının muaf gösterilmesi · iki banda
+  aynı üst sınır (bir genişlik iki banda girerse kıyas kümesi belirsizdir).
+- **Alan isteğe bağlıdır:** vermeyen profiller bugünkü davranışı birebir sürdürür (tek bant).
+  Geriye uyum ölçüldü — eski 41 kapının 41'i dokunulmadan geçiyor.
+
+Kanıt: `arac/yogunluk-denetle.test.sh` 53 kapı (41 eski + 12 yeni). Mutant: aynı bayt kümeye
+bantsız profil verilince 390 px kare **yine** düşüyor — muafiyetin fiilen ölçüldüğünün kanıtı
+(`fikstur/bant/` iki profil, tek kare kümesi).
+
 **`blok_turu` sessiz atlamaz (sahte-yeşil panzehiri).** Haritanın anahtarı sözlükte yoksa
 hiçbir işareti tutamaz; eski kod `if tur:` ile atlıyor, S2 bütçesi hiç ölçülmüyor ve kapı
 "temiz" diyordu. Artık: anahtar sözlük dışıysa **RC=2** (yapılandırma hatası, ihlal değil);
@@ -244,7 +293,7 @@ harita geçerli ama kümede hiç tutmuyorsa **uyarı** basılır — "temiz" o b
 **Ölçmediğini söyler:** tek-ekran anlamı (manşetin öznesi, görselin bilgi değeri) bu kapının
 konusu **değildir** ve çıktı bunu her koşuda yazar. Oraya "temiz" demez, hiç bakmaz.
 Kalibrasyon: reddedilmiş bir turun 4 ekranının 4'ünü düşürdü, onaylanmış turun 5 ekranına
-dokunmadı. Kapının kendi sınavı: `bash arac/yogunluk-denetle.test.sh` (35 kapı, negatif
+dokunmadı. Kapının kendi sınavı: `bash arac/yogunluk-denetle.test.sh` (53 kapı, negatif
 fikstürlü — fikstürsüz kapı devreye alınmaz).
 
 **Çift-yönlü fikstür — hattın giriş şartı.** Her ölçüm hattı hem **KIRMIZI** (yanlışı yakalar)
@@ -558,3 +607,30 @@ zaman-dilimli hâle getirildi, damga biçimi değişmedi (`...Z`), uyarı dört 
 
 Kurulu beceri kopyası ile dal, tazelemeden önce 56 dosyada **birebir aynıydı** (pozitif
 kontrollü ölçüm) — yani filo bu kırmızı sürümü koşuyordu ve ezilecek elle değişiklik YOKTU.
+
+## Sürüm notu — 0.6.0 (2026-10-15 · NAKKAŞ)
+
+**X1 bant-farkında oldu.** Yoğunluk kapısının `X1 gezinme iskeleti` kuralı dar ekranlara
+muafiyet tanımıyordu: *"720 px altı tam ekran"* kuralı olan bir üründe 390 px kareler zorunlu
+kırmızı düşüyordu. Kural artık genişlik bantlarını tanıyor; sayılar profilden gelir, araçtan
+değil. Ayrıntı ve gerekçe: yukarıdaki *"Genişlik bantları"* bölümü.
+
+🔴 Reddedilen yol kayda geçer: "dar kareleri ölçüm dışı bırak" **seçilmedi** — ölçülmemiş kare
+'temiz' kareye dönüşür (fail-open). Seçilen yol kırmızıyı taşımaktır.
+
+Bağımsız göz (tur 1 · Codex) iki bulgu çıkardı, ikisi de kabul edildi ve düzeltildi:
+(a) muafiyetsiz **tek kareli bantta** gezinme yokluğu yalnız not düşüp rc=0 dönüyordu —
+yani kendi yasakladığım *ölçülmedi = temiz* eşitliği kapıya sızmıştı; varlık/aynılık ayrımıyla
+kapandı ve regresyon fikstürü yazıldı. (b) belgedeki sınav sayısı ölçümle tutmuyordu
+(50 yazılıydı, araç 51 sayıyordu) — sayı artık metne elle yazılmıyor, koşumdan okunuyor. Tur 2'de üçüncü bulgu: aynı bantta **beraberlik**
+(iki kare, iki iskelet) not düşüp yeşil dönüyordu — tutarsızlık kanıtlıyken kapı "ikisi de
+doğru" diyordu; artık ihlal, fikstürü `bant-beraberlik`.
+
+Sınav 41 → **53 kapı**. Geriye uyum: bant ilan etmeyen profiller için davranış birebir aynı
+(41 eski kapı dokunulmadan geçti). Yeni kural kodu YOK — bant farkındalığı X1'in kendi kapsamı.
+
+**0.6.0 neyin üstüne oturuyor:** 0.5.1 (yukarıdaki not). Bu işin başında kurulu kopya ile
+ana dal arasında bir sürüm boşluğu vardı; o boşluğun ölçümü, kapanışı ve kurulu kopyanın
+yerinde doğrulanması **0.5.1 notunun ve o işin kanıt paketinin konusudur** — bu nota
+yazılmıyor, çünkü bu kartın kanıt manifesti onları ölçmez. (Bağımsız gözün tur-4 bulgusu:
+kendi kartının ölçmediği şeyi kendi sürüm notunda iddia etmek, kapsam kaymasıdır.)

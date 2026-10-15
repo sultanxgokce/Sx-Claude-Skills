@@ -1,0 +1,11 @@
+$ python3 ui-tasarim-akisi/arac/yogunluk-denetle.py ui-tasarim-akisi/arac/fikstur/bant-tek-kare --profil ui-tasarim-akisi/arac/fikstur/bant-tek-kare/bant-profili.json
+# rc=1 sure=0.0s zaman=2026-10-15T15:44:39+03:00
+--- stdout ---
+========================================================================
+❌ KIRMIZI  E3-mobil
+      · X1 gezinme: Gezinme bileşeni YOK (bant 'dar' muaf DEĞİL)
+========================================================================
+BANTLAR: dar=1 kare
+KÜME: 1 ekran · 1 kırmızı · profil: ui-tasarim-akisi/arac/fikstur/bant-tek-kare/bant-profili.json
+NOT: bu kapı tek-ekran ANLAMINI ölçmez (manşet, bilgi değeri) — ona hiç bakmadı.
+--- stderr ---

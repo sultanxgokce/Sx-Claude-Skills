@@ -1,0 +1,38 @@
+{
+  "tur": 4,
+  "is": "x1-dar-ekran-muafiyeti",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T16:43:14+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 69637,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "X1 hükmü genişlik bantlarına ayrılmış; 390 px dar ekran muafiyeti, kapalı hata davranışı ve bant içi tutarlılık araç imzalı ölçümlerle yerli yerine oturmuş. Önce kapsam kaymasını ve kanıtsız filo iddialarını ayıklayın; çekirdek uygulama güçlü olsa da bu hâliyle üretim mührü eksik.",
+    "bulgular": [
+      {
+        "ne": "Sürüm notuna iş kartı dışındaki PR #213 birleştirme, ortak kurulu kopyayı eşleme ve 230 kapının yerinde yeşil olduğu iddiaları eklenmiş; sunulan manifest bu işlemleri ölçmüyor ve yalnız dört takımda 242 kapıyı gösteriyor.",
+        "kanit": "Eklenen 0.6.0 sürüm notu PR #213'ün birleştirildiğini, `/config/.claude/skills` kopyasının senkronlandığını ve 230 kapının yeşil olduğunu söylüyor. Buna karşılık manifestte bu iddialara ait ayrı kayıt yok; ilgili tek toplu kayıt `REBASE-SONRASI-0.5.1-uzerinde-dort-suit-242-kapi` ve çıktısı dört takımda 242 kapıyı bildiriyor.",
+        "konum": "ui-tasarim-akisi/SKILL.md, eklenen `Sürüm notu — 0.6.0` bölümünün son paragrafı; kanıt kaydı `REBASE-SONRASI-0.5.1-uzerinde-dort-suit-242-kapi`",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Yeni bant sınavları için açıklama sekiz kapı diyor, fakat eklenen bölüm on iki yeni denetim üretiyor; bakım belgesi sınav kapsamıyla uyuşmuyor.",
+        "kanit": "13b başındaki yorum `burada sekiz kapı var` diyor; görünen betikte bant-yesil, bant-muafiyet-yazili, mutant, beyansız, eksik-üst, karışık, sapma, beraberlik, tek-kare, iki yapılandırma vakası ve çağıran denetimi bulunuyor. Toplu çıktı da 41 eski + 12 yeni = 53 sonucunu doğruluyor.",
+        "konum": "ui-tasarim-akisi/arac/yogunluk-denetle.test.sh, `13b · GENİŞLİK BANTLARI` yorumu; ölçüm `TUR3-SINAV-53-kapi-41-eski-12-yeni`",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Aynı fikstürün bantsız profille RC=1, bantlı profille RC=0 ölçüm çifti 390 px muafiyetini doğrudan gösteriyor; beyansız kare RC=2, muafiyetsiz tek kare RC=1, karışık muaf bant RC=1, bant içi beraberlik RC=1 ve 53/53 ile dört takımda 242 kapı yeşil kayıtları sınır davranışlarını güçlü biçimde destekliyor. Ancak sürüm notundaki 230 kapı ve kurulu filo eşleme iddialarının manifestte ölçüm kaydı yok."
+  }
+}

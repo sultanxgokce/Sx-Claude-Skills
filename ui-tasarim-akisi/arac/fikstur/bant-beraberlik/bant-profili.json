@@ -1,0 +1,40 @@
+{
+ "_aciklama": "BERABERLİK (bağımsız göz bulgusu, tur 2) — aynı bantta İKİ kare, iki ayrı iskelet; hiçbir imza çoğunluk kurmuyor. rc=1 beklenir: tutarsızlık KANITLI, bilinmeyen tek şey KİMİN saptığı. 'Hangisi yanlış bilemiyorum' ile 'ikisi de doğru' aynı cümle değildir; eski hâlde kapı ikincisini söylüyordu (rc=0).",
+ "buyuk_punto_taban": 25.0,
+ "buyuk_sayi_butce": 3,
+ "blok_tur_butce": 2,
+ "font_kademeleri": [
+  "12.5",
+  "14.5",
+  "16.5",
+  "21",
+  "25"
+ ],
+ "radius_kumesi": [
+  "0",
+  "8",
+  "10",
+  "999"
+ ],
+ "birincil_renk": "#8a5a2b",
+ "sozluk": [
+  "Gezinme",
+  "Ölçü kartı",
+  "Düğme",
+  "Durum rozeti"
+ ],
+ "blok_turu": {
+  "Ölçü kartı": "kart"
+ },
+ "yasak_dil": [
+  "tasarruf",
+  "kazan[cç]"
+ ],
+ "genislik_bantlari": {
+  "dar": 719,
+  "genis": 4000
+ },
+ "gezinme_muaf_bantlar": [
+  "dar"
+ ]
+}
