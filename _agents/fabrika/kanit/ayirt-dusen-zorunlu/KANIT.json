@@ -1,0 +1,73 @@
+{
+  "is": "ayirt-dusen-zorunlu",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T17:08:30+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "ONCE-dusensiz-kirmizi-ayirt-kaydi-KABUL-ediliyordu-BEKLENEN-YESIL-kusurun-kendisi",
+      "asama": "once",
+      "dosya": "olcum-ONCE-dusensiz-kirmizi-ayirt-kaydi-KABUL-ediliyordu-BEKLENEN-YESIL-kusurun-kendisi-once.txt",
+      "sha256": "079dee619f63bb4d7d8a241b98833e516500550d4129bc7096a51940e82c7d91",
+      "komut": [
+        "python3",
+        "/config/projects/_wt/Sx-main-dogrulama/ui-tasarim-akisi/arac/havuz.py",
+        "yaz",
+        "--havuz",
+        "/tmp/claude-1000/-config-projects-Nexus/8aa7d723-3291-4d30-9fd6-a5baa55dfd78/scratchpad/once-d.jsonl",
+        "--kutu",
+        "t",
+        "--urun",
+        "t",
+        "--ekran",
+        "e",
+        "--kapi",
+        "ayirt",
+        "--hukum",
+        "kirmizi",
+        "--klise",
+        "mor-gradyan",
+        "--imza",
+        "tipografi",
+        "--arac",
+        "0.0.0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T17:08:22+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "SONRA-havuz-102-kapi-dusen-zorunlulugu-dort-yonde",
+      "asama": "sonra",
+      "dosya": "olcum-SONRA-havuz-102-kapi-dusen-zorunlulugu-dort-yonde-sonra.txt",
+      "sha256": "ddadff4b84f829ab3de7d472edd51be9dfd4d218bb01fd50e3244096dbf8c994",
+      "komut": [
+        "bash",
+        "ui-tasarim-akisi/arac/havuz.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T17:08:27+03:00",
+      "sure_sn": 4.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "MUTANT-zorunluluk-kapatilinca-2-kapi-dusuyor-BEKLENEN-KIRMIZI",
+      "asama": "sonra",
+      "dosya": "olcum-MUTANT-zorunluluk-kapatilinca-2-kapi-dusuyor-BEKLENEN-KIRMIZI-sonra.txt",
+      "sha256": "096bcf075dd3faa3d1470988c31dd0309d3b73605630f05316ec71ebd805417c",
+      "komut": [
+        "bash",
+        "-c",
+        "cp ui-tasarim-akisi/arac/havuz.py /tmp/claude-1000/-config-projects-Nexus/8aa7d723-3291-4d30-9fd6-a5baa55dfd78/scratchpad/hy.bak; sed -i \"s/if h == \\\"kirmizi\\\" and not kayit.get(\\\"dusen\\\"):/if False and h == \\\"kirmizi\\\" and not kayit.get(\\\"dusen\\\"):/\" ui-tasarim-akisi/arac/havuz.py; bash ui-tasarim-akisi/arac/havuz.test.sh; r=$?; cp /tmp/claude-1000/-config-projects-Nexus/8aa7d723-3291-4d30-9fd6-a5baa55dfd78/scratchpad/hy.bak ui-tasarim-akisi/arac/havuz.py; exit $r"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T17:08:30+03:00",
+      "sure_sn": 3.4
+    }
+  ],
+  "imza": "66f34112010db2c3e0b7a0bf5aef7979d043bd43a32d03d76bbe6706232b37c4"
+}

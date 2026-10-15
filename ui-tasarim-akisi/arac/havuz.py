@@ -195,6 +195,16 @@ def yaz(argv, yol):
         if h == "kirmizi" and kl == "yok" and im != "yok":
             hata.append("rubrik çelişkisi: hukum=kirmizi ya klişeye düşmeyi ya imzasızlığı "
                         "gösterir (gelen: klise=yok · imza=%s) — düşen madde YOK" % im)
+        # 🔴 DÜŞEN MADDE YAZILI OLMALI (bağımsız göz bulgusu, 2026-10-15 tur 4):
+        #    Rubrik `kirmizi` için açıkça *"--dusen ile hangi maddeden düştüğünü yaz"* diyor;
+        #    kod bunu denetlemiyordu ve kırmızının KLİŞE mi İMZASIZLIK mı yüzünden verildiği
+        #    kaybolabiliyordu. Kayıp sessizdi: defterde kırmızı duruyor, sebebi yok.
+        #    🔴 Bu boşluk ÖNCEDEN de vardı (ölçüldü: 0.5.0 dalında --dusen'siz kırmızı rc=0
+        #    ile kabul ediliyordu) — yeni bir kural DEĞİL, yazılı kuralın koda inmesi.
+        if h == "kirmizi" and not kayit.get("dusen"):
+            hata.append("kapi=ayirt · hukum=kirmizi için --dusen ZORUNLU: rubrik 'hangi "
+                        "maddeden düştüğünü yaz' diyor. Sebebi yazılmayan kırmızı, bir "
+                        "sonraki tura ders taşımaz (estetik-guc-v1.md · Hüküm nasıl verilir)")
         if h == "olcemedi":
             hata.append("kapi=ayirt için hukum=olcemedi KABUL EDİLMEZ: ayırt-edicilik bir "
                         "YARGIDIR, ölçüm değil — bakılacak şey sayfanın kendisidir. Rubrik üç "

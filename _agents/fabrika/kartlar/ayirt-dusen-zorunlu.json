@@ -1,0 +1,19 @@
+{
+  "is": "ayirt-dusen-zorunlu",
+  "cumle": "Rubrik kirmizi ayirt hukmunde '--dusen ile hangi maddeden dustugunu yaz' diyor; havuz.py yaz bunu denetlemiyor -> kirmizinin klise mi imzasizlik mi yuzunden verildigi kaybolabiliyor. OLCULDU: bosluk ONCEDEN de vardi (213 dalinin dokunulmamis halinde --dusen'siz kirmizi rc=0 ile kabul ediliyor), benim isimle gelmedi. Kural NAKKAS'ta. Kaynak: bagimsiz goz tur 4, ayirt-kapisi-tazele kartindan DARALTMA ile ayrildi (4 tur mutlak tavan).",
+  "istedi": "NAKKAŞ",
+  "aldi": "NAKKAŞ",
+  "zaman": "2026-10-15T16:27:07+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

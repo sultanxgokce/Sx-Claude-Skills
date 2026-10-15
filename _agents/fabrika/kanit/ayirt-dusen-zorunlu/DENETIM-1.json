@@ -1,0 +1,29 @@
+{
+  "tur": 1,
+  "is": "ayirt-dusen-zorunlu",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T17:09:23+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 15715,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "NAKKAŞ, ayırt kapısındaki kırmızı hükmü sebep kodu olmadan yazdırmayan denetimi ve sınırlarını yoklayan testleri eklemiş. Önceki kusur, yeşil tam takım ve kural sökülünce bozulan mutant sınavıyla ölçüldüğünden iş üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; sarı kayıt yok. Önce ölçümü --dusen bulunmayan ayırt kırmızısının rc=0 ile kabul edildiğini, sonra ölçümü tüm test takımının rc=0 verdiğini gösteriyor; ayrıca ilgili koşul etkisizleştirildiğinde takımın rc=1 olması yeni sınavın gerçekten bu zorunluluğu yakaladığını kanıtlıyor. Çıktı ilk 60 satırla kesildiği için eklenen dört sınavın tek tek satırları görünmüyor, ancak yeşil takım ölçümü ile hedefli mutant ölçümü birlikte yeterli bir ölçüm çifti oluşturuyor."
+  }
+}
