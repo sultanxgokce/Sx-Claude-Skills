@@ -161,25 +161,32 @@ def havuz_oku(yol: Path, pencere_gun: int) -> tuple[list[dict], int, str]:
 
     uyari = ""
     if pencere_gun > 0:
-        sinir = (date.today() - timedelta(days=pencere_gun)).isoformat()
-        tarihli = [k for k in kayit if kayit_tarihi(k)]
-        tarihsiz = len(kayit) - len(tarihli)
-        pencereli = [k for k in tarihli if kayit_tarihi(k) >= sinir]
-        # 🔴 Tarih HİÇ okunamıyorsa pencere ÖLÇÜLEMEDİ — "pencerede kayıt yok" demek
-        #    yanlış olur (SEDİR vakası: alan adı farklıydı, pencere aslında doluydu).
-        if not tarihli:
-            uyari = (f"🟡 tarih alanı okunamadı (ne 'tarih' ne 'ts') — pencere ÖLÇÜLEMEDİ, "
-                     f"tüm havuz ({len(kayit)}) ölçüldü")
-        # 🔴 Pencere havuzu BOŞALTIRSA pencere yanlıştır, havuz boş değildir.
-        elif pencereli:
-            uyari = f"pencere {pencere_gun} gün: {len(pencereli)}/{len(kayit)} kayıt"
-            if tarihsiz:
-                uyari += f" · {tarihsiz} kayıt tarihsiz, pencere dışı kaldı"
-            kayit = pencereli
-        else:
-            uyari = (f"🔴 pencere {pencere_gun} gün içinde kayıt YOK — pencere yok sayıldı, "
-                     f"tüm havuz ({len(kayit)}) ölçüldü")
+        kayit, _ignore, uyari = _pencerele(kayit, pencere_gun)
     return kayit, bozuk, uyari
+
+
+def _pencerele(kayit: list[dict], pencere_gun: int) -> tuple[list[dict], int, str]:
+    """Pencereyi UYGULAR ve ne olduğunu söyler. TEK kopya: tek havuz da, birleşik
+    çok-kaynak okuma da buradan geçer (ikinci bir pencere mantığı yazmak, ilk
+    değişiklikte ikisini birbirine yalancı yapardı).
+    """
+    sinir = (date.today() - timedelta(days=pencere_gun)).isoformat()
+    tarihli = [k for k in kayit if kayit_tarihi(k)]
+    tarihsiz = len(kayit) - len(tarihli)
+    pencereli = [k for k in tarihli if kayit_tarihi(k) >= sinir]
+    # 🔴 Tarih HİÇ okunamıyorsa pencere ÖLÇÜLEMEDİ — "pencerede kayıt yok" demek
+    #    yanlış olur (SEDİR vakası: alan adı farklıydı, pencere aslında doluydu).
+    if not tarihli:
+        return kayit, tarihsiz, (f"🟡 tarih alanı okunamadı (ne 'tarih' ne 'ts') — pencere ÖLÇÜLEMEDİ, "
+                                 f"tüm havuz ({len(kayit)}) ölçüldü")
+    # 🔴 Pencere havuzu BOŞALTIRSA pencere yanlıştır, havuz boş değildir.
+    if pencereli:
+        u = f"pencere {pencere_gun} gün: {len(pencereli)}/{len(kayit)} kayıt"
+        if tarihsiz:
+            u += f" · {tarihsiz} kayıt tarihsiz, pencere dışı kaldı"
+        return pencereli, tarihsiz, u
+    return kayit, tarihsiz, (f"🔴 pencere {pencere_gun} gün içinde kayıt YOK — pencere yok sayıldı, "
+                             f"tüm havuz ({len(kayit)}) ölçüldü")
 
 
 def tekrar_say(kayit: list[dict]) -> dict:
@@ -453,6 +460,96 @@ def bulgu_havuzu(depo: Path, acik: str | None = None) -> Path:
     return var[0] if var else depo / HAVUZ_ADAYLARI[0]
 
 
+def bulgu_havuzlari(kod_depo: Path, havuz_depo: Path,
+                    acik: str | None = None) -> list[tuple[str, Path]]:
+    """Okunacak bulgu defterlerinin TAMAMI, etiketiyle: [(etiket, yol), ...]
+
+    🔴 İZOLE KUTU KÖRLÜĞÜ (SERDAR görevi WBHZSJEA, 15 Eki 2026): araç TEK havuz
+    okuyordu. Normal kurulumda o havuz MERKEZ odanın (Nexus) defteridir; izole
+    kutular (vekatip · mmex · medigate · huma · mihenk · tellal · akar · s02)
+    merkezi GÖRMEZ, kendi defterlerini tutar. Sonuç: izole kutuda araç ya rc=3
+    veriyordu ya da merkezin izine bakıp kutunun kendi tekrarını HİÇ görmüyordu —
+    yani tekrarın yokluğunu değil GÖRÜŞ ALANININ darlığını ölçüyordu (vekil ölçüt).
+
+    Artık iki kaynak birden okunur: merkez havuz + kutunun KENDİ defteri. İkisi
+    aynı yola çıkıyorsa (ayrılmamış kurulum) tek kaynak olarak sayılır — aynı
+    kayıt iki kez tekrar sanılmaz.
+
+    🔴 Açık yol (`--havuz-yolu`) verildiğinde eski değişmez SÜRER: yalnız o okunur,
+    yedeğe düşülmez. Açık irade, keşfi ezer.
+    """
+    if acik:
+        p = Path(acik)
+        return [("açık", p if p.is_absolute() else kod_depo / p)]
+    kaynak: list[tuple[str, Path]] = []
+    gorulen: set[str] = set()
+    for etiket, d in (("merkez", havuz_depo), ("kutu", kod_depo)):
+        y = bulgu_havuzu(d)          # iki-düzen kapısı her depo için ayrı ayrı sürer
+        anahtar = str(y.resolve() if y.exists() else y)
+        if anahtar in gorulen:
+            continue
+        gorulen.add(anahtar)
+        kaynak.append((etiket, y))
+    return kaynak
+
+
+def _kayit_anahtari(k: dict) -> str:
+    """Aynı bulgunun iki defterde birden görünmesini ayırt eder (merkez ↔ kutu aynası)."""
+    kid = str(k.get("id", "") or "").strip()
+    if kid:
+        return "id:" + kid
+    gov = " ".join(str(k.get(a, "") or "") for a in ("baslik", "sinif", "ts", "tarih"))
+    return "gov:" + " ".join(_sadelestir(gov)[:12])
+
+
+def havuzlar_oku(kaynaklar: list[tuple[str, Path]],
+                 pencere_gun: int) -> tuple[list[dict], int, str, list[str]]:
+    """Birden çok defteri okur, BİRLEŞTİRİR, kaynak kaynak kapsama yazar.
+
+    (kayitlar, bozuk, pencere_uyarisi, kaynak_satirlari) döner.
+
+    🔴 DÜRÜST KISMİ: bir kaynak okunamazsa (yok · tamamı bozuk) iş DURMAZ ama bu
+    SÖYLENİR — satırında 🟡 taşır. Hiçbir kaynak okunamazsa rc=3 (ÖLÇEMEDİM);
+    eksik veri her zaman "daha az" görünür, yani rahatlatır (K3).
+    """
+    birlesik: list[dict] = []
+    gorulen: set[str] = set()
+    bozuk_top = 0
+    satir: list[str] = []
+    okunan = 0
+    for etiket, yol in kaynaklar:
+        try:
+            kayit, bozuk, _ = havuz_oku(yol, 0)      # pencere birleşimden SONRA uygulanır
+        except Durdu as e:
+            satir.append(f"🟡 {etiket}: {yol} — okunamadı ({e.args[0].split(' — ')[0]})")
+            continue
+        okunan += 1
+        bozuk_top += bozuk
+        yeni = 0
+        for k in kayit:
+            a = _kayit_anahtari(k)
+            if a in gorulen:
+                continue
+            gorulen.add(a)
+            k = dict(k)
+            k.setdefault("_kaynak", etiket)
+            birlesik.append(k)
+            yeni += 1
+        ayni = len(kayit) - yeni
+        satir.append(f"{etiket}: {yol} — {len(kayit)} kayıt"
+                     + (f" · {bozuk} BOZUK satır" if bozuk else "")
+                     + (f" · {ayni} kayıt öbür kaynakla AYNI (bir kez sayıldı)" if ayni else ""))
+    if okunan == 0:
+        raise Durdu("hiçbir bulgu defteri okunamadı ("
+                    + " · ".join(str(y) for _, y in kaynaklar) + ") — ÖLÇEMEDİM", 3)
+    if not birlesik:
+        raise Durdu("defterlerde okunabilir kayıt YOK — ÖLÇEMEDİM", 3)
+    uyari = ""
+    if pencere_gun > 0:
+        birlesik, _b, uyari = _pencerele(birlesik, pencere_gun)
+    return birlesik, bozuk_top, uyari, satir
+
+
 FABRIKA = Path("/config/.claude/skills/yazilim-fabrikasi/scripts")
 
 # ───────────────────────────────────────── kill-switch
@@ -512,8 +609,9 @@ def olc_veri(n) -> dict:
     sn_esik = es["sinif_esik"]
     pencere = n.gun if n.gun is not None else es.get("pencere_gun", 30)
 
-    havuz = bulgu_havuzu(depo, getattr(n, "havuz_yolu", None))
-    kayit, bozuk, pen_uyari = havuz_oku(havuz, pencere)
+    kaynaklar = bulgu_havuzlari(Path(n.depo).resolve(), depo,
+                                getattr(n, "havuz_yolu", None))
+    kayit, bozuk, pen_uyari, kaynak_satirlari = havuzlar_oku(kaynaklar, pencere)
     o = tekrar_say(kayit)
     dedup, dedup_not = dedup_kaynaklari(depo)
     surt_hal, surt = surtunme_oku(depo)
@@ -522,8 +620,14 @@ def olc_veri(n) -> dict:
           f" · {datetime.now(timezone.utc).date().isoformat()}")
     # 🔴 ASIL ŞEFFAFLIK: hangi odanın izini okuduğumu YOL olarak basıyorum.
     #    Odayı seçen şey kimlik değil bu yol; o yüzden gizli kalmamalı.
-    print(f"   iz: {havuz}")
-    print(f"   havuz: {o['toplam']} kayıt" + (f" · {bozuk} BOZUK satır" if bozuk else ""))
+    #    Artık iz TEK satır değil: merkez havuz ve kutunun kendi defteri ayrı ayrı yazılır
+    #    ki "kaç kaynak gördüm" sorusu da ölçülebilsin (izole kutu körlüğü, WBHZSJEA).
+    for sat in kaynak_satirlari:
+        print(f"   iz: {sat}")
+    kutu_sayi = sum(1 for k in kayit if k.get("_kaynak") == "kutu")
+    print(f"   havuz: {o['toplam']} kayıt (birleşik, {len(kaynak_satirlari)} kaynak"
+          + (f" · {kutu_sayi} tanesi bu kutunun kendi defterinden" if kutu_sayi else "")
+          + ")" + (f" · {bozuk} BOZUK satır" if bozuk else ""))
     if pen_uyari:
         print(f"   {pen_uyari}")
     print(f"   dedup kaynakları: {dedup_not}")

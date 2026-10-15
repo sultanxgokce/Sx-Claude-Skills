@@ -1,0 +1,21 @@
+$ python3 /tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/bileyi-ESKI.py --depo /tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/kutu --havuz-depo /tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/merkez --esik-dosya /tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/esik.json olc --gun 0
+# rc=1 sure=0.1s zaman=2026-10-15T15:33:49+03:00
+--- stdout ---
+🔪 BİLEYİ · iç-tarama · ajan=mumeyyiz · 2026-10-15
+   iz: /tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/merkez/_agents/handoff/bulgu-havuzu.jsonl
+   havuz: 3 kayıt
+   dedup kaynakları: aday havuzu: 0 kayıt · kurulu beceri: 96
+   🔴 KAPSAMA · sınıf alanı dolu: 3/3 (%100) → sınıfa dayanan sayım havuzun %0'ine KÖR
+   eşik: ikili≥4 · sınıf≥2 · dayanak 2026-10-09
+
+── YÜZEY 1 · sınıf alanı (kesin, kısmi kapsama)
+   eşiği aşan tekrar yok
+
+── YÜZEY 2 · ikili söz öbeği (tüm havuz, gürültülü)
+   eşiği aşan tekrar yok
+
+── YÜZEY 3 · sürtünme raporu (olay ≥ 10)
+   🟡 sürtünme raporu bu depoda yok (friction-report.sh) — ÖLÇEMEDİM, 'yok' demiyorum
+
+✓ eşiği aşan TEKRAR YOK — bileyecek bir şey çıkmadı (bu bir ölçümdür, iddia değil)
+--- stderr ---

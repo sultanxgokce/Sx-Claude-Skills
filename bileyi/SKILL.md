@@ -1,7 +1,7 @@
 ---
 name: bileyi
 type: agent
-version: 0.2.1
+version: 0.3.0
 description: >
   Bıçağı bileyen komut: kendi izimizi (bulgu havuzu · sürtünme raporu · aday havuzu) tarar,
   TEKRAR EDEN sürtünmeyi bulur ve onu yeteneğe çevirir — beceri · kural · yapılandırma.
@@ -51,6 +51,18 @@ görmek**ti.
    Ölçülmüş vaka: bir ölçüm aracı çivili yolla hangi ajan koşarsa koşsun SERDAR'ın izini
    "dün nerede bıraktım" diye sunuyordu — iki zarar: yanlış ize bakan yanlış plan yazar, ve
    bir ajanın izi onu görmemesi gereken odalara **sızar**.
+
+   🔴 **Çok kaynak — izole kutu körlüğü (15 Eki 2026, görev WBHZSJEA).** "Kendi izi" tek defter
+   demek değildi. Araç TEK havuz okuyordu ve normal kurulumda o havuz **merkez odanın** (Nexus)
+   defteriydi. İzole kutular (vekatip · mmex · medigate · huma · mihenk · tellal · akar · s02)
+   merkezi **görmez**, kendi defterlerini tutar; o kutuda araç ya `rc=3` veriyor ya da merkezin
+   izine bakıp kutunun **kendi tekrarını hiç görmüyordu** — yani tekrarın yokluğunu değil
+   **görüş alanının darlığını** ölçüyordu (vekil ölçüt). Artık iki kaynak birden okunur:
+   merkez havuz **ve** kutunun kendi defteri. Kurallar:
+   · her kaynak iz satırında ayrı yazılır (`iz: merkez: …` · `iz: kutu: …`)
+   · bir kaynak okunamazsa iş **durmaz**, satırı 🟡 taşır; **hiçbiri** okunamazsa `rc=3`
+   · aynı kayıt iki defterde birden ise **bir kez** sayılır (ayna iki tekrar sanılmaz)
+   · `--havuz-yolu` açıkça verilirse **yalnız o** okunur — açık irade keşfi ezer
 4. **EŞİK UYDURULMAZ.** "Kaç tekrar yeteneğe döner" bir ölçüm sorusudur. Eşik dosyadan okunur
    ve dosyada **ölçülmüş dayanağı** yazılı olmalıdır; dayanak yoksa araç **rc=3 (ÖLÇEMEDİM)**
    döner, yeşil basmaz. Bu kural bugünden: bir kota dersinde eşik seçmemek, veri bir hafta

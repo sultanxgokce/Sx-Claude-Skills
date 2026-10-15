@@ -635,6 +635,45 @@ kapi "U6 iki havuz düzeni birden varsa SEÇMEZ → rc=3" 3 sh -c \
 kapi "U7 --havuz-yolu açıkça verilince belirsizlik kalkar" 0 "${U[@]}" --havuz-yolu _agents/havuz/bulgu-havuzu.jsonl olc
 kapi "U8 açık yol yoksa yedeğe DÜŞMEZ → rc=3" 3 "${U[@]}" --havuz-yolu _agents/yok/bulgu-havuzu.jsonl olc
 
+echo "V · 🔴 İZOLE KUTU KÖRLÜĞÜ (WBHZSJEA): kutunun KENDİ defteri de okunur"
+# Merkez odanın defteri $KOK/oda · izole kutunun kendi defteri $KOK/kutu — İKİ AYRI depo.
+mkdir -p "$KOK/kutu/_agents/handoff"
+: > "$KOK/kutu/_agents/handoff/layiha-aday-havuzu.jsonl"
+python3 - "$KOK/kutu/_agents/handoff/bulgu-havuzu.jsonl" <<'PY2'
+import json, sys
+from datetime import date
+bugun = date.today().isoformat()
+# Kutunun KENDİ tekrarı: merkezde HİÇ görünmeyen, eşiği aşan bir sınıf.
+k = [{"id": "kutu%02d" % i, "tarih": bugun, "baslik": "kutu ici kilit cakismasi",
+      "sinif": "kutu-kilit-cakismasi", "gercek": "q"} for i in (1, 7, 13, 25)]
+with open(sys.argv[1], "w", encoding="utf-8") as f:
+    for r in k:
+        f.write(json.dumps(r, ensure_ascii=False) + "\n")
+PY2
+V=(python3 "$B" --depo "$KOK/kutu" --havuz-depo "$KOK/oda" --esik-dosya "$ES")
+kapi "V1 iki kaynak birden okunur → ölçüm koşar" 0 "${V[@]}" olc --gun 0
+iceren "V2 merkez defteri iz satırında yazılır" "iz: merkez:" "${V[@]}" olc --gun 0
+iceren "V3 kutunun KENDİ defteri de iz satırında yazılır" "iz: kutu:" "${V[@]}" olc --gun 0
+iceren "V4 🔴 kutudan gelen kayıt sayısı SÖYLENİR (körlük ölçülebilsin)" "bu kutunun kendi defterinden" "${V[@]}" olc --gun 0
+iceren "V5 🔴 yalnız kutuda olan tekrar FİİLEN bulunur (eski sürüm bunu hiç görmezdi)" "kutu-kilit-cakismasi" "${V[@]}" olc --gun 0
+# Merkez GÖRÜNMÜYOR (izole kutunun gerçeği): iş DURMAZ, eksiklik SÖYLENİR
+V2=(python3 "$B" --depo "$KOK/kutu" --havuz-depo "$KOK/merkez-yok" --esik-dosya "$ES")
+kapi "V6 🔴 merkez görünmezken iş DURMAZ — kutunun izi ölçülür" 0 "${V2[@]}" olc --gun 0
+iceren "V7 🔴 okunamayan kaynak 🟡 ile SÖYLENİR (sessiz kısmi ölçüm yok)" "🟡 merkez:" "${V2[@]}" olc --gun 0
+# Hiçbir kaynak yok → rc=3 (D1'in çok-kaynaklı karşılığı)
+kapi "V8 🔴 hiçbir defter okunamazsa rc=3 — 'tekrar yok' DEMEZ" 3 \
+  python3 "$B" --depo "$KOK/hic-yok" --havuz-depo "$KOK/hic-yok-2" --esik-dosya "$ES" olc --gun 0
+# Aynı kayıt iki defterde: BİR kez sayılır (merkez ↔ kutu aynası)
+mkdir -p "$KOK/ayna/_agents/handoff"
+cp "$HAV" "$KOK/ayna/_agents/handoff/bulgu-havuzu.jsonl"
+: > "$KOK/ayna/_agents/handoff/layiha-aday-havuzu.jsonl"
+iceren "V9 🔴 iki defterde AYNI kayıt iki tekrar sanılmaz (bir kez sayıldı)" "öbür kaynakla AYNI" \
+  python3 "$B" --depo "$KOK/ayna" --havuz-depo "$KOK/oda" --esik-dosya "$ES" olc --gun 0
+# Açık yol eski değişmezi korur: YALNIZ o okunur, kutu defteri eklenmez
+icermeyen "V10 --havuz-yolu verilince kutu defteri EKLENMEZ (açık irade keşfi ezer)" "iz: kutu:" \
+  python3 "$B" --depo "$KOK/kutu" --havuz-depo "$KOK/oda" --esik-dosya "$ES" \
+  --havuz-yolu "$HAV" olc --gun 0
+
 echo
 echo "toplam=$((GECEN+DUSEN)) geçen=$GECEN düşen=$DUSEN"
 [[ $DUSEN -eq 0 ]]

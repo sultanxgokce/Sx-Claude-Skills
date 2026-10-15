@@ -1,0 +1,110 @@
+{
+  "is": "bileyi-kutu-defteri",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T15:34:46+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kutu-tekrari-gorunuyor-mu",
+      "asama": "once",
+      "dosya": "olcum-kutu-tekrari-gorunuyor-mu-once.txt",
+      "sha256": "411ff0e51dd9e2c140d63b8e2e4f7cd43c2efbc8c866cbe35d9f75ece7c2c42b",
+      "komut": [
+        "python3",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/bileyi-ESKI.py",
+        "--depo",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/kutu",
+        "--havuz-depo",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/merkez",
+        "--esik-dosya",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/esik.json",
+        "olc",
+        "--gun",
+        "0"
+      ],
+      "rc": 3,
+      "renk": "sari",
+      "zaman": "2026-10-15T15:33:35+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kutu-tekrari",
+      "asama": "once",
+      "dosya": "olcum-kutu-tekrari-once.txt",
+      "sha256": "50c1b4526743e3cbfecbff45b47ba5b396c794d1bf91896c9aef4893c509a91d",
+      "komut": [
+        "python3",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/bileyi-ESKI.py",
+        "--depo",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/kutu",
+        "--havuz-depo",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/merkez",
+        "--esik-dosya",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/esik.json",
+        "olc",
+        "--gun",
+        "0"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T15:33:49+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kutu-tekrari",
+      "asama": "sonra",
+      "dosya": "olcum-kutu-tekrari-sonra.txt",
+      "sha256": "0bde4c0cd757375fcf4badd13ddc8ceb803c2bb7ce879e0c0e9853a077dfab8f",
+      "komut": [
+        "python3",
+        "bileyi/scripts/bileyi.py",
+        "--depo",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/kutu",
+        "--havuz-depo",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/merkez",
+        "--esik-dosya",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/bileyi-kanit/esik.json",
+        "olc",
+        "--gun",
+        "0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T15:34:15+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapilar",
+      "asama": "sonra",
+      "dosya": "olcum-kapilar-sonra.txt",
+      "sha256": "8d8f8d9270b9930987d24604a603a057676efe0456968e02cf0ac9d1b21eb19b",
+      "komut": [
+        "bash",
+        "bileyi/scripts/bileyi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T15:34:32+03:00",
+      "sure_sn": 6.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-beklenen-kirmizi",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-beklenen-kirmizi-tek.txt",
+      "sha256": "6432ad0394c5addcf9f280fc60637a89a1006751a8c6789d5fa8e7cef36c4bbb",
+      "komut": [
+        "bash",
+        "/tmp/tmp.8VsJg4Ffzb/kos.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T15:34:46+03:00",
+      "sure_sn": 6.3
+    }
+  ],
+  "imza": "f5198911b1faac736f72af78dd40a40e8636c46526edd1b108ded100ee7e2836"
+}
