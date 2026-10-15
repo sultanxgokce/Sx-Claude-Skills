@@ -1,7 +1,7 @@
 {
   "is": "ayirt-kapisi-tazele",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T16:07:58+03:00",
+  "guncelleme": "2026-10-15T16:10:18+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -124,7 +124,22 @@
       "renk": "yesil",
       "zaman": "2026-10-15T16:07:58+03:00",
       "sure_sn": 4.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "SONRA-havuz-97-kapi-son-hukum-gecerli-ters-sira-dahil",
+      "asama": "sonra",
+      "dosya": "olcum-SONRA-havuz-97-kapi-son-hukum-gecerli-ters-sira-dahil-sonra.txt",
+      "sha256": "ccbf5d359f0dc32e52c8d004d4bdd1b6f0de3312425a96b4b1254f6c30b29d8f",
+      "komut": [
+        "bash",
+        "ui-tasarim-akisi/arac/havuz.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T16:10:18+03:00",
+      "sure_sn": 23.6
     }
   ],
-  "imza": "b1aa516dd4366ec4cd94ff41c7d3d2f13d21a8a774c787e729d404486fa06b0d"
+  "imza": "61298b83c1e3801fb50a6268e0a6fa74b4e43a93d6f31480d9c37e6b0ad008df"
 }

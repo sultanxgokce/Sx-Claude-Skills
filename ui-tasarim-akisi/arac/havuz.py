@@ -408,15 +408,21 @@ def ayirt_kapisi(argv, yol):
     #    *"meşrudur ama bir sonraki turda çözülmeli, KALICI SIĞINAK DEĞİLDİR"* diye tanımlıyor;
     #    kapıyı açarsa tam da kalıcı sığınağa dönüşür ve kapı adının söylediği şeyi ölçmez.
     #    Kayıt yazılabilir ve defterde görünür — ama sonraki sayfayı açmaz.
-    kararli = [k for k in onceki if k["kapi"] == "ayirt" and k["hukum"] in ("temiz", "kirmizi")]
-    if kararli:
-        return 0
-    kararsiz = [k for k in onceki if k["kapi"] == "ayirt"]
-    if kararsiz:
-        sys.stderr.write("KAPI KAPALI — '%s' için ayırt yargısı var ama KARARSIZ (%s).\n"
-                         % (alan["ekran"], kararsiz[-1]["hukum"]))
+    # 🔴 GEÇERLİ olan SON hükümdür (bağımsız göz bulgusu tur 3, 2026-10-15): ilk sürüm
+    #    "geçmişte bir yerde temiz/kirmizi varsa aç" diyordu. Defter salt-eklemeli olduğu için
+    #    bu, ESKİ bir kararlı kaydın sonradan yazılan `emin-degilim`i geçersiz kılması
+    #    demekti — yani sayfa değişip yargı yeniden belirsizleşince kapı açık kalıyordu.
+    #    "Bir kez karar verildi" ile "şu an karar verilmiş durumda" aynı cümle değildir.
+    ayirtlar = [k for k in onceki if k["kapi"] == "ayirt"]
+    if ayirtlar:
+        son = ayirtlar[-1]                       # salt-eklemeli defter: son satır güncel hüküm
+        if son["hukum"] in ("temiz", "kirmizi"):
+            return 0
+        sys.stderr.write("KAPI KAPALI — '%s' için SON ayırt hükmü KARARSIZ (%s).\n"
+                         % (alan["ekran"], son["hukum"]))
         sys.stderr.write("  Rubrik: 'emin-degilim meşrudur ama bir sonraki turda çözülmeli,\n")
         sys.stderr.write("  kalıcı sığınak değildir.' Bu tur o sonraki tur.\n")
+        sys.stderr.write("  (Daha eski kararlı bir kayıt varsa geçerli DEĞİLDİR — son söz geçerlidir.)\n")
         return 1
     sys.stderr.write("KAPI KAPALI — '%s' sayfası için AYIRT-EDİCİLİK yargısı yok.\n"
                      % alan["ekran"])

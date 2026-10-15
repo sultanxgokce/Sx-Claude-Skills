@@ -542,7 +542,13 @@ tamamı yeni KAPI 6'nın yargısız fikstürlerde ateşlenmesindendi. Üç ayrı
 
 Bu iki madde rubriği GEVŞETMEDİ, **kodu rubriğe hizaladı** — rubrik tek kaynaktır.
 
-Ölçüm: dört suit **228 kapı** yeşil (havuz 95 · prompt-yap 43 · yoğunluk 41 · yargı 49).
+6. 🔴 **Geçerli olan SON hükümdür.** Kapı *"geçmişte bir yerde temiz/kirmizi varsa aç"*
+   diyordu; defter salt-eklemeli olduğu için bu, ESKİ bir kararlı kaydın sonradan yazılan
+   `emin-degilim`i geçersiz kılması demekti — sayfa değişip yargı yeniden belirsizleşince kapı
+   açık kalıyordu. *"Bir kez karar verildi"* ile *"şu an karar verilmiş durumda"* aynı cümle
+   değildir. Artık son ayırt satırı geçerlidir; ters sıra da sınavda (bağımsız göz, tur 3).
+
+Ölçüm: dört suit **230 kapı** yeşil (havuz 97 · prompt-yap 43 · yoğunluk 41 · yargı 49).
 Önce/sonra çifti ve dördünün hepsi kanıt manifestinde kayıtlı; toplam elle yazılmıyor,
 koşumların çıktısından toplanıyor (bağımsız gözün tur-1 bulgusu: 214 yazmıştım, 217'ydi).
 Ayrıca `havuz.py` her koşuda `utcnow()` için DeprecationWarning basıyordu ve bu uyarı

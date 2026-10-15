@@ -288,6 +288,14 @@ python3 "$H" yaz --havuz "$JK" --kutu t --urun t --ekran e --kapi ayirt \
      --hukum temiz --klise yok --imza oran --arac 0.3.1 >/dev/null 2>&1
 kapi "karar verilince kapı AÇILIR → rc=0" 0 \
      python3 "$H" ayirt-kapisi --havuz "$JK" --kutu t --urun t --ekran e
+# 🔴 TERS SIRA (bağımsız göz bulgusu tur 3): kararlıdan SONRA yazılan emin-degilim kapıyı
+#    KAPATMALI. Salt-eklemeli defterde "bir kez karar verildi" ile "şu an karar verilmiş
+#    durumda" aynı cümle değildir; sayfa değişip yargı belirsizleşirse kapı açık kalamaz.
+python3 "$H" yaz --havuz "$JK" --kutu t --urun t --ekran e --kapi ayirt \
+     --hukum emin-degilim --klise yok --imza yok --arac 0.3.1 >/dev/null 2>&1
+kapi "kararlıdan SONRA emin-degilim → kapı yine KAPALI → rc=1" 1 \
+     python3 "$H" ayirt-kapisi --havuz "$JK" --kutu t --urun t --ekran e
+icerir "son sözün geçerli olduğu söylenir" "son söz geçerlidir"
 
 echo
 echo "TOPLAM: $GECTI geçti · $KALDI kaldı"
