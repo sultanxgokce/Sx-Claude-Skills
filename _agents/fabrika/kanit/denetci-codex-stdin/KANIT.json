@@ -1,0 +1,23 @@
+{
+  "is": "denetci-codex-stdin",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T10:42:25+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "denetci-test-149-kapi-Y8-stdin-acik-boru-20sn-biter-ve-mutant-codex-stdin-acik",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-test-149-kapi-Y8-stdin-acik-boru-20sn-biter-ve-mutant-codex-stdin-acik-sonra.txt",
+      "sha256": "c5de583105cb39d81f5a0bd04a2002a866c3116945682fa53757eb1784747730",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T10:42:25+03:00",
+      "sure_sn": 340.8
+    }
+  ],
+  "imza": "ca50818d815fc30fdd64c53cfda4a6efc838d4b65a0e924dd5a6e8db5b2e1d16"
+}

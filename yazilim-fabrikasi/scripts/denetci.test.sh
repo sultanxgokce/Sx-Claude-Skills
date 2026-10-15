@@ -382,6 +382,18 @@ python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y/DENETIM-
 [ "$RC" -eq 0 ] && [ "$(wc -l < "$T/csay")" -eq 2 ]; g $? "Y4 codex bir kez düşüp toparlarsa yedek YOK: ikinci deneme codex (2 çağrı)"
 python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y/DENETIM-3.json'));assert d['yedek'] is None and d['denetci'].startswith('codex')"; g $? "Y4b kayıtta yedek=null, denetçi codex (Y1b tautoloji değil)"
 rm -f "$FAKE/codex"
+echo "════ Y8 · codex STDIN KAPALI: çağıranın stdin'i hiç kapanmasa da denetçi biter (15 Eki, 68 dk asılı kaldı) ════"
+cat > "$FAKE/codex" <<'SH'
+#!/usr/bin/env bash
+# sahte codex: gerçek codex gibi stdin'i EOF'a kadar okur (stdin açık kalırsa asılı kalır), sonra JSON yazar
+cat >/dev/null
+for ((i=1;i<=$#;i++)); do if [ "${!i}" = -o ]; then j=$((i+1)); printf '%s' "$SAHTE_JSON" > "${!j}"; fi; done
+SH
+chmod +x "$FAKE/codex"
+bash "$K" olcum is-y8 olc --asama tek -- echo 1 >/dev/null 2>&1
+( unset DENETCI_KOMUT; PATH="$YP" DENETCI_YAZAN_MODEL=fable SAHTE_JSON="$(J 5 E "")" timeout 20 bash "$D" is-y8 --diff "$T/y.patch" --kart "$T/kart.md" < <(sleep 60) >"$T/y8.out" 2>&1 ); RC=$?
+[ "$RC" -eq 0 ] && python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-y8/DENETIM-1.json'));assert d['denetci'].startswith('codex')"; g $? "🔴 stdin 60 sn açık boruyken denetçi 20 sn içinde BİTTİ (rc=0), codex puanladı — stdin'e bağımlı değil"
+rm -f "$FAKE/codex"
 
 if [ -n "${IC_KOSUM:-}" ]; then echo "(ic)"; [ "$kalan" -eq 0 ]; exit $?; fi
 echo "════ T11 · MUTASYON: Sultan kapısını bozunca sınav kırmızı veriyor mu ════"
@@ -410,6 +422,7 @@ mut "reis-sinif-citini-kaldir" 's@^if k.get("sultan") or k.get("siniflar"): rais
 mut "mutlak-tavani-kaldir" 's@^if \[ "$TUR" -gt "$MUTLAK" \]; then@if false; then@'
 mut "yedek-gozu-kaldir" 's@if yedek_olur_mu; then YEDEK="codex yok";@if false; then YEDEK="codex yok";@'
 mut "kart-tek-kaynagi-kaldir" 's@^\[ -n "$KART_DEPO" \] || KART_DEPO="$DEPO"@KART_DEPO="$DEPO"@'
+mut "codex-stdin-acik" 's@"$TMP/istem.md")" </dev/null >"$TMP/log"@"$TMP/istem.md")" >"$TMP/log"@'
 mut "kart-yolu-harici-kalir" 's@then KART="$BIRINCIL"; _bilgi@then _bilgi@'
 mut "kart-secenegi-tek-kaynagi-asar" 's@&& ! cmp -s "$KART" "$BIRINCIL"; then@\&\& false; then@'
 mut "kapi-kart-hatasini-bastirir" 's@KARTYOL="$(kart_yolu)" || exit 3;@KARTYOL="$(kart_yolu 2>/dev/null)";@'
