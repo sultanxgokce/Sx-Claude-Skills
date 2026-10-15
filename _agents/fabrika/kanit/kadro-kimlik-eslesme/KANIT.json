@@ -1,7 +1,7 @@
 {
   "is": "kadro-kimlik-eslesme",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-16T01:08:06+03:00",
+  "guncelleme": "2026-10-16T01:09:29+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -23,37 +23,37 @@
       "etiket": "kimlik-sinavi",
       "asama": "sonra",
       "dosya": "olcum-kimlik-sinavi-sonra.txt",
-      "sha256": "519320105589f3e8d2be4809ddc623f27ed962462c93d0d2a75c970d860af828",
+      "sha256": "0b292629e580da3434650eb0351c63f57ba4b9179991b86bec2f5ea9070d807c",
       "komut": [
         "node",
         "terminal-onar/kapi/kimlik.test.mjs"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-16T01:07:31+03:00",
-      "sure_sn": 1.4
+      "zaman": "2026-10-16T01:09:20+03:00",
+      "sure_sn": 0.4
     },
     {
       "tur": "olcum",
       "etiket": "kapi-sinavi-tam",
       "asama": "sonra",
       "dosya": "olcum-kapi-sinavi-tam-sonra.txt",
-      "sha256": "ec0ee43168dade031fc597bcb757cf1a926ad3c390451da7a21f6e47f8e12349",
+      "sha256": "f69fdbe82cff5ad9396e48b8c2d8eb959582437a35887646fdcaa32ee4f0a94c",
       "komut": [
         "bash",
         "terminal-onar/kapi/kapi-sinav.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-16T01:07:41+03:00",
-      "sure_sn": 9.8
+      "zaman": "2026-10-16T01:09:29+03:00",
+      "sure_sn": 8.7
     },
     {
       "tur": "olcum",
       "etiket": "canli-kadro-code-kutusu",
       "asama": "sonra",
       "dosya": "olcum-canli-kadro-code-kutusu-sonra.txt",
-      "sha256": "fea97c008d3b6694cdb80886bf84d80ae14bcba59682398e8f8db7af7dd113c3",
+      "sha256": "7bc0c6a83f3f0fca9fdf7cfac63e0e5abaf6ffa55a4e4a36bb16a56b3efdddb9",
       "komut": [
         "node",
         "terminal-onar/kapi/kadro-canli.mjs",
@@ -66,7 +66,7 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-16T01:05:44+03:00",
+      "zaman": "2026-10-16T01:09:29+03:00",
       "sure_sn": 0.4
     },
     {
@@ -74,7 +74,7 @@
       "etiket": "mutasyon-turu",
       "asama": "sonra",
       "dosya": "olcum-mutasyon-turu-sonra.txt",
-      "sha256": "cd76bc192cac75bc76caf84a2660b089fa466acfccdbb412327af74b9a4591bb",
+      "sha256": "fe09042ed00fdbb63b26dc19b7a7614bfad7788a5d68fcce1fb151b82386833f",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/kimlik-mutasyon.sh",
@@ -83,9 +83,9 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-16T01:08:06+03:00",
-      "sure_sn": 3.6
+      "zaman": "2026-10-16T01:09:20+03:00",
+      "sure_sn": 3.8
     }
   ],
-  "imza": "80a9dcf32e3d9115ad69bda7b945b8d3a911c7927a28b0d4fe94a882afdf0ce8"
+  "imza": "528ef7f4e2a2f94a6405d60124cf690875a81b4669e84bd3dbad58abe80dd066"
 }

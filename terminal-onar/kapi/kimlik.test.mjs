@@ -48,6 +48,10 @@ const r5 = kadroBirlestir({ uyeler: kayitAyristir('uyeler:\n  - id: X\n    tmux:
 kapi('E7b session_id A oturumunu, verilen ad B oturumunu gösteriyor → session_id KAZANIR (basamaklar sıralı), B kayıtsız kalır', r5.kisiler[0].oturum && r5.kisiler[0].oturum.ad === 'a' && r5.kisiler[0].eslesme === 'kimlik' && r5.kayitsiz.map((x) => x.ad).join() === 'b', JSON.stringify(r5));
 const r6 = kadroBirlestir({ uyeler: kayitAyristir('uyeler:\n  - id: X\n    tmux: "c:0"\n    session_id: "YOK"\n'), koltuklar: koltukSatirlari('b\t1\t1\tajan\tbos\t\n'), ana: '', kimlikler: cak });
 kapi('E7c session_id hiçbir canlı oturumda yoksa (bayat) ad basamağına inilir', r6.kisiler[0].oturum && r6.kisiler[0].oturum.ad === 'b' && r6.kisiler[0].eslesme === 'kimlik');
+const yaris = new Map([['b', [{ sessionId: 'SB', ad: 'A', adKaynak: 'user' }]]]);
+const r7 = kadroBirlestir({ uyeler: kayitAyristir('uyeler:\n  - id: A\n    tmux: "a:0"\n  - id: B\n    tmux: "zz:0"\n    session_id: "SB"\n'), koltuklar: koltukSatirlari('a\t1\t1\tajan\tbos\t\nb\t1\t1\tajan\tbos\t\n'), ana: '', kimlikler: yaris });
+const A7 = r7.kisiler.find((x) => x.id === 'A'), B7 = r7.kisiler.find((x) => x.id === 'B');
+kapi('E7d kayıtta ÖNCE gelen A ad ile, SONRA gelen B session_id ile aynı oturuma talip → session_id kazanır (B ← b), A tmux adına düşer (A ← a)', B7.oturum && B7.oturum.ad === 'b' && B7.eslesme === 'kimlik' && A7.oturum && A7.oturum.ad === 'a' && !A7.eslesme, JSON.stringify(r7.kisiler));
 const r3 = kadroBirlestir({ uyeler: kayitAyristir('uyeler:\n  - id: Y\n    tmux: "y:0"\n'), koltuklar: koltukSatirlari('y\t1\t1\tajan\tbos\t\n'), ana: '', kimlikler: new Map([['y', [{ sessionId: 'Q', ad: 'Y', adKaynak: 'derived' }]]]) });
 kapi('E8 türetilmiş (derived) ad kimlik sayılmaz — yalnız kullanıcının verdiği ad', !r3.kisiler[0].eslesme && r3.kisiler[0].oturum.ad === 'y');
 

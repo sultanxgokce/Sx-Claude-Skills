@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "kadro-kimlik-eslesme",
+  "pr": "342",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-16T01:08:48+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 64386,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 34957
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kimlik kaynakları süzülmüş, istenen session_id → kullanıcı adı → tmux sırası tek kişi için uygulanmış; ana oturumdaki kişi tek çalışan satırına bağlanıyor ve altyapı eylemi 403 alıyor. Ancak kimlik oturumları kişiler arasında kayıt sırasına göre açgözlü dağıtılıyor; güçlü session_id iddiası daha önceki bir kişinin ad eşleşmesine yenilebildiği için önce bunu çözün.",
+    "bulgular": [
+      {
+        "ne": "Kimlik önceliği kişi başına uygulanıyor, kadronun tamamında basamak basamak uygulanmıyor. Önce işlenen A kişisi kullanıcı adıyla bir oturumu tüketirse, daha sonra işlenen B kişisinin aynı oturuma yönelik session_id eşleşmesi artık görülemiyor; böylece daha güçlü kimlik iddiasının kazanması yerine sonuç kayıt sırasına bağlı oluyor.",
+        "kanit": "`for (const u of uyeler) { const k = kimlikBul(u); ... }` her kişi için session_id ve ardından ad basamaklarını tamamlıyor; `kimlikBul` bulduğu oturumu hemen `kalan.delete(aday[0])` ile kaldırıyor. E7b yalnız tek kişinin session_id/ad çatışmasını ölçüyor; iki kişinin aynı oturuma sırasıyla ad ve session_id ile talip olduğu ters kayıt sırası vakası sınanmıyor.",
+        "konum": "terminal-onar/kapi/kadro.mjs:121-137; terminal-onar/kapi/kimlik.test.mjs:E7b",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kırmızı önce ölçümü 8 geçti/6 kaldıdan yeşil sonra ölçümü 16/16'ya çıkıyor, tam kapı sınavı yeşil, mutasyon turu 7/7 ve canlı code-kutusu gerçekçi eşleşmeler gösteriyor. Kanıt kartın ana senaryolarını güçlü biçimde kapsıyor; ancak kişiler arası ad/session_id çekişmesi için ölçüm bulunmuyor."
+  }
+}

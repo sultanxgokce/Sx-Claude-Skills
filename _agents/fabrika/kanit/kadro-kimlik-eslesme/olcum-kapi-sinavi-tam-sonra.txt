@@ -1,5 +1,5 @@
 $ bash terminal-onar/kapi/kapi-sinav.test.sh
-# rc=0 sure=9.8s zaman=2026-10-16T01:07:41+03:00
+# rc=0 sure=8.7s zaman=2026-10-16T01:09:29+03:00
 --- stdout ---
 ── kadro birleşimi (kadro.test.mjs)
 ── A · kayıt ayrıştırma
@@ -121,12 +121,13 @@ SONUÇ: 25 geçti · 0 kaldı
   ✓ E7 aynı kimlik İKİ oturumda → kimlik eşleşmesi yapılmaz (tahmin yok), tmux adına düşer
   ✓ E7b session_id A oturumunu, verilen ad B oturumunu gösteriyor → session_id KAZANIR (basamaklar sıralı), B kayıtsız kalır
   ✓ E7c session_id hiçbir canlı oturumda yoksa (bayat) ad basamağına inilir
+  ✓ E7d kayıtta ÖNCE gelen A ad ile, SONRA gelen B session_id ile aynı oturuma talip → session_id kazanır (B ← b), A tmux adına düşer (A ← a)
   ✓ E8 türetilmiş (derived) ad kimlik sayılmaz — yalnız kullanıcının verdiği ad
 ── U · uçtan uca: gerçek kapı süreci, sahte oturum dizini + sahte /proc
   ✓ U1 /api/kadro: kutu-yon çalışan, oturumu kutu-ana (kimlikle), ana ikinci satır değil; düşen/kayıtta-var sayısı 0
   ✓ U2 ana oturumda çalışan kişiyi dondur → 403 (ana kapatılmaz), kayıt ve tmux dokunulmadı
 
-SONUÇ: 16 geçti · 0 kaldı
+SONUÇ: 17 geçti · 0 kaldı
 ── kapı birim sınavı (sunucu.test.mjs)
 
 ── T · TABAN YOLU (kapı /sedir altında) ──
