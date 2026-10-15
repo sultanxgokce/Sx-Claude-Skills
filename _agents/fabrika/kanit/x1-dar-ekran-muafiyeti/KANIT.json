@@ -1,7 +1,7 @@
 {
   "is": "x1-dar-ekran-muafiyeti",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T16:42:07+03:00",
+  "guncelleme": "2026-10-15T16:44:21+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -171,7 +171,22 @@
       "renk": "yesil",
       "zaman": "2026-10-15T16:42:07+03:00",
       "sure_sn": 12.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "TUR4-DUZELTME-SONRASI-yogunluk-53-kapi",
+      "asama": "sonra",
+      "dosya": "olcum-TUR4-DUZELTME-SONRASI-yogunluk-53-kapi-sonra.txt",
+      "sha256": "e3a8a8e4ac86c66abf1c5db64498a58f3fae6b0477377b77c5b16fe87105a706",
+      "komut": [
+        "bash",
+        "ui-tasarim-akisi/arac/yogunluk-denetle.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T16:44:21+03:00",
+      "sure_sn": 1.1
     }
   ],
-  "imza": "9f2865c5aad5ce1d2bf9531e72ab4bf1c377fd5c4a46e0c8c344e219ed97e18a"
+  "imza": "d2388c573827d6efa83c88af52d3709f6a0bbd5677168646a3baf971c40e1252"
 }

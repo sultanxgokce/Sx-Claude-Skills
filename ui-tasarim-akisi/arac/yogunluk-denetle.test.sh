@@ -235,9 +235,11 @@ assert m.kapsayan(acik.index("C"), m.araliklar(acik, "sc-if")) is not None, "kap
 PYEOF
 
 # 13b · GENİŞLİK BANTLARI — X1'in dar-ekran muafiyeti (0.6.0)
-# Niçin burada sekiz kapı var: muafiyet, bir kapıyı gevşetmenin en kolay yoludur. O yüzden
-# muafiyetin KENDİSİ de ölçülür — açıldığını söylüyor mu, bant İÇİ kıyası kaldırıyor mu,
-# karışık durumu yutuyor mu, beyansız kareyi "temiz" sayıyor mu.
+# Niçin bu kadar kapı: muafiyet, bir kapıyı gevşetmenin en kolay yoludur. O yüzden muafiyetin
+# KENDİSİ de ölçülür — açıldığını söylüyor mu, bant İÇİ kıyası kaldırıyor mu, karışık durumu
+# yutuyor mu, beyansız kareyi "temiz" sayıyor mu, tek kareli bantla sessizce kapanıyor mu.
+# 🔴 Kapı SAYISI buraya YAZILMAZ: üç kez elle yazdım, üç kez bayatladı (bağımsız göz üçünü de
+#    yakaladı). Sayıyı suit'in kendisi basıyor — tek kaynak o.
 cikti="$(python3 "$KAPI" "$FIK/bant" --profil "$FIK/bant/bant-profili.json" 2>&1)"; rc=$?
 [ "$rc" = "0" ] && gecti "bant-yesil" "dar kare muaf bantta → rc=0 (sahte-kırmızı yok)" \
   || kaldi "bant-yesil" "rc=$rc — bant ilan edildiği hâlde dar kare kırmızı"

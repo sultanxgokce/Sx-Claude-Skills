@@ -629,9 +629,8 @@ doğru" diyordu; artık ihlal, fikstürü `bant-beraberlik`.
 Sınav 41 → **53 kapı**. Geriye uyum: bant ilan etmeyen profiller için davranış birebir aynı
 (41 eski kapı dokunulmadan geçti). Yeni kural kodu YOK — bant farkındalığı X1'in kendi kapsamı.
 
-✅ **Sürüm boşluğu KAPANDI (bu işin yan bulgusuydu).** Bu iş başlarken kurulu beceri kopyası
-(10+ kutuda ortak `/config/.claude/skills`) **0.5.0** koşuyordu, `origin/main` ise 0.4.0'daydı:
-0.5.0'ı getiren PR #213 **51 gündür açıktı** ve ölçüldüğünde **kırmızıydı** — yani filo, kendi
-sınavı geçmeyen bir sürüm koşuyordu. SERDAR'ın kararıyla (a) yolu uygulandı: #213 önce
-tazelendi (0.5.1, altı kusur kapandı), birleştirildi, kurulu kopya senkronlandı ve **yerinde
-koşturularak** doğrulandı (230 kapı yeşil). 0.6.0 onun üstüne oturuyor; kayıt ile filo hizalı.
+**0.6.0 neyin üstüne oturuyor:** 0.5.1 (yukarıdaki not). Bu işin başında kurulu kopya ile
+ana dal arasında bir sürüm boşluğu vardı; o boşluğun ölçümü, kapanışı ve kurulu kopyanın
+yerinde doğrulanması **0.5.1 notunun ve o işin kanıt paketinin konusudur** — bu nota
+yazılmıyor, çünkü bu kartın kanıt manifesti onları ölçmez. (Bağımsız gözün tur-4 bulgusu:
+kendi kartının ölçmediği şeyi kendi sürüm notunda iddia etmek, kapsam kaymasıdır.)
