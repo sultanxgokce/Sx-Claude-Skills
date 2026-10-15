@@ -1,0 +1,34 @@
+$ bash yazilim-fabrikasi/scripts/pr-kip-olc.test.sh
+# rc=0 sure=0.2s zaman=2026-10-15T18:07:34+03:00
+--- stdout ---
+── 1 · YALNIZ KİP ucuza iner (kusurun kendisi: PR #326 vakası)
+  ✓ yalnız kip → rc=0                           (rc=0)
+  ✓ içerik farkının SIFIR olduğu söylenir
+  ✓ aynı diff'in öteki dosyası da kip → rc=0  (rc=0)
+── 2 · GERÇEK dokunuş çakışma KALIR (gevşeme yok)
+  ✓ içerik hunk'ı → rc=1                       (rc=1)
+  ✓ kaç parça olduğu söylenir
+  ✓ kip VE içerik birlikte → rc=1 (kip indirimi yutmaz) (rc=1)
+── 3 · HUNK YOK ama ZARARSIZ DEĞİL — üç ayrı tuzak
+  ✓ rename (hunk yok) → rc=1                     (rc=1)
+  ✓ sebep yazılır (yer değiştirme)
+  ✓ rename hedefi de → rc=1                      (rc=1)
+  ✓ silme (hunk yok) → rc=1                      (rc=1)
+  ✓ binary (hunk görünmez) → rc=1              (rc=1)
+── 4 · ÖLÇÜLEMEDİ 'temiz' DEĞİLDİR (fail-closed)
+  ✓ tanınmayan bölüm → rc=3                   (rc=3)
+  ✓ 'zararsız sayılmaz' denir
+  ✓ diff'te olmayan yol → rc=3                   (rc=3)
+  ✓ fark dosyası yok → rc=3                     (rc=3)
+── 5 · YOL EŞLEŞMESİ TAM OLMALI (kısmi ad yanlış bölüm kesmesin)
+  ✓ kısmi ad eşleşmiyor → rc=3                (rc=3)
+── 6 · DAYANIKLILIK (bağımsız göz tur-1 bulguları)
+  ✓ tırnaklı/boşluklu yol · yalnız kip → rc=0 (rc=0)
+  ✓ kip olarak tanınır
+  ✓ tırnaklı/boşluklu yol · içerik → rc=1   (rc=1)
+  ✓ tırnaklı yolda kısmi ad hâlâ TUTMAZ → rc=3 (rc=3)
+  ✓ --fark değersiz → kullanım hatası         (rc=2)
+  ✓ --depo değersiz → kullanım hatası         (rc=2)
+────────────────────────────────────────────
+TOPLAM: 22 geçti · 0 kaldı
+--- stderr ---

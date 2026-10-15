@@ -1,0 +1,19 @@
+{
+  "is": "pr-kip-olcum-araci",
+  "cumle": "Acik PR'in bir dosyaya dokunusunun ICERIK mi yoksa yalniz dosya KIPI mi oldugunu olcen ayri arac (pr-kip-olc.sh) + kendi cift yonlu sinavi. Niçin gerekli: kapsam kapisi 'gh pr diff --name-only' ile YOL karsilastiriyor; PR #326 yedi betige yalniz calistirma biti verdi (icerik farki SIFIR satir) ve kapi KAPSAM CAKISMASI deyip is alani ACMADI. Iki ad eslesmesi iki isin ayni satirlara dokundugunu kanitlamaz. 🔴 Bu kart YALNIZ OLCUMU teslim eder, kapiya BAGLAMAZ: is-alani.sh'de MIRAHUR'un kapat() isi var (gorev N4WBMG97), SERDAR'a sira sorusu yazildi. Baglama (tek satir) ayri kart. 🔴 Yalniz kip ucuza iner; rename/silme/binary/tanimadigi hal CAKISMA kalir (fail-closed). Kaynak: kapsam-kapisi-hunk kartinin DARALT damgasi.",
+  "istedi": "SERDAR",
+  "aldi": "NAKKAŞ",
+  "zaman": "2026-10-15T18:04:38+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

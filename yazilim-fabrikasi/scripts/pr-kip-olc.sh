@@ -35,8 +35,14 @@ _kullanim() {
 PR=""; YOL=""; DEPO="${PWD}"; FARK_DOSYA=""
 while [ $# -gt 0 ]; do
   case "$1" in
-    --depo) DEPO="$2"; shift 2 ;;
-    --fark) FARK_DOSYA="$2"; shift 2 ;;
+    # 🔴 Değer isteyen bayrak, değeri eksikse SESSİZCE yutulmaz (bağımsız göz bulgusu):
+    #    `set -u` altında $2'ye dokunmak kabuk hatası verir ve aracın tanımlı çıkış kodları
+    #    yerine beklenmedik bir kodla düşer. Ölçüm aracının kendi çıkışı belirsizse ölçüm de
+    #    belirsizdir. (Aynı sınıf, yoğunluk kapısında 0.3.0'a kadar ölü bayrak olarak yaşadı.)
+    --depo) [ $# -ge 2 ] || { echo "--depo bayrağının değeri eksik" >&2; exit 2; }
+            DEPO="$2"; shift 2 ;;
+    --fark) [ $# -ge 2 ] || { echo "--fark bayrağının değeri eksik" >&2; exit 2; }
+            FARK_DOSYA="$2"; shift 2 ;;
     -h|--help) _kullanim ;;
     *) if [ -z "$PR" ] && [ -z "$FARK_DOSYA" ]; then PR="$1"; elif [ -z "$YOL" ]; then YOL="$1";
        else echo "fazla argüman: $1" >&2; exit 2; fi; shift ;;
@@ -59,13 +65,27 @@ fi
 # ── o dosyanın bölümünü kes ────────────────────────────────────────────────────────────
 # `diff --git a/<yol> b/<yol>` satırından bir SONRAKİ `diff --git ` satırına kadar.
 # Yol birebir eşleşir (grep -F mantığı): kısmi ad eşleşmesi yanlış bölüm keser.
+# 🔴 Yol ALAN BÖLMEKLE çıkarılmaz (bağımsız göz bulgusu): git, boşluk ya da özel karakter
+#    içeren yolları diff başlığında TIRNAKLAR (`diff --git "a/iki kelime.sh" "b/iki kelime.sh"`).
+#    `$3`/`$4` ile bölmek o satırı parçalar ve geçerli bir yalnız-kip dosyası rc=3'e düşer.
+#    Bunun yerine dört olası jeton (a/P · "a/P" · b/P · "b/P") jeton SINIRIYLA aranır:
+#    eşleşmenin solu satır başı ya da boşluk, sağı satır sonu ya da boşluk olmalı — kısmi ad
+#    eşleşmesi (denetle.test.sh ⟂ yogunluk-denetle.test.sh) hâlâ TUTMAZ.
 BOLUM="$(printf '%s\n' "$FARK" | awk -v yol="$YOL" '
+  function jeton(s, t,   i, sol, sag) {
+    i = index(s, t)
+    while (i > 0) {
+      sol = (i == 1) ? " " : substr(s, i - 1, 1)
+      sag = substr(s, i + length(t), 1)
+      if ((sol == " " || i == 1) && (sag == "" || sag == " ")) return 1
+      s = substr(s, i + 1); i = index(s, t)
+    }
+    return 0
+  }
   $0 ~ /^diff --git / {
-    # "diff --git a/X b/Y" → X ve Y alanları
-    a = $3; b = $4
-    sub(/^a\//, "", a); sub(/^b\//, "", b)
-    icinde = (a == yol || b == yol)
-    if (icinde) { bas = 1 } else { bas = 0 }
+    kalan = substr($0, 12)
+    bas = (jeton(kalan, "a/" yol) || jeton(kalan, "b/" yol) \
+           || jeton(kalan, "\"a/" yol "\"") || jeton(kalan, "\"b/" yol "\""))
   }
   bas { print }
 ')"

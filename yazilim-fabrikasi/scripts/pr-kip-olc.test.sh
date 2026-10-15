@@ -82,6 +82,22 @@ diff --git a/tuhaf.sh b/tuhaf.sh
 index 6666666..7777777 100644
 EOF
 
+cat > "$T/tirnakli.diff" <<'EOF'
+diff --git "a/yol/iki kelime.sh" "b/yol/iki kelime.sh"
+old mode 100644
+new mode 100755
+EOF
+
+cat > "$T/tirnakli-icerik.diff" <<'EOF'
+diff --git "a/yol/iki kelime.sh" "b/yol/iki kelime.sh"
+index 1111111..2222222 100755
+--- "a/yol/iki kelime.sh"
++++ "b/yol/iki kelime.sh"
+@@ -1 +1,2 @@
+ bir
++iki
+EOF
+
 echo "── 1 · YALNIZ KİP ucuza iner (kusurun kendisi: PR #326 vakası)"
 kapi "yalnız kip → rc=0" 0 "$T/yalniz-kip.diff" "ui-tasarim-akisi/arac/yogunluk-denetle.test.sh"
 icerir "içerik farkının SIFIR olduğu söylenir" "içerik farkı YOK"
@@ -108,6 +124,23 @@ kapi "fark dosyası yok → rc=3" 3 "$T/yok-boyle-dosya.diff" "x.sh"
 echo "── 5 · YOL EŞLEŞMESİ TAM OLMALI (kısmi ad yanlış bölüm kesmesin)"
 # 'denetle.test.sh' yolu, 'yogunluk-denetle.test.sh' bölümünü KESMEMELİ → ölçülemedi.
 kapi "kısmi ad eşleşmiyor → rc=3" 3 "$T/icerik.diff" "denetle.test.sh"
+
+
+echo "── 6 · DAYANIKLILIK (bağımsız göz tur-1 bulguları)"
+# (a) git boşluklu yolu TIRNAKLAR: alan bölmek o satırı parçalar ve geçerli bir yalnız-kip
+#     dosyası rc=3'e düşerdi. Jeton-sınırlı eşleşme bunu çözer, kısmi adı hâlâ tutmaz.
+kapi "tırnaklı/boşluklu yol · yalnız kip → rc=0" 0 "$T/tirnakli.diff" "yol/iki kelime.sh"
+icerir "kip olarak tanınır" "YALNIZ KİP"
+kapi "tırnaklı/boşluklu yol · içerik → rc=1" 1 "$T/tirnakli-icerik.diff" "yol/iki kelime.sh"
+kapi "tırnaklı yolda kısmi ad hâlâ TUTMAZ → rc=3" 3 "$T/tirnakli.diff" "kelime.sh"
+# (b) değer isteyen bayrak, değeri eksikse kabuk hatasına değil KULLANIM hatasına düşer.
+#     `set -u` altında $2'ye dokunmak aracın tanımlı çıkış kodlarını bozar.
+cikti="$(bash "$ARAC" --fark 2>&1)"; rc=$?
+if [ "$rc" = "2" ]; then printf '  ✓ %-46s (rc=2)\n' "--fark değersiz → kullanım hatası"; GECTI=$((GECTI+1))
+else printf '  ✗ %-46s beklenen rc=2, gelen rc=%s\n' "--fark değersiz → kullanım hatası" "$rc"; KALDI=$((KALDI+1)); fi
+cikti="$(bash "$ARAC" 326 x.sh --depo 2>&1)"; rc=$?
+if [ "$rc" = "2" ]; then printf '  ✓ %-46s (rc=2)\n' "--depo değersiz → kullanım hatası"; GECTI=$((GECTI+1))
+else printf '  ✗ %-46s beklenen rc=2, gelen rc=%s\n' "--depo değersiz → kullanım hatası" "$rc"; KALDI=$((KALDI+1)); fi
 
 echo "────────────────────────────────────────────"
 printf 'TOPLAM: %d geçti · %d kaldı\n' "$GECTI" "$KALDI"

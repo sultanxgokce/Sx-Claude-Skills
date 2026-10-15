@@ -1,7 +1,7 @@
 {
   "is": "pr-kip-olcum-araci",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T18:04:55+03:00",
+  "guncelleme": "2026-10-15T18:07:34+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -71,7 +71,22 @@
       "renk": "kirmizi",
       "zaman": "2026-10-15T18:04:55+03:00",
       "sure_sn": 1.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "TUR2-SONRA-22-kapi-tirnakli-yol-ve-degersiz-bayrak-dahil",
+      "asama": "sonra",
+      "dosya": "olcum-TUR2-SONRA-22-kapi-tirnakli-yol-ve-degersiz-bayrak-dahil-sonra.txt",
+      "sha256": "5b14adf89b66ec801316782739776013f0fd55da9966f0c92764909ccf79f98c",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/pr-kip-olc.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:07:34+03:00",
+      "sure_sn": 0.2
     }
   ],
-  "imza": "1632a98e7a913b7383eba6e32e9e1b9e371174926b8cb90ef6f255b2d6359dea"
+  "imza": "9ca8e95bd6d10d7a510139908e7fea43a16e6d68bb5010f6d1d4dd290c300970"
 }
