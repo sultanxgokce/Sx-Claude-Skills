@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.9.2
+version: 2.9.3
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -351,6 +351,7 @@ ssh yok, kayıtlar yerel, tek komut.
 - Sınav: `scripts/compact.test.sh` (35 kapı, hermetik: sahte tmux + sahte kayıt; mutasyon: boş-koltuk kapısı kalkınca taslaklı koltuğa tuş gider → U1 kırmızı).
 
 ## Sürüm notları
+- **2.9.3 (2026-10-15, BÂNİ · pano köprüsü 1.2.2, Sultan 2. kez "resim yapıştırma çok yavaş", gorev AT9J8305):** Safari WebP kodlayamıyor; küçültme her yapıştırmada önce PNG sonra JPEG olmak üzere İKİ kez kodluyordu. Artık destek bir kez yoklanır, yoksa doğrudan JPEG (tek kodlama). Bildirim adım sürelerini yazar ("küçültme X sn · yükleme Y sn · Z KB"); bir sonraki yavaşlıkta beklemenin küçültmede mi yüklemede (sunucu/ağ) mi olduğu ekrandan okunur. Sınav pano-sinav Y8-Y10.
 - **2.9.2 (2026-10-15, BÂNİ · pano köprüsü 1.2.1, Sultan Safari 13:33):** kopyalama Safari'de ÇALIŞIYOR (Sultan ölçtü), ama seçim panoya indikten sonra kırmızı "pano yazımı reddedildi" + Kopyala düğmesi de çıkıyordu: aynı seçim için ikinci yazım (yinelenen OSC 52) hareket dışında reddedilip başarının üstüne uyarı basıyordu. Artık metin az önce (5 sn) indiyse aynı metin için yazım denenmez, ret sessiz geçer; söz yazımı sürerken gelen ret onun sonucunu bekler; düğme yalnız metin gerçekten inmediyse çıkar. Sınav pano-sinav S7/S7b.
 - **2.9.1 (2026-10-15, BÂNİ · çalıştırma biti):** `scripts/compact.sh` ve `compact.test.sh` depoya 100644 girmişti; sync-skills duman testi "ÇALIŞTIRILAMAZ (izin yok)" ile düştü (kurulu kopya elle chmod +x ile düzeltildi, yeniden kurulumda tekrar düşerdi). Depoda 100755 yapıldı; aynı sınıftan `scripts/` altındaki 37 başka beceri betiği de düzeltildi (arac/ altındaki 7 dosya ayrı kart); kalıcı kapı depo kökünde `kabuk-biti.test.sh` — çağıranı CI (`lint.yml` "Kabuk sınamaları" her *.test.sh dosyasını keşfedip koşturur).
 - **2.9.0 (2026-10-15, BÂNİ · zorunlu compact kutu-içi):** `komut.sh compact` / `compact-bekle` + `kapi/compact-olc.mjs` + bekçi kuyruk turu (yukarıda).
