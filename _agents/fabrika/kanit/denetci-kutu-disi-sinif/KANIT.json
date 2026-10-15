@@ -1,7 +1,7 @@
 {
   "is": "denetci-kutu-disi-sinif",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T17:18:19+03:00",
+  "guncelleme": "2026-10-15T17:28:39+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -79,7 +79,68 @@
       "renk": "yesil",
       "zaman": "2026-10-15T17:18:19+03:00",
       "sure_sn": 220.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapilar-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-kapilar-tur2-sonra.txt",
+      "sha256": "346e6db8dd4fa50ba07379a0a28cae2215622b17606f3bd7c7e7e61a2ecef9a4",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-kutu-disi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T17:22:43+03:00",
+      "sure_sn": 15.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tur-yakiyor-mu-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-tur-yakiyor-mu-tur2-sonra.txt",
+      "sha256": "f601be035d68fb7ccce65eb25d792201b13ebcdc508387b0e36a343f1ce2f506",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/kd-prob/prob.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-denetci-kutu-disi-sinif/yazilim-fabrikasi/scripts/denetci.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T17:22:45+03:00",
+      "sure_sn": 1.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-tur2-beklenen-kirmizi",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-tur2-beklenen-kirmizi-tek.txt",
+      "sha256": "8483204d29365936284ff9f00811a2bbcb82a1092add40607cd5f997834361e1",
+      "komut": [
+        "bash",
+        "/tmp/tmp.54RP8h1HSc/kos.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T17:24:24+03:00",
+      "sure_sn": 98.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ana-sinav-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-ana-sinav-tur2-sonra.txt",
+      "sha256": "568030aba0853ad4e523f5734b59a890fb1a5d5e54cacac1befaee4d64c5c144",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T17:28:39+03:00",
+      "sure_sn": 255.3
     }
   ],
-  "imza": "f7e08f04135969b8bef4e90ccd18dd50f2b846cbabee7501e5c21a940851ddab"
+  "imza": "59ab8e5870b0e3be1845904e166c47a2e226d0577da979dfa78169b11874aa87"
 }

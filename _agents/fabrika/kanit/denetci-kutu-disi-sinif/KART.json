@@ -1,0 +1,19 @@
+{
+  "is": "denetci-kutu-disi-sinif",
+  "cumle": "Bagimsiz goz: kutuda olculemeyen bulgu (Sultan'in Mac'i, canli yetki, dis hesap) AYRI SINIF sayilsin ve TUR YAKMASIN",
+  "istedi": "SERDAR",
+  "aldi": "MUMEYYIZ",
+  "zaman": "2026-10-15T15:43:46+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "denetci.test.sh yeni kapilar: kutu-disi bulgu turu saymaz · tavan sayili tura bakar · sonsuz dongu kapali · ayri dosyaya yazilir",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

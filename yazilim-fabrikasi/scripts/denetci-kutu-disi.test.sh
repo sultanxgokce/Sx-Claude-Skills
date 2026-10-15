@@ -118,6 +118,26 @@ hazirla is-e2
 kapi "E7 tavan ortamla değiştirilebilir (DENETCI_KUTU_DISI_TAVAN=1 → tur 2'de rc=4)" 1 kos is-e2 "$KD" DENETCI_KUTU_DISI_TAVAN=1
 kapi "E8 ikinci yakmayan turda rc=4" 4 kos is-e2 "$KD" DENETCI_KUTU_DISI_TAVAN=1
 
+echo "H · 🔴 tur-1 bulgusu: fren ARDIŞIK dizi sayar, TOPLAM değil"
+# Eski sayaç kümülatifti (ONCEKI-SAYILI): kutu-dışı/normal/kutu-dışı/normal/kutu-dışı dizisinde
+# üç ARDIŞIK yakmayan tur olmadığı hâlde iş durabilirdi. Arada normal bir tur geçtiyse iş kutuda
+# İLERLİYOR; sayaç orada sıfırlanmalı. Aşağıdaki dizi tam o vakayı kurar.
+hazirla is-h
+kapi "H1 tur 1 kutu-dışı" 1 kos is-h "$KD"
+kapi "H2 tur 2 kutu-dışı" 1 kos is-h "$KD"
+kapi "H3 🔴 tur 3 NORMAL → ardışık dizi SIFIRLANIR (fren tetiklenmez)" 1 kos is-h "$NORMAL"
+icermeyen "H4 🔴 normal tur sonrası 'KUTUDA İLERLETİLEMİYOR' BASILMAZ" "KUTUDA İLERLETİLEMİYOR" kos is-h "$KD"
+# Buraya kadar ham tur 4, yakmayan toplam 3 (>2) ama ARDIŞIK 1 → fren susmalı.
+# Kümülatif sayaçta H4 kırmızı olurdu.
+hazirla is-h2
+kapi "H5 ardışık dizi gerçekten üst üste olunca fren ÇALIŞIR (tur 1)" 1 kos is-h2 "$KD"
+kapi "H6 tur 2" 1 kos is-h2 "$KD"
+iceren "H7 🔴 tur 3 üst üste → fren çalışır" "KUTUDA İLERLETİLEMİYOR" kos is-h2 "$KD"
+
+echo "I · 🔴 kendi #332 işimden sızan gürültü"
+hazirla is-i
+icermeyen "I1 ayıklayıcı sayıları ekrana '0 0' diye düşmez" "0 0" kos is-i "$GECTI"
+
 echo "F · 🔴 muafiyetin karşılığı İZLENEBİLİRLİK: ayrı deftere yazılır"
 hazirla is-f
 kos is-f "$KD" >/dev/null 2>&1

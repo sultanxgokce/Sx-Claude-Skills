@@ -153,18 +153,30 @@ TUR=$((ONCEKI+1))
 #    SAYILMAZ: o turda kutuda yapılacak bir şey söylenmemiştir, dolayısıyla tur yakmak haksızdır.
 #    🔴 Sıfır bulgulu tur SAYILIR — eski davranış korunur; "bulgu yok ama 5 de yok" ayrı bir vakadır
 #    ve bu kartın kapsamı değil (kapsam kayması olurdu).
-SAYILI=$(python3 - "$DZ" <<'PYSAY'
+# 🔴 TUR-1 BULGUSU (uygulama): fren "üst üste" diyordu ama sayacı KÜMÜLATİFtı
+#    (ONCEKI-SAYILI). kutu-dışı / normal / kutu-dışı / normal / kutu-dışı dizisinde üç ardışık
+#    yakmayan tur OLMADIĞI halde iş durabilirdi. Arada normal bir tur geçtiyse iş kutuda
+#    İLERLİYOR demektir; sayacı orada SIFIRLAMAK gerekir. İki sayı ayrı üretiliyor:
+#    SAYILI (tavan için, kümülatif) ve ARDISIK (fren için, yalnız KUYRUKTAKİ dizi).
+read -r SAYILI ARDISIK_ONCE <<EOSAY
+$(python3 - "$DZ" <<'PYSAY'
 import json,glob,os,sys
-n=0
+sayan=[]
 for y in sorted(glob.glob(os.path.join(sys.argv[1],"DENETIM-[0-9]*.json")),
                 key=lambda p:int(p.rsplit("-",1)[1].split(".")[0])):
     try: b=json.load(open(y,encoding="utf-8"))["sonuc"]["bulgular"]
-    except Exception: n+=1; continue          # okunamayan tur SAYILIR (şüphede muafiyet YOK)
-    if not b or any(x.get("agirlik")!="kutu-disi" for x in b): n+=1
-print(n)
+    except Exception: sayan.append(True); continue   # okunamayan tur SAYILIR (şüphede muafiyet YOK)
+    sayan.append(bool(not b or any(x.get("agirlik")!="kutu-disi" for x in b)))
+ard=0
+for v in reversed(sayan):
+    if v: break
+    ard+=1
+print(sum(1 for v in sayan if v), ard)
 PYSAY
 )
+EOSAY
 case "$SAYILI" in ''|*[!0-9]*) SAYILI="$ONCEKI" ;; esac
+case "${ARDISIK_ONCE:-}" in ''|*[!0-9]*) ARDISIK_ONCE=0 ;; esac
 ilerliyor_mu() {  # önceki iki turu kıyasla: puan↑ VE açık bulgu↓
   [ "$ONCEKI" -ge 2 ] || return 1
   python3 - "$DZ" "$ONCEKI" <<'PY'
@@ -277,12 +289,12 @@ PY
 #    "canlıda kurulu değil" bulgusu döndü, kutuda yapılacak bir şey söylenmedi, ama tur dolду.
 #    Artık SAYILI tura bakılıyor: bulgularının hepsi kutu-dışı olan turlar tavandan düşmez.
 KD_TAVAN="${DENETCI_KUTU_DISI_TAVAN:-2}"
-YAKMAYAN_ONCE=$((ONCEKI - SAYILI))
+YAKMAYAN_ONCE="$ARDISIK_ONCE"
 # Muafiyet sınırsız değil: üst üste yalnız kutu-dışı bulgu dönen iş KUTUDA İLERLETİLEMİYOR demektir.
 # Bu kapı denetçiden ÖNCE: boşuna bir codex koşumu daha yapmayalım.
 if [ "$YAKMAYAN_ONCE" -gt "$KD_TAVAN" ]; then
   _bilgi ""
-  _bilgi "⛔ KUTUDA İLERLETİLEMİYOR — $YAKMAYAN_ONCE tur üst üste yalnız kutu-dışı bulgu döndü (tavan $KD_TAVAN); denetim koşulmadı."
+  _bilgi "⛔ KUTUDA İLERLETİLEMİYOR — son $YAKMAYAN_ONCE tur üst üste yalnız kutu-dışı bulgu döndü (tavan $KD_TAVAN); denetim koşulmadı."
   _bilgi "   Bu bir KOD tıkanması DEĞİLDİR; işin kalanı başka bir yüzeyde."
   _bilgi "   Gereken yüzeyler: $DZ/KUTU-DISI.jsonl"
   _bilgi "   Üç yol (karar iş sahibinin/reisin): 1) YÜZEYE GİT — o yüzeyde ölçen bir kart/görev aç"
@@ -384,7 +396,9 @@ for blok in parcalar:
     else:
         tut.append(blok)
 open(sys.argv[2], "w", encoding="utf-8").write("".join(tut))
-sys.stderr.write("%d %d\n" % (len(at), sum(b for _, b in at)))
+# Sayılar çağıran tarafında zaten hesaplanıyor; buraya yazınca her koşumda ekrana "0 0" düşüyordu
+# (kendi #332 işimden sızan gürültü, bu turda yakalandı).
+pass
 PYA
   # 🔴 TUR-1 BULGUSU (uygulama): eski kapı "ayıklanmış fark BOŞ değilse" diyordu; fark TAMAMEN kanıt
   #    dosyalarından oluştuğunda (kanıt tazeleme commit'i) ayıklama devre dışı kalıyor ve şişkin fark
@@ -635,14 +649,15 @@ b=d['bulgular']
 print(int(sys.argv[2]) + (1 if (not b or any(x.get('agirlik')!='kutu-disi' for x in b)) else 0))
 " "$DOGRULANMIS" "$SAYILI")
 case "$SAYILI_SON" in ''|*[!0-9]*) SAYILI_SON="$TUR" ;; esac
-YAKMAYAN=$((TUR - SAYILI_SON))
+# Bu turun kendisi yakmadıysa ardışık dizi uzar; yaktıysa SIFIRLANIR.
+if [ "$SAYILI_SON" -gt "$SAYILI" ]; then YAKMAYAN=0; else YAKMAYAN=$((ARDISIK_ONCE + 1)); fi
 [ "$SAYILI_SON" -lt "$TUR" ] && _bilgi "   ℹ sayılı tur $SAYILI_SON/$TUR — $YAKMAYAN tur yakmadı (bulgularının hepsi kutu-dışıydı)"
 # 🔴 Muafiyet SıNIRSIZ değil: her tur kutu-dışı bulgu yazarak sonsuz döngü kurulabilirdi.
 #    Yakmayan tur $KD_TAVAN'ı geçerse iş tavanda değil ama KUTUDA İLERLETİLEMİYOR demektir —
 #    ayrı gerçekeçli rc=4 ve ayrı üç yol (devam demeğil: yüzeye git).
 if [ "$YAKMAYAN" -gt "$KD_TAVAN" ]; then
   _bilgi ""
-  _bilgi "⛔ KUTUDA İLERLETİLEMİYOR — $YAKMAYAN tur üst üste yalnız kutu-dışı bulgu döndü (tavan $KD_TAVAN)."
+  _bilgi "⛔ KUTUDA İLERLETİLEMİYOR — son $YAKMAYAN tur üst üste yalnız kutu-dışı bulgu döndü (tavan $KD_TAVAN)."
   _bilgi "   Bu bir KOD tıkanması DEĞİLDİR; işin kalanı başka bir yüzeyde."
   _bilgi "   Gereken yüzeyler: $DZ/KUTU-DISI.jsonl"
   _bilgi "   Üç yol (karar iş sahibinin/reisin): 1) YÜZEYE GİT — o yüzeyde ölçen bir kart/görev aç"
