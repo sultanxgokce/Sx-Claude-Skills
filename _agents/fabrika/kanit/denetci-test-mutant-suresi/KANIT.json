@@ -1,0 +1,40 @@
+{
+  "is": "denetci-test-mutant-suresi",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T13:39:23+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "ONCE-denetci-test-tam-sure-sn-mutantlar-sirali",
+      "asama": "once",
+      "dosya": "olcum-ONCE-denetci-test-tam-sure-sn-mutantlar-sirali-once.txt",
+      "sha256": "955b663e6904e0c310e1ef43da77078e8bb16ec64123aa9ffc4d6f4808665da3",
+      "komut": [
+        "bash",
+        "-c",
+        "s=$(date +%s); bash yazilim-fabrikasi/scripts/denetci.test.sh 2>&1 | grep -E \"SONUÇ|mutant\" | tail -20; echo \"yerel süre: $(( $(date +%s) - s )) sn (nproc=$(nproc))\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T13:34:16+03:00",
+      "sure_sn": 473.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "SONRA-denetci-test-tam-sure-sn-mutantlar-paralel",
+      "asama": "sonra",
+      "dosya": "olcum-SONRA-denetci-test-tam-sure-sn-mutantlar-paralel-sonra.txt",
+      "sha256": "45ebb17e1dd3991af71ffdede3252963f1cc0bfc19aecf84081e7b30d22b6ba3",
+      "komut": [
+        "bash",
+        "-c",
+        "s=$(date +%s); bash yazilim-fabrikasi/scripts/denetci.test.sh 2>&1 | grep -E \"SONUÇ|mutant|bilgi\" | tail -22; rc=${PIPESTATUS[0]}; echo \"yerel süre: $(( $(date +%s) - s )) sn (nproc=$(nproc), önce: 474 sn sıralı)\"; [ $rc = 0 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T13:39:23+03:00",
+      "sure_sn": 123.2
+    }
+  ],
+  "imza": "7321161271e806ea0cfc79304ce17552984e28d59808d34d4798122b6d3620c2"
+}

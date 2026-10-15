@@ -1,0 +1,21 @@
+$ bash -c s=$(date +%s); bash yazilim-fabrikasi/scripts/denetci.test.sh 2>&1 | grep -E "SONUÇ|mutant" | tail -20; echo "yerel süre: $(( $(date +%s) - s )) sn (nproc=$(nproc))"
+# rc=0 sure=473.8s zaman=2026-10-15T13:34:16+03:00
+--- stdout ---
+  ✓ mutant 'ayrac-temizligini-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'gerekce-zorunlulugunu-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'karti-okumayi-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'defter-dogrulamasini-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'reis-sinif-citini-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'mutlak-tavani-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'yedek-gozu-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'kart-tek-kaynagi-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'codex-stdin-acik' sınavı KIRMIZI yapıyor
+  ✓ mutant 'kart-yolu-harici-kalir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'kart-secenegi-tek-kaynagi-asar' sınavı KIRMIZI yapıyor
+  ✓ mutant 'kapi-kart-hatasini-bastirir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'bayat-kopya-geri-donusu' sınavı KIRMIZI yapıyor
+  ✓ mutant 'kart-json-hatasi-yutulur' sınavı KIRMIZI yapıyor
+  ✓ mutant 'kirpma-kaydini-kaldir' sınavı KIRMIZI yapıyor
+── SONUÇ: 149 geçti · 0 kaldı ──
+yerel süre: 474 sn (nproc=12)
+--- stderr ---

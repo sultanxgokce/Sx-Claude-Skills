@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.6.3
+version: 0.6.4
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -89,6 +89,7 @@ Bu tablo "yazılmış ≠ kurulmuş" kanununun beceriye uygulanmış hâlidir: o
 - Her betik `rc=3` = ölçülemedi (sarı); yeşil değil. Kanıt komutu boru arkasına konmaz.
 - Kanıt manifesti imzası elle yazımı yakalar; kriptografik gizlilik iddiası YOK (tuz araçta açık). Kararlı ajanı değil, kestirmeyi durdurur.
 - Araçlar arası veri DOSYADAN geçer, kabuk alıntısından değil (23 Eyl: denetçinin Türkçe metnindeki kesme işareti puan satırını kırdı).
+- **Mutant koşumu paralel (0.6.4, 15 Eki):** `denetci.test.sh` her mutant için sınav dosyasının tamamını yeniden koşturuyordu (15 mutant sırayla); CI'da 300 sn tavanında `Terminated` (#323, #326 düştü). Mutantlar artık `nproc` kadar (en çok 4, `MUT_PARALEL`) birlikte koşar, rapor kayıt sırasıyla; kapı sayısı ve yakalama değişmedi. Ölçüm (yerel, nproc=12): 474 sn → 123 sn, 149/149. `MUT_PARALEL=1` eski sıralı davranış.
 - **Codex stdin kapalı (0.6.3, 15 Eki):** `kos_codex` Codex'i `</dev/null` ile çağırır — istem argümanla verilse de stdin TTY değilken Codex EOF bekliyordu; arka plan/cron çağrısında stdin açık socket olunca denetim 68 dk asılı kaldı (CPU 0, log boş). Sınav Y8: stdin 60 sn açık boruyken denetçi 20 sn'de biter; mutant `codex-stdin-acik`.
 - Codex bu konteynerde kum havuzu (bwrap) açamıyor → istem argüman olarak verilir, denetçi komut koşmaz; >120 KB istem 110 KB'a kırpılır, denetçiye söylenir ve **DENETIM-<tur>.json `kirpildi` alanına yazılır** (oldu · istem_bayt · esik; 0.5.4 — NÂZIR/RASATÇI 8 Eki: kırpma kaydı ekranla birlikte kayboluyordu, kırpılan denetim "tamamını gördü" sanılıyordu). Sınav dikişi `DENETCI_KIRP_ESIK` (sahte denetçi yolunda da kırpar).
 - Defter yerleşimi: kartlar + karne + gün-sonu BİRİNCİL depoda (`_agents/fabrika/kartlar|karne.jsonl|gun-sonu`), kanıt + denetim İŞİN worktree'sinde (`_agents/fabrika/kanit/<iş>/`, PR ile gider).
