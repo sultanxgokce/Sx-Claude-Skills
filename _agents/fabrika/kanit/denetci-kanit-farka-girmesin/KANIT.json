@@ -1,7 +1,7 @@
 {
   "is": "denetci-kanit-farka-girmesin",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T15:53:52+03:00",
+  "guncelleme": "2026-10-15T15:57:58+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -64,7 +64,53 @@
       "renk": "yesil",
       "zaman": "2026-10-15T15:53:52+03:00",
       "sure_sn": 0.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapilar-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-kapilar-tur2-sonra.txt",
+      "sha256": "2f60eea060a5377136cefb87cf3c7525c21e6662d3137f6bca436e17d688e7ed",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-fark-ayikla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T15:57:48+03:00",
+      "sure_sn": 3.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kod-ulasiyor-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-kod-ulasiyor-tur2-sonra.txt",
+      "sha256": "ff5dc7f833c104e25aab6027d6dddac5fed1c4083cb5ffb1f87fdbbfe9ac214b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects--wt-mumeyyiz-oda/5ae0f123-b617-4bdc-ae31-70bce60fd201/scratchpad/ayikla-prob/prob.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-denetci-kanit-farka-girmesin/yazilim-fabrikasi/scripts/denetci.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T15:57:49+03:00",
+      "sure_sn": 0.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-tur2-beklenen-kirmizi",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-tur2-beklenen-kirmizi-tek.txt",
+      "sha256": "5cdbc14d2491244fef73b0bf88e2a2cec18525afb8342f3cef24e55504eaeff6",
+      "komut": [
+        "bash",
+        "/tmp/tmp.aX7iUHtUBe/kos.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T15:57:58+03:00",
+      "sure_sn": 8.9
     }
   ],
-  "imza": "be4f873d7ce8888b5b6e09935486d671de957d29c110ef61deff32881e51c27c"
+  "imza": "a4cf67a7099366815e28ffbb83533ad0ffc1fa7553b104eb57623859053dd678"
 }

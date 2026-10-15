@@ -111,6 +111,43 @@ kapi "D1 kanıt dosyası HİÇ yoksa fark olduğu gibi geçer" 0 \
 iceren "D2 kanıtsız farkta kod yine ULAŞIR" "SADECE-KOD" "$KOK/istem-izi.txt"
 icermeyen "D3 kanıtsız farkta 'ayıklandı' notu BASILMAZ (yalan söylemez)" "kanıt dosyası" "$KOK/istem-izi.txt"
 
+echo "E · 🔴 bağımsız gözün tur-1 bulguları"
+# E1-E2 (bulgu 1): benzer ADLI üretim dosyası ayıklanmamalı. Eşleşme KÖKTEN olmalı, alt dize değil.
+{ printf 'diff --git a/docs/_agents/fabrika/kanit/okuma.md b/docs/_agents/fabrika/kanit/okuma.md\n'
+  printf -- '--- /dev/null\n+++ b/docs/_agents/fabrika/kanit/okuma.md\n@@ -0,0 +1 @@\n+BENZER-ADLI-URETIM\n'
+  printf 'diff --git a/_agents/fabrika/kanit/%s/olcum-x.txt b/_agents/fabrika/kanit/%s/olcum-x.txt\n' "$IS" "$IS"
+  printf -- '--- /dev/null\n+++ b/_agents/fabrika/kanit/%s/olcum-x.txt\n@@ -0,0 +1 @@\n+GERCEK-KANIT\n' "$IS"
+} > "$KOK/benzer.patch"
+rm -f "$KOK/istem-izi.txt"
+kapi "E1 benzer adlı yolda denetim koşar" 0 \
+  env KANIT_DEPO="$KOK" DENETCI_KOMUT="$KOK/sahte-denetci.sh" ISTEM_IZI="$KOK/istem-izi.txt" \
+      bash "$D" "$IS" --diff "$KOK/benzer.patch" --depo "$KOK"
+iceren "E2 🔴 docs/_agents/fabrika/kanit/… ÜRETİM dosyası AYIKLANMAZ (kökten eşleşme)" "BENZER-ADLI-URETIM" "$KOK/istem-izi.txt"
+icermeyen "E3 gerçek kanıt yolu yine ayıklanır" "GERCEK-KANIT" "$KOK/istem-izi.txt"
+
+# E4-E6 (bulgu 2): fark TAMAMEN kanıttan oluşuyorsa ayıklama yine çalışır (devre dışı kalmaz)
+{ printf 'diff --git a/_agents/fabrika/kanit/%s/olcum-yalniz.txt b/_agents/fabrika/kanit/%s/olcum-yalniz.txt\n' "$IS" "$IS"
+  printf -- '--- /dev/null\n+++ b/_agents/fabrika/kanit/%s/olcum-yalniz.txt\n@@ -0,0 +1 @@\n+YALNIZ-KANIT-ICERIGI\n' "$IS"
+} > "$KOK/yalniz-kanit.patch"
+rm -f "$KOK/istem-izi.txt" "$DZ"/DENETIM-*.json
+kapi "E4 yalnız-kanıt farkında denetim koşar (durmaz)" 0 \
+  env KANIT_DEPO="$KOK" DENETCI_KOMUT="$KOK/sahte-denetci.sh" ISTEM_IZI="$KOK/istem-izi.txt" \
+      bash "$D" "$IS" --diff "$KOK/yalniz-kanit.patch" --depo "$KOK"
+icermeyen "E5 🔴 yalnız-kanıt farkı AYIKLANIR (eski kapı burada devre dışı kalıyordu)" "YALNIZ-KANIT-ICERIGI" "$KOK/istem-izi.txt"
+iceren "E6 🔴 kod farkının BOŞ olduğu denetçiye SÖYLENİR (eksik sanılmasın)" "ÜRETİM KODU farkı BOŞTUR" "$KOK/istem-izi.txt"
+kapi "E7 yalnız-kanıt turunda kayıt dosya=1 der" 0 python3 -c "
+import json,glob
+d=json.load(open(sorted(glob.glob('$DZ/DENETIM-*.json'))[-1],encoding='utf-8'))
+assert (d.get('kanit_ayiklandi') or {}).get('dosya')==1, d.get('kanit_ayiklandi')
+"
+
+echo "F · 🔴 bu sınavı kim çağırıyor (yazmak koşturmaz)"
+kapi "F1 CI keşfi bu dosyayı BULUR (find ile türetilen listede)" 0 bash -c '
+KOK="$(cd "$(dirname "'"$D"'")/../.." && pwd)"
+cd "$KOK" || exit 1
+mapfile -t T < <(find . -name "*.test.sh" -not -path "./.git/*" | sort)
+printf "%s\n" "${T[@]}" | grep -qx "./yazilim-fabrikasi/scripts/denetci-fark-ayikla.test.sh"'
+
 echo
 echo "toplam=$((GECEN+DUSEN)) geçen=$GECEN düşen=$DUSEN"
 [[ $DUSEN -eq 0 ]]

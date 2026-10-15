@@ -220,14 +220,21 @@ for i, blok in enumerate(parcalar):
         tut.append(blok)            # fark olmayan baş kısım: dokunulmaz
         continue
     yol = m.group(2)
-    if "_agents/fabrika/kanit/" in yol:
+    # 🔴 TUR-1 BULGUSU (uygulama): koşul alt dize arıyordu — `docs/_agents/fabrika/kanit/x` adlı bir
+    #    ÜRETİM dosyası da sessizce denetçiden çıkardı. Fark yolları depo köküne göredir; eşleşme de
+    #    kökten olmalı. Ayıklamanın sessiz olması, yanlış ayıklamayı iki kat tehlikeli yapar.
+    if yol.startswith("_agents/fabrika/kanit/"):
         at.append((yol, len(blok.encode("utf-8"))))
     else:
         tut.append(blok)
 open(sys.argv[2], "w", encoding="utf-8").write("".join(tut))
 sys.stderr.write("%d %d\n" % (len(at), sum(b for _, b in at)))
 PYA
-  if [ -s "$TMP/diff-ayik.patch" ] || [ ! -s "$TMP/diff.patch" ]; then
+  # 🔴 TUR-1 BULGUSU (uygulama): eski kapı "ayıklanmış fark BOŞ değilse" diyordu; fark TAMAMEN kanıt
+  #    dosyalarından oluştuğunda (kanıt tazeleme commit'i) ayıklama devre dışı kalıyor ve şişkin fark
+  #    olduğu gibi gidiyordu — yani ayıklama tam gerektiği yerde çalışmıyordu. Boş fark meşru bir
+  #    sonuçtur: denetçi o turda kanıt manifestine bakar, ve farkın NİÇİN boş olduğu kendisine yazılır.
+  if [ -f "$TMP/diff-ayik.patch" ]; then
     OLD_B=$(wc -c < "$TMP/diff.patch"); NEW_B=$(wc -c < "$TMP/diff-ayik.patch")
     if [ "$NEW_B" -lt "$OLD_B" ]; then
       AYIKLANAN_BAYT=$((OLD_B - NEW_B))
@@ -236,9 +243,10 @@ PYA
       AYIKLANAN_DOSYA=$((AYIKLANAN_DOSYA - KALAN))
       mv "$TMP/diff-ayik.patch" "$TMP/diff.patch"
       _bilgi "· farktan AYIKLANDI: $AYIKLANAN_DOSYA kanıt dosyası ($AYIKLANAN_BAYT bayt) — kanıt manifesti ve ölçüm çıktıları denetçiye AYRI gidiyor, farka ikinci kez girmesin (kırpılma panzehiri)"
+      [ -s "$TMP/diff.patch" ] || _bilgi "· ⚠ fark TAMAMEN kanıt dosyalarından oluşuyordu → kod farkı BOŞ; denetçiye söylendi (bu turda yalnız kanıt tazelendi)"
     fi
   else
-    _bilgi "· ⚠ kanıt ayıklaması atlandı (ayıklanmış fark boş çıktı) — fark olduğu gibi gider"
+    _bilgi "· ⚠ kanıt ayıklaması KOŞMADI (ayıklayıcı çıktı üretmedi) — fark olduğu gibi gider"
   fi
 fi
 if [ -z "$KART" ]; then KART="$(kart_yolu)" || exit 3; fi   # 0. adım kartı varsa o (YALNIZ birincil depodan; alandaki bayat kopya → rc=3)
@@ -262,7 +270,8 @@ else echo "(iş kartı verilmedi — talep bilinmiyor; DOĞRU ŞEY Mİ sorusu H'
   printf '\n\n===== ÖLÇÜM ÇIKTILARI (ilk 60 satır/dosya) =====\n'
   for f in "$DZ"/olcum-*.txt; do [ -f "$f" ] && { printf -- '--- %s ---\n' "$(basename "$f")"; head -60 "$f"; }; done
   printf '\n\n===== DEĞİŞİKLİK (diff) =====\n'
-  [ "$AYIKLANAN_DOSYA" -gt 0 ] && printf '[NOT: bu farktan %s kanıt dosyası (%s bayt) AYIKLANDI — kanıt manifesti ve ölçüm çıktıları yukarıda AYRI başlıklarda duruyor; saklanan bir şey yok, aynı veri farka ikinci kez girmesin diye çıkarıldı. Aşağısı ÜRETİM KODU farkıdır, eksik değildir.]\n' "$AYIKLANAN_DOSYA" "$AYIKLANAN_BAYT"
+  [ "$AYIKLANAN_DOSYA" -gt 0 ] && [ ! -s "$TMP/diff.patch" ] && printf '[NOT: bu turda fark TAMAMEN kanıt dosyalarından oluşuyordu (%s dosya, %s bayt); ÜRETİM KODU farkı BOŞTUR — eksik verilmedi, bu turda kod değişmedi. Hükmünü kanıt manifestine ve iş kartına dayandır.]\n' "$AYIKLANAN_DOSYA" "$AYIKLANAN_BAYT"
+  [ "$AYIKLANAN_DOSYA" -gt 0 ] && [ -s "$TMP/diff.patch" ] && printf '[NOT: bu farktan %s kanıt dosyası (%s bayt) AYIKLANDI — kanıt manifesti ve ölçüm çıktıları yukarıda AYRI başlıklarda duruyor; saklanan bir şey yok, aynı veri farka ikinci kez girmesin diye çıkarıldı. Aşağısı ÜRETİM KODU farkıdır, eksik değildir.]\n' "$AYIKLANAN_DOSYA" "$AYIKLANAN_BAYT"
   cat "$TMP/diff.patch"
   [ "$TUR" -gt 1 ] && { printf '\n\n===== ÖNCEKİ TUR (%s) =====\n' "$ONCEKI"; cat "$DZ/DENETIM-$ONCEKI.json"; }
 } > "$TMP/istem.md"
