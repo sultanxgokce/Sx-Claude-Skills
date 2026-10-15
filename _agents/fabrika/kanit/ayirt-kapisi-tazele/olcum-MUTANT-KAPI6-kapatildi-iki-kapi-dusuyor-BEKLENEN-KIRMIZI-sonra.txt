@@ -1,0 +1,208 @@
+$ env UI_AKIS_AYIRT_KAPISI=0 bash ui-tasarim-akisi/arac/havuz.test.sh
+# rc=1 sure=3.5s zaman=2026-10-15T16:01:59+03:00
+--- stdout ---
+── 1 · geçerli kayıt yazılır
+  ✓ temiz kayıt → rc=0 (rc=0)
+  ✓ kırmızı kayıt → rc=0 (rc=0)
+  ✓ düşen kodlar görünür
+── 2 · ŞEMA KAPALI: serbest metin alanı eklenemez
+  ✓ serbest metin bayrağı işe yaramaz → rc=1 (rc=1)
+  ✓ metin havuza girmedi
+── 3 · geçersiz değerler reddedilir (fail-closed)
+  ✓ bilinmeyen hüküm → rc=1 (rc=1)
+  ✓ sebep söylenir
+  ✓ bilinmeyen kapı → rc=1 (rc=1)
+  ✓ düşen alanına serbest metin → rc=1 (rc=1)
+  ✓ yalnız kod alır denir
+  ✓ kutu adında boşluk/uzunluk → rc=1 (rc=1)
+── 4 · reddedilen kayıt dosyaya DÜŞMEZ (yarım yazma yok)
+  ✓ satır sayısı değişmedi (2)
+── 5 · okuma ve özet
+  ✓ oku → rc=0 (rc=0)
+  ✓ kayıt görünür
+  ✓ ozet → rc=0 (rc=0)
+  ✓ en çok düşen kural listelenir
+── 6 · BOŞ havuz 'temiz' DEĞİL 'bakılmamış' der — METİN de KOD da
+  ✓ boş havuz → rc=3 ÖLÇÜLEMEDİ (rc=3)
+  ✓ dürüst dil
+  ✓ ölçüm yapılmış gibi tablo basmaz
+  ✓ sıfır-ihlal iddiası yok
+  ✓ kayıt VAR ama o kutuda yok → rc=3 (rc=3)
+── 7 · bozuk satır okumayı çökertmez, sessizce elenir
+  ✓ bozuk satırlı havuz → rc=0 (rc=0)
+── 8 · ÇAĞIRAN gerçek: ölçüm anında kayıt kendiliğinden düşer
+  ✓ devam promptu → rc=0 (rc=0)
+  ✓ havuza kendiliğinden yazıldı (kimse çağırmadı)
+── 9 · havuz yazılamasa bile prompt üretimi DÜŞMEZ (defter kapı değildir)
+  ✓ yazılamaz havuz → yine rc=0 (rc=0)
+── 10 · İPTAL: yanlış satır SİLİNMEDEN geçersiz kılınabilir (salt-ekleme korunur)
+  ✓ hedef kayıt yazılır (rc=0)
+  ✓ doğru kayıt da yazılır (rc=0)
+  ✓ oku/yaz kayıt-id basıyor (139d84da0b46)
+  ✓ geçersiz sebep REDDEDİLİR (serbest metin yok) (rc=1)
+  ✓ kapalı küme söylenir
+  ✓ bilinmeyen kayıt-id → rc=1 (rc=1)
+  ✓ geçerli iptal → rc=0 (rc=0)
+  ✓ eski satırın durduğu söylenir
+  ✓ iptal sonrası özet → rc=0 (rc=0)
+  ✓ iptal edilen kural sayımdan DÜŞTÜ
+  ✓ geçerli kayıt sayımda KALDI
+  ✓ oku varsayılan görünüm → rc=0 (rc=0)
+  ✓ iptal edilen satır varsayılan görünümde yok
+  ✓ oku --iptaller-dahil → rc=0 (rc=0)
+  ✓ geçmiş DURUYOR (salt-ekleme)
+  ✓ mezar-taşı görünür
+  ✓ aynı kayıt ikinci kez iptal edilmez (rc=0)
+  ✓ ikinci mezar-taşı yazılmadı
+── 11 · profil_sha: 'ölçüm doğru, referans yanlış' vakasına karşı skalar parmak izi
+  ✓ profil_sha ile yazılır → rc=0 (rc=0)
+  ✓ desene uymayan profil_sha → rc=1 (rc=1)
+  ✓ sebep söylenir
+  ✓ parmak-izsiz ölçüm özette dürüstçe sayılır (rc=0)
+  ✓ eksik parmak-izi bildirilir
+── 12 · ders: kutunun kendi defterine opak işaretçi (F2 · L40-kalem-4)
+  ✓ serbest metin ders → rc=1 (İ1 kalkanı) (rc=1)
+  ✓ sebep söylenir
+  ✓ s0000 biçimli ders → rc=0 (rc=0)
+  ✓ gerekçesiz kırmızı da yazılabilir (ders opsiyonel) (rc=0)
+  ✓ ders alanlı özet → rc=0 (rc=0)
+  ✓ gerekçesi olan kırmızı sayılır
+── 13 · dusen_karar: kural mı zayıf tasarım mı zayıf (F4 · L40-kalem-4)
+  ✓ enum-dışı dusen_karar → rc=1 (kapalı küme) (rc=1)
+  ✓ sebep söylenir
+  ✓ kural-hatali yargısı → rc=0 (rc=0)
+  ✓ tasarim-duzeltildi yargısı → rc=0 (rc=0)
+  ✓ ikinci tasarim-duzeltildi (rc=0)
+  ✓ yargı-dağılımlı özet → rc=0 (rc=0)
+  ✓ kural NAKKAŞ'ın sorusuna cevap verir
+── 14 · GEREKÇE: kırmızıya sonradan ders bağlanır (salt-ekleme, hedefe dokunulmaz)
+  ✓ e20 kırmızı yazılır (gerekçesiz) (rc=0)
+  ✓ ÖLÇÜM KAYBOLMAZ: gerekçesiz kırmızıya rağmen yazma sürer (rc=0)
+  ✓ boş gerekçe reddedilir → rc=2 (rc=2)
+  ✓ boş gerekçe gerekçe değil
+  ✓ bilinmeyen hedef → rc=1 (rc=1)
+  ✓ geçerli gerekçe bağlanır → rc=0 (rc=0)
+  ✓ hedef bildirilir
+  ✓ gerekçeli özet → rc=0 (rc=0)
+  ✓ gerekçe satırı ÖLÇÜM sayılmaz (2 kırmızı, 1'i gerekçeli)
+── 15 · F3 KAPISI: sorulur, yazma yolunu kilitlemez (Sultan-kararı 2026-08-24)
+  ✓ hiç kayıt yoksa kapı AÇIK → rc=0 (rc=0)
+  ✓ eksik argüman → rc=2 (rc=2)
+  ✓ gerekçesiz kırmızıdan sonra kapı KAPALI → rc=1 (rc=1)
+  ✓ reçete verilir
+  ✓ BAŞKA ekran etkilenmez (grup bazlı) → rc=0 (rc=0)
+  ✓ gerekçe bağlanınca kapı AÇILIR → rc=0 (rc=0)
+  ✓ temiz hükümden sonra kapı AÇIK → rc=0 (rc=0)
+── 16 · ÇAĞIRAN GERÇEK Mİ: kapı prompt-yap.sh'te fiilen duruyor mu?
+  ✓ gerekçesiz kırmızıdan sonra devam promptu ÜRETİLMEZ → rc=1 (rc=1)
+  ✓ sebep Sultan-dilinde söylenir
+  ✓ gerekçe bağlanınca devam promptu ÜRETİLİR → rc=0 (rc=0)
+  ✓ kaçış yolu açık ama sessiz değil (UI_AKIS_GEREKCE_KAPISI=0) (rc=0)
+── 17 · KAPI 6'NIN ÇAĞIRANI GERÇEK Mİ (0.5.0'ın kanıtsız kalan yarısı)
+  ✗ ayırt yargısı YOKken devam promptu ÜRETİLMEZ → rc=1 — beklenen rc=1, gelen rc=0
+      /config/projects/_wt/Sx-Claude-Skills-ayirt-kapisi-tazele/ui-tasarim-akisi/arac/havuz.py:149: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+        "ts":    al("ts") or datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+      /config/projects/_wt/Sx-Claude-Skills-ayirt-kapisi-tazele/ui-tasarim-akisi/arac/havuz.py:149: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+        "ts":    al("ts") or datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+      <!DOCTYPE html><html><body>
+      <!-- bilesen: Gezinme -->
+      <header><a href="#">Bugün</a><a href="#">Kayıtlar</a></header>
+      <!-- bilesen: Veri tablosu -->
+      <table><tr><td style="font-size:14.5px">satır</td></tr></table>
+      <!-- bilesen: Durum rozeti -->
+      <span style="border-radius:999px;font-size:12.5px">Uygun</span>
+      <!-- bilesen: Düğme -->
+      <button style="background:#8a5a2b;border-radius:8px">Kaydet</button>
+      <!-- bilesen: Ölçü kartı -->
+      <div style="border-radius:10px"><div style="font-size:25px">1.240</div>
+      <div style="font-size:12.5px">etiket</div></div>
+      
+      </body></html>
+      # Çekirdek sözleşme (filo geneli — pazarlık yok)
+      
+      *Bu bölüm becerinin içinde yaşar ve her prompta **kendiliğinden** girer. Kutu doldurmaz, seçmez,
+      kopyalamaz. Aşağıdaki kurallar tek bir renk/font/sayı içermez — onlar markanın işidir.*
+      
+      Bu ayrımın sebebi ölçülmüş: aynı kural filoda üç ayrı kopyaya bölündüğünde kopyalar bayatladı ve
+      hangisinin geçerli olduğu görünmez oldu. Kural tek yerde yaşar; **değer** kutuda yaşar.
+      
+      ---
+      
+      ## Ç1 · Çıktı sözleşmesi
+      
+      1. **Tek dosya.** Dış kaynak yok: CDN, uzak font, ikon kütüphanesi, uzak resim. İkon gerekirse
+         satır içi çizim ya da metin işareti.
+      2. **Betik yalnız görsel durum için** (panel aç/kapa, sekme). Veri çekme, ağ çağrısı, kalıcı
+         durum yok.
+      3. Her bileşenin ilk elemanı `<!-- bilesen: Ad -->` yorumunu taşır (bkz Ç2).
+      4. **Örnek veriler uydurmadır** ve gerçek kişiyle karışmayacak biçimde işaretlenir. Kişisel
+         görünen alanlar maskeli.
+      5. Ürünün bir durum kümesi varsa **hepsi** örnekte görünür — yalnız mutlu hâl çizilmez.
+      6. Hedef genişlikte doğru görünür; dar ekran davranışı markanın iskelet bölümünde tanımlıdır.
+      
+      ## Ç2 · İşaret standardı — tutarlılık nasıl grep'lenir
+      
+      Filoda **tek** işaret vardır: `<!-- bilesen: Ad -->`. İkinci bir işaret sistemi (öznitelik, sınıf
+      adı, ayrı yorum biçimi) icat edilmez — iki işaret = iki gerçek = drift.
+      
+      İşaret **süs değil ölçüm yüzeyi**: yoğunluk ve tutarlılık kapıları bu yorumları sayar. İşaretsiz
+      bir bileşen kapı için **yok** hükmündedir.
+      
+      Sözlük dışı ad sessizce icat edilmez. Gerçekten yeni bir şey gerekiyorsa model onu **bildirir**,
+      sonra markanın sözlüğüne eklenir.
+      
+      ## Ç3 · Çekirdek bileşen adları
+      
+      Hemen her üründe çıkan on ad. Ürünün işi bu adlardan birine uyuyorsa **o ad kullanılır**;
+      uymuyorsa marka sözlüğüne yeni ad eklenir — eşanlamlı ikinci bir ad açılmaz.
+      
+      `Gezinme` · `Sayfa başlığı` · `Liste satırı` · `Form alanı` · `Düğme` · `Onay diyaloğu` ·
+      `Yan panel` · `Bilgi şeridi` · `Boş durum` · `Durum rozeti`
+      
+      > **Yazım tek**: adlar burada yazıldığı gibi — cümle düzeninde — kullanılır. `Yan Panel` ile
+      > `Yan panel` iki ad değildir ama araç için iki gerçektir: kapı adı harfi harfine eşler, ikinci
+      > yazım hem "sözlük-dışı ad" hem yanlış yüzey-sayımı üretir. Ç2'nin "iki işaret = iki gerçek"
+      > kuralı yazıma da işler. (Bu hizayı `arac/cekirdek-sozluk-denetle.py` bekçisi ölçer.)
+      
+      ## Ç4 · Yoğunluk kuralları (sayı YOK — sayılar markada)
+      
+      1. **Bir ekranda tek birincil eylem.** İki birincil düğme yan yana konmaz.
+      2. **Tek dikkat kanalı:** aynı anda tek öğe bağırır. Her şey vurguluysa hiçbir şey vurgulu değildir.
+      3. **Önem ≠ büyüklük.** Bir öğenin alanı, taşıdığı bilginin değeriyle orantılıdır; dekoratif
+         büyütme yasaktır.
+      4. **Blok türü bütçesi vardır** ve markada sayıyla verilir. Bütçe koşulsuz gövde içindir; koşullu
+         yüzeyler (panel, diyalog, varyant) ayrı sayılır.
+      5. **Yarım özellik çizilmez:** veri modelinde karşılığı olmayan alan tasarımda görünmez.
+      6. Aynı bilgi iki yerde iki farklı biçimde gösterilmez.
+      
+      ## Ç5 · Kontrast — ÖLÇÜLÜR, tahmin edilmez
+      
+      Metin/zemin ve her durum rozeti için kontrast oranı **hesaplanır**; erişilebilirlik eşiğinin
+      (4.5:1) altında kalan renk değiştirilir ve ölçüm sonucu marka dosyasına yazılır.
+      
+      > "Yeterli görünüyor" bir ölçüm değildir. Ölçülmemiş kontrast, **ölçülmemiş** olarak raporlanır —
+      > "temiz" olarak değil.
+      
+      ## Ç6 · Dondurma kuralı
+      
+      Sözleşme **ilk sayfadan sonra dondurulur**. Sonrasında yalnız *ekleme* yapılır (bildirilmiş yeni
+      bileşen gibi) ve her ekleme markanın değişiklik günlüğüne gerekçesiyle yazılır.
+      
+      Renk, tipografi ya da iskelet değişirse **önceki sayfalar bayatlar** — o hâlde ya değişiklikten
+      vazgeçilir ya önceki sayfalar yeniden üretilir. Sessizce ikisinin arasında kalınmaz.
+      
+      ---
+      
+      # dil
+      renk: #123456
+      # estetik
+      sakin
+  ✗ sebep AYIRT-EDİCİLİK olarak söylenir — çıktıda yok: AYIRT-EDİCİLİK
+  ✓ yargı yazılınca kapı AÇILIR → rc=0 (rc=0)
+
+TOPLAM: 82 geçti · 2 kaldı
+--- stderr ---
+/config/projects/_wt/Sx-Claude-Skills-ayirt-kapisi-tazele/ui-tasarim-akisi/arac/havuz.py:149: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "ts":    al("ts") or datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+/config/projects/_wt/Sx-Claude-Skills-ayirt-kapisi-tazele/ui-tasarim-akisi/arac/havuz.py:296: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  satir["ts"] = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")

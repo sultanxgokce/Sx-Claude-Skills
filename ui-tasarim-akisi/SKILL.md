@@ -1,7 +1,7 @@
 ---
 name: ui-tasarim-akisi
 type: agent
-version: 0.4.0
+version: 0.5.1
 description: >
   UI/arayüz tasarım işinin ZORUNLU akış kapısı. Bir ürünün ekranlarını tek tek değil dizi
   hâlinde tasarlatır: ürün niyeti → sayfa envanteri → kullanıcı senaryoları (tık bütçesi) →
@@ -483,3 +483,78 @@ kutu-içi teslimler kanona döndüğünde bu tablo bir satır alır.
 > Kendi acı dersimiz: `SKILL.md` bu dosyada *"kopya senkron mekanizması olmadan bayatlar
 > (ölçülmüş vaka: `frontend-design`)"* diye **yazılıydı** ve beceri buna rağmen çatalladı.
 > **Doğru yazılmış uyarı = 0 koruma.** Kopya çıkarmadan önce onu geri getirecek kapıyı kur.
+
+## Sürüm notu — 0.5.0 (2026-08-25 · L77)
+
+**Ayırt-edicilik kapısı eklendi.** Ölçüldü: filo'nun UI kapılarında *"bu ekran ayırt edici mi,
+şablona mı düştü"* diye soran **tek bir madde yoktu** (`ayırt|özgün|imza|çarpıc|etkiley|estetik`
+→ rubrikte 0, çekirdek sözleşmede 0). Akışın kendi metni bunu itiraf ediyordu; artık kapıya bağlı.
+
+- Yeni rubrik: `sablonlar/estetik-guc-v1.md` — iki soru, iki **kapalı küme**:
+  `--klise` (hangi hazır kalıba düşüldü; beş ölçülmüş varsayılan + `yok`) ve
+  `--imza` (sayfanın hatırlanacağı öğe nerede yaşıyor; `yok` = kırmızı).
+- Havuz: dördüncü kapı türü `ayirt` + iki seçimli alan. `kapi=ayirt` kaydında
+  **`--klise` ve `--imza` ZORUNLU** — "ölçtüm" demek yetmez, ne görüldüğü yazılır.
+- Kapı: `havuz.py ayirt-kapisi`, çağıranı `prompt-yap.sh` **KAPI 6**. Önceki sayfa için
+  ayırt yargısı yoksa devam promptu üretilmez. KAPI 5'ten **bağımsız** koşar.
+
+🔴 **Ne ölçmediği açıkça:** çarpıcılığı ölçmez, ölçemez. Ölçtüğü şey **yargının verilmiş olması**.
+Yargıyı kimin verdiği (insan mı ajan mı) ayrı bir konudur, burada çözülmedi.
+
+Kanıt: 8/8 kapı. Kritik ikisi — yargısız `ayirt` kaydı REDDEDİLİYOR (süs-alan olamaz) ve
+kapalı-küme dışı değer REDDEDİLİYOR (havuz yorum defterine dönmüyor).
+İnşa sırasında iki kendi hatam yakalandı ve düzeltildi: (a) alanlar şemaya eklenmişti ama
+`yaz` onları hiç okumuyordu — yani ölçü süstü; (b) KAPI 6 önce KAPI 5'in içine gömülmüştü,
+gerekçe kapısı kapatılınca ayırt kapısı da susardı.
+
+## Sürüm notu — 0.5.1 (2026-10-15 · NAKKAŞ) — 0.5.0'ın tazelenmesi
+
+0.5.0 (PR #213) **51 gün açık kaldı ve bugün ölçüldüğünde KIRMIZI'ydı**: dalda `havuz` 80/1,
+`prompt-yap` 36/7; aynı suitler ana dalda 81/0 ve 43/0 (iki yüzey). Sebep mekanik olarak
+doğrulandı — `UI_AKIS_AYIRT_KAPISI=0` ile ikisi de tam yeşile dönüyordu, yani sekiz düşüşün
+tamamı yeni KAPI 6'nın yargısız fikstürlerde ateşlenmesindendi. Üç ayrı kusur çıktı:
+
+1. 🔴 **Ölçüm yargıdan önce gelir.** KAPI 5 (gerekçe) ve KAPI 6 (ayırt) yoğunluk hükmünden
+   ÖNCE çıkıp `rc=1` döndürüyordu; **ölçülemeyen** sayfa (rc=2/3) "yargı yazılmamış" gibi
+   görünüyor, operatöre yanlış işi gösteriyordu ve *ölçülemedi* bilgisi kayboluyordu.
+   İkisi de artık yalnız ölçüm TEMİZ iken koşar — KAPI 4 (tık) bu korumayı zaten taşıyordu,
+   aynı kalıp uygulandı. Ölçümün deftere düşmesi etkilenmedi (koşulsuz).
+   Bu bir gevşeme DEĞİL: kırmızı ölçümde çıkış kodu yine 1, yalnız mesajı ölçümün kendisi verir.
+2. 🔴 **Kapının çağıranı ölçülmemişti.** 0.5.0 bu dosyaya *"çağıranı prompt-yap.sh KAPI 6"*
+   yazdı ama `havuz.test.sh`'te `ayirt` kelimesi HİÇ geçmiyordu: kaydın DOĞRULANMASI
+   sınanmış, kapının FİİLEN ÇAĞRILMASI sınanmamıştı — tam da bu belgenin yasakladığı hâl.
+   Eklendi (§17, iki yön): yargı yokken prompt üretilmiyor · yargı yazılınca üretiliyor.
+   Mutantla kanıtlandı: KAPI 6 kapatılınca bu iki kapı kırmızıya dönüyor.
+3. **"Prompt üretilir" diyen sınav bütün ön-koşulları sağlamalı.** Etkilenen vakalarda kapı
+   kapatılmadı, **yargı yazıldı** — kapıyı kapatmak sınavı yeşile boyar ama ölçtüğü şeyi
+   değiştirir. Ayrıca sınavın havuz anahtarı `basename $PWD`den türüyordu (hüküm çalışma
+   dizinine göre değişiyordu); anahtar sabitlendi.
+
+4. 🔴 **Şema ⟂ kural: anlam kaçağı.** Alanların DOLU olması yargının VERİLDİĞİ anlamına
+   gelmiyordu — `hukum=temiz` + `imza=yok` kaydı şemadan geçip kapıyı açıyordu, oysa rubrik
+   temiz için `klise=yok` **ve** `imza≠yok` şartı koyuyor. Form doluydu, hüküm kendisiyle
+   çelişikti. Kayıt artık rubrikle tutarlılık denetiminden geçer (iki yönde), ve ayırt
+   kaydında `hukum=olcemedi` kabul edilmez: ayırt-edicilik bir **yargıdır**, ölçüm değil.
+5. 🔴 **Kararsız yargı kapıyı AÇMAZ.** `emin-degilim` olan her kayıt da kapıyı açıyordu;
+   rubrik onu *"meşrudur ama bir sonraki turda çözülmeli, kalıcı sığınak değildir"* diye
+   tanımlıyor — kapıyı açarsa tam da kalıcı sığınağa dönüşür. Yazılabilir ve defterde
+   görünür, ama sonraki sayfayı açmaz; gerekçe rubriğin kendi cümlesiyle basılır.
+
+Bu iki madde rubriği GEVŞETMEDİ, **kodu rubriğe hizaladı** — rubrik tek kaynaktır.
+
+6. 🔴 **Geçerli olan SON hükümdür.** Kapı *"geçmişte bir yerde temiz/kirmizi varsa aç"*
+   diyordu; defter salt-eklemeli olduğu için bu, ESKİ bir kararlı kaydın sonradan yazılan
+   `emin-degilim`i geçersiz kılması demekti — sayfa değişip yargı yeniden belirsizleşince kapı
+   açık kalıyordu. *"Bir kez karar verildi"* ile *"şu an karar verilmiş durumda"* aynı cümle
+   değildir. Artık son ayırt satırı geçerlidir; ters sıra da sınavda (bağımsız göz, tur 3).
+
+Ölçüm: dört suit **230 kapı** yeşil (havuz 97 · prompt-yap 43 · yoğunluk 41 · yargı 49).
+Önce/sonra çifti ve dördünün hepsi kanıt manifestinde kayıtlı; toplam elle yazılmıyor,
+koşumların çıktısından toplanıyor (bağımsız gözün tur-1 bulgusu: 214 yazmıştım, 217'ydi).
+Ayrıca `havuz.py` her koşuda `utcnow()` için DeprecationWarning basıyordu ve bu uyarı
+**her kanıt dosyasının** stderr bölümüne giriyordu (bağımsız gözün üçüncü bulgusu). Zararsız
+görünür ama değil: kanıt dosyası gürültü taşırsa okuyan onu okumayı bırakır. Üç çağrı
+zaman-dilimli hâle getirildi, damga biçimi değişmedi (`...Z`), uyarı dört suitte de 0.
+
+Kurulu beceri kopyası ile dal, tazelemeden önce 56 dosyada **birebir aynıydı** (pozitif
+kontrollü ölçüm) — yani filo bu kırmızı sürümü koşuyordu ve ezilecek elle değişiklik YOKTU.

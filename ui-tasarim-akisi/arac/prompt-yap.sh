@@ -138,7 +138,14 @@ if [ -n "$ONCEKI" ] && [ -f "$ONCEKI" ]; then
   # ta kendisi olurdu. Ayrıca kapıyı yazma yoluna koymak ÖLÇÜMÜ kaybettirirdi; ölçümü kaybetmek
   # dersi kaybetmekten beterdir. Bu yüzden: ölçüm HER ZAMAN deftere düşer, PROMPT üretilmez.
   # Kapı grup bazlıdır (kutu/urun/ekran/kapi) — başka ekranlar kilitlenmez.
-  if [ -f "$ARAC/havuz.py" ] && [ "${UI_AKIS_GEREKCE_KAPISI:-1}" != "0" ]; then
+  # 🔴 ÖLÇÜM YARGIDAN ÖNCE GELİR (NAKKAŞ hükmü 2026-10-15): bu kapı yalnız ölçüm TEMİZ
+  #    iken koşar. Niçin: eski hâlde yargı kapıları ölçüm hükmünden ÖNCE çıkıp rc=1
+  #    döndürüyordu; ölçülemeyen sayfa (rc=2/3) "yargı yazılmamış" gibi görünüyor, operatöre
+  #    YANLIŞ işi gösteriyordu — ve 'ölçülemedi' bilgisi kayboluyordu. KAPI 4 (tık) bu
+  #    korumayı zaten taşıyordu; aynı kalıp buraya da uygulandı. Ölçümün deftere düşmesi
+  #    etkilenmez (havuz_yaz aşağıda, koşulsuz).
+  if [ "$OLCUM_RC" = "0" ] && [ -f "$ARAC/havuz.py" ] \
+     && [ "${UI_AKIS_GEREKCE_KAPISI:-1}" != "0" ]; then
     set +e
     python3 "$ARAC/havuz.py" gerekce-kapisi --kutu "$_KU" --urun "$_KU" \
             --ekran "$_EK" --kapi yogunluk; _GK=$?
@@ -146,6 +153,23 @@ if [ -n "$ONCEKI" ] && [ -f "$ONCEKI" ]; then
     if [ "$_GK" = "1" ]; then
       echo "  Devam promptu ÜRETİLMEDİ: önceki kırmızıdan ne öğrenildiği yazılmadan" >&2
       echo "  bir sonraki sayfa çizilirse aynı hata bütün diziye yayılır." >&2
+      exit 1
+    fi
+  fi
+
+  # ── KAPI 6: AYIRT-EDİCİLİK YARGISI VERİLMEDEN SONRAKİ SAYFA ÇİZİLMEZ (L77 · 2026-08-25)
+  # Ölçüldü: filo'nun UI kapılarında "bu ekran ayırt edici mi" diye soran madde YOKTU (0 eşleşme).
+  # Sonuç: sözleşmeye uyan ama birbirinin aynısı ekranlar. Bu kapı çarpıcılığı ÖLÇMEZ —
+  # yargının VERİLMİŞ olmasını şart koşar. Rubrik: sablonlar/estetik-guc-v1.md
+  # 🔴 Aynı hüküm (bkz KAPI 5): yargı kapısı ölçüm hükmünü maskelemez.
+  if [ "$OLCUM_RC" = "0" ] && [ -f "$ARAC/havuz.py" ] \
+     && [ "${UI_AKIS_AYIRT_KAPISI:-1}" != "0" ]; then
+    set +e
+    python3 "$ARAC/havuz.py" ayirt-kapisi --kutu "$_KU" --urun "$_KU" --ekran "$_EK"; _AK=$?
+    set -e
+    if [ "$_AK" = "1" ]; then
+      echo "  Devam promptu ÜRETİLMEDİ: önceki sayfanın ayırt edici olup olmadığına" >&2
+      echo "  karar verilmeden sıradaki çizilirse dizi kendi kendini tekrarlar." >&2
       exit 1
     fi
   fi

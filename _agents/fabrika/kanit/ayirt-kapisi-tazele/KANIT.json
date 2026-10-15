@@ -1,0 +1,145 @@
+{
+  "is": "ayirt-kapisi-tazele",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T16:10:18+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "SONRA-havuz-84-kapi-KAPI6-cagiran-sinavi-dahil",
+      "asama": "sonra",
+      "dosya": "olcum-SONRA-havuz-84-kapi-KAPI6-cagiran-sinavi-dahil-sonra.txt",
+      "sha256": "8b0900fdc0a931da164642fda8d1c9f4d4db8ddd5e0795d505f35bab99f1bc6c",
+      "komut": [
+        "bash",
+        "ui-tasarim-akisi/arac/havuz.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T16:01:54+03:00",
+      "sure_sn": 6.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "SONRA-prompt-yap-43-kapi-olcum-yargidan-once",
+      "asama": "sonra",
+      "dosya": "olcum-SONRA-prompt-yap-43-kapi-olcum-yargidan-once-sonra.txt",
+      "sha256": "ce72daf14b921dec8ae3f2994b4893d0e2ac939f237a9655886e0239b9e344ff",
+      "komut": [
+        "bash",
+        "ui-tasarim-akisi/arac/prompt-yap.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T16:01:56+03:00",
+      "sure_sn": 2.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "MUTANT-KAPI6-kapatildi-iki-kapi-dusuyor-BEKLENEN-KIRMIZI",
+      "asama": "sonra",
+      "dosya": "olcum-MUTANT-KAPI6-kapatildi-iki-kapi-dusuyor-BEKLENEN-KIRMIZI-sonra.txt",
+      "sha256": "d618445f0de25f68bdc688b55b926e726cdd8d352b1815c368d734dc12e26252",
+      "komut": [
+        "env",
+        "UI_AKIS_AYIRT_KAPISI=0",
+        "bash",
+        "ui-tasarim-akisi/arac/havuz.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T16:01:59+03:00",
+      "sure_sn": 3.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ONCE-213-dalinda-havuz-80-gecti-1-KALDI-BEKLENEN-KIRMIZI",
+      "asama": "once",
+      "dosya": "olcum-ONCE-213-dalinda-havuz-80-gecti-1-KALDI-BEKLENEN-KIRMIZI-once.txt",
+      "sha256": "fedd1ccb38478ce1473ec85b9500aa56c60f77c5a2d2202b6a5b371677dcd240",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-213-once/ui-tasarim-akisi/arac/havuz.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T16:04:18+03:00",
+      "sure_sn": 5.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ONCE-213-dalinda-prompt-yap-36-gecti-7-KALDI-BEKLENEN-KIRMIZI",
+      "asama": "once",
+      "dosya": "olcum-ONCE-213-dalinda-prompt-yap-36-gecti-7-KALDI-BEKLENEN-KIRMIZI-once.txt",
+      "sha256": "3bc5967a6675a7b7d574b976d04a3ad6c54187d2aeff0181d94e605ceaccd707",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-213-once/ui-tasarim-akisi/arac/prompt-yap.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T16:04:21+03:00",
+      "sure_sn": 2.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "SONRA-yogunluk-41-kapi",
+      "asama": "sonra",
+      "dosya": "olcum-SONRA-yogunluk-41-kapi-sonra.txt",
+      "sha256": "ebed2420a1f51f8d132777ced7c276d5e748a955eb692b0a42a4c6509865cf5f",
+      "komut": [
+        "bash",
+        "ui-tasarim-akisi/arac/yogunluk-denetle.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T16:04:22+03:00",
+      "sure_sn": 1.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "SONRA-yargi-birlestir-49-kapi",
+      "asama": "sonra",
+      "dosya": "olcum-SONRA-yargi-birlestir-49-kapi-sonra.txt",
+      "sha256": "13c559af1380badda788da8db55d871790e34c6af24fb092c0ca3dc2ef676893",
+      "komut": [
+        "bash",
+        "ui-tasarim-akisi/arac/yargi-birlestir.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T16:04:26+03:00",
+      "sure_sn": 4.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "SONRA-havuz-95-kapi-rubrik-tutarliligi-ve-kararsiz-yargi",
+      "asama": "sonra",
+      "dosya": "olcum-SONRA-havuz-95-kapi-rubrik-tutarliligi-ve-kararsiz-yargi-sonra.txt",
+      "sha256": "7ef1766cc6db25e6b3c08929da342e4c3dcdcda7b214b04d9ed16c4573bbb988",
+      "komut": [
+        "bash",
+        "ui-tasarim-akisi/arac/havuz.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T16:07:58+03:00",
+      "sure_sn": 4.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "SONRA-havuz-97-kapi-son-hukum-gecerli-ters-sira-dahil",
+      "asama": "sonra",
+      "dosya": "olcum-SONRA-havuz-97-kapi-son-hukum-gecerli-ters-sira-dahil-sonra.txt",
+      "sha256": "ccbf5d359f0dc32e52c8d004d4bdd1b6f0de3312425a96b4b1254f6c30b29d8f",
+      "komut": [
+        "bash",
+        "ui-tasarim-akisi/arac/havuz.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T16:10:18+03:00",
+      "sure_sn": 23.6
+    }
+  ],
+  "imza": "61298b83c1e3801fb50a6268e0a6fa74b4e43a93d6f31480d9c37e6b0ad008df"
+}

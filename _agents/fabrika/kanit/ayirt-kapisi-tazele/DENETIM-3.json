@@ -1,0 +1,32 @@
+{
+  "tur": 3,
+  "is": "ayirt-kapisi-tazele",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T16:08:51+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 63597,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "NAKKAŞ, KAPI 6’nın çağıranını sınamış, ölçülemeyen sonucu yargı kapılarının maskelemesini önlemiş ve rubrik–kayıt tutarlılığını belirgin biçimde sıkılaştırmış. Ancak önce şu durum çözülmeli: aynı ekranın eski kararlı ayırt kaydı varsa daha sonra yazılan `emin-degilim` kaydı kapıyı kapatmıyor; dolayısıyla “kararsız yargı kapıyı açmaz” kuralı kayıt geçmişinde delinmiş durumda.",
+    "bulgular": [
+      {
+        "ne": "Kapı, en güncel ayırt hükmünü değerlendirmek yerine geçmişteki herhangi bir `temiz` veya `kirmizi` kaydıyla açılıyor; eski kararlı kaydın ardından yazılan güncel `emin-degilim` etkisiz kalıyor.",
+        "kanit": "`ayirt_kapisi`, eşleşen bütün kayıtlardan `hukum in (\"temiz\", \"kirmizi\")` olanları `kararli` listesine topluyor ve liste boş değilse hemen 0 döndürüyor. Ancak rubrik `emin-degilim` için “bir sonraki turda çözülmeli, kalıcı sığınak değildir” diyor; eklenen §19 sınavı da yalnız önce kararsız, sonra kararlı sırasını ölçüyor, kararlıdan sonra kararsız sırasını ölçmüyor.",
+        "konum": "ui-tasarim-akisi/arac/havuz.py: ayirt_kapisi içindeki `kararli`/`kararsiz` dalları; ui-tasarim-akisi/arac/havuz.test.sh: §19; ui-tasarim-akisi/sablonlar/estetik-guc-v1.md: “Hüküm nasıl verilir”",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önce ölçümleri havuz 80/1 ve prompt-yap 36/7 iken son ölçümler havuz 95/0 ve prompt-yap 43/0; yoğunluk 41/0 ile yargı 49/0 da yeşil ve dört suit toplamı 228 ediyor. Mutant rc=1 çağıran sınavının kapıya bağlı olduğunu destekliyor; fakat gösterilen ilk 60 satır düşen iki alt sınava ulaşmadığından “iki kapı düşüyor” ayrıntısı verilen çıktı kesitinden doğrudan görülemiyor."
+  }
+}

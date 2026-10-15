@@ -40,12 +40,21 @@ KULLANIM
 """
 import hashlib, json, os, re, sys, datetime
 
+
+def _simdi_utc():
+    """UTC damgası — `utcnow()` DEPRECATED (3.12+) ve her koşuda stderr'e uyarı basıyordu.
+
+    Uyarı zararsız sanılır ama değil: bu araç KANIT dosyası üretiyor ve uyarı her kanıtın
+    stderr bölümüne giriyordu (bağımsız gözün bulgusu, 2026-10-15). Kanıt dosyası gürültü
+    taşırsa okuyan onu okumayı bırakır. Biçim değişmedi: aynı `...Z` dizgisi."""
+    return datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
 ANAHTARLAR = {
     "ts":     r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$",
     "kutu":   r"^[a-z0-9][a-z0-9-]{0,23}$",
     "urun":   r"^[a-z0-9][a-z0-9-]{0,23}$",
     "ekran":  r"^[a-z0-9][a-z0-9._-]{0,39}$",
-    "kapi":   r"^(yogunluk|yargi|tik)$",
+    "kapi":   r"^(yogunluk|yargi|tik|ayirt)$",
     "hukum":  r"^(temiz|kirmizi|olcemedi|emin-degilim)$",
     "arac":   r"^[0-9]+\.[0-9]+\.[0-9]+$",
 }
@@ -71,6 +80,14 @@ SECIMLI = {
     # gerekce: hedef kırmızı kaydın id'si. `iptal` mezar-taşının kardeşi — hedefi
     #   geçersiz KILMAZ, ona gerekçe BAĞLAR (salt-ekleme korunur).
     "gerekce":     r"^[0-9a-f]{12}$",
+    # ── AYIRT-EDİCİLİK (L77, 2026-08-25) — ölçülmüş boşluğun kapatılması.
+    #   Ölçüm: filo'nun UI kapılarında "bu ekran ayırt edici mi, şablona mı düştü"
+    #   diye soran TEK BİR madde yoktu (rubrik 0, çekirdek sözleşme 0 eşleşme).
+    #   Estetik yargı mekanikleştirilemez — ama YARGI VERİLDİ Mİ, o mekanik sorulur.
+    # klise: hangi hazır kalıba düşüldüğü (kapalı küme; "yok" = düşülmedi).
+    "klise":       r"^(krem-serif-toprak|siyah-neon|gazete-hatti|mor-gradyan|merkezli-kart|yok)$",
+    # imza: sayfanın hatırlanacağı öğe NEREDE yaşıyor (boldluk tek yere harcanır).
+    "imza":        r"^(tipografi|malzeme|isik|oran|hareket|yerlesim|yok)$",
 }
 SEBEPLER = ("olcmeden-yazildi", "yanlis-profil", "tekrar", "test-artigi")
 
@@ -138,7 +155,7 @@ def yaz(argv, yol):
 
     dusen = [p.strip() for p in (al("dusen") or "").split(",") if p.strip()]
     kayit = {
-        "ts":    al("ts") or datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "ts":    al("ts") or _simdi_utc(),
         "kutu":  al("kutu") or "",
         "urun":  al("urun") or "",
         "ekran": al("ekran") or "",
@@ -154,7 +171,34 @@ def yaz(argv, yol):
         kayit["ders"] = al("ders")
     if al("dusen-karar"):
         kayit["dusen_karar"] = al("dusen-karar")
+    if al("klise"):
+        kayit["klise"] = al("klise")
+    if al("imza"):
+        kayit["imza"] = al("imza")
     hata = dogrula(kayit)
+    # AYIRT kapısında yargı BOŞ GEÇİLEMEZ (L77): "ölçtüm" demek yetmez, NE gördüğün yazılır.
+    # Aksi hâlde alan şemada durur ama kimse doldurmaz — süs-alan sınıfı.
+    if kayit["kapi"] == "ayirt":
+        for a in ("klise", "imza"):
+            if a not in kayit:
+                hata.append("kapi=ayirt için --%s ZORUNLU (yargısız ayırt-ölçümü olmaz)" % a)
+        # 🔴 RUBRİKLE TUTARLILIK (bağımsız göz bulgusu, 2026-10-15): alanların DOLU olması
+        #    yargının VERİLDİĞİ anlamına gelmiyordu. `hukum=temiz` + `imza=yok` kaydı şemadan
+        #    geçiyor ve kapıyı açıyordu — oysa rubrik (sablonlar/estetik-guc-v1.md §"Hüküm
+        #    nasıl verilir") temiz için `klise=yok` VE `imza≠yok` şartı koyuyor. Yani şema ile
+        #    kural arasında ANLAM KAÇAĞI vardı: form doluydu, hüküm kendisiyle çelişikti.
+        #    Rubrik tek kaynaktır; kapı ona uyduruldu (kuralı gevşetmek değil, kodu hizalamak).
+        h, kl, im = kayit.get("hukum"), kayit.get("klise"), kayit.get("imza")
+        if h == "temiz" and (kl != "yok" or im == "yok"):
+            hata.append("rubrik çelişkisi: hukum=temiz için klise=yok VE imza≠yok şart "
+                        "(gelen: klise=%s · imza=%s) — bir yön seçilmemişse temiz değildir" % (kl, im))
+        if h == "kirmizi" and kl == "yok" and im != "yok":
+            hata.append("rubrik çelişkisi: hukum=kirmizi ya klişeye düşmeyi ya imzasızlığı "
+                        "gösterir (gelen: klise=yok · imza=%s) — düşen madde YOK" % im)
+        if h == "olcemedi":
+            hata.append("kapi=ayirt için hukum=olcemedi KABUL EDİLMEZ: ayırt-edicilik bir "
+                        "YARGIDIR, ölçüm değil — bakılacak şey sayfanın kendisidir. Rubrik üç "
+                        "hüküm tanır: temiz · kirmizi · emin-degilim")
     if hata:
         sys.stderr.write("HAVUZ REDDETTİ — kayıt yazılmadı:\n")
         for h in hata:
@@ -206,7 +250,7 @@ def iptal(argv, yol):
         print("zaten iptal edilmiş: %s (yeni mezar-taşı yazılmadı)" % hedef_id)
         return 0
     tas = {a: hedef[a] for a in ZORUNLU}
-    tas["ts"] = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    tas["ts"] = _simdi_utc()
     tas["dusen"] = []                       # mezar-taşı kural DÜŞÜRMEZ, sayaca girmez
     tas["iptal"] = hedef_id
     tas["sebep"] = sebep
@@ -275,7 +319,7 @@ def gerekce(argv, yol):
         sys.stderr.write("kayıt bulunamadı (ya da iptal edilmiş): %s\n" % hedef_id)
         return 1
     satir = {a: hedef[a] for a in ZORUNLU}
-    satir["ts"] = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    satir["ts"] = _simdi_utc()
     satir["dusen"] = []                     # gerekçe satırı kural DÜŞÜRMEZ
     satir["gerekce"] = hedef_id
     if ders:
@@ -333,6 +377,62 @@ def gerekce_kapisi(argv, yol):
                      % kayit_id(son))
     sys.stderr.write("    (ayrıca --ders sNNNN ile kendi seyir-defterindeki nota "
                      "işaretçi bağlayabilirsin)\n")
+    return 1
+
+
+def ayirt_kapisi(argv, yol):
+    """AYIRT KAPISI (L77 · 2026-08-25): ayırt-edicilik yargısı verilmeden sonraki sayfa çizilmez.
+
+    Niçin mekanik değil de "yargı verildi mi" sorusu: çarpıcılık ölçülemez, ama
+    ÖLÇÜLMESİ GEREKTİĞİ hatırlatılabilir. Bugüne dek hiçbir kapı bunu sormuyordu;
+    sonuç sözleşmeye uyan ama birbirinin aynısı ekranlardı.
+
+    KAPI 5'in (gerekçe) kardeşidir ve aynı yerde koşar: prompt-yap.sh. Yazma yolunda
+    DURMAZ — ölçümü kaybetmek dersi kaybetmekten beterdir.
+    ÇIKIŞ: 0 kapı AÇIK · 1 KAPALI (ayırt yargısı yok) · 2 kullanım
+    """
+    def al(ad):
+        return argv[argv.index("--" + ad) + 1] if "--" + ad in argv else None
+    alan = {a: al(a) for a in ("kutu", "urun", "ekran")}
+    if not all(alan.values()):
+        sys.stderr.write("kullanım: havuz.py ayirt-kapisi --kutu X --urun X --ekran Y\n")
+        return 2
+    hepsi = gecerli(satirlar(yol))
+    onceki = [k for k in hepsi
+              if k["kutu"] == alan["kutu"] and k["urun"] == alan["urun"]
+              and k["ekran"] == alan["ekran"]]
+    if not onceki:
+        return 0            # ilk sayfa: kıyaslanacak öncesi yok
+    # 🔴 KARARLI yargı açar (bağımsız göz bulgusu, 2026-10-15): eski hâlde `kapi == "ayirt"`
+    #    olan HER kayıt kapıyı açıyordu — `emin-degilim` de dâhil. Oysa rubrik onu
+    #    *"meşrudur ama bir sonraki turda çözülmeli, KALICI SIĞINAK DEĞİLDİR"* diye tanımlıyor;
+    #    kapıyı açarsa tam da kalıcı sığınağa dönüşür ve kapı adının söylediği şeyi ölçmez.
+    #    Kayıt yazılabilir ve defterde görünür — ama sonraki sayfayı açmaz.
+    # 🔴 GEÇERLİ olan SON hükümdür (bağımsız göz bulgusu tur 3, 2026-10-15): ilk sürüm
+    #    "geçmişte bir yerde temiz/kirmizi varsa aç" diyordu. Defter salt-eklemeli olduğu için
+    #    bu, ESKİ bir kararlı kaydın sonradan yazılan `emin-degilim`i geçersiz kılması
+    #    demekti — yani sayfa değişip yargı yeniden belirsizleşince kapı açık kalıyordu.
+    #    "Bir kez karar verildi" ile "şu an karar verilmiş durumda" aynı cümle değildir.
+    ayirtlar = [k for k in onceki if k["kapi"] == "ayirt"]
+    if ayirtlar:
+        son = ayirtlar[-1]                       # salt-eklemeli defter: son satır güncel hüküm
+        if son["hukum"] in ("temiz", "kirmizi"):
+            return 0
+        sys.stderr.write("KAPI KAPALI — '%s' için SON ayırt hükmü KARARSIZ (%s).\n"
+                         % (alan["ekran"], son["hukum"]))
+        sys.stderr.write("  Rubrik: 'emin-degilim meşrudur ama bir sonraki turda çözülmeli,\n")
+        sys.stderr.write("  kalıcı sığınak değildir.' Bu tur o sonraki tur.\n")
+        sys.stderr.write("  (Daha eski kararlı bir kayıt varsa geçerli DEĞİLDİR — son söz geçerlidir.)\n")
+        return 1
+    sys.stderr.write("KAPI KAPALI — '%s' sayfası için AYIRT-EDİCİLİK yargısı yok.\n"
+                     % alan["ekran"])
+    sys.stderr.write("  Sözleşmeye uyan ama birbirinin aynısı ekranlar tam burada doğar.\n")
+    sys.stderr.write("  Rubrik: sablonlar/estetik-guc-v1.md · yargıyı yaz:\n")
+    sys.stderr.write("    havuz.py yaz --kutu %s --urun %s --ekran %s --kapi ayirt \\\n"
+                     % (alan["kutu"], alan["urun"], alan["ekran"]))
+    sys.stderr.write("      --hukum <temiz|kirmizi> --klise <krem-serif-toprak|siyah-neon|"
+                     "gazete-hatti|mor-gradyan|merkezli-kart|yok> \\\n")
+    sys.stderr.write("      --imza <tipografi|malzeme|isik|oran|hareket|yerlesim|yok>\n")
     return 1
 
 
@@ -470,8 +570,10 @@ def main(argv):
         return gerekce(argv, yol)
     if komut == "gerekce-kapisi":
         return gerekce_kapisi(argv, yol)
+    if komut == "ayirt-kapisi":
+        return ayirt_kapisi(argv, yol)
     sys.stderr.write("bilinmeyen komut: %s "
-                     "(yaz|oku|ozet|iptal|gerekce|gerekce-kapisi)\n" % komut)
+                     "(yaz|oku|ozet|iptal|gerekce|gerekce-kapisi|ayirt-kapisi)\n" % komut)
     return 2
 
 

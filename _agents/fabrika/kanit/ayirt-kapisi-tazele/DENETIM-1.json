@@ -1,0 +1,44 @@
+{
+  "tur": 1,
+  "is": "ayirt-kapisi-tazele",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T16:03:06+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 60641,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "KAPI 5 ve KAPI 6 yalnız ölçüm temizken çalıştırılmış, KAPI 6’nın gerçek çağıranı iki yönlü sınanmış ve yargı gerektiren fikstürler düzeltilmiş. Ana talep karşılanıyor; ancak sürüm notundaki toplam yanlış ve kanıt paketi dört suit ile önce/sonra farkının tamamını göstermediği için önce kanıt ile belge hesabı düzeltilmeli.",
+    "bulgular": [
+      {
+        "ne": "Sürüm notundaki “dört suit 214 kapı” toplamı kendi dökümüyle çelişiyor; 84+43+41+49=217.",
+        "kanit": "SKILL.md eklenen sürüm notunda “214 kapı” denirken aynı cümlede havuz 84, prompt-yap 43, yoğunluk 41 ve yargı 49 sayıları veriliyor.",
+        "konum": "ui-tasarim-akisi/SKILL.md:0.5.1 sürüm notu, “Ölçüm” paragrafı",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Kanıt manifesti dört suitin ve gerçek önce/sonra regresyon çiftinin tamamını taşımıyor; yalnız havuz ile prompt-yap sonraları ve KAPI 6 kapalı mutantı kayıtlı.",
+        "kanit": "Araç imzalı manifestte üç kayıt var: SONRA havuz 84/0, SONRA prompt-yap 43/0 ve mutant havuz 82/2. Sürüm notunda anılan yoğunluk 41 ile yargı 49 koşuları ve karttaki önce değerleri manifestte ölçüm kaydı değil.",
+        "konum": "KANIT.json:kayitlar; SKILL.md:0.5.1 sürüm notu",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Test çıktıları üretimden kaldırılması gereken Python zaman API’si uyarıları içeriyor.",
+        "kanit": "Her iki yeşil ölçümün stderr bölümünde havuz.py satır 149; havuz ölçümünde ayrıca satır 296 için datetime.utcnow() DeprecationWarning yazıyor.",
+        "konum": "olcum-SONRA-havuz-84-kapi-KAPI6-cagiran-sinavi-dahil-sonra.txt:stderr; olcum-SONRA-prompt-yap-43-kapi-olcum-yargidan-once-sonra.txt:stderr",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Havuz 84/0 ile prompt-yap 43/0 yeşilleri ve kapı kapatıldığında yalnız iki çağıran sınavının düşmesi güçlü mutant kanıtı sağlıyor; ayrıca rc=3 vakalarının suit içinde geçtiği görülüyor. Buna karşılık manifestte gerçek önce ölçümleri ile yoğunluk ve yargı suitleri bulunmadığından tam ölçüm çifti ve “dört suit” iddiası bağımsız olarak doğrulanamıyor."
+  }
+}

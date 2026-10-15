@@ -13,6 +13,21 @@ GECTI=0; KALDI=0
 # kullanıcının canlı defterine 6 sahte kayıt düşürdü ("kutu: ui-tasarim-akisi").
 # Sınav-verisi ile saha-verisi aynı deftere karışırsa defter yalan söylemeye başlar.
 export UI_AKIS_HAVUZ="$T/sinav-havuzu.jsonl"
+# Kutu adı SABİTLENİR: prompt-yap.sh havuz anahtarını `basename $PWD`den türetiyor, yani
+# sınavın hükmü ÇALIŞMA DİZİNİNE göre değişiyordu (gizli kırılganlık). Anahtar artık sınavın
+# kendi elinde; seed yazan satır ile kapının okuduğu satır aynı üçlüyü paylaşır.
+export UI_AKIS_KUTU=sinav
+
+# ayirt_yaz <önceki-sayfa> — AYIRT yargısını sınav havuzuna düşürür.
+# Niçin gerekti (L77/KAPI 6): "devam promptu ÜRETİLİR" diyen bir sınav, ürünün BÜTÜN
+# ön-koşullarını sağlamak zorundadır. Ayırt yargısı olmadan prompt üretilmesini beklemek,
+# ürünün yasakladığı bir durumu "doğru" ilan etmek olurdu. Kapıyı kapatmak (AYIRT_KAPISI=0)
+# sınavı yeşile boyar ama ölçtüğü şeyi değiştirir — o yüzden kapı AÇIK, yargı YAZILIYOR.
+ayirt_yaz() {
+  local e; e="$(basename "$1")"; e="$(printf '%s' "${e%.*}" | tr 'A-Z' 'a-z')"
+  python3 "$ARAC/havuz.py" yaz --kutu sinav --urun sinav --ekran "$e" \
+    --kapi ayirt --hukum temiz --klise yok --imza tipografi --arac 0.0.0 >/dev/null
+}
 
 kapi() { # kapi <ad> <beklenen-rc> <komut...>
   local ad="$1" bek="$2"; shift 2
@@ -103,6 +118,7 @@ icerir "çözüm aracı gösterilir" "tik-kaydet.sh"
 
 echo "── 5b · tık ölçülünce geçer"
 bash "$ARAC/tik-kaydet.sh" "$TEMIZ_ILK" G1=3:2 G2=2:2 >/dev/null
+ayirt_yaz "$TEMIZ_ILK"      # KAPI 6 ön-koşulu: bu sayfa için ayırt yargısı
 kapi "tık taze → rc=0" 0 bash "$YAP" "$T/sablon-devam.md" --onceki "$TEMIZ_ILK" \
      --dil "$T/tasarim/tasarim-dili.md" --estetik "$T/tasarim/estetik-yon.md"
 icerir "önceki sayfa gövdesi gömüldü" "<!-- bilesen: Gezinme -->"

@@ -218,6 +218,11 @@ kapi "gerekçesiz kırmızıdan sonra devam promptu ÜRETİLMEZ → rc=1" 1 \
 icerir "sebep Sultan-dilinde söylenir" "önceki tur KIRMIZI ve gerekçesiz"
 KID3="$(python3 "$H" oku --havuz "$J8" 2>/dev/null | head -1 | cut -d' ' -f1)"
 python3 "$H" gerekce --havuz "$J8" "$KID3" --dusen-karar tasarim-duzeltildi >/dev/null 2>&1
+# KAPI 6 ön-koşulu (L77): "prompt ÜRETİLİR" diyen sınav, ürünün BÜTÜN ön-koşullarını
+# sağlamak zorundadır — gerekçe bağlanması yetmez, ayırt yargısı da yazılı olmalı. Kapıyı
+# kapatmak sınavı yeşile boyar ama ölçtüğü şeyi değiştirir; o yüzden yargı YAZILIYOR.
+python3 "$H" yaz --havuz "$J8" --kutu akar --urun akar --ekran "$_EKAD" \
+     --kapi ayirt --hukum temiz --klise yok --imza tipografi --arac 0.3.1 >/dev/null 2>&1
 kapi "gerekçe bağlanınca devam promptu ÜRETİLİR → rc=0" 0 \
      env UI_AKIS_HAVUZ="$J8" UI_AKIS_KUTU=akar bash "$ARAC/prompt-yap.sh" \
      "$T/proje/sablon.md" --onceki "$ILK" --dil "$T/proje/dil.md" --estetik "$T/proje/est.md"
@@ -225,6 +230,72 @@ kapi "kaçış yolu açık ama sessiz değil (UI_AKIS_GEREKCE_KAPISI=0)" 0 \
      env UI_AKIS_HAVUZ="$T/kacis.jsonl" UI_AKIS_KUTU=akar UI_AKIS_GEREKCE_KAPISI=0 \
      bash "$ARAC/prompt-yap.sh" "$T/proje/sablon.md" --onceki "$ILK" \
      --dil "$T/proje/dil.md" --estetik "$T/proje/est.md"
+
+echo "── 17 · KAPI 6'NIN ÇAĞIRANI GERÇEK Mİ (0.5.0'ın kanıtsız kalan yarısı)"
+# 🔴 Niçin eklendi: 0.5.0 ayırt kapısını kurdu ve SKILL.md'ye "çağıranı prompt-yap.sh KAPI 6"
+#    yazdı, ama bu suitte `ayirt` kelimesi HİÇ geçmiyordu — yani kaydın DOĞRULANMASI
+#    sınanmış, kapının FİİLEN ÇAĞRILMASI sınanmamıştı. Tam da kendi kanonumun yasakladığı
+#    hâl: "kapı var" denip çağıranı ölçülmemiş. İki yön de burada ölçülür.
+J9="$T/kapi6.jsonl"
+python3 "$H" yaz --havuz "$J9" --kutu akar --urun akar --ekran "$_EKAD" \
+     --kapi yogunluk --hukum temiz --arac 0.3.1 >/dev/null 2>&1
+kapi "ayırt yargısı YOKken devam promptu ÜRETİLMEZ → rc=1" 1 \
+     env UI_AKIS_HAVUZ="$J9" UI_AKIS_KUTU=akar bash "$ARAC/prompt-yap.sh" \
+     "$T/proje/sablon.md" --onceki "$ILK" --dil "$T/proje/dil.md" --estetik "$T/proje/est.md"
+icerir "sebep AYIRT-EDİCİLİK olarak söylenir" "AYIRT-EDİCİLİK"
+python3 "$H" yaz --havuz "$J9" --kutu akar --urun akar --ekran "$_EKAD" \
+     --kapi ayirt --hukum temiz --klise yok --imza tipografi --arac 0.3.1 >/dev/null 2>&1
+kapi "yargı yazılınca kapı AÇILIR → rc=0" 0 \
+     env UI_AKIS_HAVUZ="$J9" UI_AKIS_KUTU=akar bash "$ARAC/prompt-yap.sh" \
+     "$T/proje/sablon.md" --onceki "$ILK" --dil "$T/proje/dil.md" --estetik "$T/proje/est.md"
+
+echo "── 18 · AYIRT KAYDI RUBRİKLE TUTARLI MI (şema ⟂ kural anlam kaçağı)"
+# 🔴 Niçin: alanların DOLU olması yargının VERİLDİĞİ anlamına gelmiyordu. `hukum=temiz` +
+#    `imza=yok` kaydı şemadan geçip kapıyı açıyordu; rubrik (estetik-guc-v1.md) temiz için
+#    `klise=yok` VE `imza≠yok` şartı koyuyor. Form doluydu, hüküm kendisiyle çelişikti.
+#    Rubrik tek kaynaktır; aşağıdaki kapılar kodun ona uyduğunu ölçer (iki yön).
+JR="$T/rubrik.jsonl"
+kapi "çelişik temiz (imza=yok) REDDEDİLİR → rc=1" 1 \
+     python3 "$H" yaz --havuz "$JR" --kutu t --urun t --ekran e --kapi ayirt \
+     --hukum temiz --klise yok --imza yok --arac 0.3.1
+icerir "çelişki rubrikle gerekçelenir" "rubrik çelişkisi"
+kapi "çelişik kırmızı (düşen madde yok) REDDEDİLİR → rc=1" 1 \
+     python3 "$H" yaz --havuz "$JR" --kutu t --urun t --ekran e --kapi ayirt \
+     --hukum kirmizi --klise yok --imza tipografi --arac 0.3.1
+kapi "ayırt kaydında hukum=olcemedi REDDEDİLİR → rc=1" 1 \
+     python3 "$H" yaz --havuz "$JR" --kutu t --urun t --ekran e --kapi ayirt \
+     --hukum olcemedi --klise yok --imza tipografi --arac 0.3.1
+icerir "ayırt bir YARGI olduğu söylenir" "YARGIDIR"
+kapi "geçerli temiz KABUL → rc=0" 0 \
+     python3 "$H" yaz --havuz "$JR" --kutu t --urun t --ekran e --kapi ayirt \
+     --hukum temiz --klise yok --imza tipografi --arac 0.3.1
+kapi "geçerli kırmızı (klişeye düşmüş) KABUL → rc=0" 0 \
+     python3 "$H" yaz --havuz "$JR" --kutu t --urun t --ekran e2 --kapi ayirt \
+     --hukum kirmizi --klise mor-gradyan --imza tipografi --dusen S3 --arac 0.3.1
+
+echo "── 19 · KARARSIZ yargı kapıyı AÇMAZ (emin-degilim kalıcı sığınak değil)"
+JK="$T/kararsiz.jsonl"
+python3 "$H" yaz --havuz "$JK" --kutu t --urun t --ekran e --kapi yogunluk \
+     --hukum temiz --arac 0.3.1 >/dev/null 2>&1
+kapi "ayırt yargısı hiç yokken KAPALI → rc=1" 1 \
+     python3 "$H" ayirt-kapisi --havuz "$JK" --kutu t --urun t --ekran e
+python3 "$H" yaz --havuz "$JK" --kutu t --urun t --ekran e --kapi ayirt \
+     --hukum emin-degilim --klise yok --imza yok --arac 0.3.1 >/dev/null 2>&1
+kapi "emin-degilim YAZILABİLİR ama kapı KAPALI → rc=1" 1 \
+     python3 "$H" ayirt-kapisi --havuz "$JK" --kutu t --urun t --ekran e
+icerir "rubriğin kendi cümlesiyle gerekçelenir" "kalıcı sığınak değildir"
+python3 "$H" yaz --havuz "$JK" --kutu t --urun t --ekran e --kapi ayirt \
+     --hukum temiz --klise yok --imza oran --arac 0.3.1 >/dev/null 2>&1
+kapi "karar verilince kapı AÇILIR → rc=0" 0 \
+     python3 "$H" ayirt-kapisi --havuz "$JK" --kutu t --urun t --ekran e
+# 🔴 TERS SIRA (bağımsız göz bulgusu tur 3): kararlıdan SONRA yazılan emin-degilim kapıyı
+#    KAPATMALI. Salt-eklemeli defterde "bir kez karar verildi" ile "şu an karar verilmiş
+#    durumda" aynı cümle değildir; sayfa değişip yargı belirsizleşirse kapı açık kalamaz.
+python3 "$H" yaz --havuz "$JK" --kutu t --urun t --ekran e --kapi ayirt \
+     --hukum emin-degilim --klise yok --imza yok --arac 0.3.1 >/dev/null 2>&1
+kapi "kararlıdan SONRA emin-degilim → kapı yine KAPALI → rc=1" 1 \
+     python3 "$H" ayirt-kapisi --havuz "$JK" --kutu t --urun t --ekran e
+icerir "son sözün geçerli olduğu söylenir" "son söz geçerlidir"
 
 echo
 echo "TOPLAM: $GECTI geçti · $KALDI kaldı"

@@ -1,0 +1,32 @@
+{
+  "tur": 4,
+  "is": "ayirt-kapisi-tazele",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T16:26:19+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 68707,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "NAKKAŞ, önceki turun son-hüküm kusurunu kapatmış; ters sıra sınavı, çağıran mutantı ve önce/sonra ölçümleriyle KAPI 6’yı talep edilen yere getirmiş. Lakin önce şu gedik kapanmalı: rubrik kırmızı ayırt hükmünde düşen maddenin yazılmasını emrediyor, kayıt yolu ise `--dusen` olmadan da kırmızıyı kabul ediyor.",
+    "bulgular": [
+      {
+        "ne": "`kapi=ayirt` ve `hukum=kirmizi` kaydı, rubriğin zorunlu tuttuğu `--dusen` boşken kabul ediliyor; böylece kırmızının klişe mi imzasızlık mı nedeniyle verildiği kaybolabiliyor.",
+        "kanit": "Rubrikte `kirmizi` için açıkça “`--dusen` ile hangi maddeden düştüğünü yaz” deniyor. `yaz` içindeki ayırt tutarlılık denetimi yalnız `klise=yok` ve `imza≠yok` birleşimini reddediyor, `dusen` boşluğunu denetlemiyor; §18 de geçerli kırmızıya `--dusen S3` veriyor fakat eksik `--dusen` için negatif sınav içermiyor.",
+        "konum": "ui-tasarim-akisi/sablonlar/estetik-guc-v1.md: “Hüküm nasıl verilir”; ui-tasarim-akisi/arac/havuz.py: `yaz` içindeki AYIRT rubrik tutarlılığı; ui-tasarim-akisi/arac/havuz.test.sh: §18",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önce havuz 80/1 ile prompt-yap 36/7 iken sonra havuz 97/0 ve prompt-yap 43/0; yoğunluk 41/0 ile yargı 49/0 da yeşil, toplam 230 kapı ediyor. Mutantın rc=1 olması çağıran sınavının KAPI 6’ya duyarlı olduğunu destekliyor; ayrıca ters sıra sınavının adı ve son yeşil havuz koşusu önceki tur bulgusunun kapandığını gösteriyor. Ancak çıktıların ilk 60 satırı §17–§19’a ulaşmadığından bu alt sınavların tek tek sonuçları kesitte doğrudan görünmüyor."
+  }
+}

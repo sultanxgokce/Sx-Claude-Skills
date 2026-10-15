@@ -1,0 +1,69 @@
+$ bash /config/projects/_wt/Sx-213-once/ui-tasarim-akisi/arac/prompt-yap.test.sh
+# rc=1 sure=2.4s zaman=2026-10-15T16:04:21+03:00
+--- stdout ---
+── 1 · Durak 0 dosyası yoksa prompt üretilmez
+  ✓ niyet dosyası yok → rc=2 (rc=2)
+  ✓ çözüm satırı gösterilir
+── 2 · boş 'Kendi cümlem:' → prompt üretilmez (şık seçmek yetmez)
+  ✓ yarım niyet → rc=2 (rc=2)
+  ✓ hangi satır boş söylenir
+── 3 · dolu niyet → üretilir ve gövdesi prompta GİRER
+  ✓ dolu niyet → rc=0 (rc=0)
+  ✓ niyet gövdesi gömüldü
+  ✓ sözleşme de gömüldü
+── 4 · ölçüm kapısı: ÖNCEKİ sayfa kırmızıysa devam promptu ÜRETİLMEZ
+  ✓ kırmızı önceki → rc=1 (rc=1)
+  ✓ sebep söylenir
+── 5 · TIK KAPISI: yoğunluk temiz olsa bile tık ölçülmeden geçilmez
+  ✓ tık ölçümü yok → rc=3 (rc=3)
+  ✓ iki şeyin farkı söylenir
+  ✓ çözüm aracı gösterilir
+── 5b · tık ölçülünce geçer
+  ✓ tık taze → rc=0 (rc=0)
+  ✓ önceki sayfa gövdesi gömüldü
+── 5c · BAYAT ölçüm 'temiz' sayılmaz (asıl saldırı yüzeyi)
+  ✓ sayfa değişti, ölçüm eski → rc=3 (rc=3)
+  ✓ bayat denir
+── 5d · bütçe AŞIMI ölçülmüştür → rc=1 (bu 'bakılamadı' değil)
+  ✓ aşım → rc=1 (rc=1)
+  ✓ hangi görev aştı söylenir
+── 5e · tik-kaydet biçim denetimi
+  ✓ bozuk biçim → rc=2 (rc=2)
+  ✓ hiç görev yok → rc=2 (rc=2)
+── 6 · profil yoksa 'temiz' DEĞİL 'ölçülemedi' (rc=3)
+  ✓ profilsiz → rc=3 (rc=3)
+  ✓ ölçülemedi denir, temiz denmez
+── 7 · REGRESYON: boş sözleşme hâlâ kaçamıyor (v0.1.1 kazanımı)
+  ✓ boş yuvalı sözleşme → rc=2 (rc=2)
+── 8 · REGRESYON: niyet yuvası OLMAYAN eski şablon çalışmaya devam eder
+  ✓ niyetsiz eski şablon → rc=0 (rc=0)
+── 9 · kanonik şablonlar Durak 0 yuvasını taşıyor
+  ✓ tasarim-promptu.md yuvayı taşıyor
+  ✓ devam-promptu.md yuvayı taşıyor
+  ✓ urun-niyeti.md zorunlu cümle satırlarını taşıyor
+── 10 · ÇEKİRDEK sözleşme çağrılmadan, kendiliğinden prompta girer
+  ✓ çekirdek otomatik → rc=0 (rc=0)
+  ✓ çekirdek işaret standardı girdi
+  ✓ çekirdek çıktı sözleşmesi girdi
+  ✓ marka değerleri de girdi
+── 11 · MARKA ":" ayraçlı liste olabilir (PATH gibi), sırayla eklenir
+  ✓ iki marka dosyası → rc=0 (rc=0)
+  ✓ birinci marka girdi
+  ✓ ikinci marka girdi
+── 12 · listede EKSİK dosya varsa hangisi olduğu söylenir
+  ✓ eksik marka parçası → rc=2 (rc=2)
+  ✓ eksik olan parça adlandırılır
+── 13 · HEX ÇİTİ: çekirdeğe renk DEĞERİ sızarsa koşu reddedilir
+  ✓ değerli çekirdek → rc=2 (rc=2)
+  ✓ sebep söylenir
+  ✓ sızan satır gösterilir
+── 14 · gerçek çekirdek dosyası hex çitinden GEÇER (kendi kuralına uyar)
+  ✓ çekirdekte sıfır renk değeri
+── 15 · REGRESYON: çekirdek yuvasız/slotsuz — dolmamış yuva taramasını tetiklemez
+  ✓ çekirdekte yuva yok
+── 16 · REGRESYON: sınav GERÇEK havuza yazmadı (sınav-verisi ⟂ saha-verisi)
+  ✓ canlı defterde sınav kaydı yok
+  ✗ sınav havuzu boş — izolasyon test edilemedi
+
+TOPLAM: 42 geçti · 1 kaldı
+--- stderr ---
