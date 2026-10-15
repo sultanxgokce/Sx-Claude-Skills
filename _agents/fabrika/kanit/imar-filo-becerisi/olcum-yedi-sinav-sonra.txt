@@ -1,0 +1,12 @@
+$ bash /tmp/claude-1000/yedi-sinav.sh /config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts
+# rc=0 sure=12.7s zaman=2026-10-15T18:33:21+03:00
+--- stdout ---
+imar.test.sh                   rc=0 kapi=18
+imar-defter.test.sh            rc=0 kapi=28
+devir-ayikla.test.sh           rc=0 kapi=39
+betik-bekcisi.test.sh          rc=0 kapi=19
+dersler-brif.test.sh           rc=0 kapi=16
+imar-ikinci-goz.test.sh        rc=0 kapi=26
+imar-kutu-bagimsizlik.test.sh  rc=0 kapi=19
+TOPLAM KAPI=165 · DUSEN SINAV=0
+--- stderr ---

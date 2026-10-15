@@ -1,0 +1,14 @@
+$ bash /tmp/claude-1000/imar-prob/prob.sh /config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts/imar.sh
+# rc=0 sure=0.0s zaman=2026-10-15T18:32:27+03:00
+--- stdout ---
+    durum dosyası açıldı (KAPALI): /tmp/tmp.FLw9gtXUUC/projects/deneme-kutusu/_agents/spec/imar/DURUM.json
+    zamanlayıcı: KAYITLI DEĞİL — ÇARK kendiliğinden dönmez (cron satırı için: scripts/cark-tur.sh başlığı)
+    parça: cark-tur.sh ✓
+    parça: muneccim-kos.sh ✓
+    parça: imar-ikinci-goz.sh ✓
+    parça: imar-fikir-kapisi.py ✓
+    parça: devir-ayikla.py ✓
+    parça: pdf-metin ✗ EKSİK — kur: cd scripts/pdf && npm install --no-audit --no-fund
+    kütük: /tmp/tmp.FLw9gtXUUC/projects/deneme-kutusu/hafiza/imar-kutuk.log
+SONUC: betik yalniz kendi kutusunun yollarini kullandi — TASINABILIR
+--- stderr ---

@@ -1,0 +1,7 @@
+$ bash /tmp/claude-1000/imar-prob/prob2.sh /config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts/imar-karne.py
+# rc=0 sure=0.0s zaman=2026-10-15T18:32:53+03:00
+--- stdout ---
+    ✗ IMAR_SERI yok — İMAR profili çözülmedi (imar-profil.py cozumle); ÖLÇEMEDİM
+    [rc=3]
+SONUC: profil cozulmeden OLCEMEDIM dedi ve eksigin ADINI soyledi — DOGRU
+--- stderr ---

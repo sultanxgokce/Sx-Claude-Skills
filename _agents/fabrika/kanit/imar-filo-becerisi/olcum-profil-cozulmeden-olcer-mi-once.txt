@@ -1,0 +1,18 @@
+$ bash /tmp/claude-1000/imar-prob/prob2.sh /tmp/claude-1000/imar-prob/karne-ESKI.py
+# rc=1 sure=0.1s zaman=2026-10-15T18:32:52+03:00
+--- stdout ---
+    # ⛩️ İMAR KARNESİ · 2026-10-15 · son 7 gün
+    
+    **Şalter:** ölçülemedi · bu dönemde 0 geçiş
+    **Damga sayacı:** 0 ardışık gün insansız (ölçüt: zamanlayıcıdan tur bitti ∧ düşen yok ∧ göz koştu). Hedef 3.
+    
+    | Gün | Tur bitti (zamanlayıcı / el) | Düştü | Atlandı (kota / kapalı) | İkinci göz |
+    |---|---|---|---|---|
+    | 2026-10-09 | — | — | — | — |
+    | 2026-10-10 | — | — | — | — |
+    | 2026-10-11 | — | — | — | — |
+    | 2026-10-12 | — | — | — | — |
+    | 2026-10-13 | — | — | — | — |
+    [rc=0]
+SONUC: profil cozulmemisken SAYI bastı (rc=0) — var olmayan dizini olcup yesil gorundu
+--- stderr ---

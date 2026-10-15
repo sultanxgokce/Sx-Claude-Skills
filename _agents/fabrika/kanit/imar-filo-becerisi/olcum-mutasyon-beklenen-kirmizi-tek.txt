@@ -1,0 +1,89 @@
+$ bash /tmp/tmp.8jN03vdPzg/kos.sh
+# rc=1 sure=13.9s zaman=2026-10-15T18:33:53+03:00
+--- stdout ---
+### BEKLENEN KIRMIZI — uc mutasyon AYRI AYRI: her biri bir mekanizmayi soker.
+
+== MUT A: kutu civisi geri cakildi (imar.sh yine mihenk-muneccim varsayar)
+A · 🔴 profil kapısı: ölçülmeden kurulum YOK
+  ✓ A1 geçerli profil kabul edilir
+  ✓ A2 🔴 cihaz teyidi BOŞ profil REDDEDİLİR (200 kanıt değildir)
+  ✓ A3 🔴 bilinmeyen alan REDDEDİLİR (sessizce atlanan alan ölçülmemiş alandır)
+  ✓ A4 🔴 göreli yol REDDEDİLİR (koşulduğu dizine göre kayar)
+  ✓ A5 profil dosyası YOKSA rc=2 (ölçemedim), 0 DEĞİL
+B · 🔴 SAHTE KUTUDA kurulum fiilen koşar
+  ✓ B1 kuru koşu geçer
+  ✓ B2 gerçek kurulum geçer
+  ✓ B3 🔴 şalter KAPALI doğdu (değişmez)
+  ✓ B4 kurulum şalterin kapalı doğduğunu SÖYLER
+  ✓ B5 Bulgu Defteri yokken ÖLÇÜLEMEDİ der, uydurmaz
+  ✓ B6 zamanlayıcı satırı ÜRETİLİR ama crontab'a dokunulmaz
+C · 🔴 SIZINTI: sahte kutu MİHENK'i hiç görmedi
+  ✓ C1 kurulum MİHENK deposuna dizin AÇMADI
+  ✓ C2 🔴 kurulum çıktısında 'mihenk' GEÇMEZ
+  ✓ C3 şalter sahte kutunun İÇİNE yazıldı
+  ✓ C4 araştırma serisi sahte kutunun evinde açıldı
+  ✗ C5 🔴 ÜRETİM kodunda çivili kutu adı YOK (sınav dosyaları hariç) (rc=1, beklenen=0)
+D · 🔴 profil çözülmeden araç YEŞİL BASMAZ (fail-closed)
+  ✓ D1 IMAR_SERI yoksa karne ÖLÇEMEDİM der (rc=3)
+  ✓ D2 IMAR_SERI yoksa olgunluk ÖLÇEMEDİM der (rc=3)
+  ✓ D3 eksikliğin ADI söylenir (hangi değişken)
+
+toplam=19 geçen=18 düşen=1
+A rc=1
+
+== MUT B: alarm cihaz-teyidi sarti kalkti ('200 dondu' yeterli sanilir)
+A · 🔴 profil kapısı: ölçülmeden kurulum YOK
+  ✓ A1 geçerli profil kabul edilir
+  ✗ A2 🔴 cihaz teyidi BOŞ profil REDDEDİLİR (200 kanıt değildir) (rc=0, beklenen=1)
+  ✓ A3 🔴 bilinmeyen alan REDDEDİLİR (sessizce atlanan alan ölçülmemiş alandır)
+  ✓ A4 🔴 göreli yol REDDEDİLİR (koşulduğu dizine göre kayar)
+  ✓ A5 profil dosyası YOKSA rc=2 (ölçemedim), 0 DEĞİL
+B · 🔴 SAHTE KUTUDA kurulum fiilen koşar
+  ✓ B1 kuru koşu geçer
+  ✓ B2 gerçek kurulum geçer
+  ✓ B3 🔴 şalter KAPALI doğdu (değişmez)
+  ✓ B4 kurulum şalterin kapalı doğduğunu SÖYLER
+  ✓ B5 Bulgu Defteri yokken ÖLÇÜLEMEDİ der, uydurmaz
+  ✓ B6 zamanlayıcı satırı ÜRETİLİR ama crontab'a dokunulmaz
+C · 🔴 SIZINTI: sahte kutu MİHENK'i hiç görmedi
+  ✓ C1 kurulum MİHENK deposuna dizin AÇMADI
+  ✓ C2 🔴 kurulum çıktısında 'mihenk' GEÇMEZ
+  ✓ C3 şalter sahte kutunun İÇİNE yazıldı
+  ✓ C4 araştırma serisi sahte kutunun evinde açıldı
+  ✓ C5 🔴 ÜRETİM kodunda çivili kutu adı YOK (sınav dosyaları hariç)
+D · 🔴 profil çözülmeden araç YEŞİL BASMAZ (fail-closed)
+  ✓ D1 IMAR_SERI yoksa karne ÖLÇEMEDİM der (rc=3)
+  ✓ D2 IMAR_SERI yoksa olgunluk ÖLÇEMEDİM der (rc=3)
+  ✓ D3 eksikliğin ADI söylenir (hangi değişken)
+
+toplam=19 geçen=18 düşen=1
+B rc=1
+
+== MUT C: karne fail-open (profil cozulmeden uydurma dizini olcer)
+A · 🔴 profil kapısı: ölçülmeden kurulum YOK
+  ✓ A1 geçerli profil kabul edilir
+  ✓ A2 🔴 cihaz teyidi BOŞ profil REDDEDİLİR (200 kanıt değildir)
+  ✓ A3 🔴 bilinmeyen alan REDDEDİLİR (sessizce atlanan alan ölçülmemiş alandır)
+  ✓ A4 🔴 göreli yol REDDEDİLİR (koşulduğu dizine göre kayar)
+  ✓ A5 profil dosyası YOKSA rc=2 (ölçemedim), 0 DEĞİL
+B · 🔴 SAHTE KUTUDA kurulum fiilen koşar
+  ✓ B1 kuru koşu geçer
+  ✓ B2 gerçek kurulum geçer
+  ✓ B3 🔴 şalter KAPALI doğdu (değişmez)
+  ✓ B4 kurulum şalterin kapalı doğduğunu SÖYLER
+  ✓ B5 Bulgu Defteri yokken ÖLÇÜLEMEDİ der, uydurmaz
+  ✓ B6 zamanlayıcı satırı ÜRETİLİR ama crontab'a dokunulmaz
+C · 🔴 SIZINTI: sahte kutu MİHENK'i hiç görmedi
+  ✓ C1 kurulum MİHENK deposuna dizin AÇMADI
+  ✓ C2 🔴 kurulum çıktısında 'mihenk' GEÇMEZ
+  ✓ C3 şalter sahte kutunun İÇİNE yazıldı
+  ✓ C4 araştırma serisi sahte kutunun evinde açıldı
+  ✓ C5 🔴 ÜRETİM kodunda çivili kutu adı YOK (sınav dosyaları hariç)
+D · 🔴 profil çözülmeden araç YEŞİL BASMAZ (fail-closed)
+  ✗ D1 IMAR_SERI yoksa karne ÖLÇEMEDİM der (rc=3) (rc=0, beklenen=3)
+  ✓ D2 IMAR_SERI yoksa olgunluk ÖLÇEMEDİM der (rc=3)
+  ✗ D3 eksikliğin ADI söylenir (hangi değişken) (çıktıda 'IMAR_SERI' yok)
+
+toplam=19 geçen=17 düşen=2
+C rc=1
+--- stderr ---

@@ -1,0 +1,119 @@
+{
+  "is": "imar-filo-becerisi",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T18:33:53+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kutu-bagimsiz-mi",
+      "asama": "once",
+      "dosya": "olcum-kutu-bagimsiz-mi-once.txt",
+      "sha256": "d72a5c5b1107e2c49b87c05c5321c8d67b67f536339bc349a5858f48861d66cd",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/imar-prob/prob.sh",
+        "/tmp/claude-1000/imar-prob/imar-ESKI.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:32:27+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kutu-bagimsiz-mi",
+      "asama": "sonra",
+      "dosya": "olcum-kutu-bagimsiz-mi-sonra.txt",
+      "sha256": "6581e76f6da0bdbb418ba258d5b08e84a2a4a1def25df2c266013e2acb1df4e3",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/imar-prob/prob.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts/imar.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:32:27+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "profil-cozulmeden-olcer-mi",
+      "asama": "once",
+      "dosya": "olcum-profil-cozulmeden-olcer-mi-once.txt",
+      "sha256": "327bd94c3e47904c97ca02f820378973edf8c5bc712f4cccf6cadd6a27177077",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/imar-prob/prob2.sh",
+        "/tmp/claude-1000/imar-prob/karne-ESKI.py"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T18:32:52+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "profil-cozulmeden-olcer-mi",
+      "asama": "sonra",
+      "dosya": "olcum-profil-cozulmeden-olcer-mi-sonra.txt",
+      "sha256": "e4327f81c8b9df665128a9fa89cd9ca1d4d0c9b8b421d17c75d4cfd9f0cdec97",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/imar-prob/prob2.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts/imar-karne.py"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:32:53+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "yedi-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-yedi-sinav-sonra.txt",
+      "sha256": "a1a41607e07c5370bf2eb367ad7d1e22bdf4f5f98f8553adee5212e6cd3f6212",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/yedi-sinav.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:33:21+03:00",
+      "sure_sn": 12.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-deftere-sizinti-kaniti",
+      "asama": "tek",
+      "dosya": "olcum-gercek-deftere-sizinti-kaniti-tek.txt",
+      "sha256": "ae8c10487e1a73ffe5ee8fed0c19a9352655b3ec804118278848e85392c3d3ba",
+      "komut": [
+        "bash",
+        "-c",
+        "echo \"MIHENK gercek kutu-eksikleri defterinde A6 FIKSTURUNUN satiri (hermetik sanilan sinav oraya yazmis):\"; grep -n \"falanca site kutudan okunamiyor\\|falanca site kutudan okunamıyor\" /config/projects/mihenk/hafiza/kutu-eksikleri.md"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:33:21+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-beklenen-kirmizi",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-beklenen-kirmizi-tek.txt",
+      "sha256": "46d341f80c3869ee8ffd6aeb3c4e6df34df4a248dc75ae43ed0431cbd906209c",
+      "komut": [
+        "bash",
+        "/tmp/tmp.8jN03vdPzg/kos.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T18:33:53+03:00",
+      "sure_sn": 13.9
+    }
+  ],
+  "imza": "679f1143489fee2d85ea6668c62fba78896a1526cb331f9ae33124213fc6a5ca"
+}

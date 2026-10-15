@@ -1,0 +1,25 @@
+{
+  "_aciklama": "⛩️ İMAR profil şeması. Kutuya özel NE VARSA burada beyan edilir; betiklerde çivili yol YOKTUR. Doğrulayıcı: scripts/imar-profil.py",
+  "_nicin": "Reçete MİHENK kutusunda doğdu ve 12 yerde o kutuya çiviliydi (mihenk deposu, mihenk-muneccim oturum evi, mezarlık yolu, bildirim başlığı, varsayılan ajan adı). Çivili bir düzen başka kutuda ya çöker ya da SESSİZCE yanlış yere yazar — ikincisi daha pahalıdır. Profil, 'bu kutuda ne nerede' sorusunu kurulumdan ÖNCE sorar.",
+  "sema": 1,
+  "zorunlu": {
+    "kutu": "kutunun adı; bildirim başlığında ve kütükte görünür (ör. mihenk · akar · huma)",
+    "ajan": "turu koşan ajanın adı; defter damgalarında kim alanına yazılır (ör. NECCAR)",
+    "repo_kok": "projenin depo kökü — şalter, kütük, karne, mezarlık buranın altında yaşar",
+    "muneccim_ev": "araştırma oturumunun evi; KONU/DERSLER/KUYRUK/KAYIT-DEFTERI ve günlük turlar burada",
+    "defter_yaz": "Bulgu Defteri yazıcısının yolu (filo-geneli; yoksa hâl zinciri ÖLÇÜLEMEDİ der, uydurmaz)",
+    "alarm": {
+      "taban": "bildirim geçidinin tabanı (ör. http://cloudtop-ntfy:80)",
+      "konu": "abone olunan konu — 🔴 yanlış konuya 200 almak YEŞİL GÖRÜNEN ARIZADIR",
+      "cihaz_teyidi": "Sultan'ın 'cihaza düştü' dediği tarih; BOŞSA alarm ölçülmemiştir ve kurulum alarmı yeşil saymaz"
+    }
+  },
+  "istege_bagli": {
+    "surum": "profil sürümü",
+    "aciklama": "serbest not",
+    "seri": "araştırma serisi dizini (varsayılan: <muneccim_ev>/arastirma-serisi)",
+    "mezarlik": "fikir mezarlığı jsonl (varsayılan: <repo_kok>/hafiza/fikir-mezarligi.jsonl)",
+    "durum": "şalter dosyası (varsayılan: <repo_kok>/_agents/spec/imar/DURUM.json)",
+    "kutuk": "İMAR kütüğü (varsayılan: <repo_kok>/hafiza/imar-kutuk.log)"
+  }
+}
