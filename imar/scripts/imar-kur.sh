@@ -15,7 +15,10 @@ PROFIL="${1:-}"; KURU=0
 [ "${2:-}" = "--kuru" ] && KURU=1
 [ -n "$PROFIL" ] || { echo "kullanım: imar-kur.sh <profil.json> [--kuru]" >&2; exit 1; }
 
-echo "⛩️  İMAR kurulumu · profil: $PROFIL${KURU:+ (kuru koşu)}"
+# 🔴 `${KURU:+...}` değişkenin TANIMLI olmasına bakar, DEĞERİNE bakmaz: KURU=0 iken de eki
+#    basıyordu, yani gerçek kurulum kendini "kuru koşu" diye tanıtıyordu (gözün tur-3 bulgusu).
+KURU_ETIKET=""; [ "$KURU" = 1 ] && KURU_ETIKET=" (kuru koşu)"
+echo "⛩️  İMAR kurulumu · profil: $PROFIL$KURU_ETIKET"
 
 # 1 · profil — ölçülmeden hiçbir dizin açılmaz
 if ! python3 "$HERE/imar-profil.py" dogrula "$PROFIL"; then

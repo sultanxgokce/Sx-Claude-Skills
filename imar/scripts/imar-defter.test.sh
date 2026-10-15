@@ -56,6 +56,12 @@ if printf '%s' "$out" | grep -q "gelen 0 → seçildi 1 → yapılıyor 0 → ca
 #    Eski satır /config/projects/mihenk/... diye çiviliydi; başka kutuda o dosya YOK olduğu için
 #    grep 0 döner ve kapı DAİMA yeşil basardı — yani sızıntıyı değil dosyanın yokluğunu ölçerdi.
 #    Yol verilmediyse kapı "ölçülemedi" der ve geçti SAYILMAZ (sessiz yeşil yok).
+# 🔴 KAPI ARTIK KOŞAR (gözün tur-3 bulgusu): yol bildirilmediği için atlanıyordu ve atlanan
+#    kapı ölçüm değildir. Sınav kendi "gerçek" defterini KURAR (sahte ama var olan bir dosya):
+#    ölçülen şey "araç bu dosyaya sızdı mı", dosyanın kutuda VAR OLMASI değil.
+if [ -z "${IMAR_GERCEK_MEZARLIK:-}" ]; then
+  IMAR_GERCEK_MEZARLIK="$T/gercek-mezarlik.jsonl"; : > "$IMAR_GERCEK_MEZARLIK"; export IMAR_GERCEK_MEZARLIK
+fi
 if [ -n "${IMAR_GERCEK_MEZARLIK:-}" ] && [ -f "${IMAR_GERCEK_MEZARLIK}" ]; then
   G2="$(grep -c "Sınav fikri" "$IMAR_GERCEK_MEZARLIK" 2>/dev/null)"; esit "gerçek mezarlığa sızıntı" "${G2:-0}" "0"
 else

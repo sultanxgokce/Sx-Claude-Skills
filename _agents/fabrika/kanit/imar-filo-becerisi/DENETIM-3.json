@@ -1,0 +1,55 @@
+{
+  "tur": 3,
+  "is": "imar-filo-becerisi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T18:50:26+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 96254,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "E",
+    "ozet": "İMAR reçetesi profil, kurulum, sahte kutu ve taşınan sınavlarla gerçekten filo becerisine çevrilmiş; yani doğru hedefe yürünmüş. Lâkin profil çözümünün `eval` ile alınması komut çalıştırma açığı doğuruyor ve üretilen zamanlayıcı profili çözmeden ÇARK'ı çağırıyor; kendi kendine dönme omurgası güvenli ve çalışır hâle gelmeden üretime çıkamaz.",
+    "bulgular": [
+      {
+        "ne": "Profildeki kullanıcı denetimli metinler kabukta `eval` edildiği için profil yalnız veri olmaktan çıkıp komut çalıştırabilir.",
+        "kanit": "`cozumle()` değerleri `json.dumps` ile çift tırnaklı `export` satırları olarak basıyor; `imar-kur.sh` bunları `eval \"$COZUM\"` ile değerlendiriyor. Çift tırnak içindeki `$(...)` ve ters tırnak kabuk tarafından çalıştırılır; doğrulayıcı ise alanların yalnız boş/metin ve yolların mutlak olmasını denetliyor, bu kabuk yapılarını reddetmiyor.",
+        "konum": "imar/scripts/imar-kur.sh: profil çözümü bloğu (`eval \"$COZUM\"`); imar/scripts/imar-profil.py: `cozumle()` ve `main()` export döngüsü",
+        "agirlik": "ciddi"
+      },
+      {
+        "ne": "Kurulumun ürettiği cron satırı profili fiilen çözmüyor; yalnız `IMAR_PROFIL` verip doğrudan `cark-tur.sh` çağırıyor, fakat gösterilen üretim kodunda bu değişkeni okuyup `IMAR_REPO`, `IMAR_SERI`, `MUNECCIM_EV` ve diğerlerini kuran bir çağrı yok.",
+        "kanit": "Kurulum çıktısındaki zamanlayıcı `env CARK_KAYNAK=cron IMAR_PROFIL=$PROFIL bash $HERE/cark-tur.sh` biçiminde. Aynı diffte `cark-tur.sh` doğrudan `${IMAR_SERI:?...}` kullanıyor; `imar-profil.py cozumle` çağrısı veya çıktısını kaynaklama adımı görünmüyor. B6 sınavı da cron'u çalıştırmıyor, yalnız kurulum metninde `crontab'a DOKUNMAZ` sözünü arıyor.",
+        "konum": "imar/scripts/imar-kur.sh: zamanlayıcı satırı; imar/scripts/cark-tur.sh: `TUR_DOSYA` ataması; imar/scripts/imar-kutu-bagimsizlik.test.sh:B6",
+        "agirlik": "ciddi"
+      },
+      {
+        "ne": "İki taşınmış sınav kapısı hâlâ ölçülmeden atlanıyor; toplu koşumun yeşil rc=0 olması bu kapıların geçtiği anlamına gelmiyor.",
+        "kanit": "Son tur çıktısı `ÖLÇÜLEN KAPI = 182 · ATLANAN ... = 2 · DÜŞEN SINAV = 0` diyor. `atlanan-iki-kapi-hangisi` kaydı bunları gerçek mezarlığa sızıntı kapısı ile Chromium/ws isteyen sayfa-metin kapısı olarak adlandırıyor ve açıkça `ölçülemedi, geçti sayılmaz` yazıyor.",
+        "konum": "olcum-yedi-sinav-tur3-sonra.txt; olcum-atlanan-iki-kapi-hangisi-tek.txt",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Kurulum başlığı gerçek kurulumda da yanlışlıkla “kuru koşu” yazar.",
+        "kanit": "`KURU=0` olmasına rağmen başlık `${KURU:+ (kuru koşu)}` kullanıyor; `:+` değerin sıfır olmasına değil değişkenin tanımlı ve boş olmamasına bakar, dolayısıyla hem 0 hem 1 için eki basar.",
+        "konum": "imar/scripts/imar-kur.sh: başlangıç başlığı",
+        "agirlik": "rotus"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Kutu bağımsızlığı ile profil çözülmeden ölçmeme için kırmızı→yeşil çiftleri, 36/36 sahte-kutu kapısı ve korumaları gerçekten kırmızıya çeviren mutasyon kayıtları kuvvetli kanıt sağlıyor. Buna karşılık iki kapı açıkça ölçülemedi; ayrıca kanıtlar üretilen cron satırını gerçek cron-benzeri ortamda çalıştırmıyor ve profil metninin `eval` güvenliğini sınamıyor."
+  }
+}
