@@ -1,0 +1,32 @@
+{
+  "tur": 2,
+  "is": "bileyi-kutu-defteri",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T15:39:08+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 99606,
+    "esik": 110000
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Merkez ile kutu defterleri birlikte okunuyor, kapsama kaynak kaynak ve okunan/toplam biçiminde yazılıyor; önceki turun iki kusuru da yeni W kapıları ve mutasyon kaydıyla kapatılmış. Lakin tekilleştirme hâlâ kaydın tamamını değil seçilmiş alanların ilk 16 sadeleştirilmiş sözcüğünü kullanıyor; farklı bulgular sessizce yutulabileceğinden önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "Aynı kimlikli farklı kayıtları ayırmak için kullanılan gövde parmak izi kayıplı. Yalnız `baslik`, `sinif`, `gercek`, `ts` ve `tarih` alanları birleştiriliyor ve bunun da ilk 16 sadeleştirilmiş sözcüğü tutuluyor; bu alanlarda ilk 16 sözcüğü aynı olan fakat devamı veya başka anlamlı alanları farklı iki kayıt aynı anahtara düşerek ikincisi sessizce atılabilir. W1–W3 yalnız gövdeleri erken ve açık biçimde ayrılan örneği ölçüyor.",
+        "kanit": "Diffte `_kayit_anahtari`, `gov = \" \".join(... (\"baslik\", \"sinif\", \"gercek\", \"ts\", \"tarih\"))` ardından `parmak = \" \".join(_sadelestir(gov)[:16])` üretiyor; `havuzlar_oku` bu anahtar daha önce görüldüyse `continue` ile kaydı bırakıyor. W1 verisinde merkez başlığı `merkez tarafi olayi`, kutu başlığı `kutu ici kilit cakismasi` olduğundan 16 sözcük sınırı ve dışlanan alan çakışmaları sınanmıyor.",
+        "konum": "bileyi/scripts/bileyi.py:490",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam. Kırmızı önce/yeşil sonra ölçüm çifti kutu defterinin görünür hâle geldiğini gösteriyor; tur-2 kapıları 88/88 geçiyor, W1–W5 önceki iki bulguyu işlev düzeyinde ölçüyor ve üçlü mutasyon bu kapıların gerçekten ilgili davranışa duyarlı olduğunu rc=1 ile kanıtlıyor. Sarı önce kaydı başarı kanıtı değildir ve hükme dayanak yapılmamıştır; kalan kayıplı parmak izi vakası için ölçüm yoktur."
+  }
+}

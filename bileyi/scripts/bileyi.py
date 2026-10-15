@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import collections
+import hashlib
 import json
 import os
 import re
@@ -502,10 +503,18 @@ def _kayit_anahtari(k: dict) -> str:
     bulgu sessizce tek kayda düşerdi: eksik veri yine "daha az", yani rahatlatıcı
     görünürdü. Anahtar artık kimlik VE gövde: ayna (aynı id + aynı gövde) bir kez
     sayılır, çakışma (aynı id + farklı gövde) İKİ kayıt kalır.
+
+    🔴 TUR-2 BULGUSU (uygulama): parmak izi seçilmiş beş alanın ilk 16 sözcüğüydü —
+    KAYIPLIYDI. O alanlarda ilk 16 sözcüğü aynı olup devamı ya da listede olmayan
+    bir alanı farklı olan iki kayıt aynı anahtara düşer, ikincisi sessizce atılırdı.
+    Seçmek zorunda değilim: kaydın TAMAMI kanonik JSON'a çevrilip özetlenir. Tek
+    dışlanan, aracın kendi eklediği `_kaynak` etiketidir (o kaydın verisi değil).
     """
+    gov = {a: v for a, v in k.items() if a != "_kaynak"}
+    parmak = hashlib.sha256(
+        json.dumps(gov, sort_keys=True, ensure_ascii=False, default=str).encode("utf-8")
+    ).hexdigest()[:24]
     kid = str(k.get("id", "") or "").strip()
-    gov = " ".join(str(k.get(a, "") or "") for a in ("baslik", "sinif", "gercek", "ts", "tarih"))
-    parmak = " ".join(_sadelestir(gov)[:16])
     return f"id:{kid}|gov:{parmak}" if kid else f"gov:{parmak}"
 
 

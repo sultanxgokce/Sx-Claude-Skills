@@ -699,6 +699,36 @@ icermeyen "W3 id çakışması 'öbür kaynakla AYNI' diye yanlış raporlanmaz"
 # W4-W5: kapsama sayimi SATIR sayisi degil OKUNAN kaynak sayisidir
 iceren "W4 iki kaynak da okunduysa özet '2/2 kaynak OKUNDU' der" "2/2 kaynak OKUNDU" "${V[@]}" olc --gun 0
 iceren "W5 🔴 bir kaynak okunamadıysa özet kapsamayı GENİŞ göstermez ('1/2')" "1/2 kaynak OKUNDU" "${V2[@]}" olc --gun 0
+# W6-W7 (tur-2 bulgusu): parmak izi KAYIPSIZ olmali. Iki kayit ayni id tasir, secili
+# alanlarda ilk 16 sozcugu BIREBIR aynidir ve yalniz (a) 16. sozcukten SONRASI ile
+# (b) eski listede HIC OLMAYAN bir alan ile ayrilir. Kayipli parmak izi bunlari yutardi.
+mkdir -p "$KOK/kayipli-m/_agents/handoff" "$KOK/kayipli-k/_agents/handoff"
+: > "$KOK/kayipli-m/_agents/handoff/layiha-aday-havuzu.jsonl"
+: > "$KOK/kayipli-k/_agents/handoff/layiha-aday-havuzu.jsonl"
+python3 - "$KOK/kayipli-m/_agents/handoff/bulgu-havuzu.jsonl" "$KOK/kayipli-k/_agents/handoff/bulgu-havuzu.jsonl" <<'PY3'
+import json, sys
+from datetime import date
+b = date.today().isoformat()
+onek = " ".join("soz%02d" % i for i in range(1, 17))   # tam 16 sozcuk, iki tarafta BIREBIR ayni
+m, k = [], []
+for i in (1, 2, 3, 4):
+    # (a) 16. sozcukten SONRASI farkli
+    m.append({"id": "c000%d" % i, "tarih": b, "baslik": onek + " merkez-kuyruk",
+              "sinif": "kayipli-sinif", "gercek": "g"})
+    # (b) ayrica eski listede OLMAYAN bir alan farkli
+    k.append({"id": "c000%d" % i, "tarih": b, "baslik": onek + " kutu-kuyruk",
+              "sinif": "kayipli-sinif", "gercek": "g", "oda": "izole-kutu"})
+for yol, kayit in ((sys.argv[1], m), (sys.argv[2], k)):
+    with open(yol, "w", encoding="utf-8") as f:
+        for r in kayit:
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+PY3
+X=(python3 "$B" --depo "$KOK/kayipli-k" --havuz-depo "$KOK/kayipli-m" --esik-dosya "$ES")
+iceren "W6 🔴 ilk 16 sözcüğü AYNI olan farklı kayıtlar yutulmaz: 8 kayıt" "havuz: 8 kayıt" "${X[@]}" olc --gun 0
+icermeyen "W7 🔴 kayıpsız parmak izi: bu kayıtlar 'öbür kaynakla AYNI' sayılmaz" "öbür kaynakla AYNI" "${X[@]}" olc --gun 0
+# W8: GERCEK ayna (birebir ayni kayit) hala BIR kez sayilir — duzeltme dedup'u bozmadi
+iceren "W8 birebir aynı kayıt hâlâ bir kez sayılır (dedup bozulmadı)" "öbür kaynakla AYNI" \
+  python3 "$B" --depo "$KOK/ayna" --havuz-depo "$KOK/oda" --esik-dosya "$ES" olc --gun 0
 
 echo
 echo "toplam=$((GECEN+DUSEN)) geçen=$GECEN düşen=$DUSEN"
