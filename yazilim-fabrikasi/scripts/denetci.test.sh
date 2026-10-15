@@ -156,6 +156,16 @@ CIKTI="$(SAHTE_JSON="$(J 5 E "")" SAHTE_ISTEM_KOPYA="$T/istem-w2.txt" KANIT_DEPO
 [ "$RC" -eq 3 ] && grep -q "OKUNMAZ" <<<"$CIKTI"; g $? "🔴 birincilde kart YOKKEN alandaki kopya OKUNMAZ: rc=3 + 'OKUNMAZ' (eski geri-dönüş kapandı)"
 [ ! -f "$T/istem-w2.txt" ] && [ ! -f "$W/_agents/fabrika/kanit/is-w2/DENETIM-1.json" ]; g $? "denetçiye istem HİÇ gitmedi, kayıt yazılmadı (bayat kartla puanlama yok)"
 mv "$T/is-w2.kart.yedek" "$T/_agents/fabrika/kartlar/is-w2.json"; rm -f "$W/_agents/fabrika/kartlar/is-w2.json"
+# 🔴 göz tur 2: reis/Sultan kapısı da kart hatasını BASTIRMAZ — tavandaki işte bayat kopya varken --reis-devam "karar YOK" reddi değil, açık rc=3 'OKUNMAZ'
+bash "$KT" ac is-w3 --is x --istedi SULTAN --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+KANIT_DEPO="$W" bash "$K" olcum is-w3 olc --asama tek -- echo 1 >/dev/null 2>&1
+for i in 1 2 3; do SAHTE_JSON="$(J 2 H "$B")" KANIT_DEPO="$W" bash "$D" is-w3 --diff "$T/d.patch" >/dev/null 2>&1; done
+mv "$T/_agents/fabrika/kartlar/is-w3.json" "$T/is-w3.kart.yedek"; cp "$T/is-w3.kart.yedek" "$W/_agents/fabrika/kartlar/is-w3.json"
+CIKTI="$(SAHTE_JSON="$(J 5 E "")" KANIT_DEPO="$W" bash "$D" is-w3 --diff "$T/d.patch" --reis-devam 2>&1)"; RC=$?
+[ "$RC" -eq 3 ] && grep -q "OKUNMAZ" <<<"$CIKTI" && ! grep -qi "karar YOK\|reis kararı yok" <<<"$CIKTI"; g $? "🔴 tavanda --reis-devam + bayat kopya: rc=3 'OKUNMAZ' (kapı reddi 'karar yok' DEĞİL — hata bastırılmıyor)"
+CIKTI="$(SAHTE_JSON="$(J 5 E "")" KANIT_DEPO="$W" bash "$D" is-w3 --diff "$T/d.patch" --sultan-devam 2>&1)"; RC=$?
+[ "$RC" -eq 3 ] && grep -q "OKUNMAZ" <<<"$CIKTI"; g $? "aynı durumda --sultan-devam da rc=3 'OKUNMAZ'"
+mv "$T/is-w3.kart.yedek" "$T/_agents/fabrika/kartlar/is-w3.json"; rm -f "$W/_agents/fabrika/kartlar/is-w3.json"
 # 🔴 göz tur 1: KART.json anlık kopyası yazılamazsa hata YUTULMAZ — PR'a kart gitmezdi, denetim rc=3
 chmod a-w "$W/_agents/fabrika/kanit/is-w2"
 CIKTI="$(SAHTE_JSON="$(J 5 E "")" KANIT_DEPO="$W" bash "$D" is-w2 --diff "$T/d.patch" 2>&1)"; RC=$?; chmod u+w "$W/_agents/fabrika/kanit/is-w2"
@@ -384,6 +394,7 @@ mut "reis-sinif-citini-kaldir" 's@^if k.get("sultan") or k.get("siniflar"): rais
 mut "mutlak-tavani-kaldir" 's@^if \[ "$TUR" -gt "$MUTLAK" \]; then@if false; then@'
 mut "yedek-gozu-kaldir" 's@if yedek_olur_mu; then YEDEK="codex yok";@if false; then YEDEK="codex yok";@'
 mut "kart-tek-kaynagi-kaldir" 's@^\[ -n "$KART_DEPO" \] || KART_DEPO="$DEPO"@KART_DEPO="$DEPO"@'
+mut "kapi-kart-hatasini-bastirir" 's@KARTYOL="$(kart_yolu)" || exit 3;@KARTYOL="$(kart_yolu 2>/dev/null)";@'
 mut "bayat-kopya-geri-donusu" 's@OKUNMAZ — kart.sh ile birincile yaz, sonra denetçiyi koştur"; return 3@"; printf "%s" "$DEPO/_agents/fabrika/kartlar/$IS.json"@'
 mut "kart-json-hatasi-yutulur" 's@denetim açılmaz"; exit 3; }@denetim açılmaz"; true; }@'
 mut "kirpma-kaydini-kaldir" 's@"kirpildi":{"oldu":kirp=="1","istem_bayt":int(bayt),"esik":int(esik)},@"kirpildi":{"oldu":False,"istem_bayt":int(bayt),"esik":int(esik)},@'

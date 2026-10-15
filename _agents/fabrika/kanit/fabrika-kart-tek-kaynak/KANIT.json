@@ -1,7 +1,7 @@
 {
   "is": "fabrika-kart-tek-kaynak",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T08:15:10+03:00",
+  "guncelleme": "2026-10-15T08:26:27+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -110,7 +110,22 @@
       "renk": "yesil",
       "zaman": "2026-10-15T08:15:10+03:00",
       "sure_sn": 253.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-test-140-kapi-tur3-reis-sultan-kapisi-bayat-kopya-rc3-ve-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-test-140-kapi-tur3-reis-sultan-kapisi-bayat-kopya-rc3-ve-mutant-sonra.txt",
+      "sha256": "21a4c54d8a34bf9455401c0d96fd67ae2a1d9683ca8d7f69a021be4329024f73",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T08:26:27+03:00",
+      "sure_sn": 238.3
     }
   ],
-  "imza": "1667f9219b8466a73efa6ef3220406c29f6fe22aab20840b63caff7ddd28d536"
+  "imza": "478b6c78932bf0cf34d47c0700005b1176fd7fc64c390c0f8b74c46773ab5739"
 }

@@ -97,7 +97,7 @@ sultan_kapisi() {
   [ "$SULTAN_DEVAM" = "1" ] || return 1
   # Karar KARTTAN okunur, komut satırından DEĞİL. (Bağımsız göz 23 Eyl, ciddi: serbest metinle
   # açılan yetki kapısı, kapı değildir.) Kartta D1 kaydı yoksa kapı AÇILMAZ.
-  KARTYOL="$(kart_yolu 2>/dev/null)"; [ -n "$KARTYOL" ] || KARTYOL="/nonexistent"
+  KARTYOL="$(kart_yolu)" || exit 3; [ -n "$KARTYOL" ] || KARTYOL="/nonexistent"   # göz tur 2: bayat kopya hatası (rc=3) bastırılmaz, "karar YOK" reddine dönüşmez
   GEREKCE="$(python3 - "$KARTYOL" "devam" 2>/dev/null <<'PY'
 import json,sys
 try: k=json.load(open(sys.argv[1],encoding="utf-8"))
@@ -139,7 +139,7 @@ PY
 #    sınıflı kartta reis kararı yok sayılır ve Sultan yolu gösterilir. Mutlak tavanı (4) yine AÇMAZ.
 reis_kapisi() {
   [ "$REIS_DEVAM" = "1" ] || return 1
-  KARTYOL="$(kart_yolu 2>/dev/null)"; [ -n "$KARTYOL" ] || KARTYOL="/nonexistent"
+  KARTYOL="$(kart_yolu)" || exit 3; [ -n "$KARTYOL" ] || KARTYOL="/nonexistent"   # göz tur 2: bayat kopya hatası (rc=3) bastırılmaz, "karar YOK" reddine dönüşmez
   GEREKCE="$(python3 - "$KARTYOL" "devam" 2>/dev/null <<'PY'
 import json,sys
 try: k=json.load(open(sys.argv[1],encoding="utf-8"))
