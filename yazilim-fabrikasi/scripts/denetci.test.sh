@@ -174,6 +174,10 @@ SAHTE_JSON="$(J 5 E "")" KANIT_DEPO="$W" bash "$D" is-w2 --diff "$T/d.patch" >/d
 # verilen --kart dosyası yoksa denetim kartsız SÜRMEZ (eskiden cp hatası yutuluyor, denetçi kartsız puanlıyordu)
 SAHTE_JSON="$(J 5 E "")" KANIT_DEPO="$W" bash "$D" is-w2 --diff "$T/d.patch" --kart "$T/yok-boyle-kart.md" >"$T/kartyok.out" 2>&1; RC=$?   # kanıt W'de; kapı sırası kanıt→tavan→kart
 [ "$RC" -eq 3 ] && grep -q "okunamadı" "$T/kartyok.out"; g $? "🔴 --kart dosyası yoksa rc=3 + 'okunamadı' (kartsız sessiz puanlama kapandı)"
+# 🔴 göz tur 3: birincil kart VARKEN farklı --kart tek-kaynağı aşamaz
+SAHTE_JSON="$(J 5 E "")" SAHTE_ISTEM_KOPYA="$T/istem-w2b.txt" KANIT_DEPO="$W" bash "$D" is-w2 --diff "$T/d.patch" --kart "$T/kart.md" >"$T/kartfarkli.out" 2>&1; RC=$?
+[ "$RC" -eq 3 ] && grep -q "TEK kaynak" "$T/kartfarkli.out" && [ ! -f "$T/istem-w2b.txt" ]; g $? "🔴 birincil kart varken FARKLI --kart: rc=3 'TEK kaynak', istem gitmedi (atlama kapandı)"
+SAHTE_JSON="$(J 5 E "")" KANIT_DEPO="$W" bash "$D" is-w2 --diff "$T/d.patch" --kart "$T/_agents/fabrika/kartlar/is-w2.json" >/dev/null 2>&1; [ $? -eq 0 ]; g $? "--kart birincil kartın kendisiyse geçer (rc=0)"
 bash "$KT" reis-dedi is-r2 --karar devam --oturum ref-r2 --gerekce "yirmi karakterden uzun bir gerekce metni" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "--reis eksikken REDDEDİLDİ"
 bash "$KT" reis-dedi is-r2 --karar devam --reis MUAVIN --gerekce "yirmi karakterden uzun bir gerekce metni" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "--oturum eksikken REDDEDİLDİ"
 bash "$KT" reis-dedi is-r2 --karar devam --reis MUAVIN --oturum ref-r2 --gerekce "kisa" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "kısa gerekçe REDDEDİLDİ"
@@ -394,6 +398,7 @@ mut "reis-sinif-citini-kaldir" 's@^if k.get("sultan") or k.get("siniflar"): rais
 mut "mutlak-tavani-kaldir" 's@^if \[ "$TUR" -gt "$MUTLAK" \]; then@if false; then@'
 mut "yedek-gozu-kaldir" 's@if yedek_olur_mu; then YEDEK="codex yok";@if false; then YEDEK="codex yok";@'
 mut "kart-tek-kaynagi-kaldir" 's@^\[ -n "$KART_DEPO" \] || KART_DEPO="$DEPO"@KART_DEPO="$DEPO"@'
+mut "kart-secenegi-tek-kaynagi-asar" 's@&& ! cmp -s "$KART" "$BIRINCIL"; then@\&\& false; then@'
 mut "kapi-kart-hatasini-bastirir" 's@KARTYOL="$(kart_yolu)" || exit 3;@KARTYOL="$(kart_yolu 2>/dev/null)";@'
 mut "bayat-kopya-geri-donusu" 's@OKUNMAZ — kart.sh ile birincile yaz, sonra denetçiyi koştur"; return 3@"; printf "%s" "$DEPO/_agents/fabrika/kartlar/$IS.json"@'
 mut "kart-json-hatasi-yutulur" 's@denetim açılmaz"; exit 3; }@denetim açılmaz"; true; }@'

@@ -198,6 +198,10 @@ if [ -n "$DIFF" ]; then cp "$DIFF" "$TMP/diff.patch" || { _hata "diff okunamadı
 else (cd "$DEPO" && gh pr diff "$PR" > "$TMP/diff.patch") || { _hata "gh pr diff $PR düştü"; exit 3; }; fi
 if [ -z "$KART" ]; then KART="$(kart_yolu)" || exit 3; fi   # 0. adım kartı varsa o (YALNIZ birincil depodan; alandaki bayat kopya → rc=3)
 [ -z "$KART" ] || [ -r "$KART" ] || { _hata "--kart dosyası okunamadı: $KART (verilen kart yoksa denetim kartsız SÜRMEZ)"; exit 3; }   # eskiden cp hatası sessizce yutuluyordu
+# göz tur 3: --kart "kart TEK kaynak"ı aşamaz — birincil kart VARKEN içeriği farklı bir dosya iş kartı olamaz (rc=3); birincil yokken serbest
+if [ -n "$KART" ]; then BIRINCIL="$(kart_yolu)" || exit 3
+  if [ -n "$BIRINCIL" ] && ! cmp -s "$KART" "$BIRINCIL"; then _hata "kart TEK kaynak: --kart ($KART) birincil karttan ($BIRINCIL) FARKLI — birincil kart varken başka dosya iş kartı olamaz; --kart'ı bırak"; exit 3; fi
+fi
 if [ -n "$KART" ] && [ -d "$DZ" ]; then   # kanıt dizinine anlık kopya: PR'a kart bununla gider — yazılamadıysa sessiz geçilmez (göz tur 1)
   cp "$KART" "$DZ/KART.json" 2>/dev/null || { _hata "kartın anlık kopyası kanıt dizinine YAZILAMADI ($DZ/KART.json) — PR'a kart gitmezdi, denetim açılmaz"; exit 3; }
 fi

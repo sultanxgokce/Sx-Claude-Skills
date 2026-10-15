@@ -1,7 +1,7 @@
 {
   "is": "fabrika-kart-tek-kaynak",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T08:26:27+03:00",
+  "guncelleme": "2026-10-15T08:39:06+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -125,7 +125,22 @@
       "renk": "yesil",
       "zaman": "2026-10-15T08:26:27+03:00",
       "sure_sn": 238.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-test-143-kapi-tur4-kart-secenegi-tek-kaynagi-asamaz-ve-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-test-143-kapi-tur4-kart-secenegi-tek-kaynagi-asamaz-ve-mutant-sonra.txt",
+      "sha256": "482e6259666efb97c35445c1973dac62c2a576438707b3bddc9f93cb6e4c46af",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T08:39:06+03:00",
+      "sure_sn": 291.1
     }
   ],
-  "imza": "478b6c78932bf0cf34d47c0700005b1176fd7fc64c390c0f8b74c46773ab5739"
+  "imza": "e13a91300e273e326314f366269587143795496fb9d4c4aa0109abf707654419"
 }
