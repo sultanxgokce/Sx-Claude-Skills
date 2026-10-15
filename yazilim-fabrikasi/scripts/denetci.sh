@@ -201,6 +201,8 @@ if [ -z "$KART" ]; then KART="$(kart_yolu)" || exit 3; fi   # 0. adım kartı va
 # göz tur 3: --kart "kart TEK kaynak"ı aşamaz — birincil kart VARKEN içeriği farklı bir dosya iş kartı olamaz (rc=3); birincil yokken serbest
 if [ -n "$KART" ]; then BIRINCIL="$(kart_yolu)" || exit 3
   if [ -n "$BIRINCIL" ] && ! cmp -s "$KART" "$BIRINCIL"; then _hata "kart TEK kaynak: --kart ($KART) birincil karttan ($BIRINCIL) FARKLI — birincil kart varken başka dosya iş kartı olamaz; --kart'ı bırak"; exit 3; fi
+  # göz tur 4: içerik aynı olsa da OKUNAN YOL birincil karttır — harici kopya iş kartı/KART.json kaynağı olmaz (yol düzeyinde tek kaynak)
+  if [ -n "$BIRINCIL" ] && [ "$KART" != "$BIRINCIL" ]; then KART="$BIRINCIL"; _bilgi "· --kart harici kopya (aynı içerik); okunan yol birincil kart: $KART"; fi
 fi
 if [ -n "$KART" ] && [ -d "$DZ" ]; then   # kanıt dizinine anlık kopya: PR'a kart bununla gider — yazılamadıysa sessiz geçilmez (göz tur 1)
   cp "$KART" "$DZ/KART.json" 2>/dev/null || { _hata "kartın anlık kopyası kanıt dizinine YAZILAMADI ($DZ/KART.json) — PR'a kart gitmezdi, denetim açılmaz"; exit 3; }

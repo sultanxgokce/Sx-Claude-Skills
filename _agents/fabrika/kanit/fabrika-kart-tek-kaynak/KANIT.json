@@ -1,7 +1,7 @@
 {
   "is": "fabrika-kart-tek-kaynak",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T08:39:06+03:00",
+  "guncelleme": "2026-10-15T10:00:29+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -140,7 +140,22 @@
       "renk": "yesil",
       "zaman": "2026-10-15T08:39:06+03:00",
       "sure_sn": 291.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-test-147-kapi-tur4-sonrasi-okunan-yol-birincil-ve-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-test-147-kapi-tur4-sonrasi-okunan-yol-birincil-ve-mutant-sonra.txt",
+      "sha256": "565e98c6e3cbf9d9a84b7f03fff9dd1a225ade05611f4ee8ff045c6be7c1215c",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T10:00:29+03:00",
+      "sure_sn": 265.4
     }
   ],
-  "imza": "e13a91300e273e326314f366269587143795496fb9d4c4aa0109abf707654419"
+  "imza": "1591e692505b7aa5f7eede6181bd233bc0988cd74c3dfcd764e0e6a6da4bbcbe"
 }

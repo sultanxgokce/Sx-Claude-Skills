@@ -178,6 +178,18 @@ SAHTE_JSON="$(J 5 E "")" KANIT_DEPO="$W" bash "$D" is-w2 --diff "$T/d.patch" --k
 SAHTE_JSON="$(J 5 E "")" SAHTE_ISTEM_KOPYA="$T/istem-w2b.txt" KANIT_DEPO="$W" bash "$D" is-w2 --diff "$T/d.patch" --kart "$T/kart.md" >"$T/kartfarkli.out" 2>&1; RC=$?
 [ "$RC" -eq 3 ] && grep -q "TEK kaynak" "$T/kartfarkli.out" && [ ! -f "$T/istem-w2b.txt" ]; g $? "🔴 birincil kart varken FARKLI --kart: rc=3 'TEK kaynak', istem gitmedi (atlama kapandı)"
 SAHTE_JSON="$(J 5 E "")" KANIT_DEPO="$W" bash "$D" is-w2 --diff "$T/d.patch" --kart "$T/_agents/fabrika/kartlar/is-w2.json" >/dev/null 2>&1; [ $? -eq 0 ]; g $? "--kart birincil kartın kendisiyse geçer (rc=0)"
+# 🔴 göz tur 4: birebir KOPYA --kart kabul edilse de okunan yol BİRİNCİL kalır — harici kopya sonradan değişse de istem/KART.json birincilden gelir
+cp "$T/_agents/fabrika/kartlar/is-w2.json" "$T/is-w2.kopya.json"
+python3 - "$T/_agents/fabrika/kartlar/is-w2.json" <<'PY'
+import json,sys;p=sys.argv[1];k=json.load(open(p));k['is']='BIRINCIL-DAMGA-w2';json.dump(k,open(p,'w'),ensure_ascii=False)
+PY
+SAHTE_JSON="$(J 5 E "")" SAHTE_ISTEM_KOPYA="$T/istem-w2c.txt" KANIT_DEPO="$W" bash "$D" is-w2 --diff "$T/d.patch" --kart "$T/is-w2.kopya.json" >"$T/kartkopya.out" 2>&1; RC=$?
+[ "$RC" -eq 3 ] && grep -q "TEK kaynak" "$T/kartkopya.out"; g $? "kopya birincilden saptıysa (içerik farklı) yine rc=3"
+cp "$T/_agents/fabrika/kartlar/is-w2.json" "$T/is-w2.kopya.json"   # kopyayı birincille eşitle (aynı içerik)
+SAHTE_JSON="$(J 5 E "")" SAHTE_ISTEM_KOPYA="$T/istem-w2c.txt" KANIT_DEPO="$W" bash "$D" is-w2 --diff "$T/d.patch" --kart "$T/is-w2.kopya.json" >"$T/kartkopya.out" 2>&1; RC=$?
+[ "$RC" -eq 0 ] && grep -qF "okunan yol birincil kart: $T/_agents/fabrika/kartlar/is-w2.json" "$T/kartkopya.out" && grep -q "BIRINCIL-DAMGA-w2" "$T/istem-w2c.txt"; g $? "🔴 aynı içerikli harici --kart: geçer ama OKUNAN YOL birincil kartın yolu (kullanılan değişken ekranda, istem birincilden)"
+grep -q "BIRINCIL-DAMGA-w2" "$W/_agents/fabrika/kanit/is-w2/KART.json"; g $? "KART.json da birincil yoldan yazıldı"
+rm -f "$T/is-w2.kopya.json"
 bash "$KT" reis-dedi is-r2 --karar devam --oturum ref-r2 --gerekce "yirmi karakterden uzun bir gerekce metni" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "--reis eksikken REDDEDİLDİ"
 bash "$KT" reis-dedi is-r2 --karar devam --reis MUAVIN --gerekce "yirmi karakterden uzun bir gerekce metni" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "--oturum eksikken REDDEDİLDİ"
 bash "$KT" reis-dedi is-r2 --karar devam --reis MUAVIN --oturum ref-r2 --gerekce "kisa" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "kısa gerekçe REDDEDİLDİ"
@@ -398,6 +410,7 @@ mut "reis-sinif-citini-kaldir" 's@^if k.get("sultan") or k.get("siniflar"): rais
 mut "mutlak-tavani-kaldir" 's@^if \[ "$TUR" -gt "$MUTLAK" \]; then@if false; then@'
 mut "yedek-gozu-kaldir" 's@if yedek_olur_mu; then YEDEK="codex yok";@if false; then YEDEK="codex yok";@'
 mut "kart-tek-kaynagi-kaldir" 's@^\[ -n "$KART_DEPO" \] || KART_DEPO="$DEPO"@KART_DEPO="$DEPO"@'
+mut "kart-yolu-harici-kalir" 's@then KART="$BIRINCIL"; _bilgi@then _bilgi@'
 mut "kart-secenegi-tek-kaynagi-asar" 's@&& ! cmp -s "$KART" "$BIRINCIL"; then@\&\& false; then@'
 mut "kapi-kart-hatasini-bastirir" 's@KARTYOL="$(kart_yolu)" || exit 3;@KARTYOL="$(kart_yolu 2>/dev/null)";@'
 mut "bayat-kopya-geri-donusu" 's@OKUNMAZ — kart.sh ile birincile yaz, sonra denetçiyi koştur"; return 3@"; printf "%s" "$DEPO/_agents/fabrika/kartlar/$IS.json"@'
