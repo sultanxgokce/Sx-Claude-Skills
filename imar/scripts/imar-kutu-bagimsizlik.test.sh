@@ -92,6 +92,50 @@ kapi "D1 IMAR_SERI yoksa karne ÖLÇEMEDİM der (rc=3)" 3 env -u IMAR_SERI IMAR_
 kapi "D2 IMAR_SERI yoksa olgunluk ÖLÇEMEDİM der (rc=3)" 3 env -u IMAR_SERI IMAR_REPO="$REPO" python3 "$S/imar-olgunluk.py"
 iceren "D3 eksikliğin ADI söylenir (hangi değişken)" "IMAR_SERI" env -u IMAR_SERI IMAR_REPO="$REPO" python3 "$S/imar-karne.py"
 
+echo "E · 🔴 gözün tur-1 bulgusu: İLAN EDİLEN alan KODA BAĞLI mı (kayıt var, çağıran yok)"
+# Profil `defter_yaz`i ZORUNLU ilan ediyordu ama kod küresel yolu varsayıyordu: ilan kutu
+# bağımsızlığını kanıtlamaz, yalnız iddia eder. Kapı, çözücüden gelen değerin koda ULAŞTIĞINI ölçer.
+iceren "E1 çözücü IMAR_DEFTER_YAZ'ı profilden taşır" "IMAR_DEFTER_YAZ=\"$KOK/yok/defter-yaz.py\"" \
+  python3 "$S/imar-profil.py" cozumle "$PROFIL"
+iceren "E2 çözücü BULGULAR_JSON taşır (profil ezebilir)" "BULGULAR_JSON=" python3 "$S/imar-profil.py" cozumle "$PROFIL"
+iceren "E3 çözücü IMAR_WA_GONDER taşır (alarm yolu kutudan kutuya değişir)" "IMAR_WA_GONDER=" python3 "$S/imar-profil.py" cozumle "$PROFIL"
+# 🔴 BU KAPIYI ÜÇ KEZ YANLIŞ YAZDIM ve her seferinde KENDİ GİRDİ HATAMI ölçtüm:
+#    (1) argüman adları uydurma (--olum/--kanit-sinifi yok) → rc=2 argparse hatası
+#    (2) --sinif'a kanıt sınıfı verdim → rc=2 "kanıt sınıfı olmalı"
+#    (3) ancak üçüncüde ölçtüm: --kanit KANIT SINIFI (olcum|kaynak|zanaat), --sinif ise dört-sınıf
+#        listesi. Doğru çağrı rc=3 ve "defter aracı yok (<profilin yolu>)" veriyor.
+#    Ders: kapıyı YAZMADAN ÖNCE aracın gerçek davranışını ölç; yoksa kapı yeşil/kırmızı basar ama
+#    adının söylediği şeyi değil, senin yazım hatanı ölçer (vekil ölçüt).
+kapi "E4 🔴 defter aracı PROFİLDEN okunur: profilin gösterdiği yok dosya ÖLÇÜLEMEDİ üretir (rc=3)" 3 \
+  env IMAR_DEFTER_YAZ="$KOK/yok/defter-yaz.py" python3 "$S/imar-fikir-kapisi.py" \
+      --baslik "deneme" --deger 40 --pazar 30 --teknik 30 --deney "x" --oldur "y" --kanit olcum
+iceren "E4b 🔴 ret mesajı PROFİLİN yolunu söyler (küresel varsayılanı değil)" "$KOK/yok/defter-yaz.py" \
+  env IMAR_DEFTER_YAZ="$KOK/yok/defter-yaz.py" python3 "$S/imar-fikir-kapisi.py" \
+      --baslik "deneme" --deger 40 --pazar 30 --teknik 30 --deney "x" --oldur "y" --kanit olcum
+kapi "E5 üretim kodunda küresel yol TEK BAŞINA kalmaz (profil ezebilir)" 0 bash -c '
+  grep -q "IMAR_DEFTER_YAZ" '"$S"'/imar-defter.py \
+  && grep -q "IMAR_DEFTER_YAZ" '"$S"'/imar-fikir-kapisi.py \
+  && grep -q "IMAR_WA_GONDER" '"$S"'/cark-tur.sh'
+
+echo "F · 🔴 gözün tur-1 bulgusu: SAYIM DÜRÜST olsun (atlanan kapı yeşil değildir)"
+# 🔴 ÖZYİNELEME TUZAĞI (ilk yazımda düştüm, sınav 115 sn'de Terminated oldu): bu kapılar toplu
+#    koşucuyu ÇAĞIRIYORDU, o da yedi sınavın içinde BU sınavı koşuyordu → sonsuz özyineleme.
+#    Bir aracı sınayan kapı, o aracın kendisini sınadığı kümede yer alıyorsa koşturarak ölçemez.
+#    Sayımın dürüstlüğü METİNDEN ölçülür (koşucu üç sayıyı ayrı basıyor mu), davranış ise
+#    koşucunun ölçemediği durumdan (F3).
+kapi "F1 toplu koşucu ATLANAN kapıyı AYRI sayar (metin kapısı, özyinelemesiz)" 0 bash -c '
+  grep -q "ATLANAN (ölçülemedi, geçti SAYILMAZ)" '"$S"'/imar-sinav-hepsi.sh'
+kapi "F2 🔴 atlanan varken 'hepsi koştu' DENMEZ uyarısı var" 0 bash -c '
+  grep -q "hepsi koştu. DENMEZ" '"$S"'/imar-sinav-hepsi.sh'
+kapi "F2b koşucu ATLANDI/⏭ satırlarını fiilen sayar (grep -c)" 0 bash -c '
+  grep -q "grep -cE .ATLANDI" '"$S"'/imar-sinav-hepsi.sh'
+kapi "F3 sınav dizini yoksa rc=3 (ölçemedim), 0 DEĞİL" 3 bash "$S/imar-sinav-hepsi.sh" "$KOK/hic-yok"
+# 🔴 SAYAÇ KENDİ KAPI ADINI EŞLEMESİN: bu araçta bizzat oldu — F2b'nin ADI "ATLANDI/⏭" taşıyor ve
+#    sayaç onu gerçek atlama sanıp 2 yerine 3 saydı. Aynı desen bugün üçüncü kez ısırdı (C5 kendini
+#    taradı, prob vekil ölçüttü, şimdi sayaç kendi adını saydı). Kapı artık onu ölçer.
+kapi "F4 🔴 sayaç kapı satırlarını (✓/✗) atlama saymaz" 0 bash -c '
+  grep -q "grep -vE .\^\[\[:space:\]\]\*\[✓✗\]" '"$S"'/imar-sinav-hepsi.sh'
+
 echo
 echo "toplam=$((GECEN+DUSEN)) geçen=$GECEN düşen=$DUSEN"
 [ "$DUSEN" -eq 0 ]

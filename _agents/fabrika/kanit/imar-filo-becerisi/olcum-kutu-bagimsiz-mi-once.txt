@@ -1,14 +1,17 @@
 $ bash /tmp/claude-1000/imar-prob/prob.sh /tmp/claude-1000/imar-prob/imar-ESKI.sh
-# rc=0 sure=0.0s zaman=2026-10-15T18:32:27+03:00
+# rc=1 sure=0.9s zaman=2026-10-15T18:43:17+03:00
 --- stdout ---
-    durum dosyası açıldı (KAPALI): /tmp/tmp.cQS0aXIDj5/projects/deneme-kutusu/_agents/spec/imar/DURUM.json
-    zamanlayıcı: KAYITLI DEĞİL — ÇARK kendiliğinden dönmez (cron satırı için: scripts/cark-tur.sh başlığı)
-    parça: cark-tur.sh ✗ EKSİK
-    parça: muneccim-kos.sh ✗ EKSİK
-    parça: imar-ikinci-goz.sh ✗ EKSİK
-    parça: imar-fikir-kapisi.py ✗ EKSİK
-    parça: devir-ayikla.py ✗ EKSİK
-    parça: pdf-metin ✗ EKSİK — kur: cd scripts/pdf && npm install --no-audit --no-fund
-    kütük: /tmp/tmp.cQS0aXIDj5/projects/deneme-kutusu/hafiza/imar-kutuk.log
-SONUC: betik yalniz kendi kutusunun yollarini kullandi — TASINABILIR
+    ⛩️ İMAR KAPALI  (son değişim: 2026-10-15T18:43:17+03:00 · sinav)
+    ÇARK: bugün 0/? tur · yuvalar: ?
+    şu an: tur koşmuyor
+    son tur: yok
+    son göz: yok
+    dersler: ölçülemedi (DERSLER.md yok)
+    fikir defteri: ── 16 kayıt · sonSayi 19
+    /tmp/claude-1000/imar-prob/imar-ESKI.sh: line 166: /tmp/claude-1000/hafiza/fikir-mezarligi.jsonl: No such file or directory
+    mezarlık: 0 fikir
+    son kütük satırları:
+      [2026-10-15T18:43:17+03:00] KUR · durum dosyası açıldı (kapalı) · kim=sinav
+    [rc=0]
+SONUC: sahte kutunun serisini GORMEDI — baska yere bakiyor (kutuya CIVILI)
 --- stderr ---

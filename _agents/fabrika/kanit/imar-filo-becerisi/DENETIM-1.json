@@ -1,0 +1,49 @@
+{
+  "tur": 1,
+  "is": "imar-filo-becerisi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T18:35:31+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": true,
+    "istem_bayt": 184155,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "İMAR reçetesi profil, kurulum, kutu-bağımsızlık kapısı ve taşınan sınavlarla filo becerisine çevrilmiş; talebin yönü doğrudur. Önce kanıt kapılarını düzeltin: eski sürüm de kutu-bağımsızlık ölçümünden yeşil geçiyor, bazı sınavlar ölçmeden atlanabildiği hâlde toplu sonuç rc=0 oluyor ve diff kırpıldığı için üretime hazır hükmü verilemez.",
+    "bulgular": [
+      {
+        "ne": "Kutu-bağımsızlık önce/sonra çifti dönüşümü ayırt etmiyor; eski betik de yeni betik de rc=0 ve “TASINABILIR” sonucu veriyor.",
+        "kanit": "“kutu-bagimsiz-mi” önce kaydı rc=0; çıktısı “SONUC: betik yalniz kendi kutusunun yollarini kullandi — TASINABILIR”. Sonra kaydı da aynı sonuçla rc=0. Önce yalnız parçaları eksik, sonra mevcut; ölçüm eski sürümün kutuya çivili olduğunu göstermiyor.",
+        "konum": "kanıt:kutu-bagimsiz-mi önce/sonra",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "“165 kapılı yedi hermetik sınav” iddiası, ölçülemeyen kapıları atlayıp süiti yine başarılı sayabilen sınavlarla destekleniyor.",
+        "kanit": "SKILL.md “165 kapı, hepsi hermetik” diyor; aynı dosya tarayıcı/Node gerektiren 5 kapının dürüstçe atlandığını söylüyor. devir-ayikla.test.sh de bağımlılıklar yoksa S1–S5’i yalnız “ATLANDI” basıp DUS artırmıyor; dolayısıyla süit rc=0 kalabiliyor. Toplu ölçüm yalnız yedi dosyanın rc=0 ve toplam kapı=165 bilgisini gösteriyor, hangi kapıların gerçekten koştuğunu göstermiyor.",
+        "konum": "imar/SKILL.md:73; imar/SKILL.md:135; imar/scripts/devir-ayikla.test.sh SAYFA-METİN bölümü; kanıt:yedi-sinav",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Profilde beyan edilen filo bağımlılıkları uygulamada hâlâ sabit küresel yollara varsayılıyor; profil çözümünün bunları her çağrıya aktardığı görülmeden kutu bağımsızlığı tamamlanmış sayılamaz.",
+        "kanit": "profil-semasi.json “defter_yaz” alanını zorunlu ve kutuya özel ilan ediyor; imar-defter.py ise DEFTER_YAZ için varsayılan olarak “/config/.ic-sayfa/defter-yaz.py”, imar-fikir-kapisi.py doğrudan aynı yolu, cark-tur.sh da “/config/.claude/skills/whatsapp-gonder/…” yolunu kullanıyor. Görülen diff bölümünde bu değerlerin profil çözümünden beslendiğini kanıtlayan çağrı zinciri yok.",
+        "konum": "imar/profil-semasi.json:zorunlu.defter_yaz; imar/scripts/imar-defter.py:DEFTER_YAZ; imar/scripts/imar-fikir-kapisi.py:DEFTER_YAZ; imar/scripts/cark-tur.sh:_bildir",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Profil fail-closed davranışı ile yedi sınavın toplu rc=0 kaydı yararlı; mutasyon kaydı da beklenen kırmızıyı gösteriyor. Ancak kutu-bağımsızlık önce/sonra çifti seçici değil, “civili mihenk yolu sayısı 0” için bağımsız ve açık bir sayım kaydı yok, toplu rc=0 atlanan/ölçülmeyen kapıları gizleyebiliyor. Ayrıca istem 110000 baytta kırpıldığı için diff'in sonu görülmedi; görünmeyen kod ve çağrı zinciri hakkında üretime hazır hükmü verilemez."
+  }
+}

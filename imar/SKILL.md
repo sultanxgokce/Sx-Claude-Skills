@@ -76,7 +76,7 @@ bash imar/scripts/imar-kur.sh imar-profil.json          # --kuru ile önce kuru 
 `alarm.cihaz_teyidi` boşsa profil **reddedilir**: geçidin 200 dönmesi alarmın çalıştığını
 kanıtlamaz (abone olunmayan konuya da 200 gelir — ölçülmüş vaka).
 
-## Sınavlar (165 kapı, hepsi hermetik, çıplak koşulur)
+## Sınavlar (bu kutuda ÖLÇÜLEN 176 kapı · ATLANAN 2 · hepsi hermetik, çıplak koşulur)
 
 | sınav | kapı | ne ölçer |
 |---|---|---|
@@ -86,7 +86,13 @@ kanıtlamaz (abone olunmayan konuya da 200 gelir — ölçülmüş vaka).
 | `betik-bekcisi.test.sh` | 19 | üç ölçülmüş tuzak + masumiyet fikstürleri |
 | `dersler-brif.test.sh` | 16 | üç başlık ayrımı (ayakta · çürütüldü · ölçülemedi) |
 | `imar-ikinci-goz.test.sh` | 26 | gözün kendi sınavı: hükmün kayda ve deftere dönüşü |
-| `imar-kutu-bagimsizlik.test.sh` | 19 | 🔴 **beceri MİHENK DIŞINDA bir kutuda kurulur ve koşar** |
+| `imar-kutu-bagimsizlik.test.sh` | 30 | 🔴 **beceri MİHENK DIŞINDA bir kutuda kurulur ve koşar** · ilan edilen profil alanı koda BAĞLI mı · sayım dürüst mü |
+
+🔴 **"Hepsi koştu" DENMEZ.** Sınavlar bağımlılık yoksa bazı kapıları *"ATLANDI — ölçülemedi, geçti
+sayılmaz"* diye atlar ve süit **yine rc=0** döner; o hâlde toplam "geçti" sayısı tek başına kaç
+kapının fiilen koştuğunu söylemez. `imar-sinav-hepsi.sh` bu yüzden **üç sayıyı ayrı** basar:
+ölçülen · düşen · **atlanan**. Bu kutuda: ölçülen **176**, atlanan **2**, düşen **0**. Atlanan kapı
+yeşil değildir; yalnız kırmızı da değildir — ölçülemedi.
 
 > `imar-defter.test.sh` 29 değil **28** sayar: "gerçek mezarlığa sızıntı" kapısı artık yol
 > bildirilmediğinde dürüstçe **atlanır** ve geçti sayılmaz. Eski hâli `/config/projects/mihenk/...`

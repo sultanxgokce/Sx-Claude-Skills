@@ -1,14 +1,19 @@
 $ bash /tmp/claude-1000/imar-prob/prob.sh /config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts/imar.sh
-# rc=0 sure=0.0s zaman=2026-10-15T18:32:27+03:00
+# rc=0 sure=0.5s zaman=2026-10-15T18:43:18+03:00
 --- stdout ---
-    durum dosyası açıldı (KAPALI): /tmp/tmp.FLw9gtXUUC/projects/deneme-kutusu/_agents/spec/imar/DURUM.json
-    zamanlayıcı: KAYITLI DEĞİL — ÇARK kendiliğinden dönmez (cron satırı için: scripts/cark-tur.sh başlığı)
-    parça: cark-tur.sh ✓
-    parça: muneccim-kos.sh ✓
-    parça: imar-ikinci-goz.sh ✓
-    parça: imar-fikir-kapisi.py ✓
-    parça: devir-ayikla.py ✓
-    parça: pdf-metin ✗ EKSİK — kur: cd scripts/pdf && npm install --no-audit --no-fund
-    kütük: /tmp/tmp.FLw9gtXUUC/projects/deneme-kutusu/hafiza/imar-kutuk.log
-SONUC: betik yalniz kendi kutusunun yollarini kullandi — TASINABILIR
+    ⛩️ İMAR KAPALI  (son değişim: 2026-10-15T18:43:17+03:00 · sinav)
+    ÇARK: bugün 0/? tur · yuvalar: ?
+    şu an: tur koşmuyor
+    son tur: 2026-01-01-tur.md
+    son göz: yok
+    betik bekçisi : — kırmızı 0 · sarı 0 · taranan 12 betik
+    dersler: 1 (ikinci gözden geçen: 1)
+    fikir defteri: ── 16 kayıt · sonSayi 19
+    /config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts/imar.sh: line 166: /config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/hafiza/fikir-mezarligi.jsonl: No such file or directory
+    mezarlık: 0 fikir
+    SENDE · Sultan'ın önünde bekleyen: 2 (seç/öldür: /imar-sec)
+    son kütük satırları:
+      [2026-10-15T18:43:17+03:00] KUR · durum dosyası açıldı (kapalı) · kim=sinav
+    [rc=0]
+SONUC: sahte kutunun KENDI serisini okudu — TASINABILIR
 --- stderr ---

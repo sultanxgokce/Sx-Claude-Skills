@@ -20,6 +20,8 @@
     "seri": "araştırma serisi dizini (varsayılan: <muneccim_ev>/arastirma-serisi)",
     "mezarlik": "fikir mezarlığı jsonl (varsayılan: <repo_kok>/hafiza/fikir-mezarligi.jsonl)",
     "durum": "şalter dosyası (varsayılan: <repo_kok>/_agents/spec/imar/DURUM.json)",
-    "kutuk": "İMAR kütüğü (varsayılan: <repo_kok>/hafiza/imar-kutuk.log)"
+    "kutuk": "İMAR kütüğü (varsayılan: <repo_kok>/hafiza/imar-kutuk.log)",
+    "bulgular_json": "Bulgu Defteri veri dosyası (varsayılan: /config/.ic-sayfa/bulgu-defteri/bulgular.json)",
+    "wa_gonder": "WhatsApp geçidi betiği (varsayılan: /config/.claude/skills/whatsapp-gonder/scripts/wa-gonder.sh) — kuruluş yeri kutudan kutuya değişirse alarm sessizce gitmez olurdu"
   }
 }

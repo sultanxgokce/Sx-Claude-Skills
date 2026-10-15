@@ -24,7 +24,8 @@ import os
 import sys
 
 UST_ZORUNLU = {"kutu", "ajan", "repo_kok", "muneccim_ev", "defter_yaz", "alarm"}
-UST_ISTEGE = {"sema", "surum", "aciklama", "seri", "mezarlik", "durum", "kutuk"}
+UST_ISTEGE = {"sema", "surum", "aciklama", "seri", "mezarlik", "durum", "kutuk",
+              "bulgular_json", "wa_gonder"}
 ALARM_ZORUNLU = {"taban", "konu", "cihaz_teyidi"}
 ALARM_ISTEGE = {"aciklama"}
 
@@ -81,7 +82,8 @@ def dogrula(p):
                     kusur.append(f"zorunlu alarm alanı boş: alarm.{k}")
 
     # Yollar MUTLAK olmalı: göreli yol, koşulduğu dizine göre kayar ve sessizce yanlış yere yazar.
-    for k in ("repo_kok", "muneccim_ev", "defter_yaz", "seri", "mezarlik", "durum", "kutuk"):
+    for k in ("repo_kok", "muneccim_ev", "defter_yaz", "seri", "mezarlik", "durum", "kutuk",
+              "bulgular_json", "wa_gonder"):
         d = p.get(k)
         if isinstance(d, str) and d.strip() and not d.startswith("/"):
             kusur.append(f"{k} mutlak yol değil ({d}) — göreli yol koşulduğu dizine göre kayar")
@@ -103,6 +105,9 @@ def cozumle(p):
         "IMAR_DURUM": p.get("durum") or f"{repo}/_agents/spec/imar/DURUM.json",
         "IMAR_KUTUK": p.get("kutuk") or f"{repo}/hafiza/imar-kutuk.log",
         "IMAR_DEFTER_YAZ": p["defter_yaz"],
+        # Profil bu ikisini ezebilir; ezmezse araçların küresel varsayılanı sürer.
+        "BULGULAR_JSON": p.get("bulgular_json") or "/config/.ic-sayfa/bulgu-defteri/bulgular.json",
+        "IMAR_WA_GONDER": p.get("wa_gonder") or "/config/.claude/skills/whatsapp-gonder/scripts/wa-gonder.sh",
         "NTFY_TABAN": a["taban"],
         "IMAR_ALARM_KONU": a["konu"],
         "IMAR_ALARM_TEYIT": a["cihaz_teyidi"],

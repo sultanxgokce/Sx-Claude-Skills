@@ -27,7 +27,11 @@ rc: 0 tamam · 1 defter hatası · 2 kullanım/kapı reddi · 3 ölçülemedi
 """
 import sys, os, json, re, subprocess, argparse
 
-DEFTER_YAZ = os.environ.get("DEFTER_YAZ", "/config/.ic-sayfa/defter-yaz.py")
+# 🔴 PROFİLE BAĞLANDI (bağımsız gözün tur-1 bulgusu): profil `defter_yaz` alanını ZORUNLU ilan
+#    ediyordu ama kod onu hiç okumuyor, küresel yolu varsayıyordu — yani kayıt vardı, ÇAĞIRAN yoktu.
+#    İlan edilen ama bağlanmayan alan, kutu bağımsızlığını kanıtlamaz; yalnız iddia eder.
+DEFTER_YAZ = (os.environ.get("IMAR_DEFTER_YAZ") or os.environ.get("DEFTER_YAZ")
+              or "/config/.ic-sayfa/defter-yaz.py")
 BULGULAR = os.environ.get("BULGULAR_JSON", "/config/.ic-sayfa/bulgu-defteri/bulgular.json")
 DAMGA = "[İMAR hâl]"
 SIRA = ["gelen", "seçildi", "yapılıyor", "canlı", "onaylandı"]

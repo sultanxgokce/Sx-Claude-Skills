@@ -29,7 +29,11 @@ import argparse, json, os, re, subprocess, sys, datetime
 
 KOK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEZARLIK = os.path.join(KOK, "hafiza", "fikir-mezarligi.jsonl")
-DEFTER_YAZ = "/config/.ic-sayfa/defter-yaz.py"
+# 🔴 PROFİLE BAĞLANDI (bağımsız gözün tur-1 bulgusu): profil `defter_yaz` alanını ZORUNLU ilan
+#    ediyordu ama kod onu hiç okumuyor, küresel yolu varsayıyordu — yani kayıt vardı, ÇAĞIRAN yoktu.
+#    İlan edilen ama bağlanmayan alan, kutu bağımsızlığını kanıtlamaz; yalnız iddia eder.
+DEFTER_YAZ = (os.environ.get("IMAR_DEFTER_YAZ") or os.environ.get("DEFTER_YAZ")
+              or "/config/.ic-sayfa/defter-yaz.py")
 ESIK = 75
 SINIFLAR = {"geri-alinamaz", "para", "dis-yuzey", "yetki"}
 

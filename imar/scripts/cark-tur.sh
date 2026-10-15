@@ -46,7 +46,9 @@ _bildir(){ # sessiz ölüm panzehiri — ve 🔴 PANZEHİRİN KENDİSİ SESSİZC
   # WhatsApp geçidi (whatsapp-gonder; numara kutuda durmaz, alıcı adı gider). ntfy ikincil olarak
   # yine yazılır (kütük izi), ama "gönderildi" yalnız WhatsApp geçidi kabul edince denir.
   local konu kod wa wrc
-  wa=/config/.claude/skills/whatsapp-gonder/scripts/wa-gonder.sh
+  # 🔴 PROFİLE BAĞLANDI (gözün tur-1 bulgusu): küresel yol varsayılan KALIR ama profil onu
+  #    ezebilir; kuruluş yeri kutudan kutuya değişiyorsa alarm sessizce gitmez olurdu.
+  wa="${IMAR_WA_GONDER:-/config/.claude/skills/whatsapp-gonder/scripts/wa-gonder.sh}"
   if [ -x "$wa" ] || [ -r "$wa" ]; then
     bash "$wa" --kime Sultan "$1" >/dev/null 2>&1; wrc=$?
     case "$wrc" in

@@ -1,30 +1,30 @@
 {
   "is": "imar-filo-becerisi",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T18:33:53+03:00",
+  "guncelleme": "2026-10-15T18:44:08+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "kutu-bagimsiz-mi",
       "asama": "once",
       "dosya": "olcum-kutu-bagimsiz-mi-once.txt",
-      "sha256": "d72a5c5b1107e2c49b87c05c5321c8d67b67f536339bc349a5858f48861d66cd",
+      "sha256": "8d0cf79e0e1f5355b51043ab48f62ffe6db48355a53c69c9b6f17b9240a3d9db",
       "komut": [
         "bash",
         "/tmp/claude-1000/imar-prob/prob.sh",
         "/tmp/claude-1000/imar-prob/imar-ESKI.sh"
       ],
-      "rc": 0,
-      "renk": "yesil",
-      "zaman": "2026-10-15T18:32:27+03:00",
-      "sure_sn": 0.0
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T18:43:17+03:00",
+      "sure_sn": 0.9
     },
     {
       "tur": "olcum",
       "etiket": "kutu-bagimsiz-mi",
       "asama": "sonra",
       "dosya": "olcum-kutu-bagimsiz-mi-sonra.txt",
-      "sha256": "6581e76f6da0bdbb418ba258d5b08e84a2a4a1def25df2c266013e2acb1df4e3",
+      "sha256": "e926573a46a3b2d0e7b2ce87f4d48afd43b7044f7afc83718a667d75cb0f9f98",
       "komut": [
         "bash",
         "/tmp/claude-1000/imar-prob/prob.sh",
@@ -32,8 +32,8 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-15T18:32:27+03:00",
-      "sure_sn": 0.0
+      "zaman": "2026-10-15T18:43:18+03:00",
+      "sure_sn": 0.5
     },
     {
       "tur": "olcum",
@@ -113,7 +113,54 @@
       "renk": "kirmizi",
       "zaman": "2026-10-15T18:33:53+03:00",
       "sure_sn": 13.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "yedi-sinav-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-yedi-sinav-tur2-sonra.txt",
+      "sha256": "5e65ae548bc71a49bbcd572f4d2e1f052d2396a018afdf37d2c6969862e265cd",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts/imar-sinav-hepsi.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:43:28+03:00",
+      "sure_sn": 10.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "profil-kodda-bagli-mi",
+      "asama": "sonra",
+      "dosya": "olcum-profil-kodda-bagli-mi-sonra.txt",
+      "sha256": "925b8e60cbb27ee1d7b093ec9a2afea6cb2a3cf954a8539252f822db0f61223c",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/projects/_wt/Sx-Claude-Skills-imar-filo-becerisi/imar/scripts && timeout 115 bash ./imar-kutu-bagimsizlik.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:43:30+03:00",
+      "sure_sn": 1.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-tur2-beklenen-kirmizi",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-tur2-beklenen-kirmizi-tek.txt",
+      "sha256": "48c79c5851a94e58be2143af58d04c48a876afd5568e6ad44b639d16a34b5ad7",
+      "komut": [
+        "bash",
+        "/tmp/tmp.Ibr7IXXY3N/kos.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T18:44:08+03:00",
+      "sure_sn": 7.8
     }
   ],
-  "imza": "679f1143489fee2d85ea6668c62fba78896a1526cb331f9ae33124213fc6a5ca"
+  "imza": "953c5e44af99d0b227f743baf7d47a2d5579fd8b19ad92c1795e9816fecb43c4"
 }

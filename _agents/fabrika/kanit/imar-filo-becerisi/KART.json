@@ -1,0 +1,19 @@
+{
+  "is": "imar-filo-becerisi",
+  "cumle": "IMAR recetesini (kendi kendine donen proje duzeni) MIHENK'e civili halden filo becerisine cevir: kutu-bagimsiz yollar + profil + dogma + tasinan sinavlar",
+  "istedi": "SERDAR",
+  "aldi": "MUMEYYIZ",
+  "zaman": "2026-10-15T18:21:24+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "kutu-bagimsizlik sinavi: beceri MIHENK DISINDA bir sahte kutuda kurulur ve kosar · tasinan 6 sinav ciplak rc=0 · civili mihenk yolu sayisi 0",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

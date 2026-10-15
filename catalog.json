@@ -1704,7 +1704,7 @@
       "type": "agent",
       "name": "⛩️ İMAR — kendi kendine dönen proje düzeni",
       "version": "0.1.0",
-      "description": "Sıfırdan doğan, olgunlaşmamış bir proje için kendi kendine dönen düzen: günlük insansız tur, kanıta vurma, fikir merceği, ikinci gözle çürütme, karne, olgunluk eşiği; olgunlaşınca DEVRİYE'ye devreder. Şalter KAPALI doğar. Kutuya özel ne varsa profilde beyan edilir, betiklerde çivili yol yoktur. 165 kapılı yedi hermetik sınav, biri 'başka kutuda kurulur ve koşar' iddiasını ölçer. Kaynak: MİHENK/NECCÂR reçetesi.",
+      "description": "Sıfırdan doğan, olgunlaşmamış bir proje için kendi kendine dönen düzen: günlük insansız tur, kanıta vurma, fikir merceği, ikinci gözle çürütme, karne, olgunluk eşiği; olgunlaşınca DEVRİYE'ye devreder. Şalter KAPALI doğar. Kutuya özel ne varsa profilde beyan edilir, betiklerde çivili yol yoktur. Yedi hermetik sınav (ölçülen kapı sayısı kutuya göre basılır, atlanan ayrı sayılır); biri 'başka kutuda kurulur ve koşar' iddiasını ölçer. Kaynak: MİHENK/NECCÂR reçetesi.",
       "tags": [
         "imar",
         "kendi-kendine-donen",

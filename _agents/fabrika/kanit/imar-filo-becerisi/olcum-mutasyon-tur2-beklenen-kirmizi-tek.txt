@@ -1,0 +1,210 @@
+$ bash /tmp/tmp.Ibr7IXXY3N/kos.sh
+# rc=1 sure=7.8s zaman=2026-10-15T18:44:08+03:00
+--- stdout ---
+### BEKLENEN KIRMIZI — BES mutasyon AYRI AYRI; her biri bir mekanizmayi soker.
+
+== MUT A: kutu civisi geri (imar.sh yine mihenk-muneccim varsayar)
+A · 🔴 profil kapısı: ölçülmeden kurulum YOK
+  ✓ A1 geçerli profil kabul edilir
+  ✓ A2 🔴 cihaz teyidi BOŞ profil REDDEDİLİR (200 kanıt değildir)
+  ✓ A3 🔴 bilinmeyen alan REDDEDİLİR (sessizce atlanan alan ölçülmemiş alandır)
+  ✓ A4 🔴 göreli yol REDDEDİLİR (koşulduğu dizine göre kayar)
+  ✓ A5 profil dosyası YOKSA rc=2 (ölçemedim), 0 DEĞİL
+B · 🔴 SAHTE KUTUDA kurulum fiilen koşar
+  ✓ B1 kuru koşu geçer
+  ✓ B2 gerçek kurulum geçer
+  ✓ B3 🔴 şalter KAPALI doğdu (değişmez)
+  ✓ B4 kurulum şalterin kapalı doğduğunu SÖYLER
+  ✓ B5 Bulgu Defteri yokken ÖLÇÜLEMEDİ der, uydurmaz
+  ✓ B6 zamanlayıcı satırı ÜRETİLİR ama crontab'a dokunulmaz
+C · 🔴 SIZINTI: sahte kutu MİHENK'i hiç görmedi
+  ✓ C1 kurulum MİHENK deposuna dizin AÇMADI
+  ✓ C2 🔴 kurulum çıktısında 'mihenk' GEÇMEZ
+  ✓ C3 şalter sahte kutunun İÇİNE yazıldı
+  ✓ C4 araştırma serisi sahte kutunun evinde açıldı
+  ✗ C5 🔴 ÜRETİM kodunda çivili kutu adı YOK (sınav dosyaları hariç) (rc=1, beklenen=0)
+D · 🔴 profil çözülmeden araç YEŞİL BASMAZ (fail-closed)
+  ✓ D1 IMAR_SERI yoksa karne ÖLÇEMEDİM der (rc=3)
+  ✓ D2 IMAR_SERI yoksa olgunluk ÖLÇEMEDİM der (rc=3)
+  ✓ D3 eksikliğin ADI söylenir (hangi değişken)
+E · 🔴 gözün tur-1 bulgusu: İLAN EDİLEN alan KODA BAĞLI mı (kayıt var, çağıran yok)
+  ✓ E1 çözücü IMAR_DEFTER_YAZ'ı profilden taşır
+  ✓ E2 çözücü BULGULAR_JSON taşır (profil ezebilir)
+  ✓ E3 çözücü IMAR_WA_GONDER taşır (alarm yolu kutudan kutuya değişir)
+  ✓ E4 🔴 defter aracı PROFİLDEN okunur: profilin gösterdiği yok dosya ÖLÇÜLEMEDİ üretir (rc=3)
+  ✓ E4b 🔴 ret mesajı PROFİLİN yolunu söyler (küresel varsayılanı değil)
+  ✓ E5 üretim kodunda küresel yol TEK BAŞINA kalmaz (profil ezebilir)
+F · 🔴 gözün tur-1 bulgusu: SAYIM DÜRÜST olsun (atlanan kapı yeşil değildir)
+  ✓ F1 toplu koşucu ATLANAN kapıyı AYRI sayar (metin kapısı, özyinelemesiz)
+  ✓ F2 🔴 atlanan varken 'hepsi koştu' DENMEZ uyarısı var
+  ✓ F2b koşucu ATLANDI/⏭ satırlarını fiilen sayar (grep -c)
+  ✓ F3 sınav dizini yoksa rc=3 (ölçemedim), 0 DEĞİL
+  ✓ F4 🔴 sayaç kapı satırlarını (✓/✗) atlama saymaz
+
+toplam=30 geçen=29 düşen=1
+A rc=1
+
+== MUT B: alarm cihaz-teyidi sarti kalkti ('200 dondu' yeterli sanilir)
+A · 🔴 profil kapısı: ölçülmeden kurulum YOK
+  ✓ A1 geçerli profil kabul edilir
+  ✗ A2 🔴 cihaz teyidi BOŞ profil REDDEDİLİR (200 kanıt değildir) (rc=0, beklenen=1)
+  ✓ A3 🔴 bilinmeyen alan REDDEDİLİR (sessizce atlanan alan ölçülmemiş alandır)
+  ✓ A4 🔴 göreli yol REDDEDİLİR (koşulduğu dizine göre kayar)
+  ✓ A5 profil dosyası YOKSA rc=2 (ölçemedim), 0 DEĞİL
+B · 🔴 SAHTE KUTUDA kurulum fiilen koşar
+  ✓ B1 kuru koşu geçer
+  ✓ B2 gerçek kurulum geçer
+  ✓ B3 🔴 şalter KAPALI doğdu (değişmez)
+  ✓ B4 kurulum şalterin kapalı doğduğunu SÖYLER
+  ✓ B5 Bulgu Defteri yokken ÖLÇÜLEMEDİ der, uydurmaz
+  ✓ B6 zamanlayıcı satırı ÜRETİLİR ama crontab'a dokunulmaz
+C · 🔴 SIZINTI: sahte kutu MİHENK'i hiç görmedi
+  ✓ C1 kurulum MİHENK deposuna dizin AÇMADI
+  ✓ C2 🔴 kurulum çıktısında 'mihenk' GEÇMEZ
+  ✓ C3 şalter sahte kutunun İÇİNE yazıldı
+  ✓ C4 araştırma serisi sahte kutunun evinde açıldı
+  ✓ C5 🔴 ÜRETİM kodunda çivili kutu adı YOK (sınav dosyaları hariç)
+D · 🔴 profil çözülmeden araç YEŞİL BASMAZ (fail-closed)
+  ✓ D1 IMAR_SERI yoksa karne ÖLÇEMEDİM der (rc=3)
+  ✓ D2 IMAR_SERI yoksa olgunluk ÖLÇEMEDİM der (rc=3)
+  ✓ D3 eksikliğin ADI söylenir (hangi değişken)
+E · 🔴 gözün tur-1 bulgusu: İLAN EDİLEN alan KODA BAĞLI mı (kayıt var, çağıran yok)
+  ✓ E1 çözücü IMAR_DEFTER_YAZ'ı profilden taşır
+  ✓ E2 çözücü BULGULAR_JSON taşır (profil ezebilir)
+  ✓ E3 çözücü IMAR_WA_GONDER taşır (alarm yolu kutudan kutuya değişir)
+  ✓ E4 🔴 defter aracı PROFİLDEN okunur: profilin gösterdiği yok dosya ÖLÇÜLEMEDİ üretir (rc=3)
+  ✓ E4b 🔴 ret mesajı PROFİLİN yolunu söyler (küresel varsayılanı değil)
+  ✓ E5 üretim kodunda küresel yol TEK BAŞINA kalmaz (profil ezebilir)
+F · 🔴 gözün tur-1 bulgusu: SAYIM DÜRÜST olsun (atlanan kapı yeşil değildir)
+  ✓ F1 toplu koşucu ATLANAN kapıyı AYRI sayar (metin kapısı, özyinelemesiz)
+  ✓ F2 🔴 atlanan varken 'hepsi koştu' DENMEZ uyarısı var
+  ✓ F2b koşucu ATLANDI/⏭ satırlarını fiilen sayar (grep -c)
+  ✓ F3 sınav dizini yoksa rc=3 (ölçemedim), 0 DEĞİL
+  ✓ F4 🔴 sayaç kapı satırlarını (✓/✗) atlama saymaz
+
+toplam=30 geçen=29 düşen=1
+B rc=1
+
+== MUT C: karne fail-open (profil cozulmeden uydurma dizini olcer)
+A · 🔴 profil kapısı: ölçülmeden kurulum YOK
+  ✓ A1 geçerli profil kabul edilir
+  ✓ A2 🔴 cihaz teyidi BOŞ profil REDDEDİLİR (200 kanıt değildir)
+  ✓ A3 🔴 bilinmeyen alan REDDEDİLİR (sessizce atlanan alan ölçülmemiş alandır)
+  ✓ A4 🔴 göreli yol REDDEDİLİR (koşulduğu dizine göre kayar)
+  ✓ A5 profil dosyası YOKSA rc=2 (ölçemedim), 0 DEĞİL
+B · 🔴 SAHTE KUTUDA kurulum fiilen koşar
+  ✓ B1 kuru koşu geçer
+  ✓ B2 gerçek kurulum geçer
+  ✓ B3 🔴 şalter KAPALI doğdu (değişmez)
+  ✓ B4 kurulum şalterin kapalı doğduğunu SÖYLER
+  ✓ B5 Bulgu Defteri yokken ÖLÇÜLEMEDİ der, uydurmaz
+  ✓ B6 zamanlayıcı satırı ÜRETİLİR ama crontab'a dokunulmaz
+C · 🔴 SIZINTI: sahte kutu MİHENK'i hiç görmedi
+  ✓ C1 kurulum MİHENK deposuna dizin AÇMADI
+  ✓ C2 🔴 kurulum çıktısında 'mihenk' GEÇMEZ
+  ✓ C3 şalter sahte kutunun İÇİNE yazıldı
+  ✓ C4 araştırma serisi sahte kutunun evinde açıldı
+  ✓ C5 🔴 ÜRETİM kodunda çivili kutu adı YOK (sınav dosyaları hariç)
+D · 🔴 profil çözülmeden araç YEŞİL BASMAZ (fail-closed)
+  ✗ D1 IMAR_SERI yoksa karne ÖLÇEMEDİM der (rc=3) (rc=0, beklenen=3)
+  ✓ D2 IMAR_SERI yoksa olgunluk ÖLÇEMEDİM der (rc=3)
+  ✗ D3 eksikliğin ADI söylenir (hangi değişken) (çıktıda 'IMAR_SERI' yok)
+E · 🔴 gözün tur-1 bulgusu: İLAN EDİLEN alan KODA BAĞLI mı (kayıt var, çağıran yok)
+  ✓ E1 çözücü IMAR_DEFTER_YAZ'ı profilden taşır
+  ✓ E2 çözücü BULGULAR_JSON taşır (profil ezebilir)
+  ✓ E3 çözücü IMAR_WA_GONDER taşır (alarm yolu kutudan kutuya değişir)
+  ✓ E4 🔴 defter aracı PROFİLDEN okunur: profilin gösterdiği yok dosya ÖLÇÜLEMEDİ üretir (rc=3)
+  ✓ E4b 🔴 ret mesajı PROFİLİN yolunu söyler (küresel varsayılanı değil)
+  ✓ E5 üretim kodunda küresel yol TEK BAŞINA kalmaz (profil ezebilir)
+F · 🔴 gözün tur-1 bulgusu: SAYIM DÜRÜST olsun (atlanan kapı yeşil değildir)
+  ✓ F1 toplu koşucu ATLANAN kapıyı AYRI sayar (metin kapısı, özyinelemesiz)
+  ✓ F2 🔴 atlanan varken 'hepsi koştu' DENMEZ uyarısı var
+  ✓ F2b koşucu ATLANDI/⏭ satırlarını fiilen sayar (grep -c)
+  ✓ F3 sınav dizini yoksa rc=3 (ölçemedim), 0 DEĞİL
+  ✓ F4 🔴 sayaç kapı satırlarını (✓/✗) atlama saymaz
+
+toplam=30 geçen=28 düşen=2
+C rc=1
+
+== MUT D: profil alani KODA BAGLI DEGIL (ilan var, cagiran yok) — gozun tur-1 bulgusu
+A · 🔴 profil kapısı: ölçülmeden kurulum YOK
+  ✓ A1 geçerli profil kabul edilir
+  ✓ A2 🔴 cihaz teyidi BOŞ profil REDDEDİLİR (200 kanıt değildir)
+  ✓ A3 🔴 bilinmeyen alan REDDEDİLİR (sessizce atlanan alan ölçülmemiş alandır)
+  ✓ A4 🔴 göreli yol REDDEDİLİR (koşulduğu dizine göre kayar)
+  ✓ A5 profil dosyası YOKSA rc=2 (ölçemedim), 0 DEĞİL
+B · 🔴 SAHTE KUTUDA kurulum fiilen koşar
+  ✓ B1 kuru koşu geçer
+  ✓ B2 gerçek kurulum geçer
+  ✓ B3 🔴 şalter KAPALI doğdu (değişmez)
+  ✓ B4 kurulum şalterin kapalı doğduğunu SÖYLER
+  ✓ B5 Bulgu Defteri yokken ÖLÇÜLEMEDİ der, uydurmaz
+  ✓ B6 zamanlayıcı satırı ÜRETİLİR ama crontab'a dokunulmaz
+C · 🔴 SIZINTI: sahte kutu MİHENK'i hiç görmedi
+  ✓ C1 kurulum MİHENK deposuna dizin AÇMADI
+  ✓ C2 🔴 kurulum çıktısında 'mihenk' GEÇMEZ
+  ✓ C3 şalter sahte kutunun İÇİNE yazıldı
+  ✓ C4 araştırma serisi sahte kutunun evinde açıldı
+  ✓ C5 🔴 ÜRETİM kodunda çivili kutu adı YOK (sınav dosyaları hariç)
+D · 🔴 profil çözülmeden araç YEŞİL BASMAZ (fail-closed)
+  ✓ D1 IMAR_SERI yoksa karne ÖLÇEMEDİM der (rc=3)
+  ✓ D2 IMAR_SERI yoksa olgunluk ÖLÇEMEDİM der (rc=3)
+  ✓ D3 eksikliğin ADI söylenir (hangi değişken)
+E · 🔴 gözün tur-1 bulgusu: İLAN EDİLEN alan KODA BAĞLI mı (kayıt var, çağıran yok)
+  ✓ E1 çözücü IMAR_DEFTER_YAZ'ı profilden taşır
+  ✓ E2 çözücü BULGULAR_JSON taşır (profil ezebilir)
+  ✓ E3 çözücü IMAR_WA_GONDER taşır (alarm yolu kutudan kutuya değişir)
+  ✗ E4 🔴 defter aracı PROFİLDEN okunur: profilin gösterdiği yok dosya ÖLÇÜLEMEDİ üretir (rc=3) (rc=0, beklenen=3)
+  ✓ E4b 🔴 ret mesajı PROFİLİN yolunu söyler (küresel varsayılanı değil)
+  ✗ E5 üretim kodunda küresel yol TEK BAŞINA kalmaz (profil ezebilir) (rc=1, beklenen=0)
+F · 🔴 gözün tur-1 bulgusu: SAYIM DÜRÜST olsun (atlanan kapı yeşil değildir)
+  ✓ F1 toplu koşucu ATLANAN kapıyı AYRI sayar (metin kapısı, özyinelemesiz)
+  ✓ F2 🔴 atlanan varken 'hepsi koştu' DENMEZ uyarısı var
+  ✓ F2b koşucu ATLANDI/⏭ satırlarını fiilen sayar (grep -c)
+  ✓ F3 sınav dizini yoksa rc=3 (ölçemedim), 0 DEĞİL
+  ✓ F4 🔴 sayaç kapı satırlarını (✓/✗) atlama saymaz
+
+toplam=30 geçen=28 düşen=2
+D rc=1
+
+== MUT E: atlama sayaci KENDI KAPI ADINI esler (sahte atlama) — bu araçta bizzat oldu
+A · 🔴 profil kapısı: ölçülmeden kurulum YOK
+  ✓ A1 geçerli profil kabul edilir
+  ✓ A2 🔴 cihaz teyidi BOŞ profil REDDEDİLİR (200 kanıt değildir)
+  ✓ A3 🔴 bilinmeyen alan REDDEDİLİR (sessizce atlanan alan ölçülmemiş alandır)
+  ✓ A4 🔴 göreli yol REDDEDİLİR (koşulduğu dizine göre kayar)
+  ✓ A5 profil dosyası YOKSA rc=2 (ölçemedim), 0 DEĞİL
+B · 🔴 SAHTE KUTUDA kurulum fiilen koşar
+  ✓ B1 kuru koşu geçer
+  ✓ B2 gerçek kurulum geçer
+  ✓ B3 🔴 şalter KAPALI doğdu (değişmez)
+  ✓ B4 kurulum şalterin kapalı doğduğunu SÖYLER
+  ✓ B5 Bulgu Defteri yokken ÖLÇÜLEMEDİ der, uydurmaz
+  ✓ B6 zamanlayıcı satırı ÜRETİLİR ama crontab'a dokunulmaz
+C · 🔴 SIZINTI: sahte kutu MİHENK'i hiç görmedi
+  ✓ C1 kurulum MİHENK deposuna dizin AÇMADI
+  ✓ C2 🔴 kurulum çıktısında 'mihenk' GEÇMEZ
+  ✓ C3 şalter sahte kutunun İÇİNE yazıldı
+  ✓ C4 araştırma serisi sahte kutunun evinde açıldı
+  ✓ C5 🔴 ÜRETİM kodunda çivili kutu adı YOK (sınav dosyaları hariç)
+D · 🔴 profil çözülmeden araç YEŞİL BASMAZ (fail-closed)
+  ✓ D1 IMAR_SERI yoksa karne ÖLÇEMEDİM der (rc=3)
+  ✓ D2 IMAR_SERI yoksa olgunluk ÖLÇEMEDİM der (rc=3)
+  ✓ D3 eksikliğin ADI söylenir (hangi değişken)
+E · 🔴 gözün tur-1 bulgusu: İLAN EDİLEN alan KODA BAĞLI mı (kayıt var, çağıran yok)
+  ✓ E1 çözücü IMAR_DEFTER_YAZ'ı profilden taşır
+  ✓ E2 çözücü BULGULAR_JSON taşır (profil ezebilir)
+  ✓ E3 çözücü IMAR_WA_GONDER taşır (alarm yolu kutudan kutuya değişir)
+  ✓ E4 🔴 defter aracı PROFİLDEN okunur: profilin gösterdiği yok dosya ÖLÇÜLEMEDİ üretir (rc=3)
+  ✓ E4b 🔴 ret mesajı PROFİLİN yolunu söyler (küresel varsayılanı değil)
+  ✓ E5 üretim kodunda küresel yol TEK BAŞINA kalmaz (profil ezebilir)
+F · 🔴 gözün tur-1 bulgusu: SAYIM DÜRÜST olsun (atlanan kapı yeşil değildir)
+  ✓ F1 toplu koşucu ATLANAN kapıyı AYRI sayar (metin kapısı, özyinelemesiz)
+  ✓ F2 🔴 atlanan varken 'hepsi koştu' DENMEZ uyarısı var
+  ✓ F2b koşucu ATLANDI/⏭ satırlarını fiilen sayar (grep -c)
+  ✓ F3 sınav dizini yoksa rc=3 (ölçemedim), 0 DEĞİL
+  ✗ F4 🔴 sayaç kapı satırlarını (✓/✗) atlama saymaz (rc=1, beklenen=0)
+
+toplam=30 geçen=29 düşen=1
+E rc=1
+--- stderr ---
