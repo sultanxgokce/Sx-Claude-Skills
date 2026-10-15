@@ -1,0 +1,29 @@
+{
+  "tur": 2,
+  "is": "denetci-kutu-disi-sinif",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T17:29:31+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 58568,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kutu-dışı bulgu ayrı sınıfa alınmış; sayılı turdan düşürülmüş, yüzey şartı ve ayrı defterle izlenebilir kılınmış, ardışık fren de normal turda doğru sıfırlanmış. Önceki turun uygulama kusuru giderilmiş ve yeni H kapılarıyla doğrudan ölçülmüş; üretimi durduracak açık kusur kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Asıl talep için kırmızı/yeşil önce-sonra ölçüm çifti mevcut; 44/44 özel kapı, ana sınavın gerçek çağrısı ve mekanizmaları ayrı ayrı bozan beklenen-kırmızı mutasyon kayıtları var. Önceki turdaki ardışıklık açığı H1-H7 ile gerçekçi kutu-dışı/kutu-dışı/normal dizisi üzerinden ölçülmüş ve ana sınav da yeşil kalmış."
+  }
+}
