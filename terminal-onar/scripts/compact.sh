@@ -11,9 +11,9 @@
 #       Kuyruk turu (bekçi her dakika kuyruk doluysa çağırır): koltuk boşaldıysa /compact; bu arada eşiğin altına inmişse (biri
 #       compact etmiş) ya da koltuk kapanmışsa kuyruktan düşer; 24 saat / 60 deneme sonra VAZGEÇİLİR (ekrana + günlüğe, sessiz değil).
 #
-# 🔴 YETKİ: --uygula AGENT_NAME ister; kimliksiz RET. Reis adı biliniyorsa (TO_REIS ya da $DURUM_DIZ/reis) yalnız o ad uygular;
-#    başkası "ölçebilir, uygulayamaz". Kuyruk turu (bekçi, kimliksiz) kaydın `kim` alanıyla koşar ve onu HER TURDA yeniden sınar:
-#    reis biliniyorsa kim == reis, değilse kim dolu; tutmayan kayıt gönderilmeden düşer (göz tur 1).
+# 🔴 YETKİ (kapalı-varsayılan): --uygula AGENT_NAME ister; kimliksiz RET. Reis adı (TO_REIS ya da $DURUM_DIZ/reis) BİLİNMİYORSA
+#    kimse uygulayamaz (ret); biliniyorsa yalnız o ad. Başkası "ölçebilir, uygulayamaz". Kuyruk turu (bekçi, kimliksiz) kaydın `kim`
+#    alanıyla koşar ve onu HER TURDA aynı kuralla sınar; tutmayan kayıt gönderilmeden düşer (göz tur 1+2).
 # 🔴 ÖLÇÜLEMEYEN KOLTUK compact EDİLMEZ: oturum kaydı bulunamazsa (sid yok / dosya yok) "ölçülemedi" basılır, tuş gitmez.
 # 🔴 PAYDA TAHMİNİ: kayıt model adını "[1m]" eki olmadan yazabiliyor → yüzde 200k paydayla tahmindir, satırda "~" ile işaretli.
 set -u
@@ -32,11 +32,12 @@ case "$ESIK" in ''|*[!0-9]*) echo "compact.sh: --esik sayı olmalı ($ESIK)" >&2
 
 # ── yetki ──
 reis_adi() { [ -n "${TO_REIS:-}" ] && { printf '%s' "$TO_REIS"; return; }; [ -f "$DURUM_DIZ/reis" ] && tr -d '\n' < "$DURUM_DIZ/reis"; }
-yetki_kapisi() {
+yetki_kapisi() {   # KAPALI-VARSAYILAN (göz tur 2 · ciddi): reis bilinmiyorsa kimse uygulayamaz; "dolu kimlik yeter" yolu YOK
   [ "$UYGULA" = 1 ] || return 0
   local kim="${AGENT_NAME:-}" reis; reis="$(reis_adi)"
   [ -n "$kim" ] || { echo "⛔ --uygula kimliksiz koşturulamaz: AGENT_NAME yok (ölçmek serbest, uygulamak reisin)" >&2; return 1; }
-  if [ -n "$reis" ] && [ "$kim" != "$reis" ]; then echo "⛔ --uygula yalnız kutu reisinin ($reis); sen: $kim — ölçüm basıldı, tuş gitmedi" >&2; return 1; fi
+  [ -n "$reis" ] || { echo "⛔ --uygula: kutu reisi BİLİNMİYOR (TO_REIS ya da $DURUM_DIZ/reis yok) — reis-dışı ret koşulsuzdur, reis adı yazılmadan uygulama kapalı; ölçüm serbest" >&2; return 1; }
+  [ "$kim" = "$reis" ] || { echo "⛔ --uygula yalnız kutu reisinin ($reis); sen: $kim — ölçüm basıldı, tuş gitmedi" >&2; return 1; }
   return 0
 }
 
@@ -65,12 +66,12 @@ compact_gonder() {  # $1 = koltuk (tmux oturumu) · $2 = kim adına (yetkili ad;
   tmux send-keys -t "=$1" Enter 2>/dev/null || return 1
   gunluk "compact gönderildi: $1 (kim: ${2:-?})"
 }
-# Kuyruk kaydının yetkisi (göz tur 1 · ciddi): bekçi kimliksiz koşar, yetki KAYITTAN gelir — kayıt yazılırken reis kapısından geçmişti.
-# Yine de her turda yeniden sınanır: reis biliniyorsa kim == reis, bilinmiyorsa kim dolu ve '?' değil. Tutmayan kayıt GÖNDERİLMEDEN düşer.
+# Kuyruk kaydının yetkisi (göz tur 1+2 · ciddi): bekçi kimliksiz koşar, yetki KAYITTAN gelir — kayıt yazılırken reis kapısından geçmişti.
+# Yine de her turda yeniden sınanır ve KAPALI-VARSAYILAN: reis bilinmiyorsa HİÇBİR kayıt yetkili değil; biliniyorsa kim == reis şart.
 kayit_yetkili() {  # $1 = kim → 0 yetkili, 1 değil
   local kim="$1" reis; reis="$(reis_adi)"
-  [ -n "$kim" ] && [ "$kim" != "?" ] && [ "$kim" != null ] || return 1
-  [ -z "$reis" ] || [ "$kim" = "$reis" ] || return 1
+  [ -n "$reis" ] || return 1
+  [ -n "$kim" ] && [ "$kim" != "?" ] && [ "$kim" != null ] && [ "$kim" = "$reis" ] || return 1
   return 0
 }
 kuyruga_al() {  # $1 ad · $2 yuzde · $3 hal · $4 kim

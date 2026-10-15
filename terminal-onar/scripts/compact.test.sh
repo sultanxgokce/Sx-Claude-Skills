@@ -68,6 +68,11 @@ AGENT_NAME=BASKA TO_REIS=MUTEVELLI kos --uygula
 [ "$(rc)" = 5 ] && grep -q 'yalnız kutu reisinin (MUTEVELLI); sen: BASKA' "$S/hata" && [ -z "$(iz)" ] && ok "Y2 reis bilinirken başkası --uygula RET, tuş gitmedi" || bad Y2 "rc=$(rc) $(h)"
 AGENT_NAME=BASKA TO_REIS=MUTEVELLI kos
 [ "$(rc)" = 0 ] && grep -q 'compact gerek' "$S/cikti" && ok "Y2b reis-dışı ÖLÇEBİLİR (yalnız uygulama kapalı)" || bad Y2b "rc=$(rc)"
+AGENT_NAME=MUTEVELLI kos --uygula
+[ "$(rc)" = 5 ] && grep -q 'kutu reisi BİLİNMİYOR' "$S/hata" && [ -z "$(iz)" ] && ok "Y3 reis adı bilinmiyorsa (TO_REIS/durum/reis yok) kimlikli çağrı bile --uygula YAPAMAZ (kapalı-varsayılan), tuş gitmedi" || bad Y3 "rc=$(rc) $(h) iz=$(iz)"
+printf 'MUTEVELLI' > "$S/durum/reis"; AGENT_NAME=MUTEVELLI kos --uygula; r1=$(rc); rm -f "$S/durum/reis"
+[ "$r1" = 0 ] && [ -n "$(iz)" ] && ok "Y3b reis adı \$DURUM_DIZ/reis dosyasından da okunur (TO_REIS yokken uygulama açılır)" || bad Y3b "rc=$r1"
+: > "$KQ"
 
 echo "U · uygula: boşa tuş, meşgule kuyruk"
 AGENT_NAME=MUTEVELLI TO_REIS=MUTEVELLI kos --uygula
@@ -87,7 +92,7 @@ TO_REIS=MUTEVELLI kos --bekle --uygula
 grep -q 'compact kuyruk yetkisiz düştü: KALFA (kim: BASKA)' "$S/durum/gunluk.log" && ok "B0b yetkisiz düşüş günlüğe" || bad B0b "$(cat "$S/durum/gunluk.log")"
 printf '{"an":"x","epoch":%s,"koltuk":"KALFA","yuzde":65,"hal":"girdi","deneme":0,"kim":"HERHANGI"}\n' "$SIMDI" > "$KQ"
 kos --bekle --uygula
-[ "$(iz)" = "$(printf 'send-keys -t =KALFA C-u\nsend-keys -t =KALFA -- /compact\nsend-keys -t =KALFA Enter')" ] && grep -q 'compact gönderildi: KALFA (kim: HERHANGI)' "$S/durum/gunluk.log" && ok "B0c reis bilinmiyorsa dolu kim yeter; gönderim kaydın sahibi adına günlüğe" || bad B0c "$(iz) $(tail -2 "$S/durum/gunluk.log")"
+[ -z "$(iz)" ] && [ ! -s "$KQ" ] && grep -q 'KALFA · kuyruk kaydı YETKİSİZ (kim: HERHANGI, reis: bilinmiyor)' "$S/hata" && ok "B0c reis bilinmiyorsa DOLU kim de yetmez: kayıt gönderilmeden düşer (kapalı-varsayılan, göz tur 2)" || bad B0c "iz=$(iz) $(h)"
 cp "$S/kq.yedek" "$KQ"; printf '⏺ Düşünüyor…\nesc to interrupt\n' > "$S/ekran-ZAKIR"; printf '❯ yarım kalmış yazı\n' > "$S/ekran-KALFA"
 TO_REIS=MUTEVELLI kos --bekle --uygula
 grep -q 'ZAKIR · hâlâ calisiyor, bekliyor (deneme 1)' "$S/cikti" && grep -q 'KALFA · hâlâ girdi' "$S/cikti" && [ -z "$(iz)" ] && [ "$(grep -c '"deneme":1' "$KQ")" = 2 ] && ok "B1 ikisi de meşgul: tuş yok, deneme 1" || bad B1 "$(c) $(cat "$KQ")"
@@ -101,7 +106,7 @@ printf '{"an":"x","epoch":%s,"koltuk":"ZAKIR","yuzde":75,"hal":"calisiyor","dene
 TO_REIS=MUTEVELLI kos --bekle --uygula
 grep -q 'VAZGEÇİLDİ' "$S/hata" && [ ! -s "$KQ" ] && grep -q 'compact VAZGEÇİLDİ: ZAKIR' "$S/durum/gunluk.log" && ok "B4 25 saattir meşgul → VAZGEÇİLDİ (ekrana kırmızı + günlük), kuyruktan düşer" || bad B4 "$(h) $(cat "$KQ")"
 printf '{"an":"x","epoch":%s,"koltuk":"YOKBOYLE","yuzde":75,"hal":"calisiyor","deneme":0,"kim":"MUTEVELLI"}\n' "$SIMDI" > "$KQ"
-kos --bekle --uygula
+TO_REIS=MUTEVELLI kos --bekle --uygula
 grep -q 'YOKBOYLE · kuyruktan düştü (koltuk artık yok' "$S/cikti" && [ ! -s "$KQ" ] && ok "B5 koltuk kapanmışsa kuyruktan düşer" || bad B5 "$(c)"
 kos --bekle; grep -q 'compact kuyruğu boş' "$S/cikti" && ok "B6 boş kuyruk: tek satır, iş yok" || bad B6 "$(c)"
 
