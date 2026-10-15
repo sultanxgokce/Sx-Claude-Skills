@@ -123,6 +123,13 @@ printf '⏺ Düşünüyor…\nesc to interrupt\n' > "$S/ekran-ZAKIR"
 ( sleep 0.5; printf '{"an":"y","epoch":%s,"koltuk":"BASIRET","yuzde":85,"hal":"calisiyor","deneme":0,"kim":"MUTEVELLI"}\n' "$SIMDI" >> "$KQ" ) & ep=$!
 TO_COMPACT_SINAV_BEKLE_SN=1 TO_REIS=MUTEVELLI kos --bekle --uygula; wait "$ep"
 grep -q '"koltuk":"ZAKIR".*"deneme":1' "$KQ" && grep -q '"koltuk":"BASIRET"' "$KQ" && ok "K2 tur sırasında eklenen BASIRET satırı yeniden yazımda KAYBOLMADI; ZAKIR deneme 1" || bad K2 "$(cat "$KQ")"
+# K3 (göz tur 4): elle --uygula da AYNI kilidi alır — bekçi turu kilidi tutarken elle çağrı boş koltuğa tuş GÖNDERMEZ (ölçüm basılır, rc 6)
+: > "$KQ"; printf '❯ \n' > "$S/ekran-BASIRET"
+( exec 8>"$KQ.tur.kilit"; flock 8; sleep 2 ) & kp=$!; sleep 0.3
+TO_COMPACT_KILIT_BEKLE_SN=1 AGENT_NAME=MUTEVELLI TO_REIS=MUTEVELLI kos --uygula; r=$(rc); wait "$kp"
+[ "$r" = 6 ] && [ -z "$(iz)" ] && grep -q 'ATLANDI' "$S/hata" && grep -q 'BASIRET.*compact gerek' "$S/cikti" && ok "K3 bekçi turu kilidi tutarken elle --uygula: tuş GİTMEDİ, ölçüm basıldı, rc 6 (iki yol aynı koltuğa gönderemez)" || bad K3 "rc=$r iz=$(iz) $(h)"
+AGENT_NAME=MUTEVELLI TO_REIS=MUTEVELLI kos --uygula
+[ "$(rc)" = 0 ] && [ -n "$(iz)" ] && ok "K3b kilit düşünce elle --uygula gönderir" || bad K3b "rc=$(rc)"
 
 echo; echo "toplam=$((GECEN+DUSEN)) geçen=$GECEN düşen=$DUSEN"
 [ "$DUSEN" = 0 ]

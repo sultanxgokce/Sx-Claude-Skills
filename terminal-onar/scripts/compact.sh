@@ -98,6 +98,12 @@ olc_hepsi() {  # satır: ad<TAB>hal<TAB>yuzde|-<TAB>son_compact|-<TAB>payda_tahm
 
 if [ "$MOD" = olc ]; then
   yetki_kapisi || exit 5
+  # 🔴 ORTAK KİLİT (göz tur 4): elle --uygula ile bekçinin kuyruk turu aynı anda aynı boş koltuğa /compact gönderebilirdi. Gönderim yapacak
+  #    her yol AYNI tur kilidini alır; kilit başkasındaysa en çok 15 sn beklenir, yine alınamazsa ölçüm basılır ama tuş GİTMEZ.
+  if [ "$UYGULA" = 1 ]; then
+    mkdir -p "$(dirname "$KUYRUK")"; exec 8>"$KUYRUK.tur.kilit"
+    if ! flock -w "${TO_COMPACT_KILIT_BEKLE_SN:-15}" 8; then UYGULA=0; KILIT_ATLANDI=1; echo "⚠ kuyruk turu şu an koşuyor (kilit) — --uygula bu seferlik ATLANDI, yalnız ölçüm; biraz sonra yeniden dene" >&2; fi
+  fi
   OLC="$(olc_hepsi)" || exit 3
   gerek=0; gonderildi=0; kuyruk=0; olculemedi=0; JS="["
   [ "$JSON" = 1 ] || echo "── compact ölçümü · kutu $KUTU · eşik %$ESIK$([ "$UYGULA" = 1 ] && echo " · UYGULA (${AGENT_NAME:-?})" || echo " · yalnız ölçüm")"
@@ -117,11 +123,12 @@ if [ "$MOD" = olc ]; then
   if [ "$JSON" = 1 ]; then echo "$JS]"; else
     echo "── $gerek compact gerek · $gonderildi gönderildi · $kuyruk kuyrukta · $olculemedi ölçülemedi$([ -s "$KUYRUK" ] && echo " · bekleyen kuyruk: $(grep -c . "$KUYRUK") ($KUYRUK)")"
     [ "$gerek" -gt 0 ] && [ "$UYGULA" = 0 ] && echo "   uygulamak: komut.sh compact --uygula   (AGENT_NAME=<reis>)"; fi
+  [ -n "${KILIT_ATLANDI:-}" ] && exit 6
   exit 0
 fi
 
 # ── kuyruk turu ──
-# 🔴 TUR KİLİDİ (göz tur 3): bekçi (cron, her dakika) ile elle çağrı çakışırsa aynı boş koltuğa iki /compact gider ya da bir turun kuyruk
+# 🔴 TUR KİLİDİ (göz tur 3+4): bekçi (cron, her dakika) ile elle çağrı çakışırsa aynı boş koltuğa iki /compact gider ya da bir turun kuyruk
 #    yazımı ötekini ezer. Tur boyunca flock tutulur; ikinci tur HİÇBİR koltuğa dokunmadan çıkar (oda-tetik uyandir ile aynı desen).
 #    Kuyruğa EKLEME (olc dalı, kuyruga_al) de aynı kilidi kısa süre alır: tur ortasında eklenen satır turun yeniden yazımında kaybolmaz.
 [ -s "$KUYRUK" ] || { [ "$JSON" = 1 ] || echo "compact kuyruğu boş"; exit 0; }

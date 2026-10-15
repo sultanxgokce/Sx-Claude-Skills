@@ -32,5 +32,14 @@
   "tikanma": {
     "yol": "devam",
     "neden": "3 turda 5/E yok ama ilerleme gerçek (2→2→4): iki ciddi yetki bulgusu kapatıldı, kalan tek bulgu kuyruk turu kilidi (oda-tetik tur kilidi deseni), düzeltmesi hazır; 4. (mutlak) tur bu düzeltmeyle"
-  }
+  },
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "BÂNİ",
+      "oturum": "NOTES 2026-10-15 04:55",
+      "gerekce": "SERDAR kararı NOTES 04:55 — gidiş 2→2→4, iki ciddi yetki bulgusu kapatıldı, kalan tek bulgu kuyruk kilidi 190bdd9 ile kapandı (33/33 + mutasyon); 4. tur yalnız kod yolu diff'iyle",
+      "zaman": "2026-10-15T04:55:21+03:00"
+    }
+  ]
 }

@@ -1,7 +1,7 @@
 {
   "is": "kutu-ici-compact",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T04:49:15+03:00",
+  "guncelleme": "2026-10-15T04:57:40+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -246,7 +246,55 @@
       "renk": "yesil",
       "zaman": "2026-10-15T04:49:15+03:00",
       "sure_sn": 10.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "compact-test-35-kapi-json-yolu",
+      "asama": "sonra",
+      "dosya": "olcum-compact-test-35-kapi-json-yolu-sonra.txt",
+      "sha256": "253568dfc37ccdefc474f74e617b8788049b5adfb40e2bd52a6af9d646c84117",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/compact.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T04:57:14+03:00",
+      "sure_sn": 15.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "compact-test-35-kapi-gomulu-yolu",
+      "asama": "sonra",
+      "dosya": "olcum-compact-test-35-kapi-gomulu-yolu-sonra.txt",
+      "sha256": "a1d630a19deea75c0e1aaba118122d7917e553c21a2129a56269a2166fb7f5ba",
+      "komut": [
+        "env",
+        "TO_CTX_WINDOWS=/yok",
+        "bash",
+        "terminal-onar/scripts/compact.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T04:57:27+03:00",
+      "sure_sn": 12.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "MUTASYON-KANITI-beklenen-kirmizi-elle-uygula-kilidi-kaldirildi",
+      "asama": "sonra",
+      "dosya": "olcum-MUTASYON-KANITI-beklenen-kirmizi-elle-uygula-kilidi-kaldirildi-sonra.txt",
+      "sha256": "51080534f0493fbed0d2d3301bbfa51705ed73f524e06f74ff3ba4946fbe3017",
+      "komut": [
+        "bash",
+        "-c",
+        "echo \"=== MUTASYON KANITI: kod BİLEREK bozuldu (geçici kopyada elle --uygula ortak kilidi almıyor → bekçi turuyla aynı koltuğa gönderebilir). Aşağıdaki KIRMIZI satır BEKLENENDİR; rc=0 = sınav bozuk kodu YAKALADI. Gerçek ölçüm: compact-test-35-kapi-json-yolu ===\"; bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut-cmp7-3643132/terminal-onar/scripts/compact.test.sh; [ $? = 1 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T04:57:40+03:00",
+      "sure_sn": 13.4
     }
   ],
-  "imza": "b270f8e6f6493b155c880300d62e4ed322740d50b0f5b863ad7dcb8bc443a41f"
+  "imza": "055903e3854b65f95cc90f90c235e5999a353b7cc9923bb10d0ca32dee8bc422"
 }
