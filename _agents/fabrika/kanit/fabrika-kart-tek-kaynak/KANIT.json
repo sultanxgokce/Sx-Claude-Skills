@@ -1,7 +1,7 @@
 {
   "is": "fabrika-kart-tek-kaynak",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T06:37:22+03:00",
+  "guncelleme": "2026-10-15T08:15:10+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -64,7 +64,53 @@
       "renk": "yesil",
       "zaman": "2026-10-15T06:36:58+03:00",
       "sure_sn": 0.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "MUTASYON-KANITI-beklenen-kirmizi-is-alani-izlenen-kart-suzgeci-eski-haline",
+      "asama": "sonra",
+      "dosya": "olcum-MUTASYON-KANITI-beklenen-kirmizi-is-alani-izlenen-kart-suzgeci-eski-haline-sonra.txt",
+      "sha256": "a3b445d3d9f84f39dc978ae14423222761cd31f38a8aa01387d0c139d4df0d46",
+      "komut": [
+        "bash",
+        "-c",
+        "echo '=== MUTASYON KANITI: kapat süzgeci eski hâline (yol metni eşlemesi) BOZULDU; aşağıdaki KIRMIZI BEKLENENDİR; rc=0 = sınav bozuk kodu YAKALADI. Gerçek ölçüm: is-alani-test-40-kapi ==='; bash /tmp/claude-1000/-config-projects-Nexus/f6109918-4d29-48c7-aa1d-245a3ef7140b/scratchpad/mut2-isalani-1792039903/is-alani.test.sh 2>&1 | grep -E '✗|SONUÇ'; [ ${PIPESTATUS[0]} = 1 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T07:51:44+03:00",
+      "sure_sn": 0.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "is-alani-test-40-kapi-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-is-alani-test-40-kapi-tur2-sonra.txt",
+      "sha256": "77b5bb84dfd6b58fce9c3153393bfa37b75a1e4b8fc62b044a23f605d6555351",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/is-alani.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T07:51:45+03:00",
+      "sure_sn": 0.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-test-137-kapi-tur2-TW-bayat-kopya-KARTjson-kart-yok-ve-2-yeni-mutant",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-test-137-kapi-tur2-TW-bayat-kopya-KARTjson-kart-yok-ve-2-yeni-mutant-sonra.txt",
+      "sha256": "181c96342b4d692fb14cc25f94ff1beaf5c5ade13b03b4fa6450f52adec4880f",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T08:15:10+03:00",
+      "sure_sn": 253.9
     }
   ],
-  "imza": "51b8c6bdd0e6fd3c68e3814ef090901e9304a738674df199c39c3daca2273375"
+  "imza": "1667f9219b8466a73efa6ef3220406c29f6fe22aab20840b63caff7ddd28d536"
 }

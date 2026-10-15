@@ -147,6 +147,23 @@ python3 -c "import json;assert json.load(open('$W/_agents/fabrika/kanit/is-w/KAR
 SAHTE_JSON="$(J 5 E "")" KANIT_DEPO="$W" bash "$D" is-w --diff "$T/d.patch" >/dev/null 2>&1; [ $? -ne 2 ]; g $? "KART.json kanıt manifestini BOZMAZ (sonraki koşum kanıt kapısında düşmüyor)"
 rm -f "$W/_agents/fabrika/kartlar/is-w.json"
 SAHTE_JSON="$(J 5 E "")" KANIT_DEPO="$W" bash "$D" is-w --diff "$T/d.patch" --reis-devam >/dev/null 2>&1; [ $? -ne 1 ]; g $? "iş alanında kart kopyası HİÇ yokken de birincil kart okunur (kapı 'karar YOK' demez)"
+# 🔴 göz tur 1: birincilde kart yokken alandaki BAYAT kopyaya geri dönmek talebi çürütür ("bayat kopya okunmaz") → okunmaz, rc=3
+#    (taze iş is-w2: is-w tavanını yemiş durumda; tavan kapısı kart okumadan ÖNCE koşar, rc=4 bu kapıyı maskelerdi)
+bash "$KT" ac is-w2 --is x --istedi SULTAN --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+KANIT_DEPO="$W" bash "$K" olcum is-w2 olc --asama tek -- echo 1 >/dev/null 2>&1
+mv "$T/_agents/fabrika/kartlar/is-w2.json" "$T/is-w2.kart.yedek"; mkdir -p "$W/_agents/fabrika/kartlar"; cp "$T/is-w2.kart.yedek" "$W/_agents/fabrika/kartlar/is-w2.json"
+CIKTI="$(SAHTE_JSON="$(J 5 E "")" SAHTE_ISTEM_KOPYA="$T/istem-w2.txt" KANIT_DEPO="$W" bash "$D" is-w2 --diff "$T/d.patch" 2>&1)"; RC=$?
+[ "$RC" -eq 3 ] && grep -q "OKUNMAZ" <<<"$CIKTI"; g $? "🔴 birincilde kart YOKKEN alandaki kopya OKUNMAZ: rc=3 + 'OKUNMAZ' (eski geri-dönüş kapandı)"
+[ ! -f "$T/istem-w2.txt" ] && [ ! -f "$W/_agents/fabrika/kanit/is-w2/DENETIM-1.json" ]; g $? "denetçiye istem HİÇ gitmedi, kayıt yazılmadı (bayat kartla puanlama yok)"
+mv "$T/is-w2.kart.yedek" "$T/_agents/fabrika/kartlar/is-w2.json"; rm -f "$W/_agents/fabrika/kartlar/is-w2.json"
+# 🔴 göz tur 1: KART.json anlık kopyası yazılamazsa hata YUTULMAZ — PR'a kart gitmezdi, denetim rc=3
+chmod a-w "$W/_agents/fabrika/kanit/is-w2"
+CIKTI="$(SAHTE_JSON="$(J 5 E "")" KANIT_DEPO="$W" bash "$D" is-w2 --diff "$T/d.patch" 2>&1)"; RC=$?; chmod u+w "$W/_agents/fabrika/kanit/is-w2"
+[ "$RC" -eq 3 ] && grep -q "YAZILAMADI" <<<"$CIKTI" && [ ! -f "$W/_agents/fabrika/kanit/is-w2/DENETIM-1.json" ]; g $? "🔴 KART.json yazılamayınca rc=3 + 'YAZILAMADI', kayıt yok (sahte başarı yok)"
+SAHTE_JSON="$(J 5 E "")" KANIT_DEPO="$W" bash "$D" is-w2 --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 0 ] && [ -f "$W/_agents/fabrika/kanit/is-w2/KART.json" ]; g $? "dizin yazılabilir olunca KART.json düşer ve tur 1 geçer (rc=0)"
+# verilen --kart dosyası yoksa denetim kartsız SÜRMEZ (eskiden cp hatası yutuluyor, denetçi kartsız puanlıyordu)
+SAHTE_JSON="$(J 5 E "")" KANIT_DEPO="$W" bash "$D" is-w2 --diff "$T/d.patch" --kart "$T/yok-boyle-kart.md" >"$T/kartyok.out" 2>&1; RC=$?   # kanıt W'de; kapı sırası kanıt→tavan→kart
+[ "$RC" -eq 3 ] && grep -q "okunamadı" "$T/kartyok.out"; g $? "🔴 --kart dosyası yoksa rc=3 + 'okunamadı' (kartsız sessiz puanlama kapandı)"
 bash "$KT" reis-dedi is-r2 --karar devam --oturum ref-r2 --gerekce "yirmi karakterden uzun bir gerekce metni" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "--reis eksikken REDDEDİLDİ"
 bash "$KT" reis-dedi is-r2 --karar devam --reis MUAVIN --gerekce "yirmi karakterden uzun bir gerekce metni" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "--oturum eksikken REDDEDİLDİ"
 bash "$KT" reis-dedi is-r2 --karar devam --reis MUAVIN --oturum ref-r2 --gerekce "kisa" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "kısa gerekçe REDDEDİLDİ"
@@ -282,6 +299,7 @@ SAHTE_JSON="$(J 5 E "")" bash "$D" is-f --diff "$T/d.patch" >/dev/null 2>&1; [ $
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo "════ Y · YEDEK GÖZ (Sultan Y0006): auto kipinde codex yoksa/düşerse yazandan farklı yeni Claude oturumu ════"
 FAKE="$T/bin"; mkdir -p "$FAKE"
+printf 'İŞ: buton ekle\nKİM İSTEDİ: Sultan\nSINIF: yok\n' > "$T/kart.md"   # T yukarıda temizlendi; Y koşumları kartsız koşmasın (denetçi artık --kart yoksa rc=3)
 cat > "$FAKE/claude" <<'SH'
 #!/usr/bin/env bash
 printf '%s\n' "ARGV: $*" >> "${CLAUDE_ARGV_LOG:-/dev/null}"
@@ -366,6 +384,8 @@ mut "reis-sinif-citini-kaldir" 's@^if k.get("sultan") or k.get("siniflar"): rais
 mut "mutlak-tavani-kaldir" 's@^if \[ "$TUR" -gt "$MUTLAK" \]; then@if false; then@'
 mut "yedek-gozu-kaldir" 's@if yedek_olur_mu; then YEDEK="codex yok";@if false; then YEDEK="codex yok";@'
 mut "kart-tek-kaynagi-kaldir" 's@^\[ -n "$KART_DEPO" \] || KART_DEPO="$DEPO"@KART_DEPO="$DEPO"@'
+mut "bayat-kopya-geri-donusu" 's@OKUNMAZ — kart.sh ile birincile yaz, sonra denetçiyi koştur"; return 3@"; printf "%s" "$DEPO/_agents/fabrika/kartlar/$IS.json"@'
+mut "kart-json-hatasi-yutulur" 's@denetim açılmaz"; exit 3; }@denetim açılmaz"; true; }@'
 mut "kirpma-kaydini-kaldir" 's@"kirpildi":{"oldu":kirp=="1","istem_bayt":int(bayt),"esik":int(esik)},@"kirpildi":{"oldu":False,"istem_bayt":int(bayt),"esik":int(esik)},@'
 
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"

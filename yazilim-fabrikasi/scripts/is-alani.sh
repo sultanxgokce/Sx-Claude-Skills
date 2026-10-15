@@ -150,14 +150,16 @@ kapat() {
   local yol="$KOK/$DEPO_AD-$is"
   if [ -d "$yol" ]; then
     local kirli
-    kirli="$(git -C "$yol" status --porcelain -uall 2>/dev/null | grep -v ' _agents/fabrika/kartlar/' | wc -l)"   # kartlar/ kopyası kayıtsız iş DEĞİL (kart birincilde; eski alanların kopyası sayılmaz)
+    # YALNIZ kayıtsız (??) kartlar/ kopyası kayıtsız iş DEĞİL (kart birincilde; eski aracın bıraktığı kopya). İzlenen/değiştirilmiş (' M', 'A ' …)
+    # kartlar/ dosyası İŞTİR ve sayılır — göz tur 1: yol metniyle eşleyen eski süzgeç izlenen değişikliği de kir dışı bırakıp SİLEBİLİYORDU.
+    kirli="$(git -C "$yol" status --porcelain -uall 2>/dev/null | grep -v '^?? _agents/fabrika/kartlar/' | wc -l)"
     if [ "$kirli" -gt 0 ]; then
       _hata "$yol içinde $kirli kayıtsız değişiklik var — önce commit'le ya da bilinçli sil (iş kaybı yok)"
       exit 1
     fi
     # kartlar/ altındaki kayıtsız kopyalar (eski aracın bıraktığı) iş değildir ama `worktree remove`yi engeller → önce onlar kaldırılır
-    if [ -n "$(git -C "$yol" status --porcelain -uall 2>/dev/null | grep ' _agents/fabrika/kartlar/')" ]; then
-      git -C "$yol" status --porcelain -uall | grep ' _agents/fabrika/kartlar/' | sed 's/^...//' | while IFS= read -r f; do rm -f "$yol/$f"; done
+    if [ -n "$(git -C "$yol" status --porcelain -uall 2>/dev/null | grep '^?? _agents/fabrika/kartlar/')" ]; then
+      git -C "$yol" status --porcelain -uall | grep '^?? _agents/fabrika/kartlar/' | sed 's/^...//' | while IFS= read -r f; do rm -f "$yol/$f"; done
       _bilgi "· kartlar/ kayıtsız kopyası kaldırıldı (kart birincil depoda, iş kaybı yok)"
     fi
     git -C "$DEPO" worktree remove "$yol" || { _hata "worktree kaldırılamadı"; exit 1; }
