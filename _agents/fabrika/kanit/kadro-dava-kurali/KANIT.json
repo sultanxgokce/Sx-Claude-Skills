@@ -1,0 +1,203 @@
+{
+  "is": "kadro-dava-kurali",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-16T19:38:58+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "dava-kapi-sinavi",
+      "asama": "once",
+      "dosya": "olcum-dava-kapi-sinavi-once.txt",
+      "sha256": "2004aac77024bf6dadd13c71a824f97f3f1100959b21ceacb8397e5fff4e0f3a",
+      "komut": [
+        "node",
+        "/tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/ana-dava/terminal-onar/kapi/dava.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-16T19:38:50+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-ac-dava-kolu",
+      "asama": "once",
+      "dosya": "olcum-koltuk-ac-dava-kolu-once.txt",
+      "sha256": "79e5e76c7f5684487cce26775d9e5bc264999e50ab79f6068f451f8000b0d6b2",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/ana-dava/terminal-onar/scripts/koltuk-ac.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-16T19:37:04+03:00",
+      "sure_sn": 7.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dava-kapi-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-dava-kapi-sinavi-sonra.txt",
+      "sha256": "ee6c20f372ada2e0444a86051499f20721da573bfd23670c39b2bf1008f7973a",
+      "komut": [
+        "node",
+        "/config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/kapi/dava.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T19:38:52+03:00",
+      "sure_sn": 1.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-ac-dava-kolu",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-ac-dava-kolu-sonra.txt",
+      "sha256": "b620e04b2da6005b2ad744c0d80e3e12a55f68df31a3b97394d8c54e2b10a467",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/scripts/koltuk-ac.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T19:37:25+03:00",
+      "sure_sn": 7.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-kadro",
+      "asama": "tek",
+      "dosya": "olcum-gerileme-kadro-tek.txt",
+      "sha256": "282e41ae4976e42422682235df28d82a9fad49874af278dd644dd11d717a9a40",
+      "komut": [
+        "node",
+        "/config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/kapi/kadro.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T19:37:25+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-kadro-yaz",
+      "asama": "tek",
+      "dosya": "olcum-gerileme-kadro-yaz-tek.txt",
+      "sha256": "219a1cac3396bac35dd725dc0601d8f548db83582013c1be35303745a608b211",
+      "komut": [
+        "node",
+        "/config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/kapi/kadro-yaz.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T19:37:25+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-kadro-hal",
+      "asama": "tek",
+      "dosya": "olcum-gerileme-kadro-hal-tek.txt",
+      "sha256": "96dc6510d9467e53b38da88fbca1131d9a8571879bd08d63688866e6092973b4",
+      "komut": [
+        "node",
+        "/config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/kapi/kadro-hal.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T19:37:27+03:00",
+      "sure_sn": 1.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-kimlik",
+      "asama": "tek",
+      "dosya": "olcum-gerileme-kimlik-tek.txt",
+      "sha256": "5cdd6f2990fc0131e305469f91cd02483e4992e7681a604ce39e95c637eb73bb",
+      "komut": [
+        "node",
+        "/config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/kapi/kimlik.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T19:37:27+03:00",
+      "sure_sn": 0.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-sunucu",
+      "asama": "tek",
+      "dosya": "olcum-gerileme-sunucu-tek.txt",
+      "sha256": "272b901f7677042869d269c57dfce9506ad0404f1f50a7e69997f34a0f11bbc7",
+      "komut": [
+        "node",
+        "/config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T19:37:35+03:00",
+      "sure_sn": 8.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-bekci-iz",
+      "asama": "tek",
+      "dosya": "olcum-gerileme-bekci-iz-tek.txt",
+      "sha256": "2eba94ee5c090c2e8f8f14f4d5730f98d947ea6b5b83afe6dc3cac4d8559be94",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/scripts/bekci-iz.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T19:37:36+03:00",
+      "sure_sn": 0.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-koltuk-bagla",
+      "asama": "tek",
+      "dosya": "olcum-gerileme-koltuk-bagla-tek.txt",
+      "sha256": "d8f6ee1e4f645a4eb9e6f3856ce2f70432dd8f07213d333b653c66ae9d47c013",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T19:37:42+03:00",
+      "sure_sn": 6.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-onar",
+      "asama": "tek",
+      "dosya": "olcum-gerileme-onar-tek.txt",
+      "sha256": "10e22d1af21bdb12af50ae274905b60875e943e87969f979d665be9e06852949",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/scripts/onar.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T19:37:44+03:00",
+      "sure_sn": 1.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dava-mutasyon",
+      "asama": "tek",
+      "dosya": "olcum-dava-mutasyon-tek.txt",
+      "sha256": "b1b13413f96863038f2272c3dcc022b0f505481f7ba385a114b53951f04cdbaf",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/kapi/dava.mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T19:38:58+03:00",
+      "sure_sn": 6.5
+    }
+  ],
+  "imza": "405cc340ea70aa0016e12cfa71574e95bcdb08b739f2eb69530b71d05184c779"
+}

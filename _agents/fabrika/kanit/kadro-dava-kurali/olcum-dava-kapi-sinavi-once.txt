@@ -1,0 +1,14 @@
+$ node /tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/ana-dava/terminal-onar/kapi/dava.test.mjs
+# rc=1 sure=0.0s zaman=2026-10-16T19:38:50+03:00
+--- stdout ---
+--- stderr ---
+file:///tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/ana-dava/terminal-onar/kapi/dava.test.mjs:12
+import { alanlarYaz, kisaAdGecerli, DOSYA_NO, baglaGeriAl, KadroHata } from './kadro-yaz.mjs';
+                                    ^^^^^^^^
+SyntaxError: The requested module './kadro-yaz.mjs' does not provide an export named 'DOSYA_NO'
+    at ModuleJob._instantiate (node:internal/modules/esm/module_job:226:21)
+    at async ModuleJob.run (node:internal/modules/esm/module_job:335:5)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+
+Node.js v22.23.0
