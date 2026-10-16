@@ -69,11 +69,17 @@ async function kapiAc(port, ek = {}) {
 const P1 = 18795, P2 = 18796;
 // 🔴 BAYAT KAPI PORTU (SERDAR 16 Eki, 3. ortam hatası "15 sn sayfa zaman aşımı"): yarım kalan bir koşumun kapısı sabit portu tutarsa
 //    kapiAc 200 görür, sayfa ÖLÜ ttyd soketine gider ve xterm hiç gelmez. Önce ölç: port cevap veriyorsa bu koşum değil, bayat kapıdır.
+//    Yoklama HAM TCP bağlantısıdır (bağımsız göz tur 2): HTTP durum koduna bakmak 404/401 veren ya da HTTP konuşmayan yabancı süreci kaçırırdı.
+import net from 'node:net';
+const portDolu = (port) => new Promise((r) => { const c = net.connect({ port, host: '127.0.0.1' }); const bitir = (v) => { try { c.destroy(); } catch {} r(v); };
+  c.once('connect', () => bitir(true)); c.once('error', () => bitir(false)); setTimeout(() => bitir(false), 1500); });
 for (const port of [P1, P2]) {
-  let acik = false; try { acik = (await fetch(`http://127.0.0.1:${port}/sinav/giris`, { signal: AbortSignal.timeout(1500) })).status === 200; } catch {}
-  if (acik) { console.log(`ÖLÇÜLEMEDİ: :${port} zaten cevap veriyor — yarım kalan koşumun kapısı (TO_KUTU=sinav sunucu.mjs). PID ile kapat: for p in $(pgrep -f 'node .*sunucu.mjs'); do tr '\\0' '\\n' </proc/$p/environ | grep -q '^TO_KUTU=sinav$' && echo $p; done`); process.exit(4); }
+  if (await portDolu(port)) { console.log(`ÖLÇÜLEMEDİ: :${port} zaten dinleniyor — yarım kalan koşumun kapısı (TO_KUTU=sinav sunucu.mjs) ya da yabancı süreç. PID ile kapat: for p in $(pgrep -f 'node .*sunucu.mjs'); do tr '\\0' '\\n' </proc/$p/environ | grep -q '^TO_KUTU=sinav$' && echo $p; done`); process.exit(4); }
 }
-const k1 = await kapiAc(P1), k2 = await kapiAc(P2, { KAPI_PANO: '0' });
+// Çıkışta çocuklar HER yolda kapanır (çökme dahil) — aksi hâlde sınavın kendi kapısı bir sonraki koşuma bayat port bırakır (bu oturumda ölçüldü).
+const cocuklar = [ttyd]; process.on('exit', () => { for (const c of cocuklar) { try { c.kill('SIGTERM'); } catch {} } try { execFileSync('tmux', ['-L', TMUX_L, 'kill-server'], { stdio: 'ignore' }); } catch {} });
+let k1, k2; try { k1 = await kapiAc(P1); cocuklar.push(k1); k2 = await kapiAc(P2, { KAPI_PANO: '0' }); cocuklar.push(k2); }
+catch (e) { console.log('ÖLÇÜLEMEDİ: ' + e.message + ' (kapı açılamadı — port/ortam)'); process.exit(4); }
 const giris = async (port) => { const r = await fetch(`http://127.0.0.1:${port}/sinav/giris`, { method: 'POST', headers: { 'content-type': 'application/json', 'x-kapi': '1' }, body: JSON.stringify({ parola: SIFRE }) });
   return ((r.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1]; };
 

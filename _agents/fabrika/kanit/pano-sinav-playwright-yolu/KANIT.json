@@ -1,7 +1,7 @@
 {
   "is": "pano-sinav-playwright-yolu",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-16T12:08:05+03:00",
+  "guncelleme": "2026-10-16T12:11:20+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -66,7 +66,39 @@
       "renk": "yesil",
       "zaman": "2026-10-16T12:08:05+03:00",
       "sure_sn": 41.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dolu-port-her-durum-kodu",
+      "asama": "sonra",
+      "dosya": "olcum-dolu-port-her-durum-kodu-sonra.txt",
+      "sha256": "11a48116774d69f081e288849f4f5e71a407aa8939b615bb8197437d772530da",
+      "komut": [
+        "bash",
+        "-c",
+        "\nr=0; cd terminal-onar/kapi\nfor kod in 404 401 500; do node -e \"require(\\\"http\\\").createServer((q,s)=>{s.writeHead($kod);s.end()}).listen(18795,\\\"127.0.0.1\\\")\" & SP=$!; sleep 0.4\n  timeout 60 node pano-sinav.mjs > /tmp/o-pw8.txt 2>&1; rc=$?; echo \"sahte kapı HTTP $kod → rc=$rc · $(grep -m1 ÖLÇÜLEMEDİ /tmp/o-pw8.txt | cut -c1-90)\"; kill $SP; wait $SP 2>/dev/null; [ $rc = 4 ] || r=1; done\nnode -e \"require(\\\"net\\\").createServer((c)=>c.destroy()).listen(18796,\\\"127.0.0.1\\\")\" & SP=$!; sleep 0.4\ntimeout 60 node pano-sinav.mjs > /tmp/o-pw8.txt 2>&1; rc=$?; echo \"HTTP konuşmayan TCP dinleyici :18796 → rc=$rc ($(grep -m1 -oE \"ÖLÇÜLEMEDİ: :[0-9]+ zaten\" /tmp/o-pw8.txt || echo \"yakalanmadı — sınır: bağlantı düşürülünce fetch hata verir, port boş sanılır\"))\"; kill $SP; wait $SP 2>/dev/null\necho \"── port boşken sınav normal koşar:\"\ntimeout 300 node pano-sinav.mjs > /tmp/o-pw8.txt 2>&1; rc=$?; echo \"exit=$rc $(grep GEÇEN /tmp/o-pw8.txt | tail -1)\"; [ $rc = 0 ] || r=1\nexit $r"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-16T12:09:44+03:00",
+      "sure_sn": 11.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dolu-port-ham-tcp-ve-cocuk-temizligi",
+      "asama": "sonra",
+      "dosya": "olcum-dolu-port-ham-tcp-ve-cocuk-temizligi-sonra.txt",
+      "sha256": "c4e46b376b9a26ef0c726b19ee52ad71fdba9137149827436bb69b9a92f7836b",
+      "komut": [
+        "bash",
+        "-c",
+        "\nr=0; cd terminal-onar/kapi\necho \"(önceki kayıt dolu-port-her-durum-kodu KIRMIZIYDI: ham TCP dinleyici yakalanmadı, sınav çöküp kendi :18795 kapısını bıraktı → sonraki koşum rc 4. Şimdi: ham TCP yoklama + çıkışta çocuk temizliği.)\"\nfor kod in 404 500; do node -e \"require(\\\"http\\\").createServer((q,s)=>{s.writeHead($kod);s.end()}).listen(18795,\\\"127.0.0.1\\\")\" & SP=$!; sleep 0.4\n  timeout 60 node pano-sinav.mjs > /tmp/o-pw9.txt 2>&1; rc=$?; echo \"sahte HTTP $kod :18795 → rc=$rc · $(grep -m1 -oE \"ÖLÇÜLEMEDİ: :[0-9]+ zaten dinleniyor\" /tmp/o-pw9.txt)\"; kill $SP; wait $SP 2>/dev/null; [ $rc = 4 ] || r=1; done\nnode -e \"require(\\\"net\\\").createServer((c)=>c.destroy()).listen(18796,\\\"127.0.0.1\\\")\" & SP=$!; sleep 0.4\ntimeout 60 node pano-sinav.mjs > /tmp/o-pw9.txt 2>&1; rc=$?; echo \"HTTP konuşmayan ham TCP :18796 → rc=$rc · $(grep -m1 -oE \"ÖLÇÜLEMEDİ: :[0-9]+ zaten dinleniyor\" /tmp/o-pw9.txt)\"; kill $SP; wait $SP 2>/dev/null; [ $rc = 4 ] || r=1\nsleep 0.5; kalan=0; for p in $(pgrep -f \"node .*sunucu.mjs\"); do tr \"\\0\" \"\\n\" < /proc/$p/environ 2>/dev/null | grep -q \"^TO_KUTU=sinav$\" && kalan=$((kalan+1)); done\necho \"rc 4 çıkışlarından sonra kalan sinav kapısı süreci: $kalan (0 olmalı) · :18795 dinleniyor mu: $(curl -s -o /dev/null -m 1 -w %{http_code} http://127.0.0.1:18795/ || echo hayır)\"; [ $kalan = 0 ] || r=1\necho \"── port boşken sınav normal koşar:\"\ntimeout 300 node pano-sinav.mjs > /tmp/o-pw9.txt 2>&1; rc=$?; echo \"exit=$rc · $(grep -E \"^tarayıcı:\" /tmp/o-pw9.txt) · $(grep GEÇEN /tmp/o-pw9.txt | tail -1)\"; [ $rc = 0 ] || r=1\nsleep 0.5; kalan=0; for p in $(pgrep -f \"node .*sunucu.mjs\"); do tr \"\\0\" \"\\n\" < /proc/$p/environ 2>/dev/null | grep -q \"^TO_KUTU=sinav$\" && kalan=$((kalan+1)); done; echo \"normal koşum sonrası kalan sinav kapısı: $kalan · bayat ttyd (pano-sinav-): $(pgrep -fc \"ttyd .*pano-sinav-\" || echo 0)\"; [ $kalan = 0 ] || r=1\nexit $r"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T12:11:20+03:00",
+      "sure_sn": 38.2
     }
   ],
-  "imza": "aa9ddd3a92c9731179ea5c0dcb9653774a7f5d61fad497b3d7c2b8eb0cebca57"
+  "imza": "b995f521e1985eb03f715573ca2a736e7c6249bf33687f94d50dea233adc01fd"
 }

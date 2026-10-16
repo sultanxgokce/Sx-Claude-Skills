@@ -15,5 +15,14 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": []
+  "gecmis": [],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "BÂNİ",
+      "oturum": "Nexus/_agents/bani/NOTES.md SERDAR 11:55 (16 Eki): 'küçük kart: pano-sinav varsayılan Playwright yolu nvm global, tek tur'",
+      "gerekce": "Kartı ben geniş yazdım (dim-okunur-sinav.mjs de sayıldı); o sınav bu dalda yok, #346'da — SERDAR'ın isteği yalnız pano-sinav. Kapsam pano-sinav + bulucu + bayat port; dim sınavı #346 birleşince ayrı küçük iş.",
+      "zaman": "2026-10-16T12:07:03+03:00"
+    }
+  ]
 }
