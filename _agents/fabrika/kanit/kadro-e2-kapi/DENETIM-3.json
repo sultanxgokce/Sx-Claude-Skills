@@ -1,0 +1,38 @@
+{
+  "tur": 3,
+  "is": "kadro-e2-kapi",
+  "pr": "341",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-16T00:52:53+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 111364,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 11,
+    "bayt": 44624
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, istenen dört eylem, kaynağa yazım, durum_once ile geri dönüş, Sultan çerezi ve altyapı koruması ölçümlerde karşılanmış. Ancak sunulan üretim farkı ile ölçüm çıktıları aynı sürümü göstermiyor; eşzamanlı eylem kilidi kanıtta geçerken farkta görünmediği için önce teslimat-kanıt eşleşmesi düzeltilmeli.",
+    "bulgular": [
+      {
+        "ne": "Ölçülen kod ile incelemeye sunulan fark tutarsız: sonuçlar eşzamanlı eylem kuyruğunu ve KH21c sınavını doğruluyor, fakat gösterilen sunucu uygulamasında istekleri sıralayan kilit yok ve gösterilen uçtan uca sınav kaynağında KH21c bulunmuyor. Bu nedenle önceki turun kayıp güncelleme açığının sunulan üretim kodunda gerçekten kapandığı doğrulanamıyor.",
+        "kanit": "olcum-uc-uctan-uca-sonra.txt 25/25 içinde KH21c'yi; olcum-mutasyon-turu-sonra.txt ise “eylem kuyruğu (kilit) sökülür → KH21c” mutantını bildiriyor. Buna karşılık DEĞİŞİKLİK içindeki terminal-onar/kapi/kadro-hal.test.mjs KH21b'den doğrudan KH22'ye geçiyor; terminal-onar/kapi/sunucu.mjs POST /api/kadro/hal akışı da kadroYaz/geri-al işlemlerini kuyruk veya kilit olmadan yürütüyor.",
+        "konum": "kanıt kaydı: olcum-uc-uctan-uca-sonra.txt ve olcum-mutasyon-turu-sonra.txt; terminal-onar/kapi/kadro-hal.test.mjs: KH21b–KH22; terminal-onar/kapi/sunucu.mjs: POST /api/kadro/hal",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sağlam ve sarı kayıt içermiyor; önce/sonra uçtan uca çifti, gerçek kayıt kopyaları ve mutasyon turu kapsam bakımından güçlü. Ne var ki ölçüm çıktıları sunulan farktan daha yeni görünen KH21c/kilit davranışını içeriyor; bu sürüm uyuşmazlığı nedeniyle yeşil ölçümlerin incelemeye verilen üretim kodunu sınadığı kesin değil."
+  }
+}

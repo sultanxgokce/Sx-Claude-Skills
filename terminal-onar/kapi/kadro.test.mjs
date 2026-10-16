@@ -2,7 +2,9 @@
 import { mkdtempSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { kayitAyristir, kayitOku, kadroBirlestir, HAL_KAYIT } from './kadro.mjs';
+import { kayitAyristir, kayitOku, kadroBirlestir, HAL_KAYIT, altyapiNeden } from './kadro.mjs';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { koltukSatirlari } from './koltuklar.mjs';
 let g = 0, k = 0; const kapi = (ad, ok, ek = '') => { if (ok) { g++; console.log('  ✓ ' + ad); } else { k++; console.log('  ✗ ' + ad + ' ' + ek); } };
 
@@ -45,15 +47,35 @@ kapi('C3 kayıtlı + oturum açık + Claude YOK → DÜŞEN (asıl düşen; bek�
 kapi('C4 kayıtlı + oturum yok + hal yok → kayıtta var çalışmıyor, hal_kayit bilinmiyor (uydurma yok)', G('MIMAR').grup === 'kayitta-var-calismiyor' && G('MIMAR').oturum === null && G('MIMAR').hal_kayit === 'bilinmiyor');
 kapi('C5 hal: emekli → geçici/emekli grubu — oturumu olsa bile düşen/çalışan sayılmaz', G('ESKI').grup === 'gecici-emekli' && G('ESKI').oturum && G('ESKI').oturum.ad === 'eski');
 kapi('C6 geçersiz hal metni (saçma) → bilinmiyor; tmux yok → kayıtta var çalışmıyor', G('TMUXSUZ').hal_kayit === 'bilinmiyor' && G('TMUXSUZ').grup === 'kayitta-var-calismiyor');
-kapi('C7 ana koltuk kayıtta yok → kişilerde "(kimliği yok)" olarak, kayıtsızlara DÜŞMEZ', r.kisiler.some((x) => x.ana && x.tmux === 'sedir-ana' && x.rol === '(kimliği yok)' && x.grup === 'calisan') && !r.kayitsiz.some((x) => x.ad === 'sedir-ana'));
+kapi('C7 ana koltuk kayıtta yok → ALTYAPI listesinde (ana oturum), ne kişilerde ne kayıtsızlarda (E2: kırmızı "boş oturum" değil)', r.altyapi.some((x) => x.ana && x.ad === 'sedir-ana' && x.altyapi === 'ana oturum') && !r.kisiler.some((x) => x.tmux === 'sedir-ana') && !r.kayitsiz.some((x) => x.ad === 'sedir-ana'), JSON.stringify(r.altyapi));
 kapi('C8 kayıtsız oturumlar: revak-yon (Claude var, soru) ve 20 (boş kabuk)', r.kayitsiz.map((x) => x.ad).sort().join() === '20,revak-yon' && r.kayitsiz.find((x) => x.ad === 'revak-yon').hal === 'soru');
-kapi('C9 sayılar gruba göre', JSON.stringify(r.sayilar) === JSON.stringify({ calisan: 3, dusen: 1, 'kayitta-var-calismiyor': 2, 'gecici-emekli': 1, kayitsiz: 2 }), JSON.stringify(r.sayilar));
+kapi('C9 sayılar gruba göre', JSON.stringify(r.sayilar) === JSON.stringify({ calisan: 2, dusen: 1, 'kayitta-var-calismiyor': 2, 'gecici-emekli': 1, kayitsiz: 2, altyapi: 1 }), JSON.stringify(r.sayilar));
 const r2 = kadroBirlestir({ uyeler: [], koltuklar, ana: 'sedir-ana' });
-kapi('C10 kayıt yoksa herkes kayıtsız (ana hariç) — kayıt uydurulmaz', r2.kisiler.length === 1 && r2.kayitsiz.length === 6);
+kapi('C10 kayıt yoksa herkes kayıtsız (ana altyapıda) — kayıt uydurulmaz', r2.kisiler.length === 0 && r2.kayitsiz.length === 6 && r2.altyapi.length === 1);
 const r3 = kadroBirlestir({ uyeler: kayitAyristir(`uyeler:\n  - id: A\n    tmux: "x:0"\n  - id: B\n    tmux: "x:0"\n`), koltuklar: koltukSatirlari('x\t1\t1\tajan\tbos\t\n'), ana: '' });
 kapi('C11 aynı tmux iki kayıtta: oturum İLKİNE bağlanır, ikincisi oturumsuz (bir koltuk iki kişiye verilmez)', r3.kisiler[0].oturum && r3.kisiler[1].oturum === null && r3.kayitsiz.length === 0);
 const r4 = kadroBirlestir({ uyeler: kayitAyristir(`uyeler:\n  - id: YIL\n    tmux: "2026:0"\n  - id: ONYEDI\n    tmux: "17:0"\n`), koltuklar: koltukSatirlari('20\t1\t1\tajan\tbos\t\n2026\t2\t1\tajan\tbos\t\n'), ana: '' });
 kapi('C12 sayısal adlar kırpılmaz: "2026:0" yalnız "2026"a bağlanır, "17" hiçbir koltuğa; "20" kayıtsız kalır (göz tur 1)', r4.kisiler[0].oturum && r4.kisiler[0].oturum.ad === '2026' && r4.kisiler[1].oturum === null && r4.kayitsiz.length === 1 && r4.kayitsiz[0].ad === '20', JSON.stringify(r4));
+console.log('── E · E2: altyapı etiketi · dondurulmuş · üretilmiş kayıt durumu');
+const LISTE2 = 'kutu-ana\t1\t0\tdiger\tbilinmiyor\t\ndash\t1\t0\tdiger\tbilinmiyor\t\ndashproxy\t1\t0\tdiger\tbilinmiyor\t\ndashwatch\t1\t0\tdiger\tbilinmiyor\t\ncode-kurtarici\t1\t1\tajan\tbos\t\nttyd-x\t1\t0\tdiger\tbilinmiyor\t\nkapi-kutu\t1\t0\tdiger\tbilinmiyor\t\nimglistener2\t1\t0\tdiger\tbilinmiyor\t\ndashboard-deneme\t1\t0\tdiger\tbilinmiyor\t\ndon\t1\t1\tajan\tbos\t\n';
+const e2 = kadroBirlestir({ uyeler: kayitAyristir('uyeler:\n  - id: DON\n    tmux: "don:0"\n    hal: calisiyor\n    durum: dondurulmus\n    durum_once: canli\n  - id: ESK\n    tmux: "esk:0"\n    durum: emekli\n'), koltuklar: koltukSatirlari(LISTE2), ana: 'kutu-ana' });
+kapi('E1 sekiz altyapı oturumu ayrı listede, gerekçeli; kayıtsız yalnız "dashboard-deneme" (önek benzerliği altyapı sayılmaz)', e2.altyapi.length === 8 && e2.kayitsiz.map((x) => x.ad).join() === 'dashboard-deneme' && e2.altyapi.find((x) => x.ad === 'dash').altyapi === 'mobil panel' && e2.altyapi.find((x) => x.ad === 'code-kurtarici').altyapi === 'kurtarıcı ajan', JSON.stringify(e2.altyapi.map((x) => x.ad + '=' + x.altyapi)));
+kapi('E2 durum: dondurulmus kaydın hal: calisiyor satırını ÖRTER → geçici/emekli grubu, oturumu açık olsa bile; geri_acilir (durum_once var)', e2.kisiler[0].hal_kayit === 'dondurulmus' && e2.kisiler[0].grup === 'gecici-emekli' && e2.kisiler[0].geri_acilir === true, JSON.stringify(e2.kisiler[0]));
+kapi('E3 durum: emekli ama durum_once yok → geri_acilir false (neyin geri konacağı bilinmiyor)', e2.kisiler[1].hal_kayit === 'emekli' && e2.kisiler[1].geri_acilir === false);
+kapi('E4 sayılar: altyapı ayrı sayılır, kayıtsız 1', e2.sayilar.altyapi === 8 && e2.sayilar.kayitsiz === 1);
+// koltuk-bagla.sh gizli() kalıplarının her örneği altyapı sayılmalı (kabuk listesi genişlerse koruma düşmesin)
+const KB = readFileSync(fileURLToPath(new URL('../scripts/koltuk-bagla.sh', import.meta.url)), 'utf8');
+const kaliplar = ((KB.match(/^gizli\(\)\s*\{\s*case "\$1" in ([^)]*)\)/m) || [])[1] || '').split('|').map((x) => x.trim()).filter(Boolean);
+const ornek = (k) => k.replace(/^\*/, 'ornek').replace(/\*$/, 'ornek');
+kapi('E5 koltuk-bagla gizli() kalıplarının hepsi altyapı (eşdeğerlik; kalıp okunamazsa kırmızı)', kaliplar.length >= 4 && kaliplar.every((k) => altyapiNeden(ornek(k))), JSON.stringify(kaliplar));
+// Üretilmiş kutu (aile dalı): aile kaydı + ekipc ekip kaydı (yalnız durum) + model (yalnız durum_once)
+const ur = join(T, 'uretilmis'); mkdirSync(join(ur, '_agents/handoff'), { recursive: true }); mkdirSync(join(ur, '_agents/ekip-os'), { recursive: true });
+writeFileSync(join(ur, '_agents/handoff/aile-registry.yaml'), 'uyeler:\n- id: u-yon\n  tmux: u-yon:0\n  rol: defteri akıtmak\n- id: u-mim\n  tmux: u-mim:0\n  rol: plan\n');
+writeFileSync(join(ur, '_agents/ekip-os/ekip-registry.yaml'), '# <!-- ekipc:uretilen:basla surum=1 hash=x -->\nuyeler:\n  - id: u-yon\n    rol: MÜDÜR\n    durum: dondurulmus\n    tmux: null\n  - id: u-mim\n    rol: MİMAR\n    durum: canli\n  - id: u-yeni\n    rol: KÂŞİF\n    durum: canli\n# <!-- ekipc:uretilen:bitti -->\n');
+writeFileSync(join(ur, '_agents/ekip-modeli.yaml'), 'roller:\n- ad: MÜDÜR\n  olcek:\n    ornekler:\n    - kayit: u-yon\n      durum: dondurulmus\n      durum_once: canli\n');
+const u = kayitOku(ur); const uy = u.uyeler.find((x) => x.id === 'u-yon'), um = u.uyeler.find((x) => x.id === 'u-mim');
+kapi('E6 aile dalı + üretilmiş ekip kaydı: durum ekip kaydından, rol/tmux aile kaydından KALIR, yeni üye EKLENMEZ', uy.durum === 'dondurulmus' && uy.rol === 'defteri akıtmak' && uy.tmux === 'u-yon:0' && um.rol === 'plan' && !u.uyeler.some((x) => x.id === 'u-yeni') && u.kaynak.length === 2, JSON.stringify(u));
+kapi('E7 durum_once ekip modelinden (derleyici taşımıyor) → geri_acilir', uy.durum_once === 'canli' && kadroBirlestir({ uyeler: u.uyeler, koltuklar: [], ana: '' }).kisiler.find((x) => x.id === 'u-yon').geri_acilir === true);
 console.log('── D · okunamayan kayıt dosyası');
 // kayıt YOLU var ama okunamıyor: dosya yerine DİZİN (EISDIR) — root dahil her kullanıcıda deterministik (göz tur 2: chmod 000 root'ta işlemiyordu)
 const kilit = join(T, 'kilit'); mkdirSync(join(kilit, '_agents/handoff/aile-registry.yaml'), { recursive: true });
