@@ -1,0 +1,15 @@
+$ bash -c 
+echo "BEKLENEN KIRMIZI — ana dal pano-sinav.mjs ortam değişkensiz: Nexus paketine gider, ikili yok → launch ÇÖKER (rc 1, yığın), rc=4 ÖLÇÜLEMEDİ değil."
+cd terminal-onar/kapi; timeout 60 node pano-sinav.mjs > /tmp/o-pw.txt 2>&1; rc=$?; echo "rc=$rc"; grep -E "Executable|triggerUncaught|ÖLÇÜLEMEDİ" /tmp/o-pw.txt | head -3 | cut -c1-160
+echo "Nexus playwright paketi: $(test -d /config/projects/Nexus/ui/node_modules/playwright && echo var || echo yok) · ikili: $(ls -d /config/.cache/ms-playwright/chromium_headless_shell-1217* 2>/dev/null | head -1 || echo YOK)"
+echo "nvm global playwright: $(ls -d /config/.nvm/versions/node/*/lib/node_modules/playwright 2>/dev/null | head -1) · ikili dizinleri: $(ls /config/.cache/ms-playwright/ 2>/dev/null | tr "\n" " ")"
+[ $rc = 4 ]
+# rc=1 sure=0.8s zaman=2026-10-16T11:59:06+03:00
+--- stdout ---
+BEKLENEN KIRMIZI — ana dal pano-sinav.mjs ortam değişkensiz: Nexus paketine gider, ikili yok → launch ÇÖKER (rc 1, yığın), rc=4 ÖLÇÜLEMEDİ değil.
+rc=1
+    triggerUncaughtException(
+browserType.launch: Executable doesn't exist at /config/.cache/ms-playwright/chromium_headless_shell-1217/chrome-headless-shell-linux64/chrome-headless-shell
+Nexus playwright paketi: var · ikili: 
+nvm global playwright: /config/.nvm/versions/node/v22.23.0/lib/node_modules/playwright · ikili dizinleri: chromium-1223 chromium-1228 chromium_headless_shell-1223 chromium_headless_shell-1228 ffmpeg-1011 webkit-2311 
+--- stderr ---

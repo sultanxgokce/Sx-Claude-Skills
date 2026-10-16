@@ -20,6 +20,9 @@ echo "── kişi↔oturum kimlik eşleşmesi (kimlik.test.mjs)"
 node kimlik.test.mjs || exit 1
 echo "── kapı-yenile: SIGHUP ile pano.js bağlantı düşürmeden tazelenir (kapi-yenile.test.mjs)"
 node kapi-yenile.test.mjs || exit 1
+echo "── tarayıcı bulucu (tarayici-bul.test.mjs — hermetik kapılar; G1 gerçek kutu: ikili yoksa rc 4 ÖLÇÜLEMEDİ = sarı, kırmızı değil)"
+node tarayici-bul.test.mjs && rc=0 || rc=$?   # set -e: rc burada yakalanır
+if [ $rc = 4 ]; then echo "ÖLÇÜLEMEDİ (sarı): bu koşucuda Playwright ikilisi yok — hermetik kapılar geçti, gerçek kutu kapısı ölçülmedi"; elif [ $rc != 0 ]; then exit 1; fi
 echo "── kapı birim sınavı (sunucu.test.mjs)"
 node sunucu.test.mjs
 echo "SONUÇ: kapı birim sınavı geçti"

@@ -1,0 +1,18 @@
+$ bash -c 
+r=0; cd terminal-onar/kapi
+for kod in 404 401 500; do node -e "require(\"http\").createServer((q,s)=>{s.writeHead($kod);s.end()}).listen(18795,\"127.0.0.1\")" & SP=$!; sleep 0.4
+  timeout 60 node pano-sinav.mjs > /tmp/o-pw8.txt 2>&1; rc=$?; echo "sahte kapı HTTP $kod → rc=$rc · $(grep -m1 ÖLÇÜLEMEDİ /tmp/o-pw8.txt | cut -c1-90)"; kill $SP; wait $SP 2>/dev/null; [ $rc = 4 ] || r=1; done
+node -e "require(\"net\").createServer((c)=>c.destroy()).listen(18796,\"127.0.0.1\")" & SP=$!; sleep 0.4
+timeout 60 node pano-sinav.mjs > /tmp/o-pw8.txt 2>&1; rc=$?; echo "HTTP konuşmayan TCP dinleyici :18796 → rc=$rc ($(grep -m1 -oE "ÖLÇÜLEMEDİ: :[0-9]+ zaten" /tmp/o-pw8.txt || echo "yakalanmadı — sınır: bağlantı düşürülünce fetch hata verir, port boş sanılır"))"; kill $SP; wait $SP 2>/dev/null
+echo "── port boşken sınav normal koşar:"
+timeout 300 node pano-sinav.mjs > /tmp/o-pw8.txt 2>&1; rc=$?; echo "exit=$rc $(grep GEÇEN /tmp/o-pw8.txt | tail -1)"; [ $rc = 0 ] || r=1
+exit $r
+# rc=1 sure=11.4s zaman=2026-10-16T12:09:44+03:00
+--- stdout ---
+sahte kapı HTTP 404 → rc=4 · ÖLÇÜLEMEDİ: :18795 zaten cevap veriyor (HTTP 404) — yarım kalan koşumun kapısı (
+sahte kapı HTTP 401 → rc=4 · ÖLÇÜLEMEDİ: :18795 zaten cevap veriyor (HTTP 401) — yarım kalan koşumun kapısı (
+sahte kapı HTTP 500 → rc=4 · ÖLÇÜLEMEDİ: :18795 zaten cevap veriyor (HTTP 500) — yarım kalan koşumun kapısı (
+HTTP konuşmayan TCP dinleyici :18796 → rc=1 (yakalanmadı — sınır: bağlantı düşürülünce fetch hata verir, port boş sanılır)
+── port boşken sınav normal koşar:
+exit=4 
+--- stderr ---
