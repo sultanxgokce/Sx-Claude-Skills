@@ -1,0 +1,29 @@
+$ bash -c 
+echo "BEKLENEN KIRMIZI — ana dal ($(git rev-parse --short origin/main)) pano.js (kanca yok) + onar.sh teması (brightBlack yok) ile AYNI sınav: D kapıları düşmeli, Ö kapıları geçmeli."
+T=$(mktemp -d); cp -r terminal-onar "$T/"; git show origin/main:terminal-onar/kapi/genel/pano.js > "$T/terminal-onar/kapi/genel/pano.js"; git show origin/main:terminal-onar/scripts/onar.sh > "$T/terminal-onar/scripts/onar.sh"
+cd "$T/terminal-onar/kapi" && timeout 180 node dim-okunur-sinav.mjs 2>&1 | grep -E "tema|✓|✗|geçti"; r=${PIPESTATUS[0]}; rm -r -- "$T"; exit $r
+# rc=1 sure=47.1s zaman=2026-10-16T11:21:34+03:00
+--- stdout ---
+BEKLENEN KIRMIZI — ana dal (bc58a6d) pano.js (kanca yok) + onar.sh teması (brightBlack yok) ile AYNI sınav: D kapıları düşmeli, Ö kapıları geçmeli.
+tema (onar.sh): bg #15120e · fg #ede5d7 · brightBlack YOK
+  ✓ Ö0 gerçek ttyd+tmux sayfası açıldı
+  ✓ Ö0b satırlar ekrana geldi
+  ✓ Ö1 köprü YOK (pano.js gömülmedi) — ölçüm eski davranışı görüyor
+  ✓ Ö2 🔴 "dim + gri-244" (Sultan'ın soru satırı) kontrastı < 3:1 — OKUNMUYOR (sorun gerçek)
+  ✓ Ö3 hücre dim bayrağı taşıyor (xterm dim çiziyor)
+  ✓ Ö4 düz dim normalin yarısından soluk (xterm yarım saydamlık; 4,4-4,5:1, AA kıyısında)
+── D · SONRA: kapı köprüyle (pano.js dim kancası + tema brightBlack)
+  ✓ D0 sayfa açıldı
+  ✓ D0b satırlar ekrana geldi
+  ✗ D1 köprü bağlı ve dim kancası takılı (__kapiPano.dimOkunur) 
+  ✗ D2 🔴 "dim + gri-244" soru satırı ≥ 4,5:1 (WCAG AA) — artık okunur L3 DIM gri-244: #4a4947 2.08:1 fg=244 dim=true
+  ✗ D3 düz dim ≥ 4,5:1 (brightBlack tonu) L2 DIM duz: #817c73 4.50:1 fg=-1 dim=true
+  ✗ D3b hücre artık dim DEĞİL (renkle ikincil, solgun değil) 
+  ✓ D4 normal metin DEĞİŞMEDİ (dim'siz SGR'ye dokunulmaz)
+  ✓ D5 dim kapanınca (22) metin VARSAYILAN renge döner
+  ✗ D6 dim'den önceki açık renk 22'de GERİ KONUR (yeşil → dim → yine yeşil) L5A yesil: #5ea702 6.23:1 fg=2 dim=false · L5B dim-yesil: #395d08 2.44:1 fg=2 dim=true · L5C yine-yesil: #5ea702 6.23:1 fg=2 dim=false
+  ✓ D7 bold+dim → 22 sonrası bold da kapanır, renk varsayılan (22 kaybolmaz)
+  ✗ D8 temanın brightBlack tonu kendisi ≥ 4,5:1 (ikincil metin okunur) L7 brightBlack: #686a66 3.42:1 fg=8 dim=false
+  ✓ D9 köprüsüz sayfadaki normal/yeşil renkler köprülüyle AYNI (yan etki yok)
+dim-okunur-sinav: 12 geçti · 6 kaldı
+--- stderr ---

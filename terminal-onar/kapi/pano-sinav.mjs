@@ -283,7 +283,7 @@ try {
     const dt = new DataTransfer(); const ev = new ClipboardEvent('copy', { clipboardData: dt, bubbles: true, cancelable: true }); document.dispatchEvent(ev);
     return { sec, odak: document.activeElement && document.activeElement.tagName, engellendi: ev.defaultPrevented, metin: dt.getData('text/plain'), yol: window.__kapiPano._sonYol() }; });
   kapi('S5 Shift+sürükle seçimi, odak terminalden kaçmışken copy olayında köprü tarafından yazılır (preventDefault + metin)', s5.sec.trim() === 'SHIFT-SECIM-XYZ' && s5.odak === 'BODY' && s5.engellendi && s5.metin.trim() === 'SHIFT-SECIM-XYZ' && s5.yol === 'copy', `→ ${JSON.stringify(s5)}`);
-  kapi('S6 köprü 1.2.2 söz ve düğme yolunu ilan eder', await pg.evaluate(() => window.__kapiPano.surum === '1.2.2' && window.__kapiPano.soz === true && window.__kapiPano.dugme === true));
+  kapi('S6 köprü 1.3.0 söz ve düğme yolunu ilan eder', await pg.evaluate(() => window.__kapiPano.surum === '1.3.0' && window.__kapiPano.soz === true && window.__kapiPano.dugme === true));
   // S7 · Sultan Safari 13:33: seçim panoya İNDİKTEN sonra aynı metin için ikinci yazım (yinelenen OSC 52) reddedilince kırmızı uyarı + düğme
   //      çıkıyordu. Söz yoluyla indir → writeText'i reddedecek şekilde boz → aynı metnin OSC 52'si yeniden gelsin → düğme YOK, kırmızı YOK.
   const dgGor = () => pg.$eval('#kapi-pano-kopyala', (e) => e.style.display !== 'none').catch(() => false);

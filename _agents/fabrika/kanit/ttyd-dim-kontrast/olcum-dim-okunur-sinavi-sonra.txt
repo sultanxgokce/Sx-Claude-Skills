@@ -1,0 +1,34 @@
+$ bash -c 
+r=0; cd terminal-onar/kapi
+timeout 180 node dim-okunur-sinav.mjs --kare ../../_agents/fabrika/kanit/ttyd-dim-kontrast/kare > /tmp/o-dim.txt 2>&1; rc=$?; grep -E "tema|✓|✗|geçti" /tmp/o-dim.txt; [ $rc = 0 ] || r=1
+timeout 300 node pano-sinav.mjs > /tmp/o-dim.txt 2>&1; rc=$?; echo "pano-sinav.mjs exit=$rc $(grep -E "GEÇEN" /tmp/o-dim.txt | tail -1) · S6 1.3.0: $(grep -c "✓ S6" /tmp/o-dim.txt)"; [ $rc = 0 ] || r=1
+timeout 300 bash kapi-sinav.test.sh > /tmp/o-dim.txt 2>&1; rc=$?; echo "kapi-sinav.test.sh exit=$rc $(grep -E "^SONUÇ: kapı" /tmp/o-dim.txt)"; [ $rc = 0 ] || r=1
+echo "kareler: $(ls ../../_agents/fabrika/kanit/ttyd-dim-kontrast/ | grep -c png) png · gerçek tmux sinav-* oturumu: $(tmux ls 2>/dev/null | grep -c "^sinav")"
+exit $r
+# rc=1 sure=116.2s zaman=2026-10-16T11:23:54+03:00
+--- stdout ---
+tema (onar.sh): bg #15120e · fg #ede5d7 · brightBlack #a89f91
+  ✓ Ö0 gerçek ttyd+tmux sayfası açıldı
+  ✓ Ö0b satırlar ekrana geldi
+  ✓ Ö1 köprü YOK (pano.js gömülmedi) — ölçüm eski davranışı görüyor
+  ✓ Ö2 🔴 "dim + gri-244" (Sultan'ın soru satırı) kontrastı < 3:1 — OKUNMUYOR (sorun gerçek)
+  ✓ Ö3 hücre dim bayrağı taşıyor (xterm dim çiziyor)
+  ✓ Ö4 düz dim normalin yarısından soluk (xterm yarım saydamlık; 4,4-4,5:1, AA kıyısında)
+── D · SONRA: kapı köprüyle (pano.js dim kancası + tema brightBlack)
+  ✓ D0 sayfa açıldı
+  ✓ D0b satırlar ekrana geldi
+  ✓ D1 köprü bağlı ve dim kancası takılı (__kapiPano.dimOkunur)
+  ✓ D2 🔴 "dim + gri-244" soru satırı ≥ 4,5:1 (WCAG AA) — artık okunur
+  ✓ D3 düz dim ≥ 4,5:1 (brightBlack tonu)
+  ✓ D3b hücre artık dim DEĞİL (renkle ikincil, solgun değil)
+  ✓ D4 normal metin DEĞİŞMEDİ (dim'siz SGR'ye dokunulmaz)
+  ✓ D5 dim kapanınca (22) metin VARSAYILAN renge döner
+  ✓ D6 dim'den önceki açık renk 22'de GERİ KONUR (yeşil → dim → yine yeşil)
+  ✓ D7 bold+dim → 22 sonrası bold da kapanır, renk varsayılan (22 kaybolmaz)
+  ✓ D8 temanın brightBlack tonu kendisi ≥ 4,5:1 (ikincil metin okunur)
+  ✓ D9 köprüsüz sayfadaki normal/yeşil renkler köprülüyle AYNI (yan etki yok)
+dim-okunur-sinav: 18 geçti · 0 kaldı
+pano-sinav.mjs exit=1 GEÇEN: 33 · KALAN: 1 · S6 1.3.0: 1
+kapi-sinav.test.sh exit=0 SONUÇ: kapı birim sınavı geçti
+kareler: 2 png · gerçek tmux sinav-* oturumu: 0
+--- stderr ---
