@@ -1,4 +1,4 @@
-// tarayici-bul.mjs — tarayıcı sınavları için Playwright'ı BULUR (2.13.x · SERDAR bulgusu gorev_01M50PZVB1GCVG6D33V1PH96CT).
+// tarayici-bul.mjs — tarayıcı sınavları için Playwright'ı BULUR (2.12.1 · SERDAR bulgusu gorev_01M50PZVB1GCVG6D33V1PH96CT).
 //
 // Niçin: pano-sinav varsayılan olarak /config/projects/Nexus/ui/node_modules'a bakıyordu. Orada paket VAR ama tarayıcı ikilisi
 // indirilmemiş (chromium_headless_shell-1217 yok) → import geçer, launch ÇÖKER (rc 1, yığın dökümü; rc=4 ÖLÇÜLEMEDİ değil).
