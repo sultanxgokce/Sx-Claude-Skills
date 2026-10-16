@@ -58,7 +58,28 @@ const RESIM_URL = process.env.KAPI_RESIM_URL || 'http://127.0.0.1:8391/upload';
 // ttyd'nin HTML sayfasına genel/pano.js gömülür: resim yapıştır → /api/resim → yol terminale; tmux seçimi (OSC 52)
 // → tarayıcı panosu. KAPI_PANO=0 ile kapatılır (geriye dönük: o zaman vekil bayt bayt eski hâli).
 const PANO_ACIK = process.env.KAPI_PANO !== '0';
-const PANO_JS = PANO_ACIK ? fs.readFileSync(path.join(GENEL, 'pano.js'), 'utf8') : '';
+// 🔴 KAPI-YENİLE (2.12.0 · SERDAR 00:5x): pano.js açılışta BELLEĞE alınıyordu; yeni pano sürümü diske inince canlı kapı eskiyi
+//    sunmaya devam ediyor, tek yol kapıyı yeniden başlatmaktı — bu Sultan'ın web terminalini koparır. Artık SIGHUP pano.js'i
+//    bağlantı düşürmeden yeniden okur. Kapı pid'ini ve yüklü pano sha'sını durum dizinine yazar; /giris yanıtı `x-kapi-pano`
+//    başlığıyla sha'yı söyler (girişsiz uç, sır değil) — `komut.sh kapi-yenile` bununla tazelenmeyi DOĞRULAR, varsaymaz.
+//    SIGHUP'ı tanımayan eski kapıda sinyal süreci ÖLDÜRÜR; o yüzden komut önce kapi.pid'in canlı pid'le eşleştiğine bakar.
+const PANO_YOL = process.env.KAPI_PANO_YOL || path.join(GENEL, 'pano.js');
+let PANO_JS = '', PANO_SHA = '';
+function panoYukle() {
+  if (!PANO_ACIK) { PANO_JS = ''; PANO_SHA = 'kapali'; return; }
+  const js = fs.readFileSync(PANO_YOL, 'utf8');   // okunamazsa fırlatır: açılışta ölümcül, SIGHUP'ta eski kopya durur
+  PANO_JS = js; PANO_SHA = crypto.createHash('sha256').update(js).digest('hex').slice(0, 12);
+  try { fs.writeFileSync(path.join(DURUM_DIZ, 'kapi.pano-sha'), PANO_SHA + '\n'); } catch (e) { console.error(new Date().toISOString(), `kapı: kapi.pano-sha yazılamadı: ${e.message}`); }
+}
+// Dizin ÖNCE (bağımsız göz tur 1): yoksa ilk kapi.pano-sha yazımı sessizce kaybolurdu — yazamıyorsa günlüğe düşer, kapı yine açılır.
+try { fs.mkdirSync(DURUM_DIZ, { recursive: true }); } catch (e) { console.error(new Date().toISOString(), `kapı: durum dizini açılamadı (${DURUM_DIZ}): ${e.message}`); }
+panoYukle();
+try { fs.writeFileSync(path.join(DURUM_DIZ, 'kapi.pid'), String(process.pid) + '\n'); } catch (e) { console.error(new Date().toISOString(), `kapı: kapi.pid yazılamadı: ${e.message}`); }
+process.on('SIGHUP', () => {
+  const eski = PANO_SHA;
+  try { panoYukle(); console.log(new Date().toISOString(), `kapı: SIGHUP — pano.js yeniden okundu (${eski} → ${PANO_SHA}), bağlantılar açık`); }
+  catch (e) { console.error(new Date().toISOString(), `kapı: SIGHUP — pano.js okunamadı (${e.message}); eski kopya (${eski}) sunulmaya devam`); }
+});
 // 🔴 Parola değişkeninin ADI kutudan türer (SEDIR__… · AKAR__…). Sert yazılsaydı
 //    beceri ikinci kutuda parolayı bulamaz, fail-closed açılmaz ve sebebi "parola yok"
 //    gibi görünürdü — oysa parola vardı, aranan ad yanlıştı. Ad da veri gibi taşınır.
@@ -131,7 +152,8 @@ function dosyaTabanli(res, ad) {
   //    'Sedir' gorurdu — 'hicbir kutu adi gomulu degil' sozu arayuzde bozuluyordu.
   h = h.split('{{KUTU}}').join(KUTU_BAS);
   h = h.replace('<head>', `<head><script>window.__TABAN=${JSON.stringify(TABAN)};window.__KUTU=${JSON.stringify(KUTU)};</script>`);
-  res.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-cache' });
+  // x-kapi-pano: yüklü pano.js sha'sı (12 hex) — kapi-yenile komutu tazelenmeyi bununla ölçer; sır değil, girişsiz sayfada da var.
+  res.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-cache', 'x-kapi-pano': PANO_SHA });
   res.end(h);
 }
 

@@ -18,6 +18,8 @@ echo "── kadro E2 ucu uçtan uca (kadro-hal.test.mjs)"
 node kadro-hal.test.mjs || exit 1
 echo "── kişi↔oturum kimlik eşleşmesi (kimlik.test.mjs)"
 node kimlik.test.mjs || exit 1
+echo "── kapı-yenile: SIGHUP ile pano.js bağlantı düşürmeden tazelenir (kapi-yenile.test.mjs)"
+node kapi-yenile.test.mjs || exit 1
 echo "── kapı birim sınavı (sunucu.test.mjs)"
 node sunucu.test.mjs
 echo "SONUÇ: kapı birim sınavı geçti"

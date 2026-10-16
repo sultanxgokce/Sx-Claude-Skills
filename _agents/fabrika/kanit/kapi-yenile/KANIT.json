@@ -1,0 +1,56 @@
+{
+  "is": "kapi-yenile",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-16T11:04:24+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "ana-dal-sighup-kapiyi-oldurur",
+      "asama": "once",
+      "dosya": "olcum-ana-dal-sighup-kapiyi-oldurur-once.txt",
+      "sha256": "a1b125aab10c9d882092fe350c1f4023c6986f6df4cf8bdcd6f499e926514056",
+      "komut": [
+        "bash",
+        "-c",
+        "\necho \"BEKLENEN KIRMIZI — ana dal ($(git rev-parse --short origin/main)) kapısı: SIGHUP kancası yok, pano.js açılışta bir kez okunur; SIGHUP süreci öldürür (Node varsayılanı), x-kapi-pano başlığı yok.\"\nT=$(mktemp -d); mkdir -p \"$T/k\"; git archive origin/main terminal-onar/kapi terminal-onar/scripts | tar -x -C \"$T/k\"\ncd \"$T/k/terminal-onar/kapi\"\nKAPI_PORT=18791 KAPI_TABAN=/sinavkutu TO_KUTU=sinavkutu KAPI_TTYD_SOKET=$T/ttyd.sock TO_DURUM_DIZ=$T SINAVKUTU__TERMINAL_SIFRE=sinav-parolasi-1234 KAPI_OTURUM_DIZ=$T/yok node sunucu.mjs > $T/kapi.log 2>&1 &\nP=$!; for i in $(seq 1 40); do sleep 0.1; curl -s -o /dev/null -m 1 http://127.0.0.1:18791/sinavkutu/giris && break; done\necho \"başlık x-kapi-pano: $(curl -s -m 2 -D - -o /dev/null http://127.0.0.1:18791/sinavkutu/giris | grep -ci x-kapi-pano) (0 = yok)\"\necho \"kapi.pid dosyası: $(test -f $T/kapi.pid && echo var || echo yok)\"\nkill -HUP $P; sleep 0.5\nif kill -0 $P 2>/dev/null; then echo \"SIGHUP sonrası kapı YAŞIYOR\"; kill $P; r=0; else echo \"SIGHUP sonrası kapı ÖLDÜ (bağlantılar koptu)\"; r=1; fi\necho \"komut.sh kapi-yenile ana dalda: $(git -C /config/projects/_wt/Sx-Claude-Skills-kapi-yenile show origin/main:terminal-onar/scripts/komut.sh | grep -c kapi-yenile)\"\nrm -r -- \"$T\"; exit $r"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-16T10:59:38+03:00",
+      "sure_sn": 0.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sighup-sicak-tazeleme-sinavlari",
+      "asama": "sonra",
+      "dosya": "olcum-sighup-sicak-tazeleme-sinavlari-sonra.txt",
+      "sha256": "2728b9ca523bb55789bb9fb7f4bbedb2d855b0f94c83b2de89ae0e904ce5f4e0",
+      "komut": [
+        "bash",
+        "-c",
+        "\nr=0\n( cd terminal-onar/kapi && timeout 300 bash kapi-sinav.test.sh > /tmp/o-ky.txt 2>&1 ); rc=$?; echo \"kapi-sinav.test.sh (kadro 3 + kimlik + kapi-yenile 12 + sunucu) exit=$rc $(grep -E \"^SONUÇ|kapi-yenile.test:\" /tmp/o-ky.txt | tr \"\\n\" \" \")\"; [ $rc = 0 ] || r=1\ntimeout 120 bash terminal-onar/scripts/kapi-yenile.test.sh > /tmp/o-ky.txt 2>&1; rc=$?; echo \"scripts/kapi-yenile.test.sh exit=$rc $(grep geçti /tmp/o-ky.txt | tail -1)\"; [ $rc = 0 ] || r=1\nfor f in onar.test.sh kurtarici-kapali.test.sh; do [ -f terminal-onar/scripts/$f ] || continue; timeout 150 bash terminal-onar/scripts/$f > /tmp/o-ky.txt 2>&1; rc=$?; echo \"$f exit=$rc $(grep -E \"geçti\" /tmp/o-ky.txt | tail -1)\"; [ $rc = 0 ] || r=1; done\necho \"gerçek tmux sinav-* oturumu: $(tmux ls 2>/dev/null | grep -c \"^sinav\") · kalan kapı sınav süreci: $(pgrep -fc \"kapi-yenile-|kapi-sinav-\" || true)\"\nexit $r"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T11:01:18+03:00",
+      "sure_sn": 20.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tur1-bulgulari-kapali-kopru-ve-dizin-yok",
+      "asama": "sonra",
+      "dosya": "olcum-tur1-bulgulari-kapali-kopru-ve-dizin-yok-sonra.txt",
+      "sha256": "284fa81043c5e80ee32ec3211e3342053b0ebb517e34ce896b994a34486f6239",
+      "komut": [
+        "bash",
+        "-c",
+        "\nr=0\n( cd terminal-onar/kapi && timeout 120 node kapi-yenile.test.mjs > /tmp/o-ky2.txt 2>&1 ); rc=$?; echo \"kapi-yenile.test.mjs exit=$rc $(grep -E \"geçti\" /tmp/o-ky2.txt | tail -1) · Y1c dizin-yok: $(grep -c \"✓ Y1c\" /tmp/o-ky2.txt) · Y7 KAPI_PANO=0: $(grep -c \"✓ Y7\" /tmp/o-ky2.txt)\"; [ $rc = 0 ] || r=1\ntimeout 120 bash terminal-onar/scripts/kapi-yenile.test.sh > /tmp/o-ky2.txt 2>&1; rc=$?; echo \"kapi-yenile.test.sh exit=$rc $(grep geçti /tmp/o-ky2.txt | tail -1) · A2 köprü kapalı: $(grep -c \"✓ A2\" /tmp/o-ky2.txt)\"; [ $rc = 0 ] || r=1\n( cd terminal-onar/kapi && timeout 300 bash kapi-sinav.test.sh > /tmp/o-ky2.txt 2>&1 ); rc=$?; echo \"kapi-sinav.test.sh exit=$rc $(grep -E \"^SONUÇ: kapı\" /tmp/o-ky2.txt)\"; [ $rc = 0 ] || r=1\nexit $r"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T11:04:24+03:00",
+      "sure_sn": 20.5
+    }
+  ],
+  "imza": "556bd5f0cb96ed18c60214c0cc4b5ce2cb280a1e18221dc8939f8bf06a21af23"
+}
