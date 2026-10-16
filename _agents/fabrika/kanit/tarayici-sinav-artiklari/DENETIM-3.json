@@ -1,0 +1,30 @@
+{
+  "tur": 3,
+  "is": "tarayici-sinav-artiklari",
+  "pr": "348",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-16T13:39:12+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 51087,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 32526
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, kartın iki ana talebi yerine gelmiş: dim sınavı ortak tarayıcı bulucuyla ortam değişkensiz çalışıyor, bekçi sınavı da ortak.sh sonrasında sahteleri öne alıp H1 kapısıyla bunu ölçüyor. Önceki turdaki kapsam itirazı Reis kararıyla aynı hata zincirine açıkça bağlanmış; nihai yeşil ölçüm hem ana sınavları hem normal ve rc=4 yollarındaki süreç temizliğini kapıladığı için üretimi durduracak kusur kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce kaydı dim sınavında rc=1 ikili çökmesini, ortak.sh sonrasında /usr/bin/tmux seçildiğini ve H1 satırının bulunmadığını gösteriyor; nihai yeşil kayıt ortam değişkenleri olmadan dim 18/18, pano 34/34 ve bekçi 13/13 sonuçlarını, H1=1 değerini, ayrıca normal ve rc=4 çıkışlarından sonra bayat ttyd ile sınav kapısı sayılarının sıfır kaldığını doğruluyor. Aradaki kırmızı kayıtlar kusurların gerçekten yakalanıp giderildiğini gösteren ölçüm zinciridir; görsel kabul talebi olmadığından kare eksikliği yoktur."
+  }
+}
