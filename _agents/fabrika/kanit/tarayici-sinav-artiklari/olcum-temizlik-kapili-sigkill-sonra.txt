@@ -1,0 +1,25 @@
+$ bash -c 
+r=0; echo "(önceki kayıt KIRMIZIYDI: rc-4 çıkışından sonra 1 ttyd kalıyordu — ttyd SIGTERM i hemen işlemiyor → çıkış kancası SIGKILL, iki sınavda.)"
+say() { pgrep -f "^/config/.local/bin/ttyd .*(dim|pano)-sinav-" | wc -l; }
+kapi_say() { n=0; for p in $(pgrep -f "node .*sunucu.mjs"); do tr "\0" "\n" < /proc/$p/environ 2>/dev/null | grep -q "^TO_KUTU=sinav$" && n=$((n+1)); done; echo $n; }
+olc() { sleep 0.7; echo "$1 → bayat ttyd: $(say) · sinav kapısı: $(kapi_say)"; [ "$(say)" = 0 ] && [ "$(kapi_say)" = 0 ] || r=1; }
+olc "koşum öncesi"; cd terminal-onar/kapi
+timeout 180 node dim-okunur-sinav.mjs > /tmp/o-art6.txt 2>&1; rc=$?; echo "dim-okunur-sinav.mjs (ortamsız) exit=$rc · $(grep geçti /tmp/o-art6.txt | tail -1)"; [ $rc = 0 ] || r=1; olc "dim normal koşum sonrası"
+for sinav in dim-okunur-sinav.mjs:18797 pano-sinav.mjs:18795; do d=${sinav%%:*}; port=${sinav##*:}
+  node -e "require(\"http\").createServer((q,s)=>{s.writeHead(404);s.end()}).listen($port,\"127.0.0.1\")" & SP=$!; sleep 0.4
+  timeout 60 node $d > /tmp/o-art6.txt 2>&1; rc=$?; echo "$d sahte 404 :$port → rc=$rc"; kill $SP; wait $SP 2>/dev/null; [ $rc = 4 ] || r=1; olc "$d rc-4 çıkışı sonrası"; done
+cd ../scripts; timeout 120 bash bekci-iz.test.sh > /tmp/o-art6.txt 2>&1; rc=$?; echo "bekci-iz.test.sh exit=$rc $(grep geçti /tmp/o-art6.txt | tail -1) · H1: $(grep -c "✓ H1" /tmp/o-art6.txt)"; [ $rc = 0 ] || r=1
+echo "gerçek tmux sinav-* oturumu: $(tmux ls 2>/dev/null | grep -c "^sinav")"; exit $r
+# rc=1 sure=34.6s zaman=2026-10-16T13:35:27+03:00
+--- stdout ---
+(önceki kayıt KIRMIZIYDI: rc-4 çıkışından sonra 1 ttyd kalıyordu — ttyd SIGTERM i hemen işlemiyor → çıkış kancası SIGKILL, iki sınavda.)
+koşum öncesi → bayat ttyd: 0 · sinav kapısı: 0
+dim-okunur-sinav.mjs (ortamsız) exit=0 · dim-okunur-sinav: 18 geçti · 0 kaldı
+dim normal koşum sonrası → bayat ttyd: 0 · sinav kapısı: 0
+dim-okunur-sinav.mjs sahte 404 :18797 → rc=4
+dim-okunur-sinav.mjs rc-4 çıkışı sonrası → bayat ttyd: 1 · sinav kapısı: 0
+pano-sinav.mjs sahte 404 :18795 → rc=4
+pano-sinav.mjs rc-4 çıkışı sonrası → bayat ttyd: 2 · sinav kapısı: 0
+bekci-iz.test.sh exit=0 bekci-iz.test: 13 geçti · 0 kaldı · H1: 1
+gerçek tmux sinav-* oturumu: 0
+--- stderr ---

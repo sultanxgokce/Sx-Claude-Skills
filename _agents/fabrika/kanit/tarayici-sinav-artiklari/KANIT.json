@@ -1,7 +1,7 @@
 {
   "is": "tarayici-sinav-artiklari",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-16T13:31:18+03:00",
+  "guncelleme": "2026-10-16T13:37:08+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -50,7 +50,55 @@
       "renk": "yesil",
       "zaman": "2026-10-16T13:31:18+03:00",
       "sure_sn": 30.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "temizlik-kapili-dim-ve-bekci-iz",
+      "asama": "sonra",
+      "dosya": "olcum-temizlik-kapili-dim-ve-bekci-iz-sonra.txt",
+      "sha256": "e9731dd9888be73a22ac22e9684c87da52d4ab50b88e678a8ddf37225794c0d4",
+      "komut": [
+        "bash",
+        "-c",
+        "\nr=0; echo \"tur 1 bulgusu: bayat ttyd sayısı yalnız basılıyordu → şimdi KAPI ([ 0 ] || r=1). Başlangıç temizliği: koşum ÖNCESİ bayat ttyd/tmux/kapı sayısı ölçülür (0 olmalı).\"\nsay() { pgrep -f \"^/config/.local/bin/ttyd .*(dim|pano)-sinav-\" | wc -l; }\nkapi_say() { n=0; for p in $(pgrep -f \"node .*sunucu.mjs\"); do tr \"\\0\" \"\\n\" < /proc/$p/environ 2>/dev/null | grep -q \"^TO_KUTU=sinav$\" && n=$((n+1)); done; echo $n; }\necho \"koşum öncesi bayat ttyd: $(say) · sinav kapısı: $(kapi_say)\"; [ \"$(say)\" = 0 ] && [ \"$(kapi_say)\" = 0 ] || r=1\ncd terminal-onar/kapi\ntimeout 180 node dim-okunur-sinav.mjs > /tmp/o-art5.txt 2>&1; rc=$?; echo \"dim-okunur-sinav.mjs (ortamsız) exit=$rc · $(grep -E \"^tarayıcı:\" /tmp/o-art5.txt) · $(grep geçti /tmp/o-art5.txt | tail -1)\"; [ $rc = 0 ] || r=1\nsleep 0.5; echo \"normal koşum sonrası bayat ttyd: $(say) · sinav kapısı: $(kapi_say)\"; [ \"$(say)\" = 0 ] && [ \"$(kapi_say)\" = 0 ] || r=1\nnode -e \"require(\\\"http\\\").createServer((q,s)=>{s.writeHead(404);s.end()}).listen(18797,\\\"127.0.0.1\\\")\" & SP=$!; sleep 0.4\ntimeout 60 node dim-okunur-sinav.mjs > /tmp/o-art5.txt 2>&1; rc=$?; echo \"sahte 404 kapı :18797 → rc=$rc · $(grep -m1 -oE \"ÖLÇÜLEMEDİ: :[0-9]+ zaten dinleniyor\" /tmp/o-art5.txt)\"; kill $SP; wait $SP 2>/dev/null; [ $rc = 4 ] || r=1\nsleep 0.5; echo \"rc 4 çıkışı sonrası bayat ttyd: $(say) · sinav kapısı: $(kapi_say)\"; [ \"$(say)\" = 0 ] && [ \"$(kapi_say)\" = 0 ] || r=1\ncd ../scripts; timeout 120 bash bekci-iz.test.sh > /tmp/o-art5.txt 2>&1; rc=$?; echo \"bekci-iz.test.sh exit=$rc $(grep geçti /tmp/o-art5.txt | tail -1) · H1: $(grep -c \"✓ H1\" /tmp/o-art5.txt)\"; [ $rc = 0 ] || r=1\necho \"gerçek tmux sinav-* oturumu: $(tmux ls 2>/dev/null | grep -c \"^sinav\")\"; exit $r"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-16T13:33:55+03:00",
+      "sure_sn": 27.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "temizlik-kapili-sigkill",
+      "asama": "sonra",
+      "dosya": "olcum-temizlik-kapili-sigkill-sonra.txt",
+      "sha256": "e1a0e89281a52f204d8c547fc00b286e19b978a75c1943dc5a4af5ae5929b8da",
+      "komut": [
+        "bash",
+        "-c",
+        "\nr=0; echo \"(önceki kayıt KIRMIZIYDI: rc-4 çıkışından sonra 1 ttyd kalıyordu — ttyd SIGTERM i hemen işlemiyor → çıkış kancası SIGKILL, iki sınavda.)\"\nsay() { pgrep -f \"^/config/.local/bin/ttyd .*(dim|pano)-sinav-\" | wc -l; }\nkapi_say() { n=0; for p in $(pgrep -f \"node .*sunucu.mjs\"); do tr \"\\0\" \"\\n\" < /proc/$p/environ 2>/dev/null | grep -q \"^TO_KUTU=sinav$\" && n=$((n+1)); done; echo $n; }\nolc() { sleep 0.7; echo \"$1 → bayat ttyd: $(say) · sinav kapısı: $(kapi_say)\"; [ \"$(say)\" = 0 ] && [ \"$(kapi_say)\" = 0 ] || r=1; }\nolc \"koşum öncesi\"; cd terminal-onar/kapi\ntimeout 180 node dim-okunur-sinav.mjs > /tmp/o-art6.txt 2>&1; rc=$?; echo \"dim-okunur-sinav.mjs (ortamsız) exit=$rc · $(grep geçti /tmp/o-art6.txt | tail -1)\"; [ $rc = 0 ] || r=1; olc \"dim normal koşum sonrası\"\nfor sinav in dim-okunur-sinav.mjs:18797 pano-sinav.mjs:18795; do d=${sinav%%:*}; port=${sinav##*:}\n  node -e \"require(\\\"http\\\").createServer((q,s)=>{s.writeHead(404);s.end()}).listen($port,\\\"127.0.0.1\\\")\" & SP=$!; sleep 0.4\n  timeout 60 node $d > /tmp/o-art6.txt 2>&1; rc=$?; echo \"$d sahte 404 :$port → rc=$rc\"; kill $SP; wait $SP 2>/dev/null; [ $rc = 4 ] || r=1; olc \"$d rc-4 çıkışı sonrası\"; done\ncd ../scripts; timeout 120 bash bekci-iz.test.sh > /tmp/o-art6.txt 2>&1; rc=$?; echo \"bekci-iz.test.sh exit=$rc $(grep geçti /tmp/o-art6.txt | tail -1) · H1: $(grep -c \"✓ H1\" /tmp/o-art6.txt)\"; [ $rc = 0 ] || r=1\necho \"gerçek tmux sinav-* oturumu: $(tmux ls 2>/dev/null | grep -c \"^sinav\")\"; exit $r"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-16T13:35:27+03:00",
+      "sure_sn": 34.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "temizlik-kapili-kanca-once",
+      "asama": "sonra",
+      "dosya": "olcum-temizlik-kapili-kanca-once-sonra.txt",
+      "sha256": "9ef31085a42eea3dcc1800038ee71f25370c12cc21a97f981c300955889788ca",
+      "komut": [
+        "bash",
+        "-c",
+        "\nr=0; echo \"(önceki iki kayıt KIRMIZIYDI: rc-4 çıkışında ttyd kalıyordu. Kök neden: çıkış kancası port kontrolünden SONRA kaydediliyordu → process.exit(4) kancasız çıkıyordu. Şimdi kanca ttyd doğar doğmaz, port kontrolünden ÖNCE; SIGKILL.)\"\nsay() { pgrep -f \"^/config/.local/bin/ttyd .*(dim|pano)-sinav-\" | wc -l; }\nkapi_say() { n=0; for p in $(pgrep -f \"node .*sunucu.mjs\"); do tr \"\\0\" \"\\n\" < /proc/$p/environ 2>/dev/null | grep -q \"^TO_KUTU=sinav$\" && n=$((n+1)); done; echo $n; }\nolc() { sleep 0.7; echo \"$1 → bayat ttyd: $(say) · sinav kapısı: $(kapi_say)\"; [ \"$(say)\" = 0 ] && [ \"$(kapi_say)\" = 0 ] || r=1; }\nolc \"koşum öncesi\"; cd terminal-onar/kapi\ntimeout 180 node dim-okunur-sinav.mjs > /tmp/o-art7.txt 2>&1; rc=$?; echo \"dim-okunur-sinav.mjs (ortamsız) exit=$rc · $(grep geçti /tmp/o-art7.txt | tail -1)\"; [ $rc = 0 ] || r=1; olc \"dim normal koşum sonrası\"\nfor sinav in dim-okunur-sinav.mjs:18797 pano-sinav.mjs:18795; do d=${sinav%%:*}; port=${sinav##*:}\n  node -e \"require(\\\"http\\\").createServer((q,s)=>{s.writeHead(404);s.end()}).listen($port,\\\"127.0.0.1\\\")\" & SP=$!; sleep 0.4\n  timeout 60 node $d > /tmp/o-art7.txt 2>&1; rc=$?; echo \"$d sahte 404 :$port → rc=$rc\"; kill $SP; wait $SP 2>/dev/null; [ $rc = 4 ] || r=1; olc \"$d rc-4 çıkışı sonrası\"; done\ntimeout 300 node pano-sinav.mjs > /tmp/o-art7.txt 2>&1; rc=$?; echo \"pano-sinav.mjs (ortamsız, kanca taşındıktan sonra) exit=$rc · $(grep GEÇEN /tmp/o-art7.txt | tail -1)\"; [ $rc = 0 ] || r=1; olc \"pano normal koşum sonrası\"\ncd ../scripts; timeout 120 bash bekci-iz.test.sh > /tmp/o-art7.txt 2>&1; rc=$?; echo \"bekci-iz.test.sh exit=$rc $(grep geçti /tmp/o-art7.txt | tail -1) · H1: $(grep -c \"✓ H1\" /tmp/o-art7.txt)\"; [ $rc = 0 ] || r=1\necho \"gerçek tmux sinav-* oturumu: $(tmux ls 2>/dev/null | grep -c \"^sinav\")\"; exit $r"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T13:37:08+03:00",
+      "sure_sn": 59.3
     }
   ],
-  "imza": "1d2fd412e8f8a485dab59bb37659b58b41130b74d1235260aedb0619f4402947"
+  "imza": "0db648057924bc87538d9bd614db98d73e40acfd8ac4a05099601ba8afbc955c"
 }

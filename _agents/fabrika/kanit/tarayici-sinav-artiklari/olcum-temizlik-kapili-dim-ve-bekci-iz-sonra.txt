@@ -1,0 +1,24 @@
+$ bash -c 
+r=0; echo "tur 1 bulgusu: bayat ttyd sayısı yalnız basılıyordu → şimdi KAPI ([ 0 ] || r=1). Başlangıç temizliği: koşum ÖNCESİ bayat ttyd/tmux/kapı sayısı ölçülür (0 olmalı)."
+say() { pgrep -f "^/config/.local/bin/ttyd .*(dim|pano)-sinav-" | wc -l; }
+kapi_say() { n=0; for p in $(pgrep -f "node .*sunucu.mjs"); do tr "\0" "\n" < /proc/$p/environ 2>/dev/null | grep -q "^TO_KUTU=sinav$" && n=$((n+1)); done; echo $n; }
+echo "koşum öncesi bayat ttyd: $(say) · sinav kapısı: $(kapi_say)"; [ "$(say)" = 0 ] && [ "$(kapi_say)" = 0 ] || r=1
+cd terminal-onar/kapi
+timeout 180 node dim-okunur-sinav.mjs > /tmp/o-art5.txt 2>&1; rc=$?; echo "dim-okunur-sinav.mjs (ortamsız) exit=$rc · $(grep -E "^tarayıcı:" /tmp/o-art5.txt) · $(grep geçti /tmp/o-art5.txt | tail -1)"; [ $rc = 0 ] || r=1
+sleep 0.5; echo "normal koşum sonrası bayat ttyd: $(say) · sinav kapısı: $(kapi_say)"; [ "$(say)" = 0 ] && [ "$(kapi_say)" = 0 ] || r=1
+node -e "require(\"http\").createServer((q,s)=>{s.writeHead(404);s.end()}).listen(18797,\"127.0.0.1\")" & SP=$!; sleep 0.4
+timeout 60 node dim-okunur-sinav.mjs > /tmp/o-art5.txt 2>&1; rc=$?; echo "sahte 404 kapı :18797 → rc=$rc · $(grep -m1 -oE "ÖLÇÜLEMEDİ: :[0-9]+ zaten dinleniyor" /tmp/o-art5.txt)"; kill $SP; wait $SP 2>/dev/null; [ $rc = 4 ] || r=1
+sleep 0.5; echo "rc 4 çıkışı sonrası bayat ttyd: $(say) · sinav kapısı: $(kapi_say)"; [ "$(say)" = 0 ] && [ "$(kapi_say)" = 0 ] || r=1
+cd ../scripts; timeout 120 bash bekci-iz.test.sh > /tmp/o-art5.txt 2>&1; rc=$?; echo "bekci-iz.test.sh exit=$rc $(grep geçti /tmp/o-art5.txt | tail -1) · H1: $(grep -c "✓ H1" /tmp/o-art5.txt)"; [ $rc = 0 ] || r=1
+echo "gerçek tmux sinav-* oturumu: $(tmux ls 2>/dev/null | grep -c "^sinav")"; exit $r
+# rc=1 sure=27.3s zaman=2026-10-16T13:33:55+03:00
+--- stdout ---
+tur 1 bulgusu: bayat ttyd sayısı yalnız basılıyordu → şimdi KAPI ([ 0 ] || r=1). Başlangıç temizliği: koşum ÖNCESİ bayat ttyd/tmux/kapı sayısı ölçülür (0 olmalı).
+koşum öncesi bayat ttyd: 0 · sinav kapısı: 0
+dim-okunur-sinav.mjs (ortamsız) exit=0 · tarayıcı: /config/.nvm/versions/node/v22.23.0/lib/node_modules · dim-okunur-sinav: 18 geçti · 0 kaldı
+normal koşum sonrası bayat ttyd: 0 · sinav kapısı: 0
+sahte 404 kapı :18797 → rc=4 · ÖLÇÜLEMEDİ: :18797 zaten dinleniyor
+rc 4 çıkışı sonrası bayat ttyd: 1 · sinav kapısı: 0
+bekci-iz.test.sh exit=0 bekci-iz.test: 13 geçti · 0 kaldı · H1: 1
+gerçek tmux sinav-* oturumu: 0
+--- stderr ---
