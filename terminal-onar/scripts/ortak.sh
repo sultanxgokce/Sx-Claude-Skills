@@ -72,6 +72,15 @@ PROJE_BECERI="${TO_PROJE_BECERI:-$PROJE/.claude/skills/terminal-onar}"
 PROJE_BETIK="$PROJE_BECERI/scripts"
 ANA_AD="${TO_ANA_AD:-$KUTU-yon}"
 KURT_AD="${TO_KURT_AD:-$KUTU-kurtarici}"
+# ── KURTARICI KAPALI işareti (Sultan kararı 16 Eki 2026: filo genelinde kurtarıcı ajanlar KAPANIR, yalnız code kutusununki
+#    kalır — her kutuda ayrı bir Claude bellek yiyordu). İşaret KUTU BAŞINADIR: durum dizini kutuya özeldir (/config/.terminal-onar
+#    kutunun kendi /config'inde; paylaşılan tek şey /config/.claude). İşareti kutunun reisi koyar; code kutusuna KONMAZ.
+#    Alternatif açık beyan: TO_KURTARICI=0 (ortamdan; cron/sınav için). İşaret varken onar.sh K0 adım 4 kurtarıcıyı AÇMAZ,
+#    açıksa KAPATIR (durum işarete yakınsar; yoksa bekçi bir dakika içinde geri açardı); durum.sh "kapalı" basar, "yok" demez;
+#    kademe.sh K2'yi atlar ve K3 iletisine "kurtarıcı kapalı → MUAVİN/SERDAR'a bildir" ekler. Geri açmak = işareti silmek.
+KURT_KAPALI_DOSYA="${TO_KURTARICI_KAPALI_DOSYA:-$DURUM_DIZ/kurtarici-kapali}"
+kurtarici_kapali() { [ "${TO_KURTARICI:-}" = 0 ] || [ -f "$KURT_KAPALI_DOSYA" ]; }
+KURT_KAPALI_SEBEP="kapalı (Sultan 16 Eki)"
 
 # ── TABAN YOLU — merkez sayfanın ön şartı ────────────────────────────────────
 # Merkez (terminal.mmepanel.com) kutuları YOL ile ayırır: /sedir/ · /akar/ …
