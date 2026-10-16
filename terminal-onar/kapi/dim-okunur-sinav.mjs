@@ -12,9 +12,10 @@ import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 const KOK = dirname(fileURLToPath(import.meta.url));
-const PW = process.env.KANIT_PLAYWRIGHT_DIR || '/config/projects/Nexus/ui/node_modules';
-let chromium; try { ({ chromium } = await import(pathToFileURL(join(PW, 'playwright/index.mjs')).href)); }
-catch { console.log(`ÖLÇÜLEMEDİ: tarayıcı kütüphanesi yok (${PW})`); process.exit(4); }
+// Tarayıcı: aday dizinler sırayla, paketi VE ikilisi olan ilki (tarayici-bul.mjs, 2.13.1) — eski sabit yol ikilisiz pakette launch'ta çökerdi
+import { tarayiciBul } from './tarayici-bul.mjs';
+let chromium, PW; try { ({ chromium, dizin: PW } = await tarayiciBul()); console.log(`tarayıcı: ${PW}`); }
+catch (e) { console.log('ÖLÇÜLEMEDİ: ' + e.message); process.exit(4); }
 const TTYD = process.env.TTYD_BIN || join(process.env.HOME || '/config', '.local/bin/ttyd');
 if (!existsSync(TTYD)) { console.log(`ÖLÇÜLEMEDİ: ttyd yok (${TTYD})`); process.exit(4); }
 try { execFileSync('tmux', ['-V'], { stdio: 'ignore' }); } catch { console.log('ÖLÇÜLEMEDİ: tmux yok'); process.exit(4); }
@@ -64,10 +65,21 @@ async function kapiAc(port, ek = {}) {
   throw new Error('kapı açılmadı');
 }
 const P1 = 18797, P2 = 18798;
-const k1 = await kapiAc(P1), k2 = await kapiAc(P2, { KAPI_PANO: '0' });
+// 🔴 BAYAT KAPI PORTU + ÇIKIŞ TEMİZLİĞİ (#347 deseni; ölçüldü 16 Eki: launch'ta çöken bir koşum kapılarını bıraktı, sonraki koşum 'kapı açılmadı').
+import net from 'node:net';
+const portDolu = (port) => new Promise((r) => { const c = net.connect({ port, host: '127.0.0.1' }); const bitir = (v) => { try { c.destroy(); } catch {} r(v); };
+  c.once('connect', () => bitir(true)); c.once('error', () => bitir(false)); setTimeout(() => bitir(false), 1500); });
+// 🔴 Çıkış kancası PORT KONTROLÜNDEN ÖNCE kayıtlı olmalı (tur 1 ölçümü: rc-4 çıkışı kancadan önce geliyordu, ttyd kalıyordu)
+// 🔴 SIGKILL (tur 1 ölçümü): ttyd SIGTERM'i hemen işlemiyor, rc-4 çıkışından sonra bir ttyd kalıyordu; sınav süreçlerinin korunacak durumu yok.
+const cocuklar = [ttyd]; process.on('exit', () => { try { execFileSync('tmux', ['-L', TMUX_L, 'kill-server'], { stdio: 'ignore' }); } catch {} for (const c of cocuklar) { try { c.kill('SIGKILL'); } catch {} } });
+for (const port of [P1, P2]) {
+  if (await portDolu(port)) { console.log(`ÖLÇÜLEMEDİ: :${port} zaten dinleniyor — yarım kalan koşumun kapısı (TO_KUTU=sinav sunucu.mjs) ya da yabancı süreç. PID ile kapat: for p in $(pgrep -f 'node .*sunucu.mjs'); do tr '\\0' '\\n' </proc/$p/environ | grep -q '^TO_KUTU=sinav$' && echo $p; done`); process.exit(4); }
+}
+let k1, k2; try { k1 = await kapiAc(P1); cocuklar.push(k1); k2 = await kapiAc(P2, { KAPI_PANO: '0' }); cocuklar.push(k2); }
+catch (e) { console.log('ÖLÇÜLEMEDİ: ' + e.message + ' (kapı açılamadı — port/ortam)'); process.exit(4); }
 const giris = async (port) => { const r = await fetch(`http://127.0.0.1:${port}/sinav/giris`, { method: 'POST', headers: { 'content-type': 'application/json', 'x-kapi': '1' }, body: JSON.stringify({ parola: SIFRE }) });
   return ((r.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1]; };
-const b = await chromium.launch();
+let b; try { b = await chromium.launch(); } catch (e) { console.log('ÖLÇÜLEMEDİ: tarayıcı açılamadı — ' + String(e.message).split('\n')[0]); process.exit(4); }
 const ekranda = (pg, metin, ms = 8000) => pg.waitForFunction((m) => { const t = window.term; if (!t) return false; const bf = t.buffer.active; for (let i = 0; i < bf.length; i++) { const l = bf.getLine(i); if (l && l.translateToString(true).includes(m)) return true; } return false; }, metin, { timeout: ms }).then(() => true, () => false);
 async function sayfa(port) {
   const ctx = await b.newContext({ viewport: { width: 1000, height: 600 } });

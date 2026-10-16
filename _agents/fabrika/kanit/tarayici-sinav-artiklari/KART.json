@@ -1,0 +1,19 @@
+{
+  "is": "tarayici-sinav-artiklari",
+  "cumle": "terminal-onar #346/#347 artıkları: (1) dim-okunur-sinav.mjs tarayıcıyı tarayici-bul.mjs ile bulsun (eski sabit yol deseni; ortam değişkensiz çalışsın, ikilisiz paket çökmesin) (2) bekci-iz.test.sh sahte tmux'u ortak.sh PATH tuzağı yüzünden hiç kullanmıyor — sahteyi ortak.sh'tan sonra öne al + H1 'sahte devrede' kapısı. Tek tur.",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-10-16T13:27:30+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

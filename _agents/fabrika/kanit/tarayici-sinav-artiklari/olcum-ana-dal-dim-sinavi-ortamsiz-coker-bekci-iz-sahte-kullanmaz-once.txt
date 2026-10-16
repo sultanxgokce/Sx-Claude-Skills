@@ -1,0 +1,15 @@
+$ bash -c 
+echo "BEKLENEN KIRMIZI — ana dal ($(git rev-parse --short origin/main)): (1) dim-okunur-sinav.mjs ortamsız Nexus paketine gider, ikili yok → çöker; (2) bekci-iz.test.sh sahte tmux/crontab PATH ile verilir ama ortak.sh /usr/bin i öne koyar → sahte hiç kullanılmaz."
+T=$(mktemp -d); git archive origin/main terminal-onar | tar -x -C "$T"
+( cd "$T/terminal-onar/kapi" && timeout 60 node dim-okunur-sinav.mjs > /tmp/o-art.txt 2>&1; rc=$?; echo "dim-okunur-sinav (ana dal, ortamsız) rc=$rc · $(grep -m1 -oE "Executable doesn.t exist|ÖLÇÜLEMEDİ[^\n]{0,40}" /tmp/o-art.txt)" )
+cd "$T/terminal-onar/scripts"; printf "#!/usr/bin/env bash\nexit 1\n" > /tmp/sahte-tmux-once; chmod +x /tmp/sahte-tmux-once
+echo "ana dal bekci-iz: sahte kullanıyor mu? $(env -i PATH=/tmp/yok-bin:/usr/bin:/bin TO_KUTU=sinav TO_DURUM_DIZ=$T/d TO_BECERI_KOK=$T/terminal-onar bash -c ". ./ortak.sh; command -v tmux" 2>/dev/null) (gerçek yol = sahte kullanılmıyor)"
+grep -c "TO_SAHTE_BIN\|H1" bekci-iz.test.sh | sed "s/^/ana dal bekci-iz.test.sh sahte-öne-alma satırı: /"
+rm -r -- "$T"; exit 1
+# rc=1 sure=0.7s zaman=2026-10-16T13:28:54+03:00
+--- stdout ---
+BEKLENEN KIRMIZI — ana dal (96a84d2): (1) dim-okunur-sinav.mjs ortamsız Nexus paketine gider, ikili yok → çöker; (2) bekci-iz.test.sh sahte tmux/crontab PATH ile verilir ama ortak.sh /usr/bin i öne koyar → sahte hiç kullanılmaz.
+dim-okunur-sinav (ana dal, ortamsız) rc=1 · Executable doesn't exist
+ana dal bekci-iz: sahte kullanıyor mu? /usr/bin/tmux (gerçek yol = sahte kullanılmıyor)
+ana dal bekci-iz.test.sh sahte-öne-alma satırı: 0
+--- stderr ---
