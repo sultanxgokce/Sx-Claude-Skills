@@ -7,11 +7,12 @@
 // /u: uzunluk KOD NOKTASI sayılır (kabukla aynı; emoji 2 değil 1).
 export const KOLTUK_AD_DESEN = /^(?![\s$@%=])(?!.*\s$)[^\x00-\x1f\x7f:.]{1,200}$/u;
 
-// koltuk-bagla.sh --liste çıktısı → koltuklar. Satır: ad · son · claude(1|0) · tür · hâl (tür/hâl eski betikte yok → alan yok, uydurulmaz).
+// koltuk-bagla.sh --liste çıktısı → koltuklar. Satır: ad · son · claude(1|0) · tür · hâl · ne · hesap (tür/hâl/hesap eski betikte yok → alan yok, uydurulmaz).
 export function koltukSatirlari(cikti) {
   return String(cikti || '').split('\n').filter(Boolean).map((l) => {
-    const [ad, son, claude, tur, hal, ne] = l.split('\t');
+    const [ad, son, claude, tur, hal, ne, hesap] = l.split('\t');
     // ne: dış olay bekliyorsa NE beklediği (2.7.0); başka hâlde yok (uydurulmaz)
-    return { ad, son: +son || 0, claude: claude === '1', ...(tur ? { tur } : {}), ...(hal ? { hal } : {}), ...(ne ? { ne } : {}) };
+    // hesap (2.14.0): koltuktaki Claude'un hesap ADI (kapi · varsayilan · <ad> · bilinmiyor:<neden>); Claude'suz koltukta yok — merkez rozeti bundan okur
+    return { ad, son: +son || 0, claude: claude === '1', ...(tur ? { tur } : {}), ...(hal ? { hal } : {}), ...(ne ? { ne } : {}), ...(hesap ? { hesap } : {}) };
   }).filter((k) => KOLTUK_AD_DESEN.test(k.ad));
 }
