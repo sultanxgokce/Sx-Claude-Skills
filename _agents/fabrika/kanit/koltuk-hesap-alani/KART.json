@@ -1,0 +1,19 @@
+{
+  "is": "koltuk-hesap-alani",
+  "cumle": "G-BANI-0008 ekran öncesi tek dilim (senaryo kartı E1 veri zemini): kutu kapısı her koltuğun HESABINI bildirir — koltuk-bagla.sh --liste'ye 7. sütun hesap (pane'deki claude sürecinin ortamından: kapi · varsayilan · <ad> · bilinmiyor:<neden>; hesap_kutu.py hesap_adi kuralının kabuk eşdeğeri, değer okunmaz yalnız AD), koltuklar.mjs → /api/koltuklar 'hesap' alanı; hermetik sınav + mutasyon. Merkez rozeti (cloudtop, dış yüzey) AYRI kart.",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-10-16T15:58:57+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/koltuk-hesap-alani/",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

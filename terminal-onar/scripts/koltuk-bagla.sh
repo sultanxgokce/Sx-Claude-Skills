@@ -112,7 +112,14 @@ hesap_adi() {  # $1 = CLAUDE_CONFIG_DIR değeri · $2 = ANTHROPIC_BASE_URL dolu 
   [ "$(dirname "$n")" = "$kok" ] && { basename "$n"; return; }
   echo bilinmiyor:dizin
 }
-normal_yol() { printf '%s' "$1" | sed -E 's#/+#/#g; s#/\./#/#g; s#(.)/$#\1#'; }   # python os.path.normpath'in burada gereken kısmı: çift eğik, /./, sondaki /
+normal_yol() {  # python os.path.normpath eşdeğeri (sözcüksel): çift eğik · '.' · '..' (kökte '..' düşer; göreli yolda başta '..' kalır) · sondaki eğik
+  printf '%s' "$1" | awk -F'/' '{ mutlak=(substr($0,1,1)=="/"); n=0
+    for (i=1;i<=NF;i++) { p=$i; if (p=="" || p==".") continue
+      if (p=="..") { if (n>0 && y[n]!="..") { n-- } else if (!mutlak) { y[++n]=p }; continue }
+      y[++n]=p }
+    s=""; for (i=1;i<=n;i++) s=s (i>1?"/":"") y[i]
+    if (mutlak) s="/" s; if (s=="") s=(mutlak?"/":"."); printf "%s", s }'
+}
 koltuk_hesabi() {  # $1 = oturum → hesap adı; Claude yoksa boş (uydurulmaz)
   local pid ort ccd burl
   pid="$(claude_pid "$1")" || { echo ""; return; }

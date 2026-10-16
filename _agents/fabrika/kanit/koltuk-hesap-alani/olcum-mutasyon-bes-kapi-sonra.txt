@@ -1,10 +1,11 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/khs-mutasyon.sh
-# rc=0 sure=30.5s zaman=2026-10-16T16:07:52+03:00
+# rc=0 sure=52.2s zaman=2026-10-16T16:14:42+03:00
 --- stdout ---
   ✓ M1 kapı şeridi kuralı silindi (ANTHROPIC_BASE_URL → kapi) — kapı ölünce sınav KIRMIZI (H5)
   ✓ M2 okunamadı → varsayilan denir (ölçülemedi = varsayılan yalanı) — kapı ölünce sınav KIRMIZI (H7)
   ✓ M3 kök dışı dizin ad sayılır (basename her yerde) — kapı ölünce sınav KIRMIZI (H6)
   ✓ M4 hesap hiç ölçülmez (sütun boş kalır) — kapı ölünce sınav KIRMIZI (H1)
   ✓ M5 Claude'suz koltuğa da hesap yazılır (uydurma) — kapı ölünce sınav KIRMIZI (H2)
-mutasyon: geçen=5 düşen=0
+  ✓ M6 normal_yol .. çözmez (normpath eşdeğerliği kırılır) — kapı ölünce sınav KIRMIZI (H10)
+mutasyon: geçen=6 düşen=0
 --- stderr ---

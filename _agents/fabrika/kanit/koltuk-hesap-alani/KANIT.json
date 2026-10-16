@@ -1,7 +1,7 @@
 {
   "is": "koltuk-hesap-alani",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-16T16:07:52+03:00",
+  "guncelleme": "2026-10-16T16:14:42+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -23,31 +23,31 @@
       "etiket": "liste-hesap-sutunu",
       "asama": "sonra",
       "dosya": "olcum-liste-hesap-sutunu-sonra.txt",
-      "sha256": "363664155e5d0e544bb708f9d7fe191557c3b2cfef3acd9d16d9da78c5207375",
+      "sha256": "200456ef8e3483ce39b5abc63a95da841e86a6ec80d13a19a2f30062188be1bf",
       "komut": [
         "bash",
         "terminal-onar/scripts/koltuk-bagla.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-16T16:05:00+03:00",
-      "sure_sn": 5.2
+      "zaman": "2026-10-16T16:13:50+03:00",
+      "sure_sn": 15.3
     },
     {
       "tur": "olcum",
       "etiket": "mutasyon-bes-kapi",
       "asama": "sonra",
       "dosya": "olcum-mutasyon-bes-kapi-sonra.txt",
-      "sha256": "0a897371dba6d9ee794bf2e26dc71eef2525e2436d8735991bdb8300153a5511",
+      "sha256": "4aee6ff62680fba6cf76cee80e2e9bf3eeacae9dd62d1becfae9f2e074a85532",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/khs-mutasyon.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-16T16:07:52+03:00",
-      "sure_sn": 30.5
+      "zaman": "2026-10-16T16:14:42+03:00",
+      "sure_sn": 52.2
     }
   ],
-  "imza": "919a618de6ba592fd63b2cce7852033f3ba2847bb1c759967bce3881cf8261ee"
+  "imza": "45a3513190b56c175315f179f8ba93e2d247f4f923b0f39a7f9658395be370e5"
 }

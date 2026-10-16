@@ -18,5 +18,6 @@ dene "M2 okunamadı → varsayilan denir (ölçülemedi = varsayılan yalanı)" 
 dene "M3 kök dışı dizin ad sayılır (basename her yerde)"               's/\[ "\$(dirname "\$n")" = "\$kok" \] && { basename "\$n"; return; }/basename "$n"; return/' H6
 dene "M4 hesap hiç ölçülmez (sütun boş kalır)"                        's/hesap="\$(koltuk_hesabi "\$s")"/hesap=""/' H1
 dene "M5 Claude'suz koltuğa da hesap yazılır (uydurma)"                  's/else hesap=""; fi/else hesap=varsayilan; fi/' H2
+dene "M6 normal_yol .. çözmez (normpath eşdeğerliği kırılır)"            's/if (p=="\.\.") { if (n>0 \&\& y\[n\]!="\.\.") { n-- } else if (!mutlak) { y\[++n\]=p }; continue }/if (p=="..") { y[++n]=p; continue }/' H10
 echo "mutasyon: geçen=$gecen düşen=$dusen"
 [ $dusen = 0 ]

@@ -192,11 +192,11 @@ def hesap_adi(ccd, kapi):
 print(hesap_adi('$1', $2))"; }
   sh_adi() { HESAP_KOK="$S/hes" HESAP_TABAN="$S/taban" bash -c "source <(sed -n '/^HESAP_KOK=/,/^koltuk_hesabi()/p' '$B' | sed '\$d'); hesap_adi \"\$1\" \"\$2\"" _ "$1" "$2"; }
   esit=1
-  for g in "$S/hes/sgk1|0" "|0" "$S/taban/|0" "$S/hes/sgk1|1" "/opt/baska/yer|0" "$S/hes//sgk1/|0"; do
+  for g in "$S/hes/sgk1|0" "|0" "$S/taban/|0" "$S/hes/sgk1|1" "/opt/baska/yer|0" "$S/hes//sgk1/|0" "$S/hes/x/../sgk1|0" "$S/hes/./sgk1/.|0" "$S/hes/sgk1/..|0" "/../$S/hes/sgk1|0" "$S/taban/../taban|0"; do
     ccd="${g%|*}"; kp="${g#*|}"; a="$(py "$ccd" "$([ "$kp" = 1 ] && echo True || echo False)")"; b="$(sh_adi "$ccd" "$kp")"
     [ "$a" = "$b" ] || { esit=0; echo "    fark: '$ccd' kapi=$kp → py=$a sh=$b"; }
   done
-  [ "$esit" = 1 ] && ok "H10 kabuk hesap_adi == Nexus hesap_kutu.py hesap_adi (6 girdi, çift eğik ve sondaki / dahil)" || bad H10 "iki dil ayrıştı"
+  [ "$esit" = 1 ] && ok "H10 kabuk hesap_adi == Nexus hesap_kutu.py hesap_adi (11 girdi: çift eğik · sondaki / · . · .. · kökte ..)" || bad H10 "iki dil ayrıştı"
 else
   echo "  · H10 atlandı: hesap_kutu.py bu kutuda yok (eşdeğerlik Nexus kutusunda ölçülür)"
 fi
