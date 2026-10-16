@@ -1,7 +1,7 @@
 {
   "is": "kurtaricisiz-ayari",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-16T10:30:25+03:00",
+  "guncelleme": "2026-10-16T10:34:39+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -50,7 +50,23 @@
       "renk": "kirmizi",
       "zaman": "2026-10-16T10:30:25+03:00",
       "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "komsu-sinavlar-donus-kodu-dogru",
+      "asama": "sonra",
+      "dosya": "olcum-komsu-sinavlar-donus-kodu-dogru-sonra.txt",
+      "sha256": "aeb54c9c0a4f37e6fe621342dea673f2b3a8384641909083eca1aa417961a916",
+      "komut": [
+        "bash",
+        "-c",
+        "\nr=0\ntimeout 150 bash terminal-onar/scripts/kurtarici-kapali.test.sh > /tmp/o-kk2.txt 2>&1; rc=$?; echo \"kurtarici-kapali.test.sh exit=$rc $(grep -E \"geçti\" /tmp/o-kk2.txt | tail -1)\"; [ \"$rc\" = 0 ] || r=1\nfor f in onar.test.sh bekci-iz.test.sh kutu-adi.test.sh; do timeout 120 bash terminal-onar/scripts/$f > /tmp/o-kk2.txt 2>&1; rc=$?; echo \"$f exit=$rc $(grep -E \"geçti\" /tmp/o-kk2.txt | tail -1)\"; [ \"$rc\" = 0 ] || r=1; done\necho \"gerçek tmux sinav-* oturumu: $(tmux ls 2>/dev/null | grep -c \"^sinav\")\"\necho \"(tur 2 rötuşu: önceki kayıtta [ \\$? = 0 ] echo nun kodunu ölçüyordu; burada her sınavın kendi rc si saklanıp toplanır)\"\nexit $r"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T10:34:39+03:00",
+      "sure_sn": 9.0
     }
   ],
-  "imza": "416f6cfb54dd1b83935ceef61d519186937018e513e00aa4aeeb07d55bce288f"
+  "imza": "1fa6435da654deb325b1142ad03bff93a26b9e68d05007885ec3ae8bd1f6ef19"
 }
