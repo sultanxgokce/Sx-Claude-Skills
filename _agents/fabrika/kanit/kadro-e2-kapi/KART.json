@@ -17,5 +17,15 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": []
+  "gecmis": [],
+  "sultan_kararlari": [
+    {
+      "karar": "devam",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+      "soz": "Son tur açılsın (Recommended)",
+      "beyan": "SERDAR",
+      "gerekce": "3 tur 4/E, her turun bulgusu gerçek ve kapatıldı (BERİD beyanı, GH CI yeşil); yetki sınıfı → Sultan izni; tur BERİD'de",
+      "zaman": "2026-10-16T09:43:09+03:00"
+    }
+  ]
 }
