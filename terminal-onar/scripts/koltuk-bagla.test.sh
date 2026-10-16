@@ -177,6 +177,14 @@ printf 'CLAUDE_CONFIG_DIR=%s\0' "$S/hes/sgk1" > "$S/proc/100/environ"
 printf '❯ \n' > "$S/ekran-BASIRET"
 [ "$(hk BASIRET)" = sgk1 ] && [ "$(grep -P '^BASIRET\t' "$S/listeH" | cut -f5)" = bos ] && [ "$(grep -P '^BASIRET\t' "$S/listeH" | cut -f3)" = 1 ] && ok "H8 hesap sütunu öteki sütunları bozmaz (3. claude=1, 5. hâl=boş, 7. hesap)" || bad H8 "$(grep -P '^BASIRET\t' "$S/listeH")"
 rm -f "$S/ekran-BASIRET"
+# H11 (bağımsız göz tur 2): pane_pid KABUKTUR, Claude onun çocuğu; hesap değişkeni yalnız çocukta → çocuğun ortamı okunmalı (kabuğunki değil)
+mkdir -p "$S/binps" "$S/proc/150"
+printf '#!/usr/bin/env bash\nprintf "  100     1 bash\\n  150   100 /usr/local/bin/claude --name BASIRET\\n  200     1 bash\\n"\n' > "$S/binps/ps"; chmod +x "$S/binps/ps"
+printf 'HOME=/config\0' > "$S/proc/100/environ"                                  # kabuk: hesap değişkeni YOK
+printf 'CLAUDE_CONFIG_DIR=%s\0' "$S/hes/sgk1" > "$S/proc/150/environ"           # çocuk Claude: adlı hesap
+h11="$(HESAP_PROC_KOK="$S/proc" HESAP_KOK="$S/hes" HESAP_TABAN="$S/taban" SAHTE="$S" PATH="$S/binps:$S/bin:$PATH" bash "$B" --liste 2>/dev/null | grep -P '^BASIRET\t' | cut -f7)"
+[ "$h11" = sgk1 ] && ok "H11 🔴 bölme komutu 'claude' görünse de pane_pid kabuk: ortam ÇOCUK Claude'dan (150) okunur → sgk1 (kabuktan okunsa 'varsayilan' yalanı)" || bad H11 "$h11"
+rm -r -f "$S/binps" "$S/proc/150"
 # kimlik DEĞERİ hiçbir yolda okunmaz: betikte .credentials.json adı geçmez (okuma yolu yok)
 grep -q "credentials" "$B" && bad H9 "betikte kimlik dosyası adı geçiyor" || ok "H9 betik kimlik dosyasına (.credentials.json) hiç dokunmaz"
 # Nexus kuralıyla eşdeğerlik (hesap_kutu.py bu kutuda varsa): aynı girdiler iki dilde aynı adı vermeli

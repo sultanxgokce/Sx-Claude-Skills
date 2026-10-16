@@ -94,11 +94,14 @@ altta_claude_pid() {  # $1 = kök pid → alt ağaçtaki İLK Claude sürecinin 
         x=a[p]; sub(/ .*/, "", x); sub(/.*\//, "", x); if (x == "claude" || x == "claude.exe") { print p; exit }
         m=split(c[p], r, " "); for (k=1;k<=m;k++) q[++n]=r[k] } }'
 }
-claude_pid() {  # $1 = oturum → koltuktaki Claude sürecinin pid'i (bölme komutu claude ise bölme pid'i; değilse alt ağaçtan); yoksa boş
+claude_pid() {  # $1 = oturum → koltuktaki Claude sürecinin pid'i; yoksa boş
+  # 🔴 ÖNCE alt ağaç (bağımsız göz tur 2): tmux'un pane_pid'i bölmenin KABUĞUDUR, pane_current_command ise ön plandaki program.
+  #    Kabuk 'CLAUDE_CONFIG_DIR=… claude' diye açtıysa hesap değişkeni yalnız ÇOCUKTA vardır; kabuğun ortamını okumak hesabı kaçırır.
+  #    Alt ağaçta Claude yoksa ve bölme komutu claude ise süreç exec'lenmiştir → bölme pid'i Claude'un kendisidir.
   local pid kom p
   while read -r pid kom; do
-    case "$kom" in claude|claude-*|claude.exe) echo "$pid"; return 0 ;; esac
     p="$(altta_claude_pid "$pid")"; [ -n "$p" ] && { echo "$p"; return 0; }
+    case "$kom" in claude|claude-*|claude.exe) echo "$pid"; return 0 ;; esac
   done < <(bolmeler | awk -F'\t' -v s="$1" '$1==s {print $5" "$6}')
   return 1
 }

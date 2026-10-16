@@ -1,5 +1,5 @@
 $ bash terminal-onar/scripts/koltuk-bagla.test.sh
-# rc=0 sure=15.3s zaman=2026-10-16T16:13:50+03:00
+# rc=0 sure=6.9s zaman=2026-10-16T16:18:31+03:00
 --- stdout ---
 A · bağlanma (kabul yüzü)
   ✓ A1 argümansız → ana oturum (bugünkü davranış aynı)
@@ -69,64 +69,65 @@ H · hesap (sürecin ortamından AD; değer değil)
   ✓ H6 kök dışı dizin → bilinmiyor:dizin (ad uydurulmaz)
   ✓ H7 🔴 ortam okunamazsa 'bilinmiyor:okunamadi' — varsayilan DENMEZ (ölçülemedi ≠ varsayılan)
   ✓ H8 hesap sütunu öteki sütunları bozmaz (3. claude=1, 5. hâl=boş, 7. hesap)
+  ✓ H11 🔴 bölme komutu 'claude' görünse de pane_pid kabuk: ortam ÇOCUK Claude'dan (150) okunur → sgk1 (kabuktan okunsa 'varsayilan' yalanı)
   ✓ H9 betik kimlik dosyasına (.credentials.json) hiç dokunmaz
   ✓ H10 kabuk hesap_adi == Nexus hesap_kutu.py hesap_adi (11 girdi: çift eğik · sondaki / · . · .. · kökte ..)
 
-toplam=65 geçen=65 düşen=0
+toplam=66 geçen=66 düşen=0
 --- stderr ---
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
-/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 127: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-hesap-alani/terminal-onar/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory

@@ -1,0 +1,38 @@
+{
+  "tur": 3,
+  "is": "koltuk-hesap-alani",
+  "pr": "349",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-16T16:16:09+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 33742,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 32277
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İstenen 7. hesap sütunu ile API’deki hesap alanı eklenmiş; sağlam önce/sonra ölçümü ve altı mutasyon kapısı ana kuralları destekliyor. Ancak doğrudan Claude görünen bölmede gerçek Claude süreci yerine tmux bölme kök PID’sinin ortamı okunabildiğinden hesap yanlış bildirilebilir; önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "`claude_pid`, bölmenin görünen komutu `claude`, `claude-*` veya `claude.exe` olduğunda alt süreç ağacındaki Claude PID’sini aramadan bölme PID’sini döndürüyor. tmux bölme PID’si kabuk, görünen komut ise onun ön planındaki Claude olduğunda `koltuk_hesabi` yanlış `/proc/<pid>/environ` dosyasını okuyarak Claude’a özgü `CLAUDE_CONFIG_DIR` veya `ANTHROPIC_BASE_URL` değerlerini kaçırabilir.",
+        "kanit": "Üretim farkında `claude_pid` içindeki `case \"$kom\" in claude|claude-*|claude.exe) echo \"$pid\"` dalı PID’yi doğrulamadan döndürüyor. H sınavı da sahte bölme PID’si 100 için doğrudan `$S/proc/100/environ` hazırlıyor; bölme kök PID’si ile ön plandaki Claude PID’sinin farklı olduğu vaka ölçülmüyor.",
+        "konum": "terminal-onar/scripts/koltuk-bagla.sh: `claude_pid` ve `koltuk_hesabi`; terminal-onar/scripts/koltuk-bagla.test.sh: H bloğundaki PID 100 düzeneği",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kırmızı önce/yeşil sonra ölçüm çifti ile altı mutasyon kapısı mevcut ve yol normalleştirme eşdeğerliği de sınanmış. Bununla birlikte hermetik sınav gerçek tmux bölme kök PID’si ile Claude alt süreç PID’sini ayırmadığı için ortamın doğru süreçten okunduğunu kanıtlamıyor."
+  }
+}
