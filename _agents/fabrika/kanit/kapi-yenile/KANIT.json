@@ -1,7 +1,7 @@
 {
   "is": "kapi-yenile",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-16T11:01:18+03:00",
+  "guncelleme": "2026-10-16T11:04:24+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -34,7 +34,23 @@
       "renk": "yesil",
       "zaman": "2026-10-16T11:01:18+03:00",
       "sure_sn": 20.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tur1-bulgulari-kapali-kopru-ve-dizin-yok",
+      "asama": "sonra",
+      "dosya": "olcum-tur1-bulgulari-kapali-kopru-ve-dizin-yok-sonra.txt",
+      "sha256": "284fa81043c5e80ee32ec3211e3342053b0ebb517e34ce896b994a34486f6239",
+      "komut": [
+        "bash",
+        "-c",
+        "\nr=0\n( cd terminal-onar/kapi && timeout 120 node kapi-yenile.test.mjs > /tmp/o-ky2.txt 2>&1 ); rc=$?; echo \"kapi-yenile.test.mjs exit=$rc $(grep -E \"geçti\" /tmp/o-ky2.txt | tail -1) · Y1c dizin-yok: $(grep -c \"✓ Y1c\" /tmp/o-ky2.txt) · Y7 KAPI_PANO=0: $(grep -c \"✓ Y7\" /tmp/o-ky2.txt)\"; [ $rc = 0 ] || r=1\ntimeout 120 bash terminal-onar/scripts/kapi-yenile.test.sh > /tmp/o-ky2.txt 2>&1; rc=$?; echo \"kapi-yenile.test.sh exit=$rc $(grep geçti /tmp/o-ky2.txt | tail -1) · A2 köprü kapalı: $(grep -c \"✓ A2\" /tmp/o-ky2.txt)\"; [ $rc = 0 ] || r=1\n( cd terminal-onar/kapi && timeout 300 bash kapi-sinav.test.sh > /tmp/o-ky2.txt 2>&1 ); rc=$?; echo \"kapi-sinav.test.sh exit=$rc $(grep -E \"^SONUÇ: kapı\" /tmp/o-ky2.txt)\"; [ $rc = 0 ] || r=1\nexit $r"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T11:04:24+03:00",
+      "sure_sn": 20.5
     }
   ],
-  "imza": "ae3656b2dd2e0fa5777729c5fa424c2918891e2c6e8ed5b128464248dfc263dd"
+  "imza": "556bd5f0cb96ed18c60214c0cc4b5ce2cb280a1e18221dc8939f8bf06a21af23"
 }

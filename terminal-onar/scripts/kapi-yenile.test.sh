@@ -46,6 +46,10 @@ c=$(kos); rc=$?
 kapi "A1 sunulan sha = disk sha → 'zaten güncel', rc 0" "0" "$rc"
 kapi "A1b SIGHUP gönderilmez, onar çağrılmaz" "0" "$(( $( [ -f "$T/hup" ] && wc -l < "$T/hup" || echo 0 ) + $(onar_sayisi) ))"
 
+sifirla; echo 1234 > "$T/canli"; echo 1234 > "$D/kapi.pid"; printf 'kapali' > "$T/sunulan"
+c=$(kos); rc=$?
+kapi "A2 pano köprüsü kapalı (KAPI_PANO=0 → başlık 'kapali') → 'tazelenecek şey yok', rc 0, SIGHUP/onar yok" "e" "$([ $rc = 0 ] && grep -q 'KAPALI' <<<"$c" && [ ! -f "$T/hup" ] && [ "$(onar_sayisi)" = 0 ] && echo e || echo "h:$c")"
+
 echo "── B · sıcak tazeleme (yeni kapı: kapi.pid = canlı pid)"
 sifirla; echo 1234 > "$T/canli"; echo 1234 > "$D/kapi.pid"; printf 'eskieski0000' > "$T/sunulan"; : > "$T/hup-olur"
 c=$(kos); rc=$?

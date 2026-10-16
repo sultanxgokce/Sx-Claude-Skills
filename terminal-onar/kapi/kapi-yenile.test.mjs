@@ -25,12 +25,11 @@ const PANO = join(T, 'pano.js');
 const V1 = 'window.__pano="surum-1";', V2 = 'window.__pano="surum-2 $& $1";';   // '$' dizileri: replace tuzağı da sınanır
 writeFileSync(PANO, V1);
 const PORT = 18781, TABAN = '/sinavkutu';
-const p = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], {
-  env: { ...process.env, KAPI_PORT: String(PORT), KAPI_TABAN: TABAN, TO_KUTU: 'sinavkutu', KAPI_TTYD_SOKET: join(T, 'ttyd.sock'),
-         TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), KAPI_PANO_YOL: PANO,
-         KAPI_KOLTUK_BETIK: join(T, 'yok.sh') },
-  stdio: ['ignore', 'pipe', 'pipe'],
-});
+// Durum dizini süreç başlamadan VAR OLMAZ (bağımsız göz tur 1): kapı onu kendisi açmalı, ilk sha yazımı kaybolmamalı.
+const DURUM = join(T, 'yeni-durum');
+const ortam = (ek = {}) => ({ ...process.env, KAPI_PORT: String(PORT), KAPI_TABAN: TABAN, TO_KUTU: 'sinavkutu', KAPI_TTYD_SOKET: join(T, 'ttyd.sock'),
+  TO_DURUM_DIZ: DURUM, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), KAPI_PANO_YOL: PANO, KAPI_KOLTUK_BETIK: join(T, 'yok.sh'), ...ek });
+const p = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: ortam(), stdio: ['ignore', 'pipe', 'pipe'] });
 let cikti = ''; p.stdout.on('data', (d) => { cikti += d; }); p.stderr.on('data', (d) => { cikti += d; });
 let acildi = false;
 for (let i = 0; i < 50 && !acildi; i++) { await bekle(100); try { acildi = (await fetch(`http://127.0.0.1:${PORT}${TABAN}/giris`)).status === 200; } catch {} }
@@ -39,8 +38,8 @@ const baslik = async () => (await fetch(`http://127.0.0.1:${PORT}${TABAN}/giris`
 
 console.log('\n── Y · kapı-yenile (SIGHUP) ──');
 kapi('Y1 /giris yanıtı yüklü pano sha\'sını söyler (x-kapi-pano = sha(pano.js v1))', (await baslik()) === sha(V1), `→ ${await baslik()} ≠ ${sha(V1)}`);
-kapi('Y1b kapi.pid durum dizinine yazıldı ve canlı pid ile aynı', existsSync(join(T, 'kapi.pid')) && readFileSync(join(T, 'kapi.pid'), 'utf8').trim() === String(p.pid));
-kapi('Y1c kapi.pano-sha dosyası da sha(v1)', existsSync(join(T, 'kapi.pano-sha')) && readFileSync(join(T, 'kapi.pano-sha'), 'utf8').trim() === sha(V1));
+kapi('Y1b kapi.pid durum dizinine yazıldı ve canlı pid ile aynı', existsSync(join(DURUM, 'kapi.pid')) && readFileSync(join(DURUM, 'kapi.pid'), 'utf8').trim() === String(p.pid));
+kapi('Y1c kapi.pano-sha dosyası da sha(v1)', existsSync(join(DURUM, 'kapi.pano-sha')) && readFileSync(join(DURUM, 'kapi.pano-sha'), 'utf8').trim() === sha(V1));
 
 // Uzun ömürlü bağlantı: SIGHUP'tan ÖNCE açılır, SONRA aynı soketten istek atılır → cevap gelirse bağlantı kopmamıştır
 const soket = net.connect(PORT, '127.0.0.1');
@@ -56,7 +55,7 @@ kapi('Y2b disk değişti ama kapı hâlâ ESKİSİNİ sunuyor (ateşlemeyen yüz
 process.kill(p.pid, 'SIGHUP');
 let yeni = ''; for (let i = 0; i < 20 && yeni !== sha(V2); i++) { await bekle(100); try { yeni = await baslik(); } catch { yeni = 'ÖLDÜ'; } }
 kapi('Y3 SIGHUP sonrası kapı YENİ pano.js\'i sunar (x-kapi-pano = sha(v2))', yeni === sha(V2), `→ ${yeni} ≠ ${sha(V2)}`);
-kapi('Y3b süreç aynı pid ile yaşıyor (yeniden başlamadı)', p.exitCode === null && readFileSync(join(T, 'kapi.pid'), 'utf8').trim() === String(p.pid));
+kapi('Y3b süreç aynı pid ile yaşıyor (yeniden başlamadı)', p.exitCode === null && readFileSync(join(DURUM, 'kapi.pid'), 'utf8').trim() === String(p.pid));
 const sonra = await soketIste();
 kapi('Y4 🔴 SIGHUP öncesi açılan bağlantı SIGHUP sonrası da cevap alır — bağlantı KOPMADI', !soketKapandi && /200 OK/.test(sonra) && sonra.toLowerCase().includes('x-kapi-pano: ' + sha(V2)), `kapandı=${soketKapandi}`);
 kapi('Y4b günlük satırı eski→yeni sha\'yı söyler', new RegExp(`SIGHUP — pano.js yeniden okundu \\(${sha(V1)} → ${sha(V2)}\\)`).test(cikti));
@@ -69,6 +68,12 @@ kapi('Y5 pano.js okunamazsa SIGHUP süreci ÖLDÜRMEZ, son sağlam kopya sunulur
 kapi('Y5b hata günlüğe düşer (sessiz değil)', /pano.js okunamadı/.test(cikti));
 writeFileSync(PANO, V1); process.kill(p.pid, 'SIGHUP'); await bekle(300);
 kapi('Y6 dosya geri gelince bir sonraki SIGHUP yine okur (v1)', (await baslik()) === sha(V1));
+
+// KAPI_PANO=0: köprü kapalı → başlık 'kapali' (kapi-yenile.sh bunu 'tazelenecek şey yok' sayar, disk sha'sını kovalamaz)
+const p2 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: ortam({ KAPI_PORT: String(PORT + 1), KAPI_PANO: '0', TO_DURUM_DIZ: join(T, 'durum2') }), stdio: ['ignore', 'pipe', 'pipe'] });
+let b2 = null; for (let i = 0; i < 50 && b2 === null; i++) { await bekle(100); try { b2 = (await fetch(`http://127.0.0.1:${PORT + 1}${TABAN}/giris`)).headers.get('x-kapi-pano'); } catch {} }
+kapi('Y7 KAPI_PANO=0 ile başlık "kapali" der (sha değil) — komut bunu tazelenecek-şey-yok sayar', b2 === 'kapali', `→ ${b2}`);
+p2.kill('SIGTERM');
 
 soket.destroy(); p.kill('SIGTERM');
 console.log(`\nkapi-yenile.test: ${gecen} geçti · ${kalan} kaldı`);

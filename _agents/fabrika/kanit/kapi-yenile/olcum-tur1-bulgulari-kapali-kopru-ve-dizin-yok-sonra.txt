@@ -1,0 +1,12 @@
+$ bash -c 
+r=0
+( cd terminal-onar/kapi && timeout 120 node kapi-yenile.test.mjs > /tmp/o-ky2.txt 2>&1 ); rc=$?; echo "kapi-yenile.test.mjs exit=$rc $(grep -E "geçti" /tmp/o-ky2.txt | tail -1) · Y1c dizin-yok: $(grep -c "✓ Y1c" /tmp/o-ky2.txt) · Y7 KAPI_PANO=0: $(grep -c "✓ Y7" /tmp/o-ky2.txt)"; [ $rc = 0 ] || r=1
+timeout 120 bash terminal-onar/scripts/kapi-yenile.test.sh > /tmp/o-ky2.txt 2>&1; rc=$?; echo "kapi-yenile.test.sh exit=$rc $(grep geçti /tmp/o-ky2.txt | tail -1) · A2 köprü kapalı: $(grep -c "✓ A2" /tmp/o-ky2.txt)"; [ $rc = 0 ] || r=1
+( cd terminal-onar/kapi && timeout 300 bash kapi-sinav.test.sh > /tmp/o-ky2.txt 2>&1 ); rc=$?; echo "kapi-sinav.test.sh exit=$rc $(grep -E "^SONUÇ: kapı" /tmp/o-ky2.txt)"; [ $rc = 0 ] || r=1
+exit $r
+# rc=0 sure=20.5s zaman=2026-10-16T11:04:24+03:00
+--- stdout ---
+kapi-yenile.test.mjs exit=0 kapi-yenile.test: 13 geçti · 0 kaldı · Y1c dizin-yok: 1 · Y7 KAPI_PANO=0: 1
+kapi-yenile.test.sh exit=0 kapi-yenile.test: 18 geçti · 0 kaldı · A2 köprü kapalı: 1
+kapi-sinav.test.sh exit=0 SONUÇ: kapı birim sınavı geçti
+--- stderr ---

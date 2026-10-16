@@ -1,0 +1,19 @@
+{
+  "is": "kapi-yenile",
+  "cumle": "terminal-onar: komut.sh kapi-yenile — kutu kapısı (kapi/sunucu.mjs) pano.js ve genel dosyaları bağlantı düşürmeden yeniden okusun (SIGHUP); kapı yoksa/eski sürümse onar.sh --web-yenile'ye düşer. Sultan'ın web terminali her pano sürümünde kopmasın (SERDAR 00:5x/10:55)",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-10-16T10:55:42+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

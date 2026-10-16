@@ -69,10 +69,12 @@ function panoYukle() {
   if (!PANO_ACIK) { PANO_JS = ''; PANO_SHA = 'kapali'; return; }
   const js = fs.readFileSync(PANO_YOL, 'utf8');   // okunamazsa fırlatır: açılışta ölümcül, SIGHUP'ta eski kopya durur
   PANO_JS = js; PANO_SHA = crypto.createHash('sha256').update(js).digest('hex').slice(0, 12);
-  try { fs.writeFileSync(path.join(DURUM_DIZ, 'kapi.pano-sha'), PANO_SHA + '\n'); } catch {}
+  try { fs.writeFileSync(path.join(DURUM_DIZ, 'kapi.pano-sha'), PANO_SHA + '\n'); } catch (e) { console.error(new Date().toISOString(), `kapı: kapi.pano-sha yazılamadı: ${e.message}`); }
 }
+// Dizin ÖNCE (bağımsız göz tur 1): yoksa ilk kapi.pano-sha yazımı sessizce kaybolurdu — yazamıyorsa günlüğe düşer, kapı yine açılır.
+try { fs.mkdirSync(DURUM_DIZ, { recursive: true }); } catch (e) { console.error(new Date().toISOString(), `kapı: durum dizini açılamadı (${DURUM_DIZ}): ${e.message}`); }
 panoYukle();
-try { fs.mkdirSync(DURUM_DIZ, { recursive: true }); fs.writeFileSync(path.join(DURUM_DIZ, 'kapi.pid'), String(process.pid) + '\n'); } catch {}
+try { fs.writeFileSync(path.join(DURUM_DIZ, 'kapi.pid'), String(process.pid) + '\n'); } catch (e) { console.error(new Date().toISOString(), `kapı: kapi.pid yazılamadı: ${e.message}`); }
 process.on('SIGHUP', () => {
   const eski = PANO_SHA;
   try { panoYukle(); console.log(new Date().toISOString(), `kapı: SIGHUP — pano.js yeniden okundu (${eski} → ${PANO_SHA}), bağlantılar açık`); }

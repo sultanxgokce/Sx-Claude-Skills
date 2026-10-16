@@ -26,6 +26,8 @@ dus() {  # $1 = sebep → onar.sh --web-yenile (kapı yeniden başlar, bağlant�
 }
 sunulan=$(baslik)
 if [ "$sunulan" = "$disk" ]; then echo "kapı zaten güncel pano.js'i sunuyor (sha $disk)"; exit 0; fi
+# Pano köprüsü KAPI_PANO=0 ile kapalıysa kapı 'kapali' der: tazelenecek şey yok (bağımsız göz tur 1 — eskiden disk sha'sını kovalar, boşuna --web-yenile'ye düşerdi)
+if [ "$sunulan" = "kapali" ]; then echo "pano köprüsü bu kapıda KAPALI (KAPI_PANO=0) — tazelenecek şey yok"; exit 0; fi
 pid=$(canli_pid); kayit=$(cat "$DURUM_DIZ/kapi.pid" 2>/dev/null | tr -dc '0-9')
 [ -n "$pid" ] || dus "kapı süreci yok"
 [ -n "$kayit" ] && [ "$kayit" = "$pid" ] || dus "kapı eski sürüm (kapi.pid ${kayit:-yok} ≠ canlı $pid; SIGHUP onu öldürürdü)"
