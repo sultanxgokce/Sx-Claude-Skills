@@ -9,12 +9,20 @@ import { existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-export function varsayilanAdaylar(ortam = process.env) {
+// nvm sürüm adları (v22.23.0 · v9.1.0) SAYISAL sıralanır, en yeni önce — düz metin sırası v9'u v22'nin önüne koyardı (bağımsız göz tur 1).
+export function surumKarsilastir(a, b) {
+  const p = (x) => String(x).replace(/^v/, '').split('.').map((n) => parseInt(n, 10) || 0);
+  const [x, y] = [p(a), p(b)];
+  for (let i = 0; i < Math.max(x.length, y.length); i++) { const d = (y[i] || 0) - (x[i] || 0); if (d) return d; }
+  return 0;
+}
+// listele(dizin) → alt dizin adları (sınav sahte liste verir)
+export function varsayilanAdaylar(ortam = process.env, listele = readdirSync) {
   const a = [];
   if (ortam.KANIT_PLAYWRIGHT_DIR) a.push(ortam.KANIT_PLAYWRIGHT_DIR);
   a.push('/config/projects/Nexus/ui/node_modules');
   const nvm = join(ortam.HOME || '/config', '.nvm/versions/node');
-  try { for (const s of readdirSync(nvm).sort().reverse()) a.push(join(nvm, s, 'lib/node_modules')); } catch { /* nvm yok */ }
+  try { for (const s of [...listele(nvm)].sort(surumKarsilastir)) a.push(join(nvm, s, 'lib/node_modules')); } catch { /* nvm yok */ }
   return [...new Set(a)];
 }
 

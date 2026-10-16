@@ -1,7 +1,7 @@
 {
   "is": "pano-sinav-playwright-yolu",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-16T12:03:43+03:00",
+  "guncelleme": "2026-10-16T12:08:05+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -50,7 +50,23 @@
       "renk": "yesil",
       "zaman": "2026-10-16T12:03:43+03:00",
       "sure_sn": 31.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tur1-sonrasi-sayisal-sira-rc4-kapi-zinciri",
+      "asama": "sonra",
+      "dosya": "olcum-tur1-sonrasi-sayisal-sira-rc4-kapi-zinciri-sonra.txt",
+      "sha256": "8516daced87c18697f90c74c5bdf51cf0a5ee5ba8e03cc0fa185b15fd1aa8d8b",
+      "komut": [
+        "bash",
+        "-c",
+        "\nr=0; cd terminal-onar/kapi; echo \"ortam: KANIT_PLAYWRIGHT_DIR=${KANIT_PLAYWRIGHT_DIR:-YOK} NODE_PATH=${NODE_PATH:-YOK} · yük $(cut -d\" \" -f1 /proc/loadavg)\"\ntimeout 60 node tarayici-bul.test.mjs > /tmp/o-pw7.txt 2>&1; rc=$?; echo \"tarayici-bul.test.mjs exit=$rc $(grep geçti /tmp/o-pw7.txt | tail -1)\"; grep -E \"C3|C4\" /tmp/o-pw7.txt | cut -c1-110; [ $rc = 0 ] || r=1\necho \"── G1 ölçülemeyince rc 4 (HOME sahte, KANIT yok → aday yalnız Nexus = ikilisiz):\"\nHOME=/tmp/olmayan-ev timeout 60 node tarayici-bul.test.mjs > /tmp/o-pw7.txt 2>&1; rc=$?; echo \"rc=$rc · $(tail -1 /tmp/o-pw7.txt | cut -c1-120)\"; [ $rc = 4 ] || r=1\ntimeout 300 bash kapi-sinav.test.sh > /tmp/o-pw7.txt 2>&1; rc=$?; echo \"kapi-sinav.test.sh exit=$rc $(grep -E \"^SONUÇ: kapı|ÖLÇÜLEMEDİ \\(sarı\\)\" /tmp/o-pw7.txt | tr \"\\n\" \" \")\"; [ $rc = 0 ] || r=1\ntimeout 300 node pano-sinav.mjs > /tmp/o-pw7.txt 2>&1; rc=$?; echo \"pano-sinav.mjs (ortamsız) exit=$rc · $(grep -E \"^tarayıcı:\" /tmp/o-pw7.txt) · $(grep GEÇEN /tmp/o-pw7.txt | tail -1)\"; [ $rc = 0 ] || r=1\nexit $r"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T12:08:05+03:00",
+      "sure_sn": 41.7
     }
   ],
-  "imza": "45dc9b9e1130ed9f88b2a8641d77550e78590efcfc70a863d4bd5650b4cad24e"
+  "imza": "aa9ddd3a92c9731179ea5c0dcb9653774a7f5d61fad497b3d7c2b8eb0cebca57"
 }

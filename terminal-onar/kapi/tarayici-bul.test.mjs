@@ -1,8 +1,8 @@
 // tarayici-bul.test.mjs — tarayıcı bulucu ÇALIŞTIRILARAK ölçülür (hermetik: sahte yükleyici + sahte dosya varlığı; ağ/tarayıcı yok).
 // Son kapı gerçek kutuda: varsayılan adaylar içinden ikilisi olan birini bulur mu (bulamazsa ÖLÇÜLEMEDİ sayılır, kırmızı değil).
-import { tarayiciBul, varsayilanAdaylar } from './tarayici-bul.mjs';
+import { tarayiciBul, varsayilanAdaylar, surumKarsilastir } from './tarayici-bul.mjs';
 import { existsSync } from 'node:fs';
-let gecen = 0, kalan = 0;
+let gecen = 0, kalan = 0, olculemedi = false;
 const kapi = (ad, k, ek = '') => { if (k) { gecen++; console.log(`  ✓ ${ad}`); } else { kalan++; console.log(`  ✗ ${ad} ${ek}`); } };
 const sahte = (paketVar, ikili) => ({ chromium: { executablePath: () => ikili } , paketVar });
 const yukle = (harita) => async (d) => { const p = harita[d]; if (!p || !p.paketVar) throw new Error("Cannot find module '" + d + "/playwright/index.mjs'"); return { chromium: p.chromium }; };
@@ -32,14 +32,18 @@ console.log('── C · varsayılan aday listesi');
   const a = varsayilanAdaylar({ KANIT_PLAYWRIGHT_DIR: '/acik/beyan', HOME: '/olmayan-ev' });
   kapi('C1 açık beyan (KANIT_PLAYWRIGHT_DIR) listenin BAŞINDA', a[0] === '/acik/beyan');
   kapi('C2 Nexus ui/node_modules eski varsayılan olarak hâlâ listede (geriye dönük)', a.includes('/config/projects/Nexus/ui/node_modules'));
-  const b = varsayilanAdaylar({ HOME: process.env.HOME || '/config' });
-  kapi('C3 nvm global node_modules dizinleri (varsa) listede, en yeni sürüm önce', b.some((d) => /\.nvm\/versions\/node\/v[\d.]+\/lib\/node_modules$/.test(d)) || !existsSync((process.env.HOME || '/config') + '/.nvm/versions/node'), `→ ${b.join(' · ')}`);
+  const b = varsayilanAdaylar({ HOME: '/ev' }, (d) => (d === '/ev/.nvm/versions/node' ? ['v9.1.0', 'v22.23.0', 'v22.9.1', 'v18.20.4'] : []));
+  const nvmler = b.filter((d) => d.includes('/.nvm/')).map((d) => d.split('/')[5]);
+  kapi('C3 🔴 nvm sürümleri SAYISAL sıralanır, en yeni önce (v9 v22\'nin önüne geçmez)', JSON.stringify(nvmler) === JSON.stringify(['v22.23.0', 'v22.9.1', 'v18.20.4', 'v9.1.0']), `→ ${nvmler.join(' ')}`);
+  kapi('C3b düz metin sırası v9\'u öne koyardı (mutasyon kanıtı: eski sıralama yanlış)', ['v9.1.0', 'v22.23.0', 'v22.9.1'].sort().reverse()[0] === 'v9.1.0' && [ 'v9.1.0', 'v22.23.0', 'v22.9.1' ].sort(surumKarsilastir)[0] === 'v22.23.0');
+  kapi('C4 nvm dizini yoksa liste yine çıkar (Nexus kalır), hata yok', varsayilanAdaylar({ HOME: '/yok' }, () => { throw new Error('ENOENT'); }).includes('/config/projects/Nexus/ui/node_modules'));
 }
 console.log('── G · gerçek kutu (bütünleşik): varsayılan adaylardan ikilisi olan biri bulunur mu');
 {
   let r = null, h = null; try { r = await tarayiciBul(); } catch (e) { h = e; }
   if (r) kapi(`G1 bulundu: ${r.dizin} → ${r.ikili.split('/').slice(-3).join('/')}`, true);
-  else console.log(`  ÖLÇÜLEMEDİ (yeşil sayılmaz): bu kutuda ikilisi olan Playwright yok —\n  ${h.message.replace(/\n/g, '\n  ')}`);
+  else { olculemedi = true; console.log(`  ÖLÇÜLEMEDİ: bu kutuda ikilisi olan Playwright yok —\n  ${h.message.replace(/\n/g, '\n  ')}`); }
 }
-console.log(`\ntarayici-bul.test: ${gecen} geçti · ${kalan} kaldı`);
-process.exit(kalan ? 1 : 0);
+console.log(`\ntarayici-bul.test: ${gecen} geçti · ${kalan} kaldı${olculemedi ? ' · G1 ÖLÇÜLEMEDİ (rc 4, yeşil DEĞİL)' : ''}`);
+// rc: 1 = kırmızı · 4 = hermetik kapılar yeşil ama gerçek kutu ölçülemedi (bağımsız göz tur 1: ölçülemeyen rc 0 dönmesin) · 0 = hepsi
+process.exit(kalan ? 1 : olculemedi ? 4 : 0);

@@ -1,0 +1,52 @@
+{
+  "tur": 1,
+  "is": "pano-sinav-playwright-yolu",
+  "pr": "347",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-16T12:05:04+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32590,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 11784
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Pano sınavı için ortam → Nexus → nvm global çözümü eklenmiş ve gerçek kutu ölçümünde ortamsız 34/34 çalıştığı gösterilmiş. Ancak kart iki sınavı isterken dim-okunur-sinav.mjs hiç bağlanmamış; ayrıca bütünleşik bulucu sınavı ölçemediğinde yine başarılı çıkabildiği için önce bunlar çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Talep edilen ikinci tarayıcı sınavı dim-okunur-sinav.mjs yeni yol çözümüne bağlanmamış; değişiklik kartın yalnız pano-sinav.mjs bölümünü tamamlıyor.",
+        "kanit": "Üretim farkında dim-okunur-sinav.mjs değişikliği yok; sürüm notu açıkça “dim-okunur-sinav.mjs (#346) aynı eski deseni taşıyor — #346 birleşince aynı bulucuya bağlanır” diyor.",
+        "konum": "terminal-onar/SKILL.md: sürüm notu 2.12.1",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Gerçek-kutu G1 kapısı Playwright bulunamadığında başarısızlık saymıyor; ÖLÇÜLEMEDİ yazıp kalan değerini artırmadan süreçten 0 çıkabiliyor. Böylece CI yeşil görünürken kartın esas ortam iddiası ölçülmemiş olabilir.",
+        "kanit": "G bloğunun else kolu yalnız console.log çağırıyor; ardından process.exit(kalan ? 1 : 0) çalışıyor. Manifestteki mevcut koşumda G1 bulunduğu için kusur tetiklenmemiş olsa da kaynak akışı ölçülemeyen ortamda rc=0 vereceğini doğrudan gösteriyor.",
+        "konum": "terminal-onar/kapi/tarayici-bul.test.mjs: G gerçek kutu bloğu ve son process.exit",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "“En yeni nvm sürümü önce” seçimi sayısal sürüm sırası yerine düz metin sırası kullanıyor; örneğin v9, v22'den önce sıralanabilir.",
+        "kanit": "Aday üretimi readdirSync(nvm).sort().reverse() kullanıyor; test C3 ise yalnız herhangi bir nvm yolunun varlığını denetliyor ve gerçek sıralamayı sınamıyor.",
+        "konum": "terminal-onar/kapi/tarayici-bul.mjs: varsayilanAdaylar; terminal-onar/kapi/tarayici-bul.test.mjs: C3",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; önceki rc=1 çöküş ile sonraki ortamsız pano-sinav 34/34 rc=0 sonucu gerçek bir önce/sonra ölçüm çifti oluşturuyor. Aradaki kırmızı kayıt başarı kanıtı değildir, son yeşil kayıt pano-sinav ve bulucu testini destekler; fakat dim-okunur-sinav için hiçbir ölçüm yoktur ve G1'in ölçülemediğinde rc=0 verebilmesi genel CI güvencesini zayıflatır."
+  }
+}
