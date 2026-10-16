@@ -108,6 +108,8 @@ async function olc(pg, isaretler) {
 const IS = ['L1 NORMAL', 'L2 DIM duz', 'L3 DIM gri-244', 'L4A dim-parca', 'L4B devam', 'L5A yesil', 'L5B dim-yesil', 'L5C yine-yesil', 'L6A bold-dim', 'L6B sonra', 'L7 brightBlack'];
 const k = (s, m) => s.sonuc[m] || { kontrast: 0, renk: 'yok', fg: '?', dim: '?', bold: '?' };
 const oz = (s, m) => `${m}: ${k(s, m).renk} ${k(s, m).kontrast.toFixed(2)}:1 fg=${k(s, m).fg} dim=${k(s, m).dim}`;
+// Ölçüm tablosu HER koşumda basılır (bağımsız göz tur 1: geçen kapı sayı göstermiyordu; önce/sonra çifti sayıyla okunmalı)
+const tablo = (s, baslik) => { console.log(`  ÖLÇÜM ${baslik} (mürekkep rengi · WCAG kontrast · xterm hücre fg/dim):`); for (const m of IS) console.log('    ' + oz(s, m)); };
 
 try {
   console.log(`tema (onar.sh): bg ${TEMA.background} · fg ${TEMA.foreground} · brightBlack ${TEMA.brightBlack || 'YOK'}`);
@@ -116,7 +118,7 @@ try {
   kapi('Ö0 gerçek ttyd+tmux sayfası açıldı', hO);
   tmux('send-keys', '-t', 'sinav-ana', `bash ${SATIR}`, 'Enter');
   kapi('Ö0b satırlar ekrana geldi', await ekranda(pO, 'SON', 8000));
-  const O = await olc(pO, IS);
+  const O = await olc(pO, IS); tablo(O, 'ÖNCE (köprüsüz)');
   kapi('Ö1 köprü YOK (pano.js gömülmedi) — ölçüm eski davranışı görüyor', !O.kopru);
   kapi('Ö2 🔴 "dim + gri-244" (Sultan\'ın soru satırı) kontrastı < 3:1 — OKUNMUYOR (sorun gerçek)', k(O, 'L3 DIM gri-244').kontrast > 0 && k(O, 'L3 DIM gri-244').kontrast < 3, oz(O, 'L3 DIM gri-244'));
   kapi('Ö3 hücre dim bayrağı taşıyor (xterm dim çiziyor)', k(O, 'L3 DIM gri-244').dim === true && k(O, 'L2 DIM duz').dim === true);
@@ -130,7 +132,7 @@ try {
   tmux('send-keys', '-t', 'sinav-ana', 'clear', 'Enter'); await bekle(300);
   tmux('send-keys', '-t', 'sinav-ana', `bash ${SATIR}`, 'Enter');
   kapi('D0b satırlar ekrana geldi', await ekranda(pg, 'SON', 8000));
-  const S = await olc(pg, IS);
+  const S = await olc(pg, IS); tablo(S, 'SONRA (köprülü)');
   kapi('D1 köprü bağlı ve dim kancası takılı (__kapiPano.dimOkunur)', S.kopru && S.dimOkunur);
   kapi('D2 🔴 "dim + gri-244" soru satırı ≥ 4,5:1 (WCAG AA) — artık okunur', k(S, 'L3 DIM gri-244').kontrast >= 4.5, oz(S, 'L3 DIM gri-244'));
   kapi('D3 düz dim ≥ 4,5:1 (brightBlack tonu)', k(S, 'L2 DIM duz').kontrast >= 4.5 && k(S, 'L2 DIM duz').fg === 8, oz(S, 'L2 DIM duz'));

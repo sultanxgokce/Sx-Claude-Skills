@@ -1,0 +1,19 @@
+{
+  "is": "ttyd-dim-kontrast",
+  "cumle": "terminal-onar ttyd teması: ESC[2m (dim) metin — Claude Code AskUserQuestion soru satırı ve şık açıklamaları — koyu temada okunmuyor (Sultan 16 Eki 10:10 karesi, nazir-yon). Çare: xterm minimumContrastRatio (≥4.5) ya da okunur dim tonu + tarayıcıda piksel-kontrast ölçümü önce/sonra. gorev_01M51RVWZXNK25C7GZGZ9MC767",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-10-16T11:07:21+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

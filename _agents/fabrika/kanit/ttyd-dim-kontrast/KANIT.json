@@ -1,7 +1,7 @@
 {
   "is": "ttyd-dim-kontrast",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-16T11:27:29+03:00",
+  "guncelleme": "2026-10-16T11:32:26+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -50,7 +50,23 @@
       "renk": "yesil",
       "zaman": "2026-10-16T11:27:29+03:00",
       "sure_sn": 113.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sayisal-kontrast-ciftleri-ve-pano-uc-kosum",
+      "asama": "sonra",
+      "dosya": "olcum-sayisal-kontrast-ciftleri-ve-pano-uc-kosum-sonra.txt",
+      "sha256": "7e77ebd989c63d9d6b77d1bd3a15758999ceb303b847baa050ea13df0a9e38df",
+      "komut": [
+        "bash",
+        "-c",
+        "\nr=0; cd terminal-onar/kapi\ntimeout 180 node dim-okunur-sinav.mjs > /tmp/o-dim.txt 2>&1; rc=$?; grep -E \"ÖLÇÜM|^    L|✗|geçti\" /tmp/o-dim.txt; echo \"dim-okunur-sinav exit=$rc\"; [ $rc = 0 ] || r=1\necho \"── pano-sinav.mjs ×3 ardışık (tur 1 bulgusu: 33/34 dalgalanması; düşen kapı kayda)\"\nfor n in 1 2 3; do timeout 300 node pano-sinav.mjs > /tmp/o-pano-$n.txt 2>&1; rc=$?; echo \"koşum $n exit=$rc $(grep -E \"GEÇEN\" /tmp/o-pano-$n.txt | tail -1) · yük $(cut -d\" \" -f1 /proc/loadavg)\"; grep \"✗\" /tmp/o-pano-$n.txt | cut -c1-260; [ $rc = 0 ] || r=1; done\necho \"gerçek tmux sinav-* oturumu: $(tmux ls 2>/dev/null | grep -c \"^sinav\")\"\nexit $r"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T11:32:26+03:00",
+      "sure_sn": 121.6
     }
   ],
-  "imza": "68f47ac1a067fbd0e39238edfd1a97d5c5f1e205a1bede12ea2a10774801b5c0"
+  "imza": "d5876a56c5f6fd96e4cfce73bedd3a01c62ba75be62c21a25dbe4f0066f839ae"
 }

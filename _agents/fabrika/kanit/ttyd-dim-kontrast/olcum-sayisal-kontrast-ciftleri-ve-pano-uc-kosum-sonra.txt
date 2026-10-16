@@ -1,0 +1,41 @@
+$ bash -c 
+r=0; cd terminal-onar/kapi
+timeout 180 node dim-okunur-sinav.mjs > /tmp/o-dim.txt 2>&1; rc=$?; grep -E "ÖLÇÜM|^    L|✗|geçti" /tmp/o-dim.txt; echo "dim-okunur-sinav exit=$rc"; [ $rc = 0 ] || r=1
+echo "── pano-sinav.mjs ×3 ardışık (tur 1 bulgusu: 33/34 dalgalanması; düşen kapı kayda)"
+for n in 1 2 3; do timeout 300 node pano-sinav.mjs > /tmp/o-pano-$n.txt 2>&1; rc=$?; echo "koşum $n exit=$rc $(grep -E "GEÇEN" /tmp/o-pano-$n.txt | tail -1) · yük $(cut -d" " -f1 /proc/loadavg)"; grep "✗" /tmp/o-pano-$n.txt | cut -c1-260; [ $rc = 0 ] || r=1; done
+echo "gerçek tmux sinav-* oturumu: $(tmux ls 2>/dev/null | grep -c "^sinav")"
+exit $r
+# rc=0 sure=121.6s zaman=2026-10-16T11:32:26+03:00
+--- stdout ---
+  ÖLÇÜM ÖNCE (köprüsüz) (mürekkep rengi · WCAG kontrast · xterm hücre fg/dim):
+    L1 NORMAL: #ede5d7 14.93:1 fg=-1 dim=false
+    L2 DIM duz: #817c73 4.50:1 fg=-1 dim=true
+    L3 DIM gri-244: #4a4947 2.08:1 fg=244 dim=true
+    L4A dim-parca: #817c73 4.50:1 fg=-1 dim=true
+    L4B devam: #ede5d7 14.93:1 fg=-1 dim=false
+    L5A yesil: #5ea702 6.23:1 fg=2 dim=false
+    L5B dim-yesil: #395d08 2.44:1 fg=2 dim=true
+    L5C yine-yesil: #5ea702 6.23:1 fg=2 dim=false
+    L6A bold-dim: #817c73 4.50:1 fg=-1 dim=true
+    L6B sonra: #ece4d6 14.79:1 fg=-1 dim=false
+    L7 brightBlack: #a79e90 7.06:1 fg=8 dim=false
+  ÖLÇÜM SONRA (köprülü) (mürekkep rengi · WCAG kontrast · xterm hücre fg/dim):
+    L1 NORMAL: #ede5d7 14.93:1 fg=-1 dim=false
+    L2 DIM duz: #a89f91 7.14:1 fg=8 dim=false
+    L3 DIM gri-244: #808080 4.73:1 fg=244 dim=false
+    L4A dim-parca: #a79e90 7.06:1 fg=8 dim=false
+    L4B devam: #ede5d7 14.93:1 fg=-1 dim=false
+    L5A yesil: #5ea702 6.23:1 fg=2 dim=false
+    L5B dim-yesil: #a89f91 7.14:1 fg=8 dim=false
+    L5C yine-yesil: #5ea702 6.23:1 fg=2 dim=false
+    L6A bold-dim: #a89f91 7.14:1 fg=8 dim=false
+    L6B sonra: #ece4d6 14.79:1 fg=-1 dim=false
+    L7 brightBlack: #a79e90 7.06:1 fg=8 dim=false
+dim-okunur-sinav: 18 geçti · 0 kaldı
+dim-okunur-sinav exit=0
+── pano-sinav.mjs ×3 ardışık (tur 1 bulgusu: 33/34 dalgalanması; düşen kapı kayda)
+koşum 1 exit=0 GEÇEN: 34 · KALAN: 0 · yük 57.39
+koşum 2 exit=0 GEÇEN: 34 · KALAN: 0 · yük 38.49
+koşum 3 exit=0 GEÇEN: 34 · KALAN: 0 · yük 29.33
+gerçek tmux sinav-* oturumu: 0
+--- stderr ---
