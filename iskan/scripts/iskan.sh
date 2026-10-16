@@ -1202,7 +1202,15 @@ cmd_cf_yayin() {
     echo "[kırmızı] REPO-KANIT yok: '$proje' origin/main setup-tunnel.sh'te bulunamadı — önce cloudtop-PR merge (D1), hiçbir yere dokunulmadı" >&2
     exit 1
   fi
-  if ! git -C "$repo_dir" show origin/main:infra/docker-compose.server.yml 2>/dev/null | grep -qE "container_name:[[:space:]]*${cname}\$"; then
+  # 🔴 FIX (16 Eki, s02-söküm canlı-vaka): `git show … | grep -qE` SIGPIPE-altında-pipefail
+  # yanlış-negatif üretebiliyordu — grep -q ilk eşleşmede ERKEN çıkar, büyük çıktıda (bu
+  # dosya ~80 KB, boru-tamponunu aşıyor) yukarı akışa SIGPIPE gider; `set -o pipefail` altında
+  # pipeline durumu grep'in BAŞARISINI değil ÖNCEKİ komutun sinyal-durumunu yansıtabiliyor.
+  # Panzehir: önce DEĞİŞKENE yakala, grep'i boru değil here-string (<<<) ile çalıştır — boru yok,
+  # SIGPIPE riski yok. (Aynı sınıf hata _ey_proje_cozumu + _kur_durak1_probe'da da düzeltildi.)
+  local durak1_cm
+  durak1_cm="$(git -C "$repo_dir" show origin/main:infra/docker-compose.server.yml 2>/dev/null)"
+  if [ -z "$durak1_cm" ] || ! grep -qE "container_name:[[:space:]]*${cname}\$" <<< "$durak1_cm"; then
     echo "[kırmızı] REPO-KANIT yok: '$cname' origin/main compose'unda bulunamadı (hostname arkasında servis olmalı) — hiçbir yere dokunulmadı" >&2
     exit 1
   fi
@@ -1507,7 +1515,12 @@ _ey_proje_cozumu() {
     echo "[kırmızı] origin/main compose okunamadı ($EY_REPO_DIR) — proje-çözümü yapılamaz, hiçbir yere dokunulmadı" >&2
     return 1
   fi
-  if ! printf '%s\n' "$compose_main" | grep -qE "container_name:[[:space:]]*${EY_CNAME}\$"; then
+  # 🔴 FIX (16 Eki, s02-söküm canlı-vaka): aşağıdaki satır `printf | grep -q` boru deseniydi —
+  # SIGPIPE-altında-pipefail yanlış-negatif üretti (büyük compose'ta grep erken çıkar, printf'e
+  # SIGPIPE gider, pipefail durumu grep'in başarısı yerine printf'in sinyal-durumunu basar).
+  # Kanıt: s02 için 3/3 satır eşleşirken fonksiyon 'kayitsiz-proje' diyordu — here-string (<<<)
+  # borusuz çalışır, aynı hata sınıfı giderilir.
+  if ! grep -qE "container_name:[[:space:]]*${EY_CNAME}\$" <<< "$compose_main"; then
     echo "[kırmızı] kayitsiz-proje: '$proje' — compose-servis-listesinde (origin/main) '${EY_CNAME}' TAM-STRING eşleşmesi yok (K4: fuzzy/önek/case-farkı kabul edilmez), hiçbir yere dokunulmadı" >&2
     return 1
   fi
@@ -3627,7 +3640,8 @@ _kur_durak1_probe() {
   local compose_main
   compose_main="$(git -C "$repo_dir" show origin/main:infra/docker-compose.server.yml 2>/dev/null)"
   [ -n "$compose_main" ] || return 2
-  printf '%s\n' "$compose_main" | grep -qE "container_name:[[:space:]]*${cname}\$"
+  # 🔴 FIX (16 Eki) — aynı SIGPIPE/pipefail sınıfı (bkz _ey_proje_cozumu): boru değil here-string.
+  grep -qE "container_name:[[:space:]]*${cname}\$" <<< "$compose_main"
 }
 
 cmd_kur() {
