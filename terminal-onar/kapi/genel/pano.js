@@ -237,11 +237,43 @@
     if (!metin) return false;
     panoyaYaz(metin); return true;
   }
+  // ── DİM OKUNURLUK (1.3.0 · Sultan 16 Eki 10:10 karesi, nazir-yon): Claude Code soru satırlarını ve şık açıklamalarını
+  //    ESC[2m (dim) basar; xterm dim'i rengi yarıya soldurarak çizer (DIM_OPACITY 0.5) ve bunu minimumContrastRatio'dan
+  //    SONRA uygular → "dim + gri-244" koyu temada 2,08:1 (ölçüldü, Chromium piksel), okunmuyor; minimumContrastRatio=7 bile
+  //    dim'e İŞLEMEZ (ölçüldü). Çare: SGR ayrıştırıcıya kanca — dim (2) → "ön plan brightBlack" (SGR 90): temada brightBlack
+  //    okunur bir ikincil ton (onar.sh: #a89f91, ≥7:1). 22 (dim kapat) gelince dim'den ÖNCEKİ açık renk (yoksa varsayılan)
+  //    geri konur; 2'den sonra gelen açık renk (2;38;5;244) kendi kazanır (gri-244 4,7:1). Dim'siz SGR'ye DOKUNULMAZ.
+  //    Genel API parametreleri dizi verir (alt-parametre iç dizi) ve kopyadır → düzleştirip çekirdeğin charAttributes'ına veririz.
+  var dimAcik = false, fgSon = null;   // fgSon: son açık ön plan SGR'si (ör. [32] · [38,5,244]) — 22'de geri konur
+  function dimKanca(t) {
+    var ih = t._core && t._core._inputHandler;
+    if (!ih || typeof ih.charAttributes !== 'function' || typeof t.parser.registerCsiHandler !== 'function') return false;
+    t.parser.registerCsiHandler({ final: 'm' }, function (arr) {
+      var flat = [], i, v, degisti = false;
+      for (i = 0; i < arr.length; i++) { if (Array.isArray(arr[i])) flat.push.apply(flat, arr[i]); else flat.push(arr[i]); }
+      if (!flat.length) flat.push(0);
+      for (i = 0; i < flat.length; i++) {
+        v = flat[i];
+        if (v === 2) { flat[i] = 90; dimAcik = true; degisti = true; }
+        else if (v === 0) { dimAcik = false; fgSon = null; }
+        else if (v === 39) { dimAcik = false; fgSon = null; }
+        else if ((v >= 30 && v <= 37) || (v >= 90 && v <= 97)) { dimAcik = false; fgSon = [v]; }
+        else if (v === 38) { var n = flat[i + 1] === 5 ? 2 : flat[i + 1] === 2 ? 4 : 0; fgSon = flat.slice(i, i + 1 + n); dimAcik = false; i += n; }
+        else if (v === 48 || v === 58) { i += flat[i + 1] === 5 ? 2 : flat[i + 1] === 2 ? 4 : 0; }
+        else if (v === 22 && dimAcik) { flat.push.apply(flat, fgSon || [39]); dimAcik = false; degisti = true; }
+      }
+      if (!degisti) return false;   // dim'siz dizi: xterm'in kendi yolu, bayt bayt eski davranış
+      ih.charAttributes({ length: flat.length, params: flat, hasSubParams: function () { return false; }, getSubParams: function () { return null; }, getSubParamsAll: function () { return {}; } });
+      return true;
+    });
+    return true;
+  }
   function termBagla() {
     var t = window.term;
     if (!t || !t.parser || typeof t.parser.registerOscHandler !== 'function') return false;
     t.parser.registerOscHandler(52, osc52);
-    window.__kapiPano = { surum: '1.2.2', sonResim: function () { return sonOlcum; }, osc52: true, cmdc: true, soz: true, dugme: true, taban: TABAN, sonMetinOmruMs: SON_METIN_OMRU,
+    var dimOkunur = false; try { dimOkunur = dimKanca(t); } catch (e) { log('dim kancası takılamadı: ' + (e && e.message)); }
+    window.__kapiPano = { surum: '1.3.0', dimOkunur: dimOkunur, sonResim: function () { return sonOlcum; }, osc52: true, cmdc: true, soz: true, dugme: true, taban: TABAN, sonMetinOmruMs: SON_METIN_OMRU,
       _eskit: function () { sonMetinAn = 0; }, _sonYol: function () { return sonYol; }, _sozBekliyor: function () { return !!bekleyen; },
       _sozOmru: function (ms) { SOZ_OMRU = ms; }, _indiOmru: function (ms) { INDI_OMRU = ms; } };   // ölçüm yüzeyi (sınav okur; _eskit: son seçimi bayatlatır; _sozOmru: sınav süreyi kısaltır)
     log('bağlandı: OSC 52 → pano · resim → ' + RESIM_URL);

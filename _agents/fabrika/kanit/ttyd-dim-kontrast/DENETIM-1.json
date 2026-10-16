@@ -1,0 +1,45 @@
+{
+  "tur": 1,
+  "is": "ttyd-dim-kontrast",
+  "pr": "346",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-16T11:29:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 42679,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 12588
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Dim metin köprüde okunur bir renge çevrilmiş, tema tonu eklenmiş ve gerçek ttyd+tmux+Chromium sınavında hedef kapılar geçmiştir. Ancak istenen önce/sonra piksel-kontrast ölçüm çifti sunulan kayıtta tamamlanmıyor ve regresyon sınavındaki tek koşumluk 33/34 düşüş açıklanmadan kalıyor; önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "Sonraki durum için sayısal piksel-kontrast değeri kanıt çıktısında gösterilmiyor; yalnız D2 kapısının ≥4,5 koşulunu geçtiği bildiriliyor. İş kartı açıkça önce/sonra piksel-kontrast ölçüm çifti istiyor.",
+        "kanit": "Önce kaydında L3 için 2.08:1 yazıyor; son yeşil kayıtta yalnız \"D2 gri-244 okunur: 1\" bulunuyor, sayısal karşılık yok.",
+        "konum": "olcum-ana-dal-dim-okunmuyor-once.txt Ö2/D2; olcum-dim-okunur-sinavi-ve-pano-sonra.txt D2 özeti",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Tam pano regresyon sınavı ardışık iki koşumda farklı sonuç verdi; ilkinde 33/34 başarısız, ikincisinde 34/34 başarılı. Düşen kapı ve dalgalanmanın nedeni kayda alınmadığı için üretim güveni tam değil.",
+        "kanit": "İlk sonra kaydı \"pano-sinav.mjs exit=1 GEÇEN: 33 · KALAN: 1\"; sonraki kayıt \"exit=0 GEÇEN: 34 · KALAN: 0\" ve bunu \"tek koşumluk dalgalanma\" diye not ediyor, fakat başarısız kapının çıktısı sunulmuyor.",
+        "konum": "olcum-dim-okunur-sinavi-sonra.txt; olcum-dim-okunur-sinavi-ve-pano-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ttyd+tmux+Chromium kullanan önce/sonra sınavı hedef davranışı ve yan etkisizliği güçlü biçimde destekliyor, ayrıca iki PNG üretildiği kaydedilmiş; ancak karelerin kendisi verilmemiş, sonraki kesin kontrast sayısı çıktıda yok ve bir kırmızı regresyon koşumunun ayrıntısı kaybolmuş."
+  }
+}

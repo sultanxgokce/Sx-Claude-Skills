@@ -106,7 +106,7 @@ if [ $WEB_YENILE = 1 ] || ! ttyd_saglam; then
   # bağlantı bugünkü gibi ana oturuma gider.
   tmux new-session -d -s "$TTYD_TMUX" "exec $TTYD_BIN -W -a -i $TTYD_SOKET -b $TABAN/tty \
     -t fontSize=12 -t disableLeaveAlert=true -t disableResizeOverlay=true -t titleFixed=$KUTU \
-    -t 'theme={\"background\":\"#15120e\",\"foreground\":\"#ede5d7\",\"cursor\":\"#c9914f\"}' \
+    -t 'theme={\"background\":\"#15120e\",\"foreground\":\"#ede5d7\",\"cursor\":\"#c9914f\",\"brightBlack\":\"#a89f91\"}' \
     bash $BETIK_DIZ/koltuk-bagla.sh $ANA_TMUX $PROJE"
   bekle_saglam ttyd_saglam "$TTYD_BEKLE" || true
   ttyd_saglam && gunluk "K0 terminal (ttyd) başlatıldı" || gunluk "K0 HATA: terminal ayağa kalkmadı ($(ttyd_kod))"
