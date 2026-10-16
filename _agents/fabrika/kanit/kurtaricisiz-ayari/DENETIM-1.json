@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "kurtaricisiz-ayari",
+  "pr": "343",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-16T10:31:45+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 38602,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 11562
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İstenen kutu-başı işaret davranışı durum, onarım ve kademe yollarına eklenmiş; hermetik sınav ile mutasyon da ana senaryoları ısırıyor. Önce yeni sınav dosyasının çalıştırma bitini düzeltin: üretim farkında 100644 gelen dosya, aynı becerinin belgelenmiş kabuk-biti kuralıyla çelişiyor ve kanıt yalnız `bash dosya` çağrısıyla bu kusuru örtüyor.",
+    "bulgular": [
+      {
+        "ne": "Yeni kabuk sınavı çalıştırılabilir değil; depodaki betik çalıştırma-bit standardına uymuyor ve doğrudan keşif/çalıştırma akışında yeniden kırılabilir.",
+        "kanit": "Diff, `terminal-onar/scripts/kurtarici-kapali.test.sh` için `new file mode 100644` gösteriyor. Aynı diffteki 2.9.1 sürüm notu, `scripts/compact.test.sh` dosyasının 100644 olmasının duman testini “ÇALIŞTIRILAMAZ” diye düşürdüğünü ve `scripts/` altındaki beceri betiklerinin 100755 yapıldığını söylüyor; sunulan yeşil ölçüm ise dosyayı doğrudan değil `bash terminal-onar/scripts/kurtarici-kapali.test.sh` ile çağırdığı için çalıştırma bitini sınamıyor.",
+        "konum": "terminal-onar/scripts/kurtarici-kapali.test.sh: yeni dosya modu 100644; terminal-onar/SKILL.md 2.9.1 sürüm notu; olcum-kurtarici-kapali-sinavi-ve-komsular-sonra.txt komutu",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü ana dalın işareti tanımadığını, sonra ölçümü 25 hedef kapının ve üç komşu sınavın geçtiğini gösteriyor; ayrıca beklenen kırmızı mutasyon işaret dalı sökülünce eski davranışın döndüğünü ölçüyor. Ancak yeşil komşu-sınav döngüsündeki `[ $? = 0 ]` denetimi `echo` sonucunu kontrol ettiği için toplu dönüş kodu kusurlu; çıktıda her komşunun `exit=0` olması bu kayıtta sonucu kurtarıyor. Kanıt gerçekçi hermetik süreç/tmux taklitleri içeriyor ve önce/sonra ölçüm çifti var, fakat yeni dosyanın çalıştırma biti ölçülmemiş."
+  }
+}

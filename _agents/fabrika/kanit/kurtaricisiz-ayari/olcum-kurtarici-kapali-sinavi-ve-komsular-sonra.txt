@@ -1,0 +1,34 @@
+$ bash -c timeout 150 bash terminal-onar/scripts/kurtarici-kapali.test.sh 2>&1 | grep -E "✓|✗|geçti"; r=${PIPESTATUS[0]}; echo "kurtarici-kapali.test exit=$r · gerçek tmux sinav-* oturumu: $(tmux ls 2>/dev/null | grep -c "^sinav")"; for f in onar.test.sh bekci-iz.test.sh kutu-adi.test.sh; do timeout 120 bash terminal-onar/scripts/$f >/tmp/o-kk.txt 2>&1; echo "$f exit=$? $(grep -E "geçti" /tmp/o-kk.txt | tail -1)"; [ $? = 0 ] || r=1; done; exit $r
+# rc=0 sure=12.3s zaman=2026-10-16T10:30:25+03:00
+--- stdout ---
+  ✓ H0 onar.sh adım 4 bloğu çıkarıldı (kurtarici_kapali dalı içinde)
+  ✓ H1 sahte tmux gerçekten devrede (gerçek tmux'a DOKUNULMAZ)
+  ✓ D1 işaret YOK + kurtarıcı yok → 'yok' (eski davranış aynen)
+  ✓ D2 işaret VAR + kurtarıcı yok → 'kapalı (Sultan 16 Eki)'
+  ✓ D2b 'düştü/yok' DENMEZ
+  ✓ D3 --json da aynı sözü taşır
+  ✓ D4 dosya yerine TO_KURTARICI=0 beyanı da işarettir
+  ✓ D5 işaretsiz 'yok' düzeni BOZUK sayar (rc 1) — kontrol
+  ✓ D6 🔴 işaretli 'kapalı' düzeni SAĞLAM sayar (rc 0) — bekçi merdiveni boşuna tırmandırmaz
+  ✓ D7 işaret VAR ama kurtarıcı AÇIK → 'kapalı-ama-AÇIK' + bozuk (K0 kapatacak)
+  ✓ O1 işaret VAR + oturum yok → yeni oturum AÇILMAZ (tmux new-session çağrılmadı)
+  ✓ O1b günlük 'kapalı (Sultan 16 Eki) — açılmadı' der
+  ✓ O2 işaret VAR + oturum AÇIK → KAPATILIR (kill-session)
+  ✓ O2b oturum dosyası gitti (durum işarete yakınsadı)
+  ✓ O2c günlük 'açık bulundu, KAPATILDI' der
+  ✓ O3 işaret YOK → eski yol: oturum kurulur, Claude başlatılmaya çalışılır
+  ✓ O3b işaret yokken kill-session YOK
+  ✓ M1 merdiven K3'e düşer (rc 1)
+  ✓ M2 K2 ATLANIR: günlük 'K2 kurtarıcı kapalı … MUAVİN/SERDAR'a bildir'
+  ✓ M2b kurtarıcıya komut YAZILMAZ (send-keys yok)
+  ✓ M3 K3 iletisi 'kurtarıcı kapalı → MUAVİN/SERDAR'a bildir' taşır
+  ✓ M4 işaret yokken K2 denenir (eski davranış: 'kurtarıcı ajan da ayakta değil')
+  ✓ M4b işaret yokken K3 iletisinde kapalı notu YOK
+  ✓ X1 MUTANT durum.sh işareti görmez → 'yok' basar (D2 onu yakalar)
+  ✓ X2 MUTANT onar adım 4 işarete rağmen kurtarıcıyı AÇAR (O1 onu yakalar)
+kurtarici-kapali.test: 25 geçti · 0 kaldı
+kurtarici-kapali.test exit=0 · gerçek tmux sinav-* oturumu: 0
+onar.test.sh exit=0 SONUÇ: 11 geçti · 0 kaldı
+bekci-iz.test.sh exit=0 bekci-iz.test: 12 geçti · 0 kaldı
+kutu-adi.test.sh exit=0 SONUÇ: 9 geçti · 0 kaldı
+--- stderr ---

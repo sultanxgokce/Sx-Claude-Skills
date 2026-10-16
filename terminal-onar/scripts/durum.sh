@@ -12,7 +12,11 @@ if id=$(claude_oturumu "$ANA_TMUX"); then
 else D[ana_claude]=yok; fi
 if ttyd_saglam && kapi_saglam; then D[web_terminal]=ok
 else D[web_terminal]="yok(terminal=$(ttyd_kod),kapı=$(kapi_kod))"; fi
-if kid=$(claude_oturumu "$KURT_TMUX"); then
+# Kurtarıcı: işaret varken (Sultan 16 Eki, filo geneli kapalı) "kapalı" sağlam sayılır, "yok/düştü" DENMEZ; işaret var ama
+# oturum hâlâ açıksa "kapalı ama AÇIK" → bozuk, onar.sh K0 kapatır.
+if kurtarici_kapali; then
+  claude_oturumu "$KURT_TMUX" >/dev/null && D[kurtarici]="kapalı-ama-AÇIK (onar.sh kapatır)" || D[kurtarici]="$KURT_KAPALI_SEBEP"
+elif kid=$(claude_oturumu "$KURT_TMUX"); then
   D[kurtarici]=ok; [ "$kid" != "?" ] && printf '%s\n' "$kid" > "$DURUM_DIZ/kurtarici-oturum"
 else D[kurtarici]=yok; fi
 # Bekçi (2.3.0): satır KURULU mu değil, son 5 dakikada gerçekten KOŞTU mu (bekci.sh her koşuda iz bırakır; REVAK hata defteri
@@ -28,7 +32,7 @@ else
   else D[bekci]=ok; fi
 fi
 
-rc=0; for k in "${!D[@]}"; do [ "${D[$k]}" = ok ] || rc=1; done
+rc=0; for k in "${!D[@]}"; do [ "${D[$k]}" = ok ] || [ "${D[$k]}" = "$KURT_KAPALI_SEBEP" ] || rc=1; done
 
 if [ "${1:-}" = "--json" ]; then
   printf '{"saglam":%s,"ana_tmux":"%s","ana_claude":"%s","web_terminal":"%s","kurtarici":"%s","bekci":"%s","ana_oturum":"%s","zaman":"%s"}\n' \

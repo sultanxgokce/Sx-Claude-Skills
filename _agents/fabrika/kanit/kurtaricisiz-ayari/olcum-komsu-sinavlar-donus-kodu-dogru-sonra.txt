@@ -1,0 +1,16 @@
+$ bash -c 
+r=0
+timeout 150 bash terminal-onar/scripts/kurtarici-kapali.test.sh > /tmp/o-kk2.txt 2>&1; rc=$?; echo "kurtarici-kapali.test.sh exit=$rc $(grep -E "geçti" /tmp/o-kk2.txt | tail -1)"; [ "$rc" = 0 ] || r=1
+for f in onar.test.sh bekci-iz.test.sh kutu-adi.test.sh; do timeout 120 bash terminal-onar/scripts/$f > /tmp/o-kk2.txt 2>&1; rc=$?; echo "$f exit=$rc $(grep -E "geçti" /tmp/o-kk2.txt | tail -1)"; [ "$rc" = 0 ] || r=1; done
+echo "gerçek tmux sinav-* oturumu: $(tmux ls 2>/dev/null | grep -c "^sinav")"
+echo "(tur 2 rötuşu: önceki kayıtta [ \$? = 0 ] echo nun kodunu ölçüyordu; burada her sınavın kendi rc si saklanıp toplanır)"
+exit $r
+# rc=0 sure=9.0s zaman=2026-10-16T10:34:39+03:00
+--- stdout ---
+kurtarici-kapali.test.sh exit=0 kurtarici-kapali.test: 25 geçti · 0 kaldı
+onar.test.sh exit=0 SONUÇ: 11 geçti · 0 kaldı
+bekci-iz.test.sh exit=0 bekci-iz.test: 12 geçti · 0 kaldı
+kutu-adi.test.sh exit=0 SONUÇ: 9 geçti · 0 kaldı
+gerçek tmux sinav-* oturumu: 0
+(tur 2 rötuşu: önceki kayıtta [ $? = 0 ] echo nun kodunu ölçüyordu; burada her sınavın kendi rc si saklanıp toplanır)
+--- stderr ---

@@ -1,0 +1,18 @@
+$ bash -c 
+echo "BEKLENEN KIRMIZI — mutant kopya: durum.sh ve onar.sh adım 4 ten kurtarici_kapali dalı sökülmüş; işaret VARKEN eski davranış geri gelir (yok / açar). Bu kaydın rc=1 olması DOĞRUDUR, kapıların ısırdığını gösterir."
+T=$(mktemp -d); mkdir -p "$T/m" "$T/durum" "$T/bin" "$T/oturum"; cp -r terminal-onar/scripts "$T/m/"
+python3 - "$T/m/scripts/durum.sh" <<PY
+import sys; p=sys.argv[1]; s=open(p,encoding="utf-8").read()
+i=s.index("if kurtarici_kapali; then"); j=s.index("elif kid=\$(claude_oturumu"); s=s[:i]+"if kid=\$(claude_oturumu"+s[j+len("elif kid=\$(claude_oturumu"):]
+open(p,"w",encoding="utf-8").write(s)
+PY
+printf "#!/usr/bin/env bash\nexit 1\n" > "$T/bin/tmux"; chmod +x "$T/bin/tmux"; printf "export PATH=\"$T/bin:\$PATH\"\n" >> "$T/m/scripts/ortak.sh"
+: > "$T/durum/kurtarici-kapali"
+h=$(env -i PATH="$T/bin:/usr/bin:/bin" HOME="$T" TO_KUTU=sinav TO_PROJE="$T" TO_DURUM_DIZ="$T/durum" TO_BEKCI_YOK=1 TO_BECERI_KOK="$T/m" CORTEX_ACCESS_ENV="$T/yok" TO_KAPI_PORT=1 TO_TTYD_SOKET="$T/yok.sock" bash "$T/m/scripts/durum.sh" 2>/dev/null | sed -n "s/^kurtarıcı ajan *: //p")
+echo "mutant durum.sh, işaret VAR → kurtarıcı: $h  (sağlam kod: kapalı (Sultan 16 Eki))"
+rm -r -- "$T"; [ "$h" = "kapalı (Sultan 16 Eki)" ]
+# rc=1 sure=0.1s zaman=2026-10-16T10:30:25+03:00
+--- stdout ---
+BEKLENEN KIRMIZI — mutant kopya: durum.sh ve onar.sh adım 4 ten kurtarici_kapali dalı sökülmüş; işaret VARKEN eski davranış geri gelir (yok / açar). Bu kaydın rc=1 olması DOĞRUDUR, kapıların ısırdığını gösterir.
+mutant durum.sh, işaret VAR → kurtarıcı: yok  (sağlam kod: kapalı (Sultan 16 Eki))
+--- stderr ---

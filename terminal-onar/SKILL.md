@@ -1,7 +1,7 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.10.1
+version: 2.11.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
@@ -21,7 +21,7 @@ Safari'de 10 sn denemesi. ⚠ WebKit bu kutuda açılmıyor (kütüphane eksik);
 | konuşma | `<kutu>-ana` içinde Claude (Sultan'ın ana konuşması) | Claude'un oturum kaydında `tmux=<kutu>-ana:` + süreç canlı |
 | web kapısı | `kapi/sunucu.mjs` `:7681` → merkez (`terminal.mmepanel.com/<kutu>/`) — telefon ekranı (PWA), giriş (parola, imzalı çerez), mesaj/foto/tuş/Onar API'si. tmux `kapi-<kutu>` | `<taban>/giris` 200 · `<taban>/` girişsiz 302 |
 | terminal | ttyd yalnız UNIX soketinde (`/config/.terminal-onar/ttyd.sock`, TCP portu yok), kapı `<taban>/tty/` altında sunar. tmux `ttyd-<kutu>` | soket `/tty/` 200 |
-| kurtarıcı ajan | tmux `<kutu>-kurtarici` içinde ayrı Claude | aynı ölçü |
+| kurtarıcı ajan | tmux `<kutu>-kurtarici` içinde ayrı Claude. **Filo genelinde KAPALI** (Sultan 16 Eki 2026; yalnız code kutusununki açık): işaret `/config/.terminal-onar/kurtarici-kapali` (ya da `TO_KURTARICI=0`) varken onar.sh açmaz, açıksa kapatır | işaret varken "kapalı (Sultan 16 Eki)" sağlam sayılır; yoksa aynı ölçü |
 | bekçi | crontab `* * * * * if [ -x <proje>/…/bekci.sh ]; then bash <proje>/…/bekci.sh; else TO_KUTU=<kutu> bash /config/.claude/skills/terminal-onar/scripts/bekci.sh; fi  # terminal-onar-bekci` (+ kalıcı kopya `.oda/cron`) | koşu izi ≤5 dk |
 
 code-server terminali ve web terminali **aynı tmux oturumuna** bağlanır → birebir, canlı senkron.
@@ -45,8 +45,10 @@ günlüğe bak, sebebi bul, `onar --web-yenile` dahil tekrar dene. Sağlam olmad
    kimlikle** geri açar (`/config/.terminal-onar/ana-oturum`), asla "son oturum"la (aynı klasörde
    başka ajanlar da çalışır; `--continue` yanlış konuşmayı açabilir).
 2. **K1** başsız Claude (`claude -p`, 10 dk) — yalnız bu betiklere + okumaya izinli.
-3. **K2** kurtarıcı ajan — `/terminal-onar onar` komutu gönderilir, 20 dk izlenir.
-4. **K3** Sultan'a WhatsApp: "elle bakılmalı" + durum + son günlük.
+3. **K2** kurtarıcı ajan — `/terminal-onar onar` komutu gönderilir, 20 dk izlenir. Kurtarıcı işareti kapalıysa
+   bu kademe ATLANIR (günlüğe "kurtarıcı kapalı → MUAVİN/SERDAR'a bildir" düşer).
+4. **K3** Sultan'a WhatsApp: "elle bakılmalı" + durum + son günlük; kurtarıcı kapalıysa ileti "kurtarıcı kapalı →
+   MUAVİN/SERDAR'a bildir" cümlesini taşır (insan kademesi kutu dışından gelir).
 
 Tek kilit (flock) → iki merdiven aynı anda koşmaz. Merdiven ölürse bekçi bir dakika içinde yeniden
 başlatır. Bekçi tetiklediğinde K1/K2 15 dakikada bir defadan sık denenmez.
@@ -72,8 +74,10 @@ başlatır. Bekçi tetiklediğinde K1/K2 15 dakikada bir defadan sık denenmez.
   (MUAVİN / host) gelir.
 
 ## Durum dosyaları
-`/config/.terminal-onar/` — `gunluk.log` · `ana-oturum` · `kurtarici-oturum` · `kademe.durum` · `duraklat`.
-Sultan-onayı: 2026-09-25 (gözetimsiz ajan kademeleri dahil).
+`/config/.terminal-onar/` — `gunluk.log` · `ana-oturum` · `kurtarici-oturum` · `kademe.durum` · `duraklat` ·
+`kurtarici-kapali` (2.11.0 · işaret: var = kurtarıcı açılmaz/kapatılır; **kutu başına**, reis koyar; code kutusuna KONMAZ;
+geri açmak = silmek). Sınav: `scripts/kurtarici-kapali.test.sh` (hermetik + mutasyon).
+Sultan-onayı: 2026-09-25 (gözetimsiz ajan kademeleri dahil) · 2026-10-16 (filo geneli kurtarıcı kapalı, code hariç).
 
 ## 🆕 Kurulum — `/terminal-kur` (2.0.0)
 
@@ -351,6 +355,7 @@ ssh yok, kayıtlar yerel, tek komut.
 - Sınav: `scripts/compact.test.sh` (35 kapı, hermetik: sahte tmux + sahte kayıt; mutasyon: boş-koltuk kapısı kalkınca taslaklı koltuğa tuş gider → U1 kırmızı).
 
 ## Sürüm notları
+- **2.11.0 (2026-10-16, BÂNİ · kurtarıcısız ayarı, Sultan kararı 10:3x, gorev_01M51QW6F3Z35G6GQJMTPWFF61):** filo genelinde kurtarıcı ajanlar KAPANIR, yalnız code kutusununki kalır. Kutu başına işaret `/config/.terminal-onar/kurtarici-kapali` (ya da `TO_KURTARICI=0`): onar.sh K0 adım 4 kurtarıcıyı açmaz, açıksa kapatır (durum işarete yakınsar); durum.sh "kurtarıcı: kapalı (Sultan 16 Eki)" basar ve bunu sağlam sayar ("yok/düştü" demez; işaret var ama oturum açıksa "kapalı-ama-AÇIK" → bozuk, K0 kapatır); kademe.sh K2'yi atlar, K3 iletisine "kurtarıcı kapalı → MUAVİN/SERDAR'a bildir" ekler. Tek kurulum (ortak /config/.claude), işareti reisler kutu kutu koyar — code'da KONMAZ. Sınav `kurtarici-kapali.test.sh` (hermetik; mutasyon: işaret kontrolü sökülünce kırmızı).
 - **2.10.1 (2026-10-16, BERİD · Kadro kişi↔oturum eşleşmesi kimlikle — SERDAR 00:4x, Sultan 00:22 karesi, huzur):** eşleşme yalnız tmux adıyla yapılınca ana oturumda çalışan kişi iki satır oluyordu ("oturumu yok" + ana "kimliği yok"). Yeni `kapi/kimlik.mjs` Claude'un süreç başına yazdığı oturum dosyalarını (`<yapılandırma>/sessions/<pid>.json`: sessionId · tmux · ad) okur — yalnız bu kutunun pid alanındaki, yaşayan, programı claude olan süreçler (ortak dizinde başka kutunun dosyası sayılmaz). Sıra: kayıttaki `session_id` (kimlik tanıma kancası yazar) → kullanıcının verdiği Claude adı (`claude -n`) → tmux adı. Kimlik iki oturuma çıkarsa tahmin yapılmaz. Kişi fiilen ana oturumdaysa "altyapı: ana oturum" korumalıdır (dondur/emekli 403). Kimlik izi yoksa davranış eskisidir. Canlı (code kutusu): SERDAR adla, MUHAKKIK ve HENDESE session_id ile bağlandı. Sınav `kapi/kimlik.test.mjs` (18, uçtan uca dahil; mutasyon 9/9; dosya adı = içindeki pid; basamaklar KADRO GENELİNDE sıralı: önce herkes için session_id, sonra kalanlar için ad). Bilinen sınır: kimlik tanıma kancası ana oturumu bir kişiye bağlayamadığında (huzur-ana ≠ huzur-yon) kayda session_id yazmaz → o kutuda kimlik izi yoktur, eşleşme tmux adına düşer.
 - **2.10.0 (2026-10-16, BERİD · KADRO E2, Sultan onaylı — SERDAR 00:3x · D1):** Kadro sayfası artık yönetir: `POST /api/kadro/hal` dört eylem — **emekli et · dondur · geri aç · kayıtsız oturumu kapat** (hepsi geri alınabilir). Yazma KAYNAĞA gider (`kapi/kadro-yaz.mjs`, BÂNİ 15 Eki 18:31 ölçümü): elle kayıtta kişinin bloğuna `durum:` + önceki değer `durum_once:`; üretilmiş kayıtta (`ekipc:uretilen` bölgesi) `_agents/ekip-modeli.yaml` + derleyici (`KAPI_EKIPC` ya da kutunun `scripts/ekipc.sh`; yoksa HİÇ yazılmaz, 503). Yeni `hal:` alanı açılmaz. Gerçek ekipc ile ölçülen üç kural: derleyiciye kutunun kendi aile kaydı (`--aile`) verilir, temel katalog derleyicinin kendisidir (`--base-katalog` verilmez), K13 gereği canlı örnek donunca `olcek.adet` bir azalır; derlemenin kayıt DIŞI farkları (bekleyen ortak-temel yayılımı) uygulanmaz, sayısı yanıtta söylenir; kayıt dosyasının İÇİNDE başka kişiye ait bekleyen fark varsa yazım reddedilir (409, hiçbir şey yazılmaz). Geri alma derleyicisizdir: derleme öncesi fotoğraftan bayt bayt. Dondur/emekli oturumu da kapatır (kapatılamazsa kayıt geri alınır; geri alma da düşerse uç 500 ile bunu açıkça söyler); dondurulmuşu geri açmak oturumu `koltuk-ac --eski` ile eski sohbetine döndürür, emekliyi geri açmak yalnız kaydı geri koyar. **Altyapı** oturumları (ana · dash · dashproxy · dashwatch · ttyd-* · kapi-* · *-kurtarici · imglistener*) `/api/kadro`'da ayrı `altyapi` listesindedir (artık kırmızı "boş oturum"/"düşen" değil) ve hiçbir eylem onlara uygulanamaz (403, tmux'a dokunulmaz). Uç yalnız kapı oturumu çereziyle; jeton taşıyan istek 403. Eylemler süreç içi kuyrukla SIRAYLA yürür (yaz → oturumu kapat → gerekirse geri al zinciri bölünmez). Okuyucu: aile dalındaki kutularda (s02 · sedir · nova …) üretilmiş ekip kaydından YALNIZ `durum`, modelden yalnız `durum_once` okunur — rol/tmux ve kişi kümesi değişmez. Her eylem `kadro-hal.log`'a tek satır. Sınav: `kadro-yaz.test.mjs` (26; `--gercek` ile 5 kutunun gerçek kaydının KOPYASINDA gidiş-dönüş bayt eşitliği) · `kadro-hal.test.mjs` (25, uçtan uca: dondur → geri aç, altyapı 403) · `kadro.test.mjs` (30) — üçü de `kapi-sinav.test.sh` ile CI'da. Bilinen sınır: modeli bugün lint-kırmızı olan kutularda (nova · tez · nazir) derleyici reddeder → eylem 502, hiçbir şey yazılmaz.
 - **2.9.3 (2026-10-15, BÂNİ · pano köprüsü 1.2.2, Sultan 2. kez "resim yapıştırma çok yavaş", gorev AT9J8305):** Safari WebP kodlayamıyor; küçültme her yapıştırmada önce PNG sonra JPEG olmak üzere İKİ kez kodluyordu. Artık destek bir kez yoklanır, yoksa doğrudan JPEG (tek kodlama). Bildirim adım sürelerini yazar ("küçültme X sn · yükleme Y sn · Z KB"); bir sonraki yavaşlıkta beklemenin küçültmede mi yüklemede (sunucu/ağ) mi olduğu ekrandan okunur. Sınav pano-sinav Y8-Y10.

@@ -128,7 +128,15 @@ if [ $WEB_YENILE = 1 ] || ! kapi_saglam; then
 fi
 
 # 4 · kurtarıcı ajan — kendi Claude'u, yalnız onarım betiklerine sorusuz izinli
-if ! claude_oturumu "$KURT_TMUX" >/dev/null; then
+#     İşaret varken (kurtarici_kapali, ortak.sh) AÇILMAZ; açıksa KAPATILIR — durum işarete yakınsar.
+if kurtarici_kapali; then
+  if tmux_var "$KURT_TMUX"; then
+    tmux kill-session -t "=$KURT_TMUX" 2>/dev/null && gunluk "K0 kurtarıcı $KURT_KAPALI_SEBEP — açık bulundu, KAPATILDI ($KURT_TMUX)" \
+      || gunluk "K0 HATA: kurtarıcı kapalı olmalı ama $KURT_TMUX kapatılamadı"
+  else
+    gunluk "K0 kurtarıcı $KURT_KAPALI_SEBEP — açılmadı (işaret: $([ "${TO_KURTARICI:-}" = 0 ] && echo TO_KURTARICI=0 || echo "$KURT_KAPALI_DOSYA"))"
+  fi
+elif ! claude_oturumu "$KURT_TMUX" >/dev/null; then
   tmux_var "$KURT_TMUX" || tmux new-session -d -s "$KURT_TMUX" -c "$PROJE"
   kid=$(cat "$DURUM_DIZ/kurtarici-oturum" 2>/dev/null)
   izin="--permission-mode auto --allowedTools 'Bash(bash $BETIK_DIZ/*)'"
