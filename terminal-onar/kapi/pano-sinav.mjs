@@ -12,9 +12,11 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import http from 'node:http';
 const KOK = dirname(fileURLToPath(import.meta.url));
-const PW = process.env.KANIT_PLAYWRIGHT_DIR || '/config/projects/Nexus/ui/node_modules';
-let chromium; try { ({ chromium } = await import(pathToFileURL(join(PW, 'playwright/index.mjs')).href)); }
-catch { console.log(`ÖLÇÜLEMEDİ: tarayıcı kütüphanesi yok (${PW})`); process.exit(4); }
+// Tarayıcı: aday dizinler sırayla (KANIT_PLAYWRIGHT_DIR → Nexus → nvm global), paketi VE ikilisi olan ilki (tarayici-bul.mjs).
+// Eski hâl Nexus paketini bulup launch'ta ÇÖKÜYORDU (ikili yok; rc 1 yığın, rc=4 değil — SERDAR 16 Eki, 3 koşum 3 ortam hatası).
+import { tarayiciBul } from './tarayici-bul.mjs';
+let chromium, PW; try { ({ chromium, dizin: PW } = await tarayiciBul()); console.log(`tarayıcı: ${PW}`); }
+catch (e) { console.log('ÖLÇÜLEMEDİ: ' + e.message); process.exit(4); }
 const TTYD = process.env.TTYD_BIN || join(process.env.HOME || '/config', '.local/bin/ttyd');
 if (!existsSync(TTYD)) { console.log(`ÖLÇÜLEMEDİ: ttyd yok (${TTYD})`); process.exit(4); }
 let TMUX = 'tmux'; try { execFileSync('tmux', ['-V'], { stdio: 'ignore' }); } catch { console.log('ÖLÇÜLEMEDİ: tmux yok'); process.exit(4); }
@@ -65,11 +67,17 @@ async function kapiAc(port, ek = {}) {
   throw new Error('kapı açılmadı');
 }
 const P1 = 18795, P2 = 18796;
+// 🔴 BAYAT KAPI PORTU (SERDAR 16 Eki, 3. ortam hatası "15 sn sayfa zaman aşımı"): yarım kalan bir koşumun kapısı sabit portu tutarsa
+//    kapiAc 200 görür, sayfa ÖLÜ ttyd soketine gider ve xterm hiç gelmez. Önce ölç: port cevap veriyorsa bu koşum değil, bayat kapıdır.
+for (const port of [P1, P2]) {
+  let acik = false; try { acik = (await fetch(`http://127.0.0.1:${port}/sinav/giris`, { signal: AbortSignal.timeout(1500) })).status === 200; } catch {}
+  if (acik) { console.log(`ÖLÇÜLEMEDİ: :${port} zaten cevap veriyor — yarım kalan koşumun kapısı (TO_KUTU=sinav sunucu.mjs). PID ile kapat: for p in $(pgrep -f 'node .*sunucu.mjs'); do tr '\\0' '\\n' </proc/$p/environ | grep -q '^TO_KUTU=sinav$' && echo $p; done`); process.exit(4); }
+}
 const k1 = await kapiAc(P1), k2 = await kapiAc(P2, { KAPI_PANO: '0' });
 const giris = async (port) => { const r = await fetch(`http://127.0.0.1:${port}/sinav/giris`, { method: 'POST', headers: { 'content-type': 'application/json', 'x-kapi': '1' }, body: JSON.stringify({ parola: SIFRE }) });
   return ((r.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1]; };
 
-const b = await chromium.launch();
+let b; try { b = await chromium.launch(); } catch (e) { console.log('ÖLÇÜLEMEDİ: tarayıcı açılamadı — ' + String(e.message).split('\n')[0]); process.exit(4); }
 const ekran = (pg) => pg.evaluate(() => { const t = window.term; if (!t) return ''; const bf = t.buffer.active; const s = []; for (let i = 0; i < bf.length; i++) s.push((bf.getLine(i) && bf.getLine(i).translateToString(true)) || ''); return s.join('\n'); });
 const ekranda = (pg, metin, ms = 8000) => pg.waitForFunction((m) => { const t = window.term; if (!t) return false; const bf = t.buffer.active; for (let i = 0; i < bf.length; i++) { const l = bf.getLine(i); if (l && l.translateToString(true).includes(m)) return true; } return false; }, metin, { timeout: ms }).then(() => true, () => false);
 const bildirim = (pg) => pg.$eval('#kapi-pano-bildirim', (e) => (e.style.display !== 'none' ? e.textContent : '')).catch(() => '');
