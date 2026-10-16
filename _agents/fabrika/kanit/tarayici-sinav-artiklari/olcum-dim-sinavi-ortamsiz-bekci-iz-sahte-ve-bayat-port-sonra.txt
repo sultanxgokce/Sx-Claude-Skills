@@ -1,0 +1,23 @@
+$ bash -c 
+r=0; echo "(önceki sonra kaydı KIRMIZIYDI: ana-dal önce-koşumu launch ta çökünce dim sınavı kapılarını :18797/:18798 de bıraktı → kapı açılmadı. PID ile kapatıldı; dim sınavına #347 deseni eklendi: port ön-kontrolü + çıkışta çocuk temizliği.)"
+echo "ortam: KANIT_PLAYWRIGHT_DIR=${KANIT_PLAYWRIGHT_DIR:-YOK} NODE_PATH=${NODE_PATH:-YOK} · yük $(cut -d" " -f1 /proc/loadavg)"
+cd terminal-onar/kapi
+timeout 180 node dim-okunur-sinav.mjs > /tmp/o-art4.txt 2>&1; rc=$?; echo "dim-okunur-sinav.mjs (ortamsız) exit=$rc · $(grep -E "^tarayıcı:" /tmp/o-art4.txt) · $(grep geçti /tmp/o-art4.txt | tail -1)"; grep "✗" /tmp/o-art4.txt | cut -c1-160; [ $rc = 0 ] || r=1
+sleep 0.5; kalan=0; for p in $(pgrep -f "node .*sunucu.mjs"); do tr "\0" "\n" < /proc/$p/environ 2>/dev/null | grep -q "^TO_KUTU=sinav$" && kalan=$((kalan+1)); done; echo "normal koşum sonrası kalan sinav kapısı: $kalan"; [ $kalan = 0 ] || r=1
+node -e "require(\"http\").createServer((q,s)=>{s.writeHead(404);s.end()}).listen(18797,\"127.0.0.1\")" & SP=$!; sleep 0.4
+timeout 60 node dim-okunur-sinav.mjs > /tmp/o-art4.txt 2>&1; rc=$?; echo "sahte 404 kapı :18797 → rc=$rc · $(grep -m1 -oE "ÖLÇÜLEMEDİ: :[0-9]+ zaten dinleniyor" /tmp/o-art4.txt)"; kill $SP; wait $SP 2>/dev/null; [ $rc = 4 ] || r=1
+cd ../scripts
+timeout 120 bash bekci-iz.test.sh > /tmp/o-art4.txt 2>&1; rc=$?; echo "bekci-iz.test.sh exit=$rc $(grep geçti /tmp/o-art4.txt | tail -1) · H1: $(grep -c "✓ H1" /tmp/o-art4.txt)"; [ $rc = 0 ] || r=1
+timeout 150 bash kurtarici-kapali.test.sh > /tmp/o-art4.txt 2>&1; rc=$?; echo "kurtarici-kapali.test.sh exit=$rc $(grep geçti /tmp/o-art4.txt | tail -1)"; [ $rc = 0 ] || r=1
+echo "gerçek tmux sinav-* oturumu: $(tmux ls 2>/dev/null | grep -c "^sinav") · bayat ttyd: $(pgrep -f "^/config/.local/bin/ttyd .*(dim|pano)-sinav-" | wc -l)"; exit $r
+# rc=0 sure=30.0s zaman=2026-10-16T13:31:18+03:00
+--- stdout ---
+(önceki sonra kaydı KIRMIZIYDI: ana-dal önce-koşumu launch ta çökünce dim sınavı kapılarını :18797/:18798 de bıraktı → kapı açılmadı. PID ile kapatıldı; dim sınavına #347 deseni eklendi: port ön-kontrolü + çıkışta çocuk temizliği.)
+ortam: KANIT_PLAYWRIGHT_DIR=YOK NODE_PATH=YOK · yük 22.36
+dim-okunur-sinav.mjs (ortamsız) exit=0 · tarayıcı: /config/.nvm/versions/node/v22.23.0/lib/node_modules · dim-okunur-sinav: 18 geçti · 0 kaldı
+normal koşum sonrası kalan sinav kapısı: 0
+sahte 404 kapı :18797 → rc=4 · ÖLÇÜLEMEDİ: :18797 zaten dinleniyor
+bekci-iz.test.sh exit=0 bekci-iz.test: 13 geçti · 0 kaldı · H1: 1
+kurtarici-kapali.test.sh exit=0 kurtarici-kapali.test: 25 geçti · 0 kaldı
+gerçek tmux sinav-* oturumu: 0 · bayat ttyd: 1
+--- stderr ---
