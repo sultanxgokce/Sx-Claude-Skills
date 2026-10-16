@@ -1,0 +1,53 @@
+{
+  "is": "koltuk-hesap-alani",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-16T16:07:52+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "liste-hesap-sutunu",
+      "asama": "once",
+      "dosya": "olcum-liste-hesap-sutunu-once.txt",
+      "sha256": "fabf14b910bfa2414aec7b0ed0888296bc37ed3cb9330a9d7006a5c7a1d7e0ef",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/khs-once/koltuk-bagla.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-16T16:04:54+03:00",
+      "sure_sn": 5.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "liste-hesap-sutunu",
+      "asama": "sonra",
+      "dosya": "olcum-liste-hesap-sutunu-sonra.txt",
+      "sha256": "363664155e5d0e544bb708f9d7fe191557c3b2cfef3acd9d16d9da78c5207375",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T16:05:00+03:00",
+      "sure_sn": 5.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-bes-kapi",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-bes-kapi-sonra.txt",
+      "sha256": "0a897371dba6d9ee794bf2e26dc71eef2525e2436d8735991bdb8300153a5511",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/khs-mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T16:07:52+03:00",
+      "sure_sn": 30.5
+    }
+  ],
+  "imza": "919a618de6ba592fd63b2cce7852033f3ba2847bb1c759967bce3881cf8261ee"
+}

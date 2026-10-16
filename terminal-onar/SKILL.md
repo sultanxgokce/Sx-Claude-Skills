@@ -1,9 +1,16 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.13.2
+version: 2.14.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 Koltuk → hesap (2.14.0 · 16 Eki · G-BANI-0008 hesap geçişi, senaryo kartı E1 zemini)
+`koltuk-bagla.sh --liste` 7. sütun ve `/api/koltuklar` `hesap` alanı: koltuktaki Claude'un **hesap adı** — `kapi` (kapı
+şeridi, `ANTHROPIC_BASE_URL` hesabı ezer) · `varsayilan` · `<ad>` (`/config/.claude/hesaplar/<ad>`) · `bilinmiyor:dizin` ·
+`bilinmiyor:okunamadi`. Claude'suz koltukta alan yok. Ad, sürecin ortamından (`/proc/<pid>/environ`, yalnız iki değişken) türetilir;
+kural Nexus `hesap_kutu.py hesap_adi` ile birebir (sınav H10 iki dili aynı girdilerle karşılaştırır). **Kimlik dosyası hiçbir yolda
+açılmaz** (H9 betikte adının bile geçmediğini ölçer). Merkezdeki rozet/çubuk sayıları (cloudtop, dış yüzey) ayrı iş. Sınav: H1–H10.
 
 ## 🆕 Pano köprüsü 1.2.0 — Safari'de kopyalama (2.6.3 · 15 Eki, Sultan: "Safari'de metin kopyalanmıyor")
 Safari pano yazımını yalnız kullanıcı hareketi İÇİNDE geçirir; tmux seçimi OSC 52 ile geç geldiğinden `writeText`

@@ -91,7 +91,7 @@ printf '%s\n' "bitti." "" "❯ " > "$S/ekran-MUHASIP"
 printf '%s\n' "sadece metin, istem yok" > "$S/ekran-cc-1"
 SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste"; lrc=$?
 al() { grep -P "^$1\t" "$S/liste" | cut -f"$2"; }
-[ "$lrc" = 0 ] && [ "$(head -1 "$S/liste" | awk -F'\t' '{print NF}')" = 6 ] && ok "D1 liste 6 alan: ad · son · claude · tür · hâl · ne (2.7.0)" || bad D1 "rc=$lrc $(head -1 "$S/liste")"
+[ "$lrc" = 0 ] && [ "$(head -1 "$S/liste" | awk -F'\t' '{print NF}')" = 7 ] && ok "D1 liste 7 alan: ad · son · claude · tür · hâl · ne · hesap (2.14.0)" || bad D1 "rc=$lrc $(head -1 "$S/liste")"
 [ "$(al BASIRET 4)" = ajan ] && ok "D2 Claude çalışan oturum 'ajan'" || bad D2 "$(al BASIRET 4)"
 [ "$(al maiset-ana 4)" = diger ] && ok "D2b Claude'suz ANA oturum da 'diğer' (istisna yok; önde durması 'ana' bayrağının işi)" || bad D2b "$(al maiset-ana 4)"
 [ "$(al CARSI 4)" = diger ] && [ "$(al dash 4)" = diger ] && ok "D3 Claude'suz oturum ve dash* 'diğer'" || bad D3 "$(al CARSI 4)/$(al dash 4)"
@@ -152,6 +152,54 @@ SAHTE_SUNUCU_YOK=1 SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste"
 printf '%s\n' maiset-ana BASIRET > "$S/oturumlar"
 SAHTE_BOZUK=1 kos maiset-ana /p BASIRET
 [ "$(rc)" = 3 ] && [ -z "$(iz)" ] && ok "C8 liste alınamazken koltuğa da BAĞLANILMAZ (yanlış 'yok' demez, red basar)" || bad C8 "rc=$(rc) iz=$(iz)"
+
+
+# ── H · hesap sütunu (2.14.0 · G-BANI-0008 E1 zemini): koltuktaki Claude'un hesap ADI sürecin ortamından; kural hesap_kutu.py hesap_adi ile aynı ──
+# Sahte /proc: HESAP_PROC_KOK=$S/proc; sahte tmux claude bölmelerine pid 100 verir → $S/proc/100/environ. Kök/taban da sahte (gerçek /config okunmaz).
+echo "H · hesap (sürecin ortamından AD; değer değil)"
+mkdir -p "$S/proc/100" "$S/hes/sgk1"
+hk() { HESAP_PROC_KOK="$S/proc" HESAP_KOK="$S/hes" HESAP_TABAN="$S/taban" SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/listeH" 2>/dev/null; grep -P "^$1\t" "$S/listeH" | cut -f7; }
+printf '%s\n' maiset-ana BASIRET CARSI > "$S/oturumlar"
+printf 'HOME=/config\0CLAUDE_CONFIG_DIR=%s\0PATH=/usr/bin\0' "$S/hes/sgk1" > "$S/proc/100/environ"
+[ "$(hk BASIRET)" = sgk1 ] && ok "H1 CLAUDE_CONFIG_DIR=<kök>/sgk1 → hesap sgk1 (adlı hesap)" || bad H1 "$(hk BASIRET)"
+[ -z "$(hk CARSI)" ] && ok "H2 Claude'suz koltukta hesap sütunu BOŞ (uydurulmaz)" || bad H2 "'$(hk CARSI)'"
+printf 'HOME=/config\0PATH=/usr/bin\0' > "$S/proc/100/environ"
+[ "$(hk BASIRET)" = varsayilan ] && ok "H3 CLAUDE_CONFIG_DIR yok → varsayilan" || bad H3 "$(hk BASIRET)"
+printf 'CLAUDE_CONFIG_DIR=%s/\0' "$S/taban" > "$S/proc/100/environ"
+[ "$(hk BASIRET)" = varsayilan ] && ok "H4 CLAUDE_CONFIG_DIR taban dizinin kendisi (sondaki / ile) → varsayilan (normpath eşdeğeri)" || bad H4 "$(hk BASIRET)"
+printf 'CLAUDE_CONFIG_DIR=%s\0ANTHROPIC_BASE_URL=http://cloudtop-kapi:4000\0' "$S/hes/sgk1" > "$S/proc/100/environ"
+[ "$(hk BASIRET)" = kapi ] && ok "H5 ANTHROPIC_BASE_URL varsa → kapi (kapı şeridi hesabı EZER; adlı hesap yazsa da)" || bad H5 "$(hk BASIRET)"
+printf 'CLAUDE_CONFIG_DIR=/opt/baska/yer\0' > "$S/proc/100/environ"
+[ "$(hk BASIRET)" = bilinmiyor:dizin ] && ok "H6 kök dışı dizin → bilinmiyor:dizin (ad uydurulmaz)" || bad H6 "$(hk BASIRET)"
+rm -f "$S/proc/100/environ"
+[ "$(hk BASIRET)" = bilinmiyor:okunamadi ] && ok "H7 🔴 ortam okunamazsa 'bilinmiyor:okunamadi' — varsayilan DENMEZ (ölçülemedi ≠ varsayılan)" || bad H7 "$(hk BASIRET)"
+printf 'CLAUDE_CONFIG_DIR=%s\0' "$S/hes/sgk1" > "$S/proc/100/environ"
+printf '❯ \n' > "$S/ekran-BASIRET"
+[ "$(hk BASIRET)" = sgk1 ] && [ "$(grep -P '^BASIRET\t' "$S/listeH" | cut -f5)" = bos ] && [ "$(grep -P '^BASIRET\t' "$S/listeH" | cut -f3)" = 1 ] && ok "H8 hesap sütunu öteki sütunları bozmaz (3. claude=1, 5. hâl=boş, 7. hesap)" || bad H8 "$(grep -P '^BASIRET\t' "$S/listeH")"
+rm -f "$S/ekran-BASIRET"
+# kimlik DEĞERİ hiçbir yolda okunmaz: betikte .credentials.json adı geçmez (okuma yolu yok)
+grep -q "credentials" "$B" && bad H9 "betikte kimlik dosyası adı geçiyor" || ok "H9 betik kimlik dosyasına (.credentials.json) hiç dokunmaz"
+# Nexus kuralıyla eşdeğerlik (hesap_kutu.py bu kutuda varsa): aynı girdiler iki dilde aynı adı vermeli
+HK=/config/projects/Nexus/scripts/hesap_kutu.py
+if [ -f "$HK" ]; then
+  py() { HESAP_KOK="$S/hes" HESAP_TABAN="$S/taban" python3 -c "import sys; sys.argv=['x']; exec(open('$HK').read().split('\ndef _ad_gecerli')[0]);
+import os
+def hesap_adi(ccd, kapi):
+    if kapi: return 'kapi'
+    if not ccd or os.path.normpath(ccd) == os.path.normpath(TABAN): return 'varsayilan'
+    if os.path.dirname(os.path.normpath(ccd)) == os.path.normpath(KOK): return os.path.basename(os.path.normpath(ccd))
+    return 'bilinmiyor:dizin'
+print(hesap_adi('$1', $2))"; }
+  sh_adi() { HESAP_KOK="$S/hes" HESAP_TABAN="$S/taban" bash -c "source <(sed -n '/^HESAP_KOK=/,/^koltuk_hesabi()/p' '$B' | sed '\$d'); hesap_adi \"\$1\" \"\$2\"" _ "$1" "$2"; }
+  esit=1
+  for g in "$S/hes/sgk1|0" "|0" "$S/taban/|0" "$S/hes/sgk1|1" "/opt/baska/yer|0" "$S/hes//sgk1/|0"; do
+    ccd="${g%|*}"; kp="${g#*|}"; a="$(py "$ccd" "$([ "$kp" = 1 ] && echo True || echo False)")"; b="$(sh_adi "$ccd" "$kp")"
+    [ "$a" = "$b" ] || { esit=0; echo "    fark: '$ccd' kapi=$kp → py=$a sh=$b"; }
+  done
+  [ "$esit" = 1 ] && ok "H10 kabuk hesap_adi == Nexus hesap_kutu.py hesap_adi (6 girdi, çift eğik ve sondaki / dahil)" || bad H10 "iki dil ayrıştı"
+else
+  echo "  · H10 atlandı: hesap_kutu.py bu kutuda yok (eşdeğerlik Nexus kutusunda ölçülür)"
+fi
 
 echo
 echo "toplam=$((GECEN+DUSEN)) geçen=$GECEN düşen=$DUSEN"

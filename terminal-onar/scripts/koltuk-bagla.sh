@@ -8,7 +8,9 @@
 #   koltuk-bagla.sh --bos                                  BOŞ KABUK oturumlar (2.5.0): hiçbir bölmesinde Claude yok VE her bölmede
 #                                                          yalnız kabuk istemi var (altında hiçbir süreç yok). Sunucu/izleme koşan
 #                                                          Claude'suz oturum boş DEĞİLDİR (ör. nova/kesif-ui web sunucusu).
-#   koltuk-bagla.sh --liste                                görünür koltuklar, sekmeyle: ad · son-etkinlik(epoch) · claude(1|0) · tür(ajan|diger) · hâl
+#   koltuk-bagla.sh --liste                                görünür koltuklar, sekmeyle: ad · son-etkinlik(epoch) · claude(1|0) · tür(ajan|diger) · hâl · ne · hesap
+#                                                          hesap (2.14.0 · G-BANI-0008 E1 zemini): koltuktaki Claude'un HESAP ADI — kapi · varsayilan · <ad> ·
+#                                                          bilinmiyor:<neden>; Claude'suz koltukta boş. Sürecin ortamından AD türetilir, kimlik DEĞERİ okunmaz.
 #
 # 🔴 NİÇİN TEK KAYNAK: "hangi oturum görünür" sorusunu hem ekran (ttyd) hem liste ucu (/api/koltuklar)
 #    soruyor. İki ayrı liste yazılsaydı ilk değişiklikte ayrışırdı: listede görünmeyen bir oturuma adresle
@@ -74,6 +76,51 @@ claude_var_mi() {  # $1 = oturum → 0 Claude var · 1 yok · 2 ölçülemedi (s
     altta_claude "$pid"; r=$?; [ $r = 0 ] && return 0; [ $r = 2 ] && return 2
   done < <(bolmeler | awk -F'\t' -v s="$1" '$1==s {print $5" "$6}')
   return 1
+}
+# ── HESAP (2.14.0 · G-BANI-0008, senaryo kartı E1 zemini): koltuktaki Claude'un hesabı, SÜRECİN ORTAMINDAN okunur.
+#    Kural Nexus scripts/hesap_kutu.py hesap_adi() ile BİREBİR (iki dilin eşdeğerliği koltuk-bagla.test.sh H bloğunda sınanır):
+#    ANTHROPIC_BASE_URL varsa → kapi (kapı şeridi hesabı EZER) · CLAUDE_CONFIG_DIR yok ya da taban dizinse → varsayilan ·
+#    <KOK>/<ad> ise → <ad> · başka yer → bilinmiyor:dizin · ortam okunamazsa → bilinmiyor:okunamadi.
+#    🔴 Yalnız AD üretilir: hesabın kimlik dosyası hiçbir yolda açılmaz (sınav H9 betikte adının bile geçmediğini ölçer);
+#       sürecin ortamından da yalnız iki değişkenin değeri okunur (dizin yolu ve kapı adresi var/yok).
+HESAP_KOK="${HESAP_KOK:-/config/.claude/hesaplar}"; HESAP_TABAN="${HESAP_TABAN:-/config/.claude}"; PROC_KOK="${HESAP_PROC_KOK:-/proc}"
+altta_claude_pid() {  # $1 = kök pid → alt ağaçtaki İLK Claude sürecinin pid'i (altta_claude ile aynı yürüyüş); yoksa boş, tablo alınamazsa rc 2
+  local tablo; tablo="$(ps -e -o pid=,ppid=,args= 2>/dev/null)" || return 2
+  [ -n "$tablo" ] || return 2
+  printf '%s\n' "$tablo" | awk -v kok="$1" '
+    { pid=$1; pp=$2; $1=""; $2=""; sub(/^  /,""); a[pid]=$0; c[pp]=c[pp] " " pid }
+    END { n=split(c[kok], q, " "); i=1
+      while (i<=n) { p=q[i++]; if (p=="" || gor[p]++) continue
+        x=a[p]; sub(/ .*/, "", x); sub(/.*\//, "", x); if (x == "claude" || x == "claude.exe") { print p; exit }
+        m=split(c[p], r, " "); for (k=1;k<=m;k++) q[++n]=r[k] } }'
+}
+claude_pid() {  # $1 = oturum → koltuktaki Claude sürecinin pid'i (bölme komutu claude ise bölme pid'i; değilse alt ağaçtan); yoksa boş
+  local pid kom p
+  while read -r pid kom; do
+    case "$kom" in claude|claude-*|claude.exe) echo "$pid"; return 0 ;; esac
+    p="$(altta_claude_pid "$pid")"; [ -n "$p" ] && { echo "$p"; return 0; }
+  done < <(bolmeler | awk -F'\t' -v s="$1" '$1==s {print $5" "$6}')
+  return 1
+}
+hesap_adi() {  # $1 = CLAUDE_CONFIG_DIR değeri · $2 = ANTHROPIC_BASE_URL dolu mu (1|0) → ad (hesap_kutu.py hesap_adi eşdeğeri)
+  local ccd="$1" n taban kok
+  [ "$2" = 1 ] && { echo kapi; return; }
+  taban="$(normal_yol "$HESAP_TABAN")"; kok="$(normal_yol "$HESAP_KOK")"
+  [ -z "$ccd" ] && { echo varsayilan; return; }
+  n="$(normal_yol "$ccd")"
+  [ "$n" = "$taban" ] && { echo varsayilan; return; }
+  [ "$(dirname "$n")" = "$kok" ] && { basename "$n"; return; }
+  echo bilinmiyor:dizin
+}
+normal_yol() { printf '%s' "$1" | sed -E 's#/+#/#g; s#/\./#/#g; s#(.)/$#\1#'; }   # python os.path.normpath'in burada gereken kısmı: çift eğik, /./, sondaki /
+koltuk_hesabi() {  # $1 = oturum → hesap adı; Claude yoksa boş (uydurulmaz)
+  local pid ort ccd burl
+  pid="$(claude_pid "$1")" || { echo ""; return; }
+  [ -n "$pid" ] || { echo ""; return; }
+  ort="$(tr '\0' '\n' < "$PROC_KOK/$pid/environ" 2>/dev/null)" || { echo "bilinmiyor:okunamadi"; return; }
+  ccd="$(printf '%s\n' "$ort" | awk -F= '$1=="CLAUDE_CONFIG_DIR"{sub(/^[^=]*=/,""); print; exit}')"
+  burl="$(printf '%s\n' "$ort" | awk -F= '$1=="ANTHROPIC_BASE_URL"{sub(/^[^=]*=/,""); print; exit}')"
+  hesap_adi "$ccd" "$([ -n "$burl" ] && echo 1 || echo 0)"
 }
 
 # ── TÜR ve HÂL (2.2.0 · dilim 4, Sultan: "düzenli net sade"): ekran yalnız AJAN koltuklarını önde gösterir,
@@ -180,8 +227,9 @@ if [ "${1:-}" = "--liste" ]; then
     KH_NE=""
     if [ "$c" = 1 ]; then hal="$(koltuk_hali "$s"; printf '\x1f%s' "$KH_NE")"; else hal=bilinmiyor; fi   # Claude'suz oturumda hâl ölçülmez → bilinmiyor
     ne="${hal#*$'\x1f'}"; hal="${hal%%$'\x1f'*}"; hal="${hal%$'\n'}"; [ "$ne" = "$hal" ] && ne=""   # echo'nun satır sonu ayraçtan önce kalır
-    # 6. sütun: ne beklediği (yalnız dis-olay'da dolu); sekme/satır sonu taşımaz
-    printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$s" "${son:-0}" "$c" "$tur" "$hal" "$(printf '%s' "$ne" | tr '\t\n' '  ')"
+    # 6. sütun: ne beklediği (yalnız dis-olay'da dolu); sekme/satır sonu taşımaz · 7. sütun: hesap adı (2.14.0; Claude'suz koltukta boş)
+    if [ "$c" = 1 ]; then hesap="$(koltuk_hesabi "$s")"; else hesap=""; fi
+    printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$s" "${son:-0}" "$c" "$tur" "$hal" "$(printf '%s' "$ne" | tr '\t\n' '  ')" "$(printf '%s' "$hesap" | tr '\t\n' '  ')"
   done
   exit 0
 fi
