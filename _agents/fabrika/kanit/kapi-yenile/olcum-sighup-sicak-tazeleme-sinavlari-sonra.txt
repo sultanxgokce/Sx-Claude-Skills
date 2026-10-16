@@ -1,0 +1,14 @@
+$ bash -c 
+r=0
+( cd terminal-onar/kapi && timeout 300 bash kapi-sinav.test.sh > /tmp/o-ky.txt 2>&1 ); rc=$?; echo "kapi-sinav.test.sh (kadro 3 + kimlik + kapi-yenile 12 + sunucu) exit=$rc $(grep -E "^SONUÇ|kapi-yenile.test:" /tmp/o-ky.txt | tr "\n" " ")"; [ $rc = 0 ] || r=1
+timeout 120 bash terminal-onar/scripts/kapi-yenile.test.sh > /tmp/o-ky.txt 2>&1; rc=$?; echo "scripts/kapi-yenile.test.sh exit=$rc $(grep geçti /tmp/o-ky.txt | tail -1)"; [ $rc = 0 ] || r=1
+for f in onar.test.sh kurtarici-kapali.test.sh; do [ -f terminal-onar/scripts/$f ] || continue; timeout 150 bash terminal-onar/scripts/$f > /tmp/o-ky.txt 2>&1; rc=$?; echo "$f exit=$rc $(grep -E "geçti" /tmp/o-ky.txt | tail -1)"; [ $rc = 0 ] || r=1; done
+echo "gerçek tmux sinav-* oturumu: $(tmux ls 2>/dev/null | grep -c "^sinav") · kalan kapı sınav süreci: $(pgrep -fc "kapi-yenile-|kapi-sinav-" || true)"
+exit $r
+# rc=0 sure=20.2s zaman=2026-10-16T11:01:18+03:00
+--- stdout ---
+kapi-sinav.test.sh (kadro 3 + kimlik + kapi-yenile 12 + sunucu) exit=0 SONUÇ: 30 geçti · 0 kaldı SONUÇ: 26 geçti · 0 kaldı SONUÇ: 25 geçti · 0 kaldı SONUÇ: 18 geçti · 0 kaldı kapi-yenile.test: 12 geçti · 0 kaldı SONUÇ: kapı birim sınavı geçti 
+scripts/kapi-yenile.test.sh exit=0 kapi-yenile.test: 17 geçti · 0 kaldı
+onar.test.sh exit=0 SONUÇ: 11 geçti · 0 kaldı
+gerçek tmux sinav-* oturumu: 0 · kalan kapı sınav süreci: 4
+--- stderr ---
