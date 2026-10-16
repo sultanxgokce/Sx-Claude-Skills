@@ -1,0 +1,91 @@
+{
+  "is": "kadro-kimlik-eslesme",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-16T01:11:42+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kimlik-sinavi-eski-eslesme",
+      "asama": "once",
+      "dosya": "olcum-kimlik-sinavi-eski-eslesme-once.txt",
+      "sha256": "2210f7d7028225bedc0a6ba2f3152a0e67b98e4ad7cd17d33c94c8e9477ce0b6",
+      "komut": [
+        "node",
+        "/tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/kimlik-once/terminal-onar/kapi/kimlik.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-16T01:05:34+03:00",
+      "sure_sn": 0.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kimlik-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kimlik-sinavi-sonra.txt",
+      "sha256": "9f23f2fff8f71694510ceb2f4532aae2b4db58968bf0429851c97ca1502fdd3d",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/kimlik.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T01:11:11+03:00",
+      "sure_sn": 0.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi-tam",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-tam-sonra.txt",
+      "sha256": "251d46a8a07b1ab4a7ca781377b4866532153dc587fa3a5aa8856087a1dd7ac6",
+      "komut": [
+        "bash",
+        "terminal-onar/kapi/kapi-sinav.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T01:11:23+03:00",
+      "sure_sn": 12.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-kadro-code-kutusu",
+      "asama": "sonra",
+      "dosya": "olcum-canli-kadro-code-kutusu-sonra.txt",
+      "sha256": "7bc0c6a83f3f0fca9fdf7cfac63e0e5abaf6ffa55a4e4a36bb16a56b3efdddb9",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/kadro-canli.mjs",
+        "--kutu",
+        "code",
+        "--proje",
+        "/config/projects/Nexus",
+        "--ana",
+        "code-ana"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T01:09:29+03:00",
+      "sure_sn": 0.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-turu",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-turu-sonra.txt",
+      "sha256": "e5369dd6e04440a243c4a93293bcc0d432b63026c782b74ab6839d9e5759430d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/kimlik-mutasyon.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-kadro-kimlik-eslesme",
+        "/tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T01:11:42+03:00",
+      "sure_sn": 6.5
+    }
+  ],
+  "imza": "e49ab6b0c2feef75d4702503be92929cae62e723cf428b5f5237c47ef7b3114d"
+}

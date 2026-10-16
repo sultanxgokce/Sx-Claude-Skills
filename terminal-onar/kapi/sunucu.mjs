@@ -20,6 +20,10 @@ import { fileURLToPath } from 'node:url';
 import { KOLTUK_AD_DESEN, koltukSatirlari } from './koltuklar.mjs';
 import { kayitOku, kadroBirlestir, altyapiNeden } from './kadro.mjs';
 import { kadroYaz, KadroHata } from './kadro-yaz.mjs';
+import { oturumKimlikleri, oturumDizinleri } from './kimlik.mjs';   // kişi↔oturum eşleşmesinin kimlik ayağı (salt-okur)
+// Sınav dikişi: süreç kökü ve pid alanı ortamdan verilebilir (gerçekte /proc ve kendi alanı)
+const kimlikler = () => oturumKimlikleri({ dizinler: oturumDizinleri(), procKok: process.env.KAPI_PROC_KOK || '/proc',
+  ...(process.env.KAPI_PID_ALANI ? { pidAlani: process.env.KAPI_PID_ALANI } : {}) });
 // KADRO E2 eylemleri SIRAYLA yürür (bağımsız göz tur 2): bir eylem "kayda yaz → oturumu kapat (await) → gerekirse geri al" zinciridir;
 // araya giren ikinci eylem (ör. aynı kişiye 'geri aç') birincinin geri almasını bozar. Kapı tek süreç → süreç içi kuyruk yeter.
 let kadroSon = Promise.resolve();
@@ -461,7 +465,7 @@ const sunucu = http.createServer(async (req, res) => {
         const kayit = kayitOku(PROJE);
         // Var olan ama OKUNAMAYAN kayıt dosyası hata sayılır (göz tur 1): boş kayıtla devam etmek herkesi "kayıtsız" gösterirdi — yalan.
         if (kayit.okunamadi.length) return json(res, 500, { hata: 'Kayıt okunamadı: ' + kayit.okunamadi.join(', ') });
-        const kd = kadroBirlestir({ uyeler: kayit.uyeler, koltuklar: koltukSatirlari(r.out), ana: ANA_TMUX });
+        const kd = kadroBirlestir({ uyeler: kayit.uyeler, koltuklar: koltukSatirlari(r.out), ana: ANA_TMUX, kimlikler: kimlikler() });
         const ekranla = (o) => o ? { ...o, ekran: T('/tty/') + '?arg=' + encodeURIComponent(o.ad) } : null;
         return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, proje: PROJE, kaynak: kayit.kaynak, okunamadi: kayit.okunamadi, zaman: new Date().toISOString(),
           sayilar: kd.sayilar, kisiler: kd.kisiler.map((k) => ({ ...k, oturum: ekranla(k.oturum) })), kayitsiz: kd.kayitsiz.map(ekranla),
@@ -488,7 +492,7 @@ const sunucu = http.createServer(async (req, res) => {
         if (r.kod !== 0) return json(res, 500, { hata: 'Koltuklar ölçülemedi — hiçbir şey yapılmadı.' });
         const kayit = kayitOku(PROJE);
         if (kayit.okunamadi.length) return json(res, 500, { hata: 'Kayıt okunamadı: ' + kayit.okunamadi.join(', ') });
-        const kd = kadroBirlestir({ uyeler: kayit.uyeler, koltuklar: koltukSatirlari(r.out), ana: ANA_TMUX });
+        const kd = kadroBirlestir({ uyeler: kayit.uyeler, koltuklar: koltukSatirlari(r.out), ana: ANA_TMUX, kimlikler: kimlikler() });
         const izYaz = (satir) => { try { fs.appendFileSync(path.join(DURUM_DIZ, 'kadro-hal.log'), new Date().toISOString() + ' ' + satir + '\n'); } catch {} };
         const kapat = async (ad) => (await calistir('tmux', ['kill-session', '-t', '=' + ad])).kod === 0;   // '=' tam ad eşleşmesi (önek değil)
         if (eylem === 'kapat') {

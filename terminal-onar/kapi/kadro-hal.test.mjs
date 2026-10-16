@@ -35,7 +35,7 @@ writeFileSync(KAYIT, ILK_KAYIT);
 
 const p = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: { ...process.env, PATH: BIN + ':' + process.env.PATH, KAPI_PORT: String(PORT), KAPI_TABAN: '/sedir',
   TO_KUTU: 'sinavkutu', TO_PROJE: PROJE, KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE,
-  KAPI_KOLTUK_BETIK: LISTE, KAPI_KOLTUK_AC_BETIK: AC, TO_ANA_TMUX: 'sinavkutu-ana', KAPI_EKIPC: '' }, stdio: ['ignore', 'ignore', 'pipe'] });
+  KAPI_KOLTUK_BETIK: LISTE, KAPI_KOLTUK_AC_BETIK: AC, TO_ANA_TMUX: 'sinavkutu-ana', KAPI_EKIPC: '', KAPI_OTURUM_DIZ: join(T, 'oturum-yok') }, stdio: ['ignore', 'ignore', 'pipe'] });
 let hataCikti = ''; p.stderr.on('data', (d) => { hataCikti += d; });
 // Sınav ne olursa olsun KENDİ sürecini öldürür (yetim kapı portu tutup sonraki koşuya cevap veriyordu — ölçüldü)
 process.on('exit', () => { try { p.kill(); } catch {} });

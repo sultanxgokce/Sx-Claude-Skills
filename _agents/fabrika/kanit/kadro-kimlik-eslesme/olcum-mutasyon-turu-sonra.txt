@@ -1,0 +1,14 @@
+$ bash /tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad/kimlik-mutasyon.sh /config/projects/_wt/Sx-Claude-Skills-kadro-kimlik-eslesme /tmp/claude-1000/-config-projects-sohbet/26c6064c-315a-4a8e-90f9-ac5e99a213f8/scratchpad
+# rc=0 sure=6.5s zaman=2026-10-16T01:11:42+03:00
+--- stdout ---
+  ✓ yakalandı · pid alanı süzgeci sökülür → ✗ K2
+  ✓ yakalandı · programın claude olduğu denetimi sökülür → ✗ K2
+  ✓ yakalandı · iki adaylı kimlikte tahmin yapılır → ✗ E7
+  ✓ yakalandı · basamak sırası ters (ad önce) → ✗ E7b
+  ✓ yakalandı · basamaklar kişi başına (kadro geneli değil) → ✗ E7d
+  ✓ yakalandı · türetilmiş ad da kimlik sayılır → ✗ E8
+  ✓ yakalandı · fiilen bağlanılan oturumun altyapı denetimi sökülür → ✗ E3
+  ✓ yakalandı · kimlik geçişi sökülür → ✗ E1
+  ✓ yakalandı · dosya adı ⟂ içindeki pid denetimi sökülür → ✗ K2b
+SONUÇ: 9 / 9 mutant yakalandı
+--- stderr ---

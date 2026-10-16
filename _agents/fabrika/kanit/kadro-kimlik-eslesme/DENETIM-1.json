@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "kadro-kimlik-eslesme",
+  "pr": "342",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-16T01:06:59+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 60470,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 30822
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kimlik dosyaları güvenli biçimde süzülmüş, kişi canlı oturuma bağlanmış, ana oturumun çift görünmesi kaldırılmış ve altyapı eylemi 403 ile korunmuş. Ancak kartın emrettiği kimlik öncelik sırası kodda tam uygulanmamış; bunu üretim öncesi çözün.",
+    "bulgular": [
+      {
+        "ne": "`session_id` ile kullanıcı tarafından verilen Claude adı ayrı öncelik basamakları değil, tek bir OR aday kümesi olarak değerlendiriliyor. Kayıttaki session_id bir oturumu, kullanıcı adı başka bir oturumu gösterirse iki aday oluşup kimlik eşleşmesi tamamen bırakılıyor ve tmux adına düşülüyor; oysa talep önce session_id sonucunun seçilmesini emrediyor.",
+        "kanit": "`kimlikBul` adayları `(u.session_id && c.sessionId === u.session_id) || (c.adKaynak === 'user' && ... === norm(u.id))` ile aynı kümede topluyor ve `aday.length !== 1` durumunda null döndürüyor. E7 yalnız aynı session_id'nin iki oturumda bulunmasını, E4 yalnız ad eşleşmesini sınamış; session_id ve adın farklı oturumları göstermesi sınanmamış.",
+        "konum": "terminal-onar/kapi/kadro.mjs:121; terminal-onar/kapi/kimlik.test.mjs:E4,E7",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; kırmızı önce/yeşil sonra ölçüm çifti 8/14'ten 14/14'e geçişi gösteriyor, tam kapı sınavı yeşil ve mutasyon turu 6/6. Canlı code-kutusu ölçümü SERDAR'ın adla, MUHAKKIK ile HENDESE'nin session_id ile bağlandığını gösteriyor; ancak yukarıdaki öncelik çatışması vakası ölçülmemiş."
+  }
+}
