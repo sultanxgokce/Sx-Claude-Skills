@@ -40,7 +40,7 @@ python3 ~/.claude/skills/hafta-kapanis/scripts/hafta-kapanis.py acik [--kok <dep
 | K2 dersler | MERKEZ.md `## Dersler`'de ≥1 `M<n>)`; **her** ders `## Görevler`'de `- gorev_<26> · ders M<n> · D1: <D1>` — RED yolu yok: görev olmayacak şey Dersler'e yazılmaz, nota taşınır | MERKEZ.md |
 | K3 süzüm | her kutu önerisi `→ gorev_` ya da `→ RED:` damgalı, metin güncel | `retro.py suzum` rc |
 | K4 kaçış/tıkanma | haftanın kaçış defteri satırları (anahtar: zaman damgası) + `durum=tikandi` kartları (anahtar: `kart:<iş>`) `## Kaçış ve tıkanma`'da **yazılı bir derse** bağlı: `- <anahtar> → M<n>` (RED yolu yok; M<n> Dersler'de olmalı); **okunamayan kart = SARI** (sessiz atlanmaz) | kaçış defteri · kartlar · MERKEZ.md |
-| K5 onay | KAPANIS.md `_sultan_onay:` D1 biçimli — **tam satır** eşleşmesi (baş/son çapalı; kuyruk metni biçimsiz) | KAPANIS.md (insan yazar) |
+| K5 onay | KAPANIS.md `_sultan_onay:` D1 biçimli — **tam satır** eşleşmesi (baş/son çapalı; kuyruk metni biçimsiz) ve kırpık **≤15 kelime** (karakter sayısı yerine geçmez; aynı kural K2 görev D1'inde) | KAPANIS.md (insan yazar) |
 
 Kapanmayan hafta: KAPANIS.md kırmızı kapıları adlarıyla basar; eksikler ilgili ajana görev olur, ertesi gün
 yeniden ölçülür. `retro.py` çözümü: `--retro-py` · `HAFTA_KAPANIS_RETRO_PY` · kardeş dizin (`../retro/scripts`) ·
@@ -48,10 +48,10 @@ yeniden ölçülür. `retro.py` çözümü: `--retro-py` · `HAFTA_KAPANIS_RETRO
 
 ## Kanıt
 
-`scripts/hafta-kapanis.test.sh` — 68 kapı hermetik (mktemp depo · sabit tarih) + 6 mutant kopya üstünde (görev D1
+`scripts/hafta-kapanis.test.sh` — 76 kapı hermetik (mktemp depo · sabit tarih) + 7 mutant kopya üstünde (görev D1
 denetimi kalkınca biçimsiz damga geçer · K4 eksik denetimi kalkınca damgasız tıkanma geçer · onay D1 denetimi
 kalkınca "onaylandı" haftayı kapatır · bozuk kart sessiz atlanınca sarı kaybolur · D1 tam eşleşmesi gevşeyince
-kuyruklu onay kapatır · yazılı-ders denetimi kalkınca var olmayan derse bağ geçer — altısı da ısırıyor). Sınav `retro.py` ister; yoksa **rc=3 ÖLÇÜLEMEDİ** basar,
+kuyruklu onay kapatır · yazılı-ders denetimi kalkınca var olmayan derse bağ geçer · kırpık kelime sınırı kalkınca 16 kelimelik onay kapatır — yedisi de ısırıyor). Sınav `retro.py` ister; yoksa **rc=3 ÖLÇÜLEMEDİ** basar,
 sahte yeşil vermez (bağ: `retro` becerisi önce birleşir).
 
 ## Sınırlar (dürüst)

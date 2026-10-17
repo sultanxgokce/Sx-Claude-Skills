@@ -8,7 +8,8 @@ koşmadıysa haftayı kapatmasın." Kapı dört ölçüm + bir onay okur; hiçbi
                  MERKEZ.md yazabildiği için kapı onu ÇAĞIRMAZ)
   K2 dersler   — MERKEZ.md var; en az bir ders (M<n>) yazılı; HER ders görev defterine D1 damgasıyla girmiş
                  (`- gorev_<26> · ders M<n> · D1: YYYY-MM-DD Sultan: … (sohbet · <ref> · "<kırpık>" · beyan:<AJAN>)`).
-                 RED yolu YOK: görev olmayacak şey Dersler'e yazılmaz (nota taşınır). D1 TAM satırdır (baş/son çapalı).
+                 RED yolu YOK: görev olmayacak şey Dersler'e yazılmaz (nota taşınır). D1 TAM satırdır (baş/son çapalı)
+                 ve kırpık ≤15 kelimedir (karakter sayısı kelime sayısının yerine geçmez).
   K3 süzüm     — kutu önerilerinin her biri damgalı (retro.py suzum rc)
   K4 kaçış     — haftanın kaçış (kaçış defteri) ve tıkanma (kart durum=tikandi) kayıtlarının her biri MERKEZ.md
                  "## Kaçış ve tıkanma" bölümünde YAZILI bir derse bağlı: `- <anahtar> → M<n>` (RED yolu yok)
@@ -30,7 +31,19 @@ import sys
 from datetime import datetime
 
 SURUM = "1.0.0"
-D1_RE = re.compile(r"\d{4}-\d{2}-\d{2} Sultan: .+\(sohbet · [^·()]+ · \"[^\"]{1,120}\" · beyan:\S+\)")
+D1_RE = re.compile(r"\d{4}-\d{2}-\d{2} Sultan: .+\(sohbet · [^·()]+ · \"([^\"]{1,120})\" · beyan:\S+\)")
+D1_KIRPIK_KELIME = 15   # L73 K1-K4: verbatim kırpık ≤15 kelime — karakter sayısı kelime sayısının yerine geçmez (göz #360 tur 3)
+
+
+def d1_gecerli(v):
+    """D1 damgası TAM satır eşleşir ve kırpık ≤15 kelimedir. → (True, "") ya da (False, sebep)."""
+    m = D1_RE.fullmatch(v.strip())
+    if not m:
+        return False, "D1 biçimi değil (tarih · 'Sultan:' · sohbet · ref · kırpık · beyan:)"
+    n = len(m.group(1).split())
+    if n > D1_KIRPIK_KELIME:
+        return False, f"kırpık {n} kelime (>{D1_KIRPIK_KELIME}); verbatim kırpık kısa tutulur, Sultan sözü özetlenmez-üretilmez"
+    return True, ""
 GOREV_RE = re.compile(r"gorev_[0-9A-Z]{26}")
 DERS_RE = re.compile(r"^- M(\d+)\) (.+)$")
 GOREV_SATIR_RE = re.compile(r"^- (gorev_[0-9A-Z]{26}) · ders ((?:M\d+(?:, )?)+) · D1: (.+)$")
@@ -128,11 +141,12 @@ def k2_dersler(merkez_yol):
         s = s.strip()
         g = GOREV_SATIR_RE.match(s)
         if g:
-            if D1_RE.fullmatch(g.group(3).strip()):
+            gecerli, sebep = d1_gecerli(g.group(3))
+            if gecerli:
                 for mn in re.findall(r"M(\d+)", g.group(2)):
                     kapsanan[mn] = g.group(1)
             else:
-                bozuk.append(f"{g.group(1)} D1 damgası biçimsiz (tarih · 'Sultan:' · sohbet · ref · kırpık · beyan:) — üretme, Sultan sözünü aktar")
+                bozuk.append(f"{g.group(1)} D1 damgası biçimsiz: {sebep} — üretme, Sultan sözünü aktar")
             continue
     eksik = [f"M{n}" for n in dersler if n not in kapsanan]
     if eksik or bozuk:
@@ -194,9 +208,10 @@ def k5_onay(kapanis_yol):
             v = s[len("_sultan_onay:"):].strip()
             if not v or v.startswith("("):
                 return "BEKLİYOR", "", "onay satırı boş"
-            if D1_RE.fullmatch(v):
-                return "VAR", v, "D1 biçimli onay var"
-            return "BİÇİMSİZ", v, "onay satırı var ama D1 biçimi değil (tarih · 'Sultan:' · sohbet · ref · kırpık · beyan:)"
+            gecerli, sebep = d1_gecerli(v)
+            if gecerli:
+                return "VAR", v, "D1 biçimli onay var (kırpık ≤15 kelime)"
+            return "BİÇİMSİZ", v, f"onay satırı var ama {sebep}"
     return "BEKLİYOR", "", "onay satırı yok"
 
 

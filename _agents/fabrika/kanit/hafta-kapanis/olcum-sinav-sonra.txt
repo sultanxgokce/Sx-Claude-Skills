@@ -1,5 +1,5 @@
 $ bash hafta-kapanis/scripts/hafta-kapanis.test.sh
-# rc=0 sure=2.2s zaman=2026-10-17T16:28:05+03:00
+# rc=0 sure=3.2s zaman=2026-10-17T16:31:37+03:00
 --- stdout ---
 — H1 retro becerisi yoksa SARI (sahte yeşil yok)
   ✓ H1a retro.py bulunamaz → rc=3 (rc=3)
@@ -40,11 +40,16 @@ $ bash hafta-kapanis/scripts/hafta-kapanis.test.sh
   ✓ H6e geçerli D1 + kuyruk metni → BİÇİMSİZ (tam satır eşleşmesi), AÇIK (rc=1)
   ✓ H6f gerekçe
   ✓ H6g düzeltildi → KAPANDI (rc=0)
+  ✓ H6h kırpık 16 kelime (120 karakter altı) → BİÇİMSİZ, AÇIK (karakter ≠ kelime) (rc=1)
+  ✓ H6i gerekçe kelime sayısı
+  ✓ H6j kırpık 15 kelime → KAPANDI (sınır dahil) (rc=0)
 — H7 K2 kenarları (kopya MERKEZ üstünde)
   ✓ H7a D1 biçimsiz görev satırı → K2 kırmızı → AÇIK (rc=1)
   ✓ H7b gerekçe
   ✓ H7a2 görev D1 başına yabancı metin → biçimsiz (tam eşleşme) (rc=1)
   ✓ H7a3 gerekçe
+  ✓ H7a4 görev D1 kırpığı 16 kelime → K2 kırmızı (rc=1)
+  ✓ H7a5 gerekçe
   ✓ H7c ders görevsiz (M2) → AÇIK (rc=1)
   ✓ H7d eksik ders adı
   ✓ H7c2 RED satırı dersi KAPSAMAZ (göz tur 2) → AÇIK (rc=1)
@@ -79,6 +84,8 @@ $ bash hafta-kapanis/scripts/hafta-kapanis.test.sh
   ✓ M5 onay D1 tam eşleşmesi gevşeyince kuyruklu onay kapatır (kapı yakalar): mutant ısırıldı
   ✓ M6-önkoşul: M9 gerçek araçta AÇIK (rc=1)
   ✓ M6 yazılı-ders denetimi kalkınca M9 bağı geçer (kapı yakalar): mutant ısırıldı
+  ✓ M7-önkoşul: 16 kelime gerçek araçta AÇIK (rc=1)
+  ✓ M7 kırpık kelime sınırı kalkınca 16 kelimelik onay kapatır (kapı yakalar): mutant ısırıldı
 
-GECEN=69 DUSEN=0
+GECEN=76 DUSEN=0
 --- stderr ---

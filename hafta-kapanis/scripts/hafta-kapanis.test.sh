@@ -94,12 +94,21 @@ sed -i 's/^_sultan_onay: \(.*\)$/_sultan_onay: \1 ve ek metin/' "$KP"
 kapi "H6e geçerli D1 + kuyruk metni → BİÇİMSİZ (tam satır eşleşmesi), AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "D1 biçimi değil" "H6f gerekçe"
 sed -i 's/^_sultan_onay: .*/_sultan_onay: 2026-10-18 Sultan: hafta kapansın (sohbet · oturum-ref-2 · "tamam kapat" · beyan:SERDAR)/' "$KP"
 kapi "H6g düzeltildi → KAPANDI" 0 python3 "$H" olc --hafta 2026-W42
+U16='bir iki üç dört beş altı yedi sekiz dokuz on on bir on iki on üç'   # 16 kelime, 66 karakter
+sed -i "s/^_sultan_onay: .*/_sultan_onay: 2026-10-18 Sultan: kapat (sohbet · oturum-ref-3 · \"$U16\" · beyan:SERDAR)/" "$KP"
+kapi "H6h kırpık 16 kelime (120 karakter altı) → BİÇİMSİZ, AÇIK (karakter ≠ kelime)" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "kırpık 16 kelime (>15)" "H6i gerekçe kelime sayısı"
+U15='bir iki üç dört beş altı yedi sekiz dokuz on on bir on iki on'           # 15 kelime
+sed -i "s/^_sultan_onay: .*/_sultan_onay: 2026-10-18 Sultan: kapat (sohbet · oturum-ref-3 · \"$U15\" · beyan:SERDAR)/" "$KP"
+kapi "H6j kırpık 15 kelime → KAPANDI (sınır dahil)" 0 python3 "$H" olc --hafta 2026-W42
+sed -i 's/^_sultan_onay: .*/_sultan_onay: 2026-10-18 Sultan: hafta kapansın (sohbet · oturum-ref-2 · "tamam kapat" · beyan:SERDAR)/' "$KP"
 echo "— H7 K2 kenarları (kopya MERKEZ üstünde)"
 cp "$M" "$T/M.yedek"
 sed -i 's/ · D1: 2026-10-18 Sultan: onay (sohbet · oturum-ref-1 · "kart depo başına, tamam" · beyan:SERDAR)/ · D1: onaylandı/' "$M"
 kapi "H7a D1 biçimsiz görev satırı → K2 kırmızı → AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "D1 damgası biçimsiz" "H7b gerekçe"
 cp "$T/M.yedek" "$M"; sed -i 's/ · D1: 2026-10-18 Sultan: onay (sohbet/ · D1: not: 2026-10-18 Sultan: onay (sohbet/' "$M"
 kapi "H7a2 görev D1 başına yabancı metin → biçimsiz (tam eşleşme)" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "D1 damgası biçimsiz" "H7a3 gerekçe"
+cp "$T/M.yedek" "$M"; sed -i "s/\"kart depo başına, tamam\"/\"$U16\"/" "$M"
+kapi "H7a4 görev D1 kırpığı 16 kelime → K2 kırmızı" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "kırpık 16 kelime (>15)" "H7a5 gerekçe"
 cp "$T/M.yedek" "$M"; sed -i '/ · ders M2 · D1: /d' "$M"
 kapi "H7c ders görevsiz (M2) → AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "ders→görev D1 eksik: M2" "H7d eksik ders adı"
 cp "$T/M.yedek" "$M"; sed -i 's/ · ders M2 · D1: / · ders M2 · D1: /; /^- gorev_01M54B2Y4QT7VWTJX10AFR7M76/c\- M2 → RED: hat adımı ayrı layiha, bu hafta görev değil' "$M"
@@ -136,7 +145,7 @@ mut(){ local ad="$1" sed_="$2"; shift 2; local MR="$T/mut-$RANDOM.py"; sed -e "$
 # M1: görev satırındaki D1 denetimi kalkınca biçimsiz D1 geçer (H7a kırmızı beklerken yeşil olur)
 sed -i 's/ · D1: 2026-10-18 Sultan: onay (sohbet · oturum-ref-1 · "kart depo başına, tamam" · beyan:SERDAR)/ · D1: onaylandı/' "$M"
 m_d1(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -ne 0 ]; }
-mut "M1 görev D1 denetimi kalkınca biçimsiz damga geçer (kapı yakalar)" 's/            if D1_RE.fullmatch(g.group(3).strip()):/            if True:/' m_d1
+mut "M1 görev D1 denetimi kalkınca biçimsiz damga geçer (kapı yakalar)" '/gecerli, sebep = d1_gecerli(g.group(3))/{n;s/if gecerli:/if True:/}' m_d1
 cp "$T/M.yedek" "$M"
 # M2: K4 eksik denetimi kalkınca damgasız tıkanma geçer
 sed -i '/^- kart:is-b → /d' "$M"
@@ -146,7 +155,7 @@ cp "$T/M.yedek" "$M"
 # M3: onay D1 denetimi kalkınca 'onaylandı' KAPANDI sayılır (A06 kapısı)
 sed -i 's/^_sultan_onay: .*/_sultan_onay: onaylandı/' "$KP"
 m_onay(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -ne 0 ]; }
-mut "M3 onay D1 denetimi kalkınca biçimsiz onay haftayı kapatır (kapı yakalar)" 's/            if D1_RE.fullmatch(v):/            if True:/' m_onay
+mut "M3 onay D1 denetimi kalkınca biçimsiz onay haftayı kapatır (kapı yakalar)" '/gecerli, sebep = d1_gecerli(v)/{n;s/if gecerli:/if True:/}' m_onay
 
 # M4: bozuk kart SARI'ya çevrilmezse H8d yeşil döner
 printf '{bozuk json' > "$KOK/_agents/fabrika/kartlar/is-x.json"
@@ -157,7 +166,7 @@ rm -f "$KOK/_agents/fabrika/kartlar/is-x.json"
 sed -i 's/^_sultan_onay: .*/_sultan_onay: 2026-10-18 Sultan: hafta kapansın (sohbet · oturum-ref-2 · "tamam kapat" · beyan:SERDAR) ve ek metin/' "$KP"
 kapi "M5-önkoşul: kuyruklu D1 gerçek araçta AÇIK" 1 python3 "$H" olc --hafta 2026-W42
 m_kuyruk(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -ne 0 ]; }
-mut "M5 onay D1 tam eşleşmesi gevşeyince kuyruklu onay kapatır (kapı yakalar)" 's/            if D1_RE.fullmatch(v):/            if D1_RE.search(v):/' m_kuyruk
+mut "M5 onay D1 tam eşleşmesi gevşeyince kuyruklu onay kapatır (kapı yakalar)" 's/    m = D1_RE.fullmatch(v.strip())/    m = D1_RE.search(v.strip())/' m_kuyruk
 
 # M6: K4'te "ders yazılı değil" denetimi kalkınca M9 bağı geçer
 sed -i 's/^_sultan_onay: .*/_sultan_onay: 2026-10-18 Sultan: hafta kapansın (sohbet · oturum-ref-2 · "tamam kapat" · beyan:SERDAR)/' "$KP"
@@ -166,6 +175,12 @@ kapi "M6-önkoşul: M9 gerçek araçta AÇIK" 1 python3 "$H" olc --hafta 2026-W4
 m_m9(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -ne 0 ]; }
 mut "M6 yazılı-ders denetimi kalkınca M9 bağı geçer (kapı yakalar)" 's/    yok = \[f"{a} → M{n} (ders yazılı değil)" for a, n in damga.items() if a in anahtarlar and n not in dersler\]/    yok = []/' m_m9
 cp "$T/M.yedek" "$M"
+
+# M7: kelime sınırı kalkınca 16 kelimelik kırpık haftayı kapatır
+sed -i "s/^_sultan_onay: .*/_sultan_onay: 2026-10-18 Sultan: kapat (sohbet · oturum-ref-3 · \"$U16\" · beyan:SERDAR)/" "$KP"
+kapi "M7-önkoşul: 16 kelime gerçek araçta AÇIK" 1 python3 "$H" olc --hafta 2026-W42
+m_kelime(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -ne 0 ]; }
+mut "M7 kırpık kelime sınırı kalkınca 16 kelimelik onay kapatır (kapı yakalar)" 's/^    if n > D1_KIRPIK_KELIME:$/    if False:/' m_kelime
 
 echo; echo "GECEN=$G DUSEN=$K"
 [ "$K" -eq 0 ]

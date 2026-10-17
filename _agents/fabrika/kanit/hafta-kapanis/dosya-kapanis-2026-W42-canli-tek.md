@@ -1,6 +1,6 @@
 # 🔒 HAFTA KAPANIŞI · 2026-W42
 _durum: AÇIK
-_olculdu: 2026-10-17T16:28:05+03:00
+_olculdu: 2026-10-17T16:31:37+03:00
 _arac: hafta-kapanis.py 1.0.0
 _sultan_onay: (bekliyor — Sultan sözünü D1 biçimiyle insan aktarır; araç yazmaz)
 
