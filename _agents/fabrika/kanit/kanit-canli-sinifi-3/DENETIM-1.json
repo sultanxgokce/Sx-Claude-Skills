@@ -1,0 +1,66 @@
+{
+  "tur": 1,
+  "is": "kanit-canli-sinifi-3",
+  "pr": "354",
+  "yazan": "claude",
+  "denetci": "claude (sonnet) (YEDEK GÖZ: codex yok · yazandan farklı yeni oturum + farklı model kademesi [yazan: fable] · Sultan Y0006)",
+  "zaman": "2026-10-17T14:33:32+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": "codex yok",
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "bildirim",
+  "yedek_model": "sonnet",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 101980,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 33,
+    "bayt": 174242
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Cron/servis/sunucu işleri için canlı kanıt sınıfı eklenmiş: `kanit.sh canli` okuma komutunu kendisi kuruyor, kapı kayıtları işe bağlıyor, rc=3 ve mutant sınavlarıyla çitler korunuyor. Yine de `ssh:` ve `docker:` hedefinde seçenek enjeksiyonu açığı ve yüzeysel anahtar kelime tetikleyicisi kaldı, bu yüzden 5 değil 4.",
+    "bulgular": [
+      {
+        "ne": "`ssh:` ve `docker:` hedefi `-` ile başlayabiliyor ve araya `--` konmuyor; seçenek enjeksiyonu mümkün. GUVENLI_RE `-` ve `/` karakterlerine izin veriyor. Örneğin `ssh:-F/yol/cfg:/x` argv'de `ssh -o BatchMode=yes -F/yol/cfg tail …` oluyor. Serbest komut yolunu kapatmak bu işin ana amacıydı; bu açık o amaçla çelişiyor. Dürüstçe de olsa, tutarsız.",
+        "kanit": "kanit.py kaynak_komutu: `return [\"ssh\",\"-o\",\"BatchMode=yes\", hedef, \"tail\", ...]` ve `[\"docker\",\"exec\", hedef, ...]`. GUVENLI_RE=`^[A-Za-z0-9_.@/+-]+$` hedefin baştaki `-` karakterini engellemiyor. T18y3 yalnızca `$(id)` metakarakterini sınıyor, baştaki `-` için sınav yok.",
+        "konum": "yazilim-fabrikasi/scripts/kanit.py:kaynak_komutu (GUVENLI_RE)",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Anahtar kelime tetikleyicisi çok geniş ve yalnızca kelime başına bağlı. `timer` kelimesi `timeline`'ı, `host` kelimesi `hosting`'i, `canlı` kelimesi `canlıya`'yı, `zil` kelimesi `zilli`'yi yakalıyor. Bu iş kartının kendi cümlesi de `canlı` yüzünden tetiklendi. Fail-closed olduğu için zararı sürtünme, ama sahip sürekli `--canli h` demeye alışırsa sınıf anlamını yitirir.",
+        "kanit": "kart.sh CANLI_KELIME: `\\b(?:cron|...|timer|...|host|...|zil|...|canlı|canli)` sonuna sınır yok. İş kartı: canli_sebep=\"--canli h (... cümlede: canlı)\".",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh:CANLI_KELIME",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Kapının `canli-gerekir` çağrısı `bitti` komutunda fail-open. `2>/dev/null` ile hata yutuluyor, varsayılan H oluyor ve uyarı hiç basılmıyor. Kapıda aynı durum rc=3 oluyor, `bitti` ise sessiz kalıyor. Yalnızca uyarı olduğu için küçük kusur.",
+        "kanit": "kart.sh bitti: `IFS=$'\\t' read -r CGB _ <<<\"$(bash \"${BASH_SOURCE[0]}\" canli-gerekir \"$IS\" 2>/dev/null)\"; CGB=\"${CGB:-H}\"`",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh:~97",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Küçük temizlik: `cmd_canli` içinde `m = SAAT_RE.search(satir); if not SAAT_RE.search(satir)` regex'i iki kez çalıştırıyor. Ayrıca `m.group(0) if m else \"\"` ölü dal. `bagli_mi` yardımcı fonksiyonu da gereksiz dolaylı.",
+        "kanit": "kanit.py cmd_canli döngüsü, birlestirme-kapisi.sh python bloğundaki `def bagli_mi(neden)`",
+        "konum": "kanit.py:cmd_canli · birlestirme-kapisi.sh:2b",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Özellik gerçek bir canlı kaynakla (journalctl, ssh, docker) uçtan uca denenmedi. Yeşil kayıt yalnızca Nexus kaçış-defteri dosyasından alınmış, `KAPISIZ` deseniyle ve bu işle ilgisiz. ssh sınavı sahte shim ile yapılmış. Sultan'ın filosundaki gerçek kutularda doğrulama bu konteynerden yapılamaz.",
+        "kanit": "Manifestteki tek `canli` kaydı `dosya:/config/projects/Nexus/_agents/fabrika/kacis-defteri.log`. T18z ssh shim'i PATH'e koyuyor.",
+        "konum": "KANIT.json kayıt ornek-kacis-defteri",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı filo kutuları (journalctl/ssh/docker erişimi ve yetkisi)"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı. Üç sınav için önce kırmızı, sonra yeşil çifti var; önce-kırmızılar yeni T10/T11/T18 testlerinin yokluğundan geliyor, yani doğru sebepten. Mutant sınavları (T9-T12, T19) çitlerin gerçek olduğunu gösteriyor. Sarı kayıt yok. Tek canlı kaydı yalnızca örnek niteliğinde, ilgisiz bir log. Kanıt bu işin ürünü (araç) için yeterli; gerçek kaynaklarla denenmesi kutu dışı."
+  }
+}

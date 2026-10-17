@@ -257,8 +257,8 @@ M4="$PKG/mutant4.sh"; sed 's/^\s*\[ "\$cs" -gt 0 \]/false/' "$G" > "$M4"; chmod 
 grep -q '^false' "$M4"; g $? "T12d mutant 4 üretildi (sarı canlı engeli kaldırıldı)"
 bash "$M4" is-g --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T12e mutant 4: sarı canlı GEÇİYOR → T11h bu mutantta düşerdi"
 bash "$G" is-g --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T12f gerçek kapı sarıyı hâlâ tutuyor"
-M5="$PKG/mutant5.sh"; sed 's/^def bagli_mi(neden): .*$/def bagli_mi(neden): return True/' "$G" > "$M5"; chmod +x "$M5"
-grep -q '^def bagli_mi(neden): return True' "$M5"; g $? "T12g mutant 5 üretildi (işe bağlama kaldırıldı)"
+M5="$PKG/mutant5.sh"; sed 's/(bagli_l if neden is None else kopuk)/(bagli_l if True else kopuk)/' "$G" > "$M5"; chmod +x "$M5"
+grep -q 'bagli_l if True else kopuk' "$M5"; g $? "T12g mutant 5 üretildi (işe bağlama kaldırıldı)"
 bash "$K" canli is-i eski --desen muhakkik-zil --kaynak "dosya:$LGK/eski.log" >/dev/null 2>&1
 bash "$M5" is-i --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T12h mutant 5: kart açılışından önceki yeşil kayıt GEÇİYOR → T11e2 bu mutantta düşerdi"
 bash "$G" is-i --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T12i gerçek kapı eski kaydı bağlamıyor, rc=1"

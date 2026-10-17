@@ -285,7 +285,8 @@ SAAT_RE = re.compile(
 #    → docker exec … tail. Hedef ve yol yalnız güvenli karakter (ssh/docker uzak kabuk açar: enjeksiyon yolu kapalı). Geriye kalan
 #    tek sahtecilik "log dosyasını elle yazmak"tır — o da manifestte yol olarak görünür ve bağımsız göz onu okur (olcum ile aynı güven).
 KAYNAK_RE = re.compile(r"^(dosya|journal|ssh|docker):(.+)$", re.S)
-GUVENLI_RE = re.compile(r"^[A-Za-z0-9_.@/+-]+$")
+# yedek göz #354: baştaki "-" seçenek enjeksiyonudur (ssh -F…, docker --…) → ilk karakter harf/rakam/./_/@/+ ya da / olmalı
+GUVENLI_RE = re.compile(r"^[A-Za-z0-9_.@/+][A-Za-z0-9_.@/+-]*$")
 
 
 def kaynak_komutu(kaynak, son):
@@ -374,9 +375,9 @@ def cmd_canli(a):
     ates = []
     for satir in p.stdout.splitlines():
         m = SAAT_RE.search(satir)
-        if not SAAT_RE.search(satir): continue
+        if not m: continue
         if not desen.search(satir): continue
-        ates.append((satir, m.group(0) if m else ""))
+        ates.append((satir, m.group(0)))
     with open(yol, "w", encoding="utf-8") as f:
         f.write(f"$ {' '.join(komut)}\n# kaynak={a.kaynak.strip()} tur={tur} desen={a.desen} en_az={a.en_az} son={a.son} "
                 f"atesleme={len(ates)} rc={p.returncode} sure={sure:.1f}s zaman={simdi()}\n--- stdout ---\n{p.stdout}--- stderr ---\n{p.stderr}")

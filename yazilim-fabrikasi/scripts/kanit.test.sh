@@ -269,6 +269,8 @@ bash "$K" canli is-canli sahte1 --desen sahte --kaynak "komut:echo $ISO1 sahte" 
 bash "$K" canli is-canli sahte2 --desen sahte --kaynak "dosya:$LG/zil.log" -- python3 -c "print('$ISO1 sahte')" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T18y '--' sonrası serbest komut kabul edilmez (python/awk üretici kapısı kapalı)"
 bash "$K" canli is-canli sahte3 --desen sahte --kaynak "ssh:kutu:/var/log/x;echo $ISO1 sahte" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T18y2 ssh yolunda kabuk metakarakteri reddedilir (uzak kabuk enjeksiyonu yok)"
 bash "$K" canli is-canli sahte4 --desen sahte --kaynak "ssh:kutu\$(id):/var/log/x" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T18y3 ssh hedefinde metakarakter reddedilir"
+bash "$K" canli is-canli sahte5 --desen sahte --kaynak "ssh:-F/tmp/cfg:/var/log/x" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T18y4 ssh hedefi '-' ile başlayamaz (seçenek enjeksiyonu: -F cfg) — yedek göz #354"
+bash "$K" canli is-canli sahte6 --desen sahte --kaynak "docker:kutu:-rf" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T18y5 docker yolu '-' ile başlayamaz"
 # ssh/docker: araç SABİT argv kurar (ssh <hedef> tail -n N -- <yol>); sınavda ssh yerine PATH'te sahte ssh: argümanları kaydeder, yerel dosyayı basar
 SHIM="$T/shim"; mkdir -p "$SHIM"; cat > "$SHIM/ssh" <<'SH'
 #!/usr/bin/env bash
@@ -289,7 +291,10 @@ import sys; src,dst,eski,yeni=sys.argv[1:]; s=open(src,encoding='utf-8').read();
 s=s.replace(eski,yeni); assert s!=o, "mutasyon deseni tutmadı: "+eski; open(dst,'w',encoding='utf-8').write(s)
 PY
 }
-_mut "if not SAAT_RE.search(satir): continue" "if False: continue"
+_mut "if not m: continue" "if False: continue"
+python3 - "$MC/kanit.py" <<'PY'
+import sys; p=sys.argv[1]; s=open(p,encoding='utf-8').read(); o=s; s=s.replace('ates.append((satir, m.group(0)))','ates.append((satir, m.group(0) if m else ""))'); assert s!=o; open(p,'w',encoding='utf-8').write(s)
+PY
 KANIT_DEPO="$T" python3 "$MC/kanit.py" canli is-canli-m saatsiz --desen servis --kaynak "dosya:$LG/saatsiz.log" >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T19a mutant saatsiz satırı ateşleme sayıyor → T18g bu mutantta düşerdi"
 bash "$K" canli is-canli-m saatsiz2 --desen servis --kaynak "dosya:$LG/saatsiz.log" >/dev/null 2>&1; [ $? -eq 3 ]; g $? "T19b gerçek araç aynı girdiyle hâlâ sarı (mutasyon kaynağı bozdu, düzeneği değil)"
 _mut 'renk = "sari" if (p.returncode != 0' 'renk = "sari" if (False'

@@ -107,6 +107,10 @@ bash "$K" olcum is-sunucu olc --asama tek -- echo 1 >/dev/null 2>&1
 CIKTI="$(bash "$KT" bitti is-sunucu 2>&1)"; grep -q "CANLI KANIT YOK" <<<"$CIKTI"; g $? "alanı olmayan eski servis/sunucu kartı bitti'de de canlı kanıt uyarısı alır (kapıyla aynı yüzey)"
 bash "$KT" ac is-ghost --is "ghost düğmesi ve ekrandaki liste" --istedi S --aldi BANI --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
 python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-ghost.json'));assert k['canli_gerekir'] is False, k['canli_sebep']"; g $? "'ghost' içindeki host canlı saymaz (kelime başı sınırı; Türkçe ek serbest)"
+bash "$KT" ac is-hosting --is "hosting paneli ve zilli bildirim sesi" --istedi S --aldi BANI --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-hosting.json'));assert k['canli_gerekir'] is False, k['canli_sebep']"; g $? "'hosting' / 'zilli' canlı saymaz (kelime sonu sınırı; yedek göz #354)"
+bash "$KT" ac is-ek --is "sunucudaki cron'u ve servisleri yenile" --istedi S --aldi BANI --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-ek.json'));assert k['canli_gerekir'] and 'sunucu' in k['canli_sebep'] and 'cron' in k['canli_sebep'] and 'servis' in k['canli_sebep'], k['canli_sebep']"; g $? "Türkçe ekler (sunucudaki · cron'u · servisleri) hâlâ yakalanır"
 
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

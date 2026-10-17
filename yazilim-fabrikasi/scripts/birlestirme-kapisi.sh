@@ -116,7 +116,6 @@ except Exception: pass
 c=[k for k in m.get("kayitlar",[]) if k.get("tur")=="canli"]
 y=[k for k in c if k.get("renk")=="yesil"]; s=[k for k in c if k.get("renk")=="sari"]
 bagli_l=[]; kopuk=[]
-def bagli_mi(neden): return neden is None
 for k in y:
     oz=P(k.get("zaman") or ""); son=P(((k.get("son_atesleme") or k.get("ilk_atesleme") or {}).get("saat_iso")) or "")
     kzs=kz.isoformat(timespec="seconds") if kz else "?"
@@ -126,7 +125,7 @@ for k in y:
     elif son<kz: neden=f"son ateşleme {son.isoformat(timespec='seconds')} kart açılışı {kzs} ÖNCESİNDE — bu işin ateşlemesi değil"
     elif son>oz+datetime.timedelta(minutes=5): neden=f"son ateşleme {son.isoformat(timespec='seconds')} ÖLÇÜMDEN SONRA ({oz.isoformat(timespec='seconds')}) — geleceğe tarihli, şüpheli"
     else: neden=None
-    (bagli_l if bagli_mi(neden) else kopuk).append((k,neden))
+    (bagli_l if neden is None else kopuk).append((k,neden))
 print("cy="+str(len(bagli_l))); print("cs="+str(len(s))); print("ckz="+("1" if kz else "0"))
 if bagli_l:
     k=bagli_l[0][0]; ilk=k.get("ilk_atesleme") or {}

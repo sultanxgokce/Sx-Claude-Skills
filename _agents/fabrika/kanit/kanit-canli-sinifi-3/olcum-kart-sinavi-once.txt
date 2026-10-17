@@ -1,5 +1,5 @@
-$ bash /tmp/tmp.8aiTk8AffK/kart.test.sh
-# rc=1 sure=1.9s zaman=2026-10-17T14:32:11+03:00
+$ bash /tmp/tmp.Ors8uOhLJu/kart.test.sh
+# rc=1 sure=1.7s zaman=2026-10-17T14:37:11+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -64,8 +64,10 @@ $ bash /tmp/tmp.8aiTk8AffK/kart.test.sh
   ✗ alanı olmayan eski kart: cümleden E, 'eski kart' işaretli
   ✗ alanı olmayan eski servis/sunucu kartı bitti'de de canlı kanıt uyarısı alır (kapıyla aynı yüzey)
   ✗ 'ghost' içindeki host canlı saymaz (kelime başı sınırı; Türkçe ek serbest)
+  ✗ 'hosting' / 'zilli' canlı saymaz (kelime sonu sınırı; yedek göz #354)
+  ✗ Türkçe ekler (sunucudaki · cron'u · servisleri) hâlâ yakalanır
 
-── SONUÇ: 41 geçti · 13 kaldı ──
+── SONUÇ: 41 geçti · 15 kaldı ──
 --- stderr ---
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
@@ -78,15 +80,21 @@ Traceback (most recent call last):
 KeyError: 'canli_gerekir'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.ynXznhBP7I/depo/_agents/fabrika/kartlar/is-canli-e.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.rVaE1vL9X9/depo/_agents/fabrika/kartlar/is-canli-e.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.ynXznhBP7I/depo/_agents/fabrika/kartlar/is-canli-h.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.rVaE1vL9X9/depo/_agents/fabrika/kartlar/is-canli-h.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
 KeyError: 'canli_kanit'
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
+KeyError: 'canli_gerekir'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+KeyError: 'canli_gerekir'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
 KeyError: 'canli_gerekir'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>

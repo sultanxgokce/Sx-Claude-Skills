@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi-3/yazilim-fabrikasi/scripts/kanit.test.sh
-# rc=0 sure=7.6s zaman=2026-10-17T14:32:29+03:00
+# rc=0 sure=7.9s zaman=2026-10-17T14:37:29+03:00
 --- stdout ---
 ════ T1 · ölçüm çifti: komutu araç koşar, kırpılmamış çıktı+rc ════
   ✓ önce ölçümü rc=0
@@ -112,6 +112,8 @@ $ bash /config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi-3/yazilim-fabrik
   ✓ T18y '--' sonrası serbest komut kabul edilmez (python/awk üretici kapısı kapalı)
   ✓ T18y2 ssh yolunda kabuk metakarakteri reddedilir (uzak kabuk enjeksiyonu yok)
   ✓ T18y3 ssh hedefinde metakarakter reddedilir
+  ✓ T18y4 ssh hedefi '-' ile başlayamaz (seçenek enjeksiyonu: -F cfg) — yedek göz #354
+  ✓ T18y5 docker yolu '-' ile başlayamaz
   ✓ T18z ssh kaynağı: araç sabit argv kurar, uzaktan okunan satırlar ateşleme → rc=0
   ✓ T18z2 ssh argv: BatchMode · hedef · tail · yol (kabuk dizgesi yok)
   ✓ T18t dogrula özeti canlı kayıtlarını söylüyor
@@ -123,5 +125,5 @@ $ bash /config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi-3/yazilim-fabrik
   ✓ T19c mutant (kopuk kaynak sarı değil) kopuk bağlantıyı yeşil sayıyor → T18j2 bu mutantta düşerdi
   ✓ T19d mutant (yol doğrulaması kaldırıldı) metakarakterli yolu reddetmiyor → T18y2 bu mutantta düşerdi
 
-── SONUÇ: 102 geçti · 0 kaldı ──
+── SONUÇ: 104 geçti · 0 kaldı ──
 --- stderr ---

@@ -1,5 +1,5 @@
-$ bash /tmp/tmp.8aiTk8AffK/kanit.test.sh
-# rc=1 sure=6.2s zaman=2026-10-17T14:32:09+03:00
+$ bash /tmp/tmp.Ors8uOhLJu/kanit.test.sh
+# rc=1 sure=5.2s zaman=2026-10-17T14:37:09+03:00
 --- stdout ---
 ════ T1 · ölçüm çifti: komutu araç koşar, kırpılmamış çıktı+rc ════
   ✓ önce ölçümü rc=0
@@ -112,6 +112,8 @@ $ bash /tmp/tmp.8aiTk8AffK/kanit.test.sh
   ✗ T18y '--' sonrası serbest komut kabul edilmez (python/awk üretici kapısı kapalı)
   ✗ T18y2 ssh yolunda kabuk metakarakteri reddedilir (uzak kabuk enjeksiyonu yok)
   ✗ T18y3 ssh hedefinde metakarakter reddedilir
+  ✗ T18y4 ssh hedefi '-' ile başlayamaz (seçenek enjeksiyonu: -F cfg) — yedek göz #354
+  ✗ T18y5 docker yolu '-' ile başlayamaz
   ✗ T18z ssh kaynağı: araç sabit argv kurar, uzaktan okunan satırlar ateşleme → rc=0
   ✗ T18z2 ssh argv: BatchMode · hedef · tail · yol (kabuk dizgesi yok)
   ✗ T18t dogrula özeti canlı kayıtlarını söylüyor
@@ -123,45 +125,48 @@ $ bash /tmp/tmp.8aiTk8AffK/kanit.test.sh
   ✗ T19c mutant (kopuk kaynak sarı değil) kopuk bağlantıyı yeşil sayıyor → T18j2 bu mutantta düşerdi
   ✓ T19d mutant (yol doğrulaması kaldırıldı) metakarakterli yolu reddetmiyor → T18y2 bu mutantta düşerdi
 
-── SONUÇ: 67 geçti · 35 kaldı ──
+── SONUÇ: 67 geçti · 37 kaldı ──
 --- stderr ---
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.jUi00YlrnE/_agents/fabrika/kanit/is-canli/KANIT.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.lOpmxjTfIU/_agents/fabrika/kanit/is-canli/KANIT.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.jUi00YlrnE/_agents/fabrika/kanit/is-canli/KANIT.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.lOpmxjTfIU/_agents/fabrika/kanit/is-canli/KANIT.json'
 Traceback (most recent call last):
   File "<string>", line 2, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.jUi00YlrnE/_agents/fabrika/kanit/is-canli/KANIT.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.lOpmxjTfIU/_agents/fabrika/kanit/is-canli/KANIT.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.jUi00YlrnE/_agents/fabrika/kanit/is-canli/KANIT.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.lOpmxjTfIU/_agents/fabrika/kanit/is-canli/KANIT.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.jUi00YlrnE/_agents/fabrika/kanit/is-canli/KANIT.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.lOpmxjTfIU/_agents/fabrika/kanit/is-canli/KANIT.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.jUi00YlrnE/_agents/fabrika/kanit/is-canli/KANIT.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.lOpmxjTfIU/_agents/fabrika/kanit/is-canli/KANIT.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.jUi00YlrnE/_agents/fabrika/kanit/is-canli/KANIT.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.lOpmxjTfIU/_agents/fabrika/kanit/is-canli/KANIT.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.jUi00YlrnE/_agents/fabrika/kanit/is-canli/KANIT.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.lOpmxjTfIU/_agents/fabrika/kanit/is-canli/KANIT.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.jUi00YlrnE/_agents/fabrika/kanit/is-canli/KANIT.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.lOpmxjTfIU/_agents/fabrika/kanit/is-canli/KANIT.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.jUi00YlrnE/_agents/fabrika/kanit/is-canli/KANIT.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.lOpmxjTfIU/_agents/fabrika/kanit/is-canli/KANIT.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.jUi00YlrnE/_agents/fabrika/kanit/is-canli/KANIT.json'
-sed: can't read /tmp/tmp.jUi00YlrnE/ssh-args.txt: No such file or directory
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.lOpmxjTfIU/_agents/fabrika/kanit/is-canli/KANIT.json'
+sed: can't read /tmp/tmp.lOpmxjTfIU/ssh-args.txt: No such file or directory
 Traceback (most recent call last):
   File "<stdin>", line 2, in <module>
-AssertionError: mutasyon deseni tutmadı: if not SAAT_RE.search(satir): continue
+AssertionError: mutasyon deseni tutmadı: if not m: continue
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.lOpmxjTfIU/pkg-canli/kanit.py'
 Traceback (most recent call last):
   File "<stdin>", line 2, in <module>
 AssertionError: mutasyon deseni tutmadı: renk = "sari" if (p.returncode != 0
