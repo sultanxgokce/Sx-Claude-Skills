@@ -1,0 +1,38 @@
+{
+  "tur": 3,
+  "is": "gunluk-plan-tablo-kapanis-2",
+  "pr": "366",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T21:06:04+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 89415,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 44,
+    "bayt": 117062
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Tek bugün tablosu, ortak BÂNİ uyum fikstürü ve kapanış kapısı talebin doğru gövdesini kuruyor. Ancak üretim farkındaki erteleme denetimi önceki kusuru hâlâ taşıyor ve sunulan son ölçüm bu kodla çelişiyor; önce kaynak ile kanıtı aynı sürüme getirip karar kapısını gerçekten daraltın.",
+    "bulgular": [
+      {
+        "ne": "Üretim farkındaki D1 kapısı “ertele istemiyorum” ve “ertele mi?” gibi karar olmayan sonuçları kabul eder; buna karşılık ölçüm çıktısı kaynakta görünmeyen tam-eşleşme kalıbını çalıştırdığını söylüyor. Bu nedenle tur-4 bulgusunun gösterilen üretim kodunda kapandığı doğrulanamıyor.",
+        "kanit": "Diffte `cipa.sh` sonucu `grep -qiE 'ertele'` ile kabul edip yalnız `ertelen?m[eaı]` kalıbını dışlıyor; `tablo.py` de aynı geniş `ERTELE.search(...)` mantığını kullanıyor. Buna karşın `olcum-ertele-karar-tam-eslesme-canli-sonra.txt`, satır 176'da diffte bulunmayan `grep -qixE '(yarına )?ertele(nsin|ndi|yelim|yin)?'` kalıbını ve karşı örneklerin rc=2 olduğunu gösteriyor; “üretim kodu farkı eksik değildir” beyanıyla ölçüm aynı revizyonu temsil edemez.",
+        "konum": "gunluk-plan/scripts/cipa.sh: ertelendi dalındaki `_snc` koşulu; gunluk-plan/scripts/tablo.py: ERTELE/ERTELEME ve ertele_d1; kanıt kaydı `ertele-karar-tam-eslesme-canli-sonra`",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam, sarı kayıt yok; önce/sonra çifti, birleşik sınavlar, ortak fikstür uyumu ve mutasyon ölçümleri güçlü. Ne var ki son erteleme ölçümü gösterilen üretim diffinden farklı bir `cipa.sh` satırı çalıştırmış; dolayısıyla tam-eşleşme düzeltmesi için yeşil kayıt güvenilir olsa da teslim edilen kodla ilişkilendirilemiyor."
+  }
+}
