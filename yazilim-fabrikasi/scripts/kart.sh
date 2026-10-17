@@ -54,7 +54,8 @@ tetik() {  # tetik <oda> <başlık> <gövde>
 #    cümledeki anahtar kelimelerden türetir ve sebebini karta yazar. Sahibin "h" demesi gizli kalmaz: karta ve ekrana yazılır,
 #    bağımsız göz görür. Kapı (birlestirme-kapisi.sh 2b) bu alanı `kart.sh canli-gerekir` ile okur; alanı olmayan ESKİ kart
 #    da cümleden türetilir — eski cron kartı kapsam dışı kalmaz.
-CANLI_KELIME='cron|crontab|servis|service|systemd|daemon|timer|sunucu|host|ssh|zil|nöbet|nobet|bekçi|bekci|watcher|canlı|canli'
+# 🔴 GÖZ #353 tur 3: çıplak alt dize 'ghost' içindeki 'host'u yakalıyordu → kelime BAŞI sınırı (\b); Türkçe ek serbest (Sunucuda → sunucu)
+CANLI_KELIME='\b(?:cron|crontab|servis|service|systemd|daemon|timer|sunucu|host|ssh|zil|nöbet|nobet|bekçi|bekci|watcher|canlı|canli)'
 canli_hesapla() {  # canli_hesapla <cümle> <--canli cevabı e|h|""> → "E|H<TAB>sebep"
   python3 - "$1" "$2" "$CANLI_KELIME" <<'PY'
 import re,sys
@@ -93,9 +94,11 @@ PY
     [ "$CMD" = "tikandi" ] && { [ -n "$YOL" ] && [ -n "$NEDEN" ] || { _hata "tikandi --yol devam|daralt|geri-al --neden gerekiyor"; exit 1; }; }
     # kanıt/denetim: çağrıldığı ağaçtan (worktree olabilir) okunur
     WT="$(git rev-parse --show-toplevel 2>/dev/null || echo "$DEPO")"; DZ="$WT/_agents/fabrika/kanit/$IS"
-    python3 - "$KD/$IS.json" "$CMD" "$PR" "$YOL" "$NEDEN" "$DZ" <<'PY'
+    # 🔴 GÖZ #353 tur 3: eski kart (alan yok) kapıda cümleden "canlı ister" sayılıyor ama bitti uyarmıyordu → aynı yüzeyden (canli-gerekir) okunur
+    IFS=$'\t' read -r CGB _ <<<"$(bash "${BASH_SOURCE[0]}" canli-gerekir "$IS" 2>/dev/null)"; CGB="${CGB:-H}"
+    python3 - "$KD/$IS.json" "$CMD" "$PR" "$YOL" "$NEDEN" "$DZ" "$CGB" <<'PY'
 import json,sys,os,glob,datetime
-yol,cmd,pr,yolu,neden,dz=sys.argv[1:]
+yol,cmd,pr,yolu,neden,dz,cgb=sys.argv[1:]
 k=json.load(open(yol)); simdi=datetime.datetime.now().astimezone().isoformat(timespec="seconds")
 den=sorted(glob.glob(os.path.join(dz,"DENETIM-[0-9]*.json")),key=lambda p:int(p.rsplit("-",1)[1].split(".")[0]))
 son=json.load(open(den[-1]))["sonuc"] if den else None
@@ -112,7 +115,7 @@ json.dump(k,open(yol,"w"),ensure_ascii=False,indent=2)
 uyari=""
 if cmd=="bitti" and not kanit: uyari=" ⚠ KANIT YOK (kanıtsız bitti sayılmaz — gün sonu özetinde işaretlenir)"
 if cmd=="bitti" and son and not(son["kod_puani"]==5 and son["dogru_sey"]=="E"): uyari+=" ⚠ son denetim 5+E DEĞİL"
-if cmd=="bitti" and k.get("canli_gerekir") and not cy: uyari+=" ⚠ CANLI KANIT YOK (cron/servis/sunucu işi gerçek ateşleme kaydı ister: kanit.sh canli)"
+if cmd=="bitti" and cgb=="E" and not cy: uyari+=" ⚠ CANLI KANIT YOK (cron/servis/sunucu işi gerçek ateşleme kaydı ister: kanit.sh canli)"
 print(f"✓ kart {cmd}: {k['is']} · puan {k['puan']} · kanıt {'var' if kanit else 'YOK'}{uyari}")
 PY
     tetik "$(python3 -c "import json;print(json.load(open('$KD/$IS.json')).get('oda',''))")" "iş $CMD: $IS" "$(python3 -c "import json;k=json.load(open('$KD/$IS.json'));print(k['cumle'],'· puan',k.get('puan'),'· pr',k.get('pr'))")"

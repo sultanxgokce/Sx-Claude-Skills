@@ -102,6 +102,11 @@ python3 - <<PY
 import json;p='$T/depo/_agents/fabrika/kartlar/is-sunucu.json';k=json.load(open(p));k.pop('canli_gerekir');k.pop('canli_sebep');json.dump(k,open(p,'w'))
 PY
 CIKTI="$(bash "$KT" canli-gerekir is-sunucu)"; [ "$(cut -f1 <<<"$CIKTI")" = "E" ] && grep -q "eski kart" <<<"$CIKTI"; g $? "alanı olmayan eski kart: cümleden E, 'eski kart' işaretli"
+# göz #353 tur 3: eski kart bitti'de de aynı sınıflandırma (kapıyla tutarlı) + kelime başı sınırı
+bash "$K" olcum is-sunucu olc --asama tek -- echo 1 >/dev/null 2>&1
+CIKTI="$(bash "$KT" bitti is-sunucu 2>&1)"; grep -q "CANLI KANIT YOK" <<<"$CIKTI"; g $? "alanı olmayan eski servis/sunucu kartı bitti'de de canlı kanıt uyarısı alır (kapıyla aynı yüzey)"
+bash "$KT" ac is-ghost --is "ghost düğmesi ve ekrandaki liste" --istedi S --aldi BANI --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-ghost.json'));assert k['canli_gerekir'] is False, k['canli_sebep']"; g $? "'ghost' içindeki host canlı saymaz (kelime başı sınırı; Türkçe ek serbest)"
 
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

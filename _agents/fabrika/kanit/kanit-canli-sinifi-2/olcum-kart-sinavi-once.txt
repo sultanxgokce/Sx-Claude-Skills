@@ -1,5 +1,5 @@
-$ bash /tmp/tmp.mikTtKXnth/kart.test.sh
-# rc=1 sure=1.8s zaman=2026-10-17T14:18:58+03:00
+$ bash /tmp/tmp.QZjftDwdhC/kart.test.sh
+# rc=1 sure=1.9s zaman=2026-10-17T14:22:46+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -62,8 +62,10 @@ $ bash /tmp/tmp.mikTtKXnth/kart.test.sh
   ✗ karta canli_kanit=var işlendi
   ✗ canli-gerekir E/H okur
   ✗ alanı olmayan eski kart: cümleden E, 'eski kart' işaretli
+  ✗ alanı olmayan eski servis/sunucu kartı bitti'de de canlı kanıt uyarısı alır (kapıyla aynı yüzey)
+  ✗ 'ghost' içindeki host canlı saymaz (kelime başı sınırı; Türkçe ek serbest)
 
-── SONUÇ: 41 geçti · 11 kaldı ──
+── SONUÇ: 41 geçti · 13 kaldı ──
 --- stderr ---
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
@@ -76,13 +78,16 @@ Traceback (most recent call last):
 KeyError: 'canli_gerekir'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.9wJWjiziee/depo/_agents/fabrika/kartlar/is-canli-e.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.odTFzLpNxb/depo/_agents/fabrika/kartlar/is-canli-e.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.9wJWjiziee/depo/_agents/fabrika/kartlar/is-canli-h.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.odTFzLpNxb/depo/_agents/fabrika/kartlar/is-canli-h.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
 KeyError: 'canli_kanit'
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
+KeyError: 'canli_gerekir'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
 KeyError: 'canli_gerekir'

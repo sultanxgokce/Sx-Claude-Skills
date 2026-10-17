@@ -1,5 +1,5 @@
-$ bash /tmp/tmp.mikTtKXnth/kanit.test.sh
-# rc=1 sure=5.7s zaman=2026-10-17T14:18:56+03:00
+$ bash /tmp/tmp.QZjftDwdhC/kanit.test.sh
+# rc=1 sure=6.9s zaman=2026-10-17T14:22:44+03:00
 --- stdout ---
 ════ T1 · ölçüm çifti: komutu araç koşar, kırpılmamış çıktı+rc ════
   ✓ önce ölçümü rc=0
@@ -127,38 +127,38 @@ $ bash /tmp/tmp.mikTtKXnth/kanit.test.sh
 --- stderr ---
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.JsILW9XncQ/_agents/fabrika/kanit/is-canli/KANIT.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.ApgHMvD6Kb/_agents/fabrika/kanit/is-canli/KANIT.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.JsILW9XncQ/_agents/fabrika/kanit/is-canli/KANIT.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.ApgHMvD6Kb/_agents/fabrika/kanit/is-canli/KANIT.json'
 Traceback (most recent call last):
   File "<string>", line 2, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.JsILW9XncQ/_agents/fabrika/kanit/is-canli/KANIT.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.ApgHMvD6Kb/_agents/fabrika/kanit/is-canli/KANIT.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.JsILW9XncQ/_agents/fabrika/kanit/is-canli/KANIT.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.ApgHMvD6Kb/_agents/fabrika/kanit/is-canli/KANIT.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.JsILW9XncQ/_agents/fabrika/kanit/is-canli/KANIT.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.ApgHMvD6Kb/_agents/fabrika/kanit/is-canli/KANIT.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.JsILW9XncQ/_agents/fabrika/kanit/is-canli/KANIT.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.ApgHMvD6Kb/_agents/fabrika/kanit/is-canli/KANIT.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.JsILW9XncQ/_agents/fabrika/kanit/is-canli/KANIT.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.ApgHMvD6Kb/_agents/fabrika/kanit/is-canli/KANIT.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.JsILW9XncQ/_agents/fabrika/kanit/is-canli/KANIT.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.ApgHMvD6Kb/_agents/fabrika/kanit/is-canli/KANIT.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.JsILW9XncQ/_agents/fabrika/kanit/is-canli/KANIT.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.ApgHMvD6Kb/_agents/fabrika/kanit/is-canli/KANIT.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.JsILW9XncQ/_agents/fabrika/kanit/is-canli/KANIT.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.ApgHMvD6Kb/_agents/fabrika/kanit/is-canli/KANIT.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.JsILW9XncQ/_agents/fabrika/kanit/is-canli/KANIT.json'
-sed: can't read /tmp/tmp.JsILW9XncQ/ssh-args.txt: No such file or directory
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.ApgHMvD6Kb/_agents/fabrika/kanit/is-canli/KANIT.json'
+sed: can't read /tmp/tmp.ApgHMvD6Kb/ssh-args.txt: No such file or directory
 Traceback (most recent call last):
   File "<stdin>", line 2, in <module>
 AssertionError: mutasyon deseni tutmadı: if not SAAT_RE.search(satir): continue

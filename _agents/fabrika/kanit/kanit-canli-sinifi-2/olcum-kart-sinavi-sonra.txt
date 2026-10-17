@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi-2/yazilim-fabrikasi/scripts/kart.test.sh
-# rc=0 sure=3.5s zaman=2026-10-17T14:19:20+03:00
+# rc=0 sure=3.2s zaman=2026-10-17T14:23:06+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -62,6 +62,8 @@ $ bash /config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi-2/yazilim-fabrik
   ✓ karta canli_kanit=var işlendi
   ✓ canli-gerekir E/H okur
   ✓ alanı olmayan eski kart: cümleden E, 'eski kart' işaretli
+  ✓ alanı olmayan eski servis/sunucu kartı bitti'de de canlı kanıt uyarısı alır (kapıyla aynı yüzey)
+  ✓ 'ghost' içindeki host canlı saymaz (kelime başı sınırı; Türkçe ek serbest)
 
-── SONUÇ: 52 geçti · 0 kaldı ──
+── SONUÇ: 54 geçti · 0 kaldı ──
 --- stderr ---
