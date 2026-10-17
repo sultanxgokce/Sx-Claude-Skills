@@ -93,7 +93,7 @@ bash "$KT" ac is-canli-x --is x --istedi S --aldi B --geri-alinamaz h --para h -
 bash "$K" olcum is-cron olc --asama tek -- echo 1 >/dev/null 2>&1
 CIKTI="$(bash "$KT" bitti is-cron 2>&1)"; grep -q "CANLI KANIT YOK" <<<"$CIKTI"; g $? "canlı kanıtsız bitti uyarır"
 printf '%s çaldı\n' "$(date -u +%FT%TZ)" > "$T/zil.log"
-bash "$K" canli is-cron zil --kaynak "x" -- cat "$T/zil.log" >/dev/null 2>&1
+bash "$K" canli is-cron zil --desen çaldı --kaynak "x" -- cat "$T/zil.log" >/dev/null 2>&1
 CIKTI="$(bash "$KT" bitti is-cron 2>&1)"; ! grep -q "CANLI KANIT YOK" <<<"$CIKTI"; g $? "yeşil canlı kayıt varken uyarı yok"
 python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-cron.json'));assert k['canli_kanit']=='var'"; g $? "karta canli_kanit=var işlendi"
 # canli-gerekir: kapının okuduğu tek yüzey; eski kartta (alan yok) cümleden türetir

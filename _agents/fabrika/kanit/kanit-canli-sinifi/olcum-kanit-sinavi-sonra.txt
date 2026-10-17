@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi/yazilim-fabrikasi/scripts/kanit.test.sh
-# rc=0 sure=6.6s zaman=2026-10-17T12:38:45+03:00
+# rc=0 sure=9.0s zaman=2026-10-17T12:47:50+03:00
 --- stdout ---
 ════ T1 · ölçüm çifti: komutu araç koşar, kırpılmamış çıktı+rc ════
   ✓ önce ölçümü rc=0
@@ -99,6 +99,10 @@ $ bash /config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi/yazilim-fabrikas
   ✓ T18o2 ateşleme 1 sayıldı
   ✓ T18p --kaynak verilmeden kayıt yazılmaz
   ✓ T18q kaynaksız dosya oluşmadı
+  ✓ T18p2 --desen verilmeden kayıt yazılmaz
+  ✓ T18q2 desensiz dosya oluşmadı
+  ✓ T18f2 geleceğe tarihli ateşleme → SARI rc=3
+  ✓ T18f3 sebebi kayıtta
   ✓ T18r komut stdin'den beslenmez (arka planda asılı kalmaz)
   ✓ T18s stdin kapalı: read düştü, ikinci dosya okunmadı
   ✓ T18v komut bu kutuda yoksa traceback değil SARI rc=3 (kaynağa ulaşılamadı)
@@ -116,5 +120,5 @@ $ bash /config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi/yazilim-fabrikas
   ✓ T19c mutant (kopuk kaynak sarı değil) → T18j bu mutantta düşerdi
   ✓ T19d mutant (üreten komut reddi kaldırıldı) echo'yu yeşil sayıyor → T18x bu mutantta düşerdi
 
-── SONUÇ: 95 geçti · 0 kaldı ──
+── SONUÇ: 99 geçti · 0 kaldı ──
 --- stderr ---

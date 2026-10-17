@@ -110,6 +110,7 @@ for k in y:
     elif oz is None or oz<kz: neden=f"ölçüm kart açılışı ({kzs}) ÖNCESİNDE"
     elif son is None: neden="ateşleme saati çözülemedi (saat_iso yok; eski araçla alınmış olabilir)"
     elif son<kz: neden=f"son ateşleme {son.isoformat(timespec='seconds')} kart açılışı {kzs} ÖNCESİNDE — bu işin ateşlemesi değil"
+    elif son>oz+datetime.timedelta(minutes=5): neden=f"son ateşleme {son.isoformat(timespec='seconds')} ÖLÇÜMDEN SONRA ({oz.isoformat(timespec='seconds')}) — geleceğe tarihli, şüpheli"
     else: neden=None
     (bagli_l if bagli_mi(neden) else kopuk).append((k,neden))
 print("cy="+str(len(bagli_l))); print("cs="+str(len(s)))

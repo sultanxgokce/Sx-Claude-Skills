@@ -159,24 +159,36 @@ bash "$K" olcum is-f olc --asama tek -- echo 1 >/dev/null 2>&1; den is-f 1 5 E
 CIKTI="$(bash "$G" is-f 2>&1)"; RC=$?
 [ "$RC" -eq 1 ]; g $? "T11a 5+E + yeşil ölçüm ama canlı kanıt YOK → rc=1"
 grep -q "canlı kanıt YOK" <<<"$CIKTI" && grep -q "kanit.sh canli" <<<"$CIKTI"; g $? "T11b sebebi ve yolu yazılı"
-bash "$K" canli is-f zil --kaynak "x" -- cat "$LGK/yok.log" >/dev/null 2>&1
+bash "$K" canli is-f zil --desen muhakkik-zil --kaynak "x" -- cat "$LGK/yok.log" >/dev/null 2>&1
 CIKTI="$(bash "$G" is-f 2>&1)"; RC=$?
 [ "$RC" -eq 1 ]; g $? "T11c canlı SARI → rc=1 (sarı yeşil değildir)"
 grep -q "canlı kanıt SARI" <<<"$CIKTI"; g $? "T11d sarı sebebi yazılı"
 # eski/ilgisiz yeşil kayıt: ateşleme kart açılışından ÖNCE → bağlanamaz, saymaz
 printf '%s muhakkik-zil çaldı (eski)\n' "$(date -u -d '-2 days' +%FT%TZ)" > "$LGK/eski.log"
-bash "$K" canli is-f zil --kaynak "cloudtop-code · journalctl" -- cat "$LGK/eski.log" >/dev/null 2>&1
+bash "$K" canli is-f zil --desen muhakkik-zil --kaynak "cloudtop-code · journalctl" -- cat "$LGK/eski.log" >/dev/null 2>&1
 CIKTI="$(bash "$G" is-f 2>&1)"; RC=$?
 [ "$RC" -eq 1 ]; g $? "T11e2 yeşil ama ateşleme kart açılışından ÖNCE → işe bağlanamaz, rc=1"
 grep -q "bağlanamadı" <<<"$CIKTI" && grep -q "kart açılışı" <<<"$CIKTI"; g $? "T11e3 sebebi yazılı: kayıt işe bağlanamadı (kart açılışından önce)"
 sleep 1; printf '%s muhakkik-zil çaldı\n' "$(date -u +%FT%TZ)" > "$LGK/zil.log"
-bash "$K" canli is-f zil --kaynak "cloudtop-code · journalctl" -- cat "$LGK/zil.log" >/dev/null 2>&1
+bash "$K" canli is-f zil --desen muhakkik-zil --kaynak "cloudtop-code · journalctl" -- cat "$LGK/zil.log" >/dev/null 2>&1
 CIKTI="$(bash "$G" is-f 2>&1)"; RC=$?
 [ "$RC" -eq 0 ]; g $? "T11e canlı YEŞİL ve kart açılışından sonra → rc=0"
 grep -q "canlı: 1 ateşleme kaydı" <<<"$CIKTI" && grep -q "komut:" <<<"$CIKTI" && grep -q "cat " <<<"$CIKTI"; g $? "T11f kapı ilk ateşlemeyi saatiyle ve okuyan komutla basıyor (göz görsün)"
+# 🔴 göz tur 2: geleceğe tarihli ateşleme araçta sarıdır; manifest araç dışında kurgulansa bile kapı ÖLÇÜMDEN SONRAKİ ateşlemeyi reddeder (çift çit)
+python3 - <<PY
+import json,sys,datetime;sys.path.insert(0,'$HERE');import kanit
+p='$T/_agents/fabrika/kanit/is-f/KANIT.json';m=json.load(open(p))
+k=[x for x in m['kayitlar'] if x['etiket']=='zil'][-1];k['son_atesleme']['saat_iso']=(datetime.datetime.now().astimezone()+datetime.timedelta(hours=2)).isoformat(timespec='seconds')
+m['imza']=kanit.imza(m['kayitlar']);json.dump(m,open(p,'w'))
+PY
+CIKTI="$(bash "$G" is-f 2>&1)"; RC=$?
+[ "$RC" -eq 1 ]; g $? "T11o son ateşleme ölçümden 2 saat sonra (geleceğe tarihli) → bağlanmaz, rc=1"
+grep -q "ÖLÇÜMDEN SONRA" <<<"$CIKTI"; g $? "T11o2 sebebi yazılı"
+bash "$K" canli is-f zil --desen muhakkik-zil --kaynak "cloudtop-code · journalctl" -- cat "$LGK/zil.log" >/dev/null 2>&1
+bash "$G" is-f --sessiz >/dev/null 2>&1; g $? "T11o3 araçla yeniden ölçülünce (gerçek saat) yine geçer"
 kart is-g; bash "$K" olcum is-g olc --asama tek -- echo 1 >/dev/null 2>&1; den is-g 1 5 E
 bash "$G" is-g --sessiz >/dev/null 2>&1; g $? "T11g canlısız kart (buton) canlı kaydı olmadan geçer (kapsam daralmadı)"
-bash "$K" canli is-g c --kaynak x -- cat "$LGK/yok.log" >/dev/null 2>&1
+bash "$K" canli is-g c --desen x --kaynak x -- cat "$LGK/yok.log" >/dev/null 2>&1
 bash "$G" is-g --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T11h ölçülmüş ama SARI canlı → canlısız kartta da rc=1"
 # eski kart (canli_gerekir alanı yok) → alan yokken kelimeden türetilir: eski cron kartı da canlı ister (kapsam dışı kalmaz)
 bash "$KT" ac is-h --is "kutu kapısı servisini 15 sunucuda yenile" --istedi S --aldi M --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
@@ -188,7 +200,7 @@ CIKTI="$(bash "$G" is-h 2>&1)"; RC=$?
 [ "$RC" -eq 1 ]; g $? "T11i alanı olmayan ESKİ servis/sunucu kartı: cümleden türetilir, canlı yok → rc=1"
 grep -q "cümlede" <<<"$CIKTI"; g $? "T11j kapı canlı şartının nereden geldiğini söylüyor"
 sleep 1; printf '%s kapi 2.14.0 ayağa kalktı\n' "$(date -u +%FT%TZ)" > "$LGK/kapi.log"
-bash "$K" canli is-h kapi --kaynak "x" -- cat "$LGK/kapi.log" >/dev/null 2>&1
+bash "$K" canli is-h kapi --desen kapi --kaynak "x" -- cat "$LGK/kapi.log" >/dev/null 2>&1
 bash "$G" is-h --sessiz >/dev/null 2>&1; g $? "T11k eski kart + bağlı yeşil canlı → geçer"
 # sahip kararı: canli-ayarla h (gerekçeli) → kapı canlı istemez; karar kartta görünür
 bash "$KT" ac is-j --is "servis belgesini düzelt" --istedi S --aldi M --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
@@ -212,9 +224,19 @@ bash "$M4" is-g --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T12e mutant 4: sar
 bash "$G" is-g --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T12f gerçek kapı sarıyı hâlâ tutuyor"
 M5="$PKG/mutant5.sh"; sed 's/^def bagli_mi(neden): .*$/def bagli_mi(neden): return True/' "$G" > "$M5"; chmod +x "$M5"
 grep -q '^def bagli_mi(neden): return True' "$M5"; g $? "T12g mutant 5 üretildi (işe bağlama kaldırıldı)"
-bash "$K" canli is-i eski --kaynak x -- cat "$LGK/eski.log" >/dev/null 2>&1
+bash "$K" canli is-i eski --desen muhakkik-zil --kaynak x -- cat "$LGK/eski.log" >/dev/null 2>&1
 bash "$M5" is-i --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T12h mutant 5: kart açılışından önceki yeşil kayıt GEÇİYOR → T11e2 bu mutantta düşerdi"
 bash "$G" is-i --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T12i gerçek kapı eski kaydı bağlamıyor, rc=1"
+M6="$PKG/mutant6.sh"; sed 's/datetime.timedelta(minutes=5)/datetime.timedelta(days=36500)/' "$G" > "$M6"; chmod +x "$M6"
+grep -q 'days=36500' "$M6"; g $? "T12j mutant 6 üretildi (gelecek payı 100 yıl)"
+python3 - <<PY
+import json,sys,datetime;sys.path.insert(0,'$HERE');import kanit
+p='$T/_agents/fabrika/kanit/is-i/KANIT.json';m=json.load(open(p))
+k=[x for x in m['kayitlar'] if x['etiket']=='eski'][-1];k['son_atesleme']['saat_iso']=(datetime.datetime.now().astimezone()+datetime.timedelta(hours=2)).isoformat(timespec='seconds')
+m['imza']=kanit.imza(m['kayitlar']);json.dump(m,open(p,'w'))
+PY
+bash "$M6" is-i --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T12k mutant 6: geleceğe tarihli kayıt GEÇİYOR → T11o bu mutantta düşerdi"
+bash "$G" is-i --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T12l gerçek kapı geleceğe tarihli kaydı reddediyor"
 
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

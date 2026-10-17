@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi/yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh
-# rc=0 sure=11.0s zaman=2026-10-17T12:38:58+03:00
+# rc=0 sure=12.1s zaman=2026-10-17T12:48:05+03:00
 --- stdout ---
 ════ T1 · hiçbir şey yok → engeller ════
   ✓ kart+kanıt+denetim yokken rc=1
@@ -63,6 +63,9 @@ $ bash /config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi/yazilim-fabrikas
   ✓ T11e3 sebebi yazılı: kayıt işe bağlanamadı (kart açılışından önce)
   ✓ T11e canlı YEŞİL ve kart açılışından sonra → rc=0
   ✓ T11f kapı ilk ateşlemeyi saatiyle ve okuyan komutla basıyor (göz görsün)
+  ✓ T11o son ateşleme ölçümden 2 saat sonra (geleceğe tarihli) → bağlanmaz, rc=1
+  ✓ T11o2 sebebi yazılı
+  ✓ T11o3 araçla yeniden ölçülünce (gerçek saat) yine geçer
   ✓ T11g canlısız kart (buton) canlı kaydı olmadan geçer (kapsam daralmadı)
   ✓ T11h ölçülmüş ama SARI canlı → canlısız kartta da rc=1
   ✓ T11i alanı olmayan ESKİ servis/sunucu kartı: cümleden türetilir, canlı yok → rc=1
@@ -81,6 +84,9 @@ $ bash /config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi/yazilim-fabrikas
   ✓ T12g mutant 5 üretildi (işe bağlama kaldırıldı)
   ✓ T12h mutant 5: kart açılışından önceki yeşil kayıt GEÇİYOR → T11e2 bu mutantta düşerdi
   ✓ T12i gerçek kapı eski kaydı bağlamıyor, rc=1
+  ✓ T12j mutant 6 üretildi (gelecek payı 100 yıl)
+  ✓ T12k mutant 6: geleceğe tarihli kayıt GEÇİYOR → T11o bu mutantta düşerdi
+  ✓ T12l gerçek kapı geleceğe tarihli kaydı reddediyor
 
-── SONUÇ: 62 geçti · 0 kaldı ──
+── SONUÇ: 68 geçti · 0 kaldı ──
 --- stderr ---

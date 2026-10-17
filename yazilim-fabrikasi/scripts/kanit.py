@@ -11,7 +11,7 @@ Kullanım:
   kanit.py olcum  <iş> <etiket> --asama once|sonra -- <komut...>     komutu koşar, kırpılmamış çıktı+rc kaydeder
   kanit.py ekran  <iş> <etiket> --asama once|sonra --url U [--urun-imi CSS] [--bekle CSS] [--genislik N]
   kanit.py dosya  <iş> <etiket> <yol> [--asama ...]                    var olan dosyayı (video, rapor) sha ile ekler
-  kanit.py canli  <iş> <etiket> --kaynak "<kutu · log yeri>" [--desen RE] [--en-az N] -- <log komutu...>
+  kanit.py canli  <iş> <etiket> --kaynak "<kutu · log yeri>" --desen <servis/olay RE> [--en-az N] -- <log komutu...>
                   CANLI sınıfı: gerçek ateşleme kaydı (saat damgalı log satırı); yoksa SARI rc=3 — kapı geçirmez.
                   Log ÜRETEN komut (echo/printf/heredoc) reddedilir (rc=1): kayıt üretilmez, okunur.
   kanit.py dogrula <iş>                                                imza + dosya sha'ları (0 sağlam · 1 bozuk · 3 yok)
@@ -332,8 +332,12 @@ def cmd_canli(a):
         hata("log komutu gerekiyor: -- <komut...> (journalctl · grep /var/log · ssh <sunucu> tail …)")
     if not (a.kaynak or "").strip():
         hata("--kaynak gerekiyor: kaydın NEREDEN okunduğu (kutu/sunucu · log yeri) — kaynaksız ateşleme kaydı kanıt değildir")
+    # 🔴 GÖZ TUR 2 (PR #352): "--desen isteğe bağlı → log çıktısındaki HERHANGİ saatli satır ateşleme sayılıyor, ilgili servise
+    #    bağlanmıyor" — doğru. Desen ZORUNLU: ateşleme, kartın işine ait servis/olay adıyla eşleşen satırdır; genel saat yetmez.
+    if not (a.desen or "").strip():
+        hata("--desen gerekiyor: ateşleme hangi servis/olay satırı? (ör. --desen muhakkik-zil) — desensiz saatli satır ateşleme değildir")
     try:
-        desen = re.compile(a.desen) if a.desen else None
+        desen = re.compile(a.desen)
     except re.error as e:
         hata(f"--desen geçersiz: {e}")
     if a.en_az < 1:
@@ -355,20 +359,31 @@ def cmd_canli(a):
     for satir in p.stdout.splitlines():
         m = SAAT_RE.search(satir)
         if not SAAT_RE.search(satir): continue
-        if desen and not desen.search(satir): continue
+        if not desen.search(satir): continue
         ates.append((satir, m.group(0) if m else ""))
     with open(yol, "w", encoding="utf-8") as f:
         f.write(f"$ {' '.join(a.komut)}\n# kaynak={a.kaynak.strip()} desen={a.desen or '-'} en_az={a.en_az} "
                 f"atesleme={len(ates)} rc={p.returncode} sure={sure:.1f}s zaman={simdi()}\n--- stdout ---\n{p.stdout}--- stderr ---\n{p.stderr}")
     def _kayit(x): return {"satir": x[0].strip()[:500], "saat": x[1], "saat_iso": saat_coz(x[1])}
     ilk = _kayit(ates[0]) if ates else None; son = _kayit(ates[-1]) if ates else None
+    # 🔴 GÖZ TUR 2: geleceğe tarihli log satırı "işe bağlı yeşil" sayılabilirdi. Son ateşleme ölçüm anından 5 dk'dan ileriyse
+    #    saat çözümü ya da log şüphelidir → SARI (kapı da ayrıca reddeder: çift çit).
+    gelecek = None
+    if son and son.get("saat_iso"):
+        try:
+            _s = datetime.datetime.fromisoformat(son["saat_iso"]); _n = datetime.datetime.now().astimezone()
+            if _s > _n + datetime.timedelta(minutes=5): gelecek = son["saat_iso"]
+        except Exception:
+            pass
     notu = None
     if p.returncode != 0:
         notu = f"log kaynağına ulaşılamadı (rc={p.returncode}) — ateşleme ölçülemedi"
+    elif gelecek:
+        notu = f"son ateşleme saati GELECEKTE ({gelecek}) — saat çözümü ya da log şüpheli; ateşleme sayılmaz"
     elif len(ates) < a.en_az:
         notu = (f"ateşleme kaydı {'YOK' if not ates else f'{len(ates)} < {a.en_az}'} — yazılmış ≠ çalışıyor; "
                 f"saat damgalı log satırı bekleniyordu" + (f" (desen: {a.desen})" if a.desen else ""))
-    renk = "sari" if (p.returncode != 0 or len(ates) < a.en_az) else "yesil"
+    renk = "sari" if (p.returncode != 0 or len(ates) < a.en_az or gelecek) else "yesil"
     kayit = {"tur": "canli", "etiket": a.etiket, "asama": "canli", "dosya": ad, "sha256": sha_dosya(yol),
              "komut": a.komut, "rc": p.returncode, "renk": renk, "kaynak": a.kaynak.strip(), "desen": a.desen or None,
              "en_az": a.en_az, "atesleme_sayisi": len(ates), "ilk_atesleme": ilk, "son_atesleme": son, "zaman": simdi(), "sure_sn": round(sure, 1)}
@@ -439,7 +454,7 @@ def main():
     o = s.add_parser("olcum"); o.add_argument("is_adi"); o.add_argument("etiket"); o.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); o.set_defaults(f=cmd_olcum)
     e = s.add_parser("ekran"); e.add_argument("is_adi"); e.add_argument("etiket"); e.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); e.add_argument("--url", required=True); e.add_argument("--urun-imi"); e.add_argument("--bekle"); e.add_argument("--genislik", type=int, default=1280); e.set_defaults(f=cmd_ekran)
     d = s.add_parser("dosya"); d.add_argument("is_adi"); d.add_argument("etiket"); d.add_argument("yol"); d.add_argument("--asama", default="tek"); d.set_defaults(f=cmd_dosya)
-    c = s.add_parser("canli"); c.add_argument("is_adi"); c.add_argument("etiket"); c.add_argument("--kaynak", required=True); c.add_argument("--desen"); c.add_argument("--en-az", dest="en_az", type=int, default=1); c.set_defaults(f=cmd_canli)
+    c = s.add_parser("canli"); c.add_argument("is_adi"); c.add_argument("etiket"); c.add_argument("--kaynak", required=True); c.add_argument("--desen", required=True); c.add_argument("--en-az", dest="en_az", type=int, default=1); c.set_defaults(f=cmd_canli)
     for ad, f in (("dogrula", cmd_dogrula), ("ozet", cmd_ozet), ("liste", cmd_liste)):
         x = s.add_parser(ad); x.add_argument("is_adi"); x.set_defaults(f=f)
     # `--` sonrası KOMUTTUR: argparse'a hiç gösterilmez (REMAINDER, seçenekleri de yutuyordu).
