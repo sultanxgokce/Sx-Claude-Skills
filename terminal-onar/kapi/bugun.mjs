@@ -16,6 +16,8 @@ export const DURUM = { ' ': 'acik', '~': 'yarim', 'x': 'bitti', 'X': 'bitti', '-
 const MADDE = /^- \[([ ~xX-])\]\s*((G?\d+)\))?\s*(.*)$/;
 const GOREV = /gorev_[A-Za-z0-9]{10,40}/g;
 const DOSYA = /^gunluk-plan-cipa\.(.+)\.md$/;
+const SAHIP = /\s*\(sahip:\s*([^)]+)\)/;
+const D1 = /\d{4}-\d{2}-\d{2} Sultan: .+\(sohbet · [^·()]+ · "[^"]{1,120}" · beyan:\S+\)/;
 
 export function cipaAyristir(metin) {
   const satirlar = String(metin || '').split('\n');
@@ -29,11 +31,19 @@ export function cipaAyristir(metin) {
     // kuyruk: "→ KAPANDI · not" | "→ YARIM · not" | "→ GERİ ALINDI" — sonuç + not ayrılır, metin temiz kalır
     const k = govde.match(/^(.*?)\s*→\s*([A-ZĞÜŞİÖÇ][A-ZĞÜŞİÖÇ ]{2,})(?:\s*·\s*(.*))?$/);
     const etiket = m[3] || '';
+    // Sx gunluk-plan/sema/bugun-maddesi.md (1.5.0): sahip metinden, kanıt nottan ayrılır; "-"+ERTELENDİ geçerli D1'le "ertelendi", D1'siz "acik"
+    const bas = (k ? k[1] : govde);
+    const sh = bas.match(SAHIP);
+    const parca = k && k[3] ? k[3].split(' · ').map((x) => x.trim()) : [];
+    const kanit = parca.filter((x) => x.startsWith('kanıt:')).map((x) => x.slice(6).trim()).join(' · ');
+    const not = parca.filter((x) => !x.startsWith('kanıt:')).join(' · ');
+    const sonuc = k ? k[2].trim() : '';
+    let durum = DURUM[m[1]] || 'acik';
+    if (m[1] === '-' && sonuc === 'ERTELENDİ') durum = D1.test(not) ? 'ertelendi' : 'acik';
     maddeler.push({
       etiket, tur: etiket.startsWith('G') ? 'gun-ortasi' : (etiket ? 'sabah' : 'serbest'),
-      durum: DURUM[m[1]] || 'acik',
-      metin: (k ? k[1] : govde).trim(),
-      sonuc: k ? k[2].trim() : '', not: k && k[3] ? k[3].trim() : '',
+      durum, metin: bas.replace(SAHIP, '').trim(), sahip: sh ? sh[1].trim() : '',
+      sonuc, kanit, not,
       gorevler: Array.from(new Set((govde.match(GOREV) || []))),
     });
   }
@@ -42,7 +52,7 @@ export function cipaAyristir(metin) {
 }
 
 export function sayilar(maddeler) {
-  const s = { acik: 0, yarim: 0, bitti: 0, geri: 0, toplam: maddeler.length };
+  const s = { acik: 0, yarim: 0, bitti: 0, geri: 0, ertelendi: 0, toplam: maddeler.length };
   for (const m of maddeler) s[m.durum] = (s[m.durum] || 0) + 1;
   return s;
 }
