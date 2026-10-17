@@ -14,6 +14,36 @@
   "sultan": false,
   "kanit_nerede": "_agents/fabrika/kanit/hafta-kapanis (sınav önce/sonra + mutasyon + canlı 2026-W42 ölçümü)",
   "oda": "",
-  "durum": "acik",
-  "gecmis": []
+  "durum": "tikandi",
+  "gecmis": [
+    {
+      "zaman": "2026-10-17T16:29:19+03:00",
+      "olay": "tikandi"
+    },
+    {
+      "zaman": "2026-10-17T16:32:02+03:00",
+      "olay": "tikandi"
+    }
+  ],
+  "bitis": "2026-10-17T16:32:02+03:00",
+  "pr": "",
+  "puan": {
+    "kod": 4,
+    "dogru": "E",
+    "tur": 3
+  },
+  "kanit_var": true,
+  "tikanma": {
+    "yol": "devam",
+    "neden": "3 turda 5/E yok ama ilerliyor: 3/H (3 bulgu) → 4/H (2) → 4/E (1); son bulgu D1 kırpık ≤15 kelime, düzeltme+sınav+mutant push'landı (6248ce1). 4. ve mutlak son tur reis 'devam' ister. ⊗ Mac kurulumu bu kutudan ölçülemez."
+  },
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "BANI",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+      "gerekce": "SERDAR 17:0x NOTES: üç turda bulgu 3→2→1 ve H→E, kalan tek bulgu D1 kelime sayımı düzeltildi 6248ce1; ilerleyen iş +1 — kart sahibi BÂNİ SERDAR kararını işler",
+      "zaman": "2026-10-17T16:58:20+03:00"
+    }
+  ]
 }
