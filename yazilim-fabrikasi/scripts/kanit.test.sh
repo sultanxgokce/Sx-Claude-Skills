@@ -262,7 +262,8 @@ grep -q "GELECEKTE" <<<"$(_c gelecek not)" && [ "$(_c gelecek renk)" = '"sari"' 
 bash "$K" canli is-canli son1 --desen muhakkik-zil --son 1 --kaynak "dosya:$LG/zil.log" >/dev/null 2>&1; g $? "T18s --son 1 ile yalnız son satır okunur → rc=0"
 [ "$(_c son1 atesleme_sayisi)" = "1" ] && [ "$(_c son1 komut | python3 -c 'import json,sys;k=json.load(sys.stdin);print(k[k.index("-n")+1])')" = "1" ]; g $? "T18s2 ateşleme 1, komutta -n 1"
 bash "$K" canli is-canli yok-komut --desen x --kaynak "journal:yok-birim" >/dev/null 2>&1; RC=$?; [ "$RC" -eq 3 ]; g $? "T18v journal kaynağı: journalctl yoksa ya da birim yoksa traceback değil SARI rc=3"
-grep -q "ulaşılamadı" <<<"$(_c yok-komut not)" && [ "$(_c yok-komut komut | python3 -c 'import json,sys;print(json.load(sys.stdin)[0])')" = "journalctl" ]; g $? "T18w sebep kayıtta, komut journalctl sabit argv"
+# iki ortam meşru: journalctl yok/erişilemez → "ulaşılamadı" (konteyner) · journalctl var, birim yok → rc 0, "ateşleme kaydı YOK" (CI runner); ikisi de SARI
+grep -qE "ulaşılamadı|ateşleme kaydı YOK" <<<"$(_c yok-komut not)" && [ "$(_c yok-komut renk)" = '"sari"' ] && [ "$(_c yok-komut komut | python3 -c 'import json,sys;print(json.load(sys.stdin)[0])')" = "journalctl" ]; g $? "T18w sebep kayıtta (ulaşılamadı | ateşleme YOK), renk sarı, komut journalctl sabit argv"
 # 🔴 göz tur 1-3: ateşleme kaydı ÜRETİLMEZ, OKUNUR — serbest komut yolu YOK, kaynak türü dışı red
 bash "$K" canli is-canli sahte1 --desen sahte --kaynak "komut:echo $ISO1 sahte" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T18x tanınmayan kaynak türü (komut:) reddedilir, rc=1"
 [ ! -f "$CZ/canli-sahte1.txt" ] && [ "$(python3 -c "import json;print(sum(1 for x in json.load(open('$CZ/KANIT.json'))['kayitlar'] if x['etiket']=='sahte1'))")" = "0" ]; g $? "T18x2 manifeste de yazılmadı"
