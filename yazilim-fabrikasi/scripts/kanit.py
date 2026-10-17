@@ -12,7 +12,8 @@ Kullanım:
   kanit.py ekran  <iş> <etiket> --asama once|sonra --url U [--urun-imi CSS] [--bekle CSS] [--genislik N]
   kanit.py dosya  <iş> <etiket> <yol> [--asama ...]                    var olan dosyayı (video, rapor) sha ile ekler
   kanit.py canli  <iş> <etiket> --kaynak "<kutu · log yeri>" [--desen RE] [--en-az N] -- <log komutu...>
-                  CANLI sınıfı: gerçek ateşleme kaydı (saat damgalı log satırı); yoksa SARI rc=3 — kapı geçirmez
+                  CANLI sınıfı: gerçek ateşleme kaydı (saat damgalı log satırı); yoksa SARI rc=3 — kapı geçirmez.
+                  Log ÜRETEN komut (echo/printf/heredoc) reddedilir (rc=1): kayıt üretilmez, okunur.
   kanit.py dogrula <iş>                                                imza + dosya sha'ları (0 sağlam · 1 bozuk · 3 yok)
   kanit.py ozet   <iş>                                                 PR gövdesi için tablo (markdown)
   kanit.py liste  <iş>
@@ -278,6 +279,54 @@ SAAT_RE = re.compile(
 )
 
 
+# 🔴 GÖZ TUR 1 (PR #352): "saatli bir echo ile yeşil kayıt ve açık kapı elde edilebilir" — doğru. Ateşleme kaydı ÜRETİLMEZ,
+#    OKUNUR: komutun kendisi (echo · printf · yes · seq) ya da kabuk dizgesi içinde echo/printf/heredoc varsa araç reddeder
+#    (rc=1, kayıt yazılmaz). Bu bir kilit değil çit: kararlı sahteciyi değil kestirmeyi durdurur; komut manifestte ve kapı
+#    çıktısında olduğu gibi görünür, bağımsız göz onu okur (olcum kayıtlarıyla aynı güven modeli).
+URETEN = {"echo", "printf", "yes", "seq", "true", "false"}
+URETEN_IC = re.compile(r"(^|[;&|(\s`])(echo|printf)(\s|$)|<<")
+
+
+def _uretilmis_mi(komut):
+    for i, t in enumerate(komut):
+        b = os.path.basename(t)
+        if i == 0 and b in URETEN:
+            return f"'{b}' log okuyan bir komut değil"
+        if URETEN_IC.search(t):
+            return "komut içinde echo/printf/heredoc var (log üretiliyor, okunmuyor)"
+    return None
+
+
+AYLAR = {"jan": 1, "feb": 2, "mar": 3, "apr": 4, "may": 5, "jun": 6, "jul": 7, "aug": 8, "sep": 9, "oct": 10, "nov": 11, "dec": 12,
+         "oca": 1, "şub": 2, "nis": 4, "haz": 6, "tem": 7, "ağu": 8, "eyl": 9, "eki": 10, "kas": 11, "ara": 12}
+
+
+def saat_coz(s):
+    """SAAT_RE eşleşmesini ISO 8601'e çevirir (kapı kart açılışıyla karşılaştırır). Çözülemezse None — yeşil sayılmaz."""
+    try:
+        d = None
+        if re.match(r"\d{4}-\d{2}-\d{2}[T ]", s):
+            t = s.replace(" ", "T", 1).replace(",", ".")
+            if t.endswith("Z"): t = t[:-1] + "+00:00"
+            t = re.sub(r"([+-]\d{2})(\d{2})$", r"\1:\2", t)
+            d = datetime.datetime.fromisoformat(t)
+        elif re.match(r"[A-Za-zŞşĞğ]{3}\s", s):
+            m = re.match(r"([A-Za-zŞşĞğ]{3})\s+(\d{1,2})\s+(\d{2}):(\d{2}):(\d{2})", s)
+            yil = datetime.datetime.now().year
+            d = datetime.datetime(yil, AYLAR[m.group(1).lower()], int(m.group(2)), int(m.group(3)), int(m.group(4)), int(m.group(5)))
+            if d > datetime.datetime.now() + datetime.timedelta(days=1): d = d.replace(year=yil - 1)   # yılsız syslog, yılbaşı dönüşü
+        elif re.match(r"\d{1,2}[./]\d{1,2}[./]\d{4}", s):
+            m = re.match(r"(\d{1,2})[./](\d{1,2})[./](\d{4})[ T,]+(\d{1,2}):(\d{2})(?::(\d{2}))?", s)
+            d = datetime.datetime(int(m.group(3)), int(m.group(2)), int(m.group(1)), int(m.group(4)), int(m.group(5)), int(m.group(6) or 0))
+        else:
+            m = re.match(r"(\d{2})/([A-Z][a-z]{2})/(\d{4}):(\d{2}):(\d{2}):(\d{2})", s)
+            d = datetime.datetime(int(m.group(3)), AYLAR[m.group(2).lower()], int(m.group(1)), int(m.group(4)), int(m.group(5)), int(m.group(6)))
+        if d.tzinfo is None: d = d.astimezone()   # saat dilimi yoksa kutunun yerel saati
+        return d.isoformat(timespec="seconds")
+    except Exception:
+        return None
+
+
 def cmd_canli(a):
     if not a.komut:
         hata("log komutu gerekiyor: -- <komut...> (journalctl · grep /var/log · ssh <sunucu> tail …)")
@@ -289,6 +338,9 @@ def cmd_canli(a):
         hata(f"--desen geçersiz: {e}")
     if a.en_az < 1:
         hata("--en-az en az 1 olmalı (0 ateşleme kanıt değildir)")
+    sebep = _uretilmis_mi(a.komut)
+    if sebep:
+        hata(f"ateşleme kaydı ÜRETİLMEZ, OKUNUR: {sebep} — journalctl · tail · grep · ssh gibi logu OKUYAN komut ver", 1)
     depo = depo_kok(a.depo); dz = kanit_dizin(depo, a.is_adi); os.makedirs(dz, exist_ok=True)
     ad = f"canli-{a.etiket}.txt"; yol = os.path.join(dz, ad)
     t0 = datetime.datetime.now()
@@ -308,7 +360,8 @@ def cmd_canli(a):
     with open(yol, "w", encoding="utf-8") as f:
         f.write(f"$ {' '.join(a.komut)}\n# kaynak={a.kaynak.strip()} desen={a.desen or '-'} en_az={a.en_az} "
                 f"atesleme={len(ates)} rc={p.returncode} sure={sure:.1f}s zaman={simdi()}\n--- stdout ---\n{p.stdout}--- stderr ---\n{p.stderr}")
-    ilk = {"satir": ates[0][0].strip()[:500], "saat": ates[0][1]} if ates else None
+    def _kayit(x): return {"satir": x[0].strip()[:500], "saat": x[1], "saat_iso": saat_coz(x[1])}
+    ilk = _kayit(ates[0]) if ates else None; son = _kayit(ates[-1]) if ates else None
     notu = None
     if p.returncode != 0:
         notu = f"log kaynağına ulaşılamadı (rc={p.returncode}) — ateşleme ölçülemedi"
@@ -318,7 +371,7 @@ def cmd_canli(a):
     renk = "sari" if (p.returncode != 0 or len(ates) < a.en_az) else "yesil"
     kayit = {"tur": "canli", "etiket": a.etiket, "asama": "canli", "dosya": ad, "sha256": sha_dosya(yol),
              "komut": a.komut, "rc": p.returncode, "renk": renk, "kaynak": a.kaynak.strip(), "desen": a.desen or None,
-             "en_az": a.en_az, "atesleme_sayisi": len(ates), "ilk_atesleme": ilk, "zaman": simdi(), "sure_sn": round(sure, 1)}
+             "en_az": a.en_az, "atesleme_sayisi": len(ates), "ilk_atesleme": ilk, "son_atesleme": son, "zaman": simdi(), "sure_sn": round(sure, 1)}
     if notu: kayit["not"] = notu
     kayit_ekle(depo, a.is_adi, kayit)
     if renk == "yesil":

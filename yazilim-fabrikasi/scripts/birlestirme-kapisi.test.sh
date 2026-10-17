@@ -148,26 +148,35 @@ CIKTI="$(bash "$M2" is-a 2>&1)"; RC=$?
 grep -q "ÖLÇÜLEMEDİ" <<<"$CIKTI"; g $? "sebebi yazılı"
 bash "$G" is-a --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "gerçek kapı aynı işte hâlâ rc=0 (mutasyon kaynağı bozdu, düzeneği değil)"
 
-echo "════ T11 · CANLI sınıfı: cron/servis/sunucu kartı canlı kanıt olmadan GEÇMEZ; sarı canlı hiç geçmez ════"
-# Retro 17 Eki ders 1: "git'te düzeltildi ≠ canlıda çalışıyor" — 119 işte en büyük bulgu kümesi. Kart cron/servis/sunucu
-# içeriyorsa kapı yeşil ölçüm + 5/E ile YETİNMEZ: gerçek ateşleme kaydı (kanit.sh canli, yeşil) ister. Sarı canlı = ölçülmüş
-# ama ateşleme yok → kart ne derse desin geçmez (sarı yeşil değildir).
+echo "════ T11 · CANLI sınıfı: cron/servis/sunucu kartı canlı kanıt olmadan GEÇMEZ; sarı canlı hiç geçmez; kayıt KARTA BAĞLI olmalı ════"
+# Retro 17 Eki ders 1: "git'te düzeltildi ≠ canlıda çalışıyor". Kart cron/servis/sunucu içeriyorsa kapı yeşil ölçüm + 5/E ile
+# YETİNMEZ: gerçek ateşleme kaydı (kanit.sh canli, yeşil) ister. Sarı canlı = ölçülmüş ama ateşleme yok → kart ne derse desin geçmez.
+# Göz tur 1: "herhangi bir yeşil canlı" yetmez — kayıt bu işe BAĞLI olmalı: ölçüm de son ateşleme de kart açılışından SONRA.
+LGK="$T/logk"; mkdir -p "$LGK"
+printf 'henüz log yok\n' > "$LGK/yok.log"
 bash "$KT" ac is-f --is "muhakkik-zil cron'u her saat çalsın" --istedi S --aldi M --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
 bash "$K" olcum is-f olc --asama tek -- echo 1 >/dev/null 2>&1; den is-f 1 5 E
 CIKTI="$(bash "$G" is-f 2>&1)"; RC=$?
 [ "$RC" -eq 1 ]; g $? "T11a 5+E + yeşil ölçüm ama canlı kanıt YOK → rc=1"
 grep -q "canlı kanıt YOK" <<<"$CIKTI" && grep -q "kanit.sh canli" <<<"$CIKTI"; g $? "T11b sebebi ve yolu yazılı"
-bash "$K" canli is-f zil --kaynak "x" -- bash -c 'echo "henüz log yok"' >/dev/null 2>&1
+bash "$K" canli is-f zil --kaynak "x" -- cat "$LGK/yok.log" >/dev/null 2>&1
 CIKTI="$(bash "$G" is-f 2>&1)"; RC=$?
 [ "$RC" -eq 1 ]; g $? "T11c canlı SARI → rc=1 (sarı yeşil değildir)"
 grep -q "canlı kanıt SARI" <<<"$CIKTI"; g $? "T11d sarı sebebi yazılı"
-bash "$K" canli is-f zil --kaynak "cloudtop-code · journalctl" -- bash -c 'echo "2026-10-17T07:02:35 muhakkik-zil çaldı"' >/dev/null 2>&1
+# eski/ilgisiz yeşil kayıt: ateşleme kart açılışından ÖNCE → bağlanamaz, saymaz
+printf '%s muhakkik-zil çaldı (eski)\n' "$(date -u -d '-2 days' +%FT%TZ)" > "$LGK/eski.log"
+bash "$K" canli is-f zil --kaynak "cloudtop-code · journalctl" -- cat "$LGK/eski.log" >/dev/null 2>&1
 CIKTI="$(bash "$G" is-f 2>&1)"; RC=$?
-[ "$RC" -eq 0 ]; g $? "T11e canlı YEŞİL → rc=0"
-grep -q "canlı: 1 ateşleme" <<<"$CIKTI" && grep -q "07:02:35" <<<"$CIKTI"; g $? "T11f kapı ilk ateşlemeyi saatiyle söylüyor"
+[ "$RC" -eq 1 ]; g $? "T11e2 yeşil ama ateşleme kart açılışından ÖNCE → işe bağlanamaz, rc=1"
+grep -q "bağlanamadı" <<<"$CIKTI" && grep -q "kart açılışı" <<<"$CIKTI"; g $? "T11e3 sebebi yazılı: kayıt işe bağlanamadı (kart açılışından önce)"
+sleep 1; printf '%s muhakkik-zil çaldı\n' "$(date -u +%FT%TZ)" > "$LGK/zil.log"
+bash "$K" canli is-f zil --kaynak "cloudtop-code · journalctl" -- cat "$LGK/zil.log" >/dev/null 2>&1
+CIKTI="$(bash "$G" is-f 2>&1)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "T11e canlı YEŞİL ve kart açılışından sonra → rc=0"
+grep -q "canlı: 1 ateşleme kaydı" <<<"$CIKTI" && grep -q "komut:" <<<"$CIKTI" && grep -q "cat " <<<"$CIKTI"; g $? "T11f kapı ilk ateşlemeyi saatiyle ve okuyan komutla basıyor (göz görsün)"
 kart is-g; bash "$K" olcum is-g olc --asama tek -- echo 1 >/dev/null 2>&1; den is-g 1 5 E
 bash "$G" is-g --sessiz >/dev/null 2>&1; g $? "T11g canlısız kart (buton) canlı kaydı olmadan geçer (kapsam daralmadı)"
-bash "$K" canli is-g c --kaynak x -- true >/dev/null 2>&1
+bash "$K" canli is-g c --kaynak x -- cat "$LGK/yok.log" >/dev/null 2>&1
 bash "$G" is-g --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T11h ölçülmüş ama SARI canlı → canlısız kartta da rc=1"
 # eski kart (canli_gerekir alanı yok) → alan yokken kelimeden türetilir: eski cron kartı da canlı ister (kapsam dışı kalmaz)
 bash "$KT" ac is-h --is "kutu kapısı servisini 15 sunucuda yenile" --istedi S --aldi M --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
@@ -178,8 +187,17 @@ bash "$K" olcum is-h olc --asama tek -- echo 1 >/dev/null 2>&1; den is-h 1 5 E
 CIKTI="$(bash "$G" is-h 2>&1)"; RC=$?
 [ "$RC" -eq 1 ]; g $? "T11i alanı olmayan ESKİ servis/sunucu kartı: cümleden türetilir, canlı yok → rc=1"
 grep -q "cümlede" <<<"$CIKTI"; g $? "T11j kapı canlı şartının nereden geldiğini söylüyor"
-bash "$K" canli is-h kapi --kaynak "x" -- bash -c 'echo "2026-10-17 07:02:35 kapi 2.14.0 ayağa kalktı"' >/dev/null 2>&1
-bash "$G" is-h --sessiz >/dev/null 2>&1; g $? "T11k eski kart + yeşil canlı → geçer"
+sleep 1; printf '%s kapi 2.14.0 ayağa kalktı\n' "$(date -u +%FT%TZ)" > "$LGK/kapi.log"
+bash "$K" canli is-h kapi --kaynak "x" -- cat "$LGK/kapi.log" >/dev/null 2>&1
+bash "$G" is-h --sessiz >/dev/null 2>&1; g $? "T11k eski kart + bağlı yeşil canlı → geçer"
+# sahip kararı: canli-ayarla h (gerekçeli) → kapı canlı istemez; karar kartta görünür
+bash "$KT" ac is-j --is "servis belgesini düzelt" --istedi S --aldi M --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+bash "$K" olcum is-j olc --asama tek -- echo 1 >/dev/null 2>&1; den is-j 1 5 E
+bash "$G" is-j --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T11l 'servis' kelimesi → canlı ister → rc=1"
+bash "$KT" canli-ayarla is-j --canli h --gerekce "belge işi; kutuya servis kurulmuyor, kelime yanlış pozitif" >/dev/null 2>&1
+CIKTI="$(bash "$G" is-j 2>&1)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "T11m sahip gerekçeyle canlı istemedi (karta yazılı) → geçer"
+grep -q "canlı kanıt istenmedi" <<<"$CIKTI" && grep -q "yanlış pozitif" <<<"$CIKTI"; g $? "T11n kapı kararı ve gerekçeyi basıyor (göz görsün)"
 
 echo "════ T12 · MUTASYON: canlı kontrolleri kaldırılınca kapı açılır (kapı gerçek, süs değil) ════"
 M3="$PKG/mutant3.sh"; sed 's/^\s*\[ "\$cg" = "E" \] && \[ "\$cy" -eq 0 \]/false/' "$G" > "$M3"; chmod +x "$M3"
@@ -192,6 +210,11 @@ M4="$PKG/mutant4.sh"; sed 's/^\s*\[ "\$cs" -gt 0 \]/false/' "$G" > "$M4"; chmod 
 grep -q '^false' "$M4"; g $? "T12d mutant 4 üretildi (sarı canlı engeli kaldırıldı)"
 bash "$M4" is-g --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T12e mutant 4: sarı canlı GEÇİYOR → T11h bu mutantta düşerdi"
 bash "$G" is-g --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T12f gerçek kapı sarıyı hâlâ tutuyor"
+M5="$PKG/mutant5.sh"; sed 's/^def bagli_mi(neden): .*$/def bagli_mi(neden): return True/' "$G" > "$M5"; chmod +x "$M5"
+grep -q '^def bagli_mi(neden): return True' "$M5"; g $? "T12g mutant 5 üretildi (işe bağlama kaldırıldı)"
+bash "$K" canli is-i eski --kaynak x -- cat "$LGK/eski.log" >/dev/null 2>&1
+bash "$M5" is-i --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T12h mutant 5: kart açılışından önceki yeşil kayıt GEÇİYOR → T11e2 bu mutantta düşerdi"
+bash "$G" is-i --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T12i gerçek kapı eski kaydı bağlamıyor, rc=1"
 
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

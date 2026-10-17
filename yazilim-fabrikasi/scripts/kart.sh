@@ -17,6 +17,7 @@
 #          Sultan'ın SÖZLÜ kararını KARTA işler (D1 deseni). Üç parça zorunlu: oturum-ref · kırpık · beyan.
 #          🔴 A06: onay ÜRETMEZ, alınan onayı AKTARIR. Ref'siz beyan sayılmaz; uyduran kartta yakalanır.
 #   kart.sh goster <iş> · kart.sh liste [--acik] · kart.sh canli-gerekir <iş>  → "E|H<TAB>sebep" (eski kartta cümleden türetir)
+#   kart.sh canli-ayarla <iş> --canli e|h --gerekce "≥20 karakter"   açık kartta sahip kararı: karta + geçmişe yazılır (gizli değil)
 # Ortam: FABRIKA_TETIK (oda-tetik.sh yolu; --oda verilirse tetik atılır, düşerse iş düşmez) · KANIT_DEPO
 # rc: 0 · 1 kullanım/eksik cevap · 3 ölçülemedi
 set -uo pipefail
@@ -199,6 +200,23 @@ k.setdefault("reis_kararlari",[]).append({
   "zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds")})
 json.dump(k,open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
 print(f"\u2713 reis karari karta islendi: {karar} \u00b7 reis {reis} \u00b7 oturum {oturum} (sinifsiz is)")
+PY
+    ;;
+  canli-ayarla)
+    # Açık kartta sahip kararı: bu özellikten ÖNCE açılmış kart ya da kelime yanlış pozitifi ("cron belgesini düzelt"). Gerekçesiz
+    # olmaz; karta canli_sebep + geçmiş satırı yazılır → kapı ve bağımsız göz kararı gerekçesiyle görür.
+    [ -n "$IS" ] && [ -f "$KD/$IS.json" ] || { _hata "kart yok: $IS"; exit 3; }
+    case "$CANLI" in e|h) ;; *) _hata "--canli e|h gerekiyor"; exit 1 ;; esac
+    [ -n "$GEREKCE" ] && [ "${#GEREKCE}" -ge 20 ] || { _hata "--gerekce en az 20 karakter — canlı şartını koymak/kaldırmak gerekçesiz olmaz (bağımsız göz görür)"; exit 1; }
+    if [[ "$GEREKCE" == *"|"* || "$GEREKCE" == *$'\n'* ]]; then _hata "--gerekce içinde '|' ya da satır sonu olamaz (defter ayracı)"; exit 1; fi
+    python3 - "$KD/$IS.json" "$CANLI" "$GEREKCE" <<'PY' || exit 1
+import json,sys,datetime
+yol,cevap,gerekce=sys.argv[1:]
+k=json.load(open(yol,encoding="utf-8")); simdi=datetime.datetime.now().astimezone().isoformat(timespec="seconds")
+k["canli_gerekir"]=(cevap=="e"); k["canli_sebep"]=f"sahip ayarladı (--canli {cevap}): {gerekce}"
+k.setdefault("gecmis",[]).append({"zaman":simdi,"olay":"canli-ayarla","canli":cevap,"gerekce":gerekce})
+json.dump(k,open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
+print(f"\u2713 canlı şartı karta işlendi: {'GEREKİR' if cevap=='e' else 'istenmedi'} — {gerekce}")
 PY
     ;;
   canli-gerekir)

@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi/yazilim-fabrikasi/scripts/kanit.test.sh
-# rc=0 sure=7.7s zaman=2026-10-17T12:28:49+03:00
+# rc=0 sure=6.6s zaman=2026-10-17T12:38:45+03:00
 --- stdout ---
 ════ T1 · ölçüm çifti: komutu araç koşar, kırpılmamış çıktı+rc ════
   ✓ önce ölçümü rc=0
@@ -84,7 +84,7 @@ $ bash /config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi/yazilim-fabrikas
   ✓ T18a saat damgalı log → rc=0
   ✓ T18b manifestte tur=canli renk=yesil
   ✓ T18c ateşleme sayısı 2
-  ✓ T18d ilk ateşleme: satır + saat + kaynak kayıtta
+  ✓ T18d ilk + son ateşleme: satır · saat · çözülmüş saat (ISO) · kaynak · komut kayıtta
   ✓ T18e log çıktısı kırpılmadan dosyada
   ✓ T18f imza ve sha sağlam
   ✓ T18g saat damgasız satırlar ateşleme sayılmaz → rc=3 (yazılmış ≠ çalışıyor)
@@ -94,20 +94,27 @@ $ bash /config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi/yazilim-fabrikas
   ✓ T18k sebebi kayıtta
   ✓ T18l --desen tutmayan saatli satır ateşleme değil → rc=3
   ✓ T18m syslog biçimi + desen tutuyor → rc=0
-  ✓ T18n renk=yesil, desen kayıtta
-  ✓ T18o --en-az 2 tek ateşlemeyle rc=3
+  ✓ T18n renk=yesil, desen kayıtta, yılsız syslog saati bu yıla çözüldü
+  ✓ T18o --en-az 2 tek ateşlemeyle rc=3 (gg.aa.yyyy biçimi tanındı)
+  ✓ T18o2 ateşleme 1 sayıldı
   ✓ T18p --kaynak verilmeden kayıt yazılmaz
   ✓ T18q kaynaksız dosya oluşmadı
   ✓ T18r komut stdin'den beslenmez (arka planda asılı kalmaz)
-  ✓ T18s stdin kapalı: ikinci (okunan) satır oluşmadı
+  ✓ T18s stdin kapalı: read düştü, ikinci dosya okunmadı
   ✓ T18v komut bu kutuda yoksa traceback değil SARI rc=3 (kaynağa ulaşılamadı)
   ✓ T18w rc=127 ve sebep kayıtta
+  ✓ T18x echo ile 'log' üretmek reddedilir (rc=1, kayıt yok)
+  ✓ T18x2 manifeste de yazılmadı
+  ✓ T18y kabuk içinde echo/printf de reddedilir
+  ✓ T18y2 heredoc da reddedilir
+  ✓ T18z kabuk içinde gerçek okuyucu (tail) serbest → rc=0
   ✓ T18t dogrula özeti canlı kayıtlarını söylüyor
   ✓ T18u ozet tablosunda tür canli görünüyor
-════ T19 · MUTASYON: saat damgası şartı kaldırılınca saatsiz satır yeşile döner (kapı gerçek) ════
+════ T19 · MUTASYON: saat şartı · kopuk kaynak · üreten komut reddi — her biri kaldırılınca sınav kırmızı ════
   ✓ T19a mutant saatsiz satırı ateşleme sayıyor → T18g bu mutantta düşerdi
   ✓ T19b gerçek araç aynı girdiyle hâlâ sarı (mutasyon kaynağı bozdu, düzeneği değil)
   ✓ T19c mutant (kopuk kaynak sarı değil) → T18j bu mutantta düşerdi
+  ✓ T19d mutant (üreten komut reddi kaldırıldı) echo'yu yeşil sayıyor → T18x bu mutantta düşerdi
 
-── SONUÇ: 88 geçti · 0 kaldı ──
+── SONUÇ: 95 geçti · 0 kaldı ──
 --- stderr ---

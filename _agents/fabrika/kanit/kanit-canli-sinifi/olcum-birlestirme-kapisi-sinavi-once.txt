@@ -1,5 +1,5 @@
-$ bash /tmp/tmp.aUT0rH1dAU/birlestirme-kapisi.test.sh
-# rc=1 sure=6.0s zaman=2026-10-17T12:28:41+03:00
+$ bash /tmp/tmp.ToALA9qR2V/birlestirme-kapisi.test.sh
+# rc=1 sure=8.9s zaman=2026-10-17T12:38:38+03:00
 --- stdout ---
 ════ T1 · hiçbir şey yok → engeller ════
   ✓ kart+kanıt+denetim yokken rc=1
@@ -54,18 +54,23 @@ $ bash /tmp/tmp.aUT0rH1dAU/birlestirme-kapisi.test.sh
   ✓ kanit.py yokken rc=3 (ölçülemedi, yeşil değil)
   ✓ sebebi yazılı
   ✓ gerçek kapı aynı işte hâlâ rc=0 (mutasyon kaynağı bozdu, düzeneği değil)
-════ T11 · CANLI sınıfı: cron/servis/sunucu kartı canlı kanıt olmadan GEÇMEZ; sarı canlı hiç geçmez ════
+════ T11 · CANLI sınıfı: cron/servis/sunucu kartı canlı kanıt olmadan GEÇMEZ; sarı canlı hiç geçmez; kayıt KARTA BAĞLI olmalı ════
   ✗ T11a 5+E + yeşil ölçüm ama canlı kanıt YOK → rc=1
   ✗ T11b sebebi ve yolu yazılı
   ✗ T11c canlı SARI → rc=1 (sarı yeşil değildir)
   ✗ T11d sarı sebebi yazılı
-  ✓ T11e canlı YEŞİL → rc=0
-  ✗ T11f kapı ilk ateşlemeyi saatiyle söylüyor
+  ✗ T11e2 yeşil ama ateşleme kart açılışından ÖNCE → işe bağlanamaz, rc=1
+  ✗ T11e3 sebebi yazılı: kayıt işe bağlanamadı (kart açılışından önce)
+  ✓ T11e canlı YEŞİL ve kart açılışından sonra → rc=0
+  ✗ T11f kapı ilk ateşlemeyi saatiyle ve okuyan komutla basıyor (göz görsün)
   ✓ T11g canlısız kart (buton) canlı kaydı olmadan geçer (kapsam daralmadı)
   ✗ T11h ölçülmüş ama SARI canlı → canlısız kartta da rc=1
   ✗ T11i alanı olmayan ESKİ servis/sunucu kartı: cümleden türetilir, canlı yok → rc=1
   ✗ T11j kapı canlı şartının nereden geldiğini söylüyor
-  ✓ T11k eski kart + yeşil canlı → geçer
+  ✓ T11k eski kart + bağlı yeşil canlı → geçer
+  ✗ T11l 'servis' kelimesi → canlı ister → rc=1
+  ✓ T11m sahip gerekçeyle canlı istemedi (karta yazılı) → geçer
+  ✗ T11n kapı kararı ve gerekçeyi basıyor (göz görsün)
 ════ T12 · MUTASYON: canlı kontrolleri kaldırılınca kapı açılır (kapı gerçek, süs değil) ════
   ✗ T12a mutant 3 üretildi (kart canlı şartı kaldırıldı)
   ✓ T12b mutant 3: cron kartı canlı kayıtsız GEÇİYOR → T11a/T11i bu mutantta düşerdi
@@ -73,6 +78,9 @@ $ bash /tmp/tmp.aUT0rH1dAU/birlestirme-kapisi.test.sh
   ✗ T12d mutant 4 üretildi (sarı canlı engeli kaldırıldı)
   ✓ T12e mutant 4: sarı canlı GEÇİYOR → T11h bu mutantta düşerdi
   ✗ T12f gerçek kapı sarıyı hâlâ tutuyor
+  ✗ T12g mutant 5 üretildi (işe bağlama kaldırıldı)
+  ✓ T12h mutant 5: kart açılışından önceki yeşil kayıt GEÇİYOR → T11e2 bu mutantta düşerdi
+  ✗ T12i gerçek kapı eski kaydı bağlamıyor, rc=1
 
-── SONUÇ: 42 geçti · 12 kaldı ──
+── SONUÇ: 44 geçti · 18 kaldı ──
 --- stderr ---

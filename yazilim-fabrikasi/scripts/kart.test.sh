@@ -92,9 +92,23 @@ bash "$KT" ac is-canli-x --is x --istedi S --aldi B --geri-alinamaz h --para h -
 [ ! -f "$T/depo/_agents/fabrika/kartlar/is-canli-x.json" ]; g $? "geçersiz cevapla kart yazılmadı"
 bash "$K" olcum is-cron olc --asama tek -- echo 1 >/dev/null 2>&1
 CIKTI="$(bash "$KT" bitti is-cron 2>&1)"; grep -q "CANLI KANIT YOK" <<<"$CIKTI"; g $? "canlı kanıtsız bitti uyarır"
-bash "$K" canli is-cron zil --kaynak "x" -- bash -c 'echo "2026-10-17T07:02:35 çaldı"' >/dev/null 2>&1
+printf '%s çaldı\n' "$(date -u +%FT%TZ)" > "$T/zil.log"
+bash "$K" canli is-cron zil --kaynak "x" -- cat "$T/zil.log" >/dev/null 2>&1
 CIKTI="$(bash "$KT" bitti is-cron 2>&1)"; ! grep -q "CANLI KANIT YOK" <<<"$CIKTI"; g $? "yeşil canlı kayıt varken uyarı yok"
 python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-cron.json'));assert k['canli_kanit']=='var'"; g $? "karta canli_kanit=var işlendi"
+# canli-gerekir: kapının okuduğu tek yüzey; eski kartta (alan yok) cümleden türetir
+[ "$(bash "$KT" canli-gerekir is-cron | cut -f1)" = "E" ] && [ "$(bash "$KT" canli-gerekir is-1 | cut -f1)" = "H" ]; g $? "canli-gerekir E/H okur"
+python3 - <<PY
+import json;p='$T/depo/_agents/fabrika/kartlar/is-sunucu.json';k=json.load(open(p));k.pop('canli_gerekir');k.pop('canli_sebep');json.dump(k,open(p,'w'))
+PY
+CIKTI="$(bash "$KT" canli-gerekir is-sunucu)"; [ "$(cut -f1 <<<"$CIKTI")" = "E" ] && grep -q "eski kart" <<<"$CIKTI"; g $? "alanı olmayan eski kart: cümleden E, 'eski kart' işaretli"
+# canli-ayarla: açık kartta sahip kararı — gerekçeli, karta ve geçmişe yazılır (bu özellikten önce açılmış kartlar + yanlış pozitif kelime)
+bash "$KT" canli-ayarla is-sunucu --canli h >/dev/null 2>&1; [ $? -eq 1 ]; g $? "canli-ayarla gerekçesiz reddeder"
+bash "$KT" canli-ayarla is-sunucu --canli h --gerekce "kısa" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "20 karakterden kısa gerekçe reddedilir"
+CIKTI="$(bash "$KT" canli-ayarla is-sunucu --canli h --gerekce "belge işi; kutuya servis kurulmuyor, kelime yanlış pozitif" 2>&1)"; g $? "gerekçeli canli-ayarla h kabul"
+python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-sunucu.json'));assert k['canli_gerekir'] is False and 'yanlış pozitif' in k['canli_sebep'] and k['gecmis'][-1]['olay']=='canli-ayarla'"; g $? "karta alan + geçmiş satırı işlendi (gizli değil)"
+[ "$(bash "$KT" canli-gerekir is-sunucu | cut -f1)" = "H" ]; g $? "kapı artık H okur"
+bash "$KT" canli-ayarla is-1 --canli e --gerekce "buton işi ama kurulum cron'la yayılıyor" >/dev/null 2>&1 && [ "$(bash "$KT" canli-gerekir is-1 | cut -f1)" = "E" ]; g $? "canli-ayarla e: canlı istemeyen kart canlı ister hâle gelir"
 
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

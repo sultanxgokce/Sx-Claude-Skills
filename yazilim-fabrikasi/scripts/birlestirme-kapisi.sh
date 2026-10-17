@@ -84,24 +84,49 @@ cg="H"; csebep=""
 if [ -f "$KART" ] && [ -f "$HERE/kart.sh" ]; then
   IFS=$'\t' read -r cg csebep <<<"$(KANIT_DEPO="$DEPO" bash "$HERE/kart.sh" canli-gerekir "$IS" 2>/dev/null)"; cg="${cg:-H}"; csebep="${csebep:-}"
 fi
-cy=0; cs=0; cilk=""
+# 🔴 GÖZ TUR 1 (PR #352): "herhangi bir yeşil canlı kaydı yetiyor; eski ya da ilgisiz kayıt yeni cron değişikliğini geçirir" — doğru.
+#    Kayıt bu İŞE BAĞLANIR: ölçüm zamanı DA son ateşleme saati DE kartın açılış zamanından SONRA olmalı. Bağlanamayan yeşil kayıt
+#    sayılmaz, sebebi basılır. Kapı sayılan kaydın komutunu ve kaynağını da basar — göz "neyi okudu" diye bakabilsin.
+cy=0; cs=0; cilk=""; ckopuk=""
 if [ -f "$DZ/KANIT.json" ]; then
-  eval "$(python3 - "$DZ/KANIT.json" <<'PY'
-import json,sys,shlex
+  eval "$(python3 - "$DZ/KANIT.json" "$KART" <<'PY'
+import json,sys,shlex,datetime
+def P(s):
+    try: return datetime.datetime.fromisoformat(s)
+    except Exception: return None
 try: m=json.load(open(sys.argv[1],encoding="utf-8"))
 except Exception: m={}
+kz=None
+try: kz=P(json.load(open(sys.argv[2],encoding="utf-8")).get("zaman",""))
+except Exception: pass
 c=[k for k in m.get("kayitlar",[]) if k.get("tur")=="canli"]
 y=[k for k in c if k.get("renk")=="yesil"]; s=[k for k in c if k.get("renk")=="sari"]
-ilk=(y[0].get("ilk_atesleme") or {}) if y else {}
-print("cy="+str(len(y))); print("cs="+str(len(s)))
-print("cilk="+shlex.quote(f"{ilk.get('saat','')} · {str(ilk.get('satir',''))[:120]} · kaynak: {y[0].get('kaynak','')}" if y else ""))
+bagli_l=[]; kopuk=[]
+def bagli_mi(neden): return neden is None
+for k in y:
+    oz=P(k.get("zaman") or ""); son=P(((k.get("son_atesleme") or k.get("ilk_atesleme") or {}).get("saat_iso")) or "")
+    kzs=kz.isoformat(timespec="seconds") if kz else "?"
+    if kz is None: neden="kart açılışı zamanı okunamadı"
+    elif oz is None or oz<kz: neden=f"ölçüm kart açılışı ({kzs}) ÖNCESİNDE"
+    elif son is None: neden="ateşleme saati çözülemedi (saat_iso yok; eski araçla alınmış olabilir)"
+    elif son<kz: neden=f"son ateşleme {son.isoformat(timespec='seconds')} kart açılışı {kzs} ÖNCESİNDE — bu işin ateşlemesi değil"
+    else: neden=None
+    (bagli_l if bagli_mi(neden) else kopuk).append((k,neden))
+print("cy="+str(len(bagli_l))); print("cs="+str(len(s)))
+if bagli_l:
+    k=bagli_l[0][0]; ilk=k.get("ilk_atesleme") or {}
+    print("cilk="+shlex.quote(f"{ilk.get('saat','')} · {str(ilk.get('satir',''))[:120]} · kaynak: {k.get('kaynak','')} · komut: {' '.join(k.get('komut') or [])[:160]}"))
+else: print("cilk=''")
+print("ckopuk="+shlex.quote("; ".join(f"{k.get('etiket')}: {n}" for k,n in kopuk)))
 PY
 )"
 fi
 cs_engel=0
+[ -n "$ckopuk" ] && _y "  ⚠ canlı kaydı işe bağlanamadı (sayılmaz): $ckopuk"
 [ "$cs" -gt 0 ] && { _h "canlı kanıt SARI ($cs kayıt) — ölçülmüş ama ateşleme kaydı yok; sarı yeşil değildir"; eksik=$((eksik+1)); cs_engel=1; }
-[ "$cg" = "E" ] && [ "$cy" -eq 0 ] && [ "$cs_engel" -eq 0 ] && { _h "canlı kanıt YOK — cron/servis/sunucu işi ($csebep) gerçek ateşleme kaydı ister: kanit.sh canli <iş> <etiket> --kaynak … -- <log komutu>"; eksik=$((eksik+1)); }
-[ "$cy" -gt 0 ] && _y "  ✓ canlı: $cy ateşleme kaydı · ilk: $cilk"
+[ "$cg" = "E" ] && [ "$cy" -eq 0 ] && [ "$cs_engel" -eq 0 ] && { _h "canlı kanıt YOK ya da bu işe bağlı değil — cron/servis/sunucu işi ($csebep) kart açılışından SONRAKİ gerçek ateşleme kaydını ister: kanit.sh canli <iş> <etiket> --kaynak … -- <log okuyan komut>"; eksik=$((eksik+1)); }
+[ "$cy" -gt 0 ] && _y "  ✓ canlı: $cy ateşleme kaydı (işe bağlı) · ilk: $cilk"
+[ "$cg" = "H" ] && [ -n "$csebep" ] && _y "  · canlı kanıt istenmedi — $csebep"
 
 # 3 · PUAN
 SON="$(ls "$DZ"/DENETIM-[0-9]*.json 2>/dev/null | sort -V | tail -1)"
