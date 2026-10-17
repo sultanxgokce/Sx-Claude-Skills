@@ -1,0 +1,53 @@
+{
+  "is": "iskan-iz-yorum",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-17T09:29:25+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "iz-yorum-sinavi",
+      "asama": "once",
+      "dosya": "olcum-iz-yorum-sinavi-once.txt",
+      "sha256": "c0a860919388e153b115311d556016370db73463c66d9ef858e29ab59a3e9dc2",
+      "komut": [
+        "bash",
+        "/tmp/tmp.iLqMT9mjjg/izy-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T09:28:52+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "iz-yorum-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-iz-yorum-sinavi-sonra.txt",
+      "sha256": "ce33bb38bf8bca45481303a3d8ee25c55ea70106e0d853821b32d867c7b681b7",
+      "komut": [
+        "bash",
+        "iskan/scripts/iskan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T09:29:25+03:00",
+      "sure_sn": 32.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-dort-kapi",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-dort-kapi-sonra.txt",
+      "sha256": "2ca83c56c23f9b53f30f75dd4ea6b11d382641419993c2178bed2943b08644fe",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/izy-mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T09:29:25+03:00",
+      "sure_sn": 0.3
+    }
+  ],
+  "imza": "f0c8fd88e2ba7870134e60f5eda8d8a9bc0acfc3208495b6aa6ef458e73c5f3e"
+}

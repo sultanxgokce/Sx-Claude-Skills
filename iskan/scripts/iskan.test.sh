@@ -2858,5 +2858,48 @@ rc=$?
   || bad "DERS-D tazelik: bilinçli-geçiş kapısı kırık (rc=$rc)"
 find "$AH_EG" -type f -delete 2>/dev/null; find "$AH_EG" -depth -type d -empty -delete 2>/dev/null
 
+
+# ── İZ-YORUM (0.11.1 · gorev_01M548D8FW): iz-sıfır assertion YORUMLARI saymaz — s02 sökümü geçmiş yorumundaki ad yüzünden ADIM-5'te durmuştu ──
+IZY="$(mktemp -d)"
+cat > "$IZY/backup.sh" <<'B'
+#!/usr/bin/env bash
+# 2026-10 geçmişi: s02 (SANCAK-2) kutusu söküldü, listeden çıkarıldı
+docker inspect cloudtop cloudtop-akar > /tmp/x.json   # eskiden cloudtop-s02 da vardı
+echo bitti
+B
+cat > "$IZY/iskan-registry.yaml" <<'Y'
+# iskan-registry — kanonik kayıt
+# not: s02 kaydı 16 Eki'de çıkarıldı
+projeler:
+  akar:
+    container: cloudtop-akar
+Y
+cat > "$IZY/compose.yml" <<'C'
+services:
+  cloudtop-s02:            # etkin içerik: GERÇEK iz
+    image: x
+C
+printf 'A=1\nB="s02"\n' > "$IZY/inv.yaml"   # tırnak içinde etkin iz
+source <(sed -n '/^_iskan_etkin_iz()/,/^}/p' "$SCRIPT_DIR/iskan.sh")
+[ "$(grep -ci s02 "$IZY/backup.sh")" = 2 ] && [ "$(_iskan_etkin_iz "$IZY/backup.sh" s02)" = 0 ] \
+  && ok "İZ-YORUM-1 backup.sh: ham grep 2 iz sayar (tam yorum + satır-sonu yorumu), etkin sayım 0 — yorum iz değildir" \
+  || bad "İZ-YORUM-1 backup.sh: ham=$(grep -ci s02 "$IZY/backup.sh") etkin=$(_iskan_etkin_iz "$IZY/backup.sh" s02)"
+[ "$(_iskan_etkin_iz "$IZY/iskan-registry.yaml" s02)" = 0 ] \
+  && ok "İZ-YORUM-2 iskan-registry.yaml: başlık yorumundaki ad sayılmaz (s02 sökümünü durduran vaka)" \
+  || bad "İZ-YORUM-2 registry yorumu sayıldı: $(_iskan_etkin_iz "$IZY/iskan-registry.yaml" s02)"
+[ "$(_iskan_etkin_iz "$IZY/compose.yml" s02)" = 1 ] \
+  && ok "İZ-YORUM-3 etkin içerikteki ad (compose servis adı) YİNE sayılır — satır-sonu yorumu kesilse de ad '#'tan önce (iz gizlenmez)" \
+  || bad "İZ-YORUM-3 etkin iz kaçtı: $(_iskan_etkin_iz "$IZY/compose.yml" s02)"
+[ "$(_iskan_etkin_iz "$IZY/inv.yaml" S02)" = 1 ] \
+  && ok "İZ-YORUM-4 tırnak içindeki ad etkin sayılır, harf duyarsız (S02 = s02)" \
+  || bad "İZ-YORUM-4: $(_iskan_etkin_iz "$IZY/inv.yaml" S02)"
+[ "$(printf 'x: cloudtop-s02\n# s02 yorum\n' | _iskan_etkin_iz - s02)" = 1 ] \
+  && ok "İZ-YORUM-5 stdin ('-') yolu: host compose ssh-cat ile aynı kural (ADIM-5b)" \
+  || bad "İZ-YORUM-5 stdin yolu: $(printf 'x: cloudtop-s02\n# s02 yorum\n' | _iskan_etkin_iz - s02)"
+[ "$(_iskan_etkin_iz "$IZY/yok.yaml" s02)" = 0 ] \
+  && ok "İZ-YORUM-6 olmayan dosya → 0 (sayım patlamaz; eski grep -ci || true davranışı korunur)" \
+  || bad "İZ-YORUM-6 olmayan dosya: $(_iskan_etkin_iz "$IZY/yok.yaml" s02)"
+find "$IZY" -type f -delete 2>/dev/null; rmdir "$IZY" 2>/dev/null || true
+
 echo "== ${PASS} geçti / ${FAIL} kaldı =="
 [ "$FAIL" -eq 0 ]
