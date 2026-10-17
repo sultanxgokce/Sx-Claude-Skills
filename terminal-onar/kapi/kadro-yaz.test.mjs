@@ -1,8 +1,10 @@
 // kadro-yaz.test.mjs — KADRO E2 kayıt yazıcısı (hermetik: geçici dizin + sahte derleyici; gerçek kayda dokunmaz, ağ yok, tmux yok)
 //   node kadro-yaz.test.mjs [--gercek]   (--gercek: kutulardaki GERÇEK kayıtların KOPYALARIYLA gidiş-dönüş bayt eşitliği)
-import { mkdtempSync, writeFileSync, readFileSync, mkdirSync, rmSync, statSync, chmodSync, existsSync, copyFileSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, readFileSync, mkdirSync, rmSync, statSync, chmodSync, existsSync, copyFileSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { tmpdir } from 'node:os';
+import { fileURLToPath } from 'node:url';
+import { spawn } from 'node:child_process';
 import { kadroYaz, durumDegistir, kayitDosyalari, KadroHata, adetAyarla } from './kadro-yaz.mjs';
 import { kayitOku, kadroBirlestir } from './kadro.mjs';
 let g = 0, k = 0; const kapi = (ad, ok, ek = '') => { if (ok) { g++; console.log('  ✓ ' + ad); } else { k++; console.log('  ✗ ' + ad + ' ' + ek); } };
@@ -101,11 +103,14 @@ if (process.argv.includes('--gercek')) {
 console.log('── K · kayıt kilidi (B7): yazım kilit altında');
 const KP = join(T, 'kilitli'), KR = join(KP, 'iskan-registry.yaml'), KO = { ISKAN_REGISTRY: KR };
 yaz(KR, ELLE);
-writeFileSync(join(KP, 'kadro.kilit'), process.pid + ' canli');
+// K1: kilidi AYRI bir süreç tutar (kernel kilidi; kadro.kilit içeriği önemsiz). Tutucu öldürülmeden kadroYaz 503 almalı.
+const TUTUCU_KOD = `import(${JSON.stringify(join(dirname(fileURLToPath(import.meta.url)), 'kilit.mjs'))}).then(m=>{m.dosyaKilit(${JSON.stringify(KP)});console.log('TUTULDU');setTimeout(()=>{},60000)})`;
+const tutan = spawn(process.execPath, ['-e', TUTUCU_KOD], { stdio: ['ignore', 'pipe', 'pipe'] });
+await new Promise((r) => { tutan.stdout.on('data', (d) => { if (String(d).includes('TUTULDU')) r(); }); });
 const k503 = hata(() => kadroYaz({ proje: KP, id: 'A', eylem: 'dondur', ortam: KO }));
-kapi('K1 kayıt başka CANLI süreçte kilitliyken → 503, kayıt dosyası aynen kalır', k503 instanceof KadroHata && k503.kod === 503 && readFileSync(KR, 'utf8') === ELLE, String(k503?.kod));
-rmSync(join(KP, 'kadro.kilit'));
+kapi('K1 kayıt başka süreçte kilitliyken → 503, kayıt dosyası aynen kalır', k503 instanceof KadroHata && k503.kod === 503 && readFileSync(KR, 'utf8') === ELLE, String(k503?.kod));
+tutan.kill('SIGKILL'); await new Promise((r) => tutan.on('close', r));
 const kr = kadroYaz({ proje: KP, id: 'A', eylem: 'dondur', ortam: KO });
-kapi('K2 kilit yokken yazım tutar; iş bitince kadro.kilit kalmaz', kr.dosya === KR && readFileSync(KR, 'utf8').includes('durum: dondurulmus') && !existsSync(join(KP, 'kadro.kilit')));
+kapi('K2 tutucu ölünce yazım tutar; iş bitince ack/geçici dosya kalmaz', kr.dosya === KR && readFileSync(KR, 'utf8').includes('durum: dondurulmus') && !readdirSync(KP).some((f) => f.includes('.ack-')));
 rmSync(T, { recursive: true, force: true });
 console.log(`\nSONUÇ: ${g} geçti · ${k} kaldı`); process.exit(k ? 1 : 0);
