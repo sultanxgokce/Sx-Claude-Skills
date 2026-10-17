@@ -1,0 +1,147 @@
+{
+  "is": "retro",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-17T16:06:00+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "beceri-varligi",
+      "asama": "once",
+      "dosya": "olcum-beceri-varligi-once.txt",
+      "sha256": "5e91274102b91aaf7c88ccf2ae89edb41b84c01a24f39371808f8d8aab51cc4d",
+      "komut": [
+        "bash",
+        "-c",
+        "test -d /config/.claude/skills/retro && echo VAR || { echo \"YOK: /config/.claude/skills/retro\"; exit 1; }"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T16:05:57+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "retro-kanali",
+      "asama": "once",
+      "dosya": "olcum-retro-kanali-once.txt",
+      "sha256": "2e1b81aa88ee5ad4985d84f26fb534df68b01c0b3b7961c4df4e6e9d79c3e139",
+      "komut": [
+        "bash",
+        "-c",
+        "ls /config/projects/Nexus/_agents/handoff/retro 2>&1 || true; test -d /config/projects/Nexus/_agents/handoff/retro"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T16:05:57+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "c9d1e88f178b7108ac1e37cfacaadf31886e10fe0112573698afd1f045152251",
+      "komut": [
+        "bash",
+        "retro/scripts/retro.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T16:05:59+03:00",
+      "sure_sn": 1.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-kutu-bani",
+      "asama": "sonra",
+      "dosya": "olcum-canli-kutu-bani-sonra.txt",
+      "sha256": "da6706ff85d7829a8f6e8b262ef3d5d3c6f424ddd01560d99ddfee53185aeb6b",
+      "komut": [
+        "python3",
+        "retro/scripts/retro.py",
+        "kutu",
+        "BÂNİ",
+        "--kok",
+        "/config/projects/Nexus",
+        "--koltuk",
+        "bani:0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T16:05:59+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-lint-bani",
+      "asama": "sonra",
+      "dosya": "olcum-canli-lint-bani-sonra.txt",
+      "sha256": "efc097621dab66b69302aed04062976b56b009cfa8a9b6f4ce2cf68be9af1a23",
+      "komut": [
+        "python3",
+        "retro/scripts/retro.py",
+        "lint",
+        "/config/projects/Nexus/_agents/handoff/retro/2026-W42/BÂNİ.md"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T16:05:59+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "dosya",
+      "etiket": "bani-retro-2026-W42",
+      "asama": "tek",
+      "dosya": "dosya-bani-retro-2026-W42-tek.md",
+      "sha256": "645a9c9c6f04fcdd520cfc72814f4efca261d5ba2904a3810456a7a82f402411",
+      "kaynak": "/config/projects/Nexus/_agents/handoff/retro/2026-W42/BÂNİ.md",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T16:05:59+03:00"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-merkez-beklenen-eksik",
+      "asama": "sonra",
+      "dosya": "olcum-canli-merkez-beklenen-eksik-sonra.txt",
+      "sha256": "f52544c3b901c2b4e78e1310c9c67e990768592a52fecf073b7a622549450275",
+      "komut": [
+        "bash",
+        "-c",
+        "python3 retro/scripts/retro.py merkez --kok '/tmp/tmp.cvqhpLE54S/nexus-ince'; [ $? -eq 1 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T16:06:00+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "dosya",
+      "etiket": "merkez-iskelet-2026-W42",
+      "asama": "tek",
+      "dosya": "dosya-merkez-iskelet-2026-W42-tek.md",
+      "sha256": "e4ee077bb25aff8697650c2b98d1f9020b08c0b061a808c7bf125dce9c549cbe",
+      "kaynak": "/tmp/tmp.cvqhpLE54S/nexus-ince/_agents/handoff/retro/2026-W42/MERKEZ.md",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T16:06:00+03:00"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-suzum-beklenen-kirmizi",
+      "asama": "sonra",
+      "dosya": "olcum-canli-suzum-beklenen-kirmizi-sonra.txt",
+      "sha256": "88d9cb31b98604047a9355a798c012b5751a4c1176294bcb40e92b5231631055",
+      "komut": [
+        "bash",
+        "-c",
+        "python3 retro/scripts/retro.py suzum --kok '/tmp/tmp.cvqhpLE54S/nexus-ince'; [ $? -eq 1 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T16:06:00+03:00",
+      "sure_sn": 0.0
+    }
+  ],
+  "imza": "817b2d0849c68ec5d879186f42e9d19dbc5cdd46f40cc58ed53d65a3eb4d326f"
+}

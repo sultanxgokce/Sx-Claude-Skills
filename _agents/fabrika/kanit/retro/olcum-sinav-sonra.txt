@@ -1,0 +1,84 @@
+$ bash retro/scripts/retro.test.sh
+# rc=0 sure=1.1s zaman=2026-10-17T16:05:59+03:00
+--- stdout ---
+— T1 hafta
+  ✓ T1a hafta kimliği sabit tarihten (rc=0)
+  ✓ T1b ISO hafta
+  ✓ T1c biçimsiz hafta rc=2 (rc=2)
+— T2 kutu: iskelet + ölçüm
+  ✓ T2a iskelet yazıldı (rc=0)
+  ✓ T2b dosya yerinde
+  ✓ T2c hafta içi 3 satır, tarihsiz 2 ayrı, geçen hafta sayılmadı
+  ✓ T2d ders satırı 1
+  ✓ T2e kart sayımı aldı=BANI↔BÂNİ, geçen hafta dışarıda
+  ✓ T2f DENETIM turları
+  ✓ T2g kaçış hafta içi 1, etiketi kutu geneli
+  ✓ T2h bekçi zili yalnız bu ajan, TUR satırı değil
+  ✓ T2i ölçülemeyen kaynak sarı, 0 değil
+  ✓ T2j koltuk beyanı
+  ✓ T2k iz özeti
+  ✓ T2l ikinci kutu rc=4 (ezmez) (rc=4)
+— T3 lint
+  ✓ T3a ham iskelet GEÇERSİZ (yer tutucu) (rc=1)
+  ✓ T3b L7 gerekçesi
+  ✓ T3c dolu retro GEÇERLİ (rc=0)
+  ✓ T3d öneri/ders sayımı
+  ✓ T3e zaman kaybı ölçüsüz → L5 (rc=1)
+  ✓ T3f L5 gerekçesi
+  ✓ T3g 6 öneri → L6 (rc=1)
+  ✓ T3h L6
+  ✓ T3i başlık yok → L4 (rc=1)
+  ✓ T3j L4
+  ✓ T3k ölçüm bloğu yok → L3 (elle retro geçersiz) (rc=1)
+  ✓ T3l L3
+  ✓ T3m koltuk boş → L2 (rc=1)
+  ✓ T3m2 L2 gerekçesi
+  ✓ T3n ölçüm değeri ne sayı ne ÖLÇÜLEMEDİ → L3 (rc=1)
+  ✓ T3n2 L3 gerekçesi
+  ✓ T3o yanlış etiket → L4 (rc=1)
+  ✓ T3p etiket gerekçesi
+  ✓ T3q dosya yok rc=2 (rc=2)
+— T4 kaynak yokluğu sarıdır
+  ✓ T4a kaynaksız depoda kutu yazılır (rc=0)
+  ✓ T4b kart kaynağı yok → ÖLÇÜLEMEDİ
+  ✓ T4c kaçış defteri yok → ÖLÇÜLEMEDİ
+  ✓ T4d sıfır ile ölçülemedi aynı hücreye yazılmaz
+  ✓ T4e iz yok
+— T5 yenile: ölçüm değişir, yorum korunur
+  ✓ T5a --yenile (rc=0)
+  ✓ T5b yeni kart sayıldı
+  ✓ T5c yorum satırı korundu
+  ✓ T5d yenileme damgası
+  ✓ T5e yenilenmiş dosya hâlâ geçerli (rc=0)
+— T6 merkez
+  ✓ T6a merkez: EKSİK var → rc=1 (kırmızı: ölçtü, tutmuyor) (rc=1)
+  ✓ T6b BÂNİ OK
+  ✓ T6c MİRAHUR iz var, retro yok → EKSİK
+  ✓ T6d BASİRET iz yok → ÇALIŞMADI (zorunlu değil)
+  ✓ T6e merkez (SERDAR) hariç
+  ✓ T6f MERKEZ.md iskeleti
+  ✓ T6g öneri süzüm listesinde, damga boş
+  ✓ T6h katılım tablosu
+  ✓ T6i geçersiz kutu retrosu → GEÇERSİZ, rc=1 (rc=1)
+  ✓ T6j GEÇERSİZ etiketi
+  ✓ T6k --ajanlar ile liste (rc=0)
+  ✓ T6m boş damgalı satır --yenile'de çoğalmadı (metindeki ok damga sanılmadı)
+  ✓ T6l registry ve --ajanlar yok → rc=3 SARI (katılım ölçülemez) (rc=3)
+— T7 süzüm
+  ✓ T7a damgasız → kırmızı (rc=1)
+  ✓ T7b gerekçe
+  ✓ T7c RED gerekçesi kısa → kırmızı (rc=1)
+  ✓ T7d yalnız Ö2 sorunlu; metindeki ok damga sanılmadı (SON ok)
+  ✓ T7e hepsi damgalı → yeşil (rc=0)
+  ✓ T7f sayım
+  ✓ T7g merkez --yenile damgayı KORUR (rc=1)
+  ✓ T7h gorev damgası korundu
+  ✓ T7i damga korunduğu için süzüm hâlâ yeşil (rc=0)
+  ✓ T7j MERKEZ yok → rc=3 SARI (ölçülemedi) (rc=3)
+— M mutasyon (kopya üstünde; her mutant en az bir kapıyı kızartmalı)
+  ✓ M1 L5 (ölçüsüz zaman kaybı) kalkınca ölçüsüz dosya geçmemeli: mutant ısırıldı
+  ✓ M2 kaynak yokluğu sıfıra çevrilince sarı kaybolmalı (kapı yakalar): mutant ısırıldı
+  ✓ M3 iz ayrımı kalkınca BASİRET EKSİK sayılır (kapı yakalar): mutant ısırıldı
+
+GECEN=70 DUSEN=0
+--- stderr ---
