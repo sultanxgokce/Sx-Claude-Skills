@@ -1,7 +1,7 @@
 {
   "is": "gunluk-plan-tablo-kapanis-2",
   "arac": "kanit.py/0.4.0",
-  "guncelleme": "2026-10-17T20:58:41+03:00",
+  "guncelleme": "2026-10-17T21:01:24+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -120,7 +120,55 @@
       "rc": 0,
       "renk": "yesil",
       "zaman": "2026-10-17T20:58:41+03:00"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cipa-sinavi-birlesik",
+      "asama": "sonra",
+      "dosya": "olcum-cipa-sinavi-birlesik-sonra.txt",
+      "sha256": "ef82149ea73185a8e4d19b388819d2b45caff04b6a2447a6c6b6037ddb22bb27",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/cipa.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T21:01:13+03:00",
+      "sure_sn": 5.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gun-ortasi-sinavi-birlesik",
+      "asama": "sonra",
+      "dosya": "olcum-gun-ortasi-sinavi-birlesik-sonra.txt",
+      "sha256": "566013edec1c3587c389dabc536cad73d9145dba3dad0bafdf68d129e16b10ff",
+      "komut": [
+        "bash",
+        "gun-ortasi/scripts/kalan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T21:01:24+03:00",
+      "sure_sn": 10.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-uyum-birlesik",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-uyum-birlesik-sonra.txt",
+      "sha256": "9fd02c871b0efbc8e0c9d3a56272b480323d0f7dd8a96986637d0a5f5dd70964",
+      "komut": [
+        "node",
+        "gunluk-plan/sema/kapi-uyum.mjs",
+        "terminal-onar/kapi/bugun.mjs",
+        "gunluk-plan/sema/ornek-cipa.md",
+        "gunluk-plan/sema/beklenen.json"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T21:01:24+03:00",
+      "sure_sn": 0.0
     }
   ],
-  "imza": "6ac523bef566e5c351d94cd5f20a2ac0108df7fbd7bc705f8b0ff6f9f55ff3ae"
+  "imza": "a57a6f25d978ba862ddfd402d9fd9b76d0e6402b79885e05aac124f060a7cfb8"
 }
