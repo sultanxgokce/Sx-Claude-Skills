@@ -1,0 +1,138 @@
+{
+  "is": "pr-kip-olcum-araci",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T20:33:36+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "ONCE-eski-kapi-YOL-gorur-GERCEK-sifir-satir-yan-yana",
+      "asama": "once",
+      "dosya": "olcum-ONCE-eski-kapi-YOL-gorur-GERCEK-sifir-satir-yan-yana-once.txt",
+      "sha256": "89427c49cff21d8a83d9347f751bd55d125f4de6120095dcd0dc982dd08014a4",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/projects/Sx-Claude-Skills; echo \"1) ESKI KAPININ GIRDISI (gh pr diff --name-only):\"; gh pr diff 326 --name-only | grep -F \"ui-tasarim-akisi/arac/yogunluk-denetle.test.sh\"; echo \"2) GERCEK:\"; bash /config/projects/_wt/Sx-Claude-Skills-kapsam-kapisi-hunk/yazilim-fabrikasi/scripts/pr-kip-olc.sh 326 ui-tasarim-akisi/arac/yogunluk-denetle.test.sh --depo /config/projects/Sx-Claude-Skills"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:04:52+03:00",
+      "sure_sn": 2.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "SONRA-arac-16-kapi-cift-yonlu",
+      "asama": "sonra",
+      "dosya": "olcum-SONRA-arac-16-kapi-cift-yonlu-sonra.txt",
+      "sha256": "9ce534073b512e3d2c4d2b2957438e652cb7906e2012a2a235e7d929ec26fe07",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/pr-kip-olc.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:04:52+03:00",
+      "sure_sn": 0.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "CANLI-PR326-kip-only-rc0",
+      "asama": "sonra",
+      "dosya": "olcum-CANLI-PR326-kip-only-rc0-sonra.txt",
+      "sha256": "211350fad80842c25e61601e5898b8a1b4696b1a1a18e1e9aca0e751b5c36b80",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/pr-kip-olc.sh",
+        "326",
+        "ui-tasarim-akisi/arac/yogunluk-denetle.test.sh",
+        "--depo",
+        "/config/projects/Sx-Claude-Skills"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:04:53+03:00",
+      "sure_sn": 1.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "CANLI-PR326-icerik-rc1-BEKLENEN-KIRMIZI",
+      "asama": "sonra",
+      "dosya": "olcum-CANLI-PR326-icerik-rc1-BEKLENEN-KIRMIZI-sonra.txt",
+      "sha256": "94ffc371f3dec93e8d4e3d93e256811ff306e85836b290b724e0963f9ee1580b",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/pr-kip-olc.sh",
+        "326",
+        "kabuk-biti.test.sh",
+        "--depo",
+        "/config/projects/Sx-Claude-Skills"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T18:04:55+03:00",
+      "sure_sn": 1.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "TUR2-SONRA-22-kapi-tirnakli-yol-ve-degersiz-bayrak-dahil",
+      "asama": "sonra",
+      "dosya": "olcum-TUR2-SONRA-22-kapi-tirnakli-yol-ve-degersiz-bayrak-dahil-sonra.txt",
+      "sha256": "5b14adf89b66ec801316782739776013f0fd55da9966f0c92764909ccf79f98c",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/pr-kip-olc.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:07:34+03:00",
+      "sure_sn": 0.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "CI-KIRMIZI-DUZELTMESI-kabuk-biti-kapisi-yerelde-yesil",
+      "asama": "sonra",
+      "dosya": "olcum-CI-KIRMIZI-DUZELTMESI-kabuk-biti-kapisi-yerelde-yesil-sonra.txt",
+      "sha256": "26857900e4788307ffceacbdda4177b9af7a14a5cee1109e0217ddd5ebc775c9",
+      "komut": [
+        "bash",
+        "kabuk-biti.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:17:41+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "TUR3-BULGU1-KAPANDI-git-kacisli-TURKCE-yol-26-kapi",
+      "asama": "sonra",
+      "dosya": "olcum-TUR3-BULGU1-KAPANDI-git-kacisli-TURKCE-yol-26-kapi-sonra.txt",
+      "sha256": "e998623976573fa9d9b24dc017afc9fa2380b93fbd14a5c16838834fa15344ac",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/pr-kip-olc.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T20:33:36+03:00",
+      "sure_sn": 3.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "GERCEK-GIT-CIKTISI-kacis-bicimi-olculdu-fikstur-uydurma-degil",
+      "asama": "once",
+      "dosya": "olcum-GERCEK-GIT-CIKTISI-kacis-bicimi-olculdu-fikstur-uydurma-degil-once.txt",
+      "sha256": "167828fd666ed1f1ea89c9b424caaf959089beef74246f78cf17f13c3e01cf5c",
+      "komut": [
+        "bash",
+        "-c",
+        "T=\"$(mktemp -d)\"; cd \"$T\"; git init -q .; printf \"x\\n\" > \"ölçüm dosyası.sh\"; git add -A; git -c user.email=a@b -c user.name=c commit -qm ilk; chmod +x \"ölçüm dosyası.sh\"; git add -A; echo \"git bu dosyayi diff basliginda boyle yaziyor:\"; git diff --cached | head -1"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T20:33:36+03:00",
+      "sure_sn": 0.1
+    }
+  ],
+  "imza": "4f56e7354b9af06424c1bef6907f33209077b1955af407b8b7091c79cb3e595c"
+}
