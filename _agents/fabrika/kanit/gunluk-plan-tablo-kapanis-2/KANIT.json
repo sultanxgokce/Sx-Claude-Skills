@@ -1,7 +1,7 @@
 {
   "is": "gunluk-plan-tablo-kapanis-2",
   "arac": "kanit.py/0.4.0",
-  "guncelleme": "2026-10-17T21:01:24+03:00",
+  "guncelleme": "2026-10-17T21:02:43+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -168,7 +168,23 @@
       "renk": "yesil",
       "zaman": "2026-10-17T21:01:24+03:00",
       "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cipa-73-kalan-33-main-birlesik",
+      "asama": "sonra",
+      "dosya": "olcum-cipa-73-kalan-33-main-birlesik-sonra.txt",
+      "sha256": "6e8d8c2978695e35931673c7da62eaad87d9d1a31bdf32e74ec16cca96b89ffb",
+      "komut": [
+        "bash",
+        "-c",
+        "bash gunluk-plan/scripts/cipa.test.sh 2>&1 | tail -n1; bash gun-ortasi/scripts/kalan.test.sh 2>&1 | tail -n1"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T21:02:43+03:00",
+      "sure_sn": 19.5
     }
   ],
-  "imza": "a57a6f25d978ba862ddfd402d9fd9b76d0e6402b79885e05aac124f060a7cfb8"
+  "imza": "419d2c9425eaf0ec8b4440a21f2c3bcb45d830771eea73a4ca72cff5dc658553"
 }
