@@ -16,10 +16,11 @@ koşmadıysa haftayı kapatmasın." Kapı beş ölçüm + bir onay okur; hiçbir
   K5 onay      — KAPANIS.md'de `_sultan_onay:` satırı geçerli D1 biçiminde. 🔴 A06: bu satırı ARAÇ YAZMAZ;
                  insan (Sultan sözünü aktaran beyan) yazar, araç yalnız var mı/biçimli mi diye ölçer ve korur.
   K6 doğrulat  — haftanın Doğrulat seans retroları (`retro/dogrulat/<tarih>.md`, tarihi haftanın içinde): `## … ders …`
-                 bölümündeki HER ders maddesi bir beceri PR'ına bağlı (`#N` ya da `/pull/N`) ve AÇIK değil. PR'sız ders,
-                 AÇIK ders ya da ders bölümü olmayan seans → kırmızı, eksik seanslar dersleriyle listelenir (Sultan katı
+                 bölümündeki HER ders maddesi AÇIK değil ve BİRLEŞMİŞ bir PR'a bağlı (durum kaynaktan: gh pr view →
+                 MERGED; referans deposuyla: `cloudtop #676` · `Sx #370` · `…/pull/<n>`). Çıplak #N, açık/kapalı PR,
+                 PR olmayan numara, PR'sız ders, AÇIK ders ya da ders bölümü olmayan seans → kırmızı, eksik seanslar dersleriyle listelenir (Sultan katı
                  kuralı 17 Eki: işlenmemiş ders varsa hafta kapanmaz). Seans kaydı yoksa yeşil ve bunu söyler; adında tarih
-                 olmayan / okunamayan seans dosyası sarı (hangi haftaya ait olduğu bilinmeyen kayıt "bu hafta değil" sayılmaz).
+                 olmayan / okunamayan seans dosyası ve gh'nin cevap veremediği PR sarı (ölçülemedi ≠ işlendi).
 
 Çıktı: `_agents/handoff/retro/<hafta>/KAPANIS.md` (aracın TEK yazdığı dosya; retro/MERKEZ dosyalarına dokunmaz).
 Çıkış: 0 KAPANDI · 5 ONAY BEKLİYOR (K1-K4 + K6 yeşil, K5 yok) · 1 AÇIK (kırmızı var) · 3 ÖLÇÜLEMEDİ (sarı var, kırmızı yok;
@@ -205,11 +206,62 @@ def k4_kacis(retro, kok, hafta, merkez_yol):
 
 
 # K6 (Sultan katı kuralı 17 Eki · gorev_01M55490MQAN8G2NB8MF7HN77R): her Doğrulat seansının dersleri kalıcı beceriye PR ile işlenir;
-#    işlenmemiş ders varsa hafta kapanmaz. "İşlendi" = ders maddesinde PR referansı (#N ya da /pull/N) VAR ve madde AÇIK değil.
-#    Görev kimliği ya da "protokol" notu PR yerine geçmez (not olarak kalan ders işlenmemiştir). RED yolu yok.
-PR_RE = re.compile(r"(?<![\w&/])#\d+\b|/pull/\d+")
+#    işlenmemiş ders varsa hafta kapanmaz. "İşlendi" = ders maddesi AÇIK değil ∧ maddedeki PR referanslarından en az biri
+#    PR KAYNAĞINDA BİRLEŞMİŞ (gh pr view → MERGED; göz #365 tur 1: metin eşleşmesi issue/ilgisiz numarayı da geçiriyordu).
+#    Referans DEPOSUYLA yazılır: "cloudtop #676" · "Sx #370" · https://github.com/<sahip>/<depo>/pull/<n>; çıplak "#N" hangi
+#    depoda olduğu bilinmediği için işlenmiş SAYILMAZ. Açık/kapalı PR, PR olmayan numara → işlenmemiş. gh cevap veremezse SARI
+#    (ölçülemedi ≠ işlendi). Görev kimliği ya da "protokol" notu PR yerine geçmez. RED yolu yok.
 ACIK_RE = re.compile(r"(?<!\w)AÇIK(?!\w)")
 MADDE_RE = re.compile(r"^\s*(?:(\d+)[.)]|[-*])\s+(\S.*)$")
+URL_PR_RE = re.compile(r"github\.com/([\w.-]+)/([\w.-]+)/pull/(\d+)")
+DEPO_PR_RE = re.compile(r"(?<![\w/.-])([A-Za-z][\w.-]*)\s+#(\d+)\b")
+CIPLAK_PR_RE = re.compile(r"(?<![\w&/])#\d+\b")
+DEPO_TAKMA = {"Sx": "Sx-Claude-Skills"}   # NOTES dilinde kısa ad → depo adı
+GH_SAHIP = os.environ.get("HAFTA_KAPANIS_GH_SAHIP", "sultanxgokce")
+
+
+def pr_referanslari(tx):
+    """Maddedeki depolu PR referansları [(sahip, depo, n)] + çıplak '#N' var mı."""
+    refs = [(m.group(1), m.group(2), m.group(3)) for m in URL_PR_RE.finditer(tx)]
+    yazi = URL_PR_RE.sub(" ", tx)
+    for m in DEPO_PR_RE.finditer(yazi):
+        refs.append((GH_SAHIP, DEPO_TAKMA.get(m.group(1), m.group(1)), m.group(2)))
+    kalan = DEPO_PR_RE.sub(" ", yazi)
+    return refs, bool(CIPLAK_PR_RE.search(kalan))
+
+
+def pr_durumu(sahip, depo, n, _onbellek={}):
+    """PR kaynağından durum: 'MERGED' · 'OPEN' · 'CLOSED' · 'PR-DEĞİL' · None (ölçülemedi)."""
+    k = (sahip, depo, n)
+    if k not in _onbellek:
+        gh = os.environ.get("HAFTA_KAPANIS_GH", "gh")
+        try:
+            r = subprocess.run([gh, "pr", "view", n, "--repo", f"{sahip}/{depo}", "--json", "state", "-q", ".state"],
+                               capture_output=True, text=True, timeout=30)
+            if r.returncode == 0 and r.stdout.strip() in ("MERGED", "OPEN", "CLOSED"):
+                _onbellek[k] = r.stdout.strip()
+            elif "Could not resolve to a PullRequest" in r.stderr or "Could not resolve to a Repository" in r.stderr:
+                _onbellek[k] = "PR-DEĞİL"
+            else:
+                _onbellek[k] = None
+        except (OSError, subprocess.TimeoutExpired):
+            _onbellek[k] = None
+    return _onbellek[k]
+
+
+def madde_hukmu(tx):
+    """→ ('islendi'|'islenmedi'|'olculemedi', gerekçe)"""
+    if ACIK_RE.search(tx):
+        return "islenmedi", "AÇIK"
+    refs, ciplak = pr_referanslari(tx)
+    if not refs:
+        return "islenmedi", "depo adı olmadan #N" if ciplak else "PR yok"
+    durumlar = [(f"{d} #{n}", pr_durumu(s, d, n)) for s, d, n in refs]
+    if any(x == "MERGED" for _, x in durumlar):
+        return "islendi", ""
+    if any(x is None for _, x in durumlar):
+        return "olculemedi", ", ".join(f"{a} ölçülemedi" for a, x in durumlar if x is None)
+    return "islenmedi", ", ".join(f"{a} {'PR değil' if x == 'PR-DEĞİL' else x.lower()}" for a, x in durumlar)
 
 
 def k6_dogrulat(retro, kok, hafta):
@@ -232,7 +284,7 @@ def k6_dogrulat(retro, kok, hafta):
         return "SARI", "seans dosyası ölçülemedi: " + ", ".join([f"{a} (adında tarih yok)" for a in tarihsiz] + okunamadi)[:200]
     if not seanslar:
         return "YEŞİL", "bu hafta Doğrulat seans kaydı yok (retro/dogrulat/<tarih>.md) — kaydı yazılmamış seansı bu kapı görmez"
-    eksik, toplam = [], 0
+    eksik, olcemedi, toplam = [], [], 0
     for ad, metin in seanslar:
         basliklar = [s[3:].strip() for s in metin.split("\n") if s.startswith("## ") and "ders" in s[3:].casefold()]
         maddeler = []
@@ -245,12 +297,16 @@ def k6_dogrulat(retro, kok, hafta):
             eksik.append(f"{ad}: ders bölümü yok (## … ders …)")
             continue
         toplam += len(maddeler)
-        islenmemis = [no for no, tx in maddeler if not PR_RE.search(tx) or ACIK_RE.search(tx)]
+        hukum = [(no,) + madde_hukmu(tx) for no, tx in maddeler]
+        islenmemis = [f"{no}: {g}" for no, h, g in hukum if h == "islenmedi"]
         if islenmemis:
-            eksik.append(f"{ad}: {len(islenmemis)}/{len(maddeler)} ders PR'a işlenmedi (madde {', '.join(islenmemis)})")
+            eksik.append(f"{ad}: {len(islenmemis)}/{len(maddeler)} ders PR'a işlenmedi (madde {'; '.join(islenmemis)})")
+        olcemedi += [f"{ad} madde {no}: {g}" for no, h, g in hukum if h == "olculemedi"]
     if eksik:
-        return "KIRMIZI", f"Doğrulat dersi işlenmemiş: {' · '.join(eksik)}"[:300]
-    return "YEŞİL", f"{len(seanslar)} Doğrulat seansı, {toplam} dersin hepsi beceri PR'ına işlenmiş"
+        return "KIRMIZI", f"Doğrulat dersi işlenmemiş: {' · '.join(eksik)}"[:400]
+    if olcemedi:
+        return "SARI", f"PR durumu ölçülemedi (gh): {' · '.join(olcemedi)}"[:300]
+    return "YEŞİL", f"{len(seanslar)} Doğrulat seansı, {toplam} dersin hepsi birleşmiş bir PR'a işlenmiş"
 
 
 def k5_onay(kapanis_yol):

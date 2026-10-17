@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-hafta-kapanis-dogrulat-retro-kapisi/hafta-kapanis/scripts/hafta-kapanis.test.sh
-# rc=0 sure=3.9s zaman=2026-10-17T20:32:35+03:00
+# rc=0 sure=4.1s zaman=2026-10-17T20:36:15+03:00
 --- stdout ---
 — H1 retro becerisi yoksa SARI (sahte yeşil yok)
   ✓ H1a retro.py bulunamaz → rc=3 (rc=3)
@@ -86,17 +86,27 @@ $ bash /config/projects/_wt/Sx-Claude-Skills-hafta-kapanis-dogrulat-retro-kapisi
   ✓ M6 yazılı-ders denetimi kalkınca M9 bağı geçer (kapı yakalar): mutant ısırıldı
   ✓ M7-önkoşul: 16 kelime gerçek araçta AÇIK (rc=1)
   ✓ M7 kırpık kelime sınırı kalkınca 16 kelimelik onay kapatır (kapı yakalar): mutant ısırıldı
-— H10 K6 Doğrulat dersleri → beceri PR (Sultan katı kuralı 17 Eki; işlenmemiş ders varsa hafta kapanmaz)
+— H10 K6 Doğrulat dersleri → BİRLEŞMİŞ beceri PR (Sultan katı kuralı 17 Eki; işlenmemiş ders varsa hafta kapanmaz)
   ✓ H10-önkoşul: seans kaydı yokken KAPANDI (K6 yeşil, bunu söyler) (rc=0)
   ✓ H10-önkoşul2 K6 dili
   ✓ H10a PR'sız ders (2) + AÇIK ders (3) → K6 kırmızı → AÇIK rc=1 (rc=1)
-  ✓ H10b eksik seans dersleriyle listelendi (görev kimliği PR yerine geçmez; ders dışı bölüm sayılmaz)
+  ✓ H10b eksik seans dersleri ve gerekçesiyle (görev kimliği PR yerine geçmez; ders dışı bölüm sayılmaz)
   ✓ H10c KAPANIS.md'de K6 satırı
   ✓ H10d onay VAR olsa da hafta AÇIK (onay işlenmemiş dersi kapatmaz)
-  ✓ H10e üç ders de PR'a bağlı (#N · /pull/N) → KAPANDI (rc=0)
+  ✓ H10e üç ders de BİRLEŞMİŞ PR'a bağlı (depo #N · /pull/N) → KAPANDI (rc=0)
   ✓ H10f yeşil dili
-  ✓ H10g PR'ı olsa da AÇIK işaretli ders işlenmemiş → AÇIK (rc=1)
+  ✓ H10g birleşmiş PR'ı olsa da AÇIK işaretli ders işlenmemiş → AÇIK (rc=1)
   ✓ H10h gerekçe
+  ✓ H10p PR kaynağında AÇIK (OPEN, metinde etiketsiz) → işlenmemiş (göz #365 tur 1) (rc=1)
+  ✓ H10p2 gerekçe PR durumundan
+  ✓ H10q kapatılmış (birleşmemiş) PR → işlenmemiş (rc=1)
+  ✓ H10q2 gerekçe
+  ✓ H10r PR olmayan numara (issue) → işlenmemiş (göz #365 tur 1) (rc=1)
+  ✓ H10r2 gerekçe
+  ✓ H10s depo adı olmadan #N (hangi depo?) → işlenmemiş (rc=1)
+  ✓ H10s2 gerekçe
+  ✓ H10t gh cevap veremez → K6 SARI → rc=3 ÖLÇÜLEMEDİ (ölçülemedi ≠ işlendi) (rc=3)
+  ✓ H10t2 gerekçe
   ✓ H10i ders bölümü olmayan seans → AÇIK (rc=1)
   ✓ H10j gerekçe
   ✓ H10k başka haftanın işlenmemiş seansı bu haftayı tutmaz → KAPANDI (rc=0)
@@ -104,10 +114,13 @@ $ bash /config/projects/_wt/Sx-Claude-Skills-hafta-kapanis-dogrulat-retro-kapisi
   ✓ H10m W41 gerekçe
   ✓ H10n adında tarih olmayan seans dosyası → K6 SARI → rc=3 ÖLÇÜLEMEDİ (bu hafta değil sayılmaz) (rc=3)
   ✓ H10o gerekçe
-  ✓ M8 PR denetimi kalkınca görev kimlikli ders işlenmiş sayılır (kapı yakalar): mutant ısırıldı
-  ✓ M9 AÇIK denetimi kalkınca PR'ı süren AÇIK ders işlenmiş sayılır (kapı yakalar): mutant ısırıldı
+  ✓ M8 PR yok denetimi kalkınca görev kimlikli ders işlenmiş sayılır (kapı yakalar): mutant ısırıldı
+  ✓ M9 AÇIK denetimi kalkınca birleşmiş PR'lı AÇIK ders geçer (kapı yakalar): mutant ısırıldı
+  ✓ M12 PR durumu sorulmazsa (referans var = işlendi) açık PR haftayı kapatır (kapı yakalar): mutant ısırıldı
+  ✓ M13 çıplak #N kabul edilince depo belirsiz referans geçer (kapı yakalar): mutant ısırıldı
+  ✓ M14 gh hatası sessiz geçilince ölçülemeyen PR yeşil olur (kapı yakalar): mutant ısırıldı
   ✓ M10 K6 olc'a bağlı olmazsa işlenmemiş ders haftayı kapatır (kapı yakalar): mutant ısırıldı
   ✓ M11 tarihsiz seans sessiz atlanınca sarı kaybolur (kapı yakalar): mutant ısırıldı
 
-GECEN=97 DUSEN=0
+GECEN=110 DUSEN=0
 --- stderr ---

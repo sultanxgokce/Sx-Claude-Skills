@@ -182,7 +182,17 @@ kapi "M7-önkoşul: 16 kelime gerçek araçta AÇIK" 1 python3 "$H" olc --hafta 
 m_kelime(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -ne 0 ]; }
 mut "M7 kırpık kelime sınırı kalkınca 16 kelimelik onay kapatır (kapı yakalar)" 's/^    if n > D1_KIRPIK_KELIME:$/    if False:/' m_kelime
 
-echo "— H10 K6 Doğrulat dersleri → beceri PR (Sultan katı kuralı 17 Eki; işlenmemiş ders varsa hafta kapanmaz)"
+echo "— H10 K6 Doğrulat dersleri → BİRLEŞMİŞ beceri PR (Sultan katı kuralı 17 Eki; işlenmemiş ders varsa hafta kapanmaz)"
+# sahte gh (hermetik): PR durumu tablodan; tabloda yoksa "PR değil"; GH_COK=1 → ağ hatası (ölçülemedi)
+cat > "$T/gh" <<'EOF'
+#!/usr/bin/env bash
+[ "${GH_COK:-0}" = 1 ] && { echo "error connecting to api.github.com" >&2; exit 1; }
+n="$3"; repo="$5"; d="$(awk -v k="$repo#$n" '$1==k{print $2}' "$(dirname "$0")/gh-tablo")"
+[ -n "$d" ] && { echo "$d"; exit 0; }
+echo "GraphQL: Could not resolve to a PullRequest with the number of $n. (repository.pullRequest)" >&2; exit 1
+EOF
+chmod +x "$T/gh"; printf 'sultanxgokce/cloudtop#676 MERGED\nsultanxgokce/Sx-Claude-Skills#370 MERGED\nx/y#371 MERGED\nsultanxgokce/cloudtop#900 OPEN\nsultanxgokce/cloudtop#901 CLOSED\n' > "$T/gh-tablo"
+export HAFTA_KAPANIS_GH="$T/gh"
 cp "$T/M.yedek" "$M"; sed -i 's/^_sultan_onay: .*/_sultan_onay: 2026-10-18 Sultan: hafta kapansın (sohbet · oturum-ref-2 · "tamam kapat" · beyan:SERDAR)/' "$KP"
 kapi "H10-önkoşul: seans kaydı yokken KAPANDI (K6 yeşil, bunu söyler)" 0 python3 "$H" olc --hafta 2026-W42
 icerir "$CIKTI" "✓ K6 Doğrulat dersleri → beceri PR: bu hafta Doğrulat seans kaydı yok" "H10-önkoşul2 K6 dili"
@@ -199,15 +209,28 @@ cat > "$DG/2026-10-16.md" <<'EOF'
 - tık sayısı #1 hedef
 EOF
 kapi "H10a PR'sız ders (2) + AÇIK ders (3) → K6 kırmızı → AÇIK rc=1" 1 python3 "$H" olc --hafta 2026-W42
-icerir "$CIKTI" "2026-10-16.md: 2/3 ders PR'a işlenmedi (madde 2, 3)" "H10b eksik seans dersleriyle listelendi (görev kimliği PR yerine geçmez; ders dışı bölüm sayılmaz)"
+icerir "$CIKTI" "2026-10-16.md: 2/3 ders PR'a işlenmedi (madde 2: PR yok; 3: AÇIK)" "H10b eksik seans dersleri ve gerekçesiyle (görev kimliği PR yerine geçmez; ders dışı bölüm sayılmaz)"
 icerir "$(cat "$KP")" "| K6 | Doğrulat dersleri → beceri PR | ✗ KIRMIZI |" "H10c KAPANIS.md'de K6 satırı"
 icerir "$(cat "$KP")" "_durum: AÇIK" "H10d onay VAR olsa da hafta AÇIK (onay işlenmemiş dersi kapatmaz)"
 cp "$DG/2026-10-16.md" "$T/DG.yedek"
-sed -i 's/^2\. Bitiş sinyali yok → .*/2. Bitiş sinyali yok → Sx #370 muhakkik --done adımı/; s/^3\. AÇIK: dış yüzeyde .*/3. Dış yüzeyde kare şartı → https:\/\/github.com\/x\/y\/pull\/371/' "$DG/2026-10-16.md"
-kapi "H10e üç ders de PR'a bağlı (#N · /pull/N) → KAPANDI" 0 python3 "$H" olc --hafta 2026-W42
-icerir "$CIKTI" "1 Doğrulat seansı, 3 dersin hepsi beceri PR'ına işlenmiş" "H10f yeşil dili"
-sed -i 's/^2\. Bitiş sinyali yok → .*/2. AÇIK: Bitiş sinyali → Sx #370 sürüyor/' "$DG/2026-10-16.md"
-kapi "H10g PR'ı olsa da AÇIK işaretli ders işlenmemiş → AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "1/3 ders PR'a işlenmedi (madde 2)" "H10h gerekçe"
+ders2(){ sed -i "s|^2\. .*|2. $1|" "$DG/2026-10-16.md"; }
+sed -i 's|^3\. AÇIK: dış yüzeyde .*|3. Dış yüzeyde kare şartı → https://github.com/x/y/pull/371|' "$DG/2026-10-16.md"
+ders2 "Bitiş sinyali → Sx #370 muhakkik --done adımı"
+kapi "H10e üç ders de BİRLEŞMİŞ PR'a bağlı (depo #N · /pull/N) → KAPANDI" 0 python3 "$H" olc --hafta 2026-W42
+icerir "$CIKTI" "1 Doğrulat seansı, 3 dersin hepsi birleşmiş bir PR'a işlenmiş" "H10f yeşil dili"
+ders2 "AÇIK: Bitiş sinyali → Sx #370 sürüyor"
+kapi "H10g birleşmiş PR'ı olsa da AÇIK işaretli ders işlenmemiş → AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "1/3 ders PR'a işlenmedi (madde 2: AÇIK)" "H10h gerekçe"
+ders2 "Bitiş sinyali → cloudtop #900 (inceleniyor)"
+kapi "H10p PR kaynağında AÇIK (OPEN, metinde etiketsiz) → işlenmemiş (göz #365 tur 1)" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "madde 2: cloudtop #900 open" "H10p2 gerekçe PR durumundan"
+ders2 "Bitiş sinyali → cloudtop #901"
+kapi "H10q kapatılmış (birleşmemiş) PR → işlenmemiş" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "madde 2: cloudtop #901 closed" "H10q2 gerekçe"
+ders2 "Bitiş sinyali → cloudtop #12345 (issue)"
+kapi "H10r PR olmayan numara (issue) → işlenmemiş (göz #365 tur 1)" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "madde 2: cloudtop #12345 PR değil" "H10r2 gerekçe"
+ders2 "Bitiş sinyali → #370"
+kapi "H10s depo adı olmadan #N (hangi depo?) → işlenmemiş" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "madde 2: depo adı olmadan #N" "H10s2 gerekçe"
+ders2 "Bitiş sinyali → Sx #370 muhakkik --done adımı"
+kapi "H10t gh cevap veremez → K6 SARI → rc=3 ÖLÇÜLEMEDİ (ölçülemedi ≠ işlendi)" 3 env GH_COK=1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "PR durumu ölçülemedi (gh)" "H10t2 gerekçe"
+cp "$T/DG.yedek" "$DG/2026-10-16.md"
 printf '# Doğrulat seansı — 2026-10-16\n## Ölçüm\n- 10 → 2\n' > "$DG/2026-10-16.md"
 kapi "H10i ders bölümü olmayan seans → AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "2026-10-16.md: ders bölümü yok" "H10j gerekçe"
 python3 -c "import os,sys; os.remove(sys.argv[1])" "$DG/2026-10-16.md"
@@ -215,18 +238,25 @@ cp "$T/DG.yedek" "$DG/2026-10-05.md"
 kapi "H10k başka haftanın işlenmemiş seansı bu haftayı tutmaz → KAPANDI" 0 python3 "$H" olc --hafta 2026-W42
 kapi "H10l ...ama kendi haftasında (W41) kırmızı" 1 python3 "$H" olc --hafta 2026-W41; icerir "$CIKTI" "2026-10-05.md: 2/3 ders" "H10m W41 gerekçe"
 python3 -c "import shutil,sys; shutil.rmtree(sys.argv[1], ignore_errors=True)" "$KOK/_agents/handoff/retro/2026-W41"
-printf '# taslak seans\n## Pürüzler → ders\n1. x → #1\n' > "$DG/taslak.md"
+printf '# taslak seans\n## Pürüzler → ders\n1. x → cloudtop #676\n' > "$DG/taslak.md"
 kapi "H10n adında tarih olmayan seans dosyası → K6 SARI → rc=3 ÖLÇÜLEMEDİ (bu hafta değil sayılmaz)" 3 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "taslak.md (adında tarih yok)" "H10o gerekçe"
 python3 -c "import os,sys; os.remove(sys.argv[1])" "$DG/taslak.md"
 cp "$T/DG.yedek" "$DG/2026-10-16.md"
 # K6 mutantları (kopya üstünde)
-m_k6_pr(){ local o; o="$(python3 "$1" olc --hafta 2026-W42 2>&1)"; grep -qF "(madde 2, 3)" <<<"$o"; }
-mut "M8 PR denetimi kalkınca görev kimlikli ders işlenmiş sayılır (kapı yakalar)" 's/if not PR_RE.search(tx) or ACIK_RE.search(tx)\]/if ACIK_RE.search(tx)]/' m_k6_pr
-sed -i 's/^2\. Bitiş sinyali yok → .*/2. AÇIK: Bitiş sinyali → Sx #370 sürüyor/; s/^3\. AÇIK: dış yüzeyde .*/3. Dış yüzeyde kare şartı → #371/' "$DG/2026-10-16.md"
-m_k6_acik(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -ne 0 ]; }
-mut "M9 AÇIK denetimi kalkınca PR'ı süren AÇIK ders işlenmiş sayılır (kapı yakalar)" 's/if not PR_RE.search(tx) or ACIK_RE.search(tx)\]/if not PR_RE.search(tx)]/' m_k6_acik
-cp "$T/DG.yedek" "$DG/2026-10-16.md"
 m_k6_bagli(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -ne 0 ]; }
+m_k6_bagli_2(){ local o; o="$(python3 "$1" olc --hafta 2026-W42 2>&1)"; grep -qF "madde 2: PR yok" <<<"$o"; }
+mut "M8 PR yok denetimi kalkınca görev kimlikli ders işlenmiş sayılır (kapı yakalar)" 's/        return "islenmedi", "depo adı olmadan #N" if ciplak else "PR yok"/        return ("islenmedi", "depo adı olmadan #N") if ciplak else ("islendi", "")/' m_k6_bagli_2
+sed -i 's|^3\. AÇIK: dış yüzeyde .*|3. Dış yüzeyde kare şartı → https://github.com/x/y/pull/371|' "$DG/2026-10-16.md"
+ders2 "AÇIK: Bitiş sinyali → Sx #370 sürüyor"
+mut "M9 AÇIK denetimi kalkınca birleşmiş PR'lı AÇIK ders geçer (kapı yakalar)" 's/^    if ACIK_RE.search(tx):$/    if False:/' m_k6_bagli
+ders2 "Bitiş sinyali → cloudtop #900 (inceleniyor)"
+mut "M12 PR durumu sorulmazsa (referans var = işlendi) açık PR haftayı kapatır (kapı yakalar)" 's/    if any(x == "MERGED" for _, x in durumlar):/    if durumlar:/' m_k6_bagli
+ders2 "Bitiş sinyali → #370"
+mut "M13 çıplak #N kabul edilince depo belirsiz referans geçer (kapı yakalar)" 's/        return "islenmedi", "depo adı olmadan #N" if ciplak else "PR yok"/        return ("islendi", "") if ciplak else ("islenmedi", "PR yok")/' m_k6_bagli
+ders2 "Bitiş sinyali → Sx #370 muhakkik --done adımı"
+m_k6_gh(){ GH_COK=1 python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -eq 3 ]; }
+mut "M14 gh hatası sessiz geçilince ölçülemeyen PR yeşil olur (kapı yakalar)" 's/^    if olcemedi:$/    if False:/' m_k6_gh
+cp "$T/DG.yedek" "$DG/2026-10-16.md"
 mut "M10 K6 olc'a bağlı olmazsa işlenmemiş ders haftayı kapatır (kapı yakalar)" '/K.append(("K6", /d' m_k6_bagli
 printf '# taslak\n' > "$DG/taslak.md"
 m_k6_tarih(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -eq 3 ]; }
