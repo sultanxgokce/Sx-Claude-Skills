@@ -1,0 +1,8 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kanon-crontab-olc.sh /config/projects/_wt/Sx-Claude-Skills-terminal-onar-bekci-yorum-korur/terminal-onar/scripts
+# rc=0 sure=0.1s zaman=2026-10-17T21:04:33+03:00
+--- stdout ---
+kanon: cloudtop origin/main 08cfb27 · 774 satır · işaret metinli satır: 2
+bekci_kur: yazıldı
+kanon ↔ bekci_kur sonrası fark satırı: 0
+bekçi satırı (yorum olmayan) sayısı: 1
+--- stderr ---

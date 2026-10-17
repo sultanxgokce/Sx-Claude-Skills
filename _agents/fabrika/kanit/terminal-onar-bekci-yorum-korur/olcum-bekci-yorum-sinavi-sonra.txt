@@ -1,0 +1,29 @@
+$ bash /config/projects/_wt/Sx-Claude-Skills-terminal-onar-bekci-yorum-korur/terminal-onar/scripts/bekci-yorum.test.sh
+# rc=0 sure=0.5s zaman=2026-10-17T21:04:34+03:00
+--- stdout ---
+── Y kanon yorumu + doğru bekçi satırı: hiçbir şey değişmez
+  ✓ Y1 crontab BAYT BAYT aynı kaldı (yorum bekçi satırı sanılmadı)
+  ✓ Y1b sonuç 'canlı crontab düzeltildi' DEMEDİ
+  ✓ Y2 işaret metinli kanon yorumu korundu
+  ✓ Y2b girintili yorum korundu
+  ✓ Y2c açılış işaretli yorum korundu
+  ✓ Y2d asıl bekçi satırı TEK ve yerinde
+── Y yalnız yorum işareti taşıyor, asıl satır yok
+  ✓ Y3 bekci_kurulu: asıl satır yokken 'kurulu' DEMEZ (yorum sayılmaz)
+  ✓ Y3b bekci_kur asıl satırı EKLEDİ
+  ✓ Y3c yorum yine korundu
+  ✓ Y3d artık kurulu
+── eski davranış korunur: çift kopya tekilleşir · eski yol kanoniğe çevrilir
+  ✓ Y4 iki asıl satır → tek
+  ✓ Y4b aradaki yorum korundu
+  ✓ Y5 eski yollu satır kanonik satıra çevrildi
+  ✓ Y5b eski yol kalmadı
+  ✓ Y5c bu kez 'düzeltildi' dedi (gerçek değişiklik)
+── .oda/cron (kalıcı dosya) da aynı kural
+  ✓ Y6 .oda/cron bayt bayt aynı (iki yorum korundu)
+── mutasyon (kopya üstünde)
+  ✓ M1 desen eski (işaret satırın HERHANGİ yerinde) olunca yorum bekçi satırına çevrilir: mutant ısırıldı
+  ✓ M2 bekci_kurulu eski desene dönünce yorum yüzünden 'kurulu' der: mutant ısırıldı
+
+GECEN=18 DUSEN=0
+--- stderr ---
