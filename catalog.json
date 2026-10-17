@@ -1697,6 +1697,21 @@
       ],
       "author": "sultanxgokce",
       "source": "merkez (BÂNİ, G-BANI-0006 · Sultan 13 Eki 2026)"
+    },
+    {
+      "id": "retro",
+      "type": "workflow",
+      "name": "Haftalık Retro — Araç Ölçer · Ajan Yorumlar · Merkez Toplar · Süzüm Kanıtlanır",
+      "version": "1.0.0",
+      "description": "Her ajanın haftasını beş kaynaktan ÖLÇER (NOTES satırları · fabrika kartları · bağımsız göz turları · kaçışlar · boşta zilleri; ölçemediğini sarı basar), ajan 5 başlığı kendi gözüyle yorumlar (ne bitti · nerede zaman kaybettim ölçüyle · hangi araç/kural yavaşlattı · ne öğrendim · merkeze önerim); çıktı _agents/handoff/retro/<hafta>/<AJAN>.md lint'li. Merkez kipi kutu retrolarını toplar (OK/GEÇERSİZ/EKSİK/ÇALIŞMADI), MERKEZ.md iskeleti kurar; her öneri → gorev_ ya da → RED damgası alır, süzüm mekanik ölçülür. Haftayı kapatmaz (/hafta-kapanis), zil düşürmez (cron).",
+      "tags": [
+        "retro",
+        "hafta",
+        "olcum",
+        "ders",
+        "workflow",
+        "global"
+      ]
     }
   ]
 }

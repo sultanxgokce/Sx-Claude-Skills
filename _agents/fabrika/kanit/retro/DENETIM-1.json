@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "retro",
+  "pr": "359",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T16:07:42+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 65674,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 10,
+    "bayt": 19848
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Kutu ve merkez kipleri, sarı ölçüm, beş başlık linti, eksik ajan dökümü ve öneri damgası akışı talep doğrultusunda kurulmuş; hermetik sınav ile canlı örnekler ana yolları gösteriyor. Lakin öneri damgası önerinin içeriğine değil yalnız ajan ve sıra numarasına bağlandığı için değiştirilmiş bir öneri eski onayla geçmiş sayılabilir; üretimden önce bu güven zinciri çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Süzüm damgasının kimliği yalnız `(ajan, öneri numarası)` olduğundan öneri metni sonradan değiştirilse bile eski `gorev_…` veya `RED` damgası yeni içeriği onaylamış gibi kabul edilir; mekanik süzüm kanıtının bütünlüğü kırılıyor.",
+        "kanit": "`merkez --yenile` mevcut damgayı `(norm(ajan), int(Ö no))` anahtarıyla saklayıp yeni öneri metnine aynı anahtarla geri takıyor; `suzum` da kutu dosyasındaki önerinin metnini MERKEZ satırıyla karşılaştırmadan aynı ikili üzerinden damgayı kabul ediyor. Sınav T7g–T7i yalnız değişmemiş öneride damga korumayı ölçüyor, öneri metni değişimi mutasyonu yok.",
+        "konum": "retro/scripts/retro.py:438, retro/scripts/retro.py:458, retro/scripts/retro.py:477, retro/scripts/retro.py:493; retro/scripts/retro.test.sh:T7g-T7i",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Hermetik sınavın rc=0 sonucu, canlı kutu/lint/merkez/süzüm ölçümleri ve örnek retro dosyası güçlü kanıt sağlıyor; ancak küresel becerinin kurulduğunu gösteren yalnız `önce` ölçümü var, `/config/.claude/skills/retro` için eşlenik `sonra` ölçümü yok ve canlı komut doğrudan depo içindeki `retro/scripts/retro.py` yolunu çağırıyor. Ayrıca verilen sınav çıktısı ilk 60 satırla kesildiğinden mutasyonların ayrıntılı sonuçları görünmüyor; tüm betiğin rc=0 olması dolaylı kanıt."
+  }
+}
