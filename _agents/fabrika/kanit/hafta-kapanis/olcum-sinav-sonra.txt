@@ -1,5 +1,5 @@
 $ bash hafta-kapanis/scripts/hafta-kapanis.test.sh
-# rc=0 sure=2.0s zaman=2026-10-17T16:23:41+03:00
+# rc=0 sure=2.2s zaman=2026-10-17T16:28:05+03:00
 --- stdout ---
 — H1 retro becerisi yoksa SARI (sahte yeşil yok)
   ✓ H1a retro.py bulunamaz → rc=3 (rc=3)
@@ -25,7 +25,7 @@ $ bash hafta-kapanis/scripts/hafta-kapanis.test.sh
 — H4 merkez dolu: dersler + D1 görevler + süzüm damgası + kaçış damgası → ONAY BEKLİYOR
   ✓ H4a dört kapı yeşil, onay yok → rc=5 ONAY BEKLİYOR (rc=5)
   ✓ H4b durum
-  ✓ H4c K2 iki ders kapsandı (biri RED)
+  ✓ H4c K2 iki ders, ikisi de görev + D1
   ✓ H4d K4 yeşil
   ✓ H4e onay hâlâ boş — araç KAPANDI demedi, D1 üretmedi (A06)
   ✓ H4f onaysız KAPANDI yok
@@ -47,11 +47,18 @@ $ bash hafta-kapanis/scripts/hafta-kapanis.test.sh
   ✓ H7a3 gerekçe
   ✓ H7c ders görevsiz (M2) → AÇIK (rc=1)
   ✓ H7d eksik ders adı
-  ✓ H7e yer tutuculu ders sayılmaz (M1 kalır, M2 yok) → yine yeşil K2 ama (rc=0)
-  ✓ H7f yer tutucu ders sayılmadı
+  ✓ H7c2 RED satırı dersi KAPSAMAZ (göz tur 2) → AÇIK (rc=1)
+  ✓ H7c3 RED yolu yok
+  ✓ H7e yer tutuculu ders sayılmaz: K2 1 ders yeşil, ama kaçışın bağlandığı M2 artık yazılı değil → K4 kırmızı → AÇIK (rc=1)
+  ✓ H7f yer tutucu ders sayılmadı (K2)
+  ✓ H7g K4 silinen derse bağ kırmızı
 — H8 K4 kenarı
   ✓ H8a tıkanma damgası silinince AÇIK (rc=1)
   ✓ H8b eksik anahtar
+  ✓ H8b2 RED damgası kaçışı kapsamaz (göz tur 2) → AÇIK (rc=1)
+  ✓ H8b3 RED'li anahtar eksik sayıldı
+  ✓ H8b4 yazılı olmayan derse bağ (M9) → AÇIK (rc=1)
+  ✓ H8b5 gerekçe
   ✓ H8c geri alındı → KAPANDI (rc=0)
   ✓ H8d okunamayan kart → K4 SARI → rc=3 ÖLÇÜLEMEDİ (sessiz atlama yok) (rc=3)
   ✓ H8e bozuk kart adı
@@ -70,6 +77,8 @@ $ bash hafta-kapanis/scripts/hafta-kapanis.test.sh
   ✓ M4 bozuk kart sessiz atlanınca sarı kaybolur (kapı yakalar): mutant ısırıldı
   ✓ M5-önkoşul: kuyruklu D1 gerçek araçta AÇIK (rc=1)
   ✓ M5 onay D1 tam eşleşmesi gevşeyince kuyruklu onay kapatır (kapı yakalar): mutant ısırıldı
+  ✓ M6-önkoşul: M9 gerçek araçta AÇIK (rc=1)
+  ✓ M6 yazılı-ders denetimi kalkınca M9 bağı geçer (kapı yakalar): mutant ısırıldı
 
-GECEN=60 DUSEN=0
+GECEN=69 DUSEN=0
 --- stderr ---

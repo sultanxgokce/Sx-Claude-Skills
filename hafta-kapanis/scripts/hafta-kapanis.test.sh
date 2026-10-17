@@ -69,13 +69,13 @@ import sys;p=sys.argv[1];s=open(p,encoding="utf-8").read()
 s=s.replace("denetci.sh daralt tanısın →","denetci.sh daralt tanısın → gorev_01M54APFDAHKN72VKBWTGKSAAM")
 s=s.replace("canli-ayarla ayrı kart →","canli-ayarla ayrı kart → RED: sahip doğrulaması tasarlanmadan açılmaz")
 s=s.replace("- M1) <ders> · kaynak: <AJAN D<n> | ölçüm>","- M1) kart depo başına açılır · kaynak: BÂNİ D1\n- M2) daraltma hat adımı eksik · kaynak: ölçüm (3 tur 4/H)")
-s=s.replace("- <gorev_… · ders M<n>>",'- gorev_01M54ARD0YSNPSY5HVQFTPCP7J · ders M1 · D1: 2026-10-18 Sultan: onay (sohbet · oturum-ref-1 · "kart depo başına, tamam" · beyan:SERDAR)\n- M2 → RED: hat adımı ayrı layiha, bu hafta görev değil')
-s+="\n## Kaçış ve tıkanma\n- 2026-10-15T14:34:31Z → M1\n- kart:is-b → RED: tıkanma dersi M1 ile aynı kök, ayrı ders yok\n"
+s=s.replace("- <gorev_… · ders M<n>>",'- gorev_01M54ARD0YSNPSY5HVQFTPCP7J · ders M1 · D1: 2026-10-18 Sultan: onay (sohbet · oturum-ref-1 · "kart depo başına, tamam" · beyan:SERDAR)\n- gorev_01M54B2Y4QT7VWTJX10AFR7M76 · ders M2 · D1: 2026-10-18 Sultan: onay (sohbet · oturum-ref-1 · "daraltma adımı hatta girsin" · beyan:SERDAR)')
+s+="\n## Kaçış ve tıkanma\n- 2026-10-15T14:34:31Z → M1\n- kart:is-b → M2\n"
 open(p,"w",encoding="utf-8").write(s)
 PY
 kapi "H4a dört kapı yeşil, onay yok → rc=5 ONAY BEKLİYOR" 5 python3 "$H" olc --hafta 2026-W42
 icerir "$(cat "$KP")" "_durum: ONAY BEKLİYOR" "H4b durum"
-icerir "$(cat "$KP")" "| K2 | dersler → görev (D1) | ✓ YEŞİL | 2 ders, hepsi" "H4c K2 iki ders kapsandı (biri RED)"
+icerir "$(cat "$KP")" "| K2 | dersler → görev (D1) | ✓ YEŞİL | 2 ders, hepsi görev defterine D1" "H4c K2 iki ders, ikisi de görev + D1"
 icerir "$(cat "$KP")" "| K4 | kaçış/tıkanma → ders | ✓ YEŞİL | 2 kaçış" "H4d K4 yeşil"
 icerir "$(cat "$KP")" "_sultan_onay: (bekliyor" "H4e onay hâlâ boş — araç KAPANDI demedi, D1 üretmedi (A06)"
 icermez "$(cat "$KP")" "_durum: KAPANDI" "H4f onaysız KAPANDI yok"
@@ -100,15 +100,22 @@ sed -i 's/ · D1: 2026-10-18 Sultan: onay (sohbet · oturum-ref-1 · "kart depo 
 kapi "H7a D1 biçimsiz görev satırı → K2 kırmızı → AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "D1 damgası biçimsiz" "H7b gerekçe"
 cp "$T/M.yedek" "$M"; sed -i 's/ · D1: 2026-10-18 Sultan: onay (sohbet/ · D1: not: 2026-10-18 Sultan: onay (sohbet/' "$M"
 kapi "H7a2 görev D1 başına yabancı metin → biçimsiz (tam eşleşme)" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "D1 damgası biçimsiz" "H7a3 gerekçe"
-cp "$T/M.yedek" "$M"; sed -i '/^- M2 → RED: /d' "$M"
-kapi "H7c ders görevsiz (M2) → AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "ders→görev eksik: M2" "H7d eksik ders adı"
+cp "$T/M.yedek" "$M"; sed -i '/ · ders M2 · D1: /d' "$M"
+kapi "H7c ders görevsiz (M2) → AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "ders→görev D1 eksik: M2" "H7d eksik ders adı"
+cp "$T/M.yedek" "$M"; sed -i 's/ · ders M2 · D1: / · ders M2 · D1: /; /^- gorev_01M54B2Y4QT7VWTJX10AFR7M76/c\- M2 → RED: hat adımı ayrı layiha, bu hafta görev değil' "$M"
+kapi "H7c2 RED satırı dersi KAPSAMAZ (göz tur 2) → AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "ders→görev D1 eksik: M2" "H7c3 RED yolu yok"
 cp "$T/M.yedek" "$M"; sed -i 's/^- M2) daraltma hat adımı eksik .*/- M2) <ders> · kaynak: <AJAN D<n> | ölçüm>/' "$M"
-kapi "H7e yer tutuculu ders sayılmaz (M1 kalır, M2 yok) → yine yeşil K2 ama" 0 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "1 ders, hepsi" "H7f yer tutucu ders sayılmadı"
+kapi "H7e yer tutuculu ders sayılmaz: K2 1 ders yeşil, ama kaçışın bağlandığı M2 artık yazılı değil → K4 kırmızı → AÇIK" 1 python3 "$H" olc --hafta 2026-W42
+icerir "$CIKTI" "1 ders, hepsi" "H7f yer tutucu ders sayılmadı (K2)"; icerir "$CIKTI" "kart:is-b → M2 (ders yazılı değil)" "H7g K4 silinen derse bağ kırmızı"
 cp "$T/M.yedek" "$M"
 
 echo "— H8 K4 kenarı"
 sed -i '/^- kart:is-b → /d' "$M"
 kapi "H8a tıkanma damgası silinince AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "1/2 kaçış/tıkanma ders damgası almadı: kart:is-b (tıkanma)" "H8b eksik anahtar"
+cp "$T/M.yedek" "$M"; sed -i 's/^- kart:is-b → M2$/- kart:is-b → RED: tıkanma dersi M1 ile aynı kök/' "$M"
+kapi "H8b2 RED damgası kaçışı kapsamaz (göz tur 2) → AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "kart:is-b (tıkanma)" "H8b3 RED'li anahtar eksik sayıldı"
+cp "$T/M.yedek" "$M"; sed -i 's/^- kart:is-b → M2$/- kart:is-b → M9/' "$M"
+kapi "H8b4 yazılı olmayan derse bağ (M9) → AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "kart:is-b → M9 (ders yazılı değil)" "H8b5 gerekçe"
 cp "$T/M.yedek" "$M"; kapi "H8c geri alındı → KAPANDI" 0 python3 "$H" olc --hafta 2026-W42
 printf '{bozuk json' > "$KOK/_agents/fabrika/kartlar/is-x.json"
 kapi "H8d okunamayan kart → K4 SARI → rc=3 ÖLÇÜLEMEDİ (sessiz atlama yok)" 3 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "1 kart okunamadı, tıkanma kümesi eksik olabilir: is-x.json" "H8e bozuk kart adı"
@@ -134,7 +141,7 @@ cp "$T/M.yedek" "$M"
 # M2: K4 eksik denetimi kalkınca damgasız tıkanma geçer
 sed -i '/^- kart:is-b → /d' "$M"
 m_k4(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -ne 0 ]; }
-mut "M2 K4 eksik denetimi kalkınca damgasız kaçış geçer (kapı yakalar)" 's/^    if eksik:$/    if False:/' m_k4
+mut "M2 K4 eksik denetimi kalkınca damgasız kaçış geçer (kapı yakalar)" 's/^    if eksik or yok:$/    if False:/' m_k4
 cp "$T/M.yedek" "$M"
 # M3: onay D1 denetimi kalkınca 'onaylandı' KAPANDI sayılır (A06 kapısı)
 sed -i 's/^_sultan_onay: .*/_sultan_onay: onaylandı/' "$KP"
@@ -151,6 +158,14 @@ sed -i 's/^_sultan_onay: .*/_sultan_onay: 2026-10-18 Sultan: hafta kapansın (so
 kapi "M5-önkoşul: kuyruklu D1 gerçek araçta AÇIK" 1 python3 "$H" olc --hafta 2026-W42
 m_kuyruk(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -ne 0 ]; }
 mut "M5 onay D1 tam eşleşmesi gevşeyince kuyruklu onay kapatır (kapı yakalar)" 's/            if D1_RE.fullmatch(v):/            if D1_RE.search(v):/' m_kuyruk
+
+# M6: K4'te "ders yazılı değil" denetimi kalkınca M9 bağı geçer
+sed -i 's/^_sultan_onay: .*/_sultan_onay: 2026-10-18 Sultan: hafta kapansın (sohbet · oturum-ref-2 · "tamam kapat" · beyan:SERDAR)/' "$KP"
+sed -i 's/^- kart:is-b → M2$/- kart:is-b → M9/' "$M"
+kapi "M6-önkoşul: M9 gerçek araçta AÇIK" 1 python3 "$H" olc --hafta 2026-W42
+m_m9(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -ne 0 ]; }
+mut "M6 yazılı-ders denetimi kalkınca M9 bağı geçer (kapı yakalar)" 's/    yok = \[f"{a} → M{n} (ders yazılı değil)" for a, n in damga.items() if a in anahtarlar and n not in dersler\]/    yok = []/' m_m9
+cp "$T/M.yedek" "$M"
 
 echo; echo "GECEN=$G DUSEN=$K"
 [ "$K" -eq 0 ]

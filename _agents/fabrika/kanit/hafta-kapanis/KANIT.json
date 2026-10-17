@@ -1,14 +1,14 @@
 {
   "is": "hafta-kapanis",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-17T16:23:42+03:00",
+  "guncelleme": "2026-10-17T16:28:05+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "beceri-varligi",
       "asama": "once",
       "dosya": "olcum-beceri-varligi-once.txt",
-      "sha256": "dffe9e7898a1228894325aba3bd69fd232d71fd9c7c34b2d0b8a1de3d4a35940",
+      "sha256": "88b9f76047603517146ff5dedfc8a797cfbf75ced04555a8dffd0e4928f8c34c",
       "komut": [
         "bash",
         "-c",
@@ -16,7 +16,7 @@
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-10-17T16:23:39+03:00",
+      "zaman": "2026-10-17T16:28:02+03:00",
       "sure_sn": 0.0
     },
     {
@@ -24,30 +24,30 @@
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "affbce76208f3bddabc7ac3eb837f3957ac5124172ffea2316b8396b072c6239",
+      "sha256": "6a2e5552f813b215867da605d77a89bdcc59a49f831b51e48333d7ce3427fe05",
       "komut": [
         "bash",
         "hafta-kapanis/scripts/hafta-kapanis.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-17T16:23:41+03:00",
-      "sure_sn": 2.0
+      "zaman": "2026-10-17T16:28:05+03:00",
+      "sure_sn": 2.2
     },
     {
       "tur": "olcum",
       "etiket": "retro-yokken-sari",
       "asama": "sonra",
       "dosya": "olcum-retro-yokken-sari-sonra.txt",
-      "sha256": "30bedd0ae467d2c7932d8b6c8ec75200fd9a19a7d3033461f40aaa3473f38971",
+      "sha256": "f4b623645ce896d14c92201296c1009fb09d521b188bbb2fdbe9959678287765",
       "komut": [
         "bash",
         "-c",
-        "env -u HAFTA_KAPANIS_RETRO_PY HOME='/tmp/tmp.n9N7qXosQM/ev' python3 '/tmp/tmp.n9N7qXosQM/x/scripts/hafta-kapanis.py' olc --hafta 2026-W42 --kok '/tmp/tmp.n9N7qXosQM'; [ $? -eq 3 ]"
+        "env -u HAFTA_KAPANIS_RETRO_PY HOME='/tmp/tmp.1nW4A35Jo7/ev' python3 '/tmp/tmp.1nW4A35Jo7/x/scripts/hafta-kapanis.py' olc --hafta 2026-W42 --kok '/tmp/tmp.1nW4A35Jo7'; [ $? -eq 3 ]"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-17T16:23:41+03:00",
+      "zaman": "2026-10-17T16:28:05+03:00",
       "sure_sn": 0.0
     },
     {
@@ -55,15 +55,15 @@
       "etiket": "canli-olc-beklenen-acik",
       "asama": "sonra",
       "dosya": "olcum-canli-olc-beklenen-acik-sonra.txt",
-      "sha256": "008bfff5c252a30b7f1457a022d4cf7f2a78ea43324dfbcac7ba4584278accb4",
+      "sha256": "8244d31ae70de4d329ac22ee5fd0c66822427dcd7d49cef7f6d5b16c2d3179c0",
       "komut": [
         "bash",
         "-c",
-        "python3 hafta-kapanis/scripts/hafta-kapanis.py olc --hafta 2026-W42 --kok '/tmp/tmp.JztquoKner/nexus-ince'; [ $? -eq 1 ]"
+        "python3 hafta-kapanis/scripts/hafta-kapanis.py olc --hafta 2026-W42 --kok '/tmp/tmp.BZWJ0vSuiq/nexus-ince'; [ $? -eq 1 ]"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-17T16:23:42+03:00",
+      "zaman": "2026-10-17T16:28:05+03:00",
       "sure_sn": 0.2
     },
     {
@@ -71,28 +71,45 @@
       "etiket": "kapanis-2026-W42-canli",
       "asama": "tek",
       "dosya": "dosya-kapanis-2026-W42-canli-tek.md",
-      "sha256": "25d01c04b7e4d92c6ef641455bb8da67cc5f807388d7ad4290332d22314fd337",
-      "kaynak": "/tmp/tmp.JztquoKner/nexus-ince/_agents/handoff/retro/2026-W42/KAPANIS.md",
+      "sha256": "00ec2788993d52072297cef111b2481282b6e9b7dd9450a1c647dfbbc67df881",
+      "kaynak": "/tmp/tmp.BZWJ0vSuiq/nexus-ince/_agents/handoff/retro/2026-W42/KAPANIS.md",
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-17T16:23:42+03:00"
+      "zaman": "2026-10-17T16:28:05+03:00"
     },
     {
       "tur": "olcum",
       "etiket": "canli-acik-beklenen-1",
       "asama": "sonra",
       "dosya": "olcum-canli-acik-beklenen-1-sonra.txt",
-      "sha256": "1a555bbd9363bbdf576941a1b6075f8503064e06b7af255e6bab0e72bd546f85",
+      "sha256": "554935f496f421e9b2f56700671fd6d9d604975960f77832d88e7c354ab5f50c",
       "komut": [
         "bash",
         "-c",
-        "python3 hafta-kapanis/scripts/hafta-kapanis.py acik --kok '/tmp/tmp.JztquoKner/nexus-ince'; [ $? -eq 1 ]"
+        "python3 hafta-kapanis/scripts/hafta-kapanis.py acik --kok '/tmp/tmp.BZWJ0vSuiq/nexus-ince'; [ $? -eq 1 ]"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-17T16:23:42+03:00",
+      "zaman": "2026-10-17T16:28:05+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kurulum-plani-kuru-kosu",
+      "asama": "sonra",
+      "dosya": "olcum-kurulum-plani-kuru-kosu-sonra.txt",
+      "sha256": "6eac455d93629439415bcae4d196e2c5916ecb1f72a446cabc2c3a5e52373fe5",
+      "komut": [
+        "node",
+        "sync-skills.mjs",
+        "--skill",
+        "hafta-kapanis"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T16:28:05+03:00",
       "sure_sn": 0.0
     }
   ],
-  "imza": "4f86c39d18e20f7af681a56ec7986d97281f9c63dbda6b85ed74f7da619d6951"
+  "imza": "5a36a7c10f5fdea6240aba275968048ff6d5b24b4620efa33a1862a477c7c3ff"
 }

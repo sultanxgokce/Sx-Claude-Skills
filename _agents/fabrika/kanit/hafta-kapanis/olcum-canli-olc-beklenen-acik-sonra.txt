@@ -1,5 +1,5 @@
-$ bash -c python3 hafta-kapanis/scripts/hafta-kapanis.py olc --hafta 2026-W42 --kok '/tmp/tmp.JztquoKner/nexus-ince'; [ $? -eq 1 ]
-# rc=0 sure=0.2s zaman=2026-10-17T16:23:42+03:00
+$ bash -c python3 hafta-kapanis/scripts/hafta-kapanis.py olc --hafta 2026-W42 --kok '/tmp/tmp.BZWJ0vSuiq/nexus-ince'; [ $? -eq 1 ]
+# rc=0 sure=0.2s zaman=2026-10-17T16:28:05+03:00
 --- stdout ---
 ✗ HAFTA 2026-W42: AÇIK
   ✗ K1 katılım: OK 1 · EKSİK 7 (MUAVİN, NAKKAŞ, BASİRET, BERİD, MUHAKKIK, MİRAHUR, HENDESE) · GEÇERSİZ 0 (—) — kutu retrosunu ajan yazar

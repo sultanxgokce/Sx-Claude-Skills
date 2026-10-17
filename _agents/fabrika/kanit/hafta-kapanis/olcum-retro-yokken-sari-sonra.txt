@@ -1,5 +1,5 @@
-$ bash -c env -u HAFTA_KAPANIS_RETRO_PY HOME='/tmp/tmp.n9N7qXosQM/ev' python3 '/tmp/tmp.n9N7qXosQM/x/scripts/hafta-kapanis.py' olc --hafta 2026-W42 --kok '/tmp/tmp.n9N7qXosQM'; [ $? -eq 3 ]
-# rc=0 sure=0.0s zaman=2026-10-17T16:23:41+03:00
+$ bash -c env -u HAFTA_KAPANIS_RETRO_PY HOME='/tmp/tmp.1nW4A35Jo7/ev' python3 '/tmp/tmp.1nW4A35Jo7/x/scripts/hafta-kapanis.py' olc --hafta 2026-W42 --kok '/tmp/tmp.1nW4A35Jo7'; [ $? -eq 3 ]
+# rc=0 sure=0.0s zaman=2026-10-17T16:28:05+03:00
 --- stdout ---
 ◻ ÖLÇÜLEMEDİ: retro becerisi yok (retro.py bulunamadı: --retro-py · HAFTA_KAPANIS_RETRO_PY · kardeş dizin · ~/.claude/skills/retro) — K1/K3/K4 ölçülemez, hafta kapanmış sayılmaz
 --- stderr ---

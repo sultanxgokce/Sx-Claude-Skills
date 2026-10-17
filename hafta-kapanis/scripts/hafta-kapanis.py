@@ -7,11 +7,11 @@ koşmadıysa haftayı kapatmasın." Kapı dört ölçüm + bir onay okur; hiçbi
   K1 katılım   — aktif ajanların kutu retrosu var ve geçerli (retro.py'nin saf yardımcılarıyla; `retro.py merkez`
                  MERKEZ.md yazabildiği için kapı onu ÇAĞIRMAZ)
   K2 dersler   — MERKEZ.md var; en az bir ders (M<n>) yazılı; HER ders görev defterine D1 damgasıyla girmiş
-                 (`- gorev_<26> · ders M<n> · D1: YYYY-MM-DD Sultan: … (sohbet · <ref> · "<kırpık>" · beyan:<AJAN>)`)
-                 ya da gerekçeyle reddedilmiş (`- M<n> → RED: <gerekçe ≥10>`). D1 TAM satırdır (baş/son çapalı).
+                 (`- gorev_<26> · ders M<n> · D1: YYYY-MM-DD Sultan: … (sohbet · <ref> · "<kırpık>" · beyan:<AJAN>)`).
+                 RED yolu YOK: görev olmayacak şey Dersler'e yazılmaz (nota taşınır). D1 TAM satırdır (baş/son çapalı).
   K3 süzüm     — kutu önerilerinin her biri damgalı (retro.py suzum rc)
   K4 kaçış     — haftanın kaçış (kaçış defteri) ve tıkanma (kart durum=tikandi) kayıtlarının her biri MERKEZ.md
-                 "## Kaçış ve tıkanma" bölümünde `- <anahtar> → M<n>` ya da `→ RED: <gerekçe>` almış
+                 "## Kaçış ve tıkanma" bölümünde YAZILI bir derse bağlı: `- <anahtar> → M<n>` (RED yolu yok)
   K5 onay      — KAPANIS.md'de `_sultan_onay:` satırı geçerli D1 biçiminde. 🔴 A06: bu satırı ARAÇ YAZMAZ;
                  insan (Sultan sözünü aktaran beyan) yazar, araç yalnız var mı/biçimli mi diye ölçer ve korur.
 
@@ -34,8 +34,7 @@ D1_RE = re.compile(r"\d{4}-\d{2}-\d{2} Sultan: .+\(sohbet · [^·()]+ · \"[^\"]
 GOREV_RE = re.compile(r"gorev_[0-9A-Z]{26}")
 DERS_RE = re.compile(r"^- M(\d+)\) (.+)$")
 GOREV_SATIR_RE = re.compile(r"^- (gorev_[0-9A-Z]{26}) · ders ((?:M\d+(?:, )?)+) · D1: (.+)$")
-RED_DERS_RE = re.compile(r"^- M(\d+) → RED: (.{10,})$")
-KACIS_SATIR_RE = re.compile(r"^- (\S+) → (M\d+|RED: .{10,})$")
+KACIS_SATIR_RE = re.compile(r"^- (\S+) → M(\d+)$")   # kaçış/tıkanma yalnız bir DERSE bağlanır; RED yolu yok
 YER_TUTUCU_RE = re.compile(r"<[^>]{1,60}>")
 
 
@@ -135,13 +134,10 @@ def k2_dersler(merkez_yol):
             else:
                 bozuk.append(f"{g.group(1)} D1 damgası biçimsiz (tarih · 'Sultan:' · sohbet · ref · kırpık · beyan:) — üretme, Sultan sözünü aktar")
             continue
-        r = RED_DERS_RE.match(s)
-        if r:
-            kapsanan[r.group(1)] = "RED"
     eksik = [f"M{n}" for n in dersler if n not in kapsanan]
     if eksik or bozuk:
-        return "KIRMIZI", f"ders→görev eksik: {', '.join(eksik) or '—'}" + (f" · {' · '.join(bozuk)}" if bozuk else ""), sorted(dersler)
-    return "YEŞİL", f"{len(dersler)} ders, hepsi görev defterine D1 damgasıyla girdi ya da gerekçeli RED", sorted(dersler)
+        return "KIRMIZI", f"ders→görev D1 eksik: {', '.join(eksik) or '—'}" + (f" · {' · '.join(bozuk)}" if bozuk else ""), sorted(dersler)
+    return "YEŞİL", f"{len(dersler)} ders, hepsi görev defterine D1 damgasıyla girdi", sorted(dersler)
 
 
 def k4_kacis(retro, kok, hafta, merkez_yol):
@@ -175,15 +171,18 @@ def k4_kacis(retro, kok, hafta, merkez_yol):
         return "YEŞİL", "bu hafta kaçış/tıkanma kaydı yok"
     if not os.path.exists(merkez_yol):
         return "KIRMIZI", f"{len(anahtarlar)} kaçış/tıkanma var, MERKEZ.md yok"
+    m = open(merkez_yol, encoding="utf-8").read()
+    dersler = {d.group(1) for d in (DERS_RE.match(x.strip()) for x in bolum(m, "Dersler")) if d and not YER_TUTUCU_RE.search(d.group(2))}
     damga = {}
-    for s in bolum(open(merkez_yol, encoding="utf-8").read(), "Kaçış ve tıkanma"):
+    for s in bolum(m, "Kaçış ve tıkanma"):
         mm = KACIS_SATIR_RE.match(s.strip())
         if mm:
             damga[mm.group(1)] = mm.group(2)
     eksik = [f"{a} ({t})" for a, t in anahtarlar.items() if a not in damga]
-    if eksik:
-        return "KIRMIZI", f"{len(eksik)}/{len(anahtarlar)} kaçış/tıkanma ders damgası almadı: {', '.join(eksik)[:200]}"
-    return "YEŞİL", f"{len(anahtarlar)} kaçış/tıkanma kaydının hepsi ders damgalı"
+    yok = [f"{a} → M{n} (ders yazılı değil)" for a, n in damga.items() if a in anahtarlar and n not in dersler]
+    if eksik or yok:
+        return "KIRMIZI", f"{len(eksik) + len(yok)}/{len(anahtarlar)} kaçış/tıkanma ders damgası almadı: {', '.join(eksik + yok)[:200]}"
+    return "YEŞİL", f"{len(anahtarlar)} kaçış/tıkanma kaydının hepsi yazılı bir derse bağlı"
 
 
 def k5_onay(kapanis_yol):

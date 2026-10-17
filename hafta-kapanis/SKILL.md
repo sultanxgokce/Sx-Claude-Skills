@@ -1,6 +1,6 @@
 ---
 name: hafta-kapanis
-description: Haftanın kapanış kapısı (Pazar, Sultan) — yazmaz, ÖLÇER; protokol eksiksiz koşmadıysa hafta kapanmaz. K1 aktif ajanların kutu retrosu var ve geçerli (retro merkez) · K2 merkez retrosu var, her ders görev defterine D1 damgasıyla girmiş ya da gerekçeli RED · K3 kutu önerileri süzülmüş (retro suzum) · K4 haftanın kaçış/tıkanma kayıtları MERKEZ.md'de ders damgası almış · K5 Sultan onayı D1 biçimli (araç YAZMAZ, var mı diye ölçer — A06). Çıktı _agents/handoff/retro/<hafta>/KAPANIS.md; açık haftaları listeler. Tetik: "/hafta-kapanis", "haftayı kapat", "hafta kapandı mı", "açık hafta var mı".
+description: Haftanın kapanış kapısı (Pazar, Sultan) — yazmaz, ÖLÇER; protokol eksiksiz koşmadıysa hafta kapanmaz. K1 aktif ajanların kutu retrosu var ve geçerli · K2 merkez retrosu var, her ders görev defterine D1 damgasıyla girmiş · K3 kutu önerileri süzülmüş (retro suzum) · K4 haftanın kaçış/tıkanma kayıtları MERKEZ.md'de yazılı bir derse bağlı · K5 Sultan onayı D1 biçimli (araç YAZMAZ, var mı diye ölçer — A06). Çıktı _agents/handoff/retro/<hafta>/KAPANIS.md; açık haftaları listeler. Tetik: "/hafta-kapanis", "haftayı kapat", "hafta kapandı mı", "açık hafta var mı".
 version: 1.0.0
 ---
 
@@ -37,9 +37,9 @@ python3 ~/.claude/skills/hafta-kapanis/scripts/hafta-kapanis.py acik [--kok <dep
 | Kapı | Ne ölçer | Kaynak |
 |---|---|---|
 | K1 katılım | aktif ajanların kutu retrosu var ve lint geçer (EKSİK/GEÇERSİZ → kırmızı; iz bırakmamış ajan serbest) | retro.py saf yardımcıları (merkez komutu çağrılmaz) |
-| K2 dersler | MERKEZ.md `## Dersler`'de ≥1 `M<n>)`; **her** ders `## Görevler`'de `- gorev_<26> · ders M<n> · D1: <D1>` ya da `- M<n> → RED: <gerekçe ≥10>` | MERKEZ.md |
+| K2 dersler | MERKEZ.md `## Dersler`'de ≥1 `M<n>)`; **her** ders `## Görevler`'de `- gorev_<26> · ders M<n> · D1: <D1>` — RED yolu yok: görev olmayacak şey Dersler'e yazılmaz, nota taşınır | MERKEZ.md |
 | K3 süzüm | her kutu önerisi `→ gorev_` ya da `→ RED:` damgalı, metin güncel | `retro.py suzum` rc |
-| K4 kaçış/tıkanma | haftanın kaçış defteri satırları (anahtar: zaman damgası) + `durum=tikandi` kartları (anahtar: `kart:<iş>`) `## Kaçış ve tıkanma`'da `- <anahtar> → M<n>` ya da `→ RED: <gerekçe>`; **okunamayan kart = SARI** (sessiz atlanmaz) | kaçış defteri · kartlar · MERKEZ.md |
+| K4 kaçış/tıkanma | haftanın kaçış defteri satırları (anahtar: zaman damgası) + `durum=tikandi` kartları (anahtar: `kart:<iş>`) `## Kaçış ve tıkanma`'da **yazılı bir derse** bağlı: `- <anahtar> → M<n>` (RED yolu yok; M<n> Dersler'de olmalı); **okunamayan kart = SARI** (sessiz atlanmaz) | kaçış defteri · kartlar · MERKEZ.md |
 | K5 onay | KAPANIS.md `_sultan_onay:` D1 biçimli — **tam satır** eşleşmesi (baş/son çapalı; kuyruk metni biçimsiz) | KAPANIS.md (insan yazar) |
 
 Kapanmayan hafta: KAPANIS.md kırmızı kapıları adlarıyla basar; eksikler ilgili ajana görev olur, ertesi gün
@@ -48,10 +48,10 @@ yeniden ölçülür. `retro.py` çözümü: `--retro-py` · `HAFTA_KAPANIS_RETRO
 
 ## Kanıt
 
-`scripts/hafta-kapanis.test.sh` — 60 kapı hermetik (mktemp depo · sabit tarih) + 5 mutant kopya üstünde (görev D1
+`scripts/hafta-kapanis.test.sh` — 68 kapı hermetik (mktemp depo · sabit tarih) + 6 mutant kopya üstünde (görev D1
 denetimi kalkınca biçimsiz damga geçer · K4 eksik denetimi kalkınca damgasız tıkanma geçer · onay D1 denetimi
 kalkınca "onaylandı" haftayı kapatır · bozuk kart sessiz atlanınca sarı kaybolur · D1 tam eşleşmesi gevşeyince
-kuyruklu onay kapatır — beşi de ısırıyor). Sınav `retro.py` ister; yoksa **rc=3 ÖLÇÜLEMEDİ** basar,
+kuyruklu onay kapatır · yazılı-ders denetimi kalkınca var olmayan derse bağ geçer — altısı da ısırıyor). Sınav `retro.py` ister; yoksa **rc=3 ÖLÇÜLEMEDİ** basar,
 sahte yeşil vermez (bağ: `retro` becerisi önce birleşir).
 
 ## Sınırlar (dürüst)
