@@ -1,23 +1,23 @@
 {
   "is": "kadro-dava-kurali-b1",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-17T14:55:52+03:00",
+  "guncelleme": "2026-10-17T15:27:11+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "kilit-sinav",
       "asama": "tek",
       "dosya": "olcum-kilit-sinav-tek.txt",
-      "sha256": "5e43cfeaef63bd824faa87e24944d8efb30fdbbbda0ba860e0e8dc472aa6faa3",
+      "sha256": "fc3691bf44c04e262cae4b933468d15971fd820dc49445ac7048a0916f735ccd",
       "komut": [
         "node",
-        "/config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali-b1/terminal-onar/kapi/kilit.test.mjs"
+        "terminal-onar/kapi/kilit.test.mjs"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-17T14:55:52+03:00",
-      "sure_sn": 2.1
+      "zaman": "2026-10-17T15:27:11+03:00",
+      "sure_sn": 2.6
     }
   ],
-  "imza": "ea6c321ee8e62aa191a9ffe70d0c618ab37eb8f1318f23ce4077e94983674346"
+  "imza": "c969f6d5f00b10a44adf98778272ab8f21736fa86a7217a7d77cc724c2df0a16"
 }

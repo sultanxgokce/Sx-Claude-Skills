@@ -36,6 +36,15 @@ kapi('DV32c üç süreç AYNI bayat kilidi aynı anda görür ve devralmaya çal
 const birak = await dosyaKilit(T, { bekleMs: 500 }); writeFileSync(KL, '4242 baskasi'); birak();
 kapi('DV32d bırakma yalnız KENDİ kilidini siler: içerik başkasınınsa dosyaya dokunmaz', existsSync(KL) && readFileSync(KL, 'utf8') === '4242 baskasi');
 unlinkSync(KL);
+// DV32e/f: devral protokolü — canlı taze kilit devralma girişiminde silinmez; canlı devral tutucusu varken bayat kilit de dokunulmaz
+writeFileSync(KL, process.pid + ' canli2');
+const r32e = await dosyaKilit(T, { bekleMs: 300 }).then(() => 'ALINDI', (e) => 'RET ' + e.kod);
+kapi('DV32e taze CANLI kilit bayat-devral yolundan geçmez: 503, içerik aynen kalır', r32e === 'RET 503' && readFileSync(KL, 'utf8') === process.pid + ' canli2', r32e);
+unlinkSync(KL);
+writeFileSync(KL, oluPid + ' olu'); writeFileSync(KL + '.devral', 'baska');
+const r32f = await dosyaKilit(T, { bekleMs: 300 }).then(() => 'ALINDI', (e) => 'RET ' + e.kod);
+kapi('DV32f bayat kilit, devralı CANLI (taze) tutucu varken silinmez: 503, kilit ve devral kalır', r32f === 'RET 503' && existsSync(KL) && existsSync(KL + '.devral'), r32f);
+unlinkSync(KL); unlinkSync(KL + '.devral');
 
 console.log(`\nSONUÇ: ${g} geçti · ${k} kaldı`);
 process.exit(k ? 1 : 0);
