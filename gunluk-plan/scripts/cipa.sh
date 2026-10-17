@@ -79,7 +79,10 @@ kullanim() {
   cat >&2 <<'K'
 kullanım:
   cipa.sh yaz --plan "1) madde … | 2) madde …" [--not "…"]   günün çıpasını diske yaz
-  cipa.sh tazele --madde <n> --durum kapandi|yarim|acilmadi|geri-alindi [--not "…"]
+  cipa.sh tazele --madde <n> --durum kapandi|yarim|acilmadi|geri-alindi [--not "…"] [--kanit "<PR#|commit|dosya>"]
+  cipa.sh tazele --madde <n> --durum ertelendi --d1 "<YYYY-MM-DD Sultan: … (sohbet · <ref> · \"<kırpık>\" · beyan:<AJAN>)>"
+  cipa.sh tablo [--json]                                      standart bugün tablosu (madde · sahip · durum · kanıt)
+  cipa.sh kapanis                                             açık madde varsa rc=4 (kapanış kabul edilmez)
   cipa.sh oku                                                 çıpayı bas (yoksa rc=1)
   cipa.sh yol                                                 çıpanın yolunu bas (dosya yoksa da)
   cipa.sh compact-onerisi                                     öneri metni; ÇIPA YOKSA rc=3
@@ -89,7 +92,7 @@ K
 
 [ $# -ge 1 ] || kullanim
 KOMUT="$1"; shift
-PLAN=""; NOT=""; MADDE=""; DURUM=""
+PLAN=""; NOT=""; MADDE=""; DURUM=""; KANIT=""; D1=""; JSON=0
 # 🔴 DEĞERSİZ BAYRAK SONSUZ DÖNGÜ YAPIYORDU (bulan: NÂZIR/MÜDÜR, 2026-10-02 — aracı
 #    yazdığım gün). `--plan` değer verilmeden gelince `shift 2` tek argümanda İLERLEMİYOR,
 #    döngü sonsuza giriyor ve işlemci %100'e çıkıyordu (timeout ile rc=124 ölçüldü).
@@ -101,7 +104,8 @@ _al() { # $1=bayrak adı · kalan argüman sayısı ve değeri DIŞARIDA sınan�
 while [ $# -gt 0 ]; do
   bayrak="$1"
   case "$bayrak" in
-    --plan|--not|--madde|--durum)
+    --json) JSON=1; shift ;;
+    --plan|--not|--madde|--durum|--kanit|--d1)
       # 🔴 İKİ AYRI ŞART, İKİSİ DE GEREKLİ:
       #    (a) argüman KALDI MI — kalmadıysa `shift 2` İLERLEMEZ ve döngü sonsuza girer
       #        (işlemci %100). Bulan: NÂZIR/MÜDÜR, aracı yazdığım gün; rc=124 ile ölçüldü.
@@ -110,6 +114,7 @@ while [ $# -gt 0 ]; do
       case "$2" in --*) echo "HATA: $bayrak bir değer ister (gelen: $2)" >&2; exit 2 ;; esac
       case "$bayrak" in
         --plan) PLAN="$2" ;; --not) NOT="$2" ;; --madde) MADDE="$2" ;; --durum) DURUM="$2" ;;
+        --kanit) KANIT="$2" ;; --d1) D1="$2" ;;
       esac
       shift 2 ;;
     *) echo "tanınmayan argüman: $bayrak" >&2; kullanim ;;
@@ -156,8 +161,16 @@ case "$KOMUT" in
       yarim)   im="~" ; et="YARIM" ;;
       acilmadi) im=" "; et="AÇILMADI" ;;
       geri-alindi) im="-" ; et="GERİ ALINDI" ;;
-      *) echo "HATA: --durum kapandi|yarim|acilmadi|geri-alindi olmalı" >&2; exit 2 ;;
+      # 🔴 ERTELEME = Sultan kararı (gorev_01M54TNAQV, Sultan 17 Eki: "planlanan işler tamamlanmadan
+      #    kapanış kabul edilmeyecek"). Taşımanın TEK yolu D1 damgasıdır; biçimi tutmayan damga REDDEDİLİR.
+      #    A06: araç sözü ÜRETMEZ, yalnız biçimini sınar — damgayı ajan Sultan'ın gördüğü sözden aktarır.
+      ertelendi)
+        printf '%s' "$D1" | grep -qE '^[0-9]{4}-[0-9]{2}-[0-9]{2} Sultan: .+\(sohbet · [^·()]+ · "[^"]{1,120}" · beyan:[^ )]+\)$' \
+          || { echo "HATA: ertelendi için --d1 zorunlu ve D1 biçiminde olmalı: 'YYYY-MM-DD Sultan: … (sohbet · <ref> · \"<kırpık>\" · beyan:<AJAN>)'" >&2; exit 2; }
+        im="-" ; et="ERTELENDİ"; NOT="D1: $D1${NOT:+ · $NOT}" ;;
+      *) echo "HATA: --durum kapandi|yarim|acilmadi|geri-alindi|ertelendi olmalı" >&2; exit 2 ;;
     esac
+    [ -z "$KANIT" ] || NOT="${NOT:+$NOT · }kanıt: $KANIT"
     python3 - "$CIPA" "$MADDE" "$im" "$et" "$NOT" <<'PY' || exit 1
 import sys, re
 yol, madde, im, et, not_ = sys.argv[1:6]
@@ -168,7 +181,7 @@ for i, satir in enumerate(s):
     if not m: continue
     n += 1
     if str(n) != str(madde): continue
-    govde = re.sub(r'\s*→ (KAPANDI|YARIM|AÇILMADI|GERİ ALINDI).*$', '', m.group(2))
+    govde = re.sub(r'\s*→ (KAPANDI|YARIM|AÇILMADI|GERİ ALINDI|ERTELENDİ).*$', '', m.group(2))
     s[i] = f'- [{im}] {govde} → {et}' + (f' · {not_}' if not_ else '')
     bulundu = True
 if not bulundu:
@@ -189,6 +202,13 @@ s.append('')
 open(yol, 'w', encoding='utf-8').write('\n'.join(s))
 print(f'✓ madde {madde} → {et}')
 PY
+    ;;
+  tablo|kapanis)
+    # Satır dilbilgisi TEK yerde: sema/bugun-maddesi.md · ayrıştırıcı tablo.py (kokpit kapısı aynı fikstürle sınanır)
+    _OK="$(_okunacak)"
+    [ -f "$_OK" ] || { echo "çıpa YOK: $CIPA" >&2; exit 1; }
+    if [ "$KOMUT" = kapanis ]; then python3 "$(dirname "$0")/tablo.py" "$_OK" --kapanis; exit $?; fi
+    if [ "$JSON" = 1 ]; then python3 "$(dirname "$0")/tablo.py" "$_OK" --json; else python3 "$(dirname "$0")/tablo.py" "$_OK"; fi
     ;;
   oku)
     _OK="$(_okunacak)"

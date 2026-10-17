@@ -150,6 +150,37 @@ kapi "K37 ajan SALT-OKUR: dosya YARATMAZ" "0" \
 kapi "K38 kimlik türetilemezse 'bilinmiyor' basar (uydurma ad YOK)" "bilinmiyor" \
      "$(GUNLUK_PLAN_CIPA_DIZ="$T/cipa" GUNLUK_PLAN_AJAN="###" bash "$ARAC" ajan 2>/dev/null)"
 
+# ── T1-T14 · BUGÜN TABLOSU + KAPANIŞ KAPISI (gorev_01M54TNAQVP4PJ7M7MGZRPT7A7 · Sultan 17 Eki) ──
+SEMA="$KOK/../sema"
+echo "── ortak satır dilbilgisi: fikstür ⟂ beklenen (kokpit kapısıyla AYNI sözleşme)"
+kapi "T1 tablo.py --json ortak fikstürü beklenen.json'a BİREBİR çevirir" "0" \
+     "$(diff <(python3 "$KOK/tablo.py" "$SEMA/ornek-cipa.md" --json) "$SEMA/beklenen.json" >/dev/null 2>&1; echo $?)"
+J() { python3 -c "import json,sys; d=json.load(open(sys.argv[1])); print($2)" "$SEMA/beklenen.json"; }
+kapi "T2 sahip metinden AYRILIR" "MUAVİN|Retro paketi gorev_01M54C4A56HDMS1H5SAWFCWSGE" "$(J x "d['maddeler'][0]['sahip']+'|'+d['maddeler'][0]['metin']")"
+kapi "T3 kanıt nottan AYRILIR" "cloudtop #669|iki tur" "$(J x "d['maddeler'][0]['kanit']+'|'+d['maddeler'][0]['not']")"
+kapi "T4 geçerli D1'li erteleme = ertelendi" "ertelendi" "$(J x "d['maddeler'][4]['durum']")"
+kapi "T5 damgasız 'ERTELENDİ' = AÇIK (sessiz taşıma yok)" "acik" "$(J x "d['maddeler'][5]['durum']")"
+kapi "T6 durum adları kokpit kapısıyla aynı küme" "acik,bitti,ertelendi,geri,yarim" "$(J x "','.join(sorted(set(m['durum'] for m in d['maddeler'])))")"
+
+echo "── kapanış kapısı: açık madde varsa kapanış KABUL EDİLMEZ"
+export GUNLUK_PLAN_AJAN="kapanis" ; CK="$T/cipa/gunluk-plan-cipa.kapanis.md"
+bash "$ARAC" yaz --plan "1) birinci (sahip: MUAVİN) | 2) ikinci | 3) üçüncü" >/dev/null 2>&1
+bash "$ARAC" kapanis >/dev/null 2>&1; kapi "T7 üç açık madde → kapanış rc=4" "4" "$?"
+bash "$ARAC" tazele --madde 1 --durum kapandi --kanit "PR #12" >/dev/null 2>&1
+kapi "T8 --kanit satıra 'kanıt:' parçası olarak yazılır" "1" "$(grep -c '^- \[x\] 1) birinci (sahip: MUAVİN) → KAPANDI · kanıt: PR #12$' "$CK"; true)"
+kapi "T9 tabloda kanıt sütunu dolu" "1" "$(bash "$ARAC" tablo 2>/dev/null | grep -c '| 1 | birinci | MUAVİN | kapandı | PR #12 |')"
+bash "$ARAC" tazele --madde 2 --durum ertelendi >/dev/null 2>&1; kapi "T10 D1'siz erteleme REDDEDİLİR" "2" "$?"
+bash "$ARAC" tazele --madde 2 --durum ertelendi --d1 "Sultan dedi ki ertele" >/dev/null 2>&1; kapi "T11 biçimsiz D1 REDDEDİLİR (oturum-ref · kırpık · beyan zorunlu)" "2" "$?"
+bash "$ARAC" tazele --madde 2 --durum ertelendi --d1 '2026-01-02 Sultan: ertele (sohbet · sinav-oturum · "yarına kalsın" · beyan:SINAV)' >/dev/null 2>&1
+kapi "T12 geçerli D1 ile ertelendi yazılır" "1" "$(grep -c '^- \[-\] 2) ikinci → ERTELENDİ · D1: 2026-01-02 Sultan: ertele' "$CK"; true)"
+bash "$ARAC" kapanis >/dev/null 2>&1; kapi "T13 bir madde hâlâ açık → kapanış rc=4" "4" "$?"
+bash "$ARAC" tazele --madde 3 --durum geri-alindi >/dev/null 2>&1; bash "$ARAC" kapanis >/dev/null 2>&1
+kapi "T14 hepsi kapandı/ertelendi/geri → kapanış rc=0" "0" "$?"
+kapi "T15 tablo --json yaşayan çıpada da aynı alanları verir" "MUAVİN|bitti|ertelendi|geri" \
+     "$(bash "$ARAC" tablo --json 2>/dev/null | python3 -c "import json,sys; m=json.load(sys.stdin)['maddeler']; print('|'.join([m[0]['sahip'],m[0]['durum'],m[1]['durum'],m[2]['durum']]))")"
+GUNLUK_PLAN_AJAN="yok-boyle" bash "$ARAC" kapanis >/dev/null 2>&1; kapi "T16 çıpa yoksa kapanış rc=1 (ölçemedim ≠ temiz)" "1" "$?"
+export GUNLUK_PLAN_AJAN="sinav"
+
 echo
 echo "SONUÇ: $gecen geçti · $kalan kaldı"
 [ "$kalan" -eq 0 ]

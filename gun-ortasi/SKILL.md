@@ -1,7 +1,7 @@
 ---
 name: gun-ortasi
 description: Gün ortası planı — sabahki plan (ya da günün işleri) erken bittiğinde "elde kalan iş var mı?" sorusunu ÖLÇEREK cevaplar; kalan işi dağınık kaynaklardan (plan çıpası, kartlar, konum çapaları, bağımsız göz raporları, gelen kutusu) bulup doğrular ve süzer; kalmadıysa kutunun ana hedeflerine bağlı, ölçülmüş bir boşluğu kapatan 2-3 geliştirme fikri önerir ve Sultan'ın seçimiyle günün ikinci yarısını planlar. Tetik: "/gun-ortasi", "plan bitti ne yapalım", "iş kaldı mı", "gün ortası planı", "yapacak iş kalmadıysa ne geliştirelim".
-version: 1.0.3
+version: 1.1.0
 ---
 
 # /gun-ortasi — gün ortası planı (ölç → doğrula → süz · yoksa fikir → sun → çıpa → icra)
@@ -88,8 +88,11 @@ Ancak doğrulanmış açık iş **sıfırsa** ve ölçülemeyen kaynaklar Sultan
 sabah planı: <N> madde · <N> kapandı · <N> kaldı      (çıpa yoksa: "sabah çıpası yok")
 ölçüm: <N> açık kart · <N> aday (<N> doğrulandı, <N> kapanmış çıktı) · <N> okunmamış mektup · ölçülemedi: <liste|yok>
 
-KALAN İŞ (sırayla — yoksa "yok, doğrulandı"):
-1. <Sultan-dilinde tek cümle> — <bitince ne değişir> · <kim>
+KALAN İŞ — standart bugün tablosu (`cipa.sh tablo`; /gunluk-plan ile TEK şablon, sema/bugun-maddesi.md):
+| # | Madde | Sahip | Durum | Kanıt |
+|---|---|---|---|---|
+| G1 | <Sultan-dilinde tek cümle — bitince ne değişir> | <kim> | açık | — |
+(yoksa "yok, doğrulandı")
 
 FİKİR (yalnız kalan iş yoksa, en çok 3):
 • <ne> — hedef: <hedef satırı> · ölçüm: <sinyal> · bitince: <ne değişir>
@@ -140,6 +143,10 @@ Akşam `/gunluk-plan kapanis` sabah + gün ortası maddelerini birlikte okur.
 - Sınav: `bash scripts/kalan.test.sh` (hermetik; gerçek kutuya dokunmaz).
 
 ## Sürüm notları
+- **1.1.0 (2026-10-17, MUAVİN · gorev_01M54TNAQV, Sultan):** gün ortası "KALAN İŞ" listesi artık
+  `/gunluk-plan` ile **tek** standart tablodur (madde · sahip · durum · kanıt), `cipa.sh tablo` basar;
+  satır dilbilgisi `gunluk-plan/sema/bugun-maddesi.md`'de, kokpit "Bugün" paneliyle ortak. Akşam
+  kapanışı da gün ortası maddelerini (`G<n>)`) kapıya sokar: açık G-maddesi varsa kapanış rc=4.
 - **1.0.3 (2026-10-05, bağımsız göz tur 3):** `cipa-ekle.sh` çıpanın varlığını ve TARİHİNİ
   kilitten **önce** soruyordu. Kilidi beklerken `cipa.sh yaz` dosyayı başka bir güne
   çevirebilir ve ekleme **yanlış günün çıpasına** yazardı (kontrol-sonra-kullan açığı).

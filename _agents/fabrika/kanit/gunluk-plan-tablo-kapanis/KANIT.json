@@ -1,0 +1,82 @@
+{
+  "is": "gunluk-plan-tablo-kapanis",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-17T15:34:37+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapanis-kapisi-var-mi",
+      "asama": "once",
+      "dosya": "olcum-kapanis-kapisi-var-mi-once.txt",
+      "sha256": "91a5d1249da5619c5913a65f22d82c41c088d334236ea96e75a010be0e9cbd41",
+      "komut": [
+        "bash",
+        "-c",
+        "grep -cE '^  (tablo|kapanis)' /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/cipa-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T15:34:24+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cipa-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-cipa-sinavi-sonra.txt",
+      "sha256": "4dcaf8c3893588edf6969b47c0c0cfe089913c01307464ddd28110794b514381",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/cipa.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:34:28+03:00",
+      "sure_sn": 4.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gun-ortasi-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-gun-ortasi-sinavi-sonra.txt",
+      "sha256": "6ee9ff27963f56084b5f617301519dabb4550b96a86db8c832da6c13a590f525",
+      "komut": [
+        "bash",
+        "gun-ortasi/scripts/kalan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:34:36+03:00",
+      "sure_sn": 8.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ornek-tablo-ve-kapanis",
+      "asama": "sonra",
+      "dosya": "olcum-ornek-tablo-ve-kapanis-sonra.txt",
+      "sha256": "f01f44addfef61eab9a50a75641bd7b76f1c8bab00bbfbb3a5457ec4ccd1ac48",
+      "komut": [
+        "python3",
+        "gunluk-plan/scripts/tablo.py",
+        "gunluk-plan/sema/ornek-cipa.md",
+        "--kapanis"
+      ],
+      "rc": 4,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T15:34:37+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "dosya",
+      "etiket": "mutasyon",
+      "asama": "sonra",
+      "dosya": "dosya-mutasyon-sonra.txt",
+      "sha256": "8f3979c673e8dc2e12682140d055eeafe5d0bbeddd5b611582254bed3ad28aaf",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/gp-mut.txt",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:34:37+03:00"
+    }
+  ],
+  "imza": "1b6701cee03baddd0a5b9e05f12bb3e1547ca30714c02eb1e29010deae83495d"
+}

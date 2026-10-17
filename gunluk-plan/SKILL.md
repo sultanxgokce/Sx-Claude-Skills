@@ -1,7 +1,7 @@
 ---
 name: gunluk-plan
 description: Günün planı — elimizdeki işleri ÖLÇ, katma değer katacakları süz, Sultan-dilinde plan sun, onaydan sonra icra et. Sultan'ın her gün verdiği "işleri analiz et, bugün ne yapalım" isteğinin tek komutlu karşılığı.
-version: 1.4.0
+version: 1.5.0
 ---
 
 # /gunluk-plan — günün planı (ölç → süz → sun → icra)
@@ -132,10 +132,10 @@ Tek kod-bloğu içinde:
 📅 GÜNÜN PLANI · <YYYY-MM-DD>
 ölçüm: <N> aktif layiha · <N> kart · <N> açık PR · <N> okunmamış mesaj
 
-BUGÜN (sırayla):
-1. <Sultan-dilinde tek cümle> — <bitince ne değişir> · <kim: ben|sen|birlikte>
-2. …
-3. …
+BUGÜN (sırayla) — standart tablo, `cipa.sh tablo` basar (çıpayı yazdıktan sonra):
+| # | Madde | Sahip | Durum | Kanıt |
+|---|---|---|---|---|
+| 1 | <Sultan-dilinde tek cümle — bitince ne değişir> | <MUAVİN|Sultan|birlikte> | açık | — |
 
 SENDE (tek tuşluk):
 • <karar/onay> — <bir cümle niçin sen>
@@ -144,6 +144,11 @@ BUGÜN DEĞİL (gerekçesiyle):
 • <iş> — <niçin bugün değil>
 ```
 ````
+
+🔴 **Tablo TEK şablondur** (gorev_01M54TNAQV · Sultan 17 Eki): sütunlar madde · sahip · durum · kanıt,
+satır dilbilgisi `sema/bugun-maddesi.md`'de. `/gun-ortasi` ve kokpitin "Bugün" paneli aynı çıpayı aynı
+kuralla okur; tabloyu elle çizme, araçtan bas. Sahibi çıpaya yazarken maddeye `(sahip: <AD>)` ekle,
+havuzdaki görevle bağlıysa `gorev_…` kimliğini maddeye koy.
 
 Sonra **tek soru**: *"Böyle mi ilerleyelim, yoksa sıralamayı değiştirelim mi?"*
 Şıklar 2-4 arası, biri `(önerim)` işaretli. Yığma yasak — bir mesaj, bir istek.
@@ -154,7 +159,8 @@ Onaydan sonra maddeleri **sırayla** yürüt. Her madde bitince:
 - kayıt-damgası (layiha defteri / kart / CONTEXT — hangisi ilgiliyse)
 - `append-note.sh` ile deftere tek satır
 - Sultan'ın notlarına tek satır (`[SERDAR]` etiketli, onun ağzından)
-- **çıpayı tazele:** `cipa.sh tazele --madde <n> --durum kapandi|yarim --not "<kanıt>"`
+- **çıpayı tazele:** `cipa.sh tazele --madde <n> --durum kapandi|yarim --kanit "<PR#|commit|dosya>" [--not "…"]`
+  (kanıt tablonun kendi sütunudur; kanıtsız "kapandı" tabloda boş kanıtla görünür)
 
 **Bağlam eşiği geçildiyse — madde ortasında bile:**
 ```bash
@@ -169,9 +175,21 @@ Madde ortasında yeni bir bulgu çıkarsa: **bodoslama fixleme** — layihaya ya
 
 ## ADIM 5 — GÜN SONU (aynı komut, `kapanis` argümanıyla)
 
-`/gunluk-plan kapanis` → sabah sunulan planı **çıpadan** geri okur (`cipa.sh oku`), her madde
-için **kapandı / yarım / açılmadı** basar ve yarım kalanı ertesi güne bırakır. Kapanış olmadan
-plan bir dilek listesidir — ve çıpa olmadan kapanış **hafızadan** yazılır, yani bayattır.
+`/gunluk-plan kapanis` → `cipa.sh kapanis`: sabah + gün ortası maddelerini **çıpadan** okur, standart
+tabloyu basar ve **kapıyı** tutar:
+
+| Çıkış | Anlamı |
+|---|---|
+| 0 | açık madde yok — gün kapandı |
+| 4 | **KAPANIŞ KABUL EDİLMEDİ** — açık / yarım / açılmadı madde var, liste basılır |
+| 1 | çıpa yok — ölçemedim (temiz değil) |
+
+🔴 **Sessiz taşıma YOK** (Sultan 17 Eki: *"planlanan işler tamamlanmadan kapanış kabul edilmeyecek"*).
+Açık madde için iki yol vardır: kanıtla kapat ya da Sultan'a sor. Sultan "ertele" derse
+`cipa.sh tazele --madde <n> --durum ertelendi --d1 "YYYY-MM-DD Sultan: ertele (sohbet · <ref> · \"<kırpık>\" · beyan:<AJAN>)"`.
+D1'siz ya da biçimsiz damga reddedilir (rc=2); elle yazılmış damgasız "ERTELENDİ" satırı tabloda
+**açık** sayılır. A06: damgayı ajan uydurmaz, Sultan'ın gördüğün sözünü aktarırsın.
+Ertesi sabah ertelenen maddeler yeni planın ilk maddeleri olarak yazılır.
 
 ## Sınırlar / dürüstlük
 - Filo kapsamı (ADIM 0-a) merkezde bir SORUDUR, bir varsayılan değil; "tüm filo" Sultan/SERDAR'ın seçimidir. Kararın kapısı bu becerinin
@@ -180,7 +198,8 @@ plan bir dilek listesidir — ve çıpa olmadan kapanış **hafızadan** yazıl�
 - Bu skill iş ÜRETMEZ, var olanı süzer. Ölçüm boşsa plan da boştur — uydurma madde yazma.
 - Süzme bir yargıdır, mekanik değil; gerekçesi her zaman yazılır ki ertesi gün tartışılabilsin.
 - Ölçülemeyen kaynak "yok" sayılmaz, "ölçülemedi" diye basılır (unknown ≠ fail).
-- Çıpa ve compact kapısının kendi sınavı: `bash scripts/cipa.test.sh` (44 kapı, hermetik —
+- Çıpa, tablo ve kapanış kapısının kendi sınavı: `bash scripts/cipa.test.sh` (60 kapı; T1 ortak fikstür
+  `sema/ornek-cipa.md` → `sema/beklenen.json` — kokpit kapısının sınavı da aynı fikstürü koşmalı; hermetik —
   gerçek çıpaya dokunmaz). Ölçüm aracının sınavı: `bash scripts/olc.test.sh` (12 kapı,
   hermetik — sahte bir kök kurar; ağırlık merkezi **sızıntı**: sahte kökte başkasının defteri
   bilerek durur ve hiçbir kimlikte basılmamalıdır; O8 mutasyonu çivili yol geri gelince,
