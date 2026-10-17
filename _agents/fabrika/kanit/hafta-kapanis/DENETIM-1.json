@@ -1,0 +1,59 @@
+{
+  "tur": 1,
+  "is": "hafta-kapanis",
+  "pr": "360",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T16:20:58+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 44356,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 11229
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Hafta kapanış kapısı K1–K5 denetimlerini, KAPANIS.md çıktısını ve açık hafta listesini kurmuş; canlı W42 ölçümü ile 45 sınav da ana akışı gösteriyor. Lakin salt ölçer sözü mevcut MERKEZ.md üzerinde yazıcı `retro.py merkez` çağrısıyla delinmiş, bozuk kartlar sessizce yok sayılmış ve D1 doğrulaması gevşek kalmış; önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "K1 ölçümü mevcut MERKEZ.md varken `retro.py merkez` komutunu çalıştırıyor; bu komutun MERKEZ.md yazabildiği aynı değişiklikte açıkça gösterildiğinden, aracın yalnız KAPANIS.md yazacağı garantisi korunmuyor.",
+        "kanit": "`olc`, MERKEZ.md varsa `k_retro(..., \"merkez\", ...)` çağırıyor; `k_retro` bunu `subprocess.run` ile yürütüyor. Kod yorumu ve H3 fikstürü `retro.py merkez` komutunun MERKEZ.md ürettiğini doğruluyor; sınav yalnız MERKEZ.md yokken yazılmadığını denetliyor.",
+        "konum": "hafta-kapanis/scripts/hafta-kapanis.py:71, hafta-kapanis/scripts/hafta-kapanis.py:188; hafta-kapanis/scripts/hafta-kapanis.test.sh:H2c/H3a",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "K4, okunamayan kart JSON'larını sessizce atlıyor; bozuk bir `durum=tikandi` kartı ölçüm kümesinden kaybolup kapının yanlış yeşile dönmesine yol açabilir.",
+        "kanit": "Kart yükleme bloğundaki geniş `except Exception: continue`, parse hatasını SARI/KIRMIZI sonuca çevirmeden kaydı dışlıyor; 45 sınav çıktısında bozuk kart vakası bulunmuyor.",
+        "konum": "hafta-kapanis/scripts/hafta-kapanis.py:127-131; olcum-sinav-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "D1 biçimi tam satır olarak doğrulanmıyor; regex araması geçerli parçanın başına veya sonuna eklenmiş yabancı metni kabul ediyor.",
+        "kanit": "`D1_RE` baş/son çapaları taşımıyor ve hem K2 hem K5 `D1_RE.search(...)` kullanıyor; sınav yalnız tamamen biçimsiz `onaylandı` örneğini kapsıyor, geçerli parça artı ek metin vakasını kapsamıyor.",
+        "konum": "hafta-kapanis/scripts/hafta-kapanis.py:34,109,160; olcum-sinav-sonra.txt:H5/H7",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Global becerinin hedef makineye kurulmuş olduğu bu konteynerde ölçülmemiş; yalnız kaynak ve eşleme yazılmış.",
+        "kanit": "Önce ölçümü `/config/.claude/skills/hafta-kapanis` için `YOK` ve rc=1 gösteriyor; manifestte aynı hedefe yönelik bir sonra-kurulum ölçümü yok. Sonraki sınav doğrudan depo içindeki `hafta-kapanis/scripts/...` yolunu çağırıyor.",
+        "konum": "olcum-beceri-varligi-once.txt; kanıt manifesti `beceri-varligi` ve `sinav` kayıtları",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "Sultan'ın Mac'i"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı manifest kaydı yok. Önce beceri-yok ölçümü, 45/0 hermetik-mutasyon sınavı ve gerçekçi 2026-W42 canlı açık-hafta ölçümü güçlü kanıt sağlıyor; ancak global kurulum için sonra ölçüm çifti yok ve sınav saltlık, bozuk kart ile D1 sonuna ek metin vakalarını ölçmüyor."
+  }
+}
