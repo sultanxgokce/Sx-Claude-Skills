@@ -44,6 +44,9 @@ else
   if [ -x "$EKIP_AC" ] && grep -Eq '^[[:space:]]*--resume-if-known\)' "$EKIP_AC" && grep -Eq '^[[:space:]]*--dry-run\)' "$EKIP_AC"; then
     ACICI=ekip-ac; fi
 fi
+# Dava satırları İSKÂN kutusunda davalar.yaml'dadır (kadro.mjs davalarYolu ile AYNI yol). Okuyucular KAYITLAR'ı sırayla tarar.
+DAVA_KAYIT="${DAVALAR_REGISTRY:-$(dirname "$ISKAN")/davalar.yaml}"
+KAYITLAR="$KAYIT"; [ "$KAYIT" = "$ISKAN" ] && [ -f "$DAVA_KAYIT" ] && KAYITLAR="$KAYIT:$DAVA_KAYIT"
 # 🔴 Liste betiği BU dosyanın yanındakidir (yedek göz tur 2 canlı bulgusu: BETIK_DIZ ortak kurulu kopyaya çözülüyor, eski
 #    koltuk-bagla son=0 basıyordu — iş alanındaki düzeltme hiç çağrılmıyordu). Aynı beceri kopyası, aynı sürüm.
 KOLTUK_BETIK="${TO_KOLTUK_BETIK:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/koltuk-bagla.sh}"
@@ -55,31 +58,35 @@ gecerli() { koltuk_adi_gecerli "$1"; }
 # tmux adı → kayıttaki rol (aile-registry: `- id: X` … `tmux: "x:0"`); kayıt yoksa boş
 rol_bul() {
   [ -f "$KAYIT" ] || return 0
-  python3 - "$KAYIT" "$1" <<'PY'
-import re, sys
-reg, ad = sys.argv[1], sys.argv[2]
-cur=None
-for line in open(reg, encoding='utf-8'):
-    m = re.match(r'\s*-\s*id:\s*(\S+)', line)
-    if m: cur = m.group(1); continue
-    m = re.match(r'\s*tmux:\s*["\']?([^"\'#\s]+)', line)
-    if m and cur:
-        t = m.group(1).split(':')[0]
-        if t == ad: print(cur); break
+  python3 - "$KAYITLAR" "$1" <<'PY'
+import re, sys, os
+regs, ad = [r for r in sys.argv[1].split(':') if os.path.exists(r)], sys.argv[2]
+for reg in regs:
+    cur=None
+    for line in open(reg, encoding='utf-8'):
+        m = re.match(r'\s*-\s*id:\s*(\S+)', line)
+        if m: cur = m.group(1); continue
+        m = re.match(r'\s*tmux:\s*["\']?([^"\'#\s]+)', line)
+        if m and cur:
+            t = m.group(1).split(':')[0]
+            if t == ad: print(cur); sys.exit(0)
 PY
 }
 # aile kaydında rolün session_id'si dolu ve transcript var mı (eski sohbete dönüş MÜMKÜN mü) — ekip-ac.sh ile aynı ölçüt
 resume_var() {
   [ -f "$KAYIT" ] || return 1
-  python3 - "$KAYIT" "$1" "${HOME:-/config}/.claude/projects" <<'PY'
+  python3 - "$KAYITLAR" "$1" "${HOME:-/config}/.claude/projects" <<'PY'
 import re, sys, os, glob
-reg, rol, kok = sys.argv[1], sys.argv[2], sys.argv[3]
-cur=None; sid=''
-for line in open(reg, encoding='utf-8'):
-    m = re.match(r'\s*-\s*id:\s*(\S+)', line)
-    if m: cur = m.group(1); continue
-    m = re.match(r'\s*session_id:\s*["\']?([0-9a-fA-F-]{36})', line)
-    if m and cur == rol: sid = m.group(1); break
+regs, rol, kok = [r for r in sys.argv[1].split(':') if os.path.exists(r)], sys.argv[2], sys.argv[3]
+sid=''
+for reg in regs:
+    cur=None
+    for line in open(reg, encoding='utf-8'):
+        m = re.match(r'\s*-\s*id:\s*(\S+)', line)
+        if m: cur = m.group(1); continue
+        m = re.match(r'\s*session_id:\s*["\']?([0-9a-fA-F-]{36})', line)
+        if m and cur == rol: sid = m.group(1); break
+    if sid: break
 ok = bool(sid) and bool(glob.glob(os.path.join(kok, '*', sid + '.jsonl')))
 sys.exit(0 if ok else 1)
 PY
@@ -87,15 +94,16 @@ PY
 # kayıtta rolün bir alanı (rol · session_id) — yoksa boş. Dava kolu (B10) ikisini de okur.
 alan_bul() {
   [ -f "$KAYIT" ] || return 0
-  python3 - "$KAYIT" "$1" "$2" <<'PY3'
-import re, sys
-reg, rol, alan = sys.argv[1], sys.argv[2], sys.argv[3]
-cur=None
-for line in open(reg, encoding='utf-8'):
-    m = re.match(r'\s*-\s*id:\s*["\']?([^"\'\s#]+)', line)
-    if m: cur = m.group(1); continue
-    m = re.match(r'\s*' + alan + r':\s*["\']?([^"\'#\s]+)', line)
-    if m and cur == rol: print(m.group(1)); break
+  python3 - "$KAYITLAR" "$1" "$2" <<'PY3'
+import re, sys, os
+regs, rol, alan = [r for r in sys.argv[1].split(':') if os.path.exists(r)], sys.argv[2], sys.argv[3]
+for reg in regs:
+    cur=None
+    for line in open(reg, encoding='utf-8'):
+        m = re.match(r'\s*-\s*id:\s*["\']?([^"\'\s#]+)', line)
+        if m: cur = m.group(1); continue
+        m = re.match(r'\s*' + alan + r':\s*["\']?([^"\'#\s]+)', line)
+        if m and cur == rol: print(m.group(1)); sys.exit(0)
 PY3
 }
 durum_olc() {  # $1 ad → DURUM CLAUDE HAL SON değişkenleri
@@ -113,15 +121,16 @@ durum_olc() {  # $1 ad → DURUM CLAUDE HAL SON değişkenleri
 }
 # İSKÂN kaydında rolün çalışma dizini (yoksa proje kökü) — baslat-claude.sh orada açılır
 cwd_bul() {
-  python3 - "$KAYIT" "$1" <<'PY2'
-import re, sys
-reg, rol = sys.argv[1], sys.argv[2]
-cur=None
-for line in open(reg, encoding='utf-8'):
-    m = re.match(r'\s*-\s*id:\s*(\S+)', line)
-    if m: cur = m.group(1); continue
-    m = re.match(r'\s*cwd:\s*["\']?([^"\'#\s]+)', line)
-    if m and cur == rol: print(m.group(1)); break
+  python3 - "$KAYITLAR" "$1" <<'PY2'
+import re, sys, os
+regs, rol = [r for r in sys.argv[1].split(':') if os.path.exists(r)], sys.argv[2]
+for reg in regs:
+    cur=None
+    for line in open(reg, encoding='utf-8'):
+        m = re.match(r'\s*-\s*id:\s*(\S+)', line)
+        if m: cur = m.group(1); continue
+        m = re.match(r'\s*cwd:\s*["\']?([^"\'#\s]+)', line)
+        if m and cur == rol: print(m.group(1)); sys.exit(0)
 PY2
 }
 yol_bul() {  # $1 ad → YOL ∈ baslat | ekip-ac | onar | yok ; ROL

@@ -14,6 +14,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
+import { davalarYolu } from './kadro.mjs';
 
 export const YAZILAN = ['emekli', 'dondurulmus'];
 const ONCEKI_YOK = 'yok';
@@ -21,13 +22,36 @@ const DEGER_DESEN = /^[A-Za-z0-9_çğıöşüÇĞİÖŞÜ-]{1,40}$/u;   // geri 
 const URETILEN_BAS = 'ekipc:uretilen:basla', URETILEN_SON = 'ekipc:uretilen:bitti';
 
 // Süreçler arası kayıt kilidi (Parça B7): kapı (süreç içi kuyruk) ile günlük bekçi turu AYNI kayda yazar → ikisi de bu kilidi alır.
-// O_EXCL dosyası; 120 sn'den eski kilit ölmüş süreçten kalmıştır, kaldırılır. 30 sn'de alınamazsa KadroHata 503 (hiçbir şey yazılmaz).
-export async function dosyaKilit(dizin, { bekleMs = 30000, bayatMs = 120000 } = {}) {
+// O_EXCL dosyası; içinde "<pid> <jeton>". 🔴 Sahiplik (bağımsız göz tur 1):
+//   · Kilit yalnız SAHİBİ ÖLMÜŞSE bayattır (pid yaşıyorsa ne kadar eski olursa olsun beklenir — kapı açıcıyı 120 sn bekleyebilir;
+//     yaşa bakan eski kural tam o anda kilidi bekçiye kaptırıyordu). İçeriği okunamayan (yazılırken ölmüş) kilit için yaş eşiği.
+//   · Bayat kilit doğrudan SİLİNMEZ: önce eşsiz ada taşınır, taşınanın içeriği bayat sanılanla aynı mı bakılır. Aynı değilse (araya
+//     başkası taze kilit koymuş) geri konur (link: yalnız yer boşsa) — iki süreç aynı bayatı görse de biri ötekinin kilidini silemez.
+//   · Bırakma yalnız içerik hâlâ kendi jetonuysa siler.
+// 30 sn'de alınamazsa KadroHata 503 (hiçbir şey yazılmaz).
+const yasiyor = (pid) => { try { process.kill(pid, 0); return true; } catch (e) { return e.code === 'EPERM'; } };
+export async function dosyaKilit(dizin, { bekleMs = 30000, bayatMs = 600000 } = {}) {
   const y = path.join(dizin, 'kadro.kilit'); const bas = Date.now();
+  const ben = process.pid + ' ' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+  const oku = (f) => { try { return fs.readFileSync(f, 'utf8'); } catch { return null; } };
   for (;;) {
-    try { const fd = fs.openSync(y, 'wx'); fs.writeSync(fd, String(process.pid)); fs.closeSync(fd); return () => { try { fs.unlinkSync(y); } catch {} }; }
+    try { const fd = fs.openSync(y, 'wx'); fs.writeSync(fd, ben); fs.closeSync(fd); return () => { if (oku(y) === ben) { try { fs.unlinkSync(y); } catch {} } }; }
     catch (e) { if (e.code !== 'EEXIST') throw e; }
-    try { if (Date.now() - fs.statSync(y).mtimeMs > bayatMs) { fs.unlinkSync(y); continue; } } catch { continue; }
+    const c = oku(y);
+    if (c !== null) {
+      const pid = +String(c).split(' ')[0];
+      let yas = 0; try { yas = Date.now() - fs.statSync(y).mtimeMs; } catch { continue; }
+      const bayat = Number.isInteger(pid) && pid > 0 ? !yasiyor(pid) : yas > bayatMs;
+      if (bayat) {
+        // Sınav dikişi: bayatı görmekle devralmak arasındaki pencereyi genişletir (yarış sınavı DV32c belirli olsun; gerçekte 0)
+        if (+process.env.KADRO_KILIT_SINAV_GECIKME > 0) await new Promise((r) => setTimeout(r, +process.env.KADRO_KILIT_SINAV_GECIKME));
+        const t = y + '.bayat.' + process.pid + '.' + Math.random().toString(36).slice(2);
+        try { fs.renameSync(y, t); } catch { continue; }
+        if (oku(t) !== c) { try { fs.linkSync(t, y); } catch {} }   // başkasının taze kilidini kaptık → yer boşsa geri koy
+        try { fs.unlinkSync(t); } catch {}
+        continue;
+      }
+    }
     if (Date.now() - bas > bekleMs) throw new KadroHata(503, 'Kayıt başka bir işlemce kilitli — biraz sonra yeniden dene.');
     await new Promise((r) => setTimeout(r, 100));
   }
@@ -46,7 +70,8 @@ export function kayitDosyalari(proje, ortam = process.env) {
   if (fs.existsSync(iskan)) {
     let isaret = '';
     try { const m = fs.readFileSync(iskan, 'utf8').match(/^\s*ekip_registry_pointer:\s*["']?([^"'#\s]+)/m); isaret = m ? m[1] : ''; } catch {}
-    return [iskan, ilk([isaret && path.join(proje, isaret), ...ekip])].filter(Boolean);
+    const dav = davalarYolu(proje, ortam);   // dava satırları iskan'dan sonra, ekipten önce (okuyucuyla aynı sıra)
+    return [iskan, fs.existsSync(dav) ? dav : null, ilk([isaret && path.join(proje, isaret), ...ekip])].filter(Boolean);
   }
   if (fs.existsSync(aile)) return [aile, ilk([ekip[1], ekip[0]])].filter(Boolean);
   return [ilk(ekip)].filter(Boolean);
@@ -197,7 +222,11 @@ export function davaEkle({ proje, ortam = process.env, id, tmux, arz_adi, sessio
   if (!dosyalar.length) throw new KadroHata(409, 'Bu kutuda kayıt dosyası yok — dava eklenecek yer yok.');
   for (const y of dosyalar) { let m; try { m = fs.readFileSync(y, 'utf8'); } catch { throw new KadroHata(500, 'Kayıt okunamadı: ' + y); }
     if (blokBul(m.split('\n'), 'id', id)) throw new KadroHata(409, `"${id}" zaten rafta.`); }
-  const hedef = dosyalar[0]; const satirlar = fs.readFileSync(hedef, 'utf8').split('\n');
+  // Dava satırı İSKÂN kutusunda davalar.yaml'a gider (yoksa oluşur); iskan'a değil (eşitleyici iskan'ı ezebilir).
+  const iskanVar = fs.existsSync(ortam.ISKAN_REGISTRY || path.join(proje, 'iskan-registry.yaml'));
+  const hedef = iskanVar ? davalarYolu(proje, ortam) : dosyalar[0];
+  if (iskanVar && !fs.existsSync(hedef)) fs.writeFileSync(hedef, 'uyeler:\n', { mode: 0o640 });   // kayıt dosyası kipi (Z3)
+  const satirlar = fs.readFileSync(hedef, 'utf8').split('\n');
   const u = satirlar.findIndex((l) => /^uyeler:\s*(#.*)?$/.test(l));
   if (u < 0) throw new KadroHata(409, 'Kayıtta "uyeler:" listesi yok — dava eklenecek yer yok, dokunulmadı.');
   // listenin sonu: girintisiz ilk dolu satırdan önceki son dolu satır; öğe girintisi ilk `- ` satırından (yoksa 2)

@@ -67,15 +67,17 @@ const surec = (pid, tmux, sid, cwd) => { mkdirSync(join(PROC, String(pid)), { re
   writeFileSync(join(OTD, pid + '.json'), JSON.stringify({ pid: String(pid), pidDomain: 'linux::' + ALAN, sessionId: sid, tmux: tmux + ':@1.%1', name: 'x', nameSource: 'derived', cwd })); };
 const PROJE = join(T, 'proje'); mkdirSync(join(PROJE, '_agents/handoff'), { recursive: true });
 surec(201, 'musteri-a', SID.musteri, PROJE); surec(202, 'kisi-ot', SID.kisi, PROJE + '/alt'); surec(203, 'ayni-ot', SID.musteri.replace('01', '03'), PROJE); surec(204, 'ayni-ot', SID.musteri.replace('01', '04'), PROJE);
-const ISKAN = join(PROJE, 'iskan-registry.yaml'), EKIP = join(PROJE, '_agents/handoff/ekip-registry.yaml');
+const ISKAN = join(PROJE, 'iskan-registry.yaml'), DAVALAR = join(PROJE, 'davalar.yaml'), EKIP = join(PROJE, '_agents/handoff/ekip-registry.yaml');
 const dava = (id, tmux, ad, ek = '') => `  - id: ${id}\n    rol: dava\n    tmux: "${tmux}:0"\n    arz_adi: "${ad}"\n    session_id: 5a1e0000-0000-4000-8000-${String(id.replace('/', '')).padStart(12, '0')}\n${ek}`;
 const ILK_ISKAN = 'proje: sinavkutu\nekip_registry_pointer: _agents/handoff/ekip-registry.yaml\ndava_kurali: {tavan: 4, gun: 14}   # Sultan 14:37\nuyeler:\n'
   + '  - id: REIS\n    tmux: "REIS:0"\n    session_id: 5a1e0000-0000-4000-8000-0000000000aa\n'
   + '  - id: MUBEYYIZ\n    tmux: "MUBEYYIZ:0"\n    session_id: ' + SID.mub + '\n'
-  + dava('2025/118', 'veli', 'İşçilik alacağı') + dava('2024/772', 'hasan', 'Tapu iptali') + dava('2026/31', 'fatma', 'Kira tespiti') + dava('2023/1', 'eski', 'Eski dosya')
-  + dava('2025/204', 'ali', 'Tazminat', `    durum: dondurulmus\n    durum_once: yok\n    son_calisma: ${SIMDI - 13 * GUN}\n`)
   + '# kayıt sonu notu\n';
-writeFileSync(ISKAN, ILK_ISKAN);
+// Dava satırları AYRI dosyada (Sx #350 · kayıt kararı (b)): iskan'da yalnız dava_kurali kalır
+const ILK_DAVALAR = 'uyeler:\n' + dava('2025/118', 'veli', 'İşçilik alacağı') + dava('2024/772', 'hasan', 'Tapu iptali') + dava('2026/31', 'fatma', 'Kira tespiti') + dava('2023/1', 'eski', 'Eski dosya')
+  + dava('2025/204', 'ali', 'Tazminat', `    durum: dondurulmus\n    durum_once: yok\n    son_calisma: ${SIMDI - 13 * GUN}\n`)
+  + '# dava kayıt sonu notu\n';
+writeFileSync(ISKAN, ILK_ISKAN); writeFileSync(DAVALAR, ILK_DAVALAR);
 writeFileSync(EKIP, 'uyeler:\n  - id: REIS\n    rol: "reis"\n  - id: MUBEYYIZ\n    rol: "ekip"\n');
 const ortam = { ...process.env, PATH: BIN + ':' + process.env.PATH, KAPI_PORT: String(PORT), KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', TO_PROJE: PROJE,
   KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_KOLTUK_BETIK: LISTE, KAPI_KOLTUK_AC_BETIK: AC,
@@ -95,7 +97,7 @@ const hal = async (govde, { ek = {} } = {}) => {
 };
 const kadro = async () => (await fetch(`http://127.0.0.1:${PORT}/sedir/api/kadro`, { headers: { cookie: CEREZ } })).json();
 const kisi = (kd, id) => kd.kisiler.find((x) => x.id === id);
-const iskan = () => readFileSync(ISKAN, 'utf8');
+const iskan = () => readFileSync(ISKAN, 'utf8'); const davalar = () => readFileSync(DAVALAR, 'utf8');
 const tmuxIz = () => existsSync(TMUX_DEFTER) ? readFileSync(TMUX_DEFTER, 'utf8') : '';
 const acIz = () => existsSync(AC_DEFTER) ? readFileSync(AC_DEFTER, 'utf8') : '';
 const bekci = (...a) => spawnSync(process.execPath, [join(KOK, 'dava-bekci.mjs'), ...a], { env: ortam, encoding: 'utf8' });
@@ -111,11 +113,11 @@ kapi('DV10 kayıtsızlar: musteri-a · kisi-ot · bos-ot · ayni-ot (davalar ve 
 
 console.log('── DV-C · günlük bekçi turu (B7)');
 const bk = bekci('--kuru');
-kapi('DV11 --kuru: yalnız "2023/1" dondurulur der, kayda ve tmux\'a dokunmaz', bk.status === 0 && /dondurulur: 2023\/1/.test(bk.stdout) && !/2024\/772/.test(bk.stdout) && iskan() === ILK_ISKAN && tmuxIz() === '', bk.stdout + bk.stderr);
+kapi('DV11 --kuru: yalnız "2023/1" dondurulur der, kayda ve tmux\'a dokunmaz', bk.status === 0 && /dondurulur: 2023\/1/.test(bk.stdout) && !/2024\/772/.test(bk.stdout) && iskan() === ILK_ISKAN && davalar() === ILK_DAVALAR && tmuxIz() === '', bk.stdout + bk.stderr);
 const b1 = bekci();
 kapi('DV12 tur: 2023/1 dondurulur (durum + son_calisma = oturumun son hareketi + dondurma: kural), oturumu kapatılır; 12 günlük 2024/772 DOKUNULMAZ',
-  b1.status === 0 && iskan().includes(`  - id: 2023/1\n    durum: dondurulmus\n    durum_once: yok\n    rol: dava\n    tmux: "eski:0"\n    arz_adi: "Eski dosya"\n    session_id: 5a1e0000-0000-4000-8000-000000020231\n    son_calisma: ${SIMDI - 20 * GUN}\n    dondurma: kural\n`)
-  && tmuxIz().trim() === 'kill-session -t =eski', b1.stdout + b1.stderr + '\n' + iskan());
+  b1.status === 0 && davalar().includes(`  - id: 2023/1\n    durum: dondurulmus\n    durum_once: yok\n    rol: dava\n    tmux: "eski:0"\n    arz_adi: "Eski dosya"\n    session_id: 5a1e0000-0000-4000-8000-000000020231\n    son_calisma: ${SIMDI - 20 * GUN}\n    dondurma: kural\n`)
+  && tmuxIz().trim() === 'kill-session -t =eski', b1.stdout + b1.stderr + '\n' + davalar());
 const k1 = await kadro();
 kapi('DV13 kadroda 2023/1: dondurulmuş · dondurma: kural (raf "kural dondurdu" der); açık 3', kisi(k1, '2023/1').dondurma === 'kural' && kisi(k1, '2023/1').hal_kayit === 'dondurulmus' && k1.davalar.acik === 3, JSON.stringify(kisi(k1, '2023/1')));
 const b2 = bekci();
@@ -126,7 +128,7 @@ console.log('── DV-D · Aç: yer varken açar, tavan doluyken yer açar (B4)
 const c1 = await hal({ eylem: 'geri-ac', id: '2025/204', yer_ac: true });
 kapi('DV16 açık 3 < tavan 4 → kimse dondurulmaz (donduruldu: null); açıcı "ac ali --eski"; yanıtta ekran = /sedir/tty/?arg=ali',
   c1.s === 200 && c1.j.tamam && c1.j.donduruldu === null && c1.j.oturum === true && c1.j.ekran === '/sedir/tty/?arg=ali' && acIz().trim() === 'ac ali --eski', JSON.stringify(c1));
-const blok204 = () => (iskan().match(/  - id: 2025\/204\n(?:    .*\n)*/) || [''])[0];
+const blok204 = () => (davalar().match(/  - id: 2025\/204\n(?:    .*\n)*/) || [''])[0];
 kapi('DV17 geri açılan davanın kaydı: durum ve durum_once satırları KALKTI; son_calisma kaldı (açıkken oturumun son\'u kullanılır)',
   !/durum/.test(blok204()) && blok204().includes(`    son_calisma: ${SIMDI - 13 * GUN}\n`), blok204());
 const tOnce = tmuxIz();
@@ -135,22 +137,22 @@ const k2 = await kadro();
 kapi('DV18 tavan dolu (4) → en uzun süredir dokunulmayan açık dava 2024/772 dondurulur, oturumu kapanır; 2023/1 açılır; donduruldu: "2024/772"',
   c2.s === 200 && c2.j.donduruldu === '2024/772' && c2.j.oturum === true && /kill-session -t =hasan/.test(tmuxIz().slice(tOnce.length)) && kisi(k2, '2024/772').hal_kayit === 'dondurulmus' && k2.davalar.acik === 4, JSON.stringify(c2) + JSON.stringify(k2.davalar));
 kapi('DV19 yer açarken dondurulan davaya son_calisma yazıldı, dondurma işareti YOK (kural değil, yer açma); geri açılan 2023/1\'in kural işareti KALKTI',
-  kisi(k2, '2024/772').son_calisma === SIMDI - 12 * GUN && !kisi(k2, '2024/772').dondurma && !/- id: 2023\/1\n(?:    .*\n)*?    dondurma:/.test(iskan()), JSON.stringify(kisi(k2, '2024/772')));
-const once3 = iskan(), acOnce3 = acIz(); writeFileSync(KILL_DUSUR, '1');
+  kisi(k2, '2024/772').son_calisma === SIMDI - 12 * GUN && !kisi(k2, '2024/772').dondurma && !/- id: 2023\/1\n(?:    .*\n)*?    dondurma:/.test(davalar()), JSON.stringify(kisi(k2, '2024/772')));
+const once3 = davalar(), acOnce3 = acIz(); writeFileSync(KILL_DUSUR, '1');
 const c3 = await hal({ eylem: 'geri-ac', id: '2024/772', yer_ac: true });
 unlinkSync(KILL_DUSUR);
 kapi('DV20 tavan dolu ve en eskinin (2026/31) oturumu KAPANMIYOR → 502, istenen dava AÇILMADI (açıcı çağrılmadı), kayıt BAYT BAYT önceki hâl',
-  c3.s === 502 && /2026\/31 dondurulamadı/.test(c3.j.hata) && /açılmadı/.test(c3.j.hata) && acIz() === acOnce3 && iskan() === once3, c3.s + ' ' + JSON.stringify(c3.j));
+  c3.s === 502 && /2026\/31 dondurulamadı/.test(c3.j.hata) && /açılmadı/.test(c3.j.hata) && acIz() === acOnce3 && davalar() === once3, c3.s + ' ' + JSON.stringify(c3.j));
 const c4 = await hal({ eylem: 'geri-ac', id: '2024/772' });
 kapi('DV21 yer_ac verilmeden (E2 paneli) tavan kuralı UYGULANMAZ: kimse dondurulmaz, açılır', c4.s === 200 && c4.j.donduruldu === null && (await kadro()).davalar.acik === 5, JSON.stringify(c4));
 const c5 = await hal({ eylem: 'dondur', id: '2024/772' });
-kapi('DV22 rafta Dondur: 200, oturumu kapanır, son_calisma yazılır (açılınca yeni oturumun son\'u)', c5.s === 200 && /- id: 2024\/772\n    durum: dondurulmus\n(?:    .*\n)*?    son_calisma: \d+\n/.test(iskan()), JSON.stringify(c5));
+kapi('DV22 rafta Dondur: 200, oturumu kapanır, son_calisma yazılır (açılınca yeni oturumun son\'u)', c5.s === 200 && /- id: 2024\/772\n    durum: dondurulmus\n(?:    .*\n)*?    son_calisma: \d+\n/.test(davalar()), JSON.stringify(c5));
 
 console.log('── DV-E · E4 kayda bağla (B6) · G7 geri al');
-const onceBag = iskan();
+const onceBag = davalar(); const onceKisi = iskan();
 const e1 = await hal({ eylem: 'bagla', oturum: 'musteri-a', hedef: 'dava', dosya_no: '2026/85', kisa_ad: 'Kira tespiti' });
 kapi('DV23 bağla → dava: 200; uyeler listesinin SONUNA blok (kayıt sonu notu yerinde kalır), id tırnaksız, session_id + cwd oturumun kimlik izinden, bagla_ile: true',
-  e1.s === 200 && iskan() === onceBag.replace('# kayıt sonu notu\n', `  - id: 2026/85\n    rol: dava\n    tmux: "musteri-a:0"\n    arz_adi: "Kira tespiti"\n    session_id: ${SID.musteri}\n    cwd: ${PROJE}\n    bagla_ile: true\n# kayıt sonu notu\n`), JSON.stringify(e1) + '\n' + iskan().slice(-400));
+  e1.s === 200 && davalar() === onceBag.replace('# dava kayıt sonu notu\n', `  - id: 2026/85\n    rol: dava\n    tmux: "musteri-a:0"\n    arz_adi: "Kira tespiti"\n    session_id: ${SID.musteri}\n    cwd: ${PROJE}\n    bagla_ile: true\n# dava kayıt sonu notu\n`), JSON.stringify(e1) + '\n' + davalar().slice(-400));
 const k3 = await kadro();
 kapi('DV24 kadroda 2026/85: rol dava · çalışan · oturumu musteri-a · bagla_ile; kayıtsızlardan çıktı; oturum KAPANMADI', kisi(k3, '2026/85') && kisi(k3, '2026/85').grup === 'calisan' && kisi(k3, '2026/85').bagla_ile === true
   && kisi(k3, '2026/85').oturum.ad === 'musteri-a' && !k3.kayitsiz.some((x) => x.ad === 'musteri-a') && !/=musteri-a/.test(tmuxIz()), JSON.stringify(kisi(k3, '2026/85')));
@@ -163,31 +165,56 @@ const red = await Promise.all([
   hal({ eylem: 'bagla', oturum: 'sinavkutu-ana', hedef: 'dava', dosya_no: '2026/86', kisa_ad: 'x' }),
   hal({ eylem: 'bagla', oturum: 'veli', hedef: 'dava', dosya_no: '2026/86', kisa_ad: 'x' })]);
 kapi('DV25 bağlama retleri: Claude yok 409 · iki Claude 409 · dosya no zaten rafta 409 · YYYY/N değil 400 · kısa adda tırnak 400 · altyapı 403 · kayıtlı oturum 404; kayıt DEĞİŞMEDİ',
-  red.map((x) => x.s).join() === '409,409,409,400,400,403,404' && /Claude yok/.test(red[0].j.hata) && /zaten rafta/.test(red[2].j.hata) && iskan() === k3Iskan(), red.map((x) => x.s + ' ' + x.j.hata).join(' | '));
-function k3Iskan() { return onceBag.replace('# kayıt sonu notu\n', `  - id: 2026/85\n    rol: dava\n    tmux: "musteri-a:0"\n    arz_adi: "Kira tespiti"\n    session_id: ${SID.musteri}\n    cwd: ${PROJE}\n    bagla_ile: true\n# kayıt sonu notu\n`); }
+  red.map((x) => x.s).join() === '409,409,409,400,400,403,404' && /Claude yok/.test(red[0].j.hata) && /zaten rafta/.test(red[2].j.hata) && davalar() === k3Iskan(), red.map((x) => x.s + ' ' + x.j.hata).join(' | '));
+function k3Iskan() { return onceBag.replace('# dava kayıt sonu notu\n', `  - id: 2026/85\n    rol: dava\n    tmux: "musteri-a:0"\n    arz_adi: "Kira tespiti"\n    session_id: ${SID.musteri}\n    cwd: ${PROJE}\n    bagla_ile: true\n# dava kayıt sonu notu\n`); }
 const e2 = await hal({ eylem: 'bagla-geri-al', id: '2026/85' });
 const k4 = await kadro();
-kapi('DV26 G7 geri al → kayıt BAYT BAYT bağlamadan önceki hâl; musteri-a yeniden kayıtsız, oturum KAPANMADI', e2.s === 200 && iskan() === onceBag && k4.kayitsiz.some((x) => x.ad === 'musteri-a') && !/=musteri-a/.test(tmuxIz()), JSON.stringify(e2));
-kapi('DV27 bağlamayla gelmemiş kayıt geri alınamaz → 409, kayıt değişmedi', (await hal({ eylem: 'bagla-geri-al', id: '2025/118' })).s === 409 && iskan() === onceBag);
+kapi('DV26 G7 geri al → kayıt BAYT BAYT bağlamadan önceki hâl; musteri-a yeniden kayıtsız, oturum KAPANMADI', e2.s === 200 && davalar() === onceBag && k4.kayitsiz.some((x) => x.ad === 'musteri-a') && !/=musteri-a/.test(tmuxIz()), JSON.stringify(e2));
+kapi('DV27 bağlamayla gelmemiş kayıt geri alınamaz → 409, kayıt değişmedi', (await hal({ eylem: 'bagla-geri-al', id: '2025/118' })).s === 409 && davalar() === onceBag);
 const e3 = await hal({ eylem: 'bagla', oturum: 'kisi-ot', hedef: 'kisi', id: 'MUBEYYIZ' });
 const k5 = await kadro(); const mub = kisi(k5, 'MUBEYYIZ');
 kapi('DV28 bağla → kişi: MUBEYYIZ\'in session_id\'si oturumunkine döner, önceki bagla_once\'a; kadroda kisi-ot artık MUBEYYIZ oturumu (kimlikle), kayıtsız değil',
   e3.s === 200 && iskan().includes(`  - id: MUBEYYIZ\n    tmux: "MUBEYYIZ:0"\n    session_id: ${SID.kisi}\n    bagla_once: ${SID.mub}\n    bagla_ile: true\n`) && mub.oturum && mub.oturum.ad === 'kisi-ot' && mub.eslesme === 'kimlik' && mub.bagla_ile === true && !k5.kayitsiz.some((x) => x.ad === 'kisi-ot'), JSON.stringify(e3) + JSON.stringify(mub));
 kapi('DV29 dava satırına kişi bağlanmaz 409 · çalışan kişiye 409', (await hal({ eylem: 'bagla', oturum: 'musteri-a', hedef: 'kisi', id: '2025/118' })).s === 409 && (await hal({ eylem: 'bagla', oturum: 'musteri-a', hedef: 'kisi', id: 'REIS' })).s === 409);
 const e4 = await hal({ eylem: 'bagla-geri-al', id: 'MUBEYYIZ' });
-kapi('DV30 kişi bağlamasını geri al → kayıt BAYT BAYT önceki hâl (eski session_id geri), kisi-ot yeniden kayıtsız', e4.s === 200 && iskan() === onceBag && (await kadro()).kayitsiz.some((x) => x.ad === 'kisi-ot'), JSON.stringify(e4));
-kapi('DV31 jetonla bagla → 403 (kadro kararı ekrandan)', (await hal({ eylem: 'bagla', oturum: 'kisi-ot', hedef: 'kisi', id: 'MUBEYYIZ' }, { ek: { authorization: 'Bearer x' } })).s === 403 && iskan() === onceBag);
+kapi('DV30 kişi bağlamasını geri al → kayıt BAYT BAYT önceki hâl (eski session_id geri), kisi-ot yeniden kayıtsız', e4.s === 200 && iskan() === onceKisi && (await kadro()).kayitsiz.some((x) => x.ad === 'kisi-ot'), JSON.stringify(e4));
+kapi('DV31 jetonla bagla → 403 (kadro kararı ekrandan)', (await hal({ eylem: 'bagla', oturum: 'kisi-ot', hedef: 'kisi', id: 'MUBEYYIZ' }, { ek: { authorization: 'Bearer x' } })).s === 403 && iskan() === onceKisi);
 
 console.log('── DV-F · süreçler arası kilit · davasız kutu');
-writeFileSync(join(T, 'kadro.kilit'), '999999');
-const bKilit = spawnSync(process.execPath, ['-e', `import('${join(KOK, 'kadro-yaz.mjs')}').then(async m=>{const t=Date.now();try{await m.dosyaKilit(${JSON.stringify(T)},{bekleMs:400});console.log('ALINDI')}catch(e){console.log('RET '+e.kod+' '+(Date.now()-t))}})`], { encoding: 'utf8' });
-unlinkSync(join(T, 'kadro.kilit'));
-kapi('DV32 taze kilit varken ikinci yazıcı BEKLER ve 503 ile vazgeçer (aynı anda iki yazım yok)', /^RET 503 \d+/.test(bKilit.stdout.trim()) && +bKilit.stdout.trim().split(' ')[2] >= 400, bKilit.stdout + bKilit.stderr);
-writeFileSync(ISKAN, ILK_ISKAN.replace(/dava_kurali:.*\n/, ''));
+const KL = join(T, 'kadro.kilit'), KY = join(KOK, 'kadro-yaz.mjs');
+const kilitDene = (bekle, tut = 0, iz = '', gecikme = 0) => spawn(process.execPath, ['-e', `import(${JSON.stringify(KY)}).then(async m=>{const t=Date.now();try{const b=await m.dosyaKilit(${JSON.stringify(T)},{bekleMs:${bekle}});`
+  + (iz ? `require('fs').appendFileSync(${JSON.stringify(iz)},'gir '+Date.now()+'\\n');await new Promise(r=>setTimeout(r,${tut}));require('fs').appendFileSync(${JSON.stringify(iz)},'cik '+Date.now()+'\\n');` : '')
+  + `b();console.log('ALINDI')}catch(e){console.log('RET '+e.kod+' '+(Date.now()-t))}})`], { stdio: ['ignore', 'pipe', 'pipe'], env: { ...process.env, KADRO_KILIT_SINAV_GECIKME: String(gecikme) } });
+const bitir = (c) => new Promise((r) => { let o = ''; c.stdout.on('data', (d) => { o += d; }); c.on('close', () => r(o.trim())); });
+const oluPid = spawnSync('true').pid;
+writeFileSync(KL, process.pid + ' canli'); const eskiZaman = new Date(Date.now() - 3600 * 1000);
+(await import('node:fs')).utimesSync(KL, eskiZaman, eskiZaman);
+const r32 = await bitir(kilitDene(400));
+kapi('DV32 sahibi YAŞAYAN kilit bir saatlik bile olsa alınmaz: ikinci yazıcı bekler, 503 ile vazgeçer (kapı açıcıyı beklerken kilit kaptırılmaz)',
+  /^RET 503 \d+/.test(r32) && +r32.split(' ')[2] >= 400 && readFileSync(KL, 'utf8') === process.pid + ' canli', r32);
+writeFileSync(KL, oluPid + ' olu');
+const r32b = await bitir(kilitDene(2000));
+kapi('DV32b sahibi ÖLMÜŞ kilit bayattır: alınır, iş bitince bırakılır (dosya kalmaz)', r32b === 'ALINDI' && !existsSync(KL), r32b);
+writeFileSync(KL, oluPid + ' olu'); const KIZ = join(T, 'kilit-iz'); writeFileSync(KIZ, '');
+// gecikme 400 ms: üçü de bayatı görür, sonra devralmaya çalışır — eski kural (doğrulamadan sil) burada ikinci girişi üretir
+const yaris = await Promise.all([1, 2, 3].map(() => bitir(kilitDene(8000, 300, KIZ, 400))));
+const ad = readFileSync(KIZ, 'utf8').trim().split('\n').map((l) => l.split(' '));
+const ust = ad.every((x, i) => (i % 2 === 0 ? x[0] === 'gir' : x[0] === 'cik')) && ad.length === 6;
+kapi('DV32c üç süreç AYNI bayat kilidi aynı anda görür ve devralmaya çalışır (pencere sınavda 400 ms): üçü de sırayla alır, hiçbir an iki süreç içeride değil (gir/çık dönüşümlü)',
+  yaris.every((x) => x === 'ALINDI') && ust && !existsSync(KL), JSON.stringify(yaris) + ' ' + ad.map((x) => x[0]).join());
+const { dosyaKilit } = await import('./kadro-yaz.mjs');
+const birak = await dosyaKilit(T, { bekleMs: 500 }); writeFileSync(KL, '4242 baskasi'); birak();
+kapi('DV32d bırakma yalnız KENDİ kilidini siler: içerik başkasınınsa dosyaya dokunmaz', existsSync(KL) && readFileSync(KL, 'utf8') === '4242 baskasi');
+unlinkSync(KL);
+writeFileSync(ISKAN, ILK_ISKAN.replace(/dava_kurali:.*\n/, '')); writeFileSync(DAVALAR, ILK_DAVALAR);
 const k6 = await kadro(); const bk6 = bekci();
 kapi('DV33 kural satırı yoksa: /api/kadro\'da davalar ANAHTARI YOK (raf çizilmez) · bekçi turu "tur yok"', !('davalar' in k6) && k6.bagla === true && bk6.status === 0 && /tur yok/.test(bk6.stdout), JSON.stringify(Object.keys(k6)) + bk6.stdout);
 const c6 = await hal({ eylem: 'geri-ac', id: '2025/204', yer_ac: true });
 kapi('DV34 kuralsız kutuda yer_ac yok sayılır (tavan yok → kimse dondurulmaz)', c6.s === 200 && c6.j.donduruldu === null, JSON.stringify(c6));
+// DV35 · filo üç-kopya eşitleyicisi iskan-registry'yi kanonik kopyasıyla EZER (dava satırı yok): davalar.yaml'daki dava satırları yerinde kalır
+writeFileSync(ISKAN, ILK_ISKAN);
+const k7 = await kadro();
+kapi('DV35 iskan eşitlenip ezilse de dava satırları davalar.yaml\'da YERİNDE kalır (kayıp yok): dört dava hâlâ rol=dava olarak kadroda', ['2025/118', '2024/772', '2026/31', '2023/1'].every((id) => kisi(k7, id) && kisi(k7, id).rol === 'dava'), JSON.stringify(k7.kisiler.filter((x) => x.rol === 'dava').map((x) => x.id)));
 p.kill();
 if (k && hataCikti) console.log('kapı stderr:\n' + hataCikti.slice(-800));
 rmSync(T, { recursive: true, force: true });

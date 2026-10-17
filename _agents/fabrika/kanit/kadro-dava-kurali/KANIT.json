@@ -1,7 +1,7 @@
 {
   "is": "kadro-dava-kurali",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-16T19:38:58+03:00",
+  "guncelleme": "2026-10-16T19:45:33+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -197,7 +197,22 @@
       "renk": "yesil",
       "zaman": "2026-10-16T19:38:58+03:00",
       "sure_sn": 6.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "b10-gercek-claude-resume",
+      "asama": "tek",
+      "dosya": "olcum-b10-gercek-claude-resume-tek.txt",
+      "sha256": "dd0107fa0c6bb5fbeaa676ee506f7a2cf49f84f920f46eecc8ac69e6607eef2d",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/scripts/dava-resume-olc.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-16T19:45:33+03:00",
+      "sure_sn": 56.1
     }
   ],
-  "imza": "405cc340ea70aa0016e12cfa71574e95bcdb08b739f2eb69530b71d05184c779"
+  "imza": "073d56c8bf60588218c5e1a7d6fa56ab8aace9c01f0499e6908eda746450d784"
 }

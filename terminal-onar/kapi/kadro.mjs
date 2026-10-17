@@ -76,6 +76,13 @@ function birlestir(listeler) {
   return [...h.values()];
 }
 
+// 🔴 DAVA DOSYASI (Sx #350 · SERDAR 10:50 + 09:25 kararı (b)): dava satırları (rol: dava) iskan-registry'den AYRI tutulur — kutunun
+//    kayıt kopyası (filo üç-kopya eşitleyicisi) iskan'ı ezdiğinde dava satırları sessizce gitmesin. Kutu içinde, registry'nin yanında.
+//    iskan'da yalnız `dava_kurali` kök satırı kalır. Okuyucu ve yazıcı bu yolu TEK yerden alır.
+export function davalarYolu(proje, ortam = process.env) {
+  return ortam.DAVALAR_REGISTRY || path.join(path.dirname(ortam.ISKAN_REGISTRY || path.join(proje, 'iskan-registry.yaml')), 'davalar.yaml');
+}
+
 // Kutunun kayıt dosyalarını bul ve oku → { kaynak: [yol…], uyeler } (okunamayan dosya atlanır, adı `okunamadi`ye düşer)
 export function kayitOku(proje, ortam = process.env) {
   const kaynak = [], okunamadi = [], listeler = [];
@@ -85,6 +92,8 @@ export function kayitOku(proje, ortam = process.env) {
   const aile = ortam.AILE_REGISTRY || path.join(proje, '_agents/handoff/aile-registry.yaml');
   if (fs.existsSync(iskan)) {
     const l = oku(iskan); if (l) listeler.push(l);
+    const dav = davalarYolu(proje, ortam);
+    if (fs.existsSync(dav)) { const ld = oku(dav); if (ld) listeler.push(ld); }
     // ekip_registry_pointer: iskan dosyasının başındaki skaler (varsa) — yoksa olağan iki yer denenir
     let isaret = ''; try { isaret = skaler((fs.readFileSync(iskan, 'utf8').split('\n').find((x) => /^\s*ekip_registry_pointer:/.test(x)) || ''), 'ekip_registry_pointer') || ''; } catch {}
     for (const y of [isaret && path.join(proje, isaret), path.join(proje, '_agents/handoff/ekip-registry.yaml'), path.join(proje, '_agents/ekip-os/ekip-registry.yaml')].filter(Boolean)) {

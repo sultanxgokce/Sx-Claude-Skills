@@ -21,4 +21,11 @@ dene 'M3 kişiye bağlama kimliği açıcının okumadığı dosyaya yazar' kadr
 dene 'M4 bekçi personeli de dondurur (rol=dava süzgeci yok)' kadro.mjs "const davaAcik = (k) => k.rol === DAVA_ROL && " "const davaAcik = (k) => "
 dene "M5 bağla, iki Claude'lu oturumda ilkini seçer" sunucu.mjs 'if (kim.length !== 1)' 'if (kim.length < 1)'
 dene 'M6 bağlamayı geri al, bagla_ile olmayan kaydı da siler' kadro-yaz.mjs "if (!a || a.deger !== 'true') throw new KadroHata(409, 'Bu kayıt bağlamayla gelmedi.');" ''
+dene 'M7 kilit yaşa bakar (sahibi yaşarken kapılır)' kadro-yaz.mjs "const bayat = Number.isInteger(pid) && pid > 0 ? !yasiyor(pid) : yas > bayatMs;" "const bayat = yas > 1000;"
+dene 'M8 bırakma sahipliğe bakmaz (başkasının kilidini siler)' kadro-yaz.mjs "return () => { if (oku(y) === ben) { try { fs.unlinkSync(y); } catch {} } };" "return () => { try { fs.unlinkSync(y); } catch {} };"
+dene 'M9 bayat kilit doğrulamadan silinir (eski kural)' kadro-yaz.mjs "        const t = y + '.bayat.' + process.pid + '.' + Math.random().toString(36).slice(2);
+        try { fs.renameSync(y, t); } catch { continue; }
+        if (oku(t) !== c) { try { fs.linkSync(t, y); } catch {} }   // başkasının taze kilidini kaptık → yer boşsa geri koy
+        try { fs.unlinkSync(t); } catch {}" "        try { fs.unlinkSync(y); } catch {}"
+dene 'M10 dava satırı iskan'a yazılır (eşitleyici ezer, davalar.yaml boş kalır)' kadro-yaz.mjs "const hedef = iskanVar ? davalarYolu(proje, ortam) : dosyalar[0];" "const hedef = dosyalar[0];"
 echo; echo "MUTASYON: $gecti yakalandı · $dusen kaçtı"; [ "$dusen" = 0 ]
