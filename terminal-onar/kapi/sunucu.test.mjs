@@ -114,6 +114,24 @@ console.log('\n── T · TABAN YOLU (kapı /sedir altında) ──');
     /HttpOnly/.test(sc) && /Secure/.test(sc) && /SameSite=Strict/.test(sc), `→ ${sc.slice(0, 90)}`);
 
   const cerez = 'kapi=' + (sc.match(/kapi=([^;]+)/) || [])[1];
+  // ── BUGÜN ucu (2.15.0): çıpa fikstürü TO_PROJE altında; bugün olan ajan listede, başka gün bugun_degil'de; girişsiz 401
+  {
+    const PRJ = join(T, 'proje'); mkdirSync(join(PRJ, '_agents/handoff'), { recursive: true });
+    writeFileSync(join(PRJ, '_agents/handoff/gunluk-plan-cipa.basiret.md'), '# ⚓ GÜNÜN PLANI ÇIPASI · 2026-10-17\n\n- [ ] 1) tek madde gorev_01ABCDEFGHJKMNPQRSTVWXYZ\n- [x] G1) bitti → KAPANDI · not\n');
+    writeFileSync(join(PRJ, '_agents/handoff/gunluk-plan-cipa.eski.md'), '# ⚓ GÜNÜN PLANI ÇIPASI · 2026-10-01\n- [ ] 1) bayat\n');
+    const PB = 18794; const pb = await kapiAc('/sedir', PB, { TO_PROJE: PRJ });
+    const okb = await iste(PB, '/sedir/giris', { metot: 'POST', govde: { parola: SIFRE } });
+    const cb = 'kapi=' + ((okb.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1];
+    const g0 = await iste(PB, '/sedir/api/bugun?tarih=2026-10-17');
+    kapi('BG1 /api/bugun girişsiz 401 (kapı oturumu ister)', g0.status === 401, `→ ${g0.status}`);
+    const g1 = await iste(PB, '/sedir/api/bugun?tarih=2026-10-17', { cerez: cb }); const j1 = await g1.json();
+    kapi('BG2 bugünkü ajan listede: basiret, 2 madde (1 açık · 1 bitti), görev bağı', g1.status === 200 && j1.ajanlar.length === 1 && j1.ajanlar[0].ajan === 'basiret' && j1.toplam.acik === 1 && j1.toplam.bitti === 1 && j1.ajanlar[0].maddeler[0].gorevler[0] === 'gorev_01ABCDEFGHJKMNPQRSTVWXYZ', JSON.stringify(j1).slice(0, 200));
+    kapi('BG3 başka günün çıpası bugun_degil\'de (listede değil)', j1.bugun_degil.length === 1 && j1.bugun_degil[0].ajan === 'eski' && j1.bugun_degil[0].tarih === '2026-10-01');
+    kapi('BG4 kutu ve proje kimliği cevapta', j1.kutu === 'sinavkutu' && j1.proje === PRJ);
+    const g2 = await iste(PB, '/sedir/api/bugun?tarih=17-10-2026', { cerez: cb });
+    kapi('BG5 bozuk tarih 400', g2.status === 400, `→ ${g2.status}`);
+    pb.kill();
+  }
   const sayfa = await iste(P1, '/sedir/', { cerez });
   const html = await sayfa.text();
   kapi('T10 sayfa kendi tabanını TAŞIR (sunucudan öğrenir, tahmin etmez)',

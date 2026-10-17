@@ -1,0 +1,69 @@
+{
+  "is": "bugun-api",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-17T15:09:22+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "bugun-sinavi",
+      "asama": "once",
+      "dosya": "olcum-bugun-sinavi-once.txt",
+      "sha256": "7053b04504b8084bfc4c2f9567bf9cff8e18546a5cd25551dad6e0e511be029e",
+      "komut": [
+        "node",
+        "/tmp/tmp.KwHmco3kNE/bugun.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T15:09:15+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bugun-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-bugun-sinavi-sonra.txt",
+      "sha256": "f465f4c7bed33989d3c9f34e8cedfb0f24dd5c64c203eccd60048e5616508465",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/bugun.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:09:15+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sunucu-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-sunucu-sinavi-sonra.txt",
+      "sha256": "a1e1b4a9638230509bff4d3a05177b3d4a2cf6b0443073ce9c0b3211856f9906",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:09:22+03:00",
+      "sure_sn": 6.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-cipa-nexus",
+      "asama": "sonra",
+      "dosya": "olcum-gercek-cipa-nexus-sonra.txt",
+      "sha256": "b0ac79877d384c8dcab799369edec8122c7d3ea76b9a24173fdd1797a77df598",
+      "komut": [
+        "node",
+        "-e",
+        "import('/config/projects/_wt/Sx-Claude-Skills-bugun-api/terminal-onar/kapi/bugun.mjs').then(m=>{const b=m.bugunOku('/config/projects/Nexus');console.log(JSON.stringify({tarih:b.tarih,ajanlar:b.ajanlar.map(a=>({ajan:a.ajan,...a.sayilar})),bugun_degil:b.bugun_degil.map(x=>x.ajan+':'+x.tarih),okunamadi:b.okunamadi,toplam:b.toplam}))})"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:09:22+03:00",
+      "sure_sn": 0.0
+    }
+  ],
+  "imza": "958b5803152d89ccfbe34fdc5946b765dc66db9404c55616979b0cf6d575bcc2"
+}

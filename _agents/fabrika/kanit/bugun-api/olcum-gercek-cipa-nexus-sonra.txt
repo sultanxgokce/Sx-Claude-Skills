@@ -1,0 +1,5 @@
+$ node -e import('/config/projects/_wt/Sx-Claude-Skills-bugun-api/terminal-onar/kapi/bugun.mjs').then(m=>{const b=m.bugunOku('/config/projects/Nexus');console.log(JSON.stringify({tarih:b.tarih,ajanlar:b.ajanlar.map(a=>({ajan:a.ajan,...a.sayilar})),bugun_degil:b.bugun_degil.map(x=>x.ajan+':'+x.tarih),okunamadi:b.okunamadi,toplam:b.toplam}))})
+# rc=0 sure=0.0s zaman=2026-10-17T15:09:22+03:00
+--- stdout ---
+{"tarih":"2026-10-17","ajanlar":[{"ajan":"serdar","acik":5,"yarim":1,"bitti":4,"geri":0,"toplam":10}],"bugun_degil":["a:2026-10-05","bani:2026-10-14","basiret:2026-10-12","dash:2026-10-05","muav-n:2026-10-05","muavin:2026-10-13"],"okunamadi":[],"toplam":{"acik":5,"yarim":1,"bitti":4,"geri":0,"toplam":10}}
+--- stderr ---
