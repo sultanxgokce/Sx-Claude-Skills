@@ -1,0 +1,52 @@
+{
+  "tur": 2,
+  "is": "kadro-dava-kurali",
+  "pr": "350",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T14:27:01+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": true,
+    "istem_bayt": 149831,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 20,
+    "bayt": 72092
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "H",
+    "ozet": "Dava Rafı’nın API, tavan, dondurma, bağlama ve geri alma kolları geniş hermetik sınavlarda çalışıyor; fakat iş kartındaki eski davaya geri dönme şartı gerçek Claude ölçümünde açıkça başarısız. Ayrıca gösterilen üretim farkı kırpılmış ve yeşil kanıtlar farkın son hâliyle uyuşmuyor; bu yüzden iş üretime hazır değil.",
+    "bulgular": [
+      {
+        "ne": "B10’un gerçek eski sohbeti geri getirme şartı sağlanmıyor; komut başarıyla oturum açsa da eski konuşma görünmüyor.",
+        "kanit": "Araç imzalı `b10-gercek-claude-resume` kaydı rc=1/kırmızı: adım 4 başarısız ve sonuç `4 tuttu · 1 tutmadı`. Aynı çıktı doğrudan `claude --resume` denemesinin `No deferred tool marker found` hatası verdiğini gösteriyor.",
+        "konum": "olcum-b10-gercek-claude-resume-tek.txt; olcum-eski-kutu-tek.txt",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Kanıt, sunulan farkın güncel dava sınavı ve mutasyon paketini çalıştırdığını göstermiyor; dolayısıyla son kilit ve ayrı davalar.yaml değişiklikleri doğrulanmamış.",
+        "kanit": "Manifestteki `dava-kapi-sinavi` çıktısı `35 geçti` ve yalnız DV32-DV34’e kadar giderken gösterilen fark DV32b-DV32d ile DV35’i de içeriyor. `dava-mutasyon` çıktısı `6 yakalandı` derken fark M7-M10 dahil 10 mutasyon tanımlıyor.",
+        "konum": "olcum-dava-kapi-sinavi-sonra.txt; olcum-dava-mutasyon-tek.txt; diff: terminal-onar/kapi/dava.test.mjs ve dava.mutasyon.sh",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Üretim kodu farkının sonu istem sınırında kırpıldığı için sunucu, bekçi çağrısı ve kalan entegrasyon değişikliklerinin tamamı bağımsız olarak incelenemiyor.",
+        "kanit": "Girdinin sonunda açıkça `istem 149831 bayttı, 110000 baytta KIRPILDI — diff'in sonu görülmedi` uyarısı var; fark `kadro.mjs` içinde yarım satırda bitiyor.",
+        "konum": "değişiklik dökümü sonundaki kırpılma uyarısı",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; ana dava ile koltuk-aç sınavlarında kırmızı→yeşil ölçüm çiftleri, gerileme sınavları ve mutasyon kanıtı var, sarı kayıt yok. Ancak gerçek `--eski/session_id` kabul ölçümü kırmızı ve eski sohbeti göstermiyor; ayrıca ölçüm çıktıları sunulan farkın daha eski bir sınav sürümüne ait göründüğünden son kodla kanıt arasında sürüm eşleşmesi yok."
+  }
+}

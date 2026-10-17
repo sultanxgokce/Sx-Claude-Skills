@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/kapi/dava.mutasyon.sh
-# rc=0 sure=6.5s zaman=2026-10-16T19:38:58+03:00
+# rc=2 sure=24.7s zaman=2026-10-17T14:27:43+03:00
 --- stdout ---
   ✓ M1 Aç yer açmaz (tavan yok sayılır) — sınav KIRMIZI
   ✓ M2 yer açan dondurma geri alınırken son_calisma artığı kalır — sınav KIRMIZI
@@ -7,6 +7,9 @@ $ bash /config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/kap
   ✓ M4 bekçi personeli de dondurur (rol=dava süzgeci yok) — sınav KIRMIZI
   ✓ M5 bağla, iki Claude'lu oturumda ilkini seçer — sınav KIRMIZI
   ✓ M6 bağlamayı geri al, bagla_ile olmayan kaydı da siler — sınav KIRMIZI
-
-MUTASYON: 6 yakalandı · 0 kaçtı
+  ✓ M7 kilit yaşa bakar (sahibi yaşarken kapılır) — sınav KIRMIZI
+  ✓ M8 bırakma sahipliğe bakmaz (başkasının kilidini siler) — sınav KIRMIZI
+  ✓ M9 bayat kilit doğrulamadan silinir (eski kural) — sınav KIRMIZI
 --- stderr ---
+/config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/kapi/dava.mutasyon.sh: line 30: syntax error near unexpected token `('
+/config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/kapi/dava.mutasyon.sh: line 30: `dene 'M10 dava satırı iskan'a yazılır (eşitleyici ezer, davalar.yaml boş kalır)' kadro-yaz.mjs "const hedef = iskanVar ? davalarYolu(proje, ortam) : dosyalar[0];" "const hedef = dosyalar[0];"'

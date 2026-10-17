@@ -1,7 +1,7 @@
 {
   "is": "kadro-dava-kurali",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-16T19:45:33+03:00",
+  "guncelleme": "2026-10-17T14:27:51+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -38,30 +38,30 @@
       "etiket": "dava-kapi-sinavi",
       "asama": "sonra",
       "dosya": "olcum-dava-kapi-sinavi-sonra.txt",
-      "sha256": "ee6c20f372ada2e0444a86051499f20721da573bfd23670c39b2bf1008f7973a",
+      "sha256": "b150403c2b6c513d3cafffb4cd291fb8e4d4069054222a891d63dbc5c645026f",
       "komut": [
         "node",
         "/config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/kapi/dava.test.mjs"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-16T19:38:52+03:00",
-      "sure_sn": 1.3
+      "zaman": "2026-10-17T14:27:18+03:00",
+      "sure_sn": 2.8
     },
     {
       "tur": "olcum",
       "etiket": "koltuk-ac-dava-kolu",
       "asama": "sonra",
       "dosya": "olcum-koltuk-ac-dava-kolu-sonra.txt",
-      "sha256": "b620e04b2da6005b2ad744c0d80e3e12a55f68df31a3b97394d8c54e2b10a467",
+      "sha256": "ec7f7498d39adc169a2a6478e95816e7d58d1766172c6e384def9827e7edd3ca",
       "komut": [
         "bash",
         "/config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/scripts/koltuk-ac.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-16T19:37:25+03:00",
-      "sure_sn": 7.3
+      "zaman": "2026-10-17T14:27:51+03:00",
+      "sure_sn": 7.9
     },
     {
       "tur": "olcum",
@@ -188,15 +188,15 @@
       "etiket": "dava-mutasyon",
       "asama": "tek",
       "dosya": "olcum-dava-mutasyon-tek.txt",
-      "sha256": "b1b13413f96863038f2272c3dcc022b0f505481f7ba385a114b53951f04cdbaf",
+      "sha256": "8e304d0414b4ec4a2f23f5b83aca2dfd1a8946485184249dc166bd2b90a0510b",
       "komut": [
         "bash",
         "/config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/kapi/dava.mutasyon.sh"
       ],
-      "rc": 0,
-      "renk": "yesil",
-      "zaman": "2026-10-16T19:38:58+03:00",
-      "sure_sn": 6.5
+      "rc": 2,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T14:27:43+03:00",
+      "sure_sn": 24.7
     },
     {
       "tur": "olcum",
@@ -214,5 +214,5 @@
       "sure_sn": 56.1
     }
   ],
-  "imza": "073d56c8bf60588218c5e1a7d6fa56ab8aace9c01f0499e6908eda746450d784"
+  "imza": "448b4978764653f236a645810424ad6e7b8e962d0d5899cf8b09d4323037ba32"
 }

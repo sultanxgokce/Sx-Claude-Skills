@@ -1,5 +1,5 @@
 $ node /config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/kapi/dava.test.mjs
-# rc=0 sure=1.3s zaman=2026-10-16T19:38:52+03:00
+# rc=0 sure=2.8s zaman=2026-10-17T14:27:18+03:00
 --- stdout ---
 ── DV-A · saf kurallar (kadro.mjs · kadro-yaz.mjs)
   ✓ DV1 dava_kurali akış ve blok biçimi okunur; eksik/bozuk/aralık dışı kural YOK sayılır (yarım kuralla dondurma yok)
@@ -39,9 +39,13 @@ $ node /config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/kap
   ✓ DV30 kişi bağlamasını geri al → kayıt BAYT BAYT önceki hâl (eski session_id geri), kisi-ot yeniden kayıtsız
   ✓ DV31 jetonla bagla → 403 (kadro kararı ekrandan)
 ── DV-F · süreçler arası kilit · davasız kutu
-  ✓ DV32 taze kilit varken ikinci yazıcı BEKLER ve 503 ile vazgeçer (aynı anda iki yazım yok)
+  ✓ DV32 sahibi YAŞAYAN kilit bir saatlik bile olsa alınmaz: ikinci yazıcı bekler, 503 ile vazgeçer (kapı açıcıyı beklerken kilit kaptırılmaz)
+  ✓ DV32b sahibi ÖLMÜŞ kilit bayattır: alınır, iş bitince bırakılır (dosya kalmaz)
+  ✓ DV32c üç süreç AYNI bayat kilidi aynı anda görür ve devralmaya çalışır (pencere sınavda 400 ms): üçü de sırayla alır, hiçbir an iki süreç içeride değil (gir/çık dönüşümlü)
+  ✓ DV32d bırakma yalnız KENDİ kilidini siler: içerik başkasınınsa dosyaya dokunmaz
   ✓ DV33 kural satırı yoksa: /api/kadro'da davalar ANAHTARI YOK (raf çizilmez) · bekçi turu "tur yok"
   ✓ DV34 kuralsız kutuda yer_ac yok sayılır (tavan yok → kimse dondurulmaz)
+  ✓ DV35 iskan eşitlenip ezilse de dava satırları davalar.yaml'da YERİNDE kalır (kayıp yok): dört dava hâlâ rol=dava olarak kadroda
 
-SONUÇ: 35 geçti · 0 kaldı
+SONUÇ: 39 geçti · 0 kaldı
 --- stderr ---
