@@ -1,0 +1,116 @@
+{
+  "is": "kadro-kapi-proje-koku",
+  "arac": "kanit.py/0.4.0",
+  "guncelleme": "2026-10-17T19:06:45+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "oda-ortam-sinavi",
+      "asama": "once",
+      "dosya": "olcum-oda-ortam-sinavi-once.txt",
+      "sha256": "9dd06eea78e806e326911d698173630015ec0a2b743fd634c5b40efd607d6837",
+      "komut": [
+        "bash",
+        "/tmp/tmp.ZZ7nO02F3J/terminal-onar/scripts/oda-ortam.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T19:04:39+03:00",
+      "sure_sn": 0.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapat-korumasi",
+      "asama": "once",
+      "dosya": "olcum-kapat-korumasi-once.txt",
+      "sha256": "00f00ce876fc405894b96084062dea8ab6575bee801d8400f6877e28037ae649",
+      "komut": [
+        "node",
+        "/tmp/tmp.ZZ7nO02F3J/terminal-onar/kapi/kadro-hal.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T19:04:42+03:00",
+      "sure_sn": 3.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "oda-ortam-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-oda-ortam-sinavi-sonra.txt",
+      "sha256": "bb037f2f81cd12df116f1fb7fcce5c271f541e72147ccde76eddf4489de4efa1",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/oda-ortam.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T19:04:43+03:00",
+      "sure_sn": 0.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapat-korumasi",
+      "asama": "sonra",
+      "dosya": "olcum-kapat-korumasi-sonra.txt",
+      "sha256": "4a12c90741f789ae382bf8c9fd9a382c85b69afadd7a2da08d8de872a37e79ca",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/kadro-hal.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T19:04:45+03:00",
+      "sure_sn": 2.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kapi-korumasi-kalkinca",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-kapi-korumasi-kalkinca-sonra.txt",
+      "sha256": "33fd30f3315d6cc7a400a7f8f268e53bff96ef94d05aacf00919f1b1fd3c59cf",
+      "komut": [
+        "bash",
+        "-c",
+        "node '/tmp/tmp.16msaV8f7y/terminal-onar/kapi/kadro-hal.test.mjs' | grep -E 'KH12c|SONUÇ'; [ ${PIPESTATUS[0]} -ne 0 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T19:04:47+03:00",
+      "sure_sn": 2.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "terminal-onar-tum-sinavlar",
+      "asama": "sonra",
+      "dosya": "olcum-terminal-onar-tum-sinavlar-sonra.txt",
+      "sha256": "bb825fca1789b129916aef710edeed7181e374e07dcb06bf2cbc1978fa29a52b",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar; d=0; for t in scripts/*.test.sh; do timeout 300 bash \"$t\" >/dev/null 2>&1 && echo \"✓ $t\" || { echo \"✗ $t\"; d=$((d+1)); }; done; for t in kapi/*.test.mjs; do timeout 300 node \"$t\" >/dev/null 2>&1 && echo \"✓ $t\" || { echo \"✗ $t\"; d=$((d+1)); }; done; echo \"düşen=$d\"; [ $d -eq 0 ]"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T19:06:45+03:00",
+      "sure_sn": 117.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "code-kutusu-gercek-kayit",
+      "asama": "sonra",
+      "dosya": "olcum-code-kutusu-gercek-kayit-sonra.txt",
+      "sha256": "ffe4de154928e95210c4c2d5082382c8af1331b1b892a28ebd6c4d3d2b480adb",
+      "komut": [
+        "bash",
+        "-c",
+        "C=$(mktemp -d); mkdir -p \"$C/code/.oda\"; echo \"AILE_REGISTRY=/config/projects/Nexus/_agents/handoff/aile-registry.yaml\" > \"$C/code/.oda/ortam\"; env -i PATH=\"$PATH\" HOME=\"$C\" TO_KUTU=code TO_PROJE=\"$C/code\" TO_DURUM_DIZ=\"$C/d\" bash -c \". terminal-onar/scripts/ortak.sh >/dev/null 2>&1; kapi_kayit_ortami; echo; echo red=\\$ODA_ORTAM_RED\"; node -e \"import(\\\"./terminal-onar/kapi/kadro.mjs\\\").then(({kayitOku})=>{const a=kayitOku(\\\"$C/code\\\",{});const b=kayitOku(\\\"$C/code\\\",{AILE_REGISTRY:\\\"/config/projects/Nexus/_agents/handoff/aile-registry.yaml\\\"});console.log(\\\"iskelet kök üye:\\\",a.uyeler.length,\\\"· ayarla üye:\\\",b.uyeler.length)})\"; python3 -c \"import shutil,sys; shutil.rmtree(sys.argv[1])\" \"$C\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T19:06:45+03:00",
+      "sure_sn": 0.1
+    }
+  ],
+  "imza": "2ff0ec8b8c05f57095fab0b4857ec598deb43c183a079ecee62a8d8996da6f4d"
+}

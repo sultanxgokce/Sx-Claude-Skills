@@ -1,0 +1,29 @@
+$ bash -c cd terminal-onar; d=0; for t in scripts/*.test.sh; do timeout 300 bash "$t" >/dev/null 2>&1 && echo "✓ $t" || { echo "✗ $t"; d=$((d+1)); }; done; for t in kapi/*.test.mjs; do timeout 300 node "$t" >/dev/null 2>&1 && echo "✓ $t" || { echo "✗ $t"; d=$((d+1)); }; done; echo "düşen=$d"; [ $d -eq 0 ]
+# rc=1 sure=117.2s zaman=2026-10-17T19:06:45+03:00
+--- stdout ---
+✓ scripts/bekci-iz.test.sh
+✗ scripts/compact.test.sh
+✓ scripts/kabuk-kapisi.test.sh
+✓ scripts/kapi-yenile.test.sh
+✓ scripts/koltuk-ac.test.sh
+✓ scripts/koltuk-adi.test.sh
+✓ scripts/koltuk-bagla.test.sh
+✓ scripts/koltuk-fark-filo.test.sh
+✓ scripts/kur-bag.test.sh
+✓ scripts/kurtarici-kapali.test.sh
+✓ scripts/kutu-adi.test.sh
+✓ scripts/oda-ortam.test.sh
+✓ scripts/onar.test.sh
+✓ scripts/sifre-yukle.test.sh
+✓ kapi/bugun.test.mjs
+✓ kapi/kadro-hal.test.mjs
+✓ kapi/kadro-yaz.test.mjs
+✓ kapi/kadro.test.mjs
+✓ kapi/kapi-yenile.test.mjs
+✓ kapi/kilit.test.mjs
+✓ kapi/kimlik.test.mjs
+✓ kapi/rapor.test.mjs
+✓ kapi/sunucu.test.mjs
+✓ kapi/tarayici-bul.test.mjs
+düşen=1
+--- stderr ---
