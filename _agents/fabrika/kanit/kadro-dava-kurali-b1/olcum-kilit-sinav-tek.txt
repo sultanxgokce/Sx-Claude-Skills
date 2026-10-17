@@ -1,0 +1,11 @@
+$ node /config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali-b1/terminal-onar/kapi/kilit.test.mjs
+# rc=0 sure=2.1s zaman=2026-10-17T14:55:52+03:00
+--- stdout ---
+── DV-F · süreçler arası kilit
+  ✓ DV32 sahibi YAŞAYAN kilit bir saatlik bile olsa alınmaz: ikinci yazıcı bekler, 503 ile vazgeçer (kapı açıcıyı beklerken kilit kaptırılmaz)
+  ✓ DV32b sahibi ÖLMÜŞ kilit bayattır: alınır, iş bitince bırakılır (dosya kalmaz)
+  ✓ DV32c üç süreç AYNI bayat kilidi aynı anda görür ve devralmaya çalışır (pencere sınavda 400 ms): üçü de sırayla alır, hiçbir an iki süreç içeride değil (gir/çık dönüşümlü)
+  ✓ DV32d bırakma yalnız KENDİ kilidini siler: içerik başkasınınsa dosyaya dokunmaz
+
+SONUÇ: 4 geçti · 0 kaldı
+--- stderr ---
