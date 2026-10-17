@@ -1,0 +1,19 @@
+{
+  "is": "hafta-kapanis",
+  "cumle": "gorev_01M54T2ENRNVGXFZ421SFPMSQJ 2/2 — /hafta-kapanis global becerisi: haftayı KAPATMAZ eğer (K1) aktif ajanların kutu retrosu eksik/geçersiz (retro.py merkez), (K2) merkez retrosu yok ya da ders→görev D1 damgası eksik, (K3) kutu önerileri süzülmemiş (retro.py suzum), (K4) haftanın kaçış/tıkanma kayıtları MERKEZ.md'de ders damgası almamış. Salt ölçer; çıktı retro/<hafta>/KAPANIS.md; Sultan onayını YAZMAZ, var mı diye ölçer (A06); açık haftaları listeler. Cron ve retro.py bu kartın dışında.",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-17T16:12:51+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/hafta-kapanis (sınav önce/sonra + mutasyon + canlı 2026-W42 ölçümü)",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

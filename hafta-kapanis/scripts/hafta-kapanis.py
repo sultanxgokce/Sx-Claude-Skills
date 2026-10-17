@@ -4,10 +4,11 @@
 Niçin var (Sultan 17 Eki 2026, beyan SERDAR): "haftayı kapatma şartı olsun; sistem protokol eksiksiz
 koşmadıysa haftayı kapatmasın." Kapı dört ölçüm + bir onay okur; hiçbirini kendisi üretmez:
 
-  K1 katılım   — aktif ajanların kutu retrosu var ve geçerli (retro.py merkez rc: 0 yeşil · 1 kırmızı · 3 sarı)
+  K1 katılım   — aktif ajanların kutu retrosu var ve geçerli (retro.py'nin saf yardımcılarıyla; `retro.py merkez`
+                 MERKEZ.md yazabildiği için kapı onu ÇAĞIRMAZ)
   K2 dersler   — MERKEZ.md var; en az bir ders (M<n>) yazılı; HER ders görev defterine D1 damgasıyla girmiş
                  (`- gorev_<26> · ders M<n> · D1: YYYY-MM-DD Sultan: … (sohbet · <ref> · "<kırpık>" · beyan:<AJAN>)`)
-                 ya da gerekçeyle reddedilmiş (`- M<n> → RED: <gerekçe ≥10>`)
+                 ya da gerekçeyle reddedilmiş (`- M<n> → RED: <gerekçe ≥10>`). D1 TAM satırdır (baş/son çapalı).
   K3 süzüm     — kutu önerilerinin her biri damgalı (retro.py suzum rc)
   K4 kaçış     — haftanın kaçış (kaçış defteri) ve tıkanma (kart durum=tikandi) kayıtlarının her biri MERKEZ.md
                  "## Kaçış ve tıkanma" bölümünde `- <anahtar> → M<n>` ya da `→ RED: <gerekçe>` almış
@@ -84,6 +85,34 @@ def k_retro(retro_py, alt, kok, hafta, ekstra):
     return "KIRMIZI", ozet[:160]
 
 
+def k1_katilim(retro, kok, hafta, a):
+    """Katılım: retro.py'nin SAF yardımcılarıyla (olc · iz_var · lint_metin · registry_ajanlar). `retro.py merkez`
+    MERKEZ.md yazabildiği için kapı onu ÇAĞIRMAZ; sınıflandırma kuralı merkezle aynıdır (OK/GEÇERSİZ/EKSİK/ÇALIŞMADI).
+    Not: bu kural iki çağıranda yaşıyor → retro.py'ye `katilim()` çıkarılması ayrı küçük iş (#359 birleşince)."""
+    diz = os.path.join(kok, "_agents", "handoff", "retro", hafta)
+    if a.get("--ajanlar"):
+        ajanlar = [x for x in a["--ajanlar"].split(",") if x]
+    else:
+        ajanlar = retro.registry_ajanlar(a.get("--registry") or os.environ.get("RETRO_REGISTRY") or os.path.join(kok, "_agents", "handoff", "aile-registry.yaml"))
+        if ajanlar is None:
+            return "SARI", "ajan listesi yok (--ajanlar ya da aile-registry.yaml) — katılım ölçülemez"
+    haric = {retro.norm(x) for x in (a.get("--haric") or "SERDAR").split(",")}
+    eksik, gecersiz, ok = [], [], 0
+    for ajan in ajanlar:
+        if retro.norm(ajan) in haric:
+            continue
+        yol = next((pp for pp in glob.glob(os.path.join(diz, "*.md")) if retro.norm(os.path.splitext(os.path.basename(pp))[0]) == retro.norm(ajan)), None)
+        if yol:
+            h, _ = retro.lint_metin(open(yol, encoding="utf-8").read(), hafta, ajan)
+            (gecersiz if h else []).append(ajan)
+            ok += 0 if h else 1
+        elif retro.iz_var(retro.olc(kok, ajan, hafta)):
+            eksik.append(ajan)
+    if eksik or gecersiz:
+        return "KIRMIZI", f"OK {ok} · EKSİK {len(eksik)} ({', '.join(eksik) or '—'}) · GEÇERSİZ {len(gecersiz)} ({', '.join(gecersiz) or '—'}) — kutu retrosunu ajan yazar"
+    return "YEŞİL", f"OK {ok} · eksik/geçersiz yok (iz bırakmamış ajan serbest)"
+
+
 def k2_dersler(merkez_yol):
     if not os.path.exists(merkez_yol):
         return "KIRMIZI", "MERKEZ.md yok — merkez retrosu yazılmadı (retro.py merkez)", []
@@ -100,7 +129,7 @@ def k2_dersler(merkez_yol):
         s = s.strip()
         g = GOREV_SATIR_RE.match(s)
         if g:
-            if D1_RE.search(g.group(3)):
+            if D1_RE.fullmatch(g.group(3).strip()):
                 for mn in re.findall(r"M(\d+)", g.group(2)):
                     kapsanan[mn] = g.group(1)
             else:
@@ -127,14 +156,21 @@ def k4_kacis(retro, kok, hafta, merkez_yol):
             t = retro.tarih_cek(s[:25])
             if retro.aralikta(t, pzt, paz):
                 anahtarlar[s.split("|")[0].strip()] = "kaçış"
+    bozuk = []
     if os.path.isdir(kdiz):
         for yol in sorted(glob.glob(os.path.join(kdiz, "*.json"))):
             try:
                 k = json.load(open(yol, encoding="utf-8"))
-            except Exception:
+                if not isinstance(k, dict):
+                    raise ValueError("nesne değil")
+            except Exception as e:
+                bozuk.append(f"{os.path.basename(yol)} ({type(e).__name__})")
                 continue
             if k.get("durum") == "tikandi" and retro.aralikta(retro.tarih_cek(str(k.get("bitis", ""))), pzt, paz):
                 anahtarlar[f"kart:{k.get('is')}"] = "tıkanma"
+    if bozuk:
+        # okunamayan kart tıkanmış olabilir; görmediğimizi yeşil sayamayız
+        return "SARI", f"{len(bozuk)} kart okunamadı, tıkanma kümesi eksik olabilir: {', '.join(bozuk)[:160]}"
     if not anahtarlar:
         return "YEŞİL", "bu hafta kaçış/tıkanma kaydı yok"
     if not os.path.exists(merkez_yol):
@@ -159,7 +195,7 @@ def k5_onay(kapanis_yol):
             v = s[len("_sultan_onay:"):].strip()
             if not v or v.startswith("("):
                 return "BEKLİYOR", "", "onay satırı boş"
-            if D1_RE.search(v):
+            if D1_RE.fullmatch(v):
                 return "VAR", v, "D1 biçimli onay var"
             return "BİÇİMSİZ", v, "onay satırı var ama D1 biçimi değil (tarih · 'Sultan:' · sohbet · ref · kırpık · beyan:)"
     return "BEKLİYOR", "", "onay satırı yok"
@@ -178,16 +214,8 @@ def olc(a):
     diz = os.path.join(kok, "_agents", "handoff", "retro", hafta)
     merkez_yol = os.path.join(diz, "MERKEZ.md")
     kapanis_yol = os.path.join(diz, "KAPANIS.md")
-    ekstra = []
-    for b in ("--ajanlar", "--registry", "--haric"):
-        if a.get(b):
-            ekstra += [b, a[b]]
     K = []
-    if retro_py and not os.path.exists(merkez_yol):
-        # retro.py merkez MERKEZ.md yoksa iskelet YAZAR; kapı yazmaz → koşturmaz, kırmızı der
-        K.append(("K1", "katılım", "KIRMIZI", "MERKEZ.md yok — `retro.py merkez` koşulmadı (kapı yazmaz, ölçer); merkez retrosu önce"))
-    else:
-        K.append(("K1", "katılım", *k_retro(retro_py, "merkez", kok, hafta, ekstra)))
+    K.append(("K1", "katılım", *k1_katilim(retro, kok, hafta, a)))
     renk2, not2, _ = k2_dersler(merkez_yol)
     K.append(("K2", "dersler → görev (D1)", renk2, not2))
     K.append(("K3", "süzüm", *k_retro(retro_py, "suzum", kok, hafta, [])))

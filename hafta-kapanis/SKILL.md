@@ -15,7 +15,8 @@ bu beceri o kapıdır. Yazılı ama koşmayan kural olmasın diye **salt ölçer
 ## 🔴 Değişmezler
 
 1. **Yazmaz, ölçer.** Tek yazdığı dosya `retro/<hafta>/KAPANIS.md`. Kutu retrolarına ve MERKEZ.md'ye dokunmaz;
-   MERKEZ.md yoksa `retro.py merkez`'i **koşturmaz** (o iskelet yazar) — K1 kırmızı der, "merkez retrosu önce".
+   `retro.py merkez` MERKEZ.md yazabildiği için **hiç çağrılmaz** — K1 katılımı retro.py'nin saf yardımcılarıyla
+   (ölçüm · iz · lint · registry) aynı kuralla sınıflandırır (sınav: MERKEZ.md sha'sı ölçümden sonra aynı).
 2. **Sultan onayını ÜRETMEZ (A06).** `_sultan_onay:` satırını insan yazar, Sultan'ın sözünü D1 biçimiyle aktararak:
    `YYYY-MM-DD Sultan: <sonuç> (sohbet · <oturum-ref> · "<≤15 kelime kırpık>" · beyan:<AJAN>)`. Araç satırı okur,
    biçimini ölçer, yeniden ölçümde **korur**; boşsa "(bekliyor…)" yazar, biçimsizse hafta AÇIK kalır.
@@ -35,11 +36,11 @@ python3 ~/.claude/skills/hafta-kapanis/scripts/hafta-kapanis.py acik [--kok <dep
 
 | Kapı | Ne ölçer | Kaynak |
 |---|---|---|
-| K1 katılım | aktif ajanların kutu retrosu var ve lint geçer (EKSİK/GEÇERSİZ → kırmızı; ÇALIŞMADI serbest) | `retro.py merkez` rc |
+| K1 katılım | aktif ajanların kutu retrosu var ve lint geçer (EKSİK/GEÇERSİZ → kırmızı; iz bırakmamış ajan serbest) | retro.py saf yardımcıları (merkez komutu çağrılmaz) |
 | K2 dersler | MERKEZ.md `## Dersler`'de ≥1 `M<n>)`; **her** ders `## Görevler`'de `- gorev_<26> · ders M<n> · D1: <D1>` ya da `- M<n> → RED: <gerekçe ≥10>` | MERKEZ.md |
 | K3 süzüm | her kutu önerisi `→ gorev_` ya da `→ RED:` damgalı, metin güncel | `retro.py suzum` rc |
-| K4 kaçış/tıkanma | haftanın kaçış defteri satırları (anahtar: zaman damgası) + `durum=tikandi` kartları (anahtar: `kart:<iş>`) `## Kaçış ve tıkanma`'da `- <anahtar> → M<n>` ya da `→ RED: <gerekçe>` | kaçış defteri · kartlar · MERKEZ.md |
-| K5 onay | KAPANIS.md `_sultan_onay:` D1 biçimli | KAPANIS.md (insan yazar) |
+| K4 kaçış/tıkanma | haftanın kaçış defteri satırları (anahtar: zaman damgası) + `durum=tikandi` kartları (anahtar: `kart:<iş>`) `## Kaçış ve tıkanma`'da `- <anahtar> → M<n>` ya da `→ RED: <gerekçe>`; **okunamayan kart = SARI** (sessiz atlanmaz) | kaçış defteri · kartlar · MERKEZ.md |
+| K5 onay | KAPANIS.md `_sultan_onay:` D1 biçimli — **tam satır** eşleşmesi (baş/son çapalı; kuyruk metni biçimsiz) | KAPANIS.md (insan yazar) |
 
 Kapanmayan hafta: KAPANIS.md kırmızı kapıları adlarıyla basar; eksikler ilgili ajana görev olur, ertesi gün
 yeniden ölçülür. `retro.py` çözümü: `--retro-py` · `HAFTA_KAPANIS_RETRO_PY` · kardeş dizin (`../retro/scripts`) ·
@@ -47,9 +48,10 @@ yeniden ölçülür. `retro.py` çözümü: `--retro-py` · `HAFTA_KAPANIS_RETRO
 
 ## Kanıt
 
-`scripts/hafta-kapanis.test.sh` — 45 kapı hermetik (mktemp depo · sabit tarih) + 3 mutant kopya üstünde (görev D1
+`scripts/hafta-kapanis.test.sh` — 60 kapı hermetik (mktemp depo · sabit tarih) + 5 mutant kopya üstünde (görev D1
 denetimi kalkınca biçimsiz damga geçer · K4 eksik denetimi kalkınca damgasız tıkanma geçer · onay D1 denetimi
-kalkınca "onaylandı" haftayı kapatır — üçü de ısırıyor). Sınav `retro.py` ister; yoksa **rc=3 ÖLÇÜLEMEDİ** basar,
+kalkınca "onaylandı" haftayı kapatır · bozuk kart sessiz atlanınca sarı kaybolur · D1 tam eşleşmesi gevşeyince
+kuyruklu onay kapatır — beşi de ısırıyor). Sınav `retro.py` ister; yoksa **rc=3 ÖLÇÜLEMEDİ** basar,
 sahte yeşil vermez (bağ: `retro` becerisi önce birleşir).
 
 ## Sınırlar (dürüst)

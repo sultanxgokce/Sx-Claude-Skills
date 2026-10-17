@@ -36,7 +36,7 @@ kapi "H1c hafta biçimsiz → retro.py hata → rc=2" 2 python3 "$H" olc --hafta
 
 echo "— H2 hiç retro yok → AÇIK"
 kapi "H2a boş hafta → rc=1 AÇIK" 1 python3 "$H" olc --hafta 2026-W42
-icerir "$CIKTI" "K1 katılım: MERKEZ.md yok" "H2b K1 kırmızı, merkez KOŞULMADI (kapı yazmaz)"
+icerir "$CIKTI" "K1 katılım: OK 0 · EKSİK 1 (BÂNİ)" "H2b K1 kırmızı: BÂNİ iz var retro yok; MİRAHUR serbest"
 [ ! -f "$M" ] && ok "H2c kapı MERKEZ.md üretmedi (salt ölçer)" || kirmizi "H2c kapı MERKEZ.md yazdı!"
 icerir "$(cat "$KP")" "_durum: AÇIK" "H2d KAPANIS.md yazıldı, durum AÇIK"
 icerir "$(cat "$KP")" "_sultan_onay: (bekliyor" "H2e onay satırı BOŞ — araç üretmedi (A06)"
@@ -51,8 +51,13 @@ s=re.sub(r"- Ö1\) .*","- Ö1) denetci.sh daralt tanısın\n- Ö2) canli-ayarla 
 PY
 python3 "$RP" lint "$RD/BÂNİ.md" >/dev/null || kirmizi "fikstür: kutu retrosu geçersiz"
 python3 "$RP" merkez >/dev/null; [ -f "$M" ] && ok "H3a fikstür: MERKEZ.md iskeleti" || kirmizi "H3a MERKEZ.md yok"
+SHA_M="$(sha256sum "$M" | cut -c1-16)"
 kapi "H3b K1 yeşil (BÂNİ OK · MİRAHUR ÇALIŞMADI), K2-K4 kırmızı → rc=1" 1 python3 "$H" olc --hafta 2026-W42
-icerir "$CIKTI" "✓ K1 katılım" "H3c K1 yeşil"
+icerir "$CIKTI" "✓ K1 katılım: OK 1" "H3c K1 yeşil"
+[ "$(sha256sum "$M" | cut -c1-16)" = "$SHA_M" ] && ok "H3c2 kapı MERKEZ.md'ye dokunmadı (sha aynı; merkez komutu çağrılmaz)" || kirmizi "H3c2 MERKEZ.md değişti!"
+cp "$RD/BÂNİ.md" "$T/B.yedek"; sed -i 's/^- Z1) .*/- Z1) ölçüsüz zaman kaybı/' "$RD/BÂNİ.md"
+kapi "H3c3 kutu retrosu lint düşerse K1 GEÇERSİZ → kırmızı" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "GEÇERSİZ 1 (BÂNİ)" "H3c4 GEÇERSİZ adı"
+cp "$T/B.yedek" "$RD/BÂNİ.md"
 icerir "$CIKTI" "✗ K2 dersler → görev (D1): MERKEZ.md'de yazılı ders yok" "H3d K2 ders yok"
 icerir "$CIKTI" "✗ K3 süzüm" "H3e K3 damgasız"
 icerir "$CIKTI" "2/2 kaçış/tıkanma ders damgası almadı" "H3f K4 kaçış + tıkanma sayıldı (eski kaçış dışarıda)"
@@ -85,10 +90,16 @@ icerir "$(cat "$KP")" "_durum: KAPANDI" "H6b durum KAPANDI"
 kapi "H6c yeniden ölçüm onayı korur, KAPANDI kalır" 0 python3 "$H" olc --hafta 2026-W42
 icerir "$(cat "$KP")" '"tamam kapat" · beyan:SERDAR' "H6d onay satırı aynen"
 
+sed -i 's/^_sultan_onay: \(.*\)$/_sultan_onay: \1 ve ek metin/' "$KP"
+kapi "H6e geçerli D1 + kuyruk metni → BİÇİMSİZ (tam satır eşleşmesi), AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "D1 biçimi değil" "H6f gerekçe"
+sed -i 's/^_sultan_onay: .*/_sultan_onay: 2026-10-18 Sultan: hafta kapansın (sohbet · oturum-ref-2 · "tamam kapat" · beyan:SERDAR)/' "$KP"
+kapi "H6g düzeltildi → KAPANDI" 0 python3 "$H" olc --hafta 2026-W42
 echo "— H7 K2 kenarları (kopya MERKEZ üstünde)"
 cp "$M" "$T/M.yedek"
 sed -i 's/ · D1: 2026-10-18 Sultan: onay (sohbet · oturum-ref-1 · "kart depo başına, tamam" · beyan:SERDAR)/ · D1: onaylandı/' "$M"
 kapi "H7a D1 biçimsiz görev satırı → K2 kırmızı → AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "D1 damgası biçimsiz" "H7b gerekçe"
+cp "$T/M.yedek" "$M"; sed -i 's/ · D1: 2026-10-18 Sultan: onay (sohbet/ · D1: not: 2026-10-18 Sultan: onay (sohbet/' "$M"
+kapi "H7a2 görev D1 başına yabancı metin → biçimsiz (tam eşleşme)" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "D1 damgası biçimsiz" "H7a3 gerekçe"
 cp "$T/M.yedek" "$M"; sed -i '/^- M2 → RED: /d' "$M"
 kapi "H7c ders görevsiz (M2) → AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "ders→görev eksik: M2" "H7d eksik ders adı"
 cp "$T/M.yedek" "$M"; sed -i 's/^- M2) daraltma hat adımı eksik .*/- M2) <ders> · kaynak: <AJAN D<n> | ölçüm>/' "$M"
@@ -99,6 +110,10 @@ echo "— H8 K4 kenarı"
 sed -i '/^- kart:is-b → /d' "$M"
 kapi "H8a tıkanma damgası silinince AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "1/2 kaçış/tıkanma ders damgası almadı: kart:is-b (tıkanma)" "H8b eksik anahtar"
 cp "$T/M.yedek" "$M"; kapi "H8c geri alındı → KAPANDI" 0 python3 "$H" olc --hafta 2026-W42
+printf '{bozuk json' > "$KOK/_agents/fabrika/kartlar/is-x.json"
+kapi "H8d okunamayan kart → K4 SARI → rc=3 ÖLÇÜLEMEDİ (sessiz atlama yok)" 3 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "1 kart okunamadı, tıkanma kümesi eksik olabilir: is-x.json" "H8e bozuk kart adı"
+icerir "$(cat "$KP")" "_durum: ÖLÇÜLEMEDİ" "H8f durum ÖLÇÜLEMEDİ (KAPANDI değil)"
+rm -f "$KOK/_agents/fabrika/kartlar/is-x.json"; kapi "H8g bozuk kart kalkınca KAPANDI" 0 python3 "$H" olc --hafta 2026-W42
 
 echo "— H9 açık haftalar dizinden türetilir"
 mkdir -p "$KOK/_agents/handoff/retro/2026-W41"
@@ -114,7 +129,7 @@ mut(){ local ad="$1" sed_="$2"; shift 2; local MR="$T/mut-$RANDOM.py"; sed -e "$
 # M1: görev satırındaki D1 denetimi kalkınca biçimsiz D1 geçer (H7a kırmızı beklerken yeşil olur)
 sed -i 's/ · D1: 2026-10-18 Sultan: onay (sohbet · oturum-ref-1 · "kart depo başına, tamam" · beyan:SERDAR)/ · D1: onaylandı/' "$M"
 m_d1(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -ne 0 ]; }
-mut "M1 görev D1 denetimi kalkınca biçimsiz damga geçer (kapı yakalar)" 's/            if D1_RE.search(g.group(3)):/            if True:/' m_d1
+mut "M1 görev D1 denetimi kalkınca biçimsiz damga geçer (kapı yakalar)" 's/            if D1_RE.fullmatch(g.group(3).strip()):/            if True:/' m_d1
 cp "$T/M.yedek" "$M"
 # M2: K4 eksik denetimi kalkınca damgasız tıkanma geçer
 sed -i '/^- kart:is-b → /d' "$M"
@@ -124,7 +139,18 @@ cp "$T/M.yedek" "$M"
 # M3: onay D1 denetimi kalkınca 'onaylandı' KAPANDI sayılır (A06 kapısı)
 sed -i 's/^_sultan_onay: .*/_sultan_onay: onaylandı/' "$KP"
 m_onay(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -ne 0 ]; }
-mut "M3 onay D1 denetimi kalkınca biçimsiz onay haftayı kapatır (kapı yakalar)" 's/            if D1_RE.search(v):/            if True:/' m_onay
+mut "M3 onay D1 denetimi kalkınca biçimsiz onay haftayı kapatır (kapı yakalar)" 's/            if D1_RE.fullmatch(v):/            if True:/' m_onay
+
+# M4: bozuk kart SARI'ya çevrilmezse H8d yeşil döner
+printf '{bozuk json' > "$KOK/_agents/fabrika/kartlar/is-x.json"
+m_bozuk(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -eq 3 ]; }
+mut "M4 bozuk kart sessiz atlanınca sarı kaybolur (kapı yakalar)" 's/^    if bozuk:$/    if False:/' m_bozuk
+rm -f "$KOK/_agents/fabrika/kartlar/is-x.json"
+# M5: onay tam-eşleşme gevşeyince kuyruk metinli D1 kapatır
+sed -i 's/^_sultan_onay: .*/_sultan_onay: 2026-10-18 Sultan: hafta kapansın (sohbet · oturum-ref-2 · "tamam kapat" · beyan:SERDAR) ve ek metin/' "$KP"
+kapi "M5-önkoşul: kuyruklu D1 gerçek araçta AÇIK" 1 python3 "$H" olc --hafta 2026-W42
+m_kuyruk(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -ne 0 ]; }
+mut "M5 onay D1 tam eşleşmesi gevşeyince kuyruklu onay kapatır (kapı yakalar)" 's/            if D1_RE.fullmatch(v):/            if D1_RE.search(v):/' m_kuyruk
 
 echo; echo "GECEN=$G DUSEN=$K"
 [ "$K" -eq 0 ]

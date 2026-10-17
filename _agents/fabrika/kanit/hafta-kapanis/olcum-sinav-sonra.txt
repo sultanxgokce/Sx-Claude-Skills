@@ -1,5 +1,5 @@
 $ bash hafta-kapanis/scripts/hafta-kapanis.test.sh
-# rc=0 sure=2.3s zaman=2026-10-17T16:19:20+03:00
+# rc=0 sure=2.0s zaman=2026-10-17T16:23:41+03:00
 --- stdout ---
 — H1 retro becerisi yoksa SARI (sahte yeşil yok)
   ✓ H1a retro.py bulunamaz → rc=3 (rc=3)
@@ -7,7 +7,7 @@ $ bash hafta-kapanis/scripts/hafta-kapanis.test.sh
   ✓ H1c hafta biçimsiz → retro.py hata → rc=2 (rc=2)
 — H2 hiç retro yok → AÇIK
   ✓ H2a boş hafta → rc=1 AÇIK (rc=1)
-  ✓ H2b K1 kırmızı, merkez KOŞULMADI (kapı yazmaz)
+  ✓ H2b K1 kırmızı: BÂNİ iz var retro yok; MİRAHUR serbest
   ✓ H2c kapı MERKEZ.md üretmedi (salt ölçer)
   ✓ H2d KAPANIS.md yazıldı, durum AÇIK
   ✓ H2e onay satırı BOŞ — araç üretmedi (A06)
@@ -15,6 +15,9 @@ $ bash hafta-kapanis/scripts/hafta-kapanis.test.sh
   ✓ H3a fikstür: MERKEZ.md iskeleti
   ✓ H3b K1 yeşil (BÂNİ OK · MİRAHUR ÇALIŞMADI), K2-K4 kırmızı → rc=1 (rc=1)
   ✓ H3c K1 yeşil
+  ✓ H3c2 kapı MERKEZ.md'ye dokunmadı (sha aynı; merkez komutu çağrılmaz)
+  ✓ H3c3 kutu retrosu lint düşerse K1 GEÇERSİZ → kırmızı (rc=1)
+  ✓ H3c4 GEÇERSİZ adı
   ✓ H3d K2 ders yok
   ✓ H3e K3 damgasız
   ✓ H3f K4 kaçış + tıkanma sayıldı (eski kaçış dışarıda)
@@ -34,9 +37,14 @@ $ bash hafta-kapanis/scripts/hafta-kapanis.test.sh
   ✓ H6b durum KAPANDI
   ✓ H6c yeniden ölçüm onayı korur, KAPANDI kalır (rc=0)
   ✓ H6d onay satırı aynen
+  ✓ H6e geçerli D1 + kuyruk metni → BİÇİMSİZ (tam satır eşleşmesi), AÇIK (rc=1)
+  ✓ H6f gerekçe
+  ✓ H6g düzeltildi → KAPANDI (rc=0)
 — H7 K2 kenarları (kopya MERKEZ üstünde)
   ✓ H7a D1 biçimsiz görev satırı → K2 kırmızı → AÇIK (rc=1)
   ✓ H7b gerekçe
+  ✓ H7a2 görev D1 başına yabancı metin → biçimsiz (tam eşleşme) (rc=1)
+  ✓ H7a3 gerekçe
   ✓ H7c ders görevsiz (M2) → AÇIK (rc=1)
   ✓ H7d eksik ders adı
   ✓ H7e yer tutuculu ders sayılmaz (M1 kalır, M2 yok) → yine yeşil K2 ama (rc=0)
@@ -45,6 +53,10 @@ $ bash hafta-kapanis/scripts/hafta-kapanis.test.sh
   ✓ H8a tıkanma damgası silinince AÇIK (rc=1)
   ✓ H8b eksik anahtar
   ✓ H8c geri alındı → KAPANDI (rc=0)
+  ✓ H8d okunamayan kart → K4 SARI → rc=3 ÖLÇÜLEMEDİ (sessiz atlama yok) (rc=3)
+  ✓ H8e bozuk kart adı
+  ✓ H8f durum ÖLÇÜLEMEDİ (KAPANDI değil)
+  ✓ H8g bozuk kart kalkınca KAPANDI (rc=0)
 — H9 açık haftalar dizinden türetilir
   ✓ H9a W41 kapanışsız → rc=1 (rc=1)
   ✓ H9b W41 listede
@@ -55,6 +67,9 @@ $ bash hafta-kapanis/scripts/hafta-kapanis.test.sh
   ✓ M1 görev D1 denetimi kalkınca biçimsiz damga geçer (kapı yakalar): mutant ısırıldı
   ✓ M2 K4 eksik denetimi kalkınca damgasız kaçış geçer (kapı yakalar): mutant ısırıldı
   ✓ M3 onay D1 denetimi kalkınca biçimsiz onay haftayı kapatır (kapı yakalar): mutant ısırıldı
+  ✓ M4 bozuk kart sessiz atlanınca sarı kaybolur (kapı yakalar): mutant ısırıldı
+  ✓ M5-önkoşul: kuyruklu D1 gerçek araçta AÇIK (rc=1)
+  ✓ M5 onay D1 tam eşleşmesi gevşeyince kuyruklu onay kapatır (kapı yakalar): mutant ısırıldı
 
-GECEN=45 DUSEN=0
+GECEN=60 DUSEN=0
 --- stderr ---
