@@ -1,0 +1,148 @@
+{
+  "is": "kadro-kapi-proje-koku",
+  "arac": "kanit.py/0.4.0",
+  "guncelleme": "2026-10-17T19:12:38+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "oda-ortam-sinavi",
+      "asama": "once",
+      "dosya": "olcum-oda-ortam-sinavi-once.txt",
+      "sha256": "9dd06eea78e806e326911d698173630015ec0a2b743fd634c5b40efd607d6837",
+      "komut": [
+        "bash",
+        "/tmp/tmp.ZZ7nO02F3J/terminal-onar/scripts/oda-ortam.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T19:04:39+03:00",
+      "sure_sn": 0.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapat-korumasi",
+      "asama": "once",
+      "dosya": "olcum-kapat-korumasi-once.txt",
+      "sha256": "00f00ce876fc405894b96084062dea8ab6575bee801d8400f6877e28037ae649",
+      "komut": [
+        "node",
+        "/tmp/tmp.ZZ7nO02F3J/terminal-onar/kapi/kadro-hal.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T19:04:42+03:00",
+      "sure_sn": 3.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "oda-ortam-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-oda-ortam-sinavi-sonra.txt",
+      "sha256": "bb037f2f81cd12df116f1fb7fcce5c271f541e72147ccde76eddf4489de4efa1",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/oda-ortam.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T19:04:43+03:00",
+      "sure_sn": 0.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapat-korumasi",
+      "asama": "sonra",
+      "dosya": "olcum-kapat-korumasi-sonra.txt",
+      "sha256": "4a12c90741f789ae382bf8c9fd9a382c85b69afadd7a2da08d8de872a37e79ca",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/kadro-hal.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T19:04:45+03:00",
+      "sure_sn": 2.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kapi-korumasi-kalkinca",
+      "asama": "sonra",
+      "dosya": "olcum-mutant-kapi-korumasi-kalkinca-sonra.txt",
+      "sha256": "33fd30f3315d6cc7a400a7f8f268e53bff96ef94d05aacf00919f1b1fd3c59cf",
+      "komut": [
+        "bash",
+        "-c",
+        "node '/tmp/tmp.16msaV8f7y/terminal-onar/kapi/kadro-hal.test.mjs' | grep -E 'KH12c|SONUÇ'; [ ${PIPESTATUS[0]} -ne 0 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T19:04:47+03:00",
+      "sure_sn": 2.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "terminal-onar-tum-sinavlar",
+      "asama": "sonra",
+      "dosya": "olcum-terminal-onar-tum-sinavlar-sonra.txt",
+      "sha256": "030d5e2505bc82dfd2001e959d56a0811f28091b83a8b67c185abbda5c4fa4ac",
+      "komut": [
+        "bash",
+        "-c",
+        "\n  cd terminal-onar; d=0; for t in scripts/*.test.sh; do [ \"$t\" = scripts/compact.test.sh ] && continue; timeout 300 bash \"$t\" >/dev/null 2>&1 && echo \"✓ $t\" || { echo \"✗ $t\"; d=$((d+1)); }; done\n  for t in kapi/*.test.mjs; do timeout 300 node \"$t\" >/dev/null 2>&1 && echo \"✓ $t\" || { echo \"✗ $t\"; d=$((d+1)); }; done\n  echo \"── compact.test.sh (Sx CI karantinasında, gorev_01M55499MB8CVR5NA14YKC8NZW — main dalında da K2 kırmızı) iki tarafta üçer kez:\"\n  for i in 1 2 3; do a=$(timeout 300 bash scripts/compact.test.sh 2>&1 | grep -cE \"^  ✗\"); b=$(timeout 300 bash /tmp/tmp.1Je8xkH0Bw/terminal-onar/scripts/compact.test.sh 2>&1 | grep -cE \"^  ✗\"); echo \"  koşum $i: bu dal düşen=$a · origin/main düşen=$b\"; done\n  echo \"düşen (compact hariç)=$d\"; [ $d -eq 0 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T19:12:38+03:00",
+      "sure_sn": 260.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "code-kutusu-gercek-kayit",
+      "asama": "sonra",
+      "dosya": "olcum-code-kutusu-gercek-kayit-sonra.txt",
+      "sha256": "ffe4de154928e95210c4c2d5082382c8af1331b1b892a28ebd6c4d3d2b480adb",
+      "komut": [
+        "bash",
+        "-c",
+        "C=$(mktemp -d); mkdir -p \"$C/code/.oda\"; echo \"AILE_REGISTRY=/config/projects/Nexus/_agents/handoff/aile-registry.yaml\" > \"$C/code/.oda/ortam\"; env -i PATH=\"$PATH\" HOME=\"$C\" TO_KUTU=code TO_PROJE=\"$C/code\" TO_DURUM_DIZ=\"$C/d\" bash -c \". terminal-onar/scripts/ortak.sh >/dev/null 2>&1; kapi_kayit_ortami; echo; echo red=\\$ODA_ORTAM_RED\"; node -e \"import(\\\"./terminal-onar/kapi/kadro.mjs\\\").then(({kayitOku})=>{const a=kayitOku(\\\"$C/code\\\",{});const b=kayitOku(\\\"$C/code\\\",{AILE_REGISTRY:\\\"/config/projects/Nexus/_agents/handoff/aile-registry.yaml\\\"});console.log(\\\"iskelet kök üye:\\\",a.uyeler.length,\\\"· ayarla üye:\\\",b.uyeler.length)})\"; python3 -c \"import shutil,sys; shutil.rmtree(sys.argv[1])\" \"$C\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T19:06:45+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-kapi-gercek-kayit",
+      "asama": "once",
+      "dosya": "olcum-gercek-kapi-gercek-kayit-once.txt",
+      "sha256": "48a15fdcf57de6adc9660d95205b12e1aad2b9022700559acfc9b255524acf82",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kapi-gercek-kayit-olc.sh",
+        "/tmp/tmp.1Je8xkH0Bw/terminal-onar"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T19:08:17+03:00",
+      "sure_sn": 0.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-kapi-gercek-kayit",
+      "asama": "sonra",
+      "dosya": "olcum-gercek-kapi-gercek-kayit-sonra.txt",
+      "sha256": "6d7dfdac40f21bfec84857990227cd2134a67a726d26950cb6af72c9245367d6",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kapi-gercek-kayit-olc.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-kadro-kapi-proje-koku/terminal-onar"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T19:08:18+03:00",
+      "sure_sn": 0.5
+    }
+  ],
+  "imza": "0f009033f08dbd0a120f9f9a2468c3b09a586351d60814fdf3438344bf46af08"
+}

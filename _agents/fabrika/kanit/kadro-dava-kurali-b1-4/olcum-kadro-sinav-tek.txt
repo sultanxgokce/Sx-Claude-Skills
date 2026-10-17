@@ -1,0 +1,41 @@
+$ node kadro.test.mjs
+# rc=0 sure=0.0s zaman=2026-10-17T17:01:21+03:00
+--- stdout ---
+── A · kayıt ayrıştırma
+  ✓ A1 dört üye, üç tırnak biçimi de okunur
+  ✓ A2 rol/mod/hal alanları; yorum atılır
+  ✓ A3 tmux: null → boş; bilinmeyen hal metni olduğu gibi (küme kapısı birleşimde)
+  ✓ A4 HAL_KAYIT kapalı küme: calisiyor gecici yedek emekli
+── B · kayıt dosyaları (İSKÂN + işaretli ekip kaydı · merkez aile kaydı · hiç yok)
+  ✓ B1 iki kaynak okundu (iskan + işaretli ekip kaydı)
+  ✓ B2 tmux İSKÂN kaydından (ilk kaynak kazanır), rol/mod/hal ekip kaydından
+  ✓ B2b ÇATIŞMADA alan önceliği: tmux İSKÂN'dan kalır, rol/hal ekip kaydı ÜSTÜNE yazar ("bayat rol"/emekli → "başkâtip"/calisiyor) (göz tur 3)
+  ✓ B3 yalnız ekip kaydında olan üye de kadroda
+  ✓ B4 merkez: aile kaydı tek kaynak
+  ✓ B5 kayıt yok → kaynak boş, üye boş (uydurma yok)
+── C · birleşim: dört grup + kayıtsız + ana
+  ✓ C1 kayıtlı + oturum var + Claude var → çalışan (hâl ve ne taşınır)
+  ✓ C2 tmux adı casing farkı (berid ↔ BERID) yine eşleşir; dış olay hâli + ne
+  ✓ C3 kayıtlı + oturum açık + Claude YOK → DÜŞEN (asıl düşen; bekçinin canlı saydığı)
+  ✓ C4 kayıtlı + oturum yok + hal yok → kayıtta var çalışmıyor, hal_kayit bilinmiyor (uydurma yok)
+  ✓ C5 hal: emekli → geçici/emekli grubu — oturumu olsa bile düşen/çalışan sayılmaz
+  ✓ C6 geçersiz hal metni (saçma) → bilinmiyor; tmux yok → kayıtta var çalışmıyor
+  ✓ C7 ana koltuk kayıtta yok → ALTYAPI listesinde (ana oturum), ne kişilerde ne kayıtsızlarda (E2: kırmızı "boş oturum" değil)
+  ✓ C8 kayıtsız oturumlar: revak-yon (Claude var, soru) ve 20 (boş kabuk)
+  ✓ C9 sayılar gruba göre
+  ✓ C10 kayıt yoksa herkes kayıtsız (ana altyapıda) — kayıt uydurulmaz
+  ✓ C11 aynı tmux iki kayıtta: oturum İLKİNE bağlanır, ikincisi oturumsuz (bir koltuk iki kişiye verilmez)
+  ✓ C12 sayısal adlar kırpılmaz: "2026:0" yalnız "2026"a bağlanır, "17" hiçbir koltuğa; "20" kayıtsız kalır (göz tur 1)
+── E · E2: altyapı etiketi · dondurulmuş · üretilmiş kayıt durumu
+  ✓ E1 sekiz altyapı oturumu ayrı listede, gerekçeli; kayıtsız yalnız "dashboard-deneme" (önek benzerliği altyapı sayılmaz)
+  ✓ E2 durum: dondurulmus kaydın hal: calisiyor satırını ÖRTER → geçici/emekli grubu, oturumu açık olsa bile; geri_acilir (durum_once var)
+  ✓ E3 durum: emekli ama durum_once yok → geri_acilir false (neyin geri konacağı bilinmiyor)
+  ✓ E4 sayılar: altyapı ayrı sayılır, kayıtsız 1
+  ✓ E5 koltuk-bagla gizli() kalıplarının hepsi altyapı (eşdeğerlik; kalıp okunamazsa kırmızı)
+  ✓ E6 aile dalı + üretilmiş ekip kaydı: durum ekip kaydından, rol/tmux aile kaydından KALIR, yeni üye EKLENMEZ
+  ✓ E7 durum_once ekip modelinden (derleyici taşımıyor) → geri_acilir
+── D · okunamayan kayıt dosyası
+  ✓ D1 var olan ama okunamayan kayıt → okunamadi dolu, kaynak boş (sessiz boş kadro yok; uç 500 verir)
+
+SONUÇ: 30 geçti · 0 kaldı
+--- stderr ---

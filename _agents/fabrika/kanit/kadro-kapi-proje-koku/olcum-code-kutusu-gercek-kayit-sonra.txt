@@ -1,0 +1,7 @@
+$ bash -c C=$(mktemp -d); mkdir -p "$C/code/.oda"; echo "AILE_REGISTRY=/config/projects/Nexus/_agents/handoff/aile-registry.yaml" > "$C/code/.oda/ortam"; env -i PATH="$PATH" HOME="$C" TO_KUTU=code TO_PROJE="$C/code" TO_DURUM_DIZ="$C/d" bash -c ". terminal-onar/scripts/ortak.sh >/dev/null 2>&1; kapi_kayit_ortami; echo; echo red=\$ODA_ORTAM_RED"; node -e "import(\"./terminal-onar/kapi/kadro.mjs\").then(({kayitOku})=>{const a=kayitOku(\"$C/code\",{});const b=kayitOku(\"$C/code\",{AILE_REGISTRY:\"/config/projects/Nexus/_agents/handoff/aile-registry.yaml\"});console.log(\"iskelet kök üye:\",a.uyeler.length,\"· ayarla üye:\",b.uyeler.length)})"; python3 -c "import shutil,sys; shutil.rmtree(sys.argv[1])" "$C"
+# rc=0 sure=0.1s zaman=2026-10-17T19:06:45+03:00
+--- stdout ---
+TO_PROJE=/tmp/tmp.Sy2jiAtSTh/code AILE_REGISTRY=/config/projects/Nexus/_agents/handoff/aile-registry.yaml
+red=0
+iskelet kök üye: 0 · ayarla üye: 17
+--- stderr ---

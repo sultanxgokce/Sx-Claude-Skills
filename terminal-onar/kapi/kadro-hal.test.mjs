@@ -14,7 +14,7 @@ let g = 0, k = 0; const kapi = (ad, ok, ek = '') => { if (ok) { g++; console.log
 
 // Kutunun "tmux"u: oturumlar bir dosyada (ad · claude). Liste betiği ve sahte tmux aynı dosyayı okur/yazar.
 const OTURUM = join(T, 'oturumlar'), TMUX_DEFTER = join(T, 'tmux-defter'), AC_DEFTER = join(T, 'ac-defter');
-const ILK_OTURUM = 'sinavkutu-ana\t1\ndash\t0\ndashwatch\t0\nBASIRET\t1\nkalfa\t0\ngezgin\t0\ninatci\t1\ninatci2\t1\nyavas\t1\n';
+const ILK_OTURUM = 'sinavkutu-ana\t1\ndash\t0\ndashwatch\t0\nBASIRET\t1\nkalfa\t0\ngezgin\t0\ninatci\t1\ninatci2\t1\nyavas\t1\ncanlikayitsiz\t1\n';   // canlikayitsiz: kayıtta YOK ama içinde Claude çalışıyor (2.17.0 kapat koruması)
 writeFileSync(OTURUM, ILK_OTURUM);
 const BIN = join(T, 'bin'); mkdirSync(BIN);
 writeFileSync(join(BIN, 'tmux'), `#!/usr/bin/env bash\necho "$*" >> ${JSON.stringify(TMUX_DEFTER)}\n`
@@ -69,14 +69,23 @@ const a5 = await hal({ eylem: 'dondur', id: 'PANELCI' }), a6 = await hal({ eylem
 kapi('KH7 kayıtlı ama koltuğu altyapı (dashwatch) olan kişiyi dondur/emekli → 403, kayıt değişmedi', a5.s === 403 && a6.s === 403 && kayit() === ILK_KAYIT, a5.s + ' ' + a6.s);
 kapi('KH8 altyapı isteklerinde tmux\'a HİÇ dokunulmadı', tmuxIz() === '', tmuxIz());
 const kd0 = await kadro();
-kapi('KH9 /api/kadro: altyapı ayrı (ana · dash; kayıtlı dashwatch kişide altyapı etiketli), kayıtsızlar yalnız gezgin; eylemler: true', kd0.eylemler === true && kd0.altyapi.map((x) => x.ad).sort().join() === 'dash,sinavkutu-ana' && kd0.kayitsiz.map((x) => x.ad).join() === 'gezgin'
+kapi('KH9 /api/kadro: altyapı ayrı (ana · dash; kayıtlı dashwatch kişide altyapı etiketli), kayıtsızlar gezgin + canlikayitsiz (2.17.0 fikstürü); eylemler: true', kd0.eylemler === true && kd0.altyapi.map((x) => x.ad).sort().join() === 'dash,sinavkutu-ana' && kd0.kayitsiz.map((x) => x.ad).join() === 'gezgin,canlikayitsiz'
   && kd0.kisiler.find((x) => x.id === 'PANELCI').altyapi === 'mobil panel', JSON.stringify({ a: kd0.altyapi, ks: kd0.kayitsiz }));
 
 console.log('── KH-C · kayıtsız oturumu kapat');
 kapi('KH10 kayıtlı kişinin oturumunu "kapat" → 409 (dondur yolu), tmux\'a dokunulmadı', (await hal({ eylem: 'kapat', oturum: 'BASIRET' })).s === 409 && tmuxIz() === '');
+const G0 = ((await kadro()).kayitsiz || []).find((x) => x.ad === 'gezgin');
+kapi('KH10b Claude\'suz kayıtsız oturum kapatilabilir:true (sorunlu oturum — düğme kalır)', !!G0 && G0.kapatilabilir === true, JSON.stringify(G0));
 const c1 = await hal({ eylem: 'kapat', oturum: 'gezgin' });
 kapi('KH11 kayıtsız "gezgin" → 200, tmux kill-session -t =gezgin (tam ad eşleşmesi)', c1.s === 200 && tmuxIz().trim() === 'kill-session -t =gezgin', c1.s + ' ' + tmuxIz());
 kapi('KH12 kapanmış oturumu tekrar kapat → 404', (await hal({ eylem: 'kapat', oturum: 'gezgin' })).s === 404);
+
+console.log('── KH-C2 · kapat koruması (2.17.0): içinde Claude çalışan kayıtsız oturum kapatılmaz');
+const kdK = await kadro(); const CK = (kdK.kayitsiz || []).find((x) => x.ad === 'canlikayitsiz');
+kapi('KH12b kadroda canlı kayıtsız oturum kapatilabilir:false (düğme göstermesin diye veri söyler)', !!CK && CK.kapatilabilir === false, JSON.stringify(kdK.kayitsiz));
+const tOnce = tmuxIz(); const ck = await hal({ eylem: 'kapat', oturum: 'canlikayitsiz' });
+kapi('KH12c canlı kayıtsız oturumu "kapat" → 409, gerekçe Sultan dilinde, tmux\'a DOKUNULMADI', ck.s === 409 && /Claude çalışıyor/.test(ck.j.hata || '') && tmuxIz() === tOnce, ck.s + ' ' + JSON.stringify(ck.j));
+kapi('KH12d oturum hâlâ listede (kapatılmadı)', ((await kadro()).kayitsiz || []).some((x) => x.ad === 'canlikayitsiz'));
 
 console.log('── KH-D · dondur → geri aç (uçtan uca)');
 const d1 = await hal({ eylem: 'dondur', id: 'BASIRET' });

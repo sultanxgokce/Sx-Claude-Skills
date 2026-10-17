@@ -1,0 +1,27 @@
+$ bash terminal-onar/scripts/oda-ortam.test.sh
+# rc=0 sure=0.8s zaman=2026-10-17T19:04:43+03:00
+--- stdout ---
+— O1 izinli satır okunur, kapıya geçer (boşluklu yol dahil)
+  ✓ O1a AILE_REGISTRY ortama alındı
+  ✓ O1b reddedilen satır 0
+  ✓ O1c kapi_kayit_ortami boşluklu yolları bozmadan iletir (TO_PROJE + AILE_REGISTRY)
+— O2 izin listesi dışı / göreli / var olmayan satırlar REDDEDİLİR
+  ✓ O2a geçersiz AILE_REGISTRY alınmadı
+  ✓ O2b beş satır reddedildi (PATH · KAPI_PORT · göreli · yok · bozuk)
+  ✓ O2c kapı ortamında yalnız TO_PROJE
+— O3 açık ortam kazanır · O4 dosya yoksa yalnız TO_PROJE
+  ✓ O3 açıkça verilen AILE_REGISTRY dosyadakini ezmez
+  ✓ O4a dosya yok → AILE_REGISTRY yok
+  ✓ O4b yalnız TO_PROJE
+— O5 onar.sh kapıyı bu işlevle başlatır
+  ✓ O5 başlatma satırı kapi_kayit_ortami'yi taşır
+— O6 GERÇEK kapı: iskelet kökte önce kayıtsız, ayarla çalışan (canlıdaki '0 kişi · 8 kayıtsız' hatasının birebir sınavı)
+  ✓ O6a ÖNCE (ayar yok): 0 çalışan · 2 kayıtsız · hiçbiri kapatılabilir değil (içlerinde Claude var)
+  ✓ O6b SONRA (ayar var): 2 çalışan · 0 kayıtsız
+— M mutasyon (ortak.sh kopyası üstünde)
+  ✓ M1 izin listesi kalkınca KAPI_PORT sızar → O2 yakalar: mutant ısırıldı
+  ✓ M2 dosya-var denetimi kalkınca var olmayan yol alınır → O2 yakalar: mutant ısırıldı
+  ✓ M3 kapi_kayit_ortami AILE_REGISTRY'yi iletmezse → O1c/O6b yakalar: mutant ısırıldı
+
+GECEN=15 DUSEN=0
+--- stderr ---

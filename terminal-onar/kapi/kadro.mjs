@@ -159,7 +159,9 @@ export function kadroBirlestir({ uyeler = [], koltuklar = [], ana = '', kimlikle
   // (Eski davranış: ana "(kimliği yok)" diye kişilerde, boş kabuksa DÜŞEN sayılıyordu; dash/dashproxy kırmızı kayıtsızdı.)
   const altyapi = [];
   for (const [ad, k] of [...kalan]) { const n = altyapiNeden(ad, ana); if (n) { kalan.delete(ad); altyapi.push({ ...oturumSade(k), altyapi: n, ...(ad === ana ? { ana: true } : {}) }); } }
-  const kayitsiz = [...kalan.values()].map(oturumSade);
+  // 🔴 KAPAT KORUMASI (2.17.0, SERDAR 17 Eki 18:55): içinde Claude çalışan oturum "kayıtsız" görünse bile kapatılamaz —
+  //    kayıt okunamadığında canlı ajanlar buraya düşüyordu ve tek eylem "Oturumu kapat"tı. Yalnız Claude'suz (sorunlu) oturum kapatılır.
+  const kayitsiz = [...kalan.values()].map((k) => ({ ...oturumSade(k), kapatilabilir: !k.claude }));
   const sayilar = Object.fromEntries(GRUPLAR.map((g) => [g, kisiler.filter((k) => k.grup === g).length]));
   sayilar.kayitsiz = kayitsiz.length;
   sayilar.altyapi = altyapi.length;
