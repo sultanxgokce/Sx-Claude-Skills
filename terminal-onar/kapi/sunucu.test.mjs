@@ -130,6 +130,10 @@ console.log('\n── T · TABAN YOLU (kapı /sedir altında) ──');
     kapi('BG4 kutu ve proje kimliği cevapta', j1.kutu === 'sinavkutu' && j1.proje === PRJ);
     const g2 = await iste(PB, '/sedir/api/bugun?tarih=17-10-2026', { cerez: cb });
     kapi('BG5 bozuk tarih 400', g2.status === 400, `→ ${g2.status}`);
+    const g3 = await iste(PB, '/sedir/api/bugun?tarih=2026-99-99', { cerez: cb });
+    kapi('BG5b biçimi doğru ama takvimde olmayan gün (2026-99-99) 400 — boş liste uydurulmaz (göz tur 1)', g3.status === 400, `→ ${g3.status}`);
+    const g4 = await iste(PB, '/sedir/api/bugun?tarih=2026-02-29', { cerez: cb });
+    kapi('BG5c 2026-02-29 yok (artık yıl değil) → 400', g4.status === 400, `→ ${g4.status}`);
     pb.kill();
   }
   const sayfa = await iste(P1, '/sedir/', { cerez });

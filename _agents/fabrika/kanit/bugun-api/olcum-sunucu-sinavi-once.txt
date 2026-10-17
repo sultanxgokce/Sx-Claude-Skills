@@ -1,0 +1,26 @@
+$ node /tmp/tmp.yai3VlZSky/sunucu.test.mjs
+# rc=1 sure=0.4s zaman=2026-10-17T15:11:13+03:00
+--- stdout ---
+
+── T · TABAN YOLU (kapı /sedir altında) ──
+  ✓ T1 giriş sayfası TABAN altında açılır
+  ✓ T2 taban DIŞI istek reddedilir (404) — kapı başkasının yoluna cevap vermez
+  ✓ T3 tabanın kendisi sondaki eğik çizgiye yönlenir
+  ✓ T4 girişsiz kök TABANLI giriş sayfasına yönlenir (kök yola DEĞİL)
+  ✓ T5 girişsiz API 401 döner (yönlendirme değil)
+  ✓ T6 yanlış parola REDDEDİLİR
+  ✓ T7 doğru parola KABUL (T6 tautoloji değil)
+  ✓ T8 çerez YALNIZ kendi tabanında geçerli (Path=/sedir)
+  ✓ T9 çerez HttpOnly+Secure+SameSite korunur
+  ✓ BG1 /api/bugun girişsiz 401 (kapı oturumu ister)
+  ✗ BG2 bugünkü ajan listede: basiret, 2 madde (1 açık · 1 bitti), görev bağı {"hata":"Yok."}
+--- stderr ---
+file:///tmp/tmp.yai3VlZSky/sunucu.test.mjs:129
+    kapi('BG3 başka günün çıpası bugun_degil\'de (listede değil)', j1.bugun_degil.length === 1 && j1.bugun_degil[0].ajan === 'eski' && j1.bugun_degil[0].tarih === '2026-10-01');
+                                                                                  ^
+
+TypeError: Cannot read properties of undefined (reading 'length')
+    at file:///tmp/tmp.yai3VlZSky/sunucu.test.mjs:129:83
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+
+Node.js v22.23.0

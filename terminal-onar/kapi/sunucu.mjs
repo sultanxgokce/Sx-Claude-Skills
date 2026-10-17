@@ -487,7 +487,8 @@ const sunucu = http.createServer(async (req, res) => {
       //    `bugun_degil`de görünür; okunamayan dosya `okunamadi`da. ?tarih=YYYY-MM-DD sınav dikişi (varsayılan kutunun yerel bugünü).
       if (y === '/api/bugun') {
         const t = url.searchParams.get('tarih');
-        if (t && !/^\d{4}-\d{2}-\d{2}$/.test(t)) return json(res, 400, { hata: 'tarih YYYY-MM-DD olmalı.' });
+        // göz #355 tur 1: biçim yetmez, takvimde var olan gün olmalı (2026-99-99 → 400; Date gevşek çözümlemesi geri yazımla sınanır)
+        if (t && !(/^\d{4}-\d{2}-\d{2}$/.test(t) && new Date(t + 'T00:00:00Z').toISOString().slice(0, 10) === t)) return json(res, 400, { hata: 'tarih takvimde olan bir gün olmalı (YYYY-MM-DD).' });
         const b = bugunOku(PROJE, t || undefined);
         return json(res, 200, { kutu: KUTU, proje: PROJE, zaman: new Date().toISOString(), ...b });
       }
