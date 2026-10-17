@@ -1,5 +1,5 @@
-$ bash -c cd '/config/projects/_wt/Sx-Claude-Skills-terminal-onar-bekci-yorum-korur/terminal-onar/scripts' && for t in bekci-iz kur-bag kabuk-kapisi oda-ortam kurtarici-kapali; do printf '%s: ' $t; bash $t.test.sh 2>&1 | tail -1; done
-# rc=0 sure=14.8s zaman=2026-10-17T21:04:49+03:00
+$ bash -c set -o pipefail; cd '/config/projects/_wt/Sx-Claude-Skills-terminal-onar-bekci-yorum-korur/terminal-onar/scripts' && r=0; for t in bekci-iz kur-bag kabuk-kapisi oda-ortam kurtarici-kapali; do printf '%s: ' $t; bash $t.test.sh > /tmp/g-$t.log 2>&1 || r=1; tail -1 /tmp/g-$t.log; done; exit $r
+# rc=0 sure=16.1s zaman=2026-10-17T21:06:01+03:00
 --- stdout ---
 bekci-iz: bekci-iz.test: 13 geçti · 0 kaldı
 kur-bag: SONUÇ: 50 geçti · 0 kaldı
