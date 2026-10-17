@@ -25,9 +25,10 @@ retro tamamen SERDAR ölçümüyle yapıldı — **ajan görüşü kanalı yoktu
 5. **Kutu retrosunu ajan yazar; merkez yazamaz.** Kimin yazdığı **ölçülemez** (aynı git kimliği) —
    `_koltuk:` satırı beyandır, kanıt değil. Bu yüzden kural SERT değil ilkedir; merkez kipi eksik
    dosyayı **üretmez**, `EKSİK` basar ve zil düşürür.
-6. **Süzüm damgası mekanik.** Her kutu önerisi MERKEZ.md'de `→ gorev_<26>` (görev defterine girdi) ya da
-   `→ RED: <gerekçe ≥10 karakter>` alır. Damgasız öneri = süzülmemiş = `retro.py suzum` kırmızı.
-   Damga MERKEZ.md'de yaşar — kutu dosyasına merkez dokunmaz.
+6. **Süzüm damgası mekanik ve METNE bağlı.** Her kutu önerisi MERKEZ.md'de `→ gorev_<26>` (görev defterine girdi) ya da
+   `→ RED: <gerekçe ≥10 karakter>` alır. Damgasız öneri = süzülmemiş = `retro.py suzum` kırmızı. Damga satırı öneri
+   metnini de taşır: kutu metni sonradan değişirse damga **bayattır** (`suzum` kırmızı, `merkez --yenile` damgayı düşürür) —
+   numara aynı kalsa bile eski onay yeni içeriği onaylamış sayılmaz. Damga MERKEZ.md'de yaşar — kutu dosyasına merkez dokunmaz.
 7. **Yeni havuz kurulmaz.** Dosyalar `_agents/handoff/retro/<hafta>/`; dersler görev defterine, bulgu
    bulgu kanalına. Hafta kimliği ISO (`YYYY-Www`, Pazartesi–Pazar).
 
@@ -82,9 +83,10 @@ L1–L7. Şemayı değiştirmek = o dosyayı ve `lint_metin`'i aynı PR'da deği
 
 ## Kanıt
 
-`scripts/retro.test.sh` — 70 kapı hermetik (mktemp depo · sahte NOTES/kart/DENETIM/kaçış/bekçi/registry ·
-sabit tarih `RETRO_BUGUN`) + 3 mutant kopya üstünde (L5 kalkınca ölçüsüz Z geçmemeli · kaynak yokluğu
-sıfıra çevrilince sarı kaybolmalı · iz ayrımı kalkınca ÇALIŞMADI EKSİK'e dönmeli — üçü de ısırıyor).
+`scripts/retro.test.sh` — 83 kapı hermetik (mktemp depo · sahte NOTES/kart/DENETIM/kaçış/bekçi/registry ·
+sabit tarih `RETRO_BUGUN`) + 4 mutant kopya üstünde (L5 kalkınca ölçüsüz Z geçmemeli · kaynak yokluğu
+sıfıra çevrilince sarı kaybolmalı · iz ayrımı kalkınca ÇALIŞMADI EKSİK'e dönmeli · metin kıyası kalkınca bayat damga
+geçmemeli — dördü de ısırıyor).
 Canlı ölçüm (Nexus, 2026-W42): BÂNİ 244 NOTES satırı · 34 ders satırı · 20 kart (16 bitti · 4 tıkandı) · 48 göz turu;
 MUAVİN'in NOTES dosyası yok → o hücre ÖLÇÜLEMEDİ.
 

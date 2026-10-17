@@ -134,6 +134,15 @@ kapi "T7g merkez --yenile damgayı KORUR" 1 python3 "$R" merkez --yenile
 icerir "$(cat "$M")" "→ gorev_01M54APFDAHKN72VKBWTGKSAAM" "T7h gorev damgası korundu"
 kapi "T7i damga korunduğu için süzüm hâlâ yeşil" 0 python3 "$R" suzum
 kapi "T7j MERKEZ yok → rc=3 SARI (ölçülemedi)" 3 python3 "$R" suzum --kok "$BOS"
+echo "— T8 damga metne bağlı (göz #359 tur 1)"
+sed -i 's/^- Ö1) kart.sh canli-ayarla sahip doğrulamalı$/- Ö1) kart.sh canli-ayarla sahip doğrulamalı ve zaman damgalı/' "$D"
+kapi "T8a kutu önerisi değişti → eski gorev damgası BAYAT, kırmızı" 1 python3 "$R" suzum; icerir "$CIKTI" "Ö1) damga BAYAT" "T8b bayat gerekçesi"
+icermez "$CIKTI" "Ö2)" "T8c değişmeyen Ö2 damgası geçerli"
+kapi "T8d merkez --yenile bayat damgayı düşürür" 1 python3 "$R" merkez --yenile; icerir "$CIKTI" "damga DÜŞTÜ (öneri metni değişti" "T8e düşme uyarısı"
+icerir "$(grep "Ö1)" "$M")" "ve zaman damgalı →" "T8f yeni metin damgasız yazıldı"
+icermez "$(grep "Ö1)" "$M")" "gorev_01M54APFDAHKN72VKBWTGKSAAM" "T8g eski gorev damgası taşınmadı"
+icerir "$(grep "Ö2)" "$M")" "→ RED: ayrı kart olarak açıldı" "T8h değişmeyen Ö2 damgası korundu"
+kapi "T8i yeni metin damgasız → süzüm kırmızı" 1 python3 "$R" suzum; icerir "$CIKTI" "Ö1) damgasız" "T8j artık bayat değil, damgasız"
 
 echo "— M mutasyon (kopya üstünde; her mutant en az bir kapıyı kızartmalı)"
 mut(){ # mut <ad> <sed> <komut...> : mutant kopyada komut BAŞARILI (rc=0) kalırsa sınav onu yakalamıyor demektir
@@ -146,6 +155,16 @@ mut "M1 L5 (ölçüsüz zaman kaybı) kalkınca ölçüsüz dosya geçmemeli" 's
 m_sari(){ local Y="$BOS/_agents/handoff/retro/2026-W42/Y.md" rc; rm -f "$Y"; python3 "$1" kutu Y --kok "$BOS" --koltuk y:0 >/dev/null 2>&1; grep -qF "ÖLÇÜLEMEDİ: fabrika kartları yok" "$Y"; rc=$?; rm -f "$Y"; return $rc; }
 mut "M2 kaynak yokluğu sıfıra çevrilince sarı kaybolmalı (kapı yakalar)" 's/"ÖLÇÜLEMEDİ: fabrika kartları yok"/"0 \/ 0 \/ 0"/' m_sari
 m_iz(){ python3 "$1" merkez --yenile 2>&1 | grep -qF "ÇALIŞMADI BASİRET"; }
+# M4 için: Ö1'e gorev damgası ver, sonra kutu metnini değiştir; gerçek araç BAYAT der (rc 1), metin kıyası kalkmış mutant yeşil (rc 0) döner
+python3 - "$M" <<'PY'
+import sys;p=sys.argv[1];s=open(p,encoding="utf-8").read()
+s=s.replace("ve zaman damgalı →","ve zaman damgalı → gorev_01M54APFDAHKN72VKBWTGKSAAM"); open(p,"w",encoding="utf-8").write(s)
+PY
+kapi "M4-önkoşul: damgalı → yeşil" 0 python3 "$R" suzum
+sed -i 's/^- Ö1) kart.sh canli-ayarla sahip doğrulamalı ve zaman damgalı$/- Ö1) kart.sh canli-ayarla sahip doğrulamalı, zaman damgalı ve kayıtlı/' "$D"
+kapi "M4-önkoşul: metin değişti → gerçek araç BAYAT (kırmızı)" 1 python3 "$R" suzum
+m_bayat(){ python3 "$1" suzum >/dev/null 2>&1; [ $? -ne 0 ]; }
+mut "M4 metin kıyası kalkınca bayat damga geçer (kapı yakalar)" 's/            if e and e\[0\] != t.strip():/            if False:/' m_bayat
 mut "M3 iz ayrımı kalkınca BASİRET EKSİK sayılır (kapı yakalar)" 's/    return bool((n and n\["satir"\] > 0)/    return True or bool((n and n["satir"] > 0)/' m_iz
 
 echo; echo "GECEN=$G DUSEN=$K"

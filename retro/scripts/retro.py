@@ -369,6 +369,17 @@ def lint(a):
 
 
 # ───────────────────────── merkez ─────────────────────────
+def merkez_satir_coz(s):
+    """'- <AJAN> Ö<n>) <metin> → <damga>' → (norm(ajan), n, metin, damga) ya da None. Damga SON oktan sonrasıdır
+    (öneri metni ok taşıyabilir); damga ok taşıyamaz. Metin damgayla birlikte saklanır: metin değişirse damga bayattır."""
+    s = s.strip()
+    m = re.match(r"^- (\S+) Ö(\d+)\) (.*)$", s)
+    if not m or "→" not in m.group(3):
+        return None
+    metin, damga = m.group(3).rsplit("→", 1)
+    return norm(m.group(1)), int(m.group(2)), metin.strip(), damga.strip()
+
+
 def registry_ajanlar(yol):
     if not yol or not os.path.exists(yol):
         return None
@@ -421,12 +432,12 @@ def merkez(a):
     if os.path.exists(myol) and "--yenile" not in a:
         print(f"  MERKEZ.md zaten var ({os.path.relpath(myol, kok)}); iskeleti yeniden yazmak için --yenile (Süzüm damgaları KORUNUR)")
     else:
-        eski_damga = {}
+        eski_damga = {}  # (ajan, n) → (metin, damga)
         if os.path.exists(myol):
             for s in open(myol, encoding="utf-8"):
-                m = re.match(r"^- (\S+) Ö(\d+)\) .*→ ?(.*)$", s.strip())  # SON ok (boş damga dahil): öneri metni de ok taşıyabilir
-                if m and m.group(3).strip():
-                    eski_damga[(norm(m.group(1)), int(m.group(2)))] = m.group(3).strip()
+                c = merkez_satir_coz(s)
+                if c and c[3]:
+                    eski_damga[(c[0], c[1])] = (c[2], c[3])
         os.makedirs(diz, exist_ok=True)
         simdi = datetime.now().astimezone().replace(microsecond=0).isoformat()
         r = [f"# 🔁 MERKEZ RETROSU · {hafta}", f"_yazildi: {simdi}", f"_arac: retro.py {SURUM}", "",
@@ -436,13 +447,23 @@ def merkez(a):
         r += ["", "## Süzüm — her öneri bir damga alır: `→ gorev_<id>` (görev defterine girdi) ya da `→ RED: <gerekçe ≥10 karakter>`"]
         if not oneriler:
             r.append("_(geçerli kutu retrosunda öneri yok)_")
+        dusen = []
         for ajan, n, t in oneriler:
-            d = eski_damga.get((norm(ajan), n), "")
+            e = eski_damga.get((norm(ajan), n))
+            d = ""
+            if e:
+                if e[0] == t.strip():
+                    d = e[1]
+                else:
+                    dusen.append(f"{ajan} Ö{n}")
             r.append(f"- {ajan} Ö{n}) {t} → {d}".rstrip())
+        if dusen:
+            print(f"  ⚠ damga DÜŞTÜ (öneri metni değişti, yeniden süzülmeli): {', '.join(dusen)}")
         r += ["", "## Dersler (merkez yorumu; kutu dersine D<n> ile atıf: `BÂNİ D2`)", "- M1) <ders> · kaynak: <AJAN D<n> | ölçüm>", "",
               "## Görevler (Sultan ders ders onaylar · D1 damgası · görev defteri)", "- <gorev_… · ders M<n>>", ""]
         open(myol, "w", encoding="utf-8").write("\n".join(r))
-        print(f"  ✓ MERKEZ.md iskeleti: {os.path.relpath(myol, kok)} · öneri {len(oneriler)} (damga bekliyor: {sum(1 for a_, n, _ in oneriler if not eski_damga.get((norm(a_), n)))})")
+        bekleyen = sum(1 for a_, n, t in oneriler if not (eski_damga.get((norm(a_), n)) and eski_damga[(norm(a_), n)][0] == t.strip()))
+        print(f"  ✓ MERKEZ.md iskeleti: {os.path.relpath(myol, kok)} · öneri {len(oneriler)} (damga bekliyor: {bekleyen})")
     if eksik:
         print(f"✗ EKSİK/GEÇERSİZ: {', '.join(eksik)} → kutu retrosunu ajan yazar (merkez yazamaz); zil düşür")
         return 1
@@ -458,11 +479,11 @@ def suzum(a):
     if not os.path.exists(myol):
         print(f"◻ ÖLÇÜLEMEDİ: MERKEZ.md yok ({os.path.relpath(myol, kok)}) — süzüm ölçülemez (merkez retrosu önce)")
         return 3
-    damga = {}
+    damga = {}  # (ajan, n) → (metin, damga)
     for s in open(myol, encoding="utf-8"):
-        m = re.match(r"^- (\S+) Ö(\d+)\) .*→ ?(.*)$", s.strip())  # SON ok (boş damga dahil): öneri metni de ok taşıyabilir
-        if m:
-            damga[(norm(m.group(1)), int(m.group(2)))] = m.group(3).strip()
+        c = merkez_satir_coz(s)
+        if c:
+            damga[(c[0], c[1])] = (c[2], c[3])
     eksik, toplam = [], 0
     for p in sorted(glob.glob(os.path.join(diz, "*.md"))):
         ajan = os.path.splitext(os.path.basename(p))[0]
@@ -474,7 +495,11 @@ def suzum(a):
             continue
         for n, t in b["oneri"]:
             toplam += 1
-            d = damga.get((norm(ajan), n), "")
+            e = damga.get((norm(ajan), n))
+            d = e[1] if e else ""
+            if e and e[0] != t.strip():
+                eksik.append(f"{ajan} Ö{n}) damga BAYAT: kutu metni değişti ('{t[:40]}…' ≠ MERKEZ '{e[0][:40]}…') — merkez --yenile ile yeniden süz")
+                continue
             if GOREV_RE.fullmatch(d) or (d.startswith("RED:") and len(d[4:].strip()) >= 10):
                 continue
             eksik.append(f"{ajan} Ö{n}) damgasız ya da biçimsiz: '{d or '(boş)'}' — '→ gorev_<26>' ya da '→ RED: <gerekçe>'")

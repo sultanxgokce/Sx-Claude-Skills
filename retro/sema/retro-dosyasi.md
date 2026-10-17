@@ -58,4 +58,6 @@ metin ≥ 8 karakter, `<…>` ya da `…` yer tutucusu içermez. Z maddesi `· �
 ## MERKEZ.md süzüm satırı
 
 `- <AJAN> Ö<n>) <metin> → gorev_<26 karakter>` ya da `→ RED: <gerekçe ≥10 karakter>`.
-`retro.py suzum` her kutu önerisinin böyle bir satırı olduğunu ölçer; `merkez --yenile` damgaları korur.
+`retro.py suzum` her kutu önerisinin böyle bir satırı olduğunu **ve satırdaki metnin kutudaki güncel metinle aynı olduğunu**
+ölçer (damga son oktan sonrasıdır, metin ok taşıyabilir, damga taşıyamaz). Metin değişmişse damga bayattır → kırmızı;
+`merkez --yenile` yalnız metni değişmemiş damgaları korur, değişenleri düşürür ve bildirir.

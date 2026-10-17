@@ -1,7 +1,7 @@
 {
   "is": "retro",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-17T16:06:00+03:00",
+  "guncelleme": "2026-10-17T16:10:26+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -40,15 +40,15 @@
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "c9d1e88f178b7108ac1e37cfacaadf31886e10fe0112573698afd1f045152251",
+      "sha256": "89bc4d450453981f3f12234668011e5ff0320e1229dd489cb3968bfa04997aac",
       "komut": [
         "bash",
         "retro/scripts/retro.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-17T16:05:59+03:00",
-      "sure_sn": 1.1
+      "zaman": "2026-10-17T16:10:26+03:00",
+      "sure_sn": 1.5
     },
     {
       "tur": "olcum",
@@ -143,5 +143,5 @@
       "sure_sn": 0.0
     }
   ],
-  "imza": "817b2d0849c68ec5d879186f42e9d19dbc5cdd46f40cc58ed53d65a3eb4d326f"
+  "imza": "79251e4a48665854f644e86982da8669c00e53ec4f93e477ab9e1fdfbbe3b015"
 }

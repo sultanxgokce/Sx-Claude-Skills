@@ -1,5 +1,5 @@
 $ bash retro/scripts/retro.test.sh
-# rc=0 sure=1.1s zaman=2026-10-17T16:05:59+03:00
+# rc=0 sure=1.5s zaman=2026-10-17T16:10:26+03:00
 --- stdout ---
 — T1 hafta
   ✓ T1a hafta kimliği sabit tarihten (rc=0)
@@ -75,10 +75,24 @@ $ bash retro/scripts/retro.test.sh
   ✓ T7h gorev damgası korundu
   ✓ T7i damga korunduğu için süzüm hâlâ yeşil (rc=0)
   ✓ T7j MERKEZ yok → rc=3 SARI (ölçülemedi) (rc=3)
+— T8 damga metne bağlı (göz #359 tur 1)
+  ✓ T8a kutu önerisi değişti → eski gorev damgası BAYAT, kırmızı (rc=1)
+  ✓ T8b bayat gerekçesi
+  ✓ T8c değişmeyen Ö2 damgası geçerli
+  ✓ T8d merkez --yenile bayat damgayı düşürür (rc=1)
+  ✓ T8e düşme uyarısı
+  ✓ T8f yeni metin damgasız yazıldı
+  ✓ T8g eski gorev damgası taşınmadı
+  ✓ T8h değişmeyen Ö2 damgası korundu
+  ✓ T8i yeni metin damgasız → süzüm kırmızı (rc=1)
+  ✓ T8j artık bayat değil, damgasız
 — M mutasyon (kopya üstünde; her mutant en az bir kapıyı kızartmalı)
   ✓ M1 L5 (ölçüsüz zaman kaybı) kalkınca ölçüsüz dosya geçmemeli: mutant ısırıldı
   ✓ M2 kaynak yokluğu sıfıra çevrilince sarı kaybolmalı (kapı yakalar): mutant ısırıldı
+  ✓ M4-önkoşul: damgalı → yeşil (rc=0)
+  ✓ M4-önkoşul: metin değişti → gerçek araç BAYAT (kırmızı) (rc=1)
+  ✓ M4 metin kıyası kalkınca bayat damga geçer (kapı yakalar): mutant ısırıldı
   ✓ M3 iz ayrımı kalkınca BASİRET EKSİK sayılır (kapı yakalar): mutant ısırıldı
 
-GECEN=70 DUSEN=0
+GECEN=83 DUSEN=0
 --- stderr ---
