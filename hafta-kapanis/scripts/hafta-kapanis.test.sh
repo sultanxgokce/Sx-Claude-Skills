@@ -182,5 +182,56 @@ kapi "M7-önkoşul: 16 kelime gerçek araçta AÇIK" 1 python3 "$H" olc --hafta 
 m_kelime(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -ne 0 ]; }
 mut "M7 kırpık kelime sınırı kalkınca 16 kelimelik onay kapatır (kapı yakalar)" 's/^    if n > D1_KIRPIK_KELIME:$/    if False:/' m_kelime
 
+echo "— H10 K6 Doğrulat dersleri → beceri PR (Sultan katı kuralı 17 Eki; işlenmemiş ders varsa hafta kapanmaz)"
+cp "$T/M.yedek" "$M"; sed -i 's/^_sultan_onay: .*/_sultan_onay: 2026-10-18 Sultan: hafta kapansın (sohbet · oturum-ref-2 · "tamam kapat" · beyan:SERDAR)/' "$KP"
+kapi "H10-önkoşul: seans kaydı yokken KAPANDI (K6 yeşil, bunu söyler)" 0 python3 "$H" olc --hafta 2026-W42
+icerir "$CIKTI" "✓ K6 Doğrulat dersleri → beceri PR: bu hafta Doğrulat seans kaydı yok" "H10-önkoşul2 K6 dili"
+DG="$KOK/_agents/handoff/retro/dogrulat"; mkdir -p "$DG"
+cat > "$DG/2026-10-16.md" <<'EOF'
+# Doğrulat seansı retrosu — 2026-10-16
+## Ölçüm
+- 40 → 3
+## Pürüzler → ders → nereye işlendi
+1. Zil meşgulü hata saydı → cloudtop #676 (birleşti)
+2. Bitiş sinyali yok → protokol: parti sonu aile-notify; kalıcı: gorev_01M554915VR3GXP09XEDYGNCNC
+3. AÇIK: dış yüzeyde ekran görülmedi → gorev_01M55490W8TSGAD8SGF3H78ZGB (kare şartı)
+## Sonraki seans için ölçülecek
+- tık sayısı #1 hedef
+EOF
+kapi "H10a PR'sız ders (2) + AÇIK ders (3) → K6 kırmızı → AÇIK rc=1" 1 python3 "$H" olc --hafta 2026-W42
+icerir "$CIKTI" "2026-10-16.md: 2/3 ders PR'a işlenmedi (madde 2, 3)" "H10b eksik seans dersleriyle listelendi (görev kimliği PR yerine geçmez; ders dışı bölüm sayılmaz)"
+icerir "$(cat "$KP")" "| K6 | Doğrulat dersleri → beceri PR | ✗ KIRMIZI |" "H10c KAPANIS.md'de K6 satırı"
+icerir "$(cat "$KP")" "_durum: AÇIK" "H10d onay VAR olsa da hafta AÇIK (onay işlenmemiş dersi kapatmaz)"
+cp "$DG/2026-10-16.md" "$T/DG.yedek"
+sed -i 's/^2\. Bitiş sinyali yok → .*/2. Bitiş sinyali yok → Sx #370 muhakkik --done adımı/; s/^3\. AÇIK: dış yüzeyde .*/3. Dış yüzeyde kare şartı → https:\/\/github.com\/x\/y\/pull\/371/' "$DG/2026-10-16.md"
+kapi "H10e üç ders de PR'a bağlı (#N · /pull/N) → KAPANDI" 0 python3 "$H" olc --hafta 2026-W42
+icerir "$CIKTI" "1 Doğrulat seansı, 3 dersin hepsi beceri PR'ına işlenmiş" "H10f yeşil dili"
+sed -i 's/^2\. Bitiş sinyali yok → .*/2. AÇIK: Bitiş sinyali → Sx #370 sürüyor/' "$DG/2026-10-16.md"
+kapi "H10g PR'ı olsa da AÇIK işaretli ders işlenmemiş → AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "1/3 ders PR'a işlenmedi (madde 2)" "H10h gerekçe"
+printf '# Doğrulat seansı — 2026-10-16\n## Ölçüm\n- 10 → 2\n' > "$DG/2026-10-16.md"
+kapi "H10i ders bölümü olmayan seans → AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "2026-10-16.md: ders bölümü yok" "H10j gerekçe"
+python3 -c "import os,sys; os.remove(sys.argv[1])" "$DG/2026-10-16.md"
+cp "$T/DG.yedek" "$DG/2026-10-05.md"
+kapi "H10k başka haftanın işlenmemiş seansı bu haftayı tutmaz → KAPANDI" 0 python3 "$H" olc --hafta 2026-W42
+kapi "H10l ...ama kendi haftasında (W41) kırmızı" 1 python3 "$H" olc --hafta 2026-W41; icerir "$CIKTI" "2026-10-05.md: 2/3 ders" "H10m W41 gerekçe"
+python3 -c "import shutil,sys; shutil.rmtree(sys.argv[1], ignore_errors=True)" "$KOK/_agents/handoff/retro/2026-W41"
+printf '# taslak seans\n## Pürüzler → ders\n1. x → #1\n' > "$DG/taslak.md"
+kapi "H10n adında tarih olmayan seans dosyası → K6 SARI → rc=3 ÖLÇÜLEMEDİ (bu hafta değil sayılmaz)" 3 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "taslak.md (adında tarih yok)" "H10o gerekçe"
+python3 -c "import os,sys; os.remove(sys.argv[1])" "$DG/taslak.md"
+cp "$T/DG.yedek" "$DG/2026-10-16.md"
+# K6 mutantları (kopya üstünde)
+m_k6_pr(){ local o; o="$(python3 "$1" olc --hafta 2026-W42 2>&1)"; grep -qF "(madde 2, 3)" <<<"$o"; }
+mut "M8 PR denetimi kalkınca görev kimlikli ders işlenmiş sayılır (kapı yakalar)" 's/if not PR_RE.search(tx) or ACIK_RE.search(tx)\]/if ACIK_RE.search(tx)]/' m_k6_pr
+sed -i 's/^2\. Bitiş sinyali yok → .*/2. AÇIK: Bitiş sinyali → Sx #370 sürüyor/; s/^3\. AÇIK: dış yüzeyde .*/3. Dış yüzeyde kare şartı → #371/' "$DG/2026-10-16.md"
+m_k6_acik(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -ne 0 ]; }
+mut "M9 AÇIK denetimi kalkınca PR'ı süren AÇIK ders işlenmiş sayılır (kapı yakalar)" 's/if not PR_RE.search(tx) or ACIK_RE.search(tx)\]/if not PR_RE.search(tx)]/' m_k6_acik
+cp "$T/DG.yedek" "$DG/2026-10-16.md"
+m_k6_bagli(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -ne 0 ]; }
+mut "M10 K6 olc'a bağlı olmazsa işlenmemiş ders haftayı kapatır (kapı yakalar)" '/K.append(("K6", /d' m_k6_bagli
+printf '# taslak\n' > "$DG/taslak.md"
+m_k6_tarih(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -eq 3 ]; }
+mut "M11 tarihsiz seans sessiz atlanınca sarı kaybolur (kapı yakalar)" 's/^    if tarihsiz or okunamadi:$/    if False:/' m_k6_tarih
+python3 -c "import os,sys; os.remove(sys.argv[1])" "$DG/taslak.md"
+
 echo; echo "GECEN=$G DUSEN=$K"
 [ "$K" -eq 0 ]

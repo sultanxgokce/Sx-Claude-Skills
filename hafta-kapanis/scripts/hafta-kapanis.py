@@ -2,7 +2,7 @@
 """hafta-kapanis.py — haftanın kapanış KAPISI: yazmaz, ÖLÇER. Protokol eksiksiz koşmadıysa hafta kapanmaz.
 
 Niçin var (Sultan 17 Eki 2026, beyan SERDAR): "haftayı kapatma şartı olsun; sistem protokol eksiksiz
-koşmadıysa haftayı kapatmasın." Kapı dört ölçüm + bir onay okur; hiçbirini kendisi üretmez:
+koşmadıysa haftayı kapatmasın." Kapı beş ölçüm + bir onay okur; hiçbirini kendisi üretmez:
 
   K1 katılım   — aktif ajanların kutu retrosu var ve geçerli (retro.py'nin saf yardımcılarıyla; `retro.py merkez`
                  MERKEZ.md yazabildiği için kapı onu ÇAĞIRMAZ)
@@ -15,9 +15,14 @@ koşmadıysa haftayı kapatmasın." Kapı dört ölçüm + bir onay okur; hiçbi
                  "## Kaçış ve tıkanma" bölümünde YAZILI bir derse bağlı: `- <anahtar> → M<n>` (RED yolu yok)
   K5 onay      — KAPANIS.md'de `_sultan_onay:` satırı geçerli D1 biçiminde. 🔴 A06: bu satırı ARAÇ YAZMAZ;
                  insan (Sultan sözünü aktaran beyan) yazar, araç yalnız var mı/biçimli mi diye ölçer ve korur.
+  K6 doğrulat  — haftanın Doğrulat seans retroları (`retro/dogrulat/<tarih>.md`, tarihi haftanın içinde): `## … ders …`
+                 bölümündeki HER ders maddesi bir beceri PR'ına bağlı (`#N` ya da `/pull/N`) ve AÇIK değil. PR'sız ders,
+                 AÇIK ders ya da ders bölümü olmayan seans → kırmızı, eksik seanslar dersleriyle listelenir (Sultan katı
+                 kuralı 17 Eki: işlenmemiş ders varsa hafta kapanmaz). Seans kaydı yoksa yeşil ve bunu söyler; adında tarih
+                 olmayan / okunamayan seans dosyası sarı (hangi haftaya ait olduğu bilinmeyen kayıt "bu hafta değil" sayılmaz).
 
 Çıktı: `_agents/handoff/retro/<hafta>/KAPANIS.md` (aracın TEK yazdığı dosya; retro/MERKEZ dosyalarına dokunmaz).
-Çıkış: 0 KAPANDI · 5 ONAY BEKLİYOR (K1-K4 yeşil, K5 yok) · 1 AÇIK (kırmızı var) · 3 ÖLÇÜLEMEDİ (sarı var, kırmızı yok;
+Çıkış: 0 KAPANDI · 5 ONAY BEKLİYOR (K1-K4 + K6 yeşil, K5 yok) · 1 AÇIK (kırmızı var) · 3 ÖLÇÜLEMEDİ (sarı var, kırmızı yok;
         retro becerisi hiç yoksa dosya yazılmadan 3 — aracın kendisi ölçülür) · 2 kullanım.
 `acik` alt komutu: KAPANDI olmayan hafta dizinlerini listeler (açık hafta kaydı dizinden türetilir, ayrı defter yok).
 """
@@ -30,7 +35,7 @@ import subprocess
 import sys
 from datetime import datetime
 
-SURUM = "1.0.0"
+SURUM = "1.1.0"
 D1_RE = re.compile(r"\d{4}-\d{2}-\d{2} Sultan: .+\(sohbet · [^·()]+ · \"([^\"]{1,120})\" · beyan:\S+\)")
 D1_KIRPIK_KELIME = 15   # L73 K1-K4: verbatim kırpık ≤15 kelime — karakter sayısı kelime sayısının yerine geçmez (göz #360 tur 3)
 
@@ -199,6 +204,55 @@ def k4_kacis(retro, kok, hafta, merkez_yol):
     return "YEŞİL", f"{len(anahtarlar)} kaçış/tıkanma kaydının hepsi yazılı bir derse bağlı"
 
 
+# K6 (Sultan katı kuralı 17 Eki · gorev_01M55490MQAN8G2NB8MF7HN77R): her Doğrulat seansının dersleri kalıcı beceriye PR ile işlenir;
+#    işlenmemiş ders varsa hafta kapanmaz. "İşlendi" = ders maddesinde PR referansı (#N ya da /pull/N) VAR ve madde AÇIK değil.
+#    Görev kimliği ya da "protokol" notu PR yerine geçmez (not olarak kalan ders işlenmemiştir). RED yolu yok.
+PR_RE = re.compile(r"(?<![\w&/])#\d+\b|/pull/\d+")
+ACIK_RE = re.compile(r"(?<!\w)AÇIK(?!\w)")
+MADDE_RE = re.compile(r"^\s*(?:(\d+)[.)]|[-*])\s+(\S.*)$")
+
+
+def k6_dogrulat(retro, kok, hafta):
+    pzt, paz = retro.hafta_araligi(hafta)
+    diz = os.path.join(kok, "_agents", "handoff", "retro", "dogrulat")
+    dosyalar = sorted(glob.glob(os.path.join(diz, "*.md"))) if os.path.isdir(diz) else []
+    seanslar, tarihsiz, okunamadi = [], [], []
+    for yol in dosyalar:
+        ad = os.path.basename(yol)
+        t = retro.tarih_cek(ad)
+        if t is None:
+            tarihsiz.append(ad)   # hangi haftaya ait olduğu bilinmeyen seans "bu hafta değil" sayılamaz
+            continue
+        if retro.aralikta(t, pzt, paz):
+            try:
+                seanslar.append((ad, open(yol, encoding="utf-8").read()))
+            except (OSError, UnicodeDecodeError) as e:
+                okunamadi.append(f"{ad} ({type(e).__name__})")
+    if tarihsiz or okunamadi:
+        return "SARI", "seans dosyası ölçülemedi: " + ", ".join([f"{a} (adında tarih yok)" for a in tarihsiz] + okunamadi)[:200]
+    if not seanslar:
+        return "YEŞİL", "bu hafta Doğrulat seans kaydı yok (retro/dogrulat/<tarih>.md) — kaydı yazılmamış seansı bu kapı görmez"
+    eksik, toplam = [], 0
+    for ad, metin in seanslar:
+        basliklar = [s[3:].strip() for s in metin.split("\n") if s.startswith("## ") and "ders" in s[3:].casefold()]
+        maddeler = []
+        for b in basliklar:
+            for s in bolum(metin, b):
+                m = MADDE_RE.match(s)
+                if m:
+                    maddeler.append((m.group(1) or str(len(maddeler) + 1), m.group(2)))
+        if not maddeler:
+            eksik.append(f"{ad}: ders bölümü yok (## … ders …)")
+            continue
+        toplam += len(maddeler)
+        islenmemis = [no for no, tx in maddeler if not PR_RE.search(tx) or ACIK_RE.search(tx)]
+        if islenmemis:
+            eksik.append(f"{ad}: {len(islenmemis)}/{len(maddeler)} ders PR'a işlenmedi (madde {', '.join(islenmemis)})")
+    if eksik:
+        return "KIRMIZI", f"Doğrulat dersi işlenmemiş: {' · '.join(eksik)}"[:300]
+    return "YEŞİL", f"{len(seanslar)} Doğrulat seansı, {toplam} dersin hepsi beceri PR'ına işlenmiş"
+
+
 def k5_onay(kapanis_yol):
     """Mevcut KAPANIS.md'deki _sultan_onay satırını okur. ARAÇ ÜRETMEZ."""
     if not os.path.exists(kapanis_yol):
@@ -234,6 +288,7 @@ def olc(a):
     K.append(("K2", "dersler → görev (D1)", renk2, not2))
     K.append(("K3", "süzüm", *k_retro(retro_py, "suzum", kok, hafta, [])))
     K.append(("K4", "kaçış/tıkanma → ders", *(k4_kacis(retro, kok, hafta, merkez_yol) if retro else ("SARI", "retro becerisi yok"))))
+    K.append(("K6", "Doğrulat dersleri → beceri PR", *k6_dogrulat(retro, kok, hafta)))
     onay_durum, onay_deger, onay_not = k5_onay(kapanis_yol)
     renkler = [k[2] for k in K]
     if "KIRMIZI" in renkler or onay_durum == "BİÇİMSİZ":
@@ -252,8 +307,8 @@ def olc(a):
     for kod, ad, renk, nt in K:
         r.append(f"| {kod} | {ad} | {im[renk]} {renk} | {nt.replace('|', '¦')} |")
     r.append(f"| K5 | Sultan onayı | {'✓ VAR' if onay_durum == 'VAR' else ('✗ BİÇİMSİZ' if onay_durum == 'BİÇİMSİZ' else '… BEKLİYOR')} | {onay_not} |")
-    r += ["", {"KAPANDI": "Hafta kapandı: dört kapı yeşil, Sultan onayı D1 biçimli.",
-               "ONAY BEKLİYOR": "Dört kapı yeşil. Kapanış için `_sultan_onay:` satırına Sultan'ın sözü D1 biçimiyle aktarılır (A06: araç yazmaz).",
+    r += ["", {"KAPANDI": "Hafta kapandı: ölçüm kapıları (K1-K4, K6) yeşil, Sultan onayı D1 biçimli.",
+               "ONAY BEKLİYOR": "Ölçüm kapıları (K1-K4, K6) yeşil. Kapanış için `_sultan_onay:` satırına Sultan'ın sözü D1 biçimiyle aktarılır (A06: araç yazmaz).",
                "AÇIK": "Hafta AÇIK: kırmızı kapı var. Eksikler ilgili ajana görev olur; ertesi gün yeniden ölçülür.",
                "ÖLÇÜLEMEDİ": "Sarı kapı var: ölçülemeyen şey kapanmış sayılmaz. Kaynağı kur, yeniden ölç."}[durum], ""]
     os.makedirs(diz, exist_ok=True)

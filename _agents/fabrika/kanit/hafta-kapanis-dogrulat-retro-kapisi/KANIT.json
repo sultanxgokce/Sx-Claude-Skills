@@ -1,0 +1,76 @@
+{
+  "is": "hafta-kapanis-dogrulat-retro-kapisi",
+  "arac": "kanit.py/0.4.0",
+  "guncelleme": "2026-10-17T20:32:35+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapanis-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kapanis-sinavi-once.txt",
+      "sha256": "22d0783af17b0be707c7d34162a7943cb3b3c0e7c011d6c70e5618d5451ccdfd",
+      "komut": [
+        "env",
+        "-u",
+        "HAFTA_KAPANIS_RETRO_PY",
+        "bash",
+        "/tmp/tmp.bKbMdDkaPN/hafta-kapanis/scripts/hafta-kapanis.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T20:32:31+03:00",
+      "sure_sn": 3.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapanis-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kapanis-sinavi-sonra.txt",
+      "sha256": "4ec8f344ff5fb6e2a85cb26bb1229abea68b48d43a724ca0a09de6b585834d0f",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-hafta-kapanis-dogrulat-retro-kapisi/hafta-kapanis/scripts/hafta-kapanis.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T20:32:35+03:00",
+      "sure_sn": 3.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-dogrulat-seansi",
+      "asama": "sonra",
+      "dosya": "olcum-gercek-dogrulat-seansi-sonra.txt",
+      "sha256": "e1d9a1c39abe47b0b73639ec6efcaeed0ff1edd16cfd928e52704bf89ea1a5ea",
+      "komut": [
+        "python3",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/k6-gercek.py",
+        "/config/projects/_wt/Sx-Claude-Skills-hafta-kapanis-dogrulat-retro-kapisi/hafta-kapanis/scripts/hafta-kapanis.py",
+        "/config/projects/_wt/Sx-Claude-Skills-hafta-kapanis-dogrulat-retro-kapisi/retro/scripts/retro.py",
+        "/config/projects/Nexus",
+        "2026-W42"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T20:32:35+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "depo-denetimi",
+      "asama": "sonra",
+      "dosya": "olcum-depo-denetimi-sonra.txt",
+      "sha256": "a8a1f84f1bfedbcd67a00b19c62550edbc44fa5749e64a584991c66c5bbc66c1",
+      "komut": [
+        "bash",
+        "-c",
+        "node ahi/schema/validate-repo.mjs . --strict | tail -1 && node ahi/schema/version-lint.mjs . | tail -1"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T20:32:35+03:00",
+      "sure_sn": 0.1
+    }
+  ],
+  "imza": "9ba027b880c1f992e148fcc9e937b527b053e91d677613cde64bb23722449bfd"
+}

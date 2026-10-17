@@ -1,7 +1,7 @@
 ---
 name: hafta-kapanis
-description: Haftanın kapanış kapısı (Pazar, Sultan) — yazmaz, ÖLÇER; protokol eksiksiz koşmadıysa hafta kapanmaz. K1 aktif ajanların kutu retrosu var ve geçerli · K2 merkez retrosu var, her ders görev defterine D1 damgasıyla girmiş · K3 kutu önerileri süzülmüş (retro suzum) · K4 haftanın kaçış/tıkanma kayıtları MERKEZ.md'de yazılı bir derse bağlı · K5 Sultan onayı D1 biçimli (araç YAZMAZ, var mı diye ölçer — A06). Çıktı _agents/handoff/retro/<hafta>/KAPANIS.md; açık haftaları listeler. Tetik: "/hafta-kapanis", "haftayı kapat", "hafta kapandı mı", "açık hafta var mı".
-version: 1.0.0
+description: Haftanın kapanış kapısı (Pazar, Sultan) — yazmaz, ÖLÇER; protokol eksiksiz koşmadıysa hafta kapanmaz. K1 aktif ajanların kutu retrosu var ve geçerli · K2 merkez retrosu var, her ders görev defterine D1 damgasıyla girmiş · K3 kutu önerileri süzülmüş (retro suzum) · K4 haftanın kaçış/tıkanma kayıtları MERKEZ.md'de yazılı bir derse bağlı · K5 Sultan onayı D1 biçimli (araç YAZMAZ, var mı diye ölçer — A06) · K6 haftanın Doğrulat seanslarının her dersi beceri PR'ına işlenmiş (Sultan katı kuralı). Çıktı _agents/handoff/retro/<hafta>/KAPANIS.md; açık haftaları listeler. Tetik: "/hafta-kapanis", "haftayı kapat", "hafta kapandı mı", "açık hafta var mı".
+version: 1.1.0
 ---
 
 # /hafta-kapanis — haftanın kapanış kapısı (ölçer, yazmaz; eksikse kapanmaz)
@@ -24,7 +24,7 @@ bu beceri o kapıdır. Yazılı ama koşmayan kural olmasın diye **salt ölçer
    "Ölçemedim" ile "kapandı" aynı şey değildir; sarı yeşil sayılmaz.
 4. **Açık hafta defteri yok.** Açık haftalar `retro/<hafta>/` dizinlerinden türetilir: KAPANIS.md yok ya da
    `_durum: KAPANDI` değil → açık. İki hafta aynı anda açık olabilir; her biri `--hafta` ile ayrı ölçülür.
-5. Renkler fabrikayla aynı: 0 KAPANDI · 5 ONAY BEKLİYOR (K1-K4 yeşil, onay yok) · 1 AÇIK (kırmızı var) ·
+5. Renkler fabrikayla aynı: 0 KAPANDI · 5 ONAY BEKLİYOR (K1-K4 + K6 yeşil, onay yok) · 1 AÇIK (kırmızı var) ·
    3 ÖLÇÜLEMEDİ (sarı var, kırmızı yok) · 2 kullanım hatası.
 
 ## Kullanım (Pazar, Sultan oturumu; Pazartesi yeniden denenebilir)
@@ -40,6 +40,7 @@ python3 ~/.claude/skills/hafta-kapanis/scripts/hafta-kapanis.py acik [--kok <dep
 | K2 dersler | MERKEZ.md `## Dersler`'de ≥1 `M<n>)`; **her** ders `## Görevler`'de `- gorev_<26> · ders M<n> · D1: <D1>` — RED yolu yok: görev olmayacak şey Dersler'e yazılmaz, nota taşınır | MERKEZ.md |
 | K3 süzüm | her kutu önerisi `→ gorev_` ya da `→ RED:` damgalı, metin güncel | `retro.py suzum` rc |
 | K4 kaçış/tıkanma | haftanın kaçış defteri satırları (anahtar: zaman damgası) + `durum=tikandi` kartları (anahtar: `kart:<iş>`) `## Kaçış ve tıkanma`'da **yazılı bir derse** bağlı: `- <anahtar> → M<n>` (RED yolu yok; M<n> Dersler'de olmalı); **okunamayan kart = SARI** (sessiz atlanmaz) | kaçış defteri · kartlar · MERKEZ.md |
+| K6 Doğrulat dersleri | haftanın Doğrulat seans retroları (`retro/dogrulat/<tarih>.md`, tarihi haftanın içinde): `## … ders …` bölümündeki **her** ders maddesi bir beceri PR'ına bağlı (`#N` ya da `/pull/N`) ve `AÇIK` değil. Görev kimliği / "protokol" notu PR yerine geçmez. PR'sız ya da AÇIK ders, ders bölümü olmayan seans → kırmızı, eksik seanslar dersleriyle listelenir (RED yolu yok). Seans kaydı yoksa yeşil ve bunu söyler; **adında tarih olmayan / okunamayan seans dosyası = SARI** | `retro/dogrulat/*.md` |
 | K5 onay | KAPANIS.md `_sultan_onay:` D1 biçimli — **tam satır** eşleşmesi (baş/son çapalı; kuyruk metni biçimsiz) ve kırpık **≤15 kelime** (karakter sayısı yerine geçmez; aynı kural K2 görev D1'inde) | KAPANIS.md (insan yazar) |
 
 Kapanmayan hafta: KAPANIS.md kırmızı kapıları adlarıyla basar; eksikler ilgili ajana görev olur, ertesi gün
@@ -48,10 +49,10 @@ yeniden ölçülür. `retro.py` çözümü: `--retro-py` · `HAFTA_KAPANIS_RETRO
 
 ## Kanıt
 
-`scripts/hafta-kapanis.test.sh` — 76 kapı hermetik (mktemp depo · sabit tarih) + 7 mutant kopya üstünde (görev D1
+`scripts/hafta-kapanis.test.sh` — 97 geçen kontrol: 86 kapı hermetik (mktemp depo · sabit tarih) + 11 mutant kopya üstünde (görev D1
 denetimi kalkınca biçimsiz damga geçer · K4 eksik denetimi kalkınca damgasız tıkanma geçer · onay D1 denetimi
 kalkınca "onaylandı" haftayı kapatır · bozuk kart sessiz atlanınca sarı kaybolur · D1 tam eşleşmesi gevşeyince
-kuyruklu onay kapatır · yazılı-ders denetimi kalkınca var olmayan derse bağ geçer · kırpık kelime sınırı kalkınca 16 kelimelik onay kapatır — yedisi de ısırıyor). Sınav `retro.py` ister; yoksa **rc=3 ÖLÇÜLEMEDİ** basar,
+kuyruklu onay kapatır · yazılı-ders denetimi kalkınca var olmayan derse bağ geçer · kırpık kelime sınırı kalkınca 16 kelimelik onay kapatır · K6 PR denetimi kalkınca görev kimlikli ders işlenmiş sayılır · K6 AÇIK denetimi kalkınca PR'ı süren AÇIK ders geçer · K6 olc'a bağlanmazsa işlenmemiş ders haftayı kapatır · tarihsiz seans sessiz atlanınca sarı kaybolur — on biri de ısırıyor). Sınav `retro.py` ister; yoksa **rc=3 ÖLÇÜLEMEDİ** basar,
 sahte yeşil vermez (bağ: `retro` becerisi önce birleşir).
 
 ## Sınırlar (dürüst)
@@ -59,4 +60,7 @@ sahte yeşil vermez (bağ: `retro` becerisi önce birleşir).
 - K5 "Sultan onayı" bir **beyandır**; araç imzayı doğrulayamaz, biçimini ve varlığını ölçer. Eşik-üstü sınıf değil
   (hafta kapanışı geri alınabilir), sohbet damgası yeter (L73 K1-K4).
 - K4 kaçış defteri ajan alanı taşımaz; damga kutu geneline yapılır.
+- K6 seansları **kayıttan** görür: retro dosyası yazılmamış bir Doğrulat seansını bu kapı göremez (seansın kendisi
+  ayrı bir defterde tutulmuyor). Seans sonu retroyu yazmak SERDAR + MUHAKKİK protokolüdür; kapı yazılanı ölçer.
+- K6 "işlendi"yi PR referansının **varlığıyla** ölçer; PR'ın birleşmiş olduğunu ve dersi gerçekten taşıdığını doğrulamaz.
 - Cuma/Pazar zilleri bu becerinin dışında (cloudtop `crontab-abc`, MİRAHUR).
