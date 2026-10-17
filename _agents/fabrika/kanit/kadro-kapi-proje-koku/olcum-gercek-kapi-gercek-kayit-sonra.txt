@@ -1,0 +1,7 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kapi-gercek-kayit-olc.sh /config/projects/_wt/Sx-Claude-Skills-kadro-kapi-proje-koku/terminal-onar
+# rc=0 sure=0.5s zaman=2026-10-17T19:08:18+03:00
+--- stdout ---
+gerçek tmux oturumu: 12 (claude çalışan: 10)
+AYARSIZ (canlıdaki hâl) · kaynak: 0 · üye: 0 · çalışan: 0 · kayıtsız: 8 · kayıtsızda kapatılabilir: 0 / bayraksız: 0
+AYARLI (.oda/ortam) · kaynak: 1 · üye: 17 · çalışan: 8 · kayıtsız: 0 · kayıtsızda kapatılabilir: 0 / bayraksız: 0
+--- stderr ---

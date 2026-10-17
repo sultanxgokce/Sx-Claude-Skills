@@ -1,0 +1,21 @@
+{
+  "is": "kadro-kapi-proje-koku",
+  "cumle": "gorev_01M554PCYA0HWM6TM4KXY4E72V (ACİL, SERDAR 18:55) — terminal-onar 2.17.0: (a) kadro kayıt kökü: kutuya özel izin listeli ayar dosyası <proje>/.oda/ortam (yalnız AILE_REGISTRY · ISKAN_REGISTRY) ortak.sh'ta okunur ve kapı bu değerler + TO_PROJE ile başlatılır; code kutusunun kapısı kaydı /config/projects/code'da arayıp 0 üye buluyordu ('0 kişi · 8 kayıtsız'); (b) koruma: kapı, içinde Claude çalışan kayıtsız oturumu kapatmayı reddeder (409) ve kadro verisinde her kayıtsız oturuma kapatilabilir bayrağı koyar (yalnız Claude'suz = sorunlu oturum kapatılabilir). Sınav + mutasyon; gerçek kapı süreci gerçek kayıtla yerelde koşturularak ölçülür. Merkez sayfasında düğmenin gizlenmesi ayrı kart (cloudtop); kutulara kurulum ve kapının yeniden başlatılması bu PR'ın dışında.",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-17T18:58:10+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/kadro-kapi-proje-koku (sınav önce/sonra + mutasyon + gerçek kapı yerel koşum)",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)"
+}

@@ -1,0 +1,7 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kapi-gercek-kayit-olc.sh /tmp/tmp.1Je8xkH0Bw/terminal-onar
+# rc=0 sure=0.6s zaman=2026-10-17T19:08:17+03:00
+--- stdout ---
+gerçek tmux oturumu: 12 (claude çalışan: 10)
+AYARSIZ (canlıdaki hâl) · kaynak: 0 · üye: 0 · çalışan: 0 · kayıtsız: 8 · kayıtsızda kapatılabilir: 0 / bayraksız: 8
+AYARLI (.oda/ortam) · kaynak: 0 · üye: 0 · çalışan: 0 · kayıtsız: 8 · kayıtsızda kapatılabilir: 0 / bayraksız: 8
+--- stderr ---

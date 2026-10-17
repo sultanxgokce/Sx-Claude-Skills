@@ -1,8 +1,12 @@
-$ bash -c cd terminal-onar; d=0; for t in scripts/*.test.sh; do timeout 300 bash "$t" >/dev/null 2>&1 && echo "✓ $t" || { echo "✗ $t"; d=$((d+1)); }; done; for t in kapi/*.test.mjs; do timeout 300 node "$t" >/dev/null 2>&1 && echo "✓ $t" || { echo "✗ $t"; d=$((d+1)); }; done; echo "düşen=$d"; [ $d -eq 0 ]
-# rc=1 sure=117.2s zaman=2026-10-17T19:06:45+03:00
+$ bash -c 
+  cd terminal-onar; d=0; for t in scripts/*.test.sh; do [ "$t" = scripts/compact.test.sh ] && continue; timeout 300 bash "$t" >/dev/null 2>&1 && echo "✓ $t" || { echo "✗ $t"; d=$((d+1)); }; done
+  for t in kapi/*.test.mjs; do timeout 300 node "$t" >/dev/null 2>&1 && echo "✓ $t" || { echo "✗ $t"; d=$((d+1)); }; done
+  echo "── compact.test.sh (Sx CI karantinasında, gorev_01M55499MB8CVR5NA14YKC8NZW — main dalında da K2 kırmızı) iki tarafta üçer kez:"
+  for i in 1 2 3; do a=$(timeout 300 bash scripts/compact.test.sh 2>&1 | grep -cE "^  ✗"); b=$(timeout 300 bash /tmp/tmp.1Je8xkH0Bw/terminal-onar/scripts/compact.test.sh 2>&1 | grep -cE "^  ✗"); echo "  koşum $i: bu dal düşen=$a · origin/main düşen=$b"; done
+  echo "düşen (compact hariç)=$d"; [ $d -eq 0 ]
+# rc=0 sure=260.2s zaman=2026-10-17T19:12:38+03:00
 --- stdout ---
 ✓ scripts/bekci-iz.test.sh
-✗ scripts/compact.test.sh
 ✓ scripts/kabuk-kapisi.test.sh
 ✓ scripts/kapi-yenile.test.sh
 ✓ scripts/koltuk-ac.test.sh
@@ -25,5 +29,9 @@ $ bash -c cd terminal-onar; d=0; for t in scripts/*.test.sh; do timeout 300 bash
 ✓ kapi/rapor.test.mjs
 ✓ kapi/sunucu.test.mjs
 ✓ kapi/tarayici-bul.test.mjs
-düşen=1
+── compact.test.sh (Sx CI karantinasında, gorev_01M55499MB8CVR5NA14YKC8NZW — main dalında da K2 kırmızı) iki tarafta üçer kez:
+  koşum 1: bu dal düşen=1 · origin/main düşen=1
+  koşum 2: bu dal düşen=1 · origin/main düşen=1
+  koşum 3: bu dal düşen=1 · origin/main düşen=1
+düşen (compact hariç)=0
 --- stderr ---
