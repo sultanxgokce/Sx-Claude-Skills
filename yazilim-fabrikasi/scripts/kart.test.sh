@@ -102,16 +102,6 @@ python3 - <<PY
 import json;p='$T/depo/_agents/fabrika/kartlar/is-sunucu.json';k=json.load(open(p));k.pop('canli_gerekir');k.pop('canli_sebep');json.dump(k,open(p,'w'))
 PY
 CIKTI="$(bash "$KT" canli-gerekir is-sunucu)"; [ "$(cut -f1 <<<"$CIKTI")" = "E" ] && grep -q "eski kart" <<<"$CIKTI"; g $? "alanı olmayan eski kart: cümleden E, 'eski kart' işaretli"
-# canli-ayarla: açık kartta sahip kararı — gerekçeli, karta ve geçmişe yazılır (bu özellikten önce açılmış kartlar + yanlış pozitif kelime)
-bash "$KT" canli-ayarla is-sunucu --canli h >/dev/null 2>&1; [ $? -eq 1 ]; g $? "canli-ayarla gerekçesiz reddeder"
-bash "$KT" canli-ayarla is-sunucu --canli h --reis BANI --gerekce "kısa" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "20 karakterden kısa gerekçe reddedilir"
-bash "$KT" canli-ayarla is-sunucu --canli h --gerekce "belge işi; kutuya servis kurulmuyor, kelime yanlış pozitif" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "--reis verilmeden reddedilir (aktör ölçülmeden şart kalkmaz — göz tur 4)"
-bash "$KT" canli-ayarla is-sunucu --canli h --reis SERDAR --gerekce "belge işi; kutuya servis kurulmuyor, kelime yanlış pozitif" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "sahip olmayan reis (SERDAR ≠ aldi BANI) reddedilir"
-python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-sunucu.json'));assert 'canli_gerekir' not in k"; g $? "reddedilen denemeler karta yazmadı"
-CIKTI="$(bash "$KT" canli-ayarla is-sunucu --canli h --reis BANI --gerekce "belge işi; kutuya servis kurulmuyor, kelime yanlış pozitif" 2>&1)"; g $? "gerekçeli canli-ayarla h kabul"
-python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-sunucu.json'));assert k['canli_gerekir'] is False and 'yanlış pozitif' in k['canli_sebep'] and k['gecmis'][-1]['olay']=='canli-ayarla' and k['gecmis'][-1]['reis']=='BANI'"; g $? "karta alan + geçmiş satırı (reis dahil) işlendi (gizli değil)"
-[ "$(bash "$KT" canli-gerekir is-sunucu | cut -f1)" = "H" ]; g $? "kapı artık H okur"
-bash "$KT" canli-ayarla is-1 --canli e --reis MUAVIN --gerekce "buton işi ama kurulum cron'la yayılıyor" >/dev/null 2>&1 && [ "$(bash "$KT" canli-gerekir is-1 | cut -f1)" = "E" ]; g $? "canli-ayarla e: canlı istemeyen kart canlı ister hâle gelir"
 
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

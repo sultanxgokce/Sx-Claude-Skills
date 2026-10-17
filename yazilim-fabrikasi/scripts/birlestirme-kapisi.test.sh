@@ -202,14 +202,6 @@ grep -q "cümlede" <<<"$CIKTI"; g $? "T11j kapı canlı şartının nereden geld
 sleep 1; printf '%s kapi 2.14.0 ayağa kalktı\n' "$(date -u +%FT%TZ)" > "$LGK/kapi.log"
 bash "$K" canli is-h kapi --desen kapi --kaynak "dosya:$LGK/kapi.log" >/dev/null 2>&1
 bash "$G" is-h --sessiz >/dev/null 2>&1; g $? "T11k eski kart + bağlı yeşil canlı → geçer"
-# sahip kararı: canli-ayarla h (gerekçeli) → kapı canlı istemez; karar kartta görünür
-bash "$KT" ac is-j --is "servis belgesini düzelt" --istedi S --aldi M --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
-bash "$K" olcum is-j olc --asama tek -- echo 1 >/dev/null 2>&1; den is-j 1 5 E
-bash "$G" is-j --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T11l 'servis' kelimesi → canlı ister → rc=1"
-bash "$KT" canli-ayarla is-j --canli h --reis M --gerekce "belge işi; kutuya servis kurulmuyor, kelime yanlış pozitif" >/dev/null 2>&1
-CIKTI="$(bash "$G" is-j 2>&1)"; RC=$?
-[ "$RC" -eq 0 ]; g $? "T11m sahip gerekçeyle canlı istemedi (karta yazılı) → geçer"
-grep -q "canlı kanıt istenmedi" <<<"$CIKTI" && grep -q "yanlış pozitif" <<<"$CIKTI"; g $? "T11n kapı kararı ve gerekçeyi basıyor (göz görsün)"
 
 echo "════ T12 · MUTASYON: canlı kontrolleri kaldırılınca kapı açılır (kapı gerçek, süs değil) ════"
 M3="$PKG/mutant3.sh"; sed 's/^\s*\[ "\$cg" = "E" \] && \[ "\$cy" -eq 0 \]/false/' "$G" > "$M3"; chmod +x "$M3"

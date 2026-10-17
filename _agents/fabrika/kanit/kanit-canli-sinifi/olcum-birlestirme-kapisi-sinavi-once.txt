@@ -1,5 +1,5 @@
-$ bash /tmp/tmp.Wxc5xiTCJ7/birlestirme-kapisi.test.sh
-# rc=1 sure=15.6s zaman=2026-10-17T13:38:15+03:00
+$ bash /tmp/tmp.jNLcC8Hf0b/birlestirme-kapisi.test.sh
+# rc=1 sure=12.4s zaman=2026-10-17T13:58:20+03:00
 --- stdout ---
 ════ T1 · hiçbir şey yok → engeller ════
   ✓ kart+kanıt+denetim yokken rc=1
@@ -71,9 +71,6 @@ $ bash /tmp/tmp.Wxc5xiTCJ7/birlestirme-kapisi.test.sh
   ✗ T11i alanı olmayan ESKİ servis/sunucu kartı: cümleden türetilir, canlı yok → rc=1
   ✗ T11j kapı canlı şartının nereden geldiğini söylüyor
   ✓ T11k eski kart + bağlı yeşil canlı → geçer
-  ✗ T11l 'servis' kelimesi → canlı ister → rc=1
-  ✓ T11m sahip gerekçeyle canlı istemedi (karta yazılı) → geçer
-  ✗ T11n kapı kararı ve gerekçeyi basıyor (göz görsün)
 ════ T12 · MUTASYON: canlı kontrolleri kaldırılınca kapı açılır (kapı gerçek, süs değil) ════
   ✗ T12a mutant 3 üretildi (kart canlı şartı kaldırıldı)
   ✓ T12b mutant 3: cron kartı canlı kayıtsız GEÇİYOR → T11a/T11i bu mutantta düşerdi
@@ -88,7 +85,7 @@ $ bash /tmp/tmp.Wxc5xiTCJ7/birlestirme-kapisi.test.sh
   ✓ T12k mutant 6: geleceğe tarihli kayıt GEÇİYOR → T11o bu mutantta düşerdi
   ✗ T12l gerçek kapı geleceğe tarihli kaydı reddediyor
 
-── SONUÇ: 46 geçti · 22 kaldı ──
+── SONUÇ: 45 geçti · 20 kaldı ──
 --- stderr ---
 Traceback (most recent call last):
   File "<stdin>", line 3, in <module>
