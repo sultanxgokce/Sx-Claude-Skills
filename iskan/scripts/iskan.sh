@@ -2811,11 +2811,18 @@ cmd_evergreen_kaydet() {
 #   🔴 NİÇİN: iz-sıfır assertion `grep -ci` ile YORUM satırlarını da sayıyordu — s02 sökümünde backup.sh:92 ve iskan-registry.yaml:3
 #   geçmiş yorumlarında 's02' geçtiği için kutu down + CF offboard BİTMİŞKEN ADIM-5 exit 1 ile yarıda durdu. Yorum iz değildir:
 #   tam yorum satırı (^\s*#) atılır, satır-sonu yorumu (boşluktan sonra #) kesilir; kalan metinde büyük/küçük harf duyarsız sayım.
-#   Tırnak içindeki '#' (nadir) de yorum sayılır — fail-closed yönü: iz GİZLEMEZ, çünkü etkin içerikteki ad '#'tan önce kalır.
+#   Tırnak İÇİNDEKİ '#' yorum DEĞİLDİR (bağımsız göz tur 1): "a # s02" etkin içeriktir, sayılır. Tek/çift tırnak izlenir; yorum yalnız
+#   tırnak dışında, satır başında ya da boşluktan sonra gelen '#' ile başlar.
 _iskan_etkin_iz() {
   local f="$1" proje="$2"
   [ "$f" = "-" ] && f=/dev/stdin
-  sed -E 's/^[[:space:]]*#.*$//; s/[[:space:]]+#.*$//' "$f" 2>/dev/null | grep -ci -- "$proje" || true
+  awk '{ t=""; q=""; n=length($0)
+         for (i=1;i<=n;i++) { c=substr($0,i,1)
+           if (q!="") { if (c==q) q=""; t=t c; continue }            # tırnak içi: olduğu gibi
+           if (c=="\"" || c=="\047") { q=c; t=t c; continue }        # tırnak açıldı
+           if (c=="#" && (i==1 || substr($0,i-1,1) ~ /[[:space:]]/)) break   # yorum başladı: gerisi atılır
+           t=t c }
+         print t }' "$f" 2>/dev/null | grep -ci -- "$proje" || true
 }
 # _iskan_bak_temizle <dosya>... — .bak güvenlik-yedeklerini BAŞARIDA temizle (söküm ADIM-5 +
 # evergreen ORTAK). Yalnız başarı-noktasında çağrılır — fail-path'ler .bak'ı restore+inceleme için

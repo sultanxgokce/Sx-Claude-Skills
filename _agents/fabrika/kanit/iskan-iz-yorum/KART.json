@@ -1,0 +1,19 @@
+{
+  "is": "iskan-iz-yorum",
+  "cumle": "iskan.sh sokum ADIM-5 iz-sıfır denetimi yorum satırlarını da sayıyor (gorev_01M548D8FW; s02 sökümü backup.sh:92 ve iskan-registry.yaml:3 geçmiş yorumlarında 's02' geçtiği için ADIM-5'te exit 1 ile yarıda durdu): sayım yorum satırlarını (^\\s*#) ve satır-sonu yorumlarını dışlar, yalnız etkin içerikte iz arar. 0.11.0→0.11.1; sınav: yorumda proje adı geçen fikstür (önce kırmızı, sonra yeşil) + mutasyon.",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-10-17T09:26:04+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/iskan-iz-yorum/",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

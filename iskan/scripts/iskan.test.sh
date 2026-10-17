@@ -2899,6 +2899,10 @@ source <(sed -n '/^_iskan_etkin_iz()/,/^}/p' "$SCRIPT_DIR/iskan.sh")
 [ "$(_iskan_etkin_iz "$IZY/yok.yaml" s02)" = 0 ] \
   && ok "İZ-YORUM-6 olmayan dosya → 0 (sayım patlamaz; eski grep -ci || true davranışı korunur)" \
   || bad "İZ-YORUM-6 olmayan dosya: $(_iskan_etkin_iz "$IZY/yok.yaml" s02)"
+printf 'X="a # s02"\nY=\x27# s02 tek tırnak\x27\nZ=1 # s02 gerçek yorum\nW=cloudtop#s02\n' > "$IZY/tirnak.sh"
+[ "$(_iskan_etkin_iz "$IZY/tirnak.sh" s02)" = 3 ] \
+  && ok "İZ-YORUM-7 tırnak İÇİNDEKİ '#' yorum değil (bağımsız göz tur 1): çift/tek tırnakta ad sayılır, boşluksuz 'a#b' de yorum değil (3); tırnak dışı ' #' yorum (sayılmaz)" \
+  || bad "İZ-YORUM-7 tırnak içi '#': $(_iskan_etkin_iz "$IZY/tirnak.sh" s02) (beklenen 3)"
 find "$IZY" -type f -delete 2>/dev/null; rmdir "$IZY" 2>/dev/null || true
 
 echo "== ${PASS} geçti / ${FAIL} kaldı =="
