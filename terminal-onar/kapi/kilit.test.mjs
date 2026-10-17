@@ -46,11 +46,17 @@ writeFileSync(KL, oluPid + ' olu'); writeFileSync(KL + '.devral', 'baska');
 const r32f = dene(300);
 kapi('DV32f bayat kilit, devralı CANLI (taze) tutucu varken silinmez: 503, kilit ve devral kalır', r32f === 'RET 503' && existsSync(KL) && existsSync(KL + '.devral'), r32f);
 unlinkSync(KL); unlinkSync(KL + '.devral');
-// DV32g: devral tutucusu 5 sn'den eski ve içeriği değişmemişse ölmüş sayılır: kaldırılır, bayat kilit devralınır
-writeFileSync(KL, oluPid + ' olu'); writeFileSync(KL + '.devral', 'olu-tutucu');
+// DV32g: devral tutucusunun SAHİBİ ÖLMÜŞSE (eski mtime) devral kaldırılır; bayat kilit devralınır ve bırakılır
+writeFileSync(KL, oluPid + ' olu'); writeFileSync(KL + '.devral', oluPid + ' olu-tutucu');
 const eskiDevral = new Date(Date.now() - 60 * 1000); utimesSync(KL + '.devral', eskiDevral, eskiDevral);
 const r32g = dene(2000);
-kapi('DV32g eski devral tutucusu (60 sn) kaldırılır; bayat kilit devralınır ve bırakılır', r32g === 'ALINDI' && !existsSync(KL) && !existsSync(KL + '.devral'), r32g);
+kapi('DV32g ölü sahipli devral (60 sn) kaldırılır; bayat kilit devralınır ve bırakılır', r32g === 'ALINDI' && !existsSync(KL) && !existsSync(KL + '.devral'), r32g);
+// DV32h: devralın sahibi CANLI ise eski mtime bile yetmez (tur 3 bulgusu): dokunulmaz, 503
+writeFileSync(KL, oluPid + ' olu'); writeFileSync(KL + '.devral', process.pid + ' duraklayan');
+utimesSync(KL + '.devral', eskiDevral, eskiDevral);
+const r32h = dene(300);
+kapi('DV32h canlı sahipli devral eski olsa da silinmez: 503, kilit ve devral kalır', r32h === 'RET 503' && existsSync(KL + '.devral') && existsSync(KL), r32h);
+unlinkSync(KL); unlinkSync(KL + '.devral');
 
 console.log(`\nSONUÇ: ${g} geçti · ${k} kaldı`);
 process.exit(k ? 1 : 0);
