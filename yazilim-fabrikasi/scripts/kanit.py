@@ -11,6 +11,8 @@ Kullanım:
   kanit.py olcum  <iş> <etiket> --asama once|sonra -- <komut...>     komutu koşar, kırpılmamış çıktı+rc kaydeder
   kanit.py ekran  <iş> <etiket> --asama once|sonra --url U [--urun-imi CSS] [--bekle CSS] [--genislik N]
   kanit.py dosya  <iş> <etiket> <yol> [--asama ...]                    var olan dosyayı (video, rapor) sha ile ekler
+  kanit.py canli  <iş> <etiket> --kaynak "<kutu · log yeri>" [--desen RE] [--en-az N] -- <log komutu...>
+                  CANLI sınıfı: gerçek ateşleme kaydı (saat damgalı log satırı); yoksa SARI rc=3 — kapı geçirmez
   kanit.py dogrula <iş>                                                imza + dosya sha'ları (0 sağlam · 1 bozuk · 3 yok)
   kanit.py ozet   <iş>                                                 PR gövdesi için tablo (markdown)
   kanit.py liste  <iş>
@@ -18,7 +20,7 @@ Ortam: KANIT_DEPO (depo kökü; vars. git toplevel) · KANIT_PLAYWRIGHT_DIR (nod
 """
 import argparse, datetime, hashlib, json, os, re, shutil, subprocess, sys
 
-SURUM = "kanit.py/0.3.0"
+SURUM = "kanit.py/0.4.0"   # 0.4.0: `canli` sınıfı (17 Eki 2026)
 # Sürüm artık GÜVENLE yükseltilebilir: imza gövdesinde değil (yukarıdaki not).
 # 0.1.0 → 0.3.0: 0.2.0 denendi ve geri alındı (o gün imza sürüme bağlıydı, yükseltmek
 # bütün geçmişi suçluyordu); numarayı atlayarak o denemeyi izlenebilir bırakıyorum.
@@ -257,6 +259,76 @@ def cmd_dosya(a):
     print(f"✓ dosya eklendi: {ad}")
 
 
+
+# ── canli ────────────────────────────────────────────────────────────────────────
+# 🔴 "GİT'TE DÜZELTİLDİ ≠ CANLIDA ÇALIŞIYOR" (haftalık retro 17 Eki 2026 · ders 1 · gorev_01M54APFDAHKN72VKBWTGKSAAM):
+#    10-16 Eki 119 işte en büyük bulgu kümesi buydu — 81 bulgu / 41 iş (wa-gecit ×7, terminal-16-kutu-kurulum ×5,
+#    donus-zili ×8); muhakkik-zil 5 tur ulaşmadı, 14/15 kutu kapısı eski sürümde kaldı. cron · servis · sunucu içeren
+#    işte "dosya yerinde, birim sınavı yeşil" kanıt DEĞİLDİR; kanıt İLK GERÇEK ATEŞLEMEDİR: bir log satırı + saati +
+#    nereden okunduğu. Bu alt komut o kaydı ARAÇ eliyle toplar: log komutunu kendisi koşar (stdin kapalı), saat
+#    damgalı satırları sayar, ilkini kayda yazar. Saat damgasız satır ateşleme sayılmaz ("servis dosyası var" bir
+#    ateşleme değildir). Kaynağa ulaşılamadıysa (komut rc≠0) ya da ateşleme yoksa renk SARI, rc=3 — kırmızı değil
+#    (kusur ölçülmedi), yeşil hiç değil. Birleştirme kapısı sarı canlıyı geçirmez; cron/servis/sunucu kartı yeşil
+#    canlı kayıt olmadan geçmez (birlestirme-kapisi.sh 2b).
+SAAT_RE = re.compile(
+    r"\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}(?::\d{2}(?:[.,]\d+)?)?(?:Z|[+-]\d{2}:?\d{2})?"      # ISO 8601 · journalctl -o short-iso
+    r"|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|Oca|Şub|Nis|Haz|Tem|Ağu|Eyl|Eki|Kas|Ara)\s+\d{1,2}\s+\d{2}:\d{2}:\d{2}"  # syslog · journalctl varsayılan
+    r"|\d{1,2}[./]\d{1,2}[./]\d{4}[ T,]+\d{1,2}:\d{2}(?::\d{2})?"                            # 17.10.2026 07:02:11
+    r"|\d{2}/[A-Z][a-z]{2}/\d{4}:\d{2}:\d{2}:\d{2}"                                          # apache/nginx erişim günlüğü
+)
+
+
+def cmd_canli(a):
+    if not a.komut:
+        hata("log komutu gerekiyor: -- <komut...> (journalctl · grep /var/log · ssh <sunucu> tail …)")
+    if not (a.kaynak or "").strip():
+        hata("--kaynak gerekiyor: kaydın NEREDEN okunduğu (kutu/sunucu · log yeri) — kaynaksız ateşleme kaydı kanıt değildir")
+    try:
+        desen = re.compile(a.desen) if a.desen else None
+    except re.error as e:
+        hata(f"--desen geçersiz: {e}")
+    if a.en_az < 1:
+        hata("--en-az en az 1 olmalı (0 ateşleme kanıt değildir)")
+    depo = depo_kok(a.depo); dz = kanit_dizin(depo, a.is_adi); os.makedirs(dz, exist_ok=True)
+    ad = f"canli-{a.etiket}.txt"; yol = os.path.join(dz, ad)
+    t0 = datetime.datetime.now()
+    # stdin KAPALI: arka planda / cron'dan çağrılınca açık bir socket'te asılı kalmasın (denetçi 68 dk vakası, 0.6.3)
+    try:
+        p = subprocess.run(a.komut, capture_output=True, text=True, errors="replace", stdin=subprocess.DEVNULL)
+    except OSError as e:
+        # komut bu kutuda yok (ör. journalctl konteynerde) → kaynağa ulaşılamadı = SARI; traceback kanıt değildir
+        p = subprocess.CompletedProcess(a.komut, 127, "", f"komut çalıştırılamadı: {e}\n")
+    sure = (datetime.datetime.now() - t0).total_seconds()
+    ates = []
+    for satir in p.stdout.splitlines():
+        m = SAAT_RE.search(satir)
+        if not SAAT_RE.search(satir): continue
+        if desen and not desen.search(satir): continue
+        ates.append((satir, m.group(0) if m else ""))
+    with open(yol, "w", encoding="utf-8") as f:
+        f.write(f"$ {' '.join(a.komut)}\n# kaynak={a.kaynak.strip()} desen={a.desen or '-'} en_az={a.en_az} "
+                f"atesleme={len(ates)} rc={p.returncode} sure={sure:.1f}s zaman={simdi()}\n--- stdout ---\n{p.stdout}--- stderr ---\n{p.stderr}")
+    ilk = {"satir": ates[0][0].strip()[:500], "saat": ates[0][1]} if ates else None
+    notu = None
+    if p.returncode != 0:
+        notu = f"log kaynağına ulaşılamadı (rc={p.returncode}) — ateşleme ölçülemedi"
+    elif len(ates) < a.en_az:
+        notu = (f"ateşleme kaydı {'YOK' if not ates else f'{len(ates)} < {a.en_az}'} — yazılmış ≠ çalışıyor; "
+                f"saat damgalı log satırı bekleniyordu" + (f" (desen: {a.desen})" if a.desen else ""))
+    renk = "sari" if (p.returncode != 0 or len(ates) < a.en_az) else "yesil"
+    kayit = {"tur": "canli", "etiket": a.etiket, "asama": "canli", "dosya": ad, "sha256": sha_dosya(yol),
+             "komut": a.komut, "rc": p.returncode, "renk": renk, "kaynak": a.kaynak.strip(), "desen": a.desen or None,
+             "en_az": a.en_az, "atesleme_sayisi": len(ates), "ilk_atesleme": ilk, "zaman": simdi(), "sure_sn": round(sure, 1)}
+    if notu: kayit["not"] = notu
+    kayit_ekle(depo, a.is_adi, kayit)
+    if renk == "yesil":
+        print(f"✓ canlı kayıt: {ad} · {len(ates)} ateşleme · ilk: {ilk['saat']} · kaynak: {a.kaynak.strip()}")
+    else:
+        print(f"◻ SARI: {notu} — bu yeşil DEĞİLDİR; birleştirme kapısı bu kanıtla geçmez ({ad})")
+    if p.stderr: print(p.stderr, end="", file=sys.stderr)
+    sys.exit(0 if renk == "yesil" else 3)
+
+
 # ── dogrula ──────────────────────────────────────────────────────────────────────
 def cmd_dogrula(a):
     depo = depo_kok(a.depo); dz = kanit_dizin(depo, a.is_adi)
@@ -282,6 +354,10 @@ def cmd_dogrula(a):
                 print(f"✗ dosya yok: {k['dosya']}"); rc = 1
             elif sha_dosya(y) != k["sha256"]:
                 print(f"✗ sha TUTMUYOR: {k['dosya']}"); rc = 1
+    canli = [k for k in m.get("kayitlar", []) if k.get("tur") == "canli"]
+    if canli:
+        cy = sum(1 for k in canli if k.get("renk") == "yesil"); cs = len(canli) - cy
+        print(f"· canlı kayıt: {cy} yeşil (ateşleme var) · {cs} sarı (ateşleme yok — kapı geçirmez)")
     n = len(m.get("kayitlar", []))
     if rc == 0:
         print(f"✓ manifest sağlam: {n} kayıt, imza ve sha'lar tutuyor" + (f" · ⚠ {sari} SARI kayıt (ölçülemedi)" if sari else ""))
@@ -310,6 +386,7 @@ def main():
     o = s.add_parser("olcum"); o.add_argument("is_adi"); o.add_argument("etiket"); o.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); o.set_defaults(f=cmd_olcum)
     e = s.add_parser("ekran"); e.add_argument("is_adi"); e.add_argument("etiket"); e.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); e.add_argument("--url", required=True); e.add_argument("--urun-imi"); e.add_argument("--bekle"); e.add_argument("--genislik", type=int, default=1280); e.set_defaults(f=cmd_ekran)
     d = s.add_parser("dosya"); d.add_argument("is_adi"); d.add_argument("etiket"); d.add_argument("yol"); d.add_argument("--asama", default="tek"); d.set_defaults(f=cmd_dosya)
+    c = s.add_parser("canli"); c.add_argument("is_adi"); c.add_argument("etiket"); c.add_argument("--kaynak", required=True); c.add_argument("--desen"); c.add_argument("--en-az", dest="en_az", type=int, default=1); c.set_defaults(f=cmd_canli)
     for ad, f in (("dogrula", cmd_dogrula), ("ozet", cmd_ozet), ("liste", cmd_liste)):
         x = s.add_parser(ad); x.add_argument("is_adi"); x.set_defaults(f=f)
     # `--` sonrası KOMUTTUR: argparse'a hiç gösterilmez (REMAINDER, seçenekleri de yutuyordu).

@@ -1,0 +1,123 @@
+{
+  "is": "kanit-canli-sinifi",
+  "arac": "kanit.py/0.4.0",
+  "guncelleme": "2026-10-17T12:28:59+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kanit-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kanit-sinavi-once.txt",
+      "sha256": "7c14bd66b52689cd42aa251eeef671b492c0328e8cbd2267b1477b25a286947a",
+      "komut": [
+        "bash",
+        "/tmp/tmp.aUT0rH1dAU/kanit.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T12:28:33+03:00",
+      "sure_sn": 9.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kart-sinavi-once.txt",
+      "sha256": "b817635f9c56d4cf72566d2c8ab0422f45108dc6474c41fb01492bbf1416fea9",
+      "komut": [
+        "bash",
+        "/tmp/tmp.aUT0rH1dAU/kart.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T12:28:35+03:00",
+      "sure_sn": 1.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "birlestirme-kapisi-sinavi",
+      "asama": "once",
+      "dosya": "olcum-birlestirme-kapisi-sinavi-once.txt",
+      "sha256": "8cf3a9ff70640c63e13a7d2c0fffc7f29289840be52bbb88170cdf1d3fdd1a8d",
+      "komut": [
+        "bash",
+        "/tmp/tmp.aUT0rH1dAU/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T12:28:41+03:00",
+      "sure_sn": 6.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kanit-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kanit-sinavi-sonra.txt",
+      "sha256": "b72dcf4c81a393e5253e092f6e21ede24f6450e48b7ec29fba48e105052b52cb",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi/yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T12:28:49+03:00",
+      "sure_sn": 7.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sinavi-sonra.txt",
+      "sha256": "a0754a8e9ce3c533406687fa55edc73836725a5f7bd01582c48371f567ddac2e",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi/yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T12:28:51+03:00",
+      "sure_sn": 2.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "birlestirme-kapisi-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-birlestirme-kapisi-sinavi-sonra.txt",
+      "sha256": "2ea5aa4a07362bffc27fbbc1a21d7edee477e60f25698a40cb193147ab7c2c45",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi/yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T12:28:59+03:00",
+      "sure_sn": 7.4
+    },
+    {
+      "tur": "canli",
+      "etiket": "ornek-kacis-defteri",
+      "asama": "canli",
+      "dosya": "canli-ornek-kacis-defteri.txt",
+      "sha256": "916d68953ad620ae4f6e325d9d55ac3856259d942680822bcbbe1acb53fda3af",
+      "komut": [
+        "tail",
+        "-n",
+        "5",
+        "/config/projects/Nexus/_agents/fabrika/kacis-defteri.log"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "cloudtop-code · Nexus _agents/fabrika/kacis-defteri.log",
+      "desen": "KAPISIZ",
+      "en_az": 1,
+      "atesleme_sayisi": 5,
+      "ilk_atesleme": {
+        "satir": "2026-10-15T09:48:12Z | KAPISIZ | Sultan sohbette 'olur birlestir' (15 Eki); kart filo-havuz-toplayici daralt: 4 tur 4/E, 12 kapi, CI yesil; havuz dosyasi depo disi | FABRIKA_KAPISIZ=\"Sultan sohbette 'olur birlestir' (15 Eki); kart filo-havuz-toplayici daralt: 4 tur 4/E, 12 kapi, CI yesil; havuz dosyasi depo disi\" gh pr merge 1134 --repo sultanxgokce/Nexus --squash --delete-branch 2>&1 | tail -1; echo \"1134 rc=$?\"",
+        "saat": "2026-10-15T09:48:12Z"
+      },
+      "zaman": "2026-10-17T12:28:59+03:00",
+      "sure_sn": 0.0
+    }
+  ],
+  "imza": "ff195feaea58adbae671e1e2124774b062b8802b2981da5264beda6bd938b4a2"
+}

@@ -76,5 +76,25 @@ grep -q "veto hakkın var" <<<"$CIKTI"; g $? "Sultan'ın veto hakkı yazılı"
 [ -f "$T/depo/_agents/fabrika/gun-sonu/$(date +%F).md" ]; g $? "dosyaya yazıldı"
 bash "$KT" liste --acik 2>&1 | grep -q "kartsiz-is"; g $? "liste --acik çalışıyor"
 
+echo "════ T10 · CANLI sınıfı: cron/servis/sunucu işi kartta canlı kanıt ister (retro 17 Eki ders 1) ════"
+CIKTI="$(bash "$KT" ac is-cron --is "donus-zili cron'u her saat çalsın" --istedi SERDAR --aldi BANI --geri-alinamaz h --para h --dis-yuzey h --yetki h 2>&1)"; g $? "cron kartı açıldı"
+grep -q "CANLI kanıt zorunlu" <<<"$CIKTI"; g $? "açılışta söylüyor"
+python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-cron.json'));assert k['canli_gerekir'] is True and 'cron' in k['canli_sebep']"; g $? "canli_gerekir=true, sebep cümledeki kelime"
+python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-1.json'));assert k.get('canli_gerekir') is False and k.get('canli_sebep')==''"; g $? "'buton ekle' kartı canlı istemez"
+bash "$KT" ac is-sunucu --is "kutu kapısı sürümünü 15 sunucuda güncelle" --istedi S --aldi BANI --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-sunucu.json'));assert k['canli_gerekir'] and 'sunucu' in k['canli_sebep']"; g $? "'sunucu' kelimesi de yeter (ek: Sunucuda → sunucu)"
+bash "$KT" ac is-canli-e --is "rapor sayfası" --istedi S --aldi BANI --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli e >/dev/null 2>&1
+python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-canli-e.json'));assert k['canli_gerekir'] and k['canli_sebep']=='--canli e'"; g $? "--canli e kelime olmasa da zorunlu kılar"
+CIKTI="$(bash "$KT" ac is-canli-h --is "cron belgesini düzelt" --istedi S --aldi BANI --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h 2>&1)"
+python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-canli-h.json'));assert k['canli_gerekir'] is False and 'sahip' in k['canli_sebep'] and 'cron' in k['canli_sebep']"; g $? "--canli h kelimeye rağmen kaldırır; kararı ve kelimeyi karta yazar (gizli değil)"
+grep -q "canlı kanıt istenmedi" <<<"$CIKTI"; g $? "açılışta 'istenmedi' uyarısı basılır (bağımsız göz görsün)"
+bash "$KT" ac is-canli-x --is x --istedi S --aldi B --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli evet >/dev/null 2>&1; [ $? -eq 1 ]; g $? "--canli yalnız e|h"
+[ ! -f "$T/depo/_agents/fabrika/kartlar/is-canli-x.json" ]; g $? "geçersiz cevapla kart yazılmadı"
+bash "$K" olcum is-cron olc --asama tek -- echo 1 >/dev/null 2>&1
+CIKTI="$(bash "$KT" bitti is-cron 2>&1)"; grep -q "CANLI KANIT YOK" <<<"$CIKTI"; g $? "canlı kanıtsız bitti uyarır"
+bash "$K" canli is-cron zil --kaynak "x" -- bash -c 'echo "2026-10-17T07:02:35 çaldı"' >/dev/null 2>&1
+CIKTI="$(bash "$KT" bitti is-cron 2>&1)"; ! grep -q "CANLI KANIT YOK" <<<"$CIKTI"; g $? "yeşil canlı kayıt varken uyarı yok"
+python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-cron.json'));assert k['canli_kanit']=='var'"; g $? "karta canli_kanit=var işlendi"
+
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

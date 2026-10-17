@@ -1,0 +1,78 @@
+$ bash /tmp/tmp.aUT0rH1dAU/birlestirme-kapisi.test.sh
+# rc=1 sure=6.0s zaman=2026-10-17T12:28:41+03:00
+--- stdout ---
+════ T1 · hiçbir şey yok → engeller ════
+  ✓ kart+kanıt+denetim yokken rc=1
+════ T2 · kart+kanıt var ama DENETİM yok → engeller ════
+  ✓ bağımsız göz koşmamışken rc=1
+  ✓ sebebi yazılı
+  ✓ kaçış satırı bozulmadan basılıyor
+  ✓ yönlendirme hatası yok
+════ T3 · puan 4 → engeller · 5 ama H → engeller ════
+  ✓ 4/5 → rc=1
+  ✓ 5 ama 'doğru şey' H → rc=1
+════ T4 · 5+E → GEÇER ════
+  ✓ rc=0
+  ✓ GEÇTİ yazıyor
+  ✓ son turu okudu (1 ve 2 değil)
+════ T5 · yazan = denetçi → engeller (K1) ════
+  ✓ aynı model → rc=1
+  ✓ K1 gerekçesi yazılı
+════ T5b · yedek göz + farklı model → bağımsız SAYILIR (Sultan Y0006) ════
+  ✓ farklı model → yedek göz bağımsız, rc=0
+  ✓ sebebi yazılı
+════ T5c · SAHTE yedek kaydı (yedek_model = yazan_model) → HÂLÂ ENGELLER (fail-closed) ════
+  ✓ yedek_model = yazan_model → sahte-yedek, rc=1 (fail-closed)
+  ✓ K1 gerekçesi yazılı
+════ T5d · yedek alanı dolu ama model bilgisi YOK → HÂLÂ ENGELLER (fail-closed) ════
+  ✓ model alanları boş → ölçülemez, rc=1 (fail-closed)
+════ T5e · 🔧 yedek gerekçesi '|' İÇERİYOR → alan kaymıyor (bağımsız göz #339) ════
+  ✓ '|' içeren yedek metni + AYNI model → hâlâ reddeder (alan kaymadı)
+  ✓ K1 gerekçesi yazılı (yanlışlıkla bağımsız sayılmadı)
+  ✓ '|' içeren yedek metni + FARKLI model → doğru okunur, bağımsız sayılır
+════ T5g · 🔧 yedek gerekçesi YENİ SATIR İÇERİYOR → alan kaymıyor (bağımsız göz #339 tur 2) ════
+  ✓ yeni satır içeren yedek metni + AYNI model → hâlâ reddeder (alan kaymadı)
+  ✓ K1 gerekçesi yazılı (yanlışlıkla bağımsız sayılmadı)
+  ✓ yeni satır içeren yedek metni + FARKLI model → doğru okunur, bağımsız sayılır
+════ T5h · 🔧 karar denetçi METNİNİN BİÇİMİNE bağlı değil (bağımsız göz #339 tur 3, CİDDİ) ════
+  ✓ denetci metni yazanı İÇERMİYOR ama yedek AYNI modelle → hâlâ reddeder
+  ✓ K1 gerekçesi yazılı
+════ T6 · kanıt manifesti elle boyanırsa → engeller ════
+  ✓ önce temiz: rc=0
+  ✓ boyanmış manifest → rc=1
+  ✓ sebebi yazılı
+════ T7 · kart yoksa engeller (0. adım atlanamaz) ════
+  ✓ kartsız → rc=1
+  ✓ sebebi yazılı
+════ T8 · sınıf işi GEÇER ama Sultan uyarısı basar (A06) ════
+  ✓ 5+E ile geçer
+  ✓ Sultan kararı olduğunu söylüyor, onay üretmiyor
+════ T9 · MUTASYON: kapıyı bozunca sınav kırmızı veriyor mu ════
+  ✓ mutant (red kaldırıldı) izin veriyor → T1 bu mutantta düşerdi
+  ✓ mutant sağlam işe de izin veriyor (ölçer sahte-kırmızı üretmiyor)
+════ T10 · kanıt aracı yoksa YEŞİL DEMİYOR (rc=3) ════
+  ✓ kanit.py yokken rc=3 (ölçülemedi, yeşil değil)
+  ✓ sebebi yazılı
+  ✓ gerçek kapı aynı işte hâlâ rc=0 (mutasyon kaynağı bozdu, düzeneği değil)
+════ T11 · CANLI sınıfı: cron/servis/sunucu kartı canlı kanıt olmadan GEÇMEZ; sarı canlı hiç geçmez ════
+  ✗ T11a 5+E + yeşil ölçüm ama canlı kanıt YOK → rc=1
+  ✗ T11b sebebi ve yolu yazılı
+  ✗ T11c canlı SARI → rc=1 (sarı yeşil değildir)
+  ✗ T11d sarı sebebi yazılı
+  ✓ T11e canlı YEŞİL → rc=0
+  ✗ T11f kapı ilk ateşlemeyi saatiyle söylüyor
+  ✓ T11g canlısız kart (buton) canlı kaydı olmadan geçer (kapsam daralmadı)
+  ✗ T11h ölçülmüş ama SARI canlı → canlısız kartta da rc=1
+  ✗ T11i alanı olmayan ESKİ servis/sunucu kartı: cümleden türetilir, canlı yok → rc=1
+  ✗ T11j kapı canlı şartının nereden geldiğini söylüyor
+  ✓ T11k eski kart + yeşil canlı → geçer
+════ T12 · MUTASYON: canlı kontrolleri kaldırılınca kapı açılır (kapı gerçek, süs değil) ════
+  ✗ T12a mutant 3 üretildi (kart canlı şartı kaldırıldı)
+  ✓ T12b mutant 3: cron kartı canlı kayıtsız GEÇİYOR → T11a/T11i bu mutantta düşerdi
+  ✗ T12c gerçek kapı aynı işte hâlâ rc=1
+  ✗ T12d mutant 4 üretildi (sarı canlı engeli kaldırıldı)
+  ✓ T12e mutant 4: sarı canlı GEÇİYOR → T11h bu mutantta düşerdi
+  ✗ T12f gerçek kapı sarıyı hâlâ tutuyor
+
+── SONUÇ: 42 geçti · 12 kaldı ──
+--- stderr ---

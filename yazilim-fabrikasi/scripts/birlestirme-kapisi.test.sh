@@ -148,5 +148,50 @@ CIKTI="$(bash "$M2" is-a 2>&1)"; RC=$?
 grep -q "ÖLÇÜLEMEDİ" <<<"$CIKTI"; g $? "sebebi yazılı"
 bash "$G" is-a --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "gerçek kapı aynı işte hâlâ rc=0 (mutasyon kaynağı bozdu, düzeneği değil)"
 
+echo "════ T11 · CANLI sınıfı: cron/servis/sunucu kartı canlı kanıt olmadan GEÇMEZ; sarı canlı hiç geçmez ════"
+# Retro 17 Eki ders 1: "git'te düzeltildi ≠ canlıda çalışıyor" — 119 işte en büyük bulgu kümesi. Kart cron/servis/sunucu
+# içeriyorsa kapı yeşil ölçüm + 5/E ile YETİNMEZ: gerçek ateşleme kaydı (kanit.sh canli, yeşil) ister. Sarı canlı = ölçülmüş
+# ama ateşleme yok → kart ne derse desin geçmez (sarı yeşil değildir).
+bash "$KT" ac is-f --is "muhakkik-zil cron'u her saat çalsın" --istedi S --aldi M --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+bash "$K" olcum is-f olc --asama tek -- echo 1 >/dev/null 2>&1; den is-f 1 5 E
+CIKTI="$(bash "$G" is-f 2>&1)"; RC=$?
+[ "$RC" -eq 1 ]; g $? "T11a 5+E + yeşil ölçüm ama canlı kanıt YOK → rc=1"
+grep -q "canlı kanıt YOK" <<<"$CIKTI" && grep -q "kanit.sh canli" <<<"$CIKTI"; g $? "T11b sebebi ve yolu yazılı"
+bash "$K" canli is-f zil --kaynak "x" -- bash -c 'echo "henüz log yok"' >/dev/null 2>&1
+CIKTI="$(bash "$G" is-f 2>&1)"; RC=$?
+[ "$RC" -eq 1 ]; g $? "T11c canlı SARI → rc=1 (sarı yeşil değildir)"
+grep -q "canlı kanıt SARI" <<<"$CIKTI"; g $? "T11d sarı sebebi yazılı"
+bash "$K" canli is-f zil --kaynak "cloudtop-code · journalctl" -- bash -c 'echo "2026-10-17T07:02:35 muhakkik-zil çaldı"' >/dev/null 2>&1
+CIKTI="$(bash "$G" is-f 2>&1)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "T11e canlı YEŞİL → rc=0"
+grep -q "canlı: 1 ateşleme" <<<"$CIKTI" && grep -q "07:02:35" <<<"$CIKTI"; g $? "T11f kapı ilk ateşlemeyi saatiyle söylüyor"
+kart is-g; bash "$K" olcum is-g olc --asama tek -- echo 1 >/dev/null 2>&1; den is-g 1 5 E
+bash "$G" is-g --sessiz >/dev/null 2>&1; g $? "T11g canlısız kart (buton) canlı kaydı olmadan geçer (kapsam daralmadı)"
+bash "$K" canli is-g c --kaynak x -- true >/dev/null 2>&1
+bash "$G" is-g --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T11h ölçülmüş ama SARI canlı → canlısız kartta da rc=1"
+# eski kart (canli_gerekir alanı yok) → alan yokken kelimeden türetilir: eski cron kartı da canlı ister (kapsam dışı kalmaz)
+bash "$KT" ac is-h --is "kutu kapısı servisini 15 sunucuda yenile" --istedi S --aldi M --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+python3 - <<PY
+import json;p='$T/_agents/fabrika/kartlar/is-h.json';k=json.load(open(p));k.pop('canli_gerekir',None);k.pop('canli_sebep',None);json.dump(k,open(p,'w'))
+PY
+bash "$K" olcum is-h olc --asama tek -- echo 1 >/dev/null 2>&1; den is-h 1 5 E
+CIKTI="$(bash "$G" is-h 2>&1)"; RC=$?
+[ "$RC" -eq 1 ]; g $? "T11i alanı olmayan ESKİ servis/sunucu kartı: cümleden türetilir, canlı yok → rc=1"
+grep -q "cümlede" <<<"$CIKTI"; g $? "T11j kapı canlı şartının nereden geldiğini söylüyor"
+bash "$K" canli is-h kapi --kaynak "x" -- bash -c 'echo "2026-10-17 07:02:35 kapi 2.14.0 ayağa kalktı"' >/dev/null 2>&1
+bash "$G" is-h --sessiz >/dev/null 2>&1; g $? "T11k eski kart + yeşil canlı → geçer"
+
+echo "════ T12 · MUTASYON: canlı kontrolleri kaldırılınca kapı açılır (kapı gerçek, süs değil) ════"
+M3="$PKG/mutant3.sh"; sed 's/^\s*\[ "\$cg" = "E" \] && \[ "\$cy" -eq 0 \]/false/' "$G" > "$M3"; chmod +x "$M3"
+grep -q '^false' "$M3"; g $? "T12a mutant 3 üretildi (kart canlı şartı kaldırıldı)"
+bash "$KT" ac is-i --is "boşta bekçisi cron'u" --istedi S --aldi M --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+bash "$K" olcum is-i olc --asama tek -- echo 1 >/dev/null 2>&1; den is-i 1 5 E
+bash "$M3" is-i --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T12b mutant 3: cron kartı canlı kayıtsız GEÇİYOR → T11a/T11i bu mutantta düşerdi"
+bash "$G" is-i --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T12c gerçek kapı aynı işte hâlâ rc=1"
+M4="$PKG/mutant4.sh"; sed 's/^\s*\[ "\$cs" -gt 0 \]/false/' "$G" > "$M4"; chmod +x "$M4"
+grep -q '^false' "$M4"; g $? "T12d mutant 4 üretildi (sarı canlı engeli kaldırıldı)"
+bash "$M4" is-g --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T12e mutant 4: sarı canlı GEÇİYOR → T11h bu mutantta düşerdi"
+bash "$G" is-g --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T12f gerçek kapı sarıyı hâlâ tutuyor"
+
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

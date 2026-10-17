@@ -218,6 +218,52 @@ if cmp -s "$MI" "$HERE/kanit.py"; then g 1 "T17 mutant FARKSIZ (çapa bayat)"; e
   [ $? -eq 1 ]; g $? "T17 MUTASYON: uyumluluk ölünce eski manifest YİNE kırmızı (kapı gerçek)"
 fi
 
+echo "════ T18 · CANLI sınıfı: gerçek ateşleme kaydı (saat damgalı log satırı + kaynak) yoksa SARI ════"
+# Niçin (retro 17 Eki): 10-16 Eki 119 işte en büyük bulgu kümesi "git'te düzeltildi ≠ canlıda çalışıyor"
+# (muhakkik-zil 5 tur ulaşmadı · 14/15 kutu kapısı eski sürüm). cron/servis/sunucu işinde kanıt, dosyanın
+# varlığı değil, İLK GERÇEK ATEŞLEME kaydıdır: log satırı + saat + kaynak. Saat damgasız satır ateşleme değildir.
+CZ="$T/_agents/fabrika/kanit/is-canli"
+_c() { python3 -c "import json,sys;m=json.load(open('$CZ/KANIT.json'));k=[x for x in m['kayitlar'] if x['etiket']==sys.argv[1]][-1];print(json.dumps(k.get(sys.argv[2]),ensure_ascii=False))" "$1" "$2"; }
+bash "$K" canli is-canli zil --kaynak "cloudtop-code · journalctl -u muhakkik-zil" -- bash -c 'echo "2026-10-17T07:02:35+03:00 muhakkik-zil: çaldı"; echo "2026-10-17T08:02:35+03:00 muhakkik-zil: çaldı"' >/dev/null 2>&1; g $? "T18a saat damgalı log → rc=0"
+[ "$(_c zil renk)" = '"yesil"' ] && [ "$(_c zil tur)" = '"canli"' ]; g $? "T18b manifestte tur=canli renk=yesil"
+[ "$(_c zil atesleme_sayisi)" = "2" ]; g $? "T18c ateşleme sayısı 2"
+python3 -c "import json;m=json.load(open('$CZ/KANIT.json'));k=[x for x in m['kayitlar'] if x['etiket']=='zil'][-1];a=k['ilk_atesleme'];assert a['saat'].startswith('2026-10-17T07:02:35') and 'çaldı' in a['satir'] and k['kaynak'].startswith('cloudtop-code')"; g $? "T18d ilk ateşleme: satır + saat + kaynak kayıtta"
+[ -f "$CZ/canli-zil.txt" ] && grep -q "08:02:35" "$CZ/canli-zil.txt"; g $? "T18e log çıktısı kırpılmadan dosyada"
+bash "$K" dogrula is-canli >/dev/null 2>&1; g $? "T18f imza ve sha sağlam"
+bash "$K" canli is-canli saatsiz --kaynak "x" -- bash -c 'echo "servis dosyası var"; echo "cron satırı var"' >/dev/null 2>&1; [ $? -eq 3 ]; g $? "T18g saat damgasız satırlar ateşleme sayılmaz → rc=3 (yazılmış ≠ çalışıyor)"
+[ "$(_c saatsiz renk)" = '"sari"' ] && [ "$(_c saatsiz atesleme_sayisi)" = "0" ]; g $? "T18h renk=sari, ateşleme 0"
+bash "$K" canli is-canli bos --kaynak "x" -- true >/dev/null 2>&1; [ $? -eq 3 ]; g $? "T18i boş log → rc=3"
+bash "$K" canli is-canli kopuk --kaynak "x" -- bash -c 'echo "2026-10-17T07:00:00 x"; exit 255' >/dev/null 2>&1; [ $? -eq 3 ]; g $? "T18j kaynağa ulaşılamadı (komut rc≠0) → rc=3, saatli satır olsa da"
+grep -q "ulaşılamadı" <<<"$(_c kopuk not)"; g $? "T18k sebebi kayıtta"
+bash "$K" canli is-canli desen1 --kaynak "x" --desen 'donus-zili' -- bash -c 'echo "Oct 17 07:02:35 cloudtop CRON[1]: (abc) CMD (bash baska.sh)"' >/dev/null 2>&1; [ $? -eq 3 ]; g $? "T18l --desen tutmayan saatli satır ateşleme değil → rc=3"
+bash "$K" canli is-canli desen2 --kaynak "x" --desen 'donus-zili' -- bash -c 'echo "Oct 17 07:02:35 cloudtop CRON[1]: (abc) CMD (bash donus-zili.sh)"' >/dev/null 2>&1; g $? "T18m syslog biçimi + desen tutuyor → rc=0"
+[ "$(_c desen2 renk)" = '"yesil"' ] && [ "$(_c desen2 desen)" = '"donus-zili"' ]; g $? "T18n renk=yesil, desen kayıtta"
+bash "$K" canli is-canli enaz --kaynak "x" --en-az 2 -- bash -c 'echo "17.10.2026 07:02:11 tek"' >/dev/null 2>&1; [ $? -eq 3 ]; g $? "T18o --en-az 2 tek ateşlemeyle rc=3"
+bash "$K" canli is-canli kaynaksiz -- bash -c 'echo "2026-10-17 07:02 x"' >/dev/null 2>&1; [ $? -ne 0 ]; g $? "T18p --kaynak verilmeden kayıt yazılmaz"
+[ ! -f "$CZ/canli-kaynaksiz.txt" ]; g $? "T18q kaynaksız dosya oluşmadı"
+bash "$K" canli is-canli stdin --kaynak "x" -- bash -c 'echo "2026-10-17 07:02 stdin-kapali"; read -r a && echo "2026-10-17 07:03 okudu $a"; true' >/dev/null 2>&1 <<<"girdi"; g $? "T18r komut stdin'den beslenmez (arka planda asılı kalmaz)"
+[ "$(_c stdin atesleme_sayisi)" = "1" ]; g $? "T18s stdin kapalı: ikinci (okunan) satır oluşmadı"
+bash "$K" canli is-canli yok-komut --kaynak "x" -- /yok/journalctl -u x >/dev/null 2>&1; [ $? -eq 3 ]; g $? "T18v komut bu kutuda yoksa traceback değil SARI rc=3 (kaynağa ulaşılamadı)"
+[ "$(_c yok-komut rc)" = "127" ] && grep -q "ulaşılamadı" <<<"$(_c yok-komut not)"; g $? "T18w rc=127 ve sebep kayıtta"
+CIKTI="$(bash "$K" dogrula is-canli 2>&1)"; grep -q "canlı" <<<"$CIKTI"; g $? "T18t dogrula özeti canlı kayıtlarını söylüyor"
+CIKTI="$(bash "$K" ozet is-canli 2>&1)"; grep -q "canli" <<<"$CIKTI"; g $? "T18u ozet tablosunda tür canli görünüyor"
+
+echo "════ T19 · MUTASYON: saat damgası şartı kaldırılınca saatsiz satır yeşile döner (kapı gerçek) ════"
+MC="$T/pkg-canli"; mkdir -p "$MC"; cp "$HERE/kanit.sh" "$MC/"
+python3 - "$HERE/kanit.py" "$MC/kanit.py" <<'PY'
+import sys; s=open(sys.argv[1],encoding='utf-8').read(); o=s
+s=s.replace("if not SAAT_RE.search(satir): continue","if False: continue")
+assert s!=o, "mutasyon deseni tutmadı"; open(sys.argv[2],'w',encoding='utf-8').write(s)
+PY
+KANIT_DEPO="$T" python3 "$MC/kanit.py" canli is-canli-m saatsiz --kaynak x -- bash -c 'echo "servis dosyası var"' >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T19a mutant saatsiz satırı ateşleme sayıyor → T18g bu mutantta düşerdi"
+bash "$K" canli is-canli-m saatsiz2 --kaynak x -- bash -c 'echo "servis dosyası var"' >/dev/null 2>&1; [ $? -eq 3 ]; g $? "T19b gerçek araç aynı girdiyle hâlâ sarı (mutasyon kaynağı bozdu, düzeneği değil)"
+python3 - "$HERE/kanit.py" "$MC/kanit.py" <<'PY'
+import sys; s=open(sys.argv[1],encoding='utf-8').read(); o=s
+s=s.replace('renk = "sari" if (p.returncode != 0','renk = "sari" if (False')
+assert s!=o, "mutasyon deseni tutmadı"; open(sys.argv[2],'w',encoding='utf-8').write(s)
+PY
+KANIT_DEPO="$T" python3 "$MC/kanit.py" canli is-canli-m kopuk --kaynak x -- bash -c 'echo "2026-10-17T07:00:00 x"; exit 255' >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T19c mutant (kopuk kaynak sarı değil) → T18j bu mutantta düşerdi"
+
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]

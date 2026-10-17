@@ -9,6 +9,7 @@
 # ÜÇ ÖLÇÜM
 #   1) KART     — işin kartı var mı (0. adım atlanmamış mı)
 #   2) KANIT    — `kanit.py dogrula` rc=0: manifest ARAÇ imzalı, dosya sha'ları tutuyor
+#   2b) CANLI   — cron/servis/sunucu kartı: yeşil `canli` kaydı (gerçek ateşleme) şart; sarı canlı her kartta engel (17 Eki 2026)
 #   3) PUAN     — son DENETIM-<tur>.json: kod_puani=5 VE dogru_sey=E VE denetçi ≠ yazan
 #
 # 🔴 NE ÖLÇMEZ (dürüstlük): kanıtın DOĞRU şeyi ölçtüğünü ölçmez — onu bağımsız göz yapar.
@@ -75,6 +76,32 @@ if [ -f "$HERE/kanit.py" ]; then
 else
   _h "kanit.py bulunamadı — ÖLÇÜLEMEDİ"; olcemedi=$((olcemedi+1))
 fi
+
+# 2b · CANLI — "git'te düzeltildi ≠ canlıda çalışıyor" (retro 17 Eki 2026 · ders 1): cron/servis/sunucu kartı yeşil ölçüm
+#    + 5/E ile GEÇMEZ; gerçek ateşleme kaydı (kanit.sh canli, yeşil) ister. Sarı canlı = ölçülmüş ama ateşleme yok → kart ne
+#    derse desin geçmez (sarı yeşil değildir). Kartın canlı şartını kart.sh söyler (eski kartta cümleden türetir).
+cg="H"; csebep=""
+if [ -f "$KART" ] && [ -f "$HERE/kart.sh" ]; then
+  IFS=$'\t' read -r cg csebep <<<"$(KANIT_DEPO="$DEPO" bash "$HERE/kart.sh" canli-gerekir "$IS" 2>/dev/null)"; cg="${cg:-H}"; csebep="${csebep:-}"
+fi
+cy=0; cs=0; cilk=""
+if [ -f "$DZ/KANIT.json" ]; then
+  eval "$(python3 - "$DZ/KANIT.json" <<'PY'
+import json,sys,shlex
+try: m=json.load(open(sys.argv[1],encoding="utf-8"))
+except Exception: m={}
+c=[k for k in m.get("kayitlar",[]) if k.get("tur")=="canli"]
+y=[k for k in c if k.get("renk")=="yesil"]; s=[k for k in c if k.get("renk")=="sari"]
+ilk=(y[0].get("ilk_atesleme") or {}) if y else {}
+print("cy="+str(len(y))); print("cs="+str(len(s)))
+print("cilk="+shlex.quote(f"{ilk.get('saat','')} · {str(ilk.get('satir',''))[:120]} · kaynak: {y[0].get('kaynak','')}" if y else ""))
+PY
+)"
+fi
+cs_engel=0
+[ "$cs" -gt 0 ] && { _h "canlı kanıt SARI ($cs kayıt) — ölçülmüş ama ateşleme kaydı yok; sarı yeşil değildir"; eksik=$((eksik+1)); cs_engel=1; }
+[ "$cg" = "E" ] && [ "$cy" -eq 0 ] && [ "$cs_engel" -eq 0 ] && { _h "canlı kanıt YOK — cron/servis/sunucu işi ($csebep) gerçek ateşleme kaydı ister: kanit.sh canli <iş> <etiket> --kaynak … -- <log komutu>"; eksik=$((eksik+1)); }
+[ "$cy" -gt 0 ] && _y "  ✓ canlı: $cy ateşleme kaydı · ilk: $cilk"
 
 # 3 · PUAN
 SON="$(ls "$DZ"/DENETIM-[0-9]*.json 2>/dev/null | sort -V | tail -1)"
