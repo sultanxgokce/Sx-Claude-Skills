@@ -1,7 +1,7 @@
 {
   "is": "bugun-api",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-17T15:11:13+03:00",
+  "guncelleme": "2026-10-17T15:19:01+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -23,30 +23,30 @@
       "etiket": "bugun-sinavi",
       "asama": "sonra",
       "dosya": "olcum-bugun-sinavi-sonra.txt",
-      "sha256": "f465f4c7bed33989d3c9f34e8cedfb0f24dd5c64c203eccd60048e5616508465",
+      "sha256": "c07530ba4b3aeffb5062a97261827e957361e462e7e172fa721f86e87765078f",
       "komut": [
         "node",
         "terminal-onar/kapi/bugun.test.mjs"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-17T15:09:15+03:00",
-      "sure_sn": 0.0
+      "zaman": "2026-10-17T15:19:01+03:00",
+      "sure_sn": 0.1
     },
     {
       "tur": "olcum",
       "etiket": "sunucu-sinavi",
       "asama": "sonra",
       "dosya": "olcum-sunucu-sinavi-sonra.txt",
-      "sha256": "f4e29973db69b848dafd954c9317300fbf00730b91e3d28fdc3eeaad99976c6e",
+      "sha256": "7ccd01d08a293b5ef74698bdae7feaf54352ef5db75e281b265fe4b174010cdd",
       "komut": [
         "node",
         "terminal-onar/kapi/sunucu.test.mjs"
       ],
-      "rc": 1,
-      "renk": "kirmizi",
-      "zaman": "2026-10-17T15:11:13+03:00",
-      "sure_sn": 0.2
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:19:01+03:00",
+      "sure_sn": 6.5
     },
     {
       "tur": "olcum",
@@ -69,16 +69,16 @@
       "etiket": "sunucu-sinavi",
       "asama": "once",
       "dosya": "olcum-sunucu-sinavi-once.txt",
-      "sha256": "176fa0965044c35f006b5c40e263a6eabee134dedf741535b54d7305b73907c9",
+      "sha256": "a6c955d3cbb17c0811ae329f3c5cb915352076154f97b2d0869cf96a41a6d8b1",
       "komut": [
         "node",
-        "/tmp/tmp.yai3VlZSky/sunucu.test.mjs"
+        "/tmp/tmp.pQPuVDbjDo/sunucu.test.mjs"
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-10-17T15:11:13+03:00",
-      "sure_sn": 0.4
+      "zaman": "2026-10-17T15:18:53+03:00",
+      "sure_sn": 6.4
     }
   ],
-  "imza": "ae854d3d3ba101289d3225d17b82098985a330d4219cea4e8fc567975c2d9565"
+  "imza": "17e443d7b7e611b117c47ee8029171849fed8fb670fcc6215de5e4ecffbf21f2"
 }
