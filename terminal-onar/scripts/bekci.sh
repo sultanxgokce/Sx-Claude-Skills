@@ -9,5 +9,12 @@ date +%s > "$DURUM_DIZ/bekci.son" 2>/dev/null
 [ -f "$DURUM_DIZ/duraklat" ] && exit 0
 # compact kuyruğu doluysa her dakika bir tur: meşgulken kuyruğa alınan koltuk boşalınca /compact gider (kutu-içi zorunlu compact, 2.9.0)
 [ -s "${TO_COMPACT_KUYRUK:-$DURUM_DIZ/compact-bekleyen.jsonl}" ] && bash "$BETIK_DIZ/compact.sh" --bekle --uygula >> "$GUNLUK" 2>&1 || true
+# Dava Rafı günlük turu (Parça B7): günde BİR kez, günün ilk bekçi koşusunda — N gün dokunulmayan açık davayı dondurur.
+# Damga turdan ÖNCE yazılır: tur düşse de aynı gün tekrar denenmez (dakikada bir tekrar etmek iz kirletir). Kuralı olmayan kutuda no-op.
+BUGUN="$(date +%F)"
+if [ "$(cat "$DURUM_DIZ/dava-bekci.gun" 2>/dev/null)" != "$BUGUN" ]; then
+  echo "$BUGUN" > "$DURUM_DIZ/dava-bekci.gun" 2>/dev/null
+  TO_PROJE="$PROJE" TO_ANA_TMUX="$ANA_TMUX" TO_DURUM_DIZ="$DURUM_DIZ" node "$BETIK_DIZ/../kapi/dava-bekci.mjs" >> "$GUNLUK" 2>&1 || true
+fi
 bash "$BETIK_DIZ/durum.sh" >/dev/null 2>&1 && exit 0
 exec bash "$BETIK_DIZ/kademe.sh" --kaynak bekci

@@ -14,11 +14,48 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
+import { davalarYolu } from './kadro.mjs';
 
 export const YAZILAN = ['emekli', 'dondurulmus'];
 const ONCEKI_YOK = 'yok';
 const DEGER_DESEN = /^[A-Za-z0-9_çğıöşüÇĞİÖŞÜ-]{1,40}$/u;   // geri konan önceki değer de bu kümeden olmalı (satır enjeksiyonu yok)
 const URETILEN_BAS = 'ekipc:uretilen:basla', URETILEN_SON = 'ekipc:uretilen:bitti';
+
+// Süreçler arası kayıt kilidi (Parça B7): kapı (süreç içi kuyruk) ile günlük bekçi turu AYNI kayda yazar → ikisi de bu kilidi alır.
+// O_EXCL dosyası; içinde "<pid> <jeton>". 🔴 Sahiplik (bağımsız göz tur 1):
+//   · Kilit yalnız SAHİBİ ÖLMÜŞSE bayattır (pid yaşıyorsa ne kadar eski olursa olsun beklenir — kapı açıcıyı 120 sn bekleyebilir;
+//     yaşa bakan eski kural tam o anda kilidi bekçiye kaptırıyordu). İçeriği okunamayan (yazılırken ölmüş) kilit için yaş eşiği.
+//   · Bayat kilit doğrudan SİLİNMEZ: önce eşsiz ada taşınır, taşınanın içeriği bayat sanılanla aynı mı bakılır. Aynı değilse (araya
+//     başkası taze kilit koymuş) geri konur (link: yalnız yer boşsa) — iki süreç aynı bayatı görse de biri ötekinin kilidini silemez.
+//   · Bırakma yalnız içerik hâlâ kendi jetonuysa siler.
+// 30 sn'de alınamazsa KadroHata 503 (hiçbir şey yazılmaz).
+const yasiyor = (pid) => { try { process.kill(pid, 0); return true; } catch (e) { return e.code === 'EPERM'; } };
+export async function dosyaKilit(dizin, { bekleMs = 30000, bayatMs = 600000 } = {}) {
+  const y = path.join(dizin, 'kadro.kilit'); const bas = Date.now();
+  const ben = process.pid + ' ' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+  const oku = (f) => { try { return fs.readFileSync(f, 'utf8'); } catch { return null; } };
+  for (;;) {
+    try { const fd = fs.openSync(y, 'wx'); fs.writeSync(fd, ben); fs.closeSync(fd); return () => { if (oku(y) === ben) { try { fs.unlinkSync(y); } catch {} } }; }
+    catch (e) { if (e.code !== 'EEXIST') throw e; }
+    const c = oku(y);
+    if (c !== null) {
+      const pid = +String(c).split(' ')[0];
+      let yas = 0; try { yas = Date.now() - fs.statSync(y).mtimeMs; } catch { continue; }
+      const bayat = Number.isInteger(pid) && pid > 0 ? !yasiyor(pid) : yas > bayatMs;
+      if (bayat) {
+        // Sınav dikişi: bayatı görmekle devralmak arasındaki pencereyi genişletir (yarış sınavı DV32c belirli olsun; gerçekte 0)
+        if (+process.env.KADRO_KILIT_SINAV_GECIKME > 0) await new Promise((r) => setTimeout(r, +process.env.KADRO_KILIT_SINAV_GECIKME));
+        const t = y + '.bayat.' + process.pid + '.' + Math.random().toString(36).slice(2);
+        try { fs.renameSync(y, t); } catch { continue; }
+        if (oku(t) !== c) { try { fs.linkSync(t, y); } catch {} }   // başkasının taze kilidini kaptık → yer boşsa geri koy
+        try { fs.unlinkSync(t); } catch {}
+        continue;
+      }
+    }
+    if (Date.now() - bas > bekleMs) throw new KadroHata(503, 'Kayıt başka bir işlemce kilitli — biraz sonra yeniden dene.');
+    await new Promise((r) => setTimeout(r, 100));
+  }
+}
 
 export class KadroHata extends Error { constructor(kod, mesaj) { super(mesaj); this.kod = kod; } }
 
@@ -33,7 +70,8 @@ export function kayitDosyalari(proje, ortam = process.env) {
   if (fs.existsSync(iskan)) {
     let isaret = '';
     try { const m = fs.readFileSync(iskan, 'utf8').match(/^\s*ekip_registry_pointer:\s*["']?([^"'#\s]+)/m); isaret = m ? m[1] : ''; } catch {}
-    return [iskan, ilk([isaret && path.join(proje, isaret), ...ekip])].filter(Boolean);
+    const dav = davalarYolu(proje, ortam);   // dava satırları iskan'dan sonra, ekipten önce (okuyucuyla aynı sıra)
+    return [iskan, fs.existsSync(dav) ? dav : null, ilk([isaret && path.join(proje, isaret), ...ekip])].filter(Boolean);
   }
   if (fs.existsSync(aile)) return [aile, ilk([ekip[1], ekip[0]])].filter(Boolean);
   return [ilk(ekip)].filter(Boolean);
@@ -138,8 +176,100 @@ function derleyiciBul(proje, ortam) {
   return fs.existsSync(y) ? y : '';
 }
 
+// ── Dava Rafı (Parça B) ─────────────────────────────────────────────────────────────────────────────────────────────────────
+// Bloğun doğrudan alanlarını yaz/sil: degisim = { alan: deger | null }. Var olan satır yerinde değişir (yorumu korunur), olmayan
+// bloğun sonuna eklenir, null satırı siler. Değerler çağıranda doğrulanır; burada yalnız satır kırıcı karakter reddedilir.
+export function alanlarYaz(metin, anahtar, id, degisim) {
+  let satirlar = String(metin).split('\n');
+  for (const [alan, deger] of Object.entries(degisim)) {
+    if (deger !== null && /[\n\r]/.test(String(deger))) throw new KadroHata(400, 'Değer satır sonu taşıyamaz.');
+    const b = blokBul(satirlar, anahtar, id); if (!b) throw new KadroHata(404, `Kayıtta "${id}" yok.`);
+    const a = alanBul(satirlar, b, alan), sp = ' '.repeat(b.girinti);
+    if (deger === null) { if (a) satirlar.splice(a.i, 1); continue; }
+    const satir = sp + alan + ': ' + deger + (a ? a.yorum : '');
+    if (a) satirlar[a.i] = satir; else satirlar.splice(b.son + 1, 0, satir);
+  }
+  return satirlar.join('\n');
+}
+
+// Kişinin bloğunu taşıyan dosya → { hedef, satirlar, b }. `alan` verilirse o alanı TAŞIYAN dosya önce gelir (session_id İSKÂN
+// kutusunda iskan-registry'dedir — açıcı baslat-claude.sh oradan okur; ekip kaydına yazılsa kadro görür, açıcı görmezdi: DV28).
+// Yoksa SON dosya (okuyucunun alanı son okuduğu yer).
+function blokDosyasi(proje, ortam, id, alan = '') {
+  let son = null, alanli = null;
+  for (const y of kayitDosyalari(proje, ortam)) {
+    let m; try { m = fs.readFileSync(y, 'utf8'); } catch { throw new KadroHata(500, 'Kayıt okunamadı: ' + y); }
+    const s = m.split('\n'); const b = blokBul(s, 'id', id); if (!b) continue;
+    son = { hedef: y, satirlar: s, b }; if (alan && alanBul(s, b, alan)) alanli = son;
+  }
+  return alanli || son;
+}
+
+export const DOSYA_NO = /^[0-9]{4}\/[0-9]{1,6}$/;
+// Kayda yazılan oturum adı: koltuk adı kuralının DARALTILMIŞI — boşluk ve tırnak yok (açıcıların satır ayrıştırıcıları `\S+` okur)
+const TMUX_KAYIT = /^[A-Za-z0-9_çğıöşüÇĞİÖŞÜ-]{1,60}$/u;
+const SID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+export function kisaAdGecerli(s) { const t = String(s || ''); return t.trim() === t && t.length >= 1 && [...t].length <= 60 && !/["\\\x00-\x1f\x7f]/.test(t); }
+
+// E4 · yeni dava satırı (B6): kaydın ilk dosyasının (İSKÂN kutusunda iskan-registry.yaml — açıcı baslat-claude.sh de onu okur)
+// `uyeler:` listesinin SONUNA blok eklenir. id başka bir dosyada da yoksa yazılır (409 "zaten rafta").
+export function davaEkle({ proje, ortam = process.env, id, tmux, arz_adi, session_id, cwd }) {
+  if (!DOSYA_NO.test(id)) throw new KadroHata(400, 'Dosya no YYYY/N biçiminde olmalı (ör. 2025/42).');
+  if (!kisaAdGecerli(arz_adi)) throw new KadroHata(400, 'Kısa ad 1-60 harf olmalı; tırnak ve ters bölü olamaz.');
+  if (!TMUX_KAYIT.test(tmux)) throw new KadroHata(409, `Oturum adı ("${tmux}") kayda yazılamaz — boşluk/özel karakter taşıyan oturum bağlanamaz.`);
+  if (!SID.test(session_id)) throw new KadroHata(409, 'Oturumdaki Claude kimliği okunamadı.');
+  const dosyalar = kayitDosyalari(proje, ortam);
+  if (!dosyalar.length) throw new KadroHata(409, 'Bu kutuda kayıt dosyası yok — dava eklenecek yer yok.');
+  for (const y of dosyalar) { let m; try { m = fs.readFileSync(y, 'utf8'); } catch { throw new KadroHata(500, 'Kayıt okunamadı: ' + y); }
+    if (blokBul(m.split('\n'), 'id', id)) throw new KadroHata(409, `"${id}" zaten rafta.`); }
+  // Dava satırı İSKÂN kutusunda davalar.yaml'a gider (yoksa oluşur); iskan'a değil (eşitleyici iskan'ı ezebilir).
+  const iskanVar = fs.existsSync(ortam.ISKAN_REGISTRY || path.join(proje, 'iskan-registry.yaml'));
+  const hedef = iskanVar ? davalarYolu(proje, ortam) : dosyalar[0];
+  if (iskanVar && !fs.existsSync(hedef)) fs.writeFileSync(hedef, 'uyeler:\n', { mode: 0o640 });   // kayıt dosyası kipi (Z3)
+  const satirlar = fs.readFileSync(hedef, 'utf8').split('\n');
+  const u = satirlar.findIndex((l) => /^uyeler:\s*(#.*)?$/.test(l));
+  if (u < 0) throw new KadroHata(409, 'Kayıtta "uyeler:" listesi yok — dava eklenecek yer yok, dokunulmadı.');
+  // listenin sonu: girintisiz ilk dolu satırdan önceki son dolu satır; öğe girintisi ilk `- ` satırından (yoksa 2)
+  let son = u, tire = -1;
+  for (let i = u + 1; i < satirlar.length; i++) { const l = satirlar[i]; if (!l.trim()) continue; if (!/^\s/.test(l)) break; son = i;
+    if (tire < 0) { const m = l.match(/^(\s*)-\s/); if (m) tire = m[1].length; } }
+  if (tire < 0) tire = 2;
+  const sp = ' '.repeat(tire), ic = ' '.repeat(tire + 2);
+  const blok = [sp + '- id: ' + id, ic + 'rol: dava', ic + 'tmux: "' + tmux + ':0"', ic + 'arz_adi: "' + arz_adi + '"',
+    ic + 'session_id: ' + session_id, ...(cwd && /^\/[^\s"#]*$/.test(cwd) ? [ic + 'cwd: ' + cwd] : []), ic + 'bagla_ile: true'];
+  satirlar.splice(son + 1, 0, ...blok);
+  atomikYaz(hedef, satirlar.join('\n'));
+  return { dosya: hedef };
+}
+
+// E4 · kişiye bağla (B6): oturum o kişinin oturumu sayılır → kişinin bloğuna session_id (kimlik eşleşmesi önce onu arar);
+// önceki değer bagla_once'a (yoksa 'yok'). Üretilmiş bölgedeki kişiye yazılmaz (derleyici siler).
+export function kisiyeBagla({ proje, ortam = process.env, id, session_id }) {
+  if (!SID.test(session_id)) throw new KadroHata(409, 'Oturumdaki Claude kimliği okunamadı.');
+  const f = blokDosyasi(proje, ortam, id, 'session_id'); if (!f) throw new KadroHata(404, `Kayıtta "${id}" yok.`);
+  if (uretilmisMi(f.satirlar, f.b)) throw new KadroHata(409, `"${id}" derlenen kayıtta — bağlama oraya yazılamaz.`);
+  const a = alanBul(f.satirlar, f.b, 'bagla_ile'); if (a && a.deger === 'true') throw new KadroHata(409, `"${id}" zaten bir bağlamayla gelmiş — önce onu geri al.`);
+  const once = alanBul(f.satirlar, f.b, 'session_id');
+  atomikYaz(f.hedef, alanlarYaz(f.satirlar.join('\n'), 'id', id, { session_id, bagla_once: once && once.deger ? once.deger : ONCEKI_YOK, bagla_ile: 'true' }));
+  return { dosya: f.hedef, onceki: once ? once.deger : '' };
+}
+
+// G7 · bağlamayı geri al: yalnız `bagla_ile: true` taşıyan kayıt. Dava bloğu (bagla_once yok) bütünüyle silinir; kişide önceki
+// session_id geri konur. Oturuma dokunulmaz — çağıran kapatmaz, oturum yeniden kayıtsız görünür.
+export function baglaGeriAl({ proje, ortam = process.env, id }) {
+  const f = blokDosyasi(proje, ortam, id, 'bagla_ile'); if (!f) throw new KadroHata(404, `Kayıtta "${id}" yok.`);
+  const a = alanBul(f.satirlar, f.b, 'bagla_ile'); if (!a || a.deger !== 'true') throw new KadroHata(409, 'Bu kayıt bağlamayla gelmedi.');
+  const o = alanBul(f.satirlar, f.b, 'bagla_once');
+  if (!o) { const s = f.satirlar.slice(); s.splice(f.b.bas, f.b.son - f.b.bas + 1); atomikYaz(f.hedef, s.join('\n')); return { dosya: f.hedef, silindi: true }; }
+  if (o.deger !== ONCEKI_YOK && !SID.test(o.deger)) throw new KadroHata(409, `Önceki kimlik okunamadı ("${o.deger}") — dokunulmadı.`);
+  atomikYaz(f.hedef, alanlarYaz(f.satirlar.join('\n'), 'id', id, { session_id: o.deger === ONCEKI_YOK ? null : o.deger, bagla_once: null, bagla_ile: null }));
+  return { dosya: f.hedef, silindi: false };
+}
+
 // Ana iş: kişinin hâlini yaz. Dönen: { dosya, uretilmis, onceki, yeni, derleme? }. Hata: KadroHata(kod, mesaj).
-export function kadroYaz({ proje, id, eylem, ortam = process.env, calistir = execFileSync }) {
+// ek: { alan: deger|null } — durumla AYNI yazımda bloğa işlenir (Dava Rafı: son_calisma · dondurma). Yalnız elle kayıtta;
+// üretilmiş kayıtta ek yok sayılır (davalar orada yaşamaz, derleyici taşımaz).
+export function kadroYaz({ proje, id, eylem, ortam = process.env, calistir = execFileSync, ek = null }) {
   const dosyalar = kayitDosyalari(proje, ortam);
   let hedef = null, satirlar = null, b = null;
   for (const y of dosyalar) {
@@ -150,7 +280,7 @@ export function kadroYaz({ proje, id, eylem, ortam = process.env, calistir = exe
   if (!hedef) throw new KadroHata(404, `Kayıtta "${id}" yok.`);
   if (!uretilmisMi(satirlar, b)) {
     const r = durumDegistir(satirlar.join('\n'), 'id', id, eylem);
-    atomikYaz(hedef, r.metin);
+    atomikYaz(hedef, ek && Object.keys(ek).length ? alanlarYaz(r.metin, 'id', id, ek) : r.metin);
     return { dosya: hedef, uretilmis: false, onceki: r.onceki, yeni: r.yeni };
   }
   // ÜRETİLMİŞ: kaynak model + derleyici

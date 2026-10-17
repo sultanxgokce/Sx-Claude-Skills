@@ -1,0 +1,9 @@
+claude: 2.1.302 (Claude Code) · dizin: /config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar
+  ✓ 1 gerçek konuşma doğdu (cevapta söz var)
+  ✓ 2 aynı kimlikle --session-id (baslat-claude.sh yolu) → 'already in use', eski sohbete DÖNMEZ
+  ✓ 3 koltuk-ac ac --eski → rc 0, 'claude --resume' kolu
+  ✗ 4 açılan oturumda gerçek Claude ESKİ SOHBETİ gösteriyor (ekranda 'mor-zeytin-1272209') — 
+  ✓ 5 baslat-claude.sh ÇAĞRILMADI
+
+SONUÇ: 4 tuttu · 1 tutmadı
+RC=1

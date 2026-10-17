@@ -1,0 +1,6 @@
+ÖLÇÜM YAN ETKİSİ — eski kutu oturumu da71bac8 (kayıt 25 Eyl 2026)
+Dosya: /config/.claude/projects/-config-projects/da71bac8-3b95-4fab-b9e2-314ffc5ba858.jsonl
+Boyut: 38550882 bayt (ölçüm öncesi) → 38553046 bayt (sonrası) · fark 2164 bayt
+Neden: dava-resume-olc.sh OLCUM_SID modunda adım 2 (claude -p --session-id <sid> "x") ve adım 3/4
+       (claude --resume) aynı transkripte satır ekledi.
+Karar: SERDAR 14:25 — transkript GERİ ALINMAZ (kullanılmayan 25 Eyl oturumu, git dışı). Bu dosya yan etkiyi kayda geçirir.

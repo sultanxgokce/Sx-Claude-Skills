@@ -1,0 +1,45 @@
+{
+  "tur": 1,
+  "is": "kadro-dava-kurali",
+  "pr": "350",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-16T19:40:42+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": true,
+    "istem_bayt": 125687,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 14,
+    "bayt": 63034
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, görünen üretim kodu Dava Rafı’nın kural okuma, kadro yanıtı, yer açma, bağlama/geri alma ve bekçi dondurması taleplerini kapsamlı uçtan uca ve mutasyon sınavlarıyla karşılıyor. Ancak fark 110000 baytta kırpıldığı için bütün değişiklik görülemiyor; ayrıca süreçler arası kilitte yarış ihtimali ve iş kartında özellikle istenen gerçek kopya --eski/session_id ölçümünün sunulmaması nedeniyle üretime hazır 5 diyemem, önce bunları çözün.",
+    "bulgular": [
+      {
+        "ne": "Bayat kilidi kaldırma işlemi sahiplik denetimsizdir; iki süreç aynı bayat kilidi görürse biri diğerinin yeni aldığı kilidi silebilir ve iki yazıcı aynı anda ilerleyebilir.",
+        "kanit": "dosyaKilit içinde süreçler EEXIST sonrasında yalnız mtime denetliyor, ardından fs.unlinkSync(y) yapıp yeniden deniyor; kilit içindeki PID okunup doğrulanmıyor ve bırakma işlevi de sahipliği doğrulamadan aynı yolu siliyor. DV32 yalnız taze kilitte tek bekleyeni ölçüyor; bayat kilide eşzamanlı yarış ölçülmüyor.",
+        "konum": "terminal-onar/kapi/kadro-yaz.mjs:23",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "İş kartının istediği gerçek kopyada --eski/session_id ölçümü kanıtta yok; sunulan ilgili önce/sonra çifti sahte proje düzenine ait.",
+        "kanit": "olcum-koltuk-ac-dava-kolu-once.txt ve sonra.txt V1-V4 davranışlarını sınavın geçici/sahte düzeninde gösteriyor; manifestte veya verilen ölçüm çıktılarında gerçek kopyaya ait ayrı --eski/session_id kaydı bulunmuyor.",
+        "konum": "kanıt kayıtları: koltuk-ac-dava-kolu önce/sonra",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. dava-kapi-sinavi ile koltuk-ac-dava-kolu için kırmızı→yeşil ölçüm çiftleri, geniş gerileme sınavları ve altı mutasyonu yakalayan ölçüm var; bunlar gerçekçi sahte proje verisiyle temel talebi güçlü biçimde destekliyor. Buna karşılık iş kartında ayrıca istenen gerçek kopya --eski/session_id ölçümü görünmüyor, günlük yalnız-bir-kez çağrı sözleşmesinin kanıtı da verilen dava sınavında doğrudan ölçülmüyor. Üretim diff’i 110000 baytta kırpıldığından son bölüm bağımsız gözce incelenemedi."
+  }
+}

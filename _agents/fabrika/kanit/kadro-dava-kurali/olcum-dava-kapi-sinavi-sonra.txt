@@ -1,0 +1,51 @@
+$ node /config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/kapi/dava.test.mjs
+# rc=0 sure=2.8s zaman=2026-10-17T14:27:18+03:00
+--- stdout ---
+── DV-A · saf kurallar (kadro.mjs · kadro-yaz.mjs)
+  ✓ DV1 dava_kurali akış ve blok biçimi okunur; eksik/bozuk/aralık dışı kural YOK sayılır (yarım kuralla dondurma yok)
+  ✓ DV2 davaOzet: açık yalnız rol=dava ve dondurulmamış (3) · dondurulacak = son üç gün (b: 2 gün kaldı, c: 0) · personel sayılmaz
+  ✓ DV3 yerAcAday: tavan dolu → en uzun süredir dokunulmayan açık dava (c); yer varsa null; istenen dava sayılmaz
+  ✓ DV4 kendiliğinden: yalnız gun gününü dolduran açık dava (c); personel 40 gün dokunulmasa da DONDURULMAZ
+  ✓ DV5 alanlarYaz: var olan satır yerinde (yorum korunur) · yoksa bloğun sonuna · null siler · komşu blok değişmez
+  ✓ DV6 dosya no YYYY/N · kısa ad 1-60, tırnak/ters bölü/satır sonu yok, baş-son boşluk yok
+  ✓ DV7 davasız kişi çıktısı ESKİ ANAHTARLARLA aynı (arz_adi · son_calisma · dondurma · bagla_ile eklenmez)
+  ✓ DV7b modül kendisi de korur: bağlamayla GELMEMİŞ kaydı baglaGeriAl silmez (409), dosya bayt bayt aynı (kapının ön kontrolüne yaslanmaz)
+── DV-B · /api/kadro davalar alanı (B2)
+  ✓ DV8 davalar: tavan 4 · gun 14 · açık 4 (dondurulmuş sayılmaz, personel sayılmaz) · dondurulacak hasan(12 gün → 2) ve eski(20 gün → 0); bagla: true
+  ✓ DV9 dava kişisi: rol dava · arz_adi · dondurulmuşta son_calisma (sayı) · açıkta oturum.son; dondurma işareti YOK (elle dondurulmuş)
+  ✓ DV10 kayıtsızlar: musteri-a · kisi-ot · bos-ot · ayni-ot (davalar ve personel oturumu kayıtsız SAYILMAZ)
+── DV-C · günlük bekçi turu (B7)
+  ✓ DV11 --kuru: yalnız "2023/1" dondurulur der, kayda ve tmux'a dokunmaz
+  ✓ DV12 tur: 2023/1 dondurulur (durum + son_calisma = oturumun son hareketi + dondurma: kural), oturumu kapatılır; 12 günlük 2024/772 DOKUNULMAZ
+  ✓ DV13 kadroda 2023/1: dondurulmuş · dondurma: kural (raf "kural dondurdu" der); açık 3
+  ✓ DV14 ikinci tur boş: dondurulacak dava yok (iz tekrar yazılmaz)
+  ✓ DV15 iz kadro-hal.log: "bekci dondur \"2023/1\" … (14 gün dokunulmadı)"
+── DV-D · Aç: yer varken açar, tavan doluyken yer açar (B4)
+  ✓ DV16 açık 3 < tavan 4 → kimse dondurulmaz (donduruldu: null); açıcı "ac ali --eski"; yanıtta ekran = /sedir/tty/?arg=ali
+  ✓ DV17 geri açılan davanın kaydı: durum ve durum_once satırları KALKTI; son_calisma kaldı (açıkken oturumun son'u kullanılır)
+  ✓ DV18 tavan dolu (4) → en uzun süredir dokunulmayan açık dava 2024/772 dondurulur, oturumu kapanır; 2023/1 açılır; donduruldu: "2024/772"
+  ✓ DV19 yer açarken dondurulan davaya son_calisma yazıldı, dondurma işareti YOK (kural değil, yer açma); geri açılan 2023/1'in kural işareti KALKTI
+  ✓ DV20 tavan dolu ve en eskinin (2026/31) oturumu KAPANMIYOR → 502, istenen dava AÇILMADI (açıcı çağrılmadı), kayıt BAYT BAYT önceki hâl
+  ✓ DV21 yer_ac verilmeden (E2 paneli) tavan kuralı UYGULANMAZ: kimse dondurulmaz, açılır
+  ✓ DV22 rafta Dondur: 200, oturumu kapanır, son_calisma yazılır (açılınca yeni oturumun son'u)
+── DV-E · E4 kayda bağla (B6) · G7 geri al
+  ✓ DV23 bağla → dava: 200; uyeler listesinin SONUNA blok (kayıt sonu notu yerinde kalır), id tırnaksız, session_id + cwd oturumun kimlik izinden, bagla_ile: true
+  ✓ DV24 kadroda 2026/85: rol dava · çalışan · oturumu musteri-a · bagla_ile; kayıtsızlardan çıktı; oturum KAPANMADI
+  ✓ DV25 bağlama retleri: Claude yok 409 · iki Claude 409 · dosya no zaten rafta 409 · YYYY/N değil 400 · kısa adda tırnak 400 · altyapı 403 · kayıtlı oturum 404; kayıt DEĞİŞMEDİ
+  ✓ DV26 G7 geri al → kayıt BAYT BAYT bağlamadan önceki hâl; musteri-a yeniden kayıtsız, oturum KAPANMADI
+  ✓ DV27 bağlamayla gelmemiş kayıt geri alınamaz → 409, kayıt değişmedi
+  ✓ DV28 bağla → kişi: MUBEYYIZ'in session_id'si oturumunkine döner, önceki bagla_once'a; kadroda kisi-ot artık MUBEYYIZ oturumu (kimlikle), kayıtsız değil
+  ✓ DV29 dava satırına kişi bağlanmaz 409 · çalışan kişiye 409
+  ✓ DV30 kişi bağlamasını geri al → kayıt BAYT BAYT önceki hâl (eski session_id geri), kisi-ot yeniden kayıtsız
+  ✓ DV31 jetonla bagla → 403 (kadro kararı ekrandan)
+── DV-F · süreçler arası kilit · davasız kutu
+  ✓ DV32 sahibi YAŞAYAN kilit bir saatlik bile olsa alınmaz: ikinci yazıcı bekler, 503 ile vazgeçer (kapı açıcıyı beklerken kilit kaptırılmaz)
+  ✓ DV32b sahibi ÖLMÜŞ kilit bayattır: alınır, iş bitince bırakılır (dosya kalmaz)
+  ✓ DV32c üç süreç AYNI bayat kilidi aynı anda görür ve devralmaya çalışır (pencere sınavda 400 ms): üçü de sırayla alır, hiçbir an iki süreç içeride değil (gir/çık dönüşümlü)
+  ✓ DV32d bırakma yalnız KENDİ kilidini siler: içerik başkasınınsa dosyaya dokunmaz
+  ✓ DV33 kural satırı yoksa: /api/kadro'da davalar ANAHTARI YOK (raf çizilmez) · bekçi turu "tur yok"
+  ✓ DV34 kuralsız kutuda yer_ac yok sayılır (tavan yok → kimse dondurulmaz)
+  ✓ DV35 iskan eşitlenip ezilse de dava satırları davalar.yaml'da YERİNDE kalır (kayıp yok): dört dava hâlâ rol=dava olarak kadroda
+
+SONUÇ: 39 geçti · 0 kaldı
+--- stderr ---

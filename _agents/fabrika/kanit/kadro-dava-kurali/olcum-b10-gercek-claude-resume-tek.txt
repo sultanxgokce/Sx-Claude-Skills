@@ -1,0 +1,12 @@
+$ bash /config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/scripts/dava-resume-olc.sh
+# rc=1 sure=56.1s zaman=2026-10-16T19:45:33+03:00
+--- stdout ---
+claude: 2.1.301 (Claude Code) · dizin: /config/projects/sohbet
+  ✓ 1 gerçek konuşma doğdu (cevapta söz var)
+  ✓ 2 aynı kimlikle --session-id (baslat-claude.sh yolu) → 'already in use', eski sohbete DÖNMEZ
+  ✓ 3 koltuk-ac ac --eski → rc 0, 'claude --resume' kolu
+  ✗ 4 açılan oturumda gerçek Claude ESKİ SOHBETİ gösteriyor (ekranda 'mor-zeytin-2730198') — 
+  ✓ 5 baslat-claude.sh ÇAĞRILMADI
+
+SONUÇ: 4 tuttu · 1 tutmadı
+--- stderr ---

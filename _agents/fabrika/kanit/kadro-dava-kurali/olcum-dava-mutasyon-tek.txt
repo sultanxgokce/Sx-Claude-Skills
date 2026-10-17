@@ -1,0 +1,16 @@
+$ bash /config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/kapi/dava.mutasyon.sh
+# rc=0 sure=28.3s zaman=2026-10-17T14:28:39+03:00
+--- stdout ---
+  ✓ M1 Aç yer açmaz (tavan yok sayılır) — sınav KIRMIZI
+  ✓ M2 yer açan dondurma geri alınırken son_calisma artığı kalır — sınav KIRMIZI
+  ✓ M3 kişiye bağlama kimliği açıcının okumadığı dosyaya yazar — sınav KIRMIZI
+  ✓ M4 bekçi personeli de dondurur (rol=dava süzgeci yok) — sınav KIRMIZI
+  ✓ M5 bağla, iki Claude'lu oturumda ilkini seçer — sınav KIRMIZI
+  ✓ M6 bağlamayı geri al, bagla_ile olmayan kaydı da siler — sınav KIRMIZI
+  ✓ M7 kilit yaşa bakar (sahibi yaşarken kapılır) — sınav KIRMIZI
+  ✓ M8 bırakma sahipliğe bakmaz (başkasının kilidini siler) — sınav KIRMIZI
+  ✓ M9 bayat kilit doğrulamadan silinir (eski kural) — sınav KIRMIZI
+  ✓ M10 dava satırı iskana yazılır (eşitleyici ezer, davalar.yaml boş kalır) — sınav KIRMIZI
+
+MUTASYON: 10 yakalandı · 0 kaçtı
+--- stderr ---

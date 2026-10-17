@@ -1,0 +1,21 @@
+{
+  "is": "kadro-dava-kurali",
+  "cumle": "Kutu kapısına Dava Rafı kuralı: kayıttaki dava_kurali'yı okur, /api/kadro'ya davalar alanını verir, Aç'ta tavan doluysa en eski davayı dondurup yer açar, kayıtsız oturumu davaya/kişiye bağlar ve geri alır, 14 gün dokunulmayan davayı bekçi günde bir dondurur (Parça B, B1-B10)",
+  "istedi": "SERDAR",
+  "aldi": "BERID",
+  "zaman": "2026-10-16T19:26:55+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "?"
+  },
+  "siniflar": [
+    "yetki"
+  ],
+  "sultan": true,
+  "kanit_nerede": "kadro-hal sınavı (sahte proje dizini) önce/sonra + gerçek kopyada --eski/session_id ölçümü",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

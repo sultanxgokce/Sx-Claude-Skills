@@ -1,0 +1,27 @@
+$ node /config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/kapi/kimlik.test.mjs
+# rc=0 sure=0.4s zaman=2026-10-16T19:37:27+03:00
+--- stdout ---
+── K · oturum kimlikleri (kimlik.mjs)
+  ✓ K1 yalnız bu kutunun, yaşayan, programı claude olan süreçleri: kutu-ana + serdar
+  ✓ K2 başka pid alanı · ölmüş süreç · pid'i başka programa geçmiş · bozuk dosya SAYILMAZ
+  ✓ K3 tmux "oturum:@N.%N" → oturum adı; sessionId + ad + ad kaynağı taşınır
+  ✓ K2b dosya adı ≠ içindeki pid (099.json içinde yaşayan 101) → tek başına SAYILMAZ; taklit önce okunsa da gerçek 101.json gölgelenmez
+  ✓ K4 pid alanı okunamazsa (boş) HİÇBİR dosya sayılmaz (ortak dizinde başka kutuya bağlanmaz)
+── E · eşleşme: önce kimlik, sonra tmux adı
+  ✓ E1 (SERDAR negatif sınavı) kimliği ANA oturumda olan kişi "çalışıyor", oturumu kutu-ana, eşleşme kimlikle — "oturumu yok" DEĞİL
+  ✓ E2 ana ikinci satır OLMAZ: ne altyapıda ne kayıtsızlarda "kutu-ana"; tek satır
+  ✓ E3 kişi ana oturumda çalışıyorsa altyapı korumalı ("ana oturum") — dondur/emekli onu kapatamaz
+  ✓ E4 kullanıcının verdiği Claude adı (serdar, nameSource user) kayıttaki tmux eski olsa da bağlar
+  ✓ E5 kimlik izi olmayan kişi eski kuralla (tmux adı) bağlanır, eslesme alanı yok
+  ✓ E6 kimlik verilmezse bugünkü davranış: kutu-yon "kayıtta var, çalışmıyor", ana altyapıda (iki satır — düzeltilen kusur)
+  ✓ E7 aynı kimlik İKİ oturumda → kimlik eşleşmesi yapılmaz (tahmin yok), tmux adına düşer
+  ✓ E7b session_id A oturumunu, verilen ad B oturumunu gösteriyor → session_id KAZANIR (basamaklar sıralı), B kayıtsız kalır
+  ✓ E7c session_id hiçbir canlı oturumda yoksa (bayat) ad basamağına inilir
+  ✓ E7d kayıtta ÖNCE gelen A ad ile, SONRA gelen B session_id ile aynı oturuma talip → session_id kazanır (B ← b), A tmux adına düşer (A ← a)
+  ✓ E8 türetilmiş (derived) ad kimlik sayılmaz — yalnız kullanıcının verdiği ad
+── U · uçtan uca: gerçek kapı süreci, sahte oturum dizini + sahte /proc
+  ✓ U1 /api/kadro: kutu-yon çalışan, oturumu kutu-ana (kimlikle), ana ikinci satır değil; düşen/kayıtta-var sayısı 0
+  ✓ U2 ana oturumda çalışan kişiyi dondur → 403 (ana kapatılmaz), kayıt ve tmux dokunulmadı
+
+SONUÇ: 18 geçti · 0 kaldı
+--- stderr ---
