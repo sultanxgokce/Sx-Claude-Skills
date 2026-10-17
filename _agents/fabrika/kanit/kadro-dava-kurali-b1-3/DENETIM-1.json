@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "kadro-dava-kurali-b1-3",
+  "pr": "361",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T16:31:23+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 40324,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 35653
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kayıt kilidi pid/yaş/devral düzeninden çıkarılıp flock(1) tabanlı kernel kilidine çevrilmiş; canlı, öldürülmüş, durdurulmuş ve yarışan süreç vakaları hedefli sınavlarla doğrulanmış. Ancak kilit beklerken çağıran süreç ölürse yardımcı kabuk flock bekleyişini sürdürüp sonradan gereksiz yere kilidi alabilir ve sahipsiz ack dosyası bırakabilir; üretim öncesi önce bu yaşam döngüsü açığı çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Çağıran süreç kilidi henüz alamadan ölürse stdin kapanması yardımcı süreci hemen durdurmaz; kabuk önce öndeki `flock -w` komutunun bitmesini bekler, ardından ack yazar ve ancak `read` EOF görünce çıkar. Bu, ölmüş bir çağrı adına sonradan kısa süreli kilit alınmasına ve `.ack-*` artığı bırakılmasına yol açabilir; bu vaka sınanmamış.",
+        "kanit": "TUTUCU sırası `flock ...; : > \"$3\"; read _`; dolayısıyla stdin kapanışı flock bekleyişi sırasında gözlenmez. DV32b yalnız kilidi zaten almış üst Node sürecini SIGKILL ile öldürüyor; bekleyen çağıranın ölümü vakası yok. K2 de yalnız normal tamamlanma sonrasında `.ack-` artığını denetliyor.",
+        "konum": "terminal-onar/kapi/kilit.mjs:TUTUCU ve dosyaKilit; terminal-onar/kapi/kilit.test.mjs:DV32b; terminal-onar/kapi/kadro-yaz.test.mjs:K2",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok, ilgili kilit sınavı rc=0 ve 7/7 yeşil. DV32–i ölçümleri talebin canlı sahip, SIGKILL sonrası kendiliğinden bırakma, SIGSTOP ve yarışma davranışlarını doğrudan sınar; ancak önce/sonra ölçüm çifti bulunmuyor ve beklerken ölen çağıran yaşam döngüsü kapsanmıyor."
+  }
+}
