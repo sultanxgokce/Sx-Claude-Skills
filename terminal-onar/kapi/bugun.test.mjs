@@ -41,6 +41,30 @@ kapi('A10 damgalar (sondaki _ soyulur)', c.yazildi === '2026-10-17T10:47:25+03:0
 const s = sayilar(c.maddeler);
 kapi('A11 sayılar: 3 açık · 1 yarım · 2 bitti · 1 geri · 7 toplam', s.acik === 3 && s.yarim === 1 && s.bitti === 2 && s.geri === 1 && s.toplam === 7, JSON.stringify(s));
 kapi('A12 DURUM kapalı küme (boş · ~ · x · X · -)', Object.keys(DURUM).join('') === ' ~xX-');
+
+console.log('── D · 1.5.0 dilbilgisi (Sx gunluk-plan/sema/bugun-maddesi.md: sahip · kanıt · ertelendi) — fikstür kapısı T17 #357\'de');
+const CIPA2 = `# ⚓ GÜNÜN PLANI ÇIPASI · 2026-10-17
+
+## Maddeler
+- [x] 1) Retro paketi (sahip: MUAVİN) gorev_01M54C4A56HDMS1H5SAWFCWSGE → KAPANDI · iki tur · kanıt: cloudtop #669
+- [~] 2) Gelen kutusu triyajı (sahip: MUAVİN) → YARIM · 234 kapandı
+- [ ] 3) WhatsApp izin kalıcılığı (sahip: Sultan)
+- [-] 4) Eski kanal düzeltmesi → GERİ ALINDI · gerekmedi
+- [-] 5) Sunum provası (sahip: MUAVİN) → ERTELENDİ · D1: 2026-10-17 Sultan: ertele (sohbet · session_ornek · "bunu yarına bırak" · beyan:MUAVİN)
+- [-] 6) Damgasız erteleme → ERTELENDİ · yarın bakarız
+- [x] 7) Kanıtı iki parça → KAPANDI · kanıt: Sx #355 · not ortada · kanıt: cloudtop #675
+`;
+const d = cipaAyristir(CIPA2).maddeler;
+kapi('D1 sahip metinden ayrılır: metin "Retro paketi gorev_…", sahip MUAVİN', d[0].sahip === 'MUAVİN' && d[0].metin === 'Retro paketi gorev_01M54C4A56HDMS1H5SAWFCWSGE', JSON.stringify([d[0].sahip, d[0].metin]));
+kapi('D2 kanıt nottan ayrılır: kanit "cloudtop #669", not "iki tur"', d[0].kanit === 'cloudtop #669' && d[0].not === 'iki tur', JSON.stringify([d[0].kanit, d[0].not]));
+kapi('D3 sahipsiz madde: sahip boş, metin dokunulmaz', d[3].sahip === '' && d[3].metin === 'Eski kanal düzeltmesi' && d[3].durum === 'geri');
+kapi('D4 sahip var, sonuç yok: açık madde, not/kanit boş', d[2].sahip === 'Sultan' && d[2].durum === 'acik' && d[2].kanit === '' && d[2].not === '');
+kapi('D5 "-" + ERTELENDİ + geçerli D1 → durum ertelendi (geri DEĞİL)', d[4].durum === 'ertelendi' && d[4].sonuc === 'ERTELENDİ' && d[4].not.startsWith('D1: 2026-10-17 Sultan'), d[4].durum);
+kapi('D6 "-" + ERTELENDİ + D1 YOK → damgasız erteleme açık sayılır (acik)', d[5].durum === 'acik' && d[5].sonuc === 'ERTELENDİ' && d[5].not === 'yarın bakarız', d[5].durum);
+kapi('D7 iki kanıt parçası birleşir, not ayrı kalır', d[6].kanit === 'Sx #355 · cloudtop #675' && d[6].not === 'not ortada', JSON.stringify([d[6].kanit, d[6].not]));
+const s2 = sayilar(d);
+kapi('D8 sayılar: ertelendi 1 · acik 2 (damgasız erteleme dahil) · geri 1 · yarim 1 · bitti 2 · toplam 7', s2.ertelendi === 1 && s2.acik === 2 && s2.geri === 1 && s2.yarim === 1 && s2.bitti === 2 && s2.toplam === 7, JSON.stringify(s2));
+kapi('D9 eski biçim (A fikstürü) sahip/kanit alanlarını boş taşır, kırılmaz', 'sahip' in m1 && 'kanit' in m1 && m1.sahip === '' && m1.kanit === '');
 const bos = cipaAyristir('');
 kapi('A13 boş metin: tarih null, madde 0 (çökmez)', bos.tarih === null && bos.maddeler.length === 0);
 
@@ -72,7 +96,14 @@ const M1 = await mutant('m1', "if (c.tarih !== gun) {", "if (false) {");
 kapi('C1 tarih kapısı kaldırılınca eski gün listeye GİRER → B1/B2 bu mutantta düşerdi', M1.bugunOku(T, '2026-10-17').ajanlar.length === 3);
 const M2 = await mutant('m2', "&& !/\\.yedek\\.md$/.test(a)", "");
 kapi('C2 yedek süzgeci kaldırılınca yedek dosya listeye girer → B3 bu mutantta düşerdi', JSON.stringify(M2.bugunOku(T, '2026-10-17')).includes('yedek, taranmaz'));
-const M3 = await mutant('m3', "metin: (k ? k[1] : govde).trim(),", "metin: govde,");
+const M3 = await mutant('m3', "metin: bas.replace(SAHIP, '').trim(),", "metin: govde,");
 kapi('C3 kuyruk ayrımı kaldırılınca metin "→ KAPANDI"yı taşır → A3 bu mutantta düşerdi', M3.cipaAyristir(CIPA).maddeler[0].metin.includes('KAPANDI'));
+
+const M4 = await mutant('m4', "if (m[1] === '-' && sonuc === 'ERTELENDİ') durum = D1.test(not) ? 'ertelendi' : 'acik';", "if (m[1] === '-' && sonuc === 'ERTELENDİ') durum = 'ertelendi';");
+kapi('C4 D1 kapısı kaldırılınca damgasız erteleme de "ertelendi" olur → D6 bu mutantta düşerdi', M4.cipaAyristir(CIPA2).maddeler[5].durum === 'ertelendi');
+const M5 = await mutant('m5', "metin: bas.replace(SAHIP, '').trim(), sahip: sh ? sh[1].trim() : '',", "metin: bas.trim(), sahip: '',");
+kapi('C5 sahip ayrımı kaldırılınca "(sahip: …)" metinde kalır → D1 bu mutantta düşerdi', M5.cipaAyristir(CIPA2).maddeler[0].metin.includes('(sahip:'));
+const M6 = await mutant('m6', "const kanit = parca.filter((x) => x.startsWith('kanıt:'))", "const kanit = parca.filter((x) => false)");
+kapi('C6 kanıt ayrımı kaldırılınca kanit boş → D2 bu mutantta düşerdi', M6.cipaAyristir(CIPA2).maddeler[0].kanit === '');
 
 console.log(`\n── SONUÇ: ${g} geçti · ${k} kaldı ──`); process.exit(k ? 1 : 0);

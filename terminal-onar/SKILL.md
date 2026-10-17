@@ -1,11 +1,18 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.15.0
+version: 2.16.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
 
-## 🆕 Bugünün listesi ucu (2.15.0 · 17 Eki · gorev_01M54SCQE08KTG9YERG2BBR604)
+## 🆕 2.16.0 · çıpa dilbilgisi 1.5.0 (17 Eki · gorev_01M54SCQE08KTG9YERG2BBR604 ek · MUAVİN yaması)
+`bugun.mjs` Sx `gunluk-plan/sema/bugun-maddesi.md` ile aynı okur: madde başına **`sahip`** (`(sahip: AD)` metinden ayrılır),
+**`kanit`** (`kanıt: <ref>` parçaları nottan ayrılır, birden çoksa ` · ` ile birleşir), **`ertelendi`** durumu (`[-]` + `ERTELENDİ` +
+geçerli D1 damgası; D1'siz erteleme **açık** sayılır — damgasız erteleme erteleme değildir). `sayilar()` `ertelendi` sayar;
+`/api/bugun` toplamlarında görünür. Eski biçim kırılmaz (alanlar boş). Ortak fikstür kapısı (`gunluk-plan/sema/kapi-uyum.mjs`, T17)
+Sx #357'de koşar; burada üç kural sınavı D1-D9 + mutant C4-C6. Panel tarafı (cloudtop) `ertelendi`yi ayrıca gösterir (ayrı kart).
+
+## Bugünün listesi ucu (2.15.0 · 17 Eki · gorev_01M54SCQE08KTG9YERG2BBR604)
 Kapı `GET /api/bugun[?tarih=YYYY-MM-DD]` — kutudaki ajanların gün çıpalarını (`_agents/handoff/gunluk-plan-cipa.<ajan>.md`,
 `gunluk-plan/cipa.sh` + `gun-ortasi/cipa-ekle.sh` yazar) okur ve yapılandırır: madde (`N)` sabah · `G<n>)` gün ortası · etiketsiz
 serbest), durum (`[ ]` açık · `[~]` yarım · `[x]` bitti · `[-]` geri), `→ KAPANDI/YARIM · not` kuyruğu ayrı, metindeki `gorev_…`
