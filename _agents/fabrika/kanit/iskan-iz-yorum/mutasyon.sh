@@ -19,5 +19,6 @@ dene "M2 yalnız satır başı yorum atılır, satır-sonu yorumu sayılır"    
 dene "M3 tırnak izlenmez (tırnak içindeki # yorum sanılır)"                  "s=s.replace('{ q=c; t=t c; continue }', '{ t=t c; continue }')" "İZ-YORUM-7"
 dene "M4 harf duyarlı sayım (S02 ≠ s02)"                                      "s=s.replace('grep -ci -- \"\$proje\"', 'grep -c -- \"\$proje\"')" "İZ-YORUM-4"
 dene "M5 '#' her yerde yorum başlatır (boşluk şartı yok: a#s02 kesilir — etkin iz gizlenir)" "s=s.replace('if (c==\"#\" && (i==1 || substr(\$0,i-1,1) ~ /[[:space:]]/)) break', 'if (c==\"#\") break')" "İZ-YORUM-7"
+dene "M6 kaçışlı tırnak izlenmez (kaçış dalı kapalı → \\\" kapanış sayılır, sonraki # yorum)" "s=s.replace('&& i<n) { t=t c substr', '&& 0) { t=t c substr')" "İZ-YORUM-7"
 rm -r -f -- "$M"
 echo "mutasyon: geçen=$gecen düşen=$dusen"; [ $dusen = 0 ]

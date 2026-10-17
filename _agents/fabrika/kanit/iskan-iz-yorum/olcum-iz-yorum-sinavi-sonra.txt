@@ -1,5 +1,5 @@
 $ bash iskan/scripts/iskan.test.sh
-# rc=0 sure=30.7s zaman=2026-10-17T09:32:17+03:00
+# rc=0 sure=31.8s zaman=2026-10-17T09:34:04+03:00
 --- stdout ---
 == iskan.test.sh ==
   ok - compose-clean: kesişim=0
@@ -276,6 +276,6 @@ $ bash iskan/scripts/iskan.test.sh
   ok - İZ-YORUM-4 tırnak içindeki ad etkin sayılır, harf duyarsız (S02 = s02)
   ok - İZ-YORUM-5 stdin ('-') yolu: host compose ssh-cat ile aynı kural (ADIM-5b)
   ok - İZ-YORUM-6 olmayan dosya → 0 (sayım patlamaz; eski grep -ci || true davranışı korunur)
-  ok - İZ-YORUM-7 tırnak İÇİNDEKİ '#' yorum değil (bağımsız göz tur 1): çift/tek tırnakta ad sayılır, boşluksuz 'a#b' de yorum değil (3); tırnak dışı ' #' yorum (sayılmaz)
+  ok - İZ-YORUM-7 tırnak İÇİNDEKİ '#' yorum değil (göz tur 1+2): çift/tek tırnak, boşluksuz 'a#b', kaçışlı \" sonrası hâlâ tırnak içi → 4; tırnak dışı/kapanmış tırnak sonrası ' #' yorum
 == 275 geçti / 0 kaldı ==
 --- stderr ---

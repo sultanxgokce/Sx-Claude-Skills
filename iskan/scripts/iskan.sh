@@ -2818,7 +2818,8 @@ _iskan_etkin_iz() {
   [ "$f" = "-" ] && f=/dev/stdin
   awk '{ t=""; q=""; n=length($0)
          for (i=1;i<=n;i++) { c=substr($0,i,1)
-           if (q!="") { if (c==q) q=""; t=t c; continue }            # tırnak içi: olduğu gibi
+           if (q!="") { if (q=="\"" && c=="\\" && i<n) { t=t c substr($0,i+1,1); i++; continue }   # çift tırnakta kaçış: \" kapatmaz (göz tur 2)
+                        if (c==q) q=""; t=t c; continue }            # tırnak içi: olduğu gibi
            if (c=="\"" || c=="\047") { q=c; t=t c; continue }        # tırnak açıldı
            if (c=="#" && (i==1 || substr($0,i-1,1) ~ /[[:space:]]/)) break   # yorum başladı: gerisi atılır
            t=t c }
