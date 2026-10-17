@@ -182,96 +182,104 @@ kapi "M7-önkoşul: 16 kelime gerçek araçta AÇIK" 1 python3 "$H" olc --hafta 
 m_kelime(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -ne 0 ]; }
 mut "M7 kırpık kelime sınırı kalkınca 16 kelimelik onay kapatır (kapı yakalar)" 's/^    if n > D1_KIRPIK_KELIME:$/    if False:/' m_kelime
 
-echo "— H10 K6 Doğrulat dersleri → BİRLEŞMİŞ beceri PR (Sultan katı kuralı 17 Eki; işlenmemiş ders varsa hafta kapanmaz)"
-# sahte gh (hermetik): PR durumu tablodan; tabloda yoksa "PR değil"; GH_COK=1 → ağ hatası (ölçülemedi)
-cat > "$T/gh" <<'EOF'
+echo "— H10 K6 Doğrulat → beceri PR · hüküm kanon D13 oracle'ında (tek ölçüm; kapı çağırır, kuralı kopyalamaz)"
+# sahte D13 oracle'ı — KURAL İÇERMEZ, yalnız arayüz: rc + "  ✗ <ad> · <neden>" / "  ? <ad> · <neden>" satırları; argümanları kaydeder.
+# Gerçek oracle (cloudtop #691) + gerçek gh ile tümleşik ölçüm kanıttadır.
+cat > "$T/d13" <<'EOF'
 #!/usr/bin/env bash
-[ "${GH_COK:-0}" = 1 ] && { echo "error connecting to api.github.com" >&2; exit 1; }
-n="$3"; repo="$5"; d="$(awk -v k="$repo#$n" '$1==k{print $2}' "$(dirname "$0")/gh-tablo")"
-[ -n "$d" ] && { echo "$d"; exit 0; }
-echo "GraphQL: Could not resolve to a PullRequest with the number of $n. (repository.pullRequest)" >&2; exit 1
+printf '%s\n' "$*" > "$(dirname "$0")/d13-arg"
+c="$(dirname "$0")/d13-cevap"; rc="$(head -1 "$c")"; tail -n +2 "$c"; exit "$rc"
 EOF
-chmod +x "$T/gh"; printf 'sultanxgokce/cloudtop#676 MERGED\nsultanxgokce/Sx-Claude-Skills#370 MERGED\nx/y#371 MERGED\nsultanxgokce/cloudtop#900 OPEN\nsultanxgokce/cloudtop#901 CLOSED\n' > "$T/gh-tablo"
-export HAFTA_KAPANIS_GH="$T/gh"
+chmod +x "$T/d13"; d13(){ printf '%s\n' "$@" > "$T/d13-cevap"; }
+export HAFTA_KAPANIS_D13="$T/d13"
 cp "$T/M.yedek" "$M"; sed -i 's/^_sultan_onay: .*/_sultan_onay: 2026-10-18 Sultan: hafta kapansın (sohbet · oturum-ref-2 · "tamam kapat" · beyan:SERDAR)/' "$KP"
+d13 0 "DOĞRULAT RETRO KAPISI · seans yok · kapı açık"
 kapi "H10-önkoşul: seans kaydı yokken KAPANDI (K6 yeşil, bunu söyler)" 0 python3 "$H" olc --hafta 2026-W42
 icerir "$CIKTI" "✓ K6 Doğrulat dersleri → beceri PR: bu hafta Doğrulat seans kaydı yok" "H10-önkoşul2 K6 dili"
 DG="$KOK/_agents/handoff/retro/dogrulat"; mkdir -p "$DG"
 cat > "$DG/2026-10-16.md" <<'EOF'
 # Doğrulat seansı retrosu — 2026-10-16
+beceri-pr: bekliyor
 ## Ölçüm
 - 40 → 3
 ## Pürüzler → ders → nereye işlendi
 1. Zil meşgulü hata saydı → cloudtop #676 (birleşti)
-2. Bitiş sinyali yok → protokol: parti sonu aile-notify; kalıcı: gorev_01M554915VR3GXP09XEDYGNCNC
-3. AÇIK: dış yüzeyde ekran görülmedi → gorev_01M55490W8TSGAD8SGF3H78ZGB (kare şartı)
-## Sonraki seans için ölçülecek
-- tık sayısı #1 hedef
+2. Bitiş sinyali yok → protokol: parti sonu aile-notify
+3. AÇIK: dış yüzeyde ekran görülmedi → gorev_01M55490W8TSGAD8SGF3H78ZGB
 EOF
-kapi "H10a PR'sız ders (2) + AÇIK ders (3) → K6 kırmızı → AÇIK rc=1" 1 python3 "$H" olc --hafta 2026-W42
-icerir "$CIKTI" "2026-10-16.md: 2/3 ders PR'a işlenmedi (madde 2 “Bitiş sinyali yok”: PR yok; 3 “AÇIK: dış yüzeyde ekran görülmedi”: AÇIK)" "H10b eksik seans dersleri ve gerekçesiyle (görev kimliği PR yerine geçmez; ders dışı bölüm sayılmaz)"
+cp "$DG/2026-10-16.md" "$T/DG.yedek"
+BEYANSIZ="  ✗ 2026-10-16 · beceri-pr satırı yok ya da 'bekliyor'"
+d13 1 "DOĞRULAT RETRO KAPISI · 1 seans · 0 işlendi · 1 İŞLENMEMİŞ → hafta kapanmaz" "$BEYANSIZ"
+kapi "H10a oracle 'işlenmemiş' → K6 kırmızı → AÇIK rc=1" 1 python3 "$H" olc --hafta 2026-W42
+icerir "$CIKTI" "2026-10-16.md: beceri-pr satırı yok ya da 'bekliyor' (kanon D13) — dersleri: 1 “Zil meşgulü hata saydı”; 2 “Bitiş sinyali yok”; 3 “AÇIK: dış yüzeyde ekran görülmedi”" "H10b eksik seans oracle gerekçesi + DERSLERİYLE"
+icerir "$(cat "$T/d13-arg")" "--dizin $DG --gun " "H10b2 oracle bu kökün dogrulat dizinini ölçtü (kural kopyalanmadı, çağrıldı)"
 icerir "$(cat "$KP")" "| K6 | Doğrulat dersleri → beceri PR | ✗ KIRMIZI |" "H10c KAPANIS.md'de K6 satırı"
 icerir "$(cat "$KP")" "_durum: AÇIK" "H10d onay VAR olsa da hafta AÇIK (onay işlenmemiş dersi kapatmaz)"
-cp "$DG/2026-10-16.md" "$T/DG.yedek"
-ders2(){ sed -i "s|^2\. .*|2. $1|" "$DG/2026-10-16.md"; }
-sed -i 's|^3\. AÇIK: dış yüzeyde .*|3. Dış yüzeyde kare şartı → https://github.com/x/y/pull/371|' "$DG/2026-10-16.md"
-ders2 "Bitiş sinyali → Sx #370 muhakkik --done adımı"
-kapi "H10e üç ders de BİRLEŞMİŞ PR'a bağlı (depo #N · /pull/N) → KAPANDI" 0 python3 "$H" olc --hafta 2026-W42
-icerir "$CIKTI" "1 Doğrulat seansı, 3 dersin hepsi birleşmiş bir PR'a işlenmiş" "H10f yeşil dili"
-ders2 "AÇIK: Bitiş sinyali → Sx #370 sürüyor"
-kapi "H10g birleşmiş PR'ı olsa da AÇIK işaretli ders işlenmemiş → AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "1/3 ders PR'a işlenmedi (madde 2 “AÇIK: Bitiş sinyali”: AÇIK)" "H10h gerekçe"
-ders2 "Bitiş sinyali → cloudtop #900 (inceleniyor)"
-kapi "H10p PR kaynağında AÇIK (OPEN, metinde etiketsiz) → işlenmemiş (göz #365 tur 1)" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "madde 2 “Bitiş sinyali”: cloudtop #900 open" "H10p2 gerekçe PR durumundan"
-ders2 "Bitiş sinyali → cloudtop #901"
-kapi "H10q kapatılmış (birleşmemiş) PR → işlenmemiş" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "madde 2 “Bitiş sinyali”: cloudtop #901 closed" "H10q2 gerekçe"
-ders2 "Bitiş sinyali → cloudtop #12345 (issue)"
-kapi "H10r PR olmayan numara (issue) → işlenmemiş (göz #365 tur 1)" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "madde 2 “Bitiş sinyali”: cloudtop #12345 PR değil" "H10r2 gerekçe"
-ders2 "Bitiş sinyali → #370"
-kapi "H10s depo adı olmadan #N (hangi depo?) → işlenmemiş" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "madde 2 “Bitiş sinyali”: depo adı olmadan #N" "H10s2 gerekçe"
-ders2 "Bitiş sinyali → Sx #370 muhakkik --done adımı"
-kapi "H10t gh cevap veremez → K6 SARI → rc=3 ÖLÇÜLEMEDİ (ölçülemedi ≠ işlendi)" 3 env GH_COK=1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "PR durumu ölçülemedi (gh)" "H10t2 gerekçe"
-cp "$T/DG.yedek" "$DG/2026-10-16.md"
-printf '# Doğrulat seansı — 2026-10-16\n## Ölçüm\n- 10 → 2\n' > "$DG/2026-10-16.md"
-kapi "H10i ders bölümü olmayan seans → AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "2026-10-16.md: ders bölümü yok" "H10j gerekçe"
+d13 1 "x" "  ✗ 2026-10-16 · cloudtop#900 birleşmemiş (beyan var, iş yok)"
+kapi "H10p oracle 'beyan var, PR birleşmemiş' → kırmızı, gerekçe oracle'dan" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "2026-10-16.md: cloudtop#900 birleşmemiş (beyan var, iş yok) (kanon D13) — dersleri: 1 “Zil" "H10p2 gerekçe + dersler"
+d13 0 "DOĞRULAT RETRO KAPISI · 1 seans · 1 işlendi · kapı açık (gh doğrulamalı)"
+kapi "H10e oracle 'hepsi işlendi' → KAPANDI" 0 python3 "$H" olc --hafta 2026-W42
+icerir "$CIKTI" "1 Doğrulat seansı işlenmiş (kanon D13" "H10f yeşil dili"
+d13 2 "DOĞRULAT RETRO KAPISI · 1 seans · ÖLÇÜLEMEDİ (gh doğrulamalı)" "  ? 2026-10-16 · cloudtop#902 gh'den okunamadı"
+kapi "H10t oracle '? ölçülemedi' → K6 SARI → rc=3 (ölçülemedi ≠ işlendi)" 3 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "kanon D13 ölçülemedi: 2026-10-16.md: cloudtop#902 gh'den okunamadı" "H10t2 gerekçe"
+cp "$DG/2026-10-16.md" "$DG/2026-10-15.md"
+d13 2 "x" "  ? 2026-10-15 · cloudtop#902 gh'den okunamadı" "  ✗ 2026-10-16 · cloudtop#900 birleşmemiş (beyan var, iş yok)"
+kapi "H10y bir seans kırmızı + öteki ölçülemedi → KIRMIZI, ölçülemeyen de raporda (göz #365 tur 3)" 1 python3 "$H" olc --hafta 2026-W42
+icerir "$CIKTI" "ayrıca ölçülemedi: 2026-10-15.md: cloudtop#902 gh'den okunamadı" "H10y2 ölçülemeyen gizlenmedi"
+python3 -c "import os,sys; os.remove(sys.argv[1])" "$DG/2026-10-15.md"
+d13 2 "ÖLÇÜLEMEDİ: gh yok — referans doğrulanamaz"
+kapi "H10z oracle rc=2 ve seans adı yok (gh yok) → K6 SARI" 3 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "kanon D13 ölçülemedi (rc=2): ÖLÇÜLEMEDİ: gh yok" "H10z2 gerekçe"
+d13 1 "x" "  satır biçimi değişti"
+kapi "H10zc oracle rc=1 ama seans adı okunamıyor → SARI (sessiz yeşil yok)" 3 python3 "$H" olc --hafta 2026-W42
+d13 0 "ok"
+kapi "H10za oracle yok (cloudtop #691 birleşmeden) → K6 SARI → ÖLÇÜLEMEDİ" 3 python3 "$H" olc --hafta 2026-W42 --d13 "$T/yok.sh"; icerir "$CIKTI" "kanon D13 oracle'ı yok" "H10za2 gerekçe"
+d13 1 "x" "  ✗ 2026-10-20 · beceri-pr satırı yok ya da 'bekliyor'"
+kapi "H10zb oracle listesindeki SONRAKİ haftanın seansı bu haftayı tutmaz → KAPANDI" 0 python3 "$H" olc --hafta 2026-W42
+printf '# Doğrulat seansı — 2026-10-16\nbeceri-pr: cloudtop#676\n## Ölçüm\n- 10 → 2\n' > "$DG/2026-10-16.md"; d13 0 ok
+kapi "H10i ders bölümü olmayan seans → AÇIK (oracle yeşil olsa da)" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "2026-10-16.md: ders bölümü yok" "H10j gerekçe"
 python3 -c "import os,sys; os.remove(sys.argv[1])" "$DG/2026-10-16.md"
-for g in 13 14; do { printf '# seans\n## Pürüzler → ders → nereye işlendi\n'; for i in $(seq 1 15); do printf '%s. ders %s-%s uzunca bir cümle, işlenmedi → protokol notu\n' "$i" "$g" "$i"; done; } > "$DG/2026-10-$g.md"; done
-kapi "H10u 2 seans × 15 PR'sız ders → AÇIK" 1 python3 "$H" olc --hafta 2026-W42
-icerir "$CIKTI" "2026-10-14.md: 15/15 ders PR'a işlenmedi" "H10v ikinci seans da listede"
-icerir "$CIKTI" "15 “ders 14-15 uzunca bir cümle, işlenmedi”: PR yok)" "H10w son dersin METNİ de raporda — liste kesilmez (göz #365 tur 2)"
-icerir "$(cat "$KP")" "“ders 14-15 uzunca bir cümle, işlenmedi”" "H10x KAPANIS.md'de de tam liste"
-m_k6_kesik(){ local o; o="$(python3 "$1" olc --hafta 2026-W42 2>&1)"; grep -qF "“ders 14-15 uzunca bir cümle, işlenmedi”: PR yok)" <<<"$o"; }
-mut "M15 rapor kesilince son seansın dersleri kaybolur (kapı yakalar)" 's/        return "KIRMIZI", f"Doğrulat dersi işlenmemiş: {'"'"' · '"'"'.join(eksik)}"   # kesilmez/        return "KIRMIZI", f"Doğrulat dersi işlenmemiş: {'"'"' · '"'"'.join(eksik)}"[:400]   # kesilmez/' m_k6_kesik
-m_k6_ders(){ local o; o="$(python3 "$1" olc --hafta 2026-W42 2>&1)"; grep -qF "“ders 13-1 uzunca bir cümle, işlenmedi”" <<<"$o"; }
-mut "M16 ders metni rapordan düşünce yalnız numara kalır (kapı yakalar)" 's/islenmemis = \[f"{no} “{d}”: {g}"/islenmemis = [f"{no}: {g}"/' m_k6_ders
-python3 -c "import os,sys; [os.remove(x) for x in sys.argv[1:]]" "$DG/2026-10-13.md" "$DG/2026-10-14.md"
-cp "$T/DG.yedek" "$DG/2026-10-05.md"
+cp "$T/DG.yedek" "$DG/2026-10-05.md"; d13 1 "x" "  ✗ 2026-10-05 · beceri-pr satırı yok ya da 'bekliyor'"
 kapi "H10k başka haftanın işlenmemiş seansı bu haftayı tutmaz → KAPANDI" 0 python3 "$H" olc --hafta 2026-W42
-kapi "H10l ...ama kendi haftasında (W41) kırmızı" 1 python3 "$H" olc --hafta 2026-W41; icerir "$CIKTI" "2026-10-05.md: 2/3 ders" "H10m W41 gerekçe"
+kapi "H10l ...ama kendi haftasında (W41) kırmızı" 1 python3 "$H" olc --hafta 2026-W41; icerir "$CIKTI" "2026-10-05.md: beceri-pr satırı yok" "H10m W41 gerekçe"
 python3 -c "import shutil,sys; shutil.rmtree(sys.argv[1], ignore_errors=True)" "$KOK/_agents/handoff/retro/2026-W41"
-printf '# taslak seans\n## Pürüzler → ders\n1. x → cloudtop #676\n' > "$DG/taslak.md"
-kapi "H10n adında tarih olmayan seans dosyası → K6 SARI → rc=3 ÖLÇÜLEMEDİ (bu hafta değil sayılmaz)" 3 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "taslak.md (adında tarih yok)" "H10o gerekçe"
+python3 -c "import os,sys; os.remove(sys.argv[1])" "$DG/2026-10-05.md"
+printf '# taslak seans\nbeceri-pr: cloudtop#676\n## Pürüzler → ders\n1. x\n' > "$DG/taslak.md"
+kapi "H10n adında tarih olmayan seans dosyası → K6 SARI → rc=3 (bu hafta değil sayılmaz)" 3 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "taslak.md (adında tarih yok)" "H10o gerekçe"
 python3 -c "import os,sys; os.remove(sys.argv[1])" "$DG/taslak.md"
-cp "$T/DG.yedek" "$DG/2026-10-16.md"
-# K6 mutantları (kopya üstünde)
-m_k6_bagli(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -ne 0 ]; }
-m_k6_bagli_2(){ local o; o="$(python3 "$1" olc --hafta 2026-W42 2>&1)"; grep -qF "madde 2 “Bitiş sinyali yok”: PR yok" <<<"$o"; }
-mut "M8 PR yok denetimi kalkınca görev kimlikli ders işlenmiş sayılır (kapı yakalar)" 's/        return "islenmedi", "depo adı olmadan #N" if ciplak else "PR yok"/        return ("islenmedi", "depo adı olmadan #N") if ciplak else ("islendi", "")/' m_k6_bagli_2
-sed -i 's|^3\. AÇIK: dış yüzeyde .*|3. Dış yüzeyde kare şartı → https://github.com/x/y/pull/371|' "$DG/2026-10-16.md"
-ders2 "AÇIK: Bitiş sinyali → Sx #370 sürüyor"
-mut "M9 AÇIK denetimi kalkınca birleşmiş PR'lı AÇIK ders geçer (kapı yakalar)" 's/^    if ACIK_RE.search(tx):$/    if False:/' m_k6_bagli
-ders2 "Bitiş sinyali → cloudtop #900 (inceleniyor)"
-mut "M12 PR durumu sorulmazsa (referans var = işlendi) açık PR haftayı kapatır (kapı yakalar)" 's/    if any(x == "MERGED" for _, x in durumlar):/    if durumlar:/' m_k6_bagli
-ders2 "Bitiş sinyali → #370"
-mut "M13 çıplak #N kabul edilince depo belirsiz referans geçer (kapı yakalar)" 's/        return "islenmedi", "depo adı olmadan #N" if ciplak else "PR yok"/        return ("islendi", "") if ciplak else ("islenmedi", "PR yok")/' m_k6_bagli
-ders2 "Bitiş sinyali → Sx #370 muhakkik --done adımı"
-m_k6_gh(){ GH_COK=1 python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -eq 3 ]; }
-mut "M14 gh hatası sessiz geçilince ölçülemeyen PR yeşil olur (kapı yakalar)" 's/^    if olcemedi:$/    if False:/' m_k6_gh
-cp "$T/DG.yedek" "$DG/2026-10-16.md"
-mut "M10 K6 olc'a bağlı olmazsa işlenmemiş ders haftayı kapatır (kapı yakalar)" '/K.append(("K6", /d' m_k6_bagli
-printf '# taslak\n' > "$DG/taslak.md"
-m_k6_tarih(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -eq 3 ]; }
-mut "M11 tarihsiz seans sessiz atlanınca sarı kaybolur (kapı yakalar)" 's/^    if tarihsiz or okunamadi:$/    if False:/' m_k6_tarih
+for g in 13 14; do { printf '# seans\nbeceri-pr: bekliyor\n## Pürüzler → ders → nereye işlendi\n'; for i in $(seq 1 15); do printf '%s. ders %s-%s uzunca bir cümle, işlenmedi → protokol notu\n' "$i" "$g" "$i"; done; } > "$DG/2026-10-$g.md"; done
+d13 1 "x" "  ✗ 2026-10-13 · beceri-pr satırı yok ya da 'bekliyor'" "  ✗ 2026-10-14 · beceri-pr satırı yok ya da 'bekliyor'"
+kapi "H10u 2 seans × 15 ders, işlenmemiş → AÇIK" 1 python3 "$H" olc --hafta 2026-W42
+icerir "$CIKTI" "15 “ders 14-15 uzunca bir cümle, işlenmedi”" "H10w son seansın son dersi de raporda — kesilmez (göz #365 tur 2)"
+icerir "$(cat "$KP")" "“ders 14-15 uzunca bir cümle, işlenmedi”" "H10x KAPANIS.md'de de tam liste"
+m_k6_kesik(){ local o; o="$(python3 "$1" olc --hafta 2026-W42 2>&1)"; grep -qF "15 “ders 14-15 uzunca bir cümle, işlenmedi”" <<<"$o"; }
+mut "M15 rapor kesilince son seansın dersleri kaybolur (kapı yakalar)" 's/{ek}"   # kesilmez/{ek}"[:400]   # kesilmez/' m_k6_kesik
+m_k6_ders(){ local o; o="$(python3 "$1" olc --hafta 2026-W42 2>&1)"; grep -qF "“ders 13-1 uzunca bir cümle, işlenmedi”" <<<"$o"; }
+mut "M16 dersler rapordan düşünce yalnız seans adı kalır (kapı yakalar)" "s/ — dersleri: {ders_soz}\")$/\")/" m_k6_ders
+python3 -c "import os,sys; [os.remove(x) for x in sys.argv[1:]]" "$DG/2026-10-13.md" "$DG/2026-10-14.md"
+# K6 mutantları (kopya üstünde) — her biri doğru davranışın tam rc'sini bekler (sarıya kaçmak da yakalanır)
+cp "$T/DG.yedek" "$DG/2026-10-16.md"; d13 1 "x" "$BEYANSIZ"
+m_k6_red(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -eq 1 ]; }
+mut "M8 oracle'ın ✗ satırları yok sayılınca işlenmemiş seans geçer (kapı yakalar)" 's/kirmizi = \[(ad, n) for k, ad, n in satirlar if k == "✗"\]/kirmizi = []/' m_k6_red
+mut "M10 K6 olc'a bağlı olmazsa işlenmemiş seans haftayı kapatır (kapı yakalar)" '/K.append(("K6", /d' m_k6_red
+m_k6_sari(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -eq 3 ]; }
+m_k6_sari_yok(){ python3 "$1" olc --hafta 2026-W42 --d13 "$T/yok.sh" >/dev/null 2>&1; [ $? -eq 3 ]; }
+mut "M18 oracle yokken sessiz geçilince işlenmemiş hafta kapanır (kapı yakalar)" "s/^    if not d13:$/    if False:/" m_k6_sari_yok
+d13 2 "ÖLÇÜLEMEDİ: gh yok — referans doğrulanamaz"
+mut "M19 oracle rc=2 (adsız) yeşil sayılınca ölçülemeyen hafta kapanır (kapı yakalar)" 's/ or (r.returncode != 0 and not satirlar):$/:/' m_k6_sari
+d13 1 "x" "  satır biçimi değişti"
+mut "M20 oracle rc=1 ama ad okunamayınca sessiz geçilirse yeşil olur (kapı yakalar)" 's/ or (r.returncode != 0 and not satirlar):$/:/' m_k6_sari
+d13 2 "x" "  ? 2026-10-16 · cloudtop#902 gh'den okunamadı"
+mut "M14 oracle '?' satırı yok sayılınca ölçülemeyen PR yeşil olur (kapı yakalar)" 's/bilinmez = \[(ad, n) for k, ad, n in satirlar if k == "?" and ad in seanslar\]/bilinmez = []/' m_k6_sari
+cp "$DG/2026-10-16.md" "$DG/2026-10-15.md"; d13 2 "x" "  ? 2026-10-15 · cloudtop#902 gh'den okunamadı" "  ✗ 2026-10-16 · cloudtop#900 birleşmemiş (beyan var, iş yok)"
+m_k6_gizli(){ local o; o="$(python3 "$1" olc --hafta 2026-W42 2>&1)"; grep -qF "cloudtop#902 gh'den okunamadı" <<<"$o"; }
+mut "M17 kırmızı rapor ölçülemeyeni yutunca sorun görünmez (kapı yakalar)" 's/^        ek = f" · ayrıca ölçülemedi: .*/        ek = ""/' m_k6_gizli
+python3 -c "import os,sys; os.remove(sys.argv[1])" "$DG/2026-10-15.md"
+printf '# taslak\n' > "$DG/taslak.md"; d13 0 ok
+mut "M11 tarihsiz seans sessiz atlanınca sarı kaybolur (kapı yakalar)" 's/^    if tarihsiz or okunamadi:$/    if False:/' m_k6_sari
 python3 -c "import os,sys; os.remove(sys.argv[1])" "$DG/taslak.md"
+d13 1 "x" "  ✗ 2026-10-20 · beceri-pr satırı yok ya da 'bekliyor'"
+m_k6_hafta(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -eq 0 ]; }
+mut "M21 oracle listesi haftaya süzülmezse sonraki haftanın seansı W42'yi tutar (kapı yakalar)" 's/^            if a == ad:$/            if True:/' m_k6_hafta
 
 echo; echo "GECEN=$G DUSEN=$K"
 [ "$K" -eq 0 ]

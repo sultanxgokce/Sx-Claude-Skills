@@ -1,66 +1,62 @@
 {
   "is": "hafta-kapanis-dogrulat-retro-kapisi",
   "arac": "kanit.py/0.4.0",
-  "guncelleme": "2026-10-17T20:37:54+03:00",
+  "guncelleme": "2026-10-17T20:58:03+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "kapanis-sinavi",
       "asama": "once",
       "dosya": "olcum-kapanis-sinavi-once.txt",
-      "sha256": "3f0a898ded9553c086b749ff7a17122a80e6563f7775c45d8d7d4a565d5d6924",
+      "sha256": "e0b450551bba99fdd02243674beea08eb3931418e3c129147eb34ff2ef2ea936",
       "komut": [
         "env",
         "-u",
         "HAFTA_KAPANIS_RETRO_PY",
         "bash",
-        "/tmp/tmp.y1CuIF0Qtv/hafta-kapanis/scripts/hafta-kapanis.test.sh"
+        "/tmp/tmp.A5QSjHxUfH/hafta-kapanis/scripts/hafta-kapanis.test.sh"
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-10-17T20:37:49+03:00",
-      "sure_sn": 6.8
+      "zaman": "2026-10-17T20:57:29+03:00",
+      "sure_sn": 5.6
     },
     {
       "tur": "olcum",
       "etiket": "kapanis-sinavi",
       "asama": "sonra",
       "dosya": "olcum-kapanis-sinavi-sonra.txt",
-      "sha256": "c272d4384b023024e5e9c0d88659796a341088af5f3e42b15ff504356122eb3e",
+      "sha256": "1c6cf23fd61ae9c2083fdb4489cbf32b94342db6f7bfa165290c7edb6efd0d58",
       "komut": [
         "bash",
         "/config/projects/_wt/Sx-Claude-Skills-hafta-kapanis-dogrulat-retro-kapisi/hafta-kapanis/scripts/hafta-kapanis.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-17T20:37:53+03:00",
-      "sure_sn": 4.5
+      "zaman": "2026-10-17T20:57:35+03:00",
+      "sure_sn": 6.5
     },
     {
       "tur": "olcum",
       "etiket": "gercek-dogrulat-seansi",
       "asama": "sonra",
       "dosya": "olcum-gercek-dogrulat-seansi-sonra.txt",
-      "sha256": "bf354997744d069b78551b2f60369ab6e165e292436dc13fd3be2f49f28cfd80",
+      "sha256": "15bc95ac2e41568728714097eb7c88cfbb8ac270bcf6a3522c5f86522c759b90",
       "komut": [
-        "python3",
-        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/k6-gercek.py",
-        "/config/projects/_wt/Sx-Claude-Skills-hafta-kapanis-dogrulat-retro-kapisi/hafta-kapanis/scripts/hafta-kapanis.py",
-        "/config/projects/_wt/Sx-Claude-Skills-hafta-kapanis-dogrulat-retro-kapisi/retro/scripts/retro.py",
-        "/config/projects/Nexus",
-        "2026-W42"
+        "echo",
+        "tur 4: bu olcum k6-tumlesik ile degisti - K6 artik kanon D13 oracle cagiriyor, kendi gh olcumu silindi"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-17T20:37:54+03:00",
-      "sure_sn": 0.8
+      "zaman": "2026-10-17T20:58:02+03:00",
+      "sure_sn": 0.0
     },
     {
       "tur": "olcum",
       "etiket": "depo-denetimi",
       "asama": "sonra",
       "dosya": "olcum-depo-denetimi-sonra.txt",
-      "sha256": "9570a63e8597a354a269f5b1563b76cec92f00aa4d0c0df4b3b229c186c87a50",
+      "sha256": "e073a2b463e689cdec6d0fe84270135d0c1cea4d0e858689166855d8bf4bc2de",
       "komut": [
         "bash",
         "-c",
@@ -68,9 +64,24 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-17T20:37:54+03:00",
+      "zaman": "2026-10-17T20:58:03+03:00",
       "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "k6-tumlesik",
+      "asama": "sonra",
+      "dosya": "olcum-k6-tumlesik-sonra.txt",
+      "sha256": "398007516b34aa7c516e7310a67f338943fff6d47032d76053d0b44e42605429",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/k6-tumlesik.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T20:57:39+03:00",
+      "sure_sn": 3.3
     }
   ],
-  "imza": "8275d4879f46d859518b62fa7699b686d03ef55f47911c48b698dfc88894e141"
+  "imza": "e23af35410a28ec576d7756f769fca74ee9dc3d0d32ecd4faa712c224e6ceae0"
 }

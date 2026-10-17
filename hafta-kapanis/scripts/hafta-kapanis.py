@@ -15,12 +15,11 @@ koşmadıysa haftayı kapatmasın." Kapı beş ölçüm + bir onay okur; hiçbir
                  "## Kaçış ve tıkanma" bölümünde YAZILI bir derse bağlı: `- <anahtar> → M<n>` (RED yolu yok)
   K5 onay      — KAPANIS.md'de `_sultan_onay:` satırı geçerli D1 biçiminde. 🔴 A06: bu satırı ARAÇ YAZMAZ;
                  insan (Sultan sözünü aktaran beyan) yazar, araç yalnız var mı/biçimli mi diye ölçer ve korur.
-  K6 doğrulat  — haftanın Doğrulat seans retroları (`retro/dogrulat/<tarih>.md`, tarihi haftanın içinde): `## … ders …`
-                 bölümündeki HER ders maddesi AÇIK değil ve BİRLEŞMİŞ bir PR'a bağlı (durum kaynaktan: gh pr view →
-                 MERGED; referans deposuyla: `cloudtop #676` · `Sx #370` · `…/pull/<n>`). Çıplak #N, açık/kapalı PR,
-                 PR olmayan numara, PR'sız ders, AÇIK ders ya da ders bölümü olmayan seans → kırmızı, eksik seanslar dersleriyle listelenir (Sultan katı
-                 kuralı 17 Eki: işlenmemiş ders varsa hafta kapanmaz). Seans kaydı yoksa yeşil ve bunu söyler; adında tarih
-                 olmayan / okunamayan seans dosyası ve gh'nin cevap veremediği PR sarı (ölçülemedi ≠ işlendi).
+  K6 doğrulat  — haftanın Doğrulat seans retroları (`retro/dogrulat/<tarih>.md`, tarihi haftanın içinde) kanon D13'e göre işlenmiş:
+                 hüküm kanonun ORACLE'ındadır (cloudtop scripts/dogrulat-retro-kapisi.sh: `beceri-pr: <depo>#<no>` beyanı var ve
+                 her PR gh'de birleşmiş) — kapı kuralı yeniden yazmaz, çağırır (ikinci kopya yok). İşlenmemiş seans → kırmızı,
+                 eksik seanslar DERSLERİYLE listelenir (kesilmez); ders bölümü olmayan seans da kırmızı. Seans kaydı yoksa yeşil
+                 ve bunu söyler; oracle yok/ölçemedi, adında tarih olmayan ya da okunamayan seans dosyası → sarı.
 
 Çıktı: `_agents/handoff/retro/<hafta>/KAPANIS.md` (aracın TEK yazdığı dosya; retro/MERKEZ dosyalarına dokunmaz).
 Çıkış: 0 KAPANDI · 5 ONAY BEKLİYOR (K1-K4 + K6 yeşil, K5 yok) · 1 AÇIK (kırmızı var) · 3 ÖLÇÜLEMEDİ (sarı var, kırmızı yok;
@@ -205,70 +204,41 @@ def k4_kacis(retro, kok, hafta, merkez_yol):
     return "YEŞİL", f"{len(anahtarlar)} kaçış/tıkanma kaydının hepsi yazılı bir derse bağlı"
 
 
-# K6 (Sultan katı kuralı 17 Eki · gorev_01M55490MQAN8G2NB8MF7HN77R): her Doğrulat seansının dersleri kalıcı beceriye PR ile işlenir;
-#    işlenmemiş ders varsa hafta kapanmaz. "İşlendi" = ders maddesi AÇIK değil ∧ maddedeki PR referanslarından en az biri
-#    PR KAYNAĞINDA BİRLEŞMİŞ (gh pr view → MERGED; göz #365 tur 1: metin eşleşmesi issue/ilgisiz numarayı da geçiriyordu).
-#    Referans DEPOSUYLA yazılır: "cloudtop #676" · "Sx #370" · https://github.com/<sahip>/<depo>/pull/<n>; çıplak "#N" hangi
-#    depoda olduğu bilinmediği için işlenmiş SAYILMAZ. Açık/kapalı PR, PR olmayan numara → işlenmemiş. gh cevap veremezse SARI
-#    (ölçülemedi ≠ işlendi). Görev kimliği ya da "protokol" notu PR yerine geçmez. RED yolu yok.
-ACIK_RE = re.compile(r"(?<!\w)AÇIK(?!\w)")
+# K6 (Sultan katı kuralı 17 Eki · gorev_01M55490MQAN8G2NB8MF7HN77R · kanon D13): Doğrulat seansının dersleri kalıcı beceriye PR ile
+#    işlenmeden hafta kapanmaz. TEK ÖLÇÜM (SERDAR 20:49 — ikinci kopya yasak, K02): hüküm kanonun oracle'ındadır —
+#    cloudtop scripts/dogrulat-retro-kapisi.sh (D13): seans dosyasında `beceri-pr: <depo>#<no>[, …]` beyanı VAR ve her referans gh'de
+#    BİRLEŞMİŞ (#691 tur 1). Bu kapı kuralı YENİDEN YAZMAZ, oracle'ı çağırır ve çıktısını okur; oracle yoksa/ölçemezse SARI.
+#    Bu kapıya kalan: (1) oracle'ın "son N gün" penceresini ISO haftasına süzmek (sonraki haftanın seansı bu haftayı tutmaz),
+#    (2) eksik seansı DERSLERİYLE raporlamak (madde no + ders metni; kesilmez — göz #365 tur 2), (3) kırmızı ölçülemeyeni gizlemez
+#    (tur 3), (4) ders bölümü olmayan seans kırmızı (kart cümlesi).
 MADDE_RE = re.compile(r"^\s*(?:(\d+)[.)]|[-*])\s+(\S.*)$")
-URL_PR_RE = re.compile(r"github\.com/([\w.-]+)/([\w.-]+)/pull/(\d+)")
-DEPO_PR_RE = re.compile(r"(?<![\w/.-])([A-Za-z][\w.-]*)\s+#(\d+)\b")
-CIPLAK_PR_RE = re.compile(r"(?<![\w&/])#\d+\b")
-DEPO_TAKMA = {"Sx": "Sx-Claude-Skills"}   # NOTES dilinde kısa ad → depo adı
-GH_SAHIP = os.environ.get("HAFTA_KAPANIS_GH_SAHIP", "sultanxgokce")
+ORACLE_SATIR_RE = re.compile(r"^\s*([✗?])\s+(\S+)(?:\s+·\s+(.*\S))?\s*$", re.MULTILINE)   # oracle: "  ✗ <ad> · <neden>" · "  ? <ad> · <neden>"
+D13_VARSAYILAN = "/config/projects/cloudtop/scripts/dogrulat-retro-kapisi.sh"
 
 
-def pr_referanslari(tx):
-    """Maddedeki depolu PR referansları [(sahip, depo, n)] + çıplak '#N' var mı."""
-    refs = [(m.group(1), m.group(2), m.group(3)) for m in URL_PR_RE.finditer(tx)]
-    yazi = URL_PR_RE.sub(" ", tx)
-    for m in DEPO_PR_RE.finditer(yazi):
-        refs.append((GH_SAHIP, DEPO_TAKMA.get(m.group(1), m.group(1)), m.group(2)))
-    kalan = DEPO_PR_RE.sub(" ", yazi)
-    return refs, bool(CIPLAK_PR_RE.search(kalan))
+def d13_bul(a):
+    """Kanon D13 oracle'ı: --d13 · HAFTA_KAPANIS_D13 · cloudtop varsayılanı. Yoksa None (K6 SARI — ölçülemedi)."""
+    y = (a or {}).get("--d13") or os.environ.get("HAFTA_KAPANIS_D13") or D13_VARSAYILAN
+    return y if os.path.isfile(y) else None
 
 
-def pr_durumu(sahip, depo, n, _onbellek={}):
-    """PR kaynağından durum: 'MERGED' · 'OPEN' · 'CLOSED' · 'PR-DEĞİL' · None (ölçülemedi)."""
-    k = (sahip, depo, n)
-    if k not in _onbellek:
-        gh = os.environ.get("HAFTA_KAPANIS_GH", "gh")
-        try:
-            r = subprocess.run([gh, "pr", "view", n, "--repo", f"{sahip}/{depo}", "--json", "state", "-q", ".state"],
-                               capture_output=True, text=True, timeout=30)
-            if r.returncode == 0 and r.stdout.strip() in ("MERGED", "OPEN", "CLOSED"):
-                _onbellek[k] = r.stdout.strip()
-            elif "Could not resolve to a PullRequest" in r.stderr or "Could not resolve to a Repository" in r.stderr:
-                _onbellek[k] = "PR-DEĞİL"
-            else:
-                _onbellek[k] = None
-        except (OSError, subprocess.TimeoutExpired):
-            _onbellek[k] = None
-    return _onbellek[k]
+def dersleri(metin):
+    """Seansın `## … ders …` bölümlerindeki maddeler → [(no, ders metni — okun solu)]."""
+    out = []
+    for b in [s[3:].strip() for s in metin.split("\n") if s.startswith("## ") and "ders" in s[3:].casefold()]:
+        for s in bolum(metin, b):
+            m = MADDE_RE.match(s)
+            if m:
+                tx = m.group(2)
+                out.append((m.group(1) or str(len(out) + 1), tx.split("→")[0].strip() or tx))
+    return out
 
 
-def madde_hukmu(tx):
-    """→ ('islendi'|'islenmedi'|'olculemedi', gerekçe)"""
-    if ACIK_RE.search(tx):
-        return "islenmedi", "AÇIK"
-    refs, ciplak = pr_referanslari(tx)
-    if not refs:
-        return "islenmedi", "depo adı olmadan #N" if ciplak else "PR yok"
-    durumlar = [(f"{d} #{n}", pr_durumu(s, d, n)) for s, d, n in refs]
-    if any(x == "MERGED" for _, x in durumlar):
-        return "islendi", ""
-    if any(x is None for _, x in durumlar):
-        return "olculemedi", ", ".join(f"{a} ölçülemedi" for a, x in durumlar if x is None)
-    return "islenmedi", ", ".join(f"{a} {'PR değil' if x == 'PR-DEĞİL' else x.lower()}" for a, x in durumlar)
-
-
-def k6_dogrulat(retro, kok, hafta):
+def k6_dogrulat(retro, kok, hafta, d13):
     pzt, paz = retro.hafta_araligi(hafta)
     diz = os.path.join(kok, "_agents", "handoff", "retro", "dogrulat")
     dosyalar = sorted(glob.glob(os.path.join(diz, "*.md"))) if os.path.isdir(diz) else []
-    seanslar, tarihsiz, okunamadi = [], [], []
+    seanslar, tarihsiz, okunamadi = {}, [], []
     for yol in dosyalar:
         ad = os.path.basename(yol)
         t = retro.tarih_cek(ad)
@@ -277,37 +247,45 @@ def k6_dogrulat(retro, kok, hafta):
             continue
         if retro.aralikta(t, pzt, paz):
             try:
-                seanslar.append((ad, open(yol, encoding="utf-8").read()))
+                seanslar[ad] = open(yol, encoding="utf-8").read()
             except (OSError, UnicodeDecodeError) as e:
                 okunamadi.append(f"{ad} ({type(e).__name__})")
     if tarihsiz or okunamadi:
         return "SARI", "seans dosyası ölçülemedi: " + ", ".join([f"{a} (adında tarih yok)" for a in tarihsiz] + okunamadi)
     if not seanslar:
         return "YEŞİL", "bu hafta Doğrulat seans kaydı yok (retro/dogrulat/<tarih>.md) — kaydı yazılmamış seansı bu kapı görmez"
-    eksik, olcemedi, toplam = [], [], 0
-    for ad, metin in seanslar:
-        basliklar = [s[3:].strip() for s in metin.split("\n") if s.startswith("## ") and "ders" in s[3:].casefold()]
-        maddeler = []
-        for b in basliklar:
-            for s in bolum(metin, b):
-                m = MADDE_RE.match(s)
-                if m:
-                    maddeler.append((m.group(1) or str(len(maddeler) + 1), m.group(2)))
-        if not maddeler:
+    if not d13:
+        return "SARI", f"kanon D13 oracle'ı yok ({D13_VARSAYILAN} · --d13 · HAFTA_KAPANIS_D13; cloudtop #691) — işlendi mi ölçülemez"
+    # oracle'ın penceresi "son N gün" (gerçek takvim) → haftanın pazartesisini kapsar; çıktısı bu haftanın dosyalarına süzülür
+    gun = max(0, (datetime.now().date() - pzt).days)
+    try:
+        r = subprocess.run(["bash", d13, "--dizin", diz, "--gun", str(gun)], capture_output=True, text=True, timeout=300)
+    except (OSError, subprocess.TimeoutExpired) as e:
+        return "SARI", f"kanon D13 oracle'ı koşmadı ({type(e).__name__}) — işlendi mi ölçülemez"
+    cikti = (r.stdout or "") + (r.stderr or "")
+    satirlar = [(m.group(1), m.group(2) + ".md", m.group(3) or "") for m in ORACLE_SATIR_RE.finditer(cikti)]
+    ilk = cikti.strip().splitlines()[0] if cikti.strip() else "—"
+    if r.returncode not in (0, 1, 2) or (r.returncode != 0 and not satirlar):
+        # rc 1/2 verip hangi seans olduğunu söylemeyen çıktı = oracle'ın kendisi ölçemedi (dizin yok · gh yok · biçim değişti)
+        return "SARI", f"kanon D13 ölçülemedi (rc={r.returncode}): {ilk}"
+    kirmizi = [(ad, n) for k, ad, n in satirlar if k == "✗"]   # haftaya süzme aşağıda: yalnız bu haftanın seansıyla eşleşen satır sayılır
+    bilinmez = [(ad, n) for k, ad, n in satirlar if k == "?" and ad in seanslar]
+    eksik = []
+    for ad, metin in seanslar.items():
+        d = dersleri(metin)
+        ders_soz = "; ".join(f"{no} “{t}”" for no, t in d)
+        if not d:
             eksik.append(f"{ad}: ders bölümü yok (## … ders …)")
-            continue
-        toplam += len(maddeler)
-        # rapor DERSİN KENDİSİNİ yazar (göz #365 tur 2): madde no + ders metni (okun solu — "nereye işlendi" kısmı hariç) + gerekçe
-        hukum = [(no, tx.split("→")[0].strip() or tx) + madde_hukmu(tx) for no, tx in maddeler]
-        islenmemis = [f"{no} “{d}”: {g}" for no, d, h, g in hukum if h == "islenmedi"]
-        if islenmemis:
-            eksik.append(f"{ad}: {len(islenmemis)}/{len(maddeler)} ders PR'a işlenmedi (madde {'; '.join(islenmemis)})")
-        olcemedi += [f"{ad} madde {no} “{d}”: {g}" for no, d, h, g in hukum if h == "olculemedi"]
+        for a, n in kirmizi:
+            if a == ad:
+                eksik.append(f"{ad}: {n or 'işlenmemiş'} (kanon D13) — dersleri: {ders_soz}")
+    olcemedi = [f"{a}: {n or 'ölçülemedi'}" for a, n in bilinmez]
     if eksik:
-        return "KIRMIZI", f"Doğrulat dersi işlenmemiş: {' · '.join(eksik)}"   # kesilmez: eksiklerin TAMAMI listelenir (göz #365 tur 2)
+        ek = f" · ayrıca ölçülemedi: {' · '.join(olcemedi)}" if olcemedi else ""   # kırmızı ölçülemeyeni GİZLEMEZ (göz #365 tur 3)
+        return "KIRMIZI", f"Doğrulat dersi işlenmemiş: {' · '.join(eksik)}{ek}"   # kesilmez: eksiklerin TAMAMI listelenir (göz #365 tur 2)
     if olcemedi:
-        return "SARI", f"PR durumu ölçülemedi (gh): {' · '.join(olcemedi)}"
-    return "YEŞİL", f"{len(seanslar)} Doğrulat seansı, {toplam} dersin hepsi birleşmiş bir PR'a işlenmiş"
+        return "SARI", f"kanon D13 ölçülemedi: {' · '.join(olcemedi)}"
+    return "YEŞİL", f"{len(seanslar)} Doğrulat seansı işlenmiş (kanon D13: beceri-pr beyanı var, PR'lar birleşmiş)"
 
 
 def k5_onay(kapanis_yol):
@@ -345,7 +323,7 @@ def olc(a):
     K.append(("K2", "dersler → görev (D1)", renk2, not2))
     K.append(("K3", "süzüm", *k_retro(retro_py, "suzum", kok, hafta, [])))
     K.append(("K4", "kaçış/tıkanma → ders", *(k4_kacis(retro, kok, hafta, merkez_yol) if retro else ("SARI", "retro becerisi yok"))))
-    K.append(("K6", "Doğrulat dersleri → beceri PR", *k6_dogrulat(retro, kok, hafta)))
+    K.append(("K6", "Doğrulat dersleri → beceri PR", *k6_dogrulat(retro, kok, hafta, d13_bul(a))))
     onay_durum, onay_deger, onay_not = k5_onay(kapanis_yol)
     renkler = [k[2] for k in K]
     if "KIRMIZI" in renkler or onay_durum == "BİÇİMSİZ":
