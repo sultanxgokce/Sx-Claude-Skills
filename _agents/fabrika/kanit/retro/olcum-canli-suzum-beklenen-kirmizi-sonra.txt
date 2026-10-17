@@ -1,0 +1,9 @@
+$ bash -c python3 retro/scripts/retro.py suzum --kok '/tmp/tmp.cvqhpLE54S/nexus-ince'; [ $? -eq 1 ]
+# rc=0 sure=0.0s zaman=2026-10-17T16:06:00+03:00
+--- stdout ---
+✗ SÜZÜM KIRMIZI · 2026-W42 · 4 öneri, 4 sorun
+  • BÂNİ Ö1) damgasız ya da biçimsiz: '(boş)' — '→ gorev_<26>' ya da '→ RED: <gerekçe>'
+  • BÂNİ Ö2) damgasız ya da biçimsiz: '(boş)' — '→ gorev_<26>' ya da '→ RED: <gerekçe>'
+  • BÂNİ Ö3) damgasız ya da biçimsiz: '(boş)' — '→ gorev_<26>' ya da '→ RED: <gerekçe>'
+  • BÂNİ Ö4) damgasız ya da biçimsiz: '(boş)' — '→ gorev_<26>' ya da '→ RED: <gerekçe>'
+--- stderr ---

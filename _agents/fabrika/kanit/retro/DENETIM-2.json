@@ -1,0 +1,30 @@
+{
+  "tur": 2,
+  "is": "retro",
+  "pr": "359",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T16:11:27+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 71732,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 12,
+    "bayt": 24545
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kutu ve merkez kipleri; beş kaynaklı ölçüm, ölçülemeyeni sarı yazma, beş başlık linti, eksik ajan dökümü ve öneri→görev/RED süzümüyle iş kartındaki akışı kurmuş. Önceki turdaki bayat damga açığı metin karşılaştırması, yenilemede damga düşürme ve bunu ısıran mutasyon sınavıyla kapatılmış; üretimi durduracak kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Hermetik sınav rc=0, canlı kutu ve lint ölçümleri, merkezde eksik ajan davranışı, kırmızı süzüm örneği ve örnek retro dosyası ana talepleri destekliyor; önceki bulgu için T8 akışı ile M4 mutasyonu doğrudan kanıt eklenmiş. Küresel beceri dizini için yalnız önce ölçümü bulunuyor; sonrasında kurulum yerine depo betiği çalıştırılmış, ancak diffte catalog/sync hedefi ve beceri paketi mevcut olduğundan bu, kod puanını düşüren bir kusur değil, dağıtım sonrası doğrulama boşluğu."
+  }
+}

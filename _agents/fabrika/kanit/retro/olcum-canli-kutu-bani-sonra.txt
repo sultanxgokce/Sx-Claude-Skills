@@ -1,0 +1,6 @@
+$ python3 retro/scripts/retro.py kutu BÂNİ --kok /config/projects/Nexus --koltuk bani:0
+# rc=0 sure=0.1s zaman=2026-10-17T16:05:59+03:00
+--- stdout ---
+✓ iskelet yazıldı: _agents/handoff/retro/2026-W42/BÂNİ.md — 5 başlığı doldur, sonra `retro.py lint` koş
+  iz: VAR · notes 246 · kart 20/16/4
+--- stderr ---
