@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi/yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh
-# rc=0 sure=10.5s zaman=2026-10-17T12:55:17+03:00
+# rc=0 sure=12.5s zaman=2026-10-17T13:38:37+03:00
 --- stdout ---
 ════ T1 · hiçbir şey yok → engeller ════
   ✓ kart+kanıt+denetim yokken rc=1

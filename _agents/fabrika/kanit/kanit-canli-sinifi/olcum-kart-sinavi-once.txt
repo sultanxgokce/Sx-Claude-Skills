@@ -1,5 +1,5 @@
-$ bash /tmp/tmp.gKiNR2R816/kart.test.sh
-# rc=1 sure=1.9s zaman=2026-10-17T12:54:49+03:00
+$ bash /tmp/tmp.Wxc5xiTCJ7/kart.test.sh
+# rc=1 sure=6.6s zaman=2026-10-17T13:38:00+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -64,12 +64,15 @@ $ bash /tmp/tmp.gKiNR2R816/kart.test.sh
   ✗ alanı olmayan eski kart: cümleden E, 'eski kart' işaretli
   ✓ canli-ayarla gerekçesiz reddeder
   ✓ 20 karakterden kısa gerekçe reddedilir
+  ✓ --reis verilmeden reddedilir (aktör ölçülmeden şart kalkmaz — göz tur 4)
+  ✓ sahip olmayan reis (SERDAR ≠ aldi BANI) reddedilir
+  ✓ reddedilen denemeler karta yazmadı
   ✗ gerekçeli canli-ayarla h kabul
-  ✗ karta alan + geçmiş satırı işlendi (gizli değil)
+  ✗ karta alan + geçmiş satırı (reis dahil) işlendi (gizli değil)
   ✗ kapı artık H okur
   ✗ canli-ayarla e: canlı istemeyen kart canlı ister hâle gelir
 
-── SONUÇ: 43 geçti · 15 kaldı ──
+── SONUÇ: 46 geçti · 15 kaldı ──
 --- stderr ---
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
@@ -82,10 +85,10 @@ Traceback (most recent call last):
 KeyError: 'canli_gerekir'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.oT9ktA7Cmb/depo/_agents/fabrika/kartlar/is-canli-e.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.YqyabULcwS/depo/_agents/fabrika/kartlar/is-canli-e.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.oT9ktA7Cmb/depo/_agents/fabrika/kartlar/is-canli-h.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.YqyabULcwS/depo/_agents/fabrika/kartlar/is-canli-h.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
 KeyError: 'canli_kanit'

@@ -1,104 +1,104 @@
 {
   "is": "kanit-canli-sinifi",
   "arac": "kanit.py/0.4.0",
-  "guncelleme": "2026-10-17T12:55:17+03:00",
+  "guncelleme": "2026-10-17T13:38:37+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "kanit-sinavi",
       "asama": "once",
       "dosya": "olcum-kanit-sinavi-once.txt",
-      "sha256": "1ac0b73337795122e5566deab36c3feb57fc654dbc757e6d18b720f639d87678",
+      "sha256": "7ae9dfe526d0228a20ca5df62292a96f0b044d97897d73f78318acc6994112fc",
       "komut": [
         "bash",
-        "/tmp/tmp.gKiNR2R816/kanit.test.sh"
+        "/tmp/tmp.Wxc5xiTCJ7/kanit.test.sh"
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-10-17T12:54:47+03:00",
-      "sure_sn": 5.7
+      "zaman": "2026-10-17T13:37:53+03:00",
+      "sure_sn": 14.9
     },
     {
       "tur": "olcum",
       "etiket": "kart-sinavi",
       "asama": "once",
       "dosya": "olcum-kart-sinavi-once.txt",
-      "sha256": "2885909e34f0e85fd7daffc7cdd3faaaaad4caa0f364709cfe7683bc979e7855",
+      "sha256": "81b80721f9f1b35687bb1eb098e4cb23bc48fdd0a45c5907b5ed26ea4f2b8b29",
       "komut": [
         "bash",
-        "/tmp/tmp.gKiNR2R816/kart.test.sh"
+        "/tmp/tmp.Wxc5xiTCJ7/kart.test.sh"
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-10-17T12:54:49+03:00",
-      "sure_sn": 1.9
+      "zaman": "2026-10-17T13:38:00+03:00",
+      "sure_sn": 6.6
     },
     {
       "tur": "olcum",
       "etiket": "birlestirme-kapisi-sinavi",
       "asama": "once",
       "dosya": "olcum-birlestirme-kapisi-sinavi-once.txt",
-      "sha256": "c3502d0efb8eee5e5a2b7bbfbb4ab78acb1e916b1fe85e0cc5cc3dc7920aaf5d",
+      "sha256": "482b0505f84e28cf62af0ba706b449db4874d3f0eb2a9fec162d6838d7a0c40f",
       "komut": [
         "bash",
-        "/tmp/tmp.gKiNR2R816/birlestirme-kapisi.test.sh"
+        "/tmp/tmp.Wxc5xiTCJ7/birlestirme-kapisi.test.sh"
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-10-17T12:54:57+03:00",
-      "sure_sn": 8.2
+      "zaman": "2026-10-17T13:38:15+03:00",
+      "sure_sn": 15.6
     },
     {
       "tur": "olcum",
       "etiket": "kanit-sinavi",
       "asama": "sonra",
       "dosya": "olcum-kanit-sinavi-sonra.txt",
-      "sha256": "dc0c334ce219bc20954515deba66cb35100d53c39d61004450a442ffd817bf1a",
+      "sha256": "c172f18ea6192ffbd8892c12891ce6b232f0c562c4df7c146232b5b347fe4901",
       "komut": [
         "bash",
         "/config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi/yazilim-fabrikasi/scripts/kanit.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-17T12:55:04+03:00",
-      "sure_sn": 7.1
+      "zaman": "2026-10-17T13:38:22+03:00",
+      "sure_sn": 6.6
     },
     {
       "tur": "olcum",
       "etiket": "kart-sinavi",
       "asama": "sonra",
       "dosya": "olcum-kart-sinavi-sonra.txt",
-      "sha256": "c9d50bdf6501d67316efaf8c6e3328f66ef48daa48d7a7cead9bd70b184dd33e",
+      "sha256": "88f172a3127f1b4eb8ce1fbbf251e6b1cf3199be7af6389a0a5a2c14715779e1",
       "komut": [
         "bash",
         "/config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi/yazilim-fabrikasi/scripts/kart.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-17T12:55:07+03:00",
-      "sure_sn": 2.0
+      "zaman": "2026-10-17T13:38:25+03:00",
+      "sure_sn": 2.6
     },
     {
       "tur": "olcum",
       "etiket": "birlestirme-kapisi-sinavi",
       "asama": "sonra",
       "dosya": "olcum-birlestirme-kapisi-sinavi-sonra.txt",
-      "sha256": "df58bde00212529974e1b2fa54d661441cafe6afa24552801a0555e490295844",
+      "sha256": "89389944e618f053af8f59e2a8755f77f0fe5663cc7983099915ffde0204c88a",
       "komut": [
         "bash",
         "/config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi/yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-17T12:55:17+03:00",
-      "sure_sn": 10.5
+      "zaman": "2026-10-17T13:38:37+03:00",
+      "sure_sn": 12.5
     },
     {
       "tur": "canli",
       "etiket": "ornek-kacis-defteri",
       "asama": "canli",
       "dosya": "canli-ornek-kacis-defteri.txt",
-      "sha256": "dfaaca0d8e368c4e9e6b84bae596c5ea30f27d152700176a341c4e47d953222d",
+      "sha256": "4b323797c9b270d90d85e2cdd8dcd9370779c549749451659ffabffd7fa06b39",
       "komut": [
         "tail",
         "-n",
@@ -124,9 +124,9 @@
         "saat": "2026-10-15T18:50:33Z",
         "saat_iso": "2026-10-15T18:50:33+00:00"
       },
-      "zaman": "2026-10-17T12:55:17+03:00",
+      "zaman": "2026-10-17T13:38:37+03:00",
       "sure_sn": 0.0
     }
   ],
-  "imza": "949928f263998ceda785bfa66185476ada5bed502b017b584cb9bad7d77bafee"
+  "imza": "37aaa1e9da391b350ef4f0913a7bdfd6ba30d447c3cbe77c6bb48c2fee4ce79e"
 }

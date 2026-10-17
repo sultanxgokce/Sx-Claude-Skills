@@ -206,7 +206,7 @@ bash "$G" is-h --sessiz >/dev/null 2>&1; g $? "T11k eski kart + bağlı yeşil c
 bash "$KT" ac is-j --is "servis belgesini düzelt" --istedi S --aldi M --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
 bash "$K" olcum is-j olc --asama tek -- echo 1 >/dev/null 2>&1; den is-j 1 5 E
 bash "$G" is-j --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T11l 'servis' kelimesi → canlı ister → rc=1"
-bash "$KT" canli-ayarla is-j --canli h --gerekce "belge işi; kutuya servis kurulmuyor, kelime yanlış pozitif" >/dev/null 2>&1
+bash "$KT" canli-ayarla is-j --canli h --reis M --gerekce "belge işi; kutuya servis kurulmuyor, kelime yanlış pozitif" >/dev/null 2>&1
 CIKTI="$(bash "$G" is-j 2>&1)"; RC=$?
 [ "$RC" -eq 0 ]; g $? "T11m sahip gerekçeyle canlı istemedi (karta yazılı) → geçer"
 grep -q "canlı kanıt istenmedi" <<<"$CIKTI" && grep -q "yanlış pozitif" <<<"$CIKTI"; g $? "T11n kapı kararı ve gerekçeyi basıyor (göz görsün)"

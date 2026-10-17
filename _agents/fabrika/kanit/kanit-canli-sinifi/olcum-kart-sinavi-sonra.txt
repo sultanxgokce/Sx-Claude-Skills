@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi/yazilim-fabrikasi/scripts/kart.test.sh
-# rc=0 sure=2.0s zaman=2026-10-17T12:55:07+03:00
+# rc=0 sure=2.6s zaman=2026-10-17T13:38:25+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -64,10 +64,13 @@ $ bash /config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi/yazilim-fabrikas
   ✓ alanı olmayan eski kart: cümleden E, 'eski kart' işaretli
   ✓ canli-ayarla gerekçesiz reddeder
   ✓ 20 karakterden kısa gerekçe reddedilir
+  ✓ --reis verilmeden reddedilir (aktör ölçülmeden şart kalkmaz — göz tur 4)
+  ✓ sahip olmayan reis (SERDAR ≠ aldi BANI) reddedilir
+  ✓ reddedilen denemeler karta yazmadı
   ✓ gerekçeli canli-ayarla h kabul
-  ✓ karta alan + geçmiş satırı işlendi (gizli değil)
+  ✓ karta alan + geçmiş satırı (reis dahil) işlendi (gizli değil)
   ✓ kapı artık H okur
   ✓ canli-ayarla e: canlı istemeyen kart canlı ister hâle gelir
 
-── SONUÇ: 58 geçti · 0 kaldı ──
+── SONUÇ: 61 geçti · 0 kaldı ──
 --- stderr ---
