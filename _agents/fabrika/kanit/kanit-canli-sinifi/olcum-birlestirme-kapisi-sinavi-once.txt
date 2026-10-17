@@ -1,5 +1,5 @@
-$ bash /tmp/tmp.DpxrVTxY1b/birlestirme-kapisi.test.sh
-# rc=1 sure=10.5s zaman=2026-10-17T12:47:41+03:00
+$ bash /tmp/tmp.gKiNR2R816/birlestirme-kapisi.test.sh
+# rc=1 sure=8.2s zaman=2026-10-17T12:54:57+03:00
 --- stdout ---
 ════ T1 · hiçbir şey yok → engeller ════
   ✓ kart+kanıt+denetim yokken rc=1

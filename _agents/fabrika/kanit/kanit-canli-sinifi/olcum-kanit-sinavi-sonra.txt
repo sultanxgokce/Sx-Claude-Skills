@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi/yazilim-fabrikasi/scripts/kanit.test.sh
-# rc=0 sure=9.0s zaman=2026-10-17T12:47:50+03:00
+# rc=0 sure=7.1s zaman=2026-10-17T12:55:04+03:00
 --- stdout ---
 ════ T1 · ölçüm çifti: komutu araç koşar, kırpılmamış çıktı+rc ════
   ✓ önce ölçümü rc=0
@@ -80,17 +80,17 @@ $ bash /config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi/yazilim-fabrikas
   ✓ T16d geçiş sonrası doğrulama temiz
 ════ T17 · MUTASYON: uyumluluk dalı koparılınca eski manifest yine suçlanır ════
   ✓ T17 MUTASYON: uyumluluk ölünce eski manifest YİNE kırmızı (kapı gerçek)
-════ T18 · CANLI sınıfı: gerçek ateşleme kaydı (saat damgalı log satırı + kaynak) yoksa SARI ════
-  ✓ T18a saat damgalı log → rc=0
-  ✓ T18b manifestte tur=canli renk=yesil
+════ T18 · CANLI sınıfı: gerçek ateşleme kaydı (saat damgalı + desenli log satırı, türlü kaynak) yoksa SARI ════
+  ✓ T18a dosya kaynağı, saat damgalı + desenli log → rc=0
+  ✓ T18b manifestte tur=canli renk=yesil kaynak_turu=dosya
   ✓ T18c ateşleme sayısı 2
-  ✓ T18d ilk + son ateşleme: satır · saat · çözülmüş saat (ISO) · kaynak · komut kayıtta
+  ✓ T18d ilk + son ateşleme · çözülmüş saat · kaynak · ARACIN kurduğu okuma komutu kayıtta
   ✓ T18e log çıktısı kırpılmadan dosyada
   ✓ T18f imza ve sha sağlam
   ✓ T18g saat damgasız satırlar ateşleme sayılmaz → rc=3 (yazılmış ≠ çalışıyor)
   ✓ T18h renk=sari, ateşleme 0
   ✓ T18i boş log → rc=3
-  ✓ T18j kaynağa ulaşılamadı (komut rc≠0) → rc=3, saatli satır olsa da
+  ✓ T18j kaynağa ulaşılamadı (dosya yok, tail rc≠0) → rc=3
   ✓ T18k sebebi kayıtta
   ✓ T18l --desen tutmayan saatli satır ateşleme değil → rc=3
   ✓ T18m syslog biçimi + desen tutuyor → rc=0
@@ -99,26 +99,29 @@ $ bash /config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi/yazilim-fabrikas
   ✓ T18o2 ateşleme 1 sayıldı
   ✓ T18p --kaynak verilmeden kayıt yazılmaz
   ✓ T18q kaynaksız dosya oluşmadı
-  ✓ T18p2 --desen verilmeden kayıt yazılmaz
+  ✓ T18p2 --desen verilmeden kayıt yazılmaz (genel saat ateşleme değildir)
   ✓ T18q2 desensiz dosya oluşmadı
   ✓ T18f2 geleceğe tarihli ateşleme → SARI rc=3
   ✓ T18f3 sebebi kayıtta
-  ✓ T18r komut stdin'den beslenmez (arka planda asılı kalmaz)
-  ✓ T18s stdin kapalı: read düştü, ikinci dosya okunmadı
-  ✓ T18v komut bu kutuda yoksa traceback değil SARI rc=3 (kaynağa ulaşılamadı)
-  ✓ T18w rc=127 ve sebep kayıtta
-  ✓ T18x echo ile 'log' üretmek reddedilir (rc=1, kayıt yok)
+  ✓ T18s --son 1 ile yalnız son satır okunur → rc=0
+  ✓ T18s2 ateşleme 1, komutta -n 1
+  ✓ T18v journal kaynağı: journalctl yoksa ya da birim yoksa traceback değil SARI rc=3
+  ✓ T18w sebep kayıtta, komut journalctl sabit argv
+  ✓ T18x tanınmayan kaynak türü (komut:) reddedilir, rc=1
   ✓ T18x2 manifeste de yazılmadı
-  ✓ T18y kabuk içinde echo/printf de reddedilir
-  ✓ T18y2 heredoc da reddedilir
-  ✓ T18z kabuk içinde gerçek okuyucu (tail) serbest → rc=0
+  ✓ T18y '--' sonrası serbest komut kabul edilmez (python/awk üretici kapısı kapalı)
+  ✓ T18y2 ssh yolunda kabuk metakarakteri reddedilir (uzak kabuk enjeksiyonu yok)
+  ✓ T18y3 ssh hedefinde metakarakter reddedilir
+  ✓ T18z ssh kaynağı: araç sabit argv kurar, uzaktan okunan satırlar ateşleme → rc=0
+  ✓ T18z2 ssh argv: BatchMode · hedef · tail · yol (kabuk dizgesi yok)
   ✓ T18t dogrula özeti canlı kayıtlarını söylüyor
   ✓ T18u ozet tablosunda tür canli görünüyor
-════ T19 · MUTASYON: saat şartı · kopuk kaynak · üreten komut reddi — her biri kaldırılınca sınav kırmızı ════
+════ T19 · MUTASYON: saat şartı · kopuk kaynak · yol doğrulaması — her biri kaldırılınca sınav kırmızı ════
   ✓ T19a mutant saatsiz satırı ateşleme sayıyor → T18g bu mutantta düşerdi
   ✓ T19b gerçek araç aynı girdiyle hâlâ sarı (mutasyon kaynağı bozdu, düzeneği değil)
-  ✓ T19c mutant (kopuk kaynak sarı değil) → T18j bu mutantta düşerdi
-  ✓ T19d mutant (üreten komut reddi kaldırıldı) echo'yu yeşil sayıyor → T18x bu mutantta düşerdi
+  ✓ T18j2 uzak okuma satır bastı ama rc=255 (bağlantı koptu) → gerçek araç SARI
+  ✓ T19c mutant (kopuk kaynak sarı değil) kopuk bağlantıyı yeşil sayıyor → T18j2 bu mutantta düşerdi
+  ✓ T19d mutant (yol doğrulaması kaldırıldı) metakarakterli yolu reddetmiyor → T18y2 bu mutantta düşerdi
 
-── SONUÇ: 99 geçti · 0 kaldı ──
+── SONUÇ: 102 geçti · 0 kaldı ──
 --- stderr ---

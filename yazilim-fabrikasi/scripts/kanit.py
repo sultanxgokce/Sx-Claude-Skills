@@ -11,9 +11,9 @@ Kullanım:
   kanit.py olcum  <iş> <etiket> --asama once|sonra -- <komut...>     komutu koşar, kırpılmamış çıktı+rc kaydeder
   kanit.py ekran  <iş> <etiket> --asama once|sonra --url U [--urun-imi CSS] [--bekle CSS] [--genislik N]
   kanit.py dosya  <iş> <etiket> <yol> [--asama ...]                    var olan dosyayı (video, rapor) sha ile ekler
-  kanit.py canli  <iş> <etiket> --kaynak "<kutu · log yeri>" --desen <servis/olay RE> [--en-az N] -- <log komutu...>
-                  CANLI sınıfı: gerçek ateşleme kaydı (saat damgalı log satırı); yoksa SARI rc=3 — kapı geçirmez.
-                  Log ÜRETEN komut (echo/printf/heredoc) reddedilir (rc=1): kayıt üretilmez, okunur.
+  kanit.py canli  <iş> <etiket> --kaynak dosya:<yol>|journal:<birim>|ssh:<sunucu>:<yol>|docker:<kutu>:<yol> --desen <RE> [--en-az N] [--son N]
+                  CANLI sınıfı: gerçek ateşleme kaydı (saat damgalı + desenli log satırı); yoksa SARI rc=3 — kapı geçirmez.
+                  Okuma komutunu ARAÇ kurar (tail/journalctl, sabit argv); serbest komut YOK (rc=1): kayıt üretilmez, okunur.
   kanit.py dogrula <iş>                                                imza + dosya sha'ları (0 sağlam · 1 bozuk · 3 yok)
   kanit.py ozet   <iş>                                                 PR gövdesi için tablo (markdown)
   kanit.py liste  <iş>
@@ -279,22 +279,36 @@ SAAT_RE = re.compile(
 )
 
 
-# 🔴 GÖZ TUR 1 (PR #352): "saatli bir echo ile yeşil kayıt ve açık kapı elde edilebilir" — doğru. Ateşleme kaydı ÜRETİLMEZ,
-#    OKUNUR: komutun kendisi (echo · printf · yes · seq) ya da kabuk dizgesi içinde echo/printf/heredoc varsa araç reddeder
-#    (rc=1, kayıt yazılmaz). Bu bir kilit değil çit: kararlı sahteciyi değil kestirmeyi durdurur; komut manifestte ve kapı
-#    çıktısında olduğu gibi görünür, bağımsız göz onu okur (olcum kayıtlarıyla aynı güven modeli).
-URETEN = {"echo", "printf", "yes", "seq", "true", "false"}
-URETEN_IC = re.compile(r"(^|[;&|(\s`])(echo|printf)(\s|$)|<<")
+# 🔴 GÖZ TUR 1-3 (PR #352): "saatli bir echo ile yeşil kayıt" (tur 1) → echo/printf kara listesi (tur 2) → "python/awk ile de
+#    üretilir, kara liste tutmaz" (tur 3) — doğru: üreticiyi saymakla bitmez. Yapısal çözüm: SERBEST KOMUT YOK. Kaynak türlüdür ve
+#    okuma komutunu ARAÇ kurar: dosya:<yol> → tail · journal:<birim> → journalctl · ssh:<sunucu>:<yol> → ssh … tail · docker:<kutu>:<yol>
+#    → docker exec … tail. Hedef ve yol yalnız güvenli karakter (ssh/docker uzak kabuk açar: enjeksiyon yolu kapalı). Geriye kalan
+#    tek sahtecilik "log dosyasını elle yazmak"tır — o da manifestte yol olarak görünür ve bağımsız göz onu okur (olcum ile aynı güven).
+KAYNAK_RE = re.compile(r"^(dosya|journal|ssh|docker):(.+)$", re.S)
+GUVENLI_RE = re.compile(r"^[A-Za-z0-9_.@/+-]+$")
 
 
-def _uretilmis_mi(komut):
-    for i, t in enumerate(komut):
-        b = os.path.basename(t)
-        if i == 0 and b in URETEN:
-            return f"'{b}' log okuyan bir komut değil"
-        if URETEN_IC.search(t):
-            return "komut içinde echo/printf/heredoc var (log üretiliyor, okunmuyor)"
-    return None
+def kaynak_komutu(kaynak, son):
+    """--kaynak türünden OKUMA komutunu kurar → (argv, tür, hata). Serbest komut yolu yoktur."""
+    m = KAYNAK_RE.match((kaynak or "").strip())
+    if not m:
+        return None, None, ("--kaynak türü tanınmadı: dosya:<yol> · journal:<birim> · ssh:<sunucu>:<yol> · docker:<kutu>:<yol> "
+                            "(serbest komut yok — ateşleme kaydı üretilmez, okunur)")
+    tur, geri = m.group(1), m.group(2).strip()
+    if tur == "dosya":
+        return ["tail", "-n", str(son), "--", geri], tur, None
+    parcalar = [geri] if tur == "journal" else geri.split(":", 1)
+    if tur != "journal" and len(parcalar) != 2:
+        return None, tur, f"{tur}:<hedef>:<yol> bekleniyor"
+    for parca in parcalar:
+        if not GUVENLI_RE.match(parca):
+            return None, tur, f"{tur} kaynağında kabuk metakarakteri ya da boş parça: {parca!r} — yalnız harf/rakam/._@/+- (uzak kabuk enjeksiyonu yok)"
+    if tur == "journal":
+        return ["journalctl", "-u", geri, "-n", str(son), "--no-pager", "-o", "short-iso"], tur, None
+    hedef, yol = parcalar
+    if tur == "ssh":
+        return ["ssh", "-o", "BatchMode=yes", hedef, "tail", "-n", str(son), "--", yol], tur, None
+    return ["docker", "exec", hedef, "tail", "-n", str(son), "--", yol], tur, None
 
 
 AYLAR = {"jan": 1, "feb": 2, "mar": 3, "apr": 4, "may": 5, "jun": 6, "jul": 7, "aug": 8, "sep": 9, "oct": 10, "nov": 11, "dec": 12,
@@ -328,8 +342,8 @@ def saat_coz(s):
 
 
 def cmd_canli(a):
-    if not a.komut:
-        hata("log komutu gerekiyor: -- <komut...> (journalctl · grep /var/log · ssh <sunucu> tail …)")
+    if a.komut:
+        hata("serbest komut kabul edilmez (-- sonrası): ateşleme kaydı üretilmez, OKUNUR — --kaynak dosya:|journal:|ssh:|docker: ver, okuma komutunu araç kurar", 1)
     if not (a.kaynak or "").strip():
         hata("--kaynak gerekiyor: kaydın NEREDEN okunduğu (kutu/sunucu · log yeri) — kaynaksız ateşleme kaydı kanıt değildir")
     # 🔴 GÖZ TUR 2 (PR #352): "--desen isteğe bağlı → log çıktısındaki HERHANGİ saatli satır ateşleme sayılıyor, ilgili servise
@@ -342,18 +356,20 @@ def cmd_canli(a):
         hata(f"--desen geçersiz: {e}")
     if a.en_az < 1:
         hata("--en-az en az 1 olmalı (0 ateşleme kanıt değildir)")
-    sebep = _uretilmis_mi(a.komut)
+    if a.son < 1:
+        hata("--son en az 1 olmalı")
+    komut, tur, sebep = kaynak_komutu(a.kaynak, a.son)
     if sebep:
-        hata(f"ateşleme kaydı ÜRETİLMEZ, OKUNUR: {sebep} — journalctl · tail · grep · ssh gibi logu OKUYAN komut ver", 1)
+        hata(sebep, 1)
     depo = depo_kok(a.depo); dz = kanit_dizin(depo, a.is_adi); os.makedirs(dz, exist_ok=True)
     ad = f"canli-{a.etiket}.txt"; yol = os.path.join(dz, ad)
     t0 = datetime.datetime.now()
     # stdin KAPALI: arka planda / cron'dan çağrılınca açık bir socket'te asılı kalmasın (denetçi 68 dk vakası, 0.6.3)
     try:
-        p = subprocess.run(a.komut, capture_output=True, text=True, errors="replace", stdin=subprocess.DEVNULL)
+        p = subprocess.run(komut, capture_output=True, text=True, errors="replace", stdin=subprocess.DEVNULL)
     except OSError as e:
         # komut bu kutuda yok (ör. journalctl konteynerde) → kaynağa ulaşılamadı = SARI; traceback kanıt değildir
-        p = subprocess.CompletedProcess(a.komut, 127, "", f"komut çalıştırılamadı: {e}\n")
+        p = subprocess.CompletedProcess(komut, 127, "", f"komut çalıştırılamadı: {e}\n")
     sure = (datetime.datetime.now() - t0).total_seconds()
     ates = []
     for satir in p.stdout.splitlines():
@@ -362,7 +378,7 @@ def cmd_canli(a):
         if not desen.search(satir): continue
         ates.append((satir, m.group(0) if m else ""))
     with open(yol, "w", encoding="utf-8") as f:
-        f.write(f"$ {' '.join(a.komut)}\n# kaynak={a.kaynak.strip()} desen={a.desen or '-'} en_az={a.en_az} "
+        f.write(f"$ {' '.join(komut)}\n# kaynak={a.kaynak.strip()} tur={tur} desen={a.desen} en_az={a.en_az} son={a.son} "
                 f"atesleme={len(ates)} rc={p.returncode} sure={sure:.1f}s zaman={simdi()}\n--- stdout ---\n{p.stdout}--- stderr ---\n{p.stderr}")
     def _kayit(x): return {"satir": x[0].strip()[:500], "saat": x[1], "saat_iso": saat_coz(x[1])}
     ilk = _kayit(ates[0]) if ates else None; son = _kayit(ates[-1]) if ates else None
@@ -385,7 +401,7 @@ def cmd_canli(a):
                 f"saat damgalı log satırı bekleniyordu" + (f" (desen: {a.desen})" if a.desen else ""))
     renk = "sari" if (p.returncode != 0 or len(ates) < a.en_az or gelecek) else "yesil"
     kayit = {"tur": "canli", "etiket": a.etiket, "asama": "canli", "dosya": ad, "sha256": sha_dosya(yol),
-             "komut": a.komut, "rc": p.returncode, "renk": renk, "kaynak": a.kaynak.strip(), "desen": a.desen or None,
+             "komut": komut, "rc": p.returncode, "renk": renk, "kaynak": a.kaynak.strip(), "kaynak_turu": tur, "son": a.son, "desen": a.desen,
              "en_az": a.en_az, "atesleme_sayisi": len(ates), "ilk_atesleme": ilk, "son_atesleme": son, "zaman": simdi(), "sure_sn": round(sure, 1)}
     if notu: kayit["not"] = notu
     kayit_ekle(depo, a.is_adi, kayit)
@@ -454,7 +470,7 @@ def main():
     o = s.add_parser("olcum"); o.add_argument("is_adi"); o.add_argument("etiket"); o.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); o.set_defaults(f=cmd_olcum)
     e = s.add_parser("ekran"); e.add_argument("is_adi"); e.add_argument("etiket"); e.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); e.add_argument("--url", required=True); e.add_argument("--urun-imi"); e.add_argument("--bekle"); e.add_argument("--genislik", type=int, default=1280); e.set_defaults(f=cmd_ekran)
     d = s.add_parser("dosya"); d.add_argument("is_adi"); d.add_argument("etiket"); d.add_argument("yol"); d.add_argument("--asama", default="tek"); d.set_defaults(f=cmd_dosya)
-    c = s.add_parser("canli"); c.add_argument("is_adi"); c.add_argument("etiket"); c.add_argument("--kaynak", required=True); c.add_argument("--desen", required=True); c.add_argument("--en-az", dest="en_az", type=int, default=1); c.set_defaults(f=cmd_canli)
+    c = s.add_parser("canli"); c.add_argument("is_adi"); c.add_argument("etiket"); c.add_argument("--kaynak", required=True); c.add_argument("--desen", required=True); c.add_argument("--en-az", dest="en_az", type=int, default=1); c.add_argument("--son", type=int, default=2000); c.set_defaults(f=cmd_canli)
     for ad, f in (("dogrula", cmd_dogrula), ("ozet", cmd_ozet), ("liste", cmd_liste)):
         x = s.add_parser(ad); x.add_argument("is_adi"); x.set_defaults(f=f)
     # `--` sonrası KOMUTTUR: argparse'a hiç gösterilmez (REMAINDER, seçenekleri de yutuyordu).
