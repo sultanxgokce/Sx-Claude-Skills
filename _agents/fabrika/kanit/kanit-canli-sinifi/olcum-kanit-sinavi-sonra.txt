@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi/yazilim-fabrikasi/scripts/kanit.test.sh
-# rc=0 sure=10.0s zaman=2026-10-17T13:58:30+03:00
+# rc=0 sure=5.7s zaman=2026-10-17T14:02:50+03:00
 --- stdout ---
 ════ T1 · ölçüm çifti: komutu araç koşar, kırpılmamış çıktı+rc ════
   ✓ önce ölçümü rc=0

@@ -1,5 +1,5 @@
-$ bash /tmp/tmp.jNLcC8Hf0b/kart.test.sh
-# rc=1 sure=2.2s zaman=2026-10-17T13:58:07+03:00
+$ bash /tmp/tmp.ekkMDUhMaR/kart.test.sh
+# rc=1 sure=1.6s zaman=2026-10-17T14:02:35+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -76,10 +76,10 @@ Traceback (most recent call last):
 KeyError: 'canli_gerekir'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.NW0tGym4ih/depo/_agents/fabrika/kartlar/is-canli-e.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.eZTp7sjwJc/depo/_agents/fabrika/kartlar/is-canli-e.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.NW0tGym4ih/depo/_agents/fabrika/kartlar/is-canli-h.json'
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.eZTp7sjwJc/depo/_agents/fabrika/kartlar/is-canli-h.json'
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
 KeyError: 'canli_kanit'

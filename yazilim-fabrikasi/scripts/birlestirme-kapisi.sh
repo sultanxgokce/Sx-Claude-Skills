@@ -80,9 +80,19 @@ fi
 # 2b · CANLI — "git'te düzeltildi ≠ canlıda çalışıyor" (retro 17 Eki 2026 · ders 1): cron/servis/sunucu kartı yeşil ölçüm
 #    + 5/E ile GEÇMEZ; gerçek ateşleme kaydı (kanit.sh canli, yeşil) ister. Sarı canlı = ölçülmüş ama ateşleme yok → kart ne
 #    derse desin geçmez (sarı yeşil değildir). Kartın canlı şartını kart.sh söyler (eski kartta cümleden türetir).
+# 🔴 GÖZ (daraltılmış tur): kart.sh canli-gerekir düşünce cg boş kalıyor ve H varsayılıyordu → canlı şartı FAIL-OPEN atlanıyordu.
+#    Kapı ölçemediğini yeşil saymaz: yardımcı rc≠0 ya da cevap E/H değilse ÖLÇÜLEMEDİ (rc=3).
 cg="H"; csebep=""
-if [ -f "$KART" ] && [ -f "$HERE/kart.sh" ]; then
-  IFS=$'\t' read -r cg csebep <<<"$(KANIT_DEPO="$DEPO" bash "$HERE/kart.sh" canli-gerekir "$IS" 2>/dev/null)"; cg="${cg:-H}"; csebep="${csebep:-}"
+if [ -f "$KART" ]; then
+  if [ -f "$HERE/kart.sh" ]; then
+    cg_cikti="$(KANIT_DEPO="$DEPO" bash "$HERE/kart.sh" canli-gerekir "$IS" 2>&1)"; cg_rc=$?
+    IFS=$'\t' read -r cg csebep <<<"$cg_cikti"; csebep="${csebep:-}"
+    if [ "$cg_rc" -ne 0 ] || { [ "$cg" != "E" ] && [ "$cg" != "H" ]; }; then
+      _h "kartın canlı şartı OKUNAMADI (kart.sh canli-gerekir rc=$cg_rc: ${cg_cikti:-boş}) — ÖLÇÜLEMEDİ, canlı kontrolü atlanmaz"; olcemedi=$((olcemedi+1)); cg="?"
+    fi
+  else
+    _h "kart.sh bulunamadı — kartın canlı şartı ÖLÇÜLEMEDİ"; olcemedi=$((olcemedi+1)); cg="?"
+  fi
 fi
 # 🔴 GÖZ TUR 1 (PR #352): "herhangi bir yeşil canlı kaydı yetiyor; eski ya da ilgisiz kayıt yeni cron değişikliğini geçirir" — doğru.
 #    Kayıt bu İŞE BAĞLANIR: ölçüm zamanı DA son ateşleme saati DE kartın açılış zamanından SONRA olmalı. Bağlanamayan yeşil kayıt

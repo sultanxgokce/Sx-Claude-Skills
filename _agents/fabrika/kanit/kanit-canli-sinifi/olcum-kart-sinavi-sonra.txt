@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi/yazilim-fabrikasi/scripts/kart.test.sh
-# rc=0 sure=2.6s zaman=2026-10-17T13:58:32+03:00
+# rc=0 sure=2.5s zaman=2026-10-17T14:02:53+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1

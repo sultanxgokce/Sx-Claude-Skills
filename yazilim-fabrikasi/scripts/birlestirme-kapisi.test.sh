@@ -136,7 +136,7 @@ grep -q "SINIF İŞİ" <<<"$CIKTI" && grep -q "onay ÜRETMEZ" <<<"$CIKTI"; g $? 
 echo "════ T9 · MUTASYON: kapıyı bozunca sınav kırmızı veriyor mu ════"
 # 🔴 Mutant, betiğin KARDEŞLERİYLE aynı dizinde durmalı. Önceki sürümde mutantı /tmp'ye koymuştum;
 # $HERE yanlış çözülüp kanit.py bulunamıyordu ve T10 "rc=3" ile YANLIŞ SEBEPTEN yeşil veriyordu.
-PKG="$T/pkg"; mkdir -p "$PKG"; cp "$HERE/kanit.py" "$HERE/kanit.sh" "$PKG/"
+PKG="$T/pkg"; mkdir -p "$PKG"; cp "$HERE/kanit.py" "$HERE/kanit.sh" "$HERE/kart.sh" "$PKG/"   # kart.sh de kardeş: kapı canlı şartını ondan okur (yoksa ÖLÇÜLEMEDİ)
 M="$PKG/mutant.sh"; sed 's/^  exit 1$/  exit 0/' "$G" > "$M"; chmod +x "$M"
 bash "$M" bos --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "mutant (red kaldırıldı) izin veriyor → T1 bu mutantta düşerdi"
 bash "$M" is-a --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "mutant sağlam işe de izin veriyor (ölçer sahte-kırmızı üretmiyor)"
@@ -202,6 +202,17 @@ grep -q "cümlede" <<<"$CIKTI"; g $? "T11j kapı canlı şartının nereden geld
 sleep 1; printf '%s kapi 2.14.0 ayağa kalktı\n' "$(date -u +%FT%TZ)" > "$LGK/kapi.log"
 bash "$K" canli is-h kapi --desen kapi --kaynak "dosya:$LGK/kapi.log" >/dev/null 2>&1
 bash "$G" is-h --sessiz >/dev/null 2>&1; g $? "T11k eski kart + bağlı yeşil canlı → geçer"
+
+# 🔴 göz (daraltılmış tur): canli-gerekir düşerse kapı H varsayıp canlı şartını ATLIYORDU (fail-open) → ÖLÇÜLEMEDİ rc=3
+bash "$KT" ac is-k --is "bekçi cron'u" --istedi S --aldi M --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+bash "$K" olcum is-k olc --asama tek -- echo 1 >/dev/null 2>&1; den is-k 1 5 E
+printf '{bozuk json' > "$T/_agents/fabrika/kartlar/is-k.json"
+CIKTI="$(bash "$G" is-k 2>&1)"; RC=$?
+[ "$RC" -eq 3 ]; g $? "T11p kart okunamıyor (canli-gerekir düşer) → rc=3 ÖLÇÜLEMEDİ, yeşil değil"
+grep -q "canlı şartı OKUNAMADI" <<<"$CIKTI"; g $? "T11p2 sebebi yazılı"
+M7="$PKG/mutant7.sh"; sed 's/^    if \[ "\$cg_rc" -ne 0 \] || .*; then$/    if false; then/' "$G" > "$M7"; chmod +x "$M7"
+grep -q '^    if false; then' "$M7"; g $? "T11p3 mutant 7 üretildi (yardımcı rc ve cevap denetimi kaldırıldı)"
+bash "$M7" is-k --sessiz >/dev/null 2>&1; [ $? -ne 3 ]; g $? "T11p4 mutant 7: bozuk kartta ölçülemedi DEMİYOR → T11p bu mutantta düşerdi"
 
 echo "════ T12 · MUTASYON: canlı kontrolleri kaldırılınca kapı açılır (kapı gerçek, süs değil) ════"
 M3="$PKG/mutant3.sh"; sed 's/^\s*\[ "\$cg" = "E" \] && \[ "\$cy" -eq 0 \]/false/' "$G" > "$M3"; chmod +x "$M3"
