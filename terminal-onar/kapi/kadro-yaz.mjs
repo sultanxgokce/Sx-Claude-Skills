@@ -14,6 +14,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
+import { dosyaKilit } from './kilit.mjs';
 
 export const YAZILAN = ['emekli', 'dondurulmus'];
 const ONCEKI_YOK = 'yok';
@@ -139,7 +140,13 @@ function derleyiciBul(proje, ortam) {
 }
 
 // Ana iş: kişinin hâlini yaz. Dönen: { dosya, uretilmis, onceki, yeni, derleme? }. Hata: KadroHata(kod, mesaj).
-export function kadroYaz({ proje, id, eylem, ortam = process.env, calistir = execFileSync }) {
+// 🔴 Okuma-yazma-doğrulama boyunca kayıt kilidi tutulur (kilit.mjs): kapı ve günlük bekçi turu aynı kayda yazar (Parça B7). Meşgulse 503.
+export function kadroYaz(args) {
+  const kapat = dosyaKilit(args.proje);
+  try { return kadroYazIc(args); } finally { kapat(); }
+}
+
+function kadroYazIc({ proje, id, eylem, ortam = process.env, calistir = execFileSync }) {
   const dosyalar = kayitDosyalari(proje, ortam);
   let hedef = null, satirlar = null, b = null;
   for (const y of dosyalar) {

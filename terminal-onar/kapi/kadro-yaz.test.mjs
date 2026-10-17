@@ -98,5 +98,14 @@ if (process.argv.includes('--gercek')) {
     kapi(`G ${kutu}: ${tamam}/${idler.length - atla} kişi dondur→geri aç bayt eşit (${atla} atlandı: zaten emekli/belirsiz)`, idler.length > 0 && tamam === idler.length - atla && tamam > 0);
   }
 }
+console.log('── K · kayıt kilidi (B7): yazım kilit altında');
+const KP = join(T, 'kilitli'), KR = join(KP, 'iskan-registry.yaml'), KO = { ISKAN_REGISTRY: KR };
+yaz(KR, ELLE);
+writeFileSync(join(KP, 'kadro.kilit'), process.pid + ' canli');
+const k503 = hata(() => kadroYaz({ proje: KP, id: 'A', eylem: 'dondur', ortam: KO }));
+kapi('K1 kayıt başka CANLI süreçte kilitliyken → 503, kayıt dosyası aynen kalır', k503 instanceof KadroHata && k503.kod === 503 && readFileSync(KR, 'utf8') === ELLE, String(k503?.kod));
+rmSync(join(KP, 'kadro.kilit'));
+const kr = kadroYaz({ proje: KP, id: 'A', eylem: 'dondur', ortam: KO });
+kapi('K2 kilit yokken yazım tutar; iş bitince kadro.kilit kalmaz', kr.dosya === KR && readFileSync(KR, 'utf8').includes('durum: dondurulmus') && !existsSync(join(KP, 'kadro.kilit')));
 rmSync(T, { recursive: true, force: true });
 console.log(`\nSONUÇ: ${g} geçti · ${k} kaldı`); process.exit(k ? 1 : 0);

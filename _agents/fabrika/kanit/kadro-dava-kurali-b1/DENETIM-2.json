@@ -1,0 +1,45 @@
+{
+  "tur": 2,
+  "is": "kadro-dava-kurali-b1",
+  "pr": "356",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T15:28:16+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 16430,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 5750
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Bağımsız `dosyaKilit` modülü ve sahiplik yarışlarını hedefleyen DV32 sınavları yazılmış; önceki turdaki canlı kilidi taşıma yarışı da içerik doğrulamalı devral kilidiyle giderilmiş. Ancak üretim farkında modülü kullanan hiçbir kapı/bekçi bağlantısı yok ve devral kilidinin bırakılması sahiplik doğrulaması yapmıyor; önce bunlar çözülmeden üretime hazır sayılamaz.",
+    "bulgular": [
+      {
+        "ne": "Yeni kilit modülü üretim akışına bağlanmamış görünüyor: fark yalnız yeni `kilit.mjs` ile onu doğrudan çağıran sınavı ekliyor; kapı veya günlük bekçi tarafında import/çağrı değişikliği yok. Bu nedenle yeşil sınav modülün kendi başına çalıştığını gösteriyor, gerçek dava dosyası yazıcılarının bu kilidi kullandığını göstermiyor.",
+        "kanit": "Üretim kodu farkının tamamında yalnız `terminal-onar/kapi/kilit.mjs` eklenmiş; `dosyaKilit` için görünen tek çağrılar `kilit.test.mjs` içindedir. Buna karşılık modülün 1. ve 6. satır yorumları kapı ile günlük bekçinin bu kilidi aldığını iddia ediyor.",
+        "konum": "terminal-onar/kapi/kilit.mjs:1-6; terminal-onar/kapi/kilit.test.mjs:8,15,36,42,47; üretim diffi bütünü",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Devral kilidinde sahiplik kuralı uygulanmıyor: süreç `d` dosyasını aldıktan sonra bırakırken içeriğin hâlâ kendi jetonu olduğunu denetlemeden siliyor. Beş saniyeyi aşan bir duraklamada başka süreç yaş kontrolü yapmadan bu dosyayı bayat diye silebilir, yeniden oluşturabilir ve ilk süreç uyandığında ikinci sürecin devral kilidini silebilir.",
+        "kanit": "`ac(d)` dosyaya `ben` jetonunu yazıyor; buna rağmen başarılı dalın sonunda koşulsuz `fs.unlinkSync(d)` var. Başarısız dal da devral sahibinin PID'sini veya canlılığını okumadan yalnız `mtime > 5000` koşuluyla `d`yi siliyor. DV32f yalnız 300 ms beklediği için beş saniye sonrası sahiplik kaybını ölçmüyor.",
+        "konum": "terminal-onar/kapi/kilit.mjs:20-21,32-37; terminal-onar/kapi/kilit.test.mjs:46-49; ölçüm `kilit-sinav` DV32f",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve tek kayıt yeşil; çıktı altı sınavın geçtiğini açıkça ölçüyor. Ölçüm modül içindeki yarış ve bırakma davranışları için değerlidir, fakat gerçek üretim çağıranlarını sınamıyor; ayrıca DV32f 'canlı devral tutucusu' dese de yalnız taze bir dosya oluşturup 300 ms gözlüyor, sahibin canlılığını ve beş saniye eşiği sonrasını ölçmüyor."
+  }
+}

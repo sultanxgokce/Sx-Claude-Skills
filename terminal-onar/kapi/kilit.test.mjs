@@ -37,14 +37,20 @@ const birak = await dosyaKilit(T, { bekleMs: 500 }); writeFileSync(KL, '4242 bas
 kapi('DV32d bırakma yalnız KENDİ kilidini siler: içerik başkasınınsa dosyaya dokunmaz', existsSync(KL) && readFileSync(KL, 'utf8') === '4242 baskasi');
 unlinkSync(KL);
 // DV32e/f: devral protokolü — canlı taze kilit devralma girişiminde silinmez; canlı devral tutucusu varken bayat kilit de dokunulmaz
+const dene = (bekle) => { try { dosyaKilit(T, { bekleMs: bekle })(); return 'ALINDI'; } catch (e) { return 'RET ' + e.kod; } };
 writeFileSync(KL, process.pid + ' canli2');
-const r32e = await dosyaKilit(T, { bekleMs: 300 }).then(() => 'ALINDI', (e) => 'RET ' + e.kod);
+const r32e = dene(300);
 kapi('DV32e taze CANLI kilit bayat-devral yolundan geçmez: 503, içerik aynen kalır', r32e === 'RET 503' && readFileSync(KL, 'utf8') === process.pid + ' canli2', r32e);
 unlinkSync(KL);
 writeFileSync(KL, oluPid + ' olu'); writeFileSync(KL + '.devral', 'baska');
-const r32f = await dosyaKilit(T, { bekleMs: 300 }).then(() => 'ALINDI', (e) => 'RET ' + e.kod);
+const r32f = dene(300);
 kapi('DV32f bayat kilit, devralı CANLI (taze) tutucu varken silinmez: 503, kilit ve devral kalır', r32f === 'RET 503' && existsSync(KL) && existsSync(KL + '.devral'), r32f);
 unlinkSync(KL); unlinkSync(KL + '.devral');
+// DV32g: devral tutucusu 5 sn'den eski ve içeriği değişmemişse ölmüş sayılır: kaldırılır, bayat kilit devralınır
+writeFileSync(KL, oluPid + ' olu'); writeFileSync(KL + '.devral', 'olu-tutucu');
+const eskiDevral = new Date(Date.now() - 60 * 1000); utimesSync(KL + '.devral', eskiDevral, eskiDevral);
+const r32g = dene(2000);
+kapi('DV32g eski devral tutucusu (60 sn) kaldırılır; bayat kilit devralınır ve bırakılır', r32g === 'ALINDI' && !existsSync(KL) && !existsSync(KL + '.devral'), r32g);
 
 console.log(`\nSONUÇ: ${g} geçti · ${k} kaldı`);
 process.exit(k ? 1 : 0);
