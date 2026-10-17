@@ -19,6 +19,7 @@ import { fileURLToPath } from 'node:url';
 // '.' · ':' · kontrol karakteri yok; boşluk arada serbest, başta/sonda yok; ilk karakter '$' '@' '%' '=' olamaz (tmux kimlik önekleri).
 import { KOLTUK_AD_DESEN, koltukSatirlari } from './koltuklar.mjs';
 import { kayitOku, kadroBirlestir, altyapiNeden } from './kadro.mjs';
+import { bugunOku } from './bugun.mjs';
 import { kadroYaz, KadroHata } from './kadro-yaz.mjs';
 import { oturumKimlikleri, oturumDizinleri } from './kimlik.mjs';   // kişi↔oturum eşleşmesinin kimlik ayağı (salt-okur)
 // Sınav dikişi: süreç kökü ve pid alanı ortamdan verilebilir (gerçekte /proc ve kendi alanı)
@@ -481,6 +482,18 @@ const sunucu = http.createServer(async (req, res) => {
       // ── KADRO (2.8.0 · Kadro E1 önkoşul 1+3, gorev_01M4WVHD00GF5MAQD1J7G74RZ4): kutunun personel KAYDI ⟂ canlı KOLTUKLAR.
       //    Dört grup + kayıtsız (kapi/kadro.mjs tek kaynak). Yalnız okur; kaldır/bağla/emekli ayrı uçlardır (E2-E4). Ekran adresi
       //    koltuk listesiyle aynı kuralla (encodeURIComponent).
+      // ── BUGÜN (2.15.0 · gorev_01M54SCQE08KTG9YERG2BBR604): kutudaki ajanların GÜN ÇIPALARI (gunluk-plan/cipa.sh dosyaları) — havuzdan
+      //    ayrı "bugün" görünümünün verisi. Salt okur; yeni defter yok (kaynak çıpa). Bugüne ait olmayan çıpa listeye girmez, adıyla
+      //    `bugun_degil`de görünür; okunamayan dosya `okunamadi`da. ?tarih=YYYY-MM-DD sınav dikişi (varsayılan kutunun yerel bugünü).
+      if (y === '/api/bugun') {
+        const t = url.searchParams.get('tarih');
+        // göz #355 tur 1: biçim yetmez, takvimde var olan gün olmalı (2026-99-99 → 400; Date gevşek çözümlemesi geri yazımla sınanır)
+        // göz tur 2: geçersiz Date'te toISOString RangeError fırlatır — işleyici dışarıdan gelen sorguyla çökmez, 400 döner
+        const takvimde = (x) => { try { return /^\d{4}-\d{2}-\d{2}$/.test(x) && new Date(x + 'T00:00:00Z').toISOString().slice(0, 10) === x; } catch { return false; } };
+        if (t && !takvimde(t)) return json(res, 400, { hata: 'tarih takvimde olan bir gün olmalı (YYYY-MM-DD).' });
+        const b = bugunOku(PROJE, t || undefined);
+        return json(res, 200, { kutu: KUTU, proje: PROJE, zaman: new Date().toISOString(), ...b });
+      }
       if (y === '/api/kadro') {
         const r = await calistir('bash', [KOLTUK_BETIK, '--liste']);
         if (r.kod !== 0) return json(res, 500, { hata: 'Koltuklar ölçülemedi.' });

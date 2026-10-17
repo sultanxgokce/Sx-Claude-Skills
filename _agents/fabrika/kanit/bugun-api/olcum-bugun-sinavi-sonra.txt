@@ -1,0 +1,32 @@
+$ node terminal-onar/kapi/bugun.test.mjs
+# rc=0 sure=0.1s zaman=2026-10-17T15:19:01+03:00
+--- stdout ---
+── A · çıpa ayrıştırma (cipa.sh biçimi, gerçek örnekten)
+  ✓ A1 tarih başlıktan
+  ✓ A2 yedi madde (bilinmeyen işaret ve düz satır madde değil)
+  ✓ A3 sabah maddesi: etiket 1, tür sabah, durum bitti, metin kuyruksuz, sonuç KAPANDI, not ayrı
+  ✓ A4 yarım madde [~] → yarim, sonuç YARIM
+  ✓ A5 açık madde: sonuç/not boş, metin tam
+  ✓ A6 geri alınan [-] → geri, sonuç GERİ ALINDI
+  ✓ A7 gün ortası G1) → tür gun-ortasi
+  ✓ A8 havuz bağı: gorev_ kimlikleri tekilleştirilmiş (iki kimlik)
+  ✓ A9 etiketsiz madde → tür serbest
+  ✓ A10 damgalar (sondaki _ soyulur)
+  ✓ A11 sayılar: 3 açık · 1 yarım · 2 bitti · 1 geri · 7 toplam
+  ✓ A12 DURUM kapalı küme (boş · ~ · x · X · -)
+  ✓ A13 boş metin: tarih null, madde 0 (çökmez)
+── B · kutu listesi (dizin tarama: bugün · bugün değil · yedek · eski tek dosya · okunamayan)
+  ✓ B1 bugünkü iki ajan (muavin · serdar), alfabetik
+  ✓ B2 başka günün çıpası listeye girmez ama bugun_degil'de adıyla ve tarihiyle görünür
+  ✓ B3 yedek ve eski tek dosya taranmaz
+  ✓ B4 okunamayan dosya okunamadi'da (sessiz atlama yok)
+  ✓ B5 toplam sayılar iki ajanın birleşimi (4 açık = 3 + 1)
+  ✓ B6 ajan başına sayılar ve dosya adı
+  ✓ B7 handoff dizini yoksa var=false, çökmez
+── C · MUTASYON (kopyada): tarih kapısı · yedek süzgeci · kuyruk ayrımı kaldırılınca sınav kırmızı
+  ✓ C1 tarih kapısı kaldırılınca eski gün listeye GİRER → B1/B2 bu mutantta düşerdi
+  ✓ C2 yedek süzgeci kaldırılınca yedek dosya listeye girer → B3 bu mutantta düşerdi
+  ✓ C3 kuyruk ayrımı kaldırılınca metin "→ KAPANDI"yı taşır → A3 bu mutantta düşerdi
+
+── SONUÇ: 23 geçti · 0 kaldı ──
+--- stderr ---
