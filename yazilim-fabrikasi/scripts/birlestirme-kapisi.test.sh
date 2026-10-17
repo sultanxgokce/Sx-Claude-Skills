@@ -210,9 +210,26 @@ printf '{bozuk json' > "$T/_agents/fabrika/kartlar/is-k.json"
 CIKTI="$(bash "$G" is-k 2>&1)"; RC=$?
 [ "$RC" -eq 3 ]; g $? "T11p kart okunamıyor (canli-gerekir düşer) → rc=3 ÖLÇÜLEMEDİ, yeşil değil"
 grep -q "canlı şartı OKUNAMADI" <<<"$CIKTI"; g $? "T11p2 sebebi yazılı"
-M7="$PKG/mutant7.sh"; sed 's/^    if \[ "\$cg_rc" -ne 0 \] || .*; then$/    if false; then/' "$G" > "$M7"; chmod +x "$M7"
-grep -q '^    if false; then' "$M7"; g $? "T11p3 mutant 7 üretildi (yardımcı rc ve cevap denetimi kaldırıldı)"
+# iki çit üst üste (canli-gerekir rc + kart zamanı): bozuk JSON ikisine de takılır → mutant ikisini de kaldırır
+M7="$PKG/mutant7.sh"; sed -e 's/^    if \[ "\$cg_rc" -ne 0 \] || .*; then$/    if false; then/' -e 's/^\[ ! -f "\$KART" \] || \[ "\$ckz" = "1" \] || {/true || {/' "$G" > "$M7"; chmod +x "$M7"
+grep -q '^    if false; then' "$M7" && grep -q '^true || {' "$M7"; g $? "T11p3 mutant 7 üretildi (fail-closed çitler: canli-gerekir rc + kart zamanı kaldırıldı)"
 bash "$M7" is-k --sessiz >/dev/null 2>&1; [ $? -ne 3 ]; g $? "T11p4 mutant 7: bozuk kartta ölçülemedi DEMİYOR → T11p bu mutantta düşerdi"
+
+# 🔴 göz #353 tur 1: geçerli JSON ama 'zaman' okunamaz → işe bağlama ölçülemez → rc=3 (rc=1 'eksik' değil)
+bash "$KT" ac is-l --is "zil cron'u" --istedi S --aldi M --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+bash "$K" olcum is-l olc --asama tek -- echo 1 >/dev/null 2>&1; den is-l 1 5 E
+sleep 1; printf '%s zil çaldı\n' "$(date -u +%FT%TZ)" > "$LGK/zil-l.log"
+bash "$K" canli is-l zil --desen zil --kaynak "dosya:$LGK/zil-l.log" >/dev/null 2>&1
+bash "$G" is-l --sessiz >/dev/null 2>&1; g $? "T11q önce sağlam: bağlı yeşil canlı ile geçer"
+python3 - <<PY
+import json;p='$T/_agents/fabrika/kartlar/is-l.json';k=json.load(open(p));k['zaman']='bozuk-saat';json.dump(k,open(p,'w'))
+PY
+CIKTI="$(bash "$G" is-l 2>&1)"; RC=$?
+[ "$RC" -eq 3 ]; g $? "T11q2 kart 'zaman' çözülemez → rc=3 ÖLÇÜLEMEDİ (rc=1 değil)"
+grep -q "açılış zamanı" <<<"$CIKTI" && grep -q "ÖLÇÜLEMEDİ" <<<"$CIKTI"; g $? "T11q3 sebebi yazılı"
+M8="$PKG/mutant8.sh"; sed 's/^\[ ! -f "\$KART" \] || \[ "\$ckz" = "1" \] || {/true || {/' "$G" > "$M8"; chmod +x "$M8"
+grep -q '^true || {' "$M8"; g $? "T11q4 mutant 8 üretildi (zaman-okunamadı kapısı kaldırıldı)"
+bash "$M8" is-l --sessiz >/dev/null 2>&1; [ $? -ne 3 ]; g $? "T11q5 mutant 8: ölçülemediğini söylemiyor → T11q2 bu mutantta düşerdi"
 
 echo "════ T12 · MUTASYON: canlı kontrolleri kaldırılınca kapı açılır (kapı gerçek, süs değil) ════"
 M3="$PKG/mutant3.sh"; sed 's/^\s*\[ "\$cg" = "E" \] && \[ "\$cy" -eq 0 \]/false/' "$G" > "$M3"; chmod +x "$M3"

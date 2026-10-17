@@ -1,0 +1,21 @@
+{
+  "is": "kanit-canli-sinifi-2",
+  "cumle": "gorev_01M54APFDAHKN72VKBWTGKSAAM — canlı sınıfı, fail-open kapatılmış son hâl (#352 yeniden sunumu: SERDAR 14:11 yeni kart kararı)",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-17T14:12:41+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/kanit-canli-sinifi-2 (araçla yeniden; eski dizin ders olarak durur)",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: canlı)"
+}

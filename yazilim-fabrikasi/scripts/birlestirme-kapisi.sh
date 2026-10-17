@@ -97,7 +97,7 @@ fi
 # 🔴 GÖZ TUR 1 (PR #352): "herhangi bir yeşil canlı kaydı yetiyor; eski ya da ilgisiz kayıt yeni cron değişikliğini geçirir" — doğru.
 #    Kayıt bu İŞE BAĞLANIR: ölçüm zamanı DA son ateşleme saati DE kartın açılış zamanından SONRA olmalı. Bağlanamayan yeşil kayıt
 #    sayılmaz, sebebi basılır. Kapı sayılan kaydın komutunu ve kaynağını da basar — göz "neyi okudu" diye bakabilsin.
-cy=0; cs=0; cilk=""; ckopuk=""
+cy=0; cs=0; cilk=""; ckopuk=""; ckz=1
 if [ -f "$DZ/KANIT.json" ]; then
   eval "$(python3 - "$DZ/KANIT.json" "$KART" <<'PY'
 import json,sys,shlex,datetime
@@ -123,7 +123,7 @@ for k in y:
     elif son>oz+datetime.timedelta(minutes=5): neden=f"son ateşleme {son.isoformat(timespec='seconds')} ÖLÇÜMDEN SONRA ({oz.isoformat(timespec='seconds')}) — geleceğe tarihli, şüpheli"
     else: neden=None
     (bagli_l if bagli_mi(neden) else kopuk).append((k,neden))
-print("cy="+str(len(bagli_l))); print("cs="+str(len(s)))
+print("cy="+str(len(bagli_l))); print("cs="+str(len(s))); print("ckz="+("1" if kz else "0"))
 if bagli_l:
     k=bagli_l[0][0]; ilk=k.get("ilk_atesleme") or {}
     print("cilk="+shlex.quote(f"{ilk.get('saat','')} · {str(ilk.get('satir',''))[:120]} · kaynak: {k.get('kaynak','')} · komut: {' '.join(k.get('komut') or [])[:160]}"))
@@ -133,6 +133,8 @@ PY
 )"
 fi
 cs_engel=0
+# 🔴 GÖZ #353 tur 1: kartın açılış zamanı okunamazsa işe bağlama ÖLÇÜLEMEZ — bu "bağlı kayıt yok" (rc=1) değil, ÖLÇÜLEMEDİ (rc=3).
+[ ! -f "$KART" ] || [ "$ckz" = "1" ] || { _h "kartın açılış zamanı ('zaman') okunamadı — canlı kaydın işe bağlanması ÖLÇÜLEMEDİ"; olcemedi=$((olcemedi+1)); }
 [ -n "$ckopuk" ] && _y "  ⚠ canlı kaydı işe bağlanamadı (sayılmaz): $ckopuk"
 [ "$cs" -gt 0 ] && { _h "canlı kanıt SARI ($cs kayıt) — ölçülmüş ama ateşleme kaydı yok; sarı yeşil değildir"; eksik=$((eksik+1)); cs_engel=1; }
 [ "$cg" = "E" ] && [ "$cy" -eq 0 ] && [ "$cs_engel" -eq 0 ] && { _h "canlı kanıt YOK ya da bu işe bağlı değil — cron/servis/sunucu işi ($csebep) kart açılışından SONRAKİ gerçek ateşleme kaydını ister: kanit.sh canli <iş> <etiket> --kaynak … -- <log okuyan komut>"; eksik=$((eksik+1)); }

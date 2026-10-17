@@ -1,5 +1,5 @@
-$ bash /tmp/tmp.YODkVe1TV4/birlestirme-kapisi.test.sh
-# rc=1 sure=11.3s zaman=2026-10-17T14:13:05+03:00
+$ bash /tmp/tmp.xCySrIb4sX/birlestirme-kapisi.test.sh
+# rc=1 sure=13.8s zaman=2026-10-17T14:16:46+03:00
 --- stdout ---
 ════ T1 · hiçbir şey yok → engeller ════
   ✓ kart+kanıt+denetim yokken rc=1
@@ -73,8 +73,13 @@ $ bash /tmp/tmp.YODkVe1TV4/birlestirme-kapisi.test.sh
   ✓ T11k eski kart + bağlı yeşil canlı → geçer
   ✗ T11p kart okunamıyor (canli-gerekir düşer) → rc=3 ÖLÇÜLEMEDİ, yeşil değil
   ✗ T11p2 sebebi yazılı
-  ✗ T11p3 mutant 7 üretildi (yardımcı rc ve cevap denetimi kaldırıldı)
+  ✗ T11p3 mutant 7 üretildi (fail-closed çitler: canli-gerekir rc + kart zamanı kaldırıldı)
   ✓ T11p4 mutant 7: bozuk kartta ölçülemedi DEMİYOR → T11p bu mutantta düşerdi
+  ✓ T11q önce sağlam: bağlı yeşil canlı ile geçer
+  ✗ T11q2 kart 'zaman' çözülemez → rc=3 ÖLÇÜLEMEDİ (rc=1 değil)
+  ✗ T11q3 sebebi yazılı
+  ✗ T11q4 mutant 8 üretildi (zaman-okunamadı kapısı kaldırıldı)
+  ✓ T11q5 mutant 8: ölçülemediğini söylemiyor → T11q2 bu mutantta düşerdi
 ════ T12 · MUTASYON: canlı kontrolleri kaldırılınca kapı açılır (kapı gerçek, süs değil) ════
   ✗ T12a mutant 3 üretildi (kart canlı şartı kaldırıldı)
   ✓ T12b mutant 3: cron kartı canlı kayıtsız GEÇİYOR → T11a/T11i bu mutantta düşerdi
@@ -89,7 +94,7 @@ $ bash /tmp/tmp.YODkVe1TV4/birlestirme-kapisi.test.sh
   ✓ T12k mutant 6: geleceğe tarihli kayıt GEÇİYOR → T11o bu mutantta düşerdi
   ✗ T12l gerçek kapı geleceğe tarihli kaydı reddediyor
 
-── SONUÇ: 46 geçti · 23 kaldı ──
+── SONUÇ: 48 geçti · 26 kaldı ──
 --- stderr ---
 Traceback (most recent call last):
   File "<stdin>", line 3, in <module>
