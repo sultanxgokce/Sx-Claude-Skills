@@ -1,7 +1,7 @@
 // kilit.test.mjs — süreçler arası kayıt kilidi (Parça B7, flock(1)), hermetik: geçici dizin, ağ yok, tmux yok
 //   node kilit.test.mjs
-import { spawn } from 'node:child_process';
-import { mkdtempSync, readFileSync, existsSync, unlinkSync, writeFileSync } from 'node:fs';
+import { spawn, spawnSync } from 'node:child_process';
+import { mkdtempSync, readFileSync, readdirSync, existsSync, unlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -65,6 +65,20 @@ const iki = await Promise.all([1, 2].map(() => bitir(surec('', IZ))));
 const ad2 = readFileSync(IZ, 'utf8').trim().split('\n').map((l) => l.split(' '));
 kapi('DV32i iki takipçi aynı anda: sırayla alır (gir/cik dönüşümlü), ikisi de ALINDI',
   iki.every((x) => x === 'ALINDI') && ad2.length === 4 && ad2.every((x, i) => (i % 2 === 0 ? x[0] === 'gir' : x[0] === 'cik')));
+
+// DV32j: bekleyen çağıran ÖLDÜ (kilit alınmadan): yardımcısı kilidi almaz, ack artığı kalmaz (denetim tur 1 bulgusu)
+const tut = surec("console.log('TUTULDU');setTimeout(()=>b(),2500)");
+await tutulduMu(tut);
+const bekleyen = surec('');
+await sleep(500); bekleyen.kill('SIGKILL'); await bitir(bekleyen);
+// Ayırt edici gözlem: sahip hâlâ tutarken, ölü çağıranın tutucusu yaşamaya devam ediyor mu? (yalnız sahibinki kalmalı)
+await sleep(300);
+const tutucuSayi = spawnSync('pgrep', ['-fc', 'until flock -n 9'], { encoding: 'utf8' }).stdout.trim();
+await bitir(tut);
+const r32j = dene(2000);
+const artik = readdirSync(T).filter((f) => f.includes('.ack-'));
+kapi('DV32j bekleyen çağıran ölünce tutucusu yaşamaz (sahip dışında tutucu kalmaz); sonraki çağıran alır; ack artığı yok',
+  tutucuSayi === '1' && r32j === 'ALINDI' && artik.length === 0, 'tutucu=' + tutucuSayi + ' ' + r32j + ' artık=' + artik.length);
 
 for (const f of [KL, KL + '.devral']) if (existsSync(f)) unlinkSync(f);
 console.log(`\nSONUÇ: ${g} geçti · ${k} kaldı`);
