@@ -1,0 +1,38 @@
+$ node kadro-yaz.test.mjs
+# rc=0 sure=30.5s zaman=2026-10-17T16:29:29+03:00
+--- stdout ---
+── Y · saf dönüşüm (durumDegistir)
+  ✓ Y1 durum değeri yerinde değişir (satır yorumu kalır), önceki değer durum_once satırına; başka satır DEĞİŞMEZ
+  ✓ Y2 geri aç önceki değeri koyar, durum_once satırı kalkar → BAYT BAYT ilk hâl (satır yorumu korunur)
+  ✓ Y3 durum satırı yoksa id satırının ALTINA iki satır, bloğun girintisiyle (iç içe liste bozulmaz)
+  ✓ Y4 "yok" geri açılınca iki satır da kalkar → BAYT BAYT ilk hâl
+  ✓ Y5 zaten dondurulmuşu dondur/emekli et → 409 (üstüne yazıp önceki değeri kaybetmez)
+  ✓ Y6 dondurulmamışı geri aç → 409; durum_once'suz emekliyi geri aç → 409
+  ✓ Y7 aynı id iki kez → 409 (hangisine yazılacağı belirsiz)
+  ✓ Y8 kayıtta olmayan id → 404; düzenli ifade karakterli id ("A.*") başka kişiye eşleşmez
+  ✓ Y9 tuhaf şu anki değer ("can li") → 409 (satıra ham değer geri yazılmaz)
+  ✓ Y10 tuhaf durum_once ("a b") geri konmaz → 409
+  ✓ Y11 ekip modeli (`- kayit:` örnekleri, derin girinti) aynı kuralla
+  ✓ Y12 K13: adet yalnız kişinin KENDİ rolünde bir azalır/artar (yorum kalır; başka rolün adet'i dokunulmaz); adet satırı yoksa metin aynen
+── Z · dosya: elle kayıt (İSKÂN kutusu + merkez)
+  ✓ Z1 yazma sırası okuyucuyla aynı: [iskan, ekip kaydı]
+  ✓ Z2 SON kaynağa (ekip kaydı) yazıldı ve OKUYUCU onu görüyor: dondurulmus + geri açılır
+  ✓ Z3 dosya kipi korunur (0640); iskan kaydına dokunulmadı
+  ✓ Z4 geri aç → dosya bayt bayt ilk hâl
+── U · üretilmiş kayıt: kaynak model + derleyici
+  ✓ U1 derleyici yok → 503, model ve üretilmiş kayıt BAYT BAYT aynı (yarım yazma yok)
+  ✓ U2 üretilmiş bölgedeki kişi → yazım MODELE gider, derleyici KUTUNUN aile kaydıyla (--aile) --apply koşar; üretilmiş kayıt elle yazılmadı
+  ✓ U2b derleyicinin KAYIT DIŞI farkları (başka kimlik dosyası, yeni dosya) uygulanmaz, sayısı söylenir
+  ✓ U3 okuyucu: durum üretilmiş kayıttan (dondurulmus), durum_once modelden → geri açılır; rol aile kaydından
+  ✓ U4 geri aç → model ve üretilmiş kayıt BAYT BAYT ilk hâl
+  ✓ U5 derleyici düşerse 502 + model geri alındı (bayt eşit)
+  ✓ U6 derleyici "başarılı" ama üretilmiş kayıt değişmedi → 502 + geri alındı (ekranda görünmeyecek yazım kabul edilmez)
+  ✓ U8 derleyici aynı dosyada BAŞKA kişinin satırını değiştirdi → 409, model ve kayıt BAYT BAYT ilk hâl
+  ✓ U9 aynı dosyada yalnız kişinin bloğu + hash satırı değişirse kabul (sahte derleyici hash satırını da yeniler)
+  ✓ U7 aynı dosyanın ELLE bölgesindeki kişi → derleyicisiz doğrudan yazılır
+── K · kayıt kilidi (B7): yazım kilit altında
+  ✓ K1 kayıt başka süreçte kilitliyken → 503, kayıt dosyası aynen kalır
+  ✓ K2 tutucu ölünce yazım tutar; iş bitince ack/geçici dosya kalmaz
+
+SONUÇ: 28 geçti · 0 kaldı
+--- stderr ---

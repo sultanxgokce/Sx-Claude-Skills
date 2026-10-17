@@ -1,0 +1,38 @@
+{
+  "is": "kadro-dava-kurali-b1",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-17T15:31:50+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kilit-sinav",
+      "asama": "tek",
+      "dosya": "olcum-kilit-sinav-tek.txt",
+      "sha256": "577d101dedef94580794902109be90172e5b9fc2b1812a9daa1dd1c9093571b5",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/kilit.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:31:10+03:00",
+      "sure_sn": 2.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinav",
+      "asama": "tek",
+      "dosya": "olcum-kapi-sinav-tek.txt",
+      "sha256": "013d4dba07f9a8840c8071fe6d61ecd0fc3418a1ed524ba936caf8ec479e573c",
+      "komut": [
+        "bash",
+        "terminal-onar/kapi/kapi-sinav.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:31:50+03:00",
+      "sure_sn": 40.4
+    }
+  ],
+  "imza": "3454b98e46a667c5937810fb381d0d2d910dec825bde91d6c6462d08f6e3f7fc"
+}

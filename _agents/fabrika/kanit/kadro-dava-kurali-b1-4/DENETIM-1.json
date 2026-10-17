@@ -1,0 +1,52 @@
+{
+  "tur": 1,
+  "is": "kadro-dava-kurali-b1-4",
+  "pr": "362",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T17:02:05+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 26326,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 35793
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Bekleyen çağıranın ölümünü yoklayan yardımcı ve ack temizliği eklenmiş; normal senaryo ile mevcut gerilemeler yeşil ölçülmüş. Ancak ölüm yoklaması ile sonraki kilit alma arasında yarış kaldığı ve DV32j bu kritik aralığı sınamadığı için önce bunu çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "Çağıran, başarısız `flock -n` sonrasındaki `kill -0` yoklamasından hemen sonra ölür ve mevcut sahip kilidi bırakırsa yardımcı bir sonraki turda kilidi yine alabilir. Başarılı kilit alımından sonra çağıranın hâlâ yaşadığı doğrulanmadan ack yazılması, iş kartındaki “ölünce bekleyen tutucu kilit almaz” garantisini yarış altında sağlamıyor.",
+        "kanit": "TUTUCU döngüsünde sıra `flock -n` başarısız → `kill -0 \"$4\"` → `sleep 0.05` → yeniden `flock -n`; başarılı `flock` sonrasında doğrudan trap kurulup `: > \"$3\"` ile ack yazılıyor, ikinci yaşam denetimi yok.",
+        "konum": "terminal-onar/kapi/kilit.mjs: TUTUCU tanımı",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Yeni DV32j sınavı ölüm ile sahibin kilidi bırakmasını yarışa sokmuyor; bu nedenle üretim kodundaki ölüm-yoklaması/kilit-alımı yarışını yeşil sonuç yakalayamaz.",
+        "kanit": "Sınav bekleyeni SIGKILL ile öldürdükten sonra 300 ms bekleyip tutucu sayısını ölçüyor, ancak mevcut sahibi yalnız bunun ardından `await bitir(tut)` ile bırakıyor. Dolayısıyla ölüm yoklaması ile kilidin serbest kalmasının çakıştığı aralık denenmiyor.",
+        "konum": "terminal-onar/kapi/kilit.test.mjs: DV32j bloğu",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "DV32j yardımcı süreç sayısını sistem genelindeki komut satırı eşleşmesiyle ölçüyor; eşzamanlı başka bir kilit sınavı veya aynı üretim yardımcısı sonucu ilgisiz biçimde bozabilir.",
+        "kanit": "`spawnSync('pgrep', ['-fc', 'until flock -n 9'])` belirli test süreç ağacına veya geçici dizine göre süzülmüyor; buna rağmen sonuç kesin olarak `tutucuSayi === '1'` bekliyor.",
+        "konum": "terminal-onar/kapi/kilit.test.mjs: DV32j `pgrep -fc` ölçümü",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Hedefe özgü `kilit-sinav` ile dört gerileme sınavı rc=0 ve yeşil, fakat önce/sonra ölçüm çifti yok. DV32j gerçek süreçlerle hedef senaryonun olağan akışını ölçüyor; yine de ölüm ile kilidin serbest kalması arasındaki kritik yarış aralığını kapsamıyor, bu yüzden yeşil kayıt tam garanti kanıtı değil."
+  }
+}

@@ -1,0 +1,15 @@
+$ node terminal-onar/kapi/kilit.test.mjs
+# rc=0 sure=3.0s zaman=2026-10-17T15:57:13+03:00
+--- stdout ---
+── DV-F · süreçler arası kilit
+  ✓ DV32 sahibi YAŞAYAN kilit bir saatlik bile olsa alınmaz: ikinci yazıcı bekler, 503 ile vazgeçer (kapı açıcıyı beklerken kilit kaptırılmaz)
+  ✓ DV32b sahibi ÖLMÜŞ kilit bayattır: alınır, iş bitince bırakılır (dosya kalmaz)
+  ✓ DV32c üç süreç AYNI bayat kilidi aynı anda görür ve devralmaya çalışır (pencere sınavda 400 ms): üçü de sırayla alır, hiçbir an iki süreç içeride değil (gir/çık dönüşümlü)
+  ✓ DV32d bırakma yalnız KENDİ kilidini siler: içerik başkasınınsa dosyaya dokunmaz
+  ✓ DV32e taze CANLI kilit bayat-devral yolundan geçmez: 503, içerik aynen kalır
+  ✓ DV32f bayat kilit, devralı CANLI (taze) tutucu varken silinmez: 503, kilit ve devral kalır
+  ✓ DV32g ölü sahipli devral (60 sn) kaldırılır; bayat kilit devralınır ve bırakılır
+  ✓ DV32h canlı sahipli devral eski olsa da silinmez: 503, kilit ve devral kalır
+
+SONUÇ: 8 geçti · 0 kaldı
+--- stderr ---

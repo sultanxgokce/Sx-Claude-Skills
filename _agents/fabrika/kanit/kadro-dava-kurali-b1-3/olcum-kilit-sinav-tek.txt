@@ -1,0 +1,14 @@
+$ node kilit.test.mjs
+# rc=0 sure=6.0s zaman=2026-10-17T16:28:58+03:00
+--- stdout ---
+── DV-F · süreçler arası kilit (flock(1))
+  ✓ DV32 sahibi CANLI iken kilit alınmaz: 503 (kapı açıcıyı beklerken kilit kaptırılmaz)
+  ✓ DV32 sahip bırakınca aynı çağrı alır
+  ✓ DV32b sahibi ÖLDÜ (SIGKILL): kilit düşer, alınır ve bırakılır; yan dosya kalmaz
+  ✓ DV32c üç yarışçı (ölü sahipten sonra): üçü de sırayla alır, gir/cik dönüşümlü
+  ✓ DV32d bırakmadan sonra aynı süreç hemen yeniden alır
+  ✓ DV32h duraklatılmış (SIGSTOP) sahip kilidi tutar: 503; öldürülünce alınır
+  ✓ DV32i iki takipçi aynı anda: sırayla alır (gir/cik dönüşümlü), ikisi de ALINDI
+
+SONUÇ: 7 geçti · 0 kaldı
+--- stderr ---
