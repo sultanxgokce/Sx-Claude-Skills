@@ -1,7 +1,7 @@
 {
   "is": "gunluk-plan-tablo-kapanis-2",
   "arac": "kanit.py/0.4.0",
-  "guncelleme": "2026-10-17T21:04:58+03:00",
+  "guncelleme": "2026-10-17T21:05:14+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -264,7 +264,45 @@
       "renk": "yesil",
       "zaman": "2026-10-17T21:04:58+03:00",
       "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "d1-mutasyon-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-d1-mutasyon-tur2-sonra.txt",
+      "sha256": "2f7889535a8dfa4bc20b167a697ac61534899999d0e2be06f51490565b35d07f",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/d1-mutasyon.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-tablo-kapanis"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T21:05:14+03:00",
+      "sure_sn": 15.7
+    },
+    {
+      "tur": "dosya",
+      "etiket": "d1-kapali-kume-prob-betigi",
+      "asama": "tek",
+      "dosya": "dosya-d1-kapali-kume-prob-betigi-tek.sh",
+      "sha256": "4620c544a12925220824a49b2a2d20c47d829ac7b22d465af0e236c771f3ae70",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/d1-icerik-prob.sh",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T21:05:14+03:00"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "d1-mutasyon-tur2-betigi",
+      "asama": "tek",
+      "dosya": "dosya-d1-mutasyon-tur2-betigi-tek.sh",
+      "sha256": "19c9f3b2d58c52cb71b063c126d303dd157c810aa80ac4b5d05f43fba671eebd",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/d1-mutasyon.sh",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T21:05:14+03:00"
     }
   ],
-  "imza": "3ff830f08cf3af29d84485f1a07f82035f94c14c8396b8bcc77eb8b796acd247"
+  "imza": "e024200a23dd82d7ae11a682615a2d0eec4ee19696bb50c3a8347b0d200b5489"
 }

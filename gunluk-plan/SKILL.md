@@ -188,8 +188,9 @@ tabloyu basar ve **kapıyı** tutar:
 Açık madde için iki yol vardır: kanıtla kapat ya da Sultan'a sor. Sultan "ertele" derse
 `cipa.sh tazele --madde <n> --durum ertelendi --d1 "YYYY-MM-DD Sultan: ertele (sohbet · <ref> · \"<kırpık>\" · beyan:<AJAN>)"`.
 D1'siz ya da biçimsiz damga reddedilir (rc=2). Biçim yetmez: damganın **sonuç kısmı** ("Sultan: …"
-ile "(sohbet" arası) "ertele" kararını taşımalıdır — "Sultan: bugün görüşelim (…)" ya da olumsuzu
-("erteleme", "ertelenmesin") reddedilir. Bu kapı kelimeyi ölçer, anlamı değil. Elle yazılmış damgasız
+ile "(sohbet" arası) tam olarak bir erteleme kararı olmalıdır: `[yarına ] ertele | ertelensin | ertelendi |
+erteleyelim | erteleyin`. "Sultan: bugün görüşelim (…)", "ertele istemiyorum", "ertele mi?" reddedilir.
+Sultan'ın kendi sözü kırpıkta (tırnak içi) durur; sonuç yalnız kararın adıdır. Elle yazılmış damgasız
 ya da kararsız "ERTELENDİ" satırı tabloda **açık** sayılır. A06: damgayı ajan uydurmaz, Sultan'ın gördüğün sözünü aktarırsın.
 Ertesi sabah ertelenen maddeler yeni planın ilk maddeleri olarak yazılır.
 

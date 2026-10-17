@@ -21,13 +21,13 @@ SONUC = re.compile(r'^(.*?)\s*→\s*([A-ZĞÜŞİÖÇ][A-ZĞÜŞİÖÇ ]{2,})(?:
 SAHIP = re.compile(r'\s*\(sahip:\s*([^)]+)\)')
 # D1 (L73): "YYYY-MM-DD Sultan: <sonuç> (sohbet · <oturum-ref> · "<kırpık>" · beyan:<AJAN>)" — üç parça zorunlu
 D1 = re.compile(r'\d{4}-\d{2}-\d{2} Sultan: (.+?) ?\(sohbet · [^·()]+ · "[^"]{1,120}" · beyan:\S+\)')
-# 🔴 biçim yetmez (bağımsız göz #357 tur 4): sonuç kısmı "ertele" kararını taşımalı, olumsuzu değil — cipa.sh ile AYNI kural
-ERTELE, ERTELEME = re.compile(r'ertele', re.I), re.compile(r'ertelen?m[eaı]', re.I)
+# 🔴 biçim yetmez (bağımsız göz #357 tur 4 + #366 tur 1): sonuç kısmı KAPALI karar kümesinden biri, TAM eşleşme — cipa.sh ile AYNI küme
+KARAR = re.compile(r'(yarına )?ertele(nsin|ndi|yelim|yin)?', re.I)
 
 
 def ertele_d1(notlar):
     m = D1.search(notlar)
-    return bool(m and ERTELE.search(m.group(1)) and not ERTELEME.search(m.group(1)))
+    return bool(m and KARAR.fullmatch(m.group(1).strip()))
 # Durum adları kokpit kapısının (bugun.mjs DURUM) adlarıyla AYNI: acik · yarim · bitti · geri (+ ertelendi).
 # "açılmadı" ayrı durum değildir: açık + sonuç AÇILMADI (tabloda öyle okunur).
 ETIKET = {'acik': 'açık', 'yarim': 'yarım', 'bitti': 'kapandı', 'ertelendi': 'ertelendi', 'geri': 'geri alındı'}

@@ -171,13 +171,13 @@ kapi "T8 --kanit satıra 'kanıt:' parçası olarak yazılır" "1" "$(grep -c '^
 kapi "T9 tabloda kanıt sütunu dolu" "1" "$(bash "$ARAC" tablo 2>/dev/null | grep -c '| 1 | birinci | MUAVİN | kapandı | PR #12 |')"
 bash "$ARAC" tazele --madde 2 --durum ertelendi >/dev/null 2>&1; kapi "T10 D1'siz erteleme REDDEDİLİR" "2" "$?"
 bash "$ARAC" tazele --madde 2 --durum ertelendi --d1 "Sultan dedi ki ertele" >/dev/null 2>&1; kapi "T11 biçimsiz D1 REDDEDİLİR (oturum-ref · kırpık · beyan zorunlu)" "2" "$?"
-for _v in "bugün görüşelim" "erteleme" "ertelenmesin, bugün bitsin"; do
+for _v in "bugün görüşelim" "erteleme" "ertelenmesin, bugün bitsin" "ertele istemiyorum" "ertele mi?" "erteleyelim mi bilmiyorum"; do
   bash "$ARAC" tazele --madde 2 --durum ertelendi --d1 "2026-01-02 Sultan: $_v (sohbet · sinav-oturum · \"bugün\" · beyan:SINAV)" >/dev/null 2>&1
   kapi "T11b biçimi doğru ama karar 'ertele' değil ('$_v') → REDDEDİLİR" "2" "$?"
 done
 kapi "T11c reddedilen D1 çıpaya yazılmadı (madde 2 hâlâ açık, ERTELENDİ yok)" "0" "$(grep -c "ERTELENDİ" "$CK"; true)"
-printf '# ⚓ GÜNÜN PLANI ÇIPASI · 2026-01-02\n\n## Maddeler\n- [-] 2) elle → ERTELENDİ · D1: 2026-01-02 Sultan: bugün görüşelim (sohbet · s · "x" · beyan:SINAV)\n- [-] 3) elle → ERTELENDİ · D1: 2026-01-02 Sultan: yarına ertelensin (sohbet · s · "x" · beyan:SINAV)\n' > "$T/elle-d1.md"
-kapi "T11d ayrıştırıcı: kararsız D1 'açık', ertele D1 'ertelendi' okunur" "acik|ertelendi" \
+printf '# ⚓ GÜNÜN PLANI ÇIPASI · 2026-01-02\n\n## Maddeler\n- [-] 2) elle → ERTELENDİ · D1: 2026-01-02 Sultan: bugün görüşelim (sohbet · s · "x" · beyan:SINAV)\n- [-] 3) elle → ERTELENDİ · D1: 2026-01-02 Sultan: yarına ertelensin (sohbet · s · "x" · beyan:SINAV)\n- [-] 4) elle → ERTELENDİ · D1: 2026-01-02 Sultan: ertele istemiyorum (sohbet · s · "x" · beyan:SINAV)\n- [-] 5) elle → ERTELENDİ · D1: 2026-01-02 Sultan: Ertelendi (sohbet · s · "x" · beyan:SINAV)\n' > "$T/elle-d1.md"
+kapi "T11d ayrıştırıcı: kararsız D1 'açık', küme içi karar 'ertelendi' okunur" "acik|ertelendi|acik|ertelendi" \
      "$(python3 "$KOK/tablo.py" "$T/elle-d1.md" --json | python3 -c "import json,sys; print('|'.join(m['durum'] for m in json.load(sys.stdin)['maddeler']))")"
 bash "$ARAC" tazele --madde 2 --durum ertelendi --d1 '2026-01-02 Sultan: ertele (sohbet · sinav-oturum · "yarına kalsın" · beyan:SINAV)' >/dev/null 2>&1
 kapi "T12 geçerli D1 ile ertelendi yazılır" "1" "$(grep -c '^- \[-\] 2) ikinci → ERTELENDİ · D1: 2026-01-02 Sultan: ertele' "$CK"; true)"
