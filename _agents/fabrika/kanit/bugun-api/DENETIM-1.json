@@ -1,0 +1,45 @@
+{
+  "tur": 1,
+  "is": "bugun-api",
+  "pr": "355",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T15:09:52+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32466,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 15044
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, salt-okur `/api/bugun` ucu güncel çıpaları ayrıştırıyor; sabah/gün-ortası, durum ve bağlı görev kimliklerini JSON’a taşıyor ve kapı oturumuyla korunuyor. Ana talep karşılanmış ve kapsamlı sınavlar yeşil; ancak tarih parametresi yalnız biçimsel denetlendiği ve önce ölçümü gerçek bir davranış karşılaştırması olmadığı için önce bunları düzeltmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "`tarih` parametresi takvimde gerçekten var olan bir günü doğrulamıyor; `2026-99-99` gibi değerler 400 yerine kabul edilip yanıltıcı boş sonuç üretebilir.",
+        "kanit": "Sunucu yalnız `/^\\d{4}-\\d{2}-\\d{2}$/` desenini denetliyor; BG5 sınavı da sadece `17-10-2026` biçimini reddediyor, geçersiz ISO biçimli takvim tarihini sınamıyor.",
+        "konum": "terminal-onar/kapi/sunucu.mjs:488; terminal-onar/kapi/sunucu.test.mjs:BG5",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Önce/sonra çifti aynı davranışı karşılaştırmıyor; önce kaydı, özelliğin yokluğunu sınamak yerine geçici dizinde eksik modül nedeniyle düşüyor.",
+        "kanit": "`olcum-bugun-sinavi-once.txt` çıktısındaki tek hata `ERR_MODULE_NOT_FOUND` ve aranan dosya `/tmp/tmp.KwHmco3kNE/bugun.mjs`; sonra kaydı ise farklı komutla depo içindeki sınavı çalıştırıyor.",
+        "konum": "kanıt kaydı: bugun-sinavi/once ve bugun-sinavi/sonra",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Sonra ölçümleri 23 ayrıştırma/tarama/mutasyon kapısını, sunucu bütünleşmesini ve gerçek Nexus çıpasında salt-okur çalışmayı yeşil gösteriyor. Bununla birlikte önce ölçümü davranışsal bir temel değil, eksik modül hatasıdır; ayrıca gerçek çıpa ölçümü yalnız özet sayıları gösterdiğinden gerçek veride madde türü, durum ve görev bağlarının tamamını doğrudan sergilemiyor."
+  }
+}

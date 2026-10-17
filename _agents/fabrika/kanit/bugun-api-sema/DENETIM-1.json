@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "bugun-api-sema",
+  "pr": "363",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T17:02:37+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 25263,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 16811
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kapı, 1.5.0 dilbilgisindeki sahip, kanıt ve geçerli D1 damgalı ertelendi kurallarını eklemiş; sayım şeması da ertelendi alanını taşıyor. Önce/sonra ortak fikstür ölçümü, 35 geçen kural sınavı ve üç hedefli mutant üretime hazır düzeyde kanıt sunuyor; yalnız API bütünleşim sınavında ertelendi sayısının doğrudan görülmesi küçük bir rötuş olur.",
+    "bulgular": [
+      {
+        "ne": "/api/bugun bütünleşim sınavı, ertelendi içeren bir yanıtın ajan ve toplam sayılarında ertelendi alanını doğrudan doğrulamıyor; bu davranış yalnız ayrıştırıcı/sayilar sınavı ve ortak fikstür üzerinden kanıtlanmış.",
+        "kanit": "olcum-bugun-sinavi-sonra.txt D5-D8 ertelendi ayrıştırma ve sayımını doğruluyor; olcum-sunucu-sinavi-sonra.txt BG2 ise yalnız 1 açık ve 1 bitti içeren eski biçimli API yanıtını sınıyor.",
+        "konum": "terminal-onar/kapi/bugun.test.mjs:D5-D8; olcum-sunucu-sinavi-sonra.txt:BG2",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Ortak fikstür uyumu önce kırmızı üç farktan sonra yeşil birebir uyuma dönmüş, kural sınavı 35/35 geçmiş ve C4-C6 mutantları üç yeni kuralın gerçekten gözetildiğini gösteriyor. Kanıt gerçekçi çıpa verisi ve ölçüm çifti içeriyor; yalnız ertelendi alanının /api/bugun çıktısında uçtan uca doğrudan iddiası ayrı bir sunucu vakasıyla ölçülmemiş."
+  }
+}

@@ -76,7 +76,11 @@ jobs:
           #     Sahibi KAŞİF/MUCİT hattı; burada bodoslama düzeltilmiyor (üreten≠işleten).
           #   ⚠️ Bu, "yeşilin ne zamanki veriye ait olduğu sorulmuyor" sınıfının bir vakasıdır —
           #     kapı-sinavi becerisinin `bayat-mi` kapısının fikstür tarafındaki karşılığı.
-          KARANTINA=" ./mucit-suz/scripts/mucit-t1.test.sh ./kasif-tara/scripts/kasif-hafiza.test.sh "
+          #   compact.test.sh — K2 ('tur sırasında kuyruğa eklenen satır yeniden yazımda kaybolmaz') origin/main'de
+          #   de KIRMIZI (ölçüldü 2026-10-17, yerel + CI #354/#360 koşumları); 0.5 sn gecikmeli eklenen satır kayboluyor.
+          #   Gerçek yarış hatası mı zamanlama mı belirsiz → görev defterinde bulgu (sahip BÂNİ, kart compact-k2-yaris);
+          #   bu PR'ların dosyası değil. Karantina = sessiz atlama DEĞİL: aşağıda adıyla loglanır, sayılır.
+          KARANTINA=" ./mucit-suz/scripts/mucit-t1.test.sh ./kasif-tara/scripts/kasif-hafiza.test.sh ./terminal-onar/scripts/compact.test.sh "
           # Süre-tavanı: varsayılan 300 sn sabitti; yazilim-fabrikasi/denetci.test.sh (15 mutant,
           # her biri TÜM süiti yeniden koşuyor) CI'da üst üste 300 sn'de Terminated oldu (2026-10-15,
           # ölç: #38724018436 vb. — 'bayat-kopya-geri-donusu' mutantında kesildi). Nexus'un

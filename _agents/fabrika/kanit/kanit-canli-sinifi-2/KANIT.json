@@ -1,0 +1,132 @@
+{
+  "is": "kanit-canli-sinifi-2",
+  "arac": "kanit.py/0.4.0",
+  "guncelleme": "2026-10-17T14:23:19+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kanit-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kanit-sinavi-once.txt",
+      "sha256": "dbf1beda6d5344b6fe09e11f448b0caf12ef55f109a6295bf3658d68741ab2c1",
+      "komut": [
+        "bash",
+        "/tmp/tmp.QZjftDwdhC/kanit.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T14:22:44+03:00",
+      "sure_sn": 6.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kart-sinavi-once.txt",
+      "sha256": "5b74f54b2ad2acdaade8ff8bd4afecad42875de0de5469c3ff9bd3188ffbfff4",
+      "komut": [
+        "bash",
+        "/tmp/tmp.QZjftDwdhC/kart.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T14:22:46+03:00",
+      "sure_sn": 1.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "birlestirme-kapisi-sinavi",
+      "asama": "once",
+      "dosya": "olcum-birlestirme-kapisi-sinavi-once.txt",
+      "sha256": "319d3fc5c5a0293331b42f38c1fe6cd3da1a59ed05238140a6f3cdfb7d652e6e",
+      "komut": [
+        "bash",
+        "/tmp/tmp.QZjftDwdhC/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T14:22:56+03:00",
+      "sure_sn": 10.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kanit-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kanit-sinavi-sonra.txt",
+      "sha256": "d88ab19bf16e4ebc38dd8f616a20c598fa06ac6e65163e1192ce58e920d58146",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi-2/yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T14:23:03+03:00",
+      "sure_sn": 6.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sinavi-sonra.txt",
+      "sha256": "efee022915c73fd8f272489ece6546175314cd74cfa52bd8ac92753f90306365",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi-2/yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T14:23:06+03:00",
+      "sure_sn": 3.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "birlestirme-kapisi-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-birlestirme-kapisi-sinavi-sonra.txt",
+      "sha256": "2ffaaae68b4d04b6786601c0bd16eab32f43fe55762bc39b6d81e0409e6dd41a",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi-2/yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T14:23:19+03:00",
+      "sure_sn": 12.6
+    },
+    {
+      "tur": "canli",
+      "etiket": "ornek-kacis-defteri",
+      "asama": "canli",
+      "dosya": "canli-ornek-kacis-defteri.txt",
+      "sha256": "968ba54535d3a0564c9dae1003b9836fc390812cc48078e29531dc88659fd0ae",
+      "komut": [
+        "tail",
+        "-n",
+        "5",
+        "--",
+        "/config/projects/Nexus/_agents/fabrika/kacis-defteri.log"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:/config/projects/Nexus/_agents/fabrika/kacis-defteri.log",
+      "kaynak_turu": "dosya",
+      "son": 5,
+      "desen": "KAPISIZ",
+      "en_az": 1,
+      "atesleme_sayisi": 5,
+      "ilk_atesleme": {
+        "satir": "2026-10-15T09:48:12Z | KAPISIZ | Sultan sohbette 'olur birlestir' (15 Eki); kart filo-havuz-toplayici daralt: 4 tur 4/E, 12 kapi, CI yesil; havuz dosyasi depo disi | FABRIKA_KAPISIZ=\"Sultan sohbette 'olur birlestir' (15 Eki); kart filo-havuz-toplayici daralt: 4 tur 4/E, 12 kapi, CI yesil; havuz dosyasi depo disi\" gh pr merge 1134 --repo sultanxgokce/Nexus --squash --delete-branch 2>&1 | tail -1; echo \"1134 rc=$?\"",
+        "saat": "2026-10-15T09:48:12Z",
+        "saat_iso": "2026-10-15T09:48:12+00:00"
+      },
+      "son_atesleme": {
+        "satir": "2026-10-15T18:50:33Z | KAPISIZ | Sultan onayı 15 Eki (sohbet session_01Ge4BawKcUrcm1pdV8WANyF 'önerin kabul edildi'): yetki sınıfı, tur 3 Codex 4/E tavan, tek bulgu uçtan uca Doğrulat zinciri (düğme panelde ayrı PR); CI 14/14 yeşil | cd /config/projects/_wt/Nexus-ise-alim-muhakkik && FABRIKA_KAPISIZ=\"Sultan onayı 15 Eki (sohbet session_01Ge4BawKcUrcm1pdV8WANyF 'önerin kabul edildi'): yetki sınıfı, tur 3 Codex 4/E tavan, tek bulgu uçtan uca Doğrulat zinciri (düğme panelde ayrı PR); CI 14/14 yeşil",
+        "saat": "2026-10-15T18:50:33Z",
+        "saat_iso": "2026-10-15T18:50:33+00:00"
+      },
+      "zaman": "2026-10-17T14:23:19+03:00",
+      "sure_sn": 0.0
+    }
+  ],
+  "imza": "449d03dab5d4b4ce25667a8d799774b2b92eebe9278c8f5cee8dbd38e8674198"
+}

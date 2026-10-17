@@ -1,0 +1,45 @@
+$ node terminal-onar/kapi/bugun.test.mjs
+# rc=0 sure=0.0s zaman=2026-10-17T17:02:04+03:00
+--- stdout ---
+── A · çıpa ayrıştırma (cipa.sh biçimi, gerçek örnekten)
+  ✓ A1 tarih başlıktan
+  ✓ A2 yedi madde (bilinmeyen işaret ve düz satır madde değil)
+  ✓ A3 sabah maddesi: etiket 1, tür sabah, durum bitti, metin kuyruksuz, sonuç KAPANDI, not ayrı
+  ✓ A4 yarım madde [~] → yarim, sonuç YARIM
+  ✓ A5 açık madde: sonuç/not boş, metin tam
+  ✓ A6 geri alınan [-] → geri, sonuç GERİ ALINDI
+  ✓ A7 gün ortası G1) → tür gun-ortasi
+  ✓ A8 havuz bağı: gorev_ kimlikleri tekilleştirilmiş (iki kimlik)
+  ✓ A9 etiketsiz madde → tür serbest
+  ✓ A10 damgalar (sondaki _ soyulur)
+  ✓ A11 sayılar: 3 açık · 1 yarım · 2 bitti · 1 geri · 7 toplam
+  ✓ A12 DURUM kapalı küme (boş · ~ · x · X · -)
+── D · 1.5.0 dilbilgisi (Sx gunluk-plan/sema/bugun-maddesi.md: sahip · kanıt · ertelendi) — fikstür kapısı T17 #357'de
+  ✓ D1 sahip metinden ayrılır: metin "Retro paketi gorev_…", sahip MUAVİN
+  ✓ D2 kanıt nottan ayrılır: kanit "cloudtop #669", not "iki tur"
+  ✓ D3 sahipsiz madde: sahip boş, metin dokunulmaz
+  ✓ D4 sahip var, sonuç yok: açık madde, not/kanit boş
+  ✓ D5 "-" + ERTELENDİ + geçerli D1 → durum ertelendi (geri DEĞİL)
+  ✓ D6 "-" + ERTELENDİ + D1 YOK → damgasız erteleme açık sayılır (acik)
+  ✓ D7 iki kanıt parçası birleşir, not ayrı kalır
+  ✓ D8 sayılar: ertelendi 1 · acik 2 (damgasız erteleme dahil) · geri 1 · yarim 1 · bitti 2 · toplam 7
+  ✓ D9 eski biçim (A fikstürü) sahip/kanit alanlarını boş taşır, kırılmaz
+  ✓ A13 boş metin: tarih null, madde 0 (çökmez)
+── B · kutu listesi (dizin tarama: bugün · bugün değil · yedek · eski tek dosya · okunamayan)
+  ✓ B1 bugünkü iki ajan (muavin · serdar), alfabetik
+  ✓ B2 başka günün çıpası listeye girmez ama bugun_degil'de adıyla ve tarihiyle görünür
+  ✓ B3 yedek ve eski tek dosya taranmaz
+  ✓ B4 okunamayan dosya okunamadi'da (sessiz atlama yok)
+  ✓ B5 toplam sayılar iki ajanın birleşimi (4 açık = 3 + 1)
+  ✓ B6 ajan başına sayılar ve dosya adı
+  ✓ B7 handoff dizini yoksa var=false, çökmez
+── C · MUTASYON (kopyada): tarih kapısı · yedek süzgeci · kuyruk ayrımı kaldırılınca sınav kırmızı
+  ✓ C1 tarih kapısı kaldırılınca eski gün listeye GİRER → B1/B2 bu mutantta düşerdi
+  ✓ C2 yedek süzgeci kaldırılınca yedek dosya listeye girer → B3 bu mutantta düşerdi
+  ✓ C3 kuyruk ayrımı kaldırılınca metin "→ KAPANDI"yı taşır → A3 bu mutantta düşerdi
+  ✓ C4 D1 kapısı kaldırılınca damgasız erteleme de "ertelendi" olur → D6 bu mutantta düşerdi
+  ✓ C5 sahip ayrımı kaldırılınca "(sahip: …)" metinde kalır → D1 bu mutantta düşerdi
+  ✓ C6 kanıt ayrımı kaldırılınca kanit boş → D2 bu mutantta düşerdi
+
+── SONUÇ: 35 geçti · 0 kaldı ──
+--- stderr ---

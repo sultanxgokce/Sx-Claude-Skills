@@ -1697,6 +1697,37 @@
       ],
       "author": "sultanxgokce",
       "source": "merkez (BÂNİ, G-BANI-0006 · Sultan 13 Eki 2026)"
+    },
+    {
+      "id": "retro",
+      "type": "workflow",
+      "name": "Haftalık Retro — Araç Ölçer · Ajan Yorumlar · Merkez Toplar · Süzüm Kanıtlanır",
+      "version": "1.0.0",
+      "description": "Her ajanın haftasını beş kaynaktan ÖLÇER (NOTES satırları · fabrika kartları · bağımsız göz turları · kaçışlar · boşta zilleri; ölçemediğini sarı basar), ajan 5 başlığı kendi gözüyle yorumlar (ne bitti · nerede zaman kaybettim ölçüyle · hangi araç/kural yavaşlattı · ne öğrendim · merkeze önerim); çıktı _agents/handoff/retro/<hafta>/<AJAN>.md lint'li. Merkez kipi kutu retrolarını toplar (OK/GEÇERSİZ/EKSİK/ÇALIŞMADI), MERKEZ.md iskeleti kurar; her öneri → gorev_ ya da → RED damgası alır, süzüm mekanik ölçülür. Haftayı kapatmaz (/hafta-kapanis), zil düşürmez (cron).",
+      "tags": [
+        "retro",
+        "hafta",
+        "olcum",
+        "ders",
+        "workflow",
+        "global"
+      ]
+    },
+    {
+      "id": "hafta-kapanis",
+      "type": "workflow",
+      "name": "Hafta Kapanışı — Protokol Eksiksiz Koşmadıysa Hafta Kapanmaz",
+      "version": "1.0.0",
+      "description": "Haftanın kapanış kapısı; yazmaz, ölçer. K1 aktif ajanların kutu retrosu (retro saf yardımcıları) · K2 merkez dersleri görev defterine D1 damgasıyla girmiş · K3 kutu önerileri süzülmüş (retro suzum) · K4 haftanın kaçış/tıkanma kayıtları yazılı bir derse bağlı · K5 Sultan onayı D1 biçimli (araç YAZMAZ, var mı diye ölçer — A06). Çıktı retro/<hafta>/KAPANIS.md; açık haftalar dizinden türetilir. Ölçüm aracı (retro) yoksa kapanmış saymaz, ÖLÇÜLEMEDİ der.",
+      "tags": [
+        "retro",
+        "hafta",
+        "kapanis",
+        "kapi",
+        "olcum",
+        "workflow",
+        "global"
+      ]
     }
   ]
 }

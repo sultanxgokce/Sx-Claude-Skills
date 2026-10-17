@@ -1,0 +1,23 @@
+$ bash -c python3 retro/scripts/retro.py merkez --kok '/tmp/tmp.cvqhpLE54S/nexus-ince'; [ $? -eq 1 ]
+# rc=0 sure=0.1s zaman=2026-10-17T16:06:00+03:00
+--- stdout ---
+MERKEZ · 2026-W42 · 16 ajan
+  EKSİK     BASİRET    iz var (notes 8 · kart 5) ama retro yok → zil
+  EKSİK     BERİD      iz var (notes 46 · kart 0) ama retro yok → zil
+  EKSİK     HENDESE    iz var (notes 18 · kart 3) ama retro yok → zil
+  EKSİK     MUAVİN     iz var (notes 0 · kart 2) ama retro yok → zil
+  EKSİK     MUHAKKIK   iz var (notes 12 · kart 0) ama retro yok → zil
+  EKSİK     MİRAHUR    iz var (notes 101 · kart 6) ama retro yok → zil
+  EKSİK     NAKKAŞ     iz var (notes 19 · kart 0) ama retro yok → zil
+  OK        BÂNİ       öneri 4 · ders 3
+  ÇALIŞMADI AHENKSERDAR bu hafta iz yok (NOTES/kart) — retro zorunlu değil
+  ÇALIŞMADI BUGSERDAR  bu hafta iz yok (NOTES/kart) — retro zorunlu değil
+  ÇALIŞMADI MIMSERDAR  bu hafta iz yok (NOTES/kart) — retro zorunlu değil
+  ÇALIŞMADI MOTORSERDAR bu hafta iz yok (NOTES/kart) — retro zorunlu değil
+  ÇALIŞMADI MUMEYYIZ   bu hafta iz yok (NOTES/kart) — retro zorunlu değil
+  ÇALIŞMADI PAZARBASI  bu hafta iz yok (NOTES/kart) — retro zorunlu değil
+  ÇALIŞMADI UISERDAR   bu hafta iz yok (NOTES/kart) — retro zorunlu değil
+  ÇALIŞMADI YAVER      bu hafta iz yok (NOTES/kart) — retro zorunlu değil
+  ✓ MERKEZ.md iskeleti: _agents/handoff/retro/2026-W42/MERKEZ.md · öneri 4 (damga bekliyor: 4)
+✗ EKSİK/GEÇERSİZ: MUAVİN, NAKKAŞ, BASİRET, BERİD, MUHAKKIK, MİRAHUR, HENDESE → kutu retrosunu ajan yazar (merkez yazamaz); zil düşür
+--- stderr ---

@@ -1,0 +1,38 @@
+{
+  "tur": 3,
+  "is": "bugun-api",
+  "pr": "355",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T15:19:27+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 41176,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 32077
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, `/api/bugun` ucu bugünün ajan çıpalarını salt-okur biçimde tarıyor; sabah/gün-ortası ayrımını, durumu ve bağlı `gorev_` kimliklerini JSON olarak veriyor. Önceki ciddi tarih doğrulama ve bütünleşme sınavı sorunları giderilmiş; üretim kodunda puanı düşürecek kanıtlı bir kusur kalmamış, yalnız birim sınavının “önce” ölçümü rötuş istiyor.",
+    "bulgular": [
+      {
+        "ne": "Birim sınavının önce/sonra çifti davranışsal bir gerileme karşılaştırması değil; önce ölçümü yalnız eksik modül nedeniyle kırmızı.",
+        "kanit": "`olcum-bugun-sinavi-once.txt`, sınav iddialarını çalıştırmadan `/tmp/tmp.KwHmco3kNE/bugun.mjs` için `ERR_MODULE_NOT_FOUND` veriyor; sonra ölçümü ise 23 davranış kontrolünün geçtiğini gösteriyor. HTTP bütünleşmesi için ayrıca geçerli kırmızı/yeşil sunucu çifti bulunduğundan bu eksik yalnız kanıt kalitesi rötuşudur.",
+        "konum": "kanıt kayıtları: bugun-sinavi/once ve bugun-sinavi/sonra",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Sunucu sınavı gerçek bir davranışsal önce/sonra çifti sunuyor: önce `/api/bugun` kontrolleri 404 ile kırmızı, sonra kimlik doğrulama, içerik, görev bağı, kutu/proje kimliği ve geçersiz tarihler dahil tamamı yeşil; ayrıştırma/tarama/mutasyon sınavı da 23/23 ve gerçek Nexus çıpası ölçümü başarılı. Yalnız bağımsız birim sınavının önce kaydı eksik modül hatası olduğu için o özel çift zayıf."
+  }
+}

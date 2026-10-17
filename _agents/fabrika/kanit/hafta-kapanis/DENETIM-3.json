@@ -1,0 +1,45 @@
+{
+  "tur": 3,
+  "is": "hafta-kapanis",
+  "pr": "360",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T16:28:42+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 56172,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 12,
+    "bayt": 24673
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Hafta kapanış kapısı K1–K5 koşullarını salt ölçüyor, KAPANIS.md üretiyor ve açık haftaları listeliyor; önceki turdaki RED kaçamakları da kaldırılmış. Ancak Sultan beyanındaki “≤15 kelime kırpık” kuralı uygulanmadığından biçimsiz bir D1 onayı haftayı kapatabilir; önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "D1 doğrulaması, belgelenen en fazla 15 kelimelik kırpık sınırını ölçmüyor; 120 karakter içinde 16 veya daha fazla kısa kelime taşıyan bir onay hem K2 damgası hem K5 Sultan onayı olarak geçerli sayılabilir ve haftayı kapatabilir.",
+        "kanit": "`D1_RE` alıntı bölümünü yalnız `\"[^\"]{1,120}\"` ile sınırlar; kelime sayımı yoktur. SKILL.md ise onay biçimini `\"<≤15 kelime kırpık>\"` olarak tanımlar. Yeşil sınav çıktısındaki H5/H6 kenarları baş/son eşleşmesini ölçüyor, fakat 15 kelime sınırına ait bir vaka göstermiyor.",
+        "konum": "hafta-kapanis/scripts/hafta-kapanis.py:38,112-124,192-204; hafta-kapanis/SKILL.md:20-21; olcum-sinav-sonra.txt:H5-H6",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Global becerinin hedef makineye gerçekten kurulması bu konteynerde doğrulanmış değil; yalnız kurulum planının kuru koşusu var.",
+        "kanit": "Önce ölçümü `/config/.claude/skills/hafta-kapanis` için `YOK` ve rc=1 gösteriyor. `kurulum-plani-kuru-kosu` çıktısı `YENİ kurulum` ve `uygulamak için: node sync-skills.mjs --apply` diyor; kurulum sonrası varlık ölçümü bulunmuyor.",
+        "konum": "olcum-beceri-varligi-once.txt; olcum-kurulum-plani-kuru-kosu-sonra.txt",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "Sultan'ın Mac'i"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; manifest düzeyinde sarı kayıt yok. Hermetik sınav rc=0, gerçekçi 2026-W42 ölçümü K1–K4 eksiklerini ve açık hafta listesini gösteriyor; ayrıca retro.py yokluğu, dış komut rc=3 üretmesine rağmen sarmalayıcı beklentiyi doğruladığı için yeşil kaydedilmiş ve çıktısı ÖLÇÜLEMEDİ davranışını kanıtlıyor. Bununla birlikte global kurulum için önce/sonra çifti yok ve sınav D1 kırpığının 15 kelime sınırını kapsamıyor."
+  }
+}

@@ -10,6 +10,7 @@ yapmak zorunda kalır — çalışma biçimini değiştirir.
 | **Görünüm** | önce/sonra kare — "sayfa yoktu, şimdi var" | **gerçekçi veriyle** çekilir; boş/örnek veriyle kare kanıt değil. Yeni görünüm karesi insana gitmeden yayınlanmaz |
 | **Akış** (tıkla, gir, gönder) | ajanın uygulamayı **kendisi kullanarak** aldığı kare dizisi; grafik ortamı olan kutuda kısa video | kutuda grafik ortam yoksa "video alınamadı" **SARI** yazılır, yeşile boyanmaz |
 | **Görünmez** (performans, veri, arka plan) | ölçüm çifti: önceki değer · sonraki değer · komut · rc — yan yana | komut kırpılmadan saklanır, boru arkasına konmaz |
+| **Canlı** (cron · servis · sunucu) | **ilk gerçek ateşleme kaydı**: log satırı · saat · kaynak (`kanit.sh canli … --kaynak dosya:|journal:|ssh:|docker:… --desen <servis>`; okuma komutunu araç kurar, serbest komut yok) | "dosya yerinde, birim yeşil" kanıt DEĞİL; saat damgasız satır ateşleme değil; kaynağa ulaşılamadı ya da ateşleme yok → **SARI**, kapı geçirmez (retro 17 Eki 2026 ders 1: 119 işte 81 bulgu bu açıktan) |
 
 **Kanıt sayılmayan:** "yaptım / bitti / çalışıyor / muhtemelen geçer" beyanı · kod satırının kendisi (kimse her
 satırı okumuyor) · pipe arkasındaki yeşil · KOŞULMADI'nın yeşil sayılması.

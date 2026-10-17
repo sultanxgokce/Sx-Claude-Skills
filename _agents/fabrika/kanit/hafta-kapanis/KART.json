@@ -1,0 +1,49 @@
+{
+  "is": "hafta-kapanis",
+  "cumle": "gorev_01M54T2ENRNVGXFZ421SFPMSQJ 2/2 — /hafta-kapanis global becerisi: haftayı KAPATMAZ eğer (K1) aktif ajanların kutu retrosu eksik/geçersiz (retro.py merkez), (K2) merkez retrosu yok ya da ders→görev D1 damgası eksik, (K3) kutu önerileri süzülmemiş (retro.py suzum), (K4) haftanın kaçış/tıkanma kayıtları MERKEZ.md'de ders damgası almamış. Salt ölçer; çıktı retro/<hafta>/KAPANIS.md; Sultan onayını YAZMAZ, var mı diye ölçer (A06); açık haftaları listeler. Cron ve retro.py bu kartın dışında.",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-17T16:12:51+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/hafta-kapanis (sınav önce/sonra + mutasyon + canlı 2026-W42 ölçümü)",
+  "oda": "",
+  "durum": "tikandi",
+  "gecmis": [
+    {
+      "zaman": "2026-10-17T16:29:19+03:00",
+      "olay": "tikandi"
+    },
+    {
+      "zaman": "2026-10-17T16:32:02+03:00",
+      "olay": "tikandi"
+    }
+  ],
+  "bitis": "2026-10-17T16:32:02+03:00",
+  "pr": "",
+  "puan": {
+    "kod": 4,
+    "dogru": "E",
+    "tur": 3
+  },
+  "kanit_var": true,
+  "tikanma": {
+    "yol": "devam",
+    "neden": "3 turda 5/E yok ama ilerliyor: 3/H (3 bulgu) → 4/H (2) → 4/E (1); son bulgu D1 kırpık ≤15 kelime, düzeltme+sınav+mutant push'landı (6248ce1). 4. ve mutlak son tur reis 'devam' ister. ⊗ Mac kurulumu bu kutudan ölçülemez."
+  },
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "BANI",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+      "gerekce": "SERDAR 17:0x NOTES: üç turda bulgu 3→2→1 ve H→E, kalan tek bulgu D1 kelime sayımı düzeltildi 6248ce1; ilerleyen iş +1 — kart sahibi BÂNİ SERDAR kararını işler",
+      "zaman": "2026-10-17T16:58:20+03:00"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+$ node /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/bugun-sema-prova/sema/kapi-uyum.mjs /tmp/tmp.vgiN011aBG/bugun.mjs /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/bugun-sema-prova/sema/ornek-cipa.md /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/bugun-sema-prova/sema/beklenen.json
+# rc=1 sure=0.0s zaman=2026-10-17T17:02:04+03:00
+--- stdout ---
+  ✗ kapı 1.5.0 dilbilgisini benimsememiş: sahip alanı yok (metinde kalıyor)
+  ✗ kapı 1.5.0 dilbilgisini benimsememiş: kanit alanı yok (notta kalıyor)
+  ✗ kapı 1.5.0 dilbilgisini benimsememiş: ertelendi kuralı yok ("-" + ERTELENDİ → geri)
+✗ UYUMSUZ — 3 fark:
+  • eksik kural: sahip alanı yok (metinde kalıyor)
+  • eksik kural: kanit alanı yok (notta kalıyor)
+  • eksik kural: ertelendi kuralı yok ("-" + ERTELENDİ → geri)
+--- stderr ---

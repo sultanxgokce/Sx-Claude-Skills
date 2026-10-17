@@ -9,6 +9,7 @@
 # ÜÇ ÖLÇÜM
 #   1) KART     — işin kartı var mı (0. adım atlanmamış mı)
 #   2) KANIT    — `kanit.py dogrula` rc=0: manifest ARAÇ imzalı, dosya sha'ları tutuyor
+#   2b) CANLI   — cron/servis/sunucu kartı: yeşil `canli` kaydı (gerçek ateşleme) şart; sarı canlı her kartta engel (17 Eki 2026)
 #   3) PUAN     — son DENETIM-<tur>.json: kod_puani=5 VE dogru_sey=E VE denetçi ≠ yazan
 #
 # 🔴 NE ÖLÇMEZ (dürüstlük): kanıtın DOĞRU şeyi ölçtüğünü ölçmez — onu bağımsız göz yapar.
@@ -75,6 +76,75 @@ if [ -f "$HERE/kanit.py" ]; then
 else
   _h "kanit.py bulunamadı — ÖLÇÜLEMEDİ"; olcemedi=$((olcemedi+1))
 fi
+
+# 2b · CANLI — "git'te düzeltildi ≠ canlıda çalışıyor" (retro 17 Eki 2026 · ders 1): cron/servis/sunucu kartı yeşil ölçüm
+#    + 5/E ile GEÇMEZ; gerçek ateşleme kaydı (kanit.sh canli, yeşil) ister. Sarı canlı = ölçülmüş ama ateşleme yok → kart ne
+#    derse desin geçmez (sarı yeşil değildir). Kartın canlı şartını kart.sh söyler (eski kartta cümleden türetir).
+# 🔴 GÖZ (daraltılmış tur): kart.sh canli-gerekir düşünce cg boş kalıyor ve H varsayılıyordu → canlı şartı FAIL-OPEN atlanıyordu.
+#    Kapı ölçemediğini yeşil saymaz: yardımcı rc≠0 ya da cevap E/H değilse ÖLÇÜLEMEDİ (rc=3).
+cg="H"; csebep=""
+if [ -f "$KART" ]; then
+  if [ -f "$HERE/kart.sh" ]; then
+    cg_cikti="$(KANIT_DEPO="$DEPO" bash "$HERE/kart.sh" canli-gerekir "$IS" 2>&1)"; cg_rc=$?
+    IFS=$'\t' read -r cg csebep <<<"$cg_cikti"; csebep="${csebep:-}"
+    if [ "$cg_rc" -ne 0 ] || { [ "$cg" != "E" ] && [ "$cg" != "H" ]; }; then
+      _h "kartın canlı şartı OKUNAMADI (kart.sh canli-gerekir rc=$cg_rc: ${cg_cikti:-boş}) — ÖLÇÜLEMEDİ, canlı kontrolü atlanmaz"; olcemedi=$((olcemedi+1)); cg="?"
+    fi
+  else
+    _h "kart.sh bulunamadı — kartın canlı şartı ÖLÇÜLEMEDİ"; olcemedi=$((olcemedi+1)); cg="?"
+  fi
+fi
+# 🔴 GÖZ TUR 1 (PR #352): "herhangi bir yeşil canlı kaydı yetiyor; eski ya da ilgisiz kayıt yeni cron değişikliğini geçirir" — doğru.
+#    Kayıt bu İŞE BAĞLANIR: ölçüm zamanı DA son ateşleme saati DE kartın açılış zamanından SONRA olmalı. Bağlanamayan yeşil kayıt
+#    sayılmaz, sebebi basılır. Kapı sayılan kaydın komutunu ve kaynağını da basar — göz "neyi okudu" diye bakabilsin.
+cy=0; cs=0; cilk=""; ckopuk=""; ckz=1; cpy_rc=0
+if [ -f "$DZ/KANIT.json" ]; then
+  # 🔴 GÖZ #353 tur 2: python bloğu düşerse eval boş kalıyor ve kapı "canlı yok" (rc=1) diyordu → alt sürecin rc'si ölçülür, düşerse ÖLÇÜLEMEDİ
+  cpy_out="$(python3 - "$DZ/KANIT.json" "$KART" <<'PY'
+import json,sys,shlex,datetime
+def P(s):
+    # 🔴 GÖZ #353 tur 2: dilimsiz (naive) ISO ile dilimli karşılaştırma TypeError veriyordu → dilimsiz değer kutunun yerel dilimine alınır
+    try:
+        d=datetime.datetime.fromisoformat(s)
+        return d.astimezone() if d.tzinfo is None else d
+    except Exception: return None
+try: m=json.load(open(sys.argv[1],encoding="utf-8"))
+except Exception: m={}
+kz=None
+try: kz=P(json.load(open(sys.argv[2],encoding="utf-8")).get("zaman",""))
+except Exception: pass
+c=[k for k in m.get("kayitlar",[]) if k.get("tur")=="canli"]
+y=[k for k in c if k.get("renk")=="yesil"]; s=[k for k in c if k.get("renk")=="sari"]
+bagli_l=[]; kopuk=[]
+for k in y:
+    oz=P(k.get("zaman") or ""); son=P(((k.get("son_atesleme") or k.get("ilk_atesleme") or {}).get("saat_iso")) or "")
+    kzs=kz.isoformat(timespec="seconds") if kz else "?"
+    if kz is None: neden="kart açılışı zamanı okunamadı"
+    elif oz is None or oz<kz: neden=f"ölçüm kart açılışı ({kzs}) ÖNCESİNDE"
+    elif son is None: neden="ateşleme saati çözülemedi (saat_iso yok; eski araçla alınmış olabilir)"
+    elif son<kz: neden=f"son ateşleme {son.isoformat(timespec='seconds')} kart açılışı {kzs} ÖNCESİNDE — bu işin ateşlemesi değil"
+    elif son>oz+datetime.timedelta(minutes=5): neden=f"son ateşleme {son.isoformat(timespec='seconds')} ÖLÇÜMDEN SONRA ({oz.isoformat(timespec='seconds')}) — geleceğe tarihli, şüpheli"
+    else: neden=None
+    (bagli_l if neden is None else kopuk).append((k,neden))
+print("cy="+str(len(bagli_l))); print("cs="+str(len(s))); print("ckz="+("1" if kz else "0"))
+if bagli_l:
+    k=bagli_l[0][0]; ilk=k.get("ilk_atesleme") or {}
+    print("cilk="+shlex.quote(f"{ilk.get('saat','')} · {str(ilk.get('satir',''))[:120]} · kaynak: {k.get('kaynak','')} · komut: {' '.join(k.get('komut') or [])[:160]}"))
+else: print("cilk=''")
+print("ckopuk="+shlex.quote("; ".join(f"{k.get('etiket')}: {n}" for k,n in kopuk)))
+PY
+)"; cpy_rc=$?
+  [ "$cpy_rc" -eq 0 ] && eval "$cpy_out"
+fi
+cs_engel=0
+[ "$cpy_rc" -eq 0 ] || { _h "canlı kayıt değerlendirmesi DÜŞTÜ (python rc=$cpy_rc) — ÖLÇÜLEMEDİ, 'canlı yok' sayılmaz"; olcemedi=$((olcemedi+1)); }
+# 🔴 GÖZ #353 tur 1: kartın açılış zamanı okunamazsa işe bağlama ÖLÇÜLEMEZ — bu "bağlı kayıt yok" (rc=1) değil, ÖLÇÜLEMEDİ (rc=3).
+[ ! -f "$KART" ] || [ "$ckz" = "1" ] || { _h "kartın açılış zamanı ('zaman') okunamadı — canlı kaydın işe bağlanması ÖLÇÜLEMEDİ"; olcemedi=$((olcemedi+1)); }
+[ -n "$ckopuk" ] && _y "  ⚠ canlı kaydı işe bağlanamadı (sayılmaz): $ckopuk"
+[ "$cs" -gt 0 ] && { _h "canlı kanıt SARI ($cs kayıt) — ölçülmüş ama ateşleme kaydı yok; sarı yeşil değildir"; eksik=$((eksik+1)); cs_engel=1; }
+[ "$cg" = "E" ] && [ "$cy" -eq 0 ] && [ "$cs_engel" -eq 0 ] && { _h "canlı kanıt YOK ya da bu işe bağlı değil — cron/servis/sunucu işi ($csebep) kart açılışından SONRAKİ gerçek ateşleme kaydını ister: kanit.sh canli <iş> <etiket> --kaynak … -- <log okuyan komut>"; eksik=$((eksik+1)); }
+[ "$cy" -gt 0 ] && _y "  ✓ canlı: $cy ateşleme kaydı (işe bağlı) · ilk: $cilk"
+[ "$cg" = "H" ] && [ -n "$csebep" ] && _y "  · canlı kanıt istenmedi — $csebep"
 
 # 3 · PUAN
 SON="$(ls "$DZ"/DENETIM-[0-9]*.json 2>/dev/null | sort -V | tail -1)"

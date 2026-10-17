@@ -114,6 +114,32 @@ console.log('\n── T · TABAN YOLU (kapı /sedir altında) ──');
     /HttpOnly/.test(sc) && /Secure/.test(sc) && /SameSite=Strict/.test(sc), `→ ${sc.slice(0, 90)}`);
 
   const cerez = 'kapi=' + (sc.match(/kapi=([^;]+)/) || [])[1];
+  // ── BUGÜN ucu (2.15.0): çıpa fikstürü TO_PROJE altında; bugün olan ajan listede, başka gün bugun_degil'de; girişsiz 401
+  {
+    const PRJ = join(T, 'proje'); mkdirSync(join(PRJ, '_agents/handoff'), { recursive: true });
+    writeFileSync(join(PRJ, '_agents/handoff/gunluk-plan-cipa.basiret.md'), '# ⚓ GÜNÜN PLANI ÇIPASI · 2026-10-17\n\n- [ ] 1) tek madde gorev_01ABCDEFGHJKMNPQRSTVWXYZ\n- [x] G1) bitti → KAPANDI · not\n');
+    writeFileSync(join(PRJ, '_agents/handoff/gunluk-plan-cipa.eski.md'), '# ⚓ GÜNÜN PLANI ÇIPASI · 2026-10-01\n- [ ] 1) bayat\n');
+    const PB = 18794; const pb = await kapiAc('/sedir', PB, { TO_PROJE: PRJ });
+    const okb = await iste(PB, '/sedir/giris', { metot: 'POST', govde: { parola: SIFRE } });
+    const cb = 'kapi=' + ((okb.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1];
+    const g0 = await iste(PB, '/sedir/api/bugun?tarih=2026-10-17');
+    kapi('BG1 /api/bugun girişsiz 401 (kapı oturumu ister)', g0.status === 401, `→ ${g0.status}`);
+    // eski kapıda (önce ölçümü) uç 404 döner: iddialar KIRMIZI düşer ama sınav ÇÖKMEZ (çökerse açılan kapılar kalır, sonraki koşum port alamaz)
+    const g1 = await iste(PB, '/sedir/api/bugun?tarih=2026-10-17', { cerez: cb }); const j1 = await g1.json().catch(() => ({}));
+    const aj = Array.isArray(j1.ajanlar) ? j1.ajanlar : [], bd = Array.isArray(j1.bugun_degil) ? j1.bugun_degil : [], tp = j1.toplam || {};
+    kapi('BG2 bugünkü ajan listede: basiret, 2 madde (1 açık · 1 bitti), görev bağı', g1.status === 200 && aj.length === 1 && aj[0].ajan === 'basiret' && tp.acik === 1 && tp.bitti === 1 && (((aj[0].maddeler || [])[0] || {}).gorevler || [])[0] === 'gorev_01ABCDEFGHJKMNPQRSTVWXYZ', `→ ${g1.status} ` + JSON.stringify(j1).slice(0, 160));
+    kapi('BG3 başka günün çıpası bugun_degil\'de (listede değil)', bd.length === 1 && bd[0].ajan === 'eski' && bd[0].tarih === '2026-10-01');
+    kapi('BG4 kutu ve proje kimliği cevapta', j1.kutu === 'sinavkutu' && j1.proje === PRJ);
+    const g2 = await iste(PB, '/sedir/api/bugun?tarih=17-10-2026', { cerez: cb });
+    kapi('BG5 bozuk tarih 400', g2.status === 400, `→ ${g2.status}`);
+    const g3 = await iste(PB, '/sedir/api/bugun?tarih=2026-99-99', { cerez: cb });
+    kapi('BG5b biçimi doğru ama takvimde olmayan gün (2026-99-99) 400 — boş liste uydurulmaz (göz tur 1)', g3.status === 400, `→ ${g3.status}`);
+    const g4 = await iste(PB, '/sedir/api/bugun?tarih=2026-02-29', { cerez: cb });
+    kapi('BG5c 2026-02-29 yok (artık yıl değil) → 400', g4.status === 400, `→ ${g4.status}`);
+    const g5 = await iste(PB, '/sedir/api/bugun?tarih=2026-10-17', { cerez: cb });
+    kapi('BG5d bozuk tarihlerden SONRA kapı hâlâ cevap veriyor (istisna işleyiciyi düşürmedi)', g5.status === 200, `→ ${g5.status}`);
+    pb.kill();
+  }
   const sayfa = await iste(P1, '/sedir/', { cerez });
   const html = await sayfa.text();
   kapi('T10 sayfa kendi tabanını TAŞIR (sunucudan öğrenir, tahmin etmez)',

@@ -6,7 +6,8 @@
 #
 # Kullanım:
 #   kart.sh ac <iş> --is "tek cümle" --istedi <kim> --aldi <ajan> \
-#          --geri-alinamaz e|h|? --para e|h|? --dis-yuzey e|h|? --yetki e|h|? [--kanit "nerede olacak"] [--oda <oda>]
+#          --geri-alinamaz e|h|? --para e|h|? --dis-yuzey e|h|? --yetki e|h|? [--kanit "nerede olacak"] [--oda <oda>] [--canli e|h]
+#          --canli: cron/servis/sunucu işi gerçek ateşleme kaydı (kanit.sh canli) ister; verilmezse cümleden türetilir, karta yazılır
 #   kart.sh bitti <iş> [--pr N]        durum=bitti; son DENETIM puanını ve KANIT durumunu karta işler (worktree'den de çağrılabilir)
 #   kart.sh tikandi <iş> --yol devam|daralt|geri-al --neden "..."
 #   kart.sh sultan-dedi <iş> --karar <devam|daralt|geri-al> --oturum <ref> --soz "<verbatim ≤15 kelime>" \
@@ -15,7 +16,7 @@
 #          --gerekce "<niçin — en az 20 karakter>"     ← YALNIZ SINIFSIZ kartta (sınıflı işin kararı Sultan'ındır)
 #          Sultan'ın SÖZLÜ kararını KARTA işler (D1 deseni). Üç parça zorunlu: oturum-ref · kırpık · beyan.
 #          🔴 A06: onay ÜRETMEZ, alınan onayı AKTARIR. Ref'siz beyan sayılmaz; uyduran kartta yakalanır.
-#   kart.sh goster <iş> · kart.sh liste [--acik]
+#   kart.sh goster <iş> · kart.sh liste [--acik] · kart.sh canli-gerekir <iş>  → "E|H<TAB>sebep" (eski kartta cümleden türetir)
 # Ortam: FABRIKA_TETIK (oda-tetik.sh yolu; --oda verilirse tetik atılır, düşerse iş düşmez) · KANIT_DEPO
 # rc: 0 · 1 kullanım/eksik cevap · 3 ölçülemedi
 set -uo pipefail
@@ -31,13 +32,13 @@ KD="$DEPO/_agents/fabrika/kartlar"; mkdir -p "$KD"
 
 CMD="${1:-}"; IS="${2:-}"; shift 2 2>/dev/null || true
 IS_C=""; ISTEDI=""; ALDI=""; GA=""; PARA=""; DIS=""; YETKI=""; KANIT=""; ODA=""; PR=""; YOL=""; NEDEN=""
-KARAR=""; OTURUM=""; SOZ=""; BEYAN=""; GEREKCE=""; REIS=""
+KARAR=""; OTURUM=""; SOZ=""; BEYAN=""; GEREKCE=""; REIS=""; CANLI=""
 while [ $# -gt 0 ]; do case "$1" in
   --is) IS_C="$2"; shift 2 ;; --istedi) ISTEDI="$2"; shift 2 ;; --aldi) ALDI="$2"; shift 2 ;;
   --geri-alinamaz) GA="$2"; shift 2 ;; --para) PARA="$2"; shift 2 ;; --dis-yuzey) DIS="$2"; shift 2 ;; --yetki) YETKI="$2"; shift 2 ;;
   --kanit) KANIT="$2"; shift 2 ;; --oda) ODA="$2"; shift 2 ;; --pr) PR="$2"; shift 2 ;; --yol) YOL="$2"; shift 2 ;; --neden) NEDEN="$2"; shift 2 ;;
   --karar) KARAR="$2"; shift 2 ;; --oturum) OTURUM="$2"; shift 2 ;; --soz) SOZ="$2"; shift 2 ;; --beyan) BEYAN="$2"; shift 2 ;;
-  --gerekce) GEREKCE="$2"; shift 2 ;; --reis) REIS="$2"; shift 2 ;;
+  --gerekce) GEREKCE="$2"; shift 2 ;; --reis) REIS="$2"; shift 2 ;; --canli) CANLI="$2"; shift 2 ;;
   --acik) ACIK=1; shift ;; *) _hata "tanınmayan argüman: $1"; exit 1 ;; esac; done
 
 tetik() {  # tetik <oda> <başlık> <gövde>
@@ -48,20 +49,44 @@ tetik() {  # tetik <oda> <başlık> <gövde>
   rm -f "$f"
 }
 
+# 🔴 CANLI SINIFI (retro 17 Eki 2026 · ders 1): cron · servis · sunucu içeren iş, "git'te düzeltildi" ile bitmez — kanıtı
+#    İLK GERÇEK ATEŞLEME kaydıdır (kanit.sh canli). Kart açılırken ARAÇ karar verir: --canli e|h verilmişse o; verilmemişse
+#    cümledeki anahtar kelimelerden türetir ve sebebini karta yazar. Sahibin "h" demesi gizli kalmaz: karta ve ekrana yazılır,
+#    bağımsız göz görür. Kapı (birlestirme-kapisi.sh 2b) bu alanı `kart.sh canli-gerekir` ile okur; alanı olmayan ESKİ kart
+#    da cümleden türetilir — eski cron kartı kapsam dışı kalmaz.
+# 🔴 GÖZ #353 tur 3: çıplak alt dize 'ghost' içindeki 'host'u yakalıyordu → kelime BAŞI sınırı (\b); Türkçe ek serbest (Sunucuda → sunucu)
+# yedek göz #354: 'hosting' · 'zilli' gibi İngilizce/yabancı ekler sayılmasın → kelime SONU da sınır; yalnız Türkçe çekim ekleri serbest
+CANLI_KELIME="\\b(?:cron|crontab|servis|service|systemd|daemon|timer|sunucu|host|ssh|zil|nöbet|nobet|bekçi|bekci|watcher|canlı|canli)(?:['’]?(?:lar|ler)?(?:[ıiuü]|[ıi]n|n[ıiuü]n|y[aeıiuü]|d[ae]|t[ae]|nd[ae]|d[ae]ki|t[ae]ki|nd[ae]ki|d[ae]n|t[ae]n|nd[ae]n|s[ıiuü]|y[ıi]|l[ae]r[ıi])?)?\\b"
+canli_hesapla() {  # canli_hesapla <cümle> <--canli cevabı e|h|""> → "E|H<TAB>sebep"
+  python3 - "$1" "$2" "$CANLI_KELIME" <<'PY'
+import re,sys
+cumle,cevap,kelime=sys.argv[1:]
+hits=sorted(set(m.lower() for m in re.findall(kelime,cumle,re.I)))
+if cevap=="e": print("E\t--canli e")
+elif cevap=="h": print("H\t--canli h (sahip: canlı kanıt gerekmez dedi"+(f"; cümlede: {', '.join(hits)}" if hits else "")+")")
+else: print(("E\tcümlede: "+", ".join(hits)) if hits else "H\t")
+PY
+}
+
 case "$CMD" in
   ac)
     [ -n "$IS" ] && [ -n "$IS_C" ] && [ -n "$ISTEDI" ] && [ -n "$ALDI" ] || { _hata "gerekli: <iş> --is --istedi --aldi"; exit 1; }
     for v in GA PARA DIS YETKI; do case "${!v}" in e|h|\?) ;; *) _hata "dört sınıf sorusu cevapsız kart AÇILMAZ: --geri-alinamaz --para --dis-yuzey --yetki (e|h|?)"; exit 1 ;; esac; done
+    case "$CANLI" in ""|e|h) ;; *) _hata "--canli yalnız e|h olabilir ('$CANLI' değil): cron/servis/sunucu işi canlı kanıt ister mi?"; exit 1 ;; esac
     [ -f "$KD/$IS.json" ] && { _hata "kart zaten var: $IS (goster ile bak)"; exit 1; }
-    python3 - "$KD/$IS.json" "$IS" "$IS_C" "$ISTEDI" "$ALDI" "$GA" "$PARA" "$DIS" "$YETKI" "$KANIT" "$ODA" <<'PY'
+    IFS=$'\t' read -r CG CSEBEP <<<"$(canli_hesapla "$IS_C" "$CANLI")"; CSEBEP="${CSEBEP:-}"
+    python3 - "$KD/$IS.json" "$IS" "$IS_C" "$ISTEDI" "$ALDI" "$GA" "$PARA" "$DIS" "$YETKI" "$KANIT" "$ODA" "$CG" "$CSEBEP" <<'PY'
 import json,sys,datetime
-yol,is_,cumle,istedi,aldi,ga,para,dis,yetki,kanit,oda=sys.argv[1:]
+yol,is_,cumle,istedi,aldi,ga,para,dis,yetki,kanit,oda,cg,csebep=sys.argv[1:]
 cev={"geri_alinamaz":ga,"para":para,"dis_yuzey":dis,"yetki":yetki}
 siniflar=[k for k,v in cev.items() if v in("e","?")]
 kart={"is":is_,"cumle":cumle,"istedi":istedi,"aldi":aldi,"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
-      "sinif_cevaplari":cev,"siniflar":siniflar,"sultan":bool(siniflar),"kanit_nerede":kanit,"oda":oda,"durum":"acik","gecmis":[]}
+      "sinif_cevaplari":cev,"siniflar":siniflar,"sultan":bool(siniflar),"kanit_nerede":kanit,"oda":oda,"durum":"acik","gecmis":[],
+      "canli_gerekir":cg=="E","canli_sebep":csebep}
 json.dump(kart,open(yol,"w"),ensure_ascii=False,indent=2)
 print(f"✓ kart açıldı: {is_} · sınıf: {', '.join(siniflar) if siniflar else 'yok'} · {'SULTAN\'A GİDER' if siniflar else 'ekipte biter, gün sonu özetine girer'}")
+if cg=="E": print(f"  · CANLI kanıt zorunlu ({csebep}): gerçek ateşleme kaydı (kanit.sh canli) olmadan birleştirme kapısı geçmez")
+elif csebep: print(f"  ⚠ canlı kanıt istenmedi — {csebep}; karta yazıldı, bağımsız göz görür")
 PY
     tetik "$ODA" "iş alındı: $IS" "$IS_C · sahip $ALDI · istedi $ISTEDI · sınıf: ${GA}${PARA}${DIS}${YETKI}"
     ;;
@@ -70,13 +95,19 @@ PY
     [ "$CMD" = "tikandi" ] && { [ -n "$YOL" ] && [ -n "$NEDEN" ] || { _hata "tikandi --yol devam|daralt|geri-al --neden gerekiyor"; exit 1; }; }
     # kanıt/denetim: çağrıldığı ağaçtan (worktree olabilir) okunur
     WT="$(git rev-parse --show-toplevel 2>/dev/null || echo "$DEPO")"; DZ="$WT/_agents/fabrika/kanit/$IS"
-    python3 - "$KD/$IS.json" "$CMD" "$PR" "$YOL" "$NEDEN" "$DZ" <<'PY'
+    # 🔴 GÖZ #353 tur 3: eski kart (alan yok) kapıda cümleden "canlı ister" sayılıyor ama bitti uyarmıyordu → aynı yüzeyden (canli-gerekir) okunur
+    # yedek göz #354: fail-open değil — okunamazsa '?' olur ve bitti bunu uyarı olarak basar (kapı aynı durumda rc=3)
+    IFS=$'\t' read -r CGB _ <<<"$(bash "${BASH_SOURCE[0]}" canli-gerekir "$IS" 2>&1)"; case "$CGB" in E|H) ;; *) CGB="?" ;; esac
+    python3 - "$KD/$IS.json" "$CMD" "$PR" "$YOL" "$NEDEN" "$DZ" "$CGB" <<'PY'
 import json,sys,os,glob,datetime
-yol,cmd,pr,yolu,neden,dz=sys.argv[1:]
+yol,cmd,pr,yolu,neden,dz,cgb=sys.argv[1:]
 k=json.load(open(yol)); simdi=datetime.datetime.now().astimezone().isoformat(timespec="seconds")
 den=sorted(glob.glob(os.path.join(dz,"DENETIM-[0-9]*.json")),key=lambda p:int(p.rsplit("-",1)[1].split(".")[0]))
 son=json.load(open(den[-1]))["sonuc"] if den else None
 kanit=os.path.exists(os.path.join(dz,"KANIT.json"))
+canli=[x for x in (json.load(open(os.path.join(dz,"KANIT.json"))).get("kayitlar",[]) if kanit else []) if x.get("tur")=="canli"]
+cy=sum(1 for x in canli if x.get("renk")=="yesil")
+k["canli_kanit"]="var" if cy else ("sari" if canli else "yok")
 k["durum"]=cmd; k["bitis"]=simdi; k["pr"]=pr or k.get("pr","")
 k["puan"]={"kod":son["kod_puani"],"dogru":son["dogru_sey"],"tur":len(den)} if son else None
 k["kanit_var"]=kanit
@@ -86,6 +117,8 @@ json.dump(k,open(yol,"w"),ensure_ascii=False,indent=2)
 uyari=""
 if cmd=="bitti" and not kanit: uyari=" ⚠ KANIT YOK (kanıtsız bitti sayılmaz — gün sonu özetinde işaretlenir)"
 if cmd=="bitti" and son and not(son["kod_puani"]==5 and son["dogru_sey"]=="E"): uyari+=" ⚠ son denetim 5+E DEĞİL"
+if cmd=="bitti" and cgb=="?": uyari+=" ⚠ kartın canlı şartı OKUNAMADI (kart.sh canli-gerekir) — kapı bunu ÖLÇÜLEMEDİ sayar"
+if cmd=="bitti" and cgb=="E" and not cy: uyari+=" ⚠ CANLI KANIT YOK (cron/servis/sunucu işi gerçek ateşleme kaydı ister: kanit.sh canli)"
 print(f"✓ kart {cmd}: {k['is']} · puan {k['puan']} · kanıt {'var' if kanit else 'YOK'}{uyari}")
 PY
     tetik "$(python3 -c "import json;print(json.load(open('$KD/$IS.json')).get('oda',''))")" "iş $CMD: $IS" "$(python3 -c "import json;k=json.load(open('$KD/$IS.json'));print(k['cumle'],'· puan',k.get('puan'),'· pr',k.get('pr'))")"
@@ -174,6 +207,16 @@ json.dump(k,open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
 print(f"\u2713 reis karari karta islendi: {karar} \u00b7 reis {reis} \u00b7 oturum {oturum} (sinifsiz is)")
 PY
     ;;
+  canli-gerekir)
+    # Kapının okuduğu tek yüzey. Alanı olmayan ESKİ kartta cümleden türetir — eski cron kartı kapsam dışı kalmaz.
+    [ -n "$IS" ] && [ -f "$KD/$IS.json" ] || { _hata "kart yok: $IS"; exit 3; }
+    durum="$(python3 -c 'import json,sys;k=json.load(open(sys.argv[1],encoding="utf-8"));cg=k.get("canli_gerekir");print(("yok" if cg is None else ("E" if cg else "H"))+"\t"+(k.get("canli_sebep") or "").replace("\n"," ").replace("\t"," "))' "$KD/$IS.json")"
+    IFS=$'\t' read -r cg sebep <<<"$durum"; sebep="${sebep:-}"
+    if [ "$cg" = "yok" ]; then
+      cumle="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1],encoding="utf-8")).get("cumle",""))' "$KD/$IS.json")"
+      IFS=$'\t' read -r cg sebep <<<"$(canli_hesapla "$cumle" "")"; sebep="eski kart · ${sebep:-cümlede anahtar yok}"
+    fi
+    printf '%s\t%s\n' "$cg" "$sebep" ;;
   goster) [ -f "$KD/$IS.json" ] && cat "$KD/$IS.json" || { _hata "kart yok: $IS"; exit 3; } ;;
   liste)
     ls "$KD"/*.json >/dev/null 2>&1 || { echo "◻ kart yok"; exit 0; }
