@@ -1,0 +1,59 @@
+{
+  "tur": 2,
+  "is": "kanit-canli-sinifi-3",
+  "pr": "354",
+  "yazan": "claude",
+  "denetci": "claude (sonnet) (YEDEK GÖZ: codex yok · yazandan farklı yeni oturum + farklı model kademesi [yazan: fable] · Sultan Y0006)",
+  "zaman": "2026-10-17T14:38:38+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": "codex yok",
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "bildirim",
+  "yedek_model": "sonnet",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 109040,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 36,
+    "bayt": 182388
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Cron/servis/sunucu kartlarına gerçek ateşleme kaydı isteyen \"canlı sınıfı\" eklenmiş: araç okuma komutunu kendisi kuruyor, kapı kaydı işe bağlıyor, ölçemediğinde yeşil demiyor. Önceki turun asıl bulguları (ssh/docker'da `-` ile seçenek enjeksiyonu, kelime sonu sınırı, `bitti`'nin sessizce geçmesi) kapatılmış ve sınavlarla mutantlandırılmış; geriye yalnız rötuş kaldı.",
+    "bulgular": [
+      {
+        "ne": "`kanit.py canli` içindeki `subprocess.run` için zaman aşımı yok. `ssh:` kaynağında TCP asılırsa araç, dolayısıyla kanıt toplama süresiz bekler. `BatchMode=yes` parola sormayı engeller ama `ConnectTimeout` yok. Stdin kapatma önlemi (68 dk vakası) bu durumu kapsamıyor.",
+        "kanit": "kanit.py kaynak_komutu: `[\"ssh\",\"-o\",\"BatchMode=yes\", hedef, \"tail\", ...]`; cmd_canli: `subprocess.run(komut, capture_output=True, text=True, errors=\"replace\", stdin=subprocess.DEVNULL)` — timeout parametresi yok.",
+        "konum": "yazilim-fabrikasi/scripts/kanit.py:cmd_canli / kaynak_komutu",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "SKILL.md'deki \"mutant ×4\" ifadesi bayat. Sınavda kapı için 10 mutant var (mutant 3-10 ve T9). `kart.sh bitti` canlı kanıtı 'var' sayarken kaydın işe bağlı olup olmadığına bakmıyor; kapı ise bağlamıyorsa engelliyor. Bu yüzden `bitti` uyarısı susarken kapı yine rc=1 verebilir.",
+        "kanit": "SKILL.md canlı sınıfı paragrafı: \"kapı T11-12 (mutant ×4)\"; birlestirme-kapisi.test.sh M3..M10. kart.sh bitti: `cy=sum(1 for x in canli if x.get(\"renk\")==\"yesil\")` — zaman bağlaması yok.",
+        "konum": "yazilim-fabrikasi/SKILL.md; yazilim-fabrikasi/scripts/kart.sh (bitti)",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "`dosya:` kaynağı herhangi bir dosyanın son N satırını (varsayılan 2000) kanıt dizinine kopyalıyor. Kanıt dizini depoya giriyorsa, desene uymayan satırlar da (sır içeren log dahil) depoya düşer. Kırpma ya da desen filtresi yok.",
+        "kanit": "cmd_canli: `f.write(... --- stdout ---\\n{p.stdout} ...)` tüm çıktıyı yazıyor; yalnız eşleşen satırlar manifestte ayrıca tutuluyor.",
+        "konum": "yazilim-fabrikasi/scripts/kanit.py:cmd_canli",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Yeşil canlı kayıt yalnızca Nexus kaçış defterinden (`KAPISIZ` deseni) alınmış örnek; bu işle ilgisiz. `journal:` ve `docker:` yolları hiç gerçek kaynakla denenmedi, `ssh:` yalnız sahte shim ile denendi. Kart bu yüzden `--canli h` ile açılmış, kapı bunu engellemiyor.",
+        "kanit": "Manifest kaydı `ornek-kacis-defteri` (kaynak_turu=dosya); kanit.test.sh T18z sahte `ssh` shim'i kullanıyor.",
+        "konum": "KANIT.json ornek-kacis-defteri; kanit.test.sh T18z",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı filo kutuları (journalctl/ssh/docker erişimi ve yetkisi)"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam. Üç sınavın her biri için önce kırmızı, sonra yeşil çifti var. Önce-kırmızılar yeni T10/T11/T18 testlerinin yokluğundan geliyor, yani doğru sebepten düşüyor. Sarı kayıt yok. Mutant sınavları (kapı T9-T12, kanit T19) çitlerin gerçek olduğunu gösteriyor. Tek canlı kaydı ilgisiz bir örnek, ama kart canlı kanıt istemiyor (`--canli h`) ve sınıfın gerçek filo kaynaklarında denenmesi kutu dışı, bu yüzden puanı düşürmedim."
+  }
+}

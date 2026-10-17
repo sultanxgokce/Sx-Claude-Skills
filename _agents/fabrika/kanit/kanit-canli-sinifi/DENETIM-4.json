@@ -1,0 +1,38 @@
+{
+  "tur": 4,
+  "is": "kanit-canli-sinifi",
+  "pr": "352",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T13:59:55+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 97750,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 12,
+    "bayt": 58303
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Canlı ateşleme kaydı, SARI davranışı, kart zamanı bağlantısı ve mutasyon sınavları istenen daraltılmış işi karşılıyor. Ancak kapı, canlı şartını okuyan yardımcı komut hata verdiğinde sessizce H varsayıp kontrolü devre dışı bırakıyor; üretimden önce bu fail-open yol kapanmalı.",
+    "bulgular": [
+      {
+        "ne": "Birleştirme kapısı `kart.sh canli-gerekir` başarısız olduğunda canlı kontrolünü fail-open atlıyor. Bozuk/okunamayan kart, yardımcı betik hatası veya Python çalışma hatasında çıktı boş kalıyor; `cg` H varsayıldığı için canlı kanıt zorunluluğu uygulanmıyor, oysa kapının ölçülemedi diyerek durması gerekir.",
+        "kanit": "Kapı yardımcı komutun dönüş kodunu denetlemeden stderr'i `/dev/null`a atıyor ve ardından `cg=\"${cg:-H}\"` uyguluyor. `kart.sh canli-gerekir` kart yoksa rc=3, JSON okunamazsa da başarısız olabilir; bu vakaları kapsayan kırmızı→yeşil ya da mutasyon sınavı sunulmamış.",
+        "konum": "yazilim-fabrikasi/scripts/birlestirme-kapisi.sh: 2b CANLI bölümündeki `read ... <<<\"$(... kart.sh canli-gerekir ... 2>/dev/null)\"` ve `cg=\"${cg:-H}\"`; birlestirme-kapisi.test.sh:T11-T12",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sha'lar sağlam; üç sınav için kırmızı→yeşil ölçüm çiftleri var ve ana ölçümlerde SARI kayıt yok. Saat, desen, kaynak, SARI, eski/gelecek kayıt, işe bağlama ve dört kapı mutasyonu güçlü biçimde ölçülmüş; fakat canlı şartı sorgusunun hata dönüşünde kapının kapalı kaldığını doğrulayan fail-closed sınavı bulunmuyor. `ornek-kacis-defteri` kaydı ürün davranışına ait değil, ancak kart gerekçeli olarak `canli_gerekir=false` olduğundan doğru şey değerlendirmesini bozmaz."
+  }
+}

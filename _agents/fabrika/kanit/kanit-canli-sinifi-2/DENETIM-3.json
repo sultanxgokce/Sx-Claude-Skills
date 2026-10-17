@@ -1,0 +1,45 @@
+{
+  "tur": 3,
+  "is": "kanit-canli-sinifi-2",
+  "pr": "353",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T14:20:09+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 102851,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 24,
+    "bayt": 119687
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Canlı ateşleme kaydı, işe ve kart zamanına bağlanmış; önceki turun saat dilimi ve düşen Python açığı fail-closed davranış ve mutasyon sınavlarıyla kapatılmış. Lakin eski cron/servis kartlarının `bitti` uyarısı yeni kapıyla aynı hesabı kullanmıyor; önce bu tutarsızlığı çöz, sonra üretime hazırdır.",
+    "bulgular": [
+      {
+        "ne": "Alanı olmayan eski bir cron/servis kartı birleştirme kapısında canlı kanıt gerektirirken `kart.sh bitti` aşamasında canlı kanıt yok uyarısı vermiyor; aynı kart iki aşamada farklı sınıflandırılıyor.",
+        "kanit": "`canli-gerekir` dalı, `canli_gerekir` alanı bulunmayan eski kartlarda cümleden türetme yapıyor ve T11i bu kartın kapıda rc=1 aldığını ölçüyor. Buna karşılık `bitti` uyarısı yalnız `if cmd==\"bitti\" and k.get(\"canli_gerekir\") and not cy` koşuluna bağlı; alanı olmayan eski kartta değer falsy olur. Kart sınavı eski kart için yalnız `canli-gerekir` çıktısını ölçüyor, `bitti` uyarısını ölçmüyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh: `bitti` bloğundaki CANLI KANIT YOK koşulu ve `canli-gerekir` dalı; yazilim-fabrikasi/scripts/kart.test.sh:T10",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Canlı sınıfını cümleden çıkaran anahtar sözcük deseni kelime sınırı kullanmadığı için ilgisiz metinleri canlı iş olarak sınıflandırabilir.",
+        "kanit": "`CANLI_KELIME='cron|...|host|...|canlı|canli'` deseni `re.findall(kelime,cumle,re.I)` ile çıplak alt dize olarak aranıyor. Bu nedenle örneğin `ghost` içindeki `host` veya `canlı renk paleti` içindeki `canlı`, cron/servis/sunucu çalışması olmamasına rağmen `canli_gerekir=true` üretir; sınav yalnız olumlu örnekleri ve `buton ekle` karşı örneğini kapsıyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh: `CANLI_KELIME` ve `canli_hesapla`; yazilim-fabrikasi/scripts/kart.test.sh:T10",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sha'ları sağlam; üç üretim sınavının kırmızıdan yeşile ölçüm çiftleri var ve sarı kayıt yok. Önceki turdaki saat dilimsiz ISO vakası T11r ile, Python alt süreci düşüşü de rc=3 ve mutantlarla doğrudan ölçülmüş. Sunulan canlı kayıt bu karta ait değil, ancak kartta açıkça `--canli h` bulunduğundan talep edilen kod değişikliğinin kanıtını geçersiz kılmıyor."
+  }
+}

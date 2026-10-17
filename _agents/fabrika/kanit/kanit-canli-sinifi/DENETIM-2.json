@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "kanit-canli-sinifi",
+  "pr": "352",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T12:49:13+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 97263,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 10,
+    "bayt": 52481
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Canlı kanıt kaydı, kart sınıflaması ve birleştirme kapısı kurulmuş; önce kırmızı/sonra yeşil üç ölçüm ile dört canlı-kapı mutasyonu talebin ana davranışını doğruluyor. Ancak “gerçek ateşleme” güvencesi kolayca aşılabilen bir komut kara listesine dayanıyor; üretime almadan önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "Canlı kaydın üretilmesini engelleyen denetim yalnız birkaç komut adı ile echo/printf/heredoc metnini kara listeye alıyor; örneğin Python, Perl veya awk ile saat damgalı sahte satır üreten bir komut yeşil canlı kayda dönüşebilir ve kapıyı geçebilir.",
+        "kanit": "`URETEN` yalnız `echo`, `printf`, `yes`, `seq`, `true`, `false` içeriyor; `URETEN_IC` yalnız echo/printf/heredoc arıyor. Ardından `cmd_canli`, komut stdout'undaki saat+desen eşleşmesini kaynağın gerçek log olduğuna dair başka bir denetim olmadan ateşleme sayıyor. T19d mutasyonu da yalnız bu dar `_uretilmis_mi` kontrolünün tamamen kaldırılmasını sınıyor; alternatif üretici komut vakası yok.",
+        "konum": "yazilim-fabrikasi/scripts/kanit.py: URETEN, URETEN_IC, _uretilmis_mi ve cmd_canli; yazilim-fabrikasi/scripts/kanit.test.sh:T18x-T19d",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sha'lar sağlam; kanıt, kanit/kart/birleştirme-kapısı sınavlarında kırmızı→yeşil ölçüm çiftleri ve canlı kontrolleri için mutasyon sınavları içeriyor, ana kayıtlarda sarı yok. `ornek-kacis-defteri` kaydı bu işe ait bir ateşleme değil; ancak kart gerekçeli biçimde `canli_gerekir=false` yapıldığından talebin araç davranışı esas olarak sınavlarla ölçülmüş. Mevcut sınavlar kara listedeki üreticileri yakalıyor fakat eşdeğer alternatif sahte-log üretimini ölçmüyor."
+  }
+}
