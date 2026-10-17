@@ -196,7 +196,15 @@ bekle_saglam() {
   return 1
 }
 
-bekci_kurulu() { ${TO_CRONTAB:-crontab} -l 2>/dev/null | grep -q '# terminal-onar-bekci'; }
+# 🔴 İŞARET YALNIZ CRON SATIRININ SONUNDA (2.17.1 · kart terminal-onar-bekci-yorum-korur, 17 Eki ölçüldü): desen eskiden işareti
+#    satırın HERHANGİ bir yerinde arıyordu → kanon crontab-abc'nin AÇIKLAMA yorumu ("…işaret yorumu '# terminal-onar-bekci' dahil…")
+#    bekçi satırı sanıldı: düzeltici o yorumu bekçi satırına çevirdi, asıl satırı "çift kopya" sayıp sildi (canlıda 20:26'da oldu);
+#    bekci_kurulu da asıl satır yokken yorum yüzünden "kurulu" diyebilirdi. Artık: '#' ile başlayan satır YORUMDUR, olduğu gibi
+#    korunur; işaret yalnız yorum olmayan satırın SONUNDA sayılır. Beş kullanım yeri (düzeltici · kurulu · iki varlık denetimi ·
+#    canlı varlık denetimi) bu iki desenden okur — tek tanım.
+BEKCI_DESEN='^[[:space:]]*[^#[:space:]].*# terminal-onar-bekci[[:space:]]*$'
+ACILIS_DESEN='^[[:space:]]*[^#[:space:]].*# terminal-onar-acilis[[:space:]]*$'
+bekci_kurulu() { ${TO_CRONTAB:-crontab} -l 2>/dev/null | grep -Eq "$BEKCI_DESEN"; }
 # ── BEKÇİ SATIRLARI — tek kaynak, PROJE yoluyla; eski (ortak-dizin yollu) satırlar GÖÇÜRÜLÜR ──────────────────────
 # 🔴 Bağımsız göz (tur 2): işaretleyici varsa satır "doğru" sayılıyordu; 15 kutudaki eski ortak-yollu satırlar yerinde
 #    kalıyordu. Artık işaretleyicili her satır KANONİK biçime yeniden yazılır (yol proje yolu); eksikse eklenir.
@@ -214,9 +222,9 @@ _cron_komut() {  # $1 = betik adı · $2 = ek argüman → proje yolu varsa orad
 BEKCI_SATIR="* * * * * $(_cron_komut bekci.sh)  # terminal-onar-bekci"
 ACILIS_SATIR="@reboot sleep 15; $(_cron_komut komut.sh onar)  # terminal-onar-acilis"
 bekci_satirlari_duzelt() {  # stdin → stdout: işaretleyicili satırlar kanonik ve TEK (çift kopya tekilleşir), gerisi olduğu gibi
-  awk -v b="$BEKCI_SATIR" -v a="$ACILIS_SATIR" '
-    /# terminal-onar-bekci/  { if (!bg) { print b; bg=1 }; next }
-    /# terminal-onar-acilis/ { if (!ag) { print a; ag=1 }; next }
+  awk -v b="$BEKCI_SATIR" -v a="$ACILIS_SATIR" -v bd="$BEKCI_DESEN" -v ad="$ACILIS_DESEN" '
+    $0 ~ bd { if (!bg) { print b; bg=1 }; next }
+    $0 ~ ad { if (!ag) { print a; ag=1 }; next }
     { print }'
 }
 # 🔴 CANLI CRONTAB KİLİDİ (2.6.0 · S-10, 13 Eki): bir sınav onar.sh'ı TO_PROJE=<geçici dizin> ile ve TO_CRONTAB vermeden
@@ -229,8 +237,8 @@ bekci_kur() {  # $1 = kalıcı cron dosyası (.oda/cron) · $2 = "canli" ise can
   mkdir -p "$(dirname "$oda")" 2>/dev/null
   tmp="$(mktemp)"
   if [ -f "$oda" ]; then bekci_satirlari_duzelt < "$oda" > "$tmp"; else printf 'TZ=Europe/Istanbul\n' > "$tmp"; fi
-  grep -q '# terminal-onar-bekci'  "$tmp" || printf '%s\n' "$BEKCI_SATIR"  >> "$tmp"
-  grep -q '# terminal-onar-acilis' "$tmp" || printf '%s\n' "$ACILIS_SATIR" >> "$tmp"
+  grep -Eq "$BEKCI_DESEN"  "$tmp" || printf '%s\n' "$BEKCI_SATIR"  >> "$tmp"
+  grep -Eq "$ACILIS_DESEN" "$tmp" || printf '%s\n' "$ACILIS_SATIR" >> "$tmp"
   if [ ! -f "$oda" ]; then sonuc="yazıldı"; cat "$tmp" > "$oda"
   elif ! cmp -s "$oda" "$tmp"; then sonuc="eski yol proje yoluna çevrildi"; cat "$tmp" > "$oda"; fi
   rm -f "$tmp"
@@ -239,7 +247,7 @@ bekci_kur() {  # $1 = kalıcı cron dosyası (.oda/cron) · $2 = "canli" ise can
       sonuc="$sonuc · canlı crontab'a DOKUNULMADI (deneme yolu: $PROJE — gerçek crontab için TO_CRONTAB ver)"
     else
       eski="$($ct -l 2>/dev/null)"; yeni="$(printf '%s\n' "$eski" | bekci_satirlari_duzelt)"
-      printf '%s\n' "$yeni" | grep -q '# terminal-onar-bekci' || yeni="${yeni:+$yeni
+      printf '%s\n' "$yeni" | grep -Eq "$BEKCI_DESEN" || yeni="${yeni:+$yeni
 }$BEKCI_SATIR"
       if [ "$eski" != "$yeni" ]; then printf '%s\n' "$yeni" | $ct - && sonuc="$sonuc · canlı crontab düzeltildi"; fi
     fi

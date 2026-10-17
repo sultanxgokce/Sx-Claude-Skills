@@ -1,9 +1,18 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.17.0
+version: 2.17.1
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.17.1 · bekçi işareti yalnız cron satırının sonunda (17 Eki · kart terminal-onar-bekci-yorum-korur · SERDAR 21:00)
+
+`bekci_kur` canlı crontab'ı düzeltirken metninde `# terminal-onar-bekci` geçen **yorum** satırını bekçi satırı sanıyordu:
+kanon `crontab-abc`'nin açıklama yorumu bekçi satırına çevrildi, asıl satır "çift kopya" sayılıp silindi (canlı code kutusu,
+17 Eki 20:26). `bekci_kurulu` da asıl satır yokken yorum yüzünden "kurulu" diyebilirdi. Artık `#` ile başlayan satır yorumdur
+ve olduğu gibi korunur; işaret yalnız yorum olmayan satırın **sonunda** sayılır (`BEKCI_DESEN` · `ACILIS_DESEN` — düzeltici,
+`bekci_kurulu` ve üç varlık denetimi aynı iki desenden okur). Sınav: `scripts/bekci-yorum.test.sh` (16 kapı + 2 mutant;
+kanonun gerçek yorum satırlarıyla). Eski davranışlar korunur: çift kopya tekilleşir, eski yollu satır kanoniğe çevrilir.
 
 ## 🆕 2.17.0 · kadro kayıt kökü + kapat koruması (17 Eki · gorev_01M554PCYA0HWM6TM4KXY4E72V · SERDAR ACİL)
 **Ölçülen hata:** merkez kutusunda (code) Kadro "0 kişi · 8 kayıtsız" gösteriyordu. Kapı kaydı `$PROJE` altında arıyor; code'da

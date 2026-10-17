@@ -1,0 +1,8 @@
+$ bash -c node ahi/schema/validate-repo.mjs . --strict | tail -1 && node ahi/schema/version-lint.mjs . | tail -1 && bash kabuk-biti.test.sh | tail -1 && git ls-files -s terminal-onar/scripts/bekci-yorum.test.sh | cut -c1-6
+# rc=0 sure=0.1s zaman=2026-10-17T21:04:49+03:00
+--- stdout ---
+✓ repo-parity temiz (catalog 76 ↔ sync-targets 66)
+✓ install-listesi 66 skill: SKILL.md + version tam
+── SONUÇ: 2 geçti · 1 kaldı ──
+100644
+--- stderr ---

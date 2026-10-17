@@ -1,0 +1,118 @@
+{
+  "is": "terminal-onar-bekci-yorum-korur",
+  "arac": "kanit.py/0.4.0",
+  "guncelleme": "2026-10-17T21:04:49+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kanon-crontab",
+      "asama": "once",
+      "dosya": "olcum-kanon-crontab-once.txt",
+      "sha256": "ab8ac380fd305d079155f2bdc0fe67ce84083f7114aacbcd0767316504a6ed27",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kanon-crontab-olc.sh",
+        "/tmp/tmp.indlJqigSW/terminal-onar/scripts"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T21:04:32+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kanon-crontab",
+      "asama": "sonra",
+      "dosya": "olcum-kanon-crontab-sonra.txt",
+      "sha256": "2a3d49f558bc8eb2a26248ab8e9b2983edec9cc78a4d5c17b5aa176460c83278",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kanon-crontab-olc.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-terminal-onar-bekci-yorum-korur/terminal-onar/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T21:04:33+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bekci-yorum-sinavi",
+      "asama": "once",
+      "dosya": "olcum-bekci-yorum-sinavi-once.txt",
+      "sha256": "a5c93caf2b6e93cd885b7d066dcb2ca1655f94aabe414eb578dbc8ab213f37c3",
+      "komut": [
+        "bash",
+        "/tmp/tmp.indlJqigSW/terminal-onar/scripts/bekci-yorum.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T21:04:33+03:00",
+      "sure_sn": 0.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bekci-yorum-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-bekci-yorum-sinavi-sonra.txt",
+      "sha256": "b681134f54a2e6d54a072f66a4b154b68b2084391d8671fee82ab25f6cf2c36f",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-terminal-onar-bekci-yorum-korur/terminal-onar/scripts/bekci-yorum.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T21:04:34+03:00",
+      "sure_sn": 0.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme",
+      "asama": "sonra",
+      "dosya": "olcum-gerileme-sonra.txt",
+      "sha256": "653574d2e40428eb4adfd3ba64d2da7f6d22e56cb4196d521b7007678c2c509c",
+      "komut": [
+        "bash",
+        "-c",
+        "cd '/config/projects/_wt/Sx-Claude-Skills-terminal-onar-bekci-yorum-korur/terminal-onar/scripts' && for t in bekci-iz kur-bag kabuk-kapisi oda-ortam kurtarici-kapali; do printf '%s: ' $t; bash $t.test.sh 2>&1 | tail -1; done"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T21:04:49+03:00",
+      "sure_sn": 14.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-crontab-dokunulmadi",
+      "asama": "sonra",
+      "dosya": "olcum-canli-crontab-dokunulmadi-sonra.txt",
+      "sha256": "10424006e858d7892fd945ef494989d8134f79f3f9fc58175ab1dc7aa711eb02",
+      "komut": [
+        "bash",
+        "-c",
+        "crontab -l | grep -cE '^[[:space:]]*[^#[:space:]].*# terminal-onar-bekci[[:space:]]*$'"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T21:04:49+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "depo-denetimi",
+      "asama": "sonra",
+      "dosya": "olcum-depo-denetimi-sonra.txt",
+      "sha256": "e63eb280d20887572ac958619c0dffb8add40959c3071347600d5e878099667c",
+      "komut": [
+        "bash",
+        "-c",
+        "node ahi/schema/validate-repo.mjs . --strict | tail -1 && node ahi/schema/version-lint.mjs . | tail -1 && bash kabuk-biti.test.sh | tail -1 && git ls-files -s terminal-onar/scripts/bekci-yorum.test.sh | cut -c1-6"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T21:04:49+03:00",
+      "sure_sn": 0.1
+    }
+  ],
+  "imza": "9bdd59e19358e51ffa93b32fe49856960b256082dd5cfcefc05037cfc4017b92"
+}
