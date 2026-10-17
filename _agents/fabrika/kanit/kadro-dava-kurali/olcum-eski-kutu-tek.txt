@@ -1,0 +1,15 @@
+# Ölçüm: eski (çalışmayan) kutu oturumu — da71bac8-3b95-4fab-b9e2-314ffc5ba858 (kayıt 2026-09-25), cwd /config/projects
+# Komut: OLCUM_SID=<sid> OLCUM_SOZ=Armut OLCUM_CWD=/config/projects bash terminal-onar/scripts/dava-resume-olc.sh
+# Transkript boyutu ölçümden ÖNCE: 38550882 bayt (15 Eki 23:47); ölçümden SONRA: 38553046 bayt (17 Eki 13:57) — ölçüm transkripte yazdı.
+claude: 2.1.302 (Claude Code) · dizin: /config/projects
+  ✓ 1 eski oturum transkripti var ve ayırt edici söz içinde ('Armut')
+  ✓ 2 aynı kimlikle --session-id (baslat-claude.sh yolu) → 'already in use', eski sohbete DÖNMEZ
+  ✓ 3 koltuk-ac ac --eski → rc 0, 'claude --resume' kolu
+  ✗ 4 açılan oturumda gerçek Claude ESKİ SOHBETİ gösteriyor (ekranda 'Armut') — 
+  ✓ 5 baslat-claude.sh ÇAĞRILMADI
+
+SONUÇ: 4 tuttu · 1 tutmadı
+RC=1
+--- doğrudan kontrol (tmux dışı): claude --resume da71bac8-... </dev/null
+Error: No deferred tool marker found in the resumed session. Either the session was not deferred, the marker is stale (tool already ran), or it exceeds the tail-scan window. Provide a prompt to continue the conversation.
+--- önceki koşum (-p ile doğan oturum, tmux düzeltmesi sonrası): 4 tuttu, adım 4 aynı hata
