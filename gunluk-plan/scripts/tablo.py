@@ -20,7 +20,14 @@ GOREV = re.compile(r'gorev_[A-Za-z0-9]{10,40}')                          # bugun
 SONUC = re.compile(r'^(.*?)\s*→\s*([A-ZĞÜŞİÖÇ][A-ZĞÜŞİÖÇ ]{2,})(?:\s*·\s*(.*))?$')
 SAHIP = re.compile(r'\s*\(sahip:\s*([^)]+)\)')
 # D1 (L73): "YYYY-MM-DD Sultan: <sonuç> (sohbet · <oturum-ref> · "<kırpık>" · beyan:<AJAN>)" — üç parça zorunlu
-D1 = re.compile(r'\d{4}-\d{2}-\d{2} Sultan: .+\(sohbet · [^·()]+ · "[^"]{1,120}" · beyan:\S+\)')
+D1 = re.compile(r'\d{4}-\d{2}-\d{2} Sultan: (.+?) ?\(sohbet · [^·()]+ · "[^"]{1,120}" · beyan:\S+\)')
+# 🔴 biçim yetmez (bağımsız göz #357 tur 4): sonuç kısmı "ertele" kararını taşımalı, olumsuzu değil — cipa.sh ile AYNI kural
+ERTELE, ERTELEME = re.compile(r'ertele', re.I), re.compile(r'ertelen?m[eaı]', re.I)
+
+
+def ertele_d1(notlar):
+    m = D1.search(notlar)
+    return bool(m and ERTELE.search(m.group(1)) and not ERTELEME.search(m.group(1)))
 # Durum adları kokpit kapısının (bugun.mjs DURUM) adlarıyla AYNI: acik · yarim · bitti · geri (+ ertelendi).
 # "açılmadı" ayrı durum değildir: açık + sonuç AÇILMADI (tabloda öyle okunur).
 ETIKET = {'acik': 'açık', 'yarim': 'yarım', 'bitti': 'kapandı', 'ertelendi': 'ertelendi', 'geri': 'geri alındı'}
@@ -50,7 +57,7 @@ def ayristir(metin):
         durum = {' ': 'acik', '~': 'yarim', 'x': 'bitti', 'X': 'bitti', '-': 'geri'}[im]
         if im == '-' and sonuc == 'ERTELENDİ':
             # 🔴 damgasız erteleme ERTELEME DEĞİLDİR: biçimi tutmayan D1 maddeyi açık bırakır
-            durum = 'ertelendi' if D1.search(notlar) else 'acik'
+            durum = 'ertelendi' if ertele_d1(notlar) else 'acik'
         etk = m.group(3) or ''
         maddeler.append({
             'etiket': etk, 'tur': 'gun-ortasi' if etk.startswith('G') else ('sabah' if etk else 'serbest'),

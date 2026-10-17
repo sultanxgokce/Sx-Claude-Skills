@@ -1,0 +1,126 @@
+{
+  "is": "gunluk-plan-tablo-kapanis-2",
+  "arac": "kanit.py/0.4.0",
+  "guncelleme": "2026-10-17T20:58:41+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "d1-icerik-prob",
+      "asama": "once",
+      "dosya": "olcum-d1-icerik-prob-once.txt",
+      "sha256": "60e0dfb4dc6e12ad93a6d5794882b680cf88dcb2252a8bf50f4b5d1c5821b279",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/d1-icerik-prob.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-tablo-kapanis"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T20:53:48+03:00",
+      "sure_sn": 0.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "d1-icerik-prob",
+      "asama": "sonra",
+      "dosya": "olcum-d1-icerik-prob-sonra.txt",
+      "sha256": "56d40667e291600781ee4105059541317c7b85025efe84eff0528a489e80a32d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/d1-icerik-prob.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-tablo-kapanis"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T20:58:07+03:00",
+      "sure_sn": 0.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cipa-sinavi-73",
+      "asama": "sonra",
+      "dosya": "olcum-cipa-sinavi-73-sonra.txt",
+      "sha256": "15522cce5b7f24d47d9840e6fbc3ecf45a59f30f4af04ce4b204f35bfce4b4e9",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/cipa.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T20:58:12+03:00",
+      "sure_sn": 5.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gun-ortasi-sinavi-33",
+      "asama": "sonra",
+      "dosya": "olcum-gun-ortasi-sinavi-33-sonra.txt",
+      "sha256": "734e7f95baeab9986b674ec10f6af32a62b950a74a8e701690f16d63774a8149",
+      "komut": [
+        "bash",
+        "gun-ortasi/scripts/kalan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T20:58:26+03:00",
+      "sure_sn": 13.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-uyum-ana-dal",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-uyum-ana-dal-sonra.txt",
+      "sha256": "f0030831a06750949f28af768720e5d71ca5cb664013b2377186581a2f414367",
+      "komut": [
+        "node",
+        "gunluk-plan/sema/kapi-uyum.mjs",
+        "terminal-onar/kapi/bugun.mjs",
+        "gunluk-plan/sema/ornek-cipa.md",
+        "gunluk-plan/sema/beklenen.json"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T20:58:26+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "d1-mutasyon",
+      "asama": "sonra",
+      "dosya": "olcum-d1-mutasyon-sonra.txt",
+      "sha256": "f7a880347e269a4d40cd992acadf34e148606e8f7945ab63f63c163f2582d0e4",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/d1-mutasyon.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-tablo-kapanis"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T20:58:41+03:00",
+      "sure_sn": 15.3
+    },
+    {
+      "tur": "dosya",
+      "etiket": "d1-icerik-prob-betigi",
+      "asama": "tek",
+      "dosya": "dosya-d1-icerik-prob-betigi-tek.sh",
+      "sha256": "88403c3ac9dac9709fa539884992055294b5480c8c80bb637742cc27ea3d1ead",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/d1-icerik-prob.sh",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T20:58:41+03:00"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "d1-mutasyon-betigi",
+      "asama": "tek",
+      "dosya": "dosya-d1-mutasyon-betigi-tek.sh",
+      "sha256": "5833be964e9c6b137172e08ad421c1cf3b1f296905c51c34cdd59a88d5bf20a0",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/d1-mutasyon.sh",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T20:58:41+03:00"
+    }
+  ],
+  "imza": "6ac523bef566e5c351d94cd5f20a2ac0108df7fbd7bc705f8b0ff6f9f55ff3ae"
+}

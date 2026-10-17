@@ -1,0 +1,7 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/d1-mutasyon.sh /config/projects/_wt/Sx-Claude-Skills-gunluk-plan-tablo-kapanis
+# rc=0 sure=15.3s zaman=2026-10-17T20:58:41+03:00
+--- stdout ---
+temiz: rc=0 SONUÇ: 73 geçti · 0 kaldı · düşen: 
+mutasyon-cipa: rc=1 SONUÇ: 69 geçti · 4 kaldı · düşen: T11b biçimi doğru ama karar 'ertele' d;T11b biçimi doğru ama karar 'ertele' d;T11b biçimi doğru ama karar 'ertele' d;T11c reddedilen D1 çıpaya yazılmadı ;
+mutasyon-tablo: rc=1 SONUÇ: 72 geçti · 1 kaldı · düşen: T11d ayrıştırıcı: kararsız D1 'aç;
+--- stderr ---

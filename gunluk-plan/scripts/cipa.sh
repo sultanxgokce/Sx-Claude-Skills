@@ -167,6 +167,13 @@ case "$KOMUT" in
       ertelendi)
         printf '%s' "$D1" | grep -qE '^[0-9]{4}-[0-9]{2}-[0-9]{2} Sultan: .+\(sohbet · [^·()]+ · "[^"]{1,120}" · beyan:[^ )]+\)$' \
           || { echo "HATA: ertelendi için --d1 zorunlu ve D1 biçiminde olmalı: 'YYYY-MM-DD Sultan: … (sohbet · <ref> · \"<kırpık>\" · beyan:<AJAN>)'" >&2; exit 2; }
+        # 🔴 BİÇİM YETMEZ, KARAR DA ŞART (bağımsız göz #357 tur 4): "Sultan: bugün görüşelim (…)" biçimce geçiyor
+        #    ve maddeyi kapanış kapısından çıkarıyordu. D1'in SONUÇ kısmı (Sultan: … (sohbet) "ertele" kararını
+        #    taşımalı; olumsuzu ("erteleme", "ertelenmesin") reddedilir. Ölçtüğü şey kelimedir, anlam değil:
+        #    kırpık (tırnak içi) bakılmaz — karar sonuç kısmında yazılır. tablo.py aynı kuralla okur.
+        _snc="${D1#* Sultan: }"; _snc="${_snc%% (sohbet*}"
+        { printf '%s' "$_snc" | grep -qiE 'ertele' && ! printf '%s' "$_snc" | grep -qiE 'ertelen?m[eaı]'; } \
+          || { echo "HATA: D1'in sonuç kısmı Sultan'ın 'ertele' kararını taşımalı (ör. 'Sultan: ertele (…)'); '$_snc' erteleme kararı değil" >&2; exit 2; }
         im="-" ; et="ERTELENDİ"; NOT="D1: $D1${NOT:+ · $NOT}" ;;
       *) echo "HATA: --durum kapandi|yarim|acilmadi|geri-alindi|ertelendi olmalı" >&2; exit 2 ;;
     esac

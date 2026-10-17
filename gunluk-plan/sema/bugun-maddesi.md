@@ -41,7 +41,7 @@ Veri adları (`durum` alanı) kokpit kapısınınkilerle **aynıdır**; tabloda 
 | `x` | `bitti` | kapandı | ✓ |
 | `-` + `GERİ ALINDI` (ya da sonuçsuz) | `geri` | geri alındı | ✓ (vazgeçildi, iz kalır) |
 | `-` + `ERTELENDİ` + geçerli D1 | `ertelendi` | ertelendi | ✓ |
-| `-` + `ERTELENDİ`, D1 yok ya da bozuk | `acik` | açık | 🔴 kapatmaz — damgasız erteleme erteleme değildir |
+| `-` + `ERTELENDİ`, D1 yok, bozuk ya da sonucu "ertele" kararı değil | `acik` | açık | 🔴 kapatmaz — damgasız erteleme erteleme değildir |
 
 JSON alanları (madde başına): `etiket · tur (sabah|gun-ortasi|serbest) · metin · sahip · durum · sonuc · kanit · not · gorevler[]`.
 `metin` görev kimliklerini içinde taşır (kapının eski davranışı); `sahip` ise metinden çıkarılır.
