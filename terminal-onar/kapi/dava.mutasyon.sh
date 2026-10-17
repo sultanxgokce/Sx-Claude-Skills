@@ -27,5 +27,5 @@ dene 'M9 bayat kilit doğrulamadan silinir (eski kural)' kadro-yaz.mjs "        
         try { fs.renameSync(y, t); } catch { continue; }
         if (oku(t) !== c) { try { fs.linkSync(t, y); } catch {} }   // başkasının taze kilidini kaptık → yer boşsa geri koy
         try { fs.unlinkSync(t); } catch {}" "        try { fs.unlinkSync(y); } catch {}"
-dene 'M10 dava satırı iskan'a yazılır (eşitleyici ezer, davalar.yaml boş kalır)' kadro-yaz.mjs "const hedef = iskanVar ? davalarYolu(proje, ortam) : dosyalar[0];" "const hedef = dosyalar[0];"
+dene 'M10 dava satırı iskana yazılır (eşitleyici ezer, davalar.yaml boş kalır)' kadro-yaz.mjs "const hedef = iskanVar ? davalarYolu(proje, ortam) : dosyalar[0];" "const hedef = dosyalar[0];"
 echo; echo "MUTASYON: $gecti yakalandı · $dusen kaçtı"; [ "$dusen" = 0 ]

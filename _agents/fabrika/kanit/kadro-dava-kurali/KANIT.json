@@ -1,7 +1,7 @@
 {
   "is": "kadro-dava-kurali",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-17T14:27:51+03:00",
+  "guncelleme": "2026-10-17T14:28:39+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -188,15 +188,15 @@
       "etiket": "dava-mutasyon",
       "asama": "tek",
       "dosya": "olcum-dava-mutasyon-tek.txt",
-      "sha256": "8e304d0414b4ec4a2f23f5b83aca2dfd1a8946485184249dc166bd2b90a0510b",
+      "sha256": "1e5849c7562c9f5a43d680e0dea954defb1e9a33b9348267f34a6f6893775ffa",
       "komut": [
         "bash",
         "/config/projects/_wt/Sx-Claude-Skills-kadro-dava-kurali/terminal-onar/kapi/dava.mutasyon.sh"
       ],
-      "rc": 2,
-      "renk": "kirmizi",
-      "zaman": "2026-10-17T14:27:43+03:00",
-      "sure_sn": 24.7
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T14:28:39+03:00",
+      "sure_sn": 28.3
     },
     {
       "tur": "olcum",
@@ -214,5 +214,5 @@
       "sure_sn": 56.1
     }
   ],
-  "imza": "448b4978764653f236a645810424ad6e7b8e962d0d5899cf8b09d4323037ba32"
+  "imza": "307af34bd96b585d4cfdbbde38ef88be06be3981a40c72510b2c6f4d27c811e0"
 }
