@@ -281,7 +281,7 @@ def k6_dogrulat(retro, kok, hafta):
             except (OSError, UnicodeDecodeError) as e:
                 okunamadi.append(f"{ad} ({type(e).__name__})")
     if tarihsiz or okunamadi:
-        return "SARI", "seans dosyası ölçülemedi: " + ", ".join([f"{a} (adında tarih yok)" for a in tarihsiz] + okunamadi)[:200]
+        return "SARI", "seans dosyası ölçülemedi: " + ", ".join([f"{a} (adında tarih yok)" for a in tarihsiz] + okunamadi)
     if not seanslar:
         return "YEŞİL", "bu hafta Doğrulat seans kaydı yok (retro/dogrulat/<tarih>.md) — kaydı yazılmamış seansı bu kapı görmez"
     eksik, olcemedi, toplam = [], [], 0
@@ -297,15 +297,16 @@ def k6_dogrulat(retro, kok, hafta):
             eksik.append(f"{ad}: ders bölümü yok (## … ders …)")
             continue
         toplam += len(maddeler)
-        hukum = [(no,) + madde_hukmu(tx) for no, tx in maddeler]
-        islenmemis = [f"{no}: {g}" for no, h, g in hukum if h == "islenmedi"]
+        # rapor DERSİN KENDİSİNİ yazar (göz #365 tur 2): madde no + ders metni (okun solu — "nereye işlendi" kısmı hariç) + gerekçe
+        hukum = [(no, tx.split("→")[0].strip() or tx) + madde_hukmu(tx) for no, tx in maddeler]
+        islenmemis = [f"{no} “{d}”: {g}" for no, d, h, g in hukum if h == "islenmedi"]
         if islenmemis:
             eksik.append(f"{ad}: {len(islenmemis)}/{len(maddeler)} ders PR'a işlenmedi (madde {'; '.join(islenmemis)})")
-        olcemedi += [f"{ad} madde {no}: {g}" for no, h, g in hukum if h == "olculemedi"]
+        olcemedi += [f"{ad} madde {no} “{d}”: {g}" for no, d, h, g in hukum if h == "olculemedi"]
     if eksik:
-        return "KIRMIZI", f"Doğrulat dersi işlenmemiş: {' · '.join(eksik)}"[:400]
+        return "KIRMIZI", f"Doğrulat dersi işlenmemiş: {' · '.join(eksik)}"   # kesilmez: eksiklerin TAMAMI listelenir (göz #365 tur 2)
     if olcemedi:
-        return "SARI", f"PR durumu ölçülemedi (gh): {' · '.join(olcemedi)}"[:300]
+        return "SARI", f"PR durumu ölçülemedi (gh): {' · '.join(olcemedi)}"
     return "YEŞİL", f"{len(seanslar)} Doğrulat seansı, {toplam} dersin hepsi birleşmiş bir PR'a işlenmiş"
 
 

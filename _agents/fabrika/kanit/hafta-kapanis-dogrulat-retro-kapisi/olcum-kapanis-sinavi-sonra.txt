@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-hafta-kapanis-dogrulat-retro-kapisi/hafta-kapanis/scripts/hafta-kapanis.test.sh
-# rc=0 sure=4.1s zaman=2026-10-17T20:36:15+03:00
+# rc=0 sure=4.5s zaman=2026-10-17T20:37:53+03:00
 --- stdout ---
 — H1 retro becerisi yoksa SARI (sahte yeşil yok)
   ✓ H1a retro.py bulunamaz → rc=3 (rc=3)
@@ -109,6 +109,12 @@ $ bash /config/projects/_wt/Sx-Claude-Skills-hafta-kapanis-dogrulat-retro-kapisi
   ✓ H10t2 gerekçe
   ✓ H10i ders bölümü olmayan seans → AÇIK (rc=1)
   ✓ H10j gerekçe
+  ✓ H10u 2 seans × 15 PR'sız ders → AÇIK (rc=1)
+  ✓ H10v ikinci seans da listede
+  ✓ H10w son dersin METNİ de raporda — liste kesilmez (göz #365 tur 2)
+  ✓ H10x KAPANIS.md'de de tam liste
+  ✓ M15 rapor kesilince son seansın dersleri kaybolur (kapı yakalar): mutant ısırıldı
+  ✓ M16 ders metni rapordan düşünce yalnız numara kalır (kapı yakalar): mutant ısırıldı
   ✓ H10k başka haftanın işlenmemiş seansı bu haftayı tutmaz → KAPANDI (rc=0)
   ✓ H10l ...ama kendi haftasında (W41) kırmızı (rc=1)
   ✓ H10m W41 gerekçe
@@ -122,5 +128,5 @@ $ bash /config/projects/_wt/Sx-Claude-Skills-hafta-kapanis-dogrulat-retro-kapisi
   ✓ M10 K6 olc'a bağlı olmazsa işlenmemiş ders haftayı kapatır (kapı yakalar): mutant ısırıldı
   ✓ M11 tarihsiz seans sessiz atlanınca sarı kaybolur (kapı yakalar): mutant ısırıldı
 
-GECEN=110 DUSEN=0
+GECEN=116 DUSEN=0
 --- stderr ---

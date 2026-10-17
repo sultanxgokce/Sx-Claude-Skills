@@ -1,0 +1,45 @@
+{
+  "tur": 2,
+  "is": "hafta-kapanis-dogrulat-retro-kapisi",
+  "pr": "365",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T20:36:38+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 45396,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 33264
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "K6 artık PR’ı kaynağından sorguluyor; çıplak numara, açık/kapalı PR, PR olmayan numara, AÇIK ders, eksik ders bölümü ve ölçülemeyen `gh` durumlarını doğru renklerle kapanışa bağlıyor. Ancak iş kartının açık talebi olan “eksik seanslar dersleriyle listelenir” tamamlanmamış: çıktı ders metinlerini değil yalnız madde numarası ile kısa gerekçeyi veriyor ve tüm raporu 400 karakterde kesebiliyor; önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "Kırmızı K6 raporu eksik derslerin kendisini listelemiyor; yalnız madde numarası ve `AÇIK`, `PR yok`, `open` gibi gerekçeleri yazıyor. Bu nedenle kullanıcı hangi dersin işlenmesi gerektiğini rapordan göremiyor.",
+        "kanit": "Karar listesi `islenmemis = [f\"{no}: {g}\" ...]` biçiminde kuruluyor; `tx` ders metni çıktıya hiç eklenmiyor. Gerçek ölçüm de `madde 2: depo adı olmadan #N; 3: PR yok; 5: AÇIK; 6: AÇIK` basıyor, ders metinlerini göstermiyor; iş kartı ise eksik seansların “dersleriyle listelenmesini” istiyor.",
+        "konum": "hafta-kapanis/scripts/hafta-kapanis.py: k6_dogrulat içindeki `islenmemis` ve `eksik.append`; kanıt `olcum-gercek-dogrulat-seansi-sonra.txt`",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Eksik seans/ders raporu 400 karakterde sessizce kesiliyor; çok sayıda seans veya ders olduğunda talep edilen eksiklerin tamamı listelenmeyecek.",
+        "kanit": "Kırmızı dönüş doğrudan `return \"KIRMIZI\", f\"Doğrulat dersi işlenmemiş: {' · '.join(eksik)}\"[:400]` kullanıyor; kesilme işareti ya da ayrı tam liste yok.",
+        "konum": "hafta-kapanis/scripts/hafta-kapanis.py: k6_dogrulat kırmızı dönüşü",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kapanış sınavında önce/sonra rc=1→0 çifti, gerçek 2026-10-17 seansında K6 kırmızı ölçümü ve depo denetimi mevcut. Bununla birlikte paylaşılan sınav çıktısı ilk 60 satırla kesildiği için H10/K6 kontrollerinin ayrıntılı çalışma satırları görünmüyor; manifestteki genel rc=0 bunların geçtiğini gösterse de eksik ders metinlerinin gerçekten listelendiğine dair kanıt yok, gerçek ölçüm tersini gösteriyor."
+  }
+}

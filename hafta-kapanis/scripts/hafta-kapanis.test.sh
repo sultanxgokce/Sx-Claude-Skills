@@ -209,7 +209,7 @@ cat > "$DG/2026-10-16.md" <<'EOF'
 - tık sayısı #1 hedef
 EOF
 kapi "H10a PR'sız ders (2) + AÇIK ders (3) → K6 kırmızı → AÇIK rc=1" 1 python3 "$H" olc --hafta 2026-W42
-icerir "$CIKTI" "2026-10-16.md: 2/3 ders PR'a işlenmedi (madde 2: PR yok; 3: AÇIK)" "H10b eksik seans dersleri ve gerekçesiyle (görev kimliği PR yerine geçmez; ders dışı bölüm sayılmaz)"
+icerir "$CIKTI" "2026-10-16.md: 2/3 ders PR'a işlenmedi (madde 2 “Bitiş sinyali yok”: PR yok; 3 “AÇIK: dış yüzeyde ekran görülmedi”: AÇIK)" "H10b eksik seans dersleri ve gerekçesiyle (görev kimliği PR yerine geçmez; ders dışı bölüm sayılmaz)"
 icerir "$(cat "$KP")" "| K6 | Doğrulat dersleri → beceri PR | ✗ KIRMIZI |" "H10c KAPANIS.md'de K6 satırı"
 icerir "$(cat "$KP")" "_durum: AÇIK" "H10d onay VAR olsa da hafta AÇIK (onay işlenmemiş dersi kapatmaz)"
 cp "$DG/2026-10-16.md" "$T/DG.yedek"
@@ -219,21 +219,31 @@ ders2 "Bitiş sinyali → Sx #370 muhakkik --done adımı"
 kapi "H10e üç ders de BİRLEŞMİŞ PR'a bağlı (depo #N · /pull/N) → KAPANDI" 0 python3 "$H" olc --hafta 2026-W42
 icerir "$CIKTI" "1 Doğrulat seansı, 3 dersin hepsi birleşmiş bir PR'a işlenmiş" "H10f yeşil dili"
 ders2 "AÇIK: Bitiş sinyali → Sx #370 sürüyor"
-kapi "H10g birleşmiş PR'ı olsa da AÇIK işaretli ders işlenmemiş → AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "1/3 ders PR'a işlenmedi (madde 2: AÇIK)" "H10h gerekçe"
+kapi "H10g birleşmiş PR'ı olsa da AÇIK işaretli ders işlenmemiş → AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "1/3 ders PR'a işlenmedi (madde 2 “AÇIK: Bitiş sinyali”: AÇIK)" "H10h gerekçe"
 ders2 "Bitiş sinyali → cloudtop #900 (inceleniyor)"
-kapi "H10p PR kaynağında AÇIK (OPEN, metinde etiketsiz) → işlenmemiş (göz #365 tur 1)" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "madde 2: cloudtop #900 open" "H10p2 gerekçe PR durumundan"
+kapi "H10p PR kaynağında AÇIK (OPEN, metinde etiketsiz) → işlenmemiş (göz #365 tur 1)" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "madde 2 “Bitiş sinyali”: cloudtop #900 open" "H10p2 gerekçe PR durumundan"
 ders2 "Bitiş sinyali → cloudtop #901"
-kapi "H10q kapatılmış (birleşmemiş) PR → işlenmemiş" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "madde 2: cloudtop #901 closed" "H10q2 gerekçe"
+kapi "H10q kapatılmış (birleşmemiş) PR → işlenmemiş" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "madde 2 “Bitiş sinyali”: cloudtop #901 closed" "H10q2 gerekçe"
 ders2 "Bitiş sinyali → cloudtop #12345 (issue)"
-kapi "H10r PR olmayan numara (issue) → işlenmemiş (göz #365 tur 1)" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "madde 2: cloudtop #12345 PR değil" "H10r2 gerekçe"
+kapi "H10r PR olmayan numara (issue) → işlenmemiş (göz #365 tur 1)" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "madde 2 “Bitiş sinyali”: cloudtop #12345 PR değil" "H10r2 gerekçe"
 ders2 "Bitiş sinyali → #370"
-kapi "H10s depo adı olmadan #N (hangi depo?) → işlenmemiş" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "madde 2: depo adı olmadan #N" "H10s2 gerekçe"
+kapi "H10s depo adı olmadan #N (hangi depo?) → işlenmemiş" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "madde 2 “Bitiş sinyali”: depo adı olmadan #N" "H10s2 gerekçe"
 ders2 "Bitiş sinyali → Sx #370 muhakkik --done adımı"
 kapi "H10t gh cevap veremez → K6 SARI → rc=3 ÖLÇÜLEMEDİ (ölçülemedi ≠ işlendi)" 3 env GH_COK=1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "PR durumu ölçülemedi (gh)" "H10t2 gerekçe"
 cp "$T/DG.yedek" "$DG/2026-10-16.md"
 printf '# Doğrulat seansı — 2026-10-16\n## Ölçüm\n- 10 → 2\n' > "$DG/2026-10-16.md"
 kapi "H10i ders bölümü olmayan seans → AÇIK" 1 python3 "$H" olc --hafta 2026-W42; icerir "$CIKTI" "2026-10-16.md: ders bölümü yok" "H10j gerekçe"
 python3 -c "import os,sys; os.remove(sys.argv[1])" "$DG/2026-10-16.md"
+for g in 13 14; do { printf '# seans\n## Pürüzler → ders → nereye işlendi\n'; for i in $(seq 1 15); do printf '%s. ders %s-%s uzunca bir cümle, işlenmedi → protokol notu\n' "$i" "$g" "$i"; done; } > "$DG/2026-10-$g.md"; done
+kapi "H10u 2 seans × 15 PR'sız ders → AÇIK" 1 python3 "$H" olc --hafta 2026-W42
+icerir "$CIKTI" "2026-10-14.md: 15/15 ders PR'a işlenmedi" "H10v ikinci seans da listede"
+icerir "$CIKTI" "15 “ders 14-15 uzunca bir cümle, işlenmedi”: PR yok)" "H10w son dersin METNİ de raporda — liste kesilmez (göz #365 tur 2)"
+icerir "$(cat "$KP")" "“ders 14-15 uzunca bir cümle, işlenmedi”" "H10x KAPANIS.md'de de tam liste"
+m_k6_kesik(){ local o; o="$(python3 "$1" olc --hafta 2026-W42 2>&1)"; grep -qF "“ders 14-15 uzunca bir cümle, işlenmedi”: PR yok)" <<<"$o"; }
+mut "M15 rapor kesilince son seansın dersleri kaybolur (kapı yakalar)" 's/        return "KIRMIZI", f"Doğrulat dersi işlenmemiş: {'"'"' · '"'"'.join(eksik)}"   # kesilmez/        return "KIRMIZI", f"Doğrulat dersi işlenmemiş: {'"'"' · '"'"'.join(eksik)}"[:400]   # kesilmez/' m_k6_kesik
+m_k6_ders(){ local o; o="$(python3 "$1" olc --hafta 2026-W42 2>&1)"; grep -qF "“ders 13-1 uzunca bir cümle, işlenmedi”" <<<"$o"; }
+mut "M16 ders metni rapordan düşünce yalnız numara kalır (kapı yakalar)" 's/islenmemis = \[f"{no} “{d}”: {g}"/islenmemis = [f"{no}: {g}"/' m_k6_ders
+python3 -c "import os,sys; [os.remove(x) for x in sys.argv[1:]]" "$DG/2026-10-13.md" "$DG/2026-10-14.md"
 cp "$T/DG.yedek" "$DG/2026-10-05.md"
 kapi "H10k başka haftanın işlenmemiş seansı bu haftayı tutmaz → KAPANDI" 0 python3 "$H" olc --hafta 2026-W42
 kapi "H10l ...ama kendi haftasında (W41) kırmızı" 1 python3 "$H" olc --hafta 2026-W41; icerir "$CIKTI" "2026-10-05.md: 2/3 ders" "H10m W41 gerekçe"
@@ -244,7 +254,7 @@ python3 -c "import os,sys; os.remove(sys.argv[1])" "$DG/taslak.md"
 cp "$T/DG.yedek" "$DG/2026-10-16.md"
 # K6 mutantları (kopya üstünde)
 m_k6_bagli(){ python3 "$1" olc --hafta 2026-W42 >/dev/null 2>&1; [ $? -ne 0 ]; }
-m_k6_bagli_2(){ local o; o="$(python3 "$1" olc --hafta 2026-W42 2>&1)"; grep -qF "madde 2: PR yok" <<<"$o"; }
+m_k6_bagli_2(){ local o; o="$(python3 "$1" olc --hafta 2026-W42 2>&1)"; grep -qF "madde 2 “Bitiş sinyali yok”: PR yok" <<<"$o"; }
 mut "M8 PR yok denetimi kalkınca görev kimlikli ders işlenmiş sayılır (kapı yakalar)" 's/        return "islenmedi", "depo adı olmadan #N" if ciplak else "PR yok"/        return ("islenmedi", "depo adı olmadan #N") if ciplak else ("islendi", "")/' m_k6_bagli_2
 sed -i 's|^3\. AÇIK: dış yüzeyde .*|3. Dış yüzeyde kare şartı → https://github.com/x/y/pull/371|' "$DG/2026-10-16.md"
 ders2 "AÇIK: Bitiş sinyali → Sx #370 sürüyor"

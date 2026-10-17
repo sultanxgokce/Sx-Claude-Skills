@@ -1,47 +1,47 @@
 {
   "is": "hafta-kapanis-dogrulat-retro-kapisi",
   "arac": "kanit.py/0.4.0",
-  "guncelleme": "2026-10-17T20:36:16+03:00",
+  "guncelleme": "2026-10-17T20:37:54+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "kapanis-sinavi",
       "asama": "once",
       "dosya": "olcum-kapanis-sinavi-once.txt",
-      "sha256": "bc8dd5c693e887fba49dd82f903bc54e0bc33c3bd4199f9ed590ba6667a95fec",
+      "sha256": "3f0a898ded9553c086b749ff7a17122a80e6563f7775c45d8d7d4a565d5d6924",
       "komut": [
         "env",
         "-u",
         "HAFTA_KAPANIS_RETRO_PY",
         "bash",
-        "/tmp/tmp.8A4Y7Hcg8m/hafta-kapanis/scripts/hafta-kapanis.test.sh"
+        "/tmp/tmp.y1CuIF0Qtv/hafta-kapanis/scripts/hafta-kapanis.test.sh"
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-10-17T20:36:11+03:00",
-      "sure_sn": 4.8
+      "zaman": "2026-10-17T20:37:49+03:00",
+      "sure_sn": 6.8
     },
     {
       "tur": "olcum",
       "etiket": "kapanis-sinavi",
       "asama": "sonra",
       "dosya": "olcum-kapanis-sinavi-sonra.txt",
-      "sha256": "5e1468154257717512ca5c0b3325a02105ee88cc493d0d6a71764e7e2ec3b6bd",
+      "sha256": "c272d4384b023024e5e9c0d88659796a341088af5f3e42b15ff504356122eb3e",
       "komut": [
         "bash",
         "/config/projects/_wt/Sx-Claude-Skills-hafta-kapanis-dogrulat-retro-kapisi/hafta-kapanis/scripts/hafta-kapanis.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-17T20:36:15+03:00",
-      "sure_sn": 4.1
+      "zaman": "2026-10-17T20:37:53+03:00",
+      "sure_sn": 4.5
     },
     {
       "tur": "olcum",
       "etiket": "gercek-dogrulat-seansi",
       "asama": "sonra",
       "dosya": "olcum-gercek-dogrulat-seansi-sonra.txt",
-      "sha256": "da4686033fe8cdb541a8ffc4ef1ee9fece2ea8f9e7d991194ae9b4c01f88e63d",
+      "sha256": "bf354997744d069b78551b2f60369ab6e165e292436dc13fd3be2f49f28cfd80",
       "komut": [
         "python3",
         "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/k6-gercek.py",
@@ -52,15 +52,15 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-17T20:36:16+03:00",
-      "sure_sn": 0.9
+      "zaman": "2026-10-17T20:37:54+03:00",
+      "sure_sn": 0.8
     },
     {
       "tur": "olcum",
       "etiket": "depo-denetimi",
       "asama": "sonra",
       "dosya": "olcum-depo-denetimi-sonra.txt",
-      "sha256": "8784ea75696e6b4199b70348c556e26290911385619e980b7cbadd9b36624c57",
+      "sha256": "9570a63e8597a354a269f5b1563b76cec92f00aa4d0c0df4b3b229c186c87a50",
       "komut": [
         "bash",
         "-c",
@@ -68,9 +68,9 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-17T20:36:16+03:00",
+      "zaman": "2026-10-17T20:37:54+03:00",
       "sure_sn": 0.1
     }
   ],
-  "imza": "ef29fa36efda3ba74acf15f6f5311202b8562443782e60170ea463cfdcefa07a"
+  "imza": "8275d4879f46d859518b62fa7699b686d03ef55f47911c48b698dfc88894e141"
 }

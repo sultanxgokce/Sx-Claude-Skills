@@ -1,5 +1,5 @@
 $ python3 /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/k6-gercek.py /config/projects/_wt/Sx-Claude-Skills-hafta-kapanis-dogrulat-retro-kapisi/hafta-kapanis/scripts/hafta-kapanis.py /config/projects/_wt/Sx-Claude-Skills-hafta-kapanis-dogrulat-retro-kapisi/retro/scripts/retro.py /config/projects/Nexus 2026-W42
-# rc=0 sure=0.9s zaman=2026-10-17T20:36:16+03:00
+# rc=0 sure=0.8s zaman=2026-10-17T20:37:54+03:00
 --- stdout ---
-K6 gerçek (/config/projects/Nexus · 2026-W42): KIRMIZI — Doğrulat dersi işlenmemiş: 2026-10-17.md: 4/6 ders PR'a işlenmedi (madde 2: depo adı olmadan #N; 3: PR yok; 5: AÇIK; 6: AÇIK)
+K6 gerçek (/config/projects/Nexus · 2026-W42): KIRMIZI — Doğrulat dersi işlenmemiş: 2026-10-17.md: 4/6 ders PR'a işlenmedi (madde 2 “Zil görevleri tek tek, 2 dk aralıkla verdi”: depo adı olmadan #N; 3 “MUHAKKİK bitirince merkeze sinyal yok”: PR yok; 5 “AÇIK: dış yüzey (ekran) görevinde hüküm 'kod canlıda' ile yetindi, ekran gözle görülmedi”: AÇIK; 6 “AÇIK: panelde toplu 'hepsini doğrulat' + parti özeti yok”: AÇIK)
 --- stderr ---
