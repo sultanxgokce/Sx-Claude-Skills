@@ -1,7 +1,7 @@
 ---
 name: iskan
 type: agent
-version: 0.11.0
+version: 0.11.1
 description: >
   Container + ekip yaşam-döngüsü master-skill. Bir hedef (yeni-proje / mevcut-ekip-yeniden-doğuşu / tek-üye-ekleme)
   için host-provizyon (UC1), oturum-kurtarma (UC2, deterministik session-id), üye-ekleme (UC3) akışlarını
@@ -116,6 +116,13 @@ izole-container hedefinde `ise-alim`/KÂHYA DOĞRUDAN invoke EDİLMEZ — İSKÂ
 Usta (S3 · bileşik), born-at-Usta (`ahi new usta iskan`). generic-goal: "container + ekip yaşam-döngüsünü
 (doğuş/yeniden-doğuş/üye-ekleme) tek-komutla yöneten fabrika". Terfi-olgunluk şerhi: DOCTRINE.md → "Manuel-beyan".
 Doğrula: `ahi check iskan` · Kanon: `ahi doctrine` · İş-planı: `Nexus/_agents/handoff/help2serdar-iskan-is-plani.md`.
+
+## Durum (2026-10-17, söküm iz-sıfır denetimi yorumları saymaz — v0.11.1 · BÂNİ, SERDAR 09:25)
+- **`sokum` ADIM-5 iz-sıfır assertion yorum satırlarını da sayıyordu** (`grep -ci`): s02 sökümünde `backup.sh` ve
+  `iskan-registry.yaml` GEÇMİŞ YORUMLARINDA "s02" geçtiği için kutu down + CF offboard bitmişken ADIM-5 exit 1 ile durdu.
+  Artık `_iskan_etkin_iz`: tam yorum satırı (`^\s*#`) ve satır-sonu yorumu (boşluktan sonra `#`) dışlanır, yalnız **etkin
+  içerikte** harf duyarsız sayım; etkin içerikteki ad (servis adı, tırnak içi) yine iz sayılır. ADIM-5b host-compose re-verify
+  de aynı kuralla (ssh-cat → stdin). Sınav `iskan.test.sh` İZ-YORUM-1..6 (yorumda ad → 0 · etkin ad → 1 · stdin · olmayan dosya).
 
 ## Durum (2026-10-13, kutu kaydı ezilmez + `kayit-fark` raporu — v0.11.0 · BÂNİ, SERDAR kısmi onayı)
 - **Kutudaki çalışan kayıt ezilmez.** `baslat-claude.sh` kutudaki `iskan-registry.yaml`'ı okur; koltuk ekranı da

@@ -1,0 +1,11 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/izy-mutasyon.sh
+# rc=0 sure=0.4s zaman=2026-10-17T09:34:05+03:00
+--- stdout ---
+  ✓ M1 yorum hiç ayıklanmaz (break kaldırıldı = eski grep -ci davranışı) — kapı ölünce sınav KIRMIZI (İZ-YORUM-1)
+  ✓ M2 yalnız satır başı yorum atılır, satır-sonu yorumu sayılır — kapı ölünce sınav KIRMIZI (İZ-YORUM-1)
+  ✓ M3 tırnak izlenmez (tırnak içindeki # yorum sanılır) — kapı ölünce sınav KIRMIZI (İZ-YORUM-7)
+  ✓ M4 harf duyarlı sayım (S02 ≠ s02) — kapı ölünce sınav KIRMIZI (İZ-YORUM-4)
+  ✓ M5 '#' her yerde yorum başlatır (boşluk şartı yok: a#s02 kesilir — etkin iz gizlenir) — kapı ölünce sınav KIRMIZI (İZ-YORUM-7)
+  ✓ M6 kaçışlı tırnak izlenmez (kaçış dalı kapalı → \" kapanış sayılır, sonraki # yorum) — kapı ölünce sınav KIRMIZI (İZ-YORUM-7)
+mutasyon: geçen=6 düşen=0
+--- stderr ---

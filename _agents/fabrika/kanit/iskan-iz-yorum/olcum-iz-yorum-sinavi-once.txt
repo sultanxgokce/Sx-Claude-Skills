@@ -1,0 +1,23 @@
+$ bash /tmp/tmp.iLqMT9mjjg/izy-once.sh
+# rc=1 sure=0.0s zaman=2026-10-17T09:28:52+03:00
+--- stdout ---
+  FAIL - İZ-YORUM-1 backup.sh: ham=2 etkin=
+  FAIL - İZ-YORUM-2 registry yorumu sayıldı: 
+  FAIL - İZ-YORUM-3 etkin iz kaçtı: 
+  FAIL - İZ-YORUM-4: 
+  FAIL - İZ-YORUM-5 stdin yolu: 
+  FAIL - İZ-YORUM-6 olmayan dosya: 
+== 0 geçti / 6 kaldı ==
+--- stderr ---
+/tmp/tmp.iLqMT9mjjg/izy-once.sh: line 26: _iskan_etkin_iz: command not found
+/tmp/tmp.iLqMT9mjjg/izy-once.sh: line 28: _iskan_etkin_iz: command not found
+/tmp/tmp.iLqMT9mjjg/izy-once.sh: line 29: _iskan_etkin_iz: command not found
+/tmp/tmp.iLqMT9mjjg/izy-once.sh: line 31: _iskan_etkin_iz: command not found
+/tmp/tmp.iLqMT9mjjg/izy-once.sh: line 32: _iskan_etkin_iz: command not found
+/tmp/tmp.iLqMT9mjjg/izy-once.sh: line 34: _iskan_etkin_iz: command not found
+/tmp/tmp.iLqMT9mjjg/izy-once.sh: line 35: _iskan_etkin_iz: command not found
+/tmp/tmp.iLqMT9mjjg/izy-once.sh: line 37: _iskan_etkin_iz: command not found
+/tmp/tmp.iLqMT9mjjg/izy-once.sh: line 38: _iskan_etkin_iz: command not found
+/tmp/tmp.iLqMT9mjjg/izy-once.sh: line 40: _iskan_etkin_iz: command not found
+/tmp/tmp.iLqMT9mjjg/izy-once.sh: line 41: _iskan_etkin_iz: command not found
+/tmp/tmp.iLqMT9mjjg/izy-once.sh: line 43: _iskan_etkin_iz: command not found
