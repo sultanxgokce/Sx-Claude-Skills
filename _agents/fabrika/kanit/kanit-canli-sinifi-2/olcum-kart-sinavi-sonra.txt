@@ -1,0 +1,67 @@
+$ bash /config/projects/_wt/Sx-Claude-Skills-kanit-canli-sinifi-2/yazilim-fabrikasi/scripts/kart.test.sh
+# rc=0 sure=2.2s zaman=2026-10-17T14:13:17+03:00
+--- stdout ---
+════ T1 · sınıf sorusu eksik → kart açılmaz ════
+  ✓ eksik cevapla rc=1
+  ✓ kart yazılmadı
+════ T2 · dört cevap h → sınıfsız, ekipte biter ════
+  ✓ kart açıldı
+  ✓ ekipte biter dedi
+  ✓ sultan=false
+════ T3 · '?' cevabı → şüphede yukarı, Sultan'a gider ════
+  ✓ SULTAN'A GİDER
+  ✓ sınıf dis_yuzey
+  ✓ aynı ad ikinci kez açılmaz
+════ T9 · reis-dedi: sınıfsız kartta ayrı alana yazar, sınıflı kartta REDDEDER (A268) ════
+  ✓ sınıfsız karta (is-1) reis kararı işlendi
+  ✓ 🔴 reis_kararlari dolu, sultan_kararlari YOK (Sultan'ın alanına yazılmadı)
+  ✓ 🔴 SINIFLI karta (is-2, dis_yuzey) reis kararı REDDEDİLDİ
+  ✓ sınıflı kartta alan oluşmadı
+  ✓ kısa gerekçe REDDEDİLDİ
+  ✓ 🔴 kartın sahibi olmayan ad (SERDAR ≠ aldi MUAVIN) REDDEDİLDİ
+  ✓ 🔴 küme dışı karar ('olur') REDDEDİLDİ
+  ✓ reddedilen denemeler karta hiçbir şey yazmadı
+════ T4 · is-alani ac kart ister; kartı worktree'ye taşır ════
+  ✓ kartsız iş alanı açılmaz (rc=1)
+  ✓ --kartsiz kaçışıyla açılır (gerekçe loglanır)
+  ✓ kartlı iş alanı açıldı
+  ✓ kart yalnız BİRİNCİL depoda, worktree'ye KOPYALANMADI (0.6.2 tek kaynak; kopya bayatlıyordu)
+════ T5 · worktree içinden bitti: denetim puanı ve kanıt karta işlenir (kart birincilde) ════
+  ✓ denetim geçti (kart otomatik okundu, --kart verilmedi)
+  ✓ bitti rc=0
+  ✓ birincil karta puan+kanıt+PR işlendi
+════ T6 · kanıtsız bitti uyarır; tıkandı üç yol ister ════
+  ✓ kanıtsız bitti uyarısı
+  ✓ nedensiz tıkandı reddedildi
+  ✓ tıkandı yazıldı
+════ T7 · gün sonu özeti defterden: üç bölüm + açık işler ════
+  ✓ özet üretildi
+  ✓ Sultan'a gidenler 3 (is-2 dış yüzey · is-3 geri alınamaz · kartsız kaçış)
+  ✓ içeride bitenler 1 (is-1, 5/5 E)
+  ✓ tıkananlar 1, nedeniyle
+  ✓ açık iş 1 (kartsız kaçış kartı)
+  ✓ kaçış başlığı var, bugün kaçış yok
+  ✓ kaçış özete düşüyor
+  ✓ gerekçe görünüyor
+  ✓ Sultan'ın veto hakkı yazılı
+  ✓ dosyaya yazıldı
+  ✓ liste --acik çalışıyor
+════ T10 · CANLI sınıfı: cron/servis/sunucu işi kartta canlı kanıt ister (retro 17 Eki ders 1) ════
+  ✓ cron kartı açıldı
+  ✓ açılışta söylüyor
+  ✓ canli_gerekir=true, sebep cümledeki kelime
+  ✓ 'buton ekle' kartı canlı istemez
+  ✓ 'sunucu' kelimesi de yeter (ek: Sunucuda → sunucu)
+  ✓ --canli e kelime olmasa da zorunlu kılar
+  ✓ --canli h kelimeye rağmen kaldırır; kararı ve kelimeyi karta yazar (gizli değil)
+  ✓ açılışta 'istenmedi' uyarısı basılır (bağımsız göz görsün)
+  ✓ --canli yalnız e|h
+  ✓ geçersiz cevapla kart yazılmadı
+  ✓ canlı kanıtsız bitti uyarır
+  ✓ yeşil canlı kayıt varken uyarı yok
+  ✓ karta canli_kanit=var işlendi
+  ✓ canli-gerekir E/H okur
+  ✓ alanı olmayan eski kart: cümleden E, 'eski kart' işaretli
+
+── SONUÇ: 52 geçti · 0 kaldı ──
+--- stderr ---
