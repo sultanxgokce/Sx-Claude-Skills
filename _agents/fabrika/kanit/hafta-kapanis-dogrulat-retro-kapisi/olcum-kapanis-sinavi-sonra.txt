@@ -1,0 +1,134 @@
+$ bash /config/projects/_wt/Sx-Claude-Skills-hafta-kapanis-dogrulat-retro-kapisi/hafta-kapanis/scripts/hafta-kapanis.test.sh
+# rc=0 sure=6.5s zaman=2026-10-17T20:57:35+03:00
+--- stdout ---
+— H1 retro becerisi yoksa SARI (sahte yeşil yok)
+  ✓ H1a retro.py bulunamaz → rc=3 (rc=3)
+  ✓ H1b sarı dili
+  ✓ H1c hafta biçimsiz → retro.py hata → rc=2 (rc=2)
+— H2 hiç retro yok → AÇIK
+  ✓ H2a boş hafta → rc=1 AÇIK (rc=1)
+  ✓ H2b K1 kırmızı: BÂNİ iz var retro yok; MİRAHUR serbest
+  ✓ H2c kapı MERKEZ.md üretmedi (salt ölçer)
+  ✓ H2d KAPANIS.md yazıldı, durum AÇIK
+  ✓ H2e onay satırı BOŞ — araç üretmedi (A06)
+— H3 kutu retrosu + merkez iskeleti var, ders/damga yok → AÇIK
+  ✓ H3a fikstür: MERKEZ.md iskeleti
+  ✓ H3b K1 yeşil (BÂNİ OK · MİRAHUR ÇALIŞMADI), K2-K4 kırmızı → rc=1 (rc=1)
+  ✓ H3c K1 yeşil
+  ✓ H3c2 kapı MERKEZ.md'ye dokunmadı (sha aynı; merkez komutu çağrılmaz)
+  ✓ H3c3 kutu retrosu lint düşerse K1 GEÇERSİZ → kırmızı (rc=1)
+  ✓ H3c4 GEÇERSİZ adı
+  ✓ H3d K2 ders yok
+  ✓ H3e K3 damgasız
+  ✓ H3f K4 kaçış + tıkanma sayıldı (eski kaçış dışarıda)
+  ✓ H3g tıkanma anahtarı kart adıyla
+— H4 merkez dolu: dersler + D1 görevler + süzüm damgası + kaçış damgası → ONAY BEKLİYOR
+  ✓ H4a dört kapı yeşil, onay yok → rc=5 ONAY BEKLİYOR (rc=5)
+  ✓ H4b durum
+  ✓ H4c K2 iki ders, ikisi de görev + D1
+  ✓ H4d K4 yeşil
+  ✓ H4e onay hâlâ boş — araç KAPANDI demedi, D1 üretmedi (A06)
+  ✓ H4f onaysız KAPANDI yok
+— H5 onay satırı biçimsiz → AÇIK; H6 D1 biçimli → KAPANDI ve korunur
+  ✓ H5a biçimsiz onay → rc=1 (rc=1)
+  ✓ H5b gerekçe
+  ✓ H5c satır korunur (araç insan satırını ezmez)
+  ✓ H6a D1 onay → rc=0 KAPANDI (rc=0)
+  ✓ H6b durum KAPANDI
+  ✓ H6c yeniden ölçüm onayı korur, KAPANDI kalır (rc=0)
+  ✓ H6d onay satırı aynen
+  ✓ H6e geçerli D1 + kuyruk metni → BİÇİMSİZ (tam satır eşleşmesi), AÇIK (rc=1)
+  ✓ H6f gerekçe
+  ✓ H6g düzeltildi → KAPANDI (rc=0)
+  ✓ H6h kırpık 16 kelime (120 karakter altı) → BİÇİMSİZ, AÇIK (karakter ≠ kelime) (rc=1)
+  ✓ H6i gerekçe kelime sayısı
+  ✓ H6j kırpık 15 kelime → KAPANDI (sınır dahil) (rc=0)
+— H7 K2 kenarları (kopya MERKEZ üstünde)
+  ✓ H7a D1 biçimsiz görev satırı → K2 kırmızı → AÇIK (rc=1)
+  ✓ H7b gerekçe
+  ✓ H7a2 görev D1 başına yabancı metin → biçimsiz (tam eşleşme) (rc=1)
+  ✓ H7a3 gerekçe
+  ✓ H7a4 görev D1 kırpığı 16 kelime → K2 kırmızı (rc=1)
+  ✓ H7a5 gerekçe
+  ✓ H7c ders görevsiz (M2) → AÇIK (rc=1)
+  ✓ H7d eksik ders adı
+  ✓ H7c2 RED satırı dersi KAPSAMAZ (göz tur 2) → AÇIK (rc=1)
+  ✓ H7c3 RED yolu yok
+  ✓ H7e yer tutuculu ders sayılmaz: K2 1 ders yeşil, ama kaçışın bağlandığı M2 artık yazılı değil → K4 kırmızı → AÇIK (rc=1)
+  ✓ H7f yer tutucu ders sayılmadı (K2)
+  ✓ H7g K4 silinen derse bağ kırmızı
+— H8 K4 kenarı
+  ✓ H8a tıkanma damgası silinince AÇIK (rc=1)
+  ✓ H8b eksik anahtar
+  ✓ H8b2 RED damgası kaçışı kapsamaz (göz tur 2) → AÇIK (rc=1)
+  ✓ H8b3 RED'li anahtar eksik sayıldı
+  ✓ H8b4 yazılı olmayan derse bağ (M9) → AÇIK (rc=1)
+  ✓ H8b5 gerekçe
+  ✓ H8c geri alındı → KAPANDI (rc=0)
+  ✓ H8d okunamayan kart → K4 SARI → rc=3 ÖLÇÜLEMEDİ (sessiz atlama yok) (rc=3)
+  ✓ H8e bozuk kart adı
+  ✓ H8f durum ÖLÇÜLEMEDİ (KAPANDI değil)
+  ✓ H8g bozuk kart kalkınca KAPANDI (rc=0)
+— H9 açık haftalar dizinden türetilir
+  ✓ H9a W41 kapanışsız → rc=1 (rc=1)
+  ✓ H9b W41 listede
+  ✓ H9c W42 KAPANDI listede değil
+  ✓ H9d açık hafta yok → rc=0 (rc=0)
+  ✓ H9e retro dizini yok → rc=3 (rc=3)
+— M mutasyon (kopya üstünde; her mutant en az bir kapıyı kızartmalı)
+  ✓ M1 görev D1 denetimi kalkınca biçimsiz damga geçer (kapı yakalar): mutant ısırıldı
+  ✓ M2 K4 eksik denetimi kalkınca damgasız kaçış geçer (kapı yakalar): mutant ısırıldı
+  ✓ M3 onay D1 denetimi kalkınca biçimsiz onay haftayı kapatır (kapı yakalar): mutant ısırıldı
+  ✓ M4 bozuk kart sessiz atlanınca sarı kaybolur (kapı yakalar): mutant ısırıldı
+  ✓ M5-önkoşul: kuyruklu D1 gerçek araçta AÇIK (rc=1)
+  ✓ M5 onay D1 tam eşleşmesi gevşeyince kuyruklu onay kapatır (kapı yakalar): mutant ısırıldı
+  ✓ M6-önkoşul: M9 gerçek araçta AÇIK (rc=1)
+  ✓ M6 yazılı-ders denetimi kalkınca M9 bağı geçer (kapı yakalar): mutant ısırıldı
+  ✓ M7-önkoşul: 16 kelime gerçek araçta AÇIK (rc=1)
+  ✓ M7 kırpık kelime sınırı kalkınca 16 kelimelik onay kapatır (kapı yakalar): mutant ısırıldı
+— H10 K6 Doğrulat → beceri PR · hüküm kanon D13 oracle'ında (tek ölçüm; kapı çağırır, kuralı kopyalamaz)
+  ✓ H10-önkoşul: seans kaydı yokken KAPANDI (K6 yeşil, bunu söyler) (rc=0)
+  ✓ H10-önkoşul2 K6 dili
+  ✓ H10a oracle 'işlenmemiş' → K6 kırmızı → AÇIK rc=1 (rc=1)
+  ✓ H10b eksik seans oracle gerekçesi + DERSLERİYLE
+  ✓ H10b2 oracle bu kökün dogrulat dizinini ölçtü (kural kopyalanmadı, çağrıldı)
+  ✓ H10c KAPANIS.md'de K6 satırı
+  ✓ H10d onay VAR olsa da hafta AÇIK (onay işlenmemiş dersi kapatmaz)
+  ✓ H10p oracle 'beyan var, PR birleşmemiş' → kırmızı, gerekçe oracle'dan (rc=1)
+  ✓ H10p2 gerekçe + dersler
+  ✓ H10e oracle 'hepsi işlendi' → KAPANDI (rc=0)
+  ✓ H10f yeşil dili
+  ✓ H10t oracle '? ölçülemedi' → K6 SARI → rc=3 (ölçülemedi ≠ işlendi) (rc=3)
+  ✓ H10t2 gerekçe
+  ✓ H10y bir seans kırmızı + öteki ölçülemedi → KIRMIZI, ölçülemeyen de raporda (göz #365 tur 3) (rc=1)
+  ✓ H10y2 ölçülemeyen gizlenmedi
+  ✓ H10z oracle rc=2 ve seans adı yok (gh yok) → K6 SARI (rc=3)
+  ✓ H10z2 gerekçe
+  ✓ H10zc oracle rc=1 ama seans adı okunamıyor → SARI (sessiz yeşil yok) (rc=3)
+  ✓ H10za oracle yok (cloudtop #691 birleşmeden) → K6 SARI → ÖLÇÜLEMEDİ (rc=3)
+  ✓ H10za2 gerekçe
+  ✓ H10zb oracle listesindeki SONRAKİ haftanın seansı bu haftayı tutmaz → KAPANDI (rc=0)
+  ✓ H10i ders bölümü olmayan seans → AÇIK (oracle yeşil olsa da) (rc=1)
+  ✓ H10j gerekçe
+  ✓ H10k başka haftanın işlenmemiş seansı bu haftayı tutmaz → KAPANDI (rc=0)
+  ✓ H10l ...ama kendi haftasında (W41) kırmızı (rc=1)
+  ✓ H10m W41 gerekçe
+  ✓ H10n adında tarih olmayan seans dosyası → K6 SARI → rc=3 (bu hafta değil sayılmaz) (rc=3)
+  ✓ H10o gerekçe
+  ✓ H10u 2 seans × 15 ders, işlenmemiş → AÇIK (rc=1)
+  ✓ H10w son seansın son dersi de raporda — kesilmez (göz #365 tur 2)
+  ✓ H10x KAPANIS.md'de de tam liste
+  ✓ M15 rapor kesilince son seansın dersleri kaybolur (kapı yakalar): mutant ısırıldı
+  ✓ M16 dersler rapordan düşünce yalnız seans adı kalır (kapı yakalar): mutant ısırıldı
+  ✓ M8 oracle'ın ✗ satırları yok sayılınca işlenmemiş seans geçer (kapı yakalar): mutant ısırıldı
+  ✓ M10 K6 olc'a bağlı olmazsa işlenmemiş seans haftayı kapatır (kapı yakalar): mutant ısırıldı
+  ✓ M18 oracle yokken sessiz geçilince işlenmemiş hafta kapanır (kapı yakalar): mutant ısırıldı
+  ✓ M19 oracle rc=2 (adsız) yeşil sayılınca ölçülemeyen hafta kapanır (kapı yakalar): mutant ısırıldı
+  ✓ M20 oracle rc=1 ama ad okunamayınca sessiz geçilirse yeşil olur (kapı yakalar): mutant ısırıldı
+  ✓ M14 oracle '?' satırı yok sayılınca ölçülemeyen PR yeşil olur (kapı yakalar): mutant ısırıldı
+  ✓ M17 kırmızı rapor ölçülemeyeni yutunca sorun görünmez (kapı yakalar): mutant ısırıldı
+  ✓ M11 tarihsiz seans sessiz atlanınca sarı kaybolur (kapı yakalar): mutant ısırıldı
+  ✓ M21 oracle listesi haftaya süzülmezse sonraki haftanın seansı W42'yi tutar (kapı yakalar): mutant ısırıldı
+
+GECEN=118 DUSEN=0
+--- stderr ---
