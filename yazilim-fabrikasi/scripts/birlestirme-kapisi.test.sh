@@ -231,6 +231,21 @@ M8="$PKG/mutant8.sh"; sed 's/^\[ ! -f "\$KART" \] || \[ "\$ckz" = "1" \] || {/tr
 grep -q '^true || {' "$M8"; g $? "T11q4 mutant 8 üretildi (zaman-okunamadı kapısı kaldırıldı)"
 bash "$M8" is-l --sessiz >/dev/null 2>&1; [ $? -ne 3 ]; g $? "T11q5 mutant 8: ölçülemediğini söylemiyor → T11q2 bu mutantta düşerdi"
 
+# 🔴 göz #353 tur 2: dilimsiz kart zamanı ↔ dilimli ateşleme → TypeError değil, karşılaştırma yerel dilimde yapılır; python düşerse rc=3
+python3 - <<PY
+import json;p='$T/_agents/fabrika/kartlar/is-l.json';k=json.load(open(p));k['zaman']='2020-01-01T00:00:00';json.dump(k,open(p,'w'))   # dilimsiz, eski tarih
+PY
+CIKTI="$(bash "$G" is-l 2>&1)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "T11r dilimsiz kart zamanı: çökmez, yerel dilimde bağlanır → geçer"
+M9="$PKG/mutant9.sh"; sed 's/return d.astimezone() if d.tzinfo is None else d/return d/' "$G" > "$M9"; chmod +x "$M9"
+grep -q '^        return d$' "$M9"; g $? "T11r2 mutant 9 üretildi (dilim düzeltmesi kaldırıldı)"
+CIKTI="$(bash "$M9" is-l 2>&1)"; RC=$?
+[ "$RC" -eq 3 ]; g $? "T11r3 mutant 9: TypeError → python düşer → kapı ÖLÇÜLEMEDİ rc=3 der (rc=1 'canlı yok' DEĞİL)"
+grep -q "DÜŞTÜ" <<<"$CIKTI"; g $? "T11r4 düşme sebebi yazılı"
+M10="$PKG/mutant10.sh"; sed 's/^\[ "\$cpy_rc" -eq 0 \] || {/true || {/' "$G" > "$M10"; chmod +x "$M10"
+sed -i 's/return d.astimezone() if d.tzinfo is None else d/return d/' "$M10"
+bash "$M10" is-l --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T11r5 mutant 10 (rc denetimi de kaldırıldı): çöküş 'canlı yok' rc=1'e dönüşüyor → T11r3 bu mutantta düşerdi"
+
 echo "════ T12 · MUTASYON: canlı kontrolleri kaldırılınca kapı açılır (kapı gerçek, süs değil) ════"
 M3="$PKG/mutant3.sh"; sed 's/^\s*\[ "\$cg" = "E" \] && \[ "\$cy" -eq 0 \]/false/' "$G" > "$M3"; chmod +x "$M3"
 grep -q '^false' "$M3"; g $? "T12a mutant 3 üretildi (kart canlı şartı kaldırıldı)"

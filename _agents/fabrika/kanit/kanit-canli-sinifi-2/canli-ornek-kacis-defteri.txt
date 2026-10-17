@@ -1,5 +1,5 @@
 $ tail -n 5 -- /config/projects/Nexus/_agents/fabrika/kacis-defteri.log
-# kaynak=dosya:/config/projects/Nexus/_agents/fabrika/kacis-defteri.log tur=dosya desen=KAPISIZ en_az=1 son=5 atesleme=5 rc=0 sure=0.0s zaman=2026-10-17T14:17:07+03:00
+# kaynak=dosya:/config/projects/Nexus/_agents/fabrika/kacis-defteri.log tur=dosya desen=KAPISIZ en_az=1 son=5 atesleme=5 rc=0 sure=0.0s zaman=2026-10-17T14:19:38+03:00
 --- stdout ---
 2026-10-15T09:48:12Z | KAPISIZ | Sultan sohbette 'olur birlestir' (15 Eki); kart filo-havuz-toplayici daralt: 4 tur 4/E, 12 kapi, CI yesil; havuz dosyasi depo disi | FABRIKA_KAPISIZ="Sultan sohbette 'olur birlestir' (15 Eki); kart filo-havuz-toplayici daralt: 4 tur 4/E, 12 kapi, CI yesil; havuz dosyasi depo disi" gh pr merge 1134 --repo sultanxgokce/Nexus --squash --delete-branch 2>&1 | tail -1; echo "1134 rc=$?"
 2026-10-15T09:48:17Z | KAPISIZ | Sultan sohbette 'olur birlestir' (15 Eki); kart posta-sevk daralt (BANI): tur 4 4/H tek bulgu okundu gorunurlugu ayri kartta (#1138), CI yesil | FABRIKA_KAPISIZ="Sultan sohbette 'olur birlestir' (15 Eki); kart posta-sevk daralt (BANI): tur 4 4/H tek bulgu okundu gorunurlugu ayri kartta (#1138), CI yesil" gh pr merge 1136 --repo sultanxgokce/Nexus --squash --delete-branch 2>&1 | tail -1; echo "1136 rc=$?"

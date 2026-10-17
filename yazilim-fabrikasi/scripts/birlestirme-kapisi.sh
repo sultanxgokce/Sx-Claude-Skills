@@ -97,12 +97,16 @@ fi
 # 🔴 GÖZ TUR 1 (PR #352): "herhangi bir yeşil canlı kaydı yetiyor; eski ya da ilgisiz kayıt yeni cron değişikliğini geçirir" — doğru.
 #    Kayıt bu İŞE BAĞLANIR: ölçüm zamanı DA son ateşleme saati DE kartın açılış zamanından SONRA olmalı. Bağlanamayan yeşil kayıt
 #    sayılmaz, sebebi basılır. Kapı sayılan kaydın komutunu ve kaynağını da basar — göz "neyi okudu" diye bakabilsin.
-cy=0; cs=0; cilk=""; ckopuk=""; ckz=1
+cy=0; cs=0; cilk=""; ckopuk=""; ckz=1; cpy_rc=0
 if [ -f "$DZ/KANIT.json" ]; then
-  eval "$(python3 - "$DZ/KANIT.json" "$KART" <<'PY'
+  # 🔴 GÖZ #353 tur 2: python bloğu düşerse eval boş kalıyor ve kapı "canlı yok" (rc=1) diyordu → alt sürecin rc'si ölçülür, düşerse ÖLÇÜLEMEDİ
+  cpy_out="$(python3 - "$DZ/KANIT.json" "$KART" <<'PY'
 import json,sys,shlex,datetime
 def P(s):
-    try: return datetime.datetime.fromisoformat(s)
+    # 🔴 GÖZ #353 tur 2: dilimsiz (naive) ISO ile dilimli karşılaştırma TypeError veriyordu → dilimsiz değer kutunun yerel dilimine alınır
+    try:
+        d=datetime.datetime.fromisoformat(s)
+        return d.astimezone() if d.tzinfo is None else d
     except Exception: return None
 try: m=json.load(open(sys.argv[1],encoding="utf-8"))
 except Exception: m={}
@@ -130,9 +134,11 @@ if bagli_l:
 else: print("cilk=''")
 print("ckopuk="+shlex.quote("; ".join(f"{k.get('etiket')}: {n}" for k,n in kopuk)))
 PY
-)"
+)"; cpy_rc=$?
+  [ "$cpy_rc" -eq 0 ] && eval "$cpy_out"
 fi
 cs_engel=0
+[ "$cpy_rc" -eq 0 ] || { _h "canlı kayıt değerlendirmesi DÜŞTÜ (python rc=$cpy_rc) — ÖLÇÜLEMEDİ, 'canlı yok' sayılmaz"; olcemedi=$((olcemedi+1)); }
 # 🔴 GÖZ #353 tur 1: kartın açılış zamanı okunamazsa işe bağlama ÖLÇÜLEMEZ — bu "bağlı kayıt yok" (rc=1) değil, ÖLÇÜLEMEDİ (rc=3).
 [ ! -f "$KART" ] || [ "$ckz" = "1" ] || { _h "kartın açılış zamanı ('zaman') okunamadı — canlı kaydın işe bağlanması ÖLÇÜLEMEDİ"; olcemedi=$((olcemedi+1)); }
 [ -n "$ckopuk" ] && _y "  ⚠ canlı kaydı işe bağlanamadı (sayılmaz): $ckopuk"
