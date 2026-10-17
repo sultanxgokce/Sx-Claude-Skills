@@ -4,10 +4,10 @@
 // Kullanım: node kapi-uyum.mjs <bugun.mjs yolu> <ornek-cipa.md> <beklenen.json>
 // Çıkış: 0 uyumlu · 1 uyumsuz (fark basılır) · 2 kullanım/okuma hatası
 //
-// Kapının 1.5.0'dan ÖNCEKİ ayrıştırıcısı iki şeyi bilmez; bunlar AÇIKÇA sayılır, sessizce yutulmaz:
-//   · sahip / kanit alanları yoktur → onun metni "(sahip: …)" taşır, notu "kanıt: …" parçasını taşır
-//   · "ertelendi" durumu yoktur → "-" imli her satır onda "geri"dir
-// Bu iki fark "BİLİNEN EKSİK" diye basılır (rc 0); başka HER fark uyumsuzluktur (rc 1).
+// 🔴 MUAFİYET YOK (bağımsız göz tur 2): ilk yazımda sahip/kanit alanı yokluğu ve "ertelendi"nin "geri"
+//    okunması "bilinen eksik" diye rc 0 alıyordu — yani aracın ölçmek için var olduğu uyumsuzluk YEŞİL
+//    basılıyordu. Artık HER fark uyumsuzluktur (rc 1). Eski kapının hangi kuralı bilmediği yine adıyla
+//    basılır (onarımı kolaylaştırsın diye), ama rc'yi kurtarmaz.
 import fs from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
@@ -51,6 +51,6 @@ bek.maddeler.forEach((b, i) => {
     else fark.push(`${ad}.durum: kapı=${k.durum} beklenen=${b.durum}`);
   }
 });
-for (const e of eksik) console.log('  ⚠ BİLİNEN EKSİK (kapı 1.5.0 dilbilgisini henüz benimsemedi):', e);
+for (const e of eksik) { console.log('  ✗ kapı 1.5.0 dilbilgisini benimsememiş:', e); fark.push('eksik kural: ' + e); }
 if (fark.length) { console.log('✗ UYUMSUZ —', fark.length, 'fark:'); fark.forEach((f) => console.log('  •', f)); process.exit(1); }
-console.log(`✓ kapı ayrıştırıcısı ortak fikstürle uyumlu (${o.maddeler.length} madde${eksik.size ? `, ${eksik.size} bilinen eksik` : ', eksiksiz'})`);
+console.log(`✓ kapı ayrıştırıcısı ortak fikstürle BİREBİR uyumlu (${o.maddeler.length} madde)`);

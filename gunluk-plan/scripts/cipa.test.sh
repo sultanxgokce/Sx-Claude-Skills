@@ -185,7 +185,7 @@ echo "── kokpit kapısıyla uyum (terminal-onar/kapi/bugun.mjs — ortak fik
 KAPI_BG="${GUNLUK_PLAN_KAPI_BUGUN:-$KOK/../../terminal-onar/kapi/bugun.mjs}"
 if [ -f "$KAPI_BG" ] && command -v node >/dev/null 2>&1; then
   node "$SEMA/kapi-uyum.mjs" "$KAPI_BG" "$SEMA/ornek-cipa.md" "$SEMA/beklenen.json" >/dev/null 2>&1
-  kapi "T17 kapının ayrıştırıcısı ortak fikstürü aynı okur (yalnız BİLİNEN EKSİK'ler serbest)" "0" "$?"
+  kapi "T17 kapının ayrıştırıcısı ortak fikstürü BİREBİR okur (muafiyet yok)" "0" "$?"
   # pozitif kontrol: '-' satırını atlayan bir kapı UYUMSUZ sayılmalı (araç farkı görebiliyor mu?)
   sed 's/\[\(\[\)\? ~xX-\]/[ ~xX]/' "$KAPI_BG" > "$T/bugun-bozuk.mjs"
   grep -q '\[ ~xX\]' "$T/bugun-bozuk.mjs" || sed -i 's/\[\([ ~xX]*\)-\]/[\1]/' "$T/bugun-bozuk.mjs"

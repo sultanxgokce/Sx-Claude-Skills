@@ -1,7 +1,7 @@
 {
   "is": "gunluk-plan-tablo-kapanis",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-17T15:43:00+03:00",
+  "guncelleme": "2026-10-17T15:45:44+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -141,7 +141,54 @@
       "renk": "yesil",
       "zaman": "2026-10-17T15:43:00+03:00",
       "sure_sn": 8.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-uyum-355-kati",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-uyum-355-kati-sonra.txt",
+      "sha256": "179937dd4b7b73e7cbc8c2f1804b0f0e8c5157d2cf03acdc3c7996462978ad7c",
+      "komut": [
+        "node",
+        "gunluk-plan/sema/kapi-uyum.mjs",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bugun-355.mjs",
+        "gunluk-plan/sema/ornek-cipa.md",
+        "gunluk-plan/sema/beklenen.json"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T15:45:44+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-uyum-onerilen-yama",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-uyum-onerilen-yama-sonra.txt",
+      "sha256": "fa800347e95898d82ce56a8f324f2ec03ccbfb961308c0eb19899b36340e26de",
+      "komut": [
+        "node",
+        "gunluk-plan/sema/kapi-uyum.mjs",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bugun-oneri.mjs",
+        "gunluk-plan/sema/ornek-cipa.md",
+        "gunluk-plan/sema/beklenen.json"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:45:44+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "dosya",
+      "etiket": "bugun-mjs-oneri-yamasi",
+      "asama": "sonra",
+      "dosya": "dosya-bugun-mjs-oneri-yamasi-sonra.diff",
+      "sha256": "d17b2a66794178b8915ada4523924b6fd5ea15afc58d2e5ac63b21f06d5e1abd",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bugun-oneri.diff",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:45:44+03:00"
     }
   ],
-  "imza": "68a0c5562d737c8b3f01969ea0be5439bcba35acd3c2f541dc4c5fc5d650d2ff"
+  "imza": "5a43c98fc115d746eafe0c7f02fbfeea8ca223205c14464879c83bdc90f5d1b7"
 }
