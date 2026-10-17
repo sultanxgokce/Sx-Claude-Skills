@@ -181,6 +181,21 @@ kapi "T15 tablo --json yaşayan çıpada da aynı alanları verir" "MUAVİN|bitt
 GUNLUK_PLAN_AJAN="yok-boyle" bash "$ARAC" kapanis >/dev/null 2>&1; kapi "T16 çıpa yoksa kapanış rc=1 (ölçemedim ≠ temiz)" "1" "$?"
 export GUNLUK_PLAN_AJAN="sinav"
 
+echo "── kokpit kapısıyla uyum (terminal-onar/kapi/bugun.mjs — ortak fikstür)"
+KAPI_BG="${GUNLUK_PLAN_KAPI_BUGUN:-$KOK/../../terminal-onar/kapi/bugun.mjs}"
+if [ -f "$KAPI_BG" ] && command -v node >/dev/null 2>&1; then
+  node "$SEMA/kapi-uyum.mjs" "$KAPI_BG" "$SEMA/ornek-cipa.md" "$SEMA/beklenen.json" >/dev/null 2>&1
+  kapi "T17 kapının ayrıştırıcısı ortak fikstürü aynı okur (yalnız BİLİNEN EKSİK'ler serbest)" "0" "$?"
+  # pozitif kontrol: '-' satırını atlayan bir kapı UYUMSUZ sayılmalı (araç farkı görebiliyor mu?)
+  sed 's/\[\(\[\)\? ~xX-\]/[ ~xX]/' "$KAPI_BG" > "$T/bugun-bozuk.mjs"
+  grep -q '\[ ~xX\]' "$T/bugun-bozuk.mjs" || sed -i 's/\[\([ ~xX]*\)-\]/[\1]/' "$T/bugun-bozuk.mjs"
+  node "$SEMA/kapi-uyum.mjs" "$T/bugun-bozuk.mjs" "$SEMA/ornek-cipa.md" "$SEMA/beklenen.json" >/dev/null 2>&1
+  kapi "T18 satır atlayan (bozuk) kapı UYUMSUZ yakalanır — ölçüm aracı farkı görüyor" "1" "$?"
+else
+  # 🟡 ÖLÇEMEDİM ≠ yeşil: kapının ayrıştırıcısı bu depoda yok (#355 birleşmeden) ya da node yok
+  echo "  🟡 T17/T18 ÖLÇÜLEMEDİ: kapı ayrıştırıcısı yok ($KAPI_BG) — uyum bu koşumda sınanmadı"
+fi
+
 echo
 echo "SONUÇ: $gecen geçti · $kalan kaldı"
 [ "$kalan" -eq 0 ]

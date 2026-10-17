@@ -14,8 +14,10 @@ _cipa_bul() {
   [ -n "${GUN_ORTASI_GERCEK_CIPA:-}" ] && { printf '%s' "$GUN_ORTASI_GERCEK_CIPA"; return; }
   local a="/config/.claude/skills/gunluk-plan/scripts/cipa.sh"
   local b="$D/../../gunluk-plan/scripts/cipa.sh"
-  [ -f "$a" ] && { printf '%s' "$a"; return; }
+  # 🔴 DEPO KARDEŞİ ÖNCE (1.1.0, bağımsız göz tur 1 bağlamı): kurulu kopya önce gelince sınav DEĞİŞEN
+  #    kodu değil kutudaki ESKİ kurulumu ölçüyordu — yeni tablo/kapanış sınavda hiç koşmuyordu.
   [ -f "$b" ] && { printf '%s' "$b"; return; }
+  [ -f "$a" ] && { printf '%s' "$a"; return; }
   printf '%s' "$a"
 }
 GERCEK_CIPA="$(_cipa_bul)"
@@ -79,6 +81,8 @@ kos env GUN_ORTASI_GUN=abc >/dev/null; kapi "T10 sayı olmayan pencere → rc=2"
 # ── T11 · GERÇEK cipa.sh ile ─────────────────────────────────────────────
 if [ -f "$GERCEK_CIPA" ]; then
   mkdir -p "$SK/gunluk-plan/scripts"; cp "$GERCEK_CIPA" "$SK/gunluk-plan/scripts/cipa.sh"
+  # 1.1.0: tablo ve sayım çıpa aracının ayrıştırıcısından gelir (tek şablon) — gerçek kurulumdaki gibi yanına konur
+  cp "$(dirname "$GERCEK_CIPA")/tablo.py" "$SK/gunluk-plan/scripts/tablo.py"
   # 🔴 ÇIPA YOLU ARAÇTAN SORULUR, SINAVA GÖMÜLMEZ (2026-10-05). Eskiden burada sabit
   #    "$CF" yazılıydı; cipa.sh ajan-başına dosyaya
   #    geçtiğinde sınav var olmayan dosyayı grep'ledi ve 8 kapı birden kırmızıya döndü.
@@ -90,6 +94,13 @@ if [ -f "$GERCEK_CIPA" ]; then
   (cd "$B" && bash "$SK/gunluk-plan/scripts/cipa.sh" tazele --madde 2 --durum yarim >/dev/null)
   O11="$(kos env)"
   kapi "T11 gerçek çıpa: [x] kapalı (notunda 'bekliyor' geçse de) · [~] ve [ ] açık → 2/1" "$(oz "$O11" cipa_acik)/$(oz "$O11" cipa_kapali)" "2/1"
+  # T16 · TEK ŞABLON fiilen basılır (bağımsız göz tur 1: yalnız talimatta yazılıydı, çıktıda ölçülmüyordu)
+  kapi "T16 1. bölüm /gunluk-plan'ın standart tablosunu basar (madde · sahip · durum · kanıt)" \
+       "$(printf '%s\n' "$O11" | grep -c '| # | Madde | Sahip | Durum | Kanıt |')/$(printf '%s\n' "$O11" | grep -c '| 2 | B | — | yarım | — |')" "1/1"
+  # T17 · ayrıştırıcı yoksa (eski kurulum) sessiz grep'e DÜŞMEZ — ölçemedim der
+  mv "$SK/gunluk-plan/scripts/tablo.py" "$SK/gunluk-plan/scripts/tablo.py.yok"
+  O17="$(kos env)"; mv "$SK/gunluk-plan/scripts/tablo.py.yok" "$SK/gunluk-plan/scripts/tablo.py"
+  kapi "T17 ayrıştırıcı yoksa çıpa sayımı ? + ölçemedim (sessiz yedek sayım yok)" "$(oz "$O17" cipa_acik)/$(printf '%s\n' "$O17" | grep -c 'tabloya çevrilemedi')" "?/1"
   # T11c başka klasörden çağrılınca da KUTUNUN çıpası okunur (kör-1: `cd $KOK` silen mutant yaşıyordu)
   mkdir -p "$TMP/baska"; git -C "$TMP/baska" init -q
   O11c="$(cd "$TMP/baska" && GUN_ORTASI_SK="$SK" GUN_ORTASI_KOK="$B" bash "$ARAC" 2>&1)"

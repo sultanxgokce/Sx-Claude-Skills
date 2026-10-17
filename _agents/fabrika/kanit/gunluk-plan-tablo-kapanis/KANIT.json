@@ -1,7 +1,7 @@
 {
   "is": "gunluk-plan-tablo-kapanis",
   "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-17T15:34:37+03:00",
+  "guncelleme": "2026-10-17T15:43:00+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -76,7 +76,72 @@
       "rc": 0,
       "renk": "yesil",
       "zaman": "2026-10-17T15:34:37+03:00"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cipa-sinavi-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-cipa-sinavi-tur2-sonra.txt",
+      "sha256": "d81571e61aacf89ca34a9514c3f90636296c10039c8af177a17b25c7a35f1f7b",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/cipa.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:42:47+03:00",
+      "sure_sn": 5.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cipa-sinavi-kapi-355-ile",
+      "asama": "sonra",
+      "dosya": "olcum-cipa-sinavi-kapi-355-ile-sonra.txt",
+      "sha256": "dcaad143d6efd924249d856914521bacd42e1afc56fc4cdb82da6022a3c28eb7",
+      "komut": [
+        "env",
+        "GUNLUK_PLAN_KAPI_BUGUN=/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bugun-355.mjs",
+        "bash",
+        "gunluk-plan/scripts/cipa.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:42:51+03:00",
+      "sure_sn": 4.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-uyum-355",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-uyum-355-sonra.txt",
+      "sha256": "98e49fa863a6043fd66834502632583db845600744746b9d456444bc435d6d67",
+      "komut": [
+        "node",
+        "gunluk-plan/sema/kapi-uyum.mjs",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bugun-355.mjs",
+        "gunluk-plan/sema/ornek-cipa.md",
+        "gunluk-plan/sema/beklenen.json"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:42:51+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gun-ortasi-sinavi-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-gun-ortasi-sinavi-tur2-sonra.txt",
+      "sha256": "723a270a87a16fe82a59a1ef59a34d9a8ef3b29b9af692b8f0961ce201cbc13f",
+      "komut": [
+        "bash",
+        "gun-ortasi/scripts/kalan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:43:00+03:00",
+      "sure_sn": 8.7
     }
   ],
-  "imza": "1b6701cee03baddd0a5b9e05f12bb3e1547ca30714c02eb1e29010deae83495d"
+  "imza": "68a0c5562d737c8b3f01969ea0be5439bcba35acd3c2f541dc4c5fc5d650d2ff"
 }
