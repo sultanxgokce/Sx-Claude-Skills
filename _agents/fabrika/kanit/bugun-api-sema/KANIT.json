@@ -1,0 +1,74 @@
+{
+  "is": "bugun-api-sema",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-17T17:02:12+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "fikstur-uyumu",
+      "asama": "once",
+      "dosya": "olcum-fikstur-uyumu-once.txt",
+      "sha256": "50b1622341048e963f0b51a013e40fe17b746739202dca01e8b03b93ac673714",
+      "komut": [
+        "node",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/bugun-sema-prova/sema/kapi-uyum.mjs",
+        "/tmp/tmp.vgiN011aBG/bugun.mjs",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/bugun-sema-prova/sema/ornek-cipa.md",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/bugun-sema-prova/sema/beklenen.json"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T17:02:04+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "fikstur-uyumu",
+      "asama": "sonra",
+      "dosya": "olcum-fikstur-uyumu-sonra.txt",
+      "sha256": "7d21aedb7cf001a6bf5a0f7abebf9365e3c5897fbd3b7332a2cac1d49076e27c",
+      "komut": [
+        "node",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/bugun-sema-prova/sema/kapi-uyum.mjs",
+        "terminal-onar/kapi/bugun.mjs",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/bugun-sema-prova/sema/ornek-cipa.md",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/bugun-sema-prova/sema/beklenen.json"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T17:02:04+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bugun-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-bugun-sinavi-sonra.txt",
+      "sha256": "a9b31bd6e01318c2f6adb634a9c73191c41859a6e96926a7ee8366ed839d5a43",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/bugun.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T17:02:04+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sunucu-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-sunucu-sinavi-sonra.txt",
+      "sha256": "5a9f7cc86720c365dbb65aef628a8d7346d49b420e47d61cf706c0a3eb33f0ce",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T17:02:12+03:00",
+      "sure_sn": 6.5
+    }
+  ],
+  "imza": "85b49f675ec8ef4eee34205019ad7c240012399e205c9c5e7e02cdb4f3ddca85"
+}
