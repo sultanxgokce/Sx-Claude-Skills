@@ -1,0 +1,19 @@
+{
+  "is": "kadro-dava-kurali-b1-2",
+  "cumle": "Dava Rafı B1 devamı: devral kilidi yaşa değil sahip pid'ine bakar (canlı sahip asla silinmez)",
+  "istedi": "SERDAR",
+  "aldi": "BERİD",
+  "zaman": "2026-10-17T15:55:57+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

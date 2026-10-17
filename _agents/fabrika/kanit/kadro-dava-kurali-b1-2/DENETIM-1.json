@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "kadro-dava-kurali-b1-2",
+  "pr": "358",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T15:58:33+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 15630,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 3,
+    "bayt": 24676
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "E",
+    "ozet": "Devral temizleme kararı yaştan sahip PID’inin canlılığına çevrilmiş ve canlı/eski sahip ile ölü sahip senaryoları sınanmış; yani iş kartındaki doğru hedefe gidilmiş. Ancak doğrulama ile unlink atomik olmadığından yarış sırasında başka bir canlı sahibin yeni devral kilidi silinebilir; “canlı sahip asla silinmez” güvencesi sağlanmadığı için ciddi hata var.",
+    "bulgular": [
+      {
+        "ne": "Devral dosyasının içeriğini ikinci kez doğrulamak ile unlink arasında yarış penceresi var. İki takipçi aynı ölü devralı okuduğunda biri eski dosyayı silip kendi canlı devralını oluşturduktan sonra diğeri doğrulamayı geçmiş durumdaysa, ikinci takipçi yeni canlı devralı silebilir; bu doğrudan iş kartındaki güvenceyi ihlal eder.",
+        "kanit": "Üretim kodunda koşul `if (olu && oku(d) === dc) fs.unlinkSync(d)` biçiminde; son `oku(d)` ile `unlinkSync(d)` ayrı işlemler. Değişiklik yorumunda da “okuma-silme arası kalan pencere, iki takipçinin aynı ölü devrali yarışı, kapatılamadı” denerek pencere açıkça kabul edilmiş. DV32c’nin 400 ms’lik gözlemi yalnız görülen koşuda karşılıklı dışlamayı gösterir, bu zamanlama penceresinin imkânsızlığını kanıtlamaz.",
+        "konum": "terminal-onar/kapi/kilit.mjs:44-46 ve dosya başı devral-kilidi açıklaması",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve iki kayıt da yeşil; hedefe özel kilit sınavı 8/8, daha geniş kapı sınavı da başarılı. Bununla birlikte kanıt önce/sonra ölçüm çifti değil ve eşzamanlılık sınavının tek başarılı koşusu, kodda ve yorumda görülen doğrulama-unlink yarışını dışlamıyor."
+  }
+}
