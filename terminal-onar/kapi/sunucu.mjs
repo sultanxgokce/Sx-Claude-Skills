@@ -535,6 +535,8 @@ const sunucu = http.createServer(async (req, res) => {
           if (!KOLTUK_AD_DESEN.test(ad)) return json(res, 400, { hata: 'Oturum adı geçersiz.' });
           if (kd.kisiler.some((k) => k.oturum && k.oturum.ad === ad)) return json(res, 409, { hata: 'Bu oturum kayıtlı bir kişinin — kapatmak yerine dondur.' });
           if (!kd.kayitsiz.some((o) => o.ad === ad)) return json(res, 404, { hata: 'Böyle bir kayıtsız oturum yok (kapanmış olabilir).' });
+          // KAPAT KORUMASI (2.17.0): içinde Claude çalışan oturum kapatılmaz — kayıt okunamasa da canlı ajan öldürülmez
+          if (kd.kayitsiz.some((o) => o.ad === ad && !o.kapatilabilir)) return json(res, 409, { hata: 'Bu oturumda Claude çalışıyor — kapatılmaz. Kayıtta görünmüyorsa önce kadro kaydını düzelt.' });
           if (!(await kapat(ad))) return json(res, 502, { hata: 'Oturum kapatılamadı.' });
           izYaz(`kapat ${JSON.stringify(ad)}`);
           return json(res, 200, { tamam: true, mesaj: `${ad} kapatıldı.` });

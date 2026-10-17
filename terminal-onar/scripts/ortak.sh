@@ -42,6 +42,37 @@ esac; fi
 KUTU_BUYUK="$(printf '%s' "$KUTU" | tr '[:lower:]-' '[:upper:]_')"
 
 PROJE="${TO_PROJE:-/config/projects/$KUTU}"
+# 🔴 KADRO KAYIT KÖKÜ (2.17.0 · gorev_01M554PCYA0HWM6TM4KXY4E72V, ölçüldü 17 Eki): kapı kaydı $PROJE altında arar. Merkez kutusunda
+#    (code) $PROJE=/config/projects/code bir iskelettir, ekibin kaydı başka depodadır → kapı 0 üye okudu, sekiz canlı ajanı
+#    "kayıtsız oturum" saydı ve Sultan'a tek eylem olarak "Oturumu kapat" sundu. Kutu adı koda GÖMÜLMEZ: kutu kendi yerinde
+#    $PROJE/.oda/ortam dosyasına kayıt yolunu yazar. Dosya SOURCE EDİLMEZ; yalnız İZİN LİSTESİ (AILE_REGISTRY · ISKAN_REGISTRY),
+#    yalnız mutlak yol, yalnız var olan dosya kabul edilir. Açık ortam (ör. sınavın verdiği) her zaman kazanır.
+ODA_ORTAM="${TO_ODA_ORTAM:-$PROJE/.oda/ortam}"
+ODA_ORTAM_RED=0
+oda_ortam_yukle() {  # → izinli ve geçerli satırları export eder; reddedilenleri ODA_ORTAM_RED'de sayar (içerik basmaz)
+  local satir ad deger
+  [ -f "$ODA_ORTAM" ] || return 0
+  ODA_ORTAM_RED=0
+  while IFS= read -r satir || [ -n "$satir" ]; do
+    satir="${satir%$'\r'}"
+    case "$satir" in ''|'#'*) continue ;; esac
+    ad="${satir%%=*}"; deger="${satir#*=}"
+    case "$ad" in AILE_REGISTRY|ISKAN_REGISTRY) ;; *) ODA_ORTAM_RED=$((ODA_ORTAM_RED+1)); continue ;; esac
+    case "$deger" in /*) ;; *) ODA_ORTAM_RED=$((ODA_ORTAM_RED+1)); continue ;; esac
+    [ -f "$deger" ] || { ODA_ORTAM_RED=$((ODA_ORTAM_RED+1)); continue; }
+    [ -n "${!ad:-}" ] && continue    # açık ortam kazanır (dolaylı okuma; eval yok)
+    export "$ad=$deger"
+  done < "$ODA_ORTAM"
+}
+oda_ortam_yukle
+# Kapıya giden kayıt ortamı — TEK yerde üretilir (onar.sh kapıyı bununla başlatır; sınav bunu çağırıp ölçer).
+# TO_PROJE de geçer: kapı kökü kendisi türetmesin, kabukla aynı kökü görsün.
+kapi_kayit_ortami() {
+  printf 'TO_PROJE=%q' "$PROJE"
+  [ -n "${AILE_REGISTRY:-}" ] && printf ' AILE_REGISTRY=%q' "$AILE_REGISTRY"
+  [ -n "${ISKAN_REGISTRY:-}" ] && printf ' ISKAN_REGISTRY=%q' "$ISKAN_REGISTRY"
+  return 0
+}
 DURUM_DIZ="${TO_DURUM_DIZ:-/config/.terminal-onar}"
 GUNLUK="$DURUM_DIZ/gunluk.log"
 ANA_TMUX="${TO_ANA_TMUX:-$KUTU-ana}"

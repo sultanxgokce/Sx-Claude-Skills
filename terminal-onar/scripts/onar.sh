@@ -121,7 +121,7 @@ if [ $WEB_YENILE = 1 ] || ! kapi_saglam; then
     # Parola tmux komutuna YAZILMAZ: kapıyı başlatan kabuk onu env dosyasından kendisi okur.
     # Rapor dizini kabuk-kaçışlı girer (printf %q): boşluk/metakarakter içeren yol komutu bölemez (bağımsız göz, tur 1).
     tmux new-session -d -s "$KAPI_TMUX" \
-      "set -a; . $ENV_DOSYA; set +a; KAPI_PORT=$KAPI_PORT KAPI_TTYD_SOKET=$TTYD_SOKET TO_ANA_TMUX=$ANA_TMUX TO_DURUM_DIZ=$DURUM_DIZ KAPI_TABAN=$TABAN KAPI_RAPOR_DIZ=$(printf %q "$RAPOR_DIZ") TO_KUTU=$KUTU exec node $KAPI_DIZ/sunucu.mjs >> $DURUM_DIZ/kapi.log 2>&1"
+      "set -a; . $ENV_DOSYA; set +a; KAPI_PORT=$KAPI_PORT KAPI_TTYD_SOKET=$TTYD_SOKET TO_ANA_TMUX=$ANA_TMUX TO_DURUM_DIZ=$DURUM_DIZ KAPI_TABAN=$TABAN KAPI_RAPOR_DIZ=$(printf %q "$RAPOR_DIZ") TO_KUTU=$KUTU $(kapi_kayit_ortami) exec node $KAPI_DIZ/sunucu.mjs >> $DURUM_DIZ/kapi.log 2>&1"
     bekle_saglam kapi_saglam "$KAPI_BEKLE" || true
     kapi_saglam && gunluk "K0 kapı başlatıldı" || gunluk "K0 HATA: kapı ayağa kalkmadı ($(kapi_kod))"
   fi

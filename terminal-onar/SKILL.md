@@ -1,9 +1,28 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.16.0
+version: 2.17.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.17.0 · kadro kayıt kökü + kapat koruması (17 Eki · gorev_01M554PCYA0HWM6TM4KXY4E72V · SERDAR ACİL)
+**Ölçülen hata:** merkez kutusunda (code) Kadro "0 kişi · 8 kayıtsız" gösteriyordu. Kapı kaydı `$PROJE` altında arıyor; code'da
+`$PROJE=/config/projects/code` bir iskelet, ekibin kaydı Nexus deposunda → 0 üye; sekiz canlı ajan "kayıtsız oturum" sayıldı ve
+satırlarında **tek eylem "Oturumu kapat"** idi.
+- **Kutuya özel kayıt ayarı:** `<proje>/.oda/ortam` — kutu adı koda gömülmez, kutu kendi yerinde yazar. SOURCE EDİLMEZ; yalnız izin
+  listesi (`AILE_REGISTRY` · `ISKAN_REGISTRY`), yalnız mutlak ve var olan dosya; açık ortam her zaman kazanır; reddedilen satır
+  sayılır, içerik basılmaz. Merkez kutusu için:
+  ```
+  AILE_REGISTRY=/config/projects/Nexus/_agents/handoff/aile-registry.yaml
+  ```
+- **Kapıya tek yerden:** `ortak.sh` `kapi_kayit_ortami` (TO_PROJE + kayıt yolları, kabuk-kaçışlı) → `onar.sh` kapıyı bununla başlatır;
+  kapının çağırdığı koltuk açıcı da aynı kaydı görür.
+- **Kapat koruması:** kadro verisinde her kayıtsız oturum `kapatilabilir` taşır (yalnız Claude'suz = sorunlu oturum `true`); kapı,
+  içinde Claude çalışan oturuma "kapat" isteğini **409** ile reddeder ve tmux'a dokunmaz — kayıt okunamasa da canlı ajan öldürülmez.
+  Merkez sayfası düğmeyi `kapatilabilir:false` satırda gizler (cloudtop, ayrı kart); eski merkezde düğme görünse bile uç reddeder.
+- Kanıt: `scripts/oda-ortam.test.sh` (15: izin listesi · ret sayımı · açık ortam · boşluklu yol · **gerçek kapı iskelet kökte önce
+  0 çalışan/2 kayıtsız → ayarla 2 çalışan/0 kayıtsız** + 3 mutant) · `kapi/kadro-hal.test.mjs` KH10b/KH12b-d (canlı kayıtsız 409).
+- ⚠️ Kurulunca kapı **yeniden başlatılmalı** (bekçi sağlıklı kapıyı yeniden başlatmaz) ve merkez kutusuna `.oda/ortam` yazılmalı.
 
 ## 🆕 2.16.0 · çıpa dilbilgisi 1.5.0 (17 Eki · gorev_01M54SCQE08KTG9YERG2BBR604 ek · MUAVİN yaması)
 `bugun.mjs` Sx `gunluk-plan/sema/bugun-maddesi.md` ile aynı okur: madde başına **`sahip`** (`(sahip: AD)` metinden ayrılır),
