@@ -175,17 +175,26 @@ case "$KOMUT" in
 import sys, re
 yol, madde, im, et, not_ = sys.argv[1:6]
 s = open(yol, encoding='utf-8').read().split('\n')
-n = 0; bulundu = False
-for i, satir in enumerate(s):
-    m = re.match(r'^- \[(.)\] (.*)$', satir)
-    if not m: continue
-    n += 1
-    if str(n) != str(madde): continue
+# 🔴 HEDEF = GÖRÜNÜR KİMLİK (bağımsız göz #357 tur 3): tablo maddeyi etiketiyle basar ("G1", "3"); tazele ise
+#    yalnız fiziksel sıraya bakıyordu → "G1" hiçbir satırı tutmuyor, tablodaki kimlikle güncelleme yapılamıyordu.
+#    Önce ETİKET aranır (G büyük/küçük harf fark etmez); etiketsiz eski çıpalar için yalnız rakamsa sıra sayısına düşülür.
+satirlar = [(i, re.match(r'^- \[(.)\] (.*)$', x)) for i, x in enumerate(s)]
+satirlar = [(i, m) for i, m in satirlar if m]
+n = len(satirlar)
+hedef = str(madde).strip().upper()
+etiketli = [i for i, m in satirlar if (re.match(r'^(G?\d+)\)', m.group(2)) or [None, ''])[1].upper() == hedef]
+if len(etiketli) > 1:
+    sys.stderr.write(f'HATA: "{madde}" etiketi {len(etiketli)} maddede var — hangisi olduğu belirsiz, dokunmadım\n'); sys.exit(1)
+if etiketli:
+    hedefler = etiketli
+elif re.fullmatch(r'\d+', hedef) and 1 <= int(hedef) <= n:
+    hedefler = [satirlar[int(hedef) - 1][0]]
+else:
+    sys.stderr.write(f'HATA: {madde}. madde yok (çıpada {n} madde var; etiket ya da sıra numarası ver: 3 · G1)\n'); sys.exit(1)
+for i in hedefler:
+    m = re.match(r'^- \[(.)\] (.*)$', s[i])
     govde = re.sub(r'\s*→ (KAPANDI|YARIM|AÇILMADI|GERİ ALINDI|ERTELENDİ).*$', '', m.group(2))
     s[i] = f'- [{im}] {govde} → {et}' + (f' · {not_}' if not_ else '')
-    bulundu = True
-if not bulundu:
-    sys.stderr.write(f'HATA: {madde}. madde yok (çıpada {n} madde var)\n'); sys.exit(1)
 # 🔴 DOKUNMA DAMGASI (2026-10-08): `tazele` bugüne kadar `_yazıldı:` satırını HİÇ
 #    güncellemiyordu. Sonuç: çıpanın içindeki damga hep ilk yazım anını gösteriyor,
 #    gün boyu tazelense bile "sabah yazılmış" görünüyordu. Tazeliği ölçmek isteyen

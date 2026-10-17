@@ -179,6 +179,24 @@ kapi "T14 hepsi kapandı/ertelendi/geri → kapanış rc=0" "0" "$?"
 kapi "T15 tablo --json yaşayan çıpada da aynı alanları verir" "MUAVİN|bitti|ertelendi|geri" \
      "$(bash "$ARAC" tablo --json 2>/dev/null | python3 -c "import json,sys; m=json.load(sys.stdin)['maddeler']; print('|'.join([m[0]['sahip'],m[0]['durum'],m[1]['durum'],m[2]['durum']]))")"
 GUNLUK_PLAN_AJAN="yok-boyle" bash "$ARAC" kapanis >/dev/null 2>&1; kapi "T16 çıpa yoksa kapanış rc=1 (ölçemedim ≠ temiz)" "1" "$?"
+
+echo "── tazele hedefi = tablodaki GÖRÜNÜR kimlik (bağımsız göz #357 tur 3: G1 hedeflenemiyordu)"
+export GUNLUK_PLAN_AJAN="etiket" ; CE="$T/cipa/gunluk-plan-cipa.etiket.md"
+bash "$ARAC" yaz --plan "1) bir | serbest iş | G1) gün ortası | G2) ikinci gün ortası" >/dev/null 2>&1
+bash "$ARAC" tazele --madde G1 --durum kapandi --kanit "PR #7" >/dev/null 2>&1; r=$?
+kapi "T19 --madde G1 gün ortası maddesini tazeler (fiziksel sırası 3 olsa da)" "0|1|0" \
+     "$r|$(grep -c '^- \[x\] G1) gün ortası → KAPANDI · kanıt: PR #7$' "$CE"; true)|$(grep -c '^- \[x\] serbest' "$CE"; true)"
+kapi "T20 tablo ile tazele aynı kimliği konuşur (G1 kapandı)" "1" "$(bash "$ARAC" tablo 2>/dev/null | grep -c '| G1 | gün ortası | — | kapandı | PR #7 |')"
+bash "$ARAC" tazele --madde g2 --durum yarim >/dev/null 2>&1
+kapi "T21 etiket büyük/küçük harf duyarsız (g2 → G2)" "1" "$(grep -c '^- \[~\] G2) ikinci gün ortası → YARIM$' "$CE"; true)"
+bash "$ARAC" tazele --madde 2 --durum yarim >/dev/null 2>&1
+kapi "T22 etiketsiz satır için sıra numarası hâlâ çalışır (2 → serbest iş)" "1" "$(grep -c '^- \[~\] serbest iş → YARIM$' "$CE"; true)"
+once="$(md5sum < "$CE")"; bash "$ARAC" tazele --madde G9 --durum kapandi >/dev/null 2>&1; r=$?
+kapi "T23 olmayan etiket rc=1 ve çıpa DEĞİŞMEZ" "1|aynı" "$r|$([ "$(md5sum < "$CE")" = "$once" ] && echo aynı || echo değişti)"
+printf -- '- [ ] G1) kopya\n' >> "$CE"; once="$(md5sum < "$CE")"
+bash "$ARAC" tazele --madde G1 --durum yarim >/dev/null 2>&1; r=$?
+kapi "T24 aynı etiket iki maddede → rc=1, hiçbirine dokunulmaz (belirsizlik tahminle çözülmez)" "1|aynı" "$r|$([ "$(md5sum < "$CE")" = "$once" ] && echo aynı || echo değişti)"
+export GUNLUK_PLAN_AJAN="sinav"
 export GUNLUK_PLAN_AJAN="sinav"
 
 echo "── kokpit kapısıyla uyum (terminal-onar/kapi/bugun.mjs — ortak fikstür)"

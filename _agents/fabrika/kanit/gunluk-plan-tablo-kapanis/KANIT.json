@@ -1,7 +1,7 @@
 {
   "is": "gunluk-plan-tablo-kapanis",
   "arac": "kanit.py/0.4.0",
-  "guncelleme": "2026-10-17T17:56:52+03:00",
+  "guncelleme": "2026-10-17T18:00:19+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -236,7 +236,33 @@
       "renk": "yesil",
       "zaman": "2026-10-17T17:56:52+03:00",
       "sure_sn": 18.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cipa-sinavi-68-etiket-hedefi",
+      "asama": "sonra",
+      "dosya": "olcum-cipa-sinavi-68-etiket-hedefi-sonra.txt",
+      "sha256": "c9d6c87d38b2be66890af71c32f700a8bc1af88dd111d3ab98fcc6e3366dc91b",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/cipa.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T18:00:18+03:00",
+      "sure_sn": 8.4
+    },
+    {
+      "tur": "dosya",
+      "etiket": "mutasyon-etiket-hedefi-4-isirdi",
+      "asama": "sonra",
+      "dosya": "dosya-mutasyon-etiket-hedefi-4-isirdi-sonra.txt",
+      "sha256": "de49a12d7c540f0726d4d4a9e118dd7911ac31b599bf6a8374728852d52908ff",
+      "kaynak": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-tablo-kapanis/m4.txt",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T18:00:19+03:00"
     }
   ],
-  "imza": "185d71b5b6cdf57b90da31cd7b873cf2da6d8fa0de02e3f3486232be8957d4ea"
+  "imza": "3d78f5dc503447c40026a989cd8dab0dcadf2ed7f52a68f17c58a19acaa11e8b"
 }

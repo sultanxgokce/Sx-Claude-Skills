@@ -127,7 +127,7 @@ bash /config/.claude/skills/gunluk-plan/scripts/cipa.sh yaz --plan "G1) … | G2
 ```
 
 `cipa.sh yaz`'ı çıpa VARKEN kullanma — sabahki çıpayı siler. Onaydan sonra maddeleri sırayla yürüt (kutunun
-iş hattı geçerlidir); her madde bitince `cipa.sh tazele --madde <n> --durum kapandi --not "<kanıt>"`.
+iş hattı geçerlidir); her madde bitince `cipa.sh tazele --madde G<n> --durum kapandi --kanit "<kanıt>"` (madde tablodaki kimliğiyle verilir: `G1`, `3`).
 Bağlam eşiği geçerse: `cipa.sh compact-onerisi` (çıpa diskteyse öneri üretir) → Sultan'a sor.
 Akşam `/gunluk-plan kapanis` sabah + gün ortası maddelerini birlikte okur.
 

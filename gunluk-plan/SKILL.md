@@ -159,7 +159,7 @@ Onaydan sonra maddeleri **sırayla** yürüt. Her madde bitince:
 - kayıt-damgası (layiha defteri / kart / CONTEXT — hangisi ilgiliyse)
 - `append-note.sh` ile deftere tek satır
 - Sultan'ın notlarına tek satır (`[SERDAR]` etiketli, onun ağzından)
-- **çıpayı tazele:** `cipa.sh tazele --madde <n> --durum kapandi|yarim --kanit "<PR#|commit|dosya>" [--not "…"]`
+- **çıpayı tazele:** `cipa.sh tazele --madde <kimlik> --durum kapandi|yarim --kanit "<PR#|commit|dosya>" [--not "…"]` — kimlik tablodaki etikettir (`3`, `G1`); etiketsiz satırda sıra numarası; aynı etiket iki maddedeyse araç dokunmaz (rc 1)
   (kanıt tablonun kendi sütunudur; kanıtsız "kapandı" tabloda boş kanıtla görünür)
 
 **Bağlam eşiği geçildiyse — madde ortasında bile:**
