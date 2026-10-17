@@ -1,0 +1,10 @@
+$ bash -c T=$(mktemp -d); export GUNLUK_PLAN_CIPA_DIR=$T; A=gunluk-plan/scripts/cipa.sh; bash $A yaz --plan "1) a | 2) b" >/dev/null 2>&1; r=0; for v in "ertele istemiyorum" "ertele mi?" "erteleyelim mi bilmiyorum" "ertelenmesin, bugün bitsin"; do bash $A tazele --madde 2 --durum ertelendi --d1 "2026-01-02 Sultan: $v (sohbet · s · \"x\" · beyan:SINAV)" >/dev/null 2>&1; rc=$?; echo "\"$v\" → rc=$rc (beklenen 2)"; [ $rc -eq 2 ] || r=1; done; bash $A tazele --madde 2 --durum ertelendi --d1 "2026-01-02 Sultan: ertele (sohbet · s · \"x\" · beyan:SINAV)" >/dev/null 2>&1; rc=$?; echo "\"ertele\" → rc=$rc (beklenen 0)"; [ $rc -eq 0 ] || r=1; grep -n "grep -qixE" $A | head -1; exit $r
+# rc=0 sure=0.2s zaman=2026-10-17T21:04:39+03:00
+--- stdout ---
+"ertele istemiyorum" → rc=2 (beklenen 2)
+"ertele mi?" → rc=2 (beklenen 2)
+"erteleyelim mi bilmiyorum" → rc=2 (beklenen 2)
+"ertelenmesin, bugün bitsin" → rc=2 (beklenen 2)
+"ertele" → rc=0 (beklenen 0)
+176:        printf '%s' "$_snc" | grep -qixE '(yarına )?ertele(nsin|ndi|yelim|yin)?' \
+--- stderr ---
