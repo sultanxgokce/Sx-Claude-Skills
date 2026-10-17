@@ -1,0 +1,170 @@
+$ bash /tmp/tmp.8aiTk8AffK/kanit.test.sh
+# rc=1 sure=6.2s zaman=2026-10-17T14:32:09+03:00
+--- stdout ---
+════ T1 · ölçüm çifti: komutu araç koşar, kırpılmamış çıktı+rc ════
+  ✓ önce ölçümü rc=0
+  ✓ sonra ölçümü rc=0
+  ✓ KANIT.json araç tarafından yazıldı
+  ✓ stdout ve stderr kırpılmadan saklandı
+  ✓ iki kayıt, yeşil, imzalı
+════ T2 · rc=3 komut → SARI, aracın rc'si 3 (yeşil değil) ════
+  ✓ araç rc=3 döndü
+  ✓ manifestte renk=sari
+════ T3 · kırmızı komut → kirmizi, araç rc=0 (kayıt başarılı) ════
+  ✓ kayıt alındı
+  ✓ renk=kirmizi rc=1
+════ T4 · dosya ekleme + dogrula sağlam ════
+  ✓ dosya eklendi
+  ✓ dogrula rc=0
+  ✓ sarı kayıt sayısı özetle söyleniyor
+════ T5 · elle yazım yakalanır ════
+  ✓ renk elle yeşile boyanınca imza tutmuyor → rc=1
+  ✓ bozuk manifeste yeni kayıt EKLENMİYOR
+  ✓ içerik aslına dönünce imza yine tutar (imza İÇERİĞE aittir, dosya baytlarına değil)
+════ T6 · dosya sha bozulursa yakalanır ════
+  ✓ kanıt dosyası sonradan değişince rc=1
+════ T7 · kanıt yok → rc=3 ════
+  ✓ manifest yokken rc=3 (ölçülemedi)
+════ T8 · ekran: playwright YOKSA sarı+rc=3; VARSA yerel sayfadan kare + ürün imi ════
+  ✓ gerçek kare alındı (playwright var)
+  ✓ ürün imi yoksa rc=2 (ölçer ürünü görmedi — 6. kanun)
+  ✓ imsiz kare manifestte kırmızı
+════ T9 · ozet tablo ════
+  ✓ markdown tablo üretildi
+════ T10 · EKRAN: kitaplık yolu ortamdan · eksik kitaplığın ADI yüzeye çıkar (MEDDAH) ════
+  ✓ E1a kare alınamadı → rc=3 (SARI, yeşil değil)
+  ✓ E1b eksik kitaplığın ADI yüzeyde (300 karakter kırpmasının arkasında kalmıyor)
+  ✓ E1c sebep doğru söylenir: ayağa kalkmama DEĞİL, görünmeme
+  ✓ E1d manifestte renk=sari
+  ✓ E1e manifestte eksik_kitaplik adıyla
+  ✓ E1f tam çıktı KIRPILMADAN diske yazıldı (kullanılan yol bilgisiyle)
+  ✓ E2a KANIT_PW_LIBS ÖNE eklenir, odanın kendi ayarı KORUNUR
+  ✓ E2b kullanılan yol manifeste yazılır (teşhis edilebilir sarı)
+  ✓ E3a ilgisiz hatada kitaplık iddiası YOK
+  ✓ E3b manifestte eksik_kitaplik BOŞ (uydurma yok)
+  ✓ E4 MUTASYON: kablo koparılınca oda ayarı çocuğa GİTMEZ (kablo süs değil)
+════ T11 · AYNI KANIT YENİDEN ÖLÇÜLÜNCE kayıt ÜSTÜNE yazılır (NÂZIR/MOTOR1) ════
+  ✓ T11a ilk ölçüm alındı
+  ✓ T11b aynı etiket+aşama yeniden ölçüldü
+  ✓ T11c manifestte TEK kayıt (bayat kayıt kalmadı; ölçülen=1)
+  ✓ T11d dogrula rc=0 (eskiden KALICI rc=1 idi)
+  ✓ T11e kanıt dosyası gerçekten yenisi (eski çıktı yok)
+  ✓ T11f üstüne yazmak SESSİZ değil — yüzeye basılır
+  ✓ T11g renk değişimi söylenir (yeşili sessizce kırmızıya çevirmez)
+  ✓ T11h son renk manifestte kirmizi
+  ✓ T11i farklı aşama/etiket AYRI kayıt kalır (3 kayıt) — birleştirme körü körüne değil
+════ T12 · GEÇERSİZ UTF-8 baytı aracı ÇÖKERTMEZ, kayıt yazılır (NÂZIR/MOTOR1) ════
+  ✓ T12a geçersiz bayta rağmen rc=0
+  ✓ T12b kayıt YAZILDI (eskiden hiç yazılmıyordu)
+  ✓ T12c kanıt dosyası dolu
+  ✓ T12d okunabilen kısım korunmuş
+  ✓ T12e dogrula rc=0
+  ✓ T12f geçersiz bayt stderr'de de çökertmez
+════ T13 · MUTASYON: iki onarım da kablolu mu (süs değil mi) ════
+  ✓ T13a MUTASYON: üstüne-yazma kaldırılınca bayat kayıt geri gelir ve dogrula KIRMIZI olur
+  ✓ T13b MUTASYON: errors kaldırılınca geçersiz bayt yine çökertir (onarım gerçek)
+  ✓ T13c MUTASYON: çöküşte kayıt hiç yazılmaz (sessiz kaybın kendisi)
+════ T14 · İMZA SÜRÜMDEN AYRI: eski araçla yazılan kanıt SUÇLANMAZ (NÂZIR+RASATÇI) ════
+  ✓ T14a manifest yazıldı
+  ✓ T14b ESKİ biçimli imza SAĞLAM sayılıyor (rc=0, suçlanmıyor)
+  ✓ T14c sürüm farkı BİLGİ satırı — hüküm değil
+  ✓ T14d hangi biçimde imzalandığı söyleniyor (sessiz kabul yok)
+  ✓ T14e sahtecilik suçlaması YOK
+════ T15 · ama GERÇEKTEN bozulan hâlâ yakalanır (tautoloji panzehiri) ════
+  ✓ T15a eski biçimli manifest ELLE bozulunca rc=1
+  ✓ T15b bozuk manifeste yeni kayıt EKLENMİYOR
+════ T16 · eski biçimli SAĞLAM manifest, yazım anında YENİ biçime geçer ════
+  ✓ T16a eski biçimli manifeste kayıt eklendi
+  ✓ T16b geçiş SESSİZ değil — yüzeye basılıyor
+  ✓ T16c yazımdan sonra imza YENİ biçimde
+  ✓ T16d geçiş sonrası doğrulama temiz
+════ T17 · MUTASYON: uyumluluk dalı koparılınca eski manifest yine suçlanır ════
+  ✓ T17 MUTASYON: uyumluluk ölünce eski manifest YİNE kırmızı (kapı gerçek)
+════ T18 · CANLI sınıfı: gerçek ateşleme kaydı (saat damgalı + desenli log satırı, türlü kaynak) yoksa SARI ════
+  ✗ T18a dosya kaynağı, saat damgalı + desenli log → rc=0
+  ✗ T18b manifestte tur=canli renk=yesil kaynak_turu=dosya
+  ✗ T18c ateşleme sayısı 2
+  ✗ T18d ilk + son ateşleme · çözülmüş saat · kaynak · ARACIN kurduğu okuma komutu kayıtta
+  ✗ T18e log çıktısı kırpılmadan dosyada
+  ✗ T18f imza ve sha sağlam
+  ✗ T18g saat damgasız satırlar ateşleme sayılmaz → rc=3 (yazılmış ≠ çalışıyor)
+  ✗ T18h renk=sari, ateşleme 0
+  ✗ T18i boş log → rc=3
+  ✗ T18j kaynağa ulaşılamadı (dosya yok, tail rc≠0) → rc=3
+  ✗ T18k sebebi kayıtta
+  ✗ T18l --desen tutmayan saatli satır ateşleme değil → rc=3
+  ✗ T18m syslog biçimi + desen tutuyor → rc=0
+  ✗ T18n renk=yesil, desen kayıtta, yılsız syslog saati bu yıla çözüldü
+  ✗ T18o --en-az 2 tek ateşlemeyle rc=3 (gg.aa.yyyy biçimi tanındı)
+  ✗ T18o2 ateşleme 1 sayıldı
+  ✓ T18p --kaynak verilmeden kayıt yazılmaz
+  ✓ T18q kaynaksız dosya oluşmadı
+  ✓ T18p2 --desen verilmeden kayıt yazılmaz (genel saat ateşleme değildir)
+  ✓ T18q2 desensiz dosya oluşmadı
+  ✗ T18f2 geleceğe tarihli ateşleme → SARI rc=3
+  ✗ T18f3 sebebi kayıtta
+  ✗ T18s --son 1 ile yalnız son satır okunur → rc=0
+  ✗ T18s2 ateşleme 1, komutta -n 1
+  ✗ T18v journal kaynağı: journalctl yoksa ya da birim yoksa traceback değil SARI rc=3
+  ✗ T18w sebep kayıtta, komut journalctl sabit argv
+  ✗ T18x tanınmayan kaynak türü (komut:) reddedilir, rc=1
+  ✗ T18x2 manifeste de yazılmadı
+  ✗ T18y '--' sonrası serbest komut kabul edilmez (python/awk üretici kapısı kapalı)
+  ✗ T18y2 ssh yolunda kabuk metakarakteri reddedilir (uzak kabuk enjeksiyonu yok)
+  ✗ T18y3 ssh hedefinde metakarakter reddedilir
+  ✗ T18z ssh kaynağı: araç sabit argv kurar, uzaktan okunan satırlar ateşleme → rc=0
+  ✗ T18z2 ssh argv: BatchMode · hedef · tail · yol (kabuk dizgesi yok)
+  ✗ T18t dogrula özeti canlı kayıtlarını söylüyor
+  ✗ T18u ozet tablosunda tür canli görünüyor
+════ T19 · MUTASYON: saat şartı · kopuk kaynak · yol doğrulaması — her biri kaldırılınca sınav kırmızı ════
+  ✗ T19a mutant saatsiz satırı ateşleme sayıyor → T18g bu mutantta düşerdi
+  ✗ T19b gerçek araç aynı girdiyle hâlâ sarı (mutasyon kaynağı bozdu, düzeneği değil)
+  ✗ T18j2 uzak okuma satır bastı ama rc=255 (bağlantı koptu) → gerçek araç SARI
+  ✗ T19c mutant (kopuk kaynak sarı değil) kopuk bağlantıyı yeşil sayıyor → T18j2 bu mutantta düşerdi
+  ✓ T19d mutant (yol doğrulaması kaldırıldı) metakarakterli yolu reddetmiyor → T18y2 bu mutantta düşerdi
+
+── SONUÇ: 67 geçti · 35 kaldı ──
+--- stderr ---
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.jUi00YlrnE/_agents/fabrika/kanit/is-canli/KANIT.json'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.jUi00YlrnE/_agents/fabrika/kanit/is-canli/KANIT.json'
+Traceback (most recent call last):
+  File "<string>", line 2, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.jUi00YlrnE/_agents/fabrika/kanit/is-canli/KANIT.json'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.jUi00YlrnE/_agents/fabrika/kanit/is-canli/KANIT.json'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.jUi00YlrnE/_agents/fabrika/kanit/is-canli/KANIT.json'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.jUi00YlrnE/_agents/fabrika/kanit/is-canli/KANIT.json'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.jUi00YlrnE/_agents/fabrika/kanit/is-canli/KANIT.json'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.jUi00YlrnE/_agents/fabrika/kanit/is-canli/KANIT.json'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.jUi00YlrnE/_agents/fabrika/kanit/is-canli/KANIT.json'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.jUi00YlrnE/_agents/fabrika/kanit/is-canli/KANIT.json'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.jUi00YlrnE/_agents/fabrika/kanit/is-canli/KANIT.json'
+sed: can't read /tmp/tmp.jUi00YlrnE/ssh-args.txt: No such file or directory
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+AssertionError: mutasyon deseni tutmadı: if not SAAT_RE.search(satir): continue
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+AssertionError: mutasyon deseni tutmadı: renk = "sari" if (p.returncode != 0
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+AssertionError: mutasyon deseni tutmadı: if not GUVENLI_RE.match(parca):
