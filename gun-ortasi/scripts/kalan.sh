@@ -40,9 +40,14 @@ if [ -f "$SK/gunluk-plan/scripts/cipa.sh" ]; then
   elif ! printf '%s\n' "$c" | grep -q "GÜNÜN PLANI ÇIPASI · $BUGUN"; then
     olcemedim "çıpa bugüne ait değil ($(printf '%s\n' "$c" | grep -o 'ÇIPASI · [0-9-]*' | head -1)) — eski plan 'sabahki plan' sayılmaz"
   else
-    CIPA_ACIK="$(printf '%s\n' "$c" | grep -cE '^- \[( |~)\] ')"   # [-] = geri alındı: açık da kapalı da değil
-    CIPA_KAPALI="$(printf '%s\n' "$c" | grep -cE '^- \[x\] ')"
-    bas "$(printf '%s\n' "$c" | grep -E '^- \[.\] ' | cut -c1-170 | sed 's/^/  /')"
+    # 🔴 TEK ŞABLON (gorev_01M54TNAQV · Sultan 17 Eki): liste /gunluk-plan'ın standart bugün tablosudur
+    #    (madde · sahip · durum · kanıt) ve SAYIM da aynı ayrıştırıcıdan gelir — ikinci bir grep sayımı,
+    #    damgasız "ERTELENDİ"yi kapalı, ertelenmiş maddeyi açık sayarak tablodan ayrışırdı.
+    j="$( (cd "$KOK" && bash "$SK/gunluk-plan/scripts/cipa.sh" tablo --json) 2>/dev/null)"
+    if sayim="$(printf '%s' "$j" | python3 -c 'import json,sys; m=json.load(sys.stdin)["maddeler"]; print(sum(x["durum"] in ("acik","yarim") for x in m), sum(x["durum"]=="bitti" for x in m))' 2>/dev/null)"; then
+      read -r CIPA_ACIK CIPA_KAPALI <<< "$sayim"
+      bas "$( (cd "$KOK" && bash "$SK/gunluk-plan/scripts/cipa.sh" tablo) 2>/dev/null | grep '^|' | cut -c1-170 | sed 's/^/  /')"
+    else olcemedim "çıpa tabloya çevrilemedi (gunluk-plan 1.5.0 öncesi kurulu olabilir)"; fi
   fi
 else olcemedim "gunluk-plan/cipa.sh bulunamadı"; fi
 

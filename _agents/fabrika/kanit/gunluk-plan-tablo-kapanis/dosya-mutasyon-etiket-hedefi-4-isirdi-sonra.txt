@@ -1,0 +1,6 @@
+temiz rc 0 SONUÇ: 68 geçti · 0 kaldı
+M1 yalnız fiziksel sıra (eski) rc 1 ['K12', 'K13', 'K16', 'K17', 'K20', 'T8', 'T9', 'T12', 'T14', 'T15', 'T19', 'T20', 'T21']
+M2 harf duyarlı rc 1 ['T21']
+M3 belirsizlikte ilkini al rc 1 ['T24']
+M4 sıra yedeği yok rc 1 ['T22']
+sonra rc 0

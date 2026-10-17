@@ -1,0 +1,8 @@
+$ node gunluk-plan/sema/kapi-uyum.mjs /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bugun-355.mjs gunluk-plan/sema/ornek-cipa.md gunluk-plan/sema/beklenen.json
+# rc=0 sure=0.0s zaman=2026-10-17T15:42:51+03:00
+--- stdout ---
+  ⚠ BİLİNEN EKSİK (kapı 1.5.0 dilbilgisini henüz benimsemedi): sahip alanı yok (metinde kalıyor)
+  ⚠ BİLİNEN EKSİK (kapı 1.5.0 dilbilgisini henüz benimsemedi): kanit alanı yok (notta kalıyor)
+  ⚠ BİLİNEN EKSİK (kapı 1.5.0 dilbilgisini henüz benimsemedi): ertelendi kuralı yok ("-" + ERTELENDİ → geri)
+✓ kapı ayrıştırıcısı ortak fikstürle uyumlu (8 madde, 3 bilinen eksik)
+--- stderr ---

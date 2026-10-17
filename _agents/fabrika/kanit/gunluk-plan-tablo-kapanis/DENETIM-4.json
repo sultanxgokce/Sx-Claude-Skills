@@ -1,0 +1,38 @@
+{
+  "tur": 4,
+  "is": "gunluk-plan-tablo-kapanis",
+  "pr": "357",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T18:00:48+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 88661,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 22,
+    "bayt": 60349
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Tek tablo sözleşmesi, görünür G-kimliğiyle tazeleme, BÂNİ uyumu ve açık maddede rc=4 kapanış kapısı kurulmuş; önceki turun G1 kusuru da hedefli sınavlarla kapanmış. Ancak erteleme kapısı D1 içindeki Sultan sözünün gerçekten “ertele” kararı olduğunu doğrulamıyor; biçimi düzgün herhangi bir Sultan cümlesi taşıma yetkisi kazanabildiği için önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "Erteleme yetkilendirmesi yalnız D1 biçimini denetliyor; Sultan karar metninde “ertele” bulunmasını şart koşmadığından, örneğin `Sultan: bugün görüşelim (...)` biçimsel olarak geçip maddeyi kapanış kapısından çıkarabilir.",
+        "kanit": "`cipa.sh` doğrulama kalıbı `Sultan: .+` kabul ediyor; `tablo.py` içindeki D1 kalıbı da aynı şekilde karar içeriğini sınırlamıyor. Sınavlarda D1'siz ve biçimsiz değer reddediliyor, fakat biçimi geçerli olup erteleme kararı içermeyen bir D1 için negatif vaka yok; iş kartındaki şart ise yalnız Sultan “ertele” D1 damgasıyla taşımadır.",
+        "konum": "gunluk-plan/scripts/cipa.sh:169-173; gunluk-plan/scripts/tablo.py:24; gunluk-plan/scripts/cipa.test.sh:T10-T12",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Son ölçümler ortak tabloyu, G1 hedeflemesini, açık maddede rc=4 davranışını, gün-ortası kullanımını ve BÂNİ ayrıştırıcısıyla birebir uyumu yeşil ölçüyor; önceki kırmızı kayıtlar daha sonra kapanmış ara durumlar. Kanıt kapsamı geniş, ancak biçimi geçerli fakat “ertele” kararı taşımayan D1 için negatif sınav bulunmuyor."
+  }
+}

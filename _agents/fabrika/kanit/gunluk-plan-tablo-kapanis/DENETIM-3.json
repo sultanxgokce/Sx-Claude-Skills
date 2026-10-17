@@ -1,0 +1,38 @@
+{
+  "tur": 3,
+  "is": "gunluk-plan-tablo-kapanis",
+  "pr": "357",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T17:58:04+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 80876,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 19,
+    "bayt": 50911
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Tek tablo sözleşmesi, BÂNİ uyum fikstürü ve açık maddeyi rc=4 ile durduran kapanış kapısı kurulmuş; önceki turdaki üç BÂNİ farkı da birleşik ölçümde kapanmış. Ancak gün-ortası satırları tabloda `G1` diye görünürken tazeleme aracı yalnız fiziksel sıra sayısını eşleştiriyor; görünür kimlikle güncellenemeyen bu uygulama sorununu önce çöz.",
+    "bulgular": [
+      {
+        "ne": "Gün-ortası maddesinin görünür `G1` kimliği `tazele --madde G1` ile hedeflenemiyor; tazeleme satır etiketini değil, eşleşen plan satırlarının fiziksel sıra sayısını kullanıyor.",
+        "kanit": "Python döngüsü her eşleşen satırda `n += 1` yapıp `str(n) != str(madde)` karşılaştırıyor; satırdaki `G1)`/`1)` etiketi hedef seçiminde hiç okunmuyor. Buna karşılık `tablo.py` etiketi koruyup gün-ortası satırını `G1` olarak basıyor ve örnek kapanış çıktısı açık maddeyi `G1` diye bildiriyor. Eklenen sınavlar da `G1` hedefli tazelemeyi değil yalnız `--madde 1|2|3` yollarını ölçüyor.",
+        "konum": "gunluk-plan/scripts/cipa.sh:166-187; gunluk-plan/scripts/tablo.py:20-22,51-55,92-94; gunluk-plan/scripts/cipa.test.sh:164-181; ölçüm `ornek-tablo-ve-kapanis`",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçekçi sekiz maddelik fikstür kapanışın rc=4 davranışını, gün-ortası sınavı ortak tabloyu ve `kapi-uyum-363-birlesik` BÂNİ ayrıştırıcısıyla birebir uyumu ölçüyor; önceki kırmızı uyum kayıtları tarihsel ara durum olup son birleşik yeşil ölçümle kapanmış. Bununla birlikte kanıt kümesinde görünür `G1` etiketiyle tazeleme sınavı yok; kod incelemesi bu yolun çalışmadığını doğrudan gösteriyor."
+  }
+}

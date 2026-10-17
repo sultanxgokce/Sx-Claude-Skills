@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "gunluk-plan-tablo-kapanis-2",
+  "pr": "366",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T21:03:54+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 75844,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 38,
+    "bayt": 98888
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Tek bugün tablosu, ortak BÂNİ uyum fikstürü ve açık maddede rc=4 veren kapanış kapısı kurulmuş; talebin ana gövdesi doğru karşılanmış. Ancak önceki turun kritik erteleme bulgusu çözülmemiş: kapı Sultan’ın kararını değil yalnız “ertele” alt dizgesini doğruluyor, bu yüzden önce bunu çözün.",
+    "bulgular": [
+      {
+        "ne": "D1 sonuç denetimi hâlâ gerçek bir “ertele” kararını doğrulamıyor; “ertele istemiyorum” veya “ertele mi?” gibi karar olmayan ifadeler kabul edilip maddeyi kapanış kapısından çıkarabilir.",
+        "kanit": "`cipa.sh` koşulu sonuç kısmında yalnız `grep -qiE 'ertele'` arıyor ve sadece `ertelen?m[eaı]` kalıbını dışlıyor; `tablo.py` aynı mantığı `ERTELE`/`ERTELEME` ile tekrarlıyor. T11b yalnız “bugün görüşelim”, “erteleme” ve “ertelenmesin, bugün bitsin” vakalarını sınıyor; önceki turda verilen “ertele istemiyorum” ve “ertele mi?” karşı örnekleri için yeni ölçüm yok. Kod yorumunda da açıkça “Bu kapı kelimeyi ölçer, anlamı değil” denerek talepteki karar doğrulamasının karşılanmadığı belirtiliyor.",
+        "konum": "gunluk-plan/scripts/cipa.sh: ertelendi dalındaki `_snc` grep koşulu; gunluk-plan/scripts/tablo.py: ERTELE/ERTELEME ve ertele_d1; gunluk-plan/scripts/cipa.test.sh:T11b-T11d",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçekçi önce/sonra D1 ölçümü, 73+33 birleşik sınav, ortak fikstür uyumu ve mutasyon ölçümü ana değişikliği güçlü biçimde destekliyor. Ancak önceki turdaki karar-semantiği açığına yönelik kod değişikliği veya “ertele istemiyorum”/“ertele mi?” karşı örneklerini ölçen kayıt bulunmadığından bu bulgu kapanmış sayılmaz."
+  }
+}

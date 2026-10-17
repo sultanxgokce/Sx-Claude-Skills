@@ -1,0 +1,98 @@
+{
+  "tarih": "2026-10-17",
+  "maddeler": [
+    {
+      "etiket": "1",
+      "tur": "sabah",
+      "metin": "Retro paketi gorev_01M54C4A56HDMS1H5SAWFCWSGE",
+      "sahip": "MUAVİN",
+      "durum": "bitti",
+      "sonuc": "KAPANDI",
+      "kanit": "cloudtop #669",
+      "not": "iki tur",
+      "gorevler": [
+        "gorev_01M54C4A56HDMS1H5SAWFCWSGE"
+      ]
+    },
+    {
+      "etiket": "2",
+      "tur": "sabah",
+      "metin": "Gelen kutusu triyajı",
+      "sahip": "MUAVİN",
+      "durum": "yarim",
+      "sonuc": "YARIM",
+      "kanit": "",
+      "not": "234 kapandı",
+      "gorevler": []
+    },
+    {
+      "etiket": "3",
+      "tur": "sabah",
+      "metin": "WhatsApp izin kalıcılığı",
+      "sahip": "Sultan",
+      "durum": "acik",
+      "sonuc": "",
+      "kanit": "",
+      "not": "",
+      "gorevler": []
+    },
+    {
+      "etiket": "4",
+      "tur": "sabah",
+      "metin": "Eski kanal düzeltmesi",
+      "sahip": "",
+      "durum": "geri",
+      "sonuc": "GERİ ALINDI",
+      "kanit": "",
+      "not": "gerekmedi",
+      "gorevler": []
+    },
+    {
+      "etiket": "5",
+      "tur": "sabah",
+      "metin": "Sunum provası",
+      "sahip": "MUAVİN",
+      "durum": "ertelendi",
+      "sonuc": "ERTELENDİ",
+      "kanit": "",
+      "not": "D1: 2026-10-17 Sultan: ertele (sohbet · session_ornek · \"bunu yarına bırak\" · beyan:MUAVİN)",
+      "gorevler": []
+    },
+    {
+      "etiket": "6",
+      "tur": "sabah",
+      "metin": "Damgasız erteleme",
+      "sahip": "",
+      "durum": "acik",
+      "sonuc": "ERTELENDİ",
+      "kanit": "",
+      "not": "yarın bakarız",
+      "gorevler": []
+    },
+    {
+      "etiket": "G1",
+      "tur": "gun-ortasi",
+      "metin": "Gün ortası maddesi gorev_01M54TNAQVP4PJ7M7MGZRPT7A7 gorev_01M54SCQE08KTG9YERG2BBR604",
+      "sahip": "",
+      "durum": "acik",
+      "sonuc": "",
+      "kanit": "",
+      "not": "",
+      "gorevler": [
+        "gorev_01M54TNAQVP4PJ7M7MGZRPT7A7",
+        "gorev_01M54SCQE08KTG9YERG2BBR604"
+      ]
+    },
+    {
+      "etiket": "7",
+      "tur": "sabah",
+      "metin": "Açılmadı örneği",
+      "sahip": "",
+      "durum": "acik",
+      "sonuc": "AÇILMADI",
+      "kanit": "",
+      "not": "",
+      "gorevler": []
+    }
+  ]
+}

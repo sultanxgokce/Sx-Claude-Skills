@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "gunluk-plan-tablo-kapanis-2",
+  "pr": "366",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T21:02:33+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 72601,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 35,
+    "bayt": 93807
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Tek bugün tablosu, ortak kapı uyumu ve açık maddede kapanışı durduran kapı kurulmuş; ölçümler ana talebi karşılıyor. Ancak Sultan’ın erteleme kararını koruyan kritik kapı yalnız “ertele” alt dizgesine baktığı için karar olmayan veya ters anlamlı bazı sözleri yetkili erteleme sayabilir; önce bu kapıyı kesinleştirin.",
+    "bulgular": [
+      {
+        "ne": "D1 karar denetimi gerçek bir “ertele” kararını doğrulamıyor; sonuç kısmında “ertele” geçmesi ve dar bir olumsuzluk kalıbına uymaması yeterli. Örneğin “ertele istemiyorum” veya “ertele mi?” mevcut koşuldan geçerek açık maddeyi kapanış kapısından çıkarabilir.",
+        "kanit": "Kod `_snc` üzerinde `grep -qiE 'ertele'` kullanıyor ve yalnız `ertelen?m[eaı]` kalıbını dışlıyor; sınavlar da sadece “bugün görüşelim”, “erteleme” ve “ertelenmesin, bugün bitsin” vakalarını reddetmeyi ölçüyor. Mutasyon ölçümü T11b/T11c/T11d’nin mevcut dar kurala duyarlı olduğunu gösteriyor, fakat karar olmayan bu karşı örnekleri kapsamıyor.",
+        "konum": "gunluk-plan/scripts/cipa.sh: ertelendi dalındaki `_snc`/grep koşulu; gunluk-plan/scripts/tablo.py: ERTELE ve ERTELEME kalıpları; gunluk-plan/scripts/cipa.test.sh:T11b-T11d",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. D1 davranışı için gerçekçi önce/sonra ölçüm çifti, birleşik sınavlar, ortak fikstür uyumu ve mutasyon ölçümü var; bunlar yapılan düzeltmeyi güçlü biçimde kanıtlıyor. Buna karşılık karar semantiğinin olumsuz/soru biçimlerindeki sınırı ölçülmemiş; yeşil kayıt bu açığı kapatmıyor."
+  }
+}

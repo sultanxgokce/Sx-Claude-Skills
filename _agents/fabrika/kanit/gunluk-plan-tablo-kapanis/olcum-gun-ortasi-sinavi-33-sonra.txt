@@ -1,0 +1,38 @@
+$ bash gun-ortasi/scripts/kalan.test.sh
+# rc=0 sure=18.6s zaman=2026-10-17T17:56:52+03:00
+--- stdout ---
+  🟢 T1 rc=0 ve #OZET satırı var
+  🟢 T2 açık kart 1 · tıkandı ayrı 1 · bozuk JSON sayılmaz, ölçemedim der
+  🟢 T3 konum çapasından 'Açık' ve 'SARI' (2), 'bitti' değil
+  🟢 T4 göz md: son rapor; kapandı düşer; KISMEN + ### başlık açık → 3 (N1,N3,N4); eski tur N9 yok
+  🟢 T4c bölüm başlıkları ('## NOT-1 (…) — görüşüm', '## B1 doğrulaması') bulgu sayılmaz
+  🟢 T4b göz json: 3·H açık (1) · daha yeni 5·E json eski md'yi ezer · 5·E+BİLGİ açık değil → toplam 4
+  🟢 T5 gelen: TAM ad eşleşmesi (BA okundu, A okunmadı) + 40 günlük mektup da sayılır → 2
+  🟢 T15 #OZET olcemedim basılan satır sayısına eşit · alanların hiçbiri boş değil
+  🟢 T6 hedef: ANA-HEDEF ve CLAUDE.md Amaç basılır
+  🟢 T7 ölçülemeyen alan ? basar, 0 değil (çıpa, layiha, kapımda)
+  🟢 T8 salt-okur: kutu dokunulmadı
+  🟢 T9 pencere dışındaki çapa sayılmaz; '?' basar (ölçemedim)
+  🟢 T9b pencere genişletilince sayılır
+  🟢 T10 sayı olmayan pencere → rc=2
+  🟢 T11 gerçek çıpa: [x] kapalı (notunda 'bekliyor' geçse de) · [~] ve [ ] açık → 2/1
+  🟢 T16 1. bölüm /gunluk-plan'ın standart tablosunu basar (madde · sahip · durum · kanıt)
+  🟢 T17 ayrıştırıcı yoksa çıpa sayımı ? + ölçemedim (sessiz yedek sayım yok)
+  🟢 T11c başka klasörden çağrıda kutunun çıpası okunur → 2/1
+  🟢 T11b başka günün çıpası sayılmaz → ? ve ölçemedim
+  🟢 T14 cipa-ekle: rc=0 · 5 madde · sabah [x] korundu · 4. madde G1 · tazele 4 çalışır
+  🟢 T14c tekrar ekleme çoğaltmaz (5) · geri-al rc=0 · geri alınan açık sayılmaz (açık 2: [~]B,[ ]C; G1 kapandı, G2 geri)
+  🟢 T14d eşleşmeyen geri-al rc=1 · değersiz bayrak rc=2 (döngü yok) · boş liste rc=2
+  🟢 T14e çıpanın '## Not' bölümü ve yazıldı satırı korunur, maddeler Not'tan önce
+  🟢 T14f geri alınan yeniden açılır · '2)' ve 'G' ret (rc=2) · etiketsiz plan ret · sabah 2. madde [~] kaldı
+  🟢 T14h aynı etiket farklı metin → rc=2, sabahki G1 dokunulmadı
+  🟢 T14g ortak kilit tutulurken ekle BEKLER (≥1500 ms) · '→' içeren madde bir kez
+  🟢 T14j kilit beklenirken çıpa başka güne dönerse YAZMAZ (rc=1)
+  🟢 T14i araç yoksa rc=1 + sebep söylenir (tahminle yazmaz)
+  🟢 T14b cipa-ekle eski çıpaya ve çıpasız kutuya YAZMAZ (rc=1/1)
+  🟢 T12 sayım kırpmadan önce (15) ve kırpılan söylenir (+5)
+  🟢 T13 kapımda hata → ? ve ölçemedim (rc=7)
+  🟢 T16a araç var, çıpa yok → cipa_acik ? ve ölçemedim satırı
+  🟢 T16 beş kaynağın her biri kaldırılınca alanı '?' ve olcemedim +1
+── SONUÇ: geçti=33 kaldı=0 ölçemedim=0 ──
+--- stderr ---
