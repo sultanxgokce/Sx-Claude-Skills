@@ -1,0 +1,38 @@
+{
+  "tur": 3,
+  "is": "kadro-dava-kurali-b1",
+  "pr": "356",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T15:32:26+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 26132,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 31816
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Bağımsız `dosyaKilit` modülü yazılmış, `kadroYaz`ın bütün okuma-yazma-doğrulama çevresine bağlanmış ve DV32a–d sahiplik davranışları yeşil sınavlarla ölçülmüş. Ancak devral kilidi yalnız yaşına bakılarak canlı sahibinin elinden alınabildiği için beş saniyeyi aşan duraklamada eski sahip artık devral kilidine sahip değilken ana kilidi silebilir; önce bu yarış çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Devral kilidinin 5 saniyelik yaş eşiği, sahibin canlılığına veya jeton sahipliğine bakılmadan uygulanıyor; ilk süreç 5 saniyeden uzun duraklarsa ikinci süreç onun devral dosyasını silip yeniden alabilir, ardından uyanan ilk süreç devral kilidinin hâlâ kendisine ait olduğunu doğrulamadan `kadro.kilit` dosyasını silebilir. Bu, taze kilidin aradan kaybolmasına ve aynı anda iki yazıcının kritik bölgeye girmesine yol açabilecek bir sahiplik yarışı bırakıyor.",
+        "kanit": "Başarısız `ac(d)` dalı `d` içindeki PID/canlılık bilgisini değerlendirmeden yalnız `mtime > DEVRAL_BAYAT_MS` ile dosyayı siliyor; başarılı `ac(d)` dalında ise ana kilidi silmeden önce `oku(d) === ben` şartı yok. DV32g tam olarak 60 saniyelik devral dosyasını sahibinin durumunu sınamadan kaldırmayı başarı sayıyor; DV32c yalnız 400 ms gecikme kullandığından 5 saniyelik sahiplik kaybı penceresini ölçmüyor.",
+        "konum": "terminal-onar/kapi/kilit.mjs:25,32-40; terminal-onar/kapi/kilit.test.mjs:31-35,51-54; ölçüm `kilit-sinav` DV32c/DV32g",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve iki kayıt da yeşil; kilit sınavında 7/7, bütün kapı sınavında gösterilen bölümlerde sıfır hata var. Kanıt, modülün `kadroYaz` bağlantısını ve DV32a–d hedeflerini doğrudan ölçüyor; fakat devral sahibinin beş saniye eşiğini aşan duraklamasını içeren ölçüm yok, DV32g ise güvenli sahiplik doğrulaması yerine yaşa dayalı kaldırmayı onaylıyor."
+  }
+}
