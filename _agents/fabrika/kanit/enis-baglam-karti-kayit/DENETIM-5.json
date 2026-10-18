@@ -1,0 +1,38 @@
+{
+  "tur": 5,
+  "is": "enis-baglam-karti-kayit",
+  "pr": "370",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T20:04:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 38077,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 16122
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Araç, sözleşmeye uyan PATCH /kayit yanıtında adımın gerçek bir listede bulunduğunu doğruluyor; sözleşme dışı 200 gövdelerini rc 1 ile fail-closed reddediyor. Hedeflenen dar kapsam sınav ve mutasyonlarla ölçülmüş, üretimi engelleyen kusur görünmüyor; yalnız belge yorumlarında küçük sayı tutarsızlıkları kalmış.",
+    "bulgular": [
+      {
+        "ne": "Sınav ve mutasyon sayıları belge yorumlarında güncellenmemiş: SKILL 19 kapı, mutasyon betiği dört mutasyon diyor; kanıt sırasıyla 20 sınav ve 7 mutasyon gösteriyor.",
+        "kanit": "SKILL son satırında “19 kapı”, mutasyon betiğinin başlık yorumunda “dört mutasyon” yazarken ölçüm çıktıları “20 geçti · 0 kaldı” ve “7 yakalandı · 0 kaçtı” diyor.",
+        "konum": "baglam-karti/SKILL.md:58; baglam-karti/scripts/baglam-karti.mutasyon.sh:2-4; olcum-sinav-tek.txt:SONUÇ; olcum-mutasyon-tek.txt:son satır",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Hermetik sınav 20/20, repo kapıları ve yedi mutasyon yeşil; özellikle önceki bulguyu kapatan adimlar yanlış-tür vakası gerçekçi sahte defter yanıtıyla rc 1 olarak ölçülmüş. Canlı defter sınavı ve defter tarafı sözleşme belgesi açıkça kalan karta daraltıldığından bu teslimin kod puanını düşürmüyor."
+  }
+}
