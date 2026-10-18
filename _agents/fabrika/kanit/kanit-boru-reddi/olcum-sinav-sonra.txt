@@ -1,0 +1,27 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/pthaq/sinav-say.sh /config/projects/_wt/Sx-Claude-Skills-kanit-boru-reddi/yazilim-fabrikasi/scripts sonra
+# rc=0 sure=20.1s zaman=2026-10-18T16:25:40+03:00
+--- stdout ---
+test_rc=1 gecen=120 kalan=3 bilinen_t8_kalan=3 yeni_T20_T21_gecen=19 yeni_T20_T21_kalan=0
+  ✗ gerçek kare alındı (playwright var)
+  ✗ ürün imi yoksa rc=2 (ölçer ürünü görmedi — 6. kanun)
+  ✗ imsiz kare manifestte kırmızı
+  ✓ T20a pipefail'siz boruyla biten betik REDDEDİLDİ (rc=1)
+  ✓ T20a2 reddedilen betik için kayıt YOK
+  ✓ T20b '|| true' reddedildi
+  ✓ T20b2 betiğin ORTASINDAKİ '|| true' da reddedildi (son komut temiz olsa bile)
+  ✓ T20c başka komuttan sonra gelen son 'echo' reddedildi
+  ✓ T20d 'set -o pipefail' ile boru kabul edildi
+  ✓ T20d2 pipefail'li boru gerçek rc'yi taşıdı: renk=kirmizi, boru_denetimi=temiz
+  ✓ T20e kabuk argümanındaki '-o pipefail' de sayıldı
+  ✓ T20f 15 karakterden kısa --boru-izin gerekçesi reddedildi
+  ✓ T20g gerekçeli --boru-izin ile kayıt alındı
+  ✓ T20g2 izin ve gerekçe manifeste yazıldı (denetçi görür)
+  ✓ T20h kabuk -c olmayan komut: boru_denetimi=kapsam-dışı (sınır beyan edildi)
+  ✓ T20i heredoc: reddedilmedi, boru_denetimi=ayrıştırılamadı
+  ✓ T20j betiğin TEK komutu echo: temiz (maskelenen iş yok)
+  ✓ T20k tırnak içindeki '|' boru sayılmadı
+  ✓ T21a mutant (denetim hiç çağrılmıyor) maskeli betiği kabul ediyor → T20a bu mutantta düşerdi
+  ✓ T21b mutant (boru kuralı yok) → T20a bu mutantta düşerdi
+  ✓ T21c mutant ('|| true' kuralı yok) ortadaki maskeyi kabul ediyor → T20b2 bu mutantta düşerdi
+  ✓ T21d mutant (son-echo kuralı yok) → T20c bu mutantta düşerdi
+--- stderr ---

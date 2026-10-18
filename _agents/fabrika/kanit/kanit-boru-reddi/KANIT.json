@@ -1,0 +1,44 @@
+{
+  "is": "kanit-boru-reddi",
+  "arac": "kanit.py/0.4.0",
+  "guncelleme": "2026-10-18T16:25:40+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "once",
+      "dosya": "olcum-sinav-once.txt",
+      "sha256": "368c2b32c74e50e376c506ca4c346d3c8dbe3bc1a7f396f29c2cf012ddf97af9",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/pthaq/sinav-say.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/pthaq/once-0Rnh",
+        "once"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:23:31+03:00",
+      "sure_sn": 12.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "d604a71478d514b374cd3aacb53136c95c6b0b1010ab9df173c53f8a1a623004",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/pthaq/sinav-say.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-kanit-boru-reddi/yazilim-fabrikasi/scripts",
+        "sonra"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:25:40+03:00",
+      "sure_sn": 20.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)"
+    }
+  ],
+  "imza": "d3544c08cb1cb8ca1d824776ad505f94204b47a6494fee9acde822387c6fc4d3"
+}

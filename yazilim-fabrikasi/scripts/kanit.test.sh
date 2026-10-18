@@ -304,6 +304,49 @@ SSH_SHIM_ARGS="$T/ssh-args3.txt" SSH_SHIM_RC=255 PATH="$SHIM:$PATH" KANIT_DEPO="
 _mut 'if not GUVENLI_RE.match(parca):' 'if False:'
 SSH_SHIM_ARGS="$T/ssh-args2.txt" PATH="$SHIM:$PATH" KANIT_DEPO="$T" python3 "$MC/kanit.py" canli is-canli-m sahte --desen sahte --kaynak "ssh:kutu:/var/log/x;echo" >/dev/null 2>&1; [ $? -ne 1 ]; g $? "T19d mutant (yol doğrulaması kaldırıldı) metakarakterli yolu reddetmiyor → T18y2 bu mutantta düşerdi"
 
+echo "════ T20 · BORU REDDİ (görev PTHAQ): kabuk -c betiğinde çıkış kodunu maskeleyen desen kayıt ÜRETMEZ ════"
+BD="$T/_agents/fabrika/kanit/is-boru"
+_yok() { python3 - "$BD/KANIT.json" "$1" <<'PY'
+import json,os,sys; p,et=sys.argv[1:]
+m=json.load(open(p)) if os.path.exists(p) else {"kayitlar":[]}
+sys.exit(1 if any(k.get("etiket")==et for k in m["kayitlar"]) else 0)
+PY
+}
+_alan() { python3 - "$BD/KANIT.json" "$1" "$2" <<'PY'
+import json,sys; p,et,bekle=sys.argv[1:]
+k=[x for x in json.load(open(p))["kayitlar"] if x["etiket"]==et][-1]
+sys.exit(0 if k.get("boru_denetimi","").startswith(bekle) else 1)
+PY
+}
+bash "$K" olcum is-boru kuyruk --asama tek -- bash -c 'false | tail -1' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20a pipefail'siz boruyla biten betik REDDEDİLDİ (rc=1)"
+_yok kuyruk; g $? "T20a2 reddedilen betik için kayıt YOK"
+bash "$K" olcum is-boru yut --asama tek -- bash -c 'false || true' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20b '|| true' reddedildi"
+bash "$K" olcum is-boru yutara --asama tek -- bash -c 'false || true; ls /' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20b2 betiğin ORTASINDAKİ '|| true' da reddedildi (son komut temiz olsa bile)"
+bash "$K" olcum is-boru yanki --asama tek -- bash -c 'false; echo bitti' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20c başka komuttan sonra gelen son 'echo' reddedildi"
+bash "$K" olcum is-boru pf --asama tek -- bash -c 'set -o pipefail; false | tail -1' >/dev/null 2>&1; g $? "T20d 'set -o pipefail' ile boru kabul edildi"
+python3 -c "import json;k=[x for x in json.load(open('$BD/KANIT.json'))['kayitlar'] if x['etiket']=='pf'][-1];assert k['renk']=='kirmizi' and k['boru_denetimi']=='temiz'"; g $? "T20d2 pipefail'li boru gerçek rc'yi taşıdı: renk=kirmizi, boru_denetimi=temiz"
+bash "$K" olcum is-boru pfarg --asama tek -- bash -o pipefail -c 'false | cat' >/dev/null 2>&1; g $? "T20e kabuk argümanındaki '-o pipefail' de sayıldı"
+bash "$K" olcum is-boru kisa --asama tek --boru-izin "kisa" -- bash -c 'false | tail -1' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20f 15 karakterden kısa --boru-izin gerekçesi reddedildi"
+bash "$K" olcum is-boru izin --asama tek --boru-izin "sayım için grep, rc anlamsız" -- bash -c 'false | tail -1' >/dev/null 2>&1; g $? "T20g gerekçeli --boru-izin ile kayıt alındı"
+python3 -c "import json;k=[x for x in json.load(open('$BD/KANIT.json'))['kayitlar'] if x['etiket']=='izin'][-1];assert k['boru_denetimi'].startswith('izinli:') and 'sayım için grep' in k['boru_denetimi']"; g $? "T20g2 izin ve gerekçe manifeste yazıldı (denetçi görür)"
+bash "$K" olcum is-boru argv --asama tek -- true >/dev/null 2>&1; _alan argv "kapsam-dışı"; g $? "T20h kabuk -c olmayan komut: boru_denetimi=kapsam-dışı (sınır beyan edildi)"
+bash "$K" olcum is-boru hd --asama tek -- bash -c 'cat <<EOF
+x
+EOF' >/dev/null 2>&1; _alan hd "ayrıştırılamadı"; g $? "T20i heredoc: reddedilmedi, boru_denetimi=ayrıştırılamadı"
+bash "$K" olcum is-boru tek --asama tek -- bash -c 'echo TEK' >/dev/null 2>&1; _alan tek "temiz"; g $? "T20j betiğin TEK komutu echo: temiz (maskelenen iş yok)"
+bash "$K" olcum is-boru tirnak --asama tek -- bash -c "echo 'a | b'; exit 0" >/dev/null 2>&1; _alan tirnak "temiz"; g $? "T20k tırnak içindeki '|' boru sayılmadı"
+
+echo "════ T21 · MUTASYON: boru denetiminin her kolu kaldırılınca T20 kırmızıya döner ════"
+_mutkos() { KANIT_DEPO="$T" python3 "$MC/kanit.py" olcum is-boru-mut "$1" --asama tek -- bash -c "$2" >/dev/null 2>&1; }
+_mut 'durum, neden = boru_denetimi(a.komut)' 'durum, neden = "temiz", None'
+_mutkos m1 'false | tail -1'; [ $? -eq 0 ]; g $? "T21a mutant (denetim hiç çağrılmıyor) maskeli betiği kabul ediyor → T20a bu mutantta düşerdi"
+_mut 'if "|" in son and not pipefail:' 'if False:'
+_mutkos m2 'false | tail -1'; [ $? -eq 0 ]; g $? "T21b mutant (boru kuralı yok) → T20a bu mutantta düşerdi"
+_mut 'if jet[k] == "||" and' 'if False and'
+_mutkos m3 'false || true; ls /'; [ $? -eq 0 ]; g $? "T21c mutant ('|| true' kuralı yok) ortadaki maskeyi kabul ediyor → T20b2 bu mutantta düşerdi"
+_mut 'if son[0] in MASKE_SON and oncesi:' 'if False:'
+_mutkos m4 'false; echo bitti'; [ $? -eq 0 ]; g $? "T21d mutant (son-echo kuralı yok) → T20c bu mutantta düşerdi"
+
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]
