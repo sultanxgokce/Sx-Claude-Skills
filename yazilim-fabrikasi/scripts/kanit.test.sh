@@ -335,6 +335,10 @@ x
 EOF' >/dev/null 2>&1; _alan hd "ayrıştırılamadı"; g $? "T20i heredoc: reddedilmedi, boru_denetimi=ayrıştırılamadı"
 bash "$K" olcum is-boru tek --asama tek -- bash -c 'echo TEK' >/dev/null 2>&1; _alan tek "temiz"; g $? "T20j betiğin TEK komutu echo: temiz (maskelenen iş yok)"
 bash "$K" olcum is-boru tirnak --asama tek -- bash -c "echo 'a | b'; exit 0" >/dev/null 2>&1; _alan tirnak "temiz"; g $? "T20k tırnak içindeki '|' boru sayılmadı"
+bash "$K" olcum is-boru pfkelime --asama tek -- bash -c 'echo pipefail; false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20l 'pipefail' KELİMESİ geçmesi yetmez (göz tur 1): echo pipefail; false | cat reddedildi"
+bash "$K" olcum is-boru pfkapat --asama tek -- bash -c 'set -o pipefail; set +o pipefail; false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20m 'set +o pipefail' ile kapatılan boru reddedildi (durum sırayla izlenir)"
+bash "$K" olcum is-boru pfargkapat --asama tek -- bash +o pipefail -c 'false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20n kabuk argümanında '+o pipefail' reddedildi"
+bash "$K" olcum is-boru sonset --asama tek -- bash -c 'false | cat; set -o pipefail' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20o son komut 'set' (öncekinin rc'sini yutar) reddedildi"
 
 echo "════ T21 · MUTASYON: boru denetiminin her kolu kaldırılınca T20 kırmızıya döner ════"
 _mutkos() { KANIT_DEPO="$T" python3 "$MC/kanit.py" olcum is-boru-mut "$1" --asama tek -- bash -c "$2" >/dev/null 2>&1; }
@@ -346,6 +350,10 @@ _mut 'if jet[k] == "||" and' 'if False and'
 _mutkos m3 'false || true; ls /'; [ $? -eq 0 ]; g $? "T21c mutant ('|| true' kuralı yok) ortadaki maskeyi kabul ediyor → T20b2 bu mutantta düşerdi"
 _mut 'if son[0] in MASKE_SON and oncesi:' 'if False:'
 _mutkos m4 'false; echo bitti'; [ $? -eq 0 ]; g $? "T21d mutant (son-echo kuralı yok) → T20c bu mutantta düşerdi"
+_mut 'durum = a[0] == "-"' 'durum = True'
+_mutkos m5 'set -o pipefail; set +o pipefail; false | cat'; [ $? -eq 0 ]; g $? "T21e mutant (pipefail kapatma yok sayılıyor) → T20m bu mutantta düşerdi"
+_mut 'pipefail = _pipefail_etkisi(komut[1:i], False)' 'pipefail = any("pipefail" in t for t in jet)'
+_mutkos m6 'echo pipefail; false | cat'; [ $? -eq 0 ]; g $? "T21f mutant (eski kelime araması) → T20l bu mutantta düşerdi"
 
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"

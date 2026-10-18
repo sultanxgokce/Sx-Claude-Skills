@@ -156,12 +156,20 @@ def kayit_ekle(depo, is_adi, kayit):
 #    bunu göremez. Bu yüzden kabuk -c betiği koşmadan önce ayrıştırılır; çıkış kodunun SON komuttan geldiği kural:
 #      (a) `|| true` / `|| :`  — nerede olursa olsun açık maskedir;
 #      (b) son komut echo/printf/true/: VE öncesinde başka komut var  — çıkış kodu artık ölçülen işin değil, o komutun;
-#      (c) son komut boru (`a | b`) ve betikte `pipefail` yok  — çıkış kodu boru SONUNDAKİ süzgecin.
+#      (c) son komut boru (`a | b`) ve o noktada pipefail AÇIK değil  — çıkış kodu boru SONUNDAKİ süzgecin.
 #    Ayrıştırılamayan betik (heredoc, dengesiz tırnak) REDDEDİLMEZ; kayda `boru_denetimi: ayrıştırılamadı` düşer — denetçi görür.
 #    Dosya betiği (`bash x.sh`) içeriği denetlenmez; kayda `kapsam-dışı` düşer (sınır dürüstçe beyan edilir).
 KABUKLAR = {"bash", "sh", "dash", "zsh", "ksh"}
-MASKE_SON = {"echo", "printf", "true", ":"}
+MASKE_SON = {"echo", "printf", "true", ":", "set"}   # son komut `set …` da 0 döner, öncekinin rc'sini yutar
 AYIRAC = {";", "&&", "||", "&", ";;"}
+
+def _pipefail_etkisi(argumanlar, durum):
+    """`set`/kabuk argümanlarında `-o pipefail` (ya da `-euo pipefail`) açar, `+o pipefail` kapatır; yoksa durum aynen kalır."""
+    for k in range(len(argumanlar) - 1):
+        a, sonraki = argumanlar[k], argumanlar[k + 1]
+        if sonraki == "pipefail" and len(a) >= 2 and a[0] in "-+" and "o" in a[1:]:
+            durum = a[0] == "-"
+    return durum
 
 def boru_denetimi(komut):
     """(durum, neden) — durum: temiz | maske | ayristirilamadi | kapsam-disi"""
@@ -173,7 +181,9 @@ def boru_denetimi(komut):
     betik = komut[i + 1]
     try:
         # yeni satır da komut ayıracıdır: ayrıştırma için `;` sayılır (tırnak içindeki satır sonları da — yalnız analiz)
-        jet = list(shlex.shlex(betik.replace("\n", " ; "), posix=True, punctuation_chars=";&|()<>"))
+        lx = shlex.shlex(betik.replace("\n", " ; "), posix=True, punctuation_chars=";&|()<>")
+        lx.wordchars += "+"   # `set +o pipefail`: `+o` tek parça kalmalı (yoksa `+` ve `o` diye bölünür, kapatma görülmez)
+        jet = list(lx)
     except ValueError as e:
         return "ayristirilamadi", f"betik ayrıştırılamadı ({e})"
     if "<<" in jet or "<<-" in jet:
@@ -181,7 +191,6 @@ def boru_denetimi(komut):
     for k in range(len(jet) - 1):
         if jet[k] == "||" and jet[k + 1] in ("true", ":"):
             return "maske", "`|| " + jet[k + 1] + "` çıkış kodunu yutuyor"
-    pipefail = any("pipefail" in t for t in jet) or any("pipefail" in t for t in komut[1:i])   # `bash -o pipefail -c …` da sayılır
     # son anlamlı komut: son ayıracın sağı (sondaki boş ayıraçlar atılır)
     while jet and jet[-1] in AYIRAC:
         jet.pop()
@@ -195,6 +204,18 @@ def boru_denetimi(komut):
     oncesi = [t for t in jet[:len(jet) - len(son)] if t not in AYIRAC]
     if son[0] in MASKE_SON and oncesi:   # betiğin TEK komutu echo ise maskelenen bir iş yoktur (ölçülen şey odur)
         return "maske", f"son komut `{son[0]}` — betiğin çıkış kodu ölçülen işin değil `{son[0]}`'nun"
+    # pipefail DURUMU sırayla izlenir (göz tur 1: kelimenin geçmesi yetmiyordu — `echo pipefail` ya da `set +o pipefail` geçiyordu).
+    # Başlangıç kabuk argümanından (`bash -o pipefail -c`, `bash -euo pipefail -c`); sonra son komuttan ÖNCEKİ her `set` komutu
+    # `-…o pipefail` ile açar, `+…o pipefail` ile kapatır. Son komutun kendisi sayılmaz.
+    pipefail = _pipefail_etkisi(komut[1:i], False)
+    bolum = []
+    for t in jet[:len(jet) - len(son)] + [";"]:
+        if t in AYIRAC:
+            if bolum and bolum[0] == "set":
+                pipefail = _pipefail_etkisi(bolum[1:], pipefail)
+            bolum = []
+        else:
+            bolum.append(t)
     if "|" in son and not pipefail:
         suzgec = son[len(son) - 1 - son[::-1].index("|") + 1] if son[-1] != "|" else "?"
         return "maske", f"son komut boruyla bitiyor (`… | {suzgec}`) ve pipefail yok — çıkış kodu süzgecin"

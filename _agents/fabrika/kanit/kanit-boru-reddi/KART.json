@@ -1,0 +1,21 @@
+{
+  "is": "kanit-boru-reddi",
+  "cumle": "kanit.py olcum kabuk -c komutunda çıkış kodunu maskeleyen deseni (|| true, son komut echo/true, pipefail'siz boru) reddetsin; gerekçeli --boru-izin istisnası manifeste yazılsın (görev PTHAQ, ilk yarı)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-18T16:18:35+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/kanit-boru-reddi/ (sınav + mutasyon)",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)"
+}
