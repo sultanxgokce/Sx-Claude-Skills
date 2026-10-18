@@ -1,0 +1,128 @@
+{
+  "is": "kanit-gecersiz-ilan",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-18T19:31:06+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-kanit",
+      "asama": "once",
+      "dosya": "olcum-sinav-kanit-once.txt",
+      "sha256": "ebb9eaca3f291cda86af36b3f0433451a9309310537fe475cc7b9fd7d55ab7ec",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T19:12:27+03:00",
+      "sure_sn": 10.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-kart",
+      "asama": "once",
+      "dosya": "olcum-sinav-kart-once.txt",
+      "sha256": "65a0465f6be5a0a293f0ae6d3d4b73dd8e7de17e27d191d7d6b4d8ac4e94f04a",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T19:12:30+03:00",
+      "sure_sn": 3.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-birlestirme-kapisi",
+      "asama": "once",
+      "dosya": "olcum-sinav-birlestirme-kapisi-once.txt",
+      "sha256": "ffe4a2d04bc092b66e11c8713ad6455a5b6a9de0758bcc876384b6244069d2a1",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T19:12:48+03:00",
+      "sure_sn": 17.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-denetci",
+      "asama": "once",
+      "dosya": "olcum-sinav-denetci-once.txt",
+      "sha256": "03f80cc8995db6b63fdd14037b7ca2556fa9e9faf0b3e96ccd8807f2092b3f68",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/4k/ana-Gsva/yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T19:26:25+03:00",
+      "sure_sn": 225.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-kanit",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-kanit-sonra.txt",
+      "sha256": "2bc40ee20afdc81120c372008d2589229cec807fe8436b61e9077b9a9ffdec6a",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T19:27:19+03:00",
+      "sure_sn": 11.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-kart",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-kart-sonra.txt",
+      "sha256": "1334993c335eb9e2a3d95347866b4b0cb2655327928d6ad48952fa4570c7066f",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T19:27:21+03:00",
+      "sure_sn": 2.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-birlestirme-kapisi",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-birlestirme-kapisi-sonra.txt",
+      "sha256": "6bd61a3820141b4b0cdf89f0c0d6cfcf7b569cc8b42068b87a58d41d546d5a03",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T19:27:40+03:00",
+      "sure_sn": 18.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-denetci",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-denetci-sonra.txt",
+      "sha256": "2f30b61e28153d6b7191d8abfe846cd68d016aee222ae9089bb0de1502eb6875",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T19:31:06+03:00",
+      "sure_sn": 206.1
+    }
+  ],
+  "imza": "13573399a66682ccc4d1939ebc931cacefe4ac0342a0ea1fd3d69e970f2b89dc"
+}

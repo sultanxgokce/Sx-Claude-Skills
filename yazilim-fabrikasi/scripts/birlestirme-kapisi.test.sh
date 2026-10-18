@@ -273,5 +273,34 @@ PY
 bash "$M6" is-i --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T12k mutant 6: geleceğe tarihli kayıt GEÇİYOR → T11o bu mutantta düşerdi"
 bash "$G" is-i --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T12l gerçek kapı geleceğe tarihli kaydı reddediyor"
 
+echo "════ T13 · GEÇERSİZ ilan (4K938): geçersiz canlı yeşil sayılmaz, sarı gibi engeldir; ilan kapıyı gevşetmez ════"
+bash "$KT" ac is-m --is "zil-m cron'u her saat çalsın" --istedi S --aldi M --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+bash "$KT" ac is-n --is "buton rengi düzelsin" --istedi S --aldi M --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+sleep 1; printf '%s zil-m çaldı\n' "$(date -u +%FT%TZ)" > "$LGK/zil-m.log"
+for i in is-m is-n; do bash "$K" olcum $i olc --asama tek -- echo 1 >/dev/null 2>&1; den $i 1 5 E; bash "$K" canli $i zil --desen zil-m --kaynak "dosya:$LGK/zil-m.log" >/dev/null 2>&1; done
+bash "$G" is-m --sessiz >/dev/null 2>&1; g $? "T13a önce: canlı kartı bağlı yeşil canlıyla geçer"
+bash "$G" is-n --sessiz >/dev/null 2>&1; g $? "T13a2 önce: canlısız kart (yeşil canlı kaydıyla) geçer"
+bash "$K" gecersiz is-m zil --neden "log satırı başka sunucunun zil kaydıydı" --kim M >/dev/null 2>&1
+bash "$K" gecersiz is-n zil --neden "log satırı başka sunucunun zil kaydıydı" --kim M >/dev/null 2>&1
+CIKTI="$(bash "$G" is-m 2>&1)"; RC=$?
+[ "$RC" -eq 1 ]; g $? "T13b geçersiz ilan edilen yeşil canlı SAYILMAZ → rc=1"
+grep -q "SARI ya da GEÇERSİZ" <<<"$CIKTI" && grep -q "kanit.sh canli" <<<"$CIKTI"; g $? "T13c sebebi ve yolu yazılı (yeniden ölç)"
+bash "$G" is-n --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T13d canlısız kartta da geçersiz canlı ENGEL (sarı gibi) → rc=1"
+# mutantlar tam kopyada (kanit.py kardeş); kontrol kopyası değişmeden aynı sonucu vermeli — kopya erken düşüp tesadüfen geçirmesin
+cp "$G" "$PKG/kontrol13.sh"; bash "$PKG/kontrol13.sh" is-n --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T13e kontrol kopyası (mutasyonsuz) gerçek kapıyla aynı: rc=1"
+M9="$PKG/mutant9.sh"; sed 's/k\["etkin_renk"\] in ("sari","gecersiz")/k["etkin_renk"] in ("sari",)/' "$G" > "$M9"
+grep -q 'in ("sari",)' "$M9"; g $? "T13f mutant 9 üretildi (geçersiz canlı engel listesinden çıktı)"
+bash "$M9" is-n --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T13g mutant 9: geçersiz canlı canlısız kartı GEÇİRİYOR → T13d bu mutantta düşerdi"
+M10="$PKG/mutant10.sh"; sed 's/y=\[k for k in c if k\["etkin_renk"\]=="yesil"\]/y=[k for k in c if k.get("renk")=="yesil"]/; s/k\["etkin_renk"\] in ("sari","gecersiz")/k.get("renk")=="sari"/' "$G" > "$M10"
+grep -q 'k.get("renk")=="yesil"' "$M10"; g $? "T13h mutant 10 üretildi (kapı etkin renk yerine ham rengi okuyor)"
+bash "$M10" is-m --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T13i mutant 10: geçersiz yeşil canlıyı SAYIYOR → T13b bu mutantta düşerdi"
+sleep 1; printf '%s zil-m çaldı\n' "$(date -u +%FT%TZ)" > "$LGK/zil-m.log"
+bash "$K" canli is-m zil --desen zil-m --kaynak "dosya:$LGK/zil-m.log" >/dev/null 2>&1
+bash "$G" is-m --sessiz >/dev/null 2>&1; g $? "T13j yeniden ölçülünce ilan uygulanmaz (eski ölçüme aitti) → geçer"
+bash "$PKG/kontrol13.sh" is-m --sessiz >/dev/null 2>&1; g $? "T13j2 kontrol kopyası geçen durumu da geçiriyor (kopyada içe aktarım düşmüyor)"
+bash "$K" gecersiz is-m olc --neden "echo 1 iddiayı ölçmüyordu, vekil ölçüttü" --kim M >/dev/null 2>&1
+CIKTI="$(bash "$G" is-m 2>&1)"; RC=$?
+grep -q "⛔ GEÇERSİZ: olcum-olc-tek.txt" <<<"$CIKTI" && grep -q "vekil ölçüttü" <<<"$CIKTI"; g $? "T13k ölçüm ilanı kapı çıktısında görünür (sessiz kalmaz; hükmü göz verir)"
+
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

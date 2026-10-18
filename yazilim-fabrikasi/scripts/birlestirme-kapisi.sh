@@ -69,7 +69,9 @@ if [ -f "$HERE/kanit.py" ]; then
   KANIT_KOK="${DZ%/_agents/fabrika/kanit/$IS}"     # kanıt dizininden deponun kökünü türet
   cik="$(python3 "$HERE/kanit.py" --depo "$KANIT_KOK" dogrula "$IS" 2>&1)"; krc=$?
   case "$krc" in
-    0) _y "  ✓ kanıt: $(printf '%s' "$cik" | head -1 | sed 's/^✓ //')" ;;
+    0) _y "  ✓ kanıt: $(printf '%s\n' "$cik" | grep '^✓ manifest' | sed 's/^✓ //')"
+       # 4K938: geçersiz ilan edilen kayıt sessiz kalmaz — kapı satırında görünür (olcum renkleri kapının hükmü değil, gözün)
+       printf '%s\n' "$cik" | grep '^⛔ GEÇERSİZ' | while IFS= read -r l; do _y "  $l"; done ;;
     1) _h "kanıt manifesti BOZUK (elle yazılmış ya da dosya değişmiş)"; eksik=$((eksik+1)) ;;
     *) _h "kanıt YOK — 'kanıtsız iş gönderilemez'"; eksik=$((eksik+1)) ;;
   esac
@@ -100,8 +102,10 @@ fi
 cy=0; cs=0; cilk=""; ckopuk=""; ckz=1; cpy_rc=0
 if [ -f "$DZ/KANIT.json" ]; then
   # 🔴 GÖZ #353 tur 2: python bloğu düşerse eval boş kalıyor ve kapı "canlı yok" (rc=1) diyordu → alt sürecin rc'si ölçülür, düşerse ÖLÇÜLEMEDİ
-  cpy_out="$(python3 - "$DZ/KANIT.json" "$KART" <<'PY'
+  cpy_out="$(python3 - "$DZ/KANIT.json" "$KART" "$HERE" <<'PY'
 import json,sys,shlex,datetime
+# 4K938: etkin renk kanit.py'den okunur (kopya yok); içe aktarım düşerse alt süreç rc≠0 → ÖLÇÜLEMEDİ (fail-closed)
+sys.path.insert(0,sys.argv[3]); from kanit import etkin_kayitlar
 def P(s):
     # 🔴 GÖZ #353 tur 2: dilimsiz (naive) ISO ile dilimli karşılaştırma TypeError veriyordu → dilimsiz değer kutunun yerel dilimine alınır
     try:
@@ -113,8 +117,9 @@ except Exception: m={}
 kz=None
 try: kz=P(json.load(open(sys.argv[2],encoding="utf-8")).get("zaman",""))
 except Exception: pass
-c=[k for k in m.get("kayitlar",[]) if k.get("tur")=="canli"]
-y=[k for k in c if k.get("renk")=="yesil"]; s=[k for k in c if k.get("renk")=="sari"]
+c=[k for k in etkin_kayitlar(m) if k.get("tur")=="canli"]
+# geçersiz ilan edilen canlı kayıt yeşil SAYILMAZ, sarı gibi ENGELDİR — ilan kapıyı hiçbir zaman gevşetmez
+y=[k for k in c if k["etkin_renk"]=="yesil"]; s=[k for k in c if k["etkin_renk"] in ("sari","gecersiz")]
 bagli_l=[]; kopuk=[]
 for k in y:
     oz=P(k.get("zaman") or ""); son=P(((k.get("son_atesleme") or k.get("ilk_atesleme") or {}).get("saat_iso")) or "")
@@ -141,7 +146,7 @@ cs_engel=0
 # 🔴 GÖZ #353 tur 1: kartın açılış zamanı okunamazsa işe bağlama ÖLÇÜLEMEZ — bu "bağlı kayıt yok" (rc=1) değil, ÖLÇÜLEMEDİ (rc=3).
 [ ! -f "$KART" ] || [ "$ckz" = "1" ] || { _h "kartın açılış zamanı ('zaman') okunamadı — canlı kaydın işe bağlanması ÖLÇÜLEMEDİ"; olcemedi=$((olcemedi+1)); }
 [ -n "$ckopuk" ] && _y "  ⚠ canlı kaydı işe bağlanamadı (sayılmaz): $ckopuk"
-[ "$cs" -gt 0 ] && { _h "canlı kanıt SARI ($cs kayıt) — ölçülmüş ama ateşleme kaydı yok; sarı yeşil değildir"; eksik=$((eksik+1)); cs_engel=1; }
+[ "$cs" -gt 0 ] && { _h "canlı kanıt SARI ya da GEÇERSİZ ($cs kayıt) — ateşleme kaydı yok ya da kayıt geçersiz ilan edilmiş; yeniden ölç (kanit.sh canli)"; eksik=$((eksik+1)); cs_engel=1; }
 [ "$cg" = "E" ] && [ "$cy" -eq 0 ] && [ "$cs_engel" -eq 0 ] && { _h "canlı kanıt YOK ya da bu işe bağlı değil — cron/servis/sunucu işi ($csebep) kart açılışından SONRAKİ gerçek ateşleme kaydını ister: kanit.sh canli <iş> <etiket> --kaynak … -- <log okuyan komut>"; eksik=$((eksik+1)); }
 [ "$cy" -gt 0 ] && _y "  ✓ canlı: $cy ateşleme kaydı (işe bağlı) · ilk: $cilk"
 [ "$cg" = "H" ] && [ -n "$csebep" ] && _y "  · canlı kanıt istenmedi — $csebep"

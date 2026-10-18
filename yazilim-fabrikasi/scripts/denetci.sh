@@ -138,7 +138,10 @@ kart_yolu() {  # birincil depodaki kart; yoksa boş. İş alanındaki kopya OKUN
 # ── 1 · kanıt kapısı ─────────────────────────────────────────────────────────────
 KANIT_CIKTI="$(KANIT_DEPO="$DEPO" python3 "$HERE/kanit.py" dogrula "$IS" 2>&1)"; KRC=$?
 case "$KRC" in
-  0) KANIT_DURUM="sağlam (araç imzalı, sha'lar tutuyor)" ;;
+  0) KANIT_DURUM="sağlam (araç imzalı, sha'lar tutuyor)"
+     # 4K938: geçersiz ilan edilen kayıt göze söylenir — manifestte durur ama kanıt sayılmaz
+     NGEC=$(printf '%s\n' "$KANIT_CIKTI" | grep -c '^⛔ GEÇERSİZ')
+     [ "$NGEC" -gt 0 ] && KANIT_DURUM="$KANIT_DURUM · $NGEC kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: $(printf '%s\n' "$KANIT_CIKTI" | grep '^⛔ GEÇERSİZ' | sed 's/^⛔ GEÇERSİZ: //' | paste -sd ';' -)" ;;
   1) _hata "kanıt manifesti BOZUK (elle yazılmış ya da dosya değişmiş) — denetim açılmaz"; printf '%s\n' "$KANIT_CIKTI" >&2; exit 2 ;;
   *) _hata "kanıt YOK — 'kanıtsız adım 4 yok'. Önce kanit.sh ile kanıt topla."; exit 2 ;;
 esac

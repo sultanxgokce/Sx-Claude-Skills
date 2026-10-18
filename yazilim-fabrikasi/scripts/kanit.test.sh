@@ -304,6 +304,75 @@ SSH_SHIM_ARGS="$T/ssh-args3.txt" SSH_SHIM_RC=255 PATH="$SHIM:$PATH" KANIT_DEPO="
 _mut 'if not GUVENLI_RE.match(parca):' 'if False:'
 SSH_SHIM_ARGS="$T/ssh-args2.txt" PATH="$SHIM:$PATH" KANIT_DEPO="$T" python3 "$MC/kanit.py" canli is-canli-m sahte --desen sahte --kaynak "ssh:kutu:/var/log/x;echo" >/dev/null 2>&1; [ $? -ne 1 ]; g $? "T19d mutant (yol doğrulaması kaldırıldı) metakarakterli yolu reddetmiyor → T18y2 bu mutantta düşerdi"
 
+echo "════ T22 · GEÇERSİZ ilan (4K938): özgün kayda dokunmaz, hedef sha+zamanına bağlı, yeşil sayılmaz ════"
+# Senaryo fonksiyonda: gerçek araçta her kapı geçer; T23'te tam kopyadaki mutantlarda hedef kapı düşer.
+_gec_senaryo() { # _gec_senaryo <kanit.sh> <depo> → "ad=0|1" satırları (0 = beklenen davranış)
+  local K="$1" D="$2" Z="$2/_agents/fabrika/kanit/is-gec" r
+  _s() { printf '%s=%s\n' "$1" "$([ "$2" -eq 0 ] && echo 0 || echo 1)"; }
+  _e() { KANIT_DEPO="$D" python3 -c "import json,sys;sys.path.insert(0,'$(dirname "$K")');import kanit;m=json.load(open('$Z/KANIT.json'));print(next(k['etkin_renk'] for k in kanit.etkin_kayitlar(m) if k['dosya']=='$1'))"; }
+  KANIT_DEPO="$D" bash "$K" olcum is-gec ana --asama sonra -- bash -c 'echo 7' >/dev/null 2>&1
+  KANIT_DEPO="$D" bash "$K" olcum is-gec iki --asama once -- echo a >/dev/null 2>&1
+  KANIT_DEPO="$D" bash "$K" olcum is-gec iki --asama sonra -- echo b >/dev/null 2>&1
+  local sha0 kay0; sha0="$(sha256sum "$Z/olcum-ana-sonra.txt")"
+  kay0="$(python3 -c "import json;print(json.dumps(next(k for k in json.load(open('$Z/KANIT.json'))['kayitlar'] if k['dosya']=='olcum-ana-sonra.txt'),sort_keys=True))")"
+  KANIT_DEPO="$D" bash "$K" gecersiz is-gec ana --neden "kısa" --kim T >/dev/null 2>&1; r=$?
+  _s kisa_neden_ret $([ "$r" -ne 0 ] && ! ls "$Z"/gecersiz-* >/dev/null 2>&1; echo $?)
+  KANIT_DEPO="$D" bash "$K" gecersiz is-gec yok-boyle --neden "olmayan hedef olmamalı, ret beklenir" --kim T >/dev/null 2>&1; _s olmayan_hedef_ret $([ $? -ne 0 ]; echo $?)
+  KANIT_DEPO="$D" bash "$K" gecersiz is-gec iki --neden "iki aşamalı etiket belirsiz, dosya ister" --kim T >/dev/null 2>&1; _s belirsiz_etiket_ret $([ $? -ne 0 ]; echo $?)
+  KANIT_DEPO="$D" bash "$K" gecersiz is-gec ana --neden "karşı kanıt yoksa ilan yazılmamalı" --kim T --karsi yok-boyle >/dev/null 2>&1; _s olmayan_karsi_ret $([ $? -ne 0 ]; echo $?)
+  KANIT_DEPO="$D" bash "$K" gecersiz is-gec ana --neden "boru çıkış kodunu maskeledi, ölçüm yanlış" --kim T --karsi olcum-iki-sonra.txt >/dev/null 2>&1; _s ilan_yazildi $?
+  _s ozgun_dosya_degismedi $([ "$(sha256sum "$Z/olcum-ana-sonra.txt")" = "$sha0" ]; echo $?)
+  _s ozgun_kayit_degismedi $([ "$(python3 -c "import json;print(json.dumps(next(k for k in json.load(open('$Z/KANIT.json'))['kayitlar'] if k['dosya']=='olcum-ana-sonra.txt'),sort_keys=True))")" = "$kay0" ]; echo $?)
+  _s etkin_gecersiz $([ "$(_e olcum-ana-sonra.txt)" = "gecersiz" ]; echo $?)
+  local C; C="$(KANIT_DEPO="$D" bash "$K" dogrula is-gec 2>&1)"; r=$?
+  _s dogrula_saglam_ve_sayar $([ "$r" -eq 0 ] && grep -q "1 kayıt GEÇERSİZ" <<<"$C" && grep -q "⛔ GEÇERSİZ: olcum-ana-sonra.txt (yesil → gecersiz) — boru" <<<"$C" && grep -q "karşı kanıt: olcum-iki-sonra.txt" <<<"$C"; echo $?)
+  C="$(KANIT_DEPO="$D" bash "$K" ozet is-gec 2>&1)"
+  _s ozet_gosterir $(grep -q "GEÇERSİZ\*\* (ölçülen: yesil): boru" <<<"$C"; echo $?)
+  _s liste_etkin_json $(KANIT_DEPO="$D" bash "$K" liste is-gec --etkin 2>/dev/null | python3 -c "import json,sys;l=json.load(sys.stdin);k=next(x for x in l if x['dosya']=='olcum-ana-sonra.txt');assert k['renk']=='yesil' and k['etkin_renk']=='gecersiz' and k['gecersiz_kim']=='T'" 2>/dev/null; echo $?)
+  KANIT_DEPO="$D" bash "$K" gecersiz is-gec ana --neden "ikinci kez ilan, ret beklenir burada" --kim T >/dev/null 2>&1; _s ikinci_ilan_ret $([ $? -ne 0 ]; echo $?)
+  KANIT_DEPO="$D" bash "$K" olcum is-gec ana --asama sonra -- bash -c 'echo 8' >/dev/null 2>&1
+  _s yeniden_olcum_ilani_dusurur $([ "$(_e olcum-ana-sonra.txt)" = "yesil" ]; echo $?)
+  C="$(KANIT_DEPO="$D" bash "$K" dogrula is-gec 2>&1)"
+  _s dogrula_uygulanmiyor_der $(grep -q "ilan artık uygulanmıyor: olcum-ana-sonra.txt" <<<"$C" && ! grep -q "kayıt GEÇERSİZ" <<<"$C"; echo $?)
+  python3 - "$Z/KANIT.json" <<'PY'
+import json,sys;p=sys.argv[1];m=json.load(open(p));next(k for k in m['kayitlar'] if k['tur']=='gecersiz')['neden']='elle değişti';json.dump(m,open(p,'w'))
+PY
+  KANIT_DEPO="$D" bash "$K" dogrula is-gec >/dev/null 2>&1; _s elle_ilan_yakalanir $([ $? -eq 1 ]; echo $?)
+}
+mkdir -p "$T/d22"; ( cd "$T/d22" && git init -q -b main ) >/dev/null 2>&1
+S22="$(_gec_senaryo "$K" "$T/d22")"
+_k() { [ "$(grep "^$1=" <<<"$2" | cut -d= -f2)" = "0" ]; }
+for ad_ac in "kisa_neden_ret:--neden 20 karakterden kısa → ret, ilan dosyası yazılmadı" "olmayan_hedef_ret:olmayan hedef → ret" \
+  "belirsiz_etiket_ret:iki kayıtlı etiket (once+sonra) → belirsiz, dosya adı ister" "olmayan_karsi_ret:olmayan karşı kanıt → ret" \
+  "ilan_yazildi:geçerli ilan rc=0" "ozgun_dosya_degismedi:özgün kanıt dosyasının baytı değişmedi" "ozgun_kayit_degismedi:özgün manifest kaydı değişmedi (renk hâlâ yesil)" \
+  "etkin_gecersiz:etkin renk = gecersiz" "dogrula_saglam_ve_sayar:dogrula rc=0, geçersiz sayısı + neden + karşı kanıt basılı" \
+  "ozet_gosterir:ozet tablosu GEÇERSİZ + nedeni gösteriyor" "liste_etkin_json:liste --etkin: ham renk yesil, etkin gecersiz, kim yazılı" \
+  "ikinci_ilan_ret:aynı ölçüme ikinci ilan → ret" "yeniden_olcum_ilani_dusurur:yeniden ölçüm (yeni sha+zaman) → ilan uygulanmaz, etkin yesil" \
+  "dogrula_uygulanmiyor_der:dogrula 'ilan artık uygulanmıyor' der, geçersiz saymaz" "elle_ilan_yakalanir:ilan kaydı elle değişince imza tutmuyor → rc=1"; do
+  _k "${ad_ac%%:*}" "$S22"; g $? "T22 ${ad_ac#*:}"
+done
+
+echo "════ T23 · MUTASYON (4K938): tam kopyada; kontrol kopyası tüm kapıları geçmeli, her mutant hedef kapısını düşürmeli ════"
+_kopya23() { local d="$T/pkg23-$1"; mkdir -p "$d"; cp "$HERE"/*.py "$HERE"/*.sh "$d/"; echo "$d"; }
+_mut23() { # _mut23 <ad> <eski> <yeni> → mutant kopyanın dizini
+  local d; d="$(_kopya23 "$1")"
+  python3 - "$d/kanit.py" "$2" "$3" <<'PY' || { echo "MUTASYON DESENİ TUTMADI: $1" >&2; }
+import sys; p,eski,yeni=sys.argv[1:]; s=open(p,encoding='utf-8').read(); assert eski in s; open(p,'w',encoding='utf-8').write(s.replace(eski,yeni,1))
+PY
+  echo "$d"
+}
+KD="$(_kopya23 kontrol)"; mkdir -p "$T/d23k"; ( cd "$T/d23k" && git init -q -b main ) >/dev/null 2>&1
+S="$(_gec_senaryo "$KD/kanit.sh" "$T/d23k")"; ! grep -q "=1$" <<<"$S" && [ "$(grep -c "=0$" <<<"$S")" -eq 15 ]; g $? "T23a kontrol kopyası (mutasyonsuz): 15 kapının 15'i geçiyor"
+_m23() { # _m23 <ad> <hedef kapı> <eski> <yeni> <açıklama>
+  local d s; d="$(_mut23 "$1" "$3" "$4")"; mkdir -p "$T/d23-$1"; ( cd "$T/d23-$1" && git init -q -b main ) >/dev/null 2>&1
+  s="$(_gec_senaryo "$d/kanit.sh" "$T/d23-$1")"; ! _k "$2" "$s"; g $? "T23 mutant $1: $5 → '$2' kapısı düşüyor"
+}
+_m23 kisa kisa_neden_ret 'if len(neden) < NEDEN_EN_AZ:' 'if False:' "neden uzunluğu denetimi kaldırıldı"
+_m23 bag yeniden_olcum_ilani_dusurur 'if h is not None and (h.get("sha256"), h.get("zaman")) == (g.get("hedef_sha256"), g.get("hedef_zaman")):' 'if h is not None:' "ilan hedefin sha+zamanına bağlı değil"
+_m23 etkin etkin_gecersiz 'elif k.get("dosya") in ilanlar:' 'elif False:' "etkin renk ilanı yok sayıyor"
+_m23 cift ikinci_ilan_ret 'if h["dosya"] in ilanlar:' 'if False:' "ikinci ilan denetimi kaldırıldı"
+_m23 karsi olmayan_karsi_ret 'kk = coz(a.karsi, "karşı kanıt")' 'kk = {"dosya": a.karsi}' "karşı kanıt çözülmeden kabul"
+
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]
