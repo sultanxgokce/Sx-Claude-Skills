@@ -1,5 +1,5 @@
 $ bash terminal-onar/kapi/dava.mutasyon.sh
-# rc=0 sure=83.2s zaman=2026-10-18T16:44:08+03:00
+# rc=0 sure=55.9s zaman=2026-10-18T16:51:21+03:00
 --- stdout ---
   ✓ M1 Aç yer açmaz (tavan yok sayılır) — sınav KIRMIZI
   ✓ M2 yer açan dondurma geri alınırken son_calisma artığı kalır — sınav KIRMIZI
@@ -11,6 +11,8 @@ $ bash terminal-onar/kapi/dava.mutasyon.sh
   ✓ M8 bekçi turu kilit almaz (kapı yazarken bekçi de yazar) — sınav KIRMIZI
   ✓ M9 dava dondurma kilit altında kilidi YENİDEN ister (kendi kendini kilitler → yer aç 503) — sınav KIRMIZI
   ✓ M10 dava satırı iskana yazılır (eşitleyici ezer, davalar.yaml boş kalır) — sınav KIRMIZI
+  ✓ M11 günlük tur her bekçi koşusunda koşar (tarih kapısı yok) — sınav KIRMIZI
+  ✓ M12 damga yazılamasa da tur koşar (her dakika tekrar) — sınav KIRMIZI
 
-MUTASYON: 10 yakalandı · 0 kaçtı
+MUTASYON: 12 yakalandı · 0 kaçtı
 --- stderr ---

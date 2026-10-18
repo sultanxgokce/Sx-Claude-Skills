@@ -25,4 +25,18 @@ dene 'M7 hal ucu kilidi bekçiden AYRI dosyada alır (kapı ile bekçi birbirini
 dene 'M8 bekçi turu kilit almaz (kapı yazarken bekçi de yazar)' dava-bekci.mjs "if (!KURU) { try { birak = dosyaKilit(PROJE," "if (false) { try { birak = dosyaKilit(PROJE,"
 dene 'M9 dava dondurma kilit altında kilidi YENİDEN ister (kendi kendini kilitler → yer aç 503)' dava.mjs "const s = kadroYazKilitAltinda({ proje, id: kisi.id, eylem: 'dondur'" "const s = kadroYaz({ proje, id: kisi.id, eylem: 'dondur'"
 dene 'M10 dava satırı iskana yazılır (eşitleyici ezer, davalar.yaml boş kalır)' kadro-yaz.mjs "const hedef = iskanVar ? davalarYolu(proje, ortam) : dosyalar[0];" "const hedef = dosyalar[0];"
+# Günlük tur kapısı (scripts/dava-gunluk.sh) kendi sınavıyla ölçülür
+dene_sh() {   # ad dosya(scripts/ altında göreli) eski yeni
+  local ad="$1" dosya="$2" eski="$3" yeni="$4"; n=$((n+1)); local b="$T/b$n"
+  cp -r "$D" "$b"
+  ESKI="$eski" YENI="$yeni" python3 -c "
+import os,sys;p=sys.argv[1];s=open(p,encoding='utf-8').read();e=os.environ['ESKI']
+open(p,'w',encoding='utf-8').write(s.replace(e,os.environ['YENI'],1))" "$b/scripts/$dosya"
+  if cmp -s "$b/scripts/$dosya" "$D/scripts/$dosya"; then echo "  ✗ $ad — desen tutmadı"; dusen=$((dusen+1))
+  elif bash "$b/scripts/dava-gunluk.test.sh" >/dev/null 2>&1; then echo "  ✗ $ad — koruma öldü ama sınav YEŞİL"; dusen=$((dusen+1))
+  else echo "  ✓ $ad — sınav KIRMIZI"; gecti=$((gecti+1)); fi
+}
+dene_sh 'M11 günlük tur her bekçi koşusunda koşar (tarih kapısı yok)' dava-gunluk.sh '[ "$(cat "$DAMGA" 2>/dev/null)" = "$BUGUN" ] && exit 0' 'true'
+dene_sh 'M12 damga yazılamasa da tur koşar (her dakika tekrar)' dava-gunluk.sh '— tur koşmadı" >&2; exit 0' '— tur koşmadı" >&2'
+
 echo; echo "MUTASYON: $gecti yakalandı · $dusen kaçtı"; [ "$dusen" = 0 ]

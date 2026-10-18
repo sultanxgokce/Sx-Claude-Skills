@@ -1,7 +1,7 @@
 {
   "is": "kadro-dava-kurali-b2",
   "arac": "kanit.py/0.4.0",
-  "guncelleme": "2026-10-18T16:46:41+03:00",
+  "guncelleme": "2026-10-18T16:52:17+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -40,15 +40,15 @@
       "etiket": "dava-mutasyon",
       "asama": "tek",
       "dosya": "olcum-dava-mutasyon-tek.txt",
-      "sha256": "b8b0c743a3b6683a63d145e3d2204eeb0f96f6bafa67e85854741042d6d38120",
+      "sha256": "4bf515ba16140b23ea1e980834a19634b8a291e069199a251ebd1852c354cbe3",
       "komut": [
         "bash",
         "terminal-onar/kapi/dava.mutasyon.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T16:44:08+03:00",
-      "sure_sn": 83.2
+      "zaman": "2026-10-18T16:51:21+03:00",
+      "sure_sn": 55.9
     },
     {
       "tur": "olcum",
@@ -135,15 +135,15 @@
       "etiket": "gerileme-kapi-sinav",
       "asama": "tek",
       "dosya": "olcum-gerileme-kapi-sinav-tek.txt",
-      "sha256": "e73f3382bc95964b20a5cea1dc4b7a9a53dbc24f0adb7b01a7bd967e07995521",
+      "sha256": "eb878d6e6547550094d16451d2c077b8b1b485acc9e76eef5a3550f1c037ad6f",
       "komut": [
         "bash",
         "terminal-onar/kapi/kapi-sinav.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T16:45:51+03:00",
-      "sure_sn": 50.0
+      "zaman": "2026-10-18T16:52:16+03:00",
+      "sure_sn": 46.7
     },
     {
       "tur": "olcum",
@@ -180,22 +180,22 @@
       "etiket": "gerileme-bekci-iz",
       "asama": "tek",
       "dosya": "olcum-gerileme-bekci-iz-tek.txt",
-      "sha256": "99936a69a77128264b0298f99a4c6bcd0995a62c6fe229f61af6239fb205bd8c",
+      "sha256": "bd3c41c71cfcec7144059dd1c411e6abd2478e3141e26616284dec85135e8536",
       "komut": [
         "bash",
         "terminal-onar/scripts/bekci-iz.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T16:46:40+03:00",
-      "sure_sn": 3.5
+      "zaman": "2026-10-18T16:51:23+03:00",
+      "sure_sn": 1.7
     },
     {
       "tur": "olcum",
       "etiket": "repo-kapilari",
       "asama": "tek",
       "dosya": "olcum-repo-kapilari-tek.txt",
-      "sha256": "8578aad6efca43b56756a0524bac045a1d10e65daeb9a2d4ba1210ded79d6986",
+      "sha256": "2a304437e9ad9978de60629d682b90fad4fecf5a166784421dd4ace3d417100b",
       "komut": [
         "bash",
         "-c",
@@ -203,9 +203,69 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T16:46:41+03:00",
-      "sure_sn": 0.2
+      "zaman": "2026-10-18T16:52:17+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dava-gunluk",
+      "asama": "tek",
+      "dosya": "olcum-dava-gunluk-tek.txt",
+      "sha256": "09feffa8574a97edc184d729978b1e04162a80dc12ab2849f3f78ea90eb9fe74",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/dava-gunluk.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:50:25+03:00",
+      "sure_sn": 0.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-bekci-yorum",
+      "asama": "tek",
+      "dosya": "olcum-gerileme-bekci-yorum-tek.txt",
+      "sha256": "d37b87ac22d9254ff21dd7935a59b701d4bedbf8a45e9f67457ded72ccf3183a",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/bekci-yorum.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:51:25+03:00",
+      "sure_sn": 1.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-onar",
+      "asama": "tek",
+      "dosya": "olcum-gerileme-onar-tek.txt",
+      "sha256": "1c8604bcb1543dfb3fbfc466fb16329965321ae3bf63543dbe6efebb27198ced",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/onar.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:51:27+03:00",
+      "sure_sn": 2.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-kur-bag",
+      "asama": "tek",
+      "dosya": "olcum-gerileme-kur-bag-tek.txt",
+      "sha256": "9eaea6c318ee9caf14726dc5e1c1c994822c585985540f903c910c56b6f3668e",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/kur-bag.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:51:30+03:00",
+      "sure_sn": 2.8
     }
   ],
-  "imza": "7563bc55af8c075c396ee9aa1e8e6b263fade68d100fc54f270130d8f102073d"
+  "imza": "5462e1826ff938f66105aca6130560efe31a14236715f78cd68d1da3eac49870"
 }

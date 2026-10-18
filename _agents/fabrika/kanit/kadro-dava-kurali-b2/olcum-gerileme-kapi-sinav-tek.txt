@@ -1,5 +1,5 @@
 $ bash terminal-onar/kapi/kapi-sinav.test.sh
-# rc=0 sure=50.0s zaman=2026-10-18T16:45:51+03:00
+# rc=0 sure=46.7s zaman=2026-10-18T16:52:16+03:00
 --- stdout ---
 ── kadro birleşimi (kadro.test.mjs)
 ── A · kayıt ayrıştırma

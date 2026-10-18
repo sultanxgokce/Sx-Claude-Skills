@@ -1,5 +1,5 @@
 $ bash terminal-onar/scripts/bekci-iz.test.sh
-# rc=0 sure=3.5s zaman=2026-10-18T16:46:40+03:00
+# rc=0 sure=1.7s zaman=2026-10-18T16:51:23+03:00
 --- stdout ---
   ✓ H1 sahte tmux/crontab ortak.sh'tan sonra da öndedir (gerçek tmux'a DOKUNULMAZ)
 ── satır yok

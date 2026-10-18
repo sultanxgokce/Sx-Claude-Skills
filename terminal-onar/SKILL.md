@@ -18,7 +18,8 @@ Kural satırı yoksa hiçbir yanıt değişmez — davasız kutuda raf çizilmez
   dosyasının `uyeler:` sonuna blok; `{…, hedef:'kisi', id}` → kişinin `session_id`'si (önceki `bagla_once`'a). Claude kimliği ve
   dizini oturumun kimlik izinden; tek Claude olmalı. · `bagla-geri-al {id}` → yalnız `bagla_ile: true` kayıt; dava bloğu silinir,
   kişide eski kimlik geri konur — kayıt bayt bayt eski hâl, oturuma dokunulmaz.
-- **Günlük tur**: `bekci.sh` günde bir (günün ilk koşusu) `kapi/dava-bekci.mjs` → `gun` gündür tmux bölmesi kıpırdamayan açık davayı
+- **Günlük tur**: `bekci.sh` → `scripts/dava-gunluk.sh` kapısı → günde BİR kez `kapi/dava-bekci.mjs` (damga `<durum>/dava-bekci.gun` turdan
+  önce yazılır: tur düşse de o gün tekrar yok, ertesi gün yeniden; damga yazılamazsa tur koşmaz — `dava-gunluk.test.sh` G1-G6) → `gun` gündür tmux bölmesi kıpırdamayan açık davayı
   dondurur (`dondurma: kural`), iz `kadro-hal.log`. `--kuru` yalnız söyler. Kapı ile bekçi aynı kaydı yazar → süreçler arası
   kayıt kilidi `kilit.mjs` (flock, #362): kapının hal ucu, bekçi turu ve `kadroYaz` AYNI `<proje>/kadro.kilit` dosyasını kilitler; hal ucu
   ve bekçi bütün işlemi (yer aç: dondur + aç) tek kilit altında yapar, içeride kilitsiz `kadroYazKilitAltinda`. Kilit 30 sn'de
@@ -26,7 +27,7 @@ Kural satırı yoksa hiçbir yanıt değişmez — davasız kutuda raf çizilmez
 - **Açma (B10 ölçümü)**: `koltuk-ac` dava satırını `claude --resume <session_id>` ile açar (kayıttaki `cwd`'de). baslat-claude.sh
   KULLANILMAZ: o `claude --session-id <id>` koşar ve konuşması olan kimlikte Claude "Session ID … is already in use" deyip çıkar
   (16 Eki, 2.1.301 ölçüldü). Konuşması olmayan dava açılmaz.
-- Sınav: `kapi/dava.test.mjs` (uçtan uca) · `kapi/dava.mutasyon.sh` (her bozma kırmızı olmalı) · `koltuk-ac.test.sh` V1-V5.
+- Sınav: `kapi/dava.test.mjs` (uçtan uca) · `scripts/dava-gunluk.test.sh` (günlük kapı) · `kapi/dava.mutasyon.sh` (12 bozma, her biri kırmızı olmalı) · `koltuk-ac.test.sh` V1-V5.
 - Ölçüm betiği `scripts/dava-resume-olc.sh` kendi tmux soketinde koşar ve `$TMUX`'u siler (DERVİŞ 17 Eki: tmux içinden çağrılınca
   `kill-server` kutunun sunucusunu öldürüyordu).
 
