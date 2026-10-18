@@ -1,0 +1,30 @@
+{
+  "tur": 1,
+  "is": "compact-k2-zamanlama",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T17:30:53+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": null,
+  "yazan_model_kaynak": null,
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 13198,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 7034
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "K2’nin sabit 0,5 saniyelik yarış kurulumu, tur anlık kopyasının oluşmasını ve ekleme kilidini bekleyen zamanlamayla değiştirilmiş. Talep edilen sınav düzeltmesi beş ardışık yeşil koşuyla doğrulandığı ve üretim koduna kapsam dışı müdahale olmadığı için iş üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü doğrudan compact.test.sh üzerinde K2’nin tek kırmızı olduğunu gösteriyor, sonra ölçümü ise aynı sınavı saran tekrar betiğinde beş koşunun tamamında rc=0, K2=✓ ve kırmızı=0 veriyor; kök ölçümü ayrıca eski yarışta K2’nin düşebildiğini kaydediyor. Görsel kare gerektiren bir arayüz işi değil; önce/sonra ölçüm çifti ve tekrarlı sonuç bu talep için yeterli."
+  }
+}

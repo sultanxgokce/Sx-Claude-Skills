@@ -117,10 +117,18 @@ TO_REIS=MUTEVELLI kos --bekle --uygula; r=$(rc); wait "$kp"
 [ "$r" = 0 ] && grep -q 'zaten koşuyor' "$S/cikti" && [ -z "$(iz)" ] && [ "$(grep -c . "$KQ")" = 1 ] && ok "K1 kilit tutuluyorken tur: 'zaten koşuyor', tuş GİTMEDİ, kuyruk DEĞİŞMEDİ" || bad K1 "rc=$r $(c) iz=$(iz)"
 TO_REIS=MUTEVELLI kos --bekle --uygula
 [ -n "$(iz)" ] && [ ! -s "$KQ" ] && ok "K1b kilit düşünce aynı kuyruk işlenir (KALFA'ya gitti)" || bad K1b "$(iz) $(cat "$KQ")"
-# tur ortasında ekleme: tmux sahte send-keys sırasında (gecikmeli) başka bir süreç kuyruğa satır ekler → yeniden yazım onu korur
+# tur ortasında ekleme: tur anlık kopyasını aldıktan SONRA başka bir süreç kuyruğa satır ekler → yeniden yazım onu korur.
+# 🔴 C8NZW (18 Eki): yazıcı eskiden sabit 0,5 sn bekliyordu; betiğin anlık kopyaya varması bundan uzun sürünce satır
+#    kopyaya GİRİYOR, turda olağan kayıt gibi işleniyordu (BASIRET'e compact gitti) → K2 "kayboldu" diye kırmızıydı, oysa
+#    satır kaybolmamış, sınav yarışı kuramamıştı. Yazıcı artık anlık kopyanın OLUŞMASINI bekler (tur sonunda silinir,
+#    bayat kopya kalmaz) VE gerçek yazıcılar gibi ekleme kilidini alır (cp kopyayı yaratıp henüz okurken eklenen satır
+#    yine kopyaya girerdi — ilk düzeltmede 3 koşunun 1'i bu yüzden kırmızıydı). Kopya 10 sn'de görünmezse yazmaz ve K2
+#    kırmızı kalır (sessiz yeşil değil).
 printf '{"an":"x","epoch":%s,"koltuk":"ZAKIR","yuzde":75,"hal":"calisiyor","deneme":0,"kim":"MUTEVELLI"}\n' "$SIMDI" > "$KQ"
 printf '⏺ Düşünüyor…\nesc to interrupt\n' > "$S/ekran-ZAKIR"
-( sleep 0.5; printf '{"an":"y","epoch":%s,"koltuk":"BASIRET","yuzde":85,"hal":"calisiyor","deneme":0,"kim":"MUTEVELLI"}\n' "$SIMDI" >> "$KQ" ) & ep=$!
+( i=0; while [ ! -e "$KQ.tur.anlik" ] && [ $i -lt 200 ]; do sleep 0.05; i=$((i+1)); done
+  # gerçek yazıcılar gibi ekleme kilidini alır: kopya oluşur oluşmaz (cp henüz okurken) eklemek satırı kopyaya sokardı
+  [ -e "$KQ.tur.anlik" ] && ( flock -w 10 9 && printf '{"an":"y","epoch":%s,"koltuk":"BASIRET","yuzde":85,"hal":"calisiyor","deneme":0,"kim":"MUTEVELLI"}\n' "$SIMDI" >> "$KQ" ) 9>"$KQ.ekle.kilit" ) & ep=$!
 TO_COMPACT_SINAV_BEKLE_SN=1 TO_REIS=MUTEVELLI kos --bekle --uygula; wait "$ep"
 grep -q '"koltuk":"ZAKIR".*"deneme":1' "$KQ" && grep -q '"koltuk":"BASIRET"' "$KQ" && ok "K2 tur sırasında eklenen BASIRET satırı yeniden yazımda KAYBOLMADI; ZAKIR deneme 1" || bad K2 "$(cat "$KQ")"
 # K3 (göz tur 4): elle --uygula da AYNI kilidi alır — bekçi turu kilidi tutarken elle çağrı boş koltuğa tuş GÖNDERMEZ (ölçüm basılır, rc 6)
