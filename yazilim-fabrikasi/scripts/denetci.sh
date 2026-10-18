@@ -484,22 +484,30 @@ fi
 if [ -n "$KART" ]; then cp "$KART" "$TMP/kart.md"
 elif [ -n "$PR" ]; then (cd "$DEPO" && gh pr view "$PR" --json title,body --jq '"# \(.title)\n\n\(.body)"' > "$TMP/kart.md") || echo "(iş kartı okunamadı)" > "$TMP/kart.md"
 else echo "(iş kartı verilmedi — talep bilinmiyor; DOĞRU ŞEY Mİ sorusu H'ye yakın değerlendirilir)" > "$TMP/kart.md"; fi
+# İstem PARÇA PARÇA kurulur, sonra birleşir (BÂNİ 21:59, 18 Eki): boyut kapısı aşağıda istemin tamamını ölçer ve
+# aşınca HANGİ parçanın şiştiğini söyler. Birleşen metin eskisiyle bayt bayt aynıdır.
+{ cat "$ISTEM"; } > "$TMP/p-sablon.md"
+{ printf '\n\n===== İŞ KARTI (talep) =====\n'; cat "$TMP/kart.md"; } > "$TMP/p-kart.md"
+{ printf '\n\n===== KANIT MANİFESTİ — durum: %s =====\n' "$KANIT_DURUM"; cat "$DZ/KANIT.json"; } > "$TMP/p-kanit.md"
 {
-  cat "$ISTEM"
-  printf '\n\n===== İŞ KARTI (talep) =====\n'; cat "$TMP/kart.md"
-  printf '\n\n===== KANIT MANİFESTİ — durum: %s =====\n' "$KANIT_DURUM"; cat "$DZ/KANIT.json"
   printf '\n\n===== ÖLÇÜM ÇIKTILARI (ilk 60 satır/dosya) =====\n'
   for f in "$DZ"/olcum-*.txt; do [ -f "$f" ] && { printf -- '--- %s ---\n' "$(basename "$f")"; head -60 "$f"; }; done
+} > "$TMP/p-olcum.md"
+{
   printf '\n\n===== DEĞİŞİKLİK (diff) =====\n'
   [ "$AYIKLANAN_DOSYA" -gt 0 ] && [ ! -s "$TMP/diff.patch" ] && printf '[NOT: bu turda fark TAMAMEN kanıt dosyalarından oluşuyordu (%s dosya, %s bayt); ÜRETİM KODU farkı BOŞTUR — eksik verilmedi, bu turda kod değişmedi. Hükmünü kanıt manifestine ve iş kartına dayandır.]\n' "$AYIKLANAN_DOSYA" "$AYIKLANAN_BAYT"
   [ "$AYIKLANAN_DOSYA" -gt 0 ] && [ -s "$TMP/diff.patch" ] && printf '[NOT: bu farktan %s kanıt dosyası (%s bayt) AYIKLANDI — kanıt manifesti ve ölçüm çıktıları yukarıda AYRI başlıklarda duruyor; saklanan bir şey yok, aynı veri farka ikinci kez girmesin diye çıkarıldı. Aşağısı ÜRETİM KODU farkıdır, eksik değildir.]\n' "$AYIKLANAN_DOSYA" "$AYIKLANAN_BAYT"
   cat "$TMP/diff.patch"
-  [ "$TUR" -gt 1 ] && { printf '\n\n===== ÖNCEKİ TUR (%s) =====\n' "$ONCEKI"; cat "$DZ/DENETIM-$ONCEKI.json"; }
+} > "$TMP/p-fark.md"
+{ [ "$TUR" -gt 1 ] && { printf '\n\n===== ÖNCEKİ TUR (%s) =====\n' "$ONCEKI"; cat "$DZ/DENETIM-$ONCEKI.json"; }; } > "$TMP/p-onceki.md"
+{
   if [ "${#KARELER[@]}" -gt 0 ]; then
     printf '\n\n===== KARELER (%s adet, bu isteme GÖRSEL olarak ekli — kabulün görsel kısmını bunlara bakarak değerlendir) =====\n' "${#KARELER[@]}"
     _i=0; for _k in "${KARELER[@]}"; do _i=$((_i+1)); printf '%s. %s · sha256 %s\n' "$_i" "$(basename "$_k")" "$(sha256sum "$_k" | cut -c1-16)"; done
   fi
-} > "$TMP/istem.md"
+} > "$TMP/p-kare.md"
+ISTEM_PARCALARI=(sablon kart kanit olcum fark onceki kare)
+for _p in "${ISTEM_PARCALARI[@]}"; do cat "$TMP/p-$_p.md"; done > "$TMP/istem.md"
 
 # ── 4 · denetçiyi seç ve koş (yazan ≠ denetleyen) ───────────────────────────────
 SEC_AUTO=0
@@ -534,15 +542,30 @@ KIRP_ESIK="${DENETCI_KIRP_ESIK:-110000}"; KIRP_TETIK=$((KIRP_ESIK + KIRP_ESIK/11
 #    denetlemek yerine durulur: kırpılmış farkta denetçi sonu görmeden puan veriyordu (PR #329: üretim kodu
 #    kırpıkta kaldı). Tur YAKILMAZ (DENETIM yazılmaz), rc=1 ile adım 2'ye dönülür; çare kart.sh daralt ile
 #    iki iş. Kaçış yolu YOK — kart cümlesinde yok (18 Eki dersi).
-DIFF_B=$(wc -c < "$TMP/diff.patch" 2>/dev/null || echo 0)
-#    Yalnız AYIKLANMIŞ farkta anlamlı: ayıklama kapalıysa (DENETCI_KANIT_AYIKLA=0) kanıt da farkın içindedir, üretim
-#    payı ölçülemez → eski kırpma yolu sürer (ölçemediğine "böl" demez).
-if { [ "$DENETCI" = "codex" ] || [ -n "${DENETCI_KIRP_ESIK:-}" ]; } && [ "${DENETCI_KANIT_AYIKLA:-1}" != "0" ] && [ "$DIFF_B" -gt "$KIRP_ESIK" ]; then
-  _hata "İŞİ BÖL — üretim farkı $DIFF_B bayt > $KIRP_ESIK (kanıt dosyaları ayıklandıktan sonra): kırpık farkla denetim yapılmaz, tur yakılmadı."
-  _bilgi "   yol: kart.sh daralt <iş> --kalan \"<ikinci yarı>\" --cumle \"<bu PR'ın yaptığı>\" --oturum <ref> → kalan yarı yeni kart/dal; bu dalda yalnız daraltılmış cümle kalsın"
-  exit 1
-fi
+# ── İSTEMİN TAMAMI ÖLÇÜLÜR (BÂNİ 21:59, 18 Eki · cloudtop #712 tur 4): kapı eskiden yalnız FARKI ölçüyordu. Fark 73 KB
+#    olarak kapıdan geçti, ama göze giden istem = şablon + iş kartı + kanıt manifesti + ölçüm çıktıları + fark + önceki
+#    tur 129.519 bayttı → 110.000'de kırpıldı, göz "diff sonu görülmedi" dedi ve mutlak dört tur içeriksiz yandı.
+#    Kapı artık kırpma eşiğinin kendisini (KIRP_TETIK) istemin TAMAMINA uygular: kırpılacak istem gönderilmez, tur
+#    yakılmaz, hangi parçanın şiştiği bayt bayt basılır.
+#    Yalnız AYIKLANMIŞ farkta anlamlı: ayıklama kapalıysa (DENETCI_KANIT_AYIKLA=0) kanıt da farkın içindedir, işi
+#    bölmek boyutu düşürmez → eski kırpma yolu sürer (ölçemediğine "böl" demez).
 ISTEM_BAYT=$(wc -c < "$TMP/istem.md"); KIRPILDI=0
+if { [ "$DENETCI" = "codex" ] || [ -n "${DENETCI_KIRP_ESIK:-}" ]; } && [ "${DENETCI_KANIT_AYIKLA:-1}" != "0" ] && [ "$ISTEM_BAYT" -gt "$KIRP_TETIK" ]; then
+  declare -A _AD=([sablon]="istem şablonu" [kart]="iş kartı" [kanit]="kanıt manifesti" [olcum]="ölçüm çıktıları" [fark]="üretim farkı" [onceki]="önceki tur kaydı" [kare]="kare listesi")
+  _DOKUM=""; _EN=""; _EN_B=-1
+  for _p in "${ISTEM_PARCALARI[@]}"; do
+    _b=$(wc -c < "$TMP/p-$_p.md"); _DOKUM="$_DOKUM · ${_AD[$_p]} $_b"
+    [ "$_b" -gt "$_EN_B" ] && { _EN="$_p"; _EN_B="$_b"; }
+  done
+  _hata "İŞİ BÖL — göze giden istem $ISTEM_BAYT bayt > $KIRP_TETIK (kırpma eşiği; kanıt dosyaları farktan ayıklandıktan sonra): kırpık istemle denetim yapılmaz, tur yakılmadı."
+  _bilgi "   parçalar (bayt):${_DOKUM}"
+  _bilgi "   en büyük parça: ${_AD[$_EN]} ($_EN_B bayt)"
+  case "$_EN" in
+    olcum|kanit) _bilgi "   yol: ölçüm kayıtlarını küçült (yalnız kartın istediği ölçümler kalsın; yanlış kaydı kanit.sh gecersiz ile ilan et) ya da işi böl: kart.sh daralt <iş> --kalan \"<ikinci yarı>\" --cumle \"<bu PR'ın yaptığı>\" --oturum <ref>" ;;
+    *) _bilgi "   yol: kart.sh daralt <iş> --kalan \"<ikinci yarı>\" --cumle \"<bu PR'ın yaptığı>\" --oturum <ref> → kalan yarı yeni kart/dal; bu dalda yalnız daraltılmış cümle kalsın" ;;
+  esac
+  exit 1   # İŞİ BÖL
+fi
 if { [ "$DENETCI" = "codex" ] || [ -n "${DENETCI_KIRP_ESIK:-}" ]; } && [ "$ISTEM_BAYT" -gt "$KIRP_TETIK" ]; then
   # İstem ARGÜMAN olarak verilir, dosya olarak değil: bu konteynerde Codex'in kum havuzu (bwrap) ad-alanı
   # açamıyor ve "dosyayı oku" komutu düşüyor (22 Eyl canlı koşum: 2/H "istem.md okunamadı"). Tek argüman
