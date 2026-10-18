@@ -1,0 +1,81 @@
+{
+  "is": "kart-kapsam-uyarisi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-18T23:27:42+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sinavi-sonra.txt",
+      "sha256": "be678fc7b75f3accaa197369d02611d90987b82b11da473f11959af7b492a579",
+      "komut": [
+        "timeout",
+        "300",
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T23:26:34+03:00",
+      "sure_sn": 8.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "51d795b0fa4f42b185b92369944aec07"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapsam-davranisi",
+      "asama": "once",
+      "dosya": "olcum-kapsam-davranisi-once.txt",
+      "sha256": "3a63651b8bc02e6e1e4835cc0295218a9b9c6979653f23d5acc1361b8701499f",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kart-kapsam-uyarisi/once-sonra.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/sx-eski2/yazilim-fabrikasi/scripts/kart.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T23:22:14+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4d942b8241f94525a363e944c96d828e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapsam-davranisi",
+      "asama": "sonra",
+      "dosya": "olcum-kapsam-davranisi-sonra.txt",
+      "sha256": "836709134bec139af3186a53ccf2624e657c91550e838b01f36652b3918fa751",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kart-kapsam-uyarisi/once-sonra.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-kart-kapsam-uyarisi/yazilim-fabrikasi/scripts/kart.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T23:25:13+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "9a1e3728ff7b4279b16ebc0af0779566"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-sonra.txt",
+      "sha256": "0c87cda1aecc2f27a73c9f2c962a1403c2be97c759f5db7d2a18f96265f83d5c",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kart-kapsam-uyarisi/mutasyon.sh",
+        "yazilim-fabrikasi"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T23:27:42+03:00",
+      "sure_sn": 68.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f0a6d77e913145baa8b2476d1e25c263"
+    }
+  ],
+  "imza": "fa62ad9323f6de7e7bd4b86014bd34c3a1355c0030b4340ae2a3a67299edaea4"
+}

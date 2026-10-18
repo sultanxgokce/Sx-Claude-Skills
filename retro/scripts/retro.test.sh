@@ -111,6 +111,7 @@ icerir "$CIKTI" "EKSİK     MİRAHUR" "T6c MİRAHUR iz var, retro yok → EKSİK
 icerir "$CIKTI" "ÇALIŞMADI BASİRET" "T6d BASİRET iz yok → ÇALIŞMADI (zorunlu değil)"
 icermez "$CIKTI" "SERDAR" "T6e merkez (SERDAR) hariç"
 M="$KOK/_agents/handoff/retro/2026-W42/MERKEZ.md"; [ -f "$M" ] && ok "T6f MERKEZ.md iskeleti" || kirmizi "T6f MERKEZ.md yok"
+icerir "$(cat "$M")" "- M1) <ders> · kaynak:" "T6f2 ilk yazımda (elle bölüm yokken) Dersler/Görevler iskeleti basılır"
 icerir "$(cat "$M")" "- BÂNİ Ö1) kart.sh canli-ayarla sahip doğrulamalı →" "T6g öneri süzüm listesinde, damga boş"
 icerir "$(cat "$M")" "| MİRAHUR | EKSİK |" "T6h katılım tablosu"
 cp "$Z" "$KOK/_agents/handoff/retro/2026-W42/MİRAHUR.md"   # BÂNİ başlıklı dosya MİRAHUR adıyla → GEÇERSİZ
@@ -144,6 +145,28 @@ icermez "$(grep "Ö1)" "$M")" "gorev_01M54APFDAHKN72VKBWTGKSAAM" "T8g eski gorev
 icerir "$(grep "Ö2)" "$M")" "→ RED: ayrı kart olarak açıldı" "T8h değişmeyen Ö2 damgası korundu"
 kapi "T8i yeni metin damgasız → süzüm kırmızı" 1 python3 "$R" suzum; icerir "$CIKTI" "Ö1) damgasız" "T8j artık bayat değil, damgasız"
 
+echo "— T9 merkez --yenile elle yazılan bölümleri KORUR (gorev_01M58987YSBASEXV1MF7T2GJHP · 19 Eki W42 MERKEZ.md silindi)"
+python3 - "$M" <<'PY'
+import sys;p=sys.argv[1];s=open(p,encoding="utf-8").read()
+s=s.replace("- M1) <ders> · kaynak: <AJAN D<n> | ölçüm>","- M1) vekil ölçütü önce adıyla ölç · kaynak: MİRAHUR D1\n\n  ikinci paragraf: girintili açıklama").replace("- <gorev_… · ders M<n>>","- gorev_01M58987YSBASEXV1MF7T2GJHP · ders M1")
+s=s.rstrip("\n")+"\n\n## Kaçış ve tıkanma\n- 9 kaçış kutu geneli · en sık: denetçi tur 4\n\n\n## Süzüm notları\nönek araç başlığına benzer ama elle yazıldı\n\n## Serbest not\nmerkezin kendi notu\n"
+open(p,"w",encoding="utf-8").write(s)
+PY
+cp "$M" "$T/merkez-elle.md"
+kapi "T9a merkez --yenile (rc 1: EKSİK hâlâ var)" 1 python3 "$R" merkez --yenile
+icerir "$(cat "$M")" "- M1) vekil ölçütü önce adıyla ölç · kaynak: MİRAHUR D1" "T9b Dersler satırı korundu"
+icerir "$(cat "$M")" "  ikinci paragraf: girintili açıklama" "T9c bölüm içi boş satır + girinti korundu"
+icerir "$(cat "$M")" "- gorev_01M58987YSBASEXV1MF7T2GJHP · ders M1" "T9d Görevler satırı korundu"
+icerir "$(cat "$M")" "## Kaçış ve tıkanma" "T9e iskelette olmayan Kaçış bölümü korundu"
+icerir "$(cat "$M")" "merkezin kendi notu" "T9f serbest bölüm korundu"
+icermez "$(cat "$M")" "<ders> · kaynak:" "T9g iskelet yer tutucusu geri gelmedi"
+[ "$(grep -c '^## Dersler' "$M")" -eq 1 ] && [ "$(grep -c '^## Kaçış' "$M")" -eq 1 ] && ok "T9h bölümler çoğalmadı (her biri bir kez)" || kirmizi "T9h bölüm sayısı: $(grep -n '^## ' "$M")"
+[ "$(grep '^## ' "$M" | tr '\n' '|')" = "## Katılım (araç yazdı)|## Süzüm — her öneri bir damga alır: \`→ gorev_<id>\` (görev defterine girdi) ya da \`→ RED: <gerekçe ≥10 karakter>\`|## Dersler (merkez yorumu; kutu dersine D<n> ile atıf: \`BÂNİ D2\`)|## Görevler (Sultan ders ders onaylar · D1 damgası · görev defteri)|## Kaçış ve tıkanma|## Süzüm notları|## Serbest not|" ] && ok "T9i bölüm sırası korundu (araç bölümleri önde, elle bölümler yazıldığı sırada)" || kirmizi "T9i sıra: $(grep '^## ' "$M" | tr '\n' '|')"
+icerir "$(grep "Ö2)" "$M")" "→ RED: ayrı kart olarak açıldı" "T9j süzüm damgası da korunmaya devam ediyor"
+cmp -s <(sed -n '/^## Dersler/,$p' "$T/merkez-elle.md") <(sed -n '/^## Dersler/,$p' "$M") && ok "T9l elle bölümler BAYT BAYT aynı (çift boş satır, girinti, dosya sonu dahil)" || kirmizi "T9l elle bölüm baytları değişti: $(diff <(sed -n '/^## Dersler/,$p' "$T/merkez-elle.md") <(sed -n '/^## Dersler/,$p' "$M") | head -5)"
+icerir "$(cat "$M")" "önek araç başlığına benzer ama elle yazıldı" "T9m '## Süzüm notları' (araç önekiyle başlayan elle bölüm) silinmedi — araç bölümü birebir başlıkla tanınır"
+python3 "$R" merkez --yenile >/dev/null 2>&1; cmp -s <(sed '/^_yazildi:/d' "$M") <(python3 "$R" merkez --yenile >/dev/null 2>&1; sed '/^_yazildi:/d' "$M") && ok "T9k ikinci --yenile aynı dosyayı üretir (kararlı)" || kirmizi "T9k ardışık --yenile farklı"
+
 echo "— M mutasyon (kopya üstünde; her mutant en az bir kapıyı kızartmalı)"
 mut(){ # mut <ad> <sed> <komut...> : mutant kopyada komut BAŞARILI (rc=0) kalırsa sınav onu yakalamıyor demektir
   local ad="$1" sed_="$2"; shift 2; local MR="$T/mut-$RANDOM.py"; sed -e "$sed_" "$R" > "$MR"
@@ -166,6 +189,10 @@ kapi "M4-önkoşul: metin değişti → gerçek araç BAYAT (kırmızı)" 1 pyth
 m_bayat(){ python3 "$1" suzum >/dev/null 2>&1; [ $? -ne 0 ]; }
 mut "M4 metin kıyası kalkınca bayat damga geçer (kapı yakalar)" 's/            if e and e\[0\] != t.strip():/            if False:/' m_bayat
 mut "M3 iz ayrımı kalkınca BASİRET EKSİK sayılır (kapı yakalar)" 's/    return bool((n and n\["satir"\] > 0)/    return True or bool((n and n["satir"] > 0)/' m_iz
+m_elle(){ local rc; cp "$T/merkez-elle.md" "$M"; python3 "$1" merkez --yenile >/dev/null 2>&1; grep -qF "## Kaçış ve tıkanma" "$M" && grep -qF "vekil ölçütü önce adıyla ölç" "$M" && grep -qF "önek araç başlığına benzer" "$M" && cmp -s <(sed -n '/^## Dersler/,$p' "$T/merkez-elle.md") <(sed -n '/^## Dersler/,$p' "$M"); rc=$?; cp "$T/merkez-elle.md" "$M"; return $rc; }
+mut "M5 elle bölümler taşınmazsa --yenile Dersler/Kaçış'ı siler (eski hata · kapı yakalar)" 's/            elle = merkez_elle_ham(eski)/            elle = ""/' m_elle
+mut "M6 araç bölümü ÖNEKLE tanınırsa '## Süzüm notları' silinir (kapı yakalar)" 's/            icinde = s.rstrip("\\r\\n") not in (MERKEZ_KATILIM, MERKEZ_SUZUM)/            icinde = not s.startswith(("## Katılım", "## Süzüm"))/' m_elle
+mut "M7 boş satırlar daraltılırsa bayt eşitliği bozulur (kapı yakalar)" 's/            ham.append(s)$/            ham.append(s) if (s.strip() or not ham or ham[-1].strip()) else None/' m_elle
 
 echo; echo "GECEN=$G DUSEN=$K"
 [ "$K" -eq 0 ]

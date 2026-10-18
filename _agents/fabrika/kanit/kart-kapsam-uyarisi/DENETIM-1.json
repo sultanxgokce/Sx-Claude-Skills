@@ -1,0 +1,45 @@
+{
+  "tur": 1,
+  "is": "kart-kapsam-uyarisi",
+  "pr": "384",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T23:24:22+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32395,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 18680
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İstenen iki-depo ve çok-günlük kapsam uyarıları karta yazılarak, kart açılışını reddetmeden uygulanmış; önce/sonra ölçümü ve dokuz mutant davranışı güçlü biçimde doğruluyor. Önce kapsam dışına eklenen “yalnız başka depo” uyarısını ayırın ya da kart talebini açıkça genişletin; bunun dışında yalnız tarih rötuşu kalıyor.",
+    "bulgular": [
+      {
+        "ne": "Talep yalnız iki depo veya haftalık kapsam gördüğünde uyarmayı isterken değişiklik, yalnız başka bir depo adı geçen cümlelerde de yeni bir uyarı üretmiş; bu kapsam kayması yanlış pozitif davranış ekliyor.",
+        "kanit": "İş kartı “iki depo ya da haftalık kapsam” diyor; üretim kodundaki `elif anilan and anilan[0] != bu:` dalı tek depo adı için `BAŞKA DEPO` uyarısı basıyor ve T13 bunu özellikle sınıyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh: kapsam_uyar içindeki `elif anilan and anilan[0] != bu` dalı; yazilim-fabrikasi/scripts/kart.test.sh:T13 `is-baska`",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Sürüm notundaki tarih kartın ve manifestin tarihiyle uyuşmuyor.",
+        "kanit": "İş kartı ve tüm ölçümler 2026-10-18 tarihli; eklenen SKILL.md kaydı “0.10.4, 19 Eki” yazıyor.",
+        "konum": "yazilim-fabrikasi/SKILL.md: Kart kapsam uyarısı sürüm notu",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçekçi örneklerle önce/sonra ölçüm çifti, genel kart sınavı ve 9/9 mutant yakalama kaydı var. İlk 60 satır sınırı nedeniyle kart sınavındaki T13 metni görünmüyor, ancak ayrı davranış ölçümü temel iki-depo, haftalık, düz-cümle ve karta yazma sonuçlarını doğrudan gösteriyor; kanıt bütünü yeterli."
+  }
+}

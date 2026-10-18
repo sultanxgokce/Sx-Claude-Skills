@@ -24,6 +24,8 @@ Ekipte biter: kanıt + bağımsız göz puanı + damga ile deftere girer; gün s
 bölümünde görünür. Sultan sonradan "bunu bana sormalıydınız" derse sınıf kuralı o vakayla düzeltilir.
 
 ## Tetikli mesaj
+**Kapsam = teslim birimi** (retro W42 ders M2): kart tek depoda, tek PR'da, bir günde teslim edilecek kadar olsun. `kart.sh ac` cümlede iki depo adı ya da haftalık kapsam görürse UYARIR (red değil) ve depo başına / gün başına kart önerir; uyarı karta da yazılır.
+
 Kart açılınca ilgili odaya `oda-tetik` ile tek satır (var olan hat, L42): "<iş> alındı · sahip <ajan> · sınıf <x>".
 Kart kapanınca aynı hattan "bitti · kanıt <yol> · puan <n>/5 <E/H>".
 
