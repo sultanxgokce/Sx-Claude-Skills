@@ -1,0 +1,31 @@
+{
+  "is": "kadro-dava-kurali-b2",
+  "cumle": "Dava Rafı B2: davalar.yaml ayrı dosya + kapı tarafı (kadro, koltuk-ac dava kolu, bekçi, sunucu) — #350 bölünmüş ikinci parça",
+  "istedi": "SERDAR",
+  "aldi": "BERID",
+  "zaman": "2026-10-17T14:56:09+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "?"
+  },
+  "siniflar": [
+    "yetki"
+  ],
+  "sultan": true,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "sultan_kararlari": [
+    {
+      "karar": "daralt",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+      "soz": "daralt",
+      "beyan": "BERİD",
+      "gerekce": "Sultan 17 Eki sohbette Dava Rafı Parça B için daralt dedi: kapı tarafı ekran-metni yoluyla ölçülür, resume adımı kanıtta SARI + Sultan eli",
+      "zaman": "2026-10-17T14:56:09+03:00"
+    }
+  ]
+}

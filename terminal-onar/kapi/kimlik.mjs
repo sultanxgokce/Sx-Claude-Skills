@@ -17,7 +17,7 @@ export function oturumDizinleri(ortam = process.env) {
   return [...new Set(l)];
 }
 
-// → Map<tmuxOturumAdı, [{ sessionId, ad, adKaynak, pid }]>
+// → Map<tmuxOturumAdı, [{ sessionId, ad, adKaynak, pid, cwd }]> (cwd: Dava Rafı bağlamasında kayda yazılır — eski sohbete dönüş o dizinde açılır)
 export function oturumKimlikleri({ dizinler = oturumDizinleri(), procKok = '/proc', pidAlani } = {}) {
   let alan = pidAlani;
   if (alan === undefined) { try { alan = fs.readlinkSync(path.join(procKok, 'self/ns/pid')); } catch { alan = ''; } }
@@ -35,7 +35,7 @@ export function oturumKimlikleri({ dizinler = oturumDizinleri(), procKok = '/pro
       const oturum = String(j.tmux || '').split(':')[0]; if (!oturum || !j.sessionId) continue;
       gorulen.add(pid);
       if (!h.has(oturum)) h.set(oturum, []);
-      h.get(oturum).push({ sessionId: String(j.sessionId), ad: String(j.name || ''), adKaynak: String(j.nameSource || ''), pid });
+      h.get(oturum).push({ sessionId: String(j.sessionId), ad: String(j.name || ''), adKaynak: String(j.nameSource || ''), pid, cwd: String(j.cwd || '') });
     }
   }
   return h;
