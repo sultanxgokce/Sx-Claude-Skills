@@ -1,5 +1,5 @@
 $ timeout 300 bash yazilim-fabrikasi/scripts/kart.test.sh
-# rc=0 sure=7.3s zaman=2026-10-18T23:21:56+03:00
+# rc=0 sure=8.9s zaman=2026-10-18T23:26:34+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -94,11 +94,11 @@ $ timeout 300 bash yazilim-fabrikasi/scripts/kart.test.sh
   ✓ kalan kart yazılamayınca rc=1
   ✓ ana kart bayt bayt DEĞİŞMEDİ (atomik)
   ✓ yarım kalan kart yok
-════ T13 · KAPSAM UYARISI: iki depo · başka depo · çok günlük kapsam → uyarır, REDDETMEZ (retro W42 ders M2) ════
+════ T13 · KAPSAM UYARISI: iki depo · çok günlük kapsam → uyarır, REDDETMEZ (retro W42 ders M2) ════
   ✓ haftalık kart AÇILDI (uyarı, red değil) · karta 1 kapsam uyarısı yazıldı
   ✓ çok günlük kapsam: gün başına kart önerildi (is-h1-g1 · is-h1-g2)
   ✓ iki depo adı → depo başına kart önerildi
-  ✓ yalnız başka depo → yanlış depoda açılıyor olabilir uyarısı
+  ✓ TEK depo adı (başka depo da olsa) uyarı almaz — kart cümlesi yalnız iki depo + çok günlük istedi (göz #384 tur 1)
   ✓ yalnız KENDİ deposunu anan cümle uyarı almaz (takma adla da)
   ✓ takma ad (Sx) depo sayılır
   ✓ yanlış alarm yok: sıradan kelime adlar · küçük harf · bitişik ad · tireli ek · 'haftaya'

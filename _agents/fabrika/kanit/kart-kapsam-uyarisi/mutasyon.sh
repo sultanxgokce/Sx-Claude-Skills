@@ -22,8 +22,7 @@ PY
   else kacan=$((kacan+1)); echo "✗ mutant '$1' KAÇTI (sınav yeşil kaldı)"; fi
 }
 mut iki-depo-uyarmaz 'if len(anilan) >= 2:' 'if False:'
-mut baska-depo-uyarmaz 'elif anilan and anilan[0] != bu:' 'elif False:'
-mut kendi-deposu-da-uyarilir 'elif anilan and anilan[0] != bu:' 'elif anilan:'
+mut tek-depo-da-uyarilir 'if len(anilan) >= 2:' 'if len(anilan) >= 1:'
 mut cok-gunluk-uyarmaz $'if h:\n    print("ÇOK GÜNLÜK' $'if False:\n    print("ÇOK GÜNLÜK'
 mut ad-siniri-yok 'return any(re.search(r"(?<![\w-])" + re.escape(a) + r"(?![\w-])", cumle) for a in adlar)' 'return any(re.search(re.escape(a), cumle) for a in adlar)'
 mut harf-duyarsiz 'return any(re.search(r"(?<![\w-])" + re.escape(a) + r"(?![\w-])", cumle) for a in adlar)' 'return any(re.search(r"(?<![\w-])" + re.escape(a) + r"(?![\w-])", cumle, re.I) for a in adlar)'
