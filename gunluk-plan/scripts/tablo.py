@@ -84,9 +84,12 @@ def tablo_md(c):
 ISARET = {'bitti': '✅', 'yarim': '🟡', 'acik': '⬜', 'ertelendi': '⏸', 'geri': '➖'}
 
 
+GENIS = set(ISARET.values()) | {'📋'}
+
+
 def _gen(s):
-    # görünür genişlik: emoji/geniş işaretler 2, gerisi 1 (terminal kutusu düzgün kapansın)
-    return sum(2 if ord(ch) > 0x2600 else 1 for ch in s)
+    # görünür genişlik: durum işaretleri ve emoji 2 hücre (⏸ U+23F8 de dahil — göz #369 tur 1), gerisi 1
+    return sum(2 if (ch in GENIS or ord(ch) >= 0x1F000 or 0x2600 <= ord(ch) <= 0x27BF) else 1 for ch in s)
 
 
 def _hiz(s, w, orta=False):

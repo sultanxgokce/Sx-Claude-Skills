@@ -234,5 +234,11 @@ kapi "T25 --md eski düz biçimi verir (kokpit/metin kanalı)" "1" "$(python3 "$
 MUT="$T/tablo-mut.py"; sed "s/ISARET\[m\['durum'\]\]/etiket(m)/" "$KOK/tablo.py" > "$MUT"
 kapi "T26 mutant (işaret yerine kelime) T23'ü düşürür — kapı ısırıyor" "1" "$( [ "$(python3 "$MUT" "$SEMA/ornek-cipa.md" 2>/dev/null | grep -cE '│ +(kapandı|açık|yarım) +│')" -gt 0 ] && echo 1 || echo 0)"
 
+kapi "T27 kutunun bütün satırları aynı görünür genişlikte (⏸ dahil, göz #369 tur 1)" "1" "$(printf '%s\n' "$KUTU" | grep '^[│┌├└]' | python3 -c "
+import sys
+G={'✅','🟡','⬜','⏸','➖'}
+w=lambda s: sum(2 if (c in G or ord(c)>=0x1F000 or 0x2600<=ord(c)<=0x27BF) else 1 for c in s)
+print(len(set(w(l.rstrip('\n')) for l in sys.stdin)))")"
+
 echo "SONUÇ: $gecen geçti · $kalan kaldı"
 [ "$kalan" -eq 0 ]

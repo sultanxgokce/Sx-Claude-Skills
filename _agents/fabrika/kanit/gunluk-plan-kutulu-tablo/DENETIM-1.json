@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "gunluk-plan-kutulu-tablo",
+  "pr": "369",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T15:06:41+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": null,
+  "yazan_model_kaynak": null,
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 38037,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 15483
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kutulu plan tablosu varsayılan yapılmış, düz ve JSON çıktılar korunmuş; günlük plan ile gün ortası aynı araca bağlanmış. İstenen iş yapılmış ve sınavlar yeşil, fakat ⏸ işaretinin genişliği yanlış hesaplandığı için ertelenmiş satırlarda kutu hizası bozulabilir; önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "Kutulu tablonun görünür genişlik hesabı ⏸ işaretini tek hücre sayıyor; çoğu terminalde iki hücre kaplayan bu işaret, ertelenmiş satırın sağ kenarını diğer satırlardan kaydırabilir.",
+        "kanit": "`_gen`, yalnız `ord(ch) > 0x2600` karakterlerini iki hücre sayıyor; ⏸ U+23F8 olduğundan bir hücre sayılıyor. Aynı dosyada `ISARET['ertelendi'] = '⏸'`; ölçüm çıktısındaki ertelenmiş satır da bu yolu kullanıyor. T21–T26 sınavları çerçeve karakterlerinin varlığını ve işaretleri sayıyor, satırların eşit görünür genişlikte olduğunu ölçmüyor.",
+        "konum": "gunluk-plan/scripts/tablo.py:_gen, ISARET ve tablo_kutu; olcum-tablo-sonra-kutulu-sonra.txt; olcum-cipa-sinavi-82-sonra.txt T21–T26",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; bütün kayıtlar yeşil, sarı kayıt yok. Kutulu varsayılan çıktı ile düz `--md` çıktısı birlikte gösterilmiş ve iki kapsamlı sınav geçiyor; ancak “önce” kaydı gerçek eski sürüm değil, yeni sürümün `--md` seçeneği olduğundan tarihsel önce/sonra kanıtı zayıf, ayrıca Sultan’ın ekran örneğiyle görsel karşılaştırma veya terminal görünür-genişlik ölçümü yok."
+  }
+}

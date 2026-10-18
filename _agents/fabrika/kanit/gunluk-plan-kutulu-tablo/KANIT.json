@@ -1,7 +1,7 @@
 {
   "is": "gunluk-plan-kutulu-tablo",
   "arac": "kanit.py/0.4.0",
-  "guncelleme": "2026-10-18T15:05:47+03:00",
+  "guncelleme": "2026-10-18T15:07:44+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -55,7 +55,7 @@
       "etiket": "tablo-sonra-kutulu",
       "asama": "sonra",
       "dosya": "olcum-tablo-sonra-kutulu-sonra.txt",
-      "sha256": "c15e22290a5c840a0184c3785c29c1b5e4dd346ff7c440951bfffcea9af7493f",
+      "sha256": "1c5938c407ac476688878a1397da36579a91d15a588f675757b50a4ce5821721",
       "komut": [
         "python3",
         "gunluk-plan/scripts/tablo.py",
@@ -63,9 +63,24 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T15:05:47+03:00",
+      "zaman": "2026-10-18T15:07:44+03:00",
       "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cipa-sinavi-83-hizalama",
+      "asama": "sonra",
+      "dosya": "olcum-cipa-sinavi-83-hizalama-sonra.txt",
+      "sha256": "04b3adf714283fcddc942b7fa9d1c9cab27b723d8b665dc729b9b006ca92a7a9",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/cipa.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T15:07:44+03:00",
+      "sure_sn": 4.6
     }
   ],
-  "imza": "580c844d9bd6707cbbc2f469d13c6f3bd26c53187fdaa91243a5ff98f19ba4d0"
+  "imza": "24a9eb87685d76a8ebd0e05d0e8ccef8f70d3c9259820833ecaf62052737b097"
 }
