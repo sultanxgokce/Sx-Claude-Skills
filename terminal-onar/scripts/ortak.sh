@@ -219,7 +219,13 @@ _cron_komut() {  # $1 = betik adı · $2 = ek argüman → proje yolu varsa orad
   printf 'if [ -x %s/%s ]; then bash %s/%s%s; else TO_KUTU=%s bash %s/scripts/%s%s; fi' \
     "$PROJE_BETIK" "$1" "$PROJE_BETIK" "$1" "${2:+ $2}" "$KUTU" "$ORTAK_BECERI" "$1" "${2:+ $2}"
 }
-BEKCI_SATIR="* * * * * $(_cron_komut bekci.sh)  # terminal-onar-bekci"
+# 🔴 KUTUYA ÖZGÜ SABİT GECİKME (2.17.2 · kart terminal-onar-bekci-gecikme, 18 Eki ölçümü): 17 kutunun dakikalık bekçisi
+#    aynı saniyede (:00) kalkıyordu → host'ta dakika başı çalışma kuyruğu 179-191 (filo yavaşladı). Gecikme kutu adından
+#    türer (cksum % 50 + 5 → 5-54 sn): her kutu kendi saniyesinde, her kurulumda aynı sayı. Sayı KURULUMDA hesaplanır ve
+#    satıra düz rakam olarak yazılır — crontab'da '%' satır sonu demektir, formül satıra giremez. '&&' (';' değil): canlılık
+#    envanteri ilk ';'den keser, ';' ile işin adı 'sleep' görünürdü. Eski gecikmesiz satır düzeltici tarafından buna çevrilir.
+BEKCI_GECIKME=$(( $(printf '%s' "$KUTU" | cksum | cut -d' ' -f1) % 50 + 5 ))
+BEKCI_SATIR="* * * * * sleep $BEKCI_GECIKME && $(_cron_komut bekci.sh)  # terminal-onar-bekci"
 ACILIS_SATIR="@reboot sleep 15; $(_cron_komut komut.sh onar)  # terminal-onar-acilis"
 bekci_satirlari_duzelt() {  # stdin → stdout: işaretleyicili satırlar kanonik ve TEK (çift kopya tekilleşir), gerisi olduğu gibi
   awk -v b="$BEKCI_SATIR" -v a="$ACILIS_SATIR" -v bd="$BEKCI_DESEN" -v ad="$ACILIS_DESEN" '
