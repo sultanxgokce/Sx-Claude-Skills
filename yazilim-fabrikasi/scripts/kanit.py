@@ -165,8 +165,18 @@ AYIRAC = {";", "&&", "||", "&", ";;"}
 ONEKLER = {"command", "builtin", "exec", "time", "nohup", "noglob"}
 # Kabuğu ÇALIŞTIRAN sarmalayıcılar (göz tur 3): kabuk yalnız argv başında ya da bu zincirin arkasında kabuktur;
 # `printf bash -c …` içindeki `bash` bir VERİDİR, çalışmaz. Sarmalayıcının seçenekleri (`-…`), VAR=değer ve süre/sayı
-# argümanları atlanır; tanınmayan argüman zinciri keser → kapsam-dışı (sınır: `timeout -s KILL 60 bash -c` görülmez).
+# argümanları atlanır; DEĞER ALAN seçeneklerin değeri de atlanır (göz tur 5: `timeout -s KILL 60`, `env -u VAR`);
+# tanınmayan argüman zinciri keser → kapsam-dışı.
 SARMALAYICI = {"timeout", "nice", "ionice", "env", "nohup", "setsid", "stdbuf", "chrt", "taskset", "command", "exec", "time"}
+DEGERLI_SECENEK = {
+    "timeout": {"-s", "--signal", "-k", "--kill-after"},
+    "env": {"-u", "--unset", "-C", "--chdir", "-S", "--split-string"},
+    "nice": {"-n", "--adjustment"},
+    "ionice": {"-c", "--class", "-n", "--classdata", "-p", "--pid"},
+    "stdbuf": {"-i", "-o", "-e", "--input", "--output", "--error"},
+    "exec": {"-a"},
+    "time": {"-f", "--format", "-o", "--output"},
+}
 
 
 def _kabuk_konumu(komut):
@@ -178,9 +188,10 @@ def _kabuk_konumu(komut):
         if ad not in SARMALAYICI:
             return None
         k += 1
+        degerli = DEGERLI_SECENEK.get(ad, set())
         while k < len(komut) and (komut[k].startswith("-") or re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*=.*", komut[k])
-                                  or re.fullmatch(r"[0-9]+(\.[0-9]+)?[smhd]?", komut[k])):
-            k += 1
+                                  or re.fullmatch(r"(0x[0-9a-fA-F]+|[0-9]+(\.[0-9]+)?[smhd]?)", komut[k])):
+            k += 2 if komut[k] in degerli else 1
     return None
 
 

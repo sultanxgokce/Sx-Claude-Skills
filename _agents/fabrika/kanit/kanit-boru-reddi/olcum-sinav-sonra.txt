@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/kanit.test.sh
-# rc=0 sure=8.7s zaman=2026-10-18T20:16:05+03:00
+# rc=0 sure=10.7s zaman=2026-10-18T20:18:09+03:00
 --- stdout ---
 ════ T1 · ölçüm çifti: komutu araç koşar, kırpılmamış çıktı+rc ════
   ✓ önce ölçümü rc=0
@@ -156,6 +156,9 @@ $ bash yazilim-fabrikasi/scripts/kanit.test.sh
   ✓ T20y '|| exit 3' maske değil (rc taşınıyor): temiz
   ✓ T20z 'bash betik.sh -c …': -c betiğin argümanı → reddedilmedi, kapsam-dışı (göz tur 4)
   ✓ T20z2 seçenekler (-e, -o değer, +o değer) arkasındaki -c hâlâ bulunur, kapatılan pipefail reddedilir
+  ✓ T20z3 'timeout -s KILL 60 bash -c': sinyal değeri atlandı, kabuk bulundu, reddedildi (göz tur 5)
+  ✓ T20z4 'env -u VAR bash -c': değer atlandı, ortadaki '|| true' reddedildi (göz tur 5)
+  ✓ T20z5 'taskset 0x1 bash -c': onaltılık maske atlandı, reddedildi
 ════ T21 · MUTASYON: boru denetiminin her kolu kaldırılınca T20 kırmızıya döner ════
   ✓ T21a mutant (denetim hiç çağrılmıyor) maskeli betiği kabul ediyor → T20a bu mutantta düşerdi
   ✓ T21b mutant (boru kuralı yok) → T20a bu mutantta düşerdi
@@ -167,7 +170,8 @@ $ bash yazilim-fabrikasi/scripts/kanit.test.sh
   ✓ T21h mutant (önek soyma yok) → T20r bu mutantta düşerdi
   ✓ T21i mutant ('||' sağı soyulmuyor) '|| /bin/true'yu kabul ediyor → T20u bu mutantta düşerdi
   ✓ T21k mutant (seçenek bölgesi betik dosyasında bitmiyor — tur 4 hâli) betik argümanını reddediyor → T20z bu mutantta düşerdi
+  ✓ T21l mutant (değerli seçenek tablosu yok — tur 5 hâli) 'timeout -s KILL' arkasını kaçırıyor → T20z3 bu mutantta düşerdi
   ✓ T21j mutant (kabuk argv'nin her yerinde aranıyor — tur 3 hâli) printf verisini reddediyor → T20w bu mutantta düşerdi
 
-── SONUÇ: 146 geçti · 0 kaldı ──
+── SONUÇ: 150 geçti · 0 kaldı ──
 --- stderr ---
