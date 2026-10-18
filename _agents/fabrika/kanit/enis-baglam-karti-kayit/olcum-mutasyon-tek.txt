@@ -1,0 +1,8 @@
+$ bash baglam-karti/scripts/baglam-karti.mutasyon.sh /config/projects/_wt/Sx-Claude-Skills-enis-baglam-karti-kayit
+# rc=0 sure=7.9s zaman=2026-10-18T16:21:42+03:00
+--- stdout ---
+M1 yakalandı
+M2 yakalandı
+M3 yakalandı
+mutasyon: 3 yakalandı · 0 kaçtı
+--- stderr ---

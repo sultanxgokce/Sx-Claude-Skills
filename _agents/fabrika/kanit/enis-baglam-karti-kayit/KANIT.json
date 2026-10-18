@@ -1,0 +1,55 @@
+{
+  "is": "enis-baglam-karti-kayit",
+  "arac": "kanit.py/0.4.0",
+  "guncelleme": "2026-10-18T16:21:44+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "tek",
+      "dosya": "olcum-sinav-tek.txt",
+      "sha256": "545b72d047814ccc61135624b830179d7906adfd08aeff22b24a68dc30067da7",
+      "komut": [
+        "bash",
+        "baglam-karti/scripts/baglam-karti.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:21:44+03:00",
+      "sure_sn": 2.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "repo-kapilari",
+      "asama": "tek",
+      "dosya": "olcum-repo-kapilari-tek.txt",
+      "sha256": "63d6fe3504cc3661ce0c63be7c74f9df901fd62014d9a5471baa9c4bf75752c1",
+      "komut": [
+        "bash",
+        "-c",
+        "node ahi/schema/validate-repo.mjs . --strict && node ahi/schema/version-lint.mjs ."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:20:38+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-tek.txt",
+      "sha256": "3b5128d8fa3e1bdc792a519887d45b7f28f81d6611829dcb88695676e9fa3f64",
+      "komut": [
+        "bash",
+        "baglam-karti/scripts/baglam-karti.mutasyon.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-enis-baglam-karti-kayit"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:21:42+03:00",
+      "sure_sn": 7.9
+    }
+  ],
+  "imza": "5994a61f4eb6a1e74eaf6c20be8be216256ef9d90ad753085c6fc0bbae8fb84f"
+}
