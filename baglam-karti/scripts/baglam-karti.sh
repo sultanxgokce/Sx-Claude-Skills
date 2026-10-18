@@ -14,7 +14,7 @@
 #     Cevap dosya adı:  ENIS-<MAISET|SERDAR>-baglam-karti-<YYYYMMDD>-<n>.md
 #     --kuru : doğrular ve yazılacak adımı basar; deftere DOKUNMAZ → rc 3 (taşıma izni DEĞİL).
 # rc: 0 kayıt yazıldı (ya da bu adım zaten yazılıydı) → taşınabilir
-#     1 kayıt YAZILAMADI (jeton yok · defter ulaşılamaz · defter reddetti) → kart DÖNMEZ
+#     1 kayıt YAZILAMADI (jeton yok · defter ulaşılamaz · reddetti · 200 ama kayıt doğrulanamadı) → kart DÖNMEZ
 #     2 kullanım ya da biçim hatası → kayda girmedi, kart DÖNMEZ
 #     3 kuru koşum: biçim doğru ama kayıt YAZILMADI → kart DÖNMEZ (yalnız rc 0 taşıma iznidir)
 # Ortam: DEFTER_JETON_YOL (vars. /config/defter-jeton; değer argv'ye/çıktıya düşmez) · DEFTER_UC (vars. http://cloudtop-defter:8791)
@@ -107,4 +107,8 @@ t=sys.stdin.read().rstrip("\n").rsplit("\n",1); g,kod=(t if len(t)==2 else (t[0]
 try: j=json.loads(g or "{}")
 except Exception: j={"hata":"yanit_bozuk"}
 if kod!="200": print("⛔ defter reddetti http=%s · %s — kayıt YAZILMADI, kart dönmez" % (kod, j.get("hata") or ""), file=sys.stderr); sys.exit(1)
-print("📒 %s · %s · %s" % (sys.argv[1], sys.argv[2], "adım yazıldı" if j.get("degisti") else "bu adım zaten yazılıydı"))' "$GOREV" "$ADIM"
+# 200 tek başına yetmez (bağımsız göz tur 3): gövde geçerli olmalı VE adım kayıtta görünmeli; yoksa kayıt doğrulanamadı → rc 1
+k=j.get("kayit") if isinstance(j,dict) else None
+if not isinstance(j.get("degisti") if isinstance(j,dict) else None, bool) or not isinstance(k,dict) or sys.argv[2] not in (k.get("adimlar") or []):
+    print("⛔ defter 200 döndü ama kayıt doğrulanamadı (gövde bozuk ya da adım kayıtta yok) — kart dönmez", file=sys.stderr); sys.exit(1)
+print("📒 %s · %s · %s" % (sys.argv[1], sys.argv[2], "adım yazıldı" if j["degisti"] else "bu adım zaten yazılıydı"))' "$GOREV" "$ADIM"

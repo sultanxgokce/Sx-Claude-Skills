@@ -35,7 +35,7 @@ Varsayılan kayıt görevi: `gorev_01M557ADY4KHRGS99DQ6E2M0CV`.
 ## Sıra (taşıyıcı için)
 
 1. `kaydet` → **yalnız rc 0** ise mektubu taşı. Başka her kod taşımayı durdurur.
-2. **rc 1** (jeton yok, defter ulaşılamaz ya da reddetti): taşıma. Kayıt yoksa kart da yok. SERDAR'a yaz.
+2. **rc 1** (jeton yok, defter ulaşılamaz, reddetti ya da kaydı doğrulanamadı): taşıma. Kayıt yoksa kart da yok. SERDAR'a yaz.
 3. **rc 2** (biçim): taşıma. Yazana geri gönder. Kapıdan geçmemiş kart için ENİS `Durum: kapalı` döner, kart yumuşatılmaz.
 4. **rc 3** (`--kuru`): yalnız deneme. Biçim doğru ama kayıt yazılmadı, taşıma.
 
@@ -46,6 +46,7 @@ Varsayılan kayıt görevi: `gorev_01M557ADY4KHRGS99DQ6E2M0CV`.
 - `verildi` için `Kapı: geçti` ve dolu `Kart` zorunlu. `kapalı` ve `dayanak yok` kart metni taşımaz.
 - Aynı adım ikinci kez yazılmaz (defter tekilleştirir). Yeniden çalıştırmak güvenlidir.
 - Jeton `curl --config` ile gider: argv'de ve çıktıda görünmez.
+- Defterin 200 cevabı tek başına yetmez: gövde geçerli olmalı ve yazılan adım kayıtta görünmeli, yoksa rc 1.
 
 ## Ölçmediği (dürüstlük)
 
@@ -54,4 +55,4 @@ Varsayılan kayıt görevi: `gorev_01M557ADY4KHRGS99DQ6E2M0CV`.
 - Cevabın karşılığı olan isteğin kayıtta olup olmadığına bakmaz.
 - SIHHAT/kasa ya da Sultan'ın bayrağı kapalıyken gelen isteklere "kapalı" dönmek ENİS'in işidir. Araç yalnız o cevabı kaydeder.
 
-Sınav: `scripts/baglam-karti.test.sh` (hermetik, sahte defter, 19 kapı) · `scripts/baglam-karti.mutasyon.sh` (5 mutasyon, hepsi yakalanmalı).
+Sınav: `scripts/baglam-karti.test.sh` (hermetik, sahte defter, 19 kapı) · `scripts/baglam-karti.mutasyon.sh` (6 mutasyon, hepsi yakalanmalı).

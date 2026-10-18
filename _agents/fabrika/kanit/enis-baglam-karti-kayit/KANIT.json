@@ -1,29 +1,29 @@
 {
   "is": "enis-baglam-karti-kayit",
   "arac": "kanit.py/0.4.0",
-  "guncelleme": "2026-10-18T16:26:46+03:00",
+  "guncelleme": "2026-10-18T16:31:08+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "sinav",
       "asama": "tek",
       "dosya": "olcum-sinav-tek.txt",
-      "sha256": "66b093607ac248773a88975f7e8b618dd39af6ad6d03f0df73a33e14ae975b43",
+      "sha256": "f55dd2c8767813f1f2e0a2059efaf83058e03af95fcee1e37b7747a5987b7337",
       "komut": [
         "bash",
         "baglam-karti/scripts/baglam-karti.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T16:25:39+03:00",
-      "sure_sn": 10.1
+      "zaman": "2026-10-18T16:29:53+03:00",
+      "sure_sn": 3.6
     },
     {
       "tur": "olcum",
       "etiket": "repo-kapilari",
       "asama": "tek",
       "dosya": "olcum-repo-kapilari-tek.txt",
-      "sha256": "9b259527ae28b4b436a723801785720efe3bf874d817797276d2c372be03194e",
+      "sha256": "ea5926b9aeb9633c9c00b953990b98437c41d1d814bae671b9efe080cf99150c",
       "komut": [
         "bash",
         "-c",
@@ -31,7 +31,7 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T16:25:13+03:00",
+      "zaman": "2026-10-18T16:31:08+03:00",
       "sure_sn": 0.1
     },
     {
@@ -39,7 +39,7 @@
       "etiket": "mutasyon",
       "asama": "tek",
       "dosya": "olcum-mutasyon-tek.txt",
-      "sha256": "77fc4d3480a15803a9c7e89db13eff2d4773d13131d9fa4f4319866094e990fa",
+      "sha256": "c9c9ef59901d3ffe6b2db932bfb1686a1f014ecc653674bcdf46f2324f9cae8e",
       "komut": [
         "bash",
         "baglam-karti/scripts/baglam-karti.mutasyon.sh",
@@ -47,9 +47,9 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T16:26:46+03:00",
-      "sure_sn": 67.7
+      "zaman": "2026-10-18T16:31:08+03:00",
+      "sure_sn": 75.2
     }
   ],
-  "imza": "24deaeb6df92e78813b6cd9b996666bf02f47fdc3c06a069f00fc0a671feb33f"
+  "imza": "4a5ee1f3193925dac6d7ebd364ef6b8a5d57d4603a9ceea1ad01901337e835ee"
 }

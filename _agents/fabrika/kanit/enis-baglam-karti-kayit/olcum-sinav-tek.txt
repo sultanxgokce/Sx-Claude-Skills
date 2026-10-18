@@ -1,5 +1,5 @@
 $ bash baglam-karti/scripts/baglam-karti.test.sh
-# rc=0 sure=10.1s zaman=2026-10-18T16:25:39+03:00
+# rc=0 sure=3.6s zaman=2026-10-18T16:29:53+03:00
 --- stdout ---
 ── İ · istek
   ✓ İ1 geçerli istek rc 0, deftere TEK istek
@@ -20,10 +20,11 @@ $ bash baglam-karti/scripts/baglam-karti.test.sh
   ✓ F1 jeton yok → rc 1, deftere istek yok
   ✓ F2 defter reddetti (http 500) → rc 1, 'kart dönmez'
   ✓ F3 defter ulaşılamaz → rc 1
+  ✓ F6 defter 200 ama gövde boş · bozuk · adım kayıtta yok → rc 1 (kayıt doğrulanamadı, kart dönmez)
   ✓ F4 kuru koşum: rc 3 (taşıma izni değil), adımı basar, deftere dokunmaz
   ✓ F5 mektup yok · biçimsiz görev kimliği → rc 2
 ── G · jeton hijyeni
   ✓ G1 jeton değeri hiçbir çıktıda yok
 
-SONUÇ: 19 geçti · 0 kaldı
+SONUÇ: 20 geçti · 0 kaldı
 --- stderr ---
