@@ -1,0 +1,38 @@
+{
+  "tur": 4,
+  "is": "kanit-boru-reddi",
+  "pr": "371",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T20:15:10+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 53659,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 31393
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Daraltılmış iş kartındaki yaygın maskeler, önekli/yollu eşdeğerler, gerekçeli izin kaydı ve açık sınır beyanı uygulanmış; önceki turun iki açığı da hedefli sınav ve mutantlarla kapatılmış. Ancak `-c` seçeneğinin kabuk argv’sindeki gerçek seçenek konumu doğrulanmadığından kabuk betiği olmayan bazı çağrılar yanlışlıkla denetime giriyor; önce bu yanlış reddi çözün.",
+    "bulgular": [
+      {
+        "ne": "Kabuktan sonraki herhangi bir `-c` benzeri argüman seçenek kabul ediliyor; oysa betik dosyasından veya `--` seçeneği-sonlandırıcısından sonra gelen `-c`, kabuğun seçeneği değil betiğe geçirilen argümandır. Örneğin `bash script.sh -c 'false | cat'` gerçekte `script.sh` çalıştırırken kod sondaki metni kabuk betiği sanıp reddedebilir.",
+        "kanit": "`boru_denetimi`, kabuk konumundan sonraki tüm argv üzerinde `next(... re.fullmatch(r\"-[A-Za-z]*c[A-Za-z]*\", komut[k]))` arıyor; ilk seçenek-dışı argümanda veya `--` üzerinde aramayı durdurmuyor. T20w veri argümanındaki kabuk adını ölçüyor fakat kabuk çalıştırıcısından sonra veri konumunda bulunan `-c` için negatif sınav yok.",
+        "konum": "yazilim-fabrikasi/scripts/kanit.py:boru_denetimi, `i = next(...)`; yazilim-fabrikasi/scripts/kanit.test.sh:T20p-T20w",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sha’ları sağlam; sarı kayıt yok. Son ölçüm 143/143 kapıyı ve T21’de on mutantı geçiriyor; T20u/T20v/T20w önceki turun iki bulgusunu doğrudan ölçüyor. Önce/sonra kayıtları aynı özellik metriğini birebir karşılaştırmıyor, ancak hedefli son sınav ve mutasyon kanıtı güçlü; bulunan argv-konumu yanlış pozitifliği mevcut sınavlarda ölçülmemiş."
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "is": "kanit-boru-reddi",
+  "cumle": "kanit.py olcum: kabuk -c betiğinde YAYGIN çıkış kodu maskelerini (çift boru + true ve önekli/yollu eşdeğerleri, son komut echo/printf/true/:/set, pipefail'siz boru; argv başında ya da bilinen sarmalayıcı arkasındaki kabuk) reddetsin; gerekçeli --boru-izin manifeste yazılsın; yasak listesinin tam olmadığı sınır olarak SKILL'de açık yazılsın (görev PTHAQ, ilk yarı)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-18T16:18:35+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/kanit-boru-reddi/ (sınav + mutasyon)",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-10-18T20:13:04+03:00",
+      "olay": "tikandi"
+    },
+    {
+      "zaman": "2026-10-18T20:13:13+03:00",
+      "olay": "daralt",
+      "kalan_kart": "kanit-kabuk-izin-listesi",
+      "tur_sifir": 3
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "canli_kanit": "yok",
+  "bitis": "2026-10-18T20:13:04+03:00",
+  "pr": "371",
+  "puan": {
+    "kod": 3,
+    "dogru": "E",
+    "tur": 3
+  },
+  "kanit_var": true,
+  "tikanma": {
+    "yol": "daralt",
+    "neden": "3 turda 3/E: yasak listesi her turda yeni kabuk eşdeğeri veriyor (tur 3: || /bin/true, || command true, printf bash -c yanlış pozitif)"
+  },
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "HENDESE",
+      "oturum": "NOTES 18:03 [SERDAR → HENDESE] (1) #371 tıkandı → DARALT (reis kararı)",
+      "gerekce": "daraltma: kalan bulgu yeni karta (kanit-kabuk-izin-listesi) — Tam çözüm yasak listesiyle olmaz: kabuk betiğini izin listesiyle (bilinen güvenli biçimler; geri kalanı ayrıştırılamadı/SARI) değerlendiren denetim — her turda yeni eşdeğer çıkıyordu (çift boru + /bin/true, çift boru + command true, printf bash -c)",
+      "zaman": "2026-10-18T20:13:13+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "kanit.py olcum kabuk -c komutunda çıkış kodunu maskeleyen deseni (|| true, son komut echo/true, pipefail'siz boru) reddetsin; gerekçeli --boru-izin istisnası manifeste yazılsın (görev PTHAQ, ilk yarı)",
+      "zaman": "2026-10-18T20:13:13+03:00",
+      "kalan_kart": "kanit-kabuk-izin-listesi"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-18T20:13:13+03:00",
+      "kalan_kart": "kanit-kabuk-izin-listesi",
+      "kalan": "Tam çözüm yasak listesiyle olmaz: kabuk betiğini izin listesiyle (bilinen güvenli biçimler; geri kalanı ayrıştırılamadı/SARI) değerlendiren denetim — her turda yeni eşdeğer çıkıyordu (çift boru + /bin/true, çift boru + command true, printf bash -c)",
+      "tur_sifir": 3,
+      "oturum": "NOTES 18:03 [SERDAR → HENDESE] (1) #371 tıkandı → DARALT (reis kararı)"
+    }
+  ]
+}

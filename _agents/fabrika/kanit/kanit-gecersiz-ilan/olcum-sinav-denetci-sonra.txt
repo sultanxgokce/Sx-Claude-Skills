@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/denetci.test.sh
-# rc=0 sure=211.2s zaman=2026-10-18T20:10:47+03:00
+# rc=0 sure=228.0s zaman=2026-10-18T20:53:34+03:00
 --- stdout ---
 ════ T1 · kanıt yok → rc=2, denetim dosyası yok ════
   ✓ kanıtsız adım 4 açılmadı (rc=2)
@@ -189,7 +189,7 @@ $ bash yazilim-fabrikasi/scripts/denetci.test.sh
   ✓ mutant 'kart-json-hatasi-yutulur' sınavı KIRMIZI yapıyor
   ✓ mutant 'kirpma-kaydini-kaldir' sınavı KIRMIZI yapıyor
   ✓ mutant 'gecersiz-goze-soylenmez' sınavı KIRMIZI yapıyor
-  (bilgi) 16 mutant · 4 paralel · 132 sn
+  (bilgi) 16 mutant · 4 paralel · 157 sn
 
 ── KANIT-AYIKLAMA (ayrı dosya, buradan çağrılır) ──
 A · 🔴 kanıt dosyaları farktan AYIKLANIR, üretim kodu KALIR

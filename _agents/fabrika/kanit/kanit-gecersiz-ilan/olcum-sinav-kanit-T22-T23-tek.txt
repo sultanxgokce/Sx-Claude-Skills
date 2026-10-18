@@ -1,5 +1,5 @@
 $ bash -c o=$(mktemp); bash "$1" > "$o" 2>&1; rc=$?; sed -n "/T22/,\$p" "$o"; exit $rc _ yazilim-fabrikasi/scripts/kanit.test.sh
-# rc=0 sure=16.0s zaman=2026-10-18T20:11:03+03:00
+# rc=0 sure=17.6s zaman=2026-10-18T20:53:52+03:00
 --- stdout ---
 ════ T22 · GEÇERSİZ ilan (4K938): özgün kayda dokunmaz, hedefin ölçüm kimliğine bağlı, yeşil sayılmaz ════
   ✓ T22 --neden 20 karakterden kısa → ret, ilan dosyası yazılmadı
@@ -28,5 +28,5 @@ $ bash -c o=$(mktemp); bash "$1" > "$o" 2>&1; rc=$?; sed -n "/T22/,\$p" "$o"; ex
   ✓ T23 mutant cift: ikinci ilan denetimi kaldırıldı → 'ikinci_ilan_ret' kapısı düşüyor
   ✓ T23 mutant karsi: karşı kanıt çözülmeden kabul → 'olmayan_karsi_ret' kapısı düşüyor
 
-── SONUÇ: 128 geçti · 0 kaldı ──
+── SONUÇ: 174 geçti · 0 kaldı ──
 --- stderr ---

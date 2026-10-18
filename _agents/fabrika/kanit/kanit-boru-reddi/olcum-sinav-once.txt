@@ -1,0 +1,8 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/pthaq/sinav-say.sh /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/pthaq/once-0Rnh once
+# rc=0 sure=12.3s zaman=2026-10-18T16:23:31+03:00
+--- stdout ---
+test_rc=1 gecen=101 kalan=3 bilinen_t8_kalan=3 yeni_T20_T21_gecen=0 yeni_T20_T21_kalan=0
+  ✗ gerçek kare alındı (playwright var)
+  ✗ ürün imi yoksa rc=2 (ölçer ürünü görmedi — 6. kanun)
+  ✗ imsiz kare manifestte kırmızı
+--- stderr ---
