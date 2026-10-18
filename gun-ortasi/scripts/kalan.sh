@@ -46,7 +46,7 @@ if [ -f "$SK/gunluk-plan/scripts/cipa.sh" ]; then
     j="$( (cd "$KOK" && bash "$SK/gunluk-plan/scripts/cipa.sh" tablo --json) 2>/dev/null)"
     if sayim="$(printf '%s' "$j" | python3 -c 'import json,sys; m=json.load(sys.stdin)["maddeler"]; print(sum(x["durum"] in ("acik","yarim") for x in m), sum(x["durum"]=="bitti" for x in m))' 2>/dev/null)"; then
       read -r CIPA_ACIK CIPA_KAPALI <<< "$sayim"
-      bas "$( (cd "$KOK" && bash "$SK/gunluk-plan/scripts/cipa.sh" tablo) 2>/dev/null | grep '^|' | cut -c1-170 | sed 's/^/  /')"
+      bas "$( (cd "$KOK" && bash "$SK/gunluk-plan/scripts/cipa.sh" tablo) 2>/dev/null | grep '^[│┌├└📋]' | cut -c1-170 | sed 's/^/  /')"
     else olcemedim "çıpa tabloya çevrilemedi (gunluk-plan 1.5.0 öncesi kurulu olabilir)"; fi
   fi
 else olcemedim "gunluk-plan/cipa.sh bulunamadı"; fi

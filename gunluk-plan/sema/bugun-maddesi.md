@@ -31,7 +31,7 @@ Niçin: aynı veriyi üç ayrı gözle okuyan üç araç vardı ve yazılı tek 
 
 ## Durum
 
-Veri adları (`durum` alanı) kokpit kapısınınkilerle **aynıdır**; tabloda Sultan-dilindeki karşılığı basılır.
+Veri adları (`durum` alanı) kokpit kapısınınkilerle **aynıdır**; kutulu tabloda işaret basılır (✅ bitti · 🟡 yarım · ⬜ açık · ⏸ ertelendi · ➖ geri), düz `--md` tabloda Sultan-dilindeki karşılığı.
 
 | im + sonuç | `durum` | Tabloda | Kapanış kapısı |
 |---|---|---|---|

@@ -1,0 +1,71 @@
+{
+  "is": "gunluk-plan-kutulu-tablo",
+  "arac": "kanit.py/0.4.0",
+  "guncelleme": "2026-10-18T15:05:47+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "cipa-sinavi-82",
+      "asama": "sonra",
+      "dosya": "olcum-cipa-sinavi-82-sonra.txt",
+      "sha256": "4f127d2e8916f80887d3574e16f915890280148cc49c760b47ee6e124298375c",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/cipa.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T15:05:39+03:00",
+      "sure_sn": 4.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gun-ortasi-sinavi-33",
+      "asama": "sonra",
+      "dosya": "olcum-gun-ortasi-sinavi-33-sonra.txt",
+      "sha256": "634c89b4459a2ba9c2d1b27ee61a34fd799d6d1134fe62d507309f53e2c4d6d2",
+      "komut": [
+        "bash",
+        "gun-ortasi/scripts/kalan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T15:05:47+03:00",
+      "sure_sn": 8.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tablo-once-duz",
+      "asama": "once",
+      "dosya": "olcum-tablo-once-duz-once.txt",
+      "sha256": "a1469daf44066be208a96dbc0be718c863e3ca535457edde2237620480dfbb60",
+      "komut": [
+        "python3",
+        "gunluk-plan/scripts/tablo.py",
+        "gunluk-plan/sema/ornek-cipa.md",
+        "--md"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T15:05:47+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tablo-sonra-kutulu",
+      "asama": "sonra",
+      "dosya": "olcum-tablo-sonra-kutulu-sonra.txt",
+      "sha256": "c15e22290a5c840a0184c3785c29c1b5e4dd346ff7c440951bfffcea9af7493f",
+      "komut": [
+        "python3",
+        "gunluk-plan/scripts/tablo.py",
+        "gunluk-plan/sema/ornek-cipa.md"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T15:05:47+03:00",
+      "sure_sn": 0.0
+    }
+  ],
+  "imza": "580c844d9bd6707cbbc2f469d13c6f3bd26c53187fdaa91243a5ff98f19ba4d0"
+}

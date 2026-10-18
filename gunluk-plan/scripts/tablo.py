@@ -11,7 +11,9 @@
 #       ertesi güne taşımanın TEK yolu Sultan'ın "ertele" kararının D1 damgasıdır (A06: damgayı ajan
 #       uyduramaz — araç yalnız biçimini sınar, sözün kendisi Sultan'dandır).
 #
-# Kullanım:  tablo.py <cipa.md> [--json]      tabloyu bas (rc 0) · çıpa okunamazsa rc 1
+# Kullanım:  tablo.py <cipa.md>              KUTULU tabloyu bas (Sultan 18 Eki: 'bu tarz bir görünüm istiyorum') · rc 0 · çıpa okunamazsa rc 1
+#            tablo.py <cipa.md> --md         düz (markdown) tablo — makine/metin kanalları için
+#            tablo.py <cipa.md> --json       ham alanlar
 #            tablo.py <cipa.md> --kapanis     açık madde yoksa rc 0; varsa listeyi basar, rc 4
 import json, re, sys
 
@@ -78,17 +80,63 @@ def tablo_md(c):
     return '\n'.join(s)
 
 
+# Durum işaretleri (Sultan'ın 18 Eki ekran örneği): ✅ kapandı · 🟡 yarım · ⬜ açık · ⏸ ertelendi · ➖ geri alındı
+ISARET = {'bitti': '✅', 'yarim': '🟡', 'acik': '⬜', 'ertelendi': '⏸', 'geri': '➖'}
+
+
+def _gen(s):
+    # görünür genişlik: emoji/geniş işaretler 2, gerisi 1 (terminal kutusu düzgün kapansın)
+    return sum(2 if ord(ch) > 0x2600 else 1 for ch in s)
+
+
+def _hiz(s, w, orta=False):
+    bos = w - _gen(s)
+    if orta:
+        sol = bos // 2; return ' ' * sol + s + ' ' * (bos - sol)
+    return s + ' ' * bos
+
+
+def ozet_satiri(c):
+    n = len(c['maddeler']); say = lambda d: sum(1 for m in c['maddeler'] if m['durum'] == d)
+    return '%d madde · %d ✅ kapandı · %d 🟡 yarım · %d ⬜ açık' % (n, say('bitti'), say('yarim'), say('acik')) + \
+           (' · %d ⏸ ertelendi' % say('ertelendi') if say('ertelendi') else '') + (' · %d ➖ geri' % say('geri') if say('geri') else '')
+
+
+def tablo_kutu(c, genislik=120):
+    satirlar = []
+    for i, m in enumerate(c['maddeler'], 1):
+        madde = GOREV.sub('', m['metin']).strip() + ''.join(' · görev …%s' % g[-5:] for g in m['gorevler'])
+        satirlar.append([str(m['etiket'] or i), madde, m['sahip'] or '—', ISARET[m['durum']], m['kanit'] or '—'])
+    bas = ['#', 'Madde', 'Sahip', 'Durum', 'Kanıt']
+    w = [max(_gen(r[k]) for r in [bas] + satirlar) for k in range(5)]
+    w[3] = max(w[3], 5)
+    # madde ve kanıt sütunları toplam genişliğe sığsın: taşanı kısalt (… ile), düşük öncelik kanıt
+    sabit = w[0] + w[2] + w[3] + 16
+    kalan = max(genislik - sabit, 30)
+    if w[1] + w[4] > kalan:
+        w[4] = min(w[4], max(12, kalan // 3)); w[1] = kalan - w[4]
+    def kirp(s, n):
+        return s if _gen(s) <= n else (s[:max(n - 1, 1)].rstrip() + '…')
+    cizgi = lambda l, m_, r: l + m_.join('─' * (x + 2) for x in w) + r
+    out = [cizgi('┌', '┬', '┐'), '│ ' + ' │ '.join(_hiz(bas[k], w[k], orta=k in (0, 3)) for k in range(5)) + ' │', cizgi('├', '┼', '┤')]
+    for r in satirlar:
+        r = [r[0], kirp(r[1], w[1]), kirp(r[2], w[2]), r[3], kirp(r[4], w[4])]
+        out.append('│ ' + ' │ '.join(_hiz(r[k], w[k], orta=k in (0, 3)) for k in range(5)) + ' │')
+    out.append(cizgi('└', '┴', '┘'))
+    return '\n'.join(out)
+
+
 def main(a):
     if not a or a[0].startswith('--'):
-        sys.stderr.write('kullanım: tablo.py <cipa.md> [--json|--kapanis]\n'); return 2
+        sys.stderr.write('kullanım: tablo.py <cipa.md> [--md|--json|--kapanis]\n'); return 2
     try:
         c = ayristir(open(a[0], encoding='utf-8').read())
     except OSError as e:
         sys.stderr.write('çıpa okunamadı: %s (%s)\n' % (a[0], type(e).__name__)); return 1
     if '--json' in a:
         print(json.dumps(c, ensure_ascii=False, indent=2)); return 0
-    print('📋 BUGÜN · %s' % (c['tarih'] or 'tarihsiz'))
-    print(tablo_md(c))
+    print('📋 BUGÜN · %s · %s' % (c['tarih'] or 'tarihsiz', ozet_satiri(c)))
+    print(tablo_md(c) if '--md' in a else tablo_kutu(c))
     if '--kapanis' in a:
         acik = [m for m in c['maddeler'] if m['durum'] in ('acik', 'yarim')]
         if acik:

@@ -1,0 +1,17 @@
+$ python3 gunluk-plan/scripts/tablo.py gunluk-plan/sema/ornek-cipa.md
+# rc=0 sure=0.0s zaman=2026-10-18T15:05:47+03:00
+--- stdout ---
+📋 BUGÜN · 2026-10-17 · 8 madde · 1 ✅ kapandı · 1 🟡 yarım · 4 ⬜ açık · 1 ⏸ ertelendi · 1 ➖ geri
+┌────┬──────────────────────────────────────────────────┬────────┬───────┬───────────────┐
+│ #  │ Madde                                            │ Sahip  │ Durum │ Kanıt         │
+├────┼──────────────────────────────────────────────────┼────────┼───────┼───────────────┤
+│ 1  │ Retro paketi · görev …CWSGE                      │ MUAVİN │  ✅   │ cloudtop #669 │
+│ 2  │ Gelen kutusu triyajı                             │ MUAVİN │  🟡   │ —             │
+│ 3  │ WhatsApp izin kalıcılığı                         │ Sultan │  ⬜   │ —             │
+│ 4  │ Eski kanal düzeltmesi                            │ —      │  ➖   │ —             │
+│ 5  │ Sunum provası                                    │ MUAVİN │   ⏸   │ —             │
+│ 6  │ Damgasız erteleme                                │ —      │  ⬜   │ —             │
+│ G1 │ Gün ortası maddesi · görev …PT7A7 · görev …BR604 │ —      │  ⬜   │ —             │
+│ 7  │ Açılmadı örneği                                  │ —      │  ⬜   │ —             │
+└────┴──────────────────────────────────────────────────┴────────┴───────┴───────────────┘
+--- stderr ---
