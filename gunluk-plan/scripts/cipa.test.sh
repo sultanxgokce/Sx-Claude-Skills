@@ -168,7 +168,7 @@ bash "$ARAC" yaz --plan "1) birinci (sahip: MUAVİN) | 2) ikinci | 3) üçüncü
 bash "$ARAC" kapanis >/dev/null 2>&1; kapi "T7 üç açık madde → kapanış rc=4" "4" "$?"
 bash "$ARAC" tazele --madde 1 --durum kapandi --kanit "PR #12" >/dev/null 2>&1
 kapi "T8 --kanit satıra 'kanıt:' parçası olarak yazılır" "1" "$(grep -c '^- \[x\] 1) birinci (sahip: MUAVİN) → KAPANDI · kanıt: PR #12$' "$CK"; true)"
-kapi "T9 tabloda kanıt sütunu dolu" "1" "$(bash "$ARAC" tablo 2>/dev/null | grep -c '| 1 | birinci | MUAVİN | kapandı | PR #12 |')"
+kapi "T9 tabloda kanıt sütunu dolu" "1" "$(bash "$ARAC" tablo --md 2>/dev/null | grep -c '| 1 | birinci | MUAVİN | kapandı | PR #12 |')"
 bash "$ARAC" tazele --madde 2 --durum ertelendi >/dev/null 2>&1; kapi "T10 D1'siz erteleme REDDEDİLİR" "2" "$?"
 bash "$ARAC" tazele --madde 2 --durum ertelendi --d1 "Sultan dedi ki ertele" >/dev/null 2>&1; kapi "T11 biçimsiz D1 REDDEDİLİR (oturum-ref · kırpık · beyan zorunlu)" "2" "$?"
 for _v in "bugün görüşelim" "erteleme" "ertelenmesin, bugün bitsin" "ertele istemiyorum" "ertele mi?" "erteleyelim mi bilmiyorum"; do
@@ -194,7 +194,7 @@ bash "$ARAC" yaz --plan "1) bir | serbest iş | G1) gün ortası | G2) ikinci g�
 bash "$ARAC" tazele --madde G1 --durum kapandi --kanit "PR #7" >/dev/null 2>&1; r=$?
 kapi "T19 --madde G1 gün ortası maddesini tazeler (fiziksel sırası 3 olsa da)" "0|1|0" \
      "$r|$(grep -c '^- \[x\] G1) gün ortası → KAPANDI · kanıt: PR #7$' "$CE"; true)|$(grep -c '^- \[x\] serbest' "$CE"; true)"
-kapi "T20 tablo ile tazele aynı kimliği konuşur (G1 kapandı)" "1" "$(bash "$ARAC" tablo 2>/dev/null | grep -c '| G1 | gün ortası | — | kapandı | PR #7 |')"
+kapi "T20 tablo ile tazele aynı kimliği konuşur (G1 kapandı)" "1" "$(bash "$ARAC" tablo --md 2>/dev/null | grep -c '| G1 | gün ortası | — | kapandı | PR #7 |')"
 bash "$ARAC" tazele --madde g2 --durum yarim >/dev/null 2>&1
 kapi "T21 etiket büyük/küçük harf duyarsız (g2 → G2)" "1" "$(grep -c '^- \[~\] G2) ikinci gün ortası → YARIM$' "$CE"; true)"
 bash "$ARAC" tazele --madde 2 --durum yarim >/dev/null 2>&1
@@ -223,5 +223,29 @@ else
 fi
 
 echo
+
+echo "── kutulu tablo ZORUNLU biçim (Sultan 18 Eki 'bu tarz bir görünüm istiyorum')"
+KUTU=$(python3 "$KOK/tablo.py" "$SEMA/ornek-cipa.md" 2>/dev/null)
+kapi "T21 varsayılan çıktı çerçevelidir (┌ ├ └)" "3" "$(printf '%s\n' "$KUTU" | grep -c '^[┌├└]')"
+kapi "T22 başlık satırı sayılı özet taşır (madde · ✅ · 🟡 · ⬜)" "1" "$(printf '%s\n' "$KUTU" | grep -c '^📋 BUGÜN · .* madde · [0-9]* ✅ kapandı · [0-9]* 🟡 yarım · [0-9]* ⬜ açık')"
+kapi "T23 durum sütunu işaretle basılır, kelimeyle değil" "0" "$(printf '%s\n' "$KUTU" | grep -cE '│ +(kapandı|açık|yarım) +│')"
+kapi "T24 beş durumun beşi işaretli (✅ 🟡 ⬜ ⏸ ➖)" "5" "$(for i in ✅ 🟡 ⬜ ⏸ ➖; do printf '%s\n' "$KUTU" | grep -q "$i" && echo x; done | wc -l)"
+kapi "T25 --md eski düz biçimi verir (kokpit/metin kanalı)" "1" "$(python3 "$KOK/tablo.py" "$SEMA/ornek-cipa.md" --md 2>/dev/null | grep -c '^|---|---|---|---|---|$')"
+MUT="$T/tablo-mut.py"; sed "s/ISARET\[m\['durum'\]\]/etiket(m)/" "$KOK/tablo.py" > "$MUT"
+kapi "T26 mutant (işaret yerine kelime) T23'ü düşürür — kapı ısırıyor" "1" "$( [ "$(python3 "$MUT" "$SEMA/ornek-cipa.md" 2>/dev/null | grep -cE '│ +(kapandı|açık|yarım) +│')" -gt 0 ] && echo 1 || echo 0)"
+
+kapi "T27 kutunun bütün satırları aynı görünür genişlikte (⏸ dahil, göz #369 tur 1)" "1" "$(printf '%s\n' "$KUTU" | grep '^[│┌├└]' | python3 -c "
+import sys
+G={'✅','🟡','⬜','⏸','➖'}
+w=lambda s: sum(2 if (c in G or ord(c)>=0x1F000 or 0x2600<=ord(c)<=0x27BF) else 1 for c in s)
+print(len(set(w(l.rstrip('\n')) for l in sys.stdin)))")"
+
+printf '# ⚓ GÜNÜN PLANI ÇIPASI · 2026-01-03\n\n## Maddeler\n- [ ] 1) 🟡🟡🟡 emoji dolu çok uzun madde metni %s (sahip: X)\n- [ ] 2) kısa\n' "$(printf 'a%.0s' $(seq 1 150))" > "$T/emoji-cipa.md"
+kapi "T28 metinde emoji olan uzun madde kısaltılınca kutu hizası bozulmaz" "1" "$(python3 "$KOK/tablo.py" "$T/emoji-cipa.md" 2>/dev/null | grep '^[│┌├└]' | python3 -c "
+import sys
+G={'✅','🟡','⬜','⏸','➖'}
+w=lambda s: sum(2 if (c in G or ord(c)>=0x1F000 or 0x2600<=ord(c)<=0x27BF) else 1 for c in s)
+print(len(set(w(l.rstrip('\\n')) for l in sys.stdin)))")"
+
 echo "SONUÇ: $gecen geçti · $kalan kaldı"
 [ "$kalan" -eq 0 ]

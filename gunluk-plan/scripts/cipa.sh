@@ -81,7 +81,7 @@ kullanım:
   cipa.sh yaz --plan "1) madde … | 2) madde …" [--not "…"]   günün çıpasını diske yaz
   cipa.sh tazele --madde <n> --durum kapandi|yarim|acilmadi|geri-alindi [--not "…"] [--kanit "<PR#|commit|dosya>"]
   cipa.sh tazele --madde <n> --durum ertelendi --d1 "<YYYY-MM-DD Sultan: … (sohbet · <ref> · \"<kırpık>\" · beyan:<AJAN>)>"
-  cipa.sh tablo [--json]                                      standart bugün tablosu (madde · sahip · durum · kanıt)
+  cipa.sh tablo [--md|--json]                                 KUTULU bugün tablosu (zorunlu sunum); --md düz, --json ham
   cipa.sh kapanis                                             açık madde varsa rc=4 (kapanış kabul edilmez)
   cipa.sh oku                                                 çıpayı bas (yoksa rc=1)
   cipa.sh yol                                                 çıpanın yolunu bas (dosya yoksa da)
@@ -105,6 +105,7 @@ while [ $# -gt 0 ]; do
   bayrak="$1"
   case "$bayrak" in
     --json) JSON=1; shift ;;
+    --md) MD=1; shift ;;
     --plan|--not|--madde|--durum|--kanit|--d1)
       # 🔴 İKİ AYRI ŞART, İKİSİ DE GEREKLİ:
       #    (a) argüman KALDI MI — kalmadıysa `shift 2` İLERLEMEZ ve döngü sonsuza girer
@@ -225,7 +226,7 @@ PY
     _OK="$(_okunacak)"
     [ -f "$_OK" ] || { echo "çıpa YOK: $CIPA" >&2; exit 1; }
     if [ "$KOMUT" = kapanis ]; then python3 "$(dirname "$0")/tablo.py" "$_OK" --kapanis; exit $?; fi
-    if [ "$JSON" = 1 ]; then python3 "$(dirname "$0")/tablo.py" "$_OK" --json; else python3 "$(dirname "$0")/tablo.py" "$_OK"; fi
+    if [ "$JSON" = 1 ]; then python3 "$(dirname "$0")/tablo.py" "$_OK" --json; elif [ "${MD:-0}" = 1 ]; then python3 "$(dirname "$0")/tablo.py" "$_OK" --md; else python3 "$(dirname "$0")/tablo.py" "$_OK"; fi
     ;;
   oku)
     _OK="$(_okunacak)"

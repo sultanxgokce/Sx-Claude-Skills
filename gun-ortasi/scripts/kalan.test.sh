@@ -95,8 +95,8 @@ if [ -f "$GERCEK_CIPA" ]; then
   O11="$(kos env)"
   kapi "T11 gerçek çıpa: [x] kapalı (notunda 'bekliyor' geçse de) · [~] ve [ ] açık → 2/1" "$(oz "$O11" cipa_acik)/$(oz "$O11" cipa_kapali)" "2/1"
   # T16 · TEK ŞABLON fiilen basılır (bağımsız göz tur 1: yalnız talimatta yazılıydı, çıktıda ölçülmüyordu)
-  kapi "T16 1. bölüm /gunluk-plan'ın standart tablosunu basar (madde · sahip · durum · kanıt)" \
-       "$(printf '%s\n' "$O11" | grep -c '| # | Madde | Sahip | Durum | Kanıt |')/$(printf '%s\n' "$O11" | grep -c '| 2 | B | — | yarım | — |')" "1/1"
+  kapi "T16 1. bölüm /gunluk-plan'ın KUTULU tablosunu basar (madde · sahip · durum işareti · kanıt)" \
+       "$(printf '%s\n' "$O11" | grep -c '│ # │ Madde')/$(printf '%s\n' "$O11" | grep -cE '│ 2 +│ B +│ — +│ +🟡 +│ — +│')" "1/1"
   # T17 · ayrıştırıcı yoksa (eski kurulum) sessiz grep'e DÜŞMEZ — ölçemedim der
   mv "$SK/gunluk-plan/scripts/tablo.py" "$SK/gunluk-plan/scripts/tablo.py.yok"
   O17="$(kos env)"; mv "$SK/gunluk-plan/scripts/tablo.py.yok" "$SK/gunluk-plan/scripts/tablo.py"
