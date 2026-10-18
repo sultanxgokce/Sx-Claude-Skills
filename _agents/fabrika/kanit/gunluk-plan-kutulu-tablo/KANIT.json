@@ -1,7 +1,7 @@
 {
   "is": "gunluk-plan-kutulu-tablo",
   "arac": "kanit.py/0.4.0",
-  "guncelleme": "2026-10-18T15:07:44+03:00",
+  "guncelleme": "2026-10-18T15:09:23+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -80,7 +80,22 @@
       "renk": "yesil",
       "zaman": "2026-10-18T15:07:44+03:00",
       "sure_sn": 4.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cipa-sinavi-84-emoji-kirpma",
+      "asama": "sonra",
+      "dosya": "olcum-cipa-sinavi-84-emoji-kirpma-sonra.txt",
+      "sha256": "263de2f97e00dec5e9d01063506afeb42ccf8b5c2dc38111f9561be27f281563",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/cipa.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T15:09:23+03:00",
+      "sure_sn": 4.5
     }
   ],
-  "imza": "24a9eb87685d76a8ebd0e05d0e8ccef8f70d3c9259820833ecaf62052737b097"
+  "imza": "3633f98e88d84aa1996e89cd32bd7a5ce52f4b8e192d52b7ea24cb9861755186"
 }
