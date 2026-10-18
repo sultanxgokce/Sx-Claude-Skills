@@ -35,7 +35,16 @@ V=[('IADE PAKETI DOKUMU','KESME','iade paketi (düz)'),('İADE PAKETİ DÖKÜMÜ
    ('Hatırlatma: FIS PAKETI DOKUMU','KES','🔴 hatırlatma önekli FİŞ PAKETİ — KAÇMAMALI'),
    ('FW: HATIRLATMA - FİŞ PAKETİ DÖKÜMÜ','KES','🔴 aynısı, tam Türkçe'),
    ('(Hatırlatma-1-) İADE PAKETİ DÖKÜMÜ','KESME','🔴 hatırlatma önekli İADE — kesilmemeli'),
-   ('Hatirlatma Malzeme İade','KES','hatırlatma önekli malzeme iade')]
+   ('Hatirlatma Malzeme İade','KES','hatırlatma önekli malzeme iade'),
+   ('BİZPUAN ÖDÜL FATURA TALEBİ','TALEP','Bizpuan talebi — kanonda KES, SOR değil'),
+   ('Eylül Ayı İskonto Fatura Talebi','TALEP','aylık iskonto talebi'),
+   ('KLİMA MONTAJ DESTEK PRİM FATURA TALEBİ','TALEP','klima montaj prim talebi (14.10)'),
+   ('Hatırlatma: Bizpuan Ödül Fatura Talebi','TALEP','🔴 hatırlatma önekli talep — uyari-ya düşmemeli'),
+   ('FW: KLIMA MONTAJ DESTEK PRIM FATURA TALEBI','TALEP','iletilmiş, aksansız'),
+   ('Düzenlenmemiş Görünen Bizpuan Faturalarınız Hakkında','SOR','toplu hatırlatma — talep DEĞİL'),
+   ('Arçelik Pazarlama A.Ş Ödeme Listesi','ATLA','ödeme listesi — döküm (Sultan 18.10)'),
+   ('Servis BizPuan- Harcanmayan Puanların Kullanımı','ATLA','harcanmayan puan duyurusu (Sultan 18.10)'),
+   ('BİZPUAN ÖDÜL FATURA TALEBİ - Harcanmayan Puan','TALEP','🔴 talep, duyuru kuralına YUTULMAMALI')]
 for k,b,a in V:
     _,kr=tip_bul(k)
     print(('YESIL' if kr==b else 'KIRMIZI')+'|'+a+'|'+(b if kr==b else f'beklenen={b} geldi={kr}'))
@@ -44,6 +53,8 @@ print(('YESIL' if ad.index('iade_paketi')<ad.index('fis_paketi') else 'KIRMIZI')
 for paket in ('iade_paketi','fis_paketi','malzeme_iade'):
     print(('YESIL' if ad.index(paket)<ad.index('uyari') else 'KIRMIZI')+f'|SIRA: {paket} deseni uyari-dan ÖNCE|hatirlatma onekli paket kacmasin')
 print(('YESIL' if ad.index('mutabakat')<ad.index('uyari') else 'KIRMIZI')+'|SIRA: mutabakat uyari-dan ÖNCE|dogru etiket')
+for once in ('odul_puan','uyari','fatura_talebi'):
+    print(('YESIL' if ad.index('fatura_talebi_kes')<ad.index(once) else 'KIRMIZI')+f'|SIRA: fatura_talebi_kes {once}-dan ÖNCE|talep SOR/ATLA-ya düşmesin')
 ")
 
 echo
@@ -87,6 +98,32 @@ rc_bekle 1 "yaz: aynı SAP'a ÜZERİNE YAZMAZ"      yaz "SINAV-KESILMIS" "YYY202
 ARCELIK_KESIM_DEFTERI="/config/olmayan-dizin/yok.jsonl" bash defter.sh sor "X" >/dev/null 2>&1
 [[ $? -eq 5 ]] && gec "altyapı hatası KENDİ kodunu taşıyor (rc=5, 1 DEĞİL)" \
                 || dus "altyapı hatası semantik koda çarpıyor — 'kesilmiş' sanılır"
+
+echo
+echo "S4 · fatura talebi — 'son kesilen' defterden okunur, okunamazsa ÖLÇÜLEMEDİ (asla 'yok' değil)"
+printf '{"sap":"BIZPUAN-2026-08","fatura_no":"T1","tutar":"1.00","tarih":"2026-08-31","durum":"kesildi","kaydeden":"SINAV"}\n{"sap":"BIZPUAN-2026-09","fatura_no":"T2","tutar":"2.00","tarih":"2026-09-30","durum":"kesildi","kaydeden":"SINAV"}\n' > "$TMP/t.jsonl"
+talep_bak(){  # talep_bak <defter> <tür> <beklenen-alt-dize> <ad>
+  local o; o=$(ARCELIK_KESIM_DEFTERI="$1" python3 -c "
+import sys; sys.path.insert(0,'.')
+import tara; print(tara.son_kesilen('$2'))" 2>&1)
+  [[ "$o" == *"$3"* ]] && gec "$4" || dus "$4 — geldi: $o"
+}
+talep_bak "$TMP/t.jsonl" bizpuan "BIZPUAN-2026-09 → T2" "son kesilen = EN SON kayıt"
+talep_bak "$TMP/t.jsonl" klima "kayıt YOK" "türden kayıt yoksa açıkça YOK der"
+talep_bak "/config/olmayan-dizin/yok.jsonl" bizpuan "ÖLÇÜLEMEDİ" "defter açılamıyor → ÖLÇÜLEMEDİ"
+bu_bak(){  # bu_bak <defter> <tür> <konu> <mail-tarihi> <beklenen-alt-dize> <ad>
+  local o; o=$(ARCELIK_KESIM_DEFTERI="$1" python3 -c "
+import sys; sys.path.insert(0,'.')
+import tara; print(tara.bu_talep(*sys.argv[1:4]))" "$2" "$3" "$4" 2>&1)
+  [[ "$o" == *"$5"* ]] && gec "$6" || dus "$6 — geldi: $o"
+}
+bu_bak "$TMP/t.jsonl" bizpuan "BİZPUAN ÖDÜL FATURA TALEBİ -Ağustos 2026" 2026-09-03 "KESİLMİŞ: BIZPUAN-2026-08 → T1" "Ağustos talebi Ağustos kaydına eşlenir (en sona DEĞİL)"
+bu_bak "$TMP/t.jsonl" iskonto "2026/9 Eylül Ayı İskonto Fatura Talebi" 2026-10-02 "defterde YOK (ISKONTO-2026-09)" "kesilmemiş talep 🔴 YOK der"
+bu_bak "$TMP/t.jsonl" bizpuan "BİZPUAN ÖDÜL FATURA TALEBİ" 2026-10-02 "okunamadı" "dönem yoksa TAHMİN etmez"
+bu_bak "$TMP/t.jsonl" bizpuan "BİZPUAN ÖDÜL FATURA TALEBİ Ağustos-Eylül 2026" 2026-10-02 "okunamadı" "iki ay geçiyorsa TAHMİN etmez"
+bu_bak "/config/olmayan-dizin/yok.jsonl" bizpuan "BİZPUAN ÖDÜL FATURA TALEBİ -Eylül 2026" 2026-10-02 "ÖLÇÜLEMEDİ" "defter açılamıyor → ÖLÇÜLEMEDİ"
+o=$(python3 -c "import sys; sys.path.insert(0,'.'); import tara; print(tara.talep_turu('KLİMA MONTAJ DESTEK PRİM FATURA TALEBİ'), tara.talep_turu('Ekim Ayı İskonto Fatura Talebi'))")
+[[ "$o" == "klima iskonto" ]] && gec "talep türü konudan doğru (klima · iskonto)" || dus "talep türü yanlış: $o"
 
 echo
 echo "toplam=$((GECEN+DUSEN)) geçen=$GECEN düşen=$DUSEN"

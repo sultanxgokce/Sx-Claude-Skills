@@ -5,6 +5,7 @@
 🔴 Kural 2: 'Malzeme İade'      -> isim yanıltır, DÜZ FATURA olarak KESİLİR.
 🔴 Kural 3: kesim defteri sorgulanır; kesilmişse listeye GİRMEZ.
 Fail-closed: tanınmayan tip -> 'SOR' listesine düşer, asla 'kes' sayılmaz.
+📝 Fatura talebi (Bizpuan · iskonto · klima montaj prim) -> ayrı başlık: kanonda KES, kalemi insan okur.
 """
 import os, re, json, subprocess, unicodedata, urllib.request, urllib.parse, sys
 
@@ -39,6 +40,13 @@ TIPLER = [
     ("iade_paketi",   re.compile(r"iade\s*paketi\s*doku?mu?"),         "KESME"),
     ("fis_paketi",    re.compile(r"fi[sz]?\s*paketi\s*doku?mu?"),      "KES"),
     ("malzeme_iade",  re.compile(r"malzeme\s*iade"),                   "KES"),
+    # 🔴 FATURA TALEBİ — kanonda KES (Sultan 05.09 Bizpuan/iskonto · 14.10 klima montaj prim).
+    #    Ayrı karar "TALEP": KESİLECEK sayısına GİRMEZ, SOR gürültüsüne de DÜŞMEZ. Neden ayrı:
+    #    tutar ekte değil mail GÖVDESİNDE, tarih mailde SABİT → kalemi insan okur. 03.10'dan
+    #    14.10'a kadar bu üç tip SOR'a düşüp elle yakalandı (görev gorev_01M4ZKQ1QTBG76GM4537QF7CE3).
+    #    SIRA: `odul_puan` ("Bizpuan ÖDÜL") ve `uyari` ("Hatırlatma: … Fatura Talebi") ÖNCESİ.
+    #    "Düzenlenmemiş Görünen … Faturalarınız" hatırlatmasında "fatura talebi" geçmez → buraya DÜŞMEZ.
+    ("fatura_talebi_kes", re.compile(r"(bizpuan|iskonto|klima\s*montaj).*fatura\s*taleb"), "TALEP"),
     # 🔴 KAPSAM DIŞI (Sultan kararı 2026-08-24): mutabakat Sultan'ın işidir, bu tarayıcının
     #    değil. Gerekçe ölçülmüş: mutabakat, karşı tarafın kaydıyla BİZİM kaydımızı
     #    karşılaştırma işidir ve bizde o cari hesap kaydı YOKTUR. Ajan ancak PDF'i okur,
@@ -70,6 +78,11 @@ TIPLER = [
     ("odeme_bildirimi", re.compile(r"odeme\s*/?\s*mahsuplastirma|mahsuplastirma\s*bildirim"), "ATLA"),
     # Hurda parça kargolama talebi — lojistik, belge değil.
     ("lojistik",      re.compile(r"fi[sz]\s*hurdas|hurda"),              "ATLA"),
+    # Sultan 18.10: ödeme dökümü ve yıllık "harcanmayan puan" duyurusu fatura değil → adlandırılmış ATLA.
+    #    Ödeme Listesi = net ödeme dökümü (mahsup sonrası); harcanmayan puan = çalışanlara harcama hatırlatması.
+    #    SIRA: `fatura_talebi_kes`ten SONRA, `odul_puan`dan ÖNCE (yoksa "puan" SOR'a düşer).
+    ("odeme_listesi", re.compile(r"odeme\s*listesi"),                   "ATLA"),
+    ("puan_duyurusu", re.compile(r"harcanmayan\s*puan"),                "ATLA"),
     ("odul_puan",     re.compile(r"odul|puan"),                         "SOR"),
     ("fatura_talebi", re.compile(r"fatura\s*taleb"),                    "SOR"),
 ]
@@ -164,6 +177,72 @@ def kesilmis_mi(sap):
     OLCULEMEDI.append((sap, f"defter rc={r.returncode} · {(r.stderr or r.stdout).strip()[:60]}"))
     return None
 
+#: Talep türü → kesim defterindeki anahtar öneki (defterde ölçüldü 15.10:
+#: BIZPUAN-2026-08 · ISKONTO-2026-08 · KLIMA-MONTAJ-PRIM-2026-10-13).
+TALEP_ONEK = {"bizpuan": "BIZPUAN-", "iskonto": "ISKONTO-", "klima": "KLIMA-MONTAJ-PRIM-"}
+
+
+def talep_turu(konu):
+    d = sadelestir(konu)
+    for tur in TALEP_ONEK:
+        if tur in d:
+            return tur
+    return "?"
+
+
+AYLAR = {"ocak": 1, "subat": 2, "mart": 3, "nisan": 4, "mayis": 5, "haziran": 6, "temmuz": 7,
+         "agustos": 8, "eylul": 9, "ekim": 10, "kasim": 11, "aralik": 12}
+
+
+def talep_anahtari(tur, konu, mail_tarihi):
+    """Talebin defter anahtarı — YALNIZ konudan kesin okunabiliyorsa; yoksa None (tahmin YOK).
+    bizpuan/iskonto: dönem konuda ("-Eylül 2026" · "2026/8 Ağustos Ayı") · klima: mail tarihi (15.10 ölçüldü)."""
+    onek = TALEP_ONEK.get(tur)
+    if not onek:
+        return None
+    if tur == "klima":
+        return onek + mail_tarihi if re.fullmatch(r"\d{4}-\d{2}-\d{2}", mail_tarihi or "") else None
+    d = sadelestir(konu)
+    yil = re.search(r"\b(20\d\d)\b", d)
+    ay = [n for ad, n in AYLAR.items() if re.search(rf"\b{ad}\b", d)]
+    if not yil or len(ay) != 1:
+        return None
+    return f"{onek}{yil.group(1)}-{ay[0]:02d}"
+
+
+def bu_talep(tur, konu, mail_tarihi):
+    """Bu talebin kendi kaydı defterde var mı — insan için tek satır; okunamazsa ÖLÇÜLEMEDİ."""
+    k = talep_anahtari(tur, konu, mail_tarihi)
+    if not k:
+        return "dönem konudan okunamadı — aşağıdaki son kesilene ve e-Logo'ya bak"
+    yol = os.environ.get("ARCELIK_KESIM_DEFTERI", os.path.expanduser("~/.config/arcelik-kesim-defteri.jsonl"))
+    try:
+        satirlar = [json.loads(x) for x in open(yol, encoding="utf-8") if x.strip()]
+    except Exception as e:
+        return f"ÖLÇÜLEMEDİ (defter okunamadı: {type(e).__name__})"
+    l = [r for r in satirlar if r.get("sap") == k and r.get("durum") == "kesildi"]
+    if l:
+        return f"✓ KESİLMİŞ: {k} → {l[-1].get('fatura_no')} · {l[-1].get('tutar')}"
+    return f"🔴 defterde YOK ({k}) — KESİLMEMİŞ olabilir, e-Logo'da da bak"
+
+
+def son_kesilen(tur):
+    """Defterde bu türün EN SON kaydı. Okunamazsa ÖLÇÜLEMEDİ der — asla 'yok' demez."""
+    onek = TALEP_ONEK.get(tur)
+    if not onek:
+        return "tür bilinmiyor — insan baksın"
+    yol = os.environ.get("ARCELIK_KESIM_DEFTERI", os.path.expanduser("~/.config/arcelik-kesim-defteri.jsonl"))
+    try:
+        satirlar = [json.loads(x) for x in open(yol, encoding="utf-8") if x.strip()]
+    except Exception as e:
+        return f"ÖLÇÜLEMEDİ (defter okunamadı: {type(e).__name__})"
+    l = [r for r in satirlar if str(r.get("sap", "")).startswith(onek) and r.get("durum") == "kesildi"]
+    if not l:
+        return "defterde bu türden kayıt YOK"
+    r = l[-1]
+    return f"{r['sap']} → {r.get('fatura_no')} · {r.get('tutar')} · {r.get('tarih')}"
+
+
 def g(url, tok):
     r = urllib.request.Request(url, headers={"Authorization": f"Bearer {tok}",
                                              "User-Agent": UA, "Accept": "application/json"})
@@ -177,12 +256,14 @@ def main():
     q = urllib.parse.urlencode({"$top": str(n), "$orderby": "ReceivedDateTime desc",
                                 "$select": "Subject,ReceivedDateTime,Id,HasAttachments"})
     msgs = g(f"{BASE}/me/mailfolders/inbox/messages?{q}", tok).get("value", [])
-    kes, kesme, sor, atla, cizgi_alti = [], [], [], 0, 0
+    kes, kesme, sor, talep, atla, cizgi_alti = [], [], [], [], 0, 0
     for m in msgs:
         konu = m.get("Subject", "") or ""
         tip, karar = tip_bul(konu)
         if karar == "ATLA":
             atla += 1; continue
+        if karar == "TALEP":
+            talep.append((m.get("ReceivedDateTime", "")[:10], talep_turu(konu), konu[:60])); continue
         ekler = []
         if m.get("HasAttachments"):
             try:
@@ -218,6 +299,14 @@ def main():
     print(f"\n✅ KESİLECEK: {len(kes)}")
     for t, tip, sap, k in kes: print(f"   {t}  {tip:<13} SAP={sap:<20} {k}")
     if not kes: print("   (yok)")
+    print(f"\n📝 FATURA TALEBİ — kanonda KES, kalemi İNSAN okur (tutar gövdede, tarih mailde): {len(talep)}")
+    for t, tur, k in talep:
+        print(f"   {t}  {tur:<8} {k}")
+        print(f"            bu talep   : {bu_talep(tur, k, t)}")
+        print(f"            son kesilen: {son_kesilen(tur)}")
+    if not talep: print("   (yok)")
+    print("   ⚠️ bu tiplerin anahtarı mailden türetilemez — 'son kesilen' bu talebi kapsıyorsa kesilmiştir;")
+    print("      emin değilsen e-Logo giden listesine bak (Kural 3). Tek kalem SATIŞ, mailde yazan tarih.")
     print(f"\n🔴 KESİLMEZ (İADE PAKETİ — zarar sebebi, sayıya dahil DEĞİL): {len(kesme)}")
     for t, tip, sap, k in kesme[:6]: print(f"   {t}  {k}")
     if len(kesme) > 6: print(f"   … +{len(kesme)-6} tane daha")

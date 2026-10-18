@@ -1,6 +1,6 @@
 ---
 name: arcelik-fatura-kesim
-version: 0.1.0
+version: 0.2.0
 description: Arçelik'ten gelen fiş/iade/malzeme-iade paketleri için HANGİSİNE fatura kesilir, hangisine KESİLMEZ kararını verir ve kalem eşlemesini kurar. 🔴 EN KRİTİK KURAL - İADE FİŞ PAKETİ'ne fatura KESİLMEZ (kesilirse ZARAR EDİLİR); adı "Malzeme İade" olan mail ise TERSİNE düz fatura olarak kesilir - isim yanıltır, tip belirler. Kesimden önce "daha önce kesildi mi" kontrolü ZORUNLUDUR. Bilinmeyen tip -> KESME, SOR (fail-closed). "Arçelik'ten kesilecek fatura var mı · fiş paketi faturası · hangi paketi keselim · bu mail kesilir mi" tetiğinde ZORUNLU çağrılır.
 ---
 
@@ -83,6 +83,7 @@ iade paketini kesip zarar ettirir, ya da malzeme iadesini atlayıp fatura kaçı
 | **malzeme iade** | `Malzeme İade` | ✅ KES (düz fatura) | isim tuzağı — Kural 2 |
 | **Bizpuan ödül** | `BİZPUAN ÖDÜL FATURA TALEBİ` | ✅ **KES** (Sultan 2026-09-05) | tek kalem · aşağıya bak |
 | **aylık iskonto** | `… Ayı İskonto Fatura Talebi` | ✅ **KES** (Sultan 2026-09-05) | tek kalem · aşağıya bak |
+| **klima montaj prim** | `KLİMA MONTAJ DESTEK PRİM FATURA TALEBİ` | ✅ **KES** (Sultan 2026-10-14) | tek kalem · aşağıya bak · ilk: `FGW…035` 24.290,62 |
 | **ek garanti iade** | `EK GARANTI IADE DOKUMU` | ⏸ **KURAL YOK → SOR** | ölçüldü 27.08, aşağıya bak |
 | **uyarı maili** | `Düzenlenmeyen`, `Hatırlatma` | ⏭ atla | fatura değil, hatırlatma |
 | **fatura talebi** | `fatura talebi` | ⏸ SOR | ayrı akış olabilir |
@@ -125,7 +126,11 @@ eşitlikleri **aynen sert kalır** — onlar faturaya giren sütunlardır. Kırm
 Gevşeyen yalnız Brüt/İndirim kolu; ve gevşemesinin sebebi "önemsiz göründü" değil,
 **o kolun faturaya bağlı olmaması**.
 
-### 🔴 FATURA TALEBİ tipleri — Bizpuan ödül · aylık iskonto (2026-09-05)
+### 🔴 FATURA TALEBİ tipleri — Bizpuan ödül · aylık iskonto (2026-09-05) · klima montaj prim (2026-10-14)
+
+`tara.py` bu üçünü **📝 FATURA TALEBİ** başlığında ayrı gösterir (SOR'a düşmez, KESİLECEK sayısına da girmez):
+tutar gövdede, tarih mailde → kalemi insan okur. Her satırın altında defterdeki **son kesilen** kaydı yazar.
+Defter anahtarı: `BIZPUAN-YYYY-MM` · `ISKONTO-YYYY-MM` · `KLIMA-MONTAJ-PRIM-<mail tarihi>`.
 
 Bu iki mail bir **fatura talebidir**: Arçelik tutarı kendisi bildirir, biz o tutara
 fatura keseriz. İlk kez 05.09.2026'da kesildi (`FGW…013` 1.035,00 · `FGW…014` 571,12).
