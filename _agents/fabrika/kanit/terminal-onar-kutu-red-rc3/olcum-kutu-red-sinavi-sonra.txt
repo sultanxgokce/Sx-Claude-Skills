@@ -1,5 +1,5 @@
-$ bash /config/projects/_wt/Sx-Claude-Skills-terminal-onar-kutu-red-rc3/terminal-onar/scripts/kutu-red.test.sh
-# rc=0 sure=0.5s zaman=2026-10-18T16:32:17+03:00
+$ timeout 200 bash /config/projects/_wt/Sx-Claude-Skills-terminal-onar-kutu-red-rc3/terminal-onar/scripts/kutu-red.test.sh
+# rc=0 sure=0.7s zaman=2026-10-18T16:54:57+03:00
 --- stdout ---
 ── R · makine kimlikli kutu adı: sekiz betik de TEK satır sebeple, rc 3 DURUR
   ✓ R1 compact.sh (FSZ30 vakası: eskiden 'DURUM_DIZ: unbound variable')
@@ -10,12 +10,13 @@ $ bash /config/projects/_wt/Sx-Claude-Skills-terminal-onar-kutu-red-rc3/terminal
   ✓ R6 kapi-yenile.sh (eskiden 'KAPI_DIZ: unbound variable')
   ✓ R7 koltuk-ac.sh durum x (eskiden 'PROJE: unbound variable')
   ✓ R8 onar.sh (eskiden 'gunluk: command not found')
-  ✓ R9 reddedilen betikler tmux/crontab'a dokunmadı, durum dizini açmadı (yan etki yok)
+  ✓ R9 reddedilen betikler tmux/crontab/ttyd'ye dokunmadı, durum dizini açmadı, özel tmux sunucusunda oturum yok
+  ✓ R0 önkoşul: ortak.sh makine kimliğini tek başına reddediyor (yoksa yukarıdaki betikler HİÇ koşturulmadı)
   ✓ R10 kapsam tam: ortak.sh'ı yükleyen HER betik (kur.sh hariç — S-11 kendi yolu) bu sınavda
   ✓ R10b R10'un aramasının kendisi ölçüldü: ortak.sh'ı yükleyen 9 betik bulunuyor (8 + kur.sh) — boş sonuç kör aramadan gelmiyor
 ── P · pozitif kontrol: aynı düzenek, GEÇERLİ kutu adıyla yükleme geçer (red ölçümü kör değil)
   ✓ P1 koltuk-ac.sh (argümansız) yüklemeyi geçip kendi kullanım satırına varır: rc 2, red YOK
   ✓ P2 komut.sh bilinmeyen fiil: yüklemeyi geçer, rc 2, red YOK
 
-SONUÇ: 13 geçti · 0 kaldı
+SONUÇ: 14 geçti · 0 kaldı
 --- stderr ---

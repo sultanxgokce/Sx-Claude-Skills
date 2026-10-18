@@ -1,10 +1,10 @@
-$ bash /config/projects/_wt/Sx-Claude-Skills-terminal-onar-kutu-red-rc3/terminal-onar/scripts/kutu-red-mutasyon.sh /config/projects/_wt/Sx-Claude-Skills-terminal-onar-kutu-red-rc3
-# rc=0 sure=1002.4s zaman=2026-10-18T16:48:59+03:00
+$ timeout 900 bash /config/projects/_wt/Sx-Claude-Skills-terminal-onar-kutu-red-rc3/terminal-onar/scripts/kutu-red-mutasyon.sh /config/projects/_wt/Sx-Claude-Skills-terminal-onar-kutu-red-rc3
+# rc=0 sure=8.9s zaman=2026-10-18T16:55:06+03:00
 --- stdout ---
   ✓ M1 bekci.sh koruması kalktı — sınav KIRMIZI
   ✓ M2 compact.sh koruması kalktı (FSZ30 geri gelir) — sınav KIRMIZI
   ✓ M3 rc 3 yerine rc 1 — sınav KIRMIZI
-  ✓ M4 ortak.sh makine kimliği reddi kalktı (pozitif: red ölçülüyor mu) — sınav KIRMIZI
+  ✓ M4 ortak.sh makine kimliği reddi kalktı → önkoşul düşer, hiçbir betik koşmaz — sınav KIRMIZI
   ✓ M5 korumasız yeni çağıran — kapsam kapısı KIRMIZI
 MUTASYON: gecti=5 dusen=0
 --- stderr ---

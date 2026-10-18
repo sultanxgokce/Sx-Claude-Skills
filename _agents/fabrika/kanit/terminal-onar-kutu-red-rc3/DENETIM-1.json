@@ -1,0 +1,30 @@
+{
+  "tur": 1,
+  "is": "terminal-onar-kutu-red-rc3",
+  "pr": "374",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T16:50:26+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": null,
+  "yazan_model_kaynak": null,
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 29274,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 10279
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Ortak.sh reddini görmezden gelen çağıranlar artık tek sebep satırıyla rc 3 dönerek duruyor; sürüm de 2.17.2’ye çıkarılmış. Önce/sonra hermetik ölçüm, pozitif kontroller ve beş mutant değişikliğin hedeflenen davranışı gerçekten koruduğunu gösterdiği için üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; sarı kayıt yok. Kutu-red sınavında gerçekçi sahte hostname ile önce rc 1 ve 9 başarısız kapı, sonra rc 0 ve 13/13 başarı ölçülmüş; sekiz çağıranın rc 3, tek satır sebep, izli hata yokluğu ve yan etkisizlik sözleşmesi ayrı ayrı sınanmış. Beş mutantın tamamı sınavı kırıyor ve geçerli kutu adı pozitif kontrolleri kör testi dışlıyor. Genel sınav turu yeşil; compact.test.sh önceden var olan ve bu değişikliğin dokunmadığı karantina olarak açıkça ayrılmış."
+  }
+}
