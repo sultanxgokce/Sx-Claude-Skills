@@ -17,14 +17,17 @@ Kullanım:
   kanit.py canli  <iş> <etiket> --kaynak dosya:<yol>|journal:<birim>|ssh:<sunucu>:<yol>|docker:<kutu>:<yol> --desen <RE> [--en-az N] [--son N]
                   CANLI sınıfı: gerçek ateşleme kaydı (saat damgalı + desenli log satırı); yoksa SARI rc=3 — kapı geçirmez.
                   Okuma komutunu ARAÇ kurar (tail/journalctl, sabit argv); serbest komut YOK (rc=1): kayıt üretilmez, okunur.
+  kanit.py gecersiz <iş> <etiket|dosya> --neden "<≥20 kr>" --kim <AJAN> [--karsi <etiket|dosya>]
+                  bir ölçümü SONRADAN geçersiz ilan eder: özgün kayda dokunmaz, hedefin ÖLÇÜM KİMLİĞİNE bağlı ilan kaydı EKLER;
+                  hedef yeniden ölçülürse ilan o yeni ölçüme uygulanmaz. Geçersiz kayıt yeşil sayılmaz (etkin renk).
   kanit.py dogrula <iş>                                                imza + dosya sha'ları (0 sağlam · 1 bozuk · 3 yok)
-  kanit.py ozet   <iş>                                                 PR gövdesi için tablo (markdown)
-  kanit.py liste  <iş>
+  kanit.py ozet   <iş>                                                 PR gövdesi için tablo (markdown; renk = etkin renk)
+  kanit.py liste  <iş> [--etkin]                                       --etkin: kayıtlar + etkin_renk, JSON
 Ortam: KANIT_DEPO (depo kökü; vars. git toplevel) · KANIT_PLAYWRIGHT_DIR (node_modules'lı dizin)
 """
-import argparse, datetime, hashlib, json, os, re, shlex, shutil, subprocess, sys
+import argparse, datetime, hashlib, json, os, re, shlex, shutil, subprocess, sys, uuid
 
-SURUM = "kanit.py/0.4.0"   # 0.4.0: `canli` sınıfı (17 Eki 2026)
+SURUM = "kanit.py/0.5.0"   # 0.5.0: `gecersiz` ilanı + etkin renk (18 Eki 2026) · 0.4.0: `canli` sınıfı (17 Eki 2026)
 # Sürüm artık GÜVENLE yükseltilebilir: imza gövdesinde değil (yukarıdaki not).
 # 0.1.0 → 0.3.0: 0.2.0 denendi ve geri alındı (o gün imza sürüme bağlıydı, yükseltmek
 # bütün geçmişi suçluyordu); numarayı atlayarak o denemeyi izlenebilir bırakıyorum.
@@ -137,6 +140,9 @@ def kayit_ekle(depo, is_adi, kayit):
     # tutmaz ve `dogrula` KALICI rc=1 verirdi; silme komutu da yoktu, tek çıkış kanıt dizinini
     # komple silmekti (MOTOR1 iki kez yaptı). Kayıt KİMLİĞİ kanıt dosyasının adıdır: aynı
     # dosyaya iki kayıt işaret edemez. Üstüne yazmak SESSİZ olmaz — yüzeye basılır.
+    # ÖLÇÜM KİMLİĞİ (4K938 göz tur 1): sha+zaman bir ölçümü TEK BAŞINA tanımlamaz — aynı çıktı aynı saniyede
+    # yeniden ölçülünce ikisi de aynı kalır. Her yazımda araç tekil kimlik verir; geçersiz ilanı ona bağlanır.
+    kayit.setdefault("olcum_id", uuid.uuid4().hex)
     eski_sira = next((i for i, k in enumerate(kayitlar) if k.get("dosya") == kayit.get("dosya")), None)
     if eski_sira is None:
         kayitlar.append(kayit)
@@ -565,6 +571,102 @@ def cmd_canli(a):
     sys.exit(0 if renk == "yesil" else 3)
 
 
+# ── gecersiz ─────────────────────────────────────────────────────────────────────
+# 4K938 (18 Eki 2026): bir ölçüm sonradan yanlış çıkabilir (boru çıkış kodunu maskeledi, yanlış dal ölçüldü).
+#   Yol YOKTU: kaydı silmek geçmişi, elle "kirmizi" yazmak imzayı bozar; tek çıkış kanıt dizinini silmekti.
+#   Özgün kayda DOKUNULMAZ; hedefin sha'sına ve zamanına bağlı ayrı bir İLAN kaydı eklenir (imza onu da kapsar).
+#   Hedef yeniden ölçülürse ilan uygulanmaz: o ilan eski ölçüme aitti. Bağ ÖLÇÜM KİMLİĞİDİR (olcum_id, her yazımda tekil);
+#   sha+zaman yalnız kimliksiz (0.10.2 öncesi) kayıtta yedek — aynı çıktı aynı saniyede ikisini de tekrarlar (göz tur 1).
+#   Etkin renk TEK yerde hesaplanır (etkin_kayitlar); kapı ve kart.sh aynı fonksiyonu çağırır, kopya yazmaz.
+#   🔴 İlan kapıyı hiçbir zaman GEVŞETMEZ: geçersiz yeşil yeşil sayılmaz, geçersiz canlı sarı gibi engeldir.
+NEDEN_EN_AZ = 20
+
+
+def _ayni_olcum(h, g):
+    """İlan g, kayıt h'nin BU ölçümüne mi ait? Kimlik varsa yalnız kimlik; kimliksiz eski ilan/kayıtta sha+zaman (geri uyum)."""
+    if g.get("hedef_olcum_id"):
+        return h.get("olcum_id") == g["hedef_olcum_id"]
+    return not h.get("olcum_id") and (h.get("sha256"), h.get("zaman")) == (g.get("hedef_sha256"), g.get("hedef_zaman"))
+
+
+def gecersiz_ilanlari(kayitlar):
+    """hedef dosya → ilan; yalnız hedefin ŞİMDİKİ ölçümüne hâlâ uyan ilanlar."""
+    hedefler = {k.get("dosya"): k for k in kayitlar if k.get("tur") != "gecersiz"}
+    uyan = {}
+    for g in kayitlar:
+        if g.get("tur") != "gecersiz":
+            continue
+        h = hedefler.get(g.get("hedef_dosya"))
+        if h is not None and _ayni_olcum(h, g):
+            uyan[g["hedef_dosya"]] = g
+    return uyan
+
+
+def etkin_kayitlar(m):
+    """Kayıtların kopyası + etkin_renk: geçersiz ilan edilen 'gecersiz', ilanın kendisi 'ilan', gerisi kendi rengi."""
+    kayitlar = (m or {}).get("kayitlar", [])
+    ilanlar = gecersiz_ilanlari(kayitlar)
+    cikti = []
+    for k in kayitlar:
+        e = dict(k)
+        if k.get("tur") == "gecersiz":
+            e["etkin_renk"] = "ilan"; e["uygulaniyor"] = ilanlar.get(k.get("hedef_dosya")) is k
+        elif k.get("dosya") in ilanlar:
+            g = ilanlar[k["dosya"]]
+            e["etkin_renk"] = "gecersiz"; e["gecersiz_neden"] = g.get("neden"); e["gecersiz_kim"] = g.get("kim"); e["gecersiz_karsi"] = g.get("karsi")
+        else:
+            e["etkin_renk"] = k.get("renk")
+        cikti.append(e)
+    return cikti
+
+
+def cmd_gecersiz(a):
+    depo = depo_kok(a.depo); dz = kanit_dizin(depo, a.is_adi); m = manifest_oku(dz)
+    if not m:
+        hata(f"{dz}/KANIT.json YOK — geçersiz ilan edilecek ölçüm yok", 3)
+    if not imza_tutuyor_mu(m)[0]:
+        hata("var olan KANIT.json imzası TUTMUYOR — elle değişmiş; ilan yazılmadı (dogrula ile bak)", 1)
+    neden = (a.neden or "").strip(); kim = (a.kim or "").strip()
+    if len(neden) < NEDEN_EN_AZ:
+        hata(f"--neden en az {NEDEN_EN_AZ} karakter olmalı (verilen {len(neden)}): neyin yanlış ölçüldüğünü yaz")
+    if not kim:
+        hata("--kim gerekiyor (ilanı kim veriyor)")
+    kayitlar = m["kayitlar"]
+    ilanlar = gecersiz_ilanlari(kayitlar)
+
+    def coz(ad, ne):
+        olcumler = [k for k in kayitlar if k.get("tur") != "gecersiz"]
+        aday = [k for k in olcumler if k.get("dosya") == ad] or [k for k in olcumler if k.get("etiket") == ad]
+        if not aday:
+            hata(f"{ne} bulunamadı: '{ad}' — etiket ya da dosya adı ver (bkz. ozet)")
+        if len(aday) > 1:
+            hata(f"{ne} belirsiz: '{ad}' etiketi {len(aday)} kayıtta ({', '.join(k['dosya'] for k in aday)}) — dosya adını ver")
+        return aday[0]
+
+    h = coz(a.hedef, "hedef")
+    if h["dosya"] in ilanlar:
+        hata(f"zaten geçersiz ilan edilmiş: {h['dosya']} — {ilanlar[h['dosya']].get('neden')}")
+    karsi = None
+    if a.karsi:
+        kk = coz(a.karsi, "karşı kanıt")
+        if kk["dosya"] == h["dosya"]:
+            hata("karşı kanıt hedefin kendisi olamaz")
+        if kk["dosya"] in ilanlar:
+            hata(f"karşı kanıt da geçersiz ilan edilmiş: {kk['dosya']}")
+        karsi = kk["dosya"]
+    iz = hashlib.sha256(f"{h.get('olcum_id')}|{h.get('sha256')}|{h.get('zaman')}".encode()).hexdigest()[:12]
+    ad = f"gecersiz-{os.path.splitext(h['dosya'])[0]}-{iz}.txt"
+    zaman = simdi(); yol = os.path.join(dz, ad)
+    with open(yol, "w", encoding="utf-8") as f:
+        f.write(f"# GEÇERSİZ İLANI — özgün kayda dokunulmadı\nhedef: {h['dosya']}\nhedef_sha256: {h.get('sha256')}\n"
+                f"hedef_zaman: {h.get('zaman')}\nhedef_renk: {h.get('renk')}\nneden: {neden}\nkim: {kim}\nkarsi: {karsi or '-'}\nzaman: {zaman}\n")
+    kayit = {"tur": "gecersiz", "etiket": h.get("etiket"), "asama": "tek", "dosya": ad, "sha256": sha_dosya(yol),
+             "hedef_dosya": h["dosya"], "hedef_olcum_id": h.get("olcum_id"), "hedef_sha256": h.get("sha256"), "hedef_zaman": h.get("zaman"), "hedef_renk": h.get("renk"),
+             "neden": neden, "kim": kim, "karsi": karsi, "rc": 0, "renk": "ilan", "zaman": zaman}
+    kayit_ekle(depo, a.is_adi, kayit)
+    print(f"⛔ geçersiz ilan edildi: {h['dosya']} ({h.get('renk')} → gecersiz) · {kim} · {neden}" + (f" · karşı kanıt: {karsi}" if karsi else ""))
+
+
 # ── dogrula ──────────────────────────────────────────────────────────────────────
 def cmd_dogrula(a):
     depo = depo_kok(a.depo); dz = kanit_dizin(depo, a.is_adi)
@@ -581,22 +683,31 @@ def cmd_dogrula(a):
         print("✗ İMZA TUTMUYOR — manifest elle değişmiş ya da araç dışında yazılmış"); rc = 1
     elif bicim == "eski":
         print(f"· imza eski biçimde (sürüm gövdede) ve TUTUYOR — ilk yazımda yeni biçime geçer")
-    sari = 0
-    for k in m.get("kayitlar", []):
-        if k.get("renk") == "sari": sari += 1
+    sari = 0; ek = etkin_kayitlar(m)
+    for k in ek:
+        if k["etkin_renk"] == "sari": sari += 1
         if k.get("sha256"):
             y = os.path.join(dz, k["dosya"])
             if not os.path.exists(y):
                 print(f"✗ dosya yok: {k['dosya']}"); rc = 1
             elif sha_dosya(y) != k["sha256"]:
                 print(f"✗ sha TUTMUYOR: {k['dosya']}"); rc = 1
-    canli = [k for k in m.get("kayitlar", []) if k.get("tur") == "canli"]
+    canli = [k for k in ek if k.get("tur") == "canli"]
     if canli:
-        cy = sum(1 for k in canli if k.get("renk") == "yesil"); cs = len(canli) - cy
-        print(f"· canlı kayıt: {cy} yeşil (ateşleme var) · {cs} sarı (ateşleme yok — kapı geçirmez)")
-    n = len(m.get("kayitlar", []))
+        cy = sum(1 for k in canli if k["etkin_renk"] == "yesil"); cg = sum(1 for k in canli if k["etkin_renk"] == "gecersiz"); cs = len(canli) - cy - cg
+        print(f"· canlı kayıt: {cy} yeşil (ateşleme var) · {cs} sarı (ateşleme yok — kapı geçirmez)"
+              + (f" · {cg} geçersiz ilan edilmiş (kapı geçirmez)" if cg else ""))
+    gec = [k for k in ek if k["etkin_renk"] == "gecersiz"]
+    for k in gec:
+        print(f"⛔ GEÇERSİZ: {k['dosya']} ({k.get('renk')} → gecersiz) — {k.get('gecersiz_neden')} · {k.get('gecersiz_kim')}"
+              + (f" · karşı kanıt: {k['gecersiz_karsi']}" if k.get("gecersiz_karsi") else ""))
+    for k in ek:
+        if k.get("tur") == "gecersiz" and not k.get("uygulaniyor"):
+            print(f"· ilan artık uygulanmıyor: {k.get('hedef_dosya')} yeniden ölçüldü ya da yok (ilan eski ölçüme aitti)")
+    n = len(ek)
     if rc == 0:
-        print(f"✓ manifest sağlam: {n} kayıt, imza ve sha'lar tutuyor" + (f" · ⚠ {sari} SARI kayıt (ölçülemedi)" if sari else ""))
+        print(f"✓ manifest sağlam: {n} kayıt, imza ve sha'lar tutuyor" + (f" · ⚠ {sari} SARI kayıt (ölçülemedi)" if sari else "")
+              + (f" · ⛔ {len(gec)} kayıt GEÇERSİZ ilan edildi (kanıt sayılmaz)" if gec else ""))
     if n == 0:
         print("◻ kayıt yok — kanıt yok"); sys.exit(3)
     sys.exit(rc)
@@ -606,13 +717,22 @@ def cmd_ozet(a):
     depo = depo_kok(a.depo); dz = kanit_dizin(depo, a.is_adi); m = manifest_oku(dz)
     if not m: print("_kanıt yok_"); sys.exit(3)
     print(f"| # | tür | etiket | aşama | renk | rc | dosya |\n|---|---|---|---|---|---|---|")
-    for i, k in enumerate(m["kayitlar"], 1):
-        print(f"| {i} | {k['tur']} | {k['etiket']} | {k.get('asama','')} | {k['renk']} | {k.get('rc','')} | `{k['dosya']}` |")
+    for i, k in enumerate(etkin_kayitlar(m), 1):
+        renk = k["etkin_renk"]
+        if renk == "gecersiz":
+            renk = f"**GEÇERSİZ** (ölçülen: {k.get('renk')}): {k.get('gecersiz_neden')}"
+        elif renk == "ilan":
+            renk = f"ilan → `{k.get('hedef_dosya')}`" + ("" if k.get("uygulaniyor") else " (uygulanmıyor: yeniden ölçüldü)")
+        print(f"| {i} | {k['tur']} | {k['etiket']} | {k.get('asama','')} | {renk} | {k.get('rc','')} | `{k['dosya']}` |")
     print(f"\nimza `{m['imza'][:16]}` · araç {m['arac']} · dizin `{os.path.relpath(dz, depo)}`")
 
 
 def cmd_liste(a):
-    cmd_ozet(a)
+    if not a.etkin:
+        return cmd_ozet(a)
+    m = manifest_oku(kanit_dizin(depo_kok(a.depo), a.is_adi))
+    if not m: print("[]"); sys.exit(3)
+    print(json.dumps(etkin_kayitlar(m), ensure_ascii=False, indent=2))
 
 
 def main():
@@ -623,8 +743,10 @@ def main():
     e = s.add_parser("ekran"); e.add_argument("is_adi"); e.add_argument("etiket"); e.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); e.add_argument("--url", required=True); e.add_argument("--urun-imi"); e.add_argument("--bekle"); e.add_argument("--genislik", type=int, default=1280); e.set_defaults(f=cmd_ekran)
     d = s.add_parser("dosya"); d.add_argument("is_adi"); d.add_argument("etiket"); d.add_argument("yol"); d.add_argument("--asama", default="tek"); d.set_defaults(f=cmd_dosya)
     c = s.add_parser("canli"); c.add_argument("is_adi"); c.add_argument("etiket"); c.add_argument("--kaynak", required=True); c.add_argument("--desen", required=True); c.add_argument("--en-az", dest="en_az", type=int, default=1); c.add_argument("--son", type=int, default=2000); c.set_defaults(f=cmd_canli)
+    v = s.add_parser("gecersiz"); v.add_argument("is_adi"); v.add_argument("hedef"); v.add_argument("--neden", required=True); v.add_argument("--kim", required=True); v.add_argument("--karsi"); v.set_defaults(f=cmd_gecersiz)
     for ad, f in (("dogrula", cmd_dogrula), ("ozet", cmd_ozet), ("liste", cmd_liste)):
         x = s.add_parser(ad); x.add_argument("is_adi"); x.set_defaults(f=f)
+        if ad == "liste": x.add_argument("--etkin", action="store_true")
     # `--` sonrası KOMUTTUR: argparse'a hiç gösterilmez (REMAINDER, seçenekleri de yutuyordu).
     argv = sys.argv[1:]; komut = []
     if "--" in argv:

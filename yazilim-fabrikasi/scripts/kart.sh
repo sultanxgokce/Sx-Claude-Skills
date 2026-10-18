@@ -103,15 +103,16 @@ PY
     # 🔴 GÖZ #353 tur 3: eski kart (alan yok) kapıda cümleden "canlı ister" sayılıyor ama bitti uyarmıyordu → aynı yüzeyden (canli-gerekir) okunur
     # yedek göz #354: fail-open değil — okunamazsa '?' olur ve bitti bunu uyarı olarak basar (kapı aynı durumda rc=3)
     IFS=$'\t' read -r CGB _ <<<"$(bash "${BASH_SOURCE[0]}" canli-gerekir "$IS" 2>&1)"; case "$CGB" in E|H) ;; *) CGB="?" ;; esac
-    python3 - "$KD/$IS.json" "$CMD" "$PR" "$YOL" "$NEDEN" "$DZ" "$CGB" <<'PY'
+    python3 - "$KD/$IS.json" "$CMD" "$PR" "$YOL" "$NEDEN" "$DZ" "$CGB" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY'
 import json,sys,os,glob,datetime
-yol,cmd,pr,yolu,neden,dz,cgb=sys.argv[1:]
+yol,cmd,pr,yolu,neden,dz,cgb,hdir=sys.argv[1:]
+sys.path.insert(0,hdir); from kanit import etkin_kayitlar   # 4K938: etkin renk tek yerden
 k=json.load(open(yol)); simdi=datetime.datetime.now().astimezone().isoformat(timespec="seconds")
 den=sorted(glob.glob(os.path.join(dz,"DENETIM-[0-9]*.json")),key=lambda p:int(p.rsplit("-",1)[1].split(".")[0]))
 son=json.load(open(den[-1]))["sonuc"] if den else None
 kanit=os.path.exists(os.path.join(dz,"KANIT.json"))
-canli=[x for x in (json.load(open(os.path.join(dz,"KANIT.json"))).get("kayitlar",[]) if kanit else []) if x.get("tur")=="canli"]
-cy=sum(1 for x in canli if x.get("renk")=="yesil")
+canli=[x for x in (etkin_kayitlar(json.load(open(os.path.join(dz,"KANIT.json")))) if kanit else []) if x.get("tur")=="canli"]
+cy=sum(1 for x in canli if x["etkin_renk"]=="yesil")
 k["canli_kanit"]="var" if cy else ("sari" if canli else "yok")
 k["durum"]=cmd; k["bitis"]=simdi; k["pr"]=pr or k.get("pr","")
 k["puan"]={"kod":son["kod_puani"],"dogru":son["dogru_sey"],"tur":len(den)} if son else None

@@ -1,0 +1,194 @@
+{
+  "is": "kanit-gecersiz-ilan",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-18T20:53:52+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-kanit",
+      "asama": "once",
+      "dosya": "olcum-sinav-kanit-once.txt",
+      "sha256": "ebb9eaca3f291cda86af36b3f0433451a9309310537fe475cc7b9fd7d55ab7ec",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T19:12:27+03:00",
+      "sure_sn": 10.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-kart",
+      "asama": "once",
+      "dosya": "olcum-sinav-kart-once.txt",
+      "sha256": "65a0465f6be5a0a293f0ae6d3d4b73dd8e7de17e27d191d7d6b4d8ac4e94f04a",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T19:12:30+03:00",
+      "sure_sn": 3.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-birlestirme-kapisi",
+      "asama": "once",
+      "dosya": "olcum-sinav-birlestirme-kapisi-once.txt",
+      "sha256": "ffe4a2d04bc092b66e11c8713ad6455a5b6a9de0758bcc876384b6244069d2a1",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T19:12:48+03:00",
+      "sure_sn": 17.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-denetci",
+      "asama": "once",
+      "dosya": "olcum-sinav-denetci-once.txt",
+      "sha256": "03f80cc8995db6b63fdd14037b7ca2556fa9e9faf0b3e96ccd8807f2092b3f68",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/4k/ana-Gsva/yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T19:26:25+03:00",
+      "sure_sn": 225.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-kanit",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-kanit-sonra.txt",
+      "sha256": "a9614c37cc2c01b9d51c55ba884d44044d1ed7be4422c1235da14644c9237bf2",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T20:49:17+03:00",
+      "sure_sn": 17.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "9889ab3e06e24c28b98937e6869d1dcf"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-kart",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-kart-sonra.txt",
+      "sha256": "4f73c2c39a665185d4369e0cab83bc96dc0fcf5d4edaef180563150ab20d737c",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T20:49:21+03:00",
+      "sure_sn": 3.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "cc0265b0f7204264a28ddf9176834bb2"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-birlestirme-kapisi",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-birlestirme-kapisi-sonra.txt",
+      "sha256": "a710d7ed2a71909c8f4290b188865e179e9fa2d8a35003ad558280c9286f31bf",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T20:49:46+03:00",
+      "sure_sn": 25.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "26cfb87c4ffa487eae193ed755f11f06"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-denetci",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-denetci-sonra.txt",
+      "sha256": "2d016dd0fc977ba08db04ffd77ce53f7eef094f125c07400a19c89c63e980897",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T20:53:34+03:00",
+      "sure_sn": 228.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "02e6cab4eabe4ca9a1f22267186a90a1"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ilan-davranisi",
+      "asama": "once",
+      "dosya": "olcum-ilan-davranisi-once.txt",
+      "sha256": "e27df9f2c24d1f6a1119b577c85f7a2b617dff9959c218f6153d00d237000b60",
+      "komut": [
+        "bash",
+        "-c",
+        "d=$(mktemp -d); git -C \"$d\" init -q; export KANIT_DEPO=\"$d\"; K=\"$1\"; bash \"$K\" olcum demo testler --asama sonra -- bash -c \"echo 12 gecti; exit 0\" >/dev/null; echo \"## ilan:\"; bash \"$K\" gecersiz demo testler --neden \"boru cikis kodunu maskeledi, olcum yanlis\" --kim HENDESE; r=$?; echo \"## gecersiz rc=$r\"; echo \"## dogrula:\"; bash \"$K\" dogrula demo; echo \"## dogrula rc=$?\"; echo \"## liste --etkin:\"; bash \"$K\" liste demo --etkin; exit $r",
+        "_",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/4k/ana/kanit.sh"
+      ],
+      "rc": 2,
+      "renk": "kirmizi",
+      "zaman": "2026-10-18T19:34:46+03:00",
+      "sure_sn": 0.2,
+      "olcum_id": "cbbc175c487b4dc3ac7e2062cec86efe"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ilan-davranisi",
+      "asama": "sonra",
+      "dosya": "olcum-ilan-davranisi-sonra.txt",
+      "sha256": "2480d705abc344940bbb5e61ded81ae7365deed90df1e89e0076f5f13bc1b53d",
+      "komut": [
+        "bash",
+        "-c",
+        "d=$(mktemp -d); git -C \"$d\" init -q; export KANIT_DEPO=\"$d\"; K=\"$1\"; bash \"$K\" olcum demo testler --asama sonra -- bash -c \"echo 12 gecti; exit 0\" >/dev/null; echo \"## ilan:\"; bash \"$K\" gecersiz demo testler --neden \"boru cikis kodunu maskeledi, olcum yanlis\" --kim HENDESE; r=$?; echo \"## gecersiz rc=$r\"; echo \"## dogrula:\"; bash \"$K\" dogrula demo; echo \"## dogrula rc=$?\"; echo \"## liste --etkin:\"; bash \"$K\" liste demo --etkin; exit $r",
+        "_",
+        "yazilim-fabrikasi/scripts/kanit.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T19:34:46+03:00",
+      "sure_sn": 0.2,
+      "olcum_id": "5cc2df94fadb4cbca4904c5a8001b96e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-kanit-T22-T23",
+      "asama": "tek",
+      "dosya": "olcum-sinav-kanit-T22-T23-tek.txt",
+      "sha256": "5bebbf2a424d328b45cae2eee2ebba62e60e994109066bcdc677e68c9b3f5395",
+      "komut": [
+        "bash",
+        "-c",
+        "o=$(mktemp); bash \"$1\" > \"$o\" 2>&1; rc=$?; sed -n \"/T22/,\\$p\" \"$o\"; exit $rc",
+        "_",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T20:53:52+03:00",
+      "sure_sn": 17.6,
+      "boru_denetimi": "temiz",
+      "olcum_id": "73657cf7fefb4f598d555e2f548546a2"
+    }
+  ],
+  "imza": "bba07cc203918c8c662e2955ded3a8ad4e18a2a188d753cd8d432c0264361ca6"
+}

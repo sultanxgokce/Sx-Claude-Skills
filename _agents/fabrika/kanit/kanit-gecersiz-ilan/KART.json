@@ -1,0 +1,21 @@
+{
+  "is": "kanit-gecersiz-ilan",
+  "cumle": "kanit.py: bir ölçümü sonradan GEÇERSİZ ilan etme yolu — özgün kayda dokunmadan manifeste hedef sha'ya bağlı iptal kaydı ekle (üstüne yazma/silme yok); dogrula/ozet/liste ve birleştirme kapısı etkin rengi okusun; sınav + mutasyon (4K938)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-18T18:04:50+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)"
+}

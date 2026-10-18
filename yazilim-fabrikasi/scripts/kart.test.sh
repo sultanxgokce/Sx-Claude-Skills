@@ -96,6 +96,13 @@ printf '%s çaldı\n' "$(date -u +%FT%TZ)" > "$T/zil.log"
 bash "$K" canli is-cron zil --desen çaldı --kaynak "dosya:$T/zil.log" >/dev/null 2>&1
 CIKTI="$(bash "$KT" bitti is-cron 2>&1)"; ! grep -q "CANLI KANIT YOK" <<<"$CIKTI"; g $? "yeşil canlı kayıt varken uyarı yok"
 python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-cron.json'));assert k['canli_kanit']=='var'"; g $? "karta canli_kanit=var işlendi"
+# 4K938: geçersiz ilan edilen yeşil canlı kayıt bitti'de 'var' sayılmaz (etkin renk kanit.py'den)
+bash "$K" gecersiz is-cron zil --neden "log başka sunucunun zil satırıydı, bu iş değil" --kim BANI >/dev/null 2>&1
+CIKTI="$(bash "$KT" bitti is-cron 2>&1)"; grep -q "CANLI KANIT YOK" <<<"$CIKTI"; g $? "geçersiz ilan edilen canlı kayıtla bitti yine uyarır"
+python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-cron.json'));assert k['canli_kanit']!='var', k['canli_kanit']"; g $? "karta canli_kanit=var İŞLENMEDİ (geçersiz yeşil sayılmaz)"
+MK="$T/pkg-kart"; mkdir -p "$MK"; cp "$HERE"/*.py "$HERE"/*.sh "$MK/"; sed -i 's/x\["etkin_renk"\]=="yesil"/x.get("renk")=="yesil"/' "$MK/kart.sh"
+grep -q 'x.get("renk")=="yesil"' "$MK/kart.sh"; g $? "mutant üretildi (kart.sh ham rengi okuyor)"
+CIKTI="$(bash "$MK/kart.sh" bitti is-cron 2>&1)"; ! grep -q "CANLI KANIT YOK" <<<"$CIKTI" && grep -q "kart bitti" <<<"$CIKTI"; g $? "mutant (tam kopya, bitti koştu): geçersiz yeşili sayıp uyarmıyor → üstteki kapı bu mutantta düşerdi"
 # canli-gerekir: kapının okuduğu tek yüzey; eski kartta (alan yok) cümleden türetir
 [ "$(bash "$KT" canli-gerekir is-cron | cut -f1)" = "E" ] && [ "$(bash "$KT" canli-gerekir is-1 | cut -f1)" = "H" ]; g $? "canli-gerekir E/H okur"
 python3 - <<PY
