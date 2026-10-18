@@ -19,7 +19,7 @@
 #   yok     = kayıtsız koltuk: AÇILMAZ, sebebi söylenir (kimliksiz Claude başka kimliğe düşer — ölçülmüş vaka)
 #   Sır değeri yok; bu betik kayda YAZMAZ (yazan açıcının kendisi).
 set -uo pipefail
-. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/ortak.sh"
+. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/ortak.sh" || exit 3   # kutu adı reddi → DUR, rc 3 (FSZ30)
 TAKILI_SN="${TO_TAKILI_SN:-900}"
 EKIP_AC="${TO_EKIP_AC:-$PROJE/scripts/ekip-ac.sh}"
 BASLAT="${TO_BASLAT:-$PROJE/scripts/baslat-claude.sh}"
