@@ -1,5 +1,5 @@
 $ bash retro/scripts/retro.test.sh
-# rc=0 sure=1.6s zaman=2026-10-18T23:28:12+03:00
+# rc=0 sure=3.0s zaman=2026-10-18T23:30:02+03:00
 --- stdout ---
 — T1 hafta
   ✓ T1a hafta kimliği sabit tarihten (rc=0)
@@ -98,6 +98,8 @@ $ bash retro/scripts/retro.test.sh
   ✓ T9h bölümler çoğalmadı (her biri bir kez)
   ✓ T9i bölüm sırası korundu (araç bölümleri önde, elle bölümler yazıldığı sırada)
   ✓ T9j süzüm damgası da korunmaya devam ediyor
+  ✓ T9l elle bölümler BAYT BAYT aynı (çift boş satır, girinti, dosya sonu dahil)
+  ✓ T9m '## Süzüm notları' (araç önekiyle başlayan elle bölüm) silinmedi — araç bölümü birebir başlıkla tanınır
   ✓ T9k ikinci --yenile aynı dosyayı üretir (kararlı)
 — M mutasyon (kopya üstünde; her mutant en az bir kapıyı kızartmalı)
   ✓ M1 L5 (ölçüsüz zaman kaybı) kalkınca ölçüsüz dosya geçmemeli: mutant ısırıldı
@@ -107,6 +109,8 @@ $ bash retro/scripts/retro.test.sh
   ✓ M4 metin kıyası kalkınca bayat damga geçer (kapı yakalar): mutant ısırıldı
   ✓ M3 iz ayrımı kalkınca BASİRET EKSİK sayılır (kapı yakalar): mutant ısırıldı
   ✓ M5 elle bölümler taşınmazsa --yenile Dersler/Kaçış'ı siler (eski hata · kapı yakalar): mutant ısırıldı
+  ✓ M6 araç bölümü ÖNEKLE tanınırsa '## Süzüm notları' silinir (kapı yakalar): mutant ısırıldı
+  ✓ M7 boş satırlar daraltılırsa bayt eşitliği bozulur (kapı yakalar): mutant ısırıldı
 
-GECEN=96 DUSEN=0
+GECEN=100 DUSEN=0
 --- stderr ---

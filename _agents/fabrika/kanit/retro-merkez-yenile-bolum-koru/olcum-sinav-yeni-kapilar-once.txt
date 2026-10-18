@@ -1,5 +1,5 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/retro-once.sh
-# rc=1 sure=1.8s zaman=2026-10-18T23:28:11+03:00
+# rc=1 sure=2.6s zaman=2026-10-18T23:29:59+03:00
 --- stdout ---
 — T1 hafta
   ✓ T1a hafta kimliği sabit tarihten (rc=0)
@@ -89,11 +89,11 @@ $ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeae
   ✓ T8j artık bayat değil, damgasız
 — T9 merkez --yenile elle yazılan bölümleri KORUR (gorev_01M58987YSBASEXV1MF7T2GJHP · 19 Eki W42 MERKEZ.md silindi)
   ✓ T9a merkez --yenile (rc 1: EKSİK hâlâ var) (rc=1)
-  ✗ T9b Dersler satırı korundu :: '- M1) vekil ölçütü önce adıyla ölç · kaynak: MİRAHUR D1' yok :: # 🔁 MERKEZ RETROSU · 2026-W42 _yazildi: 2026-10-18T23:28:10+03:00 _arac: retro.py 1.0.0  
-  ✗ T9c bölüm içi boş satır + girinti korundu :: '  ikinci paragraf: girintili açıklama' yok :: # 🔁 MERKEZ RETROSU · 2026-W42 _yazildi: 2026-10-18T23:28:10+03:00 _arac: retro.py 1.0.0  
-  ✗ T9d Görevler satırı korundu :: '- gorev_01M58987YSBASEXV1MF7T2GJHP · ders M1' yok :: # 🔁 MERKEZ RETROSU · 2026-W42 _yazildi: 2026-10-18T23:28:10+03:00 _arac: retro.py 1.0.0  
-  ✗ T9e iskelette olmayan Kaçış bölümü korundu :: '## Kaçış ve tıkanma' yok :: # 🔁 MERKEZ RETROSU · 2026-W42 _yazildi: 2026-10-18T23:28:10+03:00 _arac: retro.py 1.0.0  
-  ✗ T9f serbest bölüm korundu :: 'merkezin kendi notu' yok :: # 🔁 MERKEZ RETROSU · 2026-W42 _yazildi: 2026-10-18T23:28:10+03:00 _arac: retro.py 1.0.0  
+  ✗ T9b Dersler satırı korundu :: '- M1) vekil ölçütü önce adıyla ölç · kaynak: MİRAHUR D1' yok :: # 🔁 MERKEZ RETROSU · 2026-W42 _yazildi: 2026-10-18T23:29:59+03:00 _arac: retro.py 1.0.0  
+  ✗ T9c bölüm içi boş satır + girinti korundu :: '  ikinci paragraf: girintili açıklama' yok :: # 🔁 MERKEZ RETROSU · 2026-W42 _yazildi: 2026-10-18T23:29:59+03:00 _arac: retro.py 1.0.0  
+  ✗ T9d Görevler satırı korundu :: '- gorev_01M58987YSBASEXV1MF7T2GJHP · ders M1' yok :: # 🔁 MERKEZ RETROSU · 2026-W42 _yazildi: 2026-10-18T23:29:59+03:00 _arac: retro.py 1.0.0  
+  ✗ T9e iskelette olmayan Kaçış bölümü korundu :: '## Kaçış ve tıkanma' yok :: # 🔁 MERKEZ RETROSU · 2026-W42 _yazildi: 2026-10-18T23:29:59+03:00 _arac: retro.py 1.0.0  
+  ✗ T9f serbest bölüm korundu :: 'merkezin kendi notu' yok :: # 🔁 MERKEZ RETROSU · 2026-W42 _yazildi: 2026-10-18T23:29:59+03:00 _arac: retro.py 1.0.0  
   ✗ T9g iskelet yer tutucusu geri gelmedi :: '<ders> · kaynak:' VAR
   ✗ T9h bölüm sayısı: 5:## Katılım (araç yazdı)
 12:## Süzüm — her öneri bir damga alır: `→ gorev_<id>` (görev defterine girdi) ya da `→ RED: <gerekçe ≥10 karakter>`
@@ -101,6 +101,12 @@ $ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeae
 19:## Görevler (Sultan ders ders onaylar · D1 damgası · görev defteri)
   ✗ T9i sıra: ## Katılım (araç yazdı)|## Süzüm — her öneri bir damga alır: `→ gorev_<id>` (görev defterine girdi) ya da `→ RED: <gerekçe ≥10 karakter>`|## Dersler (merkez yorumu; kutu dersine D<n> ile atıf: `BÂNİ D2`)|## Görevler (Sultan ders ders onaylar · D1 damgası · görev defteri)|
   ✓ T9j süzüm damgası da korunmaya devam ediyor
+  ✗ T9l elle bölüm baytları değişti: 2,4c2
+< - M1) vekil ölçütü önce adıyla ölç · kaynak: MİRAHUR D1
+< 
+<   ikinci paragraf: girintili açıklama
+---
+  ✗ T9m '## Süzüm notları' (araç önekiyle başlayan elle bölüm) silinmedi — araç bölümü birebir başlıkla tanınır :: 'önek araç başlığına benzer ama elle yazıldı' yok :: # 🔁 MERKEZ RETROSU · 2026-W42 _yazildi: 2026-10-18T23:29:59+03:00 _arac: retro.py 1.0.0  
   ✓ T9k ikinci --yenile aynı dosyayı üretir (kararlı)
 — M mutasyon (kopya üstünde; her mutant en az bir kapıyı kızartmalı)
   ✓ M1 L5 (ölçüsüz zaman kaybı) kalkınca ölçüsüz dosya geçmemeli: mutant ısırıldı
@@ -110,6 +116,8 @@ $ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeae
   ✓ M4 metin kıyası kalkınca bayat damga geçer (kapı yakalar): mutant ısırıldı
   ✓ M3 iz ayrımı kalkınca BASİRET EKSİK sayılır (kapı yakalar): mutant ısırıldı
   ✗ M5 elle bölümler taşınmazsa --yenile Dersler/Kaçış'ı siler (eski hata · kapı yakalar): sed hiçbir şeyi değiştirmedi
+  ✗ M6 araç bölümü ÖNEKLE tanınırsa '## Süzüm notları' silinir (kapı yakalar): sed hiçbir şeyi değiştirmedi
+  ✗ M7 boş satırlar daraltılırsa bayt eşitliği bozulur (kapı yakalar): sed hiçbir şeyi değiştirmedi
 
-GECEN=87 DUSEN=9
+GECEN=87 DUSEN=13
 --- stderr ---

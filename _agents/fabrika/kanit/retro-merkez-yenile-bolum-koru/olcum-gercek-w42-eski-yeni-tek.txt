@@ -1,5 +1,5 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/retro-gercek-w42.sh
-# rc=0 sure=0.2s zaman=2026-10-18T23:28:13+03:00
+# rc=0 sure=0.8s zaman=2026-10-18T23:30:04+03:00
 --- stdout ---
 == kaynak (gerçek, dokunulmadı): başlıklar
 ## Katılım (araç yazdı)
