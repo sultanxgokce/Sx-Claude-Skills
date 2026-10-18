@@ -1,0 +1,32 @@
+$ bash -c o=$(mktemp); bash "$1" > "$o" 2>&1; rc=$?; sed -n "/T22/,\$p" "$o"; exit $rc _ yazilim-fabrikasi/scripts/kanit.test.sh
+# rc=0 sure=15.2s zaman=2026-10-18T19:39:42+03:00
+--- stdout ---
+════ T22 · GEÇERSİZ ilan (4K938): özgün kayda dokunmaz, hedefin ölçüm kimliğine bağlı, yeşil sayılmaz ════
+  ✓ T22 --neden 20 karakterden kısa → ret, ilan dosyası yazılmadı
+  ✓ T22 olmayan hedef → ret
+  ✓ T22 iki kayıtlı etiket (once+sonra) → belirsiz, dosya adı ister
+  ✓ T22 olmayan karşı kanıt → ret
+  ✓ T22 geçerli ilan rc=0
+  ✓ T22 özgün kanıt dosyasının baytı değişmedi
+  ✓ T22 özgün manifest kaydı değişmedi (renk hâlâ yesil)
+  ✓ T22 etkin renk = gecersiz
+  ✓ T22 dogrula rc=0, geçersiz sayısı + neden + karşı kanıt basılı
+  ✓ T22 ozet tablosu GEÇERSİZ + nedeni gösteriyor
+  ✓ T22 liste --etkin: ham renk yesil, etkin gecersiz, kim yazılı
+  ✓ T22 aynı ölçüme ikinci ilan → ret
+  ✓ T22 yeniden ölçüm (yeni sha+zaman) → ilan uygulanmaz, etkin yesil
+  ✓ T22 dogrula 'ilan artık uygulanmıyor' der, geçersiz saymaz
+  ✓ T22 aynı çıktı + aynı saniye (sha ve zaman aynı) yeniden ölçüm → ilan yine düşer (bağ ölçüm kimliği)
+  ✓ T22 ölçüm kimliği olmayan eski kayıt ilan edilebilir (yedek bağ sha+zaman)
+  ✓ T22 ilan kaydı elle değişince imza tutmuyor → rc=1
+════ T23 · MUTASYON (4K938): tam kopyada; kontrol kopyası tüm kapıları geçmeli, her mutant hedef kapısını düşürmeli ════
+  ✓ T23a kontrol kopyası (mutasyonsuz): 17 kapının 17'si geçiyor
+  ✓ T23 mutant kisa: neden uzunluğu denetimi kaldırıldı → 'kisa_neden_ret' kapısı düşüyor
+  ✓ T23 mutant bag: ilan hedefin ölçümüne bağlı değil → 'yeniden_olcum_ilani_dusurur' kapısı düşüyor
+  ✓ T23 mutant kimlik: bağ yalnız sha+zaman (göz tur 1'deki hâl) → 'ayni_cikti_ayni_saniye_ilani_dusurur' kapısı düşüyor
+  ✓ T23 mutant etkin: etkin renk ilanı yok sayıyor → 'etkin_gecersiz' kapısı düşüyor
+  ✓ T23 mutant cift: ikinci ilan denetimi kaldırıldı → 'ikinci_ilan_ret' kapısı düşüyor
+  ✓ T23 mutant karsi: karşı kanıt çözülmeden kabul → 'olmayan_karsi_ret' kapısı düşüyor
+
+── SONUÇ: 128 geçti · 0 kaldı ──
+--- stderr ---

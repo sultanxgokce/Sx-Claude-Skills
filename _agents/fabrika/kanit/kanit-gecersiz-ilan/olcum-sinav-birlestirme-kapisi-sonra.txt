@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh
-# rc=0 sure=18.7s zaman=2026-10-18T19:27:40+03:00
+# rc=0 sure=18.2s zaman=2026-10-18T19:35:35+03:00
 --- stdout ---
 ════ T1 · hiçbir şey yok → engeller ════
   ✓ kart+kanıt+denetim yokken rc=1

@@ -1,0 +1,56 @@
+$ bash -c d=$(mktemp -d); git -C "$d" init -q; export KANIT_DEPO="$d"; K="$1"; bash "$K" olcum demo testler --asama sonra -- bash -c "echo 12 gecti; exit 0" >/dev/null; echo "## ilan:"; bash "$K" gecersiz demo testler --neden "boru cikis kodunu maskeledi, olcum yanlis" --kim HENDESE; r=$?; echo "## gecersiz rc=$r"; echo "## dogrula:"; bash "$K" dogrula demo; echo "## dogrula rc=$?"; echo "## liste --etkin:"; bash "$K" liste demo --etkin; exit $r _ yazilim-fabrikasi/scripts/kanit.sh
+# rc=0 sure=0.2s zaman=2026-10-18T19:34:46+03:00
+--- stdout ---
+## ilan:
+⛔ geçersiz ilan edildi: olcum-testler-sonra.txt (yesil → gecersiz) · HENDESE · boru cikis kodunu maskeledi, olcum yanlis
+## gecersiz rc=0
+## dogrula:
+⛔ GEÇERSİZ: olcum-testler-sonra.txt (yesil → gecersiz) — boru cikis kodunu maskeledi, olcum yanlis · HENDESE
+✓ manifest sağlam: 2 kayıt, imza ve sha'lar tutuyor · ⛔ 1 kayıt GEÇERSİZ ilan edildi (kanıt sayılmaz)
+## dogrula rc=0
+## liste --etkin:
+[
+  {
+    "tur": "olcum",
+    "etiket": "testler",
+    "asama": "sonra",
+    "dosya": "olcum-testler-sonra.txt",
+    "sha256": "d54665a746c980e9a369d8f22be2e7f30b7e79704249ed5f626e57bc527a051b",
+    "komut": [
+      "bash",
+      "-c",
+      "echo 12 gecti; exit 0"
+    ],
+    "rc": 0,
+    "renk": "yesil",
+    "zaman": "2026-10-18T19:34:46+03:00",
+    "sure_sn": 0.0,
+    "olcum_id": "142d917a7c724192a2b7dd6fc0d8ee39",
+    "etkin_renk": "gecersiz",
+    "gecersiz_neden": "boru cikis kodunu maskeledi, olcum yanlis",
+    "gecersiz_kim": "HENDESE",
+    "gecersiz_karsi": null
+  },
+  {
+    "tur": "gecersiz",
+    "etiket": "testler",
+    "asama": "tek",
+    "dosya": "gecersiz-olcum-testler-sonra-d8cc7d7ef734.txt",
+    "sha256": "aac4ebc24f6d8f6420b7627c7242fac5b8e58f787bb67f8c88f0047c4aa50e8a",
+    "hedef_dosya": "olcum-testler-sonra.txt",
+    "hedef_olcum_id": "142d917a7c724192a2b7dd6fc0d8ee39",
+    "hedef_sha256": "d54665a746c980e9a369d8f22be2e7f30b7e79704249ed5f626e57bc527a051b",
+    "hedef_zaman": "2026-10-18T19:34:46+03:00",
+    "hedef_renk": "yesil",
+    "neden": "boru cikis kodunu maskeledi, olcum yanlis",
+    "kim": "HENDESE",
+    "karsi": null,
+    "rc": 0,
+    "renk": "ilan",
+    "zaman": "2026-10-18T19:34:46+03:00",
+    "olcum_id": "dcd2069bbc704d96ad20f0fd610c074c",
+    "etkin_renk": "ilan",
+    "uygulaniyor": true
+  }
+]
+--- stderr ---

@@ -15,14 +15,14 @@ Kullanım:
                   CANLI sınıfı: gerçek ateşleme kaydı (saat damgalı + desenli log satırı); yoksa SARI rc=3 — kapı geçirmez.
                   Okuma komutunu ARAÇ kurar (tail/journalctl, sabit argv); serbest komut YOK (rc=1): kayıt üretilmez, okunur.
   kanit.py gecersiz <iş> <etiket|dosya> --neden "<≥20 kr>" --kim <AJAN> [--karsi <etiket|dosya>]
-                  bir ölçümü SONRADAN geçersiz ilan eder: özgün kayda dokunmaz, hedefin sha+zamanına bağlı ilan kaydı EKLER;
+                  bir ölçümü SONRADAN geçersiz ilan eder: özgün kayda dokunmaz, hedefin ÖLÇÜM KİMLİĞİNE bağlı ilan kaydı EKLER;
                   hedef yeniden ölçülürse ilan o yeni ölçüme uygulanmaz. Geçersiz kayıt yeşil sayılmaz (etkin renk).
   kanit.py dogrula <iş>                                                imza + dosya sha'ları (0 sağlam · 1 bozuk · 3 yok)
   kanit.py ozet   <iş>                                                 PR gövdesi için tablo (markdown; renk = etkin renk)
   kanit.py liste  <iş> [--etkin]                                       --etkin: kayıtlar + etkin_renk, JSON
 Ortam: KANIT_DEPO (depo kökü; vars. git toplevel) · KANIT_PLAYWRIGHT_DIR (node_modules'lı dizin)
 """
-import argparse, datetime, hashlib, json, os, re, shutil, subprocess, sys
+import argparse, datetime, hashlib, json, os, re, shutil, subprocess, sys, uuid
 
 SURUM = "kanit.py/0.5.0"   # 0.5.0: `gecersiz` ilanı + etkin renk (18 Eki 2026) · 0.4.0: `canli` sınıfı (17 Eki 2026)
 # Sürüm artık GÜVENLE yükseltilebilir: imza gövdesinde değil (yukarıdaki not).
@@ -137,6 +137,9 @@ def kayit_ekle(depo, is_adi, kayit):
     # tutmaz ve `dogrula` KALICI rc=1 verirdi; silme komutu da yoktu, tek çıkış kanıt dizinini
     # komple silmekti (MOTOR1 iki kez yaptı). Kayıt KİMLİĞİ kanıt dosyasının adıdır: aynı
     # dosyaya iki kayıt işaret edemez. Üstüne yazmak SESSİZ olmaz — yüzeye basılır.
+    # ÖLÇÜM KİMLİĞİ (4K938 göz tur 1): sha+zaman bir ölçümü TEK BAŞINA tanımlamaz — aynı çıktı aynı saniyede
+    # yeniden ölçülünce ikisi de aynı kalır. Her yazımda araç tekil kimlik verir; geçersiz ilanı ona bağlanır.
+    kayit.setdefault("olcum_id", uuid.uuid4().hex)
     eski_sira = next((i for i, k in enumerate(kayitlar) if k.get("dosya") == kayit.get("dosya")), None)
     if eski_sira is None:
         kayitlar.append(kayit)
@@ -421,21 +424,29 @@ def cmd_canli(a):
 # 4K938 (18 Eki 2026): bir ölçüm sonradan yanlış çıkabilir (boru çıkış kodunu maskeledi, yanlış dal ölçüldü).
 #   Yol YOKTU: kaydı silmek geçmişi, elle "kirmizi" yazmak imzayı bozar; tek çıkış kanıt dizinini silmekti.
 #   Özgün kayda DOKUNULMAZ; hedefin sha'sına ve zamanına bağlı ayrı bir İLAN kaydı eklenir (imza onu da kapsar).
-#   Hedef yeniden ölçülürse (yeni sha/zaman) ilan uygulanmaz: o ilan eski ölçüme aitti.
+#   Hedef yeniden ölçülürse ilan uygulanmaz: o ilan eski ölçüme aitti. Bağ ÖLÇÜM KİMLİĞİDİR (olcum_id, her yazımda tekil);
+#   sha+zaman yalnız kimliksiz (0.10.2 öncesi) kayıtta yedek — aynı çıktı aynı saniyede ikisini de tekrarlar (göz tur 1).
 #   Etkin renk TEK yerde hesaplanır (etkin_kayitlar); kapı ve kart.sh aynı fonksiyonu çağırır, kopya yazmaz.
 #   🔴 İlan kapıyı hiçbir zaman GEVŞETMEZ: geçersiz yeşil yeşil sayılmaz, geçersiz canlı sarı gibi engeldir.
 NEDEN_EN_AZ = 20
 
 
+def _ayni_olcum(h, g):
+    """İlan g, kayıt h'nin BU ölçümüne mi ait? Kimlik varsa yalnız kimlik; kimliksiz eski ilan/kayıtta sha+zaman (geri uyum)."""
+    if g.get("hedef_olcum_id"):
+        return h.get("olcum_id") == g["hedef_olcum_id"]
+    return not h.get("olcum_id") and (h.get("sha256"), h.get("zaman")) == (g.get("hedef_sha256"), g.get("hedef_zaman"))
+
+
 def gecersiz_ilanlari(kayitlar):
-    """hedef dosya → ilan; yalnız hedefin ŞİMDİKİ sha+zamanına hâlâ uyan ilanlar."""
+    """hedef dosya → ilan; yalnız hedefin ŞİMDİKİ ölçümüne hâlâ uyan ilanlar."""
     hedefler = {k.get("dosya"): k for k in kayitlar if k.get("tur") != "gecersiz"}
     uyan = {}
     for g in kayitlar:
         if g.get("tur") != "gecersiz":
             continue
         h = hedefler.get(g.get("hedef_dosya"))
-        if h is not None and (h.get("sha256"), h.get("zaman")) == (g.get("hedef_sha256"), g.get("hedef_zaman")):
+        if h is not None and _ayni_olcum(h, g):
             uyan[g["hedef_dosya"]] = g
     return uyan
 
@@ -492,14 +503,14 @@ def cmd_gecersiz(a):
         if kk["dosya"] in ilanlar:
             hata(f"karşı kanıt da geçersiz ilan edilmiş: {kk['dosya']}")
         karsi = kk["dosya"]
-    iz = hashlib.sha256(f"{h.get('sha256')}|{h.get('zaman')}".encode()).hexdigest()[:12]
+    iz = hashlib.sha256(f"{h.get('olcum_id')}|{h.get('sha256')}|{h.get('zaman')}".encode()).hexdigest()[:12]
     ad = f"gecersiz-{os.path.splitext(h['dosya'])[0]}-{iz}.txt"
     zaman = simdi(); yol = os.path.join(dz, ad)
     with open(yol, "w", encoding="utf-8") as f:
         f.write(f"# GEÇERSİZ İLANI — özgün kayda dokunulmadı\nhedef: {h['dosya']}\nhedef_sha256: {h.get('sha256')}\n"
                 f"hedef_zaman: {h.get('zaman')}\nhedef_renk: {h.get('renk')}\nneden: {neden}\nkim: {kim}\nkarsi: {karsi or '-'}\nzaman: {zaman}\n")
     kayit = {"tur": "gecersiz", "etiket": h.get("etiket"), "asama": "tek", "dosya": ad, "sha256": sha_dosya(yol),
-             "hedef_dosya": h["dosya"], "hedef_sha256": h.get("sha256"), "hedef_zaman": h.get("zaman"), "hedef_renk": h.get("renk"),
+             "hedef_dosya": h["dosya"], "hedef_olcum_id": h.get("olcum_id"), "hedef_sha256": h.get("sha256"), "hedef_zaman": h.get("zaman"), "hedef_renk": h.get("renk"),
              "neden": neden, "kim": kim, "karsi": karsi, "rc": 0, "renk": "ilan", "zaman": zaman}
     kayit_ekle(depo, a.is_adi, kayit)
     print(f"⛔ geçersiz ilan edildi: {h['dosya']} ({h.get('renk')} → gecersiz) · {kim} · {neden}" + (f" · karşı kanıt: {karsi}" if karsi else ""))

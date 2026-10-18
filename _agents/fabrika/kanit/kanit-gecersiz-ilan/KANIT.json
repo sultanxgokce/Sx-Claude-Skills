@@ -1,7 +1,7 @@
 {
   "is": "kanit-gecersiz-ilan",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-18T19:31:06+03:00",
+  "guncelleme": "2026-10-18T19:39:42+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -68,61 +68,122 @@
       "etiket": "sinav-kanit",
       "asama": "sonra",
       "dosya": "olcum-sinav-kanit-sonra.txt",
-      "sha256": "2bc40ee20afdc81120c372008d2589229cec807fe8436b61e9077b9a9ffdec6a",
+      "sha256": "e84c81b1b4e047a43948c79c36c2aa2c807df42edbf2343c6c021b0d8b41bcd2",
       "komut": [
         "bash",
         "yazilim-fabrikasi/scripts/kanit.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T19:27:19+03:00",
-      "sure_sn": 11.3
+      "zaman": "2026-10-18T19:39:27+03:00",
+      "sure_sn": 14.3,
+      "olcum_id": "26f5a93c715b4b8a83ad8dc58e3284fc"
     },
     {
       "tur": "olcum",
       "etiket": "sinav-kart",
       "asama": "sonra",
       "dosya": "olcum-sinav-kart-sonra.txt",
-      "sha256": "1334993c335eb9e2a3d95347866b4b0cb2655327928d6ad48952fa4570c7066f",
+      "sha256": "dfe1e52ce93ee6ab6917332906e1604a73308f4c3dfbf72750e383182f405dd6",
       "komut": [
         "bash",
         "yazilim-fabrikasi/scripts/kart.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T19:27:21+03:00",
-      "sure_sn": 2.7
+      "zaman": "2026-10-18T19:35:17+03:00",
+      "sure_sn": 2.8,
+      "olcum_id": "d0eda348e8bf437ca501471eab740786"
     },
     {
       "tur": "olcum",
       "etiket": "sinav-birlestirme-kapisi",
       "asama": "sonra",
       "dosya": "olcum-sinav-birlestirme-kapisi-sonra.txt",
-      "sha256": "6bd61a3820141b4b0cdf89f0c0d6cfcf7b569cc8b42068b87a58d41d546d5a03",
+      "sha256": "aef01cb605e940cbfe530cdaac9c967243de1ce409ad0fd4f1a05cb19b5e4642",
       "komut": [
         "bash",
         "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T19:27:40+03:00",
-      "sure_sn": 18.7
+      "zaman": "2026-10-18T19:35:35+03:00",
+      "sure_sn": 18.2,
+      "olcum_id": "b6aa2c7105504bc9832dfdeadd4748ea"
     },
     {
       "tur": "olcum",
       "etiket": "sinav-denetci",
       "asama": "sonra",
       "dosya": "olcum-sinav-denetci-sonra.txt",
-      "sha256": "2f30b61e28153d6b7191d8abfe846cd68d016aee222ae9089bb0de1502eb6875",
+      "sha256": "ab8131cc1ba52ba63aabbf4df550fe6833897625b5f1ac6b3d7773087ea5af40",
       "komut": [
         "bash",
         "yazilim-fabrikasi/scripts/denetci.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T19:31:06+03:00",
-      "sure_sn": 206.1
+      "zaman": "2026-10-18T19:38:46+03:00",
+      "sure_sn": 190.9,
+      "olcum_id": "07a271be764a4b75a0b3acb9d14fe55f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ilan-davranisi",
+      "asama": "once",
+      "dosya": "olcum-ilan-davranisi-once.txt",
+      "sha256": "e27df9f2c24d1f6a1119b577c85f7a2b617dff9959c218f6153d00d237000b60",
+      "komut": [
+        "bash",
+        "-c",
+        "d=$(mktemp -d); git -C \"$d\" init -q; export KANIT_DEPO=\"$d\"; K=\"$1\"; bash \"$K\" olcum demo testler --asama sonra -- bash -c \"echo 12 gecti; exit 0\" >/dev/null; echo \"## ilan:\"; bash \"$K\" gecersiz demo testler --neden \"boru cikis kodunu maskeledi, olcum yanlis\" --kim HENDESE; r=$?; echo \"## gecersiz rc=$r\"; echo \"## dogrula:\"; bash \"$K\" dogrula demo; echo \"## dogrula rc=$?\"; echo \"## liste --etkin:\"; bash \"$K\" liste demo --etkin; exit $r",
+        "_",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/4k/ana/kanit.sh"
+      ],
+      "rc": 2,
+      "renk": "kirmizi",
+      "zaman": "2026-10-18T19:34:46+03:00",
+      "sure_sn": 0.2,
+      "olcum_id": "cbbc175c487b4dc3ac7e2062cec86efe"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ilan-davranisi",
+      "asama": "sonra",
+      "dosya": "olcum-ilan-davranisi-sonra.txt",
+      "sha256": "2480d705abc344940bbb5e61ded81ae7365deed90df1e89e0076f5f13bc1b53d",
+      "komut": [
+        "bash",
+        "-c",
+        "d=$(mktemp -d); git -C \"$d\" init -q; export KANIT_DEPO=\"$d\"; K=\"$1\"; bash \"$K\" olcum demo testler --asama sonra -- bash -c \"echo 12 gecti; exit 0\" >/dev/null; echo \"## ilan:\"; bash \"$K\" gecersiz demo testler --neden \"boru cikis kodunu maskeledi, olcum yanlis\" --kim HENDESE; r=$?; echo \"## gecersiz rc=$r\"; echo \"## dogrula:\"; bash \"$K\" dogrula demo; echo \"## dogrula rc=$?\"; echo \"## liste --etkin:\"; bash \"$K\" liste demo --etkin; exit $r",
+        "_",
+        "yazilim-fabrikasi/scripts/kanit.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T19:34:46+03:00",
+      "sure_sn": 0.2,
+      "olcum_id": "5cc2df94fadb4cbca4904c5a8001b96e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-kanit-T22-T23",
+      "asama": "tek",
+      "dosya": "olcum-sinav-kanit-T22-T23-tek.txt",
+      "sha256": "d839f9daf20e549b30e718ca7bfd4ec8c59759d9d272b0359728a374cf2df924",
+      "komut": [
+        "bash",
+        "-c",
+        "o=$(mktemp); bash \"$1\" > \"$o\" 2>&1; rc=$?; sed -n \"/T22/,\\$p\" \"$o\"; exit $rc",
+        "_",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T19:39:42+03:00",
+      "sure_sn": 15.2,
+      "olcum_id": "f097d15c0f274a7ba3b0e3aaa945d90c"
     }
   ],
-  "imza": "13573399a66682ccc4d1939ebc931cacefe4ac0342a0ea1fd3d69e970f2b89dc"
+  "imza": "444121e95b261d06be31b4fcf90f443f6beba609d3c79d2d957b4a67b2569e37"
 }

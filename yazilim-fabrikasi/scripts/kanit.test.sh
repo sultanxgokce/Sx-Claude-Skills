@@ -304,7 +304,7 @@ SSH_SHIM_ARGS="$T/ssh-args3.txt" SSH_SHIM_RC=255 PATH="$SHIM:$PATH" KANIT_DEPO="
 _mut 'if not GUVENLI_RE.match(parca):' 'if False:'
 SSH_SHIM_ARGS="$T/ssh-args2.txt" PATH="$SHIM:$PATH" KANIT_DEPO="$T" python3 "$MC/kanit.py" canli is-canli-m sahte --desen sahte --kaynak "ssh:kutu:/var/log/x;echo" >/dev/null 2>&1; [ $? -ne 1 ]; g $? "T19d mutant (yol doğrulaması kaldırıldı) metakarakterli yolu reddetmiyor → T18y2 bu mutantta düşerdi"
 
-echo "════ T22 · GEÇERSİZ ilan (4K938): özgün kayda dokunmaz, hedef sha+zamanına bağlı, yeşil sayılmaz ════"
+echo "════ T22 · GEÇERSİZ ilan (4K938): özgün kayda dokunmaz, hedefin ölçüm kimliğine bağlı, yeşil sayılmaz ════"
 # Senaryo fonksiyonda: gerçek araçta her kapı geçer; T23'te tam kopyadaki mutantlarda hedef kapı düşer.
 _gec_senaryo() { # _gec_senaryo <kanit.sh> <depo> → "ad=0|1" satırları (0 = beklenen davranış)
   local K="$1" D="$2" Z="$2/_agents/fabrika/kanit/is-gec" r
@@ -334,6 +334,23 @@ _gec_senaryo() { # _gec_senaryo <kanit.sh> <depo> → "ad=0|1" satırları (0 = 
   _s yeniden_olcum_ilani_dusurur $([ "$(_e olcum-ana-sonra.txt)" = "yesil" ]; echo $?)
   C="$(KANIT_DEPO="$D" bash "$K" dogrula is-gec 2>&1)"
   _s dogrula_uygulanmiyor_der $(grep -q "ilan artık uygulanmıyor: olcum-ana-sonra.txt" <<<"$C" && ! grep -q "kayıt GEÇERSİZ" <<<"$C"; echo $?)
+  # göz tur 1: aynı çıktı aynı saniyede yeniden ölçülürse sha+zaman ikisi de AYNI kalır — ilan yine düşmeli (bağ ölçüm kimliği).
+  # Çakışma saate bırakılmaz: kayıt aynı sha+zamanla, yalnız yeni ölçüm kimliğiyle araç imzasıyla yeniden yazılır (aracın yeniden ölçümde yaptığı).
+  KANIT_DEPO="$D" bash "$K" gecersiz is-gec ana --neden "yeniden ölçüm de yanlıştı, yine geçersiz" --kim T >/dev/null 2>&1; r=$?
+  python3 - "$Z/KANIT.json" "$(dirname "$K")" <<'PY'
+import json,sys,uuid;p=sys.argv[1];sys.path.insert(0,sys.argv[2]);import kanit;m=json.load(open(p))
+k=next(x for x in m['kayitlar'] if x['dosya']=='olcum-ana-sonra.txt');k['olcum_id']=uuid.uuid4().hex
+m['imza']=kanit.imza(m['kayitlar']);json.dump(m,open(p,'w'))
+PY
+  _s ayni_cikti_ayni_saniye_ilani_dusurur $([ "$r" -eq 0 ] && [ "$(_e olcum-ana-sonra.txt)" = "yesil" ]; echo $?)
+  # geri uyum: ölçüm kimliği olmayan (0.10.2 öncesi) kayıt da ilan edilebilir; bağ sha+zaman
+  python3 - "$Z/KANIT.json" "$(dirname "$K")" <<'PY'
+import json,sys;p=sys.argv[1];sys.path.insert(0,sys.argv[2]);import kanit;m=json.load(open(p))
+next(x for x in m['kayitlar'] if x['dosya']=='olcum-iki-once.txt').pop('olcum_id',None)
+m['imza']=kanit.imza(m['kayitlar']);json.dump(m,open(p,'w'))
+PY
+  KANIT_DEPO="$D" bash "$K" gecersiz is-gec olcum-iki-once.txt --neden "eski araçla alınmış ölçüm de ilan edilebilmeli" --kim T >/dev/null 2>&1; r=$?
+  _s kimliksiz_eski_kayit_ilan_edilir $([ "$r" -eq 0 ] && [ "$(_e olcum-iki-once.txt)" = "gecersiz" ] && python3 -c "import json;assert any(k.get('hedef_dosya')=='olcum-iki-once.txt' and k.get('hedef_olcum_id') is None for k in json.load(open('$Z/KANIT.json'))['kayitlar'])"; echo $?)
   python3 - "$Z/KANIT.json" <<'PY'
 import json,sys;p=sys.argv[1];m=json.load(open(p));next(k for k in m['kayitlar'] if k['tur']=='gecersiz')['neden']='elle değişti';json.dump(m,open(p,'w'))
 PY
@@ -348,7 +365,9 @@ for ad_ac in "kisa_neden_ret:--neden 20 karakterden kısa → ret, ilan dosyası
   "etkin_gecersiz:etkin renk = gecersiz" "dogrula_saglam_ve_sayar:dogrula rc=0, geçersiz sayısı + neden + karşı kanıt basılı" \
   "ozet_gosterir:ozet tablosu GEÇERSİZ + nedeni gösteriyor" "liste_etkin_json:liste --etkin: ham renk yesil, etkin gecersiz, kim yazılı" \
   "ikinci_ilan_ret:aynı ölçüme ikinci ilan → ret" "yeniden_olcum_ilani_dusurur:yeniden ölçüm (yeni sha+zaman) → ilan uygulanmaz, etkin yesil" \
-  "dogrula_uygulanmiyor_der:dogrula 'ilan artık uygulanmıyor' der, geçersiz saymaz" "elle_ilan_yakalanir:ilan kaydı elle değişince imza tutmuyor → rc=1"; do
+  "dogrula_uygulanmiyor_der:dogrula 'ilan artık uygulanmıyor' der, geçersiz saymaz" \
+  "ayni_cikti_ayni_saniye_ilani_dusurur:aynı çıktı + aynı saniye (sha ve zaman aynı) yeniden ölçüm → ilan yine düşer (bağ ölçüm kimliği)" \
+  "kimliksiz_eski_kayit_ilan_edilir:ölçüm kimliği olmayan eski kayıt ilan edilebilir (yedek bağ sha+zaman)" "elle_ilan_yakalanir:ilan kaydı elle değişince imza tutmuyor → rc=1"; do
   _k "${ad_ac%%:*}" "$S22"; g $? "T22 ${ad_ac#*:}"
 done
 
@@ -362,13 +381,14 @@ PY
   echo "$d"
 }
 KD="$(_kopya23 kontrol)"; mkdir -p "$T/d23k"; ( cd "$T/d23k" && git init -q -b main ) >/dev/null 2>&1
-S="$(_gec_senaryo "$KD/kanit.sh" "$T/d23k")"; ! grep -q "=1$" <<<"$S" && [ "$(grep -c "=0$" <<<"$S")" -eq 15 ]; g $? "T23a kontrol kopyası (mutasyonsuz): 15 kapının 15'i geçiyor"
+S="$(_gec_senaryo "$KD/kanit.sh" "$T/d23k")"; ! grep -q "=1$" <<<"$S" && [ "$(grep -c "=0$" <<<"$S")" -eq 17 ]; g $? "T23a kontrol kopyası (mutasyonsuz): 17 kapının 17'si geçiyor"
 _m23() { # _m23 <ad> <hedef kapı> <eski> <yeni> <açıklama>
   local d s; d="$(_mut23 "$1" "$3" "$4")"; mkdir -p "$T/d23-$1"; ( cd "$T/d23-$1" && git init -q -b main ) >/dev/null 2>&1
   s="$(_gec_senaryo "$d/kanit.sh" "$T/d23-$1")"; ! _k "$2" "$s"; g $? "T23 mutant $1: $5 → '$2' kapısı düşüyor"
 }
 _m23 kisa kisa_neden_ret 'if len(neden) < NEDEN_EN_AZ:' 'if False:' "neden uzunluğu denetimi kaldırıldı"
-_m23 bag yeniden_olcum_ilani_dusurur 'if h is not None and (h.get("sha256"), h.get("zaman")) == (g.get("hedef_sha256"), g.get("hedef_zaman")):' 'if h is not None:' "ilan hedefin sha+zamanına bağlı değil"
+_m23 bag yeniden_olcum_ilani_dusurur 'if h is not None and _ayni_olcum(h, g):' 'if h is not None:' "ilan hedefin ölçümüne bağlı değil"
+_m23 kimlik ayni_cikti_ayni_saniye_ilani_dusurur $'if g.get("hedef_olcum_id"):\n        return h.get("olcum_id") == g["hedef_olcum_id"]\n    return not h.get("olcum_id") and (' 'return (' "bağ yalnız sha+zaman (göz tur 1'deki hâl)"
 _m23 etkin etkin_gecersiz 'elif k.get("dosya") in ilanlar:' 'elif False:' "etkin renk ilanı yok sayıyor"
 _m23 cift ikinci_ilan_ret 'if h["dosya"] in ilanlar:' 'if False:' "ikinci ilan denetimi kaldırıldı"
 _m23 karsi olmayan_karsi_ret 'kk = coz(a.karsi, "karşı kanıt")' 'kk = {"dosya": a.karsi}' "karşı kanıt çözülmeden kabul"
