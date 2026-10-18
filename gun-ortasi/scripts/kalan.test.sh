@@ -197,5 +197,30 @@ for ikili in "_agents/fabrika/kartlar:kart" "_agents/handoff:capa_acik" "_agents
 done
 kapi "T16 beş kaynağın her biri kaldırılınca alanı '?' ve olcemedim +1" "${s16:-tamam}" "tamam"
 
+# T5b · BÜYÜK okundu kaydı (gorev_01M55X6PGK9C9K8MRSY0E01W3Q, TELLAL 18 Eki: 204 satırla 140/140/131 yanlış sayım):
+#   'printf | grep -q' pipefail altında — grep ilk eşleşmede çıkar, printf SIGPIPE (141) alır, boru rc≠0 olur ve
+#   OKUNMUŞ mektup okunmamış sayılır. Eşleşme kaydın BAŞINDA, kayıt boru tamponundan (64K) büyük → eski kod kesin düşer.
+{ printf '2026-10-18T00:00:00Z | okundu | A.md | abc | ali\n'
+  for i in $(seq 1 3000); do printf '2026-10-18T00:00:00Z | okundu | DOLGU-%05d-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.md | abc | ali\n' "$i"; done
+  printf '2026-10-18T00:00:00Z | okundu | BA.md | abc | ali\n'; } > "$B/0-teslimat/okundu.log"
+O5="$(kos env)"
+kapi "T5b büyük okundu kaydı (>64K, eşleşme başta ve sonda): A ve BA okundu sayılır → gelen 1 (yalnız ESKI)" \
+  "$(oz "$O5" gelen)/$(grep -c '• A.md' <<<"$O5")/$(grep -c '• BA.md' <<<"$O5")" "1/0/0"
+printf '2026-10-02T00:00:00Z | okundu | BA.md | abc | ali\n' > "$B/0-teslimat/okundu.log"
+
+# T5c · BÜYÜK çıpa (aynı SIGPIPE tuzağı, kalan.sh 1. bölüm): başlık en üstte, gövde >64K → eski 'printf | grep -q'
+#   bugünün çıpasını "bugüne ait değil" sayardı. Sahte çıpa aracı yalnız 'oku' basar.
+SK2="$TMP/sk-buyuk"; mkdir -p "$SK2/gunluk-plan/scripts"
+cat > "$SK2/gunluk-plan/scripts/cipa.sh" <<'EOF'
+#!/usr/bin/env bash
+[ "${1:-}" = oku ] || exit 2
+printf '# ⚓ GÜNÜN PLANI ÇIPASI · %s\n\n## Maddeler\n' "$(date +%F)"
+for i in $(seq 1 3000); do printf -- '- [x] %d) dolgu maddesi xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx → KAPANDI\n' "$i"; done
+EOF
+O6="$(cd "$B" && GUN_ORTASI_SK="$SK2" GUN_ORTASI_KOK="$B" bash "$ARAC" 2>&1)"
+#   Sahte araç 'tablo' bilmez → tarih kapısını GEÇEN çıpa bir sonraki adımda "tabloya çevrilemedi" der; kapıda düşen bunu diyemez.
+kapi "T5c büyük çıpa (>64K, başlık başta) tarih kapısını geçer — 'bugüne ait değil' DENMEZ, sonraki adıma (tablo) ulaşır" \
+  "$(grep -c 'çıpa bugüne ait değil' <<<"$O6")/$(grep -c 'çıpa tabloya çevrilemedi' <<<"$O6")" "0/1"
+
 echo "── SONUÇ: geçti=$G kaldı=$K ölçemedim=$O3 ──"
 [ "$K" -eq 0 ]

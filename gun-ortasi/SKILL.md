@@ -1,7 +1,7 @@
 ---
 name: gun-ortasi
 description: Gün ortası planı — sabahki plan (ya da günün işleri) erken bittiğinde "elde kalan iş var mı?" sorusunu ÖLÇEREK cevaplar; kalan işi dağınık kaynaklardan (plan çıpası, kartlar, konum çapaları, bağımsız göz raporları, gelen kutusu) bulup doğrular ve süzer; kalmadıysa kutunun ana hedeflerine bağlı, ölçülmüş bir boşluğu kapatan 2-3 geliştirme fikri önerir ve Sultan'ın seçimiyle günün ikinci yarısını planlar. Tetik: "/gun-ortasi", "plan bitti ne yapalım", "iş kaldı mı", "gün ortası planı", "yapacak iş kalmadıysa ne geliştirelim".
-version: 1.2.0
+version: 1.2.1
 ---
 
 # /gun-ortasi — gün ortası planı (ölç → doğrula → süz · yoksa fikir → sun → çıpa → icra)
@@ -147,6 +147,12 @@ Akşam `/gunluk-plan kapanis` sabah + gün ortası maddelerini birlikte okur.
 - Sınav: `bash scripts/kalan.test.sh` (hermetik; gerçek kutuya dokunmaz).
 
 ## Sürüm notları
+- **1.2.1 (2026-10-18, MUAVİN · TELLAL bildirdi, gorev_01M55X6PGK9C9K8MRSY0E01W3Q):** `kalan.sh` okundu
+  kaydındaki mektubu **okunmamış** sayıyordu. Kök: `set -o pipefail` altında `printf | grep -q` — grep ilk
+  eşleşmede çıkar, printf SIGPIPE alır, boru rc≠0 döner ve "bulundu" "bulunamadı" sayılır. Büyük kayıtta
+  (TELLAL: 204 satır → 140/140/131) kesin. İki yer here-string'e çevrildi: gelen kutusu eşleşmesi ve çıpa tarih
+  kapısı. Kapılar **T5b** (64K üstü okundu kaydı, eşleşme başta) ve **T5c** (64K üstü çıpa); eski boruya dönen
+  her mutant kendi kapısını kırmızıya çevirir. 35 kapı.
 - **1.2.0 (2026-10-18, SERDAR · Sultan isteği):** sunum **kutulu tablo ZORUNLU** (gunluk-plan 1.6.0 ile aynı araç,
   `cipa.sh tablo`); düz biçim `--md`. Sultan 18 Eki: "bu tarz bir görünüm istiyorum, tabloyu zorunlu gönder".
 - **1.1.0 (2026-10-17, MUAVİN · gorev_01M54TNAQV, Sultan):** gün ortası "KALAN İŞ" listesi artık
