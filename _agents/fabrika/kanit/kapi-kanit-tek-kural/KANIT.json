@@ -1,7 +1,7 @@
 {
   "is": "kapi-kanit-tek-kural",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-18T23:44:04+03:00",
+  "guncelleme": "2026-10-19T00:03:04+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -28,7 +28,7 @@
       "etiket": "kapi-sinavi",
       "asama": "sonra",
       "dosya": "olcum-kapi-sinavi-sonra.txt",
-      "sha256": "a958289ff501dbe7a337ee2830976a3e288f769ffa83834cce5289f9f6cc71f5",
+      "sha256": "cfe043d239cbc503e267950c7503b371abce3a7cbfb7165d7df6aedbd292c9ee",
       "komut": [
         "timeout",
         "600",
@@ -37,10 +37,10 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T23:40:36+03:00",
-      "sure_sn": 33.7,
+      "zaman": "2026-10-19T00:03:04+03:00",
+      "sure_sn": 27.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "8ec34df1978f4d9d8570f6961520ae8f"
+      "olcum_id": "6efffe077e7e456d929a193fe74627ba"
     },
     {
       "tur": "olcum",
@@ -61,5 +61,5 @@
       "olcum_id": "85357e556303446eadce3b4d2edd459c"
     }
   ],
-  "imza": "e9ecd09b5dbb25245063baa6d11d51ee755a5030ecf844d84d39bce2b5649a0a"
+  "imza": "9d2ae161dd8b10bbcd5b19778155113532baf4d1a1d2bf8a327651efe3cc3723"
 }

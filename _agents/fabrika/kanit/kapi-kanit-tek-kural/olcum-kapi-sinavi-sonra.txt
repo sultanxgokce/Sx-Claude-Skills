@@ -1,5 +1,5 @@
 $ timeout 600 bash yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh
-# rc=0 sure=33.7s zaman=2026-10-18T23:40:36+03:00
+# rc=0 sure=27.7s zaman=2026-10-19T00:03:04+03:00
 --- stdout ---
 ════ T1 · hiçbir şey yok → engeller ════
   ✓ kart+kanıt+denetim yokken rc=1
