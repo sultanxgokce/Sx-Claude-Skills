@@ -1,9 +1,18 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.17.2
+version: 2.17.3
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.17.3 · bekçi satırı kutuya özgü sabit gecikmeyle (18 Eki · kart terminal-onar-bekci-gecikme · SERDAR 15:28)
+
+17 kutunun dakikalık bekçisi her dakikanın tam başında aynı anda kalkıyordu; host'ta dakika başı çalışma kuyruğu 179-191'e
+çıkıyordu (filo yavaşladı). Bekçi satırı artık `* * * * * sleep N && …` biçiminde: `N = cksum(kutu adı) % 50 + 5` (5-54 sn),
+her kutuda farklı, her kurulumda aynı. Sayı kurulumda hesaplanıp satıra düz rakam olarak yazılır — crontab'da `%` satır sonu
+demektir. `;` değil `&&`: canlılık envanteri satırı ilk `;`den keser. Eski gecikmesiz satır bir sonraki onarımda/kurulumda
+kendiliğinden yenisine çevrilir (düzeltici aynı işareti tanır). code kutusunda N=10 (cloudtop `crontab-abc` ile aynı).
+Sınav: `scripts/bekci-gecikme.test.sh` (15 kapı + 3 mutant). Kutulara iniş: her kutuda kur/onar yeniden (ayrı adım).
 
 ## 🆕 2.17.2 · kutu adı reddinde betikler DURUR — tek satır, rc 3 (18 Eki · gorev_01M4ZHH1XXGXM5QHV2YTNFSZ30 · gün planı C)
 

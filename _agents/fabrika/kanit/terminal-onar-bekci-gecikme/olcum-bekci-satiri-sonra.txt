@@ -1,0 +1,8 @@
+$ bash -c for k in code akar huma nova; do printf "%-6s " $k; env -i PATH=/usr/bin:/bin HOME=/nonexistent TO_KUTU=$k TO_PROJE=/nonexistent/$k bash -c ". terminal-onar/scripts/ortak.sh >/dev/null 2>&1; printf %s\\\\n \"\$BEKCI_SATIR\"" | cut -c1-60; done
+# rc=0 sure=0.1s zaman=2026-10-18T16:40:49+03:00
+--- stdout ---
+code   * * * * * sleep 10 && if [ -x /nonexistent/code/.claude/skil
+akar   * * * * * sleep 7 && if [ -x /nonexistent/akar/.claude/skill
+huma   * * * * * sleep 33 && if [ -x /nonexistent/huma/.claude/skil
+nova   * * * * * sleep 5 && if [ -x /nonexistent/nova/.claude/skill
+--- stderr ---
