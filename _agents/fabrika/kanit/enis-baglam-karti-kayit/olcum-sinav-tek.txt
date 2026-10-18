@@ -1,5 +1,5 @@
 $ bash baglam-karti/scripts/baglam-karti.test.sh
-# rc=0 sure=2.1s zaman=2026-10-18T16:21:44+03:00
+# rc=0 sure=4.3s zaman=2026-10-18T16:23:16+03:00
 --- stdout ---
 ── İ · istek
   ✓ İ1 geçerli istek rc 0, deftere TEK istek
@@ -13,7 +13,7 @@ $ bash baglam-karti/scripts/baglam-karti.test.sh
 ── C · cevap
   ✓ C1 verildi + kapı geçti: rc 0, adım şablon biçiminde
   ✓ C2 kart metni ne deftere ne ekrana düşer
-  ✓ C3 kapıdan geçmemiş kart · boş kart · kapalıda kart metni · bilinmeyen durum → rc 2
+  ✓ C3 kapıdan geçmemiş kart · boş kart · kapalıda kart metni · bilinmeyen durum · yanlış kutuya HEDEF (×2) → rc 2
   ✓ C4 bu hatalarda deftere istek GİTMEZ
   ✓ C5 kapalı ve dayanak yok: rc 0, kapı '—'
 ── F · fail-closed (kayıt yazılamazsa kart dönmez)

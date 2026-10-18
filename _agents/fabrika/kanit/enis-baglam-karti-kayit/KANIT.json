@@ -1,29 +1,29 @@
 {
   "is": "enis-baglam-karti-kayit",
   "arac": "kanit.py/0.4.0",
-  "guncelleme": "2026-10-18T16:21:44+03:00",
+  "guncelleme": "2026-10-18T16:23:35+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "sinav",
       "asama": "tek",
       "dosya": "olcum-sinav-tek.txt",
-      "sha256": "545b72d047814ccc61135624b830179d7906adfd08aeff22b24a68dc30067da7",
+      "sha256": "33c31c9be5529ee5c689f32320d04651d934df115a723541296b218a211db269",
       "komut": [
         "bash",
         "baglam-karti/scripts/baglam-karti.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T16:21:44+03:00",
-      "sure_sn": 2.1
+      "zaman": "2026-10-18T16:23:16+03:00",
+      "sure_sn": 4.3
     },
     {
       "tur": "olcum",
       "etiket": "repo-kapilari",
       "asama": "tek",
       "dosya": "olcum-repo-kapilari-tek.txt",
-      "sha256": "63d6fe3504cc3661ce0c63be7c74f9df901fd62014d9a5471baa9c4bf75752c1",
+      "sha256": "e71ab2945dd0c48b7d73d53a8fafb4d5d752988479bcdfc49124e33892b49348",
       "komut": [
         "bash",
         "-c",
@@ -31,7 +31,7 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T16:20:38+03:00",
+      "zaman": "2026-10-18T16:23:35+03:00",
       "sure_sn": 0.1
     },
     {
@@ -39,7 +39,7 @@
       "etiket": "mutasyon",
       "asama": "tek",
       "dosya": "olcum-mutasyon-tek.txt",
-      "sha256": "3b5128d8fa3e1bdc792a519887d45b7f28f81d6611829dcb88695676e9fa3f64",
+      "sha256": "24ce62ee7734ef90c31534551ce8d087c46b5feb6ffd197110da3f97414abb89",
       "komut": [
         "bash",
         "baglam-karti/scripts/baglam-karti.mutasyon.sh",
@@ -47,9 +47,9 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T16:21:42+03:00",
-      "sure_sn": 7.9
+      "zaman": "2026-10-18T16:23:35+03:00",
+      "sure_sn": 19.5
     }
   ],
-  "imza": "5994a61f4eb6a1e74eaf6c20be8be216256ef9d90ad753085c6fc0bbae8fb84f"
+  "imza": "af068ce49068f283f656051ed7f3ea3a51843aa85363004f75999f7753d55063"
 }

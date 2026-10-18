@@ -1,0 +1,21 @@
+{
+  "is": "enis-baglam-karti-kayit",
+  "cumle": "ENİS bağlam kartı kayıt aracı: istek/cevap mektubunu şablona göre doğrular, gorev 2M0CV'ye tek adım yazar (karar cümlesi ve kart metni yazılmaz); kayıt yazılamazsa rc≠0, kart dönmez",
+  "istedi": "SERDAR",
+  "aldi": "BERİD",
+  "zaman": "2026-10-18T16:16:59+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)"
+}

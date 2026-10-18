@@ -41,7 +41,7 @@ Varsayılan kayıt görevi: `gorev_01M557ADY4KHRGS99DQ6E2M0CV`.
 ## Değişmezler
 
 - 🔴 Karar cümlesi ve kart metni deftere de ekrana da yazılmaz. Sınav bunu ölçer (İ5, C2).
-- İsteyen yalnız MAISET ya da SERDAR. Başka ad rc 2.
+- İsteyen yalnız MAISET ya da SERDAR. Başka ad rc 2. İstek `HEDEF: enis`; cevap isteyenin kutusuna gider (`SERDAR` → `HEDEF: merkez`, `MAISET` → `HEDEF: maiset`), başka kutu rc 2.
 - `verildi` için `Kapı: geçti` ve dolu `Kart` zorunlu. `kapalı` ve `dayanak yok` kart metni taşımaz.
 - Aynı adım ikinci kez yazılmaz (defter tekilleştirir). Yeniden çalıştırmak güvenlidir.
 - Jeton `curl --config` ile gider: argv'de ve çıktıda görünmez.
@@ -53,4 +53,4 @@ Varsayılan kayıt görevi: `gorev_01M557ADY4KHRGS99DQ6E2M0CV`.
 - Cevabın karşılığı olan isteğin kayıtta olup olmadığına bakmaz.
 - SIHHAT/kasa ya da Sultan'ın bayrağı kapalıyken gelen isteklere "kapalı" dönmek ENİS'in işidir. Araç yalnız o cevabı kaydeder.
 
-Sınav: `scripts/baglam-karti.test.sh` (hermetik, sahte defter, 19 kapı).
+Sınav: `scripts/baglam-karti.test.sh` (hermetik, sahte defter, 19 kapı) · `scripts/baglam-karti.mutasyon.sh` (4 mutasyon, hepsi yakalanmalı).

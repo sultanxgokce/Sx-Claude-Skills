@@ -72,7 +72,9 @@ if m_i:
     except ValueError: red("'Son an' YYYY-MM-DD HH:MM biçiminde olmalı (olan: %s)" % (son or "yok"))
     print("istek %s · %s · ufuk %s · son an %s" % (kimlik, kim, ufuk, son))
 else:
-    if not hedef: red("cevapta 'HEDEF' satırı yok")
+    # Cevap isteyenin kutusuna gider: SERDAR merkezde, MAİŞET kendi odasında. Yanlış kutuya giden kart kayda girmez.
+    beklenen = {"SERDAR": "merkez", "MAISET": "maiset"}[kim]
+    if (hedef or "").lower() != beklenen: red("cevapta 'HEDEF: %s' olmalı (olan: %s)" % (beklenen, hedef or "yok"))
     durum = alan("Durum")
     if durum not in ("verildi", "kapalı", "dayanak yok"): red("'Durum' verildi | kapalı | dayanak yok olmalı (olan: %s)" % (durum or "yok"))
     kapi = (alan("Kapı") or "").split(" ")[0]

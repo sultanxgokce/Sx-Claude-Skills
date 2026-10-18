@@ -36,7 +36,8 @@ M="$T/m"; mkdir -p "$M"
 KARAR="Bu hafta yeni bir satış görüşmesi alınsın mı?"
 KART="Bu hafta tempo düşük tutulursa iyi olur. Yeni görüşme yerine mevcutları kapatmak şu yönde."
 istek() { printf 'HEDEF: enis\nKOPYA: muavin\n\n# SERDAR → ENİS · bağlam kartı isteği 1\n\nKarar:   %s\nUfuk:    %s\nSon an:  %s\n' "$KARAR" "$1" "$2" > "$M/$3"; }
-cevap() { printf 'HEDEF: merkez\nKOPYA: muavin\n\n# ENİS → SERDAR · bağlam kartı 1\n\nDurum:  %s\nKart:   %s\nKapı:   %s\n' "$1" "$2" "$3" > "$M/$4"; }
+cevap() { local h=merkez; case "$4" in ENIS-MAISET-*) h=maiset ;; esac
+  printf 'HEDEF: %s\nKOPYA: muavin\n\n# ENİS → isteyen · bağlam kartı 1\n\nDurum:  %s\nKart:   %s\nKapı:   %s\n' "${HEDEF_ZORLA:-$h}" "$1" "$2" "$3" > "$M/$4"; }
 say() { [ -f "$T/istekler" ] && wc -l < "$T/istekler" | tr -d ' ' || echo 0; }
 K() { bash "$S" kaydet "$@" 2>&1; }
 
@@ -84,7 +85,11 @@ cevap "kapalı" "$KART" "—" ENIS-SERDAR-baglam-karti-20261018-4.md
 K "$M/ENIS-SERDAR-baglam-karti-20261018-4.md" >/dev/null; r3=$?
 cevap "belki" "" "—" ENIS-MAISET-baglam-karti-20261018-5.md
 K "$M/ENIS-MAISET-baglam-karti-20261018-5.md" >/dev/null; r4=$?
-kapi "C3 kapıdan geçmemiş kart · boş kart · kapalıda kart metni · bilinmeyen durum → rc 2" "2|2|2|2" "$r1|$r2|$r3|$r4"
+HEDEF_ZORLA=merkez cevap "kapalı" "" "—" ENIS-MAISET-baglam-karti-20261018-8.md
+K "$M/ENIS-MAISET-baglam-karti-20261018-8.md" >/dev/null; r5=$?
+HEDEF_ZORLA=maiset cevap "verildi" "$KART" "geçti" ENIS-SERDAR-baglam-karti-20261018-10.md
+K "$M/ENIS-SERDAR-baglam-karti-20261018-10.md" >/dev/null; r6=$?
+kapi "C3 kapıdan geçmemiş kart · boş kart · kapalıda kart metni · bilinmeyen durum · yanlış kutuya HEDEF (×2) → rc 2" "2|2|2|2|2|2" "$r1|$r2|$r3|$r4|$r5|$r6"
 kapi "C4 bu hatalarda deftere istek GİTMEZ" "$n0" "$(say)"
 cevap "kapalı" "" "—" ENIS-MAISET-baglam-karti-20261018-6.md
 out="$(K "$M/ENIS-MAISET-baglam-karti-20261018-6.md")"; rc=$?
