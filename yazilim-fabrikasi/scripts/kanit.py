@@ -162,6 +162,7 @@ def kayit_ekle(depo, is_adi, kayit):
 KABUKLAR = {"bash", "sh", "dash", "zsh", "ksh"}
 MASKE_SON = {"echo", "printf", "true", ":", "set"}   # son komut `set …` da 0 döner, öncekinin rc'sini yutar
 AYIRAC = {";", "&&", "||", "&", ";;"}
+ONEKLER = {"command", "builtin", "exec", "time", "nohup", "noglob"}
 
 def _pipefail_etkisi(argumanlar, durum):
     """`set`/kabuk argümanlarında `-o pipefail` (ya da `-euo pipefail`) açar, `+o pipefail` kapatır; yoksa durum aynen kalır."""
@@ -173,12 +174,18 @@ def _pipefail_etkisi(argumanlar, durum):
 
 def boru_denetimi(komut):
     """(durum, neden) — durum: temiz | maske | ayristirilamadi | kapsam-disi"""
-    if not komut or os.path.basename(komut[0]) not in KABUKLAR or "-c" not in komut[1:]:
+    # Kabuk argv'nin BAŞINDA olmak zorunda değil (göz tur 2): `timeout 600 bash -c`, `nice bash -c`, `env X=1 bash -c` da kabuktur.
+    # -c birleşik seçenek kümesinde de olabilir (`bash -lc`, `bash -ec`). Seçenek kümesi = `-` ile başlayan, harflerden oluşan argüman.
+    j = next((k for k, t in enumerate(komut) if os.path.basename(t) in KABUKLAR), None)
+    if j is None:
         return "kapsam-disi", None
-    i = komut.index("-c", 1)
+    i = next((k for k in range(j + 1, len(komut)) if re.fullmatch(r"-[A-Za-z]*c[A-Za-z]*", komut[k])), None)
+    if i is None:
+        return "kapsam-disi", None
     if i + 1 >= len(komut):
         return "ayristirilamadi", "-c sonrası betik yok"
     betik = komut[i + 1]
+    komut = komut[j:]; i -= j   # aşağıdaki pipefail argüman taraması kabuktan itibaren
     try:
         # yeni satır da komut ayıracıdır: ayrıştırma için `;` sayılır (tırnak içindeki satır sonları da — yalnız analiz)
         lx = shlex.shlex(betik.replace("\n", " ; "), posix=True, punctuation_chars=";&|()<>")
@@ -202,6 +209,10 @@ def boru_denetimi(komut):
     if not son:
         return "ayristirilamadi", "son komut bulunamadı"
     oncesi = [t for t in jet[:len(jet) - len(son)] if t not in AYIRAC]
+    # Önekler soyulur (göz tur 2): `command echo`, `builtin echo`, `exec true`, `/bin/echo` aynı maskedir.
+    while len(son) > 1 and son[0] in ONEKLER:
+        son = son[1:]
+    son = [os.path.basename(son[0])] + son[1:]
     if son[0] in MASKE_SON and oncesi:   # betiğin TEK komutu echo ise maskelenen bir iş yoktur (ölçülen şey odur)
         return "maske", f"son komut `{son[0]}` — betiğin çıkış kodu ölçülen işin değil `{son[0]}`'nun"
     # pipefail DURUMU sırayla izlenir (göz tur 1: kelimenin geçmesi yetmiyordu — `echo pipefail` ya da `set +o pipefail` geçiyordu).

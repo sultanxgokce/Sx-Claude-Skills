@@ -1,10 +1,7 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/pthaq/sinav-say.sh /config/projects/_wt/Sx-Claude-Skills-kanit-boru-reddi/yazilim-fabrikasi/scripts sonra
-# rc=0 sure=42.0s zaman=2026-10-18T16:30:34+03:00
+# rc=0 sure=12.3s zaman=2026-10-18T16:34:29+03:00
 --- stdout ---
-test_rc=1 gecen=126 kalan=3 bilinen_t8_kalan=3 yeni_T20_T21_gecen=25 yeni_T20_T21_kalan=0
-  ✗ gerçek kare alındı (playwright var)
-  ✗ ürün imi yoksa rc=2 (ölçer ürünü görmedi — 6. kanun)
-  ✗ imsiz kare manifestte kırmızı
+test_rc=0 gecen=134 kalan=0 bilinen_t8_kalan=0 yeni_T20_T21_gecen=32 yeni_T20_T21_kalan=0
   ✓ T20a pipefail'siz boruyla biten betik REDDEDİLDİ (rc=1)
   ✓ T20a2 reddedilen betik için kayıt YOK
   ✓ T20b '|| true' reddedildi
@@ -24,10 +21,17 @@ test_rc=1 gecen=126 kalan=3 bilinen_t8_kalan=3 yeni_T20_T21_gecen=25 yeni_T20_T2
   ✓ T20m 'set +o pipefail' ile kapatılan boru reddedildi (durum sırayla izlenir)
   ✓ T20n kabuk argümanında '+o pipefail' reddedildi
   ✓ T20o son komut 'set' (öncekinin rc'sini yutar) reddedildi
+  ✓ T20p birleşik seçenek 'bash -lc' de kabuk sayıldı, reddedildi (göz tur 2)
+  ✓ T20q sarmalayıcı arkasındaki kabuk (timeout 60 bash -c) reddedildi
+  ✓ T20r 'command echo' öneki soyuldu, reddedildi (göz tur 2)
+  ✓ T20s tam yollu '/bin/true' de maske sayıldı
+  ✓ T20t önekli TEK komut (command false) maske değil: temiz, kırmızı kayıt
   ✓ T21a mutant (denetim hiç çağrılmıyor) maskeli betiği kabul ediyor → T20a bu mutantta düşerdi
   ✓ T21b mutant (boru kuralı yok) → T20a bu mutantta düşerdi
   ✓ T21c mutant ('|| true' kuralı yok) ortadaki maskeyi kabul ediyor → T20b2 bu mutantta düşerdi
   ✓ T21d mutant (son-echo kuralı yok) → T20c bu mutantta düşerdi
   ✓ T21e mutant (pipefail kapatma yok sayılıyor) → T20m bu mutantta düşerdi
   ✓ T21f mutant (eski kelime araması) → T20l bu mutantta düşerdi
+  ✓ T21g mutant (kabuk yalnız argv başında aranıyor) sarmalayıcıyı kaçırıyor → T20q bu mutantta düşerdi
+  ✓ T21h mutant (önek soyma yok) → T20r bu mutantta düşerdi
 --- stderr ---

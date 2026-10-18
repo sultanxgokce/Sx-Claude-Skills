@@ -1,7 +1,7 @@
 {
   "is": "kanit-boru-reddi",
   "arac": "kanit.py/0.4.0",
-  "guncelleme": "2026-10-18T16:30:34+03:00",
+  "guncelleme": "2026-10-18T16:34:29+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -26,7 +26,7 @@
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "4cd54f38be1071d4f7e75386a2289a125c9b8c45e5f95f7b27e39014fefd67c7",
+      "sha256": "b7ba0a83c6d39965785fff51c566efc6b80707625bc2839b49c989e0c2a54c8d",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/pthaq/sinav-say.sh",
@@ -35,8 +35,8 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T16:30:34+03:00",
-      "sure_sn": 42.0,
+      "zaman": "2026-10-18T16:34:29+03:00",
+      "sure_sn": 12.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)"
     },
     {
@@ -56,5 +56,5 @@
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)"
     }
   ],
-  "imza": "323883cf198276c405b1764b33efd3db76f006566f94ee4f65d2bd11dcc958d5"
+  "imza": "3f732f20a30079a6e3aceca777b44f5ea5025e369625a2a82a1fa5b4d8f6ce13"
 }

@@ -58,11 +58,18 @@ CIKTI="$(KANIT_PLAYWRIGHT_DIR=/nonexistent PATH=/usr/bin:/bin bash "$K" ekran is
 if command -v node >/dev/null 2>&1 && [ -d /config/projects/Nexus/ui/node_modules/playwright ]; then
   # node PATH'te var ama KANIT_PLAYWRIGHT_DIR bozuk; aday dizinler yine bulur → gerçek playwright koşar. Ayrı test:
   printf '<html><title>Urun</title><body><div id="hesap-iste">x</div></body></html>' > "$T/sayfa.html"
-  bash "$K" ekran is-3 gercek --url "file://$T/sayfa.html" --urun-imi '#hesap-iste' >/dev/null 2>&1; RC2=$?
+  CIKTI2="$(bash "$K" ekran is-3 gercek --url "file://$T/sayfa.html" --urun-imi '#hesap-iste' 2>&1)"; RC2=$?
+  if [ "$RC2" -eq 3 ] && grep -q "chromium açılamadı" <<<"$CIKTI2"; then
+    # Modül var ama sürümünün beklediği tarayıcı ikilisi yok (ölçüldü 18 Eki: playwright 1.59.1 chromium-1217 ister, önbellekte
+    # 1223/1228 var — gorev_01M57KA02678683VH1QVAYP7DH). Doğru davranış SARI'dır; kare kapıları bu kutuda ölçülemez, sayılmaz.
+    grep -q "SARI" <<<"$CIKTI2"; g $? "tarayıcı ikilisi yok → SARI rc=3 (kare ölçülemedi, yeşil değil)"
+    echo "  · atlandı: gerçek kare · ürün imi rc=2 · imsiz kare kırmızı (tarayıcı ikilisi yok — sayıma girmez)"
+  else
   [ "$RC2" -eq 0 ] && [ -s "$T/_agents/fabrika/kanit/is-3/ekran-gercek-sonra.png" ]; g $? "gerçek kare alındı (playwright var)"
   bash "$K" ekran is-3 imsiz --url "file://$T/sayfa.html" --urun-imi '#yok-boyle' >/dev/null 2>&1; RC3=$?
   [ "$RC3" -eq 2 ]; g $? "ürün imi yoksa rc=2 (ölçer ürünü görmedi — 6. kanun)"
   python3 -c "import json;m=json.load(open('$T/_agents/fabrika/kanit/is-3/KANIT.json'));assert m['kayitlar'][-1]['renk']=='kirmizi'"; g $? "imsiz kare manifestte kırmızı"
+  fi
 else
   [ "$RC" -eq 3 ]; g $? "playwright yokken rc=3"
   grep -q "SARI" <<<"$CIKTI"; g $? "sarı olduğunu söylüyor"
@@ -339,6 +346,11 @@ bash "$K" olcum is-boru pfkelime --asama tek -- bash -c 'echo pipefail; false | 
 bash "$K" olcum is-boru pfkapat --asama tek -- bash -c 'set -o pipefail; set +o pipefail; false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20m 'set +o pipefail' ile kapatılan boru reddedildi (durum sırayla izlenir)"
 bash "$K" olcum is-boru pfargkapat --asama tek -- bash +o pipefail -c 'false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20n kabuk argümanında '+o pipefail' reddedildi"
 bash "$K" olcum is-boru sonset --asama tek -- bash -c 'false | cat; set -o pipefail' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20o son komut 'set' (öncekinin rc'sini yutar) reddedildi"
+bash "$K" olcum is-boru birlesik --asama tek -- bash -lc 'false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20p birleşik seçenek 'bash -lc' de kabuk sayıldı, reddedildi (göz tur 2)"
+bash "$K" olcum is-boru sarmal --asama tek -- timeout 60 bash -c 'false | tail -1' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20q sarmalayıcı arkasındaki kabuk (timeout 60 bash -c) reddedildi"
+bash "$K" olcum is-boru onek --asama tek -- bash -c 'false; command echo bitti' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20r 'command echo' öneki soyuldu, reddedildi (göz tur 2)"
+bash "$K" olcum is-boru yol --asama tek -- bash -c 'false; /bin/true' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20s tam yollu '/bin/true' de maske sayıldı"
+bash "$K" olcum is-boru onekiz --asama tek -- bash -c 'command false' >/dev/null 2>&1; _alan onekiz "temiz"; g $? "T20t önekli TEK komut (command false) maske değil: temiz, kırmızı kayıt"
 
 echo "════ T21 · MUTASYON: boru denetiminin her kolu kaldırılınca T20 kırmızıya döner ════"
 _mutkos() { KANIT_DEPO="$T" python3 "$MC/kanit.py" olcum is-boru-mut "$1" --asama tek -- bash -c "$2" >/dev/null 2>&1; }
@@ -354,6 +366,10 @@ _mut 'durum = a[0] == "-"' 'durum = True'
 _mutkos m5 'set -o pipefail; set +o pipefail; false | cat'; [ $? -eq 0 ]; g $? "T21e mutant (pipefail kapatma yok sayılıyor) → T20m bu mutantta düşerdi"
 _mut 'pipefail = _pipefail_etkisi(komut[1:i], False)' 'pipefail = any("pipefail" in t for t in jet)'
 _mutkos m6 'echo pipefail; false | cat'; [ $? -eq 0 ]; g $? "T21f mutant (eski kelime araması) → T20l bu mutantta düşerdi"
+_mut 'j = next((k for k, t in enumerate(komut) if os.path.basename(t) in KABUKLAR), None)' 'j = 0 if os.path.basename(komut[0]) in KABUKLAR else None'
+KANIT_DEPO="$T" python3 "$MC/kanit.py" olcum is-boru-mut m7 --asama tek -- timeout 60 bash -c 'false | tail -1' >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T21g mutant (kabuk yalnız argv başında aranıyor) sarmalayıcıyı kaçırıyor → T20q bu mutantta düşerdi"
+_mut 'while len(son) > 1 and son[0] in ONEKLER:' 'while False:'
+_mutkos m8 'false; command echo bitti'; [ $? -eq 0 ]; g $? "T21h mutant (önek soyma yok) → T20r bu mutantta düşerdi"
 
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
