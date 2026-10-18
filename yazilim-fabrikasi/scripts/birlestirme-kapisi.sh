@@ -49,10 +49,40 @@ fi
 [ -n "$IS" ] || { _h "iş adı gerekiyor (ya da --pr N)"; exit 2; }
 
 KART="$DEPO/_agents/fabrika/kartlar/$IS.json"
-DZ="$WT/_agents/fabrika/kanit/$IS"; [ -d "$DZ" ] || DZ="$DEPO/_agents/fabrika/kanit/$IS"
+# 🔴 KANIT TEK KURALLA ARANIR (retro W42 ders M3 · gorev_01M57ZWR5MAMW513WYBX5MB3J8): kapı eskiden kanıtı "çağrıldığı ağaç,
+#    yoksa birincil" diye arıyordu. Birleştirme çoğu zaman BİRİNCİL checkout'tan `--pr` ile yapılır; kanıt ise iş alanında ya da
+#    PR'ın dalında durur → kapı "kanıt YOK" dedi ve iş kaçışla (FABRIKA_KAPISIZ) birleşti (kaçış defteri: 15 Eki compact-kurali).
+#    Artık her çağrı AYNI sırayla bakar, hangisini kullandığını söyler:
+#      1) dalı iş adıyla aynı olan ağaç — önce çağrılan ağaç, sonra birincilin iş alanları (dal adı = kart adı; önek atılır)
+#      2) --pr verildiyse PR'ın BAŞI (origin pull/<N>/head; yalnız kanıt dizini geçici yere çıkarılır, ağaca dokunulmaz)
+#      3) birincil depo (birleşmiş iş, ya da tek ağaç kurulum)
+#    Dalı iş adıyla tutmayan bir ağaçtaki kopya ARANMAZ: bayat kopyadır, o işin kanıtı değil.
+KANIT_GECICI=""; trap '[ -n "$KANIT_GECICI" ] && rm -r -f "$KANIT_GECICI"' EXIT
+dal_tutar() { local b; b="$(git -C "$1" symbolic-ref --short -q HEAD 2>/dev/null)" || return 1; [ "${b##*/}" = "$IS" ]; }
+kanit_bul() {
+  local t yol agaclar=()
+  mapfile -t agaclar < <(printf '%s\n' "$WT"; git -C "$DEPO" worktree list --porcelain 2>/dev/null | sed -n 's/^worktree //p')   # boşluklu yol bölünmez
+  for t in "${agaclar[@]}"; do
+    yol="$t/_agents/fabrika/kanit/$IS"
+    if [ -f "$yol/KANIT.json" ] && dal_tutar "$t"; then
+      DZ="$yol"; [ "$t" = "$WT" ] && DZ_YER="çağrılan ağaç ($t, dal iş adıyla aynı)" || DZ_YER="iş alanı ($t, dal iş adıyla aynı)"; return 0
+    fi
+  done
+  if [ -n "$PR" ] && git -C "$DEPO" remote get-url origin >/dev/null 2>&1 && git -C "$DEPO" fetch -q origin "pull/$PR/head" 2>/dev/null; then
+    KANIT_GECICI="$(mktemp -d)"
+    if git -C "$DEPO" archive FETCH_HEAD "_agents/fabrika/kanit/$IS" 2>/dev/null | tar -x -C "$KANIT_GECICI" 2>/dev/null && [ -f "$KANIT_GECICI/_agents/fabrika/kanit/$IS/KANIT.json" ]; then
+      DZ="$KANIT_GECICI/_agents/fabrika/kanit/$IS"; DZ_YER="PR #$PR başı ($(git -C "$DEPO" rev-parse --short FETCH_HEAD 2>/dev/null))"; return 0
+    fi
+  fi
+  if [ -f "$DEPO/_agents/fabrika/kanit/$IS/KANIT.json" ]; then DZ="$DEPO/_agents/fabrika/kanit/$IS"; DZ_YER="birincil depo ($DEPO)"; return 0; fi
+  DZ="/kanit-bulunamadi/_agents/fabrika/kanit/$IS"   # bulunamadı: hiçbir yeri GÖSTERMEZ (aşağıdaki her okuma "yok" görür; mutant birincil-aranmaz)
+  DZ_YER="hiçbir yerde (arandı: dalı '$IS' olan ağaçlar${PR:+ · PR #$PR başı} · birincil depo)"; return 1
+}
+DZ=""; DZ_YER=""; kanit_bul || true
 
 eksik=0; olcemedi=0
 _y "── BİRLEŞTİRME KAPISI · iş: $IS"
+_y "  · kanıt yeri: $DZ_YER"
 
 # 1 · KART
 if [ -f "$KART" ]; then

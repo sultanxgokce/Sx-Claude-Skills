@@ -1,0 +1,21 @@
+{
+  "is": "kapi-kanit-tek-kural",
+  "cumle": "birlestirme-kapisi kanıt dizinini iş alanında, çağrılan ağaçta, birincil depoda ve PR başında TEK kuralla (aynı sırayla) arasın, hangisini kullandığını söylesin; birincilden --pr ile çağrıda iş alanındaki kanıtı bulsun ki kanıt başka yerde diye kaçış gerekmesin; kaçış defterinin 9 satırı sınav fikstürü (retro W42 ders M3, gorev_01M57ZWR5MAMW513WYBX5MB3J8)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-18T23:29:14+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/kapi-kanit-tek-kural/ (sınav + mutasyon)",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)"
+}
