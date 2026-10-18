@@ -117,4 +117,7 @@ sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kald�
   tavan ve ilerleme sayımına girmez (sıfırlama tavanı KALDIRMAZ: sonra yine 3 düşük tur = tıkandı); ayıklanmış üretim
   farkı eşiği aşarsa kırpıp denetlemek yerine **İŞİ BÖL** (rc=1, DENETIM yazılmaz); ayıklama kapalıyken ölçemediğine böl
   demez, eski kırpma sürer. (3) `birlestirme-kapisi.sh` — daraltma kaydını okur: son denetim daraltmadan ÖNCEYSE eski
-  cümlenin 5/E'si geçmez. Kaçış yolu YOK. Sınav: kart +12 (T11/T12), denetçi +15 (T-DARALT/T-BOL), kapı +9 (T13 + mutasyon).
+  cümlenin 5/E'si geçmez. Kaçış yolu YOK. Bağımsız göz tur 1 üç bulgu: sınıflı kartta Sultan'ın 'daralt' kararı TEK
+  KULLANIMLIK (`kullanildi` damgası; eski söz sonraki daraltmayı açmaz) · `--yeni` ad doğrulanır (yol ayracı/'..' yok) ·
+  iki kart ATOMİK yazılır (kalan kart yazılamazsa ana kart dokunulmaz, ana kart yazılamazsa kalan geri alınır).
+  Sınav: kart +20 (T11/T12/T12b), denetçi +15 (T-DARALT/T-BOL), kapı +9 (T13 + mutasyon).

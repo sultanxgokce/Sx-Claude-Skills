@@ -1,0 +1,52 @@
+{
+  "tur": 1,
+  "is": "fabrika-daraltma-adimi",
+  "pr": "380",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T17:40:43+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": null,
+  "yazan_model_kaynak": null,
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 57747,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 25795
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Daraltma hattı; kalan işi yeni karta ayırma, cümleyi küçültme, tur sayımını sıfırlama, kapıyı yeni 5/E turuna bağlama ve büyük üretim farkında “İŞİ BÖL” deme yönleriyle talebi karşılıyor. Ancak sınıflı işte eski bir Sultan kararının sonraki daraltmaları da yetkilendirmesi ve `--yeni` değerinin güvenli kart adı olarak doğrulanmaması önce çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Sınıflı kartta herhangi bir geçmiş `daralt` kararı bütün sonraki daraltmaları da yetkilendiriyor; her daraltma için güncel/tek kullanımlık Sultan kararı bağı kurulmamış.",
+        "kanit": "Yetki kontrolü yalnız `sultan_kararlari` içinde herhangi bir `karar == \"daralt\"` kaydı bulunmasına bakıyor. Aynı kart ikinci kez daraltıldığında önceki karar hâlâ bu koşulu sağlar; T12 yalnız ilk daraltmayı sınıyor, sınıflı kartın ikinci daraltmasını sınamıyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh: daralt dalındaki `any(x.get(\"karar\")==\"daralt\" ...)` kontrolü; yazilim-fabrikasi/scripts/kart.test.sh:T12",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "`--yeni` güvenli bir iş/kart adı olarak doğrulanmıyor; yol ayraçları ve `..` kabul edildiği için kart dizini dışındaki bir `.json` hedeflenebilir veya yazma yarıda kalabilir.",
+        "kanit": "Yeni ad `YENI=\"${YENI:-$IS-kalan}\"` ile doğrudan alınarak hem `[ -f \"$KD/$YENI.json\" ]` kontrolünde hem de Python'a `\"$KD/$YENI.json\"` hedefi olarak veriliyor. Ön doğrulama döngüsü yalnız `|` ve satır sonunu reddediyor; `/` ile `..` reddedilmiyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh: daralt dalındaki `for v in KALAN CUMLE OTURUM YENI`, `YENI=...` ve `$KD/$YENI.json` satırları",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Daraltma iki kartı atomik yazmıyor; yeni kartın yazılması başarısız olursa ana kart önceden daraltılmış ve karar/geçmiş kaydı işlenmiş halde kalabilir.",
+        "kanit": "Python bloğu önce `json.dump(k,open(yol,...))` ile mevcut kartı kalıcılaştırıyor, ardından yeni kart nesnesini kurup `json.dump(y,open(yyol,...))` çağırıyor. İkinci açma/yazma hatasında `|| exit 1` yalnız komutu başarısız bitirir; ilk dosya geri alınmaz.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh: daralt Python bloğundaki ardışık iki `json.dump` çağrısı",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kart, kapı, denetçi, fark ayıklama ve kutu-dışı sınavları yeşil, ayrıca önce/sonra ölçümleri ile mutasyon çıktısı verilmiş. Bununla birlikte `denetci-mutasyon` kaydı bilinçli olarak 5 düşen sınavı gösterirken kabuk boru hattı nedeniyle rc=0/yeşil olmuş; bu kayıt tek başına başarı kanıtı sayılamaz, fakat tam `denetci-sinav` kaydındaki 179/179 sonucu ana regresyon kanıtını sağlıyor. Bulunan yetki, yol doğrulama ve atomiklik kenarları mevcut sınavlarda ölçülmemiş."
+  }
+}

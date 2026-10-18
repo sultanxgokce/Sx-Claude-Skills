@@ -1,7 +1,7 @@
 {
   "is": "fabrika-daraltma-adimi",
   "arac": "kanit.py/0.4.0",
-  "guncelleme": "2026-10-18T17:35:16+03:00",
+  "guncelleme": "2026-10-18T17:43:38+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -126,7 +126,22 @@
       "renk": "yesil",
       "zaman": "2026-10-18T17:35:16+03:00",
       "sure_sn": 199.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "t2-kart-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-t2-kart-sinav-sonra.txt",
+      "sha256": "08dd1dbb587df41c77ccf79f74dcfb284cf22f7d363183355ee8b4b119a4f44d",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T17:43:38+03:00",
+      "sure_sn": 2.9
     }
   ],
-  "imza": "800ffa07d86485ad00b1267a0c2bbb1ed21a83cee8c4eeb8c80321b8a6322d9a"
+  "imza": "56de793c3a859e25fe51eb06102247c240bd723f11b3844dee5fd7aa000d8991"
 }

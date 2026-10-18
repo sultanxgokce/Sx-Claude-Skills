@@ -133,5 +133,18 @@ python3 -c "import json;k=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-da
 bash "$KT" sultan-dedi is-dar-s --karar daralt --oturum ref-s --soz "daralt, kalanı sonra" --beyan MUAVIN --gerekce "ikinci yarı ayrı PR ile gelsin, ilk yarı bitti" >/dev/null 2>&1
 bash "$KT" daralt is-dar-s --kalan "kalan yarı yeterince uzun bir cümle burada" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-s >/dev/null 2>&1; g $? "Sultan 'daralt' kararı karttayken daraltıldı"
 python3 -c "import json;y=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-dar-s-kalan.json'));assert y['sultan']==True and y['siniflar']==['para']"; g $? "kalan kart da SINIFLI doğdu (sınıf miras)"
+echo "════ T12b · Sultan 'daralt' kararı TEK KULLANIMLIK; --yeni ad güvenli; iki kart atomik (göz tur 1) ════"
+bash "$KT" daralt is-dar-s --kalan "üçüncü parça yeterince uzun bir cümle burada" --cumle "daha da daraltılmış cümle yeterince uzun" --oturum ref-s --yeni is-dar-s-3 >/dev/null 2>&1; [ $? -eq 1 ]; g $? "aynı Sultan kararıyla İKİNCİ daraltma REDDEDİLDİ (karar tüketildi)"
+python3 -c "import json;k=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-dar-s.json'));sk=k['sultan_kararlari'][-1];assert sk['kullanildi']['kalan_kart']=='is-dar-s-kalan' and len(k['daraltmalar'])==1"; g $? "kullanılan karar karta işaretli, ikinci daraltma yazılmadı"
+bash "$KT" daralt is-dar --kalan "yol ayraçlı ad denemesi yeterince uzun" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-d --yeni "../kacak" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "--yeni '../kacak' REDDEDİLDİ"
+bash "$KT" daralt is-dar --kalan "yol ayraçlı ad denemesi yeterince uzun" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-d --yeni "a/b" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "--yeni 'a/b' REDDEDİLDİ"
+[ ! -e "$T/depo2/_agents/fabrika/kacak.json" ] && [ ! -e "$T/depo2/_agents/fabrika/kartlar/a" ]; g $? "dizin dışına hiçbir şey yazılmadı"
+bash "$KT" ac is-at --is "atomik yazım denemesi için iş cümlesi burada" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+mkdir -p "$T/depo2/_agents/fabrika/kartlar/is-at-kalan.json.tmp"   # geçici dosya yolu bir DİZİN → kalan kart yazılamaz
+ONCE="$(md5sum < "$T/depo2/_agents/fabrika/kartlar/is-at.json")"
+bash "$KT" daralt is-at --kalan "kalan parça yeterince uzun bir cümle burada" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-at >/dev/null 2>&1; [ $? -eq 1 ]; g $? "kalan kart yazılamayınca rc=1"
+[ "$(md5sum < "$T/depo2/_agents/fabrika/kartlar/is-at.json")" = "$ONCE" ]; g $? "ana kart bayt bayt DEĞİŞMEDİ (atomik)"
+[ ! -f "$T/depo2/_agents/fabrika/kartlar/is-at-kalan.json" ]; g $? "yarım kalan kart yok"
+rmdir "$T/depo2/_agents/fabrika/kartlar/is-at-kalan.json.tmp" 2>/dev/null
 
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]
