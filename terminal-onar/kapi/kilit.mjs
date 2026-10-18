@@ -1,5 +1,6 @@
 // kilit.mjs — süreçler arası kayıt kilidi (Parça B7). Kapı ve günlük bekçi turu AYNI kayda yazar; ikisi de bu kilidi alır.
-// Sınav: kilit.test.mjs (DV32–j). Kullanan: kadro-yaz.mjs (kadroYaz tüm okuma-yazma boyunca tutar).
+// Sınav: kilit.test.mjs (DV32–j) · dava.test.mjs DV32–DV32d. Kullanan: kadro-yaz.mjs (kadroYaz tüm okuma-yazma boyunca tutar) ·
+// sunucu.mjs hal ucu ve dava-bekci.mjs (bütün işlem boyunca tutar, içeride kadroYazKilitAltinda).
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';

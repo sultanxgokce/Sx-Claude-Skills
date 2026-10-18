@@ -154,6 +154,32 @@ tmux -L "$L" kill-session -t =rolz; : > "$T/baslat-dus"
 out="$(KI ac rolz 2>&1)"; rc=$?
 kapi "I7 baslat-claude.sh düşerse 'açıldı' DENMEZ: rc 1, sebep söylenir, oturum kalmaz" "1|1|0" "$rc|$(echo "$out" | grep -c 'düştü')|$(tmux -L "$L" has-session -t =rolz 2>/dev/null && echo 1 || echo 0)"
 rm -f "$T/baslat-dus"
+echo "── V · DAVA kolu (Dava Rafı B10): rol: dava → claude --resume <session_id>, baslat-claude.sh ÇAĞRILMAZ"
+# 16 Eki ölçüldü (2.1.301): baslat-claude.sh'nin koştuğu `claude --session-id <id>` konuşması VAR olan kimlikte "already in use" deyip çıkar.
+cat >> "$IK/iskan-registry.yaml" <<Y
+  - id: 2025/42
+    rol: dava
+    tmux: "veli-dava:0"
+    arz_adi: "İşçilik alacağı"
+    session_id: 77777777-2222-4333-8444-555555555555
+    cwd: $IK/calis
+    bagla_ile: true
+  - id: 2025/43
+    rol: dava
+    tmux: "yeni-dava:0"
+    session_id: 66666666-2222-4333-8444-555555555555
+Y
+: > "$T/ev/.claude/projects/p/77777777-2222-4333-8444-555555555555.jsonl"
+printf '#!/usr/bin/env bash\necho "claude $* $(pwd)" >> "%s"\nexec sleep 300\n' "$T/defter" > "$T/claude"; chmod +x "$T/claude"
+kapi "V1 dava satırı → yol=dava, rol = dosya no, konuşma var → resume" "yok|dava|2025/42|true" "$(KI durum veli-dava | j '"|".join([j["durum"],j["yol"],j["rol"],str(j["resume"]).lower()])')"
+: > "$T/defter"; out="$(TO_CLAUDE="$T/claude" KI ac veli-dava --eski 2>&1)"; rc=$?; sleep 0.3
+kapi "V2 aç → rc 0, oturum var, claude --resume <kayıttaki session_id> kayıttaki cwd'de; baslat-claude.sh ÇAĞRILMADI" "0|1|claude --resume 77777777-2222-4333-8444-555555555555 $IK/calis|0" "$rc|$(tmux -L "$L" has-session -t =veli-dava 2>/dev/null && echo 1 || echo 0)|$(grep '^claude' "$T/defter" | tail -1)|$(grep -c '^baslat' "$T/defter")"
+out="$(TO_CLAUDE="$T/claude" KI ac yeni-dava --eski 2>&1)"; rc=$?
+kapi "V3 konuşması olmayan dava AÇILMAZ (kimliksiz Claude yok): rc 1, sebep söylenir, oturum doğmaz" "1|1|0" "$rc|$(echo "$out" | grep -c 'eski sohbeti bulunamadı')|$(tmux -L "$L" has-session -t =yeni-dava 2>/dev/null && echo 1 || echo 0)"
+tmux -L "$L" kill-session -t =veli-dava 2>/dev/null
+out="$(TO_CLAUDE="$T/yok-claude" KI ac veli-dava --eski 2>&1)"; rc=$?
+kapi "V4 claude bulunamazsa 'açıldı' DENMEZ: rc 1, oturum doğmaz" "1|1|0" "$rc|$(echo "$out" | grep -c 'claude bu kutuda bulunamadı')|$(tmux -L "$L" has-session -t =veli-dava 2>/dev/null && echo 1 || echo 0)"
+kapi "V5 dava olmayan İSKÂN koltuğu yine baslat yolunda (dava kolu onu ele geçirmez)" "baslat" "$(KI durum rolw | j 'j["yol"]')"
 echo "── G · GRID ekip-ac.sh açıcı sayılmaz (İSKÂN öncesi yarım kutu: baslat yok, aile kaydında rol var)"
 GK="$T/grid"; mkdir -p "$GK/scripts" "$GK/_agents/handoff"
 printf 'uyeler:\n  - id: ROLG\n    tmux: "rolg:0"\n' > "$GK/_agents/handoff/aile-registry.yaml"

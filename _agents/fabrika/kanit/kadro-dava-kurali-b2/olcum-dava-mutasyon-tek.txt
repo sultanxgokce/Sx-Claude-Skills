@@ -1,0 +1,16 @@
+$ bash terminal-onar/kapi/dava.mutasyon.sh
+# rc=0 sure=83.2s zaman=2026-10-18T16:44:08+03:00
+--- stdout ---
+  ✓ M1 Aç yer açmaz (tavan yok sayılır) — sınav KIRMIZI
+  ✓ M2 yer açan dondurma geri alınırken son_calisma artığı kalır — sınav KIRMIZI
+  ✓ M3 kişiye bağlama kimliği açıcının okumadığı dosyaya yazar — sınav KIRMIZI
+  ✓ M4 bekçi personeli de dondurur (rol=dava süzgeci yok) — sınav KIRMIZI
+  ✓ M5 bağla, iki Claude'lu oturumda ilkini seçer — sınav KIRMIZI
+  ✓ M6 bağlamayı geri al, bagla_ile olmayan kaydı da siler — sınav KIRMIZI
+  ✓ M7 hal ucu kilidi bekçiden AYRI dosyada alır (kapı ile bekçi birbirini görmez) — sınav KIRMIZI
+  ✓ M8 bekçi turu kilit almaz (kapı yazarken bekçi de yazar) — sınav KIRMIZI
+  ✓ M9 dava dondurma kilit altında kilidi YENİDEN ister (kendi kendini kilitler → yer aç 503) — sınav KIRMIZI
+  ✓ M10 dava satırı iskana yazılır (eşitleyici ezer, davalar.yaml boş kalır) — sınav KIRMIZI
+
+MUTASYON: 10 yakalandı · 0 kaçtı
+--- stderr ---
