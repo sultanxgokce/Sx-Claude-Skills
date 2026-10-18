@@ -147,6 +147,23 @@ esac
 mkdir -p "$DZ"
 ONCEKI=$(ls "$DZ"/DENETIM-*.json 2>/dev/null | wc -l)
 TUR=$((ONCEKI+1))
+# ── DARALTMA SIFIRI (PCP7J, 18 Eki 2026): kart daraltıldıysa (kart.sh daralt) daraltmadan ÖNCEKİ turlar yeni
+#    cümleyi puanlamadı; tavan ve "ilerliyor mu" yalnız daraltma SONRASI turlara bakar. Kart okunamazsa 0
+#    (daraltma yok sayılır — kapı aynı kaydı ayrıca okur, bu kapı tek değildir).
+TUR_SIFIR=0
+_KY="$(kart_yolu 2>/dev/null || true)"
+if [ -n "$_KY" ] && [ -r "$_KY" ]; then
+  TUR_SIFIR="$(python3 - "$_KY" <<'PYTS'
+import json,sys
+try:
+    k=json.load(open(sys.argv[1],encoding="utf-8")); d=k.get("daraltmalar") or []
+    print(int(d[-1].get("tur_sifir",0)) if d else 0)
+except Exception: print(0)
+PYTS
+)"
+  case "$TUR_SIFIR" in ''|*[!0-9]*) TUR_SIFIR=0 ;; esac
+  [ "$TUR_SIFIR" -gt 0 ] && _bilgi "· kart DARALTILMIŞ: ilk $TUR_SIFIR tur eski cümleye ait, sayılmıyor (tavan ve ilerleme daraltmadan sonra başlar)"
+fi
 # ── SAYILI TUR (gorev WC3VBZAA · ölçülmüş vaka: cloudtop #635 DÖRT turunu "canlıda kurulu
 #    değil" bulgusuyla yaktı, kod kusursuzdu ve iş hiç ilerlemedi). Tavan ham tur sayısına değil,
 #    İŞIN KUTUDA İLERLETİLEBİLDİĞİ tur sayısına uygulanır. Bir tur, bulgularının HEPSİ kutu-dışıysa
@@ -159,11 +176,12 @@ TUR=$((ONCEKI+1))
 #    İLERLİYOR demektir; sayacı orada SIFIRLAMAK gerekir. İki sayı ayrı üretiliyor:
 #    SAYILI (tavan için, kümülatif) ve ARDISIK (fren için, yalnız KUYRUKTAKİ dizi).
 read -r SAYILI ARDISIK_ONCE <<EOSAY
-$(python3 - "$DZ" <<'PYSAY'
+$(python3 - "$DZ" "$TUR_SIFIR" <<'PYSAY'
 import json,glob,os,sys
-sayan=[]
+sayan=[]; sifir=int(sys.argv[2])
 for y in sorted(glob.glob(os.path.join(sys.argv[1],"DENETIM-[0-9]*.json")),
                 key=lambda p:int(p.rsplit("-",1)[1].split(".")[0])):
+    if int(y.rsplit("-",1)[1].split(".")[0]) <= sifir: continue   # daraltmadan önceki tur: eski cümle, sayılmaz
     try: b=json.load(open(y,encoding="utf-8"))["sonuc"]["bulgular"]
     except Exception: sayan.append(True); continue   # okunamayan tur SAYILIR (şüphede muafiyet YOK)
     sayan.append(bool(not b or any(x.get("agirlik")!="kutu-disi" for x in b)))
@@ -177,8 +195,8 @@ PYSAY
 EOSAY
 case "$SAYILI" in ''|*[!0-9]*) SAYILI="$ONCEKI" ;; esac
 case "${ARDISIK_ONCE:-}" in ''|*[!0-9]*) ARDISIK_ONCE=0 ;; esac
-ilerliyor_mu() {  # önceki iki turu kıyasla: puan↑ VE açık bulgu↓
-  [ "$ONCEKI" -ge 2 ] || return 1
+ilerliyor_mu() {  # önceki iki turu kıyasla: puan↑ VE açık bulgu↓ (daraltma sonrası en az iki tur gerekir)
+  [ $((ONCEKI - TUR_SIFIR)) -ge 2 ] || return 1
   python3 - "$DZ" "$ONCEKI" <<'PY'
 import json,sys,os
 dz,n=sys.argv[1],int(sys.argv[2])
@@ -193,7 +211,7 @@ tikandi_raporu() {
   _bilgi "⛔ TIKANDI — $ONCEKI turda 5+E'ye ulaşılamadı (tavan $TAVAN, ilerleyene +1, $MUTLAK mutlak; kutu-dışı bulgulu turlar sayılmaz)."
   _bilgi "   Üç yol (karar iş sahibinin/reisin, sınıf işiyse Sultan'ın):"
   _bilgi "   1) DEVAM — gerekçeyle: neden bir tur daha işe yarar?"
-  _bilgi "   2) KAPSAMI DARALT — iş kartını küçült, geçen kısmı gönder, kalanı yeni kart"
+  _bilgi "   2) KAPSAMI DARALT — kart.sh daralt <iş> --kalan \"<bulgu>\" --cumle \"<daraltılmış cümle>\" --oturum <ref>: kalan yeni karta, tur sayacı sıfırlanır, aynı dal/PR sürer"
   _bilgi "   3) GERİ AL — alanı kapat, iş kartına 'tıkandı' damgası, ders deftere"
 }
 # 🔴 SULTAN KAPISI (23 Eyl 2026): tıkandı raporu "karar sınıf işiyse Sultan'ın" diyordu ama
@@ -479,6 +497,18 @@ HAM="$TMP/ham.json"
 #    kırpılmamış turda da (oldu=false), "yok" ile "yazılmadı" ayırt edilsin. Kırpma Codex yoluna özgüdür (tek argüman
 #    sınırı ~128 KB); DENETCI_KIRP_ESIK dikişi sınav için eşiği düşürür ve kırpmayı sahte denetçi yolunda da uygular.
 KIRP_ESIK="${DENETCI_KIRP_ESIK:-110000}"; KIRP_TETIK=$((KIRP_ESIK + KIRP_ESIK/11))   # varsayılan 110000 → 120000
+# ── İŞİ BÖL (PCP7J, 18 Eki 2026): kanıt ayıklandıktan sonra ÜRETİM FARKI tek başına eşiği aşıyorsa kırpıp
+#    denetlemek yerine durulur: kırpılmış farkta denetçi sonu görmeden puan veriyordu (PR #329: üretim kodu
+#    kırpıkta kaldı). Tur YAKILMAZ (DENETIM yazılmaz), rc=1 ile adım 2'ye dönülür; çare kart.sh daralt ile
+#    iki iş. Kaçış yolu YOK — kart cümlesinde yok (18 Eki dersi).
+DIFF_B=$(wc -c < "$TMP/diff.patch" 2>/dev/null || echo 0)
+#    Yalnız AYIKLANMIŞ farkta anlamlı: ayıklama kapalıysa (DENETCI_KANIT_AYIKLA=0) kanıt da farkın içindedir, üretim
+#    payı ölçülemez → eski kırpma yolu sürer (ölçemediğine "böl" demez).
+if { [ "$DENETCI" = "codex" ] || [ -n "${DENETCI_KIRP_ESIK:-}" ]; } && [ "${DENETCI_KANIT_AYIKLA:-1}" != "0" ] && [ "$DIFF_B" -gt "$KIRP_ESIK" ]; then
+  _hata "İŞİ BÖL — üretim farkı $DIFF_B bayt > $KIRP_ESIK (kanıt dosyaları ayıklandıktan sonra): kırpık farkla denetim yapılmaz, tur yakılmadı."
+  _bilgi "   yol: kart.sh daralt <iş> --kalan \"<ikinci yarı>\" --cumle \"<bu PR'ın yaptığı>\" --oturum <ref> → kalan yarı yeni kart/dal; bu dalda yalnız daraltılmış cümle kalsın"
+  exit 1
+fi
 ISTEM_BAYT=$(wc -c < "$TMP/istem.md"); KIRPILDI=0
 if { [ "$DENETCI" = "codex" ] || [ -n "${DENETCI_KIRP_ESIK:-}" ]; } && [ "$ISTEM_BAYT" -gt "$KIRP_TETIK" ]; then
   # İstem ARGÜMAN olarak verilir, dosya olarak değil: bu konteynerde Codex'in kum havuzu (bwrap) ad-alanı

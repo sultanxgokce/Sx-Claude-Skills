@@ -1,0 +1,132 @@
+{
+  "is": "fabrika-daraltma-adimi",
+  "arac": "kanit.py/0.4.0",
+  "guncelleme": "2026-10-18T17:35:16+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kart-daralt-yok",
+      "asama": "once",
+      "dosya": "olcum-kart-daralt-yok-once.txt",
+      "sha256": "febbbfb6aeba88399609525406529ab11ba92c9090fc4ade73197ebd1c2dff72",
+      "komut": [
+        "bash",
+        "-c",
+        "grep -c '^  daralt)' /tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/kart-eski.sh; echo exit=$?"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T17:21:18+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-karar-okumuyor",
+      "asama": "once",
+      "dosya": "olcum-kapi-karar-okumuyor-once.txt",
+      "sha256": "6888841aa97c2d7de1774c163c80f2291ede9f679cbb7545bcf57b79730e1f81",
+      "komut": [
+        "bash",
+        "-c",
+        "grep -c 'daraltmalar\\|reis_kararlari' /tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/kapi-eski.sh; echo exit=$?"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T17:21:18+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sinav-sonra.txt",
+      "sha256": "795be17a5f4f7676009d14193ab92cc4d34dd3b924ab58322ba41e53865a48bd",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T17:21:33+03:00",
+      "sure_sn": 14.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinav-sonra.txt",
+      "sha256": "6397e4829d3c096c3e9024d1de4c8212ef689ae8393c36e65321862bd39290eb",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T17:22:03+03:00",
+      "sure_sn": 30.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "fark-ayikla-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-fark-ayikla-sinav-sonra.txt",
+      "sha256": "0ea10b5d2a92efb8e1a5c277b65be80699d5ab66d4c504f187359a140da2f8af",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-fark-ayikla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T17:22:10+03:00",
+      "sure_sn": 7.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kutu-disi-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kutu-disi-sinav-sonra.txt",
+      "sha256": "e1a55319362ec2cc004ba94aca7df978bc4829e805cfdf2c90c6f5372b978a84",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-kutu-disi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T17:22:37+03:00",
+      "sure_sn": 27.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-sinav-sonra.txt",
+      "sha256": "1028ed77226b72477ba2a15a29befdaa95045d465f14ee9214160836ad3a79c6",
+      "komut": [
+        "bash",
+        "-c",
+        "bash yazilim-fabrikasi/scripts/denetci.test.sh 2>&1 | tail -n 3"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T17:31:57+03:00",
+      "sure_sn": 254.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-mutasyon",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-mutasyon-sonra.txt",
+      "sha256": "0fc4d9b902bb5a7fdf91be4661cbd1ae3439b10bec3f82107b034d2668ab582c",
+      "komut": [
+        "bash",
+        "-c",
+        "bash yazilim-fabrikasi/scripts/denetci.test.sh 2>&1 | grep -E '✗|SONUÇ' | head -n 12"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T17:35:16+03:00",
+      "sure_sn": 199.1
+    }
+  ],
+  "imza": "800ffa07d86485ad00b1267a0c2bbb1ed21a83cee8c4eeb8c80321b8a6322d9a"
+}

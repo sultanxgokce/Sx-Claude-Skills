@@ -312,8 +312,10 @@ bash "$K" olcum is-kirp olc --asama tek -- echo 1 >/dev/null 2>&1
 SAHTE_ISTEM_KOPYA="$T/istem-kucuk.md" SAHTE_JSON="$(J 3 H "$B")" DENETCI_KIRP_ESIK=200000 bash "$D" is-kirp --diff "$T/d.patch" >/dev/null 2>&1
 python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-kirp/DENETIM-1.json'));k=d['kirpildi'];assert k['oldu'] is False and k['istem_bayt']>0 and k['esik']==200000"; g $? "kırpılmayan tur: kirpildi.oldu=false, bayt ve eşik yazılı"
 ! grep -q "KIRPILDI" "$T/istem-kucuk.md"; g $? "küçük istemde kırpma uyarısı YOK"
-head -c 6000 /dev/zero | tr '\0' 'x' | sed 's/^/+/' > "$T/buyuk.patch"; printf 'diff --git a/y b/y\n' | cat - "$T/buyuk.patch" > "$T/buyuk2.patch"
-CIKTI="$(SAHTE_ISTEM_KOPYA="$T/istem-buyuk.md" SAHTE_JSON="$(J 3 H "$B")" DENETCI_KIRP_ESIK=2200 bash "$D" is-kirp --diff "$T/buyuk2.patch" 2>&1)"
+# (PCP7J, 18 Eki) büyük ÜRETİM farkı artık kırpılmaz, "İŞİ BÖL" der (T-BOL). Kırpma yalnız istem başka yerden şişince kalır:
+# burada fark küçük (d.patch), istem büyük kanıt ölçüm çıktısıyla şişiyor → kırpma yolu hâlâ ölçülüyor.
+bash "$K" olcum is-kirp buyuk-olcum --asama tek -- bash -c 'head -c 6000 /dev/zero | tr "\0" x' >/dev/null 2>&1
+CIKTI="$(SAHTE_ISTEM_KOPYA="$T/istem-buyuk.md" SAHTE_JSON="$(J 3 H "$B")" DENETCI_KIRP_ESIK=2200 bash "$D" is-kirp --diff "$T/d.patch" 2>&1)"
 python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-kirp/DENETIM-2.json'));k=d['kirpildi'];assert k['oldu'] is True and k['istem_bayt']>2400 and k['esik']==2200"; g $? "🔴 kırpılan tur: kirpildi.oldu=true, gerçek bayt ve eşik KALICI kayıtta"
 grep -q "KIRPILDI" "$T/istem-buyuk.md"; g $? "denetçiye kırpıldığı söylendi (istem sonunda uyarı)"
 grep -q "KIRPILDI" <<<"$CIKTI"; g $? "ekranda da yazıldı"
@@ -555,5 +557,45 @@ else
   kalan=$((kalan+1)); echo "  ✗ kutu-dışı sınıf kapıları (denetci-kutu-disi.test.sh) DÜŞTÜ"
 fi
 
-echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]
+
+echo "════ T-DARALT · tıkanan iş kart.sh daralt ile yeni cümleyle sıfırdan sayılır (PCP7J) ════"
+export KANIT_DEPO="$T"
+mkdir -p "$T"; cd "$T" 2>/dev/null; printf 'diff --git a/x b/x\n--- a/x\n+++ b/x\n@@ -1 +1 @@\n-a\n+b\n' > "$T/d.patch"   # önceki sınav farkı/dizini kaldırmış olabilir
+bash "$HERE/kart.sh" ac is-dar --is "iki yarım iş tek kartta bu yüzden üç tur boyunca tıkandı" --istedi Sultan --aldi SERDAR --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1; g $? "kart açıldı (sınıfsız)"
+bash "$K" olcum is-dar olc --asama tek -- echo 1 >/dev/null 2>&1
+for i in 1 2; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-dar --diff "$T/d.patch" >/dev/null 2>&1; done
+SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-dar --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 4 ]; g $? "3 tur ilerlemeyince rc=4 (tıkandı)"
+CIKTI="$(bash "$HERE/kart.sh" daralt is-dar --kalan "ikinci yarım iş: raporu da üretsin, bu kartta değil" --cumle "yalnız birinci yarım iş: ölçümü yazsın ve kaydetsin" --oturum ref-dar 2>&1)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "daralt rc=0: $(head -n1 <<<"$CIKTI")"
+python3 -c "import json;k=json.load(open('$T/_agents/fabrika/kartlar/is-dar.json'));d=k['daraltmalar'][-1];assert d['tur_sifir']==3 and d['kalan_kart']=='is-dar-kalan' and k['reis_kararlari'][-1]['karar']=='daralt' and k['cumle_gecmisi'][0]['cumle'].startswith('iki yarım') and k['cumle'].startswith('yalnız')"; g $? "karta daraltma kaydı (tur_sifir=3), reis kararı, cümle geçmişi yazıldı"
+python3 -c "import json;y=json.load(open('$T/_agents/fabrika/kartlar/is-dar-kalan.json'));assert y['koken']=='is-dar' and y['aldi']=='SERDAR' and y['cumle'].startswith('ikinci') and y['sultan']==False"; g $? "kalan bulgu yeni kartta (aynı sahip, sınıfsız, köken yazılı)"
+CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-dar --diff "$T/d.patch" 2>&1)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "daraltmadan sonraki ilk tur KOŞTU ve 5/E geçti (rc=0, tavan sıfırlandı)"; [ "$RC" -eq 0 ] || { echo "    ↳ rc=$RC"; tail -n 6 <<<"$CIKTI" | sed "s/^/    ↳ /"; }
+grep -q "DARALTILMIŞ: ilk 3 tur" <<<"$CIKTI"; g $? "denetçi daraltmayı söyledi (ilk 3 tur sayılmıyor)"
+[ -f "$T/_agents/fabrika/kanit/is-dar/DENETIM-4.json" ]; g $? "DENETIM-4 yazıldı (tur numarası sürdü, sayım sıfırlandı)"
+# daraltmadan sonra da üç düşük tur → yine tıkanır (sıfırlama sınırsız tur değildir)
+bash "$HERE/kart.sh" ac is-dar2 --is "daraltma sonrası da tıkanabilen iş cümlesi burada" --istedi Sultan --aldi SERDAR --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+bash "$K" olcum is-dar2 olc --asama tek -- echo 1 >/dev/null 2>&1
+for i in 1 2 3; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-dar2 --diff "$T/d.patch" >/dev/null 2>&1; done
+bash "$HERE/kart.sh" daralt is-dar2 --kalan "kalan yarı burada yirmi karakterden uzun" --cumle "daraltılmış cümle burada yirmi karakterden uzun" --oturum ref-dar2 >/dev/null 2>&1
+for i in 1 2; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-dar2 --diff "$T/d.patch" >/dev/null 2>&1; done
+SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-dar2 --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 4 ]; g $? "daraltma sonrası 3 düşük tur → yine rc=4 (sıfırlama tavanı kaldırmaz)"
+unset KANIT_DEPO; export KANIT_DEPO="$T"
+
+echo "════ T-BOL · üretim farkı eşiği aşarsa denetçi 'İŞİ BÖL' der, tur yakmaz (PCP7J) ════"
+bash "$K" olcum is-bol olc --asama tek -- echo 1 >/dev/null 2>&1
+python3 - "$T/bol.patch" <<'PY'
+import sys
+p=sys.argv[1]
+with open(p,"w") as f:
+    f.write("diff --git a/x.ts b/x.ts\n--- a/x.ts\n+++ b/x.ts\n@@ -1 +1,400 @@\n")
+    for i in range(400): f.write("+"+("k"*60)+f" {i}\n")
+PY
+CIKTI="$(SAHTE_JSON="$(J 5 E "")" DENETCI_KIRP_ESIK=5000 bash "$D" is-bol --diff "$T/bol.patch" 2>&1)"; RC=$?
+[ "$RC" -eq 1 ]; g $? "fark 24 KB > eşik 5 KB → rc=1"
+grep -q "İŞİ BÖL" <<<"$CIKTI" && grep -q "kart.sh daralt" <<<"$CIKTI"; g $? "'İŞİ BÖL' + daralt yolu yazılı"
+[ ! -f "$T/_agents/fabrika/kanit/is-bol/DENETIM-1.json" ]; g $? "tur yakılmadı (DENETIM yok)"
+SAHTE_JSON="$(J 5 E "")" DENETCI_KIRP_ESIK=50000 bash "$D" is-bol --diff "$T/bol.patch" >/dev/null 2>&1; [ $? -eq 0 ]; g $? "eşik altındaki fark normal denetlenir (rc=0)"
+
+echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
