@@ -1,7 +1,7 @@
 {
   "is": "kanit-boru-reddi",
   "arac": "kanit.py/0.4.0",
-  "guncelleme": "2026-10-18T16:34:29+03:00",
+  "guncelleme": "2026-10-18T20:14:05+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -26,17 +26,15 @@
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "b7ba0a83c6d39965785fff51c566efc6b80707625bc2839b49c989e0c2a54c8d",
+      "sha256": "416a7db7036567d31ea76ea1ae091368ee7aaf592d245a896b006390432f4fd7",
       "komut": [
         "bash",
-        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/pthaq/sinav-say.sh",
-        "/config/projects/_wt/Sx-Claude-Skills-kanit-boru-reddi/yazilim-fabrikasi/scripts",
-        "sonra"
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T16:34:29+03:00",
-      "sure_sn": 12.3,
+      "zaman": "2026-10-18T20:13:57+03:00",
+      "sure_sn": 7.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)"
     },
     {
@@ -54,7 +52,26 @@
       "zaman": "2026-10-18T16:29:43+03:00",
       "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-T20-T21",
+      "asama": "tek",
+      "dosya": "olcum-sinav-T20-T21-tek.txt",
+      "sha256": "582c0d4171cec41e0e5c0b88076db5017c9be2a25e67d5d2458ec78629a7f782",
+      "komut": [
+        "bash",
+        "-c",
+        "o=$(mktemp); bash \"$1\" > \"$o\" 2>&1; rc=$?; sed -n \"/T20 ·/,\\$p\" \"$o\"; exit $rc",
+        "_",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T20:14:05+03:00",
+      "sure_sn": 8.6,
+      "boru_denetimi": "temiz"
     }
   ],
-  "imza": "3f732f20a30079a6e3aceca777b44f5ea5025e369625a2a82a1fa5b4d8f6ce13"
+  "imza": "89983dd99c9e1814636b4252d27a6f74bc8b2b4ffd8a33de85efafd028927b5e"
 }

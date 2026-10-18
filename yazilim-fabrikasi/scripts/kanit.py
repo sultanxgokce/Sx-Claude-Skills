@@ -163,6 +163,32 @@ KABUKLAR = {"bash", "sh", "dash", "zsh", "ksh"}
 MASKE_SON = {"echo", "printf", "true", ":", "set"}   # son komut `set …` da 0 döner, öncekinin rc'sini yutar
 AYIRAC = {";", "&&", "||", "&", ";;"}
 ONEKLER = {"command", "builtin", "exec", "time", "nohup", "noglob"}
+# Kabuğu ÇALIŞTIRAN sarmalayıcılar (göz tur 3): kabuk yalnız argv başında ya da bu zincirin arkasında kabuktur;
+# `printf bash -c …` içindeki `bash` bir VERİDİR, çalışmaz. Sarmalayıcının seçenekleri (`-…`), VAR=değer ve süre/sayı
+# argümanları atlanır; tanınmayan argüman zinciri keser → kapsam-dışı (sınır: `timeout -s KILL 60 bash -c` görülmez).
+SARMALAYICI = {"timeout", "nice", "ionice", "env", "nohup", "setsid", "stdbuf", "chrt", "taskset", "command", "exec", "time"}
+
+
+def _kabuk_konumu(komut):
+    k = 0
+    while k < len(komut):
+        ad = os.path.basename(komut[k])
+        if ad in KABUKLAR:
+            return k
+        if ad not in SARMALAYICI:
+            return None
+        k += 1
+        while k < len(komut) and (komut[k].startswith("-") or re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*=.*", komut[k])
+                                  or re.fullmatch(r"[0-9]+(\.[0-9]+)?[smhd]?", komut[k])):
+            k += 1
+    return None
+
+
+def _yalin(toklar):
+    """Komut başındaki önekleri (command/builtin/exec…) soyar, ilk kelimeyi yoldan arındırır."""
+    while len(toklar) > 1 and toklar[0] in ONEKLER:
+        toklar = toklar[1:]
+    return [os.path.basename(toklar[0])] + toklar[1:] if toklar else toklar
 
 def _pipefail_etkisi(argumanlar, durum):
     """`set`/kabuk argümanlarında `-o pipefail` (ya da `-euo pipefail`) açar, `+o pipefail` kapatır; yoksa durum aynen kalır."""
@@ -176,7 +202,7 @@ def boru_denetimi(komut):
     """(durum, neden) — durum: temiz | maske | ayristirilamadi | kapsam-disi"""
     # Kabuk argv'nin BAŞINDA olmak zorunda değil (göz tur 2): `timeout 600 bash -c`, `nice bash -c`, `env X=1 bash -c` da kabuktur.
     # -c birleşik seçenek kümesinde de olabilir (`bash -lc`, `bash -ec`). Seçenek kümesi = `-` ile başlayan, harflerden oluşan argüman.
-    j = next((k for k, t in enumerate(komut) if os.path.basename(t) in KABUKLAR), None)
+    j = _kabuk_konumu(komut)
     if j is None:
         return "kapsam-disi", None
     i = next((k for k in range(j + 1, len(komut)) if re.fullmatch(r"-[A-Za-z]*c[A-Za-z]*", komut[k])), None)
@@ -196,8 +222,16 @@ def boru_denetimi(komut):
     if "<<" in jet or "<<-" in jet:
         return "ayristirilamadi", "heredoc içeren betik denetlenmedi"
     for k in range(len(jet) - 1):
-        if jet[k] == "||" and jet[k + 1] in ("true", ":"):
-            return "maske", "`|| " + jet[k + 1] + "` çıkış kodunu yutuyor"
+        if jet[k] == "||":
+            # göz tur 3: `|| /bin/true`, `|| command true` aynı maskedir → `||` sağındaki komut önekleri/yolu soyularak bakılır
+            sag = []
+            for t in jet[k + 1:]:
+                if t in AYIRAC or t == "|":
+                    break
+                sag.append(t)
+            yalin = _yalin(sag)
+            if yalin and yalin[0] in ("true", ":"):
+                return "maske", "`|| " + " ".join(sag) + "` çıkış kodunu yutuyor"
     # son anlamlı komut: son ayıracın sağı (sondaki boş ayıraçlar atılır)
     while jet and jet[-1] in AYIRAC:
         jet.pop()
@@ -210,9 +244,7 @@ def boru_denetimi(komut):
         return "ayristirilamadi", "son komut bulunamadı"
     oncesi = [t for t in jet[:len(jet) - len(son)] if t not in AYIRAC]
     # Önekler soyulur (göz tur 2): `command echo`, `builtin echo`, `exec true`, `/bin/echo` aynı maskedir.
-    while len(son) > 1 and son[0] in ONEKLER:
-        son = son[1:]
-    son = [os.path.basename(son[0])] + son[1:]
+    son = _yalin(son)
     if son[0] in MASKE_SON and oncesi:   # betiğin TEK komutu echo ise maskelenen bir iş yoktur (ölçülen şey odur)
         return "maske", f"son komut `{son[0]}` — betiğin çıkış kodu ölçülen işin değil `{son[0]}`'nun"
     # pipefail DURUMU sırayla izlenir (göz tur 1: kelimenin geçmesi yetmiyordu — `echo pipefail` ya da `set +o pipefail` geçiyordu).

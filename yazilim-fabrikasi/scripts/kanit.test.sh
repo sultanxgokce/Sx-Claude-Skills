@@ -352,13 +352,20 @@ bash "$K" olcum is-boru onek --asama tek -- bash -c 'false; command echo bitti' 
 bash "$K" olcum is-boru yol --asama tek -- bash -c 'false; /bin/true' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20s tam yollu '/bin/true' de maske sayıldı"
 bash "$K" olcum is-boru onekiz --asama tek -- bash -c 'command false' >/dev/null 2>&1; _alan onekiz "temiz"; g $? "T20t önekli TEK komut (command false) maske değil: temiz, kırmızı kayıt"
 
+# göz tur 3 (daraltılmış kapsam içinde kalan iki bulgu): `||` sağındaki eşdeğerler + veri argümanındaki kabuk adı
+bash "$K" olcum is-boru yolyut --asama tek -- bash -c 'false || /bin/true; ls /' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20u ORTADAKİ '|| /bin/true' (tam yol) reddedildi — son komut temiz (göz tur 3)"
+bash "$K" olcum is-boru onekyut --asama tek -- bash -c 'false || command true; ls /' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20v ORTADAKİ '|| command true' (önekli) reddedildi — son komut temiz (göz tur 3)"
+bash "$K" olcum is-boru veri --asama tek -- printf '%s\n' bash -c 'false | cat' >/dev/null 2>&1; _alan veri "kapsam-dışı"; g $? "T20w 'printf … bash -c': bash VERİ argümanı, kabuk değil → reddedilmedi, kapsam-dışı (göz tur 3 yanlış pozitif)"
+bash "$K" olcum is-boru nice --asama tek -- nice -n 5 bash -c 'false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20x seçenekli sarmalayıcı (nice -n 5 bash -c) hâlâ kabuk sayıldı, reddedildi"
+bash "$K" olcum is-boru cikis --asama tek -- bash -c 'false || exit 3' >/dev/null 2>&1; _alan cikis "temiz"; g $? "T20y '|| exit 3' maske değil (rc taşınıyor): temiz"
+
 echo "════ T21 · MUTASYON: boru denetiminin her kolu kaldırılınca T20 kırmızıya döner ════"
 _mutkos() { KANIT_DEPO="$T" python3 "$MC/kanit.py" olcum is-boru-mut "$1" --asama tek -- bash -c "$2" >/dev/null 2>&1; }
 _mut 'durum, neden = boru_denetimi(a.komut)' 'durum, neden = "temiz", None'
 _mutkos m1 'false | tail -1'; [ $? -eq 0 ]; g $? "T21a mutant (denetim hiç çağrılmıyor) maskeli betiği kabul ediyor → T20a bu mutantta düşerdi"
 _mut 'if "|" in son and not pipefail:' 'if False:'
 _mutkos m2 'false | tail -1'; [ $? -eq 0 ]; g $? "T21b mutant (boru kuralı yok) → T20a bu mutantta düşerdi"
-_mut 'if jet[k] == "||" and' 'if False and'
+_mut 'if jet[k] == "||":' 'if False:'
 _mutkos m3 'false || true; ls /'; [ $? -eq 0 ]; g $? "T21c mutant ('|| true' kuralı yok) ortadaki maskeyi kabul ediyor → T20b2 bu mutantta düşerdi"
 _mut 'if son[0] in MASKE_SON and oncesi:' 'if False:'
 _mutkos m4 'false; echo bitti'; [ $? -eq 0 ]; g $? "T21d mutant (son-echo kuralı yok) → T20c bu mutantta düşerdi"
@@ -366,10 +373,14 @@ _mut 'durum = a[0] == "-"' 'durum = True'
 _mutkos m5 'set -o pipefail; set +o pipefail; false | cat'; [ $? -eq 0 ]; g $? "T21e mutant (pipefail kapatma yok sayılıyor) → T20m bu mutantta düşerdi"
 _mut 'pipefail = _pipefail_etkisi(komut[1:i], False)' 'pipefail = any("pipefail" in t for t in jet)'
 _mutkos m6 'echo pipefail; false | cat'; [ $? -eq 0 ]; g $? "T21f mutant (eski kelime araması) → T20l bu mutantta düşerdi"
-_mut 'j = next((k for k, t in enumerate(komut) if os.path.basename(t) in KABUKLAR), None)' 'j = 0 if os.path.basename(komut[0]) in KABUKLAR else None'
+_mut 'if ad not in SARMALAYICI:' 'if True:'
 KANIT_DEPO="$T" python3 "$MC/kanit.py" olcum is-boru-mut m7 --asama tek -- timeout 60 bash -c 'false | tail -1' >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T21g mutant (kabuk yalnız argv başında aranıyor) sarmalayıcıyı kaçırıyor → T20q bu mutantta düşerdi"
-_mut 'while len(son) > 1 and son[0] in ONEKLER:' 'while False:'
+_mut 'while len(toklar) > 1 and toklar[0] in ONEKLER:' 'while False:'
 _mutkos m8 'false; command echo bitti'; [ $? -eq 0 ]; g $? "T21h mutant (önek soyma yok) → T20r bu mutantta düşerdi"
+_mut 'yalin = _yalin(sag)' 'yalin = sag'
+_mutkos m9 'false || /bin/true; ls /'; [ $? -eq 0 ]; g $? "T21i mutant ('||' sağı soyulmuyor) '|| /bin/true'yu kabul ediyor → T20u bu mutantta düşerdi"
+_mut 'j = _kabuk_konumu(komut)' 'j = next((k for k, t in enumerate(komut) if os.path.basename(t) in KABUKLAR), None)'
+KANIT_DEPO="$T" python3 "$MC/kanit.py" olcum is-boru-mut m10 --asama tek -- printf '%s\n' bash -c 'false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T21j mutant (kabuk argv'nin her yerinde aranıyor — tur 3 hâli) printf verisini reddediyor → T20w bu mutantta düşerdi"
 
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
