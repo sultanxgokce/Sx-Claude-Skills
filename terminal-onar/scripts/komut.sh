@@ -9,7 +9,7 @@
 #   compact-bekle [--uygula]                               kuyruk turu: meşgulken kuyruğa alınan koltuk boşalınca /compact (bekçi çağırır)
 #   kapi-yenile [--kuru]   kapının pano.js'ini BAĞLANTI DÜŞÜRMEDEN tazele (SIGHUP; eski kapı/yoksa onar --web-yenile'ye düşer, söyler)
 set -u
-D="$(cd "$(dirname "$0")" && pwd)"; . "$D/ortak.sh"
+D="$(cd "$(dirname "$0")" && pwd)"; . "$D/ortak.sh" || exit 3   # kutu adı reddi → DUR, rc 3 (FSZ30)
 case "${1:-durum}" in
   durum)    shift; exec bash "$D/durum.sh" "$@" ;;
   onar)     shift; exec bash "$D/onar.sh" "$@" ;;

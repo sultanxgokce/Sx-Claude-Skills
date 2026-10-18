@@ -17,7 +17,7 @@
 # 🔴 ÖLÇÜLEMEYEN KOLTUK compact EDİLMEZ: oturum kaydı bulunamazsa (sid yok / dosya yok) "ölçülemedi" basılır, tuş gitmez.
 # 🔴 PAYDA TAHMİNİ: kayıt model adını "[1m]" eki olmadan yazabiliyor → yüzde 200k paydayla tahmindir, satırda "~" ile işaretli.
 set -u
-D="$(cd "$(dirname "$0")" && pwd)"; . "$D/ortak.sh"
+D="$(cd "$(dirname "$0")" && pwd)"; . "$D/ortak.sh" || exit 3   # kutu adı reddi: ortak.sh sebebi tek satır yazdı (TO_KUTU ver …) → DUR, rc 3 (FSZ30)
 [ -n "${SAHTE:-}" ] && [ -d "$SAHTE/bin" ] && PATH="$SAHTE/bin:$PATH"   # hermetik sınav: ortak.sh PATH'i öne alır, sahte tmux geri öne gelsin
 KUYRUK="${TO_COMPACT_KUYRUK:-$DURUM_DIZ/compact-bekleyen.jsonl}"
 ESIK="${TO_COMPACT_ESIK:-60}"; UYGULA=0; JSON=0; TEK=""; MOD="olc"; TAVAN_DENEME="${TO_COMPACT_TAVAN:-60}"; TAVAN_SN="${TO_COMPACT_TAVAN_SN:-86400}"

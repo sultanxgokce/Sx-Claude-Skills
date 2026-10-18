@@ -2,7 +2,7 @@
 # bekci.sh — dakikada bir (cron). Düzen sağlamsa hiçbir şey yapmaz; bozuksa merdiveni başlatır.
 # Duraklatma: `bash komut.sh duraklat "<sebep>"` (ör. bilerek kapatırken) · `devam`.
 set -u
-. "$(dirname "$0")/ortak.sh"
+. "$(dirname "$0")/ortak.sh" || exit 3   # kutu adı reddi: ortak.sh sebebi tek satır yazdı → DUR, rc 3 (FSZ30; eskiden unbound variable ile çöküyordu)
 # Koşu izi (2.3.0): "kurulu" ile "koşuyor" ayrı şeylerdir (REVAK hata defteri, 29 Eyl–10 Eki: cron süreci 11 gün yoktu, gösterge
 # crontab satırına bakıp "ok" diyordu). İz duraklatmadan ÖNCE yazılır: duraklatılmış bekçi de canlıdır.
 date +%s > "$DURUM_DIZ/bekci.son" 2>/dev/null
