@@ -359,6 +359,11 @@ bash "$K" olcum is-boru veri --asama tek -- printf '%s\n' bash -c 'false | cat' 
 bash "$K" olcum is-boru nice --asama tek -- nice -n 5 bash -c 'false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20x seçenekli sarmalayıcı (nice -n 5 bash -c) hâlâ kabuk sayıldı, reddedildi"
 bash "$K" olcum is-boru cikis --asama tek -- bash -c 'false || exit 3' >/dev/null 2>&1; _alan cikis "temiz"; g $? "T20y '|| exit 3' maske değil (rc taşınıyor): temiz"
 
+# göz tur 4: -c yalnız kabuğun seçenek bölgesinde seçenektir; betik dosyasından sonra gelen -c betiğin argümanıdır
+printf 'exit 0\n' > "$T/betik.sh"
+bash "$K" olcum is-boru dosyac --asama tek -- bash "$T/betik.sh" -c 'false | cat' >/dev/null 2>&1; _alan dosyac "kapsam-dışı"; g $? "T20z 'bash betik.sh -c …': -c betiğin argümanı → reddedilmedi, kapsam-dışı (göz tur 4)"
+bash "$K" olcum is-boru seceneklic --asama tek -- bash -e -o pipefail +o pipefail -c 'false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20z2 seçenekler (-e, -o değer, +o değer) arkasındaki -c hâlâ bulunur, kapatılan pipefail reddedilir"
+
 echo "════ T21 · MUTASYON: boru denetiminin her kolu kaldırılınca T20 kırmızıya döner ════"
 _mutkos() { KANIT_DEPO="$T" python3 "$MC/kanit.py" olcum is-boru-mut "$1" --asama tek -- bash -c "$2" >/dev/null 2>&1; }
 _mut 'durum, neden = boru_denetimi(a.komut)' 'durum, neden = "temiz", None'
@@ -379,6 +384,8 @@ _mut 'while len(toklar) > 1 and toklar[0] in ONEKLER:' 'while False:'
 _mutkos m8 'false; command echo bitti'; [ $? -eq 0 ]; g $? "T21h mutant (önek soyma yok) → T20r bu mutantta düşerdi"
 _mut 'yalin = _yalin(sag)' 'yalin = sag'
 _mutkos m9 'false || /bin/true; ls /'; [ $? -eq 0 ]; g $? "T21i mutant ('||' sağı soyulmuyor) '|| /bin/true'yu kabul ediyor → T20u bu mutantta düşerdi"
+_mut 'if t == "--" or not (t.startswith("-") or t.startswith("+")):' 'if t == "--":'
+KANIT_DEPO="$T" python3 "$MC/kanit.py" olcum is-boru-mut m11 --asama tek -- bash "$T/betik.sh" -c 'false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T21k mutant (seçenek bölgesi betik dosyasında bitmiyor — tur 4 hâli) betik argümanını reddediyor → T20z bu mutantta düşerdi"
 _mut 'j = _kabuk_konumu(komut)' 'j = next((k for k, t in enumerate(komut) if os.path.basename(t) in KABUKLAR), None)'
 KANIT_DEPO="$T" python3 "$MC/kanit.py" olcum is-boru-mut m10 --asama tek -- printf '%s\n' bash -c 'false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T21j mutant (kabuk argv'nin her yerinde aranıyor — tur 3 hâli) printf verisini reddediyor → T20w bu mutantta düşerdi"
 

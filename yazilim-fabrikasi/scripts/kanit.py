@@ -205,7 +205,16 @@ def boru_denetimi(komut):
     j = _kabuk_konumu(komut)
     if j is None:
         return "kapsam-disi", None
-    i = next((k for k in range(j + 1, len(komut)) if re.fullmatch(r"-[A-Za-z]*c[A-Za-z]*", komut[k])), None)
+    # -c yalnız kabuğun SEÇENEK bölgesinde seçenektir (göz tur 4): ilk seçenek-dışı argüman (betik dosyası) ya da `--`
+    # bölgeyi bitirir — `bash x.sh -c '…'` içindeki -c betiğe giden argümandır. `-o/+o` (ve `-euo` gibi o ile biten küme) değer alır.
+    i = None; k = j + 1
+    while k < len(komut):
+        t = komut[k]
+        if t == "--" or not (t.startswith("-") or t.startswith("+")):
+            break
+        if re.fullmatch(r"-[A-Za-z]*c[A-Za-z]*", t):
+            i = k; break
+        k += 2 if re.fullmatch(r"[-+][A-Za-z]*[oO]", t) else 1
     if i is None:
         return "kapsam-disi", None
     if i + 1 >= len(komut):

@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/kanit.test.sh
-# rc=0 sure=7.7s zaman=2026-10-18T20:13:57+03:00
+# rc=0 sure=8.7s zaman=2026-10-18T20:16:05+03:00
 --- stdout ---
 ════ T1 · ölçüm çifti: komutu araç koşar, kırpılmamış çıktı+rc ════
   ✓ önce ölçümü rc=0
@@ -154,6 +154,8 @@ $ bash yazilim-fabrikasi/scripts/kanit.test.sh
   ✓ T20w 'printf … bash -c': bash VERİ argümanı, kabuk değil → reddedilmedi, kapsam-dışı (göz tur 3 yanlış pozitif)
   ✓ T20x seçenekli sarmalayıcı (nice -n 5 bash -c) hâlâ kabuk sayıldı, reddedildi
   ✓ T20y '|| exit 3' maske değil (rc taşınıyor): temiz
+  ✓ T20z 'bash betik.sh -c …': -c betiğin argümanı → reddedilmedi, kapsam-dışı (göz tur 4)
+  ✓ T20z2 seçenekler (-e, -o değer, +o değer) arkasındaki -c hâlâ bulunur, kapatılan pipefail reddedilir
 ════ T21 · MUTASYON: boru denetiminin her kolu kaldırılınca T20 kırmızıya döner ════
   ✓ T21a mutant (denetim hiç çağrılmıyor) maskeli betiği kabul ediyor → T20a bu mutantta düşerdi
   ✓ T21b mutant (boru kuralı yok) → T20a bu mutantta düşerdi
@@ -164,7 +166,8 @@ $ bash yazilim-fabrikasi/scripts/kanit.test.sh
   ✓ T21g mutant (kabuk yalnız argv başında aranıyor) sarmalayıcıyı kaçırıyor → T20q bu mutantta düşerdi
   ✓ T21h mutant (önek soyma yok) → T20r bu mutantta düşerdi
   ✓ T21i mutant ('||' sağı soyulmuyor) '|| /bin/true'yu kabul ediyor → T20u bu mutantta düşerdi
+  ✓ T21k mutant (seçenek bölgesi betik dosyasında bitmiyor — tur 4 hâli) betik argümanını reddediyor → T20z bu mutantta düşerdi
   ✓ T21j mutant (kabuk argv'nin her yerinde aranıyor — tur 3 hâli) printf verisini reddediyor → T20w bu mutantta düşerdi
 
-── SONUÇ: 143 geçti · 0 kaldı ──
+── SONUÇ: 146 geçti · 0 kaldı ──
 --- stderr ---

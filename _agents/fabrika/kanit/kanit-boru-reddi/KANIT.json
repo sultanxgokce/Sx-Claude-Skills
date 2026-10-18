@@ -1,7 +1,7 @@
 {
   "is": "kanit-boru-reddi",
   "arac": "kanit.py/0.4.0",
-  "guncelleme": "2026-10-18T20:14:05+03:00",
+  "guncelleme": "2026-10-18T20:16:16+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -26,15 +26,15 @@
       "etiket": "sinav",
       "asama": "sonra",
       "dosya": "olcum-sinav-sonra.txt",
-      "sha256": "416a7db7036567d31ea76ea1ae091368ee7aaf592d245a896b006390432f4fd7",
+      "sha256": "65d8c99a868262dd28c9fda1bd39e0bebb59907ce3831c31e34879d60eceeba0",
       "komut": [
         "bash",
         "yazilim-fabrikasi/scripts/kanit.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T20:13:57+03:00",
-      "sure_sn": 7.7,
+      "zaman": "2026-10-18T20:16:05+03:00",
+      "sure_sn": 8.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)"
     },
     {
@@ -58,7 +58,7 @@
       "etiket": "sinav-T20-T21",
       "asama": "tek",
       "dosya": "olcum-sinav-T20-T21-tek.txt",
-      "sha256": "582c0d4171cec41e0e5c0b88076db5017c9be2a25e67d5d2458ec78629a7f782",
+      "sha256": "30bed71ccf0fd56a5f47538ef9752e3841f5485df61ddee5bb623102891fa622",
       "komut": [
         "bash",
         "-c",
@@ -68,10 +68,10 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T20:14:05+03:00",
-      "sure_sn": 8.6,
+      "zaman": "2026-10-18T20:16:16+03:00",
+      "sure_sn": 11.6,
       "boru_denetimi": "temiz"
     }
   ],
-  "imza": "89983dd99c9e1814636b4252d27a6f74bc8b2b4ffd8a33de85efafd028927b5e"
+  "imza": "b39ce93f14f63bf624736c591255a45aaefcb71068c4eb405d04c86ad77f3473"
 }
