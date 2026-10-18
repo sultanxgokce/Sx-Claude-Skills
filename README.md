@@ -47,6 +47,8 @@ Mekanik detay → aşağıdaki [Senkron](#senkron--güncellemeleri-yay-sync-skil
 | [kapi-yolu](kapi-yolu/SKILL.md) | agent (usta/bileşik) | * (stack bağımsız) | ~2min | 1.0.0 | v1.0-usta |
 | [yazilim-fabrikasi](yazilim-fabrikasi/SKILL.md) | agent (çalışma hattı) | * (stack bağımsız) | ~2min | 0.5.1 | v0.5 |
 
+| [arcelik-fatura-kesim](arcelik-fatura-kesim/SKILL.md) | agent | * (stack bağımsız) | — | 0.1.0 | stable |
+
 Makine-okunabilir indeks: [catalog.json](catalog.json)
 
 ---
