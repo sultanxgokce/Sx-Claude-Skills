@@ -1,0 +1,139 @@
+$ timeout 600 bash yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh
+# rc=0 sure=33.7s zaman=2026-10-18T23:40:36+03:00
+--- stdout ---
+════ T1 · hiçbir şey yok → engeller ════
+  ✓ kart+kanıt+denetim yokken rc=1
+════ T2 · kart+kanıt var ama DENETİM yok → engeller ════
+  ✓ bağımsız göz koşmamışken rc=1
+  ✓ sebebi yazılı
+  ✓ kaçış satırı bozulmadan basılıyor
+  ✓ yönlendirme hatası yok
+════ T3 · puan 4 → engeller · 5 ama H → engeller ════
+  ✓ 4/5 → rc=1
+  ✓ 5 ama 'doğru şey' H → rc=1
+════ T4 · 5+E → GEÇER ════
+  ✓ rc=0
+  ✓ GEÇTİ yazıyor
+  ✓ son turu okudu (1 ve 2 değil)
+════ T5 · yazan = denetçi → engeller (K1) ════
+  ✓ aynı model → rc=1
+  ✓ K1 gerekçesi yazılı
+════ T5b · yedek göz + farklı model → bağımsız SAYILIR (Sultan Y0006) ════
+  ✓ farklı model → yedek göz bağımsız, rc=0
+  ✓ sebebi yazılı
+════ T5c · SAHTE yedek kaydı (yedek_model = yazan_model) → HÂLÂ ENGELLER (fail-closed) ════
+  ✓ yedek_model = yazan_model → sahte-yedek, rc=1 (fail-closed)
+  ✓ K1 gerekçesi yazılı
+════ T5d · yedek alanı dolu ama model bilgisi YOK → HÂLÂ ENGELLER (fail-closed) ════
+  ✓ model alanları boş → ölçülemez, rc=1 (fail-closed)
+════ T5e · 🔧 yedek gerekçesi '|' İÇERİYOR → alan kaymıyor (bağımsız göz #339) ════
+  ✓ '|' içeren yedek metni + AYNI model → hâlâ reddeder (alan kaymadı)
+  ✓ K1 gerekçesi yazılı (yanlışlıkla bağımsız sayılmadı)
+  ✓ '|' içeren yedek metni + FARKLI model → doğru okunur, bağımsız sayılır
+════ T5g · 🔧 yedek gerekçesi YENİ SATIR İÇERİYOR → alan kaymıyor (bağımsız göz #339 tur 2) ════
+  ✓ yeni satır içeren yedek metni + AYNI model → hâlâ reddeder (alan kaymadı)
+  ✓ K1 gerekçesi yazılı (yanlışlıkla bağımsız sayılmadı)
+  ✓ yeni satır içeren yedek metni + FARKLI model → doğru okunur, bağımsız sayılır
+════ T5h · 🔧 karar denetçi METNİNİN BİÇİMİNE bağlı değil (bağımsız göz #339 tur 3, CİDDİ) ════
+  ✓ denetci metni yazanı İÇERMİYOR ama yedek AYNI modelle → hâlâ reddeder
+  ✓ K1 gerekçesi yazılı
+════ T6 · kanıt manifesti elle boyanırsa → engeller ════
+  ✓ önce temiz: rc=0
+  ✓ boyanmış manifest → rc=1
+  ✓ sebebi yazılı
+════ T7 · kart yoksa engeller (0. adım atlanamaz) ════
+  ✓ kartsız → rc=1
+  ✓ sebebi yazılı
+════ T8 · sınıf işi GEÇER ama Sultan uyarısı basar (A06) ════
+  ✓ 5+E ile geçer
+  ✓ Sultan kararı olduğunu söylüyor, onay üretmiyor
+════ T9 · MUTASYON: kapıyı bozunca sınav kırmızı veriyor mu ════
+  ✓ mutant (red kaldırıldı) izin veriyor → T1 bu mutantta düşerdi
+  ✓ mutant sağlam işe de izin veriyor (ölçer sahte-kırmızı üretmiyor)
+════ T10 · kanıt aracı yoksa YEŞİL DEMİYOR (rc=3) ════
+  ✓ kanit.py yokken rc=3 (ölçülemedi, yeşil değil)
+  ✓ sebebi yazılı
+  ✓ gerçek kapı aynı işte hâlâ rc=0 (mutasyon kaynağı bozdu, düzeneği değil)
+════ T11 · CANLI sınıfı: cron/servis/sunucu kartı canlı kanıt olmadan GEÇMEZ; sarı canlı hiç geçmez; kayıt KARTA BAĞLI olmalı ════
+  ✓ T11a 5+E + yeşil ölçüm ama canlı kanıt YOK → rc=1
+  ✓ T11b sebebi ve yolu yazılı
+  ✓ T11c canlı SARI → rc=1 (sarı yeşil değildir)
+  ✓ T11d sarı sebebi yazılı
+  ✓ T11e2 yeşil ama ateşleme kart açılışından ÖNCE → işe bağlanamaz, rc=1
+  ✓ T11e3 sebebi yazılı: kayıt işe bağlanamadı (kart açılışından önce)
+  ✓ T11e canlı YEŞİL ve kart açılışından sonra → rc=0
+  ✓ T11f kapı ilk ateşlemeyi saatiyle ve okuyan komutla basıyor (göz görsün)
+  ✓ T11o son ateşleme ölçümden 2 saat sonra (geleceğe tarihli) → bağlanmaz, rc=1
+  ✓ T11o2 sebebi yazılı
+  ✓ T11o3 araçla yeniden ölçülünce (gerçek saat) yine geçer
+  ✓ T11g canlısız kart (buton) canlı kaydı olmadan geçer (kapsam daralmadı)
+  ✓ T11h ölçülmüş ama SARI canlı → canlısız kartta da rc=1
+  ✓ T11i alanı olmayan ESKİ servis/sunucu kartı: cümleden türetilir, canlı yok → rc=1
+  ✓ T11j kapı canlı şartının nereden geldiğini söylüyor
+  ✓ T11k eski kart + bağlı yeşil canlı → geçer
+  ✓ T11p kart okunamıyor (canli-gerekir düşer) → rc=3 ÖLÇÜLEMEDİ, yeşil değil
+  ✓ T11p2 sebebi yazılı
+  ✓ T11p3 mutant 7 üretildi (fail-closed çitler: canli-gerekir rc + kart zamanı kaldırıldı)
+  ✓ T11p4 mutant 7: bozuk kartta ölçülemedi DEMİYOR → T11p bu mutantta düşerdi
+  ✓ T11q önce sağlam: bağlı yeşil canlı ile geçer
+  ✓ T11q2 kart 'zaman' çözülemez → rc=3 ÖLÇÜLEMEDİ (rc=1 değil)
+  ✓ T11q3 sebebi yazılı
+  ✓ T11q4 mutant 8 üretildi (zaman-okunamadı kapısı kaldırıldı)
+  ✓ T11q5 mutant 8: ölçülemediğini söylemiyor → T11q2 bu mutantta düşerdi
+  ✓ T11r dilimsiz kart zamanı: çökmez, yerel dilimde bağlanır → geçer
+  ✓ T11r2 mutant 9 üretildi (dilim düzeltmesi kaldırıldı)
+  ✓ T11r3 mutant 9: TypeError → python düşer → kapı ÖLÇÜLEMEDİ rc=3 der (rc=1 'canlı yok' DEĞİL)
+  ✓ T11r4 düşme sebebi yazılı
+  ✓ T11r5 mutant 10 (rc denetimi de kaldırıldı): çöküş 'canlı yok' rc=1'e dönüşüyor → T11r3 bu mutantta düşerdi
+════ T12 · MUTASYON: canlı kontrolleri kaldırılınca kapı açılır (kapı gerçek, süs değil) ════
+  ✓ T12a mutant 3 üretildi (kart canlı şartı kaldırıldı)
+  ✓ T12b mutant 3: cron kartı canlı kayıtsız GEÇİYOR → T11a/T11i bu mutantta düşerdi
+  ✓ T12c gerçek kapı aynı işte hâlâ rc=1
+  ✓ T12d mutant 4 üretildi (sarı canlı engeli kaldırıldı)
+  ✓ T12e mutant 4: sarı canlı GEÇİYOR → T11h bu mutantta düşerdi
+  ✓ T12f gerçek kapı sarıyı hâlâ tutuyor
+  ✓ T12g mutant 5 üretildi (işe bağlama kaldırıldı)
+  ✓ T12h mutant 5: kart açılışından önceki yeşil kayıt GEÇİYOR → T11e2 bu mutantta düşerdi
+  ✓ T12i gerçek kapı eski kaydı bağlamıyor, rc=1
+  ✓ T12j mutant 6 üretildi (gelecek payı 100 yıl)
+  ✓ T12k mutant 6: geleceğe tarihli kayıt GEÇİYOR → T11o bu mutantta düşerdi
+  ✓ T12l gerçek kapı geleceğe tarihli kaydı reddediyor
+════ T13 · GEÇERSİZ ilan (4K938): geçersiz canlı yeşil sayılmaz, sarı gibi engeldir; ilan kapıyı gevşetmez ════
+  ✓ T13a önce: canlı kartı bağlı yeşil canlıyla geçer
+  ✓ T13a2 önce: canlısız kart (yeşil canlı kaydıyla) geçer
+  ✓ T13b geçersiz ilan edilen yeşil canlı SAYILMAZ → rc=1
+  ✓ T13c sebebi ve yolu yazılı (yeniden ölç)
+  ✓ T13d canlısız kartta da geçersiz canlı ENGEL (sarı gibi) → rc=1
+  ✓ T13e kontrol kopyası (mutasyonsuz) gerçek kapıyla aynı: rc=1
+  ✓ T13f mutant 9 üretildi (geçersiz canlı engel listesinden çıktı)
+  ✓ T13g mutant 9: geçersiz canlı canlısız kartı GEÇİRİYOR → T13d bu mutantta düşerdi
+  ✓ T13h mutant 10 üretildi (kapı etkin renk yerine ham rengi okuyor)
+  ✓ T13i mutant 10: geçersiz yeşil canlıyı SAYIYOR → T13b bu mutantta düşerdi
+  ✓ T13j yeniden ölçülünce ilan uygulanmaz (eski ölçüme aitti) → geçer
+  ✓ T13j2 kontrol kopyası geçen durumu da geçiriyor (kopyada içe aktarım düşmüyor)
+  ✓ T13k ölçüm ilanı kapı çıktısında görünür (sessiz kalmaz; hükmü göz verir)
+════ T13 · DARALTMA kaydı: eski cümleye verilmiş 5/E yeni cümleyi doğrulamaz (PCP7J) ════
+  ✓ daraltma yokken 3. tur 5/E → geçer (gerileme yok)
+  ✓ kart daraltıldı (tur sıfırı 3)
+  ✓ daraltma sonrası tur yokken son 5/E (tur 3 = sıfırdan önce) GEÇMEZ
+  ✓ sebep yazılı: son denetim daraltmadan önce
+  ✓ daraltma SONRASI 5/E tur → geçer
+  ✓ kapı daraltma kaydını ve reis kararını BASTI (eskiden hiç okumuyordu)
+════ T13b · MUTASYON: daraltma kontrolü kaldırılınca eski 5/E geçer (kapı gerçek) ════
+  ✓ T13b mutant üretildi (daraltma çiti kaldırıldı)
+  ✓ mutant: daraltma çiti kalkınca eski 5/E GEÇİYOR → T13 bu mutantta düşerdi
+  ✓ gerçek kapı aynı durumda hâlâ reddediyor
+════ T14 · KANIT TEK KURALLA: iş alanı · PR başı · birincil aynı sırayla; birincilden --pr ile çağrı iş alanındaki kanıtı bulur (retro W42 ders M3) ════
+  ✓ 🔴 BİRİNCİLDEN çağrı iş alanındaki kanıtı buldu → GEÇTİ (15 Eki'de 'kanıt YOK' deyip kaçışa itmişti)
+  ✓ iş alanının içinden çağrı aynı kanıtı buldu (aynı kural, aynı sonuç)
+  ✓ iş alanı kapalıyken kanıt PR #7 başından okundu → GEÇTİ
+  ✓ PR başı okuması birincil ağaca DOKUNMADI (kanıt geçici yere çıkarıldı)
+  ✓ --pr verilmezse PR başına bakılmaz; aranan yerler sayılır, kapı kapalı (rc=1)
+  ✓ 🔴 birincildeki BAYAT 5/E kopyası kapıyı açmaz — dalı iş adıyla aynı olan iş alanı esas (3/E → rc=1)
+  ✓ önekli dal (hendese/is-onek) iş adıyla eşleşir
+════ T14b · KAÇIŞ DEFTERİ FİKSTÜRÜ: W42'nin 9 kapısız birleştirmesi — yalnız 'kanıt başka yerde' sınıfı kapıdan geçer, gerisi KAPALI kalır ════
+  ✓ fikstür: 9 satır, 9 sınıf
+  ✓ 🔴 9 kaçışın yalnız 'kanıt başka yerde' olanı (15 Eki 10:42) artık kapıdan geçer; 8'i (tavan · kanıtsız) KAPALI kalır — kapı gevşemedi (geçen: kanit-yeri)
+
+── SONUÇ: 110 geçti · 0 kaldı ──
+--- stderr ---
