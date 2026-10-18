@@ -1,0 +1,5 @@
+$ bash -c bash yazilim-fabrikasi/scripts/denetci.test.sh >/dev/null 2>&1; echo "denetci.test rc=$? (kırık kodda 0 OLMAMALI)"
+# rc=0 sure=266.8s zaman=2026-10-18T18:05:10+03:00
+--- stdout ---
+denetci.test rc=1 (kırık kodda 0 OLMAMALI)
+--- stderr ---

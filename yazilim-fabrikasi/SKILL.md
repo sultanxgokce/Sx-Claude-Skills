@@ -119,5 +119,7 @@ sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kald�
   demez, eski kırpma sürer. (3) `birlestirme-kapisi.sh` — daraltma kaydını okur: son denetim daraltmadan ÖNCEYSE eski
   cümlenin 5/E'si geçmez. Kaçış yolu YOK. Bağımsız göz tur 1 üç bulgu: sınıflı kartta Sultan'ın 'daralt' kararı TEK
   KULLANIMLIK (`kullanildi` damgası; eski söz sonraki daraltmayı açmaz) · `--yeni` ad doğrulanır (yol ayracı/'..' yok) ·
-  iki kart ATOMİK yazılır (kalan kart yazılamazsa ana kart dokunulmaz, ana kart yazılamazsa kalan geri alınır).
+  iki kart önce geçici dosyaya tam yazılır, sonra art arda yerine konur (kalan kart konamazsa ana kart dokunulmaz,
+  ana kart konamazsa kalan geri alınır; tek pencere iki rename arası süreç ölümüdür — veri kaybı yok, yetim kalan kart
+  `koken` ile görünür). Tur 2: denetçi sınavının çıkış kodu kalan sayısına bağlandı (kırmızı sınav rc=0 veremez).
   Sınav: kart +20 (T11/T12/T12b), denetçi +15 (T-DARALT/T-BOL), kapı +9 (T13 + mutasyon).

@@ -1,7 +1,7 @@
 {
   "is": "fabrika-daraltma-adimi",
   "arac": "kanit.py/0.4.0",
-  "guncelleme": "2026-10-18T17:43:38+03:00",
+  "guncelleme": "2026-10-18T18:05:10+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -141,7 +141,49 @@
       "renk": "yesil",
       "zaman": "2026-10-18T17:43:38+03:00",
       "sure_sn": 2.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "t3-kart-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-t3-kart-sinav-sonra.txt",
+      "sha256": "b2573dc185ba3e422df485f4eafcd7e1a1c7c6962ec543f6b13eb6578a009580",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T18:00:43+03:00",
+      "sure_sn": 5.7
+    },
+    {
+      "tur": "dosya",
+      "etiket": "t3-denetci-sinav-ciktisi",
+      "asama": "tek",
+      "dosya": "dosya-t3-denetci-sinav-ciktisi-tek.log",
+      "sha256": "0baf42094e497e2c697aca59a7736aad882036e315c66eb3b4d6c22ddd268da3",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/denetci-test4.log",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T18:00:43+03:00"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "t3-sinav-rc-kirmizida",
+      "asama": "sonra",
+      "dosya": "olcum-t3-sinav-rc-kirmizida-sonra.txt",
+      "sha256": "9a313b6b76d93de437aa2fa5b08b526b52bb3309fc86b4db6a03c7640946556a",
+      "komut": [
+        "bash",
+        "-c",
+        "bash yazilim-fabrikasi/scripts/denetci.test.sh >/dev/null 2>&1; echo \"denetci.test rc=$? (kırık kodda 0 OLMAMALI)\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T18:05:10+03:00",
+      "sure_sn": 266.8
     }
   ],
-  "imza": "56de793c3a859e25fe51eb06102247c240bd723f11b3844dee5fd7aa000d8991"
+  "imza": "ace1c436c483acf09c317b12883e5f84ed7e39351dd0ed4622ce3afd9578e80a"
 }

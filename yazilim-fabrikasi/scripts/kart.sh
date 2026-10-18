@@ -263,20 +263,34 @@ y={"is":yeni,"cumle":kalan,"istedi":k.get("istedi"),"aldi":k.get("aldi"),"zaman"
 # 🔴 (bağımsız göz tur 1) iki kart ATOMİK yazılır: önce yeni kart geçici dosyaya + yerine koyma, sonra ana kart;
 #    ana kart yazılamazsa yeni kart geri alınır → "daraltılmış ana kart, kalan kart yok" hâli oluşmaz.
 import os
-def _yaz(hedef,veri):
-    g=hedef+".tmp"
-    with open(g,"w",encoding="utf-8") as f: json.dump(veri,f,ensure_ascii=False,indent=2)
-    os.replace(g,hedef)
+# (göz tur 2) iki dosya tek bir atomik işlemle değiştirilemez (POSIX'te çift rename yok). Yapılan: ÖNCE iki geçici
+# dosya da tamamen yazılır (serileştirme/disk hatası burada yakalanır, hiçbir kart değişmez), SONRA iki rename art
+# arda; ikinci rename düşerse kalan kart geri alınır. Kalan pencere yalnız iki rename ARASINDA süreç ölmesidir
+# (mikrosaniye); o hâlde kalan kart `koken` alanıyla ayakta kalır, ana kart eski cümlesiyle durur — veri kaybı yok,
+# yetim kalan kart `kart.sh liste`de görünür ve daralt yeniden koşulunca "kalan kart zaten var" der (--yeni ile sürer).
+gy, ga = yyol+".tmp", yol+".tmp"
 try:
-    _yaz(yyol,y)
+    with open(gy,"w",encoding="utf-8") as f: json.dump(y,f,ensure_ascii=False,indent=2)
+    with open(ga,"w",encoding="utf-8") as f: json.dump(k,f,ensure_ascii=False,indent=2)
 except Exception as e:
-    print(f"✗ kalan kart yazılamadı ({e}) — ana kart DOKUNULMADI", file=sys.stderr); raise SystemExit(1)
+    for g in (gy,ga):
+        try: os.remove(g)
+        except Exception: pass
+    print(f"✗ kartlar hazırlanamadı ({e}) — hiçbir kart DEĞİŞMEDİ", file=sys.stderr); raise SystemExit(1)
 try:
-    _yaz(yol,k)
+    os.replace(gy,yyol)
 except Exception as e:
-    try: os.remove(yyol)
-    except Exception: pass
-    print(f"✗ ana kart yazılamadı ({e}) — kalan kart geri alındı, daraltma OLMADI", file=sys.stderr); raise SystemExit(1)
+    for g in (gy,ga):
+        try: os.remove(g)
+        except Exception: pass
+    print(f"✗ kalan kart yerine konamadı ({e}) — ana kart DOKUNULMADI", file=sys.stderr); raise SystemExit(1)
+try:
+    os.replace(ga,yol)
+except Exception as e:
+    for g in (yyol,ga):
+        try: os.remove(g)
+        except Exception: pass
+    print(f"✗ ana kart yerine konamadı ({e}) — kalan kart geri alındı, daraltma OLMADI", file=sys.stderr); raise SystemExit(1)
 print(f"✓ kart daraltıldı: {k['is']} (tur sıfırı {ts}) · kalan bulgu yeni karta: {yeni} · {'SINIFLI, Sultan kararıyla' if y['sultan'] else 'sınıfsız, reis kararı işlendi'}")
 print("  · denetçi bundan sonra yalnız daraltmadan SONRAKİ turları sayar; kapı daraltma sonrası en az bir 5/E tur ister")
 PY

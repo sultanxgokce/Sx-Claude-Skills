@@ -598,4 +598,4 @@ grep -q "İŞİ BÖL" <<<"$CIKTI" && grep -q "kart.sh daralt" <<<"$CIKTI"; g $? 
 [ ! -f "$T/_agents/fabrika/kanit/is-bol/DENETIM-1.json" ]; g $? "tur yakılmadı (DENETIM yok)"
 SAHTE_JSON="$(J 5 E "")" DENETCI_KIRP_ESIK=50000 bash "$D" is-bol --diff "$T/bol.patch" >/dev/null 2>&1; [ $? -eq 0 ]; g $? "eşik altındaki fark normal denetlenir (rc=0)"
 
-echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
+echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]   # (göz tur 2) rc kalan sayısına bağlı: kırmızı sınav yeşil çıkış kodu veremez
