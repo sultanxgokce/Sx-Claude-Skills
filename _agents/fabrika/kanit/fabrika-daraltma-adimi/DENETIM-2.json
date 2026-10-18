@@ -1,0 +1,45 @@
+{
+  "tur": 2,
+  "is": "fabrika-daraltma-adimi",
+  "pr": "380",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T17:44:33+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": null,
+  "yazan_model_kaynak": null,
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 68870,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 12,
+    "bayt": 36766
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Daraltma adımı talebin ana parçalarını kurmuş; önceki turdaki tek kullanımlık karar, güvenli kart adı ve yarım yazım sorunları da ele alınmış. Ancak yeni denetçi sınavları gerçekten kırmızı verdiği halde sınav betiği rc=0 üretiyor; bu güvenilirlik açığı çözülmeden üretime hazır denemez.",
+    "bulgular": [
+      {
+        "ne": "Denetçi sınav betiği yeni DARALT/BÖL kontrolleri başarısız olduğunda da başarı koduyla çıkabiliyor; üstelik sunulan ölçümde beş yeni kontrol fiilen düşmüş. Önce sınavın sonuna başarısızlık sayısını rc'ye bağlayan kontrol geri konmalı, ardından kararsızlığın veya gerçek işlev hatasının sebebi çözülmeli.",
+        "kanit": "`olcum-denetci-mutasyon-sonra.txt` aynı `bash yazilim-fabrikasi/scripts/denetci.test.sh` komutunda “174 geçti · 5 kaldı” ve beş `✗` satırı gösterirken manifest kaydı rc=0/yeşildir. Diffte eski `[ \"$kalan\" -eq 0 ]` kontrolü yeni T-DARALT ve T-BOL bloklarının önüne taşınmış; dosyanın sonundaki sonuç satırından sonra başarısızlık döndüren kontrol bulunmuyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.test.sh: T-DARALT öncesindeki `[ \"$kalan\" -eq 0 ]` ve dosya sonu; kanıt kaydı `denetci-mutasyon`",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "İki kart için “atomik” denmesine rağmen uygulama iki ayrı `os.replace` arasında kesilirse yalnız kalan kartın yazıldığı ara durum kalabilir; geri alma yalnız ikinci yazma yakalanabilir bir hata verdiğinde çalışır.",
+        "kanit": "Python bloğu önce `_yaz(yyol,y)`, sonra `_yaz(yol,k)` çağırıyor. `os.replace` işlemleri arasında süreç ölmesi veya makine kesintisi halinde ikinci `try` çalışmaz ve `os.remove(yyol)` geri alması gerçekleşmez; T12b yalnız ikinci yazmanın normal bir Python istisnasıyla başarısız olduğu yolu ölçüyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh: daralt Python bloğundaki ardışık `_yaz(yyol,y)` ve `_yaz(yol,k)` çağrıları; yazilim-fabrikasi/scripts/kart.test.sh:T12b",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam, sarı kayıt yok; kart, kapı, fark ayıklama ve kutu-dışı ölçümleri ayrıntılıdır. Bununla birlikte aynı denetçi sınavının bir kaydı 179/179, sonraki kaydı 174/179 göstermektedir ve ikinci kayıt hatalı çıkış kodu yüzünden yeşile boyanmıştır; dolayısıyla DARALT/BÖL davranışları için kanıt tutarlı ve yeterli değildir."
+  }
+}

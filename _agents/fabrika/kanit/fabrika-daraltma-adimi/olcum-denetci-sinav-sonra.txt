@@ -1,0 +1,7 @@
+$ bash -c bash yazilim-fabrikasi/scripts/denetci.test.sh 2>&1 | tail -n 3
+# rc=0 sure=254.9s zaman=2026-10-18T17:31:57+03:00
+--- stdout ---
+  ✓ eşik altındaki fark normal denetlenir (rc=0)
+
+── SONUÇ: 179 geçti · 0 kaldı ──
+--- stderr ---
