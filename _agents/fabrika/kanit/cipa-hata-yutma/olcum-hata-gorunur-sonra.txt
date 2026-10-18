@@ -1,0 +1,8 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/cipa/hata-gorunur-mu.sh /config/projects/_wt/Sx-Claude-Skills-cipa-hata-yutma/gunluk-plan/scripts/cipa.sh
+# rc=0 sure=0.1s zaman=2026-10-18T17:22:30+03:00
+--- stdout ---
+tazele_rc=2
+stderr_bayt=65
+stderr=[HATA: --durum kapandi|yarim|acilmadi|geri-alindi|ertelendi olmalı]
+hata_satiri_gorunur=1
+--- stderr ---

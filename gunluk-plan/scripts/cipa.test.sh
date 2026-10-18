@@ -247,5 +247,23 @@ G={'✅','🟡','⬜','⏸','➖'}
 w=lambda s: sum(2 if (c in G or ord(c)>=0x1F000 or 0x2600<=ord(c)<=0x27BF) else 1 for c in s)
 print(len(set(w(l.rstrip('\\n')) for l in sys.stdin)))")"
 
+echo "── KİLİTTEN SONRA HATA GÖRÜNÜR (MUHAKKİK CM4JM): exec'in susturması kabuğa sızmaz"
+bash "$ARAC" yaz --plan "1) a | 2) b" >/dev/null 2>&1
+E="$(bash "$ARAC" tazele --madde 1 --durum uydurma 2>&1 >/dev/null)"
+case "$E" in *"HATA: --durum"*) r=0 ;; *) r=1 ;; esac; kapi "K-H1 kilit sonrası geçersiz durum HATA satırı stderr'de görünüyor" "0" "$r"
+E="$(bash "$ARAC" tazele --madde 9 --durum kapandi 2>&1 >/dev/null)"
+[ -n "$E" ]; kapi "K-H2 kilit sonrası olmayan madde: stderr boş değil (neden söyleniyor)" "0" "$?"
+# MUTASYON: eski satır geri konunca K-H1 düşer (mutant aynı dizinde, kardeşleriyle — erken hata tesadüfen geçirmesin)
+MD="$T/mut"; mkdir -p "$MD"; cp -p "$KOK"/* "$MD/"
+python3 - "$KOK/cipa.sh" "$MD/cipa.sh" <<'PY'
+import sys; s,d=sys.argv[1:]; t=open(s,encoding='utf-8').read()
+e='{ exec 9>>"$CIPA.kilit"; } 2>/dev/null ||'; y='exec 9>>"$CIPA.kilit" 2>/dev/null ||'
+assert e in t; open(d,'w',encoding='utf-8').write(t.replace(e,y,1))
+PY
+bash "$MD/cipa.sh" yaz --plan "1) a | 2) b" >/dev/null 2>&1; yaz_rc=$?
+E="$(bash "$MD/cipa.sh" tazele --madde 1 --durum uydurma 2>&1 >/dev/null)"
+case "$E" in *"HATA: --durum"*) r=1 ;; *) r=0 ;; esac
+[ "$yaz_rc" -eq 0 ] && [ "$r" -eq 0 ]; kapi "K-H3 mutant (eski exec satırı) hatayı YUTUYOR ve yaz yine çalışıyor → K-H1 bu mutantta düşerdi" "0" "$?"
+
 echo "SONUÇ: $gecen geçti · $kalan kaldı"
 [ "$kalan" -eq 0 ]
