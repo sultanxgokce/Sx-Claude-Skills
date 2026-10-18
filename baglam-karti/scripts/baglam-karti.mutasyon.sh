@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# baglam-karti.mutasyon.sh <depo kökü> — dört mutasyon (kapı denetimi yok · karar cümlesi adıma girer · ulaşılamayan defter rc 0 ·
+# baglam-karti.mutasyon.sh <depo kökü> — yedi mutasyon (kapı denetimi yok · karar cümlesi adıma girer · ulaşılamayan defter rc 0 ·
 # cevap HEDEF değeri denetlenmez · kuru koşum rc 0 döner · defter 200 gövdesi doğrulanmaz · adimlar tür denetimi yok);
 # her biri sınavı KIRMIZI yapmalı. Bir mutasyon uygulanamaz ya da sınav yeşil kalırsa rc 1 (ayırt edicilik yok).
 W="$1"; kacan=0
