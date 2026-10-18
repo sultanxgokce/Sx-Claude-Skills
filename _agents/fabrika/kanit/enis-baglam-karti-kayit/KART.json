@@ -17,5 +17,14 @@
   "durum": "acik",
   "gecmis": [],
   "canli_gerekir": false,
-  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)"
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "BERİD",
+      "oturum": "e8bf42c1-120a-4432-9dc5-9ce45934c7b8",
+      "gerekce": "SERDAR 17:34 NOTES kararı (DEVAM +1): üç turun bulgusu üç FARKLI uygulama kusuru (cevap HEDEF değeri · kuru koşum rc 0 · defter 200 gövdesi), her biri sonraki turda kapandı; puan sabit 4 ama açık bulgu kümesi değişiyor = iş ilerliyor. Tur 3 bulgusu e99c35b ile kapalı.",
+      "zaman": "2026-10-18T17:35:04+03:00"
+    }
+  ]
 }

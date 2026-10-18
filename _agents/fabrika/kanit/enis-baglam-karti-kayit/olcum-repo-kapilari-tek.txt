@@ -1,5 +1,5 @@
 $ bash -c node ahi/schema/validate-repo.mjs . --strict && node ahi/schema/version-lint.mjs .
-# rc=0 sure=0.1s zaman=2026-10-18T16:31:08+03:00
+# rc=0 sure=0.2s zaman=2026-10-18T17:37:40+03:00
 --- stdout ---
 ✓ repo-parity temiz (catalog 77 ↔ sync-targets 67)
 ✓ install-listesi 67 skill: SKILL.md + version tam

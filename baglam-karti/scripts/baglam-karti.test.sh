@@ -24,6 +24,7 @@ class H(http.server.BaseHTTPRequestHandler):
         if kip == "200:bos": y = b"{}"
         elif kip == "200:bozuk": y = b"<html>"
         elif kip == "200:adimsiz": y = json.dumps({"degisti": True, "kayit": {"adimlar": []}}).encode()
+        elif kip == "200:metin": y = json.dumps({"degisti": True, "kayit": {"adimlar": "x " + adim + " y"}}, ensure_ascii=False).encode()
         self.send_response(kod); self.send_header("content-type", "application/json"); self.end_headers(); self.wfile.write(y)
     def log_message(self, *a): pass
 s = http.server.HTTPServer(("127.0.0.1", 0), H)
@@ -112,9 +113,9 @@ kapi "F2 defter reddetti (http 500) → rc 1, 'kart dönmez'" "1|1" "$rc|$(grep 
 echo 200 > "$T/kod"
 out="$(DEFTER_UC="http://127.0.0.1:1" K "$M/SERDAR-ENIS-baglam-karti-20261018-9.md")"; rc=$?
 kapi "F3 defter ulaşılamaz → rc 1" "1" "$rc"
-for kip in bos bozuk adimsiz; do echo "200:$kip" > "$T/kod"; K "$M/SERDAR-ENIS-baglam-karti-20261018-9.md" >/dev/null; eval "r_$kip=\$?"; done
+for kip in bos bozuk adimsiz metin; do echo "200:$kip" > "$T/kod"; K "$M/SERDAR-ENIS-baglam-karti-20261018-9.md" >/dev/null; eval "r_$kip=\$?"; done
 echo 200 > "$T/kod"
-kapi "F6 defter 200 ama gövde boş · bozuk · adım kayıtta yok → rc 1 (kayıt doğrulanamadı, kart dönmez)" "1|1|1" "$r_bos|$r_bozuk|$r_adimsiz"
+kapi "F6 defter 200 ama gövde boş · bozuk · adım kayıtta yok · adimlar liste değil (adımı içeren metin) → rc 1 (kart dönmez)" "1|1|1|1" "$r_bos|$r_bozuk|$r_adimsiz|$r_metin"
 n0=$(say)
 out="$(K "$M/SERDAR-ENIS-baglam-karti-20261018-9.md" --kuru)"; rc=$?
 kapi "F4 kuru koşum: rc 3 (taşıma izni değil), adımı basar, deftere dokunmaz" "3|1|$n0" "$rc|$(grep -c 'istek 20261018-9 · SERDAR · ufuk bugün' <<<"$out")|$(say)"

@@ -108,7 +108,8 @@ try: j=json.loads(g or "{}")
 except Exception: j={"hata":"yanit_bozuk"}
 if kod!="200": print("⛔ defter reddetti http=%s · %s — kayıt YAZILMADI, kart dönmez" % (kod, j.get("hata") or ""), file=sys.stderr); sys.exit(1)
 # 200 tek başına yetmez (bağımsız göz tur 3): gövde geçerli olmalı VE adım kayıtta görünmeli; yoksa kayıt doğrulanamadı → rc 1
+# adimlar LİSTE olmalı (tur 4): metin olsaydı 'in' alt-metin eşleşmesi yapar, adım yazılmadan rc 0 verirdi
 k=j.get("kayit") if isinstance(j,dict) else None
-if not isinstance(j.get("degisti") if isinstance(j,dict) else None, bool) or not isinstance(k,dict) or sys.argv[2] not in (k.get("adimlar") or []):
+if not isinstance(j.get("degisti") if isinstance(j,dict) else None, bool) or not isinstance(k,dict) or not isinstance(k.get("adimlar"),list) or sys.argv[2] not in k["adimlar"]:
     print("⛔ defter 200 döndü ama kayıt doğrulanamadı (gövde bozuk ya da adım kayıtta yok) — kart dönmez", file=sys.stderr); sys.exit(1)
 print("📒 %s · %s · %s" % (sys.argv[1], sys.argv[2], "adım yazıldı" if j["degisti"] else "bu adım zaten yazılıydı"))' "$GOREV" "$ADIM"

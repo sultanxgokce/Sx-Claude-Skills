@@ -1,29 +1,29 @@
 {
   "is": "enis-baglam-karti-kayit",
   "arac": "kanit.py/0.4.0",
-  "guncelleme": "2026-10-18T16:31:08+03:00",
+  "guncelleme": "2026-10-18T17:37:40+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "sinav",
       "asama": "tek",
       "dosya": "olcum-sinav-tek.txt",
-      "sha256": "f55dd2c8767813f1f2e0a2059efaf83058e03af95fcee1e37b7747a5987b7337",
+      "sha256": "ad68a1a6e0976aeaf2a5ead3373135181481f978e356a9b0b766d9a2b362071b",
       "komut": [
         "bash",
         "baglam-karti/scripts/baglam-karti.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T16:29:53+03:00",
-      "sure_sn": 3.6
+      "zaman": "2026-10-18T17:37:17+03:00",
+      "sure_sn": 5.0
     },
     {
       "tur": "olcum",
       "etiket": "repo-kapilari",
       "asama": "tek",
       "dosya": "olcum-repo-kapilari-tek.txt",
-      "sha256": "ea5926b9aeb9633c9c00b953990b98437c41d1d814bae671b9efe080cf99150c",
+      "sha256": "e60baed4329f934c4facb47c265bfa234be7b5db5372364983867f24ecf65ab0",
       "komut": [
         "bash",
         "-c",
@@ -31,15 +31,15 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T16:31:08+03:00",
-      "sure_sn": 0.1
+      "zaman": "2026-10-18T17:37:40+03:00",
+      "sure_sn": 0.2
     },
     {
       "tur": "olcum",
       "etiket": "mutasyon",
       "asama": "tek",
       "dosya": "olcum-mutasyon-tek.txt",
-      "sha256": "c9c9ef59901d3ffe6b2db932bfb1686a1f014ecc653674bcdf46f2324f9cae8e",
+      "sha256": "a941c85b58a065ae1e7806d6c07ecba14b1aca7e33db677aaf9f506d8ef638a0",
       "komut": [
         "bash",
         "baglam-karti/scripts/baglam-karti.mutasyon.sh",
@@ -47,9 +47,9 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T16:31:08+03:00",
-      "sure_sn": 75.2
+      "zaman": "2026-10-18T17:37:39+03:00",
+      "sure_sn": 22.2
     }
   ],
-  "imza": "4a5ee1f3193925dac6d7ebd364ef6b8a5d57d4603a9ceea1ad01901337e835ee"
+  "imza": "9f8ec8502d4b581a020f06ee0c797ebd489d490dc9275959a11ea2d438dd1aab"
 }

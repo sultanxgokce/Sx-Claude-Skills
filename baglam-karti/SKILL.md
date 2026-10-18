@@ -55,4 +55,4 @@ Varsayılan kayıt görevi: `gorev_01M557ADY4KHRGS99DQ6E2M0CV`.
 - Cevabın karşılığı olan isteğin kayıtta olup olmadığına bakmaz.
 - SIHHAT/kasa ya da Sultan'ın bayrağı kapalıyken gelen isteklere "kapalı" dönmek ENİS'in işidir. Araç yalnız o cevabı kaydeder.
 
-Sınav: `scripts/baglam-karti.test.sh` (hermetik, sahte defter, 19 kapı) · `scripts/baglam-karti.mutasyon.sh` (6 mutasyon, hepsi yakalanmalı).
+Sınav: `scripts/baglam-karti.test.sh` (hermetik, sahte defter, 19 kapı) · `scripts/baglam-karti.mutasyon.sh` (7 mutasyon, hepsi yakalanmalı).
