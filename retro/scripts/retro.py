@@ -29,7 +29,7 @@ import sys
 import unicodedata
 from datetime import date, datetime, timedelta
 
-SURUM = "1.0.0"
+SURUM = "1.0.1"
 AJAN_DIZIN_DISI = {"handoff", "fabrika", "spec", "orchestration", "codex", "decisions", "runbooks", "ekip-os-base"}
 DERS_RE = re.compile(r"ders|zaman kayb|zorluk|tıkand|tikand|boşa|bosa", re.I)
 TARIH_RE = re.compile(r"(20\d\d-\d\d-\d\d)")
@@ -391,6 +391,25 @@ def registry_ajanlar(yol):
     return ids
 
 
+MERKEZ_ARAC_BOLUM = ("## Katılım", "## Süzüm")   # bu başlıkla başlayan bölümleri ARAÇ yazar; geri kalan her ## bölüm elle yazılır
+
+
+def merkez_elle_bolumler(metin):
+    """MERKEZ.md'deki araç dışı ## bölümlerini sırasıyla döndürür: [[başlık, satır, …], …] (sondaki boş satırlar kırpılır)."""
+    bolumler, cari = [], None
+    for s in metin.splitlines():
+        if s.startswith("## "):
+            cari = None if s.startswith(MERKEZ_ARAC_BOLUM) else [s]
+            if cari is not None:
+                bolumler.append(cari)
+        elif cari is not None:
+            cari.append(s)
+    for b in bolumler:
+        while len(b) > 1 and not b[-1].strip():
+            b.pop()
+    return bolumler
+
+
 def merkez(a):
     kok = kok_bul(a.get("--kok"))
     hafta = a.get("--hafta") or bu_hafta()
@@ -430,14 +449,17 @@ def merkez(a):
     eksik = [x for x, (d, _) in durum.items() if d in ("EKSİK", "GEÇERSİZ")]
     myol = os.path.join(diz, "MERKEZ.md")
     if os.path.exists(myol) and "--yenile" not in a:
-        print(f"  MERKEZ.md zaten var ({os.path.relpath(myol, kok)}); iskeleti yeniden yazmak için --yenile (Süzüm damgaları KORUNUR)")
+        print(f"  MERKEZ.md zaten var ({os.path.relpath(myol, kok)}); araç bölümlerini yenilemek için --yenile (Süzüm damgaları ve elle yazılan bölümler KORUNUR)")
     else:
         eski_damga = {}  # (ajan, n) → (metin, damga)
+        elle = []        # araç dışı ## bölümleri (Dersler · Görevler · Kaçış …) — --yenile bunları OLDUĞU GİBİ taşır
         if os.path.exists(myol):
-            for s in open(myol, encoding="utf-8"):
+            eski = open(myol, encoding="utf-8").read()
+            for s in eski.splitlines():
                 c = merkez_satir_coz(s)
                 if c and c[3]:
                     eski_damga[(c[0], c[1])] = (c[2], c[3])
+            elle = merkez_elle_bolumler(eski)
         os.makedirs(diz, exist_ok=True)
         simdi = datetime.now().astimezone().replace(microsecond=0).isoformat()
         r = [f"# 🔁 MERKEZ RETROSU · {hafta}", f"_yazildi: {simdi}", f"_arac: retro.py {SURUM}", "",
@@ -459,8 +481,13 @@ def merkez(a):
             r.append(f"- {ajan} Ö{n}) {t} → {d}".rstrip())
         if dusen:
             print(f"  ⚠ damga DÜŞTÜ (öneri metni değişti, yeniden süzülmeli): {', '.join(dusen)}")
-        r += ["", "## Dersler (merkez yorumu; kutu dersine D<n> ile atıf: `BÂNİ D2`)", "- M1) <ders> · kaynak: <AJAN D<n> | ölçüm>", "",
-              "## Görevler (Sultan ders ders onaylar · D1 damgası · görev defteri)", "- <gorev_… · ders M<n>>", ""]
+        if elle:   # gorev_01M58987YSBASEXV1MF7T2GJHP: eskiden burada iskelet yeniden basılıyor, elle yazılan bölümler SİLİNİYORDU
+            for b in elle:
+                r += [""] + b
+            r.append("")
+        else:
+            r += ["", "## Dersler (merkez yorumu; kutu dersine D<n> ile atıf: `BÂNİ D2`)", "- M1) <ders> · kaynak: <AJAN D<n> | ölçüm>", "",
+                  "## Görevler (Sultan ders ders onaylar · D1 damgası · görev defteri)", "- <gorev_… · ders M<n>>", ""]
         open(myol, "w", encoding="utf-8").write("\n".join(r))
         bekleyen = sum(1 for a_, n, t in oneriler if not (eski_damga.get((norm(a_), n)) and eski_damga[(norm(a_), n)][0] == t.strip()))
         print(f"  ✓ MERKEZ.md iskeleti: {os.path.relpath(myol, kok)} · öneri {len(oneriler)} (damga bekliyor: {bekleyen})")
