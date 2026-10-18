@@ -1,0 +1,21 @@
+{
+  "is": "retro-merkez-yenile-bolum-koru",
+  "cumle": "Sx retro becerisi: 'retro.py merkez --yenile' merkezin elle yazılan bölümlerini (Dersler · Görevler · Kaçış ve araç dışı her ## bölüm) olduğu gibi korusun; yalnız araç bölümleri (Katılım · Süzüm) yeniden yazılsın, süzüm damgaları korunmaya devam etsin (gorev_01M58987YSBASEXV1MF7T2GJHP); sınav + bölüm silen sürümü kırmızıya çeviren mutant",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-10-18T23:26:02+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "retro.test.sh yeni kapılar önce/sonra + mutasyon",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)"
+}

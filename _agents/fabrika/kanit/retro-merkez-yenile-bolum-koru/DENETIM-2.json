@@ -1,0 +1,30 @@
+{
+  "tur": 2,
+  "is": "retro-merkez-yenile-bolum-koru",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T23:30:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 30391,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 21909
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Merkez yenilemesi artık yalnız Katılım ve Süzüm bölümlerini yeniden kuruyor; Dersler, Görevler, Kaçış ve diğer elle yazılmış `##` bölümlerini ham biçimleriyle korurken süzüm damgalarını da taşıyor. Önceki turun iki uygulama kusuru tam başlık eşlemesi, bayt eşitliği kapısı ve bunları kızartan mutantlarla giderilmiş; üretime engel bulgu kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kırmızı→yeşil ölçüm çifti tüm sınavın önce rc=1, sonra rc=0 olduğunu gösteriyor; gerçek W42 ölçümü eski 1.0.0'ın elle bölümleri 30 satırdan 5 satıra düşürdüğünü, yeni 1.0.1'in bunları birebir koruduğunu doğruluyor. T9l elle bölümlerin dosya sonu, çift boş satır ve girinti dahil bayt eşitliğini; T9m tam başlık ayrımını; M5-M7 mutantları da eski silme, önekle yanlış sınıflama ve boş satır daraltma kusurlarının sınav tarafından yakalandığını ölçüyor."
+  }
+}

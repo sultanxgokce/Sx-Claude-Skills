@@ -1,10 +1,16 @@
 ---
 name: retro
 description: Haftalık retro — araç ajanın haftasını ÖLÇER (NOTES · fabrika kartları · bağımsız göz turları · kaçışlar · boşta zilleri), ajan 5 başlığı kendi gözüyle YORUMLAR (ne bitti · nerede zaman kaybettim ölçüyle · hangi araç/kural yavaşlattı · ne öğrendim · merkeze önerim); çıktı _agents/handoff/retro/<YYYY-Www>/<AJAN>.md lint'li. Merkez kipi kutu retrolarını toplar (OK/GEÇERSİZ/EKSİK/ÇALIŞMADI), MERKEZ.md iskeleti kurar; her öneri → gorev_ ya da → RED damgası alır (süzüm kanıtı). Tetik: "/retro", "haftalık retro", "haftanın dersleri", "retro yaz", "merkez retrosu".
-version: 1.0.0
+version: 1.0.1
 ---
 
 # /retro — haftalık retro (araç ölçer · ajan yorumlar · merkez toplar · süzüm kanıtlanır)
+
+## 🆕 1.0.1 · merkez --yenile elle yazılan bölümleri korur (19 Eki · kart retro-merkez-yenile-bolum-koru · gorev_01M58987YSBASEXV1MF7T2GJHP)
+1.0.0'da `merkez --yenile` dosyayı iskeletten yeniden basıyor, yalnız süzüm damgalarını taşıyordu: Dersler/Görevler yer
+tutucuya dönüyor, Kaçış gibi iskelette olmayan bölümler siliniyordu (19 Eki 01:0x W42 MERKEZ.md yedekten geri kondu).
+Artık yalnız araç bölümleri (Katılım · Süzüm) yeniden yazılır; araç dışı her `## ` bölüm olduğu gibi taşınır. Kanıt:
+`retro.test.sh` T9a-k + mutant M5.
 
 ## Niçin var (Sultan 17 Eki 2026 · beyan SERDAR)
 
@@ -67,7 +73,8 @@ python3 ~/.claude/skills/retro/scripts/retro.py merkez [--hafta 2026-W42] [--aja
 #     ÇALIŞMADI (NOTES/kart izi yok → retro zorunlu değil; ilk hafta kapanabilsin diye)
 #   → MERKEZ.md iskeleti: Katılım tablosu · Süzüm listesi (her öneri "→ " boş damgayla) · Dersler · Görevler
 #   rc 0 herkes tamam · 1 KIRMIZI: EKSİK/GEÇERSİZ var · 3 SARI: ajan listesi yok (katılım ölçülemez) — fabrika rengiyle aynı
-#   --yenile: iskeleti yeniden kurar, mevcut Süzüm DAMGALARINI KORUR
+#   --yenile: yalnız ARAÇ bölümlerini (Katılım · Süzüm) yeniden kurar, Süzüm DAMGALARINI KORUR; elle yazılan her ## bölüm
+#     (Dersler · Görevler · Kaçış · serbest) olduğu gibi, yazıldığı sırada taşınır (1.0.1 — 1.0.0 bunları siliyordu)
 python3 ~/.claude/skills/retro/scripts/retro.py suzum [--hafta 2026-W42]
 #   her Ö maddesi → gorev_<26> ya da → RED: <gerekçe> aldı mı · rc 0 / 1 kırmızı / 3 SARI: MERKEZ.md yok
 ```
