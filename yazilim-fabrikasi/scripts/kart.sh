@@ -73,6 +73,38 @@ else: print(("E\tcümlede: "+", ".join(hits)) if hits else "H\t")
 PY
 }
 
+# 🟡 KAPSAM UYARISI (retro W42 ders M2 · gorev_01M57ZWR2TENPTZJVKRM9VAXCQ): kart kapsamı teslim birimiyle uyuşmayınca iş tıkanıyor —
+#    iki depoya yayılan, yanlış depoda açılan, haftalık yazılıp günlük teslim edilen kartlar (W42'de beş kart). Kart açılırken ARAÇ
+#    cümleye bakar ve UYARIR (red değil — kart açılır): (1) cümle iki depo adı anıyorsa → depo başına kart, (2) yalnız BAŞKA bir depoyu
+#    anıyorsa → yanlış depoda açılıyor olabilir, (3) haftalık/çok günlük kapsam → gün başına kart. Uyarılar karta da yazılır
+#    (`kapsam_uyarilari`), bağımsız göz görür. Depo adları TAM yazımıyla, büyük-küçük harf duyarlı aranır (FABRIKA_DEPOLAR ile
+#    değişir; "ad:takma" biçimi, ör. "Sx-Claude-Skills:Sx"). /config/projects dizin adları KULLANILMAZ: sohbet · ocak · sedir gibi
+#    adlar sıradan kelimedir ve her cümlede yanlış alarm verirdi. Dürüst sınır: depo adı geçmeyen iki depolu iş (yalnız dosya yolu
+#    ya da araç adı anan cümle) yakalanmaz — W42'nin beş kartından dördü böyleydi.
+DEPOLAR="${FABRIKA_DEPOLAR:-Nexus cloudtop Sx-Claude-Skills:Sx MMEpanel MMEx}"
+kapsam_uyar() {  # kapsam_uyar <iş> <cümle> <bu depo adı> → her satır bir uyarı (boş = uyarı yok)
+  python3 - "$1" "$2" "$3" "$DEPOLAR" <<'PY'
+import re, sys
+is_, cumle, bu, depolar = sys.argv[1:]
+tablo = {}
+for d in depolar.split():
+    ad, _, takma = d.partition(":")
+    tablo[ad] = [ad] + [t for t in takma.split(",") if t]
+def aniliyor(adlar):
+    return any(re.search(r"(?<![\w-])" + re.escape(a) + r"(?![\w-])", cumle) for a in adlar)
+anilan = sorted(ad for ad, adlar in tablo.items() if aniliyor(adlar))
+if len(anilan) >= 2:
+    print("İKİ DEPO: cümle %s anıyor — iş birden çok depoya yayılıyorsa depo başına kart aç (her depoda kendi kartı, kendi PR'ı): %s" % (
+        " + ".join(anilan), " · ".join("kart.sh ac %s-%s …" % (is_, a.split("-")[0].lower()) for a in anilan)))
+elif anilan and anilan[0] != bu:
+    print("BAŞKA DEPO: kart %s deposunda açılıyor, cümle yalnız %s anıyor — iş orada teslim edilecekse kartı o depoda aç (cd <%s> && kart.sh ac …)" % (bu, anilan[0], anilan[0]))
+HAFTA = r"(?<!\w)(?:haftal[ıi]k\w*|hafta(?:s[ıi]|n[ıi]n|da|y[ıi])?|W\d{2}|\d+\.\s*hafta|[2-9]\s*g[üu]n(?:l[üu]k)?|her\s+g[üu]n|t[üu]m\s+hafta)(?!\w)"
+h = sorted(set(m.group(0) for m in re.finditer(HAFTA, cumle, re.I)))
+if h:
+    print("ÇOK GÜNLÜK KAPSAM (%s): bir PR'da teslim edilmez — gün başına kart öner: %s-g1 · %s-g2 … (her biri günün teslim birimi)" % (", ".join(h), is_, is_))
+PY
+}
+
 case "$CMD" in
   ac)
     [ -n "$IS" ] && [ -n "$IS_C" ] && [ -n "$ISTEDI" ] && [ -n "$ALDI" ] || { _hata "gerekli: <iş> --is --istedi --aldi"; exit 1; }
@@ -80,16 +112,18 @@ case "$CMD" in
     case "$CANLI" in ""|e|h) ;; *) _hata "--canli yalnız e|h olabilir ('$CANLI' değil): cron/servis/sunucu işi canlı kanıt ister mi?"; exit 1 ;; esac
     [ -f "$KD/$IS.json" ] && { _hata "kart zaten var: $IS (goster ile bak)"; exit 1; }
     IFS=$'\t' read -r CG CSEBEP <<<"$(canli_hesapla "$IS_C" "$CANLI")"; CSEBEP="${CSEBEP:-}"
-    python3 - "$KD/$IS.json" "$IS" "$IS_C" "$ISTEDI" "$ALDI" "$GA" "$PARA" "$DIS" "$YETKI" "$KANIT" "$ODA" "$CG" "$CSEBEP" <<'PY'
+    KUYARI="$(kapsam_uyar "$IS" "$IS_C" "$(basename "$DEPO")")" || { _hata "kapsam uyarısı ölçülemedi"; KUYARI="ÖLÇÜLEMEDİ: kapsam uyarısı aracı düştü"; }
+    python3 - "$KD/$IS.json" "$IS" "$IS_C" "$ISTEDI" "$ALDI" "$GA" "$PARA" "$DIS" "$YETKI" "$KANIT" "$ODA" "$CG" "$CSEBEP" "$KUYARI" <<'PY'
 import json,sys,datetime
-yol,is_,cumle,istedi,aldi,ga,para,dis,yetki,kanit,oda,cg,csebep=sys.argv[1:]
+yol,is_,cumle,istedi,aldi,ga,para,dis,yetki,kanit,oda,cg,csebep,kuyari=sys.argv[1:]
 cev={"geri_alinamaz":ga,"para":para,"dis_yuzey":dis,"yetki":yetki}
 siniflar=[k for k,v in cev.items() if v in("e","?")]
 kart={"is":is_,"cumle":cumle,"istedi":istedi,"aldi":aldi,"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
       "sinif_cevaplari":cev,"siniflar":siniflar,"sultan":bool(siniflar),"kanit_nerede":kanit,"oda":oda,"durum":"acik","gecmis":[],
-      "canli_gerekir":cg=="E","canli_sebep":csebep}
+      "canli_gerekir":cg=="E","canli_sebep":csebep,"kapsam_uyarilari":[u for u in kuyari.splitlines() if u.strip()]}
 json.dump(kart,open(yol,"w"),ensure_ascii=False,indent=2)
 print(f"✓ kart açıldı: {is_} · sınıf: {', '.join(siniflar) if siniflar else 'yok'} · {'SULTAN\'A GİDER' if siniflar else 'ekipte biter, gün sonu özetine girer'}")
+for u in kart["kapsam_uyarilari"]: print(f"  ⚠ KAPSAM — {u} (uyarı, red değil; karta yazıldı)")
 if cg=="E": print(f"  · CANLI kanıt zorunlu ({csebep}): gerçek ateşleme kaydı (kanit.sh canli) olmadan birleştirme kapısı geçmez")
 elif csebep: print(f"  ⚠ canlı kanıt istenmedi — {csebep}; karta yazıldı, bağımsız göz görür")
 PY

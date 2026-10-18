@@ -154,4 +154,27 @@ bash "$KT" daralt is-at --kalan "kalan parça yeterince uzun bir cümle burada" 
 [ ! -f "$T/depo2/_agents/fabrika/kartlar/is-at-kalan.json" ]; g $? "yarım kalan kart yok"
 rmdir "$T/depo2/_agents/fabrika/kartlar/is-at-kalan.json.tmp" 2>/dev/null
 
+echo "════ T13 · KAPSAM UYARISI: iki depo · başka depo · çok günlük kapsam → uyarır, REDDETMEZ (retro W42 ders M2) ════"
+K13="${KANIT_DEPO:-$T/depo}"; B13="$(basename "$K13")"   # önceki bloklar KANIT_DEPO'yu depo2'ye çeviriyor
+ac13() { bash "$KT" ac "$1" --is "$2" --istedi SERDAR --aldi HENDESE --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h 2>&1; }
+ku() { python3 -c "import json,sys;print(len(json.load(open(sys.argv[1]))['kapsam_uyarilari']))" "$K13/_agents/fabrika/kartlar/$1.json" 2>/dev/null || echo yok; }
+# W42'nin gerçek kartı (hendese-kutuphane-h1): haftalık yazıldı, günlük teslim edildi
+CIKTI="$(ac13 is-h1 "HENDESE kütüphanesi 1. hafta: günlük tur kayıtları (depo/web/video) + örnek vaka kartları, kaynaklı")"; RC=$?
+[ "$RC" -eq 0 ] && [ "$(ku is-h1)" = 1 ]; g $? "haftalık kart AÇILDI (uyarı, red değil) · karta 1 kapsam uyarısı yazıldı"
+grep -q "⚠ KAPSAM — ÇOK GÜNLÜK KAPSAM (1. hafta).*is-h1-g1 · is-h1-g2" <<<"$CIKTI"; g $? "çok günlük kapsam: gün başına kart önerildi (is-h1-g1 · is-h1-g2)"
+CIKTI="$(ac13 is-ikid "Nexus wait-ci --repo bayrağını tanısın ve cloudtop zili aynı kuralla bildirsin")"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "İKİ DEPO: cümle Nexus + cloudtop anıyor.*kart.sh ac is-ikid-nexus … · kart.sh ac is-ikid-cloudtop …" <<<"$CIKTI"; g $? "iki depo adı → depo başına kart önerildi"
+CIKTI="$(ac13 is-baska "cloudtop terminal-merkez bekçisi ölçülemedi hükmünü işlesin")"
+grep -q "BAŞKA DEPO: kart $B13 deposunda açılıyor, cümle yalnız cloudtop anıyor" <<<"$CIKTI"; g $? "yalnız başka depo → yanlış depoda açılıyor olabilir uyarısı"
+CIKTI="$(FABRIKA_DEPOLAR="$B13:Nexus cloudtop" ac13 is-bu "Nexus wait-ci --repo bayrağını tanısın")"
+[ "$(ku is-bu)" = 0 ] && ! grep -q "KAPSAM" <<<"$CIKTI"; g $? "yalnız KENDİ deposunu anan cümle uyarı almaz (takma adla da)"
+CIKTI="$(ac13 is-sx "Sx kart.sh uyarısı ve Nexus notu")"
+grep -q "İKİ DEPO: cümle Nexus + Sx-Claude-Skills" <<<"$CIKTI"; g $? "takma ad (Sx) depo sayılır"
+CIKTI="$(ac13 is-yalan "sohbet ocak sedir lonca adları, nexus küçük harfle, SxFoo ve Nexus-ana-dal-kapisi ekle; haftaya bakarız")"
+[ "$(ku is-yalan)" = 0 ] && ! grep -q "KAPSAM" <<<"$CIKTI"; g $? "yanlış alarm yok: sıradan kelime adlar · küçük harf · bitişik ad · tireli ek · 'haftaya'"
+CIKTI="$(ac13 is-duz "buton ekle")"
+[ "$(ku is-duz)" = 0 ] && ! grep -q "KAPSAM" <<<"$CIKTI"; g $? "düz cümlede uyarı yok, karta boş liste yazıldı"
+CIKTI="$(ac13 is-gun "W42 boyunca her gün tur kaydı")"
+grep -q "ÇOK GÜNLÜK KAPSAM (W42, her gün)" <<<"$CIKTI"; g $? "hafta kodu ve 'her gün' de çok günlük sayılır"
+
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]
