@@ -119,7 +119,16 @@ def tablo_kutu(c, genislik=120):
     if w[1] + w[4] > kalan:
         w[4] = min(w[4], max(12, kalan // 3)); w[1] = kalan - w[4]
     def kirp(s, n):
-        return s if _gen(s) <= n else (s[:max(n - 1, 1)].rstrip() + '…')
+        # görünür genişliğe göre kes (kod noktasına göre değil — göz #369 tur 2: metinde emoji varsa taşıyordu)
+        if _gen(s) <= n:
+            return s
+        out, w = '', 0
+        for ch in s:
+            cw = _gen(ch)
+            if w + cw > n - 1:
+                break
+            out += ch; w += cw
+        return out.rstrip() + '…'
     cizgi = lambda l, m_, r: l + m_.join('─' * (x + 2) for x in w) + r
     out = [cizgi('┌', '┬', '┐'), '│ ' + ' │ '.join(_hiz(bas[k], w[k], orta=k in (0, 3)) for k in range(5)) + ' │', cizgi('├', '┼', '┤')]
     for r in satirlar:

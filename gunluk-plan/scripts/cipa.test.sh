@@ -240,5 +240,12 @@ G={'✅','🟡','⬜','⏸','➖'}
 w=lambda s: sum(2 if (c in G or ord(c)>=0x1F000 or 0x2600<=ord(c)<=0x27BF) else 1 for c in s)
 print(len(set(w(l.rstrip('\n')) for l in sys.stdin)))")"
 
+printf '# ⚓ GÜNÜN PLANI ÇIPASI · 2026-01-03\n\n## Maddeler\n- [ ] 1) 🟡🟡🟡 emoji dolu çok uzun madde metni %s (sahip: X)\n- [ ] 2) kısa\n' "$(printf 'a%.0s' $(seq 1 150))" > "$T/emoji-cipa.md"
+kapi "T28 metinde emoji olan uzun madde kısaltılınca kutu hizası bozulmaz" "1" "$(python3 "$KOK/tablo.py" "$T/emoji-cipa.md" 2>/dev/null | grep '^[│┌├└]' | python3 -c "
+import sys
+G={'✅','🟡','⬜','⏸','➖'}
+w=lambda s: sum(2 if (c in G or ord(c)>=0x1F000 or 0x2600<=ord(c)<=0x27BF) else 1 for c in s)
+print(len(set(w(l.rstrip('\\n')) for l in sys.stdin)))")"
+
 echo "SONUÇ: $gecen geçti · $kalan kaldı"
 [ "$kalan" -eq 0 ]
