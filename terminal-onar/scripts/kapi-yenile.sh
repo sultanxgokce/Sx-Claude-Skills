@@ -11,7 +11,7 @@
 #      (bir kez kopar; sonraki yenilemeler sıcak olur). --kuru: hiçbir şey yapmaz, hangi yola gideceğini basar.
 # RC: 0 tazelendi/zaten güncel · 1 web-yenile'ye düşüldü ve o da düştü · 2 pano.js yok
 set -u
-. "$(dirname "$0")/ortak.sh"
+. "$(dirname "$0")/ortak.sh" || exit 3   # kutu adı reddi: ortak.sh sebebi tek satır yazdı → DUR, rc 3 (FSZ30; eskiden unbound variable ile çöküyordu)
 KURU=0; [ "${1:-}" = "--kuru" ] && KURU=1
 PANO="$KAPI_DIZ/genel/pano.js"
 [ -f "$PANO" ] || { echo "pano.js yok: $PANO"; exit 2; }

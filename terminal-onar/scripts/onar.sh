@@ -4,7 +4,7 @@
 #   --web-yenile   web terminalini sağlam olsa bile yeniden başlat (ör. yeni parola kasaya konduktan sonra)
 # RC: 0 = sonunda durum sağlam · 1 = hâlâ bozuk (sonraki kademeye geç) · 2 = parola kasada yok
 set -u
-. "$(dirname "$0")/ortak.sh"
+. "$(dirname "$0")/ortak.sh" || exit 3   # kutu adı reddi: ortak.sh sebebi tek satır yazdı → DUR, rc 3 (FSZ30; eskiden unbound variable ile çöküyordu)
 WEB_YENILE=0; [ "${1:-}" = "--web-yenile" ] && WEB_YENILE=1
 gunluk "K0 onar başladı"
 SIFRE_YOK=0

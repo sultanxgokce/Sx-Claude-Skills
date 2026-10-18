@@ -1,0 +1,42 @@
+$ bash -c cd terminal-onar/kapi && node kadro-hal.test.mjs
+# rc=0 sure=3.6s zaman=2026-10-18T16:44:52+03:00
+--- stdout ---
+── KH-A · kimlik: yalnız Sultan oturumu (çerez + başlık), jeton yolu yok
+  ✓ KH1 çerezsiz → 401
+  ✓ KH2 çerezsiz + Bearer jeton → 401 (jeton kimlik sayılmaz)
+  ✓ KH3 çerez VAR ama Bearer/defter jetonu da taşıyor → 403 (jetonla gelen istek ajandır)
+  ✓ KH4 x-kapi başlığı yok → 403 (sayfa dışı form gönderimi)
+  ✓ KH5 bu dört istekte tmux'a HİÇ dokunulmadı
+── KH-B · altyapı negatif: kapat/dondur/emekli 403, tmux'a dokunulmaz
+  ✓ KH6 kapat: dash · ana · ttyd-* (listede bile yok) · *-kurtarici → 403, gerekçe Sultan dilinde
+  ✓ KH7 kayıtlı ama koltuğu altyapı (dashwatch) olan kişiyi dondur/emekli → 403, kayıt değişmedi
+  ✓ KH8 altyapı isteklerinde tmux'a HİÇ dokunulmadı
+  ✓ KH9 /api/kadro: altyapı ayrı (ana · dash; kayıtlı dashwatch kişide altyapı etiketli), kayıtsızlar gezgin + canlikayitsiz (2.17.0 fikstürü); eylemler: true
+── KH-C · kayıtsız oturumu kapat
+  ✓ KH10 kayıtlı kişinin oturumunu "kapat" → 409 (dondur yolu), tmux'a dokunulmadı
+  ✓ KH10b Claude'suz kayıtsız oturum kapatilabilir:true (sorunlu oturum — düğme kalır)
+  ✓ KH11 kayıtsız "gezgin" → 200, tmux kill-session -t =gezgin (tam ad eşleşmesi)
+  ✓ KH12 kapanmış oturumu tekrar kapat → 404
+── KH-C2 · kapat koruması (2.17.0): içinde Claude çalışan kayıtsız oturum kapatılmaz
+  ✓ KH12b kadroda canlı kayıtsız oturum kapatilabilir:false (düğme göstermesin diye veri söyler)
+  ✓ KH12c canlı kayıtsız oturumu "kapat" → 409, gerekçe Sultan dilinde, tmux'a DOKUNULMADI
+  ✓ KH12d oturum hâlâ listede (kapatılmadı)
+── KH-D · dondur → geri aç (uçtan uca)
+  ✓ KH13 dondur BASIRET → 200; kayıtta durum: dondurulmus + durum_once: yok; oturum kapatıldı
+  ✓ KH14 kadroda: geçici/emekli grubunda, hâl dondurulmus, geri açılır, oturumu yok
+  ✓ KH15 dondurulmuşu yeniden dondur → 409
+  ✓ KH16 geri aç → 200 oturum:true; açıcı "ac BASIRET --eski" (eski sohbetine döner)
+  ✓ KH17 kayıt BAYT BAYT ilk hâl
+  ✓ KH18 kadroda yeniden çalışan (oturum açık, hal_kayit kaydın hal: alanından)
+── KH-E · emekli et → geri aç (oturum yeniden AÇILMAZ) · satır yorumu korunur
+  ✓ KH19 emekli KALFA → 200; durum: emekli (yorum kaldı) + durum_once: canli; oturumu kapatıldı
+  ✓ KH20 emekliyi geri aç → kayıt BAYT BAYT ilk hâl, açıcı ÇAĞRILMADI (emeklilik oturum kararı değil)
+── KH-F · oturum kapatılamazsa kayıt geri alınır · geçersiz istekler
+  ✓ KH21 kill-session düşer → 502 ve kayıt BAYT BAYT ilk hâl (ekran "dondurulmuş" deyip oturum çalışmaz)
+  ✓ KH21b kapatma düşer + geri alma da düşer → 500 ve DÜRÜST cümle ("geri alınamadı … elle düzeltilmeli"), "döndürüldü" DENMEZ; iz kaydında GERI-ALINAMADI
+  ✓ KH21c eşzamanlı iki eylem SIRAYLA: dondur → (kapatma düştü) geri-al → emekli; iz sırası dondur·geri-al·emekli, ilk 502 ikincisi de yine kapatılamadığı için 502, kayıt sonunda BAYT BAYT ilk hâl
+  ✓ KH22 dondurulmamışı geri aç → 409 · bilinmeyen kişi → 404 · bilinmeyen eylem → 400
+  ✓ KH23 iz kaydı: her eylem tek satır (kapat · dondur · geri-ac · emekli · geri-al)
+
+SONUÇ: 29 geçti · 0 kaldı
+--- stderr ---

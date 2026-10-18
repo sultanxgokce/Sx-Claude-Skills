@@ -1,0 +1,26 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/r7m/sinav-say.sh /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/r7m/once-wt/yazilim-fabrikasi/scripts
+# rc=0 sure=327.9s zaman=2026-10-18T16:59:32+03:00
+--- stdout ---
+test_rc=0
+── SONUÇ: 166 geçti · 0 kaldı ──
+  ✓ mutant 'ayrac-temizligini-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'gerekce-zorunlulugunu-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'karti-okumayi-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'defter-dogrulamasini-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'reis-sinif-citini-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'mutlak-tavani-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'yedek-gozu-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'kart-tek-kaynagi-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'codex-stdin-acik' sınavı KIRMIZI yapıyor
+  ✓ mutant 'kart-yolu-harici-kalir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'kart-secenegi-tek-kaynagi-asar' sınavı KIRMIZI yapıyor
+  ✓ mutant 'kapi-kart-hatasini-bastirir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'bayat-kopya-geri-donusu' sınavı KIRMIZI yapıyor
+  ✓ mutant 'kart-json-hatasi-yutulur' sınavı KIRMIZI yapıyor
+  ✓ mutant 'kirpma-kaydini-kaldir' sınavı KIRMIZI yapıyor
+  ✓ F1 CI keşfi bu dosyayı BULUR (find ile türetilen listede)
+  ✓ F1 KUTU-DISI.jsonl yazıldı ve yüzeyi taşıyor
+  ✓ F2 🔴 aynı bulgu her turda YENİDEN yazılmaz (defter şişmez)
+  ✓ F3 defterin yolu ekrana basılır
+  ✓ F4 kutu-dışı bulgu YOKSA defter KURULMAZ (boş dosya bırakmaz)
+--- stderr ---

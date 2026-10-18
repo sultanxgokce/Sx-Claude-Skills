@@ -18,10 +18,12 @@ import { fileURLToPath } from 'node:url';
 // Koltuk adı kuralı — kabuktaki TEK kopyası scripts/koltuk-adi.sh; iki dilin eşdeğerliği scripts/koltuk-adi.test.sh'de ölçülür.
 // '.' · ':' · kontrol karakteri yok; boşluk arada serbest, başta/sonda yok; ilk karakter '$' '@' '%' '=' olamaz (tmux kimlik önekleri).
 import { KOLTUK_AD_DESEN, koltukSatirlari } from './koltuklar.mjs';
-import { kayitOku, kadroBirlestir, altyapiNeden } from './kadro.mjs';
+import { kayitOku, kadroBirlestir, altyapiNeden, davaOzet, yerAcAday, DAVA_ROL } from './kadro.mjs';
 import { bugunOku } from './bugun.mjs';
-import { kadroYaz, KadroHata } from './kadro-yaz.mjs';
+import { kadroYazKilitAltinda, KadroHata, davaEkle, kisiyeBagla, baglaGeriAl, DOSYA_NO, kisaAdGecerli } from './kadro-yaz.mjs';
+import { dosyaKilit } from './kilit.mjs';
 import { oturumKimlikleri, oturumDizinleri } from './kimlik.mjs';   // kişi↔oturum eşleşmesinin kimlik ayağı (salt-okur)
+import { davaDondur, davaEk, davaGeriEk } from './dava.mjs';   // Dava Rafı: dondurmanın tek yolu (kapı Aç'ı + günlük bekçi turu)
 // Sınav dikişi: süreç kökü ve pid alanı ortamdan verilebilir (gerçekte /proc ve kendi alanı)
 const kimlikler = () => oturumKimlikleri({ dizinler: oturumDizinleri(), procKok: process.env.KAPI_PROC_KOK || '/proc',
   ...(process.env.KAPI_PID_ALANI ? { pidAlani: process.env.KAPI_PID_ALANI } : {}) });
@@ -54,6 +56,7 @@ const T = (y) => TABAN + y;   // dışarıya verilen mutlak yol
 const KUTU = process.env.TO_KUTU || (TABAN ? TABAN.slice(1) : '') || 'kutu';
 const KUTU_BAS = KUTU.charAt(0).toLocaleUpperCase('tr') + KUTU.slice(1);
 const DURUM_DIZ = process.env.TO_DURUM_DIZ || '/config/.terminal-onar';
+const KILIT_BEKLE_MS = +process.env.KADRO_KILIT_BEKLE_MS || 30000;   // kayıt kilidi bekleme (sınav kısaltır)
 const RESIM_URL = process.env.KAPI_RESIM_URL || 'http://127.0.0.1:8391/upload';
 // ── PANO KÖPRÜSÜ (2.3.0 · Sultan 12 Eki: "Cmd+C kopyalamıyor, resmi Cmd+V yapıştıramıyorum") ──
 // ttyd'nin HTML sayfasına genel/pano.js gömülür: resim yapıştır → /api/resim → yol terminale; tmux seçimi (OSC 52)
@@ -504,7 +507,9 @@ const sunucu = http.createServer(async (req, res) => {
         const ekranla = (o) => o ? { ...o, ekran: T('/tty/') + '?arg=' + encodeURIComponent(o.ad) } : null;
         return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, proje: PROJE, kaynak: kayit.kaynak, okunamadi: kayit.okunamadi, zaman: new Date().toISOString(),
           sayilar: kd.sayilar, kisiler: kd.kisiler.map((k) => ({ ...k, oturum: ekranla(k.oturum) })), kayitsiz: kd.kayitsiz.map(ekranla),
-          altyapi: kd.altyapi.map(ekranla), eylemler: true });   // eylemler: bu kapı E2 ucunu taşıyor (merkez düğmeleri buna bakar)
+          altyapi: kd.altyapi.map(ekranla), eylemler: true,   // eylemler: bu kapı E2 ucunu taşıyor (merkez düğmeleri buna bakar)
+          // Dava Rafı (Parça B2): kayıt kökünde dava_kurali varsa raf alanı; bagla: bu kapı E4 (kayda bağla) eylemini taşıyor
+          ...(kayit.dava_kurali ? { davalar: davaOzet(kd.kisiler, kayit.dava_kurali) } : {}), bagla: true });
       }
       // ── KADRO E2 (Sultan onaylı, SERDAR 16 Eki 00:3x): dört eylem, hepsi geri alınabilir.
       //    emekli · dondur → kayda durum (kadro-yaz.mjs; önceki değer durum_once) + oturum açıksa kapatılır (kapatılamazsa kayıt GERİ ALINIR)
@@ -518,11 +523,16 @@ const sunucu = http.createServer(async (req, res) => {
         if (req.headers.authorization || req.headers['x-defter-jeton']) return json(res, 403, { hata: 'Bu uç jetonla çağrılamaz — kadro kararını Sultan ekrandan verir.' });
         let g; try { g = JSON.parse((await govde(req, 4096)).toString('utf8') || '{}'); } catch { return json(res, 400, { hata: 'Geçersiz istek.' }); }
         const eylem = String(g.eylem || '');
-        if (!['emekli', 'dondur', 'geri-ac', 'kapat'].includes(eylem)) return json(res, 400, { hata: 'Eylem: emekli · dondur · geri-ac · kapat.' });
+        if (!['emekli', 'dondur', 'geri-ac', 'kapat', 'bagla', 'bagla-geri-al'].includes(eylem)) return json(res, 400, { hata: 'Eylem: emekli · dondur · geri-ac · kapat · bagla · bagla-geri-al.' });
         // Altyapı kontrolü HER ŞEYDEN ÖNCE ve yalnız adla: liste ölçülemese bile altyapıya dokunulmaz
         if (eylem === 'kapat' && altyapiNeden(String(g.oturum || ''), ANA_TMUX)) return json(res, 403, { hata: `Altyapı oturumu (${altyapiNeden(String(g.oturum), ANA_TMUX)}) kapatılamaz.` });
+        if (eylem === 'bagla' && altyapiNeden(String(g.oturum || ''), ANA_TMUX)) return json(res, 403, { hata: `Altyapı oturumu (${altyapiNeden(String(g.oturum), ANA_TMUX)}) kayda bağlanamaz.` });
         const birak = await kadroKilit();
+        let dosyaBirak = () => {};
         try {
+        // Süreçler arası kilit (B7): günlük bekçi turu da aynı kayda yazar → AYNI dosya (kilit.mjs, PROJE; kadroYaz da orada kilitler).
+        // Bütün işlem (yer aç: dondur + aç · bağla) bu kilit altında; içeride yalnız kadroYazKilitAltinda çağrılır.
+        try { dosyaBirak = dosyaKilit(PROJE, { bekleMs: KILIT_BEKLE_MS }); } catch (e) { if (e instanceof KadroHata) return json(res, e.kod, { hata: e.message }); throw e; }
         const r = await calistir('bash', [KOLTUK_BETIK, '--liste']);
         if (r.kod !== 0) return json(res, 500, { hata: 'Koltuklar ölçülemedi — hiçbir şey yapılmadı.' });
         const kayit = kayitOku(PROJE);
@@ -541,20 +551,70 @@ const sunucu = http.createServer(async (req, res) => {
           izYaz(`kapat ${JSON.stringify(ad)}`);
           return json(res, 200, { tamam: true, mesaj: `${ad} kapatıldı.` });
         }
+        // ── E4 · KAYDA BAĞLA (Parça B6): kayıtsız oturum ya yeni dava satırı olur ya da var olan bir kişinin oturumu sayılır.
+        //    Oturuma dokunulmaz (kapanmaz, içindeki sohbet sürer). Claude kimliği oturumun kimlik izinden (kimlik.mjs) okunur.
+        if (eylem === 'bagla') {
+          const ad = String(g.oturum || '');
+          if (!KOLTUK_AD_DESEN.test(ad)) return json(res, 400, { hata: 'Oturum adı geçersiz.' });
+          if (!kd.kayitsiz.some((o) => o.ad === ad)) return json(res, 404, { hata: 'Böyle bir kayıtsız oturum yok (kapanmış ya da zaten bağlı olabilir).' });
+          const kim = (kimlikler().get(ad) || []);
+          if (kim.length !== 1) return json(res, 409, { hata: kim.length ? 'Oturumda birden çok Claude var — hangisinin bağlanacağı belirsiz.' : 'Oturumda Claude yok — bağlanacak kimlik bulunamadı.' });
+          try {
+            if (g.hedef === 'dava') {
+              const no = String(g.dosya_no || ''), kisa = String(g.kisa_ad || '');
+              if (!DOSYA_NO.test(no)) return json(res, 400, { hata: 'Dosya no YYYY/N biçiminde olmalı (ör. 2025/42).' });
+              if (!kisaAdGecerli(kisa)) return json(res, 400, { hata: 'Kısa ad 1-60 harf olmalı; tırnak ve ters bölü olamaz.' });
+              if (kd.kisiler.some((k) => k.id === no)) return json(res, 409, { hata: `"${no}" zaten rafta.` });
+              const s2 = davaEkle({ proje: PROJE, id: no, tmux: ad, arz_adi: kisa, session_id: kim[0].sessionId, cwd: kim[0].cwd });
+              izYaz(`bagla ${JSON.stringify(ad)} → dava ${JSON.stringify(no)} ${s2.dosya}`);
+              return json(res, 200, { tamam: true, mesaj: `${no} rafa eklendi.` });
+            }
+            if (g.hedef === 'kisi') {
+              const id = String(g.id || ''); const kisi = kd.kisiler.find((k) => k.id === id);
+              if (!kisi) return json(res, 404, { hata: 'Kayıtta böyle bir kişi yok.' });
+              if (kisi.altyapi) return json(res, 403, { hata: `Altyapı oturumu (${kisi.altyapi}) — kadro eylemi uygulanamaz.` });
+              if (kisi.rol === DAVA_ROL) return json(res, 409, { hata: 'Dava satırına oturum bağlanmaz — yeni dava olarak bağla.' });
+              if (kisi.oturum && kisi.oturum.claude) return json(res, 409, { hata: `${id} zaten çalışan bir oturumda — bağlanmadı.` });
+              const s2 = kisiyeBagla({ proje: PROJE, id, session_id: kim[0].sessionId });
+              izYaz(`bagla ${JSON.stringify(ad)} → kisi ${JSON.stringify(id)} ${s2.onceki || '-'}→${kim[0].sessionId} ${s2.dosya}`);
+              return json(res, 200, { tamam: true, mesaj: `${ad} artık ${id} oturumu.` });
+            }
+            return json(res, 400, { hata: 'Hedef: dava · kisi.' });
+          } catch (e) { if (e instanceof KadroHata) return json(res, e.kod, { hata: e.message }); throw e; }
+        }
+        if (eylem === 'bagla-geri-al') {
+          const id = String(g.id || ''); const kisi = kd.kisiler.find((k) => k.id === id);
+          if (!id || !kisi) return json(res, 404, { hata: 'Kayıtta böyle bir kişi yok.' });
+          if (!kisi.bagla_ile) return json(res, 409, { hata: 'Bu kayıt bağlamayla gelmedi.' });
+          try { const s2 = baglaGeriAl({ proje: PROJE, id }); izYaz(`bagla-geri-al ${JSON.stringify(id)} ${s2.silindi ? 'blok silindi' : 'kimlik geri kondu'} ${s2.dosya}`); }
+          catch (e) { if (e instanceof KadroHata) return json(res, e.kod, { hata: e.message }); throw e; }
+          return json(res, 200, { tamam: true, mesaj: `${id} bağlaması geri alındı; oturum kapanmadı.` });
+        }
         const id = String(g.id || '');
         const kisi = kd.kisiler.find((k) => k.id === id);
         if (!id || !kisi) return json(res, 404, { hata: 'Kayıtta böyle bir kişi yok.' });
         if (kisi.altyapi) return json(res, 403, { hata: `Altyapı oturumu (${kisi.altyapi}) — kadro eylemi uygulanamaz.` });
         const onceHal = kisi.hal_kayit;
+        // ── Aç YER AÇAR (Parça B4 · Sultan 14:18): dava geri açılırken açık dava sayısı tavana ulaşmışsa en uzun süredir dokunulmayan
+        //    açık dava ÖNCE dondurulur. Dondurulamazsa (oturumu kapanmadı) HİÇBİR ŞEY açılmaz → 502.
+        let donduruldu = null;
+        if (eylem === 'geri-ac' && g.yer_ac === true && kisi.rol === DAVA_ROL && onceHal === 'dondurulmus' && kayit.dava_kurali) {
+          const aday = yerAcAday(kd.kisiler, kayit.dava_kurali, id);
+          if (aday) {
+            try { await davaDondur({ proje: PROJE, kisi: aday, kapat, iz: izYaz, neden: 'yer açmak için' }); }
+            catch (e) { if (e instanceof KadroHata) return json(res, e.kod, { hata: `Tavan dolu ve ${aday.id} dondurulamadı (${e.message}) — ${id} açılmadı.` }); throw e; }
+            donduruldu = aday.id;
+          }
+        }
         let sonuc;
-        try { sonuc = kadroYaz({ proje: PROJE, id, eylem }); }
+        try { sonuc = kadroYazKilitAltinda({ proje: PROJE, id, eylem, ek: kisi.rol === DAVA_ROL ? davaEk(kisi, eylem) : null }); }
         catch (e) { if (e instanceof KadroHata) return json(res, e.kod, { hata: e.message }); throw e; }
         izYaz(`${eylem} ${JSON.stringify(id)} ${sonuc.onceki || '-'}→${sonuc.yeni || '-'} ${sonuc.dosya}${sonuc.uretilmis ? ' (derlendi)' : ''}`);
         if (eylem === 'emekli' || eylem === 'dondur') {
           if (kisi.oturum && !(await kapat(kisi.oturum.ad))) {
             // Kayıt "kapalı" derken oturum çalışıyorsa ekran yalan söyler → kaydı geri al. Geri alma DA düşerse bunu söyle (bağımsız göz
             // tur 1: hata yutulup "döndürüldü" deniyordu) — kayıt şu an yanlış hâldedir ve elle düzeltilmelidir.
-            try { kadroYaz({ proje: PROJE, id, eylem: 'geri-ac' }); izYaz(`geri-al ${JSON.stringify(id)} (oturum kapatılamadı)`); }
+            try { kadroYazKilitAltinda({ proje: PROJE, id, eylem: 'geri-ac', ek: kisi.rol === DAVA_ROL ? davaGeriEk(kisi) : null }); izYaz(`geri-al ${JSON.stringify(id)} (oturum kapatılamadı)`); }
             catch (e) { izYaz(`GERI-ALINAMADI ${JSON.stringify(id)} ${String(e.message || e)}`);
               return json(res, 500, { hata: `Oturum kapatılamadı VE kayıt geri alınamadı (${e.message || e}) — kayıt şu an "${sonuc.yeni}" diyor, oturum çalışıyor; elle düzeltilmeli.` }); }
             return json(res, 502, { hata: 'Oturum kapatılamadı — kayıt eski hâline döndürüldü.' });
@@ -565,11 +625,12 @@ const sunucu = http.createServer(async (req, res) => {
         if (onceHal === 'dondurulmus' && kisi.tmux && !kisi.oturum) {
           const a = await calistir('bash', [KOLTUK_AC_BETIK, 'ac', kisi.tmux, '--eski'], undefined, +(process.env.KAPI_AC_SURE_MS || 120000));
           const msj = (a.out + a.err).trim().split('\n').filter(Boolean).pop() || '';
-          if (a.kod === 0 || a.kod === 3) return json(res, 200, { tamam: true, oturum: true, mesaj: `${id} geri açıldı, oturumu eski sohbetiyle açılıyor.` });
-          return json(res, 200, { tamam: true, oturum: false, mesaj: `${id} kaydı geri açıldı ama oturum açılamadı: ${msj || 'açıcı cevap vermedi'} — Kaldır ile yeniden dene.` });
+          const dz = kisi.rol === DAVA_ROL ? { donduruldu } : {};
+          if (a.kod === 0 || a.kod === 3) return json(res, 200, { tamam: true, oturum: true, ekran: T('/tty/') + '?arg=' + encodeURIComponent(kisi.tmux), ...dz, mesaj: `${id} geri açıldı, oturumu eski sohbetiyle açılıyor.` });
+          return json(res, 200, { tamam: true, oturum: false, ...dz, mesaj: `${id} kaydı geri açıldı ama oturum açılamadı: ${msj || 'açıcı cevap vermedi'} — Kaldır ile yeniden dene.` });
         }
-        return json(res, 200, { tamam: true, mesaj: `${id} geri açıldı.` });
-        } finally { birak(); }
+        return json(res, 200, { tamam: true, ...(kisi.rol === DAVA_ROL ? { donduruldu } : {}), mesaj: `${id} geri açıldı.` });
+        } finally { dosyaBirak(); birak(); }
       }
       if (y === '/api/surum') {
         // telefon eski sayfada kalmasın: dosyalar değişince sürüm değişir, sayfa kendini yeniler

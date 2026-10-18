@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "denetci-fark-kendisi",
+  "pr": "376",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T17:08:20+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": null,
+  "yazan_model_kaynak": null,
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 36215,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 10685
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Denetçi yerel üç-nokta farkı alma, ana hattın gerisinde/kirli/boş farkta durma ve PR başı denetimiyle genişletilmiş; araç imzalı ölçüm ve mutantlar uygulamanın kendi tanımladığı kapıları geçtiğini gösteriyor. Ancak iş kartı --pr kullanıldığında yerel baş ile PR başı farklıysa durulmasını isterken kod bunu yalnız dal adları eşitse yapıyor ve sınav başka dalda devam etmeyi özellikle doğru sayıyor; önce bu talep sapması çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "--pr baş denetimi iş kartından daha dar uygulanmış: yerel HEAD ile PR HEAD farklı olsa bile yerel dal adı PR dal adından farklıysa denetim devam ediyor.",
+        "kanit": "Üretim kodundaki koşul farkı yalnız `[ \"$YEREL_DAL\" = \"${PR_BAS#* }\" ]` sağlanınca durduruyor; F5e ise farklı yerel dal ve farklı PR başıyla rc=0 sonucunu açıkça bekleyip geçiriyor. İş kartı koşulu dal adı istisnası vermeden `--pr ile yerel baş PR başından farklıysa ... dur` diyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh: --pr kolundaki YEREL_DAL/YEREL_BAS koşulu; yazilim-fabrikasi/scripts/denetci-fark-kendisi.test.sh: F5e",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Önce ölçümündeki kırmızı sonuç ile sonra ölçümündeki 167/167 yeşil sonuç bir ölçüm çifti oluşturuyor, ayrıca yeni davranış için 21 kapı ve dört mutant var. Bununla birlikte yeşil sınav hedefin doğruluğunu kanıtlamıyor: F5e iş kartındaki koşula aykırı istisnayı test beklentisine dönüştürdüğü için yanlış hedef başarıyla ölçülmüş."
+  }
+}

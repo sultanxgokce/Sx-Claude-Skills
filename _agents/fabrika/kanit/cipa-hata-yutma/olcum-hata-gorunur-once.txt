@@ -1,0 +1,8 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/cipa/hata-gorunur-mu.sh /config/projects/_wt/Sx-Claude-Skills-cipa-hata-yutma/gunluk-plan/scripts/cipa.sh
+# rc=1 sure=0.4s zaman=2026-10-18T17:21:54+03:00
+--- stdout ---
+tazele_rc=2
+stderr_bayt=0
+stderr=[]
+hata_satiri_gorunur=0
+--- stderr ---

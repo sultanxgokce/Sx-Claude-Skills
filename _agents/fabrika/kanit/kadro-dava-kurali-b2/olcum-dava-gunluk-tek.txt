@@ -1,0 +1,12 @@
+$ bash terminal-onar/scripts/dava-gunluk.test.sh
+# rc=0 sure=0.3s zaman=2026-10-18T16:50:25+03:00
+--- stdout ---
+  ✓ G1 günün ilk koşusu turu çağırır, damga = bugün
+  ✓ G2 aynı gün sonraki koşular turu ÇAĞIRMAZ (kapı tarihe bakar, uygun dava olup olmadığına değil)
+  ✓ G3 ertesi gün koşar; tur düşse de (rc 3) damga yazılı, aynı gün tekrar denenmez
+  ✓ G4 sonraki gün yeniden koşar
+  ✓ G5 damga yazılamazsa tur KOŞMAZ (her dakika koşmasın), rc 0, sebebi söylenir
+  ✓ G6 bekçi turu bu kapıdan çağırır (doğrudan dava-bekci.mjs çağrısı yok)
+
+SONUÇ: 6 geçti · 0 kaldı
+--- stderr ---

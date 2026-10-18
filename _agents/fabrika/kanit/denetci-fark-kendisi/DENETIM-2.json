@@ -1,0 +1,30 @@
+{
+  "tur": 2,
+  "is": "denetci-fark-kendisi",
+  "pr": "376",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T17:23:54+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": null,
+  "yazan_model_kaynak": null,
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 39915,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 14582
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Denetçi artık seçeneksiz kullanımda ana hattı fetch ediyor, geride/kirli/boş farkta duruyor ve üç-nokta fark alıyor; --pr kipinde de PR dalının yerel kopyasını, bulunulan daldan bağımsız olarak PR başıyla karşılaştırıyor. Talep üretim kodu, çağrılan bütünleşik sınavlar ve hedef kapıları gerçekten düşüren mutantlarla karşılanmış; üretime engel kanıtlanmış kusur kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sha değerleri tutuyor; sarı kayıt yok. İlk kırmızı koşumdan sonra taban çalışma ağacında 166/166 yeşil, değişiklik sonrasında 167/167 ve yeni fark-kendisi paketinde 23/23 yeşil sonuç bulunuyor. F1–F6 yerel fark, geride kalma, üç-nokta davranışı, kayıtsız değişiklik, PR dal başı ve boş fark yollarını ölçüyor; beş mutant da ilgili kapı kaldırıldığında hedef sınavın düştüğünü ve kontrol yolunun çalışmayı sürdürdüğünü gösteriyor."
+  }
+}

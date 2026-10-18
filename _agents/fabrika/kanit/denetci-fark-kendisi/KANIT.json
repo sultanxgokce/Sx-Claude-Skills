@@ -1,0 +1,56 @@
+{
+  "is": "denetci-fark-kendisi",
+  "arac": "kanit.py/0.4.0",
+  "guncelleme": "2026-10-18T17:22:41+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "once",
+      "dosya": "olcum-sinav-once.txt",
+      "sha256": "5e060719534f2222c08c4e6ecb777707a7dd0679990a5423959a1ebd36fdf300",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/r7m/sinav-say.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/r7m/once-Ybtc"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-18T16:53:49+03:00",
+      "sure_sn": 295.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-taban-wt",
+      "asama": "once",
+      "dosya": "olcum-sinav-taban-wt-once.txt",
+      "sha256": "d72994d0579d31e1ebeb5f2f9d234ae70075d4bf584c12e22f2c65d387e36d69",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/r7m/sinav-say.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/r7m/once-wt/yazilim-fabrikasi/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:59:32+03:00",
+      "sure_sn": 327.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "226fc99002311be1f6c0faf6dcfdf690170c854af7c3de5515bbeaef2045fd62",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/r7m/sinav-say.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-denetci-fark-kendisi/yazilim-fabrikasi/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T17:22:41+03:00",
+      "sure_sn": 750.5
+    }
+  ],
+  "imza": "990b0ebb981b0f3bb145cc4e656eb80b2a8c4e6abb655e6b05dd18915d26e28c"
+}

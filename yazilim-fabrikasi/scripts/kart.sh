@@ -10,6 +10,10 @@
 #          --canli: cron/servis/sunucu işi gerçek ateşleme kaydı (kanit.sh canli) ister; verilmezse cümleden türetilir, karta yazılır
 #   kart.sh bitti <iş> [--pr N]        durum=bitti; son DENETIM puanını ve KANIT durumunu karta işler (worktree'den de çağrılabilir)
 #   kart.sh tikandi <iş> --yol devam|daralt|geri-al --neden "..."
+#   kart.sh daralt <iş> --kalan "<kalan bulgu ≥20>" --cumle "<daraltılmış cümle ≥20>" --oturum <ref> [--yeni <ad>]
+#     → kart cümlesi daraltılır (eskisi cumle_gecmisi'ne), kalan bulgu YENİ karta (aynı sınıf cevapları, aynı sahip),
+#       karta daraltma kaydı (tur_sifir = o andaki denetim turu → denetçi yeni cümleyle sıfırdan sayar, kapı onu okur).
+#       Sınıfsız kartta reis kararı 'daralt' kendiliğinden işlenir; SINIFLI kartta Sultan'ın 'daralt' kararı (sultan-dedi) ŞARTTIR.
 #   kart.sh sultan-dedi <iş> --karar <devam|daralt|geri-al> --oturum <ref> --soz "<verbatim ≤15 kelime>" \
 #          --beyan <AJAN> --gerekce "<niçin bu yol işe yarar — en az 20 karakter>"
 #   kart.sh reis-dedi <iş> --karar <devam|daralt|geri-al> --reis <AD> --oturum <ref> \
@@ -32,13 +36,14 @@ KD="$DEPO/_agents/fabrika/kartlar"; mkdir -p "$KD"
 
 CMD="${1:-}"; IS="${2:-}"; shift 2 2>/dev/null || true
 IS_C=""; ISTEDI=""; ALDI=""; GA=""; PARA=""; DIS=""; YETKI=""; KANIT=""; ODA=""; PR=""; YOL=""; NEDEN=""
-KARAR=""; OTURUM=""; SOZ=""; BEYAN=""; GEREKCE=""; REIS=""; CANLI=""
+KARAR=""; OTURUM=""; SOZ=""; BEYAN=""; GEREKCE=""; REIS=""; CANLI=""; KALAN=""; CUMLE=""; YENI=""
 while [ $# -gt 0 ]; do case "$1" in
   --is) IS_C="$2"; shift 2 ;; --istedi) ISTEDI="$2"; shift 2 ;; --aldi) ALDI="$2"; shift 2 ;;
   --geri-alinamaz) GA="$2"; shift 2 ;; --para) PARA="$2"; shift 2 ;; --dis-yuzey) DIS="$2"; shift 2 ;; --yetki) YETKI="$2"; shift 2 ;;
   --kanit) KANIT="$2"; shift 2 ;; --oda) ODA="$2"; shift 2 ;; --pr) PR="$2"; shift 2 ;; --yol) YOL="$2"; shift 2 ;; --neden) NEDEN="$2"; shift 2 ;;
   --karar) KARAR="$2"; shift 2 ;; --oturum) OTURUM="$2"; shift 2 ;; --soz) SOZ="$2"; shift 2 ;; --beyan) BEYAN="$2"; shift 2 ;;
   --gerekce) GEREKCE="$2"; shift 2 ;; --reis) REIS="$2"; shift 2 ;; --canli) CANLI="$2"; shift 2 ;;
+  --kalan) KALAN="$2"; shift 2 ;; --cumle) CUMLE="$2"; shift 2 ;; --yeni) YENI="$2"; shift 2 ;;
   --acik) ACIK=1; shift ;; *) _hata "tanınmayan argüman: $1"; exit 1 ;; esac; done
 
 tetik() {  # tetik <oda> <başlık> <gövde>
@@ -205,6 +210,89 @@ k.setdefault("reis_kararlari",[]).append({
   "zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds")})
 json.dump(k,open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
 print(f"\u2713 reis karari karta islendi: {karar} \u00b7 reis {reis} \u00b7 oturum {oturum} (sinifsiz is)")
+PY
+    ;;
+  daralt)
+    # 🔴 DARALTMA ADIMI (PCP7J, 18 Eki 2026): tıkanma raporu "kapsamı daralt" diyordu ama hatta adımı yoktu —
+    #    daralt kararı verilen iş (cloudtop #668) tur açamadı, 4. tur mutlak dolan iş (#670) bir daha denetlenemedi,
+    #    kapı reis kararını hiç okumadı. Geçici yol "yeni kart + yeni dal + yeni PR" Sultan'a günde ~30 karar yüklüyordu.
+    #    Şimdi: cümle daraltılır, kalan bulgu yeni karta, karta daraltma kaydı; denetçi daraltmadan ÖNCEKİ turları saymaz.
+    [ -n "$IS" ] || { _hata "iş adı gerekiyor"; exit 1; }
+    [ -f "$KD/$IS.json" ] || { _hata "kart YOK: $KD/$IS.json"; exit 1; }
+    eksik=""
+    [ -n "$KALAN" ] || eksik="$eksik --kalan"
+    [ -n "$CUMLE" ] || eksik="$eksik --cumle"
+    [ -n "$OTURUM" ] || eksik="$eksik --oturum"
+    [ -z "$eksik" ] || { _hata "eksik:$eksik — kalan bulgu, daraltılmış cümle ve oturum ref'i olmadan daraltma SAYILMAZ"; exit 1; }
+    [ "${#KALAN}" -ge 20 ] || { _hata "--kalan en az 20 karakter — kalan bulgu bir cümledir, etiket değil"; exit 1; }
+    [ "${#CUMLE}" -ge 20 ] || { _hata "--cumle en az 20 karakter — daraltılmış cümle yine bir iş cümlesidir"; exit 1; }
+    for v in KALAN CUMLE OTURUM YENI; do d="${!v}"; if [[ "$d" == *"|"* || "$d" == *$'\n'* ]]; then _hata "--$(printf '%s' "$v" | tr 'A-Z' 'a-z') içinde '|' ya da satır sonu olamaz (defter ayracı)"; exit 1; fi; done
+    YENI="${YENI:-$IS-kalan}"
+    # 🔴 (bağımsız göz tur 1) kart adı dosya adıdır: yol ayracı, '..' ya da boşluk kabul edilirse kart dizini DIŞINA yazılır
+    case "$YENI" in ''|*/*|*..*|.*|*[!a-zA-Z0-9_-]*) _hata "--yeni geçersiz kart adı: '$YENI' (yalnız harf/rakam/-/_, yol ayracı ve '..' yok)"; exit 1 ;; esac
+    [ -f "$KD/$YENI.json" ] && { _hata "kalan kart zaten var: $YENI (--yeni ile başka ad ver)"; exit 1; }
+    # tur_sifir: çağrıldığı ağaçtaki (worktree) denetim sayısı — daraltmadan önceki turlar yeni cümleyi puanlamadı
+    WT="$(git rev-parse --show-toplevel 2>/dev/null || echo "$DEPO")"; DZ="$WT/_agents/fabrika/kanit/$IS"
+    TS=$(ls "$DZ"/DENETIM-[0-9]*.json 2>/dev/null | wc -l)
+    python3 - "$KD/$IS.json" "$KD/$YENI.json" "$YENI" "$KALAN" "$CUMLE" "$OTURUM" "$TS" <<'PY' || exit 1
+import json,sys,datetime
+yol,yyol,yeni,kalan,cumle,oturum,ts=sys.argv[1:]
+k=json.load(open(yol,encoding="utf-8")); simdi=datetime.datetime.now().astimezone().isoformat(timespec="seconds")
+if k.get("durum") not in ("acik","tikandi"):
+    print(f"✗ kart durumu '{k.get('durum')}' — yalnız açık ya da tıkanmış kart daraltılır", file=sys.stderr); raise SystemExit(1)
+if k.get("sultan") or k.get("siniflar"):
+    # sınıf işinin kararı Sultan'ındır: karta işlenmiş, HENÜZ KULLANILMAMIŞ 'daralt' kararı yoksa araç daraltmaz (A06).
+    # 🔴 (bağımsız göz tur 1) karar TEK KULLANIMLIKTIR: bir daraltma bir karar tüketir; eski bir 'daralt' sözü
+    #    sonraki daraltmaları yetkilendiremez — her daraltma için Sultan'ın güncel kararı gerekir.
+    acik=[x for x in (k.get("sultan_kararlari") or []) if x.get("karar")=="daralt" and not x.get("kullanildi")]
+    if not acik:
+        print(f"✗ kart SINIFLI ({', '.join(k.get('siniflar') or ['?'])}) ve karta işlenmiş KULLANILMAMIŞ Sultan 'daralt' kararı YOK — her daraltma için yeni kart.sh sultan-dedi --karar daralt", file=sys.stderr); raise SystemExit(1)
+    acik[0]["kullanildi"]={"zaman":simdi,"kalan_kart":yeni}
+else:
+    k.setdefault("reis_kararlari",[]).append({"karar":"daralt","reis":k.get("aldi"),"oturum":oturum,
+        "gerekce":f"daraltma: kalan bulgu yeni karta ({yeni}) — {kalan}","zaman":simdi})
+k.setdefault("cumle_gecmisi",[]).append({"cumle":k["cumle"],"zaman":simdi,"kalan_kart":yeni})
+k["cumle"]=cumle
+k.setdefault("daraltmalar",[]).append({"zaman":simdi,"kalan_kart":yeni,"kalan":kalan,"tur_sifir":int(ts),"oturum":oturum})
+if k.get("durum")=="tikandi": k["durum"]="acik"
+k["gecmis"].append({"zaman":simdi,"olay":"daralt","kalan_kart":yeni,"tur_sifir":int(ts)})
+y={"is":yeni,"cumle":kalan,"istedi":k.get("istedi"),"aldi":k.get("aldi"),"zaman":simdi,
+   "sinif_cevaplari":k.get("sinif_cevaplari"),"siniflar":k.get("siniflar") or [],"sultan":bool(k.get("siniflar")),
+   "kanit_nerede":k.get("kanit_nerede",""),"oda":k.get("oda",""),"durum":"acik","gecmis":[{"zaman":simdi,"olay":"daraltmadan dogdu","koken":k["is"]}],
+   "canli_gerekir":k.get("canli_gerekir",False),"canli_sebep":k.get("canli_sebep",""),"koken":k["is"]}
+# 🔴 (bağımsız göz tur 1) iki kart ATOMİK yazılır: önce yeni kart geçici dosyaya + yerine koyma, sonra ana kart;
+#    ana kart yazılamazsa yeni kart geri alınır → "daraltılmış ana kart, kalan kart yok" hâli oluşmaz.
+import os
+# (göz tur 2) iki dosya tek bir atomik işlemle değiştirilemez (POSIX'te çift rename yok). Yapılan: ÖNCE iki geçici
+# dosya da tamamen yazılır (serileştirme/disk hatası burada yakalanır, hiçbir kart değişmez), SONRA iki rename art
+# arda; ikinci rename düşerse kalan kart geri alınır. Kalan pencere yalnız iki rename ARASINDA süreç ölmesidir
+# (mikrosaniye); o hâlde kalan kart `koken` alanıyla ayakta kalır, ana kart eski cümlesiyle durur — veri kaybı yok,
+# yetim kalan kart `kart.sh liste`de görünür ve daralt yeniden koşulunca "kalan kart zaten var" der (--yeni ile sürer).
+gy, ga = yyol+".tmp", yol+".tmp"
+try:
+    with open(gy,"w",encoding="utf-8") as f: json.dump(y,f,ensure_ascii=False,indent=2)
+    with open(ga,"w",encoding="utf-8") as f: json.dump(k,f,ensure_ascii=False,indent=2)
+except Exception as e:
+    for g in (gy,ga):
+        try: os.remove(g)
+        except Exception: pass
+    print(f"✗ kartlar hazırlanamadı ({e}) — hiçbir kart DEĞİŞMEDİ", file=sys.stderr); raise SystemExit(1)
+try:
+    os.replace(gy,yyol)
+except Exception as e:
+    for g in (gy,ga):
+        try: os.remove(g)
+        except Exception: pass
+    print(f"✗ kalan kart yerine konamadı ({e}) — ana kart DOKUNULMADI", file=sys.stderr); raise SystemExit(1)
+try:
+    os.replace(ga,yol)
+except Exception as e:
+    for g in (yyol,ga):
+        try: os.remove(g)
+        except Exception: pass
+    print(f"✗ ana kart yerine konamadı ({e}) — kalan kart geri alındı, daraltma OLMADI", file=sys.stderr); raise SystemExit(1)
+print(f"✓ kart daraltıldı: {k['is']} (tur sıfırı {ts}) · kalan bulgu yeni karta: {yeni} · {'SINIFLI, Sultan kararıyla' if y['sultan'] else 'sınıfsız, reis kararı işlendi'}")
+print("  · denetçi bundan sonra yalnız daraltmadan SONRAKİ turları sayar; kapı daraltma sonrası en az bir 5/E tur ister")
 PY
     ;;
   canli-gerekir)

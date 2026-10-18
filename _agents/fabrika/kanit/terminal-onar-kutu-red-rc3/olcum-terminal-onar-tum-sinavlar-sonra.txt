@@ -1,0 +1,21 @@
+$ bash -c k=0; for t in terminal-onar/scripts/*.test.sh; do case "$t" in */compact.test.sh) echo "◻ $t KARANTİNA (CI karantina listesinde; ana dalda da K2 kırmızı — bu PR dokunmadı)"; continue;; esac; timeout 300 bash "$t" >/dev/null 2>&1 && echo "✓ $t" || { echo "✗ $t"; k=$((k+1)); }; done; echo "kalan=$k"; [ $k -eq 0 ]
+# rc=0 sure=60.0s zaman=2026-10-18T16:49:59+03:00
+--- stdout ---
+✓ terminal-onar/scripts/bekci-iz.test.sh
+✓ terminal-onar/scripts/bekci-yorum.test.sh
+◻ terminal-onar/scripts/compact.test.sh KARANTİNA (CI karantina listesinde; ana dalda da K2 kırmızı — bu PR dokunmadı)
+✓ terminal-onar/scripts/kabuk-kapisi.test.sh
+✓ terminal-onar/scripts/kapi-yenile.test.sh
+✓ terminal-onar/scripts/koltuk-ac.test.sh
+✓ terminal-onar/scripts/koltuk-adi.test.sh
+✓ terminal-onar/scripts/koltuk-bagla.test.sh
+✓ terminal-onar/scripts/koltuk-fark-filo.test.sh
+✓ terminal-onar/scripts/kur-bag.test.sh
+✓ terminal-onar/scripts/kurtarici-kapali.test.sh
+✓ terminal-onar/scripts/kutu-adi.test.sh
+✓ terminal-onar/scripts/kutu-red.test.sh
+✓ terminal-onar/scripts/oda-ortam.test.sh
+✓ terminal-onar/scripts/onar.test.sh
+✓ terminal-onar/scripts/sifre-yukle.test.sh
+kalan=0
+--- stderr ---
