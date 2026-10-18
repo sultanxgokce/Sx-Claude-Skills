@@ -1,6 +1,6 @@
 {
   "version": "2.1",
-  "updated": "2026-10-09",
+  "updated": "2026-10-18",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -1364,8 +1364,10 @@
       "id": "arcelik-fatura-kesim",
       "type": "agent",
       "name": "Arçelik Fatura Kesim Kararı (hangi pakete kesilir/kesilmez)",
-      "version": "1.0.0",
-      "sync_dagitim": false
+      "version": "0.2.0",
+      "sync_dagitim": false,
+      "path": "arcelik-fatura-kesim/SKILL.md",
+      "description": "Arçelik paketlerinde kes/kesme kararı, kalem eşlemesi ve yerel çift kesim kontrolü; bilinmeyen tipte karar insana bırakılır."
     },
     {
       "id": "elogo-portal-otomasyon",
