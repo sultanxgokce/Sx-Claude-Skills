@@ -1,0 +1,59 @@
+{
+  "is": "compact-bekle-olculemeyen-sx",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-18T21:27:24+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-yeni-kapilar",
+      "asama": "once",
+      "dosya": "olcum-sinav-yeni-kapilar-once.txt",
+      "sha256": "89de03fb38dbb2e9f320afc3c98b9f682cd02ead64a46b6fc368b540e1145e9d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/sx-fnx-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-18T21:26:10+03:00",
+      "sure_sn": 17.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4664b46f35e34ac7a5858edda4413763"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-yeni-kapilar",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-yeni-kapilar-sonra.txt",
+      "sha256": "e3542c4fe6b17dbeb692817f4f9c9eca851309f00d74936fc5e5e90c3eedea7f",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/compact.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T21:26:28+03:00",
+      "sure_sn": 17.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "fab76911282a4aef9280510776e3b41a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-tek.txt",
+      "sha256": "502b1d3f1a8851115232afef845e9c58e93f1d50c76214079d4ad4332f92cc84",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/sx-fnx-mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T21:27:24+03:00",
+      "sure_sn": 56.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ddd3e4ac9979440e861bc45adf583dd5"
+    }
+  ],
+  "imza": "aa552db80260eefefd1d3409ca5730bb63f4ecb79346693b06925c396b41ceeb"
+}
