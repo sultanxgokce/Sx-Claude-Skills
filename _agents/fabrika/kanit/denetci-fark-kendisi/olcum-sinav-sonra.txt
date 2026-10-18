@@ -1,8 +1,8 @@
 $ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/r7m/sinav-say.sh /config/projects/_wt/Sx-Claude-Skills-denetci-fark-kendisi/yazilim-fabrikasi/scripts
-# rc=0 sure=399.7s zaman=2026-10-18T17:06:22+03:00
+# rc=0 sure=750.5s zaman=2026-10-18T17:22:41+03:00
 --- stdout ---
 test_rc=0
-── SONUÇ (fark-kendisi): 21 geçti · 0 kaldı ──
+── SONUÇ (fark-kendisi): 23 geçti · 0 kaldı ──
 ── SONUÇ: 167 geçti · 0 kaldı ──
   ✓ mutant 'ayrac-temizligini-kaldir' sınavı KIRMIZI yapıyor
   ✓ mutant 'gerekce-zorunlulugunu-kaldir' sınavı KIRMIZI yapıyor
@@ -39,19 +39,21 @@ test_rc=0
 ════ F4 · kayıtsız kod değişikliği → DUR rc=3 (farka girmezdi) ════
   ✓ F4a kanıt/kart dışı kayıtsız dosya → rc=3
   ✓ F4b neden söyleniyor: kayıtsız
-════ F5 · --pr: yerel dal PR dalıysa ve baş farklıysa DUR (itilmemiş commit) ════
+════ F5 · --pr: PR dalının yerel kopyası varsa ve başı PR başından farklıysa DUR (itilmemiş commit) — hangi dalda durulursa dursun ════
   ✓ F5a yerel baş ≠ PR başı (aynı dal) → rc=3
   ✓ F5b neden söyleniyor: FARKLI
   ✓ F5c yerel baş = PR başı → GEÇTİ, GitHub farkı kullanıldı
   ✓ F5d istemde gh farkı var
-  ✓ F5e başka dalın PR'ı (yerel dal farklı) → baş karşılaştırılmaz, GEÇTİ
+  ✓ F5e PR dalının yerel kopyası YOK (başkasının, çekilmemiş) → itilmemiş commit olamaz, GEÇTİ
+  ✓ F5f BAŞKA dalda durulurken bile PR dalının (is-dal) yerel başı ≠ PR başı → rc=3 (göz tur 1)
 ════ F6 · boş fark → DUR rc=3 ════
   ✓ F6a dal = ana hat → fark boş, rc=3
 ════ F7 · MUTASYON: her kapı kaldırılınca bir F kapısı düşer (mutant ana dosyanın kopyasıdır) ════
   ✓ mutant 'geride' → F2a düştü, kontrol F1a geçti (kapı gerçekten ölçüyor)
   ✓ mutant 'bas' → F5a düştü, kontrol F1a geçti (kapı gerçekten ölçüyor)
+  ✓ mutant 'bas-dal' → F5f düştü, kontrol F1a geçti (kapı gerçekten ölçüyor)
   ✓ mutant 'kir' → F4a düştü, kontrol F1a geçti (kapı gerçekten ölçüyor)
   ✓ mutant 'bos' → F6a düştü, kontrol F1a geçti (kapı gerçekten ölçüyor)
-── SONUÇ (fark-kendisi): 21 geçti · 0 kaldı ──
+── SONUÇ (fark-kendisi): 23 geçti · 0 kaldı ──
   ✓ fark-kendisi kapıları (denetci-fark-kendisi.test.sh) GEÇTİ
 --- stderr ---

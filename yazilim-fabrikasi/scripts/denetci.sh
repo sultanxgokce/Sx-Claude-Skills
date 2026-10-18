@@ -326,16 +326,19 @@ TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
 # 🔴 FARKI DENETÇİ KENDİSİ ALIR (18 Eki, gorev_01M54B2Y4QT7VWTJX10AFR7M76): elle hazırlanan fark üç kez tur yaktı (11 Eki):
 #    iki-nokta `git diff origin/main` dal gerideyken başkasının eklemelerini "silinmiş" gösterdi, odaklı fark dosya kaçırdı.
 #    Kural: (a) --diff verilmişse o (çağıranın sorumluluğu, fark kaynağı ekranda söylenir); (b) --pr ile GitHub farkı alınır AMA
-#    yerel dal PR'ın dalıysa ve yerel baş PR başından farklıysa DUR (itilmemiş ya da çekilmemiş commit: göz başka kodu puanlar);
+#    PR dalının yerel kopyası varsa ve başı PR başından farklıysa DUR — o an hangi dalda durulduğundan bağımsız (itilmemiş/çekilmemiş commit);
 #    (c) ikisi de yoksa yerel kip: fetch → dal ana hattın GERİSİNDEYSE DUR (rebase/merge çağıranın işi; araç dalı değiştirmez) →
 #    kayıtsız değişiklik (kanıt/kart dizini dışında) varsa DUR (farka girmez) → üç-nokta `<ana>...HEAD`. Durmak rc=3 (ölçülemedi).
 if [ -n "$DIFF" ]; then cp "$DIFF" "$TMP/diff.patch" || { _hata "diff okunamadı"; exit 3; }; FARK_KAYNAK="--diff $DIFF (çağıranın verdiği)"
 elif [ -n "$PR" ]; then
   PR_BAS="$(cd "$DEPO" && gh pr view "$PR" --json headRefOid,headRefName --jq '.headRefOid+" "+.headRefName' 2>/dev/null)" \
     || { _hata "gh pr view $PR düştü — PR başı ölçülemedi"; exit 3; }
-  YEREL_DAL="$(git -C "$DEPO" rev-parse --abbrev-ref HEAD 2>/dev/null)"; YEREL_BAS="$(git -C "$DEPO" rev-parse HEAD 2>/dev/null)"
-  if [ -n "$PR_BAS" ] && [ "$YEREL_DAL" = "${PR_BAS#* }" ] && [ "$YEREL_BAS" != "${PR_BAS%% *}" ]; then
-    _hata "yerel baş (${YEREL_BAS:0:8}) PR #$PR başından (${PR_BAS:0:8}) FARKLI — itilmemiş ya da çekilmemiş commit var; göz GitHub'daki farkı puanlardı. Önce it/çek, sonra koştur"; exit 3
+  # Karşılaştırılan şey PR dalının YEREL kopyasının başıdır — o an hangi dalda durulduğu değil (göz tur 1: "yalnız aynı daldaysan"
+  # istisnası kartın şartından dardı). Yerel kopya yoksa (başkasının PR'ı, hiç çekilmemiş) itilmemiş commit de olamaz → devam.
+  PR_DAL="${PR_BAS#* }"; PR_SHA="${PR_BAS%% *}"
+  YEREL_BAS="$(git -C "$DEPO" rev-parse -q --verify "refs/heads/$PR_DAL" 2>/dev/null)"
+  if [ -n "$PR_SHA" ] && [ -n "$YEREL_BAS" ] && [ "$YEREL_BAS" != "$PR_SHA" ]; then
+    _hata "PR #$PR dalının ($PR_DAL) yerel başı (${YEREL_BAS:0:8}) PR başından (${PR_SHA:0:8}) FARKLI — itilmemiş ya da çekilmemiş commit var; göz GitHub'daki farkı puanlardı. Önce it/çek, sonra koştur"; exit 3
   fi
   (cd "$DEPO" && gh pr diff "$PR" > "$TMP/diff.patch") || { _hata "gh pr diff $PR düştü"; exit 3; }
   FARK_KAYNAK="gh pr diff $PR (baş ${PR_BAS:0:8})"

@@ -65,13 +65,16 @@ kapi "F4a kanıt/kart dışı kayıtsız dosya → rc=3" 3 den f4
 iceren "F4b neden söyleniyor: kayıtsız" "kayıtsız değişiklik" "$KOK/son.out"
 mv "$KOK/w/kayitsiz.txt" "$KOK/kayitsiz.txt"
 
-echo "════ F5 · --pr: yerel dal PR dalıysa ve baş farklıysa DUR (itilmemiş commit) ════"
+echo "════ F5 · --pr: PR dalının yerel kopyası varsa ve başı PR başından farklıysa DUR (itilmemiş commit) — hangi dalda durulursa dursun ════"
 BAS="$(git -C "$KOK/w" rev-parse HEAD)"
 kanitla f5; FAKE_PR_VIEW="0000000000000000000000000000000000000000 is-dal" PATH="$SAHTEGH:$PATH" kapi "F5a yerel baş ≠ PR başı (aynı dal) → rc=3" 3 den f5 --pr 7
 iceren "F5b neden söyleniyor: FARKLI" "FARKLI" "$KOK/son.out"
 kanitla f5b; : > "$KOK/istem.md"; FAKE_PR_VIEW="$BAS is-dal" PATH="$SAHTEGH:$PATH" kapi "F5c yerel baş = PR başı → GEÇTİ, GitHub farkı kullanıldı" 0 den f5b --pr 7
 iceren "F5d istemde gh farkı var" "gh-farki" "$KOK/istem.md"
-kanitla f5c; FAKE_PR_VIEW="1111111111111111111111111111111111111111 baska-dal" PATH="$SAHTEGH:$PATH" kapi "F5e başka dalın PR'ı (yerel dal farklı) → baş karşılaştırılmaz, GEÇTİ" 0 den f5c --pr 8
+kanitla f5c; FAKE_PR_VIEW="1111111111111111111111111111111111111111 hic-cekilmemis-dal" PATH="$SAHTEGH:$PATH" kapi "F5e PR dalının yerel kopyası YOK (başkasının, çekilmemiş) → itilmemiş commit olamaz, GEÇTİ" 0 den f5c --pr 8
+git -C "$KOK/w" checkout -q -b denetleyen-dal; kanitla f5f
+FAKE_PR_VIEW="0000000000000000000000000000000000000000 is-dal" PATH="$SAHTEGH:$PATH" kapi "F5f BAŞKA dalda durulurken bile PR dalının (is-dal) yerel başı ≠ PR başı → rc=3 (göz tur 1)" 3 den f5f --pr 7
+git -C "$KOK/w" checkout -q is-dal; git -C "$KOK/w" branch -q -D denetleyen-dal
 
 echo "════ F6 · boş fark → DUR rc=3 ════"
 git -C "$KOK/w" checkout -q -b bos-dal origin/main 2>/dev/null; kanitla f6
@@ -92,7 +95,8 @@ PY
       GECEN=$((GECEN+1)); echo "  ✓ mutant '$ad' → $kapi_adi düştü, kontrol F1a geçti (kapı gerçekten ölçüyor)"
     else DUSEN=$((DUSEN+1)); echo "  ✗ mutant '$ad' → $kapi_adi düşmedi ya da kontrol F1a da düştü (geçersiz mutant)"; fi; }
   mut geride '[ "$GERIDE" -eq 0 ] ||' 'true ||' "F2a"
-  mut bas '[ "$YEREL_BAS" != "${PR_BAS%% *}" ]; then' 'false; then' "F5a"
+  mut bas '[ "$YEREL_BAS" != "$PR_SHA" ]; then' 'false; then' "F5a"
+  mut bas-dal 'YEREL_BAS="$(git -C "$DEPO" rev-parse -q --verify "refs/heads/$PR_DAL" 2>/dev/null)"' 'YEREL_BAS="$( [ "$(git -C "$DEPO" rev-parse --abbrev-ref HEAD)" = "$PR_DAL" ] && git -C "$DEPO" rev-parse HEAD)"' "F5f"
   mut kir '[ "$KIRLI" -eq 0 ] ||' 'true ||' "F4a"
   mut bos '[ -s "$TMP/diff.patch" ] ||' 'true ||' "F6a"
 fi
