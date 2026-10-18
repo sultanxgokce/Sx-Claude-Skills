@@ -1,0 +1,21 @@
+{
+  "is": "denetci-fark-kendisi",
+  "cumle": "denetci.sh farkı kendisi alsın: --pr/--diff yoksa fetch + ana hattın gerisindeyse dur + üç-nokta fark; --pr ile yerel baş PR başından farklıysa (itilmemiş commit) dur (görev R7M76, fark kısmı)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-18T16:32:25+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/denetci-fark-kendisi/ (sınav + mutasyon)",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)"
+}
