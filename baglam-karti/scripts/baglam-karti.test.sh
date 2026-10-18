@@ -111,7 +111,7 @@ out="$(DEFTER_UC="http://127.0.0.1:1" K "$M/SERDAR-ENIS-baglam-karti-20261018-9.
 kapi "F3 defter ulaşılamaz → rc 1" "1" "$rc"
 n0=$(say)
 out="$(K "$M/SERDAR-ENIS-baglam-karti-20261018-9.md" --kuru)"; rc=$?
-kapi "F4 kuru koşum: rc 0, adımı basar, deftere dokunmaz" "0|1|$n0" "$rc|$(grep -c 'istek 20261018-9 · SERDAR · ufuk bugün' <<<"$out")|$(say)"
+kapi "F4 kuru koşum: rc 3 (taşıma izni değil), adımı basar, deftere dokunmaz" "3|1|$n0" "$rc|$(grep -c 'istek 20261018-9 · SERDAR · ufuk bugün' <<<"$out")|$(say)"
 K "$M/yok.md" >/dev/null; r1=$?; K "$M/SERDAR-ENIS-baglam-karti-20261018-9.md" --gorev 'x;rm' >/dev/null; r2=$?
 kapi "F5 mektup yok · biçimsiz görev kimliği → rc 2" "2|2" "$r1|$r2"
 

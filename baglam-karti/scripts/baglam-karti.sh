@@ -12,10 +12,11 @@
 #   baglam-karti.sh kaydet <mektup.md> [--kuru] [--gorev <gorev_id>]
 #     İstek dosya adı:  <MAISET|SERDAR>-ENIS-baglam-karti-<YYYYMMDD>-<n>.md
 #     Cevap dosya adı:  ENIS-<MAISET|SERDAR>-baglam-karti-<YYYYMMDD>-<n>.md
-#     --kuru : doğrular ve yazılacak adımı basar; deftere DOKUNMAZ.
+#     --kuru : doğrular ve yazılacak adımı basar; deftere DOKUNMAZ → rc 3 (taşıma izni DEĞİL).
 # rc: 0 kayıt yazıldı (ya da bu adım zaten yazılıydı) → taşınabilir
 #     1 kayıt YAZILAMADI (jeton yok · defter ulaşılamaz · defter reddetti) → kart DÖNMEZ
 #     2 kullanım ya da biçim hatası → kayda girmedi, kart DÖNMEZ
+#     3 kuru koşum: biçim doğru ama kayıt YAZILMADI → kart DÖNMEZ (yalnız rc 0 taşıma iznidir)
 # Ortam: DEFTER_JETON_YOL (vars. /config/defter-jeton; değer argv'ye/çıktıya düşmez) · DEFTER_UC (vars. http://cloudtop-defter:8791)
 #        BAGLAM_KARTI_GOREV (vars. kayıt defteri görevi gorev_01M557ADY4KHRGS99DQ6E2M0CV)
 set -uo pipefail
@@ -23,7 +24,7 @@ set -uo pipefail
 GOREV="${BAGLAM_KARTI_GOREV:-gorev_01M557ADY4KHRGS99DQ6E2M0CV}"
 JY="${DEFTER_JETON_YOL:-/config/defter-jeton}"; UC="${DEFTER_UC:-http://cloudtop-defter:8791}"
 
-_kullanim() { sed -n '12,20p' "$0" | sed 's/^# \{0,1\}//' >&2; exit 2; }
+_kullanim() { sed -n '/^# Kullanım:/,/^set -uo/p' "$0" | grep '^#' | sed 's/^# \{0,1\}//' >&2; exit 2; }
 
 [ "${1:-}" = "kaydet" ] || _kullanim
 shift; DOSYA=""; KURU=0
@@ -90,7 +91,8 @@ else:
 PY
 )" || exit 2
 
-if [ "$KURU" -eq 1 ]; then echo "🧪 kuru: $GOREV ← $ADIM (deftere yazılmadı)"; exit 0; fi
+# Kuru koşum rc 3: yalnız rc 0 "kayıt yazıldı, taşı" demektir; kayıtsız başarı kodu yok (bağımsız göz tur 2)
+if [ "$KURU" -eq 1 ]; then echo "🧪 kuru: $GOREV ← $ADIM (deftere YAZILMADI · taşıma)"; exit 3; fi
 
 [ -r "$JY" ] || { echo "⛔ defter jetonu yok ($JY) — kayıt YAZILMADI, kart dönmez (taşıyıcı merkezde MUAVİN'dir; SERDAR'a: jeton-dagit)" >&2; exit 1; }
 govde="$(python3 -c 'import sys,json; print(json.dumps({"adimlar":[sys.argv[1]]},ensure_ascii=False))' "$ADIM")"

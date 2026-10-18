@@ -1,29 +1,29 @@
 {
   "is": "enis-baglam-karti-kayit",
   "arac": "kanit.py/0.4.0",
-  "guncelleme": "2026-10-18T16:23:35+03:00",
+  "guncelleme": "2026-10-18T16:26:46+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "sinav",
       "asama": "tek",
       "dosya": "olcum-sinav-tek.txt",
-      "sha256": "33c31c9be5529ee5c689f32320d04651d934df115a723541296b218a211db269",
+      "sha256": "66b093607ac248773a88975f7e8b618dd39af6ad6d03f0df73a33e14ae975b43",
       "komut": [
         "bash",
         "baglam-karti/scripts/baglam-karti.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T16:23:16+03:00",
-      "sure_sn": 4.3
+      "zaman": "2026-10-18T16:25:39+03:00",
+      "sure_sn": 10.1
     },
     {
       "tur": "olcum",
       "etiket": "repo-kapilari",
       "asama": "tek",
       "dosya": "olcum-repo-kapilari-tek.txt",
-      "sha256": "e71ab2945dd0c48b7d73d53a8fafb4d5d752988479bcdfc49124e33892b49348",
+      "sha256": "9b259527ae28b4b436a723801785720efe3bf874d817797276d2c372be03194e",
       "komut": [
         "bash",
         "-c",
@@ -31,7 +31,7 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T16:23:35+03:00",
+      "zaman": "2026-10-18T16:25:13+03:00",
       "sure_sn": 0.1
     },
     {
@@ -39,7 +39,7 @@
       "etiket": "mutasyon",
       "asama": "tek",
       "dosya": "olcum-mutasyon-tek.txt",
-      "sha256": "24ce62ee7734ef90c31534551ce8d087c46b5feb6ffd197110da3f97414abb89",
+      "sha256": "77fc4d3480a15803a9c7e89db13eff2d4773d13131d9fa4f4319866094e990fa",
       "komut": [
         "bash",
         "baglam-karti/scripts/baglam-karti.mutasyon.sh",
@@ -47,9 +47,9 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-18T16:23:35+03:00",
-      "sure_sn": 19.5
+      "zaman": "2026-10-18T16:26:46+03:00",
+      "sure_sn": 67.7
     }
   ],
-  "imza": "af068ce49068f283f656051ed7f3ea3a51843aa85363004f75999f7753d55063"
+  "imza": "24deaeb6df92e78813b6cd9b996666bf02f47fdc3c06a069f00fc0a671feb33f"
 }
