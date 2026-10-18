@@ -1,0 +1,53 @@
+{
+  "is": "compact-k2-zamanlama",
+  "arac": "kanit.py/0.4.0",
+  "guncelleme": "2026-10-18T17:30:12+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "once",
+      "dosya": "olcum-sinav-once.txt",
+      "sha256": "e66bc02a9de0801e55b8ab8e53cce508565b3cb4587353bb0ac587d36b1b1224",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/compact.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-18T17:18:38+03:00",
+      "sure_sn": 72.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-5-tekrar",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-5-tekrar-sonra.txt",
+      "sha256": "c3430938c1a468bbf1fadc3747295ca1092138c4556dae898edc87d974936bb2",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/k2-tekrar.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T17:29:25+03:00",
+      "sure_sn": 121.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kok-olcumu",
+      "asama": "once",
+      "dosya": "olcum-kok-olcumu-once.txt",
+      "sha256": "498de3dfe3a5dfa89acf6b71d40d203c10b5931925a7441dbecfd40681aaa521",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/k2-kok.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T17:30:12+03:00",
+      "sure_sn": 34.3
+    }
+  ],
+  "imza": "af00fac28311abf12cf7e1b15f6c561c581210d7763277403276434db4bbbf95"
+}

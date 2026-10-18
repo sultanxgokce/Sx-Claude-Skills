@@ -31,6 +31,25 @@ Kural satırı yoksa hiçbir yanıt değişmez — davasız kutuda raf çizilmez
 - Ölçüm betiği `scripts/dava-resume-olc.sh` kendi tmux soketinde koşar ve `$TMUX`'u siler (DERVİŞ 17 Eki: tmux içinden çağrılınca
   `kill-server` kutunun sunucusunu öldürüyordu).
 
+## 🆕 2.17.3 · bekçi satırı kutuya özgü sabit gecikmeyle (18 Eki · kart terminal-onar-bekci-gecikme · SERDAR 15:28)
+
+17 kutunun dakikalık bekçisi her dakikanın tam başında aynı anda kalkıyordu; host'ta dakika başı çalışma kuyruğu 179-191'e
+çıkıyordu (filo yavaşladı). Bekçi satırı artık `* * * * * sleep N && …` biçiminde: `N = cksum(kutu adı) % 50 + 5` (5-54 sn),
+her kutuda farklı, her kurulumda aynı. Sayı kurulumda hesaplanıp satıra düz rakam olarak yazılır — crontab'da `%` satır sonu
+demektir. `;` değil `&&`: canlılık envanteri satırı ilk `;`den keser. Eski gecikmesiz satır bir sonraki onarımda/kurulumda
+kendiliğinden yenisine çevrilir (düzeltici aynı işareti tanır). code kutusunda N=10 (cloudtop `crontab-abc` ile aynı).
+Sınav: `scripts/bekci-gecikme.test.sh` (15 kapı + 3 mutant). Kutulara iniş: her kutuda kur/onar yeniden (ayrı adım).
+
+## 🆕 2.17.2 · kutu adı reddinde betikler DURUR — tek satır, rc 3 (18 Eki · gorev_01M4ZHH1XXGXM5QHV2YTNFSZ30 · gün planı C)
+
+`ortak.sh` makine kimliğine benzeyen (ya da çözülemeyen) kutu adını doğru reddediyordu, ama onu yükleyen sekiz betik
+dönüşe bakmıyordu: akış sürüyor, reddin ardından tanımlanan değişkenlerde çöküyordu — `compact.sh` "DURUM_DIZ: unbound
+variable" (15 Eki code kutusu), `bekci`/`kademe` aynı, `durum` ANA_TMUX, `kapi-yenile` KAPI_DIZ, `koltuk-ac` PROJE, `onar`
+"gunluk: command not found". Sebep satırı izin altında kayboluyordu. Artık `compact · komut · bekci · durum · kademe ·
+kapi-yenile · koltuk-ac · onar` reddi görünce **durur**: tek satır (ortak.sh'ın kendi iletisi: "TO_KUTU ver …"), rc 3, yan
+etki yok — `kur.sh`'ın S-11 yoluyla aynı sözleşme. Sınav: `scripts/kutu-red.test.sh` (13 kapı: sekiz betik · yan etki ·
+kapsam taraması ve kendi pozitif kontrolü · geçerli adla iki pozitif kontrol; mutantlı).
+
 ## 🆕 2.17.1 · bekçi işareti yalnız cron satırının sonunda (17 Eki · kart terminal-onar-bekci-yorum-korur · SERDAR 21:00)
 
 `bekci_kur` canlı crontab'ı düzeltirken metninde `# terminal-onar-bekci` geçen **yorum** satırını bekçi satırı sanıyordu:

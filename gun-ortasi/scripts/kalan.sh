@@ -37,7 +37,7 @@ CIPA_ACIK="?"; CIPA_KAPALI="?"
 if [ -f "$SK/gunluk-plan/scripts/cipa.sh" ]; then
   c="$( (cd "$KOK" && bash "$SK/gunluk-plan/scripts/cipa.sh" oku) 2>/dev/null)"; r=$?
   if [ "$r" -ne 0 ] || [ -z "$c" ]; then olcemedim "çıpa yok (bugün /gunluk-plan çıpa yazmadı)"
-  elif ! printf '%s\n' "$c" | grep -q "GÜNÜN PLANI ÇIPASI · $BUGUN"; then
+  elif ! grep -q "GÜNÜN PLANI ÇIPASI · $BUGUN" <<<"$c"; then   # here-string: aynı SIGPIPE tuzağı (büyük çıpada eşleşme başlıkta)
     olcemedim "çıpa bugüne ait değil ($(printf '%s\n' "$c" | grep -o 'ÇIPASI · [0-9-]*' | head -1)) — eski plan 'sabahki plan' sayılmaz"
   else
     # 🔴 TEK ŞABLON (gorev_01M54TNAQV · Sultan 17 Eki): liste /gunluk-plan'ın standart bugün tablosudur
@@ -140,7 +140,9 @@ if [ -d "$GD" ]; then
   [ -f "$OK" ] && okunan="$(awk -F' [|] ' '{print $3}' "$OK" 2>/dev/null)"
   while IFS= read -r f; do
     a="$(basename "$f")"
-    printf '%s\n' "$okunan" | grep -qxF -- "$a" && continue   # TAM ad eşleşmesi (ad parçası değil)
+    # here-string, BORU DEĞİL (gorev_01M55X6PGK9C9K8MRSY0E01W3Q): pipefail altında 'printf | grep -q' grep ilk eşleşmede
+    #   çıkınca printf SIGPIPE alır, boru rc≠0 döner ve OKUNMUŞ mektup okunmamış sayılırdı (büyük okundu kaydında kesin).
+    grep -qxF -- "$a" <<<"$okunan" && continue   # TAM ad eşleşmesi (ad parçası değil)
     GELEN=$((GELEN+1)); liste+="  • $a ($(date -r "$f" +%F))"$'\n'
   done < <(find "$GD" -maxdepth 1 -type f -name '*.md' 2>/dev/null | sort)
   if [ -n "$liste" ]; then bas "$liste"; else printf '  (okunmamış mektup yok)\n'; fi

@@ -136,7 +136,7 @@ satir=$(env -u TO_KUTU TO_PROJE="$PROJE" TO_DURUM_DIZ="$T/durum" HOME="$T" bash 
   set +u; . "$1/scripts/ortak.sh" >/dev/null 2>&1; printf "%s" "$BEKCI_SATIR"' _ "$KOK" 2>/dev/null)
 kapi "B11 bekçi satırı (ortak.sh tek kaynak) PROJE yolunu taşır" "e" "$(case "$satir" in *"$BAG/scripts/bekci.sh"*) echo e;; *) echo "h ($satir)";; esac)"
 kapi "B12 ortak yol yalnız YEDEK dalda ve kutu AÇIK BEYANLA (TO_KUTU=sinav) — makine-kimliği tuzağı yok" "e" "$(case "$satir" in *"else TO_KUTU=sinav bash /config/.claude/skills/terminal-onar/scripts/bekci.sh; fi"*) echo e;; *) echo "h ($satir)";; esac)"
-kapi "B12b proje yolu ÖNCE sınanır, varsa o kazanır (if [ -x <proje>/bekci.sh ])" "e" "$(case "$satir" in "* * * * * if [ -x $BAG/scripts/bekci.sh ]; then bash $BAG/scripts/bekci.sh; else"*) echo e;; *) echo "h ($satir)";; esac)"
+kapi "B12b proje yolu ÖNCE sınanır, varsa o kazanır (if [ -x <proje>/bekci.sh ])" "e" "$(case "$satir" in "* * * * * sleep "[0-9]*" && if [ -x $BAG/scripts/bekci.sh ]; then bash $BAG/scripts/bekci.sh; else"*) echo e;; *) echo "h ($satir)";; esac)"
 
 echo "── S-9 · bağ YOKKEN satır ölür mü? (maiset 13 Eki: her dakika rc 127) — cron'un koşturacağı komut sh ile BİREBİR koşulur"
 # Hermetik ortak kopya: TO_ORTAK_BECERI sınav dizinine çekilir; iki bekci.sh de yalnız iz bırakır.
