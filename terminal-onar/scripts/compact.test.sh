@@ -109,6 +109,13 @@ printf '{"an":"x","epoch":%s,"koltuk":"YOKBOYLE","yuzde":75,"hal":"calisiyor","d
 TO_REIS=MUTEVELLI kos --bekle --uygula
 grep -q 'YOKBOYLE · kuyruktan düştü (koltuk artık yok' "$S/cikti" && [ ! -s "$KQ" ] && ok "B5 koltuk kapanmışsa kuyruktan düşer" || bad B5 "$(c)"
 kos --bekle; grep -q 'compact kuyruğu boş' "$S/cikti" && ok "B6 boş kuyruk: tek satır, iş yok" || bad B6 "$(c)"
+# Nexus #1171 (FNX51) Sx kopyası: NEDIM BOŞ ama kaydı yok (bağlam ölçülemez) → bayat kayıt /compact GÖNDERMEZ, kuyrukta kalır, tavanda gerçek nedenle düşer
+printf '{"an":"x","epoch":%s,"koltuk":"NEDIM","yuzde":80,"hal":"girdi","deneme":0,"kim":"MUTEVELLI"}\n' "$SIMDI" > "$KQ"
+TO_REIS=MUTEVELLI kos --bekle --uygula
+[ -z "$(iz)" ] && grep -q '"koltuk":"NEDIM".*"deneme":1' "$KQ" && grep -q 'NEDIM · bağlamı ölçülemedi (sahte kayıt yok) — GÖNDERİLMEDİ, bekliyor (deneme 1)' "$S/cikti" && ok "B7 boş ama bağlamı ölçülemeyen koltuğa tuş GİTMEZ; kayıt kuyrukta (deneme 1), neden yazılır" || bad B7 "iz=$(iz) | $(c) | $(cat "$KQ")"
+printf '{"an":"x","epoch":%s,"koltuk":"NEDIM","yuzde":80,"hal":"girdi","deneme":3,"kim":"MUTEVELLI"}\n' $((SIMDI-90000)) > "$KQ"
+TO_REIS=MUTEVELLI kos --bekle --uygula
+[ -z "$(iz)" ] && [ ! -s "$KQ" ] && grep -q 'NEDIM · VAZGEÇİLDİ.*bağlamı hiç ölçülemedi' "$S/hata" && grep -q 'compact VAZGEÇİLDİ: NEDIM (ölçülemedi)' "$S/durum/gunluk.log" && ok "B7b ölçülemeyen kayıt tavanda düşer; neden 'bağlamı hiç ölçülemedi' ('boşalmadı' DEĞİL)" || bad B7b "$(h) | $(cat "$KQ")"
 
 echo "K · tur kilidi (göz tur 3): bekçi ile elle çağrı çakışırsa ikinci tur dokunmaz; tur ortasında eklenen satır kaybolmaz"
 printf '{"an":"x","epoch":%s,"koltuk":"KALFA","yuzde":65,"hal":"girdi","deneme":0,"kim":"MUTEVELLI"}\n' "$SIMDI" > "$KQ"; printf '❯ \n' > "$S/ekran-KALFA"

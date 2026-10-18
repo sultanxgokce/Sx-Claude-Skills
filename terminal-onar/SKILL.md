@@ -1,9 +1,15 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.18.0
+version: 2.18.1
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.18.1 · compact kuyruk turu bağlamı ölçülemeyen koltuğa göndermez (18 Eki · kart compact-bekle-olculemeyen-sx · SERDAR 21:5x)
+`compact.sh compact-bekle`, koltuğun bağlamı ölçülemediğinde (yüzde `—`) "bu arada compact edilmiş" düşürmesini atlayıp bayat
+kaydı boş koltuğa gönderiyordu. Artık gönderilmez: satır "bağlamı ölçülemedi (<neden>) — GÖNDERİLMEDİ, bekliyor" der, kayıt
+kuyrukta kalır, deneme/yaş tavanında "bağlamı hiç ölçülemedi" nedeniyle düşer. Aynı kural Nexus `filo.py`'de #1171 (FNX51) ile
+birleşti. Kanıt: `compact.test.sh` B7 · B7b.
 
 ## 🆕 2.18.0 · Dava Rafı — kapı tarafı (16-18 Eki · Parça B2, SERDAR 16:26 · merkez rafı cloudtop #659 · kilit #362)
 Kayıt KÖKÜNDE `dava_kurali: {tavan: 4, gun: 14}` olan kutuda (bugün vekatip; satırı kutunun reisi yazar) kapı Dava Rafı'nı besler.
