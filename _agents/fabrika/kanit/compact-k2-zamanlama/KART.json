@@ -1,0 +1,21 @@
+{
+  "is": "compact-k2-zamanlama",
+  "cumle": "terminal-onar compact.test.sh K2 kırmızısını düzelt: kök ölçüldü — satır kaybolmuyor, sınavın arka plan yazıcısı 0,5 sn sabit beklemeyle betiğin anlık kopyasından ÖNCE ekliyor; yazıcı anlık kopyanın oluşmasını beklesin (C8NZW)",
+  "istedi": "SERDAR",
+  "aldi": "MIRAHUR",
+  "zaman": "2026-10-18T17:15:51+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/compact-k2-zamanlama (önce/sonra sınav + kök ölçümü)",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)"
+}

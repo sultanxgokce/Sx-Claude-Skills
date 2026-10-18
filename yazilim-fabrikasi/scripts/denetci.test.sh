@@ -557,7 +557,15 @@ else
   kalan=$((kalan+1)); echo "  ✗ kutu-dışı sınıf kapıları (denetci-kutu-disi.test.sh) DÜŞTÜ"
 fi
 
-[ "$kalan" -eq 0 ]
+# ── FARKI DENETÇİ KENDİSİ ALIR (gorev_01M54B2Y4QT7VWTJX10AFR7M76)
+# Gövde AYRI dosyadadır (denetci-fark-kendisi.test.sh): kurulum origin'li iki klon ister, bu dosyanınki origin'siz tek depo.
+echo ""; echo "── FARK-KENDİSİ (ayrı dosya, buradan çağrılır) ──"
+if bash "$(dirname "$0")/denetci-fark-kendisi.test.sh"; then
+  gecen=$((gecen+1)); echo "  ✓ fark-kendisi kapıları (denetci-fark-kendisi.test.sh) GEÇTİ"
+else
+  kalan=$((kalan+1)); echo "  ✗ fark-kendisi kapıları (denetci-fark-kendisi.test.sh) DÜŞTÜ"
+fi
+
 
 echo "════ T-DARALT · tıkanan iş kart.sh daralt ile yeni cümleyle sıfırdan sayılır (PCP7J) ════"
 export KANIT_DEPO="$T"

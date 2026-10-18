@@ -1,0 +1,55 @@
+{
+  "is": "cipa-hata-yutma",
+  "arac": "kanit.py/0.4.0",
+  "guncelleme": "2026-10-18T17:22:37+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "hata-gorunur",
+      "asama": "once",
+      "dosya": "olcum-hata-gorunur-once.txt",
+      "sha256": "61addedb81e16144907f9d84dd0401196e4439730356a0e9daced8ba73f46028",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/cipa/hata-gorunur-mu.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-cipa-hata-yutma/gunluk-plan/scripts/cipa.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-18T17:21:54+03:00",
+      "sure_sn": 0.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "hata-gorunur",
+      "asama": "sonra",
+      "dosya": "olcum-hata-gorunur-sonra.txt",
+      "sha256": "385c0cf5c4f7c10c5369d7d42dcababc99d9a8fdd3428b0ba906e1d28e1b5956",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/cipa/hata-gorunur-mu.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-cipa-hata-yutma/gunluk-plan/scripts/cipa.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T17:22:30+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "3d51526d39578d204c0ca07d7988cc9595df127795d77751d5b82944499b8cab",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/cipa.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T17:22:37+03:00",
+      "sure_sn": 6.9
+    }
+  ],
+  "imza": "11c1a1856002e422479095b1d55896a1df65dd78df5f27aba874a3173a67fad2"
+}

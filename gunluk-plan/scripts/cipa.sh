@@ -71,7 +71,9 @@ _okunacak() {
   else printf '%s' "$CIPA"; fi
 }
 _kilitle() {
-  exec 9>>"$CIPA.kilit" 2>/dev/null || { echo "HATA: çıpa kilidi açılamadı ($CIPA.kilit) — yazmıyorum" >&2; exit 1; }
+  # 🔴 Susturma YALNIZ bu gruba (MUHAKKİK CM4JM, 18 Eki): argümansız `exec 9>>f 2>/dev/null` iki yönlendirmeyi de KABUĞA
+  #    kalıcı uygular — kilitten sonraki her "HATA:" satırı /dev/null'a gidiyordu (rc=2 ile düşen tazele 0 bayt stderr bastı).
+  { exec 9>>"$CIPA.kilit"; } 2>/dev/null || { echo "HATA: çıpa kilidi açılamadı ($CIPA.kilit) — yazmıyorum" >&2; exit 1; }
   flock -w 10 9 2>/dev/null || { echo "HATA: çıpa kilidi 10 sn'de alınamadı — yazmıyorum (başka bir araç yazıyor)" >&2; exit 1; }
 }
 

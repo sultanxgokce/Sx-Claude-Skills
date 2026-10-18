@@ -1,0 +1,22 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/sx-tum.sh
+# rc=0 sure=289.4s zaman=2026-10-18T16:45:50+03:00
+--- stdout ---
+dal  bekci-gecikme.test.sh rc=0
+dal  bekci-iz.test.sh rc=0
+dal  bekci-yorum.test.sh rc=0
+dal  compact.test.sh rc=1
+dal  kabuk-kapisi.test.sh rc=0
+dal  kapi-yenile.test.sh rc=0
+dal  koltuk-ac.test.sh rc=0
+dal  koltuk-adi.test.sh rc=0
+dal  koltuk-bagla.test.sh rc=0
+dal  koltuk-fark-filo.test.sh rc=0
+dal  kur-bag.test.sh rc=0
+dal  kurtarici-kapali.test.sh rc=0
+dal  kutu-adi.test.sh rc=0
+dal  oda-ortam.test.sh rc=0
+dal  onar.test.sh rc=0
+dal  sifre-yukle.test.sh rc=0
+  ✗ K2 — {"an":"x","epoch":179233109
+ana  compact.test.sh rc=1
+--- stderr ---

@@ -1,0 +1,7 @@
+$ bash -c bash yazilim-fabrikasi/scripts/kart.test.sh 2>&1 | tail -n1; bash yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh 2>&1 | tail -n1; bash yazilim-fabrikasi/scripts/denetci-fark-kendisi.test.sh 2>&1 | tail -n1
+# rc=0 sure=39.8s zaman=2026-10-18T19:18:06+03:00
+--- stdout ---
+── SONUÇ: 77 geçti · 0 kaldı ──
+── SONUÇ: 88 geçti · 0 kaldı ──
+── SONUÇ (fark-kendisi): 23 geçti · 0 kaldı ──
+--- stderr ---

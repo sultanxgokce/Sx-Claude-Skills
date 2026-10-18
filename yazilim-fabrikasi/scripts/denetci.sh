@@ -12,7 +12,7 @@
 #     Sınıflı kartta AÇILMAZ (o kararın merci Sultan'dır). Defter satırı TAVAN-ACILDI-REIS, gün sonu özetinde görünür.
 #
 # Kullanım:
-#   denetci.sh <iş> (--pr N | --diff DOSYA) [--kart DOSYA] [--yazan claude|codex] [--denetci auto|codex|claude]
+#   denetci.sh <iş> [--pr N | --diff DOSYA] [--kart DOSYA] [--yazan claude|codex] [--denetci auto|codex|claude]
 #              [--model AD] [--depo KÖK] [--kare PNG/JPG]...
 #   --kare : arayüz işinde kabul karesi (tekrarlanabilir, en çok 8). Kare bağımsız göze GÖRSEL olarak gider (codex exec -i);
 #            istemde "ekte N kare" yazar, DENETIM kaydı kare adı + sha256 taşır. Dosya yok / görsel değil → rc 2 (sessiz atlama yok).
@@ -117,7 +117,7 @@ PYK
 )"
   [ -z "$_kd" ] || { _hata "--kare geçerli görsel değil ($_kd): $_k"; exit 2; }
 done
-[ -n "$PR$DIFF" ] || { _hata "--pr N ya da --diff DOSYA gerekiyor"; exit 1; }
+# --pr da --diff de yoksa denetçi FARKI KENDİSİ alır (görev R7M76): yerel kip — aşağıda "3 · girdiler".
 [ -n "$DEPO" ] || DEPO="$(git rev-parse --show-toplevel 2>/dev/null || echo "")"
 [ -n "$DEPO" ] || { _hata "depo kökü bulunamadı"; exit 3; }
 DZ="$DEPO/_agents/fabrika/kanit/$IS"
@@ -341,8 +341,38 @@ fi
 
 # ── 3 · girdiler ─────────────────────────────────────────────────────────────────
 TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
-if [ -n "$DIFF" ]; then cp "$DIFF" "$TMP/diff.patch" || { _hata "diff okunamadı"; exit 3; }
-else (cd "$DEPO" && gh pr diff "$PR" > "$TMP/diff.patch") || { _hata "gh pr diff $PR düştü"; exit 3; }; fi
+# 🔴 FARKI DENETÇİ KENDİSİ ALIR (18 Eki, gorev_01M54B2Y4QT7VWTJX10AFR7M76): elle hazırlanan fark üç kez tur yaktı (11 Eki):
+#    iki-nokta `git diff origin/main` dal gerideyken başkasının eklemelerini "silinmiş" gösterdi, odaklı fark dosya kaçırdı.
+#    Kural: (a) --diff verilmişse o (çağıranın sorumluluğu, fark kaynağı ekranda söylenir); (b) --pr ile GitHub farkı alınır AMA
+#    PR dalının yerel kopyası varsa ve başı PR başından farklıysa DUR — o an hangi dalda durulduğundan bağımsız (itilmemiş/çekilmemiş commit);
+#    (c) ikisi de yoksa yerel kip: fetch → dal ana hattın GERİSİNDEYSE DUR (rebase/merge çağıranın işi; araç dalı değiştirmez) →
+#    kayıtsız değişiklik (kanıt/kart dizini dışında) varsa DUR (farka girmez) → üç-nokta `<ana>...HEAD`. Durmak rc=3 (ölçülemedi).
+if [ -n "$DIFF" ]; then cp "$DIFF" "$TMP/diff.patch" || { _hata "diff okunamadı"; exit 3; }; FARK_KAYNAK="--diff $DIFF (çağıranın verdiği)"
+elif [ -n "$PR" ]; then
+  PR_BAS="$(cd "$DEPO" && gh pr view "$PR" --json headRefOid,headRefName --jq '.headRefOid+" "+.headRefName' 2>/dev/null)" \
+    || { _hata "gh pr view $PR düştü — PR başı ölçülemedi"; exit 3; }
+  # Karşılaştırılan şey PR dalının YEREL kopyasının başıdır — o an hangi dalda durulduğu değil (göz tur 1: "yalnız aynı daldaysan"
+  # istisnası kartın şartından dardı). Yerel kopya yoksa (başkasının PR'ı, hiç çekilmemiş) itilmemiş commit de olamaz → devam.
+  PR_DAL="${PR_BAS#* }"; PR_SHA="${PR_BAS%% *}"
+  YEREL_BAS="$(git -C "$DEPO" rev-parse -q --verify "refs/heads/$PR_DAL" 2>/dev/null)"
+  if [ -n "$PR_SHA" ] && [ -n "$YEREL_BAS" ] && [ "$YEREL_BAS" != "$PR_SHA" ]; then
+    _hata "PR #$PR dalının ($PR_DAL) yerel başı (${YEREL_BAS:0:8}) PR başından (${PR_SHA:0:8}) FARKLI — itilmemiş ya da çekilmemiş commit var; göz GitHub'daki farkı puanlardı. Önce it/çek, sonra koştur"; exit 3
+  fi
+  (cd "$DEPO" && gh pr diff "$PR" > "$TMP/diff.patch") || { _hata "gh pr diff $PR düştü"; exit 3; }
+  FARK_KAYNAK="gh pr diff $PR (baş ${PR_BAS:0:8})"
+else
+  ANA="$(git -C "$DEPO" symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null || echo origin/main)"
+  git -C "$DEPO" fetch -q origin 2>/dev/null || { _hata "git fetch origin düştü — ana hat ($ANA) ölçülemedi"; exit 3; }
+  git -C "$DEPO" rev-parse --verify -q "$ANA" >/dev/null || { _hata "ana hat $ANA bulunamadı"; exit 3; }
+  GERIDE="$(git -C "$DEPO" rev-list --count "HEAD..$ANA")"
+  [ "$GERIDE" -eq 0 ] || { _hata "dal ana hattın ($ANA) $GERIDE commit GERİSİNDE — fark başkasının işini 'silinmiş' gösterirdi. Önce rebase/merge, sonra koştur"; exit 3; }
+  KIRLI="$(git -C "$DEPO" status --porcelain -uall | grep -v -E '^.. _agents/fabrika/(kanit|kartlar)/' | wc -l)"
+  [ "$KIRLI" -eq 0 ] || { _hata "$KIRLI kayıtsız değişiklik var (kanıt/kart dışı) — farka girmez, göz eksik kod görürdü. Önce commit'le"; exit 3; }
+  git -C "$DEPO" diff "$ANA...HEAD" > "$TMP/diff.patch" || { _hata "git diff $ANA...HEAD düştü"; exit 3; }
+  [ -s "$TMP/diff.patch" ] || { _hata "fark BOŞ ($ANA...HEAD) — denetlenecek değişiklik yok"; exit 3; }
+  FARK_KAYNAK="yerel üç-nokta $ANA...HEAD ($(git -C "$DEPO" rev-list --count "$ANA..HEAD") commit)"
+fi
+echo "· fark: $FARK_KAYNAK"
 # ── KANIT FARKA İKİNCİ KEZ GİRMESİN (15 Eki 2026, gorev_01M4ZSKHD1Y1FFT8P6Z5YMPTF9)
 #    Ölçülmüş vaka (PR #329, aynı gün): istem 135.913 bayt oldu, 110.000'de kırpıldı ve denetçi ÜRETİM KODU
 #    farkını hiç göremedi — "kodun kendisi bütünüyle denetlenemedi, bu eksikle 5 verilemez" dedi. Bir tur

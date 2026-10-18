@@ -1,0 +1,21 @@
+{
+  "is": "cipa-hata-yutma",
+  "cumle": "gunluk-plan cipa.sh _kilitle: 'exec 9>> 2>/dev/null' kabuğun stderr'ini kalıcı susturuyor, kilitten sonraki HATA satırları görünmüyor; susturmayı yalnız exec grubuna sınırla, sınav: kilit sonrası hata görünür (MUHAKKİK CM4JM)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-18T17:21:32+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/cipa-hata-yutma/ (sınav + mutasyon)",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)"
+}

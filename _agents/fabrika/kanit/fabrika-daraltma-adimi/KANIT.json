@@ -1,7 +1,7 @@
 {
   "is": "fabrika-daraltma-adimi",
   "arac": "kanit.py/0.4.0",
-  "guncelleme": "2026-10-18T18:05:10+03:00",
+  "guncelleme": "2026-10-18T19:18:06+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -183,7 +183,34 @@
       "renk": "yesil",
       "zaman": "2026-10-18T18:05:10+03:00",
       "sure_sn": 266.8
+    },
+    {
+      "tur": "dosya",
+      "etiket": "t3-birlesme-sonrasi-denetci-sinavi",
+      "asama": "tek",
+      "dosya": "dosya-t3-birlesme-sonrasi-denetci-sinavi-tek.log",
+      "sha256": "f563834078fa6d17ac0f9deaa8416279b63e836d9e7aa8481d98fe5343f6328d",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/denetci-test5.log",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T19:17:27+03:00"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "t3-birlesme-sonrasi-kart-kapi",
+      "asama": "sonra",
+      "dosya": "olcum-t3-birlesme-sonrasi-kart-kapi-sonra.txt",
+      "sha256": "8a94b09fefe39d8731cf923775b13a506db81652fe4870bea51a65be6f121c8d",
+      "komut": [
+        "bash",
+        "-c",
+        "bash yazilim-fabrikasi/scripts/kart.test.sh 2>&1 | tail -n1; bash yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh 2>&1 | tail -n1; bash yazilim-fabrikasi/scripts/denetci-fark-kendisi.test.sh 2>&1 | tail -n1"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T19:18:06+03:00",
+      "sure_sn": 39.8
     }
   ],
-  "imza": "ace1c436c483acf09c317b12883e5f84ed7e39351dd0ed4622ce3afd9578e80a"
+  "imza": "ae61c66772b92cfb3a03d7cc0d8cef605a8570e356f1a1e2c7a715762a1524f0"
 }
