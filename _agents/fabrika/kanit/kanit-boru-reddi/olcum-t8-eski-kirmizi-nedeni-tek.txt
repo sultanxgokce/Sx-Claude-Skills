@@ -1,0 +1,14 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/pthaq/t8-neden.sh
+# rc=0 sure=0.1s zaman=2026-10-18T16:29:43+03:00
+--- stdout ---
+modul_var=1
+playwright_surum=1.59.1
+onbellekteki_tarayicilar:
+chromium-1223
+chromium-1228
+chromium_headless_shell-1223
+chromium_headless_shell-1228
+ffmpeg-1011
+webkit-2311
+beklenen_ikili=YOK (/config/.cache/ms-playwright/chromium_headless_shell-1217/chrome-headless-shell-linux64/chrome-headless-shell)
+--- stderr ---

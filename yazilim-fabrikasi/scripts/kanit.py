@@ -9,6 +9,9 @@ Renkler: yesil (ölçtü, korudu) · kirmizi (ölçtü, korumuyor) · sari (ÖL�
 
 Kullanım:
   kanit.py olcum  <iş> <etiket> --asama once|sonra -- <komut...>     komutu koşar, kırpılmamış çıktı+rc kaydeder
+                  BORU DENETİMİ: komut `bash|sh -c '<betik>'` ise çıkış kodunu maskeleyen betik REDDEDİLİR (rc=1, kayıt yok):
+                  `|| true` / `|| :` · başka komuttan sonra gelen son echo/printf/true/: · pipefail'siz boruyla biten son komut. Meşru istisna:
+                  --boru-izin "<gerekçe ≥15 karakter>" → kayıt alınır, gerekçe manifeste `boru_denetimi` olarak yazılır.
   kanit.py ekran  <iş> <etiket> --asama once|sonra --url U [--urun-imi CSS] [--bekle CSS] [--genislik N]
   kanit.py dosya  <iş> <etiket> <yol> [--asama ...]                    var olan dosyayı (video, rapor) sha ile ekler
   kanit.py canli  <iş> <etiket> --kaynak dosya:<yol>|journal:<birim>|ssh:<sunucu>:<yol>|docker:<kutu>:<yol> --desen <RE> [--en-az N] [--son N]
@@ -19,7 +22,7 @@ Kullanım:
   kanit.py liste  <iş>
 Ortam: KANIT_DEPO (depo kökü; vars. git toplevel) · KANIT_PLAYWRIGHT_DIR (node_modules'lı dizin)
 """
-import argparse, datetime, hashlib, json, os, re, shutil, subprocess, sys
+import argparse, datetime, hashlib, json, os, re, shlex, shutil, subprocess, sys
 
 SURUM = "kanit.py/0.4.0"   # 0.4.0: `canli` sınıfı (17 Eki 2026)
 # Sürüm artık GÜVENLE yükseltilebilir: imza gövdesinde değil (yukarıdaki not).
@@ -147,10 +150,157 @@ def kayit_ekle(depo, is_adi, kayit):
     return dz
 
 
+# ── boru denetimi (görev PTHAQ) ──────────────────────────────────────────────────
+#    Araç komutu argv olarak koşar (kabuk yok), rc'yi kendisi ölçer. Ama komut `bash -c '…'` verilince betiğin İÇİNDEKİ
+#    maske (son komut `| tail`, `; echo`, `|| true`) asıl çıkış kodunu yutar: kırmızı koşum yeşil kayda düşer ve araç
+#    bunu göremez. Bu yüzden kabuk -c betiği koşmadan önce ayrıştırılır; çıkış kodunun SON komuttan geldiği kural:
+#      (a) `|| true` / `|| :`  — nerede olursa olsun açık maskedir;
+#      (b) son komut echo/printf/true/: VE öncesinde başka komut var  — çıkış kodu artık ölçülen işin değil, o komutun;
+#      (c) son komut boru (`a | b`) ve o noktada pipefail AÇIK değil  — çıkış kodu boru SONUNDAKİ süzgecin.
+#    Ayrıştırılamayan betik (heredoc, dengesiz tırnak) REDDEDİLMEZ; kayda `boru_denetimi: ayrıştırılamadı` düşer — denetçi görür.
+#    Dosya betiği (`bash x.sh`) içeriği denetlenmez; kayda `kapsam-dışı` düşer (sınır dürüstçe beyan edilir).
+KABUKLAR = {"bash", "sh", "dash", "zsh", "ksh"}
+MASKE_SON = {"echo", "printf", "true", ":", "set"}   # son komut `set …` da 0 döner, öncekinin rc'sini yutar
+AYIRAC = {";", "&&", "||", "&", ";;"}
+ONEKLER = {"command", "builtin", "exec", "time", "nohup", "noglob"}
+# Kabuğu ÇALIŞTIRAN sarmalayıcılar (göz tur 3): kabuk yalnız argv başında ya da bu zincirin arkasında kabuktur;
+# `printf bash -c …` içindeki `bash` bir VERİDİR, çalışmaz. Sarmalayıcının seçenekleri (`-…`), VAR=değer ve süre/sayı
+# argümanları atlanır; DEĞER ALAN seçeneklerin değeri de atlanır (göz tur 5: `timeout -s KILL 60`, `env -u VAR`);
+# tanınmayan argüman zinciri keser → kapsam-dışı.
+SARMALAYICI = {"timeout", "nice", "ionice", "env", "nohup", "setsid", "stdbuf", "chrt", "taskset", "command", "exec", "time"}
+DEGERLI_SECENEK = {
+    "timeout": {"-s", "--signal", "-k", "--kill-after"},
+    "env": {"-u", "--unset", "-C", "--chdir", "-S", "--split-string"},
+    "nice": {"-n", "--adjustment"},
+    "ionice": {"-c", "--class", "-n", "--classdata", "-p", "--pid"},
+    "stdbuf": {"-i", "-o", "-e", "--input", "--output", "--error"},
+    "exec": {"-a"},
+    "time": {"-f", "--format", "-o", "--output"},
+}
+
+
+def _kabuk_konumu(komut):
+    k = 0
+    while k < len(komut):
+        ad = os.path.basename(komut[k])
+        if ad in KABUKLAR:
+            return k
+        if ad not in SARMALAYICI:
+            return None
+        k += 1
+        degerli = DEGERLI_SECENEK.get(ad, set())
+        while k < len(komut) and (komut[k].startswith("-") or re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*=.*", komut[k])
+                                  or re.fullmatch(r"(0x[0-9a-fA-F]+|[0-9]+(\.[0-9]+)?[smhd]?)", komut[k])):
+            k += 2 if komut[k] in degerli else 1
+    return None
+
+
+def _yalin(toklar):
+    """Komut başındaki önekleri (command/builtin/exec…) soyar, ilk kelimeyi yoldan arındırır."""
+    while len(toklar) > 1 and toklar[0] in ONEKLER:
+        toklar = toklar[1:]
+    return [os.path.basename(toklar[0])] + toklar[1:] if toklar else toklar
+
+def _pipefail_etkisi(argumanlar, durum):
+    """`set`/kabuk argümanlarında `-o pipefail` (ya da `-euo pipefail`) açar, `+o pipefail` kapatır; yoksa durum aynen kalır."""
+    for k in range(len(argumanlar) - 1):
+        a, sonraki = argumanlar[k], argumanlar[k + 1]
+        if sonraki == "pipefail" and len(a) >= 2 and a[0] in "-+" and "o" in a[1:]:
+            durum = a[0] == "-"
+    return durum
+
+def boru_denetimi(komut):
+    """(durum, neden) — durum: temiz | maske | ayristirilamadi | kapsam-disi"""
+    # Kabuk argv'nin BAŞINDA olmak zorunda değil (göz tur 2): `timeout 600 bash -c`, `nice bash -c`, `env X=1 bash -c` da kabuktur.
+    # -c birleşik seçenek kümesinde de olabilir (`bash -lc`, `bash -ec`). Seçenek kümesi = `-` ile başlayan, harflerden oluşan argüman.
+    j = _kabuk_konumu(komut)
+    if j is None:
+        return "kapsam-disi", None
+    # -c yalnız kabuğun SEÇENEK bölgesinde seçenektir (göz tur 4): ilk seçenek-dışı argüman (betik dosyası) ya da `--`
+    # bölgeyi bitirir — `bash x.sh -c '…'` içindeki -c betiğe giden argümandır. `-o/+o` (ve `-euo` gibi o ile biten küme) değer alır.
+    i = None; k = j + 1
+    while k < len(komut):
+        t = komut[k]
+        if t == "--" or not (t.startswith("-") or t.startswith("+")):
+            break
+        if re.fullmatch(r"-[A-Za-z]*c[A-Za-z]*", t):
+            i = k; break
+        k += 2 if re.fullmatch(r"[-+][A-Za-z]*[oO]", t) else 1
+    if i is None:
+        return "kapsam-disi", None
+    if i + 1 >= len(komut):
+        return "ayristirilamadi", "-c sonrası betik yok"
+    betik = komut[i + 1]
+    komut = komut[j:]; i -= j   # aşağıdaki pipefail argüman taraması kabuktan itibaren
+    try:
+        # yeni satır da komut ayıracıdır: ayrıştırma için `;` sayılır (tırnak içindeki satır sonları da — yalnız analiz)
+        lx = shlex.shlex(betik.replace("\n", " ; "), posix=True, punctuation_chars=";&|()<>")
+        lx.wordchars += "+"   # `set +o pipefail`: `+o` tek parça kalmalı (yoksa `+` ve `o` diye bölünür, kapatma görülmez)
+        jet = list(lx)
+    except ValueError as e:
+        return "ayristirilamadi", f"betik ayrıştırılamadı ({e})"
+    if "<<" in jet or "<<-" in jet:
+        return "ayristirilamadi", "heredoc içeren betik denetlenmedi"
+    for k in range(len(jet) - 1):
+        if jet[k] == "||":
+            # göz tur 3: `|| /bin/true`, `|| command true` aynı maskedir → `||` sağındaki komut önekleri/yolu soyularak bakılır
+            sag = []
+            for t in jet[k + 1:]:
+                if t in AYIRAC or t == "|":
+                    break
+                sag.append(t)
+            yalin = _yalin(sag)
+            if yalin and yalin[0] in ("true", ":"):
+                return "maske", "`|| " + " ".join(sag) + "` çıkış kodunu yutuyor"
+    # son anlamlı komut: son ayıracın sağı (sondaki boş ayıraçlar atılır)
+    while jet and jet[-1] in AYIRAC:
+        jet.pop()
+    son = []
+    for t in reversed(jet):
+        if t in AYIRAC:
+            break
+        son.insert(0, t)
+    if not son:
+        return "ayristirilamadi", "son komut bulunamadı"
+    oncesi = [t for t in jet[:len(jet) - len(son)] if t not in AYIRAC]
+    # Önekler soyulur (göz tur 2): `command echo`, `builtin echo`, `exec true`, `/bin/echo` aynı maskedir.
+    son = _yalin(son)
+    if son[0] in MASKE_SON and oncesi:   # betiğin TEK komutu echo ise maskelenen bir iş yoktur (ölçülen şey odur)
+        return "maske", f"son komut `{son[0]}` — betiğin çıkış kodu ölçülen işin değil `{son[0]}`'nun"
+    # pipefail DURUMU sırayla izlenir (göz tur 1: kelimenin geçmesi yetmiyordu — `echo pipefail` ya da `set +o pipefail` geçiyordu).
+    # Başlangıç kabuk argümanından (`bash -o pipefail -c`, `bash -euo pipefail -c`); sonra son komuttan ÖNCEKİ her `set` komutu
+    # `-…o pipefail` ile açar, `+…o pipefail` ile kapatır. Son komutun kendisi sayılmaz.
+    pipefail = _pipefail_etkisi(komut[1:i], False)
+    bolum = []
+    for t in jet[:len(jet) - len(son)] + [";"]:
+        if t in AYIRAC:
+            if bolum and bolum[0] == "set":
+                pipefail = _pipefail_etkisi(bolum[1:], pipefail)
+            bolum = []
+        else:
+            bolum.append(t)
+    if "|" in son and not pipefail:
+        suzgec = son[len(son) - 1 - son[::-1].index("|") + 1] if son[-1] != "|" else "?"
+        return "maske", f"son komut boruyla bitiyor (`… | {suzgec}`) ve pipefail yok — çıkış kodu süzgecin"
+    return "temiz", None
+
 # ── olcum ────────────────────────────────────────────────────────────────────────
 def cmd_olcum(a):
     if not a.komut:
         hata("komut gerekiyor: -- <komut...>")
+    durum, neden = boru_denetimi(a.komut)
+    if durum == "maske":
+        if not a.boru_izin:
+            hata(f"BORU REDDİ: {neden}. Kayıt ÜRETİLMEDİ. Çare: ölçülen komutun rc'sini değişkene al ve betiği `exit $rc` ile bitir, "
+                 f"ya da `set -o pipefail` koy; sayım gerekiyorsa sayıyı değişkene alıp basın, son komut yine `exit` olsun. "
+                 f"Meşru istisna: --boru-izin \"<niçin, ≥15 karakter>\" (gerekçe manifeste yazılır)")
+        if len(a.boru_izin.strip()) < 15:
+            hata("--boru-izin gerekçesi en az 15 karakter olmalı (denetçi okuyacak)")
+        boru = f"izinli: {neden} · gerekçe: {a.boru_izin.strip()}"
+    elif durum == "ayristirilamadi":
+        boru = f"ayrıştırılamadı: {neden}"
+    else:
+        boru = {"temiz": "temiz", "kapsam-disi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)"}[durum]
     depo = depo_kok(a.depo); dz = kanit_dizin(depo, a.is_adi); os.makedirs(dz, exist_ok=True)
     ad = f"olcum-{a.etiket}-{a.asama}.txt"
     yol = os.path.join(dz, ad)
@@ -161,7 +311,8 @@ def cmd_olcum(a):
         f.write(f"$ {' '.join(a.komut)}\n# rc={p.returncode} sure={sure:.1f}s zaman={simdi()}\n--- stdout ---\n{p.stdout}--- stderr ---\n{p.stderr}")
     renk = "sari" if p.returncode == 3 else ("yesil" if p.returncode == 0 else "kirmizi")
     kayit = {"tur": "olcum", "etiket": a.etiket, "asama": a.asama, "dosya": ad, "sha256": sha_dosya(yol),
-             "komut": a.komut, "rc": p.returncode, "renk": renk, "zaman": simdi(), "sure_sn": round(sure, 1)}
+             "komut": a.komut, "rc": p.returncode, "renk": renk, "zaman": simdi(), "sure_sn": round(sure, 1),
+             "boru_denetimi": boru}
     kayit_ekle(depo, a.is_adi, kayit)
     print(f"{'✓' if renk=='yesil' else ('◻' if renk=='sari' else '✗')} ölçüm kaydedildi: {ad} rc={p.returncode} renk={renk}")
     print(p.stdout, end="")
@@ -468,7 +619,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--depo")
     s = p.add_subparsers(dest="cmd", required=True)
-    o = s.add_parser("olcum"); o.add_argument("is_adi"); o.add_argument("etiket"); o.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); o.set_defaults(f=cmd_olcum)
+    o = s.add_parser("olcum"); o.add_argument("is_adi"); o.add_argument("etiket"); o.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); o.add_argument("--boru-izin", dest="boru_izin", default=None); o.set_defaults(f=cmd_olcum)
     e = s.add_parser("ekran"); e.add_argument("is_adi"); e.add_argument("etiket"); e.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); e.add_argument("--url", required=True); e.add_argument("--urun-imi"); e.add_argument("--bekle"); e.add_argument("--genislik", type=int, default=1280); e.set_defaults(f=cmd_ekran)
     d = s.add_parser("dosya"); d.add_argument("is_adi"); d.add_argument("etiket"); d.add_argument("yol"); d.add_argument("--asama", default="tek"); d.set_defaults(f=cmd_dosya)
     c = s.add_parser("canli"); c.add_argument("is_adi"); c.add_argument("etiket"); c.add_argument("--kaynak", required=True); c.add_argument("--desen", required=True); c.add_argument("--en-az", dest="en_az", type=int, default=1); c.add_argument("--son", type=int, default=2000); c.set_defaults(f=cmd_canli)

@@ -1,0 +1,45 @@
+{
+  "tur": 3,
+  "is": "kanit-boru-reddi",
+  "pr": "371",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T16:35:56+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": null,
+  "yazan_model_kaynak": null,
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 42011,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 15032
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "İstenen boru reddi, gerekçeli istisna ve manifest kaydı eklenmiş; önceki turdaki birleşik `-c` ve komut öneki açıkları da sınavlarla kapatılmış. Ancak eşdeğer `|| true` yazımları hâlâ maskeli rc=0 kaydı üretebildiği ve kabuk tespiti sıradan argümanları kabuk çağrısı sanabildiği için önce bunları çözün.",
+    "bulgular": [
+      {
+        "ne": "`|| true` denetimi yalnız sonraki token tam olarak `true` veya `:` olduğunda çalışıyor; tam yollu ya da önekli eşdeğerler reddi aşabiliyor. Örneğin `bash -c 'false || /bin/true'` ve `bash -c 'false || command true'` temiz kabul edilip rc=0 kaydı üretebilir.",
+        "kanit": "Kod `jet[k] == \"||\" and jet[k + 1] in (\"true\", \":\")` koşuluyla yalnız tek token biçimini yakalıyor. Aynı değişiklik son-komut denetiminde `/bin/true` ve `command echo` eşdeğerlerini özellikle normalleştirirken T20b/T20b2 yalnız yalın `true` biçimini sınıyor.",
+        "konum": "yazilim-fabrikasi/scripts/kanit.py:boru_denetimi, `|| true` döngüsü; yazilim-fabrikasi/scripts/kanit.test.sh:T20b-T20b2",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Kabuk tespiti argv içindeki herhangi bir `bash`/`sh` tokenını gerçek çalıştırılan kabuk sayıyor; bu nedenle kabuk yalnız veri argümanı olduğunda güvenli komut yanlışlıkla reddedilebilir. Örneğin `printf bash -c 'false | cat'` gerçekte betiği çalıştırmaz, fakat denetim `bash` tokenından başlayıp maskeli boru bulur.",
+        "kanit": "Kabuk konumu `next((k for k, t in enumerate(komut) if os.path.basename(t) in KABUKLAR), None)` ile argv semantiği veya tanınan sarmalayıcı sınırı olmadan aranıyor. T20q yalnız gerçek `timeout 60 bash -c` sarmalayıcısını doğruluyor; kabuk adının veri argümanı olduğu negatif vaka bulunmuyor.",
+        "konum": "yazilim-fabrikasi/scripts/kanit.py:boru_denetimi, kabuk konumu hesabı; yazilim-fabrikasi/scripts/kanit.test.sh:T20q",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçüm çifti genel sınavın 101/104 geçenden 134/134 geçene, yeni T20/T21 kapsamının 0'dan 32 geçene çıktığını gösteriyor ve sekiz mutant yakalanıyor. Bununla birlikte sınavlar `|| /bin/true`/`|| command true` eşdeğerlerini ve argv içinde veri olarak geçen kabuk adını ölçmediğinden bulgulardaki açıklar mevcut yeşil sonuca rağmen kanıtlanmamış kalıyor."
+  }
+}

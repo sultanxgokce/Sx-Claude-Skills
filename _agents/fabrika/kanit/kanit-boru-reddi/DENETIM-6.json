@@ -1,0 +1,30 @@
+{
+  "tur": 6,
+  "is": "kanit-boru-reddi",
+  "pr": "371",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T20:19:06+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 57227,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 11,
+    "bayt": 40794
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, yaygın çıkış kodu maskeleri kabuk seçenek bölgesi ve bilinen sarmalayıcı zincirleri gözetilerek reddedilmiş; gerekçeli izin manifeste taşınmış ve yasak listesinin eksikliği SKILL’de açıkça sınırlandırılmış. Önceki turun değer alan sarmalayıcı boşluğu doğrudan kapı ve mutant sınavlarıyla kapatıldığı, hedefli ölçüm de 150/150 geçtiği için yalnız rötuş düzeyi risk kalmış ve iş üretime hazırdır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sha’ları sağlam; sarı kayıt yok. Hedefli T20 kapıları maskeler, yanlış pozitifler, kabuk seçenek bölgesi, değer alan sarmalayıcı seçenekleri ve manifest alanını gerçekçi komutlarla ölçüyor; T21’deki 12 mutant da denetim kollarının sınavlar tarafından gerçekten yakalandığını gösteriyor. Önce ölçümü aynı özellik için birebir bir baz sağlamasa da hedefli son ölçüm ve mutasyon kanıtı değişikliği yeterince güçlü destekliyor."
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "tur": 2,
+  "is": "kanit-boru-reddi",
+  "pr": "371",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T16:32:12+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": null,
+  "yazan_model_kaynak": null,
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 36582,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 10944
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "İstenen reddetme kapısı, gerekçeli istisna ve manifest alanı eklenmiş; önceki turdaki pipefail durum takibi açığı da yeni sınavlarla kapatılmış. Ancak geçerli kabuk çağrıları ve komut önekleri denetimi kolayca atlayabildiği için kanıt çıkış kodu hâlâ yeşile maskelenebilir; önce bunları çözün.",
+    "bulgular": [
+      {
+        "ne": "Kabuk tespiti yalnız ayrı bir `-c` argümanını tanıyor; birleşik geçerli seçeneklerle çağrılan kabuk denetim dışı kalıyor. Örneğin `bash -lc 'false | cat'` kapsam-dışı sayılarak çalıştırılır ve maskelenmiş rc=0 kaydı üretebilir.",
+        "kanit": "Giriş koşulu `\"-c\" not in komut[1:]` olduğunda doğrudan `kapsam-disi` döndürüyor ve devamında `komut.index(\"-c\", 1)` kullanılıyor. T20 yalnız ayrı `-c` argümanlı çağrıları ölçüyor; `-lc` veya benzeri birleşik seçenek sınavı yok.",
+        "konum": "yazilim-fabrikasi/scripts/kanit.py:boru_denetimi, yaklaşık satır 174-177; yazilim-fabrikasi/scripts/kanit.test.sh:T20",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Son echo/printf/true maskesi komutun ilk tokenına bakıyor; kabuğun `command` veya `builtin` önekleriyle aynı komut çalıştırıldığında kural aşılabiliyor. Örneğin `false; command echo bitti` rc=0 üretmesine rağmen temiz kabul edilir.",
+        "kanit": "Maske koşulu yalnız `if son[0] in MASKE_SON and oncesi` biçiminde; `son` değeri `command echo bitti` olduğunda ilk token `command` olur. T20c yalnız öneksiz `false; echo bitti` vakasını sınıyor.",
+        "konum": "yazilim-fabrikasi/scripts/kanit.py:boru_denetimi, yaklaşık satır 195-197; yazilim-fabrikasi/scripts/kanit.test.sh:T20c",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Genel sınav hâlâ tamamen geçmiyor; üç eski kapı hem önce hem sonra ölçümünde kırmızı kalmış. Yeni işle ilgisiz görünseler de üretime hazır durum için ayrıştırılmaları gerekir.",
+        "kanit": "Önce ölçümü `test_rc=1 gecen=101 kalan=3`, sonra ölçümü `test_rc=1 gecen=126 kalan=3` bildiriyor; iki çıktıda da aynı üç kare/ürün-imi kapısı kalıyor.",
+        "konum": "olcum-sinav-once.txt ve olcum-sinav-sonra.txt ölçüm çifti",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam, sarı kayıt yok. Önce/sonra ölçüm çifti yeni T20/T21 kapsamının 0'dan 25 geçen kapıya çıktığını ve altı mutantın yakalandığını gösteriyor; buna karşılık birleşik `-c` seçenekleri ile `command`/`builtin` önekli son komutlar ölçülmemiş, genel sınav da önceden var olan üç hata nedeniyle rc=1 dönüyor."
+  }
+}

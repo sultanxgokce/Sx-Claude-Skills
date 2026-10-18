@@ -1,0 +1,77 @@
+{
+  "is": "kanit-boru-reddi",
+  "arac": "kanit.py/0.4.0",
+  "guncelleme": "2026-10-18T20:18:19+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "once",
+      "dosya": "olcum-sinav-once.txt",
+      "sha256": "368c2b32c74e50e376c506ca4c346d3c8dbe3bc1a7f396f29c2cf012ddf97af9",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/pthaq/sinav-say.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/pthaq/once-0Rnh",
+        "once"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:23:31+03:00",
+      "sure_sn": 12.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "cf398a6de520fb3492ca7f7f09c570ea8adaf2acf6942c90e89d243b45baa5bb",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T20:18:09+03:00",
+      "sure_sn": 10.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "t8-eski-kirmizi-nedeni",
+      "asama": "tek",
+      "dosya": "olcum-t8-eski-kirmizi-nedeni-tek.txt",
+      "sha256": "d0df2ce3a507a5d2673746830ffeb7579062b76b2bf5f27b3c432560f77a43b1",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/pthaq/t8-neden.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:29:43+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-T20-T21",
+      "asama": "tek",
+      "dosya": "olcum-sinav-T20-T21-tek.txt",
+      "sha256": "d658e01fb4e2e27092b7686c2177184e1ebaf3f5229e823e0f9765845ee4eb84",
+      "komut": [
+        "bash",
+        "-c",
+        "o=$(mktemp); bash \"$1\" > \"$o\" 2>&1; rc=$?; sed -n \"/T20 ·/,\\$p\" \"$o\"; exit $rc",
+        "_",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T20:18:19+03:00",
+      "sure_sn": 10.3,
+      "boru_denetimi": "temiz"
+    }
+  ],
+  "imza": "e0e99f630ed87f24957ed60a111b9a7c20401e95dd2b8c0fe9ad000ff616eef2"
+}
