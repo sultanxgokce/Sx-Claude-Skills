@@ -1,0 +1,24 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/retro-gercek-w42.sh
+# rc=0 sure=0.2s zaman=2026-10-18T23:28:13+03:00
+--- stdout ---
+== kaynak (gerçek, dokunulmadı): başlıklar
+## Katılım (araç yazdı)
+## Süzüm — her öneri bir damga alır: `→ gorev_<id>` 
+## Dersler (merkez yorumu; kutu dersine D<n> ile atıf: `BÂ
+## Görevler (Sultan ders ders onaylar · D1 damgası · gö
+## Kaçış ve tıkanma
+== eski-1.0.0: başlıklar
+## Katılım (araç yazdı)
+## Süzüm — her öneri bir damga alır: `→ gorev_<id>` 
+## Dersler (merkez yorumu; kutu dersine D<n> ile atıf: `BÂ
+## Görevler (Sultan ders ders onaylar · D1 damgası · gö
+   elle bölümler: FARKLI (30 satır → 5 satır)
+== yeni-1.0.1: başlıklar
+## Katılım (araç yazdı)
+## Süzüm — her öneri bir damga alır: `→ gorev_<id>` 
+## Dersler (merkez yorumu; kutu dersine D<n> ile atıf: `BÂ
+## Görevler (Sultan ders ders onaylar · D1 damgası · gö
+## Kaçış ve tıkanma
+   elle bölümler: BİREBİR AYNI
+sonuç: eski rc=1 (1 beklenir: siler) · yeni rc=0 (0 beklenir: korur)
+--- stderr ---
