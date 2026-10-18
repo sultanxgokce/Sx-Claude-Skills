@@ -172,6 +172,32 @@ PY
 )"
   eval "$okuma"
   _y "  · denetim tur $tur · $puan/5 · doğru şey: $dogru · bulgu: $nb · yazan: $yazan → denetçi: $denetci"
+  # ── DARALTMA KAYDI (PCP7J, 18 Eki 2026): kapı eskiden kartın reis/Sultan kararlarını hiç okumuyor, koşulsuz son
+  #    DENETIM 5/E istiyordu. Kart daraltıldıysa (kart.sh daralt → daraltmalar[-1].tur_sifir) son denetim daraltmadan
+  #    SONRA koşmuş olmalı: eski cümleye verilmiş 5/E yeni cümleyi doğrulamaz. Kart okunamazsa ÖLÇÜLEMEDİ (rc=3), geçti değil.
+  if [ -n "${KART:-}" ] && [ -r "$KART" ]; then
+    dar="$(python3 - "$KART" "$tur" <<'PYD'
+import json,sys
+try:
+    try: k=json.load(open(sys.argv[1],encoding="utf-8"))
+    except Exception: print("yok"); raise SystemExit   # kart okunamıyorsa onu canli-gerekir kapısı zaten ÖLÇÜLEMEDİ sayar (çift sayım yok)
+    d=k.get("daraltmalar") or []
+    rk=[x for x in (k.get("reis_kararlari") or []) if x.get("karar")=="daralt"]; sk=[x for x in (k.get("sultan_kararlari") or []) if x.get("karar")=="daralt"]
+    if not d: print("yok"); raise SystemExit
+    ts=int(d[-1].get("tur_sifir",0)); tur=int(sys.argv[2]) if str(sys.argv[2]).isdigit() else -1
+    kim="Sultan" if sk else ("reis" if rk else "kayitsiz")
+    print(f"{'tamam' if tur>ts else 'eski'} {ts} {d[-1].get('kalan_kart','?')} {kim}")
+except SystemExit: pass
+except Exception as e: print("hata")
+PYD
+)"
+    case "$dar" in
+      yok) ;;
+      hata) _h "kartın daraltma kaydı OKUNAMADI — kapı ölçemedi"; olcemedi=$((olcemedi+1)) ;;
+      tamam\ *) set -- $dar; _y "  · kart daraltılmış (tur sıfırı $2, kalan → $3, karar: $4) · son denetim daraltma SONRASI ✓" ;;
+      eski\ *) set -- $dar; _h "kart daraltılmış (tur sıfırı $2, kalan → $3) ama son denetim (tur $tur) daraltmadan ÖNCE — yeni cümle denetlenmedi, birleştirme YOK"; eksik=$((eksik+1)) ;;
+    esac
+  fi
   [ "$puan" = "5" ] || { _h "kod puanı 5 DEĞİL ($puan) — adım 2'ye dönülmeliydi"; eksik=$((eksik+1)); }
   [ "$dogru" = "E" ] || { _h "'doğru şey mi' EVET değil ($dogru) — kod doğru olsa da yanlış iş olabilir"; eksik=$((eksik+1)); }
   # Sultan Y0006: yedek göz (yazandan farklı YENİ oturum) de bağımsız sayılır — ama ancak

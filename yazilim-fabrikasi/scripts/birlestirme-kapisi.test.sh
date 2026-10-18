@@ -303,4 +303,29 @@ CIKTI="$(bash "$G" is-m 2>&1)"; RC=$?
 grep -q "⛔ GEÇERSİZ: olcum-olc-tek.txt" <<<"$CIKTI" && grep -q "vekil ölçüttü" <<<"$CIKTI"; g $? "T13k ölçüm ilanı kapı çıktısında görünür (sessiz kalmaz; hükmü göz verir)"
 
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
+echo "════ T13 · DARALTMA kaydı: eski cümleye verilmiş 5/E yeni cümleyi doğrulamaz (PCP7J) ════"
+kart is-dar; bash "$K" olcum is-dar olc --asama tek -- echo 1 >/dev/null 2>&1
+den is-dar 1 2 H; den is-dar 2 2 H; den is-dar 3 5 E
+bash "$G" is-dar --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "daraltma yokken 3. tur 5/E → geçer (gerileme yok)"
+( cd "$T" && bash "$KT" daralt is-dar --kalan "kalan yarı yeterince uzun bir cümle burada" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-d >/dev/null 2>&1 ); g $? "kart daraltıldı (tur sıfırı 3)"
+CIKTI="$(bash "$G" is-dar 2>&1)"; RC=$?
+[ "$RC" -eq 1 ]; g $? "daraltma sonrası tur yokken son 5/E (tur 3 = sıfırdan önce) GEÇMEZ"
+grep -q "daraltmadan ÖNCE" <<<"$CIKTI"; g $? "sebep yazılı: son denetim daraltmadan önce"
+den is-dar 4 5 E
+CIKTI="$(bash "$G" is-dar 2>&1)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "daraltma SONRASI 5/E tur → geçer"
+grep -q "kart daraltılmış (tur sıfırı 3" <<<"$CIKTI" && grep -q "karar: reis" <<<"$CIKTI"; g $? "kapı daraltma kaydını ve reis kararını BASTI (eskiden hiç okumuyordu)"
+echo "════ T13b · MUTASYON: daraltma kontrolü kaldırılınca eski 5/E geçer (kapı gerçek) ════"
+M13="$HERE/.mut13.tmp.sh"; python3 - "$G" "$M13" <<'PYM'
+import sys; s=open(sys.argv[1]).read()
+eski='yeni cümle denetlenmedi, birleştirme YOK"; eksik=$((eksik+1))'
+assert eski in s, "mutasyon hedefi yok"
+open(sys.argv[2],"w").write(s.replace(eski,'yeni cümle denetlenmedi"; :'))
+PYM
+grep -q 'yeni cümle denetlenmedi"; :' "$M13"; g $? "T13b mutant üretildi (daraltma çiti kaldırıldı)"
+rm -f "$T/_agents/fabrika/kanit/is-dar/DENETIM-4.json"
+bash "$M13" is-dar --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "mutant: daraltma çiti kalkınca eski 5/E GEÇİYOR → T13 bu mutantta düşerdi"
+bash "$G" is-dar --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "gerçek kapı aynı durumda hâlâ reddediyor"
+rm -f "$M13"
+
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

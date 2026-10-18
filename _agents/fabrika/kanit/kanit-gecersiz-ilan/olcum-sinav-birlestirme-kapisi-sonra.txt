@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh
-# rc=0 sure=18.2s zaman=2026-10-18T19:35:35+03:00
+# rc=0 sure=20.6s zaman=2026-10-18T20:07:16+03:00
 --- stdout ---
 ════ T1 · hiçbir şey yok → engeller ════
   ✓ kart+kanıt+denetim yokken rc=1
@@ -112,6 +112,17 @@ $ bash yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh
   ✓ T13j yeniden ölçülünce ilan uygulanmaz (eski ölçüme aitti) → geçer
   ✓ T13j2 kontrol kopyası geçen durumu da geçiriyor (kopyada içe aktarım düşmüyor)
   ✓ T13k ölçüm ilanı kapı çıktısında görünür (sessiz kalmaz; hükmü göz verir)
+════ T13 · DARALTMA kaydı: eski cümleye verilmiş 5/E yeni cümleyi doğrulamaz (PCP7J) ════
+  ✓ daraltma yokken 3. tur 5/E → geçer (gerileme yok)
+  ✓ kart daraltıldı (tur sıfırı 3)
+  ✓ daraltma sonrası tur yokken son 5/E (tur 3 = sıfırdan önce) GEÇMEZ
+  ✓ sebep yazılı: son denetim daraltmadan önce
+  ✓ daraltma SONRASI 5/E tur → geçer
+  ✓ kapı daraltma kaydını ve reis kararını BASTI (eskiden hiç okumuyordu)
+════ T13b · MUTASYON: daraltma kontrolü kaldırılınca eski 5/E geçer (kapı gerçek) ════
+  ✓ T13b mutant üretildi (daraltma çiti kaldırıldı)
+  ✓ mutant: daraltma çiti kalkınca eski 5/E GEÇİYOR → T13 bu mutantta düşerdi
+  ✓ gerçek kapı aynı durumda hâlâ reddediyor
 
-── SONUÇ: 92 geçti · 0 kaldı ──
+── SONUÇ: 101 geçti · 0 kaldı ──
 --- stderr ---

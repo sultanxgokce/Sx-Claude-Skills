@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/kanit.test.sh
-# rc=0 sure=14.3s zaman=2026-10-18T19:39:27+03:00
+# rc=0 sure=15.7s zaman=2026-10-18T20:06:52+03:00
 --- stdout ---
 ════ T1 · ölçüm çifti: komutu araç koşar, kırpılmamış çıktı+rc ════
   ✓ önce ölçümü rc=0

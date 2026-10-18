@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/kart.test.sh
-# rc=0 sure=2.8s zaman=2026-10-18T19:35:17+03:00
+# rc=0 sure=3.2s zaman=2026-10-18T20:06:55+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -70,6 +70,30 @@ $ bash yazilim-fabrikasi/scripts/kart.test.sh
   ✓ 'ghost' içindeki host canlı saymaz (kelime başı sınırı; Türkçe ek serbest)
   ✓ 'hosting' / 'zilli' canlı saymaz (kelime sonu sınırı; yedek göz #354)
   ✓ Türkçe ekler (sunucudaki · cron'u · servisleri) hâlâ yakalanır
+════ T11 · daralt: kalan bulgu yeni karta, cümle daraltılır, tur sıfırı yazılır (PCP7J) ════
+  ✓ kısa --kalan REDDEDİLDİ
+  ✓ --oturum yoksa REDDEDİLDİ
+  ✓ reddedilen denemeler kalan kart yazmadı
+  ✓ daralt rc=0
+  ✓ tur sıfırı 3 yazıldı (3 denetim vardı)
+  ✓ cümle daraltıldı, geçmiş saklandı, reis kararı 'daralt' sahibin adıyla işlendi
+  ✓ kalan kart: aynı sahip/istedi/sınıf cevapları, köken yazılı
+  ✓ aynı kalan ad ikinci kez açılmaz (--yeni gerekir)
+  ✓ --yeni ile ikinci daraltma
+════ T12 · daralt SINIFLI kartta Sultan kararı ister (A06) ════
+  ✓ sınıflı kart Sultan kararı olmadan daraltılmadı
+  ✓ karta hiçbir şey yazılmadı
+  ✓ Sultan 'daralt' kararı karttayken daraltıldı
+  ✓ kalan kart da SINIFLI doğdu (sınıf miras)
+════ T12b · Sultan 'daralt' kararı TEK KULLANIMLIK; --yeni ad güvenli; iki kart atomik (göz tur 1) ════
+  ✓ aynı Sultan kararıyla İKİNCİ daraltma REDDEDİLDİ (karar tüketildi)
+  ✓ kullanılan karar karta işaretli, ikinci daraltma yazılmadı
+  ✓ --yeni '../kacak' REDDEDİLDİ
+  ✓ --yeni 'a/b' REDDEDİLDİ
+  ✓ dizin dışına hiçbir şey yazılmadı
+  ✓ kalan kart yazılamayınca rc=1
+  ✓ ana kart bayt bayt DEĞİŞMEDİ (atomik)
+  ✓ yarım kalan kart yok
 
-── SONUÇ: 60 geçti · 0 kaldı ──
+── SONUÇ: 81 geçti · 0 kaldı ──
 --- stderr ---

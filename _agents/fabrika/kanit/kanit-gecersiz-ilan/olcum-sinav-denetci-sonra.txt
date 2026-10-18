@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/denetci.test.sh
-# rc=0 sure=190.9s zaman=2026-10-18T19:38:46+03:00
+# rc=0 sure=211.2s zaman=2026-10-18T20:10:47+03:00
 --- stdout ---
 ════ T1 · kanıt yok → rc=2, denetim dosyası yok ════
   ✓ kanıtsız adım 4 açılmadı (rc=2)
@@ -189,7 +189,7 @@ $ bash yazilim-fabrikasi/scripts/denetci.test.sh
   ✓ mutant 'kart-json-hatasi-yutulur' sınavı KIRMIZI yapıyor
   ✓ mutant 'kirpma-kaydini-kaldir' sınavı KIRMIZI yapıyor
   ✓ mutant 'gecersiz-goze-soylenmez' sınavı KIRMIZI yapıyor
-  (bilgi) 16 mutant · 4 paralel · 129 sn
+  (bilgi) 16 mutant · 4 paralel · 132 sn
 
 ── KANIT-AYIKLAMA (ayrı dosya, buradan çağrılır) ──
 A · 🔴 kanıt dosyaları farktan AYIKLANIR, üretim kodu KALIR
@@ -325,6 +325,21 @@ toplam=44 geçen=44 düşen=0
 
 ── SONUÇ (fark-kendisi): 23 geçti · 0 kaldı ──
   ✓ fark-kendisi kapıları (denetci-fark-kendisi.test.sh) GEÇTİ
+════ T-DARALT · tıkanan iş kart.sh daralt ile yeni cümleyle sıfırdan sayılır (PCP7J) ════
+  ✓ kart açıldı (sınıfsız)
+  ✓ 3 tur ilerlemeyince rc=4 (tıkandı)
+  ✓ daralt rc=0: ✓ kart daraltıldı: is-dar (tur sıfırı 3) · kalan bulgu yeni karta: is-dar-kalan · sınıfsız, reis kararı işlendi
+  ✓ karta daraltma kaydı (tur_sifir=3), reis kararı, cümle geçmişi yazıldı
+  ✓ kalan bulgu yeni kartta (aynı sahip, sınıfsız, köken yazılı)
+  ✓ daraltmadan sonraki ilk tur KOŞTU ve 5/E geçti (rc=0, tavan sıfırlandı)
+  ✓ denetçi daraltmayı söyledi (ilk 3 tur sayılmıyor)
+  ✓ DENETIM-4 yazıldı (tur numarası sürdü, sayım sıfırlandı)
+  ✓ daraltma sonrası 3 düşük tur → yine rc=4 (sıfırlama tavanı kaldırmaz)
+════ T-BOL · üretim farkı eşiği aşarsa denetçi 'İŞİ BÖL' der, tur yakmaz (PCP7J) ════
+  ✓ fark 24 KB > eşik 5 KB → rc=1
+  ✓ 'İŞİ BÖL' + daralt yolu yazılı
+  ✓ tur yakılmadı (DENETIM yok)
+  ✓ eşik altındaki fark normal denetlenir (rc=0)
 
-── SONUÇ: 171 geçti · 0 kaldı ──
+── SONUÇ: 184 geçti · 0 kaldı ──
 --- stderr ---

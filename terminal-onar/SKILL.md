@@ -1,9 +1,35 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.17.3
+version: 2.18.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.18.0 · Dava Rafı — kapı tarafı (16-18 Eki · Parça B2, SERDAR 16:26 · merkez rafı cloudtop #659 · kilit #362)
+Kayıt KÖKÜNDE `dava_kurali: {tavan: 4, gun: 14}` olan kutuda (bugün vekatip; satırı kutunun reisi yazar) kapı Dava Rafı'nı besler.
+Kural satırı yoksa hiçbir yanıt değişmez — davasız kutuda raf çizilmez (`dava.test` DV7 · DV33).
+- **Dava = kayıtlı satır**, `rol: dava`, `id` = dosya no (YYYY/N, tırnaksız). Alanlar: `tmux` · `arz_adi` (kısa ad) · `session_id` ·
+  `cwd`; kapının yazdıkları `son_calisma` (dondururken epoch) · `dondurma: kural` (bekçi dondurdu) · `bagla_ile: true` (E4 ile geldi).
+- **`/api/kadro`**: `davalar: {tavan, gun, acik, dondurulacak:[{id, kalan_gun}]}` (yalnız kural varsa) · `bagla: true` · kişide
+  `arz_adi` · `son_calisma` · `dondurma` · `bagla_ile` (yalnız kayıtta varsa).
+- **`POST /api/kadro/hal`** (aynı uç, aynı kurallar: çerez şart, jeton 403, altyapı 403, süreç içi kuyruk):
+  `geri-ac {yer_ac:true}` — açık dava ≥ tavan ise en uzun süredir dokunulmayan açık dava ÖNCE dondurulur; dondurulamazsa HİÇBİR ŞEY
+  açılmaz (502). Yanıt `{tamam, oturum, ekran, donduruldu, mesaj}`. · `bagla {oturum, hedef:'dava', dosya_no, kisa_ad}` → kaydın ilk
+  dosyasının `uyeler:` sonuna blok; `{…, hedef:'kisi', id}` → kişinin `session_id`'si (önceki `bagla_once`'a). Claude kimliği ve
+  dizini oturumun kimlik izinden; tek Claude olmalı. · `bagla-geri-al {id}` → yalnız `bagla_ile: true` kayıt; dava bloğu silinir,
+  kişide eski kimlik geri konur — kayıt bayt bayt eski hâl, oturuma dokunulmaz.
+- **Günlük tur**: `bekci.sh` → `scripts/dava-gunluk.sh` kapısı → günde BİR kez `kapi/dava-bekci.mjs` (damga `<durum>/dava-bekci.gun` turdan
+  önce yazılır: tur düşse de o gün tekrar yok, ertesi gün yeniden; damga yazılamazsa tur koşmaz — `dava-gunluk.test.sh` G1-G6) → `gun` gündür tmux bölmesi kıpırdamayan açık davayı
+  dondurur (`dondurma: kural`), iz `kadro-hal.log`. `--kuru` yalnız söyler. Kapı ile bekçi aynı kaydı yazar → süreçler arası
+  kayıt kilidi `kilit.mjs` (flock, #362): kapının hal ucu, bekçi turu ve `kadroYaz` AYNI `<proje>/kadro.kilit` dosyasını kilitler; hal ucu
+  ve bekçi bütün işlemi (yer aç: dondur + aç) tek kilit altında yapar, içeride kilitsiz `kadroYazKilitAltinda`. Kilit 30 sn'de
+  alınamazsa kapı 503, bekçi rc 3 (o gün tur yok); kayıt dokunulmaz (`dava.test` DV32–DV32d).
+- **Açma (B10 ölçümü)**: `koltuk-ac` dava satırını `claude --resume <session_id>` ile açar (kayıttaki `cwd`'de). baslat-claude.sh
+  KULLANILMAZ: o `claude --session-id <id>` koşar ve konuşması olan kimlikte Claude "Session ID … is already in use" deyip çıkar
+  (16 Eki, 2.1.301 ölçüldü). Konuşması olmayan dava açılmaz.
+- Sınav: `kapi/dava.test.mjs` (uçtan uca) · `scripts/dava-gunluk.test.sh` (günlük kapı) · `kapi/dava.mutasyon.sh` (12 bozma, her biri kırmızı olmalı) · `koltuk-ac.test.sh` V1-V5.
+- Ölçüm betiği `scripts/dava-resume-olc.sh` kendi tmux soketinde koşar ve `$TMUX`'u siler (DERVİŞ 17 Eki: tmux içinden çağrılınca
+  `kill-server` kutunun sunucusunu öldürüyordu).
 
 ## 🆕 2.17.3 · bekçi satırı kutuya özgü sabit gecikmeyle (18 Eki · kart terminal-onar-bekci-gecikme · SERDAR 15:28)
 

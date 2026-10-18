@@ -36,6 +36,7 @@ tags: [fabrika, worktree, kanit, bagimsiz-goz, puan, hat-dosyasi, orkestrasyon, 
 | `fabrika-kur.sh denetle [depo]` | şablon sha ≟ depo sha; işaretçi var mı | 0 eşit · 1 drift · 3 dosya yok |
 | `fabrika-kur.sh kur --kanca` | ek olarak ana-dal commit korumasını (pre-commit) kurar | — |
 | `kart.sh ac <iş> --is … --istedi … --aldi … --geri-alinamaz/--para/--dis-yuzey/--yetki e\|h\|?` | 0. adım: iş kartını ARAÇ yazar; dört sınıf sorusu cevapsız kart açılmaz; e/? → Sultan'a gider. `bitti` · `tikandi --yol --neden` · `liste` · `goster`. `--oda` ile tetikli mesaj. `--canli e\|h`: cron/servis/sunucu işi canlı kanıt ister; verilmezse cümleden türetilir, sebebi karta yazılır (`canli-gerekir <iş>` okur) | 0 · 1 eksik cevap · 3 |
+| `kart.sh daralt <iş> --kalan "<bulgu ≥20>" --cumle "<daraltılmış cümle ≥20>" --oturum <ref> [--yeni <ad>]` | 4. adım DARALTMA: kart cümlesi daraltılır (eskisi `cumle_gecmisi`), kalan bulgu yeni karta (aynı sahip/sınıf, `koken`), karta `daraltmalar[]` + `tur_sifir`; sınıfsız kartta reis kararı `daralt` kendiliğinden, SINIFLI kartta `sultan-dedi --karar daralt` ŞART. Denetçi daraltmadan önceki turları saymaz; kapı daraltma sonrası 5/E ister | 0 · 1 eksik/sınıflı-kararsız · 3 |
 | `kart.sh reis-dedi <iş> --karar devam --reis <AD> --oturum <ref> --gerekce …` | **Sınıfsız** işte sahip kararı karta `reis_kararlari` alanına girer (Sultan'ın alanına DEĞİL — A06). `--reis` kartta yazılı sahip (`aldi`) olmak ZORUNDA; başka reisin kararı mektupla gelir, sahip kendi adıyla işler ve gerekçede ona atıf yapar. `--karar` kapalı küme. Sınıflı kartta reddedilir: sınıf işinin merci Sultan (`sultan-dedi`). 8 Eki 2026 · A268 | 0 · 1 eksik/sınıflı |
 | `is-alani.sh ac <iş> [--dosyalar a,b] [--kartsiz]` | `origin/main`'den TAZE worktree (`/config/projects/_wt/<depo>-<iş>`); **kart yoksa açılmaz** (kaçış `--kartsiz` → kart cevapsız açılır, Sultan'a gider); açık PR'larla dosya çakışması varsa **durur ve sorar**; kartı worktree'ye kopyalar | 0 · 1 hata/kart yok · 2 çakışma |
 | `gun-sonu.sh [--gun] [--yaz]` | gün sonu özeti DEFTERDEN (kartlar + karne): Sultan'a gidenler · içeride bitirdiklerimiz · tıkananlar · açık işler; elle satır yok | 0 · 3 defter yok |
@@ -109,3 +110,19 @@ Codex yoksa ya da iki denemede de düşerse, **yazandan farklı yeni bir Claude 
 "ölçemedim" diye durmaz. Kayıtta `yedek` alanı sebebi taşır ("codex yok" · "codex düştü (2 deneme)") ve denetçi adında
 **YEDEK GÖZ** yazar — yedekle alınan puan Codex puanı sanılmaz. Açık `--denetci codex` isteğinde eski sert davranış (rc=3)
 sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kaldırılınca kırmızı).
+
+## Sürüm notları
+- **0.10.0 (2026-10-18, SERDAR · PCP7J daraltma adımı; 0.9.0 HENDESE üstüne):** tıkanma raporu "kapsamı daralt" diyordu ama hatta adımı yoktu:
+  daralt kararı verilen iş (cloudtop #668) tur açamıyor, mutlak tavanı dolan iş (#670) bir daha denetlenemiyor, kapı
+  reis/Sultan kararını hiç okumuyordu; geçici yol "yeni kart + yeni dal + yeni PR" Sultan'a günde ~30 karar yüklüyordu.
+  Üç parça: (1) `kart.sh daralt` — cümle daraltılır, kalan bulgu yeni karta, `daraltmalar[].tur_sifir`; sınıfsız kartta
+  reis kararı kendiliğinden, sınıflı kartta Sultan kararı şart (A06). (2) `denetci.sh` — `tur_sifir`dan önceki turlar
+  tavan ve ilerleme sayımına girmez (sıfırlama tavanı KALDIRMAZ: sonra yine 3 düşük tur = tıkandı); ayıklanmış üretim
+  farkı eşiği aşarsa kırpıp denetlemek yerine **İŞİ BÖL** (rc=1, DENETIM yazılmaz); ayıklama kapalıyken ölçemediğine böl
+  demez, eski kırpma sürer. (3) `birlestirme-kapisi.sh` — daraltma kaydını okur: son denetim daraltmadan ÖNCEYSE eski
+  cümlenin 5/E'si geçmez. Kaçış yolu YOK. Bağımsız göz tur 1 üç bulgu: sınıflı kartta Sultan'ın 'daralt' kararı TEK
+  KULLANIMLIK (`kullanildi` damgası; eski söz sonraki daraltmayı açmaz) · `--yeni` ad doğrulanır (yol ayracı/'..' yok) ·
+  iki kart önce geçici dosyaya tam yazılır, sonra art arda yerine konur (kalan kart konamazsa ana kart dokunulmaz,
+  ana kart konamazsa kalan geri alınır; tek pencere iki rename arası süreç ölümüdür — veri kaybı yok, yetim kalan kart
+  `koken` ile görünür). Tur 2: denetçi sınavının çıkış kodu kalan sayısına bağlandı (kırmızı sınav rc=0 veremez).
+  Sınav: kart +20 (T11/T12/T12b), denetçi +15 (T-DARALT/T-BOL), kapı +9 (T13 + mutasyon).

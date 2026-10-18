@@ -1,5 +1,5 @@
 $ bash -c o=$(mktemp); bash "$1" > "$o" 2>&1; rc=$?; sed -n "/T22/,\$p" "$o"; exit $rc _ yazilim-fabrikasi/scripts/kanit.test.sh
-# rc=0 sure=15.2s zaman=2026-10-18T19:39:42+03:00
+# rc=0 sure=16.0s zaman=2026-10-18T20:11:03+03:00
 --- stdout ---
 ════ T22 · GEÇERSİZ ilan (4K938): özgün kayda dokunmaz, hedefin ölçüm kimliğine bağlı, yeşil sayılmaz ════
   ✓ T22 --neden 20 karakterden kısa → ret, ilan dosyası yazılmadı

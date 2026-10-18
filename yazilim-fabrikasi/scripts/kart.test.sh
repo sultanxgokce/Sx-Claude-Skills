@@ -120,4 +120,38 @@ bash "$KT" ac is-ek --is "sunucudaki cron'u ve servisleri yenile" --istedi S --a
 python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-ek.json'));assert k['canli_gerekir'] and 'sunucu' in k['canli_sebep'] and 'cron' in k['canli_sebep'] and 'servis' in k['canli_sebep'], k['canli_sebep']"; g $? "Türkçe ekler (sunucudaki · cron'u · servisleri) hâlâ yakalanır"
 
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
+echo "════ T11 · daralt: kalan bulgu yeni karta, cümle daraltılır, tur sıfırı yazılır (PCP7J) ════"
+mkdir -p "$T/depo2" && cd "$T/depo2" && git init -q -b main && export KANIT_DEPO="$T/depo2"   # önceki sınav çalışma dizinini kaldırmış olabilir
+bash "$KT" ac is-dar --is "iki yarım iş tek kartta olduğu için tıkanan iş" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+bash "$KT" daralt is-dar --kalan "kısa" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-d >/dev/null 2>&1; [ $? -eq 1 ]; g $? "kısa --kalan REDDEDİLDİ"
+bash "$KT" daralt is-dar --kalan "kalan yarı: raporu da üretsin, bu kartta değil" --cumle "daraltılmış cümle yeterince uzun burada" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "--oturum yoksa REDDEDİLDİ"
+[ ! -f "$T/depo2/_agents/fabrika/kartlar/is-dar-kalan.json" ]; g $? "reddedilen denemeler kalan kart yazmadı"
+mkdir -p "$T/depo2/_agents/fabrika/kanit/is-dar"; for i in 1 2 3; do echo '{"tur":'$i',"sonuc":{"kod_puani":2,"dogru_sey":"H","bulgular":[]}}' > "$T/depo2/_agents/fabrika/kanit/is-dar/DENETIM-$i.json"; done
+CIKTI="$(bash "$KT" daralt is-dar --kalan "kalan yarı: raporu da üretsin, bu kartta değil" --cumle "yalnız birinci yarı: ölçümü yazsın ve kaydetsin" --oturum ref-d 2>&1)"; g $? "daralt rc=0"
+grep -q "tur sıfırı 3" <<<"$CIKTI"; g $? "tur sıfırı 3 yazıldı (3 denetim vardı)"
+python3 -c "import json;k=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-dar.json'));assert k['cumle'].startswith('yalnız') and k['cumle_gecmisi'][0]['cumle'].startswith('iki yarım') and k['daraltmalar'][-1]['tur_sifir']==3 and k['reis_kararlari'][-1]['karar']=='daralt' and k['reis_kararlari'][-1]['reis']=='MUAVIN'"; g $? "cümle daraltıldı, geçmiş saklandı, reis kararı 'daralt' sahibin adıyla işlendi"
+python3 -c "import json;y=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-dar-kalan.json'));assert y['koken']=='is-dar' and y['aldi']=='MUAVIN' and y['istedi']=='Sultan' and y['sinif_cevaplari']=={'geri_alinamaz':'h','para':'h','dis_yuzey':'h','yetki':'h'} and y['durum']=='acik'"; g $? "kalan kart: aynı sahip/istedi/sınıf cevapları, köken yazılı"
+bash "$KT" daralt is-dar --kalan "üçüncü parça da ayrılsın yeterince uzun" --cumle "daha da daraltılmış cümle yeterince uzun" --oturum ref-d >/dev/null 2>&1; [ $? -eq 1 ]; g $? "aynı kalan ad ikinci kez açılmaz (--yeni gerekir)"
+bash "$KT" daralt is-dar --kalan "üçüncü parça da ayrılsın yeterince uzun" --cumle "daha da daraltılmış cümle yeterince uzun" --oturum ref-d --yeni is-dar-3 >/dev/null 2>&1; g $? "--yeni ile ikinci daraltma"
+echo "════ T12 · daralt SINIFLI kartta Sultan kararı ister (A06) ════"
+bash "$KT" ac is-dar-s --is "para harcayan iş tek kartta iki yarımla tıkandı" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para e --dis-yuzey h --yetki h >/dev/null 2>&1
+bash "$KT" daralt is-dar-s --kalan "kalan yarı yeterince uzun bir cümle burada" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-s >/dev/null 2>&1; [ $? -eq 1 ]; g $? "sınıflı kart Sultan kararı olmadan daraltılmadı"
+python3 -c "import json;k=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-dar-s.json'));assert 'daraltmalar' not in k and 'reis_kararlari' not in k"; g $? "karta hiçbir şey yazılmadı"
+bash "$KT" sultan-dedi is-dar-s --karar daralt --oturum ref-s --soz "daralt, kalanı sonra" --beyan MUAVIN --gerekce "ikinci yarı ayrı PR ile gelsin, ilk yarı bitti" >/dev/null 2>&1
+bash "$KT" daralt is-dar-s --kalan "kalan yarı yeterince uzun bir cümle burada" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-s >/dev/null 2>&1; g $? "Sultan 'daralt' kararı karttayken daraltıldı"
+python3 -c "import json;y=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-dar-s-kalan.json'));assert y['sultan']==True and y['siniflar']==['para']"; g $? "kalan kart da SINIFLI doğdu (sınıf miras)"
+echo "════ T12b · Sultan 'daralt' kararı TEK KULLANIMLIK; --yeni ad güvenli; iki kart atomik (göz tur 1) ════"
+bash "$KT" daralt is-dar-s --kalan "üçüncü parça yeterince uzun bir cümle burada" --cumle "daha da daraltılmış cümle yeterince uzun" --oturum ref-s --yeni is-dar-s-3 >/dev/null 2>&1; [ $? -eq 1 ]; g $? "aynı Sultan kararıyla İKİNCİ daraltma REDDEDİLDİ (karar tüketildi)"
+python3 -c "import json;k=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-dar-s.json'));sk=k['sultan_kararlari'][-1];assert sk['kullanildi']['kalan_kart']=='is-dar-s-kalan' and len(k['daraltmalar'])==1"; g $? "kullanılan karar karta işaretli, ikinci daraltma yazılmadı"
+bash "$KT" daralt is-dar --kalan "yol ayraçlı ad denemesi yeterince uzun" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-d --yeni "../kacak" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "--yeni '../kacak' REDDEDİLDİ"
+bash "$KT" daralt is-dar --kalan "yol ayraçlı ad denemesi yeterince uzun" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-d --yeni "a/b" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "--yeni 'a/b' REDDEDİLDİ"
+[ ! -e "$T/depo2/_agents/fabrika/kacak.json" ] && [ ! -e "$T/depo2/_agents/fabrika/kartlar/a" ]; g $? "dizin dışına hiçbir şey yazılmadı"
+bash "$KT" ac is-at --is "atomik yazım denemesi için iş cümlesi burada" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+mkdir -p "$T/depo2/_agents/fabrika/kartlar/is-at-kalan.json.tmp"   # geçici dosya yolu bir DİZİN → kalan kart yazılamaz
+ONCE="$(md5sum < "$T/depo2/_agents/fabrika/kartlar/is-at.json")"
+bash "$KT" daralt is-at --kalan "kalan parça yeterince uzun bir cümle burada" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-at >/dev/null 2>&1; [ $? -eq 1 ]; g $? "kalan kart yazılamayınca rc=1"
+[ "$(md5sum < "$T/depo2/_agents/fabrika/kartlar/is-at.json")" = "$ONCE" ]; g $? "ana kart bayt bayt DEĞİŞMEDİ (atomik)"
+[ ! -f "$T/depo2/_agents/fabrika/kartlar/is-at-kalan.json" ]; g $? "yarım kalan kart yok"
+rmdir "$T/depo2/_agents/fabrika/kartlar/is-at-kalan.json.tmp" 2>/dev/null
+
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

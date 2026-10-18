@@ -15,6 +15,9 @@
 #             oturumunda baslat-claude.sh <rol> — ayrılmış kimlik, konuşma varsa ona döner
 #   ekip-ac = merkez (`scripts/ekip-ac.sh` DOĞURAN sürüm + `aile-registry.yaml`): TEK-KANONİK KAPI, ikinci kopya açmaz;
 #             --eski → --resume-if-known
+#   dava    = kayıttaki satır `rol: dava` (Dava Rafı, Parça B10): yeni tmux oturumunda `claude --resume <session_id>` — eski sohbete
+#             döner. 🔴 baslat-claude.sh KULLANILMAZ: o `claude --session-id <id>` koşar ve kimliğin konuşması zaten varsa Claude
+#             "Session ID … is already in use" deyip çıkar (16 Eki ölçüldü, 2.1.301). Konuşma yoksa açılmaz (kimliksiz Claude yok).
 #   onar    = koltuk ANA ise → onar.sh (K0), düşerse merdiven (kademe.sh)
 #   yok     = kayıtsız koltuk: AÇILMAZ, sebebi söylenir (kimliksiz Claude başka kimliğe düşer — ölçülmüş vaka)
 #   Sır değeri yok; bu betik kayda YAZMAZ (yazan açıcının kendisi).
@@ -41,6 +44,9 @@ else
   if [ -x "$EKIP_AC" ] && grep -Eq '^[[:space:]]*--resume-if-known\)' "$EKIP_AC" && grep -Eq '^[[:space:]]*--dry-run\)' "$EKIP_AC"; then
     ACICI=ekip-ac; fi
 fi
+# Dava satırları İSKÂN kutusunda davalar.yaml'dadır (kadro.mjs davalarYolu ile AYNI yol). Okuyucular KAYITLAR'ı sırayla tarar.
+DAVA_KAYIT="${DAVALAR_REGISTRY:-$(dirname "$ISKAN")/davalar.yaml}"
+KAYITLAR="$KAYIT"; [ "$KAYIT" = "$ISKAN" ] && [ -f "$DAVA_KAYIT" ] && KAYITLAR="$KAYIT:$DAVA_KAYIT"
 # 🔴 Liste betiği BU dosyanın yanındakidir (yedek göz tur 2 canlı bulgusu: BETIK_DIZ ortak kurulu kopyaya çözülüyor, eski
 #    koltuk-bagla son=0 basıyordu — iş alanındaki düzeltme hiç çağrılmıyordu). Aynı beceri kopyası, aynı sürüm.
 KOLTUK_BETIK="${TO_KOLTUK_BETIK:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/koltuk-bagla.sh}"
@@ -52,34 +58,53 @@ gecerli() { koltuk_adi_gecerli "$1"; }
 # tmux adı → kayıttaki rol (aile-registry: `- id: X` … `tmux: "x:0"`); kayıt yoksa boş
 rol_bul() {
   [ -f "$KAYIT" ] || return 0
-  python3 - "$KAYIT" "$1" <<'PY'
-import re, sys
-reg, ad = sys.argv[1], sys.argv[2]
-cur=None
-for line in open(reg, encoding='utf-8'):
-    m = re.match(r'\s*-\s*id:\s*(\S+)', line)
-    if m: cur = m.group(1); continue
-    m = re.match(r'\s*tmux:\s*["\']?([^"\'#\s]+)', line)
-    if m and cur:
-        t = m.group(1).split(':')[0]
-        if t == ad: print(cur); break
+  python3 - "$KAYITLAR" "$1" <<'PY'
+import re, sys, os
+regs, ad = [r for r in sys.argv[1].split(':') if os.path.exists(r)], sys.argv[2]
+for reg in regs:
+    cur=None
+    for line in open(reg, encoding='utf-8'):
+        m = re.match(r'\s*-\s*id:\s*(\S+)', line)
+        if m: cur = m.group(1); continue
+        m = re.match(r'\s*tmux:\s*["\']?([^"\'#\s]+)', line)
+        if m and cur:
+            t = m.group(1).split(':')[0]
+            if t == ad: print(cur); sys.exit(0)
 PY
 }
 # aile kaydında rolün session_id'si dolu ve transcript var mı (eski sohbete dönüş MÜMKÜN mü) — ekip-ac.sh ile aynı ölçüt
 resume_var() {
   [ -f "$KAYIT" ] || return 1
-  python3 - "$KAYIT" "$1" "${HOME:-/config}/.claude/projects" <<'PY'
+  python3 - "$KAYITLAR" "$1" "${HOME:-/config}/.claude/projects" <<'PY'
 import re, sys, os, glob
-reg, rol, kok = sys.argv[1], sys.argv[2], sys.argv[3]
-cur=None; sid=''
-for line in open(reg, encoding='utf-8'):
-    m = re.match(r'\s*-\s*id:\s*(\S+)', line)
-    if m: cur = m.group(1); continue
-    m = re.match(r'\s*session_id:\s*["\']?([0-9a-fA-F-]{36})', line)
-    if m and cur == rol: sid = m.group(1); break
+regs, rol, kok = [r for r in sys.argv[1].split(':') if os.path.exists(r)], sys.argv[2], sys.argv[3]
+sid=''
+for reg in regs:
+    cur=None
+    for line in open(reg, encoding='utf-8'):
+        m = re.match(r'\s*-\s*id:\s*(\S+)', line)
+        if m: cur = m.group(1); continue
+        m = re.match(r'\s*session_id:\s*["\']?([0-9a-fA-F-]{36})', line)
+        if m and cur == rol: sid = m.group(1); break
+    if sid: break
 ok = bool(sid) and bool(glob.glob(os.path.join(kok, '*', sid + '.jsonl')))
 sys.exit(0 if ok else 1)
 PY
+}
+# kayıtta rolün bir alanı (rol · session_id) — yoksa boş. Dava kolu (B10) ikisini de okur.
+alan_bul() {
+  [ -f "$KAYIT" ] || return 0
+  python3 - "$KAYITLAR" "$1" "$2" <<'PY3'
+import re, sys, os
+regs, rol, alan = [r for r in sys.argv[1].split(':') if os.path.exists(r)], sys.argv[2], sys.argv[3]
+for reg in regs:
+    cur=None
+    for line in open(reg, encoding='utf-8'):
+        m = re.match(r'\s*-\s*id:\s*["\']?([^"\'\s#]+)', line)
+        if m: cur = m.group(1); continue
+        m = re.match(r'\s*' + alan + r':\s*["\']?([^"\'#\s]+)', line)
+        if m and cur == rol: print(m.group(1)); sys.exit(0)
+PY3
 }
 durum_olc() {  # $1 ad → DURUM CLAUDE HAL SON değişkenleri
   DURUM=yok; CLAUDE=0; HAL=""; SON=0; TMUX_VAR=0
@@ -96,20 +121,22 @@ durum_olc() {  # $1 ad → DURUM CLAUDE HAL SON değişkenleri
 }
 # İSKÂN kaydında rolün çalışma dizini (yoksa proje kökü) — baslat-claude.sh orada açılır
 cwd_bul() {
-  python3 - "$KAYIT" "$1" <<'PY2'
-import re, sys
-reg, rol = sys.argv[1], sys.argv[2]
-cur=None
-for line in open(reg, encoding='utf-8'):
-    m = re.match(r'\s*-\s*id:\s*(\S+)', line)
-    if m: cur = m.group(1); continue
-    m = re.match(r'\s*cwd:\s*["\']?([^"\'#\s]+)', line)
-    if m and cur == rol: print(m.group(1)); break
+  python3 - "$KAYITLAR" "$1" <<'PY2'
+import re, sys, os
+regs, rol = [r for r in sys.argv[1].split(':') if os.path.exists(r)], sys.argv[2]
+for reg in regs:
+    cur=None
+    for line in open(reg, encoding='utf-8'):
+        m = re.match(r'\s*-\s*id:\s*(\S+)', line)
+        if m: cur = m.group(1); continue
+        m = re.match(r'\s*cwd:\s*["\']?([^"\'#\s]+)', line)
+        if m and cur == rol: print(m.group(1)); sys.exit(0)
 PY2
 }
 yol_bul() {  # $1 ad → YOL ∈ baslat | ekip-ac | onar | yok ; ROL
   ROL="$(rol_bul "$1")"
-  if [ -n "$ROL" ] && [ -n "$ACICI" ]; then YOL="$ACICI"
+  if [ -n "$ROL" ] && [ "$(alan_bul "$ROL" rol)" = dava ]; then YOL=dava
+  elif [ -n "$ROL" ] && [ -n "$ACICI" ]; then YOL="$ACICI"
   elif [ "$1" = "$ANA_TMUX" ]; then YOL=onar
   else YOL=yok; fi
 }
@@ -121,7 +148,7 @@ ESKI=0; ZORLA=0; for a in "$@"; do case "$a" in --eski) ESKI=1 ;; --zorla) ZORLA
 case "$KOMUT" in
   durum)
     durum_olc "$AD"; yol_bul "$AD"
-    RES=false; { [ "$YOL" = ekip-ac ] || [ "$YOL" = baslat ]; } && resume_var "$ROL" && RES=true
+    RES=false; { [ "$YOL" = ekip-ac ] || [ "$YOL" = baslat ] || [ "$YOL" = dava ]; } && resume_var "$ROL" && RES=true
     printf '{"ad":%s,"durum":"%s","tmux":%s,"claude":%s,"hal":%s,"son":%s,"rol":%s,"resume":%s,"yol":"%s","ana":%s}\n' \
       "$(json_s "$AD")" "$DURUM" "$([ $TMUX_VAR = 1 ] && echo true || echo false)" "$([ "${CLAUDE:-0}" = 1 ] && echo true || echo false)" \
       "$(json_s "${HAL:-}")" "${SON:-0}" "$(json_s "${ROL:-}")" "$RES" "$YOL" "$([ "$AD" = "$ANA_TMUX" ] && echo true || echo false)"
@@ -142,6 +169,17 @@ case "$KOMUT" in
     # takılı/Claude'suz/ölçülemeyen oturum önce KAPATILIR — ekip-ac.sh ve onar.sh ikisi de "oturum var" görünce Claude'u geri getirmez
     if [ "$DURUM" = claude-yok ] || [ "$DURUM" = takili ] || [ "$DURUM" = olculemedi ]; then tmux kill-session -t "=$AD" 2>/dev/null; gunluk "koltuk-ac: $AD ($DURUM) kapatıldı, yeniden doğacak (zorla=$ZORLA yol=$YOL)"; fi
     case "$YOL" in
+      dava)
+        resume_var "$ROL" || { echo "açılamadı: '$ROL' davasının eski sohbeti bulunamadı (kayıtta session_id yok ya da konuşma dosyası yok) — kimliksiz Claude açılmaz" >&2; exit 1; }
+        SID="$(alan_bul "$ROL" session_id)"
+        CWD="$(cwd_bul "$ROL")"; [ -d "${CWD:-}" ] || CWD="$PROJE"
+        # mutlak yol: tmux sunucusunun PATH'i bu sürecinkinden farklı olabilir (sunucu başka ortamda doğmuş olabilir)
+        CL="${TO_CLAUDE:-$(command -v claude 2>/dev/null)}"; [ -x "${CL:-}" ] || { echo "açılamadı: claude bu kutuda bulunamadı" >&2; exit 1; }
+        tmux new-session -d -s "$AD" -c "$CWD" "$(printf '%q' "$CL") --resume $(printf '%q' "$SID")" \
+          || { echo "açılamadı: tmux oturumu kurulamadı ($AD)" >&2; exit 1; }
+        sleep "$BASLAT_BEKLE"
+        if tmux_var "$AD"; then echo "açıldı: $AD ← claude --resume (dava $ROL, eski sohbet)"; exit 0; fi
+        echo "açılamadı: claude --resume ${BASLAT_BEKLE} sn içinde düştü (dava $ROL — kutu günlüğüne bak)" >&2; exit 1 ;;
       baslat)
         # İSKÂN: ayrılmış kimlikle açılır; konuşma varsa ona döner, yoksa taze başlar (--eski ayrıca bir şey değiştirmez)
         CWD="$(cwd_bul "$ROL")"; [ -d "${CWD:-}" ] || CWD="$PROJE"
