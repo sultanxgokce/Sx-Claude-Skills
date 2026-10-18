@@ -1,0 +1,45 @@
+{
+  "tur": 1,
+  "is": "retro-merkez-yenile-bolum-koru",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T23:28:43+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 25433,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 16332
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Merkez yenilemesi araç dışı bölümleri taşıyor, süzüm damgalarını koruyor ve eski silme davranışını yakalayan mutantla sınanıyor; yani iş kartındaki esas iş yapılmış. Ancak “olduğu gibi” güvencesi tam değil: bölüm biçimi değiştirilebiliyor ve araç bölümü ayrımı fazla geniş eşleşiyor; önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "Araç dışı bölümler bayt/satır düzeni bakımından olduğu gibi korunmuyor; her bölümün sonundaki boş satırlar silinip bölümler yeniden birer boş satırla birleştiriliyor.",
+        "kanit": "merkez_elle_bolumler içindeki `while len(b) > 1 and not b[-1].strip(): b.pop()` sondaki boş satırları kaldırıyor; yazımda `r += [\"\"] + b` özgün ayırıcı düzenini yeniden kurmak yerine tek boş satır ekliyor. T9 kontrolleri içerik parçalarını sınasa da özgün metinle tam eşitlik sınamıyor.",
+        "konum": "retro/scripts/retro.py:merkez_elle_bolumler ve merkez yazımındaki `r += [\"\"] + b`; retro/scripts/retro.test.sh:T9b-T9k",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Araç bölümü tanıma tam başlık yerine önekle yapılıyor; örneğin elle yazılmış `## Katılım değerlendirmesi` veya `## Süzüm notları` bölümü araç bölümü sanılıp yenilemede silinebilir.",
+        "kanit": "`MERKEZ_ARAC_BOLUM = (\"## Katılım\", \"## Süzüm\")` ve `s.startswith(MERKEZ_ARAC_BOLUM)` bütün bu öneklerle başlayan `##` başlıklarını dışlıyor. Testlerde benzer önekli fakat araç dışı bir başlık kapısı yok.",
+        "konum": "retro/scripts/retro.py:MERKEZ_ARAC_BOLUM ve merkez_elle_bolumler; retro/scripts/retro.test.sh:T9",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kırmızı→yeşil sınav ölçüm çifti, gerçek W42 eski/yeni karşılaştırması ve M5 mutantı ana silinme hatasının giderildiğini destekliyor. Bununla birlikte gösterilen sınav çıktısı ilk 60 satırda T9 ve mutant sonuçlarına ulaşmıyor; yeşil toplam koşu bunları kapsasa da testler biçimin birebir korunmasını ve araç başlığı önek çakışmalarını ölçmüyor."
+  }
+}
