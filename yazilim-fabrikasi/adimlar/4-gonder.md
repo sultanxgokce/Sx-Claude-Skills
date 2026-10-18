@@ -33,8 +33,10 @@
      --kalan "<kalan bulgu>" --cumle "<bu PR'ın yaptığı>" --oturum <ref>` → kalan bulgu aynı sahip ve sınıfla yeni karta,
      bu kartın cümlesi daralır, tur sayacı sıfırlanır (aynı dal, aynı PR sürer), kapı daraltma sonrası en az bir 5/E
      tur ister. Sınıfsız işte reis kararı kendiliğinden işlenir; sınıflı işte önce `kart.sh sultan-dedi --karar daralt`.
-   - Denetçi ayıklanmış **üretim farkı 110 KB'ı aşıyorsa** kırpıp denetlemez, "**İŞİ BÖL**" der ve tur yakmaz: fark
-     bölünür (daralt), kırpık farkla verilen puan puan değildir (PR #329 dersi).
+   - Göze giden **istemin tamamı** (şablon + kart + kanıt manifesti + ölçüm çıktıları + fark + önceki tur) kırpma
+     tetiğini (120 KB) aşıyorsa denetçi kırpıp denetlemez, "**İŞİ BÖL**" der, parça parça bayt basar ve tur yakmaz:
+     fark büyükse iş bölünür (daralt), ölçüm şişkinse ölçümler küçültülür; kırpık istemle verilen puan puan değildir
+     (PR #329 ve cloudtop #712 dersi — #712'de fark 73 KB'la geçmiş, istem 129 KB olup kırpılmıştı).
      Sonsuz düzelt-kanıtla-gönder döngüsü yasak (3-strike'ın fabrikadaki karşılığı).
 5. **Merge:**
    - Kart **sınıf** taşıyorsa (geri alınamaz · para · dış yüzey · yetki) → **Sultan**, `pr-onay` tek soru. Ajan
