@@ -1,0 +1,6 @@
+$ bash _agents/fabrika/kanit/bileyi-kutu-bulgu-defteri/mmex-olcer.sh origin/main
+# rc=0 sure=0.7s zaman=2026-10-20T18:08:12+03:00
+--- stdout ---
+ref origin/main (f142934) · bileyi olc rc=3
+⛔ hiçbir bulgu defteri okunamadı (<geçici>/mmex/_agents/handoff/bulgu-havuzu.jsonl) — ÖLÇEMEDİM
+--- stderr ---

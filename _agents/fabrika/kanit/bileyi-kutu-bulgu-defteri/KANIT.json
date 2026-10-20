@@ -1,0 +1,44 @@
+{
+  "is": "bileyi-kutu-bulgu-defteri",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-20T18:08:13+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "mmex-bicimi",
+      "asama": "once",
+      "dosya": "olcum-mmex-bicimi-once.txt",
+      "sha256": "b0a1e4f89d5bc5b89a67a1494b8328fedae088adb13105eaf3628e261fd63dc7",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/bileyi-kutu-bulgu-defteri/mmex-olcer.sh",
+        "origin/main"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T18:08:12+03:00",
+      "sure_sn": 0.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "67c18f74cda941569256e11856011de0"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mmex-bicimi",
+      "asama": "sonra",
+      "dosya": "olcum-mmex-bicimi-sonra.txt",
+      "sha256": "84ab2fc86eaf232b761ad3b1e927b1e7408fce5a7c3278c783fa65e4767549d4",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/bileyi-kutu-bulgu-defteri/mmex-olcer.sh",
+        "HEAD"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T18:08:13+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "36098f81af9643d1a69f25f6434065b4"
+    }
+  ],
+  "imza": "6aa2d247ab8eae992af7ba9b7b4b74a83f38998ec81a5fcf5c9e5a82df6ab0c8"
+}
