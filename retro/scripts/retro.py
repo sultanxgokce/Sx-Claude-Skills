@@ -32,7 +32,7 @@ import tempfile
 import unicodedata
 from datetime import date, datetime, timedelta
 
-SURUM = "1.1.0"
+SURUM = "1.2.0"
 AJAN_DIZIN_DISI = {"handoff", "fabrika", "spec", "orchestration", "codex", "decisions", "runbooks", "ekip-os-base"}
 DERS_RE = re.compile(r"ders|zaman kayb|zorluk|tıkand|tikand|boşa|bosa", re.I)
 TARIH_RE = re.compile(r"(20\d\d-\d\d-\d\d)")
