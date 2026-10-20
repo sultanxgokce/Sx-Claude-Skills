@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "retro-cok-depo",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-20T21:25:18+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 38152,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 10,
+    "bayt": 40035
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kartlar bütün depolardan toplanmış, göz turları disk ile origin/main birleşiminden sayılmış ve önceki turun sessiz eksik sayım kusuru depo adlı uyarıyla kapatılmış. Ancak talep kart ve bağımsız göz ölçüsü için depo başına döküm isterken çıktı yalnız kartların açılan/biten/tıkanan sayılarını depo bazında ayırıyor; göz turu sayısı hâlâ tek toplam, önce bunu tamamlayın.",
+    "bulgular": [
+      {
+        "ne": "Bağımsız göz turları depo başına dökülmüyor; yalnız toplam göz turu ve ortalama gösteriliyor.",
+        "kanit": "kart_olc içinde `dokum` yalnız `da/db/dt` değerlerinden oluşturuluyor (`f\"... {da}/{db}/{dt}\"`); `turlar` ise bütün depolar için ortak listeye eklenip yalnız `sum(turlar)` olarak dönüyor. olcum_tablosu göz satırında bu toplam ile kaynak/uyarıyı yazıyor, depo başına göz turu sayılarını yazmıyor. Sunulan sonra ölçümünde de `depolar: Nexus 9/3/2 · ...` yalnız kart üçlülerini içerirken `göz turu 46` tek toplamdır.",
+        "konum": "retro/scripts/retro.py: kart_olc ve olcum_tablosu değişiklik hunks; olcum-canli-olc-v2-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Sınav önce rc=1 iken sonra ve v2 kayıtlarında rc=0 olmuş; v2 ayrıca origin/main okunamama yolunu hedefleyen T11i–T11n ve M14 kapılarını kapsıyor. Gerçekçi ölçüm çifti kart toplamlarının MİRAHUR 9→46, HENDESE 5→14 ve BÂNİ 25→128 genişlediğini, Sx dahil depo kart dökümünü ve göz toplamlarının arttığını gösteriyor; fakat göz turlarının depo başına dökümünü gösteren ölçüm ya da sınama bulunmuyor."
+  }
+}

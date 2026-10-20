@@ -1,0 +1,8 @@
+$ bash _agents/fabrika/kanit/retro-cok-depo/canli-olc.sh retro/scripts/retro.py MİRAHUR:2026-W42 HENDESE:2026-W42 BÂNİ:2026-W42 MİRAHUR:2026-W43
+# rc=0 sure=1.0s zaman=2026-10-20T21:26:28+03:00
+--- stdout ---
+MİRAHUR   2026-W42 · kart 46/24/10 · göz turu 46 · depolar: Nexus 9/3/2 · MMEpanel 0/0/0 · Sx-Claude-Skills 4/4/0 · cloudtop 33/17/8 · mihenk 0/0/0 · sohbet 0/0/0 · göz: Nexus 12 · MMEpanel 0 · Sx-Claude-Skills 5 · cloudtop 29 · mihenk 0 · sohbet 0
+HENDESE   2026-W42 · kart 14/9/1 · göz turu 33 · depolar: Nexus 5/4/1 · MMEpanel 0/0/0 · Sx-Claude-Skills 8/5/0 · cloudtop 1/0/0 · mihenk 0/0/0 · sohbet 0/0/0 · göz: Nexus 15 · MMEpanel 0 · Sx-Claude-Skills 15 · cloudtop 3 · mihenk 0 · sohbet 0
+BÂNİ      2026-W42 · kart 128/113/9 · göz turu 283 · depolar: Nexus 25/19/5 · MMEpanel 0/0/0 · Sx-Claude-Skills 48/42/3 · cloudtop 55/52/1 · mihenk 0/0/0 · sohbet 0/0/0 · göz: Nexus 60 · MMEpanel 0 · Sx-Claude-Skills 112 · cloudtop 111 · mihenk 0 · sohbet 0
+MİRAHUR   2026-W43 · kart 11/6/0 · göz turu 19 · depolar: Nexus 3/2/0 · MMEpanel 0/0/0 · Sx-Claude-Skills 4/2/0 · cloudtop 4/2/0 · mihenk 0/0/0 · sohbet 0/0/0 · göz: Nexus 5 · MMEpanel 0 · Sx-Claude-Skills 7 · cloudtop 7 · mihenk 0 · sohbet 0
+--- stderr ---

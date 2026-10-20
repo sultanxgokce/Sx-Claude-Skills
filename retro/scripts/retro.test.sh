@@ -20,6 +20,7 @@ export RETRO_BUGUN=2026-10-17   # 2026-W42 = 12..18 Eki
 T="$(mktemp -d)"; trap 'rm -r -f -- "$T"' EXIT
 KOK="$T/depo"; mkdir -p "$KOK/_agents/bani" "$KOK/_agents/mirahur" "$KOK/_agents/handoff" "$KOK/_agents/fabrika/kartlar" "$KOK/_agents/fabrika/kanit/is-a" "$KOK/_agents/fabrika/kanit/is-b"
 export RETRO_KOK="$KOK" RETRO_BEKCI_LOG="$T/bekci.log" RETRO_REGISTRY="$KOK/_agents/handoff/aile-registry.yaml"
+export RETRO_DEPO_KOKU="$T/projeler-yok"   # HERMETİK: varsayılan keşif kökü /config/projects'tir — sınav gerçek depoları saymaz (T11 kendi kökünü verir)
 
 # NOTES: 2 tarihsiz satır · ÇIPA başlığından tarih devralan 3 satır (hafta içi, 1'i ders) · 1 satır başka hafta
 cat > "$KOK/_agents/bani/NOTES.md" <<'EOF'
@@ -219,6 +220,44 @@ kapi "T10q doldurulmuş dosyada kutu --yenile çalışır (ölçüm bloğu bulun
 icerir "$(cat "$XD")" "- D1) kapıyı gevşetme, yazmayı araca ver" "T10r yenilemeden sonra ajanın yorumu korundu"
 cp "$T/x-iskelet.md" "$XD"
 
+echo "— T11 çok depo: kart + göz ölçüsü kutunun bütün depolarından (CQ46Y + NFS16 · W42'de Sx işi retrodan görünmüyordu)"
+# KOK'ta 1 kart (DENETIM diskte) · projeler/Sx git deposunda 1 kart: DENETIM'ler YALNIZ origin/main'de (birincil kopya başka dalda,
+# Sx'in 20 Eki hali) · projeler/_wt/… çalışma kopyası SAYILMAZ · projeler/Bos kartsız depo · RETRO_DEPOLAR tekrarı tekilleşir
+P="$T/projeler"; SX="$P/Sx"; mkdir -p "$P/Bos/_agents" "$KOK/_agents/fabrika/kanit/sira-n"
+printf '{"is":"sira-n","aldi":"SIRA","zaman":"2026-10-13T10:00:00+03:00","durum":"bitti","bitis":"2026-10-14T10:00:00+03:00"}' > "$KOK/_agents/fabrika/kartlar/sira-n.json"
+echo '{}' > "$KOK/_agents/fabrika/kanit/sira-n/DENETIM-1.json"
+( export GIT_AUTHOR_NAME=s GIT_AUTHOR_EMAIL=s@s GIT_COMMITTER_NAME=s GIT_COMMITTER_EMAIL=s@s GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1
+  git init -q --bare -b main "$T/sx-origin.git" && git clone -q "$T/sx-origin.git" "$SX" 2>/dev/null
+  mkdir -p "$SX/_agents/fabrika/kanit/sira-s" && echo '{}' > "$SX/_agents/fabrika/kanit/sira-s/DENETIM-1.json" && echo '{}' > "$SX/_agents/fabrika/kanit/sira-s/DENETIM-2.json"
+  git -C "$SX" add -A && git -C "$SX" commit -qm kanit && git -C "$SX" push -q origin main 2>/dev/null
+  git -C "$SX" checkout -q -b baska-dal && git -C "$SX" rm -q -r _agents/fabrika/kanit && git -C "$SX" commit -qm sil ) || kirmizi "T11 önkoşul: Sx deposu kurulamadı"
+mkdir -p "$SX/_agents/fabrika/kartlar" "$P/_wt/Sx-x/_agents/fabrika/kartlar"
+printf '{"is":"sira-s","aldi":"SIRA","zaman":"2026-10-15T10:00:00+03:00","durum":"bitti","bitis":"2026-10-16T10:00:00+03:00"}' > "$SX/_agents/fabrika/kartlar/sira-s.json"
+printf '{"is":"sira-wt","aldi":"SIRA","zaman":"2026-10-15T10:00:00+03:00","durum":"bitti","bitis":"2026-10-16T10:00:00+03:00"}' > "$P/_wt/Sx-x/_agents/fabrika/kartlar/sira-wt.json"
+SD="$KOK/_agents/handoff/retro/2026-W42/SIRA.md"
+kapi "T11a iki depolu kutu ölçüldü" 0 env RETRO_DEPO_KOKU="$P" python3 "$R" kutu SIRA --koltuk s:0
+icerir "$(cat "$SD")" "| kart açılan / bitti / tıkandı | 2 / 2 / 0 |" "T11b kartlar İKİ depodan (KOK + Sx), _wt kopyası sayılmadı"
+icerir "$(cat "$SD")" "| bağımsız göz turu · ortalama tur/kart | 3 · 1.5 |" "T11c Sx göz turları origin/main'den (birincil kopya başka dalda, diskte DENETIM yok)"
+icerir "$(cat "$SD")" "Sx 1/1/0" "T11d kanıt sütunu depo başına döker"
+icerir "$(grep "^| bağımsız göz turu" "$SD")" "depo başına: depo 1 · Sx 2" "T11d2 göz turu da depo başına dökülür (KOK 1 · Sx 2 · göz tur 2)"
+rm -f "$SD"
+kapi "T11e RETRO_DEPOLAR verilince keşif yerine o liste; aynı depo iki kez sayılmaz" 0 env RETRO_DEPO_KOKU="$P" RETRO_DEPOLAR="$KOK:$KOK" python3 "$R" kutu SIRA --koltuk s:0
+icerir "$(cat "$SD")" "| kart açılan / bitti / tıkandı | 1 / 1 / 0 |" "T11f yalnız KOK, tekrar tekilleşti"
+rm -f "$SD"
+kapi "T11g keşif kökü yoksa yalnız KOK (eski davranış)" 0 env RETRO_DEPO_KOKU="$T/yok-boyle" python3 "$R" kutu SIRA --koltuk s:0
+icerir "$(cat "$SD")" "| kart açılan / bitti / tıkandı | 1 / 1 / 0 |" "T11h keşifsiz tek depo"
+rm -f "$SD"
+# origin/main OKUNAMAZSA sayım sessizce eksik kalmaz (göz tur 1): Sx kopyasında uzak dal referansı silinir → depo ADIYLA uyarı
+P2="$T/projeler2"; mkdir -p "$P2"; cp -r "$SX" "$P2/Sx"; git -C "$P2/Sx" update-ref -d refs/remotes/origin/main
+kapi "T11i origin/main okunamayan depolu ölçüm yine yazılır" 0 env RETRO_DEPO_KOKU="$P2" python3 "$R" kutu SIRA --koltuk s:0
+icerir "$(cat "$SD")" "| bağımsız göz turu · ortalama tur/kart | 1 · 0.5 |" "T11j okunamayınca yalnız disk sayılır (değer gerçek)"
+icerir "$(cat "$SD")" "origin/main OKUNAMADI: Sx" "T11k … ve kanıt sütunu eksikliği depo adıyla söyler (sessiz eksik yok)"
+icermez "$(cat "$SD")" "(disk ∪ origin/main)" "T11l … ve 'disk ∪ origin/main' diye yanlış etiketlemez"
+rm -f "$SD"
+kapi "T11m git deposu olmayan KOK uyarı üretmez (okunacak origin yok)" 0 env RETRO_DEPO_KOKU="$T/yok-boyle" python3 "$R" kutu SIRA --koltuk s:0
+icermez "$(cat "$SD")" "OKUNAMADI" "T11n git'siz depo için OKUNAMADI yok"
+rm -f "$SD"
+
 echo "— M mutasyon (kopya üstünde; her mutant en az bir kapıyı kızartmalı)"
 mut(){ # mut <ad> <sed> <komut...> : mutant kopyada komut BAŞARILI (rc=0) kalırsa sınav onu yakalamıyor demektir
   local ad="$1" sed_="$2"; shift 2; local MR="$T/mut-$RANDOM.py"; sed -e "$sed_" "$R" > "$MR"
@@ -251,6 +290,21 @@ m_dl_yer(){ m_dl "$1" "$T/x-yer.md"; }; m_dl_sahte(){ m_dl "$1" "$T/x-sahte.md" 
 mut "M8 doldur lint'i atlarsa yer tutuculu metin yazılır (kapı yakalar)" 's/^    if h:$/    if False:/' m_dl_yer
 mut "M9 ölçüm/imza reddi kalkınca sahte ölçüm dosyaya girer (kapı yakalar)" 's/^    if re.search(r"^## Ölçüm", metin, re.M) or /    if False and re.search(r"^## Ölçüm", metin, re.M) or /' m_dl_sahte
 mut "M10 önsöz denetimi kalkınca metin sessizce yutulur (kapı yakalar)" 's/^    if metin\[:m.start()\].strip():$/    if False:/' m_dl_onsoz
+
+m_cok(){ local rc; rm -f "$SD"; env RETRO_DEPO_KOKU="$P" python3 "$1" kutu SIRA --koltuk s:0 >/dev/null 2>&1
+  grep -qF "| kart açılan / bitti / tıkandı | 2 / 2 / 0 |" "$SD" && grep -qF "| bağımsız göz turu · ortalama tur/kart | 3 · 1.5 |" "$SD"; rc=$?; rm -f "$SD"; return $rc; }
+m_tek(){ local rc; rm -f "$SD"; env RETRO_DEPO_KOKU="$P" RETRO_DEPOLAR="$KOK:$KOK" python3 "$1" kutu SIRA --koltuk s:0 >/dev/null 2>&1
+  grep -qF "| kart açılan / bitti / tıkandı | 1 / 1 / 0 |" "$SD"; rc=$?; rm -f "$SD"; return $rc; }
+m_cok "$R" && m_tek "$R" && ok "M11-13 pozitif kontrol: bozmasız araçla iki yoklama da GEÇER (ısırık sahte değil)" || kirmizi "M11-13 pozitif kontrol: gerçek araç yoklamayı geçemiyor"
+mut "M11 depo keşfi kalkınca Sx kartı sayılmaz (kapı yakalar)" 's/        aday += \[os.path.dirname(os.path.dirname(os.path.dirname(k)))/        aday += [] and [os.path.dirname(os.path.dirname(os.path.dirname(k)))/' m_cok
+mut "M12 origin\/main okuması kalkınca birincil kopya başka daldayken göz turları eksik (kapı yakalar)" 's/^    if not om:$/    if True:/' m_cok
+mut "M13 tekilleştirme kalkınca aynı depo iki kez sayılır (kapı yakalar)" 's/        if r not in gorulen and os.path.isdir/        if os.path.isdir/' m_tek
+m_uyari(){ local rc; rm -f "$SD"; env RETRO_DEPO_KOKU="$P2" python3 "$1" kutu SIRA --koltuk s:0 >/dev/null 2>&1; grep -qF "origin/main OKUNAMADI: Sx" "$SD"; rc=$?; rm -f "$SD"; return $rc; }
+m_uyari "$R" && ok "M14 pozitif kontrol: bozmasız araç okunamayan depoyu adıyla söyler" || kirmizi "M14 pozitif kontrol: gerçek araç uyarı basmıyor"
+mut "M14 okunamama uyarısı susturulunca eksik sayım yeşil görünür (kapı yakalar)" 's/("`_agents\/fabrika\/kanit\/\*\/DENETIM-\*.json` (disk ∪ origin\/main)" if not k\["okunamadi"\] else/("`_agents\/fabrika\/kanit\/*\/DENETIM-*.json` (disk ∪ origin\/main)" if True else/' m_uyari
+m_goz(){ local rc; rm -f "$SD"; env RETRO_DEPO_KOKU="$P" python3 "$1" kutu SIRA --koltuk s:0 >/dev/null 2>&1; grep "^| bağımsız göz turu" "$SD" | grep -qF "depo başına: depo 1 · Sx 2"; rc=$?; rm -f "$SD"; return $rc; }
+m_goz "$R" && ok "M15 pozitif kontrol: bozmasız araç göz turunu depo başına döker" || kirmizi "M15 pozitif kontrol: gerçek araç dökmüyor"
+mut "M15 depo başına göz sayacı artmazsa döküm yalan söyler (kapı yakalar)" 's/turlar.append(len(ad)); dg += len(ad); /turlar.append(len(ad)); /' m_goz
 
 echo; echo "GECEN=$G DUSEN=$K"
 [ "$K" -eq 0 ]

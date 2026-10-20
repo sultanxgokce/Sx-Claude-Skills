@@ -32,7 +32,7 @@ import tempfile
 import unicodedata
 from datetime import date, datetime, timedelta
 
-SURUM = "1.1.0"
+SURUM = "1.2.0"
 AJAN_DIZIN_DISI = {"handoff", "fabrika", "spec", "orchestration", "codex", "decisions", "runbooks", "ekip-os-base"}
 DERS_RE = re.compile(r"ders|zaman kayb|zorluk|tıkand|tikand|boşa|bosa", re.I)
 TARIH_RE = re.compile(r"(20\d\d-\d\d-\d\d)")
@@ -142,33 +142,90 @@ def notes_olc(kok, ajan, pzt, paz):
     return {"yol": os.path.relpath(yol, kok), "satir": toplam, "ders": ders, "tarihsiz": tarihsiz}
 
 
+def depolar(kok):
+    """Kart/göz ölçüsünün tarandığı depolar (CQ46Y + NFS16): ajan iş kartını hangi depoda açtıysa orada durur (kart.sh birincil
+    depoya yazar) → yalnız KOK'a bakan retro W42'de Sx işini hiç görmedi. RETRO_DEPOLAR (':' ayraçlı) verilirse o liste; yoksa
+    RETRO_DEPO_KOKU (varsayılan /config/projects) altında kartlar dizini olan BİRİNCİL depolar — izole kutuda bu, kutunun kendi
+    depo listesidir; _wt/… çalışma kopyaları iki seviye derinde olduğu için sayılmaz. KOK hep ilk sıradadır; aynı depo bir kez."""
+    aday = [kok]
+    if os.environ.get("RETRO_DEPOLAR"):
+        aday += [d for d in os.environ["RETRO_DEPOLAR"].split(":") if d]
+    else:
+        kok_d = os.environ.get("RETRO_DEPO_KOKU", "/config/projects")
+        aday += [os.path.dirname(os.path.dirname(os.path.dirname(k)))
+                 for k in sorted(glob.glob(os.path.join(kok_d, "*", "_agents", "fabrika", "kartlar")))]
+    gorulen, out = set(), []
+    for d in aday:
+        r = os.path.realpath(d)
+        if r not in gorulen and os.path.isdir(os.path.join(d, "_agents", "fabrika", "kartlar")):
+            gorulen.add(r); out.append(d)
+    return out
+
+
+def origin_main_okunur(depo):
+    """True: origin/main ağacı okunur · False: git deposu ama okunamıyor (ref yok/bozuk/zaman aşımı) · None: git deposu değil."""
+    try:
+        if subprocess.run(["git", "-C", depo, "rev-parse", "--git-dir"], capture_output=True, timeout=10).returncode != 0:
+            return None
+        return subprocess.run(["git", "-C", depo, "rev-parse", "-q", "--verify", "origin/main^{tree}"],
+                              capture_output=True, timeout=10).returncode == 0
+    except Exception:
+        return False
+
+
+def denetim_adlari(depo, is_, om):
+    """Bir işin göz turu kayıtları: diskteki kopya ∪ origin/main ağacı. Birincil kopya bayat ya da başka dalda olabilir
+    (20 Eki: Sx birincili layiha dalında, birleşmiş işlerin kanıt dizini diskte yok) → yalnız disk sayımı turları eksik gösterirdi.
+    om = origin_main_okunur(depo); okunamıyorsa yalnız disk sayılır ve çağıran bunu tabloda ADIYLA söyler (sessiz eksik yok)."""
+    ad = {os.path.basename(p) for p in glob.glob(os.path.join(depo, "_agents", "fabrika", "kanit", is_, "DENETIM-*.json"))}
+    if not om:
+        return ad, om
+    try:
+        r = subprocess.run(["git", "-C", depo, "ls-tree", "--name-only", "origin/main", f"_agents/fabrika/kanit/{is_}/"],
+                           capture_output=True, text=True, timeout=10)
+    except Exception:
+        return ad, False
+    if r.returncode != 0:
+        return ad, False
+    ad |= {os.path.basename(s) for s in r.stdout.split("\n") if re.fullmatch(r"DENETIM-\d+\.json", os.path.basename(s))}
+    return ad, True
+
+
 def kart_olc(kok, ajan, pzt, paz):
-    kdiz = os.path.join(kok, "_agents", "fabrika", "kartlar")
-    if not os.path.isdir(kdiz):
+    dl = depolar(kok)
+    if not dl:
         return None
     acilan = bitti = tikandi = 0
-    turlar = []
-    for yol in sorted(glob.glob(os.path.join(kdiz, "*.json"))):
-        try:
-            k = json.load(open(yol, encoding="utf-8"))
-        except Exception:
-            continue
-        if norm(k.get("aldi", "")) != norm(ajan):
-            continue
-        z = tarih_cek(str(k.get("zaman", "")))
-        b = tarih_cek(str(k.get("bitis", "")))
-        if aralikta(z, pzt, paz):
-            acilan += 1
-        if aralikta(b, pzt, paz):
-            if k.get("durum") == "bitti":
-                bitti += 1
-            elif k.get("durum") == "tikandi":
-                tikandi += 1
-        if aralikta(z, pzt, paz) or aralikta(b, pzt, paz):
-            den = glob.glob(os.path.join(kok, "_agents", "fabrika", "kanit", k.get("is", "?"), "DENETIM-*.json"))
-            turlar.append(len(den))
+    turlar, dokum, goz_dokum, okunamadi = [], [], [], []
+    for depo in dl:
+        da = db = dt = dg = 0
+        om = origin_main_okunur(depo); depo_ok = om is not False
+        for yol in sorted(glob.glob(os.path.join(depo, "_agents", "fabrika", "kartlar", "*.json"))):
+            try:
+                k = json.load(open(yol, encoding="utf-8"))
+            except Exception:
+                continue
+            if norm(k.get("aldi", "")) != norm(ajan):
+                continue
+            z = tarih_cek(str(k.get("zaman", "")))
+            b = tarih_cek(str(k.get("bitis", "")))
+            if aralikta(z, pzt, paz):
+                da += 1
+            if aralikta(b, pzt, paz):
+                if k.get("durum") == "bitti":
+                    db += 1
+                elif k.get("durum") == "tikandi":
+                    dt += 1
+            if aralikta(z, pzt, paz) or aralikta(b, pzt, paz):
+                ad, ok = denetim_adlari(depo, k.get("is", "?"), om)
+                turlar.append(len(ad)); dg += len(ad); depo_ok = depo_ok and ok is not False
+        acilan += da; bitti += db; tikandi += dt
+        dokum.append(f"{os.path.basename(os.path.realpath(depo))} {da}/{db}/{dt}")
+        goz_dokum.append(f"{os.path.basename(os.path.realpath(depo))} {dg}")
+        if not depo_ok:
+            okunamadi.append(os.path.basename(os.path.realpath(depo)))
     return {
-        "yol": os.path.relpath(kdiz, kok), "acilan": acilan, "bitti": bitti, "tikandi": tikandi,
+        "yol": "_agents/fabrika/kartlar", "depolar": dokum, "goz_depolar": goz_dokum, "okunamadi": okunamadi, "acilan": acilan, "bitti": bitti, "tikandi": tikandi,
         "goz_turu": sum(turlar), "kart": len(turlar),
         "ort_tur": (round(sum(turlar) / len(turlar), 1) if turlar else None),
     }
@@ -226,9 +283,12 @@ def olcum_tablosu(o):
         r.append(sat("ders / zaman kaybı / tıkanma satırı", "ÖLÇÜLEMEDİ: kaynak yok", "—"))
     k = o["kart"]
     if k:
-        r.append(sat("kart açılan / bitti / tıkandı", f"{k['acilan']} / {k['bitti']} / {k['tikandi']}", f"`{k['yol']}` (aldı = ajan)"))
+        r.append(sat("kart açılan / bitti / tıkandı", f"{k['acilan']} / {k['bitti']} / {k['tikandi']}",
+                     f"`{k['yol']}` (aldı = ajan) · {len(k['depolar'])} depo: " + " · ".join(k["depolar"])))
         ort = "—" if k["ort_tur"] is None else str(k["ort_tur"])
-        r.append(sat("bağımsız göz turu · ortalama tur/kart", f"{k['goz_turu']} · {ort}", "`_agents/fabrika/kanit/*/DENETIM-*.json`"))
+        kay = ("`_agents/fabrika/kanit/*/DENETIM-*.json` (disk ∪ origin/main)" if not k["okunamadi"] else
+               "`_agents/fabrika/kanit/*/DENETIM-*.json` (disk) · ⚠ origin/main OKUNAMADI: " + ", ".join(k["okunamadi"]) + " — göz turu eksik olabilir")
+        r.append(sat("bağımsız göz turu · ortalama tur/kart", f"{k['goz_turu']} · {ort}", kay + " · depo başına: " + " · ".join(k["goz_depolar"])))
     else:
         r.append(sat("kart açılan / bitti / tıkandı", "ÖLÇÜLEMEDİ: fabrika kartları yok", "—"))
         r.append(sat("bağımsız göz turu · ortalama tur/kart", "ÖLÇÜLEMEDİ: kaynak yok", "—"))

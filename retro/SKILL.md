@@ -1,10 +1,17 @@
 ---
 name: retro
 description: Haftalık retro — araç ajanın haftasını ÖLÇER (NOTES · fabrika kartları · bağımsız göz turları · kaçışlar · boşta zilleri), ajan 5 başlığı kendi gözüyle YORUMLAR (ne bitti · nerede zaman kaybettim ölçüyle · hangi araç/kural yavaşlattı · ne öğrendim · merkeze önerim); çıktı _agents/handoff/retro/<YYYY-Www>/<AJAN>.md lint'li. Merkez kipi kutu retrolarını toplar (OK/GEÇERSİZ/EKSİK/ÇALIŞMADI), MERKEZ.md iskeleti kurar; her öneri → gorev_ ya da → RED damgası alır (süzüm kanıtı). Tetik: "/retro", "haftalık retro", "haftanın dersleri", "retro yaz", "merkez retrosu".
-version: 1.1.0
+version: 1.2.0
 ---
 
 # /retro — haftalık retro (araç ölçer · ajan yorumlar · merkez toplar · süzüm kanıtlanır)
+
+## 🆕 1.2.0 · kart ve göz ölçüsü kutunun BÜTÜN depolarından (20 Eki · CQ46Y + NFS16 · retro W42 BERİD Ö1 + HENDESE Ö2)
+W42 retrosu yalnız çağrıldığı depoyu (Nexus) sayıyordu; ajanın Sx ve cloudtop kartları görünmüyordu (ölçüm: MİRAHUR W42 9 → 46 kart,
+HENDESE 5 → 14, BÂNİ 25 → 128). Taranan depolar: `RETRO_DEPOLAR` (':' ayraçlı) verilirse o liste; yoksa `RETRO_DEPO_KOKU` (varsayılan
+`/config/projects`) altında `_agents/fabrika/kartlar` olan birincil depolar — izole kutuda bu kutunun kendi depolarıdır, `_wt/…`
+çalışma kopyaları sayılmaz, aynı depo bir kez. Göz turları disk ∪ `origin/main` ağacından sayılır: birincil kopya bayat ya da başka
+dalda olabilir. Tablonun kanıt sütunu depo başına döker (`Nexus 9/3/2 · Sx-Claude-Skills 4/4/0 · …`). Kaçış defteri hâlâ KOK'tan.
 
 ## 🆕 1.1.0 · `doldur` — ajanın yorumunu iskelete araç yazar (20 Eki · KHX56 · retro W42 MİRAHUR Ö1)
 `kutu` iskeleti paylaşılan ana ağaca yazar; ana dal kapısı (`ana-dal-kapisi.sh`) o ağaçta Edit/Write'ı reddeder — ajan iskeleti
