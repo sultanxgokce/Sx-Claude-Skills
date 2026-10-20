@@ -20,5 +20,14 @@
   "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
   "kapsam_uyarilari": [
     "ÇOK GÜNLÜK KAPSAM (W42): bir PR'da teslim edilmez — gün başına kart öner: denetci-olcum-sonu-g1 · denetci-olcum-sonu-g2 … (her biri günün teslim birimi)"
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "HENDESE",
+      "oturum": "HENDESE oturumu 2026-10-20 ~20:00 · DENETIM-3.json",
+      "gerekce": "bulgular 5→3→2 düştü, son turun iki bulgusu (atlanan sayısı, kısa dosya baytı) O10-O12 tam eşitlik sınavlarıyla ve mutantla kapandı; kalan risk yok, bir tur daha yalnız doğrulama",
+      "zaman": "2026-10-20T19:05:32+03:00"
+    }
   ]
 }
