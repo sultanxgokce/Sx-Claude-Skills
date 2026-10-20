@@ -96,6 +96,29 @@ if [ -z "${TB_IC:-}" ]; then
   r="$( export TO_GERCEK_TMUX="$T/yok-boyle"; PATH="$T/bosyol" kur "$T/proje" "$H" 2>/dev/null )"
   kapi "K6 yeni kopya gerçek tmux'a ulaşamazsa KURULMAZ (bozuk tmux asla yerleşmez)" "rc=1|yok|0" "$(printf '%s' "$r" | tail -1)|$([ -e "$H" ] && echo var || echo yok)|$(ls "$T/bin" | grep -c yeni)"
   kapi "K7 onar.sh adım 0 kurucuyu çağırır" "1" "$(grep -c '^_tb="$(tmux_bekcisi_kur)"' "$KOK/scripts/onar.sh")"
+
+  echo "── B · dakikalık bekçi her turda kurar (onar yalnız arızada koşuyordu → 2.19.0 sağlıklı kutulara inmiyordu)"
+  # Beceri ağacının geçici kopyası; durum/kademe/compact/dava sahte → bekci.sh gerçek onarım yapamaz, canlıya dokunamaz.
+  BK="$T/bk"; mkdir -p "$BK"; cp -r "$KOK/scripts" "$BK/"
+  for s in compact dava-gunluk; do printf '#!/usr/bin/env bash\nexit 0\n' > "$BK/scripts/$s.sh"; done
+  printf '#!/usr/bin/env bash\nexit "${TB_DURUM_RC:-0}"\n' > "$BK/scripts/durum.sh"
+  printf '#!/usr/bin/env bash\necho kademe >> "$TO_DURUM_DIZ/kademe.iz"\n' > "$BK/scripts/kademe.sh"
+  bekci() {  # $1 = TB_DURUM_RC → rc
+    ( export TO_KUTU=sinav TO_PROJE=/config/projects/sinav TO_DURUM_DIZ="$T/bd" TO_BECERI_KOK="$BK" TO_TMUX_BEKCI_VARSAYILAN="$T/bcanli/tmux" TB_DURUM_RC="$1"
+      unset TO_TMUX_BEKCI_BIN; bash "$BK/scripts/bekci.sh" >/dev/null 2>&1 ); echo "$?"
+  }
+  BH="$T/bcanli/tmux"; mkdir -p "$T/bd" "$T/bcanli"
+  satir() { cat "$T/bd/gunluk.log" 2>/dev/null | grep -c 'tmux bekçisi'; }
+  r="$(bekci 0)"
+  kapi "B1 sağlıklı kutu (durum 0): bekçi turu bekçiyi KURAR, günlüğe bir satır" "0|e|e|1" "$r|$([ -x "$BH" ] && echo e || echo h)|$(cmp -s "$KOK/scripts/tmux-bekcisi.sh" "$BH" && echo e || echo h)|$(satir)"
+  r="$(bekci 0)"; kapi "B2 ikinci tur: güncel → günlüğe yazmaz (dakikada bir satır olmaz)" "0|1" "$r|$(satir)"
+  printf '\n# eski sürüm tmux-bekcisi.sh\n' >> "$BH"
+  r="$(bekci 0)"; kapi "B3 eski kopya bir sonraki turda güncellenir" "0|e|2" "$r|$(cmp -s "$KOK/scripts/tmux-bekcisi.sh" "$BH" && echo e || echo h)|$(satir)"
+  printf '#!/bin/sh\necho elle-kurulmus\n' > "$BH"; rm -f "$T/bd/kademe.iz"
+  r="$(bekci 1)"; kapi "B4 kurulamasa da (yabancı dosya) bekçi işine devam eder: dosya yerinde, merdiven başlar" "elle-kurulmus|1" "$(sh "$BH")|$(cat "$T/bd/kademe.iz" 2>/dev/null | grep -c kademe)"
+  rm -f "$BH"; : > "$T/bd/duraklat"
+  r="$(bekci 0)"; kapi "B5 duraklatılmış bekçi kurmaz (duraklat = hiçbir şey yapma)" "0|yok" "$r|$([ -e "$BH" ] && echo var || echo yok)"
+  rm -f "$T/bd/duraklat"
 fi
 
 if [ -z "${TB_IC:-}" ] && [ -z "${TB_KIC:-}" ]; then
@@ -109,6 +132,22 @@ if [ -z "${TB_IC:-}" ] && [ -z "${TB_KIC:-}" ]; then
   kurmutant deneme-kilidi-yok '[ -z "${TO_TMUX_BEKCI_BIN:-}" ] && [ "$PROJE" != "/config/projects/$KUTU" ]' 'false'
   kurmutant yabanci-ezilir    '[ -e "$hedef" ] && ! grep -q' 'false && ! grep -q'
   kurmutant dogrulamasiz      '&& "$yeni" -V >/dev/null 2>&1 &&' '&&'
+  bekmutant() {  # bekci.sh bozması, aynı yöntem: kopyada bozulur, kopyanın sınavı K+B'ye kadar koşar. "" = bozmasız pozitif kontrol
+    local d="$T/bm-$1"; mkdir -p "$d"; cp -r "$KOK/scripts" "$d/"
+    if [ -n "$2" ]; then
+      python3 -c 'import sys; p=sys.argv[1]; s=open(p).read(); assert sys.argv[2] in s, "desen yok"; open(p,"w").write(s.replace(sys.argv[2],sys.argv[3],1))' \
+        "$d/scripts/bekci.sh" "$2" "$3" || { kapi "M $1 deseni bulundu" "e" "h"; return; }
+    fi
+    if TB_KIC=1 timeout 60 bash "$d/scripts/tmux-bekcisi.test.sh" >/dev/null 2>&1; then r=yesil; else r=kirmizi; fi
+    if [ -n "$2" ]; then kapi "M $1 kırmızı" "kirmizi" "$r"; else kapi "M $1 (bozmasız kopya) yeşil" "yesil" "$r"; fi
+  }
+  bekmutant bekci-pozitif-kontrol '' ''
+  bekmutant bekci-kurmaz          '_tb="$(tmux_bekcisi_kur)"; [' '_tb=güncel; ['
+  bekmutant bekci-hep-yazar       '[ "$_tb" = güncel ] || gunluk' 'gunluk'
+  bekmutant bekci-durakta-kurar   '[ -f "$DURUM_DIZ/duraklat" ] && exit 0
+' '_tb="$(tmux_bekcisi_kur)"; [ -f "$DURUM_DIZ/duraklat" ] && exit 0
+'
+  bekmutant bekci-hatada-durur    '|| gunluk "bekçi: tmux bekçisi: $_tb"' '|| { gunluk "bekçi: tmux bekçisi: $_tb"; exit 1; }'
   mutant() {  # $1 ad · $2 python değiştirme (eski) · $3 (yeni)
     local m="$T/m-$1.sh"
     python3 -c 'import sys; s=open(sys.argv[1]).read(); assert sys.argv[2] in s, "desen yok"; open(sys.argv[4],"w").write(s.replace(sys.argv[2],sys.argv[3],1))' \

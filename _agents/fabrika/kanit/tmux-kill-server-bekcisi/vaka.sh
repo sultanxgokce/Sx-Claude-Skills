@@ -6,6 +6,8 @@ set -u
 TM="${1:?tmux yolu}"; T="$(mktemp -d)"; K="$T/kutu.sok"
 trap '/usr/bin/tmux -S "$K" kill-server 2>/dev/null; rm -r -f -- "$T"' EXIT
 unset TMUX TMUX_PANE
+# Bekçinin ret izi geçici dizine (20 Eki: bu betik canlı /config/.terminal-onar/tmux-bekcisi.log'a sahte "RED" satırı yazmıştı)
+export TO_DURUM_DIZ="$T/durum"; mkdir -p "$TO_DURUM_DIZ"
 /usr/bin/tmux -S "$K" -f /dev/null new-session -d -s koltuk "sleep 120"
 kp="$(/usr/bin/tmux -S "$K" display -p '#{pid}')"
 echo "kutu sunucusu: pid=$kp · koltuk oturumu: $(/usr/bin/tmux -S "$K" ls -F '#S' | paste -sd,)"
