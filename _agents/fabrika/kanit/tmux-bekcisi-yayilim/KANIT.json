@@ -1,7 +1,7 @@
 {
   "is": "tmux-bekcisi-yayilim",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-20T20:22:48+03:00",
+  "guncelleme": "2026-10-20T20:24:16+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -91,7 +91,24 @@
       "sure_sn": 1.4,
       "boru_denetimi": "temiz",
       "olcum_id": "33100c0abcb54186bd4b7e9a4973a17c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "filo-kurulum-v2",
+      "asama": "once",
+      "dosya": "olcum-filo-kurulum-v2-once.txt",
+      "sha256": "8bac4e25ca70d7a7fb4710e893fd245c3e6fb836e7b6c8f575a1c7ac50e8a69a",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/tmux-bekcisi-yayilim/filo-kurulum.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T20:24:16+03:00",
+      "sure_sn": 9.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c3d8777227c24b209043c0a4b2ac7836"
     }
   ],
-  "imza": "2786311f0b712b239707485110d2da992fef719e3ac22cbb0c78d3573251cf47"
+  "imza": "8ae7c8048e817b4fa98dbb507f6f9424fc32a0d51bd1b732772cf6666b10bcf6"
 }

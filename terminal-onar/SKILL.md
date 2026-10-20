@@ -7,7 +7,8 @@ version: 2.19.1
 
 ## 🆕 2.19.1 · tmux bekçisi her bekçi turunda kurulur (20 Eki · SERDAR 19:3x)
 2.19.0 bekçiyi yalnız onar.sh K0'da kuruyordu; onar ise yalnız düzen bozukken koşar → sağlıklı kutulara hiç inmedi (ölçüm 20 Eki,
-`_agents/fabrika/kanit/tmux-bekcisi-yayilim/filo-kurulum.sh`: 18 ekip kutusundan yalnız code'da kurulu). Artık `bekci.sh` her dakika
+`_agents/fabrika/kanit/tmux-bekcisi-yayilim/filo-kurulum.sh` · `olcum-filo-kurulum-v2-once.txt`: abc kullanıcısı olan 18 ekip
+kutusundan yalnız code'da kurulu; abc'siz 9 altyapı kabı kapsam dışı, ölçülemeyen 0). Artık `bekci.sh` her dakika
 duraklatma denetiminden SONRA `tmux_bekcisi_kur`'u çağırır: güncelse sessiz, kurduğunda/güncellediğinde/kuramadığında günlüğe bir
 satır; kuramasa da bekçi işine devam eder. **Sınır:** bekçisi duraklatılmış kutuya (20 Eki: mmex · nazir · nova) ve bekçisi
 koşmayan kutuya (cloudtop masaüstü) inmez — duraklat "hiçbir şey yapma" demektir. Sınav: `tmux-bekcisi.test.sh` B1-B5 + 4 bozma.
