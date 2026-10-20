@@ -1,7 +1,7 @@
 {
   "is": "retro-doldur-kipi",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-20T17:44:10+03:00",
+  "guncelleme": "2026-10-20T17:46:27+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -44,18 +44,54 @@
       "etiket": "sinav",
       "asama": "tek",
       "dosya": "olcum-sinav-tek.txt",
-      "sha256": "2aa5af4bc8309eae7d3e0bb5d347b71b337ce0e59e6deee91c370835c60c21c7",
+      "sha256": "fb54b699e237bd5d718da99dced645ebfbda24e76ec5d6967aff3db85ac21678",
       "komut": [
         "bash",
         "retro/scripts/retro.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-20T17:44:10+03:00",
-      "sure_sn": 2.6,
+      "zaman": "2026-10-20T17:46:27+03:00",
+      "sure_sn": 3.2,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "8fd8aacab13441a0a6fda63cde8725bf"
+      "olcum_id": "4c557661676440c794a386abb6cdc611"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "esz-sabit-ad",
+      "asama": "once",
+      "dosya": "olcum-esz-sabit-ad-once.txt",
+      "sha256": "13e53f5fd32f8b722f69c57da641a2736be82ed85d18e3aac3cc5408c1167001",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/retro-doldur-kipi/esz.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/retro-sabitad.py"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-20T17:46:24+03:00",
+      "sure_sn": 0.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "6d3af41611894719af0e82dd35a080fa"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "esz-benzersiz",
+      "asama": "sonra",
+      "dosya": "olcum-esz-benzersiz-sonra.txt",
+      "sha256": "96698f3a44166303f1454946d9d5af63d646763411255517bf949fcaaf540737",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/retro-doldur-kipi/esz.sh",
+        "retro/scripts/retro.py"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T17:46:24+03:00",
+      "sure_sn": 0.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "3357c9688ca14438b4d84e38125ff88a"
     }
   ],
-  "imza": "08c8d9c8e545cd7a285a166e36ac690e86e3822d750a180441bc4b5d85ba668d"
+  "imza": "8fa684ebe9ce9dac8bbe6b1687934e8600314c85c9e7e01c41f8756472cdf122"
 }

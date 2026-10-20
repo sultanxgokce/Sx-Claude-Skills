@@ -209,6 +209,12 @@ cmp -s "$XD" "$T/x-dolu.md" && ok "T10o ikinci dolum aynı baytları üretir (ka
 { cat "$T/x-iyi.md"; printf '\n<!-- Yorum satırları ajanındır; merkez bunları DEĞİŞTİRMEZ. Z maddesi ölçüsüz geçmez. Ö maddesi en çok 5. -->\n'; } > "$T/x-dipnotlu.md"
 python3 "$R" doldur X --kok "$BOS" --metin "$T/x-dipnotlu.md" >/dev/null 2>&1
 cmp -s "$XD" "$T/x-dolu.md" && ok "T10p metindeki dipnot çoğalmaz" || kirmizi "T10p dipnotlu metin farklı sonuç verdi"
+# Yarış olasılıklıdır: sabit adlı eski sürüm 40 dolumda 2 kez düştü (ölçüldü, kanıt dizini) → 5 tur × 8 eşzamanlı dolum.
+es_rc=0; for tur in 1 2 3 4 5; do pids=""; for n in 1 2 3 4 5 6 7 8; do python3 "$R" doldur X --kok "$BOS" --metin "$T/x-iyi.md" > "$T/es-$tur-$n.out" 2>&1 & pids="$pids $!"; done
+  for p in $pids; do wait "$p" || es_rc=1; done; done
+[ "$es_rc" = 0 ] && ok "T10s 5 tur × 8 eşzamanlı dolumun hepsi rc=0 (geçici dosyalar çarpışmaz · göz tur 1)" || kirmizi "T10s eşzamanlı dolum düştü: $(cat "$T"/es-*.out | grep -v '✓' | head -3 | tr '\n' ' ')"
+cmp -s "$XD" "$T/x-dolu.md" && ok "T10t eşzamanlı dolum sonrası dosya geçerli ve beklenen baytlarda" || kirmizi "T10t eşzamanlı dolum sonrası dosya farklı"
+[ -z "$(find "$(dirname "$XD")" -name '*.yeni' 2>/dev/null)" ] && ok "T10u geride geçici dosya kalmadı" || kirmizi "T10u kalan: $(find "$(dirname "$XD")" -name '*.yeni')"
 kapi "T10q doldurulmuş dosyada kutu --yenile çalışır (ölçüm bloğu bulunur)" 0 python3 "$R" kutu X --kok "$BOS" --yenile
 icerir "$(cat "$XD")" "- D1) kapıyı gevşetme, yazmayı araca ver" "T10r yenilemeden sonra ajanın yorumu korundu"
 cp "$T/x-iskelet.md" "$XD"

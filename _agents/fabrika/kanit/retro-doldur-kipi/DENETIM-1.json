@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "retro-doldur-kipi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-20T17:44:53+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 26775,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 13675
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Doldur kipi dosya/stdin girdisini alıyor, ölçüm alanlarını koruyor, lint başarısızsa hedefe yazmıyor ve ana dal kapısını gevşetmeden istenen akışı sağlıyor. Ancak sabit `.yeni` geçici dosya adı eşzamanlı iki dolumda yarış ve yakalanmamış hata doğurabileceğinden önce bunu çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "Geçici dosya adı hedef başına sabit olduğu için aynı ajan/hafta üzerinde eşzamanlı iki `doldur` çağrısı birbirinin geçici dosyasını açabilir; çağrılardan biri `.yeni` dosyasını taşıdıktan sonra diğeri `os.replace` sırasında hata verebilir veya yarışın kazananı belirsizleşebilir.",
+        "kanit": "Kod `gecici = yol + \".yeni\"` ile ortak adı seçiyor, kilit ya da benzersiz geçici dosya oluşturmadan bu adı `open(..., \"w\")` ile yazıp `os.replace(gecici, yol)` çağırıyor; eklenen T10 testlerinde de eşzamanlı çağrı vakası bulunmuyor.",
+        "konum": "retro/scripts/retro.py:334",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; önceki sürümde vaka kırmızı rc=1, yeni sürümde aynı gerçekçi kapı senaryosu yeşil rc=0 ve son durumda lint rc=0 olduğundan temel talep için ölçüm çifti yeterli. Genel sınav kaydı yeşil olsa da sunulan çıktı ilk 60 satırla kesildiği için yeni T10 ve M8–M10 sonuçları görünmüyor; dolayısıyla bu alt sınavların geçtiği yalnız toplam rc=0 üzerinden dolaylı olarak kanıtlanıyor."
+  }
+}

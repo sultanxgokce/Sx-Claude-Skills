@@ -28,6 +28,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 import unicodedata
 from datetime import date, datetime, timedelta
 
@@ -333,10 +334,17 @@ def doldur(a):
         for x in h:
             print(f"  • {x}")
         return 1
-    gecici = yol + ".yeni"
-    with open(gecici, "w", encoding="utf-8") as f:
-        f.write(yeni)
-    os.replace(gecici, yol)
+    # Benzersiz geçici dosya AYNI dizinde (os.replace atomik kalsın); sabit ad eşzamanlı iki dolumu çarpıştırırdı (göz tur 1).
+    fd, gecici = tempfile.mkstemp(prefix=f".{ajan}.", suffix=".yeni", dir=os.path.dirname(yol))
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            f.write(yeni)
+        os.chmod(gecici, 0o644)
+        os.replace(gecici, yol)
+    except BaseException:
+        if os.path.exists(gecici):
+            os.unlink(gecici)
+        raise
     print(f"✓ dolduruldu: {os.path.relpath(yol, kok)} · öneri {len(b['oneri'])} · ders {len(b['ders'])} — lint geçti")
     return 0
 

@@ -1,5 +1,5 @@
 $ bash retro/scripts/retro.test.sh
-# rc=0 sure=2.6s zaman=2026-10-20T17:44:10+03:00
+# rc=0 sure=3.2s zaman=2026-10-20T17:46:27+03:00
 --- stdout ---
 — T1 hafta
   ✓ T1a hafta kimliği sabit tarihten (rc=0)
@@ -125,6 +125,9 @@ $ bash retro/scripts/retro.test.sh
   ✓ T10n stdin'den (--metin -) aynı metin → rc=0 (rc=0)
   ✓ T10o ikinci dolum aynı baytları üretir (kararlı)
   ✓ T10p metindeki dipnot çoğalmaz
+  ✓ T10s 5 tur × 8 eşzamanlı dolumun hepsi rc=0 (geçici dosyalar çarpışmaz · göz tur 1)
+  ✓ T10t eşzamanlı dolum sonrası dosya geçerli ve beklenen baytlarda
+  ✓ T10u geride geçici dosya kalmadı
   ✓ T10q doldurulmuş dosyada kutu --yenile çalışır (ölçüm bloğu bulunur) (rc=0)
   ✓ T10r yenilemeden sonra ajanın yorumu korundu
 — M mutasyon (kopya üstünde; her mutant en az bir kapıyı kızartmalı)
@@ -141,5 +144,5 @@ $ bash retro/scripts/retro.test.sh
   ✓ M9 ölçüm/imza reddi kalkınca sahte ölçüm dosyaya girer (kapı yakalar): mutant ısırıldı
   ✓ M10 önsöz denetimi kalkınca metin sessizce yutulur (kapı yakalar): mutant ısırıldı
 
-GECEN=128 DUSEN=0
+GECEN=131 DUSEN=0
 --- stderr ---
