@@ -9,7 +9,8 @@
 //   1  · öğe var, görünür, ekranda ve tıklanabilir
 //   +1 · ekran dışında (kaydırma gerekir)
 //   +1 · görünmüyor ama DOM'da (üzerine gelme / gizli menü gerekir) — üzerine gelinir, sonra tıklanır
-//   9  · öğe yok ya da tıklanamıyor → yol YÜRÜNEMEDİ, bütçe açıkça aşılır (kapı kırmızı), sebebi stderr'de
+//   YÜRÜNEMEDİ · öğe yok ya da tıklanamıyor → ölçülen = max(9, hedef+1): bütçe HER ZAMAN aşılır (kapı kırmızı), sebebi stderr'de
+//     (göz #394 tur 1: sabit 9, hedefi ≥ 9 olan görevde aşım üretmiyordu). Hedef 0-99.
 // Her görev temiz sayfayla başlar (yeniden yükleme): bir görevin açtığı menü ötekinin sayısını küçültmez.
 // Çıktı (SON satır): G1=<hedef>:<ölçülen> G2=…  ·  rc 0 ölçüldü · 2 tanım bozuk · 3 tarayıcı yok (ÖLÇÜLEMEDİ, sayı basılmaz)
 import { createRequire } from 'node:module';
@@ -21,9 +22,9 @@ try { yol = JSON.parse(readFileSync(yolDosya, 'utf8')); } catch (e) { console.er
 const adlar = Object.keys(yol);
 for (const g of adlar) {
   const t = yol[g];
-  if (!/^[A-Za-zÇĞİÖŞÜçğıöşü0-9_-]{1,20}$/.test(g) || !Number.isInteger(t?.hedef) || t.hedef < 0 || !Array.isArray(t?.adimlar) || !t.adimlar.length
+  if (!/^[A-Za-zÇĞİÖŞÜçğıöşü0-9_-]{1,20}$/.test(g) || !Number.isInteger(t?.hedef) || t.hedef < 0 || t.hedef > 99 || !Array.isArray(t?.adimlar) || !t.adimlar.length
       || t.adimlar.some(a => typeof a !== 'string' || !a.trim())) {
-    console.error(`yol tanımı bozuk: ${g} — { "hedef": <tam sayı>, "adimlar": ["<seçici>", ...] } bekleniyor`); process.exit(2);
+    console.error(`yol tanımı bozuk: ${g} — { "hedef": <0-99 tam sayı>, "adimlar": ["<seçici>", ...] } bekleniyor`); process.exit(2);
   }
 }
 if (!adlar.length) { console.error('yol tanımında görev yok'); process.exit(2); }
@@ -40,11 +41,11 @@ const sayfa = await tarayici.newPage({ viewport: { width: W, height: H } });
 const sonuc = [];
 for (const g of adlar) {
   await sayfa.goto(url, { waitUntil: 'load' });
-  let tik = 0;
+  let tik = 0; const YURUNEMEDI = Math.max(9, yol[g].hedef + 1);
   for (const [i, secici] of yol[g].adimlar.entries()) {
     const ad = `${g} adım ${i + 1} (${secici})`;
     const oge = sayfa.locator(secici).first();
-    if (!(await oge.count())) { console.error(`${ad}: öğe YOK — yol yürünemedi, ölçülen 9`); tik = 9; break; }
+    if (!(await oge.count())) { console.error(`${ad}: öğe YOK — yol yürünemedi, ölçülen ${YURUNEMEDI}`); tik = YURUNEMEDI; break; }
     let ek = 0;
     if (!(await oge.isVisible())) {   // :hover menüsü üst öğeye bağlıdır — üst öğenin üzerine gelinir
       ek += 1; await oge.locator('xpath=..').hover({ timeout: 2000 }).catch(() => {});
@@ -52,7 +53,7 @@ for (const g of adlar) {
     const kutu = await oge.boundingBox();
     if (kutu && (kutu.y < 0 || kutu.y + kutu.height > H || kutu.x < 0 || kutu.x + kutu.width > W)) ek += 1;
     try { await oge.click({ timeout: 2000 }); }
-    catch (e) { console.error(`${ad}: tıklanamıyor (${String(e.message).split('\n')[0]}) — ölçülen 9`); tik = 9; break; }
+    catch (e) { console.error(`${ad}: tıklanamıyor (${String(e.message).split('\n')[0]}) — ölçülen ${YURUNEMEDI}`); tik = YURUNEMEDI; break; }
     tik += 1 + ek;
   }
   sonuc.push(`${g}=${yol[g].hedef}:${Math.min(tik, 999)}`);

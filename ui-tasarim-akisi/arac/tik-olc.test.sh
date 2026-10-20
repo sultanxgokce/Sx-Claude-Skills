@@ -30,7 +30,8 @@ cat > "$T/yol.json" <<'JSON'
  "G4": {"hedef": 1, "adimlar": ["#menu-oge"]},
  "G5": {"hedef": 2, "adimlar": ["#gizli"]},
  "G6": {"hedef": 3, "adimlar": ["#yok"]},
- "G7": {"hedef": 1, "adimlar": ["#ortulu"]}}
+ "G7": {"hedef": 1, "adimlar": ["#ortulu"]},
+ "G8": {"hedef": 12, "adimlar": ["#yok-uzun"]}}
 JSON
 J="$T/s/olcum/E1.html.tik.json"
 oku() { python3 -c 'import json,sys;d=json.load(open(sys.argv[1]));print(eval(sys.argv[2]))' "$J" "$1" 2>/dev/null; }
@@ -41,6 +42,8 @@ KANIT_PLAYWRIGHT_DIR="$T/yok" bash "$A/tik-olc.sh" "$T/s/E1.html" "$T/yol.json" 
 
 echo "── T2 · bozuk girdi ──"
 printf '{"G1": {"hedef": "iki", "adimlar": []}}' > "$T/bozuk.json"
+printf '{"G1": {"hedef": 100, "adimlar": ["#gorunur"]}}' > "$T/bozuk2.json"
+bash "$A/tik-olc.sh" "$T/s/E1.html" "$T/bozuk2.json" >/dev/null 2>&1; [ $? -eq 2 ]; g $? "hedef 99'u aşarsa rc 2 (kaydedicinin biçimine sığmaz)"
 bash "$A/tik-olc.sh" "$T/s/E1.html" "$T/bozuk.json" >/dev/null 2>&1; [ $? -eq 2 ] && [ ! -e "$J" ]; g $? "bozuk yol tanımı → rc 2, artefakt yok"
 bash "$A/tik-kaydet.sh" "$T/s/E1.html" G1=1:1 --yontem goz >/dev/null 2>&1; [ $? -eq 2 ]; g $? "tik-kaydet bilinmeyen yöntem → rc 2"
 bash "$A/tik-kaydet.sh" "$T/s/E1.html" G1=1:1 >/dev/null 2>&1; [ "$(oku 'd["yontem"]')" = elle ]; g $? "elle kayıt (eski çağrı) yontem=elle yazar — geriye uyumlu"
@@ -66,7 +69,8 @@ bash "$A/tik-olc.sh" "$T/s/E1.html" "$T/yol.json" --genislik 800 --yukseklik 600
 echo "── T4 · artefakt yöntemi ve yolu taşır, kapı aşımı görür ──"
 [ "$(oku 'd["yontem"]')" = tarayici ]; g $? "yontem=tarayici"
 [ "$(oku 'd["yol_sha256"]')" = "$(sha256sum "$T/yol.json" | cut -d' ' -f1)" ]; g $? "yol tanımının sha'sı artefaktta (yol değişirse ölçüm bayat)"
-[ "$(oku '",".join(d["asim"])')" = "G2,G4,G6,G7" ]; g $? "bütçeyi aşanlar kapıya gider: G2,G4,G6,G7"
+[ "$(oku 'd["gorevler"]["G8"]["olculen"]')" = 13 ]; g $? "G8 hedef 12 + yürünemeyen yol → 13 (sabit 9 değil: göz #394 tur 1)"
+[ "$(oku '",".join(d["asim"])')" = "G2,G4,G6,G7,G8" ]; g $? "bütçeyi aşanlar kapıya gider: G2,G4,G6,G7,G8 (yürünemeyen yol hedef ne olursa olsun aşar)"
 
 echo "── T5 · ölçüm ayırt ediyor: sayfa düzelince sayı düşer ──"
 sed -i 's/#asagi{margin-top:2000px}/#asagi{margin-top:0}/' "$T/s/E1.html"
@@ -86,7 +90,8 @@ PYM
 }
 mut ekran-disi-sayilmaz tik-olc.mjs 'kutu.x + kutu.width > W)) ek += 1;' 'kutu.x + kutu.width > W)) ek += 0;'
 mut gizli-sayilmaz tik-olc.mjs '      ek += 1; await oge.locator' '      ek += 0; await oge.locator'
-mut yok-sifir tik-olc.mjs 'öğe YOK — yol yürünemedi, ölçülen 9`); tik = 9;' 'öğe YOK — yol yürünemedi, ölçülen 9`); tik = 0;'
+mut yok-sifir tik-olc.mjs 'öğe YOK — yol yürünemedi, ölçülen ${YURUNEMEDI}`); tik = YURUNEMEDI;' 'öğe YOK — yol yürünemedi, ölçülen ${YURUNEMEDI}`); tik = 0;'
+mut yurunemedi-sabit-9 tik-olc.mjs 'const YURUNEMEDI = Math.max(9, yol[g].hedef + 1);' 'const YURUNEMEDI = 9;'
 mut temiz-sayfa-yok tik-olc.mjs "  await sayfa.goto(url, { waitUntil: 'load' });" "  if (!sonuc.length) await sayfa.goto(url, { waitUntil: 'load' });"
 mut yontem-yazilmaz tik-olc.sh '--yontem tarayici --yol "$YOL"' '--yol "$YOL"'
 mut elle-sayi-yazar tik-olc.sh 'exit "$rc"; }' 'bash "$HERE/tik-kaydet.sh" "$SAYFA" G1=1:1 --yontem tarayici; exit "$rc"; }'

@@ -171,7 +171,7 @@ bash arac/tik-olc.sh tasarim/ciktilar/E1.html tasarim/ciktilar/E1.yol.json --gen
 ```
 
    Sayım: her adım 1 · ekran dışı +1 (kaydırma) · görünmüyor +1 (üzerine gelme) · yok ya da
-   tıklanamıyor 9 (yol yürünemedi, bütçe açıkça aşılır, sebebi yazılır). Her görev temiz sayfayla
+   tıklanamıyor → hedef+1, en az 9 (yol yürünemedi; bütçe hedef ne olursa olsun aşılır, sebebi yazılır). Hedef 0-99. Her görev temiz sayfayla
    başlar. Artefakt `yontem: tarayici` ve yol tanımının sha'sını taşır. Tarayıcı yoksa araç
    **ÖLÇÜLEMEDİ** der (rc 3) ve sayı yazmaz. Tarayıcı yoksa elle kayıt **seçenek olarak durur**
    (`yontem: elle`):
