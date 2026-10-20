@@ -1,0 +1,45 @@
+{
+  "tur": 1,
+  "is": "plan-tablo-dugum",
+  "pr": "397",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-20T20:36:52+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 28972,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Plan tablosu görev kimliklerini defterden okuyup düğüm bağını kutulu ve düz çıktıya ekliyor; defter okunamadığında açıklama basıyor ve JSON yolunu değiştirmiyor. Talep doğru karşılanmış ve sınavlar güçlü, ancak bozuk düğüm değerinin doğrulaması eksik ve kısmi okuma hatasında “satır aynen kalsın” güvencesi tam sağlanmıyor; önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "Düğüm değeri belgelenen `<kutu>:gorev_…` biçiminde doğrulanmıyor; yalnız iki nokta bulunması yeterli sayıldığı için `mmex:bozuk` gibi bir değer bağ olarak gösterilir.",
+        "kanit": "`dugumler` içinde kabul koşulu yalnız `isinstance(d, str) and ':' in d`; ardından `madde_metni` ön eki ve değerin son beş karakterini doğrudan tabloya basıyor. D3 sınavı da yalnız hiç `:` içermeyen `bozuk-deger` vakasını kapsıyor.",
+        "konum": "gunluk-plan/scripts/tablo.py:96-97, gunluk-plan/scripts/tablo.py:106-107; gunluk-plan/scripts/cipa.test.sh:D3",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Birden çok görev okunurken sonraki isteğin hata vermesi halinde daha önce bulunan bağlar korunup basılıyor; böylece defterin okunamadığı koşulda satırların bütünüyle aynen kalacağı taahhüdü sağlanmıyor.",
+        "kanit": "HTTP 500 ve genel istisna yolları `return bag, ...` ile o ana kadar dolmuş sözlüğü döndürüyor; `main` bu sözlüğü tabloya vererek kısmi bağları basıyor. D7 tek görevli dosya, D8 ise ilk bağlantıda kapalı sunucu kullandığından başarıdan sonra hata senaryosunu sınamıyor.",
+        "konum": "gunluk-plan/scripts/tablo.py:98-103, gunluk-plan/scripts/tablo.py:188-194; gunluk-plan/scripts/cipa.test.sh:D7-D8",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Aynı gerçekçi çıpa üzerinde önce/sonra çıktı çifti düğümün eklendiğini açıkça gösteriyor, çıpa sınavı 92/6'dan 100/0'a dönüyor, kalan sınavlar ve sekiz mutasyon da yeşil. CLI işi için kare yerine metinsel ölçüm uygundur; ancak ölçümler biçimi kısmen bozuk düğümü ve önce başarı sonra hata oluşan çoklu görev akışını kapsamıyor."
+  }
+}

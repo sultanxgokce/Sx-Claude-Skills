@@ -1,0 +1,14 @@
+$ /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/engel/ozet.sh bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/plan-tablo-dugum/taban/gunluk-plan/scripts/cipa.test.sh
+# rc=1 sure=5.3s zaman=2026-10-20T20:41:38+03:00
+--- stdout ---
+  🟡 T17/T18 ÖLÇÜLEMEDİ: kapı ayrıştırıcısı yok (/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/plan-tablo-dugum/taban/gunluk-plan/scripts/../../terminal-onar/kapi/bugun.mjs) — uyum bu koşumda sınanmadı
+  ✗ D1 düğümlü görev kutulu tabloda 'görev …PT7A7 ⛓ mmex …Q7K2P' gösterir — beklenen=1 gerçek=0
+  ✗ D1b düz (md) tabloda da aynı bağ — beklenen=1 gerçek=0
+  ✗ D1c bağ varsa ⛓ anlamı tek satırla söylenir — beklenen=1 gerçek=0
+  ✗ D6 jetonsuz kutu: satırlar AYNEN (bağsız) + 'jetonu yok' tek satırı — beklenen=0|1 gerçek=0|0
+  ✗ D7 defter 500 → satır aynen + 'defter http 500' söylenir — beklenen=1 gerçek=0
+  ✗ D7b ilk görev bağlı, ikincide defter 500: YARIM bağ basılmaz (hiç ⛓ yok) + 'okunamadı' satırı — beklenen=0|1 gerçek=0|0
+  ✗ D8 defter kapalı: satır aynen + 'okunamadı' söylenir, bekleme ≤ 4 sn (ilk hatada durur) — beklenen=1|1 gerçek=0|1
+SONUÇ: 93 geçti · 7 kaldı
+rc=1
+--- stderr ---
