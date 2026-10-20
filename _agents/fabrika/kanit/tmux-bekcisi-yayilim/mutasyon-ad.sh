@@ -7,9 +7,12 @@ kos() { local d="$T/$1"; mkdir -p "$d"; cp -r "$K/scripts" "$d/"
   if ! printf '%s' "$o" | grep -q '^SONUÇ:'; then echo "$1: ÖLÇÜLEMEDİ (sonuç satırı yok)"; return; fi
   echo "$1: $(printf '%s' "$o" | grep '^SONUÇ:') · düşen: $(printf '%s\n' "$o" | grep -oE '✗ [A-Z][0-9a-z]+' | sed 's/✗ //' | paste -sd' ')"; }
 kos pozitif '' ''
-kos bekci-kurmaz '_tb="$(tmux_bekcisi_kur)"; [' '_tb=güncel; ['
-kos bekci-hep-yazar '[ "$_tb" = güncel ] || gunluk' 'gunluk'
+kos bekci-kurmaz '_tb="$(tmux_bekcisi_kur)"
+' '_tb=güncel
+'
+kos bekci-hep-yazar '[ "$_tb" != güncel ] && [' 'true || ['
 kos bekci-durakta-kurar '[ -f "$DURUM_DIZ/duraklat" ] && exit 0
 ' '_tb="$(tmux_bekcisi_kur)"; [ -f "$DURUM_DIZ/duraklat" ] && exit 0
 '
-kos bekci-hatada-durur '|| gunluk "bekçi: tmux bekçisi: $_tb"' '|| { gunluk "bekçi: tmux bekçisi: $_tb"; exit 1; }'
+kos bekci-hatada-durur 'then gunluk "bekçi: tmux bekçisi: $_tb"; fi' 'then gunluk "bekçi: tmux bekçisi: $_tb"; exit 1; fi'
+kos bekci-tekrar-yazar '&& [ "$_tb" != "$(cat "$DURUM_DIZ/tmux-bekcisi.son" 2>/dev/null)" ]' ''

@@ -116,6 +116,9 @@ if [ -z "${TB_IC:-}" ]; then
   r="$(bekci 0)"; kapi "B3 eski kopya bir sonraki turda güncellenir" "0|e|2" "$r|$(cmp -s "$KOK/scripts/tmux-bekcisi.sh" "$BH" && echo e || echo h)|$(satir)"
   printf '#!/bin/sh\necho elle-kurulmus\n' > "$BH"; rm -f "$T/bd/kademe.iz"
   r="$(bekci 1)"; kapi "B4 kurulamasa da (yabancı dosya) bekçi işine devam eder: dosya yerinde, merdiven başlar" "elle-kurulmus|1" "$(sh "$BH")|$(cat "$T/bd/kademe.iz" 2>/dev/null | grep -c kademe)"
+  kapi "B4b kurulamama günlüğe BİR satır yazar" "3" "$(satir)"
+  bekci 1 >/dev/null; bekci 1 >/dev/null
+  kapi "B4c aynı kurulamama sonraki turlarda tekrar yazılmaz (dakikada bir satır olmaz)" "3" "$(satir)"
   rm -f "$BH"; : > "$T/bd/duraklat"
   r="$(bekci 0)"; kapi "B5 duraklatılmış bekçi kurmaz (duraklat = hiçbir şey yapma)" "0|yok" "$r|$([ -e "$BH" ] && echo var || echo yok)"
   rm -f "$T/bd/duraklat"
@@ -142,12 +145,15 @@ if [ -z "${TB_IC:-}" ] && [ -z "${TB_KIC:-}" ]; then
     if [ -n "$2" ]; then kapi "M $1 kırmızı" "kirmizi" "$r"; else kapi "M $1 (bozmasız kopya) yeşil" "yesil" "$r"; fi
   }
   bekmutant bekci-pozitif-kontrol '' ''
-  bekmutant bekci-kurmaz          '_tb="$(tmux_bekcisi_kur)"; [' '_tb=güncel; ['
-  bekmutant bekci-hep-yazar       '[ "$_tb" = güncel ] || gunluk' 'gunluk'
+  bekmutant bekci-kurmaz          '_tb="$(tmux_bekcisi_kur)"
+' '_tb=güncel
+'
+  bekmutant bekci-hep-yazar       '[ "$_tb" != güncel ] && [' 'true || ['
   bekmutant bekci-durakta-kurar   '[ -f "$DURUM_DIZ/duraklat" ] && exit 0
 ' '_tb="$(tmux_bekcisi_kur)"; [ -f "$DURUM_DIZ/duraklat" ] && exit 0
 '
-  bekmutant bekci-hatada-durur    '|| gunluk "bekçi: tmux bekçisi: $_tb"' '|| { gunluk "bekçi: tmux bekçisi: $_tb"; exit 1; }'
+  bekmutant bekci-hatada-durur    'then gunluk "bekçi: tmux bekçisi: $_tb"; fi' 'then gunluk "bekçi: tmux bekçisi: $_tb"; exit 1; fi'
+  bekmutant bekci-tekrar-yazar '&& [ "$_tb" != "$(cat "$DURUM_DIZ/tmux-bekcisi.son" 2>/dev/null)" ]' ''
   mutant() {  # $1 ad · $2 python değiştirme (eski) · $3 (yeni)
     local m="$T/m-$1.sh"
     python3 -c 'import sys; s=open(sys.argv[1]).read(); assert sys.argv[2] in s, "desen yok"; open(sys.argv[4],"w").write(s.replace(sys.argv[2],sys.argv[3],1))' \
