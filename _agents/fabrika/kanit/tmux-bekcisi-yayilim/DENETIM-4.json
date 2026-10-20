@@ -1,0 +1,30 @@
+{
+  "tur": 4,
+  "is": "tmux-bekcisi-yayilim",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-20T20:29:54+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 47440,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 20,
+    "bayt": 48749
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Dakikalık bekçi artık duraklatma kapısından sonra tmux bekçisini her turda karşılaştırıp gerektiğinde atomik biçimde kuruyor; aynı sonuç için günlük şişirmiyor ve kurulum aksasa da onarım merdivenini sürdürüyor. Vaka betiği de izini geçici durum dizinine yönlendiriyor; kırmızı→yeşil ölçüm çifti, davranış kapıları, bozma sınavları ve doğrudan fark kaydı birlikte üretime hazır düzeyde kanıt veriyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve kayıtların sha'ları tutuyor; sarı kayıt yok. bekci-turu ölçümü önce 39/42 ve rc=1 iken sonra tüm kapılar yeşil ve rc=0; B1–B5 ile B4b/B4c istenen tur, sessizlik, güncelleme, hata devamı ve duraklatma davranışlarını ölçüyor, bozma kayıtları sınavların gerçekten bu davranışlara duyarlı olduğunu gösteriyor. K4a ve yerinde-yazar bozması atomik güncellemeyi, vaka-canli-defter ölçümü önce=3 sonra=3 sonucunu, vaka-sh-fark kaydı da bunun geçici TO_DURUM_DIZ değişikliğinden geldiğini doğruluyor. Filo kaydı yayın öncesi durum ölçümüdür; yayın sonrası canlı filo doğrulaması sunmuyor, ancak iş kartı canlı kanıt istemediğinden ve kutuda istenen yayılım mekanizması ölçüldüğünden bu kod kusuru sayılmadı."
+  }
+}

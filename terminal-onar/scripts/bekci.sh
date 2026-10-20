@@ -7,6 +7,12 @@ set -u
 # crontab satırına bakıp "ok" diyordu). İz duraklatmadan ÖNCE yazılır: duraklatılmış bekçi de canlıdır.
 date +%s > "$DURUM_DIZ/bekci.son" 2>/dev/null
 [ -f "$DURUM_DIZ/duraklat" ] && exit 0
+# tmux bekçisi (2.19.1): her tur karşılaştırılır, eksik/eski ise kurulur. Onar yalnız arızada koştuğu için 2.19.0 sağlıklı
+# kutulara hiç inmiyordu (20 Eki: 18 kutudan yalnız code'da kurulu). Güncelse sessiz; kurulamazsa yazar, bekçi işine devam eder.
+# Kurulamayan sonuç (ör. yabancı dosya) her dakika tekrarlanır → yalnız DEĞİŞTİĞİNDE yazılır (göz tur 2: günde 1440 satır olurdu).
+_tb="$(tmux_bekcisi_kur)"
+if [ "$_tb" != güncel ] && [ "$_tb" != "$(cat "$DURUM_DIZ/tmux-bekcisi.son" 2>/dev/null)" ]; then gunluk "bekçi: tmux bekçisi: $_tb"; fi
+printf '%s' "$_tb" > "$DURUM_DIZ/tmux-bekcisi.son" 2>/dev/null
 # compact kuyruğu doluysa her dakika bir tur: meşgulken kuyruğa alınan koltuk boşalınca /compact gider (kutu-içi zorunlu compact, 2.9.0)
 [ -s "${TO_COMPACT_KUYRUK:-$DURUM_DIZ/compact-bekleyen.jsonl}" ] && bash "$BETIK_DIZ/compact.sh" --bekle --uygula >> "$GUNLUK" 2>&1 || true
 # Dava Rafı günlük turu (Parça B7): günde BİR kez — kapısı dava-gunluk.sh (damga turdan önce; sınav dava-gunluk.test.sh). Kuralsız kutuda no-op.
