@@ -1,7 +1,7 @@
 {
   "is": "denetci-olcum-sonu",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-20T18:23:56+03:00",
+  "guncelleme": "2026-10-20T18:47:07+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -26,7 +26,7 @@
       "etiket": "istem",
       "asama": "sonra",
       "dosya": "olcum-istem-sonra.txt",
-      "sha256": "b63c8d097df8dde276612c19cc80e34a08edfa68a90c1f21a0991051ed563496",
+      "sha256": "4f1902e7e8be9c9873bdb0ef35e770e986c105b5195f63c07ffba3b8c3d5ee74",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/denetci-olcum-sonu/istem-olcer.sh",
@@ -34,10 +34,10 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-20T18:15:08+03:00",
+      "zaman": "2026-10-20T18:47:07+03:00",
       "sure_sn": 0.4,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "68ffc7063e9c465684099e176c16d7bd"
+      "olcum_id": "56d85714bfb644fd8b94420391d0a2d2"
     },
     {
       "tur": "olcum",
@@ -61,7 +61,7 @@
       "etiket": "t-olcum-bolumu",
       "asama": "sonra",
       "dosya": "olcum-t-olcum-bolumu-sonra.txt",
-      "sha256": "bc14f14852081f11d57d2c47e417f1e4c05334aeb749300678ee5973a21ea2bf",
+      "sha256": "dcecab595c7169ceb435bbafef59cfd6c697325bb7fbcc633458619d69980585",
       "komut": [
         "python3",
         "_agents/fabrika/kanit/denetci-olcum-sonu/bolum-olcer.py",
@@ -73,11 +73,11 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-20T18:23:56+03:00",
-      "sure_sn": 514.2,
+      "zaman": "2026-10-20T18:41:54+03:00",
+      "sure_sn": 335.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "e4f30aaf50ee4161aa2f79a7a6d56662"
+      "olcum_id": "a7cff53049f3415097e5d330271ab1fb"
     }
   ],
-  "imza": "47e6ecd4b3d80e32f01ad233f8d73667578d180130ac2e8c462486fd87e46e7b"
+  "imza": "2571596532c3ee0b59698218206fe8bd7c7e1b076dc0fadcc50c68453eb46bd5"
 }
