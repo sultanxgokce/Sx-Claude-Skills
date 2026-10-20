@@ -94,6 +94,9 @@ BECERI_KOK="${TO_BECERI_KOK:-$(
 )}"
 KAPI_DIZ="$BECERI_KOK/kapi"
 TTYD_BIN="${TO_TTYD_BIN:-/config/.local/bin/ttyd}"
+# tmux bekçisi (K43HN): kutunun canlı sunucusunu içeriden kapatan çıplak kill-server'ı durdurur — scripts/tmux-bekcisi.sh
+#   TO_TMUX_BEKCI_VARSAYILAN yalnız sınav içindir: varsayılan (canlı) hedefi geçici dizine çevirir, kilit yine onu korur.
+TMUX_BEKCI_BIN="${TO_TMUX_BEKCI_BIN:-${TO_TMUX_BEKCI_VARSAYILAN:-/config/.local/bin/tmux}}"
 ENV_DOSYA="${CORTEX_ACCESS_ENV:-$HOME/.config/cortex-access.env}"
 SIFRE_ANAHTAR="${TO_SIFRE_ANAHTAR:-${KUTU_BUYUK}__TERMINAL_SIFRE}"
 BETIK_DIZ="$BECERI_KOK/scripts"
@@ -259,6 +262,28 @@ bekci_kur() {  # $1 = kalıcı cron dosyası (.oda/cron) · $2 = "canli" ise can
     fi
   fi
   printf '%s\n' "$sonuc"
+}
+# tmux bekçisini kurar/tazeler (K43HN). Canlı crontab kilidiyle AYNI kural: deneme yolunda (PROJE ≠ /config/projects/<kutu>)
+# canlı /config/.local/bin'e YALNIZ açıkça verilen TO_TMUX_BEKCI_BIN ile yazılır — sınavlar onar.sh'ı koşturur.
+# 🔴 Bozuk tmux ASLA kurulmaz: yeni kopya önce kendini çalıştırır (-V gerçek tmux'a ulaşmalı), sonra atomik yer değiştirir.
+# 🔴 Yabancı dosyaya dokunulmaz: hedefte bekçi olmayan bir tmux varsa (elle kurulmuş ikili) olduğu gibi kalır, söylenir.
+tmux_bekcisi_kur() {  # → stdout: kuruldu · güncellendi · güncel · DOKUNULMADI … · HATA …
+  local kay="$BETIK_DIZ/tmux-bekcisi.sh" hedef="$TMUX_BEKCI_BIN" ne yeni
+  if [ -z "${TO_TMUX_BEKCI_BIN:-}" ] && [ "$PROJE" != "/config/projects/$KUTU" ]; then
+    echo "DOKUNULMADI (deneme yolu: $PROJE — gerçek hedef için TO_TMUX_BEKCI_BIN ver)"; return 0
+  fi
+  [ -r "$kay" ] || { echo "HATA: kaynak yok ($kay)"; return 1; }
+  if [ -f "$hedef" ] && [ -x "$hedef" ] && cmp -s "$kay" "$hedef"; then echo "güncel"; return 0; fi
+  if [ -e "$hedef" ] && ! grep -q 'tmux-bekcisi.sh' "$hedef" 2>/dev/null; then
+    echo "DOKUNULMADI (hedefte bekçi olmayan bir dosya var: $hedef)"; return 1
+  fi
+  [ -e "$hedef" ] && ne=güncellendi || ne=kuruldu
+  yeni="$hedef.yeni.$$"
+  if mkdir -p "$(dirname "$hedef")" && cp "$kay" "$yeni" && chmod 755 "$yeni" && "$yeni" -V >/dev/null 2>&1 && mv -f "$yeni" "$hedef"; then
+    echo "$ne"
+  else
+    rm -f "$yeni"; echo "HATA: kurulamadı ($hedef — yeni kopya gerçek tmux'a ulaşamadı ya da yazılamadı)"; return 1
+  fi
 }
 # Kapı ve ttyd TABAN'ı ortamdan okur; tek yerden verilir ki ikisi ayrışmasın.
 export KAPI_TABAN="$TABAN"

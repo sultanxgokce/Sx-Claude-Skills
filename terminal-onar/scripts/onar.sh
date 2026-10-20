@@ -46,6 +46,9 @@ if ! kabuk_gecerli_mi; then
   exit 3
 fi
 
+# 0 · tmux bekçisi (K43HN) — kutunun canlı sunucusunu içeriden kapatan çıplak kill-server'ı durdurur; yalnız değişince günlüğe yazar
+_tb="$(tmux_bekcisi_kur)"; [ "$_tb" = güncel ] || gunluk "K0 tmux bekçisi: $_tb"
+
 # Bir tmux oturumunda Claude başlat (kabuk boştaysa aynı pencerede, değilse yeni pencerede).
 # 🔴 26 Eyl dersi: eski sürüm "yeni pencere" açamayınca komutu CANLI Claude'un içine yazdı.
 #    Artık hedef pane kimliğiyle (%N) seçilir ve yazmadan hemen önce yeniden ölçülür:

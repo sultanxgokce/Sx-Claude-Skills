@@ -1,0 +1,9 @@
+$ env TO_GERCEK_TMUX=/usr/bin/tmux bash _agents/fabrika/kanit/tmux-kill-server-bekcisi/vaka.sh terminal-onar/scripts/tmux-bekcisi.sh
+# rc=0 sure=1.1s zaman=2026-10-20T17:37:15+03:00
+--- stdout ---
+kutu sunucusu: pid=3340542 · koltuk oturumu: koltuk
+kill-server rc=1
+SONUÇ: kutu sunucusu AYAKTA (pid=3340542) — koltuk yerinde
+--- stderr ---
+tmux bekçisi: 'kill-server' REDDEDİLDİ — $TMUX dolu ve açık soket (-L/-S) yok: bu, kutunun CANLI sunucusunu (bütün oturumlar) kapatırdı.
+  yalıtılmış sunucu içindiyse: önce 'unset TMUX' ya da 'tmux -L <ad> …' · kutuyu kasten kapatıyorsan: TMUX_KILL_SERVER_IZIN=1
