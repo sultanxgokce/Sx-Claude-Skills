@@ -1,7 +1,7 @@
 {
   "is": "tmux-bekcisi-yayilim",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-20T20:26:55+03:00",
+  "guncelleme": "2026-10-20T20:29:20+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -143,7 +143,62 @@
       "sure_sn": 8.6,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "dffa0e7c64484bf1bdfbaba245c04f78"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bekci-turu-v3",
+      "asama": "sonra",
+      "dosya": "olcum-bekci-turu-v3-sonra.txt",
+      "sha256": "795873dc9a2255cd25cb08d2887dafb2b50116e006b9a4638f534f90d2816e30",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/tmux-bekcisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T20:29:20+03:00",
+      "sure_sn": 10.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "23b8fd0e55d84f7cac2ed206ca46b77c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "vaka-sh-fark",
+      "asama": "tek",
+      "dosya": "olcum-vaka-sh-fark-tek.txt",
+      "sha256": "8b8ef4285249cfe439d0a499652dd42ca030aa069a8e40d51515d04494c9a854",
+      "komut": [
+        "git",
+        "diff",
+        "origin/main...HEAD",
+        "--",
+        "_agents/fabrika/kanit/tmux-kill-server-bekcisi/vaka.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T20:29:20+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "09bd878d4d7940a0b286a35a1864f492"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kurucu-atomik-kod",
+      "asama": "tek",
+      "dosya": "olcum-kurucu-atomik-kod-tek.txt",
+      "sha256": "130caa40696ddd8deef872a7d5698121e441161f94020d5d60e52f7739315936",
+      "komut": [
+        "bash",
+        "-c",
+        "grep -n \"yeni=\\\"\\$hedef.yeni\\|mv -f \\\"\\$yeni\\\" \\\"\\$hedef\\\"\" terminal-onar/scripts/ortak.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T20:29:20+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "cc6d4c0777704b51983a0cd73a49d7dd"
     }
   ],
-  "imza": "2375e72453aaa28880d545c79f789ecb5a19f3977cef63cc6f3c44f4961b2829"
+  "imza": "fa4ec48f4f72f4a07c947592c418ed7d13d62641edbfa891d46c68758c700e41"
 }
