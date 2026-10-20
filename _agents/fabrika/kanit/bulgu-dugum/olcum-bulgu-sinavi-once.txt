@@ -1,0 +1,12 @@
+$ /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/engel/ozet.sh bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/bulgu-dugum/taban/bulgu.test.sh
+# rc=1 sure=0.7s zaman=2026-10-20T20:22:46+03:00
+--- stdout ---
+  ✗ D1 kutulu biçim olduğu gibi dugum_acar olur; defterden okuma YAPILMAZ; düğüm + bekleyen sonucu söylenir
+  ✗ D2 çıplak kimlik: kutu defterden okunur (canlı kutu mmex, ekleyen akar DEĞİL) → mmex:gorev_BEKLEYEN00000001
+  ✗ D3 çıplak kimlik defterde görünmüyorsa rc 1 + '<kutu>:… biçimiyle ver'; kayıt YAZILMADI
+  ✗ D4 🔴 jetonsuz kutuda --dugum RED (rc 2): eski deftere bağsız DÜŞMEZ, yazıcı çağrılmadı
+  ✗ D5 --dugum değersiz (son argüman) rc 2, döngü yok
+  ✗ D5b --dugum boş dize rc 2 (bağ sessizce düşmez)
+  ✗ D7 defter düğümü reddederse rc 1 + defterin sebebi aynen (kural defterde, burada kopya yok)
+rc=1
+--- stderr ---

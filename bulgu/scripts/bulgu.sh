@@ -12,12 +12,13 @@ k="${1:-}"; shift || true
 case "$k" in
   yaz)
     baslik="${1:-}"; shift || true
-    [ -n "$baslik" ] || { echo "kullanım: bulgu.sh yaz \"<başlık>\" --kim <AJAN> [--not \"…\"] [--etiket bug|ozellik]" >&2; exit 2; }
-    kim=""; notu=""; etiket="bug"
+    [ -n "$baslik" ] || { echo "kullanım: bulgu.sh yaz \"<başlık>\" --kim <AJAN> [--not \"…\"] [--etiket bug|ozellik] [--dugum <kutu>:gorev_<kimlik>|gorev_<kimlik>]" >&2; exit 2; }
+    kim=""; notu=""; etiket="bug"; dugum=""
     while [ $# -gt 0 ]; do case "$1" in
       --kim) [ $# -ge 2 ] || { echo "--kim değersiz" >&2; exit 2; }; kim="$2"; shift 2 ;;
       --not) [ $# -ge 2 ] || { echo "--not değersiz" >&2; exit 2; }; notu="$2"; shift 2 ;;
       --etiket) [ $# -ge 2 ] || { echo "--etiket değersiz" >&2; exit 2; }; etiket="$2"; shift 2 ;;
+      --dugum) [ $# -ge 2 ] && [ -n "$2" ] || { echo "--dugum değersiz" >&2; exit 2; }; dugum="$2"; shift 2 ;;
       *) echo "bilinmeyen: $1" >&2; exit 2 ;; esac; done
     [ -n "$kim" ] || { echo "--kim zorunlu (kaydı kim açıyor?)" >&2; exit 2; }
     case "$etiket" in bug|ozellik) ;; *) echo "--etiket bug ya da ozellik olmalı (K1: bulgu = bu iki etiketten biriyle görev)" >&2; exit 2 ;; esac
@@ -25,14 +26,27 @@ case "$k" in
     #    Kutuda defter jetonu varsa kayıt ORAYA gider (kutu jetondan türer, beyan edilmez; kaynak_nereden = "bulgu komutu").
     #    Jeton yoksa eski kutu defterine düşer ve bunu SÖYLER — sessiz ikilik yok. Jeton değeri argv'ye/çıktıya düşmez (curl --config).
     JY="${DEFTER_JETON_YOL:-/config/defter-jeton}"; UC="${DEFTER_UC:-http://cloudtop-defter:8791}"
+    # ── DÜĞÜM (0.4.0, SERDAR 20 Eki F3a): kayıt başka bir kutunun bekleyen görevini serbest bırakmak için açılıyorsa
+    #    --dugum <kutu>:gorev_<kimlik> → defterin dugum_acar alanı. Biçim ve varlık kapısı DEFTERDE (burada kural kopyası yok).
+    #    Çıplak gorev_<kimlik> verilirse kutu defterden okunur. Düğüm yalnız merkezî defterde yaşar: jetonsuz kutuda RED, sessiz düşmez.
+    if [ -n "$dugum" ] && [ ! -r "$JY" ]; then echo "⛔ --dugum yalnız merkezî Görev Defteri'nde yaşar; bu kutuda defter jetonu yok ($JY) — hiçbir şey yazılmadı (SERDAR'a: jeton-dagit)" >&2; exit 2; fi
     if [ -r "$JY" ]; then
-      govde="$(python3 -c 'import sys,json
-b,kim,notu,et=sys.argv[1:5]
-d={"tur":"gorev","adlar":[b],"etiket":et,"kaynak_kim":kim,"kaynak_nereden":"bulgu komutu","gorev_durumu":"acik"}
-if notu.strip(): d["adimlar"]=["[kanıt] "+notu.strip()]
-print(json.dumps(d,ensure_ascii=False))' "$baslik" "$kim" "$notu" "$etiket")"
       cfg="$(mktemp)"; trap 'rm -f -- "$cfg"' EXIT
       printf 'header = "x-defter-jeton: %s"\n' "$(tr -d '\n' < "$JY")" > "$cfg"
+      case "$dugum" in ''|*:*) ;; *)
+        [[ "$dugum" =~ ^gorev_[A-Za-z0-9]+$ ]] || { echo "⛔ --dugum <kutu>:gorev_<kimlik> ya da gorev_<kimlik> olmalı: $dugum" >&2; exit 2; }
+        cevap="$(curl -sS -m 15 --config "$cfg" "$UC/kayit/$dugum" -w '\n%{http_code}' 2>&1)" || { echo "⛔ düğümün kutusu okunamadı ($UC): $cevap — kayıt YAZILMADI" >&2; exit 1; }
+        dugum="$(printf '%s' "$cevap" | python3 -c '
+import sys,json; t=sys.stdin.read().rstrip("\n").rsplit("\n",1); g,kod=(t if len(t)==2 else (t[0],"000"))
+if kod!="200": print("⛔ düğümün bekleyen görevi %s görünmüyor (http %s) — <kutu>:%s biçimiyle ver; kayıt YAZILMADI" % (sys.argv[1], kod, sys.argv[1]), file=sys.stderr); sys.exit(1)
+k=json.loads(g)["kayit"]; print("%s:%s" % (k["canli"].get("kutu") or k.get("ekleyen_kutu"), k["id"]), end="")' "$dugum")" || exit 1 ;;
+      esac
+      govde="$(python3 -c 'import sys,json
+b,kim,notu,et,dg=sys.argv[1:6]
+d={"tur":"gorev","adlar":[b],"etiket":et,"kaynak_kim":kim,"kaynak_nereden":"bulgu komutu","gorev_durumu":"acik"}
+if notu.strip(): d["adimlar"]=["[kanıt] "+notu.strip()]
+if dg: d["dugum_acar"]=dg
+print(json.dumps(d,ensure_ascii=False))' "$baslik" "$kim" "$notu" "$etiket" "$dugum")"
       cevap="$(curl -sS -m 15 --config "$cfg" -X POST -H 'content-type: application/json' --data-binary "$govde" "$UC/kayit" -w '\n%{http_code}' 2>&1)"; rc=$?
       rm -f -- "$cfg"
       if [ $rc -ne 0 ]; then echo "⛔ merkezî Görev Defteri'ne ulaşılamadı ($UC): $cevap — kayıt YAZILMADI (eski deftere de düşmedi: ikilik olmasın; sonra yeniden dene ya da SERDAR'a yaz)" >&2; exit 1; fi
@@ -41,7 +55,10 @@ import sys,json; t=sys.stdin.read().rstrip("\n").rsplit("\n",1); g,kod=(t if len
 try: j=json.loads(g or "{}")
 except Exception: j={"hata":"yanit_bozuk"}
 if kod!="201": print("⛔ merkezî defter reddetti http=%s · %s · %s" % (kod, j.get("hata"), j.get("bekleniyor") or j.get("alanlar") or ""), file=sys.stderr); sys.exit(1)
-k=j["kayit"]; print("📌 %s · %s · %s — %s (açan: %s) · Görev Defteri" % (k["id"], k["canli"].get("kutu") or k.get("ekleyen_kutu"), k["canli"].get("etiket"), k["adlar"][0]["deger"], k["canli"].get("kaynak_kim")))'
+k=j["kayit"]; print("📌 %s · %s · %s — %s (açan: %s) · Görev Defteri" % (k["id"], k["canli"].get("kutu") or k.get("ekleyen_kutu"), k["canli"].get("etiket"), k["adlar"][0]["deger"], k["canli"].get("kaynak_kim")))
+if k["canli"].get("dugum_acar"): print("  ⛓ düğüm: %s" % k["canli"]["dugum_acar"])
+b=j.get("dugum_bekleyen")
+if b: print("  ⛓ bekleyen %s: %s" % (b.get("id"), "bekliyor notu yazıldı" if b.get("yazildi") else "NOT YAZILMADI — " + str(b.get("sebep","?"))))'
     else
       [ -f "$YAZ" ] || _kur_yok
       echo "ℹ bu kutuda defter jetonu yok ($JY) — kayıt ESKİ kutu defterine yazılıyor (merkeze taşınması için SERDAR'a: jeton-dagit)" >&2

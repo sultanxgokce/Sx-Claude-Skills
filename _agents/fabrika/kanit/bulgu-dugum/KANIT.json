@@ -1,0 +1,80 @@
+{
+  "is": "bulgu-dugum",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-20T20:22:58+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "bulgu-sinavi",
+      "asama": "once",
+      "dosya": "olcum-bulgu-sinavi-once.txt",
+      "sha256": "5315216c5b3d2197d0ad80d153e70aebb35002532fd48bb0fdb1c70844638427",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/engel/ozet.sh",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/bulgu-dugum/taban/bulgu.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-20T20:22:46+03:00",
+      "sure_sn": 0.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "cfaa680370014b23b653fd2c76c4978a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bulgu-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-bulgu-sinavi-sonra.txt",
+      "sha256": "0814cd938be903cc0691d3f5df917588aedcee8da984b0a8f23e41426d22b39a",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/engel/ozet.sh",
+        "bash",
+        "bulgu/scripts/bulgu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T20:22:47+03:00",
+      "sure_sn": 0.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "118e34ce309246c88c485589912d86bb"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dugum-mutasyon",
+      "asama": "sonra",
+      "dosya": "olcum-dugum-mutasyon-sonra.txt",
+      "sha256": "ca68e6e238f5e8a01f1caffcc13d6b5ac8dd5fa120e2491d99c8917efeede922",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/engel/ozet.sh",
+        "bash",
+        "bulgu/scripts/bulgu-dugum-mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T20:22:58+03:00",
+      "sure_sn": 10.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c144a779817d4513a3c342c983a478a4"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kabuk-biti",
+      "asama": "sonra",
+      "dosya": "olcum-kabuk-biti-sonra.txt",
+      "sha256": "cd307338af1b6d58bd031bb88503d534fb4fde5bde9227b394b05c587e2c8a5b",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/engel/ozet.sh",
+        "bash",
+        "kabuk-biti.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T20:22:58+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "10983a43106f46228e0565d68668148c"
+    }
+  ],
+  "imza": "8bd9d43b164afb82afef9c81366042c3ebe9e732c18bf6723a847facf3eeec18"
+}
