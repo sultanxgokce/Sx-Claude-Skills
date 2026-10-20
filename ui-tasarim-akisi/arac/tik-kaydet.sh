@@ -12,6 +12,8 @@
 #   tik-kaydet.sh <sayfa.html> G1=<hedef>:<olculen> [G2=<hedef>:<olculen> ...]
 #     ör:  tik-kaydet.sh tasarim/ciktilar/E1.html G1=3:2 G2=1:1 G5=4:6
 #   Artefakt: <sayfa-dizini>/olcum/<sayfa>.tik.json  (--dizin ile değiştirilebilir)
+#   --yontem elle|tarayici (vars. elle) · --yol <yol.json>: ölçüm yöntemi artefakta yazılır. Tarayıcıyla ölçmek için
+#   bunu elle çağırma — tik-olc.sh yolu yürür ve buraya ÖLÇÜLEN sayıyı verir (yontem: tarayici, yol sha'sıyla).
 #
 # TAZELİK
 #   Artefakt sayfanın sha256'sını taşır. Sayfa değişince ölçüm BAYAT sayılır ve kapı
@@ -27,21 +29,25 @@ SAYFA="${1:-}"
   exit 2; }
 shift
 
-DIZIN=""
+DIZIN=""; YONTEM="elle"; YOLD=""
 ARGS=()
 while [ $# -gt 0 ]; do
   case "$1" in
     --dizin) DIZIN="${2:-}"; shift 2 ;;
+    --yontem) YONTEM="${2:-}"; shift 2 ;;
+    --yol) YOLD="${2:-}"; shift 2 ;;
     *)       ARGS+=("$1");   shift ;;
   esac
 done
 [ "${#ARGS[@]}" -gt 0 ] || { echo "HATA: en az bir G<id>=<hedef>:<olculen> ver" >&2; exit 2; }
+case "$YONTEM" in elle|tarayici) ;; *) echo "HATA: --yontem elle|tarayici olmalı: $YONTEM" >&2; exit 2 ;; esac
+[ -z "$YOLD" ] || [ -f "$YOLD" ] || { echo "HATA: --yol dosyası yok: $YOLD" >&2; exit 2; }
 
 DIZIN="${DIZIN:-$(dirname "$SAYFA")/olcum}"
 mkdir -p "$DIZIN"
 OLCUM="$DIZIN/$(basename "$SAYFA").tik.json"
 
-SAYFA="$SAYFA" OLCUM="$OLCUM" python3 - "${ARGS[@]}" <<'PY'
+SAYFA="$SAYFA" OLCUM="$OLCUM" YONTEM="$YONTEM" YOLD="$YOLD" python3 - "${ARGS[@]}" <<'PY'
 import hashlib, json, os, re, sys, time
 
 sayfa = os.environ["SAYFA"]
@@ -61,12 +67,15 @@ kayit = {
     "sayfa_sha256": hashlib.sha256(open(sayfa, "rb").read()).hexdigest(),
     "gorevler": gorevler,
     "asim": sorted(asim),          # bütçeyi aşan görevler — kapı bunu KIRMIZI sayar
+    "yontem": os.environ["YONTEM"],  # elle · tarayici (tik-olc.sh) — "elle verilen tık sayısı ölçüm değildir" (BERİD W42 D4)
     "zaman_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
 }
+if os.environ["YOLD"]:
+    kayit["yol_sha256"] = hashlib.sha256(open(os.environ["YOLD"], "rb").read()).hexdigest()
 with open(os.environ["OLCUM"], "w", encoding="utf-8") as f:
     json.dump(kayit, f, ensure_ascii=False, indent=1, sort_keys=True)
 
-print("tık ölçümü yazıldı: %s" % os.environ["OLCUM"])
+print("tık ölçümü yazıldı: %s (yöntem: %s)" % (os.environ["OLCUM"], os.environ["YONTEM"]))
 if asim:
     print("⚠ bütçe aşımı: %s — kapı bunu KIRMIZI sayar (ya tasarımı ya hedefi düzelt)"
           % ", ".join(sorted(asim)))
