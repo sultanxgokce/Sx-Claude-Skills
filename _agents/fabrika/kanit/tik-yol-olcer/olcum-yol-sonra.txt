@@ -1,7 +1,7 @@
 $ bash _agents/fabrika/kanit/tik-yol-olcer/yol-olcer.sh HEAD
-# rc=0 sure=1.0s zaman=2026-10-20T18:37:14+03:00
+# rc=0 sure=0.9s zaman=2026-10-20T18:46:28+03:00
 --- stdout ---
-ref HEAD (ba171e3)
+ref HEAD (baba47e)
 ölçülen (tarayıcı): G1=1:2 G2=1:2 G3=2:4
 tık ölçümü yazıldı: <geçici>/s/olcum/E1.html.tik.json (yöntem: tarayici)
 ⚠ bütçe aşımı: G1, G2, G3 — kapı bunu KIRMIZI sayar (ya tasarımı ya hedefi düzelt)

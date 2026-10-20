@@ -1,7 +1,7 @@
 {
   "is": "tik-yol-olcer",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-20T18:39:13+03:00",
+  "guncelleme": "2026-10-20T18:46:28+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -26,7 +26,7 @@
       "etiket": "yol",
       "asama": "sonra",
       "dosya": "olcum-yol-sonra.txt",
-      "sha256": "9c786bb1f2fa065f485244df0e6e695bf3dad080a3c6884ec7d59adc5f9e9c14",
+      "sha256": "ffb32524188836e6d9295dfaf5099c764f44f9ad28efff807c51901853421dc2",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/tik-yol-olcer/yol-olcer.sh",
@@ -34,28 +34,28 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-20T18:37:14+03:00",
-      "sure_sn": 1.0,
+      "zaman": "2026-10-20T18:46:28+03:00",
+      "sure_sn": 0.9,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "c8ac134ef1214784b6c84fc80c8edfbc"
+      "olcum_id": "4a9eef570b094ccf8a9e4c117a481a18"
     },
     {
       "tur": "olcum",
       "etiket": "tik-olc-sinavi",
       "asama": "sonra",
       "dosya": "olcum-tik-olc-sinavi-sonra.txt",
-      "sha256": "e9a1fe437673c53d90e76d50762f5d27c2d8edc43e5cace0b7a70f31510b6d5b",
+      "sha256": "6f1492ce763e5dce9b0639300091761d66b598627ce4b772e0c767b2028ce543",
       "komut": [
         "bash",
         "ui-tasarim-akisi/arac/tik-olc.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-20T18:39:13+03:00",
-      "sure_sn": 118.6,
+      "zaman": "2026-10-20T18:46:27+03:00",
+      "sure_sn": 136.6,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "61b753ef5d094fedb584fde2a3000016"
+      "olcum_id": "abfde24767e94f5897ddbd7ef40e0dea"
     }
   ],
-  "imza": "4032f05091a518c63f2fdb18e40386750e724734e60f1943bb47079e0da3f2f2"
+  "imza": "4cb72d797d507ca527a0d2fb6f6a5edd12295011f65bf13df671bb1f8427bf6b"
 }

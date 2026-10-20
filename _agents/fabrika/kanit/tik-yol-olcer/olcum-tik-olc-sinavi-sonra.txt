@@ -1,9 +1,10 @@
 $ bash ui-tasarim-akisi/arac/tik-olc.test.sh
-# rc=0 sure=118.6s zaman=2026-10-20T18:39:13+03:00
+# rc=0 sure=136.6s zaman=2026-10-20T18:46:27+03:00
 --- stdout ---
 ── T1 · tarayıcı YOKSA: ÖLÇÜLEMEDİ, sayı yazılmaz (elle sayı ölçüm değildir) ──
   ✓ playwright yok → rc 3 · ÖLÇÜLEMEDİ · artefakt YOK (rc=3)
 ── T2 · bozuk girdi ──
+  ✓ hedef 99'u aşarsa rc 2 (kaydedicinin biçimine sığmaz)
   ✓ bozuk yol tanımı → rc 2, artefakt yok
   ✓ tik-kaydet bilinmeyen yöntem → rc 2
   ✓ elle kayıt (eski çağrı) yontem=elle yazar — geriye uyumlu
@@ -19,7 +20,8 @@ $ bash ui-tasarim-akisi/arac/tik-olc.test.sh
 ── T4 · artefakt yöntemi ve yolu taşır, kapı aşımı görür ──
   ✓ yontem=tarayici
   ✓ yol tanımının sha'sı artefaktta (yol değişirse ölçüm bayat)
-  ✓ bütçeyi aşanlar kapıya gider: G2,G4,G6,G7
+  ✓ G8 hedef 12 + yürünemeyen yol → 13 (sabit 9 değil: göz #394 tur 1)
+  ✓ bütçeyi aşanlar kapıya gider: G2,G4,G6,G7,G8 (yürünemeyen yol hedef ne olursa olsun aşar)
 ── T5 · ölçüm ayırt ediyor: sayfa düzelince sayı düşer ──
   ✓ düğme ekrana alınınca G2 → 1 (sayı sayfadan geliyor, sabit değil)
 ── T6 · MUTASYON (tam kopya; kontrol önce) ──
@@ -27,9 +29,10 @@ $ bash ui-tasarim-akisi/arac/tik-olc.test.sh
   ✓ mutant 'ekran-disi-sayilmaz' sınavı KIRMIZI yapıyor
   ✓ mutant 'gizli-sayilmaz' sınavı KIRMIZI yapıyor
   ✓ mutant 'yok-sifir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'yurunemedi-sabit-9' sınavı KIRMIZI yapıyor
   ✓ mutant 'temiz-sayfa-yok' sınavı KIRMIZI yapıyor
   ✓ mutant 'yontem-yazilmaz' sınavı KIRMIZI yapıyor
   ✓ mutant 'elle-sayi-yazar' sınavı KIRMIZI yapıyor
 
-── SONUÇ: 23 geçti · 0 kaldı ──
+── SONUÇ: 26 geçti · 0 kaldı ──
 --- stderr ---
