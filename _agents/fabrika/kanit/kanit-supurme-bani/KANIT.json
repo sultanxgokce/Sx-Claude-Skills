@@ -1,7 +1,7 @@
 {
   "is": "kanit-supurme-bani",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-20T17:22:32+03:00",
+  "guncelleme": "2026-10-20T17:28:31+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -40,7 +40,45 @@
       "sure_sn": 0.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "bccaf6ed6b0e41fd99fbe34b803d0b2a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "eski-alanlar",
+      "asama": "once",
+      "dosya": "olcum-eski-alanlar-once.txt",
+      "sha256": "37ad8bc894c0ce84f9bfd08e657c9aa50cd881a481cd8dd59bda97646ebc72da",
+      "komut": [
+        "python3",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/supurme/alan.py",
+        "Sx-Claude-Skills",
+        "olc"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T17:27:26+03:00",
+      "sure_sn": 1.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d037670f1d06421a87f7e1b8e6488298"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "eski-alanlar",
+      "asama": "sonra",
+      "dosya": "olcum-eski-alanlar-sonra.txt",
+      "sha256": "fb0de50f34c193a62484c7c29972dc4007c1000800744c3b368832644fc6fab6",
+      "komut": [
+        "python3",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/supurme/alan.py",
+        "Sx-Claude-Skills",
+        "olc"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T17:28:31+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f5f22eab63cd4165863cdd49043597e8"
     }
   ],
-  "imza": "e859d78c69e73a25618c2069776736daabb31615b4055a56b545ee23c29685f7"
+  "imza": "4a3f03c035e3a5fe376da2a7549f712736c4e322b54b2e10f000920fdc4a2687"
 }
