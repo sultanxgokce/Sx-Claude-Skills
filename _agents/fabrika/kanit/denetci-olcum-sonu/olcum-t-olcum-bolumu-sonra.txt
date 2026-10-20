@@ -1,7 +1,7 @@
 $ python3 _agents/fabrika/kanit/denetci-olcum-sonu/bolum-olcer.py T-OLCUM mutant 'olcum- -- bash yazilim-fabrikasi/scripts/denetci.test.sh
-# rc=0 sure=384.6s zaman=2026-10-20T19:04:20+03:00
+# rc=0 sure=428.3s zaman=2026-10-20T19:22:29+03:00
 --- stdout ---
-$ bash yazilim-fabrikasi/scripts/denetci.test.sh  → rc=0 · 378 satır
+$ bash yazilim-fabrikasi/scripts/denetci.test.sh  → rc=0 · 380 satır
 ════ T-OLCUM · uzun ölçümde baş + atlanan + SON gider; kısa ölçüm aynen; uzun stderr sonucu itmez ════
   ✓ O1 🔴 188 satırlık ölçümün SONUÇ satırı istemde (eskiden ilk 60 satırda kalıyordu)
   ✓ O2 kaç satırın atlandığı ve dosya boyu söylendi
@@ -14,7 +14,8 @@ $ bash yazilim-fabrikasi/scripts/denetci.test.sh  → rc=0 · 378 satır
   ✓ O9 seçmeyle de tavan aşılmaz (42 ≤ 60)
   ✓ O10 atlandı sayısı GERÇEK atlanan: bildirilen 63 = 100 − gösterilen 37
   ✓ O11 seçme varken de sayı doğru: 76 = 114 − 38 (seçilen satır atlanmış sayılmaz)
-  ✓ O12 kısa dosya bayt bayt aynen (satır sonuyla biten aynen; bitmeyene yalnız son satır sonu eklenir)
+  ✓ O12 kısa dosya bayt bayt AYNEN (satır sonuyla biten de bitmeyen de; göz #392 tur 5)
+  ✓ O13 satır sonuyla bitmeyen ölçümden sonra istemde sonraki başlık AYRI satırda (ayırıcıyı çağıran ekler)
 …
   ✓ mutant 'olcum-sonu-yok' sınavı KIRMIZI yapıyor
   ✓ mutant 'olcum-stderr-ayrilmaz' sınavı KIRMIZI yapıyor
@@ -22,6 +23,7 @@ $ bash yazilim-fabrikasi/scripts/denetci.test.sh  → rc=0 · 378 satır
   ✓ mutant 'olcum-atlanan-sayisiz' sınavı KIRMIZI yapıyor
   ✓ mutant 'olcum-ortadan-secmez' sınavı KIRMIZI yapıyor
   ✓ mutant 'olcum-secilen-de-sayilir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'olcum-ayirici-eklenmez' sınavı KIRMIZI yapıyor
 …
-── SONUÇ: 219 geçti · 0 kaldı ──
+── SONUÇ: 221 geçti · 0 kaldı ──
 --- stderr ---

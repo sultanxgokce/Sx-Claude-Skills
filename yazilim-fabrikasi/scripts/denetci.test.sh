@@ -573,7 +573,10 @@ gor=$(grep -vc '^\[…' <<<"$o11"); say=$(grep -o '\[… [0-9]* satır atlandı'
 printf 'a\nb\nson-satir-sonu-yok' > "$T/oz-kisa.txt"
 bash -c "$OZ"$'\n''olcum_ozeti "$1"' _ "$T/oz-kisa.txt" > "$T/oz-kisa.out"
 printf 'a\nb\nc\n' > "$T/oz-kisa2.txt"; bash -c "$OZ"$'\n''olcum_ozeti "$1"' _ "$T/oz-kisa2.txt" > "$T/oz-kisa2.out"
-{ printf 'a\nb\nson-satir-sonu-yok\n' | cmp -s - "$T/oz-kisa.out"; } && cmp -s "$T/oz-kisa2.txt" "$T/oz-kisa2.out"; g $? "O12 kısa dosya bayt bayt aynen (satır sonuyla biten aynen; bitmeyene yalnız son satır sonu eklenir)"
+cmp -s "$T/oz-kisa.txt" "$T/oz-kisa.out" && cmp -s "$T/oz-kisa2.txt" "$T/oz-kisa2.out"; g $? "O12 kısa dosya bayt bayt AYNEN (satır sonuyla biten de bitmeyen de; göz #392 tur 5)"
+printf 'satir-sonu-yok-olcum' > "$T/_agents/fabrika/kanit/is-son2/olcum-aa-yoksonu.txt"   # alfabede BAŞTA: ardından gerçek başlık gelsin (sonda kalınca sonraki blok zaten satır başıyla açılıyor → sahte yeşil)
+SAHTE_ISTEM_KOPYA="$T/istem-son3.md" SAHTE_JSON="$(J 5 E "")" DENETCI_KIRP_ESIK=900000 bash "$D" is-son2 --diff "$T/ist1.patch" >/dev/null 2>&1
+grep -qx "satir-sonu-yok-olcum" "$T/istem-son3.md" && grep -A1 -x "satir-sonu-yok-olcum" "$T/istem-son3.md" | grep -qx -- "--- olcum-orta-tek.txt ---"; g $? "O13 satır sonuyla bitmeyen ölçümden sonra istemde sonraki başlık AYRI satırda (ayırıcıyı çağıran ekler)"
 T="$_T_ONCE"; export KANIT_DEPO="$T" DENETCI_KOMUT="$_DK_ONCE"
 if [ -n "${IC_KOSUM:-}" ]; then echo "(ic)"; [ "$kalan" -eq 0 ]; exit $?; fi
 echo "════ T11 · MUTASYON: Sultan kapısını bozunca sınav kırmızı veriyor mu ════"
@@ -645,12 +648,13 @@ mut "istem-en-buyuk-ilk-parca" 's@\[ "$_b" -gt "$_EN_B" \] && {@[ -z "$_EN" ] \&
 mut "istem-parca-dokumu-yok" 's@_DOKUM="$_DOKUM · ${_AD\[$_p\]} $_b"@:@'
 mut "istem-karti-dusurur" 's@^ISTEM_PARCALARI=(sablon kart kanit@ISTEM_PARCALARI=(sablon kanit@'
 mut "istem-ayiklama-kosulu-duser" 's@ && \[ "${DENETCI_KANIT_AYIKLA:-1}" != "0" \] && \[ "$ISTEM_BAYT"@ \&\& [ "$ISTEM_BAYT"@'
-mut "olcum-sonu-yok" 's@olcum_ozeti "$f"; }; done@head -60 "$f"; }; done@'
+mut "olcum-sonu-yok" 's@olcum_ozeti "$f"; \[ -z@head -60 "$f"; [ -z@'
 mut "olcum-stderr-ayrilmaz" 's@^e = L.index("--- stderr ---") if "--- stderr ---" in L else len(L)$@e = len(L)@'
 mut "olcum-tavan-asilir" 's@^SINIR, BAS, SON, HSON, SECME = 60, 25, 12, 10, 8$@SINIR, BAS, SON, HSON, SECME = 60, 300, 12, 10, 8@'
 mut "olcum-atlanan-sayisiz" 's@^    not_ = "\[… %d satır atlandı (dosya %d satır) — ölçümün SONU aşağıda …\]" % (atlanan, len(L))$@    not_ = "[…]"@'
 mut "olcum-ortadan-secmez" 's@^    orta = cik\[BAS:-SON\]; sec = \[x for x in orta if any(k in x for k in SECILIR)\]$@    orta = cik[BAS:-SON]; sec = []@'
 mut "olcum-secilen-de-sayilir" 's@^    atlanan = len(orta) - min(len(sec), SECME) .*$@    atlanan = len(orta)@'
+mut "olcum-ayirici-eklenmez" 's@ \[ -z "$(tail -c1 "$f")" \] || echo; }; done@ }; done@'
 mut_kos
 
 # ── KANIT-AYIKLAMA KAPILARI (gorev_01M4ZSKHD1Y1FFT8P6Z5YMPTF9)

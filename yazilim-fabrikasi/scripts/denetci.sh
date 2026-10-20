@@ -501,7 +501,7 @@ HAM = open(sys.argv[1], encoding="utf-8", errors="replace").read()
 L = HAM.split("\n")
 if L and L[-1] == "": L.pop()
 SINIR, BAS, SON, HSON, SECME = 60, 25, 12, 10, 8
-if len(L) <= SINIR: sys.stdout.write(HAM if HAM.endswith("\n") else HAM + "\n"); sys.exit()   # aynen; yalnız eksik son satır sonu tamamlanır (sonraki başlık ayrı satırda kalsın)
+if len(L) <= SINIR: sys.stdout.write(HAM); sys.exit()   # bayt bayt AYNEN (ayırıcı satır sonunu çağıran ekler — göz #392 tur 5)
 # ATLANAN ORTADAN SEÇME (göz #392 tur 2): sonuç satırı her zaman en sonda değil (ardından 12'den fazla satır gelebilir) ve
 #   kırmızı kapı (✗) ortada kalırsa kırpma onu SAKLAR — göz "yeşil" sanır. Ortadan SONUÇ/✗ taşıyan satırlar (en çok 8) taşınır.
 SECILIR = ("SONUÇ", "SONUC", "✗", "Traceback")
@@ -521,7 +521,7 @@ PY
 }
 {
   printf '\n\n===== ÖLÇÜM ÇIKTILARI (60 satıra kadar aynen; uzunda baş + atlanan ortadan SONUÇ/✗ satırları + SON) =====\n'
-  for f in "$DZ"/olcum-*.txt; do [ -f "$f" ] && { printf -- '--- %s ---\n' "$(basename "$f")"; olcum_ozeti "$f"; }; done
+  for f in "$DZ"/olcum-*.txt; do [ -f "$f" ] && { printf -- '--- %s ---\n' "$(basename "$f")"; olcum_ozeti "$f"; [ -z "$(tail -c1 "$f")" ] || echo; }; done   # satır sonuyla bitmeyen dosyadan sonra başlık yeni satırda
 } > "$TMP/p-olcum.md"
 {
   printf '\n\n===== DEĞİŞİKLİK (diff) =====\n'
