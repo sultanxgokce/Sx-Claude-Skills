@@ -196,9 +196,9 @@ def kart_olc(kok, ajan, pzt, paz):
     if not dl:
         return None
     acilan = bitti = tikandi = 0
-    turlar, dokum, okunamadi = [], [], []
+    turlar, dokum, goz_dokum, okunamadi = [], [], [], []
     for depo in dl:
-        da = db = dt = 0
+        da = db = dt = dg = 0
         om = origin_main_okunur(depo); depo_ok = om is not False
         for yol in sorted(glob.glob(os.path.join(depo, "_agents", "fabrika", "kartlar", "*.json"))):
             try:
@@ -218,13 +218,14 @@ def kart_olc(kok, ajan, pzt, paz):
                     dt += 1
             if aralikta(z, pzt, paz) or aralikta(b, pzt, paz):
                 ad, ok = denetim_adlari(depo, k.get("is", "?"), om)
-                turlar.append(len(ad)); depo_ok = depo_ok and ok is not False
+                turlar.append(len(ad)); dg += len(ad); depo_ok = depo_ok and ok is not False
         acilan += da; bitti += db; tikandi += dt
         dokum.append(f"{os.path.basename(os.path.realpath(depo))} {da}/{db}/{dt}")
+        goz_dokum.append(f"{os.path.basename(os.path.realpath(depo))} {dg}")
         if not depo_ok:
             okunamadi.append(os.path.basename(os.path.realpath(depo)))
     return {
-        "yol": "_agents/fabrika/kartlar", "depolar": dokum, "okunamadi": okunamadi, "acilan": acilan, "bitti": bitti, "tikandi": tikandi,
+        "yol": "_agents/fabrika/kartlar", "depolar": dokum, "goz_depolar": goz_dokum, "okunamadi": okunamadi, "acilan": acilan, "bitti": bitti, "tikandi": tikandi,
         "goz_turu": sum(turlar), "kart": len(turlar),
         "ort_tur": (round(sum(turlar) / len(turlar), 1) if turlar else None),
     }
@@ -287,7 +288,7 @@ def olcum_tablosu(o):
         ort = "—" if k["ort_tur"] is None else str(k["ort_tur"])
         kay = ("`_agents/fabrika/kanit/*/DENETIM-*.json` (disk ∪ origin/main)" if not k["okunamadi"] else
                "`_agents/fabrika/kanit/*/DENETIM-*.json` (disk) · ⚠ origin/main OKUNAMADI: " + ", ".join(k["okunamadi"]) + " — göz turu eksik olabilir")
-        r.append(sat("bağımsız göz turu · ortalama tur/kart", f"{k['goz_turu']} · {ort}", kay))
+        r.append(sat("bağımsız göz turu · ortalama tur/kart", f"{k['goz_turu']} · {ort}", kay + " · depo başına: " + " · ".join(k["goz_depolar"])))
     else:
         r.append(sat("kart açılan / bitti / tıkandı", "ÖLÇÜLEMEDİ: fabrika kartları yok", "—"))
         r.append(sat("bağımsız göz turu · ortalama tur/kart", "ÖLÇÜLEMEDİ: kaynak yok", "—"))

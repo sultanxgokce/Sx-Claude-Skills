@@ -239,6 +239,7 @@ kapi "T11a iki depolu kutu ölçüldü" 0 env RETRO_DEPO_KOKU="$P" python3 "$R" 
 icerir "$(cat "$SD")" "| kart açılan / bitti / tıkandı | 2 / 2 / 0 |" "T11b kartlar İKİ depodan (KOK + Sx), _wt kopyası sayılmadı"
 icerir "$(cat "$SD")" "| bağımsız göz turu · ortalama tur/kart | 3 · 1.5 |" "T11c Sx göz turları origin/main'den (birincil kopya başka dalda, diskte DENETIM yok)"
 icerir "$(cat "$SD")" "Sx 1/1/0" "T11d kanıt sütunu depo başına döker"
+icerir "$(grep "^| bağımsız göz turu" "$SD")" "depo başına: depo 1 · Sx 2" "T11d2 göz turu da depo başına dökülür (KOK 1 · Sx 2 · göz tur 2)"
 rm -f "$SD"
 kapi "T11e RETRO_DEPOLAR verilince keşif yerine o liste; aynı depo iki kez sayılmaz" 0 env RETRO_DEPO_KOKU="$P" RETRO_DEPOLAR="$KOK:$KOK" python3 "$R" kutu SIRA --koltuk s:0
 icerir "$(cat "$SD")" "| kart açılan / bitti / tıkandı | 1 / 1 / 0 |" "T11f yalnız KOK, tekrar tekilleşti"
@@ -301,6 +302,9 @@ mut "M13 tekilleştirme kalkınca aynı depo iki kez sayılır (kapı yakalar)" 
 m_uyari(){ local rc; rm -f "$SD"; env RETRO_DEPO_KOKU="$P2" python3 "$1" kutu SIRA --koltuk s:0 >/dev/null 2>&1; grep -qF "origin/main OKUNAMADI: Sx" "$SD"; rc=$?; rm -f "$SD"; return $rc; }
 m_uyari "$R" && ok "M14 pozitif kontrol: bozmasız araç okunamayan depoyu adıyla söyler" || kirmizi "M14 pozitif kontrol: gerçek araç uyarı basmıyor"
 mut "M14 okunamama uyarısı susturulunca eksik sayım yeşil görünür (kapı yakalar)" 's/("`_agents\/fabrika\/kanit\/\*\/DENETIM-\*.json` (disk ∪ origin\/main)" if not k\["okunamadi"\] else/("`_agents\/fabrika\/kanit\/*\/DENETIM-*.json` (disk ∪ origin\/main)" if True else/' m_uyari
+m_goz(){ local rc; rm -f "$SD"; env RETRO_DEPO_KOKU="$P" python3 "$1" kutu SIRA --koltuk s:0 >/dev/null 2>&1; grep "^| bağımsız göz turu" "$SD" | grep -qF "depo başına: depo 1 · Sx 2"; rc=$?; rm -f "$SD"; return $rc; }
+m_goz "$R" && ok "M15 pozitif kontrol: bozmasız araç göz turunu depo başına döker" || kirmizi "M15 pozitif kontrol: gerçek araç dökmüyor"
+mut "M15 depo başına göz sayacı artmazsa döküm yalan söyler (kapı yakalar)" 's/turlar.append(len(ad)); dg += len(ad); /turlar.append(len(ad)); /' m_goz
 
 echo; echo "GECEN=$G DUSEN=$K"
 [ "$K" -eq 0 ]
