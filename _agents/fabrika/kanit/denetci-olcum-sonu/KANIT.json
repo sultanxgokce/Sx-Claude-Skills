@@ -1,0 +1,61 @@
+{
+  "is": "denetci-olcum-sonu",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-20T18:11:12+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "istem",
+      "asama": "once",
+      "dosya": "olcum-istem-once.txt",
+      "sha256": "02a6b19c1f9c644c1d95239d9aff46f4bc470c235f9d5114a0ab0c95081f9a02",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/denetci-olcum-sonu/istem-olcer.sh",
+        "/config/.claude/skills/yazilim-fabrikasi"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T18:04:12+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c7591352fa2c497c8ad716a7d6e70143"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "istem",
+      "asama": "sonra",
+      "dosya": "olcum-istem-sonra.txt",
+      "sha256": "0c7b04caccd70b9c6abe2f093b68bb0221af3d9535deec550b92ff109c936349",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/denetci-olcum-sonu/istem-olcer.sh",
+        "yazilim-fabrikasi"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T18:04:12+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f25c64784f0446b195e630fc02433bdf"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-sinavi-sonra.txt",
+      "sha256": "9ae1ce9d9f2f81a76259e955d260eb69c413102ed9306852c6f0b148fbfb1d64",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T18:11:12+03:00",
+      "sure_sn": 398.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d4808b016c5f48a2b5af95cd89aae857"
+    }
+  ],
+  "imza": "51ec5db7f7de090cf517426df078a6109c9f1ce814b6f2973041cfa7fdcf8fbb"
+}

@@ -1,0 +1,9 @@
+$ bash _agents/fabrika/kanit/denetci-olcum-sonu/istem-olcer.sh yazilim-fabrikasi
+# rc=0 sure=0.4s zaman=2026-10-20T18:04:12+03:00
+--- stdout ---
+denetçi rc=0 · fabrika version: 0.10.5
+başlık: ===== ÖLÇÜM ÇIKTILARI (60 satıra kadar aynen; uzunda baş + atlanan + SON — sonuç satırı sonda) =====
+ölçüm dosyası 190 satır → göze giden 49 satır
+sonuç satırı göze gidiyor mu: EVET
+son giden satır: 
+--- stderr ---
