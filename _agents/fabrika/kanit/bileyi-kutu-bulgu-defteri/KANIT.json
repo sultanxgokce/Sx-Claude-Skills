@@ -1,7 +1,7 @@
 {
   "is": "bileyi-kutu-bulgu-defteri",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-20T18:08:13+03:00",
+  "guncelleme": "2026-10-20T18:08:51+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -38,7 +38,24 @@
       "sure_sn": 0.2,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "36098f81af9643d1a69f25f6434065b4"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bileyi-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-bileyi-sinavi-sonra.txt",
+      "sha256": "999449318daccf2844df2023b311bd28ff89cc853fc0cdc1d01a6f673cc0160c",
+      "komut": [
+        "bash",
+        "bileyi/scripts/bileyi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T18:08:51+03:00",
+      "sure_sn": 11.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "5f6cc26c70cf4c9b945ef8911d05371b"
     }
   ],
-  "imza": "6aa2d247ab8eae992af7ba9b7b4b74a83f38998ec81a5fcf5c9e5a82df6ab0c8"
+  "imza": "3495db257df49c79bd5251c95b17a193b68fcc574e37878588f1ca9607014788"
 }
