@@ -149,6 +149,14 @@ def havuz_oku(yol: Path, pencere_gun: int) -> tuple[list[dict], int, str]:
     """
     if not yol.exists():
         raise Durdu(f"bulgu havuzu yok: {yol} — ÖLÇEMEDİM", 3)
+    if yol.suffix == ".json":
+        kayit, bozuk = kutu_defteri_oku(yol)
+        if not kayit:
+            raise Durdu(f"kutu defterinde okunabilir kayıt YOK ({bozuk} bozuk kayıt) — ÖLÇEMEDİM", 3)
+        uyari = ""
+        if pencere_gun > 0:
+            kayit, _ignore, uyari = _pencerele(kayit, pencere_gun)
+        return kayit, bozuk, uyari
     kayit, bozuk = [], 0
     for satir in yol.read_text(encoding="utf-8", errors="replace").splitlines():
         if not satir.strip():
@@ -164,6 +172,56 @@ def havuz_oku(yol: Path, pencere_gun: int) -> tuple[list[dict], int, str]:
     if pencere_gun > 0:
         kayit, _ignore, uyari = _pencerele(kayit, pencere_gun)
     return kayit, bozuk, uyari
+
+
+# 🔴 KUTUNUN KENDİ BULGU DEFTERİ (gorev_01M4ZMCTMEEF1QW0Z0K2TG2FTX — mmex'te 12 Eki'de görüldü, 20 Eki'de onarıldı): izole kutularda bulgular
+#    `_agents/handoff/bulgu-havuzu.jsonl`'da DEĞİL, kutunun Bulgu Defteri paketinde yaşar
+#    (`<ev>/.ic-sayfa/bulgu-defteri/bulgular.json` — cloudtop infra/bulgu-defteri, "kod global, veri yerel").
+#    Araç orada hiç bakmıyordu: mmex'te `bileyi olc` → "bulgu havuzu yok — ÖLÇEMEDİM". Yol kutuya SABİT
+#    yazılmaz, kutunun KENDİ ev dizininden türer (her kutuda HOME=/config ama kutu kendi /config'ini görür);
+#    BILEYI_KUTU_DEFTERI ile değişir (sınav ve taşınmış kurulum); "-" bilerek KAPATIR.
+#    🔴 Açık verilen yol yoksa sessizce düşmez (bağımsız göz #391 tur 1): kaynak listede kalır, iz satırı 🟡
+#    "okunamadı" der ve kapsama sayımına girer — yanlış ayar öbür kaynakların sonucunun arkasına saklanmaz.
+#    Yalnız VARSAYILAN yol (ev dizini) yoksa kaynak eklenmez: defteri olmayan kutu normaldir, arıza değil.
+KUTU_DEFTERI_GORELI = ".ic-sayfa/bulgu-defteri/bulgular.json"
+
+
+def kutu_defteri_yolu() -> tuple[Path | None, bool]:
+    """(yol, açık mı) — açık "-" ise (None, True): bilerek kapalı."""
+    acik = os.environ.get("BILEYI_KUTU_DEFTERI", "").strip()
+    if acik == "-":
+        return None, True
+    return (Path(acik), True) if acik else (Path.home() / KUTU_DEFTERI_GORELI, False)
+
+
+def kutu_defteri_oku(yol: Path) -> tuple[list[dict], int]:
+    """Bulgu Defteri (`{"bulgular": [...]}`) → bileyi kaydı. (kayitlar, bozuk) döner.
+
+    Eşleme yalnız VAR OLANI taşır, uydurmaz: id · baslik · tarih (açılış; pencere okuyabilsin) ·
+    durum (hâl) · gercek (notların metni; ikili tekrar sayımı başlık + gerçeğe bakar) · kaynak.
+    `sinif` BOŞ kalır: defterde sınıf alanı yok (tur hep 'kusur'); sınıf kapsaması bunu zaten
+    "%0 dolu" diye söyler — boş alanı doldurmak kapsamayı olduğundan geniş gösterirdi.
+    Başlığı olmayan kayıt bozuk sayılır (sessizce atlanmaz).
+    """
+    try:
+        d = json.loads(yol.read_text(encoding="utf-8", errors="replace"))
+    except json.JSONDecodeError:
+        raise Durdu(f"kutu defteri JSON değil: {yol} — ÖLÇEMEDİM", 3)
+    except OSError as e:          # izin · dizin · okuma hatası: ham çökme değil, ÖLÇEMEDİM (göz #391 tur 2)
+        raise Durdu(f"kutu defteri okunamadı: {yol} ({e.__class__.__name__}) — ÖLÇEMEDİM", 3)
+    ham = d.get("bulgular") if isinstance(d, dict) else d
+    if not isinstance(ham, list):
+        raise Durdu(f"kutu defterinde 'bulgular' listesi yok: {yol} — ÖLÇEMEDİM", 3)
+    kayit, bozuk = [], 0
+    for b in ham:
+        if not isinstance(b, dict) or not str(b.get("baslik") or "").strip():
+            bozuk += 1
+            continue
+        notlar = [str(n.get("metin") or "") if isinstance(n, dict) else str(n) for n in (b.get("notlar") or [])]
+        kayit.append({"id": str(b.get("id") or b.get("no") or ""), "baslik": str(b["baslik"]),
+                      "tarih": str(b.get("acilis") or ""), "durum": str(b.get("hal") or ""),
+                      "gercek": " ".join(n for n in notlar if n.strip()), "kaynak": str(b.get("kaynak") or "")})
+    return kayit, bozuk
 
 
 def _pencerele(kayit: list[dict], pencere_gun: int) -> tuple[list[dict], int, str]:
@@ -491,6 +549,9 @@ def bulgu_havuzlari(kod_depo: Path, havuz_depo: Path,
             continue
         gorulen.add(anahtar)
         kaynak.append((etiket, y))
+    kd, acik_verildi = kutu_defteri_yolu()
+    if kd is not None and (acik_verildi or kd.exists()) and str(kd.resolve() if kd.exists() else kd) not in gorulen:
+        kaynak.append(("kutu-defteri", kd))       # açık ama yok → 🟡 okunamadı satırı; varsayılan yok → hiç eklenmez
     return kaynak
 
 
@@ -645,7 +706,7 @@ def olc_veri(n) -> dict:
     #    ki "kaç kaynak gördüm" sorusu da ölçülebilsin (izole kutu körlüğü, WBHZSJEA).
     for sat in kaynak_satirlari:
         print(f"   iz: {sat}")
-    kutu_sayi = sum(1 for k in kayit if k.get("_kaynak") == "kutu")
+    kutu_sayi = sum(1 for k in kayit if k.get("_kaynak") in ("kutu", "kutu-defteri"))
     print(f"   havuz: {o['toplam']} kayıt (birleşik, {okunan_kaynak}/{len(kaynak_satirlari)} kaynak OKUNDU"
           + (f" · {kutu_sayi} tanesi bu kutunun kendi defterinden" if kutu_sayi else "")
           + ")" + (f" · {bozuk} BOZUK satır" if bozuk else ""))
