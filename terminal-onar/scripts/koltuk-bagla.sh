@@ -18,11 +18,9 @@
 set -uo pipefail
 
 gizli() { case "$1" in ttyd-*|kapi-*|*-kurtarici|imglistener*) return 0 ;; esac; return 1; }
-# 🔴 AD SÜZGECİ = tmux'un kuralı + bizim TEK tercihimiz (dilim 5/7, SERDAR 13 Eki ölçtü: vekatip'te '2026/85' listeden DÜŞMÜŞTÜ —
-#    17 oturumun 1'i görünmüyordu). Eski desen ^[A-Za-z0-9_-]$ tmux'un izin verdiği '/' gibi adları yutuyordu. tmux '.' ve ':'yi
-#    zaten '_' yapar (ölçüldü). BOŞLUK tmux kuralı DEĞİL (tmux 3.4 'a b' oturumunu açar — yedek göz tur 2 ölçtü): kabuk/URL yollarında
-#    tek-sözcük ad tercihimizdir, filoda boşluklu koltuk yok. Güvenlik tmux'un beyaz listesinden (var olan oturum) gelir, desenden değil.
-gecerli_ad() { [[ "$1" =~ ^[^[:space:]:.]{1,200}$ ]]; }   # tmux'ta 64 sınırı yok (yedek göz tur 1); 200 = adres/URL makul tavanı
+# 🔴 AD SÜZGECİ: tek kaynak koltuk-adi.sh (kural ve gerekçesi orada; kapı aynı kuralı KOLTUK_AD_DESEN'de taşır, eşdeğerlik sınavlı).
+. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/koltuk-adi.sh"
+gecerli_ad() { koltuk_adi_gecerli "$1"; }
 # ttyd ?arg=2026%2F85 değerini kabuğa ÇÖZÜLMÜŞ ('2026/85') iletir — gerçek ttyd+Chromium ile ölçüldü (13 Eki); burada çözme YOK.
 
 # 🔴 ÖLÇEMEDİĞİNE "boş" DEMEZ (bağımsız göz, tur 3): tmux listesi ALINAMAZSA bu "0 koltuk" değil
