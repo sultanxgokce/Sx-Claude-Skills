@@ -1,0 +1,6 @@
+$ /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/engel/ozet.sh bash bulgu/scripts/bulgu-dugum-mutasyon.sh
+# rc=0 sure=16.7s zaman=2026-10-20T20:24:45+03:00
+--- stdout ---
+MUTASYON: gecti=9 dusen=0
+rc=0
+--- stderr ---
