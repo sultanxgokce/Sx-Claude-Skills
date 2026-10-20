@@ -1,7 +1,7 @@
 $ bash _agents/fabrika/kanit/bileyi-kutu-bulgu-defteri/mmex-olcer.sh HEAD
-# rc=0 sure=0.2s zaman=2026-10-20T18:08:13+03:00
+# rc=0 sure=0.1s zaman=2026-10-20T18:11:33+03:00
 --- stdout ---
-ref HEAD (a10eb8a) · bileyi olc rc=0
+ref HEAD (14890a3) · bileyi olc rc=0
    iz: 🟡 merkez: <geçici>/mmex/_agents/handoff/bulgu-havuzu.jsonl — okunamadı (bulgu havuzu yok: <geçici>/mmex/_agents/handoff/bulgu-havuzu.jsonl)
    iz: kutu-defteri: <geçici>/ev/.ic-sayfa/bulgu-defteri/bulgular.json — 4 kayıt
    havuz: 4 kayıt (birleşik, 1/2 kaynak OKUNDU · 4 tanesi bu kutunun kendi defterinden)

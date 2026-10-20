@@ -1,7 +1,7 @@
 {
   "is": "bileyi-kutu-bulgu-defteri",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-20T18:08:51+03:00",
+  "guncelleme": "2026-10-20T18:11:44+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -26,7 +26,7 @@
       "etiket": "mmex-bicimi",
       "asama": "sonra",
       "dosya": "olcum-mmex-bicimi-sonra.txt",
-      "sha256": "84ab2fc86eaf232b761ad3b1e927b1e7408fce5a7c3278c783fa65e4767549d4",
+      "sha256": "8c675e6acaa39337a698e4045cec1b868b982681d09972cd26ce4f4622f5f0e7",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/bileyi-kutu-bulgu-defteri/mmex-olcer.sh",
@@ -34,28 +34,28 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-20T18:08:13+03:00",
-      "sure_sn": 0.2,
+      "zaman": "2026-10-20T18:11:33+03:00",
+      "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "36098f81af9643d1a69f25f6434065b4"
+      "olcum_id": "d14a382207ab480c8f9ed92b994abe5d"
     },
     {
       "tur": "olcum",
       "etiket": "bileyi-sinavi",
       "asama": "sonra",
       "dosya": "olcum-bileyi-sinavi-sonra.txt",
-      "sha256": "999449318daccf2844df2023b311bd28ff89cc853fc0cdc1d01a6f673cc0160c",
+      "sha256": "30571804d04986dc729a4d760e23d22c93647bacb637755d1b0d6ab775464542",
       "komut": [
         "bash",
         "bileyi/scripts/bileyi.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-20T18:08:51+03:00",
-      "sure_sn": 11.7,
+      "zaman": "2026-10-20T18:11:44+03:00",
+      "sure_sn": 11.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "5f6cc26c70cf4c9b945ef8911d05371b"
+      "olcum_id": "fba8ed395d24491b95be89474130b2b4"
     }
   ],
-  "imza": "3495db257df49c79bd5251c95b17a193b68fcc574e37878588f1ca9607014788"
+  "imza": "ac2de393eec1b065742f854ab992c71405d156deb81d4a8dac9171a1cdc4c4ec"
 }
