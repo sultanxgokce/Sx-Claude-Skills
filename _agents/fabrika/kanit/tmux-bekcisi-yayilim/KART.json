@@ -18,5 +18,14 @@
   "gecmis": [],
   "canli_gerekir": false,
   "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: bekçi, canlı)",
-  "kapsam_uyarilari": []
+  "kapsam_uyarilari": [],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "MİRAHUR",
+      "oturum": "Nexus _agents/mirahur/NOTES.md 20:2x (MİRAHUR sahip kararı, SERDAR'a bildirildi)",
+      "gerekce": "İş ilerliyor: tur 1 ve 2 5/5·E GEÇTİ, rötuşları kapatıldı. Tur 3 4/5 yedek gözden (codex 2 kez düştü) ve iki bulgu da farkın görünürlüğünden: atomik kurulum ana dalda ortak.sh:281-282 (farkta yok), vaka.sh _agents/fabrika/kanit altında olduğu için denetçi aracı farktan ayıkladı. İkisi kanıta çevrildi (K4a kapısı + yerinde-yazar bozması, vaka.sh farkı ayrı kayıt).",
+      "zaman": "2026-10-20T20:29:27+03:00"
+    }
+  ]
 }
