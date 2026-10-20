@@ -8,5 +8,5 @@ sp = importlib.util.spec_from_file_location("retro", sys.argv[1]); m = importlib
 for c in sys.argv[2:]:
     ajan, hafta = c.split(":")
     k = m.olc("/config/projects/Nexus", ajan, hafta)["kart"]
-    print("%-9s %s · kart %s/%s/%s · göz turu %s · depolar: %s" % (ajan, hafta, k["acilan"], k["bitti"], k["tikandi"], k["goz_turu"], " · ".join(k.get("depolar") or [k["yol"]])))
+    print("%-9s %s · kart %s/%s/%s · göz turu %s · depolar: %s · göz: %s" % (ajan, hafta, k["acilan"], k["bitti"], k["tikandi"], k["goz_turu"], " · ".join(k.get("depolar") or [k["yol"]]), " · ".join(k.get("goz_depolar") or [])))
 PY
