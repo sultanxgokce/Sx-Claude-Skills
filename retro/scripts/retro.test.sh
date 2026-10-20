@@ -167,6 +167,52 @@ cmp -s <(sed -n '/^## Dersler/,$p' "$T/merkez-elle.md") <(sed -n '/^## Dersler/,
 icerir "$(cat "$M")" "önek araç başlığına benzer ama elle yazıldı" "T9m '## Süzüm notları' (araç önekiyle başlayan elle bölüm) silinmedi — araç bölümü birebir başlıkla tanınır"
 python3 "$R" merkez --yenile >/dev/null 2>&1; cmp -s <(sed '/^_yazildi:/d' "$M") <(python3 "$R" merkez --yenile >/dev/null 2>&1; sed '/^_yazildi:/d' "$M") && ok "T9k ikinci --yenile aynı dosyayı üretir (kararlı)" || kirmizi "T9k ardışık --yenile farklı"
 
+echo "— T10 doldur: ajanın metnini iskelete ARAÇ yazar (KHX56 · ana dal kapısı Edit/Write'ı reddeder; kapı gevşetilmez)"
+XD="$BOS/_agents/handoff/retro/2026-W42/X.md"; cp "$XD" "$T/x-iskelet.md"
+olcum_imza(){ sed -n '1,/^## 1 · /p' "$1" | sed '$d'; }   # başlık + imza + ölçüm bloğu (aracın bölgesi)
+cat > "$T/x-iyi.md" <<'EOF'
+## 1 · Ne bitti
+- B1) tmux bekçisi Sx #388 kapıda
+## 2 · Nerede zaman kaybettim (ölçüyle)
+- Z1) sembolik bağ döngüsüne takılan tarama · ölçü: 5 dk
+## 3 · Hangi araç/kural beni yavaşlattı
+- A1) ana dal kapısı retro iskeletini düzenletmiyordu
+## 4 · Ne öğrendim
+- D1) kapıyı gevşetme, yazmayı araca ver
+
+## 5 · Merkeze önerim
+- Ö1) retro dolumu yalnız retro.py doldur ile yapılsın
+EOF
+kapi "T10a iskelet yoksa rc=2 (ölçümü araç yazar, önce kutu)" 2 python3 "$R" doldur Q --kok "$BOS" --metin "$T/x-iyi.md"; icerir "$CIKTI" "önce \`retro.py kutu Q\`" "T10a2 ne yapılacağını söyler"
+kapi "T10b --metin verilmezse rc=2" 2 python3 "$R" doldur X --kok "$BOS"
+kapi "T10c metin dosyası yoksa rc=2" 2 python3 "$R" doldur X --kok "$BOS" --metin "$T/yok-metin.md"
+sed 's/^- D1) .*/- D1) <ders tek cümle>/' "$T/x-iyi.md" > "$T/x-yer.md"
+kapi "T10d yer tutucu kalmış metin → rc=1, YAZILMAZ" 1 python3 "$R" doldur X --kok "$BOS" --metin "$T/x-yer.md"; icerir "$CIKTI" "L7 yer tutucu" "T10d2 lint gerekçesi"
+cmp -s "$XD" "$T/x-iskelet.md" && ok "T10d3 dosya bayt bayt eski hâli" || kirmizi "T10d3 geçersiz metin dosyayı değiştirdi"
+sed 's/ · ölçü: 5 dk//' "$T/x-iyi.md" > "$T/x-olcusuz.md"
+kapi "T10e ölçüsüz zaman kaybı → rc=1 (L5), YAZILMAZ" 1 python3 "$R" doldur X --kok "$BOS" --metin "$T/x-olcusuz.md"; icerir "$CIKTI" "L5" "T10e2 L5 gerekçesi"
+{ cat "$T/x-iyi.md"; printf '\n## Ölçüm (araç yazdı · sahte)\n| NOTES mesaj satırı | 99 |\n'; } > "$T/x-sahte.md"   # başlıkların ARDINA gizlenmiş (önsöz denetimi görmez)
+kapi "T10f metinde (başlıkların ardında) ölçüm bloğu → rc=2 (ajan ölçümü sahteleyemez)" 2 python3 "$R" doldur X --kok "$BOS" --metin "$T/x-sahte.md"; icerir "$CIKTI" "ölçüm bloğu ya da imza" "T10f2 gerekçe"
+{ cat "$T/x-iyi.md"; printf '_koltuk: sahte:0\n'; } > "$T/x-imza.md"
+kapi "T10g metinde imza satırı → rc=2" 2 python3 "$R" doldur X --kok "$BOS" --metin "$T/x-imza.md"
+{ printf 'önsöz cümlesi\n'; cat "$T/x-iyi.md"; } > "$T/x-onsoz.md"
+kapi "T10h '## 1 · ' öncesi metin → rc=2 (sessizce yutulmaz)" 2 python3 "$R" doldur X --kok "$BOS" --metin "$T/x-onsoz.md"
+cmp -s "$XD" "$T/x-iskelet.md" && ok "T10h2 reddedilen hiçbir metin dosyaya dokunmadı" || kirmizi "T10h2 dosya değişti"
+kapi "T10i geçerli metin dosyadan → rc=0" 0 python3 "$R" doldur X --kok "$BOS" --metin "$T/x-iyi.md"; icerir "$CIKTI" "öneri 1 · ders 1" "T10i2 sayım"
+kapi "T10j sonuç lint'ten geçer" 0 python3 "$R" lint "$XD"
+cmp -s <(olcum_imza "$XD") <(olcum_imza "$T/x-iskelet.md") && ok "T10k ölçüm bloğu ve imza satırları BAYT BAYT korundu" || kirmizi "T10k aracın bölgesi değişti: $(diff <(olcum_imza "$T/x-iskelet.md") <(olcum_imza "$XD") | head -4 | tr '\n' ' ')"
+icerir "$(cat "$XD")" "- D1) kapıyı gevşetme, yazmayı araca ver" "T10l ajanın maddesi yerinde"
+[ "$(grep -c '^<!-- Yorum satırları ajanındır' "$XD")" -eq 1 ] && ok "T10m dipnot bir kez" || kirmizi "T10m dipnot sayısı $(grep -c '^<!-- Yorum' "$XD")"
+cp "$XD" "$T/x-dolu.md"
+kapi "T10n stdin'den (--metin -) aynı metin → rc=0" 0 bash -c "python3 '$R' doldur X --kok '$BOS' --metin - < '$T/x-iyi.md'"
+cmp -s "$XD" "$T/x-dolu.md" && ok "T10o ikinci dolum aynı baytları üretir (kararlı)" || kirmizi "T10o ikinci dolum farklı"
+{ cat "$T/x-iyi.md"; printf '\n<!-- Yorum satırları ajanındır; merkez bunları DEĞİŞTİRMEZ. Z maddesi ölçüsüz geçmez. Ö maddesi en çok 5. -->\n'; } > "$T/x-dipnotlu.md"
+python3 "$R" doldur X --kok "$BOS" --metin "$T/x-dipnotlu.md" >/dev/null 2>&1
+cmp -s "$XD" "$T/x-dolu.md" && ok "T10p metindeki dipnot çoğalmaz" || kirmizi "T10p dipnotlu metin farklı sonuç verdi"
+kapi "T10q doldurulmuş dosyada kutu --yenile çalışır (ölçüm bloğu bulunur)" 0 python3 "$R" kutu X --kok "$BOS" --yenile
+icerir "$(cat "$XD")" "- D1) kapıyı gevşetme, yazmayı araca ver" "T10r yenilemeden sonra ajanın yorumu korundu"
+cp "$T/x-iskelet.md" "$XD"
+
 echo "— M mutasyon (kopya üstünde; her mutant en az bir kapıyı kızartmalı)"
 mut(){ # mut <ad> <sed> <komut...> : mutant kopyada komut BAŞARILI (rc=0) kalırsa sınav onu yakalamıyor demektir
   local ad="$1" sed_="$2"; shift 2; local MR="$T/mut-$RANDOM.py"; sed -e "$sed_" "$R" > "$MR"
@@ -193,6 +239,12 @@ m_elle(){ local rc; cp "$T/merkez-elle.md" "$M"; python3 "$1" merkez --yenile >/
 mut "M5 elle bölümler taşınmazsa --yenile Dersler/Kaçış'ı siler (eski hata · kapı yakalar)" 's/            elle = merkez_elle_ham(eski)/            elle = ""/' m_elle
 mut "M6 araç bölümü ÖNEKLE tanınırsa '## Süzüm notları' silinir (kapı yakalar)" 's/            icinde = s.rstrip("\\r\\n") not in (MERKEZ_KATILIM, MERKEZ_SUZUM)/            icinde = not s.startswith(("## Katılım", "## Süzüm"))/' m_elle
 mut "M7 boş satırlar daraltılırsa bayt eşitliği bozulur (kapı yakalar)" 's/            ham.append(s)$/            ham.append(s) if (s.strip() or not ham or ham[-1].strip()) else None/' m_elle
+
+m_dl(){ local rc; cp "$T/x-iskelet.md" "$XD"; python3 "$1" doldur X --kok "$BOS" --metin "$2" >/dev/null 2>&1; rc=$?; cmp -s "$XD" "$T/x-iskelet.md"; local ayni=$?; cp "$T/x-iskelet.md" "$XD"; [ "$rc" -ne 0 ] && [ "$ayni" -eq 0 ]; }
+m_dl_yer(){ m_dl "$1" "$T/x-yer.md"; }; m_dl_sahte(){ m_dl "$1" "$T/x-sahte.md" && m_dl "$1" "$T/x-imza.md"; }; m_dl_onsoz(){ m_dl "$1" "$T/x-onsoz.md"; }
+mut "M8 doldur lint'i atlarsa yer tutuculu metin yazılır (kapı yakalar)" 's/^    if h:$/    if False:/' m_dl_yer
+mut "M9 ölçüm/imza reddi kalkınca sahte ölçüm dosyaya girer (kapı yakalar)" 's/^    if re.search(r"^## Ölçüm", metin, re.M) or /    if False and re.search(r"^## Ölçüm", metin, re.M) or /' m_dl_sahte
+mut "M10 önsöz denetimi kalkınca metin sessizce yutulur (kapı yakalar)" 's/^    if metin\[:m.start()\].strip():$/    if False:/' m_dl_onsoz
 
 echo; echo "GECEN=$G DUSEN=$K"
 [ "$K" -eq 0 ]

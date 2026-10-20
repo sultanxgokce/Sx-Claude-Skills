@@ -1,0 +1,61 @@
+{
+  "is": "retro-doldur-kipi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-20T17:44:10+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "vaka-eski",
+      "asama": "once",
+      "dosya": "olcum-vaka-eski-once.txt",
+      "sha256": "45f99ed391f3eb41f85011c382ecbc4f17cd1cd819a209ce282c51d59ea54de3",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/retro-doldur-kipi/vaka.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/retro-eski.py"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-20T17:44:07+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "802a54f14ede40bfab0a1cd0f370842b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "vaka-yeni",
+      "asama": "sonra",
+      "dosya": "olcum-vaka-yeni-sonra.txt",
+      "sha256": "bf1a842fb4468f6b89a88922de692c5a998cbee81bbb2caa788128ac2394bedf",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/retro-doldur-kipi/vaka.sh",
+        "retro/scripts/retro.py"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T17:44:07+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8a1984053cfc48538c3c38dc7fdcb4b3"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "tek",
+      "dosya": "olcum-sinav-tek.txt",
+      "sha256": "2aa5af4bc8309eae7d3e0bb5d347b71b337ce0e59e6deee91c370835c60c21c7",
+      "komut": [
+        "bash",
+        "retro/scripts/retro.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T17:44:10+03:00",
+      "sure_sn": 2.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8fd8aacab13441a0a6fda63cde8725bf"
+    }
+  ],
+  "imza": "08c8d9c8e545cd7a285a166e36ac690e86e3822d750a180441bc4b5d85ba668d"
+}
