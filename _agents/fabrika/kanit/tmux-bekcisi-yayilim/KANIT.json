@@ -1,0 +1,97 @@
+{
+  "is": "tmux-bekcisi-yayilim",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-20T20:22:48+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "bekci-turu",
+      "asama": "once",
+      "dosya": "olcum-bekci-turu-once.txt",
+      "sha256": "15587781b679d755a811c67840c455cbd7d60f3220cf71190e2c34ec045ca244",
+      "komut": [
+        "env",
+        "TB_KIC=1",
+        "bash",
+        "terminal-onar/scripts/tmux-bekcisi.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-20T20:20:18+03:00",
+      "sure_sn": 0.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2be055f746b64c448dd6d18f0378495f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bekci-turu",
+      "asama": "sonra",
+      "dosya": "olcum-bekci-turu-sonra.txt",
+      "sha256": "0981ed6345626f2bb37f107d2f93890e7e4a899c01741fd50f6856635e21ecde",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/tmux-bekcisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T20:22:31+03:00",
+      "sure_sn": 10.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b2557de2ba95463c933dfa995b172dba"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bozma-adlari",
+      "asama": "tek",
+      "dosya": "olcum-bozma-adlari-tek.txt",
+      "sha256": "8a2eeee7b2dfc4285da33725a9f9e749a2c31a2fc66fb67d53294630615255a0",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/tmux-bekcisi-yayilim/mutasyon-ad.sh",
+        "terminal-onar"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T20:22:35+03:00",
+      "sure_sn": 3.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "19c10869fbc548839b9fe92f621a5b8c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "filo-kurulum",
+      "asama": "once",
+      "dosya": "olcum-filo-kurulum-once.txt",
+      "sha256": "cb85d1f34b38714ecae25ad695db3a91ea93b845e748160514dca7e2feffa910",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/tmux-bekcisi-yayilim/filo-kurulum.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T20:22:46+03:00",
+      "sure_sn": 10.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d48fe07dceaa44c3a868dc4c73316e80"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "vaka-canli-defter",
+      "asama": "tek",
+      "dosya": "olcum-vaka-canli-defter-tek.txt",
+      "sha256": "db1d30df48080b8c8aec9011f3c72bc24054603310908ef19b7fdfabc34fa612",
+      "komut": [
+        "bash",
+        "-c",
+        "o=$(wc -l < /config/.terminal-onar/tmux-bekcisi.log); bash _agents/fabrika/kanit/tmux-kill-server-bekcisi/vaka.sh terminal-onar/scripts/tmux-bekcisi.sh; r=$?; echo \"canlı defter satır önce=$o sonra=$(wc -l < /config/.terminal-onar/tmux-bekcisi.log)\"; exit $r"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T20:22:48+03:00",
+      "sure_sn": 1.4,
+      "boru_denetimi": "temiz",
+      "olcum_id": "33100c0abcb54186bd4b7e9a4973a17c"
+    }
+  ],
+  "imza": "2786311f0b712b239707485110d2da992fef719e3ac22cbb0c78d3573251cf47"
+}
