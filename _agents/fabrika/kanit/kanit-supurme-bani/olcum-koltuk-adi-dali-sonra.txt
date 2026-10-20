@@ -1,0 +1,23 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/supurme/dal-olc.sh
+# rc=0 sure=0.5s zaman=2026-10-20T17:36:15+03:00
+--- stdout ---
+uzak dal: 2567792a25338722177a1267840de1621a72f019
+ana dalda kanıt dizini: 0 dosya
+daldaki kanıt dizini:
+_agents/fabrika/kanit/terminal-koltuk-adi/DENETIM-1.json
+_agents/fabrika/kanit/terminal-koltuk-adi/DENETIM-2.json
+_agents/fabrika/kanit/terminal-koltuk-adi/DENETIM-3.json
+_agents/fabrika/kanit/terminal-koltuk-adi/KANIT.json
+_agents/fabrika/kanit/terminal-koltuk-adi/dolar-ad-olcum.sh
+_agents/fabrika/kanit/terminal-koltuk-adi/olcum-canli-slash-oturum-sonra.txt
+_agents/fabrika/kanit/terminal-koltuk-adi/olcum-gercek-tmux-dolar-adli-koltuk-sonra.txt
+_agents/fabrika/kanit/terminal-koltuk-adi/olcum-kapi-birim-82-sonra.txt
+_agents/fabrika/kanit/terminal-koltuk-adi/olcum-koltuk-bagla-46-sonra.txt
+_agents/fabrika/kanit/terminal-koltuk-adi/olcum-tmux-bosluk-izin-ve-esit-hedef-tek.txt
+_agents/fabrika/kanit/terminal-koltuk-adi/olcum-tmux-nokta-ikinokta-altcizgi-tek.txt
+_agents/fabrika/kanit/terminal-koltuk-adi/olcum-ttyd-arg-cozme-tek.txt
+_agents/fabrika/kanit/terminal-koltuk-adi/ttyd-arg-olcum.mjs
+DENETIM-3.json dalda: 1
+KART.json dalda: 0
+dalda terminal-onar farkı: 16 dosya
+--- stderr ---

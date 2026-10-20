@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "kanit-supurme-bani",
+  "pr": "387",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-20T17:24:52+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 6514,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 11074
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Üç kanıt dosyasının hedef alana birebir taşındığı önce/sonra ölçümüyle gösterilmiş. Ancak iş kartının ikinci yarısı olan eski alanların kapatılması ne değişiklikte yer alıyor ne de ölçülüyor; önce bunu çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "Eski alanların kapatılması talebi uygulanmamış veya en azından doğrulanmamış; teslimat iş kartının yalnız dosyaları ana alana alma kısmını karşılıyor.",
+        "kanit": "İş kartı \"ana dala alınır, sonra eski alanlar kapanır\" diyor; manifestteki tek ölçüm çifti yalnız üç dosyanın yokken var ve birebir hale geldiğini gösteriyor (önce 0/3, sonra 3/3). Değişiklik notu da farkın tamamen altı kanıt dosyasından oluştuğunu ve üretim kodu farkı bulunmadığını bildiriyor; alan kapatma kaydı yok.",
+        "konum": "İŞ KARTI.cumle; kanit-dosyalari önce/sonra ölçüm çifti; DEĞİŞİKLİK notu",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Önce/sonra ölçüm çifti, hedefte üç dosyanın 0/3 durumundan 3/3 birebir duruma geçtiğini yeterince kanıtlıyor. Buna karşılık ölçüm betiğinin içeriği denetlenmemiş ve manifest eski alanların kapatılmasını hiç sınamıyor; dolayısıyla birleşme kanıtı kısmi, işin tamamlanma kanıtı yetersiz."
+  }
+}
