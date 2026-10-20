@@ -1,6 +1,6 @@
 {
   "is": "kanit-supurme-bani",
-  "cumle": "birleşmiş işlerin son denetim kayıtları ve kart kopyaları alanlarda kaldı; ana dala alınır, sonra eski alanlar kapanır",
+  "cumle": "birleşmiş işlerin son denetim kayıtları ve kart kopyaları alanlarda kaldı; ana dala alınır, sonra o eski alanlar kapanır (birleşmemiş işin dalı kapsam dışı)",
   "istedi": "SERDAR",
   "aldi": "BÂNİ",
   "zaman": "2026-10-20T17:22:09+03:00",
@@ -15,7 +15,14 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": [],
+  "gecmis": [
+    {
+      "zaman": "2026-10-20T18:10:27+03:00",
+      "olay": "daralt",
+      "kalan_kart": "koltuk-adi-dal-karari",
+      "tur_sifir": 4
+    }
+  ],
   "canli_gerekir": false,
   "canli_sebep": "",
   "kapsam_uyarilari": [],
@@ -26,6 +33,29 @@
       "oturum": "SERDAR-NOTES-18:5x",
       "gerekce": "SERDAR 18:5x devam dedi: 3/H→3/H→4/E ilerliyor, tek bulgu ölçüldü (terminal-koltuk-adi KART.json dalda yok)",
       "zaman": "2026-10-20T17:53:10+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "BÂNİ",
+      "oturum": "SERDAR-NOTES-19:1x",
+      "gerekce": "daraltma: kalan bulgu yeni karta (koltuk-adi-dal-karari) — terminal-koltuk-adi birleşmemiş iş (PR #305 kapalı): yarım kodu ve kanıtı dalında (terminal-koltuk-adi @ 2567792); karar: işi yeniden PR'la sunmak ya da dalı bilerek bırakmak",
+      "zaman": "2026-10-20T18:10:27+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "birleşmiş işlerin son denetim kayıtları ve kart kopyaları alanlarda kaldı; ana dala alınır, sonra eski alanlar kapanır",
+      "zaman": "2026-10-20T18:10:27+03:00",
+      "kalan_kart": "koltuk-adi-dal-karari"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-20T18:10:27+03:00",
+      "kalan_kart": "koltuk-adi-dal-karari",
+      "kalan": "terminal-koltuk-adi birleşmemiş iş (PR #305 kapalı): yarım kodu ve kanıtı dalında (terminal-koltuk-adi @ 2567792); karar: işi yeniden PR'la sunmak ya da dalı bilerek bırakmak",
+      "tur_sifir": 4,
+      "oturum": "SERDAR-NOTES-19:1x"
     }
   ]
 }
