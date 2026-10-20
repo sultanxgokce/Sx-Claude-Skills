@@ -1,0 +1,6 @@
+$ /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/engel/ozet.sh bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/bulgu-red-sebebi/taban/bulgu.test.sh
+# rc=1 sure=1.0s zaman=2026-10-20T20:59:35+03:00
+--- stdout ---
+  ✗ D7b defter bağ reddinde (canlı 409 bag_hedefi_yok biçimi: neden/yerine ÜST düzeyde — 21 Eki canlıdan alındı) neden + yapılacak basılır, rc 1
+rc=1
+--- stderr ---
