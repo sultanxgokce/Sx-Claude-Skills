@@ -24,6 +24,7 @@ import json, os, re, sys, urllib.error, urllib.request
 
 MADDE = re.compile(r'^- \[([ ~xX-])\]\s*((G?\d+)\))?\s*(.*)$')         # bugun.mjs MADDE ile AYNI
 GOREV = re.compile(r'gorev_[A-Za-z0-9]{10,40}')                          # bugun.mjs GOREV ile AYNI
+DUGUM = re.compile(r'[a-z][a-z0-9-]{1,30}:gorev_[A-Za-z0-9]{10,40}')       # defter-gecit dugum_acar deseni ile AYNI
 SONUC = re.compile(r'^(.*?)\s*→\s*([A-ZĞÜŞİÖÇ][A-ZĞÜŞİÖÇ ]{2,})(?:\s*·\s*(.*))?$')
 SAHIP = re.compile(r'\s*\(sahip:\s*([^)]+)\)')
 # D1 (L73): "YYYY-MM-DD Sultan: <sonuç> (sohbet · <oturum-ref> · "<kırpık>" · beyan:<AJAN>)" — üç parça zorunlu
@@ -76,7 +77,8 @@ def ayristir(metin):
 
 
 def dugumler(c):
-    """görev kimliği → dugum_acar ('<kutu>:gorev_…'), defterden. Dönüş (bağlar, okunamadıysa sebep)."""
+    """görev kimliği → dugum_acar ('<kutu>:gorev_…'), defterden. Dönüş (bağlar, okunamadıysa sebep).
+    Okuma bir yerde bile bozulursa HİÇ bağ dönmez: yarım bağ listesi "öteki görevlerin bağı yok" diye okunurdu."""
     ids = list(dict.fromkeys(g for m in c['maddeler'] for g in m['gorevler']))
     if not ids:
         return {}, ''
@@ -90,13 +92,13 @@ def dugumler(c):
         try:
             with urllib.request.urlopen(urllib.request.Request(uc + '/kayit/' + g, headers={'x-defter-jeton': jeton}), timeout=3) as y:
                 d = ((json.loads(y.read() or b'{}').get('kayit') or {}).get('canli') or {}).get('dugum_acar')
-            if isinstance(d, str) and ':' in d:
+            if isinstance(d, str) and DUGUM.fullmatch(d):
                 bag[g] = d
         except urllib.error.HTTPError as e:
             if e.code != 404:   # 404 = bu kutu o görevi göremiyor / yok → bağ yok, hata değil
-                return bag, 'defter http %d' % e.code
+                return {}, 'defter http %d' % e.code
         except Exception as e:  # ulaşılamıyor / bozuk cevap → kalan görevleri bekletme
-            return bag, 'defter okunamadı: %s' % type(e).__name__
+            return {}, 'defter okunamadı: %s' % type(e).__name__
     return bag, ''
 
 

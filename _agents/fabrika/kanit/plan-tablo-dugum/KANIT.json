@@ -1,14 +1,14 @@
 {
   "is": "plan-tablo-dugum",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-20T20:36:02+03:00",
+  "guncelleme": "2026-10-20T20:43:06+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "cipa-sinavi",
       "asama": "once",
       "dosya": "olcum-cipa-sinavi-once.txt",
-      "sha256": "e1d4c2b2b60b2c188bdb1b48d1203bfe04a75ab57ffcef4f5c1075ba76a0ed54",
+      "sha256": "b8795c9b8437537af35baa90fe3493424b378a81609b7c6030e93fa72f803c02",
       "komut": [
         "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/engel/ozet.sh",
         "bash",
@@ -16,17 +16,17 @@
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-10-20T20:32:42+03:00",
-      "sure_sn": 5.2,
+      "zaman": "2026-10-20T20:41:38+03:00",
+      "sure_sn": 5.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "b1e9fe342ed44a09ac353dfc9c6f3964"
+      "olcum_id": "98468e5e9b304078b29c559ab53a6082"
     },
     {
       "tur": "olcum",
       "etiket": "cipa-sinavi",
       "asama": "sonra",
       "dosya": "olcum-cipa-sinavi-sonra.txt",
-      "sha256": "a845c902a3937bbe67f8895008e59b0f60818bda38ceb52aa4739a0548e06c9f",
+      "sha256": "abf8aebe36987f08cdf50a6844a16ef89d0c506ddc7c5cb093c204d71f143e2b",
       "komut": [
         "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/engel/ozet.sh",
         "bash",
@@ -34,17 +34,17 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-20T20:32:51+03:00",
-      "sure_sn": 8.5,
+      "zaman": "2026-10-20T20:41:46+03:00",
+      "sure_sn": 7.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "c486457b78c340b5a2be5c1c2634a393"
+      "olcum_id": "aab6f2f87fdc4e2e85de8af430f7dbb3"
     },
     {
       "tur": "olcum",
       "etiket": "tablo-dugum-mutasyon",
       "asama": "sonra",
       "dosya": "olcum-tablo-dugum-mutasyon-sonra.txt",
-      "sha256": "1d2ad1c305dba125ea9f264eb2b9e0051ae8a93f326f87428e848b3fdcee89b7",
+      "sha256": "3150426cac67816118b7055d116818baf5ccd541aa3fcdae5cc36fa153573ff9",
       "komut": [
         "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/engel/ozet.sh",
         "bash",
@@ -52,17 +52,17 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-20T20:35:19+03:00",
-      "sure_sn": 148.6,
+      "zaman": "2026-10-20T20:42:56+03:00",
+      "sure_sn": 70.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "e05f5fb059174293be02b897951fcaba"
+      "olcum_id": "9e891f4c0e34482fa158c9e43b717b88"
     },
     {
       "tur": "olcum",
       "etiket": "kalan-sinavi",
       "asama": "sonra",
       "dosya": "olcum-kalan-sinavi-sonra.txt",
-      "sha256": "37c14c4002954d395f1334955747c5682d5bedaf0e1eecdeb68f383b30ef994b",
+      "sha256": "cd726745a5f0f5765b32f7e1ca2e3766020d32247378898b2da299799ccd83ca",
       "komut": [
         "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/engel/ozet.sh",
         "bash",
@@ -70,17 +70,17 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-20T20:36:02+03:00",
-      "sure_sn": 42.4,
+      "zaman": "2026-10-20T20:43:05+03:00",
+      "sure_sn": 9.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "544debe06c5642f5872964d1a31fbd7d"
+      "olcum_id": "a3cfbfe0c40b4b16888428816da98234"
     },
     {
       "tur": "olcum",
       "etiket": "canli-tablo",
       "asama": "once",
       "dosya": "olcum-canli-tablo-once.txt",
-      "sha256": "e39cf4d29765b9f5e3d80135a464f7e26430f0f7767f78b3b49f024f95e13134",
+      "sha256": "9219e1373aabbdce2b4969b057de824bc37f9259e0896ec6f1b4edc4d495554c",
       "komut": [
         "python3",
         "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/plan-tablo-dugum/taban/gunluk-plan/scripts/tablo.py",
@@ -88,17 +88,17 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-20T20:36:02+03:00",
+      "zaman": "2026-10-20T20:43:05+03:00",
       "sure_sn": 0.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "a2709a9ecf274f369eef72a7a8304c9b"
+      "olcum_id": "5a560cc9379a4c3a98726715b57a059f"
     },
     {
       "tur": "olcum",
       "etiket": "canli-tablo",
       "asama": "sonra",
       "dosya": "olcum-canli-tablo-sonra.txt",
-      "sha256": "0dba56766333c57a52ff1ce83cd158ec2a48be85fece0c089b01efad43e2b7f0",
+      "sha256": "e15772000e1724826c8f6335b440d0ef8bc09bfbdd291d82e8ade29db1e68984",
       "komut": [
         "python3",
         "gunluk-plan/scripts/tablo.py",
@@ -106,10 +106,10 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-20T20:36:02+03:00",
+      "zaman": "2026-10-20T20:43:05+03:00",
       "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "2fa03741ba1a4fbeadd670882ae562af"
+      "olcum_id": "460d53c8a6f141d698e5d30c676e1e45"
     },
     {
       "tur": "dosya",
@@ -120,15 +120,15 @@
       "kaynak": "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/plan-tablo-dugum/canli-cipa.md",
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-20T20:36:02+03:00",
-      "olcum_id": "206fc18158dc473eada4e7eb8abcfe26"
+      "zaman": "2026-10-20T20:43:06+03:00",
+      "olcum_id": "e632edeacd94437eacea7800670d0fca"
     },
     {
       "tur": "olcum",
       "etiket": "kabuk-biti",
       "asama": "sonra",
       "dosya": "olcum-kabuk-biti-sonra.txt",
-      "sha256": "d37729b1922767f99e87324eff9d434a6983dc6ef8a7fc4215cd273c060d8f2a",
+      "sha256": "f6da0271e405c4f3070f0e49748e945998e4ace3e3d2cd054454268af195b17c",
       "komut": [
         "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/engel/ozet.sh",
         "bash",
@@ -136,11 +136,11 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-20T20:36:02+03:00",
-      "sure_sn": 0.0,
+      "zaman": "2026-10-20T20:43:06+03:00",
+      "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "4c9a655452d04011bc027ef3c90889ee"
+      "olcum_id": "759ab86e3843457ea370b4e897769835"
     }
   ],
-  "imza": "0f2608be26971da6fce90d582d14388e9efd78236a56a150245df1a63d945423"
+  "imza": "e59474a50d7edf5e575353c6d5dd41f367c2120034fd49acc3f0d587f3a0755b"
 }

@@ -1,6 +1,6 @@
 $ /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/engel/ozet.sh bash gunluk-plan/scripts/tablo-dugum-mutasyon.sh
-# rc=0 sure=148.6s zaman=2026-10-20T20:35:19+03:00
+# rc=0 sure=70.0s zaman=2026-10-20T20:42:56+03:00
 --- stdout ---
-MUTASYON: gecti=8 dusen=0
+MUTASYON: gecti=10 dusen=0
 rc=0
 --- stderr ---

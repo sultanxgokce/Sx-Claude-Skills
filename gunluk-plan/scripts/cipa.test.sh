@@ -279,6 +279,7 @@ class H(http.server.BaseHTTPRequestHandler):
         g=self.path.rsplit("/",1)[-1]
         if g=="gorev_01M54TNAQVP4PJ7M7MGZRPT7A7": b={"kayit":{"id":g,"canli":{"dugum_acar":"mmex:gorev_01M5BEKLEYENMMEXAAAAQ7K2P"}}}
         elif g=="gorev_01M54C4A56HDMS1H5SAWFCWSGE": b={"kayit":{"id":g,"canli":{"dugum_acar":"bozuk-deger"}}}
+        elif g=="gorev_01M5IKINOKTABOZUK0000001": b={"kayit":{"id":g,"canli":{"dugum_acar":"mmex:bozuk"}}}
         elif g=="gorev_01M54SCQE08KTG9YERG2BBR604": self.send_response(404); self.end_headers(); return
         else: self.send_response(500); self.end_headers(); return
         self.send_response(200); self.end_headers(); self.wfile.write(json.dumps(b).encode())
@@ -294,6 +295,8 @@ kapi "D1b düz (md) tabloda da aynı bağ" "1" "$(printf '%s' "$DM" | grep -c 'g
 kapi "D1c bağ varsa ⛓ anlamı tek satırla söylenir" "1" "$(printf '%s' "$DK" | grep -c '^⛓ = bu görev o kutunun bekleyen işini açıyor')"
 kapi "D2 404 (görünmeyen görev) bağ değil, hata da değil: …BR604 düğümsüz, 'okunamadı' satırı YOK" "0|0" "$(printf '%s' "$DM" | grep -c 'BR604 ⛓')|$(printf '%s' "$DM" | grep -c 'okunamadı')"
 kapi "D3 bozuk dugum_acar ('<kutu>:' yok) gösterilmez" "0" "$(printf '%s' "$DM" | grep -c 'SWGE ⛓\|bozuk-deger')"
+printf -- '- [ ] 1) İki noktalı bozuk değer gorev_01M5IKINOKTABOZUK0000001\n' > "$T/ikinokta.md"
+kapi "D3b defter desenine uymayan 'mmex:bozuk' bağ sayılmaz (tam eşleşme)" "0" "$(DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="$DU" python3 "$KOK/tablo.py" "$T/ikinokta.md" --md 2>&1 | grep -c '⛓')"
 kapi "D4 jeton değeri çıktıda YOK" "0" "$(printf '%s%s' "$DK" "$DM" | grep -c 'sinav-jeton-XYZ')"
 DJ=$(DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="$DU" python3 "$KOK/tablo.py" "$SEMA/ornek-cipa.md" --json 2>/dev/null)
 kapi "D5 --json DEĞİŞMEZ: defter bağ verirken bile ortak fikstüre birebir (kokpit kapısı)" "0" "$(diff <(printf '%s\n' "$DJ") "$SEMA/beklenen.json" >/dev/null 2>&1; echo $?)"
@@ -303,6 +306,9 @@ kapi "D6b düğüm YALNIZ ekler: bağlı tablodan bağ metni ve alt satırlar ç
 printf -- '- [ ] 1) Beş yüz hatası gorev_01M5SUNUCUHATASI0000000X\n' > "$T/c500.md"
 H5=$(DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="$DU" python3 "$KOK/tablo.py" "$T/c500.md" --md 2>&1)
 kapi "D7 defter 500 → satır aynen + 'defter http 500' söylenir" "1" "$(printf '%s' "$H5" | grep -c '^ℹ düğüm bağları okunamadı (defter http 500)')"
+printf -- '- [ ] 1) Bağlı görev gorev_01M54TNAQVP4PJ7M7MGZRPT7A7\n- [ ] 2) Sonra bozulan okuma gorev_01M5SUNUCUHATASI0000000X\n' > "$T/yarim.md"
+YR=$(DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="$DU" python3 "$KOK/tablo.py" "$T/yarim.md" --md 2>&1)
+kapi "D7b ilk görev bağlı, ikincide defter 500: YARIM bağ basılmaz (hiç ⛓ yok) + 'okunamadı' satırı" "0|1" "$(printf '%s' "$YR" | grep -c 'Q7K2P')|$(printf '%s' "$YR" | grep -c '^ℹ düğüm bağları okunamadı (defter http 500)')"
 kill $DSRV 2>/dev/null; wait $DSRV 2>/dev/null
 B0=$(date +%s); UL=$(DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="$DU" python3 "$KOK/tablo.py" "$SEMA/ornek-cipa.md" --md 2>&1); B1=$(date +%s)
 kapi "D8 defter kapalı: satır aynen + 'okunamadı' söylenir, bekleme ≤ 4 sn (ilk hatada durur)" "1|1" "$(printf '%s' "$UL" | grep -c '^ℹ düğüm bağları okunamadı (defter okunamadı')|$([ $((B1-B0)) -le 4 ] && echo 1 || echo 0)"

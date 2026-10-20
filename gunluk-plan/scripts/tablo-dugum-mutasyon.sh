@@ -22,7 +22,7 @@ PY
 dene "TM1 bağ tabloya yazılmaz" "if g in bag else ''" "if False else ''"
 dene "TM2 jetonsuz kutu sessiz kalır" "return {}, 'bu kutuda defter jetonu yok'" "return {}, ''"
 dene "TM3 404 hata sayılır" "if e.code != 404:" "if True:"
-dene "TM4 bozuk dugum_acar gösterilir" "if isinstance(d, str) and ':' in d:" "if d:"
+dene "TM4 bozuk dugum_acar gösterilir" "if isinstance(d, str) and DUGUM.fullmatch(d):" "if d:"
 dene "TM5 --json'a bağ sızar (kokpit fikstürü bozulur)" "print(json.dumps(c, ensure_ascii=False, indent=2)); return 0" "c['dugum'] = dugumler(c)[0]; print(json.dumps(c, ensure_ascii=False, indent=2)); return 0"
 dene "TM6 okunamayınca söylenmez" "    if sebep:
         print(" "    if False:
@@ -33,4 +33,6 @@ dene "TM7 ⛓ anlamı söylenmez" "    if bag:
 dene "TM8 görevsiz çıpada da deftere gider" "    if not ids:
         return {}, ''" "    if False:
         return {}, ''"
+dene "TM9 değer desenle değil yalnız ':' ile sınanır" "if isinstance(d, str) and DUGUM.fullmatch(d):" "if isinstance(d, str) and ':' in d:"
+dene "TM10 hata anında yarım bağlar basılır" "                return {}, 'defter http %d' % e.code" "                return bag, 'defter http %d' % e.code"
 echo "─────────────"; echo "MUTASYON: gecti=$gecti dusen=$dusen"; [ $dusen -eq 0 ]
