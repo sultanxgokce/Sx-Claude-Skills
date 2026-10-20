@@ -1,0 +1,9 @@
+$ bash _agents/fabrika/kanit/tik-yol-olcer/yol-olcer.sh origin/main
+# rc=0 sure=0.1s zaman=2026-10-20T18:37:13+03:00
+--- stdout ---
+ref origin/main (f142934)
+tarayıcı ölçeri YOK (arac/tik-olc.sh) — tık sayısı ancak ELLE verilir:
+tık ölçümü yazıldı: <geçici>/s/olcum/E1.html.tik.json
+  (elle verilen sayılar sayfaya BAKILMADAN kabul edildi — kimse yürümedi)
+artefakt: gorevler {'G1': 1, 'G2': 1, 'G3': 2} · asim [] · yontem (alan yok)
+--- stderr ---

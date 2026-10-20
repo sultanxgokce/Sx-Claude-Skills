@@ -1,0 +1,35 @@
+$ bash ui-tasarim-akisi/arac/tik-olc.test.sh
+# rc=0 sure=118.6s zaman=2026-10-20T18:39:13+03:00
+--- stdout ---
+── T1 · tarayıcı YOKSA: ÖLÇÜLEMEDİ, sayı yazılmaz (elle sayı ölçüm değildir) ──
+  ✓ playwright yok → rc 3 · ÖLÇÜLEMEDİ · artefakt YOK (rc=3)
+── T2 · bozuk girdi ──
+  ✓ bozuk yol tanımı → rc 2, artefakt yok
+  ✓ tik-kaydet bilinmeyen yöntem → rc 2
+  ✓ elle kayıt (eski çağrı) yontem=elle yazar — geriye uyumlu
+── T3 · tarayıcıda yol YÜRÜNÜR: her durum doğru sayılır ──
+  ✓ ölçüldü ve kaydedildi (rc=0)
+  ✓ G1 görünür düğme → 1
+  ✓ G2 ekran dışı düğme → 2 (kaydırma)
+  ✓ G3 menü aç + öğe → 2 (adımlar gerçekten tıklandı: menü açıldı)
+  ✓ G4 menü açılmadan öğe → 9 (her görev TEMİZ sayfayla başlar; G3'ün açtığı menü sayılmaz)
+  ✓ G5 üzerine gelince görünen → 2
+  ✓ G6 olmayan öğe → 9 + sebep
+  ✓ G7 üstü örtülü öğe → 9 + sebep (tıklanamayan yol yürünemez)
+── T4 · artefakt yöntemi ve yolu taşır, kapı aşımı görür ──
+  ✓ yontem=tarayici
+  ✓ yol tanımının sha'sı artefaktta (yol değişirse ölçüm bayat)
+  ✓ bütçeyi aşanlar kapıya gider: G2,G4,G6,G7
+── T5 · ölçüm ayırt ediyor: sayfa düzelince sayı düşer ──
+  ✓ düğme ekrana alınınca G2 → 1 (sayı sayfadan geliyor, sabit değil)
+── T6 · MUTASYON (tam kopya; kontrol önce) ──
+  ✓ kontrol: bozulmamış araçla iç koşum yeşil
+  ✓ mutant 'ekran-disi-sayilmaz' sınavı KIRMIZI yapıyor
+  ✓ mutant 'gizli-sayilmaz' sınavı KIRMIZI yapıyor
+  ✓ mutant 'yok-sifir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'temiz-sayfa-yok' sınavı KIRMIZI yapıyor
+  ✓ mutant 'yontem-yazilmaz' sınavı KIRMIZI yapıyor
+  ✓ mutant 'elle-sayi-yazar' sınavı KIRMIZI yapıyor
+
+── SONUÇ: 23 geçti · 0 kaldı ──
+--- stderr ---
