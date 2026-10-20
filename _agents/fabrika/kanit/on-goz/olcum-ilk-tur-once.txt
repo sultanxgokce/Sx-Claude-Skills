@@ -1,0 +1,17 @@
+$ python3 yazilim-fabrikasi/scripts/ilk-tur-olc.py /config/projects/Nexus /config/projects/cloudtop /config/projects/Sx-Claude-Skills
+# rc=0 sure=1.6s zaman=2026-10-20T21:14:45+03:00
+--- stdout ---
+İLK TUR 5/E (origin/main, DENETIM-1.json):
+  Nexus                   16/90  = %18
+  cloudtop                40/159 = %25
+  Sx-Claude-Skills        30/116 = %26
+  TOPLAM                  86/365 = %24
+
+İlk turda kalan işlerin bulguları (610) — sınıf:
+  kanit-bayat/eksik  139 (%23)   örn: berid-ise-alim: Talebin “yeni sohbet deposu açılışı” kısmı gerçekleştirilmiş görünmüyor; yalnızca ileride  | birlestirme-kapisi-t9b-gkapi-ci: T9b, FABRIKA_GKAPI geçersiz veya çalıştırılamaz olduğunda sınanmak yerine sessizce atlanıy
+  sinav-yetersiz     129 (%21)   örn: ana-dal-kapisi: Yeni dosyanın birden fazla üst dizini henüz yoksa kanca yalnız bir kez üst dizine çıkarıp  | basiret-aile-kaydi: Değişiklik için asıl kabul yolu olan oda cevabı → inbox eşleşmesi → BASİRET’i uyandırma da
+  kapsam/kart        117 (%19)   örn: birlestirme-kancasi-depo: Gerçek worktree sınavı depodaki/değişiklik kapsamındaki kapıyı değil, sabit global kurulum | birlestirme-kapisi-t9b-gkapi-ci: Kart yalnız GKAPI yolunun CI için taşınmasını isterken kabuk test koşucusunun kırmızı-log 
+  kenar-durum        104 (%17)   örn: ana-dal-kapisi: Mutasyon sınavı, koruma bozulduğunda asıl test takımının kırmızıya döndüğünü göstermiyor;  | berid-ise-alim: Tek ölçüm komutu ara kontroller başarısız olsa dahi toplam rc=0 döndürebilir; komutlar nok
+  diğer               85 (%14)   örn: birlestirme-kapisi: Kanca betiğinin bulunması, olay JSON'undaki `cwd` yerine kancayı çalıştıran kabuğun mevcut | compact-kurali: “Zorunlu” kural yalnız elle çağrılan komut olarak eklenmiş; düzenli çağıran cron, servis v
+  belge/rotus         36 (%6)   örn: g11-panel-tasarim: Belirsiz ürün kararları Sultan tarafından doğrulanmadan sonraki durakların bağlayıcı kısıt | hendese-kutuphane-h1: Kaynaklı olma kuralı tutarlı uygulanmamış; çok sayıda pazar, finansman ve ürün hükmü doğru
+--- stderr ---

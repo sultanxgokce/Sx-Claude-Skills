@@ -1,0 +1,45 @@
+{
+  "is": "on-goz",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-20T21:15:25+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "ilk-tur",
+      "asama": "once",
+      "dosya": "olcum-ilk-tur-once.txt",
+      "sha256": "8d5918f0d6908721ef326ab982bb9d182f2bfd4772a82d1ab1c2b10f3679d4c5",
+      "komut": [
+        "python3",
+        "yazilim-fabrikasi/scripts/ilk-tur-olc.py",
+        "/config/projects/Nexus",
+        "/config/projects/cloudtop",
+        "/config/projects/Sx-Claude-Skills"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T21:14:45+03:00",
+      "sure_sn": 1.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "95eace6df02f4225ba1c637e4408a8d0"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "on-goz-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-on-goz-sinavi-tek.txt",
+      "sha256": "ad4c60f70564cc13d9e195d1b72b1a58fac561cc4c518e2f1169d8ec74be5752",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/on-goz.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T21:15:25+03:00",
+      "sure_sn": 40.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "9e1d14e025574869a32d5c4dbf73a43e"
+    }
+  ],
+  "imza": "c4c4b92ee4e6a4e96efb600885cd96d40e11853280b48ed6b07b08a296a00a86"
+}

@@ -1,0 +1,50 @@
+$ bash yazilim-fabrikasi/scripts/on-goz.test.sh
+# rc=0 sure=40.0s zaman=2026-10-20T21:15:25+03:00
+--- stdout ---
+════ O1 · hazır iş: kontroller yeşil, tablo dolu → rc 0 ════
+  ✓ O1a tablo boşken rc 2 (kendine-sor doldurulmadan göze gidilmez)
+  ✓ O1b boş hücre sayısı yazılı
+  ✓ O1c kart cümlesi 3 maddeye bölündü (· ayırıcı; görev izi madde değil)
+  ✓ O1d tablo dolu + kontroller yeşil → rc 0 (rc=0)
+  ✓ O1e göze gönderme komutu yazılı
+  ✓ O1f ON-GOZ.json yazıldı, baş sha'sı yerel HEAD
+════ O2 · BAYAT KANIT: ölçümden sonra kanıtsız kod commit'i → rc 2 ════
+  ✓ O2a kanıt KANIT.json'suz commit'ten eski → kırmızı
+  ✓ O2b yeniden ölçüp kanıtla commit'leyince yeşil (ölç → birlikte commit'le kalıbı bayat SAYILMAZ)
+════ O3 · commit'lenmemiş üretim kodu ════
+  ✓ O3 kirli dosya: kirli-agac + bayat (mtime ölçümden yeni) kırmızı
+════ O4 · sonra ölçümü kırmızı · O5 önce/sonra çifti ════
+  ✓ O4 kırmızı sonra ölçümü → rc 2
+  ✓ O5 önce ölçümü var, sonrası yok → kırmızı
+════ O6 · sarılar rc'yi düşürmez ama yazılır ════
+  ✓ O6a PR gövdesinde dürüst sınır yok → sarı, rc 0 (rc=0)
+  ✓ O6b --pr verilmedi → sarı
+  ✓ O6c PR başı yerel HEAD değil → kırmızı (eski fark = yanan tur)
+  ✓ O6d kart başka depoları anıyor → sarı
+  ✓ O6e tek depolu kart → yeşil
+════ O7 · mutant izi · sonuç göze sığar mı ════
+  ✓ O7a hiçbir ölçümde mutant yok → sarı
+  ✓ O7b SONUÇ 60. satırdan sonra + eski denetçi → sarı
+  ✓ O7c denetçi ölçüm özetini biliyorsa → yeşil (sonucu kendisi taşır)
+════ O8 · ölçülemedi ════
+  ✓ O8a kart yok → rc 3 (ölçülemedi yeşil değildir)
+  ✓ O8b kanıtsız iş → rc 2 (kanıtsız adım 4 yok)
+════ O10 · ilk tur ölçeri: origin/main'deki DENETIM-1 kayıtlarından oran + bulgu sınıfı ════
+  ✓ O10a yalnız origin/main + yalnız 1. tur: 2/4 = %50 (commit'siz kayıt ve 2. tur sayılmadı)
+  ✓ O10b kalan işlerin bulguları sınıflandı
+  ✓ sınav gerçekten koştu (23 ≥ 20)
+════ O9 · MUTASYON: kontrolü bozunca sınav kırmızı veriyor mu ════
+  ✓ mutant 'bayat-yok' sınavı kırmızı yapıyor (OLDU)
+  ✓ mutant 'kanitli-commit-de-bayat' sınavı kırmızı yapıyor (OLDU)
+  ✓ mutant 'kirli-yok' sınavı kırmızı yapıyor (OLDU)
+  ✓ mutant 'sonra-kirmizi-gecer' sınavı kırmızı yapıyor (OLDU)
+  ✓ mutant 'yetim-gecer' sınavı kırmızı yapıyor (OLDU)
+  ✓ mutant 'tablo-sayilmaz' sınavı kırmızı yapıyor (OLDU)
+  ✓ mutant 'pr-basi-bakilmaz' sınavı kırmızı yapıyor (OLDU)
+  ✓ mutant 'goze-sigar-yok' sınavı kırmızı yapıyor (OLDU)
+  ✓ mutant 'kart-depo-yok' sınavı kırmızı yapıyor (OLDU)
+  ✓ mutant 'durust-sinir-gevsek' sınavı kırmızı yapıyor (OLDU)
+  ✓ mutant 'madde-bolunmez' sınavı kırmızı yapıyor (OLDU)
+
+── SONUÇ: 35 geçti · 0 kaldı ──
+--- stderr ---
