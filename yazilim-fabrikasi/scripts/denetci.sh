@@ -499,18 +499,26 @@ olcum_ozeti() {   # olcum_ozeti <ölçüm dosyası>
 import sys
 L = open(sys.argv[1], encoding="utf-8", errors="replace").read().split("\n")
 if L and L[-1] == "": L.pop()
-SINIR, BAS, SON, HSON = 60, 30, 15, 10
+SINIR, BAS, SON, HSON, SECME = 60, 25, 12, 10, 8
 if len(L) <= SINIR: print("\n".join(L)); sys.exit()
+# ATLANAN ORTADAN SEÇME (göz #392 tur 2): sonuç satırı her zaman en sonda değil (ardından 12'den fazla satır gelebilir) ve
+#   kırmızı kapı (✗) ortada kalırsa kırpma onu SAKLAR — göz "yeşil" sanır. Ortadan SONUÇ/✗ taşıyan satırlar (en çok 8) taşınır.
+SECILIR = ("SONUÇ", "SONUC", "✗", "Traceback")
 e = L.index("--- stderr ---") if "--- stderr ---" in L else len(L)
 cik, err = L[:e], L[e:]
 if len(err) > HSON + 1: err = [err[0], "[… stderr'den %d satır atlandı …]" % (len(err) - 1 - HSON)] + err[-HSON:]
 if len(cik) > BAS + SON + 1:
-    cik = cik[:BAS] + ["[… %d satır atlandı (dosya %d satır) — ölçümün SONU aşağıda …]" % (len(cik) - BAS - SON, len(L))] + cik[-SON:]
+    orta = cik[BAS:-SON]; sec = [x for x in orta if any(k in x for k in SECILIR)]
+    not_ = "[… %d satır atlandı (dosya %d satır) — ölçümün SONU aşağıda …]" % (len(orta), len(L))
+    if sec:
+        not_ = "[… %d satır atlandı (dosya %d satır); ortadan SONUÇ/✗ taşıyan %d satır%s: …]" % (
+            len(orta), len(L), len(sec), "" if len(sec) <= SECME else " (ilk %d'i)" % SECME)
+    cik = cik[:BAS] + [not_] + sec[:SECME] + (["[… ölçümün SONU …]"] if sec else []) + cik[-SON:]
 print("\n".join(cik + err))
 PY
 }
 {
-  printf '\n\n===== ÖLÇÜM ÇIKTILARI (60 satıra kadar aynen; uzunda baş + atlanan + SON — sonuç satırı sonda) =====\n'
+  printf '\n\n===== ÖLÇÜM ÇIKTILARI (60 satıra kadar aynen; uzunda baş + atlanan ortadan SONUÇ/✗ satırları + SON) =====\n'
   for f in "$DZ"/olcum-*.txt; do [ -f "$f" ] && { printf -- '--- %s ---\n' "$(basename "$f")"; olcum_ozeti "$f"; }; done
 } > "$TMP/p-olcum.md"
 {

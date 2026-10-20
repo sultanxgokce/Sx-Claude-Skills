@@ -18,5 +18,6 @@ bol = s[b + 1:e]
 print("başlık:", next(x for x in s if x.startswith("===== ÖLÇÜM")))
 print("ölçüm dosyası %d satır → göze giden %d satır" % (n, len(bol)))
 print("sonuç satırı göze gidiyor mu:", "EVET" if any(x.strip() == "── SONUÇ: 156 geçti · 0 kaldı ──" for x in bol) else "HAYIR")
-print("son giden (boş olmayan) satır:", next((x for x in reversed(bol) if x.strip()), "(yok)"))
+cik = bol[:bol.index("--- stderr ---")] if "--- stderr ---" in bol else bol   # ölçüm dosyasının KENDİ stderr ayırıcısı hariç
+print("ölçümün stdout'undan göze giden son satır: «%s»" % next((x for x in reversed(cik) if x.strip()), "(yok)"))
 PY

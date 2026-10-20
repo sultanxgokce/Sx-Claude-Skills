@@ -545,6 +545,21 @@ grep -qx "kapi 0" <<<"$U" && ! grep -qx "kapi 100" <<<"$U" && grep -qx "kapi 183
 [ "$(wc -l <<<"$U")" -le 60 ]; g $? "O4 tavan aynı: dosya başı ≤ 60 satır ($(wc -l <<<"$U"))"
 [ "$(grep -c '^kisa-satir-' <<<"$KS")" -eq 5 ] && ! grep -q "atlandı" <<<"$KS"; g $? "O5 kısa ölçüm aynen, işaretsiz"
 grep -qx "SONUC-SATIRI-X" <<<"$H" && grep -q "stderr'den [0-9]* satır atlandı" <<<"$H" && grep -qx "hata 49" <<<"$H"; g $? "O6 uzun stderr stdout'un sonucunu dışarı itmez; stderr'in de sonu gelir"
+# göz #392 tur 2: sonuç en sonda olmayabilir · ortadaki kırmızı kapı kırpmada saklanmamalı
+bash "$K" olcum is-son2 orta --asama tek -- python3 -c 'for i in range(80): print("  ✓ kapi %d" % i)
+print("  ✗ kapi " + "kirmizi-orta")
+for i in range(40): print("  ✓ kapi2 %d" % i)
+print("── SONUÇ: %d geçti · 1 kaldı ──" % 120)
+for i in range(30): print("temizlik %d" % i)' >/dev/null 2>&1
+SAHTE_ISTEM_KOPYA="$T/istem-son2.md" SAHTE_JSON="$(J 5 E "")" DENETCI_KIRP_ESIK=900000 bash "$D" is-son2 --diff "$T/ist1.patch" >/dev/null 2>&1
+U2="$(python3 -c '
+import sys
+s=open(sys.argv[1],encoding="utf-8").read().split("\n"); b=s.index("--- olcum-orta-tek.txt ---")
+e=next((i for i in range(b+1,len(s)) if s[i].startswith("--- olcum-") or s[i].startswith("=====")), len(s))
+print("\n".join(s[b+1:e]))' "$T/istem-son2.md")"
+grep -qx "  ✗ kapi kirmizi-orta" <<<"$U2"; g $? "O7 🔴 ortadaki KIRMIZI kapı kırpmada saklanmaz (göze gider)"
+grep -qx "── SONUÇ: 120 geçti · 1 kaldı ──" <<<"$U2" && ! grep -qx "temizlik 0" <<<"$U2"; g $? "O8 sonuç satırının ardından 12'den çok satır gelse de sonuç gider (orta atlanırken seçilir)"
+[ "$(wc -l <<<"$U2")" -le 60 ]; g $? "O9 seçmeyle de tavan aşılmaz ($(wc -l <<<"$U2") ≤ 60)"
 T="$_T_ONCE"; export KANIT_DEPO="$T" DENETCI_KOMUT="$_DK_ONCE"
 if [ -n "${IC_KOSUM:-}" ]; then echo "(ic)"; [ "$kalan" -eq 0 ]; exit $?; fi
 echo "════ T11 · MUTASYON: Sultan kapısını bozunca sınav kırmızı veriyor mu ════"
@@ -618,8 +633,9 @@ mut "istem-karti-dusurur" 's@^ISTEM_PARCALARI=(sablon kart kanit@ISTEM_PARCALARI
 mut "istem-ayiklama-kosulu-duser" 's@ && \[ "${DENETCI_KANIT_AYIKLA:-1}" != "0" \] && \[ "$ISTEM_BAYT"@ \&\& [ "$ISTEM_BAYT"@'
 mut "olcum-sonu-yok" 's@olcum_ozeti "$f"; }; done@head -60 "$f"; }; done@'
 mut "olcum-stderr-ayrilmaz" 's@^e = L.index("--- stderr ---") if "--- stderr ---" in L else len(L)$@e = len(L)@'
-mut "olcum-tavan-asilir" 's@^SINIR, BAS, SON, HSON = 60, 30, 15, 10$@SINIR, BAS, SON, HSON = 60, 300, 15, 10@'
-mut "olcum-atlanan-sayisiz" 's@"\[… %d satır atlandı (dosya %d satır) — ölçümün SONU aşağıda …\]" % (len(cik) - BAS - SON, len(L))@"[…]"@'
+mut "olcum-tavan-asilir" 's@^SINIR, BAS, SON, HSON, SECME = 60, 25, 12, 10, 8$@SINIR, BAS, SON, HSON, SECME = 60, 300, 12, 10, 8@'
+mut "olcum-atlanan-sayisiz" 's@^    not_ = "\[… %d satır atlandı (dosya %d satır) — ölçümün SONU aşağıda …\]" % (len(orta), len(L))$@    not_ = "[…]"@'
+mut "olcum-ortadan-secmez" 's@^    orta = cik\[BAS:-SON\]; sec = \[x for x in orta if any(k in x for k in SECILIR)\]$@    orta = cik[BAS:-SON]; sec = []@'
 mut_kos
 
 # ── KANIT-AYIKLAMA KAPILARI (gorev_01M4ZSKHD1Y1FFT8P6Z5YMPTF9)
