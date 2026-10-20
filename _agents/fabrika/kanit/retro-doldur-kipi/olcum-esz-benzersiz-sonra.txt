@@ -1,0 +1,5 @@
+$ bash _agents/fabrika/kanit/retro-doldur-kipi/esz.sh retro/scripts/retro.py
+# rc=0 sure=0.5s zaman=2026-10-20T17:46:24+03:00
+--- stdout ---
+40 eşzamanlı dolum: düşen=0 · geride kalan geçici dosya=0
+--- stderr ---

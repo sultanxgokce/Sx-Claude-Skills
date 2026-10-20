@@ -5,8 +5,10 @@ Niçin var (Sultan 17 Eki 2026, beyan SERDAR): haftanın dersleri yalnız merkez
 HER ajanın kendi gözüyle de merkeze aksın; akış sistemli olsun ki süzülsün. Ölçüm (17 Eki): ajanların
 kendi "ders/zaman kaybı" satırı BÂNİ 11/100 · MUAVİN 1/21 · MİRAHUR 0 · MUHAKKİK 0 — kanal yoktu.
 
-Dört alt komut:
+Beş alt komut:
   kutu   <AJAN>   ajanın haftasını ölçer, retro dosyasının iskeletini yazar (5 başlık boş; ajan doldurur)
+  doldur <AJAN> --metin <dosya|->   ajanın yazdığı 5 başlığı iskelete ARAÇ yerleştirir (ana dal kapısı Edit/Write'ı
+                  reddeder; ölçüm/imza satırları dosyada kalır, metinden alınmaz; lint'ten geçmeyen sonuç YAZILMAZ)
   lint   <dosya>  retro dosyası şemaya uyuyor mu (başlık · imza · ölçüm bloğu · 5 başlık dolu · ölçülü zaman kaybı)
   merkez          kutu retrolarını toplar: OK / GEÇERSİZ / EKSİK / ÇALIŞMADI; MERKEZ.md iskeleti (Süzüm listesi)
   suzum           her "merkeze öneri" maddesi MERKEZ.md'de → gorev_… ya da → RED: … damgası aldı mı
@@ -26,10 +28,11 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 import unicodedata
 from datetime import date, datetime, timedelta
 
-SURUM = "1.0.1"
+SURUM = "1.1.0"
 AJAN_DIZIN_DISI = {"handoff", "fabrika", "spec", "orchestration", "codex", "decisions", "runbooks", "ekip-os-base"}
 DERS_RE = re.compile(r"ders|zaman kayb|zorluk|tıkand|tikand|boşa|bosa", re.I)
 TARIH_RE = re.compile(r"(20\d\d-\d\d-\d\d)")
@@ -44,6 +47,7 @@ BASLIKLAR = [
 ]
 MADDE_RE = re.compile(r"^- ([BZADÖ])(\d+)\) (.+)$")
 YER_TUTUCU_RE = re.compile(r"<[^>]{1,60}>|…")
+YORUM_NOTU = "<!-- Yorum satırları ajanındır; merkez bunları DEĞİŞTİRMEZ. Z maddesi ölçüsüz geçmez. Ö maddesi en çok 5. -->"
 
 
 # ───────────────────────── yardımcılar ─────────────────────────
@@ -275,7 +279,7 @@ def kutu(a):
             f"# 🔁 HAFTALIK RETRO · {hafta} · {ajan}\n"
             f"_koltuk: {koltuk}\n_kutu: {os.uname().nodename}\n_yazildi: {simdi}\n_arac: retro.py {SURUM}\n\n"
             f"{tablo}\n\n" + "\n".join(bolumler) +
-            "\n<!-- Yorum satırları ajanındır; merkez bunları DEĞİŞTİRMEZ. Z maddesi ölçüsüz geçmez. Ö maddesi en çok 5. -->\n"
+            "\n" + YORUM_NOTU + "\n"
         )
         open(yol, "w", encoding="utf-8").write(govde)
         print(f"✓ iskelet yazıldı: {os.path.relpath(yol, kok)} — 5 başlığı doldur, sonra `retro.py lint` koş")
@@ -283,6 +287,65 @@ def kutu(a):
           f"kart {o['kart']['acilan'] if o['kart'] else '—'}/{o['kart']['bitti'] if o['kart'] else '—'}/{o['kart']['tikandi'] if o['kart'] else '—'}")
     if "--json" in a:
         print(json.dumps(o, ensure_ascii=False))
+    return 0
+
+
+# ───────────────────────── doldur ─────────────────────────
+# Niçin (retro W42 MİRAHUR Ö1 · gorev_01M57ZV2C26H9VZ9VX2XSKHX56): `kutu` iskeleti paylaşılan ana ağaca yazar, ama ana dal
+# kapısı o ağaçta Edit/Write'ı reddeder — ajan iskeleti dolduramıyordu. Kapı GEVŞETİLMEZ; dolumu araç yapar (Bash'ten,
+# append-note.sh gibi). Ajan metni ağaç dışında (taslak dosya ya da stdin) yazar; araç yalnız 5 yorum başlığını alır.
+def doldur(a):
+    kok = kok_bul(a.get("--kok"))
+    ajan = a["ajan"]
+    hafta = a.get("--hafta") or bu_hafta()
+    yol = os.path.join(retro_dizin(kok, hafta), f"{ajan}.md")
+    if not os.path.exists(yol):
+        print(f"✗ iskelet yok: {os.path.relpath(yol, kok)} — önce `retro.py kutu {ajan}` (ölçüm bloğunu araç yazar)")
+        return 2
+    kaynak = a.get("--metin")
+    if not kaynak:
+        raise ValueError("--metin <dosya|-> gerekli (doldurulmuş 5 başlık)")
+    try:
+        metin = sys.stdin.read() if kaynak == "-" else open(kaynak, encoding="utf-8").read()
+    except OSError as e:
+        print(f"✗ metin okunamadı: {kaynak} ({e.strerror})")
+        return 2
+    # Ölçüm ve imza ARACINDIR: metinde görünürse ajan onları sahteleyebilirdi → reddedilir, sessizce atılmaz.
+    if re.search(r"^## Ölçüm", metin, re.M) or re.search(r"^_(koltuk|kutu|yazildi|arac|olcum_yenilendi):", metin, re.M):
+        print("✗ yazılmadı — metinde ölçüm bloğu ya da imza satırı var; onları araç yazar. Yalnız '## 1 · …' … '## 5 · …' ver")
+        return 2
+    m = re.search(r"^## 1 · ", metin, re.M)
+    if not m:
+        print("✗ yazılmadı — metinde '## 1 · ' başlığı yok (5 başlık iskeletteki adlarıyla verilir)")
+        return 2
+    if metin[:m.start()].strip():
+        print("✗ yazılmadı — '## 1 · ' öncesinde metin var; araç onu yutardı. Yalnız 5 başlığı ver")
+        return 2
+    govde = re.sub(r"\n*<!-- Yorum satırları ajanındır;.*?-->\s*$", "", metin[m.start():], flags=re.S).rstrip("\n") + "\n"
+    eski = open(yol, encoding="utf-8").read()
+    i = eski.find("\n## 1 · ")
+    if i < 0:
+        print("✗ yazılmadı — iskelette '## 1 · ' bulunamadı (dosya elle bozulmuş olabilir)")
+        return 2
+    yeni = eski[: i + 1] + govde + "\n" + YORUM_NOTU + "\n"
+    h, b = lint_metin(yeni, hafta, ajan)
+    if h:
+        print(f"✗ yazılmadı — doldurulmuş retro GEÇERSİZ ({len(h)} hata), dosya olduğu gibi:")
+        for x in h:
+            print(f"  • {x}")
+        return 1
+    # Benzersiz geçici dosya AYNI dizinde (os.replace atomik kalsın); sabit ad eşzamanlı iki dolumu çarpıştırırdı (göz tur 1).
+    fd, gecici = tempfile.mkstemp(prefix=f".{ajan}.", suffix=".yeni", dir=os.path.dirname(yol))
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            f.write(yeni)
+        os.chmod(gecici, 0o644)
+        os.replace(gecici, yol)
+    except BaseException:
+        if os.path.exists(gecici):
+            os.unlink(gecici)
+        raise
+    print(f"✓ dolduruldu: {os.path.relpath(yol, kok)} · öneri {len(b['oneri'])} · ders {len(b['ders'])} — lint geçti")
     return 0
 
 
@@ -569,6 +632,8 @@ def main(argv):
     try:
         if cmd == "kutu":
             return kutu(argv_coz(rest, ["ajan"]))
+        if cmd == "doldur":
+            return doldur(argv_coz(rest, ["ajan"]))
         if cmd == "lint":
             return lint(argv_coz(rest, ["dosya"]))
         if cmd == "merkez":
@@ -581,7 +646,7 @@ def main(argv):
     except ValueError as e:
         print(f"✗ {e}")
         return 2
-    print(f"✗ bilinmeyen komut: {cmd} (kutu · lint · merkez · suzum · hafta)")
+    print(f"✗ bilinmeyen komut: {cmd} (kutu · doldur · lint · merkez · suzum · hafta)")
     return 2
 
 
