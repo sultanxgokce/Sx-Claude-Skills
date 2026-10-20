@@ -1,5 +1,5 @@
 $ bash bileyi/scripts/bileyi.test.sh
-# rc=0 sure=11.3s zaman=2026-10-20T18:11:44+03:00
+# rc=0 sure=17.5s zaman=2026-10-20T18:17:20+03:00
 --- stdout ---
 A · temel akış
   ✓ A1 eşiği aşan tekrar VAR → rc=0
@@ -129,6 +129,7 @@ X · kutunun KENDİ Bulgu Defteri (gorev_01M4ZMCTMEEF1QW0Z0K2TG2FTX — mmex: ha
   ✓ X12 🔴 AÇIK verilen yol yoksa sessizce düşmez: 🟡 okunamadı satırı
   ✓ X13 açık yolu olmayan kaynak kapsamayı GENİŞ göstermez (1/2 kaynak)
   ✓ X14 '-' bilerek kapatır: kaynak satırı yok
+  ✓ X15 🔴 defter OKUNAMAZSA (dizin/izin) ham çökme değil: rc=3 + sebep (rc=3)
 X · MUTASYON (tam kopyada; kontrol önce)
   ✓ X kontrol: bozulmamış araçla mutant beklentileri tutuyor
   ✓ X mutant 'kaynak-eklenmez' sınavı düşürüyor
@@ -136,7 +137,8 @@ X · MUTASYON (tam kopyada; kontrol önce)
   ✓ X mutant 'baslik-bozuk-sayilmaz' sınavı düşürüyor
   ✓ X mutant 'kutu-sayilmaz' sınavı düşürüyor
   ✓ X mutant 'acik-yol-sessiz-duser' sınavı düşürüyor
+  ✓ X mutant 'oserror-yakalanmaz' sınavı düşürüyor
   ✓ X mutant 'ev-dizini-yok' sınavı düşürüyor
 
-toplam=112 geçen=112 düşen=0
+toplam=114 geçen=114 düşen=0
 --- stderr ---

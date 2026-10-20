@@ -1,0 +1,73 @@
+{
+  "tur": 2,
+  "is": "bileyi-kutu-bulgu-defteri",
+  "pr": "391",
+  "yazan": "claude",
+  "denetci": "claude (haiku) (YEDEK GÖZ: codex düştü (2 deneme, rc=1) · yazandan farklı yeni oturum + farklı model kademesi [yazan: sonnet] · Sultan Y0006)",
+  "zaman": "2026-10-20T18:13:34+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": "codex düştü (2 deneme, rc=1)",
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": "haiku",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 28092,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 18653
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Bileyi artık kutunun kendi Bulgu Defteri'ni ev dizininden türeyen yoldan okuyor (BILEYI_KUTU_DEFTERI ile değişir, '-' kapatır) ve defter biçimini kendi kaydına eşliyor; mmex ölçümünde önce rc=3, sonra defterden 4 kayıtla rc=0 var, yani talep kutuda gösterilmiş. Puan 4: önceki turdaki sessiz düşme sorunu kapatılmış ve X kapıları + mutasyonlar eklenmiş, ama yeni okuma dalı okunamayan dosyada rc=3 yerine ham istisna verebilir ve sınav kanıtının görünür kısmı X bölümünü göstermiyor.",
+    "bulgular": [
+      {
+        "ne": "Yeni kutu_defteri_oku yalnız JSONDecodeError yakalıyor; dosya okunamazsa (izin, dizin, OSError) istisna Durdu'ya dönüşmeden yukarı çıkıyor, olc rc=3 ÖLÇEMEDİM yerine ham çökme verebilir.",
+        "kanit": "bileyi.py:154-164 kutu_defteri_oku içinde yalnız except json.JSONDecodeError var; yol.read_text çağrısı korumasız. Çağıran döngü (bileyi.py:603) yalnız Durdu yakalıyor. Aynı desen jsonl dalında da var, yani yeni bir hata değil ama yeni dal bunu çoğaltıyor.",
+        "konum": "bileyi/scripts/bileyi.py:kutu_defteri_oku (diff ~satır 200-215); çağıran bileyi.py:603",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "mmex 'sonra' ölçümü rc=0 ve manifestte 'yesil' işaretli, fakat çıktının kendisi iki kaynağı ÖLÇEMEDİM diye işaretliyor: merkez havuz okunamadı ve sürtünme raporu yok. Yeşil kaydı yalnız defter kaynağını kanıtlıyor.",
+        "kanit": "olcum-mmex-bicimi-sonra.txt: '🟡 merkez: ... okunamadı' ve '🟡 sürtünme raporu bu depoda yok — ÖLÇEMEDİM'; manifest: rc=0, renk=yesil; özet satırı '1/2 kaynak OKUNDU'.",
+        "konum": "kanit manifesti kayıt 'olcum mmex-bicimi sonra' (olcum_id d14a382207ab480c8f9ed92b994abe5d)",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Sınav kanıtı 60 satırda kesilmiş; yeni X bölümü (X1–X14 ve X mutasyonları) ve 'toplam=… düşen=…' özeti görünmüyor. 'Tüm X kapıları geçti' sonucu yalnız rc=0'dan çıkarılıyor (betik sonunda [[ $DUSEN -eq 0 ]] var; çıkarım makul ama doğrudan gösterilmiyor).",
+        "kanit": "olcum-bileyi-sinavi-sonra.txt son satır N1; test.sh'de X bölümü W8'den sonra başlıyor; çıktıda 'X ·' başlığı yok.",
+        "konum": "kanit manifesti 'bileyi-sinavi sonra' (olcum_id fba8ed395d24491b95be89474130b2b4)",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Sonra çıktısında '4 × aron golge' satırı 4 kayıt diyor ama yalnız 3 kimlik (S0002, S0009, S0017) listeliyor; dördüncü kaydın kimliği boş mu, liste mi kırpılmış belirsiz.",
+        "kanit": "olcum-mmex-bicimi-sonra.txt: '4 × aron golge [S0002,S0009,S0017]' ve '4 kayıt'. kutu_defteri_oku id'yi b.get('id') or b.get('no') or '' ile alıyor; boş id ayrıca ayırt edilmiyor.",
+        "konum": "bileyi.py kutu_defteri_oku eşleme satırı; olcum-mmex-bicimi-sonra.txt",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Sürtünme raporu (friction-report.sh) ve merkez bulgu havuzu bu depoda yok; mmex tarafında ölçüm için bu kaynaklar gerekiyor ve kutu içinden tamamlanamaz.",
+        "kanit": "olcum-mmex-bicimi-sonra.txt: 'sürtünme raporu bu depoda yok (friction-report.sh)' ve merkez 'okunamadı'.",
+        "konum": "olcum-mmex-bicimi-sonra.txt çıktısı",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "mmex deposu (friction-report.sh) ve merkez bulgu havuzu erişimi"
+      },
+      {
+        "ne": "Kod yorumları ve SKILL.md tarih/kaynak bilgisi tutarsız: kod yorumu 'mmex 12 Eki', SKILL.md '20 Eki 2026'; kod yorumları iç görev kimliklerini ve 'bağımsız göz #391' gibi süreç referanslarını taşıyor.",
+        "kanit": "bileyi.py yorum bloğu '(gorev_01M4ZMCTMEEF1QW0Z0K2TG2FTX, mmex 12 Eki)' ve SKILL.md '(20 Eki 2026, görev G2FTX · mmex)'.",
+        "konum": "bileyi/scripts/bileyi.py yeni yorum bloğu; bileyi/SKILL.md +66 satırları",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sha'lar tutuyor, sarı kayıt yok. Önce/sonra mmex çifti (rc=3 → rc=0, defterden 4 kayıt) talebin ana kısmını gösteriyor; ama 'sonra' kaydı yeşil olmasına rağmen iki kaynağın ÖLÇEMEDİM olduğunu kendi çıktısında taşıyor, bu yüzden yalnız defter kaynağı kanıtlanmış sayılmalı. Sınav kanıtı 60 satırla kesildiği için X bölümü ve özet doğrudan görünmüyor; geçiş yalnız rc=0 üzerinden çıkarılıyor. Önceki turdaki 'açık yol sessizce düşer' bulgusu kodda kapatılmış (bileyi.py:551-552) ve X12/X13 + xmo mutantıyla sınanıyor."
+  }
+}
