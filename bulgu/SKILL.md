@@ -23,7 +23,8 @@ Açtığın kayıt başka bir kutunun **bekleyen** görevini serbest bırakmak i
 `--dugum <kutu>:gorev_<kimlik>` ya da çıplak `--dugum gorev_<kimlik>` (kutu defterden okunur; görünmüyorsa rc 1, kayıt yazılmaz).
 Kayıt defterin `dugum_acar` alanını taşır; biçim ve varlık kapısı **defterdedir** (hedef var mı, açık mı, kutusu tutuyor mu),
 reddederse sebep aynen basılır (rc 1). Defter 1.14.0 ve sonrası bekleyen göreve aynı yazımda "bekliyor ←" notu düşer ve komut
-bunu söyler. Düğüm yalnız merkezî defterde yaşar: **jetonsuz kutuda `--dugum` reddedilir** (rc 2), bağ sessizce düşmez.
+bunu söyler; not yazılamadıysa (ör. bekleyen görevi düzenleme yetkin yok) kayıt yine yazılır ve komut **rc 4** döner
+(sebep basılır) — çağıran bağın yarım kaldığını anlar. Düğüm yalnız merkezî defterde yaşar: **jetonsuz kutuda `--dugum` reddedilir** (rc 2), bağ sessizce düşmez.
 
 ## Komut (her kutuda AYNI)
 ```bash

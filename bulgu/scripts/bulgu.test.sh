@@ -44,6 +44,7 @@ class H(http.server.BaseHTTPRequestHandler):
         if b.get("dugum_acar")=="mmex:gorev_KAPANMIS00000001": self.send_response(400); self.end_headers(); self.wfile.write(b'{"ok":false,"hata":"dugum_hedefi_gecersiz","bekleniyor":"dugum_acar: kapanmis"}'); return
         cv={"kutu":"maiset","etiket":b.get("etiket"),"kaynak_kim":b.get("kaynak_kim")}; ek={}
         if b.get("dugum_acar"): cv["dugum_acar"]=b["dugum_acar"]; ek["dugum_bekleyen"]={"id":b["dugum_acar"].split(":",1)[1],"yazildi":True}
+        if b.get("dugum_acar")=="mmex:gorev_KILITLI000000001": ek["dugum_bekleyen"]={"id":"gorev_KILITLI000000001","yazildi":False,"sebep":"yazma_yetkisi_yok"}
         self.send_response(201); self.end_headers()
         self.wfile.write(json.dumps({"ok":True,"kayit":{"id":"gorev_SINAV0000000001","ekleyen_kutu":"maiset","adlar":[{"deger":b["adlar"][0]}],"canli":cv},**ek}).encode())
     def do_GET(self):
@@ -76,6 +77,8 @@ ok "D0 --dugum verilmezse gövdede dugum_acar YOK (eski yol aynen)" '[ "$(alan)"
 rm -f "$T/get.log"
 o=$(env $M bash "$B" yaz "mmex bekleyen işin parçası" --kim BASIRET --dugum mmex:gorev_HEDEF000000001 2>&1); r=$?
 ok "D1 kutulu biçim olduğu gibi dugum_acar olur; defterden okuma YAPILMAZ; düğüm + bekleyen sonucu söylenir" '[ $r -eq 0 ] && [ "$(alan)" = "mmex:gorev_HEDEF000000001" ] && [ ! -f "$T/get.log" ] && [[ "$o" == *"⛓ düğüm: mmex:gorev_HEDEF000000001"* ]] && [[ "$o" == *"⛓ bekleyen gorev_HEDEF000000001: bekliyor notu yazıldı"* ]]'
+o=$(env $M bash "$B" yaz "kilitli bekleyen" --kim BASIRET --dugum mmex:gorev_KILITLI000000001 2>&1); r=$?
+ok "D1b kayıt yazıldı ama bekleyen notu YAZILAMADIYSA rc 4 (0 değil, 1 değil) + defterin sebebi" '[ $r -eq 4 ] && [[ "$o" == *"📌 gorev_SINAV0000000001"* ]] && [[ "$o" == *"⛓ bekleyen gorev_KILITLI000000001: NOT YAZILMADI — yazma_yetkisi_yok"* ]]'
 o=$(env $M bash "$B" yaz "çıplak kimlikle düğüm" --kim BASIRET --dugum gorev_BEKLEYEN00000001 2>&1); r=$?
 ok "D2 çıplak kimlik: kutu defterden okunur (canlı kutu mmex, ekleyen akar DEĞİL) → mmex:gorev_BEKLEYEN00000001" '[ $r -eq 0 ] && [ "$(alan)" = "mmex:gorev_BEKLEYEN00000001" ] && grep -qx "/kayit/gorev_BEKLEYEN00000001" "$T/get.log"'
 ok "D2b jeton değeri çıktıda YOK (okuma yolu da --config ile)" '[[ "$o" != *sinav-jeton-ABC* ]]'

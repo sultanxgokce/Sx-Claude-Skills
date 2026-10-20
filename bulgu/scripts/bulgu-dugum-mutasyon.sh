@@ -27,4 +27,5 @@ dene "MD5 kutu canlı değerden değil ekleyenden okunur" 'k["canli"].get("kutu"
 dene "MD6 bekleyen sonucu söylenmez" 'if b: print("  ⛓ bekleyen' 'if False: print("  ⛓ bekleyen'
 dene "MD7 düğüm boş dize kabul edilir" '[ $# -ge 2 ] && [ -n "$2" ] || { echo "--dugum değersiz"' '[ $# -ge 2 ] || { echo "--dugum değersiz"'
 dene "MD8 görünmeyen düğümde yine de yazar" '"$dugum")" || exit 1 ;;' '"$dugum")" ;;'
+dene "MD9 bekleyen notu yazılamadığında rc 0 döner" 'if b and not b.get("yazildi"): sys.exit(4)' 'pass'
 echo "─────────────"; echo "MUTASYON: gecti=$gecti dusen=$dusen"; [ $dusen -eq 0 ]

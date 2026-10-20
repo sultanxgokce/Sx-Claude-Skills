@@ -2,6 +2,7 @@
 # bulgu.sh — filonun tek bulgu komutu (Sultan /goal K2). Kutunun kendi Bulgu Defteri'ne, defterin KENDİ
 # kilitli yazıcısıyla (defter-yaz.py) yazar. Yeni yazıcı icat etmez; yalnız kapıdır.
 # rc: 0 tamam · 1 yazıcı hatası · 2 kullanım · 3 bu kutuda defter kurulu değil (hiçbir şey yazılmadı)
+#     4 kayıt YAZILDI ama düğümün bekleyen görevine "bekliyor" notu yazılamadı (yaz --dugum; defter sebebini söyler)
 set -uo pipefail
 KOK="${BULGU_KOK:-/config/.ic-sayfa}"
 YAZ="$KOK/defter-yaz.py"
@@ -58,7 +59,8 @@ if kod!="201": print("⛔ merkezî defter reddetti http=%s · %s · %s" % (kod, 
 k=j["kayit"]; print("📌 %s · %s · %s — %s (açan: %s) · Görev Defteri" % (k["id"], k["canli"].get("kutu") or k.get("ekleyen_kutu"), k["canli"].get("etiket"), k["adlar"][0]["deger"], k["canli"].get("kaynak_kim")))
 if k["canli"].get("dugum_acar"): print("  ⛓ düğüm: %s" % k["canli"]["dugum_acar"])
 b=j.get("dugum_bekleyen")
-if b: print("  ⛓ bekleyen %s: %s" % (b.get("id"), "bekliyor notu yazıldı" if b.get("yazildi") else "NOT YAZILMADI — " + str(b.get("sebep","?"))))'
+if b: print("  ⛓ bekleyen %s: %s" % (b.get("id"), "bekliyor notu yazıldı" if b.get("yazildi") else "NOT YAZILMADI — " + str(b.get("sebep","?"))))
+if b and not b.get("yazildi"): sys.exit(4)'
     else
       [ -f "$YAZ" ] || _kur_yok
       echo "ℹ bu kutuda defter jetonu yok ($JY) — kayıt ESKİ kutu defterine yazılıyor (merkeze taşınması için SERDAR'a: jeton-dagit)" >&2

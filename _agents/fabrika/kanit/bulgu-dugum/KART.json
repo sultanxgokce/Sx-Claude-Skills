@@ -1,0 +1,22 @@
+{
+  "is": "bulgu-dugum",
+  "cumle": "Kutudaki ajan bulgu komutuyla açtığı görevi başka bir kutunun bekleyen görevine düğüm olarak bağlayabilsin; çıplak görev kimliğinde kutu defterden çözülsün, jetonsuz kutuda bağ sessizce düşmesin",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-20T20:19:51+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": []
+}
