@@ -1,0 +1,45 @@
+{
+  "tur": 2,
+  "is": "tmux-bekcisi-yayilim",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "claude (haiku) (YEDEK GÖZ: codex düştü (2 deneme, rc=1) · yazandan farklı yeni oturum + farklı model kademesi [yazan: sonnet] · Sultan Y0006)",
+  "zaman": "2026-10-20T20:25:34+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": "codex düştü (2 deneme, rc=1)",
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": "haiku",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 31116,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 12,
+    "bayt": 24934
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Değişiklik küçük ve doğru yerde: bekci.sh duraklatma kapısından sonra tmux_bekcisi_kur'u her turda çağırıyor, güncelse sessiz kalıyor, kurulamasa da işine devam ediyor. B1–B5 testleri ve dört bozma bu davranışı ve duraklatma sınırını sınıyor (bekci-turu kırmızı→yeşil çifti). Talep (her turda kurma + vaka.sh'ın canlı defteri yazmaması) kodda ve kanıtta karşılanmış; tek açık, filo genelindeki etkinin yayın sonrası ölçülmemiş olması.",
+    "bulgular": [
+      {
+        "ne": "Kurulum güncel değilse (ör. yabancı dosya, B4 durumu) bekçi her dakika günlüğe bir satır yazıyor; üst sınır yok ve test günlük satır sayısını doğrulamıyor.",
+        "kanit": "bekci.sh:12 `_tb=\"$(tmux_bekcisi_kur)\"; [ \"$_tb\" = güncel ] || gunluk ...` her turda koşuyor; B2 yalnız güncel durumda yazmadığını ölçüyor, kurulamayan durum için satır sayısı kapısı yok. SKILL.md 2.19.1 notu bunu belgeliyor ('kuramadığında günlüğe bir satır').",
+        "konum": "terminal-onar/scripts/bekci.sh:12; tmux-bekcisi.test.sh B4 kapısı",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Filo etkisi yalnız yayın öncesi (once) ölçülmüş; 'sağlıklı kutulara inmesi' iddiasını doğrulayan yayın sonrası filo ölçümü yok.",
+        "kanit": "filo-kurulum kanıtı yalnız 'filo-kurulum/once' etiketiyle (v2: ekip kutusu 18 · bekçi kurulu 1). Yayın sonrası karşılaştırma yok; B testleri aynı kodu sınar, canlı kutuyu değil.",
+        "konum": "kanıt manifesti: filo-kurulum once (v2, 20:24:16) · SKILL.md 2.19.1 notu",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "filo kutuları — yayın ve bir bekçi turu sonrası canlı ölçüm (kutu sahiplerinin zamanlaması)"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam. Davranış için kırmızı→yeşil bekci-turu çifti, B1–B5 kapıları ve dört bozma (bekci-kurmaz, bekci-hep-yazar, bekci-durakta-kurar, bekci-hatada-durur) var; her bozma ilgili kapıyı kırıyor. vaka-canli-defter ölçümü canlı defteri 3→3 olarak doğruluyor. Önceki turdaki '18 kutudan yalnız code' ve ÖLÇÜLEMEDİ bulgusu v2 ölçümüyle çözülmüş. Eksik olanlar: yayın sonrası filo ölçümü (kutu-dışı) ve günlük satır sınırının sınavı. Bunlar kod puanını düşürmez."
+  }
+}

@@ -1,7 +1,7 @@
 {
   "is": "tmux-bekcisi-yayilim",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-20T20:24:16+03:00",
+  "guncelleme": "2026-10-20T20:26:55+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -108,7 +108,42 @@
       "sure_sn": 9.5,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "c3d8777227c24b209043c0a4b2ac7836"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bekci-turu-v2",
+      "asama": "sonra",
+      "dosya": "olcum-bekci-turu-v2-sonra.txt",
+      "sha256": "1abfda03031a9092035a4a5676c717cc7b53fcadeb2a1da7e653954c28d3ec0d",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/tmux-bekcisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T20:26:47+03:00",
+      "sure_sn": 12.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "9404e34921334e4aa84324f74a9e7a43"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bozma-adlari-v2",
+      "asama": "tek",
+      "dosya": "olcum-bozma-adlari-v2-tek.txt",
+      "sha256": "c8f3e193524b593d6764270e7aa4d98f8876f333b02156b4d47624a3a15517ee",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/tmux-bekcisi-yayilim/mutasyon-ad.sh",
+        "terminal-onar"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T20:26:55+03:00",
+      "sure_sn": 8.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "dffa0e7c64484bf1bdfbaba245c04f78"
     }
   ],
-  "imza": "8ae7c8048e817b4fa98dbb507f6f9424fc32a0d51bd1b732772cf6666b10bcf6"
+  "imza": "2375e72453aaa28880d545c79f789ecb5a19f3977cef63cc6f3c44f4961b2829"
 }
