@@ -246,6 +246,16 @@ rm -f "$SD"
 kapi "T11g keşif kökü yoksa yalnız KOK (eski davranış)" 0 env RETRO_DEPO_KOKU="$T/yok-boyle" python3 "$R" kutu SIRA --koltuk s:0
 icerir "$(cat "$SD")" "| kart açılan / bitti / tıkandı | 1 / 1 / 0 |" "T11h keşifsiz tek depo"
 rm -f "$SD"
+# origin/main OKUNAMAZSA sayım sessizce eksik kalmaz (göz tur 1): Sx kopyasında uzak dal referansı silinir → depo ADIYLA uyarı
+P2="$T/projeler2"; mkdir -p "$P2"; cp -r "$SX" "$P2/Sx"; git -C "$P2/Sx" update-ref -d refs/remotes/origin/main
+kapi "T11i origin/main okunamayan depolu ölçüm yine yazılır" 0 env RETRO_DEPO_KOKU="$P2" python3 "$R" kutu SIRA --koltuk s:0
+icerir "$(cat "$SD")" "| bağımsız göz turu · ortalama tur/kart | 1 · 0.5 |" "T11j okunamayınca yalnız disk sayılır (değer gerçek)"
+icerir "$(cat "$SD")" "origin/main OKUNAMADI: Sx" "T11k … ve kanıt sütunu eksikliği depo adıyla söyler (sessiz eksik yok)"
+icermez "$(cat "$SD")" "(disk ∪ origin/main)" "T11l … ve 'disk ∪ origin/main' diye yanlış etiketlemez"
+rm -f "$SD"
+kapi "T11m git deposu olmayan KOK uyarı üretmez (okunacak origin yok)" 0 env RETRO_DEPO_KOKU="$T/yok-boyle" python3 "$R" kutu SIRA --koltuk s:0
+icermez "$(cat "$SD")" "OKUNAMADI" "T11n git'siz depo için OKUNAMADI yok"
+rm -f "$SD"
 
 echo "— M mutasyon (kopya üstünde; her mutant en az bir kapıyı kızartmalı)"
 mut(){ # mut <ad> <sed> <komut...> : mutant kopyada komut BAŞARILI (rc=0) kalırsa sınav onu yakalamıyor demektir
@@ -286,8 +296,11 @@ m_tek(){ local rc; rm -f "$SD"; env RETRO_DEPO_KOKU="$P" RETRO_DEPOLAR="$KOK:$KO
   grep -qF "| kart açılan / bitti / tıkandı | 1 / 1 / 0 |" "$SD"; rc=$?; rm -f "$SD"; return $rc; }
 m_cok "$R" && m_tek "$R" && ok "M11-13 pozitif kontrol: bozmasız araçla iki yoklama da GEÇER (ısırık sahte değil)" || kirmizi "M11-13 pozitif kontrol: gerçek araç yoklamayı geçemiyor"
 mut "M11 depo keşfi kalkınca Sx kartı sayılmaz (kapı yakalar)" 's/        aday += \[os.path.dirname(os.path.dirname(os.path.dirname(k)))/        aday += [] and [os.path.dirname(os.path.dirname(os.path.dirname(k)))/' m_cok
-mut "M12 origin\/main okuması kalkınca birincil kopya başka daldayken göz turları eksik (kapı yakalar)" 's/^        if r.returncode == 0:$/        if False:/' m_cok
+mut "M12 origin\/main okuması kalkınca birincil kopya başka daldayken göz turları eksik (kapı yakalar)" 's/^    if not om:$/    if True:/' m_cok
 mut "M13 tekilleştirme kalkınca aynı depo iki kez sayılır (kapı yakalar)" 's/        if r not in gorulen and os.path.isdir/        if os.path.isdir/' m_tek
+m_uyari(){ local rc; rm -f "$SD"; env RETRO_DEPO_KOKU="$P2" python3 "$1" kutu SIRA --koltuk s:0 >/dev/null 2>&1; grep -qF "origin/main OKUNAMADI: Sx" "$SD"; rc=$?; rm -f "$SD"; return $rc; }
+m_uyari "$R" && ok "M14 pozitif kontrol: bozmasız araç okunamayan depoyu adıyla söyler" || kirmizi "M14 pozitif kontrol: gerçek araç uyarı basmıyor"
+mut "M14 okunamama uyarısı susturulunca eksik sayım yeşil görünür (kapı yakalar)" 's/("`_agents\/fabrika\/kanit\/\*\/DENETIM-\*.json` (disk ∪ origin\/main)" if not k\["okunamadi"\] else/("`_agents\/fabrika\/kanit\/*\/DENETIM-*.json` (disk ∪ origin\/main)" if True else/' m_uyari
 
 echo; echo "GECEN=$G DUSEN=$K"
 [ "$K" -eq 0 ]

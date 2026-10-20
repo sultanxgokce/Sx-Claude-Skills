@@ -162,18 +162,33 @@ def depolar(kok):
     return out
 
 
-def denetim_adlari(depo, is_):
+def origin_main_okunur(depo):
+    """True: origin/main ağacı okunur · False: git deposu ama okunamıyor (ref yok/bozuk/zaman aşımı) · None: git deposu değil."""
+    try:
+        if subprocess.run(["git", "-C", depo, "rev-parse", "--git-dir"], capture_output=True, timeout=10).returncode != 0:
+            return None
+        return subprocess.run(["git", "-C", depo, "rev-parse", "-q", "--verify", "origin/main^{tree}"],
+                              capture_output=True, timeout=10).returncode == 0
+    except Exception:
+        return False
+
+
+def denetim_adlari(depo, is_, om):
     """Bir işin göz turu kayıtları: diskteki kopya ∪ origin/main ağacı. Birincil kopya bayat ya da başka dalda olabilir
-    (20 Eki: Sx birincili layiha dalında, birleşmiş işlerin kanıt dizini diskte yok) → yalnız disk sayımı turları eksik gösterirdi."""
+    (20 Eki: Sx birincili layiha dalında, birleşmiş işlerin kanıt dizini diskte yok) → yalnız disk sayımı turları eksik gösterirdi.
+    om = origin_main_okunur(depo); okunamıyorsa yalnız disk sayılır ve çağıran bunu tabloda ADIYLA söyler (sessiz eksik yok)."""
     ad = {os.path.basename(p) for p in glob.glob(os.path.join(depo, "_agents", "fabrika", "kanit", is_, "DENETIM-*.json"))}
+    if not om:
+        return ad, om
     try:
         r = subprocess.run(["git", "-C", depo, "ls-tree", "--name-only", "origin/main", f"_agents/fabrika/kanit/{is_}/"],
                            capture_output=True, text=True, timeout=10)
-        if r.returncode == 0:
-            ad |= {os.path.basename(s) for s in r.stdout.split("\n") if re.fullmatch(r"DENETIM-\d+\.json", os.path.basename(s))}
     except Exception:
-        pass
-    return ad
+        return ad, False
+    if r.returncode != 0:
+        return ad, False
+    ad |= {os.path.basename(s) for s in r.stdout.split("\n") if re.fullmatch(r"DENETIM-\d+\.json", os.path.basename(s))}
+    return ad, True
 
 
 def kart_olc(kok, ajan, pzt, paz):
@@ -181,9 +196,10 @@ def kart_olc(kok, ajan, pzt, paz):
     if not dl:
         return None
     acilan = bitti = tikandi = 0
-    turlar, dokum = [], []
+    turlar, dokum, okunamadi = [], [], []
     for depo in dl:
         da = db = dt = 0
+        om = origin_main_okunur(depo); depo_ok = om is not False
         for yol in sorted(glob.glob(os.path.join(depo, "_agents", "fabrika", "kartlar", "*.json"))):
             try:
                 k = json.load(open(yol, encoding="utf-8"))
@@ -201,11 +217,14 @@ def kart_olc(kok, ajan, pzt, paz):
                 elif k.get("durum") == "tikandi":
                     dt += 1
             if aralikta(z, pzt, paz) or aralikta(b, pzt, paz):
-                turlar.append(len(denetim_adlari(depo, k.get("is", "?"))))
+                ad, ok = denetim_adlari(depo, k.get("is", "?"), om)
+                turlar.append(len(ad)); depo_ok = depo_ok and ok is not False
         acilan += da; bitti += db; tikandi += dt
         dokum.append(f"{os.path.basename(os.path.realpath(depo))} {da}/{db}/{dt}")
+        if not depo_ok:
+            okunamadi.append(os.path.basename(os.path.realpath(depo)))
     return {
-        "yol": "_agents/fabrika/kartlar", "depolar": dokum, "acilan": acilan, "bitti": bitti, "tikandi": tikandi,
+        "yol": "_agents/fabrika/kartlar", "depolar": dokum, "okunamadi": okunamadi, "acilan": acilan, "bitti": bitti, "tikandi": tikandi,
         "goz_turu": sum(turlar), "kart": len(turlar),
         "ort_tur": (round(sum(turlar) / len(turlar), 1) if turlar else None),
     }
@@ -266,7 +285,9 @@ def olcum_tablosu(o):
         r.append(sat("kart açılan / bitti / tıkandı", f"{k['acilan']} / {k['bitti']} / {k['tikandi']}",
                      f"`{k['yol']}` (aldı = ajan) · {len(k['depolar'])} depo: " + " · ".join(k["depolar"])))
         ort = "—" if k["ort_tur"] is None else str(k["ort_tur"])
-        r.append(sat("bağımsız göz turu · ortalama tur/kart", f"{k['goz_turu']} · {ort}", "`_agents/fabrika/kanit/*/DENETIM-*.json` (disk ∪ origin/main)"))
+        kay = ("`_agents/fabrika/kanit/*/DENETIM-*.json` (disk ∪ origin/main)" if not k["okunamadi"] else
+               "`_agents/fabrika/kanit/*/DENETIM-*.json` (disk) · ⚠ origin/main OKUNAMADI: " + ", ".join(k["okunamadi"]) + " — göz turu eksik olabilir")
+        r.append(sat("bağımsız göz turu · ortalama tur/kart", f"{k['goz_turu']} · {ort}", kay))
     else:
         r.append(sat("kart açılan / bitti / tıkandı", "ÖLÇÜLEMEDİ: fabrika kartları yok", "—"))
         r.append(sat("bağımsız göz turu · ortalama tur/kart", "ÖLÇÜLEMEDİ: kaynak yok", "—"))
