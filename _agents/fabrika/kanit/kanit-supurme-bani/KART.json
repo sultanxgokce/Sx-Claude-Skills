@@ -18,5 +18,14 @@
   "gecmis": [],
   "canli_gerekir": false,
   "canli_sebep": "",
-  "kapsam_uyarilari": []
+  "kapsam_uyarilari": [],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "BÂNİ",
+      "oturum": "SERDAR-NOTES-18:5x",
+      "gerekce": "SERDAR 18:5x devam dedi: 3/H→3/H→4/E ilerliyor, tek bulgu ölçüldü (terminal-koltuk-adi KART.json dalda yok)",
+      "zaman": "2026-10-20T17:53:10+03:00"
+    }
+  ]
 }
