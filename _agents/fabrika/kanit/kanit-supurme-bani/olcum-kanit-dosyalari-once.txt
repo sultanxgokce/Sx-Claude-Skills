@@ -1,0 +1,8 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/supurme/olc.sh Sx-Claude-Skills once
+# rc=1 sure=0.2s zaman=2026-10-20T17:22:32+03:00
+--- stdout ---
+  ✗ pano-resim-hiz DENETIM-1.json (YOK)
+  ✗ pano-resim-hiz KART.json (YOK)
+  ✗ terminal-koltuk-adi DENETIM-3.json (YOK)
+SONUÇ: 0/3 dosya birebir
+--- stderr ---

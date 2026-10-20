@@ -1,0 +1,46 @@
+{
+  "is": "kanit-supurme-bani",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-20T17:22:32+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kanit-dosyalari",
+      "asama": "once",
+      "dosya": "olcum-kanit-dosyalari-once.txt",
+      "sha256": "f272102d4d5b59498a04975b4f03c07fb64f6ec8c18c3bae7233633725d86fb8",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/supurme/olc.sh",
+        "Sx-Claude-Skills",
+        "once"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-20T17:22:32+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "cd4bc0617edf451ea63a0235da7eb604"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kanit-dosyalari",
+      "asama": "sonra",
+      "dosya": "olcum-kanit-dosyalari-sonra.txt",
+      "sha256": "28b74e4116e4bf8510137611a8eab51d39a48f26face7e6615ce012773eb5a1e",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/supurme/olc.sh",
+        "Sx-Claude-Skills",
+        "sonra"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T17:22:32+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "bccaf6ed6b0e41fd99fbe34b803d0b2a"
+    }
+  ],
+  "imza": "e859d78c69e73a25618c2069776736daabb31615b4055a56b545ee23c29685f7"
+}
