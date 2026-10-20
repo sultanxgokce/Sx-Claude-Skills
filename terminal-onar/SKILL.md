@@ -1,9 +1,28 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.18.1
+version: 2.19.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.19.0 · tmux bekçisi — kutunun canlı sunucusunu içeriden kapatan çıplak kill-server reddedilir (20 Eki · K43HN · SERDAR 17:2x)
+**Ölçülen kök neden (OOM değil):** 16-17 Eki code kutusunda aile oturumları 4 kez birlikte öldü (16 Eki 19:44 · 17 Eki 11:01 · 11:26 ·
+12:56). `oom_kill` sayacı ölümlerden önce ve sonra 83 — bellek değil. Ölümlerin her biri `dava-resume-olc.sh` çağrısından 30-60 sn sonra:
+betik `TMUX_TMPDIR` ile kendi sunucusunu kurduğunu sanıp çıkışta çıplak `tmux kill-server` koşuyordu; tmux istemcisi `$TMUX` doluyken
+TMUX_TMPDIR'ı DEĞİL `$TMUX` soketini kullanır → tmux içindeki bir Claude'dan çağrılınca KUTUNUN sunucusu gitti (DERVİŞ 17 Eki ölçtü,
+betiğe `unset TMUX` kondu). O düzeltme tek betikti; dört ölümün dördü de betik PR'a girmeden iş alanında koşturulurken oldu, yani CI
+denetimi önleyemezdi. Koruma çalışma anında:
+- `scripts/tmux-bekcisi.sh` → onar.sh (K0 adım 0) `/config/.local/bin/tmux` olarak kurar (PATH'te `/usr/bin`'den önce; bekçi/kur her
+  kutuya taşır). YALNIZ şunu reddeder: `$TMUX` dolu + açık soket yok (`-L`/`-S`, kümelenmiş/bitişik biçimler dahil) + komut konumunda
+  `kill-server` (tek anlamlı kısaltmaları ve `;` sonrası komut dahil). Ret: iki satır sebep + rc 1, iz `<durum>/tmux-bekcisi.log`
+  (çağıran süreç). Geri kalan her çağrı `exec` ile gerçek tmux'a gider — argüman ve çıkış kodu birebir.
+- Kasıtlı kapatma: `TMUX_KILL_SERVER_IZIN=1 tmux kill-server` ya da açık soket. `$TMUX` boşken (cron, `docker exec` söküm — iskan.sh)
+  hiçbir şey değişmez.
+- Kurulum kuralları (`ortak.sh tmux_bekcisi_kur`): canlı crontab kilidiyle aynı — deneme yolunda (PROJE ≠ `/config/projects/<kutu>`)
+  canlı yola YALNIZ `TO_TMUX_BEKCI_BIN` ile yazılır (sınavlar onar.sh koşturur) · bozuk tmux asla yerleşmez (yeni kopya önce `-V` ile
+  gerçek tmux'a ulaşmalı, sonra atomik yer değiştirir) · hedefte bekçi olmayan dosya varsa dokunulmaz.
+- Sınav: `scripts/tmux-bekcisi.test.sh` (37 kapı + 10 bozma; G kapıları GERÇEK tmux'la vakayı yeniden üretir: yalıtılmış "kutu"
+  sunucusu, vakadaki komut RET, kutu ve koltuğu yerinde).
 
 ## 🆕 2.18.1 · compact kuyruk turu bağlamı ölçülemeyen koltuğa göndermez (18 Eki · kart compact-bekle-olculemeyen-sx · SERDAR 21:5x)
 `compact.sh compact-bekle`, koltuğun bağlamı ölçülemediğinde (yüzde `—`) "bu arada compact edilmiş" düşürmesini atlayıp bayat
