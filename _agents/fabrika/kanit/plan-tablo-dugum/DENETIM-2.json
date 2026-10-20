@@ -1,0 +1,30 @@
+{
+  "tur": 2,
+  "is": "plan-tablo-dugum",
+  "pr": "397",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-20T20:43:35+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 33780,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Günün plan tablosu artık görevli maddede defterden okunan düğümü hem kutulu hem düz görünümde gösteriyor; defter okunamazsa bağ eklemeden satırları koruyup sebebi söylüyor. Önceki turun iki uygulama kusuru desen doğrulaması ve hata anında tüm kısmi bağların atılmasıyla kapatılmış; hedefli sınavlar, mutasyon sınavı ve gerçeğe yakın önce/sonra ölçümü üretime hazır düzeyde kanıt sunuyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçekçi iki maddeli çıpa üzerinde önce/sonra ölçüm çifti bağın yalnız hedef satıra eklendiğini ve açıklamanın basıldığını gösteriyor; hedef sınav 93/7 kırmızıdan 102/0 yeşile dönmüş, kalan sınavlar 35/0 ve kabuk sınavları 3/0 geçmiş. Ayrıca 10/10 mutasyon sınavı; bozuk düğüm deseni, jetonsuz/HTTP 500/kapalı defter davranışı, kısmi bağ sızıntısı, görevsiz maddede çağrı yapılmaması ve JSON çıktısının değişmemesi gibi kritik kuralların gerçekten sınandığını gösteriyor."
+  }
+}
