@@ -67,7 +67,9 @@ görmek**ti.
    `bulgu-havuzu.jsonl`'da değil, kutunun **Bulgu Defteri** paketinde yaşar
    (`<ev>/.ic-sayfa/bulgu-defteri/bulgular.json`). mmex'te araç oraya bakmıyordu: `rc=3 ÖLÇEMEDİM`.
    Artık üçüncü kaynak: `iz: kutu-defteri: …`. Yol kutuya sabit yazılmaz, kutunun **kendi ev
-   dizininden** türer; `BILEYI_KUTU_DEFTERI` ile değişir. Defteri olmayan kutuda kaynak satırı çıkmaz.
+   dizininden** türer; `BILEYI_KUTU_DEFTERI` ile değişir, `-` bilerek kapatır. Defteri olmayan kutuda
+   kaynak satırı çıkmaz; ama **açık verilen yol yoksa** satır 🟡 "okunamadı" der ve kapsamaya girer
+   (yanlış ayar öbür kaynakların arkasına saklanmaz).
    Eşleme yalnız var olanı taşır: id · başlık · tarih (açılış) · durum (hâl) · gerçek (notlar).
    **Sınıf uydurulmaz**: defterde sınıf alanı yok, kapsama bunu %0 diye söyler. Başlıksız kayıt
    bozuk sayılır.

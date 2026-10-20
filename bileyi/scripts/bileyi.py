@@ -179,13 +179,19 @@ def havuz_oku(yol: Path, pencere_gun: int) -> tuple[list[dict], int, str]:
 #    (`<ev>/.ic-sayfa/bulgu-defteri/bulgular.json` — cloudtop infra/bulgu-defteri, "kod global, veri yerel").
 #    Araç orada hiç bakmıyordu: mmex'te `bileyi olc` → "bulgu havuzu yok — ÖLÇEMEDİM". Yol kutuya SABİT
 #    yazılmaz, kutunun KENDİ ev dizininden türer (her kutuda HOME=/config ama kutu kendi /config'ini görür);
-#    BILEYI_KUTU_DEFTERI ile değişir (sınav ve taşınmış kurulum).
+#    BILEYI_KUTU_DEFTERI ile değişir (sınav ve taşınmış kurulum); "-" bilerek KAPATIR.
+#    🔴 Açık verilen yol yoksa sessizce düşmez (bağımsız göz #391 tur 1): kaynak listede kalır, iz satırı 🟡
+#    "okunamadı" der ve kapsama sayımına girer — yanlış ayar öbür kaynakların sonucunun arkasına saklanmaz.
+#    Yalnız VARSAYILAN yol (ev dizini) yoksa kaynak eklenmez: defteri olmayan kutu normaldir, arıza değil.
 KUTU_DEFTERI_GORELI = ".ic-sayfa/bulgu-defteri/bulgular.json"
 
 
-def kutu_defteri_yolu() -> Path:
+def kutu_defteri_yolu() -> tuple[Path | None, bool]:
+    """(yol, açık mı) — açık "-" ise (None, True): bilerek kapalı."""
     acik = os.environ.get("BILEYI_KUTU_DEFTERI", "").strip()
-    return Path(acik) if acik else Path.home() / KUTU_DEFTERI_GORELI
+    if acik == "-":
+        return None, True
+    return (Path(acik), True) if acik else (Path.home() / KUTU_DEFTERI_GORELI, False)
 
 
 def kutu_defteri_oku(yol: Path) -> tuple[list[dict], int]:
@@ -541,9 +547,9 @@ def bulgu_havuzlari(kod_depo: Path, havuz_depo: Path,
             continue
         gorulen.add(anahtar)
         kaynak.append((etiket, y))
-    kd = kutu_defteri_yolu()
-    if kd.exists() and str(kd.resolve()) not in gorulen:   # defteri olmayan kutuda boş 🟡 satırı üretmez
-        kaynak.append(("kutu-defteri", kd))
+    kd, acik_verildi = kutu_defteri_yolu()
+    if kd is not None and (acik_verildi or kd.exists()) and str(kd.resolve() if kd.exists() else kd) not in gorulen:
+        kaynak.append(("kutu-defteri", kd))       # açık ama yok → 🟡 okunamadı satırı; varsayılan yok → hiç eklenmez
     return kaynak
 
 
