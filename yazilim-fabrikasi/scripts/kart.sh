@@ -97,7 +97,12 @@ anilan = sorted(ad for ad, adlar in tablo.items() if aniliyor(adlar))
 if len(anilan) >= 2:
     print("İKİ DEPO: cümle %s anıyor — iş birden çok depoya yayılıyorsa depo başına kart aç (her depoda kendi kartı, kendi PR'ı): %s" % (
         " + ".join(anilan), " · ".join("kart.sh ac %s-%s …" % (is_, a.split("-")[0].lower()) for a in anilan)))
-HAFTA = r"(?<!\w)(?:haftal[ıi]k\w*|hafta(?:s[ıi]|n[ıi]n|da|y[ıi])?|W\d{2}|\d+\.\s*hafta|[2-9]\s*g[üu]n(?:l[üu]k)?|her\s+g[üu]n|t[üu]m\s+hafta)(?!\w)"
+# ATIF KAPSAM DEĞİLDİR (20 Eki: bir günde üç yanlış alarm — "hafta raporu E3", "retro W42 HENDESE Ö1", "retro W42 ders M2"):
+#   haftanın ADI geçiyor ama iş o haftaya yayılmıyor. "retro " önündeki hafta, ve ardından rapor/kapı/kapanış/retro/ders/Ö<n>
+#   gelen "hafta"/"W<nn>" atıftır; "W42 boyunca", "1. hafta", "haftalık", "her gün" kapsam olarak kalır.
+ATIF_SONRA = r"(?!\s+(?:rapor|kap[ıi]s|kapan[ıi]ş|retro|ders|Ö\d))"
+HAFTA = (r"(?<!\w)(?<!retro )(?:haftal[ıi]k\w*|hafta(?:s[ıi]|n[ıi]n|da|y[ıi])?(?!\w)" + ATIF_SONRA + r"|W\d{2}(?!\w)" + ATIF_SONRA
+         + r"|\d+\.\s*hafta|[2-9]\s*g[üu]n(?:l[üu]k)?|her\s+g[üu]n|t[üu]m\s+hafta)(?!\w)")
 h = sorted(set(m.group(0) for m in re.finditer(HAFTA, cumle, re.I)))
 if h:
     print("ÇOK GÜNLÜK KAPSAM (%s): bir PR'da teslim edilmez — gün başına kart öner: %s-g1 · %s-g2 … (her biri günün teslim birimi)" % (", ".join(h), is_, is_))
