@@ -1,14 +1,14 @@
 {
   "is": "kanit-supurme-bani",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-20T17:33:21+03:00",
+  "guncelleme": "2026-10-20T17:36:15+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "kanit-dosyalari",
       "asama": "once",
       "dosya": "olcum-kanit-dosyalari-once.txt",
-      "sha256": "f272102d4d5b59498a04975b4f03c07fb64f6ec8c18c3bae7233633725d86fb8",
+      "sha256": "e81873d07979e30205d2fcf8f63f3755f03082d8ee99bd46115df669685eb1e6",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/supurme/olc.sh",
@@ -17,17 +17,17 @@
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-10-20T17:22:32+03:00",
-      "sure_sn": 0.2,
+      "zaman": "2026-10-20T17:36:03+03:00",
+      "sure_sn": 0.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "cd4bc0617edf451ea63a0235da7eb604"
+      "olcum_id": "4a5d57da2ba14051b1412bee27a22e83"
     },
     {
       "tur": "olcum",
       "etiket": "kanit-dosyalari",
       "asama": "sonra",
       "dosya": "olcum-kanit-dosyalari-sonra.txt",
-      "sha256": "28b74e4116e4bf8510137611a8eab51d39a48f26face7e6615ce012773eb5a1e",
+      "sha256": "1e0b68102fd7b0795529d797d49b45e175a4d67607329f77a9584a120a478ef1",
       "komut": [
         "bash",
         "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/supurme/olc.sh",
@@ -36,10 +36,10 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-20T17:22:32+03:00",
+      "zaman": "2026-10-20T17:36:03+03:00",
       "sure_sn": 0.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "bccaf6ed6b0e41fd99fbe34b803d0b2a"
+      "olcum_id": "5986f23f0a3f4748b2d7df5c3eea9355"
     },
     {
       "tur": "olcum",
@@ -78,7 +78,24 @@
       "sure_sn": 0.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "753f8a198326441599ca849f37ba6859"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-adi-dali",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-adi-dali-sonra.txt",
+      "sha256": "39b088c27cb41b751478c6060ecbbb5020bdf9ef270f4e1c6588509515d58cea",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/supurme/dal-olc.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T17:36:15+03:00",
+      "sure_sn": 0.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b7c5c0ab5c954cc389e412c197eb52a9"
     }
   ],
-  "imza": "1d5ef3c15c548781e61b20efed94f6c918e5249e0bb9420a8bd39f2aa6499a68"
+  "imza": "2d539cac693eea45b3a4c47a86cb883b3e068f3ccd7015e4adad9d9a6e22743e"
 }
