@@ -177,4 +177,31 @@ CIKTI="$(ac13 is-duz "buton ekle")"
 CIKTI="$(ac13 is-gun "W42 boyunca her gün tur kaydı")"
 grep -q "ÇOK GÜNLÜK KAPSAM (W42, her gün)" <<<"$CIKTI"; g $? "hafta kodu ve 'her gün' de çok günlük sayılır"
 
+echo "════ T13b · ATIF KAPSAM DEĞİLDİR: 'retro W42', 'hafta raporu' uyarmaz; gerçek çok günlük kapsam uyarmaya devam eder (20 Eki, üç yanlış alarm) ════"
+ac13m() { bash "$1" ac "$2" --is "$3" --istedi SERDAR --aldi HENDESE --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h 2>&1; }
+ATIF=("birleştirme kancası CI'ı her birleştirmede ölçsün (gorev_01M506PY0B6X92R0NEK0NSPCR7 + hafta raporu E3)"
+      "denetçi ölçüm çıktısının sonunu da versin; fabrika 0.10.6 (gorev_01M5890SCNMSR4DFTGHVWEJEC3, retro W42 HENDESE Ö1)"
+      "kart.sh ac iş cümlesinde iki depo görürse uyarsın (retro W42 ders M2)"
+      "hafta kapısı D13 PR gövdesinde retro işaretini arasın"
+      "W42 retrosu için kutu dosyasını doldur")
+KAPSAM=("W42 boyunca her gün tur kaydı" "haftalık rapor üretimi kur ve her gün koştur" "bu hafta tüm kutuların retrosunu topla" "3 gün sürecek göç")
+n13=0
+for c in "${ATIF[@]}"; do n13=$((n13+1)); CIKTI="$(ac13m "$KT" "is-atif-$n13" "$c")"
+  [ "$(ku "is-atif-$n13")" = 0 ] && ! grep -q "ÇOK GÜNLÜK" <<<"$CIKTI"; g $? "atıf uyarmaz: $(cut -c1-70 <<<"$c")"; done
+for c in "${KAPSAM[@]}"; do n13=$((n13+1)); CIKTI="$(ac13m "$KT" "is-kap-$n13" "$c")"
+  grep -q "ÇOK GÜNLÜK KAPSAM" <<<"$CIKTI"; g $? "gerçek kapsam uyarır: $c"; done
+echo "── T13b · MUTASYON (tam kopya; her mutant bir atıf cümlesini yeniden uyarır hâle getirmeli) ──"
+m13() {   # m13 <ad> <eski> <yeni> <uyarmaya başlaması gereken atıf cümlesi>
+  local D="$T/pkg-kapsam-$1"; mkdir -p "$D"; cp "$HERE"/*.py "$HERE"/*.sh "$D/" 2>/dev/null
+  python3 - "$D/kart.sh" "$2" "$3" <<'PYM' || { g 1 "mutant '$1' kurulamadı (çapa bayat)"; return; }
+import sys; f, a, b = sys.argv[1:]; s = open(f, encoding="utf-8").read(); assert s.count(a) == 1; open(f, "w", encoding="utf-8").write(s.replace(a, b, 1))
+PYM
+  n13=$((n13+1)); local o; o="$(ac13m "$D/kart.sh" "is-m13-$n13" "$4")"
+  grep -q "ÇOK GÜNLÜK" <<<"$o"; g $? "mutant '$1' atfı yeniden kapsam sanıyor → üstteki kapı bu mutantta düşerdi"
+}
+m13 retro-onu-sayilir '(?<!retro )' '' "denetçi ölçüm sonu (retro W42 HENDESE Ö1)"   # yalnız öndeki 'retro ' korumasına bağlı cümle
+m13 atif-sonra-bos 'ATIF_SONRA = r"(?!\s+(?:rapor|kap[ıi]s|kapan[ıi]ş|retro|ders|Ö\d))"' 'ATIF_SONRA = r""' "hafta kapısı D13 PR gövdesinde retro işaretini arasın"
+m13 hafta-atifsiz '(?:s[ıi]|n[ıi]n|da|y[ıi])?(?!\w)" + ATIF_SONRA + r"' '(?:s[ıi]|n[ıi]n|da|y[ıi])?(?!\w)" + r"' "birleştirme kancası CI'ı ölçsün (hafta raporu E3)"
+m13 W-atifsiz 'W\d{2}(?!\w)" + ATIF_SONRA' 'W\d{2}(?!\w)"' "W42 retrosu için kutu dosyasını doldur"
+
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

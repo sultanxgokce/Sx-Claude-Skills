@@ -1,0 +1,66 @@
+{
+  "is": "kart-kapsam-atif",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-20T18:23:10+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapsam",
+      "asama": "once",
+      "dosya": "olcum-kapsam-once.txt",
+      "sha256": "5bac029f0b1bc554dc84b2e3574ce3ba2a3a7b86475784ab279c1fd69d26affe",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kart-kapsam-atif/kapsam-olcer.sh",
+        "yazilim-fabrikasi/scripts/kart.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T18:21:21+03:00",
+      "sure_sn": 1.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b04c312b8b0c4ed09eab21c11cb40e38"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapsam",
+      "asama": "sonra",
+      "dosya": "olcum-kapsam-sonra.txt",
+      "sha256": "586a4ee4fb5a8274dbc985963c3279ea041d817e8cb529e51e1bb7cca25c2f94",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kart-kapsam-atif/kapsam-olcer.sh",
+        "yazilim-fabrikasi/scripts/kart.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T18:23:02+03:00",
+      "sure_sn": 1.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "425325e670e2477c8dc32e71e91d8cd2"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sinavi-sonra.txt",
+      "sha256": "d73549941cb934ace7db5f9c1654c970e551fa41e7370baa724a83e458efa406",
+      "komut": [
+        "python3",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/bolum-olcer.py",
+        "T13b",
+        "mutant '",
+        "--",
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T18:23:10+03:00",
+      "sure_sn": 7.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "90c8b4edda624d50a44b2c8662817ba0"
+    }
+  ],
+  "imza": "6f273650e968ebb2e817140de287519c9b075c3a2371582bcc380e3d211cf8ca"
+}

@@ -1,0 +1,17 @@
+$ bash _agents/fabrika/kanit/kart-kapsam-atif/kapsam-olcer.sh yazilim-fabrikasi/scripts/kart.sh
+# rc=0 sure=1.2s zaman=2026-10-20T18:21:21+03:00
+--- stdout ---
+── 20 Eki'nin yanlış alarmları (atıf, kapsam değil) ──
+✗ beklenen SESSİZ · gelen UYARIR · birleştirme kancası CI'ı HER birleştirmede ölçsün (yalnız FABRIKA_KAPISIZ kaçış
+✗ beklenen SESSİZ · gelen UYARIR · denetçi ölçüm çıktısını keserken sonunu da versin: 60 satırı aşan ölçüm dos
+✗ beklenen SESSİZ · gelen UYARIR · kart.sh ac iş cümlesinde iki depo görürse uyarsın (retro W42 ders M2)
+✗ beklenen SESSİZ · gelen UYARIR · hafta kapısı D13 PR gövdesinde retro işaretini arasın
+✗ beklenen SESSİZ · gelen UYARIR · W42 retrosu için kutu dosyasını doldur
+── gerçek çok günlük kapsam (uyarmaya devam etmeli) ──
+✓ beklenen UYARIR · gelen UYARIR · HENDESE kütüphanesi 1. hafta: günlük tur kayıtları (depo/web/video) + örnek vaka ka
+✓ beklenen UYARIR · gelen UYARIR · W42 boyunca her gün tur kaydı
+✓ beklenen UYARIR · gelen UYARIR · haftalık rapor üretimi kur ve her gün koştur
+✓ beklenen UYARIR · gelen UYARIR · bu hafta tüm kutuların retrosunu topla
+✓ beklenen UYARIR · gelen UYARIR · 3 gün sürecek göç
+toplam 10 · yanlış 5
+--- stderr ---
