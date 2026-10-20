@@ -1,5 +1,5 @@
-$ python3 /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/bolum-olcer.py T13b mutant ' -- bash yazilim-fabrikasi/scripts/kart.test.sh
-# rc=0 sure=7.5s zaman=2026-10-20T18:23:10+03:00
+$ python3 _agents/fabrika/kanit/kart-kapsam-atif/bolum-olcer.py T13b mutant ' -- bash yazilim-fabrikasi/scripts/kart.test.sh
+# rc=0 sure=5.9s zaman=2026-10-20T18:23:27+03:00
 --- stdout ---
 $ bash yazilim-fabrikasi/scripts/kart.test.sh  → rc=0 · 120 satır
 ════ T13b · ATIF KAPSAM DEĞİLDİR: 'retro W42', 'hafta raporu' uyarmaz; gerçek çok günlük kapsam uyarmaya devam eder (20 Eki, üç yanlış alarm) ════

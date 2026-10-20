@@ -1,7 +1,7 @@
 {
   "is": "kart-kapsam-atif",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-20T18:23:10+03:00",
+  "guncelleme": "2026-10-20T18:23:27+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -44,10 +44,10 @@
       "etiket": "kart-sinavi",
       "asama": "sonra",
       "dosya": "olcum-kart-sinavi-sonra.txt",
-      "sha256": "d73549941cb934ace7db5f9c1654c970e551fa41e7370baa724a83e458efa406",
+      "sha256": "04c88373c04c60ec96c7464810e956c8ebedc5a0f32498afd26ad69e9323ae08",
       "komut": [
         "python3",
-        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/bolum-olcer.py",
+        "_agents/fabrika/kanit/kart-kapsam-atif/bolum-olcer.py",
         "T13b",
         "mutant '",
         "--",
@@ -56,11 +56,11 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-20T18:23:10+03:00",
-      "sure_sn": 7.5,
+      "zaman": "2026-10-20T18:23:27+03:00",
+      "sure_sn": 5.9,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "90c8b4edda624d50a44b2c8662817ba0"
+      "olcum_id": "5ff6668c54fa4d91911bbdb4157ee4b2"
     }
   ],
-  "imza": "6f273650e968ebb2e817140de287519c9b075c3a2371582bcc380e3d211cf8ca"
+  "imza": "b8111022178594764a5c8a17f386b1664512a99703e9793a16a055a2209cab93"
 }
