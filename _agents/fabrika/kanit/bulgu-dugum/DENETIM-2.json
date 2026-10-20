@@ -1,0 +1,52 @@
+{
+  "tur": 2,
+  "is": "bulgu-dugum",
+  "pr": "395",
+  "yazan": "claude",
+  "denetci": "claude (haiku) (YEDEK GÖZ: codex düştü (2 deneme, rc=1) · yazandan farklı yeni oturum + farklı model kademesi [yazan: sonnet] · Sultan Y0006)",
+  "zaman": "2026-10-20T20:25:48+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": "codex düştü (2 deneme, rc=1)",
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": "haiku",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 27614,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Talep (düğüm bağı, çıplak kimliğin defterden çözülmesi, jetonsuz kutuda sessiz düşmeme) D0–D7 sınavlarıyla karşılanıyor. Önceki turun 'yazildi=false iken rc 0' bulgusu güncel diffte geçersiz: bulgu.sh son bloğunda `if b and not b.get(\"yazildi\"): sys.exit(4)` var ve D1b ile MD9 bunu doğruluyor. Kalan bulgular rötuş düzeyinde; esas açık nokta kutu-dışı canlı defter uçtan uca doğrulaması.",
+    "bulgular": [
+      {
+        "ne": "Bekleyen görev için dönen HTTP 200 gövdesi bozuk ya da kayit alanı eksikse Python traceback'i basılıyor; Türkçe '⛔ … kayıt YAZILMADI' mesajı çıkmıyor. Dönüş kodu 1 olduğu için davranış güvenli, yalnız mesaj kalitesi düşük.",
+        "kanit": "bulgu.sh düğüm çözüm bloğunda `k=json.loads(g)[\"kayit\"]` satırı için try/except yok. D2/D3 yalnız geçerli 200 ve 404 durumlarını sınıyor; bozuk 200 yolu sınanmıyor.",
+        "konum": "bulgu/scripts/bulgu.sh: çıplak kimlik çözüm python bloğu; bulgu/scripts/bulgu.test.sh: D2/D3",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Kayıtta canli.kutu ve ekleyen_kutu ikisi de yoksa düğüm 'None:gorev_…' olarak gövdeye yazılabilir; defter reddetmezse bozuk bağ kaydedilir.",
+        "kanit": "Çözüm satırı `k[\"canli\"].get(\"kutu\") or k.get(\"ekleyen_kutu\")` değerini doğrudan \"%s:%s\" ile birleştiriyor; eksik alan kontrolü yok. Test sunucusu her zaman kutu alanı döndürdüğü için bu yol sınanmıyor.",
+        "konum": "bulgu/scripts/bulgu.sh: print(\"%s:%s\" % (k[\"canli\"].get(\"kutu\") or k.get(\"ekleyen_kutu\"), k[\"id\"]), end=\"\")",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Düğüm sözleşmesi (gövdede dugum_acar, yanıtta dugum_bekleyen{id,yazildi,sebep}, canli.dugum_acar) yalnız yazarın kendi mock sunucusunda sınandı. Gerçek merkezî defterin 1.14.0 yanıt şekli ve 'bekliyor ←' notunun yazımı uçtan uca ölçülmedi.",
+        "kanit": "Manifestteki tüm ölçümler bulgu.test.sh içindeki mock'a karşı; canlı defter çağrısı yok. Mutasyon sınavı (9/9 öldürüldü) script ile mock arasındaki tutarlılığı ölçüyor, defterle uyumu değil.",
+        "konum": "bulgu/scripts/bulgu.test.sh: H sınıfı (mock yanıtı); kanit/olcum-bulgu-sinavi-sonra.txt",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı cloudtop-defter (1.14.0) + defter jetonu ile gerçek yazım ve bekleyen-not denemesi"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam (sha'lar tutuyor, sarı kayıt yok). Kırmızı önce / yeşil sonra çifti var ve mutasyon koşusu 9/9 kuralı öldürüyor; kabuk bitiş sınavı yeşil. Kanıt yerel mock ile kurulmuş olduğu için 'canlı defterle uyum' iddiası kanıtsız; bu, kutu-dışı sınıfta kayıtlı. Kanıt ana talebi (düğüm bağı, çıplak kimlik, jetonsuz red) karşılıyor."
+  }
+}
