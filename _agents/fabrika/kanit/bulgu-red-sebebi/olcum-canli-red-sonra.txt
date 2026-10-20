@@ -1,0 +1,6 @@
+$ bash -c bash bulgu/scripts/bulgu.sh yaz "Canlı duman: kapanmış göreve düğüm (yazılmamalı)" --kim BANI --dugum gorev_01M4ZMCTFRXEZ3SFEH734ZPT54
+# rc=1 sure=0.1s zaman=2026-10-20T20:59:48+03:00
+--- stdout ---
+--- stderr ---
+⛔ merkezî defter reddetti http=409 · bag_hedefi_yok · 
+   neden: kapanmis · yapılacak: gösterilen görev zaten bitti ya da iptal — serbest bırakılacak bir şey yok

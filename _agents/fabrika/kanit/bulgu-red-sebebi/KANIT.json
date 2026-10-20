@@ -1,0 +1,116 @@
+{
+  "is": "bulgu-red-sebebi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-20T20:59:48+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "bulgu-sinavi",
+      "asama": "once",
+      "dosya": "olcum-bulgu-sinavi-once.txt",
+      "sha256": "4166e3a3f1277f77f26aa01b6bde77ae11344b153936740f63353955e8b1b5a5",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/engel/ozet.sh",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/bulgu-red-sebebi/taban/bulgu.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-20T20:59:35+03:00",
+      "sure_sn": 1.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "3cbd1da094df43f4b8c18858f20e82c4"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bulgu-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-bulgu-sinavi-sonra.txt",
+      "sha256": "9290e3a8164770dd81bf845d2fdcaa3d5ef29f7bd30f1f1b2d9d384f6193515f",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/engel/ozet.sh",
+        "bash",
+        "bulgu/scripts/bulgu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T20:59:36+03:00",
+      "sure_sn": 0.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "559b411654de4433a734bb2ead738afc"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dugum-mutasyon",
+      "asama": "sonra",
+      "dosya": "olcum-dugum-mutasyon-sonra.txt",
+      "sha256": "e18e66e024ead808cd7ae64950724a73ec1153d8da295353391e58702fada2d2",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/engel/ozet.sh",
+        "bash",
+        "bulgu/scripts/bulgu-dugum-mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T20:59:48+03:00",
+      "sure_sn": 11.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "249c1b2f532348129cedda5463219980"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-red",
+      "asama": "once",
+      "dosya": "olcum-canli-red-once.txt",
+      "sha256": "146912eb86a2cbf322d902a662c9997bb2fde9b1abbccdf57d9e495ff7f553d1",
+      "komut": [
+        "bash",
+        "-c",
+        "bash /config/.claude/skills/bulgu/scripts/bulgu.sh yaz \"Canlı duman: kapanmış göreve düğüm (yazılmamalı)\" --kim BANI --dugum gorev_01M4ZMCTFRXEZ3SFEH734ZPT54"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-20T20:59:48+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "temiz",
+      "olcum_id": "97bc75bfff8a4ed08eabd380b3b5956a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-red",
+      "asama": "sonra",
+      "dosya": "olcum-canli-red-sonra.txt",
+      "sha256": "65a718755cf3c4c332c657359b2340911cd575c1396eb9acc168a39becf530f7",
+      "komut": [
+        "bash",
+        "-c",
+        "bash bulgu/scripts/bulgu.sh yaz \"Canlı duman: kapanmış göreve düğüm (yazılmamalı)\" --kim BANI --dugum gorev_01M4ZMCTFRXEZ3SFEH734ZPT54"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-20T20:59:48+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "temiz",
+      "olcum_id": "dc9cfee5b74f494c9bfdac67b2bdec29"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kabuk-biti",
+      "asama": "sonra",
+      "dosya": "olcum-kabuk-biti-sonra.txt",
+      "sha256": "adc7dc211f31d8fbbe0b8b04006461588617730e9d947b27763775253240f299",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/engel/ozet.sh",
+        "bash",
+        "kabuk-biti.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T20:59:48+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b7036dfb3fa64fa0ad48cb807ac4e178"
+    }
+  ],
+  "imza": "42c20470a565120e3ab5b14b24523db252bc58021cad0e053bdb2893960ef64e"
+}

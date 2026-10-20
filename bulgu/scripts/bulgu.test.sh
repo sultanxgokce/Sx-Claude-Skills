@@ -42,6 +42,7 @@ class H(http.server.BaseHTTPRequestHandler):
         if self.headers.get("x-defter-jeton")!="sinav-jeton-ABC": self.send_response(401); self.end_headers(); self.wfile.write(b'{"ok":false,"hata":"jeton_gecersiz"}'); return
         if b.get("etiket")=="kirmizi": self.send_response(400); self.end_headers(); self.wfile.write(b'{"ok":false,"hata":"alan_degeri_gecersiz","bekleniyor":"etiket: bug|ozellik"}'); return
         if b.get("dugum_acar")=="mmex:gorev_KAPANMIS00000001": self.send_response(400); self.end_headers(); self.wfile.write(b'{"ok":false,"hata":"dugum_hedefi_gecersiz","bekleniyor":"dugum_acar: kapanmis"}'); return
+        if b.get("dugum_acar")=="mmex:gorev_KAPANMIS00000002": self.send_response(409); self.end_headers(); self.wfile.write(json.dumps({"ok":False,"hata":"bag_hedefi_yok","alan":"dugum_acar","hedef":"mmex:gorev_KAPANMIS00000002","yerine":"bekleyen görev kapanmış; açık bir görevi göster","neden":"kapanmis"},ensure_ascii=False).encode()); return
         cv={"kutu":"maiset","etiket":b.get("etiket"),"kaynak_kim":b.get("kaynak_kim")}; ek={}
         if b.get("dugum_acar"): cv["dugum_acar"]=b["dugum_acar"]; ek["dugum_bekleyen"]={"id":b["dugum_acar"].split(":",1)[1],"yazildi":True}
         if b.get("dugum_acar")=="mmex:gorev_KILITLI000000001": ek["dugum_bekleyen"]={"id":"gorev_KILITLI000000001","yazildi":False,"sebep":"yazma_yetkisi_yok"}
@@ -96,6 +97,8 @@ o=$(env $M bash "$B" yaz "b" --kim X --dugum "gorev_../../saglik" 2>&1); r=$?
 ok "D6 çıplak kimlik biçim dışıysa rc 2; defter adresine HİÇ gidilmez (yol kaçışı yok)" '[ $r -eq 2 ] && [ ! -f "$T/get.log" ] && [ ! -f "$T/gelen.json" ]'
 o=$(env $M bash "$B" yaz "kapanmış işe düğüm" --kim X --dugum mmex:gorev_KAPANMIS00000001 2>&1); r=$?
 ok "D7 defter düğümü reddederse rc 1 + defterin sebebi aynen (kural defterde, burada kopya yok)" '[ $r -eq 1 ] && [[ "$o" == *"reddetti http=400 · dugum_hedefi_gecersiz · dugum_acar: kapanmis"* ]]'
+o=$(env $M bash "$B" yaz "kapanmış işe düğüm (canlı biçim)" --kim X --dugum mmex:gorev_KAPANMIS00000002 2>&1); r=$?
+ok "D7b defter bağ reddinde (canlı 409 bag_hedefi_yok biçimi: neden/yerine ÜST düzeyde — 21 Eki canlıdan alındı) neden + yapılacak basılır, rc 1" '[ $r -eq 1 ] && [[ "$o" == *"reddetti http=409 · bag_hedefi_yok"* ]] && [[ "$o" == *"neden: kapanmis · yapılacak: bekleyen görev kapanmış; açık bir görevi göster"* ]]'
 kill $SRV 2>/dev/null; wait $SRV 2>/dev/null
 o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "x" --kim X 2>&1); r=$?
 ok "K1h merkeze ulaşılamazsa rc 1, kayıt HİÇBİR yere yazılmaz ve söylenir" '[ $r -eq 1 ] && [[ "$o" == *"ulaşılamadı"* ]] && [[ "$o" != *ARGV* ]]'
