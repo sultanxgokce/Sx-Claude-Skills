@@ -1,0 +1,19 @@
+$ python3 _agents/fabrika/kanit/denetci-olcum-sonu/bolum-olcer.py T-OLCUM mutant 'olcum- -- bash yazilim-fabrikasi/scripts/denetci.test.sh
+# rc=0 sure=514.2s zaman=2026-10-20T18:23:56+03:00
+--- stdout ---
+$ bash yazilim-fabrikasi/scripts/denetci.test.sh  → rc=0 · 370 satır
+════ T-OLCUM · uzun ölçümde baş + atlanan + SON gider; kısa ölçüm aynen; uzun stderr sonucu itmez ════
+  ✓ O1 🔴 188 satırlık ölçümün SONUÇ satırı istemde (eskiden ilk 60 satırda kalıyordu)
+  ✓ O2 kaç satırın atlandığı ve dosya boyu söylendi
+  ✓ O3 baş korunur, orta atlanır, son gelir
+  ✓ O4 tavan aynı: dosya başı ≤ 60 satır (47)
+  ✓ O5 kısa ölçüm aynen, işaretsiz
+  ✓ O6 uzun stderr stdout'un sonucunu dışarı itmez; stderr'in de sonu gelir
+…
+  ✓ mutant 'olcum-sonu-yok' sınavı KIRMIZI yapıyor
+  ✓ mutant 'olcum-stderr-ayrilmaz' sınavı KIRMIZI yapıyor
+  ✓ mutant 'olcum-tavan-asilir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'olcum-atlanan-sayisiz' sınavı KIRMIZI yapıyor
+…
+── SONUÇ: 211 geçti · 0 kaldı ──
+--- stderr ---
