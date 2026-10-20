@@ -18,3 +18,7 @@ PY
 cd "$T/mmex" && env -u BILEYI_KUTU_DEFTERI HOME="$T/ev" BILEYI_ANAHTAR="$T/anahtar-yok" python3 "$T/bileyi/scripts/bileyi.py" --depo "$T/mmex" olc --gun 0 > "$T/o" 2>&1; rc=$?
 echo "ref $1 ($(git -C "$OLDPWD" rev-parse --short "$1" 2>/dev/null)) · bileyi olc rc=$rc"
 grep -E 'iz:|havuz:|ÖLÇEMED|aron golge' "$T/o" | sed "s|$T|<geçici>|g" | head -6
+# HÜKÜM (göz #391 tur 2: rc 0 yeşili 🟡 satırlarla birlikte okunsun): bu ölçümün sorduğu YALNIZ kutu defterinin okunup okunmadığı.
+# mmex'te merkez havuz ve sürtünme raporu YOKTUR — onların 🟡 satırı beklenen hâldir, bu ölçümün konusu değildir.
+printf 'HÜKÜM · kutu defteri okundu: %s · defterdeki tekrar bulundu: %s · (çıktıda "4 × …" satırı ilk 3 kimliği basar — araç biçimi)\n' \
+  "$(grep -q 'iz: kutu-defteri: .* — 4 kayıt' "$T/o" && echo EVET || echo HAYIR)" "$(grep -q '4 × aron golge' "$T/o" && echo EVET || echo HAYIR)"

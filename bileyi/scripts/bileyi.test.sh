@@ -768,6 +768,9 @@ iceren "X11 merkez havuzu VE kutu defteri birlikte okunur (oda: 10 + defter: 5)"
 iceren "X12 🔴 AÇIK verilen yol yoksa sessizce düşmez: 🟡 okunamadı satırı" "🟡 kutu-defteri: $KOK/yok-defter.json — okunamadı" env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KOK/yok-defter.json" "${O[@]}" olc --gun 0
 iceren "X13 açık yolu olmayan kaynak kapsamayı GENİŞ göstermez (1/2 kaynak)" "1/2 kaynak OKUNDU" env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KOK/yok-defter.json" "${O[@]}" olc --gun 0
 icermeyen "X14 '-' bilerek kapatır: kaynak satırı yok" "kutu-defteri" env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="-" "${O[@]}" olc --gun 0
+mkdir -p "$KOK/dizin-defter.json"
+out15="$(env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KOK/dizin-defter.json" "${M[@]}" olc --gun 0 2>&1)"; rc15=$?
+[[ $rc15 -eq 3 && "$out15" != *Traceback* && "$out15" == *"ÖLÇEMEDİM"* ]]; kapi "X15 🔴 defter OKUNAMAZSA (dizin/izin) ham çökme değil: rc=3 + sebep (rc=$rc15)" 0 test $? -eq 0
 echo "X · MUTASYON (tam kopyada; kontrol önce)"
 xm() {   # xm <ad> <eski> <yeni> <beklenen çıktı parçası> — mutant X'in bir kapısını düşürmeli
   local Mp="$KOK/xm-$1.py"
@@ -796,6 +799,12 @@ PYM
   if [[ "$out" != *"🟡 kutu-defteri"* ]]; then GECEN=$((GECEN+1)); echo "  ✓ X mutant '$1' sınavı düşürüyor"; else DUSEN=$((DUSEN+1)); echo "  ✗ X mutant '$1' sağ kaldı"; fi
 }
 xmo acik-yol-sessiz-duser '(acik_verildi or kd.exists())' 'kd.exists()'
+Mp="$KOK/xm-oserror.py"; python3 - "$B" "$Mp" <<'PYM'
+import sys; s = open(sys.argv[1], encoding="utf-8").read(); a = "    except OSError as e:"
+assert s.count(a) == 1; open(sys.argv[2], "w", encoding="utf-8").write(s.replace(a, "    except ZeroDivisionError as e:", 1))
+PYM
+out="$(env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KOK/dizin-defter.json" python3 "$Mp" --depo "$KOK/mmex" --esik-dosya "$ES" olc --gun 0 2>&1)"
+if [[ "$out" == *Traceback* ]]; then GECEN=$((GECEN+1)); echo "  ✓ X mutant 'oserror-yakalanmaz' sınavı düşürüyor"; else DUSEN=$((DUSEN+1)); echo "  ✗ X mutant 'oserror-yakalanmaz' sağ kaldı"; fi
 xm ev-dizini-yok '(Path.home() / KUTU_DEFTERI_GORELI, False)' '(Path("/yok") / KUTU_DEFTERI_GORELI, False)' "kanit yolu" ev
 
 echo

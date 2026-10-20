@@ -174,7 +174,7 @@ def havuz_oku(yol: Path, pencere_gun: int) -> tuple[list[dict], int, str]:
     return kayit, bozuk, uyari
 
 
-# 🔴 KUTUNUN KENDİ BULGU DEFTERİ (gorev_01M4ZMCTMEEF1QW0Z0K2TG2FTX, mmex 12 Eki): izole kutularda bulgular
+# 🔴 KUTUNUN KENDİ BULGU DEFTERİ (gorev_01M4ZMCTMEEF1QW0Z0K2TG2FTX — mmex'te 12 Eki'de görüldü, 20 Eki'de onarıldı): izole kutularda bulgular
 #    `_agents/handoff/bulgu-havuzu.jsonl`'da DEĞİL, kutunun Bulgu Defteri paketinde yaşar
 #    (`<ev>/.ic-sayfa/bulgu-defteri/bulgular.json` — cloudtop infra/bulgu-defteri, "kod global, veri yerel").
 #    Araç orada hiç bakmıyordu: mmex'te `bileyi olc` → "bulgu havuzu yok — ÖLÇEMEDİM". Yol kutuya SABİT
@@ -207,6 +207,8 @@ def kutu_defteri_oku(yol: Path) -> tuple[list[dict], int]:
         d = json.loads(yol.read_text(encoding="utf-8", errors="replace"))
     except json.JSONDecodeError:
         raise Durdu(f"kutu defteri JSON değil: {yol} — ÖLÇEMEDİM", 3)
+    except OSError as e:          # izin · dizin · okuma hatası: ham çökme değil, ÖLÇEMEDİM (göz #391 tur 2)
+        raise Durdu(f"kutu defteri okunamadı: {yol} ({e.__class__.__name__}) — ÖLÇEMEDİM", 3)
     ham = d.get("bulgular") if isinstance(d, dict) else d
     if not isinstance(ham, list):
         raise Durdu(f"kutu defterinde 'bulgular' listesi yok: {yol} — ÖLÇEMEDİM", 3)
