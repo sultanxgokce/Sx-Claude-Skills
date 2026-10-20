@@ -89,7 +89,11 @@ if [ -z "${TB_IC:-}" ]; then
   r="$(kur "$T/proje" "$H")"; kapi "K2 ilk kurulum: kuruldu, kaynakla bayt bayt aynı, çalıştırılabilir" "kuruldu|rc=0|e|e" "$(printf '%s' "$r" | paste -sd'|')|$(cmp -s "$KOK/scripts/tmux-bekcisi.sh" "$H" && echo e || echo h)|$([ -x "$H" ] && echo e || echo h)"
   r="$(kur "$T/proje" "$H")"; kapi "K3 ikinci koşu: güncel (dokunmaz)" "güncel|rc=0" "$(printf '%s' "$r" | paste -sd'|')"
   printf '\n# eski sürüm tmux-bekcisi.sh\n' >> "$H"
-  r="$(kur "$T/proje" "$H")"; kapi "K4 eski bekçi kopyası güncellenir" "güncellendi|rc=0|e" "$(printf '%s' "$r" | paste -sd'|')|$(cmp -s "$KOK/scripts/tmux-bekcisi.sh" "$H" && echo e || echo h)"
+  exec 7<"$H"; ino_once="$(stat -c %i "$H")"   # açık tutulan eski kopya = o an onu koşturan süreç
+  r="$(kur "$T/proje" "$H")"
+  kapi "K4a güncelleme YERİNDE yazmaz, yenisini mv ile koyar (inode değişir; koşan eski kopya bozulmaz, yarım dosya görünmez)" "farkli|1" "$([ "$(stat -c %i "$H")" != "$ino_once" ] && echo farkli || echo ayni)|$(grep -c '# eski sürüm' <&7)"
+  exec 7<&-
+  kapi "K4 eski bekçi kopyası güncellenir" "güncellendi|rc=0|e" "$(printf '%s' "$r" | paste -sd'|')|$(cmp -s "$KOK/scripts/tmux-bekcisi.sh" "$H" && echo e || echo h)"
   printf '#!/bin/sh\necho elle-kurulmus\n' > "$H"
   r="$(kur "$T/proje" "$H")"; kapi "K5 bekçi olmayan yabancı dosyaya DOKUNMAZ" "1|rc=1|elle-kurulmus" "$(printf '%s' "$r" | grep -c '^DOKUNULMADI (hedefte')|$(printf '%s' "$r" | tail -1)|$(sh "$H")"
   rm -f "$H"
@@ -135,6 +139,7 @@ if [ -z "${TB_IC:-}" ] && [ -z "${TB_KIC:-}" ]; then
   kurmutant deneme-kilidi-yok '[ -z "${TO_TMUX_BEKCI_BIN:-}" ] && [ "$PROJE" != "/config/projects/$KUTU" ]' 'false'
   kurmutant yabanci-ezilir    '[ -e "$hedef" ] && ! grep -q' 'false && ! grep -q'
   kurmutant dogrulamasiz      '&& "$yeni" -V >/dev/null 2>&1 &&' '&&'
+  kurmutant yerinde-yazar     'mv -f "$yeni" "$hedef"' 'cat "$yeni" > "$hedef" && rm -f "$yeni"'
   bekmutant() {  # bekci.sh bozması, aynı yöntem: kopyada bozulur, kopyanın sınavı K+B'ye kadar koşar. "" = bozmasız pozitif kontrol
     local d="$T/bm-$1"; mkdir -p "$d"; cp -r "$KOK/scripts" "$d/"
     if [ -n "$2" ]; then
