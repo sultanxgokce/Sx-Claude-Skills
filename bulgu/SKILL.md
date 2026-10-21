@@ -1,6 +1,6 @@
 ---
 name: bulgu
-version: 0.4.0
+version: 0.4.1
 description: "Filonun TEK bulgu komutu — hangi kutuda olursan ol, gördüğün kusuru ya da fikri aynı komutla yaz: bulgu = bug/özellik etiketli GÖREV (Sultan 14 Eki, K1); kutuda defter jetonu varsa merkezî Görev Defteri'ne (Sultan'ın görev ekranı) gider, yoksa eski kutu defterine düşer ve söyler. 'bulgu yaz', 'kusur kaydet', 'deftere düş' dendiğinde kullan."
 allowed-tools: Bash
 ---
@@ -22,7 +22,7 @@ ve rc 1 ile söylenir. `liste · hal · sema` eski kutu defteri içindir (taşı
 Açtığın kayıt başka bir kutunun **bekleyen** görevini serbest bırakmak için açılıyorsa `--dugum` ver:
 `--dugum <kutu>:gorev_<kimlik>` ya da çıplak `--dugum gorev_<kimlik>` (kutu defterden okunur; görünmüyorsa rc 1, kayıt yazılmaz).
 Kayıt defterin `dugum_acar` alanını taşır; biçim ve varlık kapısı **defterdedir** (hedef var mı, açık mı, kutusu tutuyor mu),
-reddederse sebep aynen basılır (rc 1). Defter 1.14.0 ve sonrası bekleyen göreve aynı yazımda "bekliyor ←" notu düşer ve komut
+reddederse sebep aynen basılır (rc 1); bağ reddinde defterin `neden` ve `yapılacak` satırı da basılır (0.4.1, canlı koşuda bulundu). Defter 1.14.0 ve sonrası bekleyen göreve aynı yazımda "bekliyor ←" notu düşer ve komut
 bunu söyler; not yazılamadıysa (ör. bekleyen görevi düzenleme yetkin yok) kayıt yine yazılır ve komut **rc 4** döner
 (sebep basılır) — çağıran bağın yarım kaldığını anlar. Düğüm yalnız merkezî defterde yaşar: **jetonsuz kutuda `--dugum` reddedilir** (rc 2), bağ sessizce düşmez.
 

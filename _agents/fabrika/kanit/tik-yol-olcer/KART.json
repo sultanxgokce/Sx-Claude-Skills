@@ -1,0 +1,22 @@
+{
+  "is": "tik-yol-olcer",
+  "cumle": "ui-tasarim-akisi tık kapısına seçenek: tarayıcıda yolu yürüyen ölçer (tik-olc.sh + tik-olc.mjs) — görev yolları tanım dosyasından, her adım gerçekten tıklanır, ekran dışı/görünmez adım tık ekler, yürünemeyen adım bütçeyi aşar; ölçülen sayılar tik-kaydet.sh'e gider ve artefakt ölçüm yöntemini (elle · tarayıcı) taşır; tarayıcı yoksa ÖLÇÜLEMEDİ (gorev_01M57ZV24AF6KQ6NYYTP44JPZK, BERİD Ö5)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-20T18:31:48+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": []
+}

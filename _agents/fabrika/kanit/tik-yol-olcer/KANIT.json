@@ -1,0 +1,61 @@
+{
+  "is": "tik-yol-olcer",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-20T18:46:28+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "yol",
+      "asama": "once",
+      "dosya": "olcum-yol-once.txt",
+      "sha256": "5c643fce12e35bf38d12d03ae22a2d055252e94d681a5acbe4de3179fa29da9e",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/tik-yol-olcer/yol-olcer.sh",
+        "origin/main"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T18:37:13+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "70fcbedb5a7948b087097e1df85610fa"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "yol",
+      "asama": "sonra",
+      "dosya": "olcum-yol-sonra.txt",
+      "sha256": "ffb32524188836e6d9295dfaf5099c764f44f9ad28efff807c51901853421dc2",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/tik-yol-olcer/yol-olcer.sh",
+        "HEAD"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T18:46:28+03:00",
+      "sure_sn": 0.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4a9eef570b094ccf8a9e4c117a481a18"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tik-olc-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-tik-olc-sinavi-sonra.txt",
+      "sha256": "6f1492ce763e5dce9b0639300091761d66b598627ce4b772e0c767b2028ce543",
+      "komut": [
+        "bash",
+        "ui-tasarim-akisi/arac/tik-olc.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T18:46:27+03:00",
+      "sure_sn": 136.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "abfde24767e94f5897ddbd7ef40e0dea"
+    }
+  ],
+  "imza": "4cb72d797d507ca527a0d2fb6f6a5edd12295011f65bf13df671bb1f8427bf6b"
+}

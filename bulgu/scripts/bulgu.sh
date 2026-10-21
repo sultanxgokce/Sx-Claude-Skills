@@ -55,7 +55,12 @@ print(json.dumps(d,ensure_ascii=False))' "$baslik" "$kim" "$notu" "$etiket" "$du
 import sys,json; t=sys.stdin.read().rstrip("\n").rsplit("\n",1); g,kod=(t if len(t)==2 else (t[0],"000"))
 try: j=json.loads(g or "{}")
 except Exception: j={"hata":"yanit_bozuk"}
-if kod!="201": print("⛔ merkezî defter reddetti http=%s · %s · %s" % (kod, j.get("hata"), j.get("bekleniyor") or j.get("alanlar") or ""), file=sys.stderr); sys.exit(1)
+if kod!="201":
+    ek=j.get("ek") if isinstance(j.get("ek"),dict) else j   # canlı geçit ek alanlarını düzleştirir (ret): neden/yerine üst düzeyde
+    print("⛔ merkezî defter reddetti http=%s · %s · %s" % (kod, j.get("hata"), j.get("bekleniyor") or j.get("alanlar") or ""), file=sys.stderr)
+    # defter bağ reddinde sebebi ve çareyi verir (bag_hedefi_yok: neden · yerine) — kullanıcı ne yapacağını görsün
+    if ek.get("neden") or ek.get("yerine"): print("   neden: %s%s" % (ek.get("neden") or "?", " · yapılacak: %s" % ek["yerine"] if ek.get("yerine") else ""), file=sys.stderr)
+    sys.exit(1)
 k=j["kayit"]; print("📌 %s · %s · %s — %s (açan: %s) · Görev Defteri" % (k["id"], k["canli"].get("kutu") or k.get("ekleyen_kutu"), k["canli"].get("etiket"), k["adlar"][0]["deger"], k["canli"].get("kaynak_kim")))
 if k["canli"].get("dugum_acar"): print("  ⛓ düğüm: %s" % k["canli"]["dugum_acar"])
 b=j.get("dugum_bekleyen")
