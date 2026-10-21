@@ -519,6 +519,60 @@ _m24 '("/" in e or "\\" in e)' '("\\" in e)' 'a/b' "eğik çizgi kuralı yok"
 _m24 'if set(e) <= {"."} else ""' 'if False else ""' '..' "nokta kuralı yok"
 _m24 '"boş" if not e.strip() else' '"boş" if not e else' '   ' "yalnız boşluk boş sayılmıyor"
 
+echo "════ T25 · MUTASYON KAYDI (FR7M76 · #1136 tur 3): --mutasyon <gerçek etiket> — dosya başı söyler, renk ters, gerçek ölçüme bağlı ════"
+# Senaryo fonksiyonda: geçen kapıların anahtarını basar. Gerçek araçta hepsi geçer; mutant kopyada hedef anahtar düşer.
+_s25() {   # _s25 <kanit.py> <depo> → geçen kapı anahtarları (boşlukla)
+  local py="$1" d="$2" z="$2/_agents/fabrika/kanit/is-mut" o=""
+  mkdir -p "$d"; ( cd "$d" && git init -q -b main ) >/dev/null 2>&1
+  KANIT_DEPO="$d" python3 "$py" olcum is-mut m-yok --asama tek --mutasyon gercek -- bash -c 'exit 1' >/dev/null 2>"$d/e"
+  [ $? -eq 2 ] && grep -q "GERÇEK ölçüm yok" "$d/e" && [ ! -f "$z/olcum-m-yok-tek.txt" ] && o="$o a"
+  KANIT_DEPO="$d" python3 "$py" olcum is-mut gercek --asama tek -- bash -c 'echo "  ✓ K1 kilit tutuyor"; exit 0' >/dev/null 2>&1
+  KANIT_DEPO="$d" python3 "$py" olcum is-mut gercek --asama sonra --mutasyon gercek -- bash -c 'exit 1' >/dev/null 2>&1; [ $? -eq 2 ] && o="$o b"
+  KANIT_DEPO="$d" python3 "$py" olcum is-mut m-bos --asama tek --mutasyon '' -- bash -c 'exit 1' >/dev/null 2>&1; [ $? -eq 2 ] && o="$o c"
+  KANIT_DEPO="$d" python3 "$py" olcum is-mut mut-k1 --asama tek --mutasyon gercek -- bash -c 'echo "  ✗ K1 kilit tutuyor"; exit 1' > "$d/o" 2>&1; local r=$?
+  [ $r -eq 0 ] && head -1 "$z/olcum-mut-k1-tek.txt" | grep -q '^=== MUTASYON KANITI: kod BİLEREK bozuldu.*Gerçek kod ölçümü: olcum-gercek-\* ===$' && o="$o d"
+  python3 -c "import json,sys;k=[x for x in json.load(open(sys.argv[1]))['kayitlar'] if x['etiket']=='mut-k1'][-1];assert k['renk']=='yesil' and k['mutasyon'] is True and k['gercek_olcum']=='gercek' and k['beklenen']=='kirmizi'" "$z/KANIT.json" 2>/dev/null && grep -q "YAKALADI" "$d/o" && o="$o e"
+  KANIT_DEPO="$d" python3 "$py" olcum is-mut mut-kacan --asama tek --mutasyon gercek -- bash -c 'echo "  ✓ K1"; exit 0' > "$d/o2" 2>&1
+  python3 -c "import json,sys;k=[x for x in json.load(open(sys.argv[1]))['kayitlar'] if x['etiket']=='mut-kacan'][-1];assert k['renk']=='kirmizi'" "$z/KANIT.json" 2>/dev/null && grep -q "KAÇTI" "$d/o2" && o="$o f"
+  KANIT_DEPO="$d" python3 "$py" olcum is-mut mut-kor --asama tek --mutasyon gercek -- bash -c 'exit 3' >/dev/null 2>&1; local r3=$?
+  python3 -c "import json,sys;k=[x for x in json.load(open(sys.argv[1]))['kayitlar'] if x['etiket']=='mut-kor'][-1];assert k['renk']=='sari'" "$z/KANIT.json" 2>/dev/null && [ $r3 -eq 3 ] && o="$o g"
+  KANIT_DEPO="$d" python3 "$py" ozet is-mut > "$d/oz" 2>&1
+  grep -E '\| mut-k1 \|' "$d/oz" | grep -q "🧬 MUTASYON (gerçek ölçüm: \`gercek\`" && ! grep -E '\| gercek \|' "$d/oz" | grep -q "MUTASYON" && o="$o h"
+  KANIT_DEPO="$d" python3 "$py" dogrula is-mut >/dev/null 2>&1 && o="$o i"
+  KANIT_DEPO="$d" python3 "$py" olcum is-mut m-zincir --asama tek --mutasyon mut-k1 -- bash -c 'exit 1' >/dev/null 2>&1; [ $? -eq 2 ] && o="$o j"
+  head -1 "$z/olcum-gercek-tek.txt" | grep -q '^\$ ' && o="$o k"
+  echo "$o"
+}
+s25="$(_s25 "$HERE/kanit.py" "$T/d25")"; _k25() { case " $2 " in *" $1 "*) return 0;; esac; return 1; }
+_k25 a "$s25"; g $? "T25a bağlandığı GERÇEK ölçüm manifestte yoksa rc 2, dosya yazılmaz (neyin mutantı olduğu bilinmeli)"
+_k25 b "$s25"; g $? "T25b kendi etiketini gösteren mutasyon rc 2"
+_k25 c "$s25"; g $? "T25c boş --mutasyon rc 2"
+_k25 d "$s25"; g $? "T25d dosyanın İLK satırı 'MUTASYON KANITI … Gerçek kod ölçümü: olcum-gercek-*' (göz ✗ satırını bulgu sanmasın)"
+_k25 e "$s25"; g $? "T25e kırmızı sınav = bozuk kod YAKALANDI → yeşil; kayıtta mutasyon · gercek_olcum · beklenen"
+_k25 f "$s25"; g $? "T25f yeşil sınav = mutant KAÇTI → kırmızı, söylenir"
+_k25 g "$s25"; g $? "T25g rc 3 mutasyonda da sarı (ölçülemedi), araç rc 3"
+_k25 h "$s25"; g $? "T25h özet tablosunda mutasyon satırı 🧬 MUTASYON der, gerçek ölçüm satırı demez"
+_k25 i "$s25"; g $? "T25i manifest imzası sağlam (dogrula)"
+_k25 j "$s25"; g $? "T25j mutasyon kaydı başka mutasyonun 'gerçek ölçümü' olamaz (zincir reddi)"
+_k25 k "$s25"; g $? "T25k mutasyonsuz ölçüm dosyası değişmedi (ilk satır hâlâ komut)"
+echo "── T25 · MUTASYON (tam kopyada, kontrol şartlı) ──"
+_m25() {   # _m25 <anahtar> <eski> <yeni> <açıklama>
+  local d="$T/m25-$1"; mkdir -p "$d/pkg"; cp "$HERE/kanit.sh" "$d/pkg/"
+  python3 - "$HERE/kanit.py" "$d/pkg/kanit.py" "$2" "$3" <<'PY'
+import sys; src,dst,eski,yeni=sys.argv[1:]; s=open(src,encoding='utf-8').read(); o=s
+s=s.replace(eski,yeni); assert s!=o, "mutasyon deseni tutmadı: "+eski; open(dst,'w',encoding='utf-8').write(s)
+PY
+  [ $? -eq 0 ] || { g 1 "T25 mutant $1: desen tutmadı ($4)"; return; }
+  local s; s="$(_s25 "$d/pkg/kanit.py" "$d/depo")"; ! _k25 "$1" "$s"; g $? "T25 mutant ($4) → '$1' kapısı düşüyor"
+}
+_kd="$T/m25-kontrol"; mkdir -p "$_kd/pkg"; cp "$HERE/kanit.sh" "$HERE/kanit.py" "$_kd/pkg/"; [ "$(_s25 "$_kd/pkg/kanit.py" "$_kd/depo")" = "$s25" ] && [ -n "$s25" ]; g $? "T25 kontrol kopyası gerçek araçla aynı kapıları geçiyor (mutantlar kopyada ölçülür)"
+_m25 a 'if not any(k.get("tur") == "olcum" and k.get("etiket") == mut and not k.get("mutasyon") for k in m0["kayitlar"]):' 'if False:' "gerçek ölçüm bağı aranmıyor"
+_m25 j ' and not k.get("mutasyon") for k in m0["kayitlar"]' ' for k in m0["kayitlar"]' "mutasyon kaydı gerçek ölçüm sayılıyor"
+_m25 d '"=== MUTASYON KANITI: kod BİLEREK bozuldu' '"=== kod BİLEREK bozuldu' "dosya başı MUTASYON demiyor"
+_m25 e '("kirmizi" if p.returncode == 0 else "yesil")' '("yesil" if p.returncode == 0 else "kirmizi")' "renk ters çevrilmiyor"
+_m25 h '        elif k.get("mutasyon"):' '        elif False:' "özet mutasyonu söylemiyor"
+_m25 b '        if mut == a.etiket:' '        if False:' "kendi etiketine bağlanabiliyor"
+
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]

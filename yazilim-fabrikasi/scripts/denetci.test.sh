@@ -591,6 +591,16 @@ SAHTE_ISTEM_KOPYA="$T/istem-son3.md" SAHTE_JSON="$(J 5 E "")" DENETCI_KIRP_ESIK=
 grep -qx "satir-sonu-yok-olcum" "$T/istem-son3.md" && grep -A1 -x "satir-sonu-yok-olcum" "$T/istem-son3.md" | grep -qx -- "--- olcum-orta-tek.txt ---"; g $? "O13 satır sonuyla bitmeyen ölçümden sonra istemde sonraki başlık AYRI satırda (ayırıcıyı çağıran ekler)"
 T="$_T_ONCE"; export KANIT_DEPO="$T" DENETCI_KOMUT="$_DK_ONCE"
 fi   # IC_BOLUM=zil atlaması sonu
+if [ "${IC_BOLUM:-}" != zil ]; then
+echo "════ T-MUT · mutasyon kaydı göze 'beklenen kırmızı' diye gider (FR7M76 · #1136 tur 3) ════"
+kartac is-mutk; bash "$K" olcum is-mutk gercek --asama tek -- bash -c 'echo "  ✓ K5 kilit tutuyor"; exit 0' >/dev/null 2>&1
+bash "$K" olcum is-mutk mut-k5 --asama tek --mutasyon gercek -- bash -c 'echo "  ✗ K5 kilit tutuyor"; exit 1' >/dev/null 2>&1
+printf 'diff --git a/x b/x\n+mut\n' > "$T/mut.patch"   # ortak d.patch ve sahte.sh önceki bölümlerde silinir → kendi patch'i ve sahtesi
+MS="$T/mut-sahte.sh"; printf '#!/usr/bin/env bash\ncp "$1" "%s"; printf "%%s" "$SAHTE_JSON"\n' "$T/istem-mut.md" > "$MS"; chmod +x "$MS"
+SAHTE_JSON="$(J 5 E "")" DENETCI_KOMUT="$MS" bash "$D" is-mutk --diff "$T/mut.patch" >/dev/null 2>&1
+grep -qx -- "--- olcum-mut-k5-tek.txt · 🧬 MUTASYON KANITI (kod bilerek bozuldu; ✗ satırları BEKLENEN, bulgu değil) ---" "$T/istem-mut.md" && grep -qx -- "--- olcum-gercek-tek.txt ---" "$T/istem-mut.md"; g $? "M1 istemde mutasyon ölçümünün başlığı MUTASYON KANITI der, gerçek ölçümünki demez"
+grep -q '^=== MUTASYON KANITI: kod BİLEREK bozuldu' "$T/istem-mut.md" && grep -q '"MUTASYON KANITI" başlıklı ölçüm' "$T/istem-mut.md"; g $? "M2 dosya başı satırı ve şablon kuralı istemde (✗ satırları bulgu değildir)"
+fi
 # zil dışı mutantların iç koşumu T-ZIL'i atlar (onlar T-ZIL'den önce de ölüyordu; iç koşum 50 → 39 sn) — yalnız zil mutantları ve dış koşum girer
 if [ -z "${IC_KOSUM:-}" ] || [ "${IC_BOLUM:-}" = zil ]; then
 echo "════ T-ZIL · denetçi sessiz bitmez: koşuyor izi · zaman aşımı · her çıkışta zil · tıkanınca reise (SERDAR ACİL 21 Eki) ════"
@@ -722,6 +732,7 @@ mut "istem-en-buyuk-ilk-parca" 's@\[ "$_b" -gt "$_EN_B" \] && {@[ -z "$_EN" ] \&
 mut "istem-parca-dokumu-yok" 's@_DOKUM="$_DOKUM · ${_AD\[$_p\]} $_b"@:@'
 mut "istem-karti-dusurur" 's@^ISTEM_PARCALARI=(sablon kart kanit@ISTEM_PARCALARI=(sablon kanit@'
 mut "istem-ayiklama-kosulu-duser" 's@ && \[ "${DENETCI_KANIT_AYIKLA:-1}" != "0" \] && \[ "$ISTEM_BAYT"@ \&\& [ "$ISTEM_BAYT"@'
+mut "mutasyon-basligi-yok" 's@head -1 "$f" | grep -q .^=== MUTASYON KANITI. \&\& _mt=@false \&\& _mt=@'
 MUT_BOLUM=zil   # aşağıdaki 15 zil mutantı yalnız T-ZIL'le ölçülür (iç koşum IC_BOLUM=zil)
 mut "zil-tmux-soyulmaz" 's@env -u TMUX -u TMUX_PANE bash "$an" --done@bash "$an" --done@'
 mut "pid-kimligi-bakilmaz" 's@ \&\& { \[ -z "$_kim_iz" \] || \[ "$_kim_iz" = "$(_pid_kimlik "$_pid")" \]; }; then@; then@'

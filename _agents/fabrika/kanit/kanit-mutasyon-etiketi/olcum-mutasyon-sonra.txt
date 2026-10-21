@@ -1,0 +1,11 @@
+$ bash _agents/fabrika/kanit/kanit-mutasyon-etiketi/mut-olcer.sh yazilim-fabrikasi/scripts
+# rc=0 sure=0.5s zaman=2026-10-21T23:13:10+03:00
+--- stdout ---
+── 1 · araç mutasyonu etiketliyor mu: EVET (--mutasyon, rc 0)
+── 2 · mutasyon ölçümünün kaydı: renk yesil mutasyon
+── 3 · göz isteminde ölçüm başlıkları:
+   --- olcum-kilit-tek.txt ---
+   --- olcum-mut-k5-tek.txt · 🧬 MUTASYON KANITI (kod bilerek bozuldu; ✗ satırları BEKLENEN, bulgu değil) ---
+   göze giden satır: $ bash -c echo "  ✗ K5 kilit tutuyor"; exit 1
+── SONUÇ: etiket ✓ · renk ✓ (yakalandı=yeşil) · istem başlığı ✓
+--- stderr ---

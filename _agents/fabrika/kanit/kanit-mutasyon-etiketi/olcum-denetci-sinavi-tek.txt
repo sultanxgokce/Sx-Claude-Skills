@@ -1,0 +1,14 @@
+$ bash _agents/fabrika/kanit/denetci-bitis-zili/sizinti-olcer.sh python3 _agents/fabrika/kanit/kanit-mutasyon-etiketi/bolum-olcer.py T-MUT  M1  M2 mutant 'mutasyon (bilgi) ✗ -- bash yazilim-fabrikasi/scripts/denetci.test.sh
+# rc=0 sure=577.5s zaman=2026-10-21T23:23:27+03:00
+--- stdout ---
+$ bash yazilim-fabrikasi/scripts/denetci.test.sh  → rc=0 · 420 satır
+════ T-MUT · mutasyon kaydı göze 'beklenen kırmızı' diye gider (FR7M76 · #1136 tur 3) ════
+  ✓ M1 istemde mutasyon ölçümünün başlığı MUTASYON KANITI der, gerçek ölçümünki demez
+  ✓ M2 dosya başı satırı ve şablon kuralı istemde (✗ satırları bulgu değildir)
+…
+  ✓ mutant 'mutasyon-basligi-yok' sınavı KIRMIZI yapıyor
+  (bilgi) 45 mutant · 4 paralel · 480 sn
+…
+── SONUÇ: 259 geçti · 0 kaldı ──
+── SIZINTI: gerçek sinyal kütüğünde sınav işi zili önce 8 · sonra 8 · fark 0 (komut rc 0)
+--- stderr ---

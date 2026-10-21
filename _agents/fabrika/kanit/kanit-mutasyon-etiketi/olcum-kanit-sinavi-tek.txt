@@ -1,0 +1,28 @@
+$ python3 _agents/fabrika/kanit/kanit-mutasyon-etiketi/bolum-olcer.py T25 ✗ -- bash yazilim-fabrikasi/scripts/kanit.test.sh
+# rc=0 sure=26.5s zaman=2026-10-21T23:13:49+03:00
+--- stdout ---
+$ bash yazilim-fabrikasi/scripts/kanit.test.sh  → rc=0 · 236 satır
+════ T25 · MUTASYON KAYDI (FR7M76 · #1136 tur 3): --mutasyon <gerçek etiket> — dosya başı söyler, renk ters, gerçek ölçüme bağlı ════
+  ✓ T25a bağlandığı GERÇEK ölçüm manifestte yoksa rc 2, dosya yazılmaz (neyin mutantı olduğu bilinmeli)
+  ✓ T25b kendi etiketini gösteren mutasyon rc 2
+  ✓ T25c boş --mutasyon rc 2
+  ✓ T25d dosyanın İLK satırı 'MUTASYON KANITI … Gerçek kod ölçümü: olcum-gercek-*' (göz ✗ satırını bulgu sanmasın)
+  ✓ T25e kırmızı sınav = bozuk kod YAKALANDI → yeşil; kayıtta mutasyon · gercek_olcum · beklenen
+  ✓ T25f yeşil sınav = mutant KAÇTI → kırmızı, söylenir
+  ✓ T25g rc 3 mutasyonda da sarı (ölçülemedi), araç rc 3
+  ✓ T25h özet tablosunda mutasyon satırı 🧬 MUTASYON der, gerçek ölçüm satırı demez
+  ✓ T25i manifest imzası sağlam (dogrula)
+  ✓ T25j mutasyon kaydı başka mutasyonun 'gerçek ölçümü' olamaz (zincir reddi)
+  ✓ T25k mutasyonsuz ölçüm dosyası değişmedi (ilk satır hâlâ komut)
+── T25 · MUTASYON (tam kopyada, kontrol şartlı) ──
+  ✓ T25 kontrol kopyası gerçek araçla aynı kapıları geçiyor (mutantlar kopyada ölçülür)
+  ✓ T25 mutant (gerçek ölçüm bağı aranmıyor) → 'a' kapısı düşüyor
+  ✓ T25 mutant (mutasyon kaydı gerçek ölçüm sayılıyor) → 'j' kapısı düşüyor
+  ✓ T25 mutant (dosya başı MUTASYON demiyor) → 'd' kapısı düşüyor
+  ✓ T25 mutant (renk ters çevrilmiyor) → 'e' kapısı düşüyor
+  ✓ T25 mutant (özet mutasyonu söylemiyor) → 'h' kapısı düşüyor
+  ✓ T25 mutant (kendi etiketine bağlanabiliyor) → 'b' kapısı düşüyor
+
+…
+── SONUÇ: 207 geçti · 0 kaldı ──
+--- stderr ---
