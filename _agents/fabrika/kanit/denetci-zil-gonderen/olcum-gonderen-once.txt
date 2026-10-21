@@ -1,0 +1,7 @@
+$ bash _agents/fabrika/kanit/denetci-zil-gonderen/gonderen-olcer.sh /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/once-sx2/yazilim-fabrikasi/scripts
+# rc=1 sure=0.6s zaman=2026-10-21T23:31:13+03:00
+--- stdout ---
+── zil: --done · kimden=YOK
+── denetçinin zil hakkındaki sözü: ⚠ denetçi bitiş zili gönderilemedi (aile-notify rc 3): is-g tur 1: 5/E · bulgu 0 · rc 0 · GEÇTİ
+── SONUÇ: gönderen adı ✗ (yok → BILINMEYEN) · rc 3 dili ✗ gönderilemedi diyor
+--- stderr ---
