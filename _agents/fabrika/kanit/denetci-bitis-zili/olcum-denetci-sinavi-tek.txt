@@ -1,7 +1,7 @@
-$ python3 _agents/fabrika/kanit/denetci-bitis-zili/bolum-olcer.py T-ZIL mutant 'zil mutant 'reis mutant 'zaman mutant 'asim mutant 'kosuyor mutant 'sinav-kipi ✗ -- bash yazilim-fabrikasi/scripts/denetci.test.sh
-# rc=0 sure=732.3s zaman=2026-10-21T20:13:49+03:00
+$ python3 _agents/fabrika/kanit/denetci-bitis-zili/bolum-olcer.py T-ZIL Z6 Z7 Z8 Z9 Z10 mutant 'zil mutant 'reis mutant 'zaman mutant 'kill mutant 'asim mutant 'sure mutant 'bayat mutant 'canli mutant 'kosuyor mutant 'sinav-kipi ✗ -- bash yazilim-fabrikasi/scripts/denetci.test.sh
+# rc=0 sure=910.8s zaman=2026-10-21T21:03:38+03:00
 --- stdout ---
-$ bash yazilim-fabrikasi/scripts/denetci.test.sh  → rc=0 · 401 satır
+$ bash yazilim-fabrikasi/scripts/denetci.test.sh  → rc=0 · 412 satır
 ════ T-ZIL · denetçi sessiz bitmez: koşuyor izi · zaman aşımı · her çıkışta zil · tıkanınca reise (SERDAR ACİL 21 Eki) ════
   ✓ Z1a koşarken DENETIM-1.kosuyor izi var (pid + başlangıç)
   ✓ Z1b bitince iz silindi
@@ -16,15 +16,27 @@ $ bash yazilim-fabrikasi/scripts/denetci.test.sh  → rc=0 · 401 satır
   ✓ Z2d aşımda da koşuyor izi silindi
   ✓ Z4 rc 4 (tıkandı) → yazana zil + kart sahibine (istedi=BANI) --waiting
   ✓ Z5 zil aracı yoksa iş durmaz (rc korunur) ama stderr'e yazılır
+  ✓ Z6 TERM'i yutan denetçi KILL ile kesilir → rc 3 + ZAMAN AŞIMI (3 sn < 6)
+  ✓ Z7 geçersiz DENETCI_ZAMAN_ASIMI → söylenir, 900'e döner, denetim koşar (rc 1, 125 değil)
+  ✓ Z8 ölü pid'li (SIGKILL artığı) iz bayat sayılır: söylenir, silinir, denetim koşar
+  ✓ Z9 aynı işte canlı denetçi varken ikincisi rc 3 ile durur, öbürünün izine dokunmaz
+  ✓ Z10 yazanın zili TMUX kimliği soyularak çağrılır (kendi penceresine giden zil self-loop'ta atlanmaz — HEZARFEN ölçümü)
 …
   ✓ mutant 'reis-sinif-citini-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'bayat-kopya-geri-donusu' sınavı KIRMIZI yapıyor
+  ✓ mutant 'zil-tmux-soyulmaz' sınavı KIRMIZI yapıyor
   ✓ mutant 'zil-yok' sınavı KIRMIZI yapıyor
   ✓ mutant 'reis-zili-yok' sınavı KIRMIZI yapıyor
   ✓ mutant 'zaman-asimi-yok' sınavı KIRMIZI yapıyor
+  ✓ mutant 'kill-yok' sınavı KIRMIZI yapıyor
+  ✓ mutant 'asim-137-cevrilmez' sınavı KIRMIZI yapıyor
+  ✓ mutant 'sure-dogrulanmaz' sınavı KIRMIZI yapıyor
+  ✓ mutant 'bayat-iz-silinmez' sınavı KIRMIZI yapıyor
+  ✓ mutant 'canli-iz-ezilir' sınavı KIRMIZI yapıyor
   ✓ mutant 'asim-ham-yazilmaz' sınavı KIRMIZI yapıyor
   ✓ mutant 'kosuyor-silinmez' sınavı KIRMIZI yapıyor
   ✓ mutant 'kosuyor-yazilmaz' sınavı KIRMIZI yapıyor
   ✓ mutant 'sinav-kipi-gercek-zil' sınavı KIRMIZI yapıyor
 …
-── SONUÇ: 241 geçti · 0 kaldı ──
+── SONUÇ: 252 geçti · 0 kaldı ──
 --- stderr ---

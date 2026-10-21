@@ -50,7 +50,11 @@ _zil() {   # _zil <rc> — yazana --done, rc 3/4'te reise --waiting
   case "$rc" in 0) ne="GEÇTİ" ;; 1) ne="düzelt, yeniden gönder" ;; 2) ne="kanıt/kullanım eksiği — denetim açılmadı" ;;
                 3) ne="ÖLÇÜLEMEDİ"; [ "$ZAMAN_ASIMI" = 1 ] && ne="ZAMAN AŞIMI (${ZA} sn) — denetçi bitmedi" ;; 4) ne="TIKANDI — üç yol raporu" ;; *) ne="beklenmeyen çıkış" ;; esac
   local m="${IS:-?} tur ${TUR:-?}: ${PUAN:-—}/${DOGRU:-—} · bulgu ${NB:-—} · rc $rc · $ne"
-  bash "$an" --done ${yazan:+--amir "$yazan"} "denetçi: $m" </dev/null >/dev/null 2>&1 || printf '⚠ denetçi bitiş zili gönderilemedi (aile-notify rc %s): %s\n' "$?" "$m" >&2
+  # HEZARFEN ölçümü (20:38, #404): denetçiyi koşturan ajanın kendi penceresine giden zil, aile-notify'ın self-loop korumasına
+  #   takılıp ATLANIYORDU ("atla(self): … çağıran-oturum") — bekleyen yine sessiz kalırdı. Yazanın zilinde TMUX kimliği soyulur:
+  #   meşgul koltukta zil kuyruğa girer (ölçüldü: kanıt olcum-gercek-zil-sonra). Bedeli: gönderen "BILINMEYEN" görünür — aile-notify
+  #   göndereni yalnız TMUX'tan çözer. Reis zili başka koltuğa gider; orada kimlik KORUNUR ki reis kimden geldiğini görsün.
+  env -u TMUX -u TMUX_PANE bash "$an" --done ${yazan:+--amir "$yazan"} "denetçi: $m" </dev/null >/dev/null 2>&1 || printf '⚠ denetçi bitiş zili gönderilemedi (aile-notify rc %s): %s\n' "$?" "$m" >&2
   if [ "$rc" = 3 ] || [ "$rc" = 4 ]; then
     bash "$an" --waiting --amir "$reis" "denetçi (${yazan:-yazan?}): $m" </dev/null >/dev/null 2>&1 || printf '⚠ reis zili gönderilemedi (%s): %s\n' "$reis" "$m" >&2
   fi
@@ -62,7 +66,18 @@ _bitis() {   # EXIT tuzağı: çıkış kodu KORUNUR (tuzak exit çağırmaz)
   _zil "$rc"
 }
 trap _bitis EXIT
-ZA="${DENETCI_ZAMAN_ASIMI:-900}"
+ZA="${DENETCI_ZAMAN_ASIMI:-900}"; ZA_K="${DENETCI_ZAMAN_ASIMI_K:-30}"
+# göz tur 1 (#404): sayı olmayan değer timeout'u rc 125'e düşürür ve "codex düştü" sanılıp yeniden denenirdi → doğrula, varsayılana dön
+case "$ZA" in ''|*[!0-9]*|0) printf '⚠ DENETCI_ZAMAN_ASIMI=%s geçersiz (pozitif tam sayı sn olmalı) → 900\n' "$ZA" >&2; ZA=900 ;; esac
+case "$ZA_K" in ''|*[!0-9]*|0) ZA_K=30 ;; esac
+# _sinirli <komut…> — ZA sn sonra TERM, yutarsa ZA_K sn sonra KILL (göz tur 1: -k'sız timeout TERM'i yutan denetçide yine asılı kalır).
+#   KILL ile biten aşım 137 döner; süre dolmuşsa o da zaman aşımıdır → 124'e çevrilir (tek anlam: aşım = 124).
+_sinirli() {
+  local b=$SECONDS r
+  timeout -k "$ZA_K" "$ZA" "$@"; r=$?
+  [ "$r" -eq 137 ] && [ $((SECONDS - b)) -ge "$ZA" ] && r=124
+  return "$r"
+}
 _bilgi() { printf '%s\n' "$*"; }
 
 KARELER=(); IS=""; PR=""; DIFF=""; KART=""; YAZAN="claude"; DENETCI="auto"; MODEL=""; DEPO="${KANIT_DEPO:-}"; SULTAN_DEVAM=0; REIS_DEVAM=0
@@ -188,8 +203,22 @@ mkdir -p "$DZ"
 ONCEKI=$(ls "$DZ"/DENETIM-*.json 2>/dev/null | wc -l)
 TUR=$((ONCEKI+1))
 # "denetçi başladı mı?" sorusunun cevabı: bekleyen bu dosyaya bakar (pid canlı mı, ne zamandan beri); bitince _bitis siler
+# göz tur 1 (#404): SIGKILL/OOM'da EXIT tuzağı koşmaz → iz kalır. Kalan izin pid'i ölüyse BAYAT: söylenir ve silinir.
+#   pid'i canlıysa aynı işte BAŞKA denetçi koşuyor: aynı turu ve izi paylaşırdı → bu koşum ölçülemedi (rc 3), öbürüne dokunulmaz.
+for _iz in "$DZ"/DENETIM-*.kosuyor; do
+  [ -f "$_iz" ] || continue
+  _pid="$(sed -n 's/^pid=//p' "$_iz" | head -1)"
+  if [ -n "$_pid" ] && kill -0 "$_pid" 2>/dev/null; then
+    _hata "bu işte başka denetçi koşuyor: $(basename "$_iz") (pid $_pid, $(sed -n 's/^baslangic=//p' "$_iz")) — bitmesini bekle"; exit 3
+  fi
+  _bilgi "⚠ bayat koşuyor izi silindi: $(basename "$_iz") (pid ${_pid:-?} yaşamıyor — denetçi zil çalmadan öldü)"; rm -f "$_iz"
+done
 KOSUYOR="$DZ/DENETIM-$TUR.kosuyor"
-printf 'pid=%s\nbaslangic=%s\nzaman_asimi_sn=%s\n' "$$" "$(date -Iseconds)" "$ZA" > "$KOSUYOR" 2>/dev/null || KOSUYOR=""
+# noclobber: denetimle yazım arasındaki dar aralıkta ikinci denetçi gelirse izi ezmez, ölçülemedi der
+if ! ( set -C; printf 'pid=%s\nbaslangic=%s\nzaman_asimi_sn=%s\n' "$$" "$(date -Iseconds)" "$ZA" > "$KOSUYOR" ) 2>/dev/null; then
+  if [ -e "$KOSUYOR" ]; then KOSUYOR=""; _hata "bu işte başka denetçi aynı anda başladı (DENETIM-$TUR.kosuyor) — bitmesini bekle"; exit 3; fi
+  KOSUYOR=""
+fi
 # ── DARALTMA SIFIRI (PCP7J, 18 Eki 2026): kart daraltıldıysa (kart.sh daralt) daraltmadan ÖNCEKİ turlar yeni
 #    cümleyi puanlamadı; tavan ve "ilerliyor mu" yalnız daraltma SONRASI turlara bakar. Kart okunamazsa 0
 #    (daraltma yok sayılır — kapı aynı kaydı ayrıca okur, bu kapı tek değildir).
@@ -645,14 +674,14 @@ if { [ "$DENETCI" = "codex" ] || [ -n "${DENETCI_KIRP_ESIK:-}" ]; } && [ "$ISTEM
   mv "$TMP/istem-kirpik.md" "$TMP/istem.md"; KIRPILDI=1; _bilgi "⚠ istem $ISTEM_BAYT bayt → $KIRP_ESIK'e kırpıldı (denetçiye söylendi, DENETIM kaydına yazılır)"
 fi
 if [ -n "${DENETCI_KOMUT:-}" ]; then
-  DENETCI_AD="$DENETCI_KOMUT (sınav)"; timeout "$ZA" $DENETCI_KOMUT "$TMP/istem.md" > "$HAM" 2>"$TMP/err"; DRC=$?
+  DENETCI_AD="$DENETCI_KOMUT (sınav)"; _sinirli $DENETCI_KOMUT "$TMP/istem.md" > "$HAM" 2>"$TMP/err"; DRC=$?
 else
   kos_codex() {
     # 🔴 STDIN KAPALI (15 Eki, 68 dk boşa): istem argümanla verildiği hâlde Codex stdin TTY değilse "Reading additional input
     #    from stdin..." deyip EOF bekler; arka plandan (run_in_background, cron) çağrıda stdin açık socket olunca denetim sonsuza
     #    dek asılı kalır (CPU 0, log boş). Girdi her koşulda /dev/null'dan: çağıranın stdin'i ne olursa olsun denetçi biter.
     local kare_arg=(); for _k in "${KARELER[@]}"; do kare_arg+=(-i "$_k"); done   # kareler GÖRSEL ek (codex exec -i)
-    timeout "$ZA" codex exec -s read-only --skip-git-repo-check --ephemeral -C "$TMP" ${MODEL:+-m "$MODEL"} "${kare_arg[@]}" \
+    _sinirli codex exec -s read-only --skip-git-repo-check --ephemeral -C "$TMP" ${MODEL:+-m "$MODEL"} "${kare_arg[@]}" \
       --output-schema "$SEMA" -o "$HAM" "$(printf 'Hiçbir komut koşma, dosya okuma; gereken her şey aşağıda. Talimata göre YALNIZ JSON üret.\n\n'; cat "$TMP/istem.md")" </dev/null >"$TMP/log" 2>"$TMP/err"; DRC=$?
   }
   kos_claude() {   # yeni oturum: claude -p her çağrıda sıfırdan açılır → yazanın oturumu değildir
@@ -684,7 +713,7 @@ else
     fi
     DENETCI_AD="claude${ymodel:+ ($ymodel)}${YEDEK:+ (YEDEK GÖZ: $YEDEK · yazandan farklı yeni oturum + farklı model kademesi${YAZAN_MODEL:+ [yazan: $YAZAN_MODEL]} · Sultan Y0006)}"
     if [ "${#KARELER[@]}" -gt 0 ]; then printf '\n\n[UYARI: %s kare bu yedek göze GÖRSEL olarak verilemedi (claude -p kanalı görsel taşımıyor) — görsel kabul için yalnız adlara ve ölçüm çıktılarına bakabilirsin; bunu özete yaz]\n' "${#KARELER[@]}" >> "$TMP/istem.md"; KARE_VERILEMEDI=1; fi
-    timeout "$ZA" claude -p ${ymodel:+--model "$ymodel"} --output-format json --json-schema "$(cat "$SEMA")" < "$TMP/istem.md" > "$TMP/claude.json" 2>"$TMP/err"; DRC=$?
+    _sinirli claude -p ${ymodel:+--model "$ymodel"} --output-format json --json-schema "$(cat "$SEMA")" < "$TMP/istem.md" > "$TMP/claude.json" 2>"$TMP/err"; DRC=$?
     python3 -c "import json,sys;d=json.load(open('$TMP/claude.json'));r=d.get('structured_output') or d.get('result');print(r if isinstance(r,str) else json.dumps(r,ensure_ascii=False))" > "$HAM" 2>/dev/null || cp "$TMP/claude.json" "$HAM"
   }
   yedek_olur_mu() { [ "$SEC_AUTO" = 1 ] && [ "${DENETCI_YEDEK:-1}" != 0 ]; }

@@ -1,0 +1,66 @@
+{
+  "tur": 1,
+  "is": "denetci-bitis-zili",
+  "pr": "404",
+  "yazan": "claude",
+  "denetci": "claude (sonnet) (YEDEK GÖZ: codex düştü (2 deneme, rc=1) · yazandan farklı yeni oturum + farklı model kademesi [yazan: fable] · Sultan Y0006)",
+  "zaman": "2026-10-21T20:17:00+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": "codex düştü (2 deneme, rc=1)",
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": "sonnet",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 48628,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 12295
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kart dört şeyi istiyordu: koşuyor izi, 900 sn zaman aşımı, her çıkışta zil, rc 3/4'te reise bildirim. Dördü de var ve önce/sonra ölçümü ile 241 geçen sınav bunu gösteriyor. Puan 4: zaman aşımı yalnız SIGTERM yolluyor, iz dosyası sert ölümde kalabiliyor ve gerçek aile-notify ile bir uçtan uca koşum yok.",
+    "bulgular": [
+      {
+        "ne": "`timeout` `-k` olmadan çağrılıyor. Codex/claude SIGTERM'i yutar ya da alt süreç bırakırsa aşım yine asılı kalır. Sınav yalnız `sleep` içeren sahteyi öldürüyor, gerçek codex/claude davranışını denemiyor.",
+        "kanit": "denetci.sh: `timeout \"$ZA\" codex exec …`, `timeout \"$ZA\" claude -p …` ve `timeout \"$ZA\" $DENETCI_KOMUT`; hiçbirinde `-k` yok.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh (kos_codex, kos_claude, DENETCI_KOMUT dalı)",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "`.kosuyor` izi SIGKILL/OOM ile ölen denetçide kalır ve bayat izi temizleyen yok. Bekleyen, canlı pid'i izden ayırt etmek için `kill -0` yapmak zorunda. İz adı `DENETIM-<tur>` olduğundan iki eşzamanlı denetçi aynı turu ve aynı izi paylaşır.",
+        "kanit": "`KOSUYOR=\"$DZ/DENETIM-$TUR.kosuyor\"`: tur, `DENETIM-*.json` sayılarak bulunuyor, kilit yok; EXIT tuzağı SIGKILL'de çalışmaz.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:~190",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "`DENETCI_ZAMAN_ASIMI` sayı değilse (ya da boşsa) `timeout` rc 125 verir. Bu \"codex düştü\" sayılıp yeniden denenir. Kapıda bir doğrulama ya da varsayılana düşme yok.",
+        "kanit": "`ZA=\"${DENETCI_ZAMAN_ASIMI:-900}\"` doğrulanmadan `timeout \"$ZA\"`a giriyor; yalnız 124 özel işleniyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:65",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Gerçek aile-notify.sh ile uçtan uca koşum yok. Bayraklar gerçek araçta var (`--done`, `--waiting`, `--amir`, ölçtüm). Ama `--amir` değerleri (kartın `aldi`/`istedi` alanı, `AGENT_NAME`) kayıt defterindeki adlarla eşleşiyor mu belli değil. `MUAVİN` gibi Türkçe İ'li adlarla eşleşme denenmedi; sınav yalnız sahte zile bakıyor. Zil gitmezse stderr'e yazılıyor, ama bir koşum bunu göstermedi.",
+        "kanit": "Z-kapılarının tamamı `FABRIKA_AILE_NOTIFY=$ZS` sahtesine düşen satıra bakıyor; kartın `canli_gerekir:false` olduğu için canlı kayıt istenmemiş.",
+        "konum": "denetci.test.sh T-ZIL; denetci.sh `_zil`",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı filo (gerçek koltuk kaydı ve tmux/defter hedefleri); bu konteynerde yalnız sahte zil ölçülür"
+      },
+      {
+        "ne": "rc 3 her türlü ölçülemedi için reise `--waiting` atar. \"dal ana hattın gerisinde DUR\" gibi çağıranın kendi düzelteceği durumlar da buna dahil, yani gürültü. Kart bunu istemiyor ama zararsız.",
+        "kanit": "`_zil`: `if [ \"$rc\" = 3 ] || [ \"$rc\" = 4 ]` ayrım yapmıyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh `_zil`",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam, sarı kayıt yok. Önce/sonra ölçümü kırmızıdan yeşile geçiyor (iz yok→var, aşım HAM yok→var, zil 0→1). Denetçi sınavı yeşil: 241 geçti 0 kaldı, 7 mutantın hepsi kırmızı yapıyor. \\\"Önce\\\" ölçümü farklı bir kopyanın (ana dal) betiğine karşı koşmuş; ölçer aynı, bu kabul edilebilir. Zil çağrısı gerçek aile-notify değil sahteyle doğrulandı, yukarıda kutu-dışı olarak yazıldı."
+  }
+}

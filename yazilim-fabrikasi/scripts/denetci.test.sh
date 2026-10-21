@@ -580,7 +580,7 @@ SAHTE_ISTEM_KOPYA="$T/istem-son3.md" SAHTE_JSON="$(J 5 E "")" DENETCI_KIRP_ESIK=
 grep -qx "satir-sonu-yok-olcum" "$T/istem-son3.md" && grep -A1 -x "satir-sonu-yok-olcum" "$T/istem-son3.md" | grep -qx -- "--- olcum-orta-tek.txt ---"; g $? "O13 satır sonuyla bitmeyen ölçümden sonra istemde sonraki başlık AYRI satırda (ayırıcıyı çağıran ekler)"
 T="$_T_ONCE"; export KANIT_DEPO="$T" DENETCI_KOMUT="$_DK_ONCE"
 echo "════ T-ZIL · denetçi sessiz bitmez: koşuyor izi · zaman aşımı · her çıkışta zil · tıkanınca reise (SERDAR ACİL 21 Eki) ════"
-ZL="$T/zil.log"; ZS="$T/sahte-zil.sh"; printf '#!/usr/bin/env bash\nprintf "%%s\\n" "$*" >> "%s"\n' "$ZL" > "$ZS"; chmod +x "$ZS"
+ZL="$T/zil.log"; ZS="$T/sahte-zil.sh"; printf '#!/usr/bin/env bash\nprintf "%%s\\n" "$*" >> "%s"\nprintf "tmux=%%s pane=%%s\\n" "${TMUX:-yok}" "${TMUX_PANE:-yok}" >> "%s"\n' "$ZL" "$ZL" > "$ZS"; chmod +x "$ZS"
 printf "diff --git a/x b/x\n+zil\n" > "$T/zd.patch"; ZK="$T/zil-sahte.sh"; printf '#!/usr/bin/env bash\nprintf "%%s" "$SAHTE_JSON"\n' > "$ZK"; chmod +x "$ZK"; _DK_ZIL="$DENETCI_KOMUT"; export DENETCI_KOMUT="$ZK";   # önceki bölümler ortak sahteyi silebiliyor — bu bölüm kendi sahtesiyle
  kartac is-z; bash "$K" olcum is-z olc --asama tek -- true >/dev/null 2>&1
 DZZ="$T/_agents/fabrika/kanit/is-z"
@@ -611,6 +611,25 @@ bash "$KT" ac is-t --is x --istedi BANI --aldi MUAVIN --geri-alinamaz h --para h
 for i in 1 2 3; do : > "$ZL"; SAHTE_JSON="$(J 2 H "$B")" FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-t --diff "$T/zd.patch" >/dev/null 2>&1; RC=$?; done
 [ $RC -eq 4 ] && grep -q -- "rc 4 · TIKANDI" "$ZL" && grep -q -- "--waiting --amir BANI denetçi (MUAVIN): is-t tur 3" "$ZL"; g $? "Z4 rc 4 (tıkandı) → yazana zil + kart sahibine (istedi=BANI) --waiting"
 : > "$ZL"; SAHTE_JSON="$(J 3 H "$B")" FABRIKA_AILE_NOTIFY="$T/olmayan-zil.sh" bash "$D" is-zb --diff "$T/zd.patch" >/dev/null 2>"$T/z-err"; [ $? -eq 1 ] && grep -q "zili ATLANDI" "$T/z-err"; g $? "Z5 zil aracı yoksa iş durmaz (rc korunur) ama stderr'e yazılır"
+# göz tur 1 (#404) — Z6 TERM'i yutan denetçi de kesilir (-k) · Z7 geçersiz süre varsayılana döner · Z8 bayat iz silinir · Z9 canlı iz korunur
+kartac is-zk; bash "$K" olcum is-zk olc --asama tek -- true >/dev/null 2>&1
+ZI="$T/inatci.sh"; printf '#!/usr/bin/env bash\ntrap "" TERM; sleep 8; printf "%%s" "$SAHTE_JSON"\n' > "$ZI"; chmod +x "$ZI"
+bas=$(date +%s); SAHTE_JSON="$(J 5 E "")" DENETCI_KOMUT="$ZI" DENETCI_ZAMAN_ASIMI=1 DENETCI_ZAMAN_ASIMI_K=1 bash "$D" is-zk --diff "$T/zd.patch" >/dev/null 2>&1; RC=$?; sure=$(( $(date +%s) - bas ))
+[ $RC -eq 3 ] && [ "$sure" -lt 6 ] && grep -q "ZAMAN AŞIMI" "$T/_agents/fabrika/kanit/is-zk/DENETIM-1-HAM.txt" 2>/dev/null; g $? "Z6 TERM'i yutan denetçi KILL ile kesilir → rc 3 + ZAMAN AŞIMI (${sure} sn < 6)"
+kartac is-zv; bash "$K" olcum is-zv olc --asama tek -- true >/dev/null 2>&1
+SAHTE_JSON="$(J 3 H "$B")" DENETCI_ZAMAN_ASIMI=abc bash "$D" is-zv --diff "$T/zd.patch" >/dev/null 2>"$T/z-err"; RC=$?
+[ $RC -eq 1 ] && grep -q "DENETCI_ZAMAN_ASIMI=abc geçersiz" "$T/z-err"; g $? "Z7 geçersiz DENETCI_ZAMAN_ASIMI → söylenir, 900'e döner, denetim koşar (rc 1, 125 değil)"
+kartac is-zs; bash "$K" olcum is-zs olc --asama tek -- true >/dev/null 2>&1; DZS="$T/_agents/fabrika/kanit/is-zs"
+( exit 0 ) & olu=$!; wait "$olu"; printf 'pid=%s\nbaslangic=2026-01-01T00:00:00\n' "$olu" > "$DZS/DENETIM-1.kosuyor"
+SAHTE_JSON="$(J 3 H "$B")" bash "$D" is-zs --diff "$T/zd.patch" >"$T/z-out" 2>&1; RC=$?
+[ $RC -eq 1 ] && grep -q "bayat koşuyor izi silindi" "$T/z-out" && ! ls "$DZS"/DENETIM-*.kosuyor >/dev/null 2>&1; g $? "Z8 ölü pid'li (SIGKILL artığı) iz bayat sayılır: söylenir, silinir, denetim koşar"
+kartac is-zc; bash "$K" olcum is-zc olc --asama tek -- true >/dev/null 2>&1; DZC="$T/_agents/fabrika/kanit/is-zc"
+sleep 30 & canli=$!; printf 'pid=%s\nbaslangic=2026-01-01T00:00:00\n' "$canli" > "$DZC/DENETIM-1.kosuyor"
+SAHTE_JSON="$(J 5 E "")" bash "$D" is-zc --diff "$T/zd.patch" >/dev/null 2>"$T/z-err"; RC=$?
+[ $RC -eq 3 ] && grep -q "başka denetçi koşuyor" "$T/z-err" && grep -q "pid=$canli" "$DZC/DENETIM-1.kosuyor" && ! ls "$DZC"/DENETIM-*.json >/dev/null 2>&1; g $? "Z9 aynı işte canlı denetçi varken ikincisi rc 3 ile durur, öbürünün izine dokunmaz"
+kill "$canli" 2>/dev/null; wait "$canli" 2>/dev/null
+: > "$ZL"; SAHTE_JSON="$(J 3 H "$B")" TMUX=/tmp/tmux-1000/default,1,0 TMUX_PANE=%9 FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-zv --diff "$T/zd.patch" >/dev/null 2>&1
+grep -q -- "--done --amir MUAVIN" "$ZL" && grep -qx "tmux=yok pane=yok" "$ZL" && ! grep -q "pane=%9" "$ZL"; g $? "Z10 yazanın zili TMUX kimliği soyularak çağrılır (kendi penceresine giden zil self-loop'ta atlanmaz — HEZARFEN ölçümü)"
 export DENETCI_KOMUT="$_DK_ZIL"
 
 if [ -n "${IC_KOSUM:-}" ]; then echo "(ic)"; [ "$kalan" -eq 0 ]; exit $?; fi
@@ -683,9 +702,15 @@ mut "istem-en-buyuk-ilk-parca" 's@\[ "$_b" -gt "$_EN_B" \] && {@[ -z "$_EN" ] \&
 mut "istem-parca-dokumu-yok" 's@_DOKUM="$_DOKUM · ${_AD\[$_p\]} $_b"@:@'
 mut "istem-karti-dusurur" 's@^ISTEM_PARCALARI=(sablon kart kanit@ISTEM_PARCALARI=(sablon kanit@'
 mut "istem-ayiklama-kosulu-duser" 's@ && \[ "${DENETCI_KANIT_AYIKLA:-1}" != "0" \] && \[ "$ISTEM_BAYT"@ \&\& [ "$ISTEM_BAYT"@'
+mut "zil-tmux-soyulmaz" 's@env -u TMUX -u TMUX_PANE bash "$an" --done@bash "$an" --done@'
 mut "zil-yok" 's@^  _zil "$rc"$@  :@'
 mut "reis-zili-yok" 's@^  if \[ "$rc" = 3 \] || \[ "$rc" = 4 \]; then$@  if false; then@'
-mut "zaman-asimi-yok" 's@timeout "$ZA" $DENETCI_KOMUT@$DENETCI_KOMUT@'
+mut "zaman-asimi-yok" 's@_sinirli $DENETCI_KOMUT@$DENETCI_KOMUT@'
+mut "kill-yok" 's@timeout -k "$ZA_K" "$ZA"@timeout "$ZA"@'
+mut "asim-137-cevrilmez" 's@ \&\& r=124$@@'
+mut "sure-dogrulanmaz" 's@ZA=900 ;; esac@: ;; esac@'
+mut "bayat-iz-silinmez" 's@; rm -f "$_iz"$@@'
+mut "canli-iz-ezilir" '/başka denetçi koşuyor/s@; exit 3$@@'
 mut "asim-ham-yazilmaz" 's@^if \[ "$DRC" -eq 124 \]; then$@if false; then@'
 mut "kosuyor-silinmez" 's@^  \[ -n "$KOSUYOR" \] \&\& rm -f "$KOSUYOR"$@  :@'
 mut "kosuyor-yazilmaz" 's@^KOSUYOR="$DZ/DENETIM-$TUR.kosuyor"$@KOSUYOR=""@'
