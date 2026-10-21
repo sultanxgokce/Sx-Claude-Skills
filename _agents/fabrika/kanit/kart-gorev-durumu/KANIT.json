@@ -1,0 +1,116 @@
+{
+  "is": "kart-gorev-durumu",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-21T00:11:40+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kart-sinavi-once.txt",
+      "sha256": "3604fe3c3224d32330406702e383b54c4a9352c0128cb1aff1d345beee645c9a",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/engel/ozet.sh",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kgd/taban/scripts/kart.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-21T00:10:05+03:00",
+      "sure_sn": 6.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "728f59e4adb14743a387dbf3b27fde25"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sinavi-sonra.txt",
+      "sha256": "3aded30afd7c324c43f48c6ed8e12582ba15bce3bf4dc6d168e8f4438d76d961",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/engel/ozet.sh",
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-21T00:10:13+03:00",
+      "sure_sn": 7.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "424e3f3f6a2748a09eeaf5eeb0b972ab"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gorev-mutasyon",
+      "asama": "sonra",
+      "dosya": "olcum-gorev-mutasyon-sonra.txt",
+      "sha256": "fc3c7f54177f5fb7409271b0edda7393c271b756276be883668c9a7131e5ace4",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/engel/ozet.sh",
+        "bash",
+        "yazilim-fabrikasi/scripts/kart-gorev-mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-21T00:11:40+03:00",
+      "sure_sn": 87.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "507309a20b2a46be9141bb8f486e974a"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "canli-ac",
+      "asama": "sonra",
+      "dosya": "dosya-canli-ac-sonra.txt",
+      "sha256": "6fdcd90ab7f60a7cb91b8940d237667f890e8616f0ebfee1f81596e2dda707e2",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kgd/canli-ac.txt",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-21T00:11:40+03:00",
+      "olcum_id": "f0792ed5fc154518906dda4e4b9d972d"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "canli-defter",
+      "asama": "sonra",
+      "dosya": "dosya-canli-defter-sonra.txt",
+      "sha256": "b1906801d1700e2dfc1e765fdeff6e1a7274f1ac5b4348a5a49c16d023a7f689",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kgd/canli-defter.txt",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-21T00:11:40+03:00",
+      "olcum_id": "95e209f3540c445194cc8a830607697f"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "canli-merkez",
+      "asama": "sonra",
+      "dosya": "dosya-canli-merkez-sonra.txt",
+      "sha256": "2ebb4a6c3cc3bde084aa88253262c5ce87dcca16c5d18a51c2691e4e1181bb83",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kgd/canli-merkez.txt",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-21T00:11:40+03:00",
+      "olcum_id": "5c6286f2ad1d43beba6a6b65cb67678f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kabuk-biti",
+      "asama": "sonra",
+      "dosya": "olcum-kabuk-biti-sonra.txt",
+      "sha256": "ae552e6c00a7709b66d018df9e3a7e0603b2aabba218925673d75b25ab37c00f",
+      "komut": [
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/engel/ozet.sh",
+        "bash",
+        "kabuk-biti.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-21T00:11:40+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "25711dfadbc14375840eff2c5e21cfee"
+    }
+  ],
+  "imza": "b43eaee64acaacbc1ff5538d335b1d12be2e946193996766ee24db7b1cb5fd79"
+}

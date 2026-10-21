@@ -1517,7 +1517,7 @@
       "id": "yazilim-fabrikasi",
       "type": "agent",
       "name": "Yazılım Fabrikası — tek hat, beş adım (kabul→izole→inşa→kanıtla→gönder)",
-      "version": "0.5.4",
+      "version": "0.11.0",
       "description": "Filonun tek çalışma hattı: her iş kabul→izole→inşa→kanıtla→gönder adımlarından geçer; çıktıyı araç yazar, puanı yazandan farklı model verir, Sultan yalnız dört sınıfta ve gün sonu özetinde görünür. Hat dosyası FABRIKA.md her depoda birebir aynı (fabrika-kur.sh kur/denetle, sha). F0: hat dosyası + iş alanı (is-alani.sh, açık PR çakışma kontrolü, pre-commit kancası). F1: kanit.sh (manifesti araç yazar, imzalı; Playwright kare, ürün imi), denetci.sh (bağımsız göz: Codex/Claude çapraz, puan iki satır, tavan 3+1), karne.sh (kalibrasyon defteri). F2: sergi-beceri.py → sergi.mmepanel.com canlı (22 Eyl). F3: kart.sh (sınıf soruları araçta; kartsız iş alanı açılmaz) + gun-sonu.sh (özet defterden). Kapılar: ana-dal Edit/Write kilidi + birleştirme kapısı (kanıtsız/puansız iş birleşemez).",
       "prerequisites": {
         "system": [
@@ -1730,6 +1730,31 @@
         "workflow",
         "global"
       ]
+    },
+    {
+      "id": "baglam-karti",
+      "name": "baglam-karti — ENİS bağlam kartı kayıt defteri",
+      "version": "1.0.0",
+      "type": "agent",
+      "sync_dagitim": true,
+      "description": "ENİS bağlam kartı istek/cevap mektubunu şablona göre doğrular ve Görev Defteri'ne tek adım yazar (karar cümlesi ve kart metni yazılmaz); kayıt yazılamazsa rc≠0, kart dönmez (fail-closed).",
+      "prerequisites": [
+        "bash",
+        "python3",
+        "curl"
+      ],
+      "tags": [
+        "filo",
+        "gorev",
+        "enis",
+        "mahremiyet",
+        "kayit"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "BERİD (gorev 2M0CV · SERDAR gün planı C, 18 Eki 2026 · şablon MUAVİN)"
     }
   ]
 }

@@ -1,0 +1,31 @@
+$ bash baglam-karti/scripts/baglam-karti.test.sh
+# rc=0 sure=8.9s zaman=2026-10-21T11:00:53+03:00
+--- stdout ---
+── İ · istek
+  ✓ İ1 geçerli istek rc 0, deftere TEK istek
+  ✓ İ2 doğru uç: PATCH /kayit/<görev>
+  ✓ İ3 adım metni şablon §3 biçiminde (karar cümlesi YOK)
+  ✓ İ4 jeton başlıkta gider
+  ✓ İ5 karar cümlesi ne deftere ne ekrana düşer
+  ✓ İ6 aynı istek ikinci kez: rc 0, 'zaten yazılı'
+  ✓ İ7 biçim kapıları rc 2: ufuk · son an · karar yok · izinsiz isteyen · HEDEF · çift alan
+  ✓ İ8 biçim hatasında deftere istek GİTMEZ
+── C · cevap
+  ✓ C1 verildi + kapı geçti: rc 0, adım şablon biçiminde
+  ✓ C2 kart metni ne deftere ne ekrana düşer
+  ✓ C3 kapıdan geçmemiş kart · boş kart · kapalıda kart metni · bilinmeyen durum · yanlış kutuya HEDEF (×2) → rc 2
+  ✓ C4 bu hatalarda deftere istek GİTMEZ
+  ✓ C5 kapalı ve dayanak yok: rc 0, kapı '—'
+── F · fail-closed (kayıt yazılamazsa kart dönmez)
+  ✓ F1 jeton yok → rc 1, deftere istek yok
+  ✓ F2 defter reddetti (http 500) → rc 1, 'kart dönmez'
+  ✓ F3 defter ulaşılamaz → rc 1
+  ✓ F6 defter 200 ama gövde boş · bozuk · adım kayıtta yok · adimlar liste değil (adımı içeren metin) · başka adımın nesnesi → rc 1 (kart dönmez)
+  ✓ F7 eski varsayım (düz metin listesi) hâlâ kabul: rc 0 — kayıtta adım görünüyor
+  ✓ F4 kuru koşum: rc 3 (taşıma izni değil), adımı basar, deftere dokunmaz
+  ✓ F5 mektup yok · biçimsiz görev kimliği → rc 2
+── G · jeton hijyeni
+  ✓ G1 jeton değeri hiçbir çıktıda yok
+
+SONUÇ: 21 geçti · 0 kaldı
+--- stderr ---

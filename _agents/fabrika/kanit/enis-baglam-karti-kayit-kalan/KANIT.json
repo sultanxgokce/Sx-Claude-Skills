@@ -1,0 +1,95 @@
+{
+  "is": "enis-baglam-karti-kayit-kalan",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-21T11:01:46+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "birim-sinav",
+      "asama": "tek",
+      "dosya": "olcum-birim-sinav-tek.txt",
+      "sha256": "c34a34406f0cfb94c11ad313bbf71877b0fa56f6723e394ee4c8ef146f889ba7",
+      "komut": [
+        "bash",
+        "baglam-karti/scripts/baglam-karti.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-21T11:00:53+03:00",
+      "sure_sn": 8.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ad243870fd444a8d9bc5b92b18e5543a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon",
+      "asama": "tek",
+      "dosya": "olcum-mutasyon-tek.txt",
+      "sha256": "7db75a8a64bcd51d99d7a93d1273febe64cf7624d29936d1bffe36ffd1988c3b",
+      "komut": [
+        "bash",
+        "baglam-karti/scripts/baglam-karti.mutasyon.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-enis-baglam-karti-kayit-kalan"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-21T11:01:40+03:00",
+      "sure_sn": 47.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "cdefc6cba6294ac6a9043d76349dc90d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-sinav-gercek-defter",
+      "asama": "tek",
+      "dosya": "olcum-canli-sinav-gercek-defter-tek.txt",
+      "sha256": "38af136643267e89cc4195beec27851b3dc7ac4465129130a3531f7de192fa21",
+      "komut": [
+        "bash",
+        "baglam-karti/scripts/baglam-karti.canli.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-21T11:01:43+03:00",
+      "sure_sn": 2.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8079d3f72f5748888a280c63173e8f0e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kabuk-biti",
+      "asama": "tek",
+      "dosya": "olcum-kabuk-biti-tek.txt",
+      "sha256": "d395c7088c6858c005507b1302df507ffb086bc2bbae55d6607e9c22c15e704c",
+      "komut": [
+        "bash",
+        "kabuk-biti.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-21T11:01:43+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d32ad4b12d8c4e6cba6addd0944205d3"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kusur-eski-kod-gercek-defterde",
+      "asama": "once",
+      "dosya": "olcum-kusur-eski-kod-gercek-defterde-once.txt",
+      "sha256": "71be3dbfd0f794501166908721e781dab6ae3c2fd1d80763c0323546fda44dd0",
+      "komut": [
+        "bash",
+        "-c",
+        "S=$(mktemp -d); cp -r baglam-karti $S/; git show 6eb404e:baglam-karti/scripts/baglam-karti.sh > $S/baglam-karti/scripts/baglam-karti.sh; DEFTER_GECIT=${DEFTER_GECIT:-/config/projects/cloudtop/infra/defter-gecit/gecit.mjs} bash $S/baglam-karti/scripts/baglam-karti.canli.sh > $S/cikti 2>&1; r=$?; grep -c \"✗\" $S/cikti; grep \"kaldı\" $S/cikti; rm -r -- \"$S\"; exit $r"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-21T11:01:46+03:00",
+      "sure_sn": 2.9,
+      "boru_denetimi": "temiz",
+      "olcum_id": "32029210d80b40ce933791be2640b30b"
+    }
+  ],
+  "imza": "565aa10b265e6f15d45831148cf88fe32fa0d2f2176ac8ec351dc7692a5b909e"
+}

@@ -204,4 +204,69 @@ m13 atif-sonra-bos 'ATIF_SONRA = r"(?!\s+(?:rapor|kap[ıi]s|kapan[ıi]ş|retro|d
 m13 hafta-atifsiz '(?:s[ıi]|n[ıi]n|da|y[ıi])?(?!\w)" + ATIF_SONRA + r"' '(?:s[ıi]|n[ıi]n|da|y[ıi])?(?!\w)" + r"' "birleştirme kancası CI'ı ölçsün (hafta raporu E3)"
 m13 W-atifsiz 'W\d{2}(?!\w)" + ATIF_SONRA' 'W\d{2}(?!\w)"' "W42 retrosu için kutu dosyasını doldur"
 
+echo "════ T14 · görev durumu (Y7J3Q): --gorev bağlı kart açılış/bitti/tıkandı'da defterdeki görevi yazar; yazamazsa söyler, rc 4 ════"
+GDEPO="$(dirname "$(git rev-parse --path-format=absolute --git-common-dir)")"   # kart.sh ile aynı kök (önceki bölüm depo değiştirdi)
+printf 'kart-sinav-jeton\n' > "$T/jeton"
+python3 - "$T" <<'PY' &
+import sys, json, http.server, socketserver, os
+T=sys.argv[1]
+class H(http.server.BaseHTTPRequestHandler):
+    def log_message(self,*a): pass
+    def do_PATCH(self):
+        n=int(self.headers.get("content-length") or 0); b=json.loads(self.rfile.read(n) or b"{}")
+        with open(os.path.join(T,"yazim.jsonl"),"a") as f: f.write(json.dumps({"yol":self.path,"jeton":self.headers.get("x-defter-jeton"),"govde":b},ensure_ascii=False)+"\n")
+        if self.headers.get("x-defter-jeton")!="kart-sinav-jeton": self.send_response(401); self.end_headers(); return
+        if self.path.endswith("gorev_KARTRED000000001"):   # canlı geçidin düz ret biçimi (ret(): hata · yerine üst düzeyde)
+            self.send_response(409); self.end_headers(); self.wfile.write(json.dumps({"ok":False,"hata":"surum_catismasi","yerine":"görev bu arada değişti, yeniden dene"},ensure_ascii=False).encode()); return
+        self.send_response(200); self.end_headers(); self.wfile.write(json.dumps({"ok":True,"kayit":{"id":self.path.rsplit("/",1)[1]}}).encode())
+with socketserver.TCPServer(("127.0.0.1",0),H) as s:
+    open(os.path.join(T,"dport"),"w").write(str(s.server_address[1])); s.serve_forever()
+PY
+DSRV=$!; for i in $(seq 1 25); do [ -f "$T/dport" ] && break; sleep 0.2; done
+export DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$(cat "$T/dport")"
+KK="$GDEPO/_agents/fabrika/kartlar"; SINIF="--geri-alinamaz h --para h --dis-yuzey h --yetki h"; yz() { [ -f "$T/yazim.jsonl" ] && wc -l < "$T/yazim.jsonl" || echo 0; }
+bash "$KT" ac gb-1 --is "bağlı iş" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST00000001 >/dev/null 2>&1; [ $? -eq 1 ] && [ ! -f "$KK/gb-1.json" ]; g $? "G1 --gorev verilip --tahmin verilmezse kart AÇILMAZ (rc 1; defter tahminsiz çalışılıyor'a geçmez)"
+bash "$KT" ac gb-1 --is "bağlı iş" --istedi SERDAR --aldi BANI $SINIF --gorev GOREV-yanlis --tahmin 30 >/dev/null 2>&1; [ $? -eq 1 ] && [ ! -f "$KK/gb-1.json" ]; g $? "G1b biçimsiz görev kimliği rc 1"
+bash "$KT" ac gb-1 --is "bağlı iş" --istedi SERDAR --aldi BANI $SINIF --tahmin 30 >/dev/null 2>&1; [ $? -eq 1 ] && [ ! -f "$KK/gb-1.json" ]; g $? "G1c --tahmin tek başına anlamsız: rc 1"
+[ "$(yz)" -eq 0 ]; g $? "G1d reddedilen açılışlar deftere HİÇ gitmedi"
+O="$(bash "$KT" ac gb-1 --is "bağlı iş" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST00000001 --tahmin 45 2>&1)"; RC=$?
+python3 - "$T/yazim.jsonl" "$KK/gb-1.json" <<'PY'; g $? "G2 açılış → PATCH /kayit/<görev>: çalışılıyor + atanan BANI + tahmin 45 + '[▶ çalışılıyor]' adımı; kartta gorev/tahmin + yazım 'yazıldı'"
+import json,sys
+y=[json.loads(l) for l in open(sys.argv[1])][-1]; b=y["govde"]; k=json.load(open(sys.argv[2]))
+assert y["yol"]=="/kayit/gorev_KARTTEST00000001" and y["jeton"]=="kart-sinav-jeton"
+assert b["yerine"]=={"atanan":"BANI","tahmin_dk":"45","gorev_durumu":"calisiliyor"}, b
+assert b["adimlar"][0].startswith("[▶ çalışılıyor] BANI · kart gb-1 açıldı, tahmin 45 dk")
+assert k["gorev"]=="gorev_KARTTEST00000001" and k["tahmin_dk"]==45 and k["gorev_yazimlari"][-1]["olay"]=="ac" and k["gorev_yazimlari"][-1]["sonuc"]=="yazıldı"
+PY
+[ $RC -eq 0 ] && grep -q "✓ görev gorev_KARTTEST00000001 → çalışılıyor (defter)" <<<"$O" && ! grep -q "kart-sinav-jeton" <<<"$O"; g $? "G2b rc 0, ekranda '→ çalışılıyor (defter)', jeton değeri çıktıda YOK"
+O="$(bash "$KT" bitti gb-1 --pr 12 2>&1)"; RC=$?
+python3 - "$T/yazim.jsonl" "$(basename "$GDEPO")" <<'PY'; g $? "G3 bitti → onay bekliyor + kanıt '<depo> PR #12 · kanıt _agents/fabrika/kanit/gb-1/' + '[⏸ onay bekliyor]' adımı (✓ bitti insanındır, yazılmaz)"
+import json,sys
+b=[json.loads(l) for l in open(sys.argv[1])][-1]["govde"]; d=sys.argv[2]
+assert b["yerine"]["gorev_durumu"]=="onay-bekliyor" and b["yerine"]["kanit"]==d+" PR #12 · kanıt _agents/fabrika/kanit/gb-1/ ("+d+")", b
+assert b["adimlar"][0].startswith("[⏸ onay bekliyor] BANI · kart gb-1 bitti")
+PY
+[ $RC -eq 0 ]; g $? "G3b bitti rc 0"
+bash "$KT" ac gb-2 --is "tıkanacak iş" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST00000002 --tahmin 60 >/dev/null 2>&1
+bash "$KT" tikandi gb-2 --yol daralt --neden "kapsam kayması: hız kazancı kart dışı davranıştan" >/dev/null 2>&1; RC=$?
+python3 - "$T/yazim.jsonl" <<'PY'; g $? "G4 tıkandı → bekliyor + not (tıkanma nedeni) + '[⏳ bekliyor]' adımı (defter neyi beklediği yazılmamış bekliyor'u reddeder)"
+import json,sys
+b=[json.loads(l) for l in open(sys.argv[1])][-1]["govde"]
+assert b["yerine"]=={"gorev_durumu":"bekliyor","not":"kart gb-2 tıkandı: kapsam kayması: hız kazancı kart dışı davranıştan"}, b
+assert b["adimlar"][0].startswith("[⏳ bekliyor] BANI · kart gb-2 tıkandı (daralt)")
+PY
+[ $RC -eq 0 ]; g $? "G4b tıkandı rc 0"
+O="$(bash "$KT" ac gb-3 --is "reddedilen iş" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTRED000000001 --tahmin 30 2>&1)"; RC=$?
+[ $RC -eq 4 ] && [ -f "$KK/gb-3.json" ] && grep -q "⚠ GÖREV YAZILAMADI: gorev_KARTRED000000001 → çalışılıyor — yazılamadı: http 409 · surum_catismasi · görev bu arada değişti" <<<"$O" &&
+  python3 -c "import json;k=json.load(open('$KK/gb-3.json'));assert k['gorev_yazimlari'][-1]['sonuc'].startswith('yazılamadı: http 409 · surum_catismasi')"; g $? "G5 defter reddederse kart YİNE açılır, rc 4, sebep (hata + yerine) ekranda ve kartta"
+N0=$(yz); O="$(DEFTER_JETON_YOL="$T/jeton-yok" bash "$KT" ac gb-4 --is "jetonsuz iş" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST00000004 --tahmin 30 2>&1)"; RC=$?
+[ $RC -eq 4 ] && [ "$(yz)" -eq "$N0" ] && grep -q "yazılamadı: bu kutuda defter jetonu yok" <<<"$O" && [ -f "$KK/gb-4.json" ]; g $? "G6 jetonsuz kutu: deftere gidilmez, kart açılır, 'jetonu yok' söylenir, rc 4"
+N0=$(yz); O="$(bash "$KT" ac gb-5 --is "bağsız iş" --istedi SERDAR --aldi BANI $SINIF 2>&1)"; RC=$?
+[ $RC -eq 0 ] && [ "$(yz)" -eq "$N0" ] && grep -q "görev bağı yok — iş Sultan'ın 'çalışılıyor' görünümüne DÜŞMEZ" <<<"$O"; g $? "G7 bağsız kart deftere gitmez, rc 0, bunu söyler (eski kartlar etkilenmez)"
+O="$(bash "$KT" bitti gb-5 2>&1)"; RC=$?; [ $RC -eq 0 ] && [ "$(yz)" -eq "$N0" ]; g $? "G7b bağsız kartın bitti'si de deftere gitmez"
+kill $DSRV 2>/dev/null; wait $DSRV 2>/dev/null
+O="$(bash "$KT" bitti gb-2 2>&1)"; RC=$?
+[ $RC -eq 4 ] && grep -q "yazılamadı: deftere ulaşılamadı" <<<"$O" && python3 -c "import json;k=json.load(open('$KK/gb-2.json'));assert k['durum']=='bitti' and k['gorev_yazimlari'][-1]['olay']=='bitti'"; g $? "G8 defter kapalı: kart bitti İŞLENİR, 'ulaşılamadı' söylenir, rc 4 (sessiz eksik yok)"
+unset DEFTER_JETON_YOL DEFTER_UC
+
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "enis-baglam-karti-kayit",
+  "pr": "370",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T16:22:40+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": null,
+  "yazan_model_kaynak": null,
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 29451,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 4752
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Araç, istek ve cevapları doğrulayıp varsayılan 2M0CV görevine mahrem metinleri taşımadan tek adım yazıyor; kayıt başarısızlıklarında da kapalı kalıyor. Ana talep karşılanmış ve ölçümler güçlü, ancak cevap mektubundaki HEDEF alanı yalnız varlık bakımından denetlendiği için şablon doğrulaması tamamlanmadan önce bu uygulama açığı çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Cevap mektubunda HEDEF alanının değeri doğrulanmıyor; boş olmayan herhangi bir hedef kabul edilerek kayıt yazılabilir.",
+        "kanit": "Cevap dalında yalnız `if not hedef: red(...)` denetimi var; ardından doğrudan Durum/Kapı/Kart denetimine geçiliyor. Sınavın C1-C5 bölümü de yanlış fakat dolu bir HEDEF değerini reddeden vaka içermiyor.",
+        "konum": "baglam-karti/scripts/baglam-karti.sh:83",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Üç yeşil ölçüm, 19 işlevsel kapının geçtiğini, repo kapılarının temiz olduğunu ve üç hedefli mutasyonun yakalandığını gösteriyor. Gerçekçi sahte defterle istek gövdesi, uç, gizlilik ve hata dönüşleri ölçülmüş; ancak cevap HEDEF değerinin doğruluğu ölçüm kapsamına alınmamış."
+  }
+}

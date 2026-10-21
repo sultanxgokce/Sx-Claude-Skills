@@ -1,0 +1,59 @@
+{
+  "is": "enis-baglam-karti-kayit-kalan",
+  "cumle": "baglam-karti aracı GERÇEK Görev Defteri geçit motoruna karşı uçtan uca sınandı (geçici dizinde gerçek motor, gerçek PATCH); sınav yanıtın nesne listesi olduğunu buldu ve 1.0.0'ın her geçerli yazımda rc 1 verme hatası düzeltildi (1.0.1)",
+  "istedi": "SERDAR",
+  "aldi": "BERİD",
+  "zaman": "2026-10-18T20:03:48+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-10-18T20:03:48+03:00",
+      "olay": "daraltmadan dogdu",
+      "koken": "enis-baglam-karti-kayit"
+    },
+    {
+      "zaman": "2026-10-21T11:00:37+03:00",
+      "olay": "daralt",
+      "kalan_kart": "cloudtop-defter-yanit-sozlesmesi",
+      "tur_sifir": 0
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "koken": "enis-baglam-karti-kayit",
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "BERİD",
+      "oturum": "SERDAR-12-4x",
+      "gerekce": "daraltma: kalan bulgu yeni karta (cloudtop-defter-yanit-sozlesmesi) — Görev Defteri geçit motorunda PATCH /kayit yanıt sözleşmesinin (degisti · kayit.adimlar nesne listesi {deger, anahtar, kutu, ts}) belgelenmesi ve sözleşmeyi kilitleyen sınav (cloudtop infra/defter-gecit; sözleşme değişirse baglam-karti ve gorev.sh'ı kıran test)",
+      "zaman": "2026-10-21T11:00:37+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "Canlı Görev Defteri'ne karşı uçtan uca kayıt sınavı (sahte sunucu değil, gerçek PATCH /kayit) ve defterin yanıt sözleşmesinin (degisti/kayit/adimlar listesi) defter tarafında belgelenmesi",
+      "zaman": "2026-10-21T11:00:37+03:00",
+      "kalan_kart": "cloudtop-defter-yanit-sozlesmesi"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-21T11:00:37+03:00",
+      "kalan_kart": "cloudtop-defter-yanit-sozlesmesi",
+      "kalan": "Görev Defteri geçit motorunda PATCH /kayit yanıt sözleşmesinin (degisti · kayit.adimlar nesne listesi {deger, anahtar, kutu, ts}) belgelenmesi ve sözleşmeyi kilitleyen sınav (cloudtop infra/defter-gecit; sözleşme değişirse baglam-karti ve gorev.sh'ı kıran test)",
+      "tur_sifir": 0,
+      "oturum": "SERDAR-12-4x"
+    }
+  ]
+}
