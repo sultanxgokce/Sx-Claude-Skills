@@ -1,0 +1,10 @@
+$ bash _agents/fabrika/kanit/muhurdar-sicil/sicil-olcer.sh tescil/scripts
+# rc=0 sure=0.9s zaman=2026-10-22T02:01:06+03:00
+--- stdout ---
+── mühürdar: MÜHÜRDAR (özlük dosyası: 01.008.yaml)
+── iki görevde Sultan 'sağlanmadı' (mühürdar ✓ vermişti) → sicildeki kaçırma satırı: 2
+── durum: askida
+── özlüğü olmayan MUHAKKIK'e yazım: rc 3 (3 = yazılmadı)
+── seviye-lint (gerçek sicil kopyası): önce rc 0 · sonra rc 0 · çıktı AYNI
+── SONUÇ: ✓ sicil yazılıyor · askı hesaplanıyor · özlüksüz yazılmıyor · seviye-lint etkilenmiyor
+--- stderr ---

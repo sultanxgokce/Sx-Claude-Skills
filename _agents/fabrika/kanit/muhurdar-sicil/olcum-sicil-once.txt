@@ -1,0 +1,10 @@
+$ bash _agents/fabrika/kanit/muhurdar-sicil/sicil-olcer.sh /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/once-tescil2/tescil/scripts
+# rc=1 sure=0.9s zaman=2026-10-22T02:01:05+03:00
+--- stdout ---
+── mühürdar: MÜHÜRDAR (özlük dosyası: 01.008.yaml)
+── iki görevde Sultan 'sağlanmadı' (mühürdar ✓ vermişti) → sicildeki kaçırma satırı: 0
+── durum: (sicil yazıcısı YOK — Sultan'ın 'sağlanmadı'sı mühürdarın hiçbir kaydına düşmüyor)
+── özlüğü olmayan MUHAKKIK'e yazım: rc yok (3 = yazılmadı)
+── seviye-lint (gerçek sicil kopyası): önce rc 0 · sonra rc 0 · çıktı AYNI
+── SONUÇ: ✗
+--- stderr ---
