@@ -1,0 +1,22 @@
+{
+  "is": "denetci-bitis-zili",
+  "cumle": "denetci.sh sessiz bitmesin: başlarken DENETIM-<tur>.kosuyor izi (pid + başlangıç) bitince silinir; Codex/Claude çağrısı timeout 900 (aşımda rc 3 + HAM'a ZAMAN AŞIMI); her çıkış yolunda aile-notify --done zili yazana, rc 3/4'te reise --waiting; sınav 4 kapı + mutasyon (SERDAR ACİL 21 Eki 19:49, Sultan)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-21T19:49:56+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: zili)",
+  "kapsam_uyarilari": []
+}

@@ -1,0 +1,11 @@
+$ bash _agents/fabrika/kanit/denetci-bitis-zili/zil-olcer.sh yazilim-fabrikasi/scripts
+# rc=0 sure=3.8s zaman=2026-10-21T21:32:57+03:00
+--- stdout ---
+── A · koşarken başladı izi
+  iz: VAR (DENETIM-1.kosuyor)
+── B · 6 sn süren denetçi, DENETCI_ZAMAN_ASIMI=2
+  bekleme: 3 sn · rc 3 · HAM'da ZAMAN AŞIMI: VAR
+── C · çıkışlarda zil (sahte aile-notify'a düşen satır)
+  rc 0 → 1 zil · rc 1 → 1 zil · rc 2 (kanıt yok) → 1 zil
+── SONUÇ: iz ✓ · zaman aşımı ✓ · her çıkışta zil ✓
+--- stderr ---

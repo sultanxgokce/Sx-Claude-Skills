@@ -11,6 +11,7 @@
 #
 # HERMETİK: gerçek denetçi (codex/claude) çağrılmaz — DENETCI_KOMUT ile sahte bir betik kullanılır.
 set -uo pipefail
+export FABRIKA_AILE_NOTIFY=-   # denetçi bitiş zili sınavda KAPALI (gerçek koltuklara çalmasın); zil kapısı kendi sahtesini verir
 cd "$(dirname "$0")"
 D="$PWD/denetci.sh"
 GECEN=0; DUSEN=0
