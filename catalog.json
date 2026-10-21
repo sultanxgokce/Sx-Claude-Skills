@@ -1755,6 +1755,29 @@
       ],
       "author": "sultanxgokce",
       "source": "BERİD (gorev 2M0CV · SERDAR gün planı C, 18 Eki 2026 · şablon MUAVİN)"
+    },
+    {
+      "id": "tarif-kaydi",
+      "type": "tool",
+      "name": "tarif-kaydi — kadro tarifleri ve terim kaydı (tek kopya)",
+      "version": "0.1.0",
+      "sync_dagitim": true,
+      "description": "Uzmanlık, vazife ve usul tarifleri ile terim kaydı Sx'te tek kopya veri olarak durur (Sultan S8); şema sürüm 2 bekçisi biçimi ve bağları sınar (kapalı kümeler, iki yönlü karışan terimler, kaynak yolları). Mühürdarlık ilk uzmanlıktır.",
+      "prerequisites": {
+        "system": [
+          "python3"
+        ]
+      },
+      "tags": [
+        "kadro",
+        "terim",
+        "uzmanlik",
+        "muhurdarlik",
+        "veri"
+      ],
+      "installed_in": [
+        "_global"
+      ]
     }
   ]
 }

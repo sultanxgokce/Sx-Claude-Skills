@@ -1,0 +1,104 @@
+{
+  "sema_surumu": 2,
+  "kaynak": "veri-semasi.md §3-§5 (Nexus _agents/spec/terminoloji-kadro-tasarim/tasarim/) · Sultan kararları S2 S8 S9 S10 S11 S13 S14 (21-22 Eki 2026)",
+  "uzmanliklar": [
+    {
+      "sema_surumu": 2,
+      "id": "muhurdarlik",
+      "ad": "Mühürdarlık",
+      "unvan": "mühürdar",
+      "vazifeler": ["tescil", "tatbikat", "ders-cikarma"],
+      "el_kitabi": "tescil",
+      "sinav": { "kume": null, "turler": ["dogru", "kusurlu", "uydurma"] },
+      "sicil_esigi": { "kacirma": 2, "pencere": 10 },
+      "durum": "planli"
+    }
+  ],
+  "vazifeler": [
+    {
+      "sema_surumu": 2,
+      "id": "tescil",
+      "ad": "Tescil",
+      "uzmanlik": "muhurdarlik",
+      "usuller": ["tescil-teslim-sina"],
+      "cakisir": [],
+      "denetler": ["hedef-turu-is"],
+      "kor": true,
+      "acil": "evet",
+      "yedek": { "tur": "bassiz-sapka", "bekleme_dk": 30 },
+      "model": "codex-yoksa-claude"
+    },
+    {
+      "sema_surumu": 2,
+      "id": "tatbikat",
+      "ad": "Tatbikat",
+      "uzmanlik": "muhurdarlik",
+      "usuller": ["tatbikat-bozuk-is"],
+      "cakisir": [],
+      "denetler": ["tescil"],
+      "kor": true,
+      "acil": "hayir",
+      "yedek": null,
+      "model": "codex-yoksa-claude"
+    },
+    {
+      "sema_surumu": 2,
+      "id": "ders-cikarma",
+      "ad": "Ders çıkarma",
+      "uzmanlik": "muhurdarlik",
+      "usuller": ["ders-cikarma-kacirma"],
+      "cakisir": [],
+      "denetler": ["tescil"],
+      "kor": false,
+      "acil": "hayir",
+      "yedek": null,
+      "model": null
+    }
+  ],
+  "usuller": [
+    {
+      "sema_surumu": 2,
+      "id": "tescil-teslim-sina",
+      "ad": "Teslim sınama",
+      "vazife": "tescil",
+      "tetik": "hedef türü görev 'hedefe ulaştım' durumuna geçti",
+      "adimlar": [
+        { "sira": 1, "tur": "kapi", "kapi_yolu": null, "ne_yapar": "biçimsiz gereklilik belgesini reddeder" },
+        { "sira": 2, "tur": "kapi", "kapi_yolu": null, "ne_yapar": "yazan ile mühürdar aynıysa koşuyu reddeder (kendi işini denetleyemez)" },
+        { "sira": 3, "tur": "beceri", "beceri_id": "tescil", "ne_yapar": "G1..Gn'yi kör sınar (👤 Sultan denemesi satırlarını atlar), MUHUR.md yazar" },
+        { "sira": 4, "tur": "beceri", "beceri_id": "sert-teslim", "ne_yapar": "kanıt JSON'unu sınır + redaksiyonla mühürler" },
+        {
+          "sira": 5,
+          "tur": "sultan_eli",
+          "ne_yapar": "teslim ekranında 👤 Sultan denemesi satırlarını dener ve her satıra hüküm verir",
+          "sultan_eli_tarifi": "Ekranın en üstündeki 👤 satırının tarifini uygula, gördüğüne göre Katılıyorum ya da Sağlanmadı de"
+        }
+      ],
+      "cikti": "MUHUR.md + kanit/G<i>.json; hüküm merkez defterine (karar 1); Sultan'ın 'sağlanmadı'ları mühürdarın sicil isabet bölümüne"
+    },
+    {
+      "sema_surumu": 2,
+      "id": "tatbikat-bozuk-is",
+      "ad": "Bozuk iş tatbikatı",
+      "vazife": "tatbikat",
+      "tetik": "yaklaşık her 20 tescilde bir ya da ayda bir (tescil SKILL.md §8)",
+      "adimlar": [
+        { "sira": 1, "tur": "beceri", "beceri_id": "tescil", "ne_yapar": "bilinçli bozuk bir işi normal kart gibi sevk eder; tescil koşusu tatbikat olduğunu bilmez" },
+        { "sira": 2, "tur": "kapi", "kapi_yolu": null, "ne_yapar": "hüküm GEÇTİ dönerse 'tescil hattı bozuk' diye Sultan'a eskale eder; KALDI beklenen sonuçtur" }
+      ],
+      "cikti": "telemetriye tip=tatbikat satırı; GEÇTİ ise Sultan eskalasyonu"
+    },
+    {
+      "sema_surumu": 2,
+      "id": "ders-cikarma-kacirma",
+      "ad": "Kaçırmadan ders çıkarma",
+      "vazife": "ders-cikarma",
+      "tetik": "Sultan bir gereklilik satırına 'sağlanmadı' dedi ve mühürdar o satıra ✓ vermişti",
+      "adimlar": [
+        { "sira": 1, "tur": "kapi", "kapi_yolu": null, "ne_yapar": "kaçırmayı mühürdarın sicil isabet bölümüne append-only satır olarak yazar" },
+        { "sira": 2, "tur": "beceri", "beceri_id": "tescil", "ne_yapar": "tekrar eden kaçırma türünü ayırır ve el kitabına kural olarak yazar" }
+      ],
+      "cikti": "sicil isabet satırı + el kitabı değişiklik günlüğü; son 10 mühürde 2 kaçırma → askı + yeniden sınav (S10)"
+    }
+  ]
+}
