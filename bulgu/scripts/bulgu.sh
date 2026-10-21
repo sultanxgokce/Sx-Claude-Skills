@@ -67,6 +67,8 @@ if kod!="201":
     print("⛔ merkezî defter reddetti http=%s · %s · %s" % (kod, j.get("hata"), j.get("bekleniyor") or j.get("alanlar") or ""), file=sys.stderr)
     # defter bağ reddinde sebebi ve çareyi verir (bag_hedefi_yok: neden · yerine) — kullanıcı ne yapacağını görsün
     if ek.get("neden") or ek.get("yerine"): print("   neden: %s%s" % (ek.get("neden") or "?", " · yapılacak: %s" % ek["yerine"] if ek.get("yerine") else ""), file=sys.stderr)
+    # 0.5.0: defter havuz durumunu tanimiyorsa (1.18.0 oncesi: alan_degeri_gecersiz, alan gorev_durumu) sebebi ve sirayi soyle; acik durumuna DUSULMEZ
+    if j.get("hata")=="alan_degeri_gecersiz" and (ek.get("alan")=="gorev_durumu" or "gorev_durumu" in str(ek.get("bekleniyor") or "")): print("   defter havuz durumunu tanımıyor (defter 1.18.0 öncesi) — önce defteri yenile (cloudtop #762), sonra bu komutu; kayıt YAZILMADI, acik durumuna düşülmedi", file=sys.stderr)
     sys.exit(1)
 k=j["kayit"]; print("📌 %s · %s · %s — %s (açan: %s) · Görev Defteri" % (k["id"], k["canli"].get("kutu") or k.get("ekleyen_kutu"), k["canli"].get("etiket"), k["adlar"][0]["deger"], k["canli"].get("kaynak_kim")))
 if k["canli"].get("dugum_acar"): print("  ⛓ düğüm: %s" % k["canli"]["dugum_acar"])

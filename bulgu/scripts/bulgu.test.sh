@@ -39,6 +39,7 @@ class H(http.server.BaseHTTPRequestHandler):
     def do_POST(self):
         n=int(self.headers.get("content-length") or 0); b=json.loads(self.rfile.read(n) or b"{}")
         open(os.path.join(T,"gelen.json"),"w").write(json.dumps({"yol":self.path,"jeton":self.headers.get("x-defter-jeton"),"govde":b}))
+        if self.headers.get("x-defter-jeton")=="eski-defter-jeton" and b.get("gorev_durumu")=="havuz": self.send_response(400); self.end_headers(); self.wfile.write(json.dumps({"ok":False,"hata":"alan_degeri_gecersiz","ek":{"alan":"gorev_durumu","bekleniyor":"gorev_durumu: acik|sira-bende|bekliyor|calisiliyor|onay-bekliyor|bitti|iptal"}},ensure_ascii=False).encode()); return
         if self.headers.get("x-defter-jeton")!="sinav-jeton-ABC": self.send_response(401); self.end_headers(); self.wfile.write(b'{"ok":false,"hata":"jeton_gecersiz"}'); return
         if b.get("etiket")=="kirmizi": self.send_response(400); self.end_headers(); self.wfile.write(b'{"ok":false,"hata":"alan_degeri_gecersiz","bekleniyor":"etiket: bug|ozellik"}'); return
         if b.get("dugum_acar")=="mmex:gorev_KAPANMIS00000001": self.send_response(400); self.end_headers(); self.wfile.write(b'{"ok":false,"hata":"dugum_hedefi_gecersiz","bekleniyor":"dugum_acar: kapanmis"}'); return
@@ -110,6 +111,9 @@ o=$(env $M bash "$B" yaz "Düğüm açan iş" --kim BASIRET --gorev --dugum mmex
 ok "HV3b --dugum --gorev → acik + dugum_acar (tek istisna --gorev)" '[ $r -eq 0 ] && python3 -c "import json,sys; b=json.load(open(sys.argv[1]))[\"govde\"]; assert b[\"gorev_durumu\"]==\"acik\" and b[\"dugum_acar\"]==\"mmex:gorev_BEKLEYEN00000001\", b" "$T/gelen.json"'
 o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton-yok" bash "$B" yaz "jetonsuz bulgu" --kim X 2>&1); r=$?
 ok "HV4 jetonsuz eski yolda havuz UYGULANMAZ ve bu SÖYLENİR (eski defter havuzu bilmez; sessiz değil)" '[ $r -eq 0 ] && [[ "$o" == *"havuz yalnız merkezî defterde"* ]] && [[ "$o" == *"ARGV:yeni|--baslik|jetonsuz bulgu"* ]]'
+printf 'eski-defter-jeton\n' > "$T/jeton-eski"
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton-eski" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "eski deftere havuz" --kim X 2>&1); r=$?
+ok "HV5 defter 'havuz'u tanımıyorsa (1.18.0 öncesi 400 alan_degeri_gecersiz) rc 1 + sebep + sıra; acik'a DÜŞÜLMEZ, eski deftere gitmez" '[ $r -eq 1 ] && [[ "$o" == *"reddetti http=400"* ]] && [[ "$o" == *"havuz durumunu tanımıyor"* ]] && [[ "$o" == *"YAZILMADI"* ]] && [[ "$o" != *ARGV* ]]'
 kill $SRV 2>/dev/null; wait $SRV 2>/dev/null
 o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "x" --kim X 2>&1); r=$?
 ok "K1h merkeze ulaşılamazsa rc 1, kayıt HİÇBİR yere yazılmaz ve söylenir" '[ $r -eq 1 ] && [[ "$o" == *"ulaşılamadı"* ]] && [[ "$o" != *ARGV* ]]'
