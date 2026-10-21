@@ -47,15 +47,19 @@ _zil() {   # _zil <rc> — yazana --done, rc 3/4'te reise --waiting
     reis="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1])).get("istedi") or "")' "$k" 2>/dev/null)"
   fi
   case "$reis" in ""|SULTAN|Sultan|"$yazan") reis="SERDAR" ;; esac   # sahipsiz · Sultan (koltuk değil, zil çalınmaz) · yazanın kendisi → kutular üstü reis
+  # göz tur 2 (#404): AGENT_NAME yok ve kart yoksa (iş adı verilmeden en erken çıkış) yazan bilinmez — zil hedefsiz gitmesin, reise gider
+  local yazansiz=0
+  if [ -z "$yazan" ]; then yazansiz=1; yazan="$reis"; printf '⚠ denetçi zilinde yazan bilinmiyor (AGENT_NAME yok, kart yok) → %s\n' "$reis" >&2; fi
   case "$rc" in 0) ne="GEÇTİ" ;; 1) ne="düzelt, yeniden gönder" ;; 2) ne="kanıt/kullanım eksiği — denetim açılmadı" ;;
                 3) ne="ÖLÇÜLEMEDİ"; [ "$ZAMAN_ASIMI" = 1 ] && ne="ZAMAN AŞIMI (${ZA} sn) — denetçi bitmedi" ;; 4) ne="TIKANDI — üç yol raporu" ;; *) ne="beklenmeyen çıkış" ;; esac
   local m="${IS:-?} tur ${TUR:-?}: ${PUAN:-—}/${DOGRU:-—} · bulgu ${NB:-—} · rc $rc · $ne"
+  [ "$yazansiz" = 1 ] && m="$m · yazan bilinmiyor"
   # HEZARFEN ölçümü (20:38, #404): denetçiyi koşturan ajanın kendi penceresine giden zil, aile-notify'ın self-loop korumasına
   #   takılıp ATLANIYORDU ("atla(self): … çağıran-oturum") — bekleyen yine sessiz kalırdı. Yazanın zilinde TMUX kimliği soyulur:
   #   meşgul koltukta zil kuyruğa girer (ölçüldü: kanıt olcum-gercek-zil-sonra). Bedeli: gönderen "BILINMEYEN" görünür — aile-notify
   #   göndereni yalnız TMUX'tan çözer. Reis zili başka koltuğa gider; orada kimlik KORUNUR ki reis kimden geldiğini görsün.
   env -u TMUX -u TMUX_PANE bash "$an" --done ${yazan:+--amir "$yazan"} "denetçi: $m" </dev/null >/dev/null 2>&1 || printf '⚠ denetçi bitiş zili gönderilemedi (aile-notify rc %s): %s\n' "$?" "$m" >&2
-  if [ "$rc" = 3 ] || [ "$rc" = 4 ]; then
+  if { [ "$rc" = 3 ] || [ "$rc" = 4 ]; } && [ "$yazansiz" = 0 ]; then   # yazansızda reis zaten --done'u aldı, ikinci zil yok
     bash "$an" --waiting --amir "$reis" "denetçi (${yazan:-yazan?}): $m" </dev/null >/dev/null 2>&1 || printf '⚠ reis zili gönderilemedi (%s): %s\n' "$reis" "$m" >&2
   fi
 }
@@ -205,17 +209,21 @@ TUR=$((ONCEKI+1))
 # "denetçi başladı mı?" sorusunun cevabı: bekleyen bu dosyaya bakar (pid canlı mı, ne zamandan beri); bitince _bitis siler
 # göz tur 1 (#404): SIGKILL/OOM'da EXIT tuzağı koşmaz → iz kalır. Kalan izin pid'i ölüyse BAYAT: söylenir ve silinir.
 #   pid'i canlıysa aynı işte BAŞKA denetçi koşuyor: aynı turu ve izi paylaşırdı → bu koşum ölçülemedi (rc 3), öbürüne dokunulmaz.
+_pid_kimlik() { ps -o lstart= -p "$1" 2>/dev/null | sed 's/^ *//'; }
 for _iz in "$DZ"/DENETIM-*.kosuyor; do
   [ -f "$_iz" ] || continue
   _pid="$(sed -n 's/^pid=//p' "$_iz" | head -1)"
-  if [ -n "$_pid" ] && kill -0 "$_pid" 2>/dev/null; then
+  # göz tur 2 (#404): pid yeniden verilmiş olabilir → canlılık yetmez, sürecin başlangıç anı (ps lstart) izdekiyle aynı olmalı.
+  #   Eski biçimli izde (pid_kimlik yok) yalnız canlılık sayılır — temkinli: yanlışlıkla başkasının denetimini ezmekten iyidir.
+  _kim_iz="$(sed -n 's/^pid_kimlik=//p' "$_iz" | head -1)"
+  if [ -n "$_pid" ] && kill -0 "$_pid" 2>/dev/null && { [ -z "$_kim_iz" ] || [ "$_kim_iz" = "$(_pid_kimlik "$_pid")" ]; }; then
     _hata "bu işte başka denetçi koşuyor: $(basename "$_iz") (pid $_pid, $(sed -n 's/^baslangic=//p' "$_iz")) — bitmesini bekle"; exit 3
   fi
-  _bilgi "⚠ bayat koşuyor izi silindi: $(basename "$_iz") (pid ${_pid:-?} yaşamıyor — denetçi zil çalmadan öldü)"; rm -f "$_iz"
+  _bilgi "⚠ bayat koşuyor izi silindi: $(basename "$_iz") (pid ${_pid:-?} yaşamıyor ya da başka sürece geçmiş — denetçi zil çalmadan öldü)"; rm -f "$_iz"
 done
 KOSUYOR="$DZ/DENETIM-$TUR.kosuyor"
 # noclobber: denetimle yazım arasındaki dar aralıkta ikinci denetçi gelirse izi ezmez, ölçülemedi der
-if ! ( set -C; printf 'pid=%s\nbaslangic=%s\nzaman_asimi_sn=%s\n' "$$" "$(date -Iseconds)" "$ZA" > "$KOSUYOR" ) 2>/dev/null; then
+if ! ( set -C; printf 'pid=%s\npid_kimlik=%s\nbaslangic=%s\nzaman_asimi_sn=%s\n' "$$" "$(_pid_kimlik "$$")" "$(date -Iseconds)" "$ZA" > "$KOSUYOR" ) 2>/dev/null; then
   if [ -e "$KOSUYOR" ]; then KOSUYOR=""; _hata "bu işte başka denetçi aynı anda başladı (DENETIM-$TUR.kosuyor) — bitmesini bekle"; exit 3; fi
   KOSUYOR=""
 fi

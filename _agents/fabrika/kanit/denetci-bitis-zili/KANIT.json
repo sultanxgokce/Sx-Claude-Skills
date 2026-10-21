@@ -1,7 +1,7 @@
 {
   "is": "denetci-bitis-zili",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-21T21:03:45+03:00",
+  "guncelleme": "2026-10-21T21:59:02+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -26,7 +26,7 @@
       "etiket": "zil",
       "asama": "sonra",
       "dosya": "olcum-zil-sonra.txt",
-      "sha256": "990acb14a113366ae35609d9a3eb5d4ce784576d22166d0d4395198dbd48d126",
+      "sha256": "115bb07ab23e631ecc7d0e3bcc04313449cd50cd2b182921b4ba66bf16176e5d",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/denetci-bitis-zili/zil-olcer.sh",
@@ -34,27 +34,34 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-21T21:03:45+03:00",
-      "sure_sn": 4.0,
+      "zaman": "2026-10-21T21:32:57+03:00",
+      "sure_sn": 3.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "00cf5ea829ee4d7c94244a87b41e5ee4"
+      "olcum_id": "d54ae4b0a7a74fb282740ebd44702047"
     },
     {
       "tur": "olcum",
       "etiket": "denetci-sinavi",
       "asama": "tek",
       "dosya": "olcum-denetci-sinavi-tek.txt",
-      "sha256": "7be35a8aa3c09a991ad8c60e012e55b0252e12ca4ef841c2e487429aa3c9387c",
+      "sha256": "2238ff64d260849d94d74a6677be92db4a39300604465185c2c91c60a6d71f63",
       "komut": [
+        "bash",
+        "_agents/fabrika/kanit/denetci-bitis-zili/sizinti-olcer.sh",
         "python3",
         "_agents/fabrika/kanit/denetci-bitis-zili/bolum-olcer.py",
         "T-ZIL",
+        "Z3d",
         "Z6",
         "Z7",
         "Z8",
         "Z9",
         "Z10",
+        "Z11",
+        "Z12",
         "mutant 'zil",
+        "mutant 'pid",
+        "mutant 'yazansiz",
         "mutant 'reis",
         "mutant 'zaman",
         "mutant 'kill",
@@ -71,10 +78,10 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-21T21:03:38+03:00",
-      "sure_sn": 910.8,
+      "zaman": "2026-10-21T21:59:02+03:00",
+      "sure_sn": 748.2,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "34e9738adfab46cfabf0f32c030102b8"
+      "olcum_id": "121d810cbea04a8189b0d6158cb5eaaa"
     },
     {
       "tur": "olcum",
@@ -99,7 +106,7 @@
       "etiket": "gercek-zil",
       "asama": "sonra",
       "dosya": "olcum-gercek-zil-sonra.txt",
-      "sha256": "34be9ab7e6bf90ab34a1a8b2331227b76bd440e5080f3711afc26f560e71be8a",
+      "sha256": "c561ba4be1ee973f1f3e8350448b8a45135636c8fceb9b94c45c196b15ba3186",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/denetci-bitis-zili/gercek-zil-olcer.sh",
@@ -107,11 +114,11 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-21T21:03:41+03:00",
-      "sure_sn": 2.7,
+      "zaman": "2026-10-21T21:32:59+03:00",
+      "sure_sn": 2.9,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "688bed10465d402ca97833d8d6541bb1"
+      "olcum_id": "cce2f2dc66d24f69b611f7ab6cf26291"
     }
   ],
-  "imza": "a186494ab7a978f4bb1c8cd48ac4642404cbe885ffc111bb247e84f6f9d4aef7"
+  "imza": "4831d750dc5eca5c2dcbbcb17f4a3559a3966464aadd854803721cbb306cbec6"
 }

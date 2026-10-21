@@ -1,14 +1,14 @@
-$ python3 _agents/fabrika/kanit/denetci-bitis-zili/bolum-olcer.py T-ZIL Z6 Z7 Z8 Z9 Z10 mutant 'zil mutant 'reis mutant 'zaman mutant 'kill mutant 'asim mutant 'sure mutant 'bayat mutant 'canli mutant 'kosuyor mutant 'sinav-kipi ✗ -- bash yazilim-fabrikasi/scripts/denetci.test.sh
-# rc=0 sure=910.8s zaman=2026-10-21T21:03:38+03:00
+$ bash _agents/fabrika/kanit/denetci-bitis-zili/sizinti-olcer.sh python3 _agents/fabrika/kanit/denetci-bitis-zili/bolum-olcer.py T-ZIL Z3d Z6 Z7 Z8 Z9 Z10 Z11 Z12 mutant 'zil mutant 'pid mutant 'yazansiz mutant 'reis mutant 'zaman mutant 'kill mutant 'asim mutant 'sure mutant 'bayat mutant 'canli mutant 'kosuyor mutant 'sinav-kipi ✗ -- bash yazilim-fabrikasi/scripts/denetci.test.sh
+# rc=0 sure=748.2s zaman=2026-10-21T21:59:02+03:00
 --- stdout ---
-$ bash yazilim-fabrikasi/scripts/denetci.test.sh  → rc=0 · 412 satır
+$ bash yazilim-fabrikasi/scripts/denetci.test.sh  → rc=0 · 416 satır
 ════ T-ZIL · denetçi sessiz bitmez: koşuyor izi · zaman aşımı · her çıkışta zil · tıkanınca reise (SERDAR ACİL 21 Eki) ════
   ✓ Z1a koşarken DENETIM-1.kosuyor izi var (pid + başlangıç)
   ✓ Z1b bitince iz silindi
   ✓ Z3a rc 1 → yazana zil (puan · bulgu · rc; yazan = kartın aldı'sı)
   ✓ Z3b rc 0 → yazana zil, reise yok
   ✓ Z3c rc 2 (kanıt yok, DENETIM yazılmadı) → yine zil; AGENT_NAME yazandır
-  ✓ Z3d iş adı bile yokken (en erken çıkış) zil çalar
+  ✓ Z3d iş adı bile yokken (en erken çıkış) zil çalar; yazan bilinmiyorsa hedefsiz değil reise (SERDAR)
   ✓ Z3e sınav kipinde (DENETCI_KOMUT) gerçek zil ARANMAZ; söylenir
   ✓ Z2a zaman aşımı → rc 3, beklemedi (1 sn < 6)
   ✓ Z2b DENETIM-1-HAM.txt'e ZAMAN AŞIMI yazıldı
@@ -16,15 +16,19 @@ $ bash yazilim-fabrikasi/scripts/denetci.test.sh  → rc=0 · 412 satır
   ✓ Z2d aşımda da koşuyor izi silindi
   ✓ Z4 rc 4 (tıkandı) → yazana zil + kart sahibine (istedi=BANI) --waiting
   ✓ Z5 zil aracı yoksa iş durmaz (rc korunur) ama stderr'e yazılır
-  ✓ Z6 TERM'i yutan denetçi KILL ile kesilir → rc 3 + ZAMAN AŞIMI (3 sn < 6)
+  ✓ Z6 TERM'i yutan denetçi KILL ile kesilir → rc 3 + ZAMAN AŞIMI (2 sn < 6)
   ✓ Z7 geçersiz DENETCI_ZAMAN_ASIMI → söylenir, 900'e döner, denetim koşar (rc 1, 125 değil)
   ✓ Z8 ölü pid'li (SIGKILL artığı) iz bayat sayılır: söylenir, silinir, denetim koşar
   ✓ Z9 aynı işte canlı denetçi varken ikincisi rc 3 ile durur, öbürünün izine dokunmaz
+  ✓ Z11 pid canlı ama başka sürece verilmiş (başlangıç anı tutmuyor) → bayat sayılır, denetim koşar
   ✓ Z10 yazanın zili TMUX kimliği soyularak çağrılır (kendi penceresine giden zil self-loop'ta atlanmaz — HEZARFEN ölçümü)
+  ✓ Z12 sızıntı kilidi: T-ZIL boyunca hiçbir çağrı varsayılan zil aracına düşmedi (gerçek koltuğa yol yok)
 …
   ✓ mutant 'reis-sinif-citini-kaldir' sınavı KIRMIZI yapıyor
   ✓ mutant 'bayat-kopya-geri-donusu' sınavı KIRMIZI yapıyor
   ✓ mutant 'zil-tmux-soyulmaz' sınavı KIRMIZI yapıyor
+  ✓ mutant 'pid-kimligi-bakilmaz' sınavı KIRMIZI yapıyor
+  ✓ mutant 'yazansiz-zil-hedefsiz' sınavı KIRMIZI yapıyor
   ✓ mutant 'zil-yok' sınavı KIRMIZI yapıyor
   ✓ mutant 'reis-zili-yok' sınavı KIRMIZI yapıyor
   ✓ mutant 'zaman-asimi-yok' sınavı KIRMIZI yapıyor
@@ -38,5 +42,6 @@ $ bash yazilim-fabrikasi/scripts/denetci.test.sh  → rc=0 · 412 satır
   ✓ mutant 'kosuyor-yazilmaz' sınavı KIRMIZI yapıyor
   ✓ mutant 'sinav-kipi-gercek-zil' sınavı KIRMIZI yapıyor
 …
-── SONUÇ: 252 geçti · 0 kaldı ──
+── SONUÇ: 256 geçti · 0 kaldı ──
+── SIZINTI: gerçek sinyal kütüğünde sınav işi zili önce 7 · sonra 7 · fark 0 (komut rc 0)
 --- stderr ---

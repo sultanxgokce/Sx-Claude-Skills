@@ -1,5 +1,5 @@
 $ bash _agents/fabrika/kanit/denetci-bitis-zili/gercek-zil-olcer.sh yazilim-fabrikasi/scripts
-# rc=0 sure=2.7s zaman=2026-10-21T21:03:41+03:00
+# rc=0 sure=2.9s zaman=2026-10-21T21:32:59+03:00
 --- stdout ---
 ── kontrol · eski yol (TMUX kimliğiyle doğrudan çağrı)
   atla(self): VAR — zil kendi koltuğuna düşmedi
@@ -7,7 +7,7 @@ $ bash _agents/fabrika/kanit/denetci-bitis-zili/gercek-zil-olcer.sh yazilim-fabr
   denetçi rc 0
   | tmux=yok
   | UYARI: gönderen çözülemedi (tmux-dışı ya da registry-bayat/churn) — sinyal yine de deftere düşer
-  | sinyal: 1792605819-BILINMEYEN-2778937 deftere yazıldı (önce-defter-sonra-ping)
+  | sinyal: 1792607577-BILINMEYEN-3760433 deftere yazıldı (önce-defter-sonra-ping)
   | gönderildi: HENDESE → hendese:0 (iletildi✓)
   | ozet: gonderildi=1 atlandi_self=0 eksik_oturum=0 engellendi=0 dogrulandi=1 dogrulanamadi=0
   | done: sinyal deftere + ping yöneticiye tamam
