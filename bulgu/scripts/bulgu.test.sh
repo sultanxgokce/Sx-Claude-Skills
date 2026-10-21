@@ -76,28 +76,28 @@ M="BULGU_KOK=$T/kok DEFTER_JETON_YOL=$T/jeton DEFTER_UC=http://127.0.0.1:$PORT"
 alan(){ python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['govde'].get('dugum_acar','YOK'))" "$T/gelen.json"; }
 ok "D0 --dugum verilmezse gövdede dugum_acar YOK (eski yol aynen)" '[ "$(alan)" = YOK ]'
 rm -f "$T/get.log"
-o=$(env $M bash "$B" yaz "mmex bekleyen işin parçası" --kim BASIRET --dugum mmex:gorev_HEDEF000000001 2>&1); r=$?
+o=$(env $M bash "$B" yaz "mmex bekleyen işin parçası" --kim BASIRET --gorev --dugum mmex:gorev_HEDEF000000001 2>&1); r=$?
 ok "D1 kutulu biçim olduğu gibi dugum_acar olur; defterden okuma YAPILMAZ; düğüm + bekleyen sonucu söylenir" '[ $r -eq 0 ] && [ "$(alan)" = "mmex:gorev_HEDEF000000001" ] && [ ! -f "$T/get.log" ] && [[ "$o" == *"⛓ düğüm: mmex:gorev_HEDEF000000001"* ]] && [[ "$o" == *"⛓ bekleyen gorev_HEDEF000000001: bekliyor notu yazıldı"* ]]'
-o=$(env $M bash "$B" yaz "kilitli bekleyen" --kim BASIRET --dugum mmex:gorev_KILITLI000000001 2>&1); r=$?
+o=$(env $M bash "$B" yaz "kilitli bekleyen" --kim BASIRET --gorev --dugum mmex:gorev_KILITLI000000001 2>&1); r=$?
 ok "D1b kayıt yazıldı ama bekleyen notu YAZILAMADIYSA rc 4 (0 değil, 1 değil) + defterin sebebi" '[ $r -eq 4 ] && [[ "$o" == *"📌 gorev_SINAV0000000001"* ]] && [[ "$o" == *"⛓ bekleyen gorev_KILITLI000000001: NOT YAZILMADI — yazma_yetkisi_yok"* ]]'
-o=$(env $M bash "$B" yaz "çıplak kimlikle düğüm" --kim BASIRET --dugum gorev_BEKLEYEN00000001 2>&1); r=$?
+o=$(env $M bash "$B" yaz "çıplak kimlikle düğüm" --kim BASIRET --gorev --dugum gorev_BEKLEYEN00000001 2>&1); r=$?
 ok "D2 çıplak kimlik: kutu defterden okunur (canlı kutu mmex, ekleyen akar DEĞİL) → mmex:gorev_BEKLEYEN00000001" '[ $r -eq 0 ] && [ "$(alan)" = "mmex:gorev_BEKLEYEN00000001" ] && grep -qx "/kayit/gorev_BEKLEYEN00000001" "$T/get.log"'
 ok "D2b jeton değeri çıktıda YOK (okuma yolu da --config ile)" '[[ "$o" != *sinav-jeton-ABC* ]]'
 rm -f "$T/gelen.json"
-o=$(env $M bash "$B" yaz "görünmeyen düğüm" --kim X --dugum gorev_YOK0000000000001 2>&1); r=$?
+o=$(env $M bash "$B" yaz "görünmeyen düğüm" --kim X --gorev --dugum gorev_YOK0000000000001 2>&1); r=$?
 ok "D3 çıplak kimlik defterde görünmüyorsa rc 1 + '<kutu>:… biçimiyle ver'; kayıt YAZILMADI" '[ $r -eq 1 ] && [[ "$o" == *"görünmüyor (http 404)"* ]] && [ ! -f "$T/gelen.json" ]'
-o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton-yok" bash "$B" yaz "jetonsuz düğüm" --kim X --dugum mmex:gorev_HEDEF000000001 2>&1); r=$?
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton-yok" bash "$B" yaz "jetonsuz düğüm" --kim X --gorev --dugum mmex:gorev_HEDEF000000001 2>&1); r=$?
 ok "D4 🔴 jetonsuz kutuda --dugum RED (rc 2): eski deftere bağsız DÜŞMEZ, yazıcı çağrılmadı" '[ $r -eq 2 ] && [[ "$o" != *ARGV* ]] && [[ "$o" == *"yalnız merkezî Görev Defteri"* ]]'
-o=$(timeout 5 env $M bash "$B" yaz "b" --kim X --dugum 2>&1); r=$?
+o=$(timeout 5 env $M bash "$B" yaz "b" --kim X --gorev --dugum 2>&1); r=$?
 ok "D5 --dugum değersiz (son argüman) rc 2, döngü yok" '[ $r -eq 2 ] && [[ "$o" == *"--dugum değersiz"* ]]'
-o=$(env $M bash "$B" yaz "b" --kim X --dugum "" 2>&1); r=$?
+o=$(env $M bash "$B" yaz "b" --kim X --gorev --dugum "" 2>&1); r=$?
 ok "D5b --dugum boş dize rc 2 (bağ sessizce düşmez)" '[ $r -eq 2 ] && [[ "$o" == *"--dugum değersiz"* ]] && [ ! -f "$T/gelen.json" ]'
 rm -f "$T/get.log"
-o=$(env $M bash "$B" yaz "b" --kim X --dugum "gorev_../../saglik" 2>&1); r=$?
+o=$(env $M bash "$B" yaz "b" --kim X --gorev --dugum "gorev_../../saglik" 2>&1); r=$?
 ok "D6 çıplak kimlik biçim dışıysa rc 2; defter adresine HİÇ gidilmez (yol kaçışı yok)" '[ $r -eq 2 ] && [ ! -f "$T/get.log" ] && [ ! -f "$T/gelen.json" ]'
-o=$(env $M bash "$B" yaz "kapanmış işe düğüm" --kim X --dugum mmex:gorev_KAPANMIS00000001 2>&1); r=$?
+o=$(env $M bash "$B" yaz "kapanmış işe düğüm" --kim X --gorev --dugum mmex:gorev_KAPANMIS00000001 2>&1); r=$?
 ok "D7 defter düğümü reddederse rc 1 + defterin sebebi aynen (kural defterde, burada kopya yok)" '[ $r -eq 1 ] && [[ "$o" == *"reddetti http=400 · dugum_hedefi_gecersiz · dugum_acar: kapanmis"* ]]'
-o=$(env $M bash "$B" yaz "kapanmış işe düğüm (canlı biçim)" --kim X --dugum mmex:gorev_KAPANMIS00000002 2>&1); r=$?
+o=$(env $M bash "$B" yaz "kapanmış işe düğüm (canlı biçim)" --kim X --gorev --dugum mmex:gorev_KAPANMIS00000002 2>&1); r=$?
 ok "D7b defter bağ reddinde (canlı 409 bag_hedefi_yok biçimi: neden/yerine ÜST düzeyde — 21 Eki canlıdan alındı) neden + yapılacak basılır, rc 1" '[ $r -eq 1 ] && [[ "$o" == *"reddetti http=409 · bag_hedefi_yok"* ]] && [[ "$o" == *"neden: kapanmis · yapılacak: bekleyen görev kapanmış; açık bir görevi göster"* ]]'
 # ── HAVUZ (0.5.0, Sultan D1 21 Eki): bulgu varsayılan 'havuz' (Sırada'ya düşmez); --gorev → acik; --dugum → acik ──
 o=$(env $M bash "$B" yaz "Havuz bulgusu" --kim BASIRET 2>&1); r=$?
@@ -105,7 +105,11 @@ ok "HV1 varsayılan gorev_durumu 'havuz' + kaynak_sinif 'ajan' açıkça gövded
 o=$(env $M bash "$B" yaz "Doğrudan iş" --kim BASIRET --gorev 2>&1); r=$?
 ok "HV2 --gorev → gorev_durumu 'acik' (doğrudan İŞ, Sırada'ya düşer)" '[ $r -eq 0 ] && python3 -c "import json,sys; assert json.load(open(sys.argv[1]))[\"govde\"][\"gorev_durumu\"]==\"acik\"" "$T/gelen.json"'
 o=$(env $M bash "$B" yaz "Düğüm açan" --kim BASIRET --dugum mmex:gorev_BEKLEYEN00000001 2>&1); r=$?
-ok "HV3 --dugum verilince durum 'acik' (başka kutunun işini tutan kayıt havuzda bekleyemez)" '[ $r -eq 0 ] && python3 -c "import json,sys; b=json.load(open(sys.argv[1]))[\"govde\"]; assert b[\"gorev_durumu\"]==\"acik\" and b[\"dugum_acar\"]==\"mmex:gorev_BEKLEYEN00000001\", b" "$T/gelen.json"'
+ok "HV3 --dugum --gorev'siz RED (rc 2, 'havuzda bekleyemez'): sessizce acik'a çevrilmez, deftere gitmez" '[ $r -eq 2 ] && [[ "$o" == *"havuzda bekleyemez"* ]] && [[ "$o" == *"--gorev ver"* ]] && ! grep -q "Düğüm açan" "$T/gelen.json" 2>/dev/null'
+o=$(env $M bash "$B" yaz "Düğüm açan iş" --kim BASIRET --gorev --dugum mmex:gorev_BEKLEYEN00000001 2>&1); r=$?
+ok "HV3b --dugum --gorev → acik + dugum_acar (tek istisna --gorev)" '[ $r -eq 0 ] && python3 -c "import json,sys; b=json.load(open(sys.argv[1]))[\"govde\"]; assert b[\"gorev_durumu\"]==\"acik\" and b[\"dugum_acar\"]==\"mmex:gorev_BEKLEYEN00000001\", b" "$T/gelen.json"'
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton-yok" bash "$B" yaz "jetonsuz bulgu" --kim X 2>&1); r=$?
+ok "HV4 jetonsuz eski yolda havuz UYGULANMAZ ve bu SÖYLENİR (eski defter havuzu bilmez; sessiz değil)" '[ $r -eq 0 ] && [[ "$o" == *"havuz yalnız merkezî defterde"* ]] && [[ "$o" == *"ARGV:yeni|--baslik|jetonsuz bulgu"* ]]'
 kill $SRV 2>/dev/null; wait $SRV 2>/dev/null
 o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "x" --kim X 2>&1); r=$?
 ok "K1h merkeze ulaşılamazsa rc 1, kayıt HİÇBİR yere yazılmaz ve söylenir" '[ $r -eq 1 ] && [[ "$o" == *"ulaşılamadı"* ]] && [[ "$o" != *ARGV* ]]'

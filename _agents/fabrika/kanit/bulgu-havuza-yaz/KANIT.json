@@ -1,7 +1,7 @@
 {
   "is": "bulgu-havuza-yaz",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-21T17:11:19+03:00",
+  "guncelleme": "2026-10-21T17:16:08+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -53,7 +53,24 @@
       "sure_sn": 1.2,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "c6b57a37bda54023ac7718bbf3b79e65"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bulgu-sinavi-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-bulgu-sinavi-tur2-sonra.txt",
+      "sha256": "aaca1bc444dc15ae56bff58f549316c8a875d480a5bdfa68335d238bfacb62df",
+      "komut": [
+        "bash",
+        "bulgu/scripts/bulgu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-21T17:16:08+03:00",
+      "sure_sn": 1.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f78e77032f984fa2866bc09e54faebe9"
     }
   ],
-  "imza": "5379fc929895ae63901339b2a0b40037b35bb3232dd740e346f2c7d6ab2d1122"
+  "imza": "a39dabd736d5a5b0dd9a7877f86bd60fcccbd4e6e605f03e008e9d7feeb9601f"
 }

@@ -32,7 +32,8 @@ günde ~25 artıyor, kimse çekmiyordu. Artık `yaz` kaydı **`gorev_durumu: hav
 sayısına girmez, Sırada cümlesinin sonunda "N bulgu havuzda, süzülmeyi bekliyor" diye ayrı sayılır; haftalık süzme
 (`/gunluk-plan` retrosu · `gorev.sh durum <id> acik "<gerekçe>"`) onu göreve çevirir ya da iptal eder.
 - `--gorev` → eskisi gibi `acik` (Sultan/reis talimatıyla açılan doğrudan İŞ için).
-- `--dugum …` verilince durum kendiliğinden `acik`: başka kutunun bekleyen işini tutan kayıt havuzda bekleyemez.
+- `--dugum …` tek başına RED (rc 2): başka kutunun bekleyen işini tutan kayıt havuzda bekleyemez, ama tek istisna `--gorev`dir — `--dugum --gorev` birlikte verilir; sessizce `acik`a çevrilmez.
+- Jetonsuz kutuda (eski kutu defteri) havuz yoktur; komut bunu uyarıyla söyler, kayıt eski biçimde düşer.
 - Defter 1.18.0 öncesiyse `havuz` 400 ile reddedilir ve komut bunu basar (rc 1); sessizce `acik`a düşmez.
 - `kaynak_sinif: ajan` artık gövdede açıkça yazılır (ekranda "X açtı" künyesi defterin türetmesine bağlı kalmasın).
 
