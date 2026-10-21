@@ -1,5 +1,5 @@
 $ python3 _agents/fabrika/kanit/kanit-mutasyon-etiketi/bolum-olcer.py T25 ✗ -- bash yazilim-fabrikasi/scripts/kanit.test.sh
-# rc=0 sure=26.5s zaman=2026-10-21T23:13:49+03:00
+# rc=0 sure=35.4s zaman=2026-10-22T00:54:15+03:00
 --- stdout ---
 $ bash yazilim-fabrikasi/scripts/kanit.test.sh  → rc=0 · 236 satır
 ════ T25 · MUTASYON KAYDI (FR7M76 · #1136 tur 3): --mutasyon <gerçek etiket> — dosya başı söyler, renk ters, gerçek ölçüme bağlı ════

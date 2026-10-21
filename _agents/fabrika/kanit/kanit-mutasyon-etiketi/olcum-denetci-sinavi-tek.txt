@@ -1,14 +1,18 @@
-$ bash _agents/fabrika/kanit/denetci-bitis-zili/sizinti-olcer.sh python3 _agents/fabrika/kanit/kanit-mutasyon-etiketi/bolum-olcer.py T-MUT  M1  M2 mutant 'mutasyon (bilgi) ✗ -- bash yazilim-fabrikasi/scripts/denetci.test.sh
-# rc=0 sure=577.5s zaman=2026-10-21T23:23:27+03:00
+$ bash _agents/fabrika/kanit/denetci-bitis-zili/sizinti-olcer.sh python3 _agents/fabrika/kanit/kanit-mutasyon-etiketi/bolum-olcer.py T-MUT  M1  M2 Z13 mutant 'mutasyon (bilgi) ✗ -- bash yazilim-fabrikasi/scripts/denetci.test.sh
+# rc=0 sure=735.1s zaman=2026-10-22T01:06:31+03:00
 --- stdout ---
-$ bash yazilim-fabrikasi/scripts/denetci.test.sh  → rc=0 · 420 satır
+$ bash yazilim-fabrikasi/scripts/denetci.test.sh  → rc=0 · 427 satır
 ════ T-MUT · mutasyon kaydı göze 'beklenen kırmızı' diye gider (FR7M76 · #1136 tur 3) ════
   ✓ M1 istemde mutasyon ölçümünün başlığı MUTASYON KANITI der, gerçek ölçümünki demez
   ✓ M2 dosya başı satırı ve şablon kuralı istemde (✗ satırları bulgu değildir)
 …
+  ✓ Z13a yazanın zili gönderen adını taşır (AILE_KIMDEN=HENDESE)
+  ✓ Z13b AGENT_NAME yoksa gönderen kartın aldı'sı (MUAVIN)
+  ✓ Z13c yazan bilinmiyorsa AILE_KIMDEN verilmez (reisin adı gönderen gibi görünmesin)
+  ✓ Z13d aile-notify rc 3 (meşgul koltuk, kuyruk) 'gönderilemedi' denmez, kuyrukta denir
   ✓ mutant 'mutasyon-basligi-yok' sınavı KIRMIZI yapıyor
-  (bilgi) 45 mutant · 4 paralel · 480 sn
+  (bilgi) 48 mutant · 4 paralel · 619 sn
 …
-── SONUÇ: 259 geçti · 0 kaldı ──
-── SIZINTI: gerçek sinyal kütüğünde sınav işi zili önce 8 · sonra 8 · fark 0 (komut rc 0)
+── SONUÇ: 266 geçti · 0 kaldı ──
+── SIZINTI: gerçek sinyal kütüğünde sınav işi zili önce 9 · sonra 9 · fark 0 (komut rc 0)
 --- stderr ---
