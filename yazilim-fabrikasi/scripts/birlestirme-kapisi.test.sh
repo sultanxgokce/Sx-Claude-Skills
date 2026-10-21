@@ -136,7 +136,7 @@ grep -q "SINIF İŞİ" <<<"$CIKTI" && grep -q "onay ÜRETMEZ" <<<"$CIKTI"; g $? 
 echo "════ T9 · MUTASYON: kapıyı bozunca sınav kırmızı veriyor mu ════"
 # 🔴 Mutant, betiğin KARDEŞLERİYLE aynı dizinde durmalı. Önceki sürümde mutantı /tmp'ye koymuştum;
 # $HERE yanlış çözülüp kanit.py bulunamıyordu ve T10 "rc=3" ile YANLIŞ SEBEPTEN yeşil veriyordu.
-PKG="$T/pkg"; mkdir -p "$PKG"; cp "$HERE/kanit.py" "$HERE/kanit.sh" "$HERE/kart.sh" "$PKG/"   # kart.sh de kardeş: kapı canlı şartını ondan okur (yoksa ÖLÇÜLEMEDİ)
+PKG="$T/pkg"; mkdir -p "$PKG"; cp "$HERE/kanit.py" "$HERE/kanit.sh" "$HERE/kart.sh" "$HERE/canli_borc.py" "$PKG/"   # kart.sh de kardeş: kapı canlı şartını ondan okur (yoksa ÖLÇÜLEMEDİ)
 M="$PKG/mutant.sh"; sed 's/^  exit 1$/  exit 0/' "$G" > "$M"; chmod +x "$M"
 bash "$M" bos --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "mutant (red kaldırıldı) izin veriyor → T1 bu mutantta düşerdi"
 bash "$M" is-a --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "mutant sağlam işe de izin veriyor (ölçer sahte-kırmızı üretmiyor)"
@@ -403,5 +403,73 @@ while IFS=' |' read -r ts _; do
   [ "$tur" != kanit-yeri ] && [ "$rc" -eq 0 ] && hepsi=1
 done <<<"$KACIS"
 [ "$hepsi" = 0 ] && [ "$gecen_sinif" = " kanit-yeri" ]; g $? "🔴 9 kaçışın yalnız 'kanıt başka yerde' olanı (15 Eki 10:42) artık kapıdan geçer; 8'i (tavan · kanıtsız) KAPALI kalır — kapı gevşemedi (geçen:$gecen_sinif)"
+
+echo "════ T14 · CANLI BORÇ (5WYQMW): dağıtım birleşmeden SONRA ise kapı kayıtlı borçla geçer; kart BİTMEZ; ödenmezse kırmızı ════"
+# (T13 daraltma bölümü $T'yi sildi → mutantlar için kardeş dosyalar yeniden konur)
+mkdir -p "$T" "$PKG"; cp "$HERE/kanit.py" "$HERE/kanit.sh" "$HERE/kart.sh" "$HERE/canli_borc.py" "$PKG/"
+# Kural: borç kapıyı gevşetmez, görünür kılar. Sınıfsız kartta yazan sahip; SINIFLI kartta Sultan kararı (sultan-dedi) ŞART (A06).
+borckart() { bash "$KT" ac "$1" --is "boşta bekçisi cron'u $1" --istedi S --aldi M --geri-alinamaz "${2:-h}" --para h --dis-yuzey h --yetki h --canli e >/dev/null 2>&1; bash "$K" olcum "$1" olc --asama tek -- echo 1 >/dev/null 2>&1; den "$1" 1 5 E; }
+kj() { python3 -c "import json,sys;k=json.load(open('$T/_agents/fabrika/kartlar/$1.json'));print(eval(sys.argv[1]))" "$2"; }
+GR="kutuda dağıtım birleşmeden sonra Sultan elinde; cron ancak sabah paketiyle canlıya iner"
+borckart is-b1
+bash "$G" is-b1 --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T14a borçsuz canlı-gerekli kart canlı kayıt YOKKEN rc=1 (borç yokken kapı AYNEN kapalı)"
+bash "$KT" canli-borc is-b1 --yazan X --gerekce "$GR" >/dev/null 2>&1; [ $? -ne 0 ] && [ "$(kj is-b1 "k.get('canli_borc')")" = "None" ]; g $? "T14b borcu kartın sahibi OLMAYAN yazamaz (aldi M ≠ X) ve kayıt YAZILMAZ"
+bash "$KT" canli-borc is-b1 --yazan M --gerekce "sonra bakarız" >/dev/null 2>&1; [ $? -ne 0 ] && [ "$(kj is-b1 "k.get('canli_borc')")" = "None" ]; g $? "T14c 20 karakterden kısa gerekçe reddedilir ve kayıt YAZILMAZ"
+bash "$KT" canli-borc is-b1 --yazan M --gerekce "$GR" >/dev/null 2>&1; g $? "T14d sınıfsız kartta sahibi (M) geçerli gerekçeyle borç yazar"
+bash "$KT" canli-borc is-b1 --yazan M --gerekce "$GR" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "T14e ikinci borç yazılmaz"
+CIKTI="$(bash "$G" is-b1 2>&1)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "T14f 5+E + kayıtlı geçerli borç → kapı GEÇER (rc=0)"
+grep -q "CANLI BORÇ" <<<"$CIKTI" && grep -q "kart BİTMEZ" <<<"$CIKTI"; g $? "T14g kapı borcu YÜKSEK SESLE basar (sessiz geçmez)"
+CIKTI="$(bash "$KT" bitti is-b1 --pr 91 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && [ "$(kj is-b1 "k['durum']")" = "canli-borclu" ] && [ "$(kj is-b1 "k['bitis']")" = "None" ]; g $? "T14h kart.sh bitti → durum 'canli-borclu' (bitti DEĞİL), bitiş yok"
+grep -q "CANLI BORÇLU" <<<"$CIKTI"; g $? "T14i çıktı borçlu olduğunu ve ödeme yolunu söyler"
+bash "$KT" borclar >/dev/null 2>&1; g $? "T14j taze borç: kart.sh borclar rc=0 (süresinde)"
+bash "$KT" bitti is-b1 --pr 91 --gorev-bitti --olcum "sonra=1" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "T14k borçlu kartta --gorev-bitti reddedilir (görev canlı kayıt ödenmeden bitmez)"
+# 24 saat: borç zamanını 30 saat geriye al → borclar kırmızı
+python3 - "$T/_agents/fabrika/kartlar/is-b1.json" <<'PY'
+import json,sys,datetime
+p=sys.argv[1]; k=json.load(open(p)); k["canli_borc"]["zaman"]=(datetime.datetime.now().astimezone()-datetime.timedelta(hours=30)).isoformat(timespec="seconds"); json.dump(k,open(p,"w"))
+PY
+CIKTI="$(bash "$KT" borclar 2>&1)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "SÜRE AŞILDI" <<<"$CIKTI"; g $? "T14l 24 saati aşan borç → borclar rc=1 + SÜRE AŞILDI (bekçi/nabız bunu okur)"
+# ödeme: borçtan SONRA alınan bağlı yeşil canlı kayıt
+mkdir -p "$LGK"; sleep 1; printf '%s boşta-bekcisi çaldı\n' "$(date -u +%FT%TZ)" > "$LGK/b1.log"
+bash "$K" canli is-b1 bb --desen boşta-bekcisi --kaynak "dosya:$LGK/b1.log" >/dev/null 2>&1
+# kanıt, çağrılan ağaçtan okunur (bitti ile aynı kural): ağaç = sahte depo
+IFS=$'\t' read -r BD _ <<<"$(cd "$T" && bash "$KT" canli-borc-durum is-b1 2>&1)"
+[ "$BD" = odendi ]; g $? "T14m borçtan sonra bağlı yeşil canlı kayıt → durum 'odendi'"
+(cd "$T" && bash "$KT" bitti is-b1 --pr 91 >/dev/null 2>&1); [ "$(kj is-b1 "k['durum']")" = "bitti" ] && [ "$(kj is-b1 "k['canli_borc']['odendi'] is not None")" = "True" ]; g $? "T14n ödenen borçta kart.sh bitti → 'bitti' ve ödeme anı kartta"
+bash "$KT" borclar >/dev/null 2>&1; g $? "T14o ödenen borç artık listede yok (rc=0)"
+# geçersiz borç: kartın sahibi sonradan değişmiş/elle bozulmuş → kapı GEÇİRMEZ, bitti kapanmaz
+borckart is-b2; bash "$KT" canli-borc is-b2 --yazan M --gerekce "$GR" >/dev/null 2>&1
+python3 - "$T/_agents/fabrika/kartlar/is-b2.json" <<'PY'
+import json,sys
+p=sys.argv[1]; k=json.load(open(p)); k["canli_borc"]["yazan"]="BASKA"; json.dump(k,open(p,"w"))
+PY
+CIKTI="$(bash "$G" is-b2 2>&1)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "canlı borç GEÇERSİZ" <<<"$CIKTI"; g $? "T14p elle bozulmuş borç (yazan ≠ sahip) → kapı rc=1 ve sebep yazılı"
+bash "$KT" bitti is-b2 --pr 92 >/dev/null 2>&1; [ $? -ne 0 ] && [ "$(kj is-b2 "k['durum']")" = "acik" ]; g $? "T14q geçersiz borçla kart.sh bitti reddedilir ve kart AÇIK kalır"
+# sarı canlı + borç: ölçülmüş ama ateşleme yok = tam da borç durumu → geçer
+borckart is-b3; bash "$K" canli is-b3 yok --desen boşta-bekcisi --kaynak "dosya:$LGK/yok.log" >/dev/null 2>&1
+bash "$G" is-b3 --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T14r sarı canlı, borç YOK → rc=1 (T11c ile aynı)"
+bash "$KT" canli-borc is-b3 --yazan M --gerekce "$GR" >/dev/null 2>&1
+bash "$G" is-b3 --sessiz >/dev/null 2>&1; g $? "T14s sarı canlı + geçerli borç → rc=0"
+# SINIFLI kart: ajan Sultan adına borç yazamaz (A06)
+borckart is-b4 e
+bash "$KT" canli-borc is-b4 --yazan M --gerekce "$GR" >/dev/null 2>&1; [ $? -ne 0 ] && [ "$(kj is-b4 "k.get('canli_borc')")" = "None" ]; g $? "T14t SINIFLI kartta Sultan kararı olmadan borç YAZILAMAZ (A06)"
+CIKTI="$(bash "$KT" canli-borc is-b4 --yazan M --gerekce "$GR" 2>&1)"; grep -q "SINIFLI" <<<"$CIKTI" && grep -q "sultan-dedi" <<<"$CIKTI"; g $? "T14u sebep ve yol (sultan-dedi --karar canli-borc) söylenir"
+bash "$KT" sultan-dedi is-b4 --karar canli-borc --oturum "sohbet-0043" --soz "canlı borç onay" --beyan M --gerekce "dağıtım Sultan elinde, kapı kilitleniyor" >/dev/null 2>&1
+bash "$KT" canli-borc is-b4 --yazan M --gerekce "$GR" >/dev/null 2>&1; g $? "T14v sultan-dedi canli-borc işlendikten SONRA sınıflı kartta borç yazılır"
+bash "$G" is-b4 --sessiz >/dev/null 2>&1; g $? "T14w sınıflı kart + Sultan kararlı borç → kapı geçer"
+# MUTASYON: borç kapıyı gerçekten belirliyor (süs değil)
+MB1="$PKG/mutant-borc1.sh"; sed 's/gecerli) borc_gecer=1 ;;/gecerli) borc_gecer=0 ;;/' "$G" > "$MB1"; chmod +x "$MB1"
+grep -q 'gecerli) borc_gecer=0' "$MB1"; g $? "T14x mutant üretildi (geçerli borç artık geçirmiyor)"
+bash "$MB1" is-b3 --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T14y mutant: borç geçirmiyor → T14f/T14s bu mutantta düşerdi"
+MB2="$PKG/mutant-borc2.sh"; sed 's/gecerli) borc_gecer=1 ;;/gecerli|gecersiz|yok) borc_gecer=1 ;;/' "$G" > "$MB2"; chmod +x "$MB2"
+bash "$MB2" is-b2 --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T14z mutant 2: geçersiz borç da geçiriyor → T14p bu mutantta düşerdi"
+cp "$PKG/canli_borc.py" "$PKG/canli_borc.py.asil"; sed -i 's/        if not ok:/        if False:/' "$PKG/canli_borc.py"
+borckart is-b5 e; bash "$PKG/kart.sh" canli-borc is-b5 --yazan M --gerekce "$GR" >/dev/null 2>&1; MR=$?
+cp "$PKG/canli_borc.py.asil" "$PKG/canli_borc.py"
+[ "$MR" -eq 0 ]; g $? "T14za mutant 3: sınıflı Sultan-kararı denetimi kalkınca ajan borç yazabiliyor → T14t bu mutantta düşerdi"
 
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

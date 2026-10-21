@@ -1,0 +1,59 @@
+{
+  "is": "Sx-fabrika-canli-borc",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-22T00:59:20+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapi-test",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-test-sonra.txt",
+      "sha256": "a1d495187d1a87fec7a003958b523ade73107458900707dce7c055ba96c89490",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T00:58:32+03:00",
+      "sure_sn": 56.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "cc41f8ae8f184d26851b29a56e9fed12"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-test",
+      "asama": "sonra",
+      "dosya": "olcum-kart-test-sonra.txt",
+      "sha256": "29341e08ce188ac5cc0b19c9e059533c5618070a8b8baa4db84839c921e093f3",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T00:58:47+03:00",
+      "sure_sn": 14.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "325d75fd38e24f948d5b5a6514f528c9"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kanit-test",
+      "asama": "sonra",
+      "dosya": "olcum-kanit-test-sonra.txt",
+      "sha256": "1dfe3b951f1e185f7a2500c99fa1e4f35cc966931bb63745c6451e48205bd4db",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T00:59:20+03:00",
+      "sure_sn": 33.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "5b130b948015411785376de6677c292d"
+    }
+  ],
+  "imza": "e7925d30ab33c3edaf8ea66bde0d8916a8636c508ee541c3e4455d114a9a5d0d"
+}
