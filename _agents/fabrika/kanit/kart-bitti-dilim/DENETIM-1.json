@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "kart-bitti-dilim",
+  "pr": "402",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-21T16:33:28+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 24383,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kart kapanışı artık bağlı görevi otomatik olarak onay bekliyora çekmiyor; normal kapanış yalnız dilim adımı yazıyor, açık görev bitirme isteğini de kanıt sınıfına bağlıyor. Ana davranış önce/sonra ölçümle doğrulanmış, ancak kullanıcıya yazılan yönlendirme değiştirilen komutla uyuşmadığı için önce bu uygulama sorununu çözün.",
+    "bulgular": [
+      {
+        "ne": "Normal kart kapanışında üretilen görev adımı, görevi bitirmek için `gorev.sh bitti` kullanılmasını söylüyor; oysa eklenen seçenekler ve belgelenen akış `kart.sh bitti ... --gorev-bitti` üzerindedir. Test de bu yanlış metni özellikle şart koştuğundan 122/122 yeşil sonuç hatayı yakalamıyor.",
+        "kanit": "Diff'te `gorev_yaz` içindeki normal kapanış metni `bitti için ... (gorev.sh bitti --kare --surum | --olcum | --belge)` diyor; aynı diff'in başındaki kullanım açıklaması ve yeni argüman ayrıştırması ise `kart.sh bitti … --gorev-bitti` akışını tanımlıyor. G3 testi ayrıca `gorev.sh bitti --kare --surum` metnini arıyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh:gorev_yaz olay==bitti dalı; yazilim-fabrikasi/scripts/kart.test.sh:G3",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Aynı `kart.test.sh` için kırmızı önce ölçümü 116 geçti/6 kaldı, yeşil sonra ölçümü 122 geçti/0 kaldı ve ayrıca `bash -n` yeşil. Ölçüm çifti ana davranış değişimini güçlü biçimde gösteriyor; fakat gerçekçi kare/video yok ve sınav yanlış CLI yönlendirmesini beklediği için yeşil sonuç bu ayrıntının doğruluğuna kanıt değil."
+  }
+}

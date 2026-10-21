@@ -244,7 +244,7 @@ python3 - "$T/yazim.jsonl" "$(basename "$GDEPO")" <<'PY'; g $? "G3 (KF22R dilim 
 import json,sys
 b=[json.loads(l) for l in open(sys.argv[1])][-1]["govde"]; d=sys.argv[2]
 assert "yerine" not in b and "gerekce" not in b, b
-assert b["adimlar"][0].startswith("[dilim bitti] BANI · kart gb-1 bitti · "+d+" PR #12 · kanıt _agents/fabrika/kanit/gb-1/") and "gorev.sh bitti --kare --surum" in b["adimlar"][0], b
+assert b["adimlar"][0].startswith("[dilim bitti] BANI · kart gb-1 bitti · "+d+" PR #12 · kanıt _agents/fabrika/kanit/gb-1/") and "kart.sh bitti gb-1 --gorev-bitti --kare <yol> --surum <sürüm>" in b["adimlar"][0] and "gorev.sh bitti" in b["adimlar"][0], b
 PY
 [ $RC -eq 0 ] && grep -q "dilim adımı (görev çalışılıyor kalır" <<<"$O"; g $? "G3b bitti rc 0, ekranda 'dilim adımı (görev çalışılıyor kalır…)'"
 N0=$(yz); O="$(bash "$KT" bitti gb-1 --pr 12 --gorev-bitti --kare kanit/x-1440.png 2>&1)"; RC=$?

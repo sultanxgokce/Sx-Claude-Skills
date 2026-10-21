@@ -1,5 +1,5 @@
 $ bash -c cd /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kbd/taban/yazilim-fabrikasi/scripts && timeout 600 bash kart.test.sh
-# rc=1 sure=41.0s zaman=2026-10-21T16:32:41+03:00
+# rc=1 sure=7.3s zaman=2026-10-21T16:34:28+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1

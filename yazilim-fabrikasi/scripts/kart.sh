@@ -78,7 +78,7 @@ elif olay=="bitti":
         kn=sinif+(" · [pr] #%s" % k["pr"] if k.get("pr") else "")+" · kanıt _agents/fabrika/kanit/%s/ (%s)" % (is_,depo)
         y={"gorev_durumu":"onay-bekliyor","kanit":kn}; ne="[⏸ onay bekliyor] %s · kart %s bitti · %s" % (kim,is_,kn)
     else:
-        y=None; ne="[dilim bitti] %s · kart %s bitti%s · kanıt _agents/fabrika/kanit/%s/ (%s) — görev sürüyor, bitti için canlı kanıt sınıfı (gorev.sh bitti --kare --surum | --olcum | --belge)" % (kim,is_,(" · "+pr) if pr else "",is_,depo)
+        y=None; ne="[dilim bitti] %s · kart %s bitti%s · kanıt _agents/fabrika/kanit/%s/ (%s) — görev sürüyor; bitti için canlı kanıt sınıfı: kart.sh bitti %s --gorev-bitti --kare <yol> --surum <sürüm> | --olcum \"…\" | --belge <yol> (ya da gorev.sh bitti)" % (kim,is_,(" · "+pr) if pr else "",is_,depo,is_)
 else:
     nd=(k.get("tikanma") or {}).get("neden","") or "tıkandı"
     y={"gorev_durumu":"bekliyor","not":"kart %s tıkandı: %s" % (is_,nd[:300])}; ne="[⏳ bekliyor] %s · kart %s tıkandı (%s): %s" % (kim,is_,(k.get("tikanma") or {}).get("yol",""),nd[:300])
