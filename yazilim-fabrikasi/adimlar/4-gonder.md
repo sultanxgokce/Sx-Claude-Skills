@@ -14,6 +14,10 @@
      puan bunu yakalayamaz, bu sütun onun için var (videonun itiraf ettiği ve kapatmadığı delik).
    - `bulgular[]`: her bulgu kanıtlı (satır/kare/ölçüm) — "bulgu da kanıt ister".
    Puan bağlamsaldır: ödeme akışındaki 3 ile bir betikteki 3 aynı değil; puan onay kutusu değil, sinyaldir.
+3b. **Canlı kanıt dağıtımdan sonra geliyorsa (cron/servis/sunucu işi, kart `--canli e`):** sıra **birleştir → kur → canlı kayıt**.
+   Kapı canlı kaydı birleşmeden önce istiyorsa ve kur adımı birleşmeden sonra/başkasındaysa kilit çıkar. Çıkış **kapıyı gevşetmek değil borcu yazmaktır**:
+   `kart.sh canli-borc <iş> --yazan <sahip> --gerekce "…"` → kapı borçla geçer (sınıflı işte önce `kart.sh sultan-dedi --karar canli-borc`; ajan Sultan adına yazmaz)
+   → birleştir → kur → `kanit.sh canli …` (borçtan SONRA, bağlı yeşil) → `kart.sh bitti`. Kart o zamana dek `canli-borclu`dur (bitti değil); `kart.sh borclar` 24 saati aşanı kırmızı gösterir.
 4. **5 ve E değilse adım 2'ye dön:** düzelt → yeniden kanıtla → yeniden gönder.
    - Tavan **3 tur**. İlerleyen işe (puan yükseldi **ve** açık bulgu azaldı) **+1**. **Dört mutlak.**
    - 🔴 **Tavan SAYILI tura uygulanır** (15 Eki 2026, görev WC3VBZAA). Bir bulgu gerçek olabilir ama bu

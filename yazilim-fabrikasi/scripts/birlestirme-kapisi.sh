@@ -172,13 +172,28 @@ PY
   [ "$cpy_rc" -eq 0 ] && eval "$cpy_out"
 fi
 cs_engel=0
+# 🧾 CANLI BORÇ (5WYQMW · SERDAR 22 Eki 00:43): canlı kayıt henüz ÜRETİLEMİYORSA (dağıtım birleşmeden sonra/başkasında) kapı, kartta KAYITLI ve GEÇERLİ
+#    bir borçla geçer — borç kapıyı gevşetmez, görünür kılar: kart 'bitti' olmaz (canli-borclu), 24 saatte kırmızı olur. Koşullar canli_borc.py'de
+#    (sınıflı kartta Sultan kararı şart). Borç yalnız bağlı yeşil kayıt YOKKEN anlamlıdır; geçersiz ilan edilmiş kaydı AKLAMAZ.
+bd=""; bac=""; borc_gecer=0
+if [ "$cg" = "E" ] && [ "$cy" -eq 0 ] && [ -f "$HERE/kart.sh" ]; then
+  IFS=$'\t' read -r bd bac <<<"$(KANIT_DEPO="$DEPO" bash "$HERE/kart.sh" canli-borc-durum "$IS" 2>&1)"; bac="${bac:-}"
+  case "$bd" in
+    gecerli) borc_gecer=1 ;;
+    gecersiz) _h "canlı borç GEÇERSİZ: $bac"; eksik=$((eksik+1)) ;;
+    yok|odendi) ;;
+    *) _h "canlı borç durumu OKUNAMADI (kart.sh canli-borc-durum: ${bd:-boş} ${bac}) — ÖLÇÜLEMEDİ, borç sayılmaz"; olcemedi=$((olcemedi+1)) ;;
+  esac
+fi
 [ "$cpy_rc" -eq 0 ] || { _h "canlı kayıt değerlendirmesi DÜŞTÜ (python rc=$cpy_rc) — ÖLÇÜLEMEDİ, 'canlı yok' sayılmaz"; olcemedi=$((olcemedi+1)); }
 # 🔴 GÖZ #353 tur 1: kartın açılış zamanı okunamazsa işe bağlama ÖLÇÜLEMEZ — bu "bağlı kayıt yok" (rc=1) değil, ÖLÇÜLEMEDİ (rc=3).
 [ ! -f "$KART" ] || [ "$ckz" = "1" ] || { _h "kartın açılış zamanı ('zaman') okunamadı — canlı kaydın işe bağlanması ÖLÇÜLEMEDİ"; olcemedi=$((olcemedi+1)); }
 [ -n "$ckopuk" ] && _y "  ⚠ canlı kaydı işe bağlanamadı (sayılmaz): $ckopuk"
-[ "$cs" -gt 0 ] && { _h "canlı kanıt SARI ya da GEÇERSİZ ($cs kayıt) — ateşleme kaydı yok ya da kayıt geçersiz ilan edilmiş; yeniden ölç (kanit.sh canli)"; eksik=$((eksik+1)); cs_engel=1; }
-[ "$cg" = "E" ] && [ "$cy" -eq 0 ] && [ "$cs_engel" -eq 0 ] && { _h "canlı kanıt YOK ya da bu işe bağlı değil — cron/servis/sunucu işi ($csebep) kart açılışından SONRAKİ gerçek ateşleme kaydını ister: kanit.sh canli <iş> <etiket> --kaynak … -- <log okuyan komut>"; eksik=$((eksik+1)); }
+[ "$cs" -gt 0 ] && [ "$borc_gecer" -eq 0 ] && { _h "canlı kanıt SARI ya da GEÇERSİZ ($cs kayıt) — ateşleme kaydı yok ya da kayıt geçersiz ilan edilmiş; yeniden ölç (kanit.sh canli)"; eksik=$((eksik+1)); cs_engel=1; }
+[ "$cg" = "E" ] && [ "$cy" -eq 0 ] && [ "$cs_engel" -eq 0 ] && [ "$borc_gecer" -eq 0 ] && [ "$bd" != "gecersiz" ] && { _h "canlı kanıt YOK ya da bu işe bağlı değil — cron/servis/sunucu işi ($csebep) kart açılışından SONRAKİ gerçek ateşleme kaydını ister: kanit.sh canli <iş> <etiket> --kaynak … -- <log okuyan komut>"; eksik=$((eksik+1)); }
 [ "$cy" -gt 0 ] && _y "  ✓ canlı: $cy ateşleme kaydı (işe bağlı) · ilk: $cilk"
+[ "$borc_gecer" -eq 1 ] && _y "  🧾 CANLI BORÇ (kapı geçer, kart BİTMEZ): $bac
+     → birleştir → kur → kanit.sh canli $IS <etiket> --kaynak … --desen … → kart.sh bitti $IS. 24 sa ödenmezse kart.sh borclar kırmızı."
 [ "$cg" = "H" ] && [ -n "$csebep" ] && _y "  · canlı kanıt istenmedi — $csebep"
 
 # 3 · PUAN

@@ -20,6 +20,12 @@
 #          --gerekce "<niçin — en az 20 karakter>"     ← YALNIZ SINIFSIZ kartta (sınıflı işin kararı Sultan'ındır)
 #          Sultan'ın SÖZLÜ kararını KARTA işler (D1 deseni). Üç parça zorunlu: oturum-ref · kırpık · beyan.
 #          🔴 A06: onay ÜRETMEZ, alınan onayı AKTARIR. Ref'siz beyan sayılmaz; uyduran kartta yakalanır.
+#   kart.sh canli-borc <iş> --yazan <AD> --gerekce "<niçin canlı kayıt şimdi üretilemiyor — en az 20 karakter>"
+#          CANLI BORÇ (5WYQMW · SERDAR 22 Eki 00:43): kart --canli e ve gerçek ateşleme kaydı HENÜZ üretilemiyorsa (dağıtım birleşmeden SONRA ya da
+#          başkasında) birleştirme kapısı borç kaydıyla geçer; kart `bitti` DEĞİL `canli-borclu` olur; borç dağıtımdan sonra `kanit.sh canli` ile ödenir,
+#          sonra `kart.sh bitti` kartı kapatır. SINIFSIZ kartta yazan kartın sahibidir (aldi); SINIFLI kartta borcu AJAN yazamaz: önce
+#          `kart.sh sultan-dedi <iş> --karar canli-borc …` (Sultan'ın sözü, D1 deseni). 24 saat ödenmezse `kart.sh borclar` kırmızı (rc 1).
+#   kart.sh canli-borc-durum <iş> → "yok|gecerli|gecersiz|odendi<TAB>açıklama" (kapının okuduğu yüzey) · kart.sh borclar → açık borçlar, yaşı
 #   kart.sh goster <iş> · kart.sh liste [--acik] · kart.sh canli-gerekir <iş>  → "E|H<TAB>sebep" (eski kartta cümleden türetir)
 # Ortam: FABRIKA_TETIK (oda-tetik.sh yolu; --oda verilirse tetik atılır, düşerse iş düşmez) · KANIT_DEPO
 #   --gorev gorev_<kimlik> --tahmin <dk> (ac): kart defterdeki göreve bağlanır → açılış 'çalışılıyor' + atanan, bitti → göreve DİLİM adımı (durum kalır);
@@ -37,16 +43,16 @@ birincil_kok() {  # worktree içinden çağrılsa da BİRİNCİL depo kökü
 DEPO="${KANIT_DEPO:-$(birincil_kok)}"; [ -n "$DEPO" ] || { _hata "depo kökü bulunamadı"; exit 3; }
 KD="$DEPO/_agents/fabrika/kartlar"; mkdir -p "$KD"
 
-CMD="${1:-}"; IS="${2:-}"; shift 2 2>/dev/null || true
+CMD="${1:-}"; IS="${2:-}"; if [ $# -ge 2 ]; then shift 2; else shift $#; fi   # tek argümanlı komut (liste · borclar) "tanınmayan argüman" olmasın
 IS_C=""; ISTEDI=""; ALDI=""; GA=""; PARA=""; DIS=""; YETKI=""; KANIT=""; ODA=""; PR=""; YOL=""; NEDEN=""
-KARAR=""; OTURUM=""; SOZ=""; BEYAN=""; GEREKCE=""; REIS=""; CANLI=""; KALAN=""; CUMLE=""; YENI=""
+KARAR=""; OTURUM=""; SOZ=""; BEYAN=""; GEREKCE=""; REIS=""; CANLI=""; KALAN=""; CUMLE=""; YENI=""; YAZAN=""
 GOREV_BITTI=""; KARE=""; SURUM=""; OLCUM=""; BELGE=""   # kart bitti: görevi de bitirmek için kanıt sınıfı (KF22R: dilim ≠ görev)
 while [ $# -gt 0 ]; do case "$1" in
   --is) IS_C="$2"; shift 2 ;; --istedi) ISTEDI="$2"; shift 2 ;; --aldi) ALDI="$2"; shift 2 ;;
   --geri-alinamaz) GA="$2"; shift 2 ;; --para) PARA="$2"; shift 2 ;; --dis-yuzey) DIS="$2"; shift 2 ;; --yetki) YETKI="$2"; shift 2 ;;
   --kanit) KANIT="$2"; shift 2 ;; --oda) ODA="$2"; shift 2 ;; --pr) PR="$2"; shift 2 ;; --yol) YOL="$2"; shift 2 ;; --neden) NEDEN="$2"; shift 2 ;; --gorev-bitti) GOREV_BITTI=1; shift ;; --kare) KARE="$2"; shift 2 ;; --surum) SURUM="$2"; shift 2 ;; --olcum) OLCUM="$2"; shift 2 ;; --belge) BELGE="$2"; shift 2 ;;
   --karar) KARAR="$2"; shift 2 ;; --oturum) OTURUM="$2"; shift 2 ;; --soz) SOZ="$2"; shift 2 ;; --beyan) BEYAN="$2"; shift 2 ;;
-  --gerekce) GEREKCE="$2"; shift 2 ;; --reis) REIS="$2"; shift 2 ;; --canli) CANLI="$2"; shift 2 ;;
+  --gerekce) GEREKCE="$2"; shift 2 ;; --reis) REIS="$2"; shift 2 ;; --canli) CANLI="$2"; shift 2 ;; --yazan) YAZAN="$2"; shift 2 ;;
   --kalan) KALAN="$2"; shift 2 ;; --cumle) CUMLE="$2"; shift 2 ;; --yeni) YENI="$2"; shift 2 ;;
   --gorev) GOREV="$2"; shift 2 ;; --tahmin) TAHMIN="$2"; shift 2 ;;
   --acik) ACIK=1; shift ;; *) _hata "tanınmayan argüman: $1"; exit 1 ;; esac; done
@@ -70,7 +76,10 @@ elif olay=="bitti":
     #   durum 'çalışılıyor' kalır. Görev de bitecekse --gorev-bitti + kanıt sınıfı (ekran: --kare + --surum · ölçüm: --olcum · belge: --belge);
     #   geçit (defter 1.17.0) aynı sınıfı ister, PR tek başına 400 alır.
     pr=("%s PR #%s" % (depo,k["pr"])) if k.get("pr") else ""
-    if os.environ.get("GOREV_BITTI"):
+    if k.get("durum")=="canli-borclu":
+        # CANLI BORÇ: kart bitmedi — görev adımı borcu görünür kılar (Sultan tablosu görevden okur); görev 'çalışılıyor' kalır
+        y=None; ne="[🧾 canlı borç] %s · kart %s kodu hazır%s, CANLI KAYIT BORÇLU — dağıtımdan sonra kanit.sh canli + kart.sh bitti %s; 24 sa içinde ödenmezse kırmızı" % (kim,is_,(" · "+pr) if pr else "",is_)
+    elif os.environ.get("GOREV_BITTI"):
         kare,surum,olc,belge=(os.environ.get(x,"").strip() for x in ("KARE","SURUM","OLCUM","BELGE"))
         if kare or surum: sinif="[kare] %s · [surum] %s" % (kare,surum)
         elif olc: sinif="[olcum] %s" % olc
@@ -106,7 +115,7 @@ p,olay,sonuc=sys.argv[1:]; k=json.load(open(p))
 k.setdefault("gorev_yazimlari",[]).append({"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),"olay":olay,"sonuc":sonuc})
 json.dump(k,open(p,"w"),ensure_ascii=False,indent=2)
 import os
-d={"ac":"çalışılıyor","bitti":("onay bekliyor" if os.environ.get("GOREV_BITTI") else "dilim adımı (görev çalışılıyor kalır; bitti = canlı kanıt sınıfıyla)"),"tikandi":"bekliyor"}[olay]
+d={"ac":"çalışılıyor","bitti":("canlı borç adımı (görev çalışılıyor kalır)" if k.get("durum")=="canli-borclu" else "onay bekliyor" if os.environ.get("GOREV_BITTI") else "dilim adımı (görev çalışılıyor kalır; bitti = canlı kanıt sınıfıyla)"),"tikandi":"bekliyor"}[olay]
 print(("  ✓ görev %s → %s (defter)" % (k["gorev"],d)) if sonuc=="yazıldı" else ("  ⚠ GÖREV YAZILAMADI: %s → %s — %s (kart işlendi; karta yazıldı, rc 4)" % (k["gorev"],d,sonuc)))
 PY
   [ "$sonuc" = "yazıldı" ]
@@ -215,10 +224,11 @@ PY
     # 🔴 GÖZ #353 tur 3: eski kart (alan yok) kapıda cümleden "canlı ister" sayılıyor ama bitti uyarmıyordu → aynı yüzeyden (canli-gerekir) okunur
     # yedek göz #354: fail-open değil — okunamazsa '?' olur ve bitti bunu uyarı olarak basar (kapı aynı durumda rc=3)
     IFS=$'\t' read -r CGB _ <<<"$(bash "${BASH_SOURCE[0]}" canli-gerekir "$IS" 2>&1)"; case "$CGB" in E|H) ;; *) CGB="?" ;; esac
-    python3 - "$KD/$IS.json" "$CMD" "$PR" "$YOL" "$NEDEN" "$DZ" "$CGB" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY'
+    python3 - "$KD/$IS.json" "$CMD" "$PR" "$YOL" "$NEDEN" "$DZ" "$CGB" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY' || exit 1
 import json,sys,os,glob,datetime
 yol,cmd,pr,yolu,neden,dz,cgb,hdir=sys.argv[1:]
 sys.path.insert(0,hdir); from kanit import etkin_kayitlar   # 4K938: etkin renk tek yerden
+from canli_borc import durum as borc_durum                  # 5WYQMW: canlı borç tek yerden
 k=json.load(open(yol)); simdi=datetime.datetime.now().astimezone().isoformat(timespec="seconds")
 den=sorted(glob.glob(os.path.join(dz,"DENETIM-[0-9]*.json")),key=lambda p:int(p.rsplit("-",1)[1].split(".")[0]))
 son=json.load(open(den[-1]))["sonuc"] if den else None
@@ -226,7 +236,13 @@ kanit=os.path.exists(os.path.join(dz,"KANIT.json"))
 canli=[x for x in (etkin_kayitlar(json.load(open(os.path.join(dz,"KANIT.json")))) if kanit else []) if x.get("tur")=="canli"]
 cy=sum(1 for x in canli if x["etkin_renk"]=="yesil")
 k["canli_kanit"]="var" if cy else ("sari" if canli else "yok")
-k["durum"]=cmd; k["bitis"]=simdi; k["pr"]=pr or k.get("pr","")
+bd,bac=borc_durum(k,canli)
+borclu=False
+if cmd=="bitti" and bd=="gecersiz":
+    print("✗ canlı borç GEÇERSİZ: "+bac+" — kart kapanmadı (ya borcu düzelt ya da gerçek canlı kaydı al: kanit.sh canli)",file=sys.stderr); raise SystemExit(1)
+borclu=(cmd=="bitti" and bd=="gecerli")   # geçerli ve ÖDENMEMİŞ borç: kart bitmez, borçlu kalır
+if cmd=="bitti" and bd=="odendi": k["canli_borc"]["odendi"]=simdi
+k["durum"]="canli-borclu" if borclu else cmd; k["bitis"]=None if borclu else simdi; k["pr"]=pr or k.get("pr","")
 k["puan"]={"kod":son["kod_puani"],"dogru":son["dogru_sey"],"tur":len(den)} if son else None
 k["kanit_var"]=kanit
 if cmd=="tikandi": k["tikanma"]={"yol":yolu,"neden":neden}
@@ -236,9 +252,15 @@ uyari=""
 if cmd=="bitti" and not kanit: uyari=" ⚠ KANIT YOK (kanıtsız bitti sayılmaz — gün sonu özetinde işaretlenir)"
 if cmd=="bitti" and son and not(son["kod_puani"]==5 and son["dogru_sey"]=="E"): uyari+=" ⚠ son denetim 5+E DEĞİL"
 if cmd=="bitti" and cgb=="?": uyari+=" ⚠ kartın canlı şartı OKUNAMADI (kart.sh canli-gerekir) — kapı bunu ÖLÇÜLEMEDİ sayar"
-if cmd=="bitti" and cgb=="E" and not cy: uyari+=" ⚠ CANLI KANIT YOK (cron/servis/sunucu işi gerçek ateşleme kaydı ister: kanit.sh canli)"
-print(f"✓ kart {cmd}: {k['is']} · puan {k['puan']} · kanıt {'var' if kanit else 'YOK'}{uyari}")
+if cmd=="bitti" and cgb=="E" and not cy and bd=="yok": uyari+=" ⚠ CANLI KANIT YOK (cron/servis/sunucu işi gerçek ateşleme kaydı ister: kanit.sh canli)"
+if borclu:
+    print(f"🧾 kart CANLI BORÇLU (bitti DEĞİL): {k['is']} · {bac}\n   ödeme: dağıtımdan sonra kanit.sh canli {k['is']} <etiket> --kaynak … --desen …; sonra kart.sh bitti {k['is']} (24 sa içinde; aksi hâlde kart.sh borclar kırmızı)")
+else:
+    print(f"✓ kart {cmd}: {k['is']} · puan {k['puan']} · kanıt {'var' if kanit else 'YOK'}{uyari}"+(f" · {bac}" if bd=="odendi" else ""))
 PY
+    if [ "$CMD" = bitti ] && [ -n "$GOREV_BITTI" ] && [ "$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1],encoding="utf-8")).get("durum"))' "$KD/$IS.json")" = canli-borclu ]; then
+      _hata "kart CANLI BORÇLU — --gorev-bitti reddedildi: görev canlı kayıt ödenmeden bitmez (önce kanit.sh canli, sonra kart.sh bitti)"; exit 1
+    fi
     if [ "$CMD" = bitti ] && [ -n "$GOREV_BITTI" ]; then   # görevi de bitir: kanıt sınıfı ŞART (geçitle aynı kural)
       if [ -n "$KARE" ] || [ -n "$SURUM" ]; then [ -n "$KARE" ] && [ -n "$SURUM" ] || { _hata "--gorev-bitti ekran işinde kare + sürüm BİRLİKTE: --kare <yol> --surum <canlı sürüm> (kare hangi sürümün?)"; exit 1; }
         case "$KARE" in */*|*.*) ;; *) _hata "--kare bir dosya yolu olmalı ('/' ya da '.' taşır): $KARE"; exit 1 ;; esac
@@ -416,6 +438,62 @@ except Exception as e:
     print(f"✗ ana kart yerine konamadı ({e}) — kalan kart geri alındı, daraltma OLMADI", file=sys.stderr); raise SystemExit(1)
 print(f"✓ kart daraltıldı: {k['is']} (tur sıfırı {ts}) · kalan bulgu yeni karta: {yeni} · {'SINIFLI, Sultan kararıyla' if y['sultan'] else 'sınıfsız, reis kararı işlendi'}")
 print("  · denetçi bundan sonra yalnız daraltmadan SONRAKİ turları sayar; kapı daraltma sonrası en az bir 5/E tur ister")
+PY
+    ;;
+  canli-borc)
+    # 🔴 CANLI BORÇ (5WYQMW): kapıyı GEVŞETMEZ, borcu KAYDEDER ve görünür kılar. Koşullar canli_borc.py'de (tek gerçek).
+    [ -n "$IS" ] && [ -f "$KD/$IS.json" ] || { _hata "kart yok: $IS"; exit 3; }
+    [ -n "$YAZAN" ] && [ -n "$GEREKCE" ] || { _hata "canli-borc: --yazan <AD> ve --gerekce \"…\" gerekiyor (borcu kartın sahibi yazar, gerekçe en az 20 karakter)"; exit 1; }
+    GEREKCE="$(printf '%s' "$GEREKCE" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"   # göz tur 2: 20 boşluk gerekçe sayılmaz
+    [ "${#GEREKCE}" -ge 20 ] || { _hata "--gerekce en az 20 karakter (baş/son boşluk sayılmaz) — 'sonra bakarız' bir gerekçe değildir"; exit 1; }
+    for v in YAZAN GEREKCE; do d="${!v}"; if [[ "$d" == *"|"* || "$d" == *$'\n'* ]]; then _hata "--$(printf '%s' "$v" | tr 'A-Z' 'a-z') içinde '|' ya da satır sonu olamaz (defter ayracı)"; exit 1; fi; done
+    IFS=$'\t' read -r CGB _ <<<"$(bash "${BASH_SOURCE[0]}" canli-gerekir "$IS" 2>&1)"
+    [ "$CGB" = "E" ] || { _hata "bu kart canlı kanıt İSTEMİYOR (canli-gerekir=${CGB:-?}) — borç yalnız --canli e olan kartta olur"; exit 1; }
+    python3 - "$KD/$IS.json" "$YAZAN" "$GEREKCE" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY' || exit 1
+import json,sys,datetime
+yol,yazan,gerekce,hdir=sys.argv[1:]
+sys.path.insert(0,hdir); from canli_borc import durum, siniflimi
+k=json.load(open(yol,encoding="utf-8"))
+if k.get("durum") in ("bitti","canli-borclu") or k.get("canli_borc"):
+    print(f"✗ kartta zaten {'borç' if k.get('canli_borc') else 'bitti kaydı'} var (durum {k.get('durum')}) — ikinci borç yazılmaz", file=sys.stderr); raise SystemExit(1)
+k["canli_borc"]={"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),"yazan":yazan,"gerekce":gerekce,"odendi":None}
+ad,ac=durum(k,[])
+if ad!="gecerli":
+    print(f"✗ canlı borç YAZILMADI ({ad}): {ac}", file=sys.stderr); raise SystemExit(1)
+k.setdefault("gecmis",[]).append({"zaman":k["canli_borc"]["zaman"],"olay":"canli-borc"})
+json.dump(k,open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
+print(f"🧾 canlı borç kaydedildi: {k['is']} · {ac}\n   kapı bu kartı borçla geçirir; kart 'bitti' olmaz, 'canli-borclu' olur. Ödeme: dağıtımdan sonra kanit.sh canli, sonra kart.sh bitti.")
+PY
+    ;;
+  canli-borc-durum)
+    # Kapının okuduğu yüzey: "yok|gecerli|gecersiz|odendi<TAB>açıklama". Kanıt kaydı çağrıldığı ağaçtan okunur (bitti ile aynı kural).
+    [ -n "$IS" ] && [ -f "$KD/$IS.json" ] || { _hata "kart yok: $IS"; exit 3; }
+    WT="$(git rev-parse --show-toplevel 2>/dev/null || echo "$DEPO")"; DZ="$WT/_agents/fabrika/kanit/$IS"
+    python3 - "$KD/$IS.json" "$DZ" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY' || exit 3
+import json,sys,os
+yol,dz,hdir=sys.argv[1:]
+sys.path.insert(0,hdir); from canli_borc import durum; from kanit import etkin_kayitlar
+k=json.load(open(yol,encoding="utf-8")); kp=os.path.join(dz,"KANIT.json")
+canli=[x for x in (etkin_kayitlar(json.load(open(kp,encoding="utf-8"))) if os.path.exists(kp) else []) if x.get("tur")=="canli"]
+ad,ac=durum(k,canli); print(ad+"\t"+ac.replace("\n"," ").replace("\t"," "))
+PY
+    ;;
+  borclar)
+    # Açık canlı borçlar ve yaşları. rc 1 = 24 saati aşan borç var (bekçi/nabız bunu okur); rc 0 = borç yok ya da hepsi süresinde.
+    python3 - "$KD" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY'
+import json,sys,glob,os
+kd,hdir=sys.argv[1:]; sys.path.insert(0,hdir); from canli_borc import yas_saat, SURE_SAAT
+ac=[];gec=0
+for p in sorted(glob.glob(os.path.join(kd,"*.json"))):
+    try: k=json.load(open(p,encoding="utf-8"))
+    except Exception: continue
+    if k.get("durum")!="canli-borclu": continue
+    y=yas_saat(k); kirmizi=(y is None) or y>SURE_SAAT; gec+=1 if kirmizi else 0
+    ac.append((k["is"],y,kirmizi,k["aldi"],"SULTAN" if (k.get("sultan") or k.get("siniflar")) else "ekip"))
+if not ac: print("◻ açık canlı borç yok"); raise SystemExit(0)
+for is_,y,kr,al,sn in ac: print(f"{'🔴' if kr else '🟡'} {is_:34} {('?' if y is None else '%.1f sa'%y):>8} {al:10} {sn}  {'SÜRE AŞILDI' if kr else ''}")
+print(f"── {len(ac)} açık canlı borç · {gec} süresi aşılmış")
+raise SystemExit(1 if gec else 0)
 PY
     ;;
   canli-gerekir)
