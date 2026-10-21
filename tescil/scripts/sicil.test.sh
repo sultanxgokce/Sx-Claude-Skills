@@ -28,9 +28,11 @@ kur() {  # kur <kök> — özlükler, el kitabı kopyası, tarif kaydı, Sultan 
   kr Z '{"gorev":"gorev_Z","satirlar":{"G1":{"sultan":"katiliyorum"}}}'
   kr T '{"gorev":"gorev_T","satirlar":{"G1":{"sultan":"katiliyorum"},"G2":{"sultan":"saglanmadi","neden":"ton sert"}}}'
   kr TK '{"gorev":"gorev_TK","satirlar":{"G1":{"sultan":"katiliyorum"}}}'
+  kr W '{"gorev":"gorev_W","satirlar":{"G1":{"sultan":"katiliyorum"},"G2":{"sultan":"saglanmadi","neden":"x"}}}'
+  kr TN '{"gorev":"gorev_T","satirlar":{"G1":{"sultan":"katiliyorum"},"G2":{"sultan":"saglanmadi"}}}'
   printf '#!/usr/bin/env bash\nf="%s/kararlar/${1#teslim:karar-}.json"; [ -f "$f" ] || exit 1; cat "$f"\n' "$k" > "$k/dogrula.sh"; chmod +x "$k/dogrula.sh"
   printf '{"g":[{"id":"G1","tur":"cmd"},{"id":"G2","tur":"llm-yargi"},{"id":"G3","tur":"sultan-denemesi"}]}' > "$k/md/gereklilik.json"
-  printf '{"kart":"is-T","verdikt":"KALDI","g_dusen":["G1"],"muhurdar":"MUHURDAR1","tescil_skill_version":"0.4.0"}' > "$k/md/muhur-ozet.json"
+  printf '{"kart":"gorev_T","verdikt":"KALDI","g_dusen":["G1"],"muhurdar":"MUHURDAR1","tescil_skill_version":"0.4.0"}' > "$k/md/muhur-ozet.json"
   mkdir -p "$k/md2"; cp "$k/md/gereklilik.json" "$k/md2/"; sed 's/MUHURDAR1/BASKASI/' "$k/md/muhur-ozet.json" > "$k/md2/muhur-ozet.json"
   local W="$k/is"; mkdir -p "$W/g"; git -C "$W" init -q -b main; echo merhaba > "$W/c.txt"; git -C "$W" add -A; git -C "$W" -c user.email=a@b -c user.name=a commit -qm x
   printf 'KART: is-r\nGOAL: selam\nTIP: docs\nVITES: TAM\nG1: selam\n  tur: cmd\n  komut: grep -q merhaba c.txt\n  davranis: evet\n' > "$W/g/GEREKLILIK.md"
@@ -101,12 +103,27 @@ _sen() {  # _sen <scripts-dir> → geçen anahtarlar
   "${E[@]}" bash "$S" teslim-isle MUHURDAR1 --kaynak teslim:karar-T --muhur-dir "$k/md" >/dev/null 2>&1; local q2=$?
   "${E[@]}" bash "$S" teslim-isle MUHURDAR1 --kaynak teslim:karar-TK --muhur-dir "$k/md" >/dev/null 2>&1; local q3=$?
   "${E[@]}" bash "$S" teslim-isle MUHURDAR1 --kaynak teslim:karar-T --muhur-dir "$k/md2" >/dev/null 2>&1; local q4=$?
-  [ $q1 -eq 0 ] && [ $q2 -eq 2 ] && [ $q3 -eq 2 ] && [ $q4 -eq 2 ] && python3 - "$Y" "$c0" <<'PY' 2>/dev/null && o="$o q"
+  "${E[@]}" bash "$S" teslim-isle MUHURDAR1 --kaynak teslim:karar-W --muhur-dir "$k/md" >/dev/null 2>&1; local q5=$?
+  "${E[@]}" bash "$S" teslim-isle MUHURDAR1 --kaynak teslim:karar-TN --muhur-dir "$k/md" >/dev/null 2>&1; local q6=$?
+  [ $q1 -eq 0 ] && [ $q2 -eq 2 ] && [ $q3 -eq 2 ] && [ $q4 -eq 2 ] && [ $q5 -eq 2 ] && [ $q6 -eq 2 ] && python3 - "$Y" "$c0" <<'PY' 2>/dev/null && o="$o q"
 import yaml, sys
 x = yaml.safe_load(open(sys.argv[1]))["isabet"][int(sys.argv[2]):]
 assert [(i["gereklilik"], i["muhur"], i["sultan"], i["kacirma"]) for i in x] == [("G1", "✗", "katiliyorum", "h"), ("G2", "✓", "saglanmadi", "e")], x
 assert x[1]["neden"] == "ton sert" and x[1]["g_tur"] == "llm-yargi" and x[1]["el_kitabi_surum"] == "0.4.0"
 PY
+  # s · pencere mühür OLAYI sayar: aynı görevin 10 yeniden mühürü eski iki kaçırmayı pencere dışına iter → temiz
+  local Y4="$k/y4"; mkdir -p "$Y4"; printf 'personel_no: "01.008"\npersona: MUHURDAR1\ngecmis: []\n' > "$Y4/01.008.yaml"   # boş özlük
+  for x in X1 X2; do env SICIL_DIZIN="$Y4" SICIL_KAYNAK_DOGRULA="$k/dogrula.sh" bash "$S" isabet MUHURDAR1 --gorev "gorev_$x" --gereklilik G1 --muhur ✓ --sultan saglanmadi --kaynak "teslim:karar-$x" >/dev/null 2>&1; done
+  local s1; s1="$(env SICIL_DIZIN="$Y4" TARIF_KAYDI="$k/yok.json" bash "$S" durum MUHURDAR1 --json | python3 -c 'import json,sys;print(json.load(sys.stdin)["durum"])')"
+  for i in 1 2 3 4 5 6 7 8 9 10; do env SICIL_DIZIN="$Y4" bash "$S" muhur MUHURDAR1 --gorev gorev_R --verdikt GECTI >/dev/null 2>&1; done
+  [ "$s1" = askida ] && [ "$(env SICIL_DIZIN="$Y4" TARIF_KAYDI="$k/yok.json" bash "$S" durum MUHURDAR1 --json | python3 -c 'import json,sys;d=json.load(sys.stdin);print(d["durum"],d["muhur_sayisi"])')" = "temiz 12" ] && o="$o s"
+  # u · Sultan'ın cümlesi değiştirilemez: --neden kayıttakinden farklıysa rc 2, yazılmaz
+  local nu; nu="$(cat "$Y" | md5sum)"
+  "${E[@]}" bash "$S" isabet MUHURDAR1 --gorev gorev_A --gereklilik G2 --muhur ✓ --sultan saglanmadi --neden "Sultan bunu demedi" --kaynak teslim:karar-A >/dev/null 2>&1
+  [ $? -eq 2 ] && [ "$(cat "$Y" | md5sum)" = "$nu" ] && o="$o u"
+  # v · Türkçe harf: özlükte 'MUHAKKİK', çağrıda 'MUHAKKIK' → aynı kişi (casefold İ'yi i̇ yapar, eşleşmezdi)
+  local Y5="$k/y5"; mkdir -p "$Y5"; printf 'personel_no: "01.020"\npersona: MUHAKKİK\ngecmis: []\n' > "$Y5/01.020.yaml"
+  env SICIL_DIZIN="$Y5" bash "$S" muhur MUHAKKIK --gorev g --verdikt GECTI >/dev/null 2>&1 && env SICIL_DIZIN="$Y5" bash "$S" muhur muhakkik --gorev g2 --verdikt GECTI >/dev/null 2>&1 && o="$o v"
   # r · muhurdar.sh her mühürde mühürdarın siciline 'tur: muhur' satırı yazar (pencere bundan sayılır)
   local Y3="$k/y3"; mkdir -p "$Y3"; cp "$k/sicil/01.008.yaml" "$Y3/"
   env PATH="$ND:$PATH" SICIL_DIZIN="$Y3" AGENT_NAME=MUHURDAR1 bash "$SD/muhurdar.sh" is-r --gereklilik "$k/is/g/GEREKLILIK.md" --worktree "$k/is" --out "$k/out-r" --yazan HENDESE >/dev/null 2>&1
@@ -132,7 +149,10 @@ _k k "$S0"; g $? "k ders çıkarma: aynı tür ≥2 ayrı görevde = tekrar eden
 _k l "$S0"; g $? "l ders-bagla: günlükte olmayan derse bağlanmaz; olana ters kayıtla bağlanır, özgün satır değişmez"
 _k m "$S0"; g $? "m kaçırma olmayan satır derse bağlanmaz; aynı kaçırma iki kez bağlanmaz"
 _k n "$S0"; g $? "n başsız şapka hükmü işaretli (bassiz e), yine bu mühürdarın siciline yazılır (S14)"
-_k q "$S0"; g $? "q teslim-isle: Sultan'ın tek kararı → sınanan her satır (👤 atlanır, düşen G'de mühür ✗); tekrar · kısmi karar · başkasının mühürü reddedilir"
+_k q "$S0"; g $? "q teslim-isle: Sultan'ın tek kararı → sınanan her satır (👤 atlanır, düşen G'de mühür ✗); tekrar · kısmi karar · başkasının mühürü · başka görevin mühürü · cümlesiz sağlanmadı reddedilir"
+_k s "$S0"; g $? "s pencere mühür OLAYI sayar: aynı görevin 10 yeniden mühürü eski kaçırmaları dışarı iter (askida → temiz)"
+_k u "$S0"; g $? "u Sultan'ın cümlesi kayıttan gelir; farklı --neden ile yazılmaz (A06)"
+_k v "$S0"; g $? "v Türkçe harf katlama: özlükte MUHAKKİK, çağrıda MUHAKKIK/muhakkik → aynı kişi"
 _k r "$S0"; g $? "r muhurdar.sh her mühürde mühürdarın siciline mühür kaydı yazar"
 
 echo "── MUTASYON (tescil kopyasında, kontrol şartlı) ──"
@@ -155,7 +175,7 @@ _m b lib/sicil.py '    if not bulunan:
         return os.path.join(SICIL_DIZIN, ad + ".yaml")
         hata(' "özlük yoksa yeni dosya açıyor"
 _m d lib/sicil.py '"kacirma": "e" if (a["muhur"] == "✓" and a["sultan"] == "saglanmadi") else "h",' '"kacirma": "e" if a["sultan"] == "saglanmadi" else "h",' "mühürdarın yakaladığı da kaçırma sayılıyor"
-_m i lib/sicil.py 'x.get("tur") in (None, "muhur") and' 'x.get("tur") is None and' "pencere mühür kayıtlarını saymıyor"
+_m i lib/sicil.py '        if not isinstance(x, dict) or x.get("tur") not in (None, "muhur"):' '        if not isinstance(x, dict) or x.get("tur") is not None:' "pencere mühür kayıtlarını saymıyor"
 _m j lib/sicil.py '    try:
         with open(TARIF_KAYDI' '    return VARSAYILAN_ESIK, "varsayılan (Sultan S10)"
     try:
@@ -165,6 +185,10 @@ _m l lib/sicil.py '    if a["ders"] not in gunluk_dersleri():' '    if False:' "
 _m e lib/sicil.py '    if "isabet" in ust and ust[-1] != "isabet":' '    if False:' "isabet sonda değilken ekleniyor"
 _m q lib/sicil.py 'sinanan = [g for g in ger["g"] if g["tur"] != "sultan-denemesi"]' 'sinanan = list(ger["g"])' "teslim-isle 👤 satırına da isabet yazıyor"
 _m q lib/sicil.py '    if any(x.get("kaynak") == a["kaynak"].strip() for x in isb):' '    if False:' "aynı teslim iki kez işleniyor"
+_m q lib/sicil.py '    if oz.get("kart") != karar["gorev"]:' '    if False:' "teslim-isle başka görevin mühürünü kabul ediyor"
+_m s lib/sicil.py '        if x.get("tur") == "muhur" or x.get("gorev") not in son:' '        if x.get("gorev") not in son:' "pencere olay yerine görev sayıyor"
+_m u lib/sicil.py '    if a.get("neden") and (a["neden"].strip() != (ks.get("neden") or "").strip()):' '    if False:' "Sultan'ın cümlesi değiştirilebiliyor"
+_m v lib/sicil.py '    return (ad or "").strip().replace("İ", "I").replace("ı", "i").casefold()' '    return (ad or "").strip().casefold()' "Türkçe harf katlanmıyor"
 _m r muhurdar.sh 'if [ -n "$_VER" ] && [ "$_VER" != RED ]; then' 'if false; then' "muhurdar.sh siciline mühür kaydı yazmıyor"
 
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"

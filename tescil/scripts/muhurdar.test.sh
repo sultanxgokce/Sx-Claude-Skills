@@ -73,6 +73,8 @@ _sen() {  # _sen <scripts-dir> → geçen kapı anahtarları
   [ $? -eq 4 ] && [ "$(_alan verdikt "$O")" = RED ] && grep -q "kendi-isi" "$O/MUHUR.md" && [ ! -e "$T/isaret-g1" ] && [ ! -e "$T/claude-n" ] && o="$o a"
   _kos "$s" "$O" "$T/bin-claude:" AGENT_NAME=MUHURDAR1 MUHURDAR_MODEL=claude -- --gereklilik "$K/G-tarifsiz.md" --yazan muhurdar1
   [ $? -eq 4 ] && grep -q "gereklilik-eksik" "$O/MUHUR.md" && ! grep -q "kendi-isi" "$O/MUHUR.md" && o="$o p"
+  _kos "$s" "$O" "$T/bin-claude:" AGENT_NAME=MUHAKKİK MUHURDAR_MODEL=claude -- --gereklilik "$K/GEREKLILIK.md" --yazan MUHAKKIK
+  [ $? -eq 4 ] && grep -q "kendi-isi" "$O/MUHUR.md" && [ ! -e "$T/isaret-g1" ] && o="$o t"
   _kos "$s" "$O" "$T/bin-claude:" AGENT_NAME= -- --gereklilik "$K/GEREKLILIK.md" --yazan HENDESE; [ $? -eq 2 ] && [ ! -e "$O/MUHUR.md" ] && o="$o b"
   _kos "$s" "$O" "$T/bin-claude:" AGENT_NAME=MUHURDAR1 -- --gereklilik "$K/GEREKLILIK.md"; [ $? -eq 2 ] && [ ! -e "$T/isaret-g1" ] && o="$o c"
   _kos "$s" "$O" "$T/bin-claude:" AGENT_NAME=MUHURDAR1 MUHURDAR_MODEL=claude -- --gereklilik "$K/GEREKLILIK.md" --yazan HENDESE; local r=$?
@@ -112,6 +114,7 @@ S0="$(_sen "$HERE")"
 _k p "$S0"; g $? "p usul sırası: biçimsiz belge + kendi işi → önce biçim kapısı (gereklilik-eksik), kendi-isi değil"
 _k q "$S0"; g $? "q yargıç ve mühür AYNI ölçüme dayanır: mekanik G bir kez koşulur (kararsız G'de de GECTI, sayaç 1)"
 _k r "$S0"; g $? "r Codex zaman aşımına uğrarsa da Claude'a yeni oturumla geçilir ('codex(zaman-aşımı)→claude')"
+_k t "$S0"; g $? "t Türkçe harf: mühürdar MUHAKKİK, yazan MUHAKKIK → aynı kişi, kendi-isi reddi (taşıyıcı MUHAKKİK — Sultan D1 22 Eki)"
 _k a "$S0"; g $? "a kendi işini mühürleyemez: yazan = mühürdar (büyük-küçük harf farkıyla) → İSİMLİ-RED kendi-isi, rc 4, hiçbir G koşulmadı, yargıç çağrılmadı"
 _k b "$S0"; g $? "b mühürdarın kimliği yoksa (AGENT_NAME boş) mühür basılmaz, rc 2"
 _k c "$S0"; g $? "c --yazan verilmezse koşulmaz (kendi işi ölçülemiyor), rc 2"
@@ -141,6 +144,7 @@ PY
 _m a muhurdar.sh 'if [ "$ayni" = 1 ]; then' 'if false; then' "kendi-işi kapısı yok"
 _m q muhurdar.sh 'bash "$HERE/muhur-lint.sh" "$OUT" >/dev/null 2>&1 ||' '"${TR[@]}" ${K2[@]+"${K2[@]}"} >/dev/null 2>&1; bash "$HERE/muhur-lint.sh" "$OUT" >/dev/null 2>&1 ||' "mühürden önce mekanik G yeniden koşuluyor"
 _m r muhurdar.sh '  if [ "$yrc" -ne 0 ]; then' '  if [ "$yrc" -ne 0 ] && [ "$yrc" -ne 124 ]; then' "zaman aşımında Claude'a geçilmiyor"
+_m t muhurdar.sh 'k=lambda s: s.strip().replace("İ","I").replace("ı","i").casefold()' 'k=lambda s: s.strip().casefold()' "Türkçe harf katlanmıyor (MUHAKKİK ≠ MUHAKKIK)"
 _m p muhurdar.sh 'if [ ! -f "$GEREKLILIK" ] || [ -n "$(python3' 'if false && [ -n "$(python3' "biçim kapısı kendi-işinden sonra"
 _m k tescil-run.sh 'if g["tur"] not in ("llm-yargi", "sultan-denemesi"):' 'if g["tur"] != "llm-yargi":' "Sultan denemesi koşuluyor"
 _m d lib/muhur.py 'mekanik = [g for g in ger["g"] if g["tur"] not in ("llm-yargi", "sultan-denemesi")]' 'mekanik = [g for g in ger["g"] if g["tur"] != "llm-yargi"]' "Sultan denemesi verdikte"

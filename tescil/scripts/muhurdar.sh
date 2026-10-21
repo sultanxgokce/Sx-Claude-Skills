@@ -50,7 +50,8 @@ if [ ! -f "$GEREKLILIK" ] || [ -n "$(python3 "$LIB/gereklilik.py" parse "$GEREKL
 fi
 
 # ── adım 2 · kendi işini mühürleyemez (kadro şeması §7: iş anında ölçülür) ──────────────────────────────
-ayni="$(python3 -c 'import sys; print(1 if sys.argv[1].strip().casefold()==sys.argv[2].strip().casefold() else 0)' "$YAZAN" "$MUHURDAR")"
+# Türkçe harf katlama: 'MUHAKKİK'.casefold() 'MUHAKKIK' ile eşleşmez — taşıyıcı MUHAKKİK (Sultan D1 22 Eki), iki yazım da yaşıyor
+ayni="$(python3 -c 'import sys; k=lambda s: s.strip().replace("İ","I").replace("ı","i").casefold(); print(1 if k(sys.argv[1])==k(sys.argv[2]) else 0)' "$YAZAN" "$MUHURDAR")"
 if [ "$ayni" = 1 ]; then
   python3 "$LIB/muhur.py" red --out "$OUT" --kart "$IS" --deneme "$DENEME" --ad "kendi-isi" \
     --sebep "işi yapan ($YAZAN) ile mühürdar ($MUHURDAR) aynı — kendi işini mühürleyemez (G8, kadro şeması §7); başka mühürdar ya da başsız şapka" \

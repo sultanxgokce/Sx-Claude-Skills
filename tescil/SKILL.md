@@ -201,7 +201,11 @@ yazmaz, üstüne kurar:
 | 4 | beceri | kanıt JSON'u sınır + redaksiyonla mühürlenir | tescil-run → g-kosucu (sert-teslim) |
 | 5 | 👤 Sultan eli | 👤 satırlarını teslim ekranında dener | YAPILMAZ — MUHUR'da `SULTANDA` |
 
+- **Taşıyıcı:** Mühürdarlığı **MUHAKKİK** taşır (Sultan D1 22 Eki, "MUHAKKİK (önerim)"); koltuğu salt okurdur, kendi işini
+  mühürleyemez. Başsız şapka (S14) yalnız yedektir.
 - **Kimlik:** mühürdar = `AGENT_NAME` (yoksa rc 2, mühür basılmaz); yazan = `--yazan` (kartın `aldi`'sı; yoksa rc 2).
+  Adlar **Türkçe harf katlamasıyla** karşılaştırılır (İ/ı/I/i aynı): `'MUHAKKİK'.casefold()` `'MUHAKKIK'` ile eşleşmez
+  (ölçüldü) ve kayıtlarda iki yazım da yaşıyor — kendi-işi kapısı ve sicil eşleşmesi bu yüzden katlanmış adla bakar.
 - **Kör:** yargıç istemi (`lib/kor-istem.py`) yalnız GOAL + o G'nin satırı + izole rubrik + `hedef:` dosyası + mühürdarın
   **kendi taze** mekanik kanıt tablosundan kurulur. İnşacının raporu, transkripti, commit mesajı açılmaz; rapor verecek
   bir argüman yoktur (bilinmeyen argüman rc 2). `hedef` iş ağacı dışına kaçarsa istem kurulmaz → EMIN-DEGILIM.

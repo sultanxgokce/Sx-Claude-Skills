@@ -42,6 +42,12 @@ TESLIM = re.compile(r"^teslim:[A-Za-z0-9_.-]{6,}$")
 DERS_ID = re.compile(r"^D-\d{3}$")
 
 
+def ad_kat(ad):
+    """Türkçe harf katlama: 'MUHAKKİK'.casefold() 'muhakki̇k' (birleşik nokta) verir, 'MUHAKKIK' ile eşleşmez (ölçüldü 22 Eki).
+    İ/ı/I/i aynı sayılır — kayıtlarda iki yazım da yaşıyor (MUHAKKIK/MUHAKKİK çatalı, kadro şeması §1c)."""
+    return (ad or "").strip().replace("İ", "I").replace("ı", "i").casefold()
+
+
 def hata(m, rc=2):
     print(f"✗ {m}", file=sys.stderr)
     sys.exit(rc)
@@ -63,7 +69,7 @@ def ozluk_bul(ad):
         with open(os.path.join(SICIL_DIZIN, f), encoding="utf-8") as h:
             for satir in h:
                 m = re.match(r"^persona:\s*(\S+)", satir)
-                if m and m.group(1).strip("\"'").casefold() == ad.casefold():
+                if m and ad_kat(m.group(1).strip("\"'")) == ad_kat(ad):
                     bulunan.append(os.path.join(SICIL_DIZIN, f)); break
     if not bulunan:
         hata(f"{ad} için özlük dosyası YOK ({SICIL_DIZIN}) — isabet yazılmadı; özlük açmak KÂHYA'nın işi (/ise-alim)", 3)
@@ -174,10 +180,12 @@ def cmd_isabet(argv):
     ks = karar["satirlar"].get(a["gereklilik"]) or {}
     if karar.get("gorev") != a["gorev"] or ks.get("sultan") != a["sultan"]:
         hata(f"Sultan'ın kaydı bu satırı DOĞRULAMIYOR ({kaynak}: {karar.get('gorev')} {a['gereklilik']} = {ks.get('sultan')}) — yazılmadı (A06)")
-    if not a.get("neden") and ks.get("neden"):
-        a["neden"] = ks["neden"]
+    # Sultan'ın cümlesi YALNIZ kayıttan (göz #411 tur 2): --neden verilirse kayıttakiyle aynı olmalı, değiştirilemez
+    if a.get("neden") and (a["neden"].strip() != (ks.get("neden") or "").strip()):
+        hata(f"--neden Sultan'ın kayıtlı cümlesiyle aynı değil ({kaynak}) — Sultan'ın söylemediği cümle yazılmaz (A06)")
+    a["neden"] = ks.get("neden")
     if a["sultan"] == "saglanmadi" and not (a.get("neden") or "").strip():
-        hata("--neden zorunlu: 'sağlanmadı' Sultan'ın tek cümlesiyle gelir (ders çıkarma bundan beslenir)")
+        hata("Sultan'ın kaydında cümle yok: 'sağlanmadı' Sultan'ın tek cümlesiyle gelir (ders çıkarma bundan beslenir) — yazılmadı")
     yol = ozluk_bul(ad)
     kayit = {"ts": simdi(), "gorev": a["gorev"], "gereklilik": a["gereklilik"], "muhur": a["muhur"], "sultan": a["sultan"],
              "kacirma": "e" if (a["muhur"] == "✓" and a["sultan"] == "saglanmadi") else "h",
@@ -193,12 +201,20 @@ def hesap(ad):
     yol = ozluk_bul(ad); d = oku(yol); isb, baglar = isabetler(d); e, ek = esik()
     # mühür = görev teslimi; pencere MÜHÜR kayıtlarından (tur: muhur) sayılır — Sultan satırı gelmeyen temiz mühür de pencereyi
     #   ilerletir (göz #411 tur 1). Mühür kaydı olmayan eski isabet satırının görevi kendi yerinde sayılır.
-    gorevler = []
+    # Pencere mühür OLAYLARINI sayar (göz #411 tur 2): aynı görevin yeniden mühürü yeni olaydır. İsabet satırı o görevin kendinden
+    #   önceki SON mühür olayına bağlanır; mühür kaydı olmayan eski satır kendi yerinde bir olay açar.
+    olaylar = []   # [{gorev, kacirma}]
+    son = {}       # gorev → olay indeksi
     for x in d.get("isabet") or []:
-        if isinstance(x, dict) and x.get("tur") in (None, "muhur") and x.get("gorev") not in gorevler:
-            gorevler.append(x.get("gorev"))
-    pencere = gorevler[-e["pencere"]:]
-    kacirmali = [g for g in pencere if any(x.get("gorev") == g and x.get("kacirma") == "e" for x in isb)]
+        if not isinstance(x, dict) or x.get("tur") not in (None, "muhur"):
+            continue
+        if x.get("tur") == "muhur" or x.get("gorev") not in son:
+            olaylar.append({"gorev": x.get("gorev"), "kacirma": False}); son[x.get("gorev")] = len(olaylar) - 1
+        if x.get("tur") is None and x.get("kacirma") == "e":
+            olaylar[son[x.get("gorev")]]["kacirma"] = True
+    gorevler = [o["gorev"] for o in olaylar]
+    pencere = olaylar[-e["pencere"]:]
+    kacirmali = [o["gorev"] for o in pencere if o["kacirma"]]
     n = len(kacirmali)
     durum = "askida" if n >= e["kacirma"] else ("ders-cikarma" if n >= 1 else "temiz")
     return {"muhurdar": ad, "personel": os.path.basename(yol)[:-5], "muhur_sayisi": len(gorevler), "pencere": len(pencere),
@@ -307,10 +323,16 @@ def cmd_teslim_isle(argv):
         ger = json.load(open(os.path.join(a["muhur_dir"], "gereklilik.json"), encoding="utf-8"))
     except (OSError, ValueError) as e:
         hata(f"mühür dizini okunamadı: {e}", 3)
-    if oz.get("muhurdar") and oz["muhurdar"].casefold() != k[0].casefold():
+    if oz.get("kart") != karar["gorev"]:   # göz #411 tur 2: başka görevin mühür sonucu bu karara uygulanmasın
+        hata(f"karar {karar['gorev']} görevine ait, mühür dizini {oz.get('kart')} görevinin — eşleşmeyen mühür yazılmaz")
+    if oz.get("muhurdar") and ad_kat(oz["muhurdar"]) != ad_kat(k[0]):
         hata(f"bu mühürü {oz['muhurdar']} bastı, {k[0]} değil — başkasının siciline yazılmaz")
     sinanan = [g for g in ger["g"] if g["tur"] != "sultan-denemesi"]   # 👤 satırını mühürdar sınamadı → isabeti olmaz
     eksik = [g["id"] for g in sinanan if not (karar["satirlar"].get(g["id"]) or {}).get("sultan")]
+    cumlesiz = [g["id"] for g in sinanan if (karar["satirlar"].get(g["id"]) or {}).get("sultan") == "saglanmadi"
+                and not ((karar["satirlar"][g["id"]].get("neden")) or "").strip()]
+    if cumlesiz:
+        hata(f"Sultan'ın kaydında cümlesiz 'sağlanmadı': {', '.join(cumlesiz)} — yazılmadı")
     if eksik:
         hata(f"Sultan'ın kararında şu satırlar yok: {', '.join(eksik)} — kısmi teslim yazılmaz")
     yol = ozluk_bul(k[0]); isb, _ = isabetler(oku(yol))
