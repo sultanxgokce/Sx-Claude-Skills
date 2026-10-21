@@ -1,0 +1,59 @@
+{
+  "is": "vault-cek-atomik-yazim",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-21T23:07:15+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "atomik-sinav",
+      "asama": "once",
+      "dosya": "olcum-atomik-sinav-once.txt",
+      "sha256": "8433afc959ed8ab3abc3aa4b39be8656a0bcac55a0b23cb7e5cba1837333baf3",
+      "komut": [
+        "bash",
+        "vault-cek/scripts/vault-cek-coksatir.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-21T23:06:46+03:00",
+      "sure_sn": 1.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "14332b5211d244bf819d0a1f71e2ba68"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "atomik-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-atomik-sinav-sonra.txt",
+      "sha256": "19b0fafc63c351988537dacea0a46d6a2c527c1058ecc23d1ba678a49e8e49be",
+      "komut": [
+        "bash",
+        "vault-cek/scripts/vault-cek-coksatir.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-21T23:07:04+03:00",
+      "sure_sn": 2.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "51274890db8e4e219083906c3127f382"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "oteki-sinavlar",
+      "asama": "tek",
+      "dosya": "olcum-oteki-sinavlar-tek.txt",
+      "sha256": "d598a9b83c84c3b135fecd31c442f2f55d291ceddcad465bf6b32a72f7965b8a",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/vc-sinav.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-21T23:07:15+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "bc00bf1a59ac4510ab55c60dd12567cb"
+    }
+  ],
+  "imza": "701d5e0087a2dd9300268b34a339a8e99388333c4362b7c1266c0aa08c6a91e3"
+}
