@@ -23,6 +23,7 @@ ACIL = ("evet", "hayir")
 MODELLER = ("codex-yoksa-claude", None)
 SINAV_TURLER = ["dogru", "kusurlu", "uydurma"]
 YASAK_VAZIFE_ID = ("kalibrasyon",)
+KATMANLAR = ("personel", "uzmanlik", "vazife", "usul", "beceri", "kapi", "sultan_eli", None)
 KOKLER = {"nexus": ("NEXUS_KOK", "/config/projects/Nexus"), "cloudtop": ("CLOUDTOP_KOK", "/config/projects/cloudtop")}
 
 
@@ -46,6 +47,11 @@ def yukle(yol):
         sys.exit(3)
 
 
+def repo_ici(yol):
+    """Göreli, `..` içermeyen, mutlak olmayan yol: denetim depo dışındaki dosyaya bakıp yeşil vermesin."""
+    return isinstance(yol, str) and bool(yol) and not os.path.isabs(yol) and ".." not in yol.split("/")
+
+
 def sozluk_oge(r, kayit, ne):
     if not isinstance(kayit, dict):
         r.kirmizi("1 yapı", f"{ne}: nesne olmalı, {type(kayit).__name__} geldi")
@@ -55,9 +61,12 @@ def sozluk_oge(r, kayit, ne):
 
 def sozluk(r, veri, anahtar, ad):
     """Listeyi kimlik sözlüğüne çevirir; kimliksiz/nesne olmayan kayıt kırmızı, yinelenen kimlik kırmızı (sessizce ezilmez)."""
-    liste = veri.get(anahtar, [])
+    liste = veri.get(anahtar)
     if not isinstance(liste, list):
-        r.kirmizi("1 yapı", f"{anahtar} liste olmalı, {type(liste).__name__} geldi")
+        r.kirmizi("1 yapı", f"{anahtar} liste olmalı (yok ya da {type(liste).__name__}): ana koleksiyon eksik")
+        return {}
+    if not liste:
+        r.kirmizi("1 yapı", f"{anahtar} boş: boş tarif kaydı temiz sayılmaz")
         return {}
     sonuc = {}
     for k in liste:
@@ -101,6 +110,10 @@ def denetle(veri, terimler, katalog_idleri, kok, r):
         e = u.get("sicil_esigi") or {}
         if not (isinstance(e.get("kacirma"), int) and isinstance(e.get("pencere"), int) and 0 < e["kacirma"] <= e["pencere"]):
             r.kirmizi("1 kapalı küme", f"uzmanlık {u['id']}: sicil_esigi {e!r} geçersiz (0 < kacirma ≤ pencere, tamsayı)")
+        if not u.get("unvan"):
+            r.kirmizi("2 zorunlu alan", f"uzmanlık {u['id']}: unvan boş")
+        if u.get("el_kitabi") not in katalog_idleri:
+            r.kirmizi("3 el_kitabi", f"uzmanlık {u['id']}: el_kitabi {u.get('el_kitabi')!r} katalogda yok (şema §3: katalogda olmalı)")
         for vid in u.get("vazifeler", []):
             if vid in YASAK_VAZIFE_ID:
                 r.kirmizi("9 kalibrasyon", f"uzmanlık {u['id']}: vazife kimliği {vid!r} şema dışı (ders-cikarma)")
@@ -116,6 +129,8 @@ def denetle(veri, terimler, katalog_idleri, kok, r):
             r.kirmizi("9 kalibrasyon", f"vazife kimliği {v['id']!r} şema dışı (fabrika puan kalibrasyonuyla karışır; ders-cikarma)")
         if v.get("uzmanlik") not in uzm:
             r.kirmizi("2 bütünlük", f"vazife {v['id']}: uzmanlik {v.get('uzmanlik')!r} tanımlı değil")
+        if not isinstance(v.get("kor"), bool):
+            r.kirmizi("1 kapalı küme", f"vazife {v['id']}: kor evet/hayır (true/false) olmalı, {v.get('kor')!r}")
         if v.get("acil") not in ACIL:
             r.kirmizi("1 kapalı küme", f"vazife {v['id']}: acil {v.get('acil')!r} ∉ {ACIL}")
         if v.get("model") not in MODELLER:
@@ -140,6 +155,9 @@ def denetle(veri, terimler, katalog_idleri, kok, r):
         tur_kontrol(r, u, f"usul {u['id']}")
         if u.get("vazife") not in vaz:
             r.kirmizi("2 bütünlük", f"usul {u['id']}: vazife {u.get('vazife')!r} tanımlı değil")
+        for alan in ("ad", "tetik", "cikti"):
+            if not u.get(alan):
+                r.kirmizi("2 zorunlu alan", f"usul {u['id']}: {alan} boş")
         adimlar = u.get("adimlar") or []
         if not adimlar:
             r.kirmizi("1 kapalı küme", f"usul {u['id']}: adım yok")
@@ -165,11 +183,24 @@ def denetle(veri, terimler, katalog_idleri, kok, r):
                     r.kirmizi("4 kapi_yolu", f"{ad}: kapı adımında kapi_yolu alanı şart (henüz yazılmadıysa null)")
                 elif a["kapi_yolu"] is None:
                     r.sari("4 kapi_yolu", f"{ad}: kapı henüz yazılmadı (kapi_yolu null) — usul planlı")
+                elif not repo_ici(a["kapi_yolu"]):
+                    r.kirmizi("4 kapi_yolu", f"{ad}: kapi_yolu {a['kapi_yolu']!r} depo içi göreli yol olmalı (mutlak ya da .. yok)")
                 elif not os.path.isfile(os.path.join(kok, a["kapi_yolu"])):
                     r.kirmizi("4 kapi_yolu", f"{ad}: kapi_yolu {a['kapi_yolu']!r} dosya olarak yok")
 
     # ── terim kaydı ──
-    liste = [t for t in (terimler.get("terimler") or []) if sozluk_oge(r, t, "terim")]
+    ham = terimler.get("terimler")
+    if not isinstance(ham, list) or not ham:
+        r.kirmizi("1 yapı", "terimler liste olmalı ve boş olmamalı: ana koleksiyon eksik ya da boş")
+        ham = []
+    liste = []
+    for t in ham:
+        if not sozluk_oge(r, t, "terim"):
+            continue
+        if not isinstance(t.get("id"), str) or not t.get("id"):
+            r.kirmizi("1 yapı", f"terim: id (metin) eksik: {str(t)[:60]}")
+            continue
+        liste.append(t)
     idler, adlar = {}, {}
     for t in liste:
         tur_kontrol(r, t, f"terim {t.get('id')}")
@@ -184,6 +215,8 @@ def denetle(veri, terimler, katalog_idleri, kok, r):
         for alan in ("ad", "anlam", "isleyis", "ornek", "sahip"):
             if not t.get(alan):
                 r.kirmizi("2 zorunlu alan", f"terim {tid}: {alan} boş")
+        if t.get("katman") not in KATMANLAR:
+            r.kirmizi("1 kapalı küme", f"terim {tid}: katman {t.get('katman')!r} ∉ {KATMANLAR}")
         if t.get("durum") not in TERIM_DURUM:
             r.kirmizi("1 kapalı küme", f"terim {tid}: durum {t.get('durum')!r} ∉ {TERIM_DURUM}")
         if not t.get("kaynak"):
@@ -206,7 +239,13 @@ def denetle(veri, terimler, katalog_idleri, kok, r):
 
 
 def kaynak_denetle(r, tid, kay, katalog_idleri, kok):
+    if not isinstance(kay, str):
+        r.kirmizi("6 kaynak", f"terim {tid}: kaynak öğesi metin olmalı, {type(kay).__name__} geldi")
+        return
     onek, _, yol = kay.partition(":")
+    if onek in ("sx", "nexus", "cloudtop", "yerel") and not repo_ici(yol):
+        r.kirmizi("6 kaynak", f"terim {tid}: {kay} — yol göreli olmalı, mutlak ya da .. içeremez")
+        return
     if onek == "beceri":
         if yol not in katalog_idleri:
             r.kirmizi("6 kaynak", f"terim {tid}: beceri:{yol} katalogda yok")

@@ -24,7 +24,7 @@ Veri becerisidir: komut çalıştırmaz, okunur. **İkinci kopya yazma**; ekran 
 | `veri/kadro-tarifleri.json` | `uzmanliklar[]` · `vazifeler[]` · `usuller[]` (adım türü kapalı küme `beceri · kapi · sultan_eli`) |
 | `veri/terim-kaydi.json` | bir terim = bir anlam; aynı kelimenin iki anlamı iki kayıt (`kapı` yedi kayıt) |
 | `scripts/kadro-denetle.py` | bekçi: şema sürüm 2 kuralları (kapalı kümeler, iki yönlü bağlar, kaynak yolları …) |
-| `scripts/kadro-denetle.test.sh` | bekçinin kendi sınavı: altın + bozulmuş kopyalar + mutasyonlar (46 kapı) |
+| `scripts/kadro-denetle.test.sh` | bekçinin kendi sınavı: altın + bozulmuş kopyalar + mutasyonlar (69 kapı) |
 
 Şemanın tamamı: Nexus `_agents/spec/terminoloji-kadro-tasarim/tasarim/veri-semasi.md` (§2-§7 alanlar, §10 bekçi).
 

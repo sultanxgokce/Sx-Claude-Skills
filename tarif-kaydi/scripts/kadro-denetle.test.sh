@@ -61,6 +61,22 @@ bozuk k-idsiz      1 "id (metin) eksik"  "del v['vazifeler'][1]['id']"
 bozuk k-nesne      1 "nesne olmalı"      "v['vazifeler'].append('metin')"
 bozuk k-adim-nesne 1 "usul tescil-teslim-sina adım: nesne olmalı" "v['usuller'][0]['adimlar'].append(5)"
 bozuk k-liste      1 "usuller liste olmalı" "v['usuller']={}"
+bozuk k-koleksiyon-yok 1 "usuller liste olmalı (yok ya da NoneType)" "del v['usuller']"
+bozuk k-bos-uzm    1 "uzmanliklar boş"    "v['uzmanliklar']=[]"
+bozuk k-bos-terim  1 "terimler liste olmalı ve boş olmamalı" "t['terimler']=[]"
+bozuk k-terim-idsiz 1 "terim: id (metin) eksik" "del t['terimler'][3]['id']"
+bozuk k-terim-idsayi 1 "terim: id (metin) eksik" "t['terimler'][3]['id']=7"
+bozuk k-elkitabi   1 "el_kitabi 'olmayan-beceri' katalogda yok" "v['uzmanliklar'][0]['el_kitabi']='olmayan-beceri'"
+bozuk k-unvan      1 "unvan boş"          "v['uzmanliklar'][0]['unvan']=''"
+bozuk k-kor        1 "kor evet/hayır"     "v['vazifeler'][0]['kor']='evet'"
+bozuk k-tetik      1 "usul tescil-teslim-sina: tetik boş" "v['usuller'][0]['tetik']=''"
+bozuk k-cikti      1 "cikti boş"          "v['usuller'][1]['cikti']=None"
+bozuk k-katman     1 "katman 'beceri-x'"  "t['terimler'][0]['katman']='beceri-x'"
+bozuk k-kaynak-tip 1 "kaynak öğesi metin olmalı" "t['terimler'][0]['kaynak']=[5]"
+bozuk k-yol-kacis  1 "depo içi göreli yol olmalı" "v['usuller'][0]['adimlar'][0]['kapi_yolu']='../../etc/hostname'"
+bozuk k-yol-mutlak 1 "depo içi göreli yol olmalı" "v['usuller'][0]['adimlar'][0]['kapi_yolu']='/etc/hostname'"
+bozuk k-sx-kacis   1 "yol göreli olmalı"  "t['terimler'][0]['kaynak']=['sx:../../etc/hostname']"
+bozuk k-hepsi-bos  1 "boş tarif kaydı temiz sayılmaz" "v['uzmanliklar']=[]; v['vazifeler']=[]; v['usuller']=[]; t['terimler']=[]"
 # beklenmeyen biçim çökerse yeşil değil, ölçülemedi (rc=3)
 bozuk o-cokme      3 "beklenmeyen biçimde durdu" "v['vazifeler'][0]['cakisir']=5"
 
@@ -101,6 +117,13 @@ mutant benzersiz 'if t.get("id") in idler:||if False:'                          
 mutant adikiz    'if t.get("ad") in adlar:||if False:'                                       k-adikiz
 mutant vazikiz   'if kid in sonuc:||if False:'                                          k-vaz-ikiz
 mutant idsiz     'if not isinstance(kid, str) or not kid:||if False:'                    k-idsiz
+mutant bosuzm    'if not liste:||if False:'                                              k-bos-uzm
+mutant terimbos  'if not isinstance(ham, list) or not ham:||if False:'                  k-bos-terim
+mutant terimid   'if not isinstance(t.get("id"), str) or not t.get("id"):||if False:'   k-terim-idsiz
+mutant elkitabi  'if u.get("el_kitabi") not in katalog_idleri:||if False:'               k-elkitabi
+mutant kor       'if not isinstance(v.get("kor"), bool):||if False:'                    k-kor
+mutant yolkacis  'elif not repo_ici(a["kapi_yolu"]):||elif False:'                       k-yol-kacis
+mutant katman    'if t.get("katman") not in KATMANLAR:||if False:'                       k-katman
 mutant nesne     'if not isinstance(kayit, dict):||if False:'                            k-nesne
 mutant sira      'if [a.get("sira") for a in adimlar] != list(range(1, len(adimlar) + 1)):||if False:' k-sira
 
