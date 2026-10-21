@@ -1,0 +1,40 @@
+$ bash /config/projects/_wt/Sx-Claude-Skills-muhurdar-tarif-kaydi/tarif-kaydi/scripts/kadro-denetle.test.sh
+# rc=0 sure=1.4s zaman=2026-10-22T01:56:59+03:00
+--- stdout ---
+ok   altın: gerçek veri rc=0 kirmizi=0
+ok   altın: yazılmamış kapı SARI olarak görünür (sessiz geçmez)
+ok   k-tur → rc=1 ve «adım türü»
+ok   k-tarif → rc=1 ve «sultan_eli_tarifi»
+ok   k-yedek → rc=1 ve «yedek dolu değil»
+ok   k-kalibr → rc=1 ve «kalibrasyon»
+ok   k-cakisir → rc=1 ve «vazife tescil cakisir 'tatbikat' diyor»
+ok   k-karist → rc=1 ve «terim personel karistirilan 'uzmanlik' diyor»
+ok   k-ayirt → rc=1 ve «ayirt_testi yok»
+ok   k-kapiyol → rc=1 ve «dosya olarak yok»
+ok   k-benzersiz → rc=1 ve «terim kimliği 'personel' iki kez»
+ok   k-adikiz → rc=1 ve «terim adı 'Personel' iki kez»
+ok   k-surum → rc=1 ve «usul tescil-teslim-sina: sema_surumu 2 olmalı»
+ok   k-kaynak → rc=1 ve «sx:yok/dosya.json yok»
+ok   k-model → rc=1 ve «vazife tescil: model 'gpt'»
+ok   k-sira → rc=1 ve «ardışık değil»
+ok   k-esik → rc=1 ve «uzmanlık muhurdarlik: sicil_esigi»
+ok   k-bicim → rc=1 ve «biçimi tanınmıyor»
+ok   k-durum → rc=1 ve «terim personel: durum 'onaylandi'»
+ok   k-beceri → rc=1 ve «beceri_id zorunlu»
+ok   s-katalog → rc=0 ve «katalogda yok»
+ok   s-katalog-siki → rc=1 ve «katalogda yok»
+ok   s-terim → rc=0 ve «terimi yok»
+ok   terim-kaydi.json yok → rc=3
+ok   boş katalog → rc=3
+ok   nexus kökü okunamayınca SARI ölçülemedi (yeşil değil)
+ok   mutasyon yedek öldürüldü (kural kapalıyken k-yedek geçti → sınav bunu yakalar)
+ok   mutasyon cakisir öldürüldü (kural kapalıyken k-cakisir geçti → sınav bunu yakalar)
+ok   mutasyon kapiyol öldürüldü (kural kapalıyken k-kapiyol geçti → sınav bunu yakalar)
+ok   mutasyon kalibr öldürüldü (kural kapalıyken k-kalibr geçti → sınav bunu yakalar)
+ok   mutasyon karist öldürüldü (kural kapalıyken k-karist geçti → sınav bunu yakalar)
+ok   mutasyon tarif öldürüldü (kural kapalıyken k-tarif geçti → sınav bunu yakalar)
+ok   mutasyon benzersiz öldürüldü (kural kapalıyken k-benzersiz geçti → sınav bunu yakalar)
+ok   mutasyon adikiz öldürüldü (kural kapalıyken k-adikiz geçti → sınav bunu yakalar)
+ok   mutasyon sira öldürüldü (kural kapalıyken k-sira geçti → sınav bunu yakalar)
+toplam=35 geçen=35 kırmızı=0
+--- stderr ---

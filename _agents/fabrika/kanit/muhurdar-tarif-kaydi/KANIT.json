@@ -1,0 +1,118 @@
+{
+  "is": "muhurdar-tarif-kaydi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-22T01:57:20+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "veri-var",
+      "asama": "once",
+      "dosya": "olcum-veri-var-once.txt",
+      "sha256": "08c2a1f6f3f263a81b2bf7bd2963bbbdd22e5147c9b7cd4d13bc0c66f50d750c",
+      "komut": [
+        "git",
+        "-C",
+        "/config/projects/_wt/Sx-Claude-Skills-muhurdar-tarif-kaydi",
+        "cat-file",
+        "-e",
+        "origin/main:tarif-kaydi/veri/terim-kaydi.json"
+      ],
+      "rc": 128,
+      "renk": "kirmizi",
+      "zaman": "2026-10-22T01:56:57+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "9f60c09d0efc44f4ac67170913ced579"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "veri-var",
+      "asama": "sonra",
+      "dosya": "olcum-veri-var-sonra.txt",
+      "sha256": "8df068e74dddef2da020331b00d7269661285df0fc43c151b20838465fbe0f81",
+      "komut": [
+        "git",
+        "-C",
+        "/config/projects/_wt/Sx-Claude-Skills-muhurdar-tarif-kaydi",
+        "cat-file",
+        "-e",
+        "HEAD:tarif-kaydi/veri/terim-kaydi.json"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T01:56:57+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "40ee4245c0a74760b748e00ce58516fb"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bekci-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-bekci-sinavi-sonra.txt",
+      "sha256": "c12d8e12d2eff65c8fcd3f88f322e61866dd1c556a23f564770c28970f29aa5f",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-muhurdar-tarif-kaydi/tarif-kaydi/scripts/kadro-denetle.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T01:56:59+03:00",
+      "sure_sn": 1.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b95e59fbcee744599b32eabc2ac82ec4"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bekci-gercek-veri",
+      "asama": "sonra",
+      "dosya": "olcum-bekci-gercek-veri-sonra.txt",
+      "sha256": "5bf8327c7e4f06d510c619a98b0b36a8303e0f02065c3f1255ad4fafa31b0b67",
+      "komut": [
+        "python3",
+        "/config/projects/_wt/Sx-Claude-Skills-muhurdar-tarif-kaydi/tarif-kaydi/scripts/kadro-denetle.py"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T01:56:59+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c319e5fd2df44938bd70f9a1be64e613"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sync-ve-kabuk",
+      "asama": "sonra",
+      "dosya": "olcum-sync-ve-kabuk-sonra.txt",
+      "sha256": "c2c1f0eab9de52bf81e8d169db92ec0c2282b441648e0824d238b1a56e0c1e0e",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-muhurdar-tarif-kaydi/kabuk-biti.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T01:57:19+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "90a673f3810b4f2e8c28bab38eaf59e0"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sync-testi",
+      "asama": "sonra",
+      "dosya": "olcum-sync-testi-sonra.txt",
+      "sha256": "f09225ff066e7280b5cac26106ddd7859059e5cc1bab384544f96fe23188d62d",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-muhurdar-tarif-kaydi/sync-skills.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T01:57:20+03:00",
+      "sure_sn": 0.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e0d4e15cf16c40f0857be213e926f8e3"
+    }
+  ],
+  "imza": "454bedd67a3b9acc4291c959fde70f38f93e3e9ed27052ac31821fdf0f26e9e1"
+}

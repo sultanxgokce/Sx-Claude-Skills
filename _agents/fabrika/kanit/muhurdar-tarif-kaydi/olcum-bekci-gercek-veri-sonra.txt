@@ -1,0 +1,9 @@
+$ python3 /config/projects/_wt/Sx-Claude-Skills-muhurdar-tarif-kaydi/tarif-kaydi/scripts/kadro-denetle.py
+# rc=0 sure=0.0s zaman=2026-10-22T01:56:59+03:00
+--- stdout ---
+SARI 4 kapi_yolu: usul tescil-teslim-sina adım 1: kapı henüz yazılmadı (kapi_yolu null) — usul planlı
+SARI 4 kapi_yolu: usul tescil-teslim-sina adım 2: kapı henüz yazılmadı (kapi_yolu null) — usul planlı
+SARI 4 kapi_yolu: usul tatbikat-bozuk-is adım 2: kapı henüz yazılmadı (kapi_yolu null) — usul planlı
+SARI 4 kapi_yolu: usul ders-cikarma-kacirma adım 1: kapı henüz yazılmadı (kapi_yolu null) — usul planlı
+kirmizi=0 sari=4
+--- stderr ---
