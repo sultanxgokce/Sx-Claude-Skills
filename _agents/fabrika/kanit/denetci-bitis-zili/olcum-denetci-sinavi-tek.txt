@@ -1,0 +1,30 @@
+$ python3 _agents/fabrika/kanit/denetci-bitis-zili/bolum-olcer.py T-ZIL mutant 'zil mutant 'reis mutant 'zaman mutant 'asim mutant 'kosuyor mutant 'sinav-kipi ✗ -- bash yazilim-fabrikasi/scripts/denetci.test.sh
+# rc=0 sure=732.3s zaman=2026-10-21T20:13:49+03:00
+--- stdout ---
+$ bash yazilim-fabrikasi/scripts/denetci.test.sh  → rc=0 · 401 satır
+════ T-ZIL · denetçi sessiz bitmez: koşuyor izi · zaman aşımı · her çıkışta zil · tıkanınca reise (SERDAR ACİL 21 Eki) ════
+  ✓ Z1a koşarken DENETIM-1.kosuyor izi var (pid + başlangıç)
+  ✓ Z1b bitince iz silindi
+  ✓ Z3a rc 1 → yazana zil (puan · bulgu · rc; yazan = kartın aldı'sı)
+  ✓ Z3b rc 0 → yazana zil, reise yok
+  ✓ Z3c rc 2 (kanıt yok, DENETIM yazılmadı) → yine zil; AGENT_NAME yazandır
+  ✓ Z3d iş adı bile yokken (en erken çıkış) zil çalar
+  ✓ Z3e sınav kipinde (DENETCI_KOMUT) gerçek zil ARANMAZ; söylenir
+  ✓ Z2a zaman aşımı → rc 3, beklemedi (1 sn < 6)
+  ✓ Z2b DENETIM-1-HAM.txt'e ZAMAN AŞIMI yazıldı
+  ✓ Z2c aşımda yazana zil + reise --waiting (kart istedi=SULTAN → SERDAR)
+  ✓ Z2d aşımda da koşuyor izi silindi
+  ✓ Z4 rc 4 (tıkandı) → yazana zil + kart sahibine (istedi=BANI) --waiting
+  ✓ Z5 zil aracı yoksa iş durmaz (rc korunur) ama stderr'e yazılır
+…
+  ✓ mutant 'reis-sinif-citini-kaldir' sınavı KIRMIZI yapıyor
+  ✓ mutant 'zil-yok' sınavı KIRMIZI yapıyor
+  ✓ mutant 'reis-zili-yok' sınavı KIRMIZI yapıyor
+  ✓ mutant 'zaman-asimi-yok' sınavı KIRMIZI yapıyor
+  ✓ mutant 'asim-ham-yazilmaz' sınavı KIRMIZI yapıyor
+  ✓ mutant 'kosuyor-silinmez' sınavı KIRMIZI yapıyor
+  ✓ mutant 'kosuyor-yazilmaz' sınavı KIRMIZI yapıyor
+  ✓ mutant 'sinav-kipi-gercek-zil' sınavı KIRMIZI yapıyor
+…
+── SONUÇ: 241 geçti · 0 kaldı ──
+--- stderr ---

@@ -26,6 +26,43 @@ ISTEM="$HERE/../adimlar/denetci-istem.md"
 TAVAN=3; MUTLAK=4
 
 _hata() { printf '✗ %s\n' "$*" >&2; }
+# 🔴 SESSİZ BİTİŞ YOK (SERDAR ACİL 21 Eki 19:49, Sultan: "işler sessizce duruyor"): bir günde iki ajan bitmiş göz turunu
+#    1'er saat fark etmedi, biri HİÇ başlamamış denetçinin DENETIM-N.json'unu 1 saat bekledi. Kök üçlü: bitince haber yok,
+#    zaman aşımı yok, başladığının izi yok. Çare: (1) başlarken DENETIM-<tur>.kosuyor izi (pid + başlangıç), bitince silinir;
+#    (2) model çağrısı DENETCI_ZAMAN_ASIMI (varsayılan 900 sn) ile kesilir → rc 3 + HAM'a "ZAMAN AŞIMI";
+#    (3) HER çıkış yolunda (EXIT tuzağı — DENETIM yazmayan erken çıkışlar dâhil) yazana tek satır zil; rc 3/4'te reise de.
+#    Zil aracı yoksa (aile-notify bu kutuda yok) iş DURMAZ ama sessiz de geçmez: stderr'e yazılır.
+KOSUYOR=""; TMP=""; ZAMAN_ASIMI=0
+_zil() {   # _zil <rc> — yazana --done, rc 3/4'te reise --waiting
+  local rc="$1" an="${FABRIKA_AILE_NOTIFY:-}" yazan="${AGENT_NAME:-}" reis="" k="" ne
+  [ "$an" = "-" ] && return 0   # bilerek kapalı (sınavlar: denetçiyi yüzlerce kez koşturur, gerçek koltuklara zil çalmasın)
+  if [ -z "$an" ] && [ -n "${DENETCI_KOMUT:-}" ]; then   # sınav kipi: gerçek zil ARANMAZ, yalnız açıkça verilen çalar
+    printf '· sınav kipi (DENETCI_KOMUT): bitiş zili yalnız FABRIKA_AILE_NOTIFY ile — rc %s\n' "$rc" >&2; return 0; fi
+  [ -n "$an" ] || an="$(command -v aile-notify.sh 2>/dev/null)"
+  [ -n "$an" ] || for k in "${DEPO:-}/scripts/aile-notify.sh" /config/projects/Nexus/scripts/aile-notify.sh; do [ -f "$k" ] && { an="$k"; break; }; done
+  if [ -z "$an" ] || [ ! -f "$an" ]; then printf '⚠ denetçi bitiş zili ATLANDI: aile-notify bulunamadı (FABRIKA_AILE_NOTIFY ile ver) — rc %s\n' "$rc" >&2; return 0; fi
+  k="${KART_DEPO:-}/_agents/fabrika/kartlar/${IS:-}.json"
+  if [ -f "$k" ]; then
+    [ -n "$yazan" ] || yazan="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1])).get("aldi") or "")' "$k" 2>/dev/null)"
+    reis="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1])).get("istedi") or "")' "$k" 2>/dev/null)"
+  fi
+  case "$reis" in ""|SULTAN|Sultan|"$yazan") reis="SERDAR" ;; esac   # sahipsiz · Sultan (koltuk değil, zil çalınmaz) · yazanın kendisi → kutular üstü reis
+  case "$rc" in 0) ne="GEÇTİ" ;; 1) ne="düzelt, yeniden gönder" ;; 2) ne="kanıt/kullanım eksiği — denetim açılmadı" ;;
+                3) ne="ÖLÇÜLEMEDİ"; [ "$ZAMAN_ASIMI" = 1 ] && ne="ZAMAN AŞIMI (${ZA} sn) — denetçi bitmedi" ;; 4) ne="TIKANDI — üç yol raporu" ;; *) ne="beklenmeyen çıkış" ;; esac
+  local m="${IS:-?} tur ${TUR:-?}: ${PUAN:-—}/${DOGRU:-—} · bulgu ${NB:-—} · rc $rc · $ne"
+  bash "$an" --done ${yazan:+--amir "$yazan"} "denetçi: $m" </dev/null >/dev/null 2>&1 || printf '⚠ denetçi bitiş zili gönderilemedi (aile-notify rc %s): %s\n' "$?" "$m" >&2
+  if [ "$rc" = 3 ] || [ "$rc" = 4 ]; then
+    bash "$an" --waiting --amir "$reis" "denetçi (${yazan:-yazan?}): $m" </dev/null >/dev/null 2>&1 || printf '⚠ reis zili gönderilemedi (%s): %s\n' "$reis" "$m" >&2
+  fi
+}
+_bitis() {   # EXIT tuzağı: çıkış kodu KORUNUR (tuzak exit çağırmaz)
+  local rc=$?
+  [ -n "$KOSUYOR" ] && rm -f "$KOSUYOR"
+  [ -n "$TMP" ] && rm -rf "$TMP"
+  _zil "$rc"
+}
+trap _bitis EXIT
+ZA="${DENETCI_ZAMAN_ASIMI:-900}"
 _bilgi() { printf '%s\n' "$*"; }
 
 KARELER=(); IS=""; PR=""; DIFF=""; KART=""; YAZAN="claude"; DENETCI="auto"; MODEL=""; DEPO="${KANIT_DEPO:-}"; SULTAN_DEVAM=0; REIS_DEVAM=0
@@ -150,6 +187,9 @@ esac
 mkdir -p "$DZ"
 ONCEKI=$(ls "$DZ"/DENETIM-*.json 2>/dev/null | wc -l)
 TUR=$((ONCEKI+1))
+# "denetçi başladı mı?" sorusunun cevabı: bekleyen bu dosyaya bakar (pid canlı mı, ne zamandan beri); bitince _bitis siler
+KOSUYOR="$DZ/DENETIM-$TUR.kosuyor"
+printf 'pid=%s\nbaslangic=%s\nzaman_asimi_sn=%s\n' "$$" "$(date -Iseconds)" "$ZA" > "$KOSUYOR" 2>/dev/null || KOSUYOR=""
 # ── DARALTMA SIFIRI (PCP7J, 18 Eki 2026): kart daraltıldıysa (kart.sh daralt) daraltmadan ÖNCEKİ turlar yeni
 #    cümleyi puanlamadı; tavan ve "ilerliyor mu" yalnız daraltma SONRASI turlara bakar. Kart okunamazsa 0
 #    (daraltma yok sayılır — kapı aynı kaydı ayrıca okur, bu kapı tek değildir).
@@ -343,7 +383,7 @@ if [ "$SAYILI" -ge "$TAVAN" ]; then
 fi
 
 # ── 3 · girdiler ─────────────────────────────────────────────────────────────────
-TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
+TMP="$(mktemp -d)"   # temizliği _bitis (EXIT tuzağı) yapar
 # 🔴 FARKI DENETÇİ KENDİSİ ALIR (18 Eki, gorev_01M54B2Y4QT7VWTJX10AFR7M76): elle hazırlanan fark üç kez tur yaktı (11 Eki):
 #    iki-nokta `git diff origin/main` dal gerideyken başkasının eklemelerini "silinmiş" gösterdi, odaklı fark dosya kaçırdı.
 #    Kural: (a) --diff verilmişse o (çağıranın sorumluluğu, fark kaynağı ekranda söylenir); (b) --pr ile GitHub farkı alınır AMA
@@ -605,14 +645,14 @@ if { [ "$DENETCI" = "codex" ] || [ -n "${DENETCI_KIRP_ESIK:-}" ]; } && [ "$ISTEM
   mv "$TMP/istem-kirpik.md" "$TMP/istem.md"; KIRPILDI=1; _bilgi "⚠ istem $ISTEM_BAYT bayt → $KIRP_ESIK'e kırpıldı (denetçiye söylendi, DENETIM kaydına yazılır)"
 fi
 if [ -n "${DENETCI_KOMUT:-}" ]; then
-  DENETCI_AD="$DENETCI_KOMUT (sınav)"; $DENETCI_KOMUT "$TMP/istem.md" > "$HAM" 2>"$TMP/err"; DRC=$?
+  DENETCI_AD="$DENETCI_KOMUT (sınav)"; timeout "$ZA" $DENETCI_KOMUT "$TMP/istem.md" > "$HAM" 2>"$TMP/err"; DRC=$?
 else
   kos_codex() {
     # 🔴 STDIN KAPALI (15 Eki, 68 dk boşa): istem argümanla verildiği hâlde Codex stdin TTY değilse "Reading additional input
     #    from stdin..." deyip EOF bekler; arka plandan (run_in_background, cron) çağrıda stdin açık socket olunca denetim sonsuza
     #    dek asılı kalır (CPU 0, log boş). Girdi her koşulda /dev/null'dan: çağıranın stdin'i ne olursa olsun denetçi biter.
     local kare_arg=(); for _k in "${KARELER[@]}"; do kare_arg+=(-i "$_k"); done   # kareler GÖRSEL ek (codex exec -i)
-    codex exec -s read-only --skip-git-repo-check --ephemeral -C "$TMP" ${MODEL:+-m "$MODEL"} "${kare_arg[@]}" \
+    timeout "$ZA" codex exec -s read-only --skip-git-repo-check --ephemeral -C "$TMP" ${MODEL:+-m "$MODEL"} "${kare_arg[@]}" \
       --output-schema "$SEMA" -o "$HAM" "$(printf 'Hiçbir komut koşma, dosya okuma; gereken her şey aşağıda. Talimata göre YALNIZ JSON üret.\n\n'; cat "$TMP/istem.md")" </dev/null >"$TMP/log" 2>"$TMP/err"; DRC=$?
   }
   kos_claude() {   # yeni oturum: claude -p her çağrıda sıfırdan açılır → yazanın oturumu değildir
@@ -644,7 +684,7 @@ else
     fi
     DENETCI_AD="claude${ymodel:+ ($ymodel)}${YEDEK:+ (YEDEK GÖZ: $YEDEK · yazandan farklı yeni oturum + farklı model kademesi${YAZAN_MODEL:+ [yazan: $YAZAN_MODEL]} · Sultan Y0006)}"
     if [ "${#KARELER[@]}" -gt 0 ]; then printf '\n\n[UYARI: %s kare bu yedek göze GÖRSEL olarak verilemedi (claude -p kanalı görsel taşımıyor) — görsel kabul için yalnız adlara ve ölçüm çıktılarına bakabilirsin; bunu özete yaz]\n' "${#KARELER[@]}" >> "$TMP/istem.md"; KARE_VERILEMEDI=1; fi
-    claude -p ${ymodel:+--model "$ymodel"} --output-format json --json-schema "$(cat "$SEMA")" < "$TMP/istem.md" > "$TMP/claude.json" 2>"$TMP/err"; DRC=$?
+    timeout "$ZA" claude -p ${ymodel:+--model "$ymodel"} --output-format json --json-schema "$(cat "$SEMA")" < "$TMP/istem.md" > "$TMP/claude.json" 2>"$TMP/err"; DRC=$?
     python3 -c "import json,sys;d=json.load(open('$TMP/claude.json'));r=d.get('structured_output') or d.get('result');print(r if isinstance(r,str) else json.dumps(r,ensure_ascii=False))" > "$HAM" 2>/dev/null || cp "$TMP/claude.json" "$HAM"
   }
   yedek_olur_mu() { [ "$SEC_AUTO" = 1 ] && [ "${DENETCI_YEDEK:-1}" != 0 ]; }
@@ -654,12 +694,18 @@ else
       else _hata "codex yok — denetçi ölçemedi"; exit 3; fi
     else
       DENETCI_AD="codex${MODEL:+ ($MODEL)}"; kos_codex
-      if [ "$DRC" -ne 0 ]; then _bilgi "⚠ codex düştü (rc=$DRC) — bir kez daha deneniyor"; kos_codex; fi
-      if [ "$DRC" -ne 0 ] && yedek_olur_mu; then
+      # zaman aşımında yeniden deneme/yedek YOK: her biri 15 dk daha bekletirdi (45 dk sessizlik) — aşım ölçülemedi'dir, rc 3
+      if [ "$DRC" -ne 0 ] && [ "$DRC" -ne 124 ]; then _bilgi "⚠ codex düştü (rc=$DRC) — bir kez daha deneniyor"; kos_codex; fi
+      if [ "$DRC" -ne 0 ] && [ "$DRC" -ne 124 ] && yedek_olur_mu; then
         YEDEK="codex düştü (2 deneme, rc=$DRC)"; _bilgi "⚠ codex iki denemede düştü → YEDEK GÖZ: yazandan farklı yeni Claude oturumu (Sultan Y0006)"; kos_claude
       fi
     fi
   else kos_claude; fi
+fi
+if [ "$DRC" -eq 124 ]; then
+  ZAMAN_ASIMI=1; _hata "denetçi ($DENETCI_AD) ZAMAN AŞIMI: $ZA sn içinde bitmedi — ölçülemedi (rc 3)"
+  { printf 'ZAMAN AŞIMI — denetçi (%s) %s sn içinde bitmedi (DENETCI_ZAMAN_ASIMI); puan yok, tur sayılmaz.\n--- kısmi çıktı ---\n' "$DENETCI_AD" "$ZA"; cat "$HAM" 2>/dev/null; } > "$DZ/DENETIM-$TUR-HAM.txt"
+  exit 3
 fi
 if [ "$DRC" -ne 0 ]; then _hata "denetçi ($DENETCI_AD) düştü rc=$DRC"; head -5 "$TMP/err" >&2; cp "$HAM" "$DZ/DENETIM-$TUR-HAM.txt" 2>/dev/null; exit 3; fi
 

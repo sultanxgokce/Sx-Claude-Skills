@@ -5,6 +5,7 @@
 #   (T11'de 15 mutant var, her biri TÜM süiti IC_KOSUM ile yeniden koşuyor — mutant sayısı büyüdükçe
 #   toplam süre büyüyor; CI'da varsayılan 300 sn'de üst üste Terminated oldu, 2026-10-15.)
 set -uo pipefail
+export FABRIKA_AILE_NOTIFY=-   # denetçi bitiş zili sınavda KAPALI (gerçek koltuklara çalmasın); zil kapısı kendi sahtesini verir
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 D="${MUTANT_D:-$HERE/denetci.sh}"; K="$HERE/kanit.sh"; KT="$HERE/kart.sh"
 kartac() { bash "$KT" ac "$1" --is x --istedi SULTAN --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki e >/dev/null 2>&1; }
@@ -578,6 +579,40 @@ printf 'satir-sonu-yok-olcum' > "$T/_agents/fabrika/kanit/is-son2/olcum-aa-yokso
 SAHTE_ISTEM_KOPYA="$T/istem-son3.md" SAHTE_JSON="$(J 5 E "")" DENETCI_KIRP_ESIK=900000 bash "$D" is-son2 --diff "$T/ist1.patch" >/dev/null 2>&1
 grep -qx "satir-sonu-yok-olcum" "$T/istem-son3.md" && grep -A1 -x "satir-sonu-yok-olcum" "$T/istem-son3.md" | grep -qx -- "--- olcum-orta-tek.txt ---"; g $? "O13 satır sonuyla bitmeyen ölçümden sonra istemde sonraki başlık AYRI satırda (ayırıcıyı çağıran ekler)"
 T="$_T_ONCE"; export KANIT_DEPO="$T" DENETCI_KOMUT="$_DK_ONCE"
+echo "════ T-ZIL · denetçi sessiz bitmez: koşuyor izi · zaman aşımı · her çıkışta zil · tıkanınca reise (SERDAR ACİL 21 Eki) ════"
+ZL="$T/zil.log"; ZS="$T/sahte-zil.sh"; printf '#!/usr/bin/env bash\nprintf "%%s\\n" "$*" >> "%s"\n' "$ZL" > "$ZS"; chmod +x "$ZS"
+printf "diff --git a/x b/x\n+zil\n" > "$T/zd.patch"; ZK="$T/zil-sahte.sh"; printf '#!/usr/bin/env bash\nprintf "%%s" "$SAHTE_JSON"\n' > "$ZK"; chmod +x "$ZK"; _DK_ZIL="$DENETCI_KOMUT"; export DENETCI_KOMUT="$ZK";   # önceki bölümler ortak sahteyi silebiliyor — bu bölüm kendi sahtesiyle
+ kartac is-z; bash "$K" olcum is-z olc --asama tek -- true >/dev/null 2>&1
+DZZ="$T/_agents/fabrika/kanit/is-z"
+# Z1 koşuyor izi: denetçi KOŞARKEN izi görür, bitince iz yok
+ZD="$T/zil-denetci.sh"; printf '#!/usr/bin/env bash\nls "%s" > "%s"; cat "%s"/DENETIM-*.kosuyor > "%s" 2>/dev/null; printf "%%s" "$SAHTE_JSON"\n' "$DZZ" "$T/z-ls" "$DZZ" "$T/z-izi" > "$ZD"; chmod +x "$ZD"
+: > "$ZL"; SAHTE_JSON="$(J 3 H "$B")" DENETCI_KOMUT="$ZD" FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-z --diff "$T/zd.patch" >/dev/null 2>&1; RC=$?
+grep -qx 'DENETIM-1.kosuyor' "$T/z-ls" && grep -q "^pid=[0-9]" "$T/z-izi" && grep -q "^baslangic=20" "$T/z-izi"; g $? "Z1a koşarken DENETIM-1.kosuyor izi var (pid + başlangıç)"
+! ls "$DZZ"/DENETIM-*.kosuyor >/dev/null 2>&1; g $? "Z1b bitince iz silindi"
+# Z3 her çıkışta zil: rc 1 (3/H) · rc 0 (5/E) · rc 2 (kanıt yok) · rc 1 (kullanım: iş adı yok)
+[ $RC -eq 1 ] && grep -q -- "--done --amir MUAVIN denetçi: is-z tur 1: 3/H · bulgu 1 · rc 1" "$ZL"; g $? "Z3a rc 1 → yazana zil (puan · bulgu · rc; yazan = kartın aldı'sı)"
+: > "$ZL"; SAHTE_JSON="$(J 5 E "")" FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-z --diff "$T/zd.patch" >/dev/null 2>&1
+grep -q -- "--done --amir MUAVIN denetçi: is-z tur 2: 5/E · bulgu 0 · rc 0 · GEÇTİ" "$ZL" && ! grep -q -- "--waiting" "$ZL"; g $? "Z3b rc 0 → yazana zil, reise yok"
+: > "$ZL"; SAHTE_JSON="$(J 5 E "")" FABRIKA_AILE_NOTIFY="$ZS" AGENT_NAME=HENDESE bash "$D" is-yok --diff "$T/zd.patch" >/dev/null 2>&1
+grep -q -- "--done --amir HENDESE denetçi: is-yok tur ?: —/— · bulgu — · rc 2" "$ZL"; g $? "Z3c rc 2 (kanıt yok, DENETIM yazılmadı) → yine zil; AGENT_NAME yazandır"
+: > "$ZL"; FABRIKA_AILE_NOTIFY="$ZS" bash "$D" >/dev/null 2>&1; grep -q -- "rc 1" "$ZL"; g $? "Z3d iş adı bile yokken (en erken çıkış) zil çalar"
+kartac is-zb; bash "$K" olcum is-zb olc --asama tek -- true >/dev/null 2>&1
+: > "$ZL"; SAHTE_JSON="$(J 5 E "")" FABRIKA_AILE_NOTIFY= bash "$D" is-zb --diff "$T/zd.patch" > /dev/null 2> "$T/z-err"; [ ! -s "$ZL" ] && grep -q "sınav kipi" "$T/z-err"; g $? "Z3e sınav kipinde (DENETCI_KOMUT) gerçek zil ARANMAZ; söylenir"
+# Z2 zaman aşımı: rc 3 · HAM'da ZAMAN AŞIMI · beklemeden biter · zil + reis (kendi işi: önceki turlar tavanı doldurmasın)
+kartac is-za; bash "$K" olcum is-za olc --asama tek -- true >/dev/null 2>&1; DZA="$T/_agents/fabrika/kanit/is-za"
+ZY="$T/yavas.sh"; printf '#!/usr/bin/env bash\nsleep 8; printf "%%s" "$SAHTE_JSON"\n' > "$ZY"; chmod +x "$ZY"
+: > "$ZL"; bas=$(date +%s); SAHTE_JSON="$(J 5 E "")" DENETCI_KOMUT="$ZY" DENETCI_ZAMAN_ASIMI=1 FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-za --diff "$T/zd.patch" >/dev/null 2>&1; RC=$?; sure=$(( $(date +%s) - bas ))
+[ $RC -eq 3 ] && [ "$sure" -lt 6 ]; g $? "Z2a zaman aşımı → rc 3, beklemedi (${sure} sn < 6)"
+grep -q "ZAMAN AŞIMI" "$DZA/DENETIM-1-HAM.txt" 2>/dev/null; g $? "Z2b DENETIM-1-HAM.txt'e ZAMAN AŞIMI yazıldı"
+grep -q -- "--done --amir MUAVIN denetçi: is-za tur 1: —/— · bulgu — · rc 3 · ZAMAN AŞIMI" "$ZL" && grep -q -- "--waiting --amir SERDAR" "$ZL"; g $? "Z2c aşımda yazana zil + reise --waiting (kart istedi=SULTAN → SERDAR)"
+! ls "$DZA"/DENETIM-*.kosuyor >/dev/null 2>&1; g $? "Z2d aşımda da koşuyor izi silindi"
+# Z4 tıkanınca (rc 4) reise: sahibi yazandan farklı kartta reis kartın istedi'sidir
+bash "$KT" ac is-t --is x --istedi BANI --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1; bash "$K" olcum is-t olc --asama tek -- true >/dev/null 2>&1
+for i in 1 2 3; do : > "$ZL"; SAHTE_JSON="$(J 2 H "$B")" FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-t --diff "$T/zd.patch" >/dev/null 2>&1; RC=$?; done
+[ $RC -eq 4 ] && grep -q -- "rc 4 · TIKANDI" "$ZL" && grep -q -- "--waiting --amir BANI denetçi (MUAVIN): is-t tur 3" "$ZL"; g $? "Z4 rc 4 (tıkandı) → yazana zil + kart sahibine (istedi=BANI) --waiting"
+: > "$ZL"; SAHTE_JSON="$(J 3 H "$B")" FABRIKA_AILE_NOTIFY="$T/olmayan-zil.sh" bash "$D" is-zb --diff "$T/zd.patch" >/dev/null 2>"$T/z-err"; [ $? -eq 1 ] && grep -q "zili ATLANDI" "$T/z-err"; g $? "Z5 zil aracı yoksa iş durmaz (rc korunur) ama stderr'e yazılır"
+export DENETCI_KOMUT="$_DK_ZIL"
+
 if [ -n "${IC_KOSUM:-}" ]; then echo "(ic)"; [ "$kalan" -eq 0 ]; exit $?; fi
 echo "════ T11 · MUTASYON: Sultan kapısını bozunca sınav kırmızı veriyor mu ════"
 # 🔴 MUTANT KOŞUMU PARALEL (15 Eki, göz #323: CI 300 sn tavanı): her mutant sınav dosyasının TAMAMINI yeniden koşturur
@@ -648,6 +683,13 @@ mut "istem-en-buyuk-ilk-parca" 's@\[ "$_b" -gt "$_EN_B" \] && {@[ -z "$_EN" ] \&
 mut "istem-parca-dokumu-yok" 's@_DOKUM="$_DOKUM · ${_AD\[$_p\]} $_b"@:@'
 mut "istem-karti-dusurur" 's@^ISTEM_PARCALARI=(sablon kart kanit@ISTEM_PARCALARI=(sablon kanit@'
 mut "istem-ayiklama-kosulu-duser" 's@ && \[ "${DENETCI_KANIT_AYIKLA:-1}" != "0" \] && \[ "$ISTEM_BAYT"@ \&\& [ "$ISTEM_BAYT"@'
+mut "zil-yok" 's@^  _zil "$rc"$@  :@'
+mut "reis-zili-yok" 's@^  if \[ "$rc" = 3 \] || \[ "$rc" = 4 \]; then$@  if false; then@'
+mut "zaman-asimi-yok" 's@timeout "$ZA" $DENETCI_KOMUT@$DENETCI_KOMUT@'
+mut "asim-ham-yazilmaz" 's@^if \[ "$DRC" -eq 124 \]; then$@if false; then@'
+mut "kosuyor-silinmez" 's@^  \[ -n "$KOSUYOR" \] \&\& rm -f "$KOSUYOR"$@  :@'
+mut "kosuyor-yazilmaz" 's@^KOSUYOR="$DZ/DENETIM-$TUR.kosuyor"$@KOSUYOR=""@'
+mut "sinav-kipi-gercek-zil" 's@^  if \[ -z "$an" \] \&\& \[ -n "${DENETCI_KOMUT:-}" \]; then@  if false; then@'
 mut "olcum-sonu-yok" 's@olcum_ozeti "$f"; \[ -z@head -60 "$f"; [ -z@'
 mut "olcum-stderr-ayrilmaz" 's@^e = L.index("--- stderr ---") if "--- stderr ---" in L else len(L)$@e = len(L)@'
 mut "olcum-tavan-asilir" 's@^SINIR, BAS, SON, HSON, SECME = 60, 25, 12, 10, 8$@SINIR, BAS, SON, HSON, SECME = 60, 300, 12, 10, 8@'
