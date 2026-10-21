@@ -1,0 +1,31 @@
+{
+  "is": "muhurdar-sicil",
+  "cumle": "Mühürdarlık G11 + S10: mühürdarın sicili ve ders çıkarma — Sultan'ın 'sağlanmadı' dediği her satır mühürdarın özlük dosyasının isabet bölümüne düşer (yalnız Sultan kaydına dayanarak, A06; özlük yoksa yazmaz); son 10 mühürde 1 kaçırma ders çıkarma, 2 kaçırma askı (+ el kitabı güncelleme + yeniden sınav) hesaplanır; tekrar eden kaçırma türü el kitabının ders günlüğüne kural önerisi olur ve isabet satırı o kurala bağlanır. Sınavı + mutasyon. (Sultan D1 22 Eki)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-22T01:55:26+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5D990AEQY8VRY3QGPWPZ5FK",
+  "tahmin_dk": 150,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-22T01:55:26+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

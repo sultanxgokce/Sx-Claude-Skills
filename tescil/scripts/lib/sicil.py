@@ -7,14 +7,18 @@ Alt-komutlar (sicil.sh çağırır):
   durum  <mühürdar> [--json]
   ders   <mühürdar> [--json]
   ders-bagla <mühürdar> --isabet-ts <ts> --ders D-NNN
+  muhur  <mühürdar> --gorev G --verdikt V [--bassiz] [--el-kitabi-surum v]   (muhurdar.sh her mühürde KENDİSİ yazar)
+  teslim-isle <mühürdar> --kaynak <ref> --muhur-dir <deneme-dir>             (geçit: Sultan'ın tek teslim kararı → bütün satırlar)
 
 Kayıt yeri: personelin özlük dosyası `<SICIL_DIZIN>/<personel_no>.yaml` → `isabet:` bölümü (append-only; silinmez, ters
 kayıtla düzeltilir). Yeni defter KURULMAZ (S9). Satır §6 biçimidir + üç ek alan: `g_tur` (gereklilik türü — ders çıkarma
 gruplar), `neden` (Sultan'ın tek cümlesi), `kaynak` (Sultan'ın kaydı — A06). Satırlar JSON nesnesidir (YAML alt kümesi).
 
-🔴 A06: `sultan:` alanı Sultan'ın hükmüdür; ajan üretemez. Yazıcı yalnız Sultan'ın KAYDINA dayanarak yazar: `--kaynak`
-   teslim ekranı kararı (`teslim:<kimlik>`) ya da D1 damgası (`YYYY-MM-DD Sultan: … (sohbet · <ref> · "<kırpık>" · beyan:<AJAN>)`).
-   Kaynaksız / biçimsiz → rc 2, satır yazılmaz.
+🔴 A06: `sultan:` alanı Sultan'ın hükmüdür; ajan üretemez. Biçim yetmez (göz #411 tur 1: `teslim:abc123` uydurulabilirdi):
+   kaynak `SICIL_KAYNAK_DOGRULA <kaynak>` ile DOĞRULANIR — geçidin sağladığı bu komut Sultan'ın KAYITLI kararını JSON basar
+   (`{"gorev": …, "satirlar": {"G1": {"sultan": "katiliyorum|saglanmadi", "neden": …}}}`) ve hüküm YALNIZ bu çıktıdan alınır.
+   Doğrulayıcı yoksa → rc 3 (yazılmaz); kayıt bulunamaz ya da içerik uyuşmazsa → rc 2.
+   Pencere (S10) Sultan'ın satırlarından değil MÜHÜR kayıtlarından sayılır: muhurdar.sh her mühürde `tur: muhur` satırı yazar.
 RC: 0 tamam · 2 kullanım/biçim/kaynak · 3 ölçülemedi (özlük dosyası yok, YAML okunamadı) — yazılmaz.
 """
 import datetime
@@ -131,6 +135,28 @@ def argv_al(argv, bayraklar, tekli=()):
     return a, konum
 
 
+def sultan_karari(kaynak):
+    """A06: Sultan'ın kayıtlı kararı — yalnız geçidin doğrulayıcısından. Biçim denetimi tek başına kanıt değildir."""
+    import shlex, subprocess
+    if not (D1.match(kaynak) or TESLIM.match(kaynak)):
+        hata("--kaynak Sultan'ın KAYDINA işaret etmeli: 'teslim:<kimlik>' ya da D1 damgası — Sultan'ın hükmü üretilmez (A06); yazılmadı")
+    komut = os.environ.get("SICIL_KAYNAK_DOGRULA", "").strip()
+    if not komut:
+        hata("Sultan kaydı DOĞRULANAMADI: doğrulayıcı yok (SICIL_KAYNAK_DOGRULA — teslim geçidi sağlar). A06: doğrulanmamış hüküm yazılmaz", 3)
+    try:
+        p = subprocess.run(shlex.split(komut) + [kaynak], capture_output=True, text=True, timeout=60)
+    except (OSError, subprocess.TimeoutExpired) as e:
+        hata(f"Sultan kaydı doğrulanamadı (doğrulayıcı koşmadı: {e})", 3)
+    if p.returncode != 0:
+        hata(f"Sultan kaydı BULUNAMADI: {kaynak} (doğrulayıcı rc {p.returncode}) — uydurma kaynakla yazılmaz (A06)")
+    try:
+        k = json.loads(p.stdout)
+        assert isinstance(k.get("satirlar"), dict) and k.get("gorev")
+    except (ValueError, AssertionError):
+        hata(f"doğrulayıcı geçerli karar dönmedi ({kaynak}) — yazılmadı", 3)
+    return k
+
+
 def cmd_isabet(argv):
     a, k = argv_al(argv, ("--gorev", "--gereklilik", "--muhur", "--sultan", "--kaynak", "--neden", "--g-tur", "--el-kitabi-surum"), ("--bassiz",))
     if len(k) != 1:
@@ -144,9 +170,12 @@ def cmd_isabet(argv):
     if a["sultan"] not in ("katiliyorum", "saglanmadi"):
         hata("--sultan katiliyorum ya da saglanmadi")
     kaynak = (a.get("kaynak") or "").strip()
-    if not (D1.match(kaynak) or TESLIM.match(kaynak)):
-        hata("--kaynak Sultan'ın KAYDI olmalı: 'teslim:<kimlik>' (teslim ekranı kararı) ya da D1 damgası "
-             "'YYYY-MM-DD Sultan: … (sohbet · <ref> · \"<kırpık>\" · beyan:<AJAN>)' — Sultan'ın hükmü üretilmez (A06); satır yazılmadı")
+    karar = sultan_karari(kaynak)
+    ks = karar["satirlar"].get(a["gereklilik"]) or {}
+    if karar.get("gorev") != a["gorev"] or ks.get("sultan") != a["sultan"]:
+        hata(f"Sultan'ın kaydı bu satırı DOĞRULAMIYOR ({kaynak}: {karar.get('gorev')} {a['gereklilik']} = {ks.get('sultan')}) — yazılmadı (A06)")
+    if not a.get("neden") and ks.get("neden"):
+        a["neden"] = ks["neden"]
     if a["sultan"] == "saglanmadi" and not (a.get("neden") or "").strip():
         hata("--neden zorunlu: 'sağlanmadı' Sultan'ın tek cümlesiyle gelir (ders çıkarma bundan beslenir)")
     yol = ozluk_bul(ad)
@@ -162,9 +191,11 @@ def cmd_isabet(argv):
 
 def hesap(ad):
     yol = ozluk_bul(ad); d = oku(yol); isb, baglar = isabetler(d); e, ek = esik()
-    gorevler = []   # mühür = görev teslimi; sıra = yazım sırası (append-only)
-    for x in isb:
-        if x.get("gorev") not in gorevler:
+    # mühür = görev teslimi; pencere MÜHÜR kayıtlarından (tur: muhur) sayılır — Sultan satırı gelmeyen temiz mühür de pencereyi
+    #   ilerletir (göz #411 tur 1). Mühür kaydı olmayan eski isabet satırının görevi kendi yerinde sayılır.
+    gorevler = []
+    for x in d.get("isabet") or []:
+        if isinstance(x, dict) and x.get("tur") in (None, "muhur") and x.get("gorev") not in gorevler:
             gorevler.append(x.get("gorev"))
     pencere = gorevler[-e["pencere"]:]
     kacirmali = [g for g in pencere if any(x.get("gorev") == g and x.get("kacirma") == "e" for x in isb)]
@@ -254,10 +285,54 @@ def cmd_ders_bagla(argv):
     return 0
 
 
+def cmd_muhur(argv):
+    a, k = argv_al(argv, ("--gorev", "--verdikt", "--el-kitabi-surum"), ("--bassiz",))
+    if len(k) != 1 or not a.get("gorev") or not a.get("verdikt"):
+        hata("kullanım: muhur <mühürdar> --gorev G --verdikt V [--bassiz] [--el-kitabi-surum v]")
+    yol = ozluk_bul(k[0])
+    ekle(yol, {"ts": simdi(), "tur": "muhur", "gorev": a["gorev"], "verdikt": a["verdikt"],
+               "bassiz": "e" if a.get("bassiz") else "h", "el_kitabi_surum": a.get("el_kitabi_surum")})
+    print(f"✓ mühür kaydı: {k[0]} · {a['gorev']} · {a['verdikt']}")
+    return 0
+
+
+def cmd_teslim_isle(argv):
+    """Sultan'ın TEK teslim kararı → mühürün her (mühürdarca sınanan) satırı için bir isabet satırı. Geçit bunu bir kez çağırır."""
+    a, k = argv_al(argv, ("--kaynak", "--muhur-dir"))
+    if len(k) != 1 or not a.get("kaynak") or not a.get("muhur_dir"):
+        hata("kullanım: teslim-isle <mühürdar> --kaynak <ref> --muhur-dir <deneme-dir>")
+    karar = sultan_karari(a["kaynak"].strip())
+    try:
+        oz = json.load(open(os.path.join(a["muhur_dir"], "muhur-ozet.json"), encoding="utf-8"))
+        ger = json.load(open(os.path.join(a["muhur_dir"], "gereklilik.json"), encoding="utf-8"))
+    except (OSError, ValueError) as e:
+        hata(f"mühür dizini okunamadı: {e}", 3)
+    if oz.get("muhurdar") and oz["muhurdar"].casefold() != k[0].casefold():
+        hata(f"bu mühürü {oz['muhurdar']} bastı, {k[0]} değil — başkasının siciline yazılmaz")
+    sinanan = [g for g in ger["g"] if g["tur"] != "sultan-denemesi"]   # 👤 satırını mühürdar sınamadı → isabeti olmaz
+    eksik = [g["id"] for g in sinanan if not (karar["satirlar"].get(g["id"]) or {}).get("sultan")]
+    if eksik:
+        hata(f"Sultan'ın kararında şu satırlar yok: {', '.join(eksik)} — kısmi teslim yazılmaz")
+    yol = ozluk_bul(k[0]); isb, _ = isabetler(oku(yol))
+    if any(x.get("kaynak") == a["kaynak"].strip() for x in isb):
+        hata(f"{a['kaynak']} kararı zaten işlendi — iki kez yazılmaz")
+    dusen = set(oz.get("g_dusen") or [])
+    for g in sinanan:
+        ks = karar["satirlar"][g["id"]]
+        muhur = "✗" if g["id"] in dusen else "✓"
+        ekle(yol, {"ts": simdi(), "gorev": karar["gorev"], "gereklilik": g["id"], "muhur": muhur, "sultan": ks["sultan"],
+                   "kacirma": "e" if (muhur == "✓" and ks["sultan"] == "saglanmadi") else "h",
+                   "bassiz": "h", "el_kitabi_surum": oz.get("tescil_skill_version"), "ders": None,
+                   "g_tur": g["tur"], "neden": ks.get("neden"), "kaynak": a["kaynak"].strip()})
+    print(f"✓ teslim işlendi: {k[0]} · {karar['gorev']} · {len(sinanan)} satır (👤 {len(ger['g']) - len(sinanan)} atlandı)")
+    return 0
+
+
 def main():
     if len(sys.argv) < 2:
-        hata("kullanım: sicil.py isabet|durum|ders|ders-bagla …")
-    k = {"isabet": cmd_isabet, "durum": cmd_durum, "ders": cmd_ders, "ders-bagla": cmd_ders_bagla}.get(sys.argv[1])
+        hata("kullanım: sicil.py isabet|durum|ders|ders-bagla|muhur|teslim-isle …")
+    k = {"isabet": cmd_isabet, "durum": cmd_durum, "ders": cmd_ders, "ders-bagla": cmd_ders_bagla,
+         "muhur": cmd_muhur, "teslim-isle": cmd_teslim_isle}.get(sys.argv[1])
     if not k:
         hata(f"bilinmeyen alt komut: {sys.argv[1]}")
     return k(sys.argv[2:])

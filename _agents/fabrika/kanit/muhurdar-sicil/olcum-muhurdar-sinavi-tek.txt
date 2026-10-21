@@ -1,5 +1,5 @@
 $ bash tescil/scripts/muhurdar.test.sh
-# rc=0 sure=195.8s zaman=2026-10-22T02:04:40+03:00
+# rc=0 sure=273.5s zaman=2026-10-22T02:19:09+03:00
 --- stdout ---
 ════ G8 · Mühürdarlık · Tescil usulü (muhurdar.sh) ════
   ✓ p usul sırası: biçimsiz belge + kendi işi → önce biçim kapısı (gereklilik-eksik), kendi-isi değil

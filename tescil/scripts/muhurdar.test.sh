@@ -5,6 +5,7 @@
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 T="$(mktemp -d)"; trap 'find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null' EXIT
+export SICIL_DIZIN="$T/sicil-yok"   # hermetik: gerçek özlük dosyalarına mühür kaydı DÜŞMESİN (yok dizin → rc 3, mühür etkilenmez)
 gecen=0; kalan=0
 g() { if [ "$1" -eq 0 ]; then gecen=$((gecen+1)); echo "  ✓ $2"; else kalan=$((kalan+1)); echo "  ✗ $2"; fi; }
 ND="$(dirname "$(command -v node)")"; PY="$(dirname "$(command -v python3)")"

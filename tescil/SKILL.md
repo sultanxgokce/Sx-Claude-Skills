@@ -228,8 +228,15 @@ Mühürdarın isabeti **Sicil**'dir (S9: "karne" değil): personelin özlük dos
 
 - **İsabet satırı** (kadro şeması §6 + `g_tur · neden · kaynak`): teslim ekranında Sultan bir satıra "sağlanmadı" ya da
   "katılıyorum" der → `sicil.sh isabet <mühürdar> …`. **Kaçırma** = mühürdar ✓ verdi, Sultan "sağlanmadı" dedi.
-  🔴 A06: `--kaynak` Sultan'ın KAYDIDIR (`teslim:<kimlik>` ya da D1 damgası); kaynaksız satır yazılmaz (rc 2).
-  "Sağlanmadı"da Sultan'ın tek cümlesi (`--neden`) zorunlu. Özlük dosyası yoksa yazılmaz (rc 3 — özlük KÂHYA'nın işi).
+  🔴 A06: `--kaynak` Sultan'ın KAYDINA işaret eder ve **doğrulanır**: `SICIL_KAYNAK_DOGRULA <kaynak>` (teslim geçidi sağlar)
+  Sultan'ın kayıtlı kararını JSON basar (`{"gorev", "satirlar": {"G1": {"sultan", "neden"}}}`); hüküm YALNIZ bu çıktıdan
+  alınır — ajan kaynağı gösterebilir, içeriği uyduramaz (göz #411 tur 1). Doğrulayıcı yoksa rc 3, kayıt yok ya da satırı
+  doğrulamıyorsa rc 2; ikisinde de yazılmaz. "Sağlanmadı"da Sultan'ın tek cümlesi zorunlu (kayıttan ya da `--neden`).
+- **Teslim köprüsü:** `sicil.sh teslim-isle <mühürdar> --kaynak <ref> --muhur-dir <deneme-dir>` — geçit Sultan'ın TEK teslim
+  kararıyla bir kez çağırır; mühürdarca sınanan her satır için isabet yazılır (👤 satırı atlanır, düşen G'de mühür ✗); aynı
+  karar iki kez işlenmez, kısmi karar ve başkasının mühürü reddedilir.
+- **Mühür kaydı:** `muhurdar.sh` her mühürde mühürdarın siciline `tur: muhur` satırı yazar (özlük yoksa söyler, mühür
+  düşmez). Askı penceresi bu kayıtlardan sayılır — Sultan satırı gelmeyen temiz mühür de pencereyi ilerletir. Özlük dosyası yoksa yazılmaz (rc 3 — özlük KÂHYA'nın işi).
   Yazıcı satırı geri okuyarak doğrular; `isabet:` dosyanın sonunda değilse eklemez.
 - **Askı** (S10): `sicil.sh durum <mühürdar>` son **10 mühürde** (mühür = görev teslimi) kaçırmalı mühür sayar —
   **1** = ders çıkarma (askı yok) · **2** = **askıda** + el kitabı güncelleme + yeniden sınav. Eşik tarif kaydındaki

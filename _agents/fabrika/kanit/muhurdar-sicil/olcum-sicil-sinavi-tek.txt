@@ -1,31 +1,38 @@
 $ bash tescil/scripts/sicil.test.sh
-# rc=0 sure=18.1s zaman=2026-10-22T02:01:24+03:00
+# rc=0 sure=55.2s zaman=2026-10-22T02:14:35+03:00
 --- stdout ---
 ════ G11 · S10 · Mühürdarlık sicil · ders çıkarma · askı (sicil.sh) ════
-  ✓ a isabet özlük dosyasına yazılır (kaçırma = mühür ✓ + Sultan sağlanmadı), Sultan'ın cümlesi + kaynağı satırda, öbür alanlar korunur
+  ✓ a isabet Sultan'ın DOĞRULANMIŞ kaydıyla yazılır (kaçırma = mühür ✓ + sağlanmadı; cümle kayıttan), öbür alanlar korunur
   ✓ b özlük dosyası yoksa (MUHAKKİK vakası) yazılmaz, rc 3, hiçbir dosya değişmez
-  ✓ c A06: kaynaksız ya da biçimsiz kaynakla Sultan'ın hükmü yazılmaz (rc 2)
+  ✓ c A06: doğrulayıcı yoksa rc 3 · uydurma kaynak rc 2 · kayıt satırı doğrulamıyorsa (hüküm ya da görev farklı) rc 2 — yazılmaz
   ✓ d kaçırma değil: mühür ✗ + sağlanmadı (mühürdar yakaladı) · mühür ✓ + katılıyorum
   ✓ e isabet bölümü dosyanın sonunda değilse eklenmez (YAML bozulmasın)
   ✓ f 'sağlanmadı' Sultan'ın tek cümlesi olmadan yazılmaz
   ✓ g 1 kaçırmalı mühür → ders-cikarma, askı yok (S10)
   ✓ h son 10'da 2 kaçırmalı mühür → askida + el kitabı güncelleme + yeniden sınav (S10)
-  ✓ i pencere 10 mühür: ilk kaçırma dışarı düşünce askı kalkar (ders-cikarma)
+  ✓ p mühür kaydı: özlük yoksa rc 3; varsa 'tur: muhur' satırı (isabet sayılmaz)
+  ✓ i pencere MÜHÜR kayıtlarından: Sultan satırı gelmeyen temiz mühürler de pencereyi ilerletir → askı kalkar
   ✓ j eşik tarif kaydından okunur (3/4 → askı yok), kayıt yoksa S10 varsayılanı (2/10 → askı)
-  ✓ k ders çıkarma: aynı tür ≥2 ayrı görevde = tekrar eden → D-002 taslağı Sultan'ın cümleleriyle
-  ✓ l ders-bagla: günlükte olmayan derse bağlanmaz; olana ters kayıtla bağlanır, özgün satır değişmez, açık listeden düşer
+  ✓ k ders çıkarma: aynı tür ≥2 ayrı görevde = tekrar eden → D-002 taslağı Sultan'ın cümleleriyle; tek görevli tür sayılmaz
+  ✓ l ders-bagla: günlükte olmayan derse bağlanmaz; olana ters kayıtla bağlanır, özgün satır değişmez
   ✓ m kaçırma olmayan satır derse bağlanmaz; aynı kaçırma iki kez bağlanmaz
   ✓ n başsız şapka hükmü işaretli (bassiz e), yine bu mühürdarın siciline yazılır (S14)
+  ✓ q teslim-isle: Sultan'ın tek kararı → sınanan her satır (👤 atlanır, düşen G'de mühür ✗); tekrar · kısmi karar · başkasının mühürü reddedilir
+  ✓ r muhurdar.sh her mühürde mühürdarın siciline mühür kaydı yazar
 ── MUTASYON (tescil kopyasında, kontrol şartlı) ──
   ✓ kontrol kopyası gerçek betikle aynı kapıları geçiyor
-  ✓ mutant (Sultan kaydı aranmıyor (A06)) → 'c' kapısı düşüyor
+  ✓ mutant (doğrulayıcı yoksa hüküm uyduruluyor (A06)) → 'c' kapısı düşüyor
+  ✓ mutant (kayıt satırı doğrulamasa da yazılıyor) → 'c' kapısı düşüyor
   ✓ mutant (özlük yoksa yeni dosya açıyor) → 'b' kapısı düşüyor
   ✓ mutant (mühürdarın yakaladığı da kaçırma sayılıyor) → 'd' kapısı düşüyor
-  ✓ mutant (pencere yok sayılıyor) → 'i' kapısı düşüyor
+  ✓ mutant (pencere mühür kayıtlarını saymıyor) → 'i' kapısı düşüyor
   ✓ mutant (eşik tarif kaydından okunmuyor) → 'j' kapısı düşüyor
   ✓ mutant (tek kaçırma da tekrar eden sayılıyor) → 'k' kapısı düşüyor
   ✓ mutant (günlükte olmayan derse bağlanıyor) → 'l' kapısı düşüyor
   ✓ mutant (isabet sonda değilken ekleniyor) → 'e' kapısı düşüyor
+  ✓ mutant (teslim-isle 👤 satırına da isabet yazıyor) → 'q' kapısı düşüyor
+  ✓ mutant (aynı teslim iki kez işleniyor) → 'q' kapısı düşüyor
+  ✓ mutant (muhurdar.sh siciline mühür kaydı yazmıyor) → 'r' kapısı düşüyor
 
-── SONUÇ: 23 geçti · 0 kaldı ──
+── SONUÇ: 30 geçti · 0 kaldı ──
 --- stderr ---

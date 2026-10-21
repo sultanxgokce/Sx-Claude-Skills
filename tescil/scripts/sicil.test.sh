@@ -1,119 +1,171 @@
 #!/usr/bin/env bash
 # sicil.test.sh — Mühürdarlık sicil · ders çıkarma · askı (G11 · S9 · S10) sınavı. HERMETİK: geçici sicil dizini, el kitabı
-# kopyası, tarif kaydı fikstürü; gerçek özlük dosyalarına DOKUNMAZ. Senaryo fonksiyonda; mutant kopyada hedef anahtar düşer.
+# kopyası, tarif kaydı ve SAHTE doğrulayıcı (geçidin yerine: Sultan'ın kayıtlı kararlarını fikstürden basar); gerçek özlük
+# dosyalarına DOKUNMAZ. Senaryo fonksiyonda; mutant kopyada hedef anahtar düşer.
+# kabuk-testleri: sure=480   (yerelde 154 sn ölçüldü — 13 mutant tam senaryoyu koşar; CI payı)
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 T="$(mktemp -d)"; trap 'find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null' EXIT
 gecen=0; kalan=0
 g() { if [ "$1" -eq 0 ]; then gecen=$((gecen+1)); echo "  ✓ $2"; else kalan=$((kalan+1)); echo "  ✗ $2"; fi; }
 python3 -c "import yaml" 2>/dev/null || { echo "ÖLÇÜLEMEDİ: PyYAML yok"; exit 4; }
-D1='2026-10-22 Sultan: saglanmadi (sohbet · session_X · "renk koyu değil" · beyan:SERDAR)'
+ND="$(dirname "$(command -v node)")"; [ -n "$ND" ] || { echo "ÖLÇÜLEMEDİ: node yok"; exit 4; }
 
-kur() {  # kur <kök> — iki özlük (biri isabetsiz, biri isabet bölümü sonda olmayan), el kitabı kopyası, tarif kaydı
-  local k="$1"; mkdir -p "$k/sicil"
+kur() {  # kur <kök> — özlükler, el kitabı kopyası, tarif kaydı, Sultan kararları + sahte doğrulayıcı, sahte mühür dizini, küçük iş ağacı
+  local k="$1"; mkdir -p "$k/sicil" "$k/kararlar" "$k/md"
   printf '# özlük\npersonel_no: "01.008"\npersona: MUHURDAR1\ndurum: aktif\ngecmis: []\n' > "$k/sicil/01.008.yaml"
   printf 'personel_no: "01.009"\npersona: BOZUK\nisabet:\n  - {"ts": "x", "gorev": "g", "kacirma": "h"}\ngecmis: []\n' > "$k/sicil/01.009.yaml"
   sed 's/^Bugün kural yok.*/- **D-001** (2026-10-22 · tür: e2e-check · kaçırmalar: fikstür) Sınav kuralı — PR #0/' "$HERE/../SKILL.md" > "$k/EL.md"
   printf '{"uzmanliklar":[{"id":"muhurdarlik","sicil_esigi":{"kacirma":3,"pencere":4}}]}' > "$k/tarif.json"
+  kr() { printf '%s' "$2" > "$k/kararlar/$1.json"; }
+  kr A '{"gorev":"gorev_A","satirlar":{"G2":{"sultan":"saglanmadi","neden":"renk koyu değil"}}}'
+  kr B '{"gorev":"gorev_B","satirlar":{"G1":{"sultan":"saglanmadi","neden":"n"},"G2":{"sultan":"katiliyorum"}}}'
+  kr C '{"gorev":"gorev_C","satirlar":{"G3":{"sultan":"saglanmadi","neden":"yine koyu değil"}}}'
+  kr F '{"gorev":"gorev_F","satirlar":{"G1":{"sultan":"saglanmadi"}}}'
+  kr L '{"gorev":"gorev_L","satirlar":{"G1":{"sultan":"saglanmadi","neden":"tek sefer"}}}'
+  kr X1 '{"gorev":"gorev_X1","satirlar":{"G1":{"sultan":"saglanmadi","neden":"n"}}}'
+  kr X2 '{"gorev":"gorev_X2","satirlar":{"G1":{"sultan":"saglanmadi","neden":"n"}}}'
+  kr Z '{"gorev":"gorev_Z","satirlar":{"G1":{"sultan":"katiliyorum"}}}'
+  kr T '{"gorev":"gorev_T","satirlar":{"G1":{"sultan":"katiliyorum"},"G2":{"sultan":"saglanmadi","neden":"ton sert"}}}'
+  kr TK '{"gorev":"gorev_TK","satirlar":{"G1":{"sultan":"katiliyorum"}}}'
+  printf '#!/usr/bin/env bash\nf="%s/kararlar/${1#teslim:karar-}.json"; [ -f "$f" ] || exit 1; cat "$f"\n' "$k" > "$k/dogrula.sh"; chmod +x "$k/dogrula.sh"
+  printf '{"g":[{"id":"G1","tur":"cmd"},{"id":"G2","tur":"llm-yargi"},{"id":"G3","tur":"sultan-denemesi"}]}' > "$k/md/gereklilik.json"
+  printf '{"kart":"is-T","verdikt":"KALDI","g_dusen":["G1"],"muhurdar":"MUHURDAR1","tescil_skill_version":"0.4.0"}' > "$k/md/muhur-ozet.json"
+  mkdir -p "$k/md2"; cp "$k/md/gereklilik.json" "$k/md2/"; sed 's/MUHURDAR1/BASKASI/' "$k/md/muhur-ozet.json" > "$k/md2/muhur-ozet.json"
+  local W="$k/is"; mkdir -p "$W/g"; git -C "$W" init -q -b main; echo merhaba > "$W/c.txt"; git -C "$W" add -A; git -C "$W" -c user.email=a@b -c user.name=a commit -qm x
+  printf 'KART: is-r\nGOAL: selam\nTIP: docs\nVITES: TAM\nG1: selam\n  tur: cmd\n  komut: grep -q merhaba c.txt\n  davranis: evet\n' > "$W/g/GEREKLILIK.md"
 }
-_sen() {  # _sen <sicil.sh> → geçen anahtarlar
-  local S="$1" k="$T/k$RANDOM" o=""; kur "$k"
-  local E=(env SICIL_DIZIN="$k/sicil" EL_KITABI="$k/EL.md" TARIF_KAYDI="$k/yok.json")
-  local Y="$k/sicil/01.008.yaml"
-  # a · isabet yazılır (kaçırma = mühür ✓ + Sultan sağlanmadı), YAML geçerli, öbür alanlar korunur
-  "${E[@]}" bash "$S" isabet muhurdar1 --gorev gorev_A --gereklilik G2 --muhur ✓ --sultan saglanmadi --kaynak "$D1" --neden "renk koyu değil" --g-tur e2e-check --el-kitabi-surum 0.4.0 >/dev/null 2>&1
-  [ $? -eq 0 ] && python3 -c "import yaml,sys;d=yaml.safe_load(open(sys.argv[1]));x=d['isabet'][-1];assert x['kacirma']=='e' and x['sultan']=='saglanmadi' and x['neden']=='renk koyu değil' and x['kaynak'].startswith('2026-10-22 Sultan') and d['persona']=='MUHURDAR1' and d['gecmis']==[]" "$Y" 2>/dev/null && o="$o a"
+_sen() {  # _sen <scripts-dir> → geçen anahtarlar
+  local SD="$1" S="$1/sicil.sh" k="$T/k$RANDOM" o=""; kur "$k"
+  local E=(env SICIL_DIZIN="$k/sicil" EL_KITABI="$k/EL.md" TARIF_KAYDI="$k/yok.json" SICIL_KAYNAK_DOGRULA="$k/dogrula.sh")
+  local Y="$k/sicil/01.008.yaml" n0
+  # a · Sultan'ın DOĞRULANMIŞ kaydıyla isabet yazılır (kaçırma = mühür ✓ + sağlanmadı), öbür alanlar korunur
+  "${E[@]}" bash "$S" isabet muhurdar1 --gorev gorev_A --gereklilik G2 --muhur ✓ --sultan saglanmadi --kaynak teslim:karar-A --g-tur e2e-check --el-kitabi-surum 0.4.0 >/dev/null 2>&1
+  [ $? -eq 0 ] && python3 -c "import yaml,sys;d=yaml.safe_load(open(sys.argv[1]));x=d['isabet'][-1];assert x['kacirma']=='e' and x['neden']=='renk koyu değil' and x['kaynak']=='teslim:karar-A' and d['persona']=='MUHURDAR1' and d['gecmis']==[]" "$Y" 2>/dev/null && o="$o a"
+  n0="$(cat "$k"/sicil/*.yaml | md5sum)"
   # b · özlük dosyası yoksa yazılmaz, rc 3
-  local n0; n0="$(cat "$k"/sicil/*.yaml | md5sum)"
-  "${E[@]}" bash "$S" isabet MUHAKKIK --gorev g --gereklilik G1 --muhur ✓ --sultan katiliyorum --kaynak teslim:abc123 >/dev/null 2>"$k/e"; [ $? -eq 3 ] && grep -q "özlük dosyası YOK" "$k/e" && [ "$(cat "$k"/sicil/*.yaml | md5sum)" = "$n0" ] && o="$o b"
-  # c · A06: kaynaksız ya da biçimsiz kaynak → rc 2, yazılmaz
-  "${E[@]}" bash "$S" isabet MUHURDAR1 --gorev g --gereklilik G1 --muhur ✓ --sultan saglanmadi --neden n >/dev/null 2>&1; local r1=$?
-  "${E[@]}" bash "$S" isabet MUHURDAR1 --gorev g --gereklilik G1 --muhur ✓ --sultan saglanmadi --neden n --kaynak "Sultan öyle dedi" >/dev/null 2>"$k/e"; local r2=$?
-  [ $r1 -eq 2 ] && [ $r2 -eq 2 ] && grep -q "A06" "$k/e" && [ "$(cat "$k"/sicil/*.yaml | md5sum)" = "$n0" ] && o="$o c"
+  "${E[@]}" bash "$S" isabet MUHAKKIK --gorev gorev_Z --gereklilik G1 --muhur ✓ --sultan katiliyorum --kaynak teslim:karar-Z >/dev/null 2>"$k/e"; [ $? -eq 3 ] && grep -q "özlük dosyası YOK" "$k/e" && [ "$(cat "$k"/sicil/*.yaml | md5sum)" = "$n0" ] && o="$o b"
+  # c · A06: doğrulayıcı yoksa rc 3 · uydurma kaynak rc 2 · kayıt bu satırı doğrulamıyorsa rc 2 — hiçbiri yazılmaz
+  env SICIL_DIZIN="$k/sicil" bash "$S" isabet MUHURDAR1 --gorev gorev_A --gereklilik G2 --muhur ✓ --sultan saglanmadi --kaynak teslim:karar-A >/dev/null 2>"$k/e"; local r1=$?; grep -q "DOĞRULANAMADI" "$k/e"; local g1=$?
+  "${E[@]}" bash "$S" isabet MUHURDAR1 --gorev gorev_A --gereklilik G2 --muhur ✓ --sultan saglanmadi --kaynak teslim:karar-UYDURMA >/dev/null 2>&1; local r2=$?
+  "${E[@]}" bash "$S" isabet MUHURDAR1 --gorev gorev_A --gereklilik G2 --muhur ✓ --sultan katiliyorum --kaynak teslim:karar-A >/dev/null 2>&1; local r3=$?
+  "${E[@]}" bash "$S" isabet MUHURDAR1 --gorev gorev_B --gereklilik G2 --muhur ✓ --sultan saglanmadi --neden x --kaynak teslim:karar-A >/dev/null 2>&1; local r4=$?
+  [ $r1 -eq 3 ] && [ $g1 -eq 0 ] && [ $r2 -eq 2 ] && [ $r3 -eq 2 ] && [ $r4 -eq 2 ] && [ "$(cat "$k"/sicil/*.yaml | md5sum)" = "$n0" ] && o="$o c"
   # d · kaçırma DEĞİL: mühür ✗ + sağlanmadı (mühürdar yakaladı) · mühür ✓ + katılıyorum
-  "${E[@]}" bash "$S" isabet MUHURDAR1 --gorev gorev_B --gereklilik G1 --muhur ✗ --sultan saglanmadi --neden n --kaynak teslim:abc123 >/dev/null 2>&1
-  "${E[@]}" bash "$S" isabet MUHURDAR1 --gorev gorev_B --gereklilik G2 --muhur ✓ --sultan katiliyorum --kaynak teslim:abc123 >/dev/null 2>&1
+  "${E[@]}" bash "$S" isabet MUHURDAR1 --gorev gorev_B --gereklilik G1 --muhur ✗ --sultan saglanmadi --kaynak teslim:karar-B >/dev/null 2>&1
+  "${E[@]}" bash "$S" isabet MUHURDAR1 --gorev gorev_B --gereklilik G2 --muhur ✓ --sultan katiliyorum --kaynak teslim:karar-B >/dev/null 2>&1
   python3 -c "import yaml,sys;x=yaml.safe_load(open(sys.argv[1]))['isabet'];assert [i['kacirma'] for i in x]==['e','h','h']" "$Y" 2>/dev/null && o="$o d"
   # e · isabet bölümü dosyanın sonunda değilse eklenmez
-  "${E[@]}" bash "$S" isabet BOZUK --gorev g --gereklilik G1 --muhur ✓ --sultan katiliyorum --kaynak teslim:abc123 >/dev/null 2>"$k/e"; [ $? -eq 2 ] && grep -q "sonunda değil" "$k/e" && o="$o e"
-  # f · 'sağlanmadı' Sultan'ın cümlesi olmadan yazılmaz
-  "${E[@]}" bash "$S" isabet MUHURDAR1 --gorev g --gereklilik G1 --muhur ✓ --sultan saglanmadi --kaynak teslim:abc123 >/dev/null 2>&1; [ $? -eq 2 ] && o="$o f"
-  # g · durum: 1 kaçırmalı mühür → ders-cikarma (askı yok)
+  printf '{"gorev":"g","satirlar":{"G1":{"sultan":"katiliyorum"}}}' > "$k/kararlar/BZ.json"
+  "${E[@]}" bash "$S" isabet BOZUK --gorev g --gereklilik G1 --muhur ✓ --sultan katiliyorum --kaynak teslim:karar-BZ >/dev/null 2>"$k/e"; [ $? -eq 2 ] && grep -q "sonunda değil" "$k/e" && o="$o e"
+  # f · 'sağlanmadı' Sultan'ın tek cümlesi (ne argümanda ne kayıtta) olmadan yazılmaz
+  "${E[@]}" bash "$S" isabet MUHURDAR1 --gorev gorev_F --gereklilik G1 --muhur ✓ --sultan saglanmadi --kaynak teslim:karar-F >/dev/null 2>&1; [ $? -eq 2 ] && o="$o f"
+  # g · 1 kaçırmalı mühür → ders-cikarma (askı yok)
   [ "$("${E[@]}" bash "$S" durum MUHURDAR1 --json | python3 -c 'import json,sys;print(json.load(sys.stdin)["durum"])')" = ders-cikarma ] && o="$o g"
   # h · 2. kaçırmalı mühür (ayrı görev) → askida + gereken üç iş
-  "${E[@]}" bash "$S" isabet MUHURDAR1 --gorev gorev_C --gereklilik G3 --muhur ✓ --sultan saglanmadi --neden "yine koyu değil" --g-tur e2e-check --kaynak teslim:def456 >/dev/null 2>&1
+  "${E[@]}" bash "$S" isabet MUHURDAR1 --gorev gorev_C --gereklilik G3 --muhur ✓ --sultan saglanmadi --g-tur e2e-check --kaynak teslim:karar-C >/dev/null 2>&1
   "${E[@]}" bash "$S" durum MUHURDAR1 > "$k/d" 2>&1; grep -q "^durum: askida" "$k/d" && grep -q "yeniden yeterlilik sınavı" "$k/d" && grep -q "el kitabı güncelleme" "$k/d" && o="$o h"
-  # i · pencere: 9 temiz mühür daha → ilk kaçırma 10'un dışına düşer → askıdan çıkar (ders-cikarma)
-  for i in 1 2 3 4 5 6 7 8 9; do "${E[@]}" bash "$S" isabet MUHURDAR1 --gorev "gorev_T$i" --gereklilik G1 --muhur ✓ --sultan katiliyorum --kaynak teslim:abc123 >/dev/null 2>&1; done
-  [ "$("${E[@]}" bash "$S" durum MUHURDAR1 --json | python3 -c 'import json,sys;d=json.load(sys.stdin);print(d["durum"], d["pencere"])')" = "ders-cikarma 10" ] && o="$o i"
-  # j · eşik tarif kaydından okunur (3/4): aynı sicil, farklı eşik → farklı hüküm
+  # p · mühür kaydı: özlük yoksa rc 3; varsa 'tur: muhur' satırı, isabet sayılmaz
+  "${E[@]}" bash "$S" muhur MUHAKKIK --gorev g --verdikt GECTI >/dev/null 2>&1; local rp=$?
+  "${E[@]}" bash "$S" muhur MUHURDAR1 --gorev gorev_T1 --verdikt GECTI >/dev/null 2>&1
+  [ $rp -eq 3 ] && python3 -c "import yaml,sys;x=yaml.safe_load(open(sys.argv[1]))['isabet'][-1];assert x['tur']=='muhur' and x['gorev']=='gorev_T1'" "$Y" 2>/dev/null && o="$o p"
+  # i · pencere MÜHÜR kayıtlarından: Sultan satırı gelmeyen 9 temiz mühür ilk kaçırmayı 10'un dışına iter → askı kalkar
+  for i in 2 3 4 5 6 7 8 9; do "${E[@]}" bash "$S" muhur MUHURDAR1 --gorev "gorev_T$i" --verdikt GECTI >/dev/null 2>&1; done
+  [ "$("${E[@]}" bash "$S" durum MUHURDAR1 --json | python3 -c 'import json,sys;d=json.load(sys.stdin);print(d["durum"], d["pencere"], d["muhur_sayisi"])')" = "ders-cikarma 10 12" ] && o="$o i"
+  # j · eşik tarif kaydından okunur (3/4), kayıt yoksa S10 varsayılanı (2/10)
   local Y2="$k/y2"; mkdir -p "$Y2"; cp "$k/sicil/01.008.yaml" "$Y2/"
-  for i in 1 2; do env SICIL_DIZIN="$Y2" bash "$S" isabet MUHURDAR1 --gorev "gorev_X$i" --gereklilik G1 --muhur ✓ --sultan saglanmadi --neden n --kaynak teslim:abc123 >/dev/null 2>&1; done
+  for x in X1 X2; do env SICIL_DIZIN="$Y2" SICIL_KAYNAK_DOGRULA="$k/dogrula.sh" bash "$S" isabet MUHURDAR1 --gorev "gorev_$x" --gereklilik G1 --muhur ✓ --sultan saglanmadi --kaynak "teslim:karar-$x" >/dev/null 2>&1; done
   [ "$(env SICIL_DIZIN="$Y2" TARIF_KAYDI="$k/tarif.json" bash "$S" durum MUHURDAR1 --json | python3 -c 'import json,sys;d=json.load(sys.stdin);print(d["durum"],d["esik"]["pencere"],d["esik_kaynagi"])')" = "ders-cikarma 4 tarif kaydı" ] \
     && [ "$(env SICIL_DIZIN="$Y2" TARIF_KAYDI="$k/yok.json" bash "$S" durum MUHURDAR1 --json | python3 -c 'import json,sys;print(json.load(sys.stdin)["durum"])')" = askida ] && o="$o j"
-  "${E[@]}" bash "$S" isabet MUHURDAR1 --gorev gorev_L --gereklilik G1 --muhur ✓ --sultan saglanmadi --neden "tek sefer" --g-tur cmd --kaynak teslim:abc123 >/dev/null 2>&1
-  # k · ders: aynı tür ≥2 AYRI görevde → tekrar eden, Sultan'ın cümleleri taslakta, sonraki ders D-002
+  # k · ders: aynı tür ≥2 AYRI görevde → tekrar eden (Sultan'ın cümleleri, D-002); tek görevli tür tekrar sayılmaz
+  "${E[@]}" bash "$S" isabet MUHURDAR1 --gorev gorev_L --gereklilik G1 --muhur ✓ --sultan saglanmadi --g-tur cmd --kaynak teslim:karar-L >/dev/null 2>&1
   "${E[@]}" bash "$S" ders MUHURDAR1 > "$k/ders" 2>&1; grep -q "e2e-check: 2 kaçırma · 2 görev — TEKRAR EDEN" "$k/ders" && grep -q 'Sultan: "renk koyu değil"' "$k/ders" \
     && grep -q 'Sultan: "yine koyu değil"' "$k/ders" && grep -q "Ders taslağı (D-002)" "$k/ders" && grep -q "cmd: 1 kaçırma · 1 görev$" "$k/ders" && [ "$(grep -c 'Ders taslağı' "$k/ders")" = 1 ] && o="$o k"
-  # l · ders-bagla: günlükte olmayan derse bağlanmaz; olan derse bağlanır, özgün satır değişmez, ders listesinden düşer
+  # l · ders-bagla: günlükte olmayan derse bağlanmaz; olana ters kayıtla bağlanır, özgün satır değişmez, açık listeden düşer
   local ts; ts="$(python3 -c "import yaml,sys;print([x for x in yaml.safe_load(open(sys.argv[1]))['isabet'] if x.get('gorev')=='gorev_A'][0]['ts'])" "$Y")"
   "${E[@]}" bash "$S" ders-bagla MUHURDAR1 --isabet-ts "$ts" --ders D-077 >/dev/null 2>&1; local rb=$?
   "${E[@]}" bash "$S" ders-bagla MUHURDAR1 --isabet-ts "$ts" --ders D-001 >/dev/null 2>&1; local rg=$?
   [ $rb -eq 2 ] && [ $rg -eq 0 ] && python3 -c "import yaml,sys;x=yaml.safe_load(open(sys.argv[1]))['isabet'];a=[i for i in x if i.get('gorev')=='gorev_A'][0];b=x[-1];assert a['ders'] is None and b['tur']=='ders-bagi' and b['ders']=='D-001'" "$Y" 2>/dev/null \
     && "${E[@]}" bash "$S" ders MUHURDAR1 | grep -q "e2e-check: 1 kaçırma · 1 görev$" && o="$o l"
-  # m · kaçırma olmayan satır derse bağlanmaz; aynı kaçırma ikinci kez bağlanmaz
+  # m · kaçırma olmayan satır derse bağlanmaz; aynı kaçırma iki kez bağlanmaz
   local tsh; tsh="$(python3 -c "import yaml,sys;print([x for x in yaml.safe_load(open(sys.argv[1]))['isabet'] if x.get('gorev')=='gorev_B'][0]['ts'])" "$Y")"
-  "${E[@]}" bash "$S" ders-bagla MUHURDAR1 --isabet-ts "$tsh" --ders D-001 >/dev/null 2>&1; local r3=$?
-  "${E[@]}" bash "$S" ders-bagla MUHURDAR1 --isabet-ts "$ts" --ders D-001 >/dev/null 2>&1; local r4=$?
-  [ $r3 -eq 2 ] && [ $r4 -eq 2 ] && o="$o m"
-  # n · başsız şapka hükmü işaretlenir ama yine bu mühürdarın siciline yazılır (S14)
-  "${E[@]}" bash "$S" isabet MUHURDAR1 --gorev gorev_Z --gereklilik G1 --muhur ✓ --sultan katiliyorum --kaynak teslim:abc123 --bassiz >/dev/null 2>&1
+  "${E[@]}" bash "$S" ders-bagla MUHURDAR1 --isabet-ts "$tsh" --ders D-001 >/dev/null 2>&1; local r5=$?
+  "${E[@]}" bash "$S" ders-bagla MUHURDAR1 --isabet-ts "$ts" --ders D-001 >/dev/null 2>&1; local r6=$?
+  [ $r5 -eq 2 ] && [ $r6 -eq 2 ] && o="$o m"
+  # n · başsız şapka hükmü işaretlenir, yine bu mühürdarın siciline yazılır (S14)
+  "${E[@]}" bash "$S" isabet MUHURDAR1 --gorev gorev_Z --gereklilik G1 --muhur ✓ --sultan katiliyorum --kaynak teslim:karar-Z --bassiz >/dev/null 2>&1
   python3 -c "import yaml,sys;assert yaml.safe_load(open(sys.argv[1]))['isabet'][-1]['bassiz']=='e'" "$Y" 2>/dev/null && o="$o n"
+  # q · teslim-isle: Sultan'ın tek kararı → sınanan her satır (👤 atlanır), mühür ✗ düşen G'de; iki kez işlenmez; kısmi karar ve başkasının mühürü reddedilir
+  local c0; c0="$(python3 -c "import yaml,sys;print(len(yaml.safe_load(open(sys.argv[1]))['isabet']))" "$Y")"
+  "${E[@]}" bash "$S" teslim-isle MUHURDAR1 --kaynak teslim:karar-T --muhur-dir "$k/md" >/dev/null 2>&1; local q1=$?
+  "${E[@]}" bash "$S" teslim-isle MUHURDAR1 --kaynak teslim:karar-T --muhur-dir "$k/md" >/dev/null 2>&1; local q2=$?
+  "${E[@]}" bash "$S" teslim-isle MUHURDAR1 --kaynak teslim:karar-TK --muhur-dir "$k/md" >/dev/null 2>&1; local q3=$?
+  "${E[@]}" bash "$S" teslim-isle MUHURDAR1 --kaynak teslim:karar-T --muhur-dir "$k/md2" >/dev/null 2>&1; local q4=$?
+  [ $q1 -eq 0 ] && [ $q2 -eq 2 ] && [ $q3 -eq 2 ] && [ $q4 -eq 2 ] && python3 - "$Y" "$c0" <<'PY' 2>/dev/null && o="$o q"
+import yaml, sys
+x = yaml.safe_load(open(sys.argv[1]))["isabet"][int(sys.argv[2]):]
+assert [(i["gereklilik"], i["muhur"], i["sultan"], i["kacirma"]) for i in x] == [("G1", "✗", "katiliyorum", "h"), ("G2", "✓", "saglanmadi", "e")], x
+assert x[1]["neden"] == "ton sert" and x[1]["g_tur"] == "llm-yargi" and x[1]["el_kitabi_surum"] == "0.4.0"
+PY
+  # r · muhurdar.sh her mühürde mühürdarın siciline 'tur: muhur' satırı yazar (pencere bundan sayılır)
+  local Y3="$k/y3"; mkdir -p "$Y3"; cp "$k/sicil/01.008.yaml" "$Y3/"
+  env PATH="$ND:$PATH" SICIL_DIZIN="$Y3" AGENT_NAME=MUHURDAR1 bash "$SD/muhurdar.sh" is-r --gereklilik "$k/is/g/GEREKLILIK.md" --worktree "$k/is" --out "$k/out-r" --yazan HENDESE >/dev/null 2>&1
+  python3 -c "import yaml,sys;x=yaml.safe_load(open(sys.argv[1]))['isabet'][-1];assert x['tur']=='muhur' and x['gorev']=='is-r' and x['verdikt']=='GECTI'" "$Y3/01.008.yaml" 2>/dev/null && o="$o r"
   echo "$o"
 }
 _k() { case " $2 " in *" $1 "*) return 0;; esac; return 1; }
 
 echo "════ G11 · S10 · Mühürdarlık sicil · ders çıkarma · askı (sicil.sh) ════"
-S0="$(_sen "$HERE/sicil.sh")"
-_k a "$S0"; g $? "a isabet özlük dosyasına yazılır (kaçırma = mühür ✓ + Sultan sağlanmadı), Sultan'ın cümlesi + kaynağı satırda, öbür alanlar korunur"
+S0="$(_sen "$HERE")"
+_k a "$S0"; g $? "a isabet Sultan'ın DOĞRULANMIŞ kaydıyla yazılır (kaçırma = mühür ✓ + sağlanmadı; cümle kayıttan), öbür alanlar korunur"
 _k b "$S0"; g $? "b özlük dosyası yoksa (MUHAKKİK vakası) yazılmaz, rc 3, hiçbir dosya değişmez"
-_k c "$S0"; g $? "c A06: kaynaksız ya da biçimsiz kaynakla Sultan'ın hükmü yazılmaz (rc 2)"
+_k c "$S0"; g $? "c A06: doğrulayıcı yoksa rc 3 · uydurma kaynak rc 2 · kayıt satırı doğrulamıyorsa (hüküm ya da görev farklı) rc 2 — yazılmaz"
 _k d "$S0"; g $? "d kaçırma değil: mühür ✗ + sağlanmadı (mühürdar yakaladı) · mühür ✓ + katılıyorum"
 _k e "$S0"; g $? "e isabet bölümü dosyanın sonunda değilse eklenmez (YAML bozulmasın)"
 _k f "$S0"; g $? "f 'sağlanmadı' Sultan'ın tek cümlesi olmadan yazılmaz"
 _k g "$S0"; g $? "g 1 kaçırmalı mühür → ders-cikarma, askı yok (S10)"
 _k h "$S0"; g $? "h son 10'da 2 kaçırmalı mühür → askida + el kitabı güncelleme + yeniden sınav (S10)"
-_k i "$S0"; g $? "i pencere 10 mühür: ilk kaçırma dışarı düşünce askı kalkar (ders-cikarma)"
+_k p "$S0"; g $? "p mühür kaydı: özlük yoksa rc 3; varsa 'tur: muhur' satırı (isabet sayılmaz)"
+_k i "$S0"; g $? "i pencere MÜHÜR kayıtlarından: Sultan satırı gelmeyen temiz mühürler de pencereyi ilerletir → askı kalkar"
 _k j "$S0"; g $? "j eşik tarif kaydından okunur (3/4 → askı yok), kayıt yoksa S10 varsayılanı (2/10 → askı)"
-_k k "$S0"; g $? "k ders çıkarma: aynı tür ≥2 ayrı görevde = tekrar eden → D-002 taslağı Sultan'ın cümleleriyle"
-_k l "$S0"; g $? "l ders-bagla: günlükte olmayan derse bağlanmaz; olana ters kayıtla bağlanır, özgün satır değişmez, açık listeden düşer"
+_k k "$S0"; g $? "k ders çıkarma: aynı tür ≥2 ayrı görevde = tekrar eden → D-002 taslağı Sultan'ın cümleleriyle; tek görevli tür sayılmaz"
+_k l "$S0"; g $? "l ders-bagla: günlükte olmayan derse bağlanmaz; olana ters kayıtla bağlanır, özgün satır değişmez"
 _k m "$S0"; g $? "m kaçırma olmayan satır derse bağlanmaz; aynı kaçırma iki kez bağlanmaz"
 _k n "$S0"; g $? "n başsız şapka hükmü işaretli (bassiz e), yine bu mühürdarın siciline yazılır (S14)"
+_k q "$S0"; g $? "q teslim-isle: Sultan'ın tek kararı → sınanan her satır (👤 atlanır, düşen G'de mühür ✗); tekrar · kısmi karar · başkasının mühürü reddedilir"
+_k r "$S0"; g $? "r muhurdar.sh her mühürde mühürdarın siciline mühür kaydı yazar"
 
 echo "── MUTASYON (tescil kopyasında, kontrol şartlı) ──"
 _kopya() { local d="$T/m-$1"; mkdir -p "$d"; cp -r "$HERE/.." "$d/tescil"; echo "$d/tescil/scripts"; }
-k0="$(_kopya kontrol)"; [ "$(_sen "$k0/sicil.sh")" = "$S0" ] && [ -n "$S0" ]; g $? "kontrol kopyası gerçek betikle aynı kapıları geçiyor"
-_m() {  # _m <anahtar> <eski> <yeni> <açıklama>   (hedef: lib/sicil.py)
+k0="$(_kopya kontrol)"; [ "$(_sen "$k0")" = "$S0" ] && [ -n "$S0" ]; g $? "kontrol kopyası gerçek betikle aynı kapıları geçiyor"
+_m() {  # _m <anahtar> <dosya> <eski> <yeni> <açıklama>
   local d; d="$(_kopya "$1-$RANDOM")"
-  python3 - "$d/lib/sicil.py" "$2" "$3" <<'PY' || { g 1 "mutant ($4): desen tutmadı"; return; }
+  python3 - "$d/$2" "$3" "$4" <<'PY' || { g 1 "mutant ($5): desen tutmadı"; return; }
 import sys; p,a,b=sys.argv[1:]; s=open(p,encoding='utf-8').read(); o=s; s=s.replace(a,b,1); assert s!=o; open(p,'w',encoding='utf-8').write(s)
 PY
-  ! _k "$1" "$(_sen "$d/sicil.sh")"; g $? "mutant ($4) → '$1' kapısı düşüyor"
+  ! _k "$1" "$(_sen "$d")"; g $? "mutant ($5) → '$1' kapısı düşüyor"
 }
-_m c '    if not (D1.match(kaynak) or TESLIM.match(kaynak)):' '    if False:' "Sultan kaydı aranmıyor (A06)"
-_m b '    if not bulunan:
+_m c lib/sicil.py '    if not komut:
+        hata(' '    if not komut:
+        return {"gorev": "gorev_A", "satirlar": {"G2": {"sultan": "saglanmadi", "neden": "uyduruldu"}}}
+        hata(' "doğrulayıcı yoksa hüküm uyduruluyor (A06)"
+_m c lib/sicil.py '    if karar.get("gorev") != a["gorev"] or ks.get("sultan") != a["sultan"]:' '    if False:' "kayıt satırı doğrulamasa da yazılıyor"
+_m b lib/sicil.py '    if not bulunan:
         hata(' '    if not bulunan:
         return os.path.join(SICIL_DIZIN, ad + ".yaml")
         hata(' "özlük yoksa yeni dosya açıyor"
-_m d '"kacirma": "e" if (a["muhur"] == "✓" and a["sultan"] == "saglanmadi") else "h",' '"kacirma": "e" if a["sultan"] == "saglanmadi" else "h",' "mühürdarın yakaladığı da kaçırma sayılıyor"
-_m i '    pencere = gorevler[-e["pencere"]:]' '    pencere = gorevler' "pencere yok sayılıyor"
-_m j '    try:
+_m d lib/sicil.py '"kacirma": "e" if (a["muhur"] == "✓" and a["sultan"] == "saglanmadi") else "h",' '"kacirma": "e" if a["sultan"] == "saglanmadi" else "h",' "mühürdarın yakaladığı da kaçırma sayılıyor"
+_m i lib/sicil.py 'x.get("tur") in (None, "muhur") and' 'x.get("tur") is None and' "pencere mühür kayıtlarını saymıyor"
+_m j lib/sicil.py '    try:
         with open(TARIF_KAYDI' '    return VARSAYILAN_ESIK, "varsayılan (Sultan S10)"
     try:
         with open(TARIF_KAYDI' "eşik tarif kaydından okunmuyor"
-_m k 'len({x.get("gorev") for x in xs}) >= 2}' 'len(xs) >= 1}' "tek kaçırma da tekrar eden sayılıyor"
-_m l '    if a["ders"] not in gunluk_dersleri():' '    if False:' "günlükte olmayan derse bağlanıyor"
-_m e '    if "isabet" in ust and ust[-1] != "isabet":' '    if False:' "isabet sonda değilken ekleniyor"
+_m k lib/sicil.py 'len({x.get("gorev") for x in xs}) >= 2}' 'len(xs) >= 1}' "tek kaçırma da tekrar eden sayılıyor"
+_m l lib/sicil.py '    if a["ders"] not in gunluk_dersleri():' '    if False:' "günlükte olmayan derse bağlanıyor"
+_m e lib/sicil.py '    if "isabet" in ust and ust[-1] != "isabet":' '    if False:' "isabet sonda değilken ekleniyor"
+_m q lib/sicil.py 'sinanan = [g for g in ger["g"] if g["tur"] != "sultan-denemesi"]' 'sinanan = list(ger["g"])' "teslim-isle 👤 satırına da isabet yazıyor"
+_m q lib/sicil.py '    if any(x.get("kaynak") == a["kaynak"].strip() for x in isb):' '    if False:' "aynı teslim iki kez işleniyor"
+_m r muhurdar.sh 'if [ -n "$_VER" ] && [ "$_VER" != RED ]; then' 'if false; then' "muhurdar.sh siciline mühür kaydı yazmıyor"
 
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]

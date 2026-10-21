@@ -118,6 +118,14 @@ SHA="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("work
 python3 "$LIB/muhur.py" uret --out "$OUT" --kart "$IS" --deneme "$DENEME" --head-sha "$SHA" ${K2[@]+"${K2[@]}"} \
   ${TATBIKAT[@]+"${TATBIKAT[@]}"} --muhurdar "$MUHURDAR" --yazan "$YAZAN" ${YARGIC:+--yargic "$YARGIC"} >/dev/null; rc=$?
 bash "$HERE/muhur-lint.sh" "$OUT" >/dev/null 2>&1 || echo "muhurdar: muhur-lint UYARI (report-only, verdikt etkilenmez)" >&2
+# sicil (G11 · S10): her mühür mühürdarın siciline düşer — pencere bunlardan sayılır; Sultan'ın satırları sonra teslim-isle ile gelir.
+#   Özlük dosyası yoksa mühür DÜŞMEZ, söylenir (özlük KÂHYA'nın işi); sicil hatası verdikti değiştirmez.
+_VER="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("verdikt",""))' "$OUT/muhur-ozet.json" 2>/dev/null)"
+if [ -n "$_VER" ] && [ "$_VER" != RED ]; then
+  python3 "$LIB/sicil.py" muhur "$MUHURDAR" --gorev "$IS" --verdikt "$_VER" \
+    --el-kitabi-surum "$(awk -F': *' '/^version:/{print $2; exit}' "$HERE/../SKILL.md")" >/dev/null 2>"$OUT/.sicil.err" \
+    || echo "muhurdar: sicile mühür kaydı DÜŞMEDİ — $(head -1 "$OUT/.sicil.err")" >&2
+fi
 V="$(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(d["verdikt"], "· 👤 Sultanda:", " ".join(d.get("sultan_denemesi") or []) or "yok")' "$OUT/muhur-ozet.json" 2>/dev/null)"
 echo "muhurdar: $IS · mühürdar $MUHURDAR · yazan $YAZAN · verdikt $V${YARGIC:+ · yargıç $YARGIC}"
 exit "$rc"
