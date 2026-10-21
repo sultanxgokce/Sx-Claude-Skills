@@ -1,5 +1,5 @@
 $ bash _agents/fabrika/kanit/muhurdar-akisi/muhur-olcer.sh tescil/scripts
-# rc=0 sure=1.0s zaman=2026-10-22T01:21:28+03:00
+# rc=0 sure=1.0s zaman=2026-10-22T01:27:24+03:00
 --- stdout ---
 ── 1 · kendi işi (yazan=mühürdar): RET (rc 4)
 ── 2 · 👤 Sultan denemesi satırı: kabul, MUHUR'da SULTANDA

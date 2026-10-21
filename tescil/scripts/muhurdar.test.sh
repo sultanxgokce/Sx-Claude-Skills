@@ -67,6 +67,8 @@ _sen() {  # _sen <scripts-dir> → geçen kapı anahtarları
   local s="$1" o="" O="$T/o"
   _kos "$s" "$O" "$T/bin-claude:" AGENT_NAME=muhurdar1 MUHURDAR_MODEL=claude -- --gereklilik "$K/GEREKLILIK.md" --yazan MUHURDAR1
   [ $? -eq 4 ] && [ "$(_alan verdikt "$O")" = RED ] && grep -q "kendi-isi" "$O/MUHUR.md" && [ ! -e "$T/isaret-g1" ] && [ ! -e "$T/claude-n" ] && o="$o a"
+  _kos "$s" "$O" "$T/bin-claude:" AGENT_NAME=MUHURDAR1 MUHURDAR_MODEL=claude -- --gereklilik "$K/G-tarifsiz.md" --yazan muhurdar1
+  [ $? -eq 4 ] && grep -q "gereklilik-eksik" "$O/MUHUR.md" && ! grep -q "kendi-isi" "$O/MUHUR.md" && o="$o p"
   _kos "$s" "$O" "$T/bin-claude:" AGENT_NAME= -- --gereklilik "$K/GEREKLILIK.md" --yazan HENDESE; [ $? -eq 2 ] && [ ! -e "$O/MUHUR.md" ] && o="$o b"
   _kos "$s" "$O" "$T/bin-claude:" AGENT_NAME=MUHURDAR1 -- --gereklilik "$K/GEREKLILIK.md"; [ $? -eq 2 ] && [ ! -e "$T/isaret-g1" ] && o="$o c"
   _kos "$s" "$O" "$T/bin-claude:" AGENT_NAME=MUHURDAR1 MUHURDAR_MODEL=claude -- --gereklilik "$K/GEREKLILIK.md" --yazan HENDESE; local r=$?
@@ -99,6 +101,7 @@ _k() { case " $2 " in *" $1 "*) return 0;; esac; return 1; }
 
 echo "════ G8 · Mühürdarlık · Tescil usulü (muhurdar.sh) ════"
 S0="$(_sen "$HERE")"
+_k p "$S0"; g $? "p usul sırası: biçimsiz belge + kendi işi → önce biçim kapısı (gereklilik-eksik), kendi-isi değil"
 _k a "$S0"; g $? "a kendi işini mühürleyemez: yazan = mühürdar (büyük-küçük harf farkıyla) → İSİMLİ-RED kendi-isi, rc 4, hiçbir G koşulmadı, yargıç çağrılmadı"
 _k b "$S0"; g $? "b mühürdarın kimliği yoksa (AGENT_NAME boş) mühür basılmaz, rc 2"
 _k c "$S0"; g $? "c --yazan verilmezse koşulmaz (kendi işi ölçülemiyor), rc 2"
@@ -126,6 +129,7 @@ PY
   ! _k "$1" "$(_sen "$d")"; g $? "mutant ($5) → '$1' kapısı düşüyor"
 }
 _m a muhurdar.sh 'if [ "$ayni" = 1 ]; then' 'if false; then' "kendi-işi kapısı yok"
+_m p muhurdar.sh 'if [ ! -f "$GEREKLILIK" ] || [ -n "$(python3' 'if false && [ -n "$(python3' "biçim kapısı kendi-işinden sonra"
 _m k tescil-run.sh 'if g["tur"] not in ("llm-yargi", "sultan-denemesi"):' 'if g["tur"] != "llm-yargi":' "Sultan denemesi koşuluyor"
 _m d lib/muhur.py 'mekanik = [g for g in ger["g"] if g["tur"] not in ("llm-yargi", "sultan-denemesi")]' 'mekanik = [g for g in ger["g"] if g["tur"] != "llm-yargi"]' "Sultan denemesi verdikte"
 _m i muhurdar.sh '[ -n "$karar" ] || karar="EMIN-DEGILIM:' '[ -n "$karar" ] || karar="GECTI:' "bozuk cevap GEÇTİ sayılıyor"

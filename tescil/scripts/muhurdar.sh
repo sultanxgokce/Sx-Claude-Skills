@@ -44,6 +44,11 @@ mkdir -p "$OUT"
 TR=(bash "$HERE/tescil-run.sh" "$IS" --gereklilik "$GEREKLILIK" --worktree "$WORKTREE" --out "$OUT" --deneme "$DENEME"
     ${HEAD_SHA:+--head-sha "$HEAD_SHA"} ${TATBIKAT[@]+"${TATBIKAT[@]}"})
 
+# ── adım 1 · biçim kapısı ÖNCE (usul sırası; göz #409 tur 1): biçimsiz belge kendi-işi olsa da 'gereklilik-*' reddini alır ──
+if [ ! -f "$GEREKLILIK" ] || [ -n "$(python3 "$LIB/gereklilik.py" parse "$GEREKLILIK" 2>/dev/null | python3 -c 'import json,sys; d=json.load(sys.stdin); print(d["red"]["ad"] if d["red"] else "")' 2>/dev/null || echo bozuk)" ]; then
+  "${TR[@]}"; exit $?   # tescil-run İSİMLİ-RED MUHUR'unu yazar (gereklilik-eksik | gereklilik-jenerik)
+fi
+
 # ── adım 2 · kendi işini mühürleyemez (kadro şeması §7: iş anında ölçülür) ──────────────────────────────
 ayni="$(python3 -c 'import sys; print(1 if sys.argv[1].strip().casefold()==sys.argv[2].strip().casefold() else 0)' "$YAZAN" "$MUHURDAR")"
 if [ "$ayni" = 1 ]; then

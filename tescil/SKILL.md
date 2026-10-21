@@ -217,7 +217,7 @@ AGENT_NAME=<mühürdar> bash scripts/muhurdar.sh <iş> --gereklilik <GEREKLILIK.
 # RC tescil-run ile aynı: 0 GECTI · 1 KALDI · 2 kullanım · 3 ESKALASYON · 4 İSİMLİ-RED (kendi-isi dahil)
 ```
 
-Sınav: `scripts/muhurdar.test.sh` (15 kapı + kontrol kopyası + 8 mutant; sahte yargıçlar, ağsız). Sicil/ders çıkarma/askı
+Sınav: `scripts/muhurdar.test.sh` (16 kapı + kontrol kopyası + 9 mutant; sahte yargıçlar, ağsız; usul sırası: biçim kapısı kendi-işinden önce — göz #409 tur 1). Sicil/ders çıkarma/askı
 (G11 · S10) ve diploma/başsız şapka (G13 · S14) sonraki dilimlerdir.
 
 ## Tasarım-notu — dış-araç kararı (2026-07, DİVAN K5)
