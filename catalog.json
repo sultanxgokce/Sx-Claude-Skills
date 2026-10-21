@@ -1730,6 +1730,31 @@
         "workflow",
         "global"
       ]
+    },
+    {
+      "id": "baglam-karti",
+      "name": "baglam-karti — ENİS bağlam kartı kayıt defteri",
+      "version": "1.0.0",
+      "type": "agent",
+      "sync_dagitim": true,
+      "description": "ENİS bağlam kartı istek/cevap mektubunu şablona göre doğrular ve Görev Defteri'ne tek adım yazar (karar cümlesi ve kart metni yazılmaz); kayıt yazılamazsa rc≠0, kart dönmez (fail-closed).",
+      "prerequisites": [
+        "bash",
+        "python3",
+        "curl"
+      ],
+      "tags": [
+        "filo",
+        "gorev",
+        "enis",
+        "mahremiyet",
+        "kayit"
+      ],
+      "stacks": [
+        "*"
+      ],
+      "author": "sultanxgokce",
+      "source": "BERİD (gorev 2M0CV · SERDAR gün planı C, 18 Eki 2026 · şablon MUAVİN)"
     }
   ]
 }
