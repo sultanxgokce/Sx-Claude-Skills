@@ -14,6 +14,7 @@ Kanıt kuralları (rubrik):
 - Yazılmış ≠ kurulmuş (bu sınavı kim çağırıyor?) · yeşil ≠ ölçmüş (sınav gerçekten iddia ediyor mu?) · yeşil sınav hedefin
   doğru olduğunu söylemez.
 - Bulgu da kanıt ister: her bulguya satır/kare/ölçüm referansı yaz. Kanıtlayamadığın bulguyu yazma.
+- "MUTASYON KANITI" başlıklı ölçüm (manifestte `mutasyon: true`) kodu BİLEREK bozup sınavı koşturur: içindeki FAIL/✗ satırları beklenendir, bulgu değildir. Yeşil = sınav bozuk kodu yakaladı. Gerçek kodun durumunu `gercek_olcum` etiketli kayıttan oku.
 - Kapsam: iş kartının dışına taşan değişiklik bulgu sayılır ("kapsam kayması").
 
 🔴 KUTU-DIŞI BULGU — ayrı sınıf, çok dikkat et (ölçülmüş vaka: cloudtop #635 dört turunu "canlıda kurulu

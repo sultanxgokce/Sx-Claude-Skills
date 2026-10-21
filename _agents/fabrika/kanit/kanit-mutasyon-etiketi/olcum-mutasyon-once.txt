@@ -1,0 +1,11 @@
+$ bash _agents/fabrika/kanit/kanit-mutasyon-etiketi/mut-olcer.sh /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/once-sx/yazilim-fabrikasi/scripts
+# rc=1 sure=0.6s zaman=2026-10-21T23:13:10+03:00
+--- stdout ---
+── 1 · araç mutasyonu etiketliyor mu: HAYIR — --mutasyon tanınmıyor, yalnız etiket adı kalıyor
+── 2 · mutasyon ölçümünün kaydı: renk kirmizi etiketsiz
+── 3 · göz isteminde ölçüm başlıkları:
+   --- olcum-MUTASYON-KANITI-beklenen-kirmizi-tek.txt ---
+   --- olcum-kilit-tek.txt ---
+   göze giden satır: $ bash -c echo "  ✗ K5 kilit tutuyor"; exit 1
+── SONUÇ: etiket ✗ · renk ✗ (kirmizi etiketsiz) · istem başlığı ✗ (✗ satırı çıplak gidiyor)
+--- stderr ---
