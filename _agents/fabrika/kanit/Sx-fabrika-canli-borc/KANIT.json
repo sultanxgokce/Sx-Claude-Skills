@@ -1,24 +1,24 @@
 {
   "is": "Sx-fabrika-canli-borc",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-22T00:59:20+03:00",
+  "guncelleme": "2026-10-22T01:03:30+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "kapi-test",
       "asama": "sonra",
       "dosya": "olcum-kapi-test-sonra.txt",
-      "sha256": "a1d495187d1a87fec7a003958b523ade73107458900707dce7c055ba96c89490",
+      "sha256": "64f4a4fbf051991c7b006f770c5d0ae8363e161c1958f904eae5c97034b6a355",
       "komut": [
         "bash",
         "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-22T00:58:32+03:00",
-      "sure_sn": 56.3,
+      "zaman": "2026-10-22T01:03:30+03:00",
+      "sure_sn": 61.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "cc41f8ae8f184d26851b29a56e9fed12"
+      "olcum_id": "6eabc2716b18410b9f5e9fe20e8754f3"
     },
     {
       "tur": "olcum",
@@ -53,7 +53,24 @@
       "sure_sn": 33.6,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "5b130b948015411785376de6677c292d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-test",
+      "asama": "once",
+      "dosya": "olcum-kapi-test-once.txt",
+      "sha256": "9d97d478290c5502a4a553eb432f9ab95798ccfd809795484cf0f50347aa5ec8",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/onceki/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-22T01:03:28+03:00",
+      "sure_sn": 58.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "0b7b61849f6f44c092d3941d6afa60b6"
     }
   ],
-  "imza": "e7925d30ab33c3edaf8ea66bde0d8916a8636c508ee541c3e4455d114a9a5d0d"
+  "imza": "d0a16adb3dea43def6fff639b9cbf493229a1b920157bfec81e50de67a8433fa"
 }

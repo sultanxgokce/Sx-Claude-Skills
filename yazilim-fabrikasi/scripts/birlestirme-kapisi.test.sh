@@ -461,12 +461,38 @@ CIKTI="$(bash "$KT" canli-borc is-b4 --yazan M --gerekce "$GR" 2>&1)"; grep -q "
 bash "$KT" sultan-dedi is-b4 --karar canli-borc --oturum "sohbet-0043" --soz "canlı borç onay" --beyan M --gerekce "dağıtım Sultan elinde, kapı kilitleniyor" >/dev/null 2>&1
 bash "$KT" canli-borc is-b4 --yazan M --gerekce "$GR" >/dev/null 2>&1; g $? "T14v sultan-dedi canli-borc işlendikten SONRA sınıflı kartta borç yazılır"
 bash "$G" is-b4 --sessiz >/dev/null 2>&1; g $? "T14w sınıflı kart + Sultan kararlı borç → kapı geçer"
+# göz tur 1: Sultan kararının zamanı bozuk/eksik ya da borçtan SONRA ise karar geçerli SAYILMAZ (fail-closed)
+borckart is-b6 e; bash "$KT" sultan-dedi is-b6 --karar canli-borc --oturum "sohbet-0043" --soz "canlı borç onay" --beyan M --gerekce "dağıtım Sultan elinde, kapı kilitleniyor" >/dev/null 2>&1
+python3 - "$T/_agents/fabrika/kartlar/is-b6.json" <<'PY'
+import json,sys
+p=sys.argv[1]; k=json.load(open(p)); k["sultan_kararlari"][0]["zaman"]="bozuk-zaman"; json.dump(k,open(p,"w"))
+PY
+bash "$KT" canli-borc is-b6 --yazan M --gerekce "$GR" >/dev/null 2>&1; [ $? -ne 0 ] && [ "$(kj is-b6 "k.get('canli_borc')")" = "None" ]; g $? "T14zb sınıflı kartta Sultan kararının zamanı BOZUK → karar sayılmaz, borç yazılmaz (fail-closed)"
+python3 - "$T/_agents/fabrika/kartlar/is-b6.json" <<'PY'
+import json,sys
+p=sys.argv[1]; k=json.load(open(p)); k["sultan_kararlari"][0].pop("zaman"); json.dump(k,open(p,"w"))
+PY
+bash "$KT" canli-borc is-b6 --yazan M --gerekce "$GR" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "T14zc kararın zamanı EKSİK → karar sayılmaz"
+python3 - "$T/_agents/fabrika/kartlar/is-b6.json" <<'PY'
+import json,sys,datetime
+p=sys.argv[1]; k=json.load(open(p)); k["sultan_kararlari"][0]["zaman"]=(datetime.datetime.now().astimezone()+datetime.timedelta(hours=1)).isoformat(timespec="seconds"); json.dump(k,open(p,"w"))
+PY
+bash "$KT" canli-borc is-b6 --yazan M --gerekce "$GR" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "T14zd karar borçtan SONRAYA tarihli → sayılmaz (sıra: önce Sultan, sonra borç)"
 # MUTASYON: borç kapıyı gerçekten belirliyor (süs değil)
 MB1="$PKG/mutant-borc1.sh"; sed 's/gecerli) borc_gecer=1 ;;/gecerli) borc_gecer=0 ;;/' "$G" > "$MB1"; chmod +x "$MB1"
 grep -q 'gecerli) borc_gecer=0' "$MB1"; g $? "T14x mutant üretildi (geçerli borç artık geçirmiyor)"
 bash "$MB1" is-b3 --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T14y mutant: borç geçirmiyor → T14f/T14s bu mutantta düşerdi"
 MB2="$PKG/mutant-borc2.sh"; sed 's/gecerli) borc_gecer=1 ;;/gecerli|gecersiz|yok) borc_gecer=1 ;;/' "$G" > "$MB2"; chmod +x "$MB2"
 bash "$MB2" is-b2 --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T14z mutant 2: geçersiz borç da geçiriyor → T14p bu mutantta düşerdi"
+cp "$PKG/canli_borc.py" "$PKG/canli_borc.py.asil"; sed -i 's/and zaman(sk.get("zaman")) is not None and zaman(sk.get("zaman")) <= bz/and (zaman(sk.get("zaman")) or bz) <= bz/' "$PKG/canli_borc.py"
+borckart is-b7 e; bash "$PKG/kart.sh" sultan-dedi is-b7 --karar canli-borc --oturum "sohbet-0043" --soz "canlı borç onay" --beyan M --gerekce "dağıtım Sultan elinde, kapı kilitleniyor" >/dev/null 2>&1
+python3 - "$T/_agents/fabrika/kartlar/is-b7.json" <<'PY'
+import json,sys
+p=sys.argv[1]; k=json.load(open(p)); k["sultan_kararlari"][0]["zaman"]="bozuk-zaman"; json.dump(k,open(p,"w"))
+PY
+bash "$PKG/kart.sh" canli-borc is-b7 --yazan M --gerekce "$GR" >/dev/null 2>&1; MR2=$?
+cp "$PKG/canli_borc.py.asil" "$PKG/canli_borc.py"
+[ "$MR2" -eq 0 ]; g $? "T14ze mutant 4: eski fail-open (bozuk zaman = borç anı) geri gelince bozuk kararlı borç yazılıyor → T14zb bu mutantta düşerdi"
 cp "$PKG/canli_borc.py" "$PKG/canli_borc.py.asil"; sed -i 's/        if not ok:/        if False:/' "$PKG/canli_borc.py"
 borckart is-b5 e; bash "$PKG/kart.sh" canli-borc is-b5 --yazan M --gerekce "$GR" >/dev/null 2>&1; MR=$?
 cp "$PKG/canli_borc.py.asil" "$PKG/canli_borc.py"

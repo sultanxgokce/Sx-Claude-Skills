@@ -43,8 +43,10 @@ def durum(k, canli=()):
     if len(str(b.get("gerekce") or "")) < 20:
         return ("gecersiz", "borç gerekçesi 20 karakterden kısa")
     if siniflimi(k):
+        # FAIL-CLOSED (göz tur 1): kararın zamanı okunamıyorsa ya da eksikse karar SAYILMAZ ("sıra" ölçülemez). Eski hâl `or bz` ile
+        #   okunamayan zamanı borç anına eşitleyip kabul ediyordu.
         ok = any(
-            sk.get("karar") == "canli-borc" and (zaman(sk.get("zaman")) or bz) <= bz
+            sk.get("karar") == "canli-borc" and zaman(sk.get("zaman")) is not None and zaman(sk.get("zaman")) <= bz
             for sk in (k.get("sultan_kararlari") or [])
         )
         if not ok:

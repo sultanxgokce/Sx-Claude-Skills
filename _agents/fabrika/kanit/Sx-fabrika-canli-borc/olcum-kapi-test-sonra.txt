@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh
-# rc=0 sure=56.3s zaman=2026-10-22T00:58:32+03:00
+# rc=0 sure=61.0s zaman=2026-10-22T01:03:30+03:00
 --- stdout ---
 ════ T1 · hiçbir şey yok → engeller ════
   ✓ kart+kanıt+denetim yokken rc=1
@@ -158,10 +158,14 @@ $ bash yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh
   ✓ T14u sebep ve yol (sultan-dedi --karar canli-borc) söylenir
   ✓ T14v sultan-dedi canli-borc işlendikten SONRA sınıflı kartta borç yazılır
   ✓ T14w sınıflı kart + Sultan kararlı borç → kapı geçer
+  ✓ T14zb sınıflı kartta Sultan kararının zamanı BOZUK → karar sayılmaz, borç yazılmaz (fail-closed)
+  ✓ T14zc kararın zamanı EKSİK → karar sayılmaz
+  ✓ T14zd karar borçtan SONRAYA tarihli → sayılmaz (sıra: önce Sultan, sonra borç)
   ✓ T14x mutant üretildi (geçerli borç artık geçirmiyor)
   ✓ T14y mutant: borç geçirmiyor → T14f/T14s bu mutantta düşerdi
   ✓ T14z mutant 2: geçersiz borç da geçiriyor → T14p bu mutantta düşerdi
+  ✓ T14ze mutant 4: eski fail-open (bozuk zaman = borç anı) geri gelince bozuk kararlı borç yazılıyor → T14zb bu mutantta düşerdi
   ✓ T14za mutant 3: sınıflı Sultan-kararı denetimi kalkınca ajan borç yazabiliyor → T14t bu mutantta düşerdi
 
-── SONUÇ: 137 geçti · 0 kaldı ──
+── SONUÇ: 141 geçti · 0 kaldı ──
 --- stderr ---
