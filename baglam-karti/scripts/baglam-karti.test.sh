@@ -20,10 +20,14 @@ class H(http.server.BaseHTTPRequestHandler):
         adim = json.loads(g)["adimlar"][0]; gor = os.path.join(T, "gorulen")
         eski = open(gor).read().splitlines() if os.path.exists(gor) else []
         open(gor, "a").write(adim + "\n")
-        y = json.dumps({"degisti": adim not in eski, "kayit": {"adimlar": eski + [adim]}} if kod == 200 else {"hata": "yasak"}).encode()
+        # GERÇEK defterin yanıt biçimi (canlı sınav 21 Eki): adimlar = nesne listesi {deger, anahtar, kutu, ts}
+        nesne = lambda l: [{"deger": x, "anahtar": x.lower(), "kutu": "serdar", "ts": "2026-10-21T07:57:42.026Z"} for x in l]
+        y = json.dumps({"ok": True, "degisti": adim not in eski, "durum_degisti": False, "kayit": {"adimlar": nesne(eski + [adim])}} if kod == 200 else {"hata": "yasak"}).encode()
         if kip == "200:bos": y = b"{}"
         elif kip == "200:bozuk": y = b"<html>"
         elif kip == "200:adimsiz": y = json.dumps({"degisti": True, "kayit": {"adimlar": []}}).encode()
+        elif kip == "200:dizgi": y = json.dumps({"degisti": True, "kayit": {"adimlar": eski + [adim]}}, ensure_ascii=False).encode()   # eski varsayım: düz metin listesi hâlâ kabul
+        elif kip == "200:baska-nesne": y = json.dumps({"degisti": True, "kayit": {"adimlar": [{"deger": "başka bir adım"}]}}, ensure_ascii=False).encode()
         elif kip == "200:metin": y = json.dumps({"degisti": True, "kayit": {"adimlar": "x " + adim + " y"}}, ensure_ascii=False).encode()
         self.send_response(kod); self.send_header("content-type", "application/json"); self.end_headers(); self.wfile.write(y)
     def log_message(self, *a): pass
@@ -113,9 +117,10 @@ kapi "F2 defter reddetti (http 500) → rc 1, 'kart dönmez'" "1|1" "$rc|$(grep 
 echo 200 > "$T/kod"
 out="$(DEFTER_UC="http://127.0.0.1:1" K "$M/SERDAR-ENIS-baglam-karti-20261018-9.md")"; rc=$?
 kapi "F3 defter ulaşılamaz → rc 1" "1" "$rc"
-for kip in bos bozuk adimsiz metin; do echo "200:$kip" > "$T/kod"; K "$M/SERDAR-ENIS-baglam-karti-20261018-9.md" >/dev/null; eval "r_$kip=\$?"; done
+for kip in bos bozuk adimsiz metin baska-nesne dizgi; do echo "200:$kip" > "$T/kod"; K "$M/SERDAR-ENIS-baglam-karti-20261018-9.md" >/dev/null; eval "r_${kip//-/_}=\$?"; done
 echo 200 > "$T/kod"
-kapi "F6 defter 200 ama gövde boş · bozuk · adım kayıtta yok · adimlar liste değil (adımı içeren metin) → rc 1 (kart dönmez)" "1|1|1|1" "$r_bos|$r_bozuk|$r_adimsiz|$r_metin"
+kapi "F6 defter 200 ama gövde boş · bozuk · adım kayıtta yok · adimlar liste değil (adımı içeren metin) · başka adımın nesnesi → rc 1 (kart dönmez)" "1|1|1|1|1" "$r_bos|$r_bozuk|$r_adimsiz|$r_metin|$r_baska_nesne"
+kapi "F7 eski varsayım (düz metin listesi) hâlâ kabul: rc 0 — kayıtta adım görünüyor" "0" "$r_dizgi"
 n0=$(say)
 out="$(K "$M/SERDAR-ENIS-baglam-karti-20261018-9.md" --kuru)"; rc=$?
 kapi "F4 kuru koşum: rc 3 (taşıma izni değil), adımı basar, deftere dokunmaz" "3|1|$n0" "$rc|$(grep -c 'istek 20261018-9 · SERDAR · ufuk bugün' <<<"$out")|$(say)"

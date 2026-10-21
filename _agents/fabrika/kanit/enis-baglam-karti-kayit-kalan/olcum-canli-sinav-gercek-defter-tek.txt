@@ -1,0 +1,29 @@
+$ bash baglam-karti/scripts/baglam-karti.canli.sh
+# rc=0 sure=2.7s zaman=2026-10-21T11:01:43+03:00
+--- stdout ---
+── S · yanıt sözleşmesi (gerçek PATCH, araçtan bağımsız)
+  ✓ S1 yeni adım: http 200
+  ✓ S2 degisti bool ve true
+  ✓ S3 kayit.adimlar LİSTE, öğeler NESNE {deger, anahtar, kutu, ts} (düz metin DEĞİL — araç buna göre eşleşir)
+  ✓ S4 adım metni nesnenin deger alanında BİREBİR
+  ✓ S5 aynı adım ikinci kez: degisti=false, adım iki kez yazılmaz
+── İ · istek
+  ✓ İ1 geçerli istek: rc 0, 'adım yazıldı'
+  ✓ İ2 adım gerçek kayıtta, şablon §3 biçiminde
+  ✓ İ3 aynı istek ikinci kez: rc 0, 'zaten yazılıydı', adım sayısı değişmez
+── C · cevap
+  ✓ C1 geçerli cevap: rc 0
+  ✓ C2 cevap adımı gerçek kayıtta
+  ✓ C3 karar cümlesi ve kart metni defterde YOK (mahremiyet)
+  ✓ C4 defter kütüğünde de yok
+── F · fail-closed (gerçek reddetme yolları)
+  ✓ F1 görmeye yetkisiz jeton (başka kutu): rc 1, adım YAZILMADI
+  ✓ F2 olmayan görev: rc 1 (defter reddetti), kart dönmez
+  ✓ F3 tanınmayan jeton: rc 1
+  ✓ F4 defter ulaşılamaz: rc 1
+  ✓ F5 fail-closed yolları kayıt sayısını DEĞİŞTİRMEDİ
+  ✓ F6 jeton değeri hiçbir çıktıda yok
+── Y · geçerli ikinci istek hâlâ yazılır (reddetme yolları kaydı bozmadı)
+  ✓ Y1 rc 0 ve sayı +1
+── 19 geçti · 0 kaldı
+--- stderr ---

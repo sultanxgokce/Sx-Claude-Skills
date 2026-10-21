@@ -109,7 +109,10 @@ except Exception: j={"hata":"yanit_bozuk"}
 if kod!="200": print("⛔ defter reddetti http=%s · %s — kayıt YAZILMADI, kart dönmez" % (kod, j.get("hata") or ""), file=sys.stderr); sys.exit(1)
 # 200 tek başına yetmez (bağımsız göz tur 3): gövde geçerli olmalı VE adım kayıtta görünmeli; yoksa kayıt doğrulanamadı → rc 1
 # adimlar LİSTE olmalı (tur 4): metin olsaydı 'in' alt-metin eşleşmesi yapar, adım yazılmadan rc 0 verirdi
+# 🔴 GERÇEK defterin biçimi NESNE listesidir: {"deger": "<adım metni>", "anahtar", "kutu", "ts"} (canlı sınav 21 Eki; sahte sunucu düz metin sanıyordu,
+#   bu yüzden her geçerli yazım rc 1 verirdi). Eşleşme adım METNİNE: nesnede "deger", düz metin kayıtta kendisi — tam eşitlik, alt-metin DEĞİL.
 k=j.get("kayit") if isinstance(j,dict) else None
-if not isinstance(j.get("degisti") if isinstance(j,dict) else None, bool) or not isinstance(k,dict) or not isinstance(k.get("adimlar"),list) or sys.argv[2] not in k["adimlar"]:
+yazili=[(x.get("deger") if isinstance(x,dict) else x) for x in k["adimlar"]] if isinstance(k,dict) and isinstance(k.get("adimlar"),list) else None
+if not isinstance(j.get("degisti") if isinstance(j,dict) else None, bool) or yazili is None or sys.argv[2] not in yazili:
     print("⛔ defter 200 döndü ama kayıt doğrulanamadı (gövde bozuk ya da adım kayıtta yok) — kart dönmez", file=sys.stderr); sys.exit(1)
 print("📒 %s · %s · %s" % (sys.argv[1], sys.argv[2], "adım yazıldı" if j["degisti"] else "bu adım zaten yazılıydı"))' "$GOREV" "$ADIM"

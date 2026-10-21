@@ -1,0 +1,6 @@
+$ bash -c S=$(mktemp -d); cp -r baglam-karti $S/; git show 6eb404e:baglam-karti/scripts/baglam-karti.sh > $S/baglam-karti/scripts/baglam-karti.sh; DEFTER_GECIT=${DEFTER_GECIT:-/config/projects/cloudtop/infra/defter-gecit/gecit.mjs} bash $S/baglam-karti/scripts/baglam-karti.canli.sh > $S/cikti 2>&1; r=$?; grep -c "✗" $S/cikti; grep "kaldı" $S/cikti; rm -r -- "$S"; exit $r
+# rc=1 sure=2.9s zaman=2026-10-21T11:01:46+03:00
+--- stdout ---
+4
+── 15 geçti · 4 kaldı
+--- stderr ---
