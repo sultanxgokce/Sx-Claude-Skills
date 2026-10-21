@@ -735,6 +735,18 @@ def cmd_liste(a):
     print(json.dumps(etkin_kayitlar(m), ensure_ascii=False, indent=2))
 
 
+def etiket_denetle(e):
+    """Etiket dosya adının parçasıdır (olcum-<etiket>-<aşama>.txt). Eğik çizgi alt dizin sanılır: eskiden Python hata
+    dökümüyle rc 1 düşüyor, kayıt YAZILMIYORDU — çıktıyı atan çağıranda kanıt sessizce kayboluyordu (BASİRET W42 Ö3,
+    gorev_01M57ZV1D7K7X1Z9B04P7FD7W2). Boş ya da yalnız nokta etiket de anlamsız kayıt üretiyordu (olcum--tek.txt).
+    Yalnız yolu bozan biçimler reddedilir; boşluk, +, :, ( gibi karakterler gerçek kanıtlarda kullanılıyor (2081 etiketin
+    20'si), onlara dokunulmaz."""
+    sebep = ("boş" if not e.strip() else "eğik çizgi içeriyor (alt dizin sanılır)" if ("/" in e or "\\" in e)
+             else "denetim karakteri içeriyor" if any(ord(c) < 32 for c in e) else "yalnız noktalardan oluşuyor" if set(e) <= {"."} else "")
+    if sebep:
+        hata(f"etiket {e!r} {sebep} — kanıt KAYDEDİLMEDİ. Etiket dosya adının parçasıdır: eğik çizgisiz, boş olmayan bir ad ver (örn. 'kapi-sinavi')", 2)
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--depo")
@@ -752,6 +764,7 @@ def main():
     if "--" in argv:
         i = argv.index("--"); komut = argv[i + 1:]; argv = argv[:i]
     a = p.parse_args(argv); a.komut = komut
+    if a.f in (cmd_olcum, cmd_ekran, cmd_dosya, cmd_canli): etiket_denetle(a.etiket)
     a.f(a)
 
 

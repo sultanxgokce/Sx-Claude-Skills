@@ -15,10 +15,16 @@
 #            tablo.py <cipa.md> --md         düz (markdown) tablo — makine/metin kanalları için
 #            tablo.py <cipa.md> --json       ham alanlar
 #            tablo.py <cipa.md> --kapanis     açık madde yoksa rc 0; varsa listeyi basar, rc 4
-import json, re, sys
+#
+# DÜĞÜM (SERDAR 20 Eki, F3b): kutulu ve düz tabloda görev kimliği olan maddeye defterden o görevin düğümü (dugum_acar:
+#   hangi kutunun bekleyen işini açıyor) eklenir: "görev …ABCDE ⛓ mmex …FGHIJ". Defter okunamazsa satır AYNEN kalır ve
+#   tablonun altında tek satırla söylenir (sessiz eksik yok). --json ham alanlar DEĞİŞMEZ (kokpit kapısıyla ortak fikstür).
+#   Defter: DEFTER_UC (varsayılan cloudtop-defter:8791) · jeton DEFTER_JETON_YOL (varsayılan /config/defter-jeton; değer basılmaz).
+import json, os, re, sys, urllib.error, urllib.request
 
 MADDE = re.compile(r'^- \[([ ~xX-])\]\s*((G?\d+)\))?\s*(.*)$')         # bugun.mjs MADDE ile AYNI
 GOREV = re.compile(r'gorev_[A-Za-z0-9]{10,40}')                          # bugun.mjs GOREV ile AYNI
+DUGUM = re.compile(r'[a-z][a-z0-9-]{1,30}:gorev_[A-Za-z0-9]{10,40}')       # defter-gecit dugum_acar deseni ile AYNI
 SONUC = re.compile(r'^(.*?)\s*→\s*([A-ZĞÜŞİÖÇ][A-ZĞÜŞİÖÇ ]{2,})(?:\s*·\s*(.*))?$')
 SAHIP = re.compile(r'\s*\(sahip:\s*([^)]+)\)')
 # D1 (L73): "YYYY-MM-DD Sultan: <sonuç> (sohbet · <oturum-ref> · "<kırpık>" · beyan:<AJAN>)" — üç parça zorunlu
@@ -70,11 +76,42 @@ def ayristir(metin):
     return {'tarih': t.group(1) if t else None, 'maddeler': maddeler}
 
 
-def tablo_md(c):
+def dugumler(c):
+    """görev kimliği → dugum_acar ('<kutu>:gorev_…'), defterden. Dönüş (bağlar, okunamadıysa sebep).
+    Okuma bir yerde bile bozulursa HİÇ bağ dönmez: yarım bağ listesi "öteki görevlerin bağı yok" diye okunurdu."""
+    ids = list(dict.fromkeys(g for m in c['maddeler'] for g in m['gorevler']))
+    if not ids:
+        return {}, ''
+    uc = os.environ.get('DEFTER_UC', 'http://cloudtop-defter:8791')
+    try:
+        jeton = open(os.environ.get('DEFTER_JETON_YOL', '/config/defter-jeton'), encoding='utf-8').read().strip()
+    except OSError:
+        return {}, 'bu kutuda defter jetonu yok'
+    bag = {}
+    for g in ids:
+        try:
+            with urllib.request.urlopen(urllib.request.Request(uc + '/kayit/' + g, headers={'x-defter-jeton': jeton}), timeout=3) as y:
+                d = ((json.loads(y.read() or b'{}').get('kayit') or {}).get('canli') or {}).get('dugum_acar')
+            if isinstance(d, str) and DUGUM.fullmatch(d):
+                bag[g] = d
+        except urllib.error.HTTPError as e:
+            if e.code != 404:   # 404 = bu kutu o görevi göremiyor / yok → bağ yok, hata değil
+                return {}, 'defter http %d' % e.code
+        except Exception as e:  # ulaşılamıyor / bozuk cevap → kalan görevleri bekletme
+            return {}, 'defter okunamadı: %s' % type(e).__name__
+    return bag, ''
+
+
+def madde_metni(m, bag):
+    return GOREV.sub('', m['metin']).strip() + ''.join(
+        ' · görev …%s' % g[-5:] + (' ⛓ %s …%s' % (bag[g].split(':', 1)[0], bag[g][-5:]) if g in bag else '') for g in m['gorevler'])
+
+
+def tablo_md(c, bag={}):
     s = ['| # | Madde | Sahip | Durum | Kanıt |', '|---|---|---|---|---|']
     for i, m in enumerate(c['maddeler'], 1):
         hucre = lambda x: (x or '—').replace('|', '/')
-        madde = GOREV.sub('', m['metin']).strip() + ''.join(' · görev …%s' % g[-5:] for g in m['gorevler'])
+        madde = madde_metni(m, bag)
         s.append('| %s | %s | %s | %s | %s |' % (m['etiket'] or i, hucre(madde), hucre(m['sahip']),
                                                  etiket(m), hucre(m['kanit'])))
     return '\n'.join(s)
@@ -105,10 +142,10 @@ def ozet_satiri(c):
            (' · %d ⏸ ertelendi' % say('ertelendi') if say('ertelendi') else '') + (' · %d ➖ geri' % say('geri') if say('geri') else '')
 
 
-def tablo_kutu(c, genislik=120):
+def tablo_kutu(c, genislik=120, bag={}):
     satirlar = []
     for i, m in enumerate(c['maddeler'], 1):
-        madde = GOREV.sub('', m['metin']).strip() + ''.join(' · görev …%s' % g[-5:] for g in m['gorevler'])
+        madde = madde_metni(m, bag)
         satirlar.append([str(m['etiket'] or i), madde, m['sahip'] or '—', ISARET[m['durum']], m['kanit'] or '—'])
     bas = ['#', 'Madde', 'Sahip', 'Durum', 'Kanıt']
     w = [max(_gen(r[k]) for r in [bas] + satirlar) for k in range(5)]
@@ -148,7 +185,12 @@ def main(a):
     if '--json' in a:
         print(json.dumps(c, ensure_ascii=False, indent=2)); return 0
     print('📋 BUGÜN · %s · %s' % (c['tarih'] or 'tarihsiz', ozet_satiri(c)))
-    print(tablo_md(c) if '--md' in a else tablo_kutu(c))
+    bag, sebep = dugumler(c)
+    print(tablo_md(c, bag) if '--md' in a else tablo_kutu(c, bag=bag))
+    if bag:
+        print('⛓ = bu görev o kutunun bekleyen işini açıyor (düğüm, defterden)')
+    if sebep:
+        print('ℹ düğüm bağları okunamadı (%s) — satırlar düğümsüz gösterildi' % sebep)
     if '--kapanis' in a:
         acik = [m for m in c['maddeler'] if m['durum'] in ('acik', 'yarim')]
         if acik:

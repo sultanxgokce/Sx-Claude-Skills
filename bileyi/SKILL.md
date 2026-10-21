@@ -1,7 +1,7 @@
 ---
 name: bileyi
 type: agent
-version: 0.3.0
+version: 0.4.0
 description: >
   Bıçağı bileyen komut: kendi izimizi (bulgu havuzu · sürtünme raporu · aday havuzu) tarar,
   TEKRAR EDEN sürtünmeyi bulur ve onu yeteneğe çevirir — beceri · kural · yapılandırma.
@@ -63,6 +63,16 @@ görmek**ti.
    · bir kaynak okunamazsa iş **durmaz**, satırı 🟡 taşır; **hiçbiri** okunamazsa `rc=3`
    · aynı kayıt iki defterde birden ise **bir kez** sayılır (ayna iki tekrar sanılmaz)
    · `--havuz-yolu` açıkça verilirse **yalnız o** okunur — açık irade keşfi ezer
+   🔴 **Kutunun Bulgu Defteri (20 Eki 2026, görev G2FTX · mmex).** İzole kutuda bulgular çoğu zaman
+   `bulgu-havuzu.jsonl`'da değil, kutunun **Bulgu Defteri** paketinde yaşar
+   (`<ev>/.ic-sayfa/bulgu-defteri/bulgular.json`). mmex'te araç oraya bakmıyordu: `rc=3 ÖLÇEMEDİM`.
+   Artık üçüncü kaynak: `iz: kutu-defteri: …`. Yol kutuya sabit yazılmaz, kutunun **kendi ev
+   dizininden** türer; `BILEYI_KUTU_DEFTERI` ile değişir, `-` bilerek kapatır. Defteri olmayan kutuda
+   kaynak satırı çıkmaz; ama **açık verilen yol yoksa** satır 🟡 "okunamadı" der ve kapsamaya girer
+   (yanlış ayar öbür kaynakların arkasına saklanmaz).
+   Eşleme yalnız var olanı taşır: id · başlık · tarih (açılış) · durum (hâl) · gerçek (notlar).
+   **Sınıf uydurulmaz**: defterde sınıf alanı yok, kapsama bunu %0 diye söyler. Başlıksız kayıt
+   bozuk sayılır.
 4. **EŞİK UYDURULMAZ.** "Kaç tekrar yeteneğe döner" bir ölçüm sorusudur. Eşik dosyadan okunur
    ve dosyada **ölçülmüş dayanağı** yazılı olmalıdır; dayanak yoksa araç **rc=3 (ÖLÇEMEDİM)**
    döner, yeşil basmaz. Bu kural bugünden: bir kota dersinde eşik seçmemek, veri bir hafta

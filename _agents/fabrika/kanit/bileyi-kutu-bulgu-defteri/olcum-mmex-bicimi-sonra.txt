@@ -1,0 +1,11 @@
+$ bash _agents/fabrika/kanit/bileyi-kutu-bulgu-defteri/mmex-olcer.sh HEAD
+# rc=0 sure=0.2s zaman=2026-10-20T18:17:02+03:00
+--- stdout ---
+ref HEAD (445645e) · bileyi olc rc=0
+   iz: 🟡 merkez: <geçici>/mmex/_agents/handoff/bulgu-havuzu.jsonl — okunamadı (bulgu havuzu yok: <geçici>/mmex/_agents/handoff/bulgu-havuzu.jsonl)
+   iz: kutu-defteri: <geçici>/ev/.ic-sayfa/bulgu-defteri/bulgular.json — 4 kayıt
+   havuz: 4 kayıt (birleşik, 1/2 kaynak OKUNDU · 4 tanesi bu kutunun kendi defterinden)
+     4 × aron golge                         [S0002,S0009,S0017]
+   🟡 sürtünme raporu bu depoda yok (friction-report.sh) — ÖLÇEMEDİM, 'yok' demiyorum
+HÜKÜM · kutu defteri okundu: EVET · defterdeki tekrar bulundu: EVET · (çıktıda "4 × …" satırı ilk 3 kimliği basar — araç biçimi)
+--- stderr ---

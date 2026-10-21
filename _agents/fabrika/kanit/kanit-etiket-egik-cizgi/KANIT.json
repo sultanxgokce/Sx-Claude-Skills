@@ -1,0 +1,61 @@
+{
+  "is": "kanit-etiket-egik-cizgi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-20T18:00:21+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "etiket",
+      "asama": "once",
+      "dosya": "olcum-etiket-once.txt",
+      "sha256": "631808f729903fcc654a3c142f3ff2ea50c37b9fe02a8157846a0409363e1c9c",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kanit-etiket-egik-cizgi/etiket-olcer.sh",
+        "yazilim-fabrikasi/scripts/kanit.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T17:57:08+03:00",
+      "sure_sn": 3.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ef8b4ed1ad3e43959178199bd1ce0959"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "etiket",
+      "asama": "sonra",
+      "dosya": "olcum-etiket-sonra.txt",
+      "sha256": "266c0867f0d044449a37efc9905e0b66f94f068b1e71333915f1701965a9392b",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kanit-etiket-egik-cizgi/etiket-olcer.sh",
+        "yazilim-fabrikasi/scripts/kanit.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T17:59:42+03:00",
+      "sure_sn": 2.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4b0679856c9f40629dcbd80ab749cfda"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kanit-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kanit-sinavi-sonra.txt",
+      "sha256": "6abf7cc20a45ba2470bf10565975ae178bdd9febf7e648cd98aa697e7a55d62b",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T18:00:21+03:00",
+      "sure_sn": 39.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "956040d80ba84bf5b66a682dc451ca89"
+    }
+  ],
+  "imza": "6ccfa23e448e44e00a0847e3101767de3a101ce6bac83c7e256e683ec8b174a8"
+}

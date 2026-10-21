@@ -1,7 +1,7 @@
 ---
 name: ui-tasarim-akisi
 type: agent
-version: 0.6.0
+version: 0.7.0
 description: >
   UI/arayüz tasarım işinin ZORUNLU akış kapısı. Bir ürünün ekranlarını tek tek değil dizi
   hâlinde tasarlatır: ürün niyeti → sayfa envanteri → kullanıcı senaryoları (tık bütçesi) →
@@ -161,11 +161,23 @@ türer. Giriş/oturum ekranı **en sona** bırakılır — dili kurmaz, yalnız 
 2. **Kısıt denetimi** — ürünün kendi yasakları çiğnenmiş mi (çizilmemesi gereken alanlar,
    gösterilmemesi gereken bilgi).
 3. **Tık sayımı** — senaryodaki hedef tutmuş mu. Aşım **sessiz geçilmez**: ya tasarım revize
-   edilir ya hedef gerekçeyle güncellenir. Sayım elle yapılır (tarayıcı yok), ama **kaydı
-   makineye verilir**:
+   edilir ya hedef gerekçeyle güncellenir. **Tarayıcı varsa sayım TARAYICIDA yapılır** (0.7.0 ·
+   retro W42 BERİD Ö5 · D4 "elle verilen tık sayısı ölçüm değildir"): görev yolları bir tanım
+   dosyasından gelir, `tik-olc.sh` her adımı gerçekten tıklar ve ölçülen sayıyı kaydeder:
 
 ```
-bash arac/tik-kaydet.sh tasarim/ciktilar/E1.html G1=3:2 G2=1:1   # hedef:ölçülen
+# yol.json: {"G1": {"hedef": 2, "adimlar": ["[aria-label=\"Mesajlar\"]", "text=Ayşe"]}, ...}
+bash arac/tik-olc.sh tasarim/ciktilar/E1.html tasarim/ciktilar/E1.yol.json --genislik 420 --yukseklik 844
+```
+
+   Sayım: her adım 1 · ekran dışı +1 (kaydırma) · görünmüyor +1 (üzerine gelme) · yok ya da
+   tıklanamıyor → hedef+1, en az 9 (yol yürünemedi; bütçe hedef ne olursa olsun aşılır, sebebi yazılır). Hedef 0-99. Her görev temiz sayfayla
+   başlar. Artefakt `yontem: tarayici` ve yol tanımının sha'sını taşır. Tarayıcı yoksa araç
+   **ÖLÇÜLEMEDİ** der (rc 3) ve sayı yazmaz. Tarayıcı yoksa elle kayıt **seçenek olarak durur**
+   (`yontem: elle`):
+
+```
+bash arac/tik-kaydet.sh tasarim/ciktilar/E1.html G1=3:2 G2=1:1   # hedef:ölçülen — yontem: elle
 ```
 
 **Bu kapı sonradan eklendi ve niçini utandırıcıdır:** Durak 2 tık bütçesini ZORUNLU ilan

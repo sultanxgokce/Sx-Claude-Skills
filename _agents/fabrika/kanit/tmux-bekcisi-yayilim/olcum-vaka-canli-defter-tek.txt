@@ -1,0 +1,10 @@
+$ bash -c o=$(wc -l < /config/.terminal-onar/tmux-bekcisi.log); bash _agents/fabrika/kanit/tmux-kill-server-bekcisi/vaka.sh terminal-onar/scripts/tmux-bekcisi.sh; r=$?; echo "canlı defter satır önce=$o sonra=$(wc -l < /config/.terminal-onar/tmux-bekcisi.log)"; exit $r
+# rc=0 sure=1.4s zaman=2026-10-20T20:22:48+03:00
+--- stdout ---
+kutu sunucusu: pid=418031 · koltuk oturumu: koltuk
+kill-server rc=1
+SONUÇ: kutu sunucusu AYAKTA (pid=418031) — koltuk yerinde
+canlı defter satır önce=3 sonra=3
+--- stderr ---
+tmux bekçisi: 'kill-server' REDDEDİLDİ — $TMUX dolu ve açık soket (-L/-S) yok: bu, kutunun CANLI sunucusunu (bütün oturumlar) kapatırdı.
+  yalıtılmış sunucu içindiyse: önce 'unset TMUX' ya da 'tmux -L <ad> …' · kutuyu kasten kapatıyorsan: TMUX_KILL_SERVER_IZIN=1

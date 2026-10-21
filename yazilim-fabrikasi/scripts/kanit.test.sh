@@ -485,6 +485,40 @@ _m23 etkin etkin_gecersiz 'elif k.get("dosya") in ilanlar:' 'elif False:' "etkin
 _m23 cift ikinci_ilan_ret 'if h["dosya"] in ilanlar:' 'if False:' "ikinci ilan denetimi kaldırıldı"
 _m23 karsi olmayan_karsi_ret 'kk = coz(a.karsi, "karşı kanıt")' 'kk = {"dosya": a.karsi}' "karşı kanıt çözülmeden kabul"
 
+echo "════ T24 · ETİKET (gorev_01M57ZV1D7K7X1Z9B04P7FD7W2): yolu bozan etiket rc 2 ile reddedilir, kayıt yazılmaz, hata dökümü yok ════"
+# eskiden: 'a/b' → Python hata dökümü + rc 1 + kayıt YOK (çıktıyı atan çağıranda kanıt sessizce kayboluyordu);
+#          '' · '.' · '..' → KABUL ediliyordu (olcum--tek.txt gibi anlamsız kayıt)
+E24="$T/is-etiket"; printf 'rapor\n' > "$T/rapor24.txt"
+say24() { python3 -c 'import json,sys
+try: print(len(json.load(open(sys.argv[1]))["kayitlar"]))
+except Exception: print(0)' "$T/_agents/fabrika/kanit/is-etiket/KANIT.json"; }
+bash "$K" olcum is-etiket iyi --asama tek -- echo 1 >/dev/null 2>&1; n0="$(say24)"
+red24() {   # red24 <etiket> <açıklama> <komut…> → rc 2 · sebep · kayıt sayısı değişmedi · hata dökümü yok
+  local et="$1" ne="$2"; shift 2
+  "$@" 2>"$T/e24" >/dev/null; local rc=$?
+  [ "$rc" -eq 2 ] && grep -q "kanıt KAYDEDİLMEDİ" "$T/e24" && ! grep -q "Traceback" "$T/e24" && [ "$(say24)" = "$n0" ]; g $? "T24 $ne → rc=$rc, kayıt eklenmedi, hata dökümü yok"
+}
+red24 'a/b'    "olcum 'a/b' (eğik çizgi)"            bash "$K" olcum is-etiket 'a/b' --asama tek -- echo 1
+grep -q "eğik çizgi" "$T/e24"; g $? "T24 sebep söyleniyor (eğik çizgi)"
+red24 '../kac' "dosya '../kac'"                     bash "$K" dosya is-etiket '../kac' "$T/rapor24.txt"
+red24 'a\b'    "canli 'a\\b' (ters eğik çizgi)"      bash "$K" canli is-etiket 'a\b' --kaynak "dosya:$T/rapor24.txt" --desen rapor
+red24 'x/y'    "ekran 'x/y' (aracın varlığından önce reddedilir)" bash "$K" ekran is-etiket 'x/y' --url http://127.0.0.1:9/
+red24 ''       "olcum '' (boş)"                     bash "$K" olcum is-etiket '' --asama tek -- echo 1
+red24 '   '    "olcum '   ' (yalnız boşluk)"           bash "$K" olcum is-etiket '   ' --asama tek -- echo 1
+red24 '..'     "dosya '..' (yalnız nokta)"          bash "$K" dosya is-etiket '..' "$T/rapor24.txt"
+red24 $'a\tb'  "olcum sekmeli etiket (denetim karakteri)" bash "$K" olcum is-etiket $'a\tb' --asama tek -- echo 1
+bash "$K" olcum is-etiket 'iki sinav + kopya: (3) ≠ eski' --asama tek -- echo 1 >/dev/null 2>&1; [ $? -eq 0 ] && [ "$(say24)" -eq $((n0+1)) ]; g $? "T24 gerçek kanıtlarda kullanılan biçim (boşluk + : ( ) ≠) KABUL — kural yalnız yolu bozanı reddeder"
+echo "── T24 · MUTASYON ──"
+_m24() {   # _m24 <eski> <yeni> <etiket> <açıklama> — mutant kanit.py, kötü etiketi KABUL eder ya da çöker → rc≠2
+  _mut "$1" "$2"
+  KANIT_DEPO="$T" python3 "$MC/kanit.py" olcum is-etiket-mut "$3" --asama tek -- echo 1 >/dev/null 2>&1; [ $? -ne 2 ]; g $? "T24 mutant ($4) kötü etiketi reddetmiyor → T24 bu mutantta düşerdi"
+}
+_m24 'if a.f in (cmd_olcum, cmd_ekran, cmd_dosya, cmd_canli): etiket_denetle(a.etiket)' 'pass' 'a/b' "denetim hiç çağrılmıyor"
+_m24 '    if sebep:' '    if False:' '' "sebep bulunsa da reddetmiyor"
+_m24 '("/" in e or "\\" in e)' '("\\" in e)' 'a/b' "eğik çizgi kuralı yok"
+_m24 'if set(e) <= {"."} else ""' 'if False else ""' '..' "nokta kuralı yok"
+_m24 '"boş" if not e.strip() else' '"boş" if not e else' '   ' "yalnız boşluk boş sayılmıyor"
+
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]

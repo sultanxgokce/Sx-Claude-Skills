@@ -1,0 +1,30 @@
+{
+  "tur": 3,
+  "is": "bileyi-kutu-bulgu-defteri",
+  "pr": "391",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-20T18:19:00+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 35813,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 11,
+    "bayt": 31329
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Bileyi, kutunun Bulgu Defteri yolunu HOME’dan türetiyor, BILEYI_KUTU_DEFTERI ezmesini ve kapatma işaretini uyguluyor, bulgular.json biçimini uyarlayıp merkez havuzu olmayan mmex vakasında ölçüm yapıyor. Önceki turun okunamayan dosyada ham çökme kusuru OSError→rc=3 dönüşümüyle kapatılmış; hedefli kapılar, mutasyon sınavları ve önce/sonra ölçümü geçtiği için yalnız rötuş düzeyi risk kalmış ve iş üretime hazırdır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve kayıtların tamamı yeşil; sarı manifest kaydı yok. mmex için gerçekçi önce/sonra ölçüm çifti rc=3 ve defter okunmadı durumundan rc=0, HOME altındaki defterden 4 kayıt ve gerçek tekrar bulundu durumuna geçişi doğrudan gösteriyor. Ayrı X-bölümü ölçümü 114/114 sonucu ile HOME türetme, ezme, '-' ile kapatma, biçim uyarlama, bozuk/okunamayan defter davranışı, kaynak kapsamı ve ilgili mutantların sınavı düşürdüğünü kanıtlıyor. Sonra çıktısındaki merkez havuzu ve sürtünme raporu uyarıları talep edilen 'bulgu-havuzu.jsonl yokken ölçebilme' senaryosunun parçasıdır; hedef iddia kutu defteri üzerinden ölçümle kanıtlanmıştır."
+  }
+}

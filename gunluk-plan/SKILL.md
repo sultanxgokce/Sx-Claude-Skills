@@ -1,7 +1,7 @@
 ---
 name: gunluk-plan
 description: Günün planı — elimizdeki işleri ÖLÇ, katma değer katacakları süz, Sultan-dilinde plan sun, onaydan sonra icra et. Sultan'ın her gün verdiği "işleri analiz et, bugün ne yapalım" isteğinin tek komutlu karşılığı.
-version: 1.6.1
+version: 1.7.0
 ---
 
 # /gunluk-plan — günün planı (ölç → süz → sun → icra)
@@ -150,6 +150,11 @@ Bugün değil: <iş> (<niçin>) · <iş> (<niçin>)
 Sahip sütunu çıpadaki `(sahip: <AD>)`den, kanıt sütunu `--kanit`ten gelir; "sen" / "ikimiz" de sahip olabilir.
 Düz (markdown) biçim yalnız makine/metin kanalı içindir: `cipa.sh tablo --md`. Kokpitin "Bugün" paneli aynı çıpayı
 `--json` ile okur; üçü de **aynı** satır dilbilgisini (`sema/bugun-maddesi.md`) kullanır.
+
+**Düğüm (1.7.0, SERDAR 20 Eki F3b):** maddede görev kimliği varsa tablo o görevin düğümünü defterden okur ve
+`görev …ABCDE ⛓ mmex …FGHIJ` yazar (bu görev mmex'in bekleyen işini açıyor; altta `⛓ = …` açıklaması). Defter
+okunamazsa satır aynen kalır, tablonun altında `ℹ düğüm bağları okunamadı (<sebep>)` yazar; görevi olmayan çıpada
+deftere hiç gidilmez. `--json` değişmez (kokpit kapısıyla ortak fikstür). Düğümü açan komut: `bulgu.sh yaz … --dugum`.
 
 🔴 **Niçin zorunlu (ölçüldü 18 Eki):** 1.5.0 düz tabloyu getirmişti ama sunum adımı onu "basılabilir" diyordu,
 "zorunlu" demiyordu; ajan sabah eski madde listesini sundu, Sultan ekranda tabloyu göremedi ve iki kez istedi

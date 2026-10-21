@@ -1,0 +1,20 @@
+$ bash _agents/fabrika/kanit/kanit-etiket-egik-cizgi/etiket-olcer.sh yazilim-fabrikasi/scripts/kanit.sh
+# rc=0 sure=2.4s zaman=2026-10-20T17:59:42+03:00
+--- stdout ---
+olcum  'a/b'    → rc=2 · kayıt 1→1 · ✗ etiket 'a/b' eğik çizgi içeriyor (alt dizin sanılır) — kanıt KAYDEDİLMEDİ. Etiket dosya adının
+dosya  'a/b'    → rc=2 · kayıt 1→1 · ✗ etiket 'a/b' eğik çizgi içeriyor (alt dizin sanılır) — kanıt KAYDEDİLMEDİ. Etiket dosya adının
+canli  'a/b'    → rc=2 · kayıt 1→1 · ✗ etiket 'a/b' eğik çizgi içeriyor (alt dizin sanılır) — kanıt KAYDEDİLMEDİ. Etiket dosya adının
+olcum  '../kac' → rc=2 · kayıt 1→1 · ✗ etiket '../kac' eğik çizgi içeriyor (alt dizin sanılır) — kanıt KAYDEDİLMEDİ. Etiket dosya adın
+dosya  '../kac' → rc=2 · kayıt 1→1 · ✗ etiket '../kac' eğik çizgi içeriyor (alt dizin sanılır) — kanıt KAYDEDİLMEDİ. Etiket dosya adın
+canli  '../kac' → rc=2 · kayıt 1→1 · ✗ etiket '../kac' eğik çizgi içeriyor (alt dizin sanılır) — kanıt KAYDEDİLMEDİ. Etiket dosya adın
+olcum  ''       → rc=2 · kayıt 1→1 · ✗ etiket '' boş — kanıt KAYDEDİLMEDİ. Etiket dosya adının parçasıdır: eğik çizgisiz, boş olmay
+dosya  ''       → rc=2 · kayıt 1→1 · ✗ etiket '' boş — kanıt KAYDEDİLMEDİ. Etiket dosya adının parçasıdır: eğik çizgisiz, boş olmay
+canli  ''       → rc=2 · kayıt 1→1 · ✗ etiket '' boş — kanıt KAYDEDİLMEDİ. Etiket dosya adının parçasıdır: eğik çizgisiz, boş olmay
+olcum  '.'      → rc=2 · kayıt 1→1 · ✗ etiket '.' yalnız noktalardan oluşuyor — kanıt KAYDEDİLMEDİ. Etiket dosya adının parçasıdır: e
+dosya  '.'      → rc=2 · kayıt 1→1 · ✗ etiket '.' yalnız noktalardan oluşuyor — kanıt KAYDEDİLMEDİ. Etiket dosya adının parçasıdır: e
+canli  '.'      → rc=2 · kayıt 1→1 · ✗ etiket '.' yalnız noktalardan oluşuyor — kanıt KAYDEDİLMEDİ. Etiket dosya adının parçasıdır: e
+olcum  '..'     → rc=2 · kayıt 1→1 · ✗ etiket '..' yalnız noktalardan oluşuyor — kanıt KAYDEDİLMEDİ. Etiket dosya adının parçasıdır: 
+dosya  '..'     → rc=2 · kayıt 1→1 · ✗ etiket '..' yalnız noktalardan oluşuyor — kanıt KAYDEDİLMEDİ. Etiket dosya adının parçasıdır: 
+canli  '..'     → rc=2 · kayıt 1→1 · ✗ etiket '..' yalnız noktalardan oluşuyor — kanıt KAYDEDİLMEDİ. Etiket dosya adının parçasıdır: 
+kaçış denetimi: kanıt dizini dışına yazılan dosya: 0 üst dizinde · 0 kanit dışında
+--- stderr ---
