@@ -13,13 +13,14 @@ k="${1:-}"; shift || true
 case "$k" in
   yaz)
     baslik="${1:-}"; shift || true
-    [ -n "$baslik" ] || { echo "kullanım: bulgu.sh yaz \"<başlık>\" --kim <AJAN> [--not \"…\"] [--etiket bug|ozellik] [--dugum <kutu>:gorev_<kimlik>|gorev_<kimlik>]" >&2; exit 2; }
-    kim=""; notu=""; etiket="bug"; dugum=""
+    [ -n "$baslik" ] || { echo "kullanım: bulgu.sh yaz \"<başlık>\" --kim <AJAN> [--not \"…\"] [--etiket bug|ozellik] [--dugum <kutu>:gorev_<kimlik>|gorev_<kimlik>] [--gorev]" >&2; exit 2; }
+    kim=""; notu=""; etiket="bug"; dugum=""; durum="havuz"; gorev=0
     while [ $# -gt 0 ]; do case "$1" in
       --kim) [ $# -ge 2 ] || { echo "--kim değersiz" >&2; exit 2; }; kim="$2"; shift 2 ;;
       --not) [ $# -ge 2 ] || { echo "--not değersiz" >&2; exit 2; }; notu="$2"; shift 2 ;;
       --etiket) [ $# -ge 2 ] || { echo "--etiket değersiz" >&2; exit 2; }; etiket="$2"; shift 2 ;;
       --dugum) [ $# -ge 2 ] && [ -n "$2" ] || { echo "--dugum değersiz" >&2; exit 2; }; dugum="$2"; shift 2 ;;
+      --gorev) durum="acik"; gorev=1; shift ;;   # 0.5.0: bulgu değil doğrudan İŞ (Sultan/reis talimatı) → Sırada'ya düşer
       *) echo "bilinmeyen: $1" >&2; exit 2 ;; esac; done
     [ -n "$kim" ] || { echo "--kim zorunlu (kaydı kim açıyor?)" >&2; exit 2; }
     case "$etiket" in bug|ozellik) ;; *) echo "--etiket bug ya da ozellik olmalı (K1: bulgu = bu iki etiketten biriyle görev)" >&2; exit 2 ;; esac
@@ -27,6 +28,12 @@ case "$k" in
     #    Kutuda defter jetonu varsa kayıt ORAYA gider (kutu jetondan türer, beyan edilmez; kaynak_nereden = "bulgu komutu").
     #    Jeton yoksa eski kutu defterine düşer ve bunu SÖYLER — sessiz ikilik yok. Jeton değeri argv'ye/çıktıya düşmez (curl --config).
     JY="${DEFTER_JETON_YOL:-/config/defter-jeton}"; UC="${DEFTER_UC:-http://cloudtop-defter:8791}"
+    # ── HAVUZ (0.5.0, Sultan D1 21 Eki "Eleme turu + bulgu kapısı"): bulgu VARSAYILAN olarak 'havuz' durumunda açılır — Sırada'ya
+    #    düşmez, haftalık süzmede görev olur ya da iptal. Ölçüm: sırada 212 görevin 151'i bu komuttan 'acik' açılmıştı. --gorev = doğrudan iş.
+    #    Düğüm açan kayıt havuzda bekleyemez (başka kutunun bekleyen işini tutuyor) ama tek istisna --gorev'dir (bağımsız göz tur 1):
+    #    --dugum'u --gorev'siz vermek RED (rc 2) — sessizce 'acik'a çevrilmez, çağıran açıkça iş olduğunu söyler.
+    #    Defter 'havuz'u tanımıyorsa (1.18.0 öncesi) 400 döner ve aşağıdaki ret yolu bunu SÖYLER; sessiz düşüş yok.
+    if [ -n "$dugum" ] && [ "$gorev" != 1 ]; then echo "⛔ düğüm açan kayıt havuzda bekleyemez (başka kutunun işini tutuyor): --dugum ile birlikte --gorev ver — kayıt YAZILMADI" >&2; exit 2; fi
     # ── DÜĞÜM (0.4.0, SERDAR 20 Eki F3a): kayıt başka bir kutunun bekleyen görevini serbest bırakmak için açılıyorsa
     #    --dugum <kutu>:gorev_<kimlik> → defterin dugum_acar alanı. Biçim ve varlık kapısı DEFTERDE (burada kural kopyası yok).
     #    Çıplak gorev_<kimlik> verilirse kutu defterden okunur. Düğüm yalnız merkezî defterde yaşar: jetonsuz kutuda RED, sessiz düşmez.
@@ -43,11 +50,11 @@ if kod!="200": print("⛔ düğümün bekleyen görevi %s görünmüyor (http %s
 k=json.loads(g)["kayit"]; print("%s:%s" % (k["canli"].get("kutu") or k.get("ekleyen_kutu"), k["id"]), end="")' "$dugum")" || exit 1 ;;
       esac
       govde="$(python3 -c 'import sys,json
-b,kim,notu,et,dg=sys.argv[1:6]
-d={"tur":"gorev","adlar":[b],"etiket":et,"kaynak_kim":kim,"kaynak_nereden":"bulgu komutu","gorev_durumu":"acik"}
+b,kim,notu,et,dg,dr=sys.argv[1:7]
+d={"tur":"gorev","adlar":[b],"etiket":et,"kaynak_kim":kim,"kaynak_nereden":"bulgu komutu","kaynak_sinif":"ajan","gorev_durumu":dr}
 if notu.strip(): d["adimlar"]=["[kanıt] "+notu.strip()]
 if dg: d["dugum_acar"]=dg
-print(json.dumps(d,ensure_ascii=False))' "$baslik" "$kim" "$notu" "$etiket" "$dugum")"
+print(json.dumps(d,ensure_ascii=False))' "$baslik" "$kim" "$notu" "$etiket" "$dugum" "$durum")"
       cevap="$(curl -sS -m 15 --config "$cfg" -X POST -H 'content-type: application/json' --data-binary "$govde" "$UC/kayit" -w '\n%{http_code}' 2>&1)"; rc=$?
       rm -f -- "$cfg"
       if [ $rc -ne 0 ]; then echo "⛔ merkezî Görev Defteri'ne ulaşılamadı ($UC): $cevap — kayıt YAZILMADI (eski deftere de düşmedi: ikilik olmasın; sonra yeniden dene ya da SERDAR'a yaz)" >&2; exit 1; fi
@@ -60,6 +67,8 @@ if kod!="201":
     print("⛔ merkezî defter reddetti http=%s · %s · %s" % (kod, j.get("hata"), j.get("bekleniyor") or j.get("alanlar") or ""), file=sys.stderr)
     # defter bağ reddinde sebebi ve çareyi verir (bag_hedefi_yok: neden · yerine) — kullanıcı ne yapacağını görsün
     if ek.get("neden") or ek.get("yerine"): print("   neden: %s%s" % (ek.get("neden") or "?", " · yapılacak: %s" % ek["yerine"] if ek.get("yerine") else ""), file=sys.stderr)
+    # 0.5.0: defter havuz durumunu tanimiyorsa (1.18.0 oncesi: alan_degeri_gecersiz, alan gorev_durumu) sebebi ve sirayi soyle; acik durumuna DUSULMEZ
+    if j.get("hata")=="alan_degeri_gecersiz" and (ek.get("alan")=="gorev_durumu" or "gorev_durumu" in str(ek.get("bekleniyor") or "")): print("   defter havuz durumunu tanımıyor (defter 1.18.0 öncesi) — önce defteri yenile (cloudtop #762), sonra bu komutu; kayıt YAZILMADI, acik durumuna düşülmedi", file=sys.stderr)
     sys.exit(1)
 k=j["kayit"]; print("📌 %s · %s · %s — %s (açan: %s) · Görev Defteri" % (k["id"], k["canli"].get("kutu") or k.get("ekleyen_kutu"), k["canli"].get("etiket"), k["adlar"][0]["deger"], k["canli"].get("kaynak_kim")))
 if k["canli"].get("dugum_acar"): print("  ⛓ düğüm: %s" % k["canli"]["dugum_acar"])
@@ -69,6 +78,7 @@ if b and not b.get("yazildi"): sys.exit(4)'
     else
       [ -f "$YAZ" ] || _kur_yok
       echo "ℹ bu kutuda defter jetonu yok ($JY) — kayıt ESKİ kutu defterine yazılıyor (merkeze taşınması için SERDAR'a: jeton-dagit)" >&2
+      echo "⚠ havuz yalnız merkezî defterde var: bu kayıt eski kutu defterine 'acik' hâliyle düşüyor, Sırada ayrımı UYGULANMADI (--gorev burada anlamsız)" >&2
       if [ -n "$notu" ]; then python3 "$YAZ" yeni --baslik "$baslik" --kim "$kim" --not "$notu" --kok "$KOK"
       else python3 "$YAZ" yeni --baslik "$baslik" --kim "$kim" --kok "$KOK"; fi
     fi ;;
