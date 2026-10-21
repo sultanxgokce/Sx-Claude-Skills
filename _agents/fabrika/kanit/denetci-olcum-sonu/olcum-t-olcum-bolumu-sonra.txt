@@ -1,5 +1,5 @@
 $ python3 _agents/fabrika/kanit/denetci-olcum-sonu/bolum-olcer.py T-OLCUM mutant 'olcum- -- bash yazilim-fabrikasi/scripts/denetci.test.sh
-# rc=0 sure=428.3s zaman=2026-10-20T19:22:29+03:00
+# rc=0 sure=1188.8s zaman=2026-10-21T11:00:12+03:00
 --- stdout ---
 $ bash yazilim-fabrikasi/scripts/denetci.test.sh  → rc=0 · 380 satır
 ════ T-OLCUM · uzun ölçümde baş + atlanan + SON gider; kısa ölçüm aynen; uzun stderr sonucu itmez ════
