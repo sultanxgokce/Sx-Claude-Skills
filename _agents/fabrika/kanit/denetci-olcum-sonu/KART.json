@@ -1,0 +1,63 @@
+{
+  "is": "denetci-olcum-sonu",
+  "cumle": "denetçi ölçüm çıktısını keserken sonunu da versin: 60 satırı aşan ölçümde baş + gerçek atlanan sayısı + atlanan ortadan SONUÇ/✗ satırları + stdout'un sonu + stderr'in sonu; kısa dosya aynen; fabrika 0.10.6 (gorev_01M5890SCNMSR4DFTGHVWEJEC3)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-20T17:49:08+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-10-20T19:06:30+03:00",
+      "olay": "daralt",
+      "kalan_kart": "olcum-ayirici-cakismasi",
+      "tur_sifir": 4
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [
+    "ÇOK GÜNLÜK KAPSAM (W42): bir PR'da teslim edilmez — gün başına kart öner: denetci-olcum-sonu-g1 · denetci-olcum-sonu-g2 … (her biri günün teslim birimi)"
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "HENDESE",
+      "oturum": "HENDESE oturumu 2026-10-20 ~20:00 · DENETIM-3.json",
+      "gerekce": "bulgular 5→3→2 düştü, son turun iki bulgusu (atlanan sayısı, kısa dosya baytı) O10-O12 tam eşitlik sınavlarıyla ve mutantla kapandı; kalan risk yok, bir tur daha yalnız doğrulama",
+      "zaman": "2026-10-20T19:05:32+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "HENDESE",
+      "oturum": "HENDESE oturumu 2026-10-20 · DENETIM-4.json (mutlak tavan, sahip kararı DARALT)",
+      "gerekce": "daraltma: kalan bulgu yeni karta (olcum-ayirici-cakismasi) — ölçüm dosyasında stdout içeriği '--- stderr ---' satırı basarsa olcum_ozeti ilk eşleşmeyi ayırıcı sanıp yanlış keser (göz #392 tur 4); çare son eşleşme ya da kanit.sh'nin yazdığı ayırıcıyı benzersiz kılmak + sınav",
+      "zaman": "2026-10-20T19:06:30+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "denetçi ölçüm çıktısını keserken sonunu da versin: 60 satırı aşan ölçüm dosyasında baş + atlanan satır sayısı + stdout'un son satırları (sonuç satırı) + stderr'in sonu; kısa dosya aynen; fabrika 0.10.6 (gorev_01M5890SCNMSR4DFTGHVWEJEC3, retro W42 HENDESE Ö1)",
+      "zaman": "2026-10-20T19:06:30+03:00",
+      "kalan_kart": "olcum-ayirici-cakismasi"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-20T19:06:30+03:00",
+      "kalan_kart": "olcum-ayirici-cakismasi",
+      "kalan": "ölçüm dosyasında stdout içeriği '--- stderr ---' satırı basarsa olcum_ozeti ilk eşleşmeyi ayırıcı sanıp yanlış keser (göz #392 tur 4); çare son eşleşme ya da kanit.sh'nin yazdığı ayırıcıyı benzersiz kılmak + sınav",
+      "tur_sifir": 4,
+      "oturum": "HENDESE oturumu 2026-10-20 · DENETIM-4.json (mutlak tavan, sahip kararı DARALT)"
+    }
+  ]
+}

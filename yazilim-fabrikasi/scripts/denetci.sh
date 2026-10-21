@@ -489,9 +489,39 @@ else echo "(iş kartı verilmedi — talep bilinmiyor; DOĞRU ŞEY Mİ sorusu H'
 { cat "$ISTEM"; } > "$TMP/p-sablon.md"
 { printf '\n\n===== İŞ KARTI (talep) =====\n'; cat "$TMP/kart.md"; } > "$TMP/p-kart.md"
 { printf '\n\n===== KANIT MANİFESTİ — durum: %s =====\n' "$KANIT_DURUM"; cat "$DZ/KANIT.json"; } > "$TMP/p-kanit.md"
+# ÖLÇÜM ÇIKTISININ SONU DA GİDER (gorev_01M5890SCNMSR4DFTGHVWEJEC3, retro W42 HENDESE Ö1): eskiden her ölçüm dosyasının
+#   ilk 60 satırı gidiyordu. Sınavın sonuç satırı ("SONUÇ: 156 geçti · 0 kaldı") dosyanın SONUNDA; 184 satırlık bir sınav
+#   ölçümünde göz yalnız baştaki kapıları görüyor, sonucu hiç görmüyordu. Artık 60 satırı aşan dosyada: stdout'un başı +
+#   kaç satırın atlandığı + stdout'un sonu; stderr ayrıca kendi sonuyla (uzun stderr sonuç satırını dışarı itmesin).
+#   Tavan aynı (dosya başı ≤ 60 satır), kısa dosya bayt bayt aynen.
+olcum_ozeti() {   # olcum_ozeti <ölçüm dosyası>
+  python3 - "$1" <<'PY'
+import sys
+HAM = open(sys.argv[1], encoding="utf-8", errors="replace").read()
+L = HAM.split("\n")
+if L and L[-1] == "": L.pop()
+SINIR, BAS, SON, HSON, SECME = 60, 25, 12, 10, 8
+if len(L) <= SINIR: sys.stdout.write(HAM); sys.exit()   # bayt bayt AYNEN (ayırıcı satır sonunu çağıran ekler — göz #392 tur 5)
+# ATLANAN ORTADAN SEÇME (göz #392 tur 2): sonuç satırı her zaman en sonda değil (ardından 12'den fazla satır gelebilir) ve
+#   kırmızı kapı (✗) ortada kalırsa kırpma onu SAKLAR — göz "yeşil" sanır. Ortadan SONUÇ/✗ taşıyan satırlar (en çok 8) taşınır.
+SECILIR = ("SONUÇ", "SONUC", "✗", "Traceback")
+e = L.index("--- stderr ---") if "--- stderr ---" in L else len(L)
+cik, err = L[:e], L[e:]
+if len(err) > HSON + 1: err = [err[0], "[… stderr'den %d satır atlandı …]" % (len(err) - 1 - HSON)] + err[-HSON:]
+if len(cik) > BAS + SON + 1:
+    orta = cik[BAS:-SON]; sec = [x for x in orta if any(k in x for k in SECILIR)]
+    atlanan = len(orta) - min(len(sec), SECME)          # seçilip gösterilenler atlanmış SAYILMAZ (göz #392 tur 3)
+    not_ = "[… %d satır atlandı (dosya %d satır) — ölçümün SONU aşağıda …]" % (atlanan, len(L))
+    if sec:
+        not_ = "[… %d satır atlandı (dosya %d satır); ortadan SONUÇ/✗ taşıyan %d satır%s: …]" % (
+            atlanan, len(L), len(sec), "" if len(sec) <= SECME else " (ilk %d'i)" % SECME)
+    cik = cik[:BAS] + [not_] + sec[:SECME] + (["[… ölçümün SONU …]"] if sec else []) + cik[-SON:]
+print("\n".join(cik + err))
+PY
+}
 {
-  printf '\n\n===== ÖLÇÜM ÇIKTILARI (ilk 60 satır/dosya) =====\n'
-  for f in "$DZ"/olcum-*.txt; do [ -f "$f" ] && { printf -- '--- %s ---\n' "$(basename "$f")"; head -60 "$f"; }; done
+  printf '\n\n===== ÖLÇÜM ÇIKTILARI (60 satıra kadar aynen; uzunda baş + atlanan ortadan SONUÇ/✗ satırları + SON) =====\n'
+  for f in "$DZ"/olcum-*.txt; do [ -f "$f" ] && { printf -- '--- %s ---\n' "$(basename "$f")"; olcum_ozeti "$f"; [ -z "$(tail -c1 "$f")" ] || echo; }; done   # satır sonuyla bitmeyen dosyadan sonra başlık yeni satırda
 } > "$TMP/p-olcum.md"
 {
   printf '\n\n===== DEĞİŞİKLİK (diff) =====\n'

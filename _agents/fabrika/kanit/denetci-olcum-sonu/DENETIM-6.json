@@ -1,0 +1,38 @@
+{
+  "tur": 6,
+  "is": "denetci-olcum-sonu",
+  "pr": "392",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-20T19:23:23+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 37371,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 13,
+    "bayt": 58080
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Denetçi, uzun ölçümlerde başı, gerçek atlanan sayısını, ortadaki SONUÇ/✗ satırlarını, stdout sonunu ve stderr sonunu sınır içinde taşıyor; kısa dosyanın bayt eşitliği de önceki turdaki kusur düzeltilerek doğrudan sınanmış. Üretime engel kusur görünmüyor; yalnız SKILL.md içindeki sınav ve mutant adetleri güncel değişiklikle uyuşmayan küçük bir belge rötuşu kalmış.",
+    "bulgular": [
+      {
+        "ne": "Sürüm belgesindeki T-OLCUM sınav ve mutant adetleri güncel test kapsamını eksik bildiriyor.",
+        "kanit": "SKILL.md yeni özelliği “T-OLCUM (9 kapı) + mutant ×5” diye tanımlarken değişiklikte O1–O13 olmak üzere 13 kapı ve `olcum-*` adlı 7 mutant bulunuyor; araç ölçümü de O13 ile yedi mutantın yeşil olduğunu gösteriyor.",
+        "konum": "yazilim-fabrikasi/SKILL.md: 0.10.6 “Ölçümün sonu da göze gider” maddesi; yazilim-fabrikasi/scripts/denetci.test.sh: T-OLCUM O1–O13 ve olcum-* mutantları",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve bütün kayıtlar yeşil; sarı kayıt yok. Önce/sonra çifti 0.10.5→0.10.6 değişimini ve sonuç satırının HAYIR→EVET geçişini gerçekçi 190 satırlık ölçümle gösteriyor. T-OLCUM O1–O13; baş/son seçimini, ortadaki SONUÇ/✗ satırlarını, gerçek atlanan sayısını, 60 satır tavanını, stderr sonunu, kısa dosyanın iki satır-sonu biçiminde bayt eşitliğini ve dosyalar arası başlık ayrımını ölçüyor; yedi mutant sınavın ilgili bozulmaları yakaladığını doğruluyor. Ayırıcı çakışması kart sahibi kararıyla ayrı işe daraltıldığından bu kartın puanını düşürmüyor."
+  }
+}

@@ -523,6 +523,60 @@ s=open(sys.argv[1],encoding="utf-8").read()
 b=["===== İŞ KARTI","===== KANIT MANİFESTİ","===== ÖLÇÜM ÇIKTILARI","===== DEĞİŞİKLİK (diff)","+"+"y"*55+" 49","===== ÖNCEKİ TUR"]
 i=[s.find(x) for x in b]; assert all(v>=0 for v in i) and i==sorted(i), i
 ' "$T/istem-ist2b.md"; g $? "istemde bütün başlıklar eski sırasıyla var (iş kartı · manifest · ölçüm · fark · önceki tur)"
+# (e) ÖLÇÜM ÇIKTISININ SONU (gorev_01M5890SCNMSR4DFTGHVWEJEC3): 60 satırı aşan ölçümde sonuç satırı göze gider
+echo "════ T-OLCUM · uzun ölçümde baş + atlanan + SON gider; kısa ölçüm aynen; uzun stderr sonucu itmez ════"
+bash "$K" olcum is-son uzun --asama tek -- python3 -c 'for i in range(184): print("kapi %d" % i)
+print("── SONUÇ: %d geçti · 0 kaldı ──" % 156)' >/dev/null 2>&1   # sonuç metni komutta DÜZ geçmesin: dosyanın 1. satırı komuttur
+bash "$K" olcum is-son kisa --asama tek -- python3 -c 'for i in range(5): print("kisa-satir-%d" % i)' >/dev/null 2>&1
+bash "$K" olcum is-son hata --asama tek -- python3 -c 'import sys
+for i in range(100): print("cikti %d" % i)
+print("SONUC-SATIRI-" + "X")
+for i in range(50): print("hata %d" % i, file=sys.stderr)' >/dev/null 2>&1
+SAHTE_ISTEM_KOPYA="$T/istem-son.md" SAHTE_JSON="$(J 5 E "")" DENETCI_KIRP_ESIK=900000 bash "$D" is-son --diff "$T/ist1.patch" >/dev/null 2>&1
+bolum() { python3 -c '
+import sys
+s=open(sys.argv[1],encoding="utf-8").read().split("\n"); b=s.index("--- %s ---" % sys.argv[2])
+e=next((i for i in range(b+1,len(s)) if s[i].startswith("--- olcum-") or s[i].startswith("=====")), len(s))
+print("\n".join(s[b+1:e]))' "$T/istem-son.md" "$1"; }
+U="$(bolum olcum-uzun-tek.txt)"; H="$(bolum olcum-hata-tek.txt)"; KS="$(bolum olcum-kisa-tek.txt)"
+grep -qx "── SONUÇ: 156 geçti · 0 kaldı ──" <<<"$U"; g $? "O1 🔴 188 satırlık ölçümün SONUÇ satırı istemde (eskiden ilk 60 satırda kalıyordu)"
+grep -q "satır atlandı (dosya [0-9]* satır)" <<<"$U"; g $? "O2 kaç satırın atlandığı ve dosya boyu söylendi"
+grep -qx "kapi 0" <<<"$U" && ! grep -qx "kapi 100" <<<"$U" && grep -qx "kapi 183" <<<"$U"; g $? "O3 baş korunur, orta atlanır, son gelir"
+[ "$(wc -l <<<"$U")" -le 60 ]; g $? "O4 tavan aynı: dosya başı ≤ 60 satır ($(wc -l <<<"$U"))"
+[ "$(grep -c '^kisa-satir-' <<<"$KS")" -eq 5 ] && ! grep -q "atlandı" <<<"$KS"; g $? "O5 kısa ölçüm aynen, işaretsiz"
+grep -qx "SONUC-SATIRI-X" <<<"$H" && grep -q "stderr'den [0-9]* satır atlandı" <<<"$H" && grep -qx "hata 49" <<<"$H"; g $? "O6 uzun stderr stdout'un sonucunu dışarı itmez; stderr'in de sonu gelir"
+# göz #392 tur 2: sonuç en sonda olmayabilir · ortadaki kırmızı kapı kırpmada saklanmamalı
+bash "$K" olcum is-son2 orta --asama tek -- python3 -c 'for i in range(80): print("  ✓ kapi %d" % i)
+print("  ✗ kapi " + "kirmizi-orta")
+for i in range(40): print("  ✓ kapi2 %d" % i)
+print("── SONUÇ: %d geçti · 1 kaldı ──" % 120)
+for i in range(30): print("temizlik %d" % i)' >/dev/null 2>&1
+SAHTE_ISTEM_KOPYA="$T/istem-son2.md" SAHTE_JSON="$(J 5 E "")" DENETCI_KIRP_ESIK=900000 bash "$D" is-son2 --diff "$T/ist1.patch" >/dev/null 2>&1
+U2="$(python3 -c '
+import sys
+s=open(sys.argv[1],encoding="utf-8").read().split("\n"); b=s.index("--- olcum-orta-tek.txt ---")
+e=next((i for i in range(b+1,len(s)) if s[i].startswith("--- olcum-") or s[i].startswith("=====")), len(s))
+print("\n".join(s[b+1:e]))' "$T/istem-son2.md")"
+grep -qx "  ✗ kapi kirmizi-orta" <<<"$U2"; g $? "O7 🔴 ortadaki KIRMIZI kapı kırpmada saklanmaz (göze gider)"
+grep -qx "── SONUÇ: 120 geçti · 1 kaldı ──" <<<"$U2" && ! grep -qx "temizlik 0" <<<"$U2"; g $? "O8 sonuç satırının ardından 12'den çok satır gelse de sonuç gider (orta atlanırken seçilir)"
+[ "$(wc -l <<<"$U2")" -le 60 ]; g $? "O9 seçmeyle de tavan aşılmaz ($(wc -l <<<"$U2") ≤ 60)"
+# göz #392 tur 3: sayı ve bayt eşitliği — işlev doğrudan sınanır (denetçinin kendi tanımı, mutant kopyası dahil)
+OZ="$(sed -n '/^olcum_ozeti()/,/^}/p' "$D")"
+printf 'satir-%s\n' $(seq 1 100) > "$T/oz-100.txt"
+o10="$(bash -c "$OZ"$'\n''olcum_ozeti "$1"' _ "$T/oz-100.txt")"
+gor=$(grep -c '^satir-' <<<"$o10"); say=$(grep -o '\[… [0-9]* satır atlandı' <<<"$o10" | grep -o '[0-9]*')
+[ "$say" -eq $((100 - gor)) ]; g $? "O10 atlandı sayısı GERÇEK atlanan: bildirilen $say = 100 − gösterilen $gor"
+printf 'satir-1\n✓ a\n── SONUÇ: %s ──\n' x > "$T/oz-sec.txt"; for i in $(seq 1 80); do echo "dolgu $i"; done >> "$T/oz-sec.txt"; printf '  ✗ orta-kirmizi\n' >> "$T/oz-sec.txt"; for i in $(seq 1 30); do echo "kuyruk $i"; done >> "$T/oz-sec.txt"
+o11="$(bash -c "$OZ"$'\n''olcum_ozeti "$1"' _ "$T/oz-sec.txt")"
+gor=$(grep -vc '^\[…' <<<"$o11"); say=$(grep -o '\[… [0-9]* satır atlandı' <<<"$o11" | grep -o '[0-9]*'); top=$(wc -l < "$T/oz-sec.txt")
+[ "$say" -eq $((top - gor)) ] && grep -qx '  ✗ orta-kirmizi' <<<"$o11"; g $? "O11 seçme varken de sayı doğru: $say = $top − $gor (seçilen satır atlanmış sayılmaz)"
+printf 'a\nb\nson-satir-sonu-yok' > "$T/oz-kisa.txt"
+bash -c "$OZ"$'\n''olcum_ozeti "$1"' _ "$T/oz-kisa.txt" > "$T/oz-kisa.out"
+printf 'a\nb\nc\n' > "$T/oz-kisa2.txt"; bash -c "$OZ"$'\n''olcum_ozeti "$1"' _ "$T/oz-kisa2.txt" > "$T/oz-kisa2.out"
+cmp -s "$T/oz-kisa.txt" "$T/oz-kisa.out" && cmp -s "$T/oz-kisa2.txt" "$T/oz-kisa2.out"; g $? "O12 kısa dosya bayt bayt AYNEN (satır sonuyla biten de bitmeyen de; göz #392 tur 5)"
+printf 'satir-sonu-yok-olcum' > "$T/_agents/fabrika/kanit/is-son2/olcum-aa-yoksonu.txt"   # alfabede BAŞTA: ardından gerçek başlık gelsin (sonda kalınca sonraki blok zaten satır başıyla açılıyor → sahte yeşil)
+SAHTE_ISTEM_KOPYA="$T/istem-son3.md" SAHTE_JSON="$(J 5 E "")" DENETCI_KIRP_ESIK=900000 bash "$D" is-son2 --diff "$T/ist1.patch" >/dev/null 2>&1
+grep -qx "satir-sonu-yok-olcum" "$T/istem-son3.md" && grep -A1 -x "satir-sonu-yok-olcum" "$T/istem-son3.md" | grep -qx -- "--- olcum-orta-tek.txt ---"; g $? "O13 satır sonuyla bitmeyen ölçümden sonra istemde sonraki başlık AYRI satırda (ayırıcıyı çağıran ekler)"
 T="$_T_ONCE"; export KANIT_DEPO="$T" DENETCI_KOMUT="$_DK_ONCE"
 if [ -n "${IC_KOSUM:-}" ]; then echo "(ic)"; [ "$kalan" -eq 0 ]; exit $?; fi
 echo "════ T11 · MUTASYON: Sultan kapısını bozunca sınav kırmızı veriyor mu ════"
@@ -594,6 +648,13 @@ mut "istem-en-buyuk-ilk-parca" 's@\[ "$_b" -gt "$_EN_B" \] && {@[ -z "$_EN" ] \&
 mut "istem-parca-dokumu-yok" 's@_DOKUM="$_DOKUM · ${_AD\[$_p\]} $_b"@:@'
 mut "istem-karti-dusurur" 's@^ISTEM_PARCALARI=(sablon kart kanit@ISTEM_PARCALARI=(sablon kanit@'
 mut "istem-ayiklama-kosulu-duser" 's@ && \[ "${DENETCI_KANIT_AYIKLA:-1}" != "0" \] && \[ "$ISTEM_BAYT"@ \&\& [ "$ISTEM_BAYT"@'
+mut "olcum-sonu-yok" 's@olcum_ozeti "$f"; \[ -z@head -60 "$f"; [ -z@'
+mut "olcum-stderr-ayrilmaz" 's@^e = L.index("--- stderr ---") if "--- stderr ---" in L else len(L)$@e = len(L)@'
+mut "olcum-tavan-asilir" 's@^SINIR, BAS, SON, HSON, SECME = 60, 25, 12, 10, 8$@SINIR, BAS, SON, HSON, SECME = 60, 300, 12, 10, 8@'
+mut "olcum-atlanan-sayisiz" 's@^    not_ = "\[… %d satır atlandı (dosya %d satır) — ölçümün SONU aşağıda …\]" % (atlanan, len(L))$@    not_ = "[…]"@'
+mut "olcum-ortadan-secmez" 's@^    orta = cik\[BAS:-SON\]; sec = \[x for x in orta if any(k in x for k in SECILIR)\]$@    orta = cik[BAS:-SON]; sec = []@'
+mut "olcum-secilen-de-sayilir" 's@^    atlanan = len(orta) - min(len(sec), SECME) .*$@    atlanan = len(orta)@'
+mut "olcum-ayirici-eklenmez" 's@ \[ -z "$(tail -c1 "$f")" \] || echo; }; done@ }; done@'
 mut_kos
 
 # ── KANIT-AYIKLAMA KAPILARI (gorev_01M4ZSKHD1Y1FFT8P6Z5YMPTF9)

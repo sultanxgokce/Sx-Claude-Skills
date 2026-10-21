@@ -1,0 +1,83 @@
+{
+  "is": "denetci-olcum-sonu",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-21T16:02:53+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "istem",
+      "asama": "once",
+      "dosya": "olcum-istem-once.txt",
+      "sha256": "a26d636036af1ff4c6d4b1971fa91ddbeb0d297999e5ddada20f1aeb36bebf1d",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/denetci-olcum-sonu/istem-olcer.sh",
+        "/config/.claude/skills/yazilim-fabrikasi"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T18:15:08+03:00",
+      "sure_sn": 0.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "aa506c7e15504e2983b08c32e2c5f789"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "istem",
+      "asama": "sonra",
+      "dosya": "olcum-istem-sonra.txt",
+      "sha256": "b09c601f9902202cea4e71a54522c0e76042b2f4eda1383f20a9cbc6d44f9262",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/denetci-olcum-sonu/istem-olcer.sh",
+        "yazilim-fabrikasi"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T19:04:32+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1d3ec2fdc9ad45e6bb3f32bffeaecc8b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-sinavi-sonra.txt",
+      "sha256": "9ae1ce9d9f2f81a76259e955d260eb69c413102ed9306852c6f0b148fbfb1d64",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T18:11:12+03:00",
+      "sure_sn": 398.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d4808b016c5f48a2b5af95cd89aae857"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "t-olcum-bolumu",
+      "asama": "sonra",
+      "dosya": "olcum-t-olcum-bolumu-sonra.txt",
+      "sha256": "3484c800b90b871511670a273a19545aa01d2ddb429e639188e161068d75e5ff",
+      "komut": [
+        "python3",
+        "_agents/fabrika/kanit/denetci-olcum-sonu/bolum-olcer.py",
+        "T-OLCUM",
+        "mutant 'olcum-",
+        "--",
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-21T16:02:53+03:00",
+      "sure_sn": 398.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2dc95c9551034f86bf59c067384db879"
+    }
+  ],
+  "imza": "0ff4d90ebfc3815408604b9fb4a379aff5d909cc0352ac10a3b3d24daa94f44f"
+}
