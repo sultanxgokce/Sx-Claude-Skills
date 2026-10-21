@@ -123,7 +123,7 @@ done < <(python3 -c '
 import base64, json, sys
 d = json.load(open(sys.argv[1]))
 for g in d["g"]:
-    if g["tur"] != "llm-yargi":
+    if g["tur"] not in ("llm-yargi", "sultan-denemesi"):   # yargic G: Katman-2 · Sultan denemesi: Sultan eli
         print(base64.b64encode(json.dumps(g).encode()).decode())
 ' "$OUT/gereklilik.json")
 

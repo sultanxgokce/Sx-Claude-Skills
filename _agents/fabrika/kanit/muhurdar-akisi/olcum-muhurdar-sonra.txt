@@ -1,0 +1,9 @@
+$ bash _agents/fabrika/kanit/muhurdar-akisi/muhur-olcer.sh tescil/scripts
+# rc=0 sure=1.0s zaman=2026-10-22T01:21:28+03:00
+--- stdout ---
+── 1 · kendi işi (yazan=mühürdar): RET (rc 4)
+── 2 · 👤 Sultan denemesi satırı: kabul, MUHUR'da SULTANDA
+── 3 · öznel G2: kendiliğinden kör yargıca gitti (claude), verdikt GECTI
+── 4 · yargıç isteminde inşacı raporu: yok
+── SONUÇ: kendi-işi ✓ · 👤 ✓ · kör yargıç ✓ · rapor sızmaz ✓
+--- stderr ---
