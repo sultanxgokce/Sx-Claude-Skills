@@ -1,7 +1,7 @@
 {
   "is": "kanit-mutasyon-etiketi",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-22T01:06:31+03:00",
+  "guncelleme": "2026-10-22T01:46:32+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -26,7 +26,7 @@
       "etiket": "mutasyon",
       "asama": "sonra",
       "dosya": "olcum-mutasyon-sonra.txt",
-      "sha256": "3b5614900a779562a3f183de4c9974238df402c8641f8fe127d71cf016d34d32",
+      "sha256": "f4d6a27d036bd13cf294ca7c30d4b790f728438c0d30f1c1a7660fbbf8ce1cb0",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/kanit-mutasyon-etiketi/mut-olcer.sh",
@@ -34,17 +34,17 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-22T01:06:31+03:00",
-      "sure_sn": 0.5,
+      "zaman": "2026-10-22T01:46:32+03:00",
+      "sure_sn": 0.9,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "d35efc789ee149f8813bc57e2ebbbbbc"
+      "olcum_id": "394c041bac1a4862af3f3a8210096b85"
     },
     {
       "tur": "olcum",
       "etiket": "kanit-sinavi",
       "asama": "tek",
       "dosya": "olcum-kanit-sinavi-tek.txt",
-      "sha256": "17df4232c7fbf09b45c04ed9ed8af091047267dd10b6eb50fa10753a6164d0f8",
+      "sha256": "b93a3f1ab5a062701592c432538c57df7d82ae254447e2f221ac931b02b2a5b7",
       "komut": [
         "python3",
         "_agents/fabrika/kanit/kanit-mutasyon-etiketi/bolum-olcer.py",
@@ -56,17 +56,17 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-22T00:54:15+03:00",
-      "sure_sn": 35.4,
+      "zaman": "2026-10-22T01:36:16+03:00",
+      "sure_sn": 27.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "19d4de3723d34ced80125f2b36c2e6fe"
+      "olcum_id": "c3cb79de39ad4387bffb03c7a7368586"
     },
     {
       "tur": "olcum",
       "etiket": "denetci-sinavi",
       "asama": "tek",
       "dosya": "olcum-denetci-sinavi-tek.txt",
-      "sha256": "de64caf256d9b99ece29cdfb26b4c15f786c1cf831e1aced4cfe2d421a7d93c8",
+      "sha256": "4587d8785202d4866b3ca18cca264af06b157e0b1d7dbb8e59331175ff2b0233",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/denetci-bitis-zili/sizinti-olcer.sh",
@@ -75,7 +75,6 @@
         "T-MUT",
         " M1",
         " M2",
-        "Z13",
         "mutant 'mutasyon",
         "(bilgi)",
         "✗",
@@ -85,11 +84,11 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-22T01:06:31+03:00",
-      "sure_sn": 735.1,
+      "zaman": "2026-10-22T01:46:31+03:00",
+      "sure_sn": 614.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "74f9d8cf8ff8406eacdabfe5e9e12f92"
+      "olcum_id": "fa092d9ed1cd4d5794c34b0e127c670e"
     }
   ],
-  "imza": "da88d3aa4631df6adcc154dc54c038da772434d0e65c0cbe69b416026b334283"
+  "imza": "91f950eb8a17c7958cafba80cb265d685161a050e2e25f5d7099e312235b7b7d"
 }

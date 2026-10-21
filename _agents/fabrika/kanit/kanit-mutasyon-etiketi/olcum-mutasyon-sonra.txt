@@ -1,5 +1,5 @@
 $ bash _agents/fabrika/kanit/kanit-mutasyon-etiketi/mut-olcer.sh yazilim-fabrikasi/scripts
-# rc=0 sure=0.5s zaman=2026-10-22T01:06:31+03:00
+# rc=0 sure=0.9s zaman=2026-10-22T01:46:32+03:00
 --- stdout ---
 ── 1 · araç mutasyonu etiketliyor mu: EVET (--mutasyon, rc 0)
 ── 2 · mutasyon ölçümünün kaydı: renk yesil mutasyon
