@@ -40,7 +40,7 @@ def durum(k, canli=()):
         return ("gecersiz", "borç zamanı okunamadı")
     if b.get("yazan") != k.get("aldi"):
         return ("gecersiz", "borcu yazan '%s' kartın sahibi değil (aldi: %s)" % (b.get("yazan"), k.get("aldi")))
-    if len(str(b.get("gerekce") or "")) < 20:
+    if len(str(b.get("gerekce") or "").strip()) < 20:
         return ("gecersiz", "borç gerekçesi 20 karakterden kısa")
     if siniflimi(k):
         # FAIL-CLOSED (göz tur 1): kararın zamanı okunamıyorsa ya da eksikse karar SAYILMAZ ("sıra" ölçülemez). Eski hâl `or bz` ile

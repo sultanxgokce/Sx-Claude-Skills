@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/kart.test.sh
-# rc=0 sure=14.1s zaman=2026-10-22T00:58:47+03:00
+# rc=0 sure=12.2s zaman=2026-10-22T01:07:08+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1

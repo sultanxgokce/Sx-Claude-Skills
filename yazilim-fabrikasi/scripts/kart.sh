@@ -444,7 +444,8 @@ PY
     # 🔴 CANLI BORÇ (5WYQMW): kapıyı GEVŞETMEZ, borcu KAYDEDER ve görünür kılar. Koşullar canli_borc.py'de (tek gerçek).
     [ -n "$IS" ] && [ -f "$KD/$IS.json" ] || { _hata "kart yok: $IS"; exit 3; }
     [ -n "$YAZAN" ] && [ -n "$GEREKCE" ] || { _hata "canli-borc: --yazan <AD> ve --gerekce \"…\" gerekiyor (borcu kartın sahibi yazar, gerekçe en az 20 karakter)"; exit 1; }
-    [ "${#GEREKCE}" -ge 20 ] || { _hata "--gerekce en az 20 karakter — 'sonra bakarız' bir gerekçe değildir"; exit 1; }
+    GEREKCE="$(printf '%s' "$GEREKCE" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"   # göz tur 2: 20 boşluk gerekçe sayılmaz
+    [ "${#GEREKCE}" -ge 20 ] || { _hata "--gerekce en az 20 karakter (baş/son boşluk sayılmaz) — 'sonra bakarız' bir gerekçe değildir"; exit 1; }
     for v in YAZAN GEREKCE; do d="${!v}"; if [[ "$d" == *"|"* || "$d" == *$'\n'* ]]; then _hata "--$(printf '%s' "$v" | tr 'A-Z' 'a-z') içinde '|' ya da satır sonu olamaz (defter ayracı)"; exit 1; fi; done
     IFS=$'\t' read -r CGB _ <<<"$(bash "${BASH_SOURCE[0]}" canli-gerekir "$IS" 2>&1)"
     [ "$CGB" = "E" ] || { _hata "bu kart canlı kanıt İSTEMİYOR (canli-gerekir=${CGB:-?}) — borç yalnız --canli e olan kartta olur"; exit 1; }

@@ -478,6 +478,9 @@ import json,sys,datetime
 p=sys.argv[1]; k=json.load(open(p)); k["sultan_kararlari"][0]["zaman"]=(datetime.datetime.now().astimezone()+datetime.timedelta(hours=1)).isoformat(timespec="seconds"); json.dump(k,open(p,"w"))
 PY
 bash "$KT" canli-borc is-b6 --yazan M --gerekce "$GR" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "T14zd karar borçtan SONRAYA tarihli → sayılmaz (sıra: önce Sultan, sonra borç)"
+borckart is-b8
+bash "$KT" canli-borc is-b8 --yazan M --gerekce "                              " >/dev/null 2>&1; [ $? -ne 0 ] && [ "$(kj is-b8 "k.get('canli_borc')")" = "None" ]; g $? "T14zf 30 boşluk gerekçe sayılmaz, borç yazılmaz (göz tur 2)"
+bash "$KT" canli-borc is-b8 --yazan M --gerekce "          kısa gerekçe          " >/dev/null 2>&1; [ $? -ne 0 ]; g $? "T14zg baş/son boşlukla 20'ye tamamlanan gerekçe sayılmaz"
 # MUTASYON: borç kapıyı gerçekten belirliyor (süs değil)
 MB1="$PKG/mutant-borc1.sh"; sed 's/gecerli) borc_gecer=1 ;;/gecerli) borc_gecer=0 ;;/' "$G" > "$MB1"; chmod +x "$MB1"
 grep -q 'gecerli) borc_gecer=0' "$MB1"; g $? "T14x mutant üretildi (geçerli borç artık geçirmiyor)"
