@@ -5,6 +5,7 @@ set -u
 AD="$(cd "$(dirname "$0")" && pwd)"; VERI="$AD/../veri"; BEKCI="${KADRO_BEKCI:-$AD/kadro-denetle.py}"
 T="$(mktemp -d)"; trap 'rm -rf "$T"' EXIT
 gecen=0; kalan=0
+declare -A DESEN
 ok() { gecen=$((gecen+1)); echo "ok   $1"; }
 kt() { kalan=$((kalan+1)); echo "KIRMIZI $1"; }
 
@@ -24,6 +25,7 @@ PY
 # bozuk <ad> <beklenen-rc> <çıktıda-geçen> <python-bozucu> [bekçi-bayrakları…]
 bozuk() {
   local ad="$1" rc="$2" desen="$3" boz="$4"; shift 4
+  DESEN[$ad]="$desen"
   kopya "$ad" "$boz"; local o; o="$(python3 "$BEKCI" --veri "$T/$ad" "$@" 2>&1)"; local r=$?
   if [ "$r" -eq "$rc" ] && printf '%s' "$o" | grep -qF -- "$desen"; then ok "$ad → rc=$rc ve «$desen»"; else kt "$ad → beklenen rc=$rc «$desen», gelen rc=$r: $(printf '%s' "$o" | tail -3 | tr '\n' '|')"; fi
 }
@@ -52,6 +54,15 @@ bozuk k-esik       1 "uzmanlık muhurdarlik: sicil_esigi"       "v['uzmanliklar'
 bozuk k-bicim      1 "biçimi tanınmıyor" "t['terimler'][0]['kaynak']=['http://x']"
 bozuk k-durum      1 "terim personel: durum 'onaylandi'"           "t['terimler'][0]['durum']='onaylandi'"
 bozuk k-beceri     1 "beceri_id zorunlu" "del v['usuller'][0]['adimlar'][2]['beceri_id']"
+bozuk k-uzm-ikiz   1 "uzmanlık kimliği 'muhurdarlik' iki kez" "v['uzmanliklar'].append(dict(v['uzmanliklar'][0]))"
+bozuk k-vaz-ikiz   1 "vazife kimliği 'tescil' iki kez"       "v['vazifeler'].append(dict(v['vazifeler'][0]))"
+bozuk k-usul-ikiz  1 "usul kimliği 'tescil-teslim-sina' iki kez" "v['usuller'].append(dict(v['usuller'][0]))"
+bozuk k-idsiz      1 "id (metin) eksik"  "del v['vazifeler'][1]['id']"
+bozuk k-nesne      1 "nesne olmalı"      "v['vazifeler'].append('metin')"
+bozuk k-adim-nesne 1 "usul tescil-teslim-sina adım: nesne olmalı" "v['usuller'][0]['adimlar'].append(5)"
+bozuk k-liste      1 "usuller liste olmalı" "v['usuller']={}"
+# beklenmeyen biçim çökerse yeşil değil, ölçülemedi (rc=3)
+bozuk o-cokme      3 "beklenmeyen biçimde durdu" "v['vazifeler'][0]['cakisir']=5"
 
 # ── SARI: rc=0 ama görünür; --siki ile rc=1 ──
 bozuk s-katalog 0 "katalogda yok"   "v['usuller'][0]['adimlar'][2]['beceri_id']='olmayan-beceri'"
@@ -78,7 +89,7 @@ PY
   [ $? -eq 0 ] || { kt "mutasyon $ad: hedef bulunamadı"; return; }
   local o r
   o="$(python3 "$MUT" --veri "$T/$hedef" --kok "$AD/../.." 2>&1)"; r=$?
-  if [ "$r" -eq 0 ]; then ok "mutasyon $ad öldürüldü (kural kapalıyken $hedef geçti → sınav bunu yakalar)"; else kt "mutasyon $ad YAŞIYOR: kural kapalı olduğu halde $hedef rc=$r"; fi
+  if ! printf '%s' "$o" | grep -qF -- "${DESEN[$hedef]}"; then ok "mutasyon $ad öldürüldü (kural kapalıyken «${DESEN[$hedef]}» çıkmıyor → sınav bunu yakalar)"; else kt "mutasyon $ad YAŞIYOR: kural kapalı olduğu halde $hedef hâlâ «${DESEN[$hedef]}» diyor"; fi
 }
 mutant yedek     'if v.get("acil") == "evet":||if False:'                                  k-yedek
 mutant cakisir   'elif v["id"] not in vaz[c].get("cakisir", []):||elif False:'              k-cakisir
@@ -88,6 +99,9 @@ mutant karist    'elif tid not in idler[k].get("karistirilan", []):||elif False:
 mutant tarif     'if a["tur"] == "sultan_eli" and not a.get("sultan_eli_tarifi"):||if False:' k-tarif
 mutant benzersiz 'if t.get("id") in idler:||if False:'                                      k-benzersiz
 mutant adikiz    'if t.get("ad") in adlar:||if False:'                                       k-adikiz
+mutant vazikiz   'if kid in sonuc:||if False:'                                          k-vaz-ikiz
+mutant idsiz     'if not isinstance(kid, str) or not kid:||if False:'                    k-idsiz
+mutant nesne     'if not isinstance(kayit, dict):||if False:'                            k-nesne
 mutant sira      'if [a.get("sira") for a in adimlar] != list(range(1, len(adimlar) + 1)):||if False:' k-sira
 
 echo "toplam=$((gecen+kalan)) geçen=$gecen kırmızı=$kalan"

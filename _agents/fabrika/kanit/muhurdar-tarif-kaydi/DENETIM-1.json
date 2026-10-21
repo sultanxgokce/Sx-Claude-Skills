@@ -1,0 +1,52 @@
+{
+  "tur": 1,
+  "is": "muhurdar-tarif-kaydi",
+  "pr": "410",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-22T01:58:08+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 68282,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 11195
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Tarif kaydı, şema v2 bekçisi, katalog/senkron bağlantıları ve gerçek veri eklenmiş; istenen tek-kopya veri becerisi doğru yönde kurulmuş. Ancak bekçi, kadronun ana listelerinde yinelenen kimlikleri sessizce ezebildiği ve bazı bozuk girdilerde denetim sonucu vermek yerine çökebildiği için önce bunlar çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Uzmanlık, vazife ve usul kimliklerinin benzersizliği denetlenmiyor; sözlük oluşturma aynı kimliğin önceki kaydını sessizce ezer ve bekçi bozuk veriyi temiz kabul edebilir.",
+        "kanit": "`uzm = {u[\"id\"]: u ...}`, `vaz = {v[\"id\"]: v ...}` ve `usl = {u[\"id\"]: u ...}` doğrudan sözlüğe çeviriyor; terimler için bulunan açık yinelenen-kimlik kontrolünün bu üç liste için karşılığı yok. 35 sınavın çıktısında da kadro kimliği yineleme vakası bulunmuyor.",
+        "konum": "tarif-kaydi/scripts/kadro-denetle.py:denetle başlangıcı; olcum-bekci-sinavi-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Bekçi bazı şema bozukluklarını kırmızı raporlamak yerine yakalanmamış istisnayla sonlandırabilir.",
+        "kanit": "Sözlük kurulumunda `u[\"id\"]`/`v[\"id\"]`, vazife döngüsünde `v[\"id\"]` ve adım denetiminde `a[\"tur\"]` doğrudan indeksleniyor; eksik veya yanlış biçimli kayıtları önce doğrulayan bir tip/zorunlu-alan katmanı yok. Mevcut sınavlar `beceri_id` eksikliğini ölçüyor fakat ana kayıt `id` eksikliği ya da kayıt türünün nesne olmaması vakasını ölçmüyor.",
+        "konum": "tarif-kaydi/scripts/kadro-denetle.py:denetle; tarif-kaydi/scripts/kadro-denetle.test.sh:bozuk vakaları",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Gerçek veri bekçi koşusu temiz değil; dört kapı adımı henüz uygulanmış bir dosya yoluna bağlı değil.",
+        "kanit": "Gerçek veri çıktısı dört kez `SARI 4 kapi_yolu ... kapi_yolu null — usul planlı` ve özet olarak `kirmizi=0 sari=4` veriyor. Bunlar ölçülemedi kaydı değil, üretim verisinde açıkça planlı bırakılmış adımlar.",
+        "konum": "olcum-bekci-gercek-veri-sonra.txt; tarif-kaydi/veri/kadro-tarifleri.json",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; veri dosyasının yoktan eklendiğini gösteren önce/sonra ölçüm çifti var. Bekçi sınavı 35/35, gerçek veri koşusu ve senkron/kabuk sınavları yeşil olsa da gerçek veri çıktısı dört SARI içeriyor; dolayısıyla `rc=0` temiz veri kanıtı sayılamaz. Senkron kanıtı altyapı kapılarını doğruluyor, fakat çıktıda belirli kutulardaki kurulu `tarif-kaydi` kopyalarının kaynakla birebir eşleştiğini gösteren hedef-bazlı ölçüm bulunmuyor."
+  }
+}

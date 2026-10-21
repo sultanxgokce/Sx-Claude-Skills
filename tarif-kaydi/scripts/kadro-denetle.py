@@ -46,15 +46,45 @@ def yukle(yol):
         sys.exit(3)
 
 
+def sozluk_oge(r, kayit, ne):
+    if not isinstance(kayit, dict):
+        r.kirmizi("1 yapı", f"{ne}: nesne olmalı, {type(kayit).__name__} geldi")
+        return False
+    return True
+
+
+def sozluk(r, veri, anahtar, ad):
+    """Listeyi kimlik sözlüğüne çevirir; kimliksiz/nesne olmayan kayıt kırmızı, yinelenen kimlik kırmızı (sessizce ezilmez)."""
+    liste = veri.get(anahtar, [])
+    if not isinstance(liste, list):
+        r.kirmizi("1 yapı", f"{anahtar} liste olmalı, {type(liste).__name__} geldi")
+        return {}
+    sonuc = {}
+    for k in liste:
+        if not sozluk_oge(r, k, ad):
+            continue
+        kid = k.get("id")
+        if not isinstance(kid, str) or not kid:
+            r.kirmizi("1 yapı", f"{ad}: id (metin) eksik: {str(k)[:60]}")
+            continue
+        if kid in sonuc:
+            r.kirmizi("2 benzersiz", f"{ad} kimliği {kid!r} iki kez geçiyor")
+            continue
+        sonuc[kid] = k
+    return sonuc
+
+
 def tur_kontrol(r, kayit, ad):
     if kayit.get("sema_surumu") != 2:
         r.kirmizi("7 sema_surumu", f"{ad}: sema_surumu 2 olmalı, {kayit.get('sema_surumu')!r}")
 
 
 def denetle(veri, terimler, katalog_idleri, kok, r):
-    uzm = {u["id"]: u for u in veri.get("uzmanliklar", [])}
-    vaz = {v["id"]: v for v in veri.get("vazifeler", [])}
-    usl = {u["id"]: u for u in veri.get("usuller", [])}
+    uzm = sozluk(r, veri, "uzmanliklar", "uzmanlık")
+    vaz = sozluk(r, veri, "vazifeler", "vazife")
+    usl = sozluk(r, veri, "usuller", "usul")
+    for u in usl.values():   # adımlar nesne listesi olmalı; olmayan kayıt kırmızı sayılır ve atlanır
+        u["adimlar"] = [a for a in (u.get("adimlar") or []) if sozluk_oge(r, a, f"usul {u['id']} adım")]
     if veri.get("sema_surumu") != 2:
         r.kirmizi("7 sema_surumu", "kadro-tarifleri.json: sema_surumu 2 olmalı")
     if terimler.get("sema_surumu") != 2:
@@ -139,7 +169,7 @@ def denetle(veri, terimler, katalog_idleri, kok, r):
                     r.kirmizi("4 kapi_yolu", f"{ad}: kapi_yolu {a['kapi_yolu']!r} dosya olarak yok")
 
     # ── terim kaydı ──
-    liste = terimler.get("terimler") or []
+    liste = [t for t in (terimler.get("terimler") or []) if sozluk_oge(r, t, "terim")]
     idler, adlar = {}, {}
     for t in liste:
         tur_kontrol(r, t, f"terim {t.get('id')}")
@@ -227,7 +257,13 @@ def main(argv):
         print(f"ÖLÇÜLEMEDİ: {katalog_yolu} içinde beceri yok (boş katalog) — beceri_id denetimi yapılamaz")
         return 3
     r = Rapor()
-    denetle(veri, terimler, idler, kok, r)
+    try:
+        denetle(veri, terimler, idler, kok, r)
+    except Exception as e:   # beklenmeyen biçim: temiz DEĞİL, ölçülemedi
+        for satir in r.k + r.s:
+            print(satir)
+        print(f"ÖLÇÜLEMEDİ: bekçi beklenmeyen biçimde durdu ({type(e).__name__}: {e}) — veri şemaya uymuyor olabilir")
+        return 3
     for satir in r.k + r.s:
         print(satir)
     print(f"kirmizi={len(r.k)} sari={len(r.s)}")

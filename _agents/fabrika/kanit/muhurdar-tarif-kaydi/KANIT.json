@@ -1,7 +1,7 @@
 {
   "is": "muhurdar-tarif-kaydi",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-22T01:57:20+03:00",
+  "guncelleme": "2026-10-22T01:58:55+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -50,34 +50,34 @@
       "etiket": "bekci-sinavi",
       "asama": "sonra",
       "dosya": "olcum-bekci-sinavi-sonra.txt",
-      "sha256": "c12d8e12d2eff65c8fcd3f88f322e61866dd1c556a23f564770c28970f29aa5f",
+      "sha256": "03d995df1765e10adfd127fa9e9e57f515cf2aca9a5bd8f6a44ba936d189a4b3",
       "komut": [
         "bash",
         "/config/projects/_wt/Sx-Claude-Skills-muhurdar-tarif-kaydi/tarif-kaydi/scripts/kadro-denetle.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-22T01:56:59+03:00",
-      "sure_sn": 1.4,
+      "zaman": "2026-10-22T01:58:55+03:00",
+      "sure_sn": 2.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "b95e59fbcee744599b32eabc2ac82ec4"
+      "olcum_id": "097fb6349dac45968b3cacd001702347"
     },
     {
       "tur": "olcum",
       "etiket": "bekci-gercek-veri",
       "asama": "sonra",
       "dosya": "olcum-bekci-gercek-veri-sonra.txt",
-      "sha256": "5bf8327c7e4f06d510c619a98b0b36a8303e0f02065c3f1255ad4fafa31b0b67",
+      "sha256": "086c907ebf0a243e19e40f51dd5440514341088f97bf0d645255cf4a49a18510",
       "komut": [
         "python3",
         "/config/projects/_wt/Sx-Claude-Skills-muhurdar-tarif-kaydi/tarif-kaydi/scripts/kadro-denetle.py"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-22T01:56:59+03:00",
+      "zaman": "2026-10-22T01:58:55+03:00",
       "sure_sn": 0.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "c319e5fd2df44938bd70f9a1be64e613"
+      "olcum_id": "1217d4ac55aa466f870a90f8eca72f49"
     },
     {
       "tur": "olcum",
@@ -112,7 +112,24 @@
       "sure_sn": 0.6,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "e0d4e15cf16c40f0857be213e926f8e3"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kabuk-biti",
+      "asama": "sonra",
+      "dosya": "olcum-kabuk-biti-sonra.txt",
+      "sha256": "b57ab8bced638e37d9c96ada224655349dadeac10e040f90080d7ced5bd31b28",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-muhurdar-tarif-kaydi/kabuk-biti.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T01:58:55+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "072b955e682444cdb589e2e16302fbc7"
     }
   ],
-  "imza": "454bedd67a3b9acc4291c959fde70f38f93e3e9ed27052ac31821fdf0f26e9e1"
+  "imza": "6de995498f40100130fee4da31d45f8e94fba453b0b81ac19ad96c341aabd963"
 }
