@@ -83,16 +83,18 @@ for G in $ACIK; do
       "$(cat "$D/istem.md")" </dev/null >"$D/log" 2>&1; yrc=$?
     [ "$yrc" -eq 0 ] || echo "muhurdar: $G codex düştü (rc $yrc) → Claude ile yeni oturum" >&2
   fi
-  if [ "$yrc" -ne 0 ] && [ "$yrc" -ne 124 ]; then
+  # Codex düşerse — zaman aşımı DAHİL (göz #409 tur 2) — Claude'a yeni oturumla geçilir
+  [ "$yrc" -eq 124 ] && model="codex(zaman-aşımı)"
+  if [ "$yrc" -ne 0 ]; then
     if command -v claude >/dev/null 2>&1; then
-      model="${model:+codex→}claude"
+      model="${model:+$model→}claude"
       timeout -k 30 "$ZA" claude -p --output-format json --json-schema "$(cat "$SEMA")" < "$D/istem.md" > "$D/claude.json" 2>"$D/log"; yrc=$?
       python3 -c "import json,sys;d=json.load(open(sys.argv[1]));r=d.get('structured_output') or d.get('result');print(r if isinstance(r,str) else json.dumps(r,ensure_ascii=False))" "$D/claude.json" > "$D/cevap.json" 2>/dev/null
     else
-      model="${model:+codex→}yok"
+      model="${model:+$model→}yok"
     fi
   fi
-  [ "$yrc" -eq 124 ] && model="$model(zaman-aşımı)"
+  [ "$yrc" -eq 124 ] && model="$model(zaman-aşımı)"   # Claude da aşarsa
   YARGIC="${YARGIC:+$YARGIC,}$G=$model"
   karar="$(python3 - "$D/cevap.json" <<'PY' 2>/dev/null
 import json, sys, re
@@ -109,12 +111,13 @@ PY
   K2+=(--katman2 "$G=$karar")
 done
 
-# ── MUHUR: mekanik G'ler yeniden TAZE koşulur (tescil-run sözleşmesi), öznel kararlar + mühürdar başlığı işlenir ──
-if [ "${#K2[@]}" -gt 0 ]; then "${TR[@]}" ${K2[@]+"${K2[@]}"} >/dev/null; rc=$?; [ "$rc" -le 4 ] || exit "$rc"; fi
+# ── MUHUR: yargıcın GÖRDÜĞÜ kanıtla mühürlenir — mekanik G'ler YENİDEN KOŞULMAZ (göz #409 tur 2: yan etkili ya da kararsız bir G'de
+#    yargıç bir ölçüme, mühür başka ölçüme dayanırdı). Bu koşunun mekanik ölçümü tazedir; öznel kararlar + mühürdar başlığı işlenir.
 SHA="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("worktree_head_sha") or "")' "$OUT/muhur-ozet.json" 2>/dev/null)"
 [ -n "$SHA" ] || SHA="$(git -C "$WORKTREE" rev-parse HEAD 2>/dev/null)"
 python3 "$LIB/muhur.py" uret --out "$OUT" --kart "$IS" --deneme "$DENEME" --head-sha "$SHA" ${K2[@]+"${K2[@]}"} \
   ${TATBIKAT[@]+"${TATBIKAT[@]}"} --muhurdar "$MUHURDAR" --yazan "$YAZAN" ${YARGIC:+--yargic "$YARGIC"} >/dev/null; rc=$?
+bash "$HERE/muhur-lint.sh" "$OUT" >/dev/null 2>&1 || echo "muhurdar: muhur-lint UYARI (report-only, verdikt etkilenmez)" >&2
 V="$(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(d["verdikt"], "· 👤 Sultanda:", " ".join(d.get("sultan_denemesi") or []) or "yok")' "$OUT/muhur-ozet.json" 2>/dev/null)"
 echo "muhurdar: $IS · mühürdar $MUHURDAR · yazan $YAZAN · verdikt $V${YARGIC:+ · yargıç $YARGIC}"
 exit "$rc"

@@ -43,6 +43,9 @@ EOF
 gyaz "$K/GEREKLILIK.md" "  tarif: cikti.txt dosyasını aç, merhaba yazıyor mu bak" cikti.txt
 gyaz "$K/G-tarifsiz.md" "" cikti.txt
 gyaz "$K/G-kacis.md" "  tarif: aç bak" "../../../../etc/hostname"
+# kararsız mekanik G: yalnız İLK koşuda geçer — iki kez koşulursa yargıcın gördüğü kanıt ile mühürdeki ayrışır
+sed "s@  komut: touch $T/isaret-g1 \&\& grep -q merhaba cikti.txt@  komut: n=\$(cat $T/sayac 2>/dev/null || echo 0); echo \$((n+1)) > $T/sayac; [ \$n -eq 0 ]@" "$K/GEREKLILIK.md" > "$K/G-kararsiz.md"
+mkdir -p "$T/bin-codex-yavas"; printf '#!/usr/bin/env bash\nsleep 20\n' > "$T/bin-codex-yavas/codex"; chmod +x "$T/bin-codex-yavas/codex"
 # sahte yargıçlar: istemi kopyalar, çağrı sayar; cevabı YARGIC_CEVAP ortamından (varsayılan GEÇTİ)
 cat > "$T/bin-claude/claude" <<EOF
 #!/usr/bin/env bash
@@ -85,6 +88,10 @@ _sen() {  # _sen <scripts-dir> → geçen kapı anahtarları
   [ $? -eq 0 ] && [ "$(_alan yargic "$O")" = "G2=codex,G4=codex" ] && [ ! -e "$T/claude-n" ] && ! grep -q "RAPOR-SIZINTI" "$T/istem-codex.md" && o="$o g"
   _kos "$s" "$O" "$T/bin-codex-duser:$T/bin-claude:" AGENT_NAME=MUHURDAR1 -- --gereklilik "$K/GEREKLILIK.md" --yazan HENDESE
   [ $? -eq 0 ] && [ "$(_alan yargic "$O")" = "G2=codex→claude,G4=codex→claude" ] && o="$o h"
+  rm -f "$T/sayac"; _kos "$s" "$O" "$T/bin-claude:" AGENT_NAME=MUHURDAR1 MUHURDAR_MODEL=claude -- --gereklilik "$K/G-kararsiz.md" --yazan HENDESE
+  [ $? -eq 0 ] && [ "$(cat "$T/sayac")" = 1 ] && [ "$(_alan verdikt "$O")" = GECTI ] && o="$o q"
+  _kos "$s" "$O" "$T/bin-codex-yavas:$T/bin-claude:" AGENT_NAME=MUHURDAR1 MUHURDAR_ZAMAN_ASIMI=1 -- --gereklilik "$K/GEREKLILIK.md" --yazan HENDESE
+  [ $? -eq 0 ] && [ "$(_alan yargic "$O")" = "G2=codex(zaman-aşımı)→claude,G4=codex(zaman-aşımı)→claude" ] && o="$o r"
   _kos "$s" "$O" "$T/bin-claude:" AGENT_NAME=MUHURDAR1 MUHURDAR_MODEL=claude YARGIC_CEVAP='"bozuk"' -- --gereklilik "$K/GEREKLILIK.md" --yazan HENDESE
   [ $? -eq 3 ] && [ "$(_alan verdikt "$O")" = ESKALASYON ] && o="$o i"
   _kos "$s" "$O" "$T/bin-claude:" AGENT_NAME=MUHURDAR1 MUHURDAR_MODEL=claude YARGIC_CEVAP='{"karar":"KALDI","not":"selam yok"}' -- --gereklilik "$K/GEREKLILIK.md" --yazan HENDESE
@@ -102,6 +109,8 @@ _k() { case " $2 " in *" $1 "*) return 0;; esac; return 1; }
 echo "════ G8 · Mühürdarlık · Tescil usulü (muhurdar.sh) ════"
 S0="$(_sen "$HERE")"
 _k p "$S0"; g $? "p usul sırası: biçimsiz belge + kendi işi → önce biçim kapısı (gereklilik-eksik), kendi-isi değil"
+_k q "$S0"; g $? "q yargıç ve mühür AYNI ölçüme dayanır: mekanik G bir kez koşulur (kararsız G'de de GECTI, sayaç 1)"
+_k r "$S0"; g $? "r Codex zaman aşımına uğrarsa da Claude'a yeni oturumla geçilir ('codex(zaman-aşımı)→claude')"
 _k a "$S0"; g $? "a kendi işini mühürleyemez: yazan = mühürdar (büyük-küçük harf farkıyla) → İSİMLİ-RED kendi-isi, rc 4, hiçbir G koşulmadı, yargıç çağrılmadı"
 _k b "$S0"; g $? "b mühürdarın kimliği yoksa (AGENT_NAME boş) mühür basılmaz, rc 2"
 _k c "$S0"; g $? "c --yazan verilmezse koşulmaz (kendi işi ölçülemiyor), rc 2"
@@ -129,11 +138,13 @@ PY
   ! _k "$1" "$(_sen "$d")"; g $? "mutant ($5) → '$1' kapısı düşüyor"
 }
 _m a muhurdar.sh 'if [ "$ayni" = 1 ]; then' 'if false; then' "kendi-işi kapısı yok"
+_m q muhurdar.sh 'bash "$HERE/muhur-lint.sh" "$OUT" >/dev/null 2>&1 ||' '"${TR[@]}" ${K2[@]+"${K2[@]}"} >/dev/null 2>&1; bash "$HERE/muhur-lint.sh" "$OUT" >/dev/null 2>&1 ||' "mühürden önce mekanik G yeniden koşuluyor"
+_m r muhurdar.sh '  if [ "$yrc" -ne 0 ]; then' '  if [ "$yrc" -ne 0 ] && [ "$yrc" -ne 124 ]; then' "zaman aşımında Claude'a geçilmiyor"
 _m p muhurdar.sh 'if [ ! -f "$GEREKLILIK" ] || [ -n "$(python3' 'if false && [ -n "$(python3' "biçim kapısı kendi-işinden sonra"
 _m k tescil-run.sh 'if g["tur"] not in ("llm-yargi", "sultan-denemesi"):' 'if g["tur"] != "llm-yargi":' "Sultan denemesi koşuluyor"
 _m d lib/muhur.py 'mekanik = [g for g in ger["g"] if g["tur"] not in ("llm-yargi", "sultan-denemesi")]' 'mekanik = [g for g in ger["g"] if g["tur"] != "llm-yargi"]' "Sultan denemesi verdikte"
 _m i muhurdar.sh '[ -n "$karar" ] || karar="EMIN-DEGILIM:' '[ -n "$karar" ] || karar="GECTI:' "bozuk cevap GEÇTİ sayılıyor"
-_m h muhurdar.sh 'if [ "$yrc" -ne 0 ] && [ "$yrc" -ne 124 ]; then' 'if [ -z "$model" ]; then' "Codex düşünce Claude'a geçilmiyor"
+_m h muhurdar.sh '  if [ "$yrc" -ne 0 ]; then' '  if [ -z "$model" ]; then' "Codex düşünce Claude'a geçilmiyor"
 _m e lib/kor-istem.py '    return 0
 
 

@@ -1,8 +1,10 @@
 $ bash tescil/scripts/muhurdar.test.sh
-# rc=0 sure=65.5s zaman=2026-10-22T01:27:23+03:00
+# rc=0 sure=159.8s zaman=2026-10-22T01:35:17+03:00
 --- stdout ---
 ════ G8 · Mühürdarlık · Tescil usulü (muhurdar.sh) ════
   ✓ p usul sırası: biçimsiz belge + kendi işi → önce biçim kapısı (gereklilik-eksik), kendi-isi değil
+  ✓ q yargıç ve mühür AYNI ölçüme dayanır: mekanik G bir kez koşulur (kararsız G'de de GECTI, sayaç 1)
+  ✓ r Codex zaman aşımına uğrarsa da Claude'a yeni oturumla geçilir ('codex(zaman-aşımı)→claude')
   ✓ a kendi işini mühürleyemez: yazan = mühürdar (büyük-küçük harf farkıyla) → İSİMLİ-RED kendi-isi, rc 4, hiçbir G koşulmadı, yargıç çağrılmadı
   ✓ b mühürdarın kimliği yoksa (AGENT_NAME boş) mühür basılmaz, rc 2
   ✓ c --yazan verilmezse koşulmaz (kendi işi ölçülemiyor), rc 2
@@ -21,6 +23,8 @@ $ bash tescil/scripts/muhurdar.test.sh
 ── G8 · MUTASYON (tescil kopyasında, kontrol şartlı) ──
   ✓ kontrol kopyası gerçek betiklerle aynı kapıları geçiyor
   ✓ mutant (kendi-işi kapısı yok) → 'a' kapısı düşüyor
+  ✓ mutant (mühürden önce mekanik G yeniden koşuluyor) → 'q' kapısı düşüyor
+  ✓ mutant (zaman aşımında Claude'a geçilmiyor) → 'r' kapısı düşüyor
   ✓ mutant (biçim kapısı kendi-işinden sonra) → 'p' kapısı düşüyor
   ✓ mutant (Sultan denemesi koşuluyor) → 'k' kapısı düşüyor
   ✓ mutant (Sultan denemesi verdikte) → 'd' kapısı düşüyor
@@ -30,5 +34,5 @@ $ bash tescil/scripts/muhurdar.test.sh
   ✓ mutant (hedef ağaç dışına kaçabiliyor) → 'm' kapısı düşüyor
   ✓ mutant (Sultan denemesi tarifsiz geçiyor) → 'l' kapısı düşüyor
 
-── SONUÇ: 26 geçti · 0 kaldı ──
+── SONUÇ: 30 geçti · 0 kaldı ──
 --- stderr ---

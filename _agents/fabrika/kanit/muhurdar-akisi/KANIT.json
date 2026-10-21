@@ -1,7 +1,7 @@
 {
   "is": "muhurdar-akisi",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-22T01:27:24+03:00",
+  "guncelleme": "2026-10-22T01:35:17+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -26,7 +26,7 @@
       "etiket": "muhurdar",
       "asama": "sonra",
       "dosya": "olcum-muhurdar-sonra.txt",
-      "sha256": "4e0c9c843b439eceb2e1a132201f075e1279700df40065ed88e16262a7854bbc",
+      "sha256": "427df3cf713e520e960af821a82c1a473508df8b36e5fed2d27d9d3f68fcedc8",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/muhurdar-akisi/muhur-olcer.sh",
@@ -34,28 +34,28 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-22T01:27:24+03:00",
-      "sure_sn": 1.0,
+      "zaman": "2026-10-22T01:35:17+03:00",
+      "sure_sn": 0.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "c798453c35e64da0a5a060403c8cd072"
+      "olcum_id": "4882a243063745d98c408a0a6d69f5dd"
     },
     {
       "tur": "olcum",
       "etiket": "muhurdar-sinavi",
       "asama": "tek",
       "dosya": "olcum-muhurdar-sinavi-tek.txt",
-      "sha256": "3131b2cc0df1fda213878720859a5cd8202aa4a42ed94d59de90642f40f19728",
+      "sha256": "4de196391c6b21aa67ebb94ae4c15b5ee19c38cd92cde4bb9644687b5b59cb49",
       "komut": [
         "bash",
         "tescil/scripts/muhurdar.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-22T01:27:23+03:00",
-      "sure_sn": 65.5,
+      "zaman": "2026-10-22T01:35:17+03:00",
+      "sure_sn": 159.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "b28ecd3df5a540e69b1615023d274d37"
+      "olcum_id": "ae37c766a3e54feb9a4eaaf57879e38a"
     }
   ],
-  "imza": "2e924b83c4318a62090d109b6330441ff72b8937819d4b96ffb7a3a4bcb84267"
+  "imza": "0a7faa065bdfe37371f08913954789f5c4d5f3f23533056712341fa96bd29bea"
 }

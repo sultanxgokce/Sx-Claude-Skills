@@ -206,7 +206,8 @@ yazmaz, üstüne kurar:
   **kendi taze** mekanik kanıt tablosundan kurulur. İnşacının raporu, transkripti, commit mesajı açılmaz; rapor verecek
   bir argüman yoktur (bilinmeyen argüman rc 2). `hedef` iş ağacı dışına kaçarsa istem kurulmaz → EMIN-DEGILIM.
 - **Temiz koşu:** her öznel G kendi oturumunda (`codex exec --ephemeral` / `claude -p`); bir G'nin yargısı ötekine taşınmaz.
-- **Model:** Codex erişilebilirse Codex, değilse Claude (karar 2); Codex düşerse Claude'a yeni oturumla geçilir.
+- **Model:** Codex erişilebilirse Codex, değilse Claude (karar 2); Codex düşerse — zaman aşımı dahil — Claude'a yeni oturumla geçilir.
+- **Tek ölçüm:** yargıcın gördüğü mekanik kanıt mühürde kullanılan kanıttır; mühürden önce G'ler YENİDEN KOŞULMAZ.
   `MUHURDAR_MODEL=claude` Codex'i bilerek atlar. Süre `MUHURDAR_ZAMAN_ASIMI` (900 sn, `-k 30`).
 - **Bozuk cevap GEÇTİ sayılmaz:** geçersiz/eksik JSON ya da zaman aşımı → `EMIN-DEGILIM` → ESKALASYON (§3).
 - **MUHUR başlığı:** `muhurdar · yazan · yargic (G=model) · kor` satırları; `g_sultan` sayısı.
@@ -217,7 +218,7 @@ AGENT_NAME=<mühürdar> bash scripts/muhurdar.sh <iş> --gereklilik <GEREKLILIK.
 # RC tescil-run ile aynı: 0 GECTI · 1 KALDI · 2 kullanım · 3 ESKALASYON · 4 İSİMLİ-RED (kendi-isi dahil)
 ```
 
-Sınav: `scripts/muhurdar.test.sh` (16 kapı + kontrol kopyası + 9 mutant; sahte yargıçlar, ağsız; usul sırası: biçim kapısı kendi-işinden önce — göz #409 tur 1). Sicil/ders çıkarma/askı
+Sınav: `scripts/muhurdar.test.sh` (18 kapı + kontrol kopyası + 11 mutant; sahte yargıçlar, ağsız; usul sırası: biçim kapısı kendi-işinden önce — göz #409 tur 1; yargıç ve mühür aynı ölçüm, Codex zaman aşımında da Claude — tur 2). Sicil/ders çıkarma/askı
 (G11 · S10) ve diploma/başsız şapka (G13 · S14) sonraki dilimlerdir.
 
 ## Tasarım-notu — dış-araç kararı (2026-07, DİVAN K5)
