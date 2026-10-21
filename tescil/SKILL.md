@@ -1,7 +1,7 @@
 ---
 name: tescil
 type: agent
-version: 0.2.1
+version: 0.3.0
 description: >
   MÜHÜRDAR'ın el-kitabı: teslim edilen bir işi (kart) YAZILI gerekliliklere (GOAL + G1..Gn
   komut→beklenen/RC) karşı MAKİNE-KANITLI sınayan kör-protokol tescil-kabuğu. sert-teslim
@@ -60,14 +60,20 @@ TIP: ui | kod | docs           # docs = docs/skill/infra sınıfı
 VITES: TAM | HAFIF             # HAFİF = tek-G + tek-kanıt (küçük işin meşru ucuz yolu)
 
 G1: <kısa açıklama>
-  tur: cmd | api-check | e2e-check | llm-yargi
+  tur: cmd | api-check | e2e-check | llm-yargi | sultan-denemesi
   komut: <tek-satır shell — worktree kökünde koşulur>
   beklenen_rc: 0               # opsiyonel, default 0
   beklenen_desen: <ERE>        # opsiyonel; kırpılmamış çıktıda aranır
   davranis: evet               # DAVRANIŞ-G işareti (kart-başına ≥1 ZORUNLU)
   cwd: <göreli-alt-dizin>      # opsiyonel
   rubrik: <dosya>              # yalnız tur=llm-yargi (Katman-2)
+  hedef: <dosya>               # yalnız tur=llm-yargi: yargıca verilen TEK iş parçası (worktree içinde; dışarı kaçış reddedilir)
+  tarif: <10 sn'lik deneme>    # yalnız tur=sultan-denemesi: ZORUNLU; mühürdar sınamaz, koşmaz, GEÇTİ saymaz (S5)
 ```
+
+`sultan-denemesi` (👤, Sultan S5 · 21 Eki): Sultan'ın kendi eliyle deneyeceği satır. Katman-1'de koşulmaz, verdikte girmez,
+MUHUR'da `👤 sultan-denemesi | SULTANDA` satırıyla durur, `muhur-ozet.json → sultan_denemesi` listesine düşer; teslim
+ekranında en üstte tarifiyle gösterilir. Ajan bu satırı yapamaz ve yapılmış sayamaz (A06). Davranış-G sayılmaz.
 
 DAVRANIŞ-G = işin fiilen YAPTIĞI şeyi sınayan G (çalıştır→çıktı-gözle, uca-istek→cevap-doğrula,
 DOM↔API çaprazı). `davranis: evet` işareti ya da `tur: api-check|e2e-check` bu şartı sağlar.
@@ -181,6 +187,39 @@ bash scripts/telemetri-append.sh --file _agents/tescil/telemetri.jsonl \
 
 `muhur-lint.sh --tescil-root` verildiğinde **jenerik-G dedektörü** koşar: bu kartın G-komut-sha'ları
 son-20 kartla >%70 örtüşüyorsa "jenerik-gereklilik" UYARI-satırı basılır (SERDAR-telemetri girdisi).
+
+## 10 · Mühürdarlık akışı — `muhurdar.sh` (0.3.0 · G8 · Sultan D1 22 Eki "Üç alana böl")
+
+Mühürdarlık uzmanlığının **Tescil** vazifesinin usulü (kadro şeması §4-§5 `tescil-teslim-sina`). tescil-run.sh'ı yeniden
+yazmaz, üstüne kurar:
+
+| Adım | Tür | Ne yapar | Nerede |
+|---|---|---|---|
+| 1 | kapı | biçimsiz gereklilik belgesini reddeder | tescil-run → gereklilik.py (İSİMLİ-RED) |
+| 2 | kapı | yazan = mühürdar ise koşuyu reddeder — **kendi işini mühürleyemez** (casefold karşılaştırma) | muhurdar.sh → İSİMLİ-RED `kendi-isi`, hiçbir G koşulmaz |
+| 3 | beceri | G'leri **kör** sınar; 👤 satırları atlar | mekanik: tescil-run · öznel: her G için **yeni** yargıç oturumu |
+| 4 | beceri | kanıt JSON'u sınır + redaksiyonla mühürlenir | tescil-run → g-kosucu (sert-teslim) |
+| 5 | 👤 Sultan eli | 👤 satırlarını teslim ekranında dener | YAPILMAZ — MUHUR'da `SULTANDA` |
+
+- **Kimlik:** mühürdar = `AGENT_NAME` (yoksa rc 2, mühür basılmaz); yazan = `--yazan` (kartın `aldi`'sı; yoksa rc 2).
+- **Kör:** yargıç istemi (`lib/kor-istem.py`) yalnız GOAL + o G'nin satırı + izole rubrik + `hedef:` dosyası + mühürdarın
+  **kendi taze** mekanik kanıt tablosundan kurulur. İnşacının raporu, transkripti, commit mesajı açılmaz; rapor verecek
+  bir argüman yoktur (bilinmeyen argüman rc 2). `hedef` iş ağacı dışına kaçarsa istem kurulmaz → EMIN-DEGILIM.
+- **Temiz koşu:** her öznel G kendi oturumunda (`codex exec --ephemeral` / `claude -p`); bir G'nin yargısı ötekine taşınmaz.
+- **Model:** Codex erişilebilirse Codex, değilse Claude (karar 2); Codex düşerse — zaman aşımı dahil — Claude'a yeni oturumla geçilir.
+- **Tek ölçüm:** yargıcın gördüğü mekanik kanıt mühürde kullanılan kanıttır; mühürden önce G'ler YENİDEN KOŞULMAZ.
+  `MUHURDAR_MODEL=claude` Codex'i bilerek atlar. Süre `MUHURDAR_ZAMAN_ASIMI` (900 sn, `-k 30`).
+- **Bozuk cevap GEÇTİ sayılmaz:** geçersiz/eksik JSON ya da zaman aşımı → `EMIN-DEGILIM` → ESKALASYON (§3).
+- **MUHUR başlığı:** `muhurdar · yazan · yargic (G=model) · kor` satırları; `g_sultan` sayısı.
+
+```bash
+AGENT_NAME=<mühürdar> bash scripts/muhurdar.sh <iş> --gereklilik <GEREKLILIK.md> --worktree <iş ağacı> \
+  --out _agents/tescil/<iş>/deneme-<n> --yazan <inşacı> [--head-sha <sha>] [--deneme n] [--tatbikat]
+# RC tescil-run ile aynı: 0 GECTI · 1 KALDI · 2 kullanım · 3 ESKALASYON · 4 İSİMLİ-RED (kendi-isi dahil)
+```
+
+Sınav: `scripts/muhurdar.test.sh` (18 kapı + kontrol kopyası + 11 mutant; sahte yargıçlar, ağsız; usul sırası: biçim kapısı kendi-işinden önce — göz #409 tur 1; yargıç ve mühür aynı ölçüm, Codex zaman aşımında da Claude — tur 2). Sicil/ders çıkarma/askı
+(G11 · S10) ve diploma/başsız şapka (G13 · S14) sonraki dilimlerdir.
 
 ## Tasarım-notu — dış-araç kararı (2026-07, DİVAN K5)
 

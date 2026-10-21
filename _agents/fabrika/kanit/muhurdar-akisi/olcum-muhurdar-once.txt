@@ -1,0 +1,9 @@
+$ bash _agents/fabrika/kanit/muhurdar-akisi/muhur-olcer.sh /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/once-tescil/tescil/scripts
+# rc=1 sure=0.3s zaman=2026-10-22T01:21:27+03:00
+--- stdout ---
+── 1 · kendi işi (yazan=mühürdar): ret yok (rc yok — mühürdar akışı YOK)
+── 2 · 👤 Sultan denemesi satırı: tanınmıyor (verdikt RED gereklilik-eksik)
+── 3 · öznel G2: yargıca gitmedi (verdikt RED, rc 4)
+── 4 · yargıç isteminde inşacı raporu: yok
+── SONUÇ: kendi-işi ✗ · 👤 ✗ · kör yargıç ✗ · rapor sızmaz ✓
+--- stderr ---

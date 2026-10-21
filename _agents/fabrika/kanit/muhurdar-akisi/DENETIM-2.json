@@ -1,0 +1,45 @@
+{
+  "tur": 2,
+  "is": "muhurdar-akisi",
+  "pr": "409",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-22T01:28:05+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 52278,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 14505
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Mühürdar akışı; kendi-işi kapısı, doğru usul sırası, kör ve ayrı yargıç oturumları, Sultan denemesi ayrımı ve mutasyon sınavlarıyla talep edilen işi yapıyor. Ancak nihai mühürden önce mekanik G’lerin yeniden koşulması yargıcın gördüğü kanıtla mühürde kullanılan kanıtı ayırıyor; ayrıca Codex zaman aşımında Claude yedeği işletilmiyor, önce bunlar çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Öznel kararlar ilk mekanik koşunun kanıtlarıyla veriliyor, ardından `tescil-run.sh` aynı G’leri yeniden çalıştırıp nihai kanıtları değiştiriyor; yan etkili veya kararsız bir G’de yargıç başka, mühür başka ölçümü esas alabilir.",
+        "kanit": "Akış önce `\"${TR[@]}\"` çağrısından sonra `kor-istem.py` ile mevcut `kanit/G*.json` dosyalarını yargıca verir; K2 kararları toplandıktan sonra `if [ \"${#K2[@]}\" -gt 0 ]; then \"${TR[@]}\" ...` satırı mekanik G’leri yeniden koşturur. Sınavdaki mekanik G yalnız `touch` ve `grep` kullandığından iki koşu arasındaki değişimi ölçmüyor.",
+        "konum": "tescil/scripts/muhurdar.sh:63 ve tescil/scripts/muhurdar.sh:111",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Codex zaman aşımı Claude yedeğine düşmüyor; yalnız 124 dışındaki başarısız dönüşler yedeği çalıştırıyor. Bu, genel “Codex düşerse Claude” talebini zaman aşımı halinde karşılamıyor.",
+        "kanit": "Codex çağrısından sonra yedek koşulu `[ \"$yrc\" -ne 0 ] && [ \"$yrc\" -ne 124 ]` biçiminde; `yrc=124` doğrudan zaman-aşımı etiketi ve ardından EMIN-DEGILIM sonucuna gider. Yeşil sınavın `h` vakası yalnız hemen `exit 1` dönen sahte Codex’i sınıyor, zaman aşımı vakası yok.",
+        "konum": "tescil/scripts/muhurdar.sh:83-94; tescil/scripts/muhurdar.test.sh:80 ve 119",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kırmızı önce/yeşil sonra çifti, 26/0 hermetik sınav ve dokuz mutasyon ana talepleri güçlü biçimde ölçüyor; fakat ölçüm, iki mekanik koşunun farklı sonuç üretmesini ve Codex zaman aşımındaki yedek davranışını kapsamıyor."
+  }
+}
