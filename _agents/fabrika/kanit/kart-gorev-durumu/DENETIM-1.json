@@ -1,0 +1,30 @@
+{
+  "tur": 1,
+  "is": "kart-gorev-durumu",
+  "pr": "400",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-21T00:12:12+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 36464,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kod iyi: bağlı kartın açılış, bitiş ve tıkanma durumlarını deftere taşıyor; yazım başarısızlığında kartı koruyup görünür hata, kart kaydı ve rc 4 üretiyor, üretime engel kanıtlı kusur görünmüyor. Doğru şey yapılmış: iş kartındaki bütün davranışlar doğrudan sınanmış ve önce 10 kalan sınavın sonra 0 kalana indiği gösterilmiş.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Aynı kart sınavında önce rc=1 ve 108/118 başarı, sonra rc=0 ve 118/118 başarı ölçüm çifti var; ayrıca 10/10 mutasyonun öldürüldüğü ve kabuk bitiş sınavlarının 3/3 geçtiği ölçülmüş. Görsel kare yok, ancak talep komut satırı ve durum mutasyonu davranışı olduğundan gerçekçi yerel HTTP sunucusu, kart dosyaları, dönüş kodları ve istek gövdeleriyle yapılan ölçüm uygun; canlı kanıt iş kartınca gerekmiyor."
+  }
+}

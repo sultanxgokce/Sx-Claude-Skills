@@ -1,0 +1,22 @@
+{
+  "is": "kart-gorev-durumu",
+  "cumle": "İş kartı defterdeki göreve bağlanınca açılışta görev çalışılıyor olur ve kartı alan atanır, iş bitince onay bekliyor, tıkanınca nedeniyle bekliyor olur; defter yazılamazsa kart yine açılır ama bunu söyler ve karta not eder",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-21T00:03:15+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": []
+}
