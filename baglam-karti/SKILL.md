@@ -1,7 +1,7 @@
 ---
 name: baglam-karti
 type: agent
-version: 1.0.0
+version: 1.0.1
 description: >
   ENİS bağlam kartı KAYIT DEFTERİ: MAİŞET ya da SERDAR'ın bağlam kartı isteğini ve ENİS'in cevabını taşımadan ÖNCE
   şablona göre doğrular ve Görev Defteri'ne tek adım yazar (Sultan kim, ne zaman, hangi durumla çekim yaptı görür).
@@ -55,4 +55,12 @@ Varsayılan kayıt görevi: `gorev_01M557ADY4KHRGS99DQ6E2M0CV`.
 - Cevabın karşılığı olan isteğin kayıtta olup olmadığına bakmaz.
 - SIHHAT/kasa ya da Sultan'ın bayrağı kapalıyken gelen isteklere "kapalı" dönmek ENİS'in işidir. Araç yalnız o cevabı kaydeder.
 
-Sınav: `scripts/baglam-karti.test.sh` (hermetik, sahte defter, 20 kapı) · `scripts/baglam-karti.mutasyon.sh` (7 mutasyon, hepsi yakalanmalı).
+Sınav: `scripts/baglam-karti.test.sh` (hermetik, sahte defter — yanıt biçimi GERÇEK defterinki: adimlar nesne listesi, 21 kapı) · `scripts/baglam-karti.mutasyon.sh` (8 mutasyon, hepsi yakalanmalı) · `scripts/baglam-karti.canli.sh` (UÇTAN UCA: gerçek defter geçit motoru geçici dizinde, 19 kapı; CI dışı, elle koşar; motor yoksa rc 3 ÖLÇÜLEMEDİ).
+
+
+
+## 1.0.1 — canlı sınavın bulduğu hata (21 Eki)
+Defterin gerçek yanıtında `kayit.adimlar` düz metin değil **nesne listesidir** (`{deger, anahtar, kutu, ts}`). 1.0.0 düz metin bekliyordu ve her geçerli
+yazımda rc 1 verirdi: kart hiç dönmezdi. Sahte sunucu aynı yanlış varsayımı paylaştığı için birim sınavı yeşildi; yalnız gerçek motora karşı koşan sınav gördü.
+Eşleşme artık adım metnine (`deger`) tam eşitliktir; düz metin listesi de kabul. İlk canlı kullanımdan önce yakalandı: kayıt görevinde henüz istek/cevap adımı yoktu.
+Canlı sınav kayıt görevine DOKUNMAZ: motor geçici dizinde kendi defteriyle kalkar (gerçek görevde test adımı Sultan'ın ekranını kirletirdi).
