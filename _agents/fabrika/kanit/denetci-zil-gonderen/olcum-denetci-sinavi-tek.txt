@@ -1,0 +1,19 @@
+$ bash _agents/fabrika/kanit/denetci-bitis-zili/sizinti-olcer.sh python3 _agents/fabrika/kanit/denetci-zil-gonderen/bolum-olcer.py Z13 mutant 'zil-gonderensiz mutant 'zil-tmux mutant 'yazansizda mutant 'kuyruk (bilgi) ✗ -- bash yazilim-fabrikasi/scripts/denetci.test.sh
+# rc=0 sure=534.6s zaman=2026-10-21T23:51:22+03:00
+--- stdout ---
+$ bash yazilim-fabrikasi/scripts/denetci.test.sh  → rc=0 · 423 satır
+  ✓ Z13a yazanın zili gönderen adını taşır (AILE_KIMDEN=HENDESE)
+  ✓ Z13b AGENT_NAME yoksa gönderen kartın aldı'sı (MUAVIN)
+  ✓ Z13c yazan bilinmiyorsa AILE_KIMDEN verilmez (reisin adı gönderen gibi görünmesin)
+  ✓ Z13d aile-notify rc 3 (meşgul koltuk, kuyruk) 'gönderilemedi' denmez, kuyrukta denir
+  ✓ Z12 sızıntı kilidi: T-ZIL boyunca hiçbir çağrı varsayılan zil aracına düşmedi (gerçek koltuğa yol yok)
+…
+  ✓ mutant 'zil-tmux-soyulmaz' sınavı KIRMIZI yapıyor
+  ✓ mutant 'zil-gonderensiz' sınavı KIRMIZI yapıyor
+  ✓ mutant 'yazansizda-gonderen' sınavı KIRMIZI yapıyor
+  ✓ mutant 'kuyruk-hata-sanilir' sınavı KIRMIZI yapıyor
+  (bilgi) 47 mutant · 4 paralel · 433 sn
+…
+── SONUÇ: 263 geçti · 0 kaldı ──
+── SIZINTI: gerçek sinyal kütüğünde sınav işi zili önce 8 · sonra 8 · fark 0 (komut rc 0)
+--- stderr ---

@@ -604,7 +604,7 @@ fi
 # zil dışı mutantların iç koşumu T-ZIL'i atlar (onlar T-ZIL'den önce de ölüyordu; iç koşum 50 → 39 sn) — yalnız zil mutantları ve dış koşum girer
 if [ -z "${IC_KOSUM:-}" ] || [ "${IC_BOLUM:-}" = zil ]; then
 echo "════ T-ZIL · denetçi sessiz bitmez: koşuyor izi · zaman aşımı · her çıkışta zil · tıkanınca reise (SERDAR ACİL 21 Eki) ════"
-ZL="$T/zil.log"; ZS="$T/sahte-zil.sh"; printf '#!/usr/bin/env bash\nprintf "%%s\\n" "$*" >> "%s"\nprintf "tmux=%%s pane=%%s\\n" "${TMUX:-yok}" "${TMUX_PANE:-yok}" >> "%s"\n' "$ZL" "$ZL" > "$ZS"; chmod +x "$ZS"
+ZL="$T/zil.log"; ZS="$T/sahte-zil.sh"; printf '#!/usr/bin/env bash\nprintf "%%s\\n" "$*" >> "%s"\nprintf "tmux=%%s pane=%%s\\n" "${TMUX:-yok}" "${TMUX_PANE:-yok}" >> "%s"\nprintf "kimden=%%s\\n" "${AILE_KIMDEN:-yok}" >> "%s"\nexit "${SAHTE_ZIL_RC:-0}"\n' "$ZL" "$ZL" "$ZL" > "$ZS"; chmod +x "$ZS"
 printf "diff --git a/x b/x\n+zil\n" > "$T/zd.patch"; ZK="$T/zil-sahte.sh"; printf '#!/usr/bin/env bash\nprintf "%%s" "$SAHTE_JSON"\n' > "$ZK"; chmod +x "$ZK"; _DK_ZIL="$DENETCI_KOMUT"; export DENETCI_KOMUT="$ZK";   # önceki bölümler ortak sahteyi silebiliyor — bu bölüm kendi sahtesiyle
  kartac is-z; bash "$K" olcum is-z olc --asama tek -- true >/dev/null 2>&1
 DZZ="$T/_agents/fabrika/kanit/is-z"
@@ -658,6 +658,15 @@ SAHTE_JSON="$(J 3 H "$B")" bash "$D" is-zr --diff "$T/zd.patch" >"$T/z-out" 2>&1
 kill "$canli" 2>/dev/null; wait "$canli" 2>/dev/null
 : > "$ZL"; SAHTE_JSON="$(J 3 H "$B")" TMUX=/tmp/tmux-1000/default,1,0 TMUX_PANE=%9 FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-zv --diff "$T/zd.patch" >/dev/null 2>&1
 grep -q -- "--done --amir MUAVIN" "$ZL" && grep -qx "tmux=yok pane=yok" "$ZL" && ! grep -q "pane=%9" "$ZL"; g $? "Z10 yazanın zili TMUX kimliği soyularak çağrılır (kendi penceresine giden zil self-loop'ta atlanmaz — HEZARFEN ölçümü)"
+# Z13 gönderen adı (SERDAR 23:22: canlıda 'BILINMEYEN iş-bitti') — AILE_KIMDEN = yazan; yazansızda verilmez; rc 3 kuyruk, hata değil
+kartac is-zg; bash "$K" olcum is-zg olc --asama tek -- true >/dev/null 2>&1
+: > "$ZL"; SAHTE_JSON="$(J 3 H "$B")" AGENT_NAME=HENDESE FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-zg --diff "$T/zd.patch" >/dev/null 2>&1
+grep -A2 -- "--done --amir HENDESE" "$ZL" | grep -qx "kimden=HENDESE"; g $? "Z13a yazanın zili gönderen adını taşır (AILE_KIMDEN=HENDESE)"
+: > "$ZL"; SAHTE_JSON="$(J 3 H "$B")" FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-zg --diff "$T/zd.patch" >/dev/null 2>&1
+grep -A2 -- "--done --amir MUAVIN" "$ZL" | grep -qx "kimden=MUAVIN"; g $? "Z13b AGENT_NAME yoksa gönderen kartın aldı'sı (MUAVIN)"
+: > "$ZL"; FABRIKA_AILE_NOTIFY="$ZS" bash "$D" >/dev/null 2>&1; grep -A2 -- "--done --amir SERDAR" "$ZL" | grep -qx "kimden=yok"; g $? "Z13c yazan bilinmiyorsa AILE_KIMDEN verilmez (reisin adı gönderen gibi görünmesin)"
+: > "$ZL"; SAHTE_ZIL_RC=3 SAHTE_JSON="$(J 3 H "$B")" FABRIKA_AILE_NOTIFY="$ZS" bash "$D" is-zg --diff "$T/zd.patch" >/dev/null 2>"$T/z-err"
+grep -q "deftere yazıldı, MUAVIN koltuğu meşgul → kuyrukta" "$T/z-err" && ! grep -q "gönderilemedi" "$T/z-err"; g $? "Z13d aile-notify rc 3 (meşgul koltuk, kuyruk) 'gönderilemedi' denmez, kuyrukta denir"
 [ ! -s "$ZB/sizinti.log" ]; g $? "Z12 sızıntı kilidi: T-ZIL boyunca hiçbir çağrı varsayılan zil aracına düşmedi (gerçek koltuğa yol yok)"
 export DENETCI_KOMUT="$_DK_ZIL"
 fi   # T-ZIL sonu
@@ -734,9 +743,12 @@ mut "istem-karti-dusurur" 's@^ISTEM_PARCALARI=(sablon kart kanit@ISTEM_PARCALARI
 mut "istem-ayiklama-kosulu-duser" 's@ && \[ "${DENETCI_KANIT_AYIKLA:-1}" != "0" \] && \[ "$ISTEM_BAYT"@ \&\& [ "$ISTEM_BAYT"@'
 mut "mutasyon-basligi-yok" 's@head -1 "$f" | grep -q .^=== MUTASYON KANITI. \&\& _mt=@false \&\& _mt=@'
 MUT_BOLUM=zil   # aşağıdaki 15 zil mutantı yalnız T-ZIL'le ölçülür (iç koşum IC_BOLUM=zil)
-mut "zil-tmux-soyulmaz" 's@env -u TMUX -u TMUX_PANE bash "$an" --done@bash "$an" --done@'
+mut "zil-tmux-soyulmaz" 's@env -u TMUX -u TMUX_PANE ${kim:+AILE_KIMDEN="$kim"} bash "$an" --done@env ${kim:+AILE_KIMDEN="$kim"} bash "$an" --done@'
 mut "pid-kimligi-bakilmaz" 's@ \&\& { \[ -z "$_kim_iz" \] || \[ "$_kim_iz" = "$(_pid_kimlik "$_pid")" \]; }; then@; then@'
 mut "yazansiz-zil-hedefsiz" 's@^  if \[ -z "$yazan" \]; then yazansiz=1; yazan="$reis";@  if false; then :;@'
+mut "zil-gonderensiz" 's@env -u TMUX -u TMUX_PANE ${kim:+AILE_KIMDEN="$kim"} bash@env -u TMUX -u TMUX_PANE bash@'
+mut "yazansizda-gonderen" 's@local kim="" r; \[ "$yazansiz" = 0 \] \&\& kim="$yazan"@local kim="$yazan" r@'
+mut "kuyruk-hata-sanilir" 's@^  case "$1" in 0) ;; 3) printf@  case "$1" in 0) ;; 33) printf@'
 mut "zil-yok" 's@^  _zil "$rc"$@  :@'
 mut "reis-zili-yok" 's@^  if { \[ "$rc" = 3 \] || \[ "$rc" = 4 \]; } \&\& \[ "$yazansiz" = 0 \]; then@  if false; then@'
 mut "zaman-asimi-yok" 's@_sinirli $DENETCI_KOMUT@$DENETCI_KOMUT@'

@@ -216,13 +216,26 @@ cmd="${1:-help}"
 # _env_yaz_olc <KEY> <ENV_DOSYA> — değeri VAL ortam-değişkeninden alır, env dosyasına
 # shlex-quote'lu yazar (600) ve "uzunluk<TAB>parmak-izi<TAB>satır-sayısı" basar.
 # 🔴 Değer stdout'a ASLA düşmez; parmak izi sha256'nın ilk 12 hanesidir (geri döndürülemez).
+# 🔴 ATOMİK (mmex 6d6ff3b1, 18 Eki): dosya eskiden YERİNDE kesilip yazılıyordu ve kilit yoktu → aynı anda okuyan nöbet
+#    yarım dosya görüp anahtarı boş sandı (16 Eki TRENDYOL), iki eşzamanlı yazan birbirinin anahtarını sildi. Şimdi:
+#    <dosya>.kilit üstünde flock altında oku-değiştir-yaz · aynı dizinde geçici dosya (600) · os.replace. Bağ ise hedef yazılır.
 _env_yaz_olc() {
   KEY="$1" ENVF="$2" python3 -c '
-import os,re,shlex,hashlib
-k=os.environ["KEY"]; envf=os.environ["ENVF"]; val=os.environ["VAL"]
-lines=[l for l in open(envf).read().splitlines() if not re.match(r"^export "+re.escape(k)+"=",l)] if os.path.exists(envf) else []
-lines.append("export %s=%s"%(k, shlex.quote(val)))
-open(envf,"w").write("\n".join(lines)+"\n"); os.chmod(envf,0o600)
+import os,re,shlex,hashlib,fcntl,tempfile
+k=os.environ["KEY"]; envf=os.path.realpath(os.environ["ENVF"]); val=os.environ["VAL"]
+with open(envf+".kilit","a") as kilit:
+    fcntl.flock(kilit, fcntl.LOCK_EX)
+    lines=[l for l in open(envf).read().splitlines() if not re.match(r"^export "+re.escape(k)+"=",l)] if os.path.exists(envf) else []
+    lines.append("export %s=%s"%(k, shlex.quote(val)))
+    fd,gecici=tempfile.mkstemp(dir=os.path.dirname(envf), prefix="."+os.path.basename(envf)+".")
+    try:
+        with os.fdopen(fd,"w") as f:
+            f.write("\n".join(lines)+"\n"); f.flush(); os.fsync(f.fileno())
+        os.chmod(gecici,0o600); os.replace(gecici,envf)
+    except BaseException:
+        try: os.unlink(gecici)
+        except OSError: pass
+        raise
 iz=hashlib.sha256(val.encode("utf-8")).hexdigest()[:12]
 print("%d\t%s\t%d" % (len(val), iz, val.count("\n")+1))'
 }

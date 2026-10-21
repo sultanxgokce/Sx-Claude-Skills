@@ -1,0 +1,73 @@
+{
+  "is": "denetci-zil-gonderen",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-21T23:51:22+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "gonderen",
+      "asama": "once",
+      "dosya": "olcum-gonderen-once.txt",
+      "sha256": "1f498ea9443a768a30a8731c51ce5fe3fdca494452bf2eaa8589097291a79152",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/denetci-zil-gonderen/gonderen-olcer.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/once-sx2/yazilim-fabrikasi/scripts"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-21T23:31:13+03:00",
+      "sure_sn": 0.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "151e22423701419080b0af468738bf2b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gonderen",
+      "asama": "sonra",
+      "dosya": "olcum-gonderen-sonra.txt",
+      "sha256": "b4dbb6f20baf69cf4fa3af1a0da5f316d0d174f90e84802b4f63c1fe6bbdaa7c",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/denetci-zil-gonderen/gonderen-olcer.sh",
+        "yazilim-fabrikasi/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-21T23:31:14+03:00",
+      "sure_sn": 0.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4fe146c3785d4b149e5f60d2ab23df61"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-denetci-sinavi-tek.txt",
+      "sha256": "fb88c269c762cab8a54f867952d8e58ec651399fb2c2424a7df060c1730ad6e6",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/denetci-bitis-zili/sizinti-olcer.sh",
+        "python3",
+        "_agents/fabrika/kanit/denetci-zil-gonderen/bolum-olcer.py",
+        "Z13",
+        "mutant 'zil-gonderensiz",
+        "mutant 'zil-tmux",
+        "mutant 'yazansizda",
+        "mutant 'kuyruk",
+        "(bilgi)",
+        "✗",
+        "--",
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-21T23:51:22+03:00",
+      "sure_sn": 534.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "26d62a1360a7463fadb13b37dec06acf"
+    }
+  ],
+  "imza": "68b9410000332dc08de868dfe3c5a99412f1dbbe560afaa9c721750eed3b47fd"
+}

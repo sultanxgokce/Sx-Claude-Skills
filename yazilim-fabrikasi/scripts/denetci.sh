@@ -33,6 +33,10 @@ _hata() { printf '✗ %s\n' "$*" >&2; }
 #    (3) HER çıkış yolunda (EXIT tuzağı — DENETIM yazmayan erken çıkışlar dâhil) yazana tek satır zil; rc 3/4'te reise de.
 #    Zil aracı yoksa (aile-notify bu kutuda yok) iş DURMAZ ama sessiz de geçmez: stderr'e yazılır.
 KOSUYOR=""; TMP=""; ZAMAN_ASIMI=0
+_zil_sonuc() {   # _zil_sonuc <aile-notify rc> <kime> <mesaj> — yalnız sorunu söyler; kuyruğa giren zil sorun değildir
+  case "$1" in 0) ;; 3) printf '· denetçi zili deftere yazıldı, %s koltuğu meşgul → kuyrukta (boşalınca teslim): %s\n' "$2" "$3" >&2 ;;
+    *) printf '⚠ denetçi zili gönderilemedi (%s · aile-notify rc %s): %s\n' "$2" "$1" "$3" >&2 ;; esac
+}
 _zil() {   # _zil <rc> — yazana --done, rc 3/4'te reise --waiting
   local rc="$1" an="${FABRIKA_AILE_NOTIFY:-}" yazan="${AGENT_NAME:-}" reis="" k="" ne
   [ "$an" = "-" ] && return 0   # bilerek kapalı (sınavlar: denetçiyi yüzlerce kez koşturur, gerçek koltuklara zil çalmasın)
@@ -58,9 +62,15 @@ _zil() {   # _zil <rc> — yazana --done, rc 3/4'te reise --waiting
   #   takılıp ATLANIYORDU ("atla(self): … çağıran-oturum") — bekleyen yine sessiz kalırdı. Yazanın zilinde TMUX kimliği soyulur:
   #   meşgul koltukta zil kuyruğa girer (ölçüldü: kanıt olcum-gercek-zil-sonra). Bedeli: gönderen "BILINMEYEN" görünür — aile-notify
   #   göndereni yalnız TMUX'tan çözer. Reis zili başka koltuğa gider; orada kimlik KORUNUR ki reis kimden geldiğini görsün.
-  env -u TMUX -u TMUX_PANE bash "$an" --done ${yazan:+--amir "$yazan"} "denetçi: $m" </dev/null >/dev/null 2>&1 || printf '⚠ denetçi bitiş zili gönderilemedi (aile-notify rc %s): %s\n' "$?" "$m" >&2
+  # SERDAR 23:22: TMUX soyulunca aile-notify göndereni çözemiyor, zil 'BILINMEYEN iş-bitti' diye düşüyordu → gönderen AILE_KIMDEN ile
+  #   verilir (Nexus aile-notify yalnız TMUX'tan çözülemezse ve kayıtlı koltuksa kullanır). Yazan bilinmiyorsa VERİLMEZ: reisin adı
+  #   gönderen gibi görünürdü. rc 3 = zil deftere yazıldı, koltuk meşgul → kuyrukta (gönderilemedi DEĞİL).
+  local kim="" r; [ "$yazansiz" = 0 ] && kim="$yazan"
+  env -u TMUX -u TMUX_PANE ${kim:+AILE_KIMDEN="$kim"} bash "$an" --done ${yazan:+--amir "$yazan"} "denetçi: $m" </dev/null >/dev/null 2>&1; r=$?
+  _zil_sonuc "$r" "${yazan:-?}" "$m"
   if { [ "$rc" = 3 ] || [ "$rc" = 4 ]; } && [ "$yazansiz" = 0 ]; then   # yazansızda reis zaten --done'u aldı, ikinci zil yok
-    bash "$an" --waiting --amir "$reis" "denetçi (${yazan:-yazan?}): $m" </dev/null >/dev/null 2>&1 || printf '⚠ reis zili gönderilemedi (%s): %s\n' "$reis" "$m" >&2
+    env ${kim:+AILE_KIMDEN="$kim"} bash "$an" --waiting --amir "$reis" "denetçi (${yazan:-yazan?}): $m" </dev/null >/dev/null 2>&1; r=$?
+    _zil_sonuc "$r" "$reis (reis)" "$m"
   fi
 }
 _bitis() {   # EXIT tuzağı: çıkış kodu KORUNUR (tuzak exit çağırmaz)
