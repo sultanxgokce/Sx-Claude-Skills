@@ -240,13 +240,25 @@ assert k["gorev"]=="gorev_KARTTEST00000001" and k["tahmin_dk"]==45 and k["gorev_
 PY
 [ $RC -eq 0 ] && grep -q "✓ görev gorev_KARTTEST00000001 → çalışılıyor (defter)" <<<"$O" && ! grep -q "kart-sinav-jeton" <<<"$O"; g $? "G2b rc 0, ekranda '→ çalışılıyor (defter)', jeton değeri çıktıda YOK"
 O="$(bash "$KT" bitti gb-1 --pr 12 2>&1)"; RC=$?
-python3 - "$T/yazim.jsonl" "$(basename "$GDEPO")" <<'PY'; g $? "G3 bitti → onay bekliyor + kanıt '<depo> PR #12 · kanıt _agents/fabrika/kanit/gb-1/' + '[⏸ onay bekliyor]' adımı (✓ bitti insanındır, yazılmaz)"
+python3 - "$T/yazim.jsonl" "$(basename "$GDEPO")" <<'PY'; g $? "G3 (KF22R dilim ≠ görev) bitti → göreve YALNIZ '[dilim bitti] … PR #12 · kanıt …' adımı; durum YAZILMAZ (çalışılıyor kalır), onay bekliyor YOK"
 import json,sys
 b=[json.loads(l) for l in open(sys.argv[1])][-1]["govde"]; d=sys.argv[2]
-assert b["yerine"]["gorev_durumu"]=="onay-bekliyor" and b["yerine"]["kanit"]==d+" PR #12 · kanıt _agents/fabrika/kanit/gb-1/ ("+d+")", b
+assert "yerine" not in b and "gerekce" not in b, b
+assert b["adimlar"][0].startswith("[dilim bitti] BANI · kart gb-1 bitti · "+d+" PR #12 · kanıt _agents/fabrika/kanit/gb-1/") and "kart.sh bitti gb-1 --gorev-bitti --kare <yol> --surum <sürüm>" in b["adimlar"][0] and "gorev.sh bitti" in b["adimlar"][0], b
+PY
+[ $RC -eq 0 ] && grep -q "dilim adımı (görev çalışılıyor kalır" <<<"$O"; g $? "G3b bitti rc 0, ekranda 'dilim adımı (görev çalışılıyor kalır…)'"
+N0=$(yz); O="$(bash "$KT" bitti gb-1 --pr 12 --gorev-bitti --kare kanit/x-1440.png 2>&1)"; RC=$?
+[ $RC -eq 1 ] && [ "$(yz)" -eq "$N0" ] && grep -q "sürüm" <<<"$O"; g $? "G3c --gorev-bitti ekran işinde kare tek başına yetmez (rc 1, deftere gitmedi, 'sürüm' ister)"
+O="$(bash "$KT" bitti gb-1 --pr 12 --gorev-bitti 2>&1)"; RC=$?
+[ $RC -eq 1 ] && [ "$(yz)" -eq "$N0" ] && grep -q "dilimdir" <<<"$O"; g $? "G3d --gorev-bitti sınıfsız → rc 1, deftere gitmedi, 'PR tek başına dilimdir' der"
+O="$(bash "$KT" bitti gb-1 --pr 12 --gorev-bitti --kare kanit/x-1440.png --surum 1.25.0 2>&1)"; RC=$?
+python3 - "$T/yazim.jsonl" "$(basename "$GDEPO")" <<'PY'; g $? "G3e --gorev-bitti --kare --surum → onay bekliyor + kanıt '[kare] … · [surum] 1.25.0 · [pr] #12 · kanıt …' + '[⏸ onay bekliyor]' adımı"
+import json,sys
+b=[json.loads(l) for l in open(sys.argv[1])][-1]["govde"]; d=sys.argv[2]
+assert b["yerine"]["gorev_durumu"]=="onay-bekliyor" and b["yerine"]["kanit"]=="[kare] kanit/x-1440.png · [surum] 1.25.0 · [pr] #12 · kanıt _agents/fabrika/kanit/gb-1/ ("+d+")", b
 assert b["adimlar"][0].startswith("[⏸ onay bekliyor] BANI · kart gb-1 bitti")
 PY
-[ $RC -eq 0 ]; g $? "G3b bitti rc 0"
+[ $RC -eq 0 ] && grep -q "→ onay bekliyor (defter)" <<<"$O"; g $? "G3f rc 0, ekranda '→ onay bekliyor (defter)'"
 bash "$KT" ac gb-2 --is "tıkanacak iş" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST00000002 --tahmin 60 >/dev/null 2>&1
 bash "$KT" tikandi gb-2 --yol daralt --neden "kapsam kayması: hız kazancı kart dışı davranıştan" >/dev/null 2>&1; RC=$?
 python3 - "$T/yazim.jsonl" <<'PY'; g $? "G4 tıkandı → bekliyor + not (tıkanma nedeni) + '[⏳ bekliyor]' adımı (defter neyi beklediği yazılmamış bekliyor'u reddeder)"

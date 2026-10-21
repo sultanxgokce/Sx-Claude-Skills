@@ -1,0 +1,22 @@
+{
+  "is": "kart-bitti-dilim",
+  "cumle": "Kart kapanışı görevi onay bekliyora çekmez: dilim bitince göreve dilim adımı yazar, görev ancak canlı kanıt sınıfıyla bitirilir",
+  "istedi": "Sultan",
+  "aldi": "BÂNİ",
+  "zaman": "2026-10-21T16:27:32+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/kart-bitti-dilim (kart.test.sh)",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: canlı)",
+  "kapsam_uyarilari": []
+}
