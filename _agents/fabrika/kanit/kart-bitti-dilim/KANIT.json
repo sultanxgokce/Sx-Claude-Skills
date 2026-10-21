@@ -1,0 +1,62 @@
+{
+  "is": "kart-bitti-dilim",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-21T16:32:57+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kart-sinavi-once.txt",
+      "sha256": "22a8cd610cbe0fd15d3c96fad21d48d4a4df86aeeca3ac68a6b67eb2e30b6d30",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kbd/taban/yazilim-fabrikasi/scripts && timeout 600 bash kart.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-21T16:32:41+03:00",
+      "sure_sn": 41.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "e8e7b29ece75434d84fc6e65cb8909d1"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sinavi-sonra.txt",
+      "sha256": "95af39997a6b811eb58ce0060a49c5d958b957ccc17ade532e779dfa6362df9e",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/projects/_wt/Sx-Claude-Skills-kart-bitti-dilim/yazilim-fabrikasi/scripts && timeout 600 bash kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-21T16:32:57+03:00",
+      "sure_sn": 15.3,
+      "boru_denetimi": "temiz",
+      "olcum_id": "249765d79d57461fb76ae311397058fe"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sozdizimi",
+      "asama": "sonra",
+      "dosya": "olcum-sozdizimi-sonra.txt",
+      "sha256": "0ae953f5c2c84dc24388c38d9999bca59e8da82c2ed426390786f618e2ee6f06",
+      "komut": [
+        "bash",
+        "-n",
+        "/config/projects/_wt/Sx-Claude-Skills-kart-bitti-dilim/yazilim-fabrikasi/scripts/kart.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-21T16:32:57+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "57d95fd7b0de4fc7a2c2c365e8fef089"
+    }
+  ],
+  "imza": "75ffd66a2af6b23b7b44cd52fcc34accf4d01916349e52ae5f9c0a0258aef243"
+}

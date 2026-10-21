@@ -22,7 +22,8 @@
 #          🔴 A06: onay ÜRETMEZ, alınan onayı AKTARIR. Ref'siz beyan sayılmaz; uyduran kartta yakalanır.
 #   kart.sh goster <iş> · kart.sh liste [--acik] · kart.sh canli-gerekir <iş>  → "E|H<TAB>sebep" (eski kartta cümleden türetir)
 # Ortam: FABRIKA_TETIK (oda-tetik.sh yolu; --oda verilirse tetik atılır, düşerse iş düşmez) · KANIT_DEPO
-#   --gorev gorev_<kimlik> --tahmin <dk> (ac): kart defterdeki göreve bağlanır → açılış 'çalışılıyor' + atanan, bitti 'onay bekliyor'
+#   --gorev gorev_<kimlik> --tahmin <dk> (ac): kart defterdeki göreve bağlanır → açılış 'çalışılıyor' + atanan, bitti → göreve DİLİM adımı (durum kalır);
+#          görev de bitecekse kart.sh bitti … --gorev-bitti --kare <yol> --surum <sürüm> | --olcum "…" | --belge <yol> → 'onay bekliyor' + kanıt sınıfı (KF22R)
 #          + kanıt, tıkandı 'bekliyor' + not (kutunun defter jetonuyla; DEFTER_JETON_YOL · DEFTER_UC). Bağsız kart bunu söyler.
 # rc: 0 · 1 kullanım/eksik cevap · 3 ölçülemedi · 4 kart işlendi ama bağlı görev deftere YAZILAMADI (sebep ekranda ve kartta)
 set -uo pipefail
@@ -39,10 +40,11 @@ KD="$DEPO/_agents/fabrika/kartlar"; mkdir -p "$KD"
 CMD="${1:-}"; IS="${2:-}"; shift 2 2>/dev/null || true
 IS_C=""; ISTEDI=""; ALDI=""; GA=""; PARA=""; DIS=""; YETKI=""; KANIT=""; ODA=""; PR=""; YOL=""; NEDEN=""
 KARAR=""; OTURUM=""; SOZ=""; BEYAN=""; GEREKCE=""; REIS=""; CANLI=""; KALAN=""; CUMLE=""; YENI=""
+GOREV_BITTI=""; KARE=""; SURUM=""; OLCUM=""; BELGE=""   # kart bitti: görevi de bitirmek için kanıt sınıfı (KF22R: dilim ≠ görev)
 while [ $# -gt 0 ]; do case "$1" in
   --is) IS_C="$2"; shift 2 ;; --istedi) ISTEDI="$2"; shift 2 ;; --aldi) ALDI="$2"; shift 2 ;;
   --geri-alinamaz) GA="$2"; shift 2 ;; --para) PARA="$2"; shift 2 ;; --dis-yuzey) DIS="$2"; shift 2 ;; --yetki) YETKI="$2"; shift 2 ;;
-  --kanit) KANIT="$2"; shift 2 ;; --oda) ODA="$2"; shift 2 ;; --pr) PR="$2"; shift 2 ;; --yol) YOL="$2"; shift 2 ;; --neden) NEDEN="$2"; shift 2 ;;
+  --kanit) KANIT="$2"; shift 2 ;; --oda) ODA="$2"; shift 2 ;; --pr) PR="$2"; shift 2 ;; --yol) YOL="$2"; shift 2 ;; --neden) NEDEN="$2"; shift 2 ;; --gorev-bitti) GOREV_BITTI=1; shift ;; --kare) KARE="$2"; shift 2 ;; --surum) SURUM="$2"; shift 2 ;; --olcum) OLCUM="$2"; shift 2 ;; --belge) BELGE="$2"; shift 2 ;;
   --karar) KARAR="$2"; shift 2 ;; --oturum) OTURUM="$2"; shift 2 ;; --soz) SOZ="$2"; shift 2 ;; --beyan) BEYAN="$2"; shift 2 ;;
   --gerekce) GEREKCE="$2"; shift 2 ;; --reis) REIS="$2"; shift 2 ;; --canli) CANLI="$2"; shift 2 ;;
   --kalan) KALAN="$2"; shift 2 ;; --cumle) CUMLE="$2"; shift 2 ;; --yeni) YENI="$2"; shift 2 ;;
@@ -58,18 +60,29 @@ GOREV="${GOREV:-}"; TAHMIN="${TAHMIN:-}"
 DEFTER_JY="${DEFTER_JETON_YOL:-/config/defter-jeton}"; DEFTER_U="${DEFTER_UC:-http://cloudtop-defter:8791}"
 gorev_yaz() {  # gorev_yaz <kart.json> <ac|bitti|tikandi> → rc 0 yazıldı · 4 yazılamadı (karta işlenir)
   local kj="$1" olay="$2" govde cfg cevap rc sonuc
-  govde="$(python3 - "$kj" "$olay" "$(basename "$DEPO")" <<'PY'
-import json,sys
+  govde="$(GOREV_BITTI="${GOREV_BITTI:-}" KARE="${KARE:-}" SURUM="${SURUM:-}" OLCUM="${OLCUM:-}" BELGE="${BELGE:-}" python3 - "$kj" "$olay" "$(basename "$DEPO")" <<'PY'
+import json,sys,os
 k=json.load(open(sys.argv[1])); olay,depo=sys.argv[2:]; kim=k["aldi"]; is_=k["is"]
 if olay=="ac":
     y={"atanan":kim,"tahmin_dk":str(k.get("tahmin_dk","")),"gorev_durumu":"calisiliyor"}; ne="[▶ çalışılıyor] %s · kart %s açıldı, tahmin %s dk" % (kim,is_,k.get("tahmin_dk"))
 elif olay=="bitti":
-    kn=("%s PR #%s · " % (depo,k["pr"]) if k.get("pr") else "")+"kanıt _agents/fabrika/kanit/%s/ (%s)" % (is_,depo)
-    y={"gorev_durumu":"onay-bekliyor","kanit":kn}; ne="[⏸ onay bekliyor] %s · kart %s bitti · %s" % (kim,is_,kn)
+    # DİLİM ≠ GÖREV (KF22R · Sultan D1 21 Eki): kart = dilim; PR birleşmesi görevi BİTİRMEZ. Varsayılan: göreve yalnız dilim adımı,
+    #   durum 'çalışılıyor' kalır. Görev de bitecekse --gorev-bitti + kanıt sınıfı (ekran: --kare + --surum · ölçüm: --olcum · belge: --belge);
+    #   geçit (defter 1.17.0) aynı sınıfı ister, PR tek başına 400 alır.
+    pr=("%s PR #%s" % (depo,k["pr"])) if k.get("pr") else ""
+    if os.environ.get("GOREV_BITTI"):
+        kare,surum,olc,belge=(os.environ.get(x,"").strip() for x in ("KARE","SURUM","OLCUM","BELGE"))
+        if kare or surum: sinif="[kare] %s · [surum] %s" % (kare,surum)
+        elif olc: sinif="[olcum] %s" % olc
+        else: sinif="[belge] %s" % belge
+        kn=sinif+(" · [pr] #%s" % k["pr"] if k.get("pr") else "")+" · kanıt _agents/fabrika/kanit/%s/ (%s)" % (is_,depo)
+        y={"gorev_durumu":"onay-bekliyor","kanit":kn}; ne="[⏸ onay bekliyor] %s · kart %s bitti · %s" % (kim,is_,kn)
+    else:
+        y=None; ne="[dilim bitti] %s · kart %s bitti%s · kanıt _agents/fabrika/kanit/%s/ (%s) — görev sürüyor, bitti için canlı kanıt sınıfı (gorev.sh bitti --kare --surum | --olcum | --belge)" % (kim,is_,(" · "+pr) if pr else "",is_,depo)
 else:
     nd=(k.get("tikanma") or {}).get("neden","") or "tıkandı"
     y={"gorev_durumu":"bekliyor","not":"kart %s tıkandı: %s" % (is_,nd[:300])}; ne="[⏳ bekliyor] %s · kart %s tıkandı (%s): %s" % (kim,is_,(k.get("tikanma") or {}).get("yol",""),nd[:300])
-print(json.dumps({"yerine":y,"gerekce":ne,"adimlar":[ne]},ensure_ascii=False))
+print(json.dumps({"adimlar":[ne]} if y is None else {"yerine":y,"gerekce":ne,"adimlar":[ne]},ensure_ascii=False))
 PY
 )" || return 4
   if [ ! -r "$DEFTER_JY" ]; then sonuc="yazılamadı: bu kutuda defter jetonu yok ($DEFTER_JY)"
@@ -87,12 +100,13 @@ else:
     e=j.get("ek") if isinstance(j.get("ek"),dict) else j
     print("yazılamadı: http %s · %s%s" % (kod, j.get("hata") or "cevap okunamadı", (" · " + str(e.get("yerine"))[:160]) if e.get("yerine") else ""))')"; fi
   fi
-  python3 - "$kj" "$olay" "$sonuc" <<'PY'
+  GOREV_BITTI="${GOREV_BITTI:-}" python3 - "$kj" "$olay" "$sonuc" <<'PY'
 import json,sys,datetime
 p,olay,sonuc=sys.argv[1:]; k=json.load(open(p))
 k.setdefault("gorev_yazimlari",[]).append({"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),"olay":olay,"sonuc":sonuc})
 json.dump(k,open(p,"w"),ensure_ascii=False,indent=2)
-d={"ac":"çalışılıyor","bitti":"onay bekliyor","tikandi":"bekliyor"}[olay]
+import os
+d={"ac":"çalışılıyor","bitti":("onay bekliyor" if os.environ.get("GOREV_BITTI") else "dilim adımı (görev çalışılıyor kalır; bitti = canlı kanıt sınıfıyla)"),"tikandi":"bekliyor"}[olay]
 print(("  ✓ görev %s → %s (defter)" % (k["gorev"],d)) if sonuc=="yazıldı" else ("  ⚠ GÖREV YAZILAMADI: %s → %s — %s (kart işlendi; karta yazıldı, rc 4)" % (k["gorev"],d,sonuc)))
 PY
   [ "$sonuc" = "yazıldı" ]
@@ -225,6 +239,14 @@ if cmd=="bitti" and cgb=="?": uyari+=" ⚠ kartın canlı şartı OKUNAMADI (kar
 if cmd=="bitti" and cgb=="E" and not cy: uyari+=" ⚠ CANLI KANIT YOK (cron/servis/sunucu işi gerçek ateşleme kaydı ister: kanit.sh canli)"
 print(f"✓ kart {cmd}: {k['is']} · puan {k['puan']} · kanıt {'var' if kanit else 'YOK'}{uyari}")
 PY
+    if [ "$CMD" = bitti ] && [ -n "$GOREV_BITTI" ]; then   # görevi de bitir: kanıt sınıfı ŞART (geçitle aynı kural)
+      if [ -n "$KARE" ] || [ -n "$SURUM" ]; then [ -n "$KARE" ] && [ -n "$SURUM" ] || { _hata "--gorev-bitti ekran işinde kare + sürüm BİRLİKTE: --kare <yol> --surum <canlı sürüm> (kare hangi sürümün?)"; exit 1; }
+        case "$KARE" in */*|*.*) ;; *) _hata "--kare bir dosya yolu olmalı ('/' ya da '.' taşır): $KARE"; exit 1 ;; esac
+      elif [ -n "$OLCUM" ]; then [ "${#OLCUM}" -ge 3 ] || { _hata "--olcum en az 3 harf (önce=N sonra=M ya da dosya)"; exit 1; }
+      elif [ -n "$BELGE" ]; then [ "${#BELGE}" -ge 3 ] || { _hata "--belge en az 3 harf (yol ya da PR)"; exit 1; }
+      else _hata "--gorev-bitti kanıt sınıfı ister: --kare <yol> --surum <sürüm> | --olcum \"…\" | --belge <yol> (PR tek başına dilimdir, görev değil)"; exit 1; fi
+      export GOREV_BITTI KARE SURUM OLCUM BELGE
+    fi
     GRC=0; [ -n "$(python3 -c "import json;print(json.load(open('$KD/$IS.json')).get('gorev',''))")" ] && { gorev_yaz "$KD/$IS.json" "$CMD" || GRC=4; }
     tetik "$(python3 -c "import json;print(json.load(open('$KD/$IS.json')).get('oda',''))")" "iş $CMD: $IS" "$(python3 -c "import json;k=json.load(open('$KD/$IS.json'));print(k['cumle'],'· puan',k.get('puan'),'· pr',k.get('pr'))")"
     exit $GRC
