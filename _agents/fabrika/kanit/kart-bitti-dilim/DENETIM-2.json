@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "kart-bitti-dilim",
+  "pr": "402",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-21T16:35:14+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 26850,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kart kapanışı artık bağlı görevi onay bekliyora çekmeden yalnız dilim adımı yazıyor; görev bitirme ise açık bayrak ve kanıt sınıfına bağlanmış. Ana talep kırmızı/yeşil ölçüm çiftiyle doğrulanmış; üretimi engellemeyen tek rötuş, ölçüm ve belge başarı yollarının da doğrudan sınanmasıdır.",
+    "bulgular": [
+      {
+        "ne": "`--gorev-bitti` için ekran kanıtının başarılı yolu sınanıyor, fakat kabul edilen diğer iki kanıt sınıfının (`--olcum` ve `--belge`) başarılı görev-bitirme çıktıları doğrudan sınanmıyor.",
+        "kanit": "Test diffindeki G3c–G3f kapıları sınıfsız isteği, eksik ekran kanıtını ve `--kare` + `--surum` başarı yolunu kapsıyor; `kart.sh` içinde ayrı dallar olarak bulunan `elif [ -n \"$OLCUM\" ]` ve `elif [ -n \"$BELGE\" ]` için eşdeğer başarılı çağrı ve defter gövdesi doğrulaması yok.",
+        "konum": "yazilim-fabrikasi/scripts/kart.test.sh:G3c–G3f; yazilim-fabrikasi/scripts/kart.sh:241-248",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Aynı `kart.test.sh` için önce 116 geçti/6 kaldı ve rc=1, sonra 122 geçti/0 kaldı ve rc=0; ayrıca `bash -n` rc=0 olduğundan ana davranış ile sözdizimi güçlü biçimde kanıtlanıyor. Kanıt gerçekçi görev/PR verisi kullanıyor; ancak başarılı ölçüm ve belge sınıfları ayrı kapılarla ölçülmemiş."
+  }
+}
