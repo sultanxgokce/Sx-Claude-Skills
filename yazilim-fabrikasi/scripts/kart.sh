@@ -22,7 +22,9 @@
 #          🔴 A06: onay ÜRETMEZ, alınan onayı AKTARIR. Ref'siz beyan sayılmaz; uyduran kartta yakalanır.
 #   kart.sh goster <iş> · kart.sh liste [--acik] · kart.sh canli-gerekir <iş>  → "E|H<TAB>sebep" (eski kartta cümleden türetir)
 # Ortam: FABRIKA_TETIK (oda-tetik.sh yolu; --oda verilirse tetik atılır, düşerse iş düşmez) · KANIT_DEPO
-# rc: 0 · 1 kullanım/eksik cevap · 3 ölçülemedi
+#   --gorev gorev_<kimlik> --tahmin <dk> (ac): kart defterdeki göreve bağlanır → açılış 'çalışılıyor' + atanan, bitti 'onay bekliyor'
+#          + kanıt, tıkandı 'bekliyor' + not (kutunun defter jetonuyla; DEFTER_JETON_YOL · DEFTER_UC). Bağsız kart bunu söyler.
+# rc: 0 · 1 kullanım/eksik cevap · 3 ölçülemedi · 4 kart işlendi ama bağlı görev deftere YAZILAMADI (sebep ekranda ve kartta)
 set -uo pipefail
 _hata() { printf '✗ %s\n' "$*" >&2; }
 TETIK="${FABRIKA_TETIK:-/config/projects/Nexus/scripts/oda-tetik.sh}"
@@ -44,7 +46,57 @@ while [ $# -gt 0 ]; do case "$1" in
   --karar) KARAR="$2"; shift 2 ;; --oturum) OTURUM="$2"; shift 2 ;; --soz) SOZ="$2"; shift 2 ;; --beyan) BEYAN="$2"; shift 2 ;;
   --gerekce) GEREKCE="$2"; shift 2 ;; --reis) REIS="$2"; shift 2 ;; --canli) CANLI="$2"; shift 2 ;;
   --kalan) KALAN="$2"; shift 2 ;; --cumle) CUMLE="$2"; shift 2 ;; --yeni) YENI="$2"; shift 2 ;;
+  --gorev) GOREV="$2"; shift 2 ;; --tahmin) TAHMIN="$2"; shift 2 ;;
   --acik) ACIK=1; shift ;; *) _hata "tanınmayan argüman: $1"; exit 1 ;; esac; done
+GOREV="${GOREV:-}"; TAHMIN="${TAHMIN:-}"
+
+# 🔴 GÖREV DURUMU (Sultan 20 Eki, gorev_…Y7J3Q "çalışılıyor görünümü güvenilmez"; ölçüm 21 Eki 00:00: koltukların 3'ü çalışıyor,
+#    defterde 'çalışılıyor' 0). Kök: ajan işe başlarken/bırakırken deftere yazmıyordu. Her iş zaten bu araçtan geçtiği için yazımı
+#    ARAÇ yapar: kart --gorev ile bağlanınca açılış → 'çalışılıyor' + atanan = kartı alan + tahmin · bitti → 'onay bekliyor' + kanıt
+#    (PR / kanıt dizini) · tıkandı → 'bekliyor' + not (tıkanma nedeni). Kutunun KENDİ defter jetonuyla yazar (bulgu.sh ile aynı yol;
+#    değer argv'ye/çıktıya düşmez). Defter yazamazsa kart YİNE işlenir ama bu söylenir, karta yazılır ve rc 4 döner — sessiz eksik yok.
+DEFTER_JY="${DEFTER_JETON_YOL:-/config/defter-jeton}"; DEFTER_U="${DEFTER_UC:-http://cloudtop-defter:8791}"
+gorev_yaz() {  # gorev_yaz <kart.json> <ac|bitti|tikandi> → rc 0 yazıldı · 4 yazılamadı (karta işlenir)
+  local kj="$1" olay="$2" govde cfg cevap rc sonuc
+  govde="$(python3 - "$kj" "$olay" "$(basename "$DEPO")" <<'PY'
+import json,sys
+k=json.load(open(sys.argv[1])); olay,depo=sys.argv[2:]; kim=k["aldi"]; is_=k["is"]
+if olay=="ac":
+    y={"atanan":kim,"tahmin_dk":str(k.get("tahmin_dk","")),"gorev_durumu":"calisiliyor"}; ne="[▶ çalışılıyor] %s · kart %s açıldı, tahmin %s dk" % (kim,is_,k.get("tahmin_dk"))
+elif olay=="bitti":
+    kn=("%s PR #%s · " % (depo,k["pr"]) if k.get("pr") else "")+"kanıt _agents/fabrika/kanit/%s/ (%s)" % (is_,depo)
+    y={"gorev_durumu":"onay-bekliyor","kanit":kn}; ne="[⏸ onay bekliyor] %s · kart %s bitti · %s" % (kim,is_,kn)
+else:
+    nd=(k.get("tikanma") or {}).get("neden","") or "tıkandı"
+    y={"gorev_durumu":"bekliyor","not":"kart %s tıkandı: %s" % (is_,nd[:300])}; ne="[⏳ bekliyor] %s · kart %s tıkandı (%s): %s" % (kim,is_,(k.get("tikanma") or {}).get("yol",""),nd[:300])
+print(json.dumps({"yerine":y,"gerekce":ne,"adimlar":[ne]},ensure_ascii=False))
+PY
+)" || return 4
+  if [ ! -r "$DEFTER_JY" ]; then sonuc="yazılamadı: bu kutuda defter jetonu yok ($DEFTER_JY)"
+  else
+    cfg="$(mktemp)"; printf 'header = "x-defter-jeton: %s"\n' "$(tr -d '\n' < "$DEFTER_JY")" > "$cfg"
+    cevap="$(curl -sS -m 15 --config "$cfg" -X PATCH -H 'content-type: application/json' --data-binary "$govde" "$DEFTER_U/kayit/$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["gorev"])' "$kj")" -w '\n%{http_code}' 2>&1)"; rc=$?
+    rm -f -- "$cfg"
+    if [ $rc -ne 0 ]; then sonuc="yazılamadı: deftere ulaşılamadı ($DEFTER_U)"
+    else sonuc="$(printf '%s' "$cevap" | python3 -c '
+import sys,json; t=sys.stdin.read().rstrip("\n").rsplit("\n",1); g,kod=(t if len(t)==2 else (t[0],"000"))
+try: j=json.loads(g or "{}")
+except Exception: j={}
+if kod=="200": print("yazıldı")
+else:
+    e=j.get("ek") if isinstance(j.get("ek"),dict) else j
+    print("yazılamadı: http %s · %s%s" % (kod, j.get("hata") or "cevap okunamadı", (" · " + str(e.get("yerine"))[:160]) if e.get("yerine") else ""))')"; fi
+  fi
+  python3 - "$kj" "$olay" "$sonuc" <<'PY'
+import json,sys,datetime
+p,olay,sonuc=sys.argv[1:]; k=json.load(open(p))
+k.setdefault("gorev_yazimlari",[]).append({"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),"olay":olay,"sonuc":sonuc})
+json.dump(k,open(p,"w"),ensure_ascii=False,indent=2)
+d={"ac":"çalışılıyor","bitti":"onay bekliyor","tikandi":"bekliyor"}[olay]
+print(("  ✓ görev %s → %s (defter)" % (k["gorev"],d)) if sonuc=="yazıldı" else ("  ⚠ GÖREV YAZILAMADI: %s → %s — %s (kart işlendi; karta yazıldı, rc 4)" % (k["gorev"],d,sonuc)))
+PY
+  [ "$sonuc" = "yazıldı" ]
+}
 
 tetik() {  # tetik <oda> <başlık> <gövde>
   [ -n "$1" ] || return 0
@@ -115,23 +167,31 @@ case "$CMD" in
     for v in GA PARA DIS YETKI; do case "${!v}" in e|h|\?) ;; *) _hata "dört sınıf sorusu cevapsız kart AÇILMAZ: --geri-alinamaz --para --dis-yuzey --yetki (e|h|?)"; exit 1 ;; esac; done
     case "$CANLI" in ""|e|h) ;; *) _hata "--canli yalnız e|h olabilir ('$CANLI' değil): cron/servis/sunucu işi canlı kanıt ister mi?"; exit 1 ;; esac
     [ -f "$KD/$IS.json" ] && { _hata "kart zaten var: $IS (goster ile bak)"; exit 1; }
+    if [ -n "$GOREV" ]; then
+      [[ "$GOREV" =~ ^gorev_[A-Za-z0-9]{10,40}$ ]] || { _hata "--gorev gorev_<kimlik> biçiminde olmalı ('$GOREV' değil)"; exit 1; }
+      [[ "$TAHMIN" =~ ^[1-9][0-9]{0,4}$ ]] || { _hata "--gorev verilince --tahmin <dk> ZORUNLU (defter 'çalışılıyor'a tahminsiz geçmez; Sultan: başladıysa tahmini bitiş)"; exit 1; }
+    elif [ -n "$TAHMIN" ]; then _hata "--tahmin yalnız --gorev ile anlamlı (hangi görevin tahmini?)"; exit 1; fi
     IFS=$'\t' read -r CG CSEBEP <<<"$(canli_hesapla "$IS_C" "$CANLI")"; CSEBEP="${CSEBEP:-}"
     KUYARI="$(kapsam_uyar "$IS" "$IS_C" "$(basename "$DEPO")")" || { _hata "kapsam uyarısı ölçülemedi"; KUYARI="ÖLÇÜLEMEDİ: kapsam uyarısı aracı düştü"; }
-    python3 - "$KD/$IS.json" "$IS" "$IS_C" "$ISTEDI" "$ALDI" "$GA" "$PARA" "$DIS" "$YETKI" "$KANIT" "$ODA" "$CG" "$CSEBEP" "$KUYARI" <<'PY'
+    python3 - "$KD/$IS.json" "$IS" "$IS_C" "$ISTEDI" "$ALDI" "$GA" "$PARA" "$DIS" "$YETKI" "$KANIT" "$ODA" "$CG" "$CSEBEP" "$KUYARI" "$GOREV" "$TAHMIN" <<'PY'
 import json,sys,datetime
-yol,is_,cumle,istedi,aldi,ga,para,dis,yetki,kanit,oda,cg,csebep,kuyari=sys.argv[1:]
+yol,is_,cumle,istedi,aldi,ga,para,dis,yetki,kanit,oda,cg,csebep,kuyari,gorev,tahmin=sys.argv[1:]
 cev={"geri_alinamaz":ga,"para":para,"dis_yuzey":dis,"yetki":yetki}
 siniflar=[k for k,v in cev.items() if v in("e","?")]
 kart={"is":is_,"cumle":cumle,"istedi":istedi,"aldi":aldi,"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
       "sinif_cevaplari":cev,"siniflar":siniflar,"sultan":bool(siniflar),"kanit_nerede":kanit,"oda":oda,"durum":"acik","gecmis":[],
       "canli_gerekir":cg=="E","canli_sebep":csebep,"kapsam_uyarilari":[u for u in kuyari.splitlines() if u.strip()]}
+if gorev: kart["gorev"]=gorev; kart["tahmin_dk"]=int(tahmin)
 json.dump(kart,open(yol,"w"),ensure_ascii=False,indent=2)
 print(f"✓ kart açıldı: {is_} · sınıf: {', '.join(siniflar) if siniflar else 'yok'} · {'SULTAN\'A GİDER' if siniflar else 'ekipte biter, gün sonu özetine girer'}")
 for u in kart["kapsam_uyarilari"]: print(f"  ⚠ KAPSAM — {u} (uyarı, red değil; karta yazıldı)")
 if cg=="E": print(f"  · CANLI kanıt zorunlu ({csebep}): gerçek ateşleme kaydı (kanit.sh canli) olmadan birleştirme kapısı geçmez")
 elif csebep: print(f"  ⚠ canlı kanıt istenmedi — {csebep}; karta yazıldı, bağımsız göz görür")
+if not gorev: print("  · görev bağı yok — iş Sultan'ın 'çalışılıyor' görünümüne DÜŞMEZ (bağlamak için: kart.sh ac … --gorev gorev_<kimlik> --tahmin <dk>)")
 PY
+    GRC=0; [ -n "$GOREV" ] && { gorev_yaz "$KD/$IS.json" ac || GRC=4; }
     tetik "$ODA" "iş alındı: $IS" "$IS_C · sahip $ALDI · istedi $ISTEDI · sınıf: ${GA}${PARA}${DIS}${YETKI}"
+    exit $GRC
     ;;
   bitti|tikandi)
     [ -n "$IS" ] && [ -f "$KD/$IS.json" ] || { _hata "kart yok: $IS"; exit 3; }
@@ -165,7 +225,9 @@ if cmd=="bitti" and cgb=="?": uyari+=" ⚠ kartın canlı şartı OKUNAMADI (kar
 if cmd=="bitti" and cgb=="E" and not cy: uyari+=" ⚠ CANLI KANIT YOK (cron/servis/sunucu işi gerçek ateşleme kaydı ister: kanit.sh canli)"
 print(f"✓ kart {cmd}: {k['is']} · puan {k['puan']} · kanıt {'var' if kanit else 'YOK'}{uyari}")
 PY
+    GRC=0; [ -n "$(python3 -c "import json;print(json.load(open('$KD/$IS.json')).get('gorev',''))")" ] && { gorev_yaz "$KD/$IS.json" "$CMD" || GRC=4; }
     tetik "$(python3 -c "import json;print(json.load(open('$KD/$IS.json')).get('oda',''))")" "iş $CMD: $IS" "$(python3 -c "import json;k=json.load(open('$KD/$IS.json'));print(k['cumle'],'· puan',k.get('puan'),'· pr',k.get('pr'))")"
+    exit $GRC
     ;;
   sultan-dedi)
     # 🔴 Sultan'ın sözlü kararı KARTA girer, komut satırında kalmaz. Niçin: bir yetki kapısını
