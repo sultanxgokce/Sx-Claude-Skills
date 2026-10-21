@@ -1,7 +1,7 @@
 ---
 name: vault-cek
 type: agent
-version: 1.4.0
+version: 1.4.1
 description: >
   Merkezî Vault'tan (OpenBao central-vault; 2026-08-07 L54 cutover) sır çeker → cortex-access.env. On-demand:
   Sultan sırları bir kez vault'a koyar, her container kendi AppRole kimliğiyle self-servis çeker.
