@@ -1,0 +1,52 @@
+{
+  "tur": 2,
+  "is": "Sx-fabrika-canli-borc",
+  "pr": "407",
+  "yazan": "claude",
+  "denetci": "claude (sonnet) (YEDEK GÖZ: codex düştü (2 deneme, rc=1) · yazandan farklı yeni oturum + farklı model kademesi [yazan: opus] · Sultan Y0006)",
+  "zaman": "2026-10-22T01:04:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": "codex düştü (2 deneme, rc=1)",
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": "sonnet",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 64246,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 59141
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Canlı kayıt birleşmeden önce üretilemiyorsa kapı kayıtlı, geçerli borçla geçiyor; kart 'bitti' yerine 'canli-borclu' oluyor, borç sonradan kanit.sh canli ile ödeniyor ve 24 saati aşan borç kırmızı çıkıyor. Önceki turun fail-open bulgusu kapatıldı (bozuk, eksik ya da borçtan sonraki karar zamanı artık karar sayılmıyor) ve ölçümler bunu gösteriyor. Geriye yalnız küçük rötuşlar kalıyor.",
+    "bulgular": [
+      {
+        "ne": "24 saatlik süre yalnızca kart.sh borclar çıktısında kırmızı oluyor; süresi dolmuş borç kapıyı hâlâ geçiriyor ve borclar'ı çağıran bir bekçi/nabız bağlı değil. SKILL.md bunu 'ayrı iş — açık' diye dürüstçe not ediyor, ama ödenmeyen borç şimdilik kimseyi uyarmaz.",
+        "kanit": "canli_borc.py:durum() borç yaşına bakmıyor, yalnız yas_saat() ve borclar bakıyor. SKILL.md satırı: 'Sultan tablosuna bağlama ayrı iş — açık'. T14l yalnız borclar'ın rc=1 verdiğini sınıyor, onu çağıran bir şey sınanmıyor.",
+        "konum": "yazilim-fabrikasi/scripts/canli_borc.py:46 · kart.sh borclar",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Gerekçe uzunluğu yalnız karakter sayısıyla ölçülüyor; 20 boşluk 'geçerli gerekçe' sayılır. Gerekçeler başta/sonda boşluktan arındırılmıyor.",
+        "kanit": "kart.sh canli-borc: [ \"${#GEREKCE}\" -ge 20 ] ve canli_borc.py: len(str(b.get('gerekce') or '')) < 20 — ikisinde de strip yok.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh (canli-borc) · canli_borc.py:41",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Sınıfsız kartta borcu kartın sahibi kendi adına yazıyor (yazan = aldi), yani öz-onay. Bu tasarım gereği; ama kaçışı kapanmayan tek korumanın görünürlük olduğu açıkça söylenmeli.",
+        "kanit": "canli_borc.py:37-38 yazan==aldi kontrolü; T14d.",
+        "konum": "yazilim-fabrikasi/scripts/canli_borc.py:37",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam. Üç 'sonra' ölçümü yeşil (kapı 141/141, kart 122/122, kanıt 189/189). 'Önce' kaydı, yeni sınavın eski kod üzerinde koşulması: 120 geçti, 21 kaldı; canli_borc.py yokluğundan T14 çoğunlukla düşüyor, bu gerçek bir önce/sonra çifti. Önceki turun eksiği (önce/sonra çifti ve bozuk/eksik karar zamanı sınavı) kapatılmış: T14zb, T14zc, T14zd ve fail-open'ı geri getiren mutant T14ze var. Sarı kayıt yok. Sınav gerçek kapı ve kart.sh betiklerini koşturuyor, yalnızca birim sınamıyor. Canlı kayıt gerekmeyen (--canli h) bir fabrika işi için ek görsel kanıt beklenmez."
+  }
+}

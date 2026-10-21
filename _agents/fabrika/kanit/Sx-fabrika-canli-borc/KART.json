@@ -1,0 +1,22 @@
+{
+  "is": "Sx-fabrika-canli-borc",
+  "cumle": "fabrika: sınıflı iş için canlı borç — canlı kayıt henüz üretilemiyorsa kapı borç kaydıyla geçer, kart 'canlı borçlu' olur, borç dağıtımdan sonra kanit.sh canli ile ödenir (5WYQMW)",
+  "istedi": "SERDAR",
+  "aldi": "BERİD",
+  "zaman": "2026-10-22T00:44:10+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: canli, canlı)",
+  "kapsam_uyarilari": []
+}

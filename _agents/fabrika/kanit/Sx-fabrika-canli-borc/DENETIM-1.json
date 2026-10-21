@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "Sx-fabrika-canli-borc",
+  "pr": "407",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-22T01:01:06+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 54929,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 40561
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Canlı kayıt birleşmeden önce üretilemiyorsa görünür borçla kapıyı geçirme, kartı borçlu tutma ve sonraki canlı kayıtla kapatma akışı kurulmuş; talebin özü doğru karşılanmış. Ancak sınıflı işlerde Sultan kararının zaman doğrulaması hatalı biçimde fail-open çalışıyor; önce bunu çöz, ardından kanıtı bu sınır vakası ve gerçek önce/sonra çiftiyle tamamla.",
+    "bulgular": [
+      {
+        "ne": "Sınıflı kartta eksik veya bozuk Sultan karar zamanı geçerli onay sayılıyor; böylece borçtan önce alınmış, okunabilir zamanlı karar şartı aşılabiliyor.",
+        "kanit": "Sultan kararı denetiminde `(zaman(sk.get(\"zaman\")) or bz) <= bz` kullanılmıştır. `zaman(...)` bozuk ya da eksik değerde `None` döndürdüğünde ifade `bz <= bz` olur ve aynı kayıtta `karar == \"canli-borc\"` bulunması tek başına yeter; ölçüm çıktısındaki T14t–T14w yalnız kararsız ve düzgün zamanlı karar vakalarını gösteriyor, bozuk/eksik zaman vakasını sınamıyor.",
+        "konum": "yazilim-fabrikasi/scripts/canli_borc.py:44",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve üç kayıt yeşil; 189/189, 137/137 ve 122/122 son-test sonuçları ile ilgili borç akışına ait mutasyon sınavları güçlü kanıt sağlıyor. Bununla birlikte yalnız `sonra` ölçümleri var, gerçek önce/sonra ölçüm çifti yok; ayrıca sınıflı işte bozuk veya eksik Sultan karar zamanı için sınav bulunmadığından belirtilen fail-open kusuru mevcut kanıtla kapatılmıyor."
+  }
+}
