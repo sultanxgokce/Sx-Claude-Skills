@@ -99,6 +99,13 @@ o=$(env $M bash "$B" yaz "kapanmış işe düğüm" --kim X --dugum mmex:gorev_K
 ok "D7 defter düğümü reddederse rc 1 + defterin sebebi aynen (kural defterde, burada kopya yok)" '[ $r -eq 1 ] && [[ "$o" == *"reddetti http=400 · dugum_hedefi_gecersiz · dugum_acar: kapanmis"* ]]'
 o=$(env $M bash "$B" yaz "kapanmış işe düğüm (canlı biçim)" --kim X --dugum mmex:gorev_KAPANMIS00000002 2>&1); r=$?
 ok "D7b defter bağ reddinde (canlı 409 bag_hedefi_yok biçimi: neden/yerine ÜST düzeyde — 21 Eki canlıdan alındı) neden + yapılacak basılır, rc 1" '[ $r -eq 1 ] && [[ "$o" == *"reddetti http=409 · bag_hedefi_yok"* ]] && [[ "$o" == *"neden: kapanmis · yapılacak: bekleyen görev kapanmış; açık bir görevi göster"* ]]'
+# ── HAVUZ (0.5.0, Sultan D1 21 Eki): bulgu varsayılan 'havuz' (Sırada'ya düşmez); --gorev → acik; --dugum → acik ──
+o=$(env $M bash "$B" yaz "Havuz bulgusu" --kim BASIRET 2>&1); r=$?
+ok "HV1 varsayılan gorev_durumu 'havuz' + kaynak_sinif 'ajan' açıkça gövdede (0.5.0)" '[ $r -eq 0 ] && python3 -c "import json,sys; b=json.load(open(sys.argv[1]))[\"govde\"]; assert b[\"gorev_durumu\"]==\"havuz\" and b[\"kaynak_sinif\"]==\"ajan\", b" "$T/gelen.json"'
+o=$(env $M bash "$B" yaz "Doğrudan iş" --kim BASIRET --gorev 2>&1); r=$?
+ok "HV2 --gorev → gorev_durumu 'acik' (doğrudan İŞ, Sırada'ya düşer)" '[ $r -eq 0 ] && python3 -c "import json,sys; assert json.load(open(sys.argv[1]))[\"govde\"][\"gorev_durumu\"]==\"acik\"" "$T/gelen.json"'
+o=$(env $M bash "$B" yaz "Düğüm açan" --kim BASIRET --dugum mmex:gorev_BEKLEYEN00000001 2>&1); r=$?
+ok "HV3 --dugum verilince durum 'acik' (başka kutunun işini tutan kayıt havuzda bekleyemez)" '[ $r -eq 0 ] && python3 -c "import json,sys; b=json.load(open(sys.argv[1]))[\"govde\"]; assert b[\"gorev_durumu\"]==\"acik\" and b[\"dugum_acar\"]==\"mmex:gorev_BEKLEYEN00000001\", b" "$T/gelen.json"'
 kill $SRV 2>/dev/null; wait $SRV 2>/dev/null
 o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "x" --kim X 2>&1); r=$?
 ok "K1h merkeze ulaşılamazsa rc 1, kayıt HİÇBİR yere yazılmaz ve söylenir" '[ $r -eq 1 ] && [[ "$o" == *"ulaşılamadı"* ]] && [[ "$o" != *ARGV* ]]'

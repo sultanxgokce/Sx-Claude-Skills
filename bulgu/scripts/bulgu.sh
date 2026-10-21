@@ -13,13 +13,14 @@ k="${1:-}"; shift || true
 case "$k" in
   yaz)
     baslik="${1:-}"; shift || true
-    [ -n "$baslik" ] || { echo "kullanım: bulgu.sh yaz \"<başlık>\" --kim <AJAN> [--not \"…\"] [--etiket bug|ozellik] [--dugum <kutu>:gorev_<kimlik>|gorev_<kimlik>]" >&2; exit 2; }
-    kim=""; notu=""; etiket="bug"; dugum=""
+    [ -n "$baslik" ] || { echo "kullanım: bulgu.sh yaz \"<başlık>\" --kim <AJAN> [--not \"…\"] [--etiket bug|ozellik] [--dugum <kutu>:gorev_<kimlik>|gorev_<kimlik>] [--gorev]" >&2; exit 2; }
+    kim=""; notu=""; etiket="bug"; dugum=""; durum="havuz"
     while [ $# -gt 0 ]; do case "$1" in
       --kim) [ $# -ge 2 ] || { echo "--kim değersiz" >&2; exit 2; }; kim="$2"; shift 2 ;;
       --not) [ $# -ge 2 ] || { echo "--not değersiz" >&2; exit 2; }; notu="$2"; shift 2 ;;
       --etiket) [ $# -ge 2 ] || { echo "--etiket değersiz" >&2; exit 2; }; etiket="$2"; shift 2 ;;
       --dugum) [ $# -ge 2 ] && [ -n "$2" ] || { echo "--dugum değersiz" >&2; exit 2; }; dugum="$2"; shift 2 ;;
+      --gorev) durum="acik"; shift ;;   # 0.5.0: bulgu değil doğrudan İŞ (Sultan/reis talimatı) → Sırada'ya düşer
       *) echo "bilinmeyen: $1" >&2; exit 2 ;; esac; done
     [ -n "$kim" ] || { echo "--kim zorunlu (kaydı kim açıyor?)" >&2; exit 2; }
     case "$etiket" in bug|ozellik) ;; *) echo "--etiket bug ya da ozellik olmalı (K1: bulgu = bu iki etiketten biriyle görev)" >&2; exit 2 ;; esac
@@ -27,6 +28,11 @@ case "$k" in
     #    Kutuda defter jetonu varsa kayıt ORAYA gider (kutu jetondan türer, beyan edilmez; kaynak_nereden = "bulgu komutu").
     #    Jeton yoksa eski kutu defterine düşer ve bunu SÖYLER — sessiz ikilik yok. Jeton değeri argv'ye/çıktıya düşmez (curl --config).
     JY="${DEFTER_JETON_YOL:-/config/defter-jeton}"; UC="${DEFTER_UC:-http://cloudtop-defter:8791}"
+    # ── HAVUZ (0.5.0, Sultan D1 21 Eki "Eleme turu + bulgu kapısı"): bulgu VARSAYILAN olarak 'havuz' durumunda açılır — Sırada'ya
+    #    düşmez, haftalık süzmede görev olur ya da iptal. Ölçüm: sırada 212 görevin 151'i bu komuttan 'acik' açılmıştı. --gorev = doğrudan iş.
+    #    Düğüm açan kayıt havuzda bekleyemez (başka kutunun işini tutuyor) → --dugum verilince durum 'acik'. Defter 'havuz'u tanımıyorsa
+    #    (1.18.0 öncesi) 400 döner ve aşağıdaki ret yolu bunu SÖYLER; sessiz düşüş yok.
+    [ -n "$dugum" ] && durum="acik"
     # ── DÜĞÜM (0.4.0, SERDAR 20 Eki F3a): kayıt başka bir kutunun bekleyen görevini serbest bırakmak için açılıyorsa
     #    --dugum <kutu>:gorev_<kimlik> → defterin dugum_acar alanı. Biçim ve varlık kapısı DEFTERDE (burada kural kopyası yok).
     #    Çıplak gorev_<kimlik> verilirse kutu defterden okunur. Düğüm yalnız merkezî defterde yaşar: jetonsuz kutuda RED, sessiz düşmez.
@@ -43,11 +49,11 @@ if kod!="200": print("⛔ düğümün bekleyen görevi %s görünmüyor (http %s
 k=json.loads(g)["kayit"]; print("%s:%s" % (k["canli"].get("kutu") or k.get("ekleyen_kutu"), k["id"]), end="")' "$dugum")" || exit 1 ;;
       esac
       govde="$(python3 -c 'import sys,json
-b,kim,notu,et,dg=sys.argv[1:6]
-d={"tur":"gorev","adlar":[b],"etiket":et,"kaynak_kim":kim,"kaynak_nereden":"bulgu komutu","gorev_durumu":"acik"}
+b,kim,notu,et,dg,dr=sys.argv[1:7]
+d={"tur":"gorev","adlar":[b],"etiket":et,"kaynak_kim":kim,"kaynak_nereden":"bulgu komutu","kaynak_sinif":"ajan","gorev_durumu":dr}
 if notu.strip(): d["adimlar"]=["[kanıt] "+notu.strip()]
 if dg: d["dugum_acar"]=dg
-print(json.dumps(d,ensure_ascii=False))' "$baslik" "$kim" "$notu" "$etiket" "$dugum")"
+print(json.dumps(d,ensure_ascii=False))' "$baslik" "$kim" "$notu" "$etiket" "$dugum" "$durum")"
       cevap="$(curl -sS -m 15 --config "$cfg" -X POST -H 'content-type: application/json' --data-binary "$govde" "$UC/kayit" -w '\n%{http_code}' 2>&1)"; rc=$?
       rm -f -- "$cfg"
       if [ $rc -ne 0 ]; then echo "⛔ merkezî Görev Defteri'ne ulaşılamadı ($UC): $cevap — kayıt YAZILMADI (eski deftere de düşmedi: ikilik olmasın; sonra yeniden dene ya da SERDAR'a yaz)" >&2; exit 1; fi

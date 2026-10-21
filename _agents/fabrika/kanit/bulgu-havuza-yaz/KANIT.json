@@ -1,0 +1,59 @@
+{
+  "is": "bulgu-havuza-yaz",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-21T17:11:19+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "bulgu-sinavi",
+      "asama": "once",
+      "dosya": "olcum-bulgu-sinavi-once.txt",
+      "sha256": "fa1f67f072d4ded8743f833946f7e9521c1c6cc6813337cb39a43c1b3c7dd95d",
+      "komut": [
+        "bash",
+        "bulgu/scripts/bulgu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-21T17:02:22+03:00",
+      "sure_sn": 1.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "dd4451322dea4cc4a599d7f378b120e9"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bulgu-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-bulgu-sinavi-sonra.txt",
+      "sha256": "d7cf498716f8e607f1dfc14b550d124184ad75cf4d2103fe5d4b15cef504d73f",
+      "komut": [
+        "bash",
+        "bulgu/scripts/bulgu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-21T17:09:15+03:00",
+      "sure_sn": 1.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4de12ecbca3a42eba4eafcd20aa9f925"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-varsayilan-acik",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-varsayilan-acik-sonra.txt",
+      "sha256": "c4094323eb12463925c069ad51e360ae7b39e5e97a0334e200c7c45b7c882d8d",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/mutsx.F5P6/bulgu/scripts/bulgu.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-21T17:11:19+03:00",
+      "sure_sn": 1.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c6b57a37bda54023ac7718bbf3b79e65"
+    }
+  ],
+  "imza": "5379fc929895ae63901339b2a0b40037b35bb3232dd740e346f2c7d6ab2d1122"
+}

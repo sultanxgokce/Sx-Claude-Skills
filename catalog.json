@@ -1666,7 +1666,7 @@
       "id": "bulgu",
       "type": "workflow",
       "name": "Bulgu — filonun tek bulgu komutu (kutunun Bulgu Defteri'ne yaz/listele/hâl)",
-      "version": "0.4.1",
+      "version": "0.5.0",
       "description": "Hangi kutuda olursan ol, gördüğün kusuru ya da fikri aynı komutla, aynı şemayla kutunun Bulgu Defteri'ne yazar (bulgu.mmepanel.com'da Sultan'ın tek sayfası). Yeni yazıcı icat etmez; defterin kilitli yazıcısının (defter-yaz.py) kapısıdır. Defter kurulu değilse rc=3 ve hiçbir şey yazmaz. 0.2.0: hâl geçişi komutu (acik→uygulandi→canli; 'onaylandi' insanındır, A06). 0.3.0: jeton varsa merkezî Görev Defteri'ne görev yazar. 0.4.0: --dugum ile başka kutunun bekleyen görevine düğüm bağı. 0.4.1: bağ reddinde defterin neden + yapılacak satırı basılır.",
       "tags": [
         "bulgu",
