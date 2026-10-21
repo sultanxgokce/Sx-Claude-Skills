@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "kanit-supurme-bani",
+  "pr": "387",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-20T17:32:03+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 11196,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 10,
+    "bayt": 17488
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Üç hedef kanıt dosyası ana alana birebir alınmış ve pano-resim-hiz alanı kapatılmış. Ancak terminal-koltuk-adi alanı dört dosyanın ana kopyalarla uyuşmaması nedeniyle açık kaldığından iş kartındaki eski alanların kapanması talebi tamamlanmamış; önce bunu çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "Eski alanları kapatma işi eksik kalmış; iki bitmiş iş alanından yalnız biri kapanmış, terminal-koltuk-adi hâlâ açıktır.",
+        "kanit": "Önceki ölçüm “bitmiş işlerimin açık alanı 2/2” derken sonraki ölçüm “1/2” diyor. Sonraki çıktı terminal-koltuk-adi alanının sunucu.mjs ile üç koltuk betiğinin hiçbir kopyayla birebir olmaması nedeniyle “AÇIK KALIR” olduğunu açıkça kaydediyor.",
+        "konum": "olcum-eski-alanlar-once.txt; olcum-eski-alanlar-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Ölçüm çiftleri üç kanıt dosyasının 0/3’ten 3/3 birebir duruma geldiğini ve açık eski alan sayısının 2/2’den 1/2’ye düştüğünü gösteriyor; dolayısıyla taşıma ile tek alanın kapanması kanıtlı, fakat bütün eski alanların kapandığı iddiası ölçüm tarafından açıkça çürütülüyor."
+  }
+}

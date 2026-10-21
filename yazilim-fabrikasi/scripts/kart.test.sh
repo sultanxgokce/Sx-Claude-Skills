@@ -96,6 +96,13 @@ printf '%s çaldı\n' "$(date -u +%FT%TZ)" > "$T/zil.log"
 bash "$K" canli is-cron zil --desen çaldı --kaynak "dosya:$T/zil.log" >/dev/null 2>&1
 CIKTI="$(bash "$KT" bitti is-cron 2>&1)"; ! grep -q "CANLI KANIT YOK" <<<"$CIKTI"; g $? "yeşil canlı kayıt varken uyarı yok"
 python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-cron.json'));assert k['canli_kanit']=='var'"; g $? "karta canli_kanit=var işlendi"
+# 4K938: geçersiz ilan edilen yeşil canlı kayıt bitti'de 'var' sayılmaz (etkin renk kanit.py'den)
+bash "$K" gecersiz is-cron zil --neden "log başka sunucunun zil satırıydı, bu iş değil" --kim BANI >/dev/null 2>&1
+CIKTI="$(bash "$KT" bitti is-cron 2>&1)"; grep -q "CANLI KANIT YOK" <<<"$CIKTI"; g $? "geçersiz ilan edilen canlı kayıtla bitti yine uyarır"
+python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-cron.json'));assert k['canli_kanit']!='var', k['canli_kanit']"; g $? "karta canli_kanit=var İŞLENMEDİ (geçersiz yeşil sayılmaz)"
+MK="$T/pkg-kart"; mkdir -p "$MK"; cp "$HERE"/*.py "$HERE"/*.sh "$MK/"; sed -i 's/x\["etkin_renk"\]=="yesil"/x.get("renk")=="yesil"/' "$MK/kart.sh"
+grep -q 'x.get("renk")=="yesil"' "$MK/kart.sh"; g $? "mutant üretildi (kart.sh ham rengi okuyor)"
+CIKTI="$(bash "$MK/kart.sh" bitti is-cron 2>&1)"; ! grep -q "CANLI KANIT YOK" <<<"$CIKTI" && grep -q "kart bitti" <<<"$CIKTI"; g $? "mutant (tam kopya, bitti koştu): geçersiz yeşili sayıp uyarmıyor → üstteki kapı bu mutantta düşerdi"
 # canli-gerekir: kapının okuduğu tek yüzey; eski kartta (alan yok) cümleden türetir
 [ "$(bash "$KT" canli-gerekir is-cron | cut -f1)" = "E" ] && [ "$(bash "$KT" canli-gerekir is-1 | cut -f1)" = "H" ]; g $? "canli-gerekir E/H okur"
 python3 - <<PY
@@ -113,4 +120,88 @@ bash "$KT" ac is-ek --is "sunucudaki cron'u ve servisleri yenile" --istedi S --a
 python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-ek.json'));assert k['canli_gerekir'] and 'sunucu' in k['canli_sebep'] and 'cron' in k['canli_sebep'] and 'servis' in k['canli_sebep'], k['canli_sebep']"; g $? "Türkçe ekler (sunucudaki · cron'u · servisleri) hâlâ yakalanır"
 
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
+echo "════ T11 · daralt: kalan bulgu yeni karta, cümle daraltılır, tur sıfırı yazılır (PCP7J) ════"
+mkdir -p "$T/depo2" && cd "$T/depo2" && git init -q -b main && export KANIT_DEPO="$T/depo2"   # önceki sınav çalışma dizinini kaldırmış olabilir
+bash "$KT" ac is-dar --is "iki yarım iş tek kartta olduğu için tıkanan iş" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+bash "$KT" daralt is-dar --kalan "kısa" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-d >/dev/null 2>&1; [ $? -eq 1 ]; g $? "kısa --kalan REDDEDİLDİ"
+bash "$KT" daralt is-dar --kalan "kalan yarı: raporu da üretsin, bu kartta değil" --cumle "daraltılmış cümle yeterince uzun burada" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "--oturum yoksa REDDEDİLDİ"
+[ ! -f "$T/depo2/_agents/fabrika/kartlar/is-dar-kalan.json" ]; g $? "reddedilen denemeler kalan kart yazmadı"
+mkdir -p "$T/depo2/_agents/fabrika/kanit/is-dar"; for i in 1 2 3; do echo '{"tur":'$i',"sonuc":{"kod_puani":2,"dogru_sey":"H","bulgular":[]}}' > "$T/depo2/_agents/fabrika/kanit/is-dar/DENETIM-$i.json"; done
+CIKTI="$(bash "$KT" daralt is-dar --kalan "kalan yarı: raporu da üretsin, bu kartta değil" --cumle "yalnız birinci yarı: ölçümü yazsın ve kaydetsin" --oturum ref-d 2>&1)"; g $? "daralt rc=0"
+grep -q "tur sıfırı 3" <<<"$CIKTI"; g $? "tur sıfırı 3 yazıldı (3 denetim vardı)"
+python3 -c "import json;k=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-dar.json'));assert k['cumle'].startswith('yalnız') and k['cumle_gecmisi'][0]['cumle'].startswith('iki yarım') and k['daraltmalar'][-1]['tur_sifir']==3 and k['reis_kararlari'][-1]['karar']=='daralt' and k['reis_kararlari'][-1]['reis']=='MUAVIN'"; g $? "cümle daraltıldı, geçmiş saklandı, reis kararı 'daralt' sahibin adıyla işlendi"
+python3 -c "import json;y=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-dar-kalan.json'));assert y['koken']=='is-dar' and y['aldi']=='MUAVIN' and y['istedi']=='Sultan' and y['sinif_cevaplari']=={'geri_alinamaz':'h','para':'h','dis_yuzey':'h','yetki':'h'} and y['durum']=='acik'"; g $? "kalan kart: aynı sahip/istedi/sınıf cevapları, köken yazılı"
+bash "$KT" daralt is-dar --kalan "üçüncü parça da ayrılsın yeterince uzun" --cumle "daha da daraltılmış cümle yeterince uzun" --oturum ref-d >/dev/null 2>&1; [ $? -eq 1 ]; g $? "aynı kalan ad ikinci kez açılmaz (--yeni gerekir)"
+bash "$KT" daralt is-dar --kalan "üçüncü parça da ayrılsın yeterince uzun" --cumle "daha da daraltılmış cümle yeterince uzun" --oturum ref-d --yeni is-dar-3 >/dev/null 2>&1; g $? "--yeni ile ikinci daraltma"
+echo "════ T12 · daralt SINIFLI kartta Sultan kararı ister (A06) ════"
+bash "$KT" ac is-dar-s --is "para harcayan iş tek kartta iki yarımla tıkandı" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para e --dis-yuzey h --yetki h >/dev/null 2>&1
+bash "$KT" daralt is-dar-s --kalan "kalan yarı yeterince uzun bir cümle burada" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-s >/dev/null 2>&1; [ $? -eq 1 ]; g $? "sınıflı kart Sultan kararı olmadan daraltılmadı"
+python3 -c "import json;k=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-dar-s.json'));assert 'daraltmalar' not in k and 'reis_kararlari' not in k"; g $? "karta hiçbir şey yazılmadı"
+bash "$KT" sultan-dedi is-dar-s --karar daralt --oturum ref-s --soz "daralt, kalanı sonra" --beyan MUAVIN --gerekce "ikinci yarı ayrı PR ile gelsin, ilk yarı bitti" >/dev/null 2>&1
+bash "$KT" daralt is-dar-s --kalan "kalan yarı yeterince uzun bir cümle burada" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-s >/dev/null 2>&1; g $? "Sultan 'daralt' kararı karttayken daraltıldı"
+python3 -c "import json;y=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-dar-s-kalan.json'));assert y['sultan']==True and y['siniflar']==['para']"; g $? "kalan kart da SINIFLI doğdu (sınıf miras)"
+echo "════ T12b · Sultan 'daralt' kararı TEK KULLANIMLIK; --yeni ad güvenli; iki kart atomik (göz tur 1) ════"
+bash "$KT" daralt is-dar-s --kalan "üçüncü parça yeterince uzun bir cümle burada" --cumle "daha da daraltılmış cümle yeterince uzun" --oturum ref-s --yeni is-dar-s-3 >/dev/null 2>&1; [ $? -eq 1 ]; g $? "aynı Sultan kararıyla İKİNCİ daraltma REDDEDİLDİ (karar tüketildi)"
+python3 -c "import json;k=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-dar-s.json'));sk=k['sultan_kararlari'][-1];assert sk['kullanildi']['kalan_kart']=='is-dar-s-kalan' and len(k['daraltmalar'])==1"; g $? "kullanılan karar karta işaretli, ikinci daraltma yazılmadı"
+bash "$KT" daralt is-dar --kalan "yol ayraçlı ad denemesi yeterince uzun" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-d --yeni "../kacak" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "--yeni '../kacak' REDDEDİLDİ"
+bash "$KT" daralt is-dar --kalan "yol ayraçlı ad denemesi yeterince uzun" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-d --yeni "a/b" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "--yeni 'a/b' REDDEDİLDİ"
+[ ! -e "$T/depo2/_agents/fabrika/kacak.json" ] && [ ! -e "$T/depo2/_agents/fabrika/kartlar/a" ]; g $? "dizin dışına hiçbir şey yazılmadı"
+bash "$KT" ac is-at --is "atomik yazım denemesi için iş cümlesi burada" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+mkdir -p "$T/depo2/_agents/fabrika/kartlar/is-at-kalan.json.tmp"   # geçici dosya yolu bir DİZİN → kalan kart yazılamaz
+ONCE="$(md5sum < "$T/depo2/_agents/fabrika/kartlar/is-at.json")"
+bash "$KT" daralt is-at --kalan "kalan parça yeterince uzun bir cümle burada" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-at >/dev/null 2>&1; [ $? -eq 1 ]; g $? "kalan kart yazılamayınca rc=1"
+[ "$(md5sum < "$T/depo2/_agents/fabrika/kartlar/is-at.json")" = "$ONCE" ]; g $? "ana kart bayt bayt DEĞİŞMEDİ (atomik)"
+[ ! -f "$T/depo2/_agents/fabrika/kartlar/is-at-kalan.json" ]; g $? "yarım kalan kart yok"
+rmdir "$T/depo2/_agents/fabrika/kartlar/is-at-kalan.json.tmp" 2>/dev/null
+
+echo "════ T13 · KAPSAM UYARISI: iki depo · çok günlük kapsam → uyarır, REDDETMEZ (retro W42 ders M2) ════"
+K13="${KANIT_DEPO:-$T/depo}"; B13="$(basename "$K13")"   # önceki bloklar KANIT_DEPO'yu depo2'ye çeviriyor
+ac13() { bash "$KT" ac "$1" --is "$2" --istedi SERDAR --aldi HENDESE --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h 2>&1; }
+ku() { python3 -c "import json,sys;print(len(json.load(open(sys.argv[1]))['kapsam_uyarilari']))" "$K13/_agents/fabrika/kartlar/$1.json" 2>/dev/null || echo yok; }
+# W42'nin gerçek kartı (hendese-kutuphane-h1): haftalık yazıldı, günlük teslim edildi
+CIKTI="$(ac13 is-h1 "HENDESE kütüphanesi 1. hafta: günlük tur kayıtları (depo/web/video) + örnek vaka kartları, kaynaklı")"; RC=$?
+[ "$RC" -eq 0 ] && [ "$(ku is-h1)" = 1 ]; g $? "haftalık kart AÇILDI (uyarı, red değil) · karta 1 kapsam uyarısı yazıldı"
+grep -q "⚠ KAPSAM — ÇOK GÜNLÜK KAPSAM (1. hafta).*is-h1-g1 · is-h1-g2" <<<"$CIKTI"; g $? "çok günlük kapsam: gün başına kart önerildi (is-h1-g1 · is-h1-g2)"
+CIKTI="$(ac13 is-ikid "Nexus wait-ci --repo bayrağını tanısın ve cloudtop zili aynı kuralla bildirsin")"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "İKİ DEPO: cümle Nexus + cloudtop anıyor.*kart.sh ac is-ikid-nexus … · kart.sh ac is-ikid-cloudtop …" <<<"$CIKTI"; g $? "iki depo adı → depo başına kart önerildi"
+CIKTI="$(ac13 is-baska "cloudtop terminal-merkez bekçisi ölçülemedi hükmünü işlesin")"
+[ "$(ku is-baska)" = 0 ] && ! grep -q "KAPSAM" <<<"$CIKTI"; g $? "TEK depo adı (başka depo da olsa) uyarı almaz — kart cümlesi yalnız iki depo + çok günlük istedi (göz #384 tur 1)"
+CIKTI="$(FABRIKA_DEPOLAR="$B13:Nexus cloudtop" ac13 is-bu "Nexus wait-ci --repo bayrağını tanısın")"
+[ "$(ku is-bu)" = 0 ] && ! grep -q "KAPSAM" <<<"$CIKTI"; g $? "yalnız KENDİ deposunu anan cümle uyarı almaz (takma adla da)"
+CIKTI="$(ac13 is-sx "Sx kart.sh uyarısı ve Nexus notu")"
+grep -q "İKİ DEPO: cümle Nexus + Sx-Claude-Skills" <<<"$CIKTI"; g $? "takma ad (Sx) depo sayılır"
+CIKTI="$(ac13 is-yalan "sohbet ocak sedir lonca adları, nexus ve Cloudtop yanlış harfle, SxFoo ve Nexus-ana-dal-kapisi ekle; haftaya bakarız")"
+[ "$(ku is-yalan)" = 0 ] && ! grep -q "KAPSAM" <<<"$CIKTI"; g $? "yanlış alarm yok: sıradan kelime adlar · küçük harf · bitişik ad · tireli ek · 'haftaya'"
+CIKTI="$(ac13 is-duz "buton ekle")"
+[ "$(ku is-duz)" = 0 ] && ! grep -q "KAPSAM" <<<"$CIKTI"; g $? "düz cümlede uyarı yok, karta boş liste yazıldı"
+CIKTI="$(ac13 is-gun "W42 boyunca her gün tur kaydı")"
+grep -q "ÇOK GÜNLÜK KAPSAM (W42, her gün)" <<<"$CIKTI"; g $? "hafta kodu ve 'her gün' de çok günlük sayılır"
+
+echo "════ T13b · ATIF KAPSAM DEĞİLDİR: 'retro W42', 'hafta raporu' uyarmaz; gerçek çok günlük kapsam uyarmaya devam eder (20 Eki, üç yanlış alarm) ════"
+ac13m() { bash "$1" ac "$2" --is "$3" --istedi SERDAR --aldi HENDESE --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h 2>&1; }
+ATIF=("birleştirme kancası CI'ı her birleştirmede ölçsün (gorev_01M506PY0B6X92R0NEK0NSPCR7 + hafta raporu E3)"
+      "denetçi ölçüm çıktısının sonunu da versin; fabrika 0.10.6 (gorev_01M5890SCNMSR4DFTGHVWEJEC3, retro W42 HENDESE Ö1)"
+      "kart.sh ac iş cümlesinde iki depo görürse uyarsın (retro W42 ders M2)"
+      "hafta kapısı D13 PR gövdesinde retro işaretini arasın"
+      "W42 retrosu için kutu dosyasını doldur")
+KAPSAM=("W42 boyunca her gün tur kaydı" "haftalık rapor üretimi kur ve her gün koştur" "bu hafta tüm kutuların retrosunu topla" "3 gün sürecek göç")
+n13=0
+for c in "${ATIF[@]}"; do n13=$((n13+1)); CIKTI="$(ac13m "$KT" "is-atif-$n13" "$c")"
+  [ "$(ku "is-atif-$n13")" = 0 ] && ! grep -q "ÇOK GÜNLÜK" <<<"$CIKTI"; g $? "atıf uyarmaz: $(cut -c1-70 <<<"$c")"; done
+for c in "${KAPSAM[@]}"; do n13=$((n13+1)); CIKTI="$(ac13m "$KT" "is-kap-$n13" "$c")"
+  grep -q "ÇOK GÜNLÜK KAPSAM" <<<"$CIKTI"; g $? "gerçek kapsam uyarır: $c"; done
+echo "── T13b · MUTASYON (tam kopya; her mutant bir atıf cümlesini yeniden uyarır hâle getirmeli) ──"
+m13() {   # m13 <ad> <eski> <yeni> <uyarmaya başlaması gereken atıf cümlesi>
+  local D="$T/pkg-kapsam-$1"; mkdir -p "$D"; cp "$HERE"/*.py "$HERE"/*.sh "$D/" 2>/dev/null
+  python3 - "$D/kart.sh" "$2" "$3" <<'PYM' || { g 1 "mutant '$1' kurulamadı (çapa bayat)"; return; }
+import sys; f, a, b = sys.argv[1:]; s = open(f, encoding="utf-8").read(); assert s.count(a) == 1; open(f, "w", encoding="utf-8").write(s.replace(a, b, 1))
+PYM
+  n13=$((n13+1)); local o; o="$(ac13m "$D/kart.sh" "is-m13-$n13" "$4")"
+  grep -q "ÇOK GÜNLÜK" <<<"$o"; g $? "mutant '$1' atfı yeniden kapsam sanıyor → üstteki kapı bu mutantta düşerdi"
+}
+m13 retro-onu-sayilir '(?<!retro )' '' "denetçi ölçüm sonu (retro W42 HENDESE Ö1)"   # yalnız öndeki 'retro ' korumasına bağlı cümle
+m13 atif-sonra-bos 'ATIF_SONRA = r"(?!\s+(?:rapor|kap[ıi]s|kapan[ıi]ş|retro|ders|Ö\d))"' 'ATIF_SONRA = r""' "hafta kapısı D13 PR gövdesinde retro işaretini arasın"
+m13 hafta-atifsiz '(?:s[ıi]|n[ıi]n|da|y[ıi])?(?!\w)" + ATIF_SONRA + r"' '(?:s[ıi]|n[ıi]n|da|y[ıi])?(?!\w)" + r"' "birleştirme kancası CI'ı ölçsün (hafta raporu E3)"
+m13 W-atifsiz 'W\d{2}(?!\w)" + ATIF_SONRA' 'W\d{2}(?!\w)"' "W42 retrosu için kutu dosyasını doldur"
+
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

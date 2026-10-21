@@ -1,0 +1,21 @@
+$ bash _agents/fabrika/kanit/kart-kapsam-uyarisi/once-sonra.sh /config/projects/_wt/Sx-Claude-Skills-kart-kapsam-uyarisi/yazilim-fabrikasi/scripts/kart.sh
+# rc=0 sure=0.3s zaman=2026-10-18T23:25:13+03:00
+--- stdout ---
+── hendese-kutuphane-h1 (W42, haftalık yazıldı · günlük teslim edildi)
+✓ kart açıldı: h1 · sınıf: yok · ekipte biter, gün sonu özetine girer
+  ⚠ KAPSAM — ÇOK GÜNLÜK KAPSAM (1. hafta): bir PR'da teslim edilmez — gün başına kart öner: h1-g1 · h1-g2 … (her biri günün teslim birimi) (uyarı, red değil; karta yazıldı)
+  ⚠ canlı kanıt istenmedi — --canli h (sahip: canlı kanıt gerekmez dedi); karta yazıldı, bağımsız göz görür
+   rc=0
+── iki depolu örnek
+✓ kart açıldı: ikid · sınıf: yok · ekipte biter, gün sonu özetine girer
+  ⚠ KAPSAM — İKİ DEPO: cümle Nexus + cloudtop anıyor — iş birden çok depoya yayılıyorsa depo başına kart aç (her depoda kendi kartı, kendi PR'ı): kart.sh ac ikid-nexus … · kart.sh ac ikid-cloudtop … (uyarı, red değil; karta yazıldı)
+  ⚠ canlı kanıt istenmedi — --canli h (sahip: canlı kanıt gerekmez dedi; cümlede: zili); karta yazıldı, bağımsız göz görür
+   rc=0
+── düz cümle
+✓ kart açıldı: duz · sınıf: yok · ekipte biter, gün sonu özetine girer
+  ⚠ canlı kanıt istenmedi — --canli h (sahip: canlı kanıt gerekmez dedi); karta yazıldı, bağımsız göz görür
+   rc=0
+   h1.kapsam_uyarilari = ["ÇOK GÜNLÜK KAPSAM (1. hafta): bir PR'da teslim edilmez — gün başına kart öner: h1-g1 · h1-g2 … (her biri günün teslim birimi)"]
+   ikid.kapsam_uyarilari = ["İKİ DEPO: cümle Nexus + cloudtop anıyor — iş birden çok depoya yayılıyorsa depo başına kart aç (her depoda kendi kartı, kendi PR'ı): kart.sh ac ikid-nexus … · kart.sh ac ikid-cloudtop …"]
+   duz.kapsam_uyarilari = []
+--- stderr ---

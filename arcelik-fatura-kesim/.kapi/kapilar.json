@@ -1,0 +1,4 @@
+{"v":1,"kapilar":[
+ {"ad":"kesilmis-mi","dosya":"scripts/tara.py","cagri":"kesilmis_mi","sinav":"scripts/kesim.test.sh","girisler":["scripts/tara.py"],"mutasyon":"python"},
+ {"ad":"tip-bul","dosya":"scripts/tara.py","cagri":"tip_bul","sinav":"scripts/kesim.test.sh","girisler":["scripts/tara.py"],"mutasyon":"python"}
+]}

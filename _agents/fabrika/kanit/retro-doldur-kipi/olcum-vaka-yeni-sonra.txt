@@ -1,0 +1,10 @@
+$ bash _agents/fabrika/kanit/retro-doldur-kipi/vaka.sh retro/scripts/retro.py
+# rc=0 sure=0.2s zaman=2026-10-20T17:44:07+03:00
+--- stdout ---
+kutu rc=0
+ana dal kapısı Edit'e rc=2 (2 = REDDETTİ — kapı yerinde, gevşetilmedi)
+✓ dolduruldu: _agents/handoff/retro/2026-W42/MİRAHUR.md · öneri 1 · ders 1 — lint geçti
+doldur rc=0
+lint rc=0
+SONUÇ: retro kapı gevşetilmeden dolduruldu, geçerli
+--- stderr ---

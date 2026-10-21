@@ -1,0 +1,21 @@
+{
+  "is": "terminal-onar-bekci-gecikme",
+  "cumle": "terminal-onar becerisinin bekçi cron satırı (BEKCI_SATIR, ortak.sh) kutuya özgü sabit gecikmeyle yazılır: 'sleep N && ' öneki, N = cksum(kutu adı) % 50 + 5 (5-54 sn); böylece 17 kutunun dakikalık bekçisi aynı saniyede uyanmaz. Düzeltici (bekci_satirlari_duzelt) eski gecikmesiz satırı yeni kanona çevirir; sürüm 2.17.2; hermetik sınav eklenir",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-10-18T15:51:53+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "hermetik sınav (gecikme formülü, kutular arası farklılık, eski satırın çevrilmesi, code=10 = cloudtop crontab-abc) + mutasyon + mevcut terminal-onar sınavları; kutularda yeniden kurulum ayrı adım",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: bekçi, bekçisi, cron)"
+}

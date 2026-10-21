@@ -1,0 +1,107 @@
+{
+  "is": "terminal-onar-kutu-red-rc3",
+  "arac": "kanit.py/0.4.0",
+  "guncelleme": "2026-10-18T16:55:06+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kutu-red-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kutu-red-sinavi-once.txt",
+      "sha256": "9f337f097d246e67e40aa21702a1eee26567590f2f4ad3148ae722d2a88f74a3",
+      "komut": [
+        "timeout",
+        "200",
+        "bash",
+        "/tmp/tmp.UkUXFUD07t/terminal-onar/scripts/kutu-red.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-18T16:54:56+03:00",
+      "sure_sn": 0.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kutu-red-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kutu-red-sinavi-sonra.txt",
+      "sha256": "b0909790a99529488b379febd3cc984cbc2a32245e0f3efed55d335aad3f8102",
+      "komut": [
+        "timeout",
+        "200",
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-terminal-onar-kutu-red-rc3/terminal-onar/scripts/kutu-red.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:54:57+03:00",
+      "sure_sn": 0.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kutu-red-mutasyon",
+      "asama": "sonra",
+      "dosya": "olcum-kutu-red-mutasyon-sonra.txt",
+      "sha256": "0a95450fa52b4d8ffc3dfba25bd472bd186b1cd3ab89ddb46d93178a4de39318",
+      "komut": [
+        "timeout",
+        "900",
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-terminal-onar-kutu-red-rc3/terminal-onar/scripts/kutu-red-mutasyon.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-terminal-onar-kutu-red-rc3"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:55:06+03:00",
+      "sure_sn": 8.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "terminal-onar-tum-sinavlar",
+      "asama": "sonra",
+      "dosya": "olcum-terminal-onar-tum-sinavlar-sonra.txt",
+      "sha256": "0aff67173651ac103bf1f92083d2d89354623c5c1f165116f7bacc4056917d82",
+      "komut": [
+        "bash",
+        "-c",
+        "k=0; for t in terminal-onar/scripts/*.test.sh; do case \"$t\" in */compact.test.sh) echo \"◻ $t KARANTİNA (CI karantina listesinde; ana dalda da K2 kırmızı — bu PR dokunmadı)\"; continue;; esac; timeout 300 bash \"$t\" >/dev/null 2>&1 && echo \"✓ $t\" || { echo \"✗ $t\"; k=$((k+1)); }; done; echo \"kalan=$k\"; [ $k -eq 0 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:49:59+03:00",
+      "sure_sn": 60.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kabuk-biti",
+      "asama": "sonra",
+      "dosya": "olcum-kabuk-biti-sonra.txt",
+      "sha256": "f4b52e3b5d88f346a333e376f52ad4b752852b7169bc2a384c60f6634fe09954",
+      "komut": [
+        "bash",
+        "kabuk-biti.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:55:06+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-dokunulmadi",
+      "asama": "sonra",
+      "dosya": "olcum-canli-dokunulmadi-sonra.txt",
+      "sha256": "60a5edd3392395cd9c677292eaad8e6061d15512540269efd815b56606e2e96b",
+      "komut": [
+        "bash",
+        "-c",
+        "c=$(crontab -l | md5sum | cut -c1-12); t=$(tmux ls 2>/dev/null | wc -l); echo \"crontab e24201fb6c54 → $c · tmux oturum 13 → $t\"; [ \"$c\" = e24201fb6c54 ] && [ \"$t\" = 13 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:55:06+03:00",
+      "sure_sn": 0.0
+    }
+  ],
+  "imza": "b59fb63934e4eda84c52783a8f9dccdfcb4a3b07abf6fec63f9047db601cc13a"
+}

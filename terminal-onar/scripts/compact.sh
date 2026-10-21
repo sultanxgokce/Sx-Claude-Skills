@@ -17,7 +17,7 @@
 # 🔴 ÖLÇÜLEMEYEN KOLTUK compact EDİLMEZ: oturum kaydı bulunamazsa (sid yok / dosya yok) "ölçülemedi" basılır, tuş gitmez.
 # 🔴 PAYDA TAHMİNİ: kayıt model adını "[1m]" eki olmadan yazabiliyor → yüzde 200k paydayla tahmindir, satırda "~" ile işaretli.
 set -u
-D="$(cd "$(dirname "$0")" && pwd)"; . "$D/ortak.sh"
+D="$(cd "$(dirname "$0")" && pwd)"; . "$D/ortak.sh" || exit 3   # kutu adı reddi: ortak.sh sebebi tek satır yazdı (TO_KUTU ver …) → DUR, rc 3 (FSZ30)
 [ -n "${SAHTE:-}" ] && [ -d "$SAHTE/bin" ] && PATH="$SAHTE/bin:$PATH"   # hermetik sınav: ortak.sh PATH'i öne alır, sahte tmux geri öne gelsin
 KUYRUK="${TO_COMPACT_KUYRUK:-$DURUM_DIZ/compact-bekleyen.jsonl}"
 ESIK="${TO_COMPACT_ESIK:-60}"; UYGULA=0; JSON=0; TEK=""; MOD="olc"; TAVAN_DENEME="${TO_COMPACT_TAVAN:-60}"; TAVAN_SN="${TO_COMPACT_TAVAN_SN:-86400}"
@@ -146,14 +146,17 @@ while IFS= read -r satir; do
   if [ -z "$cur" ]; then echo "  $ad · kuyruktan düştü (koltuk artık yok ya da Claude kapalı)"; dustu=$((dustu+1)); gunluk "compact kuyruk düştü: $ad (koltuk yok)"; continue; fi
   hal="$(printf '%s' "$cur" | cut -f2)"; y="$(printf '%s' "$cur" | cut -f3)"
   if [ "$y" != "-" ] && [ "$y" -lt "$ESIK" ]; then echo "  $ad · kuyruktan düştü (bu arada compact edilmiş: %$y)"; dustu=$((dustu+1)); gunluk "compact kuyruk düştü: $ad (artık %$y)"; continue; fi
-  if [ "$hal" = bos ]; then
+  # Nexus #1171 (FNX51) ile aynı kural: bağlam ölçülemiyorsa üstteki düşürme kördür → bayat kayıt boş koltuğa GİTMEZ; kayıt kuyrukta, tavan geçerli.
+  neden_olc="$(printf '%s' "$cur" | cut -f6)"
+  if [ "$y" = "-" ]; then echo "  $ad · bağlamı ölçülemedi (${neden_olc:-neden yok}) — GÖNDERİLMEDİ, bekliyor (deneme $((den+1)))"
+  elif [ "$hal" = bos ]; then
     if [ "$UYGULA" = 1 ]; then
       if compact_gonder "$ad" "$kim"; then echo "  $ad · ⟳ /compact GÖNDERİLDİ (kuyruktan, $kim adına, deneme $((den+1)))"; gonderildi=$((gonderildi+1)); continue; fi
       echo "  $ad · gönderilemedi (tmux), kuyrukta kalır"
     else echo "  $ad · BOŞ, gönderilebilir (--uygula yok)"; fi
   else echo "  $ad · hâlâ $hal, bekliyor (deneme $((den+1)))"; fi
   if [ $((den+1)) -ge "$TAVAN_DENEME" ] || [ $((SIMDI - ep)) -ge "$TAVAN_SN" ]; then
-    echo "  🔴 $ad · VAZGEÇİLDİ ($((den+1)) deneme / $(( (SIMDI-ep)/3600 )) sa) — koltuk hiç boşalmadı, elle bak" >&2; vaz=$((vaz+1)); gunluk "compact VAZGEÇİLDİ: $ad"; continue; fi
+    echo "  🔴 $ad · VAZGEÇİLDİ ($((den+1)) deneme / $(( (SIMDI-ep)/3600 )) sa) — $([ "$y" = "-" ] && echo "bağlamı hiç ölçülemedi" || echo "koltuk hiç boşalmadı"), elle bak" >&2; vaz=$((vaz+1)); gunluk "compact VAZGEÇİLDİ: $ad$([ "$y" = "-" ] && echo " (ölçülemedi)")"; continue; fi
   kalan=$((kalan+1)); KAL="$KAL$(printf '%s' "$satir" | jq -c --argjson d "$((den+1))" '.deneme=$d')"$'\n'
 done < "$KUYRUK.tur.anlik"
 # yeniden yazım: tur sırasında EKLENEN satırlar (kuyruga_al, ekleme kilidiyle) korunur — anlık görüntüde olmayan satırlar olduğu gibi kalır

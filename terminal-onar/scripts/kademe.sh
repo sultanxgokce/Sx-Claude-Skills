@@ -13,7 +13,7 @@
 # Soğuma: bekçi tetiklediğinde K1/K2 15 dakikada bir defadan sık denenmez (düğme/elle bunu atlar).
 # Sultan-onayı: 2026-09-25, izin sormayan modda açık onayla kuruldu (gözetimsiz ajan kademesi).
 set -u
-. "$(dirname "$0")/ortak.sh"
+. "$(dirname "$0")/ortak.sh" || exit 3   # kutu adı reddi: ortak.sh sebebi tek satır yazdı → DUR, rc 3 (FSZ30; eskiden unbound variable ile çöküyordu)
 
 KAYNAK=elle; ARKA=0
 while [ $# -gt 0 ]; do case "$1" in

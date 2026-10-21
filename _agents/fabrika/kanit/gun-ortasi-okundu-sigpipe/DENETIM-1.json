@@ -1,0 +1,30 @@
+{
+  "tur": 1,
+  "is": "gun-ortasi-okundu-sigpipe",
+  "pr": "375",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T17:05:45+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": null,
+  "yazan_model_kaynak": null,
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 21551,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 12647
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Muavin, pipefail altında SIGPIPE üreten iki printf|grep -q borusunu here-string’e çevirmiş; özellikle okundu kaydındaki yanlış okunmamış sayımını 64K üstü gerçekçi fikstürle kapatmış. Önce kırmızı, sonra 35/35 yeşil ölçüm ve eski boruları geri koyunca ilgili kapıların ayrı ayrı düşmesi değişikliği üretime hazır gösteriyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Aynı kalan.test.sh komutu önce rc=1 ile T5b’de beklenen 1/0/0 yerine 2/1/0 üretmiş, sonra rc=0 ile 35 geçti ve 0 kaldı vermiştir. T5b, 3000 dolgu satırıyla 64K üstü çok satırlı okundu kaydını ve başta/sonda tam ad eşleşmesini ölçüyor; T5c aynı SIGPIPE sınıfını büyük çıpa üzerinde kapsıyor. Mutasyon ölçümü M1 ve M2 ile eski borular geri getirildiğinde yalnız ilgili kapının kırmızıya döndüğünü gösteriyor; repo doğrulaması da rc=0. Kanıt çifti ve mutant duyarlılığı talebi doğrudan destekliyor."
+  }
+}

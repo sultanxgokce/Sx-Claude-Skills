@@ -312,12 +312,24 @@ bash "$K" olcum is-kirp olc --asama tek -- echo 1 >/dev/null 2>&1
 SAHTE_ISTEM_KOPYA="$T/istem-kucuk.md" SAHTE_JSON="$(J 3 H "$B")" DENETCI_KIRP_ESIK=200000 bash "$D" is-kirp --diff "$T/d.patch" >/dev/null 2>&1
 python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-kirp/DENETIM-1.json'));k=d['kirpildi'];assert k['oldu'] is False and k['istem_bayt']>0 and k['esik']==200000"; g $? "kırpılmayan tur: kirpildi.oldu=false, bayt ve eşik yazılı"
 ! grep -q "KIRPILDI" "$T/istem-kucuk.md"; g $? "küçük istemde kırpma uyarısı YOK"
-head -c 6000 /dev/zero | tr '\0' 'x' | sed 's/^/+/' > "$T/buyuk.patch"; printf 'diff --git a/y b/y\n' | cat - "$T/buyuk.patch" > "$T/buyuk2.patch"
-CIKTI="$(SAHTE_ISTEM_KOPYA="$T/istem-buyuk.md" SAHTE_JSON="$(J 3 H "$B")" DENETCI_KIRP_ESIK=2200 bash "$D" is-kirp --diff "$T/buyuk2.patch" 2>&1)"
+# (PCP7J, 18 Eki) büyük ÜRETİM farkı artık kırpılmaz, "İŞİ BÖL" der (T-BOL); (BÂNİ 21:59, 18 Eki) istemin TAMAMI da
+# öyle (T-ISTEM). Kırpma yalnız ayıklama KAPALIYKEN kalır (kanıt farkın içinde, bölmek boyutu düşürmez):
+# burada fark küçük (d.patch), istem büyük kanıt ölçüm çıktısıyla şişiyor, ayıklama kapalı → kırpma yolu hâlâ ölçülüyor.
+bash "$K" olcum is-kirp buyuk-olcum --asama tek -- python3 -c 'print("x"*6000)' >/dev/null 2>&1   # eski `head | tr` boru reddine (0.10.1) takılıp kayda girmiyordu; istem yalnız şablonla şişiyordu
+CIKTI="$(SAHTE_ISTEM_KOPYA="$T/istem-buyuk.md" SAHTE_JSON="$(J 3 H "$B")" DENETCI_KIRP_ESIK=2200 DENETCI_KANIT_AYIKLA=0 bash "$D" is-kirp --diff "$T/d.patch" 2>&1)"
 python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-kirp/DENETIM-2.json'));k=d['kirpildi'];assert k['oldu'] is True and k['istem_bayt']>2400 and k['esik']==2200"; g $? "🔴 kırpılan tur: kirpildi.oldu=true, gerçek bayt ve eşik KALICI kayıtta"
 grep -q "KIRPILDI" "$T/istem-buyuk.md"; g $? "denetçiye kırpıldığı söylendi (istem sonunda uyarı)"
 grep -q "KIRPILDI" <<<"$CIKTI"; g $? "ekranda da yazıldı"
 [ "$(wc -c < "$T/istem-buyuk.md")" -lt 2600 ]; g $? "istem gerçekten eşiğe kırpıldı"
+
+echo "════ T9d · GEÇERSİZ ilan (4K938) göze söylenir: kanıt durumu satırında, istemde ve DENETIM kaydında ════"
+bash "$K" olcum is-gec olc --asama tek -- echo 1 >/dev/null 2>&1
+bash "$K" olcum is-gec olc2 --asama tek -- echo 2 >/dev/null 2>&1
+bash "$K" gecersiz is-gec olc --neden "boru çıkış kodunu maskeledi, yanlış ölçüm" --kim T >/dev/null 2>&1
+CIKTI="$(SAHTE_ISTEM_KOPYA="$T/istem-gec.md" SAHTE_JSON="$(J 5 E "")" bash "$D" is-gec --diff "$T/d.patch" 2>&1)"
+grep -q "kanıt: sağlam.*1 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-olc-tek.txt (yesil → gecersiz) — boru çıkış kodunu" <<<"$CIKTI"; g $? "puan satırındaki kanıt durumu geçersiz ilanı nedeniyle söylüyor"
+grep -q "durum: sağlam.*GEÇERSİZ ilan edildi" "$T/istem-gec.md"; g $? "istemdeki manifest başlığında da var (göz okur)"
+python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-gec/DENETIM-1.json'));assert 'GEÇERSİZ' in json.dumps(d,ensure_ascii=False)"; g $? "DENETIM kaydına da işlendi"
 
 echo "════ T10 · bozuk manifest → rc=2 ════"
 python3 - <<PY
@@ -468,6 +480,50 @@ PYJ
   N="$(ls "$T/_agents/fabrika/kanit/is-k/" | grep -c '^DENETIM-[0-9]*.json$')"
   python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-k/DENETIM-$N.json'));assert d['yedek'] and d['kareler']['gorsel_verildi'] is False"; g $? "K7 yedek göz (claude -p) kareyi GÖREMEZ → kayıtta gorsel_verildi=false (görmüş sanılmaz)"
 fi
+# T-ISTEM iç koşum çıkışından ÖNCE durur: mutantlar süiti yalnız buraya kadar koşar (aşağıdaki T-BOL/T-DARALT mutant görmez).
+export KANIT_DEPO="$T"
+echo "════ T-ISTEM · kapı istemin TAMAMINI ölçer: fark küçük ama istem eşiği aşarsa yine 'İŞİ BÖL', tur yakmaz (BÂNİ 21:59, #712 tur 4) ════"
+# kendi dizini: önceki bloklar $T içinden sahte denetçiyi ve d.patch'i silebiliyor (iç koşumda ölçüldü)
+TI="$(mktemp -d)"; ( cd "$TI" && git init -q -b main ) >/dev/null 2>&1
+printf '#!/usr/bin/env bash\ncp "$1" "${SAHTE_ISTEM_KOPYA:-/dev/null}"; printf "%%s" "$SAHTE_JSON"\n' > "$TI/sahte.sh"; chmod +x "$TI/sahte.sh"
+_T_ONCE="$T"; _DK_ONCE="${DENETCI_KOMUT:-}"; T="$TI"; export KANIT_DEPO="$TI" DENETCI_KOMUT="$TI/sahte.sh"
+# (a) fark minik, istemi ölçüm çıktısı şişiriyor (eski kapı burada kırpıp turu yakıyordu)
+bash "$K" olcum is-ist buyuk-olcum --asama tek -- python3 -c 'print("x"*6000)' >/dev/null 2>&1   # boru yok: boru reddi (0.10.1) maskesiz boruyu kayda almaz
+rm -f "$T/istem-ist.md"; printf 'diff --git a/x b/x\n--- a/x\n+++ b/x\n@@ -1 +1 @@\n-a\n+b\n' > "$T/ist1.patch"   # kendi farkı: d.patch önceki sınavlarda silinebiliyor
+CIKTI="$(SAHTE_ISTEM_KOPYA="$T/istem-ist.md" SAHTE_JSON="$(J 5 E "")" DENETCI_KIRP_ESIK=2200 bash "$D" is-ist --diff "$T/ist1.patch" 2>&1)"; RC=$?
+[ "$RC" -eq 1 ]; g $? "fark küçük, istem > eşik → rc=1"
+grep -q "İŞİ BÖL — göze giden istem [0-9]* bayt > 2400" <<<"$CIKTI"; g $? "'İŞİ BÖL' istemin TAMAMINI ve gerçek eşiği söylüyor"
+grep -q "parçalar (bayt):.*iş kartı [0-9]*.*kanıt manifesti [0-9]*.*ölçüm çıktıları [0-9]*.*üretim farkı [0-9]*" <<<"$CIKTI"; g $? "parça parça bayt dökümü basıldı"
+grep -q "en büyük parça: ölçüm çıktıları" <<<"$CIKTI" && grep -q "kanit.sh gecersiz" <<<"$CIKTI"; g $? "şişen parça (ölçüm) ve ona uygun yol söylendi"
+[ ! -f "$T/_agents/fabrika/kanit/is-ist/DENETIM-1.json" ] && [ ! -f "$T/istem-ist.md" ]; g $? "tur yakılmadı, denetçi hiç çağrılmadı"
+# (b) BÂNİ'nin vakası: fark TEK BAŞINA eşiğin altında, ama fark + diğer parçalar eşiği aşıyor
+bash "$K" olcum is-ist2 olc --asama tek -- echo 1 >/dev/null 2>&1
+python3 -c '
+import sys
+with open(sys.argv[1],"w") as f:
+    f.write("diff --git a/y.ts b/y.ts\n--- a/y.ts\n+++ b/y.ts\n@@ -1 +1,50 @@\n")
+    for i in range(50): f.write("+"+("y"*55)+" %d\n" % i)
+' "$T/ist2.patch"
+SAHTE_ISTEM_KOPYA="$T/istem-ist2.md" SAHTE_JSON="$(J 3 H "$B")" DENETCI_KIRP_ESIK=900000 bash "$D" is-ist2 --diff "$T/ist2.patch" >/dev/null 2>&1
+S0=$(wc -c < "$T/istem-ist2.md"); DZ=$(wc -c < "$T/ist2.patch")
+E=$(( (S0 - 200) * 11 / 12 ))   # tetik = E + E/11 ≈ S0-200 < istem; fark DZ << E
+[ "$DZ" -lt "$E" ]; g $? "kurulum: fark ($DZ) tek başına eşiğin ($E) ALTINDA"
+CIKTI="$(SAHTE_JSON="$(J 5 E "")" DENETCI_KIRP_ESIK=$E bash "$D" is-ist2 --diff "$T/ist2.patch" 2>&1)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "İŞİ BÖL" <<<"$CIKTI"; g $? "fark eşik altında ama istem eşik üstünde → İŞİ BÖL (rc=1)"
+[ ! -f "$T/_agents/fabrika/kanit/is-ist2/DENETIM-2.json" ]; g $? "tur yakılmadı (DENETIM-2 yok)"
+# (c) sınır: istem tetiğe sığıyorsa normal denetlenir, kırpılmaz
+E2=$(( (S0 + 2000) * 11 / 12 ))   # tur 2 istemi önceki tur kaydını da taşır (~750 bayt) → tetik ≈ S0+2000
+CIKTI="$(SAHTE_ISTEM_KOPYA="$T/istem-ist2b.md" SAHTE_JSON="$(J 5 E "")" DENETCI_KIRP_ESIK=$E2 bash "$D" is-ist2 --diff "$T/ist2.patch" 2>&1)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "istem tetiğe sığıyor → denetim koştu (rc=0)"
+python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-ist2/DENETIM-2.json'));assert d['kirpildi']['oldu'] is False"; g $? "sığan istem kırpılmadı (kirpildi.oldu=false)"
+# (d) parçalı kurulum istemin içeriğini ve sırasını korur
+python3 -c '
+import sys
+s=open(sys.argv[1],encoding="utf-8").read()
+b=["===== İŞ KARTI","===== KANIT MANİFESTİ","===== ÖLÇÜM ÇIKTILARI","===== DEĞİŞİKLİK (diff)","+"+"y"*55+" 49","===== ÖNCEKİ TUR"]
+i=[s.find(x) for x in b]; assert all(v>=0 for v in i) and i==sorted(i), i
+' "$T/istem-ist2b.md"; g $? "istemde bütün başlıklar eski sırasıyla var (iş kartı · manifest · ölçüm · fark · önceki tur)"
+T="$_T_ONCE"; export KANIT_DEPO="$T" DENETCI_KOMUT="$_DK_ONCE"
 if [ -n "${IC_KOSUM:-}" ]; then echo "(ic)"; [ "$kalan" -eq 0 ]; exit $?; fi
 echo "════ T11 · MUTASYON: Sultan kapısını bozunca sınav kırmızı veriyor mu ════"
 # 🔴 MUTANT KOŞUMU PARALEL (15 Eki, göz #323: CI 300 sn tavanı): her mutant sınav dosyasının TAMAMINI yeniden koşturur
@@ -530,6 +586,14 @@ mut "kapi-kart-hatasini-bastirir" 's@KARTYOL="$(kart_yolu)" || exit 3;@KARTYOL="
 mut "bayat-kopya-geri-donusu" 's@OKUNMAZ — kart.sh ile birincile yaz, sonra denetçiyi koştur"; return 3@"; printf "%s" "$DEPO/_agents/fabrika/kartlar/$IS.json"@'
 mut "kart-json-hatasi-yutulur" 's@denetim açılmaz"; exit 3; }@denetim açılmaz"; true; }@'
 mut "kirpma-kaydini-kaldir" 's@"kirpildi":{"oldu":kirp=="1","istem_bayt":int(bayt),"esik":int(esik)},@"kirpildi":{"oldu":False,"istem_bayt":int(bayt),"esik":int(esik)},@'
+mut "gecersiz-goze-soylenmez" 's@\[ "\$NGEC" -gt 0 \] && KANIT_DURUM=@false \&\& KANIT_DURUM=@'
+# T-ISTEM mutantları (BÂNİ 21:59): her biri istem kapısının bir parçasını söker
+mut "istem-yerine-fark-olculur" 's@!= "0" \] && \[ "$ISTEM_BAYT" -gt "$KIRP_TETIK" \]; then@!= "0" ] \&\& [ "$(wc -c < "$TMP/diff.patch")" -gt "$KIRP_ESIK" ]; then@'
+mut "istem-bol-tur-yakar" 's@^  exit 1   # İŞİ BÖL@  :@'
+mut "istem-en-buyuk-ilk-parca" 's@\[ "$_b" -gt "$_EN_B" \] && {@[ -z "$_EN" ] \&\& {@'
+mut "istem-parca-dokumu-yok" 's@_DOKUM="$_DOKUM · ${_AD\[$_p\]} $_b"@:@'
+mut "istem-karti-dusurur" 's@^ISTEM_PARCALARI=(sablon kart kanit@ISTEM_PARCALARI=(sablon kanit@'
+mut "istem-ayiklama-kosulu-duser" 's@ && \[ "${DENETCI_KANIT_AYIKLA:-1}" != "0" \] && \[ "$ISTEM_BAYT"@ \&\& [ "$ISTEM_BAYT"@'
 mut_kos
 
 # ── KANIT-AYIKLAMA KAPILARI (gorev_01M4ZSKHD1Y1FFT8P6Z5YMPTF9)
@@ -555,5 +619,54 @@ else
   kalan=$((kalan+1)); echo "  ✗ kutu-dışı sınıf kapıları (denetci-kutu-disi.test.sh) DÜŞTÜ"
 fi
 
-echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
-[ "$kalan" -eq 0 ]
+# ── FARKI DENETÇİ KENDİSİ ALIR (gorev_01M54B2Y4QT7VWTJX10AFR7M76)
+# Gövde AYRI dosyadadır (denetci-fark-kendisi.test.sh): kurulum origin'li iki klon ister, bu dosyanınki origin'siz tek depo.
+echo ""; echo "── FARK-KENDİSİ (ayrı dosya, buradan çağrılır) ──"
+if bash "$(dirname "$0")/denetci-fark-kendisi.test.sh"; then
+  gecen=$((gecen+1)); echo "  ✓ fark-kendisi kapıları (denetci-fark-kendisi.test.sh) GEÇTİ"
+else
+  kalan=$((kalan+1)); echo "  ✗ fark-kendisi kapıları (denetci-fark-kendisi.test.sh) DÜŞTÜ"
+fi
+
+
+echo "════ T-DARALT · tıkanan iş kart.sh daralt ile yeni cümleyle sıfırdan sayılır (PCP7J) ════"
+export KANIT_DEPO="$T"
+mkdir -p "$T"; cd "$T" 2>/dev/null; printf 'diff --git a/x b/x\n--- a/x\n+++ b/x\n@@ -1 +1 @@\n-a\n+b\n' > "$T/d.patch"   # önceki sınav farkı/dizini kaldırmış olabilir
+bash "$HERE/kart.sh" ac is-dar --is "iki yarım iş tek kartta bu yüzden üç tur boyunca tıkandı" --istedi Sultan --aldi SERDAR --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1; g $? "kart açıldı (sınıfsız)"
+bash "$K" olcum is-dar olc --asama tek -- echo 1 >/dev/null 2>&1
+for i in 1 2; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-dar --diff "$T/d.patch" >/dev/null 2>&1; done
+SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-dar --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 4 ]; g $? "3 tur ilerlemeyince rc=4 (tıkandı)"
+CIKTI="$(bash "$HERE/kart.sh" daralt is-dar --kalan "ikinci yarım iş: raporu da üretsin, bu kartta değil" --cumle "yalnız birinci yarım iş: ölçümü yazsın ve kaydetsin" --oturum ref-dar 2>&1)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "daralt rc=0: $(head -n1 <<<"$CIKTI")"
+python3 -c "import json;k=json.load(open('$T/_agents/fabrika/kartlar/is-dar.json'));d=k['daraltmalar'][-1];assert d['tur_sifir']==3 and d['kalan_kart']=='is-dar-kalan' and k['reis_kararlari'][-1]['karar']=='daralt' and k['cumle_gecmisi'][0]['cumle'].startswith('iki yarım') and k['cumle'].startswith('yalnız')"; g $? "karta daraltma kaydı (tur_sifir=3), reis kararı, cümle geçmişi yazıldı"
+python3 -c "import json;y=json.load(open('$T/_agents/fabrika/kartlar/is-dar-kalan.json'));assert y['koken']=='is-dar' and y['aldi']=='SERDAR' and y['cumle'].startswith('ikinci') and y['sultan']==False"; g $? "kalan bulgu yeni kartta (aynı sahip, sınıfsız, köken yazılı)"
+CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-dar --diff "$T/d.patch" 2>&1)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "daraltmadan sonraki ilk tur KOŞTU ve 5/E geçti (rc=0, tavan sıfırlandı)"; [ "$RC" -eq 0 ] || { echo "    ↳ rc=$RC"; tail -n 6 <<<"$CIKTI" | sed "s/^/    ↳ /"; }
+grep -q "DARALTILMIŞ: ilk 3 tur" <<<"$CIKTI"; g $? "denetçi daraltmayı söyledi (ilk 3 tur sayılmıyor)"
+[ -f "$T/_agents/fabrika/kanit/is-dar/DENETIM-4.json" ]; g $? "DENETIM-4 yazıldı (tur numarası sürdü, sayım sıfırlandı)"
+# daraltmadan sonra da üç düşük tur → yine tıkanır (sıfırlama sınırsız tur değildir)
+bash "$HERE/kart.sh" ac is-dar2 --is "daraltma sonrası da tıkanabilen iş cümlesi burada" --istedi Sultan --aldi SERDAR --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+bash "$K" olcum is-dar2 olc --asama tek -- echo 1 >/dev/null 2>&1
+for i in 1 2 3; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-dar2 --diff "$T/d.patch" >/dev/null 2>&1; done
+bash "$HERE/kart.sh" daralt is-dar2 --kalan "kalan yarı burada yirmi karakterden uzun" --cumle "daraltılmış cümle burada yirmi karakterden uzun" --oturum ref-dar2 >/dev/null 2>&1
+for i in 1 2; do SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-dar2 --diff "$T/d.patch" >/dev/null 2>&1; done
+SAHTE_JSON="$(J 2 H "$B,$B")" bash "$D" is-dar2 --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 4 ]; g $? "daraltma sonrası 3 düşük tur → yine rc=4 (sıfırlama tavanı kaldırmaz)"
+unset KANIT_DEPO; export KANIT_DEPO="$T"
+
+echo "════ T-BOL · üretim farkı eşiği aşarsa denetçi 'İŞİ BÖL' der, tur yakmaz (PCP7J) ════"
+bash "$K" olcum is-bol olc --asama tek -- echo 1 >/dev/null 2>&1
+python3 - "$T/bol.patch" <<'PY'
+import sys
+p=sys.argv[1]
+with open(p,"w") as f:
+    f.write("diff --git a/x.ts b/x.ts\n--- a/x.ts\n+++ b/x.ts\n@@ -1 +1,400 @@\n")
+    for i in range(400): f.write("+"+("k"*60)+f" {i}\n")
+PY
+CIKTI="$(SAHTE_JSON="$(J 5 E "")" DENETCI_KIRP_ESIK=5000 bash "$D" is-bol --diff "$T/bol.patch" 2>&1)"; RC=$?
+[ "$RC" -eq 1 ]; g $? "fark 24 KB > eşik 5 KB → rc=1"
+grep -q "İŞİ BÖL" <<<"$CIKTI" && grep -q "kart.sh daralt" <<<"$CIKTI"; g $? "'İŞİ BÖL' + daralt yolu yazılı"
+[ ! -f "$T/_agents/fabrika/kanit/is-bol/DENETIM-1.json" ]; g $? "tur yakılmadı (DENETIM yok)"
+SAHTE_JSON="$(J 5 E "")" DENETCI_KIRP_ESIK=50000 bash "$D" is-bol --diff "$T/bol.patch" >/dev/null 2>&1; [ $? -eq 0 ]; g $? "eşik altındaki fark normal denetlenir (rc=0)"
+
+
+echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]   # (göz tur 2) rc kalan sayısına bağlı: kırmızı sınav yeşil çıkış kodu veremez

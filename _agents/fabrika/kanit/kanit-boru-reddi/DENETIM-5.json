@@ -1,0 +1,38 @@
+{
+  "tur": 5,
+  "is": "kanit-boru-reddi",
+  "pr": "371",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T20:17:09+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 54971,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 10,
+    "bayt": 37136
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Yaygın kabuk maskeleri, gerekçeli izin kaydı ve eksik yasak listesi sınırı uygulanmış; önceki turun `-c` seçenek-bölgesi kusuru da doğrudan sınav ve mutantla kapatılmış. Ancak bilinen sarmalayıcıların değer alan seçenekleri ayrıştırılmadığı için bazı sıradan sarmalayıcı biçimlerinde denetim sessizce kapsam dışına düşüyor; önce bunu çözün.",
+    "bulgular": [
+      {
+        "ne": "Bilinen sarmalayıcıların değer alan seçenekleri yalnız değer sayısal olduğunda geçilebiliyor. Örneğin `timeout -s KILL 60 bash -c 'false | cat'` ve `env -u VAR bash -c 'false || true'` çağrılarında `KILL`/`VAR` sarmalayıcı sanılmadığı için kabuk bulunmuyor ve maskeli betik `kapsam-dışı` kabul ediliyor; bu, karttaki bilinen sarmalayıcı arkasındaki kabuk talebinde uygulama boşluğu bırakıyor.",
+        "kanit": "`_kabuk_konumu`, sarmalayıcıdan sonra yalnız `-…`, `VAR=değer` ve sayı/süre biçimlerini atlıyor; seçenek değerinin hangi sarmalayıcı seçeneğine ait olduğunu izlemiyor. SKILL değişikliği de `timeout -s KILL 60 bash -c` zincirinin kesildiğini açıkça beyan ediyor; T20x yalnız değeri sayısal olan `nice -n 5` biçimini ölçüyor.",
+        "konum": "yazilim-fabrikasi/scripts/kanit.py:_kabuk_konumu; yazilim-fabrikasi/SKILL.md:Boru reddi sınırı; yazilim-fabrikasi/scripts/kanit.test.sh:T20x",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sha'ları sağlam; sarı kayıt yok. Hedefli son ölçüm 146/146 kapıyı ve 11 mutantı geçiriyor, ayrıca önceki turun `bash betik.sh -c` yanlış pozitifliği T20z/T21k ile doğrudan ölçülmüş. Önce/sonra kayıtları aynı özellik metriğini birebir karşılaştırmasa da hedefli sınav güçlü; bulunan değer alan sarmalayıcı seçeneği boşluğu sınavda yok ve SKILL'de açık sınır olarak doğrulanıyor."
+  }
+}

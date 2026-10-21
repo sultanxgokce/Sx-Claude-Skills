@@ -1,0 +1,10 @@
+$ bash -c bash yazilim-fabrikasi/scripts/denetci.test.sh 2>&1 | grep -E '✗|SONUÇ' | head -n 12
+# rc=0 sure=199.1s zaman=2026-10-18T17:35:16+03:00
+--- stdout ---
+  ✗ daraltmadan sonraki ilk tur KOŞTU ve 5/E geçti (rc=0, tavan sıfırlandı)
+  ✗ DENETIM-4 yazıldı (tur numarası sürdü, sayım sıfırlandı)
+  ✗ fark 24 KB > eşik 5 KB → rc=1
+  ✗ 'İŞİ BÖL' + daralt yolu yazılı
+  ✗ tur yakılmadı (DENETIM yok)
+── SONUÇ: 174 geçti · 5 kaldı ──
+--- stderr ---

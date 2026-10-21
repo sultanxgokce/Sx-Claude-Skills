@@ -1,0 +1,24 @@
+{
+  "is": "retro-doldur-kipi",
+  "cumle": "retro.py doldurulmuş yorum metnini kendisi alsın (doldur kipi: dosyadan/stdin, lint'ten geçmeden yazmaz), ajan iskeleti ana dal kapısına takılmadan doldurabilsin; kapı gevşetilmez (KHX56 · retro W42 MİRAHUR Ö1)",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-10-20T17:40:35+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/retro-doldur-kipi",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [
+    "ÇOK GÜNLÜK KAPSAM (W42): bir PR'da teslim edilmez — gün başına kart öner: retro-doldur-kipi-g1 · retro-doldur-kipi-g2 … (her biri günün teslim birimi)"
+  ]
+}

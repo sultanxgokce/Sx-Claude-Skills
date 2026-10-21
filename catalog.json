@@ -1,6 +1,6 @@
 {
   "version": "2.1",
-  "updated": "2026-10-09",
+  "updated": "2026-10-18",
   "description": "Sx-Claude-Skills — portable Claude Code skill'leri kataloğu. Her skill kendi klasöründe yaşar, SKILL.md ile tek komutla kurulur.",
   "nexus": {
     "workbook": "AI Engineer Workbook",
@@ -1364,8 +1364,10 @@
       "id": "arcelik-fatura-kesim",
       "type": "agent",
       "name": "Arçelik Fatura Kesim Kararı (hangi pakete kesilir/kesilmez)",
-      "version": "1.0.0",
-      "sync_dagitim": false
+      "version": "0.2.0",
+      "sync_dagitim": false,
+      "path": "arcelik-fatura-kesim/SKILL.md",
+      "description": "Arçelik paketlerinde kes/kesme kararı, kalem eşlemesi ve yerel çift kesim kontrolü; bilinmeyen tipte karar insana bırakılır."
     },
     {
       "id": "elogo-portal-otomasyon",
@@ -1408,7 +1410,7 @@
       "id": "gunluk-plan",
       "type": "workflow",
       "name": "Günün Planı — Ölç → Süz → Sun → İcra",
-      "version": "1.6.0",
+      "version": "1.7.0",
       "description": "Elimizdeki işleri yedi kaynaktan ÖLÇER (layiha defteri · kapımda kartları · açık PR'lar · odalardan gelen · kuyruk · defter · ortam), dört elekten süzer (bugün kapanır mı · kilit açar mı · bozuk mu · Sultan hisseder mi), Sultan-dilinde sabit-formatta plan sunar ve onaydan sonra icra eder. Ölçmeden madde yazmak yasak; elenen iş gerekçesiyle kayda geçer.",
       "tags": [
         "planlama",
@@ -1423,7 +1425,7 @@
       "id": "gun-ortasi",
       "type": "workflow",
       "name": "Gün Ortası Planı — İş Kaldı mı? Kalmadıysa Ne Geliştirelim?",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "description": "Sabahki plan gün ortasında bittiğinde 'elde kalan iş var mı?' sorusunu dokuz kaynaktan ÖLÇER (günün plan çıpası · fabrika kartları · konum çapaları · bağımsız göz raporları · gelen kutusu · layiha defteri · kapımda · hedefler · ortam), adayı gerçek işten ayırır, süzer; iş kalmadıysa kutunun ana hedeflerine bağlı ve ölçülmüş bir boşluğu kapatan 2-3 fikir önerir. Ölçemediği kaynağa 'iş yok' demez, 'ölçemedim' der. Günün çıpasına sabahki maddelere dokunmadan ekler, Sultan başka şık seçerse geri alır.",
       "tags": [
         "planlama",
@@ -1549,7 +1551,7 @@
     {
       "id": "terminal-onar",
       "name": "terminal-onar — kutunun web terminali ve telefon ekranı",
-      "version": "2.17.1",
+      "version": "2.19.0",
       "type": "capability",
       "sync_dagitim": true,
       "description": "Bir kutuda canlı çalışma düzenini kurar, ölçer ve onarır: tmux konuşma odası + web terminali (ttyd, yalnız UNIX soketi) + telefon ekranı (PWA) + kurtarıcı ajan + dakikalık bekçi; dört kademeli onarım merdiveni. Bütün kutularda koşar — adlar kutudan türer, kutu adı koda gömülü değildir. Merkez sayfa (terminal.mmepanel.com) kutuları yol ile ayırdığı için taban yolu destekler. Kurulum Sultan onayı ister (kutuda dış yüzey açar); parola kasadan gelir, ÜRETİLMEZ.",
@@ -1664,8 +1666,8 @@
       "id": "bulgu",
       "type": "workflow",
       "name": "Bulgu — filonun tek bulgu komutu (kutunun Bulgu Defteri'ne yaz/listele/hâl)",
-      "version": "0.2.0",
-      "description": "Hangi kutuda olursan ol, gördüğün kusuru ya da fikri aynı komutla, aynı şemayla kutunun Bulgu Defteri'ne yazar (bulgu.mmepanel.com'da Sultan'ın tek sayfası). Yeni yazıcı icat etmez; defterin kilitli yazıcısının (defter-yaz.py) kapısıdır. Defter kurulu değilse rc=3 ve hiçbir şey yazmaz. 0.2.0: hâl geçişi komutu (acik→uygulandi→canli; 'onaylandi' insanındır, A06).",
+      "version": "0.4.1",
+      "description": "Hangi kutuda olursan ol, gördüğün kusuru ya da fikri aynı komutla, aynı şemayla kutunun Bulgu Defteri'ne yazar (bulgu.mmepanel.com'da Sultan'ın tek sayfası). Yeni yazıcı icat etmez; defterin kilitli yazıcısının (defter-yaz.py) kapısıdır. Defter kurulu değilse rc=3 ve hiçbir şey yazmaz. 0.2.0: hâl geçişi komutu (acik→uygulandi→canli; 'onaylandi' insanındır, A06). 0.3.0: jeton varsa merkezî Görev Defteri'ne görev yazar. 0.4.0: --dugum ile başka kutunun bekleyen görevine düğüm bağı. 0.4.1: bağ reddinde defterin neden + yapılacak satırı basılır.",
       "tags": [
         "bulgu",
         "defter",
@@ -1702,7 +1704,7 @@
       "id": "retro",
       "type": "workflow",
       "name": "Haftalık Retro — Araç Ölçer · Ajan Yorumlar · Merkez Toplar · Süzüm Kanıtlanır",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "Her ajanın haftasını beş kaynaktan ÖLÇER (NOTES satırları · fabrika kartları · bağımsız göz turları · kaçışlar · boşta zilleri; ölçemediğini sarı basar), ajan 5 başlığı kendi gözüyle yorumlar (ne bitti · nerede zaman kaybettim ölçüyle · hangi araç/kural yavaşlattı · ne öğrendim · merkeze önerim); çıktı _agents/handoff/retro/<hafta>/<AJAN>.md lint'li. Merkez kipi kutu retrolarını toplar (OK/GEÇERSİZ/EKSİK/ÇALIŞMADI), MERKEZ.md iskeleti kurar; her öneri → gorev_ ya da → RED damgası alır, süzüm mekanik ölçülür. Haftayı kapatmaz (/hafta-kapanis), zil düşürmez (cron).",
       "tags": [
         "retro",

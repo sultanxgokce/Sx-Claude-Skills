@@ -1,0 +1,22 @@
+{
+  "is": "bileyi-kutu-bulgu-defteri",
+  "cumle": "bileyi kutunun kendi Bulgu Defterini de okusun: yol kutunun ev dizininden türer (HOME/.ic-sayfa/bulgu-defteri/bulgular.json, BILEYI_KUTU_DEFTERI ile değişir), defter biçimi (bulgular.json) bileyi kaydına uyarlanır; mmex'te bulgu-havuzu.jsonl yokken ölçebilsin (gorev_01M4ZMCTMEEF1QW0Z0K2TG2FTX, düğüm gorev_01M5CVPT540QTDNFW9TQ03T5RC, Cezerî'ye yardım)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-20T18:05:21+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": []
+}

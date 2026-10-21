@@ -1,0 +1,20 @@
+$ bash _agents/fabrika/kanit/kanit-etiket-egik-cizgi/etiket-olcer.sh yazilim-fabrikasi/scripts/kanit.sh
+# rc=0 sure=3.1s zaman=2026-10-20T17:57:08+03:00
+--- stdout ---
+olcum  'a/b'    → rc=1 · kayıt 1→1 · FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.aZDMiVnKWL/_agents/fabrika/kanit/is-e/olcum-
+dosya  'a/b'    → rc=1 · kayıt 1→1 · FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.aZDMiVnKWL/_agents/fabrika/kanit/is-e/dosya-
+canli  'a/b'    → rc=1 · kayıt 1→1 · FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.aZDMiVnKWL/_agents/fabrika/kanit/is-e/canli-
+olcum  '../kac' → rc=1 · kayıt 1→1 · FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.aZDMiVnKWL/_agents/fabrika/kanit/is-e/olcum-
+dosya  '../kac' → rc=1 · kayıt 1→1 · FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.aZDMiVnKWL/_agents/fabrika/kanit/is-e/dosya-
+canli  '../kac' → rc=1 · kayıt 1→1 · FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.aZDMiVnKWL/_agents/fabrika/kanit/is-e/canli-
+olcum  ''       → rc=0 · kayıt 1→2 · 
+dosya  ''       → rc=0 · kayıt 2→3 · 
+canli  ''       → rc=3 · kayıt 3→4 · 
+olcum  '.'      → rc=0 · kayıt 4→5 · 
+dosya  '.'      → rc=0 · kayıt 5→6 · 
+canli  '.'      → rc=3 · kayıt 6→7 · 
+olcum  '..'     → rc=0 · kayıt 7→8 · 
+dosya  '..'     → rc=0 · kayıt 8→9 · 
+canli  '..'     → rc=3 · kayıt 9→10 · 
+kaçış denetimi: kanıt dizini dışına yazılan dosya: 0 üst dizinde · 0 kanit dışında
+--- stderr ---

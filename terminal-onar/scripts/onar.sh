@@ -4,7 +4,7 @@
 #   --web-yenile   web terminalini sağlam olsa bile yeniden başlat (ör. yeni parola kasaya konduktan sonra)
 # RC: 0 = sonunda durum sağlam · 1 = hâlâ bozuk (sonraki kademeye geç) · 2 = parola kasada yok
 set -u
-. "$(dirname "$0")/ortak.sh"
+. "$(dirname "$0")/ortak.sh" || exit 3   # kutu adı reddi: ortak.sh sebebi tek satır yazdı → DUR, rc 3 (FSZ30; eskiden unbound variable ile çöküyordu)
 WEB_YENILE=0; [ "${1:-}" = "--web-yenile" ] && WEB_YENILE=1
 gunluk "K0 onar başladı"
 SIFRE_YOK=0
@@ -45,6 +45,9 @@ if ! kabuk_gecerli_mi; then
   gunluk "K0 ÇARE: kutunun .tmux.conf dosyasına tek satır: set -g default-shell /bin/bash"
   exit 3
 fi
+
+# 0 · tmux bekçisi (K43HN) — kutunun canlı sunucusunu içeriden kapatan çıplak kill-server'ı durdurur; yalnız değişince günlüğe yazar
+_tb="$(tmux_bekcisi_kur)"; [ "$_tb" = güncel ] || gunluk "K0 tmux bekçisi: $_tb"
 
 # Bir tmux oturumunda Claude başlat (kabuk boştaysa aynı pencerede, değilse yeni pencerede).
 # 🔴 26 Eyl dersi: eski sürüm "yeni pencere" açamayınca komutu CANLI Claude'un içine yazdı.

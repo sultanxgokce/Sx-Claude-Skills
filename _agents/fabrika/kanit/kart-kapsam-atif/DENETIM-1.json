@@ -1,0 +1,30 @@
+{
+  "tur": 1,
+  "is": "kart-kapsam-atif",
+  "pr": "393",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-20T18:24:17+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 16096,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 12019
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, kart.sh hafta/W kodlarını bağlama göre ayırmış; atıf cümlelerini sustururken gerçek çok günlük kapsam uyarılarını korumuş. Araç imzalı önce/sonra ölçümü yanlış sayısını 5’ten 0’a indiriyor, hedefli sınav ve mutantlar da yeşil; üretime engel kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Kanıt yeterli ve sağlam: araç imzalı manifestte sarı kayıt yok. kapsam ölçüm çifti önce 10 örnekte 5 yanlış, sonra aynı 10 örnekte 0 yanlış gösteriyor; olcum-kapsam-once.txt ve olcum-kapsam-sonra.txt talep edilen atıf/gerçek kapsam ayrımını gerçekçi cümlelerle ölçüyor. olcum-kart-sinavi-sonra.txt ayrıca T13b hedefli sınavlarını, dört mutantın kapı tarafından yakalanacağını ve tüm pakette 103 geçti · 0 kaldı sonucunu gösteriyor."
+  }
+}

@@ -1,0 +1,12 @@
+$ bash _agents/fabrika/kanit/kapi-kanit-tek-kural/mutasyon.sh yazilim-fabrikasi
+# rc=0 sure=208.3s zaman=2026-10-18T23:44:04+03:00
+--- stdout ---
+✓ kontrol kopyası yeşil (SONUÇ: 110 geçti)
+✓ mutant 'is-alani-aranmaz' sınavı KIRMIZI yapıyor
+✓ mutant 'dal-bakilmaz' sınavı KIRMIZI yapıyor
+✓ mutant 'pr-basi-okunmaz' sınavı KIRMIZI yapıyor
+✓ mutant 'birincil-aranmaz' sınavı KIRMIZI yapıyor
+✓ mutant 'onek-atilmaz' sınavı KIRMIZI yapıyor
+✓ mutant 'yer-sessiz' sınavı KIRMIZI yapıyor
+── SONUÇ: 6 yakalandı · 0 kaçtı · 0 askıda ──
+--- stderr ---

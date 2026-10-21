@@ -20,6 +20,7 @@ export RETRO_BUGUN=2026-10-17   # 2026-W42 = 12..18 Eki
 T="$(mktemp -d)"; trap 'rm -r -f -- "$T"' EXIT
 KOK="$T/depo"; mkdir -p "$KOK/_agents/bani" "$KOK/_agents/mirahur" "$KOK/_agents/handoff" "$KOK/_agents/fabrika/kartlar" "$KOK/_agents/fabrika/kanit/is-a" "$KOK/_agents/fabrika/kanit/is-b"
 export RETRO_KOK="$KOK" RETRO_BEKCI_LOG="$T/bekci.log" RETRO_REGISTRY="$KOK/_agents/handoff/aile-registry.yaml"
+export RETRO_DEPO_KOKU="$T/projeler-yok"   # HERMETİK: varsayılan keşif kökü /config/projects'tir — sınav gerçek depoları saymaz (T11 kendi kökünü verir)
 
 # NOTES: 2 tarihsiz satır · ÇIPA başlığından tarih devralan 3 satır (hafta içi, 1'i ders) · 1 satır başka hafta
 cat > "$KOK/_agents/bani/NOTES.md" <<'EOF'
@@ -111,6 +112,7 @@ icerir "$CIKTI" "EKSİK     MİRAHUR" "T6c MİRAHUR iz var, retro yok → EKSİK
 icerir "$CIKTI" "ÇALIŞMADI BASİRET" "T6d BASİRET iz yok → ÇALIŞMADI (zorunlu değil)"
 icermez "$CIKTI" "SERDAR" "T6e merkez (SERDAR) hariç"
 M="$KOK/_agents/handoff/retro/2026-W42/MERKEZ.md"; [ -f "$M" ] && ok "T6f MERKEZ.md iskeleti" || kirmizi "T6f MERKEZ.md yok"
+icerir "$(cat "$M")" "- M1) <ders> · kaynak:" "T6f2 ilk yazımda (elle bölüm yokken) Dersler/Görevler iskeleti basılır"
 icerir "$(cat "$M")" "- BÂNİ Ö1) kart.sh canli-ayarla sahip doğrulamalı →" "T6g öneri süzüm listesinde, damga boş"
 icerir "$(cat "$M")" "| MİRAHUR | EKSİK |" "T6h katılım tablosu"
 cp "$Z" "$KOK/_agents/handoff/retro/2026-W42/MİRAHUR.md"   # BÂNİ başlıklı dosya MİRAHUR adıyla → GEÇERSİZ
@@ -144,6 +146,118 @@ icermez "$(grep "Ö1)" "$M")" "gorev_01M54APFDAHKN72VKBWTGKSAAM" "T8g eski gorev
 icerir "$(grep "Ö2)" "$M")" "→ RED: ayrı kart olarak açıldı" "T8h değişmeyen Ö2 damgası korundu"
 kapi "T8i yeni metin damgasız → süzüm kırmızı" 1 python3 "$R" suzum; icerir "$CIKTI" "Ö1) damgasız" "T8j artık bayat değil, damgasız"
 
+echo "— T9 merkez --yenile elle yazılan bölümleri KORUR (gorev_01M58987YSBASEXV1MF7T2GJHP · 19 Eki W42 MERKEZ.md silindi)"
+python3 - "$M" <<'PY'
+import sys;p=sys.argv[1];s=open(p,encoding="utf-8").read()
+s=s.replace("- M1) <ders> · kaynak: <AJAN D<n> | ölçüm>","- M1) vekil ölçütü önce adıyla ölç · kaynak: MİRAHUR D1\n\n  ikinci paragraf: girintili açıklama").replace("- <gorev_… · ders M<n>>","- gorev_01M58987YSBASEXV1MF7T2GJHP · ders M1")
+s=s.rstrip("\n")+"\n\n## Kaçış ve tıkanma\n- 9 kaçış kutu geneli · en sık: denetçi tur 4\n\n\n## Süzüm notları\nönek araç başlığına benzer ama elle yazıldı\n\n## Serbest not\nmerkezin kendi notu\n"
+open(p,"w",encoding="utf-8").write(s)
+PY
+cp "$M" "$T/merkez-elle.md"
+kapi "T9a merkez --yenile (rc 1: EKSİK hâlâ var)" 1 python3 "$R" merkez --yenile
+icerir "$(cat "$M")" "- M1) vekil ölçütü önce adıyla ölç · kaynak: MİRAHUR D1" "T9b Dersler satırı korundu"
+icerir "$(cat "$M")" "  ikinci paragraf: girintili açıklama" "T9c bölüm içi boş satır + girinti korundu"
+icerir "$(cat "$M")" "- gorev_01M58987YSBASEXV1MF7T2GJHP · ders M1" "T9d Görevler satırı korundu"
+icerir "$(cat "$M")" "## Kaçış ve tıkanma" "T9e iskelette olmayan Kaçış bölümü korundu"
+icerir "$(cat "$M")" "merkezin kendi notu" "T9f serbest bölüm korundu"
+icermez "$(cat "$M")" "<ders> · kaynak:" "T9g iskelet yer tutucusu geri gelmedi"
+[ "$(grep -c '^## Dersler' "$M")" -eq 1 ] && [ "$(grep -c '^## Kaçış' "$M")" -eq 1 ] && ok "T9h bölümler çoğalmadı (her biri bir kez)" || kirmizi "T9h bölüm sayısı: $(grep -n '^## ' "$M")"
+[ "$(grep '^## ' "$M" | tr '\n' '|')" = "## Katılım (araç yazdı)|## Süzüm — her öneri bir damga alır: \`→ gorev_<id>\` (görev defterine girdi) ya da \`→ RED: <gerekçe ≥10 karakter>\`|## Dersler (merkez yorumu; kutu dersine D<n> ile atıf: \`BÂNİ D2\`)|## Görevler (Sultan ders ders onaylar · D1 damgası · görev defteri)|## Kaçış ve tıkanma|## Süzüm notları|## Serbest not|" ] && ok "T9i bölüm sırası korundu (araç bölümleri önde, elle bölümler yazıldığı sırada)" || kirmizi "T9i sıra: $(grep '^## ' "$M" | tr '\n' '|')"
+icerir "$(grep "Ö2)" "$M")" "→ RED: ayrı kart olarak açıldı" "T9j süzüm damgası da korunmaya devam ediyor"
+cmp -s <(sed -n '/^## Dersler/,$p' "$T/merkez-elle.md") <(sed -n '/^## Dersler/,$p' "$M") && ok "T9l elle bölümler BAYT BAYT aynı (çift boş satır, girinti, dosya sonu dahil)" || kirmizi "T9l elle bölüm baytları değişti: $(diff <(sed -n '/^## Dersler/,$p' "$T/merkez-elle.md") <(sed -n '/^## Dersler/,$p' "$M") | head -5)"
+icerir "$(cat "$M")" "önek araç başlığına benzer ama elle yazıldı" "T9m '## Süzüm notları' (araç önekiyle başlayan elle bölüm) silinmedi — araç bölümü birebir başlıkla tanınır"
+python3 "$R" merkez --yenile >/dev/null 2>&1; cmp -s <(sed '/^_yazildi:/d' "$M") <(python3 "$R" merkez --yenile >/dev/null 2>&1; sed '/^_yazildi:/d' "$M") && ok "T9k ikinci --yenile aynı dosyayı üretir (kararlı)" || kirmizi "T9k ardışık --yenile farklı"
+
+echo "— T10 doldur: ajanın metnini iskelete ARAÇ yazar (KHX56 · ana dal kapısı Edit/Write'ı reddeder; kapı gevşetilmez)"
+XD="$BOS/_agents/handoff/retro/2026-W42/X.md"; cp "$XD" "$T/x-iskelet.md"
+olcum_imza(){ sed -n '1,/^## 1 · /p' "$1" | sed '$d'; }   # başlık + imza + ölçüm bloğu (aracın bölgesi)
+cat > "$T/x-iyi.md" <<'EOF'
+## 1 · Ne bitti
+- B1) tmux bekçisi Sx #388 kapıda
+## 2 · Nerede zaman kaybettim (ölçüyle)
+- Z1) sembolik bağ döngüsüne takılan tarama · ölçü: 5 dk
+## 3 · Hangi araç/kural beni yavaşlattı
+- A1) ana dal kapısı retro iskeletini düzenletmiyordu
+## 4 · Ne öğrendim
+- D1) kapıyı gevşetme, yazmayı araca ver
+
+## 5 · Merkeze önerim
+- Ö1) retro dolumu yalnız retro.py doldur ile yapılsın
+EOF
+kapi "T10a iskelet yoksa rc=2 (ölçümü araç yazar, önce kutu)" 2 python3 "$R" doldur Q --kok "$BOS" --metin "$T/x-iyi.md"; icerir "$CIKTI" "önce \`retro.py kutu Q\`" "T10a2 ne yapılacağını söyler"
+kapi "T10b --metin verilmezse rc=2" 2 python3 "$R" doldur X --kok "$BOS"
+kapi "T10c metin dosyası yoksa rc=2" 2 python3 "$R" doldur X --kok "$BOS" --metin "$T/yok-metin.md"
+sed 's/^- D1) .*/- D1) <ders tek cümle>/' "$T/x-iyi.md" > "$T/x-yer.md"
+kapi "T10d yer tutucu kalmış metin → rc=1, YAZILMAZ" 1 python3 "$R" doldur X --kok "$BOS" --metin "$T/x-yer.md"; icerir "$CIKTI" "L7 yer tutucu" "T10d2 lint gerekçesi"
+cmp -s "$XD" "$T/x-iskelet.md" && ok "T10d3 dosya bayt bayt eski hâli" || kirmizi "T10d3 geçersiz metin dosyayı değiştirdi"
+sed 's/ · ölçü: 5 dk//' "$T/x-iyi.md" > "$T/x-olcusuz.md"
+kapi "T10e ölçüsüz zaman kaybı → rc=1 (L5), YAZILMAZ" 1 python3 "$R" doldur X --kok "$BOS" --metin "$T/x-olcusuz.md"; icerir "$CIKTI" "L5" "T10e2 L5 gerekçesi"
+{ cat "$T/x-iyi.md"; printf '\n## Ölçüm (araç yazdı · sahte)\n| NOTES mesaj satırı | 99 |\n'; } > "$T/x-sahte.md"   # başlıkların ARDINA gizlenmiş (önsöz denetimi görmez)
+kapi "T10f metinde (başlıkların ardında) ölçüm bloğu → rc=2 (ajan ölçümü sahteleyemez)" 2 python3 "$R" doldur X --kok "$BOS" --metin "$T/x-sahte.md"; icerir "$CIKTI" "ölçüm bloğu ya da imza" "T10f2 gerekçe"
+{ cat "$T/x-iyi.md"; printf '_koltuk: sahte:0\n'; } > "$T/x-imza.md"
+kapi "T10g metinde imza satırı → rc=2" 2 python3 "$R" doldur X --kok "$BOS" --metin "$T/x-imza.md"
+{ printf 'önsöz cümlesi\n'; cat "$T/x-iyi.md"; } > "$T/x-onsoz.md"
+kapi "T10h '## 1 · ' öncesi metin → rc=2 (sessizce yutulmaz)" 2 python3 "$R" doldur X --kok "$BOS" --metin "$T/x-onsoz.md"
+cmp -s "$XD" "$T/x-iskelet.md" && ok "T10h2 reddedilen hiçbir metin dosyaya dokunmadı" || kirmizi "T10h2 dosya değişti"
+kapi "T10i geçerli metin dosyadan → rc=0" 0 python3 "$R" doldur X --kok "$BOS" --metin "$T/x-iyi.md"; icerir "$CIKTI" "öneri 1 · ders 1" "T10i2 sayım"
+kapi "T10j sonuç lint'ten geçer" 0 python3 "$R" lint "$XD"
+cmp -s <(olcum_imza "$XD") <(olcum_imza "$T/x-iskelet.md") && ok "T10k ölçüm bloğu ve imza satırları BAYT BAYT korundu" || kirmizi "T10k aracın bölgesi değişti: $(diff <(olcum_imza "$T/x-iskelet.md") <(olcum_imza "$XD") | head -4 | tr '\n' ' ')"
+icerir "$(cat "$XD")" "- D1) kapıyı gevşetme, yazmayı araca ver" "T10l ajanın maddesi yerinde"
+[ "$(grep -c '^<!-- Yorum satırları ajanındır' "$XD")" -eq 1 ] && ok "T10m dipnot bir kez" || kirmizi "T10m dipnot sayısı $(grep -c '^<!-- Yorum' "$XD")"
+cp "$XD" "$T/x-dolu.md"
+kapi "T10n stdin'den (--metin -) aynı metin → rc=0" 0 bash -c "python3 '$R' doldur X --kok '$BOS' --metin - < '$T/x-iyi.md'"
+cmp -s "$XD" "$T/x-dolu.md" && ok "T10o ikinci dolum aynı baytları üretir (kararlı)" || kirmizi "T10o ikinci dolum farklı"
+{ cat "$T/x-iyi.md"; printf '\n<!-- Yorum satırları ajanındır; merkez bunları DEĞİŞTİRMEZ. Z maddesi ölçüsüz geçmez. Ö maddesi en çok 5. -->\n'; } > "$T/x-dipnotlu.md"
+python3 "$R" doldur X --kok "$BOS" --metin "$T/x-dipnotlu.md" >/dev/null 2>&1
+cmp -s "$XD" "$T/x-dolu.md" && ok "T10p metindeki dipnot çoğalmaz" || kirmizi "T10p dipnotlu metin farklı sonuç verdi"
+# Yarış olasılıklıdır: sabit adlı eski sürüm 40 dolumda 2 kez düştü (ölçüldü, kanıt dizini) → 5 tur × 8 eşzamanlı dolum.
+es_rc=0; for tur in 1 2 3 4 5; do pids=""; for n in 1 2 3 4 5 6 7 8; do python3 "$R" doldur X --kok "$BOS" --metin "$T/x-iyi.md" > "$T/es-$tur-$n.out" 2>&1 & pids="$pids $!"; done
+  for p in $pids; do wait "$p" || es_rc=1; done; done
+[ "$es_rc" = 0 ] && ok "T10s 5 tur × 8 eşzamanlı dolumun hepsi rc=0 (geçici dosyalar çarpışmaz · göz tur 1)" || kirmizi "T10s eşzamanlı dolum düştü: $(cat "$T"/es-*.out | grep -v '✓' | head -3 | tr '\n' ' ')"
+cmp -s "$XD" "$T/x-dolu.md" && ok "T10t eşzamanlı dolum sonrası dosya geçerli ve beklenen baytlarda" || kirmizi "T10t eşzamanlı dolum sonrası dosya farklı"
+[ -z "$(find "$(dirname "$XD")" -name '*.yeni' 2>/dev/null)" ] && ok "T10u geride geçici dosya kalmadı" || kirmizi "T10u kalan: $(find "$(dirname "$XD")" -name '*.yeni')"
+kapi "T10q doldurulmuş dosyada kutu --yenile çalışır (ölçüm bloğu bulunur)" 0 python3 "$R" kutu X --kok "$BOS" --yenile
+icerir "$(cat "$XD")" "- D1) kapıyı gevşetme, yazmayı araca ver" "T10r yenilemeden sonra ajanın yorumu korundu"
+cp "$T/x-iskelet.md" "$XD"
+
+echo "— T11 çok depo: kart + göz ölçüsü kutunun bütün depolarından (CQ46Y + NFS16 · W42'de Sx işi retrodan görünmüyordu)"
+# KOK'ta 1 kart (DENETIM diskte) · projeler/Sx git deposunda 1 kart: DENETIM'ler YALNIZ origin/main'de (birincil kopya başka dalda,
+# Sx'in 20 Eki hali) · projeler/_wt/… çalışma kopyası SAYILMAZ · projeler/Bos kartsız depo · RETRO_DEPOLAR tekrarı tekilleşir
+P="$T/projeler"; SX="$P/Sx"; mkdir -p "$P/Bos/_agents" "$KOK/_agents/fabrika/kanit/sira-n"
+printf '{"is":"sira-n","aldi":"SIRA","zaman":"2026-10-13T10:00:00+03:00","durum":"bitti","bitis":"2026-10-14T10:00:00+03:00"}' > "$KOK/_agents/fabrika/kartlar/sira-n.json"
+echo '{}' > "$KOK/_agents/fabrika/kanit/sira-n/DENETIM-1.json"
+( export GIT_AUTHOR_NAME=s GIT_AUTHOR_EMAIL=s@s GIT_COMMITTER_NAME=s GIT_COMMITTER_EMAIL=s@s GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1
+  git init -q --bare -b main "$T/sx-origin.git" && git clone -q "$T/sx-origin.git" "$SX" 2>/dev/null
+  mkdir -p "$SX/_agents/fabrika/kanit/sira-s" && echo '{}' > "$SX/_agents/fabrika/kanit/sira-s/DENETIM-1.json" && echo '{}' > "$SX/_agents/fabrika/kanit/sira-s/DENETIM-2.json"
+  git -C "$SX" add -A && git -C "$SX" commit -qm kanit && git -C "$SX" push -q origin main 2>/dev/null
+  git -C "$SX" checkout -q -b baska-dal && git -C "$SX" rm -q -r _agents/fabrika/kanit && git -C "$SX" commit -qm sil ) || kirmizi "T11 önkoşul: Sx deposu kurulamadı"
+mkdir -p "$SX/_agents/fabrika/kartlar" "$P/_wt/Sx-x/_agents/fabrika/kartlar"
+printf '{"is":"sira-s","aldi":"SIRA","zaman":"2026-10-15T10:00:00+03:00","durum":"bitti","bitis":"2026-10-16T10:00:00+03:00"}' > "$SX/_agents/fabrika/kartlar/sira-s.json"
+printf '{"is":"sira-wt","aldi":"SIRA","zaman":"2026-10-15T10:00:00+03:00","durum":"bitti","bitis":"2026-10-16T10:00:00+03:00"}' > "$P/_wt/Sx-x/_agents/fabrika/kartlar/sira-wt.json"
+SD="$KOK/_agents/handoff/retro/2026-W42/SIRA.md"
+kapi "T11a iki depolu kutu ölçüldü" 0 env RETRO_DEPO_KOKU="$P" python3 "$R" kutu SIRA --koltuk s:0
+icerir "$(cat "$SD")" "| kart açılan / bitti / tıkandı | 2 / 2 / 0 |" "T11b kartlar İKİ depodan (KOK + Sx), _wt kopyası sayılmadı"
+icerir "$(cat "$SD")" "| bağımsız göz turu · ortalama tur/kart | 3 · 1.5 |" "T11c Sx göz turları origin/main'den (birincil kopya başka dalda, diskte DENETIM yok)"
+icerir "$(cat "$SD")" "Sx 1/1/0" "T11d kanıt sütunu depo başına döker"
+icerir "$(grep "^| bağımsız göz turu" "$SD")" "depo başına: depo 1 · Sx 2" "T11d2 göz turu da depo başına dökülür (KOK 1 · Sx 2 · göz tur 2)"
+rm -f "$SD"
+kapi "T11e RETRO_DEPOLAR verilince keşif yerine o liste; aynı depo iki kez sayılmaz" 0 env RETRO_DEPO_KOKU="$P" RETRO_DEPOLAR="$KOK:$KOK" python3 "$R" kutu SIRA --koltuk s:0
+icerir "$(cat "$SD")" "| kart açılan / bitti / tıkandı | 1 / 1 / 0 |" "T11f yalnız KOK, tekrar tekilleşti"
+rm -f "$SD"
+kapi "T11g keşif kökü yoksa yalnız KOK (eski davranış)" 0 env RETRO_DEPO_KOKU="$T/yok-boyle" python3 "$R" kutu SIRA --koltuk s:0
+icerir "$(cat "$SD")" "| kart açılan / bitti / tıkandı | 1 / 1 / 0 |" "T11h keşifsiz tek depo"
+rm -f "$SD"
+# origin/main OKUNAMAZSA sayım sessizce eksik kalmaz (göz tur 1): Sx kopyasında uzak dal referansı silinir → depo ADIYLA uyarı
+P2="$T/projeler2"; mkdir -p "$P2"; cp -r "$SX" "$P2/Sx"; git -C "$P2/Sx" update-ref -d refs/remotes/origin/main
+kapi "T11i origin/main okunamayan depolu ölçüm yine yazılır" 0 env RETRO_DEPO_KOKU="$P2" python3 "$R" kutu SIRA --koltuk s:0
+icerir "$(cat "$SD")" "| bağımsız göz turu · ortalama tur/kart | 1 · 0.5 |" "T11j okunamayınca yalnız disk sayılır (değer gerçek)"
+icerir "$(cat "$SD")" "origin/main OKUNAMADI: Sx" "T11k … ve kanıt sütunu eksikliği depo adıyla söyler (sessiz eksik yok)"
+icermez "$(cat "$SD")" "(disk ∪ origin/main)" "T11l … ve 'disk ∪ origin/main' diye yanlış etiketlemez"
+rm -f "$SD"
+kapi "T11m git deposu olmayan KOK uyarı üretmez (okunacak origin yok)" 0 env RETRO_DEPO_KOKU="$T/yok-boyle" python3 "$R" kutu SIRA --koltuk s:0
+icermez "$(cat "$SD")" "OKUNAMADI" "T11n git'siz depo için OKUNAMADI yok"
+rm -f "$SD"
+
 echo "— M mutasyon (kopya üstünde; her mutant en az bir kapıyı kızartmalı)"
 mut(){ # mut <ad> <sed> <komut...> : mutant kopyada komut BAŞARILI (rc=0) kalırsa sınav onu yakalamıyor demektir
   local ad="$1" sed_="$2"; shift 2; local MR="$T/mut-$RANDOM.py"; sed -e "$sed_" "$R" > "$MR"
@@ -166,6 +280,31 @@ kapi "M4-önkoşul: metin değişti → gerçek araç BAYAT (kırmızı)" 1 pyth
 m_bayat(){ python3 "$1" suzum >/dev/null 2>&1; [ $? -ne 0 ]; }
 mut "M4 metin kıyası kalkınca bayat damga geçer (kapı yakalar)" 's/            if e and e\[0\] != t.strip():/            if False:/' m_bayat
 mut "M3 iz ayrımı kalkınca BASİRET EKSİK sayılır (kapı yakalar)" 's/    return bool((n and n\["satir"\] > 0)/    return True or bool((n and n["satir"] > 0)/' m_iz
+m_elle(){ local rc; cp "$T/merkez-elle.md" "$M"; python3 "$1" merkez --yenile >/dev/null 2>&1; grep -qF "## Kaçış ve tıkanma" "$M" && grep -qF "vekil ölçütü önce adıyla ölç" "$M" && grep -qF "önek araç başlığına benzer" "$M" && cmp -s <(sed -n '/^## Dersler/,$p' "$T/merkez-elle.md") <(sed -n '/^## Dersler/,$p' "$M"); rc=$?; cp "$T/merkez-elle.md" "$M"; return $rc; }
+mut "M5 elle bölümler taşınmazsa --yenile Dersler/Kaçış'ı siler (eski hata · kapı yakalar)" 's/            elle = merkez_elle_ham(eski)/            elle = ""/' m_elle
+mut "M6 araç bölümü ÖNEKLE tanınırsa '## Süzüm notları' silinir (kapı yakalar)" 's/            icinde = s.rstrip("\\r\\n") not in (MERKEZ_KATILIM, MERKEZ_SUZUM)/            icinde = not s.startswith(("## Katılım", "## Süzüm"))/' m_elle
+mut "M7 boş satırlar daraltılırsa bayt eşitliği bozulur (kapı yakalar)" 's/            ham.append(s)$/            ham.append(s) if (s.strip() or not ham or ham[-1].strip()) else None/' m_elle
+
+m_dl(){ local rc; cp "$T/x-iskelet.md" "$XD"; python3 "$1" doldur X --kok "$BOS" --metin "$2" >/dev/null 2>&1; rc=$?; cmp -s "$XD" "$T/x-iskelet.md"; local ayni=$?; cp "$T/x-iskelet.md" "$XD"; [ "$rc" -ne 0 ] && [ "$ayni" -eq 0 ]; }
+m_dl_yer(){ m_dl "$1" "$T/x-yer.md"; }; m_dl_sahte(){ m_dl "$1" "$T/x-sahte.md" && m_dl "$1" "$T/x-imza.md"; }; m_dl_onsoz(){ m_dl "$1" "$T/x-onsoz.md"; }
+mut "M8 doldur lint'i atlarsa yer tutuculu metin yazılır (kapı yakalar)" 's/^    if h:$/    if False:/' m_dl_yer
+mut "M9 ölçüm/imza reddi kalkınca sahte ölçüm dosyaya girer (kapı yakalar)" 's/^    if re.search(r"^## Ölçüm", metin, re.M) or /    if False and re.search(r"^## Ölçüm", metin, re.M) or /' m_dl_sahte
+mut "M10 önsöz denetimi kalkınca metin sessizce yutulur (kapı yakalar)" 's/^    if metin\[:m.start()\].strip():$/    if False:/' m_dl_onsoz
+
+m_cok(){ local rc; rm -f "$SD"; env RETRO_DEPO_KOKU="$P" python3 "$1" kutu SIRA --koltuk s:0 >/dev/null 2>&1
+  grep -qF "| kart açılan / bitti / tıkandı | 2 / 2 / 0 |" "$SD" && grep -qF "| bağımsız göz turu · ortalama tur/kart | 3 · 1.5 |" "$SD"; rc=$?; rm -f "$SD"; return $rc; }
+m_tek(){ local rc; rm -f "$SD"; env RETRO_DEPO_KOKU="$P" RETRO_DEPOLAR="$KOK:$KOK" python3 "$1" kutu SIRA --koltuk s:0 >/dev/null 2>&1
+  grep -qF "| kart açılan / bitti / tıkandı | 1 / 1 / 0 |" "$SD"; rc=$?; rm -f "$SD"; return $rc; }
+m_cok "$R" && m_tek "$R" && ok "M11-13 pozitif kontrol: bozmasız araçla iki yoklama da GEÇER (ısırık sahte değil)" || kirmizi "M11-13 pozitif kontrol: gerçek araç yoklamayı geçemiyor"
+mut "M11 depo keşfi kalkınca Sx kartı sayılmaz (kapı yakalar)" 's/        aday += \[os.path.dirname(os.path.dirname(os.path.dirname(k)))/        aday += [] and [os.path.dirname(os.path.dirname(os.path.dirname(k)))/' m_cok
+mut "M12 origin\/main okuması kalkınca birincil kopya başka daldayken göz turları eksik (kapı yakalar)" 's/^    if not om:$/    if True:/' m_cok
+mut "M13 tekilleştirme kalkınca aynı depo iki kez sayılır (kapı yakalar)" 's/        if r not in gorulen and os.path.isdir/        if os.path.isdir/' m_tek
+m_uyari(){ local rc; rm -f "$SD"; env RETRO_DEPO_KOKU="$P2" python3 "$1" kutu SIRA --koltuk s:0 >/dev/null 2>&1; grep -qF "origin/main OKUNAMADI: Sx" "$SD"; rc=$?; rm -f "$SD"; return $rc; }
+m_uyari "$R" && ok "M14 pozitif kontrol: bozmasız araç okunamayan depoyu adıyla söyler" || kirmizi "M14 pozitif kontrol: gerçek araç uyarı basmıyor"
+mut "M14 okunamama uyarısı susturulunca eksik sayım yeşil görünür (kapı yakalar)" 's/("`_agents\/fabrika\/kanit\/\*\/DENETIM-\*.json` (disk ∪ origin\/main)" if not k\["okunamadi"\] else/("`_agents\/fabrika\/kanit\/*\/DENETIM-*.json` (disk ∪ origin\/main)" if True else/' m_uyari
+m_goz(){ local rc; rm -f "$SD"; env RETRO_DEPO_KOKU="$P" python3 "$1" kutu SIRA --koltuk s:0 >/dev/null 2>&1; grep "^| bağımsız göz turu" "$SD" | grep -qF "depo başına: depo 1 · Sx 2"; rc=$?; rm -f "$SD"; return $rc; }
+m_goz "$R" && ok "M15 pozitif kontrol: bozmasız araç göz turunu depo başına döker" || kirmizi "M15 pozitif kontrol: gerçek araç dökmüyor"
+mut "M15 depo başına göz sayacı artmazsa döküm yalan söyler (kapı yakalar)" 's/turlar.append(len(ad)); dg += len(ad); /turlar.append(len(ad)); /' m_goz
 
 echo; echo "GECEN=$G DUSEN=$K"
 [ "$K" -eq 0 ]

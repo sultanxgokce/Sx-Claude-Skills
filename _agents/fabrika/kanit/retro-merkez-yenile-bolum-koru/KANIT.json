@@ -1,0 +1,59 @@
+{
+  "is": "retro-merkez-yenile-bolum-koru",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-18T23:30:04+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinav-yeni-kapilar",
+      "asama": "once",
+      "dosya": "olcum-sinav-yeni-kapilar-once.txt",
+      "sha256": "278e7d35b5a1f448438efabb8fb628c7154b65b089c527a87d240656d4195ed1",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/retro-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-18T23:29:59+03:00",
+      "sure_sn": 2.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "82c0abc6bcaa47bca67c25eaa8c0ac9e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav-yeni-kapilar",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-yeni-kapilar-sonra.txt",
+      "sha256": "5854967d7c440afe789e5a6a9dc487c3d93376d3040230dab53da3ce958d0f77",
+      "komut": [
+        "bash",
+        "retro/scripts/retro.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T23:30:02+03:00",
+      "sure_sn": 3.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "7da6d7b10a1a4594bfc240c82eb6bbe4"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-w42-eski-yeni",
+      "asama": "tek",
+      "dosya": "olcum-gercek-w42-eski-yeni-tek.txt",
+      "sha256": "f2c98d8131680c26b22c8d250b4656acf4236f0f7046440e69b8c48d4874f566",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/retro-gercek-w42.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T23:30:04+03:00",
+      "sure_sn": 0.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a59fb4320e054b31a9e19466a2b9ae17"
+    }
+  ],
+  "imza": "dfc88aeb2e46466d29de8488183d727b3c53c1b111a72d29582db109b45c970f"
+}

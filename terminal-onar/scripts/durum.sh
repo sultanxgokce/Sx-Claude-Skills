@@ -3,7 +3,7 @@
 # Salt-okurdur; tek yazdığı şey canlı ana oturumun kimliğidir (onarımda doğru konuşmaya dönmek için).
 #   --json   makine çıktısı (web düğmesi için)
 set -u
-. "$(dirname "$0")/ortak.sh"
+. "$(dirname "$0")/ortak.sh" || exit 3   # kutu adı reddi: ortak.sh sebebi tek satır yazdı → DUR, rc 3 (FSZ30; eskiden unbound variable ile çöküyordu)
 
 declare -A D
 tmux_var "$ANA_TMUX" && D[ana_tmux]=ok || D[ana_tmux]=yok

@@ -1,10 +1,34 @@
 ---
 name: retro
 description: Haftalık retro — araç ajanın haftasını ÖLÇER (NOTES · fabrika kartları · bağımsız göz turları · kaçışlar · boşta zilleri), ajan 5 başlığı kendi gözüyle YORUMLAR (ne bitti · nerede zaman kaybettim ölçüyle · hangi araç/kural yavaşlattı · ne öğrendim · merkeze önerim); çıktı _agents/handoff/retro/<YYYY-Www>/<AJAN>.md lint'li. Merkez kipi kutu retrolarını toplar (OK/GEÇERSİZ/EKSİK/ÇALIŞMADI), MERKEZ.md iskeleti kurar; her öneri → gorev_ ya da → RED damgası alır (süzüm kanıtı). Tetik: "/retro", "haftalık retro", "haftanın dersleri", "retro yaz", "merkez retrosu".
-version: 1.0.0
+version: 1.2.0
 ---
 
 # /retro — haftalık retro (araç ölçer · ajan yorumlar · merkez toplar · süzüm kanıtlanır)
+
+## 🆕 1.2.0 · kart ve göz ölçüsü kutunun BÜTÜN depolarından (20 Eki · CQ46Y + NFS16 · retro W42 BERİD Ö1 + HENDESE Ö2)
+W42 retrosu yalnız çağrıldığı depoyu (Nexus) sayıyordu; ajanın Sx ve cloudtop kartları görünmüyordu (ölçüm: MİRAHUR W42 9 → 46 kart,
+HENDESE 5 → 14, BÂNİ 25 → 128). Taranan depolar: `RETRO_DEPOLAR` (':' ayraçlı) verilirse o liste; yoksa `RETRO_DEPO_KOKU` (varsayılan
+`/config/projects`) altında `_agents/fabrika/kartlar` olan birincil depolar — izole kutuda bu kutunun kendi depolarıdır, `_wt/…`
+çalışma kopyaları sayılmaz, aynı depo bir kez. Göz turları disk ∪ `origin/main` ağacından sayılır: birincil kopya bayat ya da başka
+dalda olabilir. Tablonun kanıt sütunu depo başına döker (`Nexus 9/3/2 · Sx-Claude-Skills 4/4/0 · …`). Kaçış defteri hâlâ KOK'tan.
+
+## 🆕 1.1.0 · `doldur` — ajanın yorumunu iskelete araç yazar (20 Eki · KHX56 · retro W42 MİRAHUR Ö1)
+`kutu` iskeleti paylaşılan ana ağaca yazar; ana dal kapısı (`ana-dal-kapisi.sh`) o ağaçta Edit/Write'ı reddeder — ajan iskeleti
+dolduramıyordu (W42'de MİRAHUR elle kaçışla doldurdu). Kapı GEVŞETİLMEDİ; dolum araca verildi:
+```
+retro.py doldur <AJAN> --metin <taslak.md>      # ya da --metin -   (stdin)
+```
+Taslak yalnız `## 1 · …` … `## 5 · …` başlıklarını taşır (scratchpad'de yazılır). Araç: ölçüm bloğu ve imza satırlarını dosyadan
+korur, metinde görürse **reddeder** (rc 2 — ajan ölçümü sahteleyemez) · `## 1 · ` öncesi metni yutmaz, reddeder · birleşik sonucu
+lint'ler, geçmezse **yazmaz** (rc 1, dosya bayt bayt eski hâli) · geçerse atomik yazar. Aynı metin ikinci kez aynı baytları üretir;
+`kutu --yenile` doldurulmuş dosyada çalışmaya devam eder. Kanıt: `retro.test.sh` T10a-r + mutant M8-M10.
+
+## 🆕 1.0.1 · merkez --yenile elle yazılan bölümleri korur (19 Eki · kart retro-merkez-yenile-bolum-koru · gorev_01M58987YSBASEXV1MF7T2GJHP)
+1.0.0'da `merkez --yenile` dosyayı iskeletten yeniden basıyor, yalnız süzüm damgalarını taşıyordu: Dersler/Görevler yer
+tutucuya dönüyor, Kaçış gibi iskelette olmayan bölümler siliniyordu (19 Eki 01:0x W42 MERKEZ.md yedekten geri kondu).
+Artık yalnız araç bölümleri (Katılım · Süzüm) yeniden yazılır; araç dışı her `## ` bölüm olduğu gibi taşınır. Kanıt:
+`retro.test.sh` T9a-k + mutant M5.
 
 ## Niçin var (Sultan 17 Eki 2026 · beyan SERDAR)
 
@@ -38,7 +62,9 @@ retro tamamen SERDAR ölçümüyle yapıldı — **ajan görüşü kanalı yoktu
 python3 ~/.claude/skills/retro/scripts/retro.py kutu <AJAN> --koltuk <tmux hedefi> [--hafta 2026-W42]
 #   → _agents/handoff/retro/2026-W42/<AJAN>.md iskeleti: ölçüm tablosu dolu, 5 başlık yer tutuculu
 #   (dosya varsa rc=4; ölçümü yenilemek: --yenile — yorum satırlarına DOKUNMAZ)
-# 5 başlığı doldur (B/Z/A/D/Ö etiketleri, 1..n sıralı; Z'de "· ölçü:" zorunlu; Ö ≤ 5), sonra:
+# 5 başlığı ağaç DIŞINDA bir taslağa yaz (B/Z/A/D/Ö etiketleri, 1..n sıralı; Z'de "· ölçü:" zorunlu; Ö ≤ 5) ve ARACA yazdır —
+# paylaşılan ana ağaçta Edit/Write ana dal kapısına takılır (1.1.0):
+python3 ~/.claude/skills/retro/scripts/retro.py doldur <AJAN> --metin <taslak.md>   # lint'ten geçmezse yazmaz (rc 1)
 python3 ~/.claude/skills/retro/scripts/retro.py lint _agents/handoff/retro/2026-W42/<AJAN>.md
 #   rc 0 geçerli · 1 geçersiz (her hata L-koduyla listelenir) · 2 dosya yok
 ```
@@ -67,7 +93,8 @@ python3 ~/.claude/skills/retro/scripts/retro.py merkez [--hafta 2026-W42] [--aja
 #     ÇALIŞMADI (NOTES/kart izi yok → retro zorunlu değil; ilk hafta kapanabilsin diye)
 #   → MERKEZ.md iskeleti: Katılım tablosu · Süzüm listesi (her öneri "→ " boş damgayla) · Dersler · Görevler
 #   rc 0 herkes tamam · 1 KIRMIZI: EKSİK/GEÇERSİZ var · 3 SARI: ajan listesi yok (katılım ölçülemez) — fabrika rengiyle aynı
-#   --yenile: iskeleti yeniden kurar, mevcut Süzüm DAMGALARINI KORUR
+#   --yenile: yalnız ARAÇ bölümlerini (Katılım · Süzüm) yeniden kurar, Süzüm DAMGALARINI KORUR; elle yazılan her ## bölüm
+#     (Dersler · Görevler · Kaçış · serbest) olduğu gibi, yazıldığı sırada taşınır (1.0.1 — 1.0.0 bunları siliyordu)
 python3 ~/.claude/skills/retro/scripts/retro.py suzum [--hafta 2026-W42]
 #   her Ö maddesi → gorev_<26> ya da → RED: <gerekçe> aldı mı · rc 0 / 1 kırmızı / 3 SARI: MERKEZ.md yok
 ```

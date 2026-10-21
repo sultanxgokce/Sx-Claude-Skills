@@ -11,6 +11,10 @@
 set -uo pipefail
 cd "$(dirname "$0")"
 B="$PWD/bileyi.py"
+# 🔴 HERMETİK: araç kutunun KENDİ Bulgu Defterini de okur (<ev>/.ic-sayfa/bulgu-defteri/bulgular.json). Bu kutuda
+#    gerçek bir defter var; sınav onu okursa sayımlar kayar ve sonuç ortama bağlanır (ölçüldü: 8 kapı düştü).
+#    Bilerek kapalı ("-"); X bölümü kendi sahte defterini verir.
+export BILEYI_KUTU_DEFTERI="-"
 GECEN=0; DUSEN=0
 kapi() { # kapi <ad> <beklenen-rc> <komut...>
   local ad="$1" bek="$2"; shift 2
@@ -729,6 +733,79 @@ icermeyen "W7 🔴 kayıpsız parmak izi: bu kayıtlar 'öbür kaynakla AYNI' sa
 # W8: GERCEK ayna (birebir ayni kayit) hala BIR kez sayilir — duzeltme dedup'u bozmadi
 iceren "W8 birebir aynı kayıt hâlâ bir kez sayılır (dedup bozulmadı)" "öbür kaynakla AYNI" \
   python3 "$B" --depo "$KOK/ayna" --havuz-depo "$KOK/oda" --esik-dosya "$ES" olc --gun 0
+
+echo "X · kutunun KENDİ Bulgu Defteri (gorev_01M4ZMCTMEEF1QW0Z0K2TG2FTX — mmex: havuz yok, defter .ic-sayfa'da)"
+# mmex biçimi: kutu deposunda bulgu-havuzu.jsonl YOK; bulgular kutunun ev dizinindeki Bulgu Defteri'nde
+mkdir -p "$KOK/mmex/_agents/handoff" "$KOK/ev/.ic-sayfa/bulgu-defteri"
+: > "$KOK/mmex/_agents/handoff/layiha-aday-havuzu.jsonl"
+KD="$KOK/ev/.ic-sayfa/bulgu-defteri/bulgular.json"
+python3 - "$KD" <<'PYX'
+import json, sys
+from datetime import date, timedelta
+b = date.today().isoformat() + "T10:00:00+0300"; eski = (date.today() - timedelta(days=90)).isoformat() + "T10:00:00+0300"
+k = []
+for no in (1, 5, 11, 30):    # eşiği aşan gerçek tekrar: 4 ayrı, ardışık olmayan kayıt
+    k.append({"id": "S%04d" % no, "no": "S-%d" % no, "sayi": no, "baslik": "zil susuyor kanit yolu kapali", "hal": "acik",
+              "surum": 1, "acan": "MUAVIN", "kaynak": "MUAVIN", "acilis": b, "tur": "kusur",
+              "notlar": [{"metin": "gercek not metni", "kim": "x", "ts": b}], "gecisler": []})
+k.append({"id": "S0050", "no": "S-50", "baslik": "eski tek kayit", "hal": "uygulandi", "acilis": eski, "tur": "kusur", "notlar": [], "gecisler": []})
+k.append({"id": "S0060", "no": "S-60", "baslik": "", "hal": "acik", "acilis": b, "tur": "kusur", "notlar": [], "gecisler": []})   # başlıksız → bozuk
+json.dump({"bulgular": k, "sonSayi": 60, "proje": "mmex"}, open(sys.argv[1], "w"), ensure_ascii=False)
+PYX
+M=(python3 "$B" --depo "$KOK/mmex" --esik-dosya "$ES")
+kapi   "X1 🔴 havuz yokken kutu defteriyle ÖLÇER (eskiden rc=3 'bulgu havuzu yok')" 0 env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KD" "${M[@]}" olc --gun 0
+iceren "X2 iz satırı defterin YOLUNU basar" "kutu-defteri: $KD — 5 kayıt" env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KD" "${M[@]}" olc --gun 0
+iceren "X3 defterdeki gerçek tekrar bulunur" "kanit yolu" env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KD" "${M[@]}" olc --gun 0
+iceren "X4 başlıksız kayıt BOZUK sayılır (sessizce atlanmaz)" "1 BOZUK" env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KD" "${M[@]}" olc --gun 0
+iceren "X5 özet kaydın kutunun defterinden geldiğini söyler" "5 tanesi bu kutunun kendi defterinden" env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KD" "${M[@]}" olc --gun 0
+iceren "X6 sınıf UYDURULMAZ: defterde sınıf yok → kapsama %0" "sınıf alanı dolu: 0/5" env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KD" "${M[@]}" olc --gun 0
+iceren "X7 açılış tarihi pencereye girer (90 günlük kayıt 30 gün dışında: 4/5)" "4/5 kayıt" env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KD" "${M[@]}" olc --gun 30
+iceren "X8 🔴 yol kutunun EV dizininden türer (ortam değişkeni yokken)" "kutu-defteri: $KD" env -u BILEYI_KUTU_DEFTERI HOME="$KOK/ev" BILEYI_ANAHTAR="$ANAH" "${M[@]}" olc --gun 0
+icermeyen "X9 defteri olmayan kutuda boş kaynak satırı ÜRETMEZ" "kutu-defteri" env -u BILEYI_KUTU_DEFTERI HOME="$KOK/bos-ev" BILEYI_ANAHTAR="$ANAH" "${O[@]}" olc --gun 0
+printf '{bozuk json\n' > "$KOK/bozuk-defter.json"
+kapi   "X10 defter bozuk + havuz yok → rc=3 ÖLÇEMEDİ ('tekrar yok' demez)" 3 env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KOK/bozuk-defter.json" "${M[@]}" olc --gun 0
+iceren "X11 merkez havuzu VE kutu defteri birlikte okunur (oda: 10 + defter: 5)" "havuz: 15 kayıt" env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KD" "${O[@]}" olc --gun 0
+iceren "X12 🔴 AÇIK verilen yol yoksa sessizce düşmez: 🟡 okunamadı satırı" "🟡 kutu-defteri: $KOK/yok-defter.json — okunamadı" env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KOK/yok-defter.json" "${O[@]}" olc --gun 0
+iceren "X13 açık yolu olmayan kaynak kapsamayı GENİŞ göstermez (1/2 kaynak)" "1/2 kaynak OKUNDU" env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KOK/yok-defter.json" "${O[@]}" olc --gun 0
+icermeyen "X14 '-' bilerek kapatır: kaynak satırı yok" "kutu-defteri" env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="-" "${O[@]}" olc --gun 0
+mkdir -p "$KOK/dizin-defter.json"
+out15="$(env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KOK/dizin-defter.json" "${M[@]}" olc --gun 0 2>&1)"; rc15=$?
+[[ $rc15 -eq 3 && "$out15" != *Traceback* && "$out15" == *"ÖLÇEMEDİM"* ]]; kapi "X15 🔴 defter OKUNAMAZSA (dizin/izin) ham çökme değil: rc=3 + sebep (rc=$rc15)" 0 test $? -eq 0
+echo "X · MUTASYON (tam kopyada; kontrol önce)"
+xm() {   # xm <ad> <eski> <yeni> <beklenen çıktı parçası> — mutant X'in bir kapısını düşürmeli
+  local Mp="$KOK/xm-$1.py"
+  python3 - "$B" "$Mp" "$2" "$3" <<'PYM' || { DUSEN=$((DUSEN+1)); echo "  ✗ X mutant '$1' kurulamadı (çapa bayat)"; return; }
+import sys; src, dst, a, b = sys.argv[1:]; s = open(src, encoding="utf-8").read()
+assert s.count(a) == 1; open(dst, "w", encoding="utf-8").write(s.replace(a, b, 1))
+PYM
+  local out
+  if [ "${5:-}" = ev ]; then out="$(env -u BILEYI_KUTU_DEFTERI HOME="$KOK/ev" BILEYI_ANAHTAR="$ANAH" python3 "$Mp" --depo "$KOK/mmex" --esik-dosya "$ES" olc --gun 0 2>&1)"
+  else out="$(env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KD" python3 "$Mp" --depo "$KOK/mmex" --esik-dosya "$ES" olc --gun 0 2>&1)"; fi
+  if [[ "$out" != *"$4"* ]]; then GECEN=$((GECEN+1)); echo "  ✓ X mutant '$1' sınavı düşürüyor"; else DUSEN=$((DUSEN+1)); echo "  ✗ X mutant '$1' sağ kaldı"; fi
+}
+out="$(env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KD" python3 "$B" --depo "$KOK/mmex" --esik-dosya "$ES" olc --gun 0 2>&1)"
+[[ "$out" == *"kanit yolu"* && "$out" == *"1 BOZUK"* && "$out" == *"5 tanesi"* ]]; kapi "X kontrol: bozulmamış araçla mutant beklentileri tutuyor" 0 test $? -eq 0
+xm kaynak-eklenmez '        kaynak.append(("kutu-defteri", kd))' '        pass' "kanit yolu"
+xm json-okunmaz '    if yol.suffix == ".json":' '    if False:' "kanit yolu"
+xm baslik-bozuk-sayilmaz 'if not isinstance(b, dict) or not str(b.get("baslik") or "").strip():' 'if not isinstance(b, dict):' "1 BOZUK"
+xm kutu-sayilmaz '("kutu", "kutu-defteri")' '("kutu",)' "5 tanesi"
+xmo() {   # xmo <ad> <eski> <yeni> — açık-yol mutantı: X12 beklentisi düşmeli (oda + yok yol)
+  local Mp="$KOK/xm-$1.py"
+  python3 - "$B" "$Mp" "$2" "$3" <<'PYM' || { DUSEN=$((DUSEN+1)); echo "  ✗ X mutant '$1' kurulamadı (çapa bayat)"; return; }
+import sys; src, dst, a, b = sys.argv[1:]; s = open(src, encoding="utf-8").read()
+assert s.count(a) == 1; open(dst, "w", encoding="utf-8").write(s.replace(a, b, 1))
+PYM
+  local out; out="$(env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KOK/yok-defter.json" python3 "$Mp" --depo "$KOK/oda" --esik-dosya "$ES" olc --gun 0 2>&1)"
+  if [[ "$out" != *"🟡 kutu-defteri"* ]]; then GECEN=$((GECEN+1)); echo "  ✓ X mutant '$1' sınavı düşürüyor"; else DUSEN=$((DUSEN+1)); echo "  ✗ X mutant '$1' sağ kaldı"; fi
+}
+xmo acik-yol-sessiz-duser '(acik_verildi or kd.exists())' 'kd.exists()'
+Mp="$KOK/xm-oserror.py"; python3 - "$B" "$Mp" <<'PYM'
+import sys; s = open(sys.argv[1], encoding="utf-8").read(); a = "    except OSError as e:"
+assert s.count(a) == 1; open(sys.argv[2], "w", encoding="utf-8").write(s.replace(a, "    except ZeroDivisionError as e:", 1))
+PYM
+out="$(env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KOK/dizin-defter.json" python3 "$Mp" --depo "$KOK/mmex" --esik-dosya "$ES" olc --gun 0 2>&1)"
+if [[ "$out" == *Traceback* ]]; then GECEN=$((GECEN+1)); echo "  ✓ X mutant 'oserror-yakalanmaz' sınavı düşürüyor"; else DUSEN=$((DUSEN+1)); echo "  ✗ X mutant 'oserror-yakalanmaz' sağ kaldı"; fi
+xm ev-dizini-yok '(Path.home() / KUTU_DEFTERI_GORELI, False)' '(Path("/yok") / KUTU_DEFTERI_GORELI, False)' "kanit yolu" ev
 
 echo
 echo "toplam=$((GECEN+DUSEN)) geçen=$GECEN düşen=$DUSEN"

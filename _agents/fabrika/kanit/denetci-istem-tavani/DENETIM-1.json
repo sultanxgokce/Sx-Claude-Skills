@@ -1,0 +1,30 @@
+{
+  "tur": 1,
+  "is": "denetci-istem-tavani",
+  "pr": "383",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T23:02:58+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 38094,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 30803
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Denetçi istemi parçalara ayırıp birleşik istemin tamamını kırpma tetiğine karşı ölçüyor; aşımda denetçiyi çağırmadan ve DENETIM kaydı oluşturmadan rc=1 ile İŞİ BÖL dönüyor, parça boylarını ve en büyük parçayı basıyor. Araç imzalı yeşil kanıt, eski yolun 7993 baytlık istemi kırpıp tur yürüttüğünü, yeni yolun aynı vakada tur yakmadan durduğunu gösteriyor; yalnız rötuş değil, üretime hazır düzeyde doğrulanmış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; iki kayıt da yeşil, rc=0 ve sarı kayıt yok. Önce/sonra ölçümü gerçek eşik vakasını sayısal olarak karşılaştırıyor: eski davranış 7993 baytı 6560'a kırpıp rc=0 verirken yeni davranış 7156 tetiğinde rc=1 dönüyor ve DENETIM-2 oluşturmuyor; ayrıca tam denetçi sınavı rc=0. İlk 60 satırlık genel sınav alıntısı T-ISTEM bölümüne ulaşmasa da özel karşılaştırma çıktısı talebin temel kabulünü doğrudan ölçüyor."
+  }
+}

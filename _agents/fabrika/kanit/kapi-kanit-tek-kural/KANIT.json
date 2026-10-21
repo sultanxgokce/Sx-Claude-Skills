@@ -1,0 +1,65 @@
+{
+  "is": "kapi-kanit-tek-kural",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-19T00:03:04+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kapi-sinavi-once.txt",
+      "sha256": "6fad1f89f5076e11affd54b8462f5c96cd0f2e4eb546c20a8dac2c9503a5643c",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kapi-kanit-tek-kural/mutasyon.sh",
+        "yazilim-fabrikasi",
+        "--ana-hat",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/kapi-ana.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T23:34:32+03:00",
+      "sure_sn": 35.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "0c4273e03b794e8d8a6508f58e1deceb"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-sonra.txt",
+      "sha256": "cfe043d239cbc503e267950c7503b371abce3a7cbfb7165d7df6aedbd292c9ee",
+      "komut": [
+        "timeout",
+        "600",
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-19T00:03:04+03:00",
+      "sure_sn": 27.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "6efffe077e7e456d929a193fe74627ba"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-sonra.txt",
+      "sha256": "fc90821f1eaa193ff24b83a4f249fcbb6a7d390d91a59aeb71292cbed64a7c5f",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kapi-kanit-tek-kural/mutasyon.sh",
+        "yazilim-fabrikasi"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T23:44:04+03:00",
+      "sure_sn": 208.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "85357e556303446eadce3b4d2edd459c"
+    }
+  ],
+  "imza": "9d2ae161dd8b10bbcd5b19778155113532baf4d1a1d2bf8a327651efe3cc3723"
+}

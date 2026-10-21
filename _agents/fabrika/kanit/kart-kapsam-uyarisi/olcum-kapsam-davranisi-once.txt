@@ -1,0 +1,19 @@
+$ bash _agents/fabrika/kanit/kart-kapsam-uyarisi/once-sonra.sh /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/sx-eski2/yazilim-fabrikasi/scripts/kart.sh
+# rc=0 sure=0.3s zaman=2026-10-18T23:22:14+03:00
+--- stdout ---
+── hendese-kutuphane-h1 (W42, haftalık yazıldı · günlük teslim edildi)
+✓ kart açıldı: h1 · sınıf: yok · ekipte biter, gün sonu özetine girer
+  ⚠ canlı kanıt istenmedi — --canli h (sahip: canlı kanıt gerekmez dedi); karta yazıldı, bağımsız göz görür
+   rc=0
+── iki depolu örnek
+✓ kart açıldı: ikid · sınıf: yok · ekipte biter, gün sonu özetine girer
+  ⚠ canlı kanıt istenmedi — --canli h (sahip: canlı kanıt gerekmez dedi; cümlede: zili); karta yazıldı, bağımsız göz görür
+   rc=0
+── düz cümle
+✓ kart açıldı: duz · sınıf: yok · ekipte biter, gün sonu özetine girer
+  ⚠ canlı kanıt istenmedi — --canli h (sahip: canlı kanıt gerekmez dedi); karta yazıldı, bağımsız göz görür
+   rc=0
+   h1.kapsam_uyarilari = (alan yok)
+   ikid.kapsam_uyarilari = (alan yok)
+   duz.kapsam_uyarilari = (alan yok)
+--- stderr ---
