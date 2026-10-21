@@ -1,5 +1,5 @@
-$ bash _agents/fabrika/kanit/denetci-bitis-zili/sizinti-olcer.sh python3 _agents/fabrika/kanit/denetci-bitis-zili/bolum-olcer.py T-ZIL Z3d Z6 Z7 Z8 Z9 Z10 Z11 Z12 mutant 'zil mutant 'pid mutant 'yazansiz mutant 'reis mutant 'zaman mutant 'kill mutant 'asim mutant 'sure mutant 'bayat mutant 'canli mutant 'kosuyor mutant 'sinav-kipi ✗ -- bash yazilim-fabrikasi/scripts/denetci.test.sh
-# rc=0 sure=748.2s zaman=2026-10-21T21:59:02+03:00
+$ bash _agents/fabrika/kanit/denetci-bitis-zili/sizinti-olcer.sh python3 _agents/fabrika/kanit/denetci-bitis-zili/bolum-olcer.py T-ZIL Z3d Z6 Z7 Z8 Z9 Z10 Z11 Z12 mutant 'zil mutant 'pid mutant 'yazansiz mutant 'reis mutant 'zaman mutant 'kill mutant 'asim mutant 'sure mutant 'bayat mutant 'canli mutant 'kosuyor mutant 'sinav-kipi (bilgi) ✗ -- bash yazilim-fabrikasi/scripts/denetci.test.sh
+# rc=0 sure=504.6s zaman=2026-10-21T22:41:23+03:00
 --- stdout ---
 $ bash yazilim-fabrikasi/scripts/denetci.test.sh  → rc=0 · 416 satır
 ════ T-ZIL · denetçi sessiz bitmez: koşuyor izi · zaman aşımı · her çıkışta zil · tıkanınca reise (SERDAR ACİL 21 Eki) ════
@@ -41,6 +41,7 @@ $ bash yazilim-fabrikasi/scripts/denetci.test.sh  → rc=0 · 416 satır
   ✓ mutant 'kosuyor-silinmez' sınavı KIRMIZI yapıyor
   ✓ mutant 'kosuyor-yazilmaz' sınavı KIRMIZI yapıyor
   ✓ mutant 'sinav-kipi-gercek-zil' sınavı KIRMIZI yapıyor
+  (bilgi) 44 mutant · 4 paralel · 397 sn
 …
 ── SONUÇ: 256 geçti · 0 kaldı ──
 ── SIZINTI: gerçek sinyal kütüğünde sınav işi zili önce 7 · sonra 7 · fark 0 (komut rc 0)
