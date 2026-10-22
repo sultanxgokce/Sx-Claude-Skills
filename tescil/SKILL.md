@@ -1,7 +1,7 @@
 ---
 name: tescil
 type: agent
-version: 0.4.0
+version: 0.5.0
 description: >
   MÜHÜRDAR'ın el-kitabı: teslim edilen bir işi (kart) YAZILI gerekliliklere (GOAL + G1..Gn
   komut→beklenen/RC) karşı MAKİNE-KANITLI sınayan kör-protokol tescil-kabuğu. sert-teslim
@@ -220,10 +220,11 @@ yazmaz, üstüne kurar:
 AGENT_NAME=<mühürdar> bash scripts/muhurdar.sh <iş> --gereklilik <GEREKLILIK.md> --worktree <iş ağacı> \
   --out _agents/tescil/<iş>/deneme-<n> --yazan <inşacı> [--head-sha <sha>] [--deneme n] [--tatbikat]
 # RC tescil-run ile aynı: 0 GECTI · 1 KALDI · 2 kullanım · 3 ESKALASYON · 4 İSİMLİ-RED (kendi-isi dahil)
+#    · 5 mühür basıldı ama özlüğü olan mühürdarın siciline DÜŞMEDİ (verdikt özette; özette `sicil: dusmedi …`)
 ```
 
 Sınav: `scripts/muhurdar.test.sh` (18 kapı + kontrol kopyası + 11 mutant; sahte yargıçlar, ağsız; usul sırası: biçim kapısı kendi-işinden önce — göz #409 tur 1; yargıç ve mühür aynı ölçüm, Codex zaman aşımında da Claude — tur 2). Sicil/ders çıkarma/askı
-(G11 · S10) ve diploma/başsız şapka (G13 · S14) sonraki dilimlerdir.
+§11'de (G11 · S10), diploma §13'te (G13); başsız şapka (S14) sonraki dilimdir.
 
 ## 11 · Sicil · ders çıkarma · askı — `sicil.sh` (0.4.0 · G11 · S9 · S10)
 
@@ -240,7 +241,8 @@ Mühürdarın isabeti **Sicil**'dir (S9: "karne" değil): personelin özlük dos
   kararıyla bir kez çağırır; mühürdarca sınanan her satır için isabet yazılır (👤 satırı atlanır, düşen G'de mühür ✗); aynı
   karar iki kez işlenmez, kısmi karar ve başkasının mühürü reddedilir.
 - **Mühür kaydı:** `muhurdar.sh` her mühürde mühürdarın siciline `tur: muhur` satırı yazar (özlük yoksa söyler, mühür
-  düşmez). Askı penceresi bu kayıtlardan sayılır — Sultan satırı gelmeyen temiz mühür de pencereyi ilerletir. Özlük dosyası yoksa yazılmaz (rc 3 — özlük KÂHYA'nın işi).
+  düşmez; özlük VARKEN yazım düşerse sessiz değil: rc 5 + özette `sicil: dusmedi …`). Yazım süreçler arası kilitli, tek
+  seferde (ya hepsi ya hiçbiri); aynı karar/satır iki kez yazılmaz. Askı penceresi bu kayıtlardan sayılır — Sultan satırı gelmeyen temiz mühür de pencereyi ilerletir. Özlük dosyası yoksa yazılmaz (rc 3 — özlük KÂHYA'nın işi).
   Yazıcı satırı geri okuyarak doğrular; `isabet:` dosyanın sonunda değilse eklemez.
 - **Askı** (S10): `sicil.sh durum <mühürdar>` son **10 mühürde** (mühür = görev teslimi) kaçırmalı mühür sayar —
   **1** = ders çıkarma (askı yok) · **2** = **askıda** + el kitabı güncelleme + yeniden sınav. Eşik tarif kaydındaki
@@ -257,6 +259,25 @@ Sınav: `scripts/sicil.test.sh`.
 
 Biçim: `- **D-NNN** (YYYY-MM-DD · tür: <g_tur> · kaçırmalar: <mühürdar> <ts>, …) <kural cümlesi> — PR #<n>`.
 Bugün kural yok: henüz Sultan'ın "sağlanmadı" dediği bir mühür kaydı düşmedi.
+
+## 13 · Diploma — `diploma.sh` (0.5.0 · G13 · kadro şeması §1b `sinav.kume` · §6 diploma defteri)
+
+Bir personel Mühürdarlık uzmanlığını **sınavla** alır; diploma saklanmaz, defterden **türetilir**.
+
+- **Sınav kümesi:** `sinav/{dogru,kusurlu,uydurma}/<ad>/` — her türde en az bir örnek (biçim `sinav/README.md`). Her örnek
+  mühürdarın GERÇEK usulüyle (`muhurdar.sh`, kör taze yargıç) geçici bir kökte koşulur; gerçek sicile ve telemetriye yazmaz.
+- **`diploma.sh sina <personel> --kanit <dizin>`** — isabet: doğru → GEÇTİ · kusurlu/uydurma → KALDI **ve** beklenen G düşmüş.
+  EMIN-DEGILIM isabet sayılmaz. Geçme = tam isabet. Iskalanan örnek **en çok bir kez** yeniden koşulur; iki koşu çelişirse
+  sınav **ÖLÇÜLEMEDİ** (rc 3, kararsız) — deftere ne KALDI ne GEÇTİ yazılır. Satır §6 biçiminde
+  (`ts personel uzmanlik el_kitabi el_kitabi_surum kume_sha sonuc gecti kanit`), kilitli yazılır ve geri okunur.
+- **`diploma.sh durum <personel>`** — esas SON koşudur: koşu yok ya da son koşu kaldı → **yok** · sicil askıda → **askida** (§11) ·
+  el kitabı sürümü (katalog) ya da küme özeti değişti → **bayat** (yeniden sınav) · aksi → **gecerli**. Defterde bozuk satır
+  varsa `bozuk: N` deyip ölçülemedi döner (sessiz atlamaz).
+- 🔴 **Dürüst sınır — cevap anahtarı:** kör istem `beklenen.json`'u taşımaz, ama yargıç oturumu dosya sistemini **okuyabilir**;
+  cevap anahtarını kendi arayıp bulan (ya da örnekleri ezberleyen) bir yargıcı bu sınav **ölçmez**. Bu bir sınırdır, kapı değil;
+  kümenin gücü örnek sayısıyla ve örnekler yenilendikçe artar.
+
+Sınav: `scripts/diploma.test.sh` (hermetik sahte yargıçlar + mutantlar). Ölçer: gerçek yargıçla 6/6 (PR #412 kanıtı).
 
 ## Tasarım-notu — dış-araç kararı (2026-07, DİVAN K5)
 
