@@ -1,0 +1,28 @@
+$ bash /config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/bekci-gecikme.test.sh
+# rc=0 sure=1.2s zaman=2026-10-22T15:10:36+03:00
+--- stdout ---
+── G formül: kutu adından sabit gecikme, satıra düz rakam
+  ✓ G1 code → 10 sn (cloudtop crontab-abc ile aynı sayı)
+  ✓ G1b akar → 7 · huma → 33 · nova → 5
+  ✓ G1c aynı kutu iki kurulumda aynı sayı (rastgele değil)
+  ✓ G2 satırda '%' YOK (crontab'da satır sonu demektir)
+  ✓ G2b önek 'sleep N && ' (';' değil: canlılık envanteri ilk ';'den keser)
+  ✓ G2c satır işaretle bitiyor (bekci_kurulu eşleşir)
+── G 17 kutu: aralık ve dağılım
+  ✓ G3 17 kutunun hepsinde sayı var
+  ✓ G3b hepsi 5-54 sn aralığında
+  ✓ G3c tek saniyede en çok 2 kutu (eskiden 17'si :00'da)
+── G eski gecikmesiz satır kurulumda yenisine çevrilir
+  ✓ G4 eski satır kalmadı
+  ✓ G4b yeni (gecikmeli) satır TEK
+  ✓ G4c öteki satırlar korundu
+  ✓ G4d 'canlı crontab düzeltildi' dedi
+  ✓ G4e ikinci kurulum hiçbir şey değiştirmez (kararlı)
+  ✓ G5 açılış satırı gecikme önekini ALMADI
+── mutasyon (kopya üstünde)
+  ✓ M1 gecikme öneki yok (eski satır): mutant ısırıldı
+  ✓ M2 '&&' yerine ';': mutant ısırıldı
+  ✓ M3 formül kutu adını kullanmıyor (her kutu aynı saniye): mutant ısırıldı
+
+GECEN=18 DUSEN=0
+--- stderr ---

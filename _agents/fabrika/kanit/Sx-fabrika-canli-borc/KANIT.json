@@ -1,0 +1,76 @@
+{
+  "is": "Sx-fabrika-canli-borc",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-22T01:07:08+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapi-test",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-test-sonra.txt",
+      "sha256": "c078ba1e16fa70d6d78ca79222fc7851d2e51e16e7ea5d488f158d04519f6e66",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T01:06:56+03:00",
+      "sure_sn": 32.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c520acc8f9604f3bb10d8f773d369883"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-test",
+      "asama": "sonra",
+      "dosya": "olcum-kart-test-sonra.txt",
+      "sha256": "6dd048cbe9b842082f51a4ba5407c2d21572dc8d33978a9df9162df5f0fdd459",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T01:07:08+03:00",
+      "sure_sn": 12.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "663c6a71ce5745538d1a055e70ffcc8d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kanit-test",
+      "asama": "sonra",
+      "dosya": "olcum-kanit-test-sonra.txt",
+      "sha256": "1dfe3b951f1e185f7a2500c99fa1e4f35cc966931bb63745c6451e48205bd4db",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T00:59:20+03:00",
+      "sure_sn": 33.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "5b130b948015411785376de6677c292d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-test",
+      "asama": "once",
+      "dosya": "olcum-kapi-test-once.txt",
+      "sha256": "9d97d478290c5502a4a553eb432f9ab95798ccfd809795484cf0f50347aa5ec8",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/onceki/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-22T01:03:28+03:00",
+      "sure_sn": 58.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "0b7b61849f6f44c092d3941d6afa60b6"
+    }
+  ],
+  "imza": "1508a760295940c877292fca438686f0845838d16828ce5d8b489af4c3631169"
+}

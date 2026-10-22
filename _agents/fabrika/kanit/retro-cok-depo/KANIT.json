@@ -1,0 +1,164 @@
+{
+  "is": "retro-cok-depo",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-20T21:26:28+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "retro-sinavi",
+      "asama": "once",
+      "dosya": "olcum-retro-sinavi-once.txt",
+      "sha256": "3472d839114ea8001ddba98c2d8c5796c8833f2263ab55ad7ebb4cb51443fec9",
+      "komut": [
+        "bash",
+        "retro/scripts/retro.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-20T21:20:18+03:00",
+      "sure_sn": 3.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "be120fe6a7c84995946bae2946338a11"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-olc",
+      "asama": "once",
+      "dosya": "olcum-canli-olc-once.txt",
+      "sha256": "d7bb9e9747dd4c406bed7d6f957da616143909cb37b607e8daf3f7adaa91a8fe",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/retro-cok-depo/canli-olc.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/retro-eski.py",
+        "MİRAHUR:2026-W42",
+        "HENDESE:2026-W42",
+        "BÂNİ:2026-W42",
+        "MİRAHUR:2026-W43"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T21:21:38+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c9ff891aa20e4d0cb1e9ed6fc8089e99"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-olc",
+      "asama": "sonra",
+      "dosya": "olcum-canli-olc-sonra.txt",
+      "sha256": "7fc3e666e3dd53f0705a54a2637b115309786effdcac50db391e77bf4b78f47a",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/retro-cok-depo/canli-olc.sh",
+        "retro/scripts/retro.py",
+        "MİRAHUR:2026-W42",
+        "HENDESE:2026-W42",
+        "BÂNİ:2026-W42",
+        "MİRAHUR:2026-W43"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T21:21:39+03:00",
+      "sure_sn": 0.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "0aa560ace3844c0699197d26714381ae"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "retro-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-retro-sinavi-sonra.txt",
+      "sha256": "55c9db5e47b4942a3327771d39bbdb0c2819d2efae6c0845ed92da913b00aa33",
+      "komut": [
+        "bash",
+        "retro/scripts/retro.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T21:22:02+03:00",
+      "sure_sn": 3.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "7183ce278f0a44cf81289f5c0946af39"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "retro-sinavi-v2",
+      "asama": "sonra",
+      "dosya": "olcum-retro-sinavi-v2-sonra.txt",
+      "sha256": "76fde1b5ce30b23411f7d42a066cb06657f888bea428693ee5e0009f9b29f054",
+      "komut": [
+        "bash",
+        "retro/scripts/retro.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T21:24:42+03:00",
+      "sure_sn": 3.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "422dbbee96ca49b888fcfa2f44e85630"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-olc-v2",
+      "asama": "sonra",
+      "dosya": "olcum-canli-olc-v2-sonra.txt",
+      "sha256": "9a742b100874d5b534b4afe9e7a121f743784d19c075f46956896e24023f6882",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/retro-cok-depo/canli-olc.sh",
+        "retro/scripts/retro.py",
+        "MİRAHUR:2026-W42",
+        "HENDESE:2026-W42",
+        "BÂNİ:2026-W42",
+        "MİRAHUR:2026-W43"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T21:24:43+03:00",
+      "sure_sn": 1.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "695c9329d9f440179d530d5975a988b5"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "retro-sinavi-v3",
+      "asama": "sonra",
+      "dosya": "olcum-retro-sinavi-v3-sonra.txt",
+      "sha256": "d94264bd41df81fff4e50077a45bcd1b9df0bdf810d65fd8aa5492065b8ef0bf",
+      "komut": [
+        "bash",
+        "retro/scripts/retro.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T21:26:27+03:00",
+      "sure_sn": 3.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "cf98c8b74726415092c04d4a0153d011"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "canli-olc-v3",
+      "asama": "sonra",
+      "dosya": "olcum-canli-olc-v3-sonra.txt",
+      "sha256": "320c3175a63e37c7fcb6377f3c82df4d30cd6862e13856d09fed432e00a87590",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/retro-cok-depo/canli-olc.sh",
+        "retro/scripts/retro.py",
+        "MİRAHUR:2026-W42",
+        "HENDESE:2026-W42",
+        "BÂNİ:2026-W42",
+        "MİRAHUR:2026-W43"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T21:26:28+03:00",
+      "sure_sn": 1.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "fa6f5e50868e47a58b2470ac7f8664b6"
+    }
+  ],
+  "imza": "75a0a3fcb46606ec19d88c7653448e0f3de4c31b766161ebc3281ac882fbc2aa"
+}

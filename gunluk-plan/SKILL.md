@@ -1,7 +1,7 @@
 ---
 name: gunluk-plan
 description: Günün planı — elimizdeki işleri ÖLÇ, katma değer katacakları süz, Sultan-dilinde plan sun, onaydan sonra icra et. Sultan'ın her gün verdiği "işleri analiz et, bugün ne yapalım" isteğinin tek komutlu karşılığı.
-version: 1.5.0
+version: 1.7.0
 ---
 
 # /gunluk-plan — günün planı (ölç → süz → sun → icra)
@@ -123,32 +123,42 @@ bulunamazsa **ölçemedim** denir: unknown ≠ başkasının verisi.
 
 Elenenler **kayda geçer** ("bugün değil, çünkü …") — sessizce düşen iş kayıp iştir.
 
-## ADIM 3 — SUN (sabit format, kopyalanabilir)
+## ADIM 3 — SUN (ZORUNLU biçim — Sultan 18 Eki: "bu tarz bir görünüm istiyorum, tabloyu zorunlu gönder")
 
-Tek kod-bloğu içinde:
+Plan sunumu **kutulu tablodur**; tablosuz sunum plan sayılmaz. Tabloyu **elle çizme** — çıpayı yazdıktan sonra
+`cipa.sh tablo` basar (madde · sahip · durum işareti · kanıt; başlık satırında sayılar). Tek kod bloğu içinde,
+bu sırayla, başka bölüm eklemeden:
 
 ````
 ```
 📅 GÜNÜN PLANI · <YYYY-MM-DD>
-ölçüm: <N> aktif layiha · <N> kart · <N> açık PR · <N> okunmamış mesaj
+ölçüm: <N> aktif layiha · <N> kart · <N> açık PR · <N> okunmamış mesaj · ölçülemedi: <liste|yok>
 
-BUGÜN (sırayla) — standart tablo, `cipa.sh tablo` basar (çıpayı yazdıktan sonra):
-| # | Madde | Sahip | Durum | Kanıt |
-|---|---|---|---|---|
-| 1 | <Sultan-dilinde tek cümle — bitince ne değişir> | <MUAVİN|Sultan|birlikte> | açık | — |
+📋 BUGÜN · <YYYY-MM-DD> · <N> madde · <N> ✅ kapandı · <N> 🟡 yarım · <N> ⬜ açık      ← cipa.sh tablo çıktısı
+┌───┬──────────────────────────────────────────────┬─────────┬───────┬──────────┐
+│ # │ Madde                                        │ Sahip   │ Durum │ Kanıt    │
+├───┼──────────────────────────────────────────────┼─────────┼───────┼──────────┤
+│ 1 │ <Sultan-dilinde tek cümle — bitince ne değişir> │ MUAVİN  │  ⬜   │ —        │
+└───┴──────────────────────────────────────────────┴─────────┴───────┴──────────┘
 
-SENDE (tek tuşluk):
-• <karar/onay> — <bir cümle niçin sen>
-
-BUGÜN DEĞİL (gerekçesiyle):
-• <iş> — <niçin bugün değil>
+Günün kalanı (en çok 3): 1) … · 2) … · 3) …
+Bugün değil: <iş> (<niçin>) · <iş> (<niçin>)
 ```
 ````
 
-🔴 **Tablo TEK şablondur** (gorev_01M54TNAQV · Sultan 17 Eki): sütunlar madde · sahip · durum · kanıt,
-satır dilbilgisi `sema/bugun-maddesi.md`'de. `/gun-ortasi` ve kokpitin "Bugün" paneli aynı çıpayı aynı
-kuralla okur; tabloyu elle çizme, araçtan bas. Sahibi çıpaya yazarken maddeye `(sahip: <AD>)` ekle,
-havuzdaki görevle bağlıysa `gorev_…` kimliğini maddeye koy.
+İşaretler sabittir: ✅ kapandı · 🟡 yarım · ⬜ açık · ⏸ ertelendi (yalnız Sultan D1 ile) · ➖ geri alındı.
+Sahip sütunu çıpadaki `(sahip: <AD>)`den, kanıt sütunu `--kanit`ten gelir; "sen" / "ikimiz" de sahip olabilir.
+Düz (markdown) biçim yalnız makine/metin kanalı içindir: `cipa.sh tablo --md`. Kokpitin "Bugün" paneli aynı çıpayı
+`--json` ile okur; üçü de **aynı** satır dilbilgisini (`sema/bugun-maddesi.md`) kullanır.
+
+**Düğüm (1.7.0, SERDAR 20 Eki F3b):** maddede görev kimliği varsa tablo o görevin düğümünü defterden okur ve
+`görev …ABCDE ⛓ mmex …FGHIJ` yazar (bu görev mmex'in bekleyen işini açıyor; altta `⛓ = …` açıklaması). Defter
+okunamazsa satır aynen kalır, tablonun altında `ℹ düğüm bağları okunamadı (<sebep>)` yazar; görevi olmayan çıpada
+deftere hiç gidilmez. `--json` değişmez (kokpit kapısıyla ortak fikstür). Düğümü açan komut: `bulgu.sh yaz … --dugum`.
+
+🔴 **Niçin zorunlu (ölçüldü 18 Eki):** 1.5.0 düz tabloyu getirmişti ama sunum adımı onu "basılabilir" diyordu,
+"zorunlu" demiyordu; ajan sabah eski madde listesini sundu, Sultan ekranda tabloyu göremedi ve iki kez istedi
+("tıpkı gün ortası gibi vermedin"). Kural artık açık: **tablo yoksa sunum yok.**
 
 Sonra **tek soru**: *"Böyle mi ilerleyelim, yoksa sıralamayı değiştirelim mi?"*
 Şıklar 2-4 arası, biri `(önerim)` işaretli. Yığma yasak — bir mesaj, bir istek.

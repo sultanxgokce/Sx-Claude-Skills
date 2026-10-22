@@ -75,6 +75,48 @@ VAL="$TEK" _fn _env_yaz_olc ORNEK2 "$TMP/b.env" >/dev/null
 N="$(grep -c '^export ORNEK2=' "$TMP/b.env")"
 [ "$N" = "1" ] && gec T10 || kal T10 "aynı anahtardan $N satır var"
 
+# ── ATOMİK YAZIM (mmex 6d6ff3b1 · kök neden NARH 18 Eki): dosya yerinde kesilip yeniden yazılıyordu, kilit yoktu →
+#    aynı anda okuyan nöbet TRENDYOL satıcı kimliğini boş gördü (16 Eki). Beklenen: kilit + aynı dizinde geçici dosya + rename.
+echo "T11 · yazım dosyayı YERİNDE kesmez: yeni dosya yerine geçer (inode değişir)"
+VAL="$TEK" _fn _env_yaz_olc ATOM_A "$TMP/c.env" >/dev/null
+I1="$(stat -c '%i' "$TMP/c.env")"; VAL="$TEK" _fn _env_yaz_olc ATOM_B "$TMP/c.env" >/dev/null; I2="$(stat -c '%i' "$TMP/c.env")"
+[ "$I1" != "$I2" ] && gec T11 || kal T11 "inode aynı kaldı ($I1) — dosya yerinde kesilip yazılıyor"
+
+echo "T12 · eşzamanlı okuyucu HİÇ eksik anahtar görmez (180 KB dosya, 30 yazım sürerken)"
+for i in $(seq 1 3000); do printf 'export DOLGU_%04d=%s\n' "$i" "dolgu-degeri-uzun-bir-satir-olsun-ki-yazim-birden-cok-parcada-gitsin"; done > "$TMP/d.env"
+printf 'export SABIT=%s\n' "yerinde-kalmali" >> "$TMP/d.env"
+rm -f "$TMP/d.bitti"
+( for i in $(seq 1 30); do VAL="deger-$i" _fn _env_yaz_olc DEGISEN "$TMP/d.env" >/dev/null; done; : > "$TMP/d.bitti" ) &
+EKSIK="$(D="$TMP/d.env" B="$TMP/d.bitti" python3 -c '
+import os
+d,b=os.environ["D"],os.environ["B"]; okuma=eksik=0
+while not os.path.exists(b) or okuma==0:
+    try: s=open(d).read()
+    except FileNotFoundError: s=""
+    okuma+=1
+    if "export SABIT=" not in s: eksik+=1
+print("%d %d"%(eksik,okuma))')"
+wait
+set -- $EKSIK
+[ "$1" = "0" ] && [ "$2" -gt 0 ] && gec "T12 ($2 okuma, 0 eksik)" || kal T12 "$2 okumanın $1'inde SABIT anahtarı yoktu (yarım dosya okundu)"
+
+echo "T13 · iki eşzamanlı yazan birbirinin anahtarını SİLMEZ (kilit)"
+: > "$TMP/e.env"
+( for i in $(seq 1 15); do VAL="x" _fn _env_yaz_olc "BIR_$i" "$TMP/e.env" >/dev/null; done ) &
+( for i in $(seq 1 15); do VAL="y" _fn _env_yaz_olc "IKI_$i" "$TMP/e.env" >/dev/null; done ) &
+wait
+N="$(grep -cE '^export (BIR|IKI)_[0-9]+=' "$TMP/e.env")"
+[ "$N" = "30" ] && gec T13 || kal T13 "30 anahtardan $N kaldı — eşzamanlı yazan birbirini ezdi"
+
+echo "T14 · env yolu bir BAĞ (symlink) ise bağ korunur, hedef güncellenir; artık geçici dosya kalmaz"
+printf 'export ESKI=1\n' > "$TMP/gercek.env"; ln -s "$TMP/gercek.env" "$TMP/bag.env"
+VAL="$TEK" _fn _env_yaz_olc YENI "$TMP/bag.env" >/dev/null
+[ -L "$TMP/bag.env" ] && grep -q '^export YENI=' "$TMP/gercek.env" && grep -q '^export ESKI=' "$TMP/gercek.env" \
+  && gec T14 || kal T14 "bağ bozuldu ya da hedef güncellenmedi"
+ARTIK="$(find "$TMP" -maxdepth 1 -name '.*.env.*' | wc -l | tr -d ' ')"
+[ "$ARTIK" = "0" ] && gec T14b || kal T14b "$ARTIK artık geçici dosya kaldı"
+P="$(stat -c '%a' "$TMP/gercek.env")"; [ "$P" = "600" ] && gec T14c || kal T14c "hedef izni $P"
+
 echo
 echo "SONUÇ: $G geçti · $K kaldı"
 [ "$K" -eq 0 ]

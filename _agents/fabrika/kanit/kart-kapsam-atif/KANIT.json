@@ -1,0 +1,66 @@
+{
+  "is": "kart-kapsam-atif",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-20T18:23:27+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapsam",
+      "asama": "once",
+      "dosya": "olcum-kapsam-once.txt",
+      "sha256": "5bac029f0b1bc554dc84b2e3574ce3ba2a3a7b86475784ab279c1fd69d26affe",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kart-kapsam-atif/kapsam-olcer.sh",
+        "yazilim-fabrikasi/scripts/kart.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T18:21:21+03:00",
+      "sure_sn": 1.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b04c312b8b0c4ed09eab21c11cb40e38"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapsam",
+      "asama": "sonra",
+      "dosya": "olcum-kapsam-sonra.txt",
+      "sha256": "586a4ee4fb5a8274dbc985963c3279ea041d817e8cb529e51e1bb7cca25c2f94",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kart-kapsam-atif/kapsam-olcer.sh",
+        "yazilim-fabrikasi/scripts/kart.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T18:23:02+03:00",
+      "sure_sn": 1.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "425325e670e2477c8dc32e71e91d8cd2"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sinavi-sonra.txt",
+      "sha256": "04c88373c04c60ec96c7464810e956c8ebedc5a0f32498afd26ad69e9323ae08",
+      "komut": [
+        "python3",
+        "_agents/fabrika/kanit/kart-kapsam-atif/bolum-olcer.py",
+        "T13b",
+        "mutant '",
+        "--",
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T18:23:27+03:00",
+      "sure_sn": 5.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "5ff6668c54fa4d91911bbdb4157ee4b2"
+    }
+  ],
+  "imza": "b8111022178594764a5c8a17f386b1664512a99703e9793a16a055a2209cab93"
+}

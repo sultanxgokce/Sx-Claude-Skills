@@ -1,0 +1,6 @@
+$ bash _agents/fabrika/kanit/retro-doldur-kipi/esz.sh /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/retro-sabitad.py
+# rc=1 sure=0.7s zaman=2026-10-20T17:46:24+03:00
+--- stdout ---
+40 eşzamanlı dolum: düşen=1 · geride kalan geçici dosya=0
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.ymrLJnX3nO/bos/_agents/handoff/retro/2026-W42/X.md.yeni' -> '/tmp/tmp.ymrLJnX3nO/bos/_agents/handoff/retro/2026-W42/X.md'
+--- stderr ---

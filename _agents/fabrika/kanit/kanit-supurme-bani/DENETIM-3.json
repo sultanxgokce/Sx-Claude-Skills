@@ -1,0 +1,38 @@
+{
+  "tur": 3,
+  "is": "kanit-supurme-bani",
+  "pr": "387",
+  "yazan": "claude",
+  "denetci": "claude (haiku) (YEDEK GÖZ: codex düştü (2 deneme, rc=1) · yazandan farklı yeni oturum + farklı model kademesi [yazan: sonnet] · Sultan Y0006)",
+  "zaman": "2026-10-20T17:34:28+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": "codex düştü (2 deneme, rc=1)",
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": "haiku",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 10833,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 11,
+    "bayt": 19428
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Bu turda üretim kodu değişmemiş; fark yalnız kanıt dosyalarından oluşuyor. Ölçüm çiftleri, önceki turda açık kalan terminal-koltuk-adi alanının sonradan kapandığını gösteriyor (\"bitmiş işlerimin açık alanı 2/2\" → \"0/2\"), üç kanıt dosyası da 0/3'ten 3/3 birebir duruma geçmiş. Kod puanı 4: ölçüm betikleri (olc.sh, alan.py) repo dışında /tmp altında olduğu için içeriğini doğrulayamadım ve terminal-koltuk-adi için KART.json kanıtta yok.",
+    "bulgular": [
+      {
+        "ne": "Kanıt ölçümü terminal-koltuk-adi alanı için KART.json kopyasını listelemiyor; iş kartı ise \"kart kopyaları\" (çoğul) diyor. Kart kopyasının bu alanda hiç olmadığı ya da kapsam dışı bırakıldığı kanıtta yazmıyor.",
+        "kanit": "olcum-kanit-dosyalari-sonra.txt: yalnız \"pano-resim-hiz DENETIM-1.json\", \"pano-resim-hiz KART.json\", \"terminal-koltuk-adi DENETIM-3.json\" satırları var; \"SONUÇ: 3/3 dosya birebir\". Önceki tur ile aynı üç dosya.",
+        "konum": "olcum-kanit-dosyalari-sonra.txt (stdout); iş kartı \"cumle\" alanı",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı (kanit.py/0.5.0), sha256'lar ölçüm dosyalarıyla eşleşiyor görünüyor, sarı (rc=3) kayıt yok. Dört ölçümden ikisi kırmızıdan yeşile geçen çift (kanıt dosyaları 0/3→3/3; eski alanlar 2/2→0/2). Önceki turdaki \"terminal-koltuk-adi hâlâ açık\" bulgusu 17:33 ölçümüyle çürümüş durumda; eski alanların kapandığı bu ölçümle kanıtlı. Eksik kalan: betiklerin içeriği ve imza doğrulaması bu konteynerde yapılamadı; kanıt listesi üç dosyayı kapsıyor, kart kopyası kapsamı belirsiz."
+  }
+}

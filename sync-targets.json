@@ -211,6 +211,9 @@
     "canli-sayfa": [
       "_global"
     ],
+    "tarif-kaydi": [
+      "_global"
+    ],
     "soluklan": [
       "_global"
     ],
@@ -230,6 +233,9 @@
       "_global"
     ],
     "hafta-kapanis": [
+      "_global"
+    ],
+    "baglam-karti": [
       "_global"
     ]
   }

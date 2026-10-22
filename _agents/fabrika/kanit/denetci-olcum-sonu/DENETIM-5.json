@@ -1,0 +1,38 @@
+{
+  "tur": 5,
+  "is": "denetci-olcum-sonu",
+  "pr": "392",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-20T19:07:29+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 34714,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 12,
+    "bayt": 53506
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Denetçi uzun ölçümde başı, gerçek atlanan sayısını, ortadaki SONUÇ/✗ satırlarını, stdout sonunu ve stderr sonunu 60 satırlık tavan içinde taşıyor; 0.10.6 sürümü ve güçlü sınavlar talebin ana yönünü karşılıyor. Önce kısa dosyanın gerçekten aynen aktarılması şartını çözün: son satır sonu bulunmayan kısa dosyaya yeni satır ekleniyor, dolayısıyla içerik bayt bayt aynı kalmıyor.",
+    "bulgular": [
+      {
+        "ne": "İş kartındaki “kısa dosya aynen” şartına rağmen son satır sonu olmayan kısa ölçüm değiştirilerek sonuna yeni satır ekleniyor.",
+        "kanit": "Üretim kodunda kısa yol `HAM if HAM.endswith(\"\\n\") else HAM + \"\\n\"` yazıyor. O12 de `son-satir-sonu-yok` girdisinin çıktısını sonuna `\\n` eklenmiş metinle karşılaştırarak bu değişikliği açıkça onaylıyor; dolayısıyla sınav karttaki mutlak “aynen” şartını değil, istisnalı davranışı ölçüyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh: `olcum_ozeti` kısa-dosya dalı; yazilim-fabrikasi/scripts/denetci.test.sh: O12",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önce/sonra ölçüm çifti sürümün 0.10.5’ten 0.10.6’ya çıktığını ve sonuç satırının HAYIR’dan EVET’e geçtiğini gösteriyor; T-OLCUM O1–O12 ile temel kırpma davranışlarını, gerçek atlanan sayısını, 60 satır tavanını ve stderr sonunu ölçüyor, mutantlar da sınav duyarlılığını destekliyor. Ancak O12, karttaki “kısa dosya aynen” ifadesini son satır sonu olmayan dosyalarda gevşettiği için bu alt talebe olumlu kanıt oluşturmuyor; ayırıcı çakışması ise kart kararıyla `olcum-ayirici-cakismasi` işine daraltılmıştır ve bu puanı düşürmemiştir."
+  }
+}

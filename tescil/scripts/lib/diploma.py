@@ -1,0 +1,380 @@
+#!/usr/bin/env python3
+"""diploma.py — Mühürdarlık diploma sınavı (G13 · Sultan D1 22 Eki "Üç alana böl"; kadro şeması §1b · §6 · §7).
+
+Bir mühürdar, el kitabının yanındaki SINAV KÜMESİYLE sınanır: bilinen doğru, kusurlu ve uydurma teslimler. Her örnekte
+mühürdarın usulü (muhurdar.sh) GERÇEKTEN koşulur ve hüküm örneğin beklenen hükmüyle karşılaştırılır. Sonuç merkezdeki
+append-only diploma defterine şema §6 satırıyla yazılır; diploma SAKLANMAZ, defterden türetilir (durum).
+
+Komutlar:
+  sina  <personel> --kanit DIR [--uzmanlik muhurdarlik] [--kume DIR]
+  durum <personel> [--uzmanlik muhurdarlik] [--kume DIR]
+
+Örnek dizini (kume/<tür>/<ad>/): GEREKLILIK.md + rubrik dosyaları + is/ (teslim edilen iş ağacı) + beklenen.json
+  beklenen.json = {"verdikt": "GECTI"|"KALDI", "kaldi": [G…], "neden": "…"}
+  Doğru örnekte hüküm GECTI olmalı. Kusurlu/uydurma örnekte hüküm KALDI olmalı VE beklenen G'lerin hepsi düşmüş olmalı
+  (başka bir G'nin kazara düşmesi kusuru yakalamak sayılmaz). EMIN-DEGILIM (eskalasyon) hiçbir türde isabet sayılmaz.
+Geçme: her örnekte isabet (tam puan). Iskalanan örnek EN ÇOK BİR kez taze kökte yeniden koşulur: iki koşu aynı ıskayı verirse
+ıska tutarlıdır; çelişirse (biri isabet) örnek KARARSIZ → sınav ÖLÇÜLEMEDİ (rc 3), deftere sahte KALDI/GEÇTİ yazılmaz. Kümedeki bir tür boşsa sınav KOŞULMAZ (rc 3) — şema §1b: her tür ≥1 örnek.
+
+Ayrım (gerçek kayda dokunmaz): sınav koşusu geçici bir kökte yapılır; mühürdarın sicili (SICIL_DIZIN) yok bir dizine,
+tescil telemetrisi geçici köke yönlenir. Sınav teslimi gerçek bir mühür DEĞİLDİR, sicil penceresini ilerletmez.
+
+Durum türetimi (§6 · §7): koşu yok ya da SON koşu kaldı → yok (önceki diploma düşer) · koşunun el kitabı sürümü ≠ güncel
+sürüm ya da kümesi ≠ güncel küme → bayat (yeniden sınav) ·
+sicil askıda → askida · aksi → gecerli. Güncel sürüm katalogdan (§1: `catalog.json` → tescil version); katalog okunamazsa
+el kitabının SKILL.md sürümü, bu da söylenir. Sicil okunamazsa diploma GEÇERLİ sayılmaz: askıda olmadığı bilinmeden geçerli hükmü
+rahatlatan eksik veridir → ölçülemedi (rc 3), sebep söylenir (göz #412 tur 6). Yok / bayat hükümleri sicilden bağımsızdır.
+
+RC: 0 = geçti / geçerli · 1 = kaldı / yok · bayat · askida · 2 = kullanım · 3 = ölçülemedi (defter yok, küme eksik, koşu bozuk)
+Ortam: DIPLOMA_DEFTERI (varsayılan Nexus _agents/orchestration/diploma-defteri.jsonl) · TESCIL_KATALOG · SICIL_DIZIN (durum için)
+"""
+import argparse
+import datetime
+import fcntl
+import hashlib
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+SCRIPTS = os.path.dirname(HERE)
+EL_KITABI_KOK = os.path.dirname(SCRIPTS)
+DEFTER = os.environ.get("DIPLOMA_DEFTERI", "/config/projects/Nexus/_agents/orchestration/diploma-defteri.jsonl")
+KATALOG = os.environ.get("TESCIL_KATALOG", os.path.join(os.path.dirname(EL_KITABI_KOK), "catalog.json"))
+TURLER = ("dogru", "kusurlu", "uydurma")
+SINAV_YAZAN = "DIPLOMA-SINAVI"
+
+
+def hata(m, rc):
+    print(f"diploma: {m}", file=sys.stderr)
+    sys.exit(rc)
+
+
+def ad_kat(s):
+    """Türkçe harf katlama: 'MUHAKKİK' ile 'MUHAKKIK' aynı kişidir (sicil.py ile aynı kural)."""
+    return s.strip().replace("İ", "I").replace("ı", "i").casefold()
+
+
+def skill_surum():
+    try:
+        with open(os.path.join(EL_KITABI_KOK, "SKILL.md"), encoding="utf-8") as f:
+            for satir in f:
+                m = re.match(r"^version:\s*(\S+)", satir)
+                if m:
+                    return m.group(1)
+    except OSError:
+        pass
+    return None
+
+
+def guncel_surum():
+    """(sürüm, kaynak) — katalog önce (şema §1), yoksa SKILL.md."""
+    try:
+        with open(KATALOG, encoding="utf-8") as f:
+            for s in json.load(f).get("skills", []):
+                if s.get("id") == "tescil" and s.get("version"):
+                    return s["version"], "katalog"
+    except (OSError, ValueError):
+        pass
+    v = skill_surum()
+    return (v, "SKILL.md (katalog okunamadı)") if v else (None, "yok")
+
+
+def kume_ozeti(kume):
+    """{tür: [örnek dizini…]} ve kümenin içerik özeti (dosya yolu + bayt, sıralı)."""
+    ornekler, h = {}, hashlib.sha256()
+    for tur in TURLER:
+        d = os.path.join(kume, tur)
+        ornekler[tur] = sorted(os.path.join(d, x) for x in os.listdir(d) if os.path.isdir(os.path.join(d, x))) if os.path.isdir(d) else []
+    for kok, dizinler, dosyalar in os.walk(kume):
+        dizinler.sort()
+        for ad in sorted(dosyalar):
+            yol = os.path.join(kok, ad)
+            h.update(os.path.relpath(yol, kume).encode() + b"\0")
+            with open(yol, "rb") as f:
+                h.update(f.read() + b"\0")
+    return ornekler, h.hexdigest()
+
+
+def ornek_kos(personel, ornek, kok, kart):
+    """Bir örneği geçici kökte mühürdar usulüyle koşar → (isabet bool, ayrıntı dict)."""
+    with open(os.path.join(ornek, "beklenen.json"), encoding="utf-8") as f:
+        bek = json.load(f)
+    if bek.get("verdikt") not in ("GECTI", "KALDI"):
+        raise ValueError(f"{ornek}: beklenen.json verdikt GECTI|KALDI değil")
+    w = os.path.join(kok, "is", kart)
+    shutil.copytree(os.path.join(ornek, "is"), w)
+    g = ["git", "-C", w]
+    subprocess.run(g + ["init", "-q", "-b", "main"], check=True)
+    subprocess.run(g + ["add", "-A"], check=True)
+    subprocess.run(g + ["-c", "user.email=sinav@yerel", "-c", "user.name=sinav", "commit", "-qm", "sinav ornegi"], check=True)
+    k = os.path.join(kok, "_agents", "tescil", kart)   # GEREKLILIK + rubrikler iş ağacının DIŞINDA; telemetri = kok/_agents/tescil
+    os.makedirs(k)
+    for ad in os.listdir(ornek):
+        if os.path.isfile(os.path.join(ornek, ad)) and ad != "beklenen.json":
+            shutil.copy(os.path.join(ornek, ad), k)
+    out = os.path.join(k, "out")
+    env = dict(os.environ, AGENT_NAME=personel, SICIL_DIZIN=os.path.join(kok, "sicil-yok"))
+    p = subprocess.run(["bash", os.path.join(SCRIPTS, "muhurdar.sh"), kart, "--gereklilik", os.path.join(k, "GEREKLILIK.md"),
+                        "--worktree", w, "--out", out, "--yazan", SINAV_YAZAN], env=env, capture_output=True, text=True, stdin=subprocess.DEVNULL)
+    try:
+        with open(os.path.join(out, "muhur-ozet.json"), encoding="utf-8") as f:
+            oz = json.load(f)
+    except (OSError, ValueError):
+        oz = {}
+    verdikt, dusen = oz.get("verdikt"), list(oz.get("g_dusen") or [])
+    yargic, notlar = "", []   # hangi yargıç karar verdi + öznel G notları (MUHUR.md) — ıska/eskalasyonun sebebi kanıtta kalsın
+    try:
+        with open(os.path.join(out, "MUHUR.md"), encoding="utf-8") as f:
+            for satir in f:
+                if satir.startswith("yargic: "):
+                    yargic = satir[8:].strip()
+                elif re.match(r"^- G\d+: (GECTI|KALDI|EMIN-DEGILIM)", satir):
+                    notlar.append(satir[2:].strip()[:300])
+    except OSError:
+        pass
+    if bek["verdikt"] == "GECTI":
+        isabet = verdikt == "GECTI"
+    else:
+        isabet = verdikt == "KALDI" and set(bek.get("kaldi") or []) <= set(dusen)
+    return isabet, {"rc": p.returncode, "verdikt": verdikt, "g_dusen": dusen, "beklenen": bek["verdikt"],
+                    "beklenen_kaldi": bek.get("kaldi") or [], "isabet": isabet, "yargic": yargic, "oznel_notlar": notlar,
+                    "son_satir": (p.stdout.strip().splitlines() or [""])[-1][:300]}, out
+
+
+def defter_ekle(satir):
+    """Defter satırı YARIM KALMADAN eklenir (göz #412 tur 4): kilit altında boyut alınır, satır tek os.write ile yazılır;
+    hata ya da kısa yazımda dosya eski boyuna kesilir (rc 3) — yarım satır sonraki bütün durum sorgularını kilitlemez.
+    Önceki bir yarım satır satır sonu taşımıyorsa yeni satır ona yapışmasın diye önce satır sonu konur (bozuk satır yine
+    ayrı satırda durur ve durum onu 'bozuk: N' diye söyler)."""
+    veri = (json.dumps(satir, ensure_ascii=False) + "\n").encode("utf-8")
+    fd = os.open(DEFTER, os.O_RDWR | os.O_APPEND | os.O_CREAT, 0o644)
+    try:
+        fcntl.flock(fd, fcntl.LOCK_EX)   # eşzamanlı sınavların satırları karışmasın
+        boy = os.fstat(fd).st_size
+        if boy and os.pread(fd, 1, boy - 1) != b"\n":
+            veri = b"\n" + veri
+        try:
+            if os.write(fd, veri) != len(veri):
+                raise OSError("kısa yazım")
+            os.fsync(fd)
+        except OSError as e:
+            os.ftruncate(fd, boy)
+            hata(f"deftere yazılamadı ({e}) — defter eski hâline kesildi, satır yazılmadı ({DEFTER})", 3)
+    finally:
+        os.close(fd)   # kilit fd ile bırakılır
+
+
+def defter_oku():
+    """(koşu satırları, AÇIK bozuk satır numaraları) | (None, []) — bozuk satır SESSİZCE atlanmaz, çağıran söyler.
+    Ters kayıtla kapatılmış bozuk satır (`tur: bozuk-ters`, göz #412 tur 5) açık sayılmaz; ters kayıtlar koşu değildir."""
+    if not os.path.isfile(DEFTER):
+        return None, []
+    satirlar, bozuk = [], []
+    with open(DEFTER, encoding="utf-8") as f:
+        for no, s in enumerate(f, 1):
+            s = s.strip()
+            if s:
+                try:
+                    d = json.loads(s)
+                    if not isinstance(d, dict):
+                        raise ValueError
+                    satirlar.append(d)
+                except ValueError:
+                    bozuk.append(no)
+    kapali = {d.get("satir") for d in satirlar if d.get("tur") == "bozuk-ters"}
+    return [d for d in satirlar if not d.get("tur")], [n for n in bozuk if n not in kapali]
+
+
+def bozuk_kapat(a):
+    """Yarım kalmış (süreç ölümü vb.) bozuk satıra TERS KAYIT: satır silinmez, durum onu artık açık saymaz. Satırın gerçekten
+    açık bozuk olduğu doğrulanır; içeriğinin özeti ters kayda yazılır (hangi satırın kapatıldığı sonradan da görülsün)."""
+    satirlar, bozuk = defter_oku()
+    if satirlar is None:
+        hata(f"diploma defteri yok: {DEFTER}", 3)
+    if a.satir not in bozuk:
+        hata(f"satır {a.satir} açık bozuk satır değil (açık bozuk: {', '.join(map(str, bozuk)) or 'yok'}) — ters kayıt yazılmadı", 2)
+    if len(a.gerekce.strip()) < 10:
+        hata("--gerekce en az 10 karakter: neden bozuk (ör. 'sınav süreci yazım ortasında öldü')", 2)
+    with open(DEFTER, encoding="utf-8") as f:
+        ham = f.read().split("\n")[a.satir - 1]
+    defter_ekle({"ts": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="microseconds").replace("+00:00", "Z"),
+                 "tur": "bozuk-ters", "satir": a.satir, "icerik_sha": hashlib.sha256(ham.encode("utf-8")).hexdigest()[:16],
+                 "gerekce": a.gerekce.strip()})
+    _, kalan = defter_oku()
+    print(f"diploma: satır {a.satir} ters kayıtla kapatıldı · açık bozuk kalan: {len(kalan)}")
+    return 0
+
+
+def sina(a):
+    if ad_kat(a.personel) == ad_kat(SINAV_YAZAN):
+        hata("sınavın yazan adı personel adı olamaz", 2)
+    if not os.path.isdir(os.path.dirname(DEFTER) or "."):
+        hata(f"diploma defterinin dizini yok: {os.path.dirname(DEFTER)} — ölçülemedi, sınav koşulmadı", 3)
+    kume = os.path.abspath(a.kume or os.path.join(EL_KITABI_KOK, "sinav"))
+    ornekler, kume_sha = kume_ozeti(kume) if os.path.isdir(kume) else ({t: [] for t in TURLER}, "")
+    bos = [t for t in TURLER if not ornekler[t]]
+    if bos:
+        hata(f"sınav kümesi eksik ({kume}): {', '.join(bos)} türünde örnek yok — şema §1b her tür ≥1 ister; sınav koşulmadı", 3)
+    surum, surum_kaynak = guncel_surum()
+    if not surum:
+        hata("el kitabı sürümü okunamadı (katalog da SKILL.md de yok) — ölçülemedi", 3)
+    ts = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+    kanit = os.path.abspath(a.kanit)   # zorunlu: defter satırı bu yolu taşır, geçici dizin kanıt sayılmaz
+    os.makedirs(kanit, exist_ok=True)
+    sonuc, ayrinti = {}, {}
+    kok = tempfile.mkdtemp(prefix="diploma-kok-")
+    kararsiz = []
+    try:
+        for tur in TURLER:
+            n = 0
+            for o in ornekler[tur]:
+                kart = f"sinav-{tur}-{os.path.basename(o)}"
+                try:
+                    isabet, ay, out = ornek_kos(a.personel, o, kok, kart)
+                except (OSError, ValueError, subprocess.CalledProcessError) as e:
+                    hata(f"örnek koşulamadı ({o}): {e} — sınav ölçülemedi, deftere yazılmadı", 3)
+                if ay["rc"] == 2 or ay["verdikt"] is None:
+                    hata(f"örnek koşusu bozuk ({kart}: rc {ay['rc']}, mühür özeti yok) — {ay['son_satir']}; deftere yazılmadı", 3)
+                if os.path.isfile(os.path.join(out, "MUHUR.md")):
+                    shutil.copy(os.path.join(out, "MUHUR.md"), os.path.join(kanit, f"{kart}.MUHUR.md"))
+                if not isabet:
+                    # yargıç dalgalanması (SERDAR, göz #412 tur 3): ıskada EN ÇOK BİR yeniden koşu, taze kökte. İkisi aynı derse hüküm
+                    # tutarlıdır (ıska); çelişirse örnek KARARSIZ → sınav ÖLÇÜLEMEDİ (sahte KALDI da sahte GEÇTİ de yazılmaz).
+                    try:
+                        isabet2, ay2, out2 = ornek_kos(a.personel, o, kok, kart + "-yeniden")
+                    except (OSError, ValueError, subprocess.CalledProcessError) as e:
+                        hata(f"örnek yeniden koşulamadı ({o}): {e} — sınav ölçülemedi, deftere yazılmadı", 3)
+                    if os.path.isfile(os.path.join(out2, "MUHUR.md")):
+                        shutil.copy(os.path.join(out2, "MUHUR.md"), os.path.join(kanit, f"{kart}.yeniden.MUHUR.md"))
+                    ay["yeniden"] = {k_: ay2[k_] for k_ in ("verdikt", "g_dusen", "isabet", "yargic", "oznel_notlar")}
+                    print(f"    ↻ yeniden koşu: hüküm {ay2['verdikt']}{' · yargıç ' + ay2['yargic'] if ay2['yargic'] else ''}"
+                          f" → {'ÇELİŞTİ (kararsız)' if isabet2 else 'aynı ıska (tutarlı)'}")
+                    if isabet2:
+                        kararsiz.append(kart)
+                n += isabet
+                ayrinti[kart] = ay
+                print(f"  {'✓' if isabet else '✗'} {tur}/{os.path.basename(o)} · beklenen {ay['beklenen']}"
+                      f"{' ' + ','.join(ay['beklenen_kaldi']) if ay['beklenen_kaldi'] else ''} · hüküm {ay['verdikt']}"
+                      f"{' (düşen ' + ','.join(ay['g_dusen']) + ')' if ay['g_dusen'] else ''}"
+                      f"{' · yargıç ' + ay['yargic'] if ay['yargic'] else ''}")
+                if not isabet:
+                    for n_ in ay["oznel_notlar"]:
+                        print(f"      {n_}")
+            sonuc[tur] = f"{n}/{len(ornekler[tur])}"
+        tel = os.path.join(kok, "_agents", "tescil", "telemetri.jsonl")   # telemetri GEÇİCİ köke gitti mi — say, kanıta yaz
+        tel_n = sum(1 for _ in open(tel, encoding="utf-8")) if os.path.isfile(tel) else 0
+    finally:
+        shutil.rmtree(kok, ignore_errors=True)
+    gecti = all(s.split("/")[0] == s.split("/")[1] for s in sonuc.values())
+    if kararsiz:
+        with open(os.path.join(kanit, "sonuc.json"), "w", encoding="utf-8") as f:
+            json.dump({"personel": a.personel, "uzmanlik": a.uzmanlik, "ts": ts, "olculemedi": "kararsiz", "kararsiz": kararsiz,
+                       "ornekler": ayrinti}, f, ensure_ascii=False, indent=1)
+        hata(f"yargıç KARARSIZ ({', '.join(kararsiz)}: iki koşu çelişti) — sınav ÖLÇÜLEMEDİ, deftere yazılmadı; kanıt {kanit}", 3)
+    with open(os.path.join(kanit, "sonuc.json"), "w", encoding="utf-8") as f:
+        json.dump({"personel": a.personel, "uzmanlik": a.uzmanlik, "ts": ts, "sonuc": sonuc, "ornekler": ayrinti,
+                   "el_kitabi_surum": surum, "surum_kaynagi": surum_kaynak, "kume_sha": kume_sha,
+                   "telemetri_gecici_satir": tel_n}, f, ensure_ascii=False, indent=1)
+    satir = {"ts": ts, "personel": a.personel, "uzmanlik": a.uzmanlik, "el_kitabi": "tescil", "el_kitabi_surum": surum,
+             "kume_sha": kume_sha, "sonuc": sonuc, "gecti": "e" if gecti else "h", "kanit": kanit}
+    defter_ekle(satir)
+    geri, bozuk = defter_oku()
+    if satir not in (geri or []):   # yazdığını geri oku (EKSİK VERİYİ ÖNCE SINA)
+        hata(f"deftere yazılan satır geri okunamadı ({DEFTER})", 3)
+    print(f"diploma: {a.personel} · {a.uzmanlik} · el kitabı tescil {surum} ({surum_kaynak}) · "
+          f"doğru {sonuc['dogru']} · kusurlu {sonuc['kusurlu']} · uydurma {sonuc['uydurma']} → {'GEÇTİ' if gecti else 'KALDI'}")
+    print(f"diploma: deftere yazıldı → {DEFTER} · kanıt {kanit}" + (f" · ⚠ bozuk: {len(bozuk)} satır (defterde, bu yazım dışı)" if bozuk else ""))
+    return 0 if gecti else 1
+
+
+def sicil_durumu(personel):
+    """(durum, sebep) — durum 'askida' | 'ders-cikarma' | 'temiz' | None (ölçülemedi; sebep söylenir, sessiz yutulmaz)."""
+    sicil = os.path.join(HERE, "sicil.py")
+    if not os.path.isfile(sicil):
+        return None, "sicil yazıcısı yok (lib/sicil.py)"
+    p = subprocess.run([sys.executable, sicil, "durum", personel, "--json"], capture_output=True, text=True, stdin=subprocess.DEVNULL)
+    try:
+        d = json.loads(p.stdout) if p.returncode == 0 else {}
+    except ValueError:
+        d = {}
+    if d.get("durum") in ("askida", "ders-cikarma", "temiz"):
+        return d["durum"], ""
+    return None, (p.stderr.strip().splitlines() or [f"rc {p.returncode}"])[-1].lstrip("✗ ")[:160]
+
+
+def durum(a):
+    """Diploma = bu personel × uzmanlık için SON koşu. Son koşu kaldıysa önceki geçen diploma düşmüştür (yeniden sınav
+    kaldırıldı). Geçen son koşu: el kitabı sürümü ya da sınav kümesi değiştiyse bayat; sicil askıdaysa askıda."""
+    satirlar, bozuk = defter_oku()
+    if satirlar is None:
+        hata(f"diploma defteri yok: {DEFTER} — ölçülemedi (yok DEĞİL)", 3)
+    if bozuk:
+        # bozuk satır bir koşunun yarım yazımı olabilir: hangisinin SON koşu olduğu bilinemez → hüküm yok (yutma = rahatlatan eksik veri)
+        hata(f"diploma defterinde bozuk: {len(bozuk)} (satır {', '.join(map(str, bozuk[:5]))}) — son koşu belirlenemez, ölçülemedi; "
+             f"satır ters kayıtla kapatılır, silinmez: diploma.sh bozuk-kapat <satır> --gerekce \"…\"", 3)
+    benim = [s for s in satirlar if ad_kat(str(s.get("personel", ""))) == ad_kat(a.personel) and s.get("uzmanlik") == a.uzmanlik]
+    sic, sebep = sicil_durumu(a.personel)
+    sicil_notu = f"sicil {sic}" if sic else f"sicil ölçülemedi ({sebep})"
+    if not benim:
+        print(f"diploma: {a.personel} · {a.uzmanlik} · durum: yok · hiç sınav koşusu yok · {sicil_notu}")
+        return 1
+    d = benim[-1]
+    if d.get("gecti") != "e":
+        onceki = [s for s in benim[:-1] if s.get("gecti") == "e"]
+        ek = f" — önceki diploma ({onceki[-1]['ts'][:10]}) DÜŞTÜ" if onceki else ""
+        print(f"diploma: {a.personel} · {a.uzmanlik} · durum: yok · son koşu {d['ts'][:10]} kaldı "
+              f"({', '.join(f'{k} {v}' for k, v in d.get('sonuc', {}).items())}){ek} · {sicil_notu} · gereken: yeniden sınav")
+        return 1
+    surum, surum_kaynak = guncel_surum()
+    kume = os.path.abspath(a.kume or os.path.join(EL_KITABI_KOK, "sinav"))
+    kume_sha = kume_ozeti(kume)[1] if os.path.isdir(kume) else None
+    if sic == "askida":
+        hal, gereken = "askida", "el kitabı güncellemesi + yeniden sınav (S10)"
+    elif not surum or not kume_sha:
+        print(f"diploma: {a.personel} · güncel {'el kitabı sürümü' if not surum else 'sınav kümesi (' + kume + ')'} okunamadı — ölçülemedi", file=sys.stderr)
+        return 3
+    elif d.get("el_kitabi_surum") != surum:
+        hal, gereken = "bayat", f"el kitabı {d.get('el_kitabi_surum')} → {surum}: yeniden sınav"
+    elif d.get("kume_sha") != kume_sha:
+        hal, gereken = "bayat", f"sınav kümesi değişti ({str(d.get('kume_sha'))[:12]} → {kume_sha[:12]}): yeniden sınav"
+    elif sic is None:   # göz #412 tur 6: askıda olmadığı bilinmeden 'geçerli' denmez
+        print(f"diploma: {a.personel} · {a.uzmanlik} · durum: ölçülemedi · sınav {d['ts'][:10]} geçti, el kitabı ve küme güncel; "
+              f"ama {sicil_notu} — askıda olmadığı bilinmeden geçerli denmez")
+        return 3
+    else:
+        hal, gereken = "gecerli", ""
+    print(f"diploma: {a.personel} · {a.uzmanlik} · durum: {hal} · sınav {d['ts'][:10]} · el kitabı {d.get('el_kitabi_surum')} "
+          f"(güncel {surum}, {surum_kaynak}) · {sicil_notu}{' · gereken: ' + gereken if gereken else ''}")
+    return 0 if hal == "gecerli" else 1
+
+
+def main():
+    ap = argparse.ArgumentParser(prog="diploma")
+    alt = ap.add_subparsers(dest="komut", required=True)
+    s = alt.add_parser("sina")
+    s.add_argument("personel")
+    s.add_argument("--uzmanlik", default="muhurdarlik")
+    s.add_argument("--kume")
+    s.add_argument("--kanit", required=True)
+    d = alt.add_parser("durum")
+    d.add_argument("personel")
+    d.add_argument("--uzmanlik", default="muhurdarlik")
+    d.add_argument("--kume")
+    b = alt.add_parser("bozuk-kapat")
+    b.add_argument("satir", type=int)
+    b.add_argument("--gerekce", required=True)
+    a = ap.parse_args()
+    if a.komut == "bozuk-kapat":
+        sys.exit(bozuk_kapat(a))
+    if a.uzmanlik != "muhurdarlik":
+        hata(f"bilinmeyen uzmanlık: {a.uzmanlik} (bugün yalnız muhurdarlik'in sınav kümesi var)", 2)
+    sys.exit(sina(a) if a.komut == "sina" else durum(a))
+
+
+if __name__ == "__main__":
+    main()

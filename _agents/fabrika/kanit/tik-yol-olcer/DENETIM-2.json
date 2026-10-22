@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "tik-yol-olcer",
+  "pr": "394",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-20T18:48:40+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32094,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 12214
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Tarayıcıda tanım dosyasındaki yolları gerçekten yürüyen ölçer, ölçülememe davranışı ve yöntem/yol özeti taşıyan artefakt talebe uygun uygulanmış; önceki turun yüksek hedef hatası da `max(9, hedef+1)` ve bunu öldüren mutasyon sınavıyla kapanmış. Sağlam ve sarısız kanıt ana davranışları güçlü biçimde ölçüyor; yalnız viewport seçeneklerinin doğrulanmaması küçük bir üretim rötuşu bırakıyor.",
+    "bulgular": [
+      {
+        "ne": "`--genislik` ve `--yukseklik` değerleri tam ve pozitif sayı olarak doğrulanmıyor; boş, metinsel, sıfır veya negatif değerler JavaScript'te doğrudan viewport'a aktarılıp belgelenen “geçersiz girdi → rc 2” yolu yerine yakalanmamış Playwright hatası üretebilir.",
+        "kanit": "Kabuk seçenekleri değerleri denetlemeden `GEN`/`YUK` değişkenlerine alıyor; MJS tarafında `const W = +gen, H = +yuk` sonrasında değerler doğrudan `newPage({ viewport: { width: W, height: H } })` çağrısına veriliyor. Sunulan T2 yalnız bozuk yol tanımı ve hedef sınırını ölçüyor; viewport girdisi sınanmıyor.",
+        "konum": "ui-tasarim-akisi/arac/tik-olc.sh:17-18,24; ui-tasarim-akisi/arac/tik-olc.mjs:39-40; ui-tasarim-akisi/arac/tik-olc.test.sh:45-52",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçüm çifti elle kabul edilen sayılardan gerçek tarayıcı yürüyüşüne geçişi gösteriyor; 136,6 saniyelik yeşil koşum 26 kontrolle görünür, ekran dışı, gizli, eksik, örtülü ve yüksek hedefli yürünemeyen yolları, yöntem/yol kaydını ve tarayıcı yokluğu dalını ölçüyor. Mutasyon sınavları yedi temel iddianın gerçekten sınandığını gösteriyor; yalnız viewport girdi doğrulaması için kayıt bulunmuyor."
+  }
+}

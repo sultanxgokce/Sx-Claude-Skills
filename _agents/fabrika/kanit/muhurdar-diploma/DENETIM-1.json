@@ -1,0 +1,66 @@
+{
+  "tur": 1,
+  "is": "muhurdar-diploma",
+  "pr": "412",
+  "yazan": "claude",
+  "denetci": "claude (sonnet) (YEDEK GÖZ: codex düştü (2 deneme, rc=1) · yazandan farklı yeni oturum + farklı model kademesi [yazan: opus] · Sultan Y0006)",
+  "zaman": "2026-10-22T04:00:19+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": "codex düştü (2 deneme, rc=1)",
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": "sonnet",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 53874,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 12,
+    "bayt": 28692
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Talep istenen her parçayı karşılıyor: 6 örneklik küme, diploma.sh sina ve durum, §6 satırı ve geçerli/bayat/yok/askıda türetmesi. Önce/sonra ölçümü ve 28 kapılı sınav yeşil; lastik yargıç KALDI, gerçek yargıç GEÇTİ. Puan 4, çünkü durum türetiminde mantık boşlukları var ve askıda yolu yalnız sahte sicille sınandı.",
+    "bulgular": [
+      {
+        "ne": "durum, son GEÇEN koşuyu esas alıyor (gecen[-1]), sonradan gelen KALDI koşusunu yok sayıyor. Aynı sürümde yenilenen sınavı kaldıran bir mühürdarın diploması 'gecerli' görünmeye devam eder.",
+        "kanit": "lib/diploma.py durum(): `gecen = [s for s in benim if s.get('gecti')=='e']; d = gecen[-1]`. Kaldı satırı yalnız hiç geçen koşu yoksa dikkate alınıyor. diploma.test.sh bu durumu sınamıyor.",
+        "konum": "tescil/scripts/lib/diploma.py:durum",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Defterdeki kume_sha, durum'da güncel kümeyle karşılaştırılmıyor. Küme değişse (örn. yeni kusurlu örnek eklense) eski diploma 'gecerli' kalır. README bu özeti 'hangi kümeyle sınandığı' için tutuyor ama bayatlık yalnız el kitabı sürümüne bağlı.",
+        "kanit": "durum() yalnız `d.get('el_kitabi_surum') != surum` bakıyor. kume_sha okunmuyor; h2 kapısı yalnız sürüm değişimini sınıyor.",
+        "konum": "tescil/scripts/lib/diploma.py:durum · tescil/sinav/README.md",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Sicil ayrımı (sınav gerçek sicile yazmaz) sarı: mutant 'sicil-ayrimi-yok' ÖLÇÜLEMEDİ. muhurdar.sh bugün sicile yazmıyor, kapı e yalnız dosyanın değişmediğini ölçüyor. Telemetrinin geçici köke gittiği iddiası da hiçbir kapıda ölçülmüyor; kapı e yalnız sicil ve küme sha'sına bakıyor.",
+        "kanit": "olcum-diploma-sinavi-tek.txt: 'ÖLÇÜLEMEDİ mutant sicil-ayrimi-yok: muhurdar.sh sicile yazmıyor (yazıcı Sx #411)'. Kart cümlesi 'gerçek sicile ve telemetriye yazmadan' diyor.",
+        "konum": "tescil/scripts/diploma.test.sh (mutant sicil-ayrimi-yok, kapı e)",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Askıda yolu yalnız sahte sicil.py ile sınandı. Gerçek ortamda 'sicil ölçülemedi' çıkıyor (sicil durum --json kullanımı doğrulanmamış ya da sicil.py yok), yani canlıda askıda hiç görülmedi. Entegrasyon eksik; yazıcı Sx #411'e bağlı.",
+        "kanit": "olcum-diploma-sonra.txt: 'durum: gecerli … sicil ölçülemedi'. Kapı i sahte `print(json.dumps({'durum':'askida'}))` yazıyor.",
+        "konum": "tescil/scripts/lib/diploma.py:sicil_durumu · diploma.test.sh kapı i",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Personel adı sicilde var mı diye doğrulanmıyor; herhangi bir ad için diploma satırı yazılır. Deftere ekleme kilitsiz (eşzamanlı sina çağrılarında satır karışma riski; kısa tek write olduğundan düşük).",
+        "kanit": "sina(): yalnız SINAV_YAZAN ile çakışma denetleniyor. `open(DEFTER,'a')` kilitsiz.",
+        "konum": "tescil/scripts/lib/diploma.py:sina",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam. Önce (kırmızı, diploma yok) ile sonra (yeşil) ölçüm çifti var; sonra koşusu gerçek yargıçla yapılmış ve lastik yargıcın ıskalarını (kusurlu 1/2, uydurma 0/2) açıkça gösteriyor; gerçek defter önce/sonra aynı. Sarı olan tek kayıt mutant sicil-ayrimi-yok; bu ayrım yeşil sayılmamış, dürüstçe ÖLÇÜLEMEDİ yazılmış. Gerçek yargıç koşusu tek seferlik ve LLM tabanlı, bir örnekte codex zaman aşımı claude'a düşmüş; tekrarlanabilirlik için hermetik sahte yargıç testi var, bu yeterli."
+  }
+}

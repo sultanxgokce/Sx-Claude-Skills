@@ -1,0 +1,6 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/vc-sinav.sh
+# rc=0 sure=0.4s zaman=2026-10-21T23:07:15+03:00
+--- stdout ---
+vault-cek/scripts/vault-cek-tenant.test.sh rc=0 · SONUÇ: 12 geçti · 0 kaldı
+vault-cek/scripts/vault-cek-put.test.sh rc=0 · SONUÇ: 10 geçti · 0 kaldı
+--- stderr ---

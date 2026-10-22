@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "gunluk-plan-kutulu-tablo",
+  "pr": "369",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T15:08:35+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": null,
+  "yazan_model_kaynak": null,
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 44284,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 25879
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kutulu tablo varsayılan yapılmış, günlük plan ile gün ortası aynı çıktıya bağlanmış ve önceki turdaki ⏸ hizalama kusuru ayrıca sınanarak giderilmiş. İstenen şey yapılmış; ancak hücre kısaltma hesabı görünür genişlik yerine karakter sayısıyla kestiği için emoji içeren uzun gerçek veride kutu yeniden hizadan çıkabilir, önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "Uzun hücreleri kısaltan `kirp`, genişliği `_gen` ile denetledikten sonra metni `s[:n-1]` ile kod noktası sayısına göre kesiyor; hücre metninde iki sütunluk emoji varsa sonuç ayrılan görünür genişliği aşabilir ve sağ kenarı kaydırabilir.",
+        "kanit": "`kirp(s, n)` taşma halinde `s[:max(n - 1, 1)].rstrip() + '…'` döndürüyor; aynı dosyadaki `_gen` ise emoji ve işaretleri 2 hücre sayıyor. T27 yalnız `ornek-cipa.md` çıktısındaki satır genişliklerini karşılaştırıyor; verilen örneğin Madde/Sahip/Kanıt hücrelerinde iki hücrelik emoji bulunmadığından bu dal ölçülmüyor.",
+        "konum": "gunluk-plan/scripts/tablo.py: `tablo_kutu` içindeki `kirp`; gunluk-plan/scripts/cipa.test.sh:T27; olcum-tablo-sonra-kutulu-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; kayıtların tümü yeşil, sarı kayıt yok. Kutulu çıktı, düz `--md` karşılığı ve iki iş akışının sınavları mevcut; T27 önceki hizalama bulgusunu doğrudan ölçüyor. Bununla birlikte “önce” kaydı eski sürüm çıktısı değil yeni sürümün `--md` seçeneği ve ölçümde emoji içeren uzun hücre/kırpma vakası yok."
+  }
+}

@@ -1,0 +1,1 @@
+merkez /api/gorevler (Sultan'ın Görevler ekranının kaynağı) çalışılıyor: 1 [('Y7J3Q', 'BANI', 240)]

@@ -1,0 +1,11 @@
+$ bash _agents/fabrika/kanit/denetci-bitis-zili/zil-olcer.sh /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/fab-main/yazilim-fabrikasi/scripts
+# rc=1 sure=7.8s zaman=2026-10-21T20:01:20+03:00
+--- stdout ---
+── A · koşarken başladı izi
+  iz: YOK — bekleyen denetçinin başlayıp başlamadığını göremez
+── B · 6 sn süren denetçi, DENETCI_ZAMAN_ASIMI=2
+  bekleme: 6 sn · rc 0 · HAM'da ZAMAN AŞIMI: YOK
+── C · çıkışlarda zil (sahte aile-notify'a düşen satır)
+  rc 0 → 0 zil · rc 1 → 0 zil · rc 2 (kanıt yok) → 0 zil
+── SONUÇ: iz ✗ · zaman aşımı ✗ · her çıkışta zil ✗
+--- stderr ---

@@ -309,7 +309,7 @@ async function koltuklariYukle() {
   if (!liste.some((k) => k.ad === koltukSecili)) koltukSecili = '';
   koltukDogrulandi = true;
   const kac = (t) => String(t).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));   // ad artık '/' gibi karakter taşıyabilir → kaçışlı
-  sec.innerHTML = liste.map((k) => `<option value="${kac(k.ad)}"${(koltukSecili ? k.ad === koltukSecili : k.ana) ? ' selected' : ''}>${kac(k.ad)}${k.claude ? ' ●' : ''}</option>`).join('');
+  sec.innerHTML = liste.map((k) => `<option value="${kac(k.ad)}"${(koltukSecili ? k.ad === koltukSecili : k.ana) ? ' selected' : ''}>${k.kabuk ? 'kabuk — elle komut' : kac(k.ad)}${k.claude ? ' ●' : ''}</option>`).join('');
   sec.hidden = liste.length < 2;   // tek koltuk varsa seçecek bir şey yok
   if ($('tty') && ttyArg !== istenenArg()) { ttySok(); ttyKur(); }   // açık terminal yanlış koltuktaysa düzelt
 }

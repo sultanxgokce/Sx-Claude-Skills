@@ -1,0 +1,59 @@
+$ bash tescil/scripts/diploma.test.sh
+# rc=0 sure=365.9s zaman=2026-10-22T19:10:22+03:00
+--- stdout ---
+── gerçek betikler
+  ✓ kapı a
+  ✓ kapı a2
+  ✓ kapı n
+  ✓ kapı e
+  ✓ kapı e2
+  ✓ kapı b
+  ✓ kapı c
+  ✓ kapı d
+  ✓ kapı l
+  ✓ kapı o
+  ✓ kapı r
+  ✓ kapı f
+  ✓ kapı g
+  ✓ kapı j
+  ✓ kapı q
+  ✓ kapı h
+  ✓ kapı h2
+  ✓ kapı h3
+  ✓ kapı h4
+  ✓ kapı h5
+  ✓ kapı k
+  ✓ kapı k2
+  ✓ kapı p
+  ✓ kapı p2
+  ✓ kapı p3
+  ✓ kapı p4
+  ✓ kapı m
+  ✓ kapı i
+  ✓ kapı i2
+── mutasyonlar (paralel 8)
+  ✓ mutant alt-kume → kapı l düştü
+  ✓ mutant eskalasyon-isabet → kapı d düştü
+  ✓ mutant sicil-ayrimi-yok → kapı e düştü
+  ✓ mutant surum-skill → kapı a düştü
+  ✓ mutant bayat-yok → kapı h2 düştü
+  ✓ mutant aski-yok → kapı i düştü
+  ✓ mutant ad-katlama-yok → kapı k düştü
+  ✓ mutant bos-tur → kapı f düştü
+  ✓ mutant defter-yok-yok → kapı m düştü
+  ✓ mutant yargic-izi-yok → kapı a2 düştü
+  ✓ mutant son-kosu-yok → kapı o düştü
+  ✓ mutant kume-bayat-yok → kapı h4 düştü
+  ✓ mutant telemetri-gercek → kapı e2 düştü
+  ✓ mutant sicil-json-yok → kapı i2 düştü
+  ✓ mutant bozuk-yutulur → kapı p düştü
+  ✓ mutant yeniden-yok → kapı r düştü
+  ✓ mutant kararsiz-yutulur → kapı r düştü
+  ✓ mutant kume-sha → kapı a düştü
+  ✓ mutant sicilsiz-gecerli → kapı h5 düştü
+  ✓ mutant ters-kayit-yok → kapı p4 düştü
+  ✓ mutant kapat-dogrulamasiz → kapı p4 düştü
+  ✓ mutant yarim-kalir → kapı p3 düştü
+  ✓ mutant satir-sonu-yok → kapı p3 düştü
+diploma.test: 52 geçti · 0 kaldı
+--- stderr ---

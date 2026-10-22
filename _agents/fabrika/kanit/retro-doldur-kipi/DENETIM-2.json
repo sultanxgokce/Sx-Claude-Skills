@@ -1,0 +1,30 @@
+{
+  "tur": 2,
+  "is": "retro-doldur-kipi",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-20T17:46:58+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32365,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 10,
+    "bayt": 21862
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Doldur kipi dosya ve stdin girdisini alıyor, araç-owned ölçüm/imza bölgesini koruyor, geçersiz birleşimi yazmıyor ve ana dal kapısını gevşetmeden ajan akışını tamamlıyor. Önceki turdaki sabit geçici dosya yarışı benzersiz aynı-dizin geçici dosyayla giderilmiş; sunulan kod ve ölçümlerde üretimi engelleyen kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam. Gerçekçi kapı vakasında önce eski sürüm rc=1 iken yeni sürüm rc=0; çıktı kapının Edit'i hâlâ rc=2 ile reddettiğini, doldurun rc=0 ve son lintin rc=0 olduğunu birlikte gösteriyor. Genel sınav rc=0; T10 ve M8–M10 satırları 60 satırlık kesitte görünmese de toplam sınav sonucu bunları dolaylı kapsıyor. Ayrıca eşzamanlılık için eski sabit-ad sürümü rc=1, yeni benzersiz-geçici-dosya sürümü 40 çağrıda düşen=0 ve artık=0 ölçüm çiftiyle doğrulanmış."
+  }
+}

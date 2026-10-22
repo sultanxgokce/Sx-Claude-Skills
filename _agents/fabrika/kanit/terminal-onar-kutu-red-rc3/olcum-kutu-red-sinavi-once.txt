@@ -1,0 +1,22 @@
+$ timeout 200 bash /tmp/tmp.UkUXFUD07t/terminal-onar/scripts/kutu-red.test.sh
+# rc=1 sure=0.8s zaman=2026-10-18T16:54:56+03:00
+--- stdout ---
+── R · makine kimlikli kutu adı: sekiz betik de TEK satır sebeple, rc 3 DURUR
+  ✗ R1 compact.sh (FSZ30 vakası: eskiden 'DURUM_DIZ: unbound variable') — beklenen=3|1|e|0 gerçek=koşturulmadı: koruma yok
+  ✗ R2 komut.sh compact --koltuk nakkas (15 Eki tam komut) — beklenen=3|1|e|0 gerçek=koşturulmadı: koruma yok
+  ✗ R3 bekci.sh (her dakika koşan bekçi) — beklenen=3|1|e|0 gerçek=koşturulmadı: koruma yok
+  ✗ R4 durum.sh (eskiden 'ANA_TMUX: unbound variable') — beklenen=3|1|e|0 gerçek=koşturulmadı: koruma yok
+  ✗ R5 kademe.sh — beklenen=3|1|e|0 gerçek=koşturulmadı: koruma yok
+  ✗ R6 kapi-yenile.sh (eskiden 'KAPI_DIZ: unbound variable') — beklenen=3|1|e|0 gerçek=koşturulmadı: koruma yok
+  ✗ R7 koltuk-ac.sh durum x (eskiden 'PROJE: unbound variable') — beklenen=3|1|e|0 gerçek=koşturulmadı: koruma yok
+  ✗ R8 onar.sh (eskiden 'gunluk: command not found') — beklenen=3|1|e|0 gerçek=koşturulmadı: koruma yok
+  ✓ R9 reddedilen betikler tmux/crontab/ttyd'ye dokunmadı, durum dizini açmadı, özel tmux sunucusunda oturum yok
+  ✓ R0 önkoşul: ortak.sh makine kimliğini tek başına reddediyor (yoksa yukarıdaki betikler HİÇ koşturulmadı)
+  ✓ R10 kapsam tam: ortak.sh'ı yükleyen HER betik (kur.sh hariç — S-11 kendi yolu) bu sınavda
+  ✓ R10b R10'un aramasının kendisi ölçüldü: ortak.sh'ı yükleyen 9 betik bulunuyor (8 + kur.sh) — boş sonuç kör aramadan gelmiyor
+── P · pozitif kontrol: aynı düzenek, GEÇERLİ kutu adıyla yükleme geçer (red ölçümü kör değil)
+  ✗ P1 koltuk-ac.sh (argümansız) yüklemeyi geçip kendi kullanım satırına varır: rc 2, red YOK — beklenen=2|h gerçek=koşturulmadı: koruma yok
+  ✗ P2 komut.sh bilinmeyen fiil: yüklemeyi geçer, rc 2, red YOK — beklenen=2|h gerçek=koşturulmadı: koruma yok
+
+SONUÇ: 4 geçti · 10 kaldı
+--- stderr ---

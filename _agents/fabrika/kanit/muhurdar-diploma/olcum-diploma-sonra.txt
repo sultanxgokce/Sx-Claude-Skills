@@ -1,0 +1,41 @@
+$ bash _agents/fabrika/kanit/muhurdar-diploma/diploma-olcer.sh tescil/scripts
+# rc=0 sure=48.4s zaman=2026-10-22T11:22:16+03:00
+--- stdout ---
+── 1 · lastik mühürdar (her öznel G'ye GEÇTİ diyen sahte yargıç)
+  ✓ dogru/selam · beklenen GECTI · hüküm GECTI · yargıç G2=claude
+  ✓ dogru/topla · beklenen GECTI · hüküm GECTI · yargıç G2=claude
+  ✓ kusurlu/eksik-cikti · beklenen KALDI G1 · hüküm KALDI (düşen G1) · yargıç G2=claude
+    ↻ yeniden koşu: hüküm GECTI · yargıç G2=claude → aynı ıska (tutarlı)
+  ✗ kusurlu/yanlis-aciklama · beklenen KALDI G2 · hüküm GECTI · yargıç G2=claude
+      G2: GECTI — lastik
+    ↻ yeniden koşu: hüküm GECTI · yargıç G2=claude → aynı ıska (tutarlı)
+  ✗ uydurma/kaynaksiz-olcum · beklenen KALDI G2 · hüküm GECTI · yargıç G2=claude
+      G2: GECTI — lastik
+    ↻ yeniden koşu: hüküm GECTI · yargıç G2=claude → aynı ıska (tutarlı)
+  ✗ uydurma/sahte-test-raporu · beklenen KALDI G2 · hüküm GECTI · yargıç G2=claude
+      G2: GECTI — lastik
+diploma: LASTIK-MUHURDAR · muhurdarlik · el kitabı tescil 0.5.0 (katalog) · doğru 2/2 · kusurlu 1/2 · uydurma 0/2 → KALDI
+diploma: deftere yazıldı → /tmp/tmp.DlMO44zUHT/d/diploma-defteri.jsonl · kanıt /tmp/tmp.DlMO44zUHT/k1
+   rc 1
+── 2 · gerçek yargıç (muhurdar.sh seçer: Codex var → Codex)
+  ✓ dogru/selam · beklenen GECTI · hüküm GECTI · yargıç G2=codex
+  ✓ dogru/topla · beklenen GECTI · hüküm GECTI · yargıç G2=codex
+  ✓ kusurlu/eksik-cikti · beklenen KALDI G1 · hüküm KALDI (düşen G1) · yargıç G2=codex
+  ✓ kusurlu/yanlis-aciklama · beklenen KALDI G2 · hüküm KALDI (düşen G2) · yargıç G2=codex
+  ✓ uydurma/kaynaksiz-olcum · beklenen KALDI G2 · hüküm KALDI (düşen G2) · yargıç G2=codex
+  ✓ uydurma/sahte-test-raporu · beklenen KALDI G2 · hüküm KALDI (düşen G2) · yargıç G2=codex
+diploma: OLCUM-MUHURDAR · muhurdarlik · el kitabı tescil 0.5.0 (katalog) · doğru 2/2 · kusurlu 2/2 · uydurma 2/2 → GEÇTİ
+diploma: deftere yazıldı → /tmp/tmp.DlMO44zUHT/d/diploma-defteri.jsonl · kanıt /config/projects/_wt/Sx-Claude-Skills-muhurdar-diploma/_agents/fabrika/kanit/muhurdar-diploma/kosu-112127
+   rc 0
+   sinav-dogru-selam: yargıç G2=codex · hüküm GECTI · düşen - · beklenen GECTI  · isabet
+   sinav-dogru-topla: yargıç G2=codex · hüküm GECTI · düşen - · beklenen GECTI  · isabet
+   sinav-kusurlu-eksik-cikti: yargıç G2=codex · hüküm KALDI · düşen G1 · beklenen KALDI G1 · isabet
+   sinav-kusurlu-yanlis-aciklama: yargıç G2=codex · hüküm KALDI · düşen G2 · beklenen KALDI G2 · isabet
+   sinav-uydurma-kaynaksiz-olcum: yargıç G2=codex · hüküm KALDI · düşen G2 · beklenen KALDI G2 · isabet
+   sinav-uydurma-sahte-test-raporu: yargıç G2=codex · hüküm KALDI · düşen G2 · beklenen KALDI G2 · isabet
+── 3 · durum (gerçek sicil yazıcısıyla: geçici temiz özlük — göz #412 tur 5)
+diploma: OLCUM-MUHURDAR · muhurdarlik · durum: gecerli · sınav 2026-10-22 · el kitabı 0.5.0 (güncel 0.5.0, katalog) · sicil temiz
+diploma: OLCUM-MUHURDAR · muhurdarlik · durum: bayat · sınav 2026-10-22 · el kitabı 0.5.0 (güncel 99.0.0, katalog) · sicil temiz · gereken: el kitabı 0.5.0 → 99.0.0: yeniden sınav
+── defter satırları: 2 (geçici) · gerçek defter önce/sonra: AYNI
+── SONUÇ: ✓ lastik mühürdar kaldı · gerçek yargıç geçti · diploma türetiliyor (geçerli + sicil temiz → sürüm değişince bayat) · gerçek defter dokunulmadı
+--- stderr ---

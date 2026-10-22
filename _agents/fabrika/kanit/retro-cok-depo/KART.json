@@ -1,0 +1,24 @@
+{
+  "is": "retro-cok-depo",
+  "cumle": "retro.py kart ve bağımsız göz ölçüsü kutunun bütün depolarını tarasın (Nexus tek başına değil; Sx dahil), göz turları birincil kopya bayat olsa da origin/main'den de sayılsın, tabloda depo başına döküm (CQ46Y + NFS16)",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-10-20T21:18:36+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [
+    "İKİ DEPO: cümle Nexus + Sx-Claude-Skills anıyor — iş birden çok depoya yayılıyorsa depo başına kart aç (her depoda kendi kartı, kendi PR'ı): kart.sh ac retro-cok-depo-nexus … · kart.sh ac retro-cok-depo-sx …"
+  ]
+}

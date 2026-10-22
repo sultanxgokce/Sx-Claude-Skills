@@ -50,7 +50,7 @@ function sahteTtyd(yol) {
 // Sahte koltuk betiği: --liste'ye sabit liste döner (biri bozuk adlı — kapı onu süzmeli).
 const KOLTUK_SAHTE = join(T, 'koltuk-sahte.sh');
 writeFileSync(KOLTUK_SAHTE, '#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\n'
-  + 'printf "sinavkutu-ana\\t1760000000\\t0\\nBASIRET\\t1760000100\\t1\\nkotu:ad\\t1\\t1\\n"\n');
+  + 'printf "sinavkutu-ana\\t1760000000\\t0\\nBASIRET\\t1760000100\\t1\\nsinavkutu-kabuk\\t1760000050\\t0\\nkotu:ad\\t1\\t1\\n"\n');
 // 2.2.0: betik 5 alan döner (… tür · hâl) ve ANA adını ortamdan (KOLTUK_ANA) alır — sahte, aldığı adı ilk satıra yazar
 const KOLTUK_SAHTE5 = join(T, 'koltuk-sahte5.sh');
 writeFileSync(KOLTUK_SAHTE5, '#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\n'
@@ -168,12 +168,14 @@ console.log('\n── Y · KOLTUKLAR (koltuk seçici) ──');
   const r = await iste(P1, '/sedir/api/koltuklar', { cerez });
   const j = await r.json();
   kapi('Y2 girişli liste 200 ve betiğin söylediği koltukları taşır',
-    r.status === 200 && j.koltuklar?.map((k) => k.ad).join(',') === 'sinavkutu-ana,BASIRET', `→ ${JSON.stringify(j).slice(0, 160)}`);
+    r.status === 200 && j.koltuklar?.map((k) => k.ad).join(',') === 'sinavkutu-ana,BASIRET,sinavkutu-kabuk', `→ ${JSON.stringify(j).slice(0, 160)}`);
   kapi('Y3 bozuk adlı satır SÜZÜLÜR (kapı betiğe körü körüne güvenmez)', !JSON.stringify(j).includes('kotu'));
   const b = j.koltuklar?.find((k) => k.ad === 'BASIRET') || {};
   kapi('Y4 Claude işareti ve son etkinlik taşınır', b.claude === true && b.son === 1760000100, `→ ${JSON.stringify(b)}`);
   kapi('Y5 ekran adresi TABANLI ve ?arg= ile (ttyd -a sözleşmesi)', b.ekran === '/sedir/tty/?arg=BASIRET', `→ ${b.ekran}`);
   kapi('Y6 ana koltuk işaretli', j.koltuklar?.[0]?.ana === true && b.ana === false && j.ana === 'sinavkutu-ana');
+  const kbk = j.koltuklar?.find((k) => k.ad === 'sinavkutu-kabuk') || {};
+  kapi('Y6b el kabuğu işaretli (yalnız <kutu>-kabuk; ana ve ajan değil)', kbk.kabuk === true && b.kabuk === false && j.koltuklar?.[0]?.kabuk === false && j.kabuk === 'sinavkutu-kabuk', `→ ${JSON.stringify(kbk)}`);
   const tt = await (await iste(P1, '/sedir/tty/?arg=BASIRET', { cerez })).json();
   kapi('Y7 ttyd vekili ?arg= sorgusunu OLDUĞU GİBİ iletir (koltuk ttyd\'ye ulaşır)', tt.yol === '/sedir/tty/?arg=BASIRET', `→ ${tt.yol}`);
   const kb = await kapiAc('/sedir', P3, { KAPI_KOLTUK_BETIK: KOLTUK_BOZUK });
@@ -549,6 +551,26 @@ console.log('\n── W · WEBSOCKET (tam terminal bağlantısı) ──');
   const c10 = await giris(18795, '/sedir'); const r10 = await iste(18795, '/sedir/api/kadro', { cerez: c10 }); const j10 = await r10.json();
   kapi('KD7 kayıt var ama okunamıyor → 500 + hangi dosya', r10.status === 500 && /Kayıt okunamadı: .*aile-registry\.yaml/.test(j10.hata || ''), `→ ${r10.status} ${JSON.stringify(j10)}`);
   p10.kill();
+}
+
+// ── KT · /api/kadro/tarif + /api/kadro/uzmanlik (2.20.0 · Mühürdarlık G12): SALT OKUR, girişli, kaynak yoksa ölçülemedi ──
+{
+  const giris = async (port, taban) => { const ok = await iste(port, `${taban}/giris`, { metot: 'POST', govde: { parola: SIFRE } });
+    return 'kapi=' + ((ok.headers.get('set-cookie') || '').match(/kapi=([^;]+)/) || [])[1]; };
+  const VERI = join(KOK, '../../tarif-kaydi/veri');
+  const p11 = spawn(process.execPath, [join(KOK, 'sunucu.mjs')], { env: { ...process.env, KAPI_PORT: '18797', KAPI_TABAN: '/sedir', TO_KUTU: 'sinavkutu', TO_PROJE: join(T, 'yok-proje'),
+    KAPI_TTYD_SOKET: join(T, 'ttyd.sock'), TO_DURUM_DIZ: T, SINAVKUTU__TERMINAL_SIFRE: SIFRE, KAPI_OTURUM_DIZ: join(T, 'oturum-yok'), TO_TARIF_DIZIN: VERI, TO_AJAN_KAYDI: join(T, 'yok/agent-registry.json') }, stdio: 'ignore' });
+  for (let i = 0; i < 50; i++) { await new Promise((r) => setTimeout(r, 100)); try { if ((await fetch('http://127.0.0.1:18797/sedir/giris')).status === 200) break; } catch {} }
+  kapi('KT0 girişsiz /api/kadro/tarif ve /api/kadro/uzmanlik 401', (await iste(18797, '/sedir/api/kadro/tarif')).status === 401 && (await iste(18797, '/sedir/api/kadro/uzmanlik')).status === 401);
+  const cerez = await giris(18797, '/sedir');
+  const r = await iste(18797, '/sedir/api/kadro/tarif', { cerez }); const j = await r.json();
+  kapi('KT1 GET /api/kadro/tarif 200: kutu + gerçek tarif (1 uzmanlık · 36 terim), olc yok, yol yok', r.status === 200 && j.kutu === 'sinavkutu' && j.tarif.uzmanliklar.length === 1 && j.terim.terimler.length === 36 && !j.olc.tarif && !j.olc.terim && !JSON.stringify(j).includes(VERI), `→ ${r.status} ${JSON.stringify(j.olc)}`);
+  const p = await iste(18797, '/sedir/api/kadro/tarif', { cerez, metot: 'POST', govde: {} });
+  const p2 = await iste(18797, '/sedir/api/kadro/uzmanlik', { cerez, metot: 'POST', govde: {} });
+  kapi('KT2 yazma yolu yok: POST → 405 (iki uçta da)', p.status === 405 && p2.status === 405, `→ ${p.status} ${p2.status}`);
+  const u = await iste(18797, '/sedir/api/kadro/uzmanlik', { cerez }); const ju = await u.json();
+  kapi('KT3 kayıt yok → 200 + personel null + olc "kaynak yok" (boş liste DEĞİL)', u.status === 200 && ju.personel === null && ju.olc.personel === 'kaynak yok' && ju.diploma === null, `→ ${u.status} ${JSON.stringify(ju)}`);
+  p11.kill();
 }
 
 kapiTaban.kill(); kapiKok.kill(); ttyd.close();

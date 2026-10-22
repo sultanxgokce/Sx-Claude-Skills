@@ -29,6 +29,7 @@ export function altyapiNeden(ad, ana = '') {
   if (a.startsWith('ttyd-')) return 'web terminali';
   if (a.startsWith('kapi-')) return 'kutu kapısı';
   if (a.endsWith('-kurtarici')) return 'kurtarıcı ajan';
+  if (a.endsWith('-kabuk')) return 'el kabuğu';   // Sultan'ın elle komut sekmesi: görünür (gizli değil) ama kadro eylemi uygulanamaz
   if (a.startsWith('imglistener')) return 'görsel dinleyici';
   return '';
 }
@@ -40,7 +41,9 @@ function skaler(line, key) {
   m = line.match(new RegExp('^\\s*' + key + ':\\s*([^#\\s][^#]*?)\\s*(?:#.*)?$')); if (m) return m[1];
   return null;
 }
-const ALANLAR = ['tmux', 'rol', 'mod', 'durum', 'durum_once', 'hal', 'arz_adi', 'cwd', 'session_id'];
+// Dava Rafı (Parça B · SERDAR 16 Eki 16:26): son_calisma (dondurulurken yazılan epoch) · dondurma (kural = bekçi dondurdu) ·
+// bagla_ile (kayda E4 bağlamayla girdi → 'bağlamayı geri al' sunulur) · bagla_once (kişiye bağlamada önceki session_id).
+const ALANLAR = ['tmux', 'rol', 'mod', 'durum', 'durum_once', 'hal', 'arz_adi', 'cwd', 'session_id', 'son_calisma', 'dondurma', 'bagla_ile', 'bagla_once'];
 
 // YAML metni → üyeler. Satır tabanlı: `- id: X` blok açar; blok içindeki bilinen skalerler alınır. `uyeler:` dışı
 // `- id:` (ör. meta) yoktur; `tmux: null` → ''. Bilinmeyen anahtar yok sayılır (şema genişlemesi kırmaz).
@@ -74,14 +77,24 @@ function birlestir(listeler) {
   return [...h.values()];
 }
 
+// 🔴 DAVA DOSYASI (Sx #350 · SERDAR 10:50 + 09:25 kararı (b)): dava satırları (rol: dava) iskan-registry'den AYRI tutulur — kutunun
+//    kayıt kopyası (filo üç-kopya eşitleyicisi) iskan'ı ezdiğinde dava satırları sessizce gitmesin. Kutu içinde, registry'nin yanında.
+//    iskan'da yalnız `dava_kurali` kök satırı kalır. Okuyucu ve yazıcı bu yolu TEK yerden alır.
+export function davalarYolu(proje, ortam = process.env) {
+  return ortam.DAVALAR_REGISTRY || path.join(path.dirname(ortam.ISKAN_REGISTRY || path.join(proje, 'iskan-registry.yaml')), 'davalar.yaml');
+}
+
 // Kutunun kayıt dosyalarını bul ve oku → { kaynak: [yol…], uyeler } (okunamayan dosya atlanır, adı `okunamadi`ye düşer)
 export function kayitOku(proje, ortam = process.env) {
   const kaynak = [], okunamadi = [], listeler = [];
-  const oku = (y) => { try { const t = fs.readFileSync(y, 'utf8'); kaynak.push(y); return kayitAyristir(t); } catch { if (fs.existsSync(y)) okunamadi.push(y); return null; } };
+  let dava_kurali = null;
+  const oku = (y) => { try { const t = fs.readFileSync(y, 'utf8'); kaynak.push(y); if (!dava_kurali) dava_kurali = davaKuraliAyristir(t); return kayitAyristir(t); } catch { if (fs.existsSync(y)) okunamadi.push(y); return null; } };
   const iskan = ortam.ISKAN_REGISTRY || path.join(proje, 'iskan-registry.yaml');
   const aile = ortam.AILE_REGISTRY || path.join(proje, '_agents/handoff/aile-registry.yaml');
   if (fs.existsSync(iskan)) {
     const l = oku(iskan); if (l) listeler.push(l);
+    const dav = davalarYolu(proje, ortam);
+    if (fs.existsSync(dav)) { const ld = oku(dav); if (ld) listeler.push(ld); }
     // ekip_registry_pointer: iskan dosyasının başındaki skaler (varsa) — yoksa olağan iki yer denenir
     let isaret = ''; try { isaret = skaler((fs.readFileSync(iskan, 'utf8').split('\n').find((x) => /^\s*ekip_registry_pointer:/.test(x)) || ''), 'ekip_registry_pointer') || ''; } catch {}
     for (const y of [isaret && path.join(proje, isaret), path.join(proje, '_agents/handoff/ekip-registry.yaml'), path.join(proje, '_agents/ekip-os/ekip-registry.yaml')].filter(Boolean)) {
@@ -105,7 +118,53 @@ export function kayitOku(proje, ortam = process.env) {
   if (listeler.length && fs.existsSync(model)) {
     try { const l3 = kayitAyristir(fs.readFileSync(model, 'utf8'), 'kayit'); l3.yalniz = ['durum_once']; listeler.push(l3); } catch {}
   }
-  return { kaynak, okunamadi, uyeler: birlestir(listeler) };
+  return { kaynak, okunamadi, uyeler: birlestir(listeler), ...(dava_kurali ? { dava_kurali } : {}) };
+}
+
+// ── DAVA KURALI (Parça B1): kayıt KÖKÜNDE `dava_kurali: {tavan: 4, gun: 14}` (akış biçimi) ya da blok biçimi
+//    dava_kurali:\n  tavan: 4\n  gun: 14. Raf yalnız bu alan varsa çıkar → davası olmayan kutuda raf yok, kutu adı koda gömülmez.
+//    İki sayı da 1..99 tam sayı olmalı; biri eksik/bozuksa kural YOK sayılır (yarım kuralla dava dondurulmaz).
+export function davaKuraliAyristir(metin) {
+  const satirlar = String(metin || '').split('\n');
+  const i = satirlar.findIndex((l) => /^dava_kurali:/.test(l)); if (i < 0) return null;
+  const h = {};
+  const akis = satirlar[i].match(/^dava_kurali:\s*\{([^}]*)\}\s*(#.*)?$/);
+  if (akis) for (const p of akis[1].split(',')) { const m = p.match(/^\s*(tavan|gun)\s*:\s*(\d+)\s*$/); if (m) h[m[1]] = +m[2]; }
+  else if (/^dava_kurali:\s*(#.*)?$/.test(satirlar[i])) {
+    for (let j = i + 1; j < satirlar.length; j++) { const l = satirlar[j]; if (!l.trim() || /^\s*#/.test(l)) continue; if (!/^\s/.test(l)) break;
+      const m = l.match(/^\s+(tavan|gun)\s*:\s*(\d+)\s*(#.*)?$/); if (m) h[m[1]] = +m[2]; }
+  }
+  const ok = (n) => Number.isInteger(n) && n >= 1 && n <= 99;
+  return ok(h.tavan) && ok(h.gun) ? { tavan: h.tavan, gun: h.gun } : null;
+}
+
+export const DAVA_ROL = 'dava';
+const GUN_SN = 86400;
+const davaAcik = (k) => k.rol === DAVA_ROL && k.hal_kayit !== 'dondurulmus' && k.hal_kayit !== 'emekli';
+// Açık davanın son hareketi: canlı oturumun `son`u (tmux bölmesi) — oturumu yoksa kayıttaki son_calisma (yoksa 0 = en eski sayılır)
+const davaSon = (k) => (k.oturum && k.oturum.son) || k.son_calisma || 0;
+
+// /api/kadro `davalar` alanı (B2). dondurulacak: kuralın son üç gününe girmiş açık davalar (kalan_gun 0 = bugünkü turda dondurulur).
+export function davaOzet(kisiler, kural, simdi = Math.floor(Date.now() / 1000)) {
+  const acik = kisiler.filter(davaAcik);
+  const dondurulacak = acik.filter((k) => k.oturum && k.oturum.son && simdi - k.oturum.son > (kural.gun - 3) * GUN_SN)
+    .map((k) => ({ id: k.id, kalan_gun: Math.max(0, kural.gun - Math.floor((simdi - k.oturum.son) / GUN_SN)) }));
+  return { tavan: kural.tavan, gun: kural.gun, acik: acik.length, dondurulacak };
+}
+
+// Aç'ta yer açma (B4): istenen dava HARİÇ açık dava sayısı ≥ tavan ise en uzun süredir dokunulmayan açık dava. Yer varsa null.
+// Altyapıya bağlanmış dava aday olamaz (zaten eylem uygulanamaz).
+export function yerAcAday(kisiler, kural, haric) {
+  const acik = kisiler.filter((k) => davaAcik(k) && k.id !== haric);
+  if (acik.length < kural.tavan) return null;
+  const aday = acik.filter((k) => !k.altyapi).sort((a, b) => davaSon(a) - davaSon(b))[0];
+  return aday || null;
+}
+
+// Kendiliğinden dondurma (B7): açık, oturumu olan ve `gun` gündür tmux bölmesi kıpırdamayan davalar. Oturumu olmayan açık dava
+// burada dondurulmaz (kapatılacak oturum yok; son hareketi ölçülemez — uydurulmaz).
+export function kendiligindenDondurulacak(kisiler, kural, simdi = Math.floor(Date.now() / 1000)) {
+  return kisiler.filter((k) => davaAcik(k) && !k.altyapi && k.oturum && k.oturum.son && simdi - k.oturum.son >= kural.gun * GUN_SN);
 }
 
 // Yalnız büyük/küçük harf farkı tolere edilir (berid ↔ BERID). Baştaki rakamı SOYMA: '20' ile '2026' aynı boş anahtara düşüp
@@ -153,7 +212,10 @@ export function kadroBirlestir({ uyeler = [], koltuklar = [], ana = '', kimlikle
     // altyapı: kayıttaki koltuk ya da FİİLEN bağlandığı oturum altyapıysa (ör. kişi ana oturumda çalışıyor) kadro eylemi uygulanmaz
     const alt = altyapiNeden(o ? o.ad : '', ana) || altyapiNeden(tmux, ana);
     return { id: u.id, rol: u.rol || '', mod: u.mod || '', hal_kayit: hal || 'bilinmiyor', tmux, oturum: oturumSade(o), grup,
-      geri_acilir: geri, ...(ok ? { eslesme: 'kimlik' } : {}), ...(alt ? { altyapi: alt } : {}) };
+      geri_acilir: geri, ...(ok ? { eslesme: 'kimlik' } : {}), ...(alt ? { altyapi: alt } : {}),
+      // Dava Rafı alanları yalnız kayıtta varsa çıkar (davasız kutunun yanıtı bayt bayt aynı kalır)
+      ...(u.arz_adi ? { arz_adi: u.arz_adi } : {}), ...(/^\d+$/.test(u.son_calisma || '') ? { son_calisma: +u.son_calisma } : {}),
+      ...(u.dondurma === 'kural' && hal === 'dondurulmus' ? { dondurma: 'kural' } : {}), ...(u.bagla_ile === 'true' ? { bagla_ile: true } : {}) };
   });
   // E2: kayıtta olmayan ALTYAPI oturumları (ana dahil) kayıtsızlara düşmez, ayrı listelenir — kapatılamaz/emekli edilemez.
   // (Eski davranış: ana "(kimliği yok)" diye kişilerde, boş kabuksa DÜŞEN sayılıyordu; dash/dashproxy kırmızı kayıtsızdı.)

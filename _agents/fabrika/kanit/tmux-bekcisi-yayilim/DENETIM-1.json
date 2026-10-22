@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "tmux-bekcisi-yayilim",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-20T20:23:28+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 26229,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 17885
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Dakikalık bekçi, duraklatma kapısından sonra tmux bekçisini her tur karşılaştırıp gerektiğinde kuracak şekilde değiştirilmiş; güncel durumda sessiz kalması, kurulum hatasında ana işi sürdürmesi ve vaka betiğinin canlı iz defterini değiştirmemesi ölçülmüş. Üretim davranışı önce/sonra ve bozma sınavlarıyla güçlü biçimde destekleniyor; yalnız sürüm notundaki filo sayısı ve kurulum kapsamı ölçümün gösterebildiğinden daha kesin yazılmış.",
+    "bulgular": [
+      {
+        "ne": "Sürüm notundaki “18 ekip kutusundan yalnız code'da kurulu” ifadesi sunulan filo ölçümüyle doğrulanmıyor: çıktı 27 kutu adı içeriyor ve 9 kutuda durum ölçülememiş; dolayısıyla yalnız code'da kurulu olduğu sonucu tüm filo için kurulamaz.",
+        "kanit": "olcum-filo-kurulum-once.txt içinde 27 satır/kutu bulunuyor; cloudtop-codex, cloudtop-defter, cloudtop-kapi, cloudtop-kilavuz, cloudtop-ntfy, cloudtop-pano, cloudtop-terminal-merkez, cloudtop-wa ve cloudtop-wa-sultan “ÖLÇÜLEMEDİ” olarak kayıtlı. Buna karşın SKILL.md yeni sürüm notu “18 ekip kutusundan yalnız code'da kurulu” diyor.",
+        "konum": "terminal-onar/SKILL.md:8 ve terminal-onar/scripts/bekci.sh:11; kanıt kaydı filo-kurulum/once",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam. Asıl davranış için kırmızıdan yeşile dönen bekci-turu ölçüm çifti var; B1-B5 kurma, sessizlik, güncelleme, hatada devam ve duraklatma sınırlarını ölçüyor, ayrıca dört hedefli bozma bu kapıların gerçekten arızayı yakaladığını gösteriyor. vaka-canli-defter ölçümü gerçekçi bir vaka çalıştırıp canlı günlük satır sayısını 3→3 olarak doğruluyor. filo-kurulum kaydı genel olarak yeşil olsa da kendi çıktısındaki “ÖLÇÜLEMEDİ” kutular hakkında kanıt sağlamaz ve filo sonrası yayılım ölçümü değildir; bu durum kod puanını düşürmez."
+  }
+}

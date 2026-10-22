@@ -1,0 +1,31 @@
+{
+  "is": "muhurdar-akisi",
+  "cumle": "Mühürdarlık G8: tescil becerisi üstüne mühürdar akışı (muhurdar.sh) — kendi işini mühürleyemez kapısı (yazan = mühürdar → isimli ret), kör ve her seferinde temiz koşu (yargıç yalnız gereklilik + taze kanıtı görür, inşacının raporunu görmez), öznel G'ler Codex varsa Codex yoksa Claude ile yargılanır, '👤 Sultan denemesi' satırları mühürdarca sınanmaz ve geçti sayılmaz; usul adımları kadro şemasındaki tescil-teslim-sina ile aynı sıra. Sınavı + mutasyon. (Sultan D1 22 Eki 'Üç alana böl')",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-22T01:11:43+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5D990AEQY8VRY3QGPWPZ5FK",
+  "tahmin_dk": 180,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-22T01:11:43+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

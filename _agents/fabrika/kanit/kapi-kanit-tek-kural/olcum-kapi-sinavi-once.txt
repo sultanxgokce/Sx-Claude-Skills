@@ -1,0 +1,13 @@
+$ bash _agents/fabrika/kanit/kapi-kanit-tek-kural/mutasyon.sh yazilim-fabrikasi --ana-hat /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/kapi-ana.sh
+# rc=0 sure=35.9s zaman=2026-10-18T23:34:32+03:00
+--- stdout ---
+ANA HAT kapısı + bu dalın sınavı → rc=1
+  ✗ 🔴 BİRİNCİLDEN çağrı iş alanındaki kanıtı buldu → GEÇTİ (15 Eki'de 'kanıt YOK' deyip kaçışa itmişti)
+  ✗ iş alanının içinden çağrı aynı kanıtı buldu (aynı kural, aynı sonuç)
+  ✗ iş alanı kapalıyken kanıt PR #7 başından okundu → GEÇTİ
+  ✗ --pr verilmezse PR başına bakılmaz; aranan yerler sayılır, kapı kapalı (rc=1)
+  ✗ 🔴 birincildeki BAYAT 5/E kopyası kapıyı açmaz — dalı iş adıyla aynı olan iş alanı esas (3/E → rc=1)
+  ✗ önekli dal (hendese/is-onek) iş adıyla eşleşir
+  ✗ 🔴 9 kaçışın yalnız 'kanıt başka yerde' olanı (15 Eki 10:42) artık kapıdan geçer; 8'i (tavan · kanıtsız) KAPALI kalır — kapı gevşemedi (geçen:)
+── SONUÇ: 103 geçti · 7 kaldı ──
+--- stderr ---

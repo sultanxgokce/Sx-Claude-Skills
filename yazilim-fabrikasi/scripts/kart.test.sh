@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # kart.test.sh — iş kartı (0. adım) ve gün sonu özeti sahte depoda: sınıf soruları zorunlu, şüphede yukarı, özet defterden.
 set -uo pipefail
+export FABRIKA_AILE_NOTIFY=-   # denetçi bitiş zili sınavda KAPALI (gerçek koltuklara çalmasın); zil kapısı kendi sahtesini verir
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 KT="$HERE/kart.sh"; GS="$HERE/gun-sonu.sh"; K="$HERE/kanit.sh"; D="$HERE/denetci.sh"; IA="$HERE/is-alani.sh"
 gecen=0; kalan=0
@@ -96,6 +97,13 @@ printf '%s çaldı\n' "$(date -u +%FT%TZ)" > "$T/zil.log"
 bash "$K" canli is-cron zil --desen çaldı --kaynak "dosya:$T/zil.log" >/dev/null 2>&1
 CIKTI="$(bash "$KT" bitti is-cron 2>&1)"; ! grep -q "CANLI KANIT YOK" <<<"$CIKTI"; g $? "yeşil canlı kayıt varken uyarı yok"
 python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-cron.json'));assert k['canli_kanit']=='var'"; g $? "karta canli_kanit=var işlendi"
+# 4K938: geçersiz ilan edilen yeşil canlı kayıt bitti'de 'var' sayılmaz (etkin renk kanit.py'den)
+bash "$K" gecersiz is-cron zil --neden "log başka sunucunun zil satırıydı, bu iş değil" --kim BANI >/dev/null 2>&1
+CIKTI="$(bash "$KT" bitti is-cron 2>&1)"; grep -q "CANLI KANIT YOK" <<<"$CIKTI"; g $? "geçersiz ilan edilen canlı kayıtla bitti yine uyarır"
+python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-cron.json'));assert k['canli_kanit']!='var', k['canli_kanit']"; g $? "karta canli_kanit=var İŞLENMEDİ (geçersiz yeşil sayılmaz)"
+MK="$T/pkg-kart"; mkdir -p "$MK"; cp "$HERE"/*.py "$HERE"/*.sh "$MK/"; sed -i 's/x\["etkin_renk"\]=="yesil"/x.get("renk")=="yesil"/' "$MK/kart.sh"
+grep -q 'x.get("renk")=="yesil"' "$MK/kart.sh"; g $? "mutant üretildi (kart.sh ham rengi okuyor)"
+CIKTI="$(bash "$MK/kart.sh" bitti is-cron 2>&1)"; ! grep -q "CANLI KANIT YOK" <<<"$CIKTI" && grep -q "kart bitti" <<<"$CIKTI"; g $? "mutant (tam kopya, bitti koştu): geçersiz yeşili sayıp uyarmıyor → üstteki kapı bu mutantta düşerdi"
 # canli-gerekir: kapının okuduğu tek yüzey; eski kartta (alan yok) cümleden türetir
 [ "$(bash "$KT" canli-gerekir is-cron | cut -f1)" = "E" ] && [ "$(bash "$KT" canli-gerekir is-1 | cut -f1)" = "H" ]; g $? "canli-gerekir E/H okur"
 python3 - <<PY
@@ -113,4 +121,197 @@ bash "$KT" ac is-ek --is "sunucudaki cron'u ve servisleri yenile" --istedi S --a
 python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-ek.json'));assert k['canli_gerekir'] and 'sunucu' in k['canli_sebep'] and 'cron' in k['canli_sebep'] and 'servis' in k['canli_sebep'], k['canli_sebep']"; g $? "Türkçe ekler (sunucudaki · cron'u · servisleri) hâlâ yakalanır"
 
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
+echo "════ T11 · daralt: kalan bulgu yeni karta, cümle daraltılır, tur sıfırı yazılır (PCP7J) ════"
+mkdir -p "$T/depo2" && cd "$T/depo2" && git init -q -b main && export KANIT_DEPO="$T/depo2"   # önceki sınav çalışma dizinini kaldırmış olabilir
+bash "$KT" ac is-dar --is "iki yarım iş tek kartta olduğu için tıkanan iş" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+bash "$KT" daralt is-dar --kalan "kısa" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-d >/dev/null 2>&1; [ $? -eq 1 ]; g $? "kısa --kalan REDDEDİLDİ"
+bash "$KT" daralt is-dar --kalan "kalan yarı: raporu da üretsin, bu kartta değil" --cumle "daraltılmış cümle yeterince uzun burada" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "--oturum yoksa REDDEDİLDİ"
+[ ! -f "$T/depo2/_agents/fabrika/kartlar/is-dar-kalan.json" ]; g $? "reddedilen denemeler kalan kart yazmadı"
+mkdir -p "$T/depo2/_agents/fabrika/kanit/is-dar"; for i in 1 2 3; do echo '{"tur":'$i',"sonuc":{"kod_puani":2,"dogru_sey":"H","bulgular":[]}}' > "$T/depo2/_agents/fabrika/kanit/is-dar/DENETIM-$i.json"; done
+CIKTI="$(bash "$KT" daralt is-dar --kalan "kalan yarı: raporu da üretsin, bu kartta değil" --cumle "yalnız birinci yarı: ölçümü yazsın ve kaydetsin" --oturum ref-d 2>&1)"; g $? "daralt rc=0"
+grep -q "tur sıfırı 3" <<<"$CIKTI"; g $? "tur sıfırı 3 yazıldı (3 denetim vardı)"
+python3 -c "import json;k=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-dar.json'));assert k['cumle'].startswith('yalnız') and k['cumle_gecmisi'][0]['cumle'].startswith('iki yarım') and k['daraltmalar'][-1]['tur_sifir']==3 and k['reis_kararlari'][-1]['karar']=='daralt' and k['reis_kararlari'][-1]['reis']=='MUAVIN'"; g $? "cümle daraltıldı, geçmiş saklandı, reis kararı 'daralt' sahibin adıyla işlendi"
+python3 -c "import json;y=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-dar-kalan.json'));assert y['koken']=='is-dar' and y['aldi']=='MUAVIN' and y['istedi']=='Sultan' and y['sinif_cevaplari']=={'geri_alinamaz':'h','para':'h','dis_yuzey':'h','yetki':'h'} and y['durum']=='acik'"; g $? "kalan kart: aynı sahip/istedi/sınıf cevapları, köken yazılı"
+bash "$KT" daralt is-dar --kalan "üçüncü parça da ayrılsın yeterince uzun" --cumle "daha da daraltılmış cümle yeterince uzun" --oturum ref-d >/dev/null 2>&1; [ $? -eq 1 ]; g $? "aynı kalan ad ikinci kez açılmaz (--yeni gerekir)"
+bash "$KT" daralt is-dar --kalan "üçüncü parça da ayrılsın yeterince uzun" --cumle "daha da daraltılmış cümle yeterince uzun" --oturum ref-d --yeni is-dar-3 >/dev/null 2>&1; g $? "--yeni ile ikinci daraltma"
+echo "════ T12 · daralt SINIFLI kartta Sultan kararı ister (A06) ════"
+bash "$KT" ac is-dar-s --is "para harcayan iş tek kartta iki yarımla tıkandı" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para e --dis-yuzey h --yetki h >/dev/null 2>&1
+bash "$KT" daralt is-dar-s --kalan "kalan yarı yeterince uzun bir cümle burada" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-s >/dev/null 2>&1; [ $? -eq 1 ]; g $? "sınıflı kart Sultan kararı olmadan daraltılmadı"
+python3 -c "import json;k=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-dar-s.json'));assert 'daraltmalar' not in k and 'reis_kararlari' not in k"; g $? "karta hiçbir şey yazılmadı"
+bash "$KT" sultan-dedi is-dar-s --karar daralt --oturum ref-s --soz "daralt, kalanı sonra" --beyan MUAVIN --gerekce "ikinci yarı ayrı PR ile gelsin, ilk yarı bitti" >/dev/null 2>&1
+bash "$KT" daralt is-dar-s --kalan "kalan yarı yeterince uzun bir cümle burada" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-s >/dev/null 2>&1; g $? "Sultan 'daralt' kararı karttayken daraltıldı"
+python3 -c "import json;y=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-dar-s-kalan.json'));assert y['sultan']==True and y['siniflar']==['para']"; g $? "kalan kart da SINIFLI doğdu (sınıf miras)"
+echo "════ T12b · Sultan 'daralt' kararı TEK KULLANIMLIK; --yeni ad güvenli; iki kart atomik (göz tur 1) ════"
+bash "$KT" daralt is-dar-s --kalan "üçüncü parça yeterince uzun bir cümle burada" --cumle "daha da daraltılmış cümle yeterince uzun" --oturum ref-s --yeni is-dar-s-3 >/dev/null 2>&1; [ $? -eq 1 ]; g $? "aynı Sultan kararıyla İKİNCİ daraltma REDDEDİLDİ (karar tüketildi)"
+python3 -c "import json;k=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-dar-s.json'));sk=k['sultan_kararlari'][-1];assert sk['kullanildi']['kalan_kart']=='is-dar-s-kalan' and len(k['daraltmalar'])==1"; g $? "kullanılan karar karta işaretli, ikinci daraltma yazılmadı"
+bash "$KT" daralt is-dar --kalan "yol ayraçlı ad denemesi yeterince uzun" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-d --yeni "../kacak" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "--yeni '../kacak' REDDEDİLDİ"
+bash "$KT" daralt is-dar --kalan "yol ayraçlı ad denemesi yeterince uzun" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-d --yeni "a/b" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "--yeni 'a/b' REDDEDİLDİ"
+[ ! -e "$T/depo2/_agents/fabrika/kacak.json" ] && [ ! -e "$T/depo2/_agents/fabrika/kartlar/a" ]; g $? "dizin dışına hiçbir şey yazılmadı"
+bash "$KT" ac is-at --is "atomik yazım denemesi için iş cümlesi burada" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+mkdir -p "$T/depo2/_agents/fabrika/kartlar/is-at-kalan.json.tmp"   # geçici dosya yolu bir DİZİN → kalan kart yazılamaz
+ONCE="$(md5sum < "$T/depo2/_agents/fabrika/kartlar/is-at.json")"
+bash "$KT" daralt is-at --kalan "kalan parça yeterince uzun bir cümle burada" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-at >/dev/null 2>&1; [ $? -eq 1 ]; g $? "kalan kart yazılamayınca rc=1"
+[ "$(md5sum < "$T/depo2/_agents/fabrika/kartlar/is-at.json")" = "$ONCE" ]; g $? "ana kart bayt bayt DEĞİŞMEDİ (atomik)"
+[ ! -f "$T/depo2/_agents/fabrika/kartlar/is-at-kalan.json" ]; g $? "yarım kalan kart yok"
+rmdir "$T/depo2/_agents/fabrika/kartlar/is-at-kalan.json.tmp" 2>/dev/null
+
+echo "════ T13 · KAPSAM UYARISI: iki depo · çok günlük kapsam → uyarır, REDDETMEZ (retro W42 ders M2) ════"
+K13="${KANIT_DEPO:-$T/depo}"; B13="$(basename "$K13")"   # önceki bloklar KANIT_DEPO'yu depo2'ye çeviriyor
+ac13() { bash "$KT" ac "$1" --is "$2" --istedi SERDAR --aldi HENDESE --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h 2>&1; }
+ku() { python3 -c "import json,sys;print(len(json.load(open(sys.argv[1]))['kapsam_uyarilari']))" "$K13/_agents/fabrika/kartlar/$1.json" 2>/dev/null || echo yok; }
+# W42'nin gerçek kartı (hendese-kutuphane-h1): haftalık yazıldı, günlük teslim edildi
+CIKTI="$(ac13 is-h1 "HENDESE kütüphanesi 1. hafta: günlük tur kayıtları (depo/web/video) + örnek vaka kartları, kaynaklı")"; RC=$?
+[ "$RC" -eq 0 ] && [ "$(ku is-h1)" = 1 ]; g $? "haftalık kart AÇILDI (uyarı, red değil) · karta 1 kapsam uyarısı yazıldı"
+grep -q "⚠ KAPSAM — ÇOK GÜNLÜK KAPSAM (1. hafta).*is-h1-g1 · is-h1-g2" <<<"$CIKTI"; g $? "çok günlük kapsam: gün başına kart önerildi (is-h1-g1 · is-h1-g2)"
+CIKTI="$(ac13 is-ikid "Nexus wait-ci --repo bayrağını tanısın ve cloudtop zili aynı kuralla bildirsin")"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "İKİ DEPO: cümle Nexus + cloudtop anıyor.*kart.sh ac is-ikid-nexus … · kart.sh ac is-ikid-cloudtop …" <<<"$CIKTI"; g $? "iki depo adı → depo başına kart önerildi"
+CIKTI="$(ac13 is-baska "cloudtop terminal-merkez bekçisi ölçülemedi hükmünü işlesin")"
+[ "$(ku is-baska)" = 0 ] && ! grep -q "KAPSAM" <<<"$CIKTI"; g $? "TEK depo adı (başka depo da olsa) uyarı almaz — kart cümlesi yalnız iki depo + çok günlük istedi (göz #384 tur 1)"
+CIKTI="$(FABRIKA_DEPOLAR="$B13:Nexus cloudtop" ac13 is-bu "Nexus wait-ci --repo bayrağını tanısın")"
+[ "$(ku is-bu)" = 0 ] && ! grep -q "KAPSAM" <<<"$CIKTI"; g $? "yalnız KENDİ deposunu anan cümle uyarı almaz (takma adla da)"
+CIKTI="$(ac13 is-sx "Sx kart.sh uyarısı ve Nexus notu")"
+grep -q "İKİ DEPO: cümle Nexus + Sx-Claude-Skills" <<<"$CIKTI"; g $? "takma ad (Sx) depo sayılır"
+CIKTI="$(ac13 is-yalan "sohbet ocak sedir lonca adları, nexus ve Cloudtop yanlış harfle, SxFoo ve Nexus-ana-dal-kapisi ekle; haftaya bakarız")"
+[ "$(ku is-yalan)" = 0 ] && ! grep -q "KAPSAM" <<<"$CIKTI"; g $? "yanlış alarm yok: sıradan kelime adlar · küçük harf · bitişik ad · tireli ek · 'haftaya'"
+CIKTI="$(ac13 is-duz "buton ekle")"
+[ "$(ku is-duz)" = 0 ] && ! grep -q "KAPSAM" <<<"$CIKTI"; g $? "düz cümlede uyarı yok, karta boş liste yazıldı"
+CIKTI="$(ac13 is-gun "W42 boyunca her gün tur kaydı")"
+grep -q "ÇOK GÜNLÜK KAPSAM (W42, her gün)" <<<"$CIKTI"; g $? "hafta kodu ve 'her gün' de çok günlük sayılır"
+
+echo "════ T13b · ATIF KAPSAM DEĞİLDİR: 'retro W42', 'hafta raporu' uyarmaz; gerçek çok günlük kapsam uyarmaya devam eder (20 Eki, üç yanlış alarm) ════"
+ac13m() { bash "$1" ac "$2" --is "$3" --istedi SERDAR --aldi HENDESE --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h 2>&1; }
+ATIF=("birleştirme kancası CI'ı her birleştirmede ölçsün (gorev_01M506PY0B6X92R0NEK0NSPCR7 + hafta raporu E3)"
+      "denetçi ölçüm çıktısının sonunu da versin; fabrika 0.10.6 (gorev_01M5890SCNMSR4DFTGHVWEJEC3, retro W42 HENDESE Ö1)"
+      "kart.sh ac iş cümlesinde iki depo görürse uyarsın (retro W42 ders M2)"
+      "hafta kapısı D13 PR gövdesinde retro işaretini arasın"
+      "W42 retrosu için kutu dosyasını doldur")
+KAPSAM=("W42 boyunca her gün tur kaydı" "haftalık rapor üretimi kur ve her gün koştur" "bu hafta tüm kutuların retrosunu topla" "3 gün sürecek göç")
+n13=0
+for c in "${ATIF[@]}"; do n13=$((n13+1)); CIKTI="$(ac13m "$KT" "is-atif-$n13" "$c")"
+  [ "$(ku "is-atif-$n13")" = 0 ] && ! grep -q "ÇOK GÜNLÜK" <<<"$CIKTI"; g $? "atıf uyarmaz: $(cut -c1-70 <<<"$c")"; done
+for c in "${KAPSAM[@]}"; do n13=$((n13+1)); CIKTI="$(ac13m "$KT" "is-kap-$n13" "$c")"
+  grep -q "ÇOK GÜNLÜK KAPSAM" <<<"$CIKTI"; g $? "gerçek kapsam uyarır: $c"; done
+echo "── T13b · MUTASYON (tam kopya; her mutant bir atıf cümlesini yeniden uyarır hâle getirmeli) ──"
+m13() {   # m13 <ad> <eski> <yeni> <uyarmaya başlaması gereken atıf cümlesi>
+  local D="$T/pkg-kapsam-$1"; mkdir -p "$D"; cp "$HERE"/*.py "$HERE"/*.sh "$D/" 2>/dev/null
+  python3 - "$D/kart.sh" "$2" "$3" <<'PYM' || { g 1 "mutant '$1' kurulamadı (çapa bayat)"; return; }
+import sys; f, a, b = sys.argv[1:]; s = open(f, encoding="utf-8").read(); assert s.count(a) == 1; open(f, "w", encoding="utf-8").write(s.replace(a, b, 1))
+PYM
+  n13=$((n13+1)); local o; o="$(ac13m "$D/kart.sh" "is-m13-$n13" "$4")"
+  grep -q "ÇOK GÜNLÜK" <<<"$o"; g $? "mutant '$1' atfı yeniden kapsam sanıyor → üstteki kapı bu mutantta düşerdi"
+}
+m13 retro-onu-sayilir '(?<!retro )' '' "denetçi ölçüm sonu (retro W42 HENDESE Ö1)"   # yalnız öndeki 'retro ' korumasına bağlı cümle
+m13 atif-sonra-bos 'ATIF_SONRA = r"(?!\s+(?:rapor|kap[ıi]s|kapan[ıi]ş|retro|ders|Ö\d))"' 'ATIF_SONRA = r""' "hafta kapısı D13 PR gövdesinde retro işaretini arasın"
+m13 hafta-atifsiz '(?:s[ıi]|n[ıi]n|da|y[ıi])?(?!\w)" + ATIF_SONRA + r"' '(?:s[ıi]|n[ıi]n|da|y[ıi])?(?!\w)" + r"' "birleştirme kancası CI'ı ölçsün (hafta raporu E3)"
+m13 W-atifsiz 'W\d{2}(?!\w)" + ATIF_SONRA' 'W\d{2}(?!\w)"' "W42 retrosu için kutu dosyasını doldur"
+
+echo "════ T14 · görev durumu (Y7J3Q): --gorev bağlı kart açılış/bitti/tıkandı'da defterdeki görevi yazar; yazamazsa söyler, rc 4 ════"
+GDEPO="$(dirname "$(git rev-parse --path-format=absolute --git-common-dir)")"   # kart.sh ile aynı kök (önceki bölüm depo değiştirdi)
+printf 'kart-sinav-jeton\n' > "$T/jeton"
+python3 - "$T" <<'PY' &
+import sys, json, http.server, socketserver, os
+T=sys.argv[1]
+class H(http.server.BaseHTTPRequestHandler):
+    def log_message(self,*a): pass
+    def do_PATCH(self):
+        n=int(self.headers.get("content-length") or 0); b=json.loads(self.rfile.read(n) or b"{}")
+        with open(os.path.join(T,"yazim.jsonl"),"a") as f: f.write(json.dumps({"yol":self.path,"jeton":self.headers.get("x-defter-jeton"),"govde":b},ensure_ascii=False)+"\n")
+        if self.headers.get("x-defter-jeton")!="kart-sinav-jeton": self.send_response(401); self.end_headers(); return
+        if self.path.endswith("gorev_KARTRED000000001"):   # canlı geçidin düz ret biçimi (ret(): hata · yerine üst düzeyde)
+            self.send_response(409); self.end_headers(); self.wfile.write(json.dumps({"ok":False,"hata":"surum_catismasi","yerine":"görev bu arada değişti, yeniden dene"},ensure_ascii=False).encode()); return
+        self.send_response(200); self.end_headers(); self.wfile.write(json.dumps({"ok":True,"kayit":{"id":self.path.rsplit("/",1)[1]}}).encode())
+with socketserver.TCPServer(("127.0.0.1",0),H) as s:
+    open(os.path.join(T,"dport"),"w").write(str(s.server_address[1])); s.serve_forever()
+PY
+DSRV=$!; for i in $(seq 1 25); do [ -f "$T/dport" ] && break; sleep 0.2; done
+export DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$(cat "$T/dport")"
+KK="$GDEPO/_agents/fabrika/kartlar"; SINIF="--geri-alinamaz h --para h --dis-yuzey h --yetki h"; yz() { [ -f "$T/yazim.jsonl" ] && wc -l < "$T/yazim.jsonl" || echo 0; }
+bash "$KT" ac gb-1 --is "bağlı iş" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST00000001 >/dev/null 2>&1; [ $? -eq 1 ] && [ ! -f "$KK/gb-1.json" ]; g $? "G1 --gorev verilip --tahmin verilmezse kart AÇILMAZ (rc 1; defter tahminsiz çalışılıyor'a geçmez)"
+bash "$KT" ac gb-1 --is "bağlı iş" --istedi SERDAR --aldi BANI $SINIF --gorev GOREV-yanlis --tahmin 30 >/dev/null 2>&1; [ $? -eq 1 ] && [ ! -f "$KK/gb-1.json" ]; g $? "G1b biçimsiz görev kimliği rc 1"
+bash "$KT" ac gb-1 --is "bağlı iş" --istedi SERDAR --aldi BANI $SINIF --tahmin 30 >/dev/null 2>&1; [ $? -eq 1 ] && [ ! -f "$KK/gb-1.json" ]; g $? "G1c --tahmin tek başına anlamsız: rc 1"
+[ "$(yz)" -eq 0 ]; g $? "G1d reddedilen açılışlar deftere HİÇ gitmedi"
+O="$(bash "$KT" ac gb-1 --is "bağlı iş" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST00000001 --tahmin 45 2>&1)"; RC=$?
+python3 - "$T/yazim.jsonl" "$KK/gb-1.json" <<'PY'; g $? "G2 açılış → PATCH /kayit/<görev>: çalışılıyor + atanan BANI + tahmin 45 + '[▶ çalışılıyor]' adımı; kartta gorev/tahmin + yazım 'yazıldı'"
+import json,sys
+y=[json.loads(l) for l in open(sys.argv[1])][-1]; b=y["govde"]; k=json.load(open(sys.argv[2]))
+assert y["yol"]=="/kayit/gorev_KARTTEST00000001" and y["jeton"]=="kart-sinav-jeton"
+assert b["yerine"]=={"atanan":"BANI","tahmin_dk":"45","gorev_durumu":"calisiliyor"}, b
+assert b["adimlar"][0].startswith("[▶ çalışılıyor] BANI · kart gb-1 açıldı, tahmin 45 dk")
+assert k["gorev"]=="gorev_KARTTEST00000001" and k["tahmin_dk"]==45 and k["gorev_yazimlari"][-1]["olay"]=="ac" and k["gorev_yazimlari"][-1]["sonuc"]=="yazıldı"
+PY
+[ $RC -eq 0 ] && grep -q "✓ görev gorev_KARTTEST00000001 → çalışılıyor (defter)" <<<"$O" && ! grep -q "kart-sinav-jeton" <<<"$O"; g $? "G2b rc 0, ekranda '→ çalışılıyor (defter)', jeton değeri çıktıda YOK"
+O="$(bash "$KT" bitti gb-1 --pr 12 2>&1)"; RC=$?
+python3 - "$T/yazim.jsonl" "$(basename "$GDEPO")" <<'PY'; g $? "G3 (KF22R dilim ≠ görev) bitti → göreve YALNIZ '[dilim bitti] … PR #12 · kanıt …' adımı; durum YAZILMAZ (çalışılıyor kalır), onay bekliyor YOK"
+import json,sys
+b=[json.loads(l) for l in open(sys.argv[1])][-1]["govde"]; d=sys.argv[2]
+assert "yerine" not in b and "gerekce" not in b, b
+assert b["adimlar"][0].startswith("[dilim bitti] BANI · kart gb-1 bitti · "+d+" PR #12 · kanıt _agents/fabrika/kanit/gb-1/") and "kart.sh bitti gb-1 --gorev-bitti --kare <yol> --surum <sürüm>" in b["adimlar"][0] and "gorev.sh bitti" in b["adimlar"][0], b
+PY
+[ $RC -eq 0 ] && grep -q "dilim adımı (görev çalışılıyor kalır" <<<"$O"; g $? "G3b bitti rc 0, ekranda 'dilim adımı (görev çalışılıyor kalır…)'"
+N0=$(yz); O="$(bash "$KT" bitti gb-1 --pr 12 --gorev-bitti --kare kanit/x-1440.png 2>&1)"; RC=$?
+[ $RC -eq 1 ] && [ "$(yz)" -eq "$N0" ] && grep -q "sürüm" <<<"$O"; g $? "G3c --gorev-bitti ekran işinde kare tek başına yetmez (rc 1, deftere gitmedi, 'sürüm' ister)"
+O="$(bash "$KT" bitti gb-1 --pr 12 --gorev-bitti 2>&1)"; RC=$?
+[ $RC -eq 1 ] && [ "$(yz)" -eq "$N0" ] && grep -q "dilimdir" <<<"$O"; g $? "G3d --gorev-bitti sınıfsız → rc 1, deftere gitmedi, 'PR tek başına dilimdir' der"
+O="$(bash "$KT" bitti gb-1 --pr 12 --gorev-bitti --kare kanit/x-1440.png --surum 1.25.0 2>&1)"; RC=$?
+python3 - "$T/yazim.jsonl" "$(basename "$GDEPO")" <<'PY'; g $? "G3e --gorev-bitti --kare --surum → onay bekliyor + kanıt '[kare] … · [surum] 1.25.0 · [pr] #12 · kanıt …' + '[⏸ onay bekliyor]' adımı"
+import json,sys
+b=[json.loads(l) for l in open(sys.argv[1])][-1]["govde"]; d=sys.argv[2]
+assert b["yerine"]["gorev_durumu"]=="onay-bekliyor" and b["yerine"]["kanit"]=="[kare] kanit/x-1440.png · [surum] 1.25.0 · [pr] #12 · kanıt _agents/fabrika/kanit/gb-1/ ("+d+")", b
+assert b["adimlar"][0].startswith("[⏸ onay bekliyor] BANI · kart gb-1 bitti")
+PY
+[ $RC -eq 0 ] && grep -q "→ onay bekliyor (defter)" <<<"$O"; g $? "G3f rc 0, ekranda '→ onay bekliyor (defter)'"
+bash "$KT" ac gb-2 --is "tıkanacak iş" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST00000002 --tahmin 60 >/dev/null 2>&1
+bash "$KT" tikandi gb-2 --yol daralt --neden "kapsam kayması: hız kazancı kart dışı davranıştan" >/dev/null 2>&1; RC=$?
+python3 - "$T/yazim.jsonl" <<'PY'; g $? "G4 tıkandı → bekliyor + not (tıkanma nedeni) + '[⏳ bekliyor]' adımı (defter neyi beklediği yazılmamış bekliyor'u reddeder)"
+import json,sys
+b=[json.loads(l) for l in open(sys.argv[1])][-1]["govde"]
+assert b["yerine"]=={"gorev_durumu":"bekliyor","not":"kart gb-2 tıkandı: kapsam kayması: hız kazancı kart dışı davranıştan"}, b
+assert b["adimlar"][0].startswith("[⏳ bekliyor] BANI · kart gb-2 tıkandı (daralt)")
+PY
+[ $RC -eq 0 ]; g $? "G4b tıkandı rc 0"
+O="$(bash "$KT" ac gb-3 --is "reddedilen iş" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTRED000000001 --tahmin 30 2>&1)"; RC=$?
+[ $RC -eq 4 ] && [ -f "$KK/gb-3.json" ] && grep -q "⚠ GÖREV YAZILAMADI: gorev_KARTRED000000001 → çalışılıyor — yazılamadı: http 409 · surum_catismasi · görev bu arada değişti" <<<"$O" &&
+  python3 -c "import json;k=json.load(open('$KK/gb-3.json'));assert k['gorev_yazimlari'][-1]['sonuc'].startswith('yazılamadı: http 409 · surum_catismasi')"; g $? "G5 defter reddederse kart YİNE açılır, rc 4, sebep (hata + yerine) ekranda ve kartta"
+N0=$(yz); O="$(DEFTER_JETON_YOL="$T/jeton-yok" bash "$KT" ac gb-4 --is "jetonsuz iş" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST00000004 --tahmin 30 2>&1)"; RC=$?
+[ $RC -eq 4 ] && [ "$(yz)" -eq "$N0" ] && grep -q "yazılamadı: bu kutuda defter jetonu yok" <<<"$O" && [ -f "$KK/gb-4.json" ]; g $? "G6 jetonsuz kutu: deftere gidilmez, kart açılır, 'jetonu yok' söylenir, rc 4"
+N0=$(yz); O="$(bash "$KT" ac gb-5 --is "bağsız iş" --istedi SERDAR --aldi BANI $SINIF 2>&1)"; RC=$?
+[ $RC -eq 0 ] && [ "$(yz)" -eq "$N0" ] && grep -q "görev bağı yok — iş Sultan'ın 'çalışılıyor' görünümüne DÜŞMEZ" <<<"$O"; g $? "G7 bağsız kart deftere gitmez, rc 0, bunu söyler (eski kartlar etkilenmez)"
+O="$(bash "$KT" bitti gb-5 2>&1)"; RC=$?; [ $RC -eq 0 ] && [ "$(yz)" -eq "$N0" ]; g $? "G7b bağsız kartın bitti'si de deftere gitmez"
+kill $DSRV 2>/dev/null; wait $DSRV 2>/dev/null
+O="$(bash "$KT" bitti gb-2 2>&1)"; RC=$?
+[ $RC -eq 4 ] && grep -q "yazılamadı: deftere ulaşılamadı" <<<"$O" && python3 -c "import json;k=json.load(open('$KK/gb-2.json'));assert k['durum']=='bitti' and k['gorev_yazimlari'][-1]['olay']=='bitti'"; g $? "G8 defter kapalı: kart bitti İŞLENİR, 'ulaşılamadı' söylenir, rc 4 (sessiz eksik yok)"
+unset DEFTER_JETON_YOL DEFTER_UC
+
+echo "════ T15 · KANIT AĞACI: bitti/daralt birincil checkout'tan çağrılınca kanıtı kartın İŞ ALANINDAN okur ve nereden okuduğunu söyler; hiçbir yerde yoksa uyarır (Nexus #1223: daralt tur_sifir=0 yazmıştı) ════"
+mkdir -p "$T/depo3" && cd "$T/depo3" && git init -q -b main && git config user.email t@t && git config user.name T && echo x > f && git add -A && git commit -qm "chore: ilk" && export KANIT_DEPO="$T/depo3"
+bash "$KT" ac is-wt --is "iş alanından okunan kanıt sınavı tek kartta" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1; g $? "kart açıldı (birincil)"
+git worktree add -q -b is-wt "$T/alan3/depo3-is-wt" main 2>/dev/null; g $? "iş alanı (dalı = iş adı, is-alani.sh kuralı) açıldı"
+( cd "$T/alan3/depo3-is-wt" && env -u KANIT_DEPO bash "$K" olcum is-wt olc --asama tek -- echo 1 >/dev/null 2>&1 ) && [ -f "$T/alan3/depo3-is-wt/_agents/fabrika/kanit/is-wt/KANIT.json" ]; g $? "kanıt iş alanında alındı (KANIT.json orada; kanit.sh KANIT_DEPO yokken cwd ağacına yazar)"
+for i in 1 2 3; do echo '{"tur":'$i',"sonuc":{"kod_puani":5,"dogru_sey":"E","bulgular":[]}}' > "$T/alan3/depo3-is-wt/_agents/fabrika/kanit/is-wt/DENETIM-$i.json"; done
+[ ! -d "$T/depo3/_agents/fabrika/kanit/is-wt" ]; g $? "birincil checkout'ta kanıt dizini YOK (eski kodun sessiz 0 verdiği hâl)"
+O="$(bash "$KT" daralt is-wt --kalan "kalan yarı yeterince uzun bir cümle burada" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-wt 2>&1)"; RC=$?
+[ $RC -eq 0 ] && grep -q "tur sıfırı 3" <<<"$O"; g $? "🔴 birincilden daralt: tur sıfırı 3 (iş alanındaki 3 DENETIM; eski kod 0 yazardı)"
+grep -q "iş alanından okundu: $T/alan3/depo3-is-wt" <<<"$O"; g $? "nereden okuduğunu söyledi (kapı kaydı)"
+python3 -c "import json;k=json.load(open('$T/depo3/_agents/fabrika/kartlar/is-wt.json'));assert k['daraltmalar'][-1]['tur_sifir']==3"; g $? "karta tur_sifir=3 yazıldı"
+O="$(bash "$KT" bitti is-wt --pr 9 2>&1)"; RC=$?
+[ $RC -eq 0 ] && ! grep -q "KANIT YOK" <<<"$O" && grep -q "iş alanından okundu" <<<"$O"; g $? "🔴 birincilden bitti: kanıt VAR (iş alanından), KANIT YOK damgası yok (Sx #383 hâli)"
+python3 -c "import json;k=json.load(open('$T/depo3/_agents/fabrika/kartlar/is-wt.json'));assert k['kanit_var'] and k['puan']['tur']==3 and k['puan']['kod']==5"; g $? "karta kanıt_var + tur 3 + puan 5 işlendi"
+O="$(bash "$KT" canli-borc-durum is-wt 2>&1)"; IFS=$'\t' read -r BD _ <<<"$O"; [ "$BD" = yok ] && grep -q "iş alanından okundu: $T/alan3/depo3-is-wt" <<<"$O"; g $? "canli-borc-durum: İLK satır 'yok' (kapı tek satır okur) + kaynak notu SONRAKİ satırda (dört komut da nereden okuduğunu söyler)"
+mkdir -p "$T/depo3/_agents/fabrika/kanit/is-wt"; echo '{"tur":1,"sonuc":{"kod_puani":2,"dogru_sey":"H","bulgular":[]}}' > "$T/depo3/_agents/fabrika/kanit/is-wt/DENETIM-1.json"
+O="$(bash "$KT" tikandi is-wt --yol devam --neden "çağrıldığı ağaç önce gelir sınavı" 2>&1)"; ! grep -q "iş alanından okundu" <<<"$O" && grep -q "'tur': 1" <<<"$O"; g $? "çağrıldığı ağaçta kanıt varsa ÖNCE o okunur (iş alanına bakılmaz; eski davranış korundu)"
+bash "$KT" ac is-yok --is "hiç kanıtı olmayan iş sınavı burada" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+O="$(bash "$KT" bitti is-yok 2>&1)"; grep -q "ne bu ağaçta" <<<"$O" && grep -q "iş alanının İÇİNDEN çağır" <<<"$O" && grep -q "KANIT YOK" <<<"$O"; g $? "kanıt hiçbir yerde yok: nerede arandığı + 'iş alanının içinden çağır' uyarısı + KANIT YOK (sessiz 0 yok)"
+O="$(bash "$KT" canli-borc-durum is-yok 2>&1)"; IFS=$'\t' read -r BD _ <<<"$O"; [ "$BD" = yok ] && grep -q "ne bu ağaçta" <<<"$O"; g $? "canli-borc-durum kanıtsız kartta: İLK satır 'yok' + yokluk uyarısı sonraki satırda"
+echo "── T15 · MUTASYON (tam kopya): iş alanı araması kaldırılınca birincilden daralt yine 0 yazar → üstteki kapı kırmızı ──"
+MD="$T/pkg-agac"; mkdir -p "$MD"; cp "$HERE"/*.py "$HERE"/*.sh "$MD/" 2>/dev/null
+python3 - "$MD/kart.sh" <<'PYM' || g 1 "mutant kurulamadı (çapa bayat)"
+import sys; f=sys.argv[1]; s=open(f,encoding="utf-8").read(); a='alan="$(is_alani_yolu "$is")"'; assert s.count(a)==1; open(f,"w",encoding="utf-8").write(s.replace(a,'alan=""',1))
+PYM
+bash "$KT" ac is-wt2 --is "ikinci iş alanı kanıt sınavı mutant için" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+git worktree add -q -b is-wt2 "$T/alan3/depo3-is-wt2" main 2>/dev/null; mkdir -p "$T/alan3/depo3-is-wt2/_agents/fabrika/kanit/is-wt2"
+for i in 1 2 3; do echo '{"tur":'$i',"sonuc":{"kod_puani":5,"dogru_sey":"E","bulgular":[]}}' > "$T/alan3/depo3-is-wt2/_agents/fabrika/kanit/is-wt2/DENETIM-$i.json"; done
+O="$(bash "$MD/kart.sh" daralt is-wt2 --kalan "kalan yarı yeterince uzun bir cümle burada" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-m 2>&1)"; grep -q "tur sıfırı 0" <<<"$O"; g $? "mutant (iş alanı aranmıyor): tur sıfırı 0 — eski davranış geri geldi → üstteki 🔴 kapı bu mutantta düşerdi"
+O="$(bash "$MD/kart.sh" bitti is-wt2 2>&1)"; grep -q "KANIT YOK" <<<"$O"; g $? "mutant: bitti 'KANIT YOK' damgalar (Sx #383) → üstteki 🔴 kapı düşerdi"
+git worktree remove --force "$T/alan3/depo3-is-wt" 2>/dev/null; git worktree remove --force "$T/alan3/depo3-is-wt2" 2>/dev/null; unset KANIT_DEPO
+
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

@@ -1,0 +1,10 @@
+$ bash _agents/fabrika/kanit/tmux-bekcisi-yayilim/mutasyon-ad.sh terminal-onar
+# rc=0 sure=8.6s zaman=2026-10-20T20:26:55+03:00
+--- stdout ---
+pozitif: SONUÇ: 44 geçti · 0 kaldı · düşen: 
+bekci-kurmaz: SONUÇ: 39 geçti · 5 kaldı · düşen: B1 B2 B3 B4b B4c
+bekci-hep-yazar: SONUÇ: 40 geçti · 4 kaldı · düşen: B2 B3 B4b B4c
+bekci-durakta-kurar: SONUÇ: 38 geçti · 6 kaldı · düşen: B1 B2 B3 B4b B4c B5
+bekci-hatada-durur: SONUÇ: 40 geçti · 4 kaldı · düşen: B1 B3 B4 B4c
+bekci-tekrar-yazar: SONUÇ: 43 geçti · 1 kaldı · düşen: B4c
+--- stderr ---

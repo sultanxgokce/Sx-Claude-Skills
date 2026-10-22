@@ -1,0 +1,22 @@
+{
+  "is": "tmux-kill-server-bekcisi",
+  "cumle": "Kutunun kendi tmux sunucusu içinden ($TMUX dolu) açık soket verilmeden çağrılan tmux kill-server reddedilsin: terminal-onar kur/onar /config/.local/bin'e tmux bekçisi kursun, diğer her çağrı gerçek tmux'a gitsin (K43HN: 16-17 Eki dört aile çöküşü, dava-resume-olc.sh trap'i)",
+  "istedi": "SERDAR",
+  "aldi": "MİRAHUR",
+  "zaman": "2026-10-20T17:28:33+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/tmux-kill-server-bekcisi",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: bekçisi, sunucusu)",
+  "kapsam_uyarilari": []
+}

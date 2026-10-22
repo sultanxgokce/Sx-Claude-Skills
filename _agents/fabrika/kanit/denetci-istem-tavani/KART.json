@@ -1,0 +1,21 @@
+{
+  "is": "denetci-istem-tavani",
+  "cumle": "denetci.sh boyut kapısı yalnız farkı değil göze giden istemin TAMAMINI (fark + iş kartı + kanıt manifesti + ölçüm çıktıları + önceki tur) ölçsün; tavanı aşarsa kırpmadan ve tur yakmadan İŞİ BÖL dönsün, hangi parçanın şiştiğini bassın (BÂNİ 21:59 bulgusu, cloudtop #712 tur 4)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-18T22:07:35+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/denetci-istem-tavani/ (sınav + mutasyon)",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)"
+}

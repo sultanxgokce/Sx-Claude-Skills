@@ -49,10 +49,40 @@ fi
 [ -n "$IS" ] || { _h "iş adı gerekiyor (ya da --pr N)"; exit 2; }
 
 KART="$DEPO/_agents/fabrika/kartlar/$IS.json"
-DZ="$WT/_agents/fabrika/kanit/$IS"; [ -d "$DZ" ] || DZ="$DEPO/_agents/fabrika/kanit/$IS"
+# 🔴 KANIT TEK KURALLA ARANIR (retro W42 ders M3 · gorev_01M57ZWR5MAMW513WYBX5MB3J8): kapı eskiden kanıtı "çağrıldığı ağaç,
+#    yoksa birincil" diye arıyordu. Birleştirme çoğu zaman BİRİNCİL checkout'tan `--pr` ile yapılır; kanıt ise iş alanında ya da
+#    PR'ın dalında durur → kapı "kanıt YOK" dedi ve iş kaçışla (FABRIKA_KAPISIZ) birleşti (kaçış defteri: 15 Eki compact-kurali).
+#    Artık her çağrı AYNI sırayla bakar, hangisini kullandığını söyler:
+#      1) dalı iş adıyla aynı olan ağaç — önce çağrılan ağaç, sonra birincilin iş alanları (dal adı = kart adı; önek atılır)
+#      2) --pr verildiyse PR'ın BAŞI (origin pull/<N>/head; yalnız kanıt dizini geçici yere çıkarılır, ağaca dokunulmaz)
+#      3) birincil depo (birleşmiş iş, ya da tek ağaç kurulum)
+#    Dalı iş adıyla tutmayan bir ağaçtaki kopya ARANMAZ: bayat kopyadır, o işin kanıtı değil.
+KANIT_GECICI=""; trap '[ -n "$KANIT_GECICI" ] && rm -r -f "$KANIT_GECICI"' EXIT
+dal_tutar() { local b; b="$(git -C "$1" symbolic-ref --short -q HEAD 2>/dev/null)" || return 1; [ "${b##*/}" = "$IS" ]; }
+kanit_bul() {
+  local t yol agaclar=()
+  mapfile -t agaclar < <(printf '%s\n' "$WT"; git -C "$DEPO" worktree list --porcelain 2>/dev/null | sed -n 's/^worktree //p')   # boşluklu yol bölünmez
+  for t in "${agaclar[@]}"; do
+    yol="$t/_agents/fabrika/kanit/$IS"
+    if [ -f "$yol/KANIT.json" ] && dal_tutar "$t"; then
+      DZ="$yol"; [ "$t" = "$WT" ] && DZ_YER="çağrılan ağaç ($t, dal iş adıyla aynı)" || DZ_YER="iş alanı ($t, dal iş adıyla aynı)"; return 0
+    fi
+  done
+  if [ -n "$PR" ] && git -C "$DEPO" remote get-url origin >/dev/null 2>&1 && git -C "$DEPO" fetch -q origin "pull/$PR/head" 2>/dev/null; then
+    KANIT_GECICI="$(mktemp -d)"
+    if git -C "$DEPO" archive FETCH_HEAD "_agents/fabrika/kanit/$IS" 2>/dev/null | tar -x -C "$KANIT_GECICI" 2>/dev/null && [ -f "$KANIT_GECICI/_agents/fabrika/kanit/$IS/KANIT.json" ]; then
+      DZ="$KANIT_GECICI/_agents/fabrika/kanit/$IS"; DZ_YER="PR #$PR başı ($(git -C "$DEPO" rev-parse --short FETCH_HEAD 2>/dev/null))"; return 0
+    fi
+  fi
+  if [ -f "$DEPO/_agents/fabrika/kanit/$IS/KANIT.json" ]; then DZ="$DEPO/_agents/fabrika/kanit/$IS"; DZ_YER="birincil depo ($DEPO)"; return 0; fi
+  DZ="/kanit-bulunamadi/_agents/fabrika/kanit/$IS"   # bulunamadı: hiçbir yeri GÖSTERMEZ (aşağıdaki her okuma "yok" görür; mutant birincil-aranmaz)
+  DZ_YER="hiçbir yerde (arandı: dalı '$IS' olan ağaçlar${PR:+ · PR #$PR başı} · birincil depo)"; return 1
+}
+DZ=""; DZ_YER=""; kanit_bul || true
 
 eksik=0; olcemedi=0
 _y "── BİRLEŞTİRME KAPISI · iş: $IS"
+_y "  · kanıt yeri: $DZ_YER"
 
 # 1 · KART
 if [ -f "$KART" ]; then
@@ -69,7 +99,9 @@ if [ -f "$HERE/kanit.py" ]; then
   KANIT_KOK="${DZ%/_agents/fabrika/kanit/$IS}"     # kanıt dizininden deponun kökünü türet
   cik="$(python3 "$HERE/kanit.py" --depo "$KANIT_KOK" dogrula "$IS" 2>&1)"; krc=$?
   case "$krc" in
-    0) _y "  ✓ kanıt: $(printf '%s' "$cik" | head -1 | sed 's/^✓ //')" ;;
+    0) _y "  ✓ kanıt: $(printf '%s\n' "$cik" | grep '^✓ manifest' | sed 's/^✓ //')"
+       # 4K938: geçersiz ilan edilen kayıt sessiz kalmaz — kapı satırında görünür (olcum renkleri kapının hükmü değil, gözün)
+       printf '%s\n' "$cik" | grep '^⛔ GEÇERSİZ' | while IFS= read -r l; do _y "  $l"; done ;;
     1) _h "kanıt manifesti BOZUK (elle yazılmış ya da dosya değişmiş)"; eksik=$((eksik+1)) ;;
     *) _h "kanıt YOK — 'kanıtsız iş gönderilemez'"; eksik=$((eksik+1)) ;;
   esac
@@ -100,8 +132,10 @@ fi
 cy=0; cs=0; cilk=""; ckopuk=""; ckz=1; cpy_rc=0
 if [ -f "$DZ/KANIT.json" ]; then
   # 🔴 GÖZ #353 tur 2: python bloğu düşerse eval boş kalıyor ve kapı "canlı yok" (rc=1) diyordu → alt sürecin rc'si ölçülür, düşerse ÖLÇÜLEMEDİ
-  cpy_out="$(python3 - "$DZ/KANIT.json" "$KART" <<'PY'
+  cpy_out="$(python3 - "$DZ/KANIT.json" "$KART" "$HERE" <<'PY'
 import json,sys,shlex,datetime
+# 4K938: etkin renk kanit.py'den okunur (kopya yok); içe aktarım düşerse alt süreç rc≠0 → ÖLÇÜLEMEDİ (fail-closed)
+sys.path.insert(0,sys.argv[3]); from kanit import etkin_kayitlar
 def P(s):
     # 🔴 GÖZ #353 tur 2: dilimsiz (naive) ISO ile dilimli karşılaştırma TypeError veriyordu → dilimsiz değer kutunun yerel dilimine alınır
     try:
@@ -113,8 +147,9 @@ except Exception: m={}
 kz=None
 try: kz=P(json.load(open(sys.argv[2],encoding="utf-8")).get("zaman",""))
 except Exception: pass
-c=[k for k in m.get("kayitlar",[]) if k.get("tur")=="canli"]
-y=[k for k in c if k.get("renk")=="yesil"]; s=[k for k in c if k.get("renk")=="sari"]
+c=[k for k in etkin_kayitlar(m) if k.get("tur")=="canli"]
+# geçersiz ilan edilen canlı kayıt yeşil SAYILMAZ, sarı gibi ENGELDİR — ilan kapıyı hiçbir zaman gevşetmez
+y=[k for k in c if k["etkin_renk"]=="yesil"]; s=[k for k in c if k["etkin_renk"] in ("sari","gecersiz")]
 bagli_l=[]; kopuk=[]
 for k in y:
     oz=P(k.get("zaman") or ""); son=P(((k.get("son_atesleme") or k.get("ilk_atesleme") or {}).get("saat_iso")) or "")
@@ -137,13 +172,28 @@ PY
   [ "$cpy_rc" -eq 0 ] && eval "$cpy_out"
 fi
 cs_engel=0
+# 🧾 CANLI BORÇ (5WYQMW · SERDAR 22 Eki 00:43): canlı kayıt henüz ÜRETİLEMİYORSA (dağıtım birleşmeden sonra/başkasında) kapı, kartta KAYITLI ve GEÇERLİ
+#    bir borçla geçer — borç kapıyı gevşetmez, görünür kılar: kart 'bitti' olmaz (canli-borclu), 24 saatte kırmızı olur. Koşullar canli_borc.py'de
+#    (sınıflı kartta Sultan kararı şart). Borç yalnız bağlı yeşil kayıt YOKKEN anlamlıdır; geçersiz ilan edilmiş kaydı AKLAMAZ.
+bd=""; bac=""; borc_gecer=0
+if [ "$cg" = "E" ] && [ "$cy" -eq 0 ] && [ -f "$HERE/kart.sh" ]; then
+  IFS=$'\t' read -r bd bac <<<"$(KANIT_DEPO="$DEPO" bash "$HERE/kart.sh" canli-borc-durum "$IS" 2>&1)"; bac="${bac:-}"
+  case "$bd" in
+    gecerli) borc_gecer=1 ;;
+    gecersiz) _h "canlı borç GEÇERSİZ: $bac"; eksik=$((eksik+1)) ;;
+    yok|odendi) ;;
+    *) _h "canlı borç durumu OKUNAMADI (kart.sh canli-borc-durum: ${bd:-boş} ${bac}) — ÖLÇÜLEMEDİ, borç sayılmaz"; olcemedi=$((olcemedi+1)) ;;
+  esac
+fi
 [ "$cpy_rc" -eq 0 ] || { _h "canlı kayıt değerlendirmesi DÜŞTÜ (python rc=$cpy_rc) — ÖLÇÜLEMEDİ, 'canlı yok' sayılmaz"; olcemedi=$((olcemedi+1)); }
 # 🔴 GÖZ #353 tur 1: kartın açılış zamanı okunamazsa işe bağlama ÖLÇÜLEMEZ — bu "bağlı kayıt yok" (rc=1) değil, ÖLÇÜLEMEDİ (rc=3).
 [ ! -f "$KART" ] || [ "$ckz" = "1" ] || { _h "kartın açılış zamanı ('zaman') okunamadı — canlı kaydın işe bağlanması ÖLÇÜLEMEDİ"; olcemedi=$((olcemedi+1)); }
 [ -n "$ckopuk" ] && _y "  ⚠ canlı kaydı işe bağlanamadı (sayılmaz): $ckopuk"
-[ "$cs" -gt 0 ] && { _h "canlı kanıt SARI ($cs kayıt) — ölçülmüş ama ateşleme kaydı yok; sarı yeşil değildir"; eksik=$((eksik+1)); cs_engel=1; }
-[ "$cg" = "E" ] && [ "$cy" -eq 0 ] && [ "$cs_engel" -eq 0 ] && { _h "canlı kanıt YOK ya da bu işe bağlı değil — cron/servis/sunucu işi ($csebep) kart açılışından SONRAKİ gerçek ateşleme kaydını ister: kanit.sh canli <iş> <etiket> --kaynak … -- <log okuyan komut>"; eksik=$((eksik+1)); }
+[ "$cs" -gt 0 ] && [ "$borc_gecer" -eq 0 ] && { _h "canlı kanıt SARI ya da GEÇERSİZ ($cs kayıt) — ateşleme kaydı yok ya da kayıt geçersiz ilan edilmiş; yeniden ölç (kanit.sh canli)"; eksik=$((eksik+1)); cs_engel=1; }
+[ "$cg" = "E" ] && [ "$cy" -eq 0 ] && [ "$cs_engel" -eq 0 ] && [ "$borc_gecer" -eq 0 ] && [ "$bd" != "gecersiz" ] && { _h "canlı kanıt YOK ya da bu işe bağlı değil — cron/servis/sunucu işi ($csebep) kart açılışından SONRAKİ gerçek ateşleme kaydını ister: kanit.sh canli <iş> <etiket> --kaynak … -- <log okuyan komut>"; eksik=$((eksik+1)); }
 [ "$cy" -gt 0 ] && _y "  ✓ canlı: $cy ateşleme kaydı (işe bağlı) · ilk: $cilk"
+[ "$borc_gecer" -eq 1 ] && _y "  🧾 CANLI BORÇ (kapı geçer, kart BİTMEZ): $bac
+     → birleştir → kur → kanit.sh canli $IS <etiket> --kaynak … --desen … → kart.sh bitti $IS. 24 sa ödenmezse kart.sh borclar kırmızı."
 [ "$cg" = "H" ] && [ -n "$csebep" ] && _y "  · canlı kanıt istenmedi — $csebep"
 
 # 3 · PUAN
@@ -167,6 +217,32 @@ PY
 )"
   eval "$okuma"
   _y "  · denetim tur $tur · $puan/5 · doğru şey: $dogru · bulgu: $nb · yazan: $yazan → denetçi: $denetci"
+  # ── DARALTMA KAYDI (PCP7J, 18 Eki 2026): kapı eskiden kartın reis/Sultan kararlarını hiç okumuyor, koşulsuz son
+  #    DENETIM 5/E istiyordu. Kart daraltıldıysa (kart.sh daralt → daraltmalar[-1].tur_sifir) son denetim daraltmadan
+  #    SONRA koşmuş olmalı: eski cümleye verilmiş 5/E yeni cümleyi doğrulamaz. Kart okunamazsa ÖLÇÜLEMEDİ (rc=3), geçti değil.
+  if [ -n "${KART:-}" ] && [ -r "$KART" ]; then
+    dar="$(python3 - "$KART" "$tur" <<'PYD'
+import json,sys
+try:
+    try: k=json.load(open(sys.argv[1],encoding="utf-8"))
+    except Exception: print("yok"); raise SystemExit   # kart okunamıyorsa onu canli-gerekir kapısı zaten ÖLÇÜLEMEDİ sayar (çift sayım yok)
+    d=k.get("daraltmalar") or []
+    rk=[x for x in (k.get("reis_kararlari") or []) if x.get("karar")=="daralt"]; sk=[x for x in (k.get("sultan_kararlari") or []) if x.get("karar")=="daralt"]
+    if not d: print("yok"); raise SystemExit
+    ts=int(d[-1].get("tur_sifir",0)); tur=int(sys.argv[2]) if str(sys.argv[2]).isdigit() else -1
+    kim="Sultan" if sk else ("reis" if rk else "kayitsiz")
+    print(f"{'tamam' if tur>ts else 'eski'} {ts} {d[-1].get('kalan_kart','?')} {kim}")
+except SystemExit: pass
+except Exception as e: print("hata")
+PYD
+)"
+    case "$dar" in
+      yok) ;;
+      hata) _h "kartın daraltma kaydı OKUNAMADI — kapı ölçemedi"; olcemedi=$((olcemedi+1)) ;;
+      tamam\ *) set -- $dar; _y "  · kart daraltılmış (tur sıfırı $2, kalan → $3, karar: $4) · son denetim daraltma SONRASI ✓" ;;
+      eski\ *) set -- $dar; _h "kart daraltılmış (tur sıfırı $2, kalan → $3) ama son denetim (tur $tur) daraltmadan ÖNCE — yeni cümle denetlenmedi, birleştirme YOK"; eksik=$((eksik+1)) ;;
+    esac
+  fi
   [ "$puan" = "5" ] || { _h "kod puanı 5 DEĞİL ($puan) — adım 2'ye dönülmeliydi"; eksik=$((eksik+1)); }
   [ "$dogru" = "E" ] || { _h "'doğru şey mi' EVET değil ($dogru) — kod doğru olsa da yanlış iş olabilir"; eksik=$((eksik+1)); }
   # Sultan Y0006: yedek göz (yazandan farklı YENİ oturum) de bağımsız sayılır — ama ancak

@@ -1,0 +1,7 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/sigpipe-mutasyon.sh /config/projects/_wt/Sx-Claude-Skills-gun-ortasi-okundu-sigpipe
+# rc=0 sure=67.3s zaman=2026-10-18T17:04:27+03:00
+--- stdout ---
+temiz: ── SONUÇ: geçti=35 kaldı=0 ölçemedim=0 ── · düşen: 
+M1 gelen kutusu boruya döndü: ── SONUÇ: geçti=34 kaldı=1 ölçemedim=0 ── · düşen: 🔴 T5b 
+M2 çıpa kapısı boruya döndü: ── SONUÇ: geçti=34 kaldı=1 ölçemedim=0 ── · düşen: 🔴 T5c 
+--- stderr ---

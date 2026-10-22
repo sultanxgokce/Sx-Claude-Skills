@@ -1,0 +1,22 @@
+{
+  "is": "plan-tablo-dugum",
+  "cumle": "Günün plan tablosu görev kimliği olan maddede o görevin hangi kutunun bekleyen işini açtığını defterden okuyup göstersin; defter okunamazsa satır aynen kalsın ve bu söylensin",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-20T20:26:48+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": []
+}

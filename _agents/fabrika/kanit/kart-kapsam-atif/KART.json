@@ -1,0 +1,24 @@
+{
+  "is": "kart-kapsam-atif",
+  "cumle": "kart.sh çok günlük kapsam uyarısı atfı kapsam sanmasın: 'retro W42', 'W42 dersi', 'hafta raporu', 'hafta kapısı' uyarı vermesin; gerçek kapsam ('W42 boyunca', '1. hafta', 'haftalık', 'her gün') uyarmaya devam etsin; 20 Eki'de üç yanlış alarm ölçüldü",
+  "istedi": "HENDESE",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-20T18:19:37+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [
+    "ÇOK GÜNLÜK KAPSAM (1. hafta, W42, hafta, haftalık, her gün): bir PR'da teslim edilmez — gün başına kart öner: kart-kapsam-atif-g1 · kart-kapsam-atif-g2 … (her biri günün teslim birimi)"
+  ]
+}

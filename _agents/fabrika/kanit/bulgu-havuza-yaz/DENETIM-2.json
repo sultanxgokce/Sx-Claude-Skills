@@ -1,0 +1,59 @@
+{
+  "tur": 2,
+  "is": "bulgu-havuza-yaz",
+  "pr": "403",
+  "yazan": "claude",
+  "denetci": "claude (sonnet) (YEDEK GÖZ: codex düştü (2 deneme, rc=1) · yazandan farklı yeni oturum + farklı model kademesi [yazan: fable] · Sultan Y0006)",
+  "zaman": "2026-10-21T17:17:06+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": "codex düştü (2 deneme, rc=1)",
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": "sonnet",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 37886,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 19869
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Bulgu yazma komutu artık merkezî defterde varsayılan olarak 'havuz' açıyor, --gorev ile eskisi gibi 'acik' açıyor. Tur 1'deki iki bulgu da giderilmiş (--dugum tek başına red, jetonsuz yolda havuzun uygulanmadığı söyleniyor); geriye defter-uyumu ve test sağlamlığıyla ilgili küçük eksikler kaldı.",
+    "bulgular": [
+      {
+        "ne": "Kartın ikinci cümlesi ('Defter havuzu tanımıyorsa açıkça reddeder') için ayrı sınav yok. HV serisi defterin 400 dönmesini ve komutun bunu basmasını denemiyor; yalnız K1g/D7'nin genel ret yoluna dayanıyor.",
+        "kanit": "35 sınavda 'havuz' kelimesi geçen HV1-HV4'ün hiçbiri sahte defterden havuz reddi döndürmüyor. SKILL.md'deki 'rc 1, sessizce acik'a düşmez' iddiası doğrudan ölçülmemiş.",
+        "konum": "bulgu/scripts/bulgu.test.sh HV1-HV4; bulgu/SKILL.md 0.5.0 maddesi",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Eski 1.18.0 öncesi defterlerde 'havuz' değerinin 400 ile reddedileceği varsayımı koddan ya da testten doğrulanmıyor. Gerçek defter başka bir davranış gösterirse (sessiz kabul veya farklı hata) kart sözü tutulmaz.",
+        "kanit": "Kod yalnız curl yanıtını genel ret yoluna bırakıyor; sürüm kontrolü yok. Dokümandaki '1.18.0 öncesi 400' bilgisi diff içinde kanıtlanmıyor.",
+        "konum": "bulgu/SKILL.md satır 'Defter 1.18.0 öncesiyse …'; bulgu/scripts/bulgu.sh yaz yolu",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Canlı merkezî defterin 'havuz' durumunu ve kaynak_sinif alanını gerçekten kabul ettiği bu kutuda ölçülemedi; testler sahte sunucuya karşı.",
+        "kanit": "Tüm sınavlar yerel sahte sunucuya (DEFTER_UC=127.0.0.1) gidiyor; canlı kayıt örneği manifestte yok.",
+        "konum": "bulgu/scripts/bulgu.test.sh M=… DEFTER_UC",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "canlı merkezî Görev Defteri + jeton yetkisi"
+      },
+      {
+        "ne": "catalog.json'daki bulgu açıklaması 0.5.0 değişikliğini (havuz varsayılanı, --gorev) anlatmıyor; yalnız sürüm numarası artmış.",
+        "kanit": "Diff'te description alanı değişmedi, son cümle '0.4.1: bağ reddinde …'.",
+        "konum": "catalog.json id=bulgu description",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam, sarı kayıt yok. Önce 30, sonra tur 2'de 35 sınav yeşil. Varsayılanı tekrar 'acik' yapan mutasyonda HV1 kırmızıya düşüyor; sınav ana iddiayı ölçüyor. Eksikler: defterin havuzu reddetme yolu ayrıca sınanmamış, canlı defter karşısında ölçüm yok. Veri sahte sunucudan geldiği için 'gerçekçi veri' sorusu canlı yüzeye kalıyor."
+  }
+}

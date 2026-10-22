@@ -12,7 +12,9 @@ Politika (SKILL.md §1-2-4):
 - TIP=ui → ≥1 e2e-check G şart (mock-only yeşil yasak) ... red: gereklilik-jenerik
 - TIP=kod → ≥1 api-check|e2e-check G şart (tsc yetmez) ... red: gereklilik-jenerik
 - VITES=HAFIF → tek-G + tek-kanıt meşru (G-sayısı şartı yok; davranış-G şartı geçerli)
-- tur=llm-yargi → rubrik zorunlu (Katman-2)
+- tur=llm-yargi → rubrik zorunlu (Katman-2); `hedef:` (worktree-göreli dosya, isteğe bağlı) yargıca verilen TEK iş parçası
+- tur=sultan-denemesi → `tarif:` zorunlu (10 sn'lik deneme, Sultan dili). Mühürdar SINAMAZ, koşmaz, GEÇTİ saymaz (Sultan
+  S5, 21 Eki): teslim ekranında en üstte Sultan dener. Davranış-G sayılmaz (Sultan'ın eli makine kanıtı değildir).
 """
 import hashlib
 import json
@@ -21,7 +23,8 @@ import sys
 
 TIPLER = ("ui", "kod", "docs")
 VITESLER = ("TAM", "HAFIF")
-TURLER = ("cmd", "api-check", "e2e-check", "llm-yargi")
+TURLER = ("cmd", "api-check", "e2e-check", "llm-yargi", "sultan-denemesi")
+KOSULMAZ = ("llm-yargi", "sultan-denemesi")   # Katman-1'de koşulmayan türler (yargıç / Sultan)
 DAVRANIS_TURLERI = ("api-check", "e2e-check")
 
 G_BASLIK = re.compile(r"^G(\d+):\s*(.*)$")
@@ -49,6 +52,8 @@ def parse(metin):
                 "davranis": False,
                 "cwd": None,
                 "rubrik": None,
+                "hedef": None,
+                "tarif": None,
             }
             gler.append(aktif)
             continue
@@ -76,7 +81,7 @@ def parse(metin):
                         aktif["beklenen_rc"] = None  # politika-denetimi yakalar
                 elif anahtar == "davranis":
                     aktif["davranis"] = deger.lower() in ("evet", "true", "1")
-                elif anahtar in ("tur", "komut", "beklenen_desen", "cwd", "rubrik"):
+                elif anahtar in ("tur", "komut", "beklenen_desen", "cwd", "rubrik", "hedef", "tarif"):
                     aktif[anahtar] = deger
     return kart, goal, tip, vites, gler
 
@@ -100,6 +105,9 @@ def politika(kart, goal, tip, vites, gler):
         if g["tur"] == "llm-yargi":
             if not g["rubrik"]:
                 eksik.append(f"{g['id']}: llm-yargi için rubrik zorunlu (izole-rubrik)")
+        elif g["tur"] == "sultan-denemesi":
+            if not g["tarif"]:
+                eksik.append(f"{g['id']}: sultan-denemesi için tarif zorunlu (Sultan'ın 10 sn'lik denemesi)")
         elif not g["komut"]:
             eksik.append(f"{g['id']}: komut eksik")
         if g["beklenen_rc"] is None:
@@ -143,6 +151,7 @@ def main():
         "gereklilik_sha256": hashlib.sha256(metin.encode("utf-8")).hexdigest(),
         "g": gler,
         "oznel_sayisi": sum(1 for g in gler if g["tur"] == "llm-yargi"),
+        "sultan_sayisi": sum(1 for g in gler if g["tur"] == "sultan-denemesi"),
         "red": {"ad": red_adi, "sebepler": sebepler} if red_adi else None,
     }
     json.dump(cikti, sys.stdout, ensure_ascii=False, indent=1)

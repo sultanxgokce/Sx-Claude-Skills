@@ -12,7 +12,7 @@
 #     Sınıflı kartta AÇILMAZ (o kararın merci Sultan'dır). Defter satırı TAVAN-ACILDI-REIS, gün sonu özetinde görünür.
 #
 # Kullanım:
-#   denetci.sh <iş> (--pr N | --diff DOSYA) [--kart DOSYA] [--yazan claude|codex] [--denetci auto|codex|claude]
+#   denetci.sh <iş> [--pr N | --diff DOSYA] [--kart DOSYA] [--yazan claude|codex] [--denetci auto|codex|claude]
 #              [--model AD] [--depo KÖK] [--kare PNG/JPG]...
 #   --kare : arayüz işinde kabul karesi (tekrarlanabilir, en çok 8). Kare bağımsız göze GÖRSEL olarak gider (codex exec -i);
 #            istemde "ekte N kare" yazar, DENETIM kaydı kare adı + sha256 taşır. Dosya yok / görsel değil → rc 2 (sessiz atlama yok).
@@ -26,6 +26,72 @@ ISTEM="$HERE/../adimlar/denetci-istem.md"
 TAVAN=3; MUTLAK=4
 
 _hata() { printf '✗ %s\n' "$*" >&2; }
+# 🔴 SESSİZ BİTİŞ YOK (SERDAR ACİL 21 Eki 19:49, Sultan: "işler sessizce duruyor"): bir günde iki ajan bitmiş göz turunu
+#    1'er saat fark etmedi, biri HİÇ başlamamış denetçinin DENETIM-N.json'unu 1 saat bekledi. Kök üçlü: bitince haber yok,
+#    zaman aşımı yok, başladığının izi yok. Çare: (1) başlarken DENETIM-<tur>.kosuyor izi (pid + başlangıç), bitince silinir;
+#    (2) model çağrısı DENETCI_ZAMAN_ASIMI (varsayılan 900 sn) ile kesilir → rc 3 + HAM'a "ZAMAN AŞIMI";
+#    (3) HER çıkış yolunda (EXIT tuzağı — DENETIM yazmayan erken çıkışlar dâhil) yazana tek satır zil; rc 3/4'te reise de.
+#    Zil aracı yoksa (aile-notify bu kutuda yok) iş DURMAZ ama sessiz de geçmez: stderr'e yazılır.
+KOSUYOR=""; TMP=""; ZAMAN_ASIMI=0
+_zil_sonuc() {   # _zil_sonuc <aile-notify rc> <kime> <mesaj> — yalnız sorunu söyler; kuyruğa giren zil sorun değildir
+  case "$1" in 0) ;; 3) printf '· denetçi zili deftere yazıldı, %s koltuğu meşgul → kuyrukta (boşalınca teslim): %s\n' "$2" "$3" >&2 ;;
+    *) printf '⚠ denetçi zili gönderilemedi (%s · aile-notify rc %s): %s\n' "$2" "$1" "$3" >&2 ;; esac
+}
+_zil() {   # _zil <rc> — yazana --done, rc 3/4'te reise --waiting
+  local rc="$1" an="${FABRIKA_AILE_NOTIFY:-}" yazan="${AGENT_NAME:-}" reis="" k="" ne
+  [ "$an" = "-" ] && return 0   # bilerek kapalı (sınavlar: denetçiyi yüzlerce kez koşturur, gerçek koltuklara zil çalmasın)
+  if [ -z "$an" ] && [ -n "${DENETCI_KOMUT:-}" ]; then   # sınav kipi: gerçek zil ARANMAZ, yalnız açıkça verilen çalar
+    printf '· sınav kipi (DENETCI_KOMUT): bitiş zili yalnız FABRIKA_AILE_NOTIFY ile — rc %s\n' "$rc" >&2; return 0; fi
+  [ -n "$an" ] || an="$(command -v aile-notify.sh 2>/dev/null)"
+  [ -n "$an" ] || for k in "${DEPO:-}/scripts/aile-notify.sh" /config/projects/Nexus/scripts/aile-notify.sh; do [ -f "$k" ] && { an="$k"; break; }; done
+  if [ -z "$an" ] || [ ! -f "$an" ]; then printf '⚠ denetçi bitiş zili ATLANDI: aile-notify bulunamadı (FABRIKA_AILE_NOTIFY ile ver) — rc %s\n' "$rc" >&2; return 0; fi
+  k="${KART_DEPO:-}/_agents/fabrika/kartlar/${IS:-}.json"
+  if [ -f "$k" ]; then
+    [ -n "$yazan" ] || yazan="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1])).get("aldi") or "")' "$k" 2>/dev/null)"
+    reis="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1])).get("istedi") or "")' "$k" 2>/dev/null)"
+  fi
+  case "$reis" in ""|SULTAN|Sultan|"$yazan") reis="SERDAR" ;; esac   # sahipsiz · Sultan (koltuk değil, zil çalınmaz) · yazanın kendisi → kutular üstü reis
+  # göz tur 2 (#404): AGENT_NAME yok ve kart yoksa (iş adı verilmeden en erken çıkış) yazan bilinmez — zil hedefsiz gitmesin, reise gider
+  local yazansiz=0
+  if [ -z "$yazan" ]; then yazansiz=1; yazan="$reis"; printf '⚠ denetçi zilinde yazan bilinmiyor (AGENT_NAME yok, kart yok) → %s\n' "$reis" >&2; fi
+  case "$rc" in 0) ne="GEÇTİ" ;; 1) ne="düzelt, yeniden gönder" ;; 2) ne="kanıt/kullanım eksiği — denetim açılmadı" ;;
+                3) ne="ÖLÇÜLEMEDİ"; [ "$ZAMAN_ASIMI" = 1 ] && ne="ZAMAN AŞIMI (${ZA} sn) — denetçi bitmedi" ;; 4) ne="TIKANDI — üç yol raporu" ;; *) ne="beklenmeyen çıkış" ;; esac
+  local m="${IS:-?} tur ${TUR:-?}: ${PUAN:-—}/${DOGRU:-—} · bulgu ${NB:-—} · rc $rc · $ne"
+  [ "$yazansiz" = 1 ] && m="$m · yazan bilinmiyor"
+  # HEZARFEN ölçümü (20:38, #404): denetçiyi koşturan ajanın kendi penceresine giden zil, aile-notify'ın self-loop korumasına
+  #   takılıp ATLANIYORDU ("atla(self): … çağıran-oturum") — bekleyen yine sessiz kalırdı. Yazanın zilinde TMUX kimliği soyulur:
+  #   meşgul koltukta zil kuyruğa girer (ölçüldü: kanıt olcum-gercek-zil-sonra). Bedeli: gönderen "BILINMEYEN" görünür — aile-notify
+  #   göndereni yalnız TMUX'tan çözer. Reis zili başka koltuğa gider; orada kimlik KORUNUR ki reis kimden geldiğini görsün.
+  # SERDAR 23:22: TMUX soyulunca aile-notify göndereni çözemiyor, zil 'BILINMEYEN iş-bitti' diye düşüyordu → gönderen AILE_KIMDEN ile
+  #   verilir (Nexus aile-notify yalnız TMUX'tan çözülemezse ve kayıtlı koltuksa kullanır). Yazan bilinmiyorsa VERİLMEZ: reisin adı
+  #   gönderen gibi görünürdü. rc 3 = zil deftere yazıldı, koltuk meşgul → kuyrukta (gönderilemedi DEĞİL).
+  local kim="" r; [ "$yazansiz" = 0 ] && kim="$yazan"
+  env -u TMUX -u TMUX_PANE ${kim:+AILE_KIMDEN="$kim"} bash "$an" --done ${yazan:+--amir "$yazan"} "denetçi: $m" </dev/null >/dev/null 2>&1; r=$?
+  _zil_sonuc "$r" "${yazan:-?}" "$m"
+  if { [ "$rc" = 3 ] || [ "$rc" = 4 ]; } && [ "$yazansiz" = 0 ]; then   # yazansızda reis zaten --done'u aldı, ikinci zil yok
+    env ${kim:+AILE_KIMDEN="$kim"} bash "$an" --waiting --amir "$reis" "denetçi (${yazan:-yazan?}): $m" </dev/null >/dev/null 2>&1; r=$?
+    _zil_sonuc "$r" "$reis (reis)" "$m"
+  fi
+}
+_bitis() {   # EXIT tuzağı: çıkış kodu KORUNUR (tuzak exit çağırmaz)
+  local rc=$?
+  [ -n "$KOSUYOR" ] && rm -f "$KOSUYOR"
+  [ -n "$TMP" ] && rm -rf "$TMP"
+  _zil "$rc"
+}
+trap _bitis EXIT
+ZA="${DENETCI_ZAMAN_ASIMI:-900}"; ZA_K="${DENETCI_ZAMAN_ASIMI_K:-30}"
+# göz tur 1 (#404): sayı olmayan değer timeout'u rc 125'e düşürür ve "codex düştü" sanılıp yeniden denenirdi → doğrula, varsayılana dön
+case "$ZA" in ''|*[!0-9]*|0) printf '⚠ DENETCI_ZAMAN_ASIMI=%s geçersiz (pozitif tam sayı sn olmalı) → 900\n' "$ZA" >&2; ZA=900 ;; esac
+case "$ZA_K" in ''|*[!0-9]*|0) ZA_K=30 ;; esac
+# _sinirli <komut…> — ZA sn sonra TERM, yutarsa ZA_K sn sonra KILL (göz tur 1: -k'sız timeout TERM'i yutan denetçide yine asılı kalır).
+#   KILL ile biten aşım 137 döner; süre dolmuşsa o da zaman aşımıdır → 124'e çevrilir (tek anlam: aşım = 124).
+_sinirli() {
+  local b=$SECONDS r
+  timeout -k "$ZA_K" "$ZA" "$@"; r=$?
+  [ "$r" -eq 137 ] && [ $((SECONDS - b)) -ge "$ZA" ] && r=124
+  return "$r"
+}
 _bilgi() { printf '%s\n' "$*"; }
 
 KARELER=(); IS=""; PR=""; DIFF=""; KART=""; YAZAN="claude"; DENETCI="auto"; MODEL=""; DEPO="${KANIT_DEPO:-}"; SULTAN_DEVAM=0; REIS_DEVAM=0
@@ -117,7 +183,7 @@ PYK
 )"
   [ -z "$_kd" ] || { _hata "--kare geçerli görsel değil ($_kd): $_k"; exit 2; }
 done
-[ -n "$PR$DIFF" ] || { _hata "--pr N ya da --diff DOSYA gerekiyor"; exit 1; }
+# --pr da --diff de yoksa denetçi FARKI KENDİSİ alır (görev R7M76): yerel kip — aşağıda "3 · girdiler".
 [ -n "$DEPO" ] || DEPO="$(git rev-parse --show-toplevel 2>/dev/null || echo "")"
 [ -n "$DEPO" ] || { _hata "depo kökü bulunamadı"; exit 3; }
 DZ="$DEPO/_agents/fabrika/kanit/$IS"
@@ -138,7 +204,10 @@ kart_yolu() {  # birincil depodaki kart; yoksa boş. İş alanındaki kopya OKUN
 # ── 1 · kanıt kapısı ─────────────────────────────────────────────────────────────
 KANIT_CIKTI="$(KANIT_DEPO="$DEPO" python3 "$HERE/kanit.py" dogrula "$IS" 2>&1)"; KRC=$?
 case "$KRC" in
-  0) KANIT_DURUM="sağlam (araç imzalı, sha'lar tutuyor)" ;;
+  0) KANIT_DURUM="sağlam (araç imzalı, sha'lar tutuyor)"
+     # 4K938: geçersiz ilan edilen kayıt göze söylenir — manifestte durur ama kanıt sayılmaz
+     NGEC=$(printf '%s\n' "$KANIT_CIKTI" | grep -c '^⛔ GEÇERSİZ')
+     [ "$NGEC" -gt 0 ] && KANIT_DURUM="$KANIT_DURUM · $NGEC kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: $(printf '%s\n' "$KANIT_CIKTI" | grep '^⛔ GEÇERSİZ' | sed 's/^⛔ GEÇERSİZ: //' | paste -sd ';' -)" ;;
   1) _hata "kanıt manifesti BOZUK (elle yazılmış ya da dosya değişmiş) — denetim açılmaz"; printf '%s\n' "$KANIT_CIKTI" >&2; exit 2 ;;
   *) _hata "kanıt YOK — 'kanıtsız adım 4 yok'. Önce kanit.sh ile kanıt topla."; exit 2 ;;
 esac
@@ -147,6 +216,44 @@ esac
 mkdir -p "$DZ"
 ONCEKI=$(ls "$DZ"/DENETIM-*.json 2>/dev/null | wc -l)
 TUR=$((ONCEKI+1))
+# "denetçi başladı mı?" sorusunun cevabı: bekleyen bu dosyaya bakar (pid canlı mı, ne zamandan beri); bitince _bitis siler
+# göz tur 1 (#404): SIGKILL/OOM'da EXIT tuzağı koşmaz → iz kalır. Kalan izin pid'i ölüyse BAYAT: söylenir ve silinir.
+#   pid'i canlıysa aynı işte BAŞKA denetçi koşuyor: aynı turu ve izi paylaşırdı → bu koşum ölçülemedi (rc 3), öbürüne dokunulmaz.
+_pid_kimlik() { ps -o lstart= -p "$1" 2>/dev/null | sed 's/^ *//'; }
+for _iz in "$DZ"/DENETIM-*.kosuyor; do
+  [ -f "$_iz" ] || continue
+  _pid="$(sed -n 's/^pid=//p' "$_iz" | head -1)"
+  # göz tur 2 (#404): pid yeniden verilmiş olabilir → canlılık yetmez, sürecin başlangıç anı (ps lstart) izdekiyle aynı olmalı.
+  #   Eski biçimli izde (pid_kimlik yok) yalnız canlılık sayılır — temkinli: yanlışlıkla başkasının denetimini ezmekten iyidir.
+  _kim_iz="$(sed -n 's/^pid_kimlik=//p' "$_iz" | head -1)"
+  if [ -n "$_pid" ] && kill -0 "$_pid" 2>/dev/null && { [ -z "$_kim_iz" ] || [ "$_kim_iz" = "$(_pid_kimlik "$_pid")" ]; }; then
+    _hata "bu işte başka denetçi koşuyor: $(basename "$_iz") (pid $_pid, $(sed -n 's/^baslangic=//p' "$_iz")) — bitmesini bekle"; exit 3
+  fi
+  _bilgi "⚠ bayat koşuyor izi silindi: $(basename "$_iz") (pid ${_pid:-?} yaşamıyor ya da başka sürece geçmiş — denetçi zil çalmadan öldü)"; rm -f "$_iz"
+done
+KOSUYOR="$DZ/DENETIM-$TUR.kosuyor"
+# noclobber: denetimle yazım arasındaki dar aralıkta ikinci denetçi gelirse izi ezmez, ölçülemedi der
+if ! ( set -C; printf 'pid=%s\npid_kimlik=%s\nbaslangic=%s\nzaman_asimi_sn=%s\n' "$$" "$(_pid_kimlik "$$")" "$(date -Iseconds)" "$ZA" > "$KOSUYOR" ) 2>/dev/null; then
+  if [ -e "$KOSUYOR" ]; then KOSUYOR=""; _hata "bu işte başka denetçi aynı anda başladı (DENETIM-$TUR.kosuyor) — bitmesini bekle"; exit 3; fi
+  KOSUYOR=""
+fi
+# ── DARALTMA SIFIRI (PCP7J, 18 Eki 2026): kart daraltıldıysa (kart.sh daralt) daraltmadan ÖNCEKİ turlar yeni
+#    cümleyi puanlamadı; tavan ve "ilerliyor mu" yalnız daraltma SONRASI turlara bakar. Kart okunamazsa 0
+#    (daraltma yok sayılır — kapı aynı kaydı ayrıca okur, bu kapı tek değildir).
+TUR_SIFIR=0
+_KY="$(kart_yolu 2>/dev/null || true)"
+if [ -n "$_KY" ] && [ -r "$_KY" ]; then
+  TUR_SIFIR="$(python3 - "$_KY" <<'PYTS'
+import json,sys
+try:
+    k=json.load(open(sys.argv[1],encoding="utf-8")); d=k.get("daraltmalar") or []
+    print(int(d[-1].get("tur_sifir",0)) if d else 0)
+except Exception: print(0)
+PYTS
+)"
+  case "$TUR_SIFIR" in ''|*[!0-9]*) TUR_SIFIR=0 ;; esac
+  [ "$TUR_SIFIR" -gt 0 ] && _bilgi "· kart DARALTILMIŞ: ilk $TUR_SIFIR tur eski cümleye ait, sayılmıyor (tavan ve ilerleme daraltmadan sonra başlar)"
+fi
 # ── SAYILI TUR (gorev WC3VBZAA · ölçülmüş vaka: cloudtop #635 DÖRT turunu "canlıda kurulu
 #    değil" bulgusuyla yaktı, kod kusursuzdu ve iş hiç ilerlemedi). Tavan ham tur sayısına değil,
 #    İŞIN KUTUDA İLERLETİLEBİLDİĞİ tur sayısına uygulanır. Bir tur, bulgularının HEPSİ kutu-dışıysa
@@ -159,11 +266,12 @@ TUR=$((ONCEKI+1))
 #    İLERLİYOR demektir; sayacı orada SIFIRLAMAK gerekir. İki sayı ayrı üretiliyor:
 #    SAYILI (tavan için, kümülatif) ve ARDISIK (fren için, yalnız KUYRUKTAKİ dizi).
 read -r SAYILI ARDISIK_ONCE <<EOSAY
-$(python3 - "$DZ" <<'PYSAY'
+$(python3 - "$DZ" "$TUR_SIFIR" <<'PYSAY'
 import json,glob,os,sys
-sayan=[]
+sayan=[]; sifir=int(sys.argv[2])
 for y in sorted(glob.glob(os.path.join(sys.argv[1],"DENETIM-[0-9]*.json")),
                 key=lambda p:int(p.rsplit("-",1)[1].split(".")[0])):
+    if int(y.rsplit("-",1)[1].split(".")[0]) <= sifir: continue   # daraltmadan önceki tur: eski cümle, sayılmaz
     try: b=json.load(open(y,encoding="utf-8"))["sonuc"]["bulgular"]
     except Exception: sayan.append(True); continue   # okunamayan tur SAYILIR (şüphede muafiyet YOK)
     sayan.append(bool(not b or any(x.get("agirlik")!="kutu-disi" for x in b)))
@@ -177,8 +285,8 @@ PYSAY
 EOSAY
 case "$SAYILI" in ''|*[!0-9]*) SAYILI="$ONCEKI" ;; esac
 case "${ARDISIK_ONCE:-}" in ''|*[!0-9]*) ARDISIK_ONCE=0 ;; esac
-ilerliyor_mu() {  # önceki iki turu kıyasla: puan↑ VE açık bulgu↓
-  [ "$ONCEKI" -ge 2 ] || return 1
+ilerliyor_mu() {  # önceki iki turu kıyasla: puan↑ VE açık bulgu↓ (daraltma sonrası en az iki tur gerekir)
+  [ $((ONCEKI - TUR_SIFIR)) -ge 2 ] || return 1
   python3 - "$DZ" "$ONCEKI" <<'PY'
 import json,sys,os
 dz,n=sys.argv[1],int(sys.argv[2])
@@ -193,7 +301,7 @@ tikandi_raporu() {
   _bilgi "⛔ TIKANDI — $ONCEKI turda 5+E'ye ulaşılamadı (tavan $TAVAN, ilerleyene +1, $MUTLAK mutlak; kutu-dışı bulgulu turlar sayılmaz)."
   _bilgi "   Üç yol (karar iş sahibinin/reisin, sınıf işiyse Sultan'ın):"
   _bilgi "   1) DEVAM — gerekçeyle: neden bir tur daha işe yarar?"
-  _bilgi "   2) KAPSAMI DARALT — iş kartını küçült, geçen kısmı gönder, kalanı yeni kart"
+  _bilgi "   2) KAPSAMI DARALT — kart.sh daralt <iş> --kalan \"<bulgu>\" --cumle \"<daraltılmış cümle>\" --oturum <ref>: kalan yeni karta, tur sayacı sıfırlanır, aynı dal/PR sürer"
   _bilgi "   3) GERİ AL — alanı kapat, iş kartına 'tıkandı' damgası, ders deftere"
 }
 # 🔴 SULTAN KAPISI (23 Eyl 2026): tıkandı raporu "karar sınıf işiyse Sultan'ın" diyordu ama
@@ -322,9 +430,40 @@ if [ "$SAYILI" -ge "$TAVAN" ]; then
 fi
 
 # ── 3 · girdiler ─────────────────────────────────────────────────────────────────
-TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
-if [ -n "$DIFF" ]; then cp "$DIFF" "$TMP/diff.patch" || { _hata "diff okunamadı"; exit 3; }
-else (cd "$DEPO" && gh pr diff "$PR" > "$TMP/diff.patch") || { _hata "gh pr diff $PR düştü"; exit 3; }; fi
+TMP="$(mktemp -d)"   # temizliği _bitis (EXIT tuzağı) yapar
+# 🔴 FARKI DENETÇİ KENDİSİ ALIR (18 Eki, gorev_01M54B2Y4QT7VWTJX10AFR7M76): elle hazırlanan fark üç kez tur yaktı (11 Eki):
+#    iki-nokta `git diff origin/main` dal gerideyken başkasının eklemelerini "silinmiş" gösterdi, odaklı fark dosya kaçırdı.
+#    Kural: (a) --diff verilmişse o (çağıranın sorumluluğu, fark kaynağı ekranda söylenir); (b) --pr ile GitHub farkı alınır AMA
+#    PR dalının yerel kopyası varsa ve başı PR başından farklıysa DUR — o an hangi dalda durulduğundan bağımsız (itilmemiş/çekilmemiş commit);
+#    (c) ikisi de yoksa yerel kip: fetch → dal ana hattın GERİSİNDEYSE DUR (rebase/merge çağıranın işi; araç dalı değiştirmez) →
+#    kayıtsız değişiklik (kanıt/kart dizini dışında) varsa DUR (farka girmez) → üç-nokta `<ana>...HEAD`. Durmak rc=3 (ölçülemedi).
+if [ -n "$DIFF" ]; then cp "$DIFF" "$TMP/diff.patch" || { _hata "diff okunamadı"; exit 3; }; FARK_KAYNAK="--diff $DIFF (çağıranın verdiği)"
+elif [ -n "$PR" ]; then
+  PR_BAS="$(cd "$DEPO" && gh pr view "$PR" --json headRefOid,headRefName --jq '.headRefOid+" "+.headRefName' 2>/dev/null)" \
+    || { _hata "gh pr view $PR düştü — PR başı ölçülemedi"; exit 3; }
+  # Karşılaştırılan şey PR dalının YEREL kopyasının başıdır — o an hangi dalda durulduğu değil (göz tur 1: "yalnız aynı daldaysan"
+  # istisnası kartın şartından dardı). Yerel kopya yoksa (başkasının PR'ı, hiç çekilmemiş) itilmemiş commit de olamaz → devam.
+  PR_DAL="${PR_BAS#* }"; PR_SHA="${PR_BAS%% *}"
+  YEREL_BAS="$(git -C "$DEPO" rev-parse -q --verify "refs/heads/$PR_DAL" 2>/dev/null)"
+  if [ -n "$PR_SHA" ] && [ -n "$YEREL_BAS" ] && [ "$YEREL_BAS" != "$PR_SHA" ]; then
+    _hata "PR #$PR dalının ($PR_DAL) yerel başı (${YEREL_BAS:0:8}) PR başından (${PR_SHA:0:8}) FARKLI — itilmemiş ya da çekilmemiş commit var; göz GitHub'daki farkı puanlardı. Önce it/çek, sonra koştur"; exit 3
+  fi
+  (cd "$DEPO" && gh pr diff "$PR" > "$TMP/diff.patch") || { _hata "gh pr diff $PR düştü"; exit 3; }
+  FARK_KAYNAK="gh pr diff $PR (baş ${PR_BAS:0:8})"
+else
+  ANA="$(git -C "$DEPO" symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null || echo origin/main)"
+  git -C "$DEPO" fetch -q origin 2>/dev/null || { _hata "git fetch origin düştü — ana hat ($ANA) ölçülemedi"; exit 3; }
+  git -C "$DEPO" rev-parse --verify -q "$ANA" >/dev/null || { _hata "ana hat $ANA bulunamadı"; exit 3; }
+  GERIDE="$(git -C "$DEPO" rev-list --count "HEAD..$ANA")"
+  [ "$GERIDE" -eq 0 ] || { _hata "dal ana hattın ($ANA) $GERIDE commit GERİSİNDE — fark başkasının işini 'silinmiş' gösterirdi. Önce rebase/merge, sonra koştur"; exit 3; }
+  # karne.jsonl kartlar gibi aracın kendi defteri: birincil checkout'ta koşan denetçinin bir önceki turu onu yazar, kir sayılmaz (NPTHAQ)
+  KIRLI="$(git -C "$DEPO" status --porcelain -uall | grep -v -E '^.. _agents/fabrika/((kanit|kartlar)/|karne\.jsonl$)' | wc -l)"
+  [ "$KIRLI" -eq 0 ] || { _hata "$KIRLI kayıtsız değişiklik var (kanıt/kart dışı) — farka girmez, göz eksik kod görürdü. Önce commit'le"; exit 3; }
+  git -C "$DEPO" diff "$ANA...HEAD" > "$TMP/diff.patch" || { _hata "git diff $ANA...HEAD düştü"; exit 3; }
+  [ -s "$TMP/diff.patch" ] || { _hata "fark BOŞ ($ANA...HEAD) — denetlenecek değişiklik yok"; exit 3; }
+  FARK_KAYNAK="yerel üç-nokta $ANA...HEAD ($(git -C "$DEPO" rev-list --count "$ANA..HEAD") commit)"
+fi
+echo "· fark: $FARK_KAYNAK"
 # ── KANIT FARKA İKİNCİ KEZ GİRMESİN (15 Eki 2026, gorev_01M4ZSKHD1Y1FFT8P6Z5YMPTF9)
 #    Ölçülmüş vaka (PR #329, aynı gün): istem 135.913 bayt oldu, 110.000'de kırpıldı ve denetçi ÜRETİM KODU
 #    farkını hiç göremedi — "kodun kendisi bütünüyle denetlenemedi, bu eksikle 5 verilemez" dedi. Bir tur
@@ -433,22 +572,61 @@ fi
 if [ -n "$KART" ]; then cp "$KART" "$TMP/kart.md"
 elif [ -n "$PR" ]; then (cd "$DEPO" && gh pr view "$PR" --json title,body --jq '"# \(.title)\n\n\(.body)"' > "$TMP/kart.md") || echo "(iş kartı okunamadı)" > "$TMP/kart.md"
 else echo "(iş kartı verilmedi — talep bilinmiyor; DOĞRU ŞEY Mİ sorusu H'ye yakın değerlendirilir)" > "$TMP/kart.md"; fi
+# İstem PARÇA PARÇA kurulur, sonra birleşir (BÂNİ 21:59, 18 Eki): boyut kapısı aşağıda istemin tamamını ölçer ve
+# aşınca HANGİ parçanın şiştiğini söyler. Birleşen metin eskisiyle bayt bayt aynıdır.
+{ cat "$ISTEM"; } > "$TMP/p-sablon.md"
+{ printf '\n\n===== İŞ KARTI (talep) =====\n'; cat "$TMP/kart.md"; } > "$TMP/p-kart.md"
+{ printf '\n\n===== KANIT MANİFESTİ — durum: %s =====\n' "$KANIT_DURUM"; cat "$DZ/KANIT.json"; } > "$TMP/p-kanit.md"
+# ÖLÇÜM ÇIKTISININ SONU DA GİDER (gorev_01M5890SCNMSR4DFTGHVWEJEC3, retro W42 HENDESE Ö1): eskiden her ölçüm dosyasının
+#   ilk 60 satırı gidiyordu. Sınavın sonuç satırı ("SONUÇ: 156 geçti · 0 kaldı") dosyanın SONUNDA; 184 satırlık bir sınav
+#   ölçümünde göz yalnız baştaki kapıları görüyor, sonucu hiç görmüyordu. Artık 60 satırı aşan dosyada: stdout'un başı +
+#   kaç satırın atlandığı + stdout'un sonu; stderr ayrıca kendi sonuyla (uzun stderr sonuç satırını dışarı itmesin).
+#   Tavan aynı (dosya başı ≤ 60 satır), kısa dosya bayt bayt aynen.
+olcum_ozeti() {   # olcum_ozeti <ölçüm dosyası>
+  python3 - "$1" <<'PY'
+import sys
+HAM = open(sys.argv[1], encoding="utf-8", errors="replace").read()
+L = HAM.split("\n")
+if L and L[-1] == "": L.pop()
+SINIR, BAS, SON, HSON, SECME = 60, 25, 12, 10, 8
+if len(L) <= SINIR: sys.stdout.write(HAM); sys.exit()   # bayt bayt AYNEN (ayırıcı satır sonunu çağıran ekler — göz #392 tur 5)
+# ATLANAN ORTADAN SEÇME (göz #392 tur 2): sonuç satırı her zaman en sonda değil (ardından 12'den fazla satır gelebilir) ve
+#   kırmızı kapı (✗) ortada kalırsa kırpma onu SAKLAR — göz "yeşil" sanır. Ortadan SONUÇ/✗ taşıyan satırlar (en çok 8) taşınır.
+SECILIR = ("SONUÇ", "SONUC", "✗", "Traceback")
+e = L.index("--- stderr ---") if "--- stderr ---" in L else len(L)
+cik, err = L[:e], L[e:]
+if len(err) > HSON + 1: err = [err[0], "[… stderr'den %d satır atlandı …]" % (len(err) - 1 - HSON)] + err[-HSON:]
+if len(cik) > BAS + SON + 1:
+    orta = cik[BAS:-SON]; sec = [x for x in orta if any(k in x for k in SECILIR)]
+    atlanan = len(orta) - min(len(sec), SECME)          # seçilip gösterilenler atlanmış SAYILMAZ (göz #392 tur 3)
+    not_ = "[… %d satır atlandı (dosya %d satır) — ölçümün SONU aşağıda …]" % (atlanan, len(L))
+    if sec:
+        not_ = "[… %d satır atlandı (dosya %d satır); ortadan SONUÇ/✗ taşıyan %d satır%s: …]" % (
+            atlanan, len(L), len(sec), "" if len(sec) <= SECME else " (ilk %d'i)" % SECME)
+    cik = cik[:BAS] + [not_] + sec[:SECME] + (["[… ölçümün SONU …]"] if sec else []) + cik[-SON:]
+print("\n".join(cik + err))
+PY
+}
 {
-  cat "$ISTEM"
-  printf '\n\n===== İŞ KARTI (talep) =====\n'; cat "$TMP/kart.md"
-  printf '\n\n===== KANIT MANİFESTİ — durum: %s =====\n' "$KANIT_DURUM"; cat "$DZ/KANIT.json"
-  printf '\n\n===== ÖLÇÜM ÇIKTILARI (ilk 60 satır/dosya) =====\n'
-  for f in "$DZ"/olcum-*.txt; do [ -f "$f" ] && { printf -- '--- %s ---\n' "$(basename "$f")"; head -60 "$f"; }; done
+  printf '\n\n===== ÖLÇÜM ÇIKTILARI (60 satıra kadar aynen; uzunda baş + atlanan ortadan SONUÇ/✗ satırları + SON) =====\n'
+  # 🧬 mutasyon kaydının ilk satırını kanıt aracı yazar (kanit.py --mutasyon); başlık da söyler ki göz ✗ satırlarını bulgu sanmasın (FR7M76)
+  for f in "$DZ"/olcum-*.txt; do [ -f "$f" ] && { _mt=""; head -1 "$f" | grep -q '^=== MUTASYON KANITI' && _mt=" · 🧬 MUTASYON KANITI (kod bilerek bozuldu; ✗ satırları BEKLENEN, bulgu değil)"; printf -- '--- %s%s ---\n' "$(basename "$f")" "$_mt"; olcum_ozeti "$f"; [ -z "$(tail -c1 "$f")" ] || echo; }; done   # satır sonuyla bitmeyen dosyadan sonra başlık yeni satırda
+} > "$TMP/p-olcum.md"
+{
   printf '\n\n===== DEĞİŞİKLİK (diff) =====\n'
   [ "$AYIKLANAN_DOSYA" -gt 0 ] && [ ! -s "$TMP/diff.patch" ] && printf '[NOT: bu turda fark TAMAMEN kanıt dosyalarından oluşuyordu (%s dosya, %s bayt); ÜRETİM KODU farkı BOŞTUR — eksik verilmedi, bu turda kod değişmedi. Hükmünü kanıt manifestine ve iş kartına dayandır.]\n' "$AYIKLANAN_DOSYA" "$AYIKLANAN_BAYT"
   [ "$AYIKLANAN_DOSYA" -gt 0 ] && [ -s "$TMP/diff.patch" ] && printf '[NOT: bu farktan %s kanıt dosyası (%s bayt) AYIKLANDI — kanıt manifesti ve ölçüm çıktıları yukarıda AYRI başlıklarda duruyor; saklanan bir şey yok, aynı veri farka ikinci kez girmesin diye çıkarıldı. Aşağısı ÜRETİM KODU farkıdır, eksik değildir.]\n' "$AYIKLANAN_DOSYA" "$AYIKLANAN_BAYT"
   cat "$TMP/diff.patch"
-  [ "$TUR" -gt 1 ] && { printf '\n\n===== ÖNCEKİ TUR (%s) =====\n' "$ONCEKI"; cat "$DZ/DENETIM-$ONCEKI.json"; }
+} > "$TMP/p-fark.md"
+{ [ "$TUR" -gt 1 ] && { printf '\n\n===== ÖNCEKİ TUR (%s) =====\n' "$ONCEKI"; cat "$DZ/DENETIM-$ONCEKI.json"; }; } > "$TMP/p-onceki.md"
+{
   if [ "${#KARELER[@]}" -gt 0 ]; then
     printf '\n\n===== KARELER (%s adet, bu isteme GÖRSEL olarak ekli — kabulün görsel kısmını bunlara bakarak değerlendir) =====\n' "${#KARELER[@]}"
     _i=0; for _k in "${KARELER[@]}"; do _i=$((_i+1)); printf '%s. %s · sha256 %s\n' "$_i" "$(basename "$_k")" "$(sha256sum "$_k" | cut -c1-16)"; done
   fi
-} > "$TMP/istem.md"
+} > "$TMP/p-kare.md"
+ISTEM_PARCALARI=(sablon kart kanit olcum fark onceki kare)
+for _p in "${ISTEM_PARCALARI[@]}"; do cat "$TMP/p-$_p.md"; done > "$TMP/istem.md"
 
 # ── 4 · denetçiyi seç ve koş (yazan ≠ denetleyen) ───────────────────────────────
 SEC_AUTO=0
@@ -479,7 +657,34 @@ HAM="$TMP/ham.json"
 #    kırpılmamış turda da (oldu=false), "yok" ile "yazılmadı" ayırt edilsin. Kırpma Codex yoluna özgüdür (tek argüman
 #    sınırı ~128 KB); DENETCI_KIRP_ESIK dikişi sınav için eşiği düşürür ve kırpmayı sahte denetçi yolunda da uygular.
 KIRP_ESIK="${DENETCI_KIRP_ESIK:-110000}"; KIRP_TETIK=$((KIRP_ESIK + KIRP_ESIK/11))   # varsayılan 110000 → 120000
+# ── İŞİ BÖL (PCP7J, 18 Eki 2026): kanıt ayıklandıktan sonra ÜRETİM FARKI tek başına eşiği aşıyorsa kırpıp
+#    denetlemek yerine durulur: kırpılmış farkta denetçi sonu görmeden puan veriyordu (PR #329: üretim kodu
+#    kırpıkta kaldı). Tur YAKILMAZ (DENETIM yazılmaz), rc=1 ile adım 2'ye dönülür; çare kart.sh daralt ile
+#    iki iş. Kaçış yolu YOK — kart cümlesinde yok (18 Eki dersi).
+# ── İSTEMİN TAMAMI ÖLÇÜLÜR (BÂNİ 21:59, 18 Eki · cloudtop #712 tur 4): kapı eskiden yalnız FARKI ölçüyordu. Fark 73 KB
+#    olarak kapıdan geçti, ama göze giden istem = şablon + iş kartı + kanıt manifesti + ölçüm çıktıları + fark + önceki
+#    tur 129.519 bayttı → 110.000'de kırpıldı, göz "diff sonu görülmedi" dedi ve mutlak dört tur içeriksiz yandı.
+#    Kapı artık kırpma eşiğinin kendisini (KIRP_TETIK) istemin TAMAMINA uygular: kırpılacak istem gönderilmez, tur
+#    yakılmaz, hangi parçanın şiştiği bayt bayt basılır.
+#    Yalnız AYIKLANMIŞ farkta anlamlı: ayıklama kapalıysa (DENETCI_KANIT_AYIKLA=0) kanıt da farkın içindedir, işi
+#    bölmek boyutu düşürmez → eski kırpma yolu sürer (ölçemediğine "böl" demez).
 ISTEM_BAYT=$(wc -c < "$TMP/istem.md"); KIRPILDI=0
+if { [ "$DENETCI" = "codex" ] || [ -n "${DENETCI_KIRP_ESIK:-}" ]; } && [ "${DENETCI_KANIT_AYIKLA:-1}" != "0" ] && [ "$ISTEM_BAYT" -gt "$KIRP_TETIK" ]; then
+  declare -A _AD=([sablon]="istem şablonu" [kart]="iş kartı" [kanit]="kanıt manifesti" [olcum]="ölçüm çıktıları" [fark]="üretim farkı" [onceki]="önceki tur kaydı" [kare]="kare listesi")
+  _DOKUM=""; _EN=""; _EN_B=-1
+  for _p in "${ISTEM_PARCALARI[@]}"; do
+    _b=$(wc -c < "$TMP/p-$_p.md"); _DOKUM="$_DOKUM · ${_AD[$_p]} $_b"
+    [ "$_b" -gt "$_EN_B" ] && { _EN="$_p"; _EN_B="$_b"; }
+  done
+  _hata "İŞİ BÖL — göze giden istem $ISTEM_BAYT bayt > $KIRP_TETIK (kırpma eşiği; kanıt dosyaları farktan ayıklandıktan sonra): kırpık istemle denetim yapılmaz, tur yakılmadı."
+  _bilgi "   parçalar (bayt):${_DOKUM}"
+  _bilgi "   en büyük parça: ${_AD[$_EN]} ($_EN_B bayt)"
+  case "$_EN" in
+    olcum|kanit) _bilgi "   yol: ölçüm kayıtlarını küçült (yalnız kartın istediği ölçümler kalsın; yanlış kaydı kanit.sh gecersiz ile ilan et) ya da işi böl: kart.sh daralt <iş> --kalan \"<ikinci yarı>\" --cumle \"<bu PR'ın yaptığı>\" --oturum <ref>" ;;
+    *) _bilgi "   yol: kart.sh daralt <iş> --kalan \"<ikinci yarı>\" --cumle \"<bu PR'ın yaptığı>\" --oturum <ref> → kalan yarı yeni kart/dal; bu dalda yalnız daraltılmış cümle kalsın" ;;
+  esac
+  exit 1   # İŞİ BÖL
+fi
 if { [ "$DENETCI" = "codex" ] || [ -n "${DENETCI_KIRP_ESIK:-}" ]; } && [ "$ISTEM_BAYT" -gt "$KIRP_TETIK" ]; then
   # İstem ARGÜMAN olarak verilir, dosya olarak değil: bu konteynerde Codex'in kum havuzu (bwrap) ad-alanı
   # açamıyor ve "dosyayı oku" komutu düşüyor (22 Eyl canlı koşum: 2/H "istem.md okunamadı"). Tek argüman
@@ -489,14 +694,14 @@ if { [ "$DENETCI" = "codex" ] || [ -n "${DENETCI_KIRP_ESIK:-}" ]; } && [ "$ISTEM
   mv "$TMP/istem-kirpik.md" "$TMP/istem.md"; KIRPILDI=1; _bilgi "⚠ istem $ISTEM_BAYT bayt → $KIRP_ESIK'e kırpıldı (denetçiye söylendi, DENETIM kaydına yazılır)"
 fi
 if [ -n "${DENETCI_KOMUT:-}" ]; then
-  DENETCI_AD="$DENETCI_KOMUT (sınav)"; $DENETCI_KOMUT "$TMP/istem.md" > "$HAM" 2>"$TMP/err"; DRC=$?
+  DENETCI_AD="$DENETCI_KOMUT (sınav)"; _sinirli $DENETCI_KOMUT "$TMP/istem.md" > "$HAM" 2>"$TMP/err"; DRC=$?
 else
   kos_codex() {
     # 🔴 STDIN KAPALI (15 Eki, 68 dk boşa): istem argümanla verildiği hâlde Codex stdin TTY değilse "Reading additional input
     #    from stdin..." deyip EOF bekler; arka plandan (run_in_background, cron) çağrıda stdin açık socket olunca denetim sonsuza
     #    dek asılı kalır (CPU 0, log boş). Girdi her koşulda /dev/null'dan: çağıranın stdin'i ne olursa olsun denetçi biter.
     local kare_arg=(); for _k in "${KARELER[@]}"; do kare_arg+=(-i "$_k"); done   # kareler GÖRSEL ek (codex exec -i)
-    codex exec -s read-only --skip-git-repo-check --ephemeral -C "$TMP" ${MODEL:+-m "$MODEL"} "${kare_arg[@]}" \
+    _sinirli codex exec -s read-only --skip-git-repo-check --ephemeral -C "$TMP" ${MODEL:+-m "$MODEL"} "${kare_arg[@]}" \
       --output-schema "$SEMA" -o "$HAM" "$(printf 'Hiçbir komut koşma, dosya okuma; gereken her şey aşağıda. Talimata göre YALNIZ JSON üret.\n\n'; cat "$TMP/istem.md")" </dev/null >"$TMP/log" 2>"$TMP/err"; DRC=$?
   }
   kos_claude() {   # yeni oturum: claude -p her çağrıda sıfırdan açılır → yazanın oturumu değildir
@@ -528,7 +733,7 @@ else
     fi
     DENETCI_AD="claude${ymodel:+ ($ymodel)}${YEDEK:+ (YEDEK GÖZ: $YEDEK · yazandan farklı yeni oturum + farklı model kademesi${YAZAN_MODEL:+ [yazan: $YAZAN_MODEL]} · Sultan Y0006)}"
     if [ "${#KARELER[@]}" -gt 0 ]; then printf '\n\n[UYARI: %s kare bu yedek göze GÖRSEL olarak verilemedi (claude -p kanalı görsel taşımıyor) — görsel kabul için yalnız adlara ve ölçüm çıktılarına bakabilirsin; bunu özete yaz]\n' "${#KARELER[@]}" >> "$TMP/istem.md"; KARE_VERILEMEDI=1; fi
-    claude -p ${ymodel:+--model "$ymodel"} --output-format json --json-schema "$(cat "$SEMA")" < "$TMP/istem.md" > "$TMP/claude.json" 2>"$TMP/err"; DRC=$?
+    _sinirli claude -p ${ymodel:+--model "$ymodel"} --output-format json --json-schema "$(cat "$SEMA")" < "$TMP/istem.md" > "$TMP/claude.json" 2>"$TMP/err"; DRC=$?
     python3 -c "import json,sys;d=json.load(open('$TMP/claude.json'));r=d.get('structured_output') or d.get('result');print(r if isinstance(r,str) else json.dumps(r,ensure_ascii=False))" > "$HAM" 2>/dev/null || cp "$TMP/claude.json" "$HAM"
   }
   yedek_olur_mu() { [ "$SEC_AUTO" = 1 ] && [ "${DENETCI_YEDEK:-1}" != 0 ]; }
@@ -538,12 +743,18 @@ else
       else _hata "codex yok — denetçi ölçemedi"; exit 3; fi
     else
       DENETCI_AD="codex${MODEL:+ ($MODEL)}"; kos_codex
-      if [ "$DRC" -ne 0 ]; then _bilgi "⚠ codex düştü (rc=$DRC) — bir kez daha deneniyor"; kos_codex; fi
-      if [ "$DRC" -ne 0 ] && yedek_olur_mu; then
+      # zaman aşımında yeniden deneme/yedek YOK: her biri 15 dk daha bekletirdi (45 dk sessizlik) — aşım ölçülemedi'dir, rc 3
+      if [ "$DRC" -ne 0 ] && [ "$DRC" -ne 124 ]; then _bilgi "⚠ codex düştü (rc=$DRC) — bir kez daha deneniyor"; kos_codex; fi
+      if [ "$DRC" -ne 0 ] && [ "$DRC" -ne 124 ] && yedek_olur_mu; then
         YEDEK="codex düştü (2 deneme, rc=$DRC)"; _bilgi "⚠ codex iki denemede düştü → YEDEK GÖZ: yazandan farklı yeni Claude oturumu (Sultan Y0006)"; kos_claude
       fi
     fi
   else kos_claude; fi
+fi
+if [ "$DRC" -eq 124 ]; then
+  ZAMAN_ASIMI=1; _hata "denetçi ($DENETCI_AD) ZAMAN AŞIMI: $ZA sn içinde bitmedi — ölçülemedi (rc 3)"
+  { printf 'ZAMAN AŞIMI — denetçi (%s) %s sn içinde bitmedi (DENETCI_ZAMAN_ASIMI); puan yok, tur sayılmaz.\n--- kısmi çıktı ---\n' "$DENETCI_AD" "$ZA"; cat "$HAM" 2>/dev/null; } > "$DZ/DENETIM-$TUR-HAM.txt"
+  exit 3
 fi
 if [ "$DRC" -ne 0 ]; then _hata "denetçi ($DENETCI_AD) düştü rc=$DRC"; head -5 "$TMP/err" >&2; cp "$HAM" "$DZ/DENETIM-$TUR-HAM.txt" 2>/dev/null; exit 3; fi
 
@@ -640,6 +851,36 @@ if kd:
                                 "kanit":b.get("kanit")},ensure_ascii=False)+"\n")
     print(f"   kutu-dışı defteri: {defter}")
 PYKD
+# 🔴 KAYIT DALDA (görev B2DBS6 · 22 Eki ölçümü: iki PR'ın 9 göz turunun 9'unda DENETIM-N.json iş alanında kayıtsız kaldı, elle
+#    commit'lendi; kapı ve alan kapatma onu dalda arar). Bu turun kaydı (+ KUTU-DISI.jsonl + denetçinin yazdığı KART.json kopyası)
+#    iş dalına commit'lenir: YALNIZ dal = iş
+#    adıyken ve birincil checkout değilken, pathspec'li (başka değişikliğe dokunmaz), push YOK. Olmazsa söylenir — sessiz geçilmez.
+kayit_commitle() {
+  [ "${DENETCI_KAYIT_COMMIT:-1}" = 1 ] || { _bilgi "   · kayıt commit'i kapalı (DENETCI_KAYIT_COMMIT=0) — elle commit'le"; return 0; }
+  local dal; dal="$(git -C "$DEPO" rev-parse --abbrev-ref HEAD 2>/dev/null)"
+  if [ "$dal" != "$IS" ]; then _bilgi "   ⚠ kayıt commit'lenmedi: dal '${dal:-?}' iş adı '$IS' değil — elle commit'le"; return 0; fi
+  if [ "$(cd "$DEPO" && pwd -P)" = "$(cd "$KART_DEPO" 2>/dev/null && pwd -P)" ]; then
+    _bilgi "   ⚠ kayıt commit'lenmedi: birincil checkout (iş alanı değil) — elle commit'le"; return 0; fi
+  local yol=("_agents/fabrika/kanit/$IS/DENETIM-$TUR.json") e
+  [ -f "$DZ/KUTU-DISI.jsonl" ] && yol+=("_agents/fabrika/kanit/$IS/KUTU-DISI.jsonl")
+  [ -f "$DZ/KART.json" ] && yol+=("_agents/fabrika/kanit/$IS/KART.json")   # denetçinin kanıta kopyaladığı kart (B2DBS6 üçüncü dosya)
+  if e="$(cd "$DEPO" && git add -- "${yol[@]}" 2>&1 && git commit -q -m "docs: $IS göz tur $TUR kaydı — $PUAN/$DOGRU" -- "${yol[@]}" 2>&1)"; then
+    _bilgi "   ✓ kayıt dala commit'lendi ($(git -C "$DEPO" rev-parse --short HEAD)) — push senin adımın"
+  else
+    _bilgi "   ⚠ kayıt commit'lenemedi: $(printf '%s' "$e" | head -1) — elle commit'le"
+  fi
+}
+kayit_commitle
+# 🔴 KARNE (görev NPTHAQ 2. yarı · 17 Eki ölçümü: karne.jsonl o hafta 0 satır, son satır 29 Eyl — karne.sh vardı, çağıranı yoktu;
+#    5/H ile biten iki iş hiç sayılmadı). Her tur, o turun satırını BİRİNCİL depodaki karneye yazar (iş alanında değil: alan kapanınca
+#    giderdi). Yazılamazsa söylenir; turun sonucu (rc) DEĞİŞMEZ — karne ölçümün kaydıdır, kapısı değil.
+karne_yaz() {
+  [ "${DENETCI_KARNE:-1}" = 1 ] || { _bilgi "   · karne kapalı (DENETCI_KARNE=0) — elle: karne.sh yaz $IS"; return 0; }
+  local e
+  if e="$(cd "$DEPO" && KANIT_DEPO="" bash "$HERE/karne.sh" yaz "$IS" --depo "$KART_DEPO" 2>&1)"; then _bilgi "   $e"
+  else _bilgi "   ⚠ karne yazılamadı: $(printf '%s' "$e" | tail -1) — elle: karne.sh yaz $IS"; fi
+}
+karne_yaz
 if [ "$PUAN" -eq 5 ] && [ "$DOGRU" = "E" ]; then _bilgi "✓ GEÇTİ — merge kararı: sınıf işi Sultan, sınıfsız iş kutu reisi"; exit 0; fi
 # 🔴 Tavan SAYILI tura uygulanır (bu turun kendisi dahil edilerek yeniden hesaplanır).
 SAYILI_SON=$(python3 -c "

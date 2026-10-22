@@ -58,11 +58,18 @@ CIKTI="$(KANIT_PLAYWRIGHT_DIR=/nonexistent PATH=/usr/bin:/bin bash "$K" ekran is
 if command -v node >/dev/null 2>&1 && [ -d /config/projects/Nexus/ui/node_modules/playwright ]; then
   # node PATH'te var ama KANIT_PLAYWRIGHT_DIR bozuk; aday dizinler yine bulur → gerçek playwright koşar. Ayrı test:
   printf '<html><title>Urun</title><body><div id="hesap-iste">x</div></body></html>' > "$T/sayfa.html"
-  bash "$K" ekran is-3 gercek --url "file://$T/sayfa.html" --urun-imi '#hesap-iste' >/dev/null 2>&1; RC2=$?
+  CIKTI2="$(bash "$K" ekran is-3 gercek --url "file://$T/sayfa.html" --urun-imi '#hesap-iste' 2>&1)"; RC2=$?
+  if [ "$RC2" -eq 3 ] && grep -q "chromium açılamadı" <<<"$CIKTI2"; then
+    # Modül var ama sürümünün beklediği tarayıcı ikilisi yok (ölçüldü 18 Eki: playwright 1.59.1 chromium-1217 ister, önbellekte
+    # 1223/1228 var — gorev_01M57KA02678683VH1QVAYP7DH). Doğru davranış SARI'dır; kare kapıları bu kutuda ölçülemez, sayılmaz.
+    grep -q "SARI" <<<"$CIKTI2"; g $? "tarayıcı ikilisi yok → SARI rc=3 (kare ölçülemedi, yeşil değil)"
+    echo "  · atlandı: gerçek kare · ürün imi rc=2 · imsiz kare kırmızı (tarayıcı ikilisi yok — sayıma girmez)"
+  else
   [ "$RC2" -eq 0 ] && [ -s "$T/_agents/fabrika/kanit/is-3/ekran-gercek-sonra.png" ]; g $? "gerçek kare alındı (playwright var)"
   bash "$K" ekran is-3 imsiz --url "file://$T/sayfa.html" --urun-imi '#yok-boyle' >/dev/null 2>&1; RC3=$?
   [ "$RC3" -eq 2 ]; g $? "ürün imi yoksa rc=2 (ölçer ürünü görmedi — 6. kanun)"
   python3 -c "import json;m=json.load(open('$T/_agents/fabrika/kanit/is-3/KANIT.json'));assert m['kayitlar'][-1]['renk']=='kirmizi'"; g $? "imsiz kare manifestte kırmızı"
+  fi
 else
   [ "$RC" -eq 3 ]; g $? "playwright yokken rc=3"
   grep -q "SARI" <<<"$CIKTI"; g $? "sarı olduğunu söylüyor"
@@ -303,6 +310,268 @@ SSH_SHIM_ARGS="$T/ssh-args3.txt" SSH_SHIM_RC=255 PATH="$SHIM:$PATH" bash "$K" ca
 SSH_SHIM_ARGS="$T/ssh-args3.txt" SSH_SHIM_RC=255 PATH="$SHIM:$PATH" KANIT_DEPO="$T" python3 "$MC/kanit.py" canli is-canli-m kopuk --desen muhakkik-zil --kaynak "ssh:kutu:$LG/zil.log" >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T19c mutant (kopuk kaynak sarı değil) kopuk bağlantıyı yeşil sayıyor → T18j2 bu mutantta düşerdi"
 _mut 'if not GUVENLI_RE.match(parca):' 'if False:'
 SSH_SHIM_ARGS="$T/ssh-args2.txt" PATH="$SHIM:$PATH" KANIT_DEPO="$T" python3 "$MC/kanit.py" canli is-canli-m sahte --desen sahte --kaynak "ssh:kutu:/var/log/x;echo" >/dev/null 2>&1; [ $? -ne 1 ]; g $? "T19d mutant (yol doğrulaması kaldırıldı) metakarakterli yolu reddetmiyor → T18y2 bu mutantta düşerdi"
+
+echo "════ T20 · BORU REDDİ (görev PTHAQ): kabuk -c betiğinde çıkış kodunu maskeleyen desen kayıt ÜRETMEZ ════"
+BD="$T/_agents/fabrika/kanit/is-boru"
+_yok() { python3 - "$BD/KANIT.json" "$1" <<'PY'
+import json,os,sys; p,et=sys.argv[1:]
+m=json.load(open(p)) if os.path.exists(p) else {"kayitlar":[]}
+sys.exit(1 if any(k.get("etiket")==et for k in m["kayitlar"]) else 0)
+PY
+}
+_alan() { python3 - "$BD/KANIT.json" "$1" "$2" <<'PY'
+import json,sys; p,et,bekle=sys.argv[1:]
+k=[x for x in json.load(open(p))["kayitlar"] if x["etiket"]==et][-1]
+sys.exit(0 if k.get("boru_denetimi","").startswith(bekle) else 1)
+PY
+}
+bash "$K" olcum is-boru kuyruk --asama tek -- bash -c 'false | tail -1' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20a pipefail'siz boruyla biten betik REDDEDİLDİ (rc=1)"
+_yok kuyruk; g $? "T20a2 reddedilen betik için kayıt YOK"
+bash "$K" olcum is-boru yut --asama tek -- bash -c 'false || true' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20b '|| true' reddedildi"
+bash "$K" olcum is-boru yutara --asama tek -- bash -c 'false || true; ls /' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20b2 betiğin ORTASINDAKİ '|| true' da reddedildi (son komut temiz olsa bile)"
+bash "$K" olcum is-boru yanki --asama tek -- bash -c 'false; echo bitti' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20c başka komuttan sonra gelen son 'echo' reddedildi"
+bash "$K" olcum is-boru pf --asama tek -- bash -c 'set -o pipefail; false | tail -1' >/dev/null 2>&1; g $? "T20d 'set -o pipefail' ile boru kabul edildi"
+python3 -c "import json;k=[x for x in json.load(open('$BD/KANIT.json'))['kayitlar'] if x['etiket']=='pf'][-1];assert k['renk']=='kirmizi' and k['boru_denetimi']=='temiz'"; g $? "T20d2 pipefail'li boru gerçek rc'yi taşıdı: renk=kirmizi, boru_denetimi=temiz"
+bash "$K" olcum is-boru pfarg --asama tek -- bash -o pipefail -c 'false | cat' >/dev/null 2>&1; g $? "T20e kabuk argümanındaki '-o pipefail' de sayıldı"
+bash "$K" olcum is-boru kisa --asama tek --boru-izin "kisa" -- bash -c 'false | tail -1' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20f 15 karakterden kısa --boru-izin gerekçesi reddedildi"
+bash "$K" olcum is-boru izin --asama tek --boru-izin "sayım için grep, rc anlamsız" -- bash -c 'false | tail -1' >/dev/null 2>&1; g $? "T20g gerekçeli --boru-izin ile kayıt alındı"
+python3 -c "import json;k=[x for x in json.load(open('$BD/KANIT.json'))['kayitlar'] if x['etiket']=='izin'][-1];assert k['boru_denetimi'].startswith('izinli:') and 'sayım için grep' in k['boru_denetimi']"; g $? "T20g2 izin ve gerekçe manifeste yazıldı (denetçi görür)"
+bash "$K" olcum is-boru argv --asama tek -- true >/dev/null 2>&1; _alan argv "kapsam-dışı"; g $? "T20h kabuk -c olmayan komut: boru_denetimi=kapsam-dışı (sınır beyan edildi)"
+bash "$K" olcum is-boru hd --asama tek -- bash -c 'cat <<EOF
+x
+EOF' >/dev/null 2>&1; _alan hd "ayrıştırılamadı"; g $? "T20i heredoc: reddedilmedi, boru_denetimi=ayrıştırılamadı"
+bash "$K" olcum is-boru tek --asama tek -- bash -c 'echo TEK' >/dev/null 2>&1; _alan tek "temiz"; g $? "T20j betiğin TEK komutu echo: temiz (maskelenen iş yok)"
+bash "$K" olcum is-boru tirnak --asama tek -- bash -c "echo 'a | b'; exit 0" >/dev/null 2>&1; _alan tirnak "temiz"; g $? "T20k tırnak içindeki '|' boru sayılmadı"
+bash "$K" olcum is-boru pfkelime --asama tek -- bash -c 'echo pipefail; false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20l 'pipefail' KELİMESİ geçmesi yetmez (göz tur 1): echo pipefail; false | cat reddedildi"
+bash "$K" olcum is-boru pfkapat --asama tek -- bash -c 'set -o pipefail; set +o pipefail; false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20m 'set +o pipefail' ile kapatılan boru reddedildi (durum sırayla izlenir)"
+bash "$K" olcum is-boru pfargkapat --asama tek -- bash +o pipefail -c 'false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20n kabuk argümanında '+o pipefail' reddedildi"
+bash "$K" olcum is-boru sonset --asama tek -- bash -c 'false | cat; set -o pipefail' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20o son komut 'set' (öncekinin rc'sini yutar) reddedildi"
+bash "$K" olcum is-boru birlesik --asama tek -- bash -lc 'false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20p birleşik seçenek 'bash -lc' de kabuk sayıldı, reddedildi (göz tur 2)"
+bash "$K" olcum is-boru sarmal --asama tek -- timeout 60 bash -c 'false | tail -1' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20q sarmalayıcı arkasındaki kabuk (timeout 60 bash -c) reddedildi"
+bash "$K" olcum is-boru onek --asama tek -- bash -c 'false; command echo bitti' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20r 'command echo' öneki soyuldu, reddedildi (göz tur 2)"
+bash "$K" olcum is-boru yol --asama tek -- bash -c 'false; /bin/true' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20s tam yollu '/bin/true' de maske sayıldı"
+bash "$K" olcum is-boru onekiz --asama tek -- bash -c 'command false' >/dev/null 2>&1; _alan onekiz "temiz"; g $? "T20t önekli TEK komut (command false) maske değil: temiz, kırmızı kayıt"
+
+# göz tur 3 (daraltılmış kapsam içinde kalan iki bulgu): `||` sağındaki eşdeğerler + veri argümanındaki kabuk adı
+bash "$K" olcum is-boru yolyut --asama tek -- bash -c 'false || /bin/true; ls /' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20u ORTADAKİ '|| /bin/true' (tam yol) reddedildi — son komut temiz (göz tur 3)"
+bash "$K" olcum is-boru onekyut --asama tek -- bash -c 'false || command true; ls /' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20v ORTADAKİ '|| command true' (önekli) reddedildi — son komut temiz (göz tur 3)"
+bash "$K" olcum is-boru veri --asama tek -- printf '%s\n' bash -c 'false | cat' >/dev/null 2>&1; _alan veri "kapsam-dışı"; g $? "T20w 'printf … bash -c': bash VERİ argümanı, kabuk değil → reddedilmedi, kapsam-dışı (göz tur 3 yanlış pozitif)"
+bash "$K" olcum is-boru nice --asama tek -- nice -n 5 bash -c 'false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20x seçenekli sarmalayıcı (nice -n 5 bash -c) hâlâ kabuk sayıldı, reddedildi"
+bash "$K" olcum is-boru cikis --asama tek -- bash -c 'false || exit 3' >/dev/null 2>&1; _alan cikis "temiz"; g $? "T20y '|| exit 3' maske değil (rc taşınıyor): temiz"
+
+# göz tur 4: -c yalnız kabuğun seçenek bölgesinde seçenektir; betik dosyasından sonra gelen -c betiğin argümanıdır
+printf 'exit 0\n' > "$T/betik.sh"
+bash "$K" olcum is-boru dosyac --asama tek -- bash "$T/betik.sh" -c 'false | cat' >/dev/null 2>&1; _alan dosyac "kapsam-dışı"; g $? "T20z 'bash betik.sh -c …': -c betiğin argümanı → reddedilmedi, kapsam-dışı (göz tur 4)"
+bash "$K" olcum is-boru seceneklic --asama tek -- bash -e -o pipefail +o pipefail -c 'false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20z2 seçenekler (-e, -o değer, +o değer) arkasındaki -c hâlâ bulunur, kapatılan pipefail reddedilir"
+
+# göz tur 5: bilinen sarmalayıcıların DEĞER ALAN seçenekleri (değer sayı değilse de) atlanır
+bash "$K" olcum is-boru tsinyal --asama tek -- timeout -s KILL 60 bash -c 'false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20z3 'timeout -s KILL 60 bash -c': sinyal değeri atlandı, kabuk bulundu, reddedildi (göz tur 5)"
+bash "$K" olcum is-boru envu --asama tek -- env -u HOMEX bash -c 'false || true; ls /' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20z4 'env -u VAR bash -c': değer atlandı, ortadaki '|| true' reddedildi (göz tur 5)"
+bash "$K" olcum is-boru tasks --asama tek -- taskset 0x1 bash -c 'false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T20z5 'taskset 0x1 bash -c': onaltılık maske atlandı, reddedildi"
+
+echo "════ T21 · MUTASYON: boru denetiminin her kolu kaldırılınca T20 kırmızıya döner ════"
+_mutkos() { KANIT_DEPO="$T" python3 "$MC/kanit.py" olcum is-boru-mut "$1" --asama tek -- bash -c "$2" >/dev/null 2>&1; }
+_mut 'durum, neden = boru_denetimi(a.komut)' 'durum, neden = "temiz", None'
+_mutkos m1 'false | tail -1'; [ $? -eq 0 ]; g $? "T21a mutant (denetim hiç çağrılmıyor) maskeli betiği kabul ediyor → T20a bu mutantta düşerdi"
+_mut 'if "|" in son and not pipefail:' 'if False:'
+_mutkos m2 'false | tail -1'; [ $? -eq 0 ]; g $? "T21b mutant (boru kuralı yok) → T20a bu mutantta düşerdi"
+_mut 'if jet[k] == "||":' 'if False:'
+_mutkos m3 'false || true; ls /'; [ $? -eq 0 ]; g $? "T21c mutant ('|| true' kuralı yok) ortadaki maskeyi kabul ediyor → T20b2 bu mutantta düşerdi"
+_mut 'if son[0] in MASKE_SON and oncesi:' 'if False:'
+_mutkos m4 'false; echo bitti'; [ $? -eq 0 ]; g $? "T21d mutant (son-echo kuralı yok) → T20c bu mutantta düşerdi"
+_mut 'durum = a[0] == "-"' 'durum = True'
+_mutkos m5 'set -o pipefail; set +o pipefail; false | cat'; [ $? -eq 0 ]; g $? "T21e mutant (pipefail kapatma yok sayılıyor) → T20m bu mutantta düşerdi"
+_mut 'pipefail = _pipefail_etkisi(komut[1:i], False)' 'pipefail = any("pipefail" in t for t in jet)'
+_mutkos m6 'echo pipefail; false | cat'; [ $? -eq 0 ]; g $? "T21f mutant (eski kelime araması) → T20l bu mutantta düşerdi"
+_mut 'if ad not in SARMALAYICI:' 'if True:'
+KANIT_DEPO="$T" python3 "$MC/kanit.py" olcum is-boru-mut m7 --asama tek -- timeout 60 bash -c 'false | tail -1' >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T21g mutant (kabuk yalnız argv başında aranıyor) sarmalayıcıyı kaçırıyor → T20q bu mutantta düşerdi"
+_mut 'while len(toklar) > 1 and toklar[0] in ONEKLER:' 'while False:'
+_mutkos m8 'false; command echo bitti'; [ $? -eq 0 ]; g $? "T21h mutant (önek soyma yok) → T20r bu mutantta düşerdi"
+_mut 'yalin = _yalin(sag)' 'yalin = sag'
+_mutkos m9 'false || /bin/true; ls /'; [ $? -eq 0 ]; g $? "T21i mutant ('||' sağı soyulmuyor) '|| /bin/true'yu kabul ediyor → T20u bu mutantta düşerdi"
+_mut 'if t == "--" or not (t.startswith("-") or t.startswith("+")):' 'if t == "--":'
+KANIT_DEPO="$T" python3 "$MC/kanit.py" olcum is-boru-mut m11 --asama tek -- bash "$T/betik.sh" -c 'false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T21k mutant (seçenek bölgesi betik dosyasında bitmiyor — tur 4 hâli) betik argümanını reddediyor → T20z bu mutantta düşerdi"
+_mut 'k += 2 if komut[k] in degerli else 1' 'k += 1'
+KANIT_DEPO="$T" python3 "$MC/kanit.py" olcum is-boru-mut m12 --asama tek -- timeout -s KILL 60 bash -c 'false | cat' >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T21l mutant (değerli seçenek tablosu yok — tur 5 hâli) 'timeout -s KILL' arkasını kaçırıyor → T20z3 bu mutantta düşerdi"
+_mut 'j = _kabuk_konumu(komut)' 'j = next((k for k, t in enumerate(komut) if os.path.basename(t) in KABUKLAR), None)'
+KANIT_DEPO="$T" python3 "$MC/kanit.py" olcum is-boru-mut m10 --asama tek -- printf '%s\n' bash -c 'false | cat' >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T21j mutant (kabuk argv'nin her yerinde aranıyor — tur 3 hâli) printf verisini reddediyor → T20w bu mutantta düşerdi"
+
+echo "════ T22 · GEÇERSİZ ilan (4K938): özgün kayda dokunmaz, hedefin ölçüm kimliğine bağlı, yeşil sayılmaz ════"
+# Senaryo fonksiyonda: gerçek araçta her kapı geçer; T23'te tam kopyadaki mutantlarda hedef kapı düşer.
+_gec_senaryo() { # _gec_senaryo <kanit.sh> <depo> → "ad=0|1" satırları (0 = beklenen davranış)
+  local K="$1" D="$2" Z="$2/_agents/fabrika/kanit/is-gec" r
+  _s() { printf '%s=%s\n' "$1" "$([ "$2" -eq 0 ] && echo 0 || echo 1)"; }
+  _e() { KANIT_DEPO="$D" python3 -c "import json,sys;sys.path.insert(0,'$(dirname "$K")');import kanit;m=json.load(open('$Z/KANIT.json'));print(next(k['etkin_renk'] for k in kanit.etkin_kayitlar(m) if k['dosya']=='$1'))"; }
+  KANIT_DEPO="$D" bash "$K" olcum is-gec ana --asama sonra -- bash -c 'echo 7' >/dev/null 2>&1
+  KANIT_DEPO="$D" bash "$K" olcum is-gec iki --asama once -- echo a >/dev/null 2>&1
+  KANIT_DEPO="$D" bash "$K" olcum is-gec iki --asama sonra -- echo b >/dev/null 2>&1
+  local sha0 kay0; sha0="$(sha256sum "$Z/olcum-ana-sonra.txt")"
+  kay0="$(python3 -c "import json;print(json.dumps(next(k for k in json.load(open('$Z/KANIT.json'))['kayitlar'] if k['dosya']=='olcum-ana-sonra.txt'),sort_keys=True))")"
+  KANIT_DEPO="$D" bash "$K" gecersiz is-gec ana --neden "kısa" --kim T >/dev/null 2>&1; r=$?
+  _s kisa_neden_ret $([ "$r" -ne 0 ] && ! ls "$Z"/gecersiz-* >/dev/null 2>&1; echo $?)
+  KANIT_DEPO="$D" bash "$K" gecersiz is-gec yok-boyle --neden "olmayan hedef olmamalı, ret beklenir" --kim T >/dev/null 2>&1; _s olmayan_hedef_ret $([ $? -ne 0 ]; echo $?)
+  KANIT_DEPO="$D" bash "$K" gecersiz is-gec iki --neden "iki aşamalı etiket belirsiz, dosya ister" --kim T >/dev/null 2>&1; _s belirsiz_etiket_ret $([ $? -ne 0 ]; echo $?)
+  KANIT_DEPO="$D" bash "$K" gecersiz is-gec ana --neden "karşı kanıt yoksa ilan yazılmamalı" --kim T --karsi yok-boyle >/dev/null 2>&1; _s olmayan_karsi_ret $([ $? -ne 0 ]; echo $?)
+  KANIT_DEPO="$D" bash "$K" gecersiz is-gec ana --neden "boru çıkış kodunu maskeledi, ölçüm yanlış" --kim T --karsi olcum-iki-sonra.txt >/dev/null 2>&1; _s ilan_yazildi $?
+  _s ozgun_dosya_degismedi $([ "$(sha256sum "$Z/olcum-ana-sonra.txt")" = "$sha0" ]; echo $?)
+  _s ozgun_kayit_degismedi $([ "$(python3 -c "import json;print(json.dumps(next(k for k in json.load(open('$Z/KANIT.json'))['kayitlar'] if k['dosya']=='olcum-ana-sonra.txt'),sort_keys=True))")" = "$kay0" ]; echo $?)
+  _s etkin_gecersiz $([ "$(_e olcum-ana-sonra.txt)" = "gecersiz" ]; echo $?)
+  local C; C="$(KANIT_DEPO="$D" bash "$K" dogrula is-gec 2>&1)"; r=$?
+  _s dogrula_saglam_ve_sayar $([ "$r" -eq 0 ] && grep -q "1 kayıt GEÇERSİZ" <<<"$C" && grep -q "⛔ GEÇERSİZ: olcum-ana-sonra.txt (yesil → gecersiz) — boru" <<<"$C" && grep -q "karşı kanıt: olcum-iki-sonra.txt" <<<"$C"; echo $?)
+  C="$(KANIT_DEPO="$D" bash "$K" ozet is-gec 2>&1)"
+  _s ozet_gosterir $(grep -q "GEÇERSİZ\*\* (ölçülen: yesil): boru" <<<"$C"; echo $?)
+  _s liste_etkin_json $(KANIT_DEPO="$D" bash "$K" liste is-gec --etkin 2>/dev/null | python3 -c "import json,sys;l=json.load(sys.stdin);k=next(x for x in l if x['dosya']=='olcum-ana-sonra.txt');assert k['renk']=='yesil' and k['etkin_renk']=='gecersiz' and k['gecersiz_kim']=='T'" 2>/dev/null; echo $?)
+  KANIT_DEPO="$D" bash "$K" gecersiz is-gec ana --neden "ikinci kez ilan, ret beklenir burada" --kim T >/dev/null 2>&1; _s ikinci_ilan_ret $([ $? -ne 0 ]; echo $?)
+  KANIT_DEPO="$D" bash "$K" olcum is-gec ana --asama sonra -- bash -c 'echo 8' >/dev/null 2>&1
+  _s yeniden_olcum_ilani_dusurur $([ "$(_e olcum-ana-sonra.txt)" = "yesil" ]; echo $?)
+  C="$(KANIT_DEPO="$D" bash "$K" dogrula is-gec 2>&1)"
+  _s dogrula_uygulanmiyor_der $(grep -q "ilan artık uygulanmıyor: olcum-ana-sonra.txt" <<<"$C" && ! grep -q "kayıt GEÇERSİZ" <<<"$C"; echo $?)
+  # göz tur 1: aynı çıktı aynı saniyede yeniden ölçülürse sha+zaman ikisi de AYNI kalır — ilan yine düşmeli (bağ ölçüm kimliği).
+  # Çakışma saate bırakılmaz: kayıt aynı sha+zamanla, yalnız yeni ölçüm kimliğiyle araç imzasıyla yeniden yazılır (aracın yeniden ölçümde yaptığı).
+  KANIT_DEPO="$D" bash "$K" gecersiz is-gec ana --neden "yeniden ölçüm de yanlıştı, yine geçersiz" --kim T >/dev/null 2>&1; r=$?
+  python3 - "$Z/KANIT.json" "$(dirname "$K")" <<'PY'
+import json,sys,uuid;p=sys.argv[1];sys.path.insert(0,sys.argv[2]);import kanit;m=json.load(open(p))
+k=next(x for x in m['kayitlar'] if x['dosya']=='olcum-ana-sonra.txt');k['olcum_id']=uuid.uuid4().hex
+m['imza']=kanit.imza(m['kayitlar']);json.dump(m,open(p,'w'))
+PY
+  _s ayni_cikti_ayni_saniye_ilani_dusurur $([ "$r" -eq 0 ] && [ "$(_e olcum-ana-sonra.txt)" = "yesil" ]; echo $?)
+  # geri uyum: ölçüm kimliği olmayan (0.10.2 öncesi) kayıt da ilan edilebilir; bağ sha+zaman
+  python3 - "$Z/KANIT.json" "$(dirname "$K")" <<'PY'
+import json,sys;p=sys.argv[1];sys.path.insert(0,sys.argv[2]);import kanit;m=json.load(open(p))
+next(x for x in m['kayitlar'] if x['dosya']=='olcum-iki-once.txt').pop('olcum_id',None)
+m['imza']=kanit.imza(m['kayitlar']);json.dump(m,open(p,'w'))
+PY
+  KANIT_DEPO="$D" bash "$K" gecersiz is-gec olcum-iki-once.txt --neden "eski araçla alınmış ölçüm de ilan edilebilmeli" --kim T >/dev/null 2>&1; r=$?
+  _s kimliksiz_eski_kayit_ilan_edilir $([ "$r" -eq 0 ] && [ "$(_e olcum-iki-once.txt)" = "gecersiz" ] && python3 -c "import json;assert any(k.get('hedef_dosya')=='olcum-iki-once.txt' and k.get('hedef_olcum_id') is None for k in json.load(open('$Z/KANIT.json'))['kayitlar'])"; echo $?)
+  python3 - "$Z/KANIT.json" <<'PY'
+import json,sys;p=sys.argv[1];m=json.load(open(p));next(k for k in m['kayitlar'] if k['tur']=='gecersiz')['neden']='elle değişti';json.dump(m,open(p,'w'))
+PY
+  KANIT_DEPO="$D" bash "$K" dogrula is-gec >/dev/null 2>&1; _s elle_ilan_yakalanir $([ $? -eq 1 ]; echo $?)
+}
+mkdir -p "$T/d22"; ( cd "$T/d22" && git init -q -b main ) >/dev/null 2>&1
+S22="$(_gec_senaryo "$K" "$T/d22")"
+_k() { [ "$(grep "^$1=" <<<"$2" | cut -d= -f2)" = "0" ]; }
+for ad_ac in "kisa_neden_ret:--neden 20 karakterden kısa → ret, ilan dosyası yazılmadı" "olmayan_hedef_ret:olmayan hedef → ret" \
+  "belirsiz_etiket_ret:iki kayıtlı etiket (once+sonra) → belirsiz, dosya adı ister" "olmayan_karsi_ret:olmayan karşı kanıt → ret" \
+  "ilan_yazildi:geçerli ilan rc=0" "ozgun_dosya_degismedi:özgün kanıt dosyasının baytı değişmedi" "ozgun_kayit_degismedi:özgün manifest kaydı değişmedi (renk hâlâ yesil)" \
+  "etkin_gecersiz:etkin renk = gecersiz" "dogrula_saglam_ve_sayar:dogrula rc=0, geçersiz sayısı + neden + karşı kanıt basılı" \
+  "ozet_gosterir:ozet tablosu GEÇERSİZ + nedeni gösteriyor" "liste_etkin_json:liste --etkin: ham renk yesil, etkin gecersiz, kim yazılı" \
+  "ikinci_ilan_ret:aynı ölçüme ikinci ilan → ret" "yeniden_olcum_ilani_dusurur:yeniden ölçüm (yeni sha+zaman) → ilan uygulanmaz, etkin yesil" \
+  "dogrula_uygulanmiyor_der:dogrula 'ilan artık uygulanmıyor' der, geçersiz saymaz" \
+  "ayni_cikti_ayni_saniye_ilani_dusurur:aynı çıktı + aynı saniye (sha ve zaman aynı) yeniden ölçüm → ilan yine düşer (bağ ölçüm kimliği)" \
+  "kimliksiz_eski_kayit_ilan_edilir:ölçüm kimliği olmayan eski kayıt ilan edilebilir (yedek bağ sha+zaman)" "elle_ilan_yakalanir:ilan kaydı elle değişince imza tutmuyor → rc=1"; do
+  _k "${ad_ac%%:*}" "$S22"; g $? "T22 ${ad_ac#*:}"
+done
+
+echo "════ T23 · MUTASYON (4K938): tam kopyada; kontrol kopyası tüm kapıları geçmeli, her mutant hedef kapısını düşürmeli ════"
+_kopya23() { local d="$T/pkg23-$1"; mkdir -p "$d"; cp "$HERE"/*.py "$HERE"/*.sh "$d/"; echo "$d"; }
+_mut23() { # _mut23 <ad> <eski> <yeni> → mutant kopyanın dizini
+  local d; d="$(_kopya23 "$1")"
+  python3 - "$d/kanit.py" "$2" "$3" <<'PY' || { echo "MUTASYON DESENİ TUTMADI: $1" >&2; }
+import sys; p,eski,yeni=sys.argv[1:]; s=open(p,encoding='utf-8').read(); assert eski in s; open(p,'w',encoding='utf-8').write(s.replace(eski,yeni,1))
+PY
+  echo "$d"
+}
+KD="$(_kopya23 kontrol)"; mkdir -p "$T/d23k"; ( cd "$T/d23k" && git init -q -b main ) >/dev/null 2>&1
+S="$(_gec_senaryo "$KD/kanit.sh" "$T/d23k")"; ! grep -q "=1$" <<<"$S" && [ "$(grep -c "=0$" <<<"$S")" -eq 17 ]; g $? "T23a kontrol kopyası (mutasyonsuz): 17 kapının 17'si geçiyor"
+_m23() { # _m23 <ad> <hedef kapı> <eski> <yeni> <açıklama>
+  local d s; d="$(_mut23 "$1" "$3" "$4")"; mkdir -p "$T/d23-$1"; ( cd "$T/d23-$1" && git init -q -b main ) >/dev/null 2>&1
+  s="$(_gec_senaryo "$d/kanit.sh" "$T/d23-$1")"; ! _k "$2" "$s"; g $? "T23 mutant $1: $5 → '$2' kapısı düşüyor"
+}
+_m23 kisa kisa_neden_ret 'if len(neden) < NEDEN_EN_AZ:' 'if False:' "neden uzunluğu denetimi kaldırıldı"
+_m23 bag yeniden_olcum_ilani_dusurur 'if h is not None and _ayni_olcum(h, g):' 'if h is not None:' "ilan hedefin ölçümüne bağlı değil"
+_m23 kimlik ayni_cikti_ayni_saniye_ilani_dusurur $'if g.get("hedef_olcum_id"):\n        return h.get("olcum_id") == g["hedef_olcum_id"]\n    return not h.get("olcum_id") and (' 'return (' "bağ yalnız sha+zaman (göz tur 1'deki hâl)"
+_m23 etkin etkin_gecersiz 'elif k.get("dosya") in ilanlar:' 'elif False:' "etkin renk ilanı yok sayıyor"
+_m23 cift ikinci_ilan_ret 'if h["dosya"] in ilanlar:' 'if False:' "ikinci ilan denetimi kaldırıldı"
+_m23 karsi olmayan_karsi_ret 'kk = coz(a.karsi, "karşı kanıt")' 'kk = {"dosya": a.karsi}' "karşı kanıt çözülmeden kabul"
+
+echo "════ T24 · ETİKET (gorev_01M57ZV1D7K7X1Z9B04P7FD7W2): yolu bozan etiket rc 2 ile reddedilir, kayıt yazılmaz, hata dökümü yok ════"
+# eskiden: 'a/b' → Python hata dökümü + rc 1 + kayıt YOK (çıktıyı atan çağıranda kanıt sessizce kayboluyordu);
+#          '' · '.' · '..' → KABUL ediliyordu (olcum--tek.txt gibi anlamsız kayıt)
+E24="$T/is-etiket"; printf 'rapor\n' > "$T/rapor24.txt"
+say24() { python3 -c 'import json,sys
+try: print(len(json.load(open(sys.argv[1]))["kayitlar"]))
+except Exception: print(0)' "$T/_agents/fabrika/kanit/is-etiket/KANIT.json"; }
+bash "$K" olcum is-etiket iyi --asama tek -- echo 1 >/dev/null 2>&1; n0="$(say24)"
+red24() {   # red24 <etiket> <açıklama> <komut…> → rc 2 · sebep · kayıt sayısı değişmedi · hata dökümü yok
+  local et="$1" ne="$2"; shift 2
+  "$@" 2>"$T/e24" >/dev/null; local rc=$?
+  [ "$rc" -eq 2 ] && grep -q "kanıt KAYDEDİLMEDİ" "$T/e24" && ! grep -q "Traceback" "$T/e24" && [ "$(say24)" = "$n0" ]; g $? "T24 $ne → rc=$rc, kayıt eklenmedi, hata dökümü yok"
+}
+red24 'a/b'    "olcum 'a/b' (eğik çizgi)"            bash "$K" olcum is-etiket 'a/b' --asama tek -- echo 1
+grep -q "eğik çizgi" "$T/e24"; g $? "T24 sebep söyleniyor (eğik çizgi)"
+red24 '../kac' "dosya '../kac'"                     bash "$K" dosya is-etiket '../kac' "$T/rapor24.txt"
+red24 'a\b'    "canli 'a\\b' (ters eğik çizgi)"      bash "$K" canli is-etiket 'a\b' --kaynak "dosya:$T/rapor24.txt" --desen rapor
+red24 'x/y'    "ekran 'x/y' (aracın varlığından önce reddedilir)" bash "$K" ekran is-etiket 'x/y' --url http://127.0.0.1:9/
+red24 ''       "olcum '' (boş)"                     bash "$K" olcum is-etiket '' --asama tek -- echo 1
+red24 '   '    "olcum '   ' (yalnız boşluk)"           bash "$K" olcum is-etiket '   ' --asama tek -- echo 1
+red24 '..'     "dosya '..' (yalnız nokta)"          bash "$K" dosya is-etiket '..' "$T/rapor24.txt"
+red24 $'a\tb'  "olcum sekmeli etiket (denetim karakteri)" bash "$K" olcum is-etiket $'a\tb' --asama tek -- echo 1
+bash "$K" olcum is-etiket 'iki sinav + kopya: (3) ≠ eski' --asama tek -- echo 1 >/dev/null 2>&1; [ $? -eq 0 ] && [ "$(say24)" -eq $((n0+1)) ]; g $? "T24 gerçek kanıtlarda kullanılan biçim (boşluk + : ( ) ≠) KABUL — kural yalnız yolu bozanı reddeder"
+echo "── T24 · MUTASYON ──"
+_m24() {   # _m24 <eski> <yeni> <etiket> <açıklama> — mutant kanit.py, kötü etiketi KABUL eder ya da çöker → rc≠2
+  _mut "$1" "$2"
+  KANIT_DEPO="$T" python3 "$MC/kanit.py" olcum is-etiket-mut "$3" --asama tek -- echo 1 >/dev/null 2>&1; [ $? -ne 2 ]; g $? "T24 mutant ($4) kötü etiketi reddetmiyor → T24 bu mutantta düşerdi"
+}
+_m24 'if a.f in (cmd_olcum, cmd_ekran, cmd_dosya, cmd_canli): etiket_denetle(a.etiket)' 'pass' 'a/b' "denetim hiç çağrılmıyor"
+_m24 '    if sebep:' '    if False:' '' "sebep bulunsa da reddetmiyor"
+_m24 '("/" in e or "\\" in e)' '("\\" in e)' 'a/b' "eğik çizgi kuralı yok"
+_m24 'if set(e) <= {"."} else ""' 'if False else ""' '..' "nokta kuralı yok"
+_m24 '"boş" if not e.strip() else' '"boş" if not e else' '   ' "yalnız boşluk boş sayılmıyor"
+
+echo "════ T25 · MUTASYON KAYDI (FR7M76 · #1136 tur 3): --mutasyon <gerçek etiket> — dosya başı söyler, renk ters, gerçek ölçüme bağlı ════"
+# Senaryo fonksiyonda: geçen kapıların anahtarını basar. Gerçek araçta hepsi geçer; mutant kopyada hedef anahtar düşer.
+_s25() {   # _s25 <kanit.py> <depo> → geçen kapı anahtarları (boşlukla)
+  local py="$1" d="$2" z="$2/_agents/fabrika/kanit/is-mut" o=""
+  mkdir -p "$d"; ( cd "$d" && git init -q -b main ) >/dev/null 2>&1
+  KANIT_DEPO="$d" python3 "$py" olcum is-mut m-yok --asama tek --mutasyon gercek -- bash -c 'exit 1' >/dev/null 2>"$d/e"
+  [ $? -eq 2 ] && grep -q "GERÇEK ölçüm yok" "$d/e" && [ ! -f "$z/olcum-m-yok-tek.txt" ] && o="$o a"
+  KANIT_DEPO="$d" python3 "$py" olcum is-mut gercek --asama tek -- bash -c 'echo "  ✓ K1 kilit tutuyor"; exit 0' >/dev/null 2>&1
+  KANIT_DEPO="$d" python3 "$py" olcum is-mut gercek --asama sonra --mutasyon gercek -- bash -c 'exit 1' >/dev/null 2>&1; [ $? -eq 2 ] && o="$o b"
+  KANIT_DEPO="$d" python3 "$py" olcum is-mut m-bos --asama tek --mutasyon '' -- bash -c 'exit 1' >/dev/null 2>&1; [ $? -eq 2 ] && o="$o c"
+  KANIT_DEPO="$d" python3 "$py" olcum is-mut mut-k1 --asama tek --mutasyon gercek -- bash -c 'echo "  ✗ K1 kilit tutuyor"; exit 1' > "$d/o" 2>&1; local r=$?
+  [ $r -eq 0 ] && head -1 "$z/olcum-mut-k1-tek.txt" | grep -q '^=== MUTASYON KANITI: kod BİLEREK bozuldu.*Gerçek kod ölçümü: olcum-gercek-\* ===$' && o="$o d"
+  python3 -c "import json,sys;k=[x for x in json.load(open(sys.argv[1]))['kayitlar'] if x['etiket']=='mut-k1'][-1];assert k['renk']=='yesil' and k['mutasyon'] is True and k['gercek_olcum']=='gercek' and k['beklenen']=='kirmizi'" "$z/KANIT.json" 2>/dev/null && grep -q "YAKALADI" "$d/o" && o="$o e"
+  KANIT_DEPO="$d" python3 "$py" olcum is-mut mut-kacan --asama tek --mutasyon gercek -- bash -c 'echo "  ✓ K1"; exit 0' > "$d/o2" 2>&1
+  python3 -c "import json,sys;k=[x for x in json.load(open(sys.argv[1]))['kayitlar'] if x['etiket']=='mut-kacan'][-1];assert k['renk']=='kirmizi'" "$z/KANIT.json" 2>/dev/null && grep -q "KAÇTI" "$d/o2" && o="$o f"
+  KANIT_DEPO="$d" python3 "$py" olcum is-mut mut-kor --asama tek --mutasyon gercek -- bash -c 'exit 3' >/dev/null 2>&1; local r3=$?
+  python3 -c "import json,sys;k=[x for x in json.load(open(sys.argv[1]))['kayitlar'] if x['etiket']=='mut-kor'][-1];assert k['renk']=='sari'" "$z/KANIT.json" 2>/dev/null && [ $r3 -eq 3 ] && o="$o g"
+  KANIT_DEPO="$d" python3 "$py" ozet is-mut > "$d/oz" 2>&1
+  grep -E '\| mut-k1 \|' "$d/oz" | grep -q "🧬 MUTASYON (gerçek ölçüm: \`gercek\`" && ! grep -E '\| gercek \|' "$d/oz" | grep -q "MUTASYON" && o="$o h"
+  KANIT_DEPO="$d" python3 "$py" dogrula is-mut >/dev/null 2>&1 && o="$o i"
+  KANIT_DEPO="$d" python3 "$py" olcum is-mut m-zincir --asama tek --mutasyon mut-k1 -- bash -c 'exit 1' >/dev/null 2>&1; [ $? -eq 2 ] && o="$o j"
+  head -1 "$z/olcum-gercek-tek.txt" | grep -q '^\$ ' && o="$o k"
+  echo "$o"
+}
+s25="$(_s25 "$HERE/kanit.py" "$T/d25")"; _k25() { case " $2 " in *" $1 "*) return 0;; esac; return 1; }
+_k25 a "$s25"; g $? "T25a bağlandığı GERÇEK ölçüm manifestte yoksa rc 2, dosya yazılmaz (neyin mutantı olduğu bilinmeli)"
+_k25 b "$s25"; g $? "T25b kendi etiketini gösteren mutasyon rc 2"
+_k25 c "$s25"; g $? "T25c boş --mutasyon rc 2"
+_k25 d "$s25"; g $? "T25d dosyanın İLK satırı 'MUTASYON KANITI … Gerçek kod ölçümü: olcum-gercek-*' (göz ✗ satırını bulgu sanmasın)"
+_k25 e "$s25"; g $? "T25e kırmızı sınav = bozuk kod YAKALANDI → yeşil; kayıtta mutasyon · gercek_olcum · beklenen"
+_k25 f "$s25"; g $? "T25f yeşil sınav = mutant KAÇTI → kırmızı, söylenir"
+_k25 g "$s25"; g $? "T25g rc 3 mutasyonda da sarı (ölçülemedi), araç rc 3"
+_k25 h "$s25"; g $? "T25h özet tablosunda mutasyon satırı 🧬 MUTASYON der, gerçek ölçüm satırı demez"
+_k25 i "$s25"; g $? "T25i manifest imzası sağlam (dogrula)"
+_k25 j "$s25"; g $? "T25j mutasyon kaydı başka mutasyonun 'gerçek ölçümü' olamaz (zincir reddi)"
+_k25 k "$s25"; g $? "T25k mutasyonsuz ölçüm dosyası değişmedi (ilk satır hâlâ komut)"
+echo "── T25 · MUTASYON (tam kopyada, kontrol şartlı) ──"
+_m25() {   # _m25 <anahtar> <eski> <yeni> <açıklama>
+  local d="$T/m25-$1"; mkdir -p "$d/pkg"; cp "$HERE/kanit.sh" "$d/pkg/"
+  python3 - "$HERE/kanit.py" "$d/pkg/kanit.py" "$2" "$3" <<'PY'
+import sys; src,dst,eski,yeni=sys.argv[1:]; s=open(src,encoding='utf-8').read(); o=s
+s=s.replace(eski,yeni); assert s!=o, "mutasyon deseni tutmadı: "+eski; open(dst,'w',encoding='utf-8').write(s)
+PY
+  [ $? -eq 0 ] || { g 1 "T25 mutant $1: desen tutmadı ($4)"; return; }
+  local s; s="$(_s25 "$d/pkg/kanit.py" "$d/depo")"; ! _k25 "$1" "$s"; g $? "T25 mutant ($4) → '$1' kapısı düşüyor"
+}
+_kd="$T/m25-kontrol"; mkdir -p "$_kd/pkg"; cp "$HERE/kanit.sh" "$HERE/kanit.py" "$_kd/pkg/"; [ "$(_s25 "$_kd/pkg/kanit.py" "$_kd/depo")" = "$s25" ] && [ -n "$s25" ]; g $? "T25 kontrol kopyası gerçek araçla aynı kapıları geçiyor (mutantlar kopyada ölçülür)"
+_m25 a 'if not any(k.get("tur") == "olcum" and k.get("etiket") == mut and not k.get("mutasyon") for k in m0["kayitlar"]):' 'if False:' "gerçek ölçüm bağı aranmıyor"
+_m25 j ' and not k.get("mutasyon") for k in m0["kayitlar"]' ' for k in m0["kayitlar"]' "mutasyon kaydı gerçek ölçüm sayılıyor"
+_m25 d '"=== MUTASYON KANITI: kod BİLEREK bozuldu' '"=== kod BİLEREK bozuldu' "dosya başı MUTASYON demiyor"
+_m25 e '("kirmizi" if p.returncode == 0 else "yesil")' '("yesil" if p.returncode == 0 else "kirmizi")' "renk ters çevrilmiyor"
+_m25 h '        elif k.get("mutasyon"):' '        elif False:' "özet mutasyonu söylemiyor"
+_m25 b '        if mut == a.etiket:' '        if False:' "kendi etiketine bağlanabiliyor"
 
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"

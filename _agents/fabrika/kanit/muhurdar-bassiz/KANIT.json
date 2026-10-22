@@ -1,0 +1,95 @@
+{
+  "is": "muhurdar-bassiz",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-22T15:15:36+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "bassiz",
+      "asama": "once",
+      "dosya": "olcum-bassiz-once.txt",
+      "sha256": "30ff11942514e4f5095af47553a5d0c51c5f06377a0ff5efeb636d72a1214f74",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/muhurdar-bassiz/bassiz-olcer.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/once-tescil/tescil"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-22T14:56:03+03:00",
+      "sure_sn": 146.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "42e99710d95148a79fbe8f665c5476fd"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bassiz",
+      "asama": "sonra",
+      "dosya": "olcum-bassiz-sonra.txt",
+      "sha256": "33db7b1b843461f65d6102858777c12f448fc240eb85fbb40bbb05a4e6309f97",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/muhurdar-bassiz/bassiz-olcer.sh",
+        "tescil"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T14:58:55+03:00",
+      "sure_sn": 171.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "579370083d5c4476b29ea40363e1c024"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "muhurdar-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-muhurdar-sinavi-tek.txt",
+      "sha256": "23220ca179787da33e9f4bfad5733a306cab479346f2c0609f46136de97c0e12",
+      "komut": [
+        "bash",
+        "tescil/scripts/muhurdar.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T15:02:11+03:00",
+      "sure_sn": 196.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "9f48fd3b4ae34c649fda2a8e36639ba2"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sicil-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-sicil-sinavi-tek.txt",
+      "sha256": "4fa3c85d40111544869290e0018cc105c211b7e135a9e69d5910e9e0dbf7cec9",
+      "komut": [
+        "bash",
+        "tescil/scripts/sicil.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T15:15:36+03:00",
+      "sure_sn": 272.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ddc01930ee5b496cbc5c48fc459de56e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "diploma-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-diploma-sinavi-tek.txt",
+      "sha256": "1430a708e1212b2dd9ec9ba8f00ffb14ac4d10d191e4ed0800a2ec967ea9e3f0",
+      "komut": [
+        "bash",
+        "tescil/scripts/diploma.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T15:10:40+03:00",
+      "sure_sn": 264.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d691c3eafbe846388d874711b5ed07a6"
+    }
+  ],
+  "imza": "f56e0af5eda6aedffebc5da47e6e4d8ec6666114f74b48dc2c90cd806b473da6"
+}

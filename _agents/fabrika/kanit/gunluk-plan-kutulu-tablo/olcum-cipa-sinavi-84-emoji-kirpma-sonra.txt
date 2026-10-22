@@ -1,0 +1,102 @@
+$ bash gunluk-plan/scripts/cipa.test.sh
+# rc=0 sure=4.5s zaman=2026-10-18T15:09:23+03:00
+--- stdout ---
+── ÇIPASIZ compact önerisi ÜRETİLMEZ (fail-closed · asıl kapı)
+  ✓ K1 çıpa yokken öneri rc=3
+  ✓ K2 çıpa yokken çıktı da üretilmez
+── çıpa yazılır ve GERİ OKUNUR
+  ✓ K3 yaz rc=0
+  ✓ K4 dosya diskte
+  ✓ K5 üç madde yazıldı
+  ✓ K6 tarih çıpada
+  ✓ K7 plansız yaz REDDEDİLİR (boş çıpa çıpa değildir)
+── çıpa VARKEN öneri üretilir
+  ✓ K8 çıpa varken öneri rc=0
+  ✓ K9 öneri Sultan'a sorulacak cümleyi taşır (K8 tautoloji değil)
+  ✓ K10 öneri OTOMATİK yapmadığını SÖYLER
+── madde durumu tazelenir
+  ✓ K11 tazele rc=0
+  ✓ K12 ikinci madde KAPANDI
+  ✓ K13 öteki maddeler DOKUNULMADI
+  ✓ K14 olmayan madde REDDEDİLİR
+  ✓ K15 geçersiz durum REDDEDİLİR
+  ✓ K16 yarım madde işaretlenir (ertesi güne taşınacak olan)
+── tazeleme İKİ KEZ koşunca çoğaltmaz (idempotent)
+  ✓ K17 tek KAPANDI etiketi (üst üste yazmaz)
+── NÂZIR'ın bulduğu üç kusur (araç yazıldığı gün bulundu)
+  ✓ K19 değersiz --plan → asılmaz, reddeder (rc=2)
+  ✓ K19 değersiz --madde → asılmaz, reddeder (rc=2)
+  ✓ K19 değersiz --durum → asılmaz, reddeder (rc=2)
+  ✓ K19d bayrak-bayrak → değer verilmemiş sayılır
+  ✓ K20 geri alınan madde [-] işaretlenir
+  ✓ K20b geri alınmış madde kapandıya çevrilince ÜST ÜSTE YAZILMAZ
+  ✓ K21 geçersiz durum hâlâ reddedilir (K20 kapıyı gevşetmedi)
+── ÇIPA AJAN BAŞINA (b0097 · KÂŞİF/BASİRET buldu, kusur bendeydi)
+  ✓ K22 iki ajan İKİ ayrı dosya
+  ✓ K23 birincinin planı DURUYOR (ikinci ezmedi)
+  ✓ K24 ikincinin planı kendi dosyasında
+  ✓ K25 birinci dosyada ikincinin planı YOK (K23 tautoloji değil)
+  ✓ K28b salt-okur komutlar (oku·yol·compact-onerisi) dosya YARATMAZ
+  ✓ K28c oku eski tek dosyayı kopyalamadan okur
+  ✓ K26 eski TEK dosya korunur (silinmez)
+  ✓ K27 eski plan ajanın dosyasına TAŞINIR (kaybolmaz)
+  ✓ K28 yol, yaz'ın yazdığı dosyanın TA KENDİSİ
+  ✓ K29 dosya YOKKEN de yol basar (rc=0) — 'nereye' ile 'yazdım mı' ayrı
+  ✓ K30 yol AJANA göre değişir (tek dosyaya dönmez)
+  ✓ K31 Türkçe ad bozulmaz (MUAVİN → muavin)
+  ✓ K32 tamamen elenen ad → bilinmiyor (boş değil)
+  ✓ K33 temizlikte çakışan iki ad AYRI dosya
+  ✓ K34 yaz dalı ortak kilidi BEKLER (kilitsiz kesmiyor)
+  ✓ K35 kilit açılamıyorsa rc=1 (fail-open değil)
+── GERÇEK çıpaya dokunulmadı
+  ✓ K18 sınav kendi dizininde kaldı
+  ✓ K36 ajan, yol'daki dosya adıyla AYNI kimliği basar (iki yazım yok)
+  ✓ K37 ajan SALT-OKUR: dosya YARATMAZ
+  ✓ K38 kimlik türetilemezse 'bilinmiyor' basar (uydurma ad YOK)
+── ortak satır dilbilgisi: fikstür ⟂ beklenen (kokpit kapısıyla AYNI sözleşme)
+  ✓ T1 tablo.py --json ortak fikstürü beklenen.json'a BİREBİR çevirir
+  ✓ T2 sahip metinden AYRILIR
+  ✓ T3 kanıt nottan AYRILIR
+  ✓ T4 geçerli D1'li erteleme = ertelendi
+  ✓ T5 damgasız 'ERTELENDİ' = AÇIK (sessiz taşıma yok)
+  ✓ T6 durum adları kokpit kapısıyla aynı küme
+── kapanış kapısı: açık madde varsa kapanış KABUL EDİLMEZ
+  ✓ T7 üç açık madde → kapanış rc=4
+  ✓ T8 --kanit satıra 'kanıt:' parçası olarak yazılır
+  ✓ T9 tabloda kanıt sütunu dolu
+  ✓ T10 D1'siz erteleme REDDEDİLİR
+  ✓ T11 biçimsiz D1 REDDEDİLİR (oturum-ref · kırpık · beyan zorunlu)
+  ✓ T11b biçimi doğru ama karar 'ertele' değil ('bugün görüşelim') → REDDEDİLİR
+  ✓ T11b biçimi doğru ama karar 'ertele' değil ('erteleme') → REDDEDİLİR
+  ✓ T11b biçimi doğru ama karar 'ertele' değil ('ertelenmesin, bugün bitsin') → REDDEDİLİR
+  ✓ T11b biçimi doğru ama karar 'ertele' değil ('ertele istemiyorum') → REDDEDİLİR
+  ✓ T11b biçimi doğru ama karar 'ertele' değil ('ertele mi?') → REDDEDİLİR
+  ✓ T11b biçimi doğru ama karar 'ertele' değil ('erteleyelim mi bilmiyorum') → REDDEDİLİR
+  ✓ T11c reddedilen D1 çıpaya yazılmadı (madde 2 hâlâ açık, ERTELENDİ yok)
+  ✓ T11d ayrıştırıcı: kararsız D1 'açık', küme içi karar 'ertelendi' okunur
+  ✓ T12 geçerli D1 ile ertelendi yazılır
+  ✓ T13 bir madde hâlâ açık → kapanış rc=4
+  ✓ T14 hepsi kapandı/ertelendi/geri → kapanış rc=0
+  ✓ T15 tablo --json yaşayan çıpada da aynı alanları verir
+  ✓ T16 çıpa yoksa kapanış rc=1 (ölçemedim ≠ temiz)
+── tazele hedefi = tablodaki GÖRÜNÜR kimlik (bağımsız göz #357 tur 3: G1 hedeflenemiyordu)
+  ✓ T19 --madde G1 gün ortası maddesini tazeler (fiziksel sırası 3 olsa da)
+  ✓ T20 tablo ile tazele aynı kimliği konuşur (G1 kapandı)
+  ✓ T21 etiket büyük/küçük harf duyarsız (g2 → G2)
+  ✓ T22 etiketsiz satır için sıra numarası hâlâ çalışır (2 → serbest iş)
+  ✓ T23 olmayan etiket rc=1 ve çıpa DEĞİŞMEZ
+  ✓ T24 aynı etiket iki maddede → rc=1, hiçbirine dokunulmaz (belirsizlik tahminle çözülmez)
+── kokpit kapısıyla uyum (terminal-onar/kapi/bugun.mjs — ortak fikstür)
+  ✓ T17 kapının ayrıştırıcısı ortak fikstürü BİREBİR okur (muafiyet yok)
+  ✓ T18 satır atlayan (bozuk) kapı UYUMSUZ yakalanır — ölçüm aracı farkı görüyor
+
+── kutulu tablo ZORUNLU biçim (Sultan 18 Eki 'bu tarz bir görünüm istiyorum')
+  ✓ T21 varsayılan çıktı çerçevelidir (┌ ├ └)
+  ✓ T22 başlık satırı sayılı özet taşır (madde · ✅ · 🟡 · ⬜)
+  ✓ T23 durum sütunu işaretle basılır, kelimeyle değil
+  ✓ T24 beş durumun beşi işaretli (✅ 🟡 ⬜ ⏸ ➖)
+  ✓ T25 --md eski düz biçimi verir (kokpit/metin kanalı)
+  ✓ T26 mutant (işaret yerine kelime) T23'ü düşürür — kapı ısırıyor
+  ✓ T27 kutunun bütün satırları aynı görünür genişlikte (⏸ dahil, göz #369 tur 1)
+SONUÇ: 83 geçti · 0 kaldı
+--- stderr ---

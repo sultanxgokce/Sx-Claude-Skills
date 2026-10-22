@@ -94,7 +94,8 @@ jobs:
             if [ "$n" -gt "$KABUK_SURE_TAVAN" ]; then echo "::warning::$t sure=$n istedi, tavan $KABUK_SURE_TAVAN uygulandı"; echo "$KABUK_SURE_TAVAN"; return 0; fi
             echo "$n"
           }
-          mapfile -t T < <(find . -name '*.test.sh' -not -path './.git/*' | sort)
+          # Arçelik sınavı aşağıdaki bağımsız işte koşar; burada ikinci kez çalıştırılmaz.
+          mapfile -t T < <(find . -name '*.test.sh' -not -path './.git/*' -not -path './arcelik-fatura-kesim/scripts/kesim.test.sh' | sort)
           if [ "${#T[@]}" -eq 0 ]; then echo "::error::hiç *.test.sh bulunamadı — keşif bozuk"; exit 1; fi
           echo "bulunan sınama: ${#T[@]}"
           dusen=0; atlanan=0
@@ -112,3 +113,12 @@ jobs:
             [ -f "$k" ] || { echo "::error::karantina listesi bayat: $k artık yok"; dusen=$((dusen+1)); }
           done
           [ "$dusen" -eq 0 ]
+
+  arcelik-fatura-kesim:
+    name: arcelik-fatura-kesim sınavı
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: arcelik-fatura-kesim sınavı
+        run: bash arcelik-fatura-kesim/scripts/kesim.test.sh

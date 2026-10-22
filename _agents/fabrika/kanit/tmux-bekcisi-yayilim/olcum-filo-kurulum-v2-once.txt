@@ -1,0 +1,32 @@
+$ bash _agents/fabrika/kanit/tmux-bekcisi-yayilim/filo-kurulum.sh
+# rc=0 sure=9.5s zaman=2026-10-20T20:24:16+03:00
+--- stdout ---
+cloudtop                   yok · bekçi izi yok
+cloudtop-akar              yok
+cloudtop-code              kurulu
+cloudtop-codex             ekip kutusu değil (abc kullanıcısı yok)
+cloudtop-defter            ekip kutusu değil (abc kullanıcısı yok)
+cloudtop-enis              yok
+cloudtop-huma              yok
+cloudtop-huzur             yok
+cloudtop-kapi              ekip kutusu değil (abc kullanıcısı yok)
+cloudtop-kilavuz           ekip kutusu değil (abc kullanıcısı yok)
+cloudtop-maiset            yok
+cloudtop-medigate          yok
+cloudtop-menzil            yok
+cloudtop-mihenk            yok
+cloudtop-mmex              yok · bekçi DURAKLATILMIŞ
+cloudtop-nazir             yok · bekçi DURAKLATILMIŞ
+cloudtop-nova              yok · bekçi DURAKLATILMIŞ
+cloudtop-ntfy              ekip kutusu değil (abc kullanıcısı yok)
+cloudtop-pano              ekip kutusu değil (abc kullanıcısı yok)
+cloudtop-revak             yok
+cloudtop-sedir             yok
+cloudtop-tellal            yok
+cloudtop-terminal-merkez   ekip kutusu değil (abc kullanıcısı yok)
+cloudtop-tez               yok
+cloudtop-vekatip           yok
+cloudtop-wa                ekip kutusu değil (abc kullanıcısı yok)
+cloudtop-wa-sultan         ekip kutusu değil (abc kullanıcısı yok)
+ÖZET: ekip kutusu 18 · bekçi kurulu 1 · altyapı kabı (abc yok) 9 · ölçülemedi 0
+--- stderr ---

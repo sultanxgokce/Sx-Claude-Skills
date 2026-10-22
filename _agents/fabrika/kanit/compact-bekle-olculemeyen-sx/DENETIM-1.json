@@ -1,0 +1,30 @@
+{
+  "tur": 1,
+  "is": "compact-bekle-olculemeyen-sx",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T21:27:44+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 22394,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 12088
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Compact kuyruk turu, yüzdesi “-” olan koltuğa /compact göndermiyor; kaydı denemesi artırılmış halde tutuyor ve tavanda “bağlamı hiç ölçülemedi” gerekçesiyle düşürüyor. Talebin iki yeni kapısı önce kırmızı, sonra 37/37 yeşil ve iki hedefli mutasyonda yeniden kırmızı olduğundan değişiklik üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; sarı kayıt yok. Aynı sınavın önce ölçümünde B7 ve B7b düşerken sonra ölçümünde 37/37 geçmesi gerçek bir önce/sonra çifti sağlıyor; mutasyon kaydı da ölçülemeyen bağlam kapısı kaldırılınca B7+B7b’nin, tavan nedeni kaldırılınca B7b’nin düştüğünü göstererek sınavın iki talebi gerçekten ölçtüğünü doğruluyor."
+  }
+}

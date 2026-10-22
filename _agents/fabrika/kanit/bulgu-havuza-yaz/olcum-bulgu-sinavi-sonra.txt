@@ -1,0 +1,38 @@
+$ bash bulgu/scripts/bulgu.test.sh
+# rc=0 sure=1.1s zaman=2026-10-21T17:09:15+03:00
+--- stdout ---
+  ✓ H1 hal: yazıcıya 'hal S-12 --hal uygulandi --gerekce … --kim MUAVİN --kok' gider, rc 0
+  ✓ H2 🔴 'onaylandi' ajan tarafından yazılamaz (A06): rc 2, yazıcı ÇAĞRILMADI
+  ✓ H3 numara S-N değilse rc 2
+  ✓ H4 bilinmeyen hâl rc 2
+  ✓ H5 --kim eksik rc 2
+  ✓ H6 --gerekce eksik rc 2
+  ✓ H7 defter kurulu değilse rc 3, hiçbir şey yazılmaz
+  ✓ H8 eski 'yaz' yolu (jetonsuz kutu) değişmedi (yazıcıya 'yeni --baslik … --kim X --kok')
+  ✓ H9 🔴 --kim son argüman ve DEĞERSİZ: rc 2, sonsuz döngü YOK (5 sn zaman aşımı değil), yazıcı çağrılmadı
+  ✓ H9b yaz: --not değersiz → rc 2, döngü yok
+  ✓ K1a jeton yoksa eski yol + 'jetonu yok' uyarısı
+  ✓ K1b jeton varsa MERKEZE yazar: tür gorev · etiket bug · kaynak_kim · kaynak_nereden 'bulgu komutu' · kanıt adımı; tek-format cevap
+  ✓ K1c eski kutu yazıcısı ÇAĞRILMADI (tek defter, ikilik yok)
+  ✓ K1d jeton değeri çıktıda YOK
+  ✓ K1e --etiket ozellik geçer
+  ✓ K1f bilinmeyen etiket rc 2, hiçbir yere gitmez
+  ✓ K1g merkez reddederse rc 1 + http kodu/sebep; eski deftere DÜŞMEZ
+  ✓ D0 --dugum verilmezse gövdede dugum_acar YOK (eski yol aynen)
+  ✓ D1 kutulu biçim olduğu gibi dugum_acar olur; defterden okuma YAPILMAZ; düğüm + bekleyen sonucu söylenir
+  ✓ D1b kayıt yazıldı ama bekleyen notu YAZILAMADIYSA rc 4 (0 değil, 1 değil) + defterin sebebi
+  ✓ D2 çıplak kimlik: kutu defterden okunur (canlı kutu mmex, ekleyen akar DEĞİL) → mmex:gorev_BEKLEYEN00000001
+  ✓ D2b jeton değeri çıktıda YOK (okuma yolu da --config ile)
+  ✓ D3 çıplak kimlik defterde görünmüyorsa rc 1 + '<kutu>:… biçimiyle ver'; kayıt YAZILMADI
+  ✓ D4 🔴 jetonsuz kutuda --dugum RED (rc 2): eski deftere bağsız DÜŞMEZ, yazıcı çağrılmadı
+  ✓ D5 --dugum değersiz (son argüman) rc 2, döngü yok
+  ✓ D5b --dugum boş dize rc 2 (bağ sessizce düşmez)
+  ✓ D6 çıplak kimlik biçim dışıysa rc 2; defter adresine HİÇ gidilmez (yol kaçışı yok)
+  ✓ D7 defter düğümü reddederse rc 1 + defterin sebebi aynen (kural defterde, burada kopya yok)
+  ✓ D7b defter bağ reddinde (canlı 409 bag_hedefi_yok biçimi: neden/yerine ÜST düzeyde — 21 Eki canlıdan alındı) neden + yapılacak basılır, rc 1
+  ✓ HV1 varsayılan gorev_durumu 'havuz' + kaynak_sinif 'ajan' açıkça gövdede (0.5.0)
+  ✓ HV2 --gorev → gorev_durumu 'acik' (doğrudan İŞ, Sırada'ya düşer)
+  ✓ HV3 --dugum verilince durum 'acik' (başka kutunun işini tutan kayıt havuzda bekleyemez)
+  ✓ K1h merkeze ulaşılamazsa rc 1, kayıt HİÇBİR yere yazılmaz ve söylenir
+bulgu.test: 33 geçti · 0 kaldı
+--- stderr ---

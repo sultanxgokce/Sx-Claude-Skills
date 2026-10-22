@@ -1,0 +1,16 @@
+$ env OUT=/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/istem-tavani/out2 bash /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/istem-tavani/once-sonra.sh /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/istem-tavani/eski/yazilim-fabrikasi/scripts /config/projects/_wt/Sx-Claude-Skills-denetci-istem-tavani/yazilim-fabrikasi/scripts
+# rc=0 sure=4.2s zaman=2026-10-18T22:49:57+03:00
+--- stdout ---
+── ESKI · /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/istem-tavani/eski/yazilim-fabrikasi/scripts
+   (1) eşik altı istem: 7357 bayt
+   (2) fark 3052 bayt < eşik 6560 · istem ≈ 7357+önceki tur > tetik 7156 → rc=0 · kayıt: {'oldu': True, 'istem_bayt': 7993, 'esik': 6560}
+      ⚠ istem 7993 bayt → 6560'e kırpıldı (denetçiye söylendi, DENETIM kaydına yazılır)
+         ⚠ KIRPILDI: istem 7993 bayt → 6560 (diff'in sonu görülmedi; kayıtta kirpildi.oldu=true)
+── YENI · /config/projects/_wt/Sx-Claude-Skills-denetci-istem-tavani/yazilim-fabrikasi/scripts
+   (1) eşik altı istem: 7357 bayt
+   (2) fark 3052 bayt < eşik 6560 · istem ≈ 7357+önceki tur > tetik 7156 → rc=1 · kayıt: (DENETIM-2 yok — tur yakılmadı)
+      ✗ İŞİ BÖL — göze giden istem 7993 bayt > 7156 (kırpma eşiği; kanıt dosyaları farktan ayıklandıktan sonra): kırpık istemle denetim yapılmaz, tur yakılmadı.
+         parçalar (bayt): · istem şablonu 3185 · iş kartı 130 · kanıt manifesti 781 · ölçüm çıktıları 172 · üretim farkı 3089 · önceki tur kaydı 636 · kare listesi 0
+         en büyük parça: istem şablonu (3185 bayt)
+✓ (1) istem aynı (yalnız ölçüm zamanı / kimliği / sha farklı — her koşumda yeni ölçüm)
+--- stderr ---

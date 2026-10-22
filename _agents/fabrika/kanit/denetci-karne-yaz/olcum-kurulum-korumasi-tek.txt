@@ -1,0 +1,55 @@
+$ bash _agents/fabrika/kanit/denetci-karne-yaz/kurulum-olcer.sh
+# rc=0 sure=20.6s zaman=2026-10-22T18:05:16+03:00
+--- stdout ---
+════ B2DBS6 · denetçi kaydını iş dalına commit'ler ════
+error: Your local changes to the following files would be overwritten by checkout:
+	_agents/fabrika/karne.jsonl
+Please commit your changes or stash them before you switch branches.
+Aborting
+  ✗ a iş alanında (dal = iş adı) 5/E kaydı + KART.json kopyası dala commit'lenir: mesaj puanlı, ağaç TEMİZ
+  ✗ b kalan tur (3/H) da commit'lenir
+  ✗ c pathspec'li: önceden staged başka değişiklik commit'e girmez, staged kalır
+  ✗ d dal iş adı değilse commit'lenmez, söylenir
+  ✗ e birincil checkout'ta commit'lenmez, söylenir
+  ✗ f kutu-dışı bulgulu turda KUTU-DISI.jsonl aynı commit'te
+  ✗ g DENETCI_KAYIT_COMMIT=0 → commit yok, söylenir
+── MUTASYON (betik kopyasında, kontrol şartlı) ──
+error: Your local changes to the following files would be overwritten by checkout:
+	_agents/fabrika/karne.jsonl
+Please commit your changes or stash them before you switch branches.
+Aborting
+  ✓ kontrol kopyası gerçek betikle aynı kapıları geçiyor
+error: Your local changes to the following files would be overwritten by checkout:
+	_agents/fabrika/karne.jsonl
+Please commit your changes or stash them before you switch branches.
+Aborting
+  ✓ mutant (kayıt commit'i çağrılmıyor) → 'a' kapısı düşüyor
+error: Your local changes to the following files would be overwritten by checkout:
+	_agents/fabrika/karne.jsonl
+Please commit your changes or stash them before you switch branches.
+Aborting
+  ✓ mutant (commit pathspec'siz (staged her şey girer)) → 'c' kapısı düşüyor
+error: Your local changes to the following files would be overwritten by checkout:
+	_agents/fabrika/karne.jsonl
+Please commit your changes or stash them before you switch branches.
+Aborting
+  ✓ mutant (dal denetimi yok) → 'd' kapısı düşüyor
+error: Your local changes to the following files would be overwritten by checkout:
+	_agents/fabrika/karne.jsonl
+Please commit your changes or stash them before you switch branches.
+Aborting
+  ✓ mutant (birincil checkout denetimi yok) → 'e' kapısı düşüyor
+error: Your local changes to the following files would be overwritten by checkout:
+	_agents/fabrika/karne.jsonl
+Please commit your changes or stash them before you switch branches.
+Aborting
+  ✓ mutant (KUTU-DISI.jsonl commit'e girmiyor) → 'f' kapısı düşüyor
+error: Your local changes to the following files would be overwritten by checkout:
+	_agents/fabrika/karne.jsonl
+Please commit your changes or stash them before you switch branches.
+Aborting
+  ✓ mutant (KART.json kopyası kayıtsız kalıyor) → 'a' kapısı düşüyor
+
+── SONUÇ: 7 geçti · 7 kaldı ──
+── kopya rc=1 · 'would be overwritten' satırı: 8
+--- stderr ---

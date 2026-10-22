@@ -136,7 +136,7 @@ grep -q "SINIF İŞİ" <<<"$CIKTI" && grep -q "onay ÜRETMEZ" <<<"$CIKTI"; g $? 
 echo "════ T9 · MUTASYON: kapıyı bozunca sınav kırmızı veriyor mu ════"
 # 🔴 Mutant, betiğin KARDEŞLERİYLE aynı dizinde durmalı. Önceki sürümde mutantı /tmp'ye koymuştum;
 # $HERE yanlış çözülüp kanit.py bulunamıyordu ve T10 "rc=3" ile YANLIŞ SEBEPTEN yeşil veriyordu.
-PKG="$T/pkg"; mkdir -p "$PKG"; cp "$HERE/kanit.py" "$HERE/kanit.sh" "$HERE/kart.sh" "$PKG/"   # kart.sh de kardeş: kapı canlı şartını ondan okur (yoksa ÖLÇÜLEMEDİ)
+PKG="$T/pkg"; mkdir -p "$PKG"; cp "$HERE/kanit.py" "$HERE/kanit.sh" "$HERE/kart.sh" "$HERE/canli_borc.py" "$PKG/"   # kart.sh de kardeş: kapı canlı şartını ondan okur (yoksa ÖLÇÜLEMEDİ)
 M="$PKG/mutant.sh"; sed 's/^  exit 1$/  exit 0/' "$G" > "$M"; chmod +x "$M"
 bash "$M" bos --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "mutant (red kaldırıldı) izin veriyor → T1 bu mutantta düşerdi"
 bash "$M" is-a --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "mutant sağlam işe de izin veriyor (ölçer sahte-kırmızı üretmiyor)"
@@ -273,5 +273,232 @@ PY
 bash "$M6" is-i --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T12k mutant 6: geleceğe tarihli kayıt GEÇİYOR → T11o bu mutantta düşerdi"
 bash "$G" is-i --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T12l gerçek kapı geleceğe tarihli kaydı reddediyor"
 
+echo "════ T13 · GEÇERSİZ ilan (4K938): geçersiz canlı yeşil sayılmaz, sarı gibi engeldir; ilan kapıyı gevşetmez ════"
+bash "$KT" ac is-m --is "zil-m cron'u her saat çalsın" --istedi S --aldi M --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+bash "$KT" ac is-n --is "buton rengi düzelsin" --istedi S --aldi M --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+sleep 1; printf '%s zil-m çaldı\n' "$(date -u +%FT%TZ)" > "$LGK/zil-m.log"
+for i in is-m is-n; do bash "$K" olcum $i olc --asama tek -- echo 1 >/dev/null 2>&1; den $i 1 5 E; bash "$K" canli $i zil --desen zil-m --kaynak "dosya:$LGK/zil-m.log" >/dev/null 2>&1; done
+bash "$G" is-m --sessiz >/dev/null 2>&1; g $? "T13a önce: canlı kartı bağlı yeşil canlıyla geçer"
+bash "$G" is-n --sessiz >/dev/null 2>&1; g $? "T13a2 önce: canlısız kart (yeşil canlı kaydıyla) geçer"
+bash "$K" gecersiz is-m zil --neden "log satırı başka sunucunun zil kaydıydı" --kim M >/dev/null 2>&1
+bash "$K" gecersiz is-n zil --neden "log satırı başka sunucunun zil kaydıydı" --kim M >/dev/null 2>&1
+CIKTI="$(bash "$G" is-m 2>&1)"; RC=$?
+[ "$RC" -eq 1 ]; g $? "T13b geçersiz ilan edilen yeşil canlı SAYILMAZ → rc=1"
+grep -q "SARI ya da GEÇERSİZ" <<<"$CIKTI" && grep -q "kanit.sh canli" <<<"$CIKTI"; g $? "T13c sebebi ve yolu yazılı (yeniden ölç)"
+bash "$G" is-n --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T13d canlısız kartta da geçersiz canlı ENGEL (sarı gibi) → rc=1"
+# mutantlar tam kopyada (kanit.py kardeş); kontrol kopyası değişmeden aynı sonucu vermeli — kopya erken düşüp tesadüfen geçirmesin
+cp "$G" "$PKG/kontrol13.sh"; bash "$PKG/kontrol13.sh" is-n --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T13e kontrol kopyası (mutasyonsuz) gerçek kapıyla aynı: rc=1"
+M9="$PKG/mutant9.sh"; sed 's/k\["etkin_renk"\] in ("sari","gecersiz")/k["etkin_renk"] in ("sari",)/' "$G" > "$M9"
+grep -q 'in ("sari",)' "$M9"; g $? "T13f mutant 9 üretildi (geçersiz canlı engel listesinden çıktı)"
+bash "$M9" is-n --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T13g mutant 9: geçersiz canlı canlısız kartı GEÇİRİYOR → T13d bu mutantta düşerdi"
+M10="$PKG/mutant10.sh"; sed 's/y=\[k for k in c if k\["etkin_renk"\]=="yesil"\]/y=[k for k in c if k.get("renk")=="yesil"]/; s/k\["etkin_renk"\] in ("sari","gecersiz")/k.get("renk")=="sari"/' "$G" > "$M10"
+grep -q 'k.get("renk")=="yesil"' "$M10"; g $? "T13h mutant 10 üretildi (kapı etkin renk yerine ham rengi okuyor)"
+bash "$M10" is-m --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T13i mutant 10: geçersiz yeşil canlıyı SAYIYOR → T13b bu mutantta düşerdi"
+sleep 1; printf '%s zil-m çaldı\n' "$(date -u +%FT%TZ)" > "$LGK/zil-m.log"
+bash "$K" canli is-m zil --desen zil-m --kaynak "dosya:$LGK/zil-m.log" >/dev/null 2>&1
+bash "$G" is-m --sessiz >/dev/null 2>&1; g $? "T13j yeniden ölçülünce ilan uygulanmaz (eski ölçüme aitti) → geçer"
+bash "$PKG/kontrol13.sh" is-m --sessiz >/dev/null 2>&1; g $? "T13j2 kontrol kopyası geçen durumu da geçiriyor (kopyada içe aktarım düşmüyor)"
+bash "$K" gecersiz is-m olc --neden "echo 1 iddiayı ölçmüyordu, vekil ölçüttü" --kim M >/dev/null 2>&1
+CIKTI="$(bash "$G" is-m 2>&1)"; RC=$?
+grep -q "⛔ GEÇERSİZ: olcum-olc-tek.txt" <<<"$CIKTI" && grep -q "vekil ölçüttü" <<<"$CIKTI"; g $? "T13k ölçüm ilanı kapı çıktısında görünür (sessiz kalmaz; hükmü göz verir)"
+
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
+echo "════ T13 · DARALTMA kaydı: eski cümleye verilmiş 5/E yeni cümleyi doğrulamaz (PCP7J) ════"
+kart is-dar; bash "$K" olcum is-dar olc --asama tek -- echo 1 >/dev/null 2>&1
+den is-dar 1 2 H; den is-dar 2 2 H; den is-dar 3 5 E
+bash "$G" is-dar --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "daraltma yokken 3. tur 5/E → geçer (gerileme yok)"
+( cd "$T" && bash "$KT" daralt is-dar --kalan "kalan yarı yeterince uzun bir cümle burada" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-d >/dev/null 2>&1 ); g $? "kart daraltıldı (tur sıfırı 3)"
+CIKTI="$(bash "$G" is-dar 2>&1)"; RC=$?
+[ "$RC" -eq 1 ]; g $? "daraltma sonrası tur yokken son 5/E (tur 3 = sıfırdan önce) GEÇMEZ"
+grep -q "daraltmadan ÖNCE" <<<"$CIKTI"; g $? "sebep yazılı: son denetim daraltmadan önce"
+den is-dar 4 5 E
+CIKTI="$(bash "$G" is-dar 2>&1)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "daraltma SONRASI 5/E tur → geçer"
+grep -q "kart daraltılmış (tur sıfırı 3" <<<"$CIKTI" && grep -q "karar: reis" <<<"$CIKTI"; g $? "kapı daraltma kaydını ve reis kararını BASTI (eskiden hiç okumuyordu)"
+echo "════ T13b · MUTASYON: daraltma kontrolü kaldırılınca eski 5/E geçer (kapı gerçek) ════"
+M13="$HERE/.mut13.tmp.sh"; python3 - "$G" "$M13" <<'PYM'
+import sys; s=open(sys.argv[1]).read()
+eski='yeni cümle denetlenmedi, birleştirme YOK"; eksik=$((eksik+1))'
+assert eski in s, "mutasyon hedefi yok"
+open(sys.argv[2],"w").write(s.replace(eski,'yeni cümle denetlenmedi"; :'))
+PYM
+grep -q 'yeni cümle denetlenmedi"; :' "$M13"; g $? "T13b mutant üretildi (daraltma çiti kaldırıldı)"
+rm -f "$T/_agents/fabrika/kanit/is-dar/DENETIM-4.json"
+bash "$M13" is-dar --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "mutant: daraltma çiti kalkınca eski 5/E GEÇİYOR → T13 bu mutantta düşerdi"
+bash "$G" is-dar --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "gerçek kapı aynı durumda hâlâ reddediyor"
+rm -f "$M13"
+
+echo "════ T14 · KANIT TEK KURALLA: iş alanı · PR başı · birincil aynı sırayla; birincilden --pr ile çağrı iş alanındaki kanıtı bulur (retro W42 ders M3) ════"
+# Gerçek düzen: çıplak origin · birincil klon (main) · iş alanı worktree (dal = iş adı) · PR başı origin'de refs/pull/<N>/head.
+# Kart birincilde (kart tek kaynak), kanıt ve DENETİM iş alanında — 15 Eki compact-kurali vakasının birebir kurulumu.
+R="$(mktemp -d)"; ( cd "$R" && git init -q --bare uzak.git && git clone -q uzak.git ana && cd ana && git config user.email t@t && git config user.name T \
+  && echo x > f && git add f && git commit -qm "chore: ilk" && git push -q origin HEAD:main ) >/dev/null 2>&1
+P="$R/ana"
+alan() { # alan <dal> → iş alanı worktree (dal adı = kart adı; önekli olabilir)
+  git -C "$P" worktree add -q -b "$1" "$R/alan-${1//\//-}" >/dev/null 2>&1; echo "$R/alan-${1//\//-}"; }
+kanitla() { # kanitla <ağaç> <iş> <puan> <E/H> → ağaçta imzalı kanıt + DENETIM-1
+  ( cd "$1" && KANIT_DEPO="$1" bash "$K" olcum "$2" olc --asama tek -- echo 1 >/dev/null 2>&1 )
+  python3 - "$1/_agents/fabrika/kanit/$2/DENETIM-1.json" "$2" "$3" "$4" <<'PY'
+import json,sys,datetime
+p,is_,puan,dogru=sys.argv[1:]
+json.dump({"tur":1,"is":is_,"pr":"7","yazan":"claude","denetci":"codex","zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
+ "kanit_durumu":"sağlam","sonuc":{"kod_puani":int(puan),"dogru_sey":dogru,"ozet":"o","bulgular":[],"kanit_gorusu":"k"}},open(p,"w"))
+PY
+}
+kartP() { ( cd "$P" && KANIT_DEPO="$P" bash "$KT" ac "$1" --is "örnek iş cümlesi burada" --istedi S --aldi M --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h >/dev/null 2>&1 ); }
+kapi() { ( cd "$1" && shift && env -u KANIT_DEPO bash "$G" "$@" 2>&1 ); }   # KANIT_DEPO yok: kapı birincili git'ten bulur (canlıdaki gibi)
+
+kartP is-ck; A="$(alan is-ck)"; kanitla "$A" is-ck 5 E
+CIKTI="$(kapi "$P" is-ck --pr 7)"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "kanıt yeri: iş alanı ($A, dal iş adıyla aynı)" <<<"$CIKTI"; g $? "🔴 BİRİNCİLDEN çağrı iş alanındaki kanıtı buldu → GEÇTİ (15 Eki'de 'kanıt YOK' deyip kaçışa itmişti)"
+CIKTI="$(kapi "$A" is-ck)"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "kanıt yeri: çağrılan ağaç ($A" <<<"$CIKTI"; g $? "iş alanının içinden çağrı aynı kanıtı buldu (aynı kural, aynı sonuç)"
+# iş alanı kapandı, kanıt PR'ın dalında: PR başından okunur
+( cd "$A" && git add -A _agents && git commit -qm "docs: kanıt" && git push -q origin "HEAD:refs/pull/7/head" ) >/dev/null 2>&1
+git -C "$P" worktree remove --force "$A" >/dev/null 2>&1
+CIKTI="$(kapi "$P" is-ck --pr 7)"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "kanıt yeri: PR #7 başı" <<<"$CIKTI"; g $? "iş alanı kapalıyken kanıt PR #7 başından okundu → GEÇTİ"
+[ -z "$(git -C "$P" status --porcelain -uall | grep -v '^?? _agents/fabrika/kartlar/')" ] && [ ! -e "$P/_agents/fabrika/kanit/is-ck" ]; g $? "PR başı okuması birincil ağaca DOKUNMADI (kanıt geçici yere çıkarıldı)"
+CIKTI="$(kapi "$P" is-ck)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "kanıt yeri: hiçbir yerde (arandı: dalı 'is-ck' olan ağaçlar · birincil depo)" <<<"$CIKTI"; g $? "--pr verilmezse PR başına bakılmaz; aranan yerler sayılır, kapı kapalı (rc=1)"
+# bayat kopya: birincilde eski 5/E kopyası var, iş alanında güncel 3/E → iş alanı esas, kapı GEÇMEZ
+kartP is-bayat; B="$(alan is-bayat)"; kanitla "$B" is-bayat 3 E
+mkdir -p "$P/_agents/fabrika/kanit"; cp -r "$B/_agents/fabrika/kanit/is-bayat" "$P/_agents/fabrika/kanit/"
+python3 -c "import json,sys;p=sys.argv[1];d=json.load(open(p));d['sonuc']['kod_puani']=5;json.dump(d,open(p,'w'))" "$P/_agents/fabrika/kanit/is-bayat/DENETIM-1.json"
+CIKTI="$(kapi "$P" is-bayat --pr 8)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "kanıt yeri: iş alanı ($B" <<<"$CIKTI"; g $? "🔴 birincildeki BAYAT 5/E kopyası kapıyı açmaz — dalı iş adıyla aynı olan iş alanı esas (3/E → rc=1)"
+# önekli dal (hendese/<iş>): önek atılır
+kartP is-onek; C="$(alan hendese/is-onek)"; kanitla "$C" is-onek 5 E
+CIKTI="$(kapi "$P" is-onek)"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "kanıt yeri: iş alanı ($C" <<<"$CIKTI"; g $? "önekli dal (hendese/is-onek) iş adıyla eşleşir"
+
+echo "════ T14b · KAÇIŞ DEFTERİ FİKSTÜRÜ: W42'nin 9 kapısız birleştirmesi — yalnız 'kanıt başka yerde' sınıfı kapıdan geçer, gerisi KAPALI kalır ════"
+# Satırlar Nexus _agents/fabrika/kacis-defteri.log'dan BİREBİR (gerekçe alanı). Sınıf: kanit-yeri = kanıt vardı ama kapı başka yerde aradı ·
+# tavan = Sultan onaylı tavan/daraltma, son puan 5/E değil · kanitsiz = kanıt kaydı yoktu. Yalnız kanit-yeri bu işle kapanır;
+# öteki sınıflarda kaçış Sultan kararıdır ve kapı GEVŞEMEZ. 09:45 satırı puan yazmıyor; 'daralt' = tıkanmış iş, 5/E değil → 4/E ile canlandırılır.
+KACIS="$(cat <<'LOG'
+2026-10-12T13:47:10Z | KAPISIZ | Sultan kararı 12 Eki 'Birleştir, zamanlayıcı sonra (önerim)' (D1 kartta) · bağımsız göz 4 tur son 3/5·E, tek kalan bulgu K4 canlı cron kurulumu yapısal olarak birleşmeden sonra · CI 5/5 yeşil
+2026-10-12T16:02:47Z | KAPISIZ | yalnız ölçüm kaydı (_agents/ belgeler); kod yok; tek-kapi işinin 4 tur Codex denetimi #1115'te; CI yeşil, CLEAN
+2026-10-12T16:09:07Z | KAPISIZ | tek dosya küçük değişiklik, sınav 54/54 + CI yeşil CLEAN; sınıfsız; reis SERDAR
+2026-10-15T09:45:30Z | KAPISIZ | Sultan sohbette 'tamamdir onay verdim devam' dedi (15 Eki); kart enis-kasa-f1 daralt: canli kurye teslimi host yolu, arac+sinav 14 kapi, CI yesil
+2026-10-15T09:48:12Z | KAPISIZ | Sultan sohbette 'olur birlestir' (15 Eki); kart filo-havuz-toplayici daralt: 4 tur 4/E, 12 kapi, CI yesil; havuz dosyasi depo disi
+2026-10-15T09:48:17Z | KAPISIZ | Sultan sohbette 'olur birlestir' (15 Eki); kart posta-sevk daralt (BANI): tur 4 4/H tek bulgu okundu gorunurlugu ayri kartta (#1138), CI yesil
+2026-10-15T10:42:55Z | KAPISIZ | Sultan 'olur birlestir' (15 Eki, yetki sınıfı); compact-kurali kanıt+DENETIM-1..3 iş alanında/PR'da, kapı birincil depoda aradığı için göremedi
+2026-10-15T14:34:31Z | KAPISIZ | Sultan onayı 15 Eki (sohbet session_01Ge4BawKcUrcm1pdV8WANyF 'karar ikisini de birleştir'): tur 4 4/E, tek bulgu (hâl defteri eşzamanlılık) denetimden sonra 6500e1d7 ile düzeltildi, CI yeşil; kapsam reis kararıyla dara
+2026-10-15T18:50:33Z | KAPISIZ | Sultan onayı 15 Eki (sohbet session_01Ge4BawKcUrcm1pdV8WANyF 'önerin kabul edildi'): yetki sınıfı, tur 3 Codex 4/E tavan, tek bulgu uçtan uca Doğrulat zinciri (düğme panelde ayrı PR); CI 14/14 yeşil
+LOG
+)"
+declare -A SINIF=([2026-10-12T13:47:10Z]=tavan:3:E [2026-10-12T16:02:47Z]=kanitsiz [2026-10-12T16:09:07Z]=kanitsiz [2026-10-15T09:45:30Z]=tavan:4:E
+  [2026-10-15T09:48:12Z]=tavan:4:E [2026-10-15T09:48:17Z]=tavan:4:H [2026-10-15T10:42:55Z]=kanit-yeri:5:E [2026-10-15T14:34:31Z]=tavan:4:E [2026-10-15T18:50:33Z]=tavan:4:E)
+[ "$(grep -c . <<<"$KACIS")" = 9 ] && [ "${#SINIF[@]}" = 9 ]; g $? "fikstür: 9 satır, 9 sınıf"
+gecen_sinif=""; n=0; hepsi=0
+while IFS=' |' read -r ts _; do
+  [ -n "$ts" ] || continue; n=$((n+1)); s="${SINIF[$ts]:-}"; [ -n "$s" ] || { hepsi=1; continue; }
+  is_="is-kacis-$n"; kartP "$is_"; D_="$(alan "$is_")"
+  IFS=: read -r tur puan dogru <<<"$s"
+  [ "$tur" = kanitsiz ] || kanitla "$D_" "$is_" "$puan" "$dogru"
+  kapi "$P" "$is_" --pr "9$n" >/dev/null; rc=$?
+  [ "$rc" -eq 0 ] && gecen_sinif="$gecen_sinif $tur"
+  [ "$tur" = kanit-yeri ] && [ "$rc" -ne 0 ] && hepsi=1
+  [ "$tur" != kanit-yeri ] && [ "$rc" -eq 0 ] && hepsi=1
+done <<<"$KACIS"
+[ "$hepsi" = 0 ] && [ "$gecen_sinif" = " kanit-yeri" ]; g $? "🔴 9 kaçışın yalnız 'kanıt başka yerde' olanı (15 Eki 10:42) artık kapıdan geçer; 8'i (tavan · kanıtsız) KAPALI kalır — kapı gevşemedi (geçen:$gecen_sinif)"
+
+echo "════ T14 · CANLI BORÇ (5WYQMW): dağıtım birleşmeden SONRA ise kapı kayıtlı borçla geçer; kart BİTMEZ; ödenmezse kırmızı ════"
+# (T13 daraltma bölümü $T'yi sildi → mutantlar için kardeş dosyalar yeniden konur)
+mkdir -p "$T" "$PKG"; cp "$HERE/kanit.py" "$HERE/kanit.sh" "$HERE/kart.sh" "$HERE/canli_borc.py" "$PKG/"
+# Kural: borç kapıyı gevşetmez, görünür kılar. Sınıfsız kartta yazan sahip; SINIFLI kartta Sultan kararı (sultan-dedi) ŞART (A06).
+borckart() { bash "$KT" ac "$1" --is "boşta bekçisi cron'u $1" --istedi S --aldi M --geri-alinamaz "${2:-h}" --para h --dis-yuzey h --yetki h --canli e >/dev/null 2>&1; bash "$K" olcum "$1" olc --asama tek -- echo 1 >/dev/null 2>&1; den "$1" 1 5 E; }
+kj() { python3 -c "import json,sys;k=json.load(open('$T/_agents/fabrika/kartlar/$1.json'));print(eval(sys.argv[1]))" "$2"; }
+GR="kutuda dağıtım birleşmeden sonra Sultan elinde; cron ancak sabah paketiyle canlıya iner"
+borckart is-b1
+bash "$G" is-b1 --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T14a borçsuz canlı-gerekli kart canlı kayıt YOKKEN rc=1 (borç yokken kapı AYNEN kapalı)"
+bash "$KT" canli-borc is-b1 --yazan X --gerekce "$GR" >/dev/null 2>&1; [ $? -ne 0 ] && [ "$(kj is-b1 "k.get('canli_borc')")" = "None" ]; g $? "T14b borcu kartın sahibi OLMAYAN yazamaz (aldi M ≠ X) ve kayıt YAZILMAZ"
+bash "$KT" canli-borc is-b1 --yazan M --gerekce "sonra bakarız" >/dev/null 2>&1; [ $? -ne 0 ] && [ "$(kj is-b1 "k.get('canli_borc')")" = "None" ]; g $? "T14c 20 karakterden kısa gerekçe reddedilir ve kayıt YAZILMAZ"
+bash "$KT" canli-borc is-b1 --yazan M --gerekce "$GR" >/dev/null 2>&1; g $? "T14d sınıfsız kartta sahibi (M) geçerli gerekçeyle borç yazar"
+bash "$KT" canli-borc is-b1 --yazan M --gerekce "$GR" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "T14e ikinci borç yazılmaz"
+CIKTI="$(bash "$G" is-b1 2>&1)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "T14f 5+E + kayıtlı geçerli borç → kapı GEÇER (rc=0)"
+grep -q "CANLI BORÇ" <<<"$CIKTI" && grep -q "kart BİTMEZ" <<<"$CIKTI"; g $? "T14g kapı borcu YÜKSEK SESLE basar (sessiz geçmez)"
+CIKTI="$(bash "$KT" bitti is-b1 --pr 91 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && [ "$(kj is-b1 "k['durum']")" = "canli-borclu" ] && [ "$(kj is-b1 "k['bitis']")" = "None" ]; g $? "T14h kart.sh bitti → durum 'canli-borclu' (bitti DEĞİL), bitiş yok"
+grep -q "CANLI BORÇLU" <<<"$CIKTI"; g $? "T14i çıktı borçlu olduğunu ve ödeme yolunu söyler"
+bash "$KT" borclar >/dev/null 2>&1; g $? "T14j taze borç: kart.sh borclar rc=0 (süresinde)"
+bash "$KT" bitti is-b1 --pr 91 --gorev-bitti --olcum "sonra=1" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "T14k borçlu kartta --gorev-bitti reddedilir (görev canlı kayıt ödenmeden bitmez)"
+# 24 saat: borç zamanını 30 saat geriye al → borclar kırmızı
+python3 - "$T/_agents/fabrika/kartlar/is-b1.json" <<'PY'
+import json,sys,datetime
+p=sys.argv[1]; k=json.load(open(p)); k["canli_borc"]["zaman"]=(datetime.datetime.now().astimezone()-datetime.timedelta(hours=30)).isoformat(timespec="seconds"); json.dump(k,open(p,"w"))
+PY
+CIKTI="$(bash "$KT" borclar 2>&1)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "SÜRE AŞILDI" <<<"$CIKTI"; g $? "T14l 24 saati aşan borç → borclar rc=1 + SÜRE AŞILDI (bekçi/nabız bunu okur)"
+# ödeme: borçtan SONRA alınan bağlı yeşil canlı kayıt
+mkdir -p "$LGK"; sleep 1; printf '%s boşta-bekcisi çaldı\n' "$(date -u +%FT%TZ)" > "$LGK/b1.log"
+bash "$K" canli is-b1 bb --desen boşta-bekcisi --kaynak "dosya:$LGK/b1.log" >/dev/null 2>&1
+# kanıt, çağrılan ağaçtan okunur (bitti ile aynı kural): ağaç = sahte depo
+IFS=$'\t' read -r BD _ <<<"$(cd "$T" && bash "$KT" canli-borc-durum is-b1 2>&1)"
+[ "$BD" = odendi ]; g $? "T14m borçtan sonra bağlı yeşil canlı kayıt → durum 'odendi'"
+(cd "$T" && bash "$KT" bitti is-b1 --pr 91 >/dev/null 2>&1); [ "$(kj is-b1 "k['durum']")" = "bitti" ] && [ "$(kj is-b1 "k['canli_borc']['odendi'] is not None")" = "True" ]; g $? "T14n ödenen borçta kart.sh bitti → 'bitti' ve ödeme anı kartta"
+bash "$KT" borclar >/dev/null 2>&1; g $? "T14o ödenen borç artık listede yok (rc=0)"
+# geçersiz borç: kartın sahibi sonradan değişmiş/elle bozulmuş → kapı GEÇİRMEZ, bitti kapanmaz
+borckart is-b2; bash "$KT" canli-borc is-b2 --yazan M --gerekce "$GR" >/dev/null 2>&1
+python3 - "$T/_agents/fabrika/kartlar/is-b2.json" <<'PY'
+import json,sys
+p=sys.argv[1]; k=json.load(open(p)); k["canli_borc"]["yazan"]="BASKA"; json.dump(k,open(p,"w"))
+PY
+CIKTI="$(bash "$G" is-b2 2>&1)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "canlı borç GEÇERSİZ" <<<"$CIKTI"; g $? "T14p elle bozulmuş borç (yazan ≠ sahip) → kapı rc=1 ve sebep yazılı"
+bash "$KT" bitti is-b2 --pr 92 >/dev/null 2>&1; [ $? -ne 0 ] && [ "$(kj is-b2 "k['durum']")" = "acik" ]; g $? "T14q geçersiz borçla kart.sh bitti reddedilir ve kart AÇIK kalır"
+# sarı canlı + borç: ölçülmüş ama ateşleme yok = tam da borç durumu → geçer
+borckart is-b3; bash "$K" canli is-b3 yok --desen boşta-bekcisi --kaynak "dosya:$LGK/yok.log" >/dev/null 2>&1
+bash "$G" is-b3 --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T14r sarı canlı, borç YOK → rc=1 (T11c ile aynı)"
+bash "$KT" canli-borc is-b3 --yazan M --gerekce "$GR" >/dev/null 2>&1
+bash "$G" is-b3 --sessiz >/dev/null 2>&1; g $? "T14s sarı canlı + geçerli borç → rc=0"
+# SINIFLI kart: ajan Sultan adına borç yazamaz (A06)
+borckart is-b4 e
+bash "$KT" canli-borc is-b4 --yazan M --gerekce "$GR" >/dev/null 2>&1; [ $? -ne 0 ] && [ "$(kj is-b4 "k.get('canli_borc')")" = "None" ]; g $? "T14t SINIFLI kartta Sultan kararı olmadan borç YAZILAMAZ (A06)"
+CIKTI="$(bash "$KT" canli-borc is-b4 --yazan M --gerekce "$GR" 2>&1)"; grep -q "SINIFLI" <<<"$CIKTI" && grep -q "sultan-dedi" <<<"$CIKTI"; g $? "T14u sebep ve yol (sultan-dedi --karar canli-borc) söylenir"
+bash "$KT" sultan-dedi is-b4 --karar canli-borc --oturum "sohbet-0043" --soz "canlı borç onay" --beyan M --gerekce "dağıtım Sultan elinde, kapı kilitleniyor" >/dev/null 2>&1
+bash "$KT" canli-borc is-b4 --yazan M --gerekce "$GR" >/dev/null 2>&1; g $? "T14v sultan-dedi canli-borc işlendikten SONRA sınıflı kartta borç yazılır"
+bash "$G" is-b4 --sessiz >/dev/null 2>&1; g $? "T14w sınıflı kart + Sultan kararlı borç → kapı geçer"
+# göz tur 1: Sultan kararının zamanı bozuk/eksik ya da borçtan SONRA ise karar geçerli SAYILMAZ (fail-closed)
+borckart is-b6 e; bash "$KT" sultan-dedi is-b6 --karar canli-borc --oturum "sohbet-0043" --soz "canlı borç onay" --beyan M --gerekce "dağıtım Sultan elinde, kapı kilitleniyor" >/dev/null 2>&1
+python3 - "$T/_agents/fabrika/kartlar/is-b6.json" <<'PY'
+import json,sys
+p=sys.argv[1]; k=json.load(open(p)); k["sultan_kararlari"][0]["zaman"]="bozuk-zaman"; json.dump(k,open(p,"w"))
+PY
+bash "$KT" canli-borc is-b6 --yazan M --gerekce "$GR" >/dev/null 2>&1; [ $? -ne 0 ] && [ "$(kj is-b6 "k.get('canli_borc')")" = "None" ]; g $? "T14zb sınıflı kartta Sultan kararının zamanı BOZUK → karar sayılmaz, borç yazılmaz (fail-closed)"
+python3 - "$T/_agents/fabrika/kartlar/is-b6.json" <<'PY'
+import json,sys
+p=sys.argv[1]; k=json.load(open(p)); k["sultan_kararlari"][0].pop("zaman"); json.dump(k,open(p,"w"))
+PY
+bash "$KT" canli-borc is-b6 --yazan M --gerekce "$GR" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "T14zc kararın zamanı EKSİK → karar sayılmaz"
+python3 - "$T/_agents/fabrika/kartlar/is-b6.json" <<'PY'
+import json,sys,datetime
+p=sys.argv[1]; k=json.load(open(p)); k["sultan_kararlari"][0]["zaman"]=(datetime.datetime.now().astimezone()+datetime.timedelta(hours=1)).isoformat(timespec="seconds"); json.dump(k,open(p,"w"))
+PY
+bash "$KT" canli-borc is-b6 --yazan M --gerekce "$GR" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "T14zd karar borçtan SONRAYA tarihli → sayılmaz (sıra: önce Sultan, sonra borç)"
+borckart is-b8
+bash "$KT" canli-borc is-b8 --yazan M --gerekce "                              " >/dev/null 2>&1; [ $? -ne 0 ] && [ "$(kj is-b8 "k.get('canli_borc')")" = "None" ]; g $? "T14zf 30 boşluk gerekçe sayılmaz, borç yazılmaz (göz tur 2)"
+bash "$KT" canli-borc is-b8 --yazan M --gerekce "          kısa gerekçe          " >/dev/null 2>&1; [ $? -ne 0 ]; g $? "T14zg baş/son boşlukla 20'ye tamamlanan gerekçe sayılmaz"
+# MUTASYON: borç kapıyı gerçekten belirliyor (süs değil)
+MB1="$PKG/mutant-borc1.sh"; sed 's/gecerli) borc_gecer=1 ;;/gecerli) borc_gecer=0 ;;/' "$G" > "$MB1"; chmod +x "$MB1"
+grep -q 'gecerli) borc_gecer=0' "$MB1"; g $? "T14x mutant üretildi (geçerli borç artık geçirmiyor)"
+bash "$MB1" is-b3 --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T14y mutant: borç geçirmiyor → T14f/T14s bu mutantta düşerdi"
+MB2="$PKG/mutant-borc2.sh"; sed 's/gecerli) borc_gecer=1 ;;/gecerli|gecersiz|yok) borc_gecer=1 ;;/' "$G" > "$MB2"; chmod +x "$MB2"
+bash "$MB2" is-b2 --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "T14z mutant 2: geçersiz borç da geçiriyor → T14p bu mutantta düşerdi"
+cp "$PKG/canli_borc.py" "$PKG/canli_borc.py.asil"; sed -i 's/and zaman(sk.get("zaman")) is not None and zaman(sk.get("zaman")) <= bz/and (zaman(sk.get("zaman")) or bz) <= bz/' "$PKG/canli_borc.py"
+borckart is-b7 e; bash "$PKG/kart.sh" sultan-dedi is-b7 --karar canli-borc --oturum "sohbet-0043" --soz "canlı borç onay" --beyan M --gerekce "dağıtım Sultan elinde, kapı kilitleniyor" >/dev/null 2>&1
+python3 - "$T/_agents/fabrika/kartlar/is-b7.json" <<'PY'
+import json,sys
+p=sys.argv[1]; k=json.load(open(p)); k["sultan_kararlari"][0]["zaman"]="bozuk-zaman"; json.dump(k,open(p,"w"))
+PY
+bash "$PKG/kart.sh" canli-borc is-b7 --yazan M --gerekce "$GR" >/dev/null 2>&1; MR2=$?
+cp "$PKG/canli_borc.py.asil" "$PKG/canli_borc.py"
+[ "$MR2" -eq 0 ]; g $? "T14ze mutant 4: eski fail-open (bozuk zaman = borç anı) geri gelince bozuk kararlı borç yazılıyor → T14zb bu mutantta düşerdi"
+cp "$PKG/canli_borc.py" "$PKG/canli_borc.py.asil"; sed -i 's/        if not ok:/        if False:/' "$PKG/canli_borc.py"
+borckart is-b5 e; bash "$PKG/kart.sh" canli-borc is-b5 --yazan M --gerekce "$GR" >/dev/null 2>&1; MR=$?
+cp "$PKG/canli_borc.py.asil" "$PKG/canli_borc.py"
+[ "$MR" -eq 0 ]; g $? "T14za mutant 3: sınıflı Sultan-kararı denetimi kalkınca ajan borç yazabiliyor → T14t bu mutantta düşerdi"
+
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

@@ -1,0 +1,6 @@
+$ bash -c grep -n "yeni=\"\$hedef.yeni\|mv -f \"\$yeni\" \"\$hedef\"" terminal-onar/scripts/ortak.sh
+# rc=0 sure=0.0s zaman=2026-10-20T20:29:20+03:00
+--- stdout ---
+281:  yeni="$hedef.yeni.$$"
+282:  if mkdir -p "$(dirname "$hedef")" && cp "$kay" "$yeni" && chmod 755 "$yeni" && "$yeni" -V >/dev/null 2>&1 && mv -f "$yeni" "$hedef"; then
+--- stderr ---

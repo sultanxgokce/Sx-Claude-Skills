@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "kadro-dava-kurali-b2",
+  "pr": "372",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T16:52:48+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": null,
+  "yazan_model_kaynak": null,
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": true,
+    "istem_bayt": 157601,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 20,
+    "bayt": 94513
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Dava Rafı B2’nin ayrı davalar.yaml kaydı ile kadro, koltuk-aç, bekçi ve sunucu kapıları yapılmış; hedef sınav kırmızıdan yeşile dönmüş, 12 mutasyon yakalanmış ve ilgili gerilemeler geçmiştir. Görünen kod ve ölçümler üretime hazır düzeydedir; ancak üretim farkı 110000 baytta kırpıldığı için tamamı bağımsız gözle okunamamış, gerçek Claude resume adımı da Sultan eli gereken kutu-dışı doğrulama olarak kalmıştır.",
+    "bulgular": [
+      {
+        "ne": "Gerçek Claude konuşmasına resume işlemi bu kanıt paketinde doğrulanmamış; yalnız sahte açıcı ve komut sözleşmesi ölçülmüş.",
+        "kanit": "Sultan kararı resume adımını “kanıtta SARI + Sultan eli” diye ayırıyor; manifestte dava-resume etiketi veya sarı kayıt yok. Mevcut olcum-gerileme-koltuk-ac-tek.txt V1-V5 yalnız sahte süreçle claude --resume çağrısını ve hata dallarını sınıyor.",
+        "konum": "sultan_kararlari[0]; kanıt manifesti; olcum-gerileme-koltuk-ac-tek.txt V1-V5",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "Sultan'ın Mac'i ve gerçek Claude konuşma oturumu"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlamdır. dava-sinavi için kırmızı rc=1 → yeşil rc=0 ölçüm çifti, 39 uçtan uca sınav, 12/12 mutasyon yakalama ve geniş yeşil gerileme paketi vardır; bu, kapı tarafındaki iddiaları güçlü biçimde ölçüyor. Gerçekçi dava kayıtları kullanılmıştır, fakat önce/sonra ekran karesi yoktur ve Sultan kararında öngörülen resume SARI kaydı manifestte bulunmamaktadır. Ayrıca üretim diff’i 110000 baytta kırpıldığı için kodun görünmeyen son bölümü doğrudan incelenememiştir."
+  }
+}

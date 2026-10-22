@@ -1,0 +1,36 @@
+$ bash yazilim-fabrikasi/scripts/denetci-fark-kendisi.test.sh
+# rc=0 sure=18.3s zaman=2026-10-22T17:51:41+03:00
+--- stdout ---
+════ F1 · yerel kip: --pr/--diff yok → denetçi farkı kendisi alır (üç-nokta, ana hat güncel) ════
+  ✓ F1a yerel kip GEÇTİ (rc=0) — kanıt dizini kayıtsız olsa bile (kanıt/kart dışı kir sayılır)
+  ✓ F1b ekranda fark kaynağı söyleniyor
+  ✓ F1c istemde dalın kendi değişikliği var
+════ F2 · ana hat ilerledi (başkası itti), dal geride → DUR rc=3, denetim yazılmaz ════
+  ✓ F2a dal 1 commit geride → rc=3 (iki-nokta tuzağı kapalı)
+  ✓ F2b neden söyleniyor: GERİSİNDE
+  ✓ F2c denetçiye istem GİTMEDİ (tur yanmadı)
+════ F3 · ana hat dala birleştirildi → geçer; başkasının dosyası farkta 'silinmiş' görünmez ════
+  ✓ F3a birleştirmeden sonra yerel kip GEÇTİ
+  ✓ F3b istemde dalın değişikliği var
+  ✓ F3c başkasının dosyası farka girmedi (üç-nokta)
+════ F4 · kayıtsız kod değişikliği → DUR rc=3 (farka girmezdi) ════
+  ✓ F4a kanıt/kart dışı kayıtsız dosya → rc=3
+  ✓ F4b neden söyleniyor: kayıtsız
+════ F5 · --pr: PR dalının yerel kopyası varsa ve başı PR başından farklıysa DUR (itilmemiş commit) — hangi dalda durulursa dursun ════
+  ✓ F5a yerel baş ≠ PR başı (aynı dal) → rc=3
+  ✓ F5b neden söyleniyor: FARKLI
+  ✓ F5c yerel baş = PR başı → GEÇTİ, GitHub farkı kullanıldı
+  ✓ F5d istemde gh farkı var
+  ✓ F5e PR dalının yerel kopyası YOK (başkasının, çekilmemiş) → itilmemiş commit olamaz, GEÇTİ
+  ✓ F5f BAŞKA dalda durulurken bile PR dalının (is-dal) yerel başı ≠ PR başı → rc=3 (göz tur 1)
+════ F6 · boş fark → DUR rc=3 ════
+  ✓ F6a dal = ana hat → fark boş, rc=3
+════ F7 · MUTASYON: her kapı kaldırılınca bir F kapısı düşer (mutant ana dosyanın kopyasıdır) ════
+  ✓ mutant 'geride' → F2a düştü, kontrol F1a geçti (kapı gerçekten ölçüyor)
+  ✓ mutant 'bas' → F5a düştü, kontrol F1a geçti (kapı gerçekten ölçüyor)
+  ✓ mutant 'bas-dal' → F5f düştü, kontrol F1a geçti (kapı gerçekten ölçüyor)
+  ✓ mutant 'kir' → F4a düştü, kontrol F1a geçti (kapı gerçekten ölçüyor)
+  ✓ mutant 'bos' → F6a düştü, kontrol F1a geçti (kapı gerçekten ölçüyor)
+
+── SONUÇ (fark-kendisi): 23 geçti · 0 kaldı ──
+--- stderr ---

@@ -1,0 +1,21 @@
+{
+  "is": "gunluk-plan-kutulu-tablo",
+  "cumle": "gunluk-plan ve gun-ortasi: plan sunumu ZORUNLU kutulu tablo (madde · sahip · durum işareti ✅🟡⬜ · kanıt) + iki özet satırı + günün kalanı + bugün değil + tek soru; cipa.sh tablo bu biçimi basar (Sultan 18 Eki 14:59 ekran örneği)",
+  "istedi": "Sultan",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-18T15:00:48+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": ""
+}

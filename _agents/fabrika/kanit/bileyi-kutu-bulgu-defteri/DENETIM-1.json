@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "bileyi-kutu-bulgu-defteri",
+  "pr": "391",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-20T18:10:23+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 23822,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 14793
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Bileyi, kutunun Bulgu Defterini HOME’dan türeyen veya BILEYI_KUTU_DEFTERI ile verilen yoldan okuyup kendi kayıt biçimine uyarlıyor; mmex ölçümü de havuz yokken dört kaydı bulduğunu gösteriyor. Lakin açıkça verilen defter yolu mevcut değilse ayar sessizce yok sayılıyor; üretime çıkmadan önce bunu ölçülemedi/yapılandırma hatası olarak görünür kılın.",
+    "bulgular": [
+      {
+        "ne": "BILEYI_KUTU_DEFTERI ile açıkça verilen fakat mevcut olmayan yol sessizce devre dışı kalıyor; araç varsa öteki kaynaklarla sonuç üretebilir ve yanlış ayarı gizleyebilir.",
+        "kanit": "kutu_defteri_yolu() ortam değerini doğrudan döndürüyor, fakat bulgu_havuzlari() kaynağı yalnız `kd.exists()` doğruysa ekliyor. X9 yalnız varsayılan HOME defterinin bulunmamasını sınıyor; açık ortam ezmesinin bulunmaması için hata/ÖLÇEMEDİM kapısı yok.",
+        "konum": "bileyi/scripts/bileyi.py:181 ve bileyi/scripts/bileyi.py:544; bileyi/scripts/bileyi.test.sh X9",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra mmex ölçüm çifti doğrudan hedef davranışı gösteriyor: önce rc=3, sonra kutu defterinden 4 kayıtla rc=0. Genel sınav yeşil olsa da sunulan çıktı ilk 60 satırla kesildiğinden yeni X kapılarının sonuçları görünmüyor; buna karşılık gerçekçi mmex ölçümü ana talebi yeterince kanıtlıyor."
+  }
+}

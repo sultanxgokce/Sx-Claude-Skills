@@ -1,0 +1,81 @@
+{
+  "is": "gun-ortasi-okundu-sigpipe",
+  "arac": "kanit.py/0.4.0",
+  "guncelleme": "2026-10-18T17:04:27+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kalan-sinavi-T5b-kirmizi",
+      "asama": "once",
+      "dosya": "olcum-kalan-sinavi-T5b-kirmizi-once.txt",
+      "sha256": "e3c8f30a9a5e6c7fd1b2741dc26204e5f01771002c3c1932ccc8389d53611004",
+      "komut": [
+        "bash",
+        "gun-ortasi/scripts/kalan.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-18T16:57:46+03:00",
+      "sure_sn": 30.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kalan-sinavi-35",
+      "asama": "sonra",
+      "dosya": "olcum-kalan-sinavi-35-sonra.txt",
+      "sha256": "330db5c7e72bb04861a6aa005a8079e5238266ce3c615dcc6c5482f341559cfc",
+      "komut": [
+        "bash",
+        "gun-ortasi/scripts/kalan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T17:03:20+03:00",
+      "sure_sn": 23.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon-2-isirdi",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-2-isirdi-sonra.txt",
+      "sha256": "c96a052eda140fd3eacf369c80bdc78e52d20df993e71c366ef3a67e3121a71f",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/sigpipe-mutasyon.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-gun-ortasi-okundu-sigpipe"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T17:04:27+03:00",
+      "sure_sn": 67.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "repo-dogrulama",
+      "asama": "sonra",
+      "dosya": "olcum-repo-dogrulama-sonra.txt",
+      "sha256": "42995e976fd0cfe53494ae0027fd79b2b5c8d284077e80223bf8be58345f8cb8",
+      "komut": [
+        "bash",
+        "-c",
+        "node ahi/schema/validate-repo.mjs . --strict && node ahi/schema/version-lint.mjs ."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T17:04:27+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "dosya",
+      "etiket": "mutasyon-betigi",
+      "asama": "tek",
+      "dosya": "dosya-mutasyon-betigi-tek.sh",
+      "sha256": "36086ac05def5c96bde573ea52e6bef642410b492aee9204d2a4dc7bdd87ec44",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/sigpipe-mutasyon.sh",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T17:04:27+03:00"
+    }
+  ],
+  "imza": "d4db6850621ebfc41697ddd7da260c7edeaeaf7bd1845b97df1973c264e1ac2e"
+}

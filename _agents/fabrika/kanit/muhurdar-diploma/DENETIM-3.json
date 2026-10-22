@@ -1,0 +1,52 @@
+{
+  "tur": 3,
+  "is": "muhurdar-diploma",
+  "pr": "412",
+  "yazan": "claude",
+  "denetci": "claude (sonnet) (YEDEK GÖZ: codex düştü (2 deneme, rc=1) · yazandan farklı yeni oturum + farklı model kademesi [yazan: opus] · Sultan Y0006)",
+  "zaman": "2026-10-22T04:32:05+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": "codex düştü (2 deneme, rc=1)",
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": "sonnet",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 65604,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 17,
+    "bayt": 43683
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İş kartındaki talep karşılanmış: 6 örneklik doğru/kusurlu/uydurma kümesi, mühürdar usulüyle gerçek sicil ve telemetriye yazmadan sınama, §6 defter satırı ve geçerli/bayat/yok/askıda türetimi var. Önceki tur bulguları kapanmış; 4 verdim çünkü yeni bir hata sınıfı (süreç ölümünde geçici kök sızıntısı, tek yazıcı sözleşmesi) ve sınavın kendi dar kapsamı kaldı, ciddi hata yok.",
+    "bulgular": [
+      {
+        "ne": "Deftere yazım başarısız yarım kalırsa (disk dolu vb.) satır kısmen yazılabilir; geri okuma kontrolü yalnız tam satırı arar, bozuk satır sessizce atlanıyor (defter_oku ValueError'u yutuyor). Bozuk satır durum türetiminde sessizce yok sayılır, yani son geçerli koşu yanlış olabilir.",
+        "kanit": "diploma.py defter_oku: `except ValueError: pass`; sina: yazım sonrası yalnız `satir not in defter_oku()` kontrolü. Bozuk satır sayısı hiçbir yerde raporlanmıyor.",
+        "konum": "tescil/scripts/lib/diploma.py:defter_oku",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Sınavın geçme koşulu tam puan ve türde yalnız 2 örnek var; tek bir LLM yargıç dalgalanması diplomayı düşürür, yeniden deneme yok. Örnekler depoda düz metin, ezberlenebilir (bir mühürdar sınav örneğini görürse cevap anahtarı yan dizinde duruyor).",
+        "kanit": "olcum-diploma-sonra.txt: 4 örnekte yargıç codex→claude düşmüş (kararsız yargıç zinciri). tescil/sinav/**/beklenen.json aynı ağaçta; yargıcın istemine girmediği kapı n ile ölçülüyor ama mühürdar ajanın dosya sistemi erişimi ölçülmüyor.",
+        "konum": "tescil/sinav/ · lib/diploma.py:sina",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Gerçek sicille askıda yolu bu depoda yalnız #411 yazıcısı gelince sınanabilir; bugünkü kanıtta 'sicil ölçülemedi' ve iki mutant (sicil-ayrimi-yok, sicil-json-yok) ÖLÇÜLEMEDİ. #411 önizlemesinde 38/0 ile iki mutant da düşüyor, yani sözleşme ölçülmüş; ama birleşme sırası #411 → #412 olmalı.",
+        "kanit": "olcum-diploma-sinavi-tek.txt: iki ÖLÇÜLEMEDİ satırı; olcum-onizleme-411-tek.txt: i2 ve sicil-ayrimi-yok mutantları düştü, 38 geçti 0 kaldı.",
+        "konum": "tescil/scripts/diploma.test.sh (kapı i2, mutant sicil-ayrimi-yok)",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sha'lar tutuyor. Önce kırmızı (diploma yok, rc=1) / sonra yeşil (rc=0) çifti gerçek. Sonra koşusu iki yargıçla: lastik yargıç kusurlu 1/2 ve uydurma 0/2 ile KALDI, gerçek yargıç 6/6 GEÇTİ, gerçek defter dokunulmadı. Hermetik sınav 36/0, #411 birleşme önizlemesi 38/0 (sicil sözleşmesi i2 ve sicil-ayrimi-yok mutantı gerçek yazıcıyla ölçülmüş). Ölçülemeyen iki mutant dürüstçe ÖLÇÜLEMEDİ yazılmış, yeşile sayılmamış. Sarı kayıt yok. Gerçek yargıç koşusu tek seferlik ve LLM tabanlı; tekrarlanabilirlik sahte yargıçlı hermetik sınavla sağlanıyor."
+  }
+}
