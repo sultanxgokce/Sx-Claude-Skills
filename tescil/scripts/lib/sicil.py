@@ -96,18 +96,34 @@ def isabetler(d):
 
 
 def ekle(yol, kayit):
-    """append-only: `isabet:` dosyanın SON üst düzey anahtarı olmalı (yoksa açılır); yazdıktan sonra geri okunur."""
+    ekle_toplu(yol, [kayit])
+
+
+def ekle_toplu(yol, kayitlar):
+    """append-only: `isabet:` dosyanın SON üst düzey anahtarı olmalı (yoksa açılır); yazdıktan sonra geri okunur.
+    Bütün satırlar TEK yazımla gider (göz #411 tur 3): yeni içerik geçici dosyaya, sonra os.replace — ya hepsi ya hiçbiri;
+    yarıda kalan teslim sicili kısmi bırakıp yeniden denemeyi 'zaten işlendi' diye kilitlemez."""
     with open(yol, encoding="utf-8") as h:
         metin = h.read()
     ust = [m.group(1) for m in re.finditer(r"^([a-z_]+):", metin, re.M)]
     if "isabet" in ust and ust[-1] != "isabet":
         hata(f"{os.path.basename(yol)}: isabet bölümü dosyanın sonunda değil ({ust[-1]} ondan sonra) — sona eklenemez, elle bakılmalı")
     ek = ("" if metin.endswith("\n") else "\n") + ("" if "isabet" in ust else "isabet:\n")
-    ek += "  - " + json.dumps(kayit, ensure_ascii=False) + "\n"
-    with open(yol, "a", encoding="utf-8") as h:
-        h.write(ek)
-    son = (oku(yol).get("isabet") or [None])[-1]   # yazdığını DOĞRULA (CLAUDE.md: "yazdım" yetmez, geri oku)
-    if son != kayit:
+    ek += "".join("  - " + json.dumps(k, ensure_ascii=False) + "\n" for k in kayitlar)
+    gecici = f"{yol}.yaziliyor-{os.getpid()}"
+    try:
+        with open(gecici, "w", encoding="utf-8") as h:
+            h.write(metin + ek); h.flush(); os.fsync(h.fileno())
+        os.chmod(gecici, os.stat(yol).st_mode & 0o7777)
+        os.replace(gecici, yol)
+    except OSError as e:
+        try:
+            os.unlink(gecici)
+        except OSError:
+            pass
+        hata(f"{os.path.basename(yol)}: yazılamadı ({e}) — dosya değişmedi, yeniden denenebilir", 3)
+    son = (oku(yol).get("isabet") or [])[-len(kayitlar):]   # yazdığını DOĞRULA (CLAUDE.md: "yazdım" yetmez, geri oku)
+    if son != kayitlar:
         hata(f"{os.path.basename(yol)}: yazılan satır geri okunamadı — dosyaya bak", 3)
 
 
@@ -331,6 +347,10 @@ def cmd_teslim_isle(argv):
     eksik = [g["id"] for g in sinanan if not (karar["satirlar"].get(g["id"]) or {}).get("sultan")]
     cumlesiz = [g["id"] for g in sinanan if (karar["satirlar"].get(g["id"]) or {}).get("sultan") == "saglanmadi"
                 and not ((karar["satirlar"][g["id"]].get("neden")) or "").strip()]
+    gecersiz = [g["id"] for g in sinanan if g["id"] not in eksik
+                and karar["satirlar"][g["id"]]["sultan"] not in ("katiliyorum", "saglanmadi")]   # göz #411 tur 3: isabet yolunun kapısı burada da
+    if gecersiz:
+        hata(f"Sultan'ın kaydında geçersiz hüküm: {', '.join(gecersiz)} (katiliyorum|saglanmadi değil) — yazılmadı")
     if cumlesiz:
         hata(f"Sultan'ın kaydında cümlesiz 'sağlanmadı': {', '.join(cumlesiz)} — yazılmadı")
     if eksik:
@@ -339,13 +359,15 @@ def cmd_teslim_isle(argv):
     if any(x.get("kaynak") == a["kaynak"].strip() for x in isb):
         hata(f"{a['kaynak']} kararı zaten işlendi — iki kez yazılmaz")
     dusen = set(oz.get("g_dusen") or [])
+    satirlar = []
     for g in sinanan:
         ks = karar["satirlar"][g["id"]]
         muhur = "✗" if g["id"] in dusen else "✓"
-        ekle(yol, {"ts": simdi(), "gorev": karar["gorev"], "gereklilik": g["id"], "muhur": muhur, "sultan": ks["sultan"],
-                   "kacirma": "e" if (muhur == "✓" and ks["sultan"] == "saglanmadi") else "h",
-                   "bassiz": "h", "el_kitabi_surum": oz.get("tescil_skill_version"), "ders": None,
-                   "g_tur": g["tur"], "neden": ks.get("neden"), "kaynak": a["kaynak"].strip()})
+        satirlar.append({"ts": simdi(), "gorev": karar["gorev"], "gereklilik": g["id"], "muhur": muhur, "sultan": ks["sultan"],
+                         "kacirma": "e" if (muhur == "✓" and ks["sultan"] == "saglanmadi") else "h",
+                         "bassiz": "h", "el_kitabi_surum": oz.get("tescil_skill_version"), "ders": None,
+                         "g_tur": g["tur"], "neden": ks.get("neden"), "kaynak": a["kaynak"].strip()})
+    ekle_toplu(yol, satirlar)   # tek yazım: kısmi teslim olmaz
     print(f"✓ teslim işlendi: {k[0]} · {karar['gorev']} · {len(sinanan)} satır (👤 {len(ger['g']) - len(sinanan)} atlandı)")
     return 0
 

@@ -1,5 +1,5 @@
 $ bash _agents/fabrika/kanit/muhurdar-sicil/sicil-olcer.sh tescil/scripts
-# rc=0 sure=1.8s zaman=2026-10-22T08:47:13+03:00
+# rc=0 sure=2.0s zaman=2026-10-22T08:55:51+03:00
 --- stdout ---
 ── mühürdar: MÜHÜRDAR (özlük dosyası: 01.008.yaml)
 ── iki görevde Sultan 'sağlanmadı' (mühürdar ✓ vermişti) → sicildeki kaçırma satırı: 2

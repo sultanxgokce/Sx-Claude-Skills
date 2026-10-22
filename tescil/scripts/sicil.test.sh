@@ -2,7 +2,7 @@
 # sicil.test.sh — Mühürdarlık sicil · ders çıkarma · askı (G11 · S9 · S10) sınavı. HERMETİK: geçici sicil dizini, el kitabı
 # kopyası, tarif kaydı ve SAHTE doğrulayıcı (geçidin yerine: Sultan'ın kayıtlı kararlarını fikstürden basar); gerçek özlük
 # dosyalarına DOKUNMAZ. Senaryo fonksiyonda; mutant kopyada hedef anahtar düşer.
-# kabuk-testleri: sure=480   (yerelde 154 sn ölçüldü — 13 mutant tam senaryoyu koşar; CI payı)
+# kabuk-testleri: sure=480   (yerelde 154 sn ölçüldü — 16 mutant tam senaryoyu koşar; CI payı)
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 T="$(mktemp -d)"; trap 'find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null' EXIT
@@ -30,6 +30,25 @@ kur() {  # kur <kök> — özlükler, el kitabı kopyası, tarif kaydı, Sultan 
   kr TK '{"gorev":"gorev_TK","satirlar":{"G1":{"sultan":"katiliyorum"}}}'
   kr W '{"gorev":"gorev_W","satirlar":{"G1":{"sultan":"katiliyorum"},"G2":{"sultan":"saglanmadi","neden":"x"}}}'
   kr TN '{"gorev":"gorev_T","satirlar":{"G1":{"sultan":"katiliyorum"},"G2":{"sultan":"saglanmadi"}}}'
+  kr TV '{"gorev":"gorev_T","satirlar":{"G1":{"sultan":"katiliyorum"},"G2":{"sultan":"evet-sayilir","neden":"x"}}}'
+  # kes.py — yazım kesici: KES_DIZIN altındaki N. yazma açılışında (KES_N) ya da yerine koymada (KES_REPLACE) OSError
+  cat > "$k/kes.py" <<'PY'
+import builtins, os, runpy, sys
+n = [0]; asil = builtins.open
+def kesik(f, mode="r", *x, **kw):
+    if any(c in mode for c in "wa") and str(f).startswith(os.environ["KES_DIZIN"]):
+        n[0] += 1
+        if n[0] == int(os.environ.get("KES_N", "0")):
+            raise OSError("kes: yazım yarıda")
+    return asil(f, mode, *x, **kw)
+def kesik_replace(*x, **kw):
+    raise OSError("kes: yerine koyma yarıda")
+builtins.open = kesik
+if os.environ.get("KES_REPLACE"):
+    os.replace = kesik_replace
+sys.argv = sys.argv[1:]
+runpy.run_path(sys.argv[0], run_name="__main__")
+PY
   printf '#!/usr/bin/env bash\nf="%s/kararlar/${1#teslim:karar-}.json"; [ -f "$f" ] || exit 1; cat "$f"\n' "$k" > "$k/dogrula.sh"; chmod +x "$k/dogrula.sh"
   printf '{"g":[{"id":"G1","tur":"cmd"},{"id":"G2","tur":"llm-yargi"},{"id":"G3","tur":"sultan-denemesi"}]}' > "$k/md/gereklilik.json"
   printf '{"kart":"gorev_T","verdikt":"KALDI","g_dusen":["G1"],"muhurdar":"MUHURDAR1","tescil_skill_version":"0.4.0"}' > "$k/md/muhur-ozet.json"
@@ -111,6 +130,26 @@ x = yaml.safe_load(open(sys.argv[1]))["isabet"][int(sys.argv[2]):]
 assert [(i["gereklilik"], i["muhur"], i["sultan"], i["kacirma"]) for i in x] == [("G1", "✗", "katiliyorum", "h"), ("G2", "✓", "saglanmadi", "e")], x
 assert x[1]["neden"] == "ton sert" and x[1]["g_tur"] == "llm-yargi" and x[1]["el_kitabi_surum"] == "0.4.0"
 PY
+  # w · teslim tek yazım (göz #411 tur 3): 2. yazma açılışı düşse de teslim ya TAM yazılır; yerine koyma düşerse dosya aynı, geçici dosya
+  #     kalmaz, yeniden deneme geçer — kısmi sicil + 'zaten işlendi' kilidi yok
+  local Y6="$k/y6" Y6b="$k/y6b" P="$SD/lib/sicil.py"; mkdir -p "$Y6" "$Y6b"
+  printf 'personel_no: "01.008"\npersona: MUHURDAR1\ngecmis: []\n' > "$Y6/01.008.yaml"; cp "$Y6/01.008.yaml" "$Y6b/"
+  env SICIL_DIZIN="$Y6" SICIL_KAYNAK_DOGRULA="$k/dogrula.sh" KES_DIZIN="$Y6" KES_N=2 python3 "$k/kes.py" "$P" teslim-isle MUHURDAR1 --kaynak teslim:karar-T --muhur-dir "$k/md" >/dev/null 2>&1
+  env SICIL_DIZIN="$Y6" SICIL_KAYNAK_DOGRULA="$k/dogrula.sh" bash "$S" teslim-isle MUHURDAR1 --kaynak teslim:karar-T --muhur-dir "$k/md" >/dev/null 2>&1
+  local w0; w0="$(md5sum < "$Y6b/01.008.yaml")"
+  env SICIL_DIZIN="$Y6b" SICIL_KAYNAK_DOGRULA="$k/dogrula.sh" KES_DIZIN="$Y6b" KES_REPLACE=1 python3 "$k/kes.py" "$P" teslim-isle MUHURDAR1 --kaynak teslim:karar-T --muhur-dir "$k/md" >/dev/null 2>&1; local w1=$?
+  local w2; w2="$(md5sum < "$Y6b/01.008.yaml")"; local w3; w3="$(find "$Y6b" -type f | wc -l)"
+  env SICIL_DIZIN="$Y6b" SICIL_KAYNAK_DOGRULA="$k/dogrula.sh" bash "$S" teslim-isle MUHURDAR1 --kaynak teslim:karar-T --muhur-dir "$k/md" >/dev/null 2>&1; local w4=$?
+  [ $w1 -eq 3 ] && [ "$w2" = "$w0" ] && [ "$w3" = 1 ] && [ $w4 -eq 0 ] && python3 - "$Y6/01.008.yaml" "$Y6b/01.008.yaml" <<'PY' 2>/dev/null && o="$o w"
+import yaml, sys
+for p in sys.argv[1:]:
+    assert [i["gereklilik"] for i in yaml.safe_load(open(p))["isabet"]] == ["G1", "G2"], p
+PY
+  # x · teslim yolunda da hüküm yalnız katiliyorum|saglanmadi (göz #411 tur 3): kayıttaki geçersiz değer sicile yazılmaz
+  local Y7="$k/y7"; mkdir -p "$Y7"; printf 'personel_no: "01.008"\npersona: MUHURDAR1\ngecmis: []\n' > "$Y7/01.008.yaml"
+  local x0; x0="$(md5sum < "$Y7/01.008.yaml")"
+  env SICIL_DIZIN="$Y7" SICIL_KAYNAK_DOGRULA="$k/dogrula.sh" bash "$S" teslim-isle MUHURDAR1 --kaynak teslim:karar-TV --muhur-dir "$k/md" >/dev/null 2>"$k/e"
+  [ $? -eq 2 ] && grep -q "geçersiz hüküm: G2" "$k/e" && [ "$(md5sum < "$Y7/01.008.yaml")" = "$x0" ] && o="$o x"
   # s · pencere mühür OLAYI sayar: aynı görevin 10 yeniden mühürü eski iki kaçırmayı pencere dışına iter → temiz
   local Y4="$k/y4"; mkdir -p "$Y4"; printf 'personel_no: "01.008"\npersona: MUHURDAR1\ngecmis: []\n' > "$Y4/01.008.yaml"   # boş özlük
   for x in X1 X2; do env SICIL_DIZIN="$Y4" SICIL_KAYNAK_DOGRULA="$k/dogrula.sh" bash "$S" isabet MUHURDAR1 --gorev "gorev_$x" --gereklilik G1 --muhur ✓ --sultan saglanmadi --kaynak "teslim:karar-$x" >/dev/null 2>&1; done
@@ -150,6 +189,8 @@ _k l "$S0"; g $? "l ders-bagla: günlükte olmayan derse bağlanmaz; olana ters 
 _k m "$S0"; g $? "m kaçırma olmayan satır derse bağlanmaz; aynı kaçırma iki kez bağlanmaz"
 _k n "$S0"; g $? "n başsız şapka hükmü işaretli (bassiz e), yine bu mühürdarın siciline yazılır (S14)"
 _k q "$S0"; g $? "q teslim-isle: Sultan'ın tek kararı → sınanan her satır (👤 atlanır, düşen G'de mühür ✗); tekrar · kısmi karar · başkasının mühürü · başka görevin mühürü · cümlesiz sağlanmadı reddedilir"
+_k w "$S0"; g $? "w teslim tek yazım: 2. yazım açılışı düşse de teslim tam; yerine koyma düşerse dosya aynı, geçici dosya kalmaz, yeniden deneme geçer"
+_k x "$S0"; g $? "x teslim yolunda geçersiz hüküm (katiliyorum|saglanmadi dışı) sicile yazılmaz, rc 2"
 _k s "$S0"; g $? "s pencere mühür OLAYI sayar: aynı görevin 10 yeniden mühürü eski kaçırmaları dışarı iter (askida → temiz)"
 _k u "$S0"; g $? "u Sultan'ın cümlesi kayıttan gelir; farklı --neden ile yazılmaz (A06)"
 _k v "$S0"; g $? "v Türkçe harf katlama: özlükte MUHAKKİK, çağrıda MUHAKKIK/muhakkik → aynı kişi"
@@ -186,6 +227,9 @@ _m e lib/sicil.py '    if "isabet" in ust and ust[-1] != "isabet":' '    if Fals
 _m q lib/sicil.py 'sinanan = [g for g in ger["g"] if g["tur"] != "sultan-denemesi"]' 'sinanan = list(ger["g"])' "teslim-isle 👤 satırına da isabet yazıyor"
 _m q lib/sicil.py '    if any(x.get("kaynak") == a["kaynak"].strip() for x in isb):' '    if False:' "aynı teslim iki kez işleniyor"
 _m q lib/sicil.py '    if oz.get("kart") != karar["gorev"]:' '    if False:' "teslim-isle başka görevin mühürünü kabul ediyor"
+_m w lib/sicil.py '    ekle_toplu(yol, satirlar)   # tek yazım: kısmi teslim olmaz' '    [ekle(yol, s) for s in satirlar]' "teslim satır satır yazılıyor (yarıda kalırsa kısmi sicil)"
+_m w lib/sicil.py '            os.unlink(gecici)' '            pass' "yarıda kalan yazım geçici dosyayı bırakıyor"
+_m x lib/sicil.py '    if gecersiz:' '    if False:' "teslim yolunda geçersiz hüküm yazılıyor"
 _m s lib/sicil.py '        if x.get("tur") == "muhur" or x.get("gorev") not in son:' '        if x.get("gorev") not in son:' "pencere olay yerine görev sayıyor"
 _m u lib/sicil.py '    if a.get("neden") and (a["neden"].strip() != (ks.get("neden") or "").strip()):' '    if False:' "Sultan'ın cümlesi değiştirilebiliyor"
 _m v lib/sicil.py '    return (ad or "").strip().replace("İ", "I").replace("ı", "i").casefold()' '    return (ad or "").strip().casefold()' "Türkçe harf katlanmıyor"

@@ -1,5 +1,5 @@
 $ bash tescil/scripts/sicil.test.sh
-# rc=0 sure=74.3s zaman=2026-10-22T08:48:27+03:00
+# rc=0 sure=97.4s zaman=2026-10-22T08:55:37+03:00
 --- stdout ---
 ════ G11 · S10 · Mühürdarlık sicil · ders çıkarma · askı (sicil.sh) ════
   ✓ a isabet Sultan'ın DOĞRULANMIŞ kaydıyla yazılır (kaçırma = mühür ✓ + sağlanmadı; cümle kayıttan), öbür alanlar korunur
@@ -18,6 +18,8 @@ $ bash tescil/scripts/sicil.test.sh
   ✓ m kaçırma olmayan satır derse bağlanmaz; aynı kaçırma iki kez bağlanmaz
   ✓ n başsız şapka hükmü işaretli (bassiz e), yine bu mühürdarın siciline yazılır (S14)
   ✓ q teslim-isle: Sultan'ın tek kararı → sınanan her satır (👤 atlanır, düşen G'de mühür ✗); tekrar · kısmi karar · başkasının mühürü · başka görevin mühürü · cümlesiz sağlanmadı reddedilir
+  ✓ w teslim tek yazım: 2. yazım açılışı düşse de teslim tam; yerine koyma düşerse dosya aynı, geçici dosya kalmaz, yeniden deneme geçer
+  ✓ x teslim yolunda geçersiz hüküm (katiliyorum|saglanmadi dışı) sicile yazılmaz, rc 2
   ✓ s pencere mühür OLAYI sayar: aynı görevin 10 yeniden mühürü eski kaçırmaları dışarı iter (askida → temiz)
   ✓ u Sultan'ın cümlesi kayıttan gelir; farklı --neden ile yazılmaz (A06)
   ✓ v Türkçe harf katlama: özlükte MUHAKKİK, çağrıda MUHAKKIK/muhakkik → aynı kişi
@@ -36,10 +38,13 @@ $ bash tescil/scripts/sicil.test.sh
   ✓ mutant (teslim-isle 👤 satırına da isabet yazıyor) → 'q' kapısı düşüyor
   ✓ mutant (aynı teslim iki kez işleniyor) → 'q' kapısı düşüyor
   ✓ mutant (teslim-isle başka görevin mühürünü kabul ediyor) → 'q' kapısı düşüyor
+  ✓ mutant (teslim satır satır yazılıyor (yarıda kalırsa kısmi sicil)) → 'w' kapısı düşüyor
+  ✓ mutant (yarıda kalan yazım geçici dosyayı bırakıyor) → 'w' kapısı düşüyor
+  ✓ mutant (teslim yolunda geçersiz hüküm yazılıyor) → 'x' kapısı düşüyor
   ✓ mutant (pencere olay yerine görev sayıyor) → 's' kapısı düşüyor
   ✓ mutant (Sultan'ın cümlesi değiştirilebiliyor) → 'u' kapısı düşüyor
   ✓ mutant (Türkçe harf katlanmıyor) → 'v' kapısı düşüyor
   ✓ mutant (muhurdar.sh siciline mühür kaydı yazmıyor) → 'r' kapısı düşüyor
 
-── SONUÇ: 37 geçti · 0 kaldı ──
+── SONUÇ: 42 geçti · 0 kaldı ──
 --- stderr ---
