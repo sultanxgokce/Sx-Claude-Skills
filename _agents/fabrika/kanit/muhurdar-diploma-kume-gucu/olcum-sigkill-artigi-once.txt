@@ -1,0 +1,7 @@
+$ bash /config/projects/_wt/Sx-Claude-Skills-muhurdar-diploma-kume-gucu/_agents/fabrika/kanit/muhurdar-diploma-kume-gucu/kok-olcer.sh /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/sx-main-416/tescil/scripts
+# rc=1 sure=5.8s zaman=2026-10-22T21:03:44+03:00
+--- stdout ---
+kill -9 sonrası kalan kök: 1
+ikinci sınav rc=0 · süpürme satırı yok
+ikinci sınavdan sonra kalan kök: 1
+--- stderr ---

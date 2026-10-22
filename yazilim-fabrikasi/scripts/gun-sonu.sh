@@ -7,11 +7,16 @@
 # Başlama izni tek yüzeyden okunur (izin.py); 'SULTAN' etiketi "Sultan bekliyor" gibi okunduğu için 'sınıflı · izin: …' oldu.
 # Her satır bir karta bağlıdır; kartta olmayan şey özete giremez.
 #
-# Kullanım: gun-sonu.sh [--gun YYYY-MM-DD] [--yaz]   (--yaz: <depo>/_agents/fabrika/gun-sonu/<gün>.md dosyasına da yazar)
-# rc: 0 üretildi · 3 defter yok (ölçülemedi)
+# Kullanım: gun-sonu.sh [--gun YYYY-MM-DD] [--yaz] [--kutu <ad>] [--kapanis]
+#   --yaz: <depo>/_agents/fabrika/gun-sonu/<gün>.md dosyasına da yazar · --kutu: görev defteri bölümünü o kutunun işleriyle sınırlar
+#   --kapanis: GÜN KAPANIŞI yalnız GÖREV DEFTERİNE göre (Z23WS 2: kart bitti ≠ görev bitti) — çalışılıyor iş varsa rc 1 "gün kapanmaz",
+#              defter ölçülemezse rc 3 (yeşil değil); bayraksız koşuda özet üretilir, rc değişmez (cron bozulmaz).
+# GÖREV DEFTERİ bölümü (Z23WS 3, kart gun-sonu-gorev-defteri): DEFTER_UC (vars. http://cloudtop-defter:8791) + DEFTER_JETON_YOL
+#   (vars. /config/defter-jeton) ile okunur; jeton yoksa / defter cevap vermezse "ölçülemedi" yazılır, 0 DENMEZ. Jeton değeri basılmaz.
+# rc: 0 üretildi · 1 (--kapanis) çalışılıyor iş var · 3 defter yok / görev defteri ölçülemedi (--kapanis)
 set -uo pipefail
-GUN="$(date +%F)"; YAZ=0; HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-while [ $# -gt 0 ]; do case "$1" in --gun) GUN="$2"; shift 2 ;; --yaz) YAZ=1; shift ;; *) shift ;; esac; done
+GUN="$(date +%F)"; YAZ=0; KUTU=""; KAPANIS=0; HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+while [ $# -gt 0 ]; do case "$1" in --gun) GUN="$2"; shift 2 ;; --yaz) YAZ=1; shift ;; --kutu) KUTU="$2"; shift 2 ;; --kapanis) KAPANIS=1; shift ;; *) shift ;; esac; done
 c="$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)" && DEPO="${KANIT_DEPO:-$(dirname "$c")}" || DEPO="${KANIT_DEPO:-}"
 [ -n "$DEPO" ] || { echo "✗ depo kökü bulunamadı" >&2; exit 3; }
 KD="$DEPO/_agents/fabrika/kartlar"; KARNE="$DEPO/_agents/fabrika/karne.jsonl"
@@ -166,5 +171,52 @@ for k in acik: out.append(f"- {k['is']} — sahip {k['aldi']} · açıldı {k['z
 print("\n".join(out))
 PY
 )" || exit 3
+# ── GÖREV DEFTERİ (Z23WS): kart defteri "ne inşa ettik" der, görev defteri "Sultan'ın işi bitti mi" der; gün ikincisine göre kapanır ──
+GD="$(python3 - "$KUTU" <<'PY'
+import json, os, sys, urllib.request, urllib.error, datetime
+kutu = sys.argv[1]
+UC = os.environ.get("DEFTER_UC") or "http://cloudtop-defter:8791"; JY = os.environ.get("DEFTER_JETON_YOL") or "/config/defter-jeton"
+def son(x, n=70): x = str(x or ""); return x if len(x) <= n else x[:n-1] + "…"
+def saat(ts):
+    try: return datetime.datetime.fromisoformat(str(ts).replace("Z", "+00:00")).astimezone().strftime("%d %b %H:%M")
+    except Exception: return "?"
+def olculemedi(neden):
+    print(f"## Görev defteri — gün kapanışı buna göre (kart bitti ≠ görev bitti)"); print(f"- ⚠ ÖLÇÜLEMEDİ: {neden} — çalışılıyor sayısı 0 DEĞİL, bilinmiyor; gün bu veriyle KAPANMAZ")
+    print("#kapanis: olculemedi=1 calisiliyor=-1"); sys.exit(0)
+try: jeton = open(JY, encoding="utf-8").read().strip()
+except OSError: olculemedi("defter jetonu yok (" + JY + ")")
+try:
+    with urllib.request.urlopen(urllib.request.Request(UC + "/gorevler", headers={"x-defter-jeton": jeton}), timeout=8) as r: g = json.loads(r.read().decode("utf-8") or "null")
+except urllib.error.HTTPError as e: olculemedi(f"defter cevap vermedi (HTTP {e.code})")
+except (OSError, ValueError) as e: olculemedi("defterе ulaşılamadı (" + type(e).__name__ + ")")
+liste = g.get("gorevler") if isinstance(g, dict) else None
+if not isinstance(liste, list): olculemedi("defter cevabı biçimsiz")
+kova = {"calisiliyor": [], "acik": [], "sira-bende": [], "onay-bekliyor": []}
+for k in liste:
+    c = k.get("canli") if isinstance(k, dict) else None
+    if not isinstance(c, dict): continue
+    if kutu and str(c.get("kutu") or k.get("ekleyen_kutu") or "") != kutu: continue
+    d = c.get("gorev_durumu")
+    if d == "calisiliyor" or d == "onay-bekliyor" or (d in ("acik", "sira-bende") and c.get("atanan")): kova[d].append(k)
+ad = lambda k: (k.get("adlar") or [{}])[0]; ad = lambda k, _ad=ad: (_ad(k).get("deger") if isinstance(_ad(k), dict) else _ad(k)) or ""
+print(f"## Görev defteri — gün kapanışı buna göre (kart bitti ≠ görev bitti){' · kutu ' + kutu if kutu else ' · bütün kutular'}")
+print(f"- çalışılıyor **{len(kova['calisiliyor'])}** · atanmış açık {len(kova['acik'])} · sıra Sultan'da {len(kova['sira-bende'])} · onay bekleyen {len(kova['onay-bekliyor'])}")
+for k in sorted(kova["calisiliyor"], key=lambda x: str(x.get("son_adim") or "")):
+    c = k["canli"]; print(f"  - {k.get('id','')[-5:]} · {c.get('atanan') or 'atanmamış'} · {son(ad(k))} · son adım {saat(k.get('son_adim'))}")
+if kova["calisiliyor"]: print("- → bu işler bitmeden gün KAPANMAZ: ajan 'bitti' demez, görev defteri der (dilim ≠ görev)")
+else: print("- → defterde çalışılan iş yok: gün görev defterine göre kapanabilir")
+print(f"#kapanis: olculemedi=0 calisiliyor={len(kova['calisiliyor'])}")
+PY
+)"
+KAP="$(printf '%s\n' "$GD" | sed -n 's/^#kapanis: //p' | tail -1)"; GD="$(printf '%s\n' "$GD" | grep -v '^#kapanis: ')"
+OZET="$OZET"$'\n'"$GD"
 printf '%s\n' "$OZET"
+if [ "$KAPANIS" -eq 1 ]; then
+  case "$KAP" in
+    *olculemedi=1*) echo "→ KAPANIŞ ÖLÇÜLEMEDİ: görev defteri okunamadı — gün kapandı DENEMEZ (rc 3)"; RC_KAP=3 ;;
+    "olculemedi=0 calisiliyor=0") echo "→ GÜN KAPANABİLİR: görev defterinde çalışılan iş yok (rc 0)"; RC_KAP=0 ;;
+    *) echo "→ GÜN KAPANMAZ: görev defterinde ${KAP##*calisiliyor=} iş çalışılıyor (rc 1) — kart/PR bitmiş olsa da görev bitmedi"; RC_KAP=1 ;;
+  esac
+fi
 if [ "$YAZ" -eq 1 ]; then mkdir -p "$DEPO/_agents/fabrika/gun-sonu"; printf '%s\n' "$OZET" > "$DEPO/_agents/fabrika/gun-sonu/$GUN.md"; echo "→ yazıldı: _agents/fabrika/gun-sonu/$GUN.md"; fi
+exit "${RC_KAP:-0}"

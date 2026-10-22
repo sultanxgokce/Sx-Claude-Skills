@@ -26,11 +26,17 @@ yoksa sınav koşulmaz (rc 3).
 `beklenen.json` yargıca hiç verilmez (kör istem yalnız G satırını, rubriği, `hedef:` dosyasını ve mekanik kanıt
 tablosunu görür); sınav bunu ölçer (diploma.test.sh kapı n).
 
-**Dürüst sınır:** kör istem cevap anahtarını taşımaz, ama yargıç oturumu dosya sistemini **okuyabilir** (Codex `read-only`
-kum havuzu okuma serbest) — bu kümede `beklenen.json`'u kendi başına arayıp bulan bir yargıcı sınav ölçmez. Bugünkü
-yargıçlar (codex `exec --ephemeral`, `claude -p`) istem dışına bakmadan karar verir; bu bir gözlem, kapı değil. Kümenin
-gücü örnek sayısıyla artar (bugün türde 2). Yargıç dalgalanması: ıskalanan örnek en çok bir kez yeniden koşulur; iki koşu
-çelişirse sınav ÖLÇÜLEMEDİ olur (kararsız) — tek oy ne sahte KALDI ne sahte GEÇTİ üretir.
+**Cevap anahtarı yargıçtan iki katla uzak:** (1) ağaç — `beklenen.json` yargıca verilen köke (iş ağacı + gereklilik dizini + çıktı) HİÇ kopyalanmaz ve istem kümenin yolunu taşımaz (`diploma.test.sh` kapı n2, mutantla); (2) disk — yargıç kilidi: gerçek `beklenen.json` yolu verilip okuması istendiğinde kilitsiz Claude okudu (pozitif kontrol), kilitli Claude ve kabuksuz Codex okuyamadı (`kanit/muhurdar-diploma-kume-gucu/anahtar-kanarya.sh`).
+
+**Dürüst sınır:** kör istem cevap anahtarını taşımaz. Yargıcın dosya sistemine bakması tescil 0.7.0'dan beri **kilitle**
+kapalıdır, istemdeki yasağa güvenilmez: Claude yargıcı `--safe-mode --strict-mcp-config --tools ""` ile koşar (dosya/kabuk/MCP
+aracı yok — gerçek modelle kanarya ölçüldü: diske ulaşamadı), Codex yargıcı kabuksuz koşar. Codex'in dosyaya öteki yolu kum
+havuzuna bağlıdır; bwrap'ın çalıştığı bir kutuda **ölçülmedi** (Sx #419 kutu-dışı bulgusu). Kümenin gücü örnek sayısıyla artar
+(türde 3: doğru `selam`·`topla`·`tarih-cevir` · kusurlu `eksik-cikti`·`yanlis-aciklama`·`bos-girdi-coker` · uydurma
+`kaynaksiz-olcum`·`sahte-test-raporu`·`yapildi-listesi`). Yargıç dalgalanması: ıskalanan örnek en çok bir kez yeniden koşulur;
+iki koşu çelişirse sınav ÖLÇÜLEMEDİ olur (kararsız) — tek oy ne sahte KALDI ne sahte GEÇTİ üretir. Gerçek yargıçla çoklu koşu
+ölçümü: `_agents/fabrika/kanit/muhurdar-diploma-kume-gucu/dalga-olcer.sh`. Sınav SIGKILL ile ölürse geçici kökü kalır; bir
+sonraki sınav, sahibi ölmüş kökü (`.sahip` izi: pid + açılış saati) süpürür.
 
 ## Değişiklik kuralı
 

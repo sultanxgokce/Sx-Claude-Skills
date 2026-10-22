@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# gun-sonu.test.sh — hermetik: sahte depo + sahte defterler; GERÇEK deftere dokunmaz.
+# gun-sonu.test.sh — hermetik: sahte depo + sahte defterler + sahte GÖREV defteri (jeton kapılı http, D1–D8); GERÇEK deftere dokunmaz.
 # Ağırlık merkezi: SAAT KAYMASI. Defterler dünya saatiyle damgalanır, süzgeç yerel günle
 # çalışır; aradaki fark her gün 3 saatlik KÖR PENCERE açıyordu (ölçülmüş canlı vaka:
 # 7 Ekim yerel 00:55 ve 01:11'deki iki kapı kaçışı 7 Ekim özetinde HİÇ görünmedi).
@@ -24,6 +24,7 @@ G="${MUTANT:-$HERE/gun-sonu.sh}"
 gecen=0; kalan=0
 g() { if [ "$1" -eq 0 ]; then gecen=$((gecen+1)); echo "  ✓ $2"; else kalan=$((kalan+1)); echo "  ✗ $2"; fi; }
 T="$(mktemp -d)"; GUN="$(date +%F)"
+export DEFTER_JETON_YOL="$T/jeton-yok"   # görev defteri bölümü (0.18.0 #422) varsayılan jetonla GERÇEK defteri okur; Ö-sınavları ona dokunmasın (D-sınavları kendi sahte defterini verir)
 mkdir -p "$T/_agents/fabrika/kartlar" "$T/pkg"; cp "$HERE"/*.py "$T/pkg/"   # mutantlar TAM kopyada koşar (izin.py kardeş; 0.18.0)
 ( cd "$T" && git init -q -b olcum . ) >/dev/null 2>&1
 cat > "$T/_agents/fabrika/kartlar/sinav.json" <<KART
@@ -121,7 +122,7 @@ grep -q 'ÇÖZÜLEMEDİ' <<<"$O10"; g $? "Ö10b bozuk satır ÇÖZÜLEMEDİ diye
 [ "$(say "$O10" 'Kapı kaçışları')" = 0 ]; g $? "Ö10c bugüne sayılmıyor"
 grep -q 'Açık işler' <<<"$O10"; g $? "Ö10d özetin SONRAKİ bölümleri de üretildi (akış kesilmedi)"
 
-echo "════ Ö12 · 0.18.0: sınıflı kart — 'Sultan'a gidenler — başlama izni / veto', izin etiketi, reisin sınıflı kararları bölümü, içeride bitenlerde sınıflı bitti ════"
+echo "════ Ö14 · 0.18.0: sınıflı kart — 'Sultan'a gidenler — başlama izni / veto', izin etiketi, reisin sınıflı kararları bölümü, içeride bitenlerde sınıflı bitti ════"
 cat > "$T/_agents/fabrika/kartlar/sinifli.json" <<KART
 {"is":"sinifli","cumle":"para harcayan iş","istedi":"S","aldi":"M","zaman":"${GUN}T10:00:00+03:00","sinif_cevaplari":{},"siniflar":["para"],"sultan":true,
  "durum":"acik","gecmis":[],"pr":"","puan":null,"kanit_var":false,"baslama_izni":{"durum":"dur","oturum":"sohbet-1","soz":"durun","beyan":"M"},
@@ -132,21 +133,21 @@ cat > "$T/_agents/fabrika/kartlar/sinifli-bitti.json" <<KART
  "durum":"bitti","bitis":"${GUN}T12:00:00+03:00","gecmis":[],"pr":"41","puan":{"kod":5,"dogru":"E","tur":1},"kanit_var":true,"baslama_izni":{"durum":"basla","oturum":"o","soz":"başla","beyan":"M"},
  "birlestirme_karari":{"karar_veren":"reis","reis":"M","pr":"41","zaman":"${GUN}T12:00:00+03:00","izin":"basla"}}
 KART
-O12="$(ozet)"
-grep -q "## Sultan'a gidenler (2) — başlama izni / veto" <<<"$O12"; g $? "Ö12a başlık öneki korunur + 'başlama izni / veto'"
-grep -qE '^\- \[acik\] \*\*sinifli\*\* .* izin: dur ' <<<"$O12"; g $? "Ö12b vetolu kart 'izin: dur'"
-grep -qE '^\- \[bitti\] \*\*sinifli-bitti\*\* .* izin: basla .* reis birleştirdi \(PR 41\)' <<<"$O12"; g $? "Ö12c biten sınıflı 'izin: basla · reis birleştirdi (PR 41)'"
-[ "$(say "$O12" 'İçeride bitirdiklerimiz')" = 2 ] && grep -qE '^\- \*\*sinifli-bitti\*\* .* sınıf: dis_yuzey · reis birleştirdi · izin: basla · veto yok' <<<"$O12"; g $? "Ö12d içeride bitenler sınıflı bitti'yi de alır (2: sinav + sinifli-bitti), etiketli"
-[ "$(say "$O12" 'Reisin sınıflı işlerdeki kararları')" = 1 ] && grep -q "11:00 · \*\*sinifli\*\* · devam · reis M · izin: bekliyor · gerekçe: reis-gerekce-uzun-metin" <<<"$O12"; g $? "Ö12e yeni bölüm: yalnız sinifli:true kayıt sayılır (1), saat · karar · reis · izin · gerekçe"
-grep -q "veto hakkın var (reis kararı, Sultan sözü değil)" <<<"$O12"; g $? "Ö12f bölüm başlığı 'reis kararı, Sultan sözü değil' der (A06)"
-grep -qE '^\- sinifli — sahip M · açıldı .* · sınıflı · izin: dur$' <<<"$O12"; g $? "Ö12g açık işlerde 'sınıflı · izin: dur' (eski '· SULTAN' yok)"
-! grep -q "· SULTAN" <<<"$O12"; g $? "Ö12h 'SULTAN' etiketi hiçbir satırda yok"
+O14="$(ozet)"
+grep -q "## Sultan'a gidenler (2) — başlama izni / veto" <<<"$O14"; g $? "Ö14a başlık öneki korunur + 'başlama izni / veto'"
+grep -qE '^\- \[acik\] \*\*sinifli\*\* .* izin: dur ' <<<"$O14"; g $? "Ö14b vetolu kart 'izin: dur'"
+grep -qE '^\- \[bitti\] \*\*sinifli-bitti\*\* .* izin: basla .* reis birleştirdi \(PR 41\)' <<<"$O14"; g $? "Ö14c biten sınıflı 'izin: basla · reis birleştirdi (PR 41)'"
+[ "$(say "$O14" 'İçeride bitirdiklerimiz')" = 2 ] && grep -qE '^\- \*\*sinifli-bitti\*\* .* sınıf: dis_yuzey · reis birleştirdi · izin: basla · veto yok' <<<"$O14"; g $? "Ö14d içeride bitenler sınıflı bitti'yi de alır (2: sinav + sinifli-bitti), etiketli"
+[ "$(say "$O14" 'Reisin sınıflı işlerdeki kararları')" = 1 ] && grep -q "11:00 · \*\*sinifli\*\* · devam · reis M · izin: bekliyor · gerekçe: reis-gerekce-uzun-metin" <<<"$O14"; g $? "Ö14e yeni bölüm: yalnız sinifli:true kayıt sayılır (1), saat · karar · reis · izin · gerekçe"
+grep -q "veto hakkın var (reis kararı, Sultan sözü değil)" <<<"$O14"; g $? "Ö14f bölüm başlığı 'reis kararı, Sultan sözü değil' der (A06)"
+grep -qE '^\- sinifli — sahip M · açıldı .* · sınıflı · izin: dur$' <<<"$O14"; g $? "Ö14g açık işlerde 'sınıflı · izin: dur' (eski '· SULTAN' yok)"
+! grep -q "· SULTAN" <<<"$O14"; g $? "Ö14h 'SULTAN' etiketi hiçbir satırda yok"
 
-echo "════ Ö13 · MUTASYON: izin.py'de dur dalı kalkınca veto görünmez olur (Ö12b kırmızıya döner) ════"
-cp "$G" "$T/pkg/mutant4.sh"; cp "$T/pkg/izin.py" "$T/pkg/izin.py.asil"; sed -i 's/^        if d == "dur":$/        if False:/' "$T/pkg/izin.py"
-if cmp -s "$T/pkg/izin.py" "$T/pkg/izin.py.asil"; then g 1 "Ö13 mutant FARKSIZ (çapa bayat)"; else
-  OM4="$( cd "$T" && bash "$T/pkg/mutant4.sh" --gun "$GUN" 2>&1 )"
-  grep -qE '^\- \[acik\] \*\*sinifli\*\* .* izin: bekliyor ' <<<"$OM4"; g $? "Ö13 MUTASYON: dur dalı ölünce vetolu kart 'bekliyor' görünüyor → Ö12b bu mutantta düşerdi"
+echo "════ Ö15 · MUTASYON: izin.py'de dur dalı kalkınca veto görünmez olur (Ö14b kırmızıya döner) ════"
+cp "$G" "$T/pkg/mutant-izin.sh"; cp "$T/pkg/izin.py" "$T/pkg/izin.py.asil"; sed -i 's/^        if d == "dur":$/        if False:/' "$T/pkg/izin.py"
+if cmp -s "$T/pkg/izin.py" "$T/pkg/izin.py.asil"; then g 1 "Ö15 mutant FARKSIZ (çapa bayat)"; else
+  OMI="$( cd "$T" && bash "$T/pkg/mutant-izin.sh" --gun "$GUN" 2>&1 )"
+  grep -qE '^\- \[acik\] \*\*sinifli\*\* .* izin: bekliyor ' <<<"$OMI"; g $? "Ö15 MUTASYON: dur dalı ölünce vetolu kart 'bekliyor' görünüyor → Ö14b bu mutantta düşerdi"
 fi
 cp "$T/pkg/izin.py.asil" "$T/pkg/izin.py"
 rm -f "$T/_agents/fabrika/kartlar/sinifli.json" "$T/_agents/fabrika/kartlar/sinifli-bitti.json"
@@ -178,6 +179,64 @@ if cmp -s "$M3" "$G"; then g 1 "Ö11 mutant3 FARKSIZ (çapa bayat)"; else
   grep -qE '^- 00:00 · gerekçe' <<<"$OM3"; g $? "Ö11 MUTASYON: çevrim ölünce HAM dilim saati basılıyor"
 fi
 
+echo "════ D · GÖREV DEFTERİ bölümü (Z23WS 2-3 · kart gun-sonu-gorev-defteri): gün kapanışı KART defterine değil GÖREV defterine göre ════"
+# sahte defter: jeton başlığı şart (403); $T/defter.json → /gorevler; $T/defter.kapali varsa 503. Rastgele kapı (başka sınavla çakışmaz).
+cat > "$T/defter.py" <<'PY'
+import http.server, json, os, sys
+T = sys.argv[1]
+class H(http.server.BaseHTTPRequestHandler):
+    def log_message(self, *a): pass
+    def do_GET(self):
+        if self.headers.get("x-defter-jeton") != "gizli-sinav-jetonu":
+            self.send_response(403); self.end_headers(); self.wfile.write(b'{"ok":false,"hata":"jeton"}'); return
+        if os.path.exists(os.path.join(T, "defter.kapali")):
+            self.send_response(503); self.end_headers(); self.wfile.write(b'{"ok":false}'); return
+        b = open(os.path.join(T, "defter.json"), "rb").read()
+        self.send_response(200); self.send_header("content-type", "application/json"); self.end_headers(); self.wfile.write(b)
+s = http.server.HTTPServer(("127.0.0.1", 0), H); print(s.server_address[1], flush=True); s.serve_forever()
+PY
+python3 "$T/defter.py" "$T" > "$T/port" 2>/dev/null & DPID=$!
+for i in $(seq 1 50); do [ -s "$T/port" ] && break; sleep 0.1; done
+PORT="$(cat "$T/port")"; printf 'gizli-sinav-jetonu\n' > "$T/jeton"
+gorev() { printf '{"id":"gorev_01AAAAAAAAAAAAAAAAAAA%s","adlar":[{"deger":"%s"}],"son_adim":"%s","canli":{"kutu":"%s","atanan":"%s","gorev_durumu":"%s"}}' "$1" "$2" "$3" "$4" "$5" "$6"; }
+defter_yaz() { printf '{"ok":true,"gorevler":[%s]}' "$(IFS=,; echo "$*")" > "$T/defter.json"; }
+ozetd() { ( cd "$T" && DEFTER_UC="http://127.0.0.1:$PORT" DEFTER_JETON_YOL="$T/jeton" bash "$G" --gun "$GUN" "$@" 2>&1 ); }
+# fikstür GERÇEK yazımlardan (defter 22 Eki): BÂNİ çalışılıyor (code) · MİRAHUR çalışılıyor (code) · BERİD açık atanmış (sohbet) · BASİRET sıra-sende · onay bekleyen · bitti · atanmamış açık
+defter_yaz "$(gorev 0001 'Görevler paneli ad eşlemesi' "${GUN}T18:49:00Z" code 'BÂNİ' calisiliyor)" "$(gorev 0002 'Bellek bekçisi kurulumu' "${GUN}T10:00:00Z" code 'MİRAHUR' calisiliyor)" \
+  "$(gorev 0003 'Sohbet yolu' "${GUN}T09:00:00Z" sohbet 'BERİD' acik)" "$(gorev 0004 'Kadro karesi' "${GUN}T09:00:00Z" code 'BASİRET' sira-bende)" \
+  "$(gorev 0005 'Dümen karesi' "${GUN}T09:00:00Z" code 'BÂNİ' onay-bekliyor)" "$(gorev 0006 'Eski iş' "${GUN}T09:00:00Z" code 'BÂNİ' bitti)" "$(gorev 0007 'Sahipsiz açık' "${GUN}T09:00:00Z" code '' acik)"
+OD="$(ozetd)"; RCD=$?
+grep -q '^## Görev defteri — gün kapanışı buna göre (kart bitti ≠ görev bitti) · bütün kutular' <<<"$OD"; g $? "D1 bölüm başlığı: görev defteri, gün kapanışı buna göre, bütün kutular"
+grep -q '^- çalışılıyor \*\*2\*\* · atanmış açık 1 · sıra Sultan'"'"'da 1 · onay bekleyen 1$' <<<"$OD"; g $? "D1b sayılar: çalışılıyor 2 · atanmış açık 1 (sahipsiz açık sayılmaz) · sıra Sultan'da 1 · onay bekleyen 1 (bitti sayılmaz)"
+grep -q '^  - A0002 · MİRAHUR · Bellek bekçisi kurulumu · son adım' <<<"$OD" && grep -q '^  - A0001 · BÂNİ · Görevler paneli ad eşlemesi · son adım' <<<"$OD"; g $? "D1c çalışılan işler satır satır: kısa kod · atanan · başlık · son adım (en eski adım önce)"
+grep -q 'bu işler bitmeden gün KAPANMAZ' <<<"$OD" && [ "$RCD" -eq 0 ]; g $? "D1d uyarı yazılı; --kapanis YOKKEN rc 0 (cron bozulmaz)"
+grep -q '^## Açık işler' <<<"$OD" && grep -q '^## Kapı kaçışları' <<<"$OD"; g $? "D1e eski bölümler (kart defteri) yerinde — iki defter yan yana"
+OD2="$(ozetd --kutu sohbet)"
+grep -q '· kutu sohbet$' <<<"$OD2" && grep -q '^- çalışılıyor \*\*0\*\* · atanmış açık 1 · sıra Sultan'"'"'da 0 · onay bekleyen 0$' <<<"$OD2" && grep -q 'defterde çalışılan iş yok' <<<"$OD2"; g $? "D2 --kutu sohbet: yalnız o kutunun işleri (çalışılıyor 0, açık 1) ve 'kapanabilir' sözü"
+OD3="$(ozetd --kapanis)"; RC3=$?
+[ "$RC3" -eq 1 ] && grep -q '^→ GÜN KAPANMAZ: görev defterinde 2 iş çalışılıyor (rc 1)' <<<"$OD3"; g $? "D3 --kapanis: çalışılıyor 2 → rc 1 'GÜN KAPANMAZ' (kart/PR bitmiş olsa da)"
+OD4="$(ozetd --kapanis --kutu sohbet)"; RC4=$?
+[ "$RC4" -eq 0 ] && grep -q '^→ GÜN KAPANABİLİR' <<<"$OD4"; g $? "D4 --kapanis --kutu sohbet: çalışılıyor 0 → rc 0 'GÜN KAPANABİLİR'"
+OD5="$( cd "$T" && DEFTER_UC="http://127.0.0.1:$PORT" DEFTER_JETON_YOL="$T/jeton-yok" bash "$G" --gun "$GUN" --kapanis 2>&1 )"; RC5=$?
+[ "$RC5" -eq 3 ] && grep -q 'ÖLÇÜLEMEDİ: defter jetonu yok' <<<"$OD5" && grep -q 'KAPANIŞ ÖLÇÜLEMEDİ' <<<"$OD5" && ! grep -q 'çalışılıyor \*\*0' <<<"$OD5"; g $? "D5 jeton yok → bölüm 'ÖLÇÜLEMEDİ', --kapanis rc 3 (0 denmez, yeşil değil)"
+touch "$T/defter.kapali"; OD6="$(ozetd --kapanis)"; RC6=$?; rm -f "$T/defter.kapali"
+[ "$RC6" -eq 3 ] && grep -q 'defter cevap vermedi (HTTP 503)' <<<"$OD6"; g $? "D6 defter 503 → ÖLÇÜLEMEDİ, --kapanis rc 3"
+OD7="$( cd "$T" && DEFTER_UC="http://127.0.0.1:$PORT" DEFTER_JETON_YOL="$T/jeton-yok" bash "$G" --gun "$GUN" 2>&1 )"; RC7=$?
+[ "$RC7" -eq 0 ] && grep -q 'ÖLÇÜLEMEDİ: defter jetonu yok' <<<"$OD7" && grep -q '^## Açık işler' <<<"$OD7"; g $? "D7 bayraksız koşuda defter ölçülemese de özet üretilir, rc 0 (cron bozulmaz), eksik yüzey yazılı"
+grep -q 'gizli-sinav-jetonu' <<<"$OD$OD2$OD3$OD5"; [ $? -ne 0 ]; g $? "D8 jeton değeri hiçbir çıktıda yok"
+echo "════ Ö12 · MUTASYON: çalışılıyor süzgeci gevşeyince sayı şişer (D1b kırmızı) ════"
+M4="$T/pkg/mutant4.sh"; sed 's@    if d == "calisiliyor" or d == "onay-bekliyor" or (d in ("acik", "sira-bende") and c.get("atanan")): kova\[d\].append(k)@    if d in kova: kova[d].append(k)@' "$G" > "$M4"
+if cmp -s "$M4" "$G"; then g 1 "Ö12 mutant4 FARKSIZ (çapa bayat)"; else
+  OM4="$( cd "$T" && DEFTER_UC="http://127.0.0.1:$PORT" DEFTER_JETON_YOL="$T/jeton" bash "$M4" --gun "$GUN" 2>&1 )"
+  grep -q '^## Görev defteri' <<<"$OM4" && ! grep -q '^- çalışılıyor \*\*2\*\* · atanmış açık 1 ·' <<<"$OM4"; g $? "Ö12 MUTASYON: kopya çalıştı (bölüm var) ve sahipsiz açık da sayılınca satır değişiyor (kapı gerçek; çöken kopya yeşil sayılmaz)"
+fi
+echo "════ Ö13 · MUTASYON: ölçülemeyen defter 'çalışılıyor 0' sayılırsa --kapanis yeşile döner (D5 kırmızı) ════"
+M5="$T/pkg/mutant5.sh"; sed 's@    print("#kapanis: olculemedi=1 calisiliyor=-1"); sys.exit(0)@    print("#kapanis: olculemedi=0 calisiliyor=0"); sys.exit(0)@' "$G" > "$M5"
+if cmp -s "$M5" "$G"; then g 1 "Ö13 mutant5 FARKSIZ (çapa bayat)"; else
+  ( cd "$T" && DEFTER_UC="http://127.0.0.1:$PORT" DEFTER_JETON_YOL="$T/jeton-yok" bash "$M5" --gun "$GUN" --kapanis >/dev/null 2>&1 ); RCM5=$?
+  [ "$RCM5" -ne 3 ]; g $? "Ö13 MUTASYON: ölçülemedi 0 sayılınca rc 3 kayboluyor (kapı gerçek)"
+fi
+kill "$DPID" 2>/dev/null; wait "$DPID" 2>/dev/null
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]

@@ -1,0 +1,44 @@
+{
+  "is": "karne-git-disi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-22T21:42:37+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "karne-git",
+      "asama": "once",
+      "dosya": "olcum-karne-git-once.txt",
+      "sha256": "5458bfed86478a1e6e566b6df6fabe16ea1191cc315548e17be867b020500ec5",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-karne-git-disi/_agents/fabrika/kanit/karne-git-disi/karne-olcer.sh",
+        "."
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-22T21:42:37+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "65dee301d6ce43b7a1325eace989db16"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "karne-git",
+      "asama": "sonra",
+      "dosya": "olcum-karne-git-sonra.txt",
+      "sha256": "1685fc386da906b83e728ea8eb996b6b5a92fa3300c0cd688633b1f20783ace1",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-karne-git-disi/_agents/fabrika/kanit/karne-git-disi/karne-olcer.sh",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T21:42:37+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "54b2a4d4fc494e079aca8aec1c030913"
+    }
+  ],
+  "imza": "f797de279d2c4735e312a79509d4399e5ffa326d6a16b4e42730e8443381064d"
+}

@@ -10,6 +10,7 @@ T="$(mktemp -d)"; mkdir -p "$T/uzak" "$T/depo"
 ( cd "$T/uzak" && git init -q --bare ) >/dev/null 2>&1
 ( cd "$T/depo" && git init -q -b main && git config user.email t@t && git config user.name T && echo x > f && git add -A && git commit -qm "chore: ilk" && git remote add origin "$T/uzak" && git push -q -u origin main ) >/dev/null 2>&1
 export FABRIKA_TETIK=/nonexistent IS_ALANI_KOK="$T/alan"
+export DEFTER_JETON_YOL="$T/jeton-yok"   # gun-sonu.sh görev defteri bölümü (0.18.0 #422) varsayılan jetonla GERÇEK defteri okur — sınav ona dokunmaz
 cd "$T/depo"
 
 echo "════ T1 · sınıf sorusu eksik → kart açılmaz ════"
@@ -368,7 +369,7 @@ O="$(bash "$KT" bitti gb-5 2>&1)"; RC=$?; [ $RC -eq 0 ] && [ "$(yz)" -eq "$N0" ]
 kill $DSRV 2>/dev/null; wait $DSRV 2>/dev/null
 O="$(bash "$KT" bitti gb-2 2>&1)"; RC=$?
 [ $RC -eq 4 ] && grep -q "yazılamadı: deftere ulaşılamadı" <<<"$O" && python3 -c "import json;k=json.load(open('$KK/gb-2.json'));assert k['durum']=='bitti' and k['gorev_yazimlari'][-1]['olay']=='bitti'"; g $? "G8 defter kapalı: kart bitti İŞLENİR, 'ulaşılamadı' söylenir, rc 4 (sessiz eksik yok)"
-unset DEFTER_JETON_YOL DEFTER_UC
+export DEFTER_JETON_YOL="$T/jeton-yok"; unset DEFTER_UC   # gerçek jetona GERİ DÖNÜLMEZ (hermetik)
 
 echo "════ T15 · KANIT AĞACI: bitti/daralt birincil checkout'tan çağrılınca kanıtı kartın İŞ ALANINDAN okur ve nereden okuduğunu söyler; hiçbir yerde yoksa uyarır (Nexus #1223: daralt tur_sifir=0 yazmıştı) ════"
 mkdir -p "$T/depo3" && cd "$T/depo3" && git init -q -b main && git config user.email t@t && git config user.name T && echo x > f && git add -A && git commit -qm "chore: ilk" && export KANIT_DEPO="$T/depo3"
