@@ -488,11 +488,12 @@ print(f"🧾 canlı borç kaydedildi: {k['is']} · {ac}\n   kapı bu kartı bor�
 PY
     ;;
   canli-borc-durum)
-    # Kapının okuduğu yüzey: "yok|gecerli|gecersiz|odendi<TAB>açıklama". Kanıt kaydı kanit_agaci ile okunur (bitti ile aynı kural);
-    # kaynak notu SUSTURULUR: kapı bu çıktıyı 2>&1 ile tek satır okur (birlestirme-kapisi 180), not ilk satıra girerse "OKUNAMADI" olur.
+    # Kapının okuduğu yüzey: "yok|gecerli|gecersiz|odendi<TAB>açıklama". Kanıt kaydı kanit_agaci ile okunur (bitti ile aynı kural).
+    # Kaynak notu / yokluk uyarısı makine satırından SONRA basılır (göz #414 tur 1): kapı bu çıktıyı 2>&1 ile `read` eder,
+    # yani yalnız İLK satırı alır — not önce gelse "OKUNAMADI" olurdu, hiç gelmese kartın "dört komut da söyler" şartı düşerdi.
     [ -n "$IS" ] && [ -f "$KD/$IS.json" ] || { _hata "kart yok: $IS"; exit 3; }
-    DZ="$(kanit_agaci "$IS" 2>/dev/null)"
-    python3 - "$KD/$IS.json" "$DZ" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY' || exit 3
+    KANIT_NOTU="$(mktemp)"; DZ="$(kanit_agaci "$IS" 2>"$KANIT_NOTU")"
+    python3 - "$KD/$IS.json" "$DZ" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY'
 import json,sys,os
 yol,dz,hdir=sys.argv[1:]
 sys.path.insert(0,hdir); from canli_borc import durum; from kanit import etkin_kayitlar
@@ -500,6 +501,7 @@ k=json.load(open(yol,encoding="utf-8")); kp=os.path.join(dz,"KANIT.json")
 canli=[x for x in (etkin_kayitlar(json.load(open(kp,encoding="utf-8"))) if os.path.exists(kp) else []) if x.get("tur")=="canli"]
 ad,ac=durum(k,canli); print(ad+"\t"+ac.replace("\n"," ").replace("\t"," "))
 PY
+    RC=$?; [ -s "$KANIT_NOTU" ] && cat "$KANIT_NOTU" >&2; rm -f "$KANIT_NOTU"; [ "$RC" -eq 0 ] || exit 3
     ;;
   borclar)
     # Açık canlı borçlar ve yaşları. rc 1 = 24 saati aşan borç var (bekçi/nabız bunu okur); rc 0 = borç yok ya da hepsi süresinde.

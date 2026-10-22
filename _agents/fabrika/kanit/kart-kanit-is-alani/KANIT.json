@@ -1,7 +1,7 @@
 {
   "is": "kart-kanit-is-alani",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-22T11:10:23+03:00",
+  "guncelleme": "2026-10-22T11:14:55+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -88,7 +88,41 @@
       "sure_sn": 626.4,
       "boru_denetimi": "temiz",
       "olcum_id": "ecdb56b1306a4f39a3379a20b635d76f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinav-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sinav-tur2-sonra.txt",
+      "sha256": "22adaf40a83fed94eed4465ffaa2dd1b65accf8e1339e4a12341397346e1fd46",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T11:14:03+03:00",
+      "sure_sn": 10.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "3cdc9f31e16d4206a439f7c26634a112"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "birlestirme-kapisi-sinav-tur2",
+      "asama": "tek",
+      "dosya": "olcum-birlestirme-kapisi-sinav-tur2-tek.txt",
+      "sha256": "fbccd86a132a594d5a375e2c71ade38fbc7fe6c4801b5556a9f637c8bc0c59f3",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T11:14:55+03:00",
+      "sure_sn": 40.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f2b831a786da4f57986a58adf409de05"
     }
   ],
-  "imza": "756b6872bf653d29312358e4605961e780c67c03c5209d823ac091f25de837a3"
+  "imza": "57b80bd20bf63606e2ccac3fa9db4623193181debc65bb995075b2197fc611ac"
 }

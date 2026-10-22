@@ -296,11 +296,12 @@ python3 -c "import json;k=json.load(open('$T/depo3/_agents/fabrika/kartlar/is-wt
 O="$(bash "$KT" bitti is-wt --pr 9 2>&1)"; RC=$?
 [ $RC -eq 0 ] && ! grep -q "KANIT YOK" <<<"$O" && grep -q "iş alanından okundu" <<<"$O"; g $? "🔴 birincilden bitti: kanıt VAR (iş alanından), KANIT YOK damgası yok (Sx #383 hâli)"
 python3 -c "import json;k=json.load(open('$T/depo3/_agents/fabrika/kartlar/is-wt.json'));assert k['kanit_var'] and k['puan']['tur']==3 and k['puan']['kod']==5"; g $? "karta kanıt_var + tur 3 + puan 5 işlendi"
-IFS=$'\t' read -r BD _ <<<"$(bash "$KT" canli-borc-durum is-wt 2>&1)"; [ "$BD" = yok ]; g $? "canli-borc-durum ilk satırı 'yok' — kaynak notu kapının tek satır okuduğu yüzeye karışmadı"
+O="$(bash "$KT" canli-borc-durum is-wt 2>&1)"; IFS=$'\t' read -r BD _ <<<"$O"; [ "$BD" = yok ] && grep -q "iş alanından okundu: $T/alan3/depo3-is-wt" <<<"$O"; g $? "canli-borc-durum: İLK satır 'yok' (kapı tek satır okur) + kaynak notu SONRAKİ satırda (dört komut da nereden okuduğunu söyler)"
 mkdir -p "$T/depo3/_agents/fabrika/kanit/is-wt"; echo '{"tur":1,"sonuc":{"kod_puani":2,"dogru_sey":"H","bulgular":[]}}' > "$T/depo3/_agents/fabrika/kanit/is-wt/DENETIM-1.json"
 O="$(bash "$KT" tikandi is-wt --yol devam --neden "çağrıldığı ağaç önce gelir sınavı" 2>&1)"; ! grep -q "iş alanından okundu" <<<"$O" && grep -q "'tur': 1" <<<"$O"; g $? "çağrıldığı ağaçta kanıt varsa ÖNCE o okunur (iş alanına bakılmaz; eski davranış korundu)"
 bash "$KT" ac is-yok --is "hiç kanıtı olmayan iş sınavı burada" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
 O="$(bash "$KT" bitti is-yok 2>&1)"; grep -q "ne bu ağaçta" <<<"$O" && grep -q "iş alanının İÇİNDEN çağır" <<<"$O" && grep -q "KANIT YOK" <<<"$O"; g $? "kanıt hiçbir yerde yok: nerede arandığı + 'iş alanının içinden çağır' uyarısı + KANIT YOK (sessiz 0 yok)"
+O="$(bash "$KT" canli-borc-durum is-yok 2>&1)"; IFS=$'\t' read -r BD _ <<<"$O"; [ "$BD" = yok ] && grep -q "ne bu ağaçta" <<<"$O"; g $? "canli-borc-durum kanıtsız kartta: İLK satır 'yok' + yokluk uyarısı sonraki satırda"
 echo "── T15 · MUTASYON (tam kopya): iş alanı araması kaldırılınca birincilden daralt yine 0 yazar → üstteki kapı kırmızı ──"
 MD="$T/pkg-agac"; mkdir -p "$MD"; cp "$HERE"/*.py "$HERE"/*.sh "$MD/" 2>/dev/null
 python3 - "$MD/kart.sh" <<'PYM' || g 1 "mutant kurulamadı (çapa bayat)"
