@@ -1,0 +1,151 @@
+{
+  "is": "higgsfield-abonelik-sx",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-22T23:57:36+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kurulu-scripts",
+      "asama": "once",
+      "dosya": "olcum-kurulu-scripts-once.txt",
+      "sha256": "27c7551abf5bdeac32188c22093f3921fd93191cecca0e8c1b7ca68e58074141",
+      "komut": [
+        "ls",
+        "-ld",
+        "/config/.claude/skills/higgsfield-abonelik/scripts"
+      ],
+      "rc": 2,
+      "renk": "kirmizi",
+      "zaman": "2026-10-22T23:57:36+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4428d3e66d714da583ad1cd304b5e47d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "devir-paket-birebir",
+      "asama": "sonra",
+      "dosya": "olcum-devir-paket-birebir-sonra.txt",
+      "sha256": "4e99f2d8e2a89d49210ab39799b4a1feb4c37208be1198bd18c36aa4e1cce721",
+      "komut": [
+        "diff",
+        "-rs",
+        "/config/.claude/TELLAL-BESIR-devir/scripts",
+        "higgsfield-abonelik/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T23:57:36+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "00a72d36414b4373a30bdee3ff11e230"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ic-cagri-kendi-dizin",
+      "asama": "sonra",
+      "dosya": "olcum-ic-cagri-kendi-dizin-sonra.txt",
+      "sha256": "6444bf2aeaf740a2ac70dd53344f2445b803cb1def2e4b43acd7547aeabbe528",
+      "komut": [
+        "grep",
+        "-n",
+        "-F",
+        "dirname \"${BASH_SOURCE[0]}\"",
+        "higgsfield-abonelik/scripts/bogaz.lib.sh",
+        "higgsfield-abonelik/scripts/buyut.sh",
+        "higgsfield-abonelik/scripts/defter.sh",
+        "higgsfield-abonelik/scripts/etiket-gom.sh",
+        "higgsfield-abonelik/scripts/ffmpeg-kanit.sh",
+        "higgsfield-abonelik/scripts/filigran-temizle.sh",
+        "higgsfield-abonelik/scripts/filigran-yama.sh",
+        "higgsfield-abonelik/scripts/girdi-kapisi.sh",
+        "higgsfield-abonelik/scripts/hf-defter.sh",
+        "higgsfield-abonelik/scripts/higgsfield-kimlik-kur.sh",
+        "higgsfield-abonelik/scripts/isik-duzelt.sh",
+        "higgsfield-abonelik/scripts/kadraj-duzelt.sh",
+        "higgsfield-abonelik/scripts/kredi-mutabakat.sh",
+        "higgsfield-abonelik/scripts/kredi-oku.sh",
+        "higgsfield-abonelik/scripts/yuzsuz-video.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T23:57:36+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "95f64b68b6cc4297a8680bb99cac7bfb"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ic-cagri-goreli-yok",
+      "asama": "sonra",
+      "dosya": "olcum-ic-cagri-goreli-yok-sonra.txt",
+      "sha256": "c0937948f1aa9a7d8677bf60a19002e0504ccd8e1099ecbd2a2f2e9f78968cb3",
+      "komut": [
+        "bash",
+        "-c",
+        "! grep -n -E \"^[^#]*(bash|source|\\\\.) +scripts/\" higgsfield-abonelik/scripts/*.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T23:57:36+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "5a2f48bb78b3452292b171fce9835d64"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sozdizimi",
+      "asama": "sonra",
+      "dosya": "olcum-sozdizimi-sonra.txt",
+      "sha256": "0b7a8991f9385e9bb08334ead1ca4fb26c764483290ebff26db38542c6d1fca1",
+      "komut": [
+        "bash",
+        "-c",
+        "set -o pipefail; ls higgsfield-abonelik/scripts/*.sh | xargs -t -n1 bash -n"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T23:57:36+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "71f0255e8e2142f7a555179d1e8daa6e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kabuk-biti",
+      "asama": "sonra",
+      "dosya": "olcum-kabuk-biti-sonra.txt",
+      "sha256": "c8b11a93961c39b9a8a4543e7fb750fc292d1ce13f4c9565eb709f8237e9c004",
+      "komut": [
+        "bash",
+        "kabuk-biti.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T23:57:36+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c9b5e9b36dbd4e129c7a57a80507602b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "validate-repo-strict",
+      "asama": "sonra",
+      "dosya": "olcum-validate-repo-strict-sonra.txt",
+      "sha256": "2a571ead11a5b6f3d156ee030e1aa6d25b9e9d526c37eb3ba5ec7e501ae890be",
+      "komut": [
+        "node",
+        "ahi/schema/validate-repo.mjs",
+        ".",
+        "--strict"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T23:57:36+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "7edcefff864645f383fb6ca22f5bd5fb"
+    }
+  ],
+  "imza": "39b392bce5b1d4d8c8cb729da2f81a761196ea4eec46143dcda32d34fa9feaf8"
+}
