@@ -850,6 +850,26 @@ if kd:
                                 "kanit":b.get("kanit")},ensure_ascii=False)+"\n")
     print(f"   kutu-dışı defteri: {defter}")
 PYKD
+# 🔴 KAYIT DALDA (görev B2DBS6 · 22 Eki ölçümü: iki PR'ın 9 göz turunun 9'unda DENETIM-N.json iş alanında kayıtsız kaldı, elle
+#    commit'lendi; kapı ve alan kapatma onu dalda arar). Bu turun kaydı (+ KUTU-DISI.jsonl + denetçinin yazdığı KART.json kopyası)
+#    iş dalına commit'lenir: YALNIZ dal = iş
+#    adıyken ve birincil checkout değilken, pathspec'li (başka değişikliğe dokunmaz), push YOK. Olmazsa söylenir — sessiz geçilmez.
+kayit_commitle() {
+  [ "${DENETCI_KAYIT_COMMIT:-1}" = 1 ] || { _bilgi "   · kayıt commit'i kapalı (DENETCI_KAYIT_COMMIT=0) — elle commit'le"; return 0; }
+  local dal; dal="$(git -C "$DEPO" rev-parse --abbrev-ref HEAD 2>/dev/null)"
+  if [ "$dal" != "$IS" ]; then _bilgi "   ⚠ kayıt commit'lenmedi: dal '${dal:-?}' iş adı '$IS' değil — elle commit'le"; return 0; fi
+  if [ "$(cd "$DEPO" && pwd -P)" = "$(cd "$KART_DEPO" 2>/dev/null && pwd -P)" ]; then
+    _bilgi "   ⚠ kayıt commit'lenmedi: birincil checkout (iş alanı değil) — elle commit'le"; return 0; fi
+  local yol=("_agents/fabrika/kanit/$IS/DENETIM-$TUR.json") e
+  [ -f "$DZ/KUTU-DISI.jsonl" ] && yol+=("_agents/fabrika/kanit/$IS/KUTU-DISI.jsonl")
+  [ -f "$DZ/KART.json" ] && yol+=("_agents/fabrika/kanit/$IS/KART.json")   # denetçinin kanıta kopyaladığı kart (B2DBS6 üçüncü dosya)
+  if e="$(cd "$DEPO" && git add -- "${yol[@]}" 2>&1 && git commit -q -m "docs: $IS göz tur $TUR kaydı — $PUAN/$DOGRU" -- "${yol[@]}" 2>&1)"; then
+    _bilgi "   ✓ kayıt dala commit'lendi ($(git -C "$DEPO" rev-parse --short HEAD)) — push senin adımın"
+  else
+    _bilgi "   ⚠ kayıt commit'lenemedi: $(printf '%s' "$e" | head -1) — elle commit'le"
+  fi
+}
+kayit_commitle
 if [ "$PUAN" -eq 5 ] && [ "$DOGRU" = "E" ]; then _bilgi "✓ GEÇTİ — merge kararı: sınıf işi Sultan, sınıfsız iş kutu reisi"; exit 0; fi
 # 🔴 Tavan SAYILI tura uygulanır (bu turun kendisi dahil edilerek yeniden hesaplanır).
 SAYILI_SON=$(python3 -c "
