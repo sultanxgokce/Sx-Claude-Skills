@@ -1,5 +1,5 @@
 $ bash -c cd /config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/kapi && node sunucu.test.mjs
-# rc=0 sure=6.6s zaman=2026-10-22T15:05:42+03:00
+# rc=0 sure=10.0s zaman=2026-10-22T15:08:56+03:00
 --- stdout ---
 
 ── T · TABAN YOLU (kapı /sedir altında) ──

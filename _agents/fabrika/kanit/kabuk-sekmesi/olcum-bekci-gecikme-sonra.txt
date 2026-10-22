@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/bekci-gecikme.test.sh
-# rc=0 sure=1.8s zaman=2026-10-22T15:06:25+03:00
+# rc=0 sure=1.2s zaman=2026-10-22T15:10:36+03:00
 --- stdout ---
 ── G formül: kutu adından sabit gecikme, satıra düz rakam
   ✓ G1 code → 10 sn (cloudtop crontab-abc ile aynı sayı)

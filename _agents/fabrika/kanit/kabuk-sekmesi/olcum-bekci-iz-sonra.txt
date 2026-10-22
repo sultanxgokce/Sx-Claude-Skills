@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/bekci-iz.test.sh
-# rc=0 sure=1.7s zaman=2026-10-22T15:06:23+03:00
+# rc=0 sure=1.4s zaman=2026-10-22T15:10:35+03:00
 --- stdout ---
   ✓ H1 sahte tmux/crontab ortak.sh'tan sonra da öndedir (gerçek tmux'a DOKUNULMAZ)
 ── satır yok

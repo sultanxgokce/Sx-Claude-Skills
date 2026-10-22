@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/bekci-yorum.test.sh
-# rc=0 sure=1.1s zaman=2026-10-22T15:06:26+03:00
+# rc=0 sure=0.8s zaman=2026-10-22T15:10:37+03:00
 --- stdout ---
 ── Y kanon yorumu + doğru bekçi satırı: hiçbir şey değişmez
   ✓ Y1 crontab BAYT BAYT aynı kaldı (yorum bekçi satırı sanılmadı)

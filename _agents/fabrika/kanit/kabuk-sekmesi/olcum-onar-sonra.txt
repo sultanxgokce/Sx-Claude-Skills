@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/onar.test.sh
-# rc=0 sure=1.9s zaman=2026-10-22T15:05:45+03:00
+# rc=0 sure=2.6s zaman=2026-10-22T15:09:00+03:00
 --- stdout ---
 ── B · bekleme bütçesi (gerçek bekle_saglam)
   ✓ B1 ttyd bütçesi ≥20 sn

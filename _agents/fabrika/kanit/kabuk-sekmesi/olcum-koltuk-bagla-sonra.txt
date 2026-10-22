@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/koltuk-bagla.test.sh
-# rc=0 sure=6.8s zaman=2026-10-22T15:05:57+03:00
+# rc=0 sure=18.8s zaman=2026-10-22T15:09:45+03:00
 --- stdout ---
 A · bağlanma (kabul yüzü)
   ✓ A1 argümansız → ana oturum (bugünkü davranış aynı)

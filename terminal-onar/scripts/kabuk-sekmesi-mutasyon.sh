@@ -28,4 +28,6 @@ dene "KM6 kabuk gizlenir (Sultan göremez)" scripts/koltuk-bagla.sh 'gizli() { c
 dene "KM7 kadroda altyapı sayılmaz (kapatılabilir)" kapi/kadro.mjs "  if (a.endsWith('-kabuk')) return 'el kabuğu';" '' sh
 dene "KM8 kalkan yok sayılır (sınav gerçek sunucuya sızar)" $O '  [ -n "${TO_KABUK_YOK:-}" ] && return 0' '' sh
 dene "KM9 kapı kabuk bayrağını vermez" kapi/sunucu.mjs 'kabuk: k.ad === KABUK_TMUX,' 'kabuk: false,' kapi
+dene "KM10 hüküm new-session dönüşünden (yarışta yanıltıcı HATA)" $O '  tmux new-session -d -s "$KABUK_TMUX" -c "$PROJE" 2>/dev/null
+  if ! tmux_var "$KABUK_TMUX"; then' '  if ! tmux new-session -d -s "$KABUK_TMUX" -c "$PROJE" 2>/dev/null || ! tmux_var "$KABUK_TMUX"; then' sh
 echo "mutasyon: $gecti öldü (sınav kırmızı) · $dusen kaçtı"; [ "$dusen" -eq 0 ]

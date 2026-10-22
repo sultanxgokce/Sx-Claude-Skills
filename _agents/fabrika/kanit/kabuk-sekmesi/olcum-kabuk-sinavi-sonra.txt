@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/kabuk-sekmesi.test.sh
-# rc=0 sure=0.8s zaman=2026-10-22T15:05:36+03:00
+# rc=0 sure=1.6s zaman=2026-10-22T15:08:46+03:00
 --- stdout ---
 ── K · kabuk_kur
   ✓ K0 ad türetimi: <kutu>-kabuk
@@ -14,6 +14,8 @@ $ bash /config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts
   ✓ K3 kurulamazsa rc 1 (her denemede)
   ✓ K3b kurulamama günlüğe YALNIZ BİR KEZ (değişince) yazılır
   ✓ K3c düzelince yeniden kurulur ve durum ok olur
+  ✓ K5 yarışta (biri kurdu, öbürünün new-session'ı düştü) rc 0, durum ok
+  ✓ K5b yarışta yanıltıcı 'kurulamadı' satırı YAZILMAZ
   ✓ K4 TO_KABUK_YOK=1 → hiçbir şey kurulmaz (gerçek tmux koşturan sınavların kalkanı)
   ✓ K4b tmux-bekcisi sınavı bekçiyi kalkanla çağırır
 ── Ç · çağıranlar (kapı yerinde mi)
@@ -26,5 +28,5 @@ $ bash /config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts
   ✓ G2 kadroda altyapı: 'el kabuğu' (kapatılamaz)
   ✓ Y1 sarmalayıcı kullanıldı (tmux = sınav soketi)
   ✓ Y2 kutunun GERÇEK tmux sunucusuna oturum SIZMADI
-── SONUÇ: 22 geçti · 0 kaldı
+── SONUÇ: 24 geçti · 0 kaldı
 --- stderr ---

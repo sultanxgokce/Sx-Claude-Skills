@@ -151,7 +151,10 @@ tmux_var() { tmux has-session -t "=$1" 2>/dev/null; }
 kabuk_kur() {
   [ -n "${TO_KABUK_YOK:-}" ] && return 0
   tmux_var "$KABUK_TMUX" && { printf ok > "$DURUM_DIZ/kabuk.son" 2>/dev/null; return 0; }
-  if ! tmux new-session -d -s "$KABUK_TMUX" -c "$PROJE" 2>/dev/null || ! tmux_var "$KABUK_TMUX"; then
+  # Hüküm komutun dönüşünden DEĞİL oturumun varlığından (göz #415 rötus): onar.sh ile bekci.sh aynı anda koşarsa ikincisinin new-session'ı
+  #   "zaten var" diye düşer ama kabuk kurulmuştur — bu bir arıza değildir, yanıltıcı K0 HATA satırı yazılmaz.
+  tmux new-session -d -s "$KABUK_TMUX" -c "$PROJE" 2>/dev/null
+  if ! tmux_var "$KABUK_TMUX"; then
     [ "$(cat "$DURUM_DIZ/kabuk.son" 2>/dev/null)" = hata ] || gunluk "K0 HATA: el kabuğu $KABUK_TMUX kurulamadı"
     printf hata > "$DURUM_DIZ/kabuk.son" 2>/dev/null; return 1
   fi

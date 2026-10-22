@@ -50,6 +50,12 @@ python3 -c "import os,sys; os.remove(sys.argv[1])" "$T/bozuk"
 kabuk_kur; rc=$?
 kapi "K3c düzelince yeniden kurulur ve durum ok olur" "0 ok" "$rc $(cat "$DURUM_DIZ/kabuk.son")"
 
+# K5 yarış (göz #415): kabuk 'yok' görüldükten SONRA başkası kurar → new-session düşer ama oturum vardır → hata DEĞİL
+tmux kill-session -t "=sinav-kabuk"; h0=$(grep -c 'kurulamadı' "$GUNLUK")
+tmux_var() { [ "$1" = sinav-kabuk ] && [ -z "${_yaris_bir:-}" ] && { _yaris_bir=1; command tmux new-session -d -s sinav-kabuk -c "$PROJE"; return 1; }; command tmux has-session -t "=$1" 2>/dev/null; }
+kabuk_kur; rc=$?; unset -f tmux_var; tmux_var() { tmux has-session -t "=$1" 2>/dev/null; }
+kapi "K5 yarışta (biri kurdu, öbürünün new-session'ı düştü) rc 0, durum ok" "0 ok" "$rc $(cat "$DURUM_DIZ/kabuk.son")"
+kapi "K5b yarışta yanıltıcı 'kurulamadı' satırı YAZILMAZ" "$h0" "$(grep -c 'kurulamadı' "$GUNLUK")"
 tmux kill-session -t "=sinav-kabuk"
 TO_KABUK_YOK=1 kabuk_kur; rc=$?
 kapi "K4 TO_KABUK_YOK=1 → hiçbir şey kurulmaz (gerçek tmux koşturan sınavların kalkanı)" "0 h" "$rc $(tmux has-session -t "=sinav-kabuk" 2>/dev/null && echo e || echo h)"

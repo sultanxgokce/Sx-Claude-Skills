@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/koltuk-ac.test.sh
-# rc=0 sure=8.1s zaman=2026-10-22T15:06:06+03:00
+# rc=0 sure=15.5s zaman=2026-10-22T15:10:00+03:00
 --- stdout ---
 ── D · durum üç ayrı
   ✓ D1 oturum yok → durum=yok, yol=ekip-ac, rol çözüldü, resume mümkün

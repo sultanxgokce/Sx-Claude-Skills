@@ -1,5 +1,5 @@
 $ bash -c cd /config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/kapi && node kadro.test.mjs
-# rc=0 sure=0.0s zaman=2026-10-22T15:05:43+03:00
+# rc=0 sure=0.7s zaman=2026-10-22T15:08:57+03:00
 --- stdout ---
 ── A · kayıt ayrıştırma
   ✓ A1 dört üye, üç tırnak biçimi de okunur

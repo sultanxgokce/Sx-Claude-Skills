@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/kabuk-kapisi.test.sh
-# rc=0 sure=6.0s zaman=2026-10-22T15:05:51+03:00
+# rc=0 sure=26.0s zaman=2026-10-22T15:09:26+03:00
 --- stdout ---
 ── sahte kabukta DURMALI
   ✓ S1 /bin/false ile onarım durur (rc=3)

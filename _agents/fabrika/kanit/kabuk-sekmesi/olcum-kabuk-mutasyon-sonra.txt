@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/kabuk-sekmesi-mutasyon.sh
-# rc=0 sure=30.7s zaman=2026-10-22T15:06:57+03:00
+# rc=0 sure=21.7s zaman=2026-10-22T15:10:59+03:00
 --- stdout ---
   ✓ pozitif kontrol: dokunulmamış kopya YEŞİL
   ✓ KM1 var olanı yeniden kurar (öldürür) — sınav KIRMIZI
@@ -11,5 +11,6 @@ $ bash /config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts
   ✓ KM7 kadroda altyapı sayılmaz (kapatılabilir) — sınav KIRMIZI
   ✓ KM8 kalkan yok sayılır (sınav gerçek sunucuya sızar) — sınav KIRMIZI
   ✓ KM9 kapı kabuk bayrağını vermez — sınav KIRMIZI
-mutasyon: 9 öldü (sınav kırmızı) · 0 kaçtı
+  ✓ KM10 hüküm new-session dönüşünden (yarışta yanıltıcı HATA) — sınav KIRMIZI
+mutasyon: 10 öldü (sınav kırmızı) · 0 kaçtı
 --- stderr ---

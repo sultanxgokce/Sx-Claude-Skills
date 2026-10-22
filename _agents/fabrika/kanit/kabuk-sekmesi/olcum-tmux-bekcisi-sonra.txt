@@ -1,5 +1,5 @@
 $ bash /config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/tmux-bekcisi.test.sh
-# rc=0 sure=15.7s zaman=2026-10-22T15:06:21+03:00
+# rc=0 sure=33.2s zaman=2026-10-22T15:10:33+03:00
 --- stdout ---
 ── A · karar (sahte gerçek tmux)
   ✓ A1 $TMUX dolu + çıplak kill-server → RET, gerçek tmux çağrılmaz
