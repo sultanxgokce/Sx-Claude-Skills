@@ -1,0 +1,38 @@
+{
+  "tur": 6,
+  "is": "muhurdar-diploma",
+  "pr": "412",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-22T10:59:47+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 96490,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 43,
+    "bayt": 122597
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İstenen diploma sınavı, geçici gerçek usul koşusu, güvenli defter yazımı, bozuk satır yönetimi ve durum türetimi uygulanmış; önce/sonra ölçümü ile kapsamlı mutasyon sınavları da bunu destekliyor. Ancak sicil durumu ölçülemediğinde kod yine diplomayı “gecerli” ve rc 0 gösterebildiği için üretim öncesi bu güvenli-varsayım kusuru çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Sicil okunamadığında diploma yine “gecerli” türetilebiliyor. Geçerlilik için personelin askıda olmadığının bilinmesi gerekir; sicil ölçülemezken rc 0 ile geçerli hükmü vermek, askı bilgisini sessizce etkisizleştiren rahatlatıcı bir sonuçtur.",
+        "kanit": "sicil_durumu() başarısızlıkta None döndürüyor; durum() yalnız `sic == \"askida\"` dalında askıya alıyor ve sicil None iken sürüm/küme güncelse `hal = \"gecerli\"` seçip sonunda rc 0 döndürüyor. Dosyanın kendi açıklaması de bunu açıkça “Sicil okunamazsa diploma geçerli görünse de” diye tarif ediyor.",
+        "konum": "tescil/scripts/lib/diploma.py: sicil_durumu() ve durum()",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önce kırmızı/sonra yeşil ölçüm çifti var; gerçek yargıç 6/6 isabet, gerçek defterin değişmediği, geçerli→bayat türetimi ve temiz sicil sözleşmesi gösteriliyor. diploma.test 50/0 ve hedefli mutantlar; ayrıca muhurdar 32/0 ile sicil 53/0 yeşil. Bununla birlikte yeşil sınavlar sicil okunamaması halinde “gecerli” hükmünü reddeden bir kapı göstermiyor; gerçek ölçüm yalnız temiz sicil yolunu doğruluyor."
+  }
+}

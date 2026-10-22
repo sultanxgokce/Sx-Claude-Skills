@@ -1,0 +1,59 @@
+{
+  "tur": 2,
+  "is": "muhurdar-diploma",
+  "pr": "412",
+  "yazan": "claude",
+  "denetci": "claude (sonnet) (YEDEK GÖZ: codex düştü (2 deneme, rc=1) · yazandan farklı yeni oturum + farklı model kademesi [yazan: opus] · Sultan Y0006)",
+  "zaman": "2026-10-22T04:09:39+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": "codex düştü (2 deneme, rc=1)",
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": "sonnet",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 61580,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 14,
+    "bayt": 35860
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Talep kapsamlı karşılanmış: 6 örneklik küme, diploma.sh sina/durum, §6 satırı, geçerli/bayat/yok/askıda türetimi, gerçek sicile ve telemetriye yazmama. Önceki turun bulguları kodda ve 34 kapılı sınavda kapanmış. 4 verdim: askıda yolunun gerçek sicil.py ile sözleşmesi hiç doğrulanmadı, sicil ayrımı ölçülemiyor.",
+    "bulgular": [
+      {
+        "ne": "Askıda yolu yalnız sahte sicil.py ile sınandı. Gerçek sicil ile `durum --json` sözleşmesi hiç doğrulanmadı. Gerçek koşuda iki kez 'sicil ölçülemedi' çıktı, yani askıda dalı üretimde hiç tetiklenmemiş.",
+        "kanit": "olcum-diploma-sonra.txt: 'durum: gecerli … sicil ölçülemedi' ve 'durum: bayat … sicil ölçülemedi'. diploma.test.sh kapı i, lib/sicil.py'yi `print(json.dumps({\"durum\":\"askida\"}))` ile ezip sınıyor. sicil_durumu() başarısızlığı sessizce None'a çeviriyor.",
+        "konum": "tescil/scripts/lib/diploma.py:sicil_durumu · tescil/scripts/diploma.test.sh kapı i",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "'Gerçek sicile yazmaz' ayrımı ölçülemiyor. mutant sicil-ayrimi-yok ÖLÇÜLEMEDİ. Kapı e yalnız sicil dosyasının değişmediğini sınıyor, SICIL_DIZIN yönlendirmesini sınamıyor. Ayrım şimdilik muhurdar.sh'ın sicile yazmamasına bağlı.",
+        "kanit": "olcum-diploma-sinavi-tek.txt: 'ÖLÇÜLEMEDİ mutant sicil-ayrimi-yok: muhurdar.sh sicile yazmıyor (yazıcı Sx #411)'. Test dürüstçe sarı bırakmış.",
+        "konum": "tescil/scripts/diploma.test.sh (mutant sicil-ayrimi-yok)",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Her türde yalnız 2 örnek var ve geçme koşulu tam puan. Tek bir LLM yargıç dalgalanması diplomayı düşürür, yeniden deneme yok. Örnek metinleri depoda açık, ezberlenebilir.",
+        "kanit": "olcum-diploma-sonra.txt: 4 örnekte yargıç 'codex→claude' düşmüş. Küme dosyaları sinav/ altında düz metin.",
+        "konum": "tescil/sinav/ · lib/diploma.py:sina",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "`--kanit` verilmezse mkdtemp ile açılan kanıt dizini temizlenmiyor. diploma.sh kullanım metni `sed -n '2,6p'` olduğu için 'Ortam:' satırını basmıyor.",
+        "kanit": "diploma.py: `kanit = os.path.abspath(a.kanit or tempfile.mkdtemp(...))`. diploma.sh başlığında Ortam satırı 7. satırda.",
+        "konum": "tescil/scripts/lib/diploma.py:sina · tescil/scripts/diploma.sh:8",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sha'lar tutuyor. Önce/sonra çifti gerçek: önce kırmızı (diploma yok, rc=1), sonra yeşil (rc=0). Sonra koşusu iki yargıçla yapılmış: lastik yargıç kusurlu 1/2 ve uydurma 0/2 ile KALDI, gerçek yargıç 6/6 ile GEÇTİ. Gerçek defter önce/sonra aynı. 34/0'lık hermetik sınavın 13 mutantından 12'si hedef kapıyı düşürüyor. Mutant sicil-ayrimi-yok ölçülemedi ve açıkça öyle yazılmış; yeşile sayılmamış. 'sicil ölçülemedi' notu iki durum çıktısında da duruyor, yani askıda dalının gerçek sicille hiç görülmediği kanıtta açık. Gerçek yargıç koşusu tek seferlik ve LLM tabanlı; tekrarlanabilirliği hermetik sahte yargıç sınavı sağlıyor."
+  }
+}

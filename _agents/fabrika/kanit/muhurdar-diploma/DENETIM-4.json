@@ -1,0 +1,59 @@
+{
+  "tur": 4,
+  "is": "muhurdar-diploma",
+  "pr": "412",
+  "yazan": "claude",
+  "denetci": "claude (sonnet) (YEDEK GÖZ: codex düştü (2 deneme, rc=1) · yazandan farklı yeni oturum + farklı model kademesi [yazan: opus] · Sultan Y0006)",
+  "zaman": "2026-10-22T10:22:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": "codex düştü (2 deneme, rc=1)",
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": "sonnet",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 85842,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 27,
+    "bayt": 75950
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kart talebi karşılanmış: doğru/kusurlu/uydurma kümesi, gerçek muhurdar.sh usulüyle geçici kökte sınama, §6 defter satırı ve geçerli/bayat/yok/askıda türetimi var; önce kırmızı/sonra yeşil çifti ve mutasyonlu hermetik sınav (44/0) araç imzalı. 4 verdim: ciddi hata yok, ama ölçüm gücü ve birkaç dayanıklılık noktası rötuş olarak kaldı.",
+    "bulgular": [
+      {
+        "ne": "Yazım başarısız/yarım kalırsa (disk dolu) deftere bozuk satır girer; sina geri okumada bozuğu yalnız uyarı olarak basıp rc 0/1 döner, bozuk satır sonrası durum komutu kalıcı olarak ölçülemedi (rc 3) verir ve ters kayıt dışında kendiliğinden toparlanmaz.",
+        "kanit": "diploma.py sina: f.write sonrası yalnız `satir not in geri` denetimi; durum: bozuk varsa hata(...,3). Yarım yazılmış satır kendi sonrası tüm sınavları kilitler.",
+        "konum": "tescil/scripts/lib/diploma.py:sina/durum",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Kapı n (cevap anahtarı istemde yok) yalnız sahte yargıç istemlerini denetler; gerçek yargıcın dosya sistemini okuyup beklenen.json'u bulabilmesi ölçülmüyor. README/SKILL bunu dürüstçe sınır olarak yazmış, ama kümede türde yalnız 2 örnek var ve gerçek yargıç koşusu tek seferlik.",
+        "kanit": "olcum-diploma-sonra.txt gerçek yargıç 6/6; diploma.test.sh kapı n yalnız istem-*.md grep'i; sinav/README.md 'Dürüst sınır' bölümü.",
+        "konum": "tescil/sinav/ · diploma.test.sh kapı n",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Sicil sözleşmesinin (i2) gerçek yazıcıyla ölçümü bu dalda yok; bu daldaki kanıtta 'sicil ölçülemedi' yazıyor, #411 önizlemesi ayrı bir ölçüm. Birleşme sırası #411→#412 gerekli.",
+        "kanit": "olcum-diploma-sonra.txt 'sicil ölçülemedi (sicil dizini yok…)'; olcum-onizleme-411-tek.txt 44 geçti 0 kaldı.",
+        "konum": "tescil/scripts/diploma.test.sh kapı i2 / i2-yok",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Sınav koşuları içinde ana süreç çökerse (SIGKILL) diploma-kok-* geçici dizinleri /tmp'de kalır; finally yalnız normal çıkışta temizler.",
+        "kanit": "diploma.py sina: tempfile.mkdtemp + try/finally rmtree; sinyal işleyici yok.",
+        "konum": "tescil/scripts/lib/diploma.py:sina",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı, sha'lar tutuyor, sarı kayıt yok. Önce kırmızı (diploma yok, rc 1) / sonra yeşil (rc 0) çifti gerçek; sonra koşusunda lastik yargıç KALDI, gerçek yargıç 6/6 GEÇTİ, gerçek defter dokunulmadan kaldı. Hermetik sınav 44/0 (18 mutant), muhurdar 32/0 ve sicil 53/0 yeşil. Gerçek yargıç koşusu tek seferlik ve LLM tabanlı; tekrarlanabilirliği sahte yargıçlı sınav sağlıyor. Sicil bağlantısı bu dalda ölçülemedi diyor, #411 önizlemesi (44/0) bunu kapatıyor."
+  }
+}
