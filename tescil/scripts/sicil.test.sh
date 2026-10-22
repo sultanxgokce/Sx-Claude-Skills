@@ -289,7 +289,7 @@ _m y lib/sicil.py '    fcntl.flock(kilit, fcntl.LOCK_EX)' '    pass' "yazım kil
 _m y lib/sicil.py '    if onkosul:
         onkosul(oku(yol))' '    pass' "kilit içi zaten-işlendi denetimi düşüyor"
 _m z muhurdar.sh '    rc=5' '    :' "muhurdar.sh düşen sicil yazımını yutuyor"
-_m z muhurdar.sh ' --yoksa-gec \' ' \' "özlüğü olmayan mühürdar da 'düşmedi' sayılıyor"
+_m z muhurdar.sh ' --yoksa-gec ${BASSIZ[@]+"${BASSIZ[@]}"} \' ' ${BASSIZ[@]+"${BASSIZ[@]}"} \' "özlüğü olmayan mühürdar da 'düşmedi' sayılıyor"
 _m s lib/sicil.py '        if x.get("tur") == "muhur" or x.get("gorev") not in son:' '        if x.get("gorev") not in son:' "pencere olay yerine görev sayıyor"
 _m u lib/sicil.py '    if a.get("neden") and (a["neden"].strip() != (ks.get("neden") or "").strip()):' '    if False:' "Sultan'ın cümlesi değiştirilebiliyor"
 _m aa lib/sicil.py '               for x in isabetler(d)[0]):' '               for x in []):' "aynı isabet iki kez yazılıyor"

@@ -13,7 +13,9 @@
 #
 # Kullanım:
 #   AGENT_NAME=<mühürdar> muhurdar.sh <iş> --gereklilik <yol> --worktree <yol> --out <dizin> --yazan <inşacı>
-#                                     [--head-sha <sha>] [--deneme <n>] [--tatbikat]
+#                                     [--head-sha <sha>] [--deneme <n>] [--tatbikat] [--bassiz]
+#   --bassiz (S14 başsız şapka): taşıyan bekleme süresinde başlamadı, yedek koşu. Usul AYNI (biçim → kendi-işi → mekanik → kör
+#            yargıç); mühür başlığı + özet başsız olduğunu taşır, sicil mühür kaydı bassiz: e (taşıyanın siciline). Kod yazmaz, birleştirmez.
 # RC: tescil-run ile aynı — 0=GECTI · 1=KALDI · 2=kullanım/harness · 3=ESKALASYON|KATMAN2-BEKLIYOR · 4=İSİMLİ-RED
 #     · 5=mühür basıldı ama özlüğü olan mühürdarın siciline DÜŞMEDİ (verdikt özette; özet `sicil: dusmedi …`)
 # Ortam: MUHURDAR_MODEL=claude (Codex'i bilerek atla) · MUHURDAR_ZAMAN_ASIMI (sn, varsayılan 900)
@@ -23,7 +25,7 @@ LIB="$HERE/lib"
 
 kullanim() { sed -n '2,20p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 2; }
 IS="${1:-}"; [ -n "$IS" ] || kullanim; case "$IS" in --*) kullanim ;; esac; shift
-GEREKLILIK="" WORKTREE="" OUT="" YAZAN="" HEAD_SHA="" DENEME=1 TATBIKAT=()
+GEREKLILIK="" WORKTREE="" OUT="" YAZAN="" HEAD_SHA="" DENEME=1 TATBIKAT=() BASSIZ=()
 while [ $# -gt 0 ]; do
   case "$1" in
     --gereklilik) GEREKLILIK="${2:-}"; shift 2 ;;
@@ -33,6 +35,7 @@ while [ $# -gt 0 ]; do
     --head-sha)   HEAD_SHA="${2:-}"; shift 2 ;;
     --deneme)     DENEME="${2:-1}"; shift 2 ;;
     --tatbikat)   TATBIKAT=(--tatbikat); shift ;;
+    --bassiz)     BASSIZ=(--bassiz); shift ;;
     *) echo "muhurdar: bilinmeyen argüman: $1 (yargıca rapor/transkript verilemez — kör protokol)" >&2; exit 2 ;;
   esac
 done
@@ -118,14 +121,14 @@ done
 SHA="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("worktree_head_sha") or "")' "$OUT/muhur-ozet.json" 2>/dev/null)"
 [ -n "$SHA" ] || SHA="$(git -C "$WORKTREE" rev-parse HEAD 2>/dev/null)"
 python3 "$LIB/muhur.py" uret --out "$OUT" --kart "$IS" --deneme "$DENEME" --head-sha "$SHA" ${K2[@]+"${K2[@]}"} \
-  ${TATBIKAT[@]+"${TATBIKAT[@]}"} --muhurdar "$MUHURDAR" --yazan "$YAZAN" ${YARGIC:+--yargic "$YARGIC"} >/dev/null; rc=$?
+  ${TATBIKAT[@]+"${TATBIKAT[@]}"} ${BASSIZ[@]+"${BASSIZ[@]}"} --muhurdar "$MUHURDAR" --yazan "$YAZAN" ${YARGIC:+--yargic "$YARGIC"} >/dev/null; rc=$?
 bash "$HERE/muhur-lint.sh" "$OUT" >/dev/null 2>&1 || echo "muhurdar: muhur-lint UYARI (report-only, verdikt etkilenmez)" >&2
 # sicil (G11 · S10): her mühür mühürdarın siciline düşer — pencere bunlardan sayılır; Sultan'ın satırları sonra teslim-isle ile gelir.
 #   Özlük dosyası yoksa mühür DÜŞMEZ, söylenir (özlük KÂHYA'nın işi). Özlük VARKEN yazım düşerse sessiz geçilmez (göz #411 tur 4):
 #   pencere bir olay eksik sayardı → özete `sicil: dusmedi …` ve rc 5. Verdikt değişmez (MUHUR.md + özette durur).
 _VER="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("verdikt",""))' "$OUT/muhur-ozet.json" 2>/dev/null)"
 if [ -n "$_VER" ] && [ "$_VER" != RED ]; then
-  if ! python3 "$LIB/sicil.py" muhur "$MUHURDAR" --gorev "$IS" --verdikt "$_VER" --yoksa-gec \
+  if ! python3 "$LIB/sicil.py" muhur "$MUHURDAR" --gorev "$IS" --verdikt "$_VER" --yoksa-gec ${BASSIZ[@]+"${BASSIZ[@]}"} \
     --el-kitabi-surum "$(awk -F': *' '/^version:/{print $2; exit}' "$HERE/../SKILL.md")" >/dev/null 2>"$OUT/.sicil.err"; then
     _SE="$(grep -m1 -v '^Traceback' "$OUT/.sicil.err")"
     echo "muhurdar: sicile mühür kaydı DÜŞMEDİ — $_SE (rc 5; pencere bu mühürü saymaz, sicile elle bakılmalı)" >&2
@@ -137,5 +140,5 @@ PYS
   fi
 fi
 V="$(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(d["verdikt"], "· 👤 Sultanda:", " ".join(d.get("sultan_denemesi") or []) or "yok")' "$OUT/muhur-ozet.json" 2>/dev/null)"
-echo "muhurdar: $IS · mühürdar $MUHURDAR · yazan $YAZAN · verdikt $V${YARGIC:+ · yargıç $YARGIC}"
+echo "muhurdar: $IS · mühürdar $MUHURDAR · yazan $YAZAN · verdikt $V${YARGIC:+ · yargıç $YARGIC}${BASSIZ[@]:+ · BAŞSIZ ŞAPKA}"
 exit "$rc"

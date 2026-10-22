@@ -105,6 +105,23 @@ _sen() {  # _sen <scripts-dir> → geçen kapı anahtarları
   [ $? -eq 3 ] && grep -q "worktree dışında" "$O/MUHUR.md" && ! grep -qs "$(cat /etc/hostname 2>/dev/null || echo YOK-HOSTNAME)" "$T"/istem-claude-*.md && o="$o m"
   _kos "$s" "$O" "$T/bin-claude:" AGENT_NAME=MUHURDAR1 -- --gereklilik "$K/GEREKLILIK.md" --yazan HENDESE --rapor "$W/RAPOR.md"
   [ $? -eq 2 ] && grep -q "kör protokol" "$T/son.log" && o="$o n"
+  # u · S14 başsız şapka: --bassiz aynı usulle koşar; MUHUR başlığı + özet başsız, sicil mühür kaydı bassiz e (taşıyanın siciline);
+  #     --bassiz'siz koşuda özet bassiz false, sicil kaydı bassiz h
+  local SU="$T/sic-u"; find "$SU" -mindepth 1 -delete 2>/dev/null; mkdir -p "$SU"
+  printf 'personel_no: "01.098"\npersona: MUHURDAR1\ngecmis: []\n' > "$SU/01.098.yaml"
+  _kos "$s" "$O" "$T/bin-claude:" AGENT_NAME=MUHURDAR1 MUHURDAR_MODEL=claude SICIL_DIZIN="$SU" -- --gereklilik "$K/GEREKLILIK.md" --yazan HENDESE --bassiz; local ru=$?
+  local bu; bu="$(_alan bassiz "$O")"; local ou; ou="$(python3 -c "import json,sys;print(json.load(open(sys.argv[1])).get('bassiz'))" "$O/muhur-ozet.json" 2>/dev/null)"
+  _kos "$s" "$O" "$T/bin-claude:" AGENT_NAME=MUHURDAR1 MUHURDAR_MODEL=claude SICIL_DIZIN="$SU" -- --gereklilik "$K/GEREKLILIK.md" --yazan HENDESE; local ru2=$?
+  [ $ru -eq 0 ] && [ $ru2 -eq 0 ] && case "$bu" in "evet "*) true ;; *) false ;; esac && [ "$ou" = True ] && [ -z "$(_alan bassiz "$O")" ] \
+    && python3 - "$SU/01.098.yaml" "$O/muhur-ozet.json" <<'PY' 2>/dev/null && o="$o u"
+import json, sys, yaml
+x = [i for i in yaml.safe_load(open(sys.argv[1]))["isabet"] if i.get("tur") == "muhur"]
+assert [i["bassiz"] for i in x] == ["e", "h"], x
+assert json.load(open(sys.argv[2]))["bassiz"] is False
+PY
+  # v · başsız koşu kendi-işi kuralına AYNEN tabi: yazan = taşıyan → İSİMLİ-RED kendi-isi, yargıç çağrılmaz
+  _kos "$s" "$O" "$T/bin-claude:" AGENT_NAME=MUHURDAR1 MUHURDAR_MODEL=claude -- --gereklilik "$K/GEREKLILIK.md" --yazan muhurdar1 --bassiz
+  [ $? -eq 4 ] && grep -q "kendi-isi" "$O/MUHUR.md" && [ ! -e "$T/claude-n" ] && o="$o v"
   echo "$o"
 }
 _k() { case " $2 " in *" $1 "*) return 0;; esac; return 1; }
@@ -130,6 +147,8 @@ _k j "$S0"; g $? "j yargıç KALDI derse verdikt KALDI, rc 1"
 _k l "$S0"; g $? "l tarifsiz 👤 Sultan denemesi biçim kapısında reddedilir (gereklilik-eksik)"
 _k m "$S0"; g $? "m hedef iş ağacı dışına kaçarsa istem kurulmaz → EMIN-DEGILIM, dış dosya istemde yok"
 _k n "$S0"; g $? "n yargıca rapor verme yolu yok: bilinmeyen argüman (--rapor) rc 2"
+_k u "$S0"; g $? "u S14 başsız şapka: --bassiz aynı usul; MUHUR + özet başsız, sicil mühür kaydı bassiz e (taşıyanın siciline); normal koşuda h"
+_k v "$S0"; g $? "v başsız koşu kendi-işi kuralına tabi: yazan = taşıyan → kendi-isi reddi, yargıç çağrılmaz"
 
 echo "── G8 · MUTASYON (tescil kopyasında, kontrol şartlı) ──"
 _kopya() { local d="$T/m-$1"; mkdir -p "$d"; cp -r "$HERE/.." "$d/tescil"; echo "$d/tescil/scripts"; }
@@ -142,6 +161,9 @@ PY
   ! _k "$1" "$(_sen "$d")"; g $? "mutant ($5) → '$1' kapısı düşüyor"
 }
 _m a muhurdar.sh 'if [ "$ayni" = 1 ]; then' 'if false; then' "kendi-işi kapısı yok"
+_m v muhurdar.sh 'if [ "$ayni" = 1 ]; then' 'if [ "$ayni" = 1 ] && [ ${#BASSIZ[@]} -eq 0 ]; then' "başsız koşu kendi-işi kapısını atlıyor"
+_m u muhurdar.sh '  ${TATBIKAT[@]+"${TATBIKAT[@]}"} ${BASSIZ[@]+"${BASSIZ[@]}"} --muhurdar' '  ${TATBIKAT[@]+"${TATBIKAT[@]}"} --muhurdar' "mühür başsız olduğunu taşımıyor"
+_m u muhurdar.sh '--yoksa-gec ${BASSIZ[@]+"${BASSIZ[@]}"} \' '--yoksa-gec \' "sicil mühür kaydı bassiz e değil"
 _m q muhurdar.sh 'bash "$HERE/muhur-lint.sh" "$OUT" >/dev/null 2>&1 ||' '"${TR[@]}" ${K2[@]+"${K2[@]}"} >/dev/null 2>&1; bash "$HERE/muhur-lint.sh" "$OUT" >/dev/null 2>&1 ||' "mühürden önce mekanik G yeniden koşuluyor"
 _m r muhurdar.sh '  if [ "$yrc" -ne 0 ]; then' '  if [ "$yrc" -ne 0 ] && [ "$yrc" -ne 124 ]; then' "zaman aşımında Claude'a geçilmiyor"
 _m t muhurdar.sh 'k=lambda s: s.strip().replace("İ","I").replace("ı","i").casefold()' 'k=lambda s: s.strip().casefold()' "Türkçe harf katlanmıyor (MUHAKKİK ≠ MUHAKKIK)"
