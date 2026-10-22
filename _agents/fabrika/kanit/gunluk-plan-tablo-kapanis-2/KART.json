@@ -17,5 +17,15 @@
   "durum": "acik",
   "gecmis": [],
   "canli_gerekir": false,
-  "canli_sebep": ""
+  "canli_sebep": "",
+  "sultan_kararlari": [
+    {
+      "karar": "devam",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+      "soz": "Devam, bir tur daha (önerim)",
+      "beyan": "SERDAR",
+      "gerekce": "göz iki turda da koddaki tam eşleşmeyi görmedi; dört olumsuz örnek canlı ölçümde rc=2 (imzalı kanıt); bulgu kanıtsız, iş ilerliyor",
+      "zaman": "2026-10-17T21:10:54+03:00"
+    }
+  ]
 }

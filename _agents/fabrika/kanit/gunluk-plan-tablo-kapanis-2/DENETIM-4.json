@@ -1,0 +1,30 @@
+{
+  "tur": 4,
+  "is": "gunluk-plan-tablo-kapanis-2",
+  "pr": "366",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T21:11:20+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 90269,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 47,
+    "bayt": 123127
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Tek bugün tablosu, ortak BÂNİ satır sözleşmesi ve açık maddeyi reddeden kapanış kapısı birlikte kurulmuş; erteleme de Sultan’ın D1 kararının sonuç kısmında tam eşleşmeyle sınırlandırılmış. Önceki turun kaynak–kanıt çelişkisi giderilmiş, karşı örnekler ve mutasyon sınavları teslim edilen dar kapıyı ölçtüğü için üretime engel bulgu kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçüm çifti eski yanlış kabulün düzeldiğini gösteriyor; 76+33 sınav, 8 maddelik ortak fikstür uyumu, canlı tam-eşleşme karşı örnekleri ve hem cipa hem tablo mutantlarını düşüren mutasyon ölçümleri talebin ana yüzeylerini doğrudan kapsıyor."
+  }
+}
