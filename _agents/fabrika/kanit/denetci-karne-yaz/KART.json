@@ -1,0 +1,31 @@
+{
+  "is": "denetci-karne-yaz",
+  "cumle": "denetci.sh her göz turunun sonunda karne.sh yaz'ı kendisi çağırır (birincil depodaki karne.jsonl'a o turun satırı; yazılamazsa söyler, turun sonucunu değiştirmez); karne.sh ozet kartı bitmiş 5/H işi 'kırıldı adayı' diye listeler",
+  "istedi": "Sultan",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-22T17:32:46+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M54B7BTJPJGNAQ0KV3NPTHAQ",
+  "tahmin_dk": 90,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-22T17:32:46+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

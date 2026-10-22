@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "denetci-karne-yaz",
+  "pr": "418",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-22T18:02:24+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 69912,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 12,
+    "bayt": 79257
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Denetçi her turun kaydını birincil karneye yazıyor, yazma hatasını turun sonucundan ayırıyor ve özet bitmiş 5/H işleri kırıldı adayı olarak gösteriyor; talebin iki ayağı da doğrudan ölçülmüş. Önce şunu çözün: regresyon sınavı sekiz açık git checkout hatasına rağmen yeşil bitiyor, dolayısıyla üretime hazır demeden önce sınavın durum geçişlerini gerçekten başardığı güvenceye alınmalı.",
+    "bulgular": [
+      {
+        "ne": "denetci-kayit-commit sınavı, git checkout işlemleri başarısız olduğu halde rc=0 ve 14/14 başarı bildiriyor; sınav betiği bu altyapı hatalarını yutuyor ve sonraki kontrollerin amaçlanan dal durumunda çalıştığını güvenilir biçimde kanıtlamıyor.",
+        "kanit": "olcum-denetci-kayit-commit-sinavi-tek.txt stderr bölümünde sekiz kez “Your local changes ... _agents/fabrika/karne.jsonl ... Aborting” yazarken aynı kaydın stdout'u “SONUÇ: 14 geçti · 0 kaldı” ve manifest rc=0 gösteriyor.",
+        "konum": "kanıt kaydı: denetci-kayit-commit-sinavi / olcum-denetci-kayit-commit-sinavi-tek.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; hedef davranış için kırmızı önce/yeşil sonra ölçüm çifti var ve sonra ölçümü 22/22 kapıyla birlikte dokuz mutasyonun ilgili kapıları düşürdüğünü gösteriyor. Sarı kayıt yok; ayrıca karne, denetçi ve çevre regresyonları yeşil. Ancak denetci-kayit-commit kaydındaki bastırılmış checkout hataları, tüm regresyon kanıtının temiz olduğu iddiasını zedeliyor."
+  }
+}
