@@ -1,5 +1,5 @@
 $ bash tescil/scripts/sicil.test.sh
-# rc=0 sure=97.4s zaman=2026-10-22T08:55:37+03:00
+# rc=0 sure=206.6s zaman=2026-10-22T09:13:42+03:00
 --- stdout ---
 ════ G11 · S10 · Mühürdarlık sicil · ders çıkarma · askı (sicil.sh) ════
   ✓ a isabet Sultan'ın DOĞRULANMIŞ kaydıyla yazılır (kaçırma = mühür ✓ + sağlanmadı; cümle kayıttan), öbür alanlar korunur
@@ -20,6 +20,8 @@ $ bash tescil/scripts/sicil.test.sh
   ✓ q teslim-isle: Sultan'ın tek kararı → sınanan her satır (👤 atlanır, düşen G'de mühür ✗); tekrar · kısmi karar · başkasının mühürü · başka görevin mühürü · cümlesiz sağlanmadı reddedilir
   ✓ w teslim tek yazım: 2. yazım açılışı düşse de teslim tam; yerine koyma düşerse dosya aynı, geçici dosya kalmaz, yeniden deneme geçer
   ✓ x teslim yolunda geçersiz hüküm (katiliyorum|saglanmadi dışı) sicile yazılmaz, rc 2
+  ✓ y eşzamanlı yazım kilitli: geciktirilmiş iki mühür kaydı ikisi de durur; aynı kararla iki eşzamanlı teslimden yalnız biri yazar
+  ✓ z muhurdar.sh: özlük varken sicil yazımı düşerse rc 5 + özette 'sicil: dusmedi'; özlük/sicil yoksa atlanır, rc mühürün
   ✓ s pencere mühür OLAYI sayar: aynı görevin 10 yeniden mühürü eski kaçırmaları dışarı iter (askida → temiz)
   ✓ u Sultan'ın cümlesi kayıttan gelir; farklı --neden ile yazılmaz (A06)
   ✓ v Türkçe harf katlama: özlükte MUHAKKİK, çağrıda MUHAKKIK/muhakkik → aynı kişi
@@ -41,10 +43,14 @@ $ bash tescil/scripts/sicil.test.sh
   ✓ mutant (teslim satır satır yazılıyor (yarıda kalırsa kısmi sicil)) → 'w' kapısı düşüyor
   ✓ mutant (yarıda kalan yazım geçici dosyayı bırakıyor) → 'w' kapısı düşüyor
   ✓ mutant (teslim yolunda geçersiz hüküm yazılıyor) → 'x' kapısı düşüyor
+  ✓ mutant (yazım kilitsiz (eşzamanlı iki yazım birbirini siler)) → 'y' kapısı düşüyor
+  ✓ mutant (kilit içi zaten-işlendi denetimi düşüyor) → 'y' kapısı düşüyor
+  ✓ mutant (muhurdar.sh düşen sicil yazımını yutuyor) → 'z' kapısı düşüyor
+  ✓ mutant (özlüğü olmayan mühürdar da 'düşmedi' sayılıyor) → 'z' kapısı düşüyor
   ✓ mutant (pencere olay yerine görev sayıyor) → 's' kapısı düşüyor
   ✓ mutant (Sultan'ın cümlesi değiştirilebiliyor) → 'u' kapısı düşüyor
   ✓ mutant (Türkçe harf katlanmıyor) → 'v' kapısı düşüyor
   ✓ mutant (muhurdar.sh siciline mühür kaydı yazmıyor) → 'r' kapısı düşüyor
 
-── SONUÇ: 42 geçti · 0 kaldı ──
+── SONUÇ: 48 geçti · 0 kaldı ──
 --- stderr ---

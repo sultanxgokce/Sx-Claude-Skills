@@ -1,7 +1,7 @@
 {
   "is": "muhurdar-sicil",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-22T08:57:51+03:00",
+  "guncelleme": "2026-10-22T09:13:42+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -26,7 +26,7 @@
       "etiket": "sicil",
       "asama": "sonra",
       "dosya": "olcum-sicil-sonra.txt",
-      "sha256": "8ebc1129edc58c0b0084cb68e5c1661468423d85a76e5c671d1903101ea41479",
+      "sha256": "00004aea752f69af7fdc046d9d9a3fe228c63d903e2f64d4722e8fd1e518a8bd",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/muhurdar-sicil/sicil-olcer.sh",
@@ -34,45 +34,45 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-22T08:55:51+03:00",
-      "sure_sn": 2.0,
+      "zaman": "2026-10-22T09:06:15+03:00",
+      "sure_sn": 0.8,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "bad1a354ffa048c3b9ff39a29b1ec690"
+      "olcum_id": "e6f0cc6963ca43839d1ce6560e347379"
     },
     {
       "tur": "olcum",
       "etiket": "sicil-sinavi",
       "asama": "tek",
       "dosya": "olcum-sicil-sinavi-tek.txt",
-      "sha256": "accc76248a79e0287b25d66da16dde3c95c3e8c9c9754d7cc30a9eab9cab72b4",
+      "sha256": "f6839d1664784f9595d61eb90c9e51f86e77a678fecbb08fb3ceb935030662f2",
       "komut": [
         "bash",
         "tescil/scripts/sicil.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-22T08:55:37+03:00",
-      "sure_sn": 97.4,
+      "zaman": "2026-10-22T09:13:42+03:00",
+      "sure_sn": 206.6,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "c689317ddb464f6fbfb8e62eaba013a8"
+      "olcum_id": "4b3f5a1d0e8d45e0b2652a2c9cde1913"
     },
     {
       "tur": "olcum",
       "etiket": "muhurdar-sinavi",
       "asama": "tek",
       "dosya": "olcum-muhurdar-sinavi-tek.txt",
-      "sha256": "aaf5587f1abef0fb597ed1fc92f1899f3de024b27d556eb3701761c52b60b1b3",
+      "sha256": "b2b4e80cc6b7ddee1d2b523b7feb7d1f997c2bb399344969d77da7467079a7cf",
       "komut": [
         "bash",
         "tescil/scripts/muhurdar.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-22T08:57:51+03:00",
-      "sure_sn": 119.2,
+      "zaman": "2026-10-22T09:06:14+03:00",
+      "sure_sn": 111.9,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "727c5415f58a4619b188a2674fdf0e50"
+      "olcum_id": "63e6cb8522f5419aaeb19f08290df560"
     }
   ],
-  "imza": "460c87cf62aef49ee3dead11afc6153ecfbf0185cfc8eaad0cf5780c82aa5b39"
+  "imza": "cfdaa9ef86b07e3dd8ac23104af2b7ad79aad443d03118b33f966d39ea4dfe64"
 }

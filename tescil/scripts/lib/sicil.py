@@ -22,6 +22,7 @@ gruplar), `neden` (Sultan'ın tek cümlesi), `kaynak` (Sultan'ın kaydı — A06
 RC: 0 tamam · 2 kullanım/biçim/kaynak · 3 ölçülemedi (özlük dosyası yok, YAML okunamadı) — yazılmaz.
 """
 import datetime
+import fcntl
 import json
 import os
 import re
@@ -56,6 +57,20 @@ def hata(m, rc=2):
 def simdi():
     # mikrosaniye: ts satırın anahtarıdır (ders-bagla ts ile bağlar); saniyede birden çok satır düşebilir (sınavda ölçüldü)
     return datetime.datetime.now().astimezone().isoformat(timespec="microseconds")
+
+
+def ozluk_var(ad):
+    """özlük dosyası ya da sicil dizini YOKSA False (bilinen durum: sicili olmayan mühürdarın penceresi de yok)."""
+    if not os.path.isdir(SICIL_DIZIN):
+        return False
+    for f in os.listdir(SICIL_DIZIN):
+        if f.endswith(".yaml"):
+            with open(os.path.join(SICIL_DIZIN, f), encoding="utf-8") as h:
+                for satir in h:
+                    m = re.match(r"^persona:\s*(\S+)", satir)
+                    if m and ad_kat(m.group(1).strip("\"'")) == ad_kat(ad):
+                        return True
+    return False
 
 
 def ozluk_bul(ad):
@@ -99,12 +114,18 @@ def ekle(yol, kayit):
     ekle_toplu(yol, [kayit])
 
 
-def ekle_toplu(yol, kayitlar):
+def ekle_toplu(yol, kayitlar, onkosul=None):
     """append-only: `isabet:` dosyanın SON üst düzey anahtarı olmalı (yoksa açılır); yazdıktan sonra geri okunur.
     Bütün satırlar TEK yazımla gider (göz #411 tur 3): yeni içerik geçici dosyaya, sonra os.replace — ya hepsi ya hiçbiri;
-    yarıda kalan teslim sicili kısmi bırakıp yeniden denemeyi 'zaten işlendi' diye kilitlemez."""
+    yarıda kalan teslim sicili kısmi bırakıp yeniden denemeyi 'zaten işlendi' diye kilitlemez.
+    Okuma → yerine koyma süreçler arası KİLİTLE (göz #411 tur 4): eşzamanlı iki yazım aynı eski içeriği okuyup birbirini silmez.
+    onkosul(d) kilidin içinde, okunan güncel içerikle koşar (ör. 'bu karar zaten işlendi mi') — yarışta iki kez yazılmaz."""
+    kilit = open(os.path.join(os.path.dirname(yol), "." + os.path.basename(yol) + ".kilit"), "a")
+    fcntl.flock(kilit, fcntl.LOCK_EX)   # süreç bitince (hata dahil) çekirdek bırakır
     with open(yol, encoding="utf-8") as h:
         metin = h.read()
+    if onkosul:
+        onkosul(oku(yol))
     ust = [m.group(1) for m in re.finditer(r"^([a-z_]+):", metin, re.M)]
     if "isabet" in ust and ust[-1] != "isabet":
         hata(f"{os.path.basename(yol)}: isabet bölümü dosyanın sonunda değil ({ust[-1]} ondan sonra) — sona eklenemez, elle bakılmalı")
@@ -318,9 +339,11 @@ def cmd_ders_bagla(argv):
 
 
 def cmd_muhur(argv):
-    a, k = argv_al(argv, ("--gorev", "--verdikt", "--el-kitabi-surum"), ("--bassiz",))
+    a, k = argv_al(argv, ("--gorev", "--verdikt", "--el-kitabi-surum"), ("--bassiz", "--yoksa-gec"))
     if len(k) != 1 or not a.get("gorev") or not a.get("verdikt"):
-        hata("kullanım: muhur <mühürdar> --gorev G --verdikt V [--bassiz] [--el-kitabi-surum v]")
+        hata("kullanım: muhur <mühürdar> --gorev G --verdikt V [--bassiz] [--el-kitabi-surum v] [--yoksa-gec]")
+    if a.get("yoksa-gec") and not ozluk_var(k[0]):   # muhurdar.sh: özlüğü olmayanın sicili yok — atlanır; öbür her hata rc ≠ 0
+        print(f"· {k[0]} için özlük yok — mühür kaydı atlandı (özlük KÂHYA'nın işi)", file=sys.stderr); return 0
     yol = ozluk_bul(k[0])
     ekle(yol, {"ts": simdi(), "tur": "muhur", "gorev": a["gorev"], "verdikt": a["verdikt"],
                "bassiz": "e" if a.get("bassiz") else "h", "el_kitabi_surum": a.get("el_kitabi_surum")})
@@ -355,9 +378,11 @@ def cmd_teslim_isle(argv):
         hata(f"Sultan'ın kaydında cümlesiz 'sağlanmadı': {', '.join(cumlesiz)} — yazılmadı")
     if eksik:
         hata(f"Sultan'ın kararında şu satırlar yok: {', '.join(eksik)} — kısmi teslim yazılmaz")
-    yol = ozluk_bul(k[0]); isb, _ = isabetler(oku(yol))
-    if any(x.get("kaynak") == a["kaynak"].strip() for x in isb):
-        hata(f"{a['kaynak']} kararı zaten işlendi — iki kez yazılmaz")
+    yol = ozluk_bul(k[0])
+
+    def islenmedi(d):   # kilidin İÇİNDE (göz #411 tur 4): aynı kararı işleyen iki eşzamanlı çağrıdan biri reddedilir
+        if any(x.get("kaynak") == a["kaynak"].strip() for x in isabetler(d)[0]):
+            hata(f"{a['kaynak']} kararı zaten işlendi — iki kez yazılmaz")
     dusen = set(oz.get("g_dusen") or [])
     satirlar = []
     for g in sinanan:
@@ -367,7 +392,7 @@ def cmd_teslim_isle(argv):
                          "kacirma": "e" if (muhur == "✓" and ks["sultan"] == "saglanmadi") else "h",
                          "bassiz": "h", "el_kitabi_surum": oz.get("tescil_skill_version"), "ders": None,
                          "g_tur": g["tur"], "neden": ks.get("neden"), "kaynak": a["kaynak"].strip()})
-    ekle_toplu(yol, satirlar)   # tek yazım: kısmi teslim olmaz
+    ekle_toplu(yol, satirlar, islenmedi)   # tek yazım: kısmi teslim olmaz
     print(f"✓ teslim işlendi: {k[0]} · {karar['gorev']} · {len(sinanan)} satır (👤 {len(ger['g']) - len(sinanan)} atlandı)")
     return 0
 
