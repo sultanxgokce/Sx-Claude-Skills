@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "muhurdar-yargic-kilidi",
+  "pr": "419",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-22T19:17:11+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32727,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 10,
+    "bayt": 25133
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Mühürdar, Claude yargıcını güvenli kipte araçsız ve MCP’siz; Codex yargıcını da kabuk aracı kapalı çalıştıracak biçimde kilitlemiş, yedek Claude yolunu da aynı kapsama almış. İstenen değişiklik doğrudan yapılmış ve mutasyonlu sınavlarla korunmuş; üretimi engelleyen bir kod kusuru görünmüyor, yalnız Codex’in bwrap çalışan ortamındaki gerçek erişim yüzeyi bu kutuda ölçülememiş.",
+    "bulgular": [
+      {
+        "ne": "Codex kilidinin bwrap çalışan bir ortamda gerçekten yalnız kör istemle sınırlı kaldığı ölçülmemiş; mevcut kanıt çağrı bayrağını doğruluyor ve bu kutudaki bwrap başarısızlığı nedeniyle gerçek dosya erişim davranışını genelleyemiyor.",
+        "kanit": "SKILL.md ekinde ve muhurdar.sh yorumunda açıkça “bwrap çalışan kutuda ölçülmedi” deniyor; yargic-kilidi.test.sh kapı b gerçek Codex yerine argüman kaydeden sahte Codex kullanıyor, kilit kanaryasının önce/sonra gerçek-model ölçümü ise yalnız Claude çıktısı içeriyor.",
+        "konum": "tescil/SKILL.md yargıç kilidi bölümü; tescil/scripts/muhurdar.sh:78-84; olcum-yargic-kilidi-sinavi-tek.txt kapı b; olcum-kilit-kanarya-sonra.txt",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "bwrap ad alanı çalışabilen bir Linux kutusu"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Claude için kırmızı önce/yeşil sonra gerçek-model ölçüm çifti diske erişimin kesildiğini ve karar üretiminin korunduğunu gösteriyor; usul kanaryası bunu akış içinde destekliyor. Yeni sınav üç yolu ve dört mutasyonu kapsıyor, ayrıca geniş muhurdar, diploma ve sicil gerileme sınavları yeşil; Codex tarafındaki gerçek ortam davranışı ise sahte yürütücüyle bayrak düzeyinde sınanmış ve bwrap çalışan yüzeyde ayrıca ölçülmemiş."
+  }
+}
