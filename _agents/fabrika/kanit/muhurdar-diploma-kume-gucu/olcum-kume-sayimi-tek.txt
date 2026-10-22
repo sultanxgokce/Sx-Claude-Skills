@@ -1,0 +1,7 @@
+$ bash -c for t in dogru kusurlu uydurma; do echo "$t: $(ls -d tescil/sinav/$t/*/ | wc -l) örnek · $(ls tescil/sinav/$t | tr "\n" " ")"; done; for t in dogru kusurlu uydurma; do test "$(ls -d tescil/sinav/$t/*/ | wc -l)" -ge 3 || exit 1; done
+# rc=0 sure=0.0s zaman=2026-10-22T21:04:08+03:00
+--- stdout ---
+dogru: 3 örnek · selam tarih-cevir topla 
+kusurlu: 3 örnek · bos-girdi-coker eksik-cikti yanlis-aciklama 
+uydurma: 3 örnek · kaynaksiz-olcum sahte-test-raporu yapildi-listesi 
+--- stderr ---

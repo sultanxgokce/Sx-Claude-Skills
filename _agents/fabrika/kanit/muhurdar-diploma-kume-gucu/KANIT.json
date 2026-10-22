@@ -1,0 +1,151 @@
+{
+  "is": "muhurdar-diploma-kume-gucu",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-22T21:16:49+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "gercek-yargic-dalga",
+      "asama": "tek",
+      "dosya": "olcum-gercek-yargic-dalga-tek.txt",
+      "sha256": "353cbdeee74eaaa548e54201ce6c12536cccc809bb151c70fd9e1e1bb3b33427",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/muhurdar-diploma-kume-gucu/dalga-olcer.sh",
+        "tescil/scripts",
+        "3"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T20:23:24+03:00",
+      "sure_sn": 166.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "0fde6bca076246d68e671848bc3cdf84"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-yargic-dalga-claude",
+      "asama": "tek",
+      "dosya": "olcum-gercek-yargic-dalga-claude-tek.txt",
+      "sha256": "71c556544d975cd825c8345b002ca1ca2f4b00f366bfe15b0dd0987e5f4232e5",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/muhurdar-diploma-kume-gucu/dalga-olcer.sh",
+        "tescil/scripts",
+        "3"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T20:32:31+03:00",
+      "sure_sn": 254.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "81f5d892feea42c1b61ac704103271fc"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sigkill-artigi",
+      "asama": "once",
+      "dosya": "olcum-sigkill-artigi-once.txt",
+      "sha256": "56515bfe137e466c9a0e8b2bb326483b2655af052672fcc91fab70d8bcdfb241",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-muhurdar-diploma-kume-gucu/_agents/fabrika/kanit/muhurdar-diploma-kume-gucu/kok-olcer.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/sx-main-416/tescil/scripts"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-22T21:03:44+03:00",
+      "sure_sn": 5.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "0d24006e770a443d950f0175000e1f0d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sigkill-artigi",
+      "asama": "sonra",
+      "dosya": "olcum-sigkill-artigi-sonra.txt",
+      "sha256": "3d6f377893cbffd5e313781869a191c07f0dc6e562ae2a0a90052ed628405347",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-muhurdar-diploma-kume-gucu/_agents/fabrika/kanit/muhurdar-diploma-kume-gucu/kok-olcer.sh",
+        "tescil/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T21:03:51+03:00",
+      "sure_sn": 7.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "9c8f08a28ba74a30a44ea6e996fbecd6"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kume-sayimi",
+      "asama": "tek",
+      "dosya": "olcum-kume-sayimi-tek.txt",
+      "sha256": "585b09ba5ba27fcdca71978c40458942488caedf78aa5dac567a178d30ce649a",
+      "komut": [
+        "bash",
+        "-c",
+        "for t in dogru kusurlu uydurma; do echo \"$t: $(ls -d tescil/sinav/$t/*/ | wc -l) örnek · $(ls tescil/sinav/$t | tr \"\\n\" \" \")\"; done; for t in dogru kusurlu uydurma; do test \"$(ls -d tescil/sinav/$t/*/ | wc -l)\" -ge 3 || exit 1; done"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T21:04:08+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "4ca2106f956f4bc4bf7a8f49385c5acf"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "diploma-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-diploma-sinavi-tek.txt",
+      "sha256": "9c99ab2e97063a6c537c2c1ee94d7af166e19b0f68c68554fa1c2bea212783c6",
+      "komut": [
+        "bash",
+        "tescil/scripts/diploma.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T21:13:16+03:00",
+      "sure_sn": 547.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2c17a1b55dd648d8b6c950e6ddeef390"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "yargic-kilidi-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-yargic-kilidi-sinavi-tek.txt",
+      "sha256": "ec50b10d914b53284d3949a413a6737be52497694786b66f1adabd6643b62ad7",
+      "komut": [
+        "bash",
+        "tescil/scripts/yargic-kilidi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T21:13:30+03:00",
+      "sure_sn": 13.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b0370e0fa2d148eeabe07656703e248d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "muhurdar-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-muhurdar-sinavi-tek.txt",
+      "sha256": "04b889f31ef56babbb828184a3ac7b1f2c16922812d444bd273e9997b9697be6",
+      "komut": [
+        "bash",
+        "tescil/scripts/muhurdar.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T21:16:49+03:00",
+      "sure_sn": 199.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "9444192ba9fe4cb4b5df05a6feb58016"
+    }
+  ],
+  "imza": "c62ccb0283deed2ea47ba9ea6ceae77cf6fb13bacce438d023c724d391756560"
+}

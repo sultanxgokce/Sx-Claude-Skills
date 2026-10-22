@@ -1,7 +1,7 @@
 ---
 name: tescil
 type: agent
-version: 0.7.0
+version: 0.8.0
 description: >
   MÜHÜRDAR'ın el-kitabı: teslim edilen bir işi (kart) YAZILI gerekliliklere (GOAL + G1..Gn
   komut→beklenen/RC) karşı MAKİNE-KANITLI sınayan kör-protokol tescil-kabuğu. sert-teslim
@@ -295,6 +295,8 @@ Bir personel Mühürdarlık uzmanlığını **sınavla** alır; diploma saklanma
   kümenin gücü örnek sayısıyla ve örnekler yenilendikçe artar.
 
 Sınav: `scripts/diploma.test.sh` (hermetik sahte yargıçlar + mutantlar). Ölçer: gerçek yargıçla 6/6 (PR #412 kanıtı).
+
+**Küme gücü (0.8.0, 22 Eki · kart muhurdar-diploma-kume-gucu):** kümede türde **3** örnek (yeni: `dogru/tarih-cevir` · `kusurlu/bos-girdi-coker` — mekanik düşüşü iyi açıklama örtmez · `uydurma/yapildi-listesi`); küme değiştiği için `kume_sha` değişti → eski diplomalar **bayat**. Cevap anahtarına yargıç erişimi 0.7.0 yargıç kilidiyle kapandı (söz değil kilit). **SIGKILL artığı:** sınav kökü `.sahip` izi (pid + /proc açılış saati) taşır; sonraki `sina` başında sahibi ölmüş ya da pid'i başka sürece geçmiş kök süpürülür, canlı sahipli ve izsiz köke dokunulmaz (kapılar s1–s5, gerçek `kill -9` ile; 5 mutant). **Gerçek yargıçla dalgalanma (ölçüm, kapı değil):** Codex 3 koşu → 9/9 · 9/9 · 9/9, dalgalanma **0/9**; kilitli Claude 2+3 koşu → iki koşuda birer örnek ıskalandı, ikisinde de yargıç sütunu `G2=yok`. İkincisinin kökü ölçüldü: `claude` bağı o anda yoktu (Claude Code aynı sürümü yeniden kuruyordu, npm günlüğü 20:33) → `EMIN-DEGILIM (model yok)`; sınav doğru davrandı (biri tutarlı ıska → KALDI, biri kararsız → ÖLÇÜLEMEDİ), sahte hüküm yazmadı. Yani gözlenen dalgalanma **hüküm değil yargıç erişimi**dir; aynı örnek tek başına 4/4 isabet. Ölçer + ıska kâğıtları: `_agents/fabrika/kanit/muhurdar-diploma-kume-gucu/`.
 
 ## Tasarım-notu — dış-araç kararı (2026-07, DİVAN K5)
 

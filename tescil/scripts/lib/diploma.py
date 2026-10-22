@@ -210,6 +210,43 @@ def bozuk_kapat(a):
     return 0
 
 
+KOK_ON = "diploma-kok-"
+
+
+def _surec_baslangici(pid):
+    """/proc/<pid>/stat 22. alan (açılış saati, saat tıkı) — pid yeniden verilmişse ayırt eder; süreç yoksa None."""
+    try:
+        with open(f"/proc/{pid}/stat", encoding="utf-8") as f:
+            return f.read().rsplit(")", 1)[1].split()[19]
+    except (OSError, IndexError):
+        return None
+
+
+def kok_supur():
+    """SIGKILL ile ölen sınavın geçici kökü kalır (finally koşmaz). Sonraki sınav başında sahibi ölmüş ya da pid'i başka sürece
+    geçmiş kökler silinir. Sahip izi (.sahip) olmayan köke DOKUNULMAZ — ne olduğu bilinmeyen dizin silinmez. → silinen sayısı"""
+    n, ana = 0, tempfile.gettempdir()
+    try:
+        adlar = os.listdir(ana)
+    except OSError:
+        return 0
+    for ad in adlar:
+        d = os.path.join(ana, ad)
+        if not ad.startswith(KOK_ON) or os.path.islink(d) or not os.path.isdir(d):
+            continue
+        try:
+            if os.stat(d).st_uid != os.getuid():
+                continue
+            with open(os.path.join(d, ".sahip"), encoding="utf-8") as f:
+                pid, bas = f.read().split()
+        except (OSError, ValueError):
+            continue
+        if _surec_baslangici(int(pid)) != bas:
+            shutil.rmtree(d, ignore_errors=True)
+            n += not os.path.exists(d)
+    return n
+
+
 def sina(a):
     if ad_kat(a.personel) == ad_kat(SINAV_YAZAN):
         hata("sınavın yazan adı personel adı olamaz", 2)
@@ -227,7 +264,12 @@ def sina(a):
     kanit = os.path.abspath(a.kanit)   # zorunlu: defter satırı bu yolu taşır, geçici dizin kanıt sayılmaz
     os.makedirs(kanit, exist_ok=True)
     sonuc, ayrinti = {}, {}
-    kok = tempfile.mkdtemp(prefix="diploma-kok-")
+    supurulen = kok_supur()
+    if supurulen:
+        print(f"· süpürüldü: {supurulen} eski sınav kökü (sahibi ölmüş — SIGKILL artığı)")
+    kok = tempfile.mkdtemp(prefix=KOK_ON)
+    with open(os.path.join(kok, ".sahip"), "w", encoding="utf-8") as f:   # SIGKILL'de finally koşmaz; sonraki sınav bu izle süpürür
+        f.write(f"{os.getpid()} {_surec_baslangici(os.getpid())}\n")
     kararsiz = []
     try:
         for tur in TURLER:

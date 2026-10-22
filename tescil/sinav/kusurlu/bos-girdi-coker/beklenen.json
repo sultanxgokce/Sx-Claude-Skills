@@ -1,0 +1,1 @@
+{"verdikt":"KALDI","kaldi":["G1"],"neden":"boş girdide sıfıra bölüp çöküyor (ZeroDivisionError) — açıklama 0 basar diyor ama mekanik satır düşer; iyi açıklama mekanik düşüşü örtmez"}
