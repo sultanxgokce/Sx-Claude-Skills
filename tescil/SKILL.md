@@ -271,7 +271,8 @@ Bir personel Mühürdarlık uzmanlığını **sınavla** alır; diploma saklanma
   sınav **ÖLÇÜLEMEDİ** (rc 3, kararsız) — deftere ne KALDI ne GEÇTİ yazılır. Satır §6 biçiminde
   (`ts personel uzmanlik el_kitabi el_kitabi_surum kume_sha sonuc gecti kanit`), kilitli ve yarım kalmadan yazılır (kısa yazımda defter eski boyuna kesilir), geri okunur.
 - **`diploma.sh durum <personel>`** — esas SON koşudur: koşu yok ya da son koşu kaldı → **yok** · sicil askıda → **askida** (§11) ·
-  el kitabı sürümü (katalog) ya da küme özeti değişti → **bayat** (yeniden sınav) · aksi → **gecerli**. Defterde bozuk satır
+  el kitabı sürümü (katalog) ya da küme özeti değişti → **bayat** (yeniden sınav) · sicil okunamıyorsa (ör. özlük yok) →
+  **ölçülemedi** (rc 3 — askıda olmadığı bilinmeden geçerli denmez) · aksi → **gecerli**. Defterde bozuk satır
   varsa `bozuk: N` deyip ölçülemedi döner (sessiz atlamaz); yarım kalmış satır `diploma.sh bozuk-kapat <N> --gerekce "…"` ile
   ters kayıtla kapatılır (satır silinmez, yalnız açık bozuk satır kapanır).
 - 🔴 **Dürüst sınır — cevap anahtarı:** kör istem `beklenen.json`'u taşımaz, ama yargıç oturumu dosya sistemini **okuyabilir**;

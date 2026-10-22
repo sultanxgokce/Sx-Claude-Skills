@@ -115,6 +115,14 @@ PY
   # k · Türkçe ad katlaması: MUHAKKIK yazımı MUHAKKİK'in diplomasını bulur; başka ad bulmaz
   _d "$s" y-durust "$D" -- durum MUHAKKIK; [ $? -eq 0 ] && o="$o k"
   _d "$s" y-durust "$D" -- durum HENDESE; [ $? -eq 1 ] && grep -q "durum: yok" "$T/son.log" && o="$o k2"
+  # h5 · sicil ölçülemezken diploma GEÇERLİ değil (göz #412 tur 6): özlüksüz sicil → ölçülemedi rc 3; bayat yine bayat (sicilden bağımsız)
+  mkdir -p "$T/sicil-bos"
+  _d "$s" y-durust "$D" SICIL_DIZIN="$T/sicil-bos" -- durum MUHAKKİK; local h5a=$?; local h5l; h5l="$(cat "$T/son.log")"
+  printf '{"skills":[{"id":"tescil","version":"9.9.10"}]}\n' > "$T/katalog.json"
+  _d "$s" y-durust "$D" SICIL_DIZIN="$T/sicil-bos" -- durum MUHAKKİK; local h5b=$?
+  printf '{"skills":[{"id":"tescil","version":"9.9.9"}]}\n' > "$T/katalog.json"
+  [ $h5a -eq 3 ] && printf '%s' "$h5l" | grep -q "durum: ölçülemedi" && printf '%s' "$h5l" | grep -q "sicil ölçülemedi" \
+    && ! printf '%s' "$h5l" | grep -q "durum: gecerli" && [ $h5b -eq 1 ] && grep -q "durum: bayat" "$T/son.log" && o="$o h5"
   # p · bozuk (yarım yazılmış) satır sessizce atlanmaz → ölçülemedi, satır numarasıyla
   cp "$D" "$T/defter/bozuk.jsonl"; printf '{"ts": "2026-10-22T09:00:00Z", "personel": "MUHAKKİK", "gec\n' >> "$T/defter/bozuk.jsonl"
   _d "$s" y-durust "$T/defter/bozuk.jsonl" -- durum MUHAKKİK; [ $? -eq 3 ] && grep -q "bozuk: 1" "$T/son.log" && o="$o p"
@@ -176,7 +184,7 @@ PY
   if [ -f "$T/sicil.py.yedek" ]; then cp "$T/sicil.py.yedek" "$s/lib/sicil.py"; rm -f "$T/sicil.py.yedek"; else rm -f "$s/lib/sicil.py" "$T/sicil.py.yedek-yok"; fi
   echo "$o"
 }
-BEK="a a2 n e e2 b c d l o r f g j q h h2 h3 h4 k k2 p p2 p3 p4 m i"
+BEK="a a2 n e e2 b c d l o r f g j q h h2 h3 h4 h5 k k2 p p2 p3 p4 m i"
 BEK="$BEK i2"   # gerçek sicil yazıcısıyla sözleşme (Sx #411 birleşti) — koşulsuz
 # gerçek betikler bir kopyada koşulur (kapı i sahte sicil.py yazar — gerçek dosyaya dokunmamak için); el kitabı kökü aynı kalır
 _kopya_gercek() { local d="$T/gercek/scripts"; mkdir -p "$d"; cp -r "$HERE/." "$d/"; cp "$HERE/../SKILL.md" "$T/gercek/SKILL.md"; ln -s "$KUME" "$T/gercek/sinav"; echo "$d"; }
@@ -223,6 +231,7 @@ _mut kararsiz-yutulur r '                    if isabet2:
                         kararsiz.append(kart)' '                    if isabet2:
                         isabet = True'
 _mut kume-sha a '    return ornekler, h.hexdigest()' '    return ornekler, ""'
+_mut sicilsiz-gecerli h5 '    elif sic is None:   # göz #412 tur 6' '    elif False:   # göz #412 tur 6'
 _mut ters-kayit-yok p4 '    return [d for d in satirlar if not d.get("tur")], [n for n in bozuk if n not in kapali]' '    return [d for d in satirlar if not d.get("tur")], bozuk'
 _mut kapat-dogrulamasiz p4 '    if a.satir not in bozuk:' '    if False:'
 _mut yarim-kalir p3 '            os.ftruncate(fd, boy)' '            pass'

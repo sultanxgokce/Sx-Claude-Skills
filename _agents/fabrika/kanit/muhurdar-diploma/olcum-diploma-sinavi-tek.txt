@@ -1,5 +1,5 @@
 $ bash tescil/scripts/diploma.test.sh
-# rc=0 sure=910.7s zaman=2026-10-22T10:57:55+03:00
+# rc=0 sure=1244.7s zaman=2026-10-22T11:21:27+03:00
 --- stdout ---
 ── gerçek betikler
   ✓ kapı a
@@ -21,6 +21,7 @@ $ bash tescil/scripts/diploma.test.sh
   ✓ kapı h2
   ✓ kapı h3
   ✓ kapı h4
+  ✓ kapı h5
   ✓ kapı k
   ✓ kapı k2
   ✓ kapı p
@@ -49,9 +50,10 @@ $ bash tescil/scripts/diploma.test.sh
   ✓ mutant yeniden-yok → kapı r düştü
   ✓ mutant kararsiz-yutulur → kapı r düştü
   ✓ mutant kume-sha → kapı a düştü
+  ✓ mutant sicilsiz-gecerli → kapı h5 düştü
   ✓ mutant ters-kayit-yok → kapı p4 düştü
   ✓ mutant kapat-dogrulamasiz → kapı p4 düştü
   ✓ mutant yarim-kalir → kapı p3 düştü
   ✓ mutant satir-sonu-yok → kapı p3 düştü
-diploma.test: 50 geçti · 0 kaldı
+diploma.test: 52 geçti · 0 kaldı
 --- stderr ---

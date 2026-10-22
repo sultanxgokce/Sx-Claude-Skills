@@ -22,7 +22,8 @@ tescil telemetrisi geçici köke yönlenir. Sınav teslimi gerçek bir mühür D
 Durum türetimi (§6 · §7): koşu yok ya da SON koşu kaldı → yok (önceki diploma düşer) · koşunun el kitabı sürümü ≠ güncel
 sürüm ya da kümesi ≠ güncel küme → bayat (yeniden sınav) ·
 sicil askıda → askida · aksi → gecerli. Güncel sürüm katalogdan (§1: `catalog.json` → tescil version); katalog okunamazsa
-el kitabının SKILL.md sürümü, bu da söylenir. Sicil okunamazsa diploma geçerli görünse de "sicil ölçülemedi" yazılır.
+el kitabının SKILL.md sürümü, bu da söylenir. Sicil okunamazsa diploma GEÇERLİ sayılmaz: askıda olmadığı bilinmeden geçerli hükmü
+rahatlatan eksik veridir → ölçülemedi (rc 3), sebep söylenir (göz #412 tur 6). Yok / bayat hükümleri sicilden bağımsızdır.
 
 RC: 0 = geçti / geçerli · 1 = kaldı / yok · bayat · askida · 2 = kullanım · 3 = ölçülemedi (defter yok, küme eksik, koşu bozuk)
 Ortam: DIPLOMA_DEFTERI (varsayılan Nexus _agents/orchestration/diploma-defteri.jsonl) · TESCIL_KATALOG · SICIL_DIZIN (durum için)
@@ -341,6 +342,10 @@ def durum(a):
         hal, gereken = "bayat", f"el kitabı {d.get('el_kitabi_surum')} → {surum}: yeniden sınav"
     elif d.get("kume_sha") != kume_sha:
         hal, gereken = "bayat", f"sınav kümesi değişti ({str(d.get('kume_sha'))[:12]} → {kume_sha[:12]}): yeniden sınav"
+    elif sic is None:   # göz #412 tur 6: askıda olmadığı bilinmeden 'geçerli' denmez
+        print(f"diploma: {a.personel} · {a.uzmanlik} · durum: ölçülemedi · sınav {d['ts'][:10]} geçti, el kitabı ve küme güncel; "
+              f"ama {sicil_notu} — askıda olmadığı bilinmeden geçerli denmez")
+        return 3
     else:
         hal, gereken = "gecerli", ""
     print(f"diploma: {a.personel} · {a.uzmanlik} · durum: {hal} · sınav {d['ts'][:10]} · el kitabı {d.get('el_kitabi_surum')} "
