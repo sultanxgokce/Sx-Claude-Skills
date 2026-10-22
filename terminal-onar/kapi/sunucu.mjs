@@ -19,6 +19,7 @@ import { fileURLToPath } from 'node:url';
 // '.' · ':' · kontrol karakteri yok; boşluk arada serbest, başta/sonda yok; ilk karakter '$' '@' '%' '=' olamaz (tmux kimlik önekleri).
 import { KOLTUK_AD_DESEN, koltukSatirlari } from './koltuklar.mjs';
 import { kayitOku, kadroBirlestir, altyapiNeden, davaOzet, yerAcAday, DAVA_ROL } from './kadro.mjs';
+import { tarifOku, uzmanlikOku } from './tarif.mjs';
 import { bugunOku } from './bugun.mjs';
 import { kadroYazKilitAltinda, KadroHata, davaEkle, kisiyeBagla, baglaGeriAl, DOSYA_NO, kisaAdGecerli } from './kadro-yaz.mjs';
 import { dosyaKilit } from './kilit.mjs';
@@ -496,6 +497,12 @@ const sunucu = http.createServer(async (req, res) => {
         if (t && !takvimde(t)) return json(res, 400, { hata: 'tarih takvimde olan bir gün olmalı (YYYY-MM-DD).' });
         const b = bugunOku(PROJE, t || undefined);
         return json(res, 200, { kutu: KUTU, proje: PROJE, zaman: new Date().toISOString(), ...b });
+      }
+      // ── KADRO · Uzmanlıklar + Terimler (Mühürdarlık G12 · SERDAR 22 Eki 05:10 (A)): iki SALT-OKUR uç — veri sahibinin kutusunda okunur, merkez vekil yolundan alır.
+      //    Yalnız GET (yazma yolu yok); çıktı beyaz listedir (yol/kaynak/sır yok — tarif.mjs); okunamayan kaynak `olc` + null, boş liste değil.
+      if (y === '/api/kadro/tarif' || y === '/api/kadro/uzmanlik') {
+        if (req.method !== 'GET') return json(res, 405, { hata: 'Bu uç yalnız okur (GET).' });
+        return json(res, 200, { kutu: KUTU, zaman: new Date().toISOString(), ...(y === '/api/kadro/tarif' ? tarifOku() : uzmanlikOku()) });
       }
       if (y === '/api/kadro') {
         const r = await calistir('bash', [KOLTUK_BETIK, '--liste']);

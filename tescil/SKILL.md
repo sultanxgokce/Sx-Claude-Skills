@@ -1,7 +1,7 @@
 ---
 name: tescil
 type: agent
-version: 0.3.0
+version: 0.4.0
 description: >
   MÜHÜRDAR'ın el-kitabı: teslim edilen bir işi (kart) YAZILI gerekliliklere (GOAL + G1..Gn
   komut→beklenen/RC) karşı MAKİNE-KANITLI sınayan kör-protokol tescil-kabuğu. sert-teslim
@@ -201,7 +201,11 @@ yazmaz, üstüne kurar:
 | 4 | beceri | kanıt JSON'u sınır + redaksiyonla mühürlenir | tescil-run → g-kosucu (sert-teslim) |
 | 5 | 👤 Sultan eli | 👤 satırlarını teslim ekranında dener | YAPILMAZ — MUHUR'da `SULTANDA` |
 
+- **Taşıyıcı:** Mühürdarlığı **MUHAKKİK** taşır (Sultan D1 22 Eki, "MUHAKKİK (önerim)"); koltuğu salt okurdur, kendi işini
+  mühürleyemez. Başsız şapka (S14) yalnız yedektir.
 - **Kimlik:** mühürdar = `AGENT_NAME` (yoksa rc 2, mühür basılmaz); yazan = `--yazan` (kartın `aldi`'sı; yoksa rc 2).
+  Adlar **Türkçe harf katlamasıyla** karşılaştırılır (İ/ı/I/i aynı): `'MUHAKKİK'.casefold()` `'MUHAKKIK'` ile eşleşmez
+  (ölçüldü) ve kayıtlarda iki yazım da yaşıyor — kendi-işi kapısı ve sicil eşleşmesi bu yüzden katlanmış adla bakar.
 - **Kör:** yargıç istemi (`lib/kor-istem.py`) yalnız GOAL + o G'nin satırı + izole rubrik + `hedef:` dosyası + mühürdarın
   **kendi taze** mekanik kanıt tablosundan kurulur. İnşacının raporu, transkripti, commit mesajı açılmaz; rapor verecek
   bir argüman yoktur (bilinmeyen argüman rc 2). `hedef` iş ağacı dışına kaçarsa istem kurulmaz → EMIN-DEGILIM.
@@ -220,6 +224,39 @@ AGENT_NAME=<mühürdar> bash scripts/muhurdar.sh <iş> --gereklilik <GEREKLILIK.
 
 Sınav: `scripts/muhurdar.test.sh` (18 kapı + kontrol kopyası + 11 mutant; sahte yargıçlar, ağsız; usul sırası: biçim kapısı kendi-işinden önce — göz #409 tur 1; yargıç ve mühür aynı ölçüm, Codex zaman aşımında da Claude — tur 2). Sicil/ders çıkarma/askı
 (G11 · S10) ve diploma/başsız şapka (G13 · S14) sonraki dilimlerdir.
+
+## 11 · Sicil · ders çıkarma · askı — `sicil.sh` (0.4.0 · G11 · S9 · S10)
+
+Mühürdarın isabeti **Sicil**'dir (S9: "karne" değil): personelin özlük dosyası `_agents/federe/sicil/<personel_no>.yaml`
+→ `isabet:` bölümü (append-only; yeni defter kurulmaz). Mühürdarlık vazifesi **Ders çıkarma** (S9; eski adı Kalibrasyon).
+
+- **İsabet satırı** (kadro şeması §6 + `g_tur · neden · kaynak`): teslim ekranında Sultan bir satıra "sağlanmadı" ya da
+  "katılıyorum" der → `sicil.sh isabet <mühürdar> …`. **Kaçırma** = mühürdar ✓ verdi, Sultan "sağlanmadı" dedi.
+  🔴 A06: `--kaynak` Sultan'ın KAYDINA işaret eder ve **doğrulanır**: `SICIL_KAYNAK_DOGRULA <kaynak>` (teslim geçidi sağlar)
+  Sultan'ın kayıtlı kararını JSON basar (`{"gorev", "satirlar": {"G1": {"sultan", "neden"}}}`); hüküm YALNIZ bu çıktıdan
+  alınır — ajan kaynağı gösterebilir, içeriği uyduramaz (göz #411 tur 1). Doğrulayıcı yoksa rc 3, kayıt yok ya da satırı
+  doğrulamıyorsa rc 2; ikisinde de yazılmaz. "Sağlanmadı"da Sultan'ın tek cümlesi zorunlu (kayıttan ya da `--neden`).
+- **Teslim köprüsü:** `sicil.sh teslim-isle <mühürdar> --kaynak <ref> --muhur-dir <deneme-dir>` — geçit Sultan'ın TEK teslim
+  kararıyla bir kez çağırır; mühürdarca sınanan her satır için isabet yazılır (👤 satırı atlanır, düşen G'de mühür ✗); aynı
+  karar iki kez işlenmez, kısmi karar ve başkasının mühürü reddedilir.
+- **Mühür kaydı:** `muhurdar.sh` her mühürde mühürdarın siciline `tur: muhur` satırı yazar (özlük yoksa söyler, mühür
+  düşmez). Askı penceresi bu kayıtlardan sayılır — Sultan satırı gelmeyen temiz mühür de pencereyi ilerletir. Özlük dosyası yoksa yazılmaz (rc 3 — özlük KÂHYA'nın işi).
+  Yazıcı satırı geri okuyarak doğrular; `isabet:` dosyanın sonunda değilse eklemez.
+- **Askı** (S10): `sicil.sh durum <mühürdar>` son **10 mühürde** (mühür = görev teslimi) kaçırmalı mühür sayar —
+  **1** = ders çıkarma (askı yok) · **2** = **askıda** + el kitabı güncelleme + yeniden sınav. Eşik tarif kaydındaki
+  `muhurdarlik.sicil_esigi`'nden okunur, yoksa S10 varsayılanı. Diploma durumu buradan türetilir (saklanmaz).
+- **Ders çıkarma** (G11, Sultan: "çok ama çok önemli"): `sicil.sh ders <mühürdar>` bağlanmamış kaçırmaları gereklilik
+  türüne göre gruplar; **≥2 ayrı görevde** aynı tür = tekrar eden kaçırma → §12 ders günlüğüne `D-NNN` kural taslağı
+  (Sultan'ın cümleleriyle). Kural el kitabına PR ile yazılır, tek kaynaktan bütün kutulara iner; sonra her kaçırma
+  `sicil.sh ders-bagla <mühürdar> --isabet-ts <ts> --ders D-NNN` ile bağlanır (ters kayıt; günlükte olmayan derse bağlanmaz).
+  Ölçüm: sicil + bu günlük (G11).
+
+Sınav: `scripts/sicil.test.sh`.
+
+## 12 · Ders günlüğü (Mühürdarlık el kitabı değişiklik günlüğü — G11)
+
+Biçim: `- **D-NNN** (YYYY-MM-DD · tür: <g_tur> · kaçırmalar: <mühürdar> <ts>, …) <kural cümlesi> — PR #<n>`.
+Bugün kural yok: henüz Sultan'ın "sağlanmadı" dediği bir mühür kaydı düşmedi.
 
 ## Tasarım-notu — dış-araç kararı (2026-07, DİVAN K5)
 

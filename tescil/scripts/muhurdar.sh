@@ -15,6 +15,7 @@
 #   AGENT_NAME=<mühürdar> muhurdar.sh <iş> --gereklilik <yol> --worktree <yol> --out <dizin> --yazan <inşacı>
 #                                     [--head-sha <sha>] [--deneme <n>] [--tatbikat]
 # RC: tescil-run ile aynı — 0=GECTI · 1=KALDI · 2=kullanım/harness · 3=ESKALASYON|KATMAN2-BEKLIYOR · 4=İSİMLİ-RED
+#     · 5=mühür basıldı ama özlüğü olan mühürdarın siciline DÜŞMEDİ (verdikt özette; özet `sicil: dusmedi …`)
 # Ortam: MUHURDAR_MODEL=claude (Codex'i bilerek atla) · MUHURDAR_ZAMAN_ASIMI (sn, varsayılan 900)
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -50,7 +51,8 @@ if [ ! -f "$GEREKLILIK" ] || [ -n "$(python3 "$LIB/gereklilik.py" parse "$GEREKL
 fi
 
 # ── adım 2 · kendi işini mühürleyemez (kadro şeması §7: iş anında ölçülür) ──────────────────────────────
-ayni="$(python3 -c 'import sys; print(1 if sys.argv[1].strip().casefold()==sys.argv[2].strip().casefold() else 0)' "$YAZAN" "$MUHURDAR")"
+# Türkçe harf katlama: 'MUHAKKİK'.casefold() 'MUHAKKIK' ile eşleşmez — taşıyıcı MUHAKKİK (Sultan D1 22 Eki), iki yazım da yaşıyor
+ayni="$(python3 -c 'import sys; k=lambda s: s.strip().replace("İ","I").replace("ı","i").casefold(); print(1 if k(sys.argv[1])==k(sys.argv[2]) else 0)' "$YAZAN" "$MUHURDAR")"
 if [ "$ayni" = 1 ]; then
   python3 "$LIB/muhur.py" red --out "$OUT" --kart "$IS" --deneme "$DENEME" --ad "kendi-isi" \
     --sebep "işi yapan ($YAZAN) ile mühürdar ($MUHURDAR) aynı — kendi işini mühürleyemez (G8, kadro şeması §7); başka mühürdar ya da başsız şapka" \
@@ -118,6 +120,22 @@ SHA="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("work
 python3 "$LIB/muhur.py" uret --out "$OUT" --kart "$IS" --deneme "$DENEME" --head-sha "$SHA" ${K2[@]+"${K2[@]}"} \
   ${TATBIKAT[@]+"${TATBIKAT[@]}"} --muhurdar "$MUHURDAR" --yazan "$YAZAN" ${YARGIC:+--yargic "$YARGIC"} >/dev/null; rc=$?
 bash "$HERE/muhur-lint.sh" "$OUT" >/dev/null 2>&1 || echo "muhurdar: muhur-lint UYARI (report-only, verdikt etkilenmez)" >&2
+# sicil (G11 · S10): her mühür mühürdarın siciline düşer — pencere bunlardan sayılır; Sultan'ın satırları sonra teslim-isle ile gelir.
+#   Özlük dosyası yoksa mühür DÜŞMEZ, söylenir (özlük KÂHYA'nın işi). Özlük VARKEN yazım düşerse sessiz geçilmez (göz #411 tur 4):
+#   pencere bir olay eksik sayardı → özete `sicil: dusmedi …` ve rc 5. Verdikt değişmez (MUHUR.md + özette durur).
+_VER="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("verdikt",""))' "$OUT/muhur-ozet.json" 2>/dev/null)"
+if [ -n "$_VER" ] && [ "$_VER" != RED ]; then
+  if ! python3 "$LIB/sicil.py" muhur "$MUHURDAR" --gorev "$IS" --verdikt "$_VER" --yoksa-gec \
+    --el-kitabi-surum "$(awk -F': *' '/^version:/{print $2; exit}' "$HERE/../SKILL.md")" >/dev/null 2>"$OUT/.sicil.err"; then
+    _SE="$(grep -m1 -v '^Traceback' "$OUT/.sicil.err")"
+    echo "muhurdar: sicile mühür kaydı DÜŞMEDİ — $_SE (rc 5; pencere bu mühürü saymaz, sicile elle bakılmalı)" >&2
+    python3 - "$OUT/muhur-ozet.json" "dusmedi: $_SE" <<'PYS' 2>/dev/null
+import json, sys
+p = sys.argv[1]; d = json.load(open(p)); d["sicil"] = sys.argv[2]; json.dump(d, open(p, "w"), ensure_ascii=False, indent=1)
+PYS
+    rc=5
+  fi
+fi
 V="$(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(d["verdikt"], "· 👤 Sultanda:", " ".join(d.get("sultan_denemesi") or []) or "yok")' "$OUT/muhur-ozet.json" 2>/dev/null)"
 echo "muhurdar: $IS · mühürdar $MUHURDAR · yazan $YAZAN · verdikt $V${YARGIC:+ · yargıç $YARGIC}"
 exit "$rc"
