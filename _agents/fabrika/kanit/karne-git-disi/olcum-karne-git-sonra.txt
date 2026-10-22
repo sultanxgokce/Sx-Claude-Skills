@@ -1,0 +1,5 @@
+$ bash /config/projects/_wt/Sx-Claude-Skills-karne-git-disi/_agents/fabrika/kanit/karne-git-disi/karne-olcer.sh .
+# rc=0 sure=0.0s zaman=2026-10-22T21:42:37+03:00
+--- stdout ---
+yok sayılıyor: evet · status'ta görünüyor: 0 · git add -A aldı: 0
+--- stderr ---
