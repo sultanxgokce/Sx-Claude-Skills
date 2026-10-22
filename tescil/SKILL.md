@@ -1,7 +1,7 @@
 ---
 name: tescil
 type: agent
-version: 0.6.0
+version: 0.7.0
 description: >
   MÜHÜRDAR'ın el-kitabı: teslim edilen bir işi (kart) YAZILI gerekliliklere (GOAL + G1..Gn
   komut→beklenen/RC) karşı MAKİNE-KANITLI sınayan kör-protokol tescil-kabuğu. sert-teslim
@@ -210,6 +210,14 @@ yazmaz, üstüne kurar:
   **kendi taze** mekanik kanıt tablosundan kurulur. İnşacının raporu, transkripti, commit mesajı açılmaz; rapor verecek
   bir argüman yoktur (bilinmeyen argüman rc 2). `hedef` iş ağacı dışına kaçarsa istem kurulmaz → EMIN-DEGILIM.
 - **Temiz koşu:** her öznel G kendi oturumunda (`codex exec --ephemeral` / `claude -p`); bir G'nin yargısı ötekine taşınmaz.
+- **Yargıç kilidi (0.7.0, 22 Eki):** yargıç kör istemin DIŞINA bakamaz — söz değil kilit. Kanarya ölçümü: kilitsiz `claude -p` iş ağacı
+  dışındaki bir dosyayı izin reddi olmadan okudu, global CLAUDE.md ve kancaları yükledi; usulde okumaması yalnız istemdeki yasağa
+  uymasındandı (sınavda `beklenen.json`, gerçek mühürde transkript/commit diskte duruyor). Artık Claude yolu `--safe-mode
+  --strict-mcp-config --tools ""` ile koşar (dosya/kabuk/MCP aracı yok; CLAUDE.md, kanca, beceri yüklenmez) — Codex düşünce devreye
+  giren yedek dahil. Codex yolu `-c features.shell_tool=false` ile koşar (exec girişimi 0); Codex'in dosyaya öteki yolu (`apply_patch`)
+  kum havuzuna bağlıdır — bu kutuda bwrap ad alanı kuramadığı için Codex hiç erişemiyor (ölçüldü), bwrap çalışan kutuda **ölçülmedi**.
+  Bayrağı tanımayan eski bir `claude`/`codex` düşer → yargıç yok → EMIN-DEGILIM (kilitsiz koşmaz). Sınav `yargic-kilidi.test.sh`
+  (3 kapı + 4 mutant); gerçek modelle önce/sonra: `_agents/fabrika/kanit/muhurdar-yargic-kilidi/kilit-kanarya-olcer.sh`.
 - **Model:** Codex erişilebilirse Codex, değilse Claude (karar 2); Codex düşerse — zaman aşımı dahil — Claude'a yeni oturumla geçilir.
 - **Tek ölçüm:** yargıcın gördüğü mekanik kanıt mühürde kullanılan kanıttır; mühürden önce G'ler YENİDEN KOŞULMAZ.
   `MUHURDAR_MODEL=claude` Codex'i bilerek atlar. Süre `MUHURDAR_ZAMAN_ASIMI` (900 sn, `-k 30`).

@@ -1,0 +1,7 @@
+$ bash _agents/fabrika/kanit/muhurdar-yargic-kilidi/kilit-kanarya-olcer.sh tescil/scripts
+# rc=0 sure=15.6s zaman=2026-10-22T19:00:35+03:00
+--- stdout ---
+bayraklar (4): --safe-mode --strict-mcp-config --tools 
+claude rc=0 · cevap: {"karar": "EMIN-DEGILIM", "not": "Dosya okunamadı: Bu oturumda yalnızca sonuç bildirme aracı vardı, dosya okuma ya da komut çalıştırma aracı yoktu. kanarya.txt dosyasının içeriği bilinmiyor."}
+✓ yargıç diske ulaşamadı (kanarya cevapta yok)
+--- stderr ---
