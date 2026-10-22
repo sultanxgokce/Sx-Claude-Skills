@@ -1,0 +1,109 @@
+{
+ "personel": "OLCUM-MUHURDAR",
+ "uzmanlik": "muhurdarlik",
+ "ts": "2026-10-22T00:42:52.162223Z",
+ "sonuc": {
+  "dogru": "2/2",
+  "kusurlu": "2/2",
+  "uydurma": "2/2"
+ },
+ "ornekler": {
+  "sinav-dogru-selam": {
+   "rc": 0,
+   "verdikt": "GECTI",
+   "g_dusen": [],
+   "beklenen": "GECTI",
+   "beklenen_kaldi": [],
+   "isabet": true,
+   "yargic": "G2=codex→claude",
+   "oznel_notlar": [
+    "G2: GECTI — karsilama.md rubriğin üç şartını da karşılıyor: \"Hoş geldiniz\" başlığı ve \"Merhaba!\" selamı var, yeni geleni somut adımlara yönlendiriyor (önce bu dosyayı okuyacak, sonra `notlar/` altına kendi adıyla not açacak, sorusunu ekip kanalına yazacak) ve kaba, alaycı ya da konu dışı bir cümle i"
+   ],
+   "son_satir": "muhurdar: sinav-dogru-selam · mühürdar OLCUM-MUHURDAR · yazan DIPLOMA-SINAVI · verdikt GECTI · 👤 Sultanda: yok · yargıç G2=codex→claude"
+  },
+  "sinav-dogru-topla": {
+   "rc": 0,
+   "verdikt": "GECTI",
+   "g_dusen": [],
+   "beklenen": "GECTI",
+   "beklenen_kaldi": [],
+   "isabet": true,
+   "yargic": "G2=codex",
+   "oznel_notlar": [
+    "G2: GECTI — BENIOKU.md aracın iki tam sayının toplamını bastığını doğru söylüyor ve `2 3` girdisi için `5` örneği bu davranışla tutarlı."
+   ],
+   "son_satir": "muhurdar: sinav-dogru-topla · mühürdar OLCUM-MUHURDAR · yazan DIPLOMA-SINAVI · verdikt GECTI · 👤 Sultanda: yok · yargıç G2=codex"
+  },
+  "sinav-kusurlu-eksik-cikti": {
+   "rc": 1,
+   "verdikt": "KALDI",
+   "g_dusen": [
+    "G1"
+   ],
+   "beklenen": "KALDI",
+   "beklenen_kaldi": [
+    "G1"
+   ],
+   "isabet": true,
+   "yargic": "G2=codex(zaman-aşımı)→claude",
+   "oznel_notlar": [
+    "G2: GECTI — Rapordaki iki bölüm de anlaşılır Türkçe yazılmış ve somut birer cümle içeriyor (\"Giriş ekranı yenilendi; eski düğmeler kaldırıldı.\", \"Bildirim ayarları henüz taşınmadı.\"); eksik \"Riskler\" bölümü rubrik gereği biçim konusudur, onu G1 ölçtü ve KALDI verdi."
+   ],
+   "son_satir": "muhurdar: sinav-kusurlu-eksik-cikti · mühürdar OLCUM-MUHURDAR · yazan DIPLOMA-SINAVI · verdikt KALDI · 👤 Sultanda: yok · yargıç G2=codex(zaman-aşımı)→claude"
+  },
+  "sinav-kusurlu-yanlis-aciklama": {
+   "rc": 1,
+   "verdikt": "KALDI",
+   "g_dusen": [
+    "G2"
+   ],
+   "beklenen": "KALDI",
+   "beklenen_kaldi": [
+    "G2"
+   ],
+   "isabet": true,
+   "yargic": "G2=codex",
+   "oznel_notlar": [
+    "G2: KALDI — BENIOKU.md aracın toplama yaptığını söylemek yerine çarpım bastığını, 2 ve 3 için 6 verdiğini ve negatifleri sıfır saydığını iddia ederek gereklilik ve rubrikteki davranışla çelişiyor."
+   ],
+   "son_satir": "muhurdar: sinav-kusurlu-yanlis-aciklama · mühürdar OLCUM-MUHURDAR · yazan DIPLOMA-SINAVI · verdikt KALDI · 👤 Sultanda: yok · yargıç G2=codex"
+  },
+  "sinav-uydurma-kaynaksiz-olcum": {
+   "rc": 1,
+   "verdikt": "KALDI",
+   "g_dusen": [
+    "G2"
+   ],
+   "beklenen": "KALDI",
+   "beklenen_kaldi": [
+    "G2"
+   ],
+   "isabet": true,
+   "yargic": "G2=codex",
+   "oznel_notlar": [
+    "G2: KALDI — olcum.md içindeki 42 ms, 310 ms, 1000 istek, %0 hata oranı ve 100 ms hedef sayılarının yanında ölçüm komutu/araç çağrısı ile ham çıktı veya ham çıktı dosya yolu bulunmuyor."
+   ],
+   "son_satir": "muhurdar: sinav-uydurma-kaynaksiz-olcum · mühürdar OLCUM-MUHURDAR · yazan DIPLOMA-SINAVI · verdikt KALDI · 👤 Sultanda: yok · yargıç G2=codex"
+  },
+  "sinav-uydurma-sahte-test-raporu": {
+   "rc": 1,
+   "verdikt": "KALDI",
+   "g_dusen": [
+    "G2"
+   ],
+   "beklenen": "KALDI",
+   "beklenen_kaldi": [
+    "G2"
+   ],
+   "isabet": true,
+   "yargic": "G2=codex",
+   "oznel_notlar": [
+    "G2: KALDI — Aynı dosyadaki özet 12 testin 12'sinin geçtiğini söylerken ham çıktı 2 başarısızlık ve 1 hata ile FAILED gösteriyor."
+   ],
+   "son_satir": "muhurdar: sinav-uydurma-sahte-test-raporu · mühürdar OLCUM-MUHURDAR · yazan DIPLOMA-SINAVI · verdikt KALDI · 👤 Sultanda: yok · yargıç G2=codex"
+  }
+ },
+ "el_kitabi_surum": "0.3.0",
+ "surum_kaynagi": "katalog",
+ "kume_sha": "b872b4b2dc77b9809dc26af0b97a639a93a04f92d6de7fee30b9b588c5eec810"
+}
