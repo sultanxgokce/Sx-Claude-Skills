@@ -1,0 +1,351 @@
+{
+  "sema_surumu": 2,
+  "kaynak": "veri-semasi.md §2 (terim kaydı) ve §8 (kapı yedi anlam) · Sultan D1 21-22 Eki S3 S6 S9 S13 · her kayıt durum=aday: onay işareti Sultan'ın ya da sahibin elindedir (A06), bu dosyayı yazan ajan onaylı yazmaz",
+  "kaynak_bicimi": "beceri:<id> (Sx catalog.json) · sx:<yol> (bu depo) · nexus:<yol> · cloudtop:<yol> · yerel:<yol> (~/.claude altı, katalog dışı)",
+  "terimler": [
+    {
+      "sema_surumu": 2, "id": "personel", "ad": "Personel", "kok": "personel",
+      "anlam": "Kadro kaydında adı, rolü ve durumu yazılı kişi (ajan).",
+      "isleyis": "Merkez kişi kaydında (personas[]) yaşar; uzmanlık ataması aynı kayda uzmanliklar[] olarak bağlanır, ayrı bir personel listesi tutulmaz.",
+      "ornek": "MUHAKKİK, nexus:_agents/orchestration/agent-registry.json içinde personas[] kaydıdır.",
+      "karistirilan": [], "ayirt_testi": null,
+      "sahip": "SERDAR", "durum": "aday",
+      "kaynak": ["nexus:_agents/orchestration/agent-registry.json"], "katman": "personel"
+    },
+    {
+      "sema_surumu": 2, "id": "uzmanlik", "ad": "Uzmanlık", "kok": "uzmanlık",
+      "anlam": "Hazır kalıp: bir unvan, birlikte gelen vazifeler, bir el kitabı ve bir yeterlilik sınavı.",
+      "isleyis": "Personele atanınca vazifeleri birlikte gelir; geçerli diploma olmadan atama aktif olamaz, sicil eşiği aşılırsa askıya düşer.",
+      "ornek": "tarif-kaydi/veri/kadro-tarifleri.json içinde ilk ve tek uzmanlık Mühürdarlık'tır.",
+      "karistirilan": [], "ayirt_testi": null,
+      "sahip": "SERDAR", "durum": "aday",
+      "kaynak": ["sx:tarif-kaydi/veri/kadro-tarifleri.json"], "katman": "uzmanlik"
+    },
+    {
+      "sema_surumu": 2, "id": "vazife", "ad": "Vazife", "kok": "vazife",
+      "anlam": "Bir uzmanlığın taşıdığı tek tür iş.",
+      "isleyis": "Çakışan vazifeler aynı personelde olamaz; kör vazife her seferinde temiz oturumda koşar; acil vazifenin yedeği tanımlı olmak zorundadır.",
+      "ornek": "Mühürdarlık üç vazife taşır: Tescil, Tatbikat, Ders çıkarma.",
+      "karistirilan": [], "ayirt_testi": null,
+      "sahip": "SERDAR", "durum": "aday",
+      "kaynak": ["sx:tarif-kaydi/veri/kadro-tarifleri.json"], "katman": "vazife"
+    },
+    {
+      "sema_surumu": 2, "id": "usul", "ad": "Usul", "kok": "usul",
+      "anlam": "Bir vazifenin izlediği sıralı adımlar.",
+      "isleyis": "Her adım bir beceri (yargı), bir kapı (deterministik betik) ya da Sultan'ın eli olur; usulün Sultan payı adım sayısından türetilir, saklanmaz.",
+      "ornek": "Teslim sınama usulü beş adımdır ve Sultan payı 1/5'tir.",
+      "karistirilan": [], "ayirt_testi": null,
+      "sahip": "SERDAR", "durum": "aday",
+      "kaynak": ["sx:tarif-kaydi/veri/kadro-tarifleri.json"], "katman": "usul"
+    },
+    {
+      "sema_surumu": 2, "id": "beceri", "ad": "Beceri", "kok": "beceri",
+      "anlam": "Sx'te SKILL.md ile yaşayan, yargı gerektiren iş yöntemi.",
+      "isleyis": "Usulün bir adımı beceri olunca ad, sürüm ve açıklama Sx catalog.json'dan okunur; ikinci bir beceri listesi tutulmaz.",
+      "ornek": "Teslim sınama usulünün üçüncü adımı tescil becerisini çağırır.",
+      "karistirilan": ["kapi-denetim"],
+      "ayirt_testi": "Kararı bir model yargılayarak mı veriyor, yoksa betik her seferinde aynı sonucu mu veriyor? Yargılıyorsa beceri.",
+      "sahip": "SERDAR", "durum": "aday",
+      "kaynak": ["beceri:tescil", "sx:catalog.json"], "katman": "beceri"
+    },
+    {
+      "sema_surumu": 2, "id": "sultan-eli-adimi", "ad": "Sultan eli", "kok": "sultan eli",
+      "anlam": "Usul adım türü: yalnız Sultan'ın yapabildiği adım (onay, deneme, elle iş).",
+      "isleyis": "Adımın 10 saniyede yapılabilir tarifi zorunludur; ajan bu adımı yapamaz ve yapılmış sayamaz.",
+      "ornek": "Teslim sınama usulünün beşinci adımı: Sultan teslim ekranında 👤 satırını dener ve hüküm verir.",
+      "karistirilan": ["sultan-eli-becerisi"],
+      "ayirt_testi": "Bir usul adımının türü mü, yoksa geri alınamaz komutun insan eliyle başlatıldığını ölçen kapı mı? Adım türüyse bu.",
+      "sahip": "SERDAR", "durum": "aday",
+      "kaynak": ["sx:tarif-kaydi/veri/kadro-tarifleri.json"], "katman": "sultan_eli"
+    },
+    {
+      "sema_surumu": 2, "id": "sultan-eli-becerisi", "ad": "sultan-eli becerisi", "kok": "sultan eli",
+      "anlam": "Geri alınamaz kapılarda komutu gerçekten insanın başlatıp başlatmadığını oturum kaydından ölçen beceri.",
+      "isleyis": "Sultan'ın ! ile koştuğu komut oturum kaydına düşer, ajanın komutu düşmez; kapı bu izi imzaya ve zamana bağlayarak arar. Kilit değil korkuluktur.",
+      "ornek": "beceri:sultan-eli, Sx'te 0.1.0 sürümüyle durur.",
+      "karistirilan": ["sultan-eli-adimi"],
+      "ayirt_testi": "Bir komutun insan eliyle başlatıldığını mı ölçüyor? Öyleyse beceri bu; usul adımı türü değil.",
+      "sahip": "sultan-eli", "durum": "aday",
+      "kaynak": ["beceri:sultan-eli"], "katman": null
+    },
+    {
+      "sema_surumu": 2, "id": "muhurdarlik", "ad": "Mühürdarlık", "kok": "mühürdar",
+      "anlam": "Bir teslimi yazılı gerekliliğe karşı bağımsız sınayıp mühürleyen uzmanlık kalıbı.",
+      "isleyis": "Üç vazife taşır (Tescil, Tatbikat, Ders çıkarma); el kitabı tescil becerisidir; taşıyanı Sultan kararıyla MUHAKKİK'tir.",
+      "ornek": "sx:tescil/SKILL.md mühürdarlığın el kitabıdır.",
+      "karistirilan": [], "ayirt_testi": null,
+      "sahip": "SERDAR", "durum": "aday",
+      "kaynak": ["beceri:tescil", "nexus:_agents/handoff/hedef-gorev-tescil-senaryo-20261020.md"], "katman": "uzmanlik"
+    },
+    {
+      "sema_surumu": 2, "id": "muhurdar-unvan", "ad": "Mühürdar", "kok": "mühürdar",
+      "anlam": "Mühürdarlık uzmanlığını taşıyan personelin unvanı; kişi değil, kalıbın adı.",
+      "isleyis": "Unvan atamayla birlikte gelir; mühürdar kendi yazdığı işi mühürleyemez ve inşacının raporunu görmeden, her seferinde temiz oturumda sınar.",
+      "ornek": "Mühürdarlığı MUHAKKİK taşır; hükmü görev defterine yazılır.",
+      "karistirilan": ["muhurdar-ozluk"],
+      "ayirt_testi": "Bir unvan mı, yoksa 01.008 numaralı eski özlük dosyası mı? Özlük dosyasıysa muhurdar-ozluk.",
+      "sahip": "SERDAR", "durum": "aday",
+      "kaynak": ["beceri:tescil", "nexus:_agents/handoff/hedef-gorev-tescil-senaryo-20261020.md"], "katman": null
+    },
+    {
+      "sema_surumu": 2, "id": "muhurdar-ozluk", "ad": "MÜHÜRDAR özlük kaydı", "kok": "mühürdar",
+      "anlam": "Federe sicil dizinindeki eski MÜHÜRDAR personel kaydı (rol sınıfı MUHURDAR).",
+      "isleyis": "Tescil mühürü için yazılmış bağımsız kör denetim rolünün özlük dosyasıdır; yeni Mühürdarlık atamasının evi değildir.",
+      "ornek": "nexus:_agents/federe/sicil/01.008.yaml içinde persona: MÜHÜRDAR yazar.",
+      "karistirilan": ["muhurdar-unvan"],
+      "ayirt_testi": "Bir dosya mı, bir personel kaydı mı? Dosya ve personel numarası taşıyorsa bu; unvan değil.",
+      "sahip": "SERDAR", "durum": "aday",
+      "kaynak": ["nexus:_agents/federe/sicil/01.008.yaml"], "katman": null
+    },
+    {
+      "sema_surumu": 2, "id": "vazife-tescil", "ad": "Tescil", "kok": "tescil",
+      "anlam": "Mühürdarlığın ana vazifesi: hedef türü işin teslimini gerekliliğe karşı kör sınayıp mühürlemek.",
+      "isleyis": "Acildir; mühürdar 30 dakikada başlayamazsa aynı el kitabıyla başsız şapka koşar. Yalnız hedef türü işlerde tetiklenir.",
+      "ornek": "/tescil komutu GEREKLILIK.md'yi taze koşar ve MUHUR.md yazar.",
+      "karistirilan": [], "ayirt_testi": null,
+      "sahip": "tescil", "durum": "aday",
+      "kaynak": ["beceri:tescil"], "katman": "vazife"
+    },
+    {
+      "sema_surumu": 2, "id": "vazife-tatbikat", "ad": "Tatbikat", "kok": "tatbikat",
+      "anlam": "Tescil hattının gerçekten bozuk işi yakalayıp yakalamadığını ölçen sınav vazifesi.",
+      "isleyis": "SERDAR bilinçli bozuk bir işi normal kart gibi sevk eder; beklenen hüküm KALDI'dır, GEÇTİ gelirse tescil hattı bozuk sayılır ve Sultan'a eskale edilir.",
+      "ornek": "/tescil tatbikat komutu tescil SKILL.md §8'deki prosedürü başlatır.",
+      "karistirilan": [], "ayirt_testi": null,
+      "sahip": "tescil", "durum": "aday",
+      "kaynak": ["beceri:tescil"], "katman": "vazife"
+    },
+    {
+      "sema_surumu": 2, "id": "ders-cikarma", "ad": "Ders çıkarma", "kok": "ders çıkarma",
+      "anlam": "Sultan'ın sağlanmadı dediği satırı sicile ve el kitabına kural olarak işleme vazifesi.",
+      "isleyis": "Her kaçırma mühürdarın sicil isabet bölümüne satır olur; tekrar eden kaçırma türü el kitabına yazılır ve tek kaynaktan bütün kutulara iner. Son 10 mühürde 2 kaçırma askıya yol açar.",
+      "ornek": "Mühürdar G3'e ✓ verdi, Sultan sağlanmadı dedi: satır sicile yazılır.",
+      "karistirilan": ["kalibrasyon-puan"],
+      "ayirt_testi": "Mühürdarın kaçırdığı gereklilik satırını mı düzeltiyor? Öyleyse ders çıkarma. Denetçinin verdiği puanların kırılma oranını mı ölçüyor? O zaman kalibrasyon.",
+      "sahip": "SERDAR", "durum": "aday",
+      "kaynak": ["nexus:_agents/handoff/hedef-gorev-tescil-senaryo-20261020.md"], "katman": "vazife"
+    },
+    {
+      "sema_surumu": 2, "id": "usul-teslim-sinama", "ad": "Teslim sınama", "kok": "usul",
+      "anlam": "Tescil vazifesinin usulü: teslimi biçim kapısından, kendi-işi kapısından, kör sınamadan ve kanıt mühründen geçirir, son adımı Sultan'a bırakır.",
+      "isleyis": "Beş adım: biçim kapısı, kendi-işi kapısı, kör sınama (tescil), kanıt mührü (sert-teslim), Sultan denemesi.",
+      "ornek": "tarif-kaydi/veri/kadro-tarifleri.json içinde tescil-teslim-sina kimliğiyle durur.",
+      "karistirilan": [], "ayirt_testi": null,
+      "sahip": "tescil", "durum": "aday",
+      "kaynak": ["sx:tarif-kaydi/veri/kadro-tarifleri.json"], "katman": "usul"
+    },
+    {
+      "sema_surumu": 2, "id": "usul-bozuk-is-tatbikati", "ad": "Bozuk iş tatbikatı", "kok": "usul",
+      "anlam": "Tatbikat vazifesinin usulü: bilinçli bozuk işi sevk eder, hükmün KALDI çıkmasını bekler.",
+      "isleyis": "İki adım: bozuk işi normal kart gibi sevk et; GEÇTİ dönerse Sultan'a eskale et.",
+      "ornek": "Yaklaşık her 20 tescilde bir ya da ayda bir yapılır.",
+      "karistirilan": [], "ayirt_testi": null,
+      "sahip": "tescil", "durum": "aday",
+      "kaynak": ["sx:tarif-kaydi/veri/kadro-tarifleri.json", "beceri:tescil"], "katman": "usul"
+    },
+    {
+      "sema_surumu": 2, "id": "usul-kacirmadan-ders", "ad": "Kaçırmadan ders çıkarma", "kok": "usul",
+      "anlam": "Ders çıkarma vazifesinin usulü: kaçırmayı sicile yazar, tekrar edeni el kitabına kural yapar.",
+      "isleyis": "İki adım: sicil isabet satırını yaz; tekrar eden kaçırma türünü ayırıp el kitabına kural olarak yaz.",
+      "ornek": "Sultan bir satıra sağlanmadı deyince tetiklenir.",
+      "karistirilan": [], "ayirt_testi": null,
+      "sahip": "tescil", "durum": "aday",
+      "kaynak": ["sx:tarif-kaydi/veri/kadro-tarifleri.json"], "katman": "usul"
+    },
+    {
+      "sema_surumu": 2, "id": "diploma", "ad": "Diploma", "kok": "diploma",
+      "anlam": "Bir personelin bir uzmanlıkta geçerli yeterliliği; saklanmaz, her seferinde sınav defteri, el kitabı sürümü ve sicilden hesaplanır.",
+      "isleyis": "El kitabı sürümü değişince bayatlar ve sınav yenilenir; diploma geçerli değilse atama aktif olamaz.",
+      "ornek": "Sınav kümesi yazılana kadar Mühürdarlık ataması aday durumunda kalır.",
+      "karistirilan": [], "ayirt_testi": null,
+      "sahip": "SERDAR", "durum": "aday",
+      "kaynak": ["nexus:_agents/spec/terminoloji-kadro-tasarim/tasarim/veri-semasi.md"], "katman": null
+    },
+    {
+      "sema_surumu": 2, "id": "aski", "ad": "Askı", "kok": "askı",
+      "anlam": "Mühürdarın son 10 mühürde 2 kaçırmaya ulaşınca atamasının durdurulması.",
+      "isleyis": "Askıda atama aktif sayılmaz; el kitabı güncellenir ve mühürdar yeniden sınava girer. Tek kaçırma yalnız ders çıkarmayı tetikler.",
+      "ornek": "İkinci kaçırmada atama askida olur, ekranda askıda yazar.",
+      "karistirilan": [], "ayirt_testi": null,
+      "sahip": "SERDAR", "durum": "aday",
+      "kaynak": ["nexus:_agents/handoff/hedef-gorev-tescil-senaryo-20261020.md"], "katman": null
+    },
+    {
+      "sema_surumu": 2, "id": "bassiz-sapka", "ad": "Başsız şapka", "kok": "başsız şapka",
+      "anlam": "Mühürdar 30 dakika içinde başlayamazsa aynı el kitabıyla koşan yedek mühürleme.",
+      "isleyis": "Hüküm aynı kurala bağlıdır ve taşıyanın siciline başsız işaretiyle yazılır.",
+      "ornek": "Mühürdarın oturumu meşgulse tescil koşusu 30 dakika sonra başsız şapkayla başlar.",
+      "karistirilan": [], "ayirt_testi": null,
+      "sahip": "SERDAR", "durum": "aday",
+      "kaynak": ["nexus:_agents/handoff/hedef-gorev-tescil-senaryo-20261020.md"], "katman": null
+    },
+    {
+      "sema_surumu": 2, "id": "muhur", "ad": "Mühür", "kok": "mühür",
+      "anlam": "Mühürdarın bir teslim için verdiği k/N hükmü; N yalnız mekanik gereklilik sayısıdır.",
+      "isleyis": "Hepsi ✓ olunca iş Sultan'a İncele satırı olarak düşer; mühürsüz ya da eksik iş Sultan'a gelmez.",
+      "ornek": "Görev satırında 🔏 3/3 yazar.",
+      "karistirilan": [], "ayirt_testi": null,
+      "sahip": "tescil", "durum": "aday",
+      "kaynak": ["beceri:tescil"], "katman": null
+    },
+    {
+      "sema_surumu": 2, "id": "hedef-turu", "ad": "Hedef türü görev", "kok": "hedef",
+      "anlam": "Gereklilik belgesiyle açılan, mühürdarla sınanan ve Sultan'ın teslim ekranında onayladığı görev.",
+      "isleyis": "Belge sürümü Sultan onayıyla donar; onaysız belgeyle inşa başlamaz; geri gönderilince sürüm n+1 olur.",
+      "ornek": "Görev defterinde hedef_turu alanı evet olan kayıt.",
+      "karistirilan": [], "ayirt_testi": null,
+      "sahip": "SERDAR", "durum": "aday",
+      "kaynak": ["nexus:_agents/handoff/hedef-gorev-tescil-senaryo-20261020.md", "cloudtop:infra/defter-gecit/kayit.mjs"], "katman": null
+    },
+    {
+      "sema_surumu": 2, "id": "gereklilik-belgesi", "ad": "Gereklilik belgesi", "kok": "gereklilik",
+      "anlam": "Hedef cümlesi ile her biri ölçüm yolu taşıyan G1..Gn satırlarından oluşan standart belge.",
+      "isleyis": "Biçimi tescil GEREKLILIK.md sözleşmesidir; biçimsiz belge kaydedilemez. Ölçüm yolu komut, kare, Sultan denemesi ya da yargı rubriğidir.",
+      "ornek": "GOAL satırı ve G1: bloğu olan GEREKLILIK.md.",
+      "karistirilan": [], "ayirt_testi": null,
+      "sahip": "tescil", "durum": "aday",
+      "kaynak": ["beceri:tescil"], "katman": null
+    },
+    {
+      "sema_surumu": 2, "id": "sicil", "ad": "Sicil", "kok": "sicil",
+      "anlam": "Personelin özlük dosyası; mühürdarın isabet satırları bu dosyanın isabet bölümüne yazılır.",
+      "isleyis": "Append-only; silinmez, ters kayıtla düzeltilir. Ayrı bir mühürdar defteri kurulmaz. seviye-lint isabet bölümünü yok sayar ve temiz geçer.",
+      "ornek": "nexus:_agents/federe/sicil/01.008.yaml bir özlük dosyasıdır.",
+      "karistirilan": ["karne-fabrika", "karne-gereklilik-yazari", "sicil-rol-sinifi"],
+      "ayirt_testi": "Bir personelin kişisel kayıt dosyası mı? Öyleyse sicil. Bir işin puanını izleyen defter karne-fabrika'dır.",
+      "sahip": "SERDAR", "durum": "aday",
+      "kaynak": ["nexus:_agents/federe/sicil/01.008.yaml", "nexus:scripts/seviye-lint.sh"], "katman": null
+    },
+    {
+      "sema_surumu": 2, "id": "sicil-rol-sinifi", "ad": "SICILDAR rol sınıfı", "kok": "sicil",
+      "anlam": "Özlük dosyasındaki rol_sinifi alanının SICILDAR değeri.",
+      "isleyis": "seviye-lint rol sınıfı sözlüğünde bir değerdir; mühürdar isabet bölümüyle ilgisi yoktur.",
+      "ornek": "rol_sinifi: SICILDAR bir özlük dosyasında yazan değerdir.",
+      "karistirilan": ["sicil"],
+      "ayirt_testi": "Bir rol sınıfı değeri mi? Öyleyse bu; personelin dosyasının kendisi sicil'dir.",
+      "sahip": "SERDAR", "durum": "aday",
+      "kaynak": ["nexus:scripts/seviye-lint.sh"], "katman": null
+    },
+    {
+      "sema_surumu": 2, "id": "karne-fabrika", "ad": "fabrika karnesi", "kok": "karne",
+      "anlam": "Denetçinin verdiği puanları izleyen ve sonradan kırılanı damgalayan puan kalibrasyonu defteri.",
+      "isleyis": "karne.sh her denetim sonucunu karne.jsonl'e tek satır yazar; haftalık soru: 5 alanların kaçı kırıldı?",
+      "ornek": "karne.sh yaz <iş> son DENETIM-*.json'u deftere işler.",
+      "karistirilan": ["karne-gereklilik-yazari", "sicil"],
+      "ayirt_testi": "Bir işin puanı mı izleniyor? Öyleyse fabrika karnesi.",
+      "sahip": "yazilim-fabrikasi", "durum": "aday",
+      "kaynak": ["sx:yazilim-fabrikasi/scripts/karne.sh"], "katman": null
+    },
+    {
+      "sema_surumu": 2, "id": "karne-gereklilik-yazari", "ad": "gereklilik yazarı karnesi", "kok": "karne",
+      "anlam": "Tescilde muğlak gereklilik yazan kişinin muğlaklık kaydı.",
+      "isleyis": "Muğlak hüküm yazara işlenir; aynı kartta ikinci muğlak otomatik Sultan eskalasyonudur.",
+      "ornek": "tescil SKILL.md: muğlak verdikt gereklilik yazarının karnesine işlenir.",
+      "karistirilan": ["karne-fabrika", "sicil"],
+      "ayirt_testi": "Gerekliliği yazan kişi mi ölçülüyor? Öyleyse bu karne.",
+      "sahip": "tescil", "durum": "aday",
+      "kaynak": ["beceri:tescil"], "katman": null
+    },
+    {
+      "sema_surumu": 2, "id": "kalibrasyon-puan", "ad": "puan kalibrasyonu", "kok": "kalibrasyon",
+      "anlam": "Denetçi puanlarının gerçeği ne kadar yansıttığının ölçülmesi.",
+      "isleyis": "Fabrika karnesi üzerinden yürür; mühürdarlığın vazifesi artık Kalibrasyon değil Ders çıkarma adını taşır.",
+      "ornek": "karne.sh ozet son günlerde kırılan 5 alanları sayar.",
+      "karistirilan": ["ders-cikarma"],
+      "ayirt_testi": "Puanların kırılma oranı mı ölçülüyor? Öyleyse puan kalibrasyonu.",
+      "sahip": "yazilim-fabrikasi", "durum": "aday",
+      "kaynak": ["sx:yazilim-fabrikasi/scripts/karne.sh"], "katman": null
+    },
+    {
+      "sema_surumu": 2, "id": "kadro-panel", "ad": "Kadro paneli", "kok": "kadro",
+      "anlam": "Merkez ekranında kutuların koltuklarını ve personelini gösteren panel; Uzmanlıklar ve Terimler alt sekmeleri burada açılır.",
+      "isleyis": "Veriyi her kutunun kapısından (/<kutu>/api/kadro) okur; yeni üst sekme eklenmez.",
+      "ornek": "cloudtop:infra/terminal-merkez/sayfalar.mjs içinde KADRO_HTML.",
+      "karistirilan": ["kadro-becerisi"],
+      "ayirt_testi": "Bir ekran mı? Öyleyse panel. Komut satırından çalışan çıktı ise kadro becerisidir.",
+      "sahip": "BÂNİ", "durum": "aday",
+      "kaynak": ["cloudtop:infra/terminal-merkez/sayfalar.mjs"], "katman": null
+    },
+    {
+      "sema_surumu": 2, "id": "kadro-becerisi", "ad": "kadro becerisi", "kok": "kadro",
+      "anlam": "Bir kutunun çalışanlarını kokpitin okuyabileceği JSON ve insan biçiminde basan beceri.",
+      "isleyis": "Durum raporunun okuduğu aynı kayıttan okur; ikinci kadro listesi tutmaz. Sx kataloğunda yoktur, yerel kuruludur.",
+      "ornek": "yerel:skills/kadro/SKILL.md 0.1.0 sürümündedir.",
+      "karistirilan": ["kadro-panel"],
+      "ayirt_testi": "Komutla çıktı mı basıyor? Öyleyse beceri. Tarayıcıda açılan ekran panel'dir.",
+      "sahip": "SERDAR", "durum": "aday",
+      "kaynak": ["yerel:skills/kadro/SKILL.md"], "katman": null
+    },
+    {
+      "sema_surumu": 2, "id": "kapi-denetim", "ad": "denetim kapısı", "kok": "kapı",
+      "anlam": "Bir adımın önünde durup koşul sağlanmazsa işi durduran deterministik betik.",
+      "isleyis": "Karar makinededir; koşul tutmazsa iş ilerlemez. Usul adımı türü kapi yalnız bu anlamdadır ve çalışan bir kapı_yolu ister.",
+      "ornek": "kart.sh, kanit.sh ve birlestirme-kapisi.sh fabrikanın denetim kapılarıdır.",
+      "karistirilan": ["kapi-serit", "kapimda", "kapi-sultan", "kapi-kutu", "kapi-giris", "kapi-yakalama", "beceri"],
+      "ayirt_testi": "Geçmezse iş durur mu, karar makinede mi? Evet ise bu.",
+      "sahip": "yazilim-fabrikasi", "durum": "aday",
+      "kaynak": ["beceri:yazilim-fabrikasi", "beceri:kapi-sinavi", "beceri:maas-kapisi"], "katman": "kapi"
+    },
+    {
+      "sema_surumu": 2, "id": "kapi-serit", "ad": "kapı şeridi", "kok": "kapı",
+      "anlam": "Claude aboneliği yerine açık kaynak modellerle çalışan oturum hattı (çok-model kapısı).",
+      "isleyis": "Oturum kapı başlatıcısıyla açılırsa kapi=1 olur; çalışan oturumun şeridi değişmez, yeni pencere gerekir.",
+      "ornek": "Oturum başında kapi= değerini basan komut.",
+      "karistirilan": ["kapi-denetim", "kapimda", "kapi-sultan", "kapi-kutu", "kapi-giris", "kapi-yakalama"],
+      "ayirt_testi": "Hangi modelle konuşuyorum sorusunun cevabıysa bu.",
+      "sahip": "kapi-yolu", "durum": "aday",
+      "kaynak": ["beceri:kapi-yolu"], "katman": null
+    },
+    {
+      "sema_surumu": 2, "id": "kapimda", "ad": "kapımda", "kok": "kapı",
+      "anlam": "Sultan'ı bekleyen işlerin tek yüzeyi.",
+      "isleyis": "Sultan'ın elini bekleyen işleri tek listede toplar.",
+      "ornek": "/kapimda becerisi bekleyen işleri sıralar.",
+      "karistirilan": ["kapi-denetim", "kapi-serit", "kapi-sultan", "kapi-kutu", "kapi-giris", "kapi-yakalama"],
+      "ayirt_testi": "Sultan'ın elini mi bekliyor? Evet ise bu.",
+      "sahip": "kapimda", "durum": "aday",
+      "kaynak": ["beceri:kapimda"], "katman": null
+    },
+    {
+      "sema_surumu": 2, "id": "kapi-sultan", "ad": "Sultan kapısı", "kok": "kapı",
+      "anlam": "Sultan onayı ya da imzası gereken işlerin kaydı ve damgası (izin kapısı).",
+      "isleyis": "Onay Sultan'ın sözüyle D1 damgası olarak kayda geçer; ajan bu damgayı yazamaz (A06).",
+      "ornek": "nexus:_agents/SULTAN-KAPISI.md bu kayıt kuralını anlatır.",
+      "karistirilan": ["kapi-denetim", "kapi-serit", "kapimda", "kapi-kutu", "kapi-giris", "kapi-yakalama"],
+      "ayirt_testi": "Sultan'ın onayı kayda mı yazılıyor? Evet ise bu.",
+      "sahip": "SERDAR", "durum": "aday",
+      "kaynak": ["nexus:_agents/SULTAN-KAPISI.md"], "katman": null
+    },
+    {
+      "sema_surumu": 2, "id": "kapi-kutu", "ad": "kutu kapısı", "kok": "kapı",
+      "anlam": "Her kutunun terminal ve kadro verisini sunan iç ağ sunucusu.",
+      "isleyis": "Merkez ekran her kutunun /<kutu>/api/kadro adresinden okur; bir adres ya da uç noktadır.",
+      "ornek": "cloudtop:infra/terminal-merkez/sayfalar.mjs içinde kutu kapısı geçer.",
+      "karistirilan": ["kapi-denetim", "kapi-serit", "kapimda", "kapi-sultan", "kapi-giris", "kapi-yakalama"],
+      "ayirt_testi": "Bir adres ya da uç nokta mı? Evet ise bu.",
+      "sahip": "terminal-onar", "durum": "aday",
+      "kaynak": ["beceri:terminal-onar", "cloudtop:infra/terminal-merkez/sayfalar.mjs"], "katman": null
+    },
+    {
+      "sema_surumu": 2, "id": "kapi-giris", "ad": "giriş kapısı", "kok": "kapı",
+      "anlam": "Bir alt alan adını kimlik doğrulamasının arkasına alan Cloudflare Access katmanı.",
+      "isleyis": "Tarayıcı kimlik sorar; geçilmeden alt alana ulaşılmaz.",
+      "ornek": "cloudflare-erisim becerisinin giriş kapısı arkasına alma adımı.",
+      "karistirilan": ["kapi-denetim", "kapi-serit", "kapimda", "kapi-sultan", "kapi-kutu", "kapi-yakalama"],
+      "ayirt_testi": "Tarayıcıda giriş soruyor mu? Evet ise bu.",
+      "sahip": "cloudflare-erisim", "durum": "aday",
+      "kaynak": ["beceri:cloudflare-erisim"], "katman": null
+    },
+    {
+      "sema_surumu": 2, "id": "kapi-yakalama", "ad": "görev yakalama kapısı", "kok": "kapı",
+      "anlam": "Sultan bir işten bahsedince yeni mi, eklenti mi diye sorup onay alan konuşma usulü.",
+      "isleyis": "Makine kapısı değil konuşma adımıdır: Sultan'a sorulur ve cevabı beklenir.",
+      "ornek": "defter-kapisi ve layiha-kapisi becerilerinin yakalama adımı.",
+      "karistirilan": ["kapi-denetim", "kapi-serit", "kapimda", "kapi-sultan", "kapi-kutu", "kapi-giris"],
+      "ayirt_testi": "Makine değil konuşma adımı mı? Evet ise bu.",
+      "sahip": "defter-kapisi", "durum": "aday",
+      "kaynak": ["beceri:defter-kapisi", "beceri:layiha-kapisi"], "katman": null
+    }
+  ]
+}

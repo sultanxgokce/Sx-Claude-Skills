@@ -1,0 +1,19 @@
+$ bash -c cd /config/projects/_wt/Sx-Claude-Skills-kapi-kadro-tarif-ucu/terminal-onar/kapi && rc=0; for t in $(ls *.test.mjs *.test.sh | sort); do case $t in *.mjs) timeout 300 node $t >/tmp/claude-1000/kg.$$.log 2>&1;; *) timeout 300 bash $t >/tmp/claude-1000/kg.$$.log 2>&1;; esac; r=$?; echo "$t rc=$r"; grep -E '^\s*✗' /tmp/claude-1000/kg.$$.log | cut -c1-400; [ $r -eq 0 ] || rc=1; done; exit $rc
+# rc=0 sure=123.6s zaman=2026-10-22T05:22:25+03:00
+--- stdout ---
+bugun.test.mjs rc=0
+dava.test.mjs rc=0
+kadro-hal.test.mjs rc=0
+kadro-yaz.test.mjs rc=0
+kadro.test.mjs rc=0
+kapi-sinav.test.sh rc=0
+kapi-yenile.test.mjs rc=0
+kilit.test.mjs rc=0
+kimlik.test.mjs rc=0
+koltuk-fark.test.sh rc=0
+rapor-kapi.test.sh rc=0
+rapor.test.mjs rc=0
+sunucu.test.mjs rc=0
+tarayici-bul.test.mjs rc=0
+tarif.test.mjs rc=0
+--- stderr ---

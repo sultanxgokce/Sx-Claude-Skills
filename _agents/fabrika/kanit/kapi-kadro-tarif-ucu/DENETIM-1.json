@@ -1,0 +1,30 @@
+{
+  "tur": 1,
+  "is": "kapi-kadro-tarif-ucu",
+  "pr": "413",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-22T05:22:49+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 49039,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İki girişli ve salt-okur uç eklenmiş; tarif, terim, persona ve diploma verileri beyaz listeyle taşınırken okunamayan kaynaklar null ve ölçüm sebebiyle ayrıştırılmış. Önce/sonra sınavları, gerçek kayıt denemesi ve tam gerileme ölçümü yeşil olduğu için üretime engel kanıtlanmış bir kusur yoktur.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; tarif sınavı kırmızıdan 19/19 yeşile, HTTP sınavı 107/110'dan 110/110'a dönmüş ve 15 sınavlık gerileme takımı rc=0 vermiştir. Gerçek tarif-kaydi üzerinde 1 uzmanlık, 3 vazife, 3 usul, 36 terim ve kaynak/yol sızıntısızlığı ölçülmüştür. Mutasyon çıktısı 10/10 koruma gösterse de manifest kaydında rubriğin istediği `mutasyon: true` alanı bulunmadığından resmi mutasyon kanıtı sayılmamıştır; karar diğer gerçek ölçümlere dayanmaktadır. Sarı kayıt yoktur; görsel kare gerektiren bir arayüz işi değil, API davranışı ölçüm çiftleriyle yeterince kanıtlanmıştır."
+  }
+}

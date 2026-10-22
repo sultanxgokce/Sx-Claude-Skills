@@ -1,9 +1,20 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.19.1
+version: 2.20.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.20.0 · Kadro Uzmanlıklar + Terimler kaynağı — iki salt-okur uç (22 Eki · Mühürdarlık G12 · SERDAR 05:10 (A))
+Merkezin Kadro sayfasındaki "Uzmanlıklar" ve "Terimler" alt sekmeleri (cloudtop) veriyi **sahibinin kutusundan**, bugünkü vekil yolundan okur:
+- `GET /api/kadro/tarif` → `tarif-kaydi` `veri/kadro-tarifleri.json` (uzmanlık · vazife · usul; adımda beceri **kurulu mu** ölçülür) +
+  `veri/terim-kaydi.json` (terimler). Yol: `TO_TARIF_DIZIN` (vars. `/config/.claude/skills/tarif-kaydi/veri`), beceri dizini iki üstü (`TO_BECERI_DIZIN`).
+- `GET /api/kadro/uzmanlik` → Nexus `agent-registry.json` `personas[]` (yalnız ad + `uzmanliklar[]`) + yanındaki `diploma-defteri.jsonl`.
+  Yol: `TO_AJAN_KAYDI` (vars. `/config/projects/Nexus/_agents/orchestration/agent-registry.json`), `TO_DIPLOMA_DEFTERI`.
+- 🔴 **Yalnız GET** (başka yöntem 405), girişli (öteki `/api/` uçları gibi). Çıktı **beyaz liste** (`kapi/tarif.mjs`): depo yolları (`kaynak`),
+  `kapi_yolu`, persona `location/contact/runtime`, diploma `kanit/kume_sha` yanıta girmez. **Okunamayan kaynak `olc` + `null` döner, boş liste DEĞİL**;
+  boş diploma defteri ölçülmüş sıfırdır (`[]`). Kaynağı olmayan kutuda uç çalışır ve "kaynak yok" der.
+- Kanıt: `kapi/tarif.test.mjs` 19 kapı (gerçek tarif-kaydi kaydıyla G1-G2 dahil) · `sunucu.test.mjs` KT0-KT3 · `kapi/tarif.mutasyon.sh` 10/10.
 
 ## 🆕 2.19.1 · tmux bekçisi her bekçi turunda kurulur (20 Eki · SERDAR 19:3x)
 2.19.0 bekçiyi yalnız onar.sh K0'da kuruyordu; onar ise yalnız düzen bozukken koşar → sağlıklı kutulara hiç inmedi (ölçüm 20 Eki,

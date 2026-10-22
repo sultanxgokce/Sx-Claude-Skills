@@ -9,6 +9,7 @@ Renkler: yesil (ölçtü, korudu) · kirmizi (ölçtü, korumuyor) · sari (ÖL�
 
 Kullanım:
   kanit.py olcum  <iş> <etiket> --asama once|sonra -- <komut...>     komutu koşar, kırpılmamış çıktı+rc kaydeder
+                  [--mutasyon <gerçek etiket>]  bilerek bozulmuş kodla koşum: dosya başı MUTASYON KANITI der, renk ters (kırmızı = yakalandı)
                   BORU DENETİMİ: komut `bash|sh -c '<betik>'` ise çıkış kodunu maskeleyen betik REDDEDİLİR (rc=1, kayıt yok):
                   `|| true` / `|| :` · başka komuttan sonra gelen son echo/printf/true/: · pipefail'siz boruyla biten son komut. Meşru istisna:
                   --boru-izin "<gerekçe ≥15 karakter>" → kayıt alınır, gerekçe manifeste `boru_denetimi` olarak yazılır.
@@ -308,18 +309,42 @@ def cmd_olcum(a):
     else:
         boru = {"temiz": "temiz", "kapsam-disi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)"}[durum]
     depo = depo_kok(a.depo); dz = kanit_dizin(depo, a.is_adi); os.makedirs(dz, exist_ok=True)
+    # 🧬 MUTASYON KAYDI (FR7M76 · #1136 tur 3, 15 Eki): bilerek bozulmuş kodla koşan sınavın ✗ satırları göze verilince GERÇEK ölçüm
+    #    sanıldı ("kilit çalışmıyor" bulgusu, iş tıkandı); etiketteki "mutasyon" kelimesi yetmedi. --mutasyon <gerçek etiket>: kayıt
+    #    mutasyon diye işaretlenir, dosyanın İLK satırı bunu söyler, renk tersine döner (kırmızı sınav = bozuk kod YAKALANDI = yeşil;
+    #    yeşil sınav = mutant kaçtı = kırmızı). Bağlandığı gerçek ölçüm manifestte yoksa kayıt üretilmez: neyin mutantı olduğu bilinmeli.
+    mut = (a.mutasyon or "").strip() or None
+    if a.mutasyon is not None:
+        if not mut:
+            hata("--mutasyon gerçek ölçümün etiketini ister (boş verildi). Kayıt ÜRETİLMEDİ.", 2)
+        if mut == a.etiket:
+            hata(f"--mutasyon kendi etiketini gösteremez ('{mut}'): mutasyon kaydı GERÇEK ölçümden ayrı bir etiket taşır. Kayıt ÜRETİLMEDİ.", 2)
+        m0 = manifest_oku(dz) or {"kayitlar": []}
+        if not any(k.get("tur") == "olcum" and k.get("etiket") == mut and not k.get("mutasyon") for k in m0["kayitlar"]):
+            hata(f"--mutasyon '{mut}': bu işte o etiketli GERÇEK ölçüm yok — önce gerçek kodu ölç (kanit.sh olcum {a.is_adi} {mut} -- …). Kayıt ÜRETİLMEDİ.", 2)
     ad = f"olcum-{a.etiket}-{a.asama}.txt"
     yol = os.path.join(dz, ad)
     t0 = datetime.datetime.now()
     p = subprocess.run(a.komut, capture_output=True, text=True, errors="replace")   # boru YOK: çıktı kırpılmadan
     sure = (datetime.datetime.now() - t0).total_seconds()
     with open(yol, "w", encoding="utf-8") as f:
+        if mut:
+            f.write(f"=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; "
+                    f"rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-{mut}-* ===\n")
         f.write(f"$ {' '.join(a.komut)}\n# rc={p.returncode} sure={sure:.1f}s zaman={simdi()}\n--- stdout ---\n{p.stdout}--- stderr ---\n{p.stderr}")
-    renk = "sari" if p.returncode == 3 else ("yesil" if p.returncode == 0 else "kirmizi")
+    if mut:   # rc 3 yine ölçülemedi; bunun dışında renk TERS: kırmızı sınav beklenen sonuçtur
+        renk = "sari" if p.returncode == 3 else ("kirmizi" if p.returncode == 0 else "yesil")
+    else:
+        renk = "sari" if p.returncode == 3 else ("yesil" if p.returncode == 0 else "kirmizi")
     kayit = {"tur": "olcum", "etiket": a.etiket, "asama": a.asama, "dosya": ad, "sha256": sha_dosya(yol),
              "komut": a.komut, "rc": p.returncode, "renk": renk, "zaman": simdi(), "sure_sn": round(sure, 1),
              "boru_denetimi": boru}
+    if mut:
+        kayit.update({"mutasyon": True, "gercek_olcum": mut, "beklenen": "kirmizi"})
     kayit_ekle(depo, a.is_adi, kayit)
+    if mut:
+        print(f"🧬 MUTASYON kaydı (gerçek ölçüm: {mut}) — " + ("sınav bozuk kodu YAKALADI" if renk == "yesil" else
+              ("mutant KAÇTI: sınav bozuk kodda da geçti" if renk == "kirmizi" else "ölçülemedi")))
     print(f"{'✓' if renk=='yesil' else ('◻' if renk=='sari' else '✗')} ölçüm kaydedildi: {ad} rc={p.returncode} renk={renk}")
     print(p.stdout, end="")
     if p.stderr: print(p.stderr, end="", file=sys.stderr)
@@ -721,6 +746,8 @@ def cmd_ozet(a):
         renk = k["etkin_renk"]
         if renk == "gecersiz":
             renk = f"**GEÇERSİZ** (ölçülen: {k.get('renk')}): {k.get('gecersiz_neden')}"
+        elif k.get("mutasyon"):
+            renk = f"{renk} · 🧬 MUTASYON (gerçek ölçüm: `{k.get('gercek_olcum')}`; beklenen kırmızı" + (" — yakalandı)" if renk == "yesil" else ")")
         elif renk == "ilan":
             renk = f"ilan → `{k.get('hedef_dosya')}`" + ("" if k.get("uygulaniyor") else " (uygulanmıyor: yeniden ölçüldü)")
         print(f"| {i} | {k['tur']} | {k['etiket']} | {k.get('asama','')} | {renk} | {k.get('rc','')} | `{k['dosya']}` |")
@@ -751,7 +778,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--depo")
     s = p.add_subparsers(dest="cmd", required=True)
-    o = s.add_parser("olcum"); o.add_argument("is_adi"); o.add_argument("etiket"); o.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); o.add_argument("--boru-izin", dest="boru_izin", default=None); o.set_defaults(f=cmd_olcum)
+    o = s.add_parser("olcum"); o.add_argument("is_adi"); o.add_argument("etiket"); o.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); o.add_argument("--boru-izin", dest="boru_izin", default=None); o.add_argument("--mutasyon", dest="mutasyon", default=None, metavar="GERCEK_ETIKET"); o.set_defaults(f=cmd_olcum)
     e = s.add_parser("ekran"); e.add_argument("is_adi"); e.add_argument("etiket"); e.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); e.add_argument("--url", required=True); e.add_argument("--urun-imi"); e.add_argument("--bekle"); e.add_argument("--genislik", type=int, default=1280); e.set_defaults(f=cmd_ekran)
     d = s.add_parser("dosya"); d.add_argument("is_adi"); d.add_argument("etiket"); d.add_argument("yol"); d.add_argument("--asama", default="tek"); d.set_defaults(f=cmd_dosya)
     c = s.add_parser("canli"); c.add_argument("is_adi"); c.add_argument("etiket"); c.add_argument("--kaynak", required=True); c.add_argument("--desen", required=True); c.add_argument("--en-az", dest="en_az", type=int, default=1); c.add_argument("--son", type=int, default=2000); c.set_defaults(f=cmd_canli)

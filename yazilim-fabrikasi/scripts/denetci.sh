@@ -608,7 +608,8 @@ PY
 }
 {
   printf '\n\n===== ÖLÇÜM ÇIKTILARI (60 satıra kadar aynen; uzunda baş + atlanan ortadan SONUÇ/✗ satırları + SON) =====\n'
-  for f in "$DZ"/olcum-*.txt; do [ -f "$f" ] && { printf -- '--- %s ---\n' "$(basename "$f")"; olcum_ozeti "$f"; [ -z "$(tail -c1 "$f")" ] || echo; }; done   # satır sonuyla bitmeyen dosyadan sonra başlık yeni satırda
+  # 🧬 mutasyon kaydının ilk satırını kanıt aracı yazar (kanit.py --mutasyon); başlık da söyler ki göz ✗ satırlarını bulgu sanmasın (FR7M76)
+  for f in "$DZ"/olcum-*.txt; do [ -f "$f" ] && { _mt=""; head -1 "$f" | grep -q '^=== MUTASYON KANITI' && _mt=" · 🧬 MUTASYON KANITI (kod bilerek bozuldu; ✗ satırları BEKLENEN, bulgu değil)"; printf -- '--- %s%s ---\n' "$(basename "$f")" "$_mt"; olcum_ozeti "$f"; [ -z "$(tail -c1 "$f")" ] || echo; }; done   # satır sonuyla bitmeyen dosyadan sonra başlık yeni satırda
 } > "$TMP/p-olcum.md"
 {
   printf '\n\n===== DEĞİŞİKLİK (diff) =====\n'

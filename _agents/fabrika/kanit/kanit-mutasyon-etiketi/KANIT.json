@@ -1,0 +1,94 @@
+{
+  "is": "kanit-mutasyon-etiketi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-22T01:46:32+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon",
+      "asama": "once",
+      "dosya": "olcum-mutasyon-once.txt",
+      "sha256": "24da42ea5a23ee6da5fa0e0a86da54a2abde9e7d4de7bf8a14549e09d2e06939",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kanit-mutasyon-etiketi/mut-olcer.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/once-sx/yazilim-fabrikasi/scripts"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-21T23:13:10+03:00",
+      "sure_sn": 0.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "5543f2f34a644c158fac8003abb21bde"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutasyon",
+      "asama": "sonra",
+      "dosya": "olcum-mutasyon-sonra.txt",
+      "sha256": "f4d6a27d036bd13cf294ca7c30d4b790f728438c0d30f1c1a7660fbbf8ce1cb0",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kanit-mutasyon-etiketi/mut-olcer.sh",
+        "yazilim-fabrikasi/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T01:46:32+03:00",
+      "sure_sn": 0.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "394c041bac1a4862af3f3a8210096b85"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kanit-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-kanit-sinavi-tek.txt",
+      "sha256": "b93a3f1ab5a062701592c432538c57df7d82ae254447e2f221ac931b02b2a5b7",
+      "komut": [
+        "python3",
+        "_agents/fabrika/kanit/kanit-mutasyon-etiketi/bolum-olcer.py",
+        "T25",
+        "✗",
+        "--",
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T01:36:16+03:00",
+      "sure_sn": 27.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c3cb79de39ad4387bffb03c7a7368586"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-denetci-sinavi-tek.txt",
+      "sha256": "4587d8785202d4866b3ca18cca264af06b157e0b1d7dbb8e59331175ff2b0233",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/denetci-bitis-zili/sizinti-olcer.sh",
+        "python3",
+        "_agents/fabrika/kanit/kanit-mutasyon-etiketi/bolum-olcer.py",
+        "T-MUT",
+        " M1",
+        " M2",
+        "mutant 'mutasyon",
+        "(bilgi)",
+        "✗",
+        "--",
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T01:46:31+03:00",
+      "sure_sn": 614.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "fa092d9ed1cd4d5794c34b0e127c670e"
+    }
+  ],
+  "imza": "91f950eb8a17c7958cafba80cb265d685161a050e2e25f5d7099e312235b7b7d"
+}
