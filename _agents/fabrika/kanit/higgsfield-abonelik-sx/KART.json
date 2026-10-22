@@ -1,0 +1,54 @@
+{
+  "is": "higgsfield-abonelik-sx",
+  "cumle": "higgsfield-abonelik becerisinin 15 betiği devir dizininden Sx deposunda beceri paketinin içine (higgsfield-abonelik/scripts) içerik değişmeden alınır; betikler birbirini kendi dizininden bulur, çalıştırma biti depoda",
+  "istedi": "SERDAR (görev 3DBM27 · MEDDAH kararı 15 Eki)",
+  "aldi": "SERDAR-alt",
+  "zaman": "2026-10-22T23:39:07+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-10-22T23:56:12+03:00",
+      "olay": "daralt",
+      "kalan_kart": "higgsfield-abonelik-sx-yol",
+      "tur_sifir": 0
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "SERDAR-alt",
+      "oturum": "SERDAR-alt workflow oturumu 2026-10-22 23:5x · denetçi tur 1 'İŞİ BÖL' (istem 160532 > 120000, üretim farkı 137952) · PR Sx #423",
+      "gerekce": "daraltma: kalan bulgu yeni karta (higgsfield-abonelik-sx-yol) — SKILL.md betik çağrıları mutlak beceri yolundan (/config/.claude/skills/higgsfield-abonelik/scripts/…), staging.sh ve flux-kontext zinciri 'bu pakette yok' diye işaretli, paket sınavı scripts/paket.test.sh (kendi dizininden, ağsız, kredisiz) + sınavın baktığı belgeler, sync-targets ve catalog kaydı; başka kutudan koşunca yol kırılmaz",
+      "zaman": "2026-10-22T23:56:12+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "higgsfield-abonelik becerisi Sx deposuna alınır: betikler beceri paketinin içine, çağrılar mutlak beceri yolundan; başka kutudan koşunca yol kırılmaz",
+      "zaman": "2026-10-22T23:56:12+03:00",
+      "kalan_kart": "higgsfield-abonelik-sx-yol"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-22T23:56:12+03:00",
+      "kalan_kart": "higgsfield-abonelik-sx-yol",
+      "kalan": "SKILL.md betik çağrıları mutlak beceri yolundan (/config/.claude/skills/higgsfield-abonelik/scripts/…), staging.sh ve flux-kontext zinciri 'bu pakette yok' diye işaretli, paket sınavı scripts/paket.test.sh (kendi dizininden, ağsız, kredisiz) + sınavın baktığı belgeler, sync-targets ve catalog kaydı; başka kutudan koşunca yol kırılmaz",
+      "tur_sifir": 0,
+      "oturum": "SERDAR-alt workflow oturumu 2026-10-22 23:5x · denetçi tur 1 'İŞİ BÖL' (istem 160532 > 120000, üretim farkı 137952) · PR Sx #423"
+    }
+  ]
+}

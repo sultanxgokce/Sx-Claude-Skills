@@ -1,0 +1,19 @@
+$ diff -rs /config/.claude/TELLAL-BESIR-devir/scripts higgsfield-abonelik/scripts
+# rc=0 sure=0.0s zaman=2026-10-22T23:57:36+03:00
+--- stdout ---
+Files /config/.claude/TELLAL-BESIR-devir/scripts/bogaz.lib.sh and higgsfield-abonelik/scripts/bogaz.lib.sh are identical
+Files /config/.claude/TELLAL-BESIR-devir/scripts/buyut.sh and higgsfield-abonelik/scripts/buyut.sh are identical
+Files /config/.claude/TELLAL-BESIR-devir/scripts/defter.sh and higgsfield-abonelik/scripts/defter.sh are identical
+Files /config/.claude/TELLAL-BESIR-devir/scripts/etiket-gom.sh and higgsfield-abonelik/scripts/etiket-gom.sh are identical
+Files /config/.claude/TELLAL-BESIR-devir/scripts/ffmpeg-kanit.sh and higgsfield-abonelik/scripts/ffmpeg-kanit.sh are identical
+Files /config/.claude/TELLAL-BESIR-devir/scripts/filigran-temizle.sh and higgsfield-abonelik/scripts/filigran-temizle.sh are identical
+Files /config/.claude/TELLAL-BESIR-devir/scripts/filigran-yama.sh and higgsfield-abonelik/scripts/filigran-yama.sh are identical
+Files /config/.claude/TELLAL-BESIR-devir/scripts/girdi-kapisi.sh and higgsfield-abonelik/scripts/girdi-kapisi.sh are identical
+Files /config/.claude/TELLAL-BESIR-devir/scripts/hf-defter.sh and higgsfield-abonelik/scripts/hf-defter.sh are identical
+Files /config/.claude/TELLAL-BESIR-devir/scripts/higgsfield-kimlik-kur.sh and higgsfield-abonelik/scripts/higgsfield-kimlik-kur.sh are identical
+Files /config/.claude/TELLAL-BESIR-devir/scripts/isik-duzelt.sh and higgsfield-abonelik/scripts/isik-duzelt.sh are identical
+Files /config/.claude/TELLAL-BESIR-devir/scripts/kadraj-duzelt.sh and higgsfield-abonelik/scripts/kadraj-duzelt.sh are identical
+Files /config/.claude/TELLAL-BESIR-devir/scripts/kredi-mutabakat.sh and higgsfield-abonelik/scripts/kredi-mutabakat.sh are identical
+Files /config/.claude/TELLAL-BESIR-devir/scripts/kredi-oku.sh and higgsfield-abonelik/scripts/kredi-oku.sh are identical
+Files /config/.claude/TELLAL-BESIR-devir/scripts/yuzsuz-video.sh and higgsfield-abonelik/scripts/yuzsuz-video.sh are identical
+--- stderr ---

@@ -1,0 +1,19 @@
+$ bash -c set -o pipefail; ls higgsfield-abonelik/scripts/*.sh | xargs -t -n1 bash -n
+# rc=0 sure=0.0s zaman=2026-10-22T23:57:36+03:00
+--- stdout ---
+--- stderr ---
+bash -n higgsfield-abonelik/scripts/bogaz.lib.sh
+bash -n higgsfield-abonelik/scripts/buyut.sh
+bash -n higgsfield-abonelik/scripts/defter.sh
+bash -n higgsfield-abonelik/scripts/etiket-gom.sh
+bash -n higgsfield-abonelik/scripts/ffmpeg-kanit.sh
+bash -n higgsfield-abonelik/scripts/filigran-temizle.sh
+bash -n higgsfield-abonelik/scripts/filigran-yama.sh
+bash -n higgsfield-abonelik/scripts/girdi-kapisi.sh
+bash -n higgsfield-abonelik/scripts/hf-defter.sh
+bash -n higgsfield-abonelik/scripts/higgsfield-kimlik-kur.sh
+bash -n higgsfield-abonelik/scripts/isik-duzelt.sh
+bash -n higgsfield-abonelik/scripts/kadraj-duzelt.sh
+bash -n higgsfield-abonelik/scripts/kredi-mutabakat.sh
+bash -n higgsfield-abonelik/scripts/kredi-oku.sh
+bash -n higgsfield-abonelik/scripts/yuzsuz-video.sh
