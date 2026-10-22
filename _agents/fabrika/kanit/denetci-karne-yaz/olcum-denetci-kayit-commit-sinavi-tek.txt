@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/denetci-kayit-commit.test.sh
-# rc=0 sure=27.1s zaman=2026-10-22T17:50:57+03:00
+# rc=0 sure=27.7s zaman=2026-10-22T18:04:55+03:00
 --- stdout ---
 ════ B2DBS6 · denetçi kaydını iş dalına commit'ler ════
   ✓ a iş alanında (dal = iş adı) 5/E kaydı + KART.json kopyası dala commit'lenir: mesaj puanlı, ağaç TEMİZ
@@ -20,35 +20,3 @@ $ bash yazilim-fabrikasi/scripts/denetci-kayit-commit.test.sh
 
 ── SONUÇ: 14 geçti · 0 kaldı ──
 --- stderr ---
-error: Your local changes to the following files would be overwritten by checkout:
-	_agents/fabrika/karne.jsonl
-Please commit your changes or stash them before you switch branches.
-Aborting
-error: Your local changes to the following files would be overwritten by checkout:
-	_agents/fabrika/karne.jsonl
-Please commit your changes or stash them before you switch branches.
-Aborting
-error: Your local changes to the following files would be overwritten by checkout:
-	_agents/fabrika/karne.jsonl
-Please commit your changes or stash them before you switch branches.
-Aborting
-error: Your local changes to the following files would be overwritten by checkout:
-	_agents/fabrika/karne.jsonl
-Please commit your changes or stash them before you switch branches.
-Aborting
-error: Your local changes to the following files would be overwritten by checkout:
-	_agents/fabrika/karne.jsonl
-Please commit your changes or stash them before you switch branches.
-Aborting
-error: Your local changes to the following files would be overwritten by checkout:
-	_agents/fabrika/karne.jsonl
-Please commit your changes or stash them before you switch branches.
-Aborting
-error: Your local changes to the following files would be overwritten by checkout:
-	_agents/fabrika/karne.jsonl
-Please commit your changes or stash them before you switch branches.
-Aborting
-error: Your local changes to the following files would be overwritten by checkout:
-	_agents/fabrika/karne.jsonl
-Please commit your changes or stash them before you switch branches.
-Aborting

@@ -8,6 +8,9 @@
 # Mutantlar geçici kopyada; kontrol kopyası önce gerçek betikle aynı kapıları geçmeli (kopyada çöken sınav sahte yeşil vermesin).
 set -uo pipefail
 export FABRIKA_AILE_NOTIFY=-   # denetçi bitiş zili sınavda KAPALI
+# Karne bu sınavın konusu değil (denetci-karne.test.sh'ın): açık kalırsa birincile yazılan karne e kapısındaki `git add -A` ile
+# dala girer, sonra değişir ve `checkout main` reddedilir — göz #418 tur 1 bunu yakaladı (8 yutulan checkout hatası, 14/14 yeşil).
+export DENETCI_KARNE=0
 HERE="$(cd "$(dirname "$0")" && pwd)"
 GECEN=0; DUSEN=0
 g() { if [ "$1" -eq 0 ]; then GECEN=$((GECEN+1)); echo "  ✓ $2"; else DUSEN=$((DUSEN+1)); echo "  ✗ $2"; fi; }
@@ -50,10 +53,10 @@ _sen() {  # _sen <scripts-dir> → geçen kapı anahtarları
   local Wd; Wd="$(alan is-d baska-dal)"; local hd; hd="$(git -C "$Wd" rev-parse HEAD)"; kos is-d "$Wd" "$GECTI"
   [ "$(git -C "$Wd" rev-parse HEAD)" = "$hd" ] && grep -q "kayıt commit'lenmedi: dal 'baska-dal'" "$k/son.log" && o="$o d"
   # e · birincil checkout'ta (dal adı iş adı olsa da) commit'lenmez ve söylenir
-  git -C "$P" checkout -q -b is-e; kart is-e; ( cd "$P" && KANIT_DEPO="$P" python3 "$S/kanit.py" olcum is-e s --asama tek -- echo o >/dev/null 2>&1 && git add -A && git commit -q -m "chore: kanit" )
+  git -C "$P" checkout -q -b is-e || { echo KURULUM-HATASI; return 1; }; kart is-e; ( cd "$P" && KANIT_DEPO="$P" python3 "$S/kanit.py" olcum is-e s --asama tek -- echo o >/dev/null 2>&1 && git add -A && git commit -q -m "chore: kanit" )
   local he; he="$(git -C "$P" rev-parse HEAD)"; kos is-e "$P" "$GECTI"
   [ "$(git -C "$P" rev-parse HEAD)" = "$he" ] && grep -q "kayıt commit'lenmedi: birincil checkout" "$k/son.log" && o="$o e"
-  git -C "$P" checkout -q main
+  git -C "$P" checkout -q main || { echo KURULUM-HATASI; return 1; }   # kurulum düşerse kapılar KIRMIZI (yutulmaz)
   # f · kutu-dışı bulgulu turda KUTU-DISI.jsonl de aynı commit'te
   local Wf; Wf="$(alan is-f)"; kos is-f "$Wf" "$KD"
   [ "$(son_dosyalar "$Wf")" = "_agents/fabrika/kanit/is-f/DENETIM-1.json _agents/fabrika/kanit/is-f/KART.json _agents/fabrika/kanit/is-f/KUTU-DISI.jsonl " ] && o="$o f"

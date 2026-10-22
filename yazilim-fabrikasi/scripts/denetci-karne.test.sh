@@ -55,17 +55,17 @@ _sen() {  # _sen <scripts-dir> → geçen kapı anahtarları
   rmdir "$KR"; [ -f "$Pe.yedek" ] && mv "$Pe.yedek" "$KR"
   [ $r -eq 0 ] && grep -q "⚠ karne yazılamadı" "$k/son.log" && grep -q "✓ GEÇTİ" "$k/son.log" && o="$o e"
   # j · birincil checkout'ta koşan denetçi de yazar (kayıt commit'i orada yok ama karne var)
-  git -C "$P" checkout -q -b is-j; kart is-j
+  git -C "$P" checkout -q -b is-j || { echo KURULUM-HATASI; return 1; }; kart is-j
   ( cd "$P" && KANIT_DEPO="$P" python3 "$S/kanit.py" olcum is-j s --asama tek -- echo o >/dev/null 2>&1 )
   kos is-j "$P" "$GECTI"; [ "$(satir is-j tur)" = 1 ] && o="$o j"
-  git -C "$P" checkout -q -f main
+  git -C "$P" checkout -q -f main || { echo KURULUM-HATASI; return 1; }   # kurulum düşerse kapılar KIRMIZI (yutulmaz)
   # p · birincil checkout'ta karne zaten açıkken YEREL kip (fark kendisi, --diff yok) kir saymaz — yoksa karne bir sonraki turu kilitler
   git clone -q --bare "$P" "$k/o.git" 2>/dev/null; git -C "$P" remote add origin "$k/o.git"; git -C "$P" fetch -q origin 2>/dev/null
-  git -C "$P" checkout -q -b is-p; echo p > "$P/p.txt"; git -C "$P" add p.txt; git -C "$P" commit -q -m "feat: p"; kart is-p
+  git -C "$P" checkout -q -b is-p || { echo KURULUM-HATASI; return 1; }; echo p > "$P/p.txt"; git -C "$P" add p.txt; git -C "$P" commit -q -m "feat: p"; kart is-p
   ( cd "$P" && KANIT_DEPO="$P" python3 "$S/kanit.py" olcum is-p s --asama tek -- echo o >/dev/null 2>&1 )
   [ -f "$KR" ] && ( cd "$P" && env KANIT_DEPO="$P" KART_DEPO="$P" DENETCI_KOMUT="$k/sd.sh" SONUC_JSON="$GECTI" bash "$S/denetci.sh" is-p --depo "$P" < /dev/null ) > "$k/son.log" 2>&1 \
     && [ "$(satir is-p tur)" = 1 ] && o="$o p"
-  git -C "$P" checkout -q -f main
+  git -C "$P" checkout -q -f main || { echo KURULUM-HATASI; return 1; }
 
   # ── karne.sh ozet: kırıldı adayı ──
   local Q="$k/ozet"; mkdir -p "$Q"; ( cd "$Q" && git init -q -b main . )

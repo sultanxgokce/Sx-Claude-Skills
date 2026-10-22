@@ -1,7 +1,7 @@
 {
   "is": "denetci-karne-yaz",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-22T18:01:07+03:00",
+  "guncelleme": "2026-10-22T18:05:16+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -26,7 +26,7 @@
       "etiket": "karne",
       "asama": "sonra",
       "dosya": "olcum-karne-sonra.txt",
-      "sha256": "74d7da3985f6e6191c28c91ced7149f23aa9ae3eeb75089d29008ee4a8fd7bdf",
+      "sha256": "b24cc8d4b42d767f134fe58eff88b0d637bd3a958dcafe318947e6a9a914b1d6",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/denetci-karne-yaz/karne-olcer.sh",
@@ -34,10 +34,10 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-22T17:50:29+03:00",
+      "zaman": "2026-10-22T18:04:27+03:00",
       "sure_sn": 51.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "973f28f7f054403baf4215f1231a5170"
+      "olcum_id": "10e8141fe0c443c4bb36348ea9bfb1fb"
     },
     {
       "tur": "olcum",
@@ -61,17 +61,17 @@
       "etiket": "denetci-kayit-commit-sinavi",
       "asama": "tek",
       "dosya": "olcum-denetci-kayit-commit-sinavi-tek.txt",
-      "sha256": "919197a19d90cc0c8bf1e5b0807cd0972207fae4121c8c5d0afeae4e2ab80dbd",
+      "sha256": "9959080c3b11613b1f78d2bec80af168586d74fe5cb9dfb0a47053ad149e2861",
       "komut": [
         "bash",
         "yazilim-fabrikasi/scripts/denetci-kayit-commit.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-22T17:50:57+03:00",
-      "sure_sn": 27.1,
+      "zaman": "2026-10-22T18:04:55+03:00",
+      "sure_sn": 27.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "4fc7522295184fb1951890fd07f1b6c2"
+      "olcum_id": "9cbc3d1ba7ca43608e6abd0a591226b4"
     },
     {
       "tur": "olcum",
@@ -174,7 +174,24 @@
       "sure_sn": 522.4,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "69059ced62fd46c1bb64aa8d32441721"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kurulum-korumasi",
+      "asama": "tek",
+      "dosya": "olcum-kurulum-korumasi-tek.txt",
+      "sha256": "4793cd992473c879cc558e6a1abbf1527e6d2416dbb6c6558b23ed7b49975e55",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/denetci-karne-yaz/kurulum-olcer.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T18:05:16+03:00",
+      "sure_sn": 20.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f8f136c9ccd9463793b9132449878d12"
     }
   ],
-  "imza": "a967bc5e2036f4b0df4869eca401aed07df793950c2b70302552955f2750820b"
+  "imza": "d749c6ab7292cd484fa06172a6591dd9bb34f5c62a3e227ab823a27e9a0edbdb"
 }

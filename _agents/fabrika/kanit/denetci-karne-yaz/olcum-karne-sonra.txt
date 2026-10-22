@@ -1,5 +1,5 @@
 $ bash _agents/fabrika/kanit/denetci-karne-yaz/karne-olcer.sh yazilim-fabrikasi/scripts
-# rc=0 sure=51.1s zaman=2026-10-22T17:50:29+03:00
+# rc=0 sure=51.1s zaman=2026-10-22T18:04:27+03:00
 --- stdout ---
 ════ NPTHAQ · denetçi karneyi kendisi yazar ════
   ✓ a iş alanındaki 5/E turu birincil depodaki karneye tek satır yazar (iş alanında karne yok), söylenir
