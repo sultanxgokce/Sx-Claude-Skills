@@ -169,7 +169,8 @@ def defter_ekle(satir):
 
 
 def defter_oku():
-    """(satırlar, bozuk satır numaraları) | (None, []) — bozuk satır SESSİZCE atlanmaz, çağıran söyler."""
+    """(koşu satırları, AÇIK bozuk satır numaraları) | (None, []) — bozuk satır SESSİZCE atlanmaz, çağıran söyler.
+    Ters kayıtla kapatılmış bozuk satır (`tur: bozuk-ters`, göz #412 tur 5) açık sayılmaz; ters kayıtlar koşu değildir."""
     if not os.path.isfile(DEFTER):
         return None, []
     satirlar, bozuk = [], []
@@ -184,7 +185,28 @@ def defter_oku():
                     satirlar.append(d)
                 except ValueError:
                     bozuk.append(no)
-    return satirlar, bozuk
+    kapali = {d.get("satir") for d in satirlar if d.get("tur") == "bozuk-ters"}
+    return [d for d in satirlar if not d.get("tur")], [n for n in bozuk if n not in kapali]
+
+
+def bozuk_kapat(a):
+    """Yarım kalmış (süreç ölümü vb.) bozuk satıra TERS KAYIT: satır silinmez, durum onu artık açık saymaz. Satırın gerçekten
+    açık bozuk olduğu doğrulanır; içeriğinin özeti ters kayda yazılır (hangi satırın kapatıldığı sonradan da görülsün)."""
+    satirlar, bozuk = defter_oku()
+    if satirlar is None:
+        hata(f"diploma defteri yok: {DEFTER}", 3)
+    if a.satir not in bozuk:
+        hata(f"satır {a.satir} açık bozuk satır değil (açık bozuk: {', '.join(map(str, bozuk)) or 'yok'}) — ters kayıt yazılmadı", 2)
+    if len(a.gerekce.strip()) < 10:
+        hata("--gerekce en az 10 karakter: neden bozuk (ör. 'sınav süreci yazım ortasında öldü')", 2)
+    with open(DEFTER, encoding="utf-8") as f:
+        ham = f.read().split("\n")[a.satir - 1]
+    defter_ekle({"ts": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="microseconds").replace("+00:00", "Z"),
+                 "tur": "bozuk-ters", "satir": a.satir, "icerik_sha": hashlib.sha256(ham.encode("utf-8")).hexdigest()[:16],
+                 "gerekce": a.gerekce.strip()})
+    _, kalan = defter_oku()
+    print(f"diploma: satır {a.satir} ters kayıtla kapatıldı · açık bozuk kalan: {len(kalan)}")
+    return 0
 
 
 def sina(a):
@@ -293,7 +315,7 @@ def durum(a):
     if bozuk:
         # bozuk satır bir koşunun yarım yazımı olabilir: hangisinin SON koşu olduğu bilinemez → hüküm yok (yutma = rahatlatan eksik veri)
         hata(f"diploma defterinde bozuk: {len(bozuk)} (satır {', '.join(map(str, bozuk[:5]))}) — son koşu belirlenemez, ölçülemedi; "
-             f"satır ters kayıtla düzeltilir, silinmez", 3)
+             f"satır ters kayıtla kapatılır, silinmez: diploma.sh bozuk-kapat <satır> --gerekce \"…\"", 3)
     benim = [s for s in satirlar if ad_kat(str(s.get("personel", ""))) == ad_kat(a.personel) and s.get("uzmanlik") == a.uzmanlik]
     sic, sebep = sicil_durumu(a.personel)
     sicil_notu = f"sicil {sic}" if sic else f"sicil ölçülemedi ({sebep})"
@@ -338,7 +360,12 @@ def main():
     d.add_argument("personel")
     d.add_argument("--uzmanlik", default="muhurdarlik")
     d.add_argument("--kume")
+    b = alt.add_parser("bozuk-kapat")
+    b.add_argument("satir", type=int)
+    b.add_argument("--gerekce", required=True)
     a = ap.parse_args()
+    if a.komut == "bozuk-kapat":
+        sys.exit(bozuk_kapat(a))
     if a.uzmanlik != "muhurdarlik":
         hata(f"bilinmeyen uzmanlık: {a.uzmanlik} (bugün yalnız muhurdarlik'in sınav kümesi var)", 2)
     sys.exit(sina(a) if a.komut == "sina" else durum(a))

@@ -30,13 +30,15 @@ d = json.load(open(sys.argv[1]))
 for k, v in d["ornekler"].items():
     print(f"   {k}: yargıç {v['yargic'] or '-'} · hüküm {v['verdikt']} · düşen {','.join(v['g_dusen']) or '-'} · beklenen {v['beklenen']} {','.join(v['beklenen_kaldi'])} · {'isabet' if v['isabet'] else 'ISKA'}")
 PY
-echo "── 3 · durum"
-bash "$S/diploma.sh" durum OLCUM-MUHURDAR; r3=$?
+echo "── 3 · durum (gerçek sicil yazıcısıyla: geçici temiz özlük — göz #412 tur 5)"
+mkdir -p "$T/sicil"; printf 'personel_no: "99.001"\npersona: OLCUM-MUHURDAR\ngecmis: []\n' > "$T/sicil/99.001.yaml"
+bash "$S/diploma.sh" durum OLCUM-MUHURDAR > "$T/durum.log" 2>&1; r3=$?; cat "$T/durum.log"
+grep -q "sicil temiz" "$T/durum.log"; r3s=$?
 printf '{"skills":[{"id":"tescil","version":"99.0.0"}]}\n' > "$T/katalog.json"
 bash "$S/diploma.sh" durum OLCUM-MUHURDAR; r4=$?
 echo "── defter satırları: $(wc -l < "$DIPLOMA_DEFTERI") (geçici) · gerçek defter önce/sonra: $( [ "$once_iz" = "$(iz)" ] && echo AYNI || echo DEĞİŞTİ)"
 ok=1; [ "$r1" -eq 1 ] || ok=0; [ "$r4" -eq 1 ] || ok=0; [ "$once_iz" = "$(iz)" ] || ok=0
-[ "$r2" -eq 0 ] && [ "$r3" -eq 0 ] || ok=0
-[ "$ok" = 1 ] && echo "── SONUÇ: ✓ lastik mühürdar kaldı · gerçek yargıç geçti · diploma türetiliyor (geçerli → sürüm değişince bayat) · gerçek defter dokunulmadı" \
-              || echo "── SONUÇ: ✗ (lastik rc $r1 · gerçek rc $r2 · durum rc $r3/$r4)"
+[ "$r2" -eq 0 ] && [ "$r3" -eq 0 ] && [ "$r3s" -eq 0 ] || ok=0
+[ "$ok" = 1 ] && echo "── SONUÇ: ✓ lastik mühürdar kaldı · gerçek yargıç geçti · diploma türetiliyor (geçerli + sicil temiz → sürüm değişince bayat) · gerçek defter dokunulmadı" \
+              || echo "── SONUÇ: ✗ (lastik rc $r1 · gerçek rc $r2 · durum rc $r3/$r4 · sicil temiz rc $r3s)"
 [ "$ok" = 1 ]

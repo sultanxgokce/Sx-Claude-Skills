@@ -1,0 +1,59 @@
+{
+  "tur": 5,
+  "is": "muhurdar-diploma",
+  "pr": "412",
+  "yazan": "claude",
+  "denetci": "claude (sonnet) (YEDEK GÖZ: codex düştü (2 deneme, rc=1) · yazandan farklı yeni oturum + farklı model kademesi [yazan: opus] · Sultan Y0006)",
+  "zaman": "2026-10-22T10:40:34+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": "codex düştü (2 deneme, rc=1)",
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": "sonnet",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 92773,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 35,
+    "bayt": 98710
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kart talebi (doğru/kusurlu/uydurma küme, gerçek muhurdar.sh usulüyle geçici kökte sınav, §6 satırlı kilitli ve yarım kalmayan defter yazımı, bozuk satırın raporlanması, geçerli/bayat/yok/askıda türetimi) kodda ve araç imzalı kanıtta karşılanmış: önce kırmızı / sonra yeşil çifti, 47/0 hermetik sınav (20 mutant) ve gerçek yargıçla 6/6. 4 verdim, çünkü ciddi hata yok ama birkaç dayanıklılık ve ölçüm rötuşu kalmış. Küme gücü ve SIGKILL temizliği ayrı karta (muhurdar-diploma-kume-gucu) devredilmiş, bu yüzden kapsam dışıdır.",
+    "bulgular": [
+      {
+        "ne": "Defter yazımında ftruncate geri alma yolu yalnız os.write/fsync OSError'ında çalışır. Süreç yazımın ortasında ölürse (SIGKILL) yarım satır kalır. Sonraki yazım satır sonu eksikse '\\n' ekler, ama durum komutu 'bozuk' deyip kalıcı olarak ölçülemedi (rc 3) verir ve ters kayıt dışında toparlanmaz.",
+        "kanit": "diploma.py defter_ekle: ftruncate yalnız except OSError içinde; durum(): bozuk varsa hata(...,3). p3 kapısı yalnız kısa yazım ve satır sonu eksik durumunu ölçüyor, süreç ölümünü ölçmüyor.",
+        "konum": "tescil/scripts/lib/diploma.py:defter_ekle/durum",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Bozuk satırlı defterde durum komutu kalıcı rc 3 verir. Bunun için ters kayıtla düzeltme yolu belgelenmiş (hata mesajında geçiyor) ama bunu uygulayan bir komut yok.",
+        "kanit": "diploma.py durum(): 'satır ters kayıtla düzeltilir, silinmez' mesajı var, bunu yapan alt komut diff'te yok.",
+        "konum": "tescil/scripts/lib/diploma.py:durum",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Kapı i2 (sicil sözleşmesi) tam ölçümü yalnız #411 önizlemesinde (olcum-onizleme-411, 44/0) var. Bu dalın kendi ölçümünde 'sicil ölçülemedi' yazıyor. Kapı i2 bu dalda lib/sicil.py varken koşuyor (diploma.test.sh 47/0), ama kanıtın sicil kısmı birleşme sırası #411→#412'ye bağlı. Sıra kartta tanımlı, kod hatası değil.",
+        "kanit": "olcum-diploma-sonra.txt: 'sicil ölçülemedi (sicil dizini yok …)'; olcum-onizleme-411-tek.txt: 44 geçti 0 kaldı.",
+        "konum": "tescil/scripts/diploma.test.sh kapı i2",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Mutant 'sicil-ayrimi-yok' (e kapısı) koşulu muhurdar.sh içinde 'sicil.py\" muhur' geçmesine bağlı. Bu dalda #411 birleşik olduğundan koşul sağlanır, ama koşul sağlanmazsa mutant sessizce 'ÖLÇÜLEMEDİ' basıp atlanır. Test sayısını etkilemediği için yeşil kalır.",
+        "kanit": "diploma.test.sh: if grep -q 'sicil.py\" muhur' ... else echo 'ÖLÇÜLEMEDİ mutant sicil-ayrimi-yok'; yalnız echo, kalan sayacına yazılmıyor.",
+        "konum": "tescil/scripts/diploma.test.sh (mutasyon bölümü)",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sha'lar tutuyor. Sarı kayıt yok. Önce/sonra çifti gerçek: önce kırmızı (diploma.sh yok, rc 1), sonra yeşil (rc 0). Sonra koşusunda lastik yargıç KALDI, gerçek yargıç (Codex, düşünce Claude) 6/6 GEÇTİ, gerçek defter dokunulmamış ve durum geçerli → bayat geçişi gösterilmiş. Hermetik sınav 47/0 (20 mutant, bu tur eklenen yarim-kalir ve satir-sonu-yok dahil). muhurdar 32/0, sicil 53/0 ve #411 önizlemesi 44/0 yeşil. Kalan zayıflık gerçek yargıç koşusunun tek seferlik olması ve cevap anahtarı okunmadığının gerçek yargıçta ölçülmemesi. İkisi de devredilen kartın (muhurdar-diploma-kume-gucu) kapsamında, README/SKILL'de dürüst sınır olarak yazılı."
+  }
+}

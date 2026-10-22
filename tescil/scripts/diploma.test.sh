@@ -121,6 +121,16 @@ PY
   # p2 · sina bozuk satırlı deftere yazar ama bozukluğu SÖYLER (geri okuma bozuğu da görür)
   cp "$T/defter/bozuk.jsonl" "$T/defter/bozuk2.jsonl"
   _d "$s" y-durust "$T/defter/bozuk2.jsonl" -- sina MUHAKKİK --kanit "$T/kanit-x"; [ $? -eq 0 ] && grep -q "⚠ bozuk: 1 satır" "$T/son.log" && o="$o p2"
+  # p4 · bozuk satır ters kayıtla kapatılır (göz #412 tur 5): kapatınca durum yeniden ölçülür (son geçerli koşu), satır SİLİNMEZ;
+  #      geçerli satır kapatılamaz, aynı satır iki kez kapatılamaz, gerekçesiz kapatılamaz
+  cp "$T/defter/bozuk.jsonl" "$T/defter/bozuk3.jsonl"; local bn; bn="$(wc -l < "$T/defter/bozuk3.jsonl")"
+  _d "$s" y-durust "$T/defter/bozuk3.jsonl" -- bozuk-kapat 1 --gerekce "geçerli satır denemesi burada"; local k1=$?
+  _d "$s" y-durust "$T/defter/bozuk3.jsonl" -- bozuk-kapat "$bn" --gerekce "kısa"; local k2=$?
+  _d "$s" y-durust "$T/defter/bozuk3.jsonl" -- bozuk-kapat "$bn" --gerekce "sınav süreci yazım ortasında öldü"; local k3=$?
+  _d "$s" y-durust "$T/defter/bozuk3.jsonl" -- bozuk-kapat "$bn" --gerekce "sınav süreci yazım ortasında öldü"; local k4=$?
+  _d "$s" y-durust "$T/defter/bozuk3.jsonl" -- durum MUHAKKİK; local k5=$?
+  [ $k1 -eq 2 ] && [ $k2 -eq 2 ] && [ $k3 -eq 0 ] && [ $k4 -eq 2 ] && [ $k5 -eq 0 ] && grep -q "durum: gecerli" "$T/son.log" \
+    && [ "$(wc -l < "$T/defter/bozuk3.jsonl")" = "$((bn + 1))" ] && grep -q '"gec$' "$T/defter/bozuk3.jsonl" && o="$o p4"
   # p3 · yazım yarım kalmaz (göz #412 tur 4): kısa yazımda defter eski hâline kesilir, rc 3; satır sonu eksik (yarım kalmış)
   #      deftere yeni satır yapışmaz — kendi satırında, okunur
   cp "$D" "$T/defter/kes.jsonl"; local kb; kb="$(md5sum < "$T/defter/kes.jsonl")"
@@ -151,7 +161,7 @@ PY
   # m · defter yok → durum ölçülemedi (yok DEĞİL)
   _d "$s" y-durust "$T/defter/yok.jsonl" -- durum MUHAKKİK; [ $? -eq 3 ] && o="$o m"
   # i2 · GERÇEK sicil.py ile sözleşme (durum --json): iki ayrı görevde kaçırma → askida; temiz özlük → sicil temiz
-  if [ -f "$s/lib/sicil.py" ]; then
+  #      (#411 main'de: yazıcı yoksa kapı düşer — ÖLÇÜLEMEDİ'ye kaçış yok, göz #412 tur 5)
     mkdir -p "$T/sicil-aski" "$T/sicil-temiz"
     printf 'personel_no: "01.099"\npersona: MUHAKKİK\ngecmis: []\nisabet:\n' > "$T/sicil-aski/01.099.yaml"
     for x in A B; do printf '  - {"ts": "2026-10-22T00:00:0%s.000001Z", "gorev": "gorev_%s", "gereklilik": "G1", "muhur": "✓", "sultan": "saglanmadi", "kacirma": "e", "bassiz": "h", "el_kitabi_surum": "9.9.9", "ders": null, "neden": "x", "kaynak": "teslim:%s"}\n' "$( [ $x = A ] && echo 1 || echo 2)" $x $x >> "$T/sicil-aski/01.099.yaml"; done
@@ -159,9 +169,6 @@ PY
     _d "$s" y-durust "$D" SICIL_DIZIN="$T/sicil-aski" TARIF_KAYDI="$T/yok.json" -- durum MUHAKKIK; r=$?
     [ $r -eq 1 ] && grep -q "durum: askida" "$T/son.log" && grep -q "sicil askida" "$T/son.log" \
       && _d "$s" y-durust "$D" SICIL_DIZIN="$T/sicil-temiz" TARIF_KAYDI="$T/yok.json" -- durum MUHAKKİK && grep -q "durum: gecerli" "$T/son.log" && grep -q "sicil temiz" "$T/son.log" && o="$o i2"
-  else
-    _d "$s" y-durust "$D" -- durum MUHAKKİK; grep -q "sicil ölçülemedi (sicil yazıcısı yok" "$T/son.log" && o="$o i2-yok"
-  fi
   # i · sicil askıda → diploma askıda (sahte sicil.py ile)
   cp "$s/lib/sicil.py" "$T/sicil.py.yedek" 2>/dev/null || : > "$T/sicil.py.yedek-yok"
   printf 'import json\nprint(json.dumps({"durum":"askida"}))\n' > "$s/lib/sicil.py"
@@ -169,9 +176,8 @@ PY
   if [ -f "$T/sicil.py.yedek" ]; then cp "$T/sicil.py.yedek" "$s/lib/sicil.py"; rm -f "$T/sicil.py.yedek"; else rm -f "$s/lib/sicil.py" "$T/sicil.py.yedek-yok"; fi
   echo "$o"
 }
-BEK="a a2 n e e2 b c d l o r f g j q h h2 h3 h4 k k2 p p2 p3 m i"
-# gerçek sicil yazıcısı (Sx #411) varsa onunla sözleşme kapısı i2; yoksa yokluğun SÖYLENDİĞİ kapı i2-yok
-if [ -f "$HERE/lib/sicil.py" ]; then BEK="$BEK i2"; else BEK="$BEK i2-yok"; fi
+BEK="a a2 n e e2 b c d l o r f g j q h h2 h3 h4 k k2 p p2 p3 p4 m i"
+BEK="$BEK i2"   # gerçek sicil yazıcısıyla sözleşme (Sx #411 birleşti) — koşulsuz
 # gerçek betikler bir kopyada koşulur (kapı i sahte sicil.py yazar — gerçek dosyaya dokunmamak için); el kitabı kökü aynı kalır
 _kopya_gercek() { local d="$T/gercek/scripts"; mkdir -p "$d"; cp -r "$HERE/." "$d/"; cp "$HERE/../SKILL.md" "$T/gercek/SKILL.md"; ln -s "$KUME" "$T/gercek/sinav"; echo "$d"; }
 echo "── gerçek betikler"
@@ -194,10 +200,8 @@ PY
 echo "── mutasyonlar"
 _mut alt-kume l 'isabet = verdikt == "KALDI" and set(bek.get("kaldi") or []) <= set(dusen)' 'isabet = verdikt == "KALDI"'
 _mut eskalasyon-isabet d 'isabet = verdikt == "GECTI"' 'isabet = verdikt != "KALDI"'
-# sicil ayrımı yalnız mühürdar sicile yazıyorsa ölçülebilir (yazıcı Sx #411'de) — yoksa ÖLÇÜLEMEDİ der, yeşil saymaz
-if grep -q 'sicil.py" muhur' "$HERE/muhurdar.sh"; then
+# sicil ayrımı: muhurdar.sh her mühürde sicile yazar (Sx #411) — koşulsuz ölçülür
 _mut sicil-ayrimi-yok e 'env = dict(os.environ, AGENT_NAME=personel, SICIL_DIZIN=os.path.join(kok, "sicil-yok"))' 'env = dict(os.environ, AGENT_NAME=personel)'
-else echo "  ÖLÇÜLEMEDİ mutant sicil-ayrimi-yok: muhurdar.sh sicile yazmıyor (yazıcı Sx #411) — kapı e bugün yalnız sicil dosyasının değişmediğini ölçer"; fi
 _mut surum-skill a '                    return s["version"], "katalog"' '                    return skill_surum(), "katalog"'
 _mut bayat-yok h2 '    elif d.get("el_kitabi_surum") != surum:' '    elif False:'
 _mut aski-yok i '    if sic == "askida":' '    if False:'
@@ -208,9 +212,7 @@ _mut yargic-izi-yok a2 '                    yargic = satir[8:].strip()' '       
 _mut son-kosu-yok o '    d = benim[-1]' '    d = ([x for x in benim if x.get("gecti") == "e"] or benim)[-1]'
 _mut kume-bayat-yok h4 '    elif d.get("kume_sha") != kume_sha:' '    elif False:'
 _mut telemetri-gercek e2 '    k = os.path.join(kok, "_agents", "tescil", kart)' '    k = os.path.join(kok, "x", kart)'
-if [ -f "$HERE/lib/sicil.py" ]; then
 _mut sicil-json-yok i2 '[sys.executable, sicil, "durum", personel, "--json"]' '[sys.executable, sicil, "durum", personel]'
-else echo "  ÖLÇÜLEMEDİ mutant sicil-json-yok: gerçek sicil yazıcısı yok (Sx #411) — kapı i2 yerine i2-yok koştu"; fi
 _mut bozuk-yutulur p '    if bozuk:
         # bozuk' '    if False:
         # bozuk'
@@ -221,6 +223,8 @@ _mut kararsiz-yutulur r '                    if isabet2:
                         kararsiz.append(kart)' '                    if isabet2:
                         isabet = True'
 _mut kume-sha a '    return ornekler, h.hexdigest()' '    return ornekler, ""'
+_mut ters-kayit-yok p4 '    return [d for d in satirlar if not d.get("tur")], [n for n in bozuk if n not in kapali]' '    return [d for d in satirlar if not d.get("tur")], bozuk'
+_mut kapat-dogrulamasiz p4 '    if a.satir not in bozuk:' '    if False:'
 _mut yarim-kalir p3 '            os.ftruncate(fd, boy)' '            pass'
 _mut satir-sonu-yok p3 '            veri = b"\n" + veri' '            pass'
 echo "diploma.test: $gecen geçti · $kalan kaldı"
