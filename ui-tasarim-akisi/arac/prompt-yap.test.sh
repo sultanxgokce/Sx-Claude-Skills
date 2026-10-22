@@ -111,6 +111,10 @@ echo "── 5 · TIK KAPISI: yoğunluk temiz olsa bile tık ölçülmeden geçi
 mkdir -p "$T/temiz"
 cp "$ARAC/fikstur/temiz/"*.html "$T/temiz/"
 TEMIZ_ILK="$(ls "$T/temiz/"*.html | head -1)"
+# KAPI 6 ön-koşulu (6TFBV, 2026-10-23): bu bölüm TIK kapısını ölçer; ayırt yargısı önce yazılır ki
+# rc=3 gerçekten tık kapısından gelsin. Eskiden yeşili "ilk sayfa" muafiyetine borçluydu — kapı
+# yargısız sayfada ilk geçişte açılıyordu, sınav da tam o açığın üstünde duruyordu.
+ayirt_yaz "$TEMIZ_ILK"
 kapi "tık ölçümü yok → rc=3" 3 bash "$YAP" "$T/sablon-devam.md" --onceki "$TEMIZ_ILK" \
      --dil "$T/tasarim/tasarim-dili.md" --estetik "$T/tasarim/estetik-yon.md"
 icerir "iki şeyin farkı söylenir" "tık BAKILMAMIŞ"
@@ -118,7 +122,6 @@ icerir "çözüm aracı gösterilir" "tik-kaydet.sh"
 
 echo "── 5b · tık ölçülünce geçer"
 bash "$ARAC/tik-kaydet.sh" "$TEMIZ_ILK" G1=3:2 G2=2:2 >/dev/null
-ayirt_yaz "$TEMIZ_ILK"      # KAPI 6 ön-koşulu: bu sayfa için ayırt yargısı
 kapi "tık taze → rc=0" 0 bash "$YAP" "$T/sablon-devam.md" --onceki "$TEMIZ_ILK" \
      --dil "$T/tasarim/tasarim-dili.md" --estetik "$T/tasarim/estetik-yon.md"
 icerir "önceki sayfa gövdesi gömüldü" "<!-- bilesen: Gezinme -->"

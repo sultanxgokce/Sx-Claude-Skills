@@ -1,6 +1,6 @@
 ---
 name: frontend-boost
-version: 0.5.0
+version: 0.5.1
 allowed-tools: Bash, Read, Write, Edit
 description: Bir sayfanın (karşılama sayfası, ürünün açılış ekranı, sunum kapağı, broşür kapağı) "bunu bir tasarımcı yapmış" dedirtecek biçimde, etkili ama yalın tasarlanması istendiğinde kullan. Tetikleyiciler — "/frontend-boost", "daha efektli ama minimal", "vasat durmasın", "premium görünsün", "landing page", "sahne", "wow etkisi". Formülü, belirteçleri, hazır şablonu, ölçüm araçlarını ve düşülen tuzakları içerir. Her UI ve tasarım işinde frontend-design ile BİRLİKTE çağrılır (Sultan 19 Eyl); sahne formülü yalnız önemli yüzeylerde, 'Devralınan disiplin' bölümü her işte (form, tablo, panel dahil) geçerlidir.
 ---
@@ -193,3 +193,11 @@ Sınav: `bash arac/araclar.test.sh` (17 kapı, ağsız; 4'ü tarayıcı ister �
 **`frontend-design` eklentisi her kutuda yok:** Sultan'ın 19 Eylül kararıyla her UI işinde zorunludur; eklentinin
 bulunmadığı kutuda teslim mektubuna "frontend-design bu kutuda yok — çağrılamadı" yazılır (sessizce atlanmaz) ve beceri
 "Devralınan disiplin" bölümüyle kendi başına yürür (NAKKAŞ'ın notu, 0.5.0'da zorunlulukla uzlaştırıldı).
+
+## Sürüm notu — 0.5.1 (2026-10-23 · MUAVİN · gorev XZE47) — kontrast ölçer
+- **Çökme ihlal değildir:** yüksekliği 0 kutu `getImageData`'yı düşürüyor, yakalanmamış hata rc=1 "eşik aşıldı" diye okunuyordu.
+  Artık 1 pikselden küçük kutu ölçüme girmez; ölçüm sırasında her çökme **rc=3 ÖLÇÜLEMEDİ**.
+- **Oran iki yönlü** (WCAG: açık/koyu): açık rozet hapı üstündeki koyu yazı 0,07 basıyordu, şimdi 15,3.
+- **Zemin = baskın piksel**, örnekleme kutunun köşe yarıçapı kadar içeriden: p95 yuvarlak hapın köşesinden dış zemini okuyordu.
+  Çıktı etiketleri buna göre: "baskın zemin" (5,5 eşiği) · "en kötü zemin pikseli" (4,5 eşiği).
+- Kanıt: `arac/araclar.test.sh` T10–T13 (tarayıcılı; gerçek soluk metin T12 hâlâ rc=1 — düzeltme kapıyı gevşetmedi). Eski ölçer bu sınavda 7 kapıda düşer.

@@ -15,6 +15,15 @@
 // pikseli okunuyor, oran 1,00 çıkıyordu. Artık gizleme = sabit liste ∪ SECICILER (SAHNE altında).
 // Oranı 1,00 (±0,005) çıkan kutu ÖLÇÜLEMEDİ sayılır (zemin okunamadı) → rc=3, eşik ihlali DEĞİL.
 //
+// 🔴 ÇÖKME İHLAL DEĞİLDİR · ORAN İKİ YÖNLÜ · ZEMİN BASKIN PİKSEL (MUAVİN, 2026-10-23, gorev XZE47):
+// (1) yüksekliği 0 kutuda getImageData IndexSizeError fırlatıyordu → yakalanmamış hata node'u rc=1 ile
+//     düşürüyordu ve "eşik aşıldı" diye okunuyordu. Artık 1 pikselden küçük kutu ölçüme alınmaz; ölçüm
+//     sırasında herhangi bir çökme rc=3 ÖLÇÜLEMEDİ'dir.
+// (2) oran (metin+.05)/(zemin+.05) tek yönlüydü: açık zemin üstündeki koyu metin 0,07 basıyordu.
+//     WCAG oranı (açık+.05)/(koyu+.05)'tir → iki yönlü.
+// (3) p95 yuvarlak hapın köşesinden DIŞ zemini okuyordu. Artık zemin = kutudaki BASKIN parlaklık
+//     (en kalabalık küme); örnekleme kutunun kendi köşe yarıçapı kadar yanlardan içeri çekilir.
+//     "en kötü piksel" (tepe) aynı içeri çekilmiş alanda metne en yakın zemin pikselidir.
 // Kullanım: node kontrast-olc.mjs <file://… | http…> [çıpa,çıpa]
 // Çıkış: 0 eşik temiz · 1 eşik AŞILDI · 2 kullanım · 3 ÖLÇÜLEMEDİ (runtime/seçici yok)
 // Ayar: FRONTEND_BOOST_PW (playwright-core modül yolu) · FRONTEND_BOOST_PW_LIBS (lib/fontconfig kökü)
@@ -62,25 +71,40 @@ catch (e) {
   console.error('  neden: ' + String(e && e.message || e).split('\n')[0]);
   process.exit(3);
 }
+try {
 for(const [en,boy,cipa] of [[1440,900,'acik'],[1440,900,'koyu'],[1280,800,'acik'],[390,844,'acik']]){
 const s=await t.newPage({viewport:{width:en,height:boy}});
 await s.goto(hedef+'#'+cipa);await s.evaluate(()=>document.fonts.ready);await s.waitForTimeout(3200);
 // sahnedeki soluk metinlerin kutuları ve renkleri
 const kutular=await s.evaluate(({SAHNE,SECICILER})=>{const sahne=document.querySelector(SAHNE);if(!sahne)return[];const r=[];
-  sahne.querySelectorAll(SECICILER).forEach(e=>{const b=e.getBoundingClientRect();if(!b.width||b.bottom>innerHeight)return;const c=getComputedStyle(e);
-    r.push({m:e.textContent.trim().slice(0,28),x:b.x,y:b.y,w:b.width,h:b.height,renk:(e.tagName==='text'?c.fill:c.color)});});return r;},{SAHNE,SECICILER});
+  sahne.querySelectorAll(SECICILER).forEach(e=>{const b=e.getBoundingClientRect();if(!(b.width>=1)||!(b.height>=1)||b.bottom>innerHeight)return;const c=getComputedStyle(e);
+    const yc=Math.min(parseFloat(c.borderTopLeftRadius)||0,b.height/2,b.width/4);
+    r.push({m:e.textContent.trim().slice(0,28),x:b.x,y:b.y,w:b.width,h:b.height,yc,renk:(e.tagName==='text'?c.fill:c.color)});});return r;},{SAHNE,SECICILER});
 await s.addStyleTag({content:GIZLE+'{color:transparent!important;fill:transparent!important}'});
 await s.waitForTimeout(200);
 const png=(await s.screenshot()).toString('base64');
 const son=await s.evaluate(async({png,kutular})=>{const im=new Image();im.src='data:image/png;base64,'+png;await im.decode();const c=document.createElement('canvas');c.width=im.width;c.height=im.height;const g=c.getContext('2d');g.drawImage(im,0,0);
   const f=v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)};const L=(r,gg,b)=>.2126*f(r)+.7152*f(gg)+.0722*f(b);
-  return kutular.map(k=>{const d=g.getImageData(Math.max(0,Math.floor(k.x)),Math.max(0,Math.floor(k.y)),Math.ceil(k.w),Math.ceil(k.h)).data;const ls=[];for(let i=0;i<d.length;i+=4)ls.push(L(d[i],d[i+1],d[i+2]));ls.sort((x,y)=>x-y);const enAcik=ls[Math.floor(ls.length*.95)],tepe=ls[ls.length-1];
-    const m=k.renk.match(/[\d.]+/g).map(Number);const lt=L(m[0],m[1],m[2]);return {m:k.m,oran:+((lt+.05)/(enAcik+.05)).toFixed(2),tepe:+((lt+.05)/(tepe+.05)).toFixed(2)};});},{png,kutular});
+  const O=(a,b)=>(Math.max(a,b)+.05)/(Math.min(a,b)+.05);   // WCAG: iki yönlü
+  return kutular.map(k=>{const x0=Math.max(0,Math.floor(k.x+k.yc)),w=Math.max(1,Math.ceil(k.w-2*k.yc));const d=g.getImageData(x0,Math.max(0,Math.floor(k.y)),w,Math.max(1,Math.ceil(k.h))).data;
+    const ls=[];for(let i=0;i<d.length;i+=4)ls.push(L(d[i],d[i+1],d[i+2]));
+    const kova=new Map();for(const v of ls){const q=Math.round(v*200);kova.set(q,(kova.get(q)||0)+1);}   // baskın zemin: en kalabalık kova
+    let bq=0,bn=-1;for(const [q,n] of kova)if(n>bn){bn=n;bq=q;}const zem=ls.filter(v=>Math.round(v*200)===bq);const zemin=zem.reduce((a,v)=>a+v,0)/zem.length;
+    const m=k.renk.match(/[\d.]+/g).map(Number);const lt=L(m[0],m[1],m[2]);
+    let tepe=Infinity;for(const v of ls){const o=O(lt,v);if(o<tepe)tepe=o;}
+    return {m:k.m,oran:+O(lt,zemin).toFixed(2),tepe:+tepe.toFixed(2)};});},{png,kutular});
 // oran 1,00 (±0,005) = zemin değil yazının kendisi ya da zeminle aynı renk okundu → ÖLÇÜLEMEDİ, eşiğe sayılmaz
 const bir=son.filter(o=>Math.abs(o.oran-1)<=0.005);bir.forEach(o=>olculemeyen.push(`${en} ${cipa} · ${o.m}`));
 son.splice(0,son.length,...son.filter(o=>!bir.includes(o)));
-son.sort((a,b)=>a.oran-b.oran);toplamMetin+=son.length;ihlal+=son.filter(o=>o.oran<5.5).length+son.filter(o=>o.tepe<4.5).length;console.log(`${en} ${cipa} · ${son.length} metin${bir.length?` (+${bir.length} ölçülemedi)`:''} · en düşük:`,son.slice(0,5).map(o=>`${o.m}=${o.oran} (en açık piksel ${o.tepe})`).join(' | '),'· 5,5 altı (p95):',son.filter(o=>o.oran<5.5).length,'· 4,5 altı (en açık piksel):',son.filter(o=>o.tepe<4.5).length);
+son.sort((a,b)=>a.oran-b.oran);toplamMetin+=son.length;ihlal+=son.filter(o=>o.oran<5.5).length+son.filter(o=>o.tepe<4.5).length;console.log(`${en} ${cipa} · ${son.length} metin${bir.length?` (+${bir.length} ölçülemedi)`:''} · en düşük:`,son.slice(0,5).map(o=>`${o.m}=${o.oran} (en kötü zemin pikseli ${o.tepe})`).join(' | '),'· 5,5 altı (baskın zemin):',son.filter(o=>o.oran<5.5).length,'· 4,5 altı (en kötü zemin pikseli):',son.filter(o=>o.tepe<4.5).length);
 await s.close();}
+} catch (e) {
+  // ölçüm sırasında çökme ihlal DEĞİLDİR: hiçbir kutu için "eşik aşıldı" hükmü verilemez
+  console.error('ÖLÇÜLEMEDİ: ölçüm sırasında hata — kontrast ÖLÇÜLMEDİ, ne "temiz" ne "eşik aşıldı": rc=3.');
+  console.error('  neden: ' + String(e && e.message || e).split('\n')[0]);
+  await t.close().catch(() => {});
+  process.exit(3);
+}
 await t.close();
 if (olculemeyen.length > 0) {
   console.error(`ÖLÇÜLEMEDİ: ${olculemeyen.length} kutuda oran 1,00 çıktı — zemin yerine yazının kendi pikseli (ya da zeminle aynı renk) okundu; bu kutular ÖLÇÜLMEDİ.`);

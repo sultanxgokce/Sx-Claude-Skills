@@ -411,8 +411,20 @@ def ayirt_kapisi(argv, yol):
     onceki = [k for k in hepsi
               if k["kutu"] == alan["kutu"] and k["urun"] == alan["urun"]
               and k["ekran"] == alan["ekran"]]
+    # 🔴 "İLK SAYFA" MUAFİYETİ KALKTI (MUAVİN, 2026-10-23, gorev 6TFBV): eskiden satır yoksa
+    #    "ilk sayfa, kıyaslanacak öncesi yok" denip kapı AÇIK sayılıyordu. Ama bu kapının tek
+    #    çağıranı prompt-yap.sh --onceki yoludur ve sorulan sayfa ZATEN önceki sayfadır — yargı
+    #    onun için istenir. Satırı ancak prompt-yap üretimi sırasında (kapıdan SONRA) oluşuyordu:
+    #    ölçüldü 21 Eki, yargısız sayfada 1. koşu rc 0 (80 KB prompt üretildi, havuz kirlendi),
+    #    2.-4. koşu rc 1. Kapı ilk geçişte hiç kapanmıyordu. İlk sayfanın (Durak 3) promptu
+    #    --onceki almaz ve bu kapıdan hiç geçmez; muafiyete orada da gerek yok.
     if not onceki:
-        return 0            # ilk sayfa: kıyaslanacak öncesi yok
+        sys.stderr.write("KAPI KAPALI — '%s' sayfası için havuzda HİÇ satır yok: ayırt-edicilik\n"
+                         "  yargısı verilmemiş. (Bu kapı yalnız devam promptunda sorulur; sorulan sayfa\n"
+                         "  önceki sayfadır — 'ilk sayfa' muafiyeti burada geçerli değil.)\n" % alan["ekran"])
+        sys.stderr.write("  Yargıyı yaz: havuz.py yaz --kapi ayirt --hukum temiz|kirmizi|emin-degilim "
+                         "--klise … --imza … (rubrik: sablonlar/estetik-guc-v1.md)\n")
+        return 1
     # 🔴 KARARLI yargı açar (bağımsız göz bulgusu, 2026-10-15): eski hâlde `kapi == "ayirt"`
     #    olan HER kayıt kapıyı açıyordu — `emin-degilim` de dâhil. Oysa rubrik onu
     #    *"meşrudur ama bir sonraki turda çözülmeli, KALICI SIĞINAK DEĞİLDİR"* diye tanımlıyor;

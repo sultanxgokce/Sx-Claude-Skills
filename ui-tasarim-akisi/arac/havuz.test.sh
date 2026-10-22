@@ -82,6 +82,13 @@ printf 'x\n> n\n---\n{{ONCEKI_HTML}}\n{{TASARIM_DILI}}\n{{ESTETIK_YON}}\n' > "$T
 ILK="$(ls "$T/proje/ciktilar/"*.html | head -1)"
 bash "$ARAC/tik-kaydet.sh" "$ILK" G1=3:2 >/dev/null   # tık kapısı: ölçüm olmadan rc=3
 J2="$T/otomatik.jsonl"
+# KAPI 6 ön-koşulu (6TFBV, 2026-10-23): bu ve sonraki iki bölüm "prompt ÜRETİLİR" der; ayırt
+# yargısı yazılmadan bunu beklemek ürünün yasakladığı durumu doğru ilan etmekti. Eskiden yeşil,
+# kapının "havuzda satır yok = ilk sayfa" muafiyetine borçluydu.
+_EK0="$(basename "$ILK")"; _EK0="$(printf '%s' "${_EK0%.*}" | tr 'A-Z' 'a-z')"
+ayirt_tohum(){ python3 "$H" yaz --havuz "$1" --kutu akar --urun akar --ekran "$_EK0" \
+     --kapi ayirt --hukum temiz --klise yok --imza tipografi --arac 0.3.1 >/dev/null 2>&1; }
+ayirt_tohum "$J2"
 kapi "devam promptu → rc=0" 0 env UI_AKIS_HAVUZ="$J2" UI_AKIS_KUTU=akar \
      bash "$ARAC/prompt-yap.sh" "$T/proje/sablon.md" --onceki "$ILK" \
      --dil "$T/proje/dil.md" --estetik "$T/proje/est.md"
@@ -90,7 +97,10 @@ if [ -s "$J2" ] && grep -q '"kapi": *"yogunluk"' "$J2"; then
 else echo "  ✗ havuza yazılmadı — çağıran yok demektir"; KALDI=$((KALDI+1)); fi
 
 echo "── 9 · havuz yazılamasa bile prompt üretimi DÜŞMEZ (defter kapı değildir)"
-kapi "yazılamaz havuz → yine rc=0" 0 env UI_AKIS_HAVUZ="/olmayan-kok-dizin/h.jsonl" \
+# "Yazılamaz" = okunur ama yazılamaz: yargı orada (kapı açılır), ölçüm yazımı düşer, prompt yine üretilir.
+# Yolu hiç olmayan havuz artık bu sınavın konusu değil — orada yargı da okunamaz ve kapı KAPALI kalır (19b).
+JRO="$T/salt-okur.jsonl"; ayirt_tohum "$JRO"; chmod 444 "$JRO"
+kapi "yazılamaz havuz → yine rc=0" 0 env UI_AKIS_HAVUZ="$JRO" \
      UI_AKIS_KUTU=akar bash "$ARAC/prompt-yap.sh" "$T/proje/sablon.md" --onceki "$ILK" \
      --dil "$T/proje/dil.md" --estetik "$T/proje/est.md"
 
@@ -226,6 +236,7 @@ python3 "$H" yaz --havuz "$J8" --kutu akar --urun akar --ekran "$_EKAD" \
 kapi "gerekçe bağlanınca devam promptu ÜRETİLİR → rc=0" 0 \
      env UI_AKIS_HAVUZ="$J8" UI_AKIS_KUTU=akar bash "$ARAC/prompt-yap.sh" \
      "$T/proje/sablon.md" --onceki "$ILK" --dil "$T/proje/dil.md" --estetik "$T/proje/est.md"
+ayirt_tohum "$T/kacis.jsonl"
 kapi "kaçış yolu açık ama sessiz değil (UI_AKIS_GEREKCE_KAPISI=0)" 0 \
      env UI_AKIS_HAVUZ="$T/kacis.jsonl" UI_AKIS_KUTU=akar UI_AKIS_GEREKCE_KAPISI=0 \
      bash "$ARAC/prompt-yap.sh" "$T/proje/sablon.md" --onceki "$ILK" \
@@ -314,6 +325,20 @@ python3 "$H" yaz --havuz "$JK" --kutu t --urun t --ekran e --kapi ayirt \
 kapi "kararlıdan SONRA emin-degilim → kapı yine KAPALI → rc=1" 1 \
      python3 "$H" ayirt-kapisi --havuz "$JK" --kutu t --urun t --ekran e
 icerir "son sözün geçerli olduğu söylenir" "son söz geçerlidir"
+
+echo "── 19b · 'İLK SAYFA' MUAFİYETİ YOK: havuzda hiç satırı olmayan önceki sayfa KAPALI (6TFBV)"
+# Ölçüldü 21 Eki: yargısız sayfada 1. prompt-yap koşusu rc 0 verdi (80 KB prompt, havuz kirlendi),
+# 2.-4. koşu rc 1. Kapının tek çağıranı --onceki yolu; sorulan sayfa ZATEN önceki sayfadır.
+kapi "satırı hiç olmayan sayfa → KAPALI → rc=1" 1 \
+     python3 "$H" ayirt-kapisi --havuz "$T/bos-ayirt.jsonl" --kutu t --urun t --ekran hic
+icerir "sebep söylenir" "havuzda HİÇ satır yok"
+J19="$T/ilk-gecis.jsonl"
+kapi "yargısız önceki sayfada İLK koşu da prompt üretmez → rc=1" 1 \
+     env UI_AKIS_HAVUZ="$J19" UI_AKIS_KUTU=akar bash "$ARAC/prompt-yap.sh" \
+     "$T/proje/sablon.md" --onceki "$ILK" --dil "$T/proje/dil.md" --estetik "$T/proje/est.md"
+kapi "ikinci koşu da aynı hüküm → rc=1 (ilk ve sonraki koşu artık AYRIŞMIYOR)" 1 \
+     env UI_AKIS_HAVUZ="$J19" UI_AKIS_KUTU=akar bash "$ARAC/prompt-yap.sh" \
+     "$T/proje/sablon.md" --onceki "$ILK" --dil "$T/proje/dil.md" --estetik "$T/proje/est.md"
 
 echo
 echo "TOPLAM: $GECTI geçti · $KALDI kaldı"

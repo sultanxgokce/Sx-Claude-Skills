@@ -1,0 +1,8 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/mutant-havuz.sh
+# rc=0 sure=4.4s zaman=2026-10-23T00:52:46+03:00
+--- stdout ---
+  ✗ satırı hiç olmayan sayfa → KAPALI → rc=1 — beklenen rc=1, gelen rc=0
+  ✗ sebep söylenir — çıktıda yok: havuzda HİÇ satır yok
+  ✗ yargısız önceki sayfada İLK koşu da prompt üretmez → rc=1 — beklenen rc=1, gelen rc=0
+mutant kırmızı (rc=1) ✓
+--- stderr ---
