@@ -1,0 +1,245 @@
+{
+  "is": "higgsfield-abonelik-sx-yol",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-22T23:59:25+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "goreli-atif",
+      "asama": "once",
+      "dosya": "olcum-goreli-atif-once.txt",
+      "sha256": "f5e4ef8c491e92bc29c6ab43d8874371d55717e5167c4d9d64cfbadc58781628",
+      "komut": [
+        "bash",
+        "-c",
+        "n=$(grep -c -F -e \"bash scripts/\" -e \"\\$CLAUDE_PROJECT_DIR/scripts\" -e \"\\`scripts/\" /config/.claude/skills/higgsfield-abonelik/SKILL.md); echo \"goreli-atif=$n (kurulu kopya)\"; test \"$n\" -eq 0"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-22T23:58:45+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "a54c2c2274e94465be5e74fed48155d3"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sync-kuru-kosu",
+      "asama": "once",
+      "dosya": "olcum-sync-kuru-kosu-once.txt",
+      "sha256": "178b7213450efeffede3254f3118396cdf6cfcf3aeee6e4834afda3fc5f8b63c",
+      "komut": [
+        "bash",
+        "-c",
+        "out=$(node sync-skills.mjs --skill higgsfield-abonelik 2>&1); printf \"%s\\n\" \"$out\"; grep -q \"higgsfield-abonelik → _global\" <<<\"$out\""
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-22T23:58:45+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "temiz",
+      "olcum_id": "9af9ae1802a145f2b82457fd4127bc0e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "paket-sinavi",
+      "asama": "once",
+      "dosya": "olcum-paket-sinavi-once.txt",
+      "sha256": "c1bc2ac633fdc70e611dda94459779a9a09f84114fdc61c42fc3fdee3670f32c",
+      "komut": [
+        "ls",
+        "-l",
+        "higgsfield-abonelik/scripts/paket.test.sh",
+        "higgsfield-abonelik/SKILL.md"
+      ],
+      "rc": 2,
+      "renk": "kirmizi",
+      "zaman": "2026-10-22T23:58:45+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "3dfa353c8f3c4233a720f756374a80a1"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "paket-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-paket-sinavi-sonra.txt",
+      "sha256": "e9cfedfec6c40486f57db1ff34048287a76fae0e23699baec4a9fd867c32b52d",
+      "komut": [
+        "bash",
+        "higgsfield-abonelik/scripts/paket.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T23:59:06+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a1a174051bd94c06894086bc210e4c0a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "paket-sinavi-mutant-goreli-cagri",
+      "asama": "sonra",
+      "dosya": "olcum-paket-sinavi-mutant-goreli-cagri-sonra.txt",
+      "sha256": "9fd421a29bc064a8538e822eff29831de3977e42ba920cd03ad1f431ecfac5fd",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/mutant-goreli-cagri.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-22T23:59:07+03:00",
+      "sure_sn": 1.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "paket-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "bdeefe99e6604d019e4c08c210bc9676"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "goreli-atif",
+      "asama": "sonra",
+      "dosya": "olcum-goreli-atif-sonra.txt",
+      "sha256": "6988968d1fb09de4e458bf33d55207fd3fe17c6fac6e1e7b1f487ee6982402c2",
+      "komut": [
+        "bash",
+        "-c",
+        "n=$(grep -c -F -e \"bash scripts/\" -e \"\\$CLAUDE_PROJECT_DIR/scripts\" -e \"\\`scripts/\" higgsfield-abonelik/SKILL.md); echo \"goreli-atif=$n\"; test \"$n\" -eq 0"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T23:59:08+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "1910ad30441440d892bc12491e495cd8"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutlak-yol",
+      "asama": "sonra",
+      "dosya": "olcum-mutlak-yol-sonra.txt",
+      "sha256": "bd039e9c074bf3b350b82fe439ed0e18a286457d2e029bd64bf591c7a8bf2fd8",
+      "komut": [
+        "grep",
+        "-n",
+        "-F",
+        "/config/.claude/skills/higgsfield-abonelik/scripts/",
+        "higgsfield-abonelik/SKILL.md"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T23:59:08+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1be6365461124ec094d2a375822df0f2"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sync-kuru-kosu",
+      "asama": "sonra",
+      "dosya": "olcum-sync-kuru-kosu-sonra.txt",
+      "sha256": "1d9a4587f1c392c506e5ec114c93f6065c7a33ec967eb2f14e4186738a2916c4",
+      "komut": [
+        "bash",
+        "-c",
+        "out=$(node sync-skills.mjs --skill higgsfield-abonelik 2>&1); printf \"%s\\n\" \"$out\"; grep -q \"higgsfield-abonelik → _global\" <<<\"$out\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T23:59:08+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "temiz",
+      "olcum_id": "6ffd58e22fe342e5aed16b751db9c6e2"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kabuk-biti",
+      "asama": "sonra",
+      "dosya": "olcum-kabuk-biti-sonra.txt",
+      "sha256": "c18f9f604285aa77a63de80fc41925560ceddddc398671e2f74c7ada9dfc8195",
+      "komut": [
+        "bash",
+        "kabuk-biti.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T23:59:08+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "190d91877fa946138192f352c67b2e97"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "validate-repo-strict",
+      "asama": "sonra",
+      "dosya": "olcum-validate-repo-strict-sonra.txt",
+      "sha256": "c666f125ea740a66c9520646bc8971c0f5f9fa9ebef6f880de0193ad7518fe92",
+      "komut": [
+        "node",
+        "ahi/schema/validate-repo.mjs",
+        ".",
+        "--strict"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T23:59:08+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "7c9dbba43058445f9327675ce0bf6a80"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "version-lint",
+      "asama": "sonra",
+      "dosya": "olcum-version-lint-sonra.txt",
+      "sha256": "9fe15a6516a5f6343016e26b8b7a232a0826f46933ff90aca4d14fb41b47781e",
+      "komut": [
+        "node",
+        "ahi/schema/version-lint.mjs",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T23:59:08+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "780187225d9143c0bf230b5ce32bfc83"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sync-skills-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-sync-skills-sinavi-sonra.txt",
+      "sha256": "70a929272cea9bbc42a01155aa496e875f11ab3bd41afe9022142806b763eb58",
+      "komut": [
+        "bash",
+        "sync-skills.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T23:59:10+03:00",
+      "sure_sn": 1.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "896caacc1a304e1ba57064e7396a2425"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-sonra.txt",
+      "sha256": "579b3332745a671628a07c273c903ff120c71a77c0144bc4f82832c7c1373501",
+      "komut": [
+        "bash",
+        "-c",
+        "A=kapi-sinavi/scripts/kapi-sinavi.sh; bash \"$A\" kayit && bash \"$A\" bagli-mi && bash \"$A\" ithal"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T23:59:25+03:00",
+      "sure_sn": 15.6,
+      "boru_denetimi": "temiz",
+      "olcum_id": "0d781c4ebdf34f8d891341b986f5857c"
+    }
+  ],
+  "imza": "0da76006cd44ed753882ea7a3a17b7e075c07159359334331d3f3968529acaf4"
+}

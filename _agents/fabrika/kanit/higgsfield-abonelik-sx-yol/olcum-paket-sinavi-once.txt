@@ -1,0 +1,6 @@
+$ ls -l higgsfield-abonelik/scripts/paket.test.sh higgsfield-abonelik/SKILL.md
+# rc=2 sure=0.0s zaman=2026-10-22T23:58:45+03:00
+--- stdout ---
+--- stderr ---
+ls: cannot access 'higgsfield-abonelik/scripts/paket.test.sh': No such file or directory
+ls: cannot access 'higgsfield-abonelik/SKILL.md': No such file or directory

@@ -1,0 +1,13 @@
+# Bu pakette ANILAN ama TAŞINMAYAN araçlar — ve niçin taşınmadıkları.
+# Karar burada yazılı ki alıcı, belgede gördüğü bir aracın niye elinde
+# olmadığını arayıp durmasın.
+
+flux-kontext-hf.sh   # görsel adaptörü: TELLAL'in staging zincirine (staging.sh +
+                     # bogaz.lib.sh + fal adaptörü prompt kaynağı) bağlı. Tek başına
+                     # taşınırsa çalışmaz; zincirin tamamı ayrı bir devir işidir.
+kapi-testi.sh        # TELLAL'in 562 iddialık kapı süiti: TELLAL depo düzenine,
+                     # fixture'larına ve varlıklarına bağlı. Başka kutuda koşmaz.
+uyum-lint.sh          # aynı sebep: uyum kanonu + teslimat dizin düzeni TELLAL'de.
+                     # 🔴 AMA KURAL TAŞINIR: uyum yükümlülüğü aracın taşınmasına
+                     # bağlı değildir. Etiket/ibare/markör zorunluluğu senin
+                     # kutunda da geçerli — aracı değil, kuralı devralıyorsun.
