@@ -1,0 +1,30 @@
+{
+  "tur": 1,
+  "is": "higgsfield-abonelik-sx-yol",
+  "pr": "424",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T00:01:41+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 63458,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 14,
+    "bayt": 24143
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İstenen devir paketi doğru yere alınmış; SKILL.md çağrıları mutlak beceri yoluna çevrilmiş, taşınmayan staging/flux zinciri açıkça işaretlenmiş ve catalog ile sync-targets kaydı eklenmiş. Üretime engel bir kusur görünmüyor; gerçek paket ölçümü, önce/sonra çiftleri ve mutasyon ölçümü talebin kritik noktalarını doğrudan sınadığı için puan 5.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Göreli atıf 6→0 ve sync planı 0→1 önce/sonra çiftleriyle ölçülmüş; gerçek paket sınavı 34/34 geçiyor, göreli çağrı mutasyonu sınavı beklendiği gibi kırmızıya çeviriyor. Mutasyon kaydı gerçek kod sonucu olarak okunmadı; gercek_olcum etiketi paket-sinavi kaydına gidiyor ve o kayıt rc=0. Mutlak yol, catalog/sync tutarlılığı, sürüm ve dağıtım sınavları da ayrı yeşil ölçümlerle desteklenmiş."
+  }
+}
