@@ -1,0 +1,31 @@
+{
+  "is": "muhurdar-diploma",
+  "cumle": "Mühürdarlık diploma sınavı (G13): tescil/sinav altında bilinen doğru, kusurlu ve uydurma teslim örneklerinden küme; diploma.sh bir mühürdarı bu kümeyle sınar (her örnekte hüküm beklenenle karşılaştırılır, gerçek sicile ve telemetriye yazmadan), sonucu diploma defterine şema §6 satırıyla ekler; durum komutu diplomayı geçerli / bayat (el kitabı sürümü değişti) / yok / askıda (sicil) olarak türetir",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-22T03:32:02+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/muhurdar-diploma",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5D990AEQY8VRY3QGPWPZ5FK",
+  "tahmin_dk": 180,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-22T03:32:03+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

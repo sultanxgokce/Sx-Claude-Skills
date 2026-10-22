@@ -1,10 +1,10 @@
-# MÜHÜR — sinav-dogru-topla · deneme-1
-kart: sinav-dogru-topla
+# MÜHÜR — sinav-dogru-selam · deneme-1
+kart: sinav-dogru-selam
 deneme: 1
 verdikt: GECTI
-zaman_utc: 2026-10-22T00:43:08Z
-worktree_head_sha: d51907b907b7b1a7e9bd6df0af8cb33fa43897ad
-gereklilik_sha256: d33b1b67732d648155c63faca733394a764841148d24ccd04ca076a82c10ac99
+zaman_utc: 2026-10-22T01:07:17Z
+worktree_head_sha: bc4b976eb70e5c65158bd88e4f6d2af9821af7c6
+gereklilik_sha256: 27103d52413ef23861d6aee048d8bc8ef3ec5c9847443056f535414b35eef9f5
 tip: docs
 vites: TAM
 tescil_skill_version: 0.3.0
@@ -22,11 +22,11 @@ kor: evet (yargıç yalnız gereklilik + taze kanıt + hedef dosyayı gördü)
 ## G-özet
 | G | tur | sonuc | rc | kanit (sha256) |
 |---|-----|-------|----|----------------|
-| G1 | cmd | GECTI | 0 | kanit/G1.json (717ae3b4678929af796c748d347b537f047b07b0c6fb0e9fdd518f9317fafdae) |
+| G1 | cmd | GECTI | 0 | kanit/G1.json (427d40a54b25397375d3bd94be1afadaba545efa8a4781f25d9fede1432b788e) |
 | G2 | llm-yargi | GECTI | - | katman2 (izole-rubrik: rubrik.md) |
 
 ## Katman-2 (izole-rubrik sonuçları)
-- G2: GECTI — BENIOKU.md aracın iki tam sayının toplamını bastığını doğru söylüyor ve `2 3` girdisi için `5` örneği bu davranışla tutarlı.
+- G2: GECTI — “Hoş geldiniz” ve “Merhaba” ile açıkça karşılıyor; ilk somut adım olarak bu dosyayı okumayı, ardından `notlar/` altında kendi adıyla not açmayı söylüyor ve kaba, alaycı ya da ilgisiz ifade içermiyor.
 
 ## Entegrasyon
 - Kart-durum flip'ini tescil YAPMAZ — verdikt raporlanır; flip `scripts/dongu-sayac.sh`

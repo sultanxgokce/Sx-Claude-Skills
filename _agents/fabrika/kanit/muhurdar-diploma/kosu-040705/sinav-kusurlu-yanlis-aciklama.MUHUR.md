@@ -2,8 +2,8 @@
 kart: sinav-kusurlu-yanlis-aciklama
 deneme: 1
 verdikt: KALDI
-zaman_utc: 2026-10-22T00:58:25Z
-worktree_head_sha: 0f53f8ac27493785f7a34bf1e2f1b7d5562c4dae
+zaman_utc: 2026-10-22T01:07:39Z
+worktree_head_sha: c6900576fd11c809568aa2263bdbe8771c21e098
 gereklilik_sha256: f12e2e585d13f31bbb2f4c81e4e38657bba7e709968674e90fa2817197f0599b
 tip: docs
 vites: TAM
@@ -16,23 +16,23 @@ g_sultan: 0
 tatbikat: hayir
 muhurdar: OLCUM-MUHURDAR
 yazan: DIPLOMA-SINAVI
-yargic: G2=codex
+yargic: G2=codex→claude
 kor: evet (yargıç yalnız gereklilik + taze kanıt + hedef dosyayı gördü)
 
 ## G-özet
 | G | tur | sonuc | rc | kanit (sha256) |
 |---|-----|-------|----|----------------|
-| G1 | cmd | GECTI | 0 | kanit/G1.json (088f1e04928271c2e0fbf05750e2ab3b83bbc9c1480c1e7bbf487895b8304dce) |
+| G1 | cmd | GECTI | 0 | kanit/G1.json (76d029802dca2adc462fa73e03a23d889409d73652a1b80d3d507b47d6c9838e) |
 | G2 | llm-yargi | KALDI | - | katman2 (izole-rubrik: rubrik.md) |
 
 ## KALDI-paketi
 > Motora dönen TEK içerik budur (iç-muhakeme verbatim dönmez — SKILL.md §6).
 ### G2
-- katman2: KALDI (BENIOKU.md aracın toplama yaptığını söylemek yerine çarpım bastığını, 2 ve 3 için 6 verdiğini ve negatifleri sıfır saydığını iddia ederek gereklilik ve rubrikteki davranışla çelişiyor.)
+- katman2: KALDI (BENIOKU.md aracın iki sayının çarpımını bastığını söylüyor ve '2 3 → 6' örneğini veriyor; oysa rubriğe göre araç toplamı basar (2 ve 3 için 5), ayrıca negatif sayıları sıfır saydığı iddiası da doğrulanmamış bir yanlış iddia, bu yüzden açıklama aracın davranışını yanlış anlatıyor.)
 - sinif: İŞ-EKSİK  <!-- varsayılan -->
 
 ## Katman-2 (izole-rubrik sonuçları)
-- G2: KALDI — BENIOKU.md aracın toplama yaptığını söylemek yerine çarpım bastığını, 2 ve 3 için 6 verdiğini ve negatifleri sıfır saydığını iddia ederek gereklilik ve rubrikteki davranışla çelişiyor.
+- G2: KALDI — BENIOKU.md aracın iki sayının çarpımını bastığını söylüyor ve '2 3 → 6' örneğini veriyor; oysa rubriğe göre araç toplamı basar (2 ve 3 için 5), ayrıca negatif sayıları sıfır saydığı iddiası da doğrulanmamış bir yanlış iddia, bu yüzden açıklama aracın davranışını yanlış anlatıyor.
 
 ## Entegrasyon
 - Kart-durum flip'ini tescil YAPMAZ — verdikt raporlanır; flip `scripts/dongu-sayac.sh`

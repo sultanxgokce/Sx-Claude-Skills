@@ -1,21 +1,24 @@
 $ bash tescil/scripts/diploma.test.sh
-# rc=0 sure=257.2s zaman=2026-10-22T03:46:57+03:00
+# rc=0 sure=311.4s zaman=2026-10-22T04:06:50+03:00
 --- stdout ---
 ── gerçek betikler
   ✓ kapı a
   ✓ kapı a2
   ✓ kapı n
   ✓ kapı e
+  ✓ kapı e2
   ✓ kapı b
   ✓ kapı c
   ✓ kapı d
   ✓ kapı l
+  ✓ kapı o
   ✓ kapı f
   ✓ kapı g
   ✓ kapı j
   ✓ kapı h
   ✓ kapı h2
   ✓ kapı h3
+  ✓ kapı h4
   ✓ kapı k
   ✓ kapı k2
   ✓ kapı m
@@ -31,6 +34,9 @@ $ bash tescil/scripts/diploma.test.sh
   ✓ mutant bos-tur → kapı f düştü
   ✓ mutant defter-yok-yok → kapı m düştü
   ✓ mutant yargic-izi-yok → kapı a2 düştü
+  ✓ mutant son-kosu-yok → kapı o düştü
+  ✓ mutant kume-bayat-yok → kapı h4 düştü
+  ✓ mutant telemetri-gercek → kapı e2 düştü
   ✓ mutant kume-sha → kapı a düştü
-diploma.test: 28 geçti · 0 kaldı
+diploma.test: 34 geçti · 0 kaldı
 --- stderr ---

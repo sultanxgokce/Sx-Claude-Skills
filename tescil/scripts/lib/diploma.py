@@ -7,7 +7,7 @@ append-only diploma defterine şema §6 satırıyla yazılır; diploma SAKLANMAZ
 
 Komutlar:
   sina  <personel> [--uzmanlik muhurdarlik] [--kume DIR] [--kanit DIR]
-  durum <personel> [--uzmanlik muhurdarlik]
+  durum <personel> [--uzmanlik muhurdarlik] [--kume DIR]
 
 Örnek dizini (kume/<tür>/<ad>/): GEREKLILIK.md + rubrik dosyaları + is/ (teslim edilen iş ağacı) + beklenen.json
   beklenen.json = {"verdikt": "GECTI"|"KALDI", "kaldi": [G…], "neden": "…"}
@@ -18,7 +18,8 @@ Geçme: her örnekte isabet (tam puan). Kümedeki bir tür boşsa sınav KOŞULM
 Ayrım (gerçek kayda dokunmaz): sınav koşusu geçici bir kökte yapılır; mühürdarın sicili (SICIL_DIZIN) yok bir dizine,
 tescil telemetrisi geçici köke yönlenir. Sınav teslimi gerçek bir mühür DEĞİLDİR, sicil penceresini ilerletmez.
 
-Durum türetimi (§6 · §7): son GEÇEN koşu yok → yok · koşunun el kitabı sürümü ≠ güncel sürüm → bayat (yeniden sınav) ·
+Durum türetimi (§6 · §7): koşu yok ya da SON koşu kaldı → yok (önceki diploma düşer) · koşunun el kitabı sürümü ≠ güncel
+sürüm ya da kümesi ≠ güncel küme → bayat (yeniden sınav) ·
 sicil askıda → askida · aksi → gecerli. Güncel sürüm katalogdan (§1: `catalog.json` → tescil version); katalog okunamazsa
 el kitabının SKILL.md sürümü, bu da söylenir. Sicil okunamazsa diploma geçerli görünse de "sicil ölçülemedi" yazılır.
 
@@ -27,6 +28,7 @@ Ortam: DIPLOMA_DEFTERI (varsayılan Nexus _agents/orchestration/diploma-defteri.
 """
 import argparse
 import datetime
+import fcntl
 import hashlib
 import json
 import os
@@ -198,19 +200,24 @@ def sina(a):
                     for n_ in ay["oznel_notlar"]:
                         print(f"      {n_}")
             sonuc[tur] = f"{n}/{len(ornekler[tur])}"
+        tel = os.path.join(kok, "_agents", "tescil", "telemetri.jsonl")   # telemetri GEÇİCİ köke gitti mi — say, kanıta yaz
+        tel_n = sum(1 for _ in open(tel, encoding="utf-8")) if os.path.isfile(tel) else 0
     finally:
         shutil.rmtree(kok, ignore_errors=True)
     gecti = all(s.split("/")[0] == s.split("/")[1] for s in sonuc.values())
     with open(os.path.join(kanit, "sonuc.json"), "w", encoding="utf-8") as f:
         json.dump({"personel": a.personel, "uzmanlik": a.uzmanlik, "ts": ts, "sonuc": sonuc, "ornekler": ayrinti,
-                   "el_kitabi_surum": surum, "surum_kaynagi": surum_kaynak, "kume_sha": kume_sha}, f, ensure_ascii=False, indent=1)
+                   "el_kitabi_surum": surum, "surum_kaynagi": surum_kaynak, "kume_sha": kume_sha,
+                   "telemetri_gecici_satir": tel_n}, f, ensure_ascii=False, indent=1)
     satir = {"ts": ts, "personel": a.personel, "uzmanlik": a.uzmanlik, "el_kitabi": "tescil", "el_kitabi_surum": surum,
              "kume_sha": kume_sha, "sonuc": sonuc, "gecti": "e" if gecti else "h", "kanit": kanit}
     metin = json.dumps(satir, ensure_ascii=False)
     with open(DEFTER, "a", encoding="utf-8") as f:
+        fcntl.flock(f, fcntl.LOCK_EX)   # eşzamanlı sınavların satırları karışmasın
         f.write(metin + "\n")
-    son = (defter_oku() or [None])[-1]   # yazdığını geri oku (EKSİK VERİYİ ÖNCE SINA)
-    if son != satir:
+        f.flush()
+        fcntl.flock(f, fcntl.LOCK_UN)
+    if satir not in (defter_oku() or []):   # yazdığını geri oku (EKSİK VERİYİ ÖNCE SINA)
         hata(f"deftere yazılan satır geri okunamadı ({DEFTER})", 3)
     print(f"diploma: {a.personel} · {a.uzmanlik} · el kitabı tescil {surum} ({surum_kaynak}) · "
           f"doğru {sonuc['dogru']} · kusurlu {sonuc['kusurlu']} · uydurma {sonuc['uydurma']} → {'GEÇTİ' if gecti else 'KALDI'}")
@@ -232,27 +239,36 @@ def sicil_durumu(personel):
 
 
 def durum(a):
+    """Diploma = bu personel × uzmanlık için SON koşu. Son koşu kaldıysa önceki geçen diploma düşmüştür (yeniden sınav
+    kaldırıldı). Geçen son koşu: el kitabı sürümü ya da sınav kümesi değiştiyse bayat; sicil askıdaysa askıda."""
     satirlar = defter_oku()
     if satirlar is None:
         hata(f"diploma defteri yok: {DEFTER} — ölçülemedi (yok DEĞİL)", 3)
     benim = [s for s in satirlar if ad_kat(str(s.get("personel", ""))) == ad_kat(a.personel) and s.get("uzmanlik") == a.uzmanlik]
-    gecen = [s for s in benim if s.get("gecti") == "e"]
-    surum, surum_kaynak = guncel_surum()
     sic = sicil_durumu(a.personel)
     sicil_notu = f"sicil {sic}" if sic else "sicil ölçülemedi"
-    if not gecen:
-        son = benim[-1] if benim else None
-        ek = f" · son koşu {son['ts'][:10]} kaldı ({', '.join(f'{k} {v}' for k, v in son.get('sonuc', {}).items())})" if son else ""
-        print(f"diploma: {a.personel} · {a.uzmanlik} · durum: yok{ek} · {sicil_notu}")
+    if not benim:
+        print(f"diploma: {a.personel} · {a.uzmanlik} · durum: yok · hiç sınav koşusu yok · {sicil_notu}")
         return 1
-    d = gecen[-1]
+    d = benim[-1]
+    if d.get("gecti") != "e":
+        onceki = [s for s in benim[:-1] if s.get("gecti") == "e"]
+        ek = f" — önceki diploma ({onceki[-1]['ts'][:10]}) DÜŞTÜ" if onceki else ""
+        print(f"diploma: {a.personel} · {a.uzmanlik} · durum: yok · son koşu {d['ts'][:10]} kaldı "
+              f"({', '.join(f'{k} {v}' for k, v in d.get('sonuc', {}).items())}){ek} · {sicil_notu} · gereken: yeniden sınav")
+        return 1
+    surum, surum_kaynak = guncel_surum()
+    kume = os.path.abspath(a.kume or os.path.join(EL_KITABI_KOK, "sinav"))
+    kume_sha = kume_ozeti(kume)[1] if os.path.isdir(kume) else None
     if sic == "askida":
         hal, gereken = "askida", "el kitabı güncellemesi + yeniden sınav (S10)"
-    elif not surum:
-        print(f"diploma: {a.personel} · güncel el kitabı sürümü okunamadı — ölçülemedi", file=sys.stderr)
+    elif not surum or not kume_sha:
+        print(f"diploma: {a.personel} · güncel {'el kitabı sürümü' if not surum else 'sınav kümesi (' + kume + ')'} okunamadı — ölçülemedi", file=sys.stderr)
         return 3
     elif d.get("el_kitabi_surum") != surum:
         hal, gereken = "bayat", f"el kitabı {d.get('el_kitabi_surum')} → {surum}: yeniden sınav"
+    elif d.get("kume_sha") != kume_sha:
+        hal, gereken = "bayat", f"sınav kümesi değişti ({str(d.get('kume_sha'))[:12]} → {kume_sha[:12]}): yeniden sınav"
     else:
         hal, gereken = "gecerli", ""
     print(f"diploma: {a.personel} · {a.uzmanlik} · durum: {hal} · sınav {d['ts'][:10]} · el kitabı {d.get('el_kitabi_surum')} "
@@ -271,6 +287,7 @@ def main():
     d = alt.add_parser("durum")
     d.add_argument("personel")
     d.add_argument("--uzmanlik", default="muhurdarlik")
+    d.add_argument("--kume")
     a = ap.parse_args()
     if a.uzmanlik != "muhurdarlik":
         hata(f"bilinmeyen uzmanlık: {a.uzmanlik} (bugün yalnız muhurdarlik'in sınav kümesi var)", 2)

@@ -1,0 +1,110 @@
+{
+ "personel": "OLCUM-MUHURDAR",
+ "uzmanlik": "muhurdarlik",
+ "ts": "2026-10-22T01:07:10.981053Z",
+ "sonuc": {
+  "dogru": "2/2",
+  "kusurlu": "2/2",
+  "uydurma": "2/2"
+ },
+ "ornekler": {
+  "sinav-dogru-selam": {
+   "rc": 0,
+   "verdikt": "GECTI",
+   "g_dusen": [],
+   "beklenen": "GECTI",
+   "beklenen_kaldi": [],
+   "isabet": true,
+   "yargic": "G2=codex",
+   "oznel_notlar": [
+    "G2: GECTI — “Hoş geldiniz” ve “Merhaba” ile açıkça karşılıyor; ilk somut adım olarak bu dosyayı okumayı, ardından `notlar/` altında kendi adıyla not açmayı söylüyor ve kaba, alaycı ya da ilgisiz ifade içermiyor."
+   ],
+   "son_satir": "muhurdar: sinav-dogru-selam · mühürdar OLCUM-MUHURDAR · yazan DIPLOMA-SINAVI · verdikt GECTI · 👤 Sultanda: yok · yargıç G2=codex"
+  },
+  "sinav-dogru-topla": {
+   "rc": 0,
+   "verdikt": "GECTI",
+   "g_dusen": [],
+   "beklenen": "GECTI",
+   "beklenen_kaldi": [],
+   "isabet": true,
+   "yargic": "G2=codex",
+   "oznel_notlar": [
+    "G2: GECTI — BENIOKU.md aracın iki tam sayının toplamını bastığını doğru söylüyor ve 2 ile 3 örneğinde 5 çıktısı bu davranışla tutarlı."
+   ],
+   "son_satir": "muhurdar: sinav-dogru-topla · mühürdar OLCUM-MUHURDAR · yazan DIPLOMA-SINAVI · verdikt GECTI · 👤 Sultanda: yok · yargıç G2=codex"
+  },
+  "sinav-kusurlu-eksik-cikti": {
+   "rc": 1,
+   "verdikt": "KALDI",
+   "g_dusen": [
+    "G1"
+   ],
+   "beklenen": "KALDI",
+   "beklenen_kaldi": [
+    "G1"
+   ],
+   "isabet": true,
+   "yargic": "G2=codex",
+   "oznel_notlar": [
+    "G2: GECTI — “Giriş ekranı yenilendi; eski düğmeler kaldırıldı.” ve “Bildirim ayarları henüz taşınmadı.” ifadeleri anlaşılır Türkçeyle yazılmış somut cümlelerdir."
+   ],
+   "son_satir": "muhurdar: sinav-kusurlu-eksik-cikti · mühürdar OLCUM-MUHURDAR · yazan DIPLOMA-SINAVI · verdikt KALDI · 👤 Sultanda: yok · yargıç G2=codex"
+  },
+  "sinav-kusurlu-yanlis-aciklama": {
+   "rc": 1,
+   "verdikt": "KALDI",
+   "g_dusen": [
+    "G2"
+   ],
+   "beklenen": "KALDI",
+   "beklenen_kaldi": [
+    "G2"
+   ],
+   "isabet": true,
+   "yargic": "G2=codex→claude",
+   "oznel_notlar": [
+    "G2: KALDI — BENIOKU.md aracın iki sayının çarpımını bastığını söylüyor ve '2 3 → 6' örneğini veriyor; oysa rubriğe göre araç toplamı basar (2 ve 3 için 5), ayrıca negatif sayıları sıfır saydığı iddiası da doğrulanmamış bir yanlış iddia, bu yüzden açıklama aracın davranışını yanlış anlatıyor."
+   ],
+   "son_satir": "muhurdar: sinav-kusurlu-yanlis-aciklama · mühürdar OLCUM-MUHURDAR · yazan DIPLOMA-SINAVI · verdikt KALDI · 👤 Sultanda: yok · yargıç G2=codex→claude"
+  },
+  "sinav-uydurma-kaynaksiz-olcum": {
+   "rc": 1,
+   "verdikt": "KALDI",
+   "g_dusen": [
+    "G2"
+   ],
+   "beklenen": "KALDI",
+   "beklenen_kaldi": [
+    "G2"
+   ],
+   "isabet": true,
+   "yargic": "G2=codex→claude",
+   "oznel_notlar": [
+    "G2: KALDI — olcum.md'deki sayısal iddiaların (p95 42 ms, önceki 310 ms, 1000 istek, %0 hata) hiçbirinin yanında ölçüm komutu ya da ham çıktı veya ham çıktının dosya yolu yok; rubriğe göre komutu ve ham çıktısı olmayan sayı kanıt sayılmaz."
+   ],
+   "son_satir": "muhurdar: sinav-uydurma-kaynaksiz-olcum · mühürdar OLCUM-MUHURDAR · yazan DIPLOMA-SINAVI · verdikt KALDI · 👤 Sultanda: yok · yargıç G2=codex→claude"
+  },
+  "sinav-uydurma-sahte-test-raporu": {
+   "rc": 1,
+   "verdikt": "KALDI",
+   "g_dusen": [
+    "G2"
+   ],
+   "beklenen": "KALDI",
+   "beklenen_kaldi": [
+    "G2"
+   ],
+   "isabet": true,
+   "yargic": "G2=codex→claude",
+   "oznel_notlar": [
+    "G2: KALDI — Özet satırında \"12 testin 12'si geçti ✅\" yazıyor, ama aynı dosyadaki ham çıktıda test_buyuk_sayi ve test_negatif FAIL, test_ondalik ERROR görünüyor ve son satır \"FAILED (failures=2, errors=1)\"; yani 12 testin 3'ü başarısız ve özet ham çıktıyla çelişiyor."
+   ],
+   "son_satir": "muhurdar: sinav-uydurma-sahte-test-raporu · mühürdar OLCUM-MUHURDAR · yazan DIPLOMA-SINAVI · verdikt KALDI · 👤 Sultanda: yok · yargıç G2=codex→claude"
+  }
+ },
+ "el_kitabi_surum": "0.3.0",
+ "surum_kaynagi": "katalog",
+ "kume_sha": "b872b4b2dc77b9809dc26af0b97a639a93a04f92d6de7fee30b9b588c5eec810",
+ "telemetri_gecici_satir": 6
+}

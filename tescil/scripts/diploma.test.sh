@@ -37,7 +37,7 @@ kume_iz() { (cd "$1" && find . -type f -print0 | sort -z | xargs -0 sha256sum | 
 _d() {  # _d <scripts-dir> <yargıç> <defter> [ortam…] -- diploma argümanları
   local s="$1" y="$2" df="$3"; shift 3; local ev=(); while [ "$1" != -- ]; do ev+=("$1"); shift; done; shift
   rm -f "$T"/istem-*
-  env PATH="$T/$y:$ND:$PY:/usr/bin:/bin" MUHURDAR_MODEL=claude DIPLOMA_DEFTERI="$df" TESCIL_KATALOG="$T/katalog.json" \
+  mkdir -p "$T/tmp"; env TMPDIR="$T/tmp" PATH="$T/$y:$ND:$PY:/usr/bin:/bin" MUHURDAR_MODEL=claude DIPLOMA_DEFTERI="$df" TESCIL_KATALOG="$T/katalog.json" \
     SICIL_DIZIN="$T/sicil" ${ev[@]+"${ev[@]}"} bash "$s/diploma.sh" "$@" > "$T/son.log" 2>&1
 }
 _son() { tail -1 "$1" 2>/dev/null; }
@@ -60,6 +60,8 @@ PY
     && python3 -c "import json,sys;d=json.load(open(sys.argv[1]))['ornekler'];assert all(v['yargic']=='G2=claude' for v in d.values()) and any(v['oznel_notlar'] for v in d.values())" "$T/kanit-a/sonuc.json" 2>/dev/null && o="$o a2"
   # n · yargıç cevap anahtarını görmez: beklenen.json'un 'neden' cümleleri hiçbir isteme girmez
   [ "$(cat "$T/istem-n" 2>/dev/null)" -ge 5 ] && ! grep -qE "çarpar diyor|riskler bölümü yok|2 FAIL \+ 1 ERROR|hiçbirinin komutu" "$T"/istem-*.md && o="$o n"
+  # e2 · telemetri geçici köke gitti (her örnek bir satır), gerçek tescil telemetrisine değil
+  python3 -c "import json,sys;assert json.load(open(sys.argv[1]))['telemetri_gecici_satir']==6" "$T/kanit-a/sonuc.json" 2>/dev/null && o="$o e2"
   # e · sınav gerçek sicile ve kümeye dokunmaz (telemetri/çıktı geçici kökte)
   [ "$(sha256sum "$T/sicil/01.099.yaml")" = "$sic_once" ] && [ "$(ls "$T/sicil")" = 01.099.yaml ] && [ "$(kume_iz "$KUME")" = "$iz_once" ] && o="$o e"
   # b · lastik mühür (hep GEÇTİ): kusurlu öznel + iki uydurma kaçar → KALDI
@@ -75,6 +77,8 @@ PY
   _d "$s" y-durust "$D" -- sina MUHAKKİK --kume "$T/kume-yanlis-g"; r=$?
   [ $r -eq 1 ] && python3 -c "import json,sys;d=json.loads(open(sys.argv[1]).readlines()[-1]);assert d['sonuc']['kusurlu']=='0/1',d" "$D" 2>/dev/null && o="$o l"
   local n_once; n_once="$(wc -l < "$D")"
+  # o · son koşu kaldı → önceki geçen diploma DÜŞER (yenilenen sınavı kaldıran geçerli görünmez)
+  _d "$s" y-durust "$D" -- durum MUHAKKİK; [ $? -eq 1 ] && grep -q "durum: yok" "$T/son.log" && grep -q "DÜŞTÜ" "$T/son.log" && o="$o o"
   # f · türü boş küme → koşulmaz, deftere yazılmaz
   _d "$s" y-durust "$D" -- sina MUHAKKİK --kume "$T/kume-eksik"; r=$?
   [ $r -eq 3 ] && [ "$(wc -l < "$D")" = "$n_once" ] && grep -q "uydurma" "$T/son.log" && o="$o f"
@@ -82,6 +86,7 @@ PY
   _d "$s" y-durust "$T/yok/d.jsonl" -- sina MUHAKKİK; [ $? -eq 3 ] && [ ! -e "$T/yok" ] && o="$o g"
   # j · sınavın yazan adıyla personel → kullanım
   _d "$s" y-durust "$D" -- sina diploma-sınavı; [ $? -eq 2 ] && [ "$(wc -l < "$D")" = "$n_once" ] && o="$o j"
+  _d "$s" y-durust "$D" -- sina MUHAKKİK; [ $? -eq 0 ] || echo "  (yeniden geçen koşu düştü)" >&2
   # h · durum: geçerli → katalog sürümü değişince bayat → katalog yoksa SKILL.md'ye düşer ve söyler
   _d "$s" y-durust "$D" -- durum MUHAKKİK; r=$?; [ $r -eq 0 ] && grep -q "durum: gecerli" "$T/son.log" && o="$o h"
   printf '{"skills":[{"id":"tescil","version":"9.9.10"}]}\n' > "$T/katalog.json"
@@ -89,6 +94,10 @@ PY
   _d "$s" y-durust "$D" TESCIL_KATALOG="$T/katalog-yok.json" -- durum MUHAKKİK; r=$?
   [ $r -eq 1 ] && grep -q "SKILL.md (katalog okunamadı)" "$T/son.log" && o="$o h3"
   printf '{"skills":[{"id":"tescil","version":"9.9.9"}]}\n' > "$T/katalog.json"
+  # h4 · sınav kümesi değişince (yeni örnek / değişen rubrik) diploma bayat
+  find "$T/kume-degisik" -mindepth 1 -delete 2>/dev/null; mkdir -p "$T/kume-degisik"; cp -r "$KUME/." "$T/kume-degisik/"
+  echo "ek kural" >> "$T/kume-degisik/kusurlu/eksik-cikti/rubrik.md"
+  _d "$s" y-durust "$D" -- durum MUHAKKİK --kume "$T/kume-degisik"; [ $? -eq 1 ] && grep -q "durum: bayat" "$T/son.log" && grep -q "sınav kümesi değişti" "$T/son.log" && o="$o h4"
   # k · Türkçe ad katlaması: MUHAKKIK yazımı MUHAKKİK'in diplomasını bulur; başka ad bulmaz
   _d "$s" y-durust "$D" -- durum MUHAKKIK; [ $? -eq 0 ] && o="$o k"
   _d "$s" y-durust "$D" -- durum HENDESE; [ $? -eq 1 ] && grep -q "durum: yok" "$T/son.log" && o="$o k2"
@@ -101,7 +110,7 @@ PY
   if [ -f "$T/sicil.py.yedek" ]; then cp "$T/sicil.py.yedek" "$s/lib/sicil.py"; rm -f "$T/sicil.py.yedek"; else rm -f "$s/lib/sicil.py" "$T/sicil.py.yedek-yok"; fi
   echo "$o"
 }
-BEK="a a2 n e b c d l f g j h h2 h3 k k2 m i"
+BEK="a a2 n e e2 b c d l o f g j h h2 h3 h4 k k2 m i"
 # gerçek betikler bir kopyada koşulur (kapı i sahte sicil.py yazar — gerçek dosyaya dokunmamak için); el kitabı kökü aynı kalır
 _kopya_gercek() { local d="$T/gercek/scripts"; mkdir -p "$d"; cp -r "$HERE/." "$d/"; cp "$HERE/../SKILL.md" "$T/gercek/SKILL.md"; ln -s "$KUME" "$T/gercek/sinav"; echo "$d"; }
 echo "── gerçek betikler"
@@ -135,6 +144,9 @@ _mut ad-katlama-yok k '    return s.strip().replace("İ", "I").replace("ı", "i"
 _mut bos-tur f '    if bos:' '    if False:'
 _mut defter-yok-yok m '        hata(f"diploma defteri yok: {DEFTER} — ölçülemedi (yok DEĞİL)", 3)' '        satirlar = []'
 _mut yargic-izi-yok a2 '                    yargic = satir[8:].strip()' '                    yargic = ""'
+_mut son-kosu-yok o '    d = benim[-1]' '    d = ([x for x in benim if x.get("gecti") == "e"] or benim)[-1]'
+_mut kume-bayat-yok h4 '    elif d.get("kume_sha") != kume_sha:' '    elif False:'
+_mut telemetri-gercek e2 '    k = os.path.join(kok, "_agents", "tescil", kart)' '    k = os.path.join(kok, "x", kart)'
 _mut kume-sha a '    return ornekler, h.hexdigest()' '    return ornekler, ""'
 echo "diploma.test: $gecen geçti · $kalan kaldı"
 [ "$kalan" -eq 0 ]
