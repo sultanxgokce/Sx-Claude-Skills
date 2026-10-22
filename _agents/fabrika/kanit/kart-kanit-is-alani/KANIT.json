@@ -1,0 +1,128 @@
+{
+  "is": "kart-kanit-is-alani",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-22T11:14:55+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinav",
+      "asama": "once",
+      "dosya": "olcum-kart-sinav-once.txt",
+      "sha256": "4159edda638cc21a3ff9eae0c4115154bf17ea7de948669435a667119c256d7b",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/pkg-old/kart.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-22T10:57:44+03:00",
+      "sure_sn": 8.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1c061e6835124e9a9ae05734022f55f5"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinav",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sinav-sonra.txt",
+      "sha256": "e9e2941652b0ad1ae4231e0b8c89c60d1fa274cfd4632897582a7eb8345cc6c8",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T10:57:53+03:00",
+      "sure_sn": 8.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "10b50ed2a97a49eda3a84625d242f48b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gorev-mutasyon",
+      "asama": "tek",
+      "dosya": "olcum-gorev-mutasyon-tek.txt",
+      "sha256": "f6a84ed18fb01a314bdb379b68686eac1889dd939bc5d73dc997775d6fc03008",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart-gorev-mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T10:59:48+03:00",
+      "sure_sn": 100.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "6e8f66ee9563489b9c06653acc84d623"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "birlestirme-kapisi-sinav",
+      "asama": "tek",
+      "dosya": "olcum-birlestirme-kapisi-sinav-tek.txt",
+      "sha256": "c8cfbe980b11e5602960d4e655af22e14d96ff12ae74dde1b537ef85773e2fd6",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T11:00:46+03:00",
+      "sure_sn": 53.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a77a48e1c4f84fc883acc4310d8e3fa3"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "komsu-sinavlar",
+      "asama": "tek",
+      "dosya": "olcum-komsu-sinavlar-tek.txt",
+      "sha256": "ea3147125023d7384b983d87a22b147abec10c64b4298ba5ef72b0d6a2dba0e7",
+      "komut": [
+        "bash",
+        "-c",
+        "W=yazilim-fabrikasi/scripts; bash $W/is-alani.test.sh && bash $W/gun-sonu.test.sh && bash $W/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T11:10:23+03:00",
+      "sure_sn": 626.4,
+      "boru_denetimi": "temiz",
+      "olcum_id": "ecdb56b1306a4f39a3379a20b635d76f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinav-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sinav-tur2-sonra.txt",
+      "sha256": "22adaf40a83fed94eed4465ffaa2dd1b65accf8e1339e4a12341397346e1fd46",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T11:14:03+03:00",
+      "sure_sn": 10.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "3cdc9f31e16d4206a439f7c26634a112"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "birlestirme-kapisi-sinav-tur2",
+      "asama": "tek",
+      "dosya": "olcum-birlestirme-kapisi-sinav-tur2-tek.txt",
+      "sha256": "fbccd86a132a594d5a375e2c71ade38fbc7fe6c4801b5556a9f637c8bc0c59f3",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T11:14:55+03:00",
+      "sure_sn": 40.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f2b831a786da4f57986a58adf409de05"
+    }
+  ],
+  "imza": "57b80bd20bf63606e2ccac3fa9db4623193181debc65bb995075b2197fc611ac"
+}
