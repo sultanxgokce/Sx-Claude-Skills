@@ -1,0 +1,20 @@
+$ bash yazilim-fabrikasi/scripts/karne.test.sh
+# rc=0 sure=0.3s zaman=2026-10-22T17:50:30+03:00
+--- stdout ---
+════ T1 · defter yokken ozet rc=3 ════
+  ✓ rc=3
+════ T2 · yaz: son turu okur, süreyi ilk turdan hesaplar ════
+  ✓ yaz rc=0
+  ✓ tur 2 · GEÇTİ · ~30 dk
+  ✓ deftere tek satır
+════ T3 · kirildi: kanıtsız reddedilir, kanıtlı damgalar ════
+  ✓ kanıtsız damga reddedildi
+  ✓ kanıtlı damga yazıldı
+════ T4 · ozet: 5 alan/kırılan/tıkanan/ortalama ════
+  ✓ sayımlar doğru (3 iş · 2 beş · 1 kırılan · 1 tıkanan)
+  ✓ ortalama tur 2.0
+════ T5 · DENETIM yokken yaz rc=3 ════
+  ✓ rc=3
+
+── SONUÇ: 9 geçti · 0 kaldı ──
+--- stderr ---

@@ -85,7 +85,7 @@ PY
   ! _k "$1" "$(_sen "$d")"; g $? "mutant ($4) → '$1' kapısı düşüyor"
 }
 _m a 'kayit_commitle
-if [ "$PUAN" -eq 5 ]' 'if [ "$PUAN" -eq 5 ]' "kayıt commit'i çağrılmıyor"
+# 🔴 KARNE' '# 🔴 KARNE' "kayıt commit'i çağrılmıyor"
 _m c 'git commit -q -m "docs: $IS göz tur $TUR kaydı — $PUAN/$DOGRU" -- "${yol[@]}"' 'git commit -q -m "docs: $IS göz tur $TUR kaydı — $PUAN/$DOGRU"' "commit pathspec'siz (staged her şey girer)"
 _m d '  if [ "$dal" != "$IS" ]; then' '  if false; then' "dal denetimi yok"
 _m e '  if [ "$(cd "$DEPO" && pwd -P)" = "$(cd "$KART_DEPO" 2>/dev/null && pwd -P)" ]; then' '  if false; then' "birincil checkout denetimi yok"

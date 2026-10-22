@@ -1,0 +1,58 @@
+$ bash _agents/fabrika/kanit/denetci-karne-yaz/karne-olcer.sh /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/sx-main-karne/yazilim-fabrikasi/scripts
+# rc=1 sure=7.0s zaman=2026-10-22T17:49:38+03:00
+--- stdout ---
+════ NPTHAQ · denetçi karneyi kendisi yazar ════
+  ✗ a iş alanındaki 5/E turu birincil depodaki karneye tek satır yazar (iş alanında karne yok), söylenir
+  ✗ b kalan tur (3/H) da yazılır, rc 1 aynen
+  ✗ c ikinci tur ikinci satır: tur 1 2 · H E
+  ✗ d DENETCI_KARNE=0 → satır yok, söylenir
+  ✗ e karne yazılamazsa söylenir, GEÇTİ ve rc 0 değişmez
+  ✗ j birincil checkout'ta koşan denetçi de yazar
+  ✗ p birincil checkout'ta karne açıkken yerel kip (fark kendisi) karneyi kir saymaz
+════ NPTHAQ · karne özeti: 5/H ile biten iş kırıldı adayı ════
+  ✗ k kartı bitmiş 5/H iş kırıldı adayı (sayı 1 + satırı)
+  ✗ l kartı açık 5/H iş aday değil
+  ✗ m kartı okunamayan 5/H iş sayılmaz ama söylenir
+  ✓ n 5/E ve 4/H ile biten iş aday değil
+  ✗ o aynı turun satırı ikinci kez yazılmaz
+── MUTASYON (betik kopyasında, kontrol şartlı) ──
+  ✓ kontrol kopyası gerçek betikle aynı kapıları geçiyor
+  ✗ mutant (denetçi karneyi çağırmıyor): desen tutmadı
+  ✗ mutant (birincil yönlendirmesi yok → karne iş alanına düşüyor): desen tutmadı
+  ✗ mutant (DENETCI_KARNE=0 dinlenmiyor): desen tutmadı
+  ✗ mutant (karne düşüşü turun sonucunu değiştiriyor): desen tutmadı
+  ✗ mutant (karne kir sayılıyor): desen tutmadı
+  ✗ mutant (kart durumu okunmuyor): desen tutmadı
+  ✗ mutant (doğru-şey şartı yok): desen tutmadı
+  ✗ mutant (okunamayan kart sessiz düşüyor): desen tutmadı
+  ✗ mutant (aynı tur ikinci kez yazılıyor): desen tutmadı
+
+── SONUÇ: 2 geçti · 20 kaldı ──
+--- stderr ---
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AssertionError
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AssertionError
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AssertionError
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AssertionError
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AssertionError
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AssertionError
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AssertionError
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AssertionError
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AssertionError
