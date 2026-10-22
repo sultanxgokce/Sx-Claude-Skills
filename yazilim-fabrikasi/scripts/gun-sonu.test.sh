@@ -24,7 +24,7 @@ G="${MUTANT:-$HERE/gun-sonu.sh}"
 gecen=0; kalan=0
 g() { if [ "$1" -eq 0 ]; then gecen=$((gecen+1)); echo "  ✓ $2"; else kalan=$((kalan+1)); echo "  ✗ $2"; fi; }
 T="$(mktemp -d)"; GUN="$(date +%F)"
-mkdir -p "$T/_agents/fabrika/kartlar"
+mkdir -p "$T/_agents/fabrika/kartlar" "$T/pkg"; cp "$HERE"/*.py "$T/pkg/"   # mutantlar TAM kopyada koşar (izin.py kardeş; 0.18.0)
 ( cd "$T" && git init -q -b olcum . ) >/dev/null 2>&1
 cat > "$T/_agents/fabrika/kartlar/sinav.json" <<KART
 {"is":"sinav","cumle":"sınav kartı","istedi":"sinav","aldi":"sinav",
@@ -57,6 +57,11 @@ O="$(ozet)"
 [ "$(say "$O" 'Tavan açılışları')" = 2 ]; g $? "Ö1d reis açılışı da sayılıyor (2)"
 grep -qE 'is=y tur=4 · reis kararı \(sınıfsız iş\) · gerekçe: reis-gerekcesi-uzun' <<<"$O"; g $? "Ö1e reis açılışı 'reis kararı (sınıfsız iş)' etiketiyle basılıyor"
 grep -qE 'is=x tur=4 · Sultan kararı · gerekçe: gece-tavani' <<<"$O"; g $? "Ö1f Sultan açılışı 'Sultan kararı' etiketiyle basılıyor (karışmıyor)"
+# 0.18.0: sınıflı işte reis açılışı 3. sütundaki sinif= izin= ile ayırt edilir
+printf '%s | TAVAN-ACILDI-REIS | is=z tur=4 sinif=para izin=basla | reis-sinifli-gerekce\n' "$GECE" >> "$T/_agents/fabrika/tavan-defteri.log"
+O="$(ozet)"
+grep -qE 'is=z tur=4 sinif=para izin=basla · reis kararı \(sınıflı iş: para · izin: basla\) · gerekçe: reis-sinifli-gerekce' <<<"$O"; g $? "Ö1g sınıflı işte reis açılışı 'reis kararı (sınıflı iş: para · izin: basla)' etiketiyle (0.18.0)"
+grep -q "sınıflı işte de reisin, veto hakkın var" <<<"$O"; g $? "Ö1h tavan başlığı sınıflı işte de reisin olduğunu ve veto hakkını söyler"
 printf '%s | TAVAN-ACILDI | is=x tur=4 | gece-tavani\n' "$GECE" > "$T/_agents/fabrika/tavan-defteri.log"; O="$(ozet)"
 
 echo "════ Ö2 · basılan SAAT yerel olmalı (Sultan 01:11'i 22:11 okumamalı) ════"
@@ -116,8 +121,38 @@ grep -q 'ÇÖZÜLEMEDİ' <<<"$O10"; g $? "Ö10b bozuk satır ÇÖZÜLEMEDİ diye
 [ "$(say "$O10" 'Kapı kaçışları')" = 0 ]; g $? "Ö10c bugüne sayılmıyor"
 grep -q 'Açık işler' <<<"$O10"; g $? "Ö10d özetin SONRAKİ bölümleri de üretildi (akış kesilmedi)"
 
+echo "════ Ö12 · 0.18.0: sınıflı kart — 'Sultan'a gidenler — başlama izni / veto', izin etiketi, reisin sınıflı kararları bölümü, içeride bitenlerde sınıflı bitti ════"
+cat > "$T/_agents/fabrika/kartlar/sinifli.json" <<KART
+{"is":"sinifli","cumle":"para harcayan iş","istedi":"S","aldi":"M","zaman":"${GUN}T10:00:00+03:00","sinif_cevaplari":{},"siniflar":["para"],"sultan":true,
+ "durum":"acik","gecmis":[],"pr":"","puan":null,"kanit_var":false,"baslama_izni":{"durum":"dur","oturum":"sohbet-1","soz":"durun","beyan":"M"},
+ "reis_kararlari":[{"karar":"devam","reis":"M","oturum":"r","gerekce":"reis-gerekce-uzun-metin","zaman":"${GUN}T11:00:00+03:00","sinifli":true,"izin":"bekliyor"},{"karar":"daralt","reis":"M","oturum":"r","gerekce":"sinifsiz-gibi","zaman":"${GUN}T11:30:00+03:00"}]}
+KART
+cat > "$T/_agents/fabrika/kartlar/sinifli-bitti.json" <<KART
+{"is":"sinifli-bitti","cumle":"dış yüzey işi","istedi":"S","aldi":"M","zaman":"${GUN}T09:00:00+03:00","sinif_cevaplari":{},"siniflar":["dis_yuzey"],"sultan":true,
+ "durum":"bitti","bitis":"${GUN}T12:00:00+03:00","gecmis":[],"pr":"41","puan":{"kod":5,"dogru":"E","tur":1},"kanit_var":true,"baslama_izni":{"durum":"basla","oturum":"o","soz":"başla","beyan":"M"},
+ "birlestirme_karari":{"karar_veren":"reis","reis":"M","pr":"41","zaman":"${GUN}T12:00:00+03:00","izin":"basla"}}
+KART
+O12="$(ozet)"
+grep -q "## Sultan'a gidenler (2) — başlama izni / veto" <<<"$O12"; g $? "Ö12a başlık öneki korunur + 'başlama izni / veto'"
+grep -qE '^\- \[acik\] \*\*sinifli\*\* .* izin: dur ' <<<"$O12"; g $? "Ö12b vetolu kart 'izin: dur'"
+grep -qE '^\- \[bitti\] \*\*sinifli-bitti\*\* .* izin: basla .* reis birleştirdi \(PR 41\)' <<<"$O12"; g $? "Ö12c biten sınıflı 'izin: basla · reis birleştirdi (PR 41)'"
+[ "$(say "$O12" 'İçeride bitirdiklerimiz')" = 2 ] && grep -qE '^\- \*\*sinifli-bitti\*\* .* sınıf: dis_yuzey · reis birleştirdi · izin: basla · veto yok' <<<"$O12"; g $? "Ö12d içeride bitenler sınıflı bitti'yi de alır (2: sinav + sinifli-bitti), etiketli"
+[ "$(say "$O12" 'Reisin sınıflı işlerdeki kararları')" = 1 ] && grep -q "11:00 · \*\*sinifli\*\* · devam · reis M · izin: bekliyor · gerekçe: reis-gerekce-uzun-metin" <<<"$O12"; g $? "Ö12e yeni bölüm: yalnız sinifli:true kayıt sayılır (1), saat · karar · reis · izin · gerekçe"
+grep -q "veto hakkın var (reis kararı, Sultan sözü değil)" <<<"$O12"; g $? "Ö12f bölüm başlığı 'reis kararı, Sultan sözü değil' der (A06)"
+grep -qE '^\- sinifli — sahip M · açıldı .* · sınıflı · izin: dur$' <<<"$O12"; g $? "Ö12g açık işlerde 'sınıflı · izin: dur' (eski '· SULTAN' yok)"
+! grep -q "· SULTAN" <<<"$O12"; g $? "Ö12h 'SULTAN' etiketi hiçbir satırda yok"
+
+echo "════ Ö13 · MUTASYON: izin.py'de dur dalı kalkınca veto görünmez olur (Ö12b kırmızıya döner) ════"
+cp "$G" "$T/pkg/mutant4.sh"; cp "$T/pkg/izin.py" "$T/pkg/izin.py.asil"; sed -i 's/^        if d == "dur":$/        if False:/' "$T/pkg/izin.py"
+if cmp -s "$T/pkg/izin.py" "$T/pkg/izin.py.asil"; then g 1 "Ö13 mutant FARKSIZ (çapa bayat)"; else
+  OM4="$( cd "$T" && bash "$T/pkg/mutant4.sh" --gun "$GUN" 2>&1 )"
+  grep -qE '^\- \[acik\] \*\*sinifli\*\* .* izin: bekliyor ' <<<"$OM4"; g $? "Ö13 MUTASYON: dur dalı ölünce vetolu kart 'bekliyor' görünüyor → Ö12b bu mutantta düşerdi"
+fi
+cp "$T/pkg/izin.py.asil" "$T/pkg/izin.py"
+rm -f "$T/_agents/fabrika/kartlar/sinifli.json" "$T/_agents/fabrika/kartlar/sinifli-bitti.json"
+
 echo "════ Ö7 · MUTASYON: saat çevrimi koparılınca kör pencere GERİ GELİR ════"
-M="$T/mutant.sh"
+M="$T/pkg/mutant.sh"
 sed 's@^        return t.astimezone().strftime("%Y-%m-%d")@        return tarih@' "$G" > "$M"
 if cmp -s "$M" "$G"; then g 1 "Ö7 mutant orijinalden FARKSIZ — ölçtüğü şey yok"; else
   printf '%s | KAPISIZ | gece-kacisi | komut-A\n' "$GECE" > "$T/_agents/fabrika/kacis-defteri.log"
@@ -126,7 +161,7 @@ if cmp -s "$M" "$G"; then g 1 "Ö7 mutant orijinalden FARKSIZ — ölçtüğü �
 fi
 
 echo "════ Ö8 · MUTASYON: 'çözülemedi' uyarısı kaldırılınca Ö5 kırmızıya döner ════"
-M2="$T/mutant2.sh"
+M2="$T/pkg/mutant2.sh"
 sed 's@^            cozulemedi.append(l)@            pass@' "$G" > "$M2"
 if cmp -s "$M2" "$G"; then g 1 "Ö8 mutant2 FARKSIZ"; else
   printf 'tarihsiz bir satir | KAPISIZ | bozuk | komut-D\n' > "$T/_agents/fabrika/kacis-defteri.log"
@@ -135,7 +170,7 @@ if cmp -s "$M2" "$G"; then g 1 "Ö8 mutant2 FARKSIZ"; else
 fi
 
 echo "════ Ö11 · MUTASYON: açık-dilim çevrimi koparılınca Ö9 kırmızıya döner ════"
-M3="$T/mutant3.sh"
+M3="$T/pkg/mutant3.sh"
 sed 's@^        if dilim:$@        if False:@' "$G" > "$M3"
 if cmp -s "$M3" "$G"; then g 1 "Ö11 mutant3 FARKSIZ (çapa bayat)"; else
   printf '%sT00:00:00+00:00 | KAPISIZ | yabanci-dilim | komut-F\n' "$GUN" > "$T/_agents/fabrika/kacis-defteri.log"

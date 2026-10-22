@@ -16,6 +16,8 @@ Kanıt kuralları (rubrik):
 - Bulgu da kanıt ister: her bulguya satır/kare/ölçüm referansı yaz. Kanıtlayamadığın bulguyu yazma.
 - "MUTASYON KANITI" başlıklı ölçüm (manifestte `mutasyon: true`) kodu BİLEREK bozup sınavı koşturur: içindeki FAIL/✗ satırları beklenendir, bulgu değildir. Yeşil = sınav bozuk kodu yakaladı. Gerçek kodun durumunu `gercek_olcum` etiketli kayıttan oku.
 - Kapsam: iş kartının dışına taşan değişiklik bulgu sayılır ("kapsam kayması").
+- Karttaki `reis_kararlari` kutu reisinin kararıdır, Sultan'ın sözü DEĞİLDİR; Sultan sözü yalnız `sultan_kararlari`'nda (A06). Sınıflı işte
+  reis kararı (devam · daralt · canlı borç · birleştir) meşrudur (0.18.0); `baslama_izni.durum = dur` ise iş vetoludur, bunu bulgu olarak yaz.
 
 🔴 KUTU-DIŞI BULGU — ayrı sınıf, çok dikkat et (ölçülmüş vaka: cloudtop #635 dört turunu "canlıda kurulu
 değil" bulgusuyla yaktı; kod kusursuzdu ve iş hiç ilerlemedi):

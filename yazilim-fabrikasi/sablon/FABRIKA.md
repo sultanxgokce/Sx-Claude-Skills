@@ -5,8 +5,9 @@
 F=/config/.claude/skills/yazilim-fabrikasi
 
 0. KABUL — `bash $F/scripts/kart.sh ac <iş> --is "…" --istedi … --aldi … --geri-alinamaz/--para/--dis-yuzey/--yetki e|h|?`
-   Dört sınıf sorusu cevapsız kart açılmaz; biri evet ya da "?" ise iş SULTAN'a gider. Şüphede sınıf YUKARI.
-   Sınıfsız iş ekipte biter; bitince `kart.sh bitti` → gün sonu özeti (`gun-sonu.sh`) defterden üretilir. ($F/adimlar/0-kabul.md)
+   Dört sınıf sorusu cevapsız kart açılmaz; biri evet ya da "?" ise BAŞLAMA İZNİ Sultan'a gider (veto penceresi: iş yürür,
+   Sultan "dur" derse kapı kapanır). Ara kararlar ve birleştirme kutu reisinin; canlıya alma Sultan eli. Şüphede sınıf YUKARI.
+   Her iş ekipte biter; bitince `kart.sh bitti` → gün sonu özeti (`gun-sonu.sh`) defterden üretilir. ($F/adimlar/0-kabul.md)
 
 1. İZOLE — `bash $F/scripts/is-alani.sh ac <iş>` → origin/main'den taze alan. Ana dalda ASLA çalışma.
    Başkasının alanına, dalına, kayıtsız işine dokunma. Açık PR'la dosya çakışıyorsa DUR ve sor.
@@ -23,8 +24,9 @@ F=/config/.claude/skills/yazilim-fabrikasi
 4. GÖNDER — PR'ı `pr-onay` ile aç. Bağımsız göz: YAZANDAN FARKLI model inceler (Claude ↔ Codex ↔ Fable).
    Puan iki satır: KOD İYİ Mİ 0-5 · DOĞRU ŞEY Mİ E/H (talep ⟷ kanıt yan yana). Bulgu da kanıt ister.
    5 ve E değilse adım 2'ye dön. Tavan 3 tur; ilerleyen işe (puan↑, açık bulgu↓) +1; DÖRT mutlak.
-   Tıkanınca: "tıkandı + üç yol" raporu (devam · daralt · geri al). Sonsuz döngü yok.
-   Merge: sınıf işi SULTAN; sınıfsız iş kutu reisi → deftere kanıt+puan+damga. ($F/adimlar/4-gonder.md)
+   Tıkanınca: "tıkandı + üç yol" raporu (devam · daralt · geri al) — karar reisin (sınıflı işte de). Sonsuz döngü yok.
+   Merge: kutu reisi (sınıflı işte de; Sultan "dur" dediyse kapı kapalı) → deftere kanıt+puan+damga.
+   Dağıtım / canlıya alma Sultan eli. ($F/adimlar/4-gonder.md)
 
 Proje kuralları (test · lint · paket yöneticisi): BURAYA YAZILMAZ — deponun kendi dosyasından okunur, tahmin edilmez.
 Tıkanma: 3 mektup ya da 24 saat → reis → SERDAR (yalnız kutular-arası) → Sultan.

@@ -90,16 +90,19 @@ ac() {
   if [ ! -f "$kart" ]; then
     if [ "$kartsiz" -eq 0 ]; then
       _hata "iş kartı yok: $is — önce: bash $HERE/kart.sh ac $is --is \"…\" --istedi … --aldi … --geri-alinamaz/--para/--dis-yuzey/--yetki e|h|?"
-      _hata "  (kaçış: --kartsiz → kart cevapsız açılır ve Sultan'a gider)"; exit 1
+      _hata "  (kaçış: --kartsiz → kart cevapsız açılır; başlama izni Sultan'a gider — veto penceresi, iş yürür)"; exit 1
     fi
     mkdir -p "$(dirname "$kart")"
-    python3 - "$kart" "$is" <<'PY'
+    python3 - "$kart" "$is" "$HERE" <<'PY'
 import json,sys,datetime
-yol,is_=sys.argv[1:]
-json.dump({"is":is_,"cumle":"(kartsız açıldı — --kartsiz kaçışı)","istedi":"?","aldi":"?","zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
-           "sinif_cevaplari":{},"siniflar":["cevapsiz"],"sultan":True,"kanit_nerede":"","oda":"","durum":"acik","kacis":True,"gecmis":[]},open(yol,"w"),ensure_ascii=False,indent=2)
+yol,is_,hdir=sys.argv[1:]; sys.path.insert(0,hdir); from izin import KURAL_SURUMU   # tek gerçek: sürüm sabiti izin.py'de
+simdi=datetime.datetime.now().astimezone().isoformat(timespec="seconds")
+# 0.18.0 (Sultan D1 22 Eki): cevapsız kart da sınıflıdır → başlama izni Sultan'a gider (veto penceresi); alan açılır, iş yürür
+json.dump({"is":is_,"cumle":"(kartsız açıldı — --kartsiz kaçışı)","istedi":"?","aldi":"?","zaman":simdi,
+           "sinif_cevaplari":{},"siniflar":["cevapsiz"],"sultan":True,"kanit_nerede":"","oda":"","durum":"acik","kacis":True,"gecmis":[],
+           "baslama_izni":{"durum":"bekliyor","istendi":simdi},"kural_surumu":KURAL_SURUMU},open(yol,"w"),ensure_ascii=False,indent=2)
 PY
-    _bilgi "⚠ --kartsiz: kart CEVAPSIZ açıldı, sultan=true damgalı (şüphede sınıf yukarı); gün sonu özetinde görünür"
+    _bilgi "⚠ --kartsiz: kart CEVAPSIZ açıldı, sultan=true damgalı (şüphede sınıf yukarı); başlama izni Sultan'a gider (veto penceresi: iş yürür, 'dur' derse kapı kapanır); gün sonu özetinde görünür"
   fi
   git -C "$DEPO" fetch -q origin || { _hata "fetch düştü — taze başlangıç garanti edilemez, DURDUM"; exit 1; }
   if git -C "$DEPO" show-ref --verify --quiet "refs/heads/$is"; then

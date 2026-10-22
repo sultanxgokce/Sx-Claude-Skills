@@ -2,21 +2,23 @@
 # gun-sonu.sh — gün sonu özeti DEFTERDEN üretilir, elle yazılmaz (K6-b/c, Sultan 22 Eyl 2026).
 #
 # Kaynaklar: <depo>/_agents/fabrika/kartlar/*.json (iş kartları) + <depo>/_agents/fabrika/karne.jsonl (denetimler).
-# Üç bölüm: SULTAN'A GİDENLER (sınıf işi) · İÇERİDE BİTİRDİKLERİMİZ (Sultan'ın veto hakkı) · TIKANANLAR; ek: açık işler.
+# Bölümler: SULTAN'A GİDENLER (sınıflı iş — başlama izni / veto; 0.18.0 Sultan D1 22 Eki) · İÇERİDE BİTİRDİKLERİMİZ (sınıflı bitti'ler de:
+# reis birleştirdi, Sultan'ın veto hakkı) · TIKANANLAR · REİSİN SINIFLI İŞLERDEKİ KARARLARI (veto hakkı) · kaçışlar · tavan · açık işler.
+# Başlama izni tek yüzeyden okunur (izin.py); 'SULTAN' etiketi "Sultan bekliyor" gibi okunduğu için 'sınıflı · izin: …' oldu.
 # Her satır bir karta bağlıdır; kartta olmayan şey özete giremez.
 #
 # Kullanım: gun-sonu.sh [--gun YYYY-MM-DD] [--yaz]   (--yaz: <depo>/_agents/fabrika/gun-sonu/<gün>.md dosyasına da yazar)
 # rc: 0 üretildi · 3 defter yok (ölçülemedi)
 set -uo pipefail
-GUN="$(date +%F)"; YAZ=0
+GUN="$(date +%F)"; YAZ=0; HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 while [ $# -gt 0 ]; do case "$1" in --gun) GUN="$2"; shift 2 ;; --yaz) YAZ=1; shift ;; *) shift ;; esac; done
 c="$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)" && DEPO="${KANIT_DEPO:-$(dirname "$c")}" || DEPO="${KANIT_DEPO:-}"
 [ -n "$DEPO" ] || { echo "✗ depo kökü bulunamadı" >&2; exit 3; }
 KD="$DEPO/_agents/fabrika/kartlar"; KARNE="$DEPO/_agents/fabrika/karne.jsonl"
 ls "$KD"/*.json >/dev/null 2>&1 || { echo "◻ kart defteri yok ($KD) — özet üretilemez (ölçülemedi)"; exit 3; }
-OZET="$(python3 - "$KD" "$KARNE" "$GUN" <<'PY'
+OZET="$(python3 - "$KD" "$KARNE" "$GUN" "$HERE" <<'PY'
 import json,sys,glob,os
-kd,karne,gun=sys.argv[1:]
+kd,karne,gun,hdir=sys.argv[1:]; sys.path.insert(0,hdir); from izin import izin_durumu   # tek gerçek; yoksa özet üretilmez (rc 3)
 kartlar=[json.load(open(p)) for p in sorted(glob.glob(os.path.join(kd,"*.json")))]
 den={}
 if os.path.exists(karne):
@@ -28,7 +30,12 @@ def bugun(k):  # o gün açılmış YA DA o gün kapanmış
     return k["zaman"][:10]==gun or (k.get("bitis","")[:10]==gun)
 g=[k for k in kartlar if bugun(k)]
 sultan=[k for k in g if k["sultan"]]
-icerde=[k for k in g if not k["sultan"] and k["durum"]=="bitti"]
+icerde=[k for k in g if k["durum"]=="bitti"]   # 0.18.0: sınıflı bitti'ler de burada — reis birleştirdi, Sultan veto hakkıyla görür
+def izin(k): return izin_durumu(k)[0]
+def reis_birl(k):
+    b=k.get("birlestirme_karari") or {}
+    if not b: return ""
+    return " · reis birleştirdi"+(f" (PR {b.get('pr')})" if b.get("pr") else "")+(f" · {b.get('reis')}" if b.get("reis") else "")
 tik=[k for k in g if k["durum"]=="tikandi"]
 acik=[k for k in kartlar if k["durum"]=="acik"]
 def puan(k):
@@ -37,12 +44,18 @@ def puan(k):
     if d: return f"{d['puan']}/5 {d['dogru']} · {d['tur']} tur"
     return "puan YOK"
 out=[f"# GÜN SONU · {gun} · {len(g)} iş (kart defterinden üretildi, elle satır yok)",""]
-out.append(f"## Sultan'a gidenler ({len(sultan)})")
-for k in sultan: out.append(f"- [{k['durum']}] **{k['is']}** — {k['cumle']} · sınıf: {', '.join(k['siniflar'])} · sahip {k['aldi']} · {puan(k)} · kanıt {'var' if k.get('kanit_var') else 'yok'}{' · PR '+k['pr'] if k.get('pr') else ''}")
+out.append(f"## Sultan'a gidenler ({len(sultan)}) — başlama izni / veto (iş bekletilmez; 'dur' dersen kapı kapanır: kart.sh sultan-dedi <iş> --karar dur)")
+for k in sultan: out.append(f"- [{k['durum']}] **{k['is']}** — {k['cumle']} · sınıf: {', '.join(k['siniflar'])} · izin: {izin(k)} · sahip {k['aldi']} · {puan(k)} · kanıt {'var' if k.get('kanit_var') else 'yok'}{' · PR '+k['pr'] if k.get('pr') else ''}{reis_birl(k)}")
 out.append(""); out.append(f"## İçeride bitirdiklerimiz ({len(icerde)}) — 'bunu bana sormalıydınız' dersen sınıf kuralı bu vakayla düzelir")
-for k in icerde: out.append(f"- **{k['is']}** — {k['cumle']} · sahip {k['aldi']} · {puan(k)} · kanıt {'var' if k.get('kanit_var') else '⚠ YOK'}{' · PR '+k['pr'] if k.get('pr') else ''}")
+for k in icerde: out.append(f"- **{k['is']}** — {k['cumle']} · sahip {k['aldi']} · {puan(k)} · kanıt {'var' if k.get('kanit_var') else '⚠ YOK'}{' · PR '+k['pr'] if k.get('pr') else ''}"
+                            +(f" · sınıf: {', '.join(k['siniflar'])} · reis birleştirdi · izin: {izin(k)}"+(" · veto yok" if izin(k)!="dur" else " · ⛔ VETOYA RAĞMEN — geri alma kararı senin") if k['sultan'] else ""))
 out.append(""); out.append(f"## Tıkananlar ({len(tik)})")
 for k in tik: out.append(f"- **{k['is']}** — {k['cumle']} · yol: {k['tikanma']['yol']} · neden: {k['tikanma']['neden']} · sahip {k['aldi']}")
+# 0.18.0: reisin sınıflı işlerde verdiği ara/birleştirme kararları — reis kararıdır, Sultan sözü DEĞİL (A06); veto hakkı buradan kullanılır
+rk=[(k,x) for k in kartlar for x in (k.get("reis_kararlari") or []) if x.get("sinifli") and str(x.get("zaman",""))[:10]==gun]
+out.append(""); out.append(f"## Reisin sınıflı işlerdeki kararları ({len(rk)}) — veto hakkın var (reis kararı, Sultan sözü değil)")
+for k,x in rk: out.append(f"- {str(x.get('zaman',''))[11:16]} · **{k['is']}** · {x.get('karar')} · reis {x.get('reis')} · izin: {x.get('izin','?')} · gerekçe: {str(x.get('gerekce',''))[:120]}")
+if not rk: out.append("- (bugün sınıflı işte reis kararı yok)")
 # 🔴 Kaçışlar Sultan'ın önüne gelir (23 Eyl kararı): sessiz delik olmaktan çıkar, kayda geçen istisna olur.
 import os as _os
 
@@ -136,15 +149,20 @@ if kac_cozulemedi: out.append(f"- ⚠ {len(kac_cozulemedi)} satırın tarihi Ç�
 tav=_os.path.join(_os.path.dirname(kd),"tavan-defteri.log")
 tsat=[l.strip() for l in open(tav,encoding="utf-8")] if _os.path.exists(tav) else []
 bugun_tav, tav_cozulemedi = _gunun_satirlari(tsat, gun)
-out.append(""); out.append(f"## Tavan açılışları ({len(bugun_tav)}) — dönüş tavanı bir kararla aşıldı (Sultan ya da sınıfsız işte reis)")
+out.append(""); out.append(f"## Tavan açılışları ({len(bugun_tav)}) — dönüş tavanı bir kararla aşıldı (Sultan ya da reis; sınıflı işte de reisin, veto hakkın var)")
+import re as _re3
 for l in bugun_tav:
     par=[x.strip() for x in l.split("|")]
-    kim = "reis kararı (sınıfsız iş)" if len(par)>1 and par[1]=="TAVAN-ACILDI-REIS" else "Sultan kararı"
+    if len(par)>1 and par[1]=="TAVAN-ACILDI-REIS":
+        # 0.18.0: 3. sütun sinif= izin= taşır; eski satır (yok) sınıfsız sayılır
+        ms=_re3.search(r"sinif=(\S+)", par[2] if len(par)>2 else ""); mi=_re3.search(r"izin=(\S+)", par[2] if len(par)>2 else "")
+        kim = f"reis kararı (sınıflı iş: {ms.group(1)} · izin: {mi.group(1) if mi else '?'})" if (ms and ms.group(1)!="yok") else "reis kararı (sınıfsız iş)"
+    else: kim = "Sultan kararı"
     out.append(f"- {_yerel_saat(par[0])} · {par[2] if len(par)>2 else '?'} · {kim} · gerekçe: {par[3] if len(par)>3 else '?'}")
 if not bugun_tav: out.append("- (bugün tavan açılmadı)")
 if tav_cozulemedi: out.append(f"- ⚠ {len(tav_cozulemedi)} satırın tarihi ÇÖZÜLEMEDİ — \"yok\" sayılmadı, sayıldı ve söyleniyor")
 out.append(""); out.append(f"## Açık işler ({len(acik)})")
-for k in acik: out.append(f"- {k['is']} — sahip {k['aldi']} · açıldı {k['zaman'][:16]}{' · SULTAN' if k['sultan'] else ''}")
+for k in acik: out.append(f"- {k['is']} — sahip {k['aldi']} · açıldı {k['zaman'][:16]}{' · sınıflı · izin: '+izin(k) if k['sultan'] else ''}")
 print("\n".join(out))
 PY
 )" || exit 3

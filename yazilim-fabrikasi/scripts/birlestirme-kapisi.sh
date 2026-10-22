@@ -13,8 +13,9 @@
 #   3) PUAN     — son DENETIM-<tur>.json: kod_puani=5 VE dogru_sey=E VE denetçi ≠ yazan
 #
 # 🔴 NE ÖLÇMEZ (dürüstlük): kanıtın DOĞRU şeyi ölçtüğünü ölçmez — onu bağımsız göz yapar.
-#    Sınıf işinde Sultan onayını da ölçmez (A06: onay üretilemez, yalnız insan verir) — yalnız
-#    kartın sınıf taşıdığını SÖYLER, kararı insana bırakır.
+#    Onay ÜRETMEZ (A06). 0.18.0 (Sultan D1 22 Eki, kural adimlar/4-gonder.md §5): sınıflı işte birleştirme kararı KUTU REİSİNİN;
+#    bu kapı yalnız Sultan'ın VETOSUNU ölçer (kart.sh izin-durum = dur → rc 1; okunamadı → rc 3) ve başlama izni durumunu
+#    söyler. Dağıtım / canlıya alma Sultan eli olarak kalır — bu kapının dışıdır.
 #
 # Kullanım:
 #   birlestirme-kapisi.sh <iş> [--depo KÖK] [--sessiz]
@@ -87,9 +88,25 @@ _y "  · kanıt yeri: $DZ_YER"
 # 1 · KART
 if [ -f "$KART" ]; then
   sinif="$(python3 -c "import json,sys;d=json.load(open(sys.argv[1]));print(','.join(d.get('siniflar') or []) or 'yok')" "$KART" 2>/dev/null)"
-  sultan="$(python3 -c "import json,sys;print('E' if json.load(open(sys.argv[1])).get('sultan') else 'H')" "$KART" 2>/dev/null)"
   _y "  ✓ kart var · sınıf: $sinif"
-  [ "$sultan" = "E" ] && _y "  ⚠ SINIF İŞİ — birleştirme kararı SULTAN'ın; bu kapı onay ÜRETMEZ (A06)"
+  # 🔴 VETO (0.18.0 · Sultan D1 22 Eki): başlama izni TEK yüzeyden okunur (kart.sh izin-durum → izin.py). dur → birleştirme YOK (eksik);
+  #    okunamadı / kart.sh yok → ÖLÇÜLEMEDİ (rc 3, fail-closed — canli-gerekir dersi); bekliyor|basla → bilgi satırı, rc'yi etkilemez.
+  if [ -f "$HERE/kart.sh" ]; then
+    iz_cikti="$(KANIT_DEPO="$DEPO" bash "$HERE/kart.sh" izin-durum "$IS" 2>&1)"; iz_rc=$?
+    IFS=$'\t' read -r iz iza <<<"$iz_cikti"; iza="${iza:-}"
+    if [ "$iz_rc" -ne 0 ]; then
+      _h "kartın başlama izni OKUNAMADI (kart.sh izin-durum rc=$iz_rc: ${iz_cikti:-boş}) — ÖLÇÜLEMEDİ, veto kontrolü atlanmaz"; olcemedi=$((olcemedi+1))
+    else
+      case "$iz" in
+        gerekmiyor) ;;
+        dur) _h "⛔ SULTAN 'DUR' DEDİ ($iza) — birleştirme YOK; kaldırmak Sultan'ın: kart.sh sultan-dedi $IS --karar basla --oturum … --soz … --beyan …"; eksik=$((eksik+1)) ;;
+        bekliyor|basla) _y "  · SINIFLI İŞ ($sinif) · başlama izni: $iz · birleştirme kararı kutu reisinin · dağıtım Sultan eli · bu kapı onay ÜRETMEZ (A06)" ;;
+        *) _h "kartın başlama izni anlaşılamadı (${iz:-boş} ${iza}) — ÖLÇÜLEMEDİ"; olcemedi=$((olcemedi+1)) ;;
+      esac
+    fi
+  else
+    _h "kart.sh bulunamadı — kartın başlama izni (veto) ÖLÇÜLEMEDİ"; olcemedi=$((olcemedi+1))
+  fi
 else
   _h "kart YOK: $KART — 0. adım atlanmış"; eksik=$((eksik+1))
 fi
@@ -174,7 +191,8 @@ fi
 cs_engel=0
 # 🧾 CANLI BORÇ (5WYQMW · SERDAR 22 Eki 00:43): canlı kayıt henüz ÜRETİLEMİYORSA (dağıtım birleşmeden sonra/başkasında) kapı, kartta KAYITLI ve GEÇERLİ
 #    bir borçla geçer — borç kapıyı gevşetmez, görünür kılar: kart 'bitti' olmaz (canli-borclu), 24 saatte kırmızı olur. Koşullar canli_borc.py'de
-#    (sınıflı kartta Sultan kararı şart). Borç yalnız bağlı yeşil kayıt YOKKEN anlamlıdır; geçersiz ilan edilmiş kaydı AKLAMAZ.
+#    (sınıflı kartta reis 'canli-borc' kararı borçla birlikte, ya da eski Sultan kararı; veto → geçersiz — 0.18.0). Borç yalnız bağlı yeşil
+#    kayıt YOKKEN anlamlıdır; geçersiz ilan edilmiş kaydı AKLAMAZ.
 bd=""; bac=""; borc_gecer=0
 if [ "$cg" = "E" ] && [ "$cy" -eq 0 ] && [ -f "$HERE/kart.sh" ]; then
   IFS=$'\t' read -r bd bac <<<"$(KANIT_DEPO="$DEPO" bash "$HERE/kart.sh" canli-borc-durum "$IS" 2>&1)"; bac="${bac:-}"
@@ -230,7 +248,7 @@ try:
     rk=[x for x in (k.get("reis_kararlari") or []) if x.get("karar")=="daralt"]; sk=[x for x in (k.get("sultan_kararlari") or []) if x.get("karar")=="daralt"]
     if not d: print("yok"); raise SystemExit
     ts=int(d[-1].get("tur_sifir",0)); tur=int(sys.argv[2]) if str(sys.argv[2]).isdigit() else -1
-    kim="Sultan" if sk else ("reis" if rk else "kayitsiz")
+    kim="Sultan" if sk else (("reis(sınıflı-iş)" if any(x.get("sinifli") for x in rk) else "reis") if rk else "kayitsiz")   # tek sözcük: çağıran `set --` ile böler
     print(f"{'tamam' if tur>ts else 'eski'} {ts} {d[-1].get('kalan_kart','?')} {kim}")
 except SystemExit: pass
 except Exception as e: print("hata")
@@ -279,5 +297,5 @@ if [ "$eksik" -gt 0 ]; then
   _y '  Acil durumda: FABRIKA_KAPISIZ="<en az 20 karakterlik gerekçe>" — kaçış deftere yazılır (sessiz atlama yasak).'
   exit 1
 fi
-_y ""; _y "✓ GEÇTİ — kanıt imzalı, bağımsız göz 5/5 + doğru şey E, kart yerinde."
+_y ""; _y "✓ GEÇTİ — kanıt imzalı, bağımsız göz 5/5 + doğru şey E, kart yerinde, Sultan vetosu yok. Birleştirme kararı kutu reisinin; dağıtım Sultan eli."
 exit 0
