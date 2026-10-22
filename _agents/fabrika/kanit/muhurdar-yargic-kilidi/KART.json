@@ -1,0 +1,31 @@
+{
+  "is": "muhurdar-yargic-kilidi",
+  "cumle": "muhurdar.sh öznel G yargıcı yalnız kör istemle karar verir: Claude yolu --safe-mode --strict-mcp-config --tools \"\" ile koşar (dosya, kabuk ve MCP aracı yok; CLAUDE.md ve kancalar yüklenmez), Codex yolu kabuk aracı kapalı koşar (features.shell_tool=false); kör istemdeki içerikle karar verme korunur",
+  "istedi": "Sultan",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-22T18:56:58+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M54B2Y4QT7VWTJX10AWPZ5FK",
+  "tahmin_dk": 60,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-22T18:56:58+03:00",
+      "olay": "ac",
+      "sonuc": "yazılamadı: http 404 · kayit_yok"
+    }
+  ]
+}

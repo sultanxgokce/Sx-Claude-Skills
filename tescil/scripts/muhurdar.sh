@@ -75,6 +75,14 @@ SEMA="$OUT/.yargic-sema.json"
 printf '%s' '{"type":"object","additionalProperties":false,"required":["karar","not"],"properties":{"karar":{"type":"string","enum":["GECTI","KALDI","EMIN-DEGILIM"]},"not":{"type":"string"}}}' > "$SEMA"
 K2=(); YARGIC=""
 codex_var() { [ "${MUHURDAR_MODEL:-}" != claude ] && command -v codex >/dev/null 2>&1; }
+# 🔴 YARGIÇ KİLİDİ (22 Eki, kanarya ölçümü): kör istem tek girdi olmalı. Kilitsiz 'claude -p' cwd dışındaki dosyayı izin reddi
+#    olmadan okudu ve global CLAUDE.md + kancaları yükledi (kendi başına "oturum başı kontrolü" koşmaya kalktı) — sınavda
+#    beklenen.json, gerçek mühürde transkript/commit okunabilirdi. Claude: araç yok (--tools ""), MCP yok, CLAUDE.md/kanca/beceri
+#    yok (--safe-mode); ölçüm: istemdeki içerikle karar verdi, diske ulaşamadı. Codex: kabuk aracı kapalı (ölçüm: exec girişimi 0);
+#    dosya okuması ayrıca kum havuzuna bağlıdır (bu kutuda bwrap ad alanı kuramıyor → hiç erişim yok; bwrap çalışan kutuda ölçülmedi).
+#    Bayrağı tanımayan eski claude/codex düşer → yargıç yok → EMIN-DEGILIM (kilitsiz koşmaz).
+CLAUDE_KILIT=(--safe-mode --strict-mcp-config --tools "")
+CODEX_KILIT=(-c features.shell_tool=false)
 for G in $ACIK; do
   D="$OUT/yargi-$G"; mkdir -p "$D"; find "$D" -mindepth 1 -delete 2>/dev/null
   # Kör istem: YALNIZ gereklilik satırı + rubrik + hedef dosya + mekanik kanıtların sonuç tablosu. Worktree taranmaz.
@@ -84,7 +92,7 @@ for G in $ACIK; do
   model=""; yrc=1
   if codex_var; then
     model=codex
-    timeout -k 30 "$ZA" codex exec -s read-only --skip-git-repo-check --ephemeral -C "$D" --output-schema "$SEMA" -o "$D/cevap.json" \
+    timeout -k 30 "$ZA" codex exec -s read-only "${CODEX_KILIT[@]}" --skip-git-repo-check --ephemeral -C "$D" --output-schema "$SEMA" -o "$D/cevap.json" \
       "$(cat "$D/istem.md")" </dev/null >"$D/log" 2>&1; yrc=$?
     [ "$yrc" -eq 0 ] || echo "muhurdar: $G codex düştü (rc $yrc) → Claude ile yeni oturum" >&2
   fi
@@ -93,7 +101,7 @@ for G in $ACIK; do
   if [ "$yrc" -ne 0 ]; then
     if command -v claude >/dev/null 2>&1; then
       model="${model:+$model→}claude"
-      timeout -k 30 "$ZA" claude -p --output-format json --json-schema "$(cat "$SEMA")" < "$D/istem.md" > "$D/claude.json" 2>"$D/log"; yrc=$?
+      timeout -k 30 "$ZA" claude -p "${CLAUDE_KILIT[@]}" --output-format json --json-schema "$(cat "$SEMA")" < "$D/istem.md" > "$D/claude.json" 2>"$D/log"; yrc=$?
       python3 -c "import json,sys;d=json.load(open(sys.argv[1]));r=d.get('structured_output') or d.get('result');print(r if isinstance(r,str) else json.dumps(r,ensure_ascii=False))" "$D/claude.json" > "$D/cevap.json" 2>/dev/null
     else
       model="${model:+$model→}yok"
