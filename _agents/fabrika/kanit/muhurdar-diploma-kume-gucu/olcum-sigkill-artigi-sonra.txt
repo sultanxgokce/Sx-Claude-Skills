@@ -1,0 +1,7 @@
+$ bash /config/projects/_wt/Sx-Claude-Skills-muhurdar-diploma-kume-gucu/_agents/fabrika/kanit/muhurdar-diploma-kume-gucu/kok-olcer.sh tescil/scripts
+# rc=0 sure=7.2s zaman=2026-10-22T21:03:51+03:00
+--- stdout ---
+kill -9 sonrası kalan kök: 1
+ikinci sınav rc=0 · · süpürüldü: 1 eski sınav kökü (sahibi ölmüş — SIGKILL artığı)
+ikinci sınavdan sonra kalan kök: 0
+--- stderr ---

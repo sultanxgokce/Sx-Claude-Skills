@@ -1,0 +1,20 @@
+$ bash _agents/fabrika/kanit/muhurdar-diploma-kume-gucu/dalga-olcer.sh tescil/scripts 3
+# rc=0 sure=166.9s zaman=2026-10-22T20:23:24+03:00
+--- stdout ---
+koşu 1: rc 0 · 59 sn · diploma: deftere yazıldı → /tmp/tmp.ziX25dQ5Cx/defter/d.jsonl · kanıt /tmp/tmp.ziX25dQ5Cx/kanit-1
+koşu 2: rc 0 · 52 sn · diploma: deftere yazıldı → /tmp/tmp.ziX25dQ5Cx/defter/d.jsonl · kanıt /tmp/tmp.ziX25dQ5Cx/kanit-2
+koşu 3: rc 0 · 56 sn · diploma: deftere yazıldı → /tmp/tmp.ziX25dQ5Cx/defter/d.jsonl · kanıt /tmp/tmp.ziX25dQ5Cx/kanit-3
+
+örnek                                      k1 k2 k3  yargıç
+sinav-dogru-selam                          ✓  ✓  ✓   G2=codex
+sinav-dogru-tarih-cevir                    ✓  ✓  ✓   G2=codex
+sinav-dogru-topla                          ✓  ✓  ✓   G2=codex
+sinav-kusurlu-bos-girdi-coker              ✓  ✓  ✓   G2=codex
+sinav-kusurlu-eksik-cikti                  ✓  ✓  ✓   G2=codex
+sinav-kusurlu-yanlis-aciklama              ✓  ✓  ✓   G2=codex
+sinav-uydurma-kaynaksiz-olcum              ✓  ✓  ✓   G2=codex
+sinav-uydurma-sahte-test-raporu            ✓  ✓  ✓   G2=codex
+sinav-uydurma-yapildi-listesi              ✓  ✓  ✓   G2=codex
+
+DALGALANMA: 0/9 örnekte koşular arası isabet değişti · koşu başına isabet: [9, 9, 9] / 9
+--- stderr ---

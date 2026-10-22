@@ -1,0 +1,16 @@
+$ bash tescil/scripts/yargic-kilidi.test.sh
+# rc=0 sure=13.5s zaman=2026-10-22T21:13:30+03:00
+--- stdout ---
+════ yargıç kilidi · yargıç yalnız kör istemle karar verir ════
+  ✓ a Claude yargıcı --safe-mode --strict-mcp-config --tools "" ile koşar ve karar verir
+  ✓ b Codex yargıcı -s read-only + features.shell_tool=false ile koşar ve karar verir
+  ✓ c Codex düşünce devreye giren Claude da kilitli
+── MUTASYON (betik kopyasında, kontrol şartlı) ──
+  ✓ kontrol kopyası gerçek betikle aynı kapıları geçiyor
+  ✓ mutant (Claude araçları açık) → 'a' kapısı düşüyor
+  ✓ mutant (CLAUDE.md/kancalar yükleniyor) → 'a' kapısı düşüyor
+  ✓ mutant (Codex kabuğu açık) → 'b' kapısı düşüyor
+  ✓ mutant (yedek Claude kilitsiz) → 'c' kapısı düşüyor
+
+── SONUÇ: 8 geçti · 0 kaldı ──
+--- stderr ---
