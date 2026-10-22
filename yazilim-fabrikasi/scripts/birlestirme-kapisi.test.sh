@@ -127,7 +127,7 @@ CIKTI="$(bash "$G" is-d 2>&1)"; RC=$?
 [ "$RC" -eq 1 ]; g $? "kartsız → rc=1"
 grep -q "kart YOK" <<<"$CIKTI"; g $? "sebebi yazılı"
 
-echo "════ T8 · sınıf işi GEÇER — 0.18.0 FLİP: 'birleştirme kararı kutu reisinin · dağıtım Sultan eli', 'SULTAN'ın' demez, onay üretmez (A06) ════"
+echo "════ T8 · sınıf işi GEÇER — 0.19.0 FLİP: 'birleştirme kararı kutu reisinin · dağıtım Sultan eli', 'SULTAN'ın' demez, onay üretmez (A06) ════"
 kart is-e e; bash "$K" olcum is-e olc --asama tek -- echo 1 >/dev/null 2>&1; den is-e 1 5 E
 CIKTI="$(bash "$G" is-e 2>&1)"; RC=$?
 [ "$RC" -eq 0 ]; g $? "5+E ile geçer (veto yok; reis kaydı ŞART koşulmaz — bitti yazar)"
@@ -151,7 +151,7 @@ CIKTI="$(bash "$M2" is-a 2>&1)"; RC=$?
 grep -q "ÖLÇÜLEMEDİ" <<<"$CIKTI"; g $? "sebebi yazılı"
 bash "$G" is-a --sessiz >/dev/null 2>&1; [ $? -eq 0 ]; g $? "gerçek kapı aynı işte hâlâ rc=0 (mutasyon kaynağı bozdu, düzeneği değil)"
 
-echo "════ T15 · VETO (0.18.0 · Sultan D1 22 Eki): Sultan 'dur' dedi → kapı rc 1 'DUR DEDİ'; 'basla' → rc 0; kart.sh yoksa rc 3; mutant: dur dalı kalkınca kapı açılır ════"
+echo "════ T15 · VETO (0.19.0 · Sultan D1 22 Eki): Sultan 'dur' dedi → kapı rc 1 'DUR DEDİ'; 'basla' → rc 0; kart.sh yoksa rc 3; mutant: dur dalı kalkınca kapı açılır ════"
 bash "$KT" sultan-dedi is-e --karar dur --oturum "sohbet-2340" --soz "bunu şimdi durdurun" --beyan M >/dev/null 2>&1; g $? "T15a Sultan 'dur' karta işlendi (D1 üçlüsü)"
 CIKTI="$(bash "$G" is-e 2>&1)"; RC=$?
 [ "$RC" -eq 1 ]; g $? "T15b 🔴 vetolu sınıflı kart 5/E ile bile GEÇMEZ (rc 1)"
@@ -242,7 +242,7 @@ CIKTI="$(bash "$G" is-k 2>&1)"; RC=$?
 [ "$RC" -eq 3 ]; g $? "T11p kart okunamıyor (canli-gerekir düşer) → rc=3 ÖLÇÜLEMEDİ, yeşil değil"
 grep -q "canlı şartı OKUNAMADI" <<<"$CIKTI"; g $? "T11p2 sebebi yazılı"
 # iki çit üst üste (canli-gerekir rc + kart zamanı): bozuk JSON ikisine de takılır → mutant ikisini de kaldırır
-# 0.18.0: üçüncü çit (başlama izni / veto okunamadı → ÖLÇÜLEMEDİ) de kaldırılır — bozuk kart artık üç çite takılır
+# 0.19.0: üçüncü çit (başlama izni / veto okunamadı → ÖLÇÜLEMEDİ) de kaldırılır — bozuk kart artık üç çite takılır
 M7="$PKG/mutant7.sh"; sed -e 's/^    if \[ "\$cg_rc" -ne 0 \] || .*; then$/    if false; then/' -e 's/^\[ ! -f "\$KART" \] || \[ "\$ckz" = "1" \] || {/true || {/' -e 's/^    if \[ "\$iz_rc" -ne 0 \]; then$/    if false; then/' -e 's/^        \*) _h "kartın başlama izni anlaşılamadı.*$/        *) ;;/' "$G" > "$M7"; chmod +x "$M7"
 [ "$(grep -c '^    if false; then' "$M7")" -eq 2 ] && grep -q '^true || {' "$M7" && grep -q '^        \*) ;;$' "$M7"; g $? "T11p3 mutant 7 üretildi (fail-closed çitler: canli-gerekir rc + kart zamanı + başlama izni okunamadı kaldırıldı)"
 bash "$M7" is-k --sessiz >/dev/null 2>&1; [ $? -ne 3 ]; g $? "T11p4 mutant 7: bozuk kartta ölçülemedi DEMİYOR → T11p bu mutantta düşerdi"
@@ -440,7 +440,7 @@ echo "════ T14 · CANLI BORÇ (5WYQMW): dağıtım birleşmeden SONRA is
 # (T13 daraltma bölümü $T'yi sildi → mutantlar için kardeş dosyalar yeniden konur)
 mkdir -p "$T" "$PKG"; cp "$HERE/kanit.py" "$HERE/kanit.sh" "$HERE/kart.sh" "$HERE/canli_borc.py" "$HERE/izin.py" "$PKG/"
 # Kural: borç kapıyı gevşetmez, görünür kılar. Yazan kartın sahibi; SINIFLI kartta araç reis 'canli-borc' kararını borçla birlikte yazar
-# (0.18.0 — eski kural Sultan kararı ŞART'tı; eski Sultan kaydı geriye uyumlu geçerli); Sultan vetosu (dur) borcu yazdırmaz / geçersiz kılar.
+# (0.19.0 — eski kural Sultan kararı ŞART'tı; eski Sultan kaydı geriye uyumlu geçerli); Sultan vetosu (dur) borcu yazdırmaz / geçersiz kılar.
 borckart() { bash "$KT" ac "$1" --is "boşta bekçisi cron'u $1" --istedi S --aldi M --geri-alinamaz "${2:-h}" --para h --dis-yuzey h --yetki h --canli e >/dev/null 2>&1; bash "$K" olcum "$1" olc --asama tek -- echo 1 >/dev/null 2>&1; den "$1" 1 5 E; }
 kj() { python3 -c "import json,sys;k=json.load(open('$T/_agents/fabrika/kartlar/$1.json'));print(eval(sys.argv[1]))" "$2"; }
 GR="kutuda dağıtım birleşmeden sonra Sultan elinde; cron ancak sabah paketiyle canlıya iner"
@@ -487,7 +487,7 @@ borckart is-b3; bash "$K" canli is-b3 yok --desen boşta-bekcisi --kaynak "dosya
 bash "$G" is-b3 --sessiz >/dev/null 2>&1; [ $? -eq 1 ]; g $? "T14r sarı canlı, borç YOK → rc=1 (T11c ile aynı)"
 bash "$KT" canli-borc is-b3 --yazan M --gerekce "$GR" >/dev/null 2>&1
 bash "$G" is-b3 --sessiz >/dev/null 2>&1; g $? "T14s sarı canlı + geçerli borç → rc=0"
-# SINIFLI kart — 0.18.0 FLİP: borcu reis yazar, Sultan kararı ŞART DEĞİL (eski kural A06 gerekçesiyle Sultan kararı istiyordu)
+# SINIFLI kart — 0.19.0 FLİP: borcu reis yazar, Sultan kararı ŞART DEĞİL (eski kural A06 gerekçesiyle Sultan kararı istiyordu)
 borckart is-b4 e
 CIKTI="$(bash "$KT" canli-borc is-b4 --yazan M --gerekce "$GR" 2>&1)"; RC=$?; [ "$RC" -eq 0 ] || echo "    ↳ $CIKTI"
 [ "$RC" -eq 0 ] && [ "$(kj is-b4 "k['canli_borc']['yazan']")" = M ]; g $? "T14t 🔴 FLİP: SINIFLI kartta Sultan kararı OLMADAN borç YAZILDI (reis yazar) — eski kural rc 1 verirdi"

@@ -113,11 +113,11 @@ CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-s --diff "$T/d.patch" --sultan-de
 grep -q "TAVAN AÇILDI" <<<"$CIKTI"; g $? "tavanın açıldığını SÖYLÜYOR (sessiz değil)"
 grep -q "muavin/4390ad1f" <<<"$CIKTI"; g $? "oturum referansı çıktıda görünüyor"
 grep -q "kapinin amacini curutur" <<<"$CIKTI"; g $? "GEREKÇE de çıktıda görünüyor (niçin bir tur daha)"
-echo "════ T7c · 🚪 REİS KAPISI: sahip kararı KARTTAN; 0.18.0 FLİP — sınıflı kartta da AÇIK (Sultan yalnız veto) ════"
+echo "════ T7c · 🚪 REİS KAPISI: sahip kararı KARTTAN; 0.19.0 FLİP — sınıflı kartta da AÇIK (Sultan yalnız veto) ════"
 # NİÇİN (8 Eki 2026 · A268): tıkandı raporu "karar iş sahibinin/reisin, sınıf işiyse Sultan'ın" diyordu ama araç
 # yalnız Sultan'ın kararını okuyordu. Sınıfsız işin sahibi kendi yetkisindeki kararı yazdıramıyor; kapı ya kapalı
 # kalıyor ya da A06'ya özendiriyordu (aynı gün iki vaka: DEVRİYE doğrulayıcısı · kokpit A2).
-# 0.18.0 (Sultan D1 22 Eki): sınıflı işte de ara karar reisin — "sınıflı kartta KAPALI" çiti kalktı; veto çiti T-VETO'da.
+# 0.19.0 (Sultan D1 22 Eki): sınıflı işte de ara karar reisin — "sınıflı kartta KAPALI" çiti kalktı; veto çiti T-VETO'da.
 # (a) SINIFLI kart: reis yolu AÇIK; defter satırı sinif= izin= taşır; mutlak tavan yine kapalı
 kartac is-r1; bash "$K" olcum is-r1 olc --asama tek -- echo 1 >/dev/null 2>&1
 SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-r1 --diff "$T/d.patch" >/dev/null 2>&1
@@ -297,7 +297,7 @@ CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-t --diff "$T/d.patch" --sultan-de
 [ "$RC" -eq 4 ]; g $? "🔴 5. tur: Sultan kapısı MUTLAK tavanı açmıyor (rc=4)"
 grep -q "mutlak tavan" <<<"$CIKTI"; g $? "mutlak olduğunu söylüyor"
 
-echo "════ T-VETO · 🚪 SULTAN VETOSU (0.18.0 · D1 22 Eki): 'dur' → denetim koşulmaz, tur yanmaz, rc 4, reise zil; 'basla' açar; bozuk izin rc 3 ════"
+echo "════ T-VETO · 🚪 SULTAN VETOSU (0.19.0 · D1 22 Eki): 'dur' → denetim koşulmaz, tur yanmaz, rc 4, reise zil; 'basla' açar; bozuk izin rc 3 ════"
 kartac is-vt; bash "$K" olcum is-vt olc --asama tek -- echo 1 >/dev/null 2>&1
 bash "$KT" sultan-dedi is-vt --karar dur --oturum "sohbet-2340" --soz "bunu şimdi durdurun" --beyan MUAVIN >/dev/null 2>&1; g $? "Sultan 'dur' karta işlendi (D1 üçlüsü)"
 VZ="$T/veto-zil.sh"; VL="$T/veto-zil.log"; printf '#!/usr/bin/env bash\nprintf "%%s\\n" "$*" >> "%s"\n' "$VL" > "$VZ"; chmod +x "$VZ"; : > "$VL"
@@ -741,7 +741,7 @@ mut "gerekce-zorunlulugunu-kaldir" 's@^if len(x.get("gerekce") or "") < 20: rais
 
 mut "karti-okumayi-kaldir" 's@^  if \[ -z "$GEREKCE" \]; then@  if false; then@'
 mut "defter-dogrulamasini-kaldir" 's@^  grep -qF "$SATIR" "$DEF"@  true@'
-# 0.18.0: 'reis-sinif-citini-kaldir' mutantı KALDIRILDI (o çitin kalkması artık YENİ davranış); yerine eski çiti GERİ koyan ve veto
+# 0.19.0: 'reis-sinif-citini-kaldir' mutantı KALDIRILDI (o çitin kalkması artık YENİ davranış); yerine eski çiti GERİ koyan ve veto
 #   denetimini kaldıran iki mutant — ikisi de T7c(a) FLİP / T-VETO kapılarını kırmızıya döndürmeli
 mut "reis-sinif-citini-geri-koy" 's@^if siniflimi(k) and izin_durumu(k)\[0\]=="dur": raise SystemExit(4)@if siniflimi(k): raise SystemExit(4)@'
 mut "veto-denetimi-kaldir" 's@^  if \[ "$IZIN" = dur \]; then@  if false; then@'

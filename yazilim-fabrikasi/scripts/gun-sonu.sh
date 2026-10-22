@@ -2,7 +2,7 @@
 # gun-sonu.sh — gün sonu özeti DEFTERDEN üretilir, elle yazılmaz (K6-b/c, Sultan 22 Eyl 2026).
 #
 # Kaynaklar: <depo>/_agents/fabrika/kartlar/*.json (iş kartları) + <depo>/_agents/fabrika/karne.jsonl (denetimler).
-# Bölümler: SULTAN'A GİDENLER (sınıflı iş — başlama izni / veto; 0.18.0 Sultan D1 22 Eki) · İÇERİDE BİTİRDİKLERİMİZ (sınıflı bitti'ler de:
+# Bölümler: SULTAN'A GİDENLER (sınıflı iş — başlama izni / veto; 0.19.0 Sultan D1 22 Eki) · İÇERİDE BİTİRDİKLERİMİZ (sınıflı bitti'ler de:
 # reis birleştirdi, Sultan'ın veto hakkı) · TIKANANLAR · REİSİN SINIFLI İŞLERDEKİ KARARLARI (veto hakkı) · kaçışlar · tavan · açık işler.
 # Başlama izni tek yüzeyden okunur (izin.py); 'SULTAN' etiketi "Sultan bekliyor" gibi okunduğu için 'sınıflı · izin: …' oldu.
 # Her satır bir karta bağlıdır; kartta olmayan şey özete giremez.
@@ -35,7 +35,7 @@ def bugun(k):  # o gün açılmış YA DA o gün kapanmış
     return k["zaman"][:10]==gun or (k.get("bitis","")[:10]==gun)
 g=[k for k in kartlar if bugun(k)]
 sultan=[k for k in g if k["sultan"]]
-icerde=[k for k in g if k["durum"]=="bitti"]   # 0.18.0: sınıflı bitti'ler de burada — reis birleştirdi, Sultan veto hakkıyla görür
+icerde=[k for k in g if k["durum"]=="bitti"]   # 0.19.0: sınıflı bitti'ler de burada — reis birleştirdi, Sultan veto hakkıyla görür
 def izin(k): return izin_durumu(k)[0]
 def reis_birl(k):
     b=k.get("birlestirme_karari") or {}
@@ -56,7 +56,7 @@ for k in icerde: out.append(f"- **{k['is']}** — {k['cumle']} · sahip {k['aldi
                             +(f" · sınıf: {', '.join(k['siniflar'])} · reis birleştirdi · izin: {izin(k)}"+(" · veto yok" if izin(k)!="dur" else " · ⛔ VETOYA RAĞMEN — geri alma kararı senin") if k['sultan'] else ""))
 out.append(""); out.append(f"## Tıkananlar ({len(tik)})")
 for k in tik: out.append(f"- **{k['is']}** — {k['cumle']} · yol: {k['tikanma']['yol']} · neden: {k['tikanma']['neden']} · sahip {k['aldi']}")
-# 0.18.0: reisin sınıflı işlerde verdiği ara/birleştirme kararları — reis kararıdır, Sultan sözü DEĞİL (A06); veto hakkı buradan kullanılır
+# 0.19.0: reisin sınıflı işlerde verdiği ara/birleştirme kararları — reis kararıdır, Sultan sözü DEĞİL (A06); veto hakkı buradan kullanılır
 rk=[(k,x) for k in kartlar for x in (k.get("reis_kararlari") or []) if x.get("sinifli") and str(x.get("zaman",""))[:10]==gun]
 out.append(""); out.append(f"## Reisin sınıflı işlerdeki kararları ({len(rk)}) — veto hakkın var (reis kararı, Sultan sözü değil)")
 for k,x in rk: out.append(f"- {str(x.get('zaman',''))[11:16]} · **{k['is']}** · {x.get('karar')} · reis {x.get('reis')} · izin: {x.get('izin','?')} · gerekçe: {str(x.get('gerekce',''))[:120]}")
@@ -159,7 +159,7 @@ import re as _re3
 for l in bugun_tav:
     par=[x.strip() for x in l.split("|")]
     if len(par)>1 and par[1]=="TAVAN-ACILDI-REIS":
-        # 0.18.0: 3. sütun sinif= izin= taşır; eski satır (yok) sınıfsız sayılır
+        # 0.19.0: 3. sütun sinif= izin= taşır; eski satır (yok) sınıfsız sayılır
         ms=_re3.search(r"sinif=(\S+)", par[2] if len(par)>2 else ""); mi=_re3.search(r"izin=(\S+)", par[2] if len(par)>2 else "")
         kim = f"reis kararı (sınıflı iş: {ms.group(1)} · izin: {mi.group(1) if mi else '?'})" if (ms and ms.group(1)!="yok") else "reis kararı (sınıfsız iş)"
     else: kim = "Sultan kararı"

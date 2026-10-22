@@ -97,7 +97,7 @@ ac() {
 import json,sys,datetime
 yol,is_,hdir=sys.argv[1:]; sys.path.insert(0,hdir); from izin import KURAL_SURUMU   # tek gerçek: sürüm sabiti izin.py'de
 simdi=datetime.datetime.now().astimezone().isoformat(timespec="seconds")
-# 0.18.0 (Sultan D1 22 Eki): cevapsız kart da sınıflıdır → başlama izni Sultan'a gider (veto penceresi); alan açılır, iş yürür
+# 0.19.0 (Sultan D1 22 Eki): cevapsız kart da sınıflıdır → başlama izni Sultan'a gider (veto penceresi); alan açılır, iş yürür
 json.dump({"is":is_,"cumle":"(kartsız açıldı — --kartsiz kaçışı)","istedi":"?","aldi":"?","zaman":simdi,
            "sinif_cevaplari":{},"siniflar":["cevapsiz"],"sultan":True,"kanit_nerede":"","oda":"","durum":"acik","kacis":True,"gecmis":[],
            "baslama_izni":{"durum":"bekliyor","istendi":simdi},"kural_surumu":KURAL_SURUMU},open(yol,"w"),ensure_ascii=False,indent=2)

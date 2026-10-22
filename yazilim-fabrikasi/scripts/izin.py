@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""izin — BAŞLAMA İZNİ / VETO penceresi (0.18.0 · Sultan D1 22 Eki 2026). Tek gerçek: kart.sh izin-durum, canli_borc.py,
+"""izin — BAŞLAMA İZNİ / VETO penceresi (0.19.0 · Sultan D1 22 Eki 2026). Tek gerçek: kart.sh izin-durum, canli_borc.py,
 denetci.sh ve birlestirme-kapisi.sh (kart.sh izin-durum üstünden) ve gun-sonu.sh buradan okur; kural metni adimlar/0-kabul.md'de yaşar.
 
 NİÇİN (Sultan, 22 Eki 2026, session_01Ge4BawKcUrcm1pdV8WANyF): "sadece ara kararlar değil birleştirme kararları da reise geçsin
@@ -15,9 +15,11 @@ DURUMLAR (izin_durumu(k) → (ad, açıklama)):
   olculemedi  kartta baslama_izni alanı var ama bozuk — çağıran fail-closed davranır (kart.sh izin-durum rc 3, borç geçersiz)
 Son basla/dur KAZANIR: dur = veto, sonraki basla vetoyu kaldırır. Eski kart (alan yok): sultan_kararlari'ndaki son basla/dur
 kaydından türetilir; o da yoksa "bekliyor · eski kart (kural 0.17) · veto yok". Serbest-metin eski kararlar YOK SAYILIR, bozuk sayılmaz.
+SINIFSIZ kartta baslama_izni alanı OLMAZ: kart.sh sultan-dedi basla|dur'u sınıfsız kartta rc 1 ile reddeder (göz 23 Eki — eski araç
+yazıyor, "kapı kapalı" diyordu, hiçbir kapı okumuyordu). Elle yazılmış alan YOK SAYILIR ve açıklamada söylenir; her yüzey "gerekmiyor" okur.
 """
 
-KURAL_SURUMU = "0.18.0"
+KURAL_SURUMU = "0.19.0"
 DURUMLAR = ("gerekmiyor", "bekliyor", "basla", "dur")
 
 
@@ -34,7 +36,8 @@ def _ref(x):
 def izin_durumu(k):
     """→ (durum, açıklama). Kartı okuyan her yüzey (kapı · denetçi · gün sonu · borç) BU fonksiyondan geçer."""
     if not siniflimi(k):
-        return ("gerekmiyor", "sınıfsız iş — başlama izni gerekmez, ekipte biter")
+        ek = " · ⚠ kartta baslama_izni alanı var ama kart SINIFSIZ — araç yazmaz (sultan-dedi reddeder), alan YOK SAYILDI" if k.get("baslama_izni") is not None else ""
+        return ("gerekmiyor", "sınıfsız iş — başlama izni gerekmez, ekipte biter" + ek)
     bi = k.get("baslama_izni")
     if bi is not None:
         if not isinstance(bi, dict) or bi.get("durum") not in ("bekliyor", "basla", "dur"):

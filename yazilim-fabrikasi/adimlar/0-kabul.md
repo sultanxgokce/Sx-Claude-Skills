@@ -19,7 +19,7 @@ KANIT NEREDE OLACAK: <_agents/fabrika/kanit/<iş>/ | ölçüm çifti | kare>
 görünüm değişikliği "kusur düzeltmesi" sanılıp peşin onayla yayınlandı; Sultan "bozulmuş" dedi.
 "Bu dış yüzey mi, iç mi" tereddüdü = dış.
 
-## Sınıflı iş — başlama izni Sultan'ın, kararlar reisin (0.18.0 · Sultan D1 22 Eki 2026)
+## Sınıflı iş — başlama izni Sultan'ın, kararlar reisin (0.19.0 · Sultan D1 22 Eki 2026)
 **Kural metni BURADA yaşar; betik başlıkları ve SKILL tablosu buraya atıf yapar, cümleyi kopyalamaz.**
 Sultan'ın sözü (session_01Ge4BawKcUrcm1pdV8WANyF): *"sadece ara kararlar değil birleştirme kararları da reise geçsin çünkü
 ciddi sorun yaşıyoruz çok iş takılıyor"*. Ölçüm: bağımsız gözden geçen işler ayda **1.138 saat** bekledi; 22 Eki'de sorulan
@@ -43,6 +43,9 @@ ciddi sorun yaşıyoruz çok iş takılıyor"*. Ölçüm: bağımsız gözden ge
 Ekipte biter: kanıt + bağımsız göz puanı + damga ile deftere girer; gün sonu özetinde "içeride bitirdiklerimiz"
 bölümünde görünür (sınıflı bitenler de orada "reis birleştirdi · izin: …" etiketiyle). Sultan sonradan "bunu bana
 sormalıydınız" derse sınıf kuralı o vakayla düzeltilir.
+**Başlama izni / veto penceresi sınıfsız işte YOKTUR:** `kart.sh sultan-dedi … --karar basla|dur` sınıfsız karta yazılmaz (rc 1) —
+yazılsaydı hiçbir kapı okumazdı (göz 23 Eki: eski araç yazıp "kapı kapalı" diyordu). Sultan sınıfsız bir işi durdurmak isterse reise
+söyler (reis `geri-al` kararı, `reis-dedi`); "bunu bana sormalıydınız" ise yukarıdaki yol: sınıf kuralı o vakayla düzelir.
 
 ## Tetikli mesaj
 **Görev bağı (0.11.0):** iş defterde bir göreve karşılık geliyorsa kartı ona bağla: `kart.sh ac … --gorev gorev_<kimlik> --tahmin <dk>`. Açılışta görev "çalışılıyor" olur, bitince "onay bekliyor", tıkanınca "bekliyor" — Sultan'ın "çalışılıyor" ekranı bunu okur. Bağsız kart o ekrana düşmez.

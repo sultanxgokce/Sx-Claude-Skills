@@ -8,7 +8,7 @@
 #   · tavan 3 tur; ilerleyen işe (puan↑ VE açık bulgu↓) +1; DÖRT mutlak → sonrası "tıkandı + üç yol" (rc=4)
 #   · --sultan-devam : KARTA işlenmiş Sultan kararını (kart.sh sultan-dedi) okur ve "ilerlemiyor"
 #     hükmünü aşar. Kartta kayıt yoksa AÇILMAZ. MUTLAK tavanı (4) AÇMAZ. Deftere yazılamazsa AÇILMAZ.
-#   · --reis-devam   : KARTA işlenmiş sahip/reis kararını (kart.sh reis-dedi) okur; aynı sınırlar. 0.18.0 (Sultan D1 22 Eki,
+#   · --reis-devam   : KARTA işlenmiş sahip/reis kararını (kart.sh reis-dedi) okur; aynı sınırlar. 0.19.0 (Sultan D1 22 Eki,
 #     kural adimlar/0-kabul.md "Sınıflı iş"): SINIFLI kartta da açılır — Sultan yalnız veto koyar; vetolu kartta (kart.sh izin-durum
 #     = dur) denetim hiç koşmaz (rc 4, tur yanmaz) ve reis kapısı açılmaz. Defter satırı TAVAN-ACILDI-REIS (+ sinif= izin=), gün sonu özetinde görünür.
 #
@@ -217,7 +217,7 @@ esac
 mkdir -p "$DZ"
 ONCEKI=$(ls "$DZ"/DENETIM-*.json 2>/dev/null | wc -l)
 TUR=$((ONCEKI+1))
-# 🔴 VETO (0.18.0 · Sultan D1 22 Eki): Sultan "dur" dediyse denetim KOŞULMAZ — tur yanmaz, Codex parası harcanmaz, iz yazılmaz;
+# 🔴 VETO (0.19.0 · Sultan D1 22 Eki): Sultan "dur" dediyse denetim KOŞULMAZ — tur yanmaz, Codex parası harcanmaz, iz yazılmaz;
 #    rc 4 (mevcut zil yolu reise --waiting çalar). Tek yüzey kart.sh izin-durum (izin.py); okunamazsa rc 3 (fail-closed —
 #    canli-gerekir dersi: ölçemediğini yeşil sayma). Sınıfsız kart (gerekmiyor) ve kartsız koşum (--kart dosyası) dokunulmaz.
 IZIN="?"; IZIN_AC=""
@@ -318,7 +318,7 @@ PY
 tikandi_raporu() {
   _bilgi ""
   _bilgi "⛔ TIKANDI — $ONCEKI turda 5+E'ye ulaşılamadı (tavan $TAVAN, ilerleyene +1, $MUTLAK mutlak; kutu-dışı bulgulu turlar sayılmaz)."
-  _bilgi "   Üç yol (karar reisin — sınıflı işte de; Sultan yalnız veto koyar, 0.18.0):"
+  _bilgi "   Üç yol (karar reisin — sınıflı işte de; Sultan yalnız veto koyar, 0.19.0):"
   _bilgi "   1) DEVAM — gerekçeyle: neden bir tur daha işe yarar?"
   _bilgi "   2) KAPSAMI DARALT — kart.sh daralt <iş> --kalan \"<bulgu>\" --cumle \"<daraltılmış cümle>\" --oturum <ref>: kalan yeni karta, tur sayacı sıfırlanır, aynı dal/PR sürer"
   _bilgi "   3) GERİ AL — alanı kapat, iş kartına 'tıkandı' damgası, ders deftere"
@@ -374,7 +374,7 @@ PY
 # 🔴 REİS KAPISI (8 Eki 2026 · A268): tıkandı raporu "karar iş sahibinin/reisin, sınıf işiyse Sultan'ın" diyordu
 #    ama araçta yalnız Sultan yolu vardı — sınıfsız işin sahibi kendi kararını araca yazdıramıyor, kapı ya
 #    kapalı kalıyor ya da A06'ya özendiriyordu (aynı gün iki vaka). Mutlak tavanı (4) yine AÇMAZ.
-# 🔴 0.18.0 (Sultan D1 22 Eki): "sınıflı kartta kapalı" çiti KALKTI — sınıflı işte de reis kararı tavanı açar; yerine VETO çiti:
+# 🔴 0.19.0 (Sultan D1 22 Eki): "sınıflı kartta kapalı" çiti KALKTI — sınıflı işte de reis kararı tavanı açar; yerine VETO çiti:
 #    Sultan "dur" dediyse (izin.py) kapı açılmaz (rc 1). Defter satırı sinif= izin= taşır; gün sonu "reis kararı (sınıflı iş · izin: …)" der.
 reis_kapisi() {
   [ "$REIS_DEVAM" = "1" ] || return 1
@@ -384,7 +384,7 @@ import json,sys
 try: k=json.load(open(sys.argv[1],encoding="utf-8"))
 except Exception: raise SystemExit(1)
 sys.path.insert(0,sys.argv[3]); from izin import izin_durumu, siniflimi
-# VETO çiti (0.18.0): sınıflı kartta Sultan "dur" dediyse reis kararı tavanı AÇAMAZ; okunamayan izin de açmaz (fail-closed)
+# VETO çiti (0.19.0): sınıflı kartta Sultan "dur" dediyse reis kararı tavanı AÇAMAZ; okunamayan izin de açmaz (fail-closed)
 if siniflimi(k) and izin_durumu(k)[0]=="dur": raise SystemExit(4)
 if siniflimi(k) and izin_durumu(k)[0] not in ("bekliyor","basla"): raise SystemExit(5)
 kk=[x for x in (k.get("reis_kararlari") or []) if x.get("karar")==sys.argv[2]]
@@ -412,7 +412,7 @@ PY
   fi
   DEF="$DEPO/_agents/fabrika/tavan-defteri.log"
   mkdir -p "$DEPO/_agents/fabrika" || { _hata "tavan defteri dizini açılamadı — kapı AÇILMADI"; return 2; }
-  # 3. sütuna sinif= izin= eklenir (0.18.0): gün sonu "reis kararı (sınıflı iş · izin: …)" ayrımını buradan okur; ayraç '|' kullanılmaz
+  # 3. sütuna sinif= izin= eklenir (0.19.0): gün sonu "reis kararı (sınıflı iş · izin: …)" ayrımını buradan okur; ayraç '|' kullanılmaz
   IZ_OZ="$(python3 - "$KARTYOL" "$HERE" 2>/dev/null <<'PY'
 import json,sys; sys.path.insert(0,sys.argv[2]); from izin import izin_durumu
 k=json.load(open(sys.argv[1],encoding="utf-8")); print("sinif=%s izin=%s" % ((",".join(k.get("siniflar") or []) or "yok").replace("|","/").replace(" ","_"), izin_durumu(k)[0]))

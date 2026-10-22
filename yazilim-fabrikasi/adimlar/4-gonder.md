@@ -17,7 +17,7 @@
 3b. **Canlı kanıt dağıtımdan sonra geliyorsa (cron/servis/sunucu işi, kart `--canli e`):** sıra **birleştir → kur → canlı kayıt**.
    Kapı canlı kaydı birleşmeden önce istiyorsa ve kur adımı birleşmeden sonra/başkasındaysa kilit çıkar. Çıkış **kapıyı gevşetmek değil borcu yazmaktır**:
    `kart.sh canli-borc <iş> --yazan <sahip> --gerekce "…"` → kapı borçla geçer. Sınıflı işte de borcu kartın sahibi (reis) yazar;
-   araç reis `canli-borc` kararını borçla birlikte karta işler (0.18.0, kural `0-kabul.md` "Sınıflı iş"); eski Sultan `canli-borc`
+   araç reis `canli-borc` kararını borçla birlikte karta işler (0.19.0, kural `0-kabul.md` "Sınıflı iş"); eski Sultan `canli-borc`
    kaydı geçerli sayılır; Sultan vetosu (`izin-durum = dur`) varsa borç yazılmaz. Ajan Sultan adına yazmaz (A06).
    → birleştir → kur → `kanit.sh canli …` (borçtan SONRA, bağlı yeşil) → `kart.sh bitti`. Kart o zamana dek `canli-borclu`dur (bitti değil); `kart.sh borclar` 24 saati aşanı kırmızı gösterir.
 4. **5 ve E değilse adım 2'ye dön:** düzelt → yeniden kanıtla → yeniden gönder.
@@ -38,14 +38,14 @@
    - **Kapsamı daralt = hattın adımıdır, elle yeni kart/dal/PR açmak değil** (0.8.0, PCP7J): `kart.sh daralt <iş>
      --kalan "<kalan bulgu>" --cumle "<bu PR'ın yaptığı>" --oturum <ref>` → kalan bulgu aynı sahip ve sınıfla yeni karta,
      bu kartın cümlesi daralır, tur sayacı sıfırlanır (aynı dal, aynı PR sürer), kapı daraltma sonrası en az bir 5/E
-     tur ister. Daraltma her kartta reis kararıyla kendiliğinden işlenir (sınıflı dahil — 0.18.0; kartta kullanılmamış eski
+     tur ister. Daraltma her kartta reis kararıyla kendiliğinden işlenir (sınıflı dahil — 0.19.0; kartta kullanılmamış eski
      bir Sultan `daralt` kararı varsa o tüketilir); vetolu kartta daraltma yok.
    - Göze giden **istemin tamamı** (şablon + kart + kanıt manifesti + ölçüm çıktıları + fark + önceki tur) kırpma
      tetiğini (120 KB) aşıyorsa denetçi kırpıp denetlemez, "**İŞİ BÖL**" der, parça parça bayt basar ve tur yakmaz:
      fark büyükse iş bölünür (daralt), ölçüm şişkinse ölçümler küçültülür; kırpık istemle verilen puan puan değildir
      (PR #329 ve cloudtop #712 dersi — #712'de fark 73 KB'la geçmiş, istem 129 KB olup kırpılmıştı).
      Sonsuz düzelt-kanıtla-gönder döngüsü yasak (3-strike'ın fabrikadaki karşılığı).
-5. **Merge — kutu reisi (sınıflı işte de; 0.18.0, Sultan D1 22 Eki, kural `0-kabul.md` "Sınıflı iş"):**
+5. **Merge — kutu reisi (sınıflı işte de; 0.19.0, Sultan D1 22 Eki, kural `0-kabul.md` "Sınıflı iş"):**
    - Şart: 5 + E + imzalı kanıt manifesti + CI yeşil + **Sultan vetosu YOK** (`kart.sh izin-durum <iş>` ≠ `dur`;
      `birlestirme-kapisi.sh` bunu ölçer: dur → rc 1, okunamadı → rc 3). Sınıflı işte `kart.sh bitti` birleştirme kararını
      karta işler (`birlestirme_karari{karar_veren: reis}`); isteğe bağlı `kart.sh reis-dedi … --karar birlestir` gerekçeyi taşır.

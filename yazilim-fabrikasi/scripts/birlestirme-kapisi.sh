@@ -13,7 +13,7 @@
 #   3) PUAN     — son DENETIM-<tur>.json: kod_puani=5 VE dogru_sey=E VE denetçi ≠ yazan
 #
 # 🔴 NE ÖLÇMEZ (dürüstlük): kanıtın DOĞRU şeyi ölçtüğünü ölçmez — onu bağımsız göz yapar.
-#    Onay ÜRETMEZ (A06). 0.18.0 (Sultan D1 22 Eki, kural adimlar/4-gonder.md §5): sınıflı işte birleştirme kararı KUTU REİSİNİN;
+#    Onay ÜRETMEZ (A06). 0.19.0 (Sultan D1 22 Eki, kural adimlar/4-gonder.md §5): sınıflı işte birleştirme kararı KUTU REİSİNİN;
 #    bu kapı yalnız Sultan'ın VETOSUNU ölçer (kart.sh izin-durum = dur → rc 1; okunamadı → rc 3) ve başlama izni durumunu
 #    söyler. Dağıtım / canlıya alma Sultan eli olarak kalır — bu kapının dışıdır.
 #
@@ -89,7 +89,7 @@ _y "  · kanıt yeri: $DZ_YER"
 if [ -f "$KART" ]; then
   sinif="$(python3 -c "import json,sys;d=json.load(open(sys.argv[1]));print(','.join(d.get('siniflar') or []) or 'yok')" "$KART" 2>/dev/null)"
   _y "  ✓ kart var · sınıf: $sinif"
-  # 🔴 VETO (0.18.0 · Sultan D1 22 Eki): başlama izni TEK yüzeyden okunur (kart.sh izin-durum → izin.py). dur → birleştirme YOK (eksik);
+  # 🔴 VETO (0.19.0 · Sultan D1 22 Eki): başlama izni TEK yüzeyden okunur (kart.sh izin-durum → izin.py). dur → birleştirme YOK (eksik);
   #    okunamadı / kart.sh yok → ÖLÇÜLEMEDİ (rc 3, fail-closed — canli-gerekir dersi); bekliyor|basla → bilgi satırı, rc'yi etkilemez.
   if [ -f "$HERE/kart.sh" ]; then
     iz_cikti="$(KANIT_DEPO="$DEPO" bash "$HERE/kart.sh" izin-durum "$IS" 2>&1)"; iz_rc=$?
@@ -191,7 +191,7 @@ fi
 cs_engel=0
 # 🧾 CANLI BORÇ (5WYQMW · SERDAR 22 Eki 00:43): canlı kayıt henüz ÜRETİLEMİYORSA (dağıtım birleşmeden sonra/başkasında) kapı, kartta KAYITLI ve GEÇERLİ
 #    bir borçla geçer — borç kapıyı gevşetmez, görünür kılar: kart 'bitti' olmaz (canli-borclu), 24 saatte kırmızı olur. Koşullar canli_borc.py'de
-#    (sınıflı kartta reis 'canli-borc' kararı borçla birlikte, ya da eski Sultan kararı; veto → geçersiz — 0.18.0). Borç yalnız bağlı yeşil
+#    (sınıflı kartta reis 'canli-borc' kararı borçla birlikte, ya da eski Sultan kararı; veto → geçersiz — 0.19.0). Borç yalnız bağlı yeşil
 #    kayıt YOKKEN anlamlıdır; geçersiz ilan edilmiş kaydı AKLAMAZ.
 bd=""; bac=""; borc_gecer=0
 if [ "$cg" = "E" ] && [ "$cy" -eq 0 ] && [ -f "$HERE/kart.sh" ]; then

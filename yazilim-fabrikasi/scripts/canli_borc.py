@@ -11,7 +11,7 @@ DURUMLAR (durum(k, canli) → (ad, açıklama)):
   gecersiz  borç kayıtlı ama koşul tutmuyor (kapı geçirmez; sebep açıklamada)
   odendi    borçtan SONRA alınmış yeşil canlı kaydı var (kart 'bitti' olabilir)
 GEÇERLİLİK: yazan = kartın sahibi (aldi) · gerekçe ≥ 20 karakter · SINIFLI kartta (sultan ya da siniflar) üç şart daha
-  (0.18.0 · Sultan D1 22 Eki — kural adimlar/4-gonder.md 3b): (1) Sultan VETO koymamış olmalı (izin.py: dur → gecersiz);
+  (0.19.0 · Sultan D1 22 Eki — kural adimlar/4-gonder.md 3b): (1) Sultan VETO koymamış olmalı (izin.py: dur → gecersiz);
   (2) borçtan ÖNCE ya da borçla birlikte kartın sahibinin (reis) 'canli-borc' kararı işlenmiş olmalı (kart.sh canli-borc bunu
   kendisi yazar: reis == aldi, zaman ≤ borç) — VEYA eski kural (0.17) döneminden kalan Sultan 'canli-borc' kararı (geriye uyum);
   (3) kararın zamanı okunamıyorsa karar SAYILMAZ (fail-closed). A06 korunur: reis kaydı ayrı alandadır, Sultan sözü gibi gösterilmez.
@@ -44,7 +44,7 @@ def durum(k, canli=()):
     if len(str(b.get("gerekce") or "").strip()) < 20:
         return ("gecersiz", "borç gerekçesi 20 karakterden kısa")
     if siniflimi(k):
-        # 🔴 VETO (0.18.0): Sultan "dur" dediyse borç yazılamaz / sayılmaz — izin.py tek gerçek; okunamazsa da sayılmaz (fail-closed)
+        # 🔴 VETO (0.19.0): Sultan "dur" dediyse borç yazılamaz / sayılmaz — izin.py tek gerçek; okunamazsa da sayılmaz (fail-closed)
         iz, iza = izin_durumu(k)
         if iz not in ("bekliyor", "basla"):   # dur = VETO · olculemedi = bozuk alan; ikisi de geçersiz (tek çit — sınav mutantı burayı çapalar)
             return ("gecersiz", ("kart SINIFLI ve Sultan DUR dedi — borç yazılmaz/sayılmaz; " if iz == "dur" else "kart SINIFLI ve başlama izni OKUNAMADI — borç sayılmaz; ") + iza)

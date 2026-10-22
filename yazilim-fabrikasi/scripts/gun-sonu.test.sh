@@ -25,7 +25,7 @@ gecen=0; kalan=0
 g() { if [ "$1" -eq 0 ]; then gecen=$((gecen+1)); echo "  ✓ $2"; else kalan=$((kalan+1)); echo "  ✗ $2"; fi; }
 T="$(mktemp -d)"; GUN="$(date +%F)"
 export DEFTER_JETON_YOL="$T/jeton-yok"   # görev defteri bölümü (0.18.0 #422) varsayılan jetonla GERÇEK defteri okur; Ö-sınavları ona dokunmasın (D-sınavları kendi sahte defterini verir)
-mkdir -p "$T/_agents/fabrika/kartlar" "$T/pkg"; cp "$HERE"/*.py "$T/pkg/"   # mutantlar TAM kopyada koşar (izin.py kardeş; 0.18.0)
+mkdir -p "$T/_agents/fabrika/kartlar" "$T/pkg"; cp "$HERE"/*.py "$T/pkg/"   # mutantlar TAM kopyada koşar (izin.py kardeş; 0.19.0)
 ( cd "$T" && git init -q -b olcum . ) >/dev/null 2>&1
 cat > "$T/_agents/fabrika/kartlar/sinav.json" <<KART
 {"is":"sinav","cumle":"sınav kartı","istedi":"sinav","aldi":"sinav",
@@ -58,10 +58,10 @@ O="$(ozet)"
 [ "$(say "$O" 'Tavan açılışları')" = 2 ]; g $? "Ö1d reis açılışı da sayılıyor (2)"
 grep -qE 'is=y tur=4 · reis kararı \(sınıfsız iş\) · gerekçe: reis-gerekcesi-uzun' <<<"$O"; g $? "Ö1e reis açılışı 'reis kararı (sınıfsız iş)' etiketiyle basılıyor"
 grep -qE 'is=x tur=4 · Sultan kararı · gerekçe: gece-tavani' <<<"$O"; g $? "Ö1f Sultan açılışı 'Sultan kararı' etiketiyle basılıyor (karışmıyor)"
-# 0.18.0: sınıflı işte reis açılışı 3. sütundaki sinif= izin= ile ayırt edilir
+# 0.19.0: sınıflı işte reis açılışı 3. sütundaki sinif= izin= ile ayırt edilir
 printf '%s | TAVAN-ACILDI-REIS | is=z tur=4 sinif=para izin=basla | reis-sinifli-gerekce\n' "$GECE" >> "$T/_agents/fabrika/tavan-defteri.log"
 O="$(ozet)"
-grep -qE 'is=z tur=4 sinif=para izin=basla · reis kararı \(sınıflı iş: para · izin: basla\) · gerekçe: reis-sinifli-gerekce' <<<"$O"; g $? "Ö1g sınıflı işte reis açılışı 'reis kararı (sınıflı iş: para · izin: basla)' etiketiyle (0.18.0)"
+grep -qE 'is=z tur=4 sinif=para izin=basla · reis kararı \(sınıflı iş: para · izin: basla\) · gerekçe: reis-sinifli-gerekce' <<<"$O"; g $? "Ö1g sınıflı işte reis açılışı 'reis kararı (sınıflı iş: para · izin: basla)' etiketiyle (0.19.0)"
 grep -q "sınıflı işte de reisin, veto hakkın var" <<<"$O"; g $? "Ö1h tavan başlığı sınıflı işte de reisin olduğunu ve veto hakkını söyler"
 printf '%s | TAVAN-ACILDI | is=x tur=4 | gece-tavani\n' "$GECE" > "$T/_agents/fabrika/tavan-defteri.log"; O="$(ozet)"
 
@@ -122,7 +122,7 @@ grep -q 'ÇÖZÜLEMEDİ' <<<"$O10"; g $? "Ö10b bozuk satır ÇÖZÜLEMEDİ diye
 [ "$(say "$O10" 'Kapı kaçışları')" = 0 ]; g $? "Ö10c bugüne sayılmıyor"
 grep -q 'Açık işler' <<<"$O10"; g $? "Ö10d özetin SONRAKİ bölümleri de üretildi (akış kesilmedi)"
 
-echo "════ Ö14 · 0.18.0: sınıflı kart — 'Sultan'a gidenler — başlama izni / veto', izin etiketi, reisin sınıflı kararları bölümü, içeride bitenlerde sınıflı bitti ════"
+echo "════ Ö14 · 0.19.0: sınıflı kart — 'Sultan'a gidenler — başlama izni / veto', izin etiketi, reisin sınıflı kararları bölümü, içeride bitenlerde sınıflı bitti ════"
 cat > "$T/_agents/fabrika/kartlar/sinifli.json" <<KART
 {"is":"sinifli","cumle":"para harcayan iş","istedi":"S","aldi":"M","zaman":"${GUN}T10:00:00+03:00","sinif_cevaplari":{},"siniflar":["para"],"sultan":true,
  "durum":"acik","gecmis":[],"pr":"","puan":null,"kanit_var":false,"baslama_izni":{"durum":"dur","oturum":"sohbet-1","soz":"durun","beyan":"M"},
