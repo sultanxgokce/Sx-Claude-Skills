@@ -1,0 +1,19 @@
+$ bash /config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/onar.test.sh
+# rc=0 sure=1.9s zaman=2026-10-22T15:05:45+03:00
+--- stdout ---
+── B · bekleme bütçesi (gerçek bekle_saglam)
+  ✓ B1 ttyd bütçesi ≥20 sn
+  ✓ B2 kapı bütçesi ≥40 sn
+  ✓ B3 28 turda açılan kapı SAĞLIKLI sayılır
+  ✓ B4 açılır açılmaz döner (boş yere beklemez)
+  ✓ B5 ESKİ 6 sn'lik bütçe aynı kapıyı KAÇIRIR (mutasyon kanıtı)
+  ✓ B6 gerçekten bozuksa kırmızı döner
+── K · çağıran gerçekten bu kapıyı kullanıyor mu
+  ✓ K1 onar.sh ttyd beklemesini helper'dan çağırır
+  ✓ K2 onar.sh kapı beklemesini helper'dan çağırır
+  ✓ K4 kapı komutunda rapor dizini kabuk-kaçışlı girer (printf %q)
+  ✓ K4b boşluk ve metakarakter içeren dizin kapıya BİREBİR ulaşır, komutu bölmez
+  ✓ K3 elle sayılı eski döngü kalmadı
+
+SONUÇ: 11 geçti · 0 kaldı
+--- stderr ---

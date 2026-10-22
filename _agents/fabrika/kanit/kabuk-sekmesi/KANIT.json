@@ -1,0 +1,249 @@
+{
+  "is": "kabuk-sekmesi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-22T15:06:57+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kabuk-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kabuk-sinavi-once.txt",
+      "sha256": "79e1a294efcb992e5775f7f6edb2b5f105dbffb9f59246cac0390dd88b766d71",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/ks/taban/terminal-onar/scripts/kabuk-sekmesi.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-22T15:05:35+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1af7bd5eb6fd4a27b1d6096226065ca8"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kabuk-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kabuk-sinavi-sonra.txt",
+      "sha256": "3b70c5c2571dc235be795f2f51d109a2695c344de025fbe0a0d400de864fe0b2",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/kabuk-sekmesi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T15:05:36+03:00",
+      "sure_sn": 0.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "10ab0fa4223943378e50ebb7340403dd"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-sonra.txt",
+      "sha256": "166384167896bb368f844ba6cb9abb4afea68c1ce54897f7d21e8f7ecc37bcf2",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/kapi && node sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T15:05:42+03:00",
+      "sure_sn": 6.6,
+      "boru_denetimi": "temiz",
+      "olcum_id": "ab520212211f4dd7947cf7edd6e41270"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kadro-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kadro-sinavi-sonra.txt",
+      "sha256": "6743aa657463f54a570119cda1501c77dd2f5e606431357b0166212c2cade3c5",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/kapi && node kadro.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T15:05:43+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "bf91ba0745924694a693a0382af705ac"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "onar",
+      "asama": "sonra",
+      "dosya": "olcum-onar-sonra.txt",
+      "sha256": "8c21786c450923bd7e23b4ce083cbde9767f2931dad9b05b7af94515cba0ea4d",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/onar.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T15:05:45+03:00",
+      "sure_sn": 1.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "37c25615eca44ba3b571b3f6dcf35f8e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kabuk-kapisi",
+      "asama": "sonra",
+      "dosya": "olcum-kabuk-kapisi-sonra.txt",
+      "sha256": "323118e64e43d171a02c6659dd39badb0f6436ef1a91d99fade55fa2c83c62fe",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/kabuk-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T15:05:51+03:00",
+      "sure_sn": 6.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d5783e8ad1bf42e186522540ad9eca81"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-bagla",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-bagla-sonra.txt",
+      "sha256": "692b6943c1eff0e4ea9de38098852734675878ec3e0e6d76c3906187b4cf37df",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T15:05:57+03:00",
+      "sure_sn": 6.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1022614d05a9404ba5cb687a9be05167"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-ac",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-ac-sonra.txt",
+      "sha256": "b3085f3c2a53189371be3c294a7c046c22ec6e5da3b2484c541648d4e20c4e48",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/koltuk-ac.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T15:06:06+03:00",
+      "sure_sn": 8.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d2c185617b8d46ad9486733794400390"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tmux-bekcisi",
+      "asama": "sonra",
+      "dosya": "olcum-tmux-bekcisi-sonra.txt",
+      "sha256": "ffd7a35176e73c47e9242d95ad33c2f4e88faf8062a03f463ce1de16b78091de",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/tmux-bekcisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T15:06:21+03:00",
+      "sure_sn": 15.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4ce6a2781f7a42138d3ede31b3f0701d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bekci-iz",
+      "asama": "sonra",
+      "dosya": "olcum-bekci-iz-sonra.txt",
+      "sha256": "bdaf3ca8162f4814b3ebc0cf24d14cd6701889c3f0ce64c6f57fce2bbccddd6f",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/bekci-iz.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T15:06:23+03:00",
+      "sure_sn": 1.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2241779c0e844584bf04211b1e788359"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bekci-gecikme",
+      "asama": "sonra",
+      "dosya": "olcum-bekci-gecikme-sonra.txt",
+      "sha256": "0e072b1ebba26c9884df1766a867c8f5c4bb3f1397909bc9fa225b50b083449f",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/bekci-gecikme.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T15:06:25+03:00",
+      "sure_sn": 1.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b8c5779b1f6343a7bc896d0540ef976c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bekci-yorum",
+      "asama": "sonra",
+      "dosya": "olcum-bekci-yorum-sonra.txt",
+      "sha256": "4f95c5be2cef2fcda4ed755ba28701295fa18f67614c56f1e1bcc91341399e4a",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/bekci-yorum.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T15:06:26+03:00",
+      "sure_sn": 1.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "90aa133fc6a5491ca258e0d85879ead3"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kabuk-mutasyon",
+      "asama": "sonra",
+      "dosya": "olcum-kabuk-mutasyon-sonra.txt",
+      "sha256": "94cd44a8135cc04418ebf32565b1d2f0a2a703ea055ef2a54996e68e7fcff7eb",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/kabuk-sekmesi-mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T15:06:57+03:00",
+      "sure_sn": 30.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "0981ec0b82354722885d75ab5aed6358"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-sunucu-sizinti",
+      "asama": "sonra",
+      "dosya": "olcum-gercek-sunucu-sizinti-sonra.txt",
+      "sha256": "bc9842b7fac360454e539e31791b00aa7c4b45146f0eb511c71f84ff4058a8e5",
+      "komut": [
+        "bash",
+        "-c",
+        "n=$(tmux ls -F '#{session_name}' 2>/dev/null | grep -c 'sinav'); echo \"gerçek tmux sunucusunda sınav oturumu: $n\"; [ $n = 0 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T15:06:57+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "3a4e6d1cb48b442c98f81311222fc52f"
+    }
+  ],
+  "imza": "f852b6ad6bc239d13bb2712704dd69dca4fffce52ea84baceace631276284082"
+}

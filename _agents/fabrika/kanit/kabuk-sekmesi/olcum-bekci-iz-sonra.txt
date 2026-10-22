@@ -1,0 +1,23 @@
+$ bash /config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/bekci-iz.test.sh
+# rc=0 sure=1.7s zaman=2026-10-22T15:06:23+03:00
+--- stdout ---
+  ✓ H1 sahte tmux/crontab ortak.sh'tan sonra da öndedir (gerçek tmux'a DOKUNULMAZ)
+── satır yok
+  ✓ B1 cron satırı yokken: yok
+── satır var, iz yok
+  ✓ B2 🔴 satır kurulu ama HİÇ koşmamış → izsiz (eski gösterge burada 'ok' derdi)
+  ✓ B3 onar.sh az önce kurduysa (damga 30 sn) ilk koşu beklenir → ok
+  ✓ B4 damga 10 dk eski + iz yok → pencere dolmuş, izsiz
+── iz var
+  ✓ B5 iz 10 dk eski → durgun (cron süreci ölmüş)
+  ✓ B5b durgun iletisi kaç dakikadır koşmadığını söyler
+  ✓ B6 iz taze → ok
+  ✓ B7 iz dosyası bozuksa sayı uydurulmaz → izsiz
+  ✓ B8 TO_BEKCI_YOK verilince (bekçisiz kurulum) izsiz olsa da ok
+── bekci.sh izi FİİLEN yazıyor mu
+  ✓ B9 duraklatılmış bekçi de iz bırakır (duraklatılmış ≠ ölü), rc 0
+  ✓ B10 izden sonra durum.sh bekçiyi ok görür
+── MUTASYON: iz ölçümü eski hâline dönerse kapı ısırır mı
+  ✓ B11 MUTASYON: eski gösterge iz yokken 'ok' basar → B2 onu yakalıyor (koruma süs değil)
+bekci-iz.test: 13 geçti · 0 kaldı
+--- stderr ---

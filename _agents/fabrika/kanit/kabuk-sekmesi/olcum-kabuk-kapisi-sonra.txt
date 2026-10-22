@@ -1,0 +1,22 @@
+$ bash /config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/kabuk-kapisi.test.sh
+# rc=0 sure=6.0s zaman=2026-10-22T15:05:51+03:00
+--- stdout ---
+── sahte kabukta DURMALI
+  ✓ S1 /bin/false ile onarım durur (rc=3)
+  ✓ S2 günlükte sebep yazılı
+  ✓ S3 günlükte ÇARE satırı var
+── gerçek kabukta DURMAMALI (kapı süs olmasın)
+  ✓ S4 /bin/bash ile kapı DURDURMAZ (fikstür tuttu mu önce o ölçüldü)
+  ✓ S4b aynı ölçü SAHTE kabukta DUR yazar (S4 boş kapı değil)
+── hemen ÇIKAN sahte kabuk da sahtedir (bağımsız göz, tur 1)
+  ✓ S5 /bin/true ile de onarım durur (çıkış kodu yetmez, çıktı ölçülür)
+  ✓ S5b /bin/true ile onarım ASILMADI (124 başarı sayılmaz)
+── tmux SUNUCUSU YOKKEN hesabın kabuğu okunur (asıl vaka: yeni doğmuş kutu)
+  ✓ S6 sunucu yok + hesabın kabuğu /bin/false → kapı DURDURUR ($SHELL geçerli olsa bile)
+  ✓ S7 sunucu yok + hesabın kabuğu /bin/bash → kapı GEÇİRİR (S6 tautoloji değil)
+── kalkan: gerçek onar.sh deneme yolundan canlı crontab'a dokunmadı mı?
+  ✓ K0 sınav boyunca çıplak crontab YAZMA çağrısı 0 (deneme kopyası canlı crontab'a dokunamaz — S-10)
+  ✓ K0b pozitif kontrol: çocuk kabuktan okuma+yazma çağrısı kalkana düştü (+2), gerçek crontab'a gitmedi
+
+SONUÇ: 11 geçti · 0 kaldı
+--- stderr ---

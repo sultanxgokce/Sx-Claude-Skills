@@ -77,6 +77,9 @@ if ! tmux_var "$ANA_TMUX"; then
   tmux new-session -d -s "$ANA_TMUX" -c "$PROJE" && gunluk "K0 tmux $ANA_TMUX kuruldu"
 fi
 
+# 1b · el kabuğu (Claude'suz, boş) — yalnız yoksa kurulur
+kabuk_kur || true
+
 # 2 · konuşma (Claude) — hep AYNI konuşmaya dön (kimlik diskte), asla rastgele "son oturum"a değil
 if ! claude_oturumu "$ANA_TMUX" >/dev/null; then
   id=$(cat "$DURUM_DIZ/ana-oturum" 2>/dev/null)
