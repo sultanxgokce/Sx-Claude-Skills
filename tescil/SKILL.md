@@ -229,8 +229,9 @@ Sınav: `scripts/muhurdar.test.sh` (18 kapı + kontrol kopyası + 11 mutant; sah
 **Başsız şapka (S14 · 0.6.0):** taşıyan (MUHAKKİK) bekleme süresinde (tarif `yedek.bekleme_dk`, 30 dk) başlamazsa yedek koşu
 `muhurdar.sh … --bassiz` ile başlar — **usul aynı** (biçim kapısı → kendi-işi → mekanik → kör taze yargıç), el kitabı aynı. Mühür
 başlığına `bassiz: evet …`, özete `"bassiz": true` yazılır; sicilin mühür kaydı `bassiz: e` ile **taşıyanın siciline** düşer.
-Başsız koşu kod yazmaz, birleştirmez; yalnız tescil. Çağıran: Nexus boşta bekçisi turu (görev onay-bekliyor'a geçip 30 dk içinde
-🔏 mühür adımı almadıysa tek başsız koşu, görev başına kilit — SERDAR 22 Eki 14:36).
+Başsız koşu kod yazmaz, birleştirmez; yalnız tescil. 🔴 **Çağıran bu sürümde YOK** — bayrak bugün yalnız elle verilir. Tetik
+(Nexus boşta bekçisi turu, görev başına kilitle tek koşu — SERDAR 22 Eki 14:36) ayrı kartta; koşulu henüz kesin değil (hedef işi
+mühürsüz `onay-bekliyor`a geçemiyor, şema §11c G9).
 
 ## 11 · Sicil · ders çıkarma · askı — `sicil.sh` (0.4.0 · G11 · S9 · S10)
 

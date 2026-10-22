@@ -1,0 +1,33 @@
+{
+  "is": "muhurdar-bassiz",
+  "cumle": "Mühürdarlık S14 başsız şapka (Sx yarısı): muhurdar.sh --bassiz ile aynı el kitabı ve kör yargıçla koşar; mühür başlığı ve özeti başsız olduğunu taşır, sicilin mühür kaydına bassiz e yazılır (taşıyanın siciline); başsız koşu kendi-işi kuralına aynen tabidir. Sınavı + mutasyon. Çağıran (boşta bekçisi turu) Nexus kartında. (Sultan D1 22 Eki · SERDAR 14:36)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-22T14:51:36+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: bekçisi)",
+  "kapsam_uyarilari": [
+    "İKİ DEPO: cümle Nexus + Sx-Claude-Skills anıyor — iş birden çok depoya yayılıyorsa depo başına kart aç (her depoda kendi kartı, kendi PR'ı): kart.sh ac muhurdar-bassiz-nexus … · kart.sh ac muhurdar-bassiz-sx …"
+  ],
+  "gorev": "gorev_01M5D990AEQY8VRY3QGPWPZ5FK",
+  "tahmin_dk": 60,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-22T14:51:36+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

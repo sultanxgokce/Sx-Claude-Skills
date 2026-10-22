@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "muhurdar-bassiz",
+  "pr": "416",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-22T15:16:57+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32198,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 18593
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Tescil tarafında `--bassiz`, mühür/özet/sicil işaretleri, kendi-işi kapısı ve bunları düşüren mutasyonlar yapılmış; ölçümler bu parçayı güçlü biçimde doğruluyor. Ama Sultan’ın kartındaki açık uçtan uca talebin Nexus’taki boşta bekçisi çağırıcısı üretim farkında yok; özellik yalnız elle çağrılabilen yarım bir akış olduğundan önce bu eksik çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "İstenen Nexus boşta bekçisi çağırıcısı uygulanmamış; 30 dakika içinde mühür adımı başlamazsa görev başına kilitle tek başsız koşuyu başlatacak üretim kodu yok. Değişiklik yalnız `tescil` tarafına `--bassiz` kabulünü ekliyor ve Nexus davranışını dokümante ediyor; bu nedenle uçtan uca talep tamamlanmamış ve iki depo kapsam uyarısı karşılanmamış.",
+        "kanit": "İş kartı açıkça “Çağıran (boşta bekçisi turu) Nexus kartında” diyor ve kapsam uyarısı Nexus ile Sx/tescil için depo başına kart istiyor. Eksiksiz olduğu belirtilen üretim farkındaki bütün dosyalar `tescil/` altında; `tescil/SKILL.md` çağırıcı davranışını yalnız metin olarak anlatırken `muhurdar.sh` sadece elle verilen `--bassiz` bayrağını işliyor. Ölçümdeki u/v kapıları da yalnız bu manuel bayrak ve kendi-işi kuralını sınıyor; bekleme süresi, görev durumu, tek koşu veya görev başına kilit sınanmıyor.",
+        "konum": "İş kartı `cumle` ve `kapsam_uyarilari`; diff: `tescil/SKILL.md`, `tescil/scripts/muhurdar.sh`; `olcum-muhurdar-sinavi-tek.txt` u/v",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kırmızı önce/yeşil sonra ölçüm çifti u/v davranışındaki değişimi gösteriyor, gerçek sınavlar yeşil ve muhurdar sınavındaki mutasyonlar yeni kapıların ilgili bozuklukları yakaladığını kanıtlıyor. Ancak kanıt yalnız tescil tarafını ölçüyor; kartın Nexus çağırıcısı, 30 dakikalık bekleme, tek-koşu ve görev kilidi için ne üretim farkı ne de ölçüm mevcut."
+  }
+}
