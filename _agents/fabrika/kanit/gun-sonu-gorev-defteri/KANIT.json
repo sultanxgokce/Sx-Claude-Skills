@@ -1,0 +1,84 @@
+{
+  "is": "gun-sonu-gorev-defteri",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-22T23:26:32+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "gun-sonu-sinavi",
+      "asama": "once",
+      "dosya": "olcum-gun-sonu-sinavi-once.txt",
+      "sha256": "8e6b728c9953b771c8ff9c70428a76d7f657a5a21ccf0bf4606aa478c0d91897",
+      "komut": [
+        "timeout",
+        "300",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/gs/taban/yazilim-fabrikasi/scripts/gun-sonu.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-22T23:26:18+03:00",
+      "sure_sn": 0.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "54005314b20b44319c2b4cadc92a0c33"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gun-sonu-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-gun-sonu-sinavi-sonra.txt",
+      "sha256": "4c5850f074c26fe7303da722a7bdf713acbdbee3b8ab2d4fdbc0870d554797b6",
+      "komut": [
+        "timeout",
+        "300",
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-gun-sonu-gorev-defteri/yazilim-fabrikasi/scripts/gun-sonu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T23:26:22+03:00",
+      "sure_sn": 3.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "5fda740b885c42e9b8cd8c304c0fb621"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sonra.txt",
+      "sha256": "99329cdee3e027972f5a1037c93381a6255783ebccc8c1df3a29d1c7d126c2b3",
+      "komut": [
+        "timeout",
+        "300",
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-gun-sonu-gorev-defteri/yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T23:26:31+03:00",
+      "sure_sn": 9.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "fed0dc648f374eefb17f63632643f653"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "fabrika-kur",
+      "asama": "sonra",
+      "dosya": "olcum-fabrika-kur-sonra.txt",
+      "sha256": "818f2a98885635016f01eefa0309ab135f61447cbb714de269cb2a33f88e71af",
+      "komut": [
+        "timeout",
+        "300",
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-gun-sonu-gorev-defteri/yazilim-fabrikasi/scripts/fabrika-kur.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T23:26:32+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "6d7e94c93fe5411b89db3e9dbfc8588d"
+    }
+  ],
+  "imza": "67946f4f2dd47e559a2a4b9ff9122c2fd8c75e715624444f195564ab058b90f6"
+}
