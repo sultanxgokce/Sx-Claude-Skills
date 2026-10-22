@@ -1,9 +1,21 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.20.0
+version: 2.21.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.21.0 · El kabuğu sekmesi — her kutuda sabit, boş, Claude'suz kabuk (22 Eki · gorev_…GT5BTK · SERDAR 12:32 (3))
+Sultan'ın elle komut (sabah paketi, kurtarma) çalıştırabileceği **`<kutu>-kabuk`** tmux oturumu:
+- `kabuk_kur` (`ortak.sh`) **yalnız yoksa** kurar: proje dizininde, varsayılan kabukla; Claude başlatılmaz. Var olanı öldürmez, içine yazmaz
+  (yarım komut kaybolmaz). Çağıranlar: `onar.sh` adım 1b + **`bekci.sh` her tur** (onar yalnız arızada koşar — tmux bekçisi dersi).
+- 🔴 Sağlık ölçüsüne (`durum.sh`) **GİRMEZ**: kabuk eksikliği merdiveni tırmandırıp yeni Claude açtırmasın. Kurulamazsa günlüğe yalnız
+  **değişince** yazılır (`$DURUM_DIZ/kabuk.son`). `--web-yenile` yalnız `ttyd-*`/`kapi-*` öldürür → kapı yeniden açılınca kabuk kalır.
+- Görünürlük: koltuk listesinde **gizli değil**; kapı `/api/koltuklar`'da `kabuk: true` bayrağı (+ üst düzey `kabuk` adı) verir,
+  telefon seçicisinde "kabuk — elle komut". Kadroda **altyapı** ("el kabuğu") → kapat/dondur/emekli uygulanamaz.
+- `TO_KABUK_YOK=1`: bekçiyi GERÇEK tmux ile koşturan sınavların kalkanı (ölçüldü: `tmux-bekcisi.test.sh` gerçek sunucuda `sinav-kabuk` açıyordu).
+- Sınav: `scripts/kabuk-sekmesi.test.sh` (gerçek tmux, kendi soketi; sarmalayıcı `ortak.sh` PATH'inden SONRA yeniden başa — aksi hâlde gerçek
+  sunucuya düşüyordu, ölçüldü; sızma kapısı Y2) · `kapi/sunucu.test.mjs` Y6b.
 
 ## 🆕 2.20.0 · Kadro Uzmanlıklar + Terimler kaynağı — iki salt-okur uç (22 Eki · Mühürdarlık G12 · SERDAR 05:10 (A))
 Merkezin Kadro sayfasındaki "Uzmanlıklar" ve "Terimler" alt sekmeleri (cloudtop) veriyi **sahibinin kutusundan**, bugünkü vekil yolundan okur:

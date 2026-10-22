@@ -29,6 +29,7 @@ export function altyapiNeden(ad, ana = '') {
   if (a.startsWith('ttyd-')) return 'web terminali';
   if (a.startsWith('kapi-')) return 'kutu kapısı';
   if (a.endsWith('-kurtarici')) return 'kurtarıcı ajan';
+  if (a.endsWith('-kabuk')) return 'el kabuğu';   // Sultan'ın elle komut sekmesi: görünür (gizli değil) ama kadro eylemi uygulanamaz
   if (a.startsWith('imglistener')) return 'görsel dinleyici';
   return '';
 }

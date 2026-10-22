@@ -55,6 +55,7 @@ const TABAN = (process.env.KAPI_TABAN || '').replace(/\/+$/, '');
 const T = (y) => TABAN + y;   // dışarıya verilen mutlak yol
 // Kutu adı: PWA kimliğinde ve sayfa başlığında görünür. Taban "/sedir" ise "sedir".
 const KUTU = process.env.TO_KUTU || (TABAN ? TABAN.slice(1) : '') || 'kutu';
+const KABUK_TMUX = process.env.TO_KABUK_TMUX || KUTU + '-kabuk';   // el kabuğu (ortak.sh KABUK_TMUX ile aynı türetim)
 const KUTU_BAS = KUTU.charAt(0).toLocaleUpperCase('tr') + KUTU.slice(1);
 const DURUM_DIZ = process.env.TO_DURUM_DIZ || '/config/.terminal-onar';
 const KILIT_BEKLE_MS = +process.env.KADRO_KILIT_BEKLE_MS || 30000;   // kayıt kilidi bekleme (sınav kısaltır)
@@ -457,8 +458,8 @@ const sunucu = http.createServer(async (req, res) => {
         const r = await calistir('bash', [KOLTUK_BETIK, '--liste']);
         if (r.kod !== 0) return json(res, 500, { hata: 'Koltuklar ölçülemedi.' });
         // satır çözümü + ad süzgeci kapi/koltuklar.mjs'te (tek kaynak); ad HTML'de kaçışlı, adreste encodeURIComponent
-        const koltuklar = koltukSatirlari(r.out).map((k) => ({ ...k, ana: k.ad === ANA_TMUX, ekran: T('/tty/') + '?arg=' + encodeURIComponent(k.ad) }));
-        return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, koltuklar });
+        const koltuklar = koltukSatirlari(r.out).map((k) => ({ ...k, ana: k.ad === ANA_TMUX, kabuk: k.ad === KABUK_TMUX, ekran: T('/tty/') + '?arg=' + encodeURIComponent(k.ad) }));
+        return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, kabuk: KABUK_TMUX, koltuklar });
       }
       // ── KOLTUK AÇ / YENİDEN AÇ / ESKİ SOHBETE DÖN (2.4.0 · dilim 5/5, Sultan: "oturum kapandı/bozuldu/silindi —
       //    tekrar açmak çok basit ve çok sağlam olmalı"). Ölçüm ve iş betikte (scripts/koltuk-ac.sh): üç durum ayrı

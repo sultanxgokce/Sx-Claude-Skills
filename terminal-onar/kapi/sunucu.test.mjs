@@ -50,7 +50,7 @@ function sahteTtyd(yol) {
 // Sahte koltuk betiği: --liste'ye sabit liste döner (biri bozuk adlı — kapı onu süzmeli).
 const KOLTUK_SAHTE = join(T, 'koltuk-sahte.sh');
 writeFileSync(KOLTUK_SAHTE, '#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\n'
-  + 'printf "sinavkutu-ana\\t1760000000\\t0\\nBASIRET\\t1760000100\\t1\\nkotu:ad\\t1\\t1\\n"\n');
+  + 'printf "sinavkutu-ana\\t1760000000\\t0\\nBASIRET\\t1760000100\\t1\\nsinavkutu-kabuk\\t1760000050\\t0\\nkotu:ad\\t1\\t1\\n"\n');
 // 2.2.0: betik 5 alan döner (… tür · hâl) ve ANA adını ortamdan (KOLTUK_ANA) alır — sahte, aldığı adı ilk satıra yazar
 const KOLTUK_SAHTE5 = join(T, 'koltuk-sahte5.sh');
 writeFileSync(KOLTUK_SAHTE5, '#!/usr/bin/env bash\n[ "$1" = --liste ] || exit 2\n'
@@ -168,12 +168,14 @@ console.log('\n── Y · KOLTUKLAR (koltuk seçici) ──');
   const r = await iste(P1, '/sedir/api/koltuklar', { cerez });
   const j = await r.json();
   kapi('Y2 girişli liste 200 ve betiğin söylediği koltukları taşır',
-    r.status === 200 && j.koltuklar?.map((k) => k.ad).join(',') === 'sinavkutu-ana,BASIRET', `→ ${JSON.stringify(j).slice(0, 160)}`);
+    r.status === 200 && j.koltuklar?.map((k) => k.ad).join(',') === 'sinavkutu-ana,BASIRET,sinavkutu-kabuk', `→ ${JSON.stringify(j).slice(0, 160)}`);
   kapi('Y3 bozuk adlı satır SÜZÜLÜR (kapı betiğe körü körüne güvenmez)', !JSON.stringify(j).includes('kotu'));
   const b = j.koltuklar?.find((k) => k.ad === 'BASIRET') || {};
   kapi('Y4 Claude işareti ve son etkinlik taşınır', b.claude === true && b.son === 1760000100, `→ ${JSON.stringify(b)}`);
   kapi('Y5 ekran adresi TABANLI ve ?arg= ile (ttyd -a sözleşmesi)', b.ekran === '/sedir/tty/?arg=BASIRET', `→ ${b.ekran}`);
   kapi('Y6 ana koltuk işaretli', j.koltuklar?.[0]?.ana === true && b.ana === false && j.ana === 'sinavkutu-ana');
+  const kbk = j.koltuklar?.find((k) => k.ad === 'sinavkutu-kabuk') || {};
+  kapi('Y6b el kabuğu işaretli (yalnız <kutu>-kabuk; ana ve ajan değil)', kbk.kabuk === true && b.kabuk === false && j.koltuklar?.[0]?.kabuk === false && j.kabuk === 'sinavkutu-kabuk', `→ ${JSON.stringify(kbk)}`);
   const tt = await (await iste(P1, '/sedir/tty/?arg=BASIRET', { cerez })).json();
   kapi('Y7 ttyd vekili ?arg= sorgusunu OLDUĞU GİBİ iletir (koltuk ttyd\'ye ulaşır)', tt.yol === '/sedir/tty/?arg=BASIRET', `→ ${tt.yol}`);
   const kb = await kapiAc('/sedir', P3, { KAPI_KOLTUK_BETIK: KOLTUK_BOZUK });

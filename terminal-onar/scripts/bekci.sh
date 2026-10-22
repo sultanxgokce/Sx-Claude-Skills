@@ -12,6 +12,9 @@ date +%s > "$DURUM_DIZ/bekci.son" 2>/dev/null
 # Kurulamayan sonuç (ör. yabancı dosya) her dakika tekrarlanır → yalnız DEĞİŞTİĞİNDE yazılır (göz tur 2: günde 1440 satır olurdu).
 _tb="$(tmux_bekcisi_kur)"
 if [ "$_tb" != güncel ] && [ "$_tb" != "$(cat "$DURUM_DIZ/tmux-bekcisi.son" 2>/dev/null)" ]; then gunluk "bekçi: tmux bekçisi: $_tb"; fi
+# El kabuğu (gorev_…GT5BTK): her tur — onar yalnız arızada koşar, sağlıklı kutuda kabuk eksik kalırdı (tmux bekçisi ile aynı ders).
+#   Sağlık ölçüsüne (durum.sh) GİRMEZ: kabuk eksikliği merdiveni tırmandırıp yeni Claude açtırmasın. Yalnız yoksa kurar.
+kabuk_kur >/dev/null 2>&1 || true
 printf '%s' "$_tb" > "$DURUM_DIZ/tmux-bekcisi.son" 2>/dev/null
 # compact kuyruğu doluysa her dakika bir tur: meşgulken kuyruğa alınan koltuk boşalınca /compact gider (kutu-içi zorunlu compact, 2.9.0)
 [ -s "${TO_COMPACT_KUYRUK:-$DURUM_DIZ/compact-bekleyen.jsonl}" ] && bash "$BETIK_DIZ/compact.sh" --bekle --uygula >> "$GUNLUK" 2>&1 || true

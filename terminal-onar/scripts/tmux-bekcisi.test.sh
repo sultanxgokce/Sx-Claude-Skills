@@ -108,7 +108,7 @@ if [ -z "${TB_IC:-}" ]; then
   printf '#!/usr/bin/env bash\nexit "${TB_DURUM_RC:-0}"\n' > "$BK/scripts/durum.sh"
   printf '#!/usr/bin/env bash\necho kademe >> "$TO_DURUM_DIZ/kademe.iz"\n' > "$BK/scripts/kademe.sh"
   bekci() {  # $1 = TB_DURUM_RC → rc
-    ( export TO_KUTU=sinav TO_PROJE=/config/projects/sinav TO_DURUM_DIZ="$T/bd" TO_BECERI_KOK="$BK" TO_TMUX_BEKCI_VARSAYILAN="$T/bcanli/tmux" TB_DURUM_RC="$1"
+    ( export TO_KUTU=sinav TO_PROJE=/config/projects/sinav TO_DURUM_DIZ="$T/bd" TO_BECERI_KOK="$BK" TO_TMUX_BEKCI_VARSAYILAN="$T/bcanli/tmux" TB_DURUM_RC="$1" TO_KABUK_YOK=1
       unset TO_TMUX_BEKCI_BIN; bash "$BK/scripts/bekci.sh" >/dev/null 2>&1 ); echo "$?"
   }
   BH="$T/bcanli/tmux"; mkdir -p "$T/bd" "$T/bcanli"

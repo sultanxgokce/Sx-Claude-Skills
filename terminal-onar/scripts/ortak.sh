@@ -76,6 +76,8 @@ kapi_kayit_ortami() {
 DURUM_DIZ="${TO_DURUM_DIZ:-/config/.terminal-onar}"
 GUNLUK="$DURUM_DIZ/gunluk.log"
 ANA_TMUX="${TO_ANA_TMUX:-$KUTU-ana}"
+# El kabuğu (Sultan · gorev_…GT5BTK, 22 Eki): Claude'dan bağımsız, sabit, BOŞ kabuk sekmesi — sabah paketi, kurtarma komutu.
+KABUK_TMUX="${TO_KABUK_TMUX:-$KUTU-kabuk}"
 KURT_TMUX="${TO_KURT_TMUX:-$KUTU-kurtarici}"
 TTYD_TMUX="${TO_TTYD_TMUX:-ttyd-$KUTU}"
 KAPI_TMUX="${TO_KAPI_TMUX:-kapi-$KUTU}"
@@ -140,6 +142,26 @@ mkdir -p "$DURUM_DIZ" 2>/dev/null
 gunluk() { printf '%s %s\n' "$(date '+%F %T')" "$*" >> "$GUNLUK"; }
 
 tmux_var() { tmux has-session -t "=$1" 2>/dev/null; }
+# El kabuğunu kurar — YALNIZ yoksa. Var olanı öldürmez, içine yazmaz (Sultan'ın yarım kalmış komutu kaybolmaz).
+#   Proje dizininde, kullanıcının varsayılan kabuğuyla; Claude başlatılmaz. Kapı/ttyd yeniden açılınca dokunulmaz
+#   (--web-yenile yalnız ttyd-*/kapi-* öldürür); tmux sunucusu giderse bekçi (onar.sh, dakikada bir) geri kurar.
+#   Kurulamama her dakika tekrarlanabilir (ör. varsayılan kabuk sahte) → günlüğe yalnız DEĞİŞTİĞİNDE yazılır ($DURUM_DIZ/kabuk.son).
+#   TO_KABUK_YOK=1 → hiçbir şey yapmaz (bekci.sh'ı GERÇEK tmux ile koşturan sınavlar için; TO_BEKCI_YOK emsali — 22 Eki ölçüldü:
+#   tmux-bekcisi.test.sh kutunun gerçek sunucusunda sinav-kabuk açıyordu).
+kabuk_kur() {
+  [ -n "${TO_KABUK_YOK:-}" ] && return 0
+  tmux_var "$KABUK_TMUX" && { printf ok > "$DURUM_DIZ/kabuk.son" 2>/dev/null; return 0; }
+  # Hüküm komutun dönüşünden DEĞİL oturumun varlığından (göz #415 rötus): onar.sh ile bekci.sh aynı anda koşarsa ikincisinin new-session'ı
+  #   "zaten var" diye düşer ama kabuk kurulmuştur — bu bir arıza değildir, yanıltıcı K0 HATA satırı yazılmaz.
+  tmux new-session -d -s "$KABUK_TMUX" -c "$PROJE" 2>/dev/null
+  if ! tmux_var "$KABUK_TMUX"; then
+    [ "$(cat "$DURUM_DIZ/kabuk.son" 2>/dev/null)" = hata ] || gunluk "K0 HATA: el kabuğu $KABUK_TMUX kurulamadı"
+    printf hata > "$DURUM_DIZ/kabuk.son" 2>/dev/null; return 1
+  fi
+  printf ok > "$DURUM_DIZ/kabuk.son" 2>/dev/null
+  local w; for w in $(tmux list-windows -t "=$KABUK_TMUX" -F '#{window_id}' 2>/dev/null); do tmux set-option -w -t "$w" window-size latest 2>/dev/null; done
+  gunluk "K0 el kabuğu $KABUK_TMUX kuruldu"
+}
 
 # Bir tmux oturumunda CANLI Claude var mı → sessionId basar (yoksa RC=1).
 # 🔴 Birincil kanıt SÜREÇ AĞACIDIR: oturumun bir panesinin altında `claude` süreci var mı.

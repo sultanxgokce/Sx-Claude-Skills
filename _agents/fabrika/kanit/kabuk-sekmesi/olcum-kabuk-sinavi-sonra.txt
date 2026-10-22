@@ -1,0 +1,32 @@
+$ bash /config/projects/_wt/Sx-Claude-Skills-kabuk-sekmesi/terminal-onar/scripts/kabuk-sekmesi.test.sh
+# rc=0 sure=1.6s zaman=2026-10-22T15:08:46+03:00
+--- stdout ---
+── K · kabuk_kur
+  ✓ K0 ad türetimi: <kutu>-kabuk
+  ✓ K1 yoksa KURULUR (rc 0, oturum var)
+  ✓ K1b proje dizininde açılır
+  ✓ K1c Claude BAŞLATILMAZ (pane'de kabuk koşar)
+  ✓ K1d günlükte tek kuruldu satırı
+  ✓ K2a oturum kimliği okunabildi (boş = boş yanlış eşitliği olmasın)
+  ✓ K2 varsa DOKUNULMAZ (aynı oturum kimliği)
+  ✓ K2b yarım komut kaybolmaz
+  ✓ K2c var olana ikinci kuruldu satırı YAZILMAZ
+  ✓ K3 kurulamazsa rc 1 (her denemede)
+  ✓ K3b kurulamama günlüğe YALNIZ BİR KEZ (değişince) yazılır
+  ✓ K3c düzelince yeniden kurulur ve durum ok olur
+  ✓ K5 yarışta (biri kurdu, öbürünün new-session'ı düştü) rc 0, durum ok
+  ✓ K5b yarışta yanıltıcı 'kurulamadı' satırı YAZILMAZ
+  ✓ K4 TO_KABUK_YOK=1 → hiçbir şey kurulmaz (gerçek tmux koşturan sınavların kalkanı)
+  ✓ K4b tmux-bekcisi sınavı bekçiyi kalkanla çağırır
+── Ç · çağıranlar (kapı yerinde mi)
+  ✓ Ç1 onar.sh kabuk_kur'u çağırır
+  ✓ Ç2 bekci.sh her tur, sağlık ölçüsünden ÖNCE çağırır
+  ✓ Ç3 sağlık ölçüsü (durum.sh) kabuğu SAYMAZ (merdiveni tırmandırmaz)
+  ✓ Ç4 --web-yenile kabuğu öldürmez (yalnız ttyd-*/kapi-*)
+── G · görünürlük
+  ✓ G1 koltuk listesinde GİZLİ DEĞİL (Sultan görür)
+  ✓ G2 kadroda altyapı: 'el kabuğu' (kapatılamaz)
+  ✓ Y1 sarmalayıcı kullanıldı (tmux = sınav soketi)
+  ✓ Y2 kutunun GERÇEK tmux sunucusuna oturum SIZMADI
+── SONUÇ: 24 geçti · 0 kaldı
+--- stderr ---
