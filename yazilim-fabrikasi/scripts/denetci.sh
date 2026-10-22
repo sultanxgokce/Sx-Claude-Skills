@@ -456,7 +456,8 @@ else
   git -C "$DEPO" rev-parse --verify -q "$ANA" >/dev/null || { _hata "ana hat $ANA bulunamadı"; exit 3; }
   GERIDE="$(git -C "$DEPO" rev-list --count "HEAD..$ANA")"
   [ "$GERIDE" -eq 0 ] || { _hata "dal ana hattın ($ANA) $GERIDE commit GERİSİNDE — fark başkasının işini 'silinmiş' gösterirdi. Önce rebase/merge, sonra koştur"; exit 3; }
-  KIRLI="$(git -C "$DEPO" status --porcelain -uall | grep -v -E '^.. _agents/fabrika/(kanit|kartlar)/' | wc -l)"
+  # karne.jsonl kartlar gibi aracın kendi defteri: birincil checkout'ta koşan denetçinin bir önceki turu onu yazar, kir sayılmaz (NPTHAQ)
+  KIRLI="$(git -C "$DEPO" status --porcelain -uall | grep -v -E '^.. _agents/fabrika/((kanit|kartlar)/|karne\.jsonl$)' | wc -l)"
   [ "$KIRLI" -eq 0 ] || { _hata "$KIRLI kayıtsız değişiklik var (kanıt/kart dışı) — farka girmez, göz eksik kod görürdü. Önce commit'le"; exit 3; }
   git -C "$DEPO" diff "$ANA...HEAD" > "$TMP/diff.patch" || { _hata "git diff $ANA...HEAD düştü"; exit 3; }
   [ -s "$TMP/diff.patch" ] || { _hata "fark BOŞ ($ANA...HEAD) — denetlenecek değişiklik yok"; exit 3; }
@@ -870,6 +871,16 @@ kayit_commitle() {
   fi
 }
 kayit_commitle
+# 🔴 KARNE (görev NPTHAQ 2. yarı · 17 Eki ölçümü: karne.jsonl o hafta 0 satır, son satır 29 Eyl — karne.sh vardı, çağıranı yoktu;
+#    5/H ile biten iki iş hiç sayılmadı). Her tur, o turun satırını BİRİNCİL depodaki karneye yazar (iş alanında değil: alan kapanınca
+#    giderdi). Yazılamazsa söylenir; turun sonucu (rc) DEĞİŞMEZ — karne ölçümün kaydıdır, kapısı değil.
+karne_yaz() {
+  [ "${DENETCI_KARNE:-1}" = 1 ] || { _bilgi "   · karne kapalı (DENETCI_KARNE=0) — elle: karne.sh yaz $IS"; return 0; }
+  local e
+  if e="$(cd "$DEPO" && KANIT_DEPO="" bash "$HERE/karne.sh" yaz "$IS" --depo "$KART_DEPO" 2>&1)"; then _bilgi "   $e"
+  else _bilgi "   ⚠ karne yazılamadı: $(printf '%s' "$e" | tail -1) — elle: karne.sh yaz $IS"; fi
+}
+karne_yaz
 if [ "$PUAN" -eq 5 ] && [ "$DOGRU" = "E" ]; then _bilgi "✓ GEÇTİ — merge kararı: sınıf işi Sultan, sınıfsız iş kutu reisi"; exit 0; fi
 # 🔴 Tavan SAYILI tura uygulanır (bu turun kendisi dahil edilerek yeniden hesaplanır).
 SAYILI_SON=$(python3 -c "
