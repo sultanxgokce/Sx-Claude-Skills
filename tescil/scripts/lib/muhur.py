@@ -99,6 +99,8 @@ def cmd_uret(argv):
             a["katman2"].append(argv[i + 1]); i += 2
         elif argv[i] == "--tatbikat":
             a["tatbikat"] = True; i += 1
+        elif argv[i] == "--bassiz":
+            a["bassiz"] = True; i += 1
         elif argv[i] in ("--muhurdar", "--yazan", "--yargic"):
             a[argv[i][2:]] = argv[i + 1]; i += 2
         else:
@@ -167,6 +169,8 @@ def cmd_uret(argv):
     if a.get("muhurdar"):
         L += [f"muhurdar: {a['muhurdar']}", f"yazan: {a.get('yazan') or '(verilmedi)'}",
               f"yargic: {a.get('yargic') or '(öznel G yok)'}", "kor: evet (yargıç yalnız gereklilik + taze kanıt + hedef dosyayı gördü)"]
+    if a.get("bassiz"):   # S14: taşıyan bekleme süresinde başlamadı — aynı el kitabı, aynı kör yargıç; hüküm taşıyanın siciline (bassiz: e)
+        L += [f"bassiz: evet (başsız şapka — taşıyan {a.get('muhurdar') or '?'} bekleme süresinde başlamadı; aynı el kitabı ve kör yargıç)"]
     L += [
         "",
         "## G-özet",
@@ -218,6 +222,7 @@ def cmd_uret(argv):
         "tatbikat": a["tatbikat"], "zaman_utc": utc(), "tescil_skill_version": sv,
         "sultan_denemesi": [g["id"] for g in sultan],
         "muhurdar": a.get("muhurdar"), "yazan": a.get("yazan"), "yargic": a.get("yargic"),
+        "bassiz": bool(a.get("bassiz")),
     }
     _yaz(out, L, ozet)
     print(f"MUHUR.md yazıldı: verdikt={verdikt} (rc={RC_MAP[verdikt]})")

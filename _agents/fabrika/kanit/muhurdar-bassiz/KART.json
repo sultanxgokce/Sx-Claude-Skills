@@ -1,0 +1,65 @@
+{
+  "is": "muhurdar-bassiz",
+  "cumle": "Mühürdarlık S14 başsız şapka — tescil yarısı: muhurdar.sh --bassiz aynı el kitabı ve kör yargıçla yedek koşu yapar; mühür başlığı ve özeti başsız olduğunu taşır, sicilin mühür kaydına bassiz e yazılır (taşıyanın siciline), normal koşuda h; başsız koşu kendi-işi kuralına aynen tabidir. Sınavı + mutasyon. (Sultan D1 22 Eki · SERDAR 14:36)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-22T14:51:36+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-10-22T15:17:36+03:00",
+      "olay": "daralt",
+      "kalan_kart": "muhurdar-bassiz-cagiran",
+      "tur_sifir": 1
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: bekçisi)",
+  "kapsam_uyarilari": [
+    "İKİ DEPO: cümle Nexus + Sx-Claude-Skills anıyor — iş birden çok depoya yayılıyorsa depo başına kart aç (her depoda kendi kartı, kendi PR'ı): kart.sh ac muhurdar-bassiz-nexus … · kart.sh ac muhurdar-bassiz-sx …"
+  ],
+  "gorev": "gorev_01M5D990AEQY8VRY3QGPWPZ5FK",
+  "tahmin_dk": 60,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-22T14:51:36+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "HENDESE",
+      "oturum": "NOTES hendese 2026-10-22 14:36 SERDAR (depo başına kart)",
+      "gerekce": "daraltma: kalan bulgu yeni karta (muhurdar-bassiz-cagiran) — Başsız koşunun çağıranı (S14 tetik): Nexus boşta bekçisi turu, görev başına kilitle tek koşu — Nexus deposunda kendi kartı ve PR'ı (muhurdar-bassiz-nexus); tetik koşulu SERDAR'a soruldu (G9: mühürsüz hedef işi onay-bekliyor'a geçemiyor).",
+      "zaman": "2026-10-22T15:17:36+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "Mühürdarlık S14 başsız şapka (Sx yarısı): muhurdar.sh --bassiz ile aynı el kitabı ve kör yargıçla koşar; mühür başlığı ve özeti başsız olduğunu taşır, sicilin mühür kaydına bassiz e yazılır (taşıyanın siciline); başsız koşu kendi-işi kuralına aynen tabidir. Sınavı + mutasyon. Çağıran (boşta bekçisi turu) Nexus kartında. (Sultan D1 22 Eki · SERDAR 14:36)",
+      "zaman": "2026-10-22T15:17:36+03:00",
+      "kalan_kart": "muhurdar-bassiz-cagiran"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-22T15:17:36+03:00",
+      "kalan_kart": "muhurdar-bassiz-cagiran",
+      "kalan": "Başsız koşunun çağıranı (S14 tetik): Nexus boşta bekçisi turu, görev başına kilitle tek koşu — Nexus deposunda kendi kartı ve PR'ı (muhurdar-bassiz-nexus); tetik koşulu SERDAR'a soruldu (G9: mühürsüz hedef işi onay-bekliyor'a geçemiyor).",
+      "tur_sifir": 1,
+      "oturum": "NOTES hendese 2026-10-22 14:36 SERDAR (depo başına kart)"
+    }
+  ]
+}

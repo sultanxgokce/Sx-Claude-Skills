@@ -1,7 +1,7 @@
 ---
 name: tescil
 type: agent
-version: 0.5.0
+version: 0.6.0
 description: >
   MÜHÜRDAR'ın el-kitabı: teslim edilen bir işi (kart) YAZILI gerekliliklere (GOAL + G1..Gn
   komut→beklenen/RC) karşı MAKİNE-KANITLI sınayan kör-protokol tescil-kabuğu. sert-teslim
@@ -224,7 +224,14 @@ AGENT_NAME=<mühürdar> bash scripts/muhurdar.sh <iş> --gereklilik <GEREKLILIK.
 ```
 
 Sınav: `scripts/muhurdar.test.sh` (18 kapı + kontrol kopyası + 11 mutant; sahte yargıçlar, ağsız; usul sırası: biçim kapısı kendi-işinden önce — göz #409 tur 1; yargıç ve mühür aynı ölçüm, Codex zaman aşımında da Claude — tur 2). Sicil/ders çıkarma/askı
-§11'de (G11 · S10), diploma §13'te (G13); başsız şapka (S14) sonraki dilimdir.
+§11'de (G11 · S10), diploma §13'te (G13).
+
+**Başsız şapka (S14 · 0.6.0):** taşıyan (MUHAKKİK) bekleme süresinde (tarif `yedek.bekleme_dk`, 30 dk) başlamazsa yedek koşu
+`muhurdar.sh … --bassiz` ile başlar — **usul aynı** (biçim kapısı → kendi-işi → mekanik → kör taze yargıç), el kitabı aynı. Mühür
+başlığına `bassiz: evet …`, özete `"bassiz": true` yazılır; sicilin mühür kaydı `bassiz: e` ile **taşıyanın siciline** düşer.
+Başsız koşu kod yazmaz, birleştirmez; yalnız tescil. 🔴 **Çağıran bu sürümde YOK** — bayrak bugün yalnız elle verilir. Tetik
+(Nexus boşta bekçisi turu, görev başına kilitle tek koşu — SERDAR 22 Eki 14:36) ayrı kartta; koşulu henüz kesin değil (hedef işi
+mühürsüz `onay-bekliyor`a geçemiyor, şema §11c G9).
 
 ## 11 · Sicil · ders çıkarma · askı — `sicil.sh` (0.4.0 · G11 · S9 · S10)
 

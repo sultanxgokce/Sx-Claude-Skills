@@ -1,0 +1,45 @@
+$ bash tescil/scripts/muhurdar.test.sh
+# rc=0 sure=196.4s zaman=2026-10-22T15:02:11+03:00
+--- stdout ---
+════ G8 · Mühürdarlık · Tescil usulü (muhurdar.sh) ════
+  ✓ p usul sırası: biçimsiz belge + kendi işi → önce biçim kapısı (gereklilik-eksik), kendi-isi değil
+  ✓ q yargıç ve mühür AYNI ölçüme dayanır: mekanik G bir kez koşulur (kararsız G'de de GECTI, sayaç 1)
+  ✓ r Codex zaman aşımına uğrarsa da Claude'a yeni oturumla geçilir ('codex(zaman-aşımı)→claude')
+  ✓ t Türkçe harf: mühürdar MUHAKKİK, yazan MUHAKKIK → aynı kişi, kendi-isi reddi (taşıyıcı MUHAKKİK — Sultan D1 22 Eki)
+  ✓ a kendi işini mühürleyemez: yazan = mühürdar (büyük-küçük harf farkıyla) → İSİMLİ-RED kendi-isi, rc 4, hiçbir G koşulmadı, yargıç çağrılmadı
+  ✓ b mühürdarın kimliği yoksa (AGENT_NAME boş) mühür basılmaz, rc 2
+  ✓ c --yazan verilmezse koşulmaz (kendi işi ölçülemiyor), rc 2
+  ✓ d mutlu yol: GECTI · MUHUR başlığında mühürdar + yazan · 👤 G3 SULTANDA · özet sultan_denemesi=[G3]
+  ✓ e kör: istemde inşacının RAPOR'u ve commit mesajı YOK; rubrik + hedef dosya VAR
+  ✓ f temiz koşu: her öznel G kendi yargıç oturumunda (2 çağrı, istemler ayrı), yargıç MUHUR'a yazıldı
+  ✓ k 👤 Sultan denemesi satırı mühürdarca KOŞULMAZ (komut verilse de)
+  ✓ o çıkan MUHUR muhur-lint'ten geçer (Sultan satırı kanıt istemez)
+  ✓ g Codex erişilebilirse yargıç Codex (Claude çağrılmaz; Codex istemi de kör)
+  ✓ h Codex düşerse Claude'a yeni oturumla geçilir, MUHUR 'codex→claude' der
+  ✓ i yargıcın bozuk cevabı GEÇTİ sayılmaz → EMIN-DEGILIM → ESKALASYON, rc 3
+  ✓ j yargıç KALDI derse verdikt KALDI, rc 1
+  ✓ l tarifsiz 👤 Sultan denemesi biçim kapısında reddedilir (gereklilik-eksik)
+  ✓ m hedef iş ağacı dışına kaçarsa istem kurulmaz → EMIN-DEGILIM, dış dosya istemde yok
+  ✓ n yargıca rapor verme yolu yok: bilinmeyen argüman (--rapor) rc 2
+  ✓ u S14 başsız şapka: --bassiz aynı usul; MUHUR + özet başsız, sicil mühür kaydı bassiz e (taşıyanın siciline); normal koşuda h
+  ✓ v başsız koşu kendi-işi kuralına tabi: yazan = taşıyan → kendi-isi reddi, yargıç çağrılmaz
+── G8 · MUTASYON (tescil kopyasında, kontrol şartlı) ──
+  ✓ kontrol kopyası gerçek betiklerle aynı kapıları geçiyor
+  ✓ mutant (kendi-işi kapısı yok) → 'a' kapısı düşüyor
+  ✓ mutant (başsız koşu kendi-işi kapısını atlıyor) → 'v' kapısı düşüyor
+  ✓ mutant (mühür başsız olduğunu taşımıyor) → 'u' kapısı düşüyor
+  ✓ mutant (sicil mühür kaydı bassiz e değil) → 'u' kapısı düşüyor
+  ✓ mutant (mühürden önce mekanik G yeniden koşuluyor) → 'q' kapısı düşüyor
+  ✓ mutant (zaman aşımında Claude'a geçilmiyor) → 'r' kapısı düşüyor
+  ✓ mutant (Türkçe harf katlanmıyor (MUHAKKİK ≠ MUHAKKIK)) → 't' kapısı düşüyor
+  ✓ mutant (biçim kapısı kendi-işinden sonra) → 'p' kapısı düşüyor
+  ✓ mutant (Sultan denemesi koşuluyor) → 'k' kapısı düşüyor
+  ✓ mutant (Sultan denemesi verdikte) → 'd' kapısı düşüyor
+  ✓ mutant (bozuk cevap GEÇTİ sayılıyor) → 'i' kapısı düşüyor
+  ✓ mutant (Codex düşünce Claude'a geçilmiyor) → 'h' kapısı düşüyor
+  ✓ mutant (inşacının raporu isteme giriyor) → 'e' kapısı düşüyor
+  ✓ mutant (hedef ağaç dışına kaçabiliyor) → 'm' kapısı düşüyor
+  ✓ mutant (Sultan denemesi tarifsiz geçiyor) → 'l' kapısı düşüyor
+
+── SONUÇ: 37 geçti · 0 kaldı ──
+--- stderr ---
