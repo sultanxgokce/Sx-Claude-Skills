@@ -14,8 +14,13 @@
   "sultan": false,
   "kanit_nerede": "_agents/fabrika/kanit/muhurdar-diploma",
   "oda": "",
-  "durum": "acik",
-  "gecmis": [],
+  "durum": "tikandi",
+  "gecmis": [
+    {
+      "zaman": "2026-10-22T04:33:25+03:00",
+      "olay": "tikandi"
+    }
+  ],
   "canli_gerekir": false,
   "canli_sebep": "",
   "kapsam_uyarilari": [],
@@ -26,6 +31,33 @@
       "zaman": "2026-10-22T03:32:03+03:00",
       "olay": "ac",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-22T04:33:26+03:00",
+      "olay": "tikandi",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "canli_kanit": "yok",
+  "bitis": "2026-10-22T04:33:25+03:00",
+  "pr": "",
+  "puan": {
+    "kod": 4,
+    "dogru": "E",
+    "tur": 3
+  },
+  "kanit_var": true,
+  "tikanma": {
+    "yol": "devam",
+    "neden": "göz 3 tur 4/E·4/E·4/E, bulgu 5→4→3 (hepsi rötuş, kutu dışı yok); tur 3'ün iki bulgusu bu dalda kapandı (bozuk defter satırı artık ölçülemedi der · cevap anahtarı dürüst sınırı README'de), üçüncüsü yalnız birleşme sırasıyla kapanır: #411 birleşince main bu dala alınır, iki ÖLÇÜLEMEDİ satırı ölçüme döner (önizleme 38/0 bugün ölçtü). Tur 4 (mutlak son) bu hâlle."
+  },
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "HENDESE",
+      "oturum": "Nexus _agents/hendese/NOTES.md · 2026-10-22 04:32 SERDAR → HENDESE",
+      "gerekce": "SERDAR kararı (NOTES 04:32 'DEVAM, +1 tur (tur 4 = mutlak son)'), ilerliyor 4→3 bulgu; kapsam: bozuk satır raporu, yargıç dalgalanması, birleşme sırası #411→#412",
+      "zaman": "2026-10-22T04:46:34+03:00"
     }
   ]
 }

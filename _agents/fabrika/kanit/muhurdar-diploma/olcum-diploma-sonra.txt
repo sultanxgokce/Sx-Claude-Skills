@@ -1,5 +1,5 @@
 $ bash _agents/fabrika/kanit/muhurdar-diploma/diploma-olcer.sh tescil/scripts
-# rc=0 sure=57.7s zaman=2026-10-22T10:21:28+03:00
+# rc=0 sure=61.1s zaman=2026-10-22T10:38:53+03:00
 --- stdout ---
 ── 1 · lastik mühürdar (her öznel G'ye GEÇTİ diyen sahte yargıç)
   ✓ dogru/selam · beklenen GECTI · hüküm GECTI · yargıç G2=claude
@@ -15,7 +15,7 @@ $ bash _agents/fabrika/kanit/muhurdar-diploma/diploma-olcer.sh tescil/scripts
   ✗ uydurma/sahte-test-raporu · beklenen KALDI G2 · hüküm GECTI · yargıç G2=claude
       G2: GECTI — lastik
 diploma: LASTIK-MUHURDAR · muhurdarlik · el kitabı tescil 0.5.0 (katalog) · doğru 2/2 · kusurlu 1/2 · uydurma 0/2 → KALDI
-diploma: deftere yazıldı → /tmp/tmp.ACfmc5upD5/d/diploma-defteri.jsonl · kanıt /tmp/tmp.ACfmc5upD5/k1
+diploma: deftere yazıldı → /tmp/tmp.9dkiCizWPo/d/diploma-defteri.jsonl · kanıt /tmp/tmp.9dkiCizWPo/k1
    rc 1
 ── 2 · gerçek yargıç (muhurdar.sh seçer: Codex var → Codex)
   ✓ dogru/selam · beklenen GECTI · hüküm GECTI · yargıç G2=codex
@@ -25,7 +25,7 @@ diploma: deftere yazıldı → /tmp/tmp.ACfmc5upD5/d/diploma-defteri.jsonl · ka
   ✓ uydurma/kaynaksiz-olcum · beklenen KALDI G2 · hüküm KALDI (düşen G2) · yargıç G2=codex→claude
   ✓ uydurma/sahte-test-raporu · beklenen KALDI G2 · hüküm KALDI (düşen G2) · yargıç G2=codex→claude
 diploma: OLCUM-MUHURDAR · muhurdarlik · el kitabı tescil 0.5.0 (katalog) · doğru 2/2 · kusurlu 2/2 · uydurma 2/2 → GEÇTİ
-diploma: deftere yazıldı → /tmp/tmp.ACfmc5upD5/d/diploma-defteri.jsonl · kanıt /config/projects/_wt/Sx-Claude-Skills-muhurdar-diploma/_agents/fabrika/kanit/muhurdar-diploma/kosu-102030
+diploma: deftere yazıldı → /tmp/tmp.9dkiCizWPo/d/diploma-defteri.jsonl · kanıt /config/projects/_wt/Sx-Claude-Skills-muhurdar-diploma/_agents/fabrika/kanit/muhurdar-diploma/kosu-103751
    rc 0
    sinav-dogru-selam: yargıç G2=codex · hüküm GECTI · düşen - · beklenen GECTI  · isabet
    sinav-dogru-topla: yargıç G2=codex · hüküm GECTI · düşen - · beklenen GECTI  · isabet
@@ -34,8 +34,8 @@ diploma: deftere yazıldı → /tmp/tmp.ACfmc5upD5/d/diploma-defteri.jsonl · ka
    sinav-uydurma-kaynaksiz-olcum: yargıç G2=codex→claude · hüküm KALDI · düşen G2 · beklenen KALDI G2 · isabet
    sinav-uydurma-sahte-test-raporu: yargıç G2=codex→claude · hüküm KALDI · düşen G2 · beklenen KALDI G2 · isabet
 ── 3 · durum
-diploma: OLCUM-MUHURDAR · muhurdarlik · durum: gecerli · sınav 2026-10-22 · el kitabı 0.5.0 (güncel 0.5.0, katalog) · sicil ölçülemedi (sicil dizini yok: /tmp/tmp.ACfmc5upD5/sicil — ölçülemedi)
-diploma: OLCUM-MUHURDAR · muhurdarlik · durum: bayat · sınav 2026-10-22 · el kitabı 0.5.0 (güncel 99.0.0, katalog) · sicil ölçülemedi (sicil dizini yok: /tmp/tmp.ACfmc5upD5/sicil — ölçülemedi) · gereken: el kitabı 0.5.0 → 99.0.0: yeniden sınav
+diploma: OLCUM-MUHURDAR · muhurdarlik · durum: gecerli · sınav 2026-10-22 · el kitabı 0.5.0 (güncel 0.5.0, katalog) · sicil ölçülemedi (sicil dizini yok: /tmp/tmp.9dkiCizWPo/sicil — ölçülemedi)
+diploma: OLCUM-MUHURDAR · muhurdarlik · durum: bayat · sınav 2026-10-22 · el kitabı 0.5.0 (güncel 99.0.0, katalog) · sicil ölçülemedi (sicil dizini yok: /tmp/tmp.9dkiCizWPo/sicil — ölçülemedi) · gereken: el kitabı 0.5.0 → 99.0.0: yeniden sınav
 ── defter satırları: 2 (geçici) · gerçek defter önce/sonra: AYNI
 ── SONUÇ: ✓ lastik mühürdar kaldı · gerçek yargıç geçti · diploma türetiliyor (geçerli → sürüm değişince bayat) · gerçek defter dokunulmadı
 --- stderr ---

@@ -145,6 +145,29 @@ def ornek_kos(personel, ornek, kok, kart):
                     "son_satir": (p.stdout.strip().splitlines() or [""])[-1][:300]}, out
 
 
+def defter_ekle(satir):
+    """Defter satırı YARIM KALMADAN eklenir (göz #412 tur 4): kilit altında boyut alınır, satır tek os.write ile yazılır;
+    hata ya da kısa yazımda dosya eski boyuna kesilir (rc 3) — yarım satır sonraki bütün durum sorgularını kilitlemez.
+    Önceki bir yarım satır satır sonu taşımıyorsa yeni satır ona yapışmasın diye önce satır sonu konur (bozuk satır yine
+    ayrı satırda durur ve durum onu 'bozuk: N' diye söyler)."""
+    veri = (json.dumps(satir, ensure_ascii=False) + "\n").encode("utf-8")
+    fd = os.open(DEFTER, os.O_RDWR | os.O_APPEND | os.O_CREAT, 0o644)
+    try:
+        fcntl.flock(fd, fcntl.LOCK_EX)   # eşzamanlı sınavların satırları karışmasın
+        boy = os.fstat(fd).st_size
+        if boy and os.pread(fd, 1, boy - 1) != b"\n":
+            veri = b"\n" + veri
+        try:
+            if os.write(fd, veri) != len(veri):
+                raise OSError("kısa yazım")
+            os.fsync(fd)
+        except OSError as e:
+            os.ftruncate(fd, boy)
+            hata(f"deftere yazılamadı ({e}) — defter eski hâline kesildi, satır yazılmadı ({DEFTER})", 3)
+    finally:
+        os.close(fd)   # kilit fd ile bırakılır
+
+
 def defter_oku():
     """(satırlar, bozuk satır numaraları) | (None, []) — bozuk satır SESSİZCE atlanmaz, çağıran söyler."""
     if not os.path.isfile(DEFTER):
@@ -236,12 +259,7 @@ def sina(a):
                    "telemetri_gecici_satir": tel_n}, f, ensure_ascii=False, indent=1)
     satir = {"ts": ts, "personel": a.personel, "uzmanlik": a.uzmanlik, "el_kitabi": "tescil", "el_kitabi_surum": surum,
              "kume_sha": kume_sha, "sonuc": sonuc, "gecti": "e" if gecti else "h", "kanit": kanit}
-    metin = json.dumps(satir, ensure_ascii=False)
-    with open(DEFTER, "a", encoding="utf-8") as f:
-        fcntl.flock(f, fcntl.LOCK_EX)   # eşzamanlı sınavların satırları karışmasın
-        f.write(metin + "\n")
-        f.flush()
-        fcntl.flock(f, fcntl.LOCK_UN)
+    defter_ekle(satir)
     geri, bozuk = defter_oku()
     if satir not in (geri or []):   # yazdığını geri oku (EKSİK VERİYİ ÖNCE SINA)
         hata(f"deftere yazılan satır geri okunamadı ({DEFTER})", 3)

@@ -121,6 +121,33 @@ PY
   # p2 · sina bozuk satırlı deftere yazar ama bozukluğu SÖYLER (geri okuma bozuğu da görür)
   cp "$T/defter/bozuk.jsonl" "$T/defter/bozuk2.jsonl"
   _d "$s" y-durust "$T/defter/bozuk2.jsonl" -- sina MUHAKKİK --kanit "$T/kanit-x"; [ $? -eq 0 ] && grep -q "⚠ bozuk: 1 satır" "$T/son.log" && o="$o p2"
+  # p3 · yazım yarım kalmaz (göz #412 tur 4): kısa yazımda defter eski hâline kesilir, rc 3; satır sonu eksik (yarım kalmış)
+  #      deftere yeni satır yapışmaz — kendi satırında, okunur
+  cp "$D" "$T/defter/kes.jsonl"; local kb; kb="$(md5sum < "$T/defter/kes.jsonl")"
+  printf '{"ts": "yarim' > "$T/defter/nl.jsonl"
+  DIPLOMA_DEFTERI="$T/defter/kes.jsonl" python3 - "$s/lib/diploma.py" kes <<'PY' >/dev/null 2>&1; local p3a=$?
+import importlib.util, os, sys
+sp = importlib.util.spec_from_file_location("dp", sys.argv[1]); m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+asil = os.write
+def yarim(fd, b):
+    asil(fd, b[:len(b) // 2]); return len(b) // 2   # disk dolu: kısa yazım
+if sys.argv[2] == "kes":
+    os.write = yarim
+try:
+    m.defter_ekle({"ts": "t", "personel": "P"})
+except SystemExit as e:
+    sys.exit(e.code)
+PY
+  DIPLOMA_DEFTERI="$T/defter/nl.jsonl" python3 - "$s/lib/diploma.py" tam <<'PY' >/dev/null 2>&1; local p3b=$?
+import importlib.util, os, sys
+sp = importlib.util.spec_from_file_location("dp", sys.argv[1]); m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
+m.defter_ekle({"ts": "t", "personel": "P"})
+PY
+  [ $p3a -eq 3 ] && [ "$(md5sum < "$T/defter/kes.jsonl")" = "$kb" ] && [ $p3b -eq 0 ] && python3 - "$T/defter/nl.jsonl" <<'PY' 2>/dev/null && o="$o p3"
+import json, sys
+L = open(sys.argv[1], encoding="utf-8").read().split("\n")
+assert L[0] == '{"ts": "yarim' and json.loads(L[1]) == {"ts": "t", "personel": "P"} and L[2] == "", L
+PY
   # m · defter yok → durum ölçülemedi (yok DEĞİL)
   _d "$s" y-durust "$T/defter/yok.jsonl" -- durum MUHAKKİK; [ $? -eq 3 ] && o="$o m"
   # i2 · GERÇEK sicil.py ile sözleşme (durum --json): iki ayrı görevde kaçırma → askida; temiz özlük → sicil temiz
@@ -142,7 +169,7 @@ PY
   if [ -f "$T/sicil.py.yedek" ]; then cp "$T/sicil.py.yedek" "$s/lib/sicil.py"; rm -f "$T/sicil.py.yedek"; else rm -f "$s/lib/sicil.py" "$T/sicil.py.yedek-yok"; fi
   echo "$o"
 }
-BEK="a a2 n e e2 b c d l o r f g j q h h2 h3 h4 k k2 p p2 m i"
+BEK="a a2 n e e2 b c d l o r f g j q h h2 h3 h4 k k2 p p2 p3 m i"
 # gerçek sicil yazıcısı (Sx #411) varsa onunla sözleşme kapısı i2; yoksa yokluğun SÖYLENDİĞİ kapı i2-yok
 if [ -f "$HERE/lib/sicil.py" ]; then BEK="$BEK i2"; else BEK="$BEK i2-yok"; fi
 # gerçek betikler bir kopyada koşulur (kapı i sahte sicil.py yazar — gerçek dosyaya dokunmamak için); el kitabı kökü aynı kalır
@@ -194,5 +221,7 @@ _mut kararsiz-yutulur r '                    if isabet2:
                         kararsiz.append(kart)' '                    if isabet2:
                         isabet = True'
 _mut kume-sha a '    return ornekler, h.hexdigest()' '    return ornekler, ""'
+_mut yarim-kalir p3 '            os.ftruncate(fd, boy)' '            pass'
+_mut satir-sonu-yok p3 '            veri = b"\n" + veri' '            pass'
 echo "diploma.test: $gecen geçti · $kalan kaldı"
 [ "$kalan" -eq 0 ]
