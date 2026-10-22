@@ -26,6 +26,8 @@ yoksa sınav koşulmaz (rc 3).
 `beklenen.json` yargıca hiç verilmez (kör istem yalnız G satırını, rubriği, `hedef:` dosyasını ve mekanik kanıt
 tablosunu görür); sınav bunu ölçer (diploma.test.sh kapı n).
 
+**Cevap anahtarı yargıçtan iki katla uzak:** (1) ağaç — `beklenen.json` yargıca verilen köke (iş ağacı + gereklilik dizini + çıktı) HİÇ kopyalanmaz ve istem kümenin yolunu taşımaz (`diploma.test.sh` kapı n2, mutantla); (2) disk — yargıç kilidi: gerçek `beklenen.json` yolu verilip okuması istendiğinde kilitsiz Claude okudu (pozitif kontrol), kilitli Claude ve kabuksuz Codex okuyamadı (`kanit/muhurdar-diploma-kume-gucu/anahtar-kanarya.sh`).
+
 **Dürüst sınır:** kör istem cevap anahtarını taşımaz. Yargıcın dosya sistemine bakması tescil 0.7.0'dan beri **kilitle**
 kapalıdır, istemdeki yasağa güvenilmez: Claude yargıcı `--safe-mode --strict-mcp-config --tools ""` ile koşar (dosya/kabuk/MCP
 aracı yok — gerçek modelle kanarya ölçüldü: diske ulaşamadı), Codex yargıcı kabuksuz koşar. Codex'in dosyaya öteki yolu kum

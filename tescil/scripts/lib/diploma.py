@@ -239,9 +239,10 @@ def kok_supur():
                 continue
             with open(os.path.join(d, ".sahip"), encoding="utf-8") as f:
                 pid, bas = f.read().split()
+            pid = int(pid)   # bozuk iz (sayı olmayan pid) süpürmeyi ÇÖKERTMESİN — izsiz gibi dokunulmaz (göz #420 tur 1)
         except (OSError, ValueError):
             continue
-        if _surec_baslangici(int(pid)) != bas:
+        if _surec_baslangici(pid) != bas:
             shutil.rmtree(d, ignore_errors=True)
             n += not os.path.exists(d)
     return n

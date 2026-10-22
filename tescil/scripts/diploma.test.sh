@@ -19,6 +19,9 @@ mkdir -p "$T/y-dalgali" "$T/y-durust" "$T/y-lastik" "$T/y-hepkaldi" "$T/y-bozuk"
 cat > "$T/y-durust/claude" <<EOF
 #!/usr/bin/env bash
 i="\$(cat)"; n=\$(( \$(cat "$T/istem-n" 2>/dev/null || echo 0) + 1 )); echo \$n > "$T/istem-n"; printf '%s' "\$i" > "$T/istem-\$n.md"
+# n2: yargıcın kendi koşusunun kökünde (iş ağacı + gereklilik dizini + çıktı) cevap anahtarı var mı, istem kümeyi işaret ediyor mu
+k="\$(ls -dt "\${TMPDIR:-/tmp}"/diploma-kok-* 2>/dev/null | head -1)"
+[ -n "\$k" ] && echo "\$(find "\$k" -name beklenen.json 2>/dev/null | wc -l) \$(printf '%s' "\$i" | grep -c '/sinav/')" >> "$T/anahtar-iz"
 if printf '%s' "\$i" | grep -qE 'çarpımlarını|FAILED \(|42 ms|- \[ \]'; then k=KALDI; else k=GECTI; fi
 printf '{"structured_output":{"karar":"%s","not":"sahte dürüst yargıç"}}' "\$k"
 EOF
@@ -56,7 +59,10 @@ _sen() {  # _sen <scripts-dir> → geçen kapı anahtarları
   printf 'persona: MUHAKKİK\npersonel_no: 01.099\n' > "$T/sicil/01.099.yaml"; local sic_once; sic_once="$(sha256sum "$T/sicil/01.099.yaml")"
   local iz_once; iz_once="$(kume_iz "$KUME")"
   # a · dürüst mühürdar: 9/9 isabet (türde 3) → GEÇTİ, §6 satırı tam alanlarla
+  rm -f "$T/anahtar-iz"
   _d "$s" y-durust "$D" -- sina MUHAKKİK --kanit "$T/kanit-a"; r=$?
+  # n2 · cevap anahtarı yargıcın ağacına HİÇ girmez (göz #420 tur 1): her yargı çağrısında kökte 0 beklenen.json, istemde küme yolu yok
+  [ "$(wc -l < "$T/anahtar-iz" 2>/dev/null)" -ge 8 ] && [ "$(sort -u "$T/anahtar-iz")" = "0 0" ] && o="$o n2"
   [ $r -eq 0 ] && [ "$(wc -l < "$D")" = 1 ] && python3 - "$D" 2>/dev/null <<'PY' && o="$o a"
 import json, re, sys
 d = json.loads(open(sys.argv[1]).readline())
@@ -194,20 +200,22 @@ PY
   until olu="$(ls -d "$T/tmp"/diploma-kok-* 2>/dev/null | head -1)"; [ -n "$olu" ] && [ -f "$olu/.sahip" ] || [ $t0 -ge 100 ]; do sleep 0.1; t0=$((t0+1)); done
   kill -9 -- "-$sp" 2>/dev/null; wait "$sp" 2>/dev/null
   [ -n "$olu" ] && [ -d "$olu" ] && [ -f "$olu/.sahip" ] && o="$o s1"
-  local canli="$T/tmp/diploma-kok-canli" izsiz="$T/tmp/diploma-kok-izsiz" yeniden="$T/tmp/diploma-kok-yeniden"
-  mkdir -p "$canli" "$izsiz" "$yeniden"
+  local canli="$T/tmp/diploma-kok-canli" izsiz="$T/tmp/diploma-kok-izsiz" yeniden="$T/tmp/diploma-kok-yeniden" bozuk="$T/tmp/diploma-kok-bozuk"
+  mkdir -p "$canli" "$izsiz" "$yeniden" "$bozuk"; echo "abc 123" > "$bozuk/.sahip"   # bozuk iz: sayı olmayan pid
   echo "$$ $(python3 -c "import sys;print(open(f'/proc/{sys.argv[1]}/stat').read().rsplit(')',1)[1].split()[19])" "$$")" > "$canli/.sahip"
   echo "$$ 1" > "$yeniden/.sahip"   # canlı pid, yanlış açılış saati = pid başka sürece verilmiş
   _d "$s" y-durust "$D" -- sina MUHAKKİK --kanit "$T/kanit-s2"; r=$?
   [ -n "$olu" ] && [ ! -e "$olu" ] && [ ! -e "$yeniden" ] && grep -q "süpürüldü: 2 eski sınav kökü" "$T/son.log" && o="$o s2"
   [ -d "$canli" ] && o="$o s3"
   [ -d "$izsiz" ] && o="$o s4"
-  [ $r -eq 0 ] && [ "$(ls -d "$T/tmp"/diploma-kok-* 2>/dev/null | wc -l)" = 2 ] && o="$o s5"
+  [ $r -eq 0 ] && [ "$(ls -d "$T/tmp"/diploma-kok-* 2>/dev/null | wc -l)" = 3 ] && o="$o s5"
+  # s6 · bozuk sahip izi (sayı olmayan pid) süpürmeyi çökertmez, o köke dokunulmaz (göz #420 tur 1)
+  [ $r -eq 0 ] && [ -d "$bozuk" ] && ! grep -q "Traceback" "$T/son.log" && o="$o s6"
   echo "$o"
 }
 BEK="a a2 n e e2 b c d l o r f g j q h h2 h3 h4 h5 k k2 p p2 p3 p4 m i"
 BEK="$BEK i2"
-BEK="$BEK s1 s2 s3 s4 s5"   # SIGKILL artığı süpürmesi (kart muhurdar-diploma-kume-gucu)   # gerçek sicil yazıcısıyla sözleşme (Sx #411 birleşti) — koşulsuz
+BEK="$BEK s1 s2 s3 s4 s5 s6 n2"   # SIGKILL artığı süpürmesi (kart muhurdar-diploma-kume-gucu)   # gerçek sicil yazıcısıyla sözleşme (Sx #411 birleşti) — koşulsuz
 # gerçek betikler bir kopyada koşulur (kapı i sahte sicil.py yazar — gerçek dosyaya dokunmamak için); el kitabı kökü aynı kalır
 _kopya_gercek() { local d="$T/gercek/scripts"; mkdir -p "$d"; cp -r "$HERE/." "$d/"; cp "$HERE/../SKILL.md" "$T/gercek/SKILL.md"; ln -s "$KUME" "$T/gercek/sinav"; echo "$d"; }
 
@@ -268,8 +276,10 @@ _mut yarim-kalir p3 '            os.ftruncate(fd, boy)' '            pass'
 _mut satir-sonu-yok p3 '            veri = b"\n" + veri' '            pass'
 _mut supur-yok s2 '    supurulen = kok_supur()' '    supurulen = 0'
 _mut iz-yok s1 '    with open(os.path.join(kok, ".sahip"), "w", encoding="utf-8") as f:' '    with open(os.devnull, "w", encoding="utf-8") as f:'
-_mut canli-silinir s3 '        if _surec_baslangici(int(pid)) != bas:' '        if True:'
-_mut pid-yeniden-gorulmez s2 '        if _surec_baslangici(int(pid)) != bas:' '        if _surec_baslangici(int(pid)) is None:'
+_mut canli-silinir s3 '        if _surec_baslangici(pid) != bas:' '        if True:'
+_mut pid-yeniden-gorulmez s2 '        if _surec_baslangici(pid) != bas:' '        if _surec_baslangici(pid) is None:'
+_mut anahtar-kopyalanir n2 '        if os.path.isfile(os.path.join(ornek, ad)) and ad != "beklenen.json":' '        if os.path.isfile(os.path.join(ornek, ad)):'
+_mut bozuk-iz-cokertir s6 '            pid = int(pid)   # bozuk iz' '            pid = pid   # bozuk iz'
 _mut izsiz-silinir s4 '            with open(os.path.join(d, ".sahip"), encoding="utf-8") as f:
                 pid, bas = f.read().split()' '            pid, bas = "1", "x"'
 wait

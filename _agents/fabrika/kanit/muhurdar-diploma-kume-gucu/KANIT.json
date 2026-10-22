@@ -1,7 +1,7 @@
 {
   "is": "muhurdar-diploma-kume-gucu",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-22T21:16:49+03:00",
+  "guncelleme": "2026-10-22T21:38:02+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -100,17 +100,17 @@
       "etiket": "diploma-sinavi",
       "asama": "tek",
       "dosya": "olcum-diploma-sinavi-tek.txt",
-      "sha256": "9c99ab2e97063a6c537c2c1ee94d7af166e19b0f68c68554fa1c2bea212783c6",
+      "sha256": "64a3cb4bb72cd697f338776108d8c4ec17eb38e0836035547049e891bfcfba81",
       "komut": [
         "bash",
         "tescil/scripts/diploma.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-22T21:13:16+03:00",
-      "sure_sn": 547.9,
+      "zaman": "2026-10-22T21:38:02+03:00",
+      "sure_sn": 658.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "2c17a1b55dd648d8b6c950e6ddeef390"
+      "olcum_id": "2601e7fdf2ae4494901928e8651a5837"
     },
     {
       "tur": "olcum",
@@ -145,7 +145,25 @@
       "sure_sn": 199.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "olcum_id": "9444192ba9fe4cb4b5df05a6feb58016"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "anahtar-kanarya",
+      "asama": "tek",
+      "dosya": "olcum-anahtar-kanarya-tek.txt",
+      "sha256": "89036641794085f9a97d69aa7ab19d5d2fb08309e7f51fabe3e039ebade1f7a3",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-muhurdar-diploma-kume-gucu/_agents/fabrika/kanit/muhurdar-diploma-kume-gucu/anahtar-kanarya.sh",
+        "tescil/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T21:26:49+03:00",
+      "sure_sn": 34.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "019263f5b6104951a4fce4da855a7cd4"
     }
   ],
-  "imza": "c62ccb0283deed2ea47ba9ea6ceae77cf6fb13bacce438d023c724d391756560"
+  "imza": "8fc2e6c7e2bbc0fb81e994e2757616d867b41e85bd6b1021486d7e158cf61775"
 }

@@ -1,5 +1,5 @@
 $ bash tescil/scripts/diploma.test.sh
-# rc=0 sure=547.9s zaman=2026-10-22T21:13:16+03:00
+# rc=0 sure=658.3s zaman=2026-10-22T21:38:02+03:00
 --- stdout ---
 ── gerçek betikler
   ✓ kapı a
@@ -36,6 +36,8 @@ $ bash tescil/scripts/diploma.test.sh
   ✓ kapı s3
   ✓ kapı s4
   ✓ kapı s5
+  ✓ kapı s6
+  ✓ kapı n2
 ── mutasyonlar (paralel 8)
   ✓ mutant alt-kume → kapı l düştü
   ✓ mutant eskalasyon-isabet → kapı d düştü
@@ -64,6 +66,8 @@ $ bash tescil/scripts/diploma.test.sh
   ✓ mutant iz-yok → kapı s1 düştü
   ✓ mutant canli-silinir → kapı s3 düştü
   ✓ mutant pid-yeniden-gorulmez → kapı s2 düştü
+  ✓ mutant anahtar-kopyalanir → kapı n2 düştü
+  ✓ mutant bozuk-iz-cokertir → kapı s6 düştü
   ✓ mutant izsiz-silinir → kapı s4 düştü
-diploma.test: 62 geçti · 0 kaldı
+diploma.test: 66 geçti · 0 kaldı
 --- stderr ---
