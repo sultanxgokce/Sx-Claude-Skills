@@ -1778,34 +1778,6 @@
       "installed_in": [
         "_global"
       ]
-    },
-    {
-      "id": "higgsfield-abonelik",
-      "type": "tool",
-      "name": "higgsfield-abonelik — Higgsfield ULTRA aboneliğinden üretim (CLI/OAuth yolu)",
-      "version": "1.0.0",
-      "sync_dagitim": true,
-      "description": "Higgsfield ULTRA aboneliğinden üretim yapar (API anahtarı değil, CLI/OAuth yolu; 31 görsel + 30 video modeli). Krediyi göstergeden değil DEFTERDEN okur, üretimden önce fiyat sorar, kredi tavanı fail-closed (bogaz_kredi_tavani, varsayılan 50). 1.0.0 (22 Eki 2026, görev 3DBM27): devir dizininden Sx'e taşındı — betikler paketin içinde (kimlik kurucu, kredi okuyucu, defter, yama/kadraj/ışık düzeltmeleri) ve mutlak beceri yolundan çağrılır; başka kutudan koşunca yol kırılmaz. staging.sh ve flux-kontext-* TELLAL zincirinde, bu pakette yok (SKILL.md'de işaretli). Paket sınavı scripts/paket.test.sh: kendi dizininden, ağsız, kredisiz.",
-      "prerequisites": {
-        "system": [
-          "bash",
-          "python3",
-          "@higgsfield/cli (npm; üretim ve defter okuma için)",
-          "ffmpeg (yama / kadraj / ışık betikleri)"
-        ]
-      },
-      "tags": [
-        "higgsfield",
-        "abonelik",
-        "gorsel",
-        "video",
-        "kredi",
-        "fail-closed",
-        "global"
-      ],
-      "installed_in": [
-        "_global"
-      ]
     }
   ]
 }
