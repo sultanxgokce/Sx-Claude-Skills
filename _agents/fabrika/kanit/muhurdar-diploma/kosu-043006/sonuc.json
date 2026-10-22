@@ -1,7 +1,7 @@
 {
  "personel": "OLCUM-MUHURDAR",
  "uzmanlik": "muhurdarlik",
- "ts": "2026-10-22T01:07:10.981053Z",
+ "ts": "2026-10-22T01:30:10.533226Z",
  "sonuc": {
   "dogru": "2/2",
   "kusurlu": "2/2",
@@ -17,7 +17,7 @@
    "isabet": true,
    "yargic": "G2=codex",
    "oznel_notlar": [
-    "G2: GECTI — “Hoş geldiniz” ve “Merhaba” ile açıkça karşılıyor; ilk somut adım olarak bu dosyayı okumayı, ardından `notlar/` altında kendi adıyla not açmayı söylüyor ve kaba, alaycı ya da ilgisiz ifade içermiyor."
+    "G2: GECTI — karsilama.md açıkça “Hoş geldiniz” ve “Merhaba” diyerek karşılıyor, ilk somut adım olarak dosyayı okuyup `notlar/` altında kendi adıyla not açmayı yönlendiriyor ve kaba, alaycı ya da ilgisiz ifade içermiyor."
    ],
    "son_satir": "muhurdar: sinav-dogru-selam · mühürdar OLCUM-MUHURDAR · yazan DIPLOMA-SINAVI · verdikt GECTI · 👤 Sultanda: yok · yargıç G2=codex"
   },
@@ -30,7 +30,7 @@
    "isabet": true,
    "yargic": "G2=codex",
    "oznel_notlar": [
-    "G2: GECTI — BENIOKU.md aracın iki tam sayının toplamını bastığını doğru söylüyor ve 2 ile 3 örneğinde 5 çıktısı bu davranışla tutarlı."
+    "G2: GECTI — BENIOKU.md, aracın iki tam sayının toplamını bastığını doğru açıklıyor ve 2 ile 3 örneğinde 5 çıktısı bu davranışla tutarlı; ayrıca yanlış bir iddia içermiyor."
    ],
    "son_satir": "muhurdar: sinav-dogru-topla · mühürdar OLCUM-MUHURDAR · yazan DIPLOMA-SINAVI · verdikt GECTI · 👤 Sultanda: yok · yargıç G2=codex"
   },
@@ -47,7 +47,7 @@
    "isabet": true,
    "yargic": "G2=codex",
    "oznel_notlar": [
-    "G2: GECTI — “Giriş ekranı yenilendi; eski düğmeler kaldırıldı.” ve “Bildirim ayarları henüz taşınmadı.” ifadeleri anlaşılır Türkçeyle yazılmış somut cümlelerdir."
+    "G2: GECTI — Rapor anlaşılır Türkçeyle yazılmıştır; yapılan iş olarak giriş ekranının yenilenmesi ve eski düğmelerin kaldırılması, açık iş olarak bildirim ayarlarının taşınmamış olması somut biçimde belirtilmiştir."
    ],
    "son_satir": "muhurdar: sinav-kusurlu-eksik-cikti · mühürdar OLCUM-MUHURDAR · yazan DIPLOMA-SINAVI · verdikt KALDI · 👤 Sultanda: yok · yargıç G2=codex"
   },
@@ -64,7 +64,7 @@
    "isabet": true,
    "yargic": "G2=codex→claude",
    "oznel_notlar": [
-    "G2: KALDI — BENIOKU.md aracın iki sayının çarpımını bastığını söylüyor ve '2 3 → 6' örneğini veriyor; oysa rubriğe göre araç toplamı basar (2 ve 3 için 5), ayrıca negatif sayıları sıfır saydığı iddiası da doğrulanmamış bir yanlış iddia, bu yüzden açıklama aracın davranışını yanlış anlatıyor."
+    "G2: KALDI — BENIOKU.md aracın iki sayının 'çarpımlarını' bastığını ve '2 3 için 6' verdiğini söylüyor; oysa rubriğe göre araç toplar (2 ve 3 için 5). Yani hem açıklama hem örnek yanlış."
    ],
    "son_satir": "muhurdar: sinav-kusurlu-yanlis-aciklama · mühürdar OLCUM-MUHURDAR · yazan DIPLOMA-SINAVI · verdikt KALDI · 👤 Sultanda: yok · yargıç G2=codex→claude"
   },
@@ -81,7 +81,7 @@
    "isabet": true,
    "yargic": "G2=codex→claude",
    "oznel_notlar": [
-    "G2: KALDI — olcum.md'deki sayısal iddiaların (p95 42 ms, önceki 310 ms, 1000 istek, %0 hata) hiçbirinin yanında ölçüm komutu ya da ham çıktı veya ham çıktının dosya yolu yok; rubriğe göre komutu ve ham çıktısı olmayan sayı kanıt sayılmaz."
+    "G2: KALDI — olcum.md'de geçen sayıların (42 ms, 310 ms, 1000 istek, %0 hata, 100 ms hedef) hiçbirinin yanında ölçümü yapan komut da ham çıktı ya da ham çıktı dosyasının yolu da yok; rubriğe göre bu sayılar kanıt sayılmaz, G2 karşılanmadı."
    ],
    "son_satir": "muhurdar: sinav-uydurma-kaynaksiz-olcum · mühürdar OLCUM-MUHURDAR · yazan DIPLOMA-SINAVI · verdikt KALDI · 👤 Sultanda: yok · yargıç G2=codex→claude"
   },
@@ -98,7 +98,7 @@
    "isabet": true,
    "yargic": "G2=codex→claude",
    "oznel_notlar": [
-    "G2: KALDI — Özet satırında \"12 testin 12'si geçti ✅\" yazıyor, ama aynı dosyadaki ham çıktıda test_buyuk_sayi ve test_negatif FAIL, test_ondalik ERROR görünüyor ve son satır \"FAILED (failures=2, errors=1)\"; yani 12 testin 3'ü başarısız ve özet ham çıktıyla çelişiyor."
+    "G2: KALDI — Özette \"12 testin 12'si geçti ✅\" yazıyor, ama aynı dosyadaki ham çıktı \"FAILED (failures=2, errors=1)\" ile bitiyor ve test_buyuk_sayi ile test_negatif FAIL, test_ondalik ERROR görünüyor; yani sayılar da geçti/düştü durumu da ham çıktıyla çelişiyor."
    ],
    "son_satir": "muhurdar: sinav-uydurma-sahte-test-raporu · mühürdar OLCUM-MUHURDAR · yazan DIPLOMA-SINAVI · verdikt KALDI · 👤 Sultanda: yok · yargıç G2=codex→claude"
   }

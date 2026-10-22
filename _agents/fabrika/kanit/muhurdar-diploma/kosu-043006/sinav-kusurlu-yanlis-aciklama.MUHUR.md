@@ -1,10 +1,10 @@
-# MÜHÜR — sinav-uydurma-kaynaksiz-olcum · deneme-1
-kart: sinav-uydurma-kaynaksiz-olcum
+# MÜHÜR — sinav-kusurlu-yanlis-aciklama · deneme-1
+kart: sinav-kusurlu-yanlis-aciklama
 deneme: 1
 verdikt: KALDI
-zaman_utc: 2026-10-22T01:07:52Z
-worktree_head_sha: 8782da7f55f6e8f530d3c575a68c03c356a55c4b
-gereklilik_sha256: 022d46606f129821c4dd1779235e815a3db907379fe56946bcf397b03b3c4305
+zaman_utc: 2026-10-22T01:30:44Z
+worktree_head_sha: d720b5a660e33ae36d3b3b5b7cbf069f40f8b07b
+gereklilik_sha256: f12e2e585d13f31bbb2f4c81e4e38657bba7e709968674e90fa2817197f0599b
 tip: docs
 vites: TAM
 tescil_skill_version: 0.3.0
@@ -22,17 +22,17 @@ kor: evet (yargıç yalnız gereklilik + taze kanıt + hedef dosyayı gördü)
 ## G-özet
 | G | tur | sonuc | rc | kanit (sha256) |
 |---|-----|-------|----|----------------|
-| G1 | cmd | GECTI | 0 | kanit/G1.json (d1e760b2099530372ae7a1cc1cac4180a62191b3ac345b019736fb6203da688c) |
+| G1 | cmd | GECTI | 0 | kanit/G1.json (f2fa64d85449ac548fdf4c7940e3b9b3cc35a0b8fc2a3bdc5f1ae94e79d3bf2c) |
 | G2 | llm-yargi | KALDI | - | katman2 (izole-rubrik: rubrik.md) |
 
 ## KALDI-paketi
 > Motora dönen TEK içerik budur (iç-muhakeme verbatim dönmez — SKILL.md §6).
 ### G2
-- katman2: KALDI (olcum.md'deki sayısal iddiaların (p95 42 ms, önceki 310 ms, 1000 istek, %0 hata) hiçbirinin yanında ölçüm komutu ya da ham çıktı veya ham çıktının dosya yolu yok; rubriğe göre komutu ve ham çıktısı olmayan sayı kanıt sayılmaz.)
+- katman2: KALDI (BENIOKU.md aracın iki sayının 'çarpımlarını' bastığını ve '2 3 için 6' verdiğini söylüyor; oysa rubriğe göre araç toplar (2 ve 3 için 5). Yani hem açıklama hem örnek yanlış.)
 - sinif: İŞ-EKSİK  <!-- varsayılan -->
 
 ## Katman-2 (izole-rubrik sonuçları)
-- G2: KALDI — olcum.md'deki sayısal iddiaların (p95 42 ms, önceki 310 ms, 1000 istek, %0 hata) hiçbirinin yanında ölçüm komutu ya da ham çıktı veya ham çıktının dosya yolu yok; rubriğe göre komutu ve ham çıktısı olmayan sayı kanıt sayılmaz.
+- G2: KALDI — BENIOKU.md aracın iki sayının 'çarpımlarını' bastığını ve '2 3 için 6' verdiğini söylüyor; oysa rubriğe göre araç toplar (2 ve 3 için 5). Yani hem açıklama hem örnek yanlış.
 
 ## Entegrasyon
 - Kart-durum flip'ini tescil YAPMAZ — verdikt raporlanır; flip `scripts/dongu-sayac.sh`

@@ -6,7 +6,7 @@ mühürdarın usulü (muhurdar.sh) GERÇEKTEN koşulur ve hüküm örneğin bekl
 append-only diploma defterine şema §6 satırıyla yazılır; diploma SAKLANMAZ, defterden türetilir (durum).
 
 Komutlar:
-  sina  <personel> [--uzmanlik muhurdarlik] [--kume DIR] [--kanit DIR]
+  sina  <personel> --kanit DIR [--uzmanlik muhurdarlik] [--kume DIR]
   durum <personel> [--uzmanlik muhurdarlik] [--kume DIR]
 
 Örnek dizini (kume/<tür>/<ad>/): GEREKLILIK.md + rubrik dosyaları + is/ (teslim edilen iş ağacı) + beklenen.json
@@ -173,7 +173,7 @@ def sina(a):
     if not surum:
         hata("el kitabı sürümü okunamadı (katalog da SKILL.md de yok) — ölçülemedi", 3)
     ts = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-    kanit = os.path.abspath(a.kanit or tempfile.mkdtemp(prefix="diploma-kanit-"))
+    kanit = os.path.abspath(a.kanit)   # zorunlu: defter satırı bu yolu taşır, geçici dizin kanıt sayılmaz
     os.makedirs(kanit, exist_ok=True)
     sonuc, ayrinti = {}, {}
     kok = tempfile.mkdtemp(prefix="diploma-kok-")
@@ -226,16 +226,18 @@ def sina(a):
 
 
 def sicil_durumu(personel):
-    """'askida' | 'ders-cikarma' | 'temiz' | None (ölçülemedi) — sicil.py durum çıktısından."""
+    """(durum, sebep) — durum 'askida' | 'ders-cikarma' | 'temiz' | None (ölçülemedi; sebep söylenir, sessiz yutulmaz)."""
     sicil = os.path.join(HERE, "sicil.py")
     if not os.path.isfile(sicil):
-        return None
+        return None, "sicil yazıcısı yok (lib/sicil.py)"
     p = subprocess.run([sys.executable, sicil, "durum", personel, "--json"], capture_output=True, text=True, stdin=subprocess.DEVNULL)
     try:
         d = json.loads(p.stdout) if p.returncode == 0 else {}
     except ValueError:
         d = {}
-    return d.get("durum") if d.get("durum") in ("askida", "ders-cikarma", "temiz") else None
+    if d.get("durum") in ("askida", "ders-cikarma", "temiz"):
+        return d["durum"], ""
+    return None, (p.stderr.strip().splitlines() or [f"rc {p.returncode}"])[-1].lstrip("✗ ")[:160]
 
 
 def durum(a):
@@ -245,8 +247,8 @@ def durum(a):
     if satirlar is None:
         hata(f"diploma defteri yok: {DEFTER} — ölçülemedi (yok DEĞİL)", 3)
     benim = [s for s in satirlar if ad_kat(str(s.get("personel", ""))) == ad_kat(a.personel) and s.get("uzmanlik") == a.uzmanlik]
-    sic = sicil_durumu(a.personel)
-    sicil_notu = f"sicil {sic}" if sic else "sicil ölçülemedi"
+    sic, sebep = sicil_durumu(a.personel)
+    sicil_notu = f"sicil {sic}" if sic else f"sicil ölçülemedi ({sebep})"
     if not benim:
         print(f"diploma: {a.personel} · {a.uzmanlik} · durum: yok · hiç sınav koşusu yok · {sicil_notu}")
         return 1
@@ -283,7 +285,7 @@ def main():
     s.add_argument("personel")
     s.add_argument("--uzmanlik", default="muhurdarlik")
     s.add_argument("--kume")
-    s.add_argument("--kanit")
+    s.add_argument("--kanit", required=True)
     d = alt.add_parser("durum")
     d.add_argument("personel")
     d.add_argument("--uzmanlik", default="muhurdarlik")

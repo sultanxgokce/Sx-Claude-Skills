@@ -2,8 +2,8 @@
 kart: sinav-kusurlu-eksik-cikti
 deneme: 1
 verdikt: KALDI
-zaman_utc: 2026-10-22T01:07:28Z
-worktree_head_sha: bd153b12e6653361a916f389dc21fc64a7c9c80b
+zaman_utc: 2026-10-22T01:30:31Z
+worktree_head_sha: 199f2daacf3d2bee3a7626b005b55695e9ac51b2
 gereklilik_sha256: 36af4017341cc0b04e6a35893d09a9e2349b15ff94894bf22006062ba5e0a79e
 tip: docs
 vites: TAM
@@ -22,7 +22,7 @@ kor: evet (yargıç yalnız gereklilik + taze kanıt + hedef dosyayı gördü)
 ## G-özet
 | G | tur | sonuc | rc | kanit (sha256) |
 |---|-----|-------|----|----------------|
-| G1 | cmd | KALDI | 1 | kanit/G1.json (9432e23fe60b00a31d21fe79b9a759626122876233a63aad3b224d158ec2412c) |
+| G1 | cmd | KALDI | 1 | kanit/G1.json (8518a8b063a39c2c5914810c7b7fb6274c230ce882708eb32971fe29afead2ce) |
 | G2 | llm-yargi | GECTI | - | katman2 (izole-rubrik: rubrik.md) |
 
 ## KALDI-paketi
@@ -38,7 +38,7 @@ kor: evet (yargıç yalnız gereklilik + taze kanıt + hedef dosyayı gördü)
 - sinif: İŞ-EKSİK  <!-- varsayılan; GEREKLİLİK-MUĞLAK teşhisi = gerekçe + düzeltme-diff'i şart (SKILL.md §6) -->
 
 ## Katman-2 (izole-rubrik sonuçları)
-- G2: GECTI — “Giriş ekranı yenilendi; eski düğmeler kaldırıldı.” ve “Bildirim ayarları henüz taşınmadı.” ifadeleri anlaşılır Türkçeyle yazılmış somut cümlelerdir.
+- G2: GECTI — Rapor anlaşılır Türkçeyle yazılmıştır; yapılan iş olarak giriş ekranının yenilenmesi ve eski düğmelerin kaldırılması, açık iş olarak bildirim ayarlarının taşınmamış olması somut biçimde belirtilmiştir.
 
 ## Entegrasyon
 - Kart-durum flip'ini tescil YAPMAZ — verdikt raporlanır; flip `scripts/dongu-sayac.sh`
