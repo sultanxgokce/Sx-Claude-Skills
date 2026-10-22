@@ -1,7 +1,7 @@
 {
   "is": "muhurdar-diploma",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-22T04:31:11+03:00",
+  "guncelleme": "2026-10-22T05:16:19+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -44,35 +44,35 @@
       "etiket": "diploma-sinavi",
       "asama": "tek",
       "dosya": "olcum-diploma-sinavi-tek.txt",
-      "sha256": "036cfb2789b1eb6d238c2c4117e14ce8c89b6372490622c9539951abe2cd55a3",
+      "sha256": "c1aeebef09499e1ecd236c42978162aa8762e7f6c118d1d8d25f8ea0ac7f3d65",
       "komut": [
         "bash",
         "tescil/scripts/diploma.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-22T04:17:56+03:00",
-      "sure_sn": 407.2,
+      "zaman": "2026-10-22T05:01:12+03:00",
+      "sure_sn": 810.6,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "c6ef5258629b40129c8ff3c5fd3aa76f"
+      "olcum_id": "6ad08d7b784e44ebbc92987ada4b90c3"
     },
     {
       "tur": "olcum",
       "etiket": "onizleme-411",
       "asama": "tek",
       "dosya": "olcum-onizleme-411-tek.txt",
-      "sha256": "dcdd153cf4a11be3277fda722f90cd2621a9172785c120e594b3747a79567e68",
+      "sha256": "23da3f63578fa3f84cfc6b4099efe5e751c584040836c272446e689f681920c9",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/muhurdar-diploma/onizleme-411.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-22T04:29:41+03:00",
-      "sure_sn": 704.8,
+      "zaman": "2026-10-22T05:16:19+03:00",
+      "sure_sn": 906.2,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "f8bd388cc1f24ab2b1b7e5083cc57cab"
+      "olcum_id": "fcdf8adb92f9440bb6d448f999cdc142"
     }
   ],
-  "imza": "51c36302bcb0e656c23809407abb15c3c8299ad54a1f04cdf7793ee60b8d810d"
+  "imza": "75447cbf2d461c02cceb4558f2a9470e19a04ea1bab2def3d2fcb000c4545408"
 }

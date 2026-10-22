@@ -26,6 +26,12 @@ yoksa sınav koşulmaz (rc 3).
 `beklenen.json` yargıca hiç verilmez (kör istem yalnız G satırını, rubriği, `hedef:` dosyasını ve mekanik kanıt
 tablosunu görür); sınav bunu ölçer (diploma.test.sh kapı n).
 
+**Dürüst sınır:** kör istem cevap anahtarını taşımaz, ama yargıç oturumu dosya sistemini **okuyabilir** (Codex `read-only`
+kum havuzu okuma serbest) — bu kümede `beklenen.json`'u kendi başına arayıp bulan bir yargıcı sınav ölçmez. Bugünkü
+yargıçlar (codex `exec --ephemeral`, `claude -p`) istem dışına bakmadan karar verir; bu bir gözlem, kapı değil. Kümenin
+gücü örnek sayısıyla artar (bugün türde 2). Yargıç dalgalanması: ıskalanan örnek en çok bir kez yeniden koşulur; iki koşu
+çelişirse sınav ÖLÇÜLEMEDİ olur (kararsız) — tek oy ne sahte KALDI ne sahte GEÇTİ üretir.
+
 ## Değişiklik kuralı
 
 - Kümeye örnek eklemek ya da değiştirmek kümenin özetini (`kume_sha`) değiştirir; defterdeki satır hangi kümeyle

@@ -1,5 +1,5 @@
 $ bash _agents/fabrika/kanit/muhurdar-diploma/onizleme-411.sh
-# rc=0 sure=704.8s zaman=2026-10-22T04:29:41+03:00
+# rc=0 sure=906.2s zaman=2026-10-22T05:16:19+03:00
 --- stdout ---
 ── #411 başı: 333caba
 ── gerçek betikler
@@ -13,6 +13,7 @@ $ bash _agents/fabrika/kanit/muhurdar-diploma/onizleme-411.sh
   ✓ kapı d
   ✓ kapı l
   ✓ kapı o
+  ✓ kapı r
   ✓ kapı f
   ✓ kapı g
   ✓ kapı j
@@ -23,6 +24,8 @@ $ bash _agents/fabrika/kanit/muhurdar-diploma/onizleme-411.sh
   ✓ kapı h4
   ✓ kapı k
   ✓ kapı k2
+  ✓ kapı p
+  ✓ kapı p2
   ✓ kapı m
   ✓ kapı i
   ✓ kapı i2
@@ -41,6 +44,9 @@ $ bash _agents/fabrika/kanit/muhurdar-diploma/onizleme-411.sh
   ✓ mutant kume-bayat-yok → kapı h4 düştü
   ✓ mutant telemetri-gercek → kapı e2 düştü
   ✓ mutant sicil-json-yok → kapı i2 düştü
+  ✓ mutant bozuk-yutulur → kapı p düştü
+  ✓ mutant yeniden-yok → kapı r düştü
+  ✓ mutant kararsiz-yutulur → kapı r düştü
   ✓ mutant kume-sha → kapı a düştü
-diploma.test: 38 geçti · 0 kaldı
+diploma.test: 44 geçti · 0 kaldı
 --- stderr ---

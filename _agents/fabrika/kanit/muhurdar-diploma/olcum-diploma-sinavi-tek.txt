@@ -1,5 +1,5 @@
 $ bash tescil/scripts/diploma.test.sh
-# rc=0 sure=407.2s zaman=2026-10-22T04:17:56+03:00
+# rc=0 sure=810.6s zaman=2026-10-22T05:01:12+03:00
 --- stdout ---
 ── gerçek betikler
   ✓ kapı a
@@ -12,6 +12,7 @@ $ bash tescil/scripts/diploma.test.sh
   ✓ kapı d
   ✓ kapı l
   ✓ kapı o
+  ✓ kapı r
   ✓ kapı f
   ✓ kapı g
   ✓ kapı j
@@ -22,6 +23,8 @@ $ bash tescil/scripts/diploma.test.sh
   ✓ kapı h4
   ✓ kapı k
   ✓ kapı k2
+  ✓ kapı p
+  ✓ kapı p2
   ✓ kapı m
   ✓ kapı i
   ✓ kapı i2-yok
@@ -40,6 +43,9 @@ $ bash tescil/scripts/diploma.test.sh
   ✓ mutant kume-bayat-yok → kapı h4 düştü
   ✓ mutant telemetri-gercek → kapı e2 düştü
   ÖLÇÜLEMEDİ mutant sicil-json-yok: gerçek sicil yazıcısı yok (Sx #411) — kapı i2 yerine i2-yok koştu
+  ✓ mutant bozuk-yutulur → kapı p düştü
+  ✓ mutant yeniden-yok → kapı r düştü
+  ✓ mutant kararsiz-yutulur → kapı r düştü
   ✓ mutant kume-sha → kapı a düştü
-diploma.test: 36 geçti · 0 kaldı
+diploma.test: 42 geçti · 0 kaldı
 --- stderr ---
