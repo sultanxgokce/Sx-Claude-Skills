@@ -1,0 +1,129 @@
+{
+  "is": "denetim-kaydi-commit",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-22T15:34:18+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kayit",
+      "asama": "once",
+      "dosya": "olcum-kayit-once.txt",
+      "sha256": "b33bd7a267bc79f6cea842fb122112c4a5e5a5d087e3c56c98d98d8676e3d8bf",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/denetim-kaydi-commit/kayit-olcer.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/once-yf/yazilim-fabrikasi/scripts"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-22T15:24:03+03:00",
+      "sure_sn": 6.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "3c42a2e3f7e9412b88edccdb4e662b57"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kayit",
+      "asama": "sonra",
+      "dosya": "olcum-kayit-sonra.txt",
+      "sha256": "06d7513b26796c59152c75cb4bcb7981e9a2b7a0a1b95a0666fb9adef010aff0",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/denetim-kaydi-commit/kayit-olcer.sh",
+        "yazilim-fabrikasi/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T15:24:29+03:00",
+      "sure_sn": 26.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a8d502e5c5264cf8a9d417cefb6eb361"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-denetci-sinavi-tek.txt",
+      "sha256": "a57503b576bac3aebd82fe2c67e0f90ebc976dd95500d9029e886187fe1d8885",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T15:33:03+03:00",
+      "sure_sn": 514.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "78af1adc0fae41ec8c0237a66ff2e299"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-kutu-disi-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-denetci-kutu-disi-sinavi-tek.txt",
+      "sha256": "e0354cfe363530cd685ba0c2830055bd9be671499452245b410cfbd7048924d1",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-kutu-disi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T15:33:21+03:00",
+      "sure_sn": 18.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "868a6bc5584b4c7f9bb13af927a59709"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-fark-kendisi-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-denetci-fark-kendisi-sinavi-tek.txt",
+      "sha256": "fe98ec9806ce3681433f5ae45a5e7e3a7f4a579e09aca6c4cfc90263d131fe7a",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-fark-kendisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T15:33:39+03:00",
+      "sure_sn": 17.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a1be18b4e1314d3ea63b9744ad29c84c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-fark-ayikla-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-denetci-fark-ayikla-sinavi-tek.txt",
+      "sha256": "406d04e29751b30bb2168cd946b3621a0bd53c5954a0dc1e3369f50c5e850103",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-fark-ayikla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T15:33:43+03:00",
+      "sure_sn": 4.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f40e453773f84539a5faab03032cbe44"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "birlestirme-kapisi-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-birlestirme-kapisi-sinavi-tek.txt",
+      "sha256": "7468fd172137daf7f79c29dc3e7945491795cb130b70a2d5d2e7406729b163f3",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T15:34:18+03:00",
+      "sure_sn": 34.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d25485b8085e4ef4b88352a667837db2"
+    }
+  ],
+  "imza": "a396061fd03c94ac240e0dc463fa73c560ae21fc8ff49b8512e6d6cc4c66fa8b"
+}
