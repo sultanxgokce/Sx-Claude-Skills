@@ -1,5 +1,5 @@
 $ bash tescil/scripts/sicil.test.sh
-# rc=0 sure=206.6s zaman=2026-10-22T09:13:42+03:00
+# rc=0 sure=235.9s zaman=2026-10-22T09:31:51+03:00
 --- stdout ---
 ════ G11 · S10 · Mühürdarlık sicil · ders çıkarma · askı (sicil.sh) ════
   ✓ a isabet Sultan'ın DOĞRULANMIŞ kaydıyla yazılır (kaçırma = mühür ✓ + sağlanmadı; cümle kayıttan), öbür alanlar korunur
@@ -14,6 +14,7 @@ $ bash tescil/scripts/sicil.test.sh
   ✓ i pencere MÜHÜR kayıtlarından: Sultan satırı gelmeyen temiz mühürler de pencereyi ilerletir → askı kalkar
   ✓ j eşik tarif kaydından okunur (3/4 → askı yok), kayıt yoksa S10 varsayılanı (2/10 → askı)
   ✓ k ders çıkarma: aynı tür ≥2 ayrı görevde = tekrar eden → D-002 taslağı Sultan'ın cümleleriyle; tek görevli tür sayılmaz
+  ✓ k2 iki tekrar eden tür → iki ayrı ders kimliği (D-002 · D-003), bağlama komutları kendi kimliğiyle
   ✓ l ders-bagla: günlükte olmayan derse bağlanmaz; olana ters kayıtla bağlanır, özgün satır değişmez
   ✓ m kaçırma olmayan satır derse bağlanmaz; aynı kaçırma iki kez bağlanmaz
   ✓ n başsız şapka hükmü işaretli (bassiz e), yine bu mühürdarın siciline yazılır (S14)
@@ -24,6 +25,7 @@ $ bash tescil/scripts/sicil.test.sh
   ✓ z muhurdar.sh: özlük varken sicil yazımı düşerse rc 5 + özette 'sicil: dusmedi'; özlük/sicil yoksa atlanır, rc mühürün
   ✓ s pencere mühür OLAYI sayar: aynı görevin 10 yeniden mühürü eski kaçırmaları dışarı iter (askida → temiz)
   ✓ u Sultan'ın cümlesi kayıttan gelir; farklı --neden ile yazılmaz (A06)
+  ✓ aa aynı Sultan kaydının aynı satırı iki kez yazılmaz (iki kaçırma sayılırdı)
   ✓ v Türkçe harf katlama: özlükte MUHAKKİK, çağrıda MUHAKKIK/muhakkik → aynı kişi
   ✓ r muhurdar.sh her mühürde mühürdarın siciline mühür kaydı yazar
 ── MUTASYON (tescil kopyasında, kontrol şartlı) ──
@@ -36,6 +38,7 @@ $ bash tescil/scripts/sicil.test.sh
   ✓ mutant (eşik tarif kaydından okunmuyor) → 'j' kapısı düşüyor
   ✓ mutant (tek kaçırma da tekrar eden sayılıyor) → 'k' kapısı düşüyor
   ✓ mutant (günlükte olmayan derse bağlanıyor) → 'l' kapısı düşüyor
+  ✓ mutant (tekrar eden türlerin hepsi aynı ders kimliğini alıyor) → 'k2' kapısı düşüyor
   ✓ mutant (isabet sonda değilken ekleniyor) → 'e' kapısı düşüyor
   ✓ mutant (teslim-isle 👤 satırına da isabet yazıyor) → 'q' kapısı düşüyor
   ✓ mutant (aynı teslim iki kez işleniyor) → 'q' kapısı düşüyor
@@ -49,8 +52,10 @@ $ bash tescil/scripts/sicil.test.sh
   ✓ mutant (özlüğü olmayan mühürdar da 'düşmedi' sayılıyor) → 'z' kapısı düşüyor
   ✓ mutant (pencere olay yerine görev sayıyor) → 's' kapısı düşüyor
   ✓ mutant (Sultan'ın cümlesi değiştirilebiliyor) → 'u' kapısı düşüyor
+  ✓ mutant (aynı isabet iki kez yazılıyor) → 'aa' kapısı düşüyor
+  ✓ mutant (aynı kaçırma iki derse bağlanıyor) → 'm' kapısı düşüyor
   ✓ mutant (Türkçe harf katlanmıyor) → 'v' kapısı düşüyor
   ✓ mutant (muhurdar.sh siciline mühür kaydı yazmıyor) → 'r' kapısı düşüyor
 
-── SONUÇ: 48 geçti · 0 kaldı ──
+── SONUÇ: 53 geçti · 0 kaldı ──
 --- stderr ---

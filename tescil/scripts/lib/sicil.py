@@ -228,7 +228,12 @@ def cmd_isabet(argv):
              "kacirma": "e" if (a["muhur"] == "✓" and a["sultan"] == "saglanmadi") else "h",
              "bassiz": "e" if a.get("bassiz") else "h", "el_kitabi_surum": a.get("el_kitabi_surum"), "ders": None,
              "g_tur": a.get("g_tur"), "neden": (a.get("neden") or "").strip() or None, "kaynak": kaynak}
-    ekle(yol, kayit)
+
+    def yazilmadi(d):   # kilidin içinde: aynı Sultan kaydının aynı satırı iki kez yazılmaz (iki kaçırma sayılırdı)
+        if any(x.get("kaynak") == kaynak and x.get("gorev") == a["gorev"] and x.get("gereklilik") == a["gereklilik"]
+               for x in isabetler(d)[0]):
+            hata(f"{kaynak} · {a['gorev']} {a['gereklilik']} zaten yazılı — iki kez yazılmaz")
+    ekle_toplu(yol, [kayit], yazilmadi)
     print(f"✓ isabet yazıldı: {ad} ({os.path.basename(yol)}) · {a['gorev']} {a['gereklilik']} · mühür {a['muhur']} · Sultan {a['sultan']}"
           + (" · KAÇIRMA" if kayit["kacirma"] == "e" else ""))
     return 0
@@ -301,19 +306,21 @@ def cmd_ders(argv):
         gruplar.setdefault(x.get("g_tur") or "(türsüz)", []).append(x)
     tekrar = {t: xs for t, xs in gruplar.items() if len({x.get("gorev") for x in xs}) >= 2}   # ≥2 AYRI görevde aynı tür
     mevcut = gunluk_dersleri()
-    sonraki = f"D-{(max([int(d[2:]) for d in mevcut] or [0]) + 1):03d}"
+    taban = max([int(d[2:]) for d in mevcut] or [0]) + 1
+    sonraki = f"D-{taban:03d}"
+    kimlik = {t: f"D-{taban + i:03d}" for i, t in enumerate(tekrar)}   # göz #411 tur 5: her tekrar eden türe AYRI ders kimliği
     if a.get("json"):
         print(json.dumps({"muhurdar": k[0], "acik_kacirma": len(acik), "tekrar_eden": {t: [x["ts"] for x in xs] for t, xs in tekrar.items()},
-                          "sonraki_ders": sonraki}, ensure_ascii=False)); return 0
+                          "sonraki_ders": sonraki, "ders_kimlikleri": kimlik}, ensure_ascii=False)); return 0
     print(f"── ders çıkarma · {k[0]} · bağlanmamış kaçırma {len(acik)} · tekrar eden tür {len(tekrar)}")
     for t, xs in gruplar.items():
         print(f"  {t}: {len(xs)} kaçırma · {len({x.get('gorev') for x in xs})} görev{' — TEKRAR EDEN' if t in tekrar else ''}")
     for t, xs in tekrar.items():
-        print(f"\n### Ders taslağı ({sonraki}) — tekrar eden kaçırma türü: {t}")
+        print(f"\n### Ders taslağı ({kimlik[t]}) — tekrar eden kaçırma türü: {t}")
         for x in xs:
             print(f"- Sultan: \"{x.get('neden')}\" ({x.get('gorev')} {x.get('gereklilik')} · {x.get('ts')})")
-        print(f"Kural (el kitabı §12'ye '- **{sonraki}** …' satırı olarak, PR ile): '{t}' türündeki gereklilikte mühürdar şunu da sınar: <yukarıdaki cümlelerden türeyen ölçüt>")
-        print(f"Bağla: sicil.sh ders-bagla {k[0]} --isabet-ts <ts> --ders {sonraki}  (her satır için)")
+        print(f"Kural (el kitabı §12'ye '- **{kimlik[t]}** …' satırı olarak, PR ile): '{t}' türündeki gereklilikte mühürdar şunu da sınar: <yukarıdaki cümlelerden türeyen ölçüt>")
+        print(f"Bağla: sicil.sh ders-bagla {k[0]} --isabet-ts <ts> --ders {kimlik[t]}  (her satır için)")
     if not tekrar:
         print("  tekrar eden tür yok — tek kaçırma ders çıkarmada konuşulur, kural yazılmaz (S10: 1 kaçırma = ders çıkarma)")
     return 0
@@ -331,9 +338,11 @@ def cmd_ders_bagla(argv):
     hedef = [x for x in isb if x.get("ts") == a["isabet_ts"] and x.get("kacirma") == "e"]
     if not hedef:
         hata(f"{a['isabet_ts']} zamanlı KAÇIRMA satırı yok — yalnız kaçırma bir derse bağlanır")
-    if any(b.get("hedef_ts") == a["isabet_ts"] for b in baglar):
-        hata(f"{a['isabet_ts']} zaten bir derse bağlı")
-    ekle(yol, {"ts": simdi(), "tur": "ders-bagi", "hedef_ts": a["isabet_ts"], "ders": a["ders"]})
+
+    def baglanmadi(d):   # kilidin içinde: eşzamanlı iki bağlama aynı kaçırmayı iki derse bağlamaz
+        if any(b.get("hedef_ts") == a["isabet_ts"] for b in isabetler(d)[1]):
+            hata(f"{a['isabet_ts']} zaten bir derse bağlı")
+    ekle_toplu(yol, [{"ts": simdi(), "tur": "ders-bagi", "hedef_ts": a["isabet_ts"], "ders": a["ders"]}], baglanmadi)
     print(f"✓ {k[0]} · {a['isabet_ts']} kaçırması {a['ders']} dersine bağlandı (ters kayıt; özgün satır değişmedi)")
     return 0
 
