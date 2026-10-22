@@ -1,7 +1,7 @@
 {
   "is": "muhurdar-diploma",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-22T11:22:16+03:00",
+  "guncelleme": "2026-10-22T12:12:42+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -44,17 +44,17 @@
       "etiket": "diploma-sinavi",
       "asama": "tek",
       "dosya": "olcum-diploma-sinavi-tek.txt",
-      "sha256": "43e2ff34a7f19850cb74e91bfcff53741e6f044f716654e712bb2ecfb90122a2",
+      "sha256": "9d9261b98b74f63a5abc552a70451c57797014af94e9143d92b99faf3c3dbd30",
       "komut": [
         "bash",
         "tescil/scripts/diploma.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-22T11:21:27+03:00",
-      "sure_sn": 1244.7,
+      "zaman": "2026-10-22T12:12:42+03:00",
+      "sure_sn": 538.4,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "8650c54353d64176a5d439df86235aad"
+      "olcum_id": "b311022472ec4412af9327f8cc77ced5"
     },
     {
       "tur": "olcum",
@@ -108,5 +108,5 @@
       "olcum_id": "ed92db650bff4c3e9186fcc8e240eaef"
     }
   ],
-  "imza": "d612cae3eacd43e5ef5f8dab4497cbc3b88e56ee2d86c74a3f90e38ce04c3abe"
+  "imza": "1dedb5336cbcc32e6f2b97489b88685c5000b0ed6cd0352ae368c78f55a8dafb"
 }

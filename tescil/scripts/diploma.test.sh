@@ -2,7 +2,9 @@
 # diploma.test.sh — Mühürdarlık diploma sınavı (G13) sınavı: diploma.sh + lib/diploma.py, gerçek muhurdar.sh/tescil-run üstünde.
 # HERMETİK: sahte yargıçlar (PATH başında claude), geçici defter/katalog/sicil; gerçek model ve gerçek defter YOK.
 # Kapılar fonksiyonda; geçen kapıların anahtarını basar. Gerçek betiklerde hepsi geçer; mutant kopyada hedef anahtar düşer.
-# kabuk-testleri: sure=600
+# kabuk-testleri: sure=900
+# Süre (CI #412: sıralı 24 senaryo × ~52 sn = 1245 sn, 600 sn tavanında kesildi): gerçek koşu ve her mutant AYRI süreçte, kendi
+#   geçici kökü ve sahte yargıçlarıyla paralel koşar (DIPLOMA_PAR, varsayılan min(nproc, 8)). Çocuk kip (--tek) mutant DOĞURMAZ.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 KUME="$(cd "$HERE/../sinav" && pwd)"
@@ -188,24 +190,32 @@ BEK="a a2 n e e2 b c d l o r f g j q h h2 h3 h4 h5 k k2 p p2 p3 p4 m i"
 BEK="$BEK i2"   # gerçek sicil yazıcısıyla sözleşme (Sx #411 birleşti) — koşulsuz
 # gerçek betikler bir kopyada koşulur (kapı i sahte sicil.py yazar — gerçek dosyaya dokunmamak için); el kitabı kökü aynı kalır
 _kopya_gercek() { local d="$T/gercek/scripts"; mkdir -p "$d"; cp -r "$HERE/." "$d/"; cp "$HERE/../SKILL.md" "$T/gercek/SKILL.md"; ln -s "$KUME" "$T/gercek/sinav"; echo "$d"; }
-echo "── gerçek betikler"
-GS="$(_kopya_gercek)"; GER="$(_sen "$GS")"
-for k in $BEK; do case " $GER " in *" $k "*) g 0 "kapı $k" ;; *) g 1 "kapı $k" ;; esac; done
 
-# ── mutasyonlar: her biri gerçek kopyada tek satır bozar; hedef kapı düşmeli ─────────────────────────────
-_mut() {  # _mut <ad> <hedef-kapı> <python-replace: eski> <yeni>
-  local d="$T/m-$1"; mkdir -p "$d/scripts"; cp -r "$GS/." "$d/scripts/"; cp "$T/gercek/SKILL.md" "$d/SKILL.md"; ln -s "$KUME" "$d/sinav"
-  python3 - "$d/scripts/lib/diploma.py" "$3" "$4" <<'PY' || { g 1 "mutant $1: çapa tutmadı"; return; }
+# ── ÇOCUK KİP: tek senaryo (gerçek ya da tek mutant), kendi $T'sinde; sonucu "SONUC <anahtarlar>" / "CAPA" basar, DOĞURMAZ ──
+if [ "${1:-}" = "--tek" ]; then
+  GS="$(_kopya_gercek)"
+  if [ "$2" = gercek ]; then echo "SONUC $(_sen "$GS")"; exit 0; fi
+  d="$T/m"; mkdir -p "$d/scripts"; cp -r "$GS/." "$d/scripts/"; cp "$T/gercek/SKILL.md" "$d/SKILL.md"; ln -s "$KUME" "$d/sinav"
+  python3 - "$d/scripts/lib/diploma.py" "$3" "$4" <<'PY' || { echo CAPA; exit 0; }
 import sys
 p, eski, yeni = sys.argv[1:4]
 s = open(p).read()
 assert s.count(eski) == 1, "capa"
 open(p, "w").write(s.replace(eski, yeni))
 PY
-  local c; c="$(_sen "$d/scripts")"
-  case " $c " in *" $2 "*) g 1 "mutant $1 → kapı $2 hâlâ geçiyor" ;; *) g 0 "mutant $1 → kapı $2 düştü" ;; esac
+  echo "SONUC $(_sen "$d/scripts")"; exit 0
+fi
+
+PAR="${DIPLOMA_PAR:-$(n=$(nproc 2>/dev/null || echo 2); [ "$n" -gt 8 ] && n=8; echo "$n")}"
+SIRA=()   # "ad|kapı" — sonuçlar bu sırayla okunur (çıktı paralel koşuya rağmen kararlı)
+_bas() {  # _bas <ad> [eski yeni] — çocuğu arka planda başlatır, PAR'ı aşmaz
+  while [ "$(jobs -rp | wc -l)" -ge "$PAR" ]; do wait -n 2>/dev/null || :; done
+  bash "${BASH_SOURCE[0]}" --tek "$@" > "$T/sonuc-$1.out" 2>&1 < /dev/null &
 }
-echo "── mutasyonlar"
+_mut() {  # _mut <ad> <hedef-kapı> <python-replace: eski> <yeni>
+  SIRA+=("$1|$2"); _bas "$1" "$3" "$4"
+}
+_bas gercek
 _mut alt-kume l 'isabet = verdikt == "KALDI" and set(bek.get("kaldi") or []) <= set(dusen)' 'isabet = verdikt == "KALDI"'
 _mut eskalasyon-isabet d 'isabet = verdikt == "GECTI"' 'isabet = verdikt != "KALDI"'
 # sicil ayrımı: muhurdar.sh her mühürde sicile yazar (Sx #411) — koşulsuz ölçülür
@@ -236,5 +246,18 @@ _mut ters-kayit-yok p4 '    return [d for d in satirlar if not d.get("tur")], [n
 _mut kapat-dogrulamasiz p4 '    if a.satir not in bozuk:' '    if False:'
 _mut yarim-kalir p3 '            os.ftruncate(fd, boy)' '            pass'
 _mut satir-sonu-yok p3 '            veri = b"\n" + veri' '            pass'
+wait
+_oku() { sed -n 's/^SONUC //p; s/^\(CAPA\)$/\1/p' "$T/sonuc-$1.out" | tail -1; }
+echo "── gerçek betikler"
+GER="$(_oku gercek)"
+[ -n "$GER" ] || { echo "  ✗ gerçek koşu sonuç basmadı:"; tail -5 "$T/sonuc-gercek.out"; }
+for k in $BEK; do case " $GER " in *" $k "*) g 0 "kapı $k" ;; *) g 1 "kapı $k" ;; esac; done
+echo "── mutasyonlar (paralel $PAR)"
+for x in "${SIRA[@]}"; do
+  ad="${x%%|*}"; kp="${x#*|}"; c="$(_oku "$ad")"
+  if [ "$c" = CAPA ]; then g 1 "mutant $ad: çapa tutmadı"
+  elif [ -z "$c" ] && ! grep -q '^SONUC' "$T/sonuc-$ad.out"; then g 1 "mutant $ad: koşu sonuç basmadı"
+  else case " $c " in *" $kp "*) g 1 "mutant $ad → kapı $kp hâlâ geçiyor" ;; *) g 0 "mutant $ad → kapı $kp düştü" ;; esac; fi
+done
 echo "diploma.test: $gecen geçti · $kalan kaldı"
 [ "$kalan" -eq 0 ]
