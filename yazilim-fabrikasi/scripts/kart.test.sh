@@ -282,4 +282,35 @@ O="$(bash "$KT" bitti gb-2 2>&1)"; RC=$?
 [ $RC -eq 4 ] && grep -q "yazılamadı: deftere ulaşılamadı" <<<"$O" && python3 -c "import json;k=json.load(open('$KK/gb-2.json'));assert k['durum']=='bitti' and k['gorev_yazimlari'][-1]['olay']=='bitti'"; g $? "G8 defter kapalı: kart bitti İŞLENİR, 'ulaşılamadı' söylenir, rc 4 (sessiz eksik yok)"
 unset DEFTER_JETON_YOL DEFTER_UC
 
+echo "════ T15 · KANIT AĞACI: bitti/daralt birincil checkout'tan çağrılınca kanıtı kartın İŞ ALANINDAN okur ve nereden okuduğunu söyler; hiçbir yerde yoksa uyarır (Nexus #1223: daralt tur_sifir=0 yazmıştı) ════"
+mkdir -p "$T/depo3" && cd "$T/depo3" && git init -q -b main && git config user.email t@t && git config user.name T && echo x > f && git add -A && git commit -qm "chore: ilk" && export KANIT_DEPO="$T/depo3"
+bash "$KT" ac is-wt --is "iş alanından okunan kanıt sınavı tek kartta" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1; g $? "kart açıldı (birincil)"
+git worktree add -q -b is-wt "$T/alan3/depo3-is-wt" main 2>/dev/null; g $? "iş alanı (dalı = iş adı, is-alani.sh kuralı) açıldı"
+( cd "$T/alan3/depo3-is-wt" && env -u KANIT_DEPO bash "$K" olcum is-wt olc --asama tek -- echo 1 >/dev/null 2>&1 ) && [ -f "$T/alan3/depo3-is-wt/_agents/fabrika/kanit/is-wt/KANIT.json" ]; g $? "kanıt iş alanında alındı (KANIT.json orada; kanit.sh KANIT_DEPO yokken cwd ağacına yazar)"
+for i in 1 2 3; do echo '{"tur":'$i',"sonuc":{"kod_puani":5,"dogru_sey":"E","bulgular":[]}}' > "$T/alan3/depo3-is-wt/_agents/fabrika/kanit/is-wt/DENETIM-$i.json"; done
+[ ! -d "$T/depo3/_agents/fabrika/kanit/is-wt" ]; g $? "birincil checkout'ta kanıt dizini YOK (eski kodun sessiz 0 verdiği hâl)"
+O="$(bash "$KT" daralt is-wt --kalan "kalan yarı yeterince uzun bir cümle burada" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-wt 2>&1)"; RC=$?
+[ $RC -eq 0 ] && grep -q "tur sıfırı 3" <<<"$O"; g $? "🔴 birincilden daralt: tur sıfırı 3 (iş alanındaki 3 DENETIM; eski kod 0 yazardı)"
+grep -q "iş alanından okundu: $T/alan3/depo3-is-wt" <<<"$O"; g $? "nereden okuduğunu söyledi (kapı kaydı)"
+python3 -c "import json;k=json.load(open('$T/depo3/_agents/fabrika/kartlar/is-wt.json'));assert k['daraltmalar'][-1]['tur_sifir']==3"; g $? "karta tur_sifir=3 yazıldı"
+O="$(bash "$KT" bitti is-wt --pr 9 2>&1)"; RC=$?
+[ $RC -eq 0 ] && ! grep -q "KANIT YOK" <<<"$O" && grep -q "iş alanından okundu" <<<"$O"; g $? "🔴 birincilden bitti: kanıt VAR (iş alanından), KANIT YOK damgası yok (Sx #383 hâli)"
+python3 -c "import json;k=json.load(open('$T/depo3/_agents/fabrika/kartlar/is-wt.json'));assert k['kanit_var'] and k['puan']['tur']==3 and k['puan']['kod']==5"; g $? "karta kanıt_var + tur 3 + puan 5 işlendi"
+IFS=$'\t' read -r BD _ <<<"$(bash "$KT" canli-borc-durum is-wt 2>&1)"; [ "$BD" = yok ]; g $? "canli-borc-durum ilk satırı 'yok' — kaynak notu kapının tek satır okuduğu yüzeye karışmadı"
+mkdir -p "$T/depo3/_agents/fabrika/kanit/is-wt"; echo '{"tur":1,"sonuc":{"kod_puani":2,"dogru_sey":"H","bulgular":[]}}' > "$T/depo3/_agents/fabrika/kanit/is-wt/DENETIM-1.json"
+O="$(bash "$KT" tikandi is-wt --yol devam --neden "çağrıldığı ağaç önce gelir sınavı" 2>&1)"; ! grep -q "iş alanından okundu" <<<"$O" && grep -q "'tur': 1" <<<"$O"; g $? "çağrıldığı ağaçta kanıt varsa ÖNCE o okunur (iş alanına bakılmaz; eski davranış korundu)"
+bash "$KT" ac is-yok --is "hiç kanıtı olmayan iş sınavı burada" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+O="$(bash "$KT" bitti is-yok 2>&1)"; grep -q "ne bu ağaçta" <<<"$O" && grep -q "iş alanının İÇİNDEN çağır" <<<"$O" && grep -q "KANIT YOK" <<<"$O"; g $? "kanıt hiçbir yerde yok: nerede arandığı + 'iş alanının içinden çağır' uyarısı + KANIT YOK (sessiz 0 yok)"
+echo "── T15 · MUTASYON (tam kopya): iş alanı araması kaldırılınca birincilden daralt yine 0 yazar → üstteki kapı kırmızı ──"
+MD="$T/pkg-agac"; mkdir -p "$MD"; cp "$HERE"/*.py "$HERE"/*.sh "$MD/" 2>/dev/null
+python3 - "$MD/kart.sh" <<'PYM' || g 1 "mutant kurulamadı (çapa bayat)"
+import sys; f=sys.argv[1]; s=open(f,encoding="utf-8").read(); a='alan="$(is_alani_yolu "$is")"'; assert s.count(a)==1; open(f,"w",encoding="utf-8").write(s.replace(a,'alan=""',1))
+PYM
+bash "$KT" ac is-wt2 --is "ikinci iş alanı kanıt sınavı mutant için" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
+git worktree add -q -b is-wt2 "$T/alan3/depo3-is-wt2" main 2>/dev/null; mkdir -p "$T/alan3/depo3-is-wt2/_agents/fabrika/kanit/is-wt2"
+for i in 1 2 3; do echo '{"tur":'$i',"sonuc":{"kod_puani":5,"dogru_sey":"E","bulgular":[]}}' > "$T/alan3/depo3-is-wt2/_agents/fabrika/kanit/is-wt2/DENETIM-$i.json"; done
+O="$(bash "$MD/kart.sh" daralt is-wt2 --kalan "kalan yarı yeterince uzun bir cümle burada" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-m 2>&1)"; grep -q "tur sıfırı 0" <<<"$O"; g $? "mutant (iş alanı aranmıyor): tur sıfırı 0 — eski davranış geri geldi → üstteki 🔴 kapı bu mutantta düşerdi"
+O="$(bash "$MD/kart.sh" bitti is-wt2 2>&1)"; grep -q "KANIT YOK" <<<"$O"; g $? "mutant: bitti 'KANIT YOK' damgalar (Sx #383) → üstteki 🔴 kapı düşerdi"
+git worktree remove --force "$T/alan3/depo3-is-wt" 2>/dev/null; git worktree remove --force "$T/alan3/depo3-is-wt2" 2>/dev/null; unset KANIT_DEPO
+
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

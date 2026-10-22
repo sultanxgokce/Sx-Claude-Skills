@@ -8,11 +8,11 @@
 #   kart.sh ac <iş> --is "tek cümle" --istedi <kim> --aldi <ajan> \
 #          --geri-alinamaz e|h|? --para e|h|? --dis-yuzey e|h|? --yetki e|h|? [--kanit "nerede olacak"] [--oda <oda>] [--canli e|h]
 #          --canli: cron/servis/sunucu işi gerçek ateşleme kaydı (kanit.sh canli) ister; verilmezse cümleden türetilir, karta yazılır
-#   kart.sh bitti <iş> [--pr N]        durum=bitti; son DENETIM puanını ve KANIT durumunu karta işler (worktree'den de çağrılabilir)
+#   kart.sh bitti <iş> [--pr N]        durum=bitti; son DENETIM puanını ve KANIT durumunu karta işler (kanıt: çağrıldığı ağaç, yoksa kartın iş alanı — kanit_agaci)
 #   kart.sh tikandi <iş> --yol devam|daralt|geri-al --neden "..."
 #   kart.sh daralt <iş> --kalan "<kalan bulgu ≥20>" --cumle "<daraltılmış cümle ≥20>" --oturum <ref> [--yeni <ad>]
 #     → kart cümlesi daraltılır (eskisi cumle_gecmisi'ne), kalan bulgu YENİ karta (aynı sınıf cevapları, aynı sahip),
-#       karta daraltma kaydı (tur_sifir = o andaki denetim turu → denetçi yeni cümleyle sıfırdan sayar, kapı onu okur).
+#       karta daraltma kaydı (tur_sifir = kanıt ağacındaki denetim turu → denetçi yeni cümleyle sıfırdan sayar, kapı onu okur).
 #       Sınıfsız kartta reis kararı 'daralt' kendiliğinden işlenir; SINIFLI kartta Sultan'ın 'daralt' kararı (sultan-dedi) ŞARTTIR.
 #   kart.sh sultan-dedi <iş> --karar <devam|daralt|geri-al> --oturum <ref> --soz "<verbatim ≤15 kelime>" \
 #          --beyan <AJAN> --gerekce "<niçin bu yol işe yarar — en az 20 karakter>"
@@ -41,6 +41,28 @@ birincil_kok() {  # worktree içinden çağrılsa da BİRİNCİL depo kökü
   dirname "$c"
 }
 DEPO="${KANIT_DEPO:-$(birincil_kok)}"; [ -n "$DEPO" ] || { _hata "depo kökü bulunamadı"; exit 3; }
+
+# 🔴 KANIT AĞACI (Nexus #1223, 22 Eki 2026): bitti/daralt BİRİNCİL checkout'tan çağrıldı; kanıt dizini iş alanı
+#    dalındaydı → daralt tur_sifir=0 yazdı (olması gereken 3), denetçi eski turları sayıp tur 4'ü "mutlak tavan" gördü;
+#    bitti aynı yoldan "KANIT YOK" damgalıyordu (Sx #383). Sessiz 0 YOK: kanıt ÖNCE çağrıldığı ağaçtan; orada kartın
+#    kanıt dizini boşsa kartın İŞ ALANINDAN (is-alani.sh'ın dalı iş adı olan worktree'si); o da yoksa uyarı basar.
+#    Nereden okuduğunu her hâlde söyler (stderr) — kapı kaydı.
+kanit_var_mi() { [ -f "$1/KANIT.json" ] || compgen -G "$1/DENETIM-[0-9]*.json" >/dev/null; }
+is_alani_yolu() {  # is_alani_yolu <iş> → dalı <iş> olan worktree'nin kökü (yoksa boş)
+  git -C "$DEPO" worktree list --porcelain 2>/dev/null | awk -v b="refs/heads/$1" '/^worktree /{w=substr($0,10)} $0=="branch "b{print w; exit}'
+}
+kanit_agaci() {  # kanit_agaci <iş> → stdout: kanıt dizini · stderr: kaynak notu / uyarı
+  local is="$1" wt dz alan adz
+  wt="$(git rev-parse --show-toplevel 2>/dev/null || echo "$DEPO")"; dz="$wt/_agents/fabrika/kanit/$is"
+  if kanit_var_mi "$dz"; then printf '%s' "$dz"; return 0; fi
+  alan="$(is_alani_yolu "$is")"; adz="${alan:+$alan/_agents/fabrika/kanit/$is}"
+  if [ -n "$alan" ] && [ "$alan" != "$wt" ] && kanit_var_mi "$adz"; then
+    printf '  ↳ kanıt bu ağaçta yok (%s) → kartın iş alanından okundu: %s\n' "$wt" "$alan" >&2
+    printf '%s' "$adz"; return 0
+  fi
+  printf '  ⚠ kanıt dizini ne bu ağaçta (%s) ne kartın iş alanında%s → denetim turu 0, kanıt YOK sayılır (iş alanının İÇİNDEN çağır)\n' "$wt" "${alan:+ ($alan)}" >&2
+  printf '%s' "$dz"
+}
 KD="$DEPO/_agents/fabrika/kartlar"; mkdir -p "$KD"
 
 CMD="${1:-}"; IS="${2:-}"; if [ $# -ge 2 ]; then shift 2; else shift $#; fi   # tek argümanlı komut (liste · borclar) "tanınmayan argüman" olmasın
@@ -219,8 +241,8 @@ PY
   bitti|tikandi)
     [ -n "$IS" ] && [ -f "$KD/$IS.json" ] || { _hata "kart yok: $IS"; exit 3; }
     [ "$CMD" = "tikandi" ] && { [ -n "$YOL" ] && [ -n "$NEDEN" ] || { _hata "tikandi --yol devam|daralt|geri-al --neden gerekiyor"; exit 1; }; }
-    # kanıt/denetim: çağrıldığı ağaçtan (worktree olabilir) okunur
-    WT="$(git rev-parse --show-toplevel 2>/dev/null || echo "$DEPO")"; DZ="$WT/_agents/fabrika/kanit/$IS"
+    # kanıt/denetim: çağrıldığı ağaçtan, orada yoksa kartın iş alanından okunur (kanit_agaci)
+    DZ="$(kanit_agaci "$IS")"
     # 🔴 GÖZ #353 tur 3: eski kart (alan yok) kapıda cümleden "canlı ister" sayılıyor ama bitti uyarmıyordu → aynı yüzeyden (canli-gerekir) okunur
     # yedek göz #354: fail-open değil — okunamazsa '?' olur ve bitti bunu uyarı olarak basar (kapı aynı durumda rc=3)
     IFS=$'\t' read -r CGB _ <<<"$(bash "${BASH_SOURCE[0]}" canli-gerekir "$IS" 2>&1)"; case "$CGB" in E|H) ;; *) CGB="?" ;; esac
@@ -376,8 +398,8 @@ PY
     # 🔴 (bağımsız göz tur 1) kart adı dosya adıdır: yol ayracı, '..' ya da boşluk kabul edilirse kart dizini DIŞINA yazılır
     case "$YENI" in ''|*/*|*..*|.*|*[!a-zA-Z0-9_-]*) _hata "--yeni geçersiz kart adı: '$YENI' (yalnız harf/rakam/-/_, yol ayracı ve '..' yok)"; exit 1 ;; esac
     [ -f "$KD/$YENI.json" ] && { _hata "kalan kart zaten var: $YENI (--yeni ile başka ad ver)"; exit 1; }
-    # tur_sifir: çağrıldığı ağaçtaki (worktree) denetim sayısı — daraltmadan önceki turlar yeni cümleyi puanlamadı
-    WT="$(git rev-parse --show-toplevel 2>/dev/null || echo "$DEPO")"; DZ="$WT/_agents/fabrika/kanit/$IS"
+    # tur_sifir: kanıt ağacındaki denetim sayısı (kanit_agaci: bu ağaç, yoksa iş alanı) — daraltmadan önceki turlar yeni cümleyi puanlamadı
+    DZ="$(kanit_agaci "$IS")"
     TS=$(ls "$DZ"/DENETIM-[0-9]*.json 2>/dev/null | wc -l)
     python3 - "$KD/$IS.json" "$KD/$YENI.json" "$YENI" "$KALAN" "$CUMLE" "$OTURUM" "$TS" <<'PY' || exit 1
 import json,sys,datetime
@@ -466,9 +488,10 @@ print(f"🧾 canlı borç kaydedildi: {k['is']} · {ac}\n   kapı bu kartı bor�
 PY
     ;;
   canli-borc-durum)
-    # Kapının okuduğu yüzey: "yok|gecerli|gecersiz|odendi<TAB>açıklama". Kanıt kaydı çağrıldığı ağaçtan okunur (bitti ile aynı kural).
+    # Kapının okuduğu yüzey: "yok|gecerli|gecersiz|odendi<TAB>açıklama". Kanıt kaydı kanit_agaci ile okunur (bitti ile aynı kural);
+    # kaynak notu SUSTURULUR: kapı bu çıktıyı 2>&1 ile tek satır okur (birlestirme-kapisi 180), not ilk satıra girerse "OKUNAMADI" olur.
     [ -n "$IS" ] && [ -f "$KD/$IS.json" ] || { _hata "kart yok: $IS"; exit 3; }
-    WT="$(git rev-parse --show-toplevel 2>/dev/null || echo "$DEPO")"; DZ="$WT/_agents/fabrika/kanit/$IS"
+    DZ="$(kanit_agaci "$IS" 2>/dev/null)"
     python3 - "$KD/$IS.json" "$DZ" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY' || exit 3
 import json,sys,os
 yol,dz,hdir=sys.argv[1:]
