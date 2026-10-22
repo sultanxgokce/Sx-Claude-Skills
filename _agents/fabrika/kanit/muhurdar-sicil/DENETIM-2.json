@@ -1,0 +1,59 @@
+{
+  "tur": 2,
+  "is": "muhurdar-sicil",
+  "pr": "411",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-22T02:20:13+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 66015,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 20779
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "H",
+    "ozet": "A06 doğrulayıcısı, ayrı mühür kayıtları, teslim köprüsü ve mutasyon sınavları eklenerek önceki turun açıklarının önemli kısmı hedeflenmiş. Ancak köprü üretim teslim akışına bağlanmamış, ayrıca farklı göreve ait mühür ile Sultan kararı eşleştirilebiliyor ve son 10 mühür aynı görev tekrarlarında yanlış hesaplanıyor; önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "`teslim-isle`, Sultan kararının görevini mühür çıktısındaki görevle doğrulamıyor; başka göreve ait bir mühür dizisinin düşen/geçen G sonuçları Sultan kararına uygulanarak yanlış sicil ve kaçırma üretilebilir.",
+        "kanit": "Kod `karar[\"gorev\"]` ile `muhur-ozet.json` içindeki `kart` alanını hiç karşılaştırmıyor; yalnız mühürdar adını denetleyip `g_dusen` kümesini karar satırlarına uyguluyor. Yeşil q sınavı da bunu bizzat farklı değerlerle geçiriyor: karar `gorev_T`, mühür özeti `\"kart\":\"is-T\"`.",
+        "konum": "tescil/scripts/lib/sicil.py:cmd_teslim_isle; tescil/scripts/sicil.test.sh:kur ve q vakası",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Teslim köprüsü yazılmış fakat üretim teslim geçidinin onu çağırdığı gösterilmemiş; dolayısıyla Sultan'ın “sağlanmadı” dediği her satırın kendiliğinden sicile düşmesi hâlâ sağlanmış değil.",
+        "kanit": "Üretim farkında `sicil.py teslim-isle` ve `sicil.sh` yüzeyi var, ancak bunları çağıran teslim geçidi değişikliği yok. Entegrasyon yalnız `muhurdar.sh` içinden `sicil.py muhur` kaydı için yapılmış; yeşil q sınavı `teslim-isle` komutunu doğrudan çağırıyor.",
+        "konum": "tescil/scripts/muhurdar.sh:118 sonrası; tescil/scripts/lib/sicil.py:cmd_teslim_isle; tescil/scripts/sicil.test.sh:q vakası",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "“Son 10 mühür” penceresi mühür olaylarını değil benzersiz görev adlarını sayıyor; aynı görevin yeniden mühürlenmesi tek olay olarak kalır ve eşik hesabını bozar.",
+        "kanit": "`hesap` içinde `x.get(\"gorev\") not in gorevler` koşulu aynı görev kimliğine ait sonraki `tur: muhur` kayıtlarını atıyor. Sınavın pencere vakası yalnız `gorev_T1`…`gorev_T9` biçiminde farklı görevler kullanıyor; tekrarlanan görev mühürlerini ölçmüyor.",
+        "konum": "tescil/scripts/lib/sicil.py:hesap; tescil/scripts/sicil.test.sh:i vakası",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Doğrudan `isabet` yolunda Sultan'ın doğrulanmış gerekçesi çağıranın `--neden` değeriyle değiştirilebiliyor; ders günlüğüne Sultan söylememiş bir cümle taşınabilir.",
+        "kanit": "`cmd_isabet`, doğrulayıcıdan gelen `ks[\"neden\"]` değerini yalnız `--neden` verilmemişse alıyor; verilmiş değerin kayıtla eşitliğini denetlemeden `kayit[\"neden\"]` alanına yazıyor. Testler doğrulanmış gerekçeyi farklı `--neden` ile değiştirme vakasını sınamıyor.",
+        "konum": "tescil/scripts/lib/sicil.py:cmd_isabet",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Kırmızı önce/yeşil sonra ölçüm çifti, iki yeşil sınav ve hedefli mutasyonlar önceki turun A06, özlüksüz yazmama ve mühür penceresi iddialarında güçlü ilerleme gösteriyor. Buna karşılık sınav fikstürü görev uyuşmazlığını yeşil sayıyor, tekrarlanan görev mühürlerini ölçmüyor ve gerçek teslim geçidinden `teslim-isle` çağrısını kanıtlamıyor; bu nedenle temel uçtan uca talep kanıtlanmış değil."
+  }
+}

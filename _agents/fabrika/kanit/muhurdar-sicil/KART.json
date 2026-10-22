@@ -1,0 +1,63 @@
+{
+  "is": "muhurdar-sicil",
+  "cumle": "Mühürdarlık G11 + S10: mühürdarın sicili ve ders çıkarma — Sultan kaydına dayanan isabet satırı (A06 doğrulamalı, özlük yoksa yazmaz) teslim-isle köprüsüyle sicile düşer; son 10 mühür olayında 1 kaçırma ders çıkarma, 2 kaçırma askı (+ el kitabı güncelleme + yeniden sınav); tekrar eden kaçırma türü ders günlüğüne kural önerisi olur. Sınavı + mutasyon. Teslim geçidinin köprüyü çağırması ayrı kart (muhurdar-sicil-gecit-bagi). (Sultan D1 22 Eki · daralt SERDAR 22 Eki 08:45)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-22T01:55:26+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-10-22T08:46:47+03:00",
+      "olay": "daralt",
+      "kalan_kart": "muhurdar-sicil-gecit-bagi",
+      "tur_sifir": 2
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5D990AEQY8VRY3QGPWPZ5FK",
+  "tahmin_dk": 150,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-22T01:55:26+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "HENDESE",
+      "oturum": "NOTES hendese 2026-10-22 08:45 SERDAR",
+      "gerekce": "daraltma: kalan bulgu yeni karta (muhurdar-sicil-gecit-bagi) — Teslim geçidinin sicil.py teslim-isle çağrısı: BERİD G9/G10 geçidi (cloudtop #783) Sultan 'sağlanmadı' kararını işlerken sicile kendiliğinden düşsün; bugün köprü yalnız doğrudan çağrıyla sınanıyor.",
+      "zaman": "2026-10-22T08:46:47+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "Mühürdarlık G11 + S10: mühürdarın sicili ve ders çıkarma — Sultan'ın 'sağlanmadı' dediği her satır mühürdarın özlük dosyasının isabet bölümüne düşer (yalnız Sultan kaydına dayanarak, A06; özlük yoksa yazmaz); son 10 mühürde 1 kaçırma ders çıkarma, 2 kaçırma askı (+ el kitabı güncelleme + yeniden sınav) hesaplanır; tekrar eden kaçırma türü el kitabının ders günlüğüne kural önerisi olur ve isabet satırı o kurala bağlanır. Sınavı + mutasyon. (Sultan D1 22 Eki)",
+      "zaman": "2026-10-22T08:46:47+03:00",
+      "kalan_kart": "muhurdar-sicil-gecit-bagi"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-22T08:46:47+03:00",
+      "kalan_kart": "muhurdar-sicil-gecit-bagi",
+      "kalan": "Teslim geçidinin sicil.py teslim-isle çağrısı: BERİD G9/G10 geçidi (cloudtop #783) Sultan 'sağlanmadı' kararını işlerken sicile kendiliğinden düşsün; bugün köprü yalnız doğrudan çağrıyla sınanıyor.",
+      "tur_sifir": 2,
+      "oturum": "NOTES hendese 2026-10-22 08:45 SERDAR"
+    }
+  ]
+}

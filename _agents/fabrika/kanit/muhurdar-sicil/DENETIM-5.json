@@ -1,0 +1,38 @@
+{
+  "tur": 5,
+  "is": "muhurdar-sicil",
+  "pr": "411",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-22T09:14:45+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 91385,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 11,
+    "bayt": 35822
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Daraltılmış karttaki A06 doğrulamalı sicil yazımı, son 10 mühürden ders/askı hesabı, doğrudan teslim köprüsü ve hata/eşzamanlılık korumaları yapılmış; geçidin köprüyü çağırması ayrı karta bırakılmış. Ancak aynı anda birden fazla tekrar eden kaçırma türü bulunursa bütün kural taslaklarına aynı ders kimliği veriliyor; üretimden önce bunu çözün.",
+    "bulgular": [
+      {
+        "ne": "Birden fazla tekrar eden kaçırma türü için üretilen ders taslaklarının tamamı aynı D-NNN kimliğini kullanıyor; bu, ders günlüğünde kimlik çakışmasına ve isabetlerin yanlış kurala bağlanmasına yol açar.",
+        "kanit": "`cmd_ders` mevcut günlükten `sonraki` değerini yalnız bir kez hesaplıyor; ardından `for t, xs in tekrar.items()` döngüsündeki her taslak ve bağlama komutunda aynı `sonraki` değerini basıyor. Sınavın `k` vakası yalnız tek tekrar eden türü ölçtüğünden iki tür çakışmasını yakalamıyor.",
+        "konum": "tescil/scripts/lib/sicil.py:cmd_ders",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Kırmızı önce/yeşil sonra ölçüm çifti gerçekçi sicil verisiyle yazım, askı ve özlüksüz yazmama sonucunu gösteriyor; gerçek sınavlar da yeşil ve önceki turun eşzamanlı yazım ile sessiz sicil hatası bulgularına özel kapılar eklenmiş. Buna karşılık mutasyon çıktıları manifestte `mutasyon:true` kayıtları olarak işaretlenmediği için rubriğin özel mutasyon kanıtı statüsünü taşımıyor; ayrıca sınav tek tekrar eden tür kullandığından çoklu ders-kimliği çakışmasını ölçmüyor."
+  }
+}

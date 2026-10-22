@@ -1,0 +1,78 @@
+{
+  "is": "muhurdar-sicil",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-22T09:31:51+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sicil",
+      "asama": "once",
+      "dosya": "olcum-sicil-once.txt",
+      "sha256": "33d6030754293e16c619a592a65ef5b0d62bd1e7d162a753c9f78099ac33b1fa",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/muhurdar-sicil/sicil-olcer.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/once-tescil2/tescil/scripts"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-22T02:13:38+03:00",
+      "sure_sn": 1.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "be396d7bb8a84cd7a2f8f68df37d10fb"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sicil",
+      "asama": "sonra",
+      "dosya": "olcum-sicil-sonra.txt",
+      "sha256": "c9ad8d2e66c37916ec27c60b2c957256f92ba1f1e821c780fc8a619410ce34c4",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/muhurdar-sicil/sicil-olcer.sh",
+        "tescil/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T09:27:27+03:00",
+      "sure_sn": 0.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2b90712d9a9847afbe3ffca321ce1094"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sicil-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-sicil-sinavi-tek.txt",
+      "sha256": "93e40397109321dac8ef81a846cf70866529df747886687ad90199587f14c33f",
+      "komut": [
+        "bash",
+        "tescil/scripts/sicil.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T09:31:51+03:00",
+      "sure_sn": 235.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "005e453c18494b39964b4e86b37bf8ee"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "muhurdar-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-muhurdar-sinavi-tek.txt",
+      "sha256": "908bef736c813890a19d15021482774b7b71a5fb8db37d45c149e598fb215bfc",
+      "komut": [
+        "bash",
+        "tescil/scripts/muhurdar.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T09:27:26+03:00",
+      "sure_sn": 110.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "3e08848abd99407aa369b6bd9f6b8faf"
+    }
+  ],
+  "imza": "cd224c5964c44d1029d03f14be38ac5f83c5662286de11e62a671227cd78067a"
+}
