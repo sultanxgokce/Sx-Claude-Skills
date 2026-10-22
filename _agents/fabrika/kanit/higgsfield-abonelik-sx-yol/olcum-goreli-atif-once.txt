@@ -1,0 +1,5 @@
+$ bash -c n=$(grep -c -F -e "bash scripts/" -e "\$CLAUDE_PROJECT_DIR/scripts" -e "\`scripts/" /config/.claude/skills/higgsfield-abonelik/SKILL.md); echo "goreli-atif=$n (kurulu kopya)"; test "$n" -eq 0
+# rc=1 sure=0.0s zaman=2026-10-22T23:58:45+03:00
+--- stdout ---
+goreli-atif=6 (kurulu kopya)
+--- stderr ---
