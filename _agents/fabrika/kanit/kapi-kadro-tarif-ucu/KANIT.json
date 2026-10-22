@@ -1,0 +1,115 @@
+{
+  "is": "kapi-kadro-tarif-ucu",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-22T05:22:25+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "tarif-sinavi",
+      "asama": "once",
+      "dosya": "olcum-tarif-sinavi-once.txt",
+      "sha256": "f51dd9b0c17c42e201c7cd42d648aa03fd67338b3ad0cb40a702eed20a33f2b1",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kt/taban/terminal-onar/kapi && timeout 300 node tarif.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-22T05:19:52+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "6bc756aa4b964630b92a07538d311c3b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tarif-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-tarif-sinavi-sonra.txt",
+      "sha256": "11cf2a1e1d75e41301a1f5d2496cf39ff38003452c8db33e88de8aa714587e85",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/projects/_wt/Sx-Claude-Skills-kapi-kadro-tarif-ucu/terminal-onar/kapi && timeout 300 node tarif.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T05:19:53+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "b530ea08b5e64895ad0cef40ed6972ad"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-http-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kapi-http-sinavi-once.txt",
+      "sha256": "afa345f85959c61d8ffdb31ad6153a6ea24b26919d360743ddeeb2f9c1091be9",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kt/taban/terminal-onar/kapi && timeout 300 node sunucu.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-22T05:20:00+03:00",
+      "sure_sn": 7.2,
+      "boru_denetimi": "temiz",
+      "olcum_id": "52691d4e440b48ae894a7f7bcba94149"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-http-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-http-sinavi-sonra.txt",
+      "sha256": "30e01f42b016f7b98299a33145e827e9fef95d13852a54374cdd07f1cb6f73e2",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/projects/_wt/Sx-Claude-Skills-kapi-kadro-tarif-ucu/terminal-onar/kapi && timeout 300 node sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T05:20:07+03:00",
+      "sure_sn": 6.8,
+      "boru_denetimi": "temiz",
+      "olcum_id": "74ce8e794515496b9fbf233fa5d39716"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tarif-mutasyon",
+      "asama": "sonra",
+      "dosya": "olcum-tarif-mutasyon-sonra.txt",
+      "sha256": "a51e62f2b7dfdeb2101307b4f006ce5eac7c41f8ab67d65b0778806971381609",
+      "komut": [
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-kapi-kadro-tarif-ucu/terminal-onar/kapi/tarif.mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T05:20:21+03:00",
+      "sure_sn": 14.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "bafb53b7fb044c0e97b87022d9015453"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-gerileme",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-gerileme-sonra.txt",
+      "sha256": "41d52aa221c7a3bf75e14e2aeddb7a2a1c5cc0accea92477e4e30491059ca8fb",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/projects/_wt/Sx-Claude-Skills-kapi-kadro-tarif-ucu/terminal-onar/kapi && rc=0; for t in $(ls *.test.mjs *.test.sh | sort); do case $t in *.mjs) timeout 300 node $t >/tmp/claude-1000/kg.$$.log 2>&1;; *) timeout 300 bash $t >/tmp/claude-1000/kg.$$.log 2>&1;; esac; r=$?; echo \"$t rc=$r\"; grep -E '^\\s*✗' /tmp/claude-1000/kg.$$.log | cut -c1-400; [ $r -eq 0 ] || rc=1; done; exit $rc"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-22T05:22:25+03:00",
+      "sure_sn": 123.6,
+      "boru_denetimi": "temiz",
+      "olcum_id": "9266ca81d4054266ab23d3c483120029"
+    }
+  ],
+  "imza": "78354b0a81435e3892c68bcfab9d44224526c112b51b3388d3b6f2e9ef62d0d4"
+}

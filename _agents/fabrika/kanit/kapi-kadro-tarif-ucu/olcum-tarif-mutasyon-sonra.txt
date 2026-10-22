@@ -1,0 +1,17 @@
+$ bash /config/projects/_wt/Sx-Claude-Skills-kapi-kadro-tarif-ucu/terminal-onar/kapi/tarif.mutasyon.sh
+# rc=0 sure=14.7s zaman=2026-10-22T05:20:21+03:00
+--- stdout ---
+  ✓ pozitif kontrol: dokunulmamış kopya YEŞİL (tarif.test + sunucu.test)
+  ✓ TM1 terimin kaynak yolu sızar — kural ölünce sınav KIRMIZI
+  ✓ TM2 kapı adımının yolu sızar — kural ölünce sınav KIRMIZI
+  ✓ TM3 persona konumu sızar — kural ölünce sınav KIRMIZI
+  ✓ TM4 diploma kanıt yolu sızar — kural ölünce sınav KIRMIZI
+  ✓ TM5 tarif okunamayınca ölçülemedi yerine BOŞ LİSTE — kural ölünce sınav KIRMIZI
+  ✓ TM6 kayıt okunamayınca personel BOŞ LİSTE — kural ölünce sınav KIRMIZI
+  ✓ TM7 bozuk diploma satırı sessizce atlanır — kural ölünce sınav KIRMIZI
+  ✓ TM8 beceri kurulu ölçülmez (hep kurulu) — kural ölünce sınav KIRMIZI
+  ✓ TM9 adımlar sıralanmaz — kural ölünce sınav KIRMIZI
+  ✓ TM10 yazma yolu açık (POST da 200) — kural ölünce sınav KIRMIZI
+─────────────
+MUTASYON: gecti=10 dusen=0
+--- stderr ---
