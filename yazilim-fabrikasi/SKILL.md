@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.17.0
+version: 0.18.0
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -39,7 +39,7 @@ tags: [fabrika, worktree, kanit, bagimsiz-goz, puan, hat-dosyasi, orkestrasyon, 
 | `kart.sh daralt <iş> --kalan "<bulgu ≥20>" --cumle "<daraltılmış cümle ≥20>" --oturum <ref> [--yeni <ad>]` | 4. adım DARALTMA: kart cümlesi daraltılır (eskisi `cumle_gecmisi`), kalan bulgu yeni karta (aynı sahip/sınıf, `koken`), karta `daraltmalar[]` + `tur_sifir`; sınıfsız kartta reis kararı `daralt` kendiliğinden, SINIFLI kartta `sultan-dedi --karar daralt` ŞART. Denetçi daraltmadan önceki turları saymaz; kapı daraltma sonrası 5/E ister | 0 · 1 eksik/sınıflı-kararsız · 3 |
 | `kart.sh reis-dedi <iş> --karar devam --reis <AD> --oturum <ref> --gerekce …` | **Sınıfsız** işte sahip kararı karta `reis_kararlari` alanına girer (Sultan'ın alanına DEĞİL — A06). `--reis` kartta yazılı sahip (`aldi`) olmak ZORUNDA; başka reisin kararı mektupla gelir, sahip kendi adıyla işler ve gerekçede ona atıf yapar. `--karar` kapalı küme. Sınıflı kartta reddedilir: sınıf işinin merci Sultan (`sultan-dedi`). 8 Eki 2026 · A268 | 0 · 1 eksik/sınıflı |
 | `is-alani.sh ac <iş> [--dosyalar a,b] [--kartsiz]` | `origin/main`'den TAZE worktree (`/config/projects/_wt/<depo>-<iş>`); **kart yoksa açılmaz** (kaçış `--kartsiz` → kart cevapsız açılır, Sultan'a gider); açık PR'larla dosya çakışması varsa **durur ve sorar**; kartı worktree'ye kopyalar | 0 · 1 hata/kart yok · 2 çakışma |
-| `gun-sonu.sh [--gun] [--yaz]` | gün sonu özeti DEFTERDEN (kartlar + karne): Sultan'a gidenler · içeride bitirdiklerimiz · tıkananlar · açık işler; elle satır yok | 0 · 3 defter yok |
+| `gun-sonu.sh [--gun] [--yaz] [--kutu <ad>] [--kapanis]` | gün sonu özeti DEFTERDEN (kartlar + karne): Sultan'a gidenler · içeride bitirdiklerimiz · tıkananlar · açık işler; elle satır yok. **0.18.0:** GÖREV DEFTERİ bölümü (çalışılıyor · atanmış açık · sıra Sultan'da · onay bekleyen; `DEFTER_UC` + jeton, okunamazsa 'ölçülemedi'); `--kapanis` gün kapanışını yalnız görev defterine göre verir — çalışılıyor varsa rc 1 'gün kapanmaz' (kart bitti ≠ görev bitti, Z23WS), ölçülemezse rc 3 | 0 · 3 defter yok |
 | `is-alani.sh kontrol` | güvenli / riskli / ölçülemedi | 0 · 1 · 2 |
 | `is-alani.sh kapat <iş>` | merge sonrası temizlik; **kayıtsız iş varsa silmez** | 0 · 1 |
 | `is-alani.sh liste` | açık alanlar | 0 |
