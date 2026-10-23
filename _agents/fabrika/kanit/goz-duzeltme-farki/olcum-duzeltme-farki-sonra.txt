@@ -1,0 +1,14 @@
+$ bash _agents/fabrika/kanit/goz-duzeltme-farki/duzeltme-olcer.sh agac
+# rc=0 sure=5.9s zaman=2026-10-23T12:48:16+03:00
+--- stdout ---
+kod kaynağı: agac
+(1) tur 1 fark bölümü: 8875 bayt · tur 2 fark bölümü: 725 bayt · tur 2'de değişmeyen dosya: hayır · önceki bulgu ayrı satırda: evet · düzeltme satırı (özel adlı dosya) istemde: evet
+   · DÜZELTME TURU: göze yalnız 05b8c94c..f76e6676 farkı gider (1 dosya, 220 bayt; tam fark 8852 bayt)
+(1b) tur 3 (yeni commit yok) fark bölümü: 401 bayt · değişmeyen dosya: hayır
+   · DÜZELTME TURU: f76e6676..f76e6676 arasında PR dosyalarında YENİ DEĞİŞİKLİK YOK → fark BOŞ gider (tam fark 8852 bayt, önceki turda görüldü)
+(1c) düzeltme turu (a.txt ana dal hâline geri alındı) geri alma istemde: evet
+   · DÜZELTME TURU: göze yalnız b905eb02..fadc0a96 farkı gider (1 dosya, 113 bayt; tam fark 134 bayt)
+(2) ~110 KB istem → rc=1 · denetçiye: gönderilmedi
+   ✗ İŞİ BÖL — göze giden istem 108075 bayt > 100000 (istem tavanı): şişkin istemle denetim yapılmaz, tur yakılmadı.
+(2b) aynı istem, ayıklama KAPALI → rc=1 · denetçiye: gönderilmedi
+--- stderr ---
