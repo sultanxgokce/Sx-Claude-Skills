@@ -1,0 +1,61 @@
+{
+  "is": "kanit-genislik-catisma",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T09:35:40+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "genislik-catisma",
+      "asama": "once",
+      "dosya": "olcum-genislik-catisma-once.txt",
+      "sha256": "6d55b5fd7cecce5631aca087d9f3552f146d5447a223616325b7af25eb40665f",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kanit-genislik-catisma/genislik-olcer.sh",
+        "origin/main"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T09:34:28+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e5f0b405ce44433788f80315a99c0df8"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "genislik-catisma",
+      "asama": "sonra",
+      "dosya": "olcum-genislik-catisma-sonra.txt",
+      "sha256": "18f00048cafe54a549bee1ffa68d57c1348a4443bf74a8c521b84c0fd2b15030",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kanit-genislik-catisma/genislik-olcer.sh",
+        "agac"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T09:34:28+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "0904f25541b34a8ea564c94d55b05056"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kanit-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-kanit-sinavi-tek.txt",
+      "sha256": "c9302d65bedc1c380c209d8f38d9bf9ece524a82945f480022805dbf1b06621e",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T09:35:40+03:00",
+      "sure_sn": 62.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "706a6f61afbc47109b64a1c829374b51"
+    }
+  ],
+  "imza": "b1d770b54219c8fbc19880e3ad01fcebb98f19fc02b162c71b2d2ef494531edf"
+}

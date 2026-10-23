@@ -1,0 +1,6 @@
+$ bash _agents/fabrika/kanit/kanit-genislik-catisma/genislik-olcer.sh origin/main
+# rc=1 sure=0.3s zaman=2026-10-23T09:34:28+03:00
+--- stdout ---
+kod kaynağı: origin/main · kanit.sh ekran --uc-boy --genislik 800 → rc=0 · tarayıcıya giden genişlikler: 1440 1280 390 · kayıt: 3
+   ── üç boy özeti (c): 1440px ✓ · 1280px ✓ · 390px ✓
+--- stderr ---

@@ -1,0 +1,38 @@
+{
+  "tur": 4,
+  "is": "gun-ortasi-okundu-kaydi",
+  "pr": "434",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T08:52:10+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 46716,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kutunun `kurye-yokla.sh` arayüzü artık önceden tahmin edilmeden `okundu-liste` ve ardından `okundu-yolu` ile sorgulanıyor; eski `okundu.log` davranışı da kuryesiz kutular için korunuyor. Hedef vakaların 35/46’dan 46/46’ya ve mihenk sonucunun yanlış 86’dan 0’a dönmesi doğru işi güçlü biçimde gösteriyor; ancak salt-okur bir ölçüm sırasında eski kuryenin mutasyonlu varsayılan kipini çalıştırabilen sorgulama yöntemi çözülmeden üretime hazır sayılmaz.",
+    "bulgular": [
+      {
+        "ne": "`kalan.sh`, herhangi bir `kurye-yokla.sh` gördüğünde destek denetimi yapmadan önce `okundu-liste`, sonra `okundu-yolu` çağırıyor; diffte tanınmayan komutun eski kuryede `touch + göç` yapan yoklama kipine düştüğü açıkça belirtiliyor. Böyle bir kutuda yalnız ölçüm yapması beklenen gün-ortası akışı kutunun durumunu değiştirebilir; mevcut T8 salt-okur geçişi bu eski-kurye senaryosunu ölçmüyor.",
+        "kanit": "Değişiklikteki açıklama doğrudan “Tanımadığı komutta eski bir kurye yoklama kipine düşerdi (touch + göç)” ve “ÖN KONTROL YOK, doğrudan SORULUR” diyor; uygulama akışı `[ -f \"$KY\" ]` ardından koşulsuz `liste_sor`, başarısızlıkta `yol_sor` çağırıyor. Sonra ölçümünde T8 yeşil olsa da yeni T5k/T5l fikstürü yalnız `echo yokluyorum; exit 1` çalıştırıyor ve mutasyonlu eski varsayılan kipi temsil etmiyor.",
+        "konum": "gun-ortasi/scripts/kalan.sh: yorumdaki “ÖN KONTROL YOK” bloğu ve `if [ -f \"$KY\" ]; then ... liste_sor ... yol_sor` akışı; gun-ortasi/scripts/kalan.test.sh:T5k,T5l; olcum-kalan-sinavi-sonra.txt:T8",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Hedef sınav için kırmızı önce/yeşil sonra çifti mevcut: önce 35 geçti, 11 kaldı; sonra 46/46 geçti. Mihenk ölçüm çifti de gerçekçi veride `gelen=86` değerinin `gelen=0` olmasına dönüştüğünü, depo parity ve sürüm denetimleri ise yeşil sonucu gösteriyor. Bununla birlikte mutasyon yapabilen eski-kurye varsayılan kipine karşı salt-okurluk ölçülmediği için bu üretim riski kanıtla dışlanmış değil."
+  }
+}
