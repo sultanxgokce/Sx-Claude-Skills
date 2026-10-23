@@ -324,15 +324,15 @@ bash "$K" olcum is-kirp olc --asama tek -- echo 1 >/dev/null 2>&1
 SAHTE_ISTEM_KOPYA="$T/istem-kucuk.md" SAHTE_JSON="$(J 3 H "$B")" DENETCI_KIRP_ESIK=200000 bash "$D" is-kirp --diff "$T/d.patch" >/dev/null 2>&1
 python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-kirp/DENETIM-1.json'));k=d['kirpildi'];assert k['oldu'] is False and k['istem_bayt']>0 and k['esik']==200000"; g $? "kırpılmayan tur: kirpildi.oldu=false, bayt ve eşik yazılı"
 ! grep -q "KIRPILDI" "$T/istem-kucuk.md"; g $? "küçük istemde kırpma uyarısı YOK"
-# (PCP7J, 18 Eki) büyük ÜRETİM farkı artık kırpılmaz, "İŞİ BÖL" der (T-BOL); (BÂNİ 21:59, 18 Eki) istemin TAMAMI da
-# öyle (T-ISTEM). Kırpma yalnız ayıklama KAPALIYKEN kalır (kanıt farkın içinde, bölmek boyutu düşürmez):
-# burada fark küçük (d.patch), istem büyük kanıt ölçüm çıktısıyla şişiyor, ayıklama kapalı → kırpma yolu hâlâ ölçülüyor.
+# (PCP7J, 18 Eki) büyük ÜRETİM farkı kırpılmaz, "İŞİ BÖL" der (T-BOL); (BÂNİ 21:59) istemin TAMAMI da öyle (T-ISTEM).
+# (göz #436 tur 1, SYV3F) kırpma yolu ayıklama KAPALIYKEN de kalktı: kart "istem tavanı aşınca gönderim durur" diyor, istisna yok.
+# Burada fark küçük (d.patch), istem büyük kanıt ölçüm çıktısıyla şişiyor, ayıklama kapalı → yine İŞİ BÖL, tur yanmaz.
 bash "$K" olcum is-kirp buyuk-olcum --asama tek -- python3 -c 'print("x"*6000)' >/dev/null 2>&1   # eski `head | tr` boru reddine (0.10.1) takılıp kayda girmiyordu; istem yalnız şablonla şişiyordu
-CIKTI="$(SAHTE_ISTEM_KOPYA="$T/istem-buyuk.md" SAHTE_JSON="$(J 3 H "$B")" DENETCI_KIRP_ESIK=2200 DENETCI_KANIT_AYIKLA=0 bash "$D" is-kirp --diff "$T/d.patch" 2>&1)"
-python3 -c "import json;d=json.load(open('$T/_agents/fabrika/kanit/is-kirp/DENETIM-2.json'));k=d['kirpildi'];assert k['oldu'] is True and k['istem_bayt']>2400 and k['esik']==2200"; g $? "🔴 kırpılan tur: kirpildi.oldu=true, gerçek bayt ve eşik KALICI kayıtta"
-grep -q "KIRPILDI" "$T/istem-buyuk.md"; g $? "denetçiye kırpıldığı söylendi (istem sonunda uyarı)"
-grep -q "KIRPILDI" <<<"$CIKTI"; g $? "ekranda da yazıldı"
-[ "$(wc -c < "$T/istem-buyuk.md")" -lt 2600 ]; g $? "istem gerçekten eşiğe kırpıldı"
+rm -f "$T/istem-buyuk.md"
+CIKTI="$(SAHTE_ISTEM_KOPYA="$T/istem-buyuk.md" SAHTE_JSON="$(J 3 H "$B")" DENETCI_KIRP_ESIK=2200 DENETCI_KANIT_AYIKLA=0 bash "$D" is-kirp --diff "$T/d.patch" 2>&1)"; RC=$?
+[ "$RC" -eq 1 ] && grep -q "İŞİ BÖL — göze giden istem [0-9]* bayt > 2400" <<<"$CIKTI"; g $? "🔴 ayıklama kapalıyken de istem tavanı aşılınca İŞİ BÖL (rc 1) — kırpık istem gönderilmez"
+[ ! -e "$T/istem-buyuk.md" ] && [ ! -e "$T/_agents/fabrika/kanit/is-kirp/DENETIM-2.json" ]; g $? "denetçiye istem gitmedi, tur yakılmadı (DENETIM-2 yok)"
+! grep -q "KIRPILDI" <<<"$CIKTI"; g $? "kırpma uyarısı hiçbir yerde yok (kırpma yolu kalktı)"
 
 echo "════ T9d · GEÇERSİZ ilan (4K938) göze söylenir: kanıt durumu satırında, istemde ve DENETIM kaydında ════"
 bash "$K" olcum is-gec olc --asama tek -- echo 1 >/dev/null 2>&1
@@ -736,15 +736,14 @@ mut "kart-secenegi-tek-kaynagi-asar" 's@&& ! cmp -s "$KART" "$BIRINCIL"; then@\&
 mut "kapi-kart-hatasini-bastirir" 's@KARTYOL="$(kart_yolu)" || exit 3;@KARTYOL="$(kart_yolu 2>/dev/null)";@'
 mut "bayat-kopya-geri-donusu" 's@OKUNMAZ — kart.sh ile birincile yaz, sonra denetçiyi koştur"; return 3@"; printf "%s" "$DEPO/_agents/fabrika/kartlar/$IS.json"@'
 mut "kart-json-hatasi-yutulur" 's@denetim açılmaz"; exit 3; }@denetim açılmaz"; true; }@'
-mut "kirpma-kaydini-kaldir" 's@"kirpildi":{"oldu":kirp=="1","istem_bayt":int(bayt),"esik":int(esik)},@"kirpildi":{"oldu":False,"istem_bayt":int(bayt),"esik":int(esik)},@'
 mut "gecersiz-goze-soylenmez" 's@\[ "\$NGEC" -gt 0 \] && KANIT_DURUM=@false \&\& KANIT_DURUM=@'
 # T-ISTEM mutantları (BÂNİ 21:59): her biri istem kapısının bir parçasını söker
-mut "istem-yerine-fark-olculur" 's@!= "0" \] && \[ "$ISTEM_BAYT" -gt "$KIRP_TETIK" \]; then@!= "0" ] \&\& [ "$(wc -c < "$TMP/diff.patch")" -gt "$KIRP_ESIK" ]; then@'
+mut "istem-yerine-fark-olculur" 's@^if \[ "$ISTEM_BAYT" -gt "$BOL_SINIR" \]; then@if [ "$(wc -c < "$TMP/diff.patch")" -gt "$KIRP_ESIK" ]; then@'
 mut "istem-bol-tur-yakar" 's@^  exit 1   # İŞİ BÖL@  :@'
 mut "istem-en-buyuk-ilk-parca" 's@\[ "$_b" -gt "$_EN_B" \] && {@[ -z "$_EN" ] \&\& {@'
 mut "istem-parca-dokumu-yok" 's@_DOKUM="$_DOKUM · ${_AD\[$_p\]} $_b"@:@'
 mut "istem-karti-dusurur" 's@^ISTEM_PARCALARI=(sablon kart kanit@ISTEM_PARCALARI=(sablon kanit@'
-mut "istem-ayiklama-kosulu-duser" 's@ && \[ "${DENETCI_KANIT_AYIKLA:-1}" != "0" \] && \[ "$ISTEM_BAYT"@ \&\& [ "$ISTEM_BAYT"@'
+mut "tavan-ayiklamaya-bagli" 's@^if \[ "$ISTEM_BAYT" -gt "$BOL_SINIR" \]; then@if [ "${DENETCI_KANIT_AYIKLA:-1}" != "0" ] \&\& [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then@'
 mut "mutasyon-basligi-yok" 's@head -1 "$f" | grep -q .^=== MUTASYON KANITI. \&\& _mt=@false \&\& _mt=@'
 MUT_BOLUM=zil   # aşağıdaki 16 zil mutantı yalnız T-ZIL'le ölçülür (iç koşum IC_BOLUM=zil)
 mut "zil-tmux-soyulmaz" 's@env -u TMUX -u TMUX_PANE bash "$an" "$yazan"@env bash "$an" "$yazan"@'
