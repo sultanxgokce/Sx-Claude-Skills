@@ -1,0 +1,30 @@
+{
+  "tur": 5,
+  "is": "gun-ortasi-okundu-kaydi",
+  "pr": "434",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T09:20:14+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 46998,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Gelen kutusu okundu kaydı artık `.okundu` dosyasından salt-okur okunuyor; özet doğrulama, son özetli kayıt, tanınmayan biçim, eksik damga ve kuryesiz eski yol taleple uyumlu biçimde ele alınmış. Önce 37/46 olan hedef sınavın sonra 46/46 geçmesi, kanaryanın kuryenin çağrılmadığını göstermesi ve gerçekçi mihenk sayımının 86’dan 0’a düzelmesi nedeniyle iş üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Hedef davranış için kırmızı önce/yeşil sonra ölçüm çifti var: önce 37 geçti, 9 kaldı; sonra 46/46 geçti. T5d–T5n kayıt biçimlerini, özet uyuşmazlığını, son özetli kaydı, okunamayan kaydı, `.okundu` yokluğunu, eski `okundu.log` yolunu ve kurye yan etkisizliğini ölçüyor; T5d2 dosya özetinin değişmediğini, T5n ise kanaryanın gerçekten çalışabilir olduğunu doğruluyor. Gerçekçi mihenk çifti de `gelen=86` yanlış sonucunun `.okundu` üzerinden `gelen=0` değerine döndüğünü gösteriyor; depo ve sürüm denetimleri ayrıca yeşil."
+  }
+}

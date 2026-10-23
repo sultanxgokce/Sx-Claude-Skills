@@ -1,6 +1,6 @@
 {
   "is": "gun-ortasi-okundu-kaydi",
-  "cumle": "gun-ortasi kalan.sh gelen kutusu bölümü okundu kaydını kutunun kendisinden sorar (scripts/kurye-yokla.sh okundu-liste, yoksa okundu-yolu), kaydın adını ve biçimini tahmin etmez; kurye-yokla.sh olmayan kutuda okundu.log eski biçimiyle aynen çalışır; kaydı kutudan okunan mektup okunmamış sayılmaz",
+  "cumle": "gun-ortasi kalan.sh gelen kutusu bölümü okundu kaydını kutunun 0-teslimat/.okundu dosyasından salt-okur okur (kurye-yokla.sh biçimi: ad, TAB, sha256: ya da md5: özet; ya da yalın ad; aynı ad için son özetli kayıt kazanır; özeti tutmayan ya da tanınmayan biçimdeki kayıt okunmuş sayılmaz), kurye-yokla.sh'ı KOŞTURMAZ; kurye var ama .okundu yoksa damga yok sayılıp hepsi okunmamış basılır ve okundu.log'a bakılmaz; kurye-yokla.sh olmayan kutuda okundu.log eski biçimiyle aynen çalışır",
   "istedi": "SERDAR",
   "aldi": "BANI",
   "zaman": "2026-10-23T05:46:28+03:00",
@@ -14,11 +14,17 @@
   "sultan": false,
   "kanit_nerede": "_agents/fabrika/kanit/gun-ortasi-okundu-kaydi",
   "oda": "",
-  "durum": "tikandi",
+  "durum": "acik",
   "gecmis": [
     {
       "zaman": "2026-10-23T06:18:28+03:00",
       "olay": "tikandi"
+    },
+    {
+      "zaman": "2026-10-23T09:13:32+03:00",
+      "olay": "daralt",
+      "kalan_kart": "gun-ortasi-okundu-kurye-sorgu",
+      "tur_sifir": 4
     }
   ],
   "canli_gerekir": false,
@@ -58,6 +64,29 @@
       "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF · aile-sinyal e0b179762732 · SERDAR 08:34",
       "gerekce": "SERDAR reis kararı 23 Eki 08:34 (zil): Sx #434 TIKANDI → DEVAM +1 tur — \"3→4→4, tek bulgu\"",
       "zaman": "2026-10-23T08:49:14+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "BANI",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF · DENETIM-4 bulgu (codex) · SERDAR 08:34 devam+1 sonrası tavan",
+      "gerekce": "daraltma: kalan bulgu yeni karta (gun-ortasi-okundu-kurye-sorgu) — kurye arayüzüne sorarak okuma (kurye-yokla.sh okundu-liste / okundu-yolu): göz tur 4 — tanımadığı komutta eski kurye yoklama kipine düşer (touch .okundu + göç), salt-okur ölçüm kutuyu değiştirir; kurye yan etkisiz bir sorgu sözleşmesi ilan ederse ayrı iş",
+      "zaman": "2026-10-23T09:13:32+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "gun-ortasi kalan.sh gelen kutusu bölümü okundu kaydını kutunun kendisinden sorar (scripts/kurye-yokla.sh okundu-liste, yoksa okundu-yolu), kaydın adını ve biçimini tahmin etmez; kurye-yokla.sh olmayan kutuda okundu.log eski biçimiyle aynen çalışır; kaydı kutudan okunan mektup okunmamış sayılmaz",
+      "zaman": "2026-10-23T09:13:32+03:00",
+      "kalan_kart": "gun-ortasi-okundu-kurye-sorgu"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-23T09:13:32+03:00",
+      "kalan_kart": "gun-ortasi-okundu-kurye-sorgu",
+      "kalan": "kurye arayüzüne sorarak okuma (kurye-yokla.sh okundu-liste / okundu-yolu): göz tur 4 — tanımadığı komutta eski kurye yoklama kipine düşer (touch .okundu + göç), salt-okur ölçüm kutuyu değiştirir; kurye yan etkisiz bir sorgu sözleşmesi ilan ederse ayrı iş",
+      "tur_sifir": 4,
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF · DENETIM-4 bulgu (codex) · SERDAR 08:34 devam+1 sonrası tavan"
     }
   ]
 }
