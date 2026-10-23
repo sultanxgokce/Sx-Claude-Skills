@@ -1,14 +1,14 @@
 {
   "is": "gun-ortasi-okundu-kaydi",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-23T05:57:16+03:00",
+  "guncelleme": "2026-10-23T06:07:23+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "kalan-sinavi",
       "asama": "once",
       "dosya": "olcum-kalan-sinavi-once.txt",
-      "sha256": "f36e18c1c26fb66f5739b86471cc940cea2250cc835b968b07800e3f569b8a66",
+      "sha256": "f80c53f2c3e5b2a030ccecc66d7cd2bed5ff18beff673bb22c9306044941ad6b",
       "komut": [
         "timeout",
         "300",
@@ -17,17 +17,17 @@
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-10-23T05:57:04+03:00",
-      "sure_sn": 13.9,
+      "zaman": "2026-10-23T06:07:08+03:00",
+      "sure_sn": 13.4,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "4409920422b4494bae4faa1268548753"
+      "olcum_id": "5cce18631b7147568131ddfc4183bcd6"
     },
     {
       "tur": "olcum",
       "etiket": "kalan-sinavi",
       "asama": "sonra",
       "dosya": "olcum-kalan-sinavi-sonra.txt",
-      "sha256": "b374b50d15b107472aff632f8beab9cae9356e4b9db84a723bbf68fd1551c17c",
+      "sha256": "387e3fa2f26b78886fa08fcb5a84d20a8491d670c48ec39ddfe693751b19b89c",
       "komut": [
         "timeout",
         "300",
@@ -36,17 +36,17 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T05:57:16+03:00",
-      "sure_sn": 12.0,
+      "zaman": "2026-10-23T06:07:20+03:00",
+      "sure_sn": 11.4,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "1a5c397ad1324a60b9d8d47808721eb5"
+      "olcum_id": "58f535b366d942ca880b83372303d261"
     },
     {
       "tur": "olcum",
       "etiket": "ci-parity-strict",
       "asama": "sonra",
       "dosya": "olcum-ci-parity-strict-sonra.txt",
-      "sha256": "bc26a5ec61689f0fcae1a67eda02e2676abb507abbc1b8589008b6c83cc12e24",
+      "sha256": "e80139b8a42a3dd81b3ab7ec52713e04dcf3bf1fd45f3cee34b23ad96a1a5478",
       "komut": [
         "node",
         "ahi/schema/validate-repo.mjs",
@@ -55,17 +55,17 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T05:57:16+03:00",
+      "zaman": "2026-10-23T06:07:20+03:00",
       "sure_sn": 0.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "96b897f29c414d22b381a88914a20eba"
+      "olcum_id": "34740fde85df4286a80317bb0e990f73"
     },
     {
       "tur": "olcum",
       "etiket": "ci-version-lint",
       "asama": "sonra",
       "dosya": "olcum-ci-version-lint-sonra.txt",
-      "sha256": "9131d6ed4011775656a3856225df5dd9767306d62ef67628cfe1af27daaa216f",
+      "sha256": "f1aa549d9649a0cda569abe82663827baf8410b6afeb29a6dbeb66b5e333ed39",
       "komut": [
         "node",
         "ahi/schema/version-lint.mjs",
@@ -73,11 +73,51 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T05:57:16+03:00",
+      "zaman": "2026-10-23T06:07:20+03:00",
       "sure_sn": 0.0,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "5458cf9662c54945a9f9050b009ff2c2"
+      "olcum_id": "c09f753a6ffa4333b67b54a5f409b09a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mihenk-canli-gelen",
+      "asama": "once",
+      "dosya": "olcum-mihenk-canli-gelen-once.txt",
+      "sha256": "2f61abbeaa2d6fc3c091abd47521b48fdbc70295eca45116bd682973e385ea16",
+      "komut": [
+        "bash",
+        "-o",
+        "pipefail",
+        "-c",
+        "GUN_ORTASI_KOK=/config/projects/mihenk bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/go/taban/gun-ortasi/scripts/kalan.sh | grep -E '^#OZET|not: okundu|5/9'"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T06:07:21+03:00",
+      "sure_sn": 1.4,
+      "boru_denetimi": "temiz",
+      "olcum_id": "0fada533f74b49f291d8dd62be53463a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mihenk-canli-gelen",
+      "asama": "sonra",
+      "dosya": "olcum-mihenk-canli-gelen-sonra.txt",
+      "sha256": "48191606d4058d18f59601b4af9073cacfad4a640920c3bafb925e1e966280cf",
+      "komut": [
+        "bash",
+        "-o",
+        "pipefail",
+        "-c",
+        "GUN_ORTASI_KOK=/config/projects/mihenk bash /config/projects/_wt/Sx-Claude-Skills-gun-ortasi-okundu-kaydi/gun-ortasi/scripts/kalan.sh | grep -E '^#OZET|not: okundu|5/9'"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T06:07:23+03:00",
+      "sure_sn": 1.7,
+      "boru_denetimi": "temiz",
+      "olcum_id": "04926233cd3d407d9799b8cf8001712e"
     }
   ],
-  "imza": "b72fb284f0ee58888acc8a2495acf50428107edb385984674f93814585d6970a"
+  "imza": "f33ac6b36489ec42879c65e9fb507ff918014b04b1e0f897d7c71f8a72415552"
 }

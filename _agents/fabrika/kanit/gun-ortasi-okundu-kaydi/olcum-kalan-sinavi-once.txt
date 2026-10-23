@@ -1,5 +1,5 @@
 $ timeout 300 bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/go/taban/gun-ortasi/scripts/kalan.test.sh
-# rc=1 sure=13.9s zaman=2026-10-23T05:57:04+03:00
+# rc=1 sure=13.4s zaman=2026-10-23T06:07:08+03:00
 --- stdout ---
   🟢 T1 rc=0 ve #OZET satırı var
   🟢 T2 açık kart 1 · tıkandı ayrı 1 · bozuk JSON sayılmaz, ölçemedim der
@@ -39,6 +39,12 @@ $ timeout 300 bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81
   🔴 T5d kutunun kurye-yokla.sh'ı 'okundu-liste' biliyor: kayıt .okundu'dan SORULUR — BA okunmuş, A (özeti tutmaz) ve ESKI okunmamış → gelen 2; 'okundu.log yok' DENMEZ; kaynak yazılır — beklenen [2/0/1/0/1] görülen [3/1/1/0/0]
   🔴 T5e yalnız 'okundu-yolu' bilen kurye-yokla.sh: .okundu okunur, ad = TAB'a kadar ilk alan (özetli de yalın da) → yalnız ESKI → gelen 1 — beklenen [1/1/0/0] görülen [3/1/1/1]
   🔴 T5f kurye-yokla.sh okundu-liste rc 2 → gelen '?' ve ölçemedim +1; üç mektubun hiçbiri '•' ile okunmamış basılmaz — beklenen [?/5/0] görülen [3/4/3]
+  🔴 T5h okundu-yolu'nun bildirdiği yol dizin (okunamaz) → gelen '?' ve ölçemedim +1 — beklenen [?/5] görülen [3/4]
+  🔴 T5i okundu-liste cevabı gelen/ dosya adı değil → ölçemedim, mektuplar sayılmaz — beklenen [?/5/1] görülen [3/4/0]
+  🔴 T5j tek tırnak + yardımcı fonksiyonla yazılmış arayüz de tanınır: okundu-liste soruldu → BA ve A okunmuş → gelen 1 — beklenen [1/1] görülen [3/0]
+  🔴 T5k kurye var, arayüz yok, okundu.log yok → gelen '?' + ölçemedim 'kaydın yeri bilinmiyor' (3 okunmamış DENMEZ) — beklenen [?/5/1] görülen [3/4/0]
+  🔴 T5l kurye var, arayüz yok, okundu.log var → okundu.log okunur (BA okunmuş → 2) ve not 'okundu.log okundu' — beklenen [2/1] görülen [2/0]
+  🔴 T5m okundu-yolu var, dosya henüz yok → üçü de okunmamış (3) ve not 'dosyası henüz yok … damgası basmamış' — beklenen [3/1] görülen [3/0]
   🔴 T5g kayıt da kurye-yokla.sh de yok: üçü de okunmamış (3) ve not 'okundu kaydı yok … kurye-yokla.sh de yok' — beklenen [3/1] görülen [3/0]
-── SONUÇ: geçti=35 kaldı=4 ölçemedim=0 ──
+── SONUÇ: geçti=35 kaldı=10 ölçemedim=0 ──
 --- stderr ---
