@@ -1,0 +1,71 @@
+{
+  "is": "sx-ci-paralel",
+  "cumle": "Sx-Claude-Skills CI'ı: kabuk sınamaları üç kovada paralel koşsun, bütün CI koşusu en çok 15 dakika sürsün (ölçülen 11,1 dk); yalnız _agents/ altındaki dosyaları (kanıt, denetim, kart) değiştiren PR'da CI hiç koşmasın, SKILL.md dahil diğer her dosyada koşsun",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-23T22:13:53+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "CI kosu sureleri (gh run) once/sonra",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-10-23T22:35:46+03:00",
+      "olay": "daralt",
+      "kalan_kart": "sx-ci-paralel-kalan",
+      "tur_sifir": 1
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5N2SS1W1W9NNAGXGFRKAXTF",
+  "tahmin_dk": 180,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-23T22:13:53+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "HENDESE",
+      "oturum": "f30fc3e3",
+      "gerekce": "göz tur 1 4/H: kart cümlesi sayısal hedefi ve CI'ı atlayan dosya kümesini söylemiyordu; cümle netleştirilecek, iş aynı",
+      "zaman": "2026-10-23T22:35:46+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "HENDESE",
+      "oturum": "f30fc3e3",
+      "gerekce": "daraltma: kalan bulgu yeni karta (sx-ci-paralel-kalan) — göz tur 1 (4/H): hedef süre dakika olarak ve CI'ın koşmayacağı dosya kümesi kart cümlesinde yazılı değildi; ikincisi için sınav da yoktu",
+      "zaman": "2026-10-23T22:35:46+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "Sx-Claude-Skills CI: kabuk sınamaları tek sıralı döngüden ayrı koşullara bölünsün (ağır iki sınav kendi koşusunda, kalanlar paralel), kanıt-belge-kart dosyası değişen PR'da CI hiç koşmasın; Sultan'ın bekleme süresi hedefin altına insin",
+      "zaman": "2026-10-23T22:35:46+03:00",
+      "kalan_kart": "sx-ci-paralel-kalan"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-23T22:35:46+03:00",
+      "kalan_kart": "sx-ci-paralel-kalan",
+      "kalan": "göz tur 1 (4/H): hedef süre dakika olarak ve CI'ın koşmayacağı dosya kümesi kart cümlesinde yazılı değildi; ikincisi için sınav da yoktu",
+      "tur_sifir": 1,
+      "oturum": "f30fc3e3"
+    }
+  ]
+}

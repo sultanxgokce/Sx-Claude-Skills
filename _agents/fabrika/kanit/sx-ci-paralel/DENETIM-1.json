@@ -1,0 +1,50 @@
+{
+  "tur": 1,
+  "is": "sx-ci-paralel",
+  "pr": "448",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T22:35:17+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-sx-ci-paralel",
+  "dal": "sx-ci-paralel",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 28198,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 4944
+  },
+  "bas": "2914eda003b0b8907d93aff817e7b2121d0c633a",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Kabuk sınamaları üç koşuya ayrılmış, ağır iki sınama yalnız bırakılmış, kalanlar paralelleştirilmiş ve ölçülen duvar süresi 41,8 dakikadan 11,1 dakikaya düşürülmüş. Ancak kart hedef süreyi ve CI’ı atlatacak dosya kümelerini tanımlamıyor; uygulama bunları 11,1 dakika ve yalnız `_agents/**` olarak varsaydığı için önce bu talep-belirsizliği kapatılmalı.",
+    "bulgular": [
+      {
+        "ne": "“Hedefin altı” için sayısal hedef verilmediğinden 11,1 dakikalık sonucun talebi karşıladığı doğrulanamıyor.",
+        "kanit": "Önce ölçümü 41,8 dk, sonra ölçümü 11,1 dk; iş kartında karşılaştırılacak hedef dakika bulunmuyor.",
+        "konum": "iş kartı `cumle` ve kanıt kayıtları `ci-duvar-dk` önce/sonra",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Kanıt-belge-kart değişikliklerinde CI’ın hiç koşmaması talebi yalnız `_agents/**` kalıbına indirgenmiş; kart bu dosyaların tamamının bu dizinde olduğunu belirtmiyor ve kabuk sınavı bu davranışı sınamıyor.",
+        "kanit": "Workflow farkında tek `paths-ignore` girdisi `_agents/**`; `kabuk-sinamalari.test.sh` içindeki K1–K7 ve M1 yalnız kova koşucusunu sınıyor.",
+        "konum": ".github/workflows/lint.yml:11 ve .github/ci/kabuk-sinamalari.test.sh:1",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek CI koşularından önce/sonra ölçüm çifti 41,8→11,1 dk ile hızlanmayı, yeşil kova sınavı da bölme ve hata kapılarını destekliyor. Buna karşılık tanımsız hedef eşiğini ve yalnız kanıt-belge-kart dosyası değişen PR’ın gerçekten tümüyle atlandığını doğrulayan ayrı bir ölçüm bulunmuyor."
+  }
+}
