@@ -149,13 +149,14 @@ koltuk_turu() {  # $1 = oturum · $2 = claude(1|0) → ajan yalnız Claude çal�
   if diger_mi "$1"; then echo diger; elif [ "$2" = 1 ]; then echo ajan; else echo diger; fi
 }
 # yazi_kutusu_var <ekran> → 0: ekranda Claude Code yazı kutusu var — '❯' ile başlayan (ama '❯ N.' menü şıkkı OLMAYAN) bir satırın hemen
-#   üstünde '─' çizgisi ve en çok 8 satır altında yine '─' çizgisi (çok satırlı insan taslağı kutuyu uzatır). U+00A0 boşluk sayılır
+#   üstünde '─' çizgisi ve ALTINDA herhangi bir yerde yine '─' çizgisi (çok satırlı insan taslağı kutuyu istediği kadar uzatır; satır sınırı
+#   YOK — göz #440 tur 1: 8 satırlık sınır uzun taslakta kutuyu kaçırıyordu). U+00A0 boşluk sayılır
 #   (koltuk-gonder 15 Eki dersi). Boş satırlar çağıranda silinmiştir. Çizgi düz üç '─' ile aranır: mawk baytla çalışır, '─{3,}'
 #   tekrarı yalnız '─'nin SON baytına uygular ve gerçek çizgide HİÇ tutmaz (ölçüldü 23 Eki, mawk 1.3.4). awk programına tek tırnaklı yorum KONMAZ.
 yazi_kutusu_var() {
   printf '%s\n' "$1" | sed 's/\xc2\xa0/ /g' | awk '
     { c[NR] = ($0 ~ /^[[:space:]]*───/); p[NR] = ($0 ~ /^[[:space:]]*❯/ && $0 !~ /^[[:space:]]*❯[[:space:]]*[0-9]+\./) }
-    END { for (i = 2; i <= NR; i++) if (p[i] && c[i-1]) for (j = i + 1; j <= NR && j <= i + 8; j++) if (c[j]) exit 0; exit 1 }'
+    END { for (i = 2; i <= NR; i++) if (p[i] && c[i-1]) for (j = i + 1; j <= NR; j++) if (c[j]) exit 0; exit 1 }'
 }
 # soru_durum_yolu → kapi/soru.mjs ile AYNI kural (TO_SORU_DURUM · XDG_STATE_HOME · ~/.local/state)
 soru_durum_yolu() { if [ -n "${TO_SORU_DURUM:-}" ]; then printf '%s' "$TO_SORU_DURUM"; else printf '%s' "${XDG_STATE_HOME:-${HOME:-/config}/.local/state}/terminal-onar/soru-beri.json"; fi; }
@@ -166,19 +167,22 @@ soru_oku() {
   tmux capture-pane -p -t "$hedef" -S -40 2>/dev/null | sed '/^[[:space:]]*$/d' | tail -n 40 | node "$KB_DIZIN/../kapi/soru.mjs" --oturum "$1" 2>/dev/null | head -1
 }
 koltuk_hali() {  # $1 = oturum → calisiyor|soru|sinirda|girdi|dis-olay|bos|bilinmiyor  (SON 15 dolu satır; eskisi sayılmaz)
-  local ekran
+  local ekran genis
   # 🔴 tmux -S -15 görünür panenin ÜSTÜNE 15 geçmiş satır ekler, sonunu sınırlamaz (bağımsız göz #298 tur 1): sınır tail ile.
   # 🔴 capture-pane BÖLME hedefi ister: "=ad" oturum biçimi GEÇERSİZDİR ("can't find pane" — canlıda ölçüldü, 13 Eki); "ad:" ise
   #    '$1' gibi adı kimlik sanır (yedek göz tur 2). Hedef = ada tam eşleşen oturumun etkin bölme kimliği (%N).
   local hedef; hedef="$(bolme_bul "$1")"; [ -n "$hedef" ] || { echo bilinmiyor; return; }
-  ekran="$(tmux capture-pane -p -t "$hedef" -S -15 2>/dev/null | sed '/^[[:space:]]*$/d' | tail -n 15)" || { echo bilinmiyor; return; }
+  # TEK yakalama, iki görünüm (2.23.0 · göz #440 tur 1): hâl desenleri SON 15 dolu satırda aranır (eskisi sayılmaz); yazı kutusu ise 60 satırda
+  #   — çok satırlı uzun bir taslak kutunun üst çizgisini 15 satırın dışına iter, kutu görülmez ve taslaktaki "Do you want to" yanlış soru olurdu.
+  genis="$(tmux capture-pane -p -t "$hedef" -S -60 2>/dev/null | sed '/^[[:space:]]*$/d' | tail -n 60)" || { echo bilinmiyor; return; }
+  ekran="$(printf '%s\n' "$genis" | tail -n 15)"
   [ -n "$ekran" ] || { echo bilinmiyor; return; }
   # Sıra: soru > meşgul > sınır > girdi > boş — soru en üstte: bekleyen bir soru, ekranda "esc to cancel" gibi meşgul izi taşısa
   # da sorudur; Sultan'ın görmesi gereken odur (filo yoklaması aynı deseni "Enter to select" istisnasıyla kuruyordu).
   # 🔴 YAZI KUTUSU VARKEN SORU YOK (2.23.0 · BÂNİ koltuğu 23 Eki 14:5x ölçümü): desen ajanın KENDİ yazdığı metinde de geçer
   #    ("Do you want to", "❯ 1." içeren bir açıklama, araç çıktısı) — eski kural hâli yanlış 'soru' yapıyordu. Gerçek soru menüsü
   #    açıkken Claude Code yazı kutusunu (çizgi · '❯' satırı · çizgi) ekrandan KALDIRIR; kutu duruyorsa soru yoktur.
-  if ! yazi_kutusu_var "$ekran" && printf '%s' "$ekran" | grep -qE 'Enter to select|Do you want to|❯ [0-9]+\. '; then echo soru; return; fi
+  if ! yazi_kutusu_var "$genis" && printf '%s' "$ekran" | grep -qE 'Enter to select|Do you want to|❯ [0-9]+\. '; then echo soru; return; fi
   if printf '%s' "$ekran" | grep -qiE 'esc to interrupt|esc to cancel\)|\([0-9]+s ·|Running…|Waiting…'; then echo calisiyor; return; fi
   if printf '%s' "$ekran" | grep -qiE 'usage limit|limit reached|5-hour limit'; then echo sinirda; return; fi
   local satir

@@ -17,10 +17,11 @@ sorunun bu koltukta ilk görüldüğü an — `soru-beri.json` durum dosyası; s
   URL parolası · `token=`/`parola=` değeri · tek başına uzun dizgi → `••• gizlendi` (anahtar adı görünür kalır).
 - **Yazı kutusu varken soru YOK:** eski kural ekranın son 15 satırında "Do you want to" / "❯ 1." aradığı için ajanın KENDİ
   yazdığı açıklama hâli yanlış "soru" yapıyordu (BÂNİ koltuğu 23 Eki 14:5x). Gerçek soru menüsü açıkken Claude Code yazı kutusunu
-  (çizgi · `❯` · çizgi) kaldırır; `yazi_kutusu_var` kutuyu görürse soru verilmez. Fikstür gerçek ekrandan:
+  (çizgi · `❯` · çizgi) kaldırır; `yazi_kutusu_var` kutuyu görürse soru verilmez. Kutu ekranın son 60 dolu satırında, satır
+  sınırı olmadan aranır (hâl desenleri yine son 15 satırda): uzun çok satırlı taslak kutunun üst çizgisini 15 satırın dışına itiyordu (göz #440 tur 1). Fikstür gerçek ekrandan:
   `scripts/fikstur/ekran-yazi-kutulu-20261023.txt`. Bu düzeltme merkezin "soru sordu" yazısını ve zil bekçisini de doğrultur.
-- Sınav: `koltuk-bagla.test.sh` Q1–Q9 (Q9 = aynı gerçek ekran eski kuralla yanlış "soru" → önce) + mutant M-kutu · M-suzgec ·
-  M-okuma · M-tut; `kapi/soru.test.mjs` S/Z/B/A (menü · serbest · bölge · sır · beri · ayrıştırıcı · kadro gövdesi).
+- Sınav: `koltuk-bagla.test.sh` Q1–Q9 + Q3b (Q9 = aynı gerçek ekran eski kuralla yanlış "soru" → önce; Q3b = 20 satırlık taslak) + mutant
+  M-kutu · M-sinir · M-pencere · M-suzgec · M-okuma · M-tut; `kapi/soru.test.mjs` S/Z/B/A (menü · serbest · bölge · sır · beri · ayrıştırıcı · kadro gövdesi).
 - Dürüst sınır: ajanın sohbet mesajıyla sorup boş istemde beklemesi "soru" hâli değildir (bugün de değil); onu bu sürüm görmez.
   Cevabı koltuğa yazma (K2: hedefli `/api/gonder` + teslim doğrulaması) **ayrı iş**, sınıflı (yetki genişletme).
 

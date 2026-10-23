@@ -236,6 +236,11 @@ qkos l1 2026-10-23T12:00:00.000Z
 [ "$(qal l1 KALFA 5)" = soru ] && [ "$(qjs "$(qal l1 KALFA 8)" 'j.tur+"/"+j.siklar.length')" = "serbest/0" ] && ok "Q4 numarasız soru → serbest, şık yok" || bad Q4 "$(qal l1 KALFA 8)"
 N8="$(qal l1 NEDIM 8)"; case "$N8" in *QQQQQQQQQQ*|*abcdef1234567*) bad Q5 "sır sızdı" ;; *"••• gizlendi"*) ok "Q5 soru metnindeki anahtar ve token=… sütuna gizlenmiş çıkar" ;; *) bad Q5 "gizlendi yok: $N8" ;; esac
 [ -z "$(qal l1 MUHASIP 8)" ] && [ "$(qal l1 MUHASIP 5)" = bos ] && ok "Q6 soru hâlinde olmayan koltukta soru sütunu boş" || bad Q6 "$(qal l1 MUHASIP 5) $(qal l1 MUHASIP 8)"
+# Q3b (göz #440 tur 1): 20 satırlık insan taslağı — kutunun üst çizgisi son 15 satırın DIŞINDA, taslakta 'Do you want to' / '❯ 1.' geçiyor → soru DEĞİL
+{ echo "⏺ Bitti."; echo "────────────────────"; echo "❯ şunu ajana soracağım:"; for i in $(seq 1 9); do echo "  satır $i"; done; echo "  Do you want to proceed?"; echo "  ❯ 1. Yes"; echo "  2. No"; for i in $(seq 10 16); do echo "  satır $i"; done; echo "────────────────────"; echo "  ⏵⏵ bypass permissions on"; } > "$S/ekran-MUHASIP"
+qkos l1b 2026-10-23T12:00:00.000Z
+[ "$(qal l1b MUHASIP 5)" != soru ] && [ -z "$(qal l1b MUHASIP 8)" ] && ok "Q3b uzun çok satırlı taslak (üst çizgi son 15 satırın dışında, taslakta soru deseni) → soru DEĞİL ($(qal l1b MUHASIP 5))" || bad Q3b "hal=$(qal l1b MUHASIP 5)"
+printf '%s\n' "bitti." "❯ " > "$S/ekran-MUHASIP"
 qkos l2 2026-10-23T12:05:00.000Z
 [ "$(qjs "$(qal l2 ZAKIR 8)" 'j.beri')" = 2026-10-23T12:00:00.000Z ] && ok "Q7 aynı soru 5 dk sonra: beri ilk görüldüğü an (12:00)" || bad Q7 "$(qjs "$(qal l2 ZAKIR 8)" 'j.beri')"
 printf '%s\n' "⏺ Bitti." "❯ " > "$S/ekran-ZAKIR"; qkos l3 2026-10-23T12:10:00.000Z
@@ -243,7 +248,7 @@ printf '%s\n' "⏺ Bitti." "❯ " > "$S/ekran-ZAKIR"; qkos l3 2026-10-23T12:10:0
 # ÖNCE: aynı GERÇEK ekran, yazı kutusu kapısı sökülmüş kuralla (origin/main kuralı) — hâl yanlış 'soru'
 QE="$QD/eski"; qsil "$QE"; mkdir -p "$QE"; cp -r "$(dirname "$B")/../scripts" "$(dirname "$B")/../kapi" "$QE/"
 python3 - "$QE/scripts/koltuk-bagla.sh" <<'PY'
-import sys;p=sys.argv[1];s=open(p,encoding="utf-8").read();a='if ! yazi_kutusu_var "$ekran" && printf'; assert a in s; open(p,"w",encoding="utf-8").write(s.replace(a,"if printf"))
+import sys;p=sys.argv[1];s=open(p,encoding="utf-8").read();a='if ! yazi_kutusu_var "$genis" && printf'; assert a in s; open(p,"w",encoding="utf-8").write(s.replace(a,"if printf"))
 PY
 QB="$QE/scripts/koltuk-bagla.sh" qkos l0 2026-10-23T12:00:00.000Z
 [ "$(qal l0 BASIRET 5)" = soru ] && ok "Q9 ÖNCE (yazı kutusu kapısı yok): aynı gerçek ekran yanlış 'soru' — Q3 bu yanlışı ölçüyor" || bad Q9 "eski kural da soru demedi: $(qal l0 BASIRET 5)"
@@ -258,7 +263,9 @@ PY
   QB="$M/scripts/koltuk-bagla.sh" qkos "o-$1" 2026-10-23T13:00:00.000Z
   if eval "$5"; then ok "M-$1 mutant yakalandı"; else bad "M-$1" "mutant YAKALANMADI — kapı süs"; fi
 }
-mutant kutu scripts/koltuk-bagla.sh 'if ! yazi_kutusu_var "$ekran" && printf' 'if printf' '[ "$(qal o-kutu BASIRET 5)" = soru ]'
+mutant kutu scripts/koltuk-bagla.sh 'if ! yazi_kutusu_var "$genis" && printf' 'if printf' '[ "$(qal o-kutu BASIRET 5)" = soru ]'
+mutant sinir scripts/koltuk-bagla.sh 'for (j = i + 1; j <= NR; j++)' 'for (j = i + 1; j <= NR && j <= i + 8; j++)' '{ echo "⏺ Bitti."; echo "────────────────────"; echo "❯ şunu ajana soracağım:"; for i in $(seq 1 9); do echo "  satır $i"; done; echo "  Do you want to proceed?"; echo "  ❯ 1. Yes"; echo "  2. No"; for i in $(seq 10 16); do echo "  satır $i"; done; echo "────────────────────"; } > "$S/ekran-MUHASIP"; QB="$QD/m-sinir/scripts/koltuk-bagla.sh" qkos o-sinir2 2026-10-23T13:00:00.000Z; printf "%s\n" "bitti." "❯ " > "$S/ekran-MUHASIP"; [ "$(qal o-sinir2 MUHASIP 5)" = soru ]'
+mutant pencere scripts/koltuk-bagla.sh 'if ! yazi_kutusu_var "$genis" && printf' 'if ! yazi_kutusu_var "$ekran" && printf' '{ echo "⏺ Bitti."; echo "────────────────────"; echo "❯ şunu ajana soracağım:"; for i in $(seq 1 9); do echo "  satır $i"; done; echo "  Do you want to proceed?"; echo "  ❯ 1. Yes"; echo "  2. No"; for i in $(seq 10 16); do echo "  satır $i"; done; echo "────────────────────"; echo "  ⏵⏵ bypass permissions on"; } > "$S/ekran-MUHASIP"; QB="$QD/m-pencere/scripts/koltuk-bagla.sh" qkos o-pencere2 2026-10-23T13:00:00.000Z; printf "%s\n" "bitti." "❯ " > "$S/ekran-MUHASIP"; [ "$(qal o-pencere2 MUHASIP 5)" = soru ]'
 mutant suzgec kapi/sir-suz.mjs 'for (const d of SIR_DESENLERI) s = s.replace(d.desen, d.yerine || GIZLI);' '' 'grep -q QQQQQQQQQQ "$QD/o-suzgec"'
 mutant okuma scripts/koltuk-bagla.sh 'soru="$(soru_oku "$s")"' 'soru=""' '[ "$(qal o-okuma ZAKIR 5)" = soru ] && [ -z "$(qal o-okuma ZAKIR 8)" ]'
 mutant tut scripts/koltuk-bagla.sh 'node "$KB_DIZIN/../kapi/soru.mjs" --tut "${SO[@]}"' 'true' 'printf "%s\n" "⏺ Bitti." "❯ " > "$S/ekran-ZAKIR"; QB="$QD/m-tut/scripts/koltuk-bagla.sh" qkos o-tut2 2026-10-23T13:05:00.000Z; [ "$(node -e "const d=JSON.parse(require(\"fs\").readFileSync(process.argv[1],\"utf8\"));console.log(d.ZAKIR?1:0)" "$TO_SORU_DURUM")" = 1 ]'
