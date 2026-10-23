@@ -1,0 +1,32 @@
+{
+  "is": "pr-kip-olcer",
+  "cumle": "Açık bir PR'ın bir dosyaya dokunuşunun yalnız dosya KİPİ (100644→100755) mi yoksa İÇERİK mi olduğunu ölçen ayrı araç (yazilim-fabrikasi/scripts/pr-kip-olc.sh: yalnız kip rc 0 · içerik/ad değiştirme/silme/ikili rc 1 · ölçülemez rc 3) ve kendi çift yönlü sınavı (pr-kip-olc.test.sh); kapsam kapısına bağlanmaz. Sahip düzeltmesi: işi yazan NAKKAŞ (pr-kip-olcum-araci kartı), sürdüren HENDESE — aynı dal kapsam-kapisi-hunk, aynı PR #337",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-23T12:48:54+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M4ZTZX5381A38DN2RX88RYVG",
+  "tahmin_dk": 60,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-23T12:48:55+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

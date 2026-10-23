@@ -1,8 +1,9 @@
 $ bash _agents/fabrika/kanit/pr-kip-olcer/kip-ayirt-olcer.sh origin/main
-# rc=1 sure=0.1s zaman=2026-10-23T12:50:25+03:00
+# rc=1 sure=1.1s zaman=2026-10-23T12:54:09+03:00
 --- stdout ---
 kod kaynağı: origin/main · araç: YOK
    kip.sh → rc=127
+   ters.sh → rc=127
    icerik.sh → rc=127
    yeni-ad.sh → rc=127
 --- stderr ---

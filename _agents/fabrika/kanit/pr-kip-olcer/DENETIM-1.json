@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "pr-kip-olcer",
+  "pr": "337",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T12:51:31+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 27530,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 27,
+    "bayt": 52261
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "İstenen ayrı ölçüm aracı ve çift yönlü sınav yazılmış; temel içerik, yeniden adlandırma, silme, ikili dosya ve ölçülememe yolları sınanmış. Ancak araç, karttaki 100644→100755 koşulunu doğrulamak yerine herhangi bir tekil old/new mode satırını “yalnız kip” sayabildiği için önce bu yanlış rc=0 geçişi çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Yalnız-kip kararı geçerli ve eşleşen bir 100644→100755 çifti aramıyor; tek bir `old mode` veya `new mode` satırı, ters kip değişimi ya da başka bir kip çifti de rc=0 üretebilir.",
+        "kanit": "`kip` yalnız `^(old|new) mode [0-7]{6}$` satırlarının sayısını alıyor ve karar `kip > 0` olduğunda doğrudan rc=0 veriyor; eski/yeni satırlarının ikisinin de bulunması ve değerlerinin 100644/100755 olması denetlenmiyor. Sınav çıktısındaki 26 vaka arasında eksik tek kip satırı, ters 100755→100644 veya farklı kip çifti vakası yok.",
+        "konum": "yazilim-fabrikasi/scripts/pr-kip-olc.sh:89 ve yazilim-fabrikasi/scripts/pr-kip-olc.sh:103",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçüm çifti aracın yokken rc=1, sonrasında temel üç ayrımı doğru verdiğini gösteriyor; ayrıca gerçek koşumda 26 sınav yeşil. Bununla birlikte sınav fikstürleri çoğunlukla sentetik ve karttaki kesin 100644→100755 şartının olumsuz varyantlarını ölçmediğinden bulunan yanlış-pozitif açıklığı kanıt kapsamı dışında kalmış."
+  }
+}

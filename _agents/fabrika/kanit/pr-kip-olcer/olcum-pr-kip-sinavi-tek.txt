@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/pr-kip-olc.test.sh
-# rc=0 sure=1.1s zaman=2026-10-23T12:50:27+03:00
+# rc=0 sure=9.5s zaman=2026-10-23T12:54:25+03:00
 --- stdout ---
 ── 1 · YALNIZ KİP ucuza iner (kusurun kendisi: PR #326 vakası)
   ✓ yalnız kip → rc=0                           (rc=0)
@@ -35,5 +35,11 @@ $ bash yazilim-fabrikasi/scripts/pr-kip-olc.test.sh
   ✓ kaçışlı Türkçe yol · içerik → rc=1   (rc=1)
   ✓ kaçışlı yolda kısmi ad TUTMAZ → rc=3    (rc=3)
 ────────────────────────────────────────────
-TOPLAM: 26 geçti · 0 kaldı
+  ✓ ters yön 100755 → 100644 → rc=1 (indirim yok) (rc=1)
+  ✓ ters yönün kip çifti çıktıda söyleniyor
+  ✓ tek 'old mode' satırı (çift eksik) → rc=3 (rc=3)
+  ✓ 100644 → 120000 (sembolik bağ) → rc=1     (rc=1)
+  ✓ doğru çift 100644 → 100755 hâlâ rc=0     (rc=0)
+  ✓ mutant (çift denetimi yok): ters yön rc 0 döndü → üstteki kapı bu mutantta düşerdi
+TOPLAM: 32 geçti · 0 kaldı
 --- stderr ---
