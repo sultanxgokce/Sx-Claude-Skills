@@ -1,0 +1,203 @@
+$ bash yazilim-fabrikasi/scripts/kart.test.sh
+# rc=0 sure=21.1s zaman=2026-10-23T16:07:05+03:00
+--- stdout ---
+════ T1 · sınıf sorusu eksik → kart açılmaz ════
+  ✓ eksik cevapla rc=1
+  ✓ kart yazılmadı
+════ T2 · dört cevap h → sınıfsız, ekipte biter ════
+  ✓ kart açıldı
+  ✓ ekipte biter dedi
+  ✓ sultan=false
+════ T3 · '?' cevabı → şüphede yukarı, Sultan'a gider ════
+  ✓ SULTAN'A GİDER
+  ✓ sınıf dis_yuzey
+  ✓ aynı ad ikinci kez açılmaz
+════ T9 · reis-dedi: sınıfsız kartta ayrı alana yazar, sınıflı kartta REDDEDER (A268) ════
+  ✓ sınıfsız karta (is-1) reis kararı işlendi
+  ✓ 🔴 reis_kararlari dolu, sultan_kararlari YOK (Sultan'ın alanına yazılmadı)
+  ✓ 🔴 SINIFLI karta (is-2, dis_yuzey) reis kararı REDDEDİLDİ
+  ✓ sınıflı kartta alan oluşmadı
+  ✓ kısa gerekçe REDDEDİLDİ
+  ✓ 🔴 kartın sahibi olmayan ad (SERDAR ≠ aldi MUAVIN) REDDEDİLDİ
+  ✓ 🔴 küme dışı karar ('olur') REDDEDİLDİ
+  ✓ reddedilen denemeler karta hiçbir şey yazmadı
+════ T4 · is-alani ac kart ister; kartı worktree'ye taşır ════
+  ✓ kartsız iş alanı açılmaz (rc=1)
+  ✓ --kartsiz kaçışıyla açılır (gerekçe loglanır)
+  ✓ kartlı iş alanı açıldı
+  ✓ kart yalnız BİRİNCİL depoda, worktree'ye KOPYALANMADI (0.6.2 tek kaynak; kopya bayatlıyordu)
+════ T5 · worktree içinden bitti: denetim puanı ve kanıt karta işlenir (kart birincilde) ════
+  ✓ denetim geçti (kart otomatik okundu, --kart verilmedi)
+  ✓ bitti rc=0
+  ✓ birincil karta puan+kanıt+PR işlendi
+════ T6 · kanıtsız bitti uyarır; tıkandı üç yol ister ════
+  ✓ kanıtsız bitti uyarısı
+  ✓ nedensiz tıkandı reddedildi
+  ✓ tıkandı yazıldı
+════ T7 · gün sonu özeti defterden: üç bölüm + açık işler ════
+  ✓ özet üretildi
+  ✓ Sultan'a gidenler 3 (is-2 dış yüzey · is-3 geri alınamaz · kartsız kaçış)
+  ✓ içeride bitenler 1 (is-1, 5/5 E)
+  ✓ tıkananlar 1, nedeniyle
+  ✓ açık iş 1 (kartsız kaçış kartı)
+  ✓ kaçış başlığı var, bugün kaçış yok
+  ✓ kaçış özete düşüyor
+  ✓ gerekçe görünüyor
+  ✓ Sultan'ın veto hakkı yazılı
+  ✓ dosyaya yazıldı
+  ✓ liste --acik çalışıyor
+════ T10 · CANLI sınıfı: cron/servis/sunucu işi kartta canlı kanıt ister (retro 17 Eki ders 1) ════
+  ✓ cron kartı açıldı
+  ✓ açılışta söylüyor
+  ✓ canli_gerekir=true, sebep cümledeki kelime
+  ✓ 'buton ekle' kartı canlı istemez
+  ✓ 'sunucu' kelimesi de yeter (ek: Sunucuda → sunucu)
+  ✓ --canli e kelime olmasa da zorunlu kılar
+  ✓ --canli h kelimeye rağmen kaldırır; kararı ve kelimeyi karta yazar (gizli değil)
+  ✓ açılışta 'istenmedi' uyarısı basılır (bağımsız göz görsün)
+  ✓ --canli yalnız e|h
+  ✓ geçersiz cevapla kart yazılmadı
+  ✓ canlı kanıtsız bitti uyarır
+  ✓ yeşil canlı kayıt varken uyarı yok
+  ✓ karta canli_kanit=var işlendi
+  ✓ geçersiz ilan edilen canlı kayıtla bitti yine uyarır
+  ✓ karta canli_kanit=var İŞLENMEDİ (geçersiz yeşil sayılmaz)
+  ✓ mutant üretildi (kart.sh ham rengi okuyor)
+  ✓ mutant (tam kopya, bitti koştu): geçersiz yeşili sayıp uyarmıyor → üstteki kapı bu mutantta düşerdi
+  ✓ canli-gerekir E/H okur
+  ✓ alanı olmayan eski kart: cümleden E, 'eski kart' işaretli
+  ✓ alanı olmayan eski servis/sunucu kartı bitti'de de canlı kanıt uyarısı alır (kapıyla aynı yüzey)
+  ✓ 'ghost' içindeki host canlı saymaz (kelime başı sınırı; Türkçe ek serbest)
+  ✓ 'hosting' / 'zilli' canlı saymaz (kelime sonu sınırı; yedek göz #354)
+  ✓ Türkçe ekler (sunucudaki · cron'u · servisleri) hâlâ yakalanır
+════ T11 · daralt: kalan bulgu yeni karta, cümle daraltılır, tur sıfırı yazılır (PCP7J) ════
+  ✓ kısa --kalan REDDEDİLDİ
+  ✓ --oturum yoksa REDDEDİLDİ
+  ✓ reddedilen denemeler kalan kart yazmadı
+  ✓ daralt rc=0
+  ✓ tur sıfırı 3 yazıldı (3 denetim vardı)
+  ✓ cümle daraltıldı, geçmiş saklandı, reis kararı 'daralt' sahibin adıyla işlendi
+  ✓ kalan kart: aynı sahip/istedi/sınıf cevapları, köken yazılı
+  ✓ aynı kalan ad ikinci kez açılmaz (--yeni gerekir)
+  ✓ --yeni ile ikinci daraltma
+════ T12 · daralt SINIFLI kartta Sultan kararı ister (A06) ════
+  ✓ sınıflı kart Sultan kararı olmadan daraltılmadı
+  ✓ karta hiçbir şey yazılmadı
+  ✓ Sultan 'daralt' kararı karttayken daraltıldı
+  ✓ kalan kart da SINIFLI doğdu (sınıf miras)
+════ T12b · Sultan 'daralt' kararı TEK KULLANIMLIK; --yeni ad güvenli; iki kart atomik (göz tur 1) ════
+  ✓ aynı Sultan kararıyla İKİNCİ daraltma REDDEDİLDİ (karar tüketildi)
+  ✓ kullanılan karar karta işaretli, ikinci daraltma yazılmadı
+  ✓ --yeni '../kacak' REDDEDİLDİ
+  ✓ --yeni 'a/b' REDDEDİLDİ
+  ✓ dizin dışına hiçbir şey yazılmadı
+  ✓ kalan kart yazılamayınca rc=1
+  ✓ ana kart bayt bayt DEĞİŞMEDİ (atomik)
+  ✓ yarım kalan kart yok
+════ T13 · KAPSAM UYARISI: iki depo · çok günlük kapsam → uyarır, REDDETMEZ (retro W42 ders M2) ════
+  ✓ haftalık kart AÇILDI (uyarı, red değil) · karta 1 kapsam uyarısı yazıldı
+  ✓ çok günlük kapsam: gün başına kart önerildi (is-h1-g1 · is-h1-g2)
+  ✓ iki depo adı → depo başına kart önerildi
+  ✓ TEK depo adı (başka depo da olsa) uyarı almaz — kart cümlesi yalnız iki depo + çok günlük istedi (göz #384 tur 1)
+  ✓ yalnız KENDİ deposunu anan cümle uyarı almaz (takma adla da)
+  ✓ takma ad (Sx) depo sayılır
+  ✓ yanlış alarm yok: sıradan kelime adlar · küçük harf · bitişik ad · tireli ek · 'haftaya'
+  ✓ düz cümlede uyarı yok, karta boş liste yazıldı
+  ✓ hafta kodu ve 'her gün' de çok günlük sayılır
+════ T13b · ATIF KAPSAM DEĞİLDİR: 'retro W42', 'hafta raporu' uyarmaz; gerçek çok günlük kapsam uyarmaya devam eder (20 Eki, üç yanlış alarm) ════
+  ✓ atıf uyarmaz: birleştirme kancası CI'ı her birleştirmede ölçsün (gorev_01M506
+  ✓ atıf uyarmaz: denetçi ölçüm çıktısının sonunu da versin; fabrika 0.10.6 (go
+  ✓ atıf uyarmaz: kart.sh ac iş cümlesinde iki depo görürse uyarsın (retro W42 ders
+  ✓ atıf uyarmaz: hafta kapısı D13 PR gövdesinde retro işaretini arasın
+  ✓ atıf uyarmaz: W42 retrosu için kutu dosyasını doldur
+  ✓ gerçek kapsam uyarır: W42 boyunca her gün tur kaydı
+  ✓ gerçek kapsam uyarır: haftalık rapor üretimi kur ve her gün koştur
+  ✓ gerçek kapsam uyarır: bu hafta tüm kutuların retrosunu topla
+  ✓ gerçek kapsam uyarır: 3 gün sürecek göç
+── T13b · MUTASYON (tam kopya; her mutant bir atıf cümlesini yeniden uyarır hâle getirmeli) ──
+  ✓ mutant 'retro-onu-sayilir' atfı yeniden kapsam sanıyor → üstteki kapı bu mutantta düşerdi
+  ✓ mutant 'atif-sonra-bos' atfı yeniden kapsam sanıyor → üstteki kapı bu mutantta düşerdi
+  ✓ mutant 'hafta-atifsiz' atfı yeniden kapsam sanıyor → üstteki kapı bu mutantta düşerdi
+  ✓ mutant 'W-atifsiz' atfı yeniden kapsam sanıyor → üstteki kapı bu mutantta düşerdi
+════ T13c · SAYI UYARISI (WNMSQ · SERDAR: uyarı, red değil): ölçümsüz '13 görev' kartı açar ama uyarır + karta yazar; --sayi-olcum kaynağı karta işler ════
+  ✓ Nexus #1213 vakası: kart AÇILDI (red yok) · karta üç sayı iddiası yazıldı (13 görev | 173 kez | %50)
+  ✓ uyarı satırı sayıları ve çareyi (--sayi-olcum) söylüyor
+  ✓ yanlış alarm yok: kimlik · sürüm · #PR · tarih/saat · ay adı · sıra · birimli eşik · 5/E sayı iddiası DEĞİL
+  ✓ sayısız cümle: uyarı yok, karta boş liste
+  ✓ --sayi-olcum: komut koşuldu, rc + çıktı karta yazıldı, uyarı düştü (0 13 görev bulundu 0)
+  ✓ düşen ölçüm komutu kaynak SAYILMAZ: uyarı karta yazılı kalır, kart yine açılır (rc 0)
+  ✓ uzun ölçüm çıktısı SESSİZ kesilmez: kartta kirpildi + tam boy + son satırlar (sonuç satırı korunur), ekranda uyarı (True 2000 13909 SONUC: 13 görev) — göz #430 tur 1
+── T13c · MUTASYON (tam kopya): sayı aranmazsa #1213 cümlesi sessiz geçer → üstteki kapı düşerdi ──
+  ✓ mutant (sayı uyarısı kapalı) #1213 cümlesini sessiz geçiriyor → üstteki kapı bu mutantta düşerdi
+════ T14 · görev durumu (Y7J3Q): --gorev bağlı kart açılış/bitti/tıkandı'da defterdeki görevi yazar; yazamazsa söyler, rc 4 ════
+  ✓ G1 --gorev verilip --tahmin verilmezse kart AÇILMAZ (rc 1; defter tahminsiz çalışılıyor'a geçmez)
+  ✓ G1b biçimsiz görev kimliği rc 1
+  ✓ G1c --tahmin tek başına anlamsız: rc 1
+  ✓ G1d reddedilen açılışlar deftere HİÇ gitmedi
+  ✓ G2 açılış → PATCH /kayit/<görev>: çalışılıyor + atanan BANI + tahmin 45 + '[▶ çalışılıyor]' adımı; kartta gorev/tahmin + yazım 'yazıldı'
+  ✓ G2b rc 0, ekranda '→ çalışılıyor (defter)', jeton değeri çıktıda YOK
+  ✓ G3 (KF22R dilim ≠ görev) bitti → göreve YALNIZ '[dilim bitti] … PR #12 · kanıt …' adımı; durum YAZILMAZ (çalışılıyor kalır), onay bekliyor YOK
+  ✓ G3b bitti rc 0, ekranda 'dilim adımı (görev çalışılıyor kalır…)'
+  ✓ G3c --gorev-bitti ekran işinde kare tek başına yetmez (rc 1, deftere gitmedi, 'sürüm' ister)
+  ✓ G3d --gorev-bitti sınıfsız → rc 1, deftere gitmedi, 'PR tek başına dilimdir' der
+  ✓ G3e --gorev-bitti --kare --surum → onay bekliyor + kanıt '[kare] … · [surum] 1.25.0 · [pr] #12 · kanıt …' + '[⏸ onay bekliyor]' adımı
+  ✓ G3f rc 0, ekranda '→ onay bekliyor (defter)'
+  ✓ G4 tıkandı → bekliyor + not (tıkanma nedeni) + '[⏳ bekliyor]' adımı (defter neyi beklediği yazılmamış bekliyor'u reddeder)
+  ✓ G4b tıkandı rc 0
+  ✓ G5 defter reddederse kart YİNE açılır, rc 4, sebep (hata + yerine) ekranda ve kartta
+  ✓ G6 jetonsuz kutu: deftere gidilmez, kart açılır, 'jetonu yok' söylenir, rc 4
+  ✓ G7 bağsız kart deftere gitmez, rc 0, bunu söyler (eski kartlar etkilenmez)
+  ✓ G7b bağsız kartın bitti'si de deftere gitmez
+  ✓ G8 defter kapalı: kart bitti İŞLENİR, 'ulaşılamadı' söylenir, rc 4 (sessiz eksik yok)
+════ T15 · KANIT AĞACI: bitti/daralt birincil checkout'tan çağrılınca kanıtı kartın İŞ ALANINDAN okur ve nereden okuduğunu söyler; hiçbir yerde yoksa uyarır (Nexus #1223: daralt tur_sifir=0 yazmıştı) ════
+  ✓ kart açıldı (birincil)
+  ✓ iş alanı (dalı = iş adı, is-alani.sh kuralı) açıldı
+  ✓ kanıt iş alanında alındı (KANIT.json orada; kanit.sh KANIT_DEPO yokken cwd ağacına yazar)
+  ✓ birincil checkout'ta kanıt dizini YOK (eski kodun sessiz 0 verdiği hâl)
+  ✓ 🔴 birincilden daralt: tur sıfırı 3 (iş alanındaki 3 DENETIM; eski kod 0 yazardı)
+  ✓ nereden okuduğunu söyledi (kapı kaydı)
+  ✓ karta tur_sifir=3 yazıldı
+  ✓ 🔴 birincilden bitti: kanıt VAR (iş alanından), KANIT YOK damgası yok (Sx #383 hâli)
+  ✓ karta kanıt_var + tur 3 + puan 5 işlendi
+  ✓ canli-borc-durum: İLK satır 'yok' (kapı tek satır okur) + kaynak notu SONRAKİ satırda (dört komut da nereden okuduğunu söyler)
+  ✓ çağrıldığı ağaçta kanıt varsa ÖNCE o okunur (iş alanına bakılmaz; eski davranış korundu)
+  ✓ kanıt hiçbir yerde yok: nerede arandığı + 'iş alanının içinden çağır' uyarısı + KANIT YOK (sessiz 0 yok)
+  ✓ canli-borc-durum kanıtsız kartta: İLK satır 'yok' + yokluk uyarısı sonraki satırda
+── T15 · MUTASYON (tam kopya): iş alanı araması kaldırılınca birincilden daralt yine 0 yazar → üstteki kapı kırmızı ──
+  ✓ mutant (iş alanı aranmıyor): tur sıfırı 0 — eski davranış geri geldi → üstteki 🔴 kapı bu mutantta düşerdi
+  ✓ mutant: bitti 'KANIT YOK' damgalar (Sx #383) → üstteki 🔴 kapı düşerdi
+════ T-SORU · CEVAP BEKLE (gorev_…CMWNK): soruya bağlı geri alınamaz eylem cevap gelmeden koşmaz ════
+  ✓ S1 sorusuz kart: 'yok' rc 0 (eylem serbest)
+  ✓ S2 soru karta bağlandı
+  ✓ S3 🔴 cevapsız soru: 'acik' rc 3 → 'cevap-bekle && eylem' KOŞMAZ
+  ✓ S4 acik-soru ajanın kartlarında soruyu buldu (rc 3)
+  ✓ S4b başka ajanın cevapsız sorusu yok (rc 0)
+  ✓ S5 🔴 cevapsız soru varken kart.sh bitti REDDEDİLDİ
+  ✓ S5b kart açık kaldı
+  ✓ S6 🔴 soran (kartın sahibi) kendi sorusunu cevaplayamaz
+  ✓ S7 🔴 sorulan olmayan ad cevap veremez
+  ✓ S8 küme dışı karar (belki) reddedildi
+  ✓ S9 oturumsuz cevap SAYILMAZ (D1 deseni)
+  ✓ S10 sorulan cevapladı: hayır
+  ✓ S11 🔴 hayır: 'hayir' rc 4 → eylem koşmaz
+  ✓ S12 cevaplı soru yeniden cevaplanmaz (hayır kesin)
+  ✓ S13 cevaplanınca acik-soru temiz (rc 0)
+  ✓ S14 yeni soru (no 2) açıldı ve evet aldı
+  ✓ S14b eski hayır hâlâ görünür (rc 4) — sonraki evet eski reddi silmez
+  ✓ S15 cevapsız soru kalmayınca kart kapanabilir
+  ✓ S16 🔴 SINIFLI kartta soru SERDAR'a sorulamaz (karar Sultan'ın)
+  ✓ S16b sınıflı kartta Sultan'a sorulur
+  ✓ S17 kısa eylem/soru reddedildi
+  ✓ S18 satır sonu içeren soru reddedildi (defter ayracı)
+  ✓ S19 🔴 okunamayan kart (bozuk JSON): acik-soru rc 2 ÖLÇÜLEMEDİ — 'cevapsız soru yok' DEMEZ
+  ✓ S19c bozuk kart + gerçek cevapsız soru (ss-2 → Sultan): rc 3 (daha belirli olan söylenir)
+  ✓ S19b 🔴 sorular listesi bozuk kart (alan eksik): rc 2
+  ✓ S19d bozuk kart kalkınca yine rc 0
+── T-SORU · MUTASYON: kapı ölünce yukarıdaki 🔴 kapı düşer ──
+  ✓ mutant (bitti engeli): cevapsız soruyla kart KAPANDI → S5 bu mutantta düşerdi
+  ✓ mutant (sorulan kimliği): sorulmayan ad cevap verdi → S7 bu mutantta düşerdi
+  ✓ mutant (sinifli kural): sınıflı kartta SERDAR'a soruldu → S16 bu mutantta düşerdi
+  ✓ mutant (bozuk kart): okunamayan kart atlanıp rc 0 → S19 bu mutantta düşerdi
+
+── SONUÇ: 175 geçti · 0 kaldı ──
+--- stderr ---

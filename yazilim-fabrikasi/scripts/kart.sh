@@ -30,6 +30,10 @@
 #          sonra `kart.sh bitti` kartı kapatır. SINIFSIZ kartta yazan kartın sahibidir (aldi); SINIFLI kartta borcu AJAN yazamaz: önce
 #          `kart.sh sultan-dedi <iş> --karar canli-borc …` (Sultan'ın sözü, D1 deseni). 24 saat ödenmezse `kart.sh borclar` kırmızı (rc 1).
 #   kart.sh canli-borc-durum <iş> → "yok|gecerli|gecersiz|odendi<TAB>açıklama" (kapının okuduğu yüzey) · kart.sh borclar → açık borçlar, yaşı
+#   kart.sh sor <iş> --kime <AD> --eylem "<geri alınamaz eylem ≥5>" --soru "<soru ≥20>"   CEVAP BEKLE (gorev_…CMWNK): eylemi soruya bağlar
+#   kart.sh cevap <iş> --no N --kim <sorulan> --karar evet|hayir --oturum <ref> --soz "<sorulanın sözü, birebir>"
+#   kart.sh cevap-bekle <iş> → "yok|evet|acik|hayir<TAB>…"; rc 0 yok/evet · 3 açık · 4 hayır  (kart.sh cevap-bekle X && <eylem>)
+#   kart.sh acik-soru <AJAN> → ajanın kartlarındaki cevapsız sorular; rc 0 yok · 3 var · 2 okunamayan kart (ÖLÇÜLEMEDİ) · cevapsız soru varken kart.sh bitti REDDEDER
 #   kart.sh izin-durum <iş> → "gerekmiyor|bekliyor|basla|dur<TAB>açıklama" (kart yok/bozuk rc 3 — fail-closed)
 #   kart.sh goster <iş> · kart.sh liste [--acik] · kart.sh canli-gerekir <iş>  → "E|H<TAB>sebep" (eski kartta cümleden türetir)
 # Ortam: FABRIKA_TETIK (oda-tetik.sh yolu; --oda verilirse tetik atılır, düşerse iş düşmez) · KANIT_DEPO
@@ -73,6 +77,7 @@ KD="$DEPO/_agents/fabrika/kartlar"; mkdir -p "$KD"
 CMD="${1:-}"; IS="${2:-}"; if [ $# -ge 2 ]; then shift 2; else shift $#; fi   # tek argümanlı komut (liste · borclar) "tanınmayan argüman" olmasın
 IS_C=""; ISTEDI=""; ALDI=""; GA=""; PARA=""; DIS=""; YETKI=""; KANIT=""; ODA=""; PR=""; YOL=""; NEDEN=""
 KARAR=""; OTURUM=""; SOZ=""; BEYAN=""; GEREKCE=""; REIS=""; CANLI=""; KALAN=""; CUMLE=""; YENI=""; YAZAN=""
+KIME=""; SORU=""; EYLEM=""; SNO=""; KIM=""   # cevap bekle (soru.py)
 SAYI_OLCUM=""; GOREV_BITTI=""; KARE=""; SURUM=""; OLCUM=""; BELGE=""   # kart bitti: görevi de bitirmek için kanıt sınıfı (KF22R: dilim ≠ görev)
 while [ $# -gt 0 ]; do case "$1" in
   --is) IS_C="$2"; shift 2 ;; --istedi) ISTEDI="$2"; shift 2 ;; --aldi) ALDI="$2"; shift 2 ;;
@@ -82,6 +87,7 @@ while [ $# -gt 0 ]; do case "$1" in
   --gerekce) GEREKCE="$2"; shift 2 ;; --reis) REIS="$2"; shift 2 ;; --canli) CANLI="$2"; shift 2 ;; --yazan) YAZAN="$2"; shift 2 ;;
   --kalan) KALAN="$2"; shift 2 ;; --cumle) CUMLE="$2"; shift 2 ;; --yeni) YENI="$2"; shift 2 ;;
   --gorev) GOREV="$2"; shift 2 ;; --tahmin) TAHMIN="$2"; shift 2 ;; --sayi-olcum) SAYI_OLCUM="$2"; shift 2 ;;
+  --kime) KIME="$2"; shift 2 ;; --soru) SORU="$2"; shift 2 ;; --eylem) EYLEM="$2"; shift 2 ;; --no) SNO="$2"; shift 2 ;; --kim) KIM="$2"; shift 2 ;;
   --acik) ACIK=1; shift ;; *) _hata "tanınmayan argüman: $1"; exit 1 ;; esac; done
 GOREV="${GOREV:-}"; TAHMIN="${TAHMIN:-}"
 
@@ -316,6 +322,13 @@ PY
   bitti|tikandi)
     [ -n "$IS" ] && [ -f "$KD/$IS.json" ] || { _hata "kart yok: $IS"; exit 3; }
     [ "$CMD" = "tikandi" ] && { [ -n "$YOL" ] && [ -n "$NEDEN" ] || { _hata "tikandi --yol devam|daralt|geri-al --neden gerekiyor"; exit 1; }; }
+    # 🔴 CEVAP BEKLE (gorev_…CMWNK): soruya bağlı eylemin cevabı gelmeden iş kapanmaz — kapanış "eylem yapıldı ya da gerekmedi" demektir.
+    #    tikandi serbest (tıkanmanın nedeni zaten cevapsız soru olabilir).
+    if [ "$CMD" = "bitti" ]; then
+      SD="$(bash "${BASH_SOURCE[0]}" cevap-bekle "$IS" 2>&1)"; SRC=$?
+      [ "$SRC" -eq 3 ] && { _hata "kartta CEVAPSIZ SORU var — cevap gelmeden kart kapanmaz: ${SD#*$'\t'} (cevap: kart.sh cevap $IS --no N …)"; exit 1; }
+      [ "$SRC" -eq 0 ] || [ "$SRC" -eq 4 ] || { _hata "soru durumu okunamadı (cevap-bekle rc $SRC) — kart kapanmadı: $SD"; exit 1; }
+    fi
     # kanıt/denetim: çağrıldığı ağaçtan, orada yoksa kartın iş alanından okunur (kanit_agaci)
     DZ="$(kanit_agaci "$IS")"
     # 🔴 GÖZ #353 tur 3: eski kart (alan yok) kapıda cümleden "canlı ister" sayılıyor ama bitti uyarmıyordu → aynı yüzeyden (canli-gerekir) okunur
@@ -659,6 +672,72 @@ PY
       IFS=$'\t' read -r cg sebep <<<"$(canli_hesapla "$cumle" "")"; sebep="eski kart · ${sebep:-cümlede anahtar yok}"
     fi
     printf '%s\t%s\n' "$cg" "$sebep" ;;
+  sor|cevap)
+    [ -n "$IS" ] && [ -f "$KD/$IS.json" ] || { _hata "kart yok: $IS"; exit 3; }
+    if [ "$CMD" = sor ]; then
+      [ -n "$KIME" ] && [ -n "$EYLEM" ] && [ -n "$SORU" ] || { _hata "sor: --kime <AD> --eylem \"<ne yapılacak>\" --soru \"<soru>\" gerekiyor"; exit 1; }
+      EYLEM="$(printf '%s' "$EYLEM" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"; SORU="$(printf '%s' "$SORU" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"
+      [ "${#EYLEM}" -ge 5 ] || { _hata "--eylem en az 5 karakter — hangi geri alınamaz eylem soruya bağlanıyor?"; exit 1; }
+      [ "${#SORU}" -ge 20 ] || { _hata "--soru en az 20 karakter (baş/son boşluk sayılmaz)"; exit 1; }
+      ALANLAR="KIME EYLEM SORU"
+    else
+      [[ "$SNO" =~ ^[1-9][0-9]{0,3}$ ]] || { _hata "cevap: --no <soru numarası> gerekiyor"; exit 1; }
+      eksik=""; for v in KIM KARAR OTURUM SOZ; do [ -n "${!v}" ] || eksik="$eksik --$(printf '%s' "$v" | tr 'A-Z' 'a-z')"; done
+      [ -z "$eksik" ] || { _hata "eksik:$eksik — kimin, hangi oturumda, hangi sözle cevap verdiği olmadan cevap SAYILMAZ (D1 deseni)"; exit 1; }
+      ALANLAR="KIM KARAR OTURUM SOZ"
+    fi
+    for v in $ALANLAR; do d="${!v}"; if [[ "$d" == *"|"* || "$d" == *$'\n'* ]]; then _hata "--$(printf '%s' "$v" | tr 'A-Z' 'a-z') içinde '|' ya da satır sonu olamaz (defter ayracı)"; exit 1; fi; done
+    python3 - "$KD/$IS.json" "$CMD" "$KIME" "$EYLEM" "$SORU" "$SNO" "$KIM" "$KARAR" "$OTURUM" "$SOZ" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY' || exit 1
+import json,sys
+yol,cmd,kime,eylem,soru,no,kim,karar,oturum,soz,hdir=sys.argv[1:]
+sys.path.insert(0,hdir); import soru as S
+k=json.load(open(yol,encoding="utf-8"))
+try:
+    if cmd=="sor":
+        n=S.sor(k,kime,eylem,soru); msg=f"❓ soru {n} karta bağlandı → {kime}: {eylem}\n   cevap gelmeden: kart.sh cevap-bekle {k['is']} rc 3 · kart.sh bitti reddeder"
+    else:
+        s=S.cevapla(k,int(no),kim,karar,oturum,soz); msg=f"{'✓' if karar=='evet' else '✗'} soru {s['no']} cevaplandı: {karar.upper()} · {kim} · oturum {oturum}" + ("" if karar=="evet" else f"\n   eylem koşmaz: {s['eylem']}")
+except ValueError as e:
+    print(f"✗ {e}",file=sys.stderr); raise SystemExit(1)
+k.setdefault("gecmis",[]).append({"zaman":S.simdi(),"olay":cmd})
+json.dump(k,open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
+print(msg)
+PY
+    ;;
+  cevap-bekle)
+    # Makine yüzeyi: İLK satır "ad<TAB>açıklama" (kapı/kanca 2>&1 ile read eder). rc: 0 yok/evet · 3 açık · 4 hayır · 2 okunamadı.
+    [ -n "$IS" ] && [ -f "$KD/$IS.json" ] || { _hata "kart yok: $IS"; exit 2; }
+    python3 - "$KD/$IS.json" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY'
+import json,sys
+yol,hdir=sys.argv[1:]; sys.path.insert(0,hdir); import soru as S
+try: k=json.load(open(yol,encoding="utf-8"))
+except Exception as e: print(f"okunamadi\tkart okunamadı: {e}"); raise SystemExit(2)
+ad,ac=S.durum(k); print(ad+"\t"+ac.replace("\n"," ").replace("\t"," "))
+raise SystemExit({"yok":0,"evet":0,"acik":3,"hayir":4}[ad])
+PY
+    ;;
+  acik-soru)
+    # Ajanın (kartı ALAN) bütün kartlarındaki cevapsız sorular. Kanca dilimi bunu okur: açık soru varken yıkıcı komut koşmaz.
+    [ -n "$IS" ] || { _hata "acik-soru <AJAN> — hangi ajanın soruları?"; exit 2; }
+    python3 - "$KD" "$IS" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY'
+import json,sys,glob,os
+kd,ajan,hdir=sys.argv[1:]; sys.path.insert(0,hdir); import soru as S
+# 🔴 FAIL-CLOSED (göz #444 tur 1): bu çıktı yıkıcı komut kancasının tek kaynağı olacak. Okunamayan kart (bozuk JSON ya da bozuk
+#    sorular listesi) atlanıp rc 0 dönülürse "cevapsız soru yok" yalanı kapıyı açık bırakır → cevapsız soru yoksa ve okunamayan
+#    kart varsa rc 2 (ÖLÇÜLEMEDİ). Kimin kartı olduğu okunamıyorsa da sayılır (bozuk kart herkesin kapısını kapatır).
+n=0; bozuk=[]
+for p in sorted(glob.glob(os.path.join(kd,"*.json"))):
+    try:
+        k=json.load(open(p,encoding="utf-8"))
+        if k.get("aldi")!=ajan: continue
+        ac=[(s["no"],s["kime"],s["eylem"],s["zaman"]) for s in S.acik(k)]
+    except Exception: bozuk.append(os.path.basename(p)); continue
+    for no,kime,eylem,zaman in ac: n+=1; print(f"❓ {k['is']} · soru {no} → {kime}: {eylem} ({zaman}'den beri)")
+if n: print(f"── {ajan}: {n} cevapsız soru"); raise SystemExit(3)
+if bozuk: print(f"ÖLÇÜLEMEDİ: {len(bozuk)} kart okunamadı ({', '.join(bozuk[:5])}) — 'cevapsız soru yok' DENEMEZ"); raise SystemExit(2)
+print(f"◻ {ajan}: cevapsız soru yok"); raise SystemExit(0)
+PY
+    ;;
   goster) [ -f "$KD/$IS.json" ] && cat "$KD/$IS.json" || { _hata "kart yok: $IS"; exit 3; } ;;
   liste)
     ls "$KD"/*.json >/dev/null 2>&1 || { echo "◻ kart yok"; exit 0; }
