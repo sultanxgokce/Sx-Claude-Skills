@@ -1,5 +1,5 @@
 $ bash -c cd /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/k1/taban/terminal-onar/kapi && timeout 120 node soru.test.mjs < /dev/null
-# rc=1 sure=0.3s zaman=2026-10-23T15:20:58+03:00
+# rc=1 sure=0.0s zaman=2026-10-23T15:27:20+03:00
 --- stdout ---
 --- stderr ---
 node:internal/modules/esm/resolve:275

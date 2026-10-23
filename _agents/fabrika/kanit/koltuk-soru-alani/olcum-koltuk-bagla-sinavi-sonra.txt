@@ -1,5 +1,5 @@
 $ bash -c timeout 300 bash /config/projects/_wt/Sx-Claude-Skills-koltuk-soru-alani/terminal-onar/scripts/koltuk-bagla.test.sh < /dev/null
-# rc=0 sure=41.5s zaman=2026-10-23T15:20:58+03:00
+# rc=0 sure=29.6s zaman=2026-10-23T15:27:20+03:00
 --- stdout ---
 A · bağlanma (kabul yüzü)
   ✓ A1 argümansız → ana oturum (bugünkü davranış aynı)
@@ -80,15 +80,18 @@ Q · soru alanı (2.23.0 · K1 Engel kurgusu · V6FJPZ): yazı kutusu varken sor
   ✓ Q4 numarasız soru → serbest, şık yok
   ✓ Q5 soru metnindeki anahtar ve token=… sütuna gizlenmiş çıkar
   ✓ Q6 soru hâlinde olmayan koltukta soru sütunu boş
+  ✓ Q3b uzun çok satırlı taslak (üst çizgi son 15 satırın dışında, taslakta soru deseni) → soru DEĞİL (girdi)
   ✓ Q7 aynı soru 5 dk sonra: beri ilk görüldüğü an (12:00)
   ✓ Q8 soru hâlinden çıkan koltuğun beri kaydı silinir
   ✓ Q9 ÖNCE (yazı kutusu kapısı yok): aynı gerçek ekran yanlış 'soru' — Q3 bu yanlışı ölçüyor
   ✓ M-kutu mutant yakalandı
+  ✓ M-sinir mutant yakalandı
+  ✓ M-pencere mutant yakalandı
   ✓ M-suzgec mutant yakalandı
   ✓ M-okuma mutant yakalandı
   ✓ M-tut mutant yakalandı
 
-toplam=80 geçen=80 düşen=0
+toplam=83 geçen=83 düşen=0
 --- stderr ---
 /config/projects/_wt/Sx-Claude-Skills-koltuk-soru-alani/terminal-onar/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
 /config/projects/_wt/Sx-Claude-Skills-koltuk-soru-alani/terminal-onar/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
@@ -161,33 +164,58 @@ toplam=80 geçen=80 düşen=0
 /config/projects/_wt/Sx-Claude-Skills-koltuk-soru-alani/terminal-onar/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
 /config/projects/_wt/Sx-Claude-Skills-koltuk-soru-alani/terminal-onar/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
 /config/projects/_wt/Sx-Claude-Skills-koltuk-soru-alani/terminal-onar/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/eski/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/eski/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/eski/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/eski/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/eski/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-kutu/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-kutu/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-kutu/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-kutu/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-kutu/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-suzgec/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-suzgec/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-suzgec/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-suzgec/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-suzgec/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-okuma/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-okuma/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-okuma/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-okuma/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-okuma/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-tut/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-tut/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-tut/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-tut/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-tut/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-tut/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-tut/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-tut/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-tut/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
-/tmp/tmp.bly83jV4Ic/q/m-tut/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-soru-alani/terminal-onar/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-soru-alani/terminal-onar/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-soru-alani/terminal-onar/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-soru-alani/terminal-onar/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/config/projects/_wt/Sx-Claude-Skills-koltuk-soru-alani/terminal-onar/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/eski/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/eski/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/eski/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/eski/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/eski/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-kutu/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-kutu/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-kutu/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-kutu/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-kutu/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-sinir/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-sinir/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-sinir/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-sinir/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-sinir/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-sinir/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-sinir/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-sinir/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-sinir/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-sinir/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-pencere/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-pencere/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-pencere/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-pencere/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-pencere/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-pencere/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-pencere/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-pencere/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-pencere/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-pencere/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-suzgec/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-suzgec/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-suzgec/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-suzgec/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-suzgec/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-okuma/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-okuma/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-okuma/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-okuma/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-okuma/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-tut/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-tut/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-tut/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-tut/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-tut/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-tut/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-tut/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-tut/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-tut/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
+/tmp/tmp.yWSrIFGiA6/q/m-tut/scripts/koltuk-bagla.sh: line 133: /proc/100/environ: No such file or directory
