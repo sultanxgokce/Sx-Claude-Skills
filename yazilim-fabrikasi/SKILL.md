@@ -134,10 +134,10 @@ sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kald�
   birincil kopyada (git-dir == git-common-dir) o iş için is-alani.sh kökünde (`IS_ALANI_KOK`, vars. /config/projects/_wt,
   `<depo-adı>-<iş>`) açık bir alan varsa yazma **reddedilir** (rc 2, alan yolu ve doğru komut söylenir; sessiz yönlendirme yok).
   Alandan koşum ve alanı olmayan iş eski davranışıyla aynı; okuma komutları (dogrula · ozet · liste) kapıdan geçmez.
-  DENETIM-N.json'a `depo` · `dal` · `birincil` alanı yazılır (kayıt nereye düştü, sonradan ayırt edilir). Kapılar: kanit.test.sh
+  DENETIM-N.json'a `depo` · `dal` · `birincil_mi` alanı yazılır (kayıt nereye düştü, sonradan ayırt edilir). Kapılar: kanit.test.sh
   **TB0–TB6b** (reddi · iz yok · alandan yazar · alansız iş yazar · okuma geçer · dosya komutu da reddedilir · mutant: kapı
-  sökülünce yazar), denetci.test.sh **TP0–TP4b** (reddi · DENETIM/KART yok · alandan DENETIM depo/dal/birincil=false ·
-  alansız iş birincil=true · mutant dizin kopyasında). Ölçüm komutu: HENDESE `_agents/hendese/olcer/`.
+  sökülünce yazar), denetci.test.sh **TP0–TP4c** (reddi · DENETIM/KART yok · alandan DENETIM depo/dal/birincil_mi=false ·
+  alansız iş birincil_mi=true · mutant dizin kopyasında). Ölçüm komutu: HENDESE `_agents/hendese/olcer/`.
 - **0.10.0 (2026-10-18, SERDAR · PCP7J daraltma adımı; 0.9.0 HENDESE üstüne):** tıkanma raporu "kapsamı daralt" diyordu ama hatta adımı yoktu:
   daralt kararı verilen iş (cloudtop #668) tur açamıyor, mutlak tavanı dolan iş (#670) bir daha denetlenemiyor, kapı
   reis/Sultan kararını hiç okumuyordu; geçici yol "yeni kart + yeni dal + yeni PR" Sultan'a günde ~30 karar yüklüyordu.

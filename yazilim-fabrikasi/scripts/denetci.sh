@@ -825,7 +825,7 @@ yol,tur,is_,pr,yazan,den,kd,sonuc_yolu,kirp,bayt,esik,yedek,yazan_model,yedek_mo
 kareler=[{"ad":a,"sha256":h} for a,h in (l.split("\t") for l in kare_kayit.splitlines() if "\t" in l)]
 json.dump({"tur":int(tur),"is":is_,"pr":pr,"yazan":yazan,"denetci":den,"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
            "kanit_durumu":kd,
-           "depo":depo,"dal":(dal or None),"birincil":birincil=="1",   # 0.20.0 (V8NMK): kayıt NEREYE yazıldı — birincil kopyaya yazılan kayıt PR'a girmez, buradan ayırt edilir
+           "depo":depo,"dal":(dal or None),"birincil_mi":birincil=="1",   # 0.20.0 (V8NMK · kart cümlesindeki ad: birincil_mi): kayıt NEREYE yazıldı — birincil kopyaya yazılan kayıt PR'a girmez, buradan ayırt edilir
            "yedek":(yedek or None),   # Sultan Y0006: yedek gözle alınan puan codex puanı sanılmasın; sebebi kayıtta
            "yazan_model":(yazan_model or None), "yazan_model_kaynak":(ym_kaynak or None), "yedek_model":(yedek_model or None),   # yedek koşumunda dolu (ölçülemezse yedek koşmaz, rc=3)
 
