@@ -1,7 +1,7 @@
 {
   "is": "canli-dosya-kapisi",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-24T01:48:22+03:00",
+  "guncelleme": "2026-10-24T01:51:16+03:00",
   "kayitlar": [
     {
       "tur": "canli",
@@ -43,18 +43,18 @@
       "etiket": "kapi-sinavi-sonra",
       "asama": "sonra",
       "dosya": "olcum-kapi-sinavi-sonra-sonra.txt",
-      "sha256": "e545cdc30be76256080198c123daa3ff2df433c9ef74b3cbc8ca43628feba69f",
+      "sha256": "dc536573dd8d64fdaa3c452a197ba2c188be64b4e6291c15378c65cb764fc6aa",
       "komut": [
         "bash",
         "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-24T01:48:22+03:00",
-      "sure_sn": 48.3,
+      "zaman": "2026-10-24T01:51:16+03:00",
+      "sure_sn": 63.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "58e20adb222f4ef0a83bb4902a2cb39e"
+      "olcum_id": "72bd987bf0494ed987c95f3bbb8ecb8c"
     }
   ],
-  "imza": "e276b32f50271ed07918389413072cc6b4fd052a60cee171c57265acf4d119c5"
+  "imza": "93da5dede925aab4fd33d9ade5c547877531e130c0606065a19d32123e2ec6b5"
 }
