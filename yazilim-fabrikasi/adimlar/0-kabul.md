@@ -21,15 +21,14 @@ görünüm değişikliği "kusur düzeltmesi" sanılıp peşin onayla yayınland
 
 ## Sınıflı iş — başlama izni Sultan'ın, kararlar reisin (0.21.0 · Sultan D1 22 Eki 2026)
 Kural metni BURADA yaşar. Sultan (session_01Ge4BawKcUrcm1pdV8WANyF): *"sadece ara kararlar değil birleştirme kararları da reise
-geçsin"* — işler Sultan'ın kapısında ayda 1.138 saat bekledi; 22 Eki'de 12 kararın 12'sinde Sultan ajan önerisini seçti.
+geçsin"* (işler kapısında ayda 1.138 saat bekledi).
 - **Başlama izni Sultan'a gider, iş bekletilmez:** sınıflı kartta `baslama_izni: bekliyor`; izin isteği `--oda` odasına gider,
   satır komut taşımaz ("durdurmak için 'dur' demen yeter").
 - **Veto:** Sultan'ın "dur"unu ajan `kart.sh sultan-dedi <iş> --karar dur` ile işler → `reis-dedi` · `daralt` · `bitti` rc 1;
   `--karar basla` vetoyu kaldırır (son kazanır). Sınıfsız kartta basla/dur rc 1 (veto penceresi yok).
 - **Ara kararlar (devam · daralt · geri-al) ve birleştirme kararı reisin:** gerekçeli `kart.sh reis-dedi`; `bitti` kararı
   `birlestirme_karari{karar_veren: reis}` olarak yazar. Dağıtım Sultan eli. A06: reis kaydı ayrı alanda, Sultan sözü değildir.
-- **Geriye uyum:** eski kart "bekliyor · veto yok" sayılır; eski Sultan kararları geçerli ama şart değil (0.17'de sınıflı işin
-  ara ve birleştirme kararı Sultan'ındı).
+- **Geriye uyum:** eski kart "bekliyor · veto yok" sayılır; eski Sultan kararları geçerli, şart değil.
 - **İkinci kartta** (`fabrika-merge-reise-parca2`): kapı/denetçi/gün sonunun vetoyu okuması, ulaşım yolu yokken kartın
   açılmaması, sınıflı işte canlı borcun reise geçmesi.
 

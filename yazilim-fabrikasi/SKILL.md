@@ -129,7 +129,7 @@ Codex yoksa ya da iki denemede de düşerse, **yazandan farklı yeni bir Claude 
 sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kaldırılınca kırmızı).
 
 ## Sürüm notları
-- **0.21.0 (2026-10-23, Sultan D1 · çekirdek; sürüm sırası SERDAR: 0.19.0 #436, 0.20.0 V8NMK):** Sultan (session_01Ge4BawKcUrcm1pdV8WANyF): *"sadece ara kararlar değil birleştirme kararları da reise geçsin"* — işler ayda 1.138 saat Sultan'ın kapısında bekledi. Eski kural (0.17): sınıflı kartta `reis-dedi` red, `daralt` için Sultan kararı şart. Yeni: `izin.py` + `kart.sh` (başlama izni · kapalı küme + basla/dur · sınıflıda reis-dedi/daralt reisin · veto çiti reis-dedi/daralt/bitti · birlestirme_karari · izin-durum) + 0-kabul/4-gonder. İş bölündü (istem 222 KB > 120 KB): kapı · denetçi · gün sonu okuması, Sultan'a ulaşım yolu zorunluluğu, canlı borç, `is-alani --kartsiz`, şablon ikinci kartta (`fabrika-merge-reise-parca2`).
+- **0.21.0 (23 Eki, Sultan D1 · çekirdek; sıra: 0.19.0 #436, 0.20.0 V8NMK):** sınıflı işte Sultan yalnız başlama izni verir (veto), ara kararlar ve birleştirme reisin — kural `adimlar/0-kabul.md` "Sınıflı iş". `izin.py` + `kart.sh` (izin-durum · basla/dur · sınıflıda reis-dedi/daralt · veto çiti reis-dedi/daralt/bitti · birlestirme_karari). Kalanı ikinci kartta (`fabrika-merge-reise-parca2`).
 - **0.10.0 (2026-10-18, SERDAR · PCP7J daraltma adımı; 0.9.0 HENDESE üstüne):** tıkanma raporu "kapsamı daralt" diyordu ama hatta adımı yoktu:
   daralt kararı verilen iş (cloudtop #668) tur açamıyor, mutlak tavanı dolan iş (#670) bir daha denetlenemiyor, kapı
   reis/Sultan kararını hiç okumuyordu; geçici yol "yeni kart + yeni dal + yeni PR" Sultan'a günde ~30 karar yüklüyordu.

@@ -4,8 +4,7 @@
 # Kartlar BİRİNCİL depo kökünde yaşar: <depo>/_agents/fabrika/kartlar/<iş>.json (worktree'ler ortak görür).
 # Dört sınıf sorusu cevapsız kart AÇILMAZ. Biri "e" ya da "?" ise → sultan=true (şüphede sınıf YUKARI).
 #
-# 🔴 KURAL 0.21.0 (Sultan D1 22 Eki; metin adimlar/0-kabul.md "Sınıflı iş"): sınıflı işte Sultan yalnız başlama izni verir (veto);
-#    ara kararlar ve birleştirme reisin. İzin tek yüzey: kart.sh izin-durum (izin.py).
+# 🔴 KURAL 0.21.0: adimlar/0-kabul.md "Sınıflı iş" (başlama izni Sultan'ın, kararlar reisin; izin tek yüzey: izin-durum).
 #
 # Kullanım:
 #   kart.sh ac <iş> --is "tek cümle" --istedi <kim> --aldi <ajan> \
