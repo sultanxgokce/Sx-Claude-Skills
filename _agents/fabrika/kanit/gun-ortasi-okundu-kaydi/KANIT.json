@@ -1,0 +1,123 @@
+{
+  "is": "gun-ortasi-okundu-kaydi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T09:19:35+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kalan-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kalan-sinavi-once.txt",
+      "sha256": "82e413a20eb8de94c3b9241f76cf31d64df7ffee15f4f1867061e4e5c7972ae7",
+      "komut": [
+        "timeout",
+        "300",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/go/taban/gun-ortasi/scripts/kalan.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T09:18:33+03:00",
+      "sure_sn": 50.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a07fecea80384554b921cf700eb60d5e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kalan-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kalan-sinavi-sonra.txt",
+      "sha256": "08bdf18b1c7dcfb55cc1c41c6ad72035877751fefc394b4142c0134e3fa331cb",
+      "komut": [
+        "timeout",
+        "300",
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-gun-ortasi-okundu-kaydi/gun-ortasi/scripts/kalan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T09:19:23+03:00",
+      "sure_sn": 49.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c5cfa83ebd7b49d4b3ed512bebf4b33b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-parity-strict",
+      "asama": "sonra",
+      "dosya": "olcum-ci-parity-strict-sonra.txt",
+      "sha256": "292230aac8d8667fb90910a8afc19729f80733c06734820e5f4a15e07ff05066",
+      "komut": [
+        "node",
+        "ahi/schema/validate-repo.mjs",
+        ".",
+        "--strict"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T09:19:23+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "61927ac62e214d5093d28442ffea127a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-version-lint",
+      "asama": "sonra",
+      "dosya": "olcum-ci-version-lint-sonra.txt",
+      "sha256": "8fc5bd06034667e2e61cbeb44e6cf290d7e4458f851b02c214c20443c51ea821",
+      "komut": [
+        "node",
+        "ahi/schema/version-lint.mjs",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T09:19:24+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "9ea014b924344e3ebafa9f4c10d7a7ef"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mihenk-canli-gelen",
+      "asama": "once",
+      "dosya": "olcum-mihenk-canli-gelen-once.txt",
+      "sha256": "26392463e9113f04ec53fb46179f60d29fa4d203aa19997c47812b0d4c7c2994",
+      "komut": [
+        "bash",
+        "-o",
+        "pipefail",
+        "-c",
+        "GUN_ORTASI_KOK=/config/projects/mihenk bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/go/taban/gun-ortasi/scripts/kalan.sh | grep -E '^#OZET|not: okundu|5/9'"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T09:19:29+03:00",
+      "sure_sn": 5.1,
+      "boru_denetimi": "temiz",
+      "olcum_id": "bdc98ce3114840fbb04a64325eae9965"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mihenk-canli-gelen",
+      "asama": "sonra",
+      "dosya": "olcum-mihenk-canli-gelen-sonra.txt",
+      "sha256": "255e3787b7d0b21362d85926787edc91fbb9ea77599bd4d1e82a6453998538f6",
+      "komut": [
+        "bash",
+        "-o",
+        "pipefail",
+        "-c",
+        "GUN_ORTASI_KOK=/config/projects/mihenk bash /config/projects/_wt/Sx-Claude-Skills-gun-ortasi-okundu-kaydi/gun-ortasi/scripts/kalan.sh | grep -E '^#OZET|not: okundu|5/9'"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T09:19:35+03:00",
+      "sure_sn": 5.4,
+      "boru_denetimi": "temiz",
+      "olcum_id": "128fedb7a042429ea12bf9deee5d2f7e"
+    }
+  ],
+  "imza": "925ea598b1bc076588a5fc856774c43419040c9b43450218ab0ea932ecdf6b0d"
+}

@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "gun-ortasi-okundu-kaydi",
+  "pr": "434",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T06:08:03+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 42519,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İstenen kutudan sorgulama akışı, eski biçim uyumluluğu ve hata durumlarında “ölçemedim” davranışı eklenmiş; önce kırmızı olan hedef sınavın 45/45 yeşile dönmesi doğru işi yaptığını güçlü biçimde gösteriyor. Ancak komut desteği hâlâ kurye betiğinin kaynak metninde sözcük arayarak tahmin ediliyor; önce bu uygulama sorununu çözmeden üretime hazır sayılmaz.",
+    "bulgular": [
+      {
+        "ne": "`okundu-liste` desteği gerçekten sınanmıyor; sözcüğün kurye betiğinde herhangi bir yerde geçmesi destek kanıtı kabul ediliyor. Yalnız `okundu-yolu` sunan bir betiğin yorumunda veya yardım metninde `okundu-liste` geçerse kod yanlış komutu çağırır, rc≠0 sonucunda `okundu-yolu`na geçmeden gelen kutusunu ölçülemedi yapar; bu, belirtilen “okundu-liste, yoksa okundu-yolu” sırasını güvenilir biçimde uygulamaz.",
+        "kanit": "Değişiklikte ilk dal `[ -f \"$KY\" ] && grep -q 'okundu-liste' \"$KY\"` koşuluna bağlı ve çağrı başarısız olunca doğrudan `neden=\"rc=...\"` atanıyor; sonraki `elif ... grep -q 'okundu-yolu'` dalına geçiş yok. T5j yalnız farklı sözdizimini, T5f ise liste çağrısının çalışma hatasını ölçüyor; sözcüğün yorum/yardım metninde bulunduğu fakat komutun desteklenmediği yalnız-yol vakası ölçülmüyor.",
+        "konum": "gun-ortasi/scripts/kalan.sh:154-163; gun-ortasi/scripts/kalan.test.sh:T5e,T5f,T5j",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Hedef sınav için kırmızı önce/yeşil sonra ölçüm çifti mevcut ve son ölçüm 45 geçti, 0 kaldı gösteriyor; depo parity ve sürüm denetimleri de yeşil. Mihenk ölçüm çifti gerçekçi veriyle eski davranışta gelen=86, yeni davranışta gelen=0 değişimini doğruluyor; ancak komut adının yalnız yorum veya yardım metninde geçtiği yanlış-pozitif yetenek tespiti kapsanmamış."
+  }
+}

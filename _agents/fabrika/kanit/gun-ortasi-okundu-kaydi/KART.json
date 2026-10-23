@@ -1,0 +1,92 @@
+{
+  "is": "gun-ortasi-okundu-kaydi",
+  "cumle": "gun-ortasi kalan.sh gelen kutusu bölümü okundu kaydını kutunun 0-teslimat/.okundu dosyasından salt-okur okur (kurye-yokla.sh biçimi: ad, TAB, sha256: ya da md5: özet; ya da yalın ad; aynı ad için son özetli kayıt kazanır; özeti tutmayan ya da tanınmayan biçimdeki kayıt okunmuş sayılmaz), kurye-yokla.sh'ı KOŞTURMAZ; kurye var ama .okundu yoksa damga yok sayılıp hepsi okunmamış basılır ve okundu.log'a bakılmaz; kurye-yokla.sh olmayan kutuda okundu.log eski biçimiyle aynen çalışır",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-23T05:46:28+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/gun-ortasi-okundu-kaydi",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-10-23T06:18:28+03:00",
+      "olay": "tikandi"
+    },
+    {
+      "zaman": "2026-10-23T09:13:32+03:00",
+      "olay": "daralt",
+      "kalan_kart": "gun-ortasi-okundu-kurye-sorgu",
+      "tur_sifir": 4
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M4ZMCTDB4B84P42S6R75A8CJ",
+  "tahmin_dk": 90,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-23T05:46:28+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-23T06:18:28+03:00",
+      "olay": "tikandi",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "canli_kanit": "yok",
+  "bitis": "2026-10-23T06:18:28+03:00",
+  "pr": "",
+  "puan": {
+    "kod": 4,
+    "dogru": "E",
+    "tur": 3
+  },
+  "kanit_var": true,
+  "tikanma": {
+    "yol": "devam",
+    "neden": "Göz 3 tur: 3/E (2 bulgu) → 4/E (1) → 4/E (1); her tur bir bulgu kapandı, tur 3'te kalan tek bulgu yeni değil, aynı konunun son hâli: arayüz var-olabilirlik ön kontrolü (kaynakta komut adı grep'i) 'tahmin' sayılıyor. Çare somut ve küçük: ön kontrolü kaldır — kurye-yokla.sh varken okundu-liste → okundu-yolu doğrudan sorulur, cevap doğrulanır, ikisi de düşerse ölçemedim (okundu.log yalnız kuryesiz kutuda). Canlı hedef zaten ölçüldü (mihenk gelen 86→0). Tur 4 bunu kapatır; yol: devam."
+  },
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "BANI",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF · aile-sinyal e0b179762732 · SERDAR 08:34",
+      "gerekce": "SERDAR reis kararı 23 Eki 08:34 (zil): Sx #434 TIKANDI → DEVAM +1 tur — \"3→4→4, tek bulgu\"",
+      "zaman": "2026-10-23T08:49:14+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "BANI",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF · DENETIM-4 bulgu (codex) · SERDAR 08:34 devam+1 sonrası tavan",
+      "gerekce": "daraltma: kalan bulgu yeni karta (gun-ortasi-okundu-kurye-sorgu) — kurye arayüzüne sorarak okuma (kurye-yokla.sh okundu-liste / okundu-yolu): göz tur 4 — tanımadığı komutta eski kurye yoklama kipine düşer (touch .okundu + göç), salt-okur ölçüm kutuyu değiştirir; kurye yan etkisiz bir sorgu sözleşmesi ilan ederse ayrı iş",
+      "zaman": "2026-10-23T09:13:32+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "gun-ortasi kalan.sh gelen kutusu bölümü okundu kaydını kutunun kendisinden sorar (scripts/kurye-yokla.sh okundu-liste, yoksa okundu-yolu), kaydın adını ve biçimini tahmin etmez; kurye-yokla.sh olmayan kutuda okundu.log eski biçimiyle aynen çalışır; kaydı kutudan okunan mektup okunmamış sayılmaz",
+      "zaman": "2026-10-23T09:13:32+03:00",
+      "kalan_kart": "gun-ortasi-okundu-kurye-sorgu"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-23T09:13:32+03:00",
+      "kalan_kart": "gun-ortasi-okundu-kurye-sorgu",
+      "kalan": "kurye arayüzüne sorarak okuma (kurye-yokla.sh okundu-liste / okundu-yolu): göz tur 4 — tanımadığı komutta eski kurye yoklama kipine düşer (touch .okundu + göç), salt-okur ölçüm kutuyu değiştirir; kurye yan etkisiz bir sorgu sözleşmesi ilan ederse ayrı iş",
+      "tur_sifir": 4,
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF · DENETIM-4 bulgu (codex) · SERDAR 08:34 devam+1 sonrası tavan"
+    }
+  ]
+}
