@@ -1,0 +1,32 @@
+{
+  "is": "sx-ci-paralel",
+  "cumle": "Sx-Claude-Skills CI: kabuk sınamaları tek sıralı döngüden ayrı koşullara bölünsün (ağır iki sınav kendi koşusunda, kalanlar paralel), kanıt-belge-kart dosyası değişen PR'da CI hiç koşmasın; Sultan'ın bekleme süresi hedefin altına insin",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-23T22:13:53+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "CI kosu sureleri (gh run) once/sonra",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5N2SS1W1W9NNAGXGFRKAXTF",
+  "tahmin_dk": 180,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-23T22:13:53+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
