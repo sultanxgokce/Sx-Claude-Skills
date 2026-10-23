@@ -1,7 +1,7 @@
 {
   "is": "kanit-uc-boy",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-23T05:18:06+03:00",
+  "guncelleme": "2026-10-23T05:20:44+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -26,7 +26,7 @@
       "etiket": "uc-boy",
       "asama": "sonra",
       "dosya": "olcum-uc-boy-sonra.txt",
-      "sha256": "b337f8bba71905ddc5f38042bf9f846be6e447029f3bafd9deca25c4a526da9f",
+      "sha256": "ad3b922f44125471023de97489ea1229488d4de987125552cde21ffac40d86ae",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/kanit-uc-boy/uc-boy-olcer.sh",
@@ -34,28 +34,28 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T05:17:43+03:00",
+      "zaman": "2026-10-23T05:20:44+03:00",
       "sure_sn": 3.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "ac9acddb8fe74cc79a49026adae1797d"
+      "olcum_id": "0d6cd3c3c77b472ab2523ee1f8ff2da2"
     },
     {
       "tur": "olcum",
       "etiket": "kanit-sinavi",
       "asama": "tek",
       "dosya": "olcum-kanit-sinavi-tek.txt",
-      "sha256": "f12b40a4ecee99e84a45d5c8ff0d3dc940114623a2cd40f33366bfd972e523b4",
+      "sha256": "da586033c9d60b495b345d84ebdc1a86f82d48aa31d59525f0ecb3dbbc224c22",
       "komut": [
         "bash",
         "yazilim-fabrikasi/scripts/kanit.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T05:18:06+03:00",
-      "sure_sn": 23.4,
+      "zaman": "2026-10-23T05:20:41+03:00",
+      "sure_sn": 27.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "11381a122ea5441fbb178c76a95cd2e2"
+      "olcum_id": "e1ed69737ee14fba9db395086befc060"
     }
   ],
-  "imza": "de34a371cf4227c425b8e4ab7ebc08e9560674d3d7974c37bf1faa9b03d62e11"
+  "imza": "9e1e062534dbe2c40d4c8c42e415c134397fb59e2181d89df7151b2551c88782"
 }

@@ -1,5 +1,5 @@
 $ bash _agents/fabrika/kanit/kanit-uc-boy/uc-boy-olcer.sh agac
-# rc=0 sure=3.1s zaman=2026-10-23T05:17:43+03:00
+# rc=0 sure=3.1s zaman=2026-10-23T05:20:44+03:00
 --- stdout ---
 kod kaynağı: agac · kanit.sh ekran --uc-boy rc=0
    ✓ kare alındı: ekran-ana-1440-tek.png (1440px · ürün imi doğrulandı)

@@ -388,6 +388,9 @@ GELEN_VARSAYILAN = "/config/evraklar/Sultan/0-Gelen"
 
 
 def cmd_ekran(a):
+    # göz #433 tur 1: kutu adı dosya adına girer — mutlak yol / "../" kopyayı gelen klasörünün DIŞINA taşırdı. Kare alınmadan reddedilir.
+    if a.gelen is not None and not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,40}", a.gelen):
+        hata(f"--gelen bir kutu adı olmalı (küçük harf/rakam/tire, ör. nexus): {a.gelen!r}", 2)
     boylar = UC_BOY if a.uc_boy else tuple(a.boylar) if a.boylar else None
     if not boylar:
         sys.exit(_ekran_tek(a, a.etiket, a.genislik))
@@ -411,16 +414,21 @@ def _boylar(v):
     return L
 
 
-def _gelene_kopyala(a, yol, etiket):
+def _gelene_kopyala(a, yol, etiket):   # → kopya gerekmediyse ya da yazıldıysa True; istenip yazılamadıysa False
     if not a.gelen:
-        return
+        return True
     hedef_diz = os.environ.get("KANIT_GELEN_DIZ") or GELEN_VARSAYILAN
     if not os.path.isdir(hedef_diz):
         print(f"   ◻ gelen klasörü yok ({hedef_diz}) — kare kopyalanmadı (kanıt kutuda kayıtlı)")
-        return
+        return True
     hedef = os.path.join(hedef_diz, f"{a.gelen}_{a.is_adi}-kare-{etiket}-{a.asama}.png")
-    shutil.copyfile(yol, hedef)
+    try:
+        shutil.copyfile(yol, hedef)
+    except OSError as e:   # göz #433 tur 1: istisnayla kesilmez; kare kanıtı yeşil kalır ama TESLİM düştü → çağırana rc 3
+        print(f"   ◻ gelen kopyası YAZILAMADI ({e.__class__.__name__}: {e.strerror or e}) — kare kanıtı kayıtlı, Sultan'a gitmedi")
+        return False
     print(f"   → Sultan'ın gelen klasörüne: {hedef}")
+    return True
 
 
 def _ekran_tek(a, etiket, genislik):
@@ -474,8 +482,7 @@ def _ekran_tek(a, etiket, genislik):
     kayit = {**temel, "sha256": sha_dosya(yol), "rc": 0, "renk": "yesil", "urun_imi": a.urun_imi, "genislik": genislik}
     kayit_ekle(depo, a.is_adi, kayit)
     print(f"✓ kare alındı: {ad} ({genislik}px{' · ürün imi doğrulandı' if a.urun_imi else ''})")
-    _gelene_kopyala(a, yol, etiket)
-    return 0
+    return 0 if _gelene_kopyala(a, yol, etiket) else 3
 
 
 # ── dosya ────────────────────────────────────────────────────────────────────────

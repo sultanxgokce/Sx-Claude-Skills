@@ -599,6 +599,15 @@ PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran is-ub kotu -
 [ "$R1" -eq 2 ] && [ "$R2" -eq 2 ] && [ "$R3" -eq 2 ] && [ -z "$(_kay kotu)" ]; g $? "bozuk/tekrarlı --boylar ve --uc-boy+--boylar birlikte → rc 2, hiçbir kayıt yazılmadı"
 PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran is-ub tekkare --url https://ornek.test --asama tek --genislik 1280 >/dev/null 2>&1; RC=$?
 [ "$RC" -eq 0 ] && [ "$(_kay tekkare)" = "tekkare:yesil:1280" ] && [ -s "$UB/ekran-tekkare-tek.png" ]; g $? "geriye uyum: boysuz çağrı eskisi gibi TEK kayıt, etiket eki yok"
+for kotu in "../disari" "/tmp/mutlak" "Nexus" "a/b"; do
+  PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran is-ub yolkac --url https://ornek.test --asama tek --uc-boy --gelen "$kotu" >/dev/null 2>&1; RK=$?
+  [ "$RK" -eq 2 ] && [ -z "$(_kay yolkac)" ]; g $? "--gelen '$kotu' kutu adı değil → rc 2, HİÇ kare alınmadı (kopya klasör dışına taşınamaz — göz #433 tur 1)"
+done
+mkdir -p "$T/gelen-kilitli"; chmod 555 "$T/gelen-kilitli"
+O="$(KANIT_GELEN_DIZ="$T/gelen-kilitli" PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran is-ub kilit --url https://ornek.test --asama tek --boylar 390 --gelen nexus 2>&1)"; RC=$?
+if [ -w "$T/gelen-kilitli" ]; then echo "  · atlandı: kök kullanıcı izinsiz dizine de yazabiliyor — kilitli klasör kapısı bu kutuda ölçülemez"; else
+[ "$RC" -eq 3 ] && [ "$(_kay kilit)" = "kilit-390:yesil:390" ] && grep -q "gelen kopyası YAZILAMADI" <<<"$O" && ! grep -q Traceback <<<"$O"; g $? "kopya yazılamazsa istisna YOK: kare kanıtı yeşil kalır, teslim düştüğü için komut rc 3 ($(_kay kilit))"; fi
+chmod 755 "$T/gelen-kilitli"
 echo "── T-UB · MUTASYON (geçici kopya): çıkış en kötü sonucu taşımazsa düşen boy yeşil görünür → 🔴 kapı düşerdi ──"
 UBM="$T/ubm"; mkdir -p "$UBM"; cp "$HERE"/kanit.py "$HERE"/kanit-ekran.mjs "$UBM/" 2>/dev/null
 python3 - "$UBM/kanit.py" <<'PYM'

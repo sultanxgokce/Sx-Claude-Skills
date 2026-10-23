@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/kanit.test.sh
-# rc=0 sure=23.4s zaman=2026-10-23T05:18:06+03:00
+# rc=0 sure=27.7s zaman=2026-10-23T05:20:41+03:00
 --- stdout ---
 ════ T1 · ölçüm çifti: komutu araç koşar, kırpılmamış çıktı+rc ════
   ✓ önce ölçümü rc=0
@@ -244,8 +244,13 @@ $ bash yazilim-fabrikasi/scripts/kanit.test.sh
   ✓ --boylar 1440,390: yalnız verilen boylar
   ✓ bozuk/tekrarlı --boylar ve --uc-boy+--boylar birlikte → rc 2, hiçbir kayıt yazılmadı
   ✓ geriye uyum: boysuz çağrı eskisi gibi TEK kayıt, etiket eki yok
+  ✓ --gelen '../disari' kutu adı değil → rc 2, HİÇ kare alınmadı (kopya klasör dışına taşınamaz — göz #433 tur 1)
+  ✓ --gelen '/tmp/mutlak' kutu adı değil → rc 2, HİÇ kare alınmadı (kopya klasör dışına taşınamaz — göz #433 tur 1)
+  ✓ --gelen 'Nexus' kutu adı değil → rc 2, HİÇ kare alınmadı (kopya klasör dışına taşınamaz — göz #433 tur 1)
+  ✓ --gelen 'a/b' kutu adı değil → rc 2, HİÇ kare alınmadı (kopya klasör dışına taşınamaz — göz #433 tur 1)
+  ✓ kopya yazılamazsa istisna YOK: kare kanıtı yeşil kalır, teslim düştüğü için komut rc 3 (kilit-390:yesil:390)
 ── T-UB · MUTASYON (geçici kopya): çıkış en kötü sonucu taşımazsa düşen boy yeşil görünür → 🔴 kapı düşerdi ──
   ✓ mutant (rc hep 0): 1280 düştüğü hâlde komut yeşil döndü → üstteki 🔴 kapı bu mutantta düşerdi
 
-── SONUÇ: 216 geçti · 0 kaldı ──
+── SONUÇ: 221 geçti · 0 kaldı ──
 --- stderr ---
