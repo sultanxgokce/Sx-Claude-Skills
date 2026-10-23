@@ -1,0 +1,6 @@
+$ bash _agents/fabrika/kanit/sx-kart-takipsiz/gecis-provasi.sh sx-kart-takipsiz
+# rc=0 sure=2.2s zaman=2026-10-23T03:46:21+03:00
+--- stdout ---
+ana kopya: layiha-global-20260722 b5ce5a2 · kart diskte 196 · hedef a93be6f (takipli kart 0)
+geçiş: OLDU · kart dizini bayt bayt aynı: evet
+--- stderr ---
