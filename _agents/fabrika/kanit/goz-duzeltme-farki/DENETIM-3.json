@@ -1,0 +1,38 @@
+{
+  "tur": 3,
+  "is": "goz-duzeltme-farki",
+  "pr": "436",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T11:36:02+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 71494,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 11,
+    "bayt": 57308
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, önceki turun iki bulgusu kapatılmış; baş kaydı, ayrı önceki-bulgu özeti, yalnız yeni fark ve 100000 baytlık gönderim kapısı güçlü sınavlarla ölçülmüş. Ancak bir dosyanın düzeltme turunda ana dal hâline tamamen geri alınması, dosya listesinin yalnız yeni baştaki net PR farkından kurulması nedeniyle göze boş fark olarak gidebilir; önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "Önceki turda PR'a ait olan bir dosya düzeltme commitinde ana dal hâline tamamen döndürülürse gerçek geri alma değişikliği göze gitmeyebilir. PR dosya listesi yalnız ortak ata ile yeni baş arasındaki net farktan çıkarıldığı için artık net PR farkında bulunmayan yol liste dışı kalır; ardından önceki baş ile yeni baş farkı bu eksik pathspec ile süzülür.",
+        "kanit": "Kod `_pd` listesini `git diff --no-renames --name-only -z \"$_mb\" \"$BAS\"` ile yeni baştaki net PR dosyalarından kuruyor, sonra düzeltme farkını `git diff \"$_ob\" \"$BAS\" -- \"${_pd[@]}\"` ile yalnız bu listeye uyguluyor. D1-D7 sınavlarında değiştirilen dosyanın bütünüyle ana dal hâline geri alındığı vaka yok; D3/D3x yalnız baş değişmemesi veya yalnız PR dışı değişikliği ölçüyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh:493-504; yazilim-fabrikasi/scripts/denetci-duzeltme-farki.test.sh:D2-D3x",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Kırmızı önce/yeşil sonra ölçüm çifti mevcut; özel sınav 44/0, genel denetçi 266/0 ve fark ayıklama 30/0 sonuçlanmış, ayrıca on mutant ilgili kapıların bozuk kodu yakaladığını gösteriyor. Kanıt gerçek Git depoları ve özel adlı dosya vakası içeriyor; ancak tam geri alma senaryosu ölçülmediği için yukarıdaki yol kaybını dışlamıyor."
+  }
+}
