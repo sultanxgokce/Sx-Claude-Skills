@@ -1,0 +1,43 @@
+{
+  "tur": 1,
+  "is": "kart-tetik-hedef",
+  "pr": "447",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T21:21:03+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-kart-tetik-hedef",
+  "dal": "kart-tetik-hedef",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 22084,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 28100
+  },
+  "bas": "458ffd7a0e6d4e7e47e806a4f24897c35601a8ec",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Tetik mektubuna ilk satırda `HEDEF: <oda>` eklenmiş; sınıflı kartın gerçek dağıtım kuralından geçerek açılması sağlanmış. Önce/sonra ölçümü, tam sınav ve hedef satırı kaldırılan mutant davranışı sonucu destekliyor; yalnız U10’un “ilk satır” konumunu doğrudan sınamaması küçük bir rötuş.",
+    "bulgular": [
+      {
+        "ne": "U10, açıklamasında HEDEF alanının ilk satırda olduğunu söylüyor ancak sahte tetik alanı ilk beş satırın herhangi birinde kabul ediyor; bu nedenle gelecekte alanın ikinci-beşinci satıra taşınması testi bozmayabilir.",
+        "kanit": "Sahte tetik `head -5 \"$3\" | sed ... | head -1` ile ilk beş satırı tarıyor; U10 yalnız rc=0, kart dosyası ve başarı çıktısını denetliyor. Üretim kodundaki `printf 'HEDEF: %s\\n%s\\n'` bugün alanı gerçekten ilk satıra yazıyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.test.sh: U10; yazilim-fabrikasi/scripts/kart.sh: tetik()",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam. Önce ölçümünde eski kodun `hedef-yok` nedeniyle kartı açamadığı, sonra ölçümünde yeni kodun aynı gerçekçi `sinav-oda` akışında rc=0 ile kartı açtığı görülüyor; ayrıca 250 sınav geçiyor. Hedef satırı mutantı genel `kart-sinavi` kaydının içinde ve manifestte ayrı `mutasyon: true` kaydı değil; dolayısıyla resmi mutasyon kanıtı sayılmaz, fakat gerçek ölçüm çifti ve U10’un normal yeşil koşusu ana iddia için yeterli."
+  }
+}
