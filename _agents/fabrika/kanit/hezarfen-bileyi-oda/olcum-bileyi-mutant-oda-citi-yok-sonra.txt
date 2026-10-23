@@ -1,14 +1,10 @@
 === MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-bileyi-sinavi-* ===
-$ bash -c set -o pipefail; timeout 300 bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/mut-bileyi/bileyi/scripts/bileyi.test.sh 2>&1 | grep -E '✗|kaldı|SONUÇ'
-# rc=1 sure=11.3s zaman=2026-10-23T15:22:29+03:00
+$ bash -c set -o pipefail; timeout 300 bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/mut-bileyi/bileyi/scripts/bileyi.test.sh 2>&1 | grep -E '✗|toplam='
+# rc=1 sure=11.0s zaman=2026-10-23T16:14:26+03:00
 --- stdout ---
-E3 · 🔴 SONUÇ kapısı: yalnız tek-parti varsa hüküm TEMİZ olmalı
-  ✓ S5 🔴 SONUÇ: sürtünme sınıfı FİİLEN aday olur (yardımcı değil, HAT ölçülür)
   ✗ OD1 (rc=1) argv-log=ac o1 --is bileyi: tekrar eden sürtünme yeteneğe çevriliyor --istedi BILEYI --aldi sinav-ajani --geri-alinamaz h --para h --dis-yuzey h --yetki e --kanit _agents/fabrika/kanit/o1 · 🔪 sınıf kâhini · hedef yollar: hooks/a.js
 ✗ Sultan'a ulaşılamadı: --oda ver ya da tetik betiğini kur (kart AÇILMADI)
   ✗ OD4 (rc=0): 🔪 sınıf kâhini · hedef yollar: hooks/a.js
   ✗ MUT-OD mutant farksız (çapa bayat)
-  ✗ X11 merkez havuzu VE kutu defteri birlikte okunur (oda: 10 + defter: 5) (çıktıda 'havuz: 15 kayıt' yok)
-  ✗ X12 🔴 AÇIK verilen yol yoksa sessizce düşmez: 🟡 okunamadı satırı (çıktıda '🟡 kutu-defteri: /tmp/tmp.GjZaA5qPFO/yok-defter.json — okunamadı' yok)
-  ✗ X13 açık yolu olmayan kaynak kapsamayı GENİŞ göstermez (1/2 kaynak) (çıktıda '1/2 kaynak OKUNDU' yok)
+toplam=127 geçen=124 düşen=3
 --- stderr ---

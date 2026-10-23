@@ -649,31 +649,31 @@ with contextlib.redirect_stdout(t): rc = m.komut_kart(n)
 print(t.getvalue()); sys.exit(rc)
 PY
 }
-cp "$KOK/sk-oda.json" "$KOK/oda/sk-oda.json" 2>/dev/null || true
-: > "$KOK/oda/kart-argv.log"
-O="$(oda_kos "$KOK/oda/kart-argv.log" o1 hooks/a.js "" 0)"; rc=$?
-if [ $rc -eq 1 ] && [[ "$O" == *"🔴 sınıflı iş: --oda ver — fabrika 0.21 odasız sınıflı kartı Sultan'a ulaştıramaz, açmaz"* ]] && [ ! -s "$KOK/oda/kart-argv.log" ]; then GECEN=$((GECEN+1)); echo "  ✓ OD1 sınıflı (yetki e) + --oda yok → rc 1, sebep basıldı, kart.sh HİÇ çağrılmadı"
-else DUSEN=$((DUSEN+1)); echo "  ✗ OD1 (rc=$rc) argv-log=$(cat "$KOK/oda/kart-argv.log" 2>/dev/null | head -1) · $O"; fi
-: > "$KOK/oda/kart-argv.log"
-O="$(oda_kos "$KOK/oda/kart-argv.log" o2 hooks/a.js oda-x 0)"; rc=$?
-if [ $rc -eq 0 ] && grep -q -- "--oda oda-x" "$KOK/oda/kart-argv.log" && [[ "$O" == *"kart açıldı · oda oda-x"* ]]; then GECEN=$((GECEN+1)); echo "  ✓ OD2 sınıflı + --oda oda-x → kart.sh'ye --oda geçti, 0.21 kuralı geçti, kart açıldı"
-else DUSEN=$((DUSEN+1)); echo "  ✗ OD2 (rc=$rc): $(cat "$KOK/oda/kart-argv.log") · $O"; fi
-: > "$KOK/oda/kart-argv.log"
-O="$(oda_kos "$KOK/oda/kart-argv.log" o3 bileyi/a.py "" 0)"; rc=$?
-if [ $rc -eq 0 ] && ! grep -q -- "--oda" "$KOK/oda/kart-argv.log" && [[ "$O" == *"kart açıldı"* ]]; then GECEN=$((GECEN+1)); echo "  ✓ OD3 sınıfsız + --oda yok → kart.sh odasız çağrıldı, açıldı (oda isteğe bağlı)"
-else DUSEN=$((DUSEN+1)); echo "  ✗ OD3 (rc=$rc): $(cat "$KOK/oda/kart-argv.log") · $O"; fi
-: > "$KOK/oda/kart-argv.log"
-O="$(oda_kos "$KOK/oda/kart-argv.log" o4 hooks/a.js "" 1)"; rc=$?
-if [ $rc -eq 1 ] && [[ "$O" == *"--oda ver"* ]]; then GECEN=$((GECEN+1)); echo "  ✓ OD4 --kuru'da da odasız sınıflı iş SÖYLENİR (rc 1), kuru koşum sessiz 'açılmadı' demez"
-else DUSEN=$((DUSEN+1)); echo "  ✗ OD4 (rc=$rc): $O"; fi
+mkdir -p "$KOK/od"; cp "$KOK/sk-oda.json" "$KOK/od/sk-oda.json"   # 🔴 DEĞİŞKEN ADI: bu bölüm OC kullanır — sınavın ilerisindeki X11–X13 "${O[@]}" DİZİSİNİ kullanıyor, O= ataması onu metne çevirip üçünü düşürüyordu (CI #441). 🔴 KENDİ dizini: paylaşılan $KOK/oda'ya yazmak X11–X13 (merkez havuzu sayımı) kapılarını düşürüyordu (CI #441)
+: > "$KOK/od/kart-argv.log"
+OC="$(oda_kos "$KOK/od/kart-argv.log" o1 hooks/a.js "" 0)"; rc=$?
+if [ $rc -eq 1 ] && [[ "$OC" == *"🔴 sınıflı iş: --oda ver — fabrika 0.21 odasız sınıflı kartı Sultan'a ulaştıramaz, açmaz"* ]] && [ ! -s "$KOK/od/kart-argv.log" ]; then GECEN=$((GECEN+1)); echo "  ✓ OD1 sınıflı (yetki e) + --oda yok → rc 1, sebep basıldı, kart.sh HİÇ çağrılmadı"
+else DUSEN=$((DUSEN+1)); echo "  ✗ OD1 (rc=$rc) argv-log=$(cat "$KOK/od/kart-argv.log" 2>/dev/null | head -1) · $OC"; fi
+: > "$KOK/od/kart-argv.log"
+OC="$(oda_kos "$KOK/od/kart-argv.log" o2 hooks/a.js oda-x 0)"; rc=$?
+if [ $rc -eq 0 ] && grep -q -- "--oda oda-x" "$KOK/od/kart-argv.log" && [[ "$OC" == *"kart açıldı · oda oda-x"* ]]; then GECEN=$((GECEN+1)); echo "  ✓ OD2 sınıflı + --oda oda-x → kart.sh'ye --oda geçti, 0.21 kuralı geçti, kart açıldı"
+else DUSEN=$((DUSEN+1)); echo "  ✗ OD2 (rc=$rc): $(cat "$KOK/od/kart-argv.log") · $OC"; fi
+: > "$KOK/od/kart-argv.log"
+OC="$(oda_kos "$KOK/od/kart-argv.log" o3 bileyi/a.py "" 0)"; rc=$?
+if [ $rc -eq 0 ] && ! grep -q -- "--oda" "$KOK/od/kart-argv.log" && [[ "$OC" == *"kart açıldı"* ]]; then GECEN=$((GECEN+1)); echo "  ✓ OD3 sınıfsız + --oda yok → kart.sh odasız çağrıldı, açıldı (oda isteğe bağlı)"
+else DUSEN=$((DUSEN+1)); echo "  ✗ OD3 (rc=$rc): $(cat "$KOK/od/kart-argv.log") · $OC"; fi
+: > "$KOK/od/kart-argv.log"
+OC="$(oda_kos "$KOK/od/kart-argv.log" o4 hooks/a.js "" 1)"; rc=$?
+if [ $rc -eq 1 ] && [[ "$OC" == *"--oda ver"* ]]; then GECEN=$((GECEN+1)); echo "  ✓ OD4 --kuru'da da odasız sınıflı iş SÖYLENİR (rc 1), kuru koşum sessiz 'açılmadı' demez"
+else DUSEN=$((DUSEN+1)); echo "  ✗ OD4 (rc=$rc): $OC"; fi
 # MUTASYON: oda çiti kalkınca O1 kırmızı (sahte kart.sh reddeder ama bileyi artık çağırır ve rc'yi geçirir — sebep bileyi'den değil)
 MB="$KOK/bileyi-mut-oda.py"; sed 's@    if sinifli and not oda:@    if False:@' "$B" > "$MB"
 if cmp -s "$MB" "$B"; then DUSEN=$((DUSEN+1)); echo "  ✗ MUT-OD mutant farksız (çapa bayat)"
 else
-  : > "$KOK/oda/kart-argv.log"
-  O="$(B="$MB" oda_kos "$KOK/oda/kart-argv.log" o5 hooks/a.js "" 0)"; rc=$?
-  if [ -s "$KOK/oda/kart-argv.log" ] && [[ "$O" != *"🔴 sınıflı iş: --oda ver"* ]]; then GECEN=$((GECEN+1)); echo "  ✓ MUT-OD: çit kalkınca bileyi odasız sınıflı kartı kart.sh'ye GÖNDERİYOR (0.21 orada reddeder, rc=$rc) — OD1 bunu yakalar"
-  else DUSEN=$((DUSEN+1)); echo "  ✗ MUT-OD yakalanmadı (rc=$rc): $O"; fi
+  : > "$KOK/od/kart-argv.log"
+  OC="$(B="$MB" oda_kos "$KOK/od/kart-argv.log" o5 hooks/a.js "" 0)"; rc=$?
+  if [ -s "$KOK/od/kart-argv.log" ] && [[ "$OC" != *"🔴 sınıflı iş: --oda ver"* ]]; then GECEN=$((GECEN+1)); echo "  ✓ MUT-OD: çit kalkınca bileyi odasız sınıflı kartı kart.sh'ye GÖNDERİYOR (0.21 orada reddeder, rc=$rc) — OD1 bunu yakalar"
+  else DUSEN=$((DUSEN+1)); echo "  ✗ MUT-OD yakalanmadı (rc=$rc): $OC"; fi
 fi
 
 echo "U · SEDİR düzeni (12 Eki bulgusu: çivili yol · noktasız ı · ts alanı)"
