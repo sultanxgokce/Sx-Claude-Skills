@@ -1,0 +1,69 @@
+{
+  "is": "fabrika-merge-reise",
+  "cumle": "Çekirdek: sınıflı işte başlama izni ve veto tek yerden okunur (izin.py, kart.sh izin-durum); kart.sh sınıflı kartta reis-dedi ve daralt kararını reise verir, Sultan dur derse ikisi de durur, Sultan'a ulaşılamazsa sınıflı kart açılmaz, bitti birleştirme kararını karta yazar; 0-kabul ve 4-gonder kural metni, SKILL sürümü, kart.test.sh ve bu davranışa göre güncellenen kapı/denetçi sınavları. Kapının, denetçinin ve gün sonunun vetoyu okuması ile canlı borç ikinci kartta.",
+  "istedi": "Sultan",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-22T22:39:32+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "e"
+  },
+  "siniflar": [
+    "yetki"
+  ],
+  "sultan": true,
+  "kanit_nerede": "sınav çıktıları (kart.test.sh, birlestirme-kapisi.test.sh, denetci.test.sh) önce/sonra + mutasyon",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-10-23T12:35:54+03:00",
+      "olay": "daralt",
+      "kalan_kart": "fabrika-merge-reise-parca2",
+      "tur_sifir": 0
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: host)",
+  "kapsam_uyarilari": [],
+  "sultan_kararlari": [
+    {
+      "karar": "devam",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+      "soz": "evet bu mantıklı ama sadece ara kararlar değil birleştirme kararları da reise geçsin",
+      "beyan": "SERDAR",
+      "gerekce": "Sultan 22 Eki 22:4x sohbette: ara kararlar ve birleştirme kararı reise geçsin; çok iş takılıyor, işler kendi kendine yürümeli",
+      "zaman": "2026-10-22T22:39:32+03:00"
+    },
+    {
+      "karar": "daralt",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+      "soz": "sadece ara kararlar değil birleştirme kararları da reise geçsin",
+      "beyan": "SERDAR",
+      "gerekce": "Sultan 22 Eki 22:4x sınıflı işte ara kararları (daralt dahil) reise devretti; bu kart o kuralı araca yazan iş, kurulu 0.18.1 reis yolunu henüz tanımıyor. Daralt kararı SERDAR'ındır: fark 114 KB, denetçi istem sınırı 120 KB aşılıyor; parça 1 çekirdek, parça 2 canlı borç + kapı + gün sonu.",
+      "zaman": "2026-10-23T12:34:55+03:00",
+      "kullanildi": {
+        "zaman": "2026-10-23T12:35:54+03:00",
+        "kalan_kart": "fabrika-merge-reise-parca2"
+      }
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "Sınıflı işte ara kararlar (daralt/devam/geri-al/borç) ve birleştirme kararı kutu reisine geçer; Sultan yalnız başlama iznini verir (Kapımda kaydı + veto); host dağıtımı Sultan eli/dar anahtar olarak kalır. kart.sh, birlestirme-kapisi.sh, denetci.sh tıkanma yolu, gun-sonu.sh, FABRIKA.md, 0-kabul.md, 4-gonder.md, SKILL.md 0.18.0 + sınavlar.",
+      "zaman": "2026-10-23T12:35:54+03:00",
+      "kalan_kart": "fabrika-merge-reise-parca2"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-23T12:35:54+03:00",
+      "kalan_kart": "fabrika-merge-reise-parca2",
+      "kalan": "Kapı, rapor ve canlı borç (SERDAR reis kararı 23 Eki 12:1x: denetçi istemi 222 KB > 120 KB, iş ikiye bölündü): birlestirme-kapisi.sh Sultan vetosunu ölçer (dur rc 1, okunamadı rc 3) + sınavı; denetci.sh veto ve sınıflı kartta reis-devam + denetci-istem.md + denetci-fark-ayikla.test.sh; gun-sonu.sh başlama izni/veto bölümü ve etiketleri + sınavı; canlı borç sınıflı kartta reisin (canli_borc.py, kart.sh canli-borc, 4-gonder 3b, kapı sınavı T14); is-alani --kartsiz; FABRIKA.md şablonu; SKILL kalan satırları. Çekirdek birleşince main'den taze dalla açılır.",
+      "tur_sifir": 0,
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF"
+    }
+  ]
+}
