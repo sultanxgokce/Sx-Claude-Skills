@@ -1,0 +1,37 @@
+{
+  "tur": 2,
+  "is": "11f0z0-serdar",
+  "pr": "442",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T16:06:43+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 33603,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 16082
+  },
+  "bas": "3f83296e10b07a5d431c84e68b6ddd815c321100",
+  "duzeltme_farki": {
+    "onceki_bas": "8582bf4471ba649b43b2dafb4b7a4176207a60b0",
+    "dosya": 12,
+    "bayt": 27276,
+    "tam_bayt": 82967
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Merkez kipi ham havuz kayıtlarını bölüme alıyor, süzüm bozuk veya damgasız satırları kırmızı sayıyor, yenileme davranışını koruyor ve köprü ölçülemezliğini rc 3 ile ayırıyor. Önceki iki bulgu da kapanmış; hermetik, mutasyon ve gerçek-defter ölçümleri talebin güncel kabul kuralını karşılıyor, yalnız küçük rötuş gerektiren kanıtlı bir kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. B1, `merkez_havuz_satirlari` işlevinin çözülemeyen satırları ayrı toplaması, `suzum`un bunları hata sayması, T12m2–T12m7 sınavları ve M20 mutasyonuyla kapanmış. B2, kartın sabit 6 şartından aynı andaki köprü sayısıyla eşitlik kuralına daraltılması ve gerçek ölçümde `havuz_satiri=11 kopru_ham=11` görülmesiyle kapanmış. Önce/sonra çiftleri havuz satırını 0→2, damgasız havuz vakasını suzum rc 0→1 gösteriyor; gerçek sınav 212/212 geçiyor. Mutasyon kaydındaki rc 1 beklenen sonuç ve `gercek_olcum=sinav` kaydı yeşil. Kare yok, ancak bu komut satırı işi için istenen ölçüm çiftleri, gerçekçi canlı veri eşitliği ve mutasyon kanıtı yeterli."
+  }
+}

@@ -1,6 +1,6 @@
 {
   "is": "11f0z0-serdar",
-  "cumle": "Haftalık retro aracı (retro.py 1.3.0) merkez kipinde görev defterindeki 'havuz' kayıtlarını da süzüm listesine alsın: `bulgu.sh havuz-cek` köprüsünden durum=ham kayıtları okuyup MERKEZ.md'ye \"## Havuz süzümü\" bölümü olarak yazsın (her satır `- <gorev_id> · <başlık> → ` ve kutu önerileriyle aynı damga kuralı: → gorev_<26> ya da → RED: gerekçe; havuzdaki kayıt kendisi görev olduğundan damga 'gorev_<kendi id>' = Sırada'ya alınır), `suzum` kipi damgasız havuz satırını kırmızı saysın, `--yenile` elle bölümleri ve eski damgaları korusun; defter jetonu/köprü yoksa ÖLÇÜLEMEDİ (rc 3) basıp 0 havuz demesin. Ölçüm: hermetik retro.test.sh'ta sahte havuz-cek ile `merkez` çıktısında havuz satırı önce=0 sonra=N (N≥2 fikstür kaydı) + damgasız havuz satırında suzum rc önce=0 sonra=1 + mutant (köprü çağrısı silinince sınav kırmızı); gerçek defterde `merkez --hafta 2026-W43` koşusu MERKEZ.md'de 6 havuz satırı gösterir (22 Eki anlık sayım).",
+  "cumle": "Haftalık retro aracı (retro.py 1.3.0) merkez kipinde görev defterindeki 'havuz' kayıtlarını da süzüm listesine alsın: `bulgu.sh havuz-cek` köprüsünden durum=ham kayıtları okuyup MERKEZ.md'ye \"## Havuz süzümü\" bölümü olarak yazsın (her satır `- <gorev_id> · <başlık> → ` ve kutu önerileriyle aynı damga kuralı: → gorev_<26> ya da → RED: gerekçe; havuzdaki kayıt kendisi görev olduğundan damga 'gorev_<kendi id>' = Sırada'ya alınır), `suzum` kipi damgasız ya da çözülemeyen havuz satırını kırmızı saysın, `--yenile` elle bölümleri ve eski damgaları korusun; defter jetonu/köprü yoksa ÖLÇÜLEMEDİ (rc 3) basıp 0 havuz demesin. Ölçüm: hermetik retro.test.sh'ta sahte havuz-cek ile `merkez` çıktısında havuz satırı önce=0 sonra=N (N≥2 fikstür kaydı) + damgasız havuz satırında suzum rc önce=0 sonra=1 + mutant (köprü çağrısı silinince sınav kırmızı); gerçek defterde `merkez --hafta 2026-W43` koşusu MERKEZ.md'deki havuz satırı sayısını köprünün AYNI ANDAKİ durum=ham sayısına eşit gösterir (defter canlı: 22 Eki anlık 6, 23 Eki 15:28 koşusunda 9=9).",
   "istedi": "SERDAR",
   "aldi": "SERDAR",
   "zaman": "2026-10-23T15:04:48+03:00",
@@ -15,7 +15,14 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": [],
+  "gecmis": [
+    {
+      "zaman": "2026-10-23T15:34:50+03:00",
+      "olay": "daralt",
+      "kalan_kart": "11f0z0-sayi-dersi",
+      "tur_sifir": 1
+    }
+  ],
   "canli_gerekir": false,
   "canli_sebep": "",
   "kapsam_uyarilari": [
@@ -37,6 +44,31 @@
       "zaman": "2026-10-23T15:04:48+03:00",
       "olay": "ac",
       "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "SERDAR",
+      "oturum": "4f6442d1 (SERDAR alt-ajanı, göz #442 tur 1)",
+      "gerekce": "daraltma: kalan bulgu yeni karta (11f0z0-sayi-dersi) — Kart cümlesindeki sabit '6 havuz satırı' iddiası canlı defterde tutmadı (koşu anında 9 = köprü ham sayısı): sayı iddiası kart cümlesine ancak ölçüm anına bağlı eşitlik kuralı ya da --sayi-olcum komutuyla girsin — ders kaydı, kod işi yok",
+      "zaman": "2026-10-23T15:34:50+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "Haftalık retro aracı (retro.py 1.3.0) merkez kipinde görev defterindeki 'havuz' kayıtlarını da süzüm listesine alsın: `bulgu.sh havuz-cek` köprüsünden durum=ham kayıtları okuyup MERKEZ.md'ye \"## Havuz süzümü\" bölümü olarak yazsın (her satır `- <gorev_id> · <başlık> → ` ve kutu önerileriyle aynı damga kuralı: → gorev_<26> ya da → RED: gerekçe; havuzdaki kayıt kendisi görev olduğundan damga 'gorev_<kendi id>' = Sırada'ya alınır), `suzum` kipi damgasız havuz satırını kırmızı saysın, `--yenile` elle bölümleri ve eski damgaları korusun; defter jetonu/köprü yoksa ÖLÇÜLEMEDİ (rc 3) basıp 0 havuz demesin. Ölçüm: hermetik retro.test.sh'ta sahte havuz-cek ile `merkez` çıktısında havuz satırı önce=0 sonra=N (N≥2 fikstür kaydı) + damgasız havuz satırında suzum rc önce=0 sonra=1 + mutant (köprü çağrısı silinince sınav kırmızı); gerçek defterde `merkez --hafta 2026-W43` koşusu MERKEZ.md'de 6 havuz satırı gösterir (22 Eki anlık sayım).",
+      "zaman": "2026-10-23T15:34:50+03:00",
+      "kalan_kart": "11f0z0-sayi-dersi"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-23T15:34:50+03:00",
+      "kalan_kart": "11f0z0-sayi-dersi",
+      "kalan": "Kart cümlesindeki sabit '6 havuz satırı' iddiası canlı defterde tutmadı (koşu anında 9 = köprü ham sayısı): sayı iddiası kart cümlesine ancak ölçüm anına bağlı eşitlik kuralı ya da --sayi-olcum komutuyla girsin — ders kaydı, kod işi yok",
+      "tur_sifir": 1,
+      "oturum": "4f6442d1 (SERDAR alt-ajanı, göz #442 tur 1)"
     }
   ]
 }
