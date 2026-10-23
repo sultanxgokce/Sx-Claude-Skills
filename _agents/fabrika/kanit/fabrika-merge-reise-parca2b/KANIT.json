@@ -1,7 +1,7 @@
 {
   "is": "fabrika-merge-reise-parca2b",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-23T17:12:32+03:00",
+  "guncelleme": "2026-10-23T17:34:16+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -65,17 +65,17 @@
       "etiket": "fabrika-sinavlari",
       "asama": "sonra",
       "dosya": "olcum-fabrika-sinavlari-sonra.txt",
-      "sha256": "5123bfe24d379f70638d6f433f68907f77f408beb236cfbb2bd3f17ad2be12e7",
+      "sha256": "dcb2df2dcb3bde91560e4cacbbb5c2f8c904de2cb766fd0812b0c656fa36040f",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/fabrika-merge-reise-parca2b/kos-fabrika-sinavlari.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T17:12:32+03:00",
-      "sure_sn": 1368.1,
+      "zaman": "2026-10-23T17:34:16+03:00",
+      "sure_sn": 935.2,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "7fae7b56d86b4ccd8fe049cb20548bd8"
+      "olcum_id": "6dc6fd9bbe0e4767a0a7fd2515bc80c3"
     },
     {
       "tur": "gecersiz",
@@ -97,5 +97,5 @@
       "olcum_id": "1c1af114523446b0a4bec9a35dbbf3f6"
     }
   ],
-  "imza": "9e981f3c49565b8fa22633f49dd8ddd31a0939d9b0cea2f4c9b60e97c4c8cb86"
+  "imza": "9feb1cff545c73c985c086916659ac2be997aa06ea2c4346b3d7157a369ed05e"
 }

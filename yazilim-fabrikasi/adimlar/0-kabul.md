@@ -24,7 +24,7 @@ Kural metni BURADA yaşar. Sultan (session_01Ge4BawKcUrcm1pdV8WANyF): *"sadece a
 geçsin"* (işler kapısında ayda 1.138 saat bekledi).
 - **Başlama izni Sultan'a gider, iş bekletilmez:** sınıflı kartta `baslama_izni: bekliyor`; izin isteği `--oda` odasına gider,
   satır komut taşımaz ("durdurmak için 'dur' demen yeter"). **Ulaşım yolu yoksa kart AÇILMAZ** (rc 1, fail-closed): `--oda`
-  verilmemişse, tetik betiği yoksa ya da tetik düşerse — varsayılan oda uydurulmaz. Sınıfsız kartta tetik best-effort kalır.
+  verilmemişse, tetik betiği yoksa ya da tetik düşerse — varsayılan oda uydurulmaz. Kart tetik başarınca yayımlanır (geçici dosya → `ln`): tetikte kesilen açılış görünür kart bırakmaz. Sınıfsız kartta tetik best-effort kalır.
 - **Veto:** Sultan'ın "dur"unu ajan `kart.sh sultan-dedi <iş> --karar dur` ile işler → `reis-dedi` · `daralt` · `bitti` rc 1;
   `--karar basla` vetoyu kaldırır (son kazanır). Sınıfsız kartta basla/dur rc 1 (veto penceresi yok).
 - **Ara kararlar (devam · daralt · geri-al) ve birleştirme kararı reisin:** gerekçeli `kart.sh reis-dedi`; `bitti` kararı

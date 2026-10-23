@@ -1,8 +1,8 @@
 $ bash _agents/fabrika/kanit/fabrika-merge-reise-parca2b/kos-fabrika-sinavlari.sh
-# rc=0 sure=1368.1s zaman=2026-10-23T17:12:32+03:00
+# rc=0 sure=935.2s zaman=2026-10-23T17:34:16+03:00
 --- stdout ---
-sınav dizini: /config/projects/_wt/Sx-Claude-Skills-fabrika-merge-reise-parca2b/yazilim-fabrikasi/scripts · ham çıktılar: /tmp/tmp.qTmTxw5Zbe
-kart.test.sh rc=0 · ── SONUÇ: 213 geçti · 0 kaldı ──
+sınav dizini: /config/projects/_wt/Sx-Claude-Skills-fabrika-merge-reise-parca2b/yazilim-fabrikasi/scripts · ham çıktılar: /tmp/tmp.Myt5Ht5CLk
+kart.test.sh rc=0 · ── SONUÇ: 218 geçti · 0 kaldı ──
 birlestirme-kapisi.test.sh rc=0 · ── SONUÇ: 143 geçti · 0 kaldı ──
 denetci.test.sh rc=0 · ── SONUÇ: 266 geçti · 0 kaldı ──
 is-alani.test.sh rc=0 · ── SONUÇ: 47 geçti · 0 kaldı ──
