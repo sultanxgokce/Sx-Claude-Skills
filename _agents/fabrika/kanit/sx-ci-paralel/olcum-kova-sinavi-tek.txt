@@ -1,0 +1,26 @@
+$ bash .github/ci/kabuk-sinamalari.test.sh
+# rc=0 sure=6.4s zaman=2026-10-23T22:29:11+03:00
+--- stdout ---
+── K1 · üç kova birlikte tüm sınamaları bölüştürür (yetim yok)
+  ✓ K1 üç kova da yeşil (karantina taslakları atlandı)
+  ✓ K1b kovalar 1+1+5 = 7 sınama (diploma 1 · denetci 1 · kalan 5 = 2 sıradan + 3 karantina) → 1+1+5
+  ✓ K1c diploma kovası yalnız diploma sınamasını koşar
+  ✓ K1d karantina üç sınamayı ADIYLA loglar
+── K2 · kırmızı sınama kovayı kırmızı yapar
+  ✓ K2 kalan kovasında kırmızı sınama → rc≠0, adıyla bildirilir
+  ✓ K2b kırmızı sınama başka kovayı etkilemez (diploma yeşil)
+── K3 · kovası boş kalan koşu KIRMIZI (dosya adı kayarsa kova sessizce yeşil demesin)
+  ✓ K3 denetci kovasında sınama yok → rc 1
+── K4 · hiç sınama yoksa KIRMIZI
+  ✓ K4 sıfır sınama → rc 1 (keşif bozuk)
+── K5 · karantina listesi bayatlarsa KIRMIZI
+  ✓ K5 karantinadaki dosya silinmiş → rc≠0, bayat bildirilir
+── K6 · süre tavanı aşılınca KIRMIZI
+  ✓ K6 sure=1 isteyen sınama 5 sn uyuyor → rc=124 kırmızı
+── K7 · bilinmeyen kova
+  ✓ K7 bilinmeyen kova adı → rc 2
+── MUTASYON · kova kuralı her şeyi 'kalan'a atarsa diploma kovası KIRMIZI olur
+  ✓ M1 kova kuralından diploma satırı çıkarsa diploma kovası boş → rc 1 (K3 türü kapı bu mutantı yakalar)
+
+── SONUÇ: 12 geçti · 0 kaldı ──
+--- stderr ---

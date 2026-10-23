@@ -1,0 +1,6 @@
+$ bash -c olc 40010041025; rc=$?; echo "kovalar: denetci 8m27 diploma 11m3 kalan 7m29 (143 sinama = 1+1+141)"; exit $rc
+# rc=0 sure=0.6s zaman=2026-10-23T22:29:17+03:00
+--- stdout ---
+run 40010041025: 666 sn = 11.1 dk
+kovalar: denetci 8m27 diploma 11m3 kalan 7m29 (143 sinama = 1+1+141)
+--- stderr ---
