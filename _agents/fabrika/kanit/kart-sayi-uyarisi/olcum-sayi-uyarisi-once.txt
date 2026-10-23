@@ -1,0 +1,7 @@
+$ bash _agents/fabrika/kanit/kart-sayi-uyarisi/sayi-olcer.sh origin/main
+# rc=1 sure=0.1s zaman=2026-10-23T04:43:34+03:00
+--- stdout ---
+kod kaynağı: origin/main
+cümle: yöneticinin 13 görev listesi panelde tek tek kapansın
+kart.sh ac rc=0 · ekrandaki SAYI uyarısı: 0 · karttaki sayi_uyarilari: (alan yok)
+--- stderr ---

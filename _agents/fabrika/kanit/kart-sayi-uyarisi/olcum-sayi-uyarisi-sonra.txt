@@ -1,0 +1,7 @@
+$ bash _agents/fabrika/kanit/kart-sayi-uyarisi/sayi-olcer.sh agac
+# rc=0 sure=0.1s zaman=2026-10-23T04:43:35+03:00
+--- stdout ---
+kod kaynağı: agac
+cümle: yöneticinin 13 görev listesi panelde tek tek kapansın
+kart.sh ac rc=0 · ekrandaki SAYI uyarısı: 1 · karttaki sayi_uyarilari: 13 görev
+--- stderr ---
