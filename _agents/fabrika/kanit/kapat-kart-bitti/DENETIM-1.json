@@ -1,0 +1,30 @@
+{
+  "tur": 1,
+  "is": "kapat-kart-bitti",
+  "pr": "432",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T05:12:13+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 21166,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 22647
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kapanış akışına, açık kartın birleşmiş PR’ını alanın içinden bulup PR numarasıyla “bitti” yapan; birleşmemiş veya ölçülemeyen durumda kartı açık bırakıp kapanışı sürdüren davranış eklenmiş. Üretim kodu talebi karşılıyor ve gerçek ölçüm çiftiyle ana sınavlar yeşil; üretimi engelleyen bir kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı ve sağlam manifest mevcut. Önce ölçümü origin/main üzerinde kartın açık kaldığını rc=1 ile, sonra ölçümü değişiklik ağacında kartın “bitti 42 True” olduğunu rc=0 ile gösteriyor; ayrıca is-alani sınavı birleşmiş, birleşmemiş, gh ile ölçülemeyen, önceden kapanmış ve kart kapatma hatası senaryolarını kapsıyor. Çıktıda mutant deneyi bulunsa da manifestte ayrı bir `mutasyon: true` kaydı değil; bu nedenle resmi mutasyon kanıtı sayılmaz, fakat gerçek kodun yeşil ölçümleri ve önce/sonra çifti tek başına yeterli."
+  }
+}
