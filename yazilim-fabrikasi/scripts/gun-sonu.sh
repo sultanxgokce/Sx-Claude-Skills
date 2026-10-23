@@ -207,8 +207,13 @@ if [ "$YAZ" -eq 1 ]; then mkdir -p "$DEPO/_agents/fabrika/gun-sonu"; printf '%s\
 # --gelen: Sultan'ın hub gelen klasörü (Mutagen ile cihazına senkron). Dizin yaratılmaz (hub düzeni Sultan'ın), yalnız var olana yazılır.
 if [ "$GELEN" -eq 1 ]; then
   GELEN_DIZ="${GUN_SONU_GELEN_DIZ:-/config/evraklar/Sultan/0-Gelen}"; GELEN_DOSYA="$GELEN_DIZ/nexus_gun-sonu_$GUN.md"
+  # Sebep AYRIŞTIRILIR (göz tur 1): dizin yok · yazma izni yok · başka her hata kabuğun kendi metniyle (dolu disk, hedef dizin, salt-okunur fs…)
   if [ ! -d "$GELEN_DIZ" ]; then echo "→ gelen klasörüne YAZILAMADI: dizin yok ($GELEN_DIZ)"
-  elif printf '%s\n' "$OZET" > "$GELEN_DOSYA" 2>/dev/null; then echo "→ gelen klasörüne yazıldı: $GELEN_DOSYA"
-  else echo "→ gelen klasörüne YAZILAMADI: yazma izni yok ($GELEN_DIZ)"; fi
+  elif [ ! -w "$GELEN_DIZ" ]; then echo "→ gelen klasörüne YAZILAMADI: yazma izni yok ($GELEN_DIZ)"
+  else
+    GELEN_HATA="$( { printf '%s\n' "$OZET" > "$GELEN_DOSYA"; } 2>&1 )"; GELEN_RC=$?
+    if [ "$GELEN_RC" -eq 0 ]; then echo "→ gelen klasörüne yazıldı: $GELEN_DOSYA"
+    else echo "→ gelen klasörüne YAZILAMADI: ${GELEN_HATA##*: }${GELEN_HATA:+ }($GELEN_DOSYA)"; fi
+  fi
 fi
 exit "${RC_KAP:-0}"

@@ -1,14 +1,14 @@
 {
   "is": "hezarfen-gun-sonu-gelen",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-23T14:49:04+03:00",
+  "guncelleme": "2026-10-23T14:53:53+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "gun-sonu-sinavi",
       "asama": "once",
       "dosya": "olcum-gun-sonu-sinavi-once.txt",
-      "sha256": "0b35d9c9555443c07ec02ab11f0c34b409a151fd2026f91240280f6bbb1e76b9",
+      "sha256": "261fef462c08b27936fbc9a7e991aab0007084650358114109498ef94baff3f0",
       "komut": [
         "bash",
         "-c",
@@ -16,17 +16,17 @@
       ],
       "rc": 1,
       "renk": "kirmizi",
-      "zaman": "2026-10-23T14:48:35+03:00",
-      "sure_sn": 15.5,
+      "zaman": "2026-10-23T14:53:23+03:00",
+      "sure_sn": 13.0,
       "boru_denetimi": "temiz",
-      "olcum_id": "78b6474a30aa4dc3a9ae4737073538cf"
+      "olcum_id": "6efa9cf79c1949bb8f7f72549f07450f"
     },
     {
       "tur": "olcum",
       "etiket": "gun-sonu-sinavi",
       "asama": "sonra",
       "dosya": "olcum-gun-sonu-sinavi-sonra.txt",
-      "sha256": "8b055e10315ac7589db00ac897554b461508df49d3ad6950c7012c99dec24df5",
+      "sha256": "0814324327bd96f57792470fba5b02b799a10ab9ced2e36c25854ae219f74678",
       "komut": [
         "bash",
         "-c",
@@ -34,17 +34,17 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T14:48:46+03:00",
-      "sure_sn": 11.5,
+      "zaman": "2026-10-23T14:53:38+03:00",
+      "sure_sn": 14.5,
       "boru_denetimi": "temiz",
-      "olcum_id": "25a710264d124f068b7aadec71828c14"
+      "olcum_id": "43e42a3bdc1d4e8391fd212bc79c65db"
     },
     {
       "tur": "olcum",
       "etiket": "gun-sonu-mutant-bayrak-kapisi-yok",
       "asama": "sonra",
       "dosya": "olcum-gun-sonu-mutant-bayrak-kapisi-yok-sonra.txt",
-      "sha256": "410f8f257f6bbe829465ef2cd657a7a2766b445997012e9ba219bddc358d5c9c",
+      "sha256": "e508f141512c752594a697498afe537512f57f015bf54ae77d244b4a4f660b30",
       "komut": [
         "bash",
         "-c",
@@ -52,14 +52,32 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-23T14:49:04+03:00",
-      "sure_sn": 17.6,
+      "zaman": "2026-10-23T14:53:53+03:00",
+      "sure_sn": 14.8,
       "boru_denetimi": "temiz",
       "mutasyon": true,
       "gercek_olcum": "gun-sonu-sinavi",
       "beklenen": "kirmizi",
-      "olcum_id": "80229579554e43fcaca9500112e71c7b"
+      "olcum_id": "3326b7eff0744314963bc3d14b9d81c0"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cron-gorevi-defterde",
+      "asama": "tek",
+      "dosya": "olcum-cron-gorevi-defterde-tek.txt",
+      "sha256": "49354b9c3ba1c50d183136e2f98fdc022d8c8bba4fcc84adc76fb8e23a52879b",
+      "komut": [
+        "bash",
+        "-c",
+        "set -o pipefail; curl -sS -m 15 --config /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/defter.cfg http://cloudtop-defter:8791/kayit/gorev_01M5M9HZ2CBYAAJ4KY6860ATGE | python3 -c \"import sys,json; k=json.load(sys.stdin)['kayit']; c=k['canli']; print(k['id'], c.get('gorev_durumu'), c.get('etiket'), c.get('kaynak_kim')); print(k['adlar'][0]['deger']); print([a.get('deger','')[:200] for a in (c.get('adimlar') or [])][:1])\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T14:52:10+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "temiz",
+      "olcum_id": "42a8b3985efd4aada1827318d99a7038"
     }
   ],
-  "imza": "ac07cae93043cce67467a31a1fcf03948a94f69eb8918574585a458c4dc8ae8c"
+  "imza": "1859f1b1a9497fe262cdecfba62193c72cf640f9f45f35669e801702a428f652"
 }

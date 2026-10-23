@@ -216,6 +216,10 @@ OG2="$( cd "$T" && GUN_SONU_GELEN_DIZ="$T/gelen-yok" bash "$G" --gun "$GUN" --ge
 mkdir -p "$T/gelen-ro"; chmod 555 "$T/gelen-ro"
 OG3="$( cd "$T" && GUN_SONU_GELEN_DIZ="$T/gelen-ro" bash "$G" --gun "$GUN" --gelen 2>&1 )"; RCG3=$?; chmod 755 "$T/gelen-ro"
 [ "$RCG3" -eq 0 ] && grep -q "→ gelen klasörüne YAZILAMADI: yazma izni yok ($T/gelen-ro)" <<<"$OG3"; g $? "G6 yazma izni yoksa 'YAZILAMADI: yazma izni yok', rc 0"
+# göz tur 1: başka hata türü (hedefte aynı adlı DİZİN var) izin hatası diye raporlanmasın — kabuğun gerçek sebebi basılır
+mkdir -p "$T/gelen-dz/nexus_gun-sonu_$GUN.md"
+OG3b="$( cd "$T" && GUN_SONU_GELEN_DIZ="$T/gelen-dz" bash "$G" --gun "$GUN" --gelen 2>&1 )"; RCG3b=$?
+[ "$RCG3b" -eq 0 ] && grep -q "→ gelen klasörüne YAZILAMADI: Is a directory ($T/gelen-dz/nexus_gun-sonu_$GUN.md)" <<<"$OG3b" && ! grep -q 'yazma izni yok' <<<"$OG3b"; g $? "G6b başka hata (hedef bir dizin) GERÇEK sebebiyle basılır ('Is a directory'), 'yazma izni yok' DENMEZ, rc 0" "→ [$OG3b]"
 ( cd "$T" && GUN_SONU_GELEN_DIZ="$T/gelen" bash "$G" --gun "$GUN" --gelen --yaz >/dev/null 2>&1 ); [ -f "$T/_agents/fabrika/gun-sonu/$GUN.md" ] && cmp -s "$T/_agents/fabrika/gun-sonu/$GUN.md" "$T/gelen/nexus_gun-sonu_$GUN.md"; g $? "G7 --yaz ile --gelen birlikte: depo kopyası ve gelen kopyası bayt bayt aynı"
 ( cd "$T" && DEFTER_UC="http://127.0.0.1:$PORT" DEFTER_JETON_YOL="$T/jeton-yok" GUN_SONU_GELEN_DIZ="$T/gelen" bash "$G" --gun "$GUN" --gelen --kapanis >/dev/null 2>&1 ); RCG4=$?
 [ "$RCG4" -eq 3 ] && grep -q 'ÖLÇÜLEMEDİ' "$T/gelen/nexus_gun-sonu_$GUN.md"; g $? "G8 --kapanis rc'si (3) --gelen ile değişmez; ölçülemedi satırı gelen kopyasında da var"
@@ -223,6 +227,11 @@ echo "════ G9 · MUTASYON: bayrak kapısı kalkınca --gelen'siz koşu d
 MG="$T/mutant-gelen.sh"; sed 's@^if \[ "$GELEN" -eq 1 \]; then@if true; then@' "$G" > "$MG"
 if cmp -s "$MG" "$G"; then g 1 "G9 mutant FARKSIZ (çapa bayat)"; else
   rm -f "$T/gelen"/*; ( cd "$T" && GUN_SONU_GELEN_DIZ="$T/gelen" bash "$MG" --gun "$GUN" >/dev/null 2>&1 ); [ -n "$(ls -A "$T/gelen")" ]; g $? "G9 MUTASYON: kapı kalkınca bayraksız koşu gelen'e yazıyor (G1 bunu yakalar)"
+fi
+echo "════ G11 · MUTASYON: sebep ayrımı kalkınca her hata 'yazma izni yok' olur (G6b kırmızı) ════"
+MG3="$T/mutant-gelen3.sh"; sed 's@    else echo "→ gelen klasörüne YAZILAMADI: ${GELEN_HATA##\*: }${GELEN_HATA:+ }($GELEN_DOSYA)"; fi@    else echo "→ gelen klasörüne YAZILAMADI: yazma izni yok ($GELEN_DIZ)"; fi@' "$G" > "$MG3"
+if cmp -s "$MG3" "$G"; then g 1 "G11 mutant FARKSIZ (çapa bayat)"; else
+  OMG3="$( cd "$T" && GUN_SONU_GELEN_DIZ="$T/gelen-dz" bash "$MG3" --gun "$GUN" --gelen 2>&1 )"; grep -q 'yazma izni yok' <<<"$OMG3"; g $? "G11 MUTASYON: ayrım kalkınca dizin hatası 'yazma izni yok' diye yanlış basılıyor (G6b bunu yakalar)"
 fi
 echo "════ G10 · MUTASYON: yazılamayınca sessiz geçilirse satır kaybolur (G5 kırmızı) ════"
 MG2="$T/mutant-gelen2.sh"; sed 's@  if \[ ! -d "$GELEN_DIZ" \]; then echo "→ gelen klasörüne YAZILAMADI: dizin yok ($GELEN_DIZ)"@  if [ ! -d "$GELEN_DIZ" ]; then :@' "$G" > "$MG2"
