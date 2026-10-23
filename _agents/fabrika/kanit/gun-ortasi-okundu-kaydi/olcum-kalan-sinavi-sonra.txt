@@ -1,5 +1,5 @@
 $ timeout 300 bash /config/projects/_wt/Sx-Claude-Skills-gun-ortasi-okundu-kaydi/gun-ortasi/scripts/kalan.test.sh
-# rc=0 sure=36.8s zaman=2026-10-23T08:51:34+03:00
+# rc=0 sure=49.0s zaman=2026-10-23T09:19:23+03:00
 --- stdout ---
   🟢 T1 rc=0 ve #OZET satırı var
   🟢 T2 açık kart 1 · tıkandı ayrı 1 · bozuk JSON sayılmaz, ölçemedim der
@@ -36,16 +36,16 @@ $ timeout 300 bash /config/projects/_wt/Sx-Claude-Skills-gun-ortasi-okundu-kaydi
   🟢 T16 beş kaynağın her biri kaldırılınca alanı '?' ve olcemedim +1
   🟢 T5b büyük okundu kaydı (>64K, eşleşme başta ve sonda): A ve BA okundu sayılır → gelen 1 (yalnız ESKI)
   🟢 T5c büyük çıpa (>64K, başlık başta) tarih kapısını geçer — 'bugüne ait değil' DENMEZ, sonraki adıma (tablo) ulaşır
-  🟢 T5d kutunun kurye-yokla.sh'ı 'okundu-liste' biliyor: kayıt .okundu'dan SORULUR — BA okunmuş, A (özeti tutmaz) ve ESKI okunmamış → gelen 2; 'okundu.log yok' DENMEZ; kaynak yazılır
-  🟢 T5e yalnız 'okundu-yolu' bilen kurye-yokla.sh: .okundu okunur, ad = TAB'a kadar ilk alan (özetli de yalın da) → yalnız ESKI → gelen 1
-  🟢 T5f kurye-yokla.sh okundu-liste rc 2 → gelen '?' ve ölçemedim +1; üç mektubun hiçbiri '•' ile okunmamış basılmaz
-  🟢 T5h okundu-yolu'nun bildirdiği yol dizin (okunamaz) → gelen '?' ve ölçemedim +1
-  🟢 T5i okundu-liste cevabı gelen/ dosya adı değil → ölçemedim, mektuplar sayılmaz
-  🟢 T5j tek tırnak + yardımcı fonksiyonla yazılmış arayüz de tanınır: okundu-liste soruldu → BA ve A okunmuş → gelen 1
-  🟢 T5k kurye var, arayüz yok, okundu.log yok → gelen '?' + ölçemedim 'kaydın yeri bilinmiyor' (3 okunmamış DENMEZ)
-  🟢 T5l kurye var, arayüz yok, okundu.log var → yine ölçemedim; not 'okundu.log'a bakılmadı'; okundu.log'daki BA bilgisi KULLANILMAZ
-  🟢 T5m okundu-yolu var, dosya henüz yok → üçü de okunmamış (3) ve not 'dosyası henüz yok … damgası basmamış'
-  🟢 T5n yardım metninde 'okundu-liste' geçen yalnız-yol betiği: liste düşer (rc 1) → okundu-yolu'na GEÇİLİR → gelen 1; geçiş notu var; ölçemedim artmaz
+  🟢 T5d kayıt .okundu'dan OKUNUR (kurye koşturulmaz): BA okunmuş, A (özeti tutmaz) ve ESKI okunmamış → gelen 2; 'okundu.log yok' DENMEZ; not kaynağı ve sayıları söyler; kanarya 0
+  🟢 T5d2 ölçüm .okundu'yu DEĞİŞTİRMEZ (yan etki yok): dosya özeti önce = sonra
+  🟢 T5e md5 özetli kayıt + yalın ad kaydı: BA ve A okunmuş → yalnız ESKI → gelen 1; kanarya 0
+  🟢 T5f aynı ad için son özetli kayıt kazanır: A okunmuş, BA okunmamış → gelen 2 (BA, ESKI); not '2 ad · 1 okunmuş'
+  🟢 T5h tanınmayan özet biçimi (blake3) okunmuş sayılmaz: BA ve ESKI okunmamış → gelen 2; not '1 kayıt tanınmayan özet biçiminde — okunmuş sayılmadı'
+  🟢 T5i .okundu dizin (okunamaz) → gelen '?' ve ölçemedim +1; hiçbir mektup '•' ile basılmaz; kanarya 0
+  🟢 T5k kurye var, .okundu yok, okundu.log yok → üçü de okunmamış (3) + not 'okundu damgası yok … koşturulmadı … bakılmadı'; ölçemedim artmaz; kanarya 0
+  🟢 T5l kurye var, .okundu yok, okundu.log var → yine 3 okunmamış (BA dahil); okundu.log'daki BA bilgisi KULLANILMAZ; not bakılmadığını söyler; kanarya 0
+  🟢 T5m kurye yok, .okundu var → .okundu okunur: BA ve A okunmuş → gelen 1; not '.okundu dosyasından okundu'
+  🟢 T5n pozitif kontrol: kanarya kurye elle çağrılınca iz bırakır (1) ve .okundu'yu 3 satıra yeniden yazar — yan etki görünür
   🟢 T5g kayıt da kurye-yokla.sh de yok: üçü de okunmamış (3) ve not 'okundu kaydı yok … kurye-yokla.sh de yok'
 ── SONUÇ: geçti=46 kaldı=0 ölçemedim=0 ──
 --- stderr ---
