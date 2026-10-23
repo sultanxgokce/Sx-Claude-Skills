@@ -1,7 +1,7 @@
 ---
 name: gun-ortasi
 description: Gün ortası planı — sabahki plan (ya da günün işleri) erken bittiğinde "elde kalan iş var mı?" sorusunu ÖLÇEREK cevaplar; kalan işi dağınık kaynaklardan (plan çıpası, kartlar, konum çapaları, bağımsız göz raporları, gelen kutusu) bulup doğrular ve süzer; kalmadıysa kutunun ana hedeflerine bağlı, ölçülmüş bir boşluğu kapatan 2-3 geliştirme fikri önerir ve Sultan'ın seçimiyle günün ikinci yarısını planlar. Tetik: "/gun-ortasi", "plan bitti ne yapalım", "iş kaldı mı", "gün ortası planı", "yapacak iş kalmadıysa ne geliştirelim".
-version: 1.2.1
+version: 1.3.0
 ---
 
 # /gun-ortasi — gün ortası planı (ölç → doğrula → süz · yoksa fikir → sun → çıpa → icra)
@@ -43,7 +43,7 @@ GUN_ORTASI_GUN=7 bash /config/.claude/skills/gun-ortasi/scripts/kalan.sh # daha 
 | 2 | fabrika kartları | açık kart (tıkandı = tavanda karar verilmiş → ayrı sayılır) |
 | 3 | konum çapaları (`*-durum.md`, son N gün) | açık / kalan / ayrı kart / SARI / SIRADA satırları |
 | 4 | bağımsız göz — her işin SON raporu | `BAGIMSIZ-GOZ-kor-*.md` ya da fabrika `DENETIM-*.json`; 5·E değilse ya da kapanmamış bulgu varsa |
-| 5 | gelen kutusu | okundu kaydında TAM adıyla olmayan her mektup |
+| 5 | gelen kutusu | okundu kaydı KUTUDAN sorulur: `scripts/kurye-yokla.sh okundu-liste` (okunmuş adlar; biçim kutuda kalır), yoksa `okundu-yolu`, o da yoksa `0-teslimat/okundu.log`; kayıtta TAM adıyla olmayan her mektup. Sorgu düşerse ölçemedim (okunmamış sayılmaz) |
 | 6 | layiha defteri | inşa bekleyen aktif layiha |
 | 7 | Sultan'ın kapısı | Sultan'ı bekleyen kart |
 | 8 | hedef dosyaları | ANA-HEDEF.md · CLAUDE.md "Amaç" (fikirlerin bağlanacağı yer) |
@@ -147,6 +147,15 @@ Akşam `/gunluk-plan kapanis` sabah + gün ortası maddelerini birlikte okur.
 - Sınav: `bash scripts/kalan.test.sh` (hermetik; gerçek kutuya dokunmaz).
 
 ## Sürüm notları
+- **1.3.0 (2026-10-23, BÂNİ · MİHENK/NECCAR bildirdi, gorev_01M4ZMCTDB4B84P42S6R75A8CJ):** `kalan.sh` 5. bölüm okundu
+  kaydının **adını ve biçimini tahmin ediyordu** (`0-teslimat/okundu.log`, ` | ` ayraçlı 3. alan). mihenk `0-teslimat/.okundu`
+  yazıyor ve biçimi `ad<TAB>algoritma:özet` — araç dosyayı bulamayınca "okundu.log yok — hepsi okunmamış" deyip **71 mektubu**
+  okunmamış bastı; gerçek sayı 0'dı. Kaydın adını yalnız sahibi bilir: artık kutunun `scripts/kurye-yokla.sh`'ı `okundu-liste`
+  biliyorsa okunmuş adlar **ondan** alınır (özeti tutmayan satır okunmuş sayılmaz), yalnız `okundu-yolu` biliyorsa yol sorulur
+  ve satırın TAB'a kadar olan ilk alanı addır; kurye-yokla.sh yoksa eski `okundu.log` yolu aynen. Sahip sorgusu düşerse
+  (rc≠0) gelen `?` + ölçemedim — okunamayan kayıt "okunmamış" değil "ölçülemedi"dir. Not satırı artık hangi kaynağa
+  bakıldığını söyler. Kapılar **T5d–T5g** (sahte kurye-yokla.sh = mihenk arayüzünün kopyası; özeti tutmayan mektup
+  okunmamış kalır); eski kod dördünde de kırmızı. 39 kapı.
 - **1.2.1 (2026-10-18, MUAVİN · TELLAL bildirdi, gorev_01M55X6PGK9C9K8MRSY0E01W3Q):** `kalan.sh` okundu
   kaydındaki mektubu **okunmamış** sayıyordu. Kök: `set -o pipefail` altında `printf | grep -q` — grep ilk
   eşleşmede çıkar, printf SIGPIPE alır, boru rc≠0 döner ve "bulundu" "bulunamadı" sayılır. Büyük kayıtta

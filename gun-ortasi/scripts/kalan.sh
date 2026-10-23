@@ -9,7 +9,8 @@
 #   3 konum çapaları (_agents/handoff/*-durum.md, son N gün, son 120 satır) — açık/kalan/ayrı kart/SARI/SIRADA
 #   4 bağımsız göz — her işin SON raporu: BAGIMSIZ-GOZ-kor-<n>.md YA DA fabrika denetçisinin DENETIM-<n>.json
 #     (5·E değilse açık; md'de kapanmamış N/B/Y/NOT/SARI/ENGEL satırları)
-#   5 gelen kutusu (0-teslimat/gelen) — okundu.log'da TAM adıyla olmayan HER mektup (pencere yok)
+#   5 gelen kutusu (0-teslimat/gelen) — okundu kaydında TAM adıyla olmayan HER mektup (pencere yok); kayıt KUTUDAN sorulur:
+#     scripts/kurye-yokla.sh okundu-liste → okundu-yolu → 0-teslimat/okundu.log (adı/biçimi tahmin edilmez, 75A8CJ)
 #   6 aktif layiha sayısı · 7 Sultan'ın kapısı · 8 hedef dosyaları · 9 ortam (dal, commit'siz, açık PR)
 #
 # ÇIKIŞ: 0 ölçüm bitti · 2 kullanım hatası. Son satır makine-okur:
@@ -134,19 +135,44 @@ else olcemedim "kanıt dizini yok: $KK"; fi
 
 bolum "5/9 · Gelen kutusu — okunmamış (pencere yok)"
 GELEN="?"
-GD="$KOK/0-teslimat/gelen"; OK="$KOK/0-teslimat/okundu.log"
+GD="$KOK/0-teslimat/gelen"; OK="$KOK/0-teslimat/okundu.log"; KY="$KOK/scripts/kurye-yokla.sh"
 if [ -d "$GD" ]; then
-  GELEN=0; liste=""; okunan=""
-  [ -f "$OK" ] && okunan="$(awk -F' [|] ' '{print $3}' "$OK" 2>/dev/null)"
-  while IFS= read -r f; do
-    a="$(basename "$f")"
-    # here-string, BORU DEĞİL (gorev_01M55X6PGK9C9K8MRSY0E01W3Q): pipefail altında 'printf | grep -q' grep ilk eşleşmede
-    #   çıkınca printf SIGPIPE alır, boru rc≠0 döner ve OKUNMUŞ mektup okunmamış sayılırdı (büyük okundu kaydında kesin).
-    grep -qxF -- "$a" <<<"$okunan" && continue   # TAM ad eşleşmesi (ad parçası değil)
-    GELEN=$((GELEN+1)); liste+="  • $a ($(date -r "$f" +%F))"$'\n'
-  done < <(find "$GD" -maxdepth 1 -type f -name '*.md' 2>/dev/null | sort)
-  if [ -n "$liste" ]; then bas "$liste"; else printf '  (okunmamış mektup yok)\n'; fi
-  [ -f "$OK" ] || printf '  not: okundu.log yok — listelenenlerin hepsi okunmamış sayıldı\n'
+  GELEN=0; liste=""; okunan=""; kaynak=""; sorgu_rc=0
+  # OKUNDU KAYDINI SAHİBİNDEN SOR, TAHMİN ETME (gorev_01M4ZMCTDB4B84P42S6R75A8CJ · MİHENK ölçümü 14 Eki): araç kaydı
+  #   '0-teslimat/okundu.log' diye arıyor, kutu '0-teslimat/.okundu' yazıyordu; biçim de başkaydı (ad<TAB>algoritma:özet,
+  #   eski satırlar yalın ad). Dosya bulunamayınca "hepsi okunmamış" denip 71 mektup basıldı, gerçek sayı 0'dı.
+  #   Sıra: (1) kutunun kurye-yokla.sh'ı 'okundu-liste' biliyorsa okunmuş sayılan ADLARI o basar (özeti tutmayan satır
+  #   okunmuş sayılmaz; biçim kutuda kalır) · (2) yalnız 'okundu-yolu' biliyorsa yol sorulur, satırın TAB'a kadar olan
+  #   ilk alanı addır · (3) kurye-yokla.sh yoksa eski okundu.log (' | ' ayraçlı, 3. alan). Sorgu düşerse ölçemedim —
+  #   okunamayan kayıt "okunmamış" DEĞİL "ölçülemedi"dir.
+  # arayüz tanıma: komut adı tırnaklı karşılaştırmada ('= "okundu-liste"') ya da case etiketinde ('okundu-liste)') geçer; düz yazıdaki anış sayılmaz
+  if [ -f "$KY" ] && grep -qE '"okundu-liste"|okundu-liste\)' "$KY"; then
+    kaynak="kurye-yokla.sh okundu-liste"
+    okunan="$(bash "$KY" okundu-liste 2>/dev/null)" || sorgu_rc=$?
+  elif [ -f "$KY" ] && grep -qE '"okundu-yolu"|okundu-yolu\)' "$KY"; then
+    OK="$(bash "$KY" okundu-yolu 2>/dev/null)" || sorgu_rc=$?
+    kaynak="kurye-yokla.sh okundu-yolu → ${OK:-?}"
+    [ "$sorgu_rc" -eq 0 ] && [ -f "$OK" ] && okunan="$(cut -f1 "$OK" 2>/dev/null)"
+  else
+    kaynak="$OK"
+    [ -f "$OK" ] && okunan="$(awk -F' [|] ' '{print $3}' "$OK" 2>/dev/null)"
+  fi
+  if [ "$sorgu_rc" -ne 0 ]; then
+    GELEN="?"; olcemedim "okundu kaydı sorgulanamadı ($kaynak rc=$sorgu_rc) — mektuplar okunmamış SAYILMADI, sayılmadı"
+  else
+    while IFS= read -r f; do
+      a="$(basename "$f")"
+      # here-string, BORU DEĞİL (gorev_01M55X6PGK9C9K8MRSY0E01W3Q): pipefail altında 'printf | grep -q' grep ilk eşleşmede
+      #   çıkınca printf SIGPIPE alır, boru rc≠0 döner ve OKUNMUŞ mektup okunmamış sayılırdı (büyük okundu kaydında kesin).
+      grep -qxF -- "$a" <<<"$okunan" && continue   # TAM ad eşleşmesi (ad parçası değil)
+      GELEN=$((GELEN+1)); liste+="  • $a ($(date -r "$f" +%F))"$'\n'
+    done < <(find "$GD" -maxdepth 1 -type f -name '*.md' 2>/dev/null | sort)
+    if [ -n "$liste" ]; then bas "$liste"; else printf '  (okunmamış mektup yok)\n'; fi
+    case "$kaynak" in
+      "kurye-yokla.sh okundu-liste") printf '  not: okundu kaydı kutudan soruldu (%s · %s okunmuş ad)\n' "$kaynak" "$(grep -c . <<<"$okunan")" ;;
+      *) [ -f "$OK" ] || printf '  not: okundu kaydı yok (%s%s) — listelenenlerin hepsi okunmamış sayıldı\n' "$kaynak" "$([ -f "$KY" ] || printf '; kutuda scripts/kurye-yokla.sh de yok')" ;;
+    esac
+  fi
 else olcemedim "gelen kutusu yok: $GD (bu kutuda mektup düzeni farklı olabilir)"; fi
 
 bolum "6/9 · Aktif layiha (inşa bekleyen)"

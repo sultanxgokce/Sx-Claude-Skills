@@ -222,5 +222,58 @@ O6="$(cd "$B" && GUN_ORTASI_SK="$SK2" GUN_ORTASI_KOK="$B" bash "$ARAC" 2>&1)"
 kapi "T5c büyük çıpa (>64K, başlık başta) tarih kapısını geçer — 'bugüne ait değil' DENMEZ, sonraki adıma (tablo) ulaşır" \
   "$(grep -c 'çıpa bugüne ait değil' <<<"$O6")/$(grep -c 'çıpa tabloya çevrilemedi' <<<"$O6")" "0/1"
 
+# ── T5d–T5g · OKUNDU KAYDI SAHİBİNDEN SORULUR (gorev_01M4ZMCTDB4B84P42S6R75A8CJ · MİHENK 14 Eki: kutu '0-teslimat/.okundu'
+#   yazıyor, araç 'okundu.log' arıyordu → 71 mektup okunmamış basıldı, gerçek 0). Sahte kurye-yokla.sh, mihenk'teki arayüzün
+#   KOPYASI: 'okundu-yolu' yolu basar; 'okundu-liste' özeti TUTAN ad+özet satırlarını ve özetsiz eski satırları okunmuş sayar.
+#   Fikstür mihenk'i taklit eder: okundu.log YOK, kayıt .okundu'da. Eski kod üçünde de "okundu.log yok — hepsi okunmamış" der.
+mv "$B/0-teslimat/okundu.log" "$TMP/okundu.log.kenar"
+mkdir -p "$B/scripts"
+cat > "$B/scripts/kurye-yokla.sh" <<'EOF'
+#!/usr/bin/env bash
+# sahte kurye-yokla.sh — mihenk arayüzü: okundu-yolu · okundu-liste (ad<TAB>sha256:özet tutanlar + özetsiz eski satır) · yoklama rc 1
+K="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/0-teslimat"
+case "${1:-}" in
+  okundu-yolu) echo "$K/.okundu"; exit 0 ;;
+  okundu-liste) [ -f "$K/.okundu" ] || exit 0
+    [ -z "${SAHTE_DUS:-}" ] || { echo "sahte: kayıt kilitli" >&2; exit 2; }
+    while IFS= read -r s; do [ -n "$s" ] || continue; ad="${s%%	*}"; [ -f "$K/gelen/$ad" ] || continue
+      case "$s" in *"	"*) d="${s#*	}"; [ "${d#sha256:}" = "$(sha256sum "$K/gelen/$ad" | cut -d' ' -f1)" ] && echo "$ad" ;;
+                   *) echo "$ad" ;; esac
+    done < "$K/.okundu"; exit 0 ;;
+  *) exit 1 ;;
+esac
+EOF
+# BA: özeti tutuyor (okunmuş) · A: okunduktan sonra İÇERİĞİ değişmiş (özet tutmaz → okunmamış) · ESKI: kayıtta yok
+printf 'BA.md\tsha256:%s\nA.md\tsha256:0000000000000000000000000000000000000000000000000000000000000000\n' "$(sha256sum "$B/0-teslimat/gelen/BA.md" | cut -d' ' -f1)" > "$B/0-teslimat/.okundu"
+O7="$(kos env)"
+kapi "T5d kutunun kurye-yokla.sh'ı 'okundu-liste' biliyor: kayıt .okundu'dan SORULUR — BA okunmuş, A (özeti tutmaz) ve ESKI okunmamış → gelen 2; 'okundu.log yok' DENMEZ; kaynak yazılır" \
+  "$(oz "$O7" gelen)/$(grep -c '• BA.md' <<<"$O7")/$(grep -c '• A.md' <<<"$O7")/$(grep -c 'okundu kaydı yok' <<<"$O7")/$(grep -c 'kurye-yokla.sh okundu-liste · 1 okunmuş ad' <<<"$O7")" "2/0/1/0/1"
+# T5e · yalnız 'okundu-yolu' bilen eski kurye-yokla.sh: yol sorulur, satırın TAB'a kadar olan ilk alanı addır (özet denetimi kutuda değil → ad yeter)
+cat > "$B/scripts/kurye-yokla.sh" <<'SAHTE'
+#!/usr/bin/env bash
+# sahte eski kurye-yokla.sh — yalnız yol komutunu bilir (liste arayüzü yok)
+K="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/0-teslimat"
+if [ "${1:-}" = "okundu-yolu" ]; then echo "$K/.okundu"; exit 0; fi
+exit 1
+SAHTE
+printf 'BA.md\tsha256:abc\nA.md\n' > "$B/0-teslimat/.okundu"
+O8="$(kos env)"
+kapi "T5e yalnız 'okundu-yolu' bilen kurye-yokla.sh: .okundu okunur, ad = TAB'a kadar ilk alan (özetli de yalın da) → yalnız ESKI → gelen 1" \
+  "$(oz "$O8" gelen)/$(grep -c '• ESKI.md' <<<"$O8")/$(grep -c '• BA.md' <<<"$O8")/$(grep -c '• A.md' <<<"$O8")" "1/1/0/0"
+# T5f · sahip sorgusu DÜŞERSE (rc 2): mektuplar okunmamış sayılmaz — gelen '?' ve ölçemedim +1 (okunamayan kayıt ≠ boş kayıt)
+cat > "$B/scripts/kurye-yokla.sh" <<'EOF'
+#!/usr/bin/env bash
+case "${1:-}" in okundu-liste) echo "sahte: kayıt kilitli" >&2; exit 2 ;; okundu-yolu) echo x; exit 0 ;; *) exit 1 ;; esac
+EOF
+O9="$(kos env)"
+kapi "T5f kurye-yokla.sh okundu-liste rc 2 → gelen '?' ve ölçemedim +1; üç mektubun hiçbiri '•' ile okunmamış basılmaz" \
+  "$(oz "$O9" gelen)/$(oz "$O9" olcemedim)/$(grep -cE '• (A|BA|ESKI)\.md' <<<"$O9")" "?/$(( $(oz "$O7" olcemedim) + 1 ))/0"
+# T5g · kurye-yokla.sh de okundu.log da yok: eski yol, dürüst not (hepsi okunmamış sayıldı + kutuda kurye-yokla.sh de yok)
+rm -rf "$B/scripts" "$B/0-teslimat/.okundu"
+O10="$(kos env)"
+kapi "T5g kayıt da kurye-yokla.sh de yok: üçü de okunmamış (3) ve not 'okundu kaydı yok … kurye-yokla.sh de yok'" \
+  "$(oz "$O10" gelen)/$(grep -c 'okundu kaydı yok .*kurye-yokla.sh de yok' <<<"$O10")" "3/1"
+mv "$TMP/okundu.log.kenar" "$B/0-teslimat/okundu.log"
+
 echo "── SONUÇ: geçti=$G kaldı=$K ölçemedim=$O3 ──"
 [ "$K" -eq 0 ]
