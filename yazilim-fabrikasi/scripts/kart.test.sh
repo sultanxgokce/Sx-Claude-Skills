@@ -205,6 +205,30 @@ m13 atif-sonra-bos 'ATIF_SONRA = r"(?!\s+(?:rapor|kap[ıi]s|kapan[ıi]ş|retro|d
 m13 hafta-atifsiz '(?:s[ıi]|n[ıi]n|da|y[ıi])?(?!\w)" + ATIF_SONRA + r"' '(?:s[ıi]|n[ıi]n|da|y[ıi])?(?!\w)" + r"' "birleştirme kancası CI'ı ölçsün (hafta raporu E3)"
 m13 W-atifsiz 'W\d{2}(?!\w)" + ATIF_SONRA' 'W\d{2}(?!\w)"' "W42 retrosu için kutu dosyasını doldur"
 
+echo "════ T13c · SAYI UYARISI (WNMSQ · SERDAR: uyarı, red değil): ölçümsüz '13 görev' kartı açar ama uyarır + karta yazar; --sayi-olcum kaynağı karta işler ════"
+su() { python3 -c "import json,sys;k=json.load(open(sys.argv[1]));print(' | '.join(k['sayi_uyarilari']))" "$K13/_agents/fabrika/kartlar/$1.json" 2>/dev/null || echo yok; }
+CIKTI="$(ac13 is-s1 "yöneticinin 13 görev listesi işlensin; ayda 173 kez düşüyor, hedef %50")"; RC=$?
+[ "$RC" -eq 0 ] && [ "$(su is-s1)" = "13 görev | 173 kez | %50" ]; g $? "Nexus #1213 vakası: kart AÇILDI (red yok) · karta üç sayı iddiası yazıldı ($(su is-s1))"
+grep -q "⚠ SAYI — cümlede kaynağı ölçülmemiş sayı: '13 görev' · '173 kez' · '%50'.*--sayi-olcum" <<<"$CIKTI"; g $? "uyarı satırı sayıları ve çareyi (--sayi-olcum) söylüyor"
+CIKTI="$(ac13 is-s2 "retro W42 MUAVİN Ö3 · fabrika 0.18.1 · #337 · gorev_01M57ZV15AARDJDVV9NK3WNMSQ · 23 Eki 04:30 · 2026-10-23 · 1. hafta · 40 dk · 100 KB · 1440+390 kare · 81D0W · 5/E")"
+[ "$(su is-s2)" = "" ] && ! grep -q "SAYI" <<<"$CIKTI"; g $? "yanlış alarm yok: kimlik · sürüm · #PR · tarih/saat · ay adı · sıra · birimli eşik · 5/E sayı iddiası DEĞİL"
+CIKTI="$(ac13 is-duz2 "buton ekle")"; [ "$(su is-duz2)" = "" ] && ! grep -q "SAYI" <<<"$CIKTI"; g $? "sayısız cümle: uyarı yok, karta boş liste"
+CIKTI="$(bash "$KT" ac is-s3 --is "13 görev kapansın" --istedi SERDAR --aldi HENDESE --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h --sayi-olcum "printf '13 görev bulundu\n'; exit 0" 2>&1)"
+SO="$(python3 -c "import json,sys;k=json.load(open(sys.argv[1]));o=k['sayi_olcum'];print(o['rc'],o['cikti'].strip(),len(k['sayi_uyarilari']))" "$K13/_agents/fabrika/kartlar/is-s3.json" 2>&1)"
+[ "$SO" = "0 13 görev bulundu 0" ] && grep -q "sayı kaynağı karta yazıldı (rc=0): 13 görev bulundu" <<<"$CIKTI" && ! grep -q "⚠ SAYI" <<<"$CIKTI"; g $? "--sayi-olcum: komut koşuldu, rc + çıktı karta yazıldı, uyarı düştü ($SO)"
+CIKTI="$(bash "$KT" ac is-s4 --is "13 görev kapansın" --istedi SERDAR --aldi HENDESE --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h --sayi-olcum "echo kaynak yok; exit 7" 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && [ "$(su is-s4)" = "13 görev" ] && grep -q "ölçüm komutu DÜŞTÜ (rc=7)" <<<"$CIKTI"; g $? "düşen ölçüm komutu kaynak SAYILMAZ: uyarı karta yazılı kalır, kart yine açılır (rc 0)"
+CIKTI="$(bash "$KT" ac is-s5 --is "13 görev kapansın" --istedi SERDAR --aldi HENDESE --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h --sayi-olcum "seq 1 3000; echo SONUC: 13 görev" 2>&1)"
+SO="$(python3 -c "import json,sys;o=json.load(open(sys.argv[1]))['sayi_olcum'];print(o['kirpildi'],len(o['cikti']),o['cikti_bayt'],o['son_satirlar'][-1])" "$K13/_agents/fabrika/kartlar/is-s5.json" 2>&1)"
+[ "$SO" = "True 2000 13909 SONUC: 13 görev" ] && grep -q "ölçüm çıktısı 13909 bayt: karta ilk 2000 karakter + son 5 satır yazıldı (KIRPILDI)" <<<"$CIKTI"; g $? "uzun ölçüm çıktısı SESSİZ kesilmez: kartta kirpildi + tam boy + son satırlar (sonuç satırı korunur), ekranda uyarı ($SO) — göz #430 tur 1"
+echo "── T13c · MUTASYON (tam kopya): sayı aranmazsa #1213 cümlesi sessiz geçer → üstteki kapı düşerdi ──"
+D="$T/pkg-sayi"; mkdir -p "$D"; cp "$HERE"/*.py "$HERE"/*.sh "$D/" 2>/dev/null
+if python3 - "$D/kart.sh" <<'PYM'
+import sys; f=sys.argv[1]; s=open(f,encoding="utf-8").read(); a='kart["sayi_uyarilari"]=[] if kaynakli else sayilar'; assert s.count(a)==1; open(f,"w",encoding="utf-8").write(s.replace(a,'kart["sayi_uyarilari"]=[]'))
+PYM
+then o="$(ac13m "$D/kart.sh" is-s-mut "yöneticinin 13 görev listesi işlensin")"; [ "$(su is-s-mut)" = "" ] && ! grep -q "⚠ SAYI" <<<"$o"; g $? "mutant (sayı uyarısı kapalı) #1213 cümlesini sessiz geçiriyor → üstteki kapı bu mutantta düşerdi"
+else g 1 "mutant kurulamadı (çapa bayat)"; fi
+
 echo "════ T14 · görev durumu (Y7J3Q): --gorev bağlı kart açılış/bitti/tıkandı'da defterdeki görevi yazar; yazamazsa söyler, rc 4 ════"
 GDEPO="$(dirname "$(git rev-parse --path-format=absolute --git-common-dir)")"   # kart.sh ile aynı kök (önceki bölüm depo değiştirdi)
 printf 'kart-sinav-jeton\n' > "$T/jeton"

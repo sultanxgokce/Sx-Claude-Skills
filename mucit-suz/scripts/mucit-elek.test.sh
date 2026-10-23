@@ -9,6 +9,8 @@
 #
 # İZOLE: gerçek havuz/deftere DOKUNMAZ; her koşu temp-dizinde fixture üretir. Ağ/ssh YOK.
 set -uo pipefail
+# 🔴 HERMETİK (4FDVE5): mucit-t1 jeton okunabiliyorsa merkezî Görev Defteri'ni de süzer — sınav canlı deftere gitmesin (bu kutuda jeton var).
+export MUCIT_GOREV_DEFTERI="-"
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 T1="$ROOT/scripts/mucit-t1.sh"

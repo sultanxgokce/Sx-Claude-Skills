@@ -135,6 +135,27 @@ _EF="$(_kanon kart_kaynagi.env_dosyasi)"
 
 [[ -f "$HAVUZ" ]] || { echo "HATA: havuz yok: $HAVUZ" >&2; exit 2; }
 
+# ── GÖREV DEFTERİ KAYNAĞI (gorev 4FDVE5 · B16BJ parçası, 23 Eki): 22 Eki'den beri bulgular merkezî Görev Defteri'ne düşüyor
+#    ('havuz' durumu); bu elek yalnız bulgu-havuzu.jsonl'u okuyordu → yeni bulgular fikir hattına HİÇ girmiyordu (Nexus havuzunun
+#    son satırı 8 Eki). Defter `bulgu.sh havuz-cek` köprüsüyle eski havuz biçiminde okunur (eşleme TEK orada; 'havuz' → 'ham'),
+#    dosya havuzuyla BİRLEŞİK geçici JSONL'e yazılır ve aşağıdaki bütünlük + süzme yolundan AYNEN geçer.
+#    Varsayılan: yalnız jeton okunabiliyorsa (jetonsuz kutu normaldir) · MUCIT_GOREV_DEFTERI=1 zorlar · =- kapatır.
+#    Köprü ölçemezse (rc 3) iş DURMAZ ama SÖYLENİR (stderr 🟡) — "defterde bulgu yok" sanılmaz.
+HAVUZ_OKU="$HAVUZ"; GD_NOT="görev defteri: kapalı"
+_gd="${MUCIT_GOREV_DEFTERI:-}"
+if [ "$_gd" != "-" ] && { [ "$_gd" = 1 ] || [ -r "${DEFTER_JETON_YOL:-/config/defter-jeton}" ]; }; then
+  _bsh="${MUCIT_BULGU_SH:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)/bulgu/scripts/bulgu.sh}"
+  _gdf="$(mktemp --suffix=.jsonl)"; _bir="$(mktemp --suffix=.jsonl)"; trap 'rm -f -- "$_gdf" "$_bir"' EXIT
+  if [ -f "$_bsh" ] && bash "$_bsh" havuz-cek > "$_gdf" 2>"$_gdf.err" </dev/null; then
+    cat "$HAVUZ" > "$_bir"; [ -s "$_bir" ] && [ -n "$(tail -c1 "$_bir")" ] && echo >> "$_bir"; cat "$_gdf" >> "$_bir"
+    HAVUZ_OKU="$_bir"; GD_NOT="görev defteri: $(grep -c . "$_gdf") bulgu eklendi"
+  else
+    GD_NOT="görev defteri: ÖLÇÜLEMEDİ ($([ -f "$_bsh" ] && tail -n1 "$_gdf.err" | sed 's/^🟡 //' || echo "köprü yok: $_bsh"))"
+    echo "🟡 $GD_NOT — yalnız dosya havuzu süzüldü" >&2
+  fi
+  rm -f -- "$_gdf.err"
+fi
+
 # ── DÖNEM-TAVAN (mekanik kilit) ──
 case "$PERIYOT" in
   hafta) DFMT="+%G-W%V"; DONEM_AD="bu hafta" ;;
@@ -284,7 +305,7 @@ fi
 # ── M1: havuz-bütünlük ön-kontrolü (bozuk-JSONL SESSİZCE yutulmasın — fail-closed) ──
 # Eski `<(jq '.' "$HAVUZ")` process-sub'ı inner-jq parse-error'unu yutuyordu (RC=0 + eksik-bulgu).
 # Doğrudan `jq empty` ile TÜM satırları doğrula; bir satır bozuksa DUR (acımasız-ele = sessiz-eksik'in TERSİ).
-if ! jq empty "$HAVUZ" 2>/dev/null; then
+if ! jq empty "$HAVUZ_OKU" 2>/dev/null; then
   echo "HATA: havuz bozuk-JSONL (parse hatası) — fail-closed durduruldu: $HAVUZ" >&2; exit 2
 fi
 
@@ -294,7 +315,7 @@ export DEDUP_ESIK MIHENK_DESEN
 # ARGV-LİMİTİ (aynı sınıf): kart-başlıkları da defter büyüdükçe argv'yi taşırıyordu.
 _t1_kartf="$(mktemp)"; printf '%s' "$KART_BASLIKLAR" > "$_t1_kartf"
 CIKTI="$(jq -c -n \
-  --slurpfile havuz "$HAVUZ" \
+  --slurpfile havuz "$HAVUZ_OKU" \
   --slurpfile kartlar_f "$_t1_kartf" \
   --arg mihenk "$MIHENK_DESEN" \
   --argjson kapatici "$KAPATICI_IDS" \
@@ -345,7 +366,7 @@ ADAYLAR_TEMIZ="$(jq -c 'sort_by(-.onskor) | [ .[] | del(._kanitli, ._uygun_durum
 
 # ── eleme-özeti (stderr) ──
 {
-  echo "── MUCİT T1 eleme-özeti (havuz: $(basename "$HAVUZ")) ──"
+  echo "── MUCİT T1 eleme-özeti (havuz: $(basename "$HAVUZ") · $GD_NOT) ──"
   echo "   uygun-olmayan durum : $E_DURUM  (bitti/cozuluyor/aday-onerildi/kart/elendi)"
   echo "   kanıtsız (fail-closed): $E_KANIT"
   echo "   MİHENK-alanı (Sultan) : $E_MIHENK  ${MIHENK_LIST}"
@@ -362,7 +383,7 @@ ADAYLAR_TEMIZ="$(jq -c 'sort_by(-.onskor) | [ .[] | del(._kanitli, ._uygun_durum
 # çekirdek komutu reddediyor ("Argument list too long", rc=126) ve T2-kontratı HİÇ üretilmiyor.
 # Üstelik özet satırları bu noktadan ÖNCE stderr'e basıldığı için koşu SAĞLIKLI görünüyordu.
 # Çözüm: büyüyebilen listeler argv yerine DOSYADAN okunur (--slurpfile → $x[0]).
-_t1_tmp="$(mktemp -d)"; trap 'rm -rf "$_t1_tmp"' EXIT
+_t1_tmp="$(mktemp -d)"; trap 'rm -rf "$_t1_tmp"; rm -f -- "${_gdf:-}" "${_bir:-}"' EXIT   # görev defteri geçicileri de (üstteki trap'i ezer)
 printf '%s' "$ADAYLAR_TEMIZ" > "$_t1_tmp/adaylar.json"
 printf '%s' "$MIHENK_LIST"   > "$_t1_tmp/mihenk.json"
 jq -c -n \

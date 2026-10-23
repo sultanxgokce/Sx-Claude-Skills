@@ -15,6 +15,9 @@ B="$PWD/bileyi.py"
 #    gerçek bir defter var; sınav onu okursa sayımlar kayar ve sonuç ortama bağlanır (ölçüldü: 8 kapı düştü).
 #    Bilerek kapalı ("-"); X bölümü kendi sahte defterini verir.
 export BILEYI_KUTU_DEFTERI="-"
+# 🔴 HERMETİK (4FDVE5): araç jeton okunabiliyorsa merkezî Görev Defteri'ni de okur — bu kutuda jeton VAR; sınav canlı deftere
+#    gitmesin. Bilerek kapalı ("-"); Y bölümü kendi sahte köprüsünü verir.
+export BILEYI_DEFTER="-"
 GECEN=0; DUSEN=0
 kapi() { # kapi <ad> <beklenen-rc> <komut...>
   local ad="$1" bek="$2"; shift 2
@@ -806,6 +809,38 @@ PYM
 out="$(env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KOK/dizin-defter.json" python3 "$Mp" --depo "$KOK/mmex" --esik-dosya "$ES" olc --gun 0 2>&1)"
 if [[ "$out" == *Traceback* ]]; then GECEN=$((GECEN+1)); echo "  ✓ X mutant 'oserror-yakalanmaz' sınavı düşürüyor"; else DUSEN=$((DUSEN+1)); echo "  ✗ X mutant 'oserror-yakalanmaz' sağ kaldı"; fi
 xm ev-dizini-yok '(Path.home() / KUTU_DEFTERI_GORELI, False)' '(Path("/yok") / KUTU_DEFTERI_GORELI, False)' "kanit yolu" ev
+
+echo "Y · merkezî GÖREV DEFTERİ kaynağı (gorev 4FDVE5: 22 Eki'den beri bulgular defterde, araç yalnız dosyaları okuyordu)"
+# sahte köprü: bulgu.sh havuz-cek'in BİÇİMİNDE (eşlemenin kendisi bulgu.test.sh HC1-HC3'te ölçülür); 3 kayıt, biri göçle
+# taşınmış S-5 (aynı başlık + eski_no) → kutu defteriyle İKİ KEZ sayılmamalı
+mkdir -p "$KOK/kopru"; KJ="$KOK/kopru/defter.jsonl"
+python3 - "$KJ" <<'PYY'
+import json, sys
+from datetime import date
+t = date.today().isoformat()
+L = [{"id": "gorev_Y0000000000000001", "tarih": t, "baslik": "denetci kaydi pr yetismiyor", "kanit": "iki vaka", "gercek": "iki vaka", "durum": "ham", "kaynak": "defter", "eski_no": ""},
+     {"id": "gorev_Y0000000000000002", "tarih": t, "baslik": "kokpit bellek rahat yaniliyor", "kanit": "kare", "gercek": "kare", "durum": "acik", "kaynak": "defter", "eski_no": ""},
+     {"id": "gorev_Y0000000000000003", "tarih": t, "baslik": "zil susuyor kanit yolu kapali", "kanit": "", "gercek": "", "durum": "bitti", "kaynak": "defter", "eski_no": "S-5 (mmex)"}]
+open(sys.argv[1], "w").write("".join(json.dumps(k, ensure_ascii=False) + "\n" for k in L))
+PYY
+printf '#!/usr/bin/env bash\n[ "$1" = havuz-cek ] || exit 2\ncat "%s"\n' "$KJ" > "$KOK/kopru/bulgu.sh"
+printf '#!/usr/bin/env bash\necho "🟡 defter ulaşılamadı (http://x) — defterdeki bulgular ÖLÇÜLEMEDİ" >&2; exit 3\n' > "$KOK/kopru/olmez.sh"
+printf 'jeton\n' > "$KOK/kopru/jeton"
+YD=(env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KD" BILEYI_BULGU_SH="$KOK/kopru/bulgu.sh")
+iceren "Y1 defter kaynağı okunur: iz satırı 3 kayıt + göç aynası 1 kayıt bir kez sayıldı" "defter: " "${YD[@]}" BILEYI_DEFTER=1 "${M[@]}" olc --gun 0
+iceren "Y2 🔴 göçle taşınan bulgu İKİ KEZ sayılmaz: 5 kutu + 3 defter − 1 ayna = 7 (2 tanesi görev defterinden)" "havuz: 7 kayıt (birleşik, 2/3 kaynak OKUNDU · 5 tanesi bu kutunun kendi defterinden · 2 tanesi görev defterinden)" "${YD[@]}" BILEYI_DEFTER=1 "${M[@]}" olc --gun 0
+iceren "Y3 jeton okunabiliyorsa varsayılan AÇIK (ayar yokken de okur)" "2 tanesi görev defterinden" env -u BILEYI_DEFTER "${YD[@]}" DEFTER_JETON_YOL="$KOK/kopru/jeton" "${M[@]}" olc --gun 0
+icermeyen "Y4 jetonsuz kutu normaldir: ayar yokken defter kaynağı HİÇ eklenmez (boş 🟡 gürültüsü yok)" "defter: " env -u BILEYI_DEFTER "${YD[@]}" DEFTER_JETON_YOL="$KOK/kopru/jeton-yok" "${M[@]}" olc --gun 0
+icermeyen "Y5 BILEYI_DEFTER=- jeton olsa da kapatır" "görev defteri" "${YD[@]}" BILEYI_DEFTER=- DEFTER_JETON_YOL="$KOK/kopru/jeton" "${M[@]}" olc --gun 0
+iceren "Y6 🔴 köprü ölçemezse kaynak YOK SAYILMAZ: 🟡 satırı + sebep" "🟡 defter: <görev defteri: defter ulaşılamadı> — okunamadı" env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KD" BILEYI_BULGU_SH="$KOK/kopru/olmez.sh" BILEYI_DEFTER=1 "${M[@]}" olc --gun 0
+iceren "Y7 okunamayan defter kapsamayı GENİŞ göstermez (1/3 kaynak)" "1/3 kaynak OKUNDU" env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KD" BILEYI_BULGU_SH="$KOK/kopru/olmez.sh" BILEYI_DEFTER=1 "${M[@]}" olc --gun 0
+echo "── Y · MUTASYON (tam kopya): göç aynası kalkınca Y2 düşmeli ──"
+YM="$KOK/ym"; mkdir -p "$YM"; cp "$B" "$YM/bileyi.py"
+python3 - "$YM/bileyi.py" <<'PYM'
+import sys; f=sys.argv[1]; s=open(f,encoding="utf-8").read(); a='            if k.get("eski_no") and g in goc:\n                continue\n'; assert s.count(a)==1; open(f,"w",encoding="utf-8").write(s.replace(a,""))
+PYM
+out="$(env BILEYI_ANAHTAR="$ANAH" BILEYI_KUTU_DEFTERI="$KD" BILEYI_BULGU_SH="$KOK/kopru/bulgu.sh" BILEYI_DEFTER=1 python3 "$YM/bileyi.py" --depo "$KOK/mmex" --esik-dosya "$ES" olc --gun 0 2>&1)"
+if [[ "$out" == *"havuz: 8 kayıt"* ]]; then GECEN=$((GECEN+1)); echo "  ✓ Y mutant 'goc-aynasi-yok' aynı bulguyu iki kez sayıyor (8) → Y2 bu mutantta düşerdi"; else DUSEN=$((DUSEN+1)); echo "  ✗ Y mutant sağ kaldı ya da kurulamadı"; fi
 
 echo
 echo "toplam=$((GECEN+DUSEN)) geçen=$GECEN düşen=$DUSEN"

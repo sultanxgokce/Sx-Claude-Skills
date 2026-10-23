@@ -1,0 +1,30 @@
+{
+  "tur": 3,
+  "is": "hezarfen-ortam-okuyucu",
+  "pr": "427",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T03:55:12+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 26276,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 14547
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Ortam okuyucusu ortak dosyaya çıkarılmış; ortak.sh ile kapı kabuğu bu okuyucuyu kullanıyor ve tehlikeli doğrudan kaynak alma kaldırılmış. Sağlam gerçek ölçüm güvenlik davranışını, mutasyon ölçümü de eski yolun sınav tarafından yakalandığını gösterdiğinden yalnız küçük rötuş düzeyinde dahi kanıtlanmış bir kusur kalmıyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önce/sonra ölçümünde etkin “set -a; .” kullanımı 1'den 0'a iniyor; gerçek ölçüm E1-E9 ile AD=değer yükleme, bozuk satırın koşmaması, değer parçasının basılmaması, ortak okuyucunun tek başına çalışması ve onar.sh entegrasyonunu doğruluyor. Mutasyon kaydı beklenen rc=1 ile E7-E8'i kırmızıya çevirerek eski yolun sınavca yakalandığını kanıtlıyor. Gerçek tmux oturumunun uçtan uca başlatıldığına dair ayrı ölçüm yok, ancak kartın daraltılmış talebi ve sunulan kaynak/sınav kanıtı için bu durum puan düşürecek kanıtlı bir kusur oluşturmuyor."
+  }
+}

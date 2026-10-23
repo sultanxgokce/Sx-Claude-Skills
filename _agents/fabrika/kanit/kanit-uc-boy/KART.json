@@ -1,0 +1,31 @@
+{
+  "is": "kanit-uc-boy",
+  "cumle": "Kanıt aracı tek komutla üç boy kare alsın (kanit.sh ekran --uc-boy → 1440/1280/390, her boy ayrı imzalı kayıt); --gelen <kutu> yeşil kareleri Sultan'ın 0-Gelen klasörüne <kutu>_<iş>-kare-*.png adıyla kopyalasın (görev 4PZV4'ün fabrika aracı payı)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-23T05:13:11+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "önce/sonra: --uc-boy önce tanınmaz → sonra üç yeşil kayıt; kanit sınavı + mutant",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M54D1PAG435JDEM0Z9M4PZV4",
+  "tahmin_dk": 60,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-23T05:13:11+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

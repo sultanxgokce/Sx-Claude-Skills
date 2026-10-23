@@ -1,0 +1,82 @@
+$ bash layiha-fabrikasi/scripts/layiha-fabrika.test.sh
+# rc=0 sure=1.3s zaman=2026-10-23T05:04:31+03:00
+--- stdout ---
+== T1: bayrak-YOKKEN layiha üretim-yolu geçer (mucit-t1.sh --profil layiha çalışır) ==
+PASS  T1 rc=0
+PASS  T1 üretim engellenmedi (aday geçti)
+== T2: bayrak-VARKEN layiha üretimi DURUR (exit=0 graceful-skip + mesaj + çıktı YOK) ==
+PASS  T2 exit=0 (üretim-atlama hata değil, kasıtlı-skip) (rc=0)
+PASS  T2 stderr'de KAPALI mesajı var
+PASS  T2 aday-çıktısı BASILMADI (üretim gerçekten durdu)
+PASS  T2b bayrak-VARKEN DİVAN profili ÇALIŞMAYA DEVAM eder (rc=0)
+PASS  T2b DİVAN çıktısı gerçek (susturulmadı)
+PASS  T2c bayrak-VARKEN KAŞİF (paylaşılan ham-havuz) MUAF — çalışır (rc=0)
+PASS  T2c KAŞİF havuza yazdı
+== T3: bayrak-VARKEN CRUD (layiha-aday-havuzu.sh liste/durum) HÂLÂ ÇALIŞIR ==
+PASS  T3 liste rc=0 (CRUD guard'tan etkilenmedi)
+PASS  T3 liste kaydı görünüyor
+PASS  T3 durum rc=0
+== T4: layiha-fabrika.sh kapat --sebep → durum çıktısında sebep GÖRÜNÜR ==
+PASS  T4 kapat rc=0
+PASS  T4 bayrak-dosyası oluştu
+PASS  T4 durum KAPALI gösterir
+PASS  T4 durum sebep-metnini içerir
+== T5: kapat→ac idempotent (round-trip AÇIK'a döner, tekrar ac hata vermez) ==
+PASS  T5 ac rc=0
+PASS  T5 bayrak silindi
+PASS  T5 durum AÇIK gösterir
+PASS  T5 zaten-açıkken tekrar ac idempotent (rc=0)
+PASS  T5 ikinci round-trip sonunda bayrak yok
+== T6: içeriksiz (boş) bayrak da KAPALI sayılır (yalın test -f yeterli) ==
+PASS  T6 boş-bayrak da üretimi durdurur (rc=0 skip) (rc=0)
+PASS  T6 aday-çıktısı yok
+PASS  T6 gerekçesiz-bayrak açıkça belirtilir
+== T7/T8: 'şu odayı kapat' YALNIZ o odayı durdurur (öteki oda üretmeye devam) ==
+PASS  T7 kapatılan oda (A) KAPALI
+PASS  T8 kapatılmayan oda (B) AÇIK — vakumsuzluk kanıtı: aynı bayrak, farklı karar
+PASS  T7b bayrak kapsam=yerel
+PASS  T7c scope yalnız A
+== T9: aynı bayrağa ikinci oda eklenir; mükerrer kayıt YAZILMAZ (idempotent) ==
+PASS  T9 iki oda da kapalı
+PASS  T9 üçüncü oda hâlâ açık
+PASS  T9b tekrar-kapat mükerrer eklemez
+PASS  T9c --sebep'siz ikinci kapatma ilk gerekçeyi SİLMEZ
+== T10: 'bu odayı aç' yalnız bu odayı açar, ötekini kapalı bırakır ==
+PASS  T10 A açıldı
+PASS  T10 B hâlâ KAPALI (yanlışlıkla hepsi açılmadı)
+PASS  T10b scope'ta yalnız B kaldı
+== T11: scope'ta olmayan odada 'ac' zararsız no-op (bayrağa dokunmaz) ==
+PASS  T11 rc=0 (hata değil)
+PASS  T11 bayrak değişmedi
+PASS  T11 B hâlâ kapalı
+== T12: son oda açılınca bayrak DOSYASI silinir (artık kapatma yok) ==
+PASS  T12 bayrak silindi
+PASS  T12 her oda açık
+== T13: 'hepsini kapat' her odayı durdurur (scope'ta olmayan oda dahil) ==
+PASS  T13 kapsam=filo
+PASS  T13 A·B·C hepsi KAPALI
+== T14: BAŞKA odanın filo-kapatmasını yalın 'ac' geri alamaz (10 odayı sessizce açmaz) ==
+PASS  T14 rc=2 (reddedildi)
+PASS  T14 bayrak SİLİNMEDİ
+PASS  T14 hata-metni doğru komutu söylüyor
+PASS  T14b 'ac --filo' ile açılır
+== T15: filo kapalıyken 'kapat --yerel' sessizce GEVŞETMEZ (kapsam filo kalır) ==
+PASS  T15 kapsam hâlâ filo
+PASS  T15 C hâlâ kapalı (daraltma olmadı)
+== T16: GERİYE-UYUM — eski-usul çıplak bayrak TÜM filoyu kapatmaya devam eder ==
+PASS  T16 A·B·C hepsi KAPALI (sessiz-gevşeme yok)
+== T17: FAIL-CLOSED — bozuk JSON kapalı sayılır ==
+PASS  T17 bozuk-JSON → KAPALI
+PASS  T17b tanınmayan kapsam → KAPALI (bilinmeyen değer üretime izin vermez)
+== T18: FAIL-CLOSED — jq YOKKEN kapsam okunamaz → kapalı sayılır ==
+PASS  T18 jq gerçekten PATH-dışı
+PASS  T18b jq yokken açık-oda bile KAPALI sayılır (fail-closed)
+== T19 (B9): ekran, KAŞİF'in DURMADIĞINI açıkça söyler — 'kapattım' ≠ 'her şey durdu' ==
+PASS  T19 durum-ekranı KAŞİF'i adıyla anıyor
+PASS  T19 'DURMAZ' ifadesi geçiyor (muafiyet net)
+PASS  T19b kapat-ekranı da KAŞİF muafiyetini yazıyor
+PASS  T19c kapat-ekranı hangi kapsamda kapattığını söylüyor
+PASS  T19d durum bu-odanın kararını başlıkta veriyor
+
+TOPLAM: pass=58 fail=0
+--- stderr ---

@@ -19,7 +19,8 @@ def tam(**kw):
     d = dict(duzenleyen=Taraf("A LTD","1234567890","VD","Türkiye","Ankara","Çankaya","Adres 1"),
              muhatap=Taraf("B AŞ","0987654321","","Türkiye","İstanbul","Kadıköy","Adres 2"),
              tarih="2026-08-22",
-             kalemler=[Kalem("Hizmet", Decimal("2"), "C62", 100000, 20)])
+             kalemler=[Kalem("Hizmet", Decimal("2"), "C62", 100000, 20)],
+             uuid="6c1f0a52-3b7d-4c19-9a2c-5d8f7a103b46")   # sabit ETTN: rastgele uuid4 %0,65 "…e-0…" üretip float kapısını yanlış düşürüyordu (81D0W)
     d.update(kw); return SatisFaturasi(**d)'
 
 echo "A · tam belge kurulur"

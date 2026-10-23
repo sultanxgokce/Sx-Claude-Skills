@@ -1,0 +1,259 @@
+$ bash yazilim-fabrikasi/scripts/kanit.test.sh
+# rc=0 sure=62.4s zaman=2026-10-23T09:35:40+03:00
+--- stdout ---
+════ T1 · ölçüm çifti: komutu araç koşar, kırpılmamış çıktı+rc ════
+  ✓ önce ölçümü rc=0
+  ✓ sonra ölçümü rc=0
+  ✓ KANIT.json araç tarafından yazıldı
+  ✓ stdout ve stderr kırpılmadan saklandı
+  ✓ iki kayıt, yeşil, imzalı
+════ T2 · rc=3 komut → SARI, aracın rc'si 3 (yeşil değil) ════
+  ✓ araç rc=3 döndü
+  ✓ manifestte renk=sari
+════ T3 · kırmızı komut → kirmizi, araç rc=0 (kayıt başarılı) ════
+  ✓ kayıt alındı
+  ✓ renk=kirmizi rc=1
+════ T4 · dosya ekleme + dogrula sağlam ════
+  ✓ dosya eklendi
+  ✓ dogrula rc=0
+  ✓ sarı kayıt sayısı özetle söyleniyor
+════ T5 · elle yazım yakalanır ════
+  ✓ renk elle yeşile boyanınca imza tutmuyor → rc=1
+  ✓ bozuk manifeste yeni kayıt EKLENMİYOR
+  ✓ içerik aslına dönünce imza yine tutar (imza İÇERİĞE aittir, dosya baytlarına değil)
+════ T6 · dosya sha bozulursa yakalanır ════
+  ✓ kanıt dosyası sonradan değişince rc=1
+════ T7 · kanıt yok → rc=3 ════
+  ✓ manifest yokken rc=3 (ölçülemedi)
+════ T8 · ekran: playwright YOKSA sarı+rc=3; VARSA yerel sayfadan kare + ürün imi ════
+  ✓ gerçek kare alındı (playwright var)
+  ✓ ürün imi yoksa rc=2 (ölçer ürünü görmedi — 6. kanun)
+  ✓ imsiz kare manifestte kırmızı
+════ T9 · ozet tablo ════
+  ✓ markdown tablo üretildi
+════ T10 · EKRAN: kitaplık yolu ortamdan · eksik kitaplığın ADI yüzeye çıkar (MEDDAH) ════
+  ✓ E1a kare alınamadı → rc=3 (SARI, yeşil değil)
+  ✓ E1b eksik kitaplığın ADI yüzeyde (300 karakter kırpmasının arkasında kalmıyor)
+  ✓ E1c sebep doğru söylenir: ayağa kalkmama DEĞİL, görünmeme
+  ✓ E1d manifestte renk=sari
+  ✓ E1e manifestte eksik_kitaplik adıyla
+  ✓ E1f tam çıktı KIRPILMADAN diske yazıldı (kullanılan yol bilgisiyle)
+  ✓ E2a KANIT_PW_LIBS ÖNE eklenir, odanın kendi ayarı KORUNUR
+  ✓ E2b kullanılan yol manifeste yazılır (teşhis edilebilir sarı)
+  ✓ E3a ilgisiz hatada kitaplık iddiası YOK
+  ✓ E3b manifestte eksik_kitaplik BOŞ (uydurma yok)
+  ✓ E4 MUTASYON: kablo koparılınca oda ayarı çocuğa GİTMEZ (kablo süs değil)
+════ T11 · AYNI KANIT YENİDEN ÖLÇÜLÜNCE kayıt ÜSTÜNE yazılır (NÂZIR/MOTOR1) ════
+  ✓ T11a ilk ölçüm alındı
+  ✓ T11b aynı etiket+aşama yeniden ölçüldü
+  ✓ T11c manifestte TEK kayıt (bayat kayıt kalmadı; ölçülen=1)
+  ✓ T11d dogrula rc=0 (eskiden KALICI rc=1 idi)
+  ✓ T11e kanıt dosyası gerçekten yenisi (eski çıktı yok)
+  ✓ T11f üstüne yazmak SESSİZ değil — yüzeye basılır
+  ✓ T11g renk değişimi söylenir (yeşili sessizce kırmızıya çevirmez)
+  ✓ T11h son renk manifestte kirmizi
+  ✓ T11i farklı aşama/etiket AYRI kayıt kalır (3 kayıt) — birleştirme körü körüne değil
+════ T12 · GEÇERSİZ UTF-8 baytı aracı ÇÖKERTMEZ, kayıt yazılır (NÂZIR/MOTOR1) ════
+  ✓ T12a geçersiz bayta rağmen rc=0
+  ✓ T12b kayıt YAZILDI (eskiden hiç yazılmıyordu)
+  ✓ T12c kanıt dosyası dolu
+  ✓ T12d okunabilen kısım korunmuş
+  ✓ T12e dogrula rc=0
+  ✓ T12f geçersiz bayt stderr'de de çökertmez
+════ T13 · MUTASYON: iki onarım da kablolu mu (süs değil mi) ════
+  ✓ T13a MUTASYON: üstüne-yazma kaldırılınca bayat kayıt geri gelir ve dogrula KIRMIZI olur
+  ✓ T13b MUTASYON: errors kaldırılınca geçersiz bayt yine çökertir (onarım gerçek)
+  ✓ T13c MUTASYON: çöküşte kayıt hiç yazılmaz (sessiz kaybın kendisi)
+════ T14 · İMZA SÜRÜMDEN AYRI: eski araçla yazılan kanıt SUÇLANMAZ (NÂZIR+RASATÇI) ════
+  ✓ T14a manifest yazıldı
+  ✓ T14b ESKİ biçimli imza SAĞLAM sayılıyor (rc=0, suçlanmıyor)
+  ✓ T14c sürüm farkı BİLGİ satırı — hüküm değil
+  ✓ T14d hangi biçimde imzalandığı söyleniyor (sessiz kabul yok)
+  ✓ T14e sahtecilik suçlaması YOK
+════ T15 · ama GERÇEKTEN bozulan hâlâ yakalanır (tautoloji panzehiri) ════
+  ✓ T15a eski biçimli manifest ELLE bozulunca rc=1
+  ✓ T15b bozuk manifeste yeni kayıt EKLENMİYOR
+════ T16 · eski biçimli SAĞLAM manifest, yazım anında YENİ biçime geçer ════
+  ✓ T16a eski biçimli manifeste kayıt eklendi
+  ✓ T16b geçiş SESSİZ değil — yüzeye basılıyor
+  ✓ T16c yazımdan sonra imza YENİ biçimde
+  ✓ T16d geçiş sonrası doğrulama temiz
+════ T17 · MUTASYON: uyumluluk dalı koparılınca eski manifest yine suçlanır ════
+  ✓ T17 MUTASYON: uyumluluk ölünce eski manifest YİNE kırmızı (kapı gerçek)
+════ T18 · CANLI sınıfı: gerçek ateşleme kaydı (saat damgalı + desenli log satırı, türlü kaynak) yoksa SARI ════
+  ✓ T18a dosya kaynağı, saat damgalı + desenli log → rc=0
+  ✓ T18b manifestte tur=canli renk=yesil kaynak_turu=dosya
+  ✓ T18c ateşleme sayısı 2
+  ✓ T18d ilk + son ateşleme · çözülmüş saat · kaynak · ARACIN kurduğu okuma komutu kayıtta
+  ✓ T18e log çıktısı kırpılmadan dosyada
+  ✓ T18f imza ve sha sağlam
+  ✓ T18g saat damgasız satırlar ateşleme sayılmaz → rc=3 (yazılmış ≠ çalışıyor)
+  ✓ T18h renk=sari, ateşleme 0
+  ✓ T18i boş log → rc=3
+  ✓ T18j kaynağa ulaşılamadı (dosya yok, tail rc≠0) → rc=3
+  ✓ T18k sebebi kayıtta
+  ✓ T18l --desen tutmayan saatli satır ateşleme değil → rc=3
+  ✓ T18m syslog biçimi + desen tutuyor → rc=0
+  ✓ T18n renk=yesil, desen kayıtta, yılsız syslog saati bu yıla çözüldü
+  ✓ T18o --en-az 2 tek ateşlemeyle rc=3 (gg.aa.yyyy biçimi tanındı)
+  ✓ T18o2 ateşleme 1 sayıldı
+  ✓ T18p --kaynak verilmeden kayıt yazılmaz
+  ✓ T18q kaynaksız dosya oluşmadı
+  ✓ T18p2 --desen verilmeden kayıt yazılmaz (genel saat ateşleme değildir)
+  ✓ T18q2 desensiz dosya oluşmadı
+  ✓ T18f2 geleceğe tarihli ateşleme → SARI rc=3
+  ✓ T18f3 sebebi kayıtta
+  ✓ T18s --son 1 ile yalnız son satır okunur → rc=0
+  ✓ T18s2 ateşleme 1, komutta -n 1
+  ✓ T18v journal kaynağı: journalctl yoksa ya da birim yoksa traceback değil SARI rc=3
+  ✓ T18w sebep kayıtta (ulaşılamadı | ateşleme YOK), renk sarı, komut journalctl sabit argv
+  ✓ T18x tanınmayan kaynak türü (komut:) reddedilir, rc=1
+  ✓ T18x2 manifeste de yazılmadı
+  ✓ T18y '--' sonrası serbest komut kabul edilmez (python/awk üretici kapısı kapalı)
+  ✓ T18y2 ssh yolunda kabuk metakarakteri reddedilir (uzak kabuk enjeksiyonu yok)
+  ✓ T18y3 ssh hedefinde metakarakter reddedilir
+  ✓ T18y4 ssh hedefi '-' ile başlayamaz (seçenek enjeksiyonu: -F cfg) — yedek göz #354
+  ✓ T18y5 docker yolu '-' ile başlayamaz
+  ✓ T18z ssh kaynağı: araç sabit argv kurar, uzaktan okunan satırlar ateşleme → rc=0
+  ✓ T18z2 ssh argv: BatchMode · hedef · tail · yol (kabuk dizgesi yok)
+  ✓ T18t dogrula özeti canlı kayıtlarını söylüyor
+  ✓ T18u ozet tablosunda tür canli görünüyor
+════ T19 · MUTASYON: saat şartı · kopuk kaynak · yol doğrulaması — her biri kaldırılınca sınav kırmızı ════
+  ✓ T19a mutant saatsiz satırı ateşleme sayıyor → T18g bu mutantta düşerdi
+  ✓ T19b gerçek araç aynı girdiyle hâlâ sarı (mutasyon kaynağı bozdu, düzeneği değil)
+  ✓ T18j2 uzak okuma satır bastı ama rc=255 (bağlantı koptu) → gerçek araç SARI
+  ✓ T19c mutant (kopuk kaynak sarı değil) kopuk bağlantıyı yeşil sayıyor → T18j2 bu mutantta düşerdi
+  ✓ T19d mutant (yol doğrulaması kaldırıldı) metakarakterli yolu reddetmiyor → T18y2 bu mutantta düşerdi
+════ T20 · BORU REDDİ (görev PTHAQ): kabuk -c betiğinde çıkış kodunu maskeleyen desen kayıt ÜRETMEZ ════
+  ✓ T20a pipefail'siz boruyla biten betik REDDEDİLDİ (rc=1)
+  ✓ T20a2 reddedilen betik için kayıt YOK
+  ✓ T20b '|| true' reddedildi
+  ✓ T20b2 betiğin ORTASINDAKİ '|| true' da reddedildi (son komut temiz olsa bile)
+  ✓ T20c başka komuttan sonra gelen son 'echo' reddedildi
+  ✓ T20d 'set -o pipefail' ile boru kabul edildi
+  ✓ T20d2 pipefail'li boru gerçek rc'yi taşıdı: renk=kirmizi, boru_denetimi=temiz
+  ✓ T20e kabuk argümanındaki '-o pipefail' de sayıldı
+  ✓ T20f 15 karakterden kısa --boru-izin gerekçesi reddedildi
+  ✓ T20g gerekçeli --boru-izin ile kayıt alındı
+  ✓ T20g2 izin ve gerekçe manifeste yazıldı (denetçi görür)
+  ✓ T20h kabuk -c olmayan komut: boru_denetimi=kapsam-dışı (sınır beyan edildi)
+  ✓ T20i heredoc: reddedilmedi, boru_denetimi=ayrıştırılamadı
+  ✓ T20j betiğin TEK komutu echo: temiz (maskelenen iş yok)
+  ✓ T20k tırnak içindeki '|' boru sayılmadı
+  ✓ T20l 'pipefail' KELİMESİ geçmesi yetmez (göz tur 1): echo pipefail; false | cat reddedildi
+  ✓ T20m 'set +o pipefail' ile kapatılan boru reddedildi (durum sırayla izlenir)
+  ✓ T20n kabuk argümanında '+o pipefail' reddedildi
+  ✓ T20o son komut 'set' (öncekinin rc'sini yutar) reddedildi
+  ✓ T20p birleşik seçenek 'bash -lc' de kabuk sayıldı, reddedildi (göz tur 2)
+  ✓ T20q sarmalayıcı arkasındaki kabuk (timeout 60 bash -c) reddedildi
+  ✓ T20r 'command echo' öneki soyuldu, reddedildi (göz tur 2)
+  ✓ T20s tam yollu '/bin/true' de maske sayıldı
+  ✓ T20t önekli TEK komut (command false) maske değil: temiz, kırmızı kayıt
+  ✓ T20u ORTADAKİ '|| /bin/true' (tam yol) reddedildi — son komut temiz (göz tur 3)
+  ✓ T20v ORTADAKİ '|| command true' (önekli) reddedildi — son komut temiz (göz tur 3)
+  ✓ T20w 'printf … bash -c': bash VERİ argümanı, kabuk değil → reddedilmedi, kapsam-dışı (göz tur 3 yanlış pozitif)
+  ✓ T20x seçenekli sarmalayıcı (nice -n 5 bash -c) hâlâ kabuk sayıldı, reddedildi
+  ✓ T20y '|| exit 3' maske değil (rc taşınıyor): temiz
+  ✓ T20z 'bash betik.sh -c …': -c betiğin argümanı → reddedilmedi, kapsam-dışı (göz tur 4)
+  ✓ T20z2 seçenekler (-e, -o değer, +o değer) arkasındaki -c hâlâ bulunur, kapatılan pipefail reddedilir
+  ✓ T20z3 'timeout -s KILL 60 bash -c': sinyal değeri atlandı, kabuk bulundu, reddedildi (göz tur 5)
+  ✓ T20z4 'env -u VAR bash -c': değer atlandı, ortadaki '|| true' reddedildi (göz tur 5)
+  ✓ T20z5 'taskset 0x1 bash -c': onaltılık maske atlandı, reddedildi
+════ T21 · MUTASYON: boru denetiminin her kolu kaldırılınca T20 kırmızıya döner ════
+  ✓ T21a mutant (denetim hiç çağrılmıyor) maskeli betiği kabul ediyor → T20a bu mutantta düşerdi
+  ✓ T21b mutant (boru kuralı yok) → T20a bu mutantta düşerdi
+  ✓ T21c mutant ('|| true' kuralı yok) ortadaki maskeyi kabul ediyor → T20b2 bu mutantta düşerdi
+  ✓ T21d mutant (son-echo kuralı yok) → T20c bu mutantta düşerdi
+  ✓ T21e mutant (pipefail kapatma yok sayılıyor) → T20m bu mutantta düşerdi
+  ✓ T21f mutant (eski kelime araması) → T20l bu mutantta düşerdi
+  ✓ T21g mutant (kabuk yalnız argv başında aranıyor) sarmalayıcıyı kaçırıyor → T20q bu mutantta düşerdi
+  ✓ T21h mutant (önek soyma yok) → T20r bu mutantta düşerdi
+  ✓ T21i mutant ('||' sağı soyulmuyor) '|| /bin/true'yu kabul ediyor → T20u bu mutantta düşerdi
+  ✓ T21k mutant (seçenek bölgesi betik dosyasında bitmiyor — tur 4 hâli) betik argümanını reddediyor → T20z bu mutantta düşerdi
+  ✓ T21l mutant (değerli seçenek tablosu yok — tur 5 hâli) 'timeout -s KILL' arkasını kaçırıyor → T20z3 bu mutantta düşerdi
+  ✓ T21j mutant (kabuk argv'nin her yerinde aranıyor — tur 3 hâli) printf verisini reddediyor → T20w bu mutantta düşerdi
+════ T22 · GEÇERSİZ ilan (4K938): özgün kayda dokunmaz, hedefin ölçüm kimliğine bağlı, yeşil sayılmaz ════
+  ✓ T22 --neden 20 karakterden kısa → ret, ilan dosyası yazılmadı
+  ✓ T22 olmayan hedef → ret
+  ✓ T22 iki kayıtlı etiket (once+sonra) → belirsiz, dosya adı ister
+  ✓ T22 olmayan karşı kanıt → ret
+  ✓ T22 geçerli ilan rc=0
+  ✓ T22 özgün kanıt dosyasının baytı değişmedi
+  ✓ T22 özgün manifest kaydı değişmedi (renk hâlâ yesil)
+  ✓ T22 etkin renk = gecersiz
+  ✓ T22 dogrula rc=0, geçersiz sayısı + neden + karşı kanıt basılı
+  ✓ T22 ozet tablosu GEÇERSİZ + nedeni gösteriyor
+  ✓ T22 liste --etkin: ham renk yesil, etkin gecersiz, kim yazılı
+  ✓ T22 aynı ölçüme ikinci ilan → ret
+  ✓ T22 yeniden ölçüm (yeni sha+zaman) → ilan uygulanmaz, etkin yesil
+  ✓ T22 dogrula 'ilan artık uygulanmıyor' der, geçersiz saymaz
+  ✓ T22 aynı çıktı + aynı saniye (sha ve zaman aynı) yeniden ölçüm → ilan yine düşer (bağ ölçüm kimliği)
+  ✓ T22 ölçüm kimliği olmayan eski kayıt ilan edilebilir (yedek bağ sha+zaman)
+  ✓ T22 ilan kaydı elle değişince imza tutmuyor → rc=1
+════ T23 · MUTASYON (4K938): tam kopyada; kontrol kopyası tüm kapıları geçmeli, her mutant hedef kapısını düşürmeli ════
+  ✓ T23a kontrol kopyası (mutasyonsuz): 17 kapının 17'si geçiyor
+  ✓ T23 mutant kisa: neden uzunluğu denetimi kaldırıldı → 'kisa_neden_ret' kapısı düşüyor
+  ✓ T23 mutant bag: ilan hedefin ölçümüne bağlı değil → 'yeniden_olcum_ilani_dusurur' kapısı düşüyor
+  ✓ T23 mutant kimlik: bağ yalnız sha+zaman (göz tur 1'deki hâl) → 'ayni_cikti_ayni_saniye_ilani_dusurur' kapısı düşüyor
+  ✓ T23 mutant etkin: etkin renk ilanı yok sayıyor → 'etkin_gecersiz' kapısı düşüyor
+  ✓ T23 mutant cift: ikinci ilan denetimi kaldırıldı → 'ikinci_ilan_ret' kapısı düşüyor
+  ✓ T23 mutant karsi: karşı kanıt çözülmeden kabul → 'olmayan_karsi_ret' kapısı düşüyor
+════ T24 · ETİKET (gorev_01M57ZV1D7K7X1Z9B04P7FD7W2): yolu bozan etiket rc 2 ile reddedilir, kayıt yazılmaz, hata dökümü yok ════
+  ✓ T24 olcum 'a/b' (eğik çizgi) → rc=2, kayıt eklenmedi, hata dökümü yok
+  ✓ T24 sebep söyleniyor (eğik çizgi)
+  ✓ T24 dosya '../kac' → rc=2, kayıt eklenmedi, hata dökümü yok
+  ✓ T24 canli 'a\b' (ters eğik çizgi) → rc=2, kayıt eklenmedi, hata dökümü yok
+  ✓ T24 ekran 'x/y' (aracın varlığından önce reddedilir) → rc=2, kayıt eklenmedi, hata dökümü yok
+  ✓ T24 olcum '' (boş) → rc=2, kayıt eklenmedi, hata dökümü yok
+  ✓ T24 olcum '   ' (yalnız boşluk) → rc=2, kayıt eklenmedi, hata dökümü yok
+  ✓ T24 dosya '..' (yalnız nokta) → rc=2, kayıt eklenmedi, hata dökümü yok
+  ✓ T24 olcum sekmeli etiket (denetim karakteri) → rc=2, kayıt eklenmedi, hata dökümü yok
+  ✓ T24 gerçek kanıtlarda kullanılan biçim (boşluk + : ( ) ≠) KABUL — kural yalnız yolu bozanı reddeder
+── T24 · MUTASYON ──
+  ✓ T24 mutant (denetim hiç çağrılmıyor) kötü etiketi reddetmiyor → T24 bu mutantta düşerdi
+  ✓ T24 mutant (sebep bulunsa da reddetmiyor) kötü etiketi reddetmiyor → T24 bu mutantta düşerdi
+  ✓ T24 mutant (eğik çizgi kuralı yok) kötü etiketi reddetmiyor → T24 bu mutantta düşerdi
+  ✓ T24 mutant (nokta kuralı yok) kötü etiketi reddetmiyor → T24 bu mutantta düşerdi
+  ✓ T24 mutant (yalnız boşluk boş sayılmıyor) kötü etiketi reddetmiyor → T24 bu mutantta düşerdi
+════ T25 · MUTASYON KAYDI (FR7M76 · #1136 tur 3): --mutasyon <gerçek etiket> — dosya başı söyler, renk ters, gerçek ölçüme bağlı ════
+  ✓ T25a bağlandığı GERÇEK ölçüm manifestte yoksa rc 2, dosya yazılmaz (neyin mutantı olduğu bilinmeli)
+  ✓ T25b kendi etiketini gösteren mutasyon rc 2
+  ✓ T25c boş --mutasyon rc 2
+  ✓ T25d dosyanın İLK satırı 'MUTASYON KANITI … Gerçek kod ölçümü: olcum-gercek-*' (göz ✗ satırını bulgu sanmasın)
+  ✓ T25e kırmızı sınav = bozuk kod YAKALANDI → yeşil; kayıtta mutasyon · gercek_olcum · beklenen
+  ✓ T25f yeşil sınav = mutant KAÇTI → kırmızı, söylenir
+  ✓ T25g rc 3 mutasyonda da sarı (ölçülemedi), araç rc 3
+  ✓ T25h özet tablosunda mutasyon satırı 🧬 MUTASYON der, gerçek ölçüm satırı demez
+  ✓ T25i manifest imzası sağlam (dogrula)
+  ✓ T25j mutasyon kaydı başka mutasyonun 'gerçek ölçümü' olamaz (zincir reddi)
+  ✓ T25k mutasyonsuz ölçüm dosyası değişmedi (ilk satır hâlâ komut)
+── T25 · MUTASYON (tam kopyada, kontrol şartlı) ──
+  ✓ T25 kontrol kopyası gerçek araçla aynı kapıları geçiyor (mutantlar kopyada ölçülür)
+  ✓ T25 mutant (gerçek ölçüm bağı aranmıyor) → 'a' kapısı düşüyor
+  ✓ T25 mutant (mutasyon kaydı gerçek ölçüm sayılıyor) → 'j' kapısı düşüyor
+  ✓ T25 mutant (dosya başı MUTASYON demiyor) → 'd' kapısı düşüyor
+  ✓ T25 mutant (renk ters çevrilmiyor) → 'e' kapısı düşüyor
+  ✓ T25 mutant (özet mutasyonu söylemiyor) → 'h' kapısı düşüyor
+  ✓ T25 mutant (kendi etiketine bağlanabiliyor) → 'b' kapısı düşüyor
+════ T-UB · ÜÇ BOY (görev 4PZV4): tek komut → 1440/1280/390 her boy AYRI imzalı kayıt; bir boy düşerse komut yeşil DÖNMEZ ════
+  ✓ --uc-boy: tek komut, üç AYRI yeşil kayıt (etiket-<boy>), tarayıcıya üç genişlik gitti (uc-1440:yesil:1440 uc-1280:yesil:1280 uc-390:yesil:390)
+  ✓ özet satırı her boyu söylüyor
+  ✓ 🔴 bir boy düşerse komut rc 3 (yeşil DEĞİL), öbür boylar kayıtlı (dus-1440:yesil:1440 dus-1280:sari:- dus-390:yesil:390)
+  ✓ --gelen istendi ama klasör yok → kare kanıtı yeşil, TESLİM düştü → rc 3 (başarı sayılmaz — göz #433 tur 2)
+  ✓ --gelen: YALNIZ yeşil kareler <kutu>_<iş>-kare-… adıyla Sultan'ın gelen klasörüne (düşen 1280 gitmedi): nexus_is-ub-kare-gel-1440-tek.png nexus_is-ub-kare-gel-390-tek.png 
+  ✓ --boylar 1440,390: yalnız verilen boylar
+  ✓ bozuk/tekrarlı --boylar ve --uc-boy+--boylar birlikte → rc 2, hiçbir kayıt yazılmadı
+  ✓ geriye uyum: boysuz çağrı eskisi gibi TEK kayıt, etiket eki yok
+  ✓ --genislik verilmezse tek boy kipinde 1280 (varsayılan boşaldı ama davranış aynı)
+  ✓ --genislik + --uc-boy / --boylar → rc 2, tarayıcı açılmadı, kayıt yok (eskiden --genislik sessizce yok sayılıyordu — göz #433 tur 3)
+  ✓ mutant (çatışma kapısı yok): --uc-boy --genislik 800 yeşil döndü → üstteki kapı bu mutantta düşerdi
+  ✓ --gelen '../disari' kutu adı değil → rc 2, HİÇ kare alınmadı (kopya klasör dışına taşınamaz — göz #433 tur 1)
+  ✓ --gelen '/tmp/mutlak' kutu adı değil → rc 2, HİÇ kare alınmadı (kopya klasör dışına taşınamaz — göz #433 tur 1)
+  ✓ --gelen 'Nexus' kutu adı değil → rc 2, HİÇ kare alınmadı (kopya klasör dışına taşınamaz — göz #433 tur 1)
+  ✓ --gelen 'a/b' kutu adı değil → rc 2, HİÇ kare alınmadı (kopya klasör dışına taşınamaz — göz #433 tur 1)
+  ✓ kopya yazılamazsa istisna YOK: kare kanıtı yeşil kalır, teslim düştüğü için komut rc 3 (kilit-390:yesil:390)
+── T-UB · MUTASYON (geçici kopya): çıkış en kötü sonucu taşımazsa düşen boy yeşil görünür → 🔴 kapı düşerdi ──
+  ✓ mutant (rc hep 0): 1280 düştüğü hâlde komut yeşil döndü → üstteki 🔴 kapı bu mutantta düşerdi
+
+── SONUÇ: 224 geçti · 0 kaldı ──
+--- stderr ---

@@ -1,0 +1,75 @@
+$ bash ui-tasarim-akisi/arac/yargi-birlestir.test.sh
+# rc=0 sure=1.5s zaman=2026-10-23T00:55:34+03:00
+--- stdout ---
+── 1 · temiz küme: hiçbir madde düşmüyor → rc=0
+  ✓ temiz küme rc=0 (rc=0)
+  ✓ hüküm KIRMIZI-DEĞİL
+── 2 · kırmızı çizgi: geçerli-alıntılı TEK 0, diğer ikisi 2 → madde 0
+  ✓ tek 0 madde-0 yapar, ekran RED değil (1<3) (rc=0)
+  ✓ M1 düşürüldü
+── 3 · alıntı kapısı: UYDURMA alıntılı 0 sayılmaz
+  ✓ uydurma alıntı hükmü düşürmez (rc=0)
+  ✓ M1 düşmedi
+  ✓ karnede alıntı-düşen sayıldı
+── 4 · RED: 3 madde 0 → rc=1
+  ✓ 3 düşen madde → RED rc=1 (rc=1)
+  ✓ hüküm RED
+── 5 · imza: sayısal puan İMZAYA GİRMEZ (dönme-freni sakatlanmasın)
+  ✓ imza okunuyor (rc=0)
+── 6 · yeter sayı: ayakta <2 oy → EMİN-DEĞİLİM, rc=2 (unknown ≠ pass)
+  ✓ tek yargıç → rc=2 (rc=2)
+  ✓ hüküm EMİN-DEĞİLİM
+── 7 · parse kapısı: şemasız cevap düşer (çıktı bozulması)
+  ✓ bozuk cevap düşer, kalan 2 oy yeter (rc=0)
+  ✓ karnede parse-düşen görünür
+── 8 · medyan AŞAĞI yuvarlar (ortalama değil)
+  ✓ 2 oy [1,2] → medyan 1 (rc=0)
+  ✓ M1=1 doğrulandı (rc=0)
+── 9 · MÜHÜR: rubrik sha uyuşmazsa koşu REDDEDİLİR
+  ✓ yanlış mühür → rc=2 (rc=2)
+  ✓ mühür uyuşmazlığı bildirildi
+  ✓ doğru mühür → geçer (rc=0)
+── 10 · rubriksiz koşu 'temiz' sayılmaz → rc=2
+  ✓ rubrik yok → rc=2 (rc=2)
+  ✓ yargı yapılmadı denir
+── 11 · yanıt yok → rc=2 (sessiz yeşil yok)
+  ✓ boş yanıt dizini → rc=2 (rc=2)
+── 12 · tescil kolu: --katman2 sözcesi üretilir
+  ✓ tescil sözcesi (RED→KALDI) (rc=1)
+  ✓ katman2 KALDI
+  ✓ tescil sözcesi (temiz→GECTI) (rc=0)
+  ✓ katman2 GECTI
+── 13 · panel süzgeci: --panel dışındaki yargıç sayılmaz
+  ✓ panel=kimi,glm → qwen'in 0'ı sayılmaz (rc=0)
+  ✓ kimi'nin M1=0'ı panelde yok
+── 14 · ekran HTML'i yoksa oy sayılmaz (alıntı doğrulanamaz)
+  ✓ öksüz yanıt → rc=2 (rc=2)
+  ✓ ekran HTML'i yok uyarısı
+── 15 · yargı fikstürleri MEKANİK olarak temiz (yargı-kırmızısı anlam boyutundandır)
+  ✓ ALTIN mekanik rc=0 (rc=0)
+  ✓ M2 KIRMIZI mekanik rc=0 (rc=0)
+── 16 · istek gövdesi: ÇEKİRDEK prompta fiilen giriyor mu (M1'in çatalı)
+  ✓ gövde kuruldu (rc=0)
+  ✓ çekirdek adı promptta: Liste satırı
+  ✓ çekirdek adı promptta: Form alanı
+  ✓ çekirdek adı promptta: Onay diyaloğu
+  ✓ çekirdek adı promptta: Sayfa başlığı
+  ✓ çekirdek bölümü etiketli (yargıç hangi parçanın filo kuralı olduğunu görür)
+  ✓ ekran gövdesi promptta
+── 16b · çekirdek okunamazsa gövde YAZILMAZ (yarım sözleşmeyle hüküm istenmez)
+  ✓ çekirdeksiz → rc=2 (rc=2)
+  ✓ gövde dosyası hiç oluşmadı
+── 17 · ÇİFT YÖNLÜ HÜKÜM: ALTIN ayakta kalır, M2 düşer (aynı oy şeması)
+  ✓ ALTIN → RED değil (rc=0) (rc=0)
+  ✓ M2 fikstürü → RED (rc=1) (rc=1)
+  ✓ düşen madde M2
+── 17b · EŞİK ALTI dürüstlüğü: tek M2=0 RED DEĞİLDİR ama sessiz de geçmez
+  ✓ tek sıfır → KIRMIZI-DEĞİL (rc=0) (rc=0)
+  ✓ rc=0 olsa da düşen madde raporlanır
+── L57-EK2 · ALTIN: yargı hükmü havuza REFERANS DAMGASIYLA düşer
+  ✓ havuza yazan yargı koşumu rc=0 (rc=0)
+  ✓ yargı kaydı 12-hane referans damgası taşıyor
+  ✓ damgalı ölçüm 'parmak-izi YOK' sayacına DÜŞMEZ
+
+TOPLAM: 49 geçti · 0 kaldı
+--- stderr ---

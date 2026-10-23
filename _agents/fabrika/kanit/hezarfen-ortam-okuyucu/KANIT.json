@@ -1,0 +1,93 @@
+{
+  "is": "hezarfen-ortam-okuyucu",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T03:51:32+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapi-komutu-set-a-sayisi",
+      "asama": "once",
+      "dosya": "olcum-kapi-komutu-set-a-sayisi-once.txt",
+      "sha256": "3afb906f2e48a2711696af237e2a71be28e040c5e136f40c39e56f64770fb4e2",
+      "komut": [
+        "bash",
+        "-c",
+        "n=$(grep -v \"^[[:space:]]*#\" /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/onar-main.sh | grep -c \"set -a; \\\\. \"); echo \"origin/main onar.sh: set -a; . satırı = $n\"; [ \"$n\" = 0 ]"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T03:47:24+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "ffbed4306bba4c4b971656c2ece30612"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-komutu-set-a-sayisi",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-komutu-set-a-sayisi-sonra.txt",
+      "sha256": "8d04f3b9db33449a6c3d4284e9deb81fdd404210e1e26d5a7034cd46698e5e0c",
+      "komut": [
+        "bash",
+        "-c",
+        "n=$(grep -v \"^[[:space:]]*#\" terminal-onar/scripts/onar.sh | grep -c \"set -a; \\\\. \"); echo \"onar.sh: set -a; . satırı = $n\"; [ \"$n\" = 0 ]"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T03:47:24+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "7744356520fd4247b417fde33389af18"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sifre-yukle-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-sifre-yukle-sinavi-sonra.txt",
+      "sha256": "3352c08e478b25a8df4baa5522a0c05b69dad1f56002b8c949a65613f6e583e0",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/sifre-yukle.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T03:47:25+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a439f0eaef9e4774b8fb41ba7893a529"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sifre-yukle-mutant-set-a",
+      "asama": "sonra",
+      "dosya": "olcum-sifre-yukle-mutant-set-a-sonra.txt",
+      "sha256": "4f51518a2527b517da420b7e28a22549bf1c99d261d6a28063983f2c3c6228b8",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/mut-sx/sifre-yukle.test.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-23T03:47:49+03:00",
+      "sure_sn": 0.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sifre-yukle-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "75776759d9a94d32a68810773cf3127a"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "terminal-onar-paketi-20-sinav",
+      "asama": "sonra",
+      "dosya": "dosya-terminal-onar-paketi-20-sinav-sonra.txt",
+      "sha256": "ef7fd06d7ce33a234569c8ddb7f99c0f28dda4aab9d9bb8a6e9c663458a03516",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/sx-paket-20.txt",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T03:51:32+03:00",
+      "olcum_id": "6a6f637ffdf74615876b27615836c240"
+    }
+  ],
+  "imza": "44f186c099e282bd4a89184c8bdb9253ca9172f94ceda0806b359c164e533de8"
+}

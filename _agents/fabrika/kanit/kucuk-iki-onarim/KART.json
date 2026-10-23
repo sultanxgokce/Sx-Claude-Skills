@@ -1,0 +1,31 @@
+{
+  "is": "kucuk-iki-onarim",
+  "cumle": "Plan aracı cipa.sh her alt komutta --help/-h ile kullanım metnini basıp rc=0 dönsün (tanınmayan başka argüman rc=2 kalsın); e-Logo ubl_satis sınavı sabit UUID versin, rastgele UUID'deki 'e-0' 'float artığı' kapısını yanlış düşürmesin (görevler RN95G + 81D0W)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-23T04:37:37+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "önce/sonra: --help rc 2→0; ubl_satis sınavı UUID 'e-0' içeren durumda önce kırmızı → sonra yeşil",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M555YA477PPQRHKXQEWRN95G",
+  "tahmin_dk": 40,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-23T04:37:38+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

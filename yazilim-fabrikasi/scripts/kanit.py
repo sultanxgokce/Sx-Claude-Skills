@@ -13,7 +13,7 @@ Kullanım:
                   BORU DENETİMİ: komut `bash|sh -c '<betik>'` ise çıkış kodunu maskeleyen betik REDDEDİLİR (rc=1, kayıt yok):
                   `|| true` / `|| :` · başka komuttan sonra gelen son echo/printf/true/: · pipefail'siz boruyla biten son komut. Meşru istisna:
                   --boru-izin "<gerekçe ≥15 karakter>" → kayıt alınır, gerekçe manifeste `boru_denetimi` olarak yazılır.
-  kanit.py ekran  <iş> <etiket> --asama once|sonra --url U [--urun-imi CSS] [--bekle CSS] [--genislik N]
+  kanit.py ekran  <iş> <etiket> --asama once|sonra --url U [--urun-imi CSS] [--bekle CSS] [--genislik N | --uc-boy | --boylar 1440,390] [--gelen <kutu>]
   kanit.py dosya  <iş> <etiket> <yol> [--asama ...]                    var olan dosyayı (video, rapor) sha ile ekler
   kanit.py canli  <iş> <etiket> --kaynak dosya:<yol>|journal:<birim>|ssh:<sunucu>:<yol>|docker:<kutu>:<yol> --desen <RE> [--en-az N] [--son N]
                   CANLI sınıfı: gerçek ateşleme kaydı (saat damgalı + desenli log satırı); yoksa SARI rc=3 — kapı geçirmez.
@@ -377,28 +377,87 @@ def playwright_dizin():
     return None
 
 
+# ÜÇ BOY (görev 4PZV4 · Sultan D1 17 Eki "(b) ekran: plan + kare, onaysız sürüm yok"): Sultan'a görünen her yeni ekran
+#   1440 / 1280 / 390 genişliğinde, gerçek veriyle karelenir. Üç ayrı çağrı unutuluyordu (çoğu iş yalnız 1440+390 aldı) →
+#   `--uc-boy` (= --boylar 1440,1280,390) TEK komutta her boy için AYRI imzalı kayıt düşer: etiket "<etiket>-<boy>".
+#   Çıkış en kötü sonuçtur (kırmızı 2 > sarı 3 > yeşil 0): bir boy düşerse komut yeşil DÖNMEZ.
+#   `--gelen <kutu>`: YALNIZ yeşil kareler Sultan'ın gelen klasörüne kopyalanır (<kutu>_<iş>-kare-<etiket>-<asama>-<boy>.png;
+#   KANIT_GELEN_DIZ ile değişir) — sarı/kırmızı kare Sultan'a gitmez; kopyanın kendisi manifeste girmez (kanıt kutuda kalır).
+UC_BOY = (1440, 1280, 390)
+GELEN_VARSAYILAN = "/config/evraklar/Sultan/0-Gelen"
+
+
 def cmd_ekran(a):
+    # göz #433 tur 1: kutu adı dosya adına girer — mutlak yol / "../" kopyayı gelen klasörünün DIŞINA taşırdı. Kare alınmadan reddedilir.
+    if a.gelen is not None and not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,40}", a.gelen):
+        hata(f"--gelen bir kutu adı olmalı (küçük harf/rakam/tire, ör. nexus): {a.gelen!r}", 2)
+    boylar = UC_BOY if a.uc_boy else tuple(a.boylar) if a.boylar else None
+    if not boylar:
+        sys.exit(_ekran_tek(a, a.etiket, a.genislik if a.genislik is not None else 1280))
+    if a.uc_boy and a.boylar:
+        hata("--uc-boy ile --boylar birlikte verilmez (hangisi?)", 2)
+    # göz #433 tur 3 rötuşu: --genislik çoklu boyla birlikte sessizce yok sayılıyordu (varsayılan 1280 olduğu için verildiği
+    #   bile anlaşılmıyordu). Varsayılan artık boş; verildiyse ve çoklu boy da istendiyse hangisinin geçerli olduğu belirsiz → rc 2.
+    if a.genislik is not None:
+        hata("--genislik ile --uc-boy/--boylar birlikte verilmez (tek boy mu, çoklu mu?)", 2)
+    sonuc = [(g, _ekran_tek(a, f"{a.etiket}-{g}", g)) for g in boylar]
+    rcs = [rc for _, rc in sonuc]
+    rc = 2 if 2 in rcs else 3 if 3 in rcs else (max(rcs) if any(rcs) else 0)
+    print(f"── üç boy özeti ({a.etiket}): " + " · ".join(f"{g}px {'✓' if r == 0 else '✗' if r == 2 else '◻'}" for g, r in sonuc)
+          + ("" if rc == 0 else f" → rc {rc}: bir boy yeşil değil, komut yeşil DÖNMEZ"))
+    sys.exit(rc)
+
+
+def _boylar(v):
+    try:
+        L = [int(x) for x in v.split(",") if x.strip()]
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"--boylar virgüllü genişlik listesi olmalı (ör. 1440,1280,390): {v}")
+    if not L or any(g < 200 or g > 4000 for g in L) or len(set(L)) != len(L):
+        raise argparse.ArgumentTypeError(f"--boylar: 200-4000 arası, tekrarsız genişlikler: {v}")
+    return L
+
+
+def _gelene_kopyala(a, yol, etiket):   # → kopya gerekmediyse ya da yazıldıysa True; istenip yazılamadıysa False
+    if not a.gelen:
+        return True
+    hedef_diz = os.environ.get("KANIT_GELEN_DIZ") or GELEN_VARSAYILAN
+    if not os.path.isdir(hedef_diz):
+        # göz #433 tur 2: teslim AÇIKÇA istendi; klasörün yokluğu da teslimin düşmesidir — başarı sayılmaz (rc 3)
+        print(f"   ◻ gelen klasörü yok ({hedef_diz}) — kare Sultan'a GİTMEDİ (kanıt kutuda kayıtlı)")
+        return False
+    hedef = os.path.join(hedef_diz, f"{a.gelen}_{a.is_adi}-kare-{etiket}-{a.asama}.png")
+    try:
+        shutil.copyfile(yol, hedef)
+    except OSError as e:   # göz #433 tur 1: istisnayla kesilmez; kare kanıtı yeşil kalır ama TESLİM düştü → çağırana rc 3
+        print(f"   ◻ gelen kopyası YAZILAMADI ({e.__class__.__name__}: {e.strerror or e}) — kare kanıtı kayıtlı, Sultan'a gitmedi")
+        return False
+    print(f"   → Sultan'ın gelen klasörüne: {hedef}")
+    return True
+
+
+def _ekran_tek(a, etiket, genislik):
     depo = depo_kok(a.depo); dz = kanit_dizin(depo, a.is_adi); os.makedirs(dz, exist_ok=True)
-    ad = f"ekran-{a.etiket}-{a.asama}.png"; yol = os.path.join(dz, ad)
+    ad = f"ekran-{etiket}-{a.asama}.png"; yol = os.path.join(dz, ad)
     pw = playwright_dizin()
-    temel = {"tur": "ekran", "etiket": a.etiket, "asama": a.asama, "dosya": ad, "url": a.url, "zaman": simdi()}
+    temel = {"tur": "ekran", "etiket": etiket, "asama": a.asama, "dosya": ad, "url": a.url, "zaman": simdi()}
     if not pw or not shutil.which("node"):
         kayit = {**temel, "sha256": None, "rc": 3, "renk": "sari", "not": "playwright/node bulunamadı — kare ALINAMADI"}
         kayit_ekle(depo, a.is_adi, kayit)
         print("◻ SARI: kare alınamadı (playwright/node yok) — bu yeşil DEĞİLDİR; manifeste sarı yazıldı")
-        sys.exit(3)
+        return 3
     env = {**os.environ, "NODE_PATH": pw}
     libs = kitaplik_yolu()
     if libs:
         onceki = env.get("LD_LIBRARY_PATH", "")
         env["LD_LIBRARY_PATH"] = f"{libs}:{onceki}" if onceki else libs
-    argv = ["node", os.path.join(HERE, "kanit-ekran.mjs"), a.url, yol, a.urun_imi or "", a.bekle or "", str(a.genislik)]
+    argv = ["node", os.path.join(HERE, "kanit-ekran.mjs"), a.url, yol, a.urun_imi or "", a.bekle or "", str(genislik)]
     p = subprocess.run(argv, capture_output=True, text=True, errors="replace", env=env)
     if p.returncode == 2:
         kayit = {**temel, "sha256": None, "rc": 2, "renk": "kirmizi", "not": "ÜRÜN İMİ YOK — açılan sayfa ürün değil (giriş/hata sayfası olabilir)"}
         kayit_ekle(depo, a.is_adi, kayit)
         print(f"✗ ürün imi bulunamadı ({a.urun_imi}) — ölçer ürünü görmedi; kare kanıt sayılmaz\n{p.stderr}", file=sys.stderr)
-        sys.exit(2)
+        return 2
     if p.returncode != 0 or not os.path.exists(yol):
         # 🔴 SEBEBİ KIRPMA (MEDDAH, 2026-10-06): stderr 300 karakterde kesiliyordu ve asıl
         #    satır ("… .so: cannot open shared object file") ÖNDEKİ gürültünün arkasında
@@ -406,7 +465,7 @@ def cmd_ekran(a):
         #    görünüyor, gerçek sebep altta duruyor. Teşhis edilemeyen sarı, sarı değil sistir.
         tam = (p.stderr or "") + (p.stdout or "")
         eksik = sorted(set(EKSIK_KITAPLIK.findall(tam)))
-        gunluk = os.path.join(dz, f"ekran-{a.etiket}-{a.asama}.hata.txt")
+        gunluk = os.path.join(dz, f"ekran-{etiket}-{a.asama}.hata.txt")
         with open(gunluk, "w", encoding="utf-8") as f:
             f.write(f"$ {' '.join(argv)}\nrc={p.returncode} zaman={simdi()}\n"
                     f"LD_LIBRARY_PATH={env.get('LD_LIBRARY_PATH','(yok)')}\n"
@@ -424,10 +483,11 @@ def cmd_ekran(a):
         else:
             print(f"◻ SARI: kare alınamadı — {p.stderr.strip()[:300]}")
         print(f"   tam çıktı kırpılmadan burada: {os.path.basename(gunluk)}")
-        sys.exit(3)
-    kayit = {**temel, "sha256": sha_dosya(yol), "rc": 0, "renk": "yesil", "urun_imi": a.urun_imi, "genislik": a.genislik}
+        return 3
+    kayit = {**temel, "sha256": sha_dosya(yol), "rc": 0, "renk": "yesil", "urun_imi": a.urun_imi, "genislik": genislik}
     kayit_ekle(depo, a.is_adi, kayit)
-    print(f"✓ kare alındı: {ad} ({a.genislik}px{' · ürün imi doğrulandı' if a.urun_imi else ''})")
+    print(f"✓ kare alındı: {ad} ({genislik}px{' · ürün imi doğrulandı' if a.urun_imi else ''})")
+    return 0 if _gelene_kopyala(a, yol, etiket) else 3
 
 
 # ── dosya ────────────────────────────────────────────────────────────────────────
@@ -779,7 +839,9 @@ def main():
     p.add_argument("--depo")
     s = p.add_subparsers(dest="cmd", required=True)
     o = s.add_parser("olcum"); o.add_argument("is_adi"); o.add_argument("etiket"); o.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); o.add_argument("--boru-izin", dest="boru_izin", default=None); o.add_argument("--mutasyon", dest="mutasyon", default=None, metavar="GERCEK_ETIKET"); o.set_defaults(f=cmd_olcum)
-    e = s.add_parser("ekran"); e.add_argument("is_adi"); e.add_argument("etiket"); e.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); e.add_argument("--url", required=True); e.add_argument("--urun-imi"); e.add_argument("--bekle"); e.add_argument("--genislik", type=int, default=1280); e.set_defaults(f=cmd_ekran)
+    e = s.add_parser("ekran"); e.add_argument("is_adi"); e.add_argument("etiket"); e.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); e.add_argument("--url", required=True); e.add_argument("--urun-imi"); e.add_argument("--bekle", help="kare almadan önce beklenecek öğenin CSS SEÇİCİSİ (süre DEĞİL)"); e.add_argument("--genislik", type=int, default=None, help="tek boy genişliği (verilmezse 1280)")
+    e.add_argument("--uc-boy", action="store_true", help="1440 · 1280 · 390 — her boy ayrı kayıt (etiket-<boy>)"); e.add_argument("--boylar", type=_boylar, help="virgüllü genişlik listesi")
+    e.add_argument("--gelen", metavar="KUTU", help="yeşil kareleri Sultan'ın gelen klasörüne <kutu>_<iş>-kare-… adıyla kopyala"); e.set_defaults(f=cmd_ekran)
     d = s.add_parser("dosya"); d.add_argument("is_adi"); d.add_argument("etiket"); d.add_argument("yol"); d.add_argument("--asama", default="tek"); d.set_defaults(f=cmd_dosya)
     c = s.add_parser("canli"); c.add_argument("is_adi"); c.add_argument("etiket"); c.add_argument("--kaynak", required=True); c.add_argument("--desen", required=True); c.add_argument("--en-az", dest="en_az", type=int, default=1); c.add_argument("--son", type=int, default=2000); c.set_defaults(f=cmd_canli)
     v = s.add_parser("gecersiz"); v.add_argument("is_adi"); v.add_argument("hedef"); v.add_argument("--neden", required=True); v.add_argument("--kim", required=True); v.add_argument("--karsi"); v.set_defaults(f=cmd_gecersiz)
