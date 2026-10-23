@@ -1,5 +1,5 @@
 $ bash -c timeout 900 bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/v8/taban/yazilim-fabrikasi/scripts/kanit.test.sh < /dev/null
-# rc=1 sure=28.1s zaman=2026-10-23T13:34:56+03:00
+# rc=1 sure=57.7s zaman=2026-10-23T14:31:08+03:00
 --- stdout ---
 ════ T1 · ölçüm çifti: komutu araç koşar, kırpılmamış çıktı+rc ════
   ✓ önce ölçümü rc=0

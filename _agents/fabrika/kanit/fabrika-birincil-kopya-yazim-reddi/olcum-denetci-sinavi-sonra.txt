@@ -1,5 +1,5 @@
 $ bash -c timeout 2400 bash /config/projects/_wt/Sx-Claude-Skills-fabrika-birincil-kopya-yazim-reddi/yazilim-fabrikasi/scripts/denetci.test.sh < /dev/null
-# rc=0 sure=1253.1s zaman=2026-10-23T14:23:19+03:00
+# rc=0 sure=1252.5s zaman=2026-10-23T15:23:53+03:00
 --- stdout ---
 ════ T1 · kanıt yok → rc=2, denetim dosyası yok ════
   ✓ kanıtsız adım 4 açılmadı (rc=2)
@@ -124,10 +124,9 @@ $ bash -c timeout 2400 bash /config/projects/_wt/Sx-Claude-Skills-fabrika-birinc
 ════ T9c · KIRPMA KAYDI: kırpılan tur DENETIM json'da kirpildi.oldu=true + bayt + eşik; kırpılmayan tur false (NÂZIR/RASATÇI 8 Eki) ════
   ✓ kırpılmayan tur: kirpildi.oldu=false, bayt ve eşik yazılı
   ✓ küçük istemde kırpma uyarısı YOK
-  ✓ 🔴 kırpılan tur: kirpildi.oldu=true, gerçek bayt ve eşik KALICI kayıtta
-  ✓ denetçiye kırpıldığı söylendi (istem sonunda uyarı)
-  ✓ ekranda da yazıldı
-  ✓ istem gerçekten eşiğe kırpıldı
+  ✓ 🔴 ayıklama kapalıyken de istem tavanı aşılınca İŞİ BÖL (rc 1) — kırpık istem gönderilmez
+  ✓ denetçiye istem gitmedi, tur yakılmadı (DENETIM-2 yok)
+  ✓ kırpma uyarısı hiçbir yerde yok (kırpma yolu kalktı)
 ════ T9d · GEÇERSİZ ilan (4K938) göze söylenir: kanıt durumu satırında, istemde ve DENETIM kaydında ════
   ✓ puan satırındaki kanıt durumu geçersiz ilanı nedeniyle söylüyor
   ✓ istemdeki manifest başlığında da var (göz okur)
@@ -242,14 +241,13 @@ $ bash -c timeout 2400 bash /config/projects/_wt/Sx-Claude-Skills-fabrika-birinc
   ✓ mutant 'kapi-kart-hatasini-bastirir' sınavı KIRMIZI yapıyor
   ✓ mutant 'bayat-kopya-geri-donusu' sınavı KIRMIZI yapıyor
   ✓ mutant 'kart-json-hatasi-yutulur' sınavı KIRMIZI yapıyor
-  ✓ mutant 'kirpma-kaydini-kaldir' sınavı KIRMIZI yapıyor
   ✓ mutant 'gecersiz-goze-soylenmez' sınavı KIRMIZI yapıyor
   ✓ mutant 'istem-yerine-fark-olculur' sınavı KIRMIZI yapıyor
   ✓ mutant 'istem-bol-tur-yakar' sınavı KIRMIZI yapıyor
   ✓ mutant 'istem-en-buyuk-ilk-parca' sınavı KIRMIZI yapıyor
   ✓ mutant 'istem-parca-dokumu-yok' sınavı KIRMIZI yapıyor
   ✓ mutant 'istem-karti-dusurur' sınavı KIRMIZI yapıyor
-  ✓ mutant 'istem-ayiklama-kosulu-duser' sınavı KIRMIZI yapıyor
+  ✓ mutant 'tavan-ayiklamaya-bagli' sınavı KIRMIZI yapıyor
   ✓ mutant 'mutasyon-basligi-yok' sınavı KIRMIZI yapıyor
   ✓ mutant 'zil-tmux-soyulmaz' sınavı KIRMIZI yapıyor
   ✓ mutant 'pid-kimligi-bakilmaz' sınavı KIRMIZI yapıyor
@@ -277,7 +275,7 @@ $ bash -c timeout 2400 bash /config/projects/_wt/Sx-Claude-Skills-fabrika-birinc
   ✓ mutant 'olcum-ortadan-secmez' sınavı KIRMIZI yapıyor
   ✓ mutant 'olcum-secilen-de-sayilir' sınavı KIRMIZI yapıyor
   ✓ mutant 'olcum-ayirici-eklenmez' sınavı KIRMIZI yapıyor
-  (bilgi) 49 mutant · 2 paralel · 1124 sn
+  (bilgi) 48 mutant · 2 paralel · 1114 sn
 
 ── KANIT-AYIKLAMA (ayrı dosya, buradan çağrılır) ──
 A · 🔴 kanıt dosyaları farktan AYIKLANIR, üretim kodu KALIR
@@ -289,12 +287,12 @@ A · 🔴 kanıt dosyaları farktan AYIKLANIR, üretim kodu KALIR
 B · 🔴 kırpılma: asıl zarar buydu
   ✓ B1 ayıklamalı koşumda istem eşiğin ALTINA düşer (kırpılma yok)
   ✓ B2 🔴 kırpılma uyarısı istemde YOK
-  ✓ B3 ayıklama KAPATILINCA (DENETCI_KANIT_AYIKLA=0) denetim yine koşar
-  ✓ B4 🔴 ayıklama kapalıyken istem KIRPILIR — eski davranış ölçülür
-  ✓ B5 🔴 ayıklama kapalıyken üretim kodu istemden DIŞARI itilir (yanan tur)
+  ✓ B3 ayıklama KAPATILINCA şişkin istem → rc 1, kırpılıp gönderilmez
+  ✓ B4 neden söyleniyor: İŞİ BÖL
+  ✓ B5 🔴 ayıklama kapalıyken denetçiye istem GİTMEDİ (kırpık istemle tur yanmaz)
 C · 🔴 kayıt: 'fark eksikti' ile 'kanıt ayrı gitti' sonradan ayırt edilsin
   ✓ C1 DENETIM kaydında kanit_ayiklandi.dosya = 3
-  ✓ C2 ayıklama kapalıyken kayıt dosya=0 ve kirpildi.oldu=true der
+  ✓ C2 ayıklama kapalıyken şişkin istemde DENETIM kaydı yazılmaz (tur yakılmadı)
 D · 🔴 ayıklama farkı BOZMAZ (yalnız kanıt yolu düşer)
   ✓ D1 kanıt dosyası HİÇ yoksa fark olduğu gibi geçer
   ✓ D2 kanıtsız farkta kod yine ULAŞIR
@@ -432,12 +430,12 @@ toplam=44 geçen=44 düşen=0
   ✓ TP0 fikstür: birincil kopya + iş alanı
   ✓ TP1 birincilden, alan varken: rc 2 + 'BİRİNCİL kopyadasın' + alan yolu söylenir
   ✓ TP1b birincile DENETIM / KART.json yazılmadı
-  ✓ TP2 alandan koşum yazar (rc 0); DENETIM'de depo=alan, dal=is-p, birincil=false
-  ✓ TP3 alanı OLMAYAN iş birincilden eskisi gibi denetlenir; DENETIM birincil=true, dal=main
+  ✓ TP2 alandan koşum yazar (rc 0); DENETIM'de depo=alan, dal=is-p, birincil_mi=false
+  ✓ TP3 alanı OLMAYAN iş birincilden eskisi gibi denetlenir; DENETIM birincil_mi=true, dal=main
   ✓ TP4 mutant üretildi (desen tuttu)
   ✓ TP4a fikstür: birincilde de kanıt var (alan tespiti kapalıyken yazıldı)
   ✓ TP4c kanıt birincilde VARKEN gerçek betik yine rc 2, DENETIM yok (kapıyı kanıt değil birincil tespiti kapatıyor)
   ✓ TP4b MUTASYON: kapı sökülünce birincile DENETIM yazılır (kapı gerçekten kabloda)
 
-── SONUÇ: 277 geçti · 0 kaldı ──
+── SONUÇ: 275 geçti · 0 kaldı ──
 --- stderr ---

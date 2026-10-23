@@ -1,5 +1,5 @@
 $ bash -c timeout 900 bash /config/projects/_wt/Sx-Claude-Skills-fabrika-birincil-kopya-yazim-reddi/yazilim-fabrikasi/scripts/kanit.test.sh < /dev/null
-# rc=0 sure=35.3s zaman=2026-10-23T13:35:31+03:00
+# rc=0 sure=148.5s zaman=2026-10-23T14:33:36+03:00
 --- stdout ---
 ════ T1 · ölçüm çifti: komutu araç koşar, kırpılmamış çıktı+rc ════
   ✓ önce ölçümü rc=0
