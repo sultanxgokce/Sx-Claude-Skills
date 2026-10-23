@@ -314,29 +314,10 @@ export KAPI_TABAN="$TABAN"
 # 🔴 Değer hiçbir zaman argv'ye, günlüğe ya da tmux komutuna girmez — kasadan ortam
 #    değişkenine çekilir, kapıyı başlatan kabuk onu dosyadan kendisi okur.
 sifre_var_mi() { [ -n "$(eval "printf '%s' \"\${$SIFRE_ANAHTAR:-}\"")" ]; }
-# 🔴 Ortam dosyası SOURCE EDİLMEZ (2.2.2 · 13 Eki ölçümü): üç kutuda dosyada AD=değer olmayan satırlar vardı; `. dosya`
-#    bash'e o satırları KOMUT diye koşturdu, "command not found" ile değer parçaları stderr'e düştü (sır sızıntısı) ve
-#    kabuk bir komut çalıştırmış da olabilirdi. Yalnız `AD=değer` biçimli satırlar okunur, çevreleyen tırnak soyulur,
-#    gerisi SAYILIR ama ne koşturulur ne basılır (fail-closed: bozuk satır sayısı ölçülebilir, içerik görünmez).
-ORTAM_BOZUK_SATIR=0
-ortam_yukle() {  # $1 = dosya → yalnız AD=değer satırlarını ortama alır; bozuk satırları sayar (içerik basmaz)
-  local d="$1" satir ad deger
-  [ -f "$d" ] || return 1
-  ORTAM_BOZUK_SATIR=0
-  while IFS= read -r satir || [ -n "$satir" ]; do
-    satir="${satir%$'\r'}"
-    case "$satir" in ''|'#'*) continue ;; esac
-    satir="${satir#export }"
-    case "$satir" in
-      [A-Za-z_]*=*) ad="${satir%%=*}"; deger="${satir#*=}"
-        case "$ad" in *[!A-Za-z0-9_]*) ORTAM_BOZUK_SATIR=$((ORTAM_BOZUK_SATIR+1)); continue ;; esac
-        case "$deger" in \"*\") deger="${deger#\"}"; deger="${deger%\"}" ;; \'*\') deger="${deger#\'}"; deger="${deger%\'}" ;; esac
-        export "$ad=$deger" ;;
-      *) ORTAM_BOZUK_SATIR=$((ORTAM_BOZUK_SATIR+1)) ;;
-    esac
-  done < "$d"
-  return 0
-}
+# Ortam dosyası okuyucusu (ortam_yukle · ORTAM_BOZUK_SATIR) paylaşılan dosyada yaşar: ortam-yukle.sh (2.22.0, görev GQ9DY) —
+#   kapı kabuğu ve başka depolar da onu kaynak alır; burada ikinci kopya tutulmaz.
+OKUYUCU="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/ortam-yukle.sh"   # ortak.sh'ın YANINDAKİ okuyucu (kurulu kopya değil: sınav/iş alanı kendi kopyasını alır)
+. "$OKUYUCU"
 sifre_yukle() {
   sifre_var_mi && return 0
   ortam_yukle "$ENV_DOSYA"

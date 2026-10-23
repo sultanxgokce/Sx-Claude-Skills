@@ -1,9 +1,18 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.21.0
+version: 2.22.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.22.0 · Ortam dosyası kapı kabuğunda da KAYNAK ALINMAZ (23 Eki · gorev_…GQ9DY · SERDAR 23:2x)
+Kapıyı başlatan tmux kabuğu (onar.sh) ortam dosyasını `set -a; . dosya` ile yüklüyordu; ortak.sh 2.2.2'den beri aynı dosyayı
+yalnız AD=değer okuyordu ama kapı kabuğu o okuyucuyu görmüyordu. Gerçek dosyada 303 satırın 135'i AD=değer değil, 6'sı PEM
+işareti → kabuk onları komut diye koşturdu, sır parçaları kapi-code ve imglistener bölmelerine düştü (SERDAR ölçtü, temizledi).
+Okuyucu artık `scripts/ortam-yukle.sh` (yan etkisiz, tek başına kaynak alınır); ortak.sh onu yanından alır (`OKUYUCU`), kapı
+kabuğu `. ortam-yukle.sh; ortam_yukle <dosya>` der, cloudtop `mobile-start.sh` de aynı dosyayı kullanır — kopya yok.
+Sınav `sifre-yukle.test.sh` E7-E9: başlatma komutunda `set -a; .` yok · kabuk okuyucuyu kullanıyor · okuyucu boş ortamda tek
+başına çalışır (bozuk satır koşmaz, stderr temiz). Mutasyon: `set -a; .` geri gelirse E7, `. dosya` okuyucuya dönerse E3/E4/E9 kırmızı.
 
 ## 🆕 2.21.0 · El kabuğu sekmesi — her kutuda sabit, boş, Claude'suz kabuk (22 Eki · gorev_…GT5BTK · SERDAR 12:32 (3))
 Sultan'ın elle komut (sabah paketi, kurtarma) çalıştırabileceği **`<kutu>-kabuk`** tmux oturumu:
