@@ -1,0 +1,32 @@
+{
+  "is": "fabrika-cevap-bekle",
+  "cumle": "Geri alınamaz eylem soruya bağlandıysa cevap gelmeden koşmasın: kart.sh sor (açık soru kaydı, eylem adıyla) · cevap (sorulanın sözü verbatim + oturum, evet/hayır; soran kendi sorusunu cevaplayamaz) · cevap-bekle (kartta açık ya da hayır cevaplı soru varsa rc 3/4) · acik-soru (ajanın bütün kartlarında) ve açık soru varken kart.sh bitti reddeder; yıkıcı komutu durduran kanca ayrı dilim",
+  "istedi": "SERDAR",
+  "aldi": "BERİD",
+  "zaman": "2026-10-23T14:26:49+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M54XHCBPN9NBS2KM7PGCMWNK",
+  "tahmin_dk": 180,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-23T14:26:49+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
