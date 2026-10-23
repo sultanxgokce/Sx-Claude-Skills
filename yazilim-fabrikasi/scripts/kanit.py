@@ -419,8 +419,9 @@ def _gelene_kopyala(a, yol, etiket):   # → kopya gerekmediyse ya da yazıldıy
         return True
     hedef_diz = os.environ.get("KANIT_GELEN_DIZ") or GELEN_VARSAYILAN
     if not os.path.isdir(hedef_diz):
-        print(f"   ◻ gelen klasörü yok ({hedef_diz}) — kare kopyalanmadı (kanıt kutuda kayıtlı)")
-        return True
+        # göz #433 tur 2: teslim AÇIKÇA istendi; klasörün yokluğu da teslimin düşmesidir — başarı sayılmaz (rc 3)
+        print(f"   ◻ gelen klasörü yok ({hedef_diz}) — kare Sultan'a GİTMEDİ (kanıt kutuda kayıtlı)")
+        return False
     hedef = os.path.join(hedef_diz, f"{a.gelen}_{a.is_adi}-kare-{etiket}-{a.asama}.png")
     try:
         shutil.copyfile(yol, hedef)

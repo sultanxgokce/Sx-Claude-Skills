@@ -585,9 +585,10 @@ _kay() { python3 -c 'import json,sys;m=json.load(open(sys.argv[1]));print(" ".jo
 O="$(PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran is-ub uc --url https://ornek.test --asama tek --uc-boy 2>&1)"; RC=$?
 [ "$RC" -eq 0 ] && [ "$(_kay uc-)" = "uc-1440:yesil:1440 uc-1280:yesil:1280 uc-390:yesil:390" ] && [ "$(tr '\n' ' ' < "$T/boy-log")" = "1440 1280 390 " ]; g $? "--uc-boy: tek komut, üç AYRI yeşil kayıt (etiket-<boy>), tarayıcıya üç genişlik gitti ($(_kay uc-))"
 grep -q "üç boy özeti (uc): 1440px ✓ · 1280px ✓ · 390px ✓" <<<"$O"; g $? "özet satırı her boyu söylüyor"
-O="$(DUS_BOY=1280 PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran is-ub dus --url https://ornek.test --asama tek --uc-boy --gelen kutu 2>&1)"; RC=$?
+O="$(DUS_BOY=1280 PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran is-ub dus --url https://ornek.test --asama tek --uc-boy 2>&1)"; RC=$?
 [ "$RC" -eq 3 ] && [ "$(_kay dus-)" = "dus-1440:yesil:1440 dus-1280:sari:- dus-390:yesil:390" ] && grep -q "1440px ✓ · 1280px ◻ · 390px ✓ → rc 3: bir boy yeşil değil, komut yeşil DÖNMEZ" <<<"$O"; g $? "🔴 bir boy düşerse komut rc 3 (yeşil DEĞİL), öbür boylar kayıtlı ($(_kay dus-))"
-grep -q "gelen klasörü yok" <<<"$O"; g $? "--gelen: klasör yoksa söyler, kanıt yine kutuda (çökme yok)"
+O="$(PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran is-ub yokdiz --url https://ornek.test --asama tek --boylar 390 --gelen kutu 2>&1)"; RC=$?
+[ "$RC" -eq 3 ] && [ "$(_kay yokdiz)" = "yokdiz-390:yesil:390" ] && grep -q "gelen klasörü yok .* Sultan'a GİTMEDİ" <<<"$O"; g $? "--gelen istendi ama klasör yok → kare kanıtı yeşil, TESLİM düştü → rc 3 (başarı sayılmaz — göz #433 tur 2)"
 mkdir -p "$T/gelen"
 O="$(DUS_BOY=1280 KANIT_GELEN_DIZ="$T/gelen" PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran is-ub gel --url https://ornek.test --asama tek --uc-boy --gelen nexus 2>&1)"
 [ "$(ls "$T/gelen" | tr '\n' ' ')" = "nexus_is-ub-kare-gel-1440-tek.png nexus_is-ub-kare-gel-390-tek.png " ] && [ "$(cat "$T/gelen/nexus_is-ub-kare-gel-390-tek.png")" = "PNG390" ]; g $? "--gelen: YALNIZ yeşil kareler <kutu>_<iş>-kare-… adıyla Sultan'ın gelen klasörüne (düşen 1280 gitmedi): $(ls "$T/gelen" | tr '\n' ' ')"

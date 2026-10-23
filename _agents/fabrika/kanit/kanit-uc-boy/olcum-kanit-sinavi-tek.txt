@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/kanit.test.sh
-# rc=0 sure=27.7s zaman=2026-10-23T05:20:41+03:00
+# rc=0 sure=27.1s zaman=2026-10-23T05:23:28+03:00
 --- stdout ---
 ════ T1 · ölçüm çifti: komutu araç koşar, kırpılmamış çıktı+rc ════
   ✓ önce ölçümü rc=0
@@ -239,7 +239,7 @@ $ bash yazilim-fabrikasi/scripts/kanit.test.sh
   ✓ --uc-boy: tek komut, üç AYRI yeşil kayıt (etiket-<boy>), tarayıcıya üç genişlik gitti (uc-1440:yesil:1440 uc-1280:yesil:1280 uc-390:yesil:390)
   ✓ özet satırı her boyu söylüyor
   ✓ 🔴 bir boy düşerse komut rc 3 (yeşil DEĞİL), öbür boylar kayıtlı (dus-1440:yesil:1440 dus-1280:sari:- dus-390:yesil:390)
-  ✓ --gelen: klasör yoksa söyler, kanıt yine kutuda (çökme yok)
+  ✓ --gelen istendi ama klasör yok → kare kanıtı yeşil, TESLİM düştü → rc 3 (başarı sayılmaz — göz #433 tur 2)
   ✓ --gelen: YALNIZ yeşil kareler <kutu>_<iş>-kare-… adıyla Sultan'ın gelen klasörüne (düşen 1280 gitmedi): nexus_is-ub-kare-gel-1440-tek.png nexus_is-ub-kare-gel-390-tek.png 
   ✓ --boylar 1440,390: yalnız verilen boylar
   ✓ bozuk/tekrarlı --boylar ve --uc-boy+--boylar birlikte → rc 2, hiçbir kayıt yazılmadı
