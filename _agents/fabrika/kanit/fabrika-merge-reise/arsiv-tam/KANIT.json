@@ -1,0 +1,172 @@
+{
+  "is": "fabrika-merge-reise",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T11:18:30+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinifli-kart-odasiz",
+      "asama": "once",
+      "dosya": "olcum-sinifli-kart-odasiz-once.txt",
+      "sha256": "6a970d3c83d3c70467f433285fb35c52f92266d943a1c6902302f107b73619f5",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/olc/olc-oda.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/pkg-main/yazilim-fabrikasi/scripts"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T11:16:40+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c0a7cd720917421683e05e030f4ab4e3"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinifli-kart-odasiz",
+      "asama": "sonra",
+      "dosya": "olcum-sinifli-kart-odasiz-sonra.txt",
+      "sha256": "5ea930977552c4d81ec797a323f56d66838091e57f43e576b1d352a847e29681",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/olc/olc-oda.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-fabrika-merge-reise/yazilim-fabrikasi/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T11:16:48+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b9bdd1821af947ae8e697b45a0175c04"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sultan-satiri-komut",
+      "asama": "once",
+      "dosya": "olcum-sultan-satiri-komut-once.txt",
+      "sha256": "0c13426f8480754db50fcdd356f41ee3c0c380cc3b85908bcf8c6196b62a7909",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/olc/olc-komut.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/pkg-once/yazilim-fabrikasi/scripts"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T11:16:53+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2a607e4f93d24760933062ec693c7168"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sultan-satiri-komut",
+      "asama": "sonra",
+      "dosya": "olcum-sultan-satiri-komut-sonra.txt",
+      "sha256": "a199f1a9ef2f96247d2cf6c0903e3c1a8ce970042f44df0077e02643fc302140",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/olc/olc-komut.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-fabrika-merge-reise/yazilim-fabrikasi/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T11:16:53+03:00",
+      "sure_sn": 0.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2e753df4c1c1477998b878e5182fe072"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "olcum-betigi-oda",
+      "asama": "tek",
+      "dosya": "dosya-olcum-betigi-oda-tek.sh",
+      "sha256": "3415f5031b0ee1fd49b4a1ec22f87c106e5f0845cad6f7deaa7417feaf9989b7",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/olc/olc-oda.sh",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T11:16:58+03:00",
+      "olcum_id": "f3de58e4d7e54397af74be69c317e499"
+    },
+    {
+      "tur": "dosya",
+      "etiket": "olcum-betigi-komut",
+      "asama": "tek",
+      "dosya": "dosya-olcum-betigi-komut-tek.sh",
+      "sha256": "9e3004e601adcb018d51b94c50d5d0e2acbcbc1494ee93c6362ba79ddc99396e",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/olc/olc-komut.sh",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T11:16:58+03:00",
+      "olcum_id": "a286ebf02369450f9e0358b7f50a9343"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-test",
+      "asama": "sonra",
+      "dosya": "olcum-kart-test-sonra.txt",
+      "sha256": "8ad45a58e69ff74ae5e4cdc79b3e31890ca04aad227663d602a0dac92d2d07f0",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T11:17:21+03:00",
+      "sure_sn": 18.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e720ff5a53124c03ab0abf2c67f32616"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "birlestirme-kapisi-test",
+      "asama": "sonra",
+      "dosya": "olcum-birlestirme-kapisi-test-sonra.txt",
+      "sha256": "035eeead114b8723f4a3c91494d5e62ff57a61a4d2b164722650566d42cbd5fd",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T11:18:12+03:00",
+      "sure_sn": 47.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "fcaeb12913e34348a4a49d12fc7ed230"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gun-sonu-test",
+      "asama": "sonra",
+      "dosya": "olcum-gun-sonu-test-sonra.txt",
+      "sha256": "4e5ff9fb60143a7f0aeab8fd889eb1a6111b0b689acd8e36d3c20514adc9c749",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/gun-sonu.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T11:18:19+03:00",
+      "sure_sn": 3.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "205f5fd1b47d4dc4b8cc007dd26353a9"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-fark-ayikla-test",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-fark-ayikla-test-sonra.txt",
+      "sha256": "604f3ecdf022072f4d97e60e06e4dca523554c1106974d29daf5852a5755ad07",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-fark-ayikla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T11:18:30+03:00",
+      "sure_sn": 4.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d38e4f8eb2e84097b4b1d07981c8f51e"
+    }
+  ],
+  "imza": "fd2c427be5db05185bb1c70c6f6b58da81c075785667a456cca4e457d233213e"
+}
