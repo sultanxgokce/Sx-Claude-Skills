@@ -1,5 +1,5 @@
 $ bash kasif-tara/scripts/kasif-tara.test.sh
-# rc=0 sure=1.3s zaman=2026-10-23T05:04:30+03:00
+# rc=0 sure=1.4s zaman=2026-10-23T05:54:29+03:00
 --- stdout ---
 === G1 · sözdizimi: paketteki her script bash -n temiz ===
 PASS  G1 bash -n hepsi temiz
