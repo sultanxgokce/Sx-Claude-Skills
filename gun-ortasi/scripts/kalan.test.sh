@@ -268,6 +268,61 @@ EOF
 O9="$(kos env)"
 kapi "T5f kurye-yokla.sh okundu-liste rc 2 → gelen '?' ve ölçemedim +1; üç mektubun hiçbiri '•' ile okunmamış basılmaz" \
   "$(oz "$O9" gelen)/$(oz "$O9" olcemedim)/$(grep -cE '• (A|BA|ESKI)\.md' <<<"$O9")" "?/$(( $(oz "$O7" olcemedim) + 1 ))/0"
+# T5h · okundu-yolu başarıyla döner ama bildirdiği yol okunabilir bir dosya DEĞİL (dizin): ölçemedim, boş liste ile "hepsi okunmamış" DENMEZ (göz tur 1)
+cat > "$B/scripts/kurye-yokla.sh" <<'SAHTE'
+#!/usr/bin/env bash
+K="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/0-teslimat"
+if [ "${1:-}" = "okundu-yolu" ]; then echo "$K/okundu-dizin"; exit 0; fi
+exit 1
+SAHTE
+mkdir -p "$B/0-teslimat/okundu-dizin"
+O11="$(kos env)"
+kapi "T5h okundu-yolu'nun bildirdiği yol dizin (okunamaz) → gelen '?' ve ölçemedim +1" \
+  "$(oz "$O11" gelen)/$(oz "$O11" olcemedim)" "?/$(( $(oz "$O7" olcemedim) + 1 ))"
+rmdir "$B/0-teslimat/okundu-dizin"
+# T5i · okundu-liste rc 0 ama cevap gelen/ dosya adı değil (yoklama metni sızmış) → beklenmedik cevap = ölçemedim
+cat > "$B/scripts/kurye-yokla.sh" <<'SAHTE'
+#!/usr/bin/env bash
+if [ "${1:-}" = "okundu-liste" ]; then echo "🔴 gelen/ içinde okunmamış 2 mektup var"; exit 0; fi
+exit 1
+SAHTE
+O12="$(kos env)"
+kapi "T5i okundu-liste cevabı gelen/ dosya adı değil → ölçemedim, mektuplar sayılmaz" \
+  "$(oz "$O12" gelen)/$(oz "$O12" olcemedim)/$(grep -c 'beklenmedik cevap' <<<"$O12")" "?/$(( $(oz "$O7" olcemedim) + 1 ))/1"
+# T5j · arayüz başka yazımla: tek tırnaklı case etiketi + yardımcı fonksiyon — yine tanınır ve sorulur (destek metin kalıbından çıkarılmaz)
+cat > "$B/scripts/kurye-yokla.sh" <<'SAHTE'
+#!/usr/bin/env bash
+K="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/0-teslimat"
+liste_bas() { while IFS= read -r s; do ad="${s%%	*}"; [ -f "$K/gelen/$ad" ] && echo "$ad"; done < "$K/.okundu"; }
+komut() { case "$1" in 'okundu-liste') liste_bas; exit 0 ;; 'okundu-yolu') echo "$K/.okundu"; exit 0 ;; esac; }
+komut "${1:-}"; exit 1
+SAHTE
+printf 'BA.md\tsha256:abc\nA.md\n' > "$B/0-teslimat/.okundu"
+O13="$(kos env)"
+kapi "T5j tek tırnak + yardımcı fonksiyonla yazılmış arayüz de tanınır: okundu-liste soruldu → BA ve A okunmuş → gelen 1" \
+  "$(oz "$O13" gelen)/$(grep -c 'kurye-yokla.sh okundu-liste · 2 okunmuş ad' <<<"$O13")" "1/1"
+# T5k · kurye-yokla.sh VAR ama okundu arayüzü YOK ve okundu.log da yok: eski yola sessizce düşülmez → kaydın yeri bilinmiyor = ölçemedim
+printf '#!/usr/bin/env bash\necho yokluyorum; exit 1\n' > "$B/scripts/kurye-yokla.sh"
+O14="$(kos env)"
+kapi "T5k kurye var, arayüz yok, okundu.log yok → gelen '?' + ölçemedim 'kaydın yeri bilinmiyor' (3 okunmamış DENMEZ)" \
+  "$(oz "$O14" gelen)/$(oz "$O14" olcemedim)/$(grep -c 'kaydın yeri bilinmiyor' <<<"$O14")" "?/$(( $(oz "$O7" olcemedim) + 1 ))/1"
+# T5l · kurye var, arayüz yok, ama okundu.log VAR: okunur ve notta söylenir
+cp "$TMP/okundu.log.kenar" "$B/0-teslimat/okundu.log"
+O15="$(kos env)"
+kapi "T5l kurye var, arayüz yok, okundu.log var → okundu.log okunur (BA okunmuş → 2) ve not 'okundu.log okundu'" \
+  "$(oz "$O15" gelen)/$(grep -c 'okundu-yolu sunmuyor, okundu.log okundu' <<<"$O15")" "2/1"
+rm -f "$B/0-teslimat/okundu.log"
+# T5m · okundu-yolu'nun bildirdiği dosya HENÜZ yok (kutu damga basmamış): kutunun kendi anlamı 'hiç okunmamış' → 3, not bunu söyler
+cat > "$B/scripts/kurye-yokla.sh" <<'SAHTE'
+#!/usr/bin/env bash
+K="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/0-teslimat"
+if [ "${1:-}" = "okundu-yolu" ]; then echo "$K/.okundu"; exit 0; fi
+exit 1
+SAHTE
+rm -f "$B/0-teslimat/.okundu"
+O16="$(kos env)"
+kapi "T5m okundu-yolu var, dosya henüz yok → üçü de okunmamış (3) ve not 'dosyası henüz yok … damgası basmamış'" \
+  "$(oz "$O16" gelen)/$(grep -c 'dosyası henüz yok' <<<"$O16")" "3/1"
 # T5g · kurye-yokla.sh de okundu.log da yok: eski yol, dürüst not (hepsi okunmamış sayıldı + kutuda kurye-yokla.sh de yok)
 rm -rf "$B/scripts" "$B/0-teslimat/.okundu"
 O10="$(kos env)"

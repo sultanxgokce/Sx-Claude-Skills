@@ -153,9 +153,14 @@ Akşam `/gunluk-plan kapanis` sabah + gün ortası maddelerini birlikte okur.
   okunmamış bastı; gerçek sayı 0'dı. Kaydın adını yalnız sahibi bilir: artık kutunun `scripts/kurye-yokla.sh`'ı `okundu-liste`
   biliyorsa okunmuş adlar **ondan** alınır (özeti tutmayan satır okunmuş sayılmaz), yalnız `okundu-yolu` biliyorsa yol sorulur
   ve satırın TAB'a kadar olan ilk alanı addır; kurye-yokla.sh yoksa eski `okundu.log` yolu aynen. Sahip sorgusu düşerse
-  (rc≠0) gelen `?` + ölçemedim — okunamayan kayıt "okunmamış" değil "ölçülemedi"dir. Not satırı artık hangi kaynağa
-  bakıldığını söyler. Kapılar **T5d–T5g** (sahte kurye-yokla.sh = mihenk arayüzünün kopyası; özeti tutmayan mektup
-  okunmamış kalır); eski kod dördünde de kırmızı. 39 kapı.
+  (rc≠0) ya da cevabı biçime uymazsa (okundu-liste satırı gelen/ dosyası değil · okundu-yolu tek satır mutlak yol değil ·
+  bildirdiği dosya okunamıyor) gelen `?` + ölçemedim — okunamayan kayıt "okunmamış" değil "ölçülemedi"dir. Arayüz desteği
+  kaynak metnindeki yazım kalıbından çıkarılmaz (bağımsız göz tur 1): komut adı dosyada geçiyorsa **sorulur**, cevap
+  doğrulanır; kurye-yokla.sh varken eski okundu.log'a sessizce düşülmez (arayüz yoksa: okundu.log varsa okunur ve söylenir,
+  yoksa "kaydın yeri bilinmiyor" ölçemedim). Not satırı hangi kaynağa bakıldığını söyler. Kapılar **T5d–T5m** (sahte
+  kurye-yokla.sh = mihenk arayüzünün kopyası; özeti tutmayan mektup okunmamış kalır; tek tırnak + yardımcı fonksiyon yazımı;
+  dizin/garip cevap/arayüzsüz kurye → ölçemedim); eski kod bunların tümünde kırmızı. Canlı ölçüm: mihenk kutusu (87 mektup,
+  .okundu 86 satır) eski kodla gelen=87 "okundu.log yok", yeni kodla gelen=0. 45 kapı.
 - **1.2.1 (2026-10-18, MUAVİN · TELLAL bildirdi, gorev_01M55X6PGK9C9K8MRSY0E01W3Q):** `kalan.sh` okundu
   kaydındaki mektubu **okunmamış** sayıyordu. Kök: `set -o pipefail` altında `printf | grep -q` — grep ilk
   eşleşmede çıkar, printf SIGPIPE alır, boru rc≠0 döner ve "bulundu" "bulunamadı" sayılır. Büyük kayıtta

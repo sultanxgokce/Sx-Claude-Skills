@@ -145,20 +145,35 @@ if [ -d "$GD" ]; then
   #   okunmuş sayılmaz; biçim kutuda kalır) · (2) yalnız 'okundu-yolu' biliyorsa yol sorulur, satırın TAB'a kadar olan
   #   ilk alanı addır · (3) kurye-yokla.sh yoksa eski okundu.log (' | ' ayraçlı, 3. alan). Sorgu düşerse ölçemedim —
   #   okunamayan kayıt "okunmamış" DEĞİL "ölçülemedi"dir.
-  # arayüz tanıma: komut adı tırnaklı karşılaştırmada ('= "okundu-liste"') ya da case etiketinde ('okundu-liste)') geçer; düz yazıdaki anış sayılmaz
-  if [ -f "$KY" ] && grep -qE '"okundu-liste"|okundu-liste\)' "$KY"; then
+  # SOR ve CEVABI DOĞRULA (bağımsız göz tur 1): arayüz desteği kaynak metnindeki yazım kalıbından ÇIKARILMAZ — tek/çift tırnak,
+  #   case etiketi, yardımcı fonksiyon hepsi geçerli yazımdır. Tek ön koşul: komut ADI dosyada hiç geçmiyorsa o komut var olamaz
+  #   (geçiyorsa SORULUR; geçmeyen komutu çağırmak kuryeyi yoklama kipine düşürür, o kip salt-okur değildir). Cevap biçimi doğrulanır:
+  #   okundu-liste → her satır gelen/ içinde var olan bir dosya adı · okundu-yolu → tek satır, mutlak yol. Uymayan cevap = ölçemedim.
+  #   kurye-yokla.sh VARKEN eski okundu.log'a sessizce düşülmez: arayüz yoksa okundu.log varsa okunur ve SÖYLENİR, yoksa ölçemedim.
+  neden=""
+  if [ -f "$KY" ] && grep -q 'okundu-liste' "$KY"; then
     kaynak="kurye-yokla.sh okundu-liste"
     okunan="$(bash "$KY" okundu-liste 2>/dev/null)" || sorgu_rc=$?
-  elif [ -f "$KY" ] && grep -qE '"okundu-yolu"|okundu-yolu\)' "$KY"; then
+    if [ "$sorgu_rc" -ne 0 ]; then neden="rc=$sorgu_rc"
+    else while IFS= read -r a; do [ -z "$a" ] || [ -f "$GD/$a" ] || { neden="beklenmedik cevap satırı: ${a:0:60}"; break; }; done <<<"$okunan"; fi
+  elif [ -f "$KY" ] && grep -q 'okundu-yolu' "$KY"; then
     OK="$(bash "$KY" okundu-yolu 2>/dev/null)" || sorgu_rc=$?
     kaynak="kurye-yokla.sh okundu-yolu → ${OK:-?}"
-    [ "$sorgu_rc" -eq 0 ] && [ -f "$OK" ] && okunan="$(cut -f1 "$OK" 2>/dev/null)"
+    if [ "$sorgu_rc" -ne 0 ]; then neden="rc=$sorgu_rc"
+    elif [ "$(grep -c . <<<"$OK")" -ne 1 ] || [ "${OK#/}" = "$OK" ]; then neden="beklenmedik cevap (tek satır mutlak yol değil)"
+    elif [ -e "$OK" ] && { [ ! -f "$OK" ] || [ ! -r "$OK" ]; }; then neden="kayıt dosyası okunamıyor: $OK"
+    elif [ -f "$OK" ]; then okunan="$(cut -f1 "$OK" 2>/dev/null)" || neden="kayıt okunamadı: $OK"; fi
+  elif [ -f "$KY" ]; then
+    # kurye var, okundu arayüzü yok: kaydın adını yalnız o bilir — eski yola SESSİZCE düşülmez
+    if [ -f "$OK" ]; then kaynak="$OK (kurye-yokla.sh okundu-liste/okundu-yolu sunmuyor, okundu.log okundu)"; okunan="$(awk -F' [|] ' '{print $3}' "$OK" 2>/dev/null)"
+    else kaynak="bilinmiyor"; neden="kutuda scripts/kurye-yokla.sh var ama okundu-liste/okundu-yolu sunmuyor ve $OK yok — kaydın yeri bilinmiyor"; fi
   else
     kaynak="$OK"
-    [ -f "$OK" ] && okunan="$(awk -F' [|] ' '{print $3}' "$OK" 2>/dev/null)"
+    if [ -e "$OK" ] && { [ ! -f "$OK" ] || [ ! -r "$OK" ]; }; then neden="kayıt dosyası okunamıyor: $OK"
+    elif [ -f "$OK" ]; then okunan="$(awk -F' [|] ' '{print $3}' "$OK" 2>/dev/null)" || neden="kayıt okunamadı: $OK"; fi
   fi
-  if [ "$sorgu_rc" -ne 0 ]; then
-    GELEN="?"; olcemedim "okundu kaydı sorgulanamadı ($kaynak rc=$sorgu_rc) — mektuplar okunmamış SAYILMADI, sayılmadı"
+  if [ -n "$neden" ]; then
+    GELEN="?"; olcemedim "okundu kaydı sorgulanamadı ($kaynak · $neden) — mektuplar okunmamış SAYILMADI, sayılmadı"
   else
     while IFS= read -r f; do
       a="$(basename "$f")"
@@ -170,7 +185,10 @@ if [ -d "$GD" ]; then
     if [ -n "$liste" ]; then bas "$liste"; else printf '  (okunmamış mektup yok)\n'; fi
     case "$kaynak" in
       "kurye-yokla.sh okundu-liste") printf '  not: okundu kaydı kutudan soruldu (%s · %s okunmuş ad)\n' "$kaynak" "$(grep -c . <<<"$okunan")" ;;
-      *) [ -f "$OK" ] || printf '  not: okundu kaydı yok (%s%s) — listelenenlerin hepsi okunmamış sayıldı\n' "$kaynak" "$([ -f "$KY" ] || printf '; kutuda scripts/kurye-yokla.sh de yok')" ;;
+      "kurye-yokla.sh okundu-yolu"*) [ -f "$OK" ] && printf '  not: okundu kaydı kutudan soruldu (%s · %s satır)\n' "$kaynak" "$(grep -c . "$OK")" \
+                                     || printf '  not: okundu kaydı dosyası henüz yok (%s) — kutu okundu damgası basmamış; listelenenlerin hepsi okunmamış sayıldı\n' "$kaynak" ;;
+      *) if [ -f "$OK" ]; then printf '  not: okundu kaydı: %s\n' "$kaynak"
+         else printf '  not: okundu kaydı yok (%s%s) — listelenenlerin hepsi okunmamış sayıldı\n' "$kaynak" "$([ -f "$KY" ] || printf '; kutuda scripts/kurye-yokla.sh de yok')"; fi ;;
     esac
   fi
 else olcemedim "gelen kutusu yok: $GD (bu kutuda mektup düzeni farklı olabilir)"; fi
