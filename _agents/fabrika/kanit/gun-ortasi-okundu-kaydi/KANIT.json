@@ -1,0 +1,83 @@
+{
+  "is": "gun-ortasi-okundu-kaydi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T05:57:16+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kalan-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kalan-sinavi-once.txt",
+      "sha256": "f36e18c1c26fb66f5739b86471cc940cea2250cc835b968b07800e3f569b8a66",
+      "komut": [
+        "timeout",
+        "300",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/go/taban/gun-ortasi/scripts/kalan.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T05:57:04+03:00",
+      "sure_sn": 13.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4409920422b4494bae4faa1268548753"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kalan-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kalan-sinavi-sonra.txt",
+      "sha256": "b374b50d15b107472aff632f8beab9cae9356e4b9db84a723bbf68fd1551c17c",
+      "komut": [
+        "timeout",
+        "300",
+        "bash",
+        "/config/projects/_wt/Sx-Claude-Skills-gun-ortasi-okundu-kaydi/gun-ortasi/scripts/kalan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T05:57:16+03:00",
+      "sure_sn": 12.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "1a5c397ad1324a60b9d8d47808721eb5"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-parity-strict",
+      "asama": "sonra",
+      "dosya": "olcum-ci-parity-strict-sonra.txt",
+      "sha256": "bc26a5ec61689f0fcae1a67eda02e2676abb507abbc1b8589008b6c83cc12e24",
+      "komut": [
+        "node",
+        "ahi/schema/validate-repo.mjs",
+        ".",
+        "--strict"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T05:57:16+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "96b897f29c414d22b381a88914a20eba"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-version-lint",
+      "asama": "sonra",
+      "dosya": "olcum-ci-version-lint-sonra.txt",
+      "sha256": "9131d6ed4011775656a3856225df5dd9767306d62ef67628cfe1af27daaa216f",
+      "komut": [
+        "node",
+        "ahi/schema/version-lint.mjs",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T05:57:16+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "5458cf9662c54945a9f9050b009ff2c2"
+    }
+  ],
+  "imza": "b72fb284f0ee58888acc8a2495acf50428107edb385984674f93814585d6970a"
+}
