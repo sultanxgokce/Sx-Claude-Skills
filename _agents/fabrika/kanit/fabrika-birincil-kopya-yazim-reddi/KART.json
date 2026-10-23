@@ -32,5 +32,14 @@
       "olay": "ac",
       "sonuc": "yazıldı"
     }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "BANI",
+      "oturum": "Nexus/_agents/bani/NOTES.md:1089 [SERDAR → BÂNİ 23 Eki 13:0x]",
+      "gerekce": "SERDAR 23 Eki 13:0x (verbatim): Fabrika sürüm sırası: HENDESE #436 = 0.19.0 · senin V8NMK (fabrika-birincil-kopya-yazim-reddi) = 0.20.0 · merge-reise parça 1 = 0.21.0. — kart cümlesindeki 0.19.0 bu sıraya göre 0.20.0 olarak yayımlanır; kapsam değişmedi, yalnız sürüm numarası",
+      "zaman": "2026-10-23T14:25:29+03:00"
+    }
   ]
 }
