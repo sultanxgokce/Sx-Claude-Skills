@@ -1,0 +1,13 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/olc/olc-komut.sh /tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/pkg-once/yazilim-fabrikasi/scripts
+# rc=1 sure=0.3s zaman=2026-10-23T11:16:53+03:00
+--- stdout ---
+── kart.sh ac rc=0 (paket: /tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/pkg-once/yazilim-fabrikasi/scripts)
+── oda tetiğinin Sultan'a giden gövdesi:
+olcum-oda	Sultan satırı ölçümü · sahip MUAVIN · istedi Sultan · sınıf: hhhe · başlama izni bekleniyor (veto penceresi: iş yürür; durdurmak için kart.sh sultan-dedi olcum-sinifli --karar dur) 
+── gun-sonu.sh rc=0
+── gün sonu 'Sultan'a gidenler' bölümü:
+## Sultan'a gidenler (1) — başlama izni / veto (iş bekletilmez; 'dur' dersen kapı kapanır: kart.sh sultan-dedi <iş> --karar dur)
+- [acik] **olcum-sinifli** — Sultan satırı ölçümü · sınıf: yetki · izin: bekliyor · sahip MUAVIN · puan YOK · kanıt yok
+SAYIM: tetik gövdesi kart.sh=1 · gün sonu bölümü kart.sh=1 · toplam=2
+SONUÇ: Sultan'a giden satırlarda komut VAR
+--- stderr ---

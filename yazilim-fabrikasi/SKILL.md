@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.19.0
+version: 0.21.0
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -36,8 +36,8 @@ tags: [fabrika, worktree, kanit, bagimsiz-goz, puan, hat-dosyasi, orkestrasyon, 
 | `fabrika-kur.sh denetle [depo]` | şablon sha ≟ depo sha; işaretçi var mı | 0 eşit · 1 drift · 3 dosya yok |
 | `fabrika-kur.sh kur --kanca` | ek olarak ana-dal commit korumasını (pre-commit) kurar | — |
 | `kart.sh ac <iş> --is … --istedi … --aldi … --geri-alinamaz/--para/--dis-yuzey/--yetki e\|h\|?` | 0. adım: iş kartını ARAÇ yazar; dört sınıf sorusu cevapsız kart açılmaz; e/? → Sultan'a gider. `bitti` · `tikandi --yol --neden` · `liste` · `goster`. `--oda` ile tetikli mesaj. `--canli e\|h`: cron/servis/sunucu işi canlı kanıt ister; verilmezse cümleden türetilir, sebebi karta yazılır (`canli-gerekir <iş>` okur) | 0 · 1 eksik cevap · 3 |
-| `kart.sh daralt <iş> --kalan "<bulgu ≥20>" --cumle "<daraltılmış cümle ≥20>" --oturum <ref> [--yeni <ad>]` | 4. adım DARALTMA: kart cümlesi daraltılır (eskisi `cumle_gecmisi`), kalan bulgu yeni karta (aynı sahip/sınıf, `koken`), karta `daraltmalar[]` + `tur_sifir`; sınıfsız kartta reis kararı `daralt` kendiliğinden, SINIFLI kartta `sultan-dedi --karar daralt` ŞART. Denetçi daraltmadan önceki turları saymaz; kapı daraltma sonrası 5/E ister | 0 · 1 eksik/sınıflı-kararsız · 3 |
-| `kart.sh reis-dedi <iş> --karar devam --reis <AD> --oturum <ref> --gerekce …` | **Sınıfsız** işte sahip kararı karta `reis_kararlari` alanına girer (Sultan'ın alanına DEĞİL — A06). `--reis` kartta yazılı sahip (`aldi`) olmak ZORUNDA; başka reisin kararı mektupla gelir, sahip kendi adıyla işler ve gerekçede ona atıf yapar. `--karar` kapalı küme. Sınıflı kartta reddedilir: sınıf işinin merci Sultan (`sultan-dedi`). 8 Eki 2026 · A268 | 0 · 1 eksik/sınıflı |
+| `kart.sh daralt <iş> --kalan "<bulgu ≥20>" --cumle "<daraltılmış cümle ≥20>" --oturum <ref> [--yeni <ad>]` | 4. adım DARALTMA: kart cümlesi daraltılır (eskisi `cumle_gecmisi`), kalan bulgu yeni karta (aynı sahip/sınıf, `koken`), karta `daraltmalar[]` + `tur_sifir`; her kartta reis kararı `daralt` kendiliğinden (0.21.0; vetolu kartta rc 1). Denetçi daraltmadan önceki turları saymaz; kapı daraltma sonrası 5/E ister | 0 · 1 eksik/sınıflı-kararsız · 3 |
+| `kart.sh reis-dedi <iş> --karar devam\|daralt\|geri-al\|birlestir --reis <AD> --oturum <ref> --gerekce …` | Sahip/reis kararı `reis_kararlari`'na (Sultan'ın alanına DEĞİL — A06); `--reis` = `aldi`. **0.21.0:** sınıflı kartta da (`sinifli: true`); vetolu kartta rc 1. Başlama izni/veto: `sultan-dedi --karar basla\|dur` · `izin-durum` (kural `adimlar/0-kabul.md`) | 0 · 1 |
 | `is-alani.sh ac <iş> [--dosyalar a,b] [--kartsiz]` | `origin/main`'den TAZE worktree (`/config/projects/_wt/<depo>-<iş>`); **kart yoksa açılmaz** (kaçış `--kartsiz` → kart cevapsız açılır, Sultan'a gider); açık PR'larla dosya çakışması varsa **durur ve sorar**; kartı worktree'ye kopyalar | 0 · 1 hata/kart yok · 2 çakışma |
 | `gun-sonu.sh [--gun] [--yaz] [--kutu <ad>] [--kapanis]` | gün sonu özeti DEFTERDEN (kartlar + karne): Sultan'a gidenler · içeride bitirdiklerimiz · tıkananlar · açık işler; elle satır yok. **0.18.0:** GÖREV DEFTERİ bölümü (çalışılıyor · atanmış açık · sıra Sultan'da · onay bekleyen; `DEFTER_UC` + jeton, okunamazsa 'ölçülemedi'); `--kapanis` gün kapanışını yalnız görev defterine göre verir — çalışılıyor varsa rc 1 'gün kapanmaz' (kart bitti ≠ görev bitti, Z23WS), ölçülemezse rc 3 | 0 · 3 defter yok |
 | `is-alani.sh kontrol` | güvenli / riskli / ölçülemedi | 0 · 1 · 2 |
@@ -129,6 +129,7 @@ Codex yoksa ya da iki denemede de düşerse, **yazandan farklı yeni bir Claude 
 sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kaldırılınca kırmızı).
 
 ## Sürüm notları
+- **0.21.0 (23 Eki, Sultan D1 · çekirdek; sıra: 0.19.0 #436, 0.20.0 V8NMK):** sınıflı işte Sultan yalnız başlama izni verir (veto), ara kararlar ve birleştirme reisin — kural `adimlar/0-kabul.md` "Sınıflı iş". `izin.py` + `kart.sh` (izin-durum · basla/dur · sınıflıda reis-dedi/daralt · veto çiti reis-dedi/daralt/bitti · birlestirme_karari). Kalanı ikinci kartta (`fabrika-merge-reise-parca2`).
 - **0.10.0 (2026-10-18, SERDAR · PCP7J daraltma adımı; 0.9.0 HENDESE üstüne):** tıkanma raporu "kapsamı daralt" diyordu ama hatta adımı yoktu:
   daralt kararı verilen iş (cloudtop #668) tur açamıyor, mutlak tavanı dolan iş (#670) bir daha denetlenemiyor, kapı
   reis/Sultan kararını hiç okumuyordu; geçici yol "yeni kart + yeni dal + yeni PR" Sultan'a günde ~30 karar yüklüyordu.

@@ -1,0 +1,11 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-cekirdek-davranis-* ===
+$ env MUTANT=bitti-veto-citi bash _agents/fabrika/kanit/fabrika-merge-reise/cekirdek-davranis.sh dal
+# rc=1 sure=0.6s zaman=2026-10-23T15:07:53+03:00
+--- stdout ---
+MUTANT: bitti'deki veto çiti kaldırıldı
+✓ sınıflı karta reis-dedi: rc 0
+✓ Sultan dur sonrası reis-dedi: rc 1
+✗ Sultan dur sonrası bitti: rc 0 (beklenen rc 1)
+birlestirme_karari var bitti
+sapma: 1
+--- stderr ---
