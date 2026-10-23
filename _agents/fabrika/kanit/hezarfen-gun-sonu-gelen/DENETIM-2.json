@@ -1,0 +1,37 @@
+{
+  "tur": 2,
+  "is": "hezarfen-gun-sonu-gelen",
+  "pr": "439",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T14:54:45+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 22647,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 15416
+  },
+  "bas": "f3316d271c7e40a1f8e4071bfa9b6c0284e0db8e",
+  "duzeltme_farki": {
+    "onceki_bas": "14d4fec523d0d9eec81842193a5977debb8d567c",
+    "dosya": 9,
+    "bayt": 20311,
+    "tam_bayt": 24941
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan, önceki turun iki açığı da kapanmış: MİRAHUR cron işi görev defterine komut önerisiyle yazılmış, yazma hataları da izin hatası ile gerçek kabuk sebebi ayrılarak raporlanmış. --gelen davranışı, rc koruması, hermetiklik ve mutant kapıları 53/0 gerçek ölçümle doğrulandığı için yalnız rötuş düzeyi dahi açık görünmüyor; üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra çifti 42 geçti/11 kaldı durumundan 53 geçti/0 kaldı durumuna ilerlemeyi gösteriyor; gerçek ölçüm --gelen olmadan dokunmama, doğru ad ve içerik, eksik/yazılamaz dizin mesajları, başka hata sebebi, kopya eşitliği ve rc korumasını kapsıyor. Mutasyon kanıtındaki beklenen kırmızı, bayrak kapısı kaldırılınca sınavın bozuk kodu yakaladığını doğruluyor; gerçek kod sonucu ayrı gercek_olcum kaydından okunuyor. Önceki B1, cron-gorevi-defterde kaydındaki MİRAHUR görevi ve “gun-sonu.sh --yaz --gelen --kutu code” önerisiyle; B2 ise G6b ile G11 kapıları ve gerçek hata metni ölçümüyle kapanmış."
+  }
+}

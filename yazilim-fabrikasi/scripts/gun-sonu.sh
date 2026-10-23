@@ -5,16 +5,19 @@
 # Üç bölüm: SULTAN'A GİDENLER (sınıf işi) · İÇERİDE BİTİRDİKLERİMİZ (Sultan'ın veto hakkı) · TIKANANLAR; ek: açık işler.
 # Her satır bir karta bağlıdır; kartta olmayan şey özete giremez.
 #
-# Kullanım: gun-sonu.sh [--gun YYYY-MM-DD] [--yaz] [--kutu <ad>] [--kapanis]
+# Kullanım: gun-sonu.sh [--gun YYYY-MM-DD] [--yaz] [--gelen] [--kutu <ad>] [--kapanis]
 #   --yaz: <depo>/_agents/fabrika/gun-sonu/<gün>.md dosyasına da yazar · --kutu: görev defteri bölümünü o kutunun işleriyle sınırlar
+#   --gelen (görev …9758FA, Z23WS): özet Sultan'ın hub gelen klasörüne de düşer — GUN_SONU_GELEN_DIZ (vars. /config/evraklar/Sultan/0-Gelen)
+#           altına nexus_gun-sonu_<gün>.md (kaynak önekli ad, _DUZEN.md). YALNIZ bu bayrakla; akşam cron satırı (MİRAHUR) bayrağı verir.
+#           Dizin yoksa / yazılamazsa "→ gelen klasörüne YAZILAMADI: …" satırı basılır, rc DEĞİŞMEZ (cron bozulmaz; sessiz de geçilmez).
 #   --kapanis: GÜN KAPANIŞI yalnız GÖREV DEFTERİNE göre (Z23WS 2: kart bitti ≠ görev bitti) — çalışılıyor iş varsa rc 1 "gün kapanmaz",
 #              defter ölçülemezse rc 3 (yeşil değil); bayraksız koşuda özet üretilir, rc değişmez (cron bozulmaz).
 # GÖREV DEFTERİ bölümü (Z23WS 3, kart gun-sonu-gorev-defteri): DEFTER_UC (vars. http://cloudtop-defter:8791) + DEFTER_JETON_YOL
 #   (vars. /config/defter-jeton) ile okunur; jeton yoksa / defter cevap vermezse "ölçülemedi" yazılır, 0 DENMEZ. Jeton değeri basılmaz.
 # rc: 0 üretildi · 1 (--kapanis) çalışılıyor iş var · 3 defter yok / görev defteri ölçülemedi (--kapanis)
 set -uo pipefail
-GUN="$(date +%F)"; YAZ=0; KUTU=""; KAPANIS=0
-while [ $# -gt 0 ]; do case "$1" in --gun) GUN="$2"; shift 2 ;; --yaz) YAZ=1; shift ;; --kutu) KUTU="$2"; shift 2 ;; --kapanis) KAPANIS=1; shift ;; *) shift ;; esac; done
+GUN="$(date +%F)"; YAZ=0; GELEN=0; KUTU=""; KAPANIS=0
+while [ $# -gt 0 ]; do case "$1" in --gun) GUN="$2"; shift 2 ;; --yaz) YAZ=1; shift ;; --gelen) GELEN=1; shift ;; --kutu) KUTU="$2"; shift 2 ;; --kapanis) KAPANIS=1; shift ;; *) shift ;; esac; done
 c="$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)" && DEPO="${KANIT_DEPO:-$(dirname "$c")}" || DEPO="${KANIT_DEPO:-}"
 [ -n "$DEPO" ] || { echo "✗ depo kökü bulunamadı" >&2; exit 3; }
 KD="$DEPO/_agents/fabrika/kartlar"; KARNE="$DEPO/_agents/fabrika/karne.jsonl"
@@ -201,4 +204,16 @@ if [ "$KAPANIS" -eq 1 ]; then
   esac
 fi
 if [ "$YAZ" -eq 1 ]; then mkdir -p "$DEPO/_agents/fabrika/gun-sonu"; printf '%s\n' "$OZET" > "$DEPO/_agents/fabrika/gun-sonu/$GUN.md"; echo "→ yazıldı: _agents/fabrika/gun-sonu/$GUN.md"; fi
+# --gelen: Sultan'ın hub gelen klasörü (Mutagen ile cihazına senkron). Dizin yaratılmaz (hub düzeni Sultan'ın), yalnız var olana yazılır.
+if [ "$GELEN" -eq 1 ]; then
+  GELEN_DIZ="${GUN_SONU_GELEN_DIZ:-/config/evraklar/Sultan/0-Gelen}"; GELEN_DOSYA="$GELEN_DIZ/nexus_gun-sonu_$GUN.md"
+  # Sebep AYRIŞTIRILIR (göz tur 1): dizin yok · yazma izni yok · başka her hata kabuğun kendi metniyle (dolu disk, hedef dizin, salt-okunur fs…)
+  if [ ! -d "$GELEN_DIZ" ]; then echo "→ gelen klasörüne YAZILAMADI: dizin yok ($GELEN_DIZ)"
+  elif [ ! -w "$GELEN_DIZ" ]; then echo "→ gelen klasörüne YAZILAMADI: yazma izni yok ($GELEN_DIZ)"
+  else
+    GELEN_HATA="$( { printf '%s\n' "$OZET" > "$GELEN_DOSYA"; } 2>&1 )"; GELEN_RC=$?
+    if [ "$GELEN_RC" -eq 0 ]; then echo "→ gelen klasörüne yazıldı: $GELEN_DOSYA"
+    else echo "→ gelen klasörüne YAZILAMADI: ${GELEN_HATA##*: }${GELEN_HATA:+ }($GELEN_DOSYA)"; fi
+  fi
+fi
 exit "${RC_KAP:-0}"
