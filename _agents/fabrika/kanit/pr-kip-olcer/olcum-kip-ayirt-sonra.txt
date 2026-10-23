@@ -1,0 +1,8 @@
+$ bash _agents/fabrika/kanit/pr-kip-olcer/kip-ayirt-olcer.sh agac
+# rc=0 sure=0.4s zaman=2026-10-23T12:50:26+03:00
+--- stdout ---
+kod kaynağı: agac · araç: var
+   kip.sh → rc=0
+   icerik.sh → rc=1
+   yeni-ad.sh → rc=1
+--- stderr ---
