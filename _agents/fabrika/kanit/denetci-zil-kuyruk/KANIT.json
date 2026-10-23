@@ -1,0 +1,61 @@
+{
+  "is": "denetci-zil-kuyruk",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T04:16:42+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "mesgul-yazana-zil",
+      "asama": "once",
+      "dosya": "olcum-mesgul-yazana-zil-once.txt",
+      "sha256": "d9ed4a097c4a04a8f2b49e6a318c6d2c116393c13606b9e3b82c2c3fa6ca1c82",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/denetci-zil-kuyruk/zil-olcer.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/sx-main-416/yazilim-fabrikasi/scripts"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T04:16:41+03:00",
+      "sure_sn": 0.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "82cf6e0a35754cf79e19dcee5487f3cc"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mesgul-yazana-zil",
+      "asama": "sonra",
+      "dosya": "olcum-mesgul-yazana-zil-sonra.txt",
+      "sha256": "1959b51515cc66e57c1e54e160163408157cfc636b3de0f32d0cf211eb5b56a6",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/denetci-zil-kuyruk/zil-olcer.sh",
+        "yazilim-fabrikasi/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T04:16:42+03:00",
+      "sure_sn": 0.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "bbc06c5d8a2e405099258a2e39ff376f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-denetci-sinavi-tek.txt",
+      "sha256": "413a6aa1f1c6acf7711772f266ec6521a7e884c60d0fa9e0beabbcf88e2cb7e6",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T04:15:52+03:00",
+      "sure_sn": 690.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "ce16984ab37044ebacc379fe91340879"
+    }
+  ],
+  "imza": "3f1a03736eee6955efdcf60d946982a66510eaacfced4b85b3b083a61b638910"
+}
