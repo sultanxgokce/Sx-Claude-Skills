@@ -123,7 +123,7 @@ def simdi():
 
 
 def birincil_reddi(depo, is_adi):
-    """0.20.0 (gorev_01M5F03K79B5B19A2XQ54V8NMK · HENDESE 22 Eki ölçümü): BİRİNCİL kopyadan (git-dir == git-common-dir), o iş için
+    """0.22.0 (gorev_01M5F03K79B5B19A2XQ54V8NMK · HENDESE 22 Eki ölçümü): BİRİNCİL kopyadan (git-dir == git-common-dir), o iş için
     is-alani.sh kökünde (<kök>/<depo-adı>-<iş>) açık bir iş alanı varken kanıt YAZILMAZ — birincile düşen kayıt takipsiz kalır,
     PR'a girmez (Nexus 116 + cloudtop 45 takipsiz kanıt dosyası böyle doğdu). rc 2, doğru yol söylenir; sessiz yönlendirme yok.
     Okuma komutları (dogrula · ozet · liste) bu kapıdan geçmez. Alanı olmayan iş ve alandan koşum eski davranışıyla aynı."""

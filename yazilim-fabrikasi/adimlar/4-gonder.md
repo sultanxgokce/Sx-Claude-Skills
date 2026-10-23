@@ -36,15 +36,15 @@
    - **Kapsamı daralt = hattın adımıdır, elle yeni kart/dal/PR açmak değil** (0.8.0, PCP7J): `kart.sh daralt <iş>
      --kalan "<kalan bulgu>" --cumle "<bu PR'ın yaptığı>" --oturum <ref>` → kalan bulgu aynı sahip ve sınıfla yeni karta,
      bu kartın cümlesi daralır, tur sayacı sıfırlanır (aynı dal, aynı PR sürer), kapı daraltma sonrası en az bir 5/E
-     tur ister. Sınıfsız işte reis kararı kendiliğinden işlenir; sınıflı işte önce `kart.sh sultan-dedi --karar daralt`.
+     tur ister. Daraltma her kartta reis kararıyla kendiliğinden işlenir (sınıflı dahil — 0.21.0; kartta kullanılmamış eski
+     bir Sultan `daralt` kararı varsa o tüketilir); vetolu kartta daraltma yok.
    - Göze giden **istemin tamamı** (şablon + kart + kanıt manifesti + ölçüm çıktıları + fark + önceki tur) kırpma
      tetiğini (120 KB) aşıyorsa denetçi kırpıp denetlemez, "**İŞİ BÖL**" der, parça parça bayt basar ve tur yakmaz:
      fark büyükse iş bölünür (daralt), ölçüm şişkinse ölçümler küçültülür; kırpık istemle verilen puan puan değildir
      (PR #329 ve cloudtop #712 dersi — #712'de fark 73 KB'la geçmiş, istem 129 KB olup kırpılmıştı).
      Sonsuz düzelt-kanıtla-gönder döngüsü yasak (3-strike'ın fabrikadaki karşılığı).
 5. **Merge:**
-   - Kart **sınıf** taşıyorsa (geri alınamaz · para · dış yüzey · yetki) → **Sultan**, `pr-onay` tek soru. Ajan
-     onay yazamaz (A06).
+   - Kart **sınıf** taşıyorsa da → **kutu reisi** (0.21.0, kural `0-kabul.md` "Sınıflı iş"); vetolu kartta `bitti` rc 1. Ajan onay yazamaz (A06).
    - Sınıfsız iş → **kutu reisi** merge eder; şart: 5 + E + kanıt manifesti + CI yeşil. Deftere `kayit-damgasi`
      ile kanıt+puan+damga; gün sonu özetinde "içeride bitirdiklerimiz". (Geçiş: Nexus'ta ilk iki hafta yine
      Sultan'a sorulur — Sultan 22 Eyl.)

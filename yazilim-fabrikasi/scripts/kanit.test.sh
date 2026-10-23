@@ -627,7 +627,7 @@ import sys; f=sys.argv[1]; s=open(f,encoding="utf-8").read(); a='rc = 2 if 2 in 
 PYM
 DUS_BOY=1280 PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" KANIT_DEPO="$T" python3 "$UBM/kanit.py" ekran is-ub mut --url https://ornek.test --asama tek --uc-boy >/dev/null 2>&1; [ $? -eq 0 ]; g $? "mutant (rc hep 0): 1280 düştüğü hâlde komut yeşil döndü → üstteki 🔴 kapı bu mutantta düşerdi"
 
-echo "════ TB · BİRİNCİL KOPYADA YAZMA REDDİ (0.20.0 · gorev_01M5F03K79B5B19A2XQ54V8NMK): alan varken birincile kanıt yazılmaz ════"
+echo "════ TB · BİRİNCİL KOPYADA YAZMA REDDİ (0.22.0 · gorev_01M5F03K79B5B19A2XQ54V8NMK): alan varken birincile kanıt yazılmaz ════"
 # NİÇİN: kanıt aracı çağrıldığı ağacın köküne yazar; iş alanı açıkken BİRİNCİL kopyadan koşulan ölçüm orada takipsiz kalıyor, PR'a
 #        girmiyordu (HENDESE 22 Eki: Nexus 116 + cloudtop 45 takipsiz kanıt dosyası, ana kopyanın otomatik çekmesi 10 gün ölü).
 #        Alan = IS_ALANI_KOK/<depo-adı>-<iş> (is-alani.sh deseni). Birincil = git-dir ile git-common-dir aynı.
