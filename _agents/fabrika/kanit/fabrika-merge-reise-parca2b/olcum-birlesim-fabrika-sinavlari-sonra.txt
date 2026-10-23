@@ -1,0 +1,11 @@
+$ bash _agents/fabrika/kanit/fabrika-merge-reise-parca2b/kos-fabrika-sinavlari.sh
+# rc=1 sure=1232.3s zaman=2026-10-23T19:27:41+03:00
+--- stdout ---
+sınav dizini: /config/projects/_wt/Sx-Claude-Skills-fabrika-merge-reise-parca2b/yazilim-fabrikasi/scripts · ham çıktılar: /tmp/tmp.30OhwMYcrD
+kart.test.sh rc=1 · ── SONUÇ: 242 geçti · 6 kaldı ──
+birlestirme-kapisi.test.sh rc=0 · ── SONUÇ: 143 geçti · 0 kaldı ──
+denetci.test.sh rc=0 · ── SONUÇ: 275 geçti · 0 kaldı ──
+is-alani.test.sh rc=0 · ── SONUÇ: 47 geçti · 0 kaldı ──
+denetci-fark-kendisi.test.sh rc=0 · ── SONUÇ (fark-kendisi): 23 geçti · 0 kaldı ──
+kırmızı sınav: 1
+--- stderr ---

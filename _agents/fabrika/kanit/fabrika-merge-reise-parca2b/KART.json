@@ -1,0 +1,30 @@
+{
+  "is": "fabrika-merge-reise-parca2b",
+  "cumle": "Sultan'a ulaşılamazsa sınıflı kart açılmaz (kart.sh açılış + T17)",
+  "istedi": "Sultan",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-23T15:10:28+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "e"
+  },
+  "siniflar": [
+    "yetki"
+  ],
+  "sultan": true,
+  "kanit_nerede": "sınav çıktıları (kart.test.sh, birlestirme-kapisi.test.sh, denetci.test.sh) önce/sonra + mutasyon",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-10-23T15:10:28+03:00",
+      "olay": "daraltmadan dogdu",
+      "koken": "fabrika-merge-reise"
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: host)",
+  "koken": "fabrika-merge-reise"
+}

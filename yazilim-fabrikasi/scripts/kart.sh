@@ -162,12 +162,14 @@ PY
   [ "$sonuc" = "yazıldı" ]
 }
 
-tetik() {  # tetik <oda> <başlık> <gövde>
+tetik() {  # tetik <oda> <başlık> <gövde> → 0 gitti/oda yok · 1 atılmadı/düştü (sınıfsız çağıran yok sayar: iş düşmez;
+           #   sınıflı açılış bunu "Sultan'a ulaşılamadı" sayar ve kartı geri alır — göz 23 Eki tur 2)
   [ -n "$1" ] || return 0
-  if [ ! -x "$TETIK" ]; then echo "· tetik atılmadı: $TETIK yok (mesaj kartta duruyor)"; return 0; fi
-  local f; f="$(mktemp)"; printf '%s\n' "$3" > "$f"
-  bash "$TETIK" gonder "$1" "$f" --ajan "${ALDI:-fabrika}" --baslik "$2" >/dev/null 2>&1 && echo "✓ tetik: $1 ← $2" || echo "· tetik düştü (mesaj kartta duruyor, iş düşmez)"
-  rm -f "$f"
+  if [ ! -x "$TETIK" ]; then echo "· tetik atılmadı: $TETIK yok (mesaj kartta duruyor)"; return 1; fi
+  local f r=0; f="$(mktemp)"; printf '%s\n' "$3" > "$f"
+  if bash "$TETIK" gonder "$1" "$f" --ajan "${ALDI:-fabrika}" --baslik "$2" >/dev/null 2>&1; then echo "✓ tetik: $1 ← $2"
+  else echo "· tetik düştü (mesaj kartta duruyor, iş düşmez)"; r=1; fi
+  rm -f "$f"; return "$r"
 }
 
 # 🔴 CANLI SINIFI (retro 17 Eki 2026 · ders 1): cron · servis · sunucu içeren iş, "git'te düzeltildi" ile bitmez — kanıtı
@@ -255,7 +257,16 @@ case "$CMD" in
     for v in GA PARA DIS YETKI; do case "${!v}" in e|h|\?) ;; *) _hata "dört sınıf sorusu cevapsız kart AÇILMAZ: --geri-alinamaz --para --dis-yuzey --yetki (e|h|?)"; exit 1 ;; esac; done
     case "$CANLI" in ""|e|h) ;; *) _hata "--canli yalnız e|h olabilir ('$CANLI' değil): cron/servis/sunucu işi canlı kanıt ister mi?"; exit 1 ;; esac
     [ -f "$KD/$IS.json" ] && { _hata "kart zaten var: $IS (goster ile bak)"; exit 1; }
+    # 🔴 SULTAN'A ULAŞIM YOLU (göz 23 Eki tur 2 · fabrika-merge-reise): sınıflı kartın başlama izni Sultan'a GİDER — yol yoksa kart
+    #    AÇILMAZ (fail-closed, rc 1). Ölçüldü: eski araç "BAŞLAMA İZNİ SULTAN'A GİDER" basıp rc 0 dönüyordu; --oda yoksa tetik() sessizce
+    #    çıkıyor, tetik betiği yoksa "atılmadı" deyip yine 0 — veto penceresi Sultan'ın hiç görmediği bir pencere oluyordu.
+    #    Varsayılan oda UYDURULMAZ: oda-tetik.sh'ta "merkez/Sultan" diye bir oda yok; tahmin edilen oda sessiz kayıp olurdu.
+    #    Sınıfsız kart DEĞİŞMEDİ (--oda isteğe bağlı, tetik best-effort).
     SINIFLI=0; case "${GA}${PARA}${DIS}${YETKI}" in *e*|*\?*) SINIFLI=1 ;; esac
+    if [ "$SINIFLI" = 1 ]; then
+      [ -n "$ODA" ] || { _hata "Sultan'a ulaşılamadı: --oda ver ya da tetik betiğini kur — sınıflı işin başlama izni Sultan'a gitmeli, --oda verilmedi (kart AÇILMADI)"; exit 1; }
+      [ -x "$TETIK" ] || { _hata "Sultan'a ulaşılamadı: --oda ver ya da tetik betiğini kur — tetik betiği yok: $TETIK (FABRIKA_TETIK; kart AÇILMADI)"; exit 1; }
+    fi
     if [ -n "$GOREV" ]; then
       [[ "$GOREV" =~ ^gorev_[A-Za-z0-9]{10,40}$ ]] || { _hata "--gorev gorev_<kimlik> biçiminde olmalı ('$GOREV' değil)"; exit 1; }
       [[ "$TAHMIN" =~ ^[1-9][0-9]{0,4}$ ]] || { _hata "--gorev verilince --tahmin <dk> ZORUNLU (defter 'çalışılıyor'a tahminsiz geçmez; Sultan: başladıysa tahmini bitiş)"; exit 1; }
@@ -267,7 +278,11 @@ case "$CMD" in
     if [ -n "$SAYI_OLCUM" ]; then   # sayının kaynağı: deponun kökünde, girdisiz, 30 sn tavanlı; çıkış kodu SAKLANIR (boru yutmaz)
       SCIKTI="$(cd "$DEPO" && timeout 30 bash -c "$SAYI_OLCUM" </dev/null 2>&1)"; SRC=$?
     fi
-    python3 - "$KD/$IS.json" "$IS" "$IS_C" "$ISTEDI" "$ALDI" "$GA" "$PARA" "$DIS" "$YETKI" "$KANIT" "$ODA" "$CG" "$CSEBEP" "$KUYARI" "$GOREV" "$TAHMIN" "$SUYARI" "$SAYI_OLCUM" "$SRC" "$SCIKTI" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY'
+    # 🔴 ATOMİK YAYIM (göz 23 Eki tur 3 · PR #445): kart önce GEÇİCİ dosyaya yazılır, tetik başarıdan sonra tek adımda (ln: var olanı ezmez)
+    #    yayımlanır. Tetik sırasında süreç kesilirse görünür kart KALMAZ (izin isteği gitmemiş kart yok); başarısızlıkta yalnız KENDİ geçici
+    #    dosyamız silinir — aynı kimlikle eşzamanlı açılan başkasının kartına dokunulmaz.
+    KART_TMP="$KD/$IS.json.acilis-$$"
+    python3 - "$KART_TMP" "$IS" "$IS_C" "$ISTEDI" "$ALDI" "$GA" "$PARA" "$DIS" "$YETKI" "$KANIT" "$ODA" "$CG" "$CSEBEP" "$KUYARI" "$GOREV" "$TAHMIN" "$SUYARI" "$SAYI_OLCUM" "$SRC" "$SCIKTI" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY'
 import json,sys,datetime
 yol,is_,cumle,istedi,aldi,ga,para,dis,yetki,kanit,oda,cg,csebep,kuyari,gorev,tahmin,suyari,skomut,src,scikti,hdir=sys.argv[1:]
 sys.path.insert(0,hdir); from izin import KURAL_SURUMU
@@ -301,6 +316,14 @@ if cg=="E": print(f"  · CANLI kanıt zorunlu ({csebep}): gerçek ateşleme kayd
 elif csebep: print(f"  ⚠ canlı kanıt istenmedi — {csebep}; karta yazıldı, bağımsız göz görür")
 if not gorev: print("  · görev bağı yok — iş Sultan'ın 'çalışılıyor' görünümüne DÜŞMEZ (bağlamak için: kart.sh ac … --gorev gorev_<kimlik> --tahmin <dk>)")
 PY
+    # Sultan'a giden satır Sultan-dilindedir: Sultan komut yazmaz (göz 23 Eki tur 2). Ajan tarafı: kart.sh sultan-dedi <iş> --karar dur
+    IZIN_NOT=""; [ "$SINIFLI" = 1 ] && IZIN_NOT=" · başlama izni bekleniyor (veto penceresi: iş yürür; durdurmak için 'dur' demen yeter)"
+    TRC=0; tetik "$ODA" "iş alındı: $IS" "$IS_C · sahip $ALDI · istedi $ISTEDI · sınıf: ${GA}${PARA}${DIS}${YETKI}$IZIN_NOT" || TRC=1
+    if [ "$SINIFLI" = 1 ] && [ "$TRC" -ne 0 ]; then   # izin isteği GİTMEDİ → kart hiç yayımlanmaz (yalnız kendi geçici dosyamız silinir)
+      rm -f -- "$KART_TMP"; _hata "Sultan'a ulaşılamadı: --oda ver ya da tetik betiğini kur — '$ODA' odasına tetik düştü, başlama izni GİTMEDİ (kart GERİ ALINDI, açılmadı)"; exit 1
+    fi
+    ln -- "$KART_TMP" "$KD/$IS.json" 2>/dev/null || { rm -f -- "$KART_TMP"; _hata "kart zaten var: $IS (açılış sırasında başkası açtı; onun kartına dokunulmadı)"; exit 1; }
+    rm -f -- "$KART_TMP"
     GRC=0; [ -n "$GOREV" ] && { gorev_yaz "$KD/$IS.json" ac || GRC=4; }
     # 0.23.0: aynı ajanın BAŞKA açık, görev bağlı kartı varsa o görev 'bekliyor' + 'başka işe geçti: <bu kart>' (bırakma anı araçta)
     if [ -n "$GOREV" ]; then
@@ -314,9 +337,6 @@ for f in sorted(glob.glob(kd+"/*.json")):
 PY
 ); do GECTI_KART="$IS" gorev_yaz "$KD/$ONC.json" gecti || GRC=4; done
     fi
-    # Sultan'a giden satır komut taşımaz (ulaşım yolu şartı ikinci kartta)
-    IZIN_NOT=""; [ "$SINIFLI" = 1 ] && IZIN_NOT=" · başlama izni bekleniyor (veto penceresi: iş yürür; durdurmak için 'dur' demen yeter)"
-    tetik "$ODA" "iş alındı: $IS" "$IS_C · sahip $ALDI · istedi $ISTEDI · sınıf: ${GA}${PARA}${DIS}${YETKI}$IZIN_NOT"
     exit $GRC
     ;;
   bitti|tikandi)

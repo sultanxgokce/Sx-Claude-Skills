@@ -1,0 +1,12 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinifli-kart-odasiz-* ===
+$ bash _agents/fabrika/kanit/fabrika-merge-reise-parca2b/olc-oda.sh /tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/p2/u/pkg-mut2/yazilim-fabrikasi/scripts
+# rc=1 sure=0.1s zaman=2026-10-23T16:18:21+03:00
+--- stdout ---
+── kart.sh ac çıktısı (paket: /tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/p2/u/pkg-mut2/yazilim-fabrikasi/scripts) ──
+✓ kart açıldı: olcum-sinifli · sınıf: yetki · BAŞLAMA İZNİ SULTAN'A GİDER (veto penceresi: iş yürür; ara ve birleştirme kararları reisin)
+  · görev bağı yok — iş Sultan'ın 'çalışılıyor' görünümüne DÜŞMEZ (bağlamak için: kart.sh ac … --gorev gorev_<kimlik> --tahmin <dk>)
+── kart.sh rc=0
+── kart dosyası yazıldı mı: 1
+── 'Sultan'a ulaşılamadı' satırı: 0
+SONUÇ: ulaşım yolu yokken sınıflı kart açıldı ya da sessiz kaldı
+--- stderr ---

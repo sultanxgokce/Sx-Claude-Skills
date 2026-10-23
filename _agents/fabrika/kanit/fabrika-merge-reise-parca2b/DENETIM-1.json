@@ -1,0 +1,40 @@
+{
+  "tur": 1,
+  "is": "fabrika-merge-reise-parca2b",
+  "pr": "445",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T17:17:02+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 47418,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 13322
+  },
+  "bas": "cbc7c363087ae32ca7d1fabfcffcab90382c4c46",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sınıflı kart, Sultan’a erişim yolu yoksa veya tetik başarısızsa açılmıyor; T17, önce/sonra ölçümü ve mutasyonlar talebi doğrudan doğruluyor. Ancak kart tetikten önce görünür dosyaya yazılıp başarısızlıkta silindiği için süreç kesilmesi ya da eşzamanlı aynı kimlik kullanımı fail-closed güvencesini bozabilir; önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "Kartın kalıcı dosyası bildirim başarıyla tamamlanmadan oluşturuluyor; tetik sırasında süreç kesilirse kart açık kalabilir, ayrıca başarısızlık kolundaki koşulsuz silme eşzamanlı oluşturulan aynı kimlikli kartı silebilir. Kartı geçici dosyada tutup başarılı tetikten sonra atomik yayımlamak gerekir.",
+        "kanit": "Değişiklikte kartın varlık denetimi ve yazımı tetikten önce gerçekleşiyor; tetik çağrısından sonra yalnız normal başarısızlık dönüşünde `rm -f -- \"$KD/$IS.json\"` ile geri alma yapılıyor. T17 U3 yalnız tetik betiğinin rc=4 döndürdüğü normal hata yolunu sınıyor; süreç kesilmesi veya eşzamanlılık sınanmıyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh:246, kart.sh:301-305; yazilim-fabrikasi/scripts/kart.test.sh:T17/U3",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Araç imzalı manifest sağlam; sarı kayıt yok. Odasız sınıflı kart için kırmızı→yeşil önce/sonra ölçüm çifti var, gerçek ölçüm rc=0 ve kartın yazılmadığını doğruluyor. Mutasyon kaydı beklenen rc=1 ile bozuk davranışı yakalıyor; ayrıca tam fabrika süiti kart 213/0, birleştirme kapısı 143/0 ve denetçi 266/0 geçti. Geçersiz eski ölçüm açıkça ayrılmış ve hükme katılmadı."
+  }
+}

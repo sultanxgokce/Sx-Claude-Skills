@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-birlesim-fabrika-sinavlari-sonra.txt
+hedef_sha256: 40be09fa23fffcc533a3ffbf3eda143a1ab4e2f769107bf252b892824fd764b4
+hedef_zaman: 2026-10-23T19:27:41+03:00
+hedef_renk: kirmizi
+neden: kart.test.sh S16-S19c: #444 sınavları sınıflı kartı --oda'sız açıyordu (bu PR odasız sınıflı kartı reddeder); sınav açılışlarına --oda eklendi, düzeltilmiş koşum birlesim-kart-sinavi 248/0
+kim: SERDAR alt-ajanı
+karsi: olcum-birlesim-kart-sinavi-sonra.txt
+zaman: 2026-10-23T19:30:23+03:00
