@@ -323,6 +323,19 @@ rm -f "$B/0-teslimat/.okundu"
 O16="$(kos env)"
 kapi "T5m okundu-yolu var, dosya henüz yok → üçü de okunmamış (3) ve not 'dosyası henüz yok … damgası basmamış'" \
   "$(oz "$O16" gelen)/$(grep -c 'dosyası henüz yok' <<<"$O16")" "3/1"
+# T5n · sözcük geçer, komut yok (göz tur 2): yalnız-yol betiğinin yardım metninde 'okundu-liste' geçer → liste sorulur, düşer (rc 1),
+#   SIRADAKİNE geçilir: okundu-yolu doğrulanır ve kullanılır; geçiş notta yazılır. Eski tur burada ölçemedim diyordu (yol hiç sorulmuyordu).
+cat > "$B/scripts/kurye-yokla.sh" <<'SAHTE'
+#!/usr/bin/env bash
+# sahte eski kurye-yokla.sh — yalnız yol komutu; yardım metni ileride gelecek okundu-liste komutunu ANAR ama sunmaz
+K="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/0-teslimat"
+if [ "${1:-}" = "okundu-yolu" ]; then echo "$K/.okundu"; exit 0; fi
+echo "kullanım: kurye-yokla.sh [okundu-yolu]   (okundu-liste henüz yok)" >&2; exit 1
+SAHTE
+printf 'BA.md\tsha256:abc\nA.md\n' > "$B/0-teslimat/.okundu"
+O17="$(kos env)"
+kapi "T5n yardım metninde 'okundu-liste' geçen yalnız-yol betiği: liste düşer (rc 1) → okundu-yolu'na GEÇİLİR → gelen 1; geçiş notu var; ölçemedim artmaz" \
+  "$(oz "$O17" gelen)/$(grep -c "okundu-liste rc=1 → okundu-yolu'na geçildi" <<<"$O17")/$(oz "$O17" olcemedim)" "1/1/$(oz "$O7" olcemedim)"
 # T5g · kurye-yokla.sh de okundu.log da yok: eski yol, dürüst not (hepsi okunmamış sayıldı + kutuda kurye-yokla.sh de yok)
 rm -rf "$B/scripts" "$B/0-teslimat/.okundu"
 O10="$(kos env)"
