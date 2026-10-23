@@ -1,0 +1,32 @@
+{
+  "tur": 3,
+  "is": "fabrika-cevap-bekle",
+  "pr": "444",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T17:18:49+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 67870,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 14,
+    "bayt": 122837
+  },
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Soru ve cevabı karta bağlayan kayıt, evet/hayır durumlu cevap kapısı, ajanın bütün kartlarında açık soru taraması ve cevapsız soruda kart kapanışını reddetme talep edildiği gibi kurulmuş; yıkıcı komut kancası da istendiği üzere bu dilime alınmamış. Önceki turda bulgu yoktu; araç imzalı ölçümlerde kart sınavı 175/175 ve tüketici sınavları 18/18 geçtiği, kritik kapılar mutasyonlarla da sınandığı için üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. `kart-sinavi` önce/sonra çifti rc 1 ve 155/173 durumundan rc 0 ve 175/175 sonucuna geçişi; `acik-soru-failclosed` çifti bozuk kartlarda rc 2 ÖLÇÜLEMEDİ davranışının düzeldiğini; `tuketici-sinavlar` kaydı 18 sınavın tamamının geçtiğini gösteriyor. Gerçekçi soru, hayır, sonraki evet, yanlış cevaplayan, sınıflı kart ve bozuk JSON vakaları ölçülmüş; mutasyon bölümündeki kontrollü bozma sonuçları gerçek kod kusuru sayılmadı. Önceki turda bulgu bulunmadığından kapanması gereken açık bulgu yok."
+  }
+}

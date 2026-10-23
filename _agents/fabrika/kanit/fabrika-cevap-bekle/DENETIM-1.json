@@ -1,0 +1,40 @@
+{
+  "tur": 1,
+  "is": "fabrika-cevap-bekle",
+  "pr": "444",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T15:51:56+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 50946,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 34783
+  },
+  "bas": "0b82aeb51f135221a1d6ced504ba3e39dcda5761",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Soru, cevap, bekleme durumu ve kapanış kapısı istenen ayrı dilim sınırında kurulmuş; ana sınav ile 18 tüketici sınavı yeşil. Önce şunu çözün: açık soruları yıkıcı komut kancasına besleyecek `acik-soru`, bozuk bir kartı saymadan geçip rc 0 dönebildiği için güvenlik kapısı yanlışlıkla “cevapsız soru yok” diyebilir.",
+    "bulgular": [
+      {
+        "ne": "`acik-soru` okunamayan kartlarda güvenli biçimde durmak yerine kartı atlıyor; başka açık soru bulunmazsa uyarıya rağmen rc 0 dönüyor. Bu çıktı ileride yıkıcı komut kancasının tek kaynağı olacağı için bozuk/yarım yazılmış kart kapıyı açık bırakabilir.",
+        "kanit": "Kodda JSON okuma hatası `bozuk+=1; continue` ile geçiliyor, sonunda çıkış kodu yalnız `n` değerine göre `3 if n else 0` seçiliyor; `bozuk` çıkış kodunu etkilemiyor. T-SORU sınavları S4/S4b yalnız geçerli kartlarda rc 3/0 davranışını ölçüyor, okunamayan kart vakasını ölçmüyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh: `acik-soru` dalındaki `except Exception: bozuk+=1; continue` ve `raise SystemExit(3 if n else 0)`",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Son gerçek ölçüm `kart-sinavi` rc 0 ile 170/170, tüketici ölçümü rc 0 ile 18/18 gösteriyor; üç mutasyon da ilgili kapıların bozulmasını yakalıyor. Ancak önce/sonra zamanları ters sırada (`sonra` 15:28:21, `önce` 15:29:13) olduğundan çift kronolojik bir dönüşüm kanıtı değil; ayrıca önce kaydındaki mutasyon kurulum hataları gerçek kod bulgusu sayılmadı. Görsel iş olmadığı için kare gerekmiyor."
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "tur": 2,
+  "is": "fabrika-cevap-bekle",
+  "pr": "444",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T16:19:09+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 45442,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 38799
+  },
+  "bas": "17dd1e11012308458dce3a9e6be18e321d0e992e",
+  "duzeltme_farki": {
+    "onceki_bas": "0b82aeb51f135221a1d6ced504ba3e39dcda5761",
+    "dosya": 10,
+    "bayt": 60074,
+    "tam_bayt": 109509
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Soru-cevap kaydı, cevap bekleme çıkışları, ajanın açık sorularını toplama ve açık soru varken kartı kapatmama talep edildiği gibi kurulmuş; ayrı dilim denilen yıkıcı komut kancası bu işe katılmamış. Önceki turun fail-open kusuru rc 2 ÖLÇÜLEMEDİ davranışıyla kapanmış, gerçek ölçüm 175/175 ve tüketici ölçümü 18/18 geçtiği için üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. B1 için kronolojik önce/sonra çifti doğrudan kanıt sunuyor: `acik-soru-failclosed` önce ölçümü rc 1 ve S19/S19b düşüşleri gösterirken sonra ölçümü rc 0, 175 geçti · 0 kaldı sonucunu veriyor; bozuk JSON rc 2, bozuk `sorular` rc 2, gerçek açık soru varken daha belirli rc 3 ve bozuk kart kaldırılınca rc 0 ayrı ayrı ölçülmüş. `kart-sinavi` sonrasında da 175/175, tüketici sınavlarında 18/18 yeşil; kare gerektiren bir ekran işi değil. Mutasyon satırlarındaki beklenen yakalamalar gerçek kod kusuru olarak değerlendirilmedi."
+  }
+}

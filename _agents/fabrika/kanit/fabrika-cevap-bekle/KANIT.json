@@ -1,0 +1,94 @@
+{
+  "is": "fabrika-cevap-bekle",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T16:07:05+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kart-sinavi-once.txt",
+      "sha256": "d2d9cd89b2b1998e218e6fb93dcfab266fcefd5ea64862da04d581222633d25e",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/once-soru/yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T15:29:13+03:00",
+      "sure_sn": 15.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "290fde3fa6e24a879866e56dd9187f36"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sinavi-sonra.txt",
+      "sha256": "8c6f58a2bd3bf8c209f3702d9e95d041e3569b473cc349d96d270c8442e6e840",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T16:07:05+03:00",
+      "sure_sn": 21.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "df67497be8dc4252bf8601f5a005e27c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tuketici-sinavlar",
+      "asama": "sonra",
+      "dosya": "olcum-tuketici-sinavlar-sonra.txt",
+      "sha256": "b752f7f0b37e9b681e5340d93913cc827302f8c9b481c9403f6218ee8764a624",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/fabrika-cevap-bekle/tuketici-kos.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-fabrika-cevap-bekle"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T15:49:48+03:00",
+      "sure_sn": 1234.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "058bf323e1f6408ca2835444702244b7"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "acik-soru-failclosed",
+      "asama": "once",
+      "dosya": "olcum-acik-soru-failclosed-once.txt",
+      "sha256": "e2b216cbc226b45fa9cd2d2a4a289fdd3189fecc39d1e1ad6238da1a0dde1968",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/once-goz1-soru/yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T16:06:24+03:00",
+      "sure_sn": 22.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "7234598be87c409ba3a5487306eb3dbd"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "acik-soru-failclosed",
+      "asama": "sonra",
+      "dosya": "olcum-acik-soru-failclosed-sonra.txt",
+      "sha256": "0acae0f50cca4df2962a5ef1de332739fb711eab3b7d9116be14e37ead7ae894",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T16:06:44+03:00",
+      "sure_sn": 19.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "bf39da112a44417fa69a771c3f130cae"
+    }
+  ],
+  "imza": "b11b8aa5ed904dc03ac5298dbdbea2eae443f1d0736669c969804b81617326ab"
+}
