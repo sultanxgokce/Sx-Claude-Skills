@@ -1,0 +1,44 @@
+{
+  "is": "hezarfen-fabrika-0-19-1",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T15:39:48+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sync-kuru",
+      "asama": "once",
+      "dosya": "olcum-sync-kuru-once.txt",
+      "sha256": "0396f3d94d1286a1637404e154a256b7f7223875b0b4e5de7e2e77da06bf8d09",
+      "komut": [
+        "bash",
+        "-c",
+        "set -o pipefail; cd /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/sx-main && node sync-skills.mjs --skill yazilim-fabrikasi 2>&1 | tee /dev/stderr | grep -q '1 planlandı'"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T15:39:36+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "temiz",
+      "olcum_id": "4aab20a9d5bc46bb9e41eb658022755f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sync-kuru",
+      "asama": "sonra",
+      "dosya": "olcum-sync-kuru-sonra.txt",
+      "sha256": "b0962fef0544453cd3b42d3b34b047da856308720a0ea0712eff1087e18a5a58",
+      "komut": [
+        "bash",
+        "-c",
+        "set -o pipefail; O=$(node sync-skills.mjs --skill yazilim-fabrikasi 2>&1); printf '%s\\n' \"$O\"; grep -q '1 planlandı' <<<\"$O\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T15:39:48+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "temiz",
+      "olcum_id": "db6de495eb584ccfb588bece8f310569"
+    }
+  ],
+  "imza": "bdeb4045dcfc8bb909544910646e3a4d242ed4709d4ffe8f154d79699f0c25ca"
+}

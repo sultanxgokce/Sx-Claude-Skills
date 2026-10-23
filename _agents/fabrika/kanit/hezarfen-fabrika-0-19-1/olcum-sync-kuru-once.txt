@@ -1,0 +1,14 @@
+$ bash -c set -o pipefail; cd /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/sx-main && node sync-skills.mjs --skill yazilim-fabrikasi 2>&1 | tee /dev/stderr | grep -q '1 planlandı'
+# rc=1 sure=0.1s zaman=2026-10-23T15:39:36+03:00
+--- stdout ---
+--- stderr ---
+
+  sync-skills — CHECK (dry-run)
+
+  ⚠ yazilim-fabrikasi → _global: İÇERİK-DRIFT — sürüm aynı (v0.19.0) ama içerik farklı
+     → kaynak fa43f545b5a2 ≠ kurulu a52e7d4e5f02. Sürüm bump'lanmadan düzenlenmiş.
+     → hangisinin doğru olduğunu SÜRÜM söyleyemez: farkı incele (diff), kaynağa taşı ve bump'la;
+        kurulu kopya çöpse --force ile ez (--force olmadan DOKUNULMAZ).
+
+  özet: 0 planlandı · 0 güncel · 1 drift-uyarı · 0 eksik · 0 duman-düştü
+

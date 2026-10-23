@@ -1,0 +1,11 @@
+$ bash -c set -o pipefail; O=$(node sync-skills.mjs --skill yazilim-fabrikasi 2>&1); printf '%s\n' "$O"; grep -q '1 planlandı' <<<"$O"
+# rc=0 sure=0.2s zaman=2026-10-23T15:39:48+03:00
+--- stdout ---
+
+  sync-skills — CHECK (dry-run)
+
+  ↑ yazilim-fabrikasi → _global: güncelle v0.19.0 → v0.19.1
+
+  özet: 1 planlandı · 0 güncel · 0 drift-uyarı · 0 eksik · 0 duman-düştü
+  → uygulamak için: node sync-skills.mjs --apply
+--- stderr ---
