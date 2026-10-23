@@ -867,6 +867,12 @@ SAHTE_JSON="$(J 5 E "")" IS_ALANI_KOK="$AKP" KANIT_DEPO="$TP" bash "$D" is-q --d
 [ "$RC" -eq 0 ] && python3 -c "import json;d=json.load(open('$TP/_agents/fabrika/kanit/is-q/DENETIM-1.json'));assert d['birincil'] is True and d['dal']=='main', d" 2>/dev/null; g $? "TP3 alanı OLMAYAN iş birincilden eskisi gibi denetlenir; DENETIM birincil=true, dal=main"
 # MUTASYON: betiğin bütün dizini kopyalanır (denetci.sh kardeşlerini \$HERE'den bulur), kopyada birincil tespiti sökülür → TP1 senaryosu birincile yazar
 MPD="$TP/scripts"; cp -r "$HERE" "$MPD"; sed -i 's/^\[ -n "\$_gd" \] && \[ "\$_gd" = "\$_gc" \] && DENETCI_BIRINCIL=1$/DENETCI_BIRINCIL=0/' "$MPD/denetci.sh"; ! cmp -s "$MPD/denetci.sh" "$HERE/denetci.sh"; g $? "TP4 mutant üretildi (desen tuttu)"
+# Mutantın yazabilmesi için birincilde de kanıt olmalı (denetçi kanıtı KANIT_DEPO'dan okur; kanıtsız rc 2 kapıdan ÖNCE düşer ve mutantı
+#   yanlışlıkla "yakalanmış" gösterirdi — tur 1 ölçümü: TP4b eski araçta da yeni araçta da aynı sebeple kırmızıydı). Kanıt alan tespiti
+#   kapalıyken (IS_ALANI_KOK boş dizin) birincile yazılır; sonra GERÇEK betik aynı kanıtla yine rc 2 vermeli (kapıyı kanıt değil tespit kapatıyor).
+IS_ALANI_KOK="$TP/alan-yok" KANIT_DEPO="$TP" bash "$K" olcum is-p olc --asama tek -- echo 1 >/dev/null 2>&1; [ -f "$TP/_agents/fabrika/kanit/is-p/KANIT.json" ]; g $? "TP4a fikstür: birincilde de kanıt var (alan tespiti kapalıyken yazıldı)"
+SAHTE_JSON="$(J 5 E "")" IS_ALANI_KOK="$AKP" KANIT_DEPO="$TP" bash "$D" is-p --diff "$T/d.patch" >/dev/null 2>&1; RC=$?
+[ "$RC" -eq 2 ] && [ ! -e "$TP/_agents/fabrika/kanit/is-p/DENETIM-1.json" ]; g $? "TP4c kanıt birincilde VARKEN gerçek betik yine rc 2, DENETIM yok (kapıyı kanıt değil birincil tespiti kapatıyor)"
 SAHTE_JSON="$(J 5 E "")" IS_ALANI_KOK="$AKP" KANIT_DEPO="$TP" bash "$MPD/denetci.sh" is-p --diff "$T/d.patch" >/dev/null 2>&1; RC=$?
 [ "$RC" -ne 2 ] && [ -f "$TP/_agents/fabrika/kanit/is-p/DENETIM-1.json" ]; g $? "TP4b MUTASYON: kapı sökülünce birincile DENETIM yazılır (kapı gerçekten kabloda)"
 git -C "$TP" worktree remove --force "$WP" >/dev/null 2>&1; find "$TP" -mindepth 1 -delete 2>/dev/null; rmdir "$TP" 2>/dev/null
