@@ -1,0 +1,14 @@
+# canli-dosyalar.txt — canlıda başka süreçlerin sürekli yazdığı dosyalar (birleştirme kapısı UYARI basar, rc değişmez).
+# NİÇİN: PR bu dosyalara dokunursa birincil checkout'ta `git pull` kirli ağaç yüzünden kilitlenir (cloudtop #507 türü).
+# Biçim: satır başına bir kalıp (bash glob; * dizin ayracını da eşler). # ile başlayan satır yorumdur.
+_agents/handoff/aile-registry.yaml
+_agents/handoff/serdar-defter.md
+_agents/handoff/serdar-sepet.md
+_agents/handoff/aile-brief.md
+_agents/handoff/*.jsonl
+_agents/handoff/*.log
+_agents/*/NOTES.md
+_agents/fabrika/kacis-defteri.log
+_agents/fabrika/tavan-defteri.log
+_agents/kasif/seyir.jsonl
+Notlarim/notlarim.md
