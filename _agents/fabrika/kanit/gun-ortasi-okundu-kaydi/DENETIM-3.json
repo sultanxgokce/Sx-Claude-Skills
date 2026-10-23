@@ -1,0 +1,38 @@
+{
+  "tur": 3,
+  "is": "gun-ortasi-okundu-kaydi",
+  "pr": "434",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T06:15:18+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 44799,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kutudan `okundu-liste`/`okundu-yolu` sorgulama, eski `okundu.log` uyumluluğu ve sorgu belirsizliğinde “ölçemedim” davranışı eklenmiş; hedef sınavın 35/46’dan 46/46’ya dönmesi ve mihenk ölçümünde yanlış 86 sayısının 0’a inmesi doğru işi yaptığını gösteriyor. Ancak destek hâlâ kurye betiğinin kaynak metninde komut adını arayarak tahmin ediliyor; önce bu uygulama sorununu çözmeden üretime hazır sayılmaz.",
+    "bulgular": [
+      {
+        "ne": "Kod, kutuya doğrudan yetenek sorup sonucu doğrulamak yerine önce `kurye-yokla.sh` kaynak metninde `okundu-liste` ve `okundu-yolu` sözcüklerini arıyor. Komutları değişken, yönlendirme veya başka bir dosya üzerinden sunan geçerli bir kurye betiğinde bu sözcükler kaynakta bulunmayabilir; böyle durumda mevcut arayüz hiç çağrılmaz, eski `okundu.log` okunur veya kayıt yeri bilinmiyor denir. Bu, iş kartındaki “kaydın adını ve biçimini tahmin etmez; kutunun kendisinden sorar” şartını tüm geçerli uygulama biçimlerinde güvenilir biçimde sağlamıyor.",
+        "kanit": "Diffte yetenek bayrakları `grep -q 'okundu-liste' \"$KY\"` ve `grep -q 'okundu-yolu' \"$KY\"` ile belirleniyor; `liste_sor`/`yol_sor` yalnız bu bayraklar açıksa çağrılıyor. T5j farklı ama yine komut adlarını düz metin olarak içeren bir yazımı, T5n ise yalnız yanlış-pozitif sözcük eşleşmesini ölçüyor; komutun çalıştığı fakat adının kaynakta düz metin bulunmadığı yanlış-negatif vaka ölçülmüyor.",
+        "konum": "gun-ortasi/scripts/kalan.sh:166-179; gun-ortasi/scripts/kalan.test.sh:T5j,T5n",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Hedef sınavda kırmızı önce/yeşil sonra ölçüm çifti var: 11 hedef vaka önce kırmızı iken sonra toplam 46/46 geçiyor; depo parity ve sürüm denetimleri de yeşil. Mihenk çifti gerçekçi kutu verisinde eski gelen=86 sonucunun yeni kodla gelen=0 olduğunu doğruluyor. Bununla birlikte sınav, kaynakta komut adı bulunmadan çalışan bir kurye arayüzünü kapsamadığından yukarıdaki yetenek-tahmini kusurunu dışlamıyor."
+  }
+}
