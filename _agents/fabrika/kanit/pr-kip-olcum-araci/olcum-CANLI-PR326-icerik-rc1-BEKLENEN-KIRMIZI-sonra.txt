@@ -1,0 +1,5 @@
+$ bash yazilim-fabrikasi/scripts/pr-kip-olc.sh 326 kabuk-biti.test.sh --depo /config/projects/Sx-Claude-Skills
+# rc=1 sure=1.3s zaman=2026-10-15T18:04:55+03:00
+--- stdout ---
+GERÇEK: 'kabuk-biti.test.sh' içerik değişiyor (1 parça)
+--- stderr ---

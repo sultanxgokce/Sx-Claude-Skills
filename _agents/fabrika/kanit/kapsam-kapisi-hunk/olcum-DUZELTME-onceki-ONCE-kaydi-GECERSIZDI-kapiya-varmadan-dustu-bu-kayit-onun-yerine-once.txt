@@ -1,0 +1,11 @@
+$ bash -c cd /config/projects/Sx-Claude-Skills; echo "--- 1) ESKI KAPININ GORDUGU (gh pr diff --name-only): dosya LISTEDE ---"; gh pr diff 326 --name-only | grep -F "ui-tasarim-akisi/arac/yogunluk-denetle.test.sh"; echo "rc_name_only=$?"; echo "--- 2) GERCEK (yeni arac): ayni dosyada SATIR farki ---"; bash /config/projects/_wt/Sx-Claude-Skills-kapsam-kapisi-hunk/yazilim-fabrikasi/scripts/pr-kip-olc.sh 326 ui-tasarim-akisi/arac/yogunluk-denetle.test.sh --depo /config/projects/Sx-Claude-Skills; echo "rc_kip_olc=$?"; echo "--- KUSUR: eski kapi (1) ile karar veriyordu, (2) sifir satir diyor ---"
+# rc=0 sure=2.3s zaman=2026-10-15T18:03:19+03:00
+--- stdout ---
+--- 1) ESKI KAPININ GORDUGU (gh pr diff --name-only): dosya LISTEDE ---
+ui-tasarim-akisi/arac/yogunluk-denetle.test.sh
+rc_name_only=0
+--- 2) GERCEK (yeni arac): ayni dosyada SATIR farki ---
+YALNIZ KİP: 'ui-tasarim-akisi/arac/yogunluk-denetle.test.sh' — dosya izni değişiyor, içerik farkı YOK (satır: 0)
+rc_kip_olc=0
+--- KUSUR: eski kapi (1) ile karar veriyordu, (2) sifir satir diyor ---
+--- stderr ---
