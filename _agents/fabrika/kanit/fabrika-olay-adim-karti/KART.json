@@ -1,6 +1,6 @@
 {
   "is": "fabrika-olay-adim-karti",
-  "cumle": "gorev_01M5CWJAH2B8MFG4XFVY3Y7J3Q — yazilim-fabrikasi 0.23.0: kart --gorev bağlıysa (1) denetci.sh tur sonucu göreve tek satır adım yazar (tur · puan · doğru şey · bulgu sayısı), durum DEĞİŞMEZ (çalışılıyor olmayan görevde de aynı; sınavda ölçülür), yazılamazsa uyarı iş düşmez; her kanıt ölçümü YAZMAZ. (2) kart.sh ac --gorev yeni görev açarken aynı ajanın (aldi) başka açık kartı / çalışılıyor görevi varsa önceki görevi 'bekliyor' + 'başka işe geçti: <kart>' yazar (bırakma anı araca geçer). wait-ci adımı Nexus'ta ayrı kart. Ölçüm: bekçi --json nabız kırmızı, önce 16/15 → sonra fiilen çalışılanlarda 0.",
+  "cumle": "yazilim-fabrikasi 0.23.0: kart --gorev bağlıysa (1) denetci.sh tur sonucu göreve tek satır adım yazar (tur · puan · doğru şey · bulgu sayısı), durum DEĞİŞMEZ (çalışılıyor olmayan görevde de aynı; sınavda ölçülür), yazılamazsa uyarı iş düşmez; her kanıt ölçümü YAZMAZ. (2) kart.sh ac --gorev yeni görev açarken aynı ajanın (aldi) başka açık kartı / çalışılıyor görevi varsa önceki görevi bekliyor + başka işe geçti: <kart> yazar. Mekanizma ve sınavları bu PR'ın işi; bekçi nabzı ölçümü (önce 16/15 → sonra fiilen çalışılanlarda 0) birleşme ve kurulumdan SONRA ayrı kartta.",
   "istedi": "SERDAR",
   "aldi": "BANI",
   "zaman": "2026-10-23T18:20:36+03:00",
@@ -15,7 +15,14 @@
   "kanit_nerede": "_agents/fabrika/kanit/fabrika-olay-adim-karti (sınav önce/sonra + mutasyon)",
   "oda": "",
   "durum": "acik",
-  "gecmis": [],
+  "gecmis": [
+    {
+      "zaman": "2026-10-23T19:03:50+03:00",
+      "olay": "daralt",
+      "kalan_kart": "fabrika-olay-adim-olcumu",
+      "tur_sifir": 1
+    }
+  ],
   "canli_gerekir": false,
   "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: bekçi)",
   "kapsam_uyarilari": [],
@@ -27,6 +34,31 @@
       "zaman": "2026-10-23T18:20:37+03:00",
       "olay": "ac",
       "sonuc": "yazıldı"
+    }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "BANI",
+      "oturum": "BANI-23Eki-1830-Y7J3Q-tur1",
+      "gerekce": "daraltma: kalan bulgu yeni karta (fabrika-olay-adim-olcumu) — Ölçüm: bekçi --json nabız kırmızı sayısı, önce 16/15 (y7j3q/olcum-20261023-1319.txt) → araç kurulduktan sonra fiilen çalışılan görevlerde 0; birleşme ve kurulu kopya 0.23.0 olduktan sonra, gerçek kullanımla (canlı kanıt)",
+      "zaman": "2026-10-23T19:03:50+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "gorev_01M5CWJAH2B8MFG4XFVY3Y7J3Q — yazilim-fabrikasi 0.23.0: kart --gorev bağlıysa (1) denetci.sh tur sonucu göreve tek satır adım yazar (tur · puan · doğru şey · bulgu sayısı), durum DEĞİŞMEZ (çalışılıyor olmayan görevde de aynı; sınavda ölçülür), yazılamazsa uyarı iş düşmez; her kanıt ölçümü YAZMAZ. (2) kart.sh ac --gorev yeni görev açarken aynı ajanın (aldi) başka açık kartı / çalışılıyor görevi varsa önceki görevi 'bekliyor' + 'başka işe geçti: <kart>' yazar (bırakma anı araca geçer). wait-ci adımı Nexus'ta ayrı kart. Ölçüm: bekçi --json nabız kırmızı, önce 16/15 → sonra fiilen çalışılanlarda 0.",
+      "zaman": "2026-10-23T19:03:50+03:00",
+      "kalan_kart": "fabrika-olay-adim-olcumu"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-23T19:03:50+03:00",
+      "kalan_kart": "fabrika-olay-adim-olcumu",
+      "kalan": "Ölçüm: bekçi --json nabız kırmızı sayısı, önce 16/15 (y7j3q/olcum-20261023-1319.txt) → araç kurulduktan sonra fiilen çalışılan görevlerde 0; birleşme ve kurulu kopya 0.23.0 olduktan sonra, gerçek kullanımla (canlı kanıt)",
+      "tur_sifir": 1,
+      "oturum": "BANI-23Eki-1830-Y7J3Q-tur1"
     }
   ]
 }
