@@ -1,0 +1,31 @@
+{
+  "is": "kart-sayi-uyarisi",
+  "cumle": "kart.sh ac: kart cümlesinde ölçümsüz bir sayı (ör. '13 görev') varsa kart yine açılır ama UYARI basılır ve karta yazılır; --sayi-olcum '<komut>' verilirse komut koşulur, çıktısı ve çıkış kodu karta kaynak olarak işlenir (görev WNMSQ, SERDAR kararı: uyarı, red değil)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-23T04:41:03+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "önce/sonra: sayılı cümle → önce sessiz, sonra uyarı + karta yazılı; kart.test.sh",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M57ZV15AARDJDVV9NK3WNMSQ",
+  "tahmin_dk": 60,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-23T04:41:03+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
