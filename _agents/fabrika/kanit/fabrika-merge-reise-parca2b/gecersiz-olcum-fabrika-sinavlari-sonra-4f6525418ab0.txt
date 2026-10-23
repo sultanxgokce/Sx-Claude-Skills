@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-fabrika-sinavlari-sonra.txt
+hedef_sha256: 0b72806e097782e79ff2af04ace1f89cd07298ab3ee7eada0ef1b48461f92656
+hedef_zaman: 2026-10-23T16:46:24+03:00
+hedef_renk: kirmizi
+neden: sınav süiti kos betiğinden KANIT_DEPO ortam değişkeni sızarak koşuldu; kart ve alan sınavları gerçek alanı gördü (yanlış kurulum, kod değil)
+kim: SERDAR-ALT-AJAN
+karsi: -
+zaman: 2026-10-23T16:47:09+03:00

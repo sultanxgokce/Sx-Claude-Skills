@@ -1,0 +1,101 @@
+{
+  "is": "fabrika-merge-reise-parca2b",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T17:12:32+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sinifli-kart-odasiz",
+      "asama": "once",
+      "dosya": "olcum-sinifli-kart-odasiz-once.txt",
+      "sha256": "d6d00d1023b5b7d393c97af0db7ce776a8ff267659021aaa8007c77f68f248d0",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/fabrika-merge-reise-parca2b/olc-oda.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/p2/u/pkg-main2/yazilim-fabrikasi/scripts"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T16:18:21+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "51a4695fd5c6405ba6b18d2634ea70b0"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinifli-kart-odasiz",
+      "asama": "sonra",
+      "dosya": "olcum-sinifli-kart-odasiz-sonra.txt",
+      "sha256": "e6ebd8348b99361c8c6ac68e34f699e7d84849bd8b54c6f7daad7d74783a2798",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/fabrika-merge-reise-parca2b/olc-oda.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-fabrika-merge-reise-parca2b/yazilim-fabrikasi/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T16:18:21+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a5bce04618134cdb9216abc147f3ea4b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinifli-kart-odasiz-mutant",
+      "asama": "tek",
+      "dosya": "olcum-sinifli-kart-odasiz-mutant-tek.txt",
+      "sha256": "fd127aa312662dde80cd709b51a0b44915c7ecf6b6fddac81b0f3d2cc4555fef",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/fabrika-merge-reise-parca2b/olc-oda.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/p2/u/pkg-mut2/yazilim-fabrikasi/scripts"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-23T16:18:21+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinifli-kart-odasiz",
+      "beklenen": "kirmizi",
+      "olcum_id": "5c64534563b24045baf95d91c8423a7d"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "fabrika-sinavlari",
+      "asama": "sonra",
+      "dosya": "olcum-fabrika-sinavlari-sonra.txt",
+      "sha256": "5123bfe24d379f70638d6f433f68907f77f408beb236cfbb2bd3f17ad2be12e7",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/fabrika-merge-reise-parca2b/kos-fabrika-sinavlari.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T17:12:32+03:00",
+      "sure_sn": 1368.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "7fae7b56d86b4ccd8fe049cb20548bd8"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "fabrika-sinavlari",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-fabrika-sinavlari-sonra-4f6525418ab0.txt",
+      "sha256": "28507ae487d5a5626046d022c0807bc1c7abda708e8cfb74affdd6755560f2da",
+      "hedef_dosya": "olcum-fabrika-sinavlari-sonra.txt",
+      "hedef_olcum_id": "a3bded8371d84436b45bd05045fe2b07",
+      "hedef_sha256": "0b72806e097782e79ff2af04ace1f89cd07298ab3ee7eada0ef1b48461f92656",
+      "hedef_zaman": "2026-10-23T16:46:24+03:00",
+      "hedef_renk": "kirmizi",
+      "neden": "sınav süiti kos betiğinden KANIT_DEPO ortam değişkeni sızarak koşuldu; kart ve alan sınavları gerçek alanı gördü (yanlış kurulum, kod değil)",
+      "kim": "SERDAR-ALT-AJAN",
+      "karsi": null,
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-23T16:47:09+03:00",
+      "olcum_id": "1c1af114523446b0a4bec9a35dbbf3f6"
+    }
+  ],
+  "imza": "9e981f3c49565b8fa22633f49dd8ddd31a0939d9b0cea2f4c9b60e97c4c8cb86"
+}
