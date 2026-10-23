@@ -1,0 +1,34 @@
+{
+  "is": "koltuk-soru-alani",
+  "cumle": "terminal-onar 2.23.0 (K1, salt okur): koltuğun 'soru' hâli yalnız yazı kutusu (iki çizgi arasındaki ❯ satırı) ekranda YOKKEN verilir — bugün ajanın kendi yazdığı metindeki 'Do you want to' / '❯ 1.' deseni hâli yanlış 'soru' yapıyor (BÂNİ koltuğu 23 Eki 14:5x ölçümü); hâl soru iken koltuk-bagla.sh --liste ve kapının /api/kadro koltuk kaydı 'soru' alanı taşır: tur (menu: en az iki numaralı şık · serbest: şık yok), metin (ekranın son soru bloğu, en çok 300 karakter), siklar (menüde numara + metin, en çok 6), beri (bu sorunun ilk görüldüğü an, kapının durum dosyasından); metin ve şıklar sır desen süzgecinden geçer (anahtar/jeton/PEM → '••• gizlendi'); hâl soru değilse ya da ekran okunamazsa alan yok; tmux'a hiçbir şey yazılmaz; ölçüm: sahte ekran fikstürleriyle menü ve serbest iki tür + yazı kutusu varken soru yok + sır süzgeci + beri kalıcılığı, önce alan yok → sonra dolu",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-23T14:57:34+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5JRQTEKFT9FD6QA4RV6FJPZ",
+  "tahmin_dk": 150,
+  "sayi_uyarilari": [
+    "300 karakter"
+  ],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-23T14:57:35+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

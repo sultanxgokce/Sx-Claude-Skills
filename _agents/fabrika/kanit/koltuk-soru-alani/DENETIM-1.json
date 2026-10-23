@@ -1,0 +1,40 @@
+{
+  "tur": 1,
+  "is": "koltuk-soru-alani",
+  "pr": "440",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T15:23:37+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 68251,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, istenen soru alanı, menü/serbest ayrımı, sır süzgeci, beri kalıcılığı ve yazı kutusu kapısı uygulanmış; önce/sonra ölçümleri de hedef davranışın değiştiğini gösteriyor. Ancak yazı kutusu tanıma, kartta olmayan sekiz satırlık bir alt sınır varsayımına bağlı; uzun çok satırlı girişlerde aynı yanlış “soru” hâli geri dönebileceği için önce bu uygulama sorununu çözün.",
+    "bulgular": [
+      {
+        "ne": "Yazı kutusu kapısı, istem satırından sonraki ikinci çizgiyi yalnız en çok 8 dolu satır içinde arıyor; iş kartı ise iki çizgi arasındaki ❯ satırını tarif ediyor ve böyle bir uzunluk sınırı koymuyor. Sekiz satırı aşan çok satırlı taslakta kutu tanınmayabilir; taslakta “Do you want to” veya “❯ 1.” geçerse koltuk yeniden yanlışlıkla soru olabilir.",
+        "kanit": "yazi_kutusu_var içindeki `j <= i + 8` koşulu; Q3 fikstürü yalnız boş istemli `çizgi · ❯ · çizgi` vakasını ölçüyor, sekiz satırı aşan kutu vakası sınanmıyor.",
+        "konum": "terminal-onar/scripts/koltuk-bagla.sh:yazi_kutusu_var; terminal-onar/scripts/koltuk-bagla.test.sh:Q3",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. İki ana sınavda kırmızı önce/yeşil sonra çifti, Q3/Q9 ile gerçekçi ekran fikstüründe önce yanlış soru ve sonra alanın yokluğu, menü/serbest türleri, sır süzgeci, beri kalıcılığı ve API aktarımı ölçülmüş; regresyonlar da yeşil. Bununla birlikte yazı kutusunun uzun çok satırlı biçimi için kanıt yok; ayrıca manifestte ayrı `mutasyon:true` kayıtları bulunmadığından gömülü M-* kontrolleri resmi mutasyon kanıtı sayılmaz."
+  }
+}
