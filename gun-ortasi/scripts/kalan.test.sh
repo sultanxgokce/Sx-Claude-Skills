@@ -306,11 +306,12 @@ printf '#!/usr/bin/env bash\necho yokluyorum; exit 1\n' > "$B/scripts/kurye-yokl
 O14="$(kos env)"
 kapi "T5k kurye var, arayüz yok, okundu.log yok → gelen '?' + ölçemedim 'kaydın yeri bilinmiyor' (3 okunmamış DENMEZ)" \
   "$(oz "$O14" gelen)/$(oz "$O14" olcemedim)/$(grep -c 'kaydın yeri bilinmiyor' <<<"$O14")" "?/$(( $(oz "$O7" olcemedim) + 1 ))/1"
-# T5l · kurye var, arayüz yok, ama okundu.log VAR: okunur ve notta söylenir
+# T5l · kurye var, arayüz yok, yanında okundu.log da VAR: kurye kutusunun kaydı .okundu'dur — okundu.log'a BAKILMAZ (eski hata o dosyayı sanıp
+#   'hepsi okunmamış' demekti); ölçemedim der ve bakılmadığını söyler
 cp "$TMP/okundu.log.kenar" "$B/0-teslimat/okundu.log"
 O15="$(kos env)"
-kapi "T5l kurye var, arayüz yok, okundu.log var → okundu.log okunur (BA okunmuş → 2) ve not 'okundu.log okundu'" \
-  "$(oz "$O15" gelen)/$(grep -c 'okundu-yolu sunmuyor, okundu.log okundu' <<<"$O15")" "2/1"
+kapi "T5l kurye var, arayüz yok, okundu.log var → yine ölçemedim; not 'okundu.log'a bakılmadı'; okundu.log'daki BA bilgisi KULLANILMAZ" \
+  "$(oz "$O15" gelen)/$(oz "$O15" olcemedim)/$(grep -c "okundu.log'a bakılmadı" <<<"$O15")" "?/$(( $(oz "$O7" olcemedim) + 1 ))/1"
 rm -f "$B/0-teslimat/okundu.log"
 # T5m · okundu-yolu'nun bildirdiği dosya HENÜZ yok (kutu damga basmamış): kutunun kendi anlamı 'hiç okunmamış' → 3, not bunu söyler
 cat > "$B/scripts/kurye-yokla.sh" <<'SAHTE'

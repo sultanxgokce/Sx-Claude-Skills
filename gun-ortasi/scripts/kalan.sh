@@ -137,7 +137,7 @@ bolum "5/9 · Gelen kutusu — okunmamış (pencere yok)"
 GELEN="?"
 GD="$KOK/0-teslimat/gelen"; OK="$KOK/0-teslimat/okundu.log"; KY="$KOK/scripts/kurye-yokla.sh"
 if [ -d "$GD" ]; then
-  GELEN=0; liste=""; okunan=""; kaynak=""; sorgu_rc=0
+  GELEN=0; liste=""; okunan=""; kaynak=""
   # OKUNDU KAYDINI SAHİBİNDEN SOR, TAHMİN ETME (gorev_01M4ZMCTDB4B84P42S6R75A8CJ · MİHENK ölçümü 14 Eki): araç kaydı
   #   '0-teslimat/okundu.log' diye arıyor, kutu '0-teslimat/.okundu' yazıyordu; biçim de başkaydı (ad<TAB>algoritma:özet,
   #   eski satırlar yalın ad). Dosya bulunamayınca "hepsi okunmamış" denip 71 mektup basıldı, gerçek sayı 0'dı.
@@ -167,16 +167,17 @@ if [ -d "$GD" ]; then
     if [ -f "$OK" ]; then okunan="$(cut -f1 "$OK" 2>/dev/null)" || { neden="kayıt okunamadı: $OK"; return 1; }; fi
     return 0; }
   if [ -f "$KY" ]; then
-    kaynak="kurye-yokla.sh"; L=0; Y=0; grep -q 'okundu-liste' "$KY" && L=1; grep -q 'okundu-yolu' "$KY" && Y=1
-    if [ "$L" = 1 ] && liste_sor; then :
-    elif [ "$Y" = 1 ]; then
-      n1="$neden"; neden=""   # liste düştüyse sebebi saklanır, yola geçilir; yol da düşerse ikisi birlikte söylenir
-      if yol_sor; then [ -z "$n1" ] || gecis="$n1 → okundu-yolu'na geçildi"; else [ -z "$n1" ] || neden="$n1; $neden"; fi
-    elif [ "$L" = 1 ]; then :   # liste soruldu, doğrulanamadı, yol arayüzü yok → neden dolu, ölçemedim
+    # Kurye varsa kaydın sahibi odur: ÖN KONTROL YOK, doğrudan SORULUR (bağımsız göz tur 3: kaynakta komut adı aramak da tahmindir —
+    #   komutu değişkenden ya da başka dosyadan sunan kurye tanınmazdı). Tanımadığı komutta eski bir kurye yoklama kipine düşer
+    #   (touch .okundu + göç); filoda ölçüldü (23 Eki, host salt-okur): scripts/kurye-yokla.sh olan tek kutu mihenk ve iki komutu da
+    #   sunuyor — bu risk bugün yok, cevap doğrulaması yine de zorunlu. İkisi de düşerse ölçemedim; okundu.log'a BAKILMAZ
+    #   (kurye kutusunun kaydı .okundu'dur — o dosyayı aramak 71 sahte okunmamışın köküydü).
+    kaynak="kurye-yokla.sh"
+    if liste_sor; then :
     else
-      # kurye var, okundu arayüzü yok: kaydın adını yalnız o bilir — eski yola SESSİZCE düşülmez
-      if [ -f "$OK" ]; then kaynak="$OK (kurye-yokla.sh okundu-liste/okundu-yolu sunmuyor, okundu.log okundu)"; okunan="$(awk -F' [|] ' '{print $3}' "$OK" 2>/dev/null)"
-      else kaynak="bilinmiyor"; neden="kutuda scripts/kurye-yokla.sh var ama okundu-liste/okundu-yolu sunmuyor ve $OK yok — kaydın yeri bilinmiyor"; fi
+      n1="$neden"; neden=""
+      if yol_sor; then gecis="$n1 → okundu-yolu'na geçildi"
+      else neden="kurye-yokla.sh okundu kaydını söyleyemedi ($n1 · $neden) — kaydın yeri bilinmiyor, okundu.log'a bakılmadı (kurye kutusunun kaydı .okundu'dur)"; fi
     fi
   else
     kaynak="$OK"
