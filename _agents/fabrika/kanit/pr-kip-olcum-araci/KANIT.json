@@ -1,7 +1,7 @@
 {
   "is": "pr-kip-olcum-araci",
-  "arac": "kanit.py/0.3.0",
-  "guncelleme": "2026-10-15T20:33:36+03:00",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T04:35:55+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -132,7 +132,24 @@
       "renk": "yesil",
       "zaman": "2026-10-15T20:33:36+03:00",
       "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ana-dal-birlesmesi-sonrasi-sinav",
+      "asama": "tek",
+      "dosya": "olcum-ana-dal-birlesmesi-sonrasi-sinav-tek.txt",
+      "sha256": "4a9c58a41c0b2b7c00c565442c663eeaa7d7498d4248a119d2c834135c7b729f",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/pr-kip-olc.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T04:35:55+03:00",
+      "sure_sn": 0.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "879cdcff47144e3ba9a67953fd48281b"
     }
   ],
-  "imza": "4f56e7354b9af06424c1bef6907f33209077b1955af407b8b7091c79cb3e595c"
+  "imza": "73f57d6894b01a3761a99912b58320ad87bec6b42cdde8b8760f6caf95457755"
 }
