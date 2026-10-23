@@ -10,7 +10,7 @@ set -uo pipefail
 export FABRIKA_AILE_NOTIFY=-   # denetçi bitiş zili sınavda KAPALI (gerçek koltuklara çalmasın); zil kapısı kendi sahtesini verir
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 D="${MUTANT_D:-$HERE/denetci.sh}"; K="$HERE/kanit.sh"; KT="$HERE/kart.sh"
-# Sınıflı kart Sultan'a ulaşım yolu ister (--oda + tetik betiği; 0.21.0) — sınav gerçek odaya mektup BIRAKMAZ: sahte tetik.
+# 0.21.0: sınıflı kart --oda + tetik ister — sahte tetik (gerçek odaya mektup gitmez).
 TETIK_SAHTE="$(mktemp)"; printf '#!/usr/bin/env bash\nexit 0\n' > "$TETIK_SAHTE"; chmod +x "$TETIK_SAHTE"; export FABRIKA_TETIK="$TETIK_SAHTE"
 kartac() { bash "$KT" ac "$1" --is x --istedi SULTAN --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki e --oda sinav-oda >/dev/null 2>&1; }
 gecen=0; kalan=0
@@ -115,11 +115,11 @@ CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-s --diff "$T/d.patch" --sultan-de
 grep -q "TAVAN AÇILDI" <<<"$CIKTI"; g $? "tavanın açıldığını SÖYLÜYOR (sessiz değil)"
 grep -q "muavin/4390ad1f" <<<"$CIKTI"; g $? "oturum referansı çıktıda görünüyor"
 grep -q "kapinin amacini curutur" <<<"$CIKTI"; g $? "GEREKÇE de çıktıda görünüyor (niçin bir tur daha)"
-echo "════ T7c · 🚪 REİS KAPISI: sınıfsız işte sahip kararı KARTTAN; sınıflı kartta denetçinin reis kapısı KAPALI (açılması ikinci kartta) ════"
+echo "════ T7c · 🚪 REİS KAPISI: sınıfsız işte sahip kararı KARTTAN; sınıflı kartta KAPALI ════"
 # NİÇİN (8 Eki 2026 · A268): tıkandı raporu "karar iş sahibinin/reisin, sınıf işiyse Sultan'ın" diyordu ama araç
 # yalnız Sultan'ın kararını okuyordu. Sınıfsız işin sahibi kendi yetkisindeki kararı yazdıramıyor; kapı ya kapalı
 # kalıyor ya da A06'ya özendiriyordu (aynı gün iki vaka: DEVRİYE doğrulayıcısı · kokpit A2).
-# (a) SINIFLI kart: kart.sh reis kararını yazar (0.21.0) ama denetçinin reis kapısı bu sürümde KAPALI kalır
+# (a) SINIFLI kart: reis yolu her adımda KAPALI
 kartac is-r1; bash "$K" olcum is-r1 olc --asama tek -- echo 1 >/dev/null 2>&1
 SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-r1 --diff "$T/d.patch" >/dev/null 2>&1
 SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-r1 --diff "$T/d.patch" >/dev/null 2>&1

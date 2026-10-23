@@ -6,7 +6,7 @@ G="$HERE/birlestirme-kapisi.sh"; K="$HERE/kanit.sh"; KT="$HERE/kart.sh"
 gecen=0; kalan=0
 g() { if [ "$1" -eq 0 ]; then gecen=$((gecen+1)); echo "  ✓ $2"; else kalan=$((kalan+1)); echo "  ✗ $2"; fi; }
 T="$(mktemp -d)"; ( cd "$T" && git init -q -b main ) >/dev/null 2>&1
-# Sınıflı kart Sultan'a ulaşım yolu ister (--oda + tetik betiği; 0.21.0) — sınav gerçek odaya mektup BIRAKMAZ: sahte tetik.
+# 0.21.0: sınıflı kart --oda + tetik ister — sahte tetik (gerçek odaya mektup gitmez).
 TETIK_SAHTE="$(mktemp)"; printf '#!/usr/bin/env bash\nexit 0\n' > "$TETIK_SAHTE"; chmod +x "$TETIK_SAHTE"
 export KANIT_DEPO="$T" FABRIKA_TETIK="$TETIK_SAHTE"
 kart() { bash "$KT" ac "$1" --is x --istedi S --aldi M --geri-alinamaz "${2:-h}" --para h --dis-yuzey h --yetki h --oda sinav-oda >/dev/null 2>&1; }

@@ -27,7 +27,7 @@ bağımsız gözden geçen işler ayda **1.138 saat** bekledi; 22 Eki'de sorulan
   `--oda` odasına tetikle gönderir; `--oda` yoksa, tetik betiği yoksa ya da tetik düşerse kart AÇILMAZ (rc 1, fail-closed;
   varsayılan oda uydurulmaz). Sultan'a giden satır komut taşımaz ("durdurmak için 'dur' demen yeter").
 - İzin bir **VETO PENCERESİ**dir: Sultan'ın "dur"unu ajan `kart.sh sultan-dedi <iş> --karar dur` ile karta işler → reis durur
-  (`reis-dedi` · `daralt` rc 1); kapının ve denetçinin vetoyu okuması ikinci kartta (`fabrika-merge-reise-parca2`).
+  (`reis-dedi` · `daralt` · `bitti` rc 1); kapının ve denetçinin vetoyu okuması ikinci kartta (`fabrika-merge-reise-parca2`).
   `--karar basla` vetoyu kaldırır (son basla/dur kazanır); Sultan bir şey demezse iş reis kararlarıyla biter.
 - **Ara kararlar (devam · daralt · geri-al) ve BİRLEŞTİRME kararı kutu reisinindir** (canlı borcun reise geçmesi ikinci kartta) — gerekçeli (≥20 karakter),
   `kart.sh reis-dedi` ile karta; `kart.sh bitti` birleştirme kararını `birlestirme_karari{karar_veren: reis}` olarak yazar.
