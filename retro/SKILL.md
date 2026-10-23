@@ -1,10 +1,28 @@
 ---
 name: retro
-description: Haftalık retro — araç ajanın haftasını ÖLÇER (NOTES · fabrika kartları · bağımsız göz turları · kaçışlar · boşta zilleri), ajan 5 başlığı kendi gözüyle YORUMLAR (ne bitti · nerede zaman kaybettim ölçüyle · hangi araç/kural yavaşlattı · ne öğrendim · merkeze önerim); çıktı _agents/handoff/retro/<YYYY-Www>/<AJAN>.md lint'li. Merkez kipi kutu retrolarını toplar (OK/GEÇERSİZ/EKSİK/ÇALIŞMADI), MERKEZ.md iskeleti kurar; her öneri → gorev_ ya da → RED damgası alır (süzüm kanıtı). Tetik: "/retro", "haftalık retro", "haftanın dersleri", "retro yaz", "merkez retrosu".
-version: 1.2.0
+description: Haftalık retro — araç ajanın haftasını ÖLÇER (NOTES · fabrika kartları · bağımsız göz turları · kaçışlar · boşta zilleri), ajan 5 başlığı kendi gözüyle YORUMLAR (ne bitti · nerede zaman kaybettim ölçüyle · hangi araç/kural yavaşlattı · ne öğrendim · merkeze önerim); çıktı _agents/handoff/retro/<YYYY-Www>/<AJAN>.md lint'li. Merkez kipi kutu retrolarını toplar (OK/GEÇERSİZ/EKSİK/ÇALIŞMADI), MERKEZ.md iskeleti kurar; her öneri → gorev_ ya da → RED damgası alır (süzüm kanıtı); görev defterindeki 'havuz' kayıtları da (bulgu.sh havuz-cek köprüsü) aynı damga kuralıyla "Havuz süzümü" bölümüne girer. Tetik: "/retro", "haftalık retro", "haftanın dersleri", "retro yaz", "merkez retrosu".
+version: 1.3.0
 ---
 
 # /retro — haftalık retro (araç ölçer · ajan yorumlar · merkez toplar · süzüm kanıtlanır)
+
+## 🆕 1.3.0 · merkez havuzu da süzer — görev defterindeki 'havuz' kayıtları MERKEZ.md'ye (23 Eki · 11F0Z0 · Sultan D1 21 Eki "Eleme turu + bulgu kapısı")
+Bulgular 22 Eki'den beri merkezî Görev Defteri'ne **'havuz'** durumunda düşer (`bulgu` 0.5.0) ve haftalık süzmede görev olur; retro
+merkez kipi havuzu görmüyordu → süzüm listesi yalnız kutu önerilerini taşıyor, havuz kayıtları hafta kapanışında hiç sorulmuyordu
+(22 Eki anlık sayım: 6 ham kayıt). Artık `merkez` köprüden (`bulgu.sh havuz-cek`, eşleme TEK orada; `RETRO_BULGU_SH` ile değişir,
+varsayılan kardeş beceri `<skills>/bulgu/scripts/bulgu.sh`) **durum=ham** kayıtları okur ve MERKEZ.md'ye araç bölümü olarak yazar:
+```
+## Havuz süzümü — görev defterindeki 'havuz' kayıtları (`bulgu.sh havuz-cek` · durum=ham) · damga: `→ gorev_<kendi id>` (Sırada'ya alınır) ya da `→ RED: <gerekçe ≥10 karakter>`
+- gorev_01M5M55BRC0V3G8A200PYTVZV9 · mihenk: PR'da testleri koşan küçük bir iş akışı gerek →
+```
+Damga kuralı kutu önerisiyle aynıdır; havuzdaki kayıt **kendisi görev** olduğundan `→ gorev_<kendi id>` = Sırada'ya alındı demektir,
+`→ RED: <gerekçe>` = havuzda elendi. `suzum` damgasız/biçimsiz havuz satırını **kırmızı** sayar. `--yenile` eski havuz damgalarını
+(başlık değişmediyse) ve elle bölümleri korur; başlığı değişen kaydın damgası düşer ve söylenir; havuzdan çıkan (defterde artık
+'havuz' olmayan) kaydın satırı düşer ve söylenir. **Köprü ölçemezse** (jeton yok · defter ulaşılamadı · köprü dosyası yok) `merkez`
+MERKEZ.md'yi **yazmaz**, `◻ ÖLÇÜLEMEDİ … (0 havuz DEĞİL)` basar, rc 3 — sessiz "0 havuz" yok (K01). Bozuk köprü satırı sayılır ve
+notta söylenir. `suzum` havuz satırlarını MERKEZ.md'den okur (köprüyü çağırmaz); bölüm yoksa (1.3.0 öncesi dosya) uyarır, geriye
+dönük kırmızıya çevirmez. Kanıt: `retro.test.sh` T6h2 · T12a-z3 · T13a-m + mutant M16-M19 (köprü çağrısı silinince · ham süzgeci
+kalkınca · köprü yokluğu boş listeye çevrilince · damga denetimi kalkınca — dördü de ısırıyor).
 
 ## 🆕 1.2.0 · kart ve göz ölçüsü kutunun BÜTÜN depolarından (20 Eki · CQ46Y + NFS16 · retro W42 BERİD Ö1 + HENDESE Ö2)
 W42 retrosu yalnız çağrıldığı depoyu (Nexus) sayıyordu; ajanın Sx ve cloudtop kartları görünmüyordu (ölçüm: MİRAHUR W42 9 → 46 kart,
@@ -91,29 +109,32 @@ python3 ~/.claude/skills/retro/scripts/retro.py merkez [--hafta 2026-W42] [--aja
 #   katılım: aile-registry.yaml uyeler (ya da --ajanlar) · her ajan için
 #     OK (lint geçti) · GEÇERSİZ (lint kırmızı) · EKSİK (hafta içinde iz var, retro yok → zil) ·
 #     ÇALIŞMADI (NOTES/kart izi yok → retro zorunlu değil; ilk hafta kapanabilsin diye)
-#   → MERKEZ.md iskeleti: Katılım tablosu · Süzüm listesi (her öneri "→ " boş damgayla) · Dersler · Görevler
-#   rc 0 herkes tamam · 1 KIRMIZI: EKSİK/GEÇERSİZ var · 3 SARI: ajan listesi yok (katılım ölçülemez) — fabrika rengiyle aynı
-#   --yenile: yalnız ARAÇ bölümlerini (Katılım · Süzüm) yeniden kurar, Süzüm DAMGALARINI KORUR; elle yazılan her ## bölüm
+#   → MERKEZ.md iskeleti: Katılım tablosu · Süzüm listesi (her öneri "→ " boş damgayla) · Havuz süzümü (görev defterindeki
+#     durum=ham kayıtlar, `bulgu.sh havuz-cek` köprüsü · 1.3.0) · Dersler · Görevler
+#   rc 0 herkes tamam · 1 KIRMIZI: EKSİK/GEÇERSİZ var · 3 SARI: ajan listesi yok (katılım ölçülemez) ya da havuz köprüsü
+#     ölçemedi (MERKEZ.md yazılmaz) — fabrika rengiyle aynı
+#   --yenile: yalnız ARAÇ bölümlerini (Katılım · Süzüm · Havuz süzümü) yeniden kurar, DAMGALARI KORUR; elle yazılan her ## bölüm
 #     (Dersler · Görevler · Kaçış · serbest) olduğu gibi, yazıldığı sırada taşınır (1.0.1 — 1.0.0 bunları siliyordu)
+#   RETRO_BULGU_SH=<yol>: havuz köprüsü (varsayılan kardeş beceri bulgu/scripts/bulgu.sh)
 python3 ~/.claude/skills/retro/scripts/retro.py suzum [--hafta 2026-W42]
-#   her Ö maddesi → gorev_<26> ya da → RED: <gerekçe> aldı mı · rc 0 / 1 kırmızı / 3 SARI: MERKEZ.md yok
+#   her Ö maddesi VE her havuz satırı → gorev_<26> ya da → RED: <gerekçe> aldı mı · rc 0 / 1 kırmızı / 3 SARI: MERKEZ.md yok
 ```
 
 Merkez akışı: `merkez` → eksik ajana zil (boşta bekçisiyle birleşir) → SERDAR MERKEZ.md'de dersleri yazar
-(`M<n>)`, kutu dersine `BÂNİ D2` ile atıf) → Sultan ders ders onaylar → görev defteri → her öneriye damga
-→ `suzum` yeşil. `/hafta-kapanis` (ayrı beceri, Pazar) `merkez` rc'sini ve `suzum` rc'sini kapı olarak okur.
+(`M<n>)`, kutu dersine `BÂNİ D2` ile atıf) → Sultan ders ders onaylar → görev defteri → her öneriye ve her havuz
+satırına damga (havuz kaydı Sırada'ya alınırsa `→ gorev_<kendi id>`, elenirse `→ RED: …`) → `suzum` yeşil. `/hafta-kapanis` (ayrı beceri, Pazar) `merkez` rc'sini ve `suzum` rc'sini kapı olarak okur.
 
 ## Şema
 
 `sema/retro-dosyasi.md` — başlık · imza satırları · ölçüm tablosu · 5 başlık · etiket dilbilgisi · lint kodları
-L1–L7. Şemayı değiştirmek = o dosyayı ve `lint_metin`'i aynı PR'da değiştirmek.
+L1–L7 · MERKEZ.md süzüm ve havuz satırı biçimi. Şemayı değiştirmek = o dosyayı ve `lint_metin`'i aynı PR'da değiştirmek.
 
 ## Kanıt
 
-`scripts/retro.test.sh` — 83 kapı hermetik (mktemp depo · sahte NOTES/kart/DENETIM/kaçış/bekçi/registry ·
-sabit tarih `RETRO_BUGUN`) + 4 mutant kopya üstünde (L5 kalkınca ölçüsüz Z geçmemeli · kaynak yokluğu
-sıfıra çevrilince sarı kaybolmalı · iz ayrımı kalkınca ÇALIŞMADI EKSİK'e dönmeli · metin kıyası kalkınca bayat damga
-geçmemeli — dördü de ısırıyor).
+`scripts/retro.test.sh` — hermetik kapılar (mktemp depo · sahte NOTES/kart/DENETIM/kaçış/bekçi/registry · sahte havuz
+köprüsü `RETRO_BULGU_SH` · sabit tarih `RETRO_BUGUN`) + mutantlar kopya üstünde (L5 kalkınca ölçüsüz Z geçmemeli · kaynak
+yokluğu sıfıra çevrilince sarı kaybolmalı · iz ayrımı kalkınca ÇALIŞMADI EKSİK'e dönmeli · metin kıyası kalkınca bayat damga
+geçmemeli · havuz köprüsü M16-M19 — hepsi ısırıyor).
 Canlı ölçüm (Nexus, 2026-W42): BÂNİ 244 NOTES satırı · 34 ders satırı · 20 kart (16 bitti · 4 tıkandı) · 48 göz turu;
 MUAVİN'in NOTES dosyası yok → o hücre ÖLÇÜLEMEDİ.
 
@@ -123,3 +144,6 @@ MUAVİN'in NOTES dosyası yok → o hücre ÖLÇÜLEMEDİ.
   "tarihsiz N sayılmadı" diye yazar. Günlük çıpa başlığı (`## ÇIPA YYYY-MM-DD`) yazan ajanın ölçümü kesin olur.
 - `--koltuk` verilmezse `TMUX_PANE_HEDEF` ortamı, o da yoksa boş kalır → lint L2 düşer. Kasıtlı: imzasız retro yok.
 - Bu beceri cron zili düşürmez (cloudtop `crontab-abc`, MİRAHUR) ve haftayı kapatmaz (`/hafta-kapanis`).
+- Havuz süzümü merkez kipinin işidir ve defter jetonu ister; jetonsuz (izole) kutuda `merkez` rc 3 ÖLÇÜLEMEDİ verir —
+  kutu kipi (`kutu` · `doldur` · `lint`) köprüye dokunmaz. `suzum` köprüyü çağırmaz: havuzun o anki hâli değil, MERKEZ.md'ye
+  son `merkez --yenile`de yazılan hâli ölçülür (taze çekim = `merkez --yenile`).

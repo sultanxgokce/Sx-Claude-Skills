@@ -20,6 +20,9 @@ export RETRO_BUGUN=2026-10-17
 T="$(mktemp -d)"; trap 'python3 -c "import shutil,sys; shutil.rmtree(sys.argv[1], ignore_errors=True)" "$T"' EXIT
 KOK="$T/depo"; mkdir -p "$KOK/_agents/bani" "$KOK/_agents/mirahur" "$KOK/_agents/handoff" "$KOK/_agents/fabrika/kartlar" "$KOK/_agents/fabrika/kanit/is-b"
 export RETRO_KOK="$KOK" RETRO_BEKCI_LOG="$T/bekci.log" RETRO_REGISTRY="$KOK/_agents/handoff/aile-registry.yaml"
+# HERMETİK (retro 1.3.0 · 11F0Z0): `retro.py merkez` fikstürü artık görev defterini `bulgu.sh havuz-cek` köprüsünden okur — sahte
+# köprü vermezsek bu kutunun GERÇEK defterine gider ve K3 süzüm gerçek havuz satırlarıyla kızarır. Boş köprü: 0 havuz kaydı.
+mkdir -p "$T/kopru"; printf '#!/usr/bin/env bash\n[ "$1" = havuz-cek ] || exit 2\nexit 0\n' > "$T/kopru/bulgu.sh"; export RETRO_BULGU_SH="$T/kopru/bulgu.sh"
 printf '# B\n## ÇIPA 2026-10-15 10:00\n[BÂNİ → SERDAR] 10:05 · iş bitti\n' > "$KOK/_agents/bani/NOTES.md"
 printf '# M\n## ÇIPA 2026-10-01\n[MİRAHUR → SERDAR] 10:00 · geçen ay\n' > "$KOK/_agents/mirahur/NOTES.md"   # bu hafta iz yok → ÇALIŞMADI
 printf '{"is":"is-b","aldi":"BANI","zaman":"2026-10-15T10:00:00+03:00","durum":"tikandi","bitis":"2026-10-16T10:00:00+03:00"}' > "$KOK/_agents/fabrika/kartlar/is-b.json"

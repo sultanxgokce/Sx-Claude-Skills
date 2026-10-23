@@ -1,0 +1,224 @@
+$ bash retro/scripts/retro.test.sh
+# rc=0 sure=6.7s zaman=2026-10-23T15:28:33+03:00
+--- stdout ---
+— T1 hafta
+  ✓ T1a hafta kimliği sabit tarihten (rc=0)
+  ✓ T1b ISO hafta
+  ✓ T1c biçimsiz hafta rc=2 (rc=2)
+— T2 kutu: iskelet + ölçüm
+  ✓ T2a iskelet yazıldı (rc=0)
+  ✓ T2b dosya yerinde
+  ✓ T2c hafta içi 3 satır, tarihsiz 2 ayrı, geçen hafta sayılmadı
+  ✓ T2d ders satırı 1
+  ✓ T2e kart sayımı aldı=BANI↔BÂNİ, geçen hafta dışarıda
+  ✓ T2f DENETIM turları
+  ✓ T2g kaçış hafta içi 1, etiketi kutu geneli
+  ✓ T2h bekçi zili yalnız bu ajan, TUR satırı değil
+  ✓ T2i ölçülemeyen kaynak sarı, 0 değil
+  ✓ T2j koltuk beyanı
+  ✓ T2k iz özeti
+  ✓ T2l ikinci kutu rc=4 (ezmez) (rc=4)
+— T3 lint
+  ✓ T3a ham iskelet GEÇERSİZ (yer tutucu) (rc=1)
+  ✓ T3b L7 gerekçesi
+  ✓ T3c dolu retro GEÇERLİ (rc=0)
+  ✓ T3d öneri/ders sayımı
+  ✓ T3e zaman kaybı ölçüsüz → L5 (rc=1)
+  ✓ T3f L5 gerekçesi
+  ✓ T3g 6 öneri → L6 (rc=1)
+  ✓ T3h L6
+  ✓ T3i başlık yok → L4 (rc=1)
+  ✓ T3j L4
+  ✓ T3k ölçüm bloğu yok → L3 (elle retro geçersiz) (rc=1)
+  ✓ T3l L3
+  ✓ T3m koltuk boş → L2 (rc=1)
+  ✓ T3m2 L2 gerekçesi
+  ✓ T3n ölçüm değeri ne sayı ne ÖLÇÜLEMEDİ → L3 (rc=1)
+  ✓ T3n2 L3 gerekçesi
+  ✓ T3o yanlış etiket → L4 (rc=1)
+  ✓ T3p etiket gerekçesi
+  ✓ T3q dosya yok rc=2 (rc=2)
+— T4 kaynak yokluğu sarıdır
+  ✓ T4a kaynaksız depoda kutu yazılır (rc=0)
+  ✓ T4b kart kaynağı yok → ÖLÇÜLEMEDİ
+  ✓ T4c kaçış defteri yok → ÖLÇÜLEMEDİ
+  ✓ T4d sıfır ile ölçülemedi aynı hücreye yazılmaz
+  ✓ T4e iz yok
+— T5 yenile: ölçüm değişir, yorum korunur
+  ✓ T5a --yenile (rc=0)
+  ✓ T5b yeni kart sayıldı
+  ✓ T5c yorum satırı korundu
+  ✓ T5d yenileme damgası
+  ✓ T5e yenilenmiş dosya hâlâ geçerli (rc=0)
+— T6 merkez
+  ✓ T6a merkez: EKSİK var → rc=1 (kırmızı: ölçtü, tutmuyor) (rc=1)
+  ✓ T6b BÂNİ OK
+  ✓ T6c MİRAHUR iz var, retro yok → EKSİK
+  ✓ T6d BASİRET iz yok → ÇALIŞMADI (zorunlu değil)
+  ✓ T6e merkez (SERDAR) hariç
+  ✓ T6f MERKEZ.md iskeleti
+  ✓ T6f2 ilk yazımda (elle bölüm yokken) Dersler/Görevler iskeleti basılır
+  ✓ T6g öneri süzüm listesinde, damga boş
+  ✓ T6h katılım tablosu
+  ✓ T6h2 havuz bölümü boşken köprünün okunduğu ve bozuk satır SÖYLENİR (0 sessiz değil)
+  ✓ T6i geçersiz kutu retrosu → GEÇERSİZ, rc=1 (rc=1)
+  ✓ T6j GEÇERSİZ etiketi
+  ✓ T6k --ajanlar ile liste (rc=0)
+  ✓ T6m boş damgalı satır --yenile'de çoğalmadı (metindeki ok damga sanılmadı)
+  ✓ T6l registry ve --ajanlar yok → rc=3 SARI (katılım ölçülemez) (rc=3)
+— T7 süzüm
+  ✓ T7a damgasız → kırmızı (rc=1)
+  ✓ T7b gerekçe
+  ✓ T7c RED gerekçesi kısa → kırmızı (rc=1)
+  ✓ T7d yalnız Ö2 sorunlu; metindeki ok damga sanılmadı (SON ok)
+  ✓ T7e hepsi damgalı → yeşil (rc=0)
+  ✓ T7f sayım
+  ✓ T7g merkez --yenile damgayı KORUR (rc=1)
+  ✓ T7h gorev damgası korundu
+  ✓ T7i damga korunduğu için süzüm hâlâ yeşil (rc=0)
+  ✓ T7j MERKEZ yok → rc=3 SARI (ölçülemedi) (rc=3)
+— T8 damga metne bağlı (göz #359 tur 1)
+  ✓ T8a kutu önerisi değişti → eski gorev damgası BAYAT, kırmızı (rc=1)
+  ✓ T8b bayat gerekçesi
+  ✓ T8c değişmeyen Ö2 damgası geçerli
+  ✓ T8d merkez --yenile bayat damgayı düşürür (rc=1)
+  ✓ T8e düşme uyarısı
+  ✓ T8f yeni metin damgasız yazıldı
+  ✓ T8g eski gorev damgası taşınmadı
+  ✓ T8h değişmeyen Ö2 damgası korundu
+  ✓ T8i yeni metin damgasız → süzüm kırmızı (rc=1)
+  ✓ T8j artık bayat değil, damgasız
+— T9 merkez --yenile elle yazılan bölümleri KORUR (gorev_01M58987YSBASEXV1MF7T2GJHP · 19 Eki W42 MERKEZ.md silindi)
+  ✓ T9a merkez --yenile (rc 1: EKSİK hâlâ var) (rc=1)
+  ✓ T9b Dersler satırı korundu
+  ✓ T9c bölüm içi boş satır + girinti korundu
+  ✓ T9d Görevler satırı korundu
+  ✓ T9e iskelette olmayan Kaçış bölümü korundu
+  ✓ T9f serbest bölüm korundu
+  ✓ T9g iskelet yer tutucusu geri gelmedi
+  ✓ T9h bölümler çoğalmadı (her biri bir kez)
+  ✓ T9i bölüm sırası korundu (araç bölümleri önde, elle bölümler yazıldığı sırada)
+  ✓ T9j süzüm damgası da korunmaya devam ediyor
+  ✓ T9l elle bölümler BAYT BAYT aynı (çift boş satır, girinti, dosya sonu dahil)
+  ✓ T9m '## Süzüm notları' (araç önekiyle başlayan elle bölüm) silinmedi — araç bölümü birebir başlıkla tanınır
+  ✓ T9k ikinci --yenile aynı dosyayı üretir (kararlı)
+— T10 doldur: ajanın metnini iskelete ARAÇ yazar (KHX56 · ana dal kapısı Edit/Write'ı reddeder; kapı gevşetilmez)
+  ✓ T10a iskelet yoksa rc=2 (ölçümü araç yazar, önce kutu) (rc=2)
+  ✓ T10a2 ne yapılacağını söyler
+  ✓ T10b --metin verilmezse rc=2 (rc=2)
+  ✓ T10c metin dosyası yoksa rc=2 (rc=2)
+  ✓ T10d yer tutucu kalmış metin → rc=1, YAZILMAZ (rc=1)
+  ✓ T10d2 lint gerekçesi
+  ✓ T10d3 dosya bayt bayt eski hâli
+  ✓ T10e ölçüsüz zaman kaybı → rc=1 (L5), YAZILMAZ (rc=1)
+  ✓ T10e2 L5 gerekçesi
+  ✓ T10f metinde (başlıkların ardında) ölçüm bloğu → rc=2 (ajan ölçümü sahteleyemez) (rc=2)
+  ✓ T10f2 gerekçe
+  ✓ T10g metinde imza satırı → rc=2 (rc=2)
+  ✓ T10h '## 1 · ' öncesi metin → rc=2 (sessizce yutulmaz) (rc=2)
+  ✓ T10h2 reddedilen hiçbir metin dosyaya dokunmadı
+  ✓ T10i geçerli metin dosyadan → rc=0 (rc=0)
+  ✓ T10i2 sayım
+  ✓ T10j sonuç lint'ten geçer (rc=0)
+  ✓ T10k ölçüm bloğu ve imza satırları BAYT BAYT korundu
+  ✓ T10l ajanın maddesi yerinde
+  ✓ T10m dipnot bir kez
+  ✓ T10n stdin'den (--metin -) aynı metin → rc=0 (rc=0)
+  ✓ T10o ikinci dolum aynı baytları üretir (kararlı)
+  ✓ T10p metindeki dipnot çoğalmaz
+  ✓ T10s 5 tur × 8 eşzamanlı dolumun hepsi rc=0 (geçici dosyalar çarpışmaz · göz tur 1)
+  ✓ T10t eşzamanlı dolum sonrası dosya geçerli ve beklenen baytlarda
+  ✓ T10u geride geçici dosya kalmadı
+  ✓ T10q doldurulmuş dosyada kutu --yenile çalışır (ölçüm bloğu bulunur) (rc=0)
+  ✓ T10r yenilemeden sonra ajanın yorumu korundu
+— T11 çok depo: kart + göz ölçüsü kutunun bütün depolarından (CQ46Y + NFS16 · W42'de Sx işi retrodan görünmüyordu)
+  ✓ T11a iki depolu kutu ölçüldü (rc=0)
+  ✓ T11b kartlar İKİ depodan (KOK + Sx), _wt kopyası sayılmadı
+  ✓ T11c Sx göz turları origin/main'den (birincil kopya başka dalda, diskte DENETIM yok)
+  ✓ T11d kanıt sütunu depo başına döker
+  ✓ T11d2 göz turu da depo başına dökülür (KOK 1 · Sx 2 · göz tur 2)
+  ✓ T11e RETRO_DEPOLAR verilince keşif yerine o liste; aynı depo iki kez sayılmaz (rc=0)
+  ✓ T11f yalnız KOK, tekrar tekilleşti
+  ✓ T11g keşif kökü yoksa yalnız KOK (eski davranış) (rc=0)
+  ✓ T11h keşifsiz tek depo
+  ✓ T11i origin/main okunamayan depolu ölçüm yine yazılır (rc=0)
+  ✓ T11j okunamayınca yalnız disk sayılır (değer gerçek)
+  ✓ T11k … ve kanıt sütunu eksikliği depo adıyla söyler (sessiz eksik yok)
+  ✓ T11l … ve 'disk ∪ origin/main' diye yanlış etiketlemez
+  ✓ T11m git deposu olmayan KOK uyarı üretmez (okunacak origin yok) (rc=0)
+  ✓ T11n git'siz depo için OKUNAMADI yok
+— T12 havuz süzümü: görev defterindeki 'havuz' kayıtları merkez süzüm listesine (11F0Z0 · bulgu.sh havuz-cek köprüsü)
+  ✓ T12a merkez havuz bölümünü yazar (rc 0: X çalışmadı) (rc=0)
+  ✓ T12b özet: 2 ham, bozuk satır söylendi
+  ✓ T12c bölüm başlığı
+  ✓ T12d 2 havuz satırı (acik kayıt dışarıda, bozuk satır atlandı)
+  ✓ T12e satır biçimi '- <gorev_id> · <başlık> → ' (damga boş)
+  ✓ T12f durum=acik kayıt havuz listesine girmedi
+  ✓ T12g damgasız havuz satırı → suzum KIRMIZI (rc=1)
+  ✓ T12h gerekçe havuz kimliğiyle
+  ✓ T12i sayım
+  ✓ T12j RED gerekçesi kısa → kırmızı, yalnız o satır (rc=1)
+  ✓ T12k biçimsiz gerekçe
+  ✓ T12l kendi-id damgası (= Sırada'ya alındı) geçerli
+  ✓ T12m iki havuz satırı damgalı → yeşil (rc=0)
+  ✓ T12n sayım
+  ✓ T12o merkez --yenile (rc=0)
+  ✓ T12p kendi-id damgası korundu
+  ✓ T12q RED damgası korundu
+  ✓ T12r elle bölüm korundu
+  ✓ T12s havuz bölümü bir kez (araç bölümü birebir başlıkla tanındı)
+  ✓ T12t yenilemede bekleyen 0
+  ✓ T12u yenileme sonrası süzüm hâlâ yeşil (rc=0)
+  ✓ T12u2 ikinci --yenile aynı dosyayı üretir (havuz satırları kimliğe göre sıralı, kararlı)
+  ✓ T12v --yenile: başlığı değişen kaydın damgası düşer, havuzdan çıkan (acik) satır düşer (rc=0)
+  ✓ T12w düşme uyarısı
+  ✓ T12x çıkan kayıt notu (sessiz düşmez)
+  ✓ T12y yeni başlık damgasız yazıldı
+  ✓ T12z eski damga taşınmadı
+  ✓ T12z2 havuzdan çıkan kayıt listede değil
+  ✓ T12z3 yeniden damgasız → süzüm kırmızı (rc=1)
+— T13 havuz köprüsü ölçemezse MERKEZ.md yazılmaz: ÖLÇÜLEMEDİ rc 3, '0 havuz' DEĞİL
+  ✓ T13a köprü rc 3 (jeton yok) → merkez rc 3 (rc=3)
+  ✓ T13b sebep köprünün kendi cümlesinden
+  ✓ T13c 0 havuz denmedi
+  ✓ T13d MERKEZ.md bayt bayt değişmedi (damgalar ve elle bölüm yerinde)
+  ✓ T13e köprü dosyası yok → rc 3 (rc=3)
+  ✓ T13f sebep
+  ✓ T13g ilk yazımda da köprü yoksa dosya üretilmez (rc=3)
+  ✓ T13h MERKEZ.md yazılmadı
+  ✓ T13i bölümsüz (1.3.0 öncesi) MERKEZ.md → suzum uyarır, geriye dönük kırmızıya çevirmez (rc=0)
+  ✓ T13j uyarı
+  ✓ T13k --yenile bölümü ekler (rc=0)
+  ✓ T13l 2 havuz satırı geri geldi
+  ✓ T13m elle bölüm korundu
+— M mutasyon (kopya üstünde; her mutant en az bir kapıyı kızartmalı)
+  ✓ M1 L5 (ölçüsüz zaman kaybı) kalkınca ölçüsüz dosya geçmemeli: mutant ısırıldı
+  ✓ M2 kaynak yokluğu sıfıra çevrilince sarı kaybolmalı (kapı yakalar): mutant ısırıldı
+  ✓ M4-önkoşul: damgalı → yeşil (rc=0)
+  ✓ M4-önkoşul: metin değişti → gerçek araç BAYAT (kırmızı) (rc=1)
+  ✓ M4 metin kıyası kalkınca bayat damga geçer (kapı yakalar): mutant ısırıldı
+  ✓ M3 iz ayrımı kalkınca BASİRET EKSİK sayılır (kapı yakalar): mutant ısırıldı
+  ✓ M5 elle bölümler taşınmazsa --yenile Dersler/Kaçış'ı siler (eski hata · kapı yakalar): mutant ısırıldı
+  ✓ M6 araç bölümü ÖNEKLE tanınırsa '## Süzüm notları' silinir (kapı yakalar): mutant ısırıldı
+  ✓ M7 boş satırlar daraltılırsa bayt eşitliği bozulur (kapı yakalar): mutant ısırıldı
+  ✓ M8 doldur lint'i atlarsa yer tutuculu metin yazılır (kapı yakalar): mutant ısırıldı
+  ✓ M9 ölçüm/imza reddi kalkınca sahte ölçüm dosyaya girer (kapı yakalar): mutant ısırıldı
+  ✓ M10 önsöz denetimi kalkınca metin sessizce yutulur (kapı yakalar): mutant ısırıldı
+  ✓ M11-13 pozitif kontrol: bozmasız araçla iki yoklama da GEÇER (ısırık sahte değil)
+  ✓ M11 depo keşfi kalkınca Sx kartı sayılmaz (kapı yakalar): mutant ısırıldı
+  ✓ M12 origin\/main okuması kalkınca birincil kopya başka daldayken göz turları eksik (kapı yakalar): mutant ısırıldı
+  ✓ M13 tekilleştirme kalkınca aynı depo iki kez sayılır (kapı yakalar): mutant ısırıldı
+  ✓ M14 pozitif kontrol: bozmasız araç okunamayan depoyu adıyla söyler
+  ✓ M14 okunamama uyarısı susturulunca eksik sayım yeşil görünür (kapı yakalar): mutant ısırıldı
+  ✓ M15 pozitif kontrol: bozmasız araç göz turunu depo başına döker
+  ✓ M15 depo başına göz sayacı artmazsa döküm yalan söyler (kapı yakalar): mutant ısırıldı
+  ✓ M16-17 pozitif kontrol: bozmasız araç 2 havuz satırı yazar
+  ✓ M16 köprü çağrısı silinince havuz satırı yazılmaz (kapı yakalar): mutant ısırıldı
+  ✓ M17 ham süzgeci kalkınca acik kayıt da listeye girer (kapı yakalar): mutant ısırıldı
+  ✓ M18 pozitif kontrol: köprü yokken rc 3, dosya yok
+  ✓ M18 köprü yokluğu boş listeye çevrilince '0 havuz' sessiz yeşil olur (kapı yakalar): mutant ısırıldı
+  ✓ M19 pozitif kontrol: damgasız havuz satırında gerçek suzum kırmızı
+  ✓ M19 havuz damga denetimi kalkınca damgasız havuz satırı süzümden geçer (kapı yakalar): mutant ısırıldı
+
+GECEN=204 DUSEN=0
+--- stderr ---

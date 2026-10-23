@@ -1,0 +1,134 @@
+{
+  "is": "11f0z0-serdar",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T15:28:38+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "havuz-satiri",
+      "asama": "once",
+      "dosya": "olcum-havuz-satiri-once.txt",
+      "sha256": "af1f466ac14d660385d47a8e0d684cef7e7b72a72080317f951a444c0a82a526",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/11f0z0-serdar/olc-havuz.sh",
+        "merkez"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T15:07:38+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "293425df242345a6ac9f6e7ec9e64214"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "suzum-damgasiz-havuz",
+      "asama": "once",
+      "dosya": "olcum-suzum-damgasiz-havuz-once.txt",
+      "sha256": "4742b90e97fd45373b65e68e55af62a0fa330886e0bcb6219ff218bee90ca261",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/11f0z0-serdar/olc-havuz.sh",
+        "suzum"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T15:07:38+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f7b2d6353b8a4585a3808126d5d364c7"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "havuz-satiri",
+      "asama": "sonra",
+      "dosya": "olcum-havuz-satiri-sonra.txt",
+      "sha256": "258ea2ed02783aaa15f1017284200ce64a77f5ef04c28fffb22a1c81ca3a05a9",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/11f0z0-serdar/olc-havuz.sh",
+        "merkez"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T15:28:26+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "82694e90f4d544f998a7ecb83d00ecad"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "suzum-damgasiz-havuz",
+      "asama": "sonra",
+      "dosya": "olcum-suzum-damgasiz-havuz-sonra.txt",
+      "sha256": "aaef531c9315ff23a0d4e88fded138d35812a2b41d1d8d192efcfd3ab7544a1c",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/11f0z0-serdar/olc-havuz.sh",
+        "suzum"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T15:28:26+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8c575c849ccb4b13bce476e530b0a120"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "tek",
+      "dosya": "olcum-sinav-tek.txt",
+      "sha256": "49146913471584f23261d975ac6bb9d42cc526b61ce2769b6d0638252eb47485",
+      "komut": [
+        "bash",
+        "retro/scripts/retro.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T15:28:33+03:00",
+      "sure_sn": 6.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "67fab0c28fdb43ab91f4dd10e80a4481"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "mutant-kopru",
+      "asama": "tek",
+      "dosya": "olcum-mutant-kopru-tek.txt",
+      "sha256": "0dea25e2ec3b81d1d7165a6b53e23febf814ac7100f90d924ef85b75895904a2",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/11f0z0-serdar/mutant-kopru.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-23T15:28:33+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "sinav",
+      "beklenen": "kirmizi",
+      "olcum_id": "e6aa6ba31cf44a388372770e0ab26b43"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-defter-w43",
+      "asama": "tek",
+      "dosya": "olcum-gercek-defter-w43-tek.txt",
+      "sha256": "0809e4bc8df122c127b846c75982e218663f5f0100e176c56a2c37ccb37e5d3f",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/11f0z0-serdar/olc-gercek.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T15:28:38+03:00",
+      "sure_sn": 4.6,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "68e0985820914492ad86f9aa078e5c0b"
+    }
+  ],
+  "imza": "e9d0b9b00ab92a24d36932601da07cc9d03172bd728928a3ce738aab4d7ecb07"
+}

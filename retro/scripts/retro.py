@@ -10,8 +10,9 @@ Beş alt komut:
   doldur <AJAN> --metin <dosya|->   ajanın yazdığı 5 başlığı iskelete ARAÇ yerleştirir (ana dal kapısı Edit/Write'ı
                   reddeder; ölçüm/imza satırları dosyada kalır, metinden alınmaz; lint'ten geçmeyen sonuç YAZILMAZ)
   lint   <dosya>  retro dosyası şemaya uyuyor mu (başlık · imza · ölçüm bloğu · 5 başlık dolu · ölçülü zaman kaybı)
-  merkez          kutu retrolarını toplar: OK / GEÇERSİZ / EKSİK / ÇALIŞMADI; MERKEZ.md iskeleti (Süzüm listesi)
-  suzum           her "merkeze öneri" maddesi MERKEZ.md'de → gorev_… ya da → RED: … damgası aldı mı
+  merkez          kutu retrolarını toplar: OK / GEÇERSİZ / EKSİK / ÇALIŞMADI; MERKEZ.md iskeleti (Süzüm listesi +
+                  Havuz süzümü: görev defterindeki 'havuz' kayıtları `bulgu.sh havuz-cek` köprüsünden, durum=ham)
+  suzum           her "merkeze öneri" maddesi VE her havuz satırı MERKEZ.md'de → gorev_… ya da → RED: … damgası aldı mı
 
 Dürüst sınırlar (K01: ölçemediğin kuralı sert ilan edemezsin):
   • NOTES satırlarının tarihi çoğunlukla satırda yok; satır üstündeki son açık tarihi devralır
@@ -19,8 +20,9 @@ Dürüst sınırlar (K01: ölçemediğin kuralı sert ilan edemezsin):
   • Kaçış defteri ajan alanı taşımaz → sayı KUTU GENELİdir, böyle etiketlenir.
   • "Sultan-eli adımı" için tanımlı kaynak yok → ÖLÇÜLEMEDİ basılır, 0 değil.
   • Dosyayı kimin yazdığı ölçülemez (hepimiz aynı git kimliğiyiz); _koltuk satırı BEYANdır, kanıt değil.
+  • Havuz köprüsü (jeton · defter · bulgu.sh) ölçemezse merkez MERKEZ.md'yi YAZMAZ ve ÖLÇÜLEMEDİ basar — "0 havuz" demez.
 Çıkış kodları (fabrika rengiyle aynı): 0 yeşil · 1 KIRMIZI (lint/süzüm/merkez EKSİK-GEÇERSİZ: ölçtü, tutmuyor) ·
-  2 kullanım hatası · 3 SARI (ölçemedi: ajan listesi ya da MERKEZ.md yok) · 4 dosya zaten var
+  2 kullanım hatası · 3 SARI (ölçemedi: ajan listesi · MERKEZ.md · havuz köprüsü yok) · 4 dosya zaten var
 """
 import glob
 import json
@@ -32,7 +34,7 @@ import tempfile
 import unicodedata
 from datetime import date, datetime, timedelta
 
-SURUM = "1.2.0"
+SURUM = "1.3.0"
 AJAN_DIZIN_DISI = {"handoff", "fabrika", "spec", "orchestration", "codex", "decisions", "runbooks", "ekip-os-base"}
 DERS_RE = re.compile(r"ders|zaman kayb|zorluk|tıkand|tikand|boşa|bosa", re.I)
 TARIH_RE = re.compile(r"(20\d\d-\d\d-\d\d)")
@@ -516,7 +518,83 @@ def registry_ajanlar(yol):
 
 MERKEZ_KATILIM = "## Katılım (araç yazdı)"
 MERKEZ_SUZUM = "## Süzüm — her öneri bir damga alır: `→ gorev_<id>` (görev defterine girdi) ya da `→ RED: <gerekçe ≥10 karakter>`"
+MERKEZ_HAVUZ = ("## Havuz süzümü — görev defterindeki 'havuz' kayıtları (`bulgu.sh havuz-cek` · durum=ham) · damga: "
+                "`→ gorev_<kendi id>` (Sırada'ya alınır) ya da `→ RED: <gerekçe ≥10 karakter>`")
+MERKEZ_ARAC_BOLUMLERI = (MERKEZ_KATILIM, MERKEZ_SUZUM, MERKEZ_HAVUZ)
 # ARAÇ bölümleri BİREBİR bu başlıklardır (önek değil: elle yazılmış "## Süzüm notları" araç bölümü sayılıp silinmesin, göz tur 1)
+HAVUZ_SATIR_RE = re.compile(r"^- (gorev_[0-9A-Z]{26}) · (.*)$")
+# Havuz köprüsü: RETRO_BULGU_SH ya da kardeş beceri (<skills>/bulgu/scripts/bulgu.sh) — Sx deposunda ve ~/.claude/skills'te aynı yol.
+BULGU_SH_VARSAYILAN = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))), "bulgu", "scripts", "bulgu.sh")
+
+
+# 🔴 HAVUZ SÜZÜMÜ (11F0Z0 · Sultan D1 21 Eki "Eleme turu + bulgu kapısı"): bulgular 22 Eki'den beri merkezî Görev Defteri'ne
+#    'havuz' durumunda düşer (bulgu 0.5.0) ve haftalık süzmede görev olur. Retro merkez kipi havuzu görmüyordu → süzüm listesi
+#    yalnız kutu önerilerini taşıyordu, havuz kayıtları hafta kapanışında hiç sorulmuyordu. Köprü `bulgu.sh havuz-cek` (eşleme TEK
+#    orada; burada kopyası yok): 'havuz' → durum 'ham'. Havuzdaki kayıt kendisi görev olduğundan damga `→ gorev_<kendi id>` =
+#    Sırada'ya alınır; `→ RED: <gerekçe>` = havuzda kalır/elenir. Köprü ölçemezse (jeton yok · defter ulaşılamadı · köprü yok)
+#    ÖLÇÜLEMEDİ: MERKEZ.md yazılmaz, rc 3 — "0 havuz" sessiz yeşil olurdu (K01).
+def havuz_cek():
+    """→ ([(gorev_id, başlık)…] sıralı, not) ya da (None, neden). Bozuk satır sayılır ve notta söylenir, sessiz atlanmaz."""
+    bsh = os.environ.get("RETRO_BULGU_SH") or BULGU_SH_VARSAYILAN
+    if not os.path.isfile(bsh):
+        return None, f"köprü yok: {bsh}"
+    try:
+        p = subprocess.run(["bash", bsh, "havuz-cek"], capture_output=True, text=True, stdin=subprocess.DEVNULL, timeout=60)
+    except (subprocess.TimeoutExpired, OSError) as e:
+        return None, f"köprü koşmadı: {e.__class__.__name__}"
+    if p.returncode != 0:
+        neden = (p.stderr.strip().splitlines() or ["?"])[-1].lstrip("🟡 ").split(" — ")[0]
+        return None, f"{neden} (köprü rc {p.returncode})"
+    kayit, bozuk = {}, 0
+    for satir in p.stdout.splitlines():
+        if not satir.strip():
+            continue
+        try:
+            k = json.loads(satir)
+            if not isinstance(k, dict):
+                raise ValueError("nesne değil")
+        except ValueError:
+            bozuk += 1
+            continue
+        kid = str(k.get("id") or "").strip()
+        baslik = " ".join(str(k.get("baslik") or "").split())
+        if not GOREV_RE.fullmatch(kid) or not baslik:
+            bozuk += 1
+            continue
+        if k.get("durum") != "ham":
+            continue
+        kayit[kid] = baslik
+    return [(i, kayit[i]) for i in sorted(kayit)], f"{len(kayit)} havuz kaydı" + (f" · {bozuk} BOZUK satır atlandı" if bozuk else "")
+
+
+def havuz_satir_coz(s):
+    """'- gorev_<26> · <başlık> → <damga>' → (gorev_id, başlık, damga) ya da None. Damga SON oktan sonrasıdır (öneri satırıyla aynı)."""
+    s = s.strip()
+    m = HAVUZ_SATIR_RE.match(s)
+    if not m or "→" not in m.group(2):
+        return None
+    metin, damga = m.group(2).rsplit("→", 1)
+    return m.group(1), metin.strip(), damga.strip()
+
+
+def merkez_havuz_satirlari(metin):
+    """MERKEZ.md'nin Havuz süzümü BÖLÜMÜNDEKİ satırlar → {gorev_id: (başlık, damga)}; bölüm yoksa None (1.3.0 öncesi dosya).
+    Bölümle sınırlı: Görevler bölümündeki '- gorev_… · ders M1' satırı havuz satırı sanılmasın."""
+    out, icinde, var = {}, False, False
+    for s in metin.splitlines():
+        if s.startswith("## "):
+            icinde = s.rstrip("\r\n") == MERKEZ_HAVUZ
+            var = var or icinde
+            continue
+        if icinde:
+            c = havuz_satir_coz(s)
+            if c:
+                out[c[0]] = (c[1], c[2])
+    return out if var else None
+
+
+def damga_gecerli(d):
+    return bool(GOREV_RE.fullmatch(d) or (d.startswith("RED:") and len(d[4:].strip()) >= 10))
 
 
 def merkez_elle_ham(metin):
@@ -525,7 +603,7 @@ def merkez_elle_ham(metin):
     ham, icinde = [], False
     for s in metin.splitlines(keepends=True):
         if s.startswith("## "):
-            icinde = s.rstrip("\r\n") not in (MERKEZ_KATILIM, MERKEZ_SUZUM)
+            icinde = s.rstrip("\r\n") not in MERKEZ_ARAC_BOLUMLERI
         if icinde:
             ham.append(s)
     return "".join(ham)
@@ -573,6 +651,7 @@ def merkez(a):
         print(f"  MERKEZ.md zaten var ({os.path.relpath(myol, kok)}); araç bölümlerini yenilemek için --yenile (Süzüm damgaları ve elle yazılan bölümler KORUNUR)")
     else:
         eski_damga = {}  # (ajan, n) → (metin, damga)
+        eski_havuz = {}  # gorev_id → (başlık, damga)
         elle = ""        # araç dışı ## bölümleri (Dersler · Görevler · Kaçış …) — --yenile bunları OLDUĞU GİBİ taşır
         if os.path.exists(myol):
             eski = open(myol, encoding="utf-8").read()
@@ -580,7 +659,13 @@ def merkez(a):
                 c = merkez_satir_coz(s)
                 if c and c[3]:
                     eski_damga[(c[0], c[1])] = (c[2], c[3])
+            eski_havuz = merkez_havuz_satirlari(eski) or {}
             elle = merkez_elle_ham(eski)
+        # Havuz köprüsü YAZMADAN ÖNCE okunur: ölçülemezse dosyaya dokunulmaz (eski damgalar ve elle bölümler yerinde kalır).
+        havuz, havuz_not = havuz_cek()
+        if havuz is None:
+            print(f"◻ ÖLÇÜLEMEDİ: havuz okunamadı — {havuz_not} → MERKEZ.md YAZILMADI (0 havuz DEĞİL, ölçülemedi; köprü: RETRO_BULGU_SH ya da bulgu becerisi + defter jetonu)")
+            return 3
         os.makedirs(diz, exist_ok=True)
         simdi = datetime.now().astimezone().replace(microsecond=0).isoformat()
         r = [f"# 🔁 MERKEZ RETROSU · {hafta}", f"_yazildi: {simdi}", f"_arac: retro.py {SURUM}", "",
@@ -602,6 +687,24 @@ def merkez(a):
             r.append(f"- {ajan} Ö{n}) {t} → {d}".rstrip())
         if dusen:
             print(f"  ⚠ damga DÜŞTÜ (öneri metni değişti, yeniden süzülmeli): {', '.join(dusen)}")
+        r += ["", MERKEZ_HAVUZ]
+        if not havuz:
+            r.append(f"_(görev defterinde havuz kaydı yok — köprü okundu: {havuz_not})_")
+        h_dusen = []
+        for kid, baslik in havuz:
+            e = eski_havuz.get(kid)
+            d = ""
+            if e:
+                if e[0] == baslik:
+                    d = e[1]
+                else:
+                    h_dusen.append(kid)
+            r.append(f"- {kid} · {baslik} → {d}".rstrip())
+        if h_dusen:
+            print(f"  ⚠ havuz damgası DÜŞTÜ (kayıt başlığı değişti, yeniden süzülmeli): {', '.join(h_dusen)}")
+        h_cikan = [k for k, (_, d) in eski_havuz.items() if d and k not in dict(havuz)]
+        if h_cikan:
+            print(f"  ℹ havuzdan çıkan damgalı kayıt (defter durumu artık 'havuz' değil, satırı düştü): {', '.join(h_cikan)}")
         if elle:   # gorev_01M58987YSBASEXV1MF7T2GJHP: eskiden burada iskelet yeniden basılıyor, elle yazılan bölümler SİLİNİYORDU
             metin = "\n".join(r) + "\n\n" + elle   # araç bölümleri + bir boş satır + elle bölümler HAM (bayt bayt)
         else:
@@ -610,7 +713,9 @@ def merkez(a):
             metin = "\n".join(r)
         open(myol, "w", encoding="utf-8").write(metin)
         bekleyen = sum(1 for a_, n, t in oneriler if not (eski_damga.get((norm(a_), n)) and eski_damga[(norm(a_), n)][0] == t.strip()))
-        print(f"  ✓ MERKEZ.md iskeleti: {os.path.relpath(myol, kok)} · öneri {len(oneriler)} (damga bekliyor: {bekleyen})")
+        h_bekleyen = sum(1 for kid, b in havuz if not (eski_havuz.get(kid) and eski_havuz[kid][0] == b and eski_havuz[kid][1]))
+        print(f"  ✓ MERKEZ.md iskeleti: {os.path.relpath(myol, kok)} · öneri {len(oneriler)} (damga bekliyor: {bekleyen})"
+              f" · havuz {len(havuz)} (damga bekliyor: {h_bekleyen}; {havuz_not})")
     if eksik:
         print(f"✗ EKSİK/GEÇERSİZ: {', '.join(eksik)} → kutu retrosunu ajan yazar (merkez yazamaz); zil düşür")
         return 1
@@ -626,12 +731,21 @@ def suzum(a):
     if not os.path.exists(myol):
         print(f"◻ ÖLÇÜLEMEDİ: MERKEZ.md yok ({os.path.relpath(myol, kok)}) — süzüm ölçülemez (merkez retrosu önce)")
         return 3
+    mmetin = open(myol, encoding="utf-8").read()
     damga = {}  # (ajan, n) → (metin, damga)
-    for s in open(myol, encoding="utf-8"):
+    for s in mmetin.splitlines():
         c = merkez_satir_coz(s)
         if c:
             damga[(c[0], c[1])] = (c[2], c[3])
     eksik, toplam = [], 0
+    # Havuz satırları MERKEZ.md'den okunur (köprü burada çağrılmaz: kayıt dosyadadır, taze çekim `merkez --yenile`nin işi).
+    havuz = merkez_havuz_satirlari(mmetin)
+    if havuz is None:
+        print("  ⚠ Havuz süzümü bölümü yok (MERKEZ.md 1.3.0 öncesi araçla yazılmış) — havuz süzümü bu dosyada ÖLÇÜLEMEDİ; `merkez --yenile` bölümü ekler")
+        havuz = {}
+    for kid, (_, d) in havuz.items():
+        if not damga_gecerli(d):
+            eksik.append(f"havuz {kid} damgasız ya da biçimsiz: '{d or '(boş)'}' — '→ gorev_<26>' (Sırada'ya al) ya da '→ RED: <gerekçe>'")
     for p in sorted(glob.glob(os.path.join(diz, "*.md"))):
         ajan = os.path.splitext(os.path.basename(p))[0]
         if ajan in ("MERKEZ", "KAPANIS"):
@@ -647,15 +761,15 @@ def suzum(a):
             if e and e[0] != t.strip():
                 eksik.append(f"{ajan} Ö{n}) damga BAYAT: kutu metni değişti ('{t[:40]}…' ≠ MERKEZ '{e[0][:40]}…') — merkez --yenile ile yeniden süz")
                 continue
-            if GOREV_RE.fullmatch(d) or (d.startswith("RED:") and len(d[4:].strip()) >= 10):
+            if damga_gecerli(d):
                 continue
             eksik.append(f"{ajan} Ö{n}) damgasız ya da biçimsiz: '{d or '(boş)'}' — '→ gorev_<26>' ya da '→ RED: <gerekçe>'")
     if eksik:
-        print(f"✗ SÜZÜM KIRMIZI · {hafta} · {toplam} öneri, {len(eksik)} sorun")
+        print(f"✗ SÜZÜM KIRMIZI · {hafta} · {toplam} öneri + {len(havuz)} havuz kaydı, {len(eksik)} sorun")
         for x in eksik:
             print(f"  • {x}")
         return 1
-    print(f"✓ süzüm tamam · {hafta} · {toplam} önerinin {toplam}'i damgalı")
+    print(f"✓ süzüm tamam · {hafta} · {toplam} önerinin {toplam}'i damgalı · {len(havuz)} havuz kaydının tümü damgalı")
     return 0
 
 

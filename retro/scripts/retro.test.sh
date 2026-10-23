@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# retro.test.sh — retro.py kapıları (hermetik: mktemp depo, sahte kaynaklar, sabit tarih) + 3 mutant.
+# retro.test.sh — retro.py kapıları (hermetik: mktemp depo, sahte kaynaklar, sahte havuz köprüsü, sabit tarih) + mutantlar.
 # kabuk-testleri: sure=120
 set -uo pipefail
 B="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -44,6 +44,23 @@ echo '{}' > "$KOK/_agents/fabrika/kanit/is-a/DENETIM-1.json"; echo '{}' > "$KOK/
 printf '2026-10-15T14:34:31Z | KAPISIZ | a\n2026-10-01T14:34:31Z | KAPISIZ | eski\n' > "$KOK/_agents/fabrika/kacis-defteri.log"
 printf '2026-10-17T14:49:02+03:00 bosta-bekcisi BERİD 16 dk boş\n2026-10-17T14:49:02+03:00 bosta-bekcisi BÂNİ 20 dk boş\n2026-10-17T14:49:02+03:00 bosta-bekcisi TUR uye=6\n' > "$T/bekci.log"
 printf 'uyeler:\n  - id: SERDAR\n    tmux: "serdar:0"\n  - id: BÂNİ\n    tmux: "bani:0"\n  - id: MİRAHUR\n  - id: BASİRET\n' > "$RETRO_REGISTRY"
+# Havuz köprüsü (11F0Z0): `bulgu.sh havuz-cek` BİÇİMİNDE sahte köprüler (eşlemenin kendisi bulgu.test.sh'ta ölçülür).
+#   bulgu-bos.sh  → varsayılan: 0 ham (1 acik + 1 bozuk satır) — T6-T9 akışı havuzsuz kalır
+#   bulgu.sh      → 2 ham + 1 acik + 1 bozuk satır (T12/T13 ve mutantlar `env RETRO_BULGU_SH=` ile seçer)
+#   olmez.sh      → köprü rc 3 (jeton yok) · yok.sh → dosya yok
+mkdir -p "$T/kopru"; HS="$T/kopru/defter.jsonl"
+cat > "$HS" <<'EOF'
+{"id":"gorev_01M5M55BRC0V3G8A200PYTVZV9","tarih":"2026-10-23","baslik":"mihenk: PR'da testleri koşan küçük bir iş akışı gerek","detay":"","durum":"ham","kaynak":"defter","kutu":"code","etiket":"ozellik","eski_no":""}
+{"id":"gorev_01M5M7Y1F90HTSRADKETDCX24C","tarih":"2026-10-23","baslik":"Denetçi düzeltme turu eski DENETIM kaydında tam fark gönderiyor","durum":"ham","kaynak":"defter","kutu":"code","etiket":"bug","eski_no":""}
+{"id":"gorev_01M5M0000000000000000ACIK0","tarih":"2026-10-22","baslik":"Sırada olan kayıt (havuzda değil)","durum":"acik","kaynak":"defter"}
+bozuk satır json değil
+EOF
+cp "$HS" "$T/kopru/defter.orig.jsonl"; grep -v '"durum":"ham"' "$HS" > "$T/kopru/defter-bos.jsonl"
+printf '#!/usr/bin/env bash\n[ "$1" = havuz-cek ] || exit 2\ncat "%s"\n' "$HS" > "$T/kopru/bulgu.sh"
+printf '#!/usr/bin/env bash\n[ "$1" = havuz-cek ] || exit 2\ncat "%s"\n' "$T/kopru/defter-bos.jsonl" > "$T/kopru/bulgu-bos.sh"
+printf '#!/usr/bin/env bash\necho "🟡 defter jetonu yok (/x/jeton) — defterdeki bulgular ÖLÇÜLEMEDİ" >&2; exit 3\n' > "$T/kopru/olmez.sh"
+export RETRO_BULGU_SH="$T/kopru/bulgu-bos.sh"
+HB=(env RETRO_BULGU_SH="$T/kopru/bulgu.sh")
 
 echo "— T1 hafta"
 kapi "T1a hafta kimliği sabit tarihten" 0 python3 "$R" hafta; icerir "$CIKTI" "2026-W42" "T1b ISO hafta"
@@ -115,6 +132,7 @@ M="$KOK/_agents/handoff/retro/2026-W42/MERKEZ.md"; [ -f "$M" ] && ok "T6f MERKEZ
 icerir "$(cat "$M")" "- M1) <ders> · kaynak:" "T6f2 ilk yazımda (elle bölüm yokken) Dersler/Görevler iskeleti basılır"
 icerir "$(cat "$M")" "- BÂNİ Ö1) kart.sh canli-ayarla sahip doğrulamalı →" "T6g öneri süzüm listesinde, damga boş"
 icerir "$(cat "$M")" "| MİRAHUR | EKSİK |" "T6h katılım tablosu"
+icerir "$(cat "$M")" "_(görev defterinde havuz kaydı yok — köprü okundu: 0 havuz kaydı · 1 BOZUK satır atlandı)_" "T6h2 havuz bölümü boşken köprünün okunduğu ve bozuk satır SÖYLENİR (0 sessiz değil)"
 cp "$Z" "$KOK/_agents/handoff/retro/2026-W42/MİRAHUR.md"   # BÂNİ başlıklı dosya MİRAHUR adıyla → GEÇERSİZ
 kapi "T6i geçersiz kutu retrosu → GEÇERSİZ, rc=1" 1 python3 "$R" merkez --yenile; icerir "$CIKTI" "GEÇERSİZ  MİRAHUR" "T6j GEÇERSİZ etiketi"
 rm -f "$KOK/_agents/handoff/retro/2026-W42/MİRAHUR.md"
@@ -162,7 +180,7 @@ icerir "$(cat "$M")" "## Kaçış ve tıkanma" "T9e iskelette olmayan Kaçış b
 icerir "$(cat "$M")" "merkezin kendi notu" "T9f serbest bölüm korundu"
 icermez "$(cat "$M")" "<ders> · kaynak:" "T9g iskelet yer tutucusu geri gelmedi"
 [ "$(grep -c '^## Dersler' "$M")" -eq 1 ] && [ "$(grep -c '^## Kaçış' "$M")" -eq 1 ] && ok "T9h bölümler çoğalmadı (her biri bir kez)" || kirmizi "T9h bölüm sayısı: $(grep -n '^## ' "$M")"
-[ "$(grep '^## ' "$M" | tr '\n' '|')" = "## Katılım (araç yazdı)|## Süzüm — her öneri bir damga alır: \`→ gorev_<id>\` (görev defterine girdi) ya da \`→ RED: <gerekçe ≥10 karakter>\`|## Dersler (merkez yorumu; kutu dersine D<n> ile atıf: \`BÂNİ D2\`)|## Görevler (Sultan ders ders onaylar · D1 damgası · görev defteri)|## Kaçış ve tıkanma|## Süzüm notları|## Serbest not|" ] && ok "T9i bölüm sırası korundu (araç bölümleri önde, elle bölümler yazıldığı sırada)" || kirmizi "T9i sıra: $(grep '^## ' "$M" | tr '\n' '|')"
+[ "$(grep '^## ' "$M" | tr '\n' '|')" = "## Katılım (araç yazdı)|## Süzüm — her öneri bir damga alır: \`→ gorev_<id>\` (görev defterine girdi) ya da \`→ RED: <gerekçe ≥10 karakter>\`|## Havuz süzümü — görev defterindeki 'havuz' kayıtları (\`bulgu.sh havuz-cek\` · durum=ham) · damga: \`→ gorev_<kendi id>\` (Sırada'ya alınır) ya da \`→ RED: <gerekçe ≥10 karakter>\`|## Dersler (merkez yorumu; kutu dersine D<n> ile atıf: \`BÂNİ D2\`)|## Görevler (Sultan ders ders onaylar · D1 damgası · görev defteri)|## Kaçış ve tıkanma|## Süzüm notları|## Serbest not|" ] && ok "T9i bölüm sırası korundu (araç bölümleri önde, elle bölümler yazıldığı sırada)" || kirmizi "T9i sıra: $(grep '^## ' "$M" | tr '\n' '|')"
 icerir "$(grep "Ö2)" "$M")" "→ RED: ayrı kart olarak açıldı" "T9j süzüm damgası da korunmaya devam ediyor"
 cmp -s <(sed -n '/^## Dersler/,$p' "$T/merkez-elle.md") <(sed -n '/^## Dersler/,$p' "$M") && ok "T9l elle bölümler BAYT BAYT aynı (çift boş satır, girinti, dosya sonu dahil)" || kirmizi "T9l elle bölüm baytları değişti: $(diff <(sed -n '/^## Dersler/,$p' "$T/merkez-elle.md") <(sed -n '/^## Dersler/,$p' "$M") | head -5)"
 icerir "$(cat "$M")" "önek araç başlığına benzer ama elle yazıldı" "T9m '## Süzüm notları' (araç önekiyle başlayan elle bölüm) silinmedi — araç bölümü birebir başlıkla tanınır"
@@ -258,6 +276,67 @@ kapi "T11m git deposu olmayan KOK uyarı üretmez (okunacak origin yok)" 0 env R
 icermez "$(cat "$SD")" "OKUNAMADI" "T11n git'siz depo için OKUNAMADI yok"
 rm -f "$SD"
 
+echo "— T12 havuz süzümü: görev defterindeki 'havuz' kayıtları merkez süzüm listesine (11F0Z0 · bulgu.sh havuz-cek köprüsü)"
+HK="$T/havuz-kok"; mkdir -p "$HK/_agents/x"; printf '# X\n' > "$HK/_agents/x/NOTES.md"
+HM="$HK/_agents/handoff/retro/2026-W42/MERKEZ.md"
+kapi "T12a merkez havuz bölümünü yazar (rc 0: X çalışmadı)" 0 "${HB[@]}" python3 "$R" merkez --kok "$HK" --ajanlar X
+icerir "$CIKTI" "havuz 2 (damga bekliyor: 2; 2 havuz kaydı · 1 BOZUK satır atlandı)" "T12b özet: 2 ham, bozuk satır söylendi"
+icerir "$(cat "$HM")" "## Havuz süzümü — görev defterindeki 'havuz' kayıtları" "T12c bölüm başlığı"
+[ "$(grep -cE '^- gorev_[0-9A-Z]{26} · ' "$HM")" -eq 2 ] && ok "T12d 2 havuz satırı (acik kayıt dışarıda, bozuk satır atlandı)" || kirmizi "T12d havuz satırı: $(grep -c '^- gorev_' "$HM")"
+icerir "$(cat "$HM")" "- gorev_01M5M55BRC0V3G8A200PYTVZV9 · mihenk: PR'da testleri koşan küçük bir iş akışı gerek →" "T12e satır biçimi '- <gorev_id> · <başlık> → ' (damga boş)"
+icermez "$(cat "$HM")" "Sırada olan kayıt" "T12f durum=acik kayıt havuz listesine girmedi"
+cp "$HM" "$T/havuz-merkez-damgasiz.md"
+kapi "T12g damgasız havuz satırı → suzum KIRMIZI" 1 python3 "$R" suzum --kok "$HK"; icerir "$CIKTI" "havuz gorev_01M5M55BRC0V3G8A200PYTVZV9 damgasız" "T12h gerekçe havuz kimliğiyle"
+icerir "$CIKTI" "0 öneri + 2 havuz kaydı, 2 sorun" "T12i sayım"
+python3 - "$HM" <<'PY'
+import sys;p=sys.argv[1];s=open(p,encoding="utf-8").read()
+s=s.replace("küçük bir iş akışı gerek →","küçük bir iş akışı gerek → gorev_01M5M55BRC0V3G8A200PYTVZV9").replace("tam fark gönderiyor →","tam fark gönderiyor → RED: kısa")
+open(p,"w",encoding="utf-8").write(s)
+PY
+kapi "T12j RED gerekçesi kısa → kırmızı, yalnız o satır" 1 python3 "$R" suzum --kok "$HK"; icerir "$CIKTI" "havuz gorev_01M5M7Y1F90HTSRADKETDCX24C damgasız ya da biçimsiz: 'RED: kısa'" "T12k biçimsiz gerekçe"
+icermez "$CIKTI" "PYTVZV9" "T12l kendi-id damgası (= Sırada'ya alındı) geçerli"
+sed -i 's/→ RED: kısa/→ RED: ayrı kart olarak açıldı (denetçi düzeltme turu farkı)/' "$HM"
+kapi "T12m iki havuz satırı damgalı → yeşil" 0 python3 "$R" suzum --kok "$HK"; icerir "$CIKTI" "2 havuz kaydının tümü damgalı" "T12n sayım"
+printf '\n## Serbest havuz notu\nmerkezin havuz notu\n' >> "$HM"
+kapi "T12o merkez --yenile" 0 "${HB[@]}" python3 "$R" merkez --kok "$HK" --ajanlar X --yenile
+icerir "$(cat "$HM")" "→ gorev_01M5M55BRC0V3G8A200PYTVZV9" "T12p kendi-id damgası korundu"; icerir "$(cat "$HM")" "→ RED: ayrı kart olarak açıldı (denetçi" "T12q RED damgası korundu"
+icerir "$(cat "$HM")" "merkezin havuz notu" "T12r elle bölüm korundu"
+[ "$(grep -c '^## Havuz süzümü' "$HM")" -eq 1 ] && ok "T12s havuz bölümü bir kez (araç bölümü birebir başlıkla tanındı)" || kirmizi "T12s bölüm sayısı $(grep -c '^## Havuz' "$HM")"
+icerir "$CIKTI" "havuz 2 (damga bekliyor: 0" "T12t yenilemede bekleyen 0"
+kapi "T12u yenileme sonrası süzüm hâlâ yeşil" 0 python3 "$R" suzum --kok "$HK"
+cp "$HM" "$T/havuz-merkez.md"
+"${HB[@]}" python3 "$R" merkez --kok "$HK" --ajanlar X --yenile >/dev/null 2>&1; cmp -s <(sed '/^_yazildi:/d' "$T/havuz-merkez.md") <(sed '/^_yazildi:/d' "$HM") && ok "T12u2 ikinci --yenile aynı dosyayı üretir (havuz satırları kimliğe göre sıralı, kararlı)" || kirmizi "T12u2 ardışık --yenile farklı"
+python3 - "$HS" <<'PY'
+import sys,json;p=sys.argv[1];out=[]
+for l in open(p,encoding="utf-8").read().splitlines():
+    try: k=json.loads(l)
+    except Exception: out.append(l); continue
+    if k.get("id")=="gorev_01M5M55BRC0V3G8A200PYTVZV9": k["baslik"]+=" (CI)"
+    if k.get("id")=="gorev_01M5M7Y1F90HTSRADKETDCX24C": k["durum"]="acik"
+    out.append(json.dumps(k,ensure_ascii=False))
+open(p,"w",encoding="utf-8").write("\n".join(out)+"\n")
+PY
+kapi "T12v --yenile: başlığı değişen kaydın damgası düşer, havuzdan çıkan (acik) satır düşer" 0 "${HB[@]}" python3 "$R" merkez --kok "$HK" --ajanlar X --yenile
+icerir "$CIKTI" "havuz damgası DÜŞTÜ (kayıt başlığı değişti" "T12w düşme uyarısı"; icerir "$CIKTI" "havuzdan çıkan damgalı kayıt" "T12x çıkan kayıt notu (sessiz düşmez)"
+icerir "$(grep PYTVZV9 "$HM")" "iş akışı gerek (CI) →" "T12y yeni başlık damgasız yazıldı"; icermez "$(grep PYTVZV9 "$HM")" "→ gorev_" "T12z eski damga taşınmadı"
+icermez "$(cat "$HM")" "DCX24C" "T12z2 havuzdan çıkan kayıt listede değil"
+kapi "T12z3 yeniden damgasız → süzüm kırmızı" 1 python3 "$R" suzum --kok "$HK"
+cp "$T/kopru/defter.orig.jsonl" "$HS"; cp "$T/havuz-merkez.md" "$HM"
+
+echo "— T13 havuz köprüsü ölçemezse MERKEZ.md yazılmaz: ÖLÇÜLEMEDİ rc 3, '0 havuz' DEĞİL"
+kapi "T13a köprü rc 3 (jeton yok) → merkez rc 3" 3 env RETRO_BULGU_SH="$T/kopru/olmez.sh" python3 "$R" merkez --kok "$HK" --ajanlar X --yenile
+icerir "$CIKTI" "ÖLÇÜLEMEDİ: havuz okunamadı — defter jetonu yok" "T13b sebep köprünün kendi cümlesinden"; icermez "$CIKTI" "havuz 0" "T13c 0 havuz denmedi"
+cmp -s "$HM" "$T/havuz-merkez.md" && ok "T13d MERKEZ.md bayt bayt değişmedi (damgalar ve elle bölüm yerinde)" || kirmizi "T13d MERKEZ.md değişti"
+kapi "T13e köprü dosyası yok → rc 3" 3 env RETRO_BULGU_SH="$T/kopru/yok.sh" python3 "$R" merkez --kok "$HK" --ajanlar X --yenile; icerir "$CIKTI" "köprü yok" "T13f sebep"
+kapi "T13g ilk yazımda da köprü yoksa dosya üretilmez" 3 env RETRO_BULGU_SH="$T/kopru/yok.sh" python3 "$R" merkez --kok "$BOS" --ajanlar X
+[ ! -f "$BOS/_agents/handoff/retro/2026-W42/MERKEZ.md" ] && ok "T13h MERKEZ.md yazılmadı" || kirmizi "T13h MERKEZ.md yazıldı"
+sed -i '/^## Havuz süzümü/,/^## Serbest havuz notu/{/^## Serbest havuz notu/!d}' "$HM"
+kapi "T13i bölümsüz (1.3.0 öncesi) MERKEZ.md → suzum uyarır, geriye dönük kırmızıya çevirmez" 0 python3 "$R" suzum --kok "$HK"; icerir "$CIKTI" "Havuz süzümü bölümü yok" "T13j uyarı"
+kapi "T13k --yenile bölümü ekler" 0 "${HB[@]}" python3 "$R" merkez --kok "$HK" --ajanlar X --yenile
+[ "$(grep -cE '^- gorev_[0-9A-Z]{26} · ' "$HM")" -eq 2 ] && ok "T13l 2 havuz satırı geri geldi" || kirmizi "T13l havuz satırı $(grep -c '^- gorev_' "$HM")"
+icerir "$(cat "$HM")" "merkezin havuz notu" "T13m elle bölüm korundu"
+cp "$T/havuz-merkez.md" "$HM"
+
 echo "— M mutasyon (kopya üstünde; her mutant en az bir kapıyı kızartmalı)"
 mut(){ # mut <ad> <sed> <komut...> : mutant kopyada komut BAŞARILI (rc=0) kalırsa sınav onu yakalamıyor demektir
   local ad="$1" sed_="$2"; shift 2; local MR="$T/mut-$RANDOM.py"; sed -e "$sed_" "$R" > "$MR"
@@ -282,7 +361,7 @@ mut "M4 metin kıyası kalkınca bayat damga geçer (kapı yakalar)" 's/        
 mut "M3 iz ayrımı kalkınca BASİRET EKSİK sayılır (kapı yakalar)" 's/    return bool((n and n\["satir"\] > 0)/    return True or bool((n and n["satir"] > 0)/' m_iz
 m_elle(){ local rc; cp "$T/merkez-elle.md" "$M"; python3 "$1" merkez --yenile >/dev/null 2>&1; grep -qF "## Kaçış ve tıkanma" "$M" && grep -qF "vekil ölçütü önce adıyla ölç" "$M" && grep -qF "önek araç başlığına benzer" "$M" && cmp -s <(sed -n '/^## Dersler/,$p' "$T/merkez-elle.md") <(sed -n '/^## Dersler/,$p' "$M"); rc=$?; cp "$T/merkez-elle.md" "$M"; return $rc; }
 mut "M5 elle bölümler taşınmazsa --yenile Dersler/Kaçış'ı siler (eski hata · kapı yakalar)" 's/            elle = merkez_elle_ham(eski)/            elle = ""/' m_elle
-mut "M6 araç bölümü ÖNEKLE tanınırsa '## Süzüm notları' silinir (kapı yakalar)" 's/            icinde = s.rstrip("\\r\\n") not in (MERKEZ_KATILIM, MERKEZ_SUZUM)/            icinde = not s.startswith(("## Katılım", "## Süzüm"))/' m_elle
+mut "M6 araç bölümü ÖNEKLE tanınırsa '## Süzüm notları' silinir (kapı yakalar)" 's/            icinde = s.rstrip("\\r\\n") not in MERKEZ_ARAC_BOLUMLERI/            icinde = not s.startswith(("## Katılım", "## Süzüm", "## Havuz"))/' m_elle
 mut "M7 boş satırlar daraltılırsa bayt eşitliği bozulur (kapı yakalar)" 's/            ham.append(s)$/            ham.append(s) if (s.strip() or not ham or ham[-1].strip()) else None/' m_elle
 
 m_dl(){ local rc; cp "$T/x-iskelet.md" "$XD"; python3 "$1" doldur X --kok "$BOS" --metin "$2" >/dev/null 2>&1; rc=$?; cmp -s "$XD" "$T/x-iskelet.md"; local ayni=$?; cp "$T/x-iskelet.md" "$XD"; [ "$rc" -ne 0 ] && [ "$ayni" -eq 0 ]; }
@@ -305,6 +384,18 @@ mut "M14 okunamama uyarısı susturulunca eksik sayım yeşil görünür (kapı 
 m_goz(){ local rc; rm -f "$SD"; env RETRO_DEPO_KOKU="$P" python3 "$1" kutu SIRA --koltuk s:0 >/dev/null 2>&1; grep "^| bağımsız göz turu" "$SD" | grep -qF "depo başına: depo 1 · Sx 2"; rc=$?; rm -f "$SD"; return $rc; }
 m_goz "$R" && ok "M15 pozitif kontrol: bozmasız araç göz turunu depo başına döker" || kirmizi "M15 pozitif kontrol: gerçek araç dökmüyor"
 mut "M15 depo başına göz sayacı artmazsa döküm yalan söyler (kapı yakalar)" 's/turlar.append(len(ad)); dg += len(ad); /turlar.append(len(ad)); /' m_goz
+
+# Havuz mutantları her koşuda TAZE kök açar (mktemp -d, $T altında; dosya silinmez, trap toplar): durum sızmaz.
+m_havuz(){ local K; K="$(mktemp -d -p "$T")"; "${HB[@]}" python3 "$1" merkez --kok "$K" --ajanlar X >/dev/null 2>&1; [ "$(grep -cE '^- gorev_[0-9A-Z]{26} · ' "$K/_agents/handoff/retro/2026-W42/MERKEZ.md" 2>/dev/null)" -eq 2 ]; }
+m_havuz "$R" && ok "M16-17 pozitif kontrol: bozmasız araç 2 havuz satırı yazar" || kirmizi "M16-17 pozitif kontrol: gerçek araç 2 satır yazmıyor"
+mut "M16 köprü çağrısı silinince havuz satırı yazılmaz (kapı yakalar)" 's/\["bash", bsh, "havuz-cek"\]/["true"]/' m_havuz
+mut "M17 ham süzgeci kalkınca acik kayıt da listeye girer (kapı yakalar)" 's/        if k.get("durum") != "ham":/        if False:/' m_havuz
+m_h_sari(){ local K rc; K="$(mktemp -d -p "$T")"; env RETRO_BULGU_SH="$T/kopru/yok.sh" python3 "$1" merkez --kok "$K" --ajanlar X >/dev/null 2>&1; rc=$?; [ "$rc" -eq 3 ] && [ ! -f "$K/_agents/handoff/retro/2026-W42/MERKEZ.md" ]; }
+m_h_sari "$R" && ok "M18 pozitif kontrol: köprü yokken rc 3, dosya yok" || kirmizi "M18 pozitif kontrol: gerçek araç köprüsüz yazıyor"
+mut "M18 köprü yokluğu boş listeye çevrilince '0 havuz' sessiz yeşil olur (kapı yakalar)" 's/        return None, f"köprü yok: {bsh}"/        return [], "köprü yok"/' m_h_sari
+m_h_suzum(){ local rc; cp "$T/havuz-merkez-damgasiz.md" "$HM"; python3 "$1" suzum --kok "$HK" >/dev/null 2>&1; rc=$?; cp "$T/havuz-merkez.md" "$HM"; [ "$rc" -ne 0 ]; }
+m_h_suzum "$R" && ok "M19 pozitif kontrol: damgasız havuz satırında gerçek suzum kırmızı" || kirmizi "M19 pozitif kontrol: gerçek suzum damgasız havuzu geçiriyor"
+mut "M19 havuz damga denetimi kalkınca damgasız havuz satırı süzümden geçer (kapı yakalar)" 's/        if not damga_gecerli(d):/        if False:/' m_h_suzum
 
 echo; echo "GECEN=$G DUSEN=$K"
 [ "$K" -eq 0 ]
