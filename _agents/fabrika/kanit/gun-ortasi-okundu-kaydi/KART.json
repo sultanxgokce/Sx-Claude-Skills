@@ -1,0 +1,31 @@
+{
+  "is": "gun-ortasi-okundu-kaydi",
+  "cumle": "gun-ortasi kalan.sh gelen kutusu bölümü okundu kaydını kutunun kendisinden sorar (scripts/kurye-yokla.sh okundu-liste, yoksa okundu-yolu), kaydın adını ve biçimini tahmin etmez; kurye-yokla.sh olmayan kutuda okundu.log eski biçimiyle aynen çalışır; kaydı kutudan okunan mektup okunmamış sayılmaz",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-23T05:46:28+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/gun-ortasi-okundu-kaydi",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M4ZMCTDB4B84P42S6R75A8CJ",
+  "tahmin_dk": 90,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-23T05:46:28+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
