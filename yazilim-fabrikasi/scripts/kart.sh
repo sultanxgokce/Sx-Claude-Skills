@@ -258,8 +258,10 @@ kart={"is":is_,"cumle":cumle,"istedi":istedi,"aldi":aldi,"zaman":datetime.dateti
       "canli_gerekir":cg=="E","canli_sebep":csebep,"kapsam_uyarilari":[u for u in kuyari.splitlines() if u.strip()]}
 if gorev: kart["gorev"]=gorev; kart["tahmin_dk"]=int(tahmin)
 sayilar=[u for u in suyari.splitlines() if u.strip()]
+TAVAN=2000   # kart bir JSON kaydıdır, ölçüm arşivi değil: tavan AÇIK yazılır, kesilme SESSİZ değildir (göz #430 tur 1)
 if skomut:
-    kart["sayi_olcum"]={"komut":skomut,"rc":int(src),"cikti":scikti[:400],"zaman":kart["zaman"]}
+    kart["sayi_olcum"]={"komut":skomut,"rc":int(src),"cikti":scikti[:TAVAN],"cikti_bayt":len(scikti.encode()),"kirpildi":len(scikti)>TAVAN,"zaman":kart["zaman"]}
+    if len(scikti)>TAVAN: kart["sayi_olcum"]["son_satirlar"]=scikti.rstrip().splitlines()[-5:]   # sonuç çoğu zaman sondadır
 kaynakli = bool(skomut) and src=="0"
 kart["sayi_uyarilari"]=[] if kaynakli else sayilar
 json.dump(kart,open(yol,"w"),ensure_ascii=False,indent=2)
@@ -270,6 +272,7 @@ if kart["sayi_uyarilari"]:
 if skomut:
     ilk=(scikti.strip().splitlines() or ["(çıktı yok)"])[0][:120]
     print(f"  · sayı kaynağı karta yazıldı (rc={src}): {ilk}" if kaynakli else f"  ⚠ SAYI — ölçüm komutu DÜŞTÜ (rc={src}) — sayı kaynaksız sayıldı: {ilk}")
+    if kart["sayi_olcum"]["kirpildi"]: print(f"  ⚠ SAYI — ölçüm çıktısı {kart['sayi_olcum']['cikti_bayt']} bayt: karta ilk {TAVAN} karakter + son 5 satır yazıldı (KIRPILDI); tam çıktı için kanit.sh olcum")
 if cg=="E": print(f"  · CANLI kanıt zorunlu ({csebep}): gerçek ateşleme kaydı (kanit.sh canli) olmadan birleştirme kapısı geçmez")
 elif csebep: print(f"  ⚠ canlı kanıt istenmedi — {csebep}; karta yazıldı, bağımsız göz görür")
 if not gorev: print("  · görev bağı yok — iş Sultan'ın 'çalışılıyor' görünümüne DÜŞMEZ (bağlamak için: kart.sh ac … --gorev gorev_<kimlik> --tahmin <dk>)")

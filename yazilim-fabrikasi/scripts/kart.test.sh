@@ -218,6 +218,9 @@ SO="$(python3 -c "import json,sys;k=json.load(open(sys.argv[1]));o=k['sayi_olcum
 [ "$SO" = "0 13 görev bulundu 0" ] && grep -q "sayı kaynağı karta yazıldı (rc=0): 13 görev bulundu" <<<"$CIKTI" && ! grep -q "⚠ SAYI" <<<"$CIKTI"; g $? "--sayi-olcum: komut koşuldu, rc + çıktı karta yazıldı, uyarı düştü ($SO)"
 CIKTI="$(bash "$KT" ac is-s4 --is "13 görev kapansın" --istedi SERDAR --aldi HENDESE --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h --sayi-olcum "echo kaynak yok; exit 7" 2>&1)"; RC=$?
 [ "$RC" -eq 0 ] && [ "$(su is-s4)" = "13 görev" ] && grep -q "ölçüm komutu DÜŞTÜ (rc=7)" <<<"$CIKTI"; g $? "düşen ölçüm komutu kaynak SAYILMAZ: uyarı karta yazılı kalır, kart yine açılır (rc 0)"
+CIKTI="$(bash "$KT" ac is-s5 --is "13 görev kapansın" --istedi SERDAR --aldi HENDESE --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h --sayi-olcum "seq 1 3000; echo SONUC: 13 görev" 2>&1)"
+SO="$(python3 -c "import json,sys;o=json.load(open(sys.argv[1]))['sayi_olcum'];print(o['kirpildi'],len(o['cikti']),o['cikti_bayt'],o['son_satirlar'][-1])" "$K13/_agents/fabrika/kartlar/is-s5.json" 2>&1)"
+[ "$SO" = "True 2000 13909 SONUC: 13 görev" ] && grep -q "ölçüm çıktısı 13909 bayt: karta ilk 2000 karakter + son 5 satır yazıldı (KIRPILDI)" <<<"$CIKTI"; g $? "uzun ölçüm çıktısı SESSİZ kesilmez: kartta kirpildi + tam boy + son satırlar (sonuç satırı korunur), ekranda uyarı ($SO) — göz #430 tur 1"
 echo "── T13c · MUTASYON (tam kopya): sayı aranmazsa #1213 cümlesi sessiz geçer → üstteki kapı düşerdi ──"
 D="$T/pkg-sayi"; mkdir -p "$D"; cp "$HERE"/*.py "$HERE"/*.sh "$D/" 2>/dev/null
 if python3 - "$D/kart.sh" <<'PYM'

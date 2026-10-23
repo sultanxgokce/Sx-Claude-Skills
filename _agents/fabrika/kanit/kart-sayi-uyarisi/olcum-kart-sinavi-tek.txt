@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/kart.test.sh
-# rc=0 sure=11.6s zaman=2026-10-23T04:43:46+03:00
+# rc=0 sure=19.1s zaman=2026-10-23T04:45:42+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -126,6 +126,7 @@ $ bash yazilim-fabrikasi/scripts/kart.test.sh
   ✓ sayısız cümle: uyarı yok, karta boş liste
   ✓ --sayi-olcum: komut koşuldu, rc + çıktı karta yazıldı, uyarı düştü (0 13 görev bulundu 0)
   ✓ düşen ölçüm komutu kaynak SAYILMAZ: uyarı karta yazılı kalır, kart yine açılır (rc 0)
+  ✓ uzun ölçüm çıktısı SESSİZ kesilmez: kartta kirpildi + tam boy + son satırlar (sonuç satırı korunur), ekranda uyarı (True 2000 13909 SONUC: 13 görev) — göz #430 tur 1
 ── T13c · MUTASYON (tam kopya): sayı aranmazsa #1213 cümlesi sessiz geçer → üstteki kapı düşerdi ──
   ✓ mutant (sayı uyarısı kapalı) #1213 cümlesini sessiz geçiriyor → üstteki kapı bu mutantta düşerdi
 ════ T14 · görev durumu (Y7J3Q): --gorev bağlı kart açılış/bitti/tıkandı'da defterdeki görevi yazar; yazamazsa söyler, rc 4 ════
@@ -166,5 +167,5 @@ $ bash yazilim-fabrikasi/scripts/kart.test.sh
   ✓ mutant (iş alanı aranmıyor): tur sıfırı 0 — eski davranış geri geldi → üstteki 🔴 kapı bu mutantta düşerdi
   ✓ mutant: bitti 'KANIT YOK' damgalar (Sx #383) → üstteki 🔴 kapı düşerdi
 
-── SONUÇ: 144 geçti · 0 kaldı ──
+── SONUÇ: 145 geçti · 0 kaldı ──
 --- stderr ---
