@@ -129,6 +129,16 @@ Codex yoksa ya da iki denemede de düşerse, **yazandan farklı yeni bir Claude 
 sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kaldırılınca kırmızı).
 
 ## Sürüm notları
+- **0.22.0 (2026-10-23, sürüm sırası: 0.21.0 merge-reise önce birleşti, bu iş 0.20.0 için hazırlanmıştı; BÂNİ · HENDESE 22 Eki ölçümü, gorev_01M5F03K79B5B19A2XQ54V8NMK):** `denetci.sh` ve `kanit.py` kaydı
+  çağrıldığı ağacın köküne yazıyordu; iş alanı (worktree) açıkken BİRİNCİL kopyadan koşulan ölçüm/denetim orada takipsiz
+  kalıyor, PR'a girmiyordu (Nexus 116 + cloudtop 45 takipsiz kanıt dosyası; ana kopyanın otomatik çekmesi 10 gün ölü). Artık
+  birincil kopyada (git-dir == git-common-dir) o iş için is-alani.sh kökünde (`IS_ALANI_KOK`, vars. /config/projects/_wt,
+  `<depo-adı>-<iş>`) açık bir alan varsa yazma **reddedilir** (rc 2, alan yolu ve doğru komut söylenir; sessiz yönlendirme yok).
+  Alandan koşum ve alanı olmayan iş eski davranışıyla aynı; okuma komutları (dogrula · ozet · liste) kapıdan geçmez.
+  DENETIM-N.json'a `depo` · `dal` · `birincil_mi` alanı yazılır (kayıt nereye düştü, sonradan ayırt edilir). Kapılar: kanit.test.sh
+  **TB0–TB6b** (reddi · iz yok · alandan yazar · alansız iş yazar · okuma geçer · dosya komutu da reddedilir · mutant: kapı
+  sökülünce yazar), denetci.test.sh **TP0–TP4c** (reddi · DENETIM/KART yok · alandan DENETIM depo/dal/birincil_mi=false ·
+  alansız iş birincil_mi=true · mutant dizin kopyasında). Ölçüm komutu: HENDESE `_agents/hendese/olcer/`.
 - **0.21.0 (23 Eki, Sultan D1 · çekirdek; sıra: 0.19.0 #436, 0.20.0 V8NMK):** sınıflı işte Sultan yalnız başlama izni verir (veto), ara kararlar ve birleştirme reisin — kural `adimlar/0-kabul.md` "Sınıflı iş". `izin.py` + `kart.sh` (izin-durum · basla/dur · sınıflıda reis-dedi/daralt · veto çiti reis-dedi/daralt/bitti · birlestirme_karari). Kalanı ikinci kartta (`fabrika-merge-reise-parca2`).
 - **0.22.0 (23 Eki, Sultan D1 · Sultan'a ulaşım yolu; 0.21.0 çekirdeğinin ikinci kartı, parça 2b):** sınıflı kartın başlama izni Sultan'a GİDER — yol yoksa kart AÇILMAZ. `kart.sh ac` sınıflıda `--oda` yoksa, tetik betiği yoksa ya da tetik düşerse rc 1 "Sultan'a ulaşılamadı: --oda ver ya da tetik betiğini kur" der ve kartı yazmaz/geri alır; ölçüldü: eski araç "BAŞLAMA İZNİ SULTAN'A GİDER" basıp rc 0 dönüyordu (oda yoksa `tetik()` sessizce çıkıyor, betik yoksa "atılmadı" deyip yine 0). `tetik()` artık gitti/gitmedi söyler (sınıfsız çağıran yok sayar: iş düşmez). Sultan'a giden satırda komut yok. **Atomik yayım (göz tur 3):** kart önce geçici dosyaya yazılır, tetik başarınca `ln` ile (var olanı ezmeden) yayımlanır — tetikte süreç kesilirse görünür kart kalmaz, geri alma yalnız kendi geçici dosyasını siler (eşzamanlı aynı kimlikli başkasının kartı ezilmez/silinmez). Sınav T17 (U1-U9 + 7 mutant); sınavlar sahte tetikle koşar (gerçek odaya mektup bırakmaz). Kalan: parca2 (kapı/denetçi/gün sonu) · parca2c (canlı borç). Kural metni `adimlar/0-kabul.md`.
 - **0.10.0 (2026-10-18, SERDAR · PCP7J daraltma adımı; 0.9.0 HENDESE üstüne):** tıkanma raporu "kapsamı daralt" diyordu ama hatta adımı yoktu:

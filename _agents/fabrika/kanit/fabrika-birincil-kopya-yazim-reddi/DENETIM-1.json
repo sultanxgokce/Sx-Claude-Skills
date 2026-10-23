@@ -1,0 +1,47 @@
+{
+  "tur": 1,
+  "is": "fabrika-birincil-kopya-yazim-reddi",
+  "pr": "438",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T14:23:41+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 39230,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Birincil kopyada açık iş alanı varken yazmayı rc 2 ile durduran kapılar ve eski davranışın korunduğu yollar güçlü ölçümlerle gösterilmiş. Ancak iş kartı 0.19.0 ve `birincil_mi` alanını isterken değişiklik 0.20.0 yayımlıyor ve DENETIM kaydına `birincil` yazıyor; teslim sözleşmesiyle uyuşmayan bu iki uygulama sorunu önce çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "DENETIM-N.json alan adı talebi karşılamıyor: istenen `birincil_mi`, üretilen alan `birincil`. Testler de yanlış sözleşmeyi `d['birincil']` üzerinden sabitlemiş.",
+        "kanit": "İş kartı açıkça “depo yolu, dal ve birincil_mi alanı” diyor; denetci.sh JSON değişikliği `\"depo\":depo,\"dal\":...,\"birincil\":birincil==\"1\"` yazıyor ve TP2/TP3 sınavları `d['birincil']` denetliyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh JSON yazım hunki; yazilim-fabrikasi/scripts/denetci.test.sh TP2-TP3",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "İş kartındaki hedef sürüm 0.19.0 iken değişiklik bütün sürüm işaretlerini 0.20.0 olarak yayımlıyor.",
+        "kanit": "Talep cümlesi “yazilim-fabrikasi 0.19.0” diyor; catalog.json ve SKILL.md sürümleri 0.20.0 yapılmış, yeni sürüm notu ile TB/TP başlıkları da 0.20.0 olarak eklenmiş.",
+        "konum": "catalog.json sürüm hunki; yazilim-fabrikasi/SKILL.md sürüm ve sürüm-notu hunki; TB/TP başlıkları",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. kanit-sinavi ile denetci-sinavi için kırmızı önce/yeşil sonra ölçüm çiftleri var; sonrasında sırasıyla 233/0 ve 277/0 sonuçları, rc 2 reddi, iz bırakmama, iş alanından yazma, alansız eski davranış ve mutasyon yakalaması gösteriliyor. Bununla birlikte yeşil sınavlar iş kartındaki `birincil_mi` adını değil uygulamanın `birincil` adını sınadığı için hedef sözleşme uyuşmazlığını örter."
+  }
+}
