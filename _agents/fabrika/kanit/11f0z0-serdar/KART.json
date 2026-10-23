@@ -1,0 +1,42 @@
+{
+  "is": "11f0z0-serdar",
+  "cumle": "Haftalık retro aracı (retro.py 1.3.0) merkez kipinde görev defterindeki 'havuz' kayıtlarını da süzüm listesine alsın: `bulgu.sh havuz-cek` köprüsünden durum=ham kayıtları okuyup MERKEZ.md'ye \"## Havuz süzümü\" bölümü olarak yazsın (her satır `- <gorev_id> · <başlık> → ` ve kutu önerileriyle aynı damga kuralı: → gorev_<26> ya da → RED: gerekçe; havuzdaki kayıt kendisi görev olduğundan damga 'gorev_<kendi id>' = Sırada'ya alınır), `suzum` kipi damgasız havuz satırını kırmızı saysın, `--yenile` elle bölümleri ve eski damgaları korusun; defter jetonu/köprü yoksa ÖLÇÜLEMEDİ (rc 3) basıp 0 havuz demesin. Ölçüm: hermetik retro.test.sh'ta sahte havuz-cek ile `merkez` çıktısında havuz satırı önce=0 sonra=N (N≥2 fikstür kaydı) + damgasız havuz satırında suzum rc önce=0 sonra=1 + mutant (köprü çağrısı silinince sınav kırmızı); gerçek defterde `merkez --hafta 2026-W43` koşusu MERKEZ.md'de 6 havuz satırı gösterir (22 Eki anlık sayım).",
+  "istedi": "SERDAR",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-23T15:04:48+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [
+    "ÇOK GÜNLÜK KAPSAM (Haftalık, W43, hafta): bir PR'da teslim edilmez — gün başına kart öner: 11f0z0-serdar-g1 · 11f0z0-serdar-g2 … (her biri günün teslim birimi)"
+  ],
+  "gorev": "gorev_01M5JKV3XCJ6DFA9VA7311F0Z0",
+  "tahmin_dk": 90,
+  "sayi_olcum": {
+    "komut": "bash /config/.claude/skills/bulgu/scripts/bulgu.sh havuz-cek 2>/dev/null | grep -c '\"durum\": \"ham\"'",
+    "rc": 0,
+    "cikti": "7",
+    "cikti_bayt": 1,
+    "kirpildi": false,
+    "zaman": "2026-10-23T15:04:48+03:00"
+  },
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-23T15:04:48+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
