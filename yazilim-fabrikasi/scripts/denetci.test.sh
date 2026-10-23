@@ -10,9 +10,7 @@ set -uo pipefail
 export FABRIKA_AILE_NOTIFY=-   # denetçi bitiş zili sınavda KAPALI (gerçek koltuklara çalmasın); zil kapısı kendi sahtesini verir
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 D="${MUTANT_D:-$HERE/denetci.sh}"; K="$HERE/kanit.sh"; KT="$HERE/kart.sh"
-# Sınıflı kart Sultan'a ulaşım yolu ister (--oda + tetik betiği; göz 23 Eki tur 2) — sınav gerçek odaya mektup BIRAKMAZ: sahte tetik.
-TETIK_SAHTE="$(mktemp)"; printf '#!/usr/bin/env bash\nexit 0\n' > "$TETIK_SAHTE"; chmod +x "$TETIK_SAHTE"; export FABRIKA_TETIK="$TETIK_SAHTE"
-kartac() { bash "$KT" ac "$1" --is x --istedi SULTAN --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki e --oda sinav-oda >/dev/null 2>&1; }
+kartac() { bash "$KT" ac "$1" --is x --istedi SULTAN --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki e >/dev/null 2>&1; }
 gecen=0; kalan=0
 g() { if [ "$1" -eq 0 ]; then gecen=$((gecen+1)); echo "  ✓ $2"; else kalan=$((kalan+1)); echo "  ✗ $2"; fi; }
 
@@ -115,27 +113,26 @@ CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-s --diff "$T/d.patch" --sultan-de
 grep -q "TAVAN AÇILDI" <<<"$CIKTI"; g $? "tavanın açıldığını SÖYLÜYOR (sessiz değil)"
 grep -q "muavin/4390ad1f" <<<"$CIKTI"; g $? "oturum referansı çıktıda görünüyor"
 grep -q "kapinin amacini curutur" <<<"$CIKTI"; g $? "GEREKÇE de çıktıda görünüyor (niçin bir tur daha)"
-echo "════ T7c · 🚪 REİS KAPISI: sahip kararı KARTTAN; 0.19.0 FLİP — sınıflı kartta da AÇIK (Sultan yalnız veto) ════"
+echo "════ T7c · 🚪 REİS KAPISI: sınıfsız işte sahip kararı KARTTAN; sınıflı kartta KAPALI ════"
 # NİÇİN (8 Eki 2026 · A268): tıkandı raporu "karar iş sahibinin/reisin, sınıf işiyse Sultan'ın" diyordu ama araç
 # yalnız Sultan'ın kararını okuyordu. Sınıfsız işin sahibi kendi yetkisindeki kararı yazdıramıyor; kapı ya kapalı
 # kalıyor ya da A06'ya özendiriyordu (aynı gün iki vaka: DEVRİYE doğrulayıcısı · kokpit A2).
-# 0.19.0 (Sultan D1 22 Eki): sınıflı işte de ara karar reisin — "sınıflı kartta KAPALI" çiti kalktı; veto çiti T-VETO'da.
-# (a) SINIFLI kart: reis yolu AÇIK; defter satırı sinif= izin= taşır; mutlak tavan yine kapalı
+# (a) SINIFLI kart: reis yolu her adımda KAPALI
 kartac is-r1; bash "$K" olcum is-r1 olc --asama tek -- echo 1 >/dev/null 2>&1
 SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-r1 --diff "$T/d.patch" >/dev/null 2>&1
 SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-r1 --diff "$T/d.patch" >/dev/null 2>&1
-CIKTI="$(SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-r1 --diff "$T/d.patch" 2>&1)"; [ $? -eq 4 ]; g $? "sınıflı iş tur3 tıkandı (rc=4)"
-grep -q "karar reisin — sınıflı işte de" <<<"$CIKTI"; g $? "tıkandı raporu: 'karar reisin — sınıflı işte de; Sultan yalnız veto'"
-grep -q "başlama izni: bekliyor" <<<"$CIKTI"; g $? "denetçi sınıflı işte başlama izni durumunu basar"
+SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-r1 --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 4 ]; g $? "sınıflı iş tur3 tıkandı (rc=4)"
+bash "$KT" reis-dedi is-r1 --karar devam --reis MUAVIN --oturum ref-r1 --gerekce "bulgular farkliydi ve hepsi kapandi, dorduncu tur ilerlemeyi olcer" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "🔴 SINIFLI karta reis kararı YAZILAMADI (merci Sultan)"
+python3 -c "import json;k=json.load(open('$T/_agents/fabrika/kartlar/is-r1.json'));assert not k.get('reis_kararlari')"; g $? "kartta reis_kararlari alanı oluşmadı"
+python3 - "$T/_agents/fabrika/kartlar/is-r1.json" <<'PY'
+import json,sys; k=json.load(open(sys.argv[1])); k["reis_kararlari"]=[{"karar":"devam","reis":"MUAVIN","oturum":"ref-elle","gerekce":"yirmi karakterden uzun elle yazilmis gerekce"}]; json.dump(k,open(sys.argv[1],"w"))
+PY
 CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-r1 --diff "$T/d.patch" --reis-devam 2>&1)"; RC=$?
-[ "$RC" -eq 1 ] && grep -q "reis-dedi" <<<"$CIKTI"; g $? "kartta reis kararı yokken bayrak sınıflıda da AÇMIYOR (rc=1), yol reis-dedi"
-bash "$KT" reis-dedi is-r1 --karar devam --reis MUAVIN --oturum ref-r1 --gerekce "bulgular farkliydi ve hepsi kapandi, dorduncu tur ilerlemeyi olcer" >/dev/null 2>&1; g $? "🔴 FLİP: SINIFLI karta reis kararı YAZILDI (eski kural reddederdi)"
-python3 -c "import json;k=json.load(open('$T/_agents/fabrika/kartlar/is-r1.json'));r=k['reis_kararlari'][-1];assert r['sinifli'] is True and not k.get('sultan_kararlari')"; g $? "kayıt reis_kararlari'nda sinifli:true; sultan_kararlari YOK (A06)"
-CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-r1 --diff "$T/d.patch" --reis-devam 2>&1)"; RC=$?
-[ "$RC" -eq 0 ]; g $? "🔴 FLİP: sınıflı kartta reis kararı tavanı AÇTI, tur4 koştu ve GEÇTİ (rc=0)"
-grep -q "REİS kararı" <<<"$CIKTI" && grep -q "Sultan sözü değil" <<<"$CIKTI"; g $? "açılış 'REİS kararı … Sultan sözü değil' diye yazılı"
-grep -q "TAVAN-ACILDI-REIS | is=is-r1 tur=4 sinif=yetki izin=bekliyor |" "$T/_agents/fabrika/tavan-defteri.log"; g $? "defter satırı 3. sütunda sinif=yetki izin=bekliyor taşır (gün sonu ayrımı; ayraç bozulmadı)"
-SAHTE_JSON="$(J 5 E "")" bash "$D" is-r1 --diff "$T/d.patch" --reis-devam >/dev/null 2>&1; [ $? -eq 4 ]; g $? "sınıflıda da reis kararı MUTLAK tavanı (4) AÇMIYOR → tur5 rc=4"
+[ "$RC" -eq 1 ]; g $? "🔴 sınıflı karta ELLE yazılmış reis kararı bile kapıyı AÇMIYOR (rc=1)"
+grep -q "SINIFLI" <<<"$CIKTI"; g $? "sebebi yazılı: kart sınıflı, merci Sultan"
+grep -q "sultan-dedi" <<<"$CIKTI"; g $? "doğru yol gösterildi (sultan-dedi)"
+[ ! -f "$T/_agents/fabrika/kanit/is-r1/DENETIM-4.json" ]; g $? "denetim KOŞULMADI"
+! grep -q "is=is-r1" "$T/_agents/fabrika/tavan-defteri.log" 2>/dev/null; g $? "deftere de yazılmadı"
 # (b) SINIFSIZ kart: karar karttan okunur, serbest metinle açılmaz
 bash "$KT" ac is-r2 --is x --istedi SULTAN --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1
 bash "$K" olcum is-r2 olc --asama tek -- echo 1 >/dev/null 2>&1
@@ -161,7 +158,6 @@ python3 -c "import json;assert not json.load(open('$W/_agents/fabrika/kartlar/is
 CIKTI="$(SAHTE_JSON="$(J 5 E "")" SAHTE_ISTEM_KOPYA="$T/istem-w.txt" KANIT_DEPO="$W" bash "$D" is-w --diff "$T/d.patch" --reis-devam 2>&1)"; RC=$?
 [ "$RC" -eq 0 ] && grep -q "TAVAN AÇILDI" <<<"$CIKTI"; g $? "🔴 iş alanından koşan --reis-devam kapıyı BİRİNCİL karttan AÇTI (elle kopyalama yok, rc=0)"
 grep -q "ref-w-birincil" "$T/istem-w.txt"; g $? "denetçi istemindeki iş kartı da BİRİNCİL kart (reis kararı görünüyor)"
-grep -qF "kutu reisinin kararıdır, Sultan'ın sözü DEĞİLDİR; Sultan sözü yalnız \`sultan_kararlari\`'nda (A06)" "$T/istem-w.txt"; g $? "A06: denetçi istemi reis kaydının Sultan sözü OLMADIĞINI söylüyor (reis_kararlari ≠ sultan_kararlari)"
 python3 -c "import json;assert json.load(open('$W/_agents/fabrika/kanit/is-w/KART.json')).get('reis_kararlari')[0]['oturum']=='ref-w-birincil'"; g $? "kartın anlık kopyası kanıt dizinine düştü (KART.json) — PR'a kart bununla gider, kartlar/ kopyasıyla değil"
 SAHTE_JSON="$(J 5 E "")" KANIT_DEPO="$W" bash "$D" is-w --diff "$T/d.patch" >/dev/null 2>&1; [ $? -ne 2 ]; g $? "KART.json kanıt manifestini BOZMAZ (sonraki koşum kanıt kapısında düşmüyor)"
 rm -f "$W/_agents/fabrika/kartlar/is-w.json"
@@ -299,28 +295,6 @@ SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-t --diff "$T/d.patch" --sultan-devam >/d
 CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-t --diff "$T/d.patch" --sultan-devam 2>&1)"; RC=$?
 [ "$RC" -eq 4 ]; g $? "🔴 5. tur: Sultan kapısı MUTLAK tavanı açmıyor (rc=4)"
 grep -q "mutlak tavan" <<<"$CIKTI"; g $? "mutlak olduğunu söylüyor"
-
-echo "════ T-VETO · 🚪 SULTAN VETOSU (0.19.0 · D1 22 Eki): 'dur' → denetim koşulmaz, tur yanmaz, rc 4, reise zil; 'basla' açar; bozuk izin rc 3 ════"
-kartac is-vt; bash "$K" olcum is-vt olc --asama tek -- echo 1 >/dev/null 2>&1
-bash "$KT" sultan-dedi is-vt --karar dur --oturum "sohbet-2340" --soz "bunu şimdi durdurun" --beyan MUAVIN >/dev/null 2>&1; g $? "Sultan 'dur' karta işlendi (D1 üçlüsü)"
-VZ="$T/veto-zil.sh"; VL="$T/veto-zil.log"; printf '#!/usr/bin/env bash\nprintf "%%s\\n" "$*" >> "%s"\n' "$VL" > "$VZ"; chmod +x "$VZ"; : > "$VL"
-CIKTI="$(SAHTE_JSON="$(J 5 E "")" FABRIKA_AILE_NOTIFY="$VZ" bash "$D" is-vt --diff "$T/d.patch" 2>&1)"; RC=$?
-[ "$RC" -eq 4 ]; g $? "🔴 vetolu kartta denetçi rc=4 (tıkandı yolu)"
-grep -q "SULTAN DUR DEDİ" <<<"$CIKTI" && grep -q "tur yanmadı" <<<"$CIKTI" && grep -q "sohbet-2340" <<<"$CIKTI" && grep -q "sultan-dedi is-vt --karar basla" <<<"$CIKTI"; g $? "sebep (oturum ref) + 'tur yanmadı' + çare yazılı"
-[ ! -f "$T/_agents/fabrika/kanit/is-vt/DENETIM-1.json" ] && [ ! -f "$T/_agents/fabrika/kanit/is-vt/DENETIM-1.kosuyor" ]; g $? "DENETIM yazılmadı, koşuyor izi de yok (denetçi hiç başlamadı — Codex parası yanmadı)"
-# ana dal #428 (B843Q · 0.18.1): yazana bitiş zili artık DÜZ PING ("<yazan> denetçi: …", --done YOK — meşgul yazanın kuyruğuna girsin)
-grep -q -- "^MUAVIN denetçi: is-vt" "$VL" && ! grep -q -- "--done" "$VL" && grep -q -- "--waiting --amir SERDAR" "$VL"; g $? "zil: yazana düz ping (--done yok, #428) + reise --waiting (rc 4 yolu; istedi SULTAN → SERDAR)"
-bash "$KT" sultan-dedi is-vt --karar basla --oturum "sohbet-2355" --soz "tamam başlayın" --beyan MUAVIN >/dev/null 2>&1
-CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-vt --diff "$T/d.patch" 2>&1)"; RC=$?
-[ "$RC" -eq 0 ] && grep -q "başlama izni: basla" <<<"$CIKTI" && grep -q "birleştirme kararı kutu reisinin" <<<"$CIKTI"; g $? "'basla' sonrası denetim koştu, GEÇTİ: 'başlama izni: basla … birleştirme kararı kutu reisinin; dağıtım Sultan eli'"
-[ -f "$T/_agents/fabrika/kanit/is-vt/DENETIM-1.json" ]; g $? "tur 1 şimdi yazıldı (veto turu yakmamıştı)"
-python3 - "$T/_agents/fabrika/kartlar/is-vt.json" <<'PY'
-import json,sys; p=sys.argv[1]; k=json.load(open(p)); k["baslama_izni"]={"durum":"evet"}; json.dump(k,open(p,"w"))
-PY
-SAHTE_JSON="$(J 5 E "")" bash "$D" is-vt --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 3 ]; g $? "bozuk baslama_izni → rc 3 ÖLÇÜLEMEDİ (denetim koşulmadı, fail-closed)"
-[ ! -f "$T/_agents/fabrika/kanit/is-vt/DENETIM-2.json" ]; g $? "ölçülemedi turu da yazmadı"
-bash "$KT" ac is-vs --is x --istedi SULTAN --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1; bash "$K" olcum is-vs olc --asama tek -- echo 1 >/dev/null 2>&1
-CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-vs --diff "$T/d.patch" 2>&1)"; [ $? -eq 0 ] && ! grep -q "başlama izni" <<<"$CIKTI"; g $? "sınıfsız kartta izin satırı basılmaz, davranış aynı (bayt bayt eski)"
 
 echo "════ T8 · geçersiz çıktı → rc=3 ölçemedi, ham saklanır ════"
 bash "$K" olcum is-e olc --asama tek -- echo 1 >/dev/null 2>&1
@@ -749,10 +723,7 @@ mut "gerekce-zorunlulugunu-kaldir" 's@^if len(x.get("gerekce") or "") < 20: rais
 
 mut "karti-okumayi-kaldir" 's@^  if \[ -z "$GEREKCE" \]; then@  if false; then@'
 mut "defter-dogrulamasini-kaldir" 's@^  grep -qF "$SATIR" "$DEF"@  true@'
-# 0.19.0: 'reis-sinif-citini-kaldir' mutantı KALDIRILDI (o çitin kalkması artık YENİ davranış); yerine eski çiti GERİ koyan ve veto
-#   denetimini kaldıran iki mutant — ikisi de T7c(a) FLİP / T-VETO kapılarını kırmızıya döndürmeli
-mut "reis-sinif-citini-geri-koy" 's@^if siniflimi(k) and izin_durumu(k)\[0\]=="dur": raise SystemExit(4)@if siniflimi(k): raise SystemExit(4)@'
-mut "veto-denetimi-kaldir" 's@^  if \[ "$IZIN" = dur \]; then@  if false; then@'
+mut "reis-sinif-citini-kaldir" 's@^if k.get("sultan") or k.get("siniflar"): raise SystemExit(3)@pass@'
 # 🔴 ÇAPA TAZELENDİ (görev WC3VBZAA): mutlak tavan artık HAM tura değil SAYILI tura bakıyor
 # (bulgularının hepsi kutu-dışı olan tur tavandan düşmez). Eski çapa `$TUR -gt $MUTLAK` idi ve
 # değişiklikten sonra hiçbir şey eşleşmiyordu — süitin "çapa bayatlamış" bekçisi bunu yakaladı.

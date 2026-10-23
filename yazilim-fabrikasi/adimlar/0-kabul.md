@@ -20,36 +20,28 @@ görünüm değişikliği "kusur düzeltmesi" sanılıp peşin onayla yayınland
 "Bu dış yüzey mi, iç mi" tereddüdü = dış.
 
 ## Sınıflı iş — başlama izni Sultan'ın, kararlar reisin (0.19.0 · Sultan D1 22 Eki 2026)
-**Kural metni BURADA yaşar; betik başlıkları ve SKILL tablosu buraya atıf yapar, cümleyi kopyalamaz.**
-Sultan'ın sözü (session_01Ge4BawKcUrcm1pdV8WANyF): *"sadece ara kararlar değil birleştirme kararları da reise geçsin çünkü
-ciddi sorun yaşıyoruz çok iş takılıyor"*. Ölçüm: bağımsız gözden geçen işler ayda **1.138 saat** bekledi; 22 Eki'de sorulan
-12 kararın **12'sinde** Sultan ajan önerisini seçti.
+**Kural metni BURADA yaşar; betik başlıkları ve SKILL buraya atıf yapar.** Sultan (session_01Ge4BawKcUrcm1pdV8WANyF):
+*"sadece ara kararlar değil birleştirme kararları da reise geçsin çünkü ciddi sorun yaşıyoruz çok iş takılıyor"*. Ölçüm:
+bağımsız gözden geçen işler ayda **1.138 saat** bekledi; 22 Eki'de sorulan 12 kararın **12'sinde** Sultan ajan önerisini seçti.
 - **Başlama izni Sultan'a gider, iş bekletilmez.** `kart.sh ac` sınıflı kartta `baslama_izni: bekliyor` yazar ve izin isteğini
-  `--oda <oda>` odasına tetikle (`FABRIKA_TETIK`, varsayılan Nexus `oda-tetik.sh`) gönderir. **Ulaşım yolu yoksa kart AÇILMAZ
-  (fail-closed, rc 1 — göz 23 Eki tur 2):** `--oda` verilmemişse, tetik betiği yoksa ya da tetik düşerse araç "Sultan'a
-  ulaşılamadı: --oda ver ya da tetik betiğini kur" der ve kartı yazmaz/geri alır. Varsayılan oda uydurulmaz (oda-tetik'te
-  "merkez/Sultan" odası yok). Sultan'a giden satır komut taşımaz: "durdurmak için 'dur' demen yeter"; Sultan'ın "dur"unu ajan
-  `kart.sh sultan-dedi <iş> --karar dur` ile karta işler. İş alanı açılır, iş yürür. İzin bir **VETO PENCERESİ**dir: Sultan `kart.sh sultan-dedi <iş>
-  --karar dur` derse kapı birleştirmeyi reddeder, denetçi tur koşmaz, reis durur; `--karar basla` karta işlenir; hiçbir şey
-  demezse iş reis kararlarıyla biter. Son basla/dur kazanır (dur = veto, sonraki basla vetoyu kaldırır).
+  `--oda` odasına tetikle gönderir; `--oda` yoksa, tetik betiği yoksa ya da tetik düşerse kart AÇILMAZ (rc 1, fail-closed;
+  varsayılan oda uydurulmaz). Sultan'a giden satır komut taşımaz ("durdurmak için 'dur' demen yeter").
+- İzin bir **VETO PENCERESİ**dir: Sultan'ın "dur"unu ajan `kart.sh sultan-dedi <iş> --karar dur` ile karta işler → reis durur
+  (`reis-dedi` · `daralt` · `canli-borc` rc 1); kapının ve denetçinin vetoyu okuması ikinci kartta (`fabrika-merge-reise-kapi`).
+  `--karar basla` vetoyu kaldırır (son basla/dur kazanır); Sultan bir şey demezse iş reis kararlarıyla biter.
 - **Ara kararlar (devam · daralt · geri-al · canlı borç) ve BİRLEŞTİRME kararı kutu reisinindir** — gerekçeli (≥20 karakter),
-  `kart.sh reis-dedi` ile karta yazılır (kart = defter; gün sonu özeti oradan üretilir, Sultan'ın veto hakkı oradadır).
-  `kart.sh bitti` birleştirme kararını `birlestirme_karari{karar_veren: reis}` olarak karta işler.
-- **Dağıtım / canlıya alma Sultan eli olarak KALIR** (sabah paketi, dar anahtar) — bu kuralın dışıdır.
-- **A06 korunur:** ajan Sultan adına söz ÜRETMEZ; `sultan-dedi` yine oturum-ref · kırpık · beyan ister. Reis kararı AYRI
-  alandır (`reis_kararlari`, sınıflıda `sinifli: true`), hiçbir çıktıda Sultan sözü gibi gösterilmez.
-- **Geriye uyum:** eski kart (alan yok) "bekliyor · veto yok" sayılır; eski Sultan devam/daralt/canli-borc kararları geçerli
-  kalır ama artık ŞART değildir; `sultan` alanı "sınıflı" anlamına daralır, silinmez.
-- **Eski kural (0.17, 21 Eyl–22 Eki):** sınıflı işin ara ve birleştirme kararı Sultan'ındı; ajan `sultan-dedi` olmadan
-  daraltamıyor, borç yazamıyor, reis-dedi reddediliyordu. Neden değişti: yukarıdaki ölçüm — işler Sultan'ın kapısında bekledi.
+  `kart.sh reis-dedi` ile karta; `kart.sh bitti` birleştirme kararını `birlestirme_karari{karar_veren: reis}` olarak yazar.
+- **Dağıtım / canlıya alma Sultan eli olarak KALIR.**
+- **A06 korunur:** `sultan-dedi` yine oturum-ref · kırpık · beyan ister; reis kararı ayrı alandadır (`reis_kararlari`, sınıflıda
+  `sinifli: true`) ve Sultan sözü gibi gösterilmez.
+- **Geriye uyum:** eski kart (alan yok) "bekliyor · veto yok" sayılır; eski Sultan kararları geçerli ama artık ŞART değil.
+  **Eski kural (0.17):** sınıflı işin ara ve birleştirme kararı Sultan'ındı; neden değişti: yukarıdaki ölçüm.
 
 ## Sınıfsız iş
 Ekipte biter: kanıt + bağımsız göz puanı + damga ile deftere girer; gün sonu özetinde "içeride bitirdiklerimiz"
-bölümünde görünür (sınıflı bitenler de orada "reis birleştirdi · izin: …" etiketiyle). Sultan sonradan "bunu bana
-sormalıydınız" derse sınıf kuralı o vakayla düzeltilir.
-**Başlama izni / veto penceresi sınıfsız işte YOKTUR:** `kart.sh sultan-dedi … --karar basla|dur` sınıfsız karta yazılmaz (rc 1) —
-yazılsaydı hiçbir kapı okumazdı (göz 23 Eki: eski araç yazıp "kapı kapalı" diyordu). Sultan sınıfsız bir işi durdurmak isterse reise
-söyler (reis `geri-al` kararı, `reis-dedi`); "bunu bana sormalıydınız" ise yukarıdaki yol: sınıf kuralı o vakayla düzelir.
+bölümünde görünür. Sultan sonradan "bunu bana sormalıydınız" derse sınıf kuralı o vakayla düzeltilir.
+**Başlama izni / veto sınıfsız işte YOKTUR:** `sultan-dedi … --karar basla|dur` sınıfsız karta yazılmaz (rc 1); sınıfsız işi
+durdurmak reisin `geri-al` kararıdır (`reis-dedi`).
 
 ## Tetikli mesaj
 **Görev bağı (0.11.0):** iş defterde bir göreve karşılık geliyorsa kartı ona bağla: `kart.sh ac … --gorev gorev_<kimlik> --tahmin <dk>`. Açılışta görev "çalışılıyor" olur, bitince "onay bekliyor", tıkanınca "bekliyor" — Sultan'ın "çalışılıyor" ekranı bunu okur. Bağsız kart o ekrana düşmez.
@@ -57,9 +49,7 @@ söyler (reis `geri-al` kararı, `reis-dedi`); "bunu bana sormalıydınız" ise 
 **Kapsam = teslim birimi** (retro W42 ders M2): kart tek depoda, tek PR'da, bir günde teslim edilecek kadar olsun. `kart.sh ac` cümlede iki depo adı ya da haftalık kapsam görürse UYARIR (red değil) ve depo başına / gün başına kart önerir; uyarı karta da yazılır.
 
 Kart açılınca ilgili odaya `oda-tetik` ile tek satır (var olan hat, L42): "<iş> alındı · sahip <ajan> · sınıf <x>" — sınıflı
-işte "· başlama izni bekleniyor (veto penceresi: iş yürür; durdurmak için 'dur' demen yeter)" eklenir; Sultan'ın tek görünürlüğü
-bu satır ve gün sonu özetidir — bu yüzden sınıflı kartta satır gidemiyorsa kart açılmaz (yukarıda, "Sınıflı iş"). Sınıfsız kartta
-`--oda` isteğe bağlı, tetik best-effort (düşerse iş düşmez).
+işte "· başlama izni bekleniyor (veto penceresi …)" eklenir ve satır gidemiyorsa kart açılmaz; sınıfsızda tetik best-effort.
 Kart kapanınca aynı hattan "bitti · kanıt <yol> · puan <n>/5 <E/H>".
 
 ## Sahiplik ve tıkanma

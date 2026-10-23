@@ -76,13 +76,10 @@ bash "$KT" tikandi is-3 --yol daralt --neden "şema çakışıyor" >/dev/null 2>
 
 echo "════ T7 · gün sonu özeti defterden: üç bölüm + açık işler ════"
 CIKTI="$(bash "$GS" --yaz 2>&1)"; g $? "özet üretildi"
-grep -q "## Sultan'a gidenler (3) — başlama izni / veto" <<<"$CIKTI"; g $? "Sultan'a gidenler 3 (is-2 dış yüzey · is-3 geri alınamaz · kartsız kaçış) — öneki korunur, başlık 'başlama izni / veto'"
-grep -qE "^\- \[bitti\] \*\*is-2\*\*.* izin: bekliyor .* reis birleştirdi" <<<"$CIKTI"; g $? "sınıflı bitti satırı 'izin: bekliyor · reis birleştirdi' taşır"
-grep -q "## İçeride bitirdiklerimiz (2)" <<<"$CIKTI" && grep -q "is-1" <<<"$CIKTI"; g $? "0.19.0: içeride bitenler 2 (is-1 sınıfsız + is-2 sınıflı: reis birleştirdi)"
-grep -qE "^\- \*\*is-2\*\*.*sınıf: dis_yuzey · reis birleştirdi · izin: bekliyor · veto yok" <<<"$CIKTI"; g $? "sınıflı bitti içeride 'sınıf · reis birleştirdi · izin · veto yok' etiketiyle"
-grep -q "## Reisin sınıflı işlerdeki kararları (2) — veto hakkın var" <<<"$CIKTI" && grep -q "is-2.* · birlestir · reis NAKKAS" <<<"$CIKTI"; g $? "YENİ bölüm: reisin sınıflı işlerdeki kararları (2: devam + birlestir), 'veto hakkın var'"
-grep -q "kartsiz-is — sahip ? · açıldı .* · sınıflı · izin: bekliyor" <<<"$CIKTI"; g $? "açık işlerde 'sınıflı · izin: bekliyor' (eski '· SULTAN' etiketi kalktı)"
-! grep -q "· SULTAN$" <<<"$CIKTI"; g $? "eski 'SULTAN' etiketi hiçbir satırda yok"
+# 0.19.0 gün sonu etiketleri ("başlama izni / veto" başlığı, "reis birleştirdi", "sınıflı · izin: …") gun-sonu.sh ile İKİNCİ kartta
+#   (fabrika-merge-reise-kapi) gelir; bu kart gün sonunu değiştirmez → burada eski çıktı sınanır (gerilemesin).
+grep -q "## Sultan'a gidenler (3)" <<<"$CIKTI"; g $? "Sultan'a gidenler 3 (is-2 dış yüzey · is-3 geri alınamaz · kartsız kaçış)"
+grep -q "## İçeride bitirdiklerimiz (1)" <<<"$CIKTI" && grep -q "is-1" <<<"$CIKTI"; g $? "içeride bitenler 1 (is-1, 5/5 E)"
 grep -q "## Tıkananlar (1)" <<<"$CIKTI" && grep -q "şema çakışıyor" <<<"$CIKTI"; g $? "tıkananlar 1, nedeniyle"
 grep -q "## Açık işler (1)" <<<"$CIKTI" && grep -q "kartsiz-is" <<<"$CIKTI"; g $? "açık iş 1 (kartsız kaçış kartı)"
 grep -q "## Kapı kaçışları (0)" <<<"$CIKTI"; g $? "kaçış başlığı var, bugün kaçış yok"

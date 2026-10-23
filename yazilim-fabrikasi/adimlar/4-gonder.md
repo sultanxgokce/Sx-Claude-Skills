@@ -45,16 +45,14 @@
      fark büyükse iş bölünür (daralt), ölçüm şişkinse ölçümler küçültülür; kırpık istemle verilen puan puan değildir
      (PR #329 ve cloudtop #712 dersi — #712'de fark 73 KB'la geçmiş, istem 129 KB olup kırpılmıştı).
      Sonsuz düzelt-kanıtla-gönder döngüsü yasak (3-strike'ın fabrikadaki karşılığı).
-5. **Merge — kutu reisi (sınıflı işte de; 0.19.0, Sultan D1 22 Eki, kural `0-kabul.md` "Sınıflı iş"):**
-   - Şart: 5 + E + imzalı kanıt manifesti + CI yeşil + **Sultan vetosu YOK** (`kart.sh izin-durum <iş>` ≠ `dur`;
-     `birlestirme-kapisi.sh` bunu ölçer: dur → rc 1, okunamadı → rc 3). Sınıflı işte `kart.sh bitti` birleştirme kararını
-     karta işler (`birlestirme_karari{karar_veren: reis}`); isteğe bağlı `kart.sh reis-dedi … --karar birlestir` gerekçeyi taşır.
-   - Deftere `kayit-damgasi` ile kanıt+puan+damga; gün sonu özetinde "içeride bitirdiklerimiz" (sınıflıda "reis birleştirdi ·
-     izin: …") ve "Sultan'a gidenler — başlama izni / veto". Ajan onay YAZAMAZ (A06): kapı onay üretmez, yalnız vetoyu ölçer.
-   - **Dağıtım / canlıya alma Sultan eli** (sabah paketi, dar anahtar) — birleştirme kararının dışıdır.
+5. **Merge:**
+   - Kart **sınıf** taşıyorsa da → **kutu reisi** (0.19.0, Sultan D1 22 Eki; kural `0-kabul.md` "Sınıflı iş"): Sultan vetosu
+     yoksa (`kart.sh izin-durum` ≠ `dur`) reis birleştirir, `kart.sh bitti` kararı karta yazar; kapının vetoyu ölçmesi ikinci
+     kartta (`fabrika-merge-reise-kapi`). Dağıtım / canlıya alma Sultan eli. Ajan onay yazamaz (A06).
+   - Sınıfsız iş → **kutu reisi** merge eder; şart: 5 + E + kanıt manifesti + CI yeşil. Deftere `kayit-damgasi`
+     ile kanıt+puan+damga; gün sonu özetinde "içeride bitirdiklerimiz". (Geçiş: Nexus'ta ilk iki hafta yine
+     Sultan'a sorulur — Sultan 22 Eyl.)
    - CI kırmızı → merge yok, çıplak çıktıyla rapor.
-   - Eski kural (0.17): sınıflı iş Sultan'a `pr-onay` tek soru ile gidiyordu; "Nexus'ta ilk iki hafta yine Sultan'a sorulur"
-     geçiş notu (22 Eyl) D1 ile kalktı — neden: işler Sultan'ın kapısında ayda 1.138 saat bekledi.
 6. **Kapanış:** `is-alani.sh kapat` · kart "bitti" satırı + tetikli mesaj · `karne.sh` (F1) puanı deftere yazar.
 
 ## Puan kalibrasyonu — puan da bir beyandır

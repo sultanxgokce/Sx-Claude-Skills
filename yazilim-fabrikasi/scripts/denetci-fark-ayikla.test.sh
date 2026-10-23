@@ -143,14 +143,11 @@ assert (d.get('kanit_ayiklandi') or {}).get('dosya')==1, d.get('kanit_ayiklandi'
 "
 
 echo "F · 🔴 bu sınavı kim çağırıyor (yazmak koşturmaz)"
-# Beklenen yol SABİT YAZILMAZ, bu dosyanın kendi konumundan türetilir (göz 23 Eki tur 2): eski kapı
-# "./yazilim-fabrikasi/scripts/…" diyordu → beceri başka adlı bir dizine kopyalanınca (mutant/geçici kopya) F1 sahte KIRMIZI.
-# Kök = CI'ın find'ı koştuğu yer (depo kökü = <beceri>/scripts/../..); beklenen = o köke göre bu dosyanın yolu.
-F1_KOK="$(cd "$PWD/../.." && pwd)"; F1_BEN="./$(python3 -c 'import os,sys;print(os.path.relpath(sys.argv[1],sys.argv[2]))' "$PWD/$(basename "$0")" "$F1_KOK")"
-kapi "F1 CI keşfi bu dosyayı BULUR (find ile türetilen listede; beklenen yol konumdan türetildi: $F1_BEN)" 0 bash -c '
-cd "$1" || exit 1
+kapi "F1 CI keşfi bu dosyayı BULUR (find ile türetilen listede)" 0 bash -c '
+KOK="$(cd "$(dirname "'"$D"'")/../.." && pwd)"
+cd "$KOK" || exit 1
 mapfile -t T < <(find . -name "*.test.sh" -not -path "./.git/*" | sort)
-printf "%s\n" "${T[@]}" | grep -qxF -- "$2"' _ "$F1_KOK" "$F1_BEN"
+printf "%s\n" "${T[@]}" | grep -qx "./yazilim-fabrikasi/scripts/denetci-fark-ayikla.test.sh"'
 
 echo "G · 🔴 tur-2 bulgusu: boşluklu ve tırnaklı yollar ayıklayıcıdan KAÇMASIN"
 # git, özel karakterli yolu tırnaklar: diff --git "a/x y" "b/x y". Eski desen (\S+) boşlukta kesilir
