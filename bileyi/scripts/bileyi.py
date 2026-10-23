@@ -17,6 +17,7 @@
 from __future__ import annotations
 
 import argparse
+import atexit
 import collections
 import hashlib
 import json
@@ -24,6 +25,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 import unicodedata
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
@@ -218,7 +220,7 @@ def kutu_defteri_oku(yol: Path) -> tuple[list[dict], int]:
             bozuk += 1
             continue
         notlar = [str(n.get("metin") or "") if isinstance(n, dict) else str(n) for n in (b.get("notlar") or [])]
-        kayit.append({"id": str(b.get("id") or b.get("no") or ""), "baslik": str(b["baslik"]),
+        kayit.append({"id": str(b.get("id") or b.get("no") or ""), "no": str(b.get("no") or ""), "baslik": str(b["baslik"]),
                       "tarih": str(b.get("acilis") or ""), "durum": str(b.get("hal") or ""),
                       "gercek": " ".join(n for n in notlar if n.strip()), "kaynak": str(b.get("kaynak") or "")})
     return kayit, bozuk
@@ -552,7 +554,42 @@ def bulgu_havuzlari(kod_depo: Path, havuz_depo: Path,
     kd, acik_verildi = kutu_defteri_yolu()
     if kd is not None and (acik_verildi or kd.exists()) and str(kd.resolve() if kd.exists() else kd) not in gorulen:
         kaynak.append(("kutu-defteri", kd))       # açık ama yok → 🟡 okunamadı satırı; varsayılan yok → hiç eklenmez
+    dy = defter_kaynagi()
+    if dy is not None:
+        kaynak.append(("defter", dy))
     return kaynak
+
+
+# 🔴 GÖREV DEFTERİ KAYNAĞI (gorev 4FDVE5 · B16BJ parçası, 23 Eki): 22 Eki'den beri bulgular merkezî Görev Defteri'ne
+#    düşüyor (`bulgu.sh yaz` → 'havuz' durumu); araç yalnız dosya defterlerini okuyordu → yeni bulgular tekrar sayımına
+#    HİÇ girmiyordu (Nexus havuzunun son satırı 8 Eki). Defter `bulgu.sh havuz-cek` köprüsüyle okunur — eşleme TEK orada,
+#    burada kopyası yok; çıktı geçici JSONL'e yazılır ve öbür kaynaklarla AYNI yoldan (bozuk sayımı · tekilleştirme) geçer.
+#    Kutu defteri emsali: VARSAYILAN olarak yalnız jeton okunabiliyorsa eklenir (jetonsuz kutu normaldir, arıza değil);
+#    BILEYI_DEFTER=1 zorlar (okunamazsa 🟡 satırı kapsama sayımına girer), BILEYI_DEFTER=- bilerek kapatır.
+#    Köprü ölçemezse (rc 3) kaynak YOK SAYILMAZ: var olmayan bir yol olarak listede kalır, iz satırı 🟡 "okunamadı" der.
+BULGU_SH_VARSAYILAN = Path(__file__).resolve().parents[2] / "bulgu" / "scripts" / "bulgu.sh"
+
+
+def defter_kaynagi() -> Path | None:
+    ayar = os.environ.get("BILEYI_DEFTER", "").strip()
+    if ayar == "-":
+        return None
+    jeton = Path(os.environ.get("DEFTER_JETON_YOL") or "/config/defter-jeton")
+    if ayar != "1" and not os.access(jeton, os.R_OK):
+        return None
+    bsh = Path(os.environ.get("BILEYI_BULGU_SH") or BULGU_SH_VARSAYILAN)
+    if not bsh.exists():
+        return Path(f"<görev defteri: köprü yok ({bsh})>")
+    fd, ad = tempfile.mkstemp(prefix="bileyi-defter-", suffix=".jsonl")
+    atexit.register(lambda: os.path.exists(ad) and os.unlink(ad))
+    with os.fdopen(fd, "w", encoding="utf-8") as f:
+        r = subprocess.run(["bash", str(bsh), "havuz-cek"], stdout=f, stderr=subprocess.PIPE, text=True,
+                           stdin=subprocess.DEVNULL, timeout=60)
+    if r.returncode != 0:
+        # sebep parantezden önce kesilir: adres/yol Path'e girince "//" teke iner ve iz satırında BOZUK görünürdü (sınav Y6)
+        neden = (r.stderr.strip().splitlines() or ["?"])[-1].lstrip("🟡 ").split(" — ")[0].split(" (")[0]
+        return Path(f"<görev defteri: {neden}>")
+    return Path(ad)
 
 
 def _kayit_anahtari(k: dict) -> str:
@@ -596,6 +633,7 @@ def havuzlar_oku(kaynaklar: list[tuple[str, Path]],
     """
     birlesik: list[dict] = []
     gorulen: set[str] = set()
+    goc: set[tuple[str, str]] = set()   # (kutu defteri no, sade başlık): göçle deftere taşınan bulgu İKİ KEZ sayılmasın
     bozuk_top = 0
     satir: list[str] = []
     okunan = 0
@@ -610,6 +648,15 @@ def havuzlar_oku(kaynaklar: list[tuple[str, Path]],
         yeni = 0
         for k in kayit:
             a = _kayit_anahtari(k)
+            # 🔴 GÖÇ AYNASI (4FDVE5, ölçüldü: code kutusunun 20 kaydından 15'i 14-15 Eki'de deftere taşındı): defter kaydı
+            #    eski_no "S-4 (code)" + aynı başlık taşıyorsa kutu defterindeki S-4'ün kendisidir; kimlikleri farklı olduğu
+            #    için kimlik anahtarı bunu GÖRMEZ → iki kez sayılır, tek bulgu "tekrar" olur. Başlık şartı: numara uzayları
+            #    kutudan kutuya çakışır (her kutunun kendi S-4'ü var), yalnız numara eşleşmesi başka kutunun bulgusunu yutardı.
+            g = (str(k.get("eski_no") or "").split(" (")[0].strip(), " ".join(str(k.get("baslik", "")).lower().split()))
+            if k.get("eski_no") and g in goc:
+                continue
+            if k.get("no"):
+                goc.add((str(k["no"]).strip(), " ".join(str(k.get("baslik", "")).lower().split())))
             if a in gorulen:
                 continue
             gorulen.add(a)
@@ -707,8 +754,10 @@ def olc_veri(n) -> dict:
     for sat in kaynak_satirlari:
         print(f"   iz: {sat}")
     kutu_sayi = sum(1 for k in kayit if k.get("_kaynak") in ("kutu", "kutu-defteri"))
+    defter_sayi = sum(1 for k in kayit if k.get("_kaynak") == "defter")
     print(f"   havuz: {o['toplam']} kayıt (birleşik, {okunan_kaynak}/{len(kaynak_satirlari)} kaynak OKUNDU"
           + (f" · {kutu_sayi} tanesi bu kutunun kendi defterinden" if kutu_sayi else "")
+          + (f" · {defter_sayi} tanesi görev defterinden" if defter_sayi else "")
           + ")" + (f" · {bozuk} BOZUK satır" if bozuk else ""))
     if pen_uyari:
         print(f"   {pen_uyari}")

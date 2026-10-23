@@ -1,0 +1,11 @@
+$ bash _agents/fabrika/kanit/fikir-hatti-defter/fikir-hatti-olcer.sh origin/main
+# rc=1 sure=34.3s zaman=2026-10-23T05:03:25+03:00
+--- stdout ---
+kod kaynağı: origin/main · oda: /config/projects/Nexus · defter: canlı (salt-okur)
+   iz: merkez: /config/projects/Nexus/_agents/handoff/bulgu-havuzu.jsonl — 143 kayıt
+   iz: kutu-defteri: /config/.ic-sayfa/bulgu-defteri/bulgular.json — 20 kayıt
+   havuz: 82 kayıt (birleşik, 2/2 kaynak OKUNDU · 20 tanesi bu kutunun kendi defterinden)
+── MUCİT T1 eleme-özeti (havuz: bulgu-havuzu.jsonl) ──
+   ➜ T2'ye geçen aday    : 61   ·   [layiha/haftalik] kota: kalan 10/10
+bileyi rc=0 · defterden: 0 · mucit rc=0 · defterden: 0
+--- stderr ---

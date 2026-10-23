@@ -1,0 +1,8 @@
+$ bash _agents/fabrika/kanit/kapat-kart-bitti/kapanis-olcer.sh agac
+# rc=0 sure=0.4s zaman=2026-10-23T05:11:02+03:00
+--- stdout ---
+kod kaynağı: agac · kapat rc=0 · alan: kaldırıldı · kart (durum pr kanıt): bitti 42 True
+   ✓ kart bitti: olc · puan None · kanıt var
+   ✓ kart kendiliğinden bitti: olc · PR #42 birleşmiş (alanın içinden)
+   ✓ çalışma alanı kaldırıldı: /tmp/tmp.mz28akjfBb/alan/depo-olc
+--- stderr ---

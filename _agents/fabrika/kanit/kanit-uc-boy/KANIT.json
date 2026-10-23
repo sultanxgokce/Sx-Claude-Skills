@@ -1,0 +1,61 @@
+{
+  "is": "kanit-uc-boy",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T05:23:31+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "uc-boy",
+      "asama": "once",
+      "dosya": "olcum-uc-boy-once.txt",
+      "sha256": "5cececbc68e6fa534ecadf6ca103a00f4e5ec384ad2073cb08e093c8ad7f7d1e",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kanit-uc-boy/uc-boy-olcer.sh",
+        "origin/main"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T05:17:40+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "034f30ede59f4bd2a15bb2f8099cea2f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "uc-boy",
+      "asama": "sonra",
+      "dosya": "olcum-uc-boy-sonra.txt",
+      "sha256": "e05dc126a3f0183f9decf2240efed693ab4bf47a20e0049570ff92ea472e9f12",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kanit-uc-boy/uc-boy-olcer.sh",
+        "agac"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T05:23:31+03:00",
+      "sure_sn": 3.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "35a35be15efe4f39831cfa458032145b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kanit-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-kanit-sinavi-tek.txt",
+      "sha256": "8e92195b76db074b6a60e4b9ec2aa37c67f4ecf63e633845fc32dd6930cc26d5",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kanit.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T05:23:28+03:00",
+      "sure_sn": 27.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "cfd012a54b9d487ca01638f4cce52be0"
+    }
+  ],
+  "imza": "f4585923587b8f57741013c8d97cecab8f0ba3b2893de0a40162d83c98b6f333"
+}

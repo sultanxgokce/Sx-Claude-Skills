@@ -6,6 +6,9 @@ set -uo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SUT="$ROOT/scripts/mucit-t1.sh"
 T="$(mktemp -d)"; trap 'rm -rf "$T"' EXIT
+# 🔴 HERMETİK (4FDVE5): araç jeton okunabiliyorsa merkezî Görev Defteri'ni de süzer — bu kutuda jeton VAR; sınav canlı deftere
+#    gitmesin. Bilerek kapalı ("-"); GD bölümü kendi sahte köprüsünü verir.
+export MUCIT_GOREV_DEFTERI="-"
 PASS=0; FAIL=0
 
 ok()   { PASS=$((PASS+1)); echo "  ✅ $1"; }
@@ -149,5 +152,39 @@ esit "G19e mihenk_alani da dizi (aynı sarmal hatası orada da yok)" "array" "$(
 grep -qi "argument list too long" "$T/err-buyuk" && bad "G19f argv taşması hâlâ var" "yok" "var" || ok "G19f 'Argument list too long' YOK"
 
 echo
+echo "── GD: merkezî GÖREV DEFTERİ kaynağı (gorev 4FDVE5: 22 Eki'den beri bulgular defterde, elek yalnız dosyayı okuyordu) ──"
+# sahte köprü: bulgu.sh havuz-cek BİÇİMİNDE (eşlemenin kendisi bulgu.test.sh HC1-HC3'te ölçülür) — 1 uygun (ham, kanıtlı) + 1 bitmiş
+cat >"$T/defter.jsonl" <<'JSONL'
+{"id":"gorev_GD0000000000000001","baslik":"Defterdeki teknik bulgu","detay":"iki vaka","kanit":"iki vaka: #1146 #1151","durum":"ham","defter_durumu":"havuz","kaynak":"defter","tarih":"2026-10-22"}
+{"id":"gorev_GD0000000000000002","baslik":"Kapanmış defter bulgusu","detay":"","kanit":"x","durum":"bitti","defter_durumu":"bitti","kaynak":"defter","tarih":"2026-10-14"}
+JSONL
+printf '#!/usr/bin/env bash\n[ "$1" = havuz-cek ] || exit 2\ncat "%s"\n' "$T/defter.jsonl" > "$T/kopru.sh"
+printf '#!/usr/bin/env bash\necho "🟡 defter ulaşılamadı (http://x) — defterdeki bulgular ÖLÇÜLEMEDİ" >&2; exit 3\n' > "$T/olmez.sh"
+printf 'jeton\n' > "$T/jeton"
+gd() { "$SUT" suz --profil layiha --defter "$T/layiha.jsonl" --kartlar "$T/kartlar.json" "$@" 2>"$T/gerr"; }
+OUT="$(MUCIT_GOREV_DEFTERI=1 MUCIT_BULGU_SH="$T/kopru.sh" gd --havuz "$T/havuz.jsonl")"; RC=$?
+esit "GD1 defterdeki ham + kanıtlı bulgu aday olur: dosya 2 + defter 1 = 3 aday (RC 0)" "0 3 gorev_GD0000000000000001" "$RC $(jq -r '.uygun_sayi' <<<"$OUT") $(jq -r '[.adaylar[].id]|map(select(startswith("gorev_")))|join(",")' <<<"$OUT")"
+esit "GD2 özet kaynağı söyler; bitmiş defter kaydı 'uygun-olmayan durum'a düşer" "1 1" "$(grep -c 'görev defteri: 2 bulgu eklendi' "$T/gerr") $(grep -oE 'uygun-olmayan durum : [0-9]+' "$T/gerr" | grep -oE '[0-9]+$')"
+OUT="$(MUCIT_GOREV_DEFTERI=- MUCIT_BULGU_SH="$T/kopru.sh" DEFTER_JETON_YOL="$T/jeton" gd --havuz "$T/havuz.jsonl")"
+esit "GD3 MUCIT_GOREV_DEFTERI=- jeton olsa da kapatır (2 aday, 'kapalı')" "2 1" "$(jq -r '.uygun_sayi' <<<"$OUT") $(grep -c 'görev defteri: kapalı' "$T/gerr")"
+OUT="$(env -u MUCIT_GOREV_DEFTERI MUCIT_BULGU_SH="$T/kopru.sh" DEFTER_JETON_YOL="$T/jeton" "$SUT" suz --profil layiha --defter "$T/layiha.jsonl" --kartlar "$T/kartlar.json" --havuz "$T/havuz.jsonl" 2>/dev/null)"
+esit "GD4 jeton okunabiliyorsa varsayılan AÇIK (ayar yokken 3 aday)" "3" "$(jq -r '.uygun_sayi' <<<"$OUT")"
+OUT="$(env -u MUCIT_GOREV_DEFTERI MUCIT_BULGU_SH="$T/kopru.sh" DEFTER_JETON_YOL="$T/jeton-yok" "$SUT" suz --profil layiha --defter "$T/layiha.jsonl" --kartlar "$T/kartlar.json" --havuz "$T/havuz.jsonl" 2>"$T/gerr")"
+esit "GD5 jetonsuz kutu normaldir: ayar yokken kaynak eklenmez, 🟡 gürültüsü yok (2 aday)" "2 0" "$(jq -r '.uygun_sayi' <<<"$OUT") $(grep -c '🟡' "$T/gerr")"
+OUT="$(MUCIT_GOREV_DEFTERI=1 MUCIT_BULGU_SH="$T/olmez.sh" gd --havuz "$T/havuz.jsonl")"; RC=$?
+esit "GD6 🔴 köprü ölçemezse iş DURMAZ ama SÖYLENİR: RC 0 · 2 aday · stderr 🟡 ÖLÇÜLEMEDİ + sebep" "0 2 1" "$RC $(jq -r '.uygun_sayi' <<<"$OUT") $(grep -c '🟡 görev defteri: ÖLÇÜLEMEDİ (defter ulaşılamadı' "$T/gerr")"
+printf '%s' '{"id":"b9","baslik":"Satır sonu olmayan son kayıt","durum":"ham","kanit":"k:1 — kanıt","kaynak":"denetim"}' > "$T/havuz-nl.jsonl"
+OUT="$(MUCIT_GOREV_DEFTERI=1 MUCIT_BULGU_SH="$T/kopru.sh" gd --havuz "$T/havuz-nl.jsonl")"; RC=$?
+esit "GD7 dosya havuzu satır sonuyla bitmese de birleşim bozulmaz (1 + 1 aday, RC 0)" "0 2" "$RC $(jq -r '.uygun_sayi' <<<"$OUT")"
+ls "${TMPDIR:-/tmp}"/tmp.*.jsonl >/dev/null 2>&1 && SIZ=1 || SIZ=0
+esit "GD8 geçici birleşim dosyaları koşu sonunda silinir (trap ezilmedi)" "0" "$SIZ"
+echo "── GD · MUTASYON (tam kopya): kaynak bağlanmazsa GD1 düşmeli ──"
+MUT="$ROOT/scripts/.mutant-gd-$$.sh"; cp "$SUT" "$MUT"   # aynı dizinde: kardeş beceriler (layiha · layiha-fabrikasi) göreli yoldan aranır
+python3 - "$MUT" <<'PYM'
+import sys; f=sys.argv[1]; s=open(f,encoding="utf-8").read(); a='  --slurpfile havuz "$HAVUZ_OKU" \\'; assert s.count(a)==1, "çapa"; open(f,"w",encoding="utf-8").write(s.replace(a,'  --slurpfile havuz "$HAVUZ" \\'))
+PYM
+OUT="$(MUCIT_GOREV_DEFTERI=1 MUCIT_BULGU_SH="$T/kopru.sh" bash "$MUT" suz --profil layiha --defter "$T/layiha.jsonl" --kartlar "$T/kartlar.json" --havuz "$T/havuz.jsonl" 2>/dev/null)"; rm -f -- "$MUT"
+esit "GD-M mutant (süzme eski dosyayı okur) defter bulgusunu KAÇIRIYOR (2) → GD1 bu mutantta düşerdi" "2" "$(jq -r '.uygun_sayi' <<<"$OUT")"
+
 echo "pass=$PASS fail=$FAIL"
 [[ $FAIL -eq 0 ]]

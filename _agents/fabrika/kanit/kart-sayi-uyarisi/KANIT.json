@@ -1,0 +1,61 @@
+{
+  "is": "kart-sayi-uyarisi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T04:45:42+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "sayi-uyarisi",
+      "asama": "once",
+      "dosya": "olcum-sayi-uyarisi-once.txt",
+      "sha256": "35c0ef6fbec1d7ca22cfaf8204e4f97f97ec7d8190c708aa7cb862d8300aa22d",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kart-sayi-uyarisi/sayi-olcer.sh",
+        "origin/main"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T04:43:34+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "5b21f547ddf14f07873cf4305f93503b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sayi-uyarisi",
+      "asama": "sonra",
+      "dosya": "olcum-sayi-uyarisi-sonra.txt",
+      "sha256": "64961458a8a11d40bc699333b5816dc6b06942d8efde06040557116c29ec4fc5",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kart-sayi-uyarisi/sayi-olcer.sh",
+        "agac"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T04:45:42+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c2a980c05ab0420da0763b45733c8d15"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-kart-sinavi-tek.txt",
+      "sha256": "00607f40b306e68b5b6f2eca390924d081d04deecef3085bf66240fbae3e5bd8",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T04:45:42+03:00",
+      "sure_sn": 19.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "3ce214b82c5c4b9fa27d3b858a17c1cd"
+    }
+  ],
+  "imza": "5cbadbae415660fc321484c32d8295280aace53882a238d7ffea851a61f571bb"
+}

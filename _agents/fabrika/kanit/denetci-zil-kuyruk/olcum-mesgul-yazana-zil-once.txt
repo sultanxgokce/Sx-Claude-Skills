@@ -1,0 +1,13 @@
+$ bash _agents/fabrika/kanit/denetci-zil-kuyruk/zil-olcer.sh /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/sx-main-416/yazilim-fabrikasi/scripts
+# rc=1 sure=0.6s zaman=2026-10-23T04:16:41+03:00
+--- stdout ---
+── denetçinin zil satırı:
+   kayıt: /tmp/tmp.rz7Bk8OA7i/d/_agents/fabrika/kanit/zil-olc/DENETIM-1.json
+   · karne kapalı (DENETCI_KARNE=0) — elle: karne.sh yaz zil-olc
+· denetçi zili deftere yazıldı, HENDESE koltuğu meşgul → kuyrukta (boşalınca teslim): zil-olc tur 1: 5/E · bulgu 0 · rc 0 · GEÇTİ
+── geçici sinyal defteri (HENDESE'ye):
+done|HENDESE|yeni|denetçi: zil-olc tur 1: 5/E · bulgu 0 · rc 0 · GEÇTİ
+ping|HENDESE|engellendi|✅ HENDESE iş-bitti: denetçi: zil-olc tur 1: 5/E · bulgu 0 · rc 0
+kuyruk|HENDESE|kendine|✅ HENDESE iş-bitti: denetçi: zil-olc tur 1: 5/E · bulgu 0 · rc 0
+── kuyrukta bekleyen (HENDESE): 0 · doğrudan iletildi: 0 · kendine düştü: 1
+--- stderr ---

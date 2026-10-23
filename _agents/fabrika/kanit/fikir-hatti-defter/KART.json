@@ -1,0 +1,31 @@
+{
+  "is": "fikir-hatti-defter",
+  "cumle": "Fikir hattı (bileyi + mucit-t1) bulguları görev defterinden de okusun: bulgu.sh havuz-cek defterdeki bulgu kayıtlarını (havuz dahil) eski havuz biçiminde verir, defter okunamazsa ÖLÇÜLEMEDİ der; bileyi ve mucit-t1 bu kaynağı eski dosyanın yanına ekler (görev 4FDVE5)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-23T04:51:16+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "önce/sonra: defterdeki bulgu bileyi/mucit çıktısında önce görünmez → sonra görünür; jetonsuz kutuda ölçülemedi satırı; sınavlar + mutant",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5JKV2HQG77MHM9GW44FDVE5",
+  "tahmin_dk": 150,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-23T04:51:16+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

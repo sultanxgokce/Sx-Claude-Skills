@@ -77,8 +77,11 @@ _kilitle() {
   flock -w 10 9 2>/dev/null || { echo "HATA: çıpa kilidi 10 sn'de alınamadı — yazmıyorum (başka bir araç yazıyor)" >&2; exit 1; }
 }
 
+# kullanim [rc] — yardım İSTENDİYSE (--help/-h) metin stdout'a, rc=0: yardım bir hata değildir (görev RN95G).
+#   Hatalı çağrıda (tanınmayan argüman, komutsuz) stderr'e, rc=2 — çağıran kırmızıyı görmeli.
 kullanim() {
-  cat >&2 <<'K'
+  local rc="${1:-2}"
+  { cat <<'K'
 kullanım:
   cipa.sh yaz --plan "1) madde … | 2) madde …" [--not "…"]   günün çıpasını diske yaz
   cipa.sh tazele --madde <n> --durum kapandi|yarim|acilmadi|geri-alindi [--not "…"] [--kanit "<PR#|commit|dosya>"]
@@ -88,11 +91,14 @@ kullanım:
   cipa.sh oku                                                 çıpayı bas (yoksa rc=1)
   cipa.sh yol                                                 çıpanın yolunu bas (dosya yoksa da)
   cipa.sh compact-onerisi                                     öneri metni; ÇIPA YOKSA rc=3
+  cipa.sh [<komut>] --help | -h                               bu metin (rc=0)
 K
-  exit 2
+  } >&$([ "$rc" = 0 ] && echo 1 || echo 2)
+  exit "$rc"
 }
 
 [ $# -ge 1 ] || kullanim
+case "$1" in -h|--help) kullanim 0 ;; esac
 KOMUT="$1"; shift
 PLAN=""; NOT=""; MADDE=""; DURUM=""; KANIT=""; D1=""; JSON=0
 # 🔴 DEĞERSİZ BAYRAK SONSUZ DÖNGÜ YAPIYORDU (bulan: NÂZIR/MÜDÜR, 2026-10-02 — aracı
@@ -106,6 +112,7 @@ _al() { # $1=bayrak adı · kalan argüman sayısı ve değeri DIŞARIDA sınan�
 while [ $# -gt 0 ]; do
   bayrak="$1"
   case "$bayrak" in
+    -h|--help) kullanim 0 ;;
     --json) JSON=1; shift ;;
     --md) MD=1; shift ;;
     --plan|--not|--madde|--durum|--kanit|--d1)

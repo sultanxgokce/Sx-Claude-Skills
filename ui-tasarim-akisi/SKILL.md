@@ -1,7 +1,7 @@
 ---
 name: ui-tasarim-akisi
 type: agent
-version: 0.7.0
+version: 0.7.1
 description: >
   UI/arayüz tasarım işinin ZORUNLU akış kapısı. Bir ürünün ekranlarını tek tek değil dizi
   hâlinde tasarlatır: ürün niyeti → sayfa envanteri → kullanıcı senaryoları (tık bütçesi) →
@@ -646,3 +646,11 @@ ana dal arasında bir sürüm boşluğu vardı; o boşluğun ölçümü, kapanı
 yerinde doğrulanması **0.5.1 notunun ve o işin kanıt paketinin konusudur** — bu nota
 yazılmıyor, çünkü bu kartın kanıt manifesti onları ölçmez. (Bağımsız gözün tur-4 bulgusu:
 kendi kartının ölçmediği şeyi kendi sürüm notunda iddia etmek, kapsam kaymasıdır.)
+
+## Sürüm notu — 0.7.1 (2026-10-23 · MUAVİN · gorev 6TFBV) — KAPI 6 "ilk sayfa" muafiyeti kalktı
+`havuz.py ayirt-kapisi` havuzda satır yoksa "ilk sayfa" deyip kapıyı AÇIK sayıyordu. Kapının tek çağıranı
+`prompt-yap.sh --onceki` yoludur ve sorulan sayfa zaten önceki sayfadır; satırı ise ancak üretim sırasında
+(kapıdan SONRA) oluşuyordu. Ölçüldü 21 Eki: yargısız sayfada 1. koşu rc 0 (prompt üretildi, havuz kirlendi),
+sonraki koşular rc 1. Artık satır yoksa **KAPALI (rc=1)**. Sınavdaki üç "prompt üretilir" kapısı yeşilini bu
+muafiyete borçluydu; yargı artık önce yazılıyor (kapı kapatılmadı). Yeni sınav bölümü 19b; muafiyet geri
+konunca üç kapı kırmızıya döner.

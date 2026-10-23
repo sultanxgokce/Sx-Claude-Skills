@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "kanit-uc-boy",
+  "pr": "433",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T05:21:39+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 30903,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 30606
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Tek komutla 1440/1280/390 kare alma, her boyu ayrı imzalı kayda geçirme, yalnız yeşil kareleri güvenli adla Gelen'e kopyalama ve başarısız boyu çıkış koduna taşıma talebi uygulanmış. Önce üretime çıkmadan, `--gelen` istendiği hâlde hedef klasör yoksa teslimi başarılı sayan davranışı düzeltin.",
+    "bulgular": [
+      {
+        "ne": "`--gelen` ile teslim açıkça istendiğinde hedef klasörün bulunmaması kopyalama başarısızlığı sayılmıyor; komut bütün kareler yeşilse rc=0 dönebiliyor ve Sultan'a hiçbir dosya gitmeden başarı bildiriyor.",
+        "kanit": "`_gelene_kopyala`, `os.path.isdir(hedef_diz)` yanlış olduğunda “kare kopyalanmadı” yazıp `True` döndürüyor; `_ekran_tek` de bu değeri rc=0'a çeviriyor. Eklenen sınav bunu `--gelen: klasör yoksa söyler, kanıt yine kutuda` beklentisiyle doğruluyor; buna karşılık yazma hatası aynı işlevde `False` ve rc=3 üretiyor.",
+        "konum": "yazilim-fabrikasi/scripts/kanit.py:_gelene_kopyala ve _ekran_tek; yazilim-fabrikasi/scripts/kanit.test.sh:T-UB “gelen klasörü yok” sınavı",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü seçeneğin tanınmadığını, sonra ölçümü üç ayrı yeşil 1440/1280/390 kaydı ile doğru Gelen adlarını gösteriyor; 221 geçen sınav güvenli kutu adı, yalnız yeşil kopyalama, geriye uyum, hata çıkışları ve mutantı kapsıyor. Bununla birlikte kare üretimi sahte node ve `PNG<genişlik>` içeriğiyle ölçülmüş; gerçekçi tarayıcı verisiyle görsel kare kanıtı yok. Mutasyon da manifestte `mutasyon:true` olan ayrı bir araç kaydı değil, test betiği içindeki geçici kopya ölçümüdür; bu nedenle mutasyon kanıtının gücü sınırlıdır."
+  }
+}

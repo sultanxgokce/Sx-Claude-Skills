@@ -1,0 +1,31 @@
+{
+  "is": "kapat-kart-bitti",
+  "cumle": "İş alanı kapatılırken dalın PR'ı birleşmiş ve kart hâlâ açıksa kart kendiliğinden 'bitti' olsun (alanın içinden, PR numarasıyla); PR birleşmemişse ya da ölçülemezse kart açık kalır ve bu söylenir, kapanış durmaz (görev CBBQEE)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-23T05:09:04+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "önce/sonra: birleşmiş PR'lı alan kapatılınca kart önce açık kalır → sonra bitti; is-alani sınavı + mutant",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5JKV2YZ903K6MAC2KCBBQEE",
+  "tahmin_dk": 60,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-23T05:09:04+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

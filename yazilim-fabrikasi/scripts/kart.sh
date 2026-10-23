@@ -8,6 +8,7 @@
 #   kart.sh ac <iş> --is "tek cümle" --istedi <kim> --aldi <ajan> \
 #          --geri-alinamaz e|h|? --para e|h|? --dis-yuzey e|h|? --yetki e|h|? [--kanit "nerede olacak"] [--oda <oda>] [--canli e|h]
 #          --canli: cron/servis/sunucu işi gerçek ateşleme kaydı (kanit.sh canli) ister; verilmezse cümleden türetilir, karta yazılır
+#          [--sayi-olcum '<komut>']: cümlede "13 görev" gibi bir sayı iddiası varsa onu KAYNAĞINDAN sayan komut (yoksa UYARI, red değil)
 #   kart.sh bitti <iş> [--pr N]        durum=bitti; son DENETIM puanını ve KANIT durumunu karta işler (kanıt: çağrıldığı ağaç, yoksa kartın iş alanı — kanit_agaci)
 #   kart.sh tikandi <iş> --yol devam|daralt|geri-al --neden "..."
 #   kart.sh daralt <iş> --kalan "<kalan bulgu ≥20>" --cumle "<daraltılmış cümle ≥20>" --oturum <ref> [--yeni <ad>]
@@ -68,7 +69,7 @@ KD="$DEPO/_agents/fabrika/kartlar"; mkdir -p "$KD"
 CMD="${1:-}"; IS="${2:-}"; if [ $# -ge 2 ]; then shift 2; else shift $#; fi   # tek argümanlı komut (liste · borclar) "tanınmayan argüman" olmasın
 IS_C=""; ISTEDI=""; ALDI=""; GA=""; PARA=""; DIS=""; YETKI=""; KANIT=""; ODA=""; PR=""; YOL=""; NEDEN=""
 KARAR=""; OTURUM=""; SOZ=""; BEYAN=""; GEREKCE=""; REIS=""; CANLI=""; KALAN=""; CUMLE=""; YENI=""; YAZAN=""
-GOREV_BITTI=""; KARE=""; SURUM=""; OLCUM=""; BELGE=""   # kart bitti: görevi de bitirmek için kanıt sınıfı (KF22R: dilim ≠ görev)
+SAYI_OLCUM=""; GOREV_BITTI=""; KARE=""; SURUM=""; OLCUM=""; BELGE=""   # kart bitti: görevi de bitirmek için kanıt sınıfı (KF22R: dilim ≠ görev)
 while [ $# -gt 0 ]; do case "$1" in
   --is) IS_C="$2"; shift 2 ;; --istedi) ISTEDI="$2"; shift 2 ;; --aldi) ALDI="$2"; shift 2 ;;
   --geri-alinamaz) GA="$2"; shift 2 ;; --para) PARA="$2"; shift 2 ;; --dis-yuzey) DIS="$2"; shift 2 ;; --yetki) YETKI="$2"; shift 2 ;;
@@ -76,7 +77,7 @@ while [ $# -gt 0 ]; do case "$1" in
   --karar) KARAR="$2"; shift 2 ;; --oturum) OTURUM="$2"; shift 2 ;; --soz) SOZ="$2"; shift 2 ;; --beyan) BEYAN="$2"; shift 2 ;;
   --gerekce) GEREKCE="$2"; shift 2 ;; --reis) REIS="$2"; shift 2 ;; --canli) CANLI="$2"; shift 2 ;; --yazan) YAZAN="$2"; shift 2 ;;
   --kalan) KALAN="$2"; shift 2 ;; --cumle) CUMLE="$2"; shift 2 ;; --yeni) YENI="$2"; shift 2 ;;
-  --gorev) GOREV="$2"; shift 2 ;; --tahmin) TAHMIN="$2"; shift 2 ;;
+  --gorev) GOREV="$2"; shift 2 ;; --tahmin) TAHMIN="$2"; shift 2 ;; --sayi-olcum) SAYI_OLCUM="$2"; shift 2 ;;
   --acik) ACIK=1; shift ;; *) _hata "tanınmayan argüman: $1"; exit 1 ;; esac; done
 GOREV="${GOREV:-}"; TAHMIN="${TAHMIN:-}"
 
@@ -206,6 +207,30 @@ if h:
 PY
 }
 
+# 🟡 SAYI UYARISI (retro W42 MUAVİN Ö3 · gorev_01M57ZV15AARDJDVV9NK3WNMSQ · SERDAR kararı: UYARI, red değil): yöneticinin
+#    "13 görev" sözü kart cümlesine aynen girdi; kaynakta sayı farklıydı, iki göz turu yandı, iş daraltıldı (Nexus #1213).
+#    Kart açılırken ARAÇ cümledeki "sayı + ad" iddialarını ("13 görev", "ayda 173 kez", "%50") arar ve UYARIR; karta
+#    `sayi_uyarilari` olarak yazılır, bağımsız göz görür. --sayi-olcum '<komut>' verilirse komut deponun kökünde koşulur
+#    (30 sn tavan), çıkış kodu + çıktının başı karta `sayi_olcum` olarak işlenir: sayının KAYNAĞI karttadır, uyarı düşer.
+#    Sayı SAYILMAYAN yazımlar (atıf/ölçü, iddia değil): kimlik (gorev_…, W42, Ö3, 81D0W) · #PR · sürüm (0.18.1) · tarih/saat
+#    (2026-10-23, 04:30, "23 Eki") · sıra ("1. hafta") · birimli eşik/süre (40 dk, 100 KB, 390 px). Dürüst sınır: yazıyla sayı
+#    ("on üç görev") ve birimle yazılmış GÖZLEM ("ayda 40 dk kayıp") yakalanmaz; uyarı ölçümün yerini tutmaz, yalnız hatırlatır.
+sayi_uyar() {  # sayi_uyar <cümle> → her satır bir ölçümsüz sayı iddiası (boş = yok)
+  python3 - "$1" <<'PY'
+import re, sys
+cumle = sys.argv[1]
+AY = r"(?:oca|şub|sub|mar|nis|may|haz|tem|ağu|agu|eyl|eki|kas|ara)\w*"
+BIRIM = r"(?:ms|sn|saniye|dk|dakika|sa|saat|kb|mb|gb|tb|px|pt|em|rem|bayt|byte)(?!\w)"
+bul = []
+for m in re.finditer(r"(?<![\w#.:/+%-])(\d+(?:[.,]\d+)?)(?![\w.,:/-])\s+([^\W\d_][\w']*)", cumle):
+    ad = m.group(2)
+    if re.match(AY + r"$", ad, re.I) or re.match(BIRIM, ad, re.I): continue
+    bul.append(m.group(0))
+bul += [m.group(0) for m in re.finditer(r"%\d+(?:[.,]\d+)?(?![\w.,])", cumle)]
+for b in dict.fromkeys(bul): print(b)
+PY
+}
+
 case "$CMD" in
   ac)
     [ -n "$IS" ] && [ -n "$IS_C" ] && [ -n "$ISTEDI" ] && [ -n "$ALDI" ] || { _hata "gerekli: <iş> --is --istedi --aldi"; exit 1; }
@@ -218,18 +243,36 @@ case "$CMD" in
     elif [ -n "$TAHMIN" ]; then _hata "--tahmin yalnız --gorev ile anlamlı (hangi görevin tahmini?)"; exit 1; fi
     IFS=$'\t' read -r CG CSEBEP <<<"$(canli_hesapla "$IS_C" "$CANLI")"; CSEBEP="${CSEBEP:-}"
     KUYARI="$(kapsam_uyar "$IS" "$IS_C" "$(basename "$DEPO")")" || { _hata "kapsam uyarısı ölçülemedi"; KUYARI="ÖLÇÜLEMEDİ: kapsam uyarısı aracı düştü"; }
-    python3 - "$KD/$IS.json" "$IS" "$IS_C" "$ISTEDI" "$ALDI" "$GA" "$PARA" "$DIS" "$YETKI" "$KANIT" "$ODA" "$CG" "$CSEBEP" "$KUYARI" "$GOREV" "$TAHMIN" <<'PY'
+    SUYARI="$(sayi_uyar "$IS_C")" || { _hata "sayı uyarısı ölçülemedi"; SUYARI="ÖLÇÜLEMEDİ: sayı uyarısı aracı düştü"; }
+    SRC=""; SCIKTI=""
+    if [ -n "$SAYI_OLCUM" ]; then   # sayının kaynağı: deponun kökünde, girdisiz, 30 sn tavanlı; çıkış kodu SAKLANIR (boru yutmaz)
+      SCIKTI="$(cd "$DEPO" && timeout 30 bash -c "$SAYI_OLCUM" </dev/null 2>&1)"; SRC=$?
+    fi
+    python3 - "$KD/$IS.json" "$IS" "$IS_C" "$ISTEDI" "$ALDI" "$GA" "$PARA" "$DIS" "$YETKI" "$KANIT" "$ODA" "$CG" "$CSEBEP" "$KUYARI" "$GOREV" "$TAHMIN" "$SUYARI" "$SAYI_OLCUM" "$SRC" "$SCIKTI" <<'PY'
 import json,sys,datetime
-yol,is_,cumle,istedi,aldi,ga,para,dis,yetki,kanit,oda,cg,csebep,kuyari,gorev,tahmin=sys.argv[1:]
+yol,is_,cumle,istedi,aldi,ga,para,dis,yetki,kanit,oda,cg,csebep,kuyari,gorev,tahmin,suyari,skomut,src,scikti=sys.argv[1:]
 cev={"geri_alinamaz":ga,"para":para,"dis_yuzey":dis,"yetki":yetki}
 siniflar=[k for k,v in cev.items() if v in("e","?")]
 kart={"is":is_,"cumle":cumle,"istedi":istedi,"aldi":aldi,"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
       "sinif_cevaplari":cev,"siniflar":siniflar,"sultan":bool(siniflar),"kanit_nerede":kanit,"oda":oda,"durum":"acik","gecmis":[],
       "canli_gerekir":cg=="E","canli_sebep":csebep,"kapsam_uyarilari":[u for u in kuyari.splitlines() if u.strip()]}
 if gorev: kart["gorev"]=gorev; kart["tahmin_dk"]=int(tahmin)
+sayilar=[u for u in suyari.splitlines() if u.strip()]
+TAVAN=2000   # kart bir JSON kaydıdır, ölçüm arşivi değil: tavan AÇIK yazılır, kesilme SESSİZ değildir (göz #430 tur 1)
+if skomut:
+    kart["sayi_olcum"]={"komut":skomut,"rc":int(src),"cikti":scikti[:TAVAN],"cikti_bayt":len(scikti.encode()),"kirpildi":len(scikti)>TAVAN,"zaman":kart["zaman"]}
+    if len(scikti)>TAVAN: kart["sayi_olcum"]["son_satirlar"]=scikti.rstrip().splitlines()[-5:]   # sonuç çoğu zaman sondadır
+kaynakli = bool(skomut) and src=="0"
+kart["sayi_uyarilari"]=[] if kaynakli else sayilar
 json.dump(kart,open(yol,"w"),ensure_ascii=False,indent=2)
 print(f"✓ kart açıldı: {is_} · sınıf: {', '.join(siniflar) if siniflar else 'yok'} · {'SULTAN\'A GİDER' if siniflar else 'ekipte biter, gün sonu özetine girer'}")
 for u in kart["kapsam_uyarilari"]: print(f"  ⚠ KAPSAM — {u} (uyarı, red değil; karta yazıldı)")
+if kart["sayi_uyarilari"]:
+    print("  ⚠ SAYI — cümlede kaynağı ölçülmemiş sayı: %s → kaynağından sayan komutu ver: kart.sh ac … --sayi-olcum '<komut>' (uyarı, red değil; karta yazıldı)" % " · ".join("'%s'" % u for u in kart["sayi_uyarilari"]))
+if skomut:
+    ilk=(scikti.strip().splitlines() or ["(çıktı yok)"])[0][:120]
+    print(f"  · sayı kaynağı karta yazıldı (rc={src}): {ilk}" if kaynakli else f"  ⚠ SAYI — ölçüm komutu DÜŞTÜ (rc={src}) — sayı kaynaksız sayıldı: {ilk}")
+    if kart["sayi_olcum"]["kirpildi"]: print(f"  ⚠ SAYI — ölçüm çıktısı {kart['sayi_olcum']['cikti_bayt']} bayt: karta ilk {TAVAN} karakter + son 5 satır yazıldı (KIRPILDI); tam çıktı için kanit.sh olcum")
 if cg=="E": print(f"  · CANLI kanıt zorunlu ({csebep}): gerçek ateşleme kaydı (kanit.sh canli) olmadan birleştirme kapısı geçmez")
 elif csebep: print(f"  ⚠ canlı kanıt istenmedi — {csebep}; karta yazıldı, bağımsız göz görür")
 if not gorev: print("  · görev bağı yok — iş Sultan'ın 'çalışılıyor' görünümüne DÜŞMEZ (bağlamak için: kart.sh ac … --gorev gorev_<kimlik> --tahmin <dk>)")

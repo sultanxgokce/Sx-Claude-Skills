@@ -1,0 +1,8 @@
+$ bash _agents/fabrika/kanit/kucuk-iki-onarim/iki-onarim-olcer.sh agac
+# rc=0 sure=1.3s zaman=2026-10-23T04:39:15+03:00
+--- stdout ---
+kod kaynağı: agac
+RN95G · 'tazele --help' rc=0 (beklenen 0) · 'tazele --bilinmeyen' rc=2 (beklenen 2)
+81D0W · uuid4 = 21 Eki CI değeri (e-0 içerir) zorlanınca ubl_satis sınavı rc=0
+toplam=25 geçen=25 düşen=0
+--- stderr ---

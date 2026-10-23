@@ -1,0 +1,8 @@
+$ bash _agents/fabrika/kanit/kanit-uc-boy/uc-boy-olcer.sh origin/main
+# rc=1 sure=0.1s zaman=2026-10-23T05:17:40+03:00
+--- stdout ---
+kod kaynağı: origin/main · kanit.sh ekran --uc-boy rc=2
+   kanit.py: error: unrecognized arguments: --uc-boy --gelen olc
+manifest (etiket:renk:PNG-genişlik): (kayıt yok)
+gelen kopyaları: 
+--- stderr ---

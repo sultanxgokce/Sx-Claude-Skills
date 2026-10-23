@@ -1,0 +1,55 @@
+$ bash kasif-tara/scripts/kasif-tara.test.sh
+# rc=0 sure=1.4s zaman=2026-10-23T05:54:29+03:00
+--- stdout ---
+=== G1 · sözdizimi: paketteki her script bash -n temiz ===
+PASS  G1 bash -n hepsi temiz
+
+=== G2 · bootstrap: boş odada tezgâh doğar ===
+PASS  G2 kasif-kur rc=0
+PASS  G2 üretildi: _agents/handoff/bulgu-havuzu.jsonl
+PASS  G2 üretildi: _agents/handoff/layiha-aday-havuzu.jsonl
+PASS  G2 üretildi: _agents/handoff/mucit-defteri.jsonl
+PASS  G2 üretildi: _agents/handoff/mucit-defteri-layiha.jsonl
+PASS  G2 üretildi: _agents/handoff/layiha-defteri.jsonl
+PASS  G2 üretildi: _agents/mucit/kanon.json
+PASS  G2 üretildi: _agents/kasif/knowledge
+PASS  G2 K4: yeni oda üretime KAPALI doğdu
+PASS  G2 K4: kapatma YEREL kapsamda (filo değil)
+PASS  G2 K4: kapsamda yalnız bu oda var
+
+=== G3 · idempotans: ikinci koşu veriyi bozmaz, açık odayı YENİDEN KAPATMAZ ===
+PASS  G3 ikinci koşu rc=0
+PASS  G3 mevcut defter ÜZERİNE YAZILMADI
+PASS  G3 Sultan'ın açtığı oda yeniden KAPATILMADI
+PASS  G3 --kontrol rc=0
+PASS  G3 --kontrol hiçbir şey yazmadığını söyler
+
+=== G4 · uçtan uca: kurulan tezgâha gerçek bulgu yazılır, MUCİT onu görür ===
+PASS  G4 kasif-havuz-ekle rc=0
+PASS  G4 bir bulgu eklendi
+PASS  G4 satır kurulan tezgâha düştü
+PASS  G4 MUCİT aynı tezgâhı okudu (aday sayısı)
+PASS  G4 kanon.json'da base BOŞ → ağ çağrısı yok
+
+=== G5 · yabancı yazma-hedefi reddedilir (SF1 değişmezi paket-içinde de geçerli) ===
+PASS  G5 kanonik-dışı hedef rc=2
+PASS  G5 yabancı dosyaya HİÇBİR ŞEY yazılmadı
+
+=== G6 · İ1 NEGATİF TESTİ: git-siz dizinde ortak dizine SIZMA yok ===
+PASS  G6 KAŞİF git-siz dizinde rc=2
+PASS  G6 aday-havuzu git-siz dizinde rc=2
+PASS  G6 MUCİT git-siz dizinde rc=2
+PASS  G6 kasif-kur git-siz dizinde rc=2
+PASS  G6 ORTAK DİZİNDE yeni defter/tezgâh OLUŞMADI
+PASS  G6 git-siz dizinde de dosya bırakılmadı
+
+=== G7 · bayrak kapsam-disiplini: kapalı oda üretmez, komşu oda üretir ===
+PASS  G7 kapalı odada layiha üretimi ATLANDI (çıktı yok)
+PASS  G7 komşu oda ÜRETMEYE DEVAM ediyor
+PASS  G7 kapalı odada bile DİVAN hattı çalışıyor (dar kapsam)
+
+=== G8 · sürüm paritesi (saf bash — node/npm gerekmez) ===
+PASS  G8 SKILL.md ↔ catalog sürümleri uyumlu
+
+════════ SONUÇ: PASS=34 · FAIL=0 ════════
+--- stderr ---

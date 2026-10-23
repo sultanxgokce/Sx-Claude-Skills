@@ -1,6 +1,6 @@
 ---
 name: mucit-suz
-version: 1.8.0
+version: 1.9.0
 description: >
   MUCİT'in el-kitabı: DİVAN bulgu-havuzunu (bulgu-havuzu.jsonl — KEŞŞAF dış-tarama + SERDAR pilot-bulguları)
   acımasızca süzüp Sultan-dilinde en çok haftada 3 ADAY-kart önerir. T1 = <skill-dizini>/scripts/mucit-t1.sh ($0-mekanik:
@@ -196,3 +196,6 @@ sayıları · kalan-kota. (Tavan-kilidi RC=3 ise "bu hafta tavan dolu, aday üre
 - **Rol-kapısının dürüst sınırı:** `LAYIHA_ROL` boşsa kısıt yoktur (elle koşu + fabrika bandı + eski
   çağrılar bozulmasın diye). Yani kapı, deseni **uygulayan** akışta K4'ü mekanikleştirir; deseni hiç
   kullanmayan bir ajanı yakalayamaz. Bu tasarım kararıdır, ölçüm değil.
+
+## Görev defteri kaynağı (1.9.0 · görev 4FDVE5)
+`mucit-t1.sh suz` dosya havuzuna ek olarak merkezî Görev Defteri'ndeki bulguları (`bulgu.sh havuz-cek`; `havuz` → `ham`) birleşik süzer; eleme özeti `görev defteri: N bulgu eklendi` ya da `ÖLÇÜLEMEDİ (sebep)` yazar. Varsayılan: yalnız jeton okunabiliyorsa · `MUCIT_GOREV_DEFTERI=1` zorlar · `=-` kapatır (`MUCIT_DEFTER` başka bir şeydir: layiha defteri). Sınavlar hermetik: mucit-t1/elek, kasif-tara, layiha-fabrika sınavları kaynağı kapatır. Sınav: GD1-GD8 + mutant.

@@ -1,0 +1,30 @@
+{
+  "tur": 2,
+  "is": "fikir-hatti-defter",
+  "pr": "431",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T05:07:44+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 71787,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 12,
+    "bayt": 41986
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Görev defteri kayıtları eski havuz biçimine çevrilmiş, bileyi ve mucit-t1 kaynaklarına eklenmiş; okunamama hâli de ÖLÇÜLEMEDİ olarak ele alınmış. Önce/sonra gerçekçi ölçüm, kapsamlı sınavlar ve önceki turun bozuk yanıt açığını kapatan yeni HC7b/HC7c vakaları üretime hazır sonucu destekliyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt içermiyor. `defteri-goruyor` ölçüm çifti önce rc=1 ile defterden 0, sonra rc=0 ile bileyi için 445 ve mucit için 460 defter kaydı gösteriyor; bulgu, bileyi ve mucit sınavları yeşil, jetonsuz ve bozuk yanıt yolları da rc=3/ÖLÇÜLEMEDİ olarak ölçülmüş. Mutantların etkisi sınav çıktılarında görülüyor fakat manifestte `mutasyon:true` kayıtları bulunmuyor; bu nedenle resmî mutasyon kanıtı sayılmaz, ancak gerçek ölçüm çiftinin yeterliliğini bozmaz."
+  }
+}
