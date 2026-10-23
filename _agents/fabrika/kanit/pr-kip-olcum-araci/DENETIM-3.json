@@ -1,0 +1,45 @@
+{
+  "tur": 3,
+  "is": "pr-kip-olcum-araci",
+  "pr": "337",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T20:25:38+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 33472,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 17,
+    "bayt": 31656
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, istenen ayrı ölçüm aracı ile çift yönlü sınav teslim edilmiş; yalnız kip, içerik değişikliği ve fail-closed hâller hem 22/22 sınavda hem canlı PR #326 üzerinde ayrıştırılmış. Ancak geçerli Git yollarının kaçışlı gösterimini kapsamayan bölüm eşleştirmesi ve karta ait olmayan ikinci kart dosyasının eklenmesi çözülmeden buna üretime hazır mührü basmam.",
+    "bulgular": [
+      {
+        "ne": "Git diff başlığında kaçışlanmış yol adları desteklenmiyor; boşluklu yol denenmiş olsa da Git'in tırnak, ters eğik çizgi, sekme veya varsayılan core.quotePath altında ASCII dışı karakterleri kaçışladığı geçerli yollar ham YOL değeriyle eşleşmeyip rc=3'e düşebilir.",
+        "kanit": "Araç yalnız ham a/$YOL, b/$YOL ve bunların çift tırnaklı biçimlerini arıyor; Git kaçış dizilerini çözen bir işlem yok. Sınav da yalnız `yol/iki kelime.sh` örneğini kapsıyor ve kaçış gerektiren karakter içermiyor.",
+        "konum": "yazilim-fabrikasi/scripts/pr-kip-olc.sh:78; yazilim-fabrikasi/scripts/pr-kip-olc.test.sh:85",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Değişiklik, ölçüm aracı kartının dışında ayrı bir `kapsam-kapisi-hunk` iş kartını da depoya ekliyor; bu kapsam kaymasıdır.",
+        "kanit": "Talep yalnız `pr-kip-olc.sh` ve kendi çift yönlü sınavını isterken üretim farkı ayrıca 32 satırlık yeni `_agents/fabrika/kartlar/kapsam-kapisi-hunk.json` dosyası içeriyor.",
+        "konum": "_agents/fabrika/kartlar/kapsam-kapisi-hunk.json:1",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü eski yol kapısının PR #326 dosyasını gördüğünü ve gerçek içerik farkının sıfır olduğunu yan yana gösteriyor; sonra ölçümleri canlı yalnız-kip için rc=0, canlı içerik için beklenen rc=1 ve yerel çift yönlü sınav için 22/22 sonuç veriyor. Kanıt güçlüdür, fakat sınav matrisi Git'in kaçış gerektiren yol adlarını kapsamıyor."
+  }
+}

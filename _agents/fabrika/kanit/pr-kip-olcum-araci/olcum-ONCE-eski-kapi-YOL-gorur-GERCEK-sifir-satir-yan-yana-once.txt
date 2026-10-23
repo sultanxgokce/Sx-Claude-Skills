@@ -1,0 +1,8 @@
+$ bash -c cd /config/projects/Sx-Claude-Skills; echo "1) ESKI KAPININ GIRDISI (gh pr diff --name-only):"; gh pr diff 326 --name-only | grep -F "ui-tasarim-akisi/arac/yogunluk-denetle.test.sh"; echo "2) GERCEK:"; bash /config/projects/_wt/Sx-Claude-Skills-kapsam-kapisi-hunk/yazilim-fabrikasi/scripts/pr-kip-olc.sh 326 ui-tasarim-akisi/arac/yogunluk-denetle.test.sh --depo /config/projects/Sx-Claude-Skills
+# rc=0 sure=2.1s zaman=2026-10-15T18:04:52+03:00
+--- stdout ---
+1) ESKI KAPININ GIRDISI (gh pr diff --name-only):
+ui-tasarim-akisi/arac/yogunluk-denetle.test.sh
+2) GERCEK:
+YALNIZ KİP: 'ui-tasarim-akisi/arac/yogunluk-denetle.test.sh' — dosya izni değişiyor, içerik farkı YOK (satır: 0)
+--- stderr ---

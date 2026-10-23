@@ -1,0 +1,79 @@
+{
+  "is": "pr-kip-olcer",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T12:54:25+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kip-ayirt",
+      "asama": "once",
+      "dosya": "olcum-kip-ayirt-once.txt",
+      "sha256": "8fa3d4e5f681e931955ee0df0d74ccb20a5f3a92bc8df158abdd114ab41cf156",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/pr-kip-olcer/kip-ayirt-olcer.sh",
+        "origin/main"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T12:54:09+03:00",
+      "sure_sn": 1.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "29d0c6dadc5c4acc91daafe35214ff30"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kip-ayirt",
+      "asama": "sonra",
+      "dosya": "olcum-kip-ayirt-sonra.txt",
+      "sha256": "74490ec4510171fb4ffd9f466324c6e0d3b5fe8d74faa3b9762c1ba53273ed3f",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/pr-kip-olcer/kip-ayirt-olcer.sh",
+        "agac"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T12:54:15+03:00",
+      "sure_sn": 2.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "321c6ea42c1b40ba88f7acdbbf9e00b8"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "pr-kip-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-pr-kip-sinavi-tek.txt",
+      "sha256": "7efaa95767dd2999834afbfcff613f5cf676354a44ed5e7f6fa00ba1bedccecb",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/pr-kip-olc.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T12:54:25+03:00",
+      "sure_sn": 9.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "0fdabdbd5f264699aac215e4a6ff8995"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ters-kip-tur1-kodu",
+      "asama": "once",
+      "dosya": "olcum-ters-kip-tur1-kodu-once.txt",
+      "sha256": "dfa4f7ae300a1100d82bfcf1df1cb0d1f3cf331d14ed595969b11f14e29424c4",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/pr-kip-olcer/kip-ayirt-olcer.sh",
+        "e83599a6"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T12:54:12+03:00",
+      "sure_sn": 3.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "35b1ad291fc249e58f35918850dbebdb"
+    }
+  ],
+  "imza": "30f36da717b848634bbe78ae5c73f1c0601a6da10cd70abb4c5208e41eb03c98"
+}

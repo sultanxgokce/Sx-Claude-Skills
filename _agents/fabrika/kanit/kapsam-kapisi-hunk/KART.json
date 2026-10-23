@@ -1,0 +1,19 @@
+{
+  "is": "kapsam-kapisi-hunk",
+  "cumle": "is-alani.sh kapsam kapisi dosya YOLU karsilastiriyor, SATIR degil: acik PR'in yalniz dosya KIPINI (100644->100755) degistirdigi dosyaya dokunan is, 'KAPSAM CAKISMASI' ile alan acamiyor (olculdu 15 Eki: PR #326, icerik farki SIFIR satir). Zararsiz kip/izin PR'lari butun o dosyalara dokunacak islerin alanini blokluyor. Cozum: ad eslesmesinden SONRA ikinci yuzey olarak hunk ortusmesi olculsun; yalniz-kip degisikligi UYARI olsun, blok olmasin. SINIR ILANI: yalniz kapsam_kontrol() + ac() icindeki cagrisi; kapat() MIRAHUR'da (gorev N4WBMG97).",
+  "istedi": "SERDAR",
+  "aldi": "NAKKAŞ",
+  "zaman": "2026-10-15T17:58:12+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}

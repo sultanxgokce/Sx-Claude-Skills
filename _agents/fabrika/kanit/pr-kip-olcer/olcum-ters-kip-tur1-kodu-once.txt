@@ -1,0 +1,9 @@
+$ bash _agents/fabrika/kanit/pr-kip-olcer/kip-ayirt-olcer.sh e83599a6
+# rc=1 sure=3.1s zaman=2026-10-23T12:54:12+03:00
+--- stdout ---
+kod kaynağı: e83599a6 · araç: var
+   kip.sh → rc=0
+   ters.sh → rc=0
+   icerik.sh → rc=1
+   yeni-ad.sh → rc=1
+--- stderr ---

@@ -1,0 +1,5 @@
+$ bash yazilim-fabrikasi/scripts/pr-kip-olc.sh 326 ui-tasarim-akisi/arac/yogunluk-denetle.test.sh --depo /config/projects/Sx-Claude-Skills
+# rc=0 sure=0.9s zaman=2026-10-15T18:01:22+03:00
+--- stdout ---
+YALNIZ KİP: 'ui-tasarim-akisi/arac/yogunluk-denetle.test.sh' — dosya izni değişiyor, içerik farkı YOK (satır: 0)
+--- stderr ---

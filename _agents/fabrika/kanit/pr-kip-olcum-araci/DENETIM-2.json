@@ -1,0 +1,30 @@
+{
+  "tur": 2,
+  "is": "pr-kip-olcum-araci",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T18:08:06+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 27957,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Ayrı ölçüm aracı ve kendi çift yönlü sınavı teslim edilmiş; yalnız kip rc=0, gerçek içerik/rename/silme/binary rc=1, ölçülemeyen hâller rc=3 olarak ayrılıyor ve araç kapsam kapısına bağlanmıyor. Önceki turun iki uygulama açığı da doğrudan kontroller ve 22/22 sınavla kapatılmış; canlı PR ölçümleriyle birlikte üretime engel kanıtlı bir kusur kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam, sarı kayıt yok. Önce/sonra ölçümünde eski kapının yolu gördüğü hâlde aynı dosyada içerik farkının sıfır olduğu yan yana gösteriliyor; canlı PR #326 üzerinde yalnız-kip rc=0 ve içerik değişikliği beklenen rc=1 ile doğrulanıyor. Son 22/22 çift yönlü sınav; yalnız kip, içerik, kip+içerik, rename, silme, binary, tanınmayan durum, tam yol eşleşmesi, tırnaklı/boşluklu yol ve değersiz bayrakları kapsıyor."
+  }
+}
