@@ -82,9 +82,12 @@ iceren "A5 kanıt manifesti yine AYRI gider" "KANIT MANİFESTİ" "$KOK/istem-izi
 echo "B · 🔴 kırpılma: asıl zarar buydu"
 kapi "B1 ayıklamalı koşumda istem eşiğin ALTINA düşer (kırpılma yok)" 0 kos
 icermeyen "B2 🔴 kırpılma uyarısı istemde YOK" "KIRPILDI" "$KOK/istem-izi.txt"
-kapi "B3 ayıklama KAPATILINCA (DENETCI_KANIT_AYIKLA=0) denetim yine koşar" 0 kos DENETCI_KANIT_AYIKLA=0
-iceren "B4 🔴 ayıklama kapalıyken istem KIRPILIR — eski davranış ölçülür" "KIRPILDI" "$KOK/istem-izi.txt"
-icermeyen "B5 🔴 ayıklama kapalıyken üretim kodu istemden DIŞARI itilir (yanan tur)" "URETIM-KODU-BURADA" "$KOK/istem-izi.txt"
+# (göz #436 tur 1, SYV3F) ayıklama kapalıyken istem eskiden KIRPILIP gönderiliyordu (üretim kodu dışarı itilir, tur yanardı);
+#   artık istem tavanı her kipte geçerli → gönderim durur, tur yanmaz. Ayıklamanın değeri B1-B2'de: aynı fark tavanın ALTINA iner.
+kos DENETCI_KANIT_AYIKLA=0 > "$KOK/b3.out" 2>&1; _rc=$?
+[ "$_rc" -eq 1 ] && { GECEN=$((GECEN+1)); echo "  ✓ B3 ayıklama KAPATILINCA şişkin istem → rc 1, kırpılıp gönderilmez"; } || { DUSEN=$((DUSEN+1)); echo "  ✗ B3 rc=$_rc (beklenen 1)"; }
+iceren "B4 neden söyleniyor: İŞİ BÖL" "İŞİ BÖL" "$KOK/b3.out"
+[ ! -e "$KOK/istem-izi.txt" ] && { GECEN=$((GECEN+1)); echo "  ✓ B5 🔴 ayıklama kapalıyken denetçiye istem GİTMEDİ (kırpık istemle tur yanmaz)"; } || { DUSEN=$((DUSEN+1)); echo "  ✗ B5 istem gitti"; }
 
 echo "C · 🔴 kayıt: 'fark eksikti' ile 'kanıt ayrı gitti' sonradan ayırt edilsin"
 kos >/dev/null 2>&1
@@ -96,13 +99,8 @@ assert a.get('dosya')==3, a
 assert a.get('bayt',0) > 100000, a
 assert d['kirpildi']['oldu'] is False, d['kirpildi']
 "
-kos DENETCI_KANIT_AYIKLA=0 >/dev/null 2>&1
-kapi "C2 ayıklama kapalıyken kayıt dosya=0 ve kirpildi.oldu=true der" 0 python3 -c "
-import json,glob
-d=json.load(open(sorted(glob.glob('$DZ/DENETIM-*.json'))[-1],encoding='utf-8'))
-assert (d.get('kanit_ayiklandi') or {}).get('dosya')==0, d.get('kanit_ayiklandi')
-assert d['kirpildi']['oldu'] is True, d['kirpildi']
-"
+kos DENETCI_KANIT_AYIKLA=0 >/dev/null 2>&1   # kos önceki DENETIM kayıtlarını siler → koşudan sonra kayıt SIFIR olmalı
+[ "$(ls "$DZ"/DENETIM-*.json 2>/dev/null | wc -l)" -eq 0 ] && { GECEN=$((GECEN+1)); echo "  ✓ C2 ayıklama kapalıyken şişkin istemde DENETIM kaydı yazılmaz (tur yakılmadı)"; } || { DUSEN=$((DUSEN+1)); echo "  ✗ C2 ayıklama kapalıyken tur yandı"; }
 
 echo "D · 🔴 ayıklama farkı BOZMAZ (yalnız kanıt yolu düşer)"
 printf 'diff --git a/uretim/a.py b/uretim/a.py\n--- a/uretim/a.py\n+++ b/uretim/a.py\n@@ -1 +1 @@\n-x\n+SADECE-KOD\n' > "$KOK/kodsuz.patch"

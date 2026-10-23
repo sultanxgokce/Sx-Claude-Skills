@@ -58,11 +58,23 @@ icermeyen "D2f ana hattan gelen başkasının dosyası farka girmedi" "baskasini
 iceren "D2g önceki bulgu ayrı satırda sayıldı" "B1. [uygulama] sinir-kontrolu-eksik" "$KOK/istem.md"
 dogru "D2h DENETIM-2: bas=B, duzeltme_farki.onceki_bas=A, dosya=1" "import json;d=json.load(open('$(kayit d1 2)'));f=d['duzeltme_farki'];assert d['bas']=='$B1' and f['onceki_bas']=='$A1' and f['dosya']==1 and f['tam_bayt']>f['bayt']>0"
 
-echo "════ D3 · baş değişmedi → tam fark, sebebi ekranda ════"
+echo "════ D3 · baş değişmedi → fark BOŞ gider, istem bunu söyler (göz #436 tur 1: boş kümede tam farka dönülmez) ════"
 yap d3; kanitla d3; den d3 "$J4" >/dev/null 2>&1; : > "$KOK/istem.md"
 kapi "D3a tur 2 aynı başla koştu" 0 den d3 "$J5"
-iceren "D3b sebep: baş önceki turla aynı" "baş önceki turla aynı" "$KOK/son.out"
-iceren "D3c tam fark gitti" "degismeyen-dosya-icerigi" "$KOK/istem.md"
+iceren "D3b ekranda: YENİ DEĞİŞİKLİK YOK → fark BOŞ" "YENİ DEĞİŞİKLİK YOK → fark BOŞ gider" "$KOK/son.out"
+icermeyen "D3c 🔴 tam fark GİTMEDİ" "degismeyen-dosya-icerigi" "$KOK/istem.md"
+iceren "D3d istem farkın BOŞ olduğunu ve niçin söylüyor" "YENİ DEĞİŞİKLİK YOK, bu yüzden aşağıdaki fark BOŞTUR" "$KOK/istem.md"
+iceren "D3e önceki bulgu yine sayıldı" "B1. [uygulama] sinir-kontrolu-eksik" "$KOK/istem.md"
+dogru "D3f kayıt: duzeltme_farki.dosya=0" "import json;d=json.load(open('$(kayit d3 2)'));f=d['duzeltme_farki'];assert f and f['dosya']==0 and f['bayt']==0"
+
+echo "════ D3x · yeni commit var ama yalnız PR DIŞI dosyada (ana hat birleşmesi) → fark BOŞ ════"
+yap d3x; kanitla d3x; den d3x "$J4" >/dev/null 2>&1
+git -C "$KOK/baska" pull -q origin main 2>/dev/null; echo d3x-baskasi > "$KOK/baska/d3x-baska.txt"
+git -C "$KOK/baska" add d3x-baska.txt; git -C "$KOK/baska" commit -q -m d3xb; git -C "$KOK/baska" push -q origin main 2>/dev/null
+git -C "$KOK/w" fetch -q origin 2>/dev/null; git -C "$KOK/w" merge -q --no-edit origin/main 2>/dev/null; : > "$KOK/istem.md"
+kapi "D3xa tur 2 koştu" 0 den d3x "$J5"
+iceren "D3xb ekranda YENİ DEĞİŞİKLİK YOK" "YENİ DEĞİŞİKLİK YOK" "$KOK/son.out"
+icermeyen "D3xc ne tam fark ne başkasının dosyası gitti" "degismeyen-dosya-icerigi" "$KOK/istem.md"
 
 echo "════ D4 · önceki kayıt bas taşımıyor (eski kayıt) → tam fark, sebebi ekranda ════"
 yap d4; kanitla d4; den d4 "$J4" >/dev/null 2>&1
@@ -84,6 +96,7 @@ unset DENETCI_KIRP_ESIK DENETCI_ISTEM_TAVAN
 kapi "D6a ~100 KB üstü istem → rc 1 (İŞİ BÖL)" 1 den d6 "$J5"
 iceren "D6b sınır 100000 olarak söyleniyor" "> 100000 (istem tavanı" "$KOK/son.out"
 [ ! -e "$(kayit d6 1)" ] && [ ! -s "$KOK/istem.md" ] && { GECEN=$((GECEN+1)); echo "  ✓ D6c tur yakılmadı, denetçiye istem gitmedi"; } || { DUSEN=$((DUSEN+1)); echo "  ✗ D6c tur yandı ya da istem gitti"; }
+kapi "D6e 🔴 ayıklama KAPALIYKEN de durur (göz #436 tur 1)" 1 env DENETCI_KANIT_AYIKLA=0 bash -c 'cd "$1" && SAHTE_JSON="$2" KANIT_DEPO="$1" bash "$3" d6 --kart "$4" < /dev/null' _ "$KOK/w" "$J5" "$D" "$KOK/kart.md"
 DENETCI_ISTEM_TAVAN=200000 kapi "D6d DENETCI_ISTEM_TAVAN=200000 ile aynı iş denetlenir (rc 0)" 0 den d6 "$J5"
 
 echo "════ D7 · MUTASYON: her kapı kaldırılınca bir D kapısı düşer; kontrol D1a geçer ════"
@@ -100,7 +113,9 @@ PY
   mut dosya-siniri-yok 'git -C "$DEPO" diff "$_ob" "$BAS" -- "${_pd[@]}"' 'git -C "$DEPO" diff "$_ob" "$BAS"' "D2f"
   mut bas-yazilmaz '"bas":(bas or None),' '"bas":None,' "D1c"
   mut onceki-bulgu-sayilmaz 'for i,x in enumerate(b,1): print(' 'for i,x in []: print(' "D2g"
-  mut tavan-yalniz-codex 'if [ "${DENETCI_KANIT_AYIKLA:-1}" != "0" ] && [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' 'if { [ "$DENETCI" = "codex" ] || [ -n "${DENETCI_KIRP_ESIK:-}" ]; } && [ "${DENETCI_KANIT_AYIKLA:-1}" != "0" ] && [ "$ISTEM_BAYT" -gt "$KIRP_TETIK" ]; then' "D6a"
+  mut tavan-yalniz-codex 'if [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' 'if { [ "$DENETCI" = "codex" ] || [ -n "${DENETCI_KIRP_ESIK:-}" ]; } && [ "$ISTEM_BAYT" -gt "$KIRP_TETIK" ]; then' "D6a"
+  mut tavan-ayiklamaya-bagli 'if [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' 'if [ "${DENETCI_KANIT_AYIKLA:-1}" != "0" ] && [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' "D6e"
+  mut bos-farkta-tam-fark '      DUZ_ONCEKI_BAS="$_ob"; mv "$TMP/diff-duz.patch" "$TMP/diff.patch"' '      [ "$DUZ_DOSYA" -eq 0 ] && DUZ_ONCEKI_BAS="" || { DUZ_ONCEKI_BAS="$_ob"; mv "$TMP/diff-duz.patch" "$TMP/diff.patch"; }' "D3c"
   mut tavan-120k 'ISTEM_TAVAN="${DENETCI_ISTEM_TAVAN:-100000}"' 'ISTEM_TAVAN="${DENETCI_ISTEM_TAVAN:-200000}"' "D6a"
 fi
 
