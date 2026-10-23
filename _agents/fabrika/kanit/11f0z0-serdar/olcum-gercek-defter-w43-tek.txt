@@ -1,0 +1,18 @@
+$ bash _agents/fabrika/kanit/11f0z0-serdar/olc-gercek.sh
+# rc=0 sure=4.5s zaman=2026-10-23T15:51:17+03:00
+--- stdout ---
+merkez_rc=1 havuz_satiri=11 kopru_ham=11
+  ✓ MERKEZ.md iskeleti: _agents/handoff/retro/2026-W43/MERKEZ.md · öneri 0 (damga bekliyor: 0) · havuz 11 (damga bekliyor: 11; 11 havuz kaydı)
+## Havuz süzümü — görev defterindeki 'havuz' kayıtları (`bulgu.sh havuz-cek` · durum=ham) · damga: `→ gorev_
+- gorev_01M5M55BRC0V3G8A200PYTVZV9 · mihenk: PR'da testleri koşan küçük bir pull_request iş akışı gerek — kan
+- gorev_01M5M7Y1F90HTSRADKETDCX24C · Denetçi düzeltme turu eski DENETIM kaydında tam fark gönderiyor (baş commit y
+- gorev_01M5M8N4AYHJDSZ675MCRFYNVP · Sultan'ın elinden koşan 39 betik hâlâ hiçbir yerde kayıtlı değil: sıfırd
+- gorev_01M5M9HYGPP3857DSVYHR4K4BS · Çalışılıyor durumu bırakılınca geri çekilmiyor: ajan başka işe geçince
+- gorev_01M5M9HZ2CBYAAJ4KY6860ATGE · MİRAHUR: gün sonu özeti akşam cron satırı — gun-sonu.sh --yaz --gelen --ku
+- gorev_01M5M9MJX7DT6XPX2Q757JS8A2 · Doğrulat zili doğrulayıcının kendi işini yine doğrulayıcıya gönderiyor: 
+- gorev_01M5MA8FP9SBRRAT67D8ZDJGSP · Üç el betiğinin depodaki kaydı çalışan kopyasından ayrışmış: ana kopya
+- gorev_01M5MAWAY5NSXJRJMKFYDVDJ8C · Senin elin bloğu Sultan'ın kararını bekleyen işlerin çoğunu göstermiyor: d
+- gorev_01M5MB0SDE3GNDVAFFR2VBPXPD · Altı izole kutuya (huzur · medigate · vekatip · sedir · revak · tez) mektup 
+- gorev_01M5MC2ZW1T304DPXCMG6D9V5J · Yedek kapsamı sınavı paralel sınav korpusunda arada bir kırmızı dönüyor: 
+- gorev_01M5MCV13DCVVCRNQ5TE68X0B1 · gelen-sahipsiz.sh MUAVİN'e zil çalamıyor: ASCII 'MUAVIN' yazıyor, aile-notify 
+--- stderr ---

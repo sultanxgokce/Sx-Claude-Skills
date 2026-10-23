@@ -61,3 +61,12 @@ metin ≥ 8 karakter, `<…>` ya da `…` yer tutucusu içermez. Z maddesi `· �
 `retro.py suzum` her kutu önerisinin böyle bir satırı olduğunu **ve satırdaki metnin kutudaki güncel metinle aynı olduğunu**
 ölçer (damga son oktan sonrasıdır, metin ok taşıyabilir, damga taşıyamaz). Metin değişmişse damga bayattır → kırmızı;
 `merkez --yenile` yalnız metni değişmemiş damgaları korur, değişenleri düşürür ve bildirir.
+
+## MERKEZ.md havuz satırı (1.3.0)
+
+Araç bölümü `## Havuz süzümü — …` altında, görev defterindeki durum=ham kayıt başına:
+`- gorev_<26 karakter> · <başlık> → gorev_<26 karakter>` (Sırada'ya alındı; havuzdaki kayıt kendisi görev olduğundan
+çoğunlukla kendi kimliği) ya da `→ RED: <gerekçe ≥10 karakter>`. Satırlar yalnız bu bölümün içinde havuz satırı sayılır
+(Görevler bölümündeki `- gorev_… · ders M1` satırı değildir). `retro.py suzum` damgasız/biçimsiz havuz satırını ve bölümdeki çözülemeyen (oku silinmiş, kimliği bozuk) satırı kırmızı sayar;
+`merkez --yenile` başlığı değişmemiş kaydın damgasını korur, değişeninkini düşürür, havuzdan çıkan kaydın satırını düşürür ve
+ikisini de bildirir. Köprü (`bulgu.sh havuz-cek`) ölçemezse bölüm yazılmaz, dosya da yazılmaz: rc 3.

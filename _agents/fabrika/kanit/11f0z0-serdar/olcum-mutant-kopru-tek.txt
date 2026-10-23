@@ -1,0 +1,7 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sinav-* ===
+$ bash _agents/fabrika/kanit/11f0z0-serdar/mutant-kopru.sh
+# rc=1 sure=0.1s zaman=2026-10-23T15:51:13+03:00
+--- stdout ---
+mutant koşusu: merkez_rc=0 havuz_satiri=0
+mutant ISIRILDI: köprü çağrısı silinince havuz satırı 2 değil
+--- stderr ---

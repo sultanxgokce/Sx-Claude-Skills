@@ -1,0 +1,5 @@
+$ bash _agents/fabrika/kanit/11f0z0-serdar/olc-havuz.sh suzum
+# rc=0 sure=0.1s zaman=2026-10-23T15:07:38+03:00
+--- stdout ---
+suzum_rc=0
+--- stderr ---

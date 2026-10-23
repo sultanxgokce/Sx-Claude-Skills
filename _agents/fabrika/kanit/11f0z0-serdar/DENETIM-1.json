@@ -1,0 +1,47 @@
+{
+  "tur": 1,
+  "is": "11f0z0-serdar",
+  "pr": "442",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T15:33:17+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 60751,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 11,
+    "bayt": 28355
+  },
+  "bas": "8582bf4471ba649b43b2dafb4b7a4176207a60b0",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Merkez kipi havuz köprüsünü eklemiş, ham kayıtları MERKEZ.md'ye yazmış, damgaları yenilemede korumuş ve köprü yokluğunu rc 3 ile ayırmış. Ancak süzüm, biçimi bozularak çözümlenemeyen havuz satırlarını sessizce yok sayabiliyor; ayrıca iş kartındaki gerçek-defter kabulü 6 satır isterken sunulan ölçüm 9 satır gösteriyor, bu yüzden teslim talebi birebir karşılamıyor.",
+    "bulgular": [
+      {
+        "ne": "Havuz bölümündeki sözdizimi bozuk bir görev satırı süzümden kaçabilir: `havuz_satir_coz` başarısız olunca satır sözlüğe hiç alınmıyor ve `suzum` yalnız sözlüğe alınan kayıtları denetliyor. Örneğin oku silinmiş `- gorev_<26> · başlık` satırı kırmızı olmak yerine yok sayılır.",
+        "kanit": "`havuz_satir_coz`, satır eşleşmezse veya `→` yoksa `None` döndürüyor; `merkez_havuz_satirlari` yalnız `if c:` durumunda kayıt ekliyor; `suzum` ise yalnız `for kid, (_, d) in havuz.items()` döngüsünü denetliyor. Kanıtlanan T12g/T12h vakasında ok mevcut ve yalnız damga boş; çözümlenemeyen satır vakası ölçülmemiş.",
+        "konum": "retro/scripts/retro.py:542-570, retro/scripts/retro.py:731-746; olcum-sinav-tek.txt T12g/T12h özeti",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "İş kartındaki gerçek-defter kabul sayısı sağlanmamış: talep MERKEZ.md'de 6 havuz satırı isterken gerçek ölçüm 9 gösteriyor.",
+        "kanit": "Gerçek ölçüm çıktısı `merkez_rc=1 havuz_satiri=9 kopru_ham=9` diyor ve altında dokuz havuz satırı listeleniyor; iş kartı ise gerçek defter koşusunda 6 satır şartını açıkça yazıyor.",
+        "konum": "olcum-gercek-defter-w43-tek.txt; İŞ KARTI.cumle",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Hermetik önce/sonra çiftleri havuz sayısını 0→2 ve damgasız süzüm sonucunu rc 0→1 gösteriyor; gerçek sınav 204/204 geçiyor, mutasyon kaydı köprü çağrısı kaldırılınca sınavın bozulmayı yakaladığını doğruluyor. Bununla birlikte çözümlenemeyen havuz satırının kırmızı sayılması ölçülmemiş ve gerçek-defter ölçümü karttaki 6 yerine 9 üretmiş."
+  }
+}

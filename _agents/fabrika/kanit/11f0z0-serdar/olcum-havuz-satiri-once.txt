@@ -1,0 +1,5 @@
+$ bash _agents/fabrika/kanit/11f0z0-serdar/olc-havuz.sh merkez
+# rc=0 sure=0.2s zaman=2026-10-23T15:07:38+03:00
+--- stdout ---
+merkez_rc=0 havuz_satiri=0
+--- stderr ---
