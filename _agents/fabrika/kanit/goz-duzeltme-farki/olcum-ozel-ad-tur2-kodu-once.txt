@@ -1,0 +1,12 @@
+$ bash _agents/fabrika/kanit/goz-duzeltme-farki/duzeltme-olcer.sh 6e5e65fc
+# rc=1 sure=2.0s zaman=2026-10-23T11:25:13+03:00
+--- stdout ---
+kod kaynağı: 6e5e65fc
+(1) tur 1 fark bölümü: 8875 bayt · tur 2 fark bölümü: 401 bayt · tur 2'de değişmeyen dosya: hayır · önceki bulgu ayrı satırda: evet · düzeltme satırı (özel adlı dosya) istemde: hayır
+   · DÜZELTME TURU: e29b14f6..da7905f3 arasında PR dosyalarında YENİ DEĞİŞİKLİK YOK → fark BOŞ gider (tam fark 8852 bayt, önceki turda görüldü)
+(1b) tur 3 (yeni commit yok) fark bölümü: 401 bayt · değişmeyen dosya: hayır
+   · DÜZELTME TURU: da7905f3..da7905f3 arasında PR dosyalarında YENİ DEĞİŞİKLİK YOK → fark BOŞ gider (tam fark 8852 bayt, önceki turda görüldü)
+(2) ~110 KB istem → rc=1 · denetçiye: gönderilmedi
+   ✗ İŞİ BÖL — göze giden istem 108075 bayt > 100000 (istem tavanı): şişkin istemle denetim yapılmaz, tur yakılmadı.
+(2b) aynı istem, ayıklama KAPALI → rc=1 · denetçiye: gönderilmedi
+--- stderr ---

@@ -1,0 +1,30 @@
+{
+  "tur": 4,
+  "is": "goz-duzeltme-farki",
+  "pr": "436",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T13:19:56+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor) · 1 kayıt GEÇERSİZ ilan edildi, kanıt sayılmaz: olcum-geri-alma-tur3-kodu-once.txt (yesil → gecersiz) — ölçer bu kayıtta geri alma senaryosunu İÇERMİYORDU; yeşil sonuç tur 3 kusurunu ölçmedi (vekil ölçüt), ölçer genişletilip yeniden alınacak · HENDESE",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 76933,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 15,
+    "bayt": 67806
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, düzeltme turlarında yalnız önceki baştan bu yana PR dosyalarında oluşan farkın gönderilmesi, önceki bulguların ayrı başlıkta sunulması, her kayda incelenen başın yazılması ve 100000 bayt üstünde turun yakılmadan durması uygulanmış. Önceki turun geri alma kusuru da iki uçtan dosya listesi çıkarılarak kapatılmış ve gerçek ölçüm, regresyon sınavları ile mutantlar bunu doğrudan yakaladığı için üretime hazır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Geçersiz ilan edilen eski yeşil kayıt kanıt sayılmamış, genişletilmiş ölçer eski kodda geri alma vakasını kırmızı göstermiş; güncel ağaçtaki önce/sonra çifti kırmızıdan yeşile dönmüş ve geri alma istemde görünmüş. Özel sınav 48/0, genel denetçi sınavı 266/0, fark ayıklama sınavı 30/0; ayrıca 11 mutant baş kaydı, önceki bulgular, boş fark, PR dosya sınırı, özel yollar, tam geri alma ve 100000 bayt kapılarının bozulunca düştüğünü gösteriyor."
+  }
+}
