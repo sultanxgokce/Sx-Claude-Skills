@@ -51,7 +51,16 @@ class H(http.server.BaseHTTPRequestHandler):
         self.wfile.write(json.dumps({"ok":True,"kayit":{"id":"gorev_SINAV0000000001","ekleyen_kutu":"maiset","adlar":[{"deger":b["adlar"][0]}],"canli":cv},**ek}).encode())
     def do_GET(self):
         with open(os.path.join(T,"get.log"),"a") as f: f.write(self.path+"\n")
+        if self.path=="/gorevler" and self.headers.get("x-defter-jeton")=="bozuk-yanit-jeton": self.send_response(200); self.end_headers(); self.wfile.write(b'{"ok":true}'); return
         if self.headers.get("x-defter-jeton")!="sinav-jeton-ABC": self.send_response(401); self.end_headers(); self.wfile.write(b'{"ok":false}'); return
+        if self.path=="/gorevler":   # havuz-cek fikstürü: canlı /gorevler biçimi (adlar[].deger · canli{} · adimlar[].deger · olusturma)
+            G=lambda i,ad,c,ad_=None,t="2026-10-22T09:24:09.195Z": {"id":i,"olusturma":t,"ekleyen_kutu":"code","adlar":[{"deger":ad}] if ad else [],"canli":c,"adimlar":ad_ or []}
+            L=[G("gorev_HAVUZ0000000000001","Denetçi kaydı PR'a yetişmiyor",{"gorev_durumu":"havuz","kutu":"code","etiket":"bug","kaynak_kim":"BASİRET","kaynak_nereden":"bulgu komutu"},[{"deger":"[atandı → X] y"},{"deger":"[kanıt] iki vaka: #1146 #1151"}]),
+               G("gorev_GOC00000000000001","Fatura ekranı donuyor",{"gorev_durumu":"bitti","kutu":"code","etiket":"bug","kaynak_kim":"MUAVIN","kaynak_nereden":"AKAR Bulgu Defteri","eski_no":"S-4 (code)"},None,"2026-10-14T10:00:00Z"),
+               G("gorev_ISOLMAYAN000000001","Kokpit ekranı yenilensin",{"gorev_durumu":"acik","kutu":"code","kaynak_nereden":"gorev komutu"}),
+               G("gorev_CATISMA0000000001","Çatışmalı durum",{"gorev_durumu":["acik","bitti"],"kutu":"mmex","etiket":"ozellik","kaynak_kim":"BÂNİ"}),
+               G("gorev_ADSIZ000000000001",None,{"gorev_durumu":"havuz","etiket":"bug","kaynak_nereden":"bulgu komutu"})]
+            self.send_response(200); self.end_headers(); self.wfile.write(json.dumps({"ok":True,"adet":len(L),"gorevler":L},ensure_ascii=False).encode()); return
         if self.path=="/kayit/gorev_BEKLEYEN00000001":
             self.send_response(200); self.end_headers(); self.wfile.write(b'{"ok":true,"kayit":{"id":"gorev_BEKLEYEN00000001","ekleyen_kutu":"akar","canli":{"kutu":"mmex"}}}'); return
         self.send_response(404); self.end_headers(); self.wfile.write(b'{"ok":false,"hata":"yok"}')
@@ -114,7 +123,28 @@ ok "HV4 jetonsuz eski yolda havuz UYGULANMAZ ve bu SÖYLENİR (eski defter havuz
 printf 'eski-defter-jeton\n' > "$T/jeton-eski"
 o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton-eski" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "eski deftere havuz" --kim X 2>&1); r=$?
 ok "HV5 defter 'havuz'u tanımıyorsa (1.18.0 öncesi 400 alan_degeri_gecersiz) rc 1 + sebep + sıra; acik'a DÜŞÜLMEZ, eski deftere gitmez" '[ $r -eq 1 ] && [[ "$o" == *"reddetti http=400"* ]] && [[ "$o" == *"havuz durumunu tanımıyor"* ]] && [[ "$o" == *"YAZILMADI"* ]] && [[ "$o" != *ARGV* ]]'
+# ── HAVUZ-ÇEK (4FDVE5): defterdeki bulgular eski havuz biçiminde; ölçemezse rc 3 (sessiz boş liste YOK) ──
+o=$(env $M bash "$B" havuz-cek 2>"$T/hc.err"); r=$?
+ok "HC1 havuz-cek: bulgu kayıtları (bulgu komutu YA DA etiket bug/ozellik) gelir, bulgu olmayan görev ve adsız kayıt GELMEZ; sayı stderr'de" '[ $r -eq 0 ] && [ "$(printf "%s\n" "$o" | python3 -c "import sys,json;print(\" \".join(json.loads(l)[\"id\"][6:12] for l in sys.stdin if l.strip()))")" = "HAVUZ0 GOC000 CATISM" ] && grep -q "defterden 3 bulgu kaydı (5 görev tarandı)" "$T/hc.err"'
+ok "HC2 eşleme: havuz → durum 'ham' (defter_durumu havuz) · ilk [kanıt] adımı kanit/detay/gercek · tarih · bulan · kutu · sinif YOK · kaynak defter" 'printf "%s\n" "$o" | head -n1 | python3 -c "
+import sys,json; k=json.loads(sys.stdin.read())
+assert k[\"durum\"]==\"ham\" and k[\"defter_durumu\"]==\"havuz\" and k[\"kanit\"]==k[\"detay\"]==k[\"gercek\"]==\"iki vaka: #1146 #1151\", k
+assert k[\"tarih\"]==\"2026-10-22\" and k[\"bulan\"]==\"BASİRET\" and k[\"kutu\"]==\"code\" and \"sinif\" not in k and k[\"kaynak\"]==\"defter\", k"'
+ok "HC3 göç kaydı eski_no taşır (tüketici kutu defteriyle iki kez saymasın); havuz dışı durum aynen kalır; çatışmalı durum listesi → son değer" 'printf "%s\n" "$o" | python3 -c "
+import sys,json; L=[json.loads(l) for l in sys.stdin if l.strip()]
+assert L[1][\"eski_no\"]==\"S-4 (code)\" and L[1][\"durum\"]==\"bitti\" and L[0][\"eski_no\"]==\"\", L[1]
+assert L[2][\"durum\"]==\"bitti\" and L[2][\"kutu\"]==\"mmex\", L[2]"'
+ok "HC4 jeton değeri çıktıda YOK" '[[ "$o$(cat "$T/hc.err")" != *sinav-jeton-ABC* ]]'
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton-yok" bash "$B" havuz-cek 2>&1); r=$?
+ok "HC5 jetonsuz kutu: rc 3 + ÖLÇÜLEMEDİ (boş liste 'bulgu yok' sanılmaz)" '[ $r -eq 3 ] && [[ "$o" == *"ÖLÇÜLEMEDİ"* ]] && [[ "$o" != *\{* ]]'
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton2" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" havuz-cek 2>&1); r=$?
+ok "HC6 defter reddederse (401) rc 3 + http kodu" '[ $r -eq 3 ] && [[ "$o" == *"http 401"* ]]'
+printf 'bozuk-yanit-jeton\n' > "$T/jeton3"
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton3" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" havuz-cek 2>&1); r=$?
+ok "HC7 yanıtta gorevler listesi yoksa rc 3 (0 kayıt 'temiz' sayılmaz)" '[ $r -eq 3 ] && [[ "$o" == *"yanıtı bozuk"* ]]'
 kill $SRV 2>/dev/null; wait $SRV 2>/dev/null
+o=$(env $M bash "$B" havuz-cek 2>&1); r=$?
+ok "HC8 defter ulaşılamazsa rc 3" '[ $r -eq 3 ] && [[ "$o" == *"ulaşılamadı"* ]]'
 o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" yaz "x" --kim X 2>&1); r=$?
 ok "K1h merkeze ulaşılamazsa rc 1, kayıt HİÇBİR yere yazılmaz ve söylenir" '[ $r -eq 1 ] && [[ "$o" == *"ulaşılamadı"* ]] && [[ "$o" != *ARGV* ]]'
 echo "bulgu.test: $g geçti · $k kaldı"; [ $k -eq 0 ]

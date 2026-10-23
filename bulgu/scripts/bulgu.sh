@@ -82,6 +82,46 @@ if b and not b.get("yazildi"): sys.exit(4)'
       if [ -n "$notu" ]; then python3 "$YAZ" yeni --baslik "$baslik" --kim "$kim" --not "$notu" --kok "$KOK"
       else python3 "$YAZ" yeni --baslik "$baslik" --kim "$kim" --kok "$KOK"; fi
     fi ;;
+  havuz-cek)
+    # ── FİKİR HATTI KÖPRÜSÜ (gorev 4FDVE5 · B16BJ parçası): 22 Eki'den beri bulgular merkezî Görev Defteri'ne düşüyor
+    #    ('bulgu komutu', etiket bug/ozellik, durum 'havuz'); bileyi ve mucit-t1 ise yalnız eski bulgu-havuzu.jsonl'u okuyordu →
+    #    yeni bulgular fikir hattına HİÇ girmiyordu (Nexus havuzunun son satırı b0143, 8 Eki). Bu komut defterdeki bulgu kayıtlarını
+    #    ESKİ HAVUZ BİÇİMİNDE JSONL olarak stdout'a verir; eşleme TEK burada yaşar (iki tüketicide kopyası yok).
+    #    Eşleme: id=gorev_id · tarih=oluşturma · baslik=ad · detay+kanit+gercek=ilk [kanıt] adımı · bulan=kaynak_kim · kutu · etiket ·
+    #    defter_durumu=asıl durum · durum: 'havuz' → 'ham' (süzülmemiş havuz, mucit'in uygunluk dili), öbürleri aynen (mucit onları ELER).
+    #    'sinif' BİLEREK boş: bug/ozellik kaba etiketi sınıf sayımında sahte tekrar üretirdi (bileyi kutu defteri emsali).
+    #    eski_no: 14-15 Eki toplu aktarımda kutu Bulgu Defteri'nden taşınan kaydın eski numarası ("S-4 (code)") — tüketici aynı
+#    bulguyu kutu defterinden de okuyorsa İKİ KEZ saymasın diye taşınır (ölçüldü: code kutusunun 20 kaydından 15'i defterde).
+#    Hangi kayıt bulgudur: kaynak_nereden='bulgu komutu' YA DA etiket bug|ozellik (14-15 Eki toplu aktarım da bulgudur).
+    #    rc: 0 tamam (0 kayıt da 0; sayı stderr'de) · 3 ÖLÇÜLEMEDİ (jeton yok · defter ulaşılamadı · yanıt bozuk) — sessiz boş liste YOK.
+    JY="${DEFTER_JETON_YOL:-/config/defter-jeton}"; UC="${DEFTER_UC:-http://cloudtop-defter:8791}"
+    [ -r "$JY" ] || { echo "🟡 defter jetonu yok ($JY) — defterdeki bulgular ÖLÇÜLEMEDİ" >&2; exit 3; }
+    cfg="$(mktemp)"; trap 'rm -f -- "$cfg"' EXIT
+    printf 'header = "x-defter-jeton: %s"\n' "$(tr -d '\n' < "$JY")" > "$cfg"
+    cevap="$(curl -sS -m 20 --config "$cfg" "$UC/gorevler" -w '\n%{http_code}' 2>&1)" || { echo "🟡 defter ulaşılamadı ($UC) — defterdeki bulgular ÖLÇÜLEMEDİ" >&2; exit 3; }
+    rm -f -- "$cfg"
+    printf '%s' "$cevap" | python3 -c '
+import sys, json
+t = sys.stdin.read().rstrip("\n").rsplit("\n", 1); g, kod = (t if len(t) == 2 else (t[0], "000"))
+if kod != "200":
+    print("🟡 defter okunamadı (http %s) — defterdeki bulgular ÖLÇÜLEMEDİ" % kod, file=sys.stderr); sys.exit(3)
+try:
+    L = json.loads(g)["gorevler"]
+except Exception:
+    print("🟡 defter yanıtı bozuk (gorevler listesi yok) — defterdeki bulgular ÖLÇÜLEMEDİ", file=sys.stderr); sys.exit(3)
+n = 0
+for k in L:
+    c = k.get("canli") or {}
+    if not (c.get("kaynak_nereden") == "bulgu komutu" or c.get("etiket") in ("bug", "ozellik")): continue
+    ad = ((k.get("adlar") or [{}])[0] or {}).get("deger", "")
+    if not str(ad).strip(): continue
+    kanit = next((str(a.get("deger", ""))[len("[kanıt] "):] for a in (k.get("adimlar") or []) if str(a.get("deger", "")).startswith("[kanıt] ")), "")
+    dd = c.get("gorev_durumu"); dd = dd[-1] if isinstance(dd, list) else dd   # çatışmalı durum: son değer
+    print(json.dumps({"id": k["id"], "tarih": str(k.get("olusturma") or "")[:10], "baslik": ad, "detay": kanit, "kanit": kanit,
+                      "gercek": kanit, "bulan": c.get("kaynak_kim") or "", "kutu": c.get("kutu") or k.get("ekleyen_kutu") or "",
+                      "etiket": c.get("etiket") or "", "eski_no": str(c.get("eski_no") or ""), "defter_durumu": dd or "", "durum": "ham" if dd == "havuz" else (dd or ""),
+                      "kaynak": "defter"}, ensure_ascii=False)); n += 1
+print("· defterden %d bulgu kaydı (%d görev tarandı)" % (n, len(L)), file=sys.stderr)' ;;
   liste)
     [ -f "$YAZ" ] || _kur_yok; python3 "$YAZ" listele --kok "$KOK" ;;
   hal)
@@ -110,5 +150,5 @@ print(json.dumps({"toplam": len(b), "sema_gecen": len(ok), "gecmeyen": len(b) - 
                   "son_gecen": [x["no"] + " " + str(x.get("acan")) for x in ok[-3:]]}, ensure_ascii=False))
 PY
     ;;
-  *) sed -n '2,4p' "$0"; echo "komutlar: yaz · liste · hal · sema"; exit 2 ;;
+  *) sed -n '2,4p' "$0"; echo "komutlar: yaz · havuz-cek · liste · hal · sema"; exit 2 ;;
 esac

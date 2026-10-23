@@ -1,0 +1,51 @@
+$ bash mucit-suz/scripts/mucit-elek.test.sh
+# rc=0 sure=1.2s zaman=2026-10-23T05:04:29+03:00
+--- stdout ---
+── F2 · elek-hafızası (bayrak KAPALI = INERT) ──
+  ✅ E1 t1 sözdizimi temiz
+  ✅ E1b yazıcı sözdizimi temiz
+  ✅ E2 kaçış-kapağı (=0) koşusu RC=0
+  ✅ E3 kaçış-kapağı: 4 bulgunun DÖRDÜ de aday (INERT — eski davranış aynen geri gelir)
+  ✅ E3b bayraksız koşu = hafıza AÇIK (varsayılan değişti)
+── F2 · elek-hafızası (bayrak AÇIK) ──
+  ✅ E4 bayraklı koşu RC=0
+  ✅ E5 kapatıcı(b1) ELENDİ · pencereli-bugün(b2) ELENDİ · eski(b3)+preview(b4) GEÇTİ
+  ✅ E6 stderr hafıza satırı basıldı
+  ✅ E7 kapatıcı sayacı=1
+── F2 · pencere semantiği ──
+  ✅ E8 pencere sayacı=1 (yalnız b2)
+  ✅ E9 elek=aylik: kapatıcı(b1) hâlâ dışarıda, pencereliler girer
+  ✅ E10 aylık elekte pencere-kümesi BOŞ (kararlar haftalik etiketli)
+── F1 · durum-yazıcı ──
+  ✅ D1 kuru-koşu RC=0
+  ✅ D2 kuru-koşu havuza DOKUNMADI
+  ✅ D3 bayrak kapalıyken --uygula REDDEDİLDİ (RC=4)
+  ✅ D3b red sonrası havuz hâlâ değişmemiş
+  ✅ D4 bayrak+uygula RC=0
+  ✅ D4b b1 → elendi-kalici
+  ✅ D4c b2 (pencereli) DOKUNULMADI
+  ✅ D4d b4 (preview) DOKUNULMADI
+  ✅ D4e kayıt sayısı korundu
+  ✅ D4f öteki alanlar korundu (kanit)
+  ✅ D5 ikinci koşu RC=0 (idempotent)
+  ✅ D5b ikinci koşu hiçbir şey değiştirmedi
+  ✅ D6 bozuk havuz → fail-closed RC=2
+── aday-arzi geçişi (kart taşıma) ──
+  ✅ D7 aday-arzi → durum=aday-onerildi
+  ✅ D7b kart alanı defterden taşındı
+── F3 · üç elek: kapılar ──
+  ✅ U1 haftalik: 1/3 dolu → geçer (RC=0)
+  ✅ U2 gunluk: bugün 1 aday var → ritim-freni RC=3
+  ✅ U2b fren gerekçesi Sultan-dilinde basıldı
+  ✅ U2c haftalık tavanın DOLU OLMADIĞI ayrıca söyleniyor
+  ✅ U3 haftalık 3/3 dolu → günlük elek de RC=3 (tavan BÖLÜNMEZ)
+  ✅ U4 aylık: haftalık tavan dolu olsa bile RC=0 (kotayı yemez)
+  ✅ U4b aylık çıktı mod=tema
+  ✅ U4c aylık kalan=0 (aday kotası yok)
+  ✅ U4d sentez-modu ilanı basıldı
+  ✅ U5 --elek yoksa varsayılan haftalik (geriye-uyum)
+  ✅ U5b varsayılan mod=aday
+  ✅ U6 bilinmeyen elek → RC=2 (fail-closed)
+─────────────────────────────
+TOPLAM: 39 PASS · 0 FAIL
+--- stderr ---

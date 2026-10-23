@@ -1,0 +1,12 @@
+$ bash _agents/fabrika/kanit/fikir-hatti-defter/fikir-hatti-olcer.sh agac
+# rc=0 sure=39.7s zaman=2026-10-23T05:04:04+03:00
+--- stdout ---
+kod kaynağı: agac · oda: /config/projects/Nexus · defter: canlı (salt-okur)
+   iz: merkez: /config/projects/Nexus/_agents/handoff/bulgu-havuzu.jsonl — 143 kayıt
+   iz: kutu-defteri: /config/.ic-sayfa/bulgu-defteri/bulgular.json — 20 kayıt
+   iz: defter: /tmp/bileyi-defter-47qwz8it.jsonl — 460 kayıt · 15 kayıt öbür kaynakla AYNI (bir kez sayıldı)
+   havuz: 527 kayıt (birleşik, 3/3 kaynak OKUNDU · 20 tanesi bu kutunun kendi defterinden · 445 tanesi görev defterinden)
+── MUCİT T1 eleme-özeti (havuz: bulgu-havuzu.jsonl · görev defteri: 460 bulgu eklendi) ──
+   ➜ T2'ye geçen aday    : 66   ·   [layiha/haftalik] kota: kalan 10/10
+bileyi rc=0 · defterden: 445 · mucit rc=0 · defterden: 460
+--- stderr ---

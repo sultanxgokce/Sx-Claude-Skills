@@ -1,0 +1,58 @@
+$ bash mucit-suz/scripts/mucit-t1.test.sh
+# rc=0 sure=6.0s zaman=2026-10-23T05:04:27+03:00
+--- stdout ---
+── mucit-t1 PROFİL kapıları ──
+  ✅ G1 bash -n temiz
+  ✅ G2 bayraksız (divan) haftalık tavan dolu → RC=3
+  ✅ G3 --profil divan aynı sonuç → RC=3
+  ✅ G4 --profil layiha (gün/10) 3 kayıtla geçer → RC=0
+  ✅ G4b kalan-kota 7
+  ✅ G4c tavan 10
+  ✅ G4d profil alanı
+  ✅ G4e periyot alanı
+  ✅ G5a sahte-kökte divan defteri DOLU → RC=3 (fixture doğru kuruldu)
+  ✅ G5b aynı kökte layiha profili kilide DÜŞMEZ → RC=0 (ayrı defter kanıtı)
+  ✅ G5c layiha sayacı sıfırdan başlar (kalan=10)
+  ✅ G5d divan defteri layiha koşusundan sonra DEĞİŞMEDİ (3 satır)
+  ✅ G6 divan periyot=hafta
+  ✅ G6b 'hafta' anahtarı hâlâ var (T2 kontratı kırılmadı)
+  ✅ G6c hafta değeri ISO-hafta biçimi
+  ✅ G7 layiha dönem değeri YYYY-MM-DD
+  ✅ G8 bilinmeyen profil → RC=2
+  ✅ G9 bilinmeyen periyot → RC=2
+  ✅ G10 --tavan profili ezer → RC=3
+  ✅ G11 ters bayrak-sırası aynı sonuç → RC=3
+  ✅ G12 MUCIT_PROFIL env → RC=0
+  ✅ G13 bayrak VARKEN layiha üretimi ATLANIR (exit 0, çıktı yok)
+  ✅ G13b atlama sessiz değil — stderr 'KAPALI' der
+  ✅ G13c layiha koşusu aday BASMAZ
+  ✅ G14 bayrak VARKEN divan (DİVAN hattı) ÇALIŞMAYA DEVAM eder
+  ✅ G14b divan çıktısı gerçek JSON (susturulmadı)
+  ✅ G15 bayrak KALKINCA layiha üretimi geri gelir
+  ✅ G16 KAŞİF rolündeki alt-ajan ELEME motorunu koşamaz (RC=2)
+  ✅ G16b ret sessiz değil — gerekçe K4'e atıf yapar
+  ✅ G16c reddedilen koşu çıktı BASMAZ
+  ✅ G17 MUCİT rolündeki alt-ajan normal koşar
+  ✅ G17b ve gerçek çıktı üretir (kapı fazla geniş değil)
+  ✅ G18 rol BOŞKEN geriye-uyum: elle/fabrika koşusu bozulmaz
+── G19: BÜYÜK HAVUZ — argv limiti (NÂZIR bulgusu · MUAVİN doğruladı · 2026-08-14) ──
+  ✅ G19a büyük havuzda çıkış-kodu 0 (eski hâlde 126 = argv taşması)
+  ✅ G19b T2-kontratı üretildi (stdout boş DEĞİL)
+  ✅ G19c kontrat geçerli JSON ve aday alanı taşıyor
+  ✅ G19d aday listesi DİZİ olarak geldi (slurpfile sarmalı açıldı)
+  ✅ G19e mihenk_alani da dizi (aynı sarmal hatası orada da yok)
+  ✅ G19f 'Argument list too long' YOK
+
+── GD: merkezî GÖREV DEFTERİ kaynağı (gorev 4FDVE5: 22 Eki'den beri bulgular defterde, elek yalnız dosyayı okuyordu) ──
+  ✅ GD1 defterdeki ham + kanıtlı bulgu aday olur: dosya 2 + defter 1 = 3 aday (RC 0)
+  ✅ GD2 özet kaynağı söyler; bitmiş defter kaydı 'uygun-olmayan durum'a düşer
+  ✅ GD3 MUCIT_GOREV_DEFTERI=- jeton olsa da kapatır (2 aday, 'kapalı')
+  ✅ GD4 jeton okunabiliyorsa varsayılan AÇIK (ayar yokken 3 aday)
+  ✅ GD5 jetonsuz kutu normaldir: ayar yokken kaynak eklenmez, 🟡 gürültüsü yok (2 aday)
+  ✅ GD6 🔴 köprü ölçemezse iş DURMAZ ama SÖYLENİR: RC 0 · 2 aday · stderr 🟡 ÖLÇÜLEMEDİ + sebep
+  ✅ GD7 dosya havuzu satır sonuyla bitmese de birleşim bozulmaz (1 + 1 aday, RC 0)
+  ✅ GD8 geçici birleşim dosyaları koşu sonunda silinir (trap ezilmedi)
+── GD · MUTASYON (tam kopya): kaynak bağlanmazsa GD1 düşmeli ──
+  ✅ GD-M mutant (süzme eski dosyayı okur) defter bulgusunu KAÇIRIYOR (2) → GD1 bu mutantta düşerdi
+pass=48 fail=0
+--- stderr ---

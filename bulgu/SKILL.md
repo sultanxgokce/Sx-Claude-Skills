@@ -1,6 +1,6 @@
 ---
 name: bulgu
-version: 0.5.0
+version: 0.6.0
 description: "Filonun TEK bulgu komutu — hangi kutuda olursan ol, gördüğün kusuru ya da fikri aynı komutla yaz: bulgu = bug/özellik etiketli GÖREV (Sultan 14 Eki, K1); kutuda defter jetonu varsa merkezî Görev Defteri'ne (Sultan'ın görev ekranı) gider, yoksa eski kutu defterine düşer ve söyler. 'bulgu yaz', 'kusur kaydet', 'deftere düş' dendiğinde kullan."
 allowed-tools: Bash
 ---
@@ -57,3 +57,6 @@ bash /config/.claude/skills/bulgu/scripts/bulgu.sh sema             # bu kutunun
 - Defter kutuya `cloudtop/infra/bulgu-defteri/kur.sh` ile kurulur; kurulu değilse komut **rc=3** "bu kutuda defter yok"
   der ve hiçbir şey yazmaz (dosya uydurmaz). O zaman SERDAR'a yaz.
 - Veri kutuda kalır (izolasyon); merkez yalnız salt-okur toplar (`toplac.py`, `filo.py bulgu`).
+
+## `havuz-cek` — fikir hattı köprüsü (0.6.0 · görev 4FDVE5)
+`bulgu.sh havuz-cek` merkezî Görev Defteri'ndeki bulgu kayıtlarını (`kaynak_nereden: bulgu komutu` ya da etiket `bug`/`ozellik`) **eski `bulgu-havuzu.jsonl` biçiminde** stdout'a verir; bileyi ve mucit-t1 bu köprüyle okur — eşleme **tek burada** yaşar. `havuz` durumu `ham` olarak, ilk `[kanıt]` adımı `kanit`/`detay` olarak gelir; `sinif` bilerek boş; göçle taşınan kayıt `eski_no` taşır. Jeton yok · defter ulaşılamadı · yanıt bozuk → **rc 3 ÖLÇÜLEMEDİ** (sessiz boş liste yok). Sınav: `bulgu.test.sh` HC1-HC8.
