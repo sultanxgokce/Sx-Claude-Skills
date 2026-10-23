@@ -616,6 +616,24 @@ import sys; f=sys.argv[1]; s=open(f,encoding="utf-8").read(); a='rc = 2 if 2 in 
 PYM
 DUS_BOY=1280 PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" KANIT_DEPO="$T" python3 "$UBM/kanit.py" ekran is-ub mut --url https://ornek.test --asama tek --uc-boy >/dev/null 2>&1; [ $? -eq 0 ]; g $? "mutant (rc hep 0): 1280 düştüğü hâlde komut yeşil döndü → üstteki 🔴 kapı bu mutantta düşerdi"
 
+echo "════ TB · BİRİNCİL KOPYADA YAZMA REDDİ (0.19.0 · gorev_01M5F03K79B5B19A2XQ54V8NMK): alan varken birincile kanıt yazılmaz ════"
+# NİÇİN: kanıt aracı çağrıldığı ağacın köküne yazar; iş alanı açıkken BİRİNCİL kopyadan koşulan ölçüm orada takipsiz kalıyor, PR'a
+#        girmiyordu (HENDESE 22 Eki: Nexus 116 + cloudtop 45 takipsiz kanıt dosyası, ana kopyanın otomatik çekmesi 10 gün ölü).
+#        Alan = IS_ALANI_KOK/<depo-adı>-<iş> (is-alani.sh deseni). Birincil = git-dir ile git-common-dir aynı.
+TB="$(mktemp -d)"; ( cd "$TB" && git init -q -b main && git -c user.email=t@t -c user.name=T commit -q --allow-empty -m "ilk" ) >/dev/null 2>&1
+AK="$TB/alanlar"; mkdir -p "$AK"; WB="$AK/$(basename "$TB")-is-b"; git -C "$TB" worktree add -q -b is-b "$WB" >/dev/null 2>&1; [ -d "$WB" ]; g $? "TB0 fikstür: birincil kopya + iş alanı (worktree) açıldı"
+IS_ALANI_KOK="$AK" KANIT_DEPO="$TB" python3 "$HERE/kanit.py" olcum is-b olc --asama tek -- echo 1 >"$TB/cikti.txt" 2>&1; RC=$?
+[ "$RC" -eq 2 ] && grep -q "BİRİNCİL kopyadasın" "$TB/cikti.txt" && grep -q "$WB" "$TB/cikti.txt"; g $? "TB1 birincilden, alan varken: rc 2 + 'BİRİNCİL kopyadasın' + alan yolu söylenir"
+[ ! -e "$TB/_agents/fabrika/kanit/is-b" ]; g $? "TB1b birincile HİÇBİR dosya yazılmadı (ölçüm dosyası da dizin de yok)"
+IS_ALANI_KOK="$AK" KANIT_DEPO="$WB" python3 "$HERE/kanit.py" olcum is-b olc --asama tek -- echo 1 >/dev/null 2>&1; [ $? -eq 0 ] && [ -f "$WB/_agents/fabrika/kanit/is-b/KANIT.json" ]; g $? "TB2 aynı komut ALANDAN yazar (rc 0, manifest alanda)"
+IS_ALANI_KOK="$AK" KANIT_DEPO="$TB" python3 "$HERE/kanit.py" olcum is-c olc --asama tek -- echo 1 >/dev/null 2>&1; [ $? -eq 0 ] && [ -f "$TB/_agents/fabrika/kanit/is-c/KANIT.json" ]; g $? "TB3 alanı OLMAYAN iş birincilden eskisi gibi yazar (rc 0)"
+IS_ALANI_KOK="$AK" KANIT_DEPO="$TB" python3 "$HERE/kanit.py" ozet is-c >/dev/null 2>&1; g $? "TB4 okuma komutu (ozet) bu kapıdan geçmez"
+printf 'x' > "$TB/rapor.txt"; IS_ALANI_KOK="$AK" KANIT_DEPO="$TB" python3 "$HERE/kanit.py" dosya is-b rapor "$TB/rapor.txt" --asama tek >/dev/null 2>&1; [ $? -eq 2 ] && [ ! -e "$TB/_agents/fabrika/kanit/is-b" ]; g $? "TB5 'dosya' komutu da birincilden reddedilir, iz yok (gecersiz/canli/ekran aynı kapı: kayit_ekle + komut başı)"
+# MUTASYON: kapı sökülünce (birincil tespiti hep 'değil' döner) TB1 senaryosu birincile yazar — kapı süs değil kabloda
+MB="$TB/kanit-mutant-birincil.py"
+python3 -c 'import sys;s=open(sys.argv[1],encoding="utf-8").read();y=s.replace("    if not gd or gd != gc:\n        return\n","    return\n",1);assert y!=s,"desen tutmadı";open(sys.argv[2],"w",encoding="utf-8").write(y)' "$HERE/kanit.py" "$MB"; g $? "TB6 mutant üretildi (desen tuttu)"
+IS_ALANI_KOK="$AK" KANIT_DEPO="$TB" python3 "$MB" olcum is-b olc --asama tek -- echo 1 >/dev/null 2>&1; [ $? -eq 0 ] && [ -f "$TB/_agents/fabrika/kanit/is-b/KANIT.json" ]; g $? "TB6b MUTASYON: kapı sökülünce birincile yazılır (kapı gerçekten çalışıyor)"
+git -C "$TB" worktree remove --force "$WB" >/dev/null 2>&1; find "$TB" -mindepth 1 -delete 2>/dev/null; rmdir "$TB" 2>/dev/null
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]

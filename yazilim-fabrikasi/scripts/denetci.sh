@@ -206,6 +206,22 @@ DZ="$DEPO/_agents/fabrika/kanit/$IS"
 #    o anki hâli $DZ/KART.json'a kopyalanır — PR'a kart bununla gider, kartlar/ dizinindeki kopyayla değil; kopya yazılamazsa rc=3.
 KART_DEPO="${KART_DEPO:-$(c="$(git -C "$DEPO" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)" && [ -n "$c" ] && dirname "$c")}"
 [ -n "$KART_DEPO" ] || KART_DEPO="$DEPO"
+# 🔴 BİRİNCİL KOPYADA YAZMA REDDİ (0.19.0 · gorev_01M5F03K79B5B19A2XQ54V8NMK · HENDESE 22 Eki ölçümü): denetçi kaydı çağrıldığı ağacın
+#    köküne yazar; iş alanı (worktree) varken BİRİNCİL kopyadan `--pr N` ile koşulan son tur DENETIM + KART.json birincilde kalıyor,
+#    kimse commit'lemiyordu (Nexus 116 + cloudtop 45 takipsiz kanıt dosyası; ana kopyanın otomatik çekmesi 10 gün ölü). Birincil
+#    kopya = git-common-dir ile git-dir aynı; bu iş için alan = is-alani.sh kökü altında <depo-adı>-<iş>. Alan varken birincilden
+#    yazmak REDDEDİLİR (rc 2) ve doğru yol söylenir — sessiz yönlendirme yok (kullanıcı nereye yazıldığını bilmeli). Alanı olmayan iş
+#    (ör. bitti sonrası kapanmış alan) ve alandan koşum eski davranışıyla aynı. Kayıt: DENETIM-N.json'a depo/dal/birincil alanı.
+DENETCI_BIRINCIL=0; _gd="$(git -C "$DEPO" rev-parse --path-format=absolute --git-dir 2>/dev/null)"; _gc="$(git -C "$DEPO" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)"
+[ -n "$_gd" ] && [ "$_gd" = "$_gc" ] && DENETCI_BIRINCIL=1
+if [ "$DENETCI_BIRINCIL" -eq 1 ]; then
+  _alan="${IS_ALANI_KOK:-/config/projects/_wt}/$(basename "$DEPO")-$IS"
+  if [ -d "$_alan" ] && git -C "$_alan" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    _hata "BİRİNCİL kopyadasın ($DEPO) ama bu işin açık iş alanı var: $_alan — denetim kaydı birincile yazılmaz (takipsiz kalır, PR'a girmez). Alandan koş: cd $_alan && bash $0 $IS …"
+    exit 2
+  fi
+fi
+DENETCI_DAL="$(git -C "$DEPO" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")"
 kart_yolu() {  # birincil depodaki kart; yoksa boş. İş alanındaki kopya OKUNMAZ: birincilde yokken alanda kopya varsa rc=3 (bayat kart kapıyı yanıltır)
   if [ -f "$KART_DEPO/_agents/fabrika/kartlar/$IS.json" ]; then printf '%s' "$KART_DEPO/_agents/fabrika/kartlar/$IS.json"
   elif [ "$KART_DEPO" != "$DEPO" ] && [ -f "$DEPO/_agents/fabrika/kartlar/$IS.json" ]; then
@@ -803,12 +819,13 @@ PY
 SRC=$?
 if [ "$SRC" -ne 0 ]; then _hata "denetçi çıktısı geçersiz — ölçemedi"; cp "$HAM" "$DZ/DENETIM-$TUR-HAM.txt"; exit 3; fi
 KARE_KAYIT="$(for _k in "${KARELER[@]}"; do printf '%s\t%s\n' "$(basename "$_k")" "$(sha256sum "$_k" | cut -d' ' -f1)"; done)"
-python3 - "$DZ/DENETIM-$TUR.json" "$TUR" "$IS" "$PR" "$YAZAN" "$DENETCI_AD" "$KANIT_DURUM" "$DOGRULANMIS" "$KIRPILDI" "$ISTEM_BAYT" "$KIRP_ESIK" "$YEDEK" "$YAZAN_MODEL" "$YEDEK_MODEL" "$YAZAN_MODEL_KAYNAK" "$AYIKLANAN_DOSYA" "$AYIKLANAN_BAYT" "$KARE_KAYIT" "${KARE_VERILEMEDI:-0}" <<'PY'
+python3 - "$DZ/DENETIM-$TUR.json" "$TUR" "$IS" "$PR" "$YAZAN" "$DENETCI_AD" "$KANIT_DURUM" "$DOGRULANMIS" "$KIRPILDI" "$ISTEM_BAYT" "$KIRP_ESIK" "$YEDEK" "$YAZAN_MODEL" "$YEDEK_MODEL" "$YAZAN_MODEL_KAYNAK" "$AYIKLANAN_DOSYA" "$AYIKLANAN_BAYT" "$KARE_KAYIT" "${KARE_VERILEMEDI:-0}" "$DEPO" "$DENETCI_DAL" "$DENETCI_BIRINCIL" <<'PY'
 import json,sys,datetime
-yol,tur,is_,pr,yazan,den,kd,sonuc_yolu,kirp,bayt,esik,yedek,yazan_model,yedek_model,ym_kaynak,ayik_dosya,ayik_bayt,kare_kayit,kare_verilemedi=sys.argv[1:]
+yol,tur,is_,pr,yazan,den,kd,sonuc_yolu,kirp,bayt,esik,yedek,yazan_model,yedek_model,ym_kaynak,ayik_dosya,ayik_bayt,kare_kayit,kare_verilemedi,depo,dal,birincil=sys.argv[1:]
 kareler=[{"ad":a,"sha256":h} for a,h in (l.split("\t") for l in kare_kayit.splitlines() if "\t" in l)]
 json.dump({"tur":int(tur),"is":is_,"pr":pr,"yazan":yazan,"denetci":den,"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
            "kanit_durumu":kd,
+           "depo":depo,"dal":(dal or None),"birincil":birincil=="1",   # 0.19.0 (V8NMK): kayıt NEREYE yazıldı — birincil kopyaya yazılan kayıt PR'a girmez, buradan ayırt edilir
            "yedek":(yedek or None),   # Sultan Y0006: yedek gözle alınan puan codex puanı sanılmasın; sebebi kayıtta
            "yazan_model":(yazan_model or None), "yazan_model_kaynak":(ym_kaynak or None), "yedek_model":(yedek_model or None),   # yedek koşumunda dolu (ölçülemezse yedek koşmaz, rc=3)
 

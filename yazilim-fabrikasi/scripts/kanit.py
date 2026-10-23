@@ -122,7 +122,26 @@ def simdi():
     return datetime.datetime.now().astimezone().isoformat(timespec="seconds")
 
 
+def birincil_reddi(depo, is_adi):
+    """0.19.0 (gorev_01M5F03K79B5B19A2XQ54V8NMK · HENDESE 22 Eki ölçümü): BİRİNCİL kopyadan (git-dir == git-common-dir), o iş için
+    is-alani.sh kökünde (<kök>/<depo-adı>-<iş>) açık bir iş alanı varken kanıt YAZILMAZ — birincile düşen kayıt takipsiz kalır,
+    PR'a girmez (Nexus 116 + cloudtop 45 takipsiz kanıt dosyası böyle doğdu). rc 2, doğru yol söylenir; sessiz yönlendirme yok.
+    Okuma komutları (dogrula · ozet · liste) bu kapıdan geçmez. Alanı olmayan iş ve alandan koşum eski davranışıyla aynı."""
+    try:
+        gd = subprocess.check_output(["git", "-C", depo, "rev-parse", "--path-format=absolute", "--git-dir"], text=True, stderr=subprocess.DEVNULL).strip()
+        gc = subprocess.check_output(["git", "-C", depo, "rev-parse", "--path-format=absolute", "--git-common-dir"], text=True, stderr=subprocess.DEVNULL).strip()
+    except Exception:
+        return
+    if not gd or gd != gc:
+        return
+    alan = os.path.join(os.environ.get("IS_ALANI_KOK", "/config/projects/_wt"), f"{os.path.basename(os.path.abspath(depo))}-{is_adi}")
+    if os.path.isdir(alan) and subprocess.run(["git", "-C", alan, "rev-parse", "--is-inside-work-tree"], capture_output=True).returncode == 0:
+        hata(f"BİRİNCİL kopyadasın ({depo}) ama bu işin açık iş alanı var: {alan} — kanıt birincile yazılmaz (takipsiz kalır, PR'a girmez). "
+             f"Alandan koş: cd {alan} && KANIT_DEPO={alan} python3 {os.path.abspath(__file__)} …", 2)
+
+
 def kayit_ekle(depo, is_adi, kayit):
+    birincil_reddi(depo, is_adi)
     dz = kanit_dizin(depo, is_adi); os.makedirs(dz, exist_ok=True)
     m = manifest_oku(dz)
     kayitlar = m["kayitlar"] if m else []
@@ -308,7 +327,7 @@ def cmd_olcum(a):
         boru = f"ayrıştırılamadı: {neden}"
     else:
         boru = {"temiz": "temiz", "kapsam-disi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)"}[durum]
-    depo = depo_kok(a.depo); dz = kanit_dizin(depo, a.is_adi); os.makedirs(dz, exist_ok=True)
+    depo = depo_kok(a.depo); birincil_reddi(depo, a.is_adi); dz = kanit_dizin(depo, a.is_adi); os.makedirs(dz, exist_ok=True)
     # 🧬 MUTASYON KAYDI (FR7M76 · #1136 tur 3, 15 Eki): bilerek bozulmuş kodla koşan sınavın ✗ satırları göze verilince GERÇEK ölçüm
     #    sanıldı ("kilit çalışmıyor" bulgusu, iş tıkandı); etiketteki "mutasyon" kelimesi yetmedi. --mutasyon <gerçek etiket>: kayıt
     #    mutasyon diye işaretlenir, dosyanın İLK satırı bunu söyler, renk tersine döner (kırmızı sınav = bozuk kod YAKALANDI = yeşil;
@@ -433,7 +452,7 @@ def _gelene_kopyala(a, yol, etiket):   # → kopya gerekmediyse ya da yazıldıy
 
 
 def _ekran_tek(a, etiket, genislik):
-    depo = depo_kok(a.depo); dz = kanit_dizin(depo, a.is_adi); os.makedirs(dz, exist_ok=True)
+    depo = depo_kok(a.depo); birincil_reddi(depo, a.is_adi); dz = kanit_dizin(depo, a.is_adi); os.makedirs(dz, exist_ok=True)
     ad = f"ekran-{etiket}-{a.asama}.png"; yol = os.path.join(dz, ad)
     pw = playwright_dizin()
     temel = {"tur": "ekran", "etiket": etiket, "asama": a.asama, "dosya": ad, "url": a.url, "zaman": simdi()}
@@ -488,7 +507,7 @@ def _ekran_tek(a, etiket, genislik):
 
 # ── dosya ────────────────────────────────────────────────────────────────────────
 def cmd_dosya(a):
-    depo = depo_kok(a.depo); dz = kanit_dizin(depo, a.is_adi); os.makedirs(dz, exist_ok=True)
+    depo = depo_kok(a.depo); birincil_reddi(depo, a.is_adi); dz = kanit_dizin(depo, a.is_adi); os.makedirs(dz, exist_ok=True)
     if not os.path.isfile(a.yol): hata(f"dosya yok: {a.yol}", 3)
     ad = f"dosya-{a.etiket}-{a.asama}{os.path.splitext(a.yol)[1]}"; hedef = os.path.join(dz, ad)
     shutil.copyfile(a.yol, hedef)
@@ -600,7 +619,7 @@ def cmd_canli(a):
     komut, tur, sebep = kaynak_komutu(a.kaynak, a.son)
     if sebep:
         hata(sebep, 1)
-    depo = depo_kok(a.depo); dz = kanit_dizin(depo, a.is_adi); os.makedirs(dz, exist_ok=True)
+    depo = depo_kok(a.depo); birincil_reddi(depo, a.is_adi); dz = kanit_dizin(depo, a.is_adi); os.makedirs(dz, exist_ok=True)
     ad = f"canli-{a.etiket}.txt"; yol = os.path.join(dz, ad)
     t0 = datetime.datetime.now()
     # stdin KAPALI: arka planda / cron'dan çağrılınca açık bir socket'te asılı kalmasın (denetçi 68 dk vakası, 0.6.3)
@@ -702,7 +721,7 @@ def etkin_kayitlar(m):
 
 
 def cmd_gecersiz(a):
-    depo = depo_kok(a.depo); dz = kanit_dizin(depo, a.is_adi); m = manifest_oku(dz)
+    depo = depo_kok(a.depo); birincil_reddi(depo, a.is_adi); dz = kanit_dizin(depo, a.is_adi); m = manifest_oku(dz)
     if not m:
         hata(f"{dz}/KANIT.json YOK — geçersiz ilan edilecek ölçüm yok", 3)
     if not imza_tutuyor_mu(m)[0]:

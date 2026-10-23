@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.18.1
+version: 0.19.0
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -128,6 +128,16 @@ Codex yoksa ya da iki denemede de düşerse, **yazandan farklı yeni bir Claude 
 sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kaldırılınca kırmızı).
 
 ## Sürüm notları
+- **0.19.0 (2026-10-23, BÂNİ · HENDESE 22 Eki ölçümü, gorev_01M5F03K79B5B19A2XQ54V8NMK):** `denetci.sh` ve `kanit.py` kaydı
+  çağrıldığı ağacın köküne yazıyordu; iş alanı (worktree) açıkken BİRİNCİL kopyadan koşulan ölçüm/denetim orada takipsiz
+  kalıyor, PR'a girmiyordu (Nexus 116 + cloudtop 45 takipsiz kanıt dosyası; ana kopyanın otomatik çekmesi 10 gün ölü). Artık
+  birincil kopyada (git-dir == git-common-dir) o iş için is-alani.sh kökünde (`IS_ALANI_KOK`, vars. /config/projects/_wt,
+  `<depo-adı>-<iş>`) açık bir alan varsa yazma **reddedilir** (rc 2, alan yolu ve doğru komut söylenir; sessiz yönlendirme yok).
+  Alandan koşum ve alanı olmayan iş eski davranışıyla aynı; okuma komutları (dogrula · ozet · liste) kapıdan geçmez.
+  DENETIM-N.json'a `depo` · `dal` · `birincil` alanı yazılır (kayıt nereye düştü, sonradan ayırt edilir). Kapılar: kanit.test.sh
+  **TB0–TB6b** (reddi · iz yok · alandan yazar · alansız iş yazar · okuma geçer · dosya komutu da reddedilir · mutant: kapı
+  sökülünce yazar), denetci.test.sh **TP0–TP4b** (reddi · DENETIM/KART yok · alandan DENETIM depo/dal/birincil=false ·
+  alansız iş birincil=true · mutant dizin kopyasında). Ölçüm komutu: HENDESE `_agents/hendese/olcer/`.
 - **0.10.0 (2026-10-18, SERDAR · PCP7J daraltma adımı; 0.9.0 HENDESE üstüne):** tıkanma raporu "kapsamı daralt" diyordu ama hatta adımı yoktu:
   daralt kararı verilen iş (cloudtop #668) tur açamıyor, mutlak tavanı dolan iş (#670) bir daha denetlenemiyor, kapı
   reis/Sultan kararını hiç okumuyordu; geçici yol "yeni kart + yeni dal + yeni PR" Sultan'a günde ~30 karar yüklüyordu.
