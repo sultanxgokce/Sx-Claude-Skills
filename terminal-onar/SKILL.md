@@ -10,7 +10,7 @@ Kapıyı başlatan tmux kabuğu (onar.sh) ortam dosyasını `set -a; . dosya` il
 yalnız AD=değer okuyordu ama kapı kabuğu o okuyucuyu görmüyordu. Gerçek dosyada 303 satırın 135'i AD=değer değil, 6'sı PEM
 işareti → kabuk onları komut diye koşturdu, sır parçaları kapi-code ve imglistener bölmelerine düştü (SERDAR ölçtü, temizledi).
 Okuyucu artık `scripts/ortam-yukle.sh` (yan etkisiz, tek başına kaynak alınır); ortak.sh onu yanından alır (`OKUYUCU`), kapı
-kabuğu `. ortam-yukle.sh; ortam_yukle <dosya>` der, cloudtop `mobile-start.sh` de aynı dosyayı kullanır — kopya yok.
+kabuğu `. ortam-yukle.sh; ortam_yukle <dosya>` der. Başka depolar aynı dosyayı kendi PR'larında alır (cloudtop `mobile-start.sh`: cloudtop #811, bu sürümün dışı) — kopya yok.
 Sınav `sifre-yukle.test.sh` E7-E9: başlatma komutunda `set -a; .` yok · kabuk okuyucuyu kullanıyor · okuyucu boş ortamda tek
 başına çalışır (bozuk satır koşmaz, stderr temiz). Mutasyon: `set -a; .` geri gelirse E7, `. dosya` okuyucuya dönerse E3/E4/E9 kırmızı.
 
