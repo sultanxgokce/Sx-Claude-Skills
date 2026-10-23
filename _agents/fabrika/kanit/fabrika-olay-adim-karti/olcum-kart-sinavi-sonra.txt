@@ -1,5 +1,5 @@
 $ bash -c unset KANIT_DEPO; timeout 1500 bash /config/projects/_wt/Sx-Claude-Skills-fabrika-olay-adim-karti/yazilim-fabrikasi/scripts/kart.test.sh < /dev/null
-# rc=0 sure=29.8s zaman=2026-10-23T20:56:37+03:00
+# rc=0 sure=28.6s zaman=2026-10-24T01:05:55+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -162,6 +162,7 @@ $ bash -c unset KANIT_DEPO; timeout 1500 bash /config/projects/_wt/Sx-Claude-Ski
   ✓ U7 🔴 tetik anında kart GÖRÜNMEZ ('yok'), tetik başarınca yayımlandı, geçici dosya kalmadı (süreç tetikte kesilse kart kalmazdı)
   ✓ U8 🔴 tetik sırasında başkası aynı kimlikle kart açtıysa onun kartı EZİLMEZ (rc 1 'kart zaten var')
   ✓ U9 🔴 tetik düşünce geri alma YALNIZ kendi geçici dosyasını siler: başkasının aynı kimlikli kartı SİLİNMEZ
+  ✓ U10 🔴 tetik mektubu ilk satırda 'HEDEF: <oda>' taşır → HEDEF kuralını uygulayan tetik kabul eder, sınıflı kart AÇILIR
 ── T17 · MUTASYON (tam kopya): yol kapalıyken rc 0 dönerse sınav KIRMIZI ──
   ✓ mutant 'oda çiti kalkınca': odasız sınıflı kart rc 0 ile açılıyor → U1 bu mutantta KIRMIZI
   ✓ mutant 'betik çiti kalkınca': sebep 'tetik betiği yok' söylenmiyor → U2 bu mutantta KIRMIZI
@@ -170,6 +171,7 @@ $ bash -c unset KANIT_DEPO; timeout 1500 bash /config/projects/_wt/Sx-Claude-Ski
   ✓ mutant 'komut satıra geri konunca': Sultan'a giden satırda 'kart.sh' var → U4b bu mutantta KIRMIZI
   ✓ mutant 'yayım var olan kartı ezince' (ln yerine mv -f): başkasının kartı EZİLİYOR → U8 bu mutantta KIRMIZI
   ✓ mutant 'geri alma kimlikle siler' (eski davranış): başkasının kartı SİLİNİYOR → U9 bu mutantta KIRMIZI
+  ✓ mutant 'HEDEF satırı kalkınca' (eski davranış): HEDEF kuralı uygulayan tetik reddediyor, kart AÇILAMIYOR (rc 1) → U10 bu mutantta KIRMIZI
 ── A06 (önceki tur notu) · reis kaydı 'Sultan sözü' gibi okunmasın: etiket kalkarsa sınav KIRMIZI ──
   ✓ mutant 'reis çıktısından etiket kalkınca': sınıflı reis kaydı etiketsiz basılıyor → T9 'reis kararı, Sultan sözü değil' kapısı bu mutantta KIRMIZI
   ✓ A06 reis kaydı reis_kararlari'nda (sinifli:true), sultan_kararlari'na HİÇBİR şey yazılmadı
@@ -227,7 +229,7 @@ $ bash -c unset KANIT_DEPO; timeout 1500 bash /config/projects/_wt/Sx-Claude-Ski
   ✓ G6 jetonsuz kutu: deftere gidilmez, kart açılır, 'jetonu yok' söylenir, rc 4
   ✓ G7 bağsız kart deftere gitmez, rc 0, bunu söyler (eski kartlar etkilenmez)
   ✓ G7b bağsız kartın bitti'si de deftere gitmez
-════ T14b · 0.23.0 (Y7J3Q): yeni işe geçince önceki görev 'bekliyor'; göz turu göreve tek adım, durum değişmez ════
+════ T14b · 0.24.0 (Y7J3Q): yeni işe geçince önceki görev 'bekliyor'; göz turu göreve tek adım, durum değişmez ════
   ✓ G8 aynı ajanın açık görevli kartı (gb-4) varken yeni iş: gb-4'ün görevi 'bekliyor' + 'başka işe geçti: gb-6' ve yeni işin görevi 'çalışılıyor' (toplam 2 yazım)
   ✓ G8b rc 0; önceki KART açık kalır (yalnız görevi bekliyor), karta 'gecti' yazımı işlenir
   ✓ G8c başka ajanın kartı ETKİLENMEZ: yalnız kendi görevi yazıldı (+1 yazım)
@@ -285,6 +287,33 @@ $ bash -c unset KANIT_DEPO; timeout 1500 bash /config/projects/_wt/Sx-Claude-Ski
   ✓ mutant (sorulan kimliği): sorulmayan ad cevap verdi → S7 bu mutantta düşerdi
   ✓ mutant (sinifli kural): sınıflı kartta SERDAR'a soruldu → S16 bu mutantta düşerdi
   ✓ mutant (bozuk kart): okunamayan kart atlanıp rc 0 → S19 bu mutantta düşerdi
+════ T17 · ÖLÇÜT NEREDE ÖLÇÜLECEK (görev …90KA6C): cümlede sayısal ölçüt varsa --olcum-yeri ZORUNLU (W1G2N: '≤6 dk' 2 çekirdekli CI'da imkânsızdı) ════
+  ✓ OL1 ölçütlü cümle + yer YOK → rc 1, sebep ölçütü söyler, kart AÇILMADI
+  ✓ OL2 'yerel' ama çekirdek sayısı YOK → rc 1 (çekirdek şart)
+  ✓ OL3 'yerel, 12 çekirdek' → açıldı, çıktı ölçüt+yeri söyler
+  ✓ OL3b kartta olcut + olcum_yeri yazılı
+  ✓ OL4 'CI, 2 çekirdek' kabul
+  ✓ OL5 'canlı' çekirdek sayısı istemeden kabul
+  ✓ OL6 eşik işaretsiz süre / kapı sayısı / sürüm ölçüt SAYILMAZ → yer istenmez
+  ✓ OL7 'en çok 40 MB' biçimi de ölçüt sayılır (yer yok → rc 1)
+  ✓ OL8 '6 dk altında' / 40 dk'dan az biçimleri de ölçüt sayılır
+  ✓ OL13 birim dar değil: 'en az 95 puan' / 'en çok 10 istek' de ölçüt sayılır (yer yok → rc 1)
+  ✓ OL14 '3 hata altında' ölçüt sayılır
+  ✓ OL15 birden çok yüzey adı ('canlı, CI') belirsiz → rc 1 (tek yer şart)
+  ✓ OL16 'CI, yerel, 2 çekirdek' de belirsiz → rc 1
+──  T17 · daralt: yeni cümlede ölçüt varsa yer zorunlu; ölçüt değişince eski GEÇERSİZ, karta + görev adımına yazılır ──
+  ✓ OL9 daralt: yeni cümlede ölçüt var, yer YOK → rc 1, kart DEĞİŞMEDİ
+  ✓ OL10 daralt + yer → ölçüt değişti uyarısı (eski GEÇERSİZ, yeni)
+  ✓ OL10b kartta güncel ölçüt + olcut_gecmisi (eski→yeni) yazılı
+  ✓ OL11 daralt ölçütü KALDIRIRSA yer istenmez, eski ölçüt geçersiz sayılıp kayda geçer
+  ✓ OL12 görev bağlı kartta ölçüt daralması görev adımı olarak DENENİR (olay 'daralt'; jeton yok → rc 4, karta işlenir)
+──  T17 · MUTASYON: şart kalkarsa ilgili kapı KIRMIZI ──
+  ✓ M-OL1 ac'taki ölçüt şartı kalkarsa yersiz kart açılır (OL1 bu mutantta düşerdi)
+  ✓ M-OL2 çekirdek sayısı şartı kalkarsa 'yerel' tek başına geçer (OL2 düşerdi)
+  ✓ M-OL3 daralt'taki ölçüt şartı kalkarsa yersiz daraltma geçer (OL9 düşerdi)
+  ✓ M-OL5 birim sözlüğü daralırsa 'en az 95 puan' ölçüt sayılmaz, kart yersiz açılır (OL13 düşerdi)
+  ✓ M-OL6 tek-yer şartı gevşerse 'canlı, CI' geçer (OL15 düşerdi)
+  ✓ M-OL4 ölçüt değişimi kayda geçmezse olcut_gecmisi boş kalır (OL10b düşerdi)
 
-── SONUÇ: 255 geçti · 0 kaldı ──
+── SONUÇ: 281 geçti · 0 kaldı ──
 --- stderr ---

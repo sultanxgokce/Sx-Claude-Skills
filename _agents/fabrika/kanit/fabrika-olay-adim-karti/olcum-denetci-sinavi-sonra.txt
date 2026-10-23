@@ -1,5 +1,5 @@
 $ bash -c unset KANIT_DEPO; timeout 2400 bash /config/projects/_wt/Sx-Claude-Skills-fabrika-olay-adim-karti/yazilim-fabrikasi/scripts/denetci.test.sh < /dev/null
-# rc=0 sure=1516.7s zaman=2026-10-23T21:21:53+03:00
+# rc=0 sure=1167.7s zaman=2026-10-24T01:25:22+03:00
 --- stdout ---
 ════ T1 · kanıt yok → rc=2, denetim dosyası yok ════
   ✓ kanıtsız adım 4 açılmadı (rc=2)
@@ -10,7 +10,7 @@ $ bash -c unset KANIT_DEPO; timeout 2400 bash /config/projects/_wt/Sx-Claude-Ski
 ════ T3 · 5/E → rc=0 GEÇTİ, tur 2 ════
   ✓ rc=0
   ✓ GEÇTİ ve tur 2 yazılı
-════ T3b · göz adımı göreve (0.23.0 · Y7J3Q): kartlı iş 5/E ve 3/H turunda kart.sh goz-adim tek satırla çağrılır; kartsız iş çağırmaz; yazılamasa tur sonucu değişmez ════
+════ T3b · göz adımı göreve (0.24.0 · Y7J3Q): kartlı iş 5/E ve 3/H turunda kart.sh goz-adim tek satırla çağrılır; kartsız iş çağırmaz; yazılamasa tur sonucu değişmez ════
   ✓ G-a 3/H turu: kart.sh goz-adim is-g --not '[🔎 göz] kart is-g · tur 1 · kod 3/5 · doğru şey H · bulgu 1' (rc 1 değişmedi)
   ✓ G-b 5/E turu: ikinci satır tur 2 · 5/5 · E · bulgu 0 (rc 0 değişmedi)
   ✓ G-c kartsız iş (kart.json yok): göz adımı çağrılmaz
@@ -213,7 +213,7 @@ $ bash -c unset KANIT_DEPO; timeout 2400 bash /config/projects/_wt/Sx-Claude-Ski
   ✓ Z3c rc 2 (kanıt yok, DENETIM yazılmadı) → yine zil; AGENT_NAME yazandır
   ✓ Z3d iş adı bile yokken (en erken çıkış) zil çalar; yazan bilinmiyorsa hedefsiz değil reise (SERDAR)
   ✓ Z3e sınav kipinde (DENETCI_KOMUT) gerçek zil ARANMAZ; söylenir
-  ✓ Z2a zaman aşımı → rc 3, beklemedi (1 sn < 6)
+  ✓ Z2a zaman aşımı → rc 3, beklemedi (2 sn < 6)
   ✓ Z2b DENETIM-1-HAM.txt'e ZAMAN AŞIMI yazıldı
   ✓ Z2c aşımda yazana zil + reise --waiting (kart istedi=SULTAN → SERDAR)
   ✓ Z2d aşımda da koşuyor izi silindi
@@ -280,7 +280,7 @@ $ bash -c unset KANIT_DEPO; timeout 2400 bash /config/projects/_wt/Sx-Claude-Ski
   ✓ mutant 'olcum-ortadan-secmez' sınavı KIRMIZI yapıyor
   ✓ mutant 'olcum-secilen-de-sayilir' sınavı KIRMIZI yapıyor
   ✓ mutant 'olcum-ayirici-eklenmez' sınavı KIRMIZI yapıyor
-  (bilgi) 48 mutant · 2 paralel · 1323 sn
+  (bilgi) 48 mutant · 2 paralel · 1047 sn
 
 ── KANIT-AYIKLAMA (ayrı dosya, buradan çağrılır) ──
 A · 🔴 kanıt dosyaları farktan AYIKLANIR, üretim kodu KALIR
