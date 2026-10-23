@@ -1,5 +1,5 @@
 $ bash -o pipefail -c GUN_ORTASI_KOK=/config/projects/mihenk bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/go/taban/gun-ortasi/scripts/kalan.sh | grep -E '^#OZET|not: okundu|5/9'
-# rc=0 sure=1.4s zaman=2026-10-23T06:07:21+03:00
+# rc=0 sure=1.4s zaman=2026-10-23T06:14:47+03:00
 --- stdout ---
 ━━━ 5/9 · Gelen kutusu — okunmamış (pencere yok) ━━━
   not: okundu.log yok — listelenenlerin hepsi okunmamış sayıldı

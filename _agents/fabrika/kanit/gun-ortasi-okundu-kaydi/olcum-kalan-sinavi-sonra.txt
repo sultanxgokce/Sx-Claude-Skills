@@ -1,5 +1,5 @@
 $ timeout 300 bash /config/projects/_wt/Sx-Claude-Skills-gun-ortasi-okundu-kaydi/gun-ortasi/scripts/kalan.test.sh
-# rc=0 sure=11.4s zaman=2026-10-23T06:07:20+03:00
+# rc=0 sure=11.9s zaman=2026-10-23T06:14:45+03:00
 --- stdout ---
   🟢 T1 rc=0 ve #OZET satırı var
   🟢 T2 açık kart 1 · tıkandı ayrı 1 · bozuk JSON sayılmaz, ölçemedim der
@@ -45,6 +45,7 @@ $ timeout 300 bash /config/projects/_wt/Sx-Claude-Skills-gun-ortasi-okundu-kaydi
   🟢 T5k kurye var, arayüz yok, okundu.log yok → gelen '?' + ölçemedim 'kaydın yeri bilinmiyor' (3 okunmamış DENMEZ)
   🟢 T5l kurye var, arayüz yok, okundu.log var → okundu.log okunur (BA okunmuş → 2) ve not 'okundu.log okundu'
   🟢 T5m okundu-yolu var, dosya henüz yok → üçü de okunmamış (3) ve not 'dosyası henüz yok … damgası basmamış'
+  🟢 T5n yardım metninde 'okundu-liste' geçen yalnız-yol betiği: liste düşer (rc 1) → okundu-yolu'na GEÇİLİR → gelen 1; geçiş notu var; ölçemedim artmaz
   🟢 T5g kayıt da kurye-yokla.sh de yok: üçü de okunmamış (3) ve not 'okundu kaydı yok … kurye-yokla.sh de yok'
-── SONUÇ: geçti=45 kaldı=0 ölçemedim=0 ──
+── SONUÇ: geçti=46 kaldı=0 ölçemedim=0 ──
 --- stderr ---
