@@ -3,8 +3,9 @@
 #   Verilen kaynaktaki yazilim-fabrikasi/scripts geçici dizine alınır; geçici çıplak origin + klonda bir iş iki tur denetlenir
 #   (tur 1: 4/E bir bulgu; arada tek satırlık düzeltme commit'i), sahte denetçi istemi diske bırakır. Ölçülen:
 #   (1) tur 2 istemindeki FARK bölümünün baytı · değişmeyen dosya istemde mi · önceki bulgu ayrı satırda mı;
-#   (2) ~110 KB'lık istem (100-120 KB arası) eşik dikişi olmadan sahte denetçiye GÖNDERİLİYOR mu.
-#   Çıkış 0 = tur 2 yalnız yeni farkı görüyor VE 110 KB istem gönderilmiyor · 1 = değil.
+#   (1b) tur 3 — yeni commit YOK: fark bölümü kaç bayt, değişmeyen dosya istemde mi (göz #436 tur 1 bulgu 1);
+#   (2) ~110 KB'lık istem (100-120 KB arası) eşik dikişi olmadan sahte denetçiye GÖNDERİLİYOR mu; (2b) aynısı ayıklama KAPALIYKEN (bulgu 2).
+#   Çıkış 0 = tur 2 yalnız yeni farkı, tur 3 boş fark görüyor VE 110 KB istem iki kipte de gönderilmiyor · 1 = değil.
 set -uo pipefail
 R="$(git rev-parse --show-toplevel)"; T="$(mktemp -d)"; trap 'find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T"' EXIT
 mkdir -p "$T/s"
@@ -36,6 +37,10 @@ grep -qF "B1. [uygulama] sinir-kontrolu-eksik" "$T/i2.md" && BUL=evet || BUL=hay
 echo "kod kaynağı: $1"
 echo "(1) tur 1 fark bölümü: $F1 bayt · tur 2 fark bölümü: $F2 bayt · tur 2'de değişmeyen dosya: $DEG · önceki bulgu ayrı satırda: $BUL"
 printf '%s\n' "$O2" | grep -E "DÜZELTME TURU|düzeltme farkı" | sed 's/^/   /'
+O3T="$(den olc "$J5" "$T/i3t.md")"; F3="$(fark_bayt "$T/i3t.md")"
+grep -q "degismeyen-0499" "$T/i3t.md" && DEG3=evet || DEG3=hayır
+echo "(1b) tur 3 (yeni commit yok) fark bölümü: $F3 bayt · değişmeyen dosya: $DEG3"
+printf '%s\n' "$O3T" | grep -E "DÜZELTME TURU|düzeltme farkı" | sed 's/^/   /'
 # (2) ~110 KB istem, eşik dikişi yok
 git -C "$T/w" checkout -q -b buyuk origin/main 2>/dev/null
 python3 -c "open('$T/w/buyuk.txt','w').write(''.join('satir-%05d-%s\n'%(i,'b'*80) for i in range(1100)))"
@@ -45,4 +50,7 @@ git -C "$T/w" add buyuk.txt; git -C "$T/w" commit -q -m buyuk
 [ -s "$T/i3.md" ] && GIT="gönderildi ($(wc -c < "$T/i3.md") bayt)" || GIT="gönderilmedi"
 echo "(2) ~110 KB istem → rc=$RC3 · denetçiye: $GIT"
 printf '%s\n' "$O3" | grep -E "İŞİ BÖL" | sed 's/^/   /'
-[ "$DEG" = hayır ] && [ "$BUL" = evet ] && [ "$F2" -lt "$F1" ] && [ "$RC3" = 1 ] && [ ! -s "$T/i3.md" ]
+: > "$T/i4.md"; O4="$(env -u DENETCI_KIRP_ESIK -u DENETCI_ISTEM_TAVAN DENETCI_KANIT_AYIKLA=0 bash -c "cd '$T/w' && SAHTE_ISTEM_KOPYA='$T/i4.md' SAHTE_JSON='$J5' KANIT_DEPO='$T/w' bash '$T/s/denetci.sh' buyuk --kart '$T/kart.md' < /dev/null 2>&1")"; RC4=$?
+[ -s "$T/i4.md" ] && GIT4="gönderildi ($(wc -c < "$T/i4.md") bayt)" || GIT4="gönderilmedi"
+echo "(2b) aynı istem, ayıklama KAPALI → rc=$RC4 · denetçiye: $GIT4"
+[ "$DEG" = hayır ] && [ "$BUL" = evet ] && [ "$F2" -lt "$F1" ] && [ "$DEG3" = hayır ] && [ "$RC3" = 1 ] && [ ! -s "$T/i3.md" ] && [ "$RC4" = 1 ] && [ ! -s "$T/i4.md" ]
