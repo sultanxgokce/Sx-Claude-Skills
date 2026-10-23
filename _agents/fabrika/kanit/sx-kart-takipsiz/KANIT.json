@@ -1,0 +1,44 @@
+{
+  "is": "sx-kart-takipsiz",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T03:46:21+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "ana-kopya-gecisi",
+      "asama": "once",
+      "dosya": "olcum-ana-kopya-gecisi-once.txt",
+      "sha256": "d2e7a58e04b73905a8f5eeeb281e77baeed64cd01a5f919b6adb1e9c933b7dcf",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/sx-kart-takipsiz/gecis-provasi.sh",
+        "origin/main"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T03:45:35+03:00",
+      "sure_sn": 0.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "39431e60f90443e7a9f733e4b51c3336"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ana-kopya-gecisi",
+      "asama": "sonra",
+      "dosya": "olcum-ana-kopya-gecisi-sonra.txt",
+      "sha256": "e28fb81f3826744374aac211020d43d0e59ed415f5a270914e1fb8045337babb",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/sx-kart-takipsiz/gecis-provasi.sh",
+        "sx-kart-takipsiz"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T03:46:21+03:00",
+      "sure_sn": 2.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "6b9a128251d54a7386d33ade20d94db8"
+    }
+  ],
+  "imza": "2e6149e078193161b06d0370b723fbb3b497f8b144bcbca0c64b54b5bb9f668b"
+}

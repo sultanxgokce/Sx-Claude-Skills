@@ -1,0 +1,30 @@
+{
+  "tur": 1,
+  "is": "sx-kart-takipsiz",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T03:47:50+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19584,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 5003
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kart JSON’ları Git takibinden çıkarılıp aynı yol .gitignore’a alınmış; geçiş provası hedef dalda takipli kart sayısını 71’den 0’a indirirken diskteki 196 kartın bayt bayt korunduğunu gösteriyor. Talep ile değişiklik ve önce/sonra ölçümü örtüşüyor; üretimi durduracak uygulama kusuru görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçekçi ana kopyadaki 196 kartla yapılmış ölçüm çifti, origin/main üzerinde geçişin rc=1 ile reddedildiğini ve değişiklik dalında rc=0 ile geçtiğini gösteriyor; ayrıca kart dizininin bayt bayt aynı kaldığı ve takipli kart sayısının 71’den 0’a düştüğü ölçülmüş."
+  }
+}
