@@ -1,0 +1,47 @@
+{
+  "tur": 1,
+  "is": "hezarfen-gun-sonu-gelen",
+  "pr": "439",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T14:50:35+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "claude-fable-5-1[1m]",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19901,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 6760
+  },
+  "bas": "14d4fec523d0d9eec81842193a5977debb8d567c",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Sultan, --gelen kapısı ve hermetik G sınavları çalışıyor; gerçek ölçüm 42/9'dan 51/0'a çıkmış, mutant da bayraksız yazmayı yakalamış. Ancak kartın açıkça istediği MİRAHUR cron görevinin görev defterine öneri satırıyla yazıldığına dair değişiklik yok; ayrıca her yazma hatası gerçeğe aykırı biçimde “yazma izni yok” diye raporlanıyor, önce bunları çöz.",
+    "bulgular": [
+      {
+        "ne": "Kartın teslimatlarından biri eksik: akşam cron satırının MİRAHUR işi olarak görev defterine, satır önerisiyle yazılması istenmiş; üretim farkında yalnız açıklama yorumu var, görev kaydı yok.",
+        "kanit": "İş kartı “akşam cron satırı MİRAHUR'un işi: deftere görev olarak yazılır (satır önerisiyle)” diyor. Gösterilen üretim farkı yalnız gun-sonu.sh ve gun-sonu.test.sh dosyalarını değiştiriyor; gun-sonu.sh:8-10 civarında cron işi yalnız yorum olarak anılıyor.",
+        "konum": "İş kartı cumle alanı; yazilim-fabrikasi/scripts/gun-sonu.sh:8",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Yazma başarısızlığının sebebi ayrıştırılmadan her hata “yazma izni yok” diye bildiriliyor; dolu disk, salt-okunur dosya sistemi veya hedefte uygun olmayan mevcut nesne gibi hatalarda mesaj yanlış olur.",
+        "kanit": "Başarısız redirection/printf dallarının tamamı tek else koluna düşerek sabit “YAZILAMADI: yazma izni yok” metnini basıyor; G6 kapısı da yalnız bu tek metni sınıyor. Kart ise “YAZILAMADI: <sebep>” istiyor.",
+        "konum": "yazilim-fabrikasi/scripts/gun-sonu.sh:208-210; yazilim-fabrikasi/scripts/gun-sonu.test.sh:G6",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ölçüm çifti önce 42 geçti/9 kaldı ve sonra 51 geçti/0 kaldı sonuçlarını veriyor; mutasyon kaydı beklenen kırmızıyı üreterek bayrak kapısının bozulmasını yakalıyor. Kanıt, uygulanan --gelen davranışı için güçlüdür; fakat MİRAHUR görev-defteri teslimatını ölçen veya gösteren kayıt yoktur ve hata-sebebi sınavı yalnız izin senaryosunu kapsar."
+  }
+}

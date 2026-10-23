@@ -1,0 +1,32 @@
+{
+  "is": "hezarfen-gun-sonu-gelen",
+  "cumle": "gun-sonu.sh (yazilim-fabrikasi/scripts) --gelen bayrağı: üretilen gün sonu özeti Sultan'ın hub gelen klasörüne de yazılır — GUN_SONU_GELEN_DIZ (varsayılan /config/evraklar/Sultan/0-Gelen) altına nexus_gun-sonu_<gün>.md (kaynak önekli ad, _DUZEN.md kuralı); yalnız --gelen verilince (akşam cron bu bayrakla koşar), dizin yoksa ya da yazılamazsa '→ gelen klasörüne YAZILAMADI: <sebep>' satırı basılır ve rc değişmez (cron bozulmaz, sessiz de geçilmez); görev defteri bölümü zaten var (090b509), bu kart kalan yarıyı kapatır; gun-sonu.test.sh'ye G kapıları (hermetik: GUN_SONU_GELEN_DIZ geçici yola kilitli, gerçek 0-Gelen'e ASLA yazmaz; --gelen'siz koşu gelen'e dokunmaz; yazılamayan dizin satırı + rc) + mutant (bayraksız koşu da yazarsa / sessiz yutarsa); akşam cron satırı MİRAHUR'un işi: deftere görev olarak yazılır (satır önerisiyle); önce/sonra ölçüm; sınıfsız, kapıdan sonra birleştirme HEZARFEN (SERDAR devri)",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-23T14:46:05+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: cron)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5JKV63K7R63RSTHTR9758FA",
+  "tahmin_dk": 60,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-23T14:46:05+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
