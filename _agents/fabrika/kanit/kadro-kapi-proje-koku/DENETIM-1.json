@@ -1,0 +1,45 @@
+{
+  "tur": 1,
+  "is": "kadro-kapi-proje-koku",
+  "pr": "364",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T19:07:08+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 45367,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 20802
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, izin listeli proje ayarı kapıya taşınmış; Claude çalışan kayıtsız oturum 409 ile korunmuş ve kapatılabilir bayrağı doğru yönde eklenmiş. Hedefli önce/sonra ile mutasyon sınavları güçlü, ancak tüm sınav koşusu kırmızı ve kartın istediği gerçek kapı süreci + gerçek kayıt birleşik ölçümü gösterilmediği için önce bu kabul açıkları çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Tüm terminal-onar sınavları geçmiyor; compact.test.sh başarısız olduğu için değişiklik mevcut haliyle üretime hazır sayılamaz.",
+        "kanit": "Araç imzalı terminal-onar-tum-sinavlar ölçümü rc=1/kırmızı; çıktı `✗ scripts/compact.test.sh` ve `düşen=1` diyor.",
+        "konum": "kanıt:olcum-terminal-onar-tum-sinavlar-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "İş kartındaki “gerçek kapı süreci gerçek kayıtla yerelde” kabulü tek bir ölçümde sağlanmamış: gerçek kapı sınavı sentetik kayıt kullanıyor, gerçek Nexus kaydı ölçümü ise kapı sürecini çalıştırmadan doğrudan kayitOku çağırıyor.",
+        "kanit": "oda-ortam O6, geçici `$T/ekip/.../aile-registry.yaml` içindeki AJAN1/AJAN2 ile gerçek sunucuyu koşturuyor; code-kutusu-gercek-kayit çıktısı Nexus kaydında `0 → 17` gösterse de komut `kayitOku(...)` çağırıyor ve sunucu/API süreci başlatmıyor.",
+        "konum": "terminal-onar/scripts/oda-ortam.test.sh:48; kanıt:olcum-code-kutusu-gercek-kayit-sonra.txt",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı kayıt yok. Oda ortamı ile kapat korumasında kırmızı→yeşil ölçüm çiftleri, ayrıca koruma mutantını öldüren ölçüm var. Bununla birlikte genel takım kırmızı ve kartın özellikle istediği gerçek kapı + gerçek kayıt birleşik yerel ölçümü yok; mevcut iki yeşil kayıt bu iddiayı ayrı yarımlarda ölçüyor."
+  }
+}

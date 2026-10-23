@@ -1,0 +1,8 @@
+$ bash _agents/fabrika/kanit/muhurdar-bassiz/bassiz-olcer.sh /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/once-tescil/tescil
+# rc=1 sure=146.5s zaman=2026-10-22T14:56:03+03:00
+--- stdout ---
+  ✗ u S14 başsız şapka: --bassiz aynı usul; MUHUR + özet başsız, sicil mühür kaydı bassiz e (taşıyanın siciline); normal koşuda h
+  ✗ v başsız koşu kendi-işi kuralına tabi: yazan = taşıyan → kendi-isi reddi, yargıç çağrılmaz
+── SONUÇ: 33 geçti · 4 kaldı ──
+── başsız şapka: ✗ (sınav rc 1)
+--- stderr ---

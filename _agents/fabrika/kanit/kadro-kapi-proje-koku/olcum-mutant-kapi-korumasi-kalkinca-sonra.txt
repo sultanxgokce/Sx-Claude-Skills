@@ -1,0 +1,6 @@
+$ bash -c node '/tmp/tmp.16msaV8f7y/terminal-onar/kapi/kadro-hal.test.mjs' | grep -E 'KH12c|SONUÇ'; [ ${PIPESTATUS[0]} -ne 0 ]
+# rc=0 sure=2.2s zaman=2026-10-17T19:04:47+03:00
+--- stdout ---
+  ✗ KH12c canlı kayıtsız oturumu "kapat" → 409, gerekçe Sultan dilinde, tmux'a DOKUNULMADI 200 {"tamam":true,"mesaj":"canlikayitsiz kapatıldı."}
+SONUÇ: 27 geçti · 2 kaldı
+--- stderr ---

@@ -1,0 +1,30 @@
+{
+  "tur": 3,
+  "is": "retro-cok-depo",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-20T21:26:52+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 44009,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 13,
+    "bayt": 55405
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, retro artık kartları kutudaki depolardan topluyor, göz turlarını disk ile origin/main birleşiminden sayıyor ve hem kart hem göz ölçüsünü depo başına döküyor. Önceki turdaki eksik göz dökümü v3 çıktısı ve hedefli T11/M15 sınamalarıyla kapanmış; üretimi durduracak kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önce/sonra ölçüm çifti kart kapsamının MİRAHUR 9→46, HENDESE 5→14 ve BÂNİ 25→128 genişlediğini gösteriyor; v3 gerçekçi çıktısı ayrıca göz toplamını depo bazında doğruluyor (ör. MİRAHUR W42: Nexus 12, Sx-Claude-Skills 5, cloudtop 29 = 46). Genel sınav önce rc=1 iken sonra rc=0; diffteki T11 kart keşfi, origin/main, tekilleştirme ve okunamama uyarısını, M11–M15 ise bu davranışların bozulmasını hedefliyor."
+  }
+}

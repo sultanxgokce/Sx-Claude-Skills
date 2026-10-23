@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "muhurdar-diploma-kume-gucu",
+  "pr": "420",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-22T21:39:06+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 51943,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 18,
+    "bayt": 42674
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Küme tür başına üç örneğe çıkarılmış, cevap anahtarı yargıç kökünden ayrılıp gerçek yargıç kanaryasıyla ölçülmüş, çoklu koşu dalgalanması kaydedilmiş ve SIGKILL artıkları güvenli sahip iziyle süpürülmüş. Üretimi engelleyen kusur görünmüyor; yalnız el kitabındaki Claude ölçüm özeti sunulan manifestten daha fazla koşu varmış gibi yazılmış, bu küçük kayıt rötuşu ister.",
+    "bulgular": [
+      {
+        "ne": "El kitabı Claude için “2+3 koşu” ve iki ayrı ıska anlatıyor; sağlam manifestte ise Claude dalga ölçümü yalnız bir adet üç koşuluk kayıt olarak bulunuyor. Belgelenen ek iki koşu bu işin kanıt manifestinde desteklenmiyor.",
+        "kanit": "SKILL.md eklenen paragraf “kilitli Claude 2+3 koşu → iki koşuda birer örnek ıskalandı” diyor; manifestte Claude'a ait yalnız `gercek-yargic-dalga-claude` kaydı var ve çıktısı üç koşu ile tek dalgalanan örnek gösteriyor.",
+        "konum": "tescil/SKILL.md: Küme gücü paragrafı; kanıt kaydı `gercek-yargic-dalga-claude`",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam, sarı kayıt yok. Tür başına üç örnek `kume-sayimi` ile; gerçek yargıç çoklu koşuları Codex ve Claude ölçümleriyle; anahtar yalıtımı kilitsiz pozitif kontrol ile kilitli Claude/Codex karşılaştırmasıyla; SIGKILL temizliği ise kırmızı önce/yeşil sonra çiftiyle doğrudan ölçülmüş. Diploma ve kilit sınavlarındaki mutantlar bozuk kodun ilgili kapılarda yakalandığını ayrıca gösteriyor; yalnız SKILL.md'deki ilave Claude koşusu anlatımı manifestte karşılıksız."
+  }
+}

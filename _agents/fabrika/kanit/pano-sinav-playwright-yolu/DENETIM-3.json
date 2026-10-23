@@ -1,0 +1,38 @@
+{
+  "tur": 3,
+  "is": "pano-sinav-playwright-yolu",
+  "pr": "347",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-16T12:12:30+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 50148,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 10,
+    "bayt": 32826
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Pano sınavı artık ortam değişkeni olmadan uygun Playwright paketini ve tarayıcı ikilisini ortam → Nexus → sayısal sıralı nvm adaylarından buluyor; bulunamama, launch ve dolu port durumlarını rc=4 ÖLÇÜLEMEDİ olarak yönetiyor. Önceki turdaki 200 dışı/ham TCP port açığı da ölçülerek kapatılmış; üretimi engellemeyen yalnız sürüm notu/test sayısı rötuşları kalmış.",
+    "bulgular": [
+      {
+        "ne": "Sürüm belgelerinde iki küçük tutarsızlık var: yeni bulucunun başlığı 2.13.x diyor, beceri sürümü 2.12.1; sürüm notu da bulucu sınavını 10 kapı diye kaydederken güncel ölçüm 12 geçti gösteriyor.",
+        "kanit": "Diffte terminal-onar/SKILL.md sürümü 2.12.1 ve sürüm notunda “tarayici-bul.test.mjs (10)” yazıyor; terminal-onar/kapi/tarayici-bul.mjs ilk satırı “2.13.x” diyor; `tur1-sonrasi-sayisal-sira-rc4-kapi-zinciri` çıktısı “12 geçti · 0 kaldı” gösteriyor.",
+        "konum": "terminal-onar/SKILL.md:4 ve 360; terminal-onar/kapi/tarayici-bul.mjs:1; kanıt etiketi tur1-sonrasi-sayisal-sira-rc4-kapi-zinciri",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok, kırmızı ara kayıtlar başarı diye sunulmamış ve sonraki yeşil ölçümlerle açıkça düzeltilmiş. Önce rc=1 Playwright launch çöküşü, sonra ortam değişkensiz 34/34 rc=0 sonucu geçerli ölçüm çifti oluşturuyor; ayrıca bulucu 12/12, aday bulunamadığında rc=4, HTTP 404/500 ile ham TCP doluluğunda rc=4, çocuk temizliği ve port boşken yeniden 34/34 ayrı yeşil kayıtlarda ölçülmüş. Kare gerektiren bir arayüz iddiası yok; komut çıktıları bu altyapı değişikliği için yeterli."
+  }
+}

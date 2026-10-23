@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "bulgu-dugum",
+  "pr": "395",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-20T20:23:28+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 24297,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İstenen düğüm bağı, çıplak kimlik çözümü ve jetonsuz kutuda sessiz düşmeme davranışları uygulanmış; önce/sonra ile mutasyon ölçümleri de ana kuralları güçlü biçimde yokluyor. Önce şunu çözün: defter bekleyen göreve notu yazamadığını bildirdiğinde komut yine başarıyla bitiyor; ayrıca bu olumsuz yanıt için sınav bulunmuyor.",
+    "bulgular": [
+      {
+        "ne": "Merkezî defter `dugum_bekleyen.yazildi=false` döndürürse komut yalnız “NOT YAZILMADI” basıyor fakat rc 0 bırakıyor; böylece çağıran taraf bağlantının bekleyen görev üzerinde tamamlanmadığını programatik olarak anlayamıyor.",
+        "kanit": "Yanıt işleme kodunda `if b: print(...)` dalı `yazildi` false durumunda sadece metin üretiyor, `sys.exit(1)` uygulamıyor. Eklenen D1 sınavı yalnız `yazildi:true` yanıtını doğruluyor; false durumuna ait sınav yok.",
+        "konum": "bulgu/scripts/bulgu.sh: eklenen Python yanıt işleme bloğu; bulgu/scripts/bulgu.test.sh:D1",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. `bulgu-sinavi` için kırmızı önce/yeşil sonra ölçüm çifti var, sekiz mutasyonun tamamı sınav tarafından yakalanmış ve kabuk bitiş sınavı da yeşil. Kanıt ana talebi gerçekçi yerel HTTP taklidiyle iyi kapsıyor; ancak `dugum_bekleyen.yazildi=false` olumsuz sonucunun çıkış kodu davranışı ölçülmemiş."
+  }
+}

@@ -5,7 +5,9 @@
 # Kullanım:
 #   karne.sh yaz <iş> [--depo KÖK]              son DENETIM-*.json'u okur, deftere tek satır ekler (tur · süre · puan · E/H)
 #   karne.sh kirildi <iş|PR> --neden "..."      o işi "kırıldı" diye damgalar (kanıt referansı zorunlu: --kanit)
-#   karne.sh ozet [--gun N]                     son N günde: kaç iş · 5 alan · kırılan · ortalama tur · tıkanan
+#   karne.sh ozet [--gun N]                     son N günde: kaç iş · 5 alan · kırılan · ortalama tur · tıkanan · kırıldı adayı
+#                                               (kırıldı adayı = son turu 5/H iken kartı 'bitti' olan iş: kod iyi, doğru şey değil, yine de kapandı)
+# Yazan: denetci.sh her turun sonunda kendisi çağırır (görev NPTHAQ); aynı turun satırı ikinci kez yazılmaz.
 # Defter: <depo>/_agents/fabrika/karne.jsonl (append-only; satır silinmez)
 set -uo pipefail
 _hata() { printf '✗ %s\n' "$*" >&2; }
@@ -33,6 +35,12 @@ import json,sys,os,glob,datetime
 dz,son,defter,is_=sys.argv[1:]
 d=json.load(open(son)); turlar=sorted(glob.glob(os.path.join(dz,"DENETIM-[0-9]*.json")),key=lambda p:int(p.rsplit("-",1)[1].split(".")[0]))
 ilk=json.load(open(turlar[0])); t0=datetime.datetime.fromisoformat(ilk["zaman"]); t1=datetime.datetime.fromisoformat(d["zaman"])
+if os.path.exists(defter):   # aynı turun satırı ikinci kez yazılmaz (denetçi + elle çağrı, yeniden koşum)
+    for l in open(defter,encoding="utf-8"):
+        try: r=json.loads(l)
+        except ValueError: continue
+        if r.get("olay")=="denetim" and r.get("is")==is_ and r.get("tur")==d["tur"] and r.get("zaman")==d["zaman"]:
+            print(f"· karne: {is_} tur {d['tur']} zaten yazılı"); sys.exit(0)
 s=d["sonuc"]; gecti=(s["kod_puani"]==5 and s["dogru_sey"]=="E")
 satir={"olay":"denetim","is":is_,"pr":d.get("pr",""),"zaman":d["zaman"],"yazan":d["yazan"],"denetci":d["denetci"],
        "tur":d["tur"],"puan":s["kod_puani"],"dogru":s["dogru_sey"],"bulgu":len(s["bulgular"]),"gecti":gecti,
@@ -52,9 +60,9 @@ PY
     ;;
   ozet)
     [ -f "$DEFTER" ] || { echo "◻ karne defteri yok — henüz denetim geçmemiş"; exit 3; }
-    python3 - "$DEFTER" "$GUN" <<'PY'
-import json,sys,datetime
-defter,gun=sys.argv[1],int(sys.argv[2])
+    python3 - "$DEFTER" "$GUN" "$DEPO/_agents/fabrika/kartlar" <<'PY'
+import json,sys,datetime,os
+defter,gun,kartlar=sys.argv[1],int(sys.argv[2]),sys.argv[3]
 esik=datetime.datetime.now().astimezone()-datetime.timedelta(days=gun)
 rows=[json.loads(l) for l in open(defter,encoding="utf-8") if l.strip()]
 den=[r for r in rows if r["olay"]=="denetim" and datetime.datetime.fromisoformat(r["zaman"])>=esik]
@@ -64,8 +72,17 @@ for r in den: son[r["is"]]=r
 bes=[r for r in son.values() if r["gecti"]]; kirilan=[r for r in bes if r["is"] in kir or r.get("pr") in kir]
 tikanan=[r for r in son.values() if not r["gecti"] and r["tur"]>=3]
 ort=(sum(r["tur"] for r in son.values())/len(son)) if son else 0
-print(f"KARNE · son {gun} gün · iş: {len(son)} · 5+E alan: {len(bes)} · KIRILAN (5 alıp sonradan kırılan): {len(kirilan)} · tıkanan: {len(tikanan)} · ortalama tur: {ort:.1f}")
+# Kırıldı adayı: son tur 5/H ("kod iyi, doğru şey değil") ama kart 'bitti' — 17 Eki ölçümü: iki iş böyle kapandı, karne saymadı.
+aday,okunamadi=[],[]
+for r in son.values():
+    if r["puan"]!=5 or r["dogru"]!="H": continue
+    try: durum=json.load(open(os.path.join(kartlar,r["is"]+".json"),encoding="utf-8")).get("durum")
+    except (OSError,ValueError): okunamadi.append(r); continue
+    if durum=="bitti": aday.append(r)
+print(f"KARNE · son {gun} gün · iş: {len(son)} · 5+E alan: {len(bes)} · KIRILAN (5 alıp sonradan kırılan): {len(kirilan)} · tıkanan: {len(tikanan)} · ortalama tur: {ort:.1f} · KIRILDI ADAYI (5/H ile bitti): {len(aday)}")
 for r in kirilan: print(f"  ✗ {r['is']} (PR {r.get('pr','')}) — 5 verildi, kırıldı")
+for r in aday: print(f"  ? {r['is']} (PR {r.get('pr','')}) — 5/H ile bitti: kod iyi, doğru şey değil → kırıldı adayı")
+for r in okunamadi: print(f"  ◻ {r['is']} (PR {r.get('pr','')}) — son tur 5/H, kartı okunamadı: bitip bitmediği ölçülemedi")
 if not bes: print("  (5 verilen iş yok — kalibrasyon sorusu henüz sorulamaz)")
 PY
     ;;

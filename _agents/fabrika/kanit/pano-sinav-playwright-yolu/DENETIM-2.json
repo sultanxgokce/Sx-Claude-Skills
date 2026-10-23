@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "pano-sinav-playwright-yolu",
+  "pr": "347",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-16T12:09:01+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 41528,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 20371
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Pano sınavı için ortam → Nexus → sayısal sıralı nvm global çözümü kurulmuş; ortamsız 34/34 koşum, gerçek bulucu kapısı ve bulunamama hâlinde rc=4 ölçülmüş. Daraltma kararı dim-okunur kapsamını ayrı işe bırakmayı meşrulaştırıyor, ancak bayat port ön-kontrolü yalnız HTTP 200 yanıtını dolu saydığı için önce bu uygulama açığını çözün.",
+    "bulgular": [
+      {
+        "ne": "Bayat/dolu port denetimi yalnız /sinav/giris isteği tam 200 döndürürse devreye giriyor; port başka bir süreççe tutulup 404, 401 veya başka bir HTTP durumu döndürürse doluluk gözden kaçar ve sonraki kapı açılışı yine çevresel rc=4 yerine yakalanmamış hataya gidebilir.",
+        "kanit": "Kaynakta acik yalnız `(await fetch(...)).status === 200` ile true oluyor. Yeşil ölçüm de yalnız 200 döndüren sahte HTTP sunucusunu kullanıyor (`writeHead(200)`), dolayısıyla 200 dışındaki dolu-port vakası sınanmamış.",
+        "konum": "terminal-onar/kapi/pano-sinav.mjs: P1/P2 ön-kontrol döngüsü; kanıt etiketi ortamsiz-pano-sinav-yesil-ve-bayat-port",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam. Önceki rc=1 launch çöküşü ile sonraki ortam değişkensiz pano-sinav 34/34 rc=0 sonuçları geçerli ölçüm çifti oluşturuyor; son yeşil kayıt ayrıca bulucu testlerinin 12/12 geçtiğini, sayısal nvm sırasını, HOME altında aday bulunamadığında rc=4 çıktığını ve kapı zincirinin geçtiğini gösteriyor. Aradaki kırmızı kayıt başarı sayılmamış. Dim-okunur için kanıt yok, fakat kayıtlı daraltma kararı onu bu işin güncel kapsamından çıkardığından doğru-şey sonucunu bozmaz."
+  }
+}

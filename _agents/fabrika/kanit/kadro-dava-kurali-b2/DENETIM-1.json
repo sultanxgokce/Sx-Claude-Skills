@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "kadro-dava-kurali-b2",
+  "pr": "372",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T16:47:45+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": null,
+  "yazan_model_kaynak": null,
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": true,
+    "istem_bayt": 141488,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 14,
+    "bayt": 79784
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Dava kayıtları ayrı davalar.yaml yoluna alınmış; kapı özeti, yer açma, bağlama/geri alma, bekçi dondurması, ortak kilit ve dava koltuğunu sürdürme yolları geniş sınavlarla ölçülmüş. Ancak üretim farkı 110000 baytta kırpıldığı için sunucu ve çağırıcıların son bölümü bağımsız gözle bütünüyle denetlenemiyor; ayrıca “günde bir, günün ilk koşusu” davranışının gerçekten sınandığı gösterilmeden 5 verilemez.",
+    "bulgular": [
+      {
+        "ne": "Günlük bekçi turunun aynı gün yalnız bir kez çalışması kanıtlanmıyor; görülen ikinci çağrı zaman kapısı sayesinde değil, ilk çağrıda tek uygun dava zaten dondurulduğu için boş geçiyor. Önce bu işletim kuralını aynı gün yeniden uygun dava oluşturan bir sınavla kilitleyin.",
+        "kanit": "DV12 ilk turda 2023/1'i donduruyor; DV14 ikinci tur yalnız “dondurulacak dava yok” sonucunu arıyor. Görülen dava-bekci.mjs kodunda gün damgası veya aynı güne ait çalıştırma kapısı bulunmuyor; bekci.sh tarafındaki değişiklik ise kırpılan farkta görülemiyor.",
+        "konum": "dava.test.mjs: DV12-DV14; dava-bekci.mjs:1-48; diff kırpılma uyarısı",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; dava sınavında kırmızı→yeşil ölçüm çifti, 10/10 mutasyon yakalama ve geniş yeşil gerileme kayıtları var, sarı kayıt yok. Bununla birlikte “önce” ölçümü davranışsal bir başarısızlıktan çok eksik export nedeniyle yükleme hatasıdır; ayrıca üretim diff'inin sonu görünmediğinden sunucu/bekçi çağrı zinciri tam kod incelemesinden geçemedi ve günlük tek-koşu iddiası mevcut sınavlarda doğrudan ölçülmedi."
+  }
+}

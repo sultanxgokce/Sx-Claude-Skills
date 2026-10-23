@@ -1,0 +1,5 @@
+$ bash -c test -d /config/.claude/skills/hafta-kapanis && echo VAR || { echo "YOK: /config/.claude/skills/hafta-kapanis"; exit 1; }
+# rc=1 sure=0.0s zaman=2026-10-17T16:31:34+03:00
+--- stdout ---
+YOK: /config/.claude/skills/hafta-kapanis
+--- stderr ---

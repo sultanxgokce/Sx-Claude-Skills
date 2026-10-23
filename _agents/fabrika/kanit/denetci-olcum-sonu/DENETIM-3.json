@@ -1,0 +1,45 @@
+{
+  "tur": 3,
+  "is": "denetci-olcum-sonu",
+  "pr": "392",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-20T18:48:35+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32463,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 10,
+    "bayt": 46674
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Denetçi artık uzun ölçümde başı, ortadaki sonuç/hata işaretlerini, stdout sonunu ve stderr sonunu taşıyor; kısa ölçüm yolu da korunmuş, yani istenen iş yapılmış. Önce şu iki uygulama kusuru çözülmeli: bildirilen atlanan satır sayısı seçilip gösterilen orta satırları da atlanmış sayıyor ve kısa dosyanın “aynen” aktarımı son satır sonu yoksa birebir değil.",
+    "bulgular": [
+      {
+        "ne": "Uzun çıktıda ortadan seçilip isteme eklenen SONUÇ/✗ satırları, bildirilen “atlandı” sayısından düşülmüyor; kullanıcıya gerçek atlanan satır sayısından 1–8 fazla sayı veriliyor.",
+        "kanit": "Kod `orta = cik[BAS:-SON]` sonrasında seçilenleri `sec[:SECME]` ile yeniden çıktıya ekliyor, fakat açıklamayı hâlâ `len(orta)` ile “%d satır atlandı” diye kuruyor. O2 sınavı yalnız metnin ve sayıların varlığını regex ile denetliyor; sayının gerçek atlanan miktara eşitliğini sınamıyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh: olcum_ozeti içindeki `orta`, `sec` ve `not_` hesapları; yazilim-fabrikasi/scripts/denetci.test.sh: O2",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "60 satır veya daha kısa dosya her durumda bayt bayt aynen aktarılmıyor: sonu satır sonu karakteri olmadan biten dosyaya çıktı sırasında satır sonu ekleniyor.",
+        "kanit": "Okuma `read().split(\"\\n\")` ile yapılıyor, varsa son boş öğe atılıyor ve kısa yol `print(\"\\n\".join(L))` kullanıyor; `print` kaynak dosyada bulunmayan bir son `\\n` üretir. O5 yalnız beş satırın bulunduğunu ve “atlandı” işareti olmadığını denetliyor, kaynak ile bayt karşılaştırması yapmıyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh: olcum_ozeti kısa-dosya dalı; yazilim-fabrikasi/scripts/denetci.test.sh: O5",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. 0.10.5→0.10.6 önce/sonra ölçüm çifti sonuç satırının HAYIR’dan EVET’e geçtiğini ve sürüm değişimini gösteriyor; T-OLCUM ayrıca uzun stdout, ortadaki sonuç/✗, stderr sonu, 60 satır tavanı ve mutantları ölçüyor. Kanıt ana davranış için güçlüdür; ancak atlanan sayının aritmetik doğruluğu ve kısa dosyanın bayt düzeyinde aynılığı mevcut sınavlarda ölçülmemiştir."
+  }
+}

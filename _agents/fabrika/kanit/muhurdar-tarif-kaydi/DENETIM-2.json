@@ -1,0 +1,45 @@
+{
+  "tur": 2,
+  "is": "muhurdar-tarif-kaydi",
+  "pr": "410",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-22T01:59:35+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 76658,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 10,
+    "bayt": 18573
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Tek-kopya tarif verisi, şema v2 bekçisi, katalog ve senkron bağlantısı istenen yönde kurulmuş; önceki turdaki yinelenen kadro kimliği ve beklenmeyen çökme açıkları da sınavlarla kapatılmış. Ancak bekçi, zorunlu ana koleksiyonların yokluğunu ve kimliksiz tek bir terimi kırmızı saymadan geçirebildiği için şema v2 bekçisi henüz üretime hazır değil; önce bunlar çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Bekçi, `uzmanliklar`, `vazifeler`, `usuller` veya `terimler` ana koleksiyonları eksik ya da boş olduğunda bunu doğrudan şema ihlali saymıyor; bütünüyle boş bir tarif kaydı kırmızısız geçebilir.",
+        "kanit": "`sozluk()` koleksiyonu `veri.get(anahtar, [])` ile alıyor ve boş listeyi geçerli kabul ediyor; terimler de `(terimler.get(\"terimler\") or [])` ile yokluk/boşluk halinde sessizce boş listeye dönüşüyor. Sınav yalnız `usuller={}` vakasını ölçüyor; eksik anahtar, boş liste veya bütün koleksiyonların boşluğu için bir vaka yok.",
+        "konum": "tarif-kaydi/scripts/kadro-denetle.py:sozluk ve denetle içindeki terim kaydı başlangıcı; tarif-kaydi/scripts/kadro-denetle.test.sh:k-liste",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Tek bir terim kaydında zorunlu `id` alanı bulunmasa bile bekçi bunu kırmızı saymayabilir.",
+        "kanit": "Terim döngüsü `tid = t.get(\"id\")` kullanıyor, fakat zorunlu alan denetimi yalnız `ad`, `anlam`, `isleyis`, `ornek` ve `sahip` alanlarını kapsıyor; ilk `id` eksik kaydı `idler[None]` içine yazılıyor ve yinelenme de oluşmadığından kimlik hatası üretilmiyor. `k-idsiz` sınavı yalnız vazife kimliğini siliyor, terim kimliğini sınamıyor.",
+        "konum": "tarif-kaydi/scripts/kadro-denetle.py:terim kaydı döngüsü; tarif-kaydi/scripts/kadro-denetle.test.sh:k-idsiz",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; veri dosyasının eklenişi için gerçek bir önce/sonra ölçüm çifti var. Bekçi sınavı 46/46, gerçek veri koşusu ve senkron/kabuk sınavları yeşil; gerçek verideki dört SARI planlı ve henüz yolu yazılmamış kapıları açıkça gösterdiğinden temiz veri kanıtı değildir, fakat kart kapıların uygulanmasını istemediği için tek başına kusur sayılmadı. Kanıtlar senkron mekanizmasını sınasa da belirli kutulardaki kurulu kopyaların kaynakla eşitliğini hedef bazında göstermiyor."
+  }
+}

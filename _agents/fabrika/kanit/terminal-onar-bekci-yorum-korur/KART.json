@@ -1,0 +1,21 @@
+{
+  "is": "terminal-onar-bekci-yorum-korur",
+  "cumle": "SERDAR 21:00 (BÂNİ bulgusu, tek tur): terminal-onar bekci_kur canlı crontab'ı düzeltirken metninde '# terminal-onar-bekci' geçen YORUM satırını bekçi satırı sanıp siliyor (kanon crontab-abc satır 723 kayboldu); düzeltme sonrası yorum satırları olduğu gibi korunur, işaret yalnız yorum olmayan cron satırının sonunda aranır (düzeltici, bekci_kurulu ve varlık denetimleri aynı desenle); kanıt: kanon crontab üstünde önce/sonra karşılaştırması.",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-17T21:01:26+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "terminal-onar/kanit (kanon crontab önce/sonra fark + sınav + mutant)",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: bekci, bekçi, canlı, cron, crontab, crontab'ı)"
+}

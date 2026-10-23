@@ -1,0 +1,52 @@
+{
+  "tur": 2,
+  "is": "bugun-api",
+  "pr": "355",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T15:11:38+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 34890,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 13879
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, salt-okur `/api/bugun` ucu çıpaları okuyup istenen sabah/gün-ortası, durum ve bağlı görev kimliği verisini JSON’a dönüştürüyor; yani doğru iş yapılmış. Ancak geçersiz ama biçimce uygun bir tarih `RangeError` üretebilir ve uç bütünleşme sınavının son kaydı da kırmızı olduğu için kod üretime hazır değildir; önce bunları çözmek gerekir.",
+    "bulgular": [
+      {
+        "ne": "Takvim tarihi doğrulaması, bazı geçersiz girdileri 400’e çevirmek yerine `toISOString()` çağrısında istisna üretebilir; bu, dışarıdan gönderilebilen bir sorgunun istek işleyicisini bozmasıdır.",
+        "kanit": "Koşul, desen eşleşince `new Date(t + 'T00:00:00Z').toISOString()` çağırıyor. Eklenen BG5b girdisi `2026-99-99` tam olarak bu yolu hedefliyor; fakat son sunucu sınavı kapı açılamadan rc=1 ile bittiğinden beklenen 400 sonucu gösterilemedi.",
+        "konum": "terminal-onar/kapi/sunucu.mjs:489; terminal-onar/kapi/sunucu.test.mjs:BG5b; kanıt kaydı sunucu-sinavi/sonra",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Sunucu bütünleşme sınavı değişiklikten sonra kırmızı; `/api/bugun` rotası, kimlik doğrulaması ve tarih hata cevapları çalışan sunucu üzerinde doğrulanmış değil.",
+        "kanit": "`olcum-sunucu-sinavi-sonra.txt` rc=1 ve `Error: kapı açılmadı, rc=1` ile BG1-BG5c kontrollerine ulaşmadan sonlanıyor. Birim sınavının 23/23 yeşil olması HTTP ucunun çalıştığını tek başına kanıtlamaz.",
+        "konum": "kanıt kaydı: sunucu-sinavi/sonra; terminal-onar/kapi/sunucu.test.mjs:BG1-BG5c",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Önce/sonra birim ölçümü aynı davranışsal tabanı karşılaştırmıyor; önce kaydı özellik sınavından değil eksik modülden dolayı kırmızı.",
+        "kanit": "`olcum-bugun-sinavi-once.txt` yalnız `/tmp/tmp.KwHmco3kNE/bugun.mjs` için `ERR_MODULE_NOT_FOUND` gösterirken sonra kaydı depo içindeki sınavı çalıştırıp 23 geçiş gösteriyor.",
+        "konum": "kanıt kayıtları: bugun-sinavi/once ve bugun-sinavi/sonra",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Ayrıştırma/tarama/mutasyon sınavı 23/23 yeşil, gerçek Nexus çıpası ölçümü de başarılı; fakat sunucu sonrası ölçümü kırmızı ve uç davranışını hiç çalıştıramamış. Ayrıca birim önce kaydı davranışsal ölçüm değil eksik modül hatası olduğundan önce/sonra çifti zayıf kalıyor."
+  }
+}

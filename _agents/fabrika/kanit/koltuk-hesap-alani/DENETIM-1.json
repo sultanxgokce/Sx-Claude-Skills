@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "koltuk-hesap-alani",
+  "pr": "349",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-16T16:10:50+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 30640,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 28279
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İstenen 7. hesap sütunu ile API alanı eklenmiş; hermetik önce/sonra ölçümü ve beş kapılı mutasyon sınavı temel davranışı doğruluyor. Ancak kabuk kuralı Python kuralıyla gerçekten birebir değil; yol normalleştirme eksik ve H10 bu ayrışmayı yakalayacak girdileri sınamadığı için önce bu uygulama sorununu çöz.",
+    "bulgular": [
+      {
+        "ne": "Kabuktaki normal_yol, Python os.path.normpath eşdeğeri değildir: '..' bileşenlerini çözmez. Örneğin HESAP_KOK altında `x/../sgk1` Python tarafında adlı hesap `sgk1` olurken kabuk tarafında `bilinmiyor:dizin` üretir; iş kartındaki birebir eşdeğerlik şartı böylece bozulur.",
+        "kanit": "Üretim farkında normal_yol yalnız yinelenen eğikleri, `/./` parçalarını ve sondaki eğiyi işler; `..` için kural yoktur. H10 girdileri de yalnız adlı/yok/taban/kapı/kök-dışı/çift-eğik-son-eğik vakalarını kapsar ve `..` içeren yol içermez; buna rağmen ölçüm H10'u yeşil göstermektedir.",
+        "konum": "terminal-onar/scripts/koltuk-bagla.sh: normal_yol ve hesap_adi; terminal-onar/scripts/koltuk-bagla.test.sh: H10 girdi döngüsü",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kırmızı önce/yeşil sonra ölçüm çifti ile beş mutasyon kapısı mevcut ve temel hesap sütunu davranışını güçlü biçimde kanıtlıyor. Bununla birlikte yeşil H10, iddia edilen tam Python eşdeğerliğini ölçmüyor; seçilen altı örnek eksik normalleştirme vakasını kapsamıyor."
+  }
+}

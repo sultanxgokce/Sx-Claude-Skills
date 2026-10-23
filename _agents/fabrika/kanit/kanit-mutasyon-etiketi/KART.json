@@ -1,0 +1,31 @@
+{
+  "is": "kanit-mutasyon-etiketi",
+  "cumle": "Kanıt aracı mutasyon ölçümünü etiketler (--mutasyon <gerçek ölçüm etiketi>): bilerek bozulmuş kodla kırmızı sınav beklenen sonuç olarak yeşil sayılır, kırmızı çıkmayan mutant kırmızıdır; dosyanın ilk satırı ve denetçi istemi 'MUTASYON KANITI — FAIL satırları beklenendir' der, gerçek ölçüm etiketi yoksa reddedilir. FR7M76'nın kalan maddesi (#1136 tur 3 vakası).",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-21T23:03:13+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M54B2Y4QT7VWTJX10AFR7M76",
+  "tahmin_dk": 120,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-21T23:03:13+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

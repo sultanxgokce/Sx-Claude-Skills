@@ -1,0 +1,17 @@
+$ bash yazilim-fabrikasi/scripts/kart-gorev-mutasyon.sh
+# rc=0 sure=100.3s zaman=2026-10-22T10:59:48+03:00
+--- stdout ---
+  ✓ pozitif kontrol: dokunulmamış kopya YEŞİL
+  ✓ KG1 --gorev tahminsiz kabul edilir — kural ölünce sınav KIRMIZI
+  ✓ KG2 görev kimliği biçimi sınanmaz — kural ölünce sınav KIRMIZI
+  ✓ KG3 açılışta atanan yazılmaz — kural ölünce sınav KIRMIZI
+  ✓ KG4 bitti insanın tikini (bitti) yazar — A06 — kural ölünce sınav KIRMIZI
+  ✓ KG5 tıkandı notsuz bekliyor yazar — kural ölünce sınav KIRMIZI
+  ✓ KG6 açılışta yazılamayınca rc 0 (sessiz) — kural ölünce sınav KIRMIZI
+  ✓ KG7 bitti/tıkandı'da yazılamayınca rc 0 (sessiz) — kural ölünce sınav KIRMIZI
+  ✓ KG8 yazım sonucu karta işlenmez — kural ölünce sınav KIRMIZI
+  ✓ KG9 jetonsuz kutuda da deftere gidilir — kural ölünce sınav KIRMIZI
+  ✓ KG10 bağsız kartta 'görünüme düşmez' uyarısı yok — kural ölünce sınav KIRMIZI
+─────────────
+MUTASYON: gecti=10 dusen=0
+--- stderr ---

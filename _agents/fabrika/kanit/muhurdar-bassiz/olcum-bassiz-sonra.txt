@@ -1,0 +1,8 @@
+$ bash _agents/fabrika/kanit/muhurdar-bassiz/bassiz-olcer.sh tescil
+# rc=0 sure=171.6s zaman=2026-10-22T14:58:55+03:00
+--- stdout ---
+  ✓ u S14 başsız şapka: --bassiz aynı usul; MUHUR + özet başsız, sicil mühür kaydı bassiz e (taşıyanın siciline); normal koşuda h
+  ✓ v başsız koşu kendi-işi kuralına tabi: yazan = taşıyan → kendi-isi reddi, yargıç çağrılmaz
+── SONUÇ: 37 geçti · 0 kaldı ──
+── başsız şapka: ✓ ölçüldü (sınav rc 0)
+--- stderr ---

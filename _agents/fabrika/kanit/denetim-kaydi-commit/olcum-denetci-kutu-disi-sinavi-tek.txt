@@ -1,0 +1,59 @@
+$ bash yazilim-fabrikasi/scripts/denetci-kutu-disi.test.sh
+# rc=0 sure=18.0s zaman=2026-10-22T15:33:21+03:00
+--- stdout ---
+A · 🔴 kutu-dışı bulgu TUR YAKMAZ (asıl talep)
+  ✓ A1 tur 1 (kutu-dışı bulgu) → düzelt-dön
+  ✓ A2 tur 2
+  ✓ A3 🔴 ham tur 3 = TAVAN ama SAYILI tur 0 → TIKANMAZ (rc=1)
+  ✓ A4 🔴 ham tur 4 = MUTLAK tavan ama yine tıkanmaz
+  ✓ A5 🔴 'tur yakmadı' SÖYLENİR (sessiz muafiyet yok)
+  ✓ A6 🔴 bu turlarda TIKANDI raporu BASILMAZ
+  ✓ A7 sayılı tur ekranda 0 olarak yazılır
+B · 🔴 normal bulgu YİNE tur yakar (muafiyet sızmasın)
+  ✓ B1 tur 1 (normal bulgu)
+  ✓ B2 tur 2 (normal bulgu)
+  ✓ B3 🔴 tur 3'te TIKANIR (rc=4) — eski davranış korundu
+  ✓ B4 tıkanma raporu basılır
+C · 🔴 karışık tur SAYILIR (içinde bir normal bulgu varsa)
+  ✓ C1 tur 1 (karışık)
+  ✓ C2 tur 2 (karışık)
+  ✓ C3 🔴 tur 3'te TIKANIR — karışık tur muafiyet ALMAZ
+D · 🔴 muafiyet BEDELSİZ değil: yüzey yazılmazsa sınıf DÜŞÜRÜLÜR
+  ✓ D1 yüzeysiz kutu-dışı bulgu 'uygulama'ya DÜŞÜRÜLÜR
+  ✓ D2 düşürüldüğü SÖYLENİR
+  ✓ D3 tur 1 (yüzeysiz)
+  ✓ D4 tur 2 (yüzeysiz)
+  ✓ D5 🔴 yüzeysiz bulgu tur YAKAR → KOD tıkanması (etiket bedava muafiyet değil)
+  ✓ D6 🔴 yüzeysiz bulgu kutu-dışı MUAFİYETİ ALMAZ
+E · 🔴 sonsuz döngü KAPALI: muafiyet sınırsız değil
+  ✓ E1 tur 1
+  ✓ E2 tur 2
+  ✓ E3 tur 3 (yakmayan 3 > tavan 2) → rc=4
+  ✓ E4 🔴 bu ret KOD tıkanması DEĞİL diye söylenir
+  ✓ E5 çare 'yüzeye git' olarak verilir
+  ✓ E6 🔴 'DEVAM — gerekçeyle' yolu ÖNERİLMEZ (yanlış çare)
+  ✓ E7 tavan ortamla değiştirilebilir (DENETCI_KUTU_DISI_TAVAN=1 → tur 2'de rc=4)
+  ✓ E8 ikinci yakmayan turda rc=4
+H · 🔴 tur-1 bulgusu: fren ARDIŞIK dizi sayar, TOPLAM değil
+  ✓ H1 tur 1 kutu-dışı
+  ✓ H2 tur 2 kutu-dışı
+  ✓ H3 🔴 tur 3 NORMAL → ardışık dizi SIFIRLANIR (fren tetiklenmez)
+  ✓ H4 🔴 normal tur sonrası 'KUTUDA İLERLETİLEMİYOR' BASILMAZ
+  ✓ H5 ardışık dizi gerçekten üst üste olunca fren ÇALIŞIR (tur 1)
+  ✓ H6 tur 2
+  ✓ H7 🔴 tur 3 üst üste → fren çalışır
+I · 🔴 kendi #332 işimden sızan gürültü
+  ✓ I1 ayıklayıcı sayıları ekrana '0 0' diye düşmez
+F · 🔴 muafiyetin karşılığı İZLENEBİLİRLİK: ayrı deftere yazılır
+  ✓ F1 KUTU-DISI.jsonl yazıldı ve yüzeyi taşıyor
+  ✓ F2 🔴 aynı bulgu her turda YENİDEN yazılmaz (defter şişmez)
+  ✓ F3 defterin yolu ekrana basılır
+  ✓ F4 kutu-dışı bulgu YOKSA defter KURULMAZ (boş dosya bırakmaz)
+G · 🔴 geçiş ve ayrı yazdırma bozulmadı
+  ✓ G1 5+E yine GEÇER (rc=0)
+  ✓ G2 kutu-dışı bulgular AYRI başlıkta listelenir
+  ✓ G3 gereken yüzey yazdırılır
+  ✓ G4 işin sahibine gideceği söylenir
+
+toplam=44 geçen=44 düşen=0
+--- stderr ---

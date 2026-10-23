@@ -1,0 +1,38 @@
+{
+  "tur": 4,
+  "is": "enis-baglam-karti-kayit",
+  "pr": "370",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T17:35:48+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": null,
+  "yazan_model_kaynak": null,
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 35561,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 13047
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Araç istek/cevap mektubunu doğruluyor, 2M0CV görevine mahrem metinleri taşımayan tek adım yazıyor ve kayıt doğrulanmazsa kartı durduruyor; önceki turun HTTP 200 açığı da üç olumsuz vakayla kapatılmış. Ancak yanıt şemasında `kayit.adimlar` alanının liste olduğu doğrulanmadığı için biçimsiz bir 200 gövdesi başarı sayılabilir; üretimden önce bu uygulama kusuru çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Başarılı yanıt denetimi `kayit.adimlar` alanının liste olduğunu doğrulamıyor; alan bir metin olup yazılan adımı içerdiğinde Python üyelik sınaması geçer ve araç rc 0 verebilir.",
+        "kanit": "Denetim `sys.argv[2] not in (k.get(\"adimlar\") or [])` biçiminde yapılıyor; Python'da sağ taraf metinse bu işlem alt-metin sınamasıdır. F6 ölçümü boş gövdeyi, bozuk JSON'u ve boş `adimlar` listesini kapsıyor, fakat `{\"degisti\":true,\"kayit\":{\"adimlar\":\"<beklenen adım>\"}}` gibi yanlış türü kapsamıyor.",
+        "konum": "baglam-karti/scripts/baglam-karti.sh:109-110; baglam-karti/scripts/baglam-karti.test.sh:118-120; olcum-sinav-tek.txt:F6",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Hermetik sınav 20/20, repo kapıları ve mutasyon sınavı 6/6 yeşil; doğru uç, tek adım, mahremiyet, rc sözleşmesi ve HTTP 200 boş/bozuk/adımsız gövde vakaları gerçekçi sahte defterle ölçülmüş. Bununla birlikte ölçüm yanlış türdeki `kayit.adimlar` gövdesini sınamadığından şema doğrulamasındaki bulguyu kapatmıyor."
+  }
+}

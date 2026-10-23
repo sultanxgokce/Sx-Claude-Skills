@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "koltuk-hesap-alani",
+  "pr": "349",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-16T16:15:17+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 33448,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 32277
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "İstenen 7. hesap sütunu ve API alanı eklenmiş; önce/sonra ölçümü, genişletilmiş H10 eşdeğerlik sınavı ve mutasyonlar önceki turdaki yol normalleştirme kusurunun kapandığını gösteriyor. Ancak doğrudan Claude çalışan bölmede Claude sürecinin PID’si yerine bölmenin kök PID’si seçilebildiğinden, hesap yanlış ortamdan türetilebilir; önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "claude_pid, bölmenin görünen komutu `claude` veya `claude-*` olduğunda alt süreç ağacını aramadan doğrudan bölme PID’sini döndürüyor. Bu PID Claude’un kendisi değilse `/proc/<pid>/environ` yanlış sürece ait olur; özellikle yalnız Claude komutuna verilen CLAUDE_CONFIG_DIR veya ANTHROPIC_BASE_URL görülmeyerek hesap yanlışlıkla `varsayilan` olabilir.",
+        "kanit": "Üretim farkındaki `case \"$kom\" in claude|claude-*|claude.exe) echo \"$pid\"` dalı PID’yi doğrulamadan döndürüyor; buna karşılık iş kartı ortamın pane’deki Claude sürecinden okunmasını istiyor. H sınavı da sahte bölmeye komut `claude`, PID `100` verip doğrudan `$S/proc/100/environ` hazırladığı için bölme kök PID’si ile gerçek Claude PID’sinin ayrıştığı vakayı ölçmüyor.",
+        "konum": "terminal-onar/scripts/koltuk-bagla.sh: claude_pid ve koltuk_hesabi; terminal-onar/scripts/koltuk-bagla.test.sh: H bloğu sahte PID 100 düzeni",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kırmızı önce/yeşil sonra ölçüm çifti mevcut, H10 artık `..`, çift eğik ve nokta bileşenlerini kapsıyor; altı mutasyon kapısı da temel kuralları sınamış. Ancak sınav düzeneği bölme PID’sini Claude PID’siyle aynı kabul ettiği için gerçek süreç ayrımını ve ortamın doğru PID’den okunduğunu kanıtlamıyor."
+  }
+}

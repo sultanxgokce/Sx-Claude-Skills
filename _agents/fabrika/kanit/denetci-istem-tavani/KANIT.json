@@ -1,0 +1,46 @@
+{
+  "is": "denetci-istem-tavani",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-18T23:01:09+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "istem-once-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-istem-once-sonra-sonra.txt",
+      "sha256": "822a90e37883fc710c1951ddc2887f93e8e0ea765b1096027d47c00c726064b0",
+      "komut": [
+        "env",
+        "OUT=/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/istem-tavani/out2",
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/istem-tavani/once-sonra.sh",
+        "/tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/istem-tavani/eski/yazilim-fabrikasi/scripts",
+        "/config/projects/_wt/Sx-Claude-Skills-denetci-istem-tavani/yazilim-fabrikasi/scripts"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T22:49:57+03:00",
+      "sure_sn": 4.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "dba9ea853e424e5a958a0240fda89d9c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-sinavi-sonra.txt",
+      "sha256": "b83e262f5a2b30a6bfefeca6bf9cf43f58784cbd7a7643cff8396192902007c0",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T23:01:09+03:00",
+      "sure_sn": 663.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8421a2bb159e481bbfdf8b08761ce6d3"
+    }
+  ],
+  "imza": "afdcdd1e3a9075394276ab7b1ee0bbd9a49a52c752154559626d3ea0e8ba124f"
+}

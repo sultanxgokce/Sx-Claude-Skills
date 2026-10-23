@@ -1,0 +1,11 @@
+$ bash -c out=$(node sync-skills.mjs --skill higgsfield-abonelik 2>&1); printf "%s\n" "$out"; grep -q "higgsfield-abonelik → _global" <<<"$out"
+# rc=0 sure=0.1s zaman=2026-10-22T23:59:08+03:00
+--- stdout ---
+
+  sync-skills — CHECK (dry-run)
+
+  + higgsfield-abonelik → _global: YENİ kurulum (v1.0.0)
+
+  özet: 1 planlandı · 0 güncel · 0 drift-uyarı · 0 eksik · 0 duman-düştü
+  → uygulamak için: node sync-skills.mjs --apply
+--- stderr ---

@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "kadro-dava-kurali-b1-4",
+  "pr": "362",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T17:43:41+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 30148,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 40304
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Bekleyen çağıranın ölümü yardımcı süreç yaşamı, sonraki kilit alımı ve ack artığı üzerinden sınanmış; üretim kodu da çağıran yaşam yoklaması ile yardımcı taraflı ack temizliği ekliyor. Daraltılmış kabul sınırı kısa süreli kilit alımına izin verdiğinden önceki yarış uygulama kusuru değildir; yalnız sınavın sistem geneli süreç sayımına dayanan küçük bir kırılganlığı kalmıştır.",
+    "bulgular": [
+      {
+        "ne": "DV32j yardımcı süreç sayısını testin kendi süreç ağacına veya geçici kilit dizinine bağlamak yerine sistem genelindeki komut satırı eşleşmesiyle ölçüyor; eşzamanlı aynı yardımcı komutunu kullanan başka bir süreç sınavı yalancı biçimde bozabilir.",
+        "kanit": "DV32j içinde `spawnSync('pgrep', ['-fc', 'until flock -n 9'])` sonucu doğrudan `tutucuSayi === '1'` koşuluna bağlanıyor; komut satırı eşleşmesi test dizini ya da çocuk PID ile süzülmüyor.",
+        "konum": "terminal-onar/kapi/kilit.test.mjs: DV32j `pgrep -fc` ölçümü",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Hedefe özgü `kilit-sinav` rc=0 ile DV32j senaryosunda ölü çağıranın yardımcısının kalmadığını, sonraki çağıranın kilidi aldığını ve ack artığı bulunmadığını ölçüyor; dört gerileme paketi de yeşil. Önce/sonra çifti yok, ancak bu backend eşzamanlılık değişikliği gerçek alt süreçlerle ayırt edici davranış sınavı üzerinden doğrudan kanıtlanmış; daraltılmış kabul sınırı da ölçülen davranışla uyumlu."
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "tur": 1,
+  "is": "denetci-kutu-disi-sinif",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T17:19:32+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 42276,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kutu-dışı bulgu ayrı sınıfa alınmış, sayılı turdan düşürülmüş, yüzey şartıyla kapatılmış ve ayrı deftere bağlanmış; ana sınav ile mutasyon sınavı da bunu gerçekten çağırıp ölçüyor. Önce ardışıklık hesabını düzeltin: mevcut sayaç üst üste kutu-dışı turları değil, geçmişteki bütün yakmayan turları topladığı için araya normal tur girse bile işi yanlışlıkla durdurabilir.",
+    "bulgular": [
+      {
+        "ne": "Sonsuz döngü freni 'üst üste' turları ölçmüyor; YAKMAYAN_ONCE=ONCEKI-SAYILI ve YAKMAYAN=TUR-SAYILI_SON geçmişteki tüm kutu-dışı turları biriktiriyor. Örneğin kutu-dışı, normal, kutu-dışı, normal, kutu-dışı dizisi ardışık üç kutu-dışı tur olmadığı halde tavana takılabilir; testler de yalnız kesintisiz kutu-dışı diziyi kapsıyor.",
+        "kanit": "Diffte açıklama ve kullanıcı çıktısı sınırı 'üst üste 2’den fazla' diye tanımlarken iki sayaç toplam ham turdan toplam sayılı turu çıkarıyor; denetci-kutu-disi.test.sh E1-E8 yalnız ardışık kutu-dışı çağrılar yapıyor ve araya normal tur koyup sayacın sıfırlandığını sınamıyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh: KD_TAVAN çevresindeki YAKMAYAN_ONCE ve karar sonrasındaki YAKMAYAN hesapları; denetci-kutu-disi.test.sh:E",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Asıl davranış için kırmızı/yeşil önce-sonra ölçüm çifti, 36/36 kapı, ana sınavdan gerçek çağırma ve dört mekanizmayı bozan beklenen-kırmızı mutasyon kaydı var; ancak 'üst üste' sayacının normal turla sıfırlanması ölçülmemiş."
+  }
+}

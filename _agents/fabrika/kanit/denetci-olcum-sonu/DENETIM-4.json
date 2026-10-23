@@ -1,0 +1,38 @@
+{
+  "tur": 4,
+  "is": "denetci-olcum-sonu",
+  "pr": "392",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-20T19:06:10+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 33778,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 11,
+    "bayt": 50395
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Denetçi uzun ölçümlerde başı, gerçek atlanan satır sayısını, ortadaki sonuç/hata satırlarını, stdout sonunu ve stderr sonunu taşıyor; kısa dosya davranışı da doğrudan sınanmış, yani iş kartındaki esas talep karşılanmış. Önce ayırıcı çakışmasını çözün: ölçülen program stdout'a `--- stderr ---` yazarsa ayrıştırıcı bunu gerçek bölüm sınırı sanıp çıktıyı yanlış kesebilir.",
+    "bulgular": [
+      {
+        "ne": "Stdout içeriğindeki ilk `--- stderr ---` satırı gerçek stderr ayırıcısı kabul ediliyor; ölçülen program aynı satırı üretirse stdout'un kalan kısmı stderr sanılarak farklı kota ile kırpılır ve sonuç/son satırlar kaybolabilir.",
+        "kanit": "Üretim kodu sınırı `L.index(\"--- stderr ---\")` ile, yani dosyadaki ilk eşleşmeyle buluyor. O1–O12 senaryolarında stdout'un bu ayırıcı satırı üretmesi sınanmıyor; mutantlar da yalnız ayırmayı tamamen kaldırma durumunu kapsıyor.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh: `olcum_ozeti` içindeki `e = L.index(\"--- stderr ---\") ...` satırı; yazilim-fabrikasi/scripts/denetci.test.sh: O1–O12 ve `olcum-stderr-ayrilmaz` mutanti",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. 0.10.5→0.10.6 ölçüm çifti sonuç satırının HAYIR'dan EVET'e geçtiğini gösteriyor; T-OLCUM O1–O12 ile sonuç/✗ seçimini, gerçek atlanan sayısını, 60 satır tavanını, stderr sonunu ve kısa dosya eşitliğini ölçüyor, mutantlar da ana davranışların sınava bağlı olduğunu doğruluyor. Kanıt güçlüdür; ancak stdout'un bölüm ayırıcısını taklit ettiği çakışma vakası kapsanmamıştır."
+  }
+}

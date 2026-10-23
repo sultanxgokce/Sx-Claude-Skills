@@ -1,0 +1,37 @@
+$ timeout 300 bash /config/projects/_wt/Sx-Claude-Skills-gun-sonu-gorev-defteri/yazilim-fabrikasi/scripts/fabrika-kur.test.sh
+# rc=0 sure=0.3s zaman=2026-10-22T23:26:32+03:00
+--- stdout ---
+════ T0 · şablon tavanı ════
+  ✓ şablon ≤ 40 satır (30)
+  ✓ şablonda kod tabanı/çerçeve adı yok
+════ T1 · denetle: kurulmamış depoda rc=3 ════
+  ✓ hat yokken rc=3 (ölçülemedi, yeşil değil)
+════ T2 · kur: dosya + işaretçi ════
+  ✓ kur rc=0
+  ✓ FABRIKA.md kuruldu
+  ✓ içerik şablonla birebir
+  ✓ işaretçi başlığın altına, tek satır
+  ✓ işaretçi bir kez
+  ✓ CLAUDE.md'nin kendi içeriği korundu
+  ✓ denetle rc=0
+════ T3 · ikinci kur idempotent ════
+  ✓ ikinci kur rc=0
+  ✓ işaretçi çoğalmadı
+════ T4 · drift: elle değişiklik yakalanır, kur üstüne yazmaz ════
+  ✓ drift rc=1
+  ✓ kur --zorla'sız REDDETTİ (elle değişikliği ezmedi)
+  ✓ elle değişiklik yerinde duruyor
+  ✓ kur --zorla rc=0
+  ✓ zorla sonrası drift yok
+════ T5 · işaretçi silinirse denetle kırmızı ════
+  ✓ işaretçi yokken rc=1
+  ✓ kur işaretçiyi geri koydu
+════ T6 · CLAUDE.md olmayan depo ════
+  ✓ kur rc=0
+  ✓ CLAUDE.md işaretçiyle oluşturuldu
+════ T7 · --kanca ════
+  ✓ kur --kanca rc=0
+  ✓ kanca kurulu
+
+── SONUÇ: 23 geçti · 0 kaldı ──
+--- stderr ---

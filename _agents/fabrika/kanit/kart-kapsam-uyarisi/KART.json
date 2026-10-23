@@ -1,0 +1,21 @@
+{
+  "is": "kart-kapsam-uyarisi",
+  "cumle": "kart.sh ac iş cümlesinde iki depo ya da haftalık kapsam görürse uyarsın ve depo başına / gün başına kart önersin; uyarı, red değil (retro W42 ders M2, gorev_01M57ZWR2TENPTZJVKRM9VAXCQ)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-18T23:17:20+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/kart-kapsam-uyarisi/ (sınav + mutasyon)",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)"
+}

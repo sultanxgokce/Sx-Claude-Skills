@@ -6,6 +6,7 @@ import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { kayitOku, kadroBirlestir } from './kadro.mjs';
+import { oturumKimlikleri } from './kimlik.mjs';
 import { koltukSatirlari } from './koltuklar.mjs';
 const arg = (a, v) => { const i = process.argv.indexOf(a); return i > 0 ? process.argv[i + 1] : v; };
 const KUTU = arg('--kutu', process.env.TO_KUTU || '');
@@ -18,8 +19,9 @@ try { out = execFileSync('bash', [BETIK, '--liste'], { env: { ...process.env, TO
 catch (e) { console.error('koltuk listesi ölçülemedi: ' + (e.stderr || e.message).toString().trim()); process.exit(3); }
 const kayit = kayitOku(PROJE);
 if (kayit.okunamadi.length) { console.error('kayıt okunamadı: ' + kayit.okunamadi.join(', ')); process.exit(3); }
-const k = kadroBirlestir({ uyeler: kayit.uyeler, koltuklar: koltukSatirlari(out), ana: ANA });
+const k = kadroBirlestir({ uyeler: kayit.uyeler, koltuklar: koltukSatirlari(out), ana: ANA, kimlikler: oturumKimlikleri() });
 console.log('kutu: ' + KUTU + ' · proje: ' + PROJE + ' · kaynak: ' + (kayit.kaynak.join(', ') || '(kayıt yok)'));
 console.log('sayilar: ' + JSON.stringify(k.sayilar));
-for (const p of k.kisiler) console.log(`${p.grup.padEnd(24)} ${(p.id || p.tmux).padEnd(12)} rol=${p.rol.slice(0, 30).padEnd(30)} hal_kayit=${p.hal_kayit.padEnd(10)} oturum=${p.oturum ? p.oturum.ad + '/' + p.oturum.hal + (p.oturum.ne ? ' (' + p.oturum.ne + ')' : '') : '-'}`);
+for (const p of k.kisiler) console.log(`${p.grup.padEnd(24)} ${(p.id || p.tmux).padEnd(12)} rol=${p.rol.slice(0, 30).padEnd(30)} hal_kayit=${p.hal_kayit.padEnd(10)} oturum=${p.oturum ? p.oturum.ad + '/' + p.oturum.hal + (p.oturum.ne ? ' (' + p.oturum.ne + ')' : '') : '-'}${p.eslesme === 'kimlik' ? ' [kimlikle]' : ''}`);
 console.log('kayitsiz: ' + (k.kayitsiz.map((x) => x.ad + '/' + x.hal).join(' · ') || '-'));
+console.log('altyapi: ' + (k.altyapi.map((x) => x.ad + ' (' + x.altyapi + ')').join(' · ') || '-'));

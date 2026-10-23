@@ -42,6 +42,16 @@
   }
 
   // ── küçültme: FAIL-OPEN — tutmazsa orijinal gider, yapıştırma asla engellenmez ───
+  // 1.2.2 (Sultan 15 Eki, İKİNCİ kez "resim yapıştırma çok yavaş" · gorev AT9J8305): Safari WebP KODLAYAMAZ — convertToBlob('image/webp')
+  //   sessizce PNG döner; eski kod sonra JPEG'i İKİNCİ kez kodluyordu (2000 px PNG kodlaması bedavaya gelmez). Destek bir kez yoklanır,
+  //   yoksa doğrudan JPEG: her yapıştırmada tek kodlama.
+  var WEBP = null;   // null = henüz yoklanmadı
+  function webpVarMi() {
+    if (WEBP !== null) return WEBP;
+    try { var c = document.createElement('canvas'); c.width = c.height = 1; WEBP = c.toDataURL('image/webp').indexOf('data:image/webp') === 0; }
+    catch (e) { WEBP = false; }
+    return WEBP;
+  }
   async function kucult(blob) {
     if (!blob || !blob.type || blob.type.indexOf('image/') !== 0) return null;
     if (blob.type === 'image/gif') return null;                       // animasyon kaybolur
@@ -54,8 +64,9 @@
       var cv = new OffscreenCanvas(g, y); var ctx = cv.getContext('2d');
       ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
       ctx.drawImage(bmp, 0, 0, g, y); if (bmp.close) bmp.close();
-      var out = await cv.convertToBlob({ type: 'image/webp', quality: KALITE });
-      if (!out || out.type !== 'image/webp') out = await cv.convertToBlob({ type: 'image/jpeg', quality: KALITE });
+      var tip = webpVarMi() ? 'image/webp' : 'image/jpeg';
+      var out = await cv.convertToBlob({ type: tip, quality: KALITE });
+      if (tip === 'image/webp' && (!out || out.type !== 'image/webp')) { WEBP = false; out = await cv.convertToBlob({ type: 'image/jpeg', quality: KALITE }); }   // yoklama yanıldıysa bir kez, sonra hep JPEG
       if (!out || out.size >= blob.size) { log('küçültme atlandı: sonuç daha büyük'); return null; }
       log('küçültüldü', blob.size, '→', out.size, out.type, g + 'x' + y);
       return out;
@@ -75,18 +86,28 @@
     return '';
   }
 
+  // adım süreleri bildirimde (1.2.2): "yavaş" olunca nerede beklendiği ekrandan okunur — küçültme mi, yükleme mi (sunucu/ağ)
+  function sn(ms) { return (ms / 1000).toFixed(1).replace('.', ',') + ' sn'; }
+  function kb(b) { return b >= 1024 * 1024 ? (b / 1048576).toFixed(1).replace('.', ',') + ' MB' : Math.round(b / 1024) + ' KB'; }
+  var sonOlcum = null;
   var mesgul = false;
   async function resimIsle(blob) {
     if (mesgul) return; mesgul = true;
-    bildir('⬆ resim yükleniyor…', '#c9914f', 60000);
+    var t0 = performance.now();
+    bildir('⏳ resim küçültülüyor… (' + kb(blob.size) + ')', '#c9914f', 60000);
     try {
-      var kucuk = await kucult(blob); var govde = kucuk || blob;
+      var kucuk = await kucult(blob); var govde = kucuk || blob, t1 = performance.now();
+      bildir('⬆ resim yükleniyor… (' + kb(govde.size) + ' · küçültme ' + sn(t1 - t0) + ')', '#c9914f', 60000);
       var r = await fetch(RESIM_URL, { method: 'POST', credentials: 'same-origin',
         headers: { 'x-kapi': '1', 'content-type': govde.type || 'application/octet-stream' }, body: govde });
       var j = null; try { j = await r.json(); } catch (e) { /* gövde json değil */ }
+      var t2 = performance.now();
+      sonOlcum = { kucultMs: Math.round(t1 - t0), yukleMs: Math.round(t2 - t1), ilkBayt: blob.size, bayt: govde.size, tip: govde.type || '' };
+      var sure = 'küçültme ' + sn(t1 - t0) + ' · yükleme ' + sn(t2 - t1) + ' · ' + kb(govde.size);
+      log('süreler', sonOlcum);
       if (r.ok && j && j.yol) {
         var nasil = terminaleYaz(' ' + j.yol + ' ');
-        if (nasil) { bildir('✓ resmin yolu terminale yazıldı — Enter ile gönder', '#7ee787', 3500); log('yazıldı', nasil, j.yol); }
+        if (nasil) { bildir('✓ resmin yolu terminale yazıldı — Enter ile gönder\n' + sure, '#7ee787', 6000); log('yazıldı', nasil, j.yol); }
         else {
           try { await navigator.clipboard.writeText(j.yol); bildir('📋 yol panoda — Cmd+V ile yapıştır', '#79c0ff', 6000); }
           catch (e) { bildir('✗ yol terminale yazılamadı: ' + j.yol, '#ff7b72', 9000); }
@@ -216,11 +237,43 @@
     if (!metin) return false;
     panoyaYaz(metin); return true;
   }
+  // ── DİM OKUNURLUK (1.3.0 · Sultan 16 Eki 10:10 karesi, nazir-yon): Claude Code soru satırlarını ve şık açıklamalarını
+  //    ESC[2m (dim) basar; xterm dim'i rengi yarıya soldurarak çizer (DIM_OPACITY 0.5) ve bunu minimumContrastRatio'dan
+  //    SONRA uygular → "dim + gri-244" koyu temada 2,08:1 (ölçüldü, Chromium piksel), okunmuyor; minimumContrastRatio=7 bile
+  //    dim'e İŞLEMEZ (ölçüldü). Çare: SGR ayrıştırıcıya kanca — dim (2) → "ön plan brightBlack" (SGR 90): temada brightBlack
+  //    okunur bir ikincil ton (onar.sh: #a89f91, ≥7:1). 22 (dim kapat) gelince dim'den ÖNCEKİ açık renk (yoksa varsayılan)
+  //    geri konur; 2'den sonra gelen açık renk (2;38;5;244) kendi kazanır (gri-244 4,7:1). Dim'siz SGR'ye DOKUNULMAZ.
+  //    Genel API parametreleri dizi verir (alt-parametre iç dizi) ve kopyadır → düzleştirip çekirdeğin charAttributes'ına veririz.
+  var dimAcik = false, fgSon = null;   // fgSon: son açık ön plan SGR'si (ör. [32] · [38,5,244]) — 22'de geri konur
+  function dimKanca(t) {
+    var ih = t._core && t._core._inputHandler;
+    if (!ih || typeof ih.charAttributes !== 'function' || typeof t.parser.registerCsiHandler !== 'function') return false;
+    t.parser.registerCsiHandler({ final: 'm' }, function (arr) {
+      var flat = [], i, v, degisti = false;
+      for (i = 0; i < arr.length; i++) { if (Array.isArray(arr[i])) flat.push.apply(flat, arr[i]); else flat.push(arr[i]); }
+      if (!flat.length) flat.push(0);
+      for (i = 0; i < flat.length; i++) {
+        v = flat[i];
+        if (v === 2) { flat[i] = 90; dimAcik = true; degisti = true; }
+        else if (v === 0) { dimAcik = false; fgSon = null; }
+        else if (v === 39) { dimAcik = false; fgSon = null; }
+        else if ((v >= 30 && v <= 37) || (v >= 90 && v <= 97)) { dimAcik = false; fgSon = [v]; }
+        else if (v === 38) { var n = flat[i + 1] === 5 ? 2 : flat[i + 1] === 2 ? 4 : 0; fgSon = flat.slice(i, i + 1 + n); dimAcik = false; i += n; }
+        else if (v === 48 || v === 58) { i += flat[i + 1] === 5 ? 2 : flat[i + 1] === 2 ? 4 : 0; }
+        else if (v === 22 && dimAcik) { flat.push.apply(flat, fgSon || [39]); dimAcik = false; degisti = true; }
+      }
+      if (!degisti) return false;   // dim'siz dizi: xterm'in kendi yolu, bayt bayt eski davranış
+      ih.charAttributes({ length: flat.length, params: flat, hasSubParams: function () { return false; }, getSubParams: function () { return null; }, getSubParamsAll: function () { return {}; } });
+      return true;
+    });
+    return true;
+  }
   function termBagla() {
     var t = window.term;
     if (!t || !t.parser || typeof t.parser.registerOscHandler !== 'function') return false;
     t.parser.registerOscHandler(52, osc52);
-    window.__kapiPano = { surum: '1.2.1', osc52: true, cmdc: true, soz: true, dugme: true, taban: TABAN, sonMetinOmruMs: SON_METIN_OMRU,
+    var dimOkunur = false; try { dimOkunur = dimKanca(t); } catch (e) { log('dim kancası takılamadı: ' + (e && e.message)); }
+    window.__kapiPano = { surum: '1.3.0', dimOkunur: dimOkunur, sonResim: function () { return sonOlcum; }, osc52: true, cmdc: true, soz: true, dugme: true, taban: TABAN, sonMetinOmruMs: SON_METIN_OMRU,
       _eskit: function () { sonMetinAn = 0; }, _sonYol: function () { return sonYol; }, _sozBekliyor: function () { return !!bekleyen; },
       _sozOmru: function (ms) { SOZ_OMRU = ms; }, _indiOmru: function (ms) { INDI_OMRU = ms; } };   // ölçüm yüzeyi (sınav okur; _eskit: son seçimi bayatlatır; _sozOmru: sınav süreyi kısaltır)
     log('bağlandı: OSC 52 → pano · resim → ' + RESIM_URL);

@@ -1,0 +1,38 @@
+{
+  "tur": 3,
+  "is": "hafta-kapanis-dogrulat-retro-kapisi",
+  "pr": "365",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T20:38:24+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 47603,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 39297
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "K6, haftadaki Doğrulat retrosunu okuyup ders metinlerini ve gerekçelerini eksiksiz raporluyor; birleşmiş PR, AÇIK ders, çıplak numara, PR olmayan numara, tarihsiz dosya ve boş hafta yolları kapanışa bağlanmış. Talep doğru karşılanmış ve önceki turun iki açığı kapatılmış; ancak aynı ölçümde hem kesin eksik hem de sorgulanamayan PR bulunursa ölçülemeyen ders sessizce rapordan düşüyor, önce bunu çöz.",
+    "bulgular": [
+      {
+        "ne": "Bir seansta kesin işlenmemiş ders ile PR durumu ölçülemeyen ders birlikte bulunursa K6 hemen KIRMIZI dönüyor ve ölçülemeyen dersi hiç listelemiyor. Böylece `gh` sorunu görünmez kalıyor ve kullanıcı ilk eksikleri giderdikten sonra yeni bir engeli ancak sonraki turda öğreniyor.",
+        "kanit": "`k6_dogrulat` önce `if eksik: return \"KIRMIZI\", ...` ile çıkıyor; `if olcemedi: return \"SARI\", ...` yalnız hiç `eksik` yoksa çalışabiliyor. Oysa döngü ölçülemeyen dersleri `olcemedi` listesine topluyor ve SKILL/K6 sözleşmesi `gh` cevap veremeyen PR'ın ölçülemedi olarak bildirilmesini söylüyor.",
+        "konum": "hafta-kapanis/scripts/hafta-kapanis.py: k6_dogrulat sonundaki `if eksik` / `if olcemedi` karar sırası",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kapanış sınavında rc=1→0 önce/sonra çifti, gerçek 2026-10-17 seansıyla ders metinlerini içeren K6 kırmızı ölçümü ve yeşil depo denetimi var. Genel sınav rc=0; paylaşılan çıktı ilk 60 satırla kesildiğinden H10 ayrıntıları görünmese de üretim farkındaki yeni H10/M15/M16 kontrolleri önceki turun ders metni ve rapor kesilmesi açıklarını doğrudan sınamaktadır."
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "kanit-canli-sinifi-2",
+  "pr": "353",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T14:17:32+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 100711,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 23,
+    "bayt": 115826
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Canlı ateşleme kanıtı karta bağlanmış; önceki turdaki okunamayan kart zamanı açığı ayrıca rc=3 kapısı ve mutasyon sınavıyla kapatılmış. Önce tarih karşılaştırmasının saat dilimsiz ama ISO-geçerli değerlerde çöküp ölçülemedi durumunu rc=1'e indirmesini çöz; bunun dışında talep doğru uygulanmış ve kanıt kuvvetli.",
+    "bulgular": [
+      {
+        "ne": "ISO olarak çözülen fakat saat dilimi taşımayan kart veya ateşleme zamanı, saat dilimli değerle karşılaştırılırken Python bloğunu TypeError ile düşürebilir; alt süreç dönüşü denetlenmediğinden kapı bunu ÖLÇÜLEMEDİ rc=3 yerine canlı kanıt eksik rc=1 olarak sonuçlandırabilir.",
+        "kanit": "`P()` doğrudan `datetime.fromisoformat(s)` döndürüyor; örneğin `2026-10-17T14:12:41` saat dilimsiz, manifestteki `2026-10-17T14:17:07+03:00` ise saat dilimli nesnedir. `oz<kz`, `son<kz` veya `son>oz+...` karşılaştırması bu karışımda TypeError üretir. Kabuk tarafındaki `eval \"$(python3 ...)\"` Python dönüş kodunu denetlemiyor; başlangıç değerleri `cy=0`, `ckz=1` kaldığından `cg=E` yolu `eksik` artırarak rc=1'e gider. Eklenen T11q yalnız `zaman='bozuk-saat'` ile `P()` sonucunun None olduğu yolu ölçüyor, saat dilimsiz ISO vakasını ölçmüyor.",
+        "konum": "yazilim-fabrikasi/scripts/birlestirme-kapisi.sh: canlı bağlama bloğundaki `def P`, `oz<kz`/`son<kz` karşılaştırmaları ve bu bloğu çalıştıran `eval \"$(python3 ...)\"`",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sha'ları sağlam; kanıt, üç üretim sınavında kırmızıdan yeşile ölçüm çiftleri sunuyor ve sarı kayıt içermiyor. Önceki bulgu için geçerli JSON içindeki bozuk zaman vakası ile fail-closed mutasyonu eklenmiş; ancak saat dilimsiz ISO değerinin aware/naive karşılaştırma vakası ölçülmemiş. Ek canlı kayıt bu karttan eski olsa da kart açıkça `--canli h` dediği için bu işin doğrulanmasını engelleyen bir kutu-dışı eksik değildir."
+  }
+}

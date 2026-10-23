@@ -1,0 +1,20 @@
+18a19,20
+> const SAHIP = /\s*\(sahip:\s*([^)]+)\)/;
+> const D1 = /\d{4}-\d{2}-\d{2} Sultan: .+\(sohbet · [^·()]+ · "[^"]{1,120}" · beyan:\S+\)/;
+31a34,42
+>     // Sx gunluk-plan/sema/bugun-maddesi.md (1.5.0): sahip metinden, kanıt nottan ayrılır; "-"+ERTELENDİ geçerli D1'le "ertelendi", D1'siz "acik"
+>     const bas = (k ? k[1] : govde);
+>     const sh = bas.match(SAHIP);
+>     const parca = k && k[3] ? k[3].split(' · ').map((x) => x.trim()) : [];
+>     const kanit = parca.filter((x) => x.startsWith('kanıt:')).map((x) => x.slice(6).trim()).join(' · ');
+>     const not = parca.filter((x) => !x.startsWith('kanıt:')).join(' · ');
+>     const sonuc = k ? k[2].trim() : '';
+>     let durum = DURUM[m[1]] || 'acik';
+>     if (m[1] === '-' && sonuc === 'ERTELENDİ') durum = D1.test(not) ? 'ertelendi' : 'acik';
+34,36c45,46
+<       durum: DURUM[m[1]] || 'acik',
+<       metin: (k ? k[1] : govde).trim(),
+<       sonuc: k ? k[2].trim() : '', not: k && k[3] ? k[3].trim() : '',
+---
+>       durum, metin: bas.replace(SAHIP, '').trim(), sahip: sh ? sh[1].trim() : '',
+>       sonuc, kanit, not,

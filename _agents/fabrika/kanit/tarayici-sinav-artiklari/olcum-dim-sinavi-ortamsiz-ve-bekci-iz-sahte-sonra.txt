@@ -1,0 +1,14 @@
+$ bash -c 
+r=0; echo "ortam: KANIT_PLAYWRIGHT_DIR=${KANIT_PLAYWRIGHT_DIR:-YOK} NODE_PATH=${NODE_PATH:-YOK} · yük $(cut -d" " -f1 /proc/loadavg)"
+( cd terminal-onar/kapi && timeout 180 node dim-okunur-sinav.mjs > /tmp/o-art2.txt 2>&1; rc=$?; echo "dim-okunur-sinav.mjs (ortamsız) exit=$rc · $(grep -E "^tarayıcı:" /tmp/o-art2.txt) · $(grep geçti /tmp/o-art2.txt | tail -1)"; grep "✗" /tmp/o-art2.txt | cut -c1-160; exit $rc ) || r=1
+timeout 120 bash terminal-onar/scripts/bekci-iz.test.sh > /tmp/o-art2.txt 2>&1; rc=$?; echo "bekci-iz.test.sh exit=$rc $(grep geçti /tmp/o-art2.txt | tail -1) · H1: $(grep -c "✓ H1" /tmp/o-art2.txt)"; [ $rc = 0 ] || r=1
+timeout 150 bash terminal-onar/scripts/kurtarici-kapali.test.sh > /tmp/o-art2.txt 2>&1; rc=$?; echo "kurtarici-kapali.test.sh exit=$rc $(grep geçti /tmp/o-art2.txt | tail -1)"; [ $rc = 0 ] || r=1
+echo "gerçek tmux sinav-* oturumu: $(tmux ls 2>/dev/null | grep -c "^sinav")"; exit $r
+# rc=1 sure=9.8s zaman=2026-10-16T13:29:20+03:00
+--- stdout ---
+ortam: KANIT_PLAYWRIGHT_DIR=YOK NODE_PATH=YOK · yük 9.91
+dim-okunur-sinav.mjs (ortamsız) exit=1 · tarayıcı: /config/.nvm/versions/node/v22.23.0/lib/node_modules · 
+bekci-iz.test.sh exit=0 bekci-iz.test: 13 geçti · 0 kaldı · H1: 1
+kurtarici-kapali.test.sh exit=0 kurtarici-kapali.test: 25 geçti · 0 kaldı
+gerçek tmux sinav-* oturumu: 0
+--- stderr ---

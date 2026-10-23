@@ -1,0 +1,21 @@
+{
+  "is": "kanit-canli-sinifi-3",
+  "cumle": "gorev_01M54APFDAHKN72VKBWTGKSAAM — canlı sınıfı son hâl, YEDEK GÖZ turu (#353 yeniden sunumu: SERDAR 14:25 kararı, K1 Y0006 farklı model)",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-17T14:32:01+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/kanit-canli-sinifi-3 (araçla yeniden; -1 ve -2 dizinleri ders olarak durur)",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: canlı)"
+}

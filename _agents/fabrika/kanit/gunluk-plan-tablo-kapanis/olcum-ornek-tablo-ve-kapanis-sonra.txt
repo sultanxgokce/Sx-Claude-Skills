@@ -1,0 +1,23 @@
+$ python3 gunluk-plan/scripts/tablo.py gunluk-plan/sema/ornek-cipa.md --kapanis
+# rc=4 sure=0.0s zaman=2026-10-17T15:34:37+03:00
+--- stdout ---
+📋 BUGÜN · 2026-10-17
+| # | Madde | Sahip | Durum | Kanıt |
+|---|---|---|---|---|
+| 1 | Retro paketi · görev …CWSGE | MUAVİN | kapandı | cloudtop #669 |
+| 2 | Gelen kutusu triyajı | MUAVİN | yarım | — |
+| 3 | WhatsApp izin kalıcılığı | Sultan | açık | — |
+| 4 | Eski kanal düzeltmesi | — | geri alındı | — |
+| 5 | Sunum provası | MUAVİN | ertelendi | — |
+| 6 | Damgasız erteleme | — | açık | — |
+| G1 | Gün ortası maddesi · görev …PT7A7 · görev …BR604 | — | açık | — |
+| 7 | Açılmadı örneği | — | açılmadı | — |
+
+✗ KAPANIŞ KABUL EDİLMEDİ — 5 madde açık:
+  • 2 Gelen kutusu triyajı (yarım)
+  • 3 WhatsApp izin kalıcılığı (açık)
+  • 6 Damgasız erteleme (açık)
+  • G1 Gün ortası maddesi (açık)
+  • 7 Açılmadı örneği (açılmadı)
+  Her madde ya kapanır (kanıtla) ya Sultan "ertele" der (D1 damgası). Sessiz taşıma yok.
+--- stderr ---

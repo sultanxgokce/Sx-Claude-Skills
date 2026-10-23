@@ -1,0 +1,40 @@
+$ bash vault-cek/scripts/vault-cek-coksatir.test.sh
+# rc=1 sure=1.5s zaman=2026-10-21T23:06:46+03:00
+--- stdout ---
+T1 · sözdizimi
+  ✓ T1
+T2 · tek satırlı değer: uzunluk/iz/satır doğru, satır=1
+  ✓ T2
+T3 · parmak izi DEĞERİN KENDİSİ DEĞİL (sha256 ilk 12 · geri döndürülemez)
+  ✓ T3
+  ✓ T3b
+T4 · çok satırlı değer: satır sayısı DOĞRU ölçülür
+  ✓ T4
+T5 · 🔴 ASIL VAKA: satır-tabanlı okuma değeri BOZAR — dosya bunu kanıtlar
+  ✓ T5
+  ✓ T5b
+T6 · uyarı: çok satırlıda SESLİ (stderr), tek satırlıda SESSİZ
+  ✓ T6a
+  ✓ T6b
+T7 · uyarı DOĞRU REÇETEYİ verir (set -a … source) ve doğrulama izini söyler
+  ✓ T7a
+  ✓ T7b
+T8 · 🔴 uyarı DEĞERİ BASMAZ (sır sızıntısı kalkanı)
+  ✓ T8
+T9 · env dosyası 600 izinli
+  ✓ T9
+T10 · aynı anahtar iki kez yazılınca TEK satır kalır (idempotent, birikme yok)
+  ✓ T10
+T11 · yazım dosyayı YERİNDE kesmez: yeni dosya yerine geçer (inode değişir)
+  ✗ T11 — inode aynı kaldı (16310852) — dosya yerinde kesilip yazılıyor
+T12 · eşzamanlı okuyucu HİÇ eksik anahtar görmez (180 KB dosya, 30 yazım sürerken)
+  ✗ T12 — 6265 okumanın 383'inde SABIT anahtarı yoktu (yarım dosya okundu)
+T13 · iki eşzamanlı yazan birbirinin anahtarını SİLMEZ (kilit)
+  ✗ T13 — 30 anahtardan 28 kaldı — eşzamanlı yazan birbirini ezdi
+T14 · env yolu bir BAĞ (symlink) ise bağ korunur, hedef güncellenir; artık geçici dosya kalmaz
+  ✓ T14
+  ✓ T14b
+  ✓ T14c
+
+SONUÇ: 17 geçti · 3 kaldı
+--- stderr ---

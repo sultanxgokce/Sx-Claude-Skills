@@ -1,0 +1,271 @@
+{
+  "is": "kadro-dava-kurali-b2",
+  "arac": "kanit.py/0.4.0",
+  "guncelleme": "2026-10-18T16:52:17+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "dava-sinavi",
+      "asama": "once",
+      "dosya": "olcum-dava-sinavi-once.txt",
+      "sha256": "5be3df95d81986b6a03d5b3b87b77435bdd64baf25b474796e057139cf9f4eff",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/once-main/terminal-onar/kapi && timeout 120 node dava.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-18T16:41:15+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dava-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-dava-sinavi-sonra.txt",
+      "sha256": "d5029e2182c4b7d197e17621914abfec6afd2da84b7f296bbea3d4bc589689e8",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/kapi && node dava.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:41:23+03:00",
+      "sure_sn": 7.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dava-mutasyon",
+      "asama": "tek",
+      "dosya": "olcum-dava-mutasyon-tek.txt",
+      "sha256": "4bf515ba16140b23ea1e980834a19634b8a291e069199a251ebd1852c354cbe3",
+      "komut": [
+        "bash",
+        "terminal-onar/kapi/dava.mutasyon.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:51:21+03:00",
+      "sure_sn": 55.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-kilit",
+      "asama": "tek",
+      "dosya": "olcum-gerileme-kilit-tek.txt",
+      "sha256": "e7332f15c74f7c208536e288817cae99cfb7b66fc0a4b6922c77d0be7116b700",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/kapi && node kilit.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:44:18+03:00",
+      "sure_sn": 9.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-kadro-yaz",
+      "asama": "tek",
+      "dosya": "olcum-gerileme-kadro-yaz-tek.txt",
+      "sha256": "3cff1452c0f4141eb61231b1d489a54e82e3d7339135e6a17b51b83632429db4",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/kapi && node kadro-yaz.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:44:48+03:00",
+      "sure_sn": 30.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-kadro",
+      "asama": "tek",
+      "dosya": "olcum-gerileme-kadro-tek.txt",
+      "sha256": "83a5ad5b76989872445b00db6e36a428f4f6486391a3412a802f0e2de454aa86",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/kapi && node kadro.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:44:48+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-kadro-hal",
+      "asama": "tek",
+      "dosya": "olcum-gerileme-kadro-hal-tek.txt",
+      "sha256": "379852daa10d7b98566b107b84dcfaafe2cebe2dbd8674580790059bf87817dd",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/kapi && node kadro-hal.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:44:52+03:00",
+      "sure_sn": 3.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-sunucu",
+      "asama": "tek",
+      "dosya": "olcum-gerileme-sunucu-tek.txt",
+      "sha256": "1d85fb15ba04187108611c73aba70dd052609819d2c9667d4ffc5aa8151dc2b4",
+      "komut": [
+        "bash",
+        "-c",
+        "cd terminal-onar/kapi && node sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:45:01+03:00",
+      "sure_sn": 8.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-kapi-sinav",
+      "asama": "tek",
+      "dosya": "olcum-gerileme-kapi-sinav-tek.txt",
+      "sha256": "eb878d6e6547550094d16451d2c077b8b1b485acc9e76eef5a3550f1c037ad6f",
+      "komut": [
+        "bash",
+        "terminal-onar/kapi/kapi-sinav.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:52:16+03:00",
+      "sure_sn": 46.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-koltuk-ac",
+      "asama": "tek",
+      "dosya": "olcum-gerileme-koltuk-ac-tek.txt",
+      "sha256": "96240ad9390ce27d0187127b13497fc7b2303b4f068f165d7bd8f0d6bccfbbaf",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-ac.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:46:13+03:00",
+      "sure_sn": 21.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-koltuk-bagla",
+      "asama": "tek",
+      "dosya": "olcum-gerileme-koltuk-bagla-tek.txt",
+      "sha256": "f49694defaad4003d445e8df14d4bf6c4a57ac9fe599b64f3725f5e2986fc1b9",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/koltuk-bagla.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:46:36+03:00",
+      "sure_sn": 23.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-bekci-iz",
+      "asama": "tek",
+      "dosya": "olcum-gerileme-bekci-iz-tek.txt",
+      "sha256": "bd3c41c71cfcec7144059dd1c411e6abd2478e3141e26616284dec85135e8536",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/bekci-iz.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:51:23+03:00",
+      "sure_sn": 1.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "repo-kapilari",
+      "asama": "tek",
+      "dosya": "olcum-repo-kapilari-tek.txt",
+      "sha256": "2a304437e9ad9978de60629d682b90fad4fecf5a166784421dd4ace3d417100b",
+      "komut": [
+        "bash",
+        "-c",
+        "node ahi/schema/validate-repo.mjs . --strict && node ahi/schema/version-lint.mjs ."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:52:17+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dava-gunluk",
+      "asama": "tek",
+      "dosya": "olcum-dava-gunluk-tek.txt",
+      "sha256": "09feffa8574a97edc184d729978b1e04162a80dc12ab2849f3f78ea90eb9fe74",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/dava-gunluk.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:50:25+03:00",
+      "sure_sn": 0.3
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-bekci-yorum",
+      "asama": "tek",
+      "dosya": "olcum-gerileme-bekci-yorum-tek.txt",
+      "sha256": "d37b87ac22d9254ff21dd7935a59b701d4bedbf8a45e9f67457ded72ccf3183a",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/bekci-yorum.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:51:25+03:00",
+      "sure_sn": 1.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-onar",
+      "asama": "tek",
+      "dosya": "olcum-gerileme-onar-tek.txt",
+      "sha256": "1c8604bcb1543dfb3fbfc466fb16329965321ae3bf63543dbe6efebb27198ced",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/onar.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:51:27+03:00",
+      "sure_sn": 2.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gerileme-kur-bag",
+      "asama": "tek",
+      "dosya": "olcum-gerileme-kur-bag-tek.txt",
+      "sha256": "9eaea6c318ee9caf14726dc5e1c1c994822c585985540f903c910c56b6f3668e",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/kur-bag.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:51:30+03:00",
+      "sure_sn": 2.8
+    }
+  ],
+  "imza": "5462e1826ff938f66105aca6130560efe31a14236715f78cd68d1da3eac49870"
+}

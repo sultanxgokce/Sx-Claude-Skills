@@ -1,0 +1,7 @@
+$ bash _agents/fabrika/kanit/tmux-kill-server-bekcisi/vaka.sh /usr/bin/tmux
+# rc=1 sure=1.0s zaman=2026-10-20T17:37:14+03:00
+--- stdout ---
+kutu sunucusu: pid=3340255 · koltuk oturumu: koltuk
+kill-server rc=0
+SONUÇ: kutu sunucusu ÖLDÜ — bütün koltuklar gitti (K43HN)
+--- stderr ---

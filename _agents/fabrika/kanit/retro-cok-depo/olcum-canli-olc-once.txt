@@ -1,0 +1,8 @@
+$ bash _agents/fabrika/kanit/retro-cok-depo/canli-olc.sh /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/retro-eski.py MİRAHUR:2026-W42 HENDESE:2026-W42 BÂNİ:2026-W42 MİRAHUR:2026-W43
+# rc=0 sure=0.1s zaman=2026-10-20T21:21:38+03:00
+--- stdout ---
+MİRAHUR   2026-W42 · kart 9/3/2 · göz turu 8 · depolar: _agents/fabrika/kartlar
+HENDESE   2026-W42 · kart 5/4/1 · göz turu 11 · depolar: _agents/fabrika/kartlar
+BÂNİ      2026-W42 · kart 25/19/5 · göz turu 57 · depolar: _agents/fabrika/kartlar
+MİRAHUR   2026-W43 · kart 3/2/0 · göz turu 0 · depolar: _agents/fabrika/kartlar
+--- stderr ---

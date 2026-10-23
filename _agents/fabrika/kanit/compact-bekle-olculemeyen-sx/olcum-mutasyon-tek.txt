@@ -1,0 +1,7 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/sx-fnx-mutasyon.sh
+# rc=0 sure=56.6s zaman=2026-10-18T21:27:24+03:00
+--- stdout ---
+SONRA                          toplam=37 geçen=37 düşen=0 | düşen: 
+M1 ölçülemedi kapısı yok  toplam=37 geçen=35 düşen=2 | düşen:   ✗ B7 — iz=send-keys -t =NEDIM C-u   ✗ B7b — /tmp/claude-1000/-config-projects-Ne 
+M2 tavan nedeni yok            toplam=37 geçen=36 düşen=1 | düşen:   ✗ B7b — /tmp/claude-1000/-config-projects-Ne 
+--- stderr ---

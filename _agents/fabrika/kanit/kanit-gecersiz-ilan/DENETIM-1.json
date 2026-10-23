@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "kanit-gecersiz-ilan",
+  "pr": "381",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T19:32:09+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 80642,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 87997
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Özgün kaydı koruyan, sha+zamana bağlı iptal ilanı eklenmiş; doğrulama, özet, liste, denetçi, kart ve birleştirme kapısı etkin rengi ortak işlevden okuyor. Önce şu uygulama açığını çözün: aynı dosya içeriği aynı zaman çözünürlüğünde yeniden ölçülürse eski ilan yeni ölçüme de uygulanabilir; ayrıca sunulan çıktı yeni T22/T23 satırlarını doğrudan göstermiyor.",
+    "bulgular": [
+      {
+        "ne": "İlanın ölçüm kimliği yalnız hedef sha256 ve zamandan oluşuyor; yeniden ölçüm aynı çıktıyı üretir ve aynı zaman değerine denk gelirse eski ilan düşmez. Bu, “hedef yeniden ölçülürse ilan uygulanmaz” davranışını her durumda sağlamıyor; benzersiz kayıt kimliği veya monoton nonce gerekir.",
+        "kanit": "gecersiz_ilanlari yalnız `(h.sha256, h.zaman) == (g.hedef_sha256, g.hedef_zaman)` karşılaştırıyor; cmd_gecersiz de izi yalnız `sha256|zaman` üzerinden üretiyor. T22 yeniden ölçüm sınavı çıktıyı `echo 7`den `echo 8`e değiştirerek sha'yı zorunlu olarak değiştirdiği için aynı içerikle yeniden ölçüm vakasını sınamıyor.",
+        "konum": "yazilim-fabrikasi/scripts/kanit.py: gecersiz_ilanlari ve cmd_gecersiz; yazilim-fabrikasi/scripts/kanit.test.sh: T22 yeniden_olcum_ilani_dusurur",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; önce/sonra dört sınavın tümü rc=0, sarı kayıt yok. Ancak gösterilen kanit.test.sh çıktıları ilk 60 satırda kesildiğinden yeni T22/T23 kapıları ve mutasyon sonuçları satır bazında görünmüyor; bunların geçtiği yalnız tüm betiğin rc=0 sonucundan anlaşılabiliyor. Ölçüm çifti var ama önce/sonra ikisi de yeşil olduğundan davranış farkını tek başına göstermiyor."
+  }
+}

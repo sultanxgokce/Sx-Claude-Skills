@@ -1,0 +1,16 @@
+$ bash -c d=$(mktemp -d); git -C "$d" init -q; export KANIT_DEPO="$d"; K="$1"; bash "$K" olcum demo testler --asama sonra -- bash -c "echo 12 gecti; exit 0" >/dev/null; echo "## ilan:"; bash "$K" gecersiz demo testler --neden "boru cikis kodunu maskeledi, olcum yanlis" --kim HENDESE; r=$?; echo "## gecersiz rc=$r"; echo "## dogrula:"; bash "$K" dogrula demo; echo "## dogrula rc=$?"; echo "## liste --etkin:"; bash "$K" liste demo --etkin; exit $r _ /tmp/claude-1000/-config-projects-Nexus/f30fc3e3-ae41-40d7-be56-cc333d810a30/scratchpad/4k/ana/kanit.sh
+# rc=2 sure=0.2s zaman=2026-10-18T19:34:46+03:00
+--- stdout ---
+## ilan:
+## gecersiz rc=2
+## dogrula:
+✓ manifest sağlam: 1 kayıt, imza ve sha'lar tutuyor
+## dogrula rc=0
+## liste --etkin:
+--- stderr ---
+usage: kanit.py [-h] [--depo DEPO]
+                {olcum,ekran,dosya,canli,dogrula,ozet,liste} ...
+kanit.py: error: argument cmd: invalid choice: 'gecersiz' (choose from olcum, ekran, dosya, canli, dogrula, ozet, liste)
+usage: kanit.py [-h] [--depo DEPO]
+                {olcum,ekran,dosya,canli,dogrula,ozet,liste} ...
+kanit.py: error: unrecognized arguments: --etkin

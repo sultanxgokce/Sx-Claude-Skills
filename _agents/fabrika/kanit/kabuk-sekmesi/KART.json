@@ -1,0 +1,31 @@
+{
+  "is": "kabuk-sekmesi",
+  "cumle": "terminal-onar: her kutuda sabit boş kabuk sekmesi <kutu>-kabuk — onar.sh eksikse kurar (sade kabuk, proje dizininde, Claude yok, var olanı öldürmez; kapı/ttyd yeniden açılınca da kalır, tmux silinirse bekçi dakika içinde geri kurar); sekme listesinde ana'nın yanında 'kabuk' adıyla görünür; Kadro'da altyapı (kapatılamaz)",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-10-22T14:53:27+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: bekçi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5HCACPJNCTNGQF4C3GT5BTK",
+  "tahmin_dk": 120,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-22T14:53:27+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 ---
 name: gun-ortasi
 description: Gün ortası planı — sabahki plan (ya da günün işleri) erken bittiğinde "elde kalan iş var mı?" sorusunu ÖLÇEREK cevaplar; kalan işi dağınık kaynaklardan (plan çıpası, kartlar, konum çapaları, bağımsız göz raporları, gelen kutusu) bulup doğrular ve süzer; kalmadıysa kutunun ana hedeflerine bağlı, ölçülmüş bir boşluğu kapatan 2-3 geliştirme fikri önerir ve Sultan'ın seçimiyle günün ikinci yarısını planlar. Tetik: "/gun-ortasi", "plan bitti ne yapalım", "iş kaldı mı", "gün ortası planı", "yapacak iş kalmadıysa ne geliştirelim".
-version: 1.0.3
+version: 1.2.1
 ---
 
 # /gun-ortasi — gün ortası planı (ölç → doğrula → süz · yoksa fikir → sun → çıpa → icra)
@@ -88,8 +88,15 @@ Ancak doğrulanmış açık iş **sıfırsa** ve ölçülemeyen kaynaklar Sultan
 sabah planı: <N> madde · <N> kapandı · <N> kaldı      (çıpa yoksa: "sabah çıpası yok")
 ölçüm: <N> açık kart · <N> aday (<N> doğrulandı, <N> kapanmış çıktı) · <N> okunmamış mektup · ölçülemedi: <liste|yok>
 
-KALAN İŞ (sırayla — yoksa "yok, doğrulandı"):
-1. <Sultan-dilinde tek cümle> — <bitince ne değişir> · <kim>
+📋 BUGÜN · <tarih> · <N> madde · <N> ✅ kapandı · <N> 🟡 yarım · <N> ⬜ açık      ← cipa.sh tablo (KUTULU, zorunlu)
+┌────┬────────────────────────────────────────┬─────────┬───────┬──────────┐
+│ #  │ Madde                                  │ Sahip   │ Durum │ Kanıt    │
+├────┼────────────────────────────────────────┼─────────┼───────┼──────────┤
+│ G1 │ <Sultan-dilinde tek cümle>             │ <kim>   │  ⬜   │ —        │
+└────┴────────────────────────────────────────┴─────────┴───────┴──────────┘
+(kalan iş yoksa tablo yine basılır; sabah maddeleri görünür, altına "yok, doğrulandı")
+
+Günün kalanı (en çok 3): 1) … · 2) … · 3) …
 
 FİKİR (yalnız kalan iş yoksa, en çok 3):
 • <ne> — hedef: <hedef satırı> · ölçüm: <sinyal> · bitince: <ne değişir>
@@ -124,7 +131,7 @@ bash /config/.claude/skills/gunluk-plan/scripts/cipa.sh yaz --plan "G1) … | G2
 ```
 
 `cipa.sh yaz`'ı çıpa VARKEN kullanma — sabahki çıpayı siler. Onaydan sonra maddeleri sırayla yürüt (kutunun
-iş hattı geçerlidir); her madde bitince `cipa.sh tazele --madde <n> --durum kapandi --not "<kanıt>"`.
+iş hattı geçerlidir); her madde bitince `cipa.sh tazele --madde G<n> --durum kapandi --kanit "<kanıt>"` (madde tablodaki kimliğiyle verilir: `G1`, `3`).
 Bağlam eşiği geçerse: `cipa.sh compact-onerisi` (çıpa diskteyse öneri üretir) → Sultan'a sor.
 Akşam `/gunluk-plan kapanis` sabah + gün ortası maddelerini birlikte okur.
 
@@ -140,6 +147,18 @@ Akşam `/gunluk-plan kapanis` sabah + gün ortası maddelerini birlikte okur.
 - Sınav: `bash scripts/kalan.test.sh` (hermetik; gerçek kutuya dokunmaz).
 
 ## Sürüm notları
+- **1.2.1 (2026-10-18, MUAVİN · TELLAL bildirdi, gorev_01M55X6PGK9C9K8MRSY0E01W3Q):** `kalan.sh` okundu
+  kaydındaki mektubu **okunmamış** sayıyordu. Kök: `set -o pipefail` altında `printf | grep -q` — grep ilk
+  eşleşmede çıkar, printf SIGPIPE alır, boru rc≠0 döner ve "bulundu" "bulunamadı" sayılır. Büyük kayıtta
+  (TELLAL: 204 satır → 140/140/131) kesin. İki yer here-string'e çevrildi: gelen kutusu eşleşmesi ve çıpa tarih
+  kapısı. Kapılar **T5b** (64K üstü okundu kaydı, eşleşme başta) ve **T5c** (64K üstü çıpa); eski boruya dönen
+  her mutant kendi kapısını kırmızıya çevirir. 35 kapı.
+- **1.2.0 (2026-10-18, SERDAR · Sultan isteği):** sunum **kutulu tablo ZORUNLU** (gunluk-plan 1.6.0 ile aynı araç,
+  `cipa.sh tablo`); düz biçim `--md`. Sultan 18 Eki: "bu tarz bir görünüm istiyorum, tabloyu zorunlu gönder".
+- **1.1.0 (2026-10-17, MUAVİN · gorev_01M54TNAQV, Sultan):** gün ortası "KALAN İŞ" listesi artık
+  `/gunluk-plan` ile **tek** standart tablodur (madde · sahip · durum · kanıt), `cipa.sh tablo` basar;
+  satır dilbilgisi `gunluk-plan/sema/bugun-maddesi.md`'de, kokpit "Bugün" paneliyle ortak. Akşam
+  kapanışı da gün ortası maddelerini (`G<n>)`) kapıya sokar: açık G-maddesi varsa kapanış rc=4.
 - **1.0.3 (2026-10-05, bağımsız göz tur 3):** `cipa-ekle.sh` çıpanın varlığını ve TARİHİNİ
   kilitten **önce** soruyordu. Kilidi beklerken `cipa.sh yaz` dosyayı başka bir güne
   çevirebilir ve ekleme **yanlış günün çıpasına** yazardı (kontrol-sonra-kullan açığı).

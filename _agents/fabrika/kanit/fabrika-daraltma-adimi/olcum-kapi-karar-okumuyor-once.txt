@@ -1,0 +1,6 @@
+$ bash -c grep -c 'daraltmalar\|reis_kararlari' /tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/kapi-eski.sh; echo exit=$?
+# rc=0 sure=0.0s zaman=2026-10-18T17:21:18+03:00
+--- stdout ---
+0
+exit=1
+--- stderr ---

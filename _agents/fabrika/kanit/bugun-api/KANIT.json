@@ -1,0 +1,84 @@
+{
+  "is": "bugun-api",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-17T15:19:01+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "bugun-sinavi",
+      "asama": "once",
+      "dosya": "olcum-bugun-sinavi-once.txt",
+      "sha256": "7053b04504b8084bfc4c2f9567bf9cff8e18546a5cd25551dad6e0e511be029e",
+      "komut": [
+        "node",
+        "/tmp/tmp.KwHmco3kNE/bugun.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T15:09:15+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bugun-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-bugun-sinavi-sonra.txt",
+      "sha256": "c07530ba4b3aeffb5062a97261827e957361e462e7e172fa721f86e87765078f",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/bugun.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:19:01+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sunucu-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-sunucu-sinavi-sonra.txt",
+      "sha256": "7ccd01d08a293b5ef74698bdae7feaf54352ef5db75e281b265fe4b174010cdd",
+      "komut": [
+        "node",
+        "terminal-onar/kapi/sunucu.test.mjs"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:19:01+03:00",
+      "sure_sn": 6.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gercek-cipa-nexus",
+      "asama": "sonra",
+      "dosya": "olcum-gercek-cipa-nexus-sonra.txt",
+      "sha256": "b0ac79877d384c8dcab799369edec8122c7d3ea76b9a24173fdd1797a77df598",
+      "komut": [
+        "node",
+        "-e",
+        "import('/config/projects/_wt/Sx-Claude-Skills-bugun-api/terminal-onar/kapi/bugun.mjs').then(m=>{const b=m.bugunOku('/config/projects/Nexus');console.log(JSON.stringify({tarih:b.tarih,ajanlar:b.ajanlar.map(a=>({ajan:a.ajan,...a.sayilar})),bugun_degil:b.bugun_degil.map(x=>x.ajan+':'+x.tarih),okunamadi:b.okunamadi,toplam:b.toplam}))})"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:09:22+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sunucu-sinavi",
+      "asama": "once",
+      "dosya": "olcum-sunucu-sinavi-once.txt",
+      "sha256": "a6c955d3cbb17c0811ae329f3c5cb915352076154f97b2d0869cf96a41a6d8b1",
+      "komut": [
+        "node",
+        "/tmp/tmp.pQPuVDbjDo/sunucu.test.mjs"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T15:18:53+03:00",
+      "sure_sn": 6.4
+    }
+  ],
+  "imza": "17e443d7b7e611b117c47ee8029171849fed8fb670fcc6215de5e4ecffbf21f2"
+}

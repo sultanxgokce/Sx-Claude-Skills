@@ -1,0 +1,6 @@
+$ bash _agents/fabrika/kanit/sx-kart-takipsiz/gecis-provasi.sh origin/main
+# rc=1 sure=0.9s zaman=2026-10-23T03:45:35+03:00
+--- stdout ---
+ana kopya: layiha-global-20260722 b5ce5a2 · kart diskte 196 · hedef 3721ceb (takipli kart 71)
+geçiş: REDDEDİLDİ — error: The following untracked working tree files would be overwritten by checkout: (+67 kart satırı)
+--- stderr ---

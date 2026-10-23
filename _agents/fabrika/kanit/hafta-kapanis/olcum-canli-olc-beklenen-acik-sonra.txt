@@ -1,0 +1,11 @@
+$ bash -c python3 hafta-kapanis/scripts/hafta-kapanis.py olc --hafta 2026-W42 --kok '/tmp/tmp.ctYTv0C3l8/nexus-ince'; [ $? -eq 1 ]
+# rc=0 sure=0.2s zaman=2026-10-17T16:31:37+03:00
+--- stdout ---
+✗ HAFTA 2026-W42: AÇIK
+  ✗ K1 katılım: OK 1 · EKSİK 7 (MUAVİN, NAKKAŞ, BASİRET, BERİD, MUHAKKIK, MİRAHUR, HENDESE) · GEÇERSİZ 0 (—) — kutu retrosunu ajan yazar
+  ✗ K2 dersler → görev (D1): MERKEZ.md'de yazılı ders yok (## Dersler · `- M1) …`)
+  ✗ K3 süzüm: ✗ SÜZÜM KIRMIZI · 2026-W42 · 4 öneri, 4 sorun
+  ✗ K4 kaçış/tıkanma → ders: 18/18 kaçış/tıkanma ders damgası almadı: 2026-10-12T13:47:10Z (kaçış), 2026-10-12T16:02:47Z (kaçış), 2026-10-12T16:09:07Z (kaçış), 2026-10-15T09:45:30Z (kaçış), 2026-10-15T09:48:12Z (kaçış), 2026-10-15T09:48:17Z (kaçış), 2026-10-15T10:42:55Z
+  … K5 Sultan onayı: onay satırı yok
+  → _agents/handoff/retro/2026-W42/KAPANIS.md
+--- stderr ---

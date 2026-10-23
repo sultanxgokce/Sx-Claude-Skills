@@ -1,0 +1,5 @@
+$ git -C /config/projects/_wt/Sx-Claude-Skills-muhurdar-tarif-kaydi cat-file -e origin/main:tarif-kaydi/veri/terim-kaydi.json
+# rc=128 sure=0.0s zaman=2026-10-22T01:56:57+03:00
+--- stdout ---
+--- stderr ---
+fatal: path 'tarif-kaydi/veri/terim-kaydi.json' exists on disk, but not in 'origin/main'

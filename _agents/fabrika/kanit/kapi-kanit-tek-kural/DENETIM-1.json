@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "kapi-kanit-tek-kural",
+  "pr": "386",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-18T23:45:09+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 32550,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 18079
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kapı, kanıtı çağrılan uygun ağaçta, iş alanlarında, PR başında ve birincil depoda aynı öncelik düzeniyle arıyor; seçtiği yeri de açıkça bildiriyor. Ana sınavın 110/110 geçmesi ve altı hedefli mutantın tamamının yakalanması üretime hazır düzeyde kanıt sunuyor; yalnız belge tarihindeki küçük tutarsızlık rötuş niteliğinde.",
+    "bulgular": [
+      {
+        "ne": "SKILL.md değişikliği 19 Ekim diye tarihlenmiş, ancak araç imzalı manifest ve ölçümler 18 Ekim 2026 tarihli.",
+        "kanit": "Eklenen başlıkta “0.10.5, 19 Eki” yazarken manifest güncellemesi “2026-10-18T23:44:04+03:00” ve ölçüm kayıtları da 18 Ekim tarihini taşıyor.",
+        "konum": "yazilim-fabrikasi/SKILL.md:95; KANIT manifesti guncelleme/kayitlar.zaman",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü eski davranışta hedeflenen 7 kapının kaldığını, sonra ölçümü tüm sınav takımının rc=0 verdiğini gösteriyor. Hedef T14/T14b satırları 60 satırlık gösterimde görünmese de toplam 110/110 sonucu ile ayrıca altı bağımsız mutasyonun 6/6 yakalanması; iş alanı, dal eşleşmesi, PR başı, birincil araması, önek ve yer bildirimi iddialarını güçlü biçimde ölçüyor."
+  }
+}

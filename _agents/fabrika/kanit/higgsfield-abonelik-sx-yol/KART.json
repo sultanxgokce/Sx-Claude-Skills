@@ -1,0 +1,28 @@
+{
+  "is": "higgsfield-abonelik-sx-yol",
+  "cumle": "SKILL.md betik çağrıları mutlak beceri yolundan (/config/.claude/skills/higgsfield-abonelik/scripts/…), staging.sh ve flux-kontext zinciri 'bu pakette yok' diye işaretli, paket sınavı scripts/paket.test.sh (kendi dizininden, ağsız, kredisiz) + sınavın baktığı belgeler, sync-targets ve catalog kaydı; başka kutudan koşunca yol kırılmaz",
+  "istedi": "SERDAR (görev 3DBM27 · MEDDAH kararı 15 Eki)",
+  "aldi": "SERDAR-alt",
+  "zaman": "2026-10-22T23:56:12+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-10-22T23:56:12+03:00",
+      "olay": "daraltmadan dogdu",
+      "koken": "higgsfield-abonelik-sx"
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "koken": "higgsfield-abonelik-sx"
+}

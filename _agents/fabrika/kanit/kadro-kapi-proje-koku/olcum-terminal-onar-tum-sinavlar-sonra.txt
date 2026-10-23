@@ -1,0 +1,37 @@
+$ bash -c 
+  cd terminal-onar; d=0; for t in scripts/*.test.sh; do [ "$t" = scripts/compact.test.sh ] && continue; timeout 300 bash "$t" >/dev/null 2>&1 && echo "✓ $t" || { echo "✗ $t"; d=$((d+1)); }; done
+  for t in kapi/*.test.mjs; do timeout 300 node "$t" >/dev/null 2>&1 && echo "✓ $t" || { echo "✗ $t"; d=$((d+1)); }; done
+  echo "── compact.test.sh (Sx CI karantinasında, gorev_01M55499MB8CVR5NA14YKC8NZW — main dalında da K2 kırmızı) iki tarafta üçer kez:"
+  for i in 1 2 3; do a=$(timeout 300 bash scripts/compact.test.sh 2>&1 | grep -cE "^  ✗"); b=$(timeout 300 bash /tmp/tmp.1Je8xkH0Bw/terminal-onar/scripts/compact.test.sh 2>&1 | grep -cE "^  ✗"); echo "  koşum $i: bu dal düşen=$a · origin/main düşen=$b"; done
+  echo "düşen (compact hariç)=$d"; [ $d -eq 0 ]
+# rc=0 sure=260.2s zaman=2026-10-17T19:12:38+03:00
+--- stdout ---
+✓ scripts/bekci-iz.test.sh
+✓ scripts/kabuk-kapisi.test.sh
+✓ scripts/kapi-yenile.test.sh
+✓ scripts/koltuk-ac.test.sh
+✓ scripts/koltuk-adi.test.sh
+✓ scripts/koltuk-bagla.test.sh
+✓ scripts/koltuk-fark-filo.test.sh
+✓ scripts/kur-bag.test.sh
+✓ scripts/kurtarici-kapali.test.sh
+✓ scripts/kutu-adi.test.sh
+✓ scripts/oda-ortam.test.sh
+✓ scripts/onar.test.sh
+✓ scripts/sifre-yukle.test.sh
+✓ kapi/bugun.test.mjs
+✓ kapi/kadro-hal.test.mjs
+✓ kapi/kadro-yaz.test.mjs
+✓ kapi/kadro.test.mjs
+✓ kapi/kapi-yenile.test.mjs
+✓ kapi/kilit.test.mjs
+✓ kapi/kimlik.test.mjs
+✓ kapi/rapor.test.mjs
+✓ kapi/sunucu.test.mjs
+✓ kapi/tarayici-bul.test.mjs
+── compact.test.sh (Sx CI karantinasında, gorev_01M55499MB8CVR5NA14YKC8NZW — main dalında da K2 kırmızı) iki tarafta üçer kez:
+  koşum 1: bu dal düşen=1 · origin/main düşen=1
+  koşum 2: bu dal düşen=1 · origin/main düşen=1
+  koşum 3: bu dal düşen=1 · origin/main düşen=1
+düşen (compact hariç)=0
+--- stderr ---

@@ -1,0 +1,31 @@
+{
+  "is": "kapi-kadro-tarif-ucu",
+  "cumle": "terminal-onar kapısına iki salt-okur uç: /api/kadro/tarif (tarif-kaydi veri: uzmanlık·vazife·usul·terim, beyaz listeyle — yol/kaynak yok) ve /api/kadro/uzmanlik (agent-registry personas ad + uzmanliklar, diploma defteri durum); kaynak okunamazsa ölçülemedi, boş liste değil (Mühürdarlık G12, SERDAR 05:10 (A))",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-10-22T05:12:44+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5DCJNMY33WYSZSYXC8GTZQV",
+  "tahmin_dk": 90,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-22T05:12:44+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

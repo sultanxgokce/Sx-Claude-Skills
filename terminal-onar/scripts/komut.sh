@@ -7,8 +7,9 @@
 #   gunluk [N]             son N satır (varsayılan 30)
 #   compact [--esik N] [--koltuk ad] [--uygula] [--json]   kutudaki Claude koltuklarını ölç (bağlam % · son compact), eşik üstü BOŞ koltuğa /compact
 #   compact-bekle [--uygula]                               kuyruk turu: meşgulken kuyruğa alınan koltuk boşalınca /compact (bekçi çağırır)
+#   kapi-yenile [--kuru]   kapının pano.js'ini BAĞLANTI DÜŞÜRMEDEN tazele (SIGHUP; eski kapı/yoksa onar --web-yenile'ye düşer, söyler)
 set -u
-D="$(cd "$(dirname "$0")" && pwd)"; . "$D/ortak.sh"
+D="$(cd "$(dirname "$0")" && pwd)"; . "$D/ortak.sh" || exit 3   # kutu adı reddi → DUR, rc 3 (FSZ30)
 case "${1:-durum}" in
   durum)    shift; exec bash "$D/durum.sh" "$@" ;;
   onar)     shift; exec bash "$D/onar.sh" "$@" ;;
@@ -18,5 +19,6 @@ case "${1:-durum}" in
   gunluk)   tail -n "${2:-30}" "$GUNLUK" 2>/dev/null || echo "günlük boş" ;;
   compact)  shift; exec bash "$D/compact.sh" "$@" ;;
   compact-bekle) shift; exec bash "$D/compact.sh" --bekle "$@" ;;
+  kapi-yenile) shift; exec bash "$D/kapi-yenile.sh" "$@" ;;
   *) sed -n '2,10p' "$0"; exit 2 ;;
 esac

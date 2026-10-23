@@ -1,0 +1,52 @@
+{
+  "tur": 2,
+  "is": "hafta-kapanis",
+  "pr": "360",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T16:25:04+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 53325,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 10,
+    "bayt": 18386
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Kapı önceki turun üç ana kusurunu kapatmış: MERKEZ.md’yi değiştirmeden K1’i ölçüyor, bozuk kartı SARI yapıyor ve D1’i tam eşleşmeyle doğruluyor; sağlam manifest, rc=0 sınav ve canlı W42 ölçümü bunu destekliyor. Ancak iş kartının zorunlu tuttuğu D1 ve ders damgalarının yerine gerekçeli RED’i de yeterli sayarak haftayı kapatabiliyor; önce bu talep sapmasını çöz.",
+    "bulgular": [
+      {
+        "ne": "K2, iş kartındaki “ders→görev D1 damgası” zorunluluğuna rağmen bir dersi gerekçeli RED ile kapsanmış kabul ediyor; böylece her ders için D1 bulunmadan hafta kapanabiliyor.",
+        "kanit": "`k2_dersler`, `RED_DERS_RE` eşleşmesinde dersi `kapsanan` sözlüğüne ekliyor. H4 fikstüründe M2 yalnız `- M2 → RED: ...` satırına sahipken H4a dört kapının yeşil ve sonucun ONAY BEKLİYOR olduğunu, H6a ise onay eklenince KAPANDI olduğunu doğruluyor.",
+        "konum": "hafta-kapanis/scripts/hafta-kapanis.py:37,112-124; olcum-sinav-sonra.txt:H4a/H4c/H6a",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "K4, iş kartının istediği ders damgası yerine `RED: <gerekçe>` değerini de geçerli sayıyor; bir kaçış veya tıkanma hiçbir M<n> dersine bağlanmadan kapı yeşile dönebiliyor.",
+        "kanit": "`KACIS_SATIR_RE`, hedef olarak `M\\d+|RED: .{10,}` kabul ediyor ve `k4_kacis` yalnız anahtarın `damga` sözlüğünde bulunmasına bakıyor. H4 fikstüründe `kart:is-b` yalnız RED satırıyla işaretlenmesine rağmen H4d K4’ün yeşil olduğunu gösteriyor.",
+        "konum": "hafta-kapanis/scripts/hafta-kapanis.py:38,165-172; hafta-kapanis/scripts/hafta-kapanis.test.sh:H4 fikstürü; olcum-sinav-sonra.txt:H4d",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Global becerinin hedef makineye kurulmuş olduğu bu konteynerde doğrulanmamış; kaynak ve global eşleme hazırlanmış olsa da kurulum sonrası ölçüm yok.",
+        "kanit": "Önce ölçümü `/config/.claude/skills/hafta-kapanis` için `YOK` ve rc=1 gösteriyor; manifestte aynı hedef için bir sonra ölçümü bulunmuyor, sınav depo içindeki `hafta-kapanis/scripts/hafta-kapanis.test.sh` yolundan çalışıyor.",
+        "konum": "olcum-beceri-varligi-once.txt; kanıt manifesti `beceri-varligi` ve `sinav` kayıtları",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "Sultan'ın Mac'i"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı manifest kaydı yok. Rc=0 hermetik sınav, önce beceri-yok ölçümü ve gerçekçi 2026-W42 canlı ölçümü güçlü kanıt oluşturuyor; ayrıca önceki turdaki saltlık, bozuk kart ve tam D1 eşleşmesi kusurlarının yeni sınavlarla kapandığı görülüyor. Buna karşılık RED’in karttaki zorunlu D1/ders damgası yerine kabul edilmesi sınavlarda özellikle beklenen davranış yapılmış; bu nedenle test yeşili hedef uyumunu kanıtlamıyor ve global kurulum için önce/sonra çifti hâlâ yok."
+  }
+}

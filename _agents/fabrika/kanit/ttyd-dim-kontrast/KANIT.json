@@ -1,0 +1,72 @@
+{
+  "is": "ttyd-dim-kontrast",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-16T11:32:26+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "ana-dal-dim-okunmuyor",
+      "asama": "once",
+      "dosya": "olcum-ana-dal-dim-okunmuyor-once.txt",
+      "sha256": "15535638676f8397bff941d917715a2ecad4a8239511f86b852dcf55f6bef399",
+      "komut": [
+        "bash",
+        "-c",
+        "\necho \"BEKLENEN KIRMIZI — ana dal ($(git rev-parse --short origin/main)) pano.js (kanca yok) + onar.sh teması (brightBlack yok) ile AYNI sınav: D kapıları düşmeli, Ö kapıları geçmeli.\"\nT=$(mktemp -d); cp -r terminal-onar \"$T/\"; git show origin/main:terminal-onar/kapi/genel/pano.js > \"$T/terminal-onar/kapi/genel/pano.js\"; git show origin/main:terminal-onar/scripts/onar.sh > \"$T/terminal-onar/scripts/onar.sh\"\ncd \"$T/terminal-onar/kapi\" && timeout 180 node dim-okunur-sinav.mjs 2>&1 | grep -E \"tema|✓|✗|geçti\"; r=${PIPESTATUS[0]}; rm -r -- \"$T\"; exit $r"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-16T11:21:34+03:00",
+      "sure_sn": 47.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dim-okunur-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-dim-okunur-sinavi-sonra.txt",
+      "sha256": "594fa7d788e775cd8a20eed9291922ace41afacf7304b5cd03915339794e171e",
+      "komut": [
+        "bash",
+        "-c",
+        "\nr=0; cd terminal-onar/kapi\ntimeout 180 node dim-okunur-sinav.mjs --kare ../../_agents/fabrika/kanit/ttyd-dim-kontrast/kare > /tmp/o-dim.txt 2>&1; rc=$?; grep -E \"tema|✓|✗|geçti\" /tmp/o-dim.txt; [ $rc = 0 ] || r=1\ntimeout 300 node pano-sinav.mjs > /tmp/o-dim.txt 2>&1; rc=$?; echo \"pano-sinav.mjs exit=$rc $(grep -E \"GEÇEN\" /tmp/o-dim.txt | tail -1) · S6 1.3.0: $(grep -c \"✓ S6\" /tmp/o-dim.txt)\"; [ $rc = 0 ] || r=1\ntimeout 300 bash kapi-sinav.test.sh > /tmp/o-dim.txt 2>&1; rc=$?; echo \"kapi-sinav.test.sh exit=$rc $(grep -E \"^SONUÇ: kapı\" /tmp/o-dim.txt)\"; [ $rc = 0 ] || r=1\necho \"kareler: $(ls ../../_agents/fabrika/kanit/ttyd-dim-kontrast/ | grep -c png) png · gerçek tmux sinav-* oturumu: $(tmux ls 2>/dev/null | grep -c \"^sinav\")\"\nexit $r"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-16T11:23:54+03:00",
+      "sure_sn": 116.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dim-okunur-sinavi-ve-pano",
+      "asama": "sonra",
+      "dosya": "olcum-dim-okunur-sinavi-ve-pano-sonra.txt",
+      "sha256": "4bc113fe3520a610d169404c8e869011dccab091951cbe077d563aee89b6c6f8",
+      "komut": [
+        "bash",
+        "-c",
+        "\nr=0; cd terminal-onar/kapi\ntimeout 180 node dim-okunur-sinav.mjs --kare ../../_agents/fabrika/kanit/ttyd-dim-kontrast/kare > /tmp/o-dim.txt 2>&1; rc=$?; grep -E \"tema|✗|geçti\" /tmp/o-dim.txt; echo \"dim-okunur-sinav exit=$rc · D2 gri-244 okunur: $(grep -c \"✓ D2\" /tmp/o-dim.txt) · Ö2 sorun ölçüldü: $(grep -c \"✓ Ö2\" /tmp/o-dim.txt)\"; [ $rc = 0 ] || r=1\ntimeout 300 node pano-sinav.mjs > /tmp/o-dim.txt 2>&1; rc=$?; echo \"pano-sinav.mjs exit=$rc $(grep -E \"GEÇEN\" /tmp/o-dim.txt | tail -1) · S6 köprü 1.3.0: $(grep -c \"✓ S6\" /tmp/o-dim.txt)\"; grep \"✗\" /tmp/o-dim.txt | cut -c1-200; [ $rc = 0 ] || r=1\ntimeout 300 bash kapi-sinav.test.sh > /tmp/o-dim.txt 2>&1; rc=$?; echo \"kapi-sinav.test.sh exit=$rc $(grep -E \"^SONUÇ: kapı\" /tmp/o-dim.txt)\"; [ $rc = 0 ] || r=1\necho \"(önceki kayıtta pano-sinav 33/34 düştü, yeniden koşumda 34/34 — tek koşumluk dalgalanma; kayıt dürüstlük için silinmedi)\"\necho \"kareler: $(ls ../../_agents/fabrika/kanit/ttyd-dim-kontrast/ | grep -c png) png · gerçek tmux sinav-* oturumu: $(tmux ls 2>/dev/null | grep -c \"^sinav\")\"\nexit $r"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T11:27:29+03:00",
+      "sure_sn": 113.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sayisal-kontrast-ciftleri-ve-pano-uc-kosum",
+      "asama": "sonra",
+      "dosya": "olcum-sayisal-kontrast-ciftleri-ve-pano-uc-kosum-sonra.txt",
+      "sha256": "7e77ebd989c63d9d6b77d1bd3a15758999ceb303b847baa050ea13df0a9e38df",
+      "komut": [
+        "bash",
+        "-c",
+        "\nr=0; cd terminal-onar/kapi\ntimeout 180 node dim-okunur-sinav.mjs > /tmp/o-dim.txt 2>&1; rc=$?; grep -E \"ÖLÇÜM|^    L|✗|geçti\" /tmp/o-dim.txt; echo \"dim-okunur-sinav exit=$rc\"; [ $rc = 0 ] || r=1\necho \"── pano-sinav.mjs ×3 ardışık (tur 1 bulgusu: 33/34 dalgalanması; düşen kapı kayda)\"\nfor n in 1 2 3; do timeout 300 node pano-sinav.mjs > /tmp/o-pano-$n.txt 2>&1; rc=$?; echo \"koşum $n exit=$rc $(grep -E \"GEÇEN\" /tmp/o-pano-$n.txt | tail -1) · yük $(cut -d\" \" -f1 /proc/loadavg)\"; grep \"✗\" /tmp/o-pano-$n.txt | cut -c1-260; [ $rc = 0 ] || r=1; done\necho \"gerçek tmux sinav-* oturumu: $(tmux ls 2>/dev/null | grep -c \"^sinav\")\"\nexit $r"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T11:32:26+03:00",
+      "sure_sn": 121.6
+    }
+  ],
+  "imza": "d5876a56c5f6fd96e4cfce73bedd3a01c62ba75be62c21a25dbe4f0066f839ae"
+}

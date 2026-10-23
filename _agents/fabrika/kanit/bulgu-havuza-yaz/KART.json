@@ -1,0 +1,22 @@
+{
+  "is": "bulgu-havuza-yaz",
+  "cumle": "bulgu.sh yaz varsayılan olarak görevi 'havuz' durumunda açar (Sırada'ya düşmez); --gorev bayrağıyla eskisi gibi 'acik' açılır. Defter 'havuz'u tanımıyorsa açıkça reddeder, sessiz düşmez.",
+  "istedi": "Sultan (D1 21 Eki 'Eleme turu + bulgu kapısı (önerim)' · session_01Ge4BawKcUrcm1pdV8WANyF)",
+  "aldi": "SERDAR",
+  "zaman": "2026-10-21T17:00:29+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": []
+}

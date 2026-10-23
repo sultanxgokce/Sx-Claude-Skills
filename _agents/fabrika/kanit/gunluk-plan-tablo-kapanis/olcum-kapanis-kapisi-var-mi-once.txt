@@ -1,0 +1,5 @@
+$ bash -c grep -cE '^  (tablo|kapanis)' /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/cipa-once.sh
+# rc=1 sure=0.0s zaman=2026-10-17T15:34:24+03:00
+--- stdout ---
+0
+--- stderr ---

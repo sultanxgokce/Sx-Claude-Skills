@@ -1,0 +1,81 @@
+{
+  "is": "terminal-onar-bekci-gecikme",
+  "arac": "kanit.py/0.4.0",
+  "guncelleme": "2026-10-18T16:45:50+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "bekci-satiri",
+      "asama": "once",
+      "dosya": "olcum-bekci-satiri-once.txt",
+      "sha256": "66db14a6815dcd59cd154a6f1e58f48f21bf999a74d820b7f5e67a7cbcc3f07e",
+      "komut": [
+        "bash",
+        "-c",
+        "git show origin/main:terminal-onar/scripts/ortak.sh | grep -n \"^BEKCI_SATIR=\"; echo \"gecikme önekli satır sayısı: $(git show origin/main:terminal-onar/scripts/ortak.sh | grep -c \"^BEKCI_SATIR=.*sleep\")\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:31:45+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "dosya",
+      "etiket": "kutu-ici-cron-onerisi",
+      "asama": "tek",
+      "dosya": "dosya-kutu-ici-cron-onerisi-tek.md",
+      "sha256": "bf46b8cb52c6c823f76822e76d3ccc6d24eb72257881d542ec9a6033e77b9fbf",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/kutu-ici-cron-onerisi.md",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:31:45+03:00"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "sonra",
+      "dosya": "olcum-sinav-sonra.txt",
+      "sha256": "9572edc27dbbe74303cb43b17de130830cc45c100d4369d39164a42d2519c6d3",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/bekci-gecikme.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:40:49+03:00",
+      "sure_sn": 1.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bekci-satiri",
+      "asama": "sonra",
+      "dosya": "olcum-bekci-satiri-sonra.txt",
+      "sha256": "250f2899f5cad37220179133bee893c46d3304351ca472ba3b55a958aeb165b2",
+      "komut": [
+        "bash",
+        "-c",
+        "for k in code akar huma nova; do printf \"%-6s \" $k; env -i PATH=/usr/bin:/bin HOME=/nonexistent TO_KUTU=$k TO_PROJE=/nonexistent/$k bash -c \". terminal-onar/scripts/ortak.sh >/dev/null 2>&1; printf %s\\\\\\\\n \\\"\\$BEKCI_SATIR\\\"\" | cut -c1-60; done"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:40:49+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tum-sinavlar",
+      "asama": "sonra",
+      "dosya": "olcum-tum-sinavlar-sonra.txt",
+      "sha256": "aea976118bafa6c36529c64f886d14d73e1df4f837da29cc61d9044d82fc3a97",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/sx-tum.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T16:45:50+03:00",
+      "sure_sn": 289.4
+    }
+  ],
+  "imza": "a2654a9cd6ac753e6c81f92cc2b9f27b324ca9c648d0477eda08d3b89c8877ff"
+}

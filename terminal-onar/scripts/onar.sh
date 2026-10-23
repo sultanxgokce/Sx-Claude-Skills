@@ -4,7 +4,7 @@
 #   --web-yenile   web terminalini sağlam olsa bile yeniden başlat (ör. yeni parola kasaya konduktan sonra)
 # RC: 0 = sonunda durum sağlam · 1 = hâlâ bozuk (sonraki kademeye geç) · 2 = parola kasada yok
 set -u
-. "$(dirname "$0")/ortak.sh"
+. "$(dirname "$0")/ortak.sh" || exit 3   # kutu adı reddi: ortak.sh sebebi tek satır yazdı → DUR, rc 3 (FSZ30; eskiden unbound variable ile çöküyordu)
 WEB_YENILE=0; [ "${1:-}" = "--web-yenile" ] && WEB_YENILE=1
 gunluk "K0 onar başladı"
 SIFRE_YOK=0
@@ -46,6 +46,9 @@ if ! kabuk_gecerli_mi; then
   exit 3
 fi
 
+# 0 · tmux bekçisi (K43HN) — kutunun canlı sunucusunu içeriden kapatan çıplak kill-server'ı durdurur; yalnız değişince günlüğe yazar
+_tb="$(tmux_bekcisi_kur)"; [ "$_tb" = güncel ] || gunluk "K0 tmux bekçisi: $_tb"
+
 # Bir tmux oturumunda Claude başlat (kabuk boştaysa aynı pencerede, değilse yeni pencerede).
 # 🔴 26 Eyl dersi: eski sürüm "yeni pencere" açamayınca komutu CANLI Claude'un içine yazdı.
 #    Artık hedef pane kimliğiyle (%N) seçilir ve yazmadan hemen önce yeniden ölçülür:
@@ -73,6 +76,9 @@ claude_baslat() {
 if ! tmux_var "$ANA_TMUX"; then
   tmux new-session -d -s "$ANA_TMUX" -c "$PROJE" && gunluk "K0 tmux $ANA_TMUX kuruldu"
 fi
+
+# 1b · el kabuğu (Claude'suz, boş) — yalnız yoksa kurulur
+kabuk_kur || true
 
 # 2 · konuşma (Claude) — hep AYNI konuşmaya dön (kimlik diskte), asla rastgele "son oturum"a değil
 if ! claude_oturumu "$ANA_TMUX" >/dev/null; then
@@ -106,7 +112,7 @@ if [ $WEB_YENILE = 1 ] || ! ttyd_saglam; then
   # bağlantı bugünkü gibi ana oturuma gider.
   tmux new-session -d -s "$TTYD_TMUX" "exec $TTYD_BIN -W -a -i $TTYD_SOKET -b $TABAN/tty \
     -t fontSize=12 -t disableLeaveAlert=true -t disableResizeOverlay=true -t titleFixed=$KUTU \
-    -t 'theme={\"background\":\"#15120e\",\"foreground\":\"#ede5d7\",\"cursor\":\"#c9914f\"}' \
+    -t 'theme={\"background\":\"#15120e\",\"foreground\":\"#ede5d7\",\"cursor\":\"#c9914f\",\"brightBlack\":\"#a89f91\"}' \
     bash $BETIK_DIZ/koltuk-bagla.sh $ANA_TMUX $PROJE"
   bekle_saglam ttyd_saglam "$TTYD_BEKLE" || true
   ttyd_saglam && gunluk "K0 terminal (ttyd) başlatıldı" || gunluk "K0 HATA: terminal ayağa kalkmadı ($(ttyd_kod))"
@@ -121,14 +127,22 @@ if [ $WEB_YENILE = 1 ] || ! kapi_saglam; then
     # Parola tmux komutuna YAZILMAZ: kapıyı başlatan kabuk onu env dosyasından kendisi okur.
     # Rapor dizini kabuk-kaçışlı girer (printf %q): boşluk/metakarakter içeren yol komutu bölemez (bağımsız göz, tur 1).
     tmux new-session -d -s "$KAPI_TMUX" \
-      "set -a; . $ENV_DOSYA; set +a; KAPI_PORT=$KAPI_PORT KAPI_TTYD_SOKET=$TTYD_SOKET TO_ANA_TMUX=$ANA_TMUX TO_DURUM_DIZ=$DURUM_DIZ KAPI_TABAN=$TABAN KAPI_RAPOR_DIZ=$(printf %q "$RAPOR_DIZ") TO_KUTU=$KUTU exec node $KAPI_DIZ/sunucu.mjs >> $DURUM_DIZ/kapi.log 2>&1"
+      "set -a; . $ENV_DOSYA; set +a; KAPI_PORT=$KAPI_PORT KAPI_TTYD_SOKET=$TTYD_SOKET TO_ANA_TMUX=$ANA_TMUX TO_DURUM_DIZ=$DURUM_DIZ KAPI_TABAN=$TABAN KAPI_RAPOR_DIZ=$(printf %q "$RAPOR_DIZ") TO_KUTU=$KUTU $(kapi_kayit_ortami) exec node $KAPI_DIZ/sunucu.mjs >> $DURUM_DIZ/kapi.log 2>&1"
     bekle_saglam kapi_saglam "$KAPI_BEKLE" || true
     kapi_saglam && gunluk "K0 kapı başlatıldı" || gunluk "K0 HATA: kapı ayağa kalkmadı ($(kapi_kod))"
   fi
 fi
 
 # 4 · kurtarıcı ajan — kendi Claude'u, yalnız onarım betiklerine sorusuz izinli
-if ! claude_oturumu "$KURT_TMUX" >/dev/null; then
+#     İşaret varken (kurtarici_kapali, ortak.sh) AÇILMAZ; açıksa KAPATILIR — durum işarete yakınsar.
+if kurtarici_kapali; then
+  if tmux_var "$KURT_TMUX"; then
+    tmux kill-session -t "=$KURT_TMUX" 2>/dev/null && gunluk "K0 kurtarıcı $KURT_KAPALI_SEBEP — açık bulundu, KAPATILDI ($KURT_TMUX)" \
+      || gunluk "K0 HATA: kurtarıcı kapalı olmalı ama $KURT_TMUX kapatılamadı"
+  else
+    gunluk "K0 kurtarıcı $KURT_KAPALI_SEBEP — açılmadı (işaret: $([ "${TO_KURTARICI:-}" = 0 ] && echo TO_KURTARICI=0 || echo "$KURT_KAPALI_DOSYA"))"
+  fi
+elif ! claude_oturumu "$KURT_TMUX" >/dev/null; then
   tmux_var "$KURT_TMUX" || tmux new-session -d -s "$KURT_TMUX" -c "$PROJE"
   kid=$(cat "$DURUM_DIZ/kurtarici-oturum" 2>/dev/null)
   izin="--permission-mode auto --allowedTools 'Bash(bash $BETIK_DIZ/*)'"

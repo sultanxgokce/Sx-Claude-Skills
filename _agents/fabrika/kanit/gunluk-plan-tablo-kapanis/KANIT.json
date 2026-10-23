@@ -1,0 +1,268 @@
+{
+  "is": "gunluk-plan-tablo-kapanis",
+  "arac": "kanit.py/0.4.0",
+  "guncelleme": "2026-10-17T18:00:19+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapanis-kapisi-var-mi",
+      "asama": "once",
+      "dosya": "olcum-kapanis-kapisi-var-mi-once.txt",
+      "sha256": "91a5d1249da5619c5913a65f22d82c41c088d334236ea96e75a010be0e9cbd41",
+      "komut": [
+        "bash",
+        "-c",
+        "grep -cE '^  (tablo|kapanis)' /tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/cipa-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T15:34:24+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cipa-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-cipa-sinavi-sonra.txt",
+      "sha256": "4dcaf8c3893588edf6969b47c0c0cfe089913c01307464ddd28110794b514381",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/cipa.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:34:28+03:00",
+      "sure_sn": 4.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gun-ortasi-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-gun-ortasi-sinavi-sonra.txt",
+      "sha256": "6ee9ff27963f56084b5f617301519dabb4550b96a86db8c832da6c13a590f525",
+      "komut": [
+        "bash",
+        "gun-ortasi/scripts/kalan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:34:36+03:00",
+      "sure_sn": 8.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ornek-tablo-ve-kapanis",
+      "asama": "sonra",
+      "dosya": "olcum-ornek-tablo-ve-kapanis-sonra.txt",
+      "sha256": "f01f44addfef61eab9a50a75641bd7b76f1c8bab00bbfbb3a5457ec4ccd1ac48",
+      "komut": [
+        "python3",
+        "gunluk-plan/scripts/tablo.py",
+        "gunluk-plan/sema/ornek-cipa.md",
+        "--kapanis"
+      ],
+      "rc": 4,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T15:34:37+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "dosya",
+      "etiket": "mutasyon",
+      "asama": "sonra",
+      "dosya": "dosya-mutasyon-sonra.txt",
+      "sha256": "8f3979c673e8dc2e12682140d055eeafe5d0bbeddd5b611582254bed3ad28aaf",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/gp-mut.txt",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:34:37+03:00"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cipa-sinavi-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-cipa-sinavi-tur2-sonra.txt",
+      "sha256": "d81571e61aacf89ca34a9514c3f90636296c10039c8af177a17b25c7a35f1f7b",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/cipa.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:42:47+03:00",
+      "sure_sn": 5.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cipa-sinavi-kapi-355-ile",
+      "asama": "sonra",
+      "dosya": "olcum-cipa-sinavi-kapi-355-ile-sonra.txt",
+      "sha256": "dcaad143d6efd924249d856914521bacd42e1afc56fc4cdb82da6022a3c28eb7",
+      "komut": [
+        "env",
+        "GUNLUK_PLAN_KAPI_BUGUN=/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bugun-355.mjs",
+        "bash",
+        "gunluk-plan/scripts/cipa.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:42:51+03:00",
+      "sure_sn": 4.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-uyum-355",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-uyum-355-sonra.txt",
+      "sha256": "98e49fa863a6043fd66834502632583db845600744746b9d456444bc435d6d67",
+      "komut": [
+        "node",
+        "gunluk-plan/sema/kapi-uyum.mjs",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bugun-355.mjs",
+        "gunluk-plan/sema/ornek-cipa.md",
+        "gunluk-plan/sema/beklenen.json"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:42:51+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gun-ortasi-sinavi-tur2",
+      "asama": "sonra",
+      "dosya": "olcum-gun-ortasi-sinavi-tur2-sonra.txt",
+      "sha256": "723a270a87a16fe82a59a1ef59a34d9a8ef3b29b9af692b8f0961ce201cbc13f",
+      "komut": [
+        "bash",
+        "gun-ortasi/scripts/kalan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:43:00+03:00",
+      "sure_sn": 8.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-uyum-355-kati",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-uyum-355-kati-sonra.txt",
+      "sha256": "179937dd4b7b73e7cbc8c2f1804b0f0e8c5157d2cf03acdc3c7996462978ad7c",
+      "komut": [
+        "node",
+        "gunluk-plan/sema/kapi-uyum.mjs",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bugun-355.mjs",
+        "gunluk-plan/sema/ornek-cipa.md",
+        "gunluk-plan/sema/beklenen.json"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-17T15:45:44+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-uyum-onerilen-yama",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-uyum-onerilen-yama-sonra.txt",
+      "sha256": "fa800347e95898d82ce56a8f324f2ec03ccbfb961308c0eb19899b36340e26de",
+      "komut": [
+        "node",
+        "gunluk-plan/sema/kapi-uyum.mjs",
+        "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bugun-oneri.mjs",
+        "gunluk-plan/sema/ornek-cipa.md",
+        "gunluk-plan/sema/beklenen.json"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:45:44+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "dosya",
+      "etiket": "bugun-mjs-oneri-yamasi",
+      "asama": "sonra",
+      "dosya": "dosya-bugun-mjs-oneri-yamasi-sonra.diff",
+      "sha256": "d17b2a66794178b8915ada4523924b6fd5ea15afc58d2e5ac63b21f06d5e1abd",
+      "kaynak": "/tmp/claude-1000/-config-projects-Nexus/4390ad1f-cbcc-4086-81a5-9f5d946b35a3/scratchpad/bugun-oneri.diff",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T15:45:44+03:00"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-uyum-363-birlesik",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-uyum-363-birlesik-sonra.txt",
+      "sha256": "e258c8154b698c3b297c18f9f3be5ebf291e40871ee8a9fbc3e449efd68c30b6",
+      "komut": [
+        "node",
+        "gunluk-plan/sema/kapi-uyum.mjs",
+        "terminal-onar/kapi/bugun.mjs",
+        "gunluk-plan/sema/ornek-cipa.md",
+        "gunluk-plan/sema/beklenen.json"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T17:56:27+03:00",
+      "sure_sn": 0.1
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cipa-sinavi-62-T17-yesil",
+      "asama": "sonra",
+      "dosya": "olcum-cipa-sinavi-62-T17-yesil-sonra.txt",
+      "sha256": "44c659b610eff7a6a3b2bb41b797bc5b2b8518199f9320e1c125a65c242bcf7f",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/cipa.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T17:56:34+03:00",
+      "sure_sn": 7.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gun-ortasi-sinavi-33",
+      "asama": "sonra",
+      "dosya": "olcum-gun-ortasi-sinavi-33-sonra.txt",
+      "sha256": "42acd35bbf3a6288d97c92ebed94dfc25de60776de45a611df1562cbfe376542",
+      "komut": [
+        "bash",
+        "gun-ortasi/scripts/kalan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T17:56:52+03:00",
+      "sure_sn": 18.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cipa-sinavi-68-etiket-hedefi",
+      "asama": "sonra",
+      "dosya": "olcum-cipa-sinavi-68-etiket-hedefi-sonra.txt",
+      "sha256": "c9d6c87d38b2be66890af71c32f700a8bc1af88dd111d3ab98fcc6e3366dc91b",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/cipa.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T18:00:18+03:00",
+      "sure_sn": 8.4
+    },
+    {
+      "tur": "dosya",
+      "etiket": "mutasyon-etiket-hedefi-4-isirdi",
+      "asama": "sonra",
+      "dosya": "dosya-mutasyon-etiket-hedefi-4-isirdi-sonra.txt",
+      "sha256": "de49a12d7c540f0726d4d4a9e118dd7911ac31b599bf6a8374728852d52908ff",
+      "kaynak": "/config/projects/_wt/Sx-Claude-Skills-gunluk-plan-tablo-kapanis/m4.txt",
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-17T18:00:19+03:00"
+    }
+  ],
+  "imza": "3d78f5dc503447c40026a989cd8dab0dcadf2ed7f52a68f17c58a19acaa11e8b"
+}

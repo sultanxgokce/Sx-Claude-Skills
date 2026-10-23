@@ -1,0 +1,31 @@
+{
+  "is": "gun-sonu-gorev-defteri",
+  "cumle": "gun-sonu.sh gün sonu özetine GÖREV DEFTERİNDEN 'Görev defteri' bölümü ekler (DEFTER_UC + jeton; kutunun ajanlarına atanmış çalışılıyor · açık · sıra-sende işler, --kutu süzgeci; defter okunamazsa 'ölçülemedi', 0 denmez) ve --kapanis ile gün kapanışını yalnız görev defterine göre verir: çalışılıyor iş varsa rc 1 'gün kapanmaz' (kart bitti ≠ görev bitti); özet elle yazılmaz, defterden üretilir (Z23WS 2-3)",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-22T23:21:21+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/gun-sonu-gorev-defteri: gun-sonu.test.sh (sahte defter) önce/sonra + mutasyon",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5F88H4B6R7ZZ74049EZ23WS",
+  "tahmin_dk": 120,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-22T23:21:21+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/d26a1038-c462-43e7-8057-360eceeaec18/scratchpad/k2-tekrar.sh
+# rc=0 sure=121.4s zaman=2026-10-18T17:29:25+03:00
+--- stdout ---
+koşu 1 rc=0 · K2: ✓ K2 · kırmızı: 0
+koşu 2 rc=0 · K2: ✓ K2 · kırmızı: 0
+koşu 3 rc=0 · K2: ✓ K2 · kırmızı: 0
+koşu 4 rc=0 · K2: ✓ K2 · kırmızı: 0
+koşu 5 rc=0 · K2: ✓ K2 · kırmızı: 0
+--- stderr ---

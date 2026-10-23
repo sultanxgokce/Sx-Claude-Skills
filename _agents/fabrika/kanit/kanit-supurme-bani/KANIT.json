@@ -1,0 +1,101 @@
+{
+  "is": "kanit-supurme-bani",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-20T17:36:15+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kanit-dosyalari",
+      "asama": "once",
+      "dosya": "olcum-kanit-dosyalari-once.txt",
+      "sha256": "e81873d07979e30205d2fcf8f63f3755f03082d8ee99bd46115df669685eb1e6",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/supurme/olc.sh",
+        "Sx-Claude-Skills",
+        "once"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-20T17:36:03+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4a5d57da2ba14051b1412bee27a22e83"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kanit-dosyalari",
+      "asama": "sonra",
+      "dosya": "olcum-kanit-dosyalari-sonra.txt",
+      "sha256": "1e0b68102fd7b0795529d797d49b45e175a4d67607329f77a9584a120a478ef1",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/supurme/olc.sh",
+        "Sx-Claude-Skills",
+        "sonra"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T17:36:03+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "5986f23f0a3f4748b2d7df5c3eea9355"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "eski-alanlar",
+      "asama": "once",
+      "dosya": "olcum-eski-alanlar-once.txt",
+      "sha256": "37ad8bc894c0ce84f9bfd08e657c9aa50cd881a481cd8dd59bda97646ebc72da",
+      "komut": [
+        "python3",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/supurme/alan.py",
+        "Sx-Claude-Skills",
+        "olc"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T17:27:26+03:00",
+      "sure_sn": 1.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d037670f1d06421a87f7e1b8e6488298"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "eski-alanlar",
+      "asama": "sonra",
+      "dosya": "olcum-eski-alanlar-sonra.txt",
+      "sha256": "b2bca21134ee9ac88f6c87b4690306a93341e3b3cc5c3a8d7becc7bfa4e74665",
+      "komut": [
+        "python3",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/supurme/alan.py",
+        "Sx-Claude-Skills",
+        "olc"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T17:33:21+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "753f8a198326441599ca849f37ba6859"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-adi-dali",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-adi-dali-sonra.txt",
+      "sha256": "39b088c27cb41b751478c6060ecbbb5020bdf9ef270f4e1c6588509515d58cea",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/supurme/dal-olc.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T17:36:15+03:00",
+      "sure_sn": 0.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "b7c5c0ab5c954cc389e412c197eb52a9"
+    }
+  ],
+  "imza": "2d539cac693eea45b3a4c47a86cb883b3e068f3ccd7015e4adad9d9a6e22743e"
+}

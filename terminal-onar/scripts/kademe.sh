@@ -13,7 +13,7 @@
 # Soğuma: bekçi tetiklediğinde K1/K2 15 dakikada bir defadan sık denenmez (düğme/elle bunu atlar).
 # Sultan-onayı: 2026-09-25, izin sormayan modda açık onayla kuruldu (gözetimsiz ajan kademesi).
 set -u
-. "$(dirname "$0")/ortak.sh"
+. "$(dirname "$0")/ortak.sh" || exit 3   # kutu adı reddi: ortak.sh sebebi tek satır yazdı → DUR, rc 3 (FSZ30; eskiden unbound variable ile çöküyordu)
 
 KAYNAK=elle; ARKA=0
 while [ $# -gt 0 ]; do case "$1" in
@@ -61,8 +61,12 @@ Durum 'sağlam' olunca bitir. Sır değerini asla yazdırma." \
   gunluk "K1 onaramadı"
 fi
 
-# K2 · kurtarıcı ajan
-if sogudu K2; then
+# K2 · kurtarıcı ajan — işaret varken (Sultan 16 Eki) kademe ATLANIR, K3 iletisi insanı işaret eder
+KURT_NOTU=""
+if kurtarici_kapali; then
+  gunluk "K2 kurtarıcı $KURT_KAPALI_SEBEP → atlandı; MUAVİN/SERDAR'a bildir"
+  KURT_NOTU="kurtarıcı kapalı → MUAVİN/SERDAR'a bildir"
+elif sogudu K2; then
   gunluk "K2 kurtarıcı ajana komut gidiyor"
   if claude_oturumu "$KURT_TMUX" >/dev/null; then
     tmux send-keys -t "$KURT_TMUX" -l "/terminal-onar onar — kademe 0 ve 1 başaramadı, merdivenden geldi (kaynak=$KAYNAK). Günlük: $GUNLUK"
@@ -77,7 +81,7 @@ fi
 
 # K3 · insan
 bitir "basarisiz"
-haber "🚨 Sedir terminali ONARILAMADI — elle bakılmalı.
+haber "🚨 Sedir terminali ONARILAMADI — elle bakılmalı.${KURT_NOTU:+ $KURT_NOTU.}
 $(bash "$BETIK_DIZ/durum.sh" 2>/dev/null)
 Son adımlar:
 $(son)"

@@ -1,0 +1,5 @@
+$ node ahi/schema/validate-repo.mjs . --strict
+# rc=0 sure=0.0s zaman=2026-10-22T23:57:36+03:00
+--- stdout ---
+✓ repo-parity temiz (catalog 78 ↔ sync-targets 68)
+--- stderr ---

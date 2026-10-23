@@ -1,0 +1,30 @@
+{
+  "tur": 2,
+  "is": "ttyd-dim-kontrast",
+  "pr": "346",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-16T11:33:35+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 49206,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 20387
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Dim metin, pano köprüsünde okunur ikincil renge dönüştürülmüş ve ttyd temasına yeterli kontrastlı brightBlack tonu eklenmiş. Sayısal önce/sonra piksel ölçümü 2,08:1→4,73:1 sonucunu, hedef davranışı ve regresyonları üç ardışık yeşil koşumla doğruladığı için iş üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek ttyd+tmux+Chromium ölçümü, önce/sonra sayısal kontrast çiftini açıkça veriyor: gri-244 soru satırı 2,08:1'den 4,73:1'e, düz dim 4,50:1'den 7,14:1'e çıkmış; normal ve yeşil metnin değişmediği de ölçülmüş. İki PNG üretildiği kaydediliyor ancak karelerin kendisi sunumda yok; buna rağmen piksel ölçüm çifti, 18/18 hedef sınavı, 34/34 pano sınavının üç ardışık geçişi ve birim sınavı yeterli kanıt oluşturuyor."
+  }
+}

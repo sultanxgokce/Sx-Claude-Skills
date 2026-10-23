@@ -1,0 +1,14 @@
+$ bash _agents/fabrika/kanit/kart-kapsam-uyarisi/mutasyon.sh yazilim-fabrikasi
+# rc=0 sure=68.0s zaman=2026-10-18T23:27:42+03:00
+--- stdout ---
+✓ kontrol kopyası yeşil
+✓ mutant 'iki-depo-uyarmaz' sınavı KIRMIZI yapıyor
+✓ mutant 'tek-depo-da-uyarilir' sınavı KIRMIZI yapıyor
+✓ mutant 'cok-gunluk-uyarmaz' sınavı KIRMIZI yapıyor
+✓ mutant 'ad-siniri-yok' sınavı KIRMIZI yapıyor
+✓ mutant 'harf-duyarsiz' sınavı KIRMIZI yapıyor
+✓ mutant 'karta-yazilmaz' sınavı KIRMIZI yapıyor
+✓ mutant 'uyari-reddeder' sınavı KIRMIZI yapıyor
+✓ mutant 'hafta-kodu-yok' sınavı KIRMIZI yapıyor
+── SONUÇ: 8 yakalandı · 0 kaçtı · 0 askıda ──
+--- stderr ---

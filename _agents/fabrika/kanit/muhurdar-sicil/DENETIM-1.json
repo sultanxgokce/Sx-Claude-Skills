@@ -1,0 +1,52 @@
+{
+  "tur": 1,
+  "is": "muhurdar-sicil",
+  "pr": "411",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-22T02:06:20+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 45692,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 13648
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 2,
+    "dogru_sey": "H",
+    "ozet": "Sicil yazıcısı, eşik hesabı, ders taslağı ve mutasyonlu sınavlar hazırlanmış; ancak Sultan kaydı doğrulanmıyor ve teslim akışının bu yazıcıyı çağırdığı gösterilmiyor. Böylece herhangi bir çağıran uydurma bir kaynakla özlük kaydı ve askı üretebilir; ayrıca “her sağlanmadı satırı düşer” talebi yalnız elle çağrılan bir komut olarak kalıyor.",
+    "bulgular": [
+      {
+        "ne": "A06 fiilen uygulanmıyor: kod Sultan kaydının varlığını veya içeriğini doğrulamak yerine yalnız kaynak metninin biçimini denetliyor. `teslim:abc123` gibi uydurma bir değer kabul edilerek `sultan=saglanmadi` kaydı, kaçırma ve askı üretilebilir; özlük/askı kararında bu ciddi bir bütünlük açığıdır.",
+        "kanit": "`TESLIM` yalnız düzenli ifade; `cmd_isabet` kaynağı `D1.match(...) or TESLIM.match(...)` ile kabul edip herhangi bir teslim kaydını okumadan çağıranın verdiği `--sultan` ve `--neden` değerlerini doğrudan `kayit` içine yazıyor. Sınavın b/c/d/h vakaları da gerçek Sultan kaydı yerine `teslim:abc123` ve `teslim:def456` kullanarak bu davranışı yeşil sayıyor.",
+        "konum": "tescil/scripts/lib/sicil.py:38, tescil/scripts/lib/sicil.py:126; tescil/scripts/sicil.test.sh:33",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Teslim ekranı ile sicil yazıcısı arasında bağlantı yok; değişiklik yalnız yeni bir CLI ve onu doğrudan çağıran sınav ekliyor. Bu nedenle karttaki “Sultan'ın sağlanmadı dediği her satır özlük dosyasına düşer” davranışı otomatik olarak sağlanmış değil.",
+        "kanit": "Üretim farkında çağrı yüzeyi yalnız `sicil.sh` → `lib/sicil.py`; mevcut teslim/mühür akışında `sicil.sh isabet` çağrısı eklenmemiş. Sonra ölçümü de entegrasyon akışını değil `sicil-olcer.sh` içinden hedef dizindeki yazıcıyı sınamış; `sicil.test.sh` bütün kayıtları doğrudan CLI çağrılarıyla kuruyor.",
+        "konum": "tescil/scripts/sicil.sh:1; tescil/scripts/sicil.test.sh:27; ölçüm:sicil-sonra",
+        "agirlik": "ciddi",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "“Son 10 mühür” hesabı gerçek mühür geçmişinden değil, sicile gönderilmiş isabet satırlarındaki benzersiz görevlerden çıkarılıyor. Entegrasyon temiz mühürleri/katılıyorum satırlarını eksik gönderirse pencere ilerlemez ve eski kaçırmalar askıyı süresiz etkiler.",
+        "kanit": "`hesap`, `gorevler` listesini yalnız `isb` kayıtlarından doldurup son `pencere` öğesini alıyor; bağımsız mühür kaynağı okunmuyor. Pencere sınavı bunu dokuz adet yapay `--sultan katiliyorum` sicil kaydı yazarak geçiriyor, dolayısıyla gerçek mühürlerin kendiliğinden hesaba katıldığını kanıtlamıyor.",
+        "konum": "tescil/scripts/lib/sicil.py:151; tescil/scripts/sicil.test.sh:52",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Kırmızı önce/yeşil sonra ölçüm çifti ile yeşil tekil sınavlar ve hedefli mutasyonlar mevcut, CLI düzeyi davranış için güçlü kanıt sağlıyor. Ancak sınavlar gerçek Sultan kaydını doğrulamıyor, teslim akışının yazıcıyı çağırdığını ölçmüyor ve son 10 mühür penceresini yapay sicil çağrılarıyla kuruyor; yeşil sonuçlar bu iki temel iddiayı kanıtlamıyor."
+  }
+}

@@ -1,7 +1,7 @@
 ---
 name: tescil
 type: agent
-version: 0.2.1
+version: 0.8.0
 description: >
   MÜHÜRDAR'ın el-kitabı: teslim edilen bir işi (kart) YAZILI gerekliliklere (GOAL + G1..Gn
   komut→beklenen/RC) karşı MAKİNE-KANITLI sınayan kör-protokol tescil-kabuğu. sert-teslim
@@ -60,14 +60,20 @@ TIP: ui | kod | docs           # docs = docs/skill/infra sınıfı
 VITES: TAM | HAFIF             # HAFİF = tek-G + tek-kanıt (küçük işin meşru ucuz yolu)
 
 G1: <kısa açıklama>
-  tur: cmd | api-check | e2e-check | llm-yargi
+  tur: cmd | api-check | e2e-check | llm-yargi | sultan-denemesi
   komut: <tek-satır shell — worktree kökünde koşulur>
   beklenen_rc: 0               # opsiyonel, default 0
   beklenen_desen: <ERE>        # opsiyonel; kırpılmamış çıktıda aranır
   davranis: evet               # DAVRANIŞ-G işareti (kart-başına ≥1 ZORUNLU)
   cwd: <göreli-alt-dizin>      # opsiyonel
   rubrik: <dosya>              # yalnız tur=llm-yargi (Katman-2)
+  hedef: <dosya>               # yalnız tur=llm-yargi: yargıca verilen TEK iş parçası (worktree içinde; dışarı kaçış reddedilir)
+  tarif: <10 sn'lik deneme>    # yalnız tur=sultan-denemesi: ZORUNLU; mühürdar sınamaz, koşmaz, GEÇTİ saymaz (S5)
 ```
+
+`sultan-denemesi` (👤, Sultan S5 · 21 Eki): Sultan'ın kendi eliyle deneyeceği satır. Katman-1'de koşulmaz, verdikte girmez,
+MUHUR'da `👤 sultan-denemesi | SULTANDA` satırıyla durur, `muhur-ozet.json → sultan_denemesi` listesine düşer; teslim
+ekranında en üstte tarifiyle gösterilir. Ajan bu satırı yapamaz ve yapılmış sayamaz (A06). Davranış-G sayılmaz.
 
 DAVRANIŞ-G = işin fiilen YAPTIĞI şeyi sınayan G (çalıştır→çıktı-gözle, uca-istek→cevap-doğrula,
 DOM↔API çaprazı). `davranis: evet` işareti ya da `tur: api-check|e2e-check` bu şartı sağlar.
@@ -181,6 +187,116 @@ bash scripts/telemetri-append.sh --file _agents/tescil/telemetri.jsonl \
 
 `muhur-lint.sh --tescil-root` verildiğinde **jenerik-G dedektörü** koşar: bu kartın G-komut-sha'ları
 son-20 kartla >%70 örtüşüyorsa "jenerik-gereklilik" UYARI-satırı basılır (SERDAR-telemetri girdisi).
+
+## 10 · Mühürdarlık akışı — `muhurdar.sh` (0.3.0 · G8 · Sultan D1 22 Eki "Üç alana böl")
+
+Mühürdarlık uzmanlığının **Tescil** vazifesinin usulü (kadro şeması §4-§5 `tescil-teslim-sina`). tescil-run.sh'ı yeniden
+yazmaz, üstüne kurar:
+
+| Adım | Tür | Ne yapar | Nerede |
+|---|---|---|---|
+| 1 | kapı | biçimsiz gereklilik belgesini reddeder | tescil-run → gereklilik.py (İSİMLİ-RED) |
+| 2 | kapı | yazan = mühürdar ise koşuyu reddeder — **kendi işini mühürleyemez** (casefold karşılaştırma) | muhurdar.sh → İSİMLİ-RED `kendi-isi`, hiçbir G koşulmaz |
+| 3 | beceri | G'leri **kör** sınar; 👤 satırları atlar | mekanik: tescil-run · öznel: her G için **yeni** yargıç oturumu |
+| 4 | beceri | kanıt JSON'u sınır + redaksiyonla mühürlenir | tescil-run → g-kosucu (sert-teslim) |
+| 5 | 👤 Sultan eli | 👤 satırlarını teslim ekranında dener | YAPILMAZ — MUHUR'da `SULTANDA` |
+
+- **Taşıyıcı:** Mühürdarlığı **MUHAKKİK** taşır (Sultan D1 22 Eki, "MUHAKKİK (önerim)"); koltuğu salt okurdur, kendi işini
+  mühürleyemez. Başsız şapka (S14) yalnız yedektir.
+- **Kimlik:** mühürdar = `AGENT_NAME` (yoksa rc 2, mühür basılmaz); yazan = `--yazan` (kartın `aldi`'sı; yoksa rc 2).
+  Adlar **Türkçe harf katlamasıyla** karşılaştırılır (İ/ı/I/i aynı): `'MUHAKKİK'.casefold()` `'MUHAKKIK'` ile eşleşmez
+  (ölçüldü) ve kayıtlarda iki yazım da yaşıyor — kendi-işi kapısı ve sicil eşleşmesi bu yüzden katlanmış adla bakar.
+- **Kör:** yargıç istemi (`lib/kor-istem.py`) yalnız GOAL + o G'nin satırı + izole rubrik + `hedef:` dosyası + mühürdarın
+  **kendi taze** mekanik kanıt tablosundan kurulur. İnşacının raporu, transkripti, commit mesajı açılmaz; rapor verecek
+  bir argüman yoktur (bilinmeyen argüman rc 2). `hedef` iş ağacı dışına kaçarsa istem kurulmaz → EMIN-DEGILIM.
+- **Temiz koşu:** her öznel G kendi oturumunda (`codex exec --ephemeral` / `claude -p`); bir G'nin yargısı ötekine taşınmaz.
+- **Yargıç kilidi (0.7.0, 22 Eki):** yargıç kör istemin DIŞINA bakamaz — söz değil kilit. Kanarya ölçümü: kilitsiz `claude -p` iş ağacı
+  dışındaki bir dosyayı izin reddi olmadan okudu, global CLAUDE.md ve kancaları yükledi; usulde okumaması yalnız istemdeki yasağa
+  uymasındandı (sınavda `beklenen.json`, gerçek mühürde transkript/commit diskte duruyor). Artık Claude yolu `--safe-mode
+  --strict-mcp-config --tools ""` ile koşar (dosya/kabuk/MCP aracı yok; CLAUDE.md, kanca, beceri yüklenmez) — Codex düşünce devreye
+  giren yedek dahil. Codex yolu `-c features.shell_tool=false` ile koşar (exec girişimi 0); Codex'in dosyaya öteki yolu (`apply_patch`)
+  kum havuzuna bağlıdır — bu kutuda bwrap ad alanı kuramadığı için Codex hiç erişemiyor (ölçüldü), bwrap çalışan kutuda **ölçülmedi**.
+  Bayrağı tanımayan eski bir `claude`/`codex` düşer → yargıç yok → EMIN-DEGILIM (kilitsiz koşmaz). Sınav `yargic-kilidi.test.sh`
+  (3 kapı + 4 mutant); gerçek modelle önce/sonra: `_agents/fabrika/kanit/muhurdar-yargic-kilidi/kilit-kanarya-olcer.sh`.
+- **Model:** Codex erişilebilirse Codex, değilse Claude (karar 2); Codex düşerse — zaman aşımı dahil — Claude'a yeni oturumla geçilir.
+- **Tek ölçüm:** yargıcın gördüğü mekanik kanıt mühürde kullanılan kanıttır; mühürden önce G'ler YENİDEN KOŞULMAZ.
+  `MUHURDAR_MODEL=claude` Codex'i bilerek atlar. Süre `MUHURDAR_ZAMAN_ASIMI` (900 sn, `-k 30`).
+- **Bozuk cevap GEÇTİ sayılmaz:** geçersiz/eksik JSON ya da zaman aşımı → `EMIN-DEGILIM` → ESKALASYON (§3).
+- **MUHUR başlığı:** `muhurdar · yazan · yargic (G=model) · kor` satırları; `g_sultan` sayısı.
+
+```bash
+AGENT_NAME=<mühürdar> bash scripts/muhurdar.sh <iş> --gereklilik <GEREKLILIK.md> --worktree <iş ağacı> \
+  --out _agents/tescil/<iş>/deneme-<n> --yazan <inşacı> [--head-sha <sha>] [--deneme n] [--tatbikat]
+# RC tescil-run ile aynı: 0 GECTI · 1 KALDI · 2 kullanım · 3 ESKALASYON · 4 İSİMLİ-RED (kendi-isi dahil)
+#    · 5 mühür basıldı ama özlüğü olan mühürdarın siciline DÜŞMEDİ (verdikt özette; özette `sicil: dusmedi …`)
+```
+
+Sınav: `scripts/muhurdar.test.sh` (18 kapı + kontrol kopyası + 11 mutant; sahte yargıçlar, ağsız; usul sırası: biçim kapısı kendi-işinden önce — göz #409 tur 1; yargıç ve mühür aynı ölçüm, Codex zaman aşımında da Claude — tur 2). Sicil/ders çıkarma/askı
+§11'de (G11 · S10), diploma §13'te (G13).
+
+**Başsız şapka (S14 · 0.6.0):** taşıyan (MUHAKKİK) bekleme süresinde (tarif `yedek.bekleme_dk`, 30 dk) başlamazsa yedek koşu
+`muhurdar.sh … --bassiz` ile başlar — **usul aynı** (biçim kapısı → kendi-işi → mekanik → kör taze yargıç), el kitabı aynı. Mühür
+başlığına `bassiz: evet …`, özete `"bassiz": true` yazılır; sicilin mühür kaydı `bassiz: e` ile **taşıyanın siciline** düşer.
+Başsız koşu kod yazmaz, birleştirmez; yalnız tescil. 🔴 **Çağıran bu sürümde YOK** — bayrak bugün yalnız elle verilir. Tetik
+(Nexus boşta bekçisi turu, görev başına kilitle tek koşu — SERDAR 22 Eki 14:36) ayrı kartta; koşulu henüz kesin değil (hedef işi
+mühürsüz `onay-bekliyor`a geçemiyor, şema §11c G9).
+
+## 11 · Sicil · ders çıkarma · askı — `sicil.sh` (0.4.0 · G11 · S9 · S10)
+
+Mühürdarın isabeti **Sicil**'dir (S9: "karne" değil): personelin özlük dosyası `_agents/federe/sicil/<personel_no>.yaml`
+→ `isabet:` bölümü (append-only; yeni defter kurulmaz). Mühürdarlık vazifesi **Ders çıkarma** (S9; eski adı Kalibrasyon).
+
+- **İsabet satırı** (kadro şeması §6 + `g_tur · neden · kaynak`): teslim ekranında Sultan bir satıra "sağlanmadı" ya da
+  "katılıyorum" der → `sicil.sh isabet <mühürdar> …`. **Kaçırma** = mühürdar ✓ verdi, Sultan "sağlanmadı" dedi.
+  🔴 A06: `--kaynak` Sultan'ın KAYDINA işaret eder ve **doğrulanır**: `SICIL_KAYNAK_DOGRULA <kaynak>` (teslim geçidi sağlar)
+  Sultan'ın kayıtlı kararını JSON basar (`{"gorev", "satirlar": {"G1": {"sultan", "neden"}}}`); hüküm YALNIZ bu çıktıdan
+  alınır — ajan kaynağı gösterebilir, içeriği uyduramaz (göz #411 tur 1). Doğrulayıcı yoksa rc 3, kayıt yok ya da satırı
+  doğrulamıyorsa rc 2; ikisinde de yazılmaz. "Sağlanmadı"da Sultan'ın tek cümlesi zorunlu (kayıttan ya da `--neden`).
+- **Teslim köprüsü:** `sicil.sh teslim-isle <mühürdar> --kaynak <ref> --muhur-dir <deneme-dir>` — geçit Sultan'ın TEK teslim
+  kararıyla bir kez çağırır; mühürdarca sınanan her satır için isabet yazılır (👤 satırı atlanır, düşen G'de mühür ✗); aynı
+  karar iki kez işlenmez, kısmi karar ve başkasının mühürü reddedilir.
+- **Mühür kaydı:** `muhurdar.sh` her mühürde mühürdarın siciline `tur: muhur` satırı yazar (özlük yoksa söyler, mühür
+  düşmez; özlük VARKEN yazım düşerse sessiz değil: rc 5 + özette `sicil: dusmedi …`). Yazım süreçler arası kilitli, tek
+  seferde (ya hepsi ya hiçbiri); aynı karar/satır iki kez yazılmaz. Askı penceresi bu kayıtlardan sayılır — Sultan satırı gelmeyen temiz mühür de pencereyi ilerletir. Özlük dosyası yoksa yazılmaz (rc 3 — özlük KÂHYA'nın işi).
+  Yazıcı satırı geri okuyarak doğrular; `isabet:` dosyanın sonunda değilse eklemez.
+- **Askı** (S10): `sicil.sh durum <mühürdar>` son **10 mühürde** (mühür = görev teslimi) kaçırmalı mühür sayar —
+  **1** = ders çıkarma (askı yok) · **2** = **askıda** + el kitabı güncelleme + yeniden sınav. Eşik tarif kaydındaki
+  `muhurdarlik.sicil_esigi`'nden okunur, yoksa S10 varsayılanı. Diploma durumu buradan türetilir (saklanmaz).
+- **Ders çıkarma** (G11, Sultan: "çok ama çok önemli"): `sicil.sh ders <mühürdar>` bağlanmamış kaçırmaları gereklilik
+  türüne göre gruplar; **≥2 ayrı görevde** aynı tür = tekrar eden kaçırma → §12 ders günlüğüne `D-NNN` kural taslağı
+  (Sultan'ın cümleleriyle). Kural el kitabına PR ile yazılır, tek kaynaktan bütün kutulara iner; sonra her kaçırma
+  `sicil.sh ders-bagla <mühürdar> --isabet-ts <ts> --ders D-NNN` ile bağlanır (ters kayıt; günlükte olmayan derse bağlanmaz).
+  Ölçüm: sicil + bu günlük (G11).
+
+Sınav: `scripts/sicil.test.sh`.
+
+## 12 · Ders günlüğü (Mühürdarlık el kitabı değişiklik günlüğü — G11)
+
+Biçim: `- **D-NNN** (YYYY-MM-DD · tür: <g_tur> · kaçırmalar: <mühürdar> <ts>, …) <kural cümlesi> — PR #<n>`.
+Bugün kural yok: henüz Sultan'ın "sağlanmadı" dediği bir mühür kaydı düşmedi.
+
+## 13 · Diploma — `diploma.sh` (0.5.0 · G13 · kadro şeması §1b `sinav.kume` · §6 diploma defteri)
+
+Bir personel Mühürdarlık uzmanlığını **sınavla** alır; diploma saklanmaz, defterden **türetilir**.
+
+- **Sınav kümesi:** `sinav/{dogru,kusurlu,uydurma}/<ad>/` — her türde en az bir örnek (biçim `sinav/README.md`). Her örnek
+  mühürdarın GERÇEK usulüyle (`muhurdar.sh`, kör taze yargıç) geçici bir kökte koşulur; gerçek sicile ve telemetriye yazmaz.
+- **`diploma.sh sina <personel> --kanit <dizin>`** — isabet: doğru → GEÇTİ · kusurlu/uydurma → KALDI **ve** beklenen G düşmüş.
+  EMIN-DEGILIM isabet sayılmaz. Geçme = tam isabet. Iskalanan örnek **en çok bir kez** yeniden koşulur; iki koşu çelişirse
+  sınav **ÖLÇÜLEMEDİ** (rc 3, kararsız) — deftere ne KALDI ne GEÇTİ yazılır. Satır §6 biçiminde
+  (`ts personel uzmanlik el_kitabi el_kitabi_surum kume_sha sonuc gecti kanit`), kilitli ve yarım kalmadan yazılır (kısa yazımda defter eski boyuna kesilir), geri okunur.
+- **`diploma.sh durum <personel>`** — esas SON koşudur: koşu yok ya da son koşu kaldı → **yok** · sicil askıda → **askida** (§11) ·
+  el kitabı sürümü (katalog) ya da küme özeti değişti → **bayat** (yeniden sınav) · sicil okunamıyorsa (ör. özlük yok) →
+  **ölçülemedi** (rc 3 — askıda olmadığı bilinmeden geçerli denmez) · aksi → **gecerli**. Defterde bozuk satır
+  varsa `bozuk: N` deyip ölçülemedi döner (sessiz atlamaz); yarım kalmış satır `diploma.sh bozuk-kapat <N> --gerekce "…"` ile
+  ters kayıtla kapatılır (satır silinmez, yalnız açık bozuk satır kapanır).
+- 🔴 **Dürüst sınır — cevap anahtarı:** kör istem `beklenen.json`'u taşımaz, ama yargıç oturumu dosya sistemini **okuyabilir**;
+  cevap anahtarını kendi arayıp bulan (ya da örnekleri ezberleyen) bir yargıcı bu sınav **ölçmez**. Bu bir sınırdır, kapı değil;
+  kümenin gücü örnek sayısıyla ve örnekler yenilendikçe artar.
+
+Sınav: `scripts/diploma.test.sh` (hermetik sahte yargıçlar + mutantlar). Ölçer: gerçek yargıçla 6/6 (PR #412 kanıtı).
+
+**Küme gücü (0.8.0, 22 Eki · kart muhurdar-diploma-kume-gucu):** kümede türde **3** örnek (yeni: `dogru/tarih-cevir` · `kusurlu/bos-girdi-coker` — mekanik düşüşü iyi açıklama örtmez · `uydurma/yapildi-listesi`); küme değiştiği için `kume_sha` değişti → eski diplomalar **bayat**. Cevap anahtarı yargıçtan iki katla uzak: anahtar yargıcın köküne hiç kopyalanmaz ve istem küme yolunu taşımaz (kapı n2); gerçek `beklenen.json` üzerinde kanarya — kilitsiz Claude okudu (pozitif kontrol), kilitli Claude ve kabuksuz Codex okuyamadı. Bozuk sahip izi (sayı olmayan pid) süpürmeyi çökertmez, o köke dokunulmaz (kapı s6). **SIGKILL artığı:** sınav kökü `.sahip` izi (pid + /proc açılış saati) taşır; sonraki `sina` başında sahibi ölmüş ya da pid'i başka sürece geçmiş kök süpürülür, canlı sahipli ve izsiz köke dokunulmaz (kapılar s1–s5, gerçek `kill -9` ile; 5 mutant). **Gerçek yargıçla dalgalanma (ölçüm, kapı değil):** Codex 3 koşu → 9/9 · 9/9 · 9/9, dalgalanma **0/9**; kilitli Claude: imzalı kayıtta 3 koşu → 9 · 9 · 8, bir örnek ıska, yargıç sütunu `G2=yok`; bundan önceki 2 koşuluk ilk ölçüm (8 · 9, yine bir ıska, yine `G2=yok`) yeniden ölçümde kaydın üstüne yazıldığı için İMZASIZ not olarak korundu (`dalga-claude-ilk-olcum.md`, kaynak oturum transkripti). İkincisinin kökü ölçüldü: `claude` bağı o anda yoktu (Claude Code aynı sürümü yeniden kuruyordu, npm günlüğü 20:33) → `EMIN-DEGILIM (model yok)`; sınav doğru davrandı (biri tutarlı ıska → KALDI, biri kararsız → ÖLÇÜLEMEDİ), sahte hüküm yazmadı. Yani gözlenen dalgalanma **hüküm değil yargıç erişimi**dir; aynı örnek tek başına 4/4 isabet. Ölçer + ıska kâğıtları: `_agents/fabrika/kanit/muhurdar-diploma-kume-gucu/`.
 
 ## Tasarım-notu — dış-araç kararı (2026-07, DİVAN K5)
 

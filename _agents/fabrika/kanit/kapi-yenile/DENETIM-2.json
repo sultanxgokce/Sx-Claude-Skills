@@ -1,0 +1,30 @@
+{
+  "tur": 2,
+  "is": "kapi-yenile",
+  "pr": "344",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-16T11:05:13+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 49159,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 14500
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kapı artık SIGHUP ile pano.js’i aynı süreç ve açık bağlantı korunarak yeniden okuyor; eski veya bulunmayan kapıda güvenli biçimde web yenilemeye düşüyor. Önceki turun iki uygulama açığı da üretim kodunda kapatılmış ve özel sınavlarla ölçülmüş olduğundan yalnız rötuş düzeyi dahi kanıtlanmış bir kusur kalmıyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü ana dalda SIGHUP’ın kapıyı öldürdüğünü gösteriyor; sonra ölçümleri gerçek süreçte aynı PID ve önceden açılmış bağlantı korunurken pano SHA’sının değiştiğini, okunamayan pano dosyasında son sağlam kopyanın sürdüğünü, durum dizininin yoktan oluşturulduğunu ve KAPI_PANO=0 yolunun gereksiz yenilemeye düşmediğini gösteriyor. Karar sınavları komut yönlendirmesini, PID eşleşmesini, eski kapı düşüşünü, kuru çalışmayı ve mutasyonla güvenlik kapısının gerçekten sınandığını kapsıyor. “Kalan kapı sınav süreci: 4” sayacı tek başına süreç sızıntısı kanıtı değildir; sonraki bağımsız ölçüm de başarıyla tamamlanmıştır."
+  }
+}

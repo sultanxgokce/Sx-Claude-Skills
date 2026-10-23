@@ -1,0 +1,30 @@
+{
+  "tur": 4,
+  "is": "hafta-kapanis-dogrulat-retro-kapisi",
+  "pr": "365",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T20:58:28+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 50922,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 10,
+    "bayt": 44952
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "K6 kapısı, haftanın Doğrulat retrosunu kanon D13 oracle’ıyla ölçüyor; eksik veya açık PR’lı seansları dersleriyle kırmızı, ölçülemeyenleri görünür biçimde sarı, kayıtsız haftayı açıklamalı yeşil yapıyor. Önceki turun kalan raporlama açığı kapatılmış, mutant ve gerçek seans ölçümüyle doğrulanmış; üretimi durduracak bir kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı manifest kaydı yok. Kapanış sınavında rc=1→0 önce/sonra çifti, depo denetiminde rc=0 ve gerçek 2026-10-17 seansını kullanan tümleşik K6 ölçümü var; bu ölçüm kırmızı, yeşil ve sarı sonuçları, birleşmiş/açık/yok PR örneklerini ve önceki bulguyu kapatan kırmızı+ölçülemedi ortak raporunu gösteriyor. `gercek-dogrulat-seansi` adlı echo kaydı tek başına kanıt değildir, fakat aynı iddia gerçek seanslı `k6-tumlesik` ölçümüyle desteklenmiştir."
+  }
+}

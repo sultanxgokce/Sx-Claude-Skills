@@ -1,0 +1,23 @@
+$ python3 _agents/fabrika/kanit/kart-kapsam-atif/bolum-olcer.py T13b mutant ' -- bash yazilim-fabrikasi/scripts/kart.test.sh
+# rc=0 sure=5.9s zaman=2026-10-20T18:23:27+03:00
+--- stdout ---
+$ bash yazilim-fabrikasi/scripts/kart.test.sh  → rc=0 · 120 satır
+════ T13b · ATIF KAPSAM DEĞİLDİR: 'retro W42', 'hafta raporu' uyarmaz; gerçek çok günlük kapsam uyarmaya devam eder (20 Eki, üç yanlış alarm) ════
+  ✓ atıf uyarmaz: birleştirme kancası CI'ı her birleştirmede ölçsün (gorev_01M506
+  ✓ atıf uyarmaz: denetçi ölçüm çıktısının sonunu da versin; fabrika 0.10.6 (go
+  ✓ atıf uyarmaz: kart.sh ac iş cümlesinde iki depo görürse uyarsın (retro W42 ders
+  ✓ atıf uyarmaz: hafta kapısı D13 PR gövdesinde retro işaretini arasın
+  ✓ atıf uyarmaz: W42 retrosu için kutu dosyasını doldur
+  ✓ gerçek kapsam uyarır: W42 boyunca her gün tur kaydı
+  ✓ gerçek kapsam uyarır: haftalık rapor üretimi kur ve her gün koştur
+  ✓ gerçek kapsam uyarır: bu hafta tüm kutuların retrosunu topla
+  ✓ gerçek kapsam uyarır: 3 gün sürecek göç
+── T13b · MUTASYON (tam kopya; her mutant bir atıf cümlesini yeniden uyarır hâle getirmeli) ──
+  ✓ mutant 'retro-onu-sayilir' atfı yeniden kapsam sanıyor → üstteki kapı bu mutantta düşerdi
+  ✓ mutant 'atif-sonra-bos' atfı yeniden kapsam sanıyor → üstteki kapı bu mutantta düşerdi
+  ✓ mutant 'hafta-atifsiz' atfı yeniden kapsam sanıyor → üstteki kapı bu mutantta düşerdi
+  ✓ mutant 'W-atifsiz' atfı yeniden kapsam sanıyor → üstteki kapı bu mutantta düşerdi
+
+…
+── SONUÇ: 103 geçti · 0 kaldı ──
+--- stderr ---

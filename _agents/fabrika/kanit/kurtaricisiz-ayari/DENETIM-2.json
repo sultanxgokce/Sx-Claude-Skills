@@ -1,0 +1,38 @@
+{
+  "tur": 2,
+  "is": "kurtaricisiz-ayari",
+  "pr": "343",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-16T10:33:25+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 41263,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 11562
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kutu başına işaret; durum, K0 onarımı ve K2/K3 merdivenine talep edildiği gibi bağlanmış, yeni sınav artık 100755 ve mutasyon kapıları davranışı gerçekten ısırıyor. Üretime engel kusur görünmüyor; yalnız komşu sınavları toplayan kanıt komutundaki dönüş-kodu hesabı küçük bir rötuş istiyor.",
+    "bulgular": [
+      {
+        "ne": "Kanıt komutundaki komşu-sınav döngüsü, sınavın dönüş kodu yerine hemen önceki `echo` komutunun dönüş kodunu denetliyor; gelecekte bir komşu sınav bozulsa toplu kayıt yanlışlıkla yeşil kalabilir.",
+        "kanit": "Komut sırası `timeout ...; echo \"$f exit=$? ...\"; [ $? = 0 ] || r=1` biçiminde; ikinci `$?` başarılı `echo`ya aittir. Bu kayıtta risk gerçekleşmemiştir, çünkü ölçüm çıktısında `onar.test.sh`, `bekci-iz.test.sh` ve `kutu-adi.test.sh` ayrı ayrı `exit=0` göstermektedir.",
+        "konum": "KANIT MANİFESTİ: kurtarici-kapali-sinavi-ve-komsular / olcum-kurtarici-kapali-sinavi-ve-komsular-sonra.txt",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü ana dalın işareti tanımadığını, sonra ölçümü 25 hedef kapının ve üç komşu sınavın geçtiğini gösteriyor; beklenen kırmızı mutasyon da işaret denetimi sökülünce eski davranışın geri geldiğini ölçüyor. Hermetik sahte tmux/Claude düzeni gerçekçi süreç durumlarını kapsıyor, gerçek tmux'a dokunulmadığı ayrıca ölçülmüş ve önce/sonra ölçüm çifti mevcut. Yeni sınavın üretim farkındaki modu 100755 olduğundan önceki turun çalıştırma-biti bulgusu giderilmiş."
+  }
+}

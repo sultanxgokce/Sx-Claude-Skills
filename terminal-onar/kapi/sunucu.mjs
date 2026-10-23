@@ -18,7 +18,20 @@ import { fileURLToPath } from 'node:url';
 // Koltuk adı kuralı — kabuktaki TEK kopyası scripts/koltuk-adi.sh; iki dilin eşdeğerliği scripts/koltuk-adi.test.sh'de ölçülür.
 // '.' · ':' · kontrol karakteri yok; boşluk arada serbest, başta/sonda yok; ilk karakter '$' '@' '%' '=' olamaz (tmux kimlik önekleri).
 import { KOLTUK_AD_DESEN, koltukSatirlari } from './koltuklar.mjs';
-import { kayitOku, kadroBirlestir } from './kadro.mjs';   // 2.8.0 Kadro: kayıt ⟂ koltuk birleşimi (dosya okur, yazmaz)   // ad kuralı + liste çözümü TEK yerde (fark ölçeri de aynısını çağırır)
+import { kayitOku, kadroBirlestir, altyapiNeden, davaOzet, yerAcAday, DAVA_ROL } from './kadro.mjs';
+import { tarifOku, uzmanlikOku } from './tarif.mjs';
+import { bugunOku } from './bugun.mjs';
+import { kadroYazKilitAltinda, KadroHata, davaEkle, kisiyeBagla, baglaGeriAl, DOSYA_NO, kisaAdGecerli } from './kadro-yaz.mjs';
+import { dosyaKilit } from './kilit.mjs';
+import { oturumKimlikleri, oturumDizinleri } from './kimlik.mjs';   // kişi↔oturum eşleşmesinin kimlik ayağı (salt-okur)
+import { davaDondur, davaEk, davaGeriEk } from './dava.mjs';   // Dava Rafı: dondurmanın tek yolu (kapı Aç'ı + günlük bekçi turu)
+// Sınav dikişi: süreç kökü ve pid alanı ortamdan verilebilir (gerçekte /proc ve kendi alanı)
+const kimlikler = () => oturumKimlikleri({ dizinler: oturumDizinleri(), procKok: process.env.KAPI_PROC_KOK || '/proc',
+  ...(process.env.KAPI_PID_ALANI ? { pidAlani: process.env.KAPI_PID_ALANI } : {}) });
+// KADRO E2 eylemleri SIRAYLA yürür (bağımsız göz tur 2): bir eylem "kayda yaz → oturumu kapat (await) → gerekirse geri al" zinciridir;
+// araya giren ikinci eylem (ör. aynı kişiye 'geri aç') birincinin geri almasını bozar. Kapı tek süreç → süreç içi kuyruk yeter.
+let kadroSon = Promise.resolve();
+function kadroKilit() { let birak; const p = new Promise((r) => { birak = r; }); const once = kadroSon; kadroSon = once.then(() => p); return once.then(() => birak); }   // E2: kayda durum yazan TEK yer (emekli et · dondur · geri aç)   // 2.8.0 Kadro: kayıt ⟂ koltuk birleşimi (dosya okur, yazmaz)   // ad kuralı + liste çözümü TEK yerde (fark ölçeri de aynısını çağırır)
 
 const KOK = path.dirname(fileURLToPath(import.meta.url));
 const GENEL = path.join(KOK, 'genel');
@@ -42,14 +55,37 @@ const TABAN = (process.env.KAPI_TABAN || '').replace(/\/+$/, '');
 const T = (y) => TABAN + y;   // dışarıya verilen mutlak yol
 // Kutu adı: PWA kimliğinde ve sayfa başlığında görünür. Taban "/sedir" ise "sedir".
 const KUTU = process.env.TO_KUTU || (TABAN ? TABAN.slice(1) : '') || 'kutu';
+const KABUK_TMUX = process.env.TO_KABUK_TMUX || KUTU + '-kabuk';   // el kabuğu (ortak.sh KABUK_TMUX ile aynı türetim)
 const KUTU_BAS = KUTU.charAt(0).toLocaleUpperCase('tr') + KUTU.slice(1);
 const DURUM_DIZ = process.env.TO_DURUM_DIZ || '/config/.terminal-onar';
+const KILIT_BEKLE_MS = +process.env.KADRO_KILIT_BEKLE_MS || 30000;   // kayıt kilidi bekleme (sınav kısaltır)
 const RESIM_URL = process.env.KAPI_RESIM_URL || 'http://127.0.0.1:8391/upload';
 // ── PANO KÖPRÜSÜ (2.3.0 · Sultan 12 Eki: "Cmd+C kopyalamıyor, resmi Cmd+V yapıştıramıyorum") ──
 // ttyd'nin HTML sayfasına genel/pano.js gömülür: resim yapıştır → /api/resim → yol terminale; tmux seçimi (OSC 52)
 // → tarayıcı panosu. KAPI_PANO=0 ile kapatılır (geriye dönük: o zaman vekil bayt bayt eski hâli).
 const PANO_ACIK = process.env.KAPI_PANO !== '0';
-const PANO_JS = PANO_ACIK ? fs.readFileSync(path.join(GENEL, 'pano.js'), 'utf8') : '';
+// 🔴 KAPI-YENİLE (2.12.0 · SERDAR 00:5x): pano.js açılışta BELLEĞE alınıyordu; yeni pano sürümü diske inince canlı kapı eskiyi
+//    sunmaya devam ediyor, tek yol kapıyı yeniden başlatmaktı — bu Sultan'ın web terminalini koparır. Artık SIGHUP pano.js'i
+//    bağlantı düşürmeden yeniden okur. Kapı pid'ini ve yüklü pano sha'sını durum dizinine yazar; /giris yanıtı `x-kapi-pano`
+//    başlığıyla sha'yı söyler (girişsiz uç, sır değil) — `komut.sh kapi-yenile` bununla tazelenmeyi DOĞRULAR, varsaymaz.
+//    SIGHUP'ı tanımayan eski kapıda sinyal süreci ÖLDÜRÜR; o yüzden komut önce kapi.pid'in canlı pid'le eşleştiğine bakar.
+const PANO_YOL = process.env.KAPI_PANO_YOL || path.join(GENEL, 'pano.js');
+let PANO_JS = '', PANO_SHA = '';
+function panoYukle() {
+  if (!PANO_ACIK) { PANO_JS = ''; PANO_SHA = 'kapali'; return; }
+  const js = fs.readFileSync(PANO_YOL, 'utf8');   // okunamazsa fırlatır: açılışta ölümcül, SIGHUP'ta eski kopya durur
+  PANO_JS = js; PANO_SHA = crypto.createHash('sha256').update(js).digest('hex').slice(0, 12);
+  try { fs.writeFileSync(path.join(DURUM_DIZ, 'kapi.pano-sha'), PANO_SHA + '\n'); } catch (e) { console.error(new Date().toISOString(), `kapı: kapi.pano-sha yazılamadı: ${e.message}`); }
+}
+// Dizin ÖNCE (bağımsız göz tur 1): yoksa ilk kapi.pano-sha yazımı sessizce kaybolurdu — yazamıyorsa günlüğe düşer, kapı yine açılır.
+try { fs.mkdirSync(DURUM_DIZ, { recursive: true }); } catch (e) { console.error(new Date().toISOString(), `kapı: durum dizini açılamadı (${DURUM_DIZ}): ${e.message}`); }
+panoYukle();
+try { fs.writeFileSync(path.join(DURUM_DIZ, 'kapi.pid'), String(process.pid) + '\n'); } catch (e) { console.error(new Date().toISOString(), `kapı: kapi.pid yazılamadı: ${e.message}`); }
+process.on('SIGHUP', () => {
+  const eski = PANO_SHA;
+  try { panoYukle(); console.log(new Date().toISOString(), `kapı: SIGHUP — pano.js yeniden okundu (${eski} → ${PANO_SHA}), bağlantılar açık`); }
+  catch (e) { console.error(new Date().toISOString(), `kapı: SIGHUP — pano.js okunamadı (${e.message}); eski kopya (${eski}) sunulmaya devam`); }
+});
 // 🔴 Parola değişkeninin ADI kutudan türer (SEDIR__… · AKAR__…). Sert yazılsaydı
 //    beceri ikinci kutuda parolayı bulamaz, fail-closed açılmaz ve sebebi "parola yok"
 //    gibi görünürdü — oysa parola vardı, aranan ad yanlıştı. Ad da veri gibi taşınır.
@@ -122,7 +158,8 @@ function dosyaTabanli(res, ad) {
   //    'Sedir' gorurdu — 'hicbir kutu adi gomulu degil' sozu arayuzde bozuluyordu.
   h = h.split('{{KUTU}}').join(KUTU_BAS);
   h = h.replace('<head>', `<head><script>window.__TABAN=${JSON.stringify(TABAN)};window.__KUTU=${JSON.stringify(KUTU)};</script>`);
-  res.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-cache' });
+  // x-kapi-pano: yüklü pano.js sha'sı (12 hex) — kapi-yenile komutu tazelenmeyi bununla ölçer; sır değil, girişsiz sayfada da var.
+  res.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-cache', 'x-kapi-pano': PANO_SHA });
   res.end(h);
 }
 
@@ -421,8 +458,8 @@ const sunucu = http.createServer(async (req, res) => {
         const r = await calistir('bash', [KOLTUK_BETIK, '--liste']);
         if (r.kod !== 0) return json(res, 500, { hata: 'Koltuklar ölçülemedi.' });
         // satır çözümü + ad süzgeci kapi/koltuklar.mjs'te (tek kaynak); ad HTML'de kaçışlı, adreste encodeURIComponent
-        const koltuklar = koltukSatirlari(r.out).map((k) => ({ ...k, ana: k.ad === ANA_TMUX, ekran: T('/tty/') + '?arg=' + encodeURIComponent(k.ad) }));
-        return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, koltuklar });
+        const koltuklar = koltukSatirlari(r.out).map((k) => ({ ...k, ana: k.ad === ANA_TMUX, kabuk: k.ad === KABUK_TMUX, ekran: T('/tty/') + '?arg=' + encodeURIComponent(k.ad) }));
+        return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, kabuk: KABUK_TMUX, koltuklar });
       }
       // ── KOLTUK AÇ / YENİDEN AÇ / ESKİ SOHBETE DÖN (2.4.0 · dilim 5/5, Sultan: "oturum kapandı/bozuldu/silindi —
       //    tekrar açmak çok basit ve çok sağlam olmalı"). Ölçüm ve iş betikte (scripts/koltuk-ac.sh): üç durum ayrı
@@ -450,16 +487,158 @@ const sunucu = http.createServer(async (req, res) => {
       // ── KADRO (2.8.0 · Kadro E1 önkoşul 1+3, gorev_01M4WVHD00GF5MAQD1J7G74RZ4): kutunun personel KAYDI ⟂ canlı KOLTUKLAR.
       //    Dört grup + kayıtsız (kapi/kadro.mjs tek kaynak). Yalnız okur; kaldır/bağla/emekli ayrı uçlardır (E2-E4). Ekran adresi
       //    koltuk listesiyle aynı kuralla (encodeURIComponent).
+      // ── BUGÜN (2.15.0 · gorev_01M54SCQE08KTG9YERG2BBR604): kutudaki ajanların GÜN ÇIPALARI (gunluk-plan/cipa.sh dosyaları) — havuzdan
+      //    ayrı "bugün" görünümünün verisi. Salt okur; yeni defter yok (kaynak çıpa). Bugüne ait olmayan çıpa listeye girmez, adıyla
+      //    `bugun_degil`de görünür; okunamayan dosya `okunamadi`da. ?tarih=YYYY-MM-DD sınav dikişi (varsayılan kutunun yerel bugünü).
+      if (y === '/api/bugun') {
+        const t = url.searchParams.get('tarih');
+        // göz #355 tur 1: biçim yetmez, takvimde var olan gün olmalı (2026-99-99 → 400; Date gevşek çözümlemesi geri yazımla sınanır)
+        // göz tur 2: geçersiz Date'te toISOString RangeError fırlatır — işleyici dışarıdan gelen sorguyla çökmez, 400 döner
+        const takvimde = (x) => { try { return /^\d{4}-\d{2}-\d{2}$/.test(x) && new Date(x + 'T00:00:00Z').toISOString().slice(0, 10) === x; } catch { return false; } };
+        if (t && !takvimde(t)) return json(res, 400, { hata: 'tarih takvimde olan bir gün olmalı (YYYY-MM-DD).' });
+        const b = bugunOku(PROJE, t || undefined);
+        return json(res, 200, { kutu: KUTU, proje: PROJE, zaman: new Date().toISOString(), ...b });
+      }
+      // ── KADRO · Uzmanlıklar + Terimler (Mühürdarlık G12 · SERDAR 22 Eki 05:10 (A)): iki SALT-OKUR uç — veri sahibinin kutusunda okunur, merkez vekil yolundan alır.
+      //    Yalnız GET (yazma yolu yok); çıktı beyaz listedir (yol/kaynak/sır yok — tarif.mjs); okunamayan kaynak `olc` + null, boş liste değil.
+      if (y === '/api/kadro/tarif' || y === '/api/kadro/uzmanlik') {
+        if (req.method !== 'GET') return json(res, 405, { hata: 'Bu uç yalnız okur (GET).' });
+        return json(res, 200, { kutu: KUTU, zaman: new Date().toISOString(), ...(y === '/api/kadro/tarif' ? tarifOku() : uzmanlikOku()) });
+      }
       if (y === '/api/kadro') {
         const r = await calistir('bash', [KOLTUK_BETIK, '--liste']);
         if (r.kod !== 0) return json(res, 500, { hata: 'Koltuklar ölçülemedi.' });
         const kayit = kayitOku(PROJE);
         // Var olan ama OKUNAMAYAN kayıt dosyası hata sayılır (göz tur 1): boş kayıtla devam etmek herkesi "kayıtsız" gösterirdi — yalan.
         if (kayit.okunamadi.length) return json(res, 500, { hata: 'Kayıt okunamadı: ' + kayit.okunamadi.join(', ') });
-        const kd = kadroBirlestir({ uyeler: kayit.uyeler, koltuklar: koltukSatirlari(r.out), ana: ANA_TMUX });
+        const kd = kadroBirlestir({ uyeler: kayit.uyeler, koltuklar: koltukSatirlari(r.out), ana: ANA_TMUX, kimlikler: kimlikler() });
         const ekranla = (o) => o ? { ...o, ekran: T('/tty/') + '?arg=' + encodeURIComponent(o.ad) } : null;
         return json(res, 200, { kutu: KUTU, ana: ANA_TMUX, proje: PROJE, kaynak: kayit.kaynak, okunamadi: kayit.okunamadi, zaman: new Date().toISOString(),
-          sayilar: kd.sayilar, kisiler: kd.kisiler.map((k) => ({ ...k, oturum: ekranla(k.oturum) })), kayitsiz: kd.kayitsiz.map(ekranla) });
+          sayilar: kd.sayilar, kisiler: kd.kisiler.map((k) => ({ ...k, oturum: ekranla(k.oturum) })), kayitsiz: kd.kayitsiz.map(ekranla),
+          altyapi: kd.altyapi.map(ekranla), eylemler: true,   // eylemler: bu kapı E2 ucunu taşıyor (merkez düğmeleri buna bakar)
+          // Dava Rafı (Parça B2): kayıt kökünde dava_kurali varsa raf alanı; bagla: bu kapı E4 (kayda bağla) eylemini taşıyor
+          ...(kayit.dava_kurali ? { davalar: davaOzet(kd.kisiler, kayit.dava_kurali) } : {}), bagla: true });
+      }
+      // ── KADRO E2 (Sultan onaylı, SERDAR 16 Eki 00:3x): dört eylem, hepsi geri alınabilir.
+      //    emekli · dondur → kayda durum (kadro-yaz.mjs; önceki değer durum_once) + oturum açıksa kapatılır (kapatılamazsa kayıt GERİ ALINIR)
+      //    geri-ac         → durum_once geri konur; dondurulmuştuysa oturum kutunun kendi açıcısıyla eski sohbetine döner (koltuk-ac --eski)
+      //    kapat           → YALNIZ kayıtsız oturum (kayıtlı kişi dondurulur, kapatılmaz)
+      // 🔴 A06: emeklilik Sultan kararıdır, düğmeyi insan basar. Uç yalnız kapı oturumu çereziyle açılır (yukarıdaki girisli kapısı —
+      //    o çerezi yalnız kutu parolası ya da merkez üretir; merkezin önünde Access + merkez parolası). Jeton taşıyan istek REDDEDİLİR:
+      //    bu kapının jeton yolu yok; jetonla gelen istek bir ajandır ve "bir gün jeton kabul edilir" diye sessizce açılmasın.
+      // 🔴 ALTYAPI oturumları (ana · dash* · ttyd-* · kapi-* · *-kurtarici · imglistener*) hiçbir eylemle kapatılamaz: 403, tmux'a dokunulmaz.
+      if (y === '/api/kadro/hal' && req.method === 'POST') {
+        if (req.headers.authorization || req.headers['x-defter-jeton']) return json(res, 403, { hata: 'Bu uç jetonla çağrılamaz — kadro kararını Sultan ekrandan verir.' });
+        let g; try { g = JSON.parse((await govde(req, 4096)).toString('utf8') || '{}'); } catch { return json(res, 400, { hata: 'Geçersiz istek.' }); }
+        const eylem = String(g.eylem || '');
+        if (!['emekli', 'dondur', 'geri-ac', 'kapat', 'bagla', 'bagla-geri-al'].includes(eylem)) return json(res, 400, { hata: 'Eylem: emekli · dondur · geri-ac · kapat · bagla · bagla-geri-al.' });
+        // Altyapı kontrolü HER ŞEYDEN ÖNCE ve yalnız adla: liste ölçülemese bile altyapıya dokunulmaz
+        if (eylem === 'kapat' && altyapiNeden(String(g.oturum || ''), ANA_TMUX)) return json(res, 403, { hata: `Altyapı oturumu (${altyapiNeden(String(g.oturum), ANA_TMUX)}) kapatılamaz.` });
+        if (eylem === 'bagla' && altyapiNeden(String(g.oturum || ''), ANA_TMUX)) return json(res, 403, { hata: `Altyapı oturumu (${altyapiNeden(String(g.oturum), ANA_TMUX)}) kayda bağlanamaz.` });
+        const birak = await kadroKilit();
+        let dosyaBirak = () => {};
+        try {
+        // Süreçler arası kilit (B7): günlük bekçi turu da aynı kayda yazar → AYNI dosya (kilit.mjs, PROJE; kadroYaz da orada kilitler).
+        // Bütün işlem (yer aç: dondur + aç · bağla) bu kilit altında; içeride yalnız kadroYazKilitAltinda çağrılır.
+        try { dosyaBirak = dosyaKilit(PROJE, { bekleMs: KILIT_BEKLE_MS }); } catch (e) { if (e instanceof KadroHata) return json(res, e.kod, { hata: e.message }); throw e; }
+        const r = await calistir('bash', [KOLTUK_BETIK, '--liste']);
+        if (r.kod !== 0) return json(res, 500, { hata: 'Koltuklar ölçülemedi — hiçbir şey yapılmadı.' });
+        const kayit = kayitOku(PROJE);
+        if (kayit.okunamadi.length) return json(res, 500, { hata: 'Kayıt okunamadı: ' + kayit.okunamadi.join(', ') });
+        const kd = kadroBirlestir({ uyeler: kayit.uyeler, koltuklar: koltukSatirlari(r.out), ana: ANA_TMUX, kimlikler: kimlikler() });
+        const izYaz = (satir) => { try { fs.appendFileSync(path.join(DURUM_DIZ, 'kadro-hal.log'), new Date().toISOString() + ' ' + satir + '\n'); } catch {} };
+        const kapat = async (ad) => (await calistir('tmux', ['kill-session', '-t', '=' + ad])).kod === 0;   // '=' tam ad eşleşmesi (önek değil)
+        if (eylem === 'kapat') {
+          const ad = String(g.oturum || '');
+          if (!KOLTUK_AD_DESEN.test(ad)) return json(res, 400, { hata: 'Oturum adı geçersiz.' });
+          if (kd.kisiler.some((k) => k.oturum && k.oturum.ad === ad)) return json(res, 409, { hata: 'Bu oturum kayıtlı bir kişinin — kapatmak yerine dondur.' });
+          if (!kd.kayitsiz.some((o) => o.ad === ad)) return json(res, 404, { hata: 'Böyle bir kayıtsız oturum yok (kapanmış olabilir).' });
+          // KAPAT KORUMASI (2.17.0): içinde Claude çalışan oturum kapatılmaz — kayıt okunamasa da canlı ajan öldürülmez
+          if (kd.kayitsiz.some((o) => o.ad === ad && !o.kapatilabilir)) return json(res, 409, { hata: 'Bu oturumda Claude çalışıyor — kapatılmaz. Kayıtta görünmüyorsa önce kadro kaydını düzelt.' });
+          if (!(await kapat(ad))) return json(res, 502, { hata: 'Oturum kapatılamadı.' });
+          izYaz(`kapat ${JSON.stringify(ad)}`);
+          return json(res, 200, { tamam: true, mesaj: `${ad} kapatıldı.` });
+        }
+        // ── E4 · KAYDA BAĞLA (Parça B6): kayıtsız oturum ya yeni dava satırı olur ya da var olan bir kişinin oturumu sayılır.
+        //    Oturuma dokunulmaz (kapanmaz, içindeki sohbet sürer). Claude kimliği oturumun kimlik izinden (kimlik.mjs) okunur.
+        if (eylem === 'bagla') {
+          const ad = String(g.oturum || '');
+          if (!KOLTUK_AD_DESEN.test(ad)) return json(res, 400, { hata: 'Oturum adı geçersiz.' });
+          if (!kd.kayitsiz.some((o) => o.ad === ad)) return json(res, 404, { hata: 'Böyle bir kayıtsız oturum yok (kapanmış ya da zaten bağlı olabilir).' });
+          const kim = (kimlikler().get(ad) || []);
+          if (kim.length !== 1) return json(res, 409, { hata: kim.length ? 'Oturumda birden çok Claude var — hangisinin bağlanacağı belirsiz.' : 'Oturumda Claude yok — bağlanacak kimlik bulunamadı.' });
+          try {
+            if (g.hedef === 'dava') {
+              const no = String(g.dosya_no || ''), kisa = String(g.kisa_ad || '');
+              if (!DOSYA_NO.test(no)) return json(res, 400, { hata: 'Dosya no YYYY/N biçiminde olmalı (ör. 2025/42).' });
+              if (!kisaAdGecerli(kisa)) return json(res, 400, { hata: 'Kısa ad 1-60 harf olmalı; tırnak ve ters bölü olamaz.' });
+              if (kd.kisiler.some((k) => k.id === no)) return json(res, 409, { hata: `"${no}" zaten rafta.` });
+              const s2 = davaEkle({ proje: PROJE, id: no, tmux: ad, arz_adi: kisa, session_id: kim[0].sessionId, cwd: kim[0].cwd });
+              izYaz(`bagla ${JSON.stringify(ad)} → dava ${JSON.stringify(no)} ${s2.dosya}`);
+              return json(res, 200, { tamam: true, mesaj: `${no} rafa eklendi.` });
+            }
+            if (g.hedef === 'kisi') {
+              const id = String(g.id || ''); const kisi = kd.kisiler.find((k) => k.id === id);
+              if (!kisi) return json(res, 404, { hata: 'Kayıtta böyle bir kişi yok.' });
+              if (kisi.altyapi) return json(res, 403, { hata: `Altyapı oturumu (${kisi.altyapi}) — kadro eylemi uygulanamaz.` });
+              if (kisi.rol === DAVA_ROL) return json(res, 409, { hata: 'Dava satırına oturum bağlanmaz — yeni dava olarak bağla.' });
+              if (kisi.oturum && kisi.oturum.claude) return json(res, 409, { hata: `${id} zaten çalışan bir oturumda — bağlanmadı.` });
+              const s2 = kisiyeBagla({ proje: PROJE, id, session_id: kim[0].sessionId });
+              izYaz(`bagla ${JSON.stringify(ad)} → kisi ${JSON.stringify(id)} ${s2.onceki || '-'}→${kim[0].sessionId} ${s2.dosya}`);
+              return json(res, 200, { tamam: true, mesaj: `${ad} artık ${id} oturumu.` });
+            }
+            return json(res, 400, { hata: 'Hedef: dava · kisi.' });
+          } catch (e) { if (e instanceof KadroHata) return json(res, e.kod, { hata: e.message }); throw e; }
+        }
+        if (eylem === 'bagla-geri-al') {
+          const id = String(g.id || ''); const kisi = kd.kisiler.find((k) => k.id === id);
+          if (!id || !kisi) return json(res, 404, { hata: 'Kayıtta böyle bir kişi yok.' });
+          if (!kisi.bagla_ile) return json(res, 409, { hata: 'Bu kayıt bağlamayla gelmedi.' });
+          try { const s2 = baglaGeriAl({ proje: PROJE, id }); izYaz(`bagla-geri-al ${JSON.stringify(id)} ${s2.silindi ? 'blok silindi' : 'kimlik geri kondu'} ${s2.dosya}`); }
+          catch (e) { if (e instanceof KadroHata) return json(res, e.kod, { hata: e.message }); throw e; }
+          return json(res, 200, { tamam: true, mesaj: `${id} bağlaması geri alındı; oturum kapanmadı.` });
+        }
+        const id = String(g.id || '');
+        const kisi = kd.kisiler.find((k) => k.id === id);
+        if (!id || !kisi) return json(res, 404, { hata: 'Kayıtta böyle bir kişi yok.' });
+        if (kisi.altyapi) return json(res, 403, { hata: `Altyapı oturumu (${kisi.altyapi}) — kadro eylemi uygulanamaz.` });
+        const onceHal = kisi.hal_kayit;
+        // ── Aç YER AÇAR (Parça B4 · Sultan 14:18): dava geri açılırken açık dava sayısı tavana ulaşmışsa en uzun süredir dokunulmayan
+        //    açık dava ÖNCE dondurulur. Dondurulamazsa (oturumu kapanmadı) HİÇBİR ŞEY açılmaz → 502.
+        let donduruldu = null;
+        if (eylem === 'geri-ac' && g.yer_ac === true && kisi.rol === DAVA_ROL && onceHal === 'dondurulmus' && kayit.dava_kurali) {
+          const aday = yerAcAday(kd.kisiler, kayit.dava_kurali, id);
+          if (aday) {
+            try { await davaDondur({ proje: PROJE, kisi: aday, kapat, iz: izYaz, neden: 'yer açmak için' }); }
+            catch (e) { if (e instanceof KadroHata) return json(res, e.kod, { hata: `Tavan dolu ve ${aday.id} dondurulamadı (${e.message}) — ${id} açılmadı.` }); throw e; }
+            donduruldu = aday.id;
+          }
+        }
+        let sonuc;
+        try { sonuc = kadroYazKilitAltinda({ proje: PROJE, id, eylem, ek: kisi.rol === DAVA_ROL ? davaEk(kisi, eylem) : null }); }
+        catch (e) { if (e instanceof KadroHata) return json(res, e.kod, { hata: e.message }); throw e; }
+        izYaz(`${eylem} ${JSON.stringify(id)} ${sonuc.onceki || '-'}→${sonuc.yeni || '-'} ${sonuc.dosya}${sonuc.uretilmis ? ' (derlendi)' : ''}`);
+        if (eylem === 'emekli' || eylem === 'dondur') {
+          if (kisi.oturum && !(await kapat(kisi.oturum.ad))) {
+            // Kayıt "kapalı" derken oturum çalışıyorsa ekran yalan söyler → kaydı geri al. Geri alma DA düşerse bunu söyle (bağımsız göz
+            // tur 1: hata yutulup "döndürüldü" deniyordu) — kayıt şu an yanlış hâldedir ve elle düzeltilmelidir.
+            try { kadroYazKilitAltinda({ proje: PROJE, id, eylem: 'geri-ac', ek: kisi.rol === DAVA_ROL ? davaGeriEk(kisi) : null }); izYaz(`geri-al ${JSON.stringify(id)} (oturum kapatılamadı)`); }
+            catch (e) { izYaz(`GERI-ALINAMADI ${JSON.stringify(id)} ${String(e.message || e)}`);
+              return json(res, 500, { hata: `Oturum kapatılamadı VE kayıt geri alınamadı (${e.message || e}) — kayıt şu an "${sonuc.yeni}" diyor, oturum çalışıyor; elle düzeltilmeli.` }); }
+            return json(res, 502, { hata: 'Oturum kapatılamadı — kayıt eski hâline döndürüldü.' });
+          }
+          return json(res, 200, { tamam: true, mesaj: `${id} ${eylem === 'emekli' ? 'emekli edildi' : 'donduruldu'}${kisi.oturum ? ', oturumu kapandı' : ''}.` });
+        }
+        // geri-ac: dondurulmuşsa oturum yeniden doğar (eski sohbetine döner); emekliyse yalnız kayıt geri gelir
+        if (onceHal === 'dondurulmus' && kisi.tmux && !kisi.oturum) {
+          const a = await calistir('bash', [KOLTUK_AC_BETIK, 'ac', kisi.tmux, '--eski'], undefined, +(process.env.KAPI_AC_SURE_MS || 120000));
+          const msj = (a.out + a.err).trim().split('\n').filter(Boolean).pop() || '';
+          const dz = kisi.rol === DAVA_ROL ? { donduruldu } : {};
+          if (a.kod === 0 || a.kod === 3) return json(res, 200, { tamam: true, oturum: true, ekran: T('/tty/') + '?arg=' + encodeURIComponent(kisi.tmux), ...dz, mesaj: `${id} geri açıldı, oturumu eski sohbetiyle açılıyor.` });
+          return json(res, 200, { tamam: true, oturum: false, ...dz, mesaj: `${id} kaydı geri açıldı ama oturum açılamadı: ${msj || 'açıcı cevap vermedi'} — Kaldır ile yeniden dene.` });
+        }
+        return json(res, 200, { tamam: true, ...(kisi.rol === DAVA_ROL ? { donduruldu } : {}), mesaj: `${id} geri açıldı.` });
+        } finally { dosyaBirak(); birak(); }
       }
       if (y === '/api/surum') {
         // telefon eski sayfada kalmasın: dosyalar değişince sürüm değişir, sayfa kendini yeniler

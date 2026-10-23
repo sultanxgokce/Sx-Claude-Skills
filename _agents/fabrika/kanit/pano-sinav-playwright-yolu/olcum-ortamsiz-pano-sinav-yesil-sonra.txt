@@ -1,0 +1,18 @@
+$ bash -c 
+r=0; cd terminal-onar/kapi
+echo "ortam: KANIT_PLAYWRIGHT_DIR=${KANIT_PLAYWRIGHT_DIR:-YOK} NODE_PATH=${NODE_PATH:-YOK}"
+timeout 300 node pano-sinav.mjs > /tmp/o-pw2.txt 2>&1; rc=$?; echo "pano-sinav.mjs (ortamsız) exit=$rc · $(grep -E "^tarayıcı:" /tmp/o-pw2.txt) · $(grep GEÇEN /tmp/o-pw2.txt | tail -1)"; grep "✗" /tmp/o-pw2.txt | cut -c1-200; [ $rc = 0 ] || r=1
+timeout 60 node tarayici-bul.test.mjs > /tmp/o-pw2.txt 2>&1; rc=$?; echo "tarayici-bul.test.mjs exit=$rc $(grep geçti /tmp/o-pw2.txt | tail -1) · $(grep "G1" /tmp/o-pw2.txt | cut -c1-120)"; [ $rc = 0 ] || r=1
+echo "── Nexus yolu zorlanınca (ikilisiz paket) artık ÇÖKMEZ, ÖLÇÜLEMEDİ rc 4:"
+KANIT_PLAYWRIGHT_DIR=/tmp/olmayan-dizin timeout 60 node -e "
+import(\"./tarayici-bul.mjs\").then(async (m) => { try { const r = await m.tarayiciBul({ adaylar: [\"/config/projects/Nexus/ui/node_modules\"] }); console.log(\"BEKLENMEDİK: bulundu\", r.dizin); process.exit(1); } catch (e) { console.log(\"ÖLÇÜLEMEDİ malzemesi:\", e.message.replace(/\n/g, \" | \").slice(0, 220)); process.exit(0); } });"; rc=$?; echo "rc=$rc (0 = fırlattı, çökmedi)"; [ $rc = 0 ] || r=1
+exit $r
+# rc=1 sure=20.0s zaman=2026-10-16T12:00:29+03:00
+--- stdout ---
+ortam: KANIT_PLAYWRIGHT_DIR=YOK NODE_PATH=YOK
+pano-sinav.mjs (ortamsız) exit=1 · tarayıcı: /config/.nvm/versions/node/v22.23.0/lib/node_modules · 
+tarayici-bul.test.mjs exit=0 tarayici-bul.test: 10 geçti · 0 kaldı ·   ✓ G1 bulundu: /config/.nvm/versions/node/v22.23.0/lib/node_modules → chromium-1228/chrome-linux64/chrome
+── Nexus yolu zorlanınca (ikilisiz paket) artık ÇÖKMEZ, ÖLÇÜLEMEDİ rc 4:
+ÖLÇÜLEMEDİ malzemesi: tarayıcı bulunamadı — denenen yollar: |   /config/projects/Nexus/ui/node_modules: paket var, tarayıcı İKİLİSİ yok (/config/.cache/ms-playwright/chromium-1217/chrome-linux64/chrome) — npx playwright install
+rc=0 (0 = fırlattı, çökmedi)
+--- stderr ---

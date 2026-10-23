@@ -1,0 +1,116 @@
+{
+  "is": "gunluk-plan-kutulu-tablo",
+  "arac": "kanit.py/0.4.0",
+  "guncelleme": "2026-10-18T15:10:21+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "cipa-sinavi-82",
+      "asama": "sonra",
+      "dosya": "olcum-cipa-sinavi-82-sonra.txt",
+      "sha256": "4f127d2e8916f80887d3574e16f915890280148cc49c760b47ee6e124298375c",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/cipa.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T15:05:39+03:00",
+      "sure_sn": 4.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gun-ortasi-sinavi-33",
+      "asama": "sonra",
+      "dosya": "olcum-gun-ortasi-sinavi-33-sonra.txt",
+      "sha256": "634c89b4459a2ba9c2d1b27ee61a34fd799d6d1134fe62d507309f53e2c4d6d2",
+      "komut": [
+        "bash",
+        "gun-ortasi/scripts/kalan.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T15:05:47+03:00",
+      "sure_sn": 8.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tablo-once-duz",
+      "asama": "once",
+      "dosya": "olcum-tablo-once-duz-once.txt",
+      "sha256": "a1469daf44066be208a96dbc0be718c863e3ca535457edde2237620480dfbb60",
+      "komut": [
+        "python3",
+        "gunluk-plan/scripts/tablo.py",
+        "gunluk-plan/sema/ornek-cipa.md",
+        "--md"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T15:05:47+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tablo-sonra-kutulu",
+      "asama": "sonra",
+      "dosya": "olcum-tablo-sonra-kutulu-sonra.txt",
+      "sha256": "1c5938c407ac476688878a1397da36579a91d15a588f675757b50a4ce5821721",
+      "komut": [
+        "python3",
+        "gunluk-plan/scripts/tablo.py",
+        "gunluk-plan/sema/ornek-cipa.md"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T15:07:44+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cipa-sinavi-83-hizalama",
+      "asama": "sonra",
+      "dosya": "olcum-cipa-sinavi-83-hizalama-sonra.txt",
+      "sha256": "04b3adf714283fcddc942b7fa9d1c9cab27b723d8b665dc729b9b006ca92a7a9",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/cipa.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T15:07:44+03:00",
+      "sure_sn": 4.6
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cipa-sinavi-84-emoji-kirpma",
+      "asama": "sonra",
+      "dosya": "olcum-cipa-sinavi-84-emoji-kirpma-sonra.txt",
+      "sha256": "263de2f97e00dec5e9d01063506afeb42ccf8b5c2dc38111f9561be27f281563",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/cipa.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T15:09:23+03:00",
+      "sure_sn": 4.5
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cipa-sinavi-84-emoji-kirpma-gercek",
+      "asama": "sonra",
+      "dosya": "olcum-cipa-sinavi-84-emoji-kirpma-gercek-sonra.txt",
+      "sha256": "24a57c3d5ed72bc5a05d257b0e91ccbdd6ca12d38565068ff52289313672462e",
+      "komut": [
+        "bash",
+        "gunluk-plan/scripts/cipa.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-18T15:10:21+03:00",
+      "sure_sn": 4.6
+    }
+  ],
+  "imza": "edc313ea538917da02c77b27e4dec8782cfb43fb638ee0760c78691e4958912e"
+}

@@ -1,0 +1,74 @@
+$ bash /config/projects/_wt/Sx-Claude-Skills-muhurdar-tarif-kaydi/tarif-kaydi/scripts/kadro-denetle.test.sh
+# rc=0 sure=3.2s zaman=2026-10-22T02:00:45+03:00
+--- stdout ---
+ok   altın: gerçek veri rc=0 kirmizi=0
+ok   altın: yazılmamış kapı SARI olarak görünür (sessiz geçmez)
+ok   k-tur → rc=1 ve «adım türü»
+ok   k-tarif → rc=1 ve «sultan_eli_tarifi»
+ok   k-yedek → rc=1 ve «yedek dolu değil»
+ok   k-kalibr → rc=1 ve «kalibrasyon»
+ok   k-cakisir → rc=1 ve «vazife tescil cakisir 'tatbikat' diyor»
+ok   k-karist → rc=1 ve «terim personel karistirilan 'uzmanlik' diyor»
+ok   k-ayirt → rc=1 ve «ayirt_testi yok»
+ok   k-kapiyol → rc=1 ve «dosya olarak yok»
+ok   k-benzersiz → rc=1 ve «terim kimliği 'personel' iki kez»
+ok   k-adikiz → rc=1 ve «terim adı 'Personel' iki kez»
+ok   k-surum → rc=1 ve «usul tescil-teslim-sina: sema_surumu 2 olmalı»
+ok   k-kaynak → rc=1 ve «sx:yok/dosya.json yok»
+ok   k-model → rc=1 ve «vazife tescil: model 'gpt'»
+ok   k-sira → rc=1 ve «ardışık değil»
+ok   k-esik → rc=1 ve «uzmanlık muhurdarlik: sicil_esigi»
+ok   k-bicim → rc=1 ve «biçimi tanınmıyor»
+ok   k-durum → rc=1 ve «terim personel: durum 'onaylandi'»
+ok   k-beceri → rc=1 ve «beceri_id zorunlu»
+ok   k-uzm-ikiz → rc=1 ve «uzmanlık kimliği 'muhurdarlik' iki kez»
+ok   k-vaz-ikiz → rc=1 ve «vazife kimliği 'tescil' iki kez»
+ok   k-usul-ikiz → rc=1 ve «usul kimliği 'tescil-teslim-sina' iki kez»
+ok   k-idsiz → rc=1 ve «id (metin) eksik»
+ok   k-nesne → rc=1 ve «nesne olmalı»
+ok   k-adim-nesne → rc=1 ve «usul tescil-teslim-sina adım: nesne olmalı»
+ok   k-liste → rc=1 ve «usuller liste olmalı»
+ok   k-koleksiyon-yok → rc=1 ve «usuller liste olmalı (yok ya da NoneType)»
+ok   k-bos-uzm → rc=1 ve «uzmanliklar boş»
+ok   k-bos-terim → rc=1 ve «terimler liste olmalı ve boş olmamalı»
+ok   k-terim-idsiz → rc=1 ve «terim: id (metin) eksik»
+ok   k-terim-idsayi → rc=1 ve «terim: id (metin) eksik»
+ok   k-elkitabi → rc=1 ve «el_kitabi 'olmayan-beceri' katalogda yok»
+ok   k-unvan → rc=1 ve «unvan boş»
+ok   k-kor → rc=1 ve «kor evet/hayır»
+ok   k-tetik → rc=1 ve «usul tescil-teslim-sina: tetik boş»
+ok   k-cikti → rc=1 ve «cikti boş»
+ok   k-katman → rc=1 ve «katman 'beceri-x'»
+ok   k-kaynak-tip → rc=1 ve «kaynak öğesi metin olmalı»
+ok   k-yol-kacis → rc=1 ve «depo içi göreli yol olmalı»
+ok   k-yol-mutlak → rc=1 ve «depo içi göreli yol olmalı»
+ok   k-sx-kacis → rc=1 ve «yol göreli olmalı»
+ok   k-hepsi-bos → rc=1 ve «boş tarif kaydı temiz sayılmaz»
+ok   o-cokme → rc=3 ve «beklenmeyen biçimde durdu»
+ok   s-katalog → rc=0 ve «katalogda yok»
+ok   s-katalog-siki → rc=1 ve «katalogda yok»
+ok   s-terim → rc=0 ve «terimi yok»
+ok   terim-kaydi.json yok → rc=3
+ok   boş katalog → rc=3
+ok   nexus kökü okunamayınca SARI ölçülemedi (yeşil değil)
+ok   mutasyon yedek öldürüldü (kural kapalıyken «yedek dolu değil» çıkmıyor → sınav bunu yakalar)
+ok   mutasyon cakisir öldürüldü (kural kapalıyken «vazife tescil cakisir 'tatbikat' diyor» çıkmıyor → sınav bunu yakalar)
+ok   mutasyon kapiyol öldürüldü (kural kapalıyken «dosya olarak yok» çıkmıyor → sınav bunu yakalar)
+ok   mutasyon kalibr öldürüldü (kural kapalıyken «kalibrasyon» çıkmıyor → sınav bunu yakalar)
+ok   mutasyon karist öldürüldü (kural kapalıyken «terim personel karistirilan 'uzmanlik' diyor» çıkmıyor → sınav bunu yakalar)
+ok   mutasyon tarif öldürüldü (kural kapalıyken «sultan_eli_tarifi» çıkmıyor → sınav bunu yakalar)
+ok   mutasyon benzersiz öldürüldü (kural kapalıyken «terim kimliği 'personel' iki kez» çıkmıyor → sınav bunu yakalar)
+ok   mutasyon adikiz öldürüldü (kural kapalıyken «terim adı 'Personel' iki kez» çıkmıyor → sınav bunu yakalar)
+ok   mutasyon vazikiz öldürüldü (kural kapalıyken «vazife kimliği 'tescil' iki kez» çıkmıyor → sınav bunu yakalar)
+ok   mutasyon idsiz öldürüldü (kural kapalıyken «id (metin) eksik» çıkmıyor → sınav bunu yakalar)
+ok   mutasyon bosuzm öldürüldü (kural kapalıyken «uzmanliklar boş» çıkmıyor → sınav bunu yakalar)
+ok   mutasyon terimbos öldürüldü (kural kapalıyken «terimler liste olmalı ve boş olmamalı» çıkmıyor → sınav bunu yakalar)
+ok   mutasyon terimid öldürüldü (kural kapalıyken «terim: id (metin) eksik» çıkmıyor → sınav bunu yakalar)
+ok   mutasyon elkitabi öldürüldü (kural kapalıyken «el_kitabi 'olmayan-beceri' katalogda yok» çıkmıyor → sınav bunu yakalar)
+ok   mutasyon kor öldürüldü (kural kapalıyken «kor evet/hayır» çıkmıyor → sınav bunu yakalar)
+ok   mutasyon yolkacis öldürüldü (kural kapalıyken «depo içi göreli yol olmalı» çıkmıyor → sınav bunu yakalar)
+ok   mutasyon katman öldürüldü (kural kapalıyken «katman 'beceri-x'» çıkmıyor → sınav bunu yakalar)
+ok   mutasyon nesne öldürüldü (kural kapalıyken «nesne olmalı» çıkmıyor → sınav bunu yakalar)
+ok   mutasyon sira öldürüldü (kural kapalıyken «ardışık değil» çıkmıyor → sınav bunu yakalar)
+toplam=69 geçen=69 kırmızı=0
+--- stderr ---

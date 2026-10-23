@@ -1,0 +1,24 @@
+$ bash -c 
+r=0; cd terminal-onar/kapi
+echo "(önceki kayıt dolu-port-her-durum-kodu KIRMIZIYDI: ham TCP dinleyici yakalanmadı, sınav çöküp kendi :18795 kapısını bıraktı → sonraki koşum rc 4. Şimdi: ham TCP yoklama + çıkışta çocuk temizliği.)"
+for kod in 404 500; do node -e "require(\"http\").createServer((q,s)=>{s.writeHead($kod);s.end()}).listen(18795,\"127.0.0.1\")" & SP=$!; sleep 0.4
+  timeout 60 node pano-sinav.mjs > /tmp/o-pw9.txt 2>&1; rc=$?; echo "sahte HTTP $kod :18795 → rc=$rc · $(grep -m1 -oE "ÖLÇÜLEMEDİ: :[0-9]+ zaten dinleniyor" /tmp/o-pw9.txt)"; kill $SP; wait $SP 2>/dev/null; [ $rc = 4 ] || r=1; done
+node -e "require(\"net\").createServer((c)=>c.destroy()).listen(18796,\"127.0.0.1\")" & SP=$!; sleep 0.4
+timeout 60 node pano-sinav.mjs > /tmp/o-pw9.txt 2>&1; rc=$?; echo "HTTP konuşmayan ham TCP :18796 → rc=$rc · $(grep -m1 -oE "ÖLÇÜLEMEDİ: :[0-9]+ zaten dinleniyor" /tmp/o-pw9.txt)"; kill $SP; wait $SP 2>/dev/null; [ $rc = 4 ] || r=1
+sleep 0.5; kalan=0; for p in $(pgrep -f "node .*sunucu.mjs"); do tr "\0" "\n" < /proc/$p/environ 2>/dev/null | grep -q "^TO_KUTU=sinav$" && kalan=$((kalan+1)); done
+echo "rc 4 çıkışlarından sonra kalan sinav kapısı süreci: $kalan (0 olmalı) · :18795 dinleniyor mu: $(curl -s -o /dev/null -m 1 -w %{http_code} http://127.0.0.1:18795/ || echo hayır)"; [ $kalan = 0 ] || r=1
+echo "── port boşken sınav normal koşar:"
+timeout 300 node pano-sinav.mjs > /tmp/o-pw9.txt 2>&1; rc=$?; echo "exit=$rc · $(grep -E "^tarayıcı:" /tmp/o-pw9.txt) · $(grep GEÇEN /tmp/o-pw9.txt | tail -1)"; [ $rc = 0 ] || r=1
+sleep 0.5; kalan=0; for p in $(pgrep -f "node .*sunucu.mjs"); do tr "\0" "\n" < /proc/$p/environ 2>/dev/null | grep -q "^TO_KUTU=sinav$" && kalan=$((kalan+1)); done; echo "normal koşum sonrası kalan sinav kapısı: $kalan · bayat ttyd (pano-sinav-): $(pgrep -fc "ttyd .*pano-sinav-" || echo 0)"; [ $kalan = 0 ] || r=1
+exit $r
+# rc=0 sure=38.2s zaman=2026-10-16T12:11:20+03:00
+--- stdout ---
+(önceki kayıt dolu-port-her-durum-kodu KIRMIZIYDI: ham TCP dinleyici yakalanmadı, sınav çöküp kendi :18795 kapısını bıraktı → sonraki koşum rc 4. Şimdi: ham TCP yoklama + çıkışta çocuk temizliği.)
+sahte HTTP 404 :18795 → rc=4 · ÖLÇÜLEMEDİ: :18795 zaten dinleniyor
+sahte HTTP 500 :18795 → rc=4 · ÖLÇÜLEMEDİ: :18795 zaten dinleniyor
+HTTP konuşmayan ham TCP :18796 → rc=4 · ÖLÇÜLEMEDİ: :18796 zaten dinleniyor
+rc 4 çıkışlarından sonra kalan sinav kapısı süreci: 0 (0 olmalı) · :18795 dinleniyor mu: 000hayır
+── port boşken sınav normal koşar:
+exit=0 · tarayıcı: /config/.nvm/versions/node/v22.23.0/lib/node_modules · GEÇEN: 34 · KALAN: 0
+normal koşum sonrası kalan sinav kapısı: 0 · bayat ttyd (pano-sinav-): 13
+--- stderr ---

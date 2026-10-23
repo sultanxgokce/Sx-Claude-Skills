@@ -1202,7 +1202,15 @@ cmd_cf_yayin() {
     echo "[kırmızı] REPO-KANIT yok: '$proje' origin/main setup-tunnel.sh'te bulunamadı — önce cloudtop-PR merge (D1), hiçbir yere dokunulmadı" >&2
     exit 1
   fi
-  if ! git -C "$repo_dir" show origin/main:infra/docker-compose.server.yml 2>/dev/null | grep -qE "container_name:[[:space:]]*${cname}\$"; then
+  # 🔴 FIX (16 Eki, s02-söküm canlı-vaka): `git show … | grep -qE` SIGPIPE-altında-pipefail
+  # yanlış-negatif üretebiliyordu — grep -q ilk eşleşmede ERKEN çıkar, büyük çıktıda (bu
+  # dosya ~80 KB, boru-tamponunu aşıyor) yukarı akışa SIGPIPE gider; `set -o pipefail` altında
+  # pipeline durumu grep'in BAŞARISINI değil ÖNCEKİ komutun sinyal-durumunu yansıtabiliyor.
+  # Panzehir: önce DEĞİŞKENE yakala, grep'i boru değil here-string (<<<) ile çalıştır — boru yok,
+  # SIGPIPE riski yok. (Aynı sınıf hata _ey_proje_cozumu + _kur_durak1_probe'da da düzeltildi.)
+  local durak1_cm
+  durak1_cm="$(git -C "$repo_dir" show origin/main:infra/docker-compose.server.yml 2>/dev/null)"
+  if [ -z "$durak1_cm" ] || ! grep -qE "container_name:[[:space:]]*${cname}\$" <<< "$durak1_cm"; then
     echo "[kırmızı] REPO-KANIT yok: '$cname' origin/main compose'unda bulunamadı (hostname arkasında servis olmalı) — hiçbir yere dokunulmadı" >&2
     exit 1
   fi
@@ -1507,7 +1515,12 @@ _ey_proje_cozumu() {
     echo "[kırmızı] origin/main compose okunamadı ($EY_REPO_DIR) — proje-çözümü yapılamaz, hiçbir yere dokunulmadı" >&2
     return 1
   fi
-  if ! printf '%s\n' "$compose_main" | grep -qE "container_name:[[:space:]]*${EY_CNAME}\$"; then
+  # 🔴 FIX (16 Eki, s02-söküm canlı-vaka): aşağıdaki satır `printf | grep -q` boru deseniydi —
+  # SIGPIPE-altında-pipefail yanlış-negatif üretti (büyük compose'ta grep erken çıkar, printf'e
+  # SIGPIPE gider, pipefail durumu grep'in başarısı yerine printf'in sinyal-durumunu basar).
+  # Kanıt: s02 için 3/3 satır eşleşirken fonksiyon 'kayitsiz-proje' diyordu — here-string (<<<)
+  # borusuz çalışır, aynı hata sınıfı giderilir.
+  if ! grep -qE "container_name:[[:space:]]*${EY_CNAME}\$" <<< "$compose_main"; then
     echo "[kırmızı] kayitsiz-proje: '$proje' — compose-servis-listesinde (origin/main) '${EY_CNAME}' TAM-STRING eşleşmesi yok (K4: fuzzy/önek/case-farkı kabul edilmez), hiçbir yere dokunulmadı" >&2
     return 1
   fi
@@ -2794,6 +2807,24 @@ cmd_evergreen_kaydet() {
 # KOMŞU-KANIT: 7 komşu (6-çekirdek + mihenk) ÖNCE/SONRA StartedAt + config-hash; fark → exit=1.
 # CF-silme cf.sh offboard'a DELEGE (ham-CF-API bu dosyaya gömülmez — token ikinci-yüzeye yayılmaz).
 
+# _iskan_etkin_iz <dosya|-> <proje> — dosyanın ETKİN içeriğinde (yorumlar dışı) proje izini sayar; stdout: sayı (0.11.1 · gorev_01M548D8FW).
+#   🔴 NİÇİN: iz-sıfır assertion `grep -ci` ile YORUM satırlarını da sayıyordu — s02 sökümünde backup.sh:92 ve iskan-registry.yaml:3
+#   geçmiş yorumlarında 's02' geçtiği için kutu down + CF offboard BİTMİŞKEN ADIM-5 exit 1 ile yarıda durdu. Yorum iz değildir:
+#   tam yorum satırı (^\s*#) atılır, satır-sonu yorumu (boşluktan sonra #) kesilir; kalan metinde büyük/küçük harf duyarsız sayım.
+#   Tırnak İÇİNDEKİ '#' yorum DEĞİLDİR (bağımsız göz tur 1): "a # s02" etkin içeriktir, sayılır. Tek/çift tırnak izlenir; yorum yalnız
+#   tırnak dışında, satır başında ya da boşluktan sonra gelen '#' ile başlar.
+_iskan_etkin_iz() {
+  local f="$1" proje="$2"
+  [ "$f" = "-" ] && f=/dev/stdin
+  awk '{ t=""; q=""; n=length($0)
+         for (i=1;i<=n;i++) { c=substr($0,i,1)
+           if (q!="") { if (q=="\"" && c=="\\" && i<n) { t=t c substr($0,i+1,1); i++; continue }   # çift tırnakta kaçış: \" kapatmaz (göz tur 2)
+                        if (c==q) q=""; t=t c; continue }            # tırnak içi: olduğu gibi
+           if (c=="\"" || c=="\047") { q=c; t=t c; continue }        # tırnak açıldı
+           if (c=="#" && (i==1 || substr($0,i-1,1) ~ /[[:space:]]/)) break   # yorum başladı: gerisi atılır
+           t=t c }
+         print t }' "$f" 2>/dev/null | grep -ci -- "$proje" || true
+}
 # _iskan_bak_temizle <dosya>... — .bak güvenlik-yedeklerini BAŞARIDA temizle (söküm ADIM-5 +
 # evergreen ORTAK). Yalnız başarı-noktasında çağrılır — fail-path'ler .bak'ı restore+inceleme için
 # KORUR. Argüman = ASIL dosya yolları; her biri için "<yol>.bak" silinir. rm -f → .bak yoksa
@@ -3237,12 +3268,12 @@ cmd_sokum() {
   # tombstone-yasak assertion (aksiyon-14): 5 dosyada iz SIFIR olmalı
   local iz_toplam=0 n
   for f in "$m_compose" "$m_tunnel" "$m_inv" "$m_bkp" "$m_reg"; do
-    n="$(grep -ci "$proje" "$f" 2>/dev/null || true)"
-    [ "$n" = "0" ] || { echo "[kırmızı] iz-sıfır assertion düştü: $f içinde $n '$proje' izi kaldı" >&2; iz_toplam=$((iz_toplam + n)); }
+    n="$(_iskan_etkin_iz "$f" "$proje")"   # yorumlar sayılmaz (0.11.1): geçmiş yorumundaki ad iz değildir
+    [ "$n" = "0" ] || { echo "[kırmızı] iz-sıfır assertion düştü: $f içinde $n '$proje' izi kaldı (etkin içerik; yorumlar sayılmaz)" >&2; iz_toplam=$((iz_toplam + n)); }
   done
   [ "$iz_toplam" = "0" ] || { echo "[kırmızı] ADIM-5 tombstone-yasak assertion başarısız — .bak'lardan incele, DUR" >&2; exit 1; }
   _iskan_bak_temizle "$m_compose" "$m_tunnel" "$m_inv" "$m_bkp" "$m_reg"
-  echo "[yeşil] ADIM-5 iz-sıfır assertion: 5 manifest '$proje'-izi 0 (.bak güvenlik-yedekleri başarıda temizlendi — working-tree debris-siz)"
+  echo "[yeşil] ADIM-5 iz-sıfır assertion: 5 manifest '$proje'-izi 0 — etkin içerikte, yorumlar sayılmaz (.bak güvenlik-yedekleri başarıda temizlendi — working-tree debris-siz)"
 
   # ── ADIM-5b: HOST compose residual temizliği (cycle-3 fix-3; birth _compose_senkron simetriği) ──
   # ADIM-2 container'ı `down` etti ama host compose-METNİ bayat-blokla kaldı → sonraki doğumun
@@ -3276,7 +3307,7 @@ cmd_sokum() {
        fi
        hc_sonra_md5="$(timeout 20 ssh -o BatchMode=yes "$ssh_host" "cat '$host_compose'" 2>/dev/null | md5sum | awk '{print $1}')"
        if [ "$hc_sonra_md5" != "$hc_clean_md5" ] \
-          || timeout 20 ssh -o BatchMode=yes "$ssh_host" "grep -ci '$proje' '$host_compose'" 2>/dev/null | grep -qxv 0; then
+          || [ "$(timeout 20 ssh -o BatchMode=yes "$ssh_host" "cat '$host_compose'" 2>/dev/null | _iskan_etkin_iz - "$proje")" != "0" ]; then   # yorumlar sayılmaz (0.11.1)
          echo "[kırmızı] ADIM-5b: BAYT re-verify DÜŞTÜ (host-md5=$hc_sonra_md5 ≠ beklenen; ya da '$proje' izi kaldı) — .bak-restore" >&2
          timeout 20 ssh -o BatchMode=yes "$ssh_host" "cp -a '$hc_bak' '$host_compose'" 2>/dev/null \
            || echo "[kırmızı] .bak-restore da başarısız — host'ta elle geri-al: $hc_bak" >&2
@@ -3627,7 +3658,8 @@ _kur_durak1_probe() {
   local compose_main
   compose_main="$(git -C "$repo_dir" show origin/main:infra/docker-compose.server.yml 2>/dev/null)"
   [ -n "$compose_main" ] || return 2
-  printf '%s\n' "$compose_main" | grep -qE "container_name:[[:space:]]*${cname}\$"
+  # 🔴 FIX (16 Eki) — aynı SIGPIPE/pipefail sınıfı (bkz _ey_proje_cozumu): boru değil here-string.
+  grep -qE "container_name:[[:space:]]*${cname}\$" <<< "$compose_main"
 }
 
 cmd_kur() {

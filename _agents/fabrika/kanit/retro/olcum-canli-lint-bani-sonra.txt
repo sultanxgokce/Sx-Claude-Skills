@@ -1,0 +1,5 @@
+$ python3 retro/scripts/retro.py lint /config/projects/Nexus/_agents/handoff/retro/2026-W42/BÂNİ.md
+# rc=0 sure=0.0s zaman=2026-10-17T16:05:59+03:00
+--- stdout ---
+✓ geçerli retro: /config/projects/Nexus/_agents/handoff/retro/2026-W42/BÂNİ.md · öneri 4 · ders 3
+--- stderr ---

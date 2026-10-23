@@ -1,0 +1,11 @@
+$ bash -c set -eo pipefail; node ahi/schema/validate-repo.mjs . --strict; node ahi/schema/version-lint.mjs .; bash kabuk-biti.test.sh; m=$(git ls-files -s terminal-onar/scripts/bekci-yorum.test.sh | cut -c1-6); echo "bekci-yorum.test.sh git kipi: $m"; [ "$m" = 100755 ]
+# rc=0 sure=0.1s zaman=2026-10-17T21:05:45+03:00
+--- stdout ---
+✓ repo-parity temiz (catalog 76 ↔ sync-targets 66)
+✓ install-listesi 66 skill: SKILL.md + version tam
+  ✓ beceri betikleri bulundu (araç görüyor): 230 dosya
+  ✓ pozitif kontrol: en az bir 100755 betik var (230)
+  ✓ 🔴 çalıştırma biti olmayan beceri betiği YOK (sync-skills duman testi bu yüzden düşüyordu)
+── SONUÇ: 3 geçti · 0 kaldı ──
+bekci-yorum.test.sh git kipi: 100755
+--- stderr ---

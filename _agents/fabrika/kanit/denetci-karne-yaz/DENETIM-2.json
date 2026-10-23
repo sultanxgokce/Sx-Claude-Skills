@@ -1,0 +1,30 @@
+{
+  "tur": 2,
+  "is": "denetci-karne-yaz",
+  "pr": "418",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-22T18:06:12+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 76566,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 16,
+    "bayt": 86716
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Denetçi artık her geçerli göz turundan sonra birincil depodaki karneye tekilleştirilmiş satır yazıyor, yazma hatasını tur sonucundan ayırıyor ve özet bitmiş 5/H işleri kırıldı adayı olarak gösteriyor. Önceki turdaki checkout yutma kusuru da sınavda karne kapatılarak ve başarısız checkout işlemleri açıkça kırmızıya çevrilerek giderilmiş; hedef davranış ve regresyonlar üretime hazır düzeyde ölçülmüş.",
+    "bulgular": [],
+    "kanit_gorusu": "Araç imzalı manifest sağlam ve sarı kayıt yok. Hedef için kırmızı önce (2/22) ile yeşil sonra (22/22) ölçüm çifti mevcut; dokuz mutasyon çağrı, birincil depo yönlendirmesi, sonuçtan bağımsız hata davranışı, 5/H aday seçimi ve tekilleştirme kapılarının gerçekten hassas olduğunu gösteriyor. Önceki tur bulgusu doğrudan denetci-kayit-commit sınavında 14/14 yeşil ölçülmüş; ayrıca kurulum-korumasi kaydı eski kusurlu kopyanın checkout hatalarıyla 7/14 kaldığını görünür biçimde ayırıyor."
+  }
+}

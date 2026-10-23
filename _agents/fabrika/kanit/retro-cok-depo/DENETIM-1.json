@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "retro-cok-depo",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-20T21:23:06+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 28443,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 24183
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kutudaki depoların kartlarını toplama, göz kayıtlarını disk ile origin/main üzerinden birleştirme ve depo başına döküm işi yapılmış; önce/sonra ölçümü de toplamların Nexus dışına genişlediğini gösteriyor. Ancak origin/main ölçümü hata verdiğinde araç bunu sessizce sıfır katkı gibi gösterdiği için eksik göz sayısını geçerli ölçüm diye sunabilir; üretimden önce bu ayrım çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "origin/main okunamazsa bağımsız göz sayımı sessizce eksik kalıyor; zaman aşımı, git yokluğu veya bozuk ref durumunda kullanıcıya ÖLÇÜLEMEDİ uyarısı verilmeden yalnız disk sonucu sunuluyor.",
+        "kanit": "denetim_adlari içinde git ls-tree sonucu yalnız returncode=0 olduğunda ekleniyor ve bütün istisnalar `except Exception: pass` ile yutuluyor; buna rağmen olcum_tablosu kaynağı koşulsuz `disk ∪ origin/main` diye etiketliyor. Eklenen T11 yalnız başarılı origin/main okumasını sınıyor; hata yoluna ilişkin kapı gösterilmiyor.",
+        "konum": "retro/scripts/retro.py: denetim_adlari ve olcum_tablosu değişiklik hunks",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. retro-sinavi kırmızı rc=1'den yeşil rc=0'a dönmüş, gerçekçi çok-depo ölçüm çifti de MİRAHUR 9→46, HENDESE 5→14 ve BÂNİ 25→128 kart değişimini, Sx dahil depo başına dökümü gösteriyor. T11 ayrıntıları ilk 60 satırlık çıktı kesitinde görünmese de test farkında hedefli kapılar mevcut ve bütün sınavın rc=0 kaydı var; origin/main hata yolunun ölçümü ise yok."
+  }
+}

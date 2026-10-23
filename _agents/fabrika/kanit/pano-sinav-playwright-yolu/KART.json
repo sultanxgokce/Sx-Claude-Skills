@@ -1,0 +1,28 @@
+{
+  "is": "pano-sinav-playwright-yolu",
+  "cumle": "terminal-onar tarayıcı sınavları (pano-sinav.mjs, dim-okunur-sinav.mjs) varsayılan Playwright yolu /config/projects/Nexus/ui/node_modules — orada yok → ÖLÇÜLEMEDİ; KANIT_PLAYWRIGHT_DIR + NODE_PATH el ile şart (SERDAR 3 koşum 3 ortam hatası, gorev_01M50PZVB1GCVG6D33V1PH96CT). Yol çözümü: ortam → Nexus → nvm global node_modules (playwright/index.mjs olan); bulunamazsa denenen yolları söyleyen ÖLÇÜLEMEDİ",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-10-16T11:57:26+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "BÂNİ",
+      "oturum": "Nexus/_agents/bani/NOTES.md SERDAR 11:55 (16 Eki): 'küçük kart: pano-sinav varsayılan Playwright yolu nvm global, tek tur'",
+      "gerekce": "Kartı ben geniş yazdım (dim-okunur-sinav.mjs de sayıldı); o sınav bu dalda yok, #346'da — SERDAR'ın isteği yalnız pano-sinav. Kapsam pano-sinav + bulucu + bayat port; dim sınavı #346 birleşince ayrı küçük iş.",
+      "zaman": "2026-10-16T12:07:03+03:00"
+    }
+  ]
+}

@@ -211,6 +211,9 @@
     "canli-sayfa": [
       "_global"
     ],
+    "tarif-kaydi": [
+      "_global"
+    ],
     "soluklan": [
       "_global"
     ],
@@ -224,6 +227,18 @@
       "_global"
     ],
     "donus": [
+      "_global"
+    ],
+    "retro": [
+      "_global"
+    ],
+    "hafta-kapanis": [
+      "_global"
+    ],
+    "baglam-karti": [
+      "_global"
+    ],
+    "higgsfield-abonelik": [
       "_global"
     ]
   }

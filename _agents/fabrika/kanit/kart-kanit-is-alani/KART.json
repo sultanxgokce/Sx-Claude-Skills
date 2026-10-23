@@ -1,0 +1,22 @@
+{
+  "is": "kart-kanit-is-alani",
+  "cumle": "kart.sh bitti, tikandi, daralt ve canlı-borç-durumu kanıt/denetim dosyalarını çağrıldığı ağaçta bulamazsa kartın iş alanı worktree'sinden okur ve nereden okuduğunu basar; iki ağaçta da yoksa sessiz 0 yerine uyarı basar; sınav kapısı + mutant (eski davranış dönünce kırmızı)",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-22T10:53:59+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: canlı)",
+  "kapsam_uyarilari": []
+}

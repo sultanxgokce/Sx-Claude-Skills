@@ -1,0 +1,123 @@
+$ node terminal-onar/kapi/sunucu.test.mjs
+# rc=0 sure=6.5s zaman=2026-10-17T15:19:01+03:00
+--- stdout ---
+
+── T · TABAN YOLU (kapı /sedir altında) ──
+  ✓ T1 giriş sayfası TABAN altında açılır
+  ✓ T2 taban DIŞI istek reddedilir (404) — kapı başkasının yoluna cevap vermez
+  ✓ T3 tabanın kendisi sondaki eğik çizgiye yönlenir
+  ✓ T4 girişsiz kök TABANLI giriş sayfasına yönlenir (kök yola DEĞİL)
+  ✓ T5 girişsiz API 401 döner (yönlendirme değil)
+  ✓ T6 yanlış parola REDDEDİLİR
+  ✓ T7 doğru parola KABUL (T6 tautoloji değil)
+  ✓ T8 çerez YALNIZ kendi tabanında geçerli (Path=/sedir)
+  ✓ T9 çerez HttpOnly+Secure+SameSite korunur
+  ✓ BG1 /api/bugun girişsiz 401 (kapı oturumu ister)
+  ✓ BG2 bugünkü ajan listede: basiret, 2 madde (1 açık · 1 bitti), görev bağı
+  ✓ BG3 başka günün çıpası bugun_degil'de (listede değil)
+  ✓ BG4 kutu ve proje kimliği cevapta
+  ✓ BG5 bozuk tarih 400
+  ✓ BG5b biçimi doğru ama takvimde olmayan gün (2026-99-99) 400 — boş liste uydurulmaz (göz tur 1)
+  ✓ BG5c 2026-02-29 yok (artık yıl değil) → 400
+  ✓ BG5d bozuk tarihlerden SONRA kapı hâlâ cevap veriyor (istisna işleyiciyi düşürmedi)
+  ✓ T10 sayfa kendi tabanını TAŞIR (sunucudan öğrenir, tahmin etmez)
+  ✓ T11 sayfadaki mutlak varlık yolları tabana taşınmış
+  ✓ T12 PWA kimliği KUTU BAŞINA üretilir (kapsam tabanda, ad kutudan)
+  ✓ T13 PWA ikon yolları da tabanlı
+  ✓ T14 ttyd vekili tabanlı yolu OLDUĞU GİBİ iletir (ttyd -b ile eşleşsin)
+
+── Y · KOLTUKLAR (koltuk seçici) ──
+  ✓ Y1 girişsiz koltuk listesi 401 (kutunun oturum adları açık değil)
+  ✓ Y2 girişli liste 200 ve betiğin söylediği koltukları taşır
+  ✓ Y3 bozuk adlı satır SÜZÜLÜR (kapı betiğe körü körüne güvenmez)
+  ✓ Y4 Claude işareti ve son etkinlik taşınır
+  ✓ Y5 ekran adresi TABANLI ve ?arg= ile (ttyd -a sözleşmesi)
+  ✓ Y6 ana koltuk işaretli
+  ✓ Y7 ttyd vekili ?arg= sorgusunu OLDUĞU GİBİ iletir (koltuk ttyd'ye ulaşır)
+  ✓ Y8 betik düşerse 500 "ölçülemedi" — boş liste ("hiç koltuk yok") BASILMAZ
+  ✓ Y10 tür ve hâl taşınır (BASIRET ajan/soru · cc-1 diğer/bilinmiyor)
+  ✓ Y10b ana bayrağı kapıdan (betikten değil): sahte ana adını bilmez, kapı yine ana:true işaretler
+  ✓ Y10c eski 3 alanlı betikte tür/hâl alanı YOK (uydurulmaz)
+  ✓ Y9 telefon ekranı koltuk seçici TAŞIR (başlıkta seçim kutusu)
+  ✓ Y10 seçici listeyi kutunun /api/koltuklar ucundan çeker ve tam terminali ?arg= ile açar
+
+── K · KÖK DAVRANIŞI (taban boş — geriye dönük) ──
+  ✓ K1 taban boşken giriş kök yolda açılır
+  ✓ K2 girişsiz kök → /giris (eski davranış BAYT BAYT aynı)
+  ✓ K3 taban boşken çerez Path=/ kalır
+  ✓ K4 taban boşken sayfa yolları DEĞİŞTİRİLMEZ
+  ✓ K5 taban boşken ttyd yolu kök kalır
+
+── M · MAHREMİYET (iki kutu aynı kaynağı paylaşıyor) ──
+  ✓ M1 geçerli oturumla BAŞKA kutunun yoluna gidilemez (404)
+  ✓ M2 ... kendi yolu çalışıyor (M1 "her şey 404" değil)
+
+── W · WEBSOCKET (tam terminal bağlantısı) ──
+  ✓ W1 tabanlı WS yolu ttyd'ye ULAŞIR
+  ✓ W2 taban DIŞI WS yolu REDDEDİLİR (401) — geçerli oturumla bile
+  ✓ W3 çerezsiz WS REDDEDİLİR (401)
+  ✓ W4 tty dışı yola upgrade REDDEDİLİR
+  ✓ B1 giriş sayfası tabanı TAŞIR (window.__TABAN gömülü)
+  ✓ B2 giriş sayfasında KÖK-mutlak varlık yolu kalmadı
+  ✓ B3 başarılı girişten sonra taban altına dönülür (köke DEĞİL)
+  ✓ B4 tabansız kutuda sayfa yine çalışır (B1 tautoloji değil)
+  ✓ P1 kutunun kendi parolası yokken BAŞKASININKİYLE açılmaz (fail-closed)
+  ✓ P2 kendi parolası varken AÇILIR (P1 tautoloji değil)
+  ✓ F1 biçem dosyasında kök-mutlak yazı tipi adresi yok
+  ✓ F2 yazı tipi taban altından İNİYOR (F1 tautoloji değil)
+  ✓ C1 kısa adlı kutu UZUN adlının önbelleğini silmez
+  ✓ C2 ... ama kendi eski kabını siler (C1 tautoloji değil)
+  ✓ C3 kutu kendi eski sürümünü temizler, komşununkine dokunmaz
+  ✓ A1 giriş ekranı KUTUNUN adını gösterir
+  ✓ A2 sayfada doldurulmamış yuva kalmadı
+  ✓ A3 kaynakta sabit kutu adı kalmadı
+  ✓ A4 BAŞKA kutu KENDİ adını gösterir (A1 tautoloji değil)
+  ✓ PN1 ttyd HTML sayfasına pano köprüsü gömülür (data-kapi-pano işareti)
+  ✓ PN2 köprü TABANI taşır (window.__TABAN="/sedir") ve /api/resim'e tabanla gider
+  ✓ PN3 ekleme </body> ÖNÜNE girer, sayfa bütün (…</body></html> ile biter)
+  ✓ PN4 content-length yeniden hesaplanır (düz istekte gövde bayt sayısı = başlık, gzip yok)
+  ✓ PN5 ttyd'den DÜZ gövde istenir (accept-encoding sıyrılır)
+  ✓ PN6 ttyd'nin kendi betiği yerinde (köprü sayfayı ezmez)
+  ✓ PN7 istemci gzip istediyse cevap gzip'lidir ve köprü içindedir
+  ✓ PN8 </body> olmayan sayfada köprü SONA eklenir (sayfa yine açılır)
+  ✓ PN9 ttyd SIKIŞTIRILMIŞ cevap verirse gövde bozulmaz ve köprü EKLENMEZ
+  ✓ PN10 HTML olmayan ttyd cevabına (json) köprü girmez
+  ✓ PN11 tabansız kutuda köprü __TABAN="" ile gömülür (K2 tautoloji değil)
+  ✓ PN12 KAPI_PANO=0 → köprü gömülmez, accept-encoding ttyd'ye geçer (eski davranış bayt bayt)
+  ✓ PN13 pano.js kapanış script etiketi içermez (satır içi gömülüyor)
+  ✓ PN14 ekleme replace'i FONKSİYONLA yapılır (pano.js içindeki $ dizileri yorumlanmasın)
+  ✓ KA0 /koltuk/<ad> api altında değil → 404 (yol disiplini)
+  ✓ KA1 GET /api/koltuk/<ad> betiğin durum JSON'unu olduğu gibi taşır (durum·yol·rol·resume)
+  ✓ KA2 betik "durum <ad>" ile çağrıldı
+  ✓ KA3 girişsiz → 401
+  ✓ KA4 POST …/ac → betik "ac <ad>" (eski yok) · rc0 → 200 tamam, mesaj betikten
+  ✓ KA5 {eski:true} → betiğe --eski geçer (eski sohbete dönüş)
+  ✓ KA6 rc3 (merdiven başladı) → 202 tamam:true
+  ✓ KA7 rc4 (kayıtsız koltuk) → 409 tamam:false, sebep mesajda
+  ✓ KA8 rc1 (açılamadı) → 502
+  ✓ KA9 x-kapi başlığı olmadan POST → 403 (CSRF kalkanı korunur)
+  ✓ KA10 bozuk ad (:) yola GİRMEZ → 404 (betik çağrılmaz)
+  ✓ KA11 üçüncü hâl "takili" kapıdan olduğu gibi geçer (son epoch dolu)
+  ✓ KA12 açma süreyi aşarsa 504 + "arkada doğmuş olabilir" (502 açılamadı DEĞİL)
+  ✓ KA13 süre içinde biten açma 200 (KA12 tautoloji değil)
+  ✓ KA14 takılı/ölçülemeyen koltuk zorlasız → rc5 → 428 tamam:false (dokunulmadı)
+  ✓ KA15 {zorla:true} → betiğe --zorla geçer
+  ✓ SL1 "/" içeren koltuk listede (eski süzgeç düşürüyordu)
+  ✓ SL2 ekran adresi encodeURIComponent ile (?arg=2026%2F85)
+  ✓ SL3 /api/koltuk/<kodlu ad> → yol çözülür, betiğe "durum 2026/85" gider
+  ✓ SL4 arada boşluklu ad yola girer → betiğe "durum a b" (tmux izin verir — bağımsız göz tur 1)
+  ✓ SL5 200 karakterlik "/"lı ad: kodlu parça 200'ü aşsa da tekil uç ÇÖZÜMDEN SONRA aynı kuralla sınar → 200
+  ✓ SL6 201 karakter → 404 (sınır çözülmüş ada uygulanır)
+  ✓ SL7 200 emojilik ad (kodlu 2400) tekil uca girer → 200; 201 emoji → 404
+  ✓ KD0 girişsiz /api/kadro 401
+  ✓ KD1 200 + kaynak aile kaydı + sayılar
+  ✓ KD2 çalışan: BASIRET ⏳ dış olay + ne + ekran adresi
+  ✓ KD3 düşen: kalfa (oturum açık, Claude yok) · ana koltuk boş kabuk olsa da DÜŞEN değil, altyapı (E2: "ana oturum")
+  ✓ KD4 hal: emekli → geçici/emekli; kayıtsız "2026/85" kodlu ekran adresiyle
+  ✓ KD5 proje dizini yanıtta (hangi kayıt okundu, izlenebilir)
+  ✓ KD6 koltuk listesi ölçülemezse 500 (uydurma kadro yok)
+  ✓ KD7 kayıt var ama okunamıyor → 500 + hangi dosya
+
+────────────────────────────────────────────────────────
+GECEN: 106  ·  KALAN: 0
+--- stderr ---

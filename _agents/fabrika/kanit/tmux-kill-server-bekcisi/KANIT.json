@@ -1,0 +1,63 @@
+{
+  "is": "tmux-kill-server-bekcisi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-20T17:37:20+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "vaka-bekcisiz",
+      "asama": "once",
+      "dosya": "olcum-vaka-bekcisiz-once.txt",
+      "sha256": "d9d6f704cf6053a4632653a6872509e7507fb61ca499e3fd8f90a5e940a83a27",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/tmux-kill-server-bekcisi/vaka.sh",
+        "/usr/bin/tmux"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-20T17:37:14+03:00",
+      "sure_sn": 1.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "e780f93b6ee5419c9502b22456f19a9f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "vaka-bekcili",
+      "asama": "sonra",
+      "dosya": "olcum-vaka-bekcili-sonra.txt",
+      "sha256": "d6b1622f1604c9b97dc50aea56cf3d1eed9f7604c09a0360254f2e90cb62c30f",
+      "komut": [
+        "env",
+        "TO_GERCEK_TMUX=/usr/bin/tmux",
+        "bash",
+        "_agents/fabrika/kanit/tmux-kill-server-bekcisi/vaka.sh",
+        "terminal-onar/scripts/tmux-bekcisi.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T17:37:15+03:00",
+      "sure_sn": 1.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "73f0a257da0a4a63a201d256b69b18c9"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "sinav",
+      "asama": "tek",
+      "dosya": "olcum-sinav-tek.txt",
+      "sha256": "800c606a0f95c34495e9c72b5c40fa640f348c06996e3d0a52a712feb92924f3",
+      "komut": [
+        "bash",
+        "terminal-onar/scripts/tmux-bekcisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-20T17:37:20+03:00",
+      "sure_sn": 5.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4f4e3a8177484c9c828b1d3411d422ca"
+    }
+  ],
+  "imza": "743aa7c1bbdfc2428a6e697d114061f6d972348a8a875fcab240db498edee101"
+}

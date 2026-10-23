@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "kanit-canli-sinifi-2",
+  "pr": "353",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T14:14:02+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 96194,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 21,
+    "bayt": 111356
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Canlı işlerde gerçek ateşleme kaydını karta bağlayan kapı kurulmuş; serbest komut, sarı kayıt, eski kayıt ve geleceğe tarihli kayıt yolları sınavlarla kapatılmış. Önce şu uygulama sorununu çöz: kart açılış zamanı okunamazsa canlı bağlama ölçülemedi sayılacağı yerde normal eksik kanıt gibi sonuçlanabiliyor; bunun dışında kanıt güçlü ve talep doğru karşılanmış.",
+    "bulgular": [
+      {
+        "ne": "Kartın `zaman` alanı eksik veya ISO olarak çözülemez olduğunda canlı kayıtların işe bağlanması ölçülemez; fakat kapı bunu rc=3 yerine bağlı kayıt yokmuş gibi rc=1'e indirebilir.",
+        "kanit": "Python parçası `kz=None` olduğunda yalnız `neden=\"kart açılışı zamanı okunamadı\"` üretip kaydı `kopuk` listesine koyuyor; kabuk tarafı `ckopuk` uyarısını basıyor fakat `olcemedi` artırmıyor. Böylece `cg=E`, `cy=0` yolunda `eksik` artırılıyor. T11p yalnız bozuk JSON / `canli-gerekir` başarısızlığını sınamış; geçerli JSON içindeki okunamayan `zaman` vakası yok.",
+        "konum": "yazilim-fabrikasi/scripts/birlestirme-kapisi.sh: canlı bağlama Python bloğu (`kz=P(...)`, `if kz is None`) ve ardından `ckopuk`/`cg` kontrolleri",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sha'ları sağlam; üç sınavda kırmızıdan yeşile ölçüm çiftleri var, sarı ölçüm kaydı yok. Kanıtlar gerçek üretim betiklerini çalıştırıyor, canlı kapı için eski/bağlı/gelecek/sarı vakaları ve dört mutasyon içeriyor; ancak geçerli kart JSON'unda okunamayan açılış zamanı senaryosu ölçülmemiş. Ek canlı kayıt yeşil olsa da karttan eski olduğu için bu işe bağlı canlı kanıt değildir; kart açıkça `--canli h` olduğundan talebin doğrulanması için gerekli değildir."
+  }
+}

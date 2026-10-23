@@ -3,3 +3,13 @@ __pycache__/
 
 # kapi-sinavi kos komutunun yazdigi damga — koşuma ozel, paylasilmaz
 .kapi/durum.json
+
+# Fabrika karne defteri — canlı durum: denetçi her göz turunda BİRİNCİL depoya yazar (karne.sh, git-common-dir). Takipli
+# olsa her tur ana kopyayı commit'siz bırakır, 'git add -A' ile dala girer (kart dosyalarıyla aynı sınıf, cloudtop #802 / Nexus #1148).
+# Kayba karşı emniyet git değil yedektir: /opt/cloudtop/config uzak yedekte (backup-offsite.sh) bütün olarak.
+_agents/fabrika/karne.jsonl
+
+# Fabrika kart dosyaları — canlı durum: kart.sh BİRİNCİL depoya yazar (git-common-dir). Takipli olunca ana kopya kirlenir ve
+# ana kopya main'e geçemez ('untracked working tree files would be overwritten', 23 Eki ölçümü: 67 kart). PR'a giden donmuş
+# kopya kanit/<iş>/KART.json'dadır. Emsal: cloudtop #802 · Nexus #1148.
+_agents/fabrika/kartlar/*.json

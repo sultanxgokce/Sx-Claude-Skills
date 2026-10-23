@@ -1,0 +1,6 @@
+$ bash -c bash gunluk-plan/scripts/cipa.test.sh 2>&1 | tail -n1; bash gun-ortasi/scripts/kalan.test.sh 2>&1 | tail -n1
+# rc=0 sure=19.5s zaman=2026-10-17T21:02:43+03:00
+--- stdout ---
+SONUÇ: 73 geçti · 0 kaldı
+── SONUÇ: geçti=33 kaldı=0 ölçemedim=0 ──
+--- stderr ---

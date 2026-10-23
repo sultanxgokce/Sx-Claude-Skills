@@ -1,0 +1,52 @@
+$ env TB_KIC=1 bash terminal-onar/scripts/tmux-bekcisi.test.sh
+# rc=1 sure=0.9s zaman=2026-10-20T20:20:18+03:00
+--- stdout ---
+── A · karar (sahte gerçek tmux)
+  ✓ A1 $TMUX dolu + çıplak kill-server → RET, gerçek tmux çağrılmaz
+  ✓ A1b ret iletisi sebebi ve çıkışı söyler
+  ✓ A2 $TMUX dolu + -L ad kill-server → geçer
+  ✓ A3 $TMUX dolu + -S yol kill-server → geçer
+  ✓ A3b bitişik -Lad → geçer
+  ✓ A3c kümelenmiş -2L ad → geçer
+  ✓ A3d -f dosya ARGÜMANI soket sanılmaz (-f -L kill-server → -L dosya adıdır, RET)
+  ✓ A4 $TMUX yok + kill-server → geçer (cron/docker exec söküm yolu)
+  ✓ A5 tek anlamlı kısaltma kill-ser → RET
+  ✓ A5b kill-serv / kill-serve → RET
+  ✓ A6 ';' sonrası ikinci komut kill-server → RET
+  ✓ A6b -f ayarlı ve -c'li çağrıda da RET
+  ✓ A7 kill-session -t x → geçer
+  ✓ A7b komut konumunda OLMAYAN 'kill-server' (oturum adı) → geçer
+  ✓ A7c kabuk komutu metni içindeki kill-server → geçer
+  ✓ A8 TMUX_KILL_SERVER_IZIN=1 → kasıtlı kapatma geçer
+  ✓ A9 argümanlar bayt bayt iletilir (boşluk, ; ve tırnak)
+  ✓ A10 gerçek tmux'un çıkış kodu aynen döner
+  ✓ A11 gerçek tmux yoksa 127
+  ✓ A12 ret iz defterine yazılır (kim çağırdı)
+── G · GERÇEK tmux: K43HN vakası (yalıtılmış sunucu = kutu)
+  ✓ G0 pozitif kontrol: kutu sunucusu canlı
+  ✓ G1 vakadaki komut RET alır
+  ✓ G2 kutunun sunucusu ve koltuğu YERİNDE
+  ✓ G3 (bekçisiz gerçek tmux) aynı ortamda yeni oturum KUTUYA düşer — vakanın mekanizması
+  ✓ G4 'unset TMUX' ile yalıtılmış sunucu kapanır, kutu kalır
+  ✓ G5 açık soketle kasıtlı kapatma GEÇER (kutu gerçekten kapanır)
+── K · kurulum (ortak.sh tmux_bekcisi_kur)
+  ✓ K1 deneme yolunda hedef verilmezse canlı yola DOKUNMAZ
+  ✓ K1a … varsayılan (canlı rolündeki) hedefe hiçbir şey yazmaz
+  ✓ K1b … ve gerçek /config/.local/bin/tmux da değişmez (önce=sonra)
+  ✓ K1d gerçek kutu yolunda (PROJE=/config/projects/<kutu>) varsayılan hedefe KURAR
+  ✓ K1c boş TO_TMUX_BEKCI_BIN de 'verilmedi' sayılır
+  ✓ K2 ilk kurulum: kuruldu, kaynakla bayt bayt aynı, çalıştırılabilir
+  ✓ K3 ikinci koşu: güncel (dokunmaz)
+  ✓ K4 eski bekçi kopyası güncellenir
+  ✓ K5 bekçi olmayan yabancı dosyaya DOKUNMAZ
+  ✓ K6 yeni kopya gerçek tmux'a ulaşamazsa KURULMAZ (bozuk tmux asla yerleşmez)
+  ✓ K7 onar.sh adım 0 kurucuyu çağırır
+── B · dakikalık bekçi her turda kurar (onar yalnız arızada koşuyordu → 2.19.0 sağlıklı kutulara inmiyordu)
+  ✗ B1 sağlıklı kutu (durum 0): bekçi turu bekçiyi KURAR, günlüğe bir satır — beklenen=0|e|e|1 gerçek=0|h|h|0
+  ✗ B2 ikinci tur: güncel → günlüğe yazmaz (dakikada bir satır olmaz) — beklenen=0|1 gerçek=0|0
+  ✗ B3 eski kopya bir sonraki turda güncellenir — beklenen=0|e|2 gerçek=0|h|0
+  ✓ B4 kurulamasa da (yabancı dosya) bekçi işine devam eder: dosya yerinde, merdiven başlar
+  ✓ B5 duraklatılmış bekçi kurmaz (duraklat = hiçbir şey yapma)
+
+SONUÇ: 39 geçti · 3 kaldı
+--- stderr ---

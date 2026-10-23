@@ -1,9 +1,160 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.9.2
+version: 2.21.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.21.0 · El kabuğu sekmesi — her kutuda sabit, boş, Claude'suz kabuk (22 Eki · gorev_…GT5BTK · SERDAR 12:32 (3))
+Sultan'ın elle komut (sabah paketi, kurtarma) çalıştırabileceği **`<kutu>-kabuk`** tmux oturumu:
+- `kabuk_kur` (`ortak.sh`) **yalnız yoksa** kurar: proje dizininde, varsayılan kabukla; Claude başlatılmaz. Var olanı öldürmez, içine yazmaz
+  (yarım komut kaybolmaz). Çağıranlar: `onar.sh` adım 1b + **`bekci.sh` her tur** (onar yalnız arızada koşar — tmux bekçisi dersi).
+- 🔴 Sağlık ölçüsüne (`durum.sh`) **GİRMEZ**: kabuk eksikliği merdiveni tırmandırıp yeni Claude açtırmasın. Kurulamazsa günlüğe yalnız
+  **değişince** yazılır (`$DURUM_DIZ/kabuk.son`). `--web-yenile` yalnız `ttyd-*`/`kapi-*` öldürür → kapı yeniden açılınca kabuk kalır.
+- Görünürlük: koltuk listesinde **gizli değil**; kapı `/api/koltuklar`'da `kabuk: true` bayrağı (+ üst düzey `kabuk` adı) verir,
+  telefon seçicisinde "kabuk — elle komut". Kadroda **altyapı** ("el kabuğu") → kapat/dondur/emekli uygulanamaz.
+- `TO_KABUK_YOK=1`: bekçiyi GERÇEK tmux ile koşturan sınavların kalkanı (ölçüldü: `tmux-bekcisi.test.sh` gerçek sunucuda `sinav-kabuk` açıyordu).
+- Sınav: `scripts/kabuk-sekmesi.test.sh` (gerçek tmux, kendi soketi; sarmalayıcı `ortak.sh` PATH'inden SONRA yeniden başa — aksi hâlde gerçek
+  sunucuya düşüyordu, ölçüldü; sızma kapısı Y2) · `kapi/sunucu.test.mjs` Y6b.
+
+## 🆕 2.20.0 · Kadro Uzmanlıklar + Terimler kaynağı — iki salt-okur uç (22 Eki · Mühürdarlık G12 · SERDAR 05:10 (A))
+Merkezin Kadro sayfasındaki "Uzmanlıklar" ve "Terimler" alt sekmeleri (cloudtop) veriyi **sahibinin kutusundan**, bugünkü vekil yolundan okur:
+- `GET /api/kadro/tarif` → `tarif-kaydi` `veri/kadro-tarifleri.json` (uzmanlık · vazife · usul; adımda beceri **kurulu mu** ölçülür) +
+  `veri/terim-kaydi.json` (terimler). Yol: `TO_TARIF_DIZIN` (vars. `/config/.claude/skills/tarif-kaydi/veri`), beceri dizini iki üstü (`TO_BECERI_DIZIN`).
+- `GET /api/kadro/uzmanlik` → Nexus `agent-registry.json` `personas[]` (yalnız ad + `uzmanliklar[]`) + yanındaki `diploma-defteri.jsonl`.
+  Yol: `TO_AJAN_KAYDI` (vars. `/config/projects/Nexus/_agents/orchestration/agent-registry.json`), `TO_DIPLOMA_DEFTERI`.
+- 🔴 **Yalnız GET** (başka yöntem 405), girişli (öteki `/api/` uçları gibi). Çıktı **beyaz liste** (`kapi/tarif.mjs`): depo yolları (`kaynak`),
+  `kapi_yolu`, persona `location/contact/runtime`, diploma `kanit/kume_sha` yanıta girmez. **Okunamayan kaynak `olc` + `null` döner, boş liste DEĞİL**;
+  boş diploma defteri ölçülmüş sıfırdır (`[]`). Kaynağı olmayan kutuda uç çalışır ve "kaynak yok" der.
+- Kanıt: `kapi/tarif.test.mjs` 19 kapı (gerçek tarif-kaydi kaydıyla G1-G2 dahil) · `sunucu.test.mjs` KT0-KT3 · `kapi/tarif.mutasyon.sh` 10/10.
+
+## 🆕 2.19.1 · tmux bekçisi her bekçi turunda kurulur (20 Eki · SERDAR 19:3x)
+2.19.0 bekçiyi yalnız onar.sh K0'da kuruyordu; onar ise yalnız düzen bozukken koşar → sağlıklı kutulara hiç inmedi (ölçüm 20 Eki,
+`_agents/fabrika/kanit/tmux-bekcisi-yayilim/filo-kurulum.sh` · `olcum-filo-kurulum-v2-once.txt`: abc kullanıcısı olan 18 ekip
+kutusundan yalnız code'da kurulu; abc'siz 9 altyapı kabı kapsam dışı, ölçülemeyen 0). Artık `bekci.sh` her dakika
+duraklatma denetiminden SONRA `tmux_bekcisi_kur`'u çağırır: güncelse sessiz, kurduğunda/güncellediğinde/kuramadığında günlüğe bir
+satır; kuramasa da bekçi işine devam eder. **Sınır:** bekçisi duraklatılmış kutuya (20 Eki: mmex · nazir · nova) ve bekçisi
+koşmayan kutuya (cloudtop masaüstü) inmez — duraklat "hiçbir şey yapma" demektir. Sınav: `tmux-bekcisi.test.sh` B1-B5 + 4 bozma.
+
+## 🆕 2.19.0 · tmux bekçisi — kutunun canlı sunucusunu içeriden kapatan çıplak kill-server reddedilir (20 Eki · K43HN · SERDAR 17:2x)
+**Ölçülen kök neden (OOM değil):** 16-17 Eki code kutusunda aile oturumları 4 kez birlikte öldü (16 Eki 19:44 · 17 Eki 11:01 · 11:26 ·
+12:56). `oom_kill` sayacı ölümlerden önce ve sonra 83 — bellek değil. Ölümlerin her biri `dava-resume-olc.sh` çağrısından 30-60 sn sonra:
+betik `TMUX_TMPDIR` ile kendi sunucusunu kurduğunu sanıp çıkışta çıplak `tmux kill-server` koşuyordu; tmux istemcisi `$TMUX` doluyken
+TMUX_TMPDIR'ı DEĞİL `$TMUX` soketini kullanır → tmux içindeki bir Claude'dan çağrılınca KUTUNUN sunucusu gitti (DERVİŞ 17 Eki ölçtü,
+betiğe `unset TMUX` kondu). O düzeltme tek betikti; dört ölümün dördü de betik PR'a girmeden iş alanında koşturulurken oldu, yani CI
+denetimi önleyemezdi. Koruma çalışma anında:
+- `scripts/tmux-bekcisi.sh` → onar.sh (K0 adım 0) `/config/.local/bin/tmux` olarak kurar (PATH'te `/usr/bin`'den önce; 2.19.1'den
+  beri dakikalık bekçi de her turda kurar). YALNIZ şunu reddeder: `$TMUX` dolu + açık soket yok (`-L`/`-S`, kümelenmiş/bitişik biçimler dahil) + komut konumunda
+  `kill-server` (tek anlamlı kısaltmaları ve `;` sonrası komut dahil). Ret: iki satır sebep + rc 1, iz `<durum>/tmux-bekcisi.log`
+  (çağıran süreç). Geri kalan her çağrı `exec` ile gerçek tmux'a gider — argüman ve çıkış kodu birebir.
+- Kasıtlı kapatma: `TMUX_KILL_SERVER_IZIN=1 tmux kill-server` ya da açık soket. `$TMUX` boşken (cron, `docker exec` söküm — iskan.sh)
+  hiçbir şey değişmez.
+- Kurulum kuralları (`ortak.sh tmux_bekcisi_kur`): canlı crontab kilidiyle aynı — deneme yolunda (PROJE ≠ `/config/projects/<kutu>`)
+  canlı yola YALNIZ `TO_TMUX_BEKCI_BIN` ile yazılır (sınavlar onar.sh koşturur) · bozuk tmux asla yerleşmez (yeni kopya önce `-V` ile
+  gerçek tmux'a ulaşmalı, sonra atomik yer değiştirir) · hedefte bekçi olmayan dosya varsa dokunulmaz.
+- Sınav: `scripts/tmux-bekcisi.test.sh` (37 kapı + 10 bozma; G kapıları GERÇEK tmux'la vakayı yeniden üretir: yalıtılmış "kutu"
+  sunucusu, vakadaki komut RET, kutu ve koltuğu yerinde).
+
+## 🆕 2.18.1 · compact kuyruk turu bağlamı ölçülemeyen koltuğa göndermez (18 Eki · kart compact-bekle-olculemeyen-sx · SERDAR 21:5x)
+`compact.sh compact-bekle`, koltuğun bağlamı ölçülemediğinde (yüzde `—`) "bu arada compact edilmiş" düşürmesini atlayıp bayat
+kaydı boş koltuğa gönderiyordu. Artık gönderilmez: satır "bağlamı ölçülemedi (<neden>) — GÖNDERİLMEDİ, bekliyor" der, kayıt
+kuyrukta kalır, deneme/yaş tavanında "bağlamı hiç ölçülemedi" nedeniyle düşer. Aynı kural Nexus `filo.py`'de #1171 (FNX51) ile
+birleşti. Kanıt: `compact.test.sh` B7 · B7b.
+
+## 🆕 2.18.0 · Dava Rafı — kapı tarafı (16-18 Eki · Parça B2, SERDAR 16:26 · merkez rafı cloudtop #659 · kilit #362)
+Kayıt KÖKÜNDE `dava_kurali: {tavan: 4, gun: 14}` olan kutuda (bugün vekatip; satırı kutunun reisi yazar) kapı Dava Rafı'nı besler.
+Kural satırı yoksa hiçbir yanıt değişmez — davasız kutuda raf çizilmez (`dava.test` DV7 · DV33).
+- **Dava = kayıtlı satır**, `rol: dava`, `id` = dosya no (YYYY/N, tırnaksız). Alanlar: `tmux` · `arz_adi` (kısa ad) · `session_id` ·
+  `cwd`; kapının yazdıkları `son_calisma` (dondururken epoch) · `dondurma: kural` (bekçi dondurdu) · `bagla_ile: true` (E4 ile geldi).
+- **`/api/kadro`**: `davalar: {tavan, gun, acik, dondurulacak:[{id, kalan_gun}]}` (yalnız kural varsa) · `bagla: true` · kişide
+  `arz_adi` · `son_calisma` · `dondurma` · `bagla_ile` (yalnız kayıtta varsa).
+- **`POST /api/kadro/hal`** (aynı uç, aynı kurallar: çerez şart, jeton 403, altyapı 403, süreç içi kuyruk):
+  `geri-ac {yer_ac:true}` — açık dava ≥ tavan ise en uzun süredir dokunulmayan açık dava ÖNCE dondurulur; dondurulamazsa HİÇBİR ŞEY
+  açılmaz (502). Yanıt `{tamam, oturum, ekran, donduruldu, mesaj}`. · `bagla {oturum, hedef:'dava', dosya_no, kisa_ad}` → kaydın ilk
+  dosyasının `uyeler:` sonuna blok; `{…, hedef:'kisi', id}` → kişinin `session_id`'si (önceki `bagla_once`'a). Claude kimliği ve
+  dizini oturumun kimlik izinden; tek Claude olmalı. · `bagla-geri-al {id}` → yalnız `bagla_ile: true` kayıt; dava bloğu silinir,
+  kişide eski kimlik geri konur — kayıt bayt bayt eski hâl, oturuma dokunulmaz.
+- **Günlük tur**: `bekci.sh` → `scripts/dava-gunluk.sh` kapısı → günde BİR kez `kapi/dava-bekci.mjs` (damga `<durum>/dava-bekci.gun` turdan
+  önce yazılır: tur düşse de o gün tekrar yok, ertesi gün yeniden; damga yazılamazsa tur koşmaz — `dava-gunluk.test.sh` G1-G6) → `gun` gündür tmux bölmesi kıpırdamayan açık davayı
+  dondurur (`dondurma: kural`), iz `kadro-hal.log`. `--kuru` yalnız söyler. Kapı ile bekçi aynı kaydı yazar → süreçler arası
+  kayıt kilidi `kilit.mjs` (flock, #362): kapının hal ucu, bekçi turu ve `kadroYaz` AYNI `<proje>/kadro.kilit` dosyasını kilitler; hal ucu
+  ve bekçi bütün işlemi (yer aç: dondur + aç) tek kilit altında yapar, içeride kilitsiz `kadroYazKilitAltinda`. Kilit 30 sn'de
+  alınamazsa kapı 503, bekçi rc 3 (o gün tur yok); kayıt dokunulmaz (`dava.test` DV32–DV32d).
+- **Açma (B10 ölçümü)**: `koltuk-ac` dava satırını `claude --resume <session_id>` ile açar (kayıttaki `cwd`'de). baslat-claude.sh
+  KULLANILMAZ: o `claude --session-id <id>` koşar ve konuşması olan kimlikte Claude "Session ID … is already in use" deyip çıkar
+  (16 Eki, 2.1.301 ölçüldü). Konuşması olmayan dava açılmaz.
+- Sınav: `kapi/dava.test.mjs` (uçtan uca) · `scripts/dava-gunluk.test.sh` (günlük kapı) · `kapi/dava.mutasyon.sh` (12 bozma, her biri kırmızı olmalı) · `koltuk-ac.test.sh` V1-V5.
+- Ölçüm betiği `scripts/dava-resume-olc.sh` kendi tmux soketinde koşar ve `$TMUX`'u siler (DERVİŞ 17 Eki: tmux içinden çağrılınca
+  `kill-server` kutunun sunucusunu öldürüyordu).
+
+## 🆕 2.17.3 · bekçi satırı kutuya özgü sabit gecikmeyle (18 Eki · kart terminal-onar-bekci-gecikme · SERDAR 15:28)
+
+17 kutunun dakikalık bekçisi her dakikanın tam başında aynı anda kalkıyordu; host'ta dakika başı çalışma kuyruğu 179-191'e
+çıkıyordu (filo yavaşladı). Bekçi satırı artık `* * * * * sleep N && …` biçiminde: `N = cksum(kutu adı) % 50 + 5` (5-54 sn),
+her kutuda farklı, her kurulumda aynı. Sayı kurulumda hesaplanıp satıra düz rakam olarak yazılır — crontab'da `%` satır sonu
+demektir. `;` değil `&&`: canlılık envanteri satırı ilk `;`den keser. Eski gecikmesiz satır bir sonraki onarımda/kurulumda
+kendiliğinden yenisine çevrilir (düzeltici aynı işareti tanır). code kutusunda N=10 (cloudtop `crontab-abc` ile aynı).
+Sınav: `scripts/bekci-gecikme.test.sh` (15 kapı + 3 mutant). Kutulara iniş: her kutuda kur/onar yeniden (ayrı adım).
+
+## 🆕 2.17.2 · kutu adı reddinde betikler DURUR — tek satır, rc 3 (18 Eki · gorev_01M4ZHH1XXGXM5QHV2YTNFSZ30 · gün planı C)
+
+`ortak.sh` makine kimliğine benzeyen (ya da çözülemeyen) kutu adını doğru reddediyordu, ama onu yükleyen sekiz betik
+dönüşe bakmıyordu: akış sürüyor, reddin ardından tanımlanan değişkenlerde çöküyordu — `compact.sh` "DURUM_DIZ: unbound
+variable" (15 Eki code kutusu), `bekci`/`kademe` aynı, `durum` ANA_TMUX, `kapi-yenile` KAPI_DIZ, `koltuk-ac` PROJE, `onar`
+"gunluk: command not found". Sebep satırı izin altında kayboluyordu. Artık `compact · komut · bekci · durum · kademe ·
+kapi-yenile · koltuk-ac · onar` reddi görünce **durur**: tek satır (ortak.sh'ın kendi iletisi: "TO_KUTU ver …"), rc 3, yan
+etki yok — `kur.sh`'ın S-11 yoluyla aynı sözleşme. Sınav: `scripts/kutu-red.test.sh` (13 kapı: sekiz betik · yan etki ·
+kapsam taraması ve kendi pozitif kontrolü · geçerli adla iki pozitif kontrol; mutantlı).
+
+## 🆕 2.17.1 · bekçi işareti yalnız cron satırının sonunda (17 Eki · kart terminal-onar-bekci-yorum-korur · SERDAR 21:00)
+
+`bekci_kur` canlı crontab'ı düzeltirken metninde `# terminal-onar-bekci` geçen **yorum** satırını bekçi satırı sanıyordu:
+kanon `crontab-abc`'nin açıklama yorumu bekçi satırına çevrildi, asıl satır "çift kopya" sayılıp silindi (canlı code kutusu,
+17 Eki 20:26). `bekci_kurulu` da asıl satır yokken yorum yüzünden "kurulu" diyebilirdi. Artık `#` ile başlayan satır yorumdur
+ve olduğu gibi korunur; işaret yalnız yorum olmayan satırın **sonunda** sayılır (`BEKCI_DESEN` · `ACILIS_DESEN` — düzeltici,
+`bekci_kurulu` ve üç varlık denetimi aynı iki desenden okur). Sınav: `scripts/bekci-yorum.test.sh` (16 kapı + 2 mutant;
+kanonun gerçek yorum satırlarıyla). Eski davranışlar korunur: çift kopya tekilleşir, eski yollu satır kanoniğe çevrilir.
+
+## 🆕 2.17.0 · kadro kayıt kökü + kapat koruması (17 Eki · gorev_01M554PCYA0HWM6TM4KXY4E72V · SERDAR ACİL)
+**Ölçülen hata:** merkez kutusunda (code) Kadro "0 kişi · 8 kayıtsız" gösteriyordu. Kapı kaydı `$PROJE` altında arıyor; code'da
+`$PROJE=/config/projects/code` bir iskelet, ekibin kaydı Nexus deposunda → 0 üye; sekiz canlı ajan "kayıtsız oturum" sayıldı ve
+satırlarında **tek eylem "Oturumu kapat"** idi.
+- **Kutuya özel kayıt ayarı:** `<proje>/.oda/ortam` — kutu adı koda gömülmez, kutu kendi yerinde yazar. SOURCE EDİLMEZ; yalnız izin
+  listesi (`AILE_REGISTRY` · `ISKAN_REGISTRY`), yalnız mutlak ve var olan dosya; açık ortam her zaman kazanır; reddedilen satır
+  sayılır, içerik basılmaz. Merkez kutusu için:
+  ```
+  AILE_REGISTRY=/config/projects/Nexus/_agents/handoff/aile-registry.yaml
+  ```
+- **Kapıya tek yerden:** `ortak.sh` `kapi_kayit_ortami` (TO_PROJE + kayıt yolları, kabuk-kaçışlı) → `onar.sh` kapıyı bununla başlatır;
+  kapının çağırdığı koltuk açıcı da aynı kaydı görür.
+- **Kapat koruması:** kadro verisinde her kayıtsız oturum `kapatilabilir` taşır (yalnız Claude'suz = sorunlu oturum `true`); kapı,
+  içinde Claude çalışan oturuma "kapat" isteğini **409** ile reddeder ve tmux'a dokunmaz — kayıt okunamasa da canlı ajan öldürülmez.
+  Merkez sayfası düğmeyi `kapatilabilir:false` satırda gizler (cloudtop, ayrı kart); eski merkezde düğme görünse bile uç reddeder.
+- Kanıt: `scripts/oda-ortam.test.sh` (15: izin listesi · ret sayımı · açık ortam · boşluklu yol · **gerçek kapı iskelet kökte önce
+  0 çalışan/2 kayıtsız → ayarla 2 çalışan/0 kayıtsız** + 3 mutant) · `kapi/kadro-hal.test.mjs` KH10b/KH12b-d (canlı kayıtsız 409).
+- ⚠️ Kurulunca kapı **yeniden başlatılmalı** (bekçi sağlıklı kapıyı yeniden başlatmaz) ve merkez kutusuna `.oda/ortam` yazılmalı.
+
+## 🆕 2.16.0 · çıpa dilbilgisi 1.5.0 (17 Eki · gorev_01M54SCQE08KTG9YERG2BBR604 ek · MUAVİN yaması)
+`bugun.mjs` Sx `gunluk-plan/sema/bugun-maddesi.md` ile aynı okur: madde başına **`sahip`** (`(sahip: AD)` metinden ayrılır),
+**`kanit`** (`kanıt: <ref>` parçaları nottan ayrılır, birden çoksa ` · ` ile birleşir), **`ertelendi`** durumu (`[-]` + `ERTELENDİ` +
+geçerli D1 damgası; D1'siz erteleme **açık** sayılır — damgasız erteleme erteleme değildir). `sayilar()` `ertelendi` sayar;
+`/api/bugun` toplamlarında görünür. Eski biçim kırılmaz (alanlar boş). Ortak fikstür kapısı (`gunluk-plan/sema/kapi-uyum.mjs`, T17)
+Sx #357'de koşar; burada üç kural sınavı D1-D9 + mutant C4-C6. Panel tarafı (cloudtop) `ertelendi`yi ayrıca gösterir (ayrı kart).
+
+## Bugünün listesi ucu (2.15.0 · 17 Eki · gorev_01M54SCQE08KTG9YERG2BBR604)
+Kapı `GET /api/bugun[?tarih=YYYY-MM-DD]` — kutudaki ajanların gün çıpalarını (`_agents/handoff/gunluk-plan-cipa.<ajan>.md`,
+`gunluk-plan/cipa.sh` + `gun-ortasi/cipa-ekle.sh` yazar) okur ve yapılandırır: madde (`N)` sabah · `G<n>)` gün ortası · etiketsiz
+serbest), durum (`[ ]` açık · `[~]` yarım · `[x]` bitti · `[-]` geri), `→ KAPANDI/YARIM · not` kuyruğu ayrı, metindeki `gorev_…`
+kimlikleri havuz bağı. Yeni defter YOK, yazma yolu YOK. Bugüne ait olmayan çıpa listeye girmez (`bugun_degil`), `.yedek.md` ve eski
+tek dosya taranmaz, okunamayan dosya `okunamadi`. Merkez (cloudtop terminal-merkez) bunu şeritte "Bugün" yan paneli olarak çizer.
+Modül `kapi/bugun.mjs` (salt okur), sınav `bugun.test.mjs` (23 kapı, mutant ×3) + `sunucu.test.mjs` BG1-BG5.
+
+## 🆕 Koltuk → hesap (2.14.0 · 16 Eki · G-BANI-0008 hesap geçişi, senaryo kartı E1 zemini)
+`koltuk-bagla.sh --liste` 7. sütun ve `/api/koltuklar` `hesap` alanı: koltuktaki Claude'un **hesap adı** — `kapi` (kapı
+şeridi, `ANTHROPIC_BASE_URL` hesabı ezer) · `varsayilan` · `<ad>` (`/config/.claude/hesaplar/<ad>`) · `bilinmiyor:dizin` ·
+`bilinmiyor:okunamadi`. Claude'suz koltukta alan yok. Ad, sürecin ortamından (`/proc/<pid>/environ`, yalnız iki değişken) türetilir;
+kural Nexus `hesap_kutu.py hesap_adi` ile birebir (sınav H10 iki dili aynı girdilerle karşılaştırır). **Kimlik dosyası hiçbir yolda
+açılmaz** (H9 betikte adının bile geçmediğini ölçer). Merkezdeki rozet/çubuk sayıları (cloudtop, dış yüzey) ayrı iş. Sınav: H1–H10.
 
 ## 🆕 Pano köprüsü 1.2.0 — Safari'de kopyalama (2.6.3 · 15 Eki, Sultan: "Safari'de metin kopyalanmıyor")
 Safari pano yazımını yalnız kullanıcı hareketi İÇİNDE geçirir; tmux seçimi OSC 52 ile geç geldiğinden `writeText`
@@ -21,7 +172,7 @@ Safari'de 10 sn denemesi. ⚠ WebKit bu kutuda açılmıyor (kütüphane eksik);
 | konuşma | `<kutu>-ana` içinde Claude (Sultan'ın ana konuşması) | Claude'un oturum kaydında `tmux=<kutu>-ana:` + süreç canlı |
 | web kapısı | `kapi/sunucu.mjs` `:7681` → merkez (`terminal.mmepanel.com/<kutu>/`) — telefon ekranı (PWA), giriş (parola, imzalı çerez), mesaj/foto/tuş/Onar API'si. tmux `kapi-<kutu>` | `<taban>/giris` 200 · `<taban>/` girişsiz 302 |
 | terminal | ttyd yalnız UNIX soketinde (`/config/.terminal-onar/ttyd.sock`, TCP portu yok), kapı `<taban>/tty/` altında sunar. tmux `ttyd-<kutu>` | soket `/tty/` 200 |
-| kurtarıcı ajan | tmux `<kutu>-kurtarici` içinde ayrı Claude | aynı ölçü |
+| kurtarıcı ajan | tmux `<kutu>-kurtarici` içinde ayrı Claude. **Filo genelinde KAPALI** (Sultan 16 Eki 2026; yalnız code kutusununki açık): işaret `/config/.terminal-onar/kurtarici-kapali` (ya da `TO_KURTARICI=0`) varken onar.sh açmaz, açıksa kapatır | işaret varken "kapalı (Sultan 16 Eki)" sağlam sayılır; yoksa aynı ölçü |
 | bekçi | crontab `* * * * * if [ -x <proje>/…/bekci.sh ]; then bash <proje>/…/bekci.sh; else TO_KUTU=<kutu> bash /config/.claude/skills/terminal-onar/scripts/bekci.sh; fi  # terminal-onar-bekci` (+ kalıcı kopya `.oda/cron`) | koşu izi ≤5 dk |
 
 code-server terminali ve web terminali **aynı tmux oturumuna** bağlanır → birebir, canlı senkron.
@@ -36,6 +187,7 @@ bash .claude/skills/terminal-onar/scripts/komut.sh duraklat "<sebep>" | devam
 bash .claude/skills/terminal-onar/scripts/komut.sh gunluk [N]
 bash .claude/skills/terminal-onar/scripts/komut.sh compact [--esik 60] [--koltuk ad] [--uygula] [--json]   # kutu-içi zorunlu compact
 bash .claude/skills/terminal-onar/scripts/komut.sh compact-bekle [--uygula]                                # kuyruk turu (bekçi çağırır)
+bash .claude/skills/terminal-onar/scripts/komut.sh kapi-yenile [--kuru]   # kapının pano.js'ini BAĞLANTI DÜŞÜRMEDEN tazele (SIGHUP); eski kapı/yoksa onar --web-yenile'ye düşer ve söyler
 ```
 Argüman `onar` ile çağrıldıysan: önce `durum`, sonra `onar`, sonra yine `durum`. Sağlam değilse
 günlüğe bak, sebebi bul, `onar --web-yenile` dahil tekrar dene. Sağlam olmadan "bitti" deme.
@@ -45,8 +197,10 @@ günlüğe bak, sebebi bul, `onar --web-yenile` dahil tekrar dene. Sağlam olmad
    kimlikle** geri açar (`/config/.terminal-onar/ana-oturum`), asla "son oturum"la (aynı klasörde
    başka ajanlar da çalışır; `--continue` yanlış konuşmayı açabilir).
 2. **K1** başsız Claude (`claude -p`, 10 dk) — yalnız bu betiklere + okumaya izinli.
-3. **K2** kurtarıcı ajan — `/terminal-onar onar` komutu gönderilir, 20 dk izlenir.
-4. **K3** Sultan'a WhatsApp: "elle bakılmalı" + durum + son günlük.
+3. **K2** kurtarıcı ajan — `/terminal-onar onar` komutu gönderilir, 20 dk izlenir. Kurtarıcı işareti kapalıysa
+   bu kademe ATLANIR (günlüğe "kurtarıcı kapalı → MUAVİN/SERDAR'a bildir" düşer).
+4. **K3** Sultan'a WhatsApp: "elle bakılmalı" + durum + son günlük; kurtarıcı kapalıysa ileti "kurtarıcı kapalı →
+   MUAVİN/SERDAR'a bildir" cümlesini taşır (insan kademesi kutu dışından gelir).
 
 Tek kilit (flock) → iki merdiven aynı anda koşmaz. Merdiven ölürse bekçi bir dakika içinde yeniden
 başlatır. Bekçi tetiklediğinde K1/K2 15 dakikada bir defadan sık denenmez.
@@ -72,8 +226,11 @@ başlatır. Bekçi tetiklediğinde K1/K2 15 dakikada bir defadan sık denenmez.
   (MUAVİN / host) gelir.
 
 ## Durum dosyaları
-`/config/.terminal-onar/` — `gunluk.log` · `ana-oturum` · `kurtarici-oturum` · `kademe.durum` · `duraklat`.
-Sultan-onayı: 2026-09-25 (gözetimsiz ajan kademeleri dahil).
+`/config/.terminal-onar/` — `gunluk.log` · `ana-oturum` · `kurtarici-oturum` · `kademe.durum` · `duraklat` ·
+`kurtarici-kapali` (2.11.0 · işaret: var = kurtarıcı açılmaz/kapatılır; **kutu başına**, reis koyar; code kutusuna KONMAZ;
+geri açmak = silmek). Sınav: `scripts/kurtarici-kapali.test.sh` (hermetik + mutasyon). ·
+`kapi.pid` + `kapi.pano-sha` (2.12.0 · kapı yazar: SIGHUP'ı tanıyan sürümün imzası ve yüklü pano.js sha'sı; `kapi-yenile` bunlara bakar).
+Sultan-onayı: 2026-09-25 (gözetimsiz ajan kademeleri dahil) · 2026-10-16 (filo geneli kurtarıcı kapalı, code hariç).
 
 ## 🆕 Kurulum — `/terminal-kur` (2.0.0)
 
@@ -351,6 +508,14 @@ ssh yok, kayıtlar yerel, tek komut.
 - Sınav: `scripts/compact.test.sh` (35 kapı, hermetik: sahte tmux + sahte kayıt; mutasyon: boş-koltuk kapısı kalkınca taslaklı koltuğa tuş gider → U1 kırmızı).
 
 ## Sürüm notları
+- **2.13.2 (2026-10-16, BÂNİ · tarayıcı sınavı artıkları):** `dim-okunur-sinav.mjs` tarayıcıyı `tarayici-bul.mjs` ile bulur (2.13.1 ile aynı kural; eski sabit yol ikilisiz pakette çöküyordu) ve `launch()` hatası ÖLÇÜLEMEDİ. `bekci-iz.test.sh`: sahte tmux/crontab PATH ile veriliyordu ama `ortak.sh` /usr/bin'i öne koyduğu için hiç kullanılmıyordu (ölçüldü: `command -v tmux` gerçek yolu veriyordu) — sınav artık betiklerin KOPYASINI koşturur, kopyanın ortak.sh'ı sahte kutuyu sona ekleyip öne alır, H1 kapısı bunu her koşuda ölçer (kurtarici-kapali.test deseni). Dim sınavına da #347 deseni: bayat kapı portu ön-kontrolü (ÖLÇÜLEMEDİ rc 4) + çıkışta ttyd/kapı/tmux temizliği (launch'ta çöken koşum kapılarını bırakıyordu, ölçüldü); temizlik iki sınavda SIGKILL ve çıkış kancası PORT KONTROLÜNDEN ÖNCE kayıtlı (#347'de kanca sonra kaydediliyordu, rc-4 çıkışı kancasızdı → ttyd kalıyordu; ölçüldü); kanıtta kapılı (önce/sonra bayat süreç 0). Davranış değişikliği yok; sınav dürüstlüğü.
+- **2.13.1 (2026-10-16, BÂNİ · tarayıcı sınavı Playwright yolu, SERDAR bulgusu gorev_01M50PZVB1GCVG6D33V1PH96CT):** `pano-sinav.mjs` varsayılan olarak `/config/projects/Nexus/ui/node_modules`'a bakıyordu; orada paket var ama tarayıcı İKİLİSİ indirilmemiş → import geçip launch ÇÖKÜYORDU (rc 1 yığın; rc=4 ÖLÇÜLEMEDİ değil). Yeni `kapi/tarayici-bul.mjs`: adaylar sırayla (`KANIT_PLAYWRIGHT_DIR` → Nexus → nvm global `~/.nvm/versions/node/*/lib/node_modules`, en yeni önce), paketi VE `chromium.executablePath()` ikilisi diskte olan ilki seçilir; hiçbiri yoksa denenen yollar sebebiyle (`paket yok` / `ikili yok — npx playwright install`) ÖLÇÜLEMEDİ rc 4. `chromium.launch()` hatası da ÖLÇÜLEMEDİ. Artık ortam değişkensiz `node pano-sinav.mjs` bu kutuda 34/34. Üçüncü ortam hatasının (15 sn sayfa zaman aşımı) kökü ayrıydı: yarım kalan koşumun kapısı sabit portu (:18795/:18796) tutuyordu, sonraki koşum 200 görüp ölü ttyd soketine gidiyordu → pano-sinav artık koşmadan önce portu yoklar, cevap varsa ÖLÇÜLEMEDİ rc 4 + PID ile kapatma ipucu basar (bayat kapı portu dersi, 15 Eki). Sınav `tarayici-bul.test.mjs` (12; nvm sayısal sıra, G1 ölçülemeyince rc 4; `kapi-sinav.test.sh` ile CI'da — rc 4 sarı). Not: `dim-okunur-sinav.mjs` (#346) aynı eski deseni taşıyor — #346 birleşince aynı bulucuya bağlanır.
+- **2.13.0 (2026-10-16, BÂNİ · dim okunurluk, pano köprüsü 1.3.0, Sultan 10:10 karesi nazir-yon, gorev_01M51RVWZXNK25C7GZGZ9MC767):** Claude Code soru satırlarını ve şık açıklamalarını ESC[2m (dim) basar; xterm dim'i rengi yarıya soldurarak çizer ve bunu `minimumContrastRatio`'dan SONRA uygular → "dim + gri-244" koyu temada **2,08:1** (Chromium piksel ölçümü; `minimumContrastRatio=7` bile dim'e işlemiyor — ölçüldü). Çare iki parça: (1) `genel/pano.js` SGR ayrıştırıcıya kanca — dim (2) → ön plan **brightBlack** (SGR 90); 22'de dim'den önceki açık renk (yoksa varsayılan) geri konur; 2'den sonra gelen açık renk kendi kazanır; dim'siz diziye dokunulmaz. (2) `onar.sh` ttyd temasına `brightBlack: #a89f91` (≥7:1). Sonuç: soru satırı **≥ 4,5:1** (gri-244 → 4,7; düz dim → 7). Sınav `kapi/dim-okunur-sinav.mjs` (18; gerçek ttyd+tmux+kapı+Chromium; önce = köprüsüz kapı: sorun ölçülür; piksel kontrast + hücre niteliği; `--kare` ile önce/sonra kare). Kapı yeniden açılmadan canlıya inmez: `komut.sh kapi-yenile` (2.12.0) pano.js'i sıcak tazeler, tema için ttyd'nin yeniden açılması gerekir (`onar.sh --web-yenile`, bağlantı bir kez kopar). Bilinen sınır: dim artık "soluk" değil "ikincil renk"; bold+dim kapanışında 22 bold'u da kapatır (xterm'in kendi davranışı korunur).
+- **2.12.0 (2026-10-16, BÂNİ · kapı-yenile, SERDAR 00:5x/10:55):** pano köprüsü (genel/pano.js) kapı açılışında belleğe alınıyordu; yeni pano sürümü diske inince canlı kapı eskiyi sunuyor, tek yol `onar.sh --web-yenile` idi — kapı süreci ölür, Sultan'ın açık web terminali kopar. Artık kapı **SIGHUP**'ta pano.js'i bağlantı düşürmeden yeniden okur (okunamazsa son sağlam kopya sunulur, süreç ölmez, günlüğe düşer); `kapi.pid` ve `kapi.pano-sha` durum dizinine yazılır; `/giris` yanıtı `x-kapi-pano` başlığıyla yüklü sha'yı söyler. `komut.sh kapi-yenile`: disk sha = sunulan sha ise biter; kapı canlı ve `kapi.pid` canlı pid'le EŞLEŞİYORSA SIGHUP gönderir ve başlığın disk sha'sına döndüğünü ≤5 sn ÖLÇER; aksi hâlde (kapı yok · eski sürüm — SIGHUP onu öldürürdü · sha dönmedi · süreç öldü) `onar.sh --web-yenile`'ye düşer ve bunu SÖYLER (bir kez kopar, sonrakiler sıcak). `--kuru` yalnız yolu basar. Sınav: `kapi/kapi-yenile.test.mjs` (13, gerçek süreç: SIGHUP öncesi açılan bağlantı sonrasında da cevap alır; durum dizini yokken kapı kendisi açar; KAPI_PANO=0 başlığı "kapali"; `kapi-sinav.test.sh` ile CI'da) · `scripts/kapi-yenile.test.sh` (18, karar mantığı, köprü kapalıysa tazelenecek şey yok; mutasyon: pid eşleşme kapısı sökülünce eski kapıya SIGHUP gider → X1). Bilinen sınır: kurulu kopyada çalışan ESKİ kapı ilk seferde yine --web-yenile ile yenilenir (bir kez kopma); sonrası sıcak.
+- **2.11.0 (2026-10-16, BÂNİ · kurtarıcısız ayarı, Sultan kararı 10:3x, gorev_01M51QW6F3Z35G6GQJMTPWFF61):** filo genelinde kurtarıcı ajanlar KAPANIR, yalnız code kutusununki kalır. Kutu başına işaret `/config/.terminal-onar/kurtarici-kapali` (ya da `TO_KURTARICI=0`): onar.sh K0 adım 4 kurtarıcıyı açmaz, açıksa kapatır (durum işarete yakınsar); durum.sh "kurtarıcı: kapalı (Sultan 16 Eki)" basar ve bunu sağlam sayar ("yok/düştü" demez; işaret var ama oturum açıksa "kapalı-ama-AÇIK" → bozuk, K0 kapatır); kademe.sh K2'yi atlar, K3 iletisine "kurtarıcı kapalı → MUAVİN/SERDAR'a bildir" ekler. Tek kurulum (ortak /config/.claude), işareti reisler kutu kutu koyar — code'da KONMAZ. Sınav `kurtarici-kapali.test.sh` (hermetik; mutasyon: işaret kontrolü sökülünce kırmızı).
+- **2.10.1 (2026-10-16, BERİD · Kadro kişi↔oturum eşleşmesi kimlikle — SERDAR 00:4x, Sultan 00:22 karesi, huzur):** eşleşme yalnız tmux adıyla yapılınca ana oturumda çalışan kişi iki satır oluyordu ("oturumu yok" + ana "kimliği yok"). Yeni `kapi/kimlik.mjs` Claude'un süreç başına yazdığı oturum dosyalarını (`<yapılandırma>/sessions/<pid>.json`: sessionId · tmux · ad) okur — yalnız bu kutunun pid alanındaki, yaşayan, programı claude olan süreçler (ortak dizinde başka kutunun dosyası sayılmaz). Sıra: kayıttaki `session_id` (kimlik tanıma kancası yazar) → kullanıcının verdiği Claude adı (`claude -n`) → tmux adı. Kimlik iki oturuma çıkarsa tahmin yapılmaz. Kişi fiilen ana oturumdaysa "altyapı: ana oturum" korumalıdır (dondur/emekli 403). Kimlik izi yoksa davranış eskisidir. Canlı (code kutusu): SERDAR adla, MUHAKKIK ve HENDESE session_id ile bağlandı. Sınav `kapi/kimlik.test.mjs` (18, uçtan uca dahil; mutasyon 9/9; dosya adı = içindeki pid; basamaklar KADRO GENELİNDE sıralı: önce herkes için session_id, sonra kalanlar için ad). Bilinen sınır: kimlik tanıma kancası ana oturumu bir kişiye bağlayamadığında (huzur-ana ≠ huzur-yon) kayda session_id yazmaz → o kutuda kimlik izi yoktur, eşleşme tmux adına düşer.
+- **2.10.0 (2026-10-16, BERİD · KADRO E2, Sultan onaylı — SERDAR 00:3x · D1):** Kadro sayfası artık yönetir: `POST /api/kadro/hal` dört eylem — **emekli et · dondur · geri aç · kayıtsız oturumu kapat** (hepsi geri alınabilir). Yazma KAYNAĞA gider (`kapi/kadro-yaz.mjs`, BÂNİ 15 Eki 18:31 ölçümü): elle kayıtta kişinin bloğuna `durum:` + önceki değer `durum_once:`; üretilmiş kayıtta (`ekipc:uretilen` bölgesi) `_agents/ekip-modeli.yaml` + derleyici (`KAPI_EKIPC` ya da kutunun `scripts/ekipc.sh`; yoksa HİÇ yazılmaz, 503). Yeni `hal:` alanı açılmaz. Gerçek ekipc ile ölçülen üç kural: derleyiciye kutunun kendi aile kaydı (`--aile`) verilir, temel katalog derleyicinin kendisidir (`--base-katalog` verilmez), K13 gereği canlı örnek donunca `olcek.adet` bir azalır; derlemenin kayıt DIŞI farkları (bekleyen ortak-temel yayılımı) uygulanmaz, sayısı yanıtta söylenir; kayıt dosyasının İÇİNDE başka kişiye ait bekleyen fark varsa yazım reddedilir (409, hiçbir şey yazılmaz). Geri alma derleyicisizdir: derleme öncesi fotoğraftan bayt bayt. Dondur/emekli oturumu da kapatır (kapatılamazsa kayıt geri alınır; geri alma da düşerse uç 500 ile bunu açıkça söyler); dondurulmuşu geri açmak oturumu `koltuk-ac --eski` ile eski sohbetine döndürür, emekliyi geri açmak yalnız kaydı geri koyar. **Altyapı** oturumları (ana · dash · dashproxy · dashwatch · ttyd-* · kapi-* · *-kurtarici · imglistener*) `/api/kadro`'da ayrı `altyapi` listesindedir (artık kırmızı "boş oturum"/"düşen" değil) ve hiçbir eylem onlara uygulanamaz (403, tmux'a dokunulmaz). Uç yalnız kapı oturumu çereziyle; jeton taşıyan istek 403. Eylemler süreç içi kuyrukla SIRAYLA yürür (yaz → oturumu kapat → gerekirse geri al zinciri bölünmez). Okuyucu: aile dalındaki kutularda (s02 · sedir · nova …) üretilmiş ekip kaydından YALNIZ `durum`, modelden yalnız `durum_once` okunur — rol/tmux ve kişi kümesi değişmez. Her eylem `kadro-hal.log`'a tek satır. Sınav: `kadro-yaz.test.mjs` (26; `--gercek` ile 5 kutunun gerçek kaydının KOPYASINDA gidiş-dönüş bayt eşitliği) · `kadro-hal.test.mjs` (25, uçtan uca: dondur → geri aç, altyapı 403) · `kadro.test.mjs` (30) — üçü de `kapi-sinav.test.sh` ile CI'da. Bilinen sınır: modeli bugün lint-kırmızı olan kutularda (nova · tez · nazir) derleyici reddeder → eylem 502, hiçbir şey yazılmaz.
+- **2.9.3 (2026-10-15, BÂNİ · pano köprüsü 1.2.2, Sultan 2. kez "resim yapıştırma çok yavaş", gorev AT9J8305):** Safari WebP kodlayamıyor; küçültme her yapıştırmada önce PNG sonra JPEG olmak üzere İKİ kez kodluyordu. Artık destek bir kez yoklanır, yoksa doğrudan JPEG (tek kodlama). Bildirim adım sürelerini yazar ("küçültme X sn · yükleme Y sn · Z KB"); bir sonraki yavaşlıkta beklemenin küçültmede mi yüklemede (sunucu/ağ) mi olduğu ekrandan okunur. Sınav pano-sinav Y8-Y10.
 - **2.9.2 (2026-10-15, BÂNİ · pano köprüsü 1.2.1, Sultan Safari 13:33):** kopyalama Safari'de ÇALIŞIYOR (Sultan ölçtü), ama seçim panoya indikten sonra kırmızı "pano yazımı reddedildi" + Kopyala düğmesi de çıkıyordu: aynı seçim için ikinci yazım (yinelenen OSC 52) hareket dışında reddedilip başarının üstüne uyarı basıyordu. Artık metin az önce (5 sn) indiyse aynı metin için yazım denenmez, ret sessiz geçer; söz yazımı sürerken gelen ret onun sonucunu bekler; düğme yalnız metin gerçekten inmediyse çıkar. Sınav pano-sinav S7/S7b.
 - **2.9.1 (2026-10-15, BÂNİ · çalıştırma biti):** `scripts/compact.sh` ve `compact.test.sh` depoya 100644 girmişti; sync-skills duman testi "ÇALIŞTIRILAMAZ (izin yok)" ile düştü (kurulu kopya elle chmod +x ile düzeltildi, yeniden kurulumda tekrar düşerdi). Depoda 100755 yapıldı; aynı sınıftan `scripts/` altındaki 37 başka beceri betiği de düzeltildi (arac/ altındaki 7 dosya ayrı kart); kalıcı kapı depo kökünde `kabuk-biti.test.sh` — çağıranı CI (`lint.yml` "Kabuk sınamaları" her *.test.sh dosyasını keşfedip koşturur).
 - **2.9.0 (2026-10-15, BÂNİ · zorunlu compact kutu-içi):** `komut.sh compact` / `compact-bekle` + `kapi/compact-olc.mjs` + bekçi kuyruk turu (yukarıda).

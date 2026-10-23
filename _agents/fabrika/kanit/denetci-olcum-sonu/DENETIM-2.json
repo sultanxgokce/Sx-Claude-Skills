@@ -1,0 +1,52 @@
+{
+  "tur": 2,
+  "is": "denetci-olcum-sonu",
+  "pr": "392",
+  "yazan": "claude",
+  "denetci": "claude (haiku) (YEDEK GÖZ: codex düştü (2 deneme, rc=1) · yazandan farklı yeni oturum + farklı model kademesi [yazan: sonnet] · Sultan Y0006)",
+  "zaman": "2026-10-20T18:26:22+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": "codex düştü (2 deneme, rc=1)",
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": "haiku",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 30529,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 9,
+    "bayt": 41299
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Talep yerine geliyor: 60 satırı aşan ölçümde stdout'un başı, atlanan satır sayısı, sonu (sonuç satırı) ve stderr'in sonu gidiyor, kısa dosya aynen geçiyor. Kesim mantığını yerel bir örnekle yeniden çalıştırdım (239 satırlık dosyada SONUÇ satırı 46. satırda, 143 atlanan satır doğru sayıldı, stderr 40 atlanan satırla kesildi); denetci.sh'in sha'sı (1fea00f3664e24c7) istem-olcer'ın 'sonra' ölçümündeki sha ile birebir tutuyor, yani ölçüm bu koda bağlı. Puanı 5'ten indiren tek şey, sonuç satırının 'göze gidiyor: EVET' kaydını doğrulayan ölçüm çıktısının boş kalması.",
+    "bulgular": [
+      {
+        "ne": "istem-olcer'ın 'son giden (boş olmayan) satır' alanı iki ölçümde de boş; araç 'sonuç satırı göze gidiyor mu: EVET' derken kendi okuduğu son satırı gösteremiyor. Kabul kanıtının ana iddiası bu alanla doğrulanmış sayılamıyor.",
+        "kanit": "olcum-istem-sonra.txt: 'sonuç satırı göze gidiyor mu: EVET' ve hemen ardından 'son giden (boş olmayan) satır: ' (boş) ve '--- stderr ---'. olcum-istem-once.txt'te de aynı boş alan var. Yerel denemem (olcum_ozeti, 184 satır + SONUÇ satırı) SONUÇ satırını doğru gösterdi; kusur denetci.sh'da değil, ölçüm aracının okumasında.",
+        "konum": "_agents/fabrika/kanit/denetci-olcum-sonu/olcum-istem-sonra.txt (stdout 2-3. satırlar) · istem-olcer.sh (kapsam dışı, diffte yok)",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Kart kapsam uyarısı 'ÇOK GÜNLÜK KAPSAM (W42)' yanlış tetiklendi: tetikleyici kart cümlesindeki 'W42' etiketi; iş tek PR'da tek kod değişikliği (denetci.sh + test + SKILL.md). Uyarı karar olarak kapatılmadı.",
+        "kanit": "KART.json kapsam_uyarilari: 'ÇOK GÜNLÜK KAPSAM (W42): bir PR'da teslim edilmez'. Diff: tek sürüm artışı 0.10.5→0.10.6 ve tek olcum_ozeti fonksiyonu.",
+        "konum": "_agents/fabrika/kanit/denetci-olcum-sonu/KART.json (kapsam_uyarilari) · kart.sh kapsam uyarı kuralı (diffte yok)",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Sonuç satırının kesimden kurtulması, ölçümün son 15 stdout satırına bağlı: sonuç satırından sonra 15'ten fazla çıktı gelirse sonuç yine atılır. Tasarım sınırı; SKILL.md'de 'stdout'un sonu (15)' olarak yazılı ama bu durum için sınav yok (T-OLCUM yalnız sonucun en sonda olduğu durumu ölçüyor).",
+        "kanit": "denetci.sh olcum_ozeti: SON=15; denetci.test.sh O1-O6 sonucu dosya sonuna koyuyor. Yerel denemede sonuç satırı 46. satırda, stderr'den önce; sonrasında 15 satırlık pay yok.",
+        "konum": "yazilim-fabrikasi/scripts/denetci.sh (olcum_ozeti, SINIR/BAS/SON/HSON satırı)",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sha'lar tutuyor; sarı kayıt yok. Önce/sonra çifti aynı aracın iki sürümünü ölçüyor: once 0.10.5 (62 satır, sonuç HAYIR), sonra 0.10.6 (49 satır, sonuç EVET) ve sonra'nın sha'sı çalışma ağacındaki denetci.sh ile eşleşiyor. Önceki turun 1. ve 2. bulguları bu yüzden çürük: olcum-istem-sonra.txt 0.10.5 demiyor, 0.10.5 yazan dosya olcum-istem-once.txt; sürüm/ağaç bağı kanıtlanmış. Sınav (T-OLCUM 211 geçti, 0 kaldı; 4 mutant kırmızı) gerçek ölçüm, rc=0 ve manifest sha'sıyla bağlı. Zayıf nokta: istem-olcer'ın boş 'son giden satır' alanı. Önceki turun 3. bulgusu (sınav ölçümünün yalnız ilk 60 satırı görünüyor) bu incelemenin ölçüm çıktılarına da uygulanır: sınav özeti dosyanın sonundadır ve burada gösterilmemiştir; kabulde ölçüm tam görülmeli."
+  }
+}

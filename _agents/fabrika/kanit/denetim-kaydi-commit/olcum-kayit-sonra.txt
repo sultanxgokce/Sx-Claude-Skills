@@ -1,0 +1,22 @@
+$ bash _agents/fabrika/kanit/denetim-kaydi-commit/kayit-olcer.sh yazilim-fabrikasi/scripts
+# rc=0 sure=26.2s zaman=2026-10-22T15:24:29+03:00
+--- stdout ---
+════ B2DBS6 · denetçi kaydını iş dalına commit'ler ════
+  ✓ a iş alanında (dal = iş adı) 5/E kaydı + KART.json kopyası dala commit'lenir: mesaj puanlı, ağaç TEMİZ
+  ✓ b kalan tur (3/H) da commit'lenir
+  ✓ c pathspec'li: önceden staged başka değişiklik commit'e girmez, staged kalır
+  ✓ d dal iş adı değilse commit'lenmez, söylenir
+  ✓ e birincil checkout'ta commit'lenmez, söylenir
+  ✓ f kutu-dışı bulgulu turda KUTU-DISI.jsonl aynı commit'te
+  ✓ g DENETCI_KAYIT_COMMIT=0 → commit yok, söylenir
+── MUTASYON (betik kopyasında, kontrol şartlı) ──
+  ✓ kontrol kopyası gerçek betikle aynı kapıları geçiyor
+  ✓ mutant (kayıt commit'i çağrılmıyor) → 'a' kapısı düşüyor
+  ✓ mutant (commit pathspec'siz (staged her şey girer)) → 'c' kapısı düşüyor
+  ✓ mutant (dal denetimi yok) → 'd' kapısı düşüyor
+  ✓ mutant (birincil checkout denetimi yok) → 'e' kapısı düşüyor
+  ✓ mutant (KUTU-DISI.jsonl commit'e girmiyor) → 'f' kapısı düşüyor
+  ✓ mutant (KART.json kopyası kayıtsız kalıyor) → 'a' kapısı düşüyor
+
+── SONUÇ: 14 geçti · 0 kaldı ──
+--- stderr ---

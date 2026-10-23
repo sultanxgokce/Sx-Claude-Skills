@@ -1,0 +1,7 @@
+Mutasyon (geçici kopya, temiz hâl önce/sonra yeşil):
+M1 D1 biçim denetimi kaldırıldı → ISIRDI (T10,T11)
+M2 damgasız ERTELENDİ ertelendi sayılır → ISIRDI (T5)
+M3 kapanış hep geçer → ISIRDI (T7,T13)
+M4 sahip metinden ayrılmaz → ISIRDI (3)
+M5 açık madde kapıyı geçer → ISIRDI (2)
+Repo doğrulayıcıları çıplak: validate-repo --strict 0 · version-lint 0 · kabuk-biti 0

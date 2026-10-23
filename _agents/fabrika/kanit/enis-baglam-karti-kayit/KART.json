@@ -1,0 +1,67 @@
+{
+  "is": "enis-baglam-karti-kayit",
+  "cumle": "baglam-karti kaydet: defter sözleşmesine uyan cevaplar (PATCH /kayit → 200, adimlar listesi adımı içerir) için fail-closed kayıt; sözleşme dışı gövde rc 1 ile reddedilir",
+  "istedi": "SERDAR",
+  "aldi": "BERİD",
+  "zaman": "2026-10-18T16:16:59+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [
+    {
+      "zaman": "2026-10-18T20:03:48+03:00",
+      "olay": "daralt",
+      "kalan_kart": "enis-baglam-karti-kayit-kalan",
+      "tur_sifir": 4
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "BERİD",
+      "oturum": "e8bf42c1-120a-4432-9dc5-9ce45934c7b8",
+      "gerekce": "SERDAR 17:34 NOTES kararı (DEVAM +1): üç turun bulgusu üç FARKLI uygulama kusuru (cevap HEDEF değeri · kuru koşum rc 0 · defter 200 gövdesi), her biri sonraki turda kapandı; puan sabit 4 ama açık bulgu kümesi değişiyor = iş ilerliyor. Tur 3 bulgusu e99c35b ile kapalı.",
+      "zaman": "2026-10-18T17:35:04+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "BERİD",
+      "oturum": "e8bf42c1-120a-4432-9dc5-9ce45934c7b8",
+      "gerekce": "SERDAR 17:34 NOTES: '4 de geçmezse daralt'. Tur 4 4/5 E, tek bulgu (adimlar tür denetimi) 1ce düzeltildi + sınav/mutasyonla kilitlendi. Daraltılmış teslim: defter SÖZLEŞMESİNE uyan cevaplar (PATCH /kayit → 200 + adimlar listesi) için fail-closed kayıt; sözleşme dışı defter gövdeleri rc 1 ile reddedilir, ötesi kapsam dışı.",
+      "zaman": "2026-10-18T17:37:42+03:00"
+    },
+    {
+      "karar": "daralt",
+      "reis": "BERİD",
+      "oturum": "e8bf42c1-120a-4432-9dc5-9ce45934c7b8",
+      "gerekce": "daraltma: kalan bulgu yeni karta (enis-baglam-karti-kayit-kalan) — Canlı Görev Defteri'ne karşı uçtan uca kayıt sınavı (sahte sunucu değil, gerçek PATCH /kayit) ve defterin yanıt sözleşmesinin (degisti/kayit/adimlar listesi) defter tarafında belgelenmesi",
+      "zaman": "2026-10-18T20:03:48+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "ENİS bağlam kartı kayıt aracı: istek/cevap mektubunu şablona göre doğrular, gorev 2M0CV'ye tek adım yazar (karar cümlesi ve kart metni yazılmaz); kayıt yazılamazsa rc≠0, kart dönmez",
+      "zaman": "2026-10-18T20:03:48+03:00",
+      "kalan_kart": "enis-baglam-karti-kayit-kalan"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-18T20:03:48+03:00",
+      "kalan_kart": "enis-baglam-karti-kayit-kalan",
+      "kalan": "Canlı Görev Defteri'ne karşı uçtan uca kayıt sınavı (sahte sunucu değil, gerçek PATCH /kayit) ve defterin yanıt sözleşmesinin (degisti/kayit/adimlar listesi) defter tarafında belgelenmesi",
+      "tur_sifir": 4,
+      "oturum": "e8bf42c1-120a-4432-9dc5-9ce45934c7b8"
+    }
+  ]
+}

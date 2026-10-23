@@ -1,0 +1,52 @@
+{
+  "tur": 3,
+  "is": "tmux-bekcisi-yayilim",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "claude (haiku) (YEDEK GÖZ: codex düştü (2 deneme, rc=1) · yazandan farklı yeni oturum + farklı model kademesi [yazan: sonnet] · Sultan Y0006)",
+  "zaman": "2026-10-20T20:28:01+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": "codex düştü (2 deneme, rc=1)",
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": "haiku",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 37623,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 16,
+    "bayt": 35734
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "bekci.sh duraklatma kapısından sonra tmux_bekcisi_kur'u her turda çağırıyor; güncelse sessiz kalıyor, kurulamamayı yalnız durum değiştiğinde yazıyor. B1–B5, B4b/B4c ve beş bozma bu davranışı sınıyor, bekci-turu kırmızı→yeşil çifti kanıtlı. Puan 4: kod küçük ve doğru, ama her dakika canlı tmux ikilisini yeniden yazan yolun atomikliği bu farkta görünmüyor ve vaka.sh değişikliğinin kodu bu farkta yok.",
+    "bulgular": [
+      {
+        "ne": "Bekçinin her dakika /config/.local/bin/tmux'u (güncel değilse) yeniden yazdığı yolun atomik olduğu bu farkta gösterilmiyor; çalışan bir tmux bu dosyayı kullanıyorsa yarım yazım veya 'text file busy' riski var. Test yalnız bayt eşitliği ve çalıştırılabilirlik sınıyor, eşzamanlı yazım yok.",
+        "kanit": "bekci.sh eklenen satır `_tb=\"$(tmux_bekcisi_kur)\"` her turda çağrılıyor; olcum-bekci-turu-v2-sonra.txt K2/K3/K4 yalnız kopyanın bayt eşitliğini ölçüyor; kur fonksiyonunun geçici-dosya+mv kullanıp kullanmadığı diffte yok",
+        "konum": "terminal-onar/scripts/bekci.sh (tmux_bekcisi_kur çağrısı); tmux-bekcisi.test.sh K2–K4",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Talepteki 'vaka.sh iz defterini canlı durum dizinine yazmasın' kısmının kodu bu farkta yok; kanıt yalnız ölçüm (canlı defter satır önce=3 sonra=3). Ölçüm doğru ama değişikliğin hangi dosyada olduğu gösterilmiyor.",
+        "kanit": "olcum-vaka-canli-defter-tek.txt: 'canlı defter satır önce=3 sonra=3' ve 'kill-server rc=1'; commit f7bca82 mesajı vaka.sh izini geçici dizine yazar diyor; diff yalnız SKILL.md, bekci.sh, test.sh içeriyor",
+        "konum": "_agents/fabrika/kanit/tmux-kill-server-bekcisi/vaka.sh (ölçüm komutu); kanıt manifesti vaka-canli-defter-tek",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Yayın sonrası filo etkisi ölçülmedi: 2.19.1'in 'sağlıklı kutulara inmesi' iddiasını doğrulayan ölçüm yalnız yayın öncesi (once). Mevcut kanıtta 17 ekip kutusu bekçisiz.",
+        "kanit": "filo-kurulum-v2-once.txt: 'ekip kutusu 18 · bekçi kurulu 1'; yayın sonrası karşılaştırma manifestte yok",
+        "konum": "kanıt manifesti filo-kurulum-v2 (20:24:16); SKILL.md 2.19.1 notu",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "filo kutuları — yayın ve bir bekçi turu sonrası canlı ölçüm (kutu sahiplerinin zamanlaması)"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sha'lar tutarlı. Davranış kanıtı yeterli: bekci-turu kırmızı→yeşil çifti, B1–B5 kapıları ve her biri ilgili kapıyı kıran beş bekci bozması (v2'de bekci-tekrar-yazar eklendi, B4c'yi kırıyor). Ölçümler test çıktısıyla birebir; yeşil bu betik düzeyinde doğru. Eksik: vaka.sh değişikliğinin kodu bu farkta görünmüyor, yayın sonrası filo ölçümü yok (kutu-dışı), eşzamanlı yazım sınanmamış. Bunlar kod puanını yalnız rötuş düzeyinde etkiler."
+  }
+}

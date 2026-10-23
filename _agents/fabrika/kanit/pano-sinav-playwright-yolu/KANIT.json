@@ -1,0 +1,104 @@
+{
+  "is": "pano-sinav-playwright-yolu",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-16T12:11:20+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "ana-dal-ortamsiz-cokuyor",
+      "asama": "once",
+      "dosya": "olcum-ana-dal-ortamsiz-cokuyor-once.txt",
+      "sha256": "49b1f53f31e4e69e9029c910bc85fe8fd86a834ed1d95463264b73ccd5e3dd3b",
+      "komut": [
+        "bash",
+        "-c",
+        "\necho \"BEKLENEN KIRMIZI — ana dal pano-sinav.mjs ortam değişkensiz: Nexus paketine gider, ikili yok → launch ÇÖKER (rc 1, yığın), rc=4 ÖLÇÜLEMEDİ değil.\"\ncd terminal-onar/kapi; timeout 60 node pano-sinav.mjs > /tmp/o-pw.txt 2>&1; rc=$?; echo \"rc=$rc\"; grep -E \"Executable|triggerUncaught|ÖLÇÜLEMEDİ\" /tmp/o-pw.txt | head -3 | cut -c1-160\necho \"Nexus playwright paketi: $(test -d /config/projects/Nexus/ui/node_modules/playwright && echo var || echo yok) · ikili: $(ls -d /config/.cache/ms-playwright/chromium_headless_shell-1217* 2>/dev/null | head -1 || echo YOK)\"\necho \"nvm global playwright: $(ls -d /config/.nvm/versions/node/*/lib/node_modules/playwright 2>/dev/null | head -1) · ikili dizinleri: $(ls /config/.cache/ms-playwright/ 2>/dev/null | tr \"\\n\" \" \")\"\n[ $rc = 4 ]"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-16T11:59:06+03:00",
+      "sure_sn": 0.8
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ortamsiz-pano-sinav-yesil",
+      "asama": "sonra",
+      "dosya": "olcum-ortamsiz-pano-sinav-yesil-sonra.txt",
+      "sha256": "2c6bf7da2c0afe5b0f8dd5b7c363494b9bed5039f31202675f84eb8486e5899d",
+      "komut": [
+        "bash",
+        "-c",
+        "\nr=0; cd terminal-onar/kapi\necho \"ortam: KANIT_PLAYWRIGHT_DIR=${KANIT_PLAYWRIGHT_DIR:-YOK} NODE_PATH=${NODE_PATH:-YOK}\"\ntimeout 300 node pano-sinav.mjs > /tmp/o-pw2.txt 2>&1; rc=$?; echo \"pano-sinav.mjs (ortamsız) exit=$rc · $(grep -E \"^tarayıcı:\" /tmp/o-pw2.txt) · $(grep GEÇEN /tmp/o-pw2.txt | tail -1)\"; grep \"✗\" /tmp/o-pw2.txt | cut -c1-200; [ $rc = 0 ] || r=1\ntimeout 60 node tarayici-bul.test.mjs > /tmp/o-pw2.txt 2>&1; rc=$?; echo \"tarayici-bul.test.mjs exit=$rc $(grep geçti /tmp/o-pw2.txt | tail -1) · $(grep \"G1\" /tmp/o-pw2.txt | cut -c1-120)\"; [ $rc = 0 ] || r=1\necho \"── Nexus yolu zorlanınca (ikilisiz paket) artık ÇÖKMEZ, ÖLÇÜLEMEDİ rc 4:\"\nKANIT_PLAYWRIGHT_DIR=/tmp/olmayan-dizin timeout 60 node -e \"\nimport(\\\"./tarayici-bul.mjs\\\").then(async (m) => { try { const r = await m.tarayiciBul({ adaylar: [\\\"/config/projects/Nexus/ui/node_modules\\\"] }); console.log(\\\"BEKLENMEDİK: bulundu\\\", r.dizin); process.exit(1); } catch (e) { console.log(\\\"ÖLÇÜLEMEDİ malzemesi:\\\", e.message.replace(/\\n/g, \\\" | \\\").slice(0, 220)); process.exit(0); } });\"; rc=$?; echo \"rc=$rc (0 = fırlattı, çökmedi)\"; [ $rc = 0 ] || r=1\nexit $r"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-16T12:00:29+03:00",
+      "sure_sn": 20.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ortamsiz-pano-sinav-yesil-ve-bayat-port",
+      "asama": "sonra",
+      "dosya": "olcum-ortamsiz-pano-sinav-yesil-ve-bayat-port-sonra.txt",
+      "sha256": "6f6b1802fd3c21a488b78bb1ebe27c836c70586c93a97fdf56ab53ddb35c1142",
+      "komut": [
+        "bash",
+        "-c",
+        "\nr=0; cd terminal-onar/kapi\necho \"ortam: KANIT_PLAYWRIGHT_DIR=${KANIT_PLAYWRIGHT_DIR:-YOK} NODE_PATH=${NODE_PATH:-YOK} · yük $(cut -d\" \" -f1 /proc/loadavg)\"\necho \"önceki kayıt (ortamsiz-pano-sinav-yesil) KIRMIZIYDI: sebep bayat kapı portu — kurulu kopyadan koşan sınavın kapıları (pid 3260747/3260760, TO_KUTU=sinav, :18795/:18796) pkill kazasında temizlenmemişti; PID ile kapatıldı.\"\ntimeout 300 node pano-sinav.mjs > /tmp/o-pw6.txt 2>&1; rc=$?; echo \"pano-sinav.mjs (ortamsız) exit=$rc · $(grep -E \"^tarayıcı:\" /tmp/o-pw6.txt) · $(grep GEÇEN /tmp/o-pw6.txt | tail -1)\"; grep \"✗\" /tmp/o-pw6.txt | cut -c1-200; [ $rc = 0 ] || r=1\ntimeout 60 node tarayici-bul.test.mjs > /tmp/o-pw6.txt 2>&1; rc=$?; echo \"tarayici-bul.test.mjs exit=$rc $(grep geçti /tmp/o-pw6.txt | tail -1)\"; [ $rc = 0 ] || r=1\necho \"── bayat kapı portu ön-kontrolü: :18795 i tutan sahte kapı varken sınav ÇÖKMEZ, ÖLÇÜLEMEDİ rc 4 + PID ipucu\"\nnode -e \"require(\\\"http\\\").createServer((q,s)=>{s.writeHead(200);s.end(\\\"ok\\\")}).listen(18795,\\\"127.0.0.1\\\")\" & SP=$!; sleep 0.5\ntimeout 60 node pano-sinav.mjs > /tmp/o-pw6.txt 2>&1; rc=$?; echo \"rc=$rc · $(head -1 /tmp/o-pw6.txt | cut -c1-140)\"; kill $SP; [ $rc = 4 ] || r=1\nexit $r"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T12:03:43+03:00",
+      "sure_sn": 31.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tur1-sonrasi-sayisal-sira-rc4-kapi-zinciri",
+      "asama": "sonra",
+      "dosya": "olcum-tur1-sonrasi-sayisal-sira-rc4-kapi-zinciri-sonra.txt",
+      "sha256": "8516daced87c18697f90c74c5bdf51cf0a5ee5ba8e03cc0fa185b15fd1aa8d8b",
+      "komut": [
+        "bash",
+        "-c",
+        "\nr=0; cd terminal-onar/kapi; echo \"ortam: KANIT_PLAYWRIGHT_DIR=${KANIT_PLAYWRIGHT_DIR:-YOK} NODE_PATH=${NODE_PATH:-YOK} · yük $(cut -d\" \" -f1 /proc/loadavg)\"\ntimeout 60 node tarayici-bul.test.mjs > /tmp/o-pw7.txt 2>&1; rc=$?; echo \"tarayici-bul.test.mjs exit=$rc $(grep geçti /tmp/o-pw7.txt | tail -1)\"; grep -E \"C3|C4\" /tmp/o-pw7.txt | cut -c1-110; [ $rc = 0 ] || r=1\necho \"── G1 ölçülemeyince rc 4 (HOME sahte, KANIT yok → aday yalnız Nexus = ikilisiz):\"\nHOME=/tmp/olmayan-ev timeout 60 node tarayici-bul.test.mjs > /tmp/o-pw7.txt 2>&1; rc=$?; echo \"rc=$rc · $(tail -1 /tmp/o-pw7.txt | cut -c1-120)\"; [ $rc = 4 ] || r=1\ntimeout 300 bash kapi-sinav.test.sh > /tmp/o-pw7.txt 2>&1; rc=$?; echo \"kapi-sinav.test.sh exit=$rc $(grep -E \"^SONUÇ: kapı|ÖLÇÜLEMEDİ \\(sarı\\)\" /tmp/o-pw7.txt | tr \"\\n\" \" \")\"; [ $rc = 0 ] || r=1\ntimeout 300 node pano-sinav.mjs > /tmp/o-pw7.txt 2>&1; rc=$?; echo \"pano-sinav.mjs (ortamsız) exit=$rc · $(grep -E \"^tarayıcı:\" /tmp/o-pw7.txt) · $(grep GEÇEN /tmp/o-pw7.txt | tail -1)\"; [ $rc = 0 ] || r=1\nexit $r"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T12:08:05+03:00",
+      "sure_sn": 41.7
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dolu-port-her-durum-kodu",
+      "asama": "sonra",
+      "dosya": "olcum-dolu-port-her-durum-kodu-sonra.txt",
+      "sha256": "11a48116774d69f081e288849f4f5e71a407aa8939b615bb8197437d772530da",
+      "komut": [
+        "bash",
+        "-c",
+        "\nr=0; cd terminal-onar/kapi\nfor kod in 404 401 500; do node -e \"require(\\\"http\\\").createServer((q,s)=>{s.writeHead($kod);s.end()}).listen(18795,\\\"127.0.0.1\\\")\" & SP=$!; sleep 0.4\n  timeout 60 node pano-sinav.mjs > /tmp/o-pw8.txt 2>&1; rc=$?; echo \"sahte kapı HTTP $kod → rc=$rc · $(grep -m1 ÖLÇÜLEMEDİ /tmp/o-pw8.txt | cut -c1-90)\"; kill $SP; wait $SP 2>/dev/null; [ $rc = 4 ] || r=1; done\nnode -e \"require(\\\"net\\\").createServer((c)=>c.destroy()).listen(18796,\\\"127.0.0.1\\\")\" & SP=$!; sleep 0.4\ntimeout 60 node pano-sinav.mjs > /tmp/o-pw8.txt 2>&1; rc=$?; echo \"HTTP konuşmayan TCP dinleyici :18796 → rc=$rc ($(grep -m1 -oE \"ÖLÇÜLEMEDİ: :[0-9]+ zaten\" /tmp/o-pw8.txt || echo \"yakalanmadı — sınır: bağlantı düşürülünce fetch hata verir, port boş sanılır\"))\"; kill $SP; wait $SP 2>/dev/null\necho \"── port boşken sınav normal koşar:\"\ntimeout 300 node pano-sinav.mjs > /tmp/o-pw8.txt 2>&1; rc=$?; echo \"exit=$rc $(grep GEÇEN /tmp/o-pw8.txt | tail -1)\"; [ $rc = 0 ] || r=1\nexit $r"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-16T12:09:44+03:00",
+      "sure_sn": 11.4
+    },
+    {
+      "tur": "olcum",
+      "etiket": "dolu-port-ham-tcp-ve-cocuk-temizligi",
+      "asama": "sonra",
+      "dosya": "olcum-dolu-port-ham-tcp-ve-cocuk-temizligi-sonra.txt",
+      "sha256": "c4e46b376b9a26ef0c726b19ee52ad71fdba9137149827436bb69b9a92f7836b",
+      "komut": [
+        "bash",
+        "-c",
+        "\nr=0; cd terminal-onar/kapi\necho \"(önceki kayıt dolu-port-her-durum-kodu KIRMIZIYDI: ham TCP dinleyici yakalanmadı, sınav çöküp kendi :18795 kapısını bıraktı → sonraki koşum rc 4. Şimdi: ham TCP yoklama + çıkışta çocuk temizliği.)\"\nfor kod in 404 500; do node -e \"require(\\\"http\\\").createServer((q,s)=>{s.writeHead($kod);s.end()}).listen(18795,\\\"127.0.0.1\\\")\" & SP=$!; sleep 0.4\n  timeout 60 node pano-sinav.mjs > /tmp/o-pw9.txt 2>&1; rc=$?; echo \"sahte HTTP $kod :18795 → rc=$rc · $(grep -m1 -oE \"ÖLÇÜLEMEDİ: :[0-9]+ zaten dinleniyor\" /tmp/o-pw9.txt)\"; kill $SP; wait $SP 2>/dev/null; [ $rc = 4 ] || r=1; done\nnode -e \"require(\\\"net\\\").createServer((c)=>c.destroy()).listen(18796,\\\"127.0.0.1\\\")\" & SP=$!; sleep 0.4\ntimeout 60 node pano-sinav.mjs > /tmp/o-pw9.txt 2>&1; rc=$?; echo \"HTTP konuşmayan ham TCP :18796 → rc=$rc · $(grep -m1 -oE \"ÖLÇÜLEMEDİ: :[0-9]+ zaten dinleniyor\" /tmp/o-pw9.txt)\"; kill $SP; wait $SP 2>/dev/null; [ $rc = 4 ] || r=1\nsleep 0.5; kalan=0; for p in $(pgrep -f \"node .*sunucu.mjs\"); do tr \"\\0\" \"\\n\" < /proc/$p/environ 2>/dev/null | grep -q \"^TO_KUTU=sinav$\" && kalan=$((kalan+1)); done\necho \"rc 4 çıkışlarından sonra kalan sinav kapısı süreci: $kalan (0 olmalı) · :18795 dinleniyor mu: $(curl -s -o /dev/null -m 1 -w %{http_code} http://127.0.0.1:18795/ || echo hayır)\"; [ $kalan = 0 ] || r=1\necho \"── port boşken sınav normal koşar:\"\ntimeout 300 node pano-sinav.mjs > /tmp/o-pw9.txt 2>&1; rc=$?; echo \"exit=$rc · $(grep -E \"^tarayıcı:\" /tmp/o-pw9.txt) · $(grep GEÇEN /tmp/o-pw9.txt | tail -1)\"; [ $rc = 0 ] || r=1\nsleep 0.5; kalan=0; for p in $(pgrep -f \"node .*sunucu.mjs\"); do tr \"\\0\" \"\\n\" < /proc/$p/environ 2>/dev/null | grep -q \"^TO_KUTU=sinav$\" && kalan=$((kalan+1)); done; echo \"normal koşum sonrası kalan sinav kapısı: $kalan · bayat ttyd (pano-sinav-): $(pgrep -fc \"ttyd .*pano-sinav-\" || echo 0)\"; [ $kalan = 0 ] || r=1\nexit $r"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-16T12:11:20+03:00",
+      "sure_sn": 38.2
+    }
+  ],
+  "imza": "b995f521e1985eb03f715573ca2a736e7c6249bf33687f94d50dea233adc01fd"
+}

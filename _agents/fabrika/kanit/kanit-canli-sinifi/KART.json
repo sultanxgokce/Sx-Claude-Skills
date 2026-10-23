@@ -1,0 +1,60 @@
+{
+  "is": "kanit-canli-sinifi",
+  "cumle": "gorev_01M54APFDAHKN72VKBWTGKSAAM — kanıt aracına 'canlı' sınıfı: cron/servis/sunucu içeren işte gerçek ateşleme kaydı (log satırı+saat+kaynak) yoksa kanıt SARI, birleştirme kapısı geçirmez; sınav+mutasyon",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-17T10:52:52+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/kanit-canli-sinifi (sınav önce/sonra + mutasyon)",
+  "oda": "",
+  "durum": "tikandi",
+  "gecmis": [
+    {
+      "zaman": "2026-10-17T12:38:21+03:00",
+      "olay": "canli-ayarla",
+      "canli": "h",
+      "gerekce": "araç/beceri işi: kutuya cron ya da servis kurulmuyor; cümledeki cron/servis/sunucu kelimeleri aracın konusu (yanlış pozitif) — kurulu kopya senkronu ayrı el işi"
+    },
+    {
+      "zaman": "2026-10-17T13:38:50+03:00",
+      "olay": "tikandi"
+    }
+  ],
+  "canli_gerekir": false,
+  "canli_sebep": "sahip ayarladı (--canli h): araç/beceri işi: kutuya cron ya da servis kurulmuyor; cümledeki cron/servis/sunucu kelimeleri aracın konusu (yanlış pozitif) — kurulu kopya senkronu ayrı el işi",
+  "bitis": "2026-10-17T13:38:50+03:00",
+  "pr": "",
+  "puan": {
+    "kod": 4,
+    "dogru": "E",
+    "tur": 3
+  },
+  "kanit_var": true,
+  "tikanma": {
+    "yol": "devam",
+    "neden": "4 turda 2→3→4/E; son bulgu (canli-ayarla sahip doğrulaması) tavan sonrası düzeltildi, göze gitmedi; mutlak tavan dolu — karar reisin (SERDAR)"
+  },
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "BANI",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+      "gerekce": "SERDAR 13:56 (NOTES): canli-ayarla ayrı karta (kanit-canli-ayarla, sahip doğrulamalı), gövde daraltıldı; araç sayımı 3, daraltılmış teslim için göz turu meşru",
+      "zaman": "2026-10-17T13:56:58+03:00"
+    },
+    {
+      "karar": "devam",
+      "reis": "BANI",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF",
+      "gerekce": "SERDAR 13:56 DARALT kararının uygulanması: canli-ayarla çıkarıldı, daraltılmış gövde için bir göz turu (araç yalnız devam kararını okuyor; daralt kaydı da kartta)",
+      "zaman": "2026-10-17T13:59:20+03:00"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "tur": 4,
+  "is": "hafta-kapanis",
+  "pr": "360",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-17T17:03:32+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "fable",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 58955,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 13,
+    "bayt": 28890
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Hafta kapanış becerisi K1–K5 kapılarını salt ölçüyor, yalnız KAPANIS.md yazıyor, onayı üretmeden doğruluyor ve açık haftaları listeliyor. Önceki turdaki 15 kelimelik D1 sınırı kod, sınav ve mutantla kapatılmış; kutu içinde üretimi durduracak kusur kalmamış.",
+    "bulgular": [
+      {
+        "ne": "Global becerinin Sultan’ın hedef makinesine gerçekten kurulması bu konteynerde doğrulanamıyor; kanıt yalnız kurulum planının doğru oluştuğunu gösteriyor.",
+        "kanit": "Önce ölçümü `/config/.claude/skills/hafta-kapanis` için `YOK` ve rc=1 veriyor; kuru koşu ise `YENİ kurulum` ile `uygulamak için: node sync-skills.mjs --apply` diyor. Kurulum sonrası varlık ölçümü yok.",
+        "konum": "olcum-beceri-varligi-once.txt; olcum-kurulum-plani-kuru-kosu-sonra.txt",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "Sultan'ın Mac'i"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; manifestte sarı kayıt yok. Hermetik sınav rc=0, gerçekçi 2026-W42 ölçümü dört kapının eksiklerini ve açık hafta listesini gösteriyor; retro.py yokluğu vakasında dış programın rc=3 ve ÖLÇÜLEMEDİ üretmesi, sarmalayıcı beklentiyi doğruladığı için yeşil kaydedilmiş. Önceki bulgu olan D1 kırpık sınırı artık 16/15 kelime sınır vakaları ve M7 mutantıyla ölçülüyor. Kutu içi davranış için kanıt yeterli; yalnız hedef makine kurulumu için önce/sonra çifti yok."
+  }
+}

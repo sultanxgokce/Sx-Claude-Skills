@@ -37,12 +37,17 @@ CIPA_ACIK="?"; CIPA_KAPALI="?"
 if [ -f "$SK/gunluk-plan/scripts/cipa.sh" ]; then
   c="$( (cd "$KOK" && bash "$SK/gunluk-plan/scripts/cipa.sh" oku) 2>/dev/null)"; r=$?
   if [ "$r" -ne 0 ] || [ -z "$c" ]; then olcemedim "çıpa yok (bugün /gunluk-plan çıpa yazmadı)"
-  elif ! printf '%s\n' "$c" | grep -q "GÜNÜN PLANI ÇIPASI · $BUGUN"; then
+  elif ! grep -q "GÜNÜN PLANI ÇIPASI · $BUGUN" <<<"$c"; then   # here-string: aynı SIGPIPE tuzağı (büyük çıpada eşleşme başlıkta)
     olcemedim "çıpa bugüne ait değil ($(printf '%s\n' "$c" | grep -o 'ÇIPASI · [0-9-]*' | head -1)) — eski plan 'sabahki plan' sayılmaz"
   else
-    CIPA_ACIK="$(printf '%s\n' "$c" | grep -cE '^- \[( |~)\] ')"   # [-] = geri alındı: açık da kapalı da değil
-    CIPA_KAPALI="$(printf '%s\n' "$c" | grep -cE '^- \[x\] ')"
-    bas "$(printf '%s\n' "$c" | grep -E '^- \[.\] ' | cut -c1-170 | sed 's/^/  /')"
+    # 🔴 TEK ŞABLON (gorev_01M54TNAQV · Sultan 17 Eki): liste /gunluk-plan'ın standart bugün tablosudur
+    #    (madde · sahip · durum · kanıt) ve SAYIM da aynı ayrıştırıcıdan gelir — ikinci bir grep sayımı,
+    #    damgasız "ERTELENDİ"yi kapalı, ertelenmiş maddeyi açık sayarak tablodan ayrışırdı.
+    j="$( (cd "$KOK" && bash "$SK/gunluk-plan/scripts/cipa.sh" tablo --json) 2>/dev/null)"
+    if sayim="$(printf '%s' "$j" | python3 -c 'import json,sys; m=json.load(sys.stdin)["maddeler"]; print(sum(x["durum"] in ("acik","yarim") for x in m), sum(x["durum"]=="bitti" for x in m))' 2>/dev/null)"; then
+      read -r CIPA_ACIK CIPA_KAPALI <<< "$sayim"
+      bas "$( (cd "$KOK" && bash "$SK/gunluk-plan/scripts/cipa.sh" tablo) 2>/dev/null | grep '^[│┌├└📋]' | cut -c1-170 | sed 's/^/  /')"
+    else olcemedim "çıpa tabloya çevrilemedi (gunluk-plan 1.5.0 öncesi kurulu olabilir)"; fi
   fi
 else olcemedim "gunluk-plan/cipa.sh bulunamadı"; fi
 
@@ -135,7 +140,9 @@ if [ -d "$GD" ]; then
   [ -f "$OK" ] && okunan="$(awk -F' [|] ' '{print $3}' "$OK" 2>/dev/null)"
   while IFS= read -r f; do
     a="$(basename "$f")"
-    printf '%s\n' "$okunan" | grep -qxF -- "$a" && continue   # TAM ad eşleşmesi (ad parçası değil)
+    # here-string, BORU DEĞİL (gorev_01M55X6PGK9C9K8MRSY0E01W3Q): pipefail altında 'printf | grep -q' grep ilk eşleşmede
+    #   çıkınca printf SIGPIPE alır, boru rc≠0 döner ve OKUNMUŞ mektup okunmamış sayılırdı (büyük okundu kaydında kesin).
+    grep -qxF -- "$a" <<<"$okunan" && continue   # TAM ad eşleşmesi (ad parçası değil)
     GELEN=$((GELEN+1)); liste+="  • $a ($(date -r "$f" +%F))"$'\n'
   done < <(find "$GD" -maxdepth 1 -type f -name '*.md' 2>/dev/null | sort)
   if [ -n "$liste" ]; then bas "$liste"; else printf '  (okunmamış mektup yok)\n'; fi

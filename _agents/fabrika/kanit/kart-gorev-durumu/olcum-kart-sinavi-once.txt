@@ -1,0 +1,22 @@
+$ /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/engel/ozet.sh bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/kgd/taban/scripts/kart.test.sh
+# rc=1 sure=6.6s zaman=2026-10-21T00:10:05+03:00
+--- stdout ---
+── T13b · MUTASYON (tam kopya; her mutant bir atıf cümlesini yeniden uyarır hâle getirmeli) ──
+  ✓ G1 --gorev verilip --tahmin verilmezse kart AÇILMAZ (rc 1; defter tahminsiz çalışılıyor'a geçmez)
+  ✓ G1b biçimsiz görev kimliği rc 1
+  ✓ G1c --tahmin tek başına anlamsız: rc 1
+  ✓ G1d reddedilen açılışlar deftere HİÇ gitmedi
+  ✗ G2 açılış → PATCH /kayit/<görev>: çalışılıyor + atanan BANI + tahmin 45 + '[▶ çalışılıyor]' adımı; kartta gorev/tahmin + yazım 'yazıldı'
+  ✗ G2b rc 0, ekranda '→ çalışılıyor (defter)', jeton değeri çıktıda YOK
+  ✗ G3 bitti → onay bekliyor + kanıt '<depo> PR #12 · kanıt _agents/fabrika/kanit/gb-1/' + '[⏸ onay bekliyor]' adımı (✓ bitti insanındır, yazılmaz)
+  ✗ G3b bitti rc 0
+  ✗ G4 tıkandı → bekliyor + not (tıkanma nedeni) + '[⏳ bekliyor]' adımı (defter neyi beklediği yazılmamış bekliyor'u reddeder)
+  ✗ G4b tıkandı rc 0
+  ✗ G5 defter reddederse kart YİNE açılır, rc 4, sebep (hata + yerine) ekranda ve kartta
+  ✗ G6 jetonsuz kutu: deftere gidilmez, kart açılır, 'jetonu yok' söylenir, rc 4
+  ✗ G7 bağsız kart deftere gitmez, rc 0, bunu söyler (eski kartlar etkilenmez)
+  ✓ G7b bağsız kartın bitti'si de deftere gitmez
+  ✗ G8 defter kapalı: kart bitti İŞLENİR, 'ulaşılamadı' söylenir, rc 4 (sessiz eksik yok)
+── SONUÇ: 108 geçti · 10 kaldı ──
+rc=1
+--- stderr ---

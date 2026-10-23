@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "tik-yol-olcer",
+  "pr": "394",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-20T18:40:56+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 28733,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 8256
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Tarayıcıda tanımlı görev yollarını gerçekten yürüyen ölçer, yöntem/yol özeti taşıyan artefakt ve tarayıcı yokluğu davranışı uygulanmış; sağlam manifestteki gerçek tarayıcı koşumu ile mutasyon sınavları ana iddiaları güçlü biçimde destekliyor. Ancak yürünemeyen yolu sabit 9 saymak, hedefi 9 veya daha yüksek olan görevlerde kartın “bütçeyi aşar” şartını bozuyor; üretimden önce bu düzeltilmeli.",
+    "bulgular": [
+      {
+        "ne": "Yürünemeyen adımın sabit 9 sayılması her zaman bütçe aşımı üretmiyor. Yol tanımı hedef için yalnızca sıfır veya üstü tam sayı şartı koyuyor; dolayısıyla hedef 9 olduğunda ölçülen 9 aşım değildir, hedef 10 olduğunda ise altında kalır.",
+        "kanit": "tik-olc.mjs doğrulaması `t.hedef < 0` dışında üst sınır koymuyor; bulunamayan ve tıklanamayan öğe dalları `tik = 9` yazıyor. Sunulan T3/T4 sınavları bu davranışı yalnız G6 hedef=3 ve G7 hedef=1 ile ölçüyor; hedef>=9 vakası sınanmıyor.",
+        "konum": "ui-tasarim-akisi/arac/tik-olc.mjs:24,49,55; ui-tasarim-akisi/arac/tik-olc.test.sh:34-35,61-62,67",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçüm çifti davranış farkını gösteriyor, ayrıca 118,6 saniyelik yeşil sınav gerçek tarayıcıyla 23 kontrol ve altı mutasyon içeriyor. Sentetik sayfa gerçekçi etkileşim sınıflarını kapsıyor; ancak yüksek hedefli yürünemeyen yol vakası kanıtta yok ve mevcut kod bu uç durumda talebi ihlal ediyor."
+  }
+}

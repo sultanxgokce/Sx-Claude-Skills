@@ -3,6 +3,7 @@
 
 Alt-komutlar:
   uret --out <deneme-dir> --kart --deneme --head-sha [--katman2 G3=GECTI[:not]]... [--tatbikat]
+       [--muhurdar AD --yazan AD --yargic "G3=codex,G4=claude"]   (muhurdar.sh verir; MUHUR başlığına yazılır)
        gereklilik.json + kanit/G*.json okur → MUHUR.md + muhur-ozet.json yazar.
        RC = verdikt: 0=GECTI · 1=KALDI · 3=KATMAN2-BEKLIYOR|ESKALASYON.
   red  --out <deneme-dir> --kart --deneme --ad <red-adi> [--sebep S]... [--head-sha sha]
@@ -98,6 +99,10 @@ def cmd_uret(argv):
             a["katman2"].append(argv[i + 1]); i += 2
         elif argv[i] == "--tatbikat":
             a["tatbikat"] = True; i += 1
+        elif argv[i] == "--bassiz":
+            a["bassiz"] = True; i += 1
+        elif argv[i] in ("--muhurdar", "--yazan", "--yargic"):
+            a[argv[i][2:]] = argv[i + 1]; i += 2
         else:
             sys.stderr.write(f"muhur.py uret: bilinmeyen argüman {argv[i]}\n"); return 2
     out = a.get("out")
@@ -116,8 +121,9 @@ def cmd_uret(argv):
             return 2
         katman2[m.group(1)] = {"sonuc": m.group(2), "not": m.group(3) or ""}
 
-    mekanik = [g for g in ger["g"] if g["tur"] != "llm-yargi"]
+    mekanik = [g for g in ger["g"] if g["tur"] not in ("llm-yargi", "sultan-denemesi")]
     oznel = [g for g in ger["g"] if g["tur"] == "llm-yargi"]
+    sultan = [g for g in ger["g"] if g["tur"] == "sultan-denemesi"]   # mühürdar sınamaz, verdikte girmez (S5)
 
     kanitlar = {}
     for g in mekanik:
@@ -157,7 +163,15 @@ def cmd_uret(argv):
         f"g_gecti: {len(mekanik) - len(dusen) + sum(1 for v in katman2.values() if v['sonuc'] == 'GECTI')}",
         f"g_kaldi: {len(dusen) + len(oznel_kaldi)}",
         f"g_oznel: {len(oznel)}",
+        f"g_sultan: {len(sultan)}",
         f"tatbikat: {'evet' if a['tatbikat'] else 'hayir'}",
+    ]
+    if a.get("muhurdar"):
+        L += [f"muhurdar: {a['muhurdar']}", f"yazan: {a.get('yazan') or '(verilmedi)'}",
+              f"yargic: {a.get('yargic') or '(öznel G yok)'}", "kor: evet (yargıç yalnız gereklilik + taze kanıt + hedef dosyayı gördü)"]
+    if a.get("bassiz"):   # S14: taşıyan bekleme süresinde başlamadı — aynı el kitabı, aynı kör yargıç; hüküm taşıyanın siciline (bassiz: e)
+        L += [f"bassiz: evet (başsız şapka — taşıyan {a.get('muhurdar') or '?'} bekleme süresinde başlamadı; aynı el kitabı ve kör yargıç)"]
+    L += [
         "",
         "## G-özet",
         "| G | tur | sonuc | rc | kanit (sha256) |",
@@ -172,6 +186,8 @@ def cmd_uret(argv):
             L.append(f"| {g['id']} | llm-yargi | {v['sonuc']} | - | katman2 (izole-rubrik: {g.get('rubrik')}) |")
         else:
             L.append(f"| {g['id']} | llm-yargi | KATMAN2-BEKLIYOR | - | (rubrik: {g.get('rubrik')}) |")
+    for g in sultan:
+        L.append(f"| {g['id']} | 👤 sultan-denemesi | SULTANDA | - | mühürdar sınamaz — tarif: {g.get('tarif')} |")
 
     if verdikt == "KALDI":
         L += ["", "## KALDI-paketi", "> Motora dönen TEK içerik budur (iç-muhakeme verbatim dönmez — SKILL.md §6)."]
@@ -204,6 +220,9 @@ def cmd_uret(argv):
         "tip": ger["tip"], "vites": ger["vites"], "g_toplam": len(ger["g"]),
         "g_dusen": dusen + oznel_kaldi, "oznel_acik": oznel_acik,
         "tatbikat": a["tatbikat"], "zaman_utc": utc(), "tescil_skill_version": sv,
+        "sultan_denemesi": [g["id"] for g in sultan],
+        "muhurdar": a.get("muhurdar"), "yazan": a.get("yazan"), "yargic": a.get("yargic"),
+        "bassiz": bool(a.get("bassiz")),
     }
     _yaz(out, L, ozet)
     print(f"MUHUR.md yazıldı: verdikt={verdikt} (rc={RC_MAP[verdikt]})")
@@ -302,7 +321,7 @@ def cmd_lint(argv):
             ger = oku_json(ger_yolu)
             if b.get("gereklilik_sha256") and b["gereklilik_sha256"] != ger["gereklilik_sha256"]:
                 hatalar.append("gereklilik_sha256 uyuşmuyor (MUHUR ↔ gereklilik.json)")
-            mekanik = [g for g in ger["g"] if g["tur"] != "llm-yargi"]
+            mekanik = [g for g in ger["g"] if g["tur"] not in ("llm-yargi", "sultan-denemesi")]   # Sultan satırı kanıt üretmez
             if not ger["g"]:
                 hatalar.append("hiç G yok — çıplak-verdikt geçersiz")
             if not any(g["davranis"] or g["tur"] in ("api-check", "e2e-check") for g in ger["g"]):

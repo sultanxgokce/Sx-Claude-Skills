@@ -1,0 +1,66 @@
+{
+  "tur": 1,
+  "is": "denetci-olcum-sonu",
+  "pr": "392",
+  "yazan": "claude",
+  "denetci": "claude (haiku) (YEDEK GÖZ: codex düştü (2 deneme, rc=1) · yazandan farklı yeni oturum + farklı model kademesi [yazan: sonnet] · Sultan Y0006)",
+  "zaman": "2026-10-20T18:14:11+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": "codex düştü (2 deneme, rc=1)",
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": "haiku",
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 23228,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 30100
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Talebin istediği şey yapılmış: 60 satırı aşan ölçümde stdout'un başı, atlanan satır sayısı ve sonu ile stderr'in sonu gidiyor, kısa dosya aynen geçiyor. Kodu okuyunca satır sayımı ve kesim sınırları doğru; bulduğum tek sorun kanıtın bağlanması: sonra ölçümü 0.10.5 sürümünü gösteriyor, diff ise 0.10.6 yazıyor, yani ölçülen ağaç son diff olmayabilir. Bu doğrulanmadan puan 5'e çıkmaz.",
+    "bulgular": [
+      {
+        "ne": "Sonra ölçümünün ağacı son diff ile aynı olmayabilir: istem-olcer çıktısı 'fabrika version: 0.10.5' diyor, diff ise SKILL.md'yi 0.10.6'ya çeviriyor. Manifestte sonra kaydının sha256'sı ölçüm dosyasına bağlı, ama ölçülen kod ağacına bağlı değil.",
+        "kanit": "olcum-istem-sonra.txt 2. satır 'denetçi rc=0 · fabrika version: 0.10.5'; diff: '-version: 0.10.5' / '+version: 0.10.6'; manifest sonra kaydı zaman 18:04:12, kanıt manifesti güncellemesi 18:11:12. Ölçümden sonra kod değişmiş olabilir ya da istem-olcer sürümü başka yerden okuyor olabilir; ikisi de kanıtla ayrılmamış.",
+        "konum": "_agents/fabrika/kanit/denetci-olcum-sonu/olcum-istem-sonra.txt:2 · yazilim-fabrikasi/SKILL.md (version satırı)",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "İstem ölçümü ile sınav ölçümü arasında sürüm bilgisi tutarsız; ölçüm çifti (önce/sonra) hangi kod üzerinde alındığını kanıtlamıyor.",
+        "kanit": "önce ölçümü '/config/.claude/skills/yazilim-fabrikasi' ile, sonra ölçümü göreli 'yazilim-fabrikasi' ile alınmış; iki ölçümün ağaç sha'sı ya da commit kaydı yok. Sayılar (62 satır → 49 satır, HAYIR → EVET) kodun değiştiğini gösteriyor ama hangi sürüm olduğunu göstermiyor.",
+        "konum": "_agents/fabrika/kanit/denetci-olcum-sonu/KART.json kayıt listesi (olcum-istem-once / olcum-istem-sonra)",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "istem-olcer'ın 'son giden satır' alanı iki ölçümde de boş; kanıt aracı kendi çıktısının son satırını doğrulayamadan 'sonuç satırı göze gidiyor mu: EVET' diyor.",
+        "kanit": "olcum-istem-once.txt: 'son giden satır: ' (boş) ve olcum-istem-sonra.txt: 'son giden satır: ' (boş). Ölçülen ölçüm dosyası kendi sonunda '--- stderr ---' satırı taşıyor; boş alan ile beklenen son satır uyuşmuyor.",
+        "konum": "_agents/fabrika/kanit/denetci-olcum-sonu/olcum-istem-sonra.txt (son satır alanı)",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Kart kapsam uyarısı 'ÇOK GÜNLÜK' çıktı, çünkü kart cümlesindeki 'W42' etiketi tetikleyici oldu; iş tek PR'da teslim edildi. Uyarı karar olarak kapatılmamış.",
+        "kanit": "KART kapsam_uyarilari: 'ÇOK GÜNLÜK KAPSAM (W42): bir PR'da teslim edilmez'; diff tek bir sürüm artışı ve tek bir kod değişikliği (denetci.sh + test + SKILL.md).",
+        "konum": "_agents/fabrika/kanit/denetci-olcum-sonu/KART.json (kapsam_uyarilari)",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Sınav ölçümünün tamamı kanıtta yok: manifest 'rc=0, 398.9 sn' diyor ama gösterilen kısım yalnız ilk 60 satır (T1 … TW). Yeni T-OLCUM (O1–O6) ve mutant×4'ün gerçekten geçtiği yalnız rc=0 ile dolaylı kanıtlanıyor.",
+        "kanit": "olcum-denetci-sinavi-sonra.txt: 190 satır sayılmış, ilk 60 satır gösterilmiş (son görünen başlık '════ TW ·'). Diffteki O1–O6 kontrolleri ve 4 mutant bu dosyanın içinde; sonuç satırı ve mutant tablosu gösterilmemiş.",
+        "konum": "_agents/fabrika/kanit/denetci-olcum-sonu/olcum-denetci-sinavi-sonra.txt (60 satır sonrası)",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sha'lar tutuyor; sarı kayıt yok; önce/sonra ölçüm çifti var ve 62→49 satır ile HAYIR→EVET farkı gerçek bir değişimi gösteriyor (kanıt sayılır). Zayıf noktalar: sonra ölçümünün 0.10.5 sürümünü göstermesi (diff 0.10.6), 'son giden satır' alanının boş kalması, sınav çıktısının yalnız 60 satırının görünmesi. Bunlar kodu çürütmüyor ama 'son kod ölçüldü' iddiasını şu an tam kanıtlamıyor; final ağaçta istem ölçümü yeniden alınıp sürüm satırı 0.10.6 görülürse kanıt tamam sayılır."
+  }
+}

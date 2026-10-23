@@ -42,9 +42,42 @@ esac; fi
 KUTU_BUYUK="$(printf '%s' "$KUTU" | tr '[:lower:]-' '[:upper:]_')"
 
 PROJE="${TO_PROJE:-/config/projects/$KUTU}"
+# 🔴 KADRO KAYIT KÖKÜ (2.17.0 · gorev_01M554PCYA0HWM6TM4KXY4E72V, ölçüldü 17 Eki): kapı kaydı $PROJE altında arar. Merkez kutusunda
+#    (code) $PROJE=/config/projects/code bir iskelettir, ekibin kaydı başka depodadır → kapı 0 üye okudu, sekiz canlı ajanı
+#    "kayıtsız oturum" saydı ve Sultan'a tek eylem olarak "Oturumu kapat" sundu. Kutu adı koda GÖMÜLMEZ: kutu kendi yerinde
+#    $PROJE/.oda/ortam dosyasına kayıt yolunu yazar. Dosya SOURCE EDİLMEZ; yalnız İZİN LİSTESİ (AILE_REGISTRY · ISKAN_REGISTRY),
+#    yalnız mutlak yol, yalnız var olan dosya kabul edilir. Açık ortam (ör. sınavın verdiği) her zaman kazanır.
+ODA_ORTAM="${TO_ODA_ORTAM:-$PROJE/.oda/ortam}"
+ODA_ORTAM_RED=0
+oda_ortam_yukle() {  # → izinli ve geçerli satırları export eder; reddedilenleri ODA_ORTAM_RED'de sayar (içerik basmaz)
+  local satir ad deger
+  [ -f "$ODA_ORTAM" ] || return 0
+  ODA_ORTAM_RED=0
+  while IFS= read -r satir || [ -n "$satir" ]; do
+    satir="${satir%$'\r'}"
+    case "$satir" in ''|'#'*) continue ;; esac
+    ad="${satir%%=*}"; deger="${satir#*=}"
+    case "$ad" in AILE_REGISTRY|ISKAN_REGISTRY) ;; *) ODA_ORTAM_RED=$((ODA_ORTAM_RED+1)); continue ;; esac
+    case "$deger" in /*) ;; *) ODA_ORTAM_RED=$((ODA_ORTAM_RED+1)); continue ;; esac
+    [ -f "$deger" ] || { ODA_ORTAM_RED=$((ODA_ORTAM_RED+1)); continue; }
+    [ -n "${!ad:-}" ] && continue    # açık ortam kazanır (dolaylı okuma; eval yok)
+    export "$ad=$deger"
+  done < "$ODA_ORTAM"
+}
+oda_ortam_yukle
+# Kapıya giden kayıt ortamı — TEK yerde üretilir (onar.sh kapıyı bununla başlatır; sınav bunu çağırıp ölçer).
+# TO_PROJE de geçer: kapı kökü kendisi türetmesin, kabukla aynı kökü görsün.
+kapi_kayit_ortami() {
+  printf 'TO_PROJE=%q' "$PROJE"
+  [ -n "${AILE_REGISTRY:-}" ] && printf ' AILE_REGISTRY=%q' "$AILE_REGISTRY"
+  [ -n "${ISKAN_REGISTRY:-}" ] && printf ' ISKAN_REGISTRY=%q' "$ISKAN_REGISTRY"
+  return 0
+}
 DURUM_DIZ="${TO_DURUM_DIZ:-/config/.terminal-onar}"
 GUNLUK="$DURUM_DIZ/gunluk.log"
 ANA_TMUX="${TO_ANA_TMUX:-$KUTU-ana}"
+# El kabuğu (Sultan · gorev_…GT5BTK, 22 Eki): Claude'dan bağımsız, sabit, BOŞ kabuk sekmesi — sabah paketi, kurtarma komutu.
+KABUK_TMUX="${TO_KABUK_TMUX:-$KUTU-kabuk}"
 KURT_TMUX="${TO_KURT_TMUX:-$KUTU-kurtarici}"
 TTYD_TMUX="${TO_TTYD_TMUX:-ttyd-$KUTU}"
 KAPI_TMUX="${TO_KAPI_TMUX:-kapi-$KUTU}"
@@ -63,6 +96,9 @@ BECERI_KOK="${TO_BECERI_KOK:-$(
 )}"
 KAPI_DIZ="$BECERI_KOK/kapi"
 TTYD_BIN="${TO_TTYD_BIN:-/config/.local/bin/ttyd}"
+# tmux bekçisi (K43HN): kutunun canlı sunucusunu içeriden kapatan çıplak kill-server'ı durdurur — scripts/tmux-bekcisi.sh
+#   TO_TMUX_BEKCI_VARSAYILAN yalnız sınav içindir: varsayılan (canlı) hedefi geçici dizine çevirir, kilit yine onu korur.
+TMUX_BEKCI_BIN="${TO_TMUX_BEKCI_BIN:-${TO_TMUX_BEKCI_VARSAYILAN:-/config/.local/bin/tmux}}"
 ENV_DOSYA="${CORTEX_ACCESS_ENV:-$HOME/.config/cortex-access.env}"
 SIFRE_ANAHTAR="${TO_SIFRE_ANAHTAR:-${KUTU_BUYUK}__TERMINAL_SIFRE}"
 BETIK_DIZ="$BECERI_KOK/scripts"
@@ -72,6 +108,15 @@ PROJE_BECERI="${TO_PROJE_BECERI:-$PROJE/.claude/skills/terminal-onar}"
 PROJE_BETIK="$PROJE_BECERI/scripts"
 ANA_AD="${TO_ANA_AD:-$KUTU-yon}"
 KURT_AD="${TO_KURT_AD:-$KUTU-kurtarici}"
+# ── KURTARICI KAPALI işareti (Sultan kararı 16 Eki 2026: filo genelinde kurtarıcı ajanlar KAPANIR, yalnız code kutusununki
+#    kalır — her kutuda ayrı bir Claude bellek yiyordu). İşaret KUTU BAŞINADIR: durum dizini kutuya özeldir (/config/.terminal-onar
+#    kutunun kendi /config'inde; paylaşılan tek şey /config/.claude). İşareti kutunun reisi koyar; code kutusuna KONMAZ.
+#    Alternatif açık beyan: TO_KURTARICI=0 (ortamdan; cron/sınav için). İşaret varken onar.sh K0 adım 4 kurtarıcıyı AÇMAZ,
+#    açıksa KAPATIR (durum işarete yakınsar; yoksa bekçi bir dakika içinde geri açardı); durum.sh "kapalı" basar, "yok" demez;
+#    kademe.sh K2'yi atlar ve K3 iletisine "kurtarıcı kapalı → MUAVİN/SERDAR'a bildir" ekler. Geri açmak = işareti silmek.
+KURT_KAPALI_DOSYA="${TO_KURTARICI_KAPALI_DOSYA:-$DURUM_DIZ/kurtarici-kapali}"
+kurtarici_kapali() { [ "${TO_KURTARICI:-}" = 0 ] || [ -f "$KURT_KAPALI_DOSYA" ]; }
+KURT_KAPALI_SEBEP="kapalı (Sultan 16 Eki)"
 
 # ── TABAN YOLU — merkez sayfanın ön şartı ────────────────────────────────────
 # Merkez (terminal.mmepanel.com) kutuları YOL ile ayırır: /sedir/ · /akar/ …
@@ -97,6 +142,26 @@ mkdir -p "$DURUM_DIZ" 2>/dev/null
 gunluk() { printf '%s %s\n' "$(date '+%F %T')" "$*" >> "$GUNLUK"; }
 
 tmux_var() { tmux has-session -t "=$1" 2>/dev/null; }
+# El kabuğunu kurar — YALNIZ yoksa. Var olanı öldürmez, içine yazmaz (Sultan'ın yarım kalmış komutu kaybolmaz).
+#   Proje dizininde, kullanıcının varsayılan kabuğuyla; Claude başlatılmaz. Kapı/ttyd yeniden açılınca dokunulmaz
+#   (--web-yenile yalnız ttyd-*/kapi-* öldürür); tmux sunucusu giderse bekçi (onar.sh, dakikada bir) geri kurar.
+#   Kurulamama her dakika tekrarlanabilir (ör. varsayılan kabuk sahte) → günlüğe yalnız DEĞİŞTİĞİNDE yazılır ($DURUM_DIZ/kabuk.son).
+#   TO_KABUK_YOK=1 → hiçbir şey yapmaz (bekci.sh'ı GERÇEK tmux ile koşturan sınavlar için; TO_BEKCI_YOK emsali — 22 Eki ölçüldü:
+#   tmux-bekcisi.test.sh kutunun gerçek sunucusunda sinav-kabuk açıyordu).
+kabuk_kur() {
+  [ -n "${TO_KABUK_YOK:-}" ] && return 0
+  tmux_var "$KABUK_TMUX" && { printf ok > "$DURUM_DIZ/kabuk.son" 2>/dev/null; return 0; }
+  # Hüküm komutun dönüşünden DEĞİL oturumun varlığından (göz #415 rötus): onar.sh ile bekci.sh aynı anda koşarsa ikincisinin new-session'ı
+  #   "zaten var" diye düşer ama kabuk kurulmuştur — bu bir arıza değildir, yanıltıcı K0 HATA satırı yazılmaz.
+  tmux new-session -d -s "$KABUK_TMUX" -c "$PROJE" 2>/dev/null
+  if ! tmux_var "$KABUK_TMUX"; then
+    [ "$(cat "$DURUM_DIZ/kabuk.son" 2>/dev/null)" = hata ] || gunluk "K0 HATA: el kabuğu $KABUK_TMUX kurulamadı"
+    printf hata > "$DURUM_DIZ/kabuk.son" 2>/dev/null; return 1
+  fi
+  printf ok > "$DURUM_DIZ/kabuk.son" 2>/dev/null
+  local w; for w in $(tmux list-windows -t "=$KABUK_TMUX" -F '#{window_id}' 2>/dev/null); do tmux set-option -w -t "$w" window-size latest 2>/dev/null; done
+  gunluk "K0 el kabuğu $KABUK_TMUX kuruldu"
+}
 
 # Bir tmux oturumunda CANLI Claude var mı → sessionId basar (yoksa RC=1).
 # 🔴 Birincil kanıt SÜREÇ AĞACIDIR: oturumun bir panesinin altında `claude` süreci var mı.
@@ -156,7 +221,15 @@ bekle_saglam() {
   return 1
 }
 
-bekci_kurulu() { ${TO_CRONTAB:-crontab} -l 2>/dev/null | grep -q '# terminal-onar-bekci'; }
+# 🔴 İŞARET YALNIZ CRON SATIRININ SONUNDA (2.17.1 · kart terminal-onar-bekci-yorum-korur, 17 Eki ölçüldü): desen eskiden işareti
+#    satırın HERHANGİ bir yerinde arıyordu → kanon crontab-abc'nin AÇIKLAMA yorumu ("…işaret yorumu '# terminal-onar-bekci' dahil…")
+#    bekçi satırı sanıldı: düzeltici o yorumu bekçi satırına çevirdi, asıl satırı "çift kopya" sayıp sildi (canlıda 20:26'da oldu);
+#    bekci_kurulu da asıl satır yokken yorum yüzünden "kurulu" diyebilirdi. Artık: '#' ile başlayan satır YORUMDUR, olduğu gibi
+#    korunur; işaret yalnız yorum olmayan satırın SONUNDA sayılır. Beş kullanım yeri (düzeltici · kurulu · iki varlık denetimi ·
+#    canlı varlık denetimi) bu iki desenden okur — tek tanım.
+BEKCI_DESEN='^[[:space:]]*[^#[:space:]].*# terminal-onar-bekci[[:space:]]*$'
+ACILIS_DESEN='^[[:space:]]*[^#[:space:]].*# terminal-onar-acilis[[:space:]]*$'
+bekci_kurulu() { ${TO_CRONTAB:-crontab} -l 2>/dev/null | grep -Eq "$BEKCI_DESEN"; }
 # ── BEKÇİ SATIRLARI — tek kaynak, PROJE yoluyla; eski (ortak-dizin yollu) satırlar GÖÇÜRÜLÜR ──────────────────────
 # 🔴 Bağımsız göz (tur 2): işaretleyici varsa satır "doğru" sayılıyordu; 15 kutudaki eski ortak-yollu satırlar yerinde
 #    kalıyordu. Artık işaretleyicili her satır KANONİK biçime yeniden yazılır (yol proje yolu); eksikse eklenir.
@@ -171,12 +244,18 @@ _cron_komut() {  # $1 = betik adı · $2 = ek argüman → proje yolu varsa orad
   printf 'if [ -x %s/%s ]; then bash %s/%s%s; else TO_KUTU=%s bash %s/scripts/%s%s; fi' \
     "$PROJE_BETIK" "$1" "$PROJE_BETIK" "$1" "${2:+ $2}" "$KUTU" "$ORTAK_BECERI" "$1" "${2:+ $2}"
 }
-BEKCI_SATIR="* * * * * $(_cron_komut bekci.sh)  # terminal-onar-bekci"
+# 🔴 KUTUYA ÖZGÜ SABİT GECİKME (2.17.2 · kart terminal-onar-bekci-gecikme, 18 Eki ölçümü): 17 kutunun dakikalık bekçisi
+#    aynı saniyede (:00) kalkıyordu → host'ta dakika başı çalışma kuyruğu 179-191 (filo yavaşladı). Gecikme kutu adından
+#    türer (cksum % 50 + 5 → 5-54 sn): her kutu kendi saniyesinde, her kurulumda aynı sayı. Sayı KURULUMDA hesaplanır ve
+#    satıra düz rakam olarak yazılır — crontab'da '%' satır sonu demektir, formül satıra giremez. '&&' (';' değil): canlılık
+#    envanteri ilk ';'den keser, ';' ile işin adı 'sleep' görünürdü. Eski gecikmesiz satır düzeltici tarafından buna çevrilir.
+BEKCI_GECIKME=$(( $(printf '%s' "$KUTU" | cksum | cut -d' ' -f1) % 50 + 5 ))
+BEKCI_SATIR="* * * * * sleep $BEKCI_GECIKME && $(_cron_komut bekci.sh)  # terminal-onar-bekci"
 ACILIS_SATIR="@reboot sleep 15; $(_cron_komut komut.sh onar)  # terminal-onar-acilis"
 bekci_satirlari_duzelt() {  # stdin → stdout: işaretleyicili satırlar kanonik ve TEK (çift kopya tekilleşir), gerisi olduğu gibi
-  awk -v b="$BEKCI_SATIR" -v a="$ACILIS_SATIR" '
-    /# terminal-onar-bekci/  { if (!bg) { print b; bg=1 }; next }
-    /# terminal-onar-acilis/ { if (!ag) { print a; ag=1 }; next }
+  awk -v b="$BEKCI_SATIR" -v a="$ACILIS_SATIR" -v bd="$BEKCI_DESEN" -v ad="$ACILIS_DESEN" '
+    $0 ~ bd { if (!bg) { print b; bg=1 }; next }
+    $0 ~ ad { if (!ag) { print a; ag=1 }; next }
     { print }'
 }
 # 🔴 CANLI CRONTAB KİLİDİ (2.6.0 · S-10, 13 Eki): bir sınav onar.sh'ı TO_PROJE=<geçici dizin> ile ve TO_CRONTAB vermeden
@@ -189,8 +268,8 @@ bekci_kur() {  # $1 = kalıcı cron dosyası (.oda/cron) · $2 = "canli" ise can
   mkdir -p "$(dirname "$oda")" 2>/dev/null
   tmp="$(mktemp)"
   if [ -f "$oda" ]; then bekci_satirlari_duzelt < "$oda" > "$tmp"; else printf 'TZ=Europe/Istanbul\n' > "$tmp"; fi
-  grep -q '# terminal-onar-bekci'  "$tmp" || printf '%s\n' "$BEKCI_SATIR"  >> "$tmp"
-  grep -q '# terminal-onar-acilis' "$tmp" || printf '%s\n' "$ACILIS_SATIR" >> "$tmp"
+  grep -Eq "$BEKCI_DESEN"  "$tmp" || printf '%s\n' "$BEKCI_SATIR"  >> "$tmp"
+  grep -Eq "$ACILIS_DESEN" "$tmp" || printf '%s\n' "$ACILIS_SATIR" >> "$tmp"
   if [ ! -f "$oda" ]; then sonuc="yazıldı"; cat "$tmp" > "$oda"
   elif ! cmp -s "$oda" "$tmp"; then sonuc="eski yol proje yoluna çevrildi"; cat "$tmp" > "$oda"; fi
   rm -f "$tmp"
@@ -199,12 +278,34 @@ bekci_kur() {  # $1 = kalıcı cron dosyası (.oda/cron) · $2 = "canli" ise can
       sonuc="$sonuc · canlı crontab'a DOKUNULMADI (deneme yolu: $PROJE — gerçek crontab için TO_CRONTAB ver)"
     else
       eski="$($ct -l 2>/dev/null)"; yeni="$(printf '%s\n' "$eski" | bekci_satirlari_duzelt)"
-      printf '%s\n' "$yeni" | grep -q '# terminal-onar-bekci' || yeni="${yeni:+$yeni
+      printf '%s\n' "$yeni" | grep -Eq "$BEKCI_DESEN" || yeni="${yeni:+$yeni
 }$BEKCI_SATIR"
       if [ "$eski" != "$yeni" ]; then printf '%s\n' "$yeni" | $ct - && sonuc="$sonuc · canlı crontab düzeltildi"; fi
     fi
   fi
   printf '%s\n' "$sonuc"
+}
+# tmux bekçisini kurar/tazeler (K43HN). Canlı crontab kilidiyle AYNI kural: deneme yolunda (PROJE ≠ /config/projects/<kutu>)
+# canlı /config/.local/bin'e YALNIZ açıkça verilen TO_TMUX_BEKCI_BIN ile yazılır — sınavlar onar.sh'ı koşturur.
+# 🔴 Bozuk tmux ASLA kurulmaz: yeni kopya önce kendini çalıştırır (-V gerçek tmux'a ulaşmalı), sonra atomik yer değiştirir.
+# 🔴 Yabancı dosyaya dokunulmaz: hedefte bekçi olmayan bir tmux varsa (elle kurulmuş ikili) olduğu gibi kalır, söylenir.
+tmux_bekcisi_kur() {  # → stdout: kuruldu · güncellendi · güncel · DOKUNULMADI … · HATA …
+  local kay="$BETIK_DIZ/tmux-bekcisi.sh" hedef="$TMUX_BEKCI_BIN" ne yeni
+  if [ -z "${TO_TMUX_BEKCI_BIN:-}" ] && [ "$PROJE" != "/config/projects/$KUTU" ]; then
+    echo "DOKUNULMADI (deneme yolu: $PROJE — gerçek hedef için TO_TMUX_BEKCI_BIN ver)"; return 0
+  fi
+  [ -r "$kay" ] || { echo "HATA: kaynak yok ($kay)"; return 1; }
+  if [ -f "$hedef" ] && [ -x "$hedef" ] && cmp -s "$kay" "$hedef"; then echo "güncel"; return 0; fi
+  if [ -e "$hedef" ] && ! grep -q 'tmux-bekcisi.sh' "$hedef" 2>/dev/null; then
+    echo "DOKUNULMADI (hedefte bekçi olmayan bir dosya var: $hedef)"; return 1
+  fi
+  [ -e "$hedef" ] && ne=güncellendi || ne=kuruldu
+  yeni="$hedef.yeni.$$"
+  if mkdir -p "$(dirname "$hedef")" && cp "$kay" "$yeni" && chmod 755 "$yeni" && "$yeni" -V >/dev/null 2>&1 && mv -f "$yeni" "$hedef"; then
+    echo "$ne"
+  else
+    rm -f "$yeni"; echo "HATA: kurulamadı ($hedef — yeni kopya gerçek tmux'a ulaşamadı ya da yazılamadı)"; return 1
+  fi
 }
 # Kapı ve ttyd TABAN'ı ortamdan okur; tek yerden verilir ki ikisi ayrışmasın.
 export KAPI_TABAN="$TABAN"

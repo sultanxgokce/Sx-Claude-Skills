@@ -1,0 +1,21 @@
+{
+  "is": "kurtaricisiz-ayari",
+  "cumle": "terminal-onar: kutu başına 'kurtarıcı kapalı' işareti (Sultan 16 Eki: filo geneli kurtarıcılar kapanır, yalnız code kutusununki kalır) — onar.sh K0 adım 4 kurtarıcı açmaz/açıksa kapatır · durum.sh 'kurtarıcı: kapalı (Sultan 16 Eki)' basar, düştü demez · kademe.sh K3'te 'kurtarıcı kapalı → MUAVİN/SERDAR'a bildir' · sınav+mutasyon · tek kurulum, işareti reisler koyar (code'da konmaz)",
+  "istedi": "SERDAR",
+  "aldi": "BÂNİ",
+  "zaman": "2026-10-16T10:12:22+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "e"
+  },
+  "siniflar": [
+    "yetki"
+  ],
+  "sultan": true,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": []
+}
