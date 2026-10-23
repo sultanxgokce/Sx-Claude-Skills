@@ -338,4 +338,55 @@ O="$(bash "$MD/kart.sh" daralt is-wt2 --kalan "kalan yarı yeterince uzun bir c�
 O="$(bash "$MD/kart.sh" bitti is-wt2 2>&1)"; grep -q "KANIT YOK" <<<"$O"; g $? "mutant: bitti 'KANIT YOK' damgalar (Sx #383) → üstteki 🔴 kapı düşerdi"
 git worktree remove --force "$T/alan3/depo3-is-wt" 2>/dev/null; git worktree remove --force "$T/alan3/depo3-is-wt2" 2>/dev/null; unset KANIT_DEPO
 
+echo "════ T-SORU · CEVAP BEKLE (gorev_…CMWNK): soruya bağlı geri alınamaz eylem cevap gelmeden koşmaz ════"
+# kendi deposu: önceki bölümler $T/depo'yu kaldırıyor (ölçüldü: cd düşünce sınav başka ağaçta koşuyordu)
+unset KANIT_DEPO; SQ="$T/depo-soru"; mkdir -p "$SQ" && cd "$SQ" && git init -q -b main && git config user.email t@t && git config user.name T && echo x > f && git add -A && git commit -qm "chore: ilk" || { g 1 "T-SORU deposu kurulamadı"; }
+bash "$KT" ac ss-1 --is "railway eski servis temizliği" --istedi SERDAR --aldi MIRAHUR --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h >/dev/null 2>&1
+O="$(bash "$KT" cevap-bekle ss-1 2>&1)"; RC=$?; [ "$RC" -eq 0 ] && [ "${O%%$'\t'*}" = yok ]; g $? "S1 sorusuz kart: 'yok' rc 0 (eylem serbest)"
+bash "$KT" sor ss-1 --kime SERDAR --eylem "iki Postgres servisini sil" --soru "Cortex-Db dışındaki iki boş Postgres servisini silebilir miyim?" >/dev/null 2>&1; g $? "S2 soru karta bağlandı"
+O="$(bash "$KT" cevap-bekle ss-1 2>&1)"; RC=$?; [ "$RC" -eq 3 ] && [ "${O%%$'\t'*}" = acik ]; g $? "S3 🔴 cevapsız soru: 'acik' rc 3 → 'cevap-bekle && eylem' KOŞMAZ"
+O="$(bash "$KT" acik-soru MIRAHUR 2>&1)"; RC=$?; [ "$RC" -eq 3 ] && grep -q "ss-1 · soru 1" <<<"$O"; g $? "S4 acik-soru ajanın kartlarında soruyu buldu (rc 3)"
+bash "$KT" acik-soru NAKKAS >/dev/null 2>&1; g $? "S4b başka ajanın cevapsız sorusu yok (rc 0)"
+O="$(bash "$KT" bitti ss-1 2>&1)"; RC=$?; [ "$RC" -eq 1 ] && grep -q "CEVAPSIZ SORU" <<<"$O"; g $? "S5 🔴 cevapsız soru varken kart.sh bitti REDDEDİLDİ"
+python3 -c "import json;k=json.load(open('$SQ/_agents/fabrika/kartlar/ss-1.json'));assert k['durum']=='acik'"; g $? "S5b kart açık kaldı"
+bash "$KT" cevap ss-1 --no 1 --kim MIRAHUR --karar evet --oturum x --soz "olur" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "S6 🔴 soran (kartın sahibi) kendi sorusunu cevaplayamaz"
+bash "$KT" cevap ss-1 --no 1 --kim HENDESE --karar evet --oturum x --soz "olur" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "S7 🔴 sorulan olmayan ad cevap veremez"
+bash "$KT" cevap ss-1 --no 1 --kim SERDAR --karar belki --oturum x --soz "bakarız" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "S8 küme dışı karar (belki) reddedildi"
+bash "$KT" cevap ss-1 --no 1 --kim SERDAR --karar evet --soz "olur" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "S9 oturumsuz cevap SAYILMAZ (D1 deseni)"
+bash "$KT" cevap ss-1 --no 1 --kim SERDAR --karar hayir --oturum sess-1 --soz "silme, önce satır sayısını ölç" >/dev/null 2>&1; g $? "S10 sorulan cevapladı: hayır"
+O="$(bash "$KT" cevap-bekle ss-1 2>&1)"; RC=$?; [ "$RC" -eq 4 ] && [ "${O%%$'\t'*}" = hayir ]; g $? "S11 🔴 hayır: 'hayir' rc 4 → eylem koşmaz"
+bash "$KT" cevap ss-1 --no 1 --kim SERDAR --karar evet --oturum s2 --soz "tamam" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "S12 cevaplı soru yeniden cevaplanmaz (hayır kesin)"
+bash "$KT" acik-soru MIRAHUR >/dev/null 2>&1; g $? "S13 cevaplanınca acik-soru temiz (rc 0)"
+bash "$KT" sor ss-1 --kime SERDAR --eylem "yalnız boş servisi sil" --soru "Satır sayısı 0 çıkan tek servisi silebilir miyim, ölçüm ekte?" >/dev/null 2>&1 && bash "$KT" cevap ss-1 --no 2 --kim SERDAR --karar evet --oturum sess-2 --soz "evet, yalnız o" >/dev/null 2>&1; g $? "S14 yeni soru (no 2) açıldı ve evet aldı"
+bash "$KT" cevap-bekle ss-1 >/dev/null 2>&1; [ $? -eq 4 ]; g $? "S14b eski hayır hâlâ görünür (rc 4) — sonraki evet eski reddi silmez"
+bash "$KT" bitti ss-1 >/dev/null 2>&1; g $? "S15 cevapsız soru kalmayınca kart kapanabilir"
+bash "$KT" ac ss-2 --is "veritabanı yedeğini sil" --istedi Sultan --aldi MIRAHUR --geri-alinamaz e --para h --dis-yuzey h --yetki h --canli h >/dev/null 2>&1
+bash "$KT" sor ss-2 --kime SERDAR --eylem "eski yedeği sil" --soru "Eski veritabanı yedeğini silebilir miyim, yer açılacak?" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "S16 🔴 SINIFLI kartta soru SERDAR'a sorulamaz (karar Sultan'ın)"
+bash "$KT" sor ss-2 --kime Sultan --eylem "eski yedeği sil" --soru "Eski veritabanı yedeğini silebilir miyim, yer açılacak?" >/dev/null 2>&1; g $? "S16b sınıflı kartta Sultan'a sorulur"
+bash "$KT" sor ss-2 --kime Sultan --eylem "sil" --soru "kısa" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "S17 kısa eylem/soru reddedildi"
+bash "$KT" sor ss-2 --kime Sultan --eylem "eski yedeği sil" --soru "satır1
+satır2 yeterince uzun bir soru" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "S18 satır sonu içeren soru reddedildi (defter ayracı)"
+echo "── T-SORU · MUTASYON: kapı ölünce yukarıdaki 🔴 kapı düşer ──"
+for M in "bitti engeli" "sorulan kimliği" "sinifli kural"; do
+  MD="$T/mut-soru-${M// /-}"; mkdir -p "$MD"; cp "$HERE"/*.py "$HERE"/*.sh "$MD/" 2>/dev/null
+  python3 - "$MD" "$M" <<'PYM' || g 1 "mutant kurulamadı ($M — çapa bayat)"
+import sys; d,m=sys.argv[1:]
+def deg(f,a,b):
+    p=d+"/"+f; s=open(p,encoding="utf-8").read(); assert s.count(a)==1,(m,a); open(p,"w",encoding="utf-8").write(s.replace(a,b,1))
+if m=="bitti engeli": deg("kart.sh",'    if [ "$CMD" = "bitti" ]; then\n      SD="$(bash','    if false; then\n      SD="$(bash')
+if m=="sorulan kimliği": deg("soru.py",'    if kim != s["kime"]:','    if False:')
+if m=="sinifli kural": deg("soru.py",'and kime != "Sultan":','and False:')
+PYM
+  cd "$SQ" || { g 1 "T-SORU deposu kayboldu"; break; }; rm -f _agents/fabrika/kartlar/mm-*.json
+  bash "$MD/kart.sh" ac mm-1 --is "mutant sınavı için railway temizliği" --istedi SERDAR --aldi MIRAHUR --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h >/dev/null 2>&1
+  bash "$MD/kart.sh" sor mm-1 --kime SERDAR --eylem "servisi sil" --soru "Boş servisi silebilir miyim, ölçüm ekte duruyor?" >/dev/null 2>&1
+  case "$M" in
+    "bitti engeli") bash "$MD/kart.sh" bitti mm-1 >/dev/null 2>&1; g $? "mutant ($M): cevapsız soruyla kart KAPANDI → S5 bu mutantta düşerdi" ;;
+    "sorulan kimliği") bash "$MD/kart.sh" cevap mm-1 --no 1 --kim HENDESE --karar evet --oturum x --soz "olur" >/dev/null 2>&1; g $? "mutant ($M): sorulmayan ad cevap verdi → S7 bu mutantta düşerdi" ;;
+    "sinifli kural") bash "$MD/kart.sh" ac mm-2 --is "mutant sınıflı yedek silme işi" --istedi Sultan --aldi MIRAHUR --geri-alinamaz e --para h --dis-yuzey h --yetki h --canli h >/dev/null 2>&1
+                     bash "$MD/kart.sh" sor mm-2 --kime SERDAR --eylem "yedeği sil" --soru "Eski yedeği silebilir miyim, yer açılacak?" >/dev/null 2>&1; g $? "mutant ($M): sınıflı kartta SERDAR'a soruldu → S16 bu mutantta düşerdi" ;;
+  esac
+done
+rm -f "$SQ/_agents/fabrika/kartlar/mm-"*.json
+
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]

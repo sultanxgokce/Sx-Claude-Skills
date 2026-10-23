@@ -1,0 +1,60 @@
+{
+  "is": "fabrika-cevap-bekle",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T15:49:48+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kart-sinavi-once.txt",
+      "sha256": "d2d9cd89b2b1998e218e6fb93dcfab266fcefd5ea64862da04d581222633d25e",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-sohbet/e8bf42c1-120a-4432-9dc5-9ce45934c7b8/scratchpad/once-soru/yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T15:29:13+03:00",
+      "sure_sn": 15.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "290fde3fa6e24a879866e56dd9187f36"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sinavi-sonra.txt",
+      "sha256": "4351f94a0b91cff1bdddeb7679eec57929b10673b6a460fdaa0f14a55c70d11d",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T15:28:21+03:00",
+      "sure_sn": 15.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "bc8727a2bc664404a3453eabfb7b417f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "tuketici-sinavlar",
+      "asama": "sonra",
+      "dosya": "olcum-tuketici-sinavlar-sonra.txt",
+      "sha256": "b752f7f0b37e9b681e5340d93913cc827302f8c9b481c9403f6218ee8764a624",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/fabrika-cevap-bekle/tuketici-kos.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-fabrika-cevap-bekle"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T15:49:48+03:00",
+      "sure_sn": 1234.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "058bf323e1f6408ca2835444702244b7"
+    }
+  ],
+  "imza": "bb84e5beba0e7f070485cae7b671c54fc487f9205233402b2af39778cf5f6a7f"
+}

@@ -1,0 +1,23 @@
+$ bash _agents/fabrika/kanit/fabrika-cevap-bekle/tuketici-kos.sh /config/projects/_wt/Sx-Claude-Skills-fabrika-cevap-bekle
+# rc=0 sure=1234.3s zaman=2026-10-23T15:49:48+03:00
+--- stdout ---
+✓ bileyi/scripts/bileyi.test.sh
+✓ retro/scripts/retro.test.sh
+✓ yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh
+✓ yazilim-fabrikasi/scripts/denetci-duzeltme-farki.test.sh
+✓ yazilim-fabrikasi/scripts/denetci-fark-ayikla.test.sh
+✓ yazilim-fabrikasi/scripts/denetci-fark-kendisi.test.sh
+✓ yazilim-fabrikasi/scripts/denetci-karne.test.sh
+✓ yazilim-fabrikasi/scripts/denetci-kayit-commit.test.sh
+✓ yazilim-fabrikasi/scripts/denetci-kutu-disi.test.sh
+✓ yazilim-fabrikasi/scripts/denetci.test.sh
+✓ yazilim-fabrikasi/scripts/denetim-sema-kati.test.sh
+✓ yazilim-fabrikasi/scripts/fabrika-kur.test.sh
+✓ yazilim-fabrikasi/scripts/gun-sonu.test.sh
+✓ yazilim-fabrikasi/scripts/is-alani.test.sh
+✓ yazilim-fabrikasi/scripts/kanit.test.sh
+✓ yazilim-fabrikasi/scripts/karne.test.sh
+✓ yazilim-fabrikasi/scripts/kart.test.sh
+✓ yazilim-fabrikasi/scripts/pr-kip-olc.test.sh
+SONUÇ: 18 sınav · düşen 0
+--- stderr ---
