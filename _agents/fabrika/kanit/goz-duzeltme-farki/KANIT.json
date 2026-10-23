@@ -1,0 +1,78 @@
+{
+  "is": "goz-duzeltme-farki",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T09:58:19+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "duzeltme-farki",
+      "asama": "once",
+      "dosya": "olcum-duzeltme-farki-once.txt",
+      "sha256": "d5b4cda2c91b4fe04c1e3cb481d5e1bf23445c8d104fc0ecb9b6ca54360d7283",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/goz-duzeltme-farki/duzeltme-olcer.sh",
+        "origin/main"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T09:31:45+03:00",
+      "sure_sn": 2.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "950d7b30851c49509d44aebed098e770"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "duzeltme-farki",
+      "asama": "sonra",
+      "dosya": "olcum-duzeltme-farki-sonra.txt",
+      "sha256": "f529a662350822fe75e5b11229e0e6c645d455e66681ec265168903e605912a4",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/goz-duzeltme-farki/duzeltme-olcer.sh",
+        "agac"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T09:31:47+03:00",
+      "sure_sn": 1.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8ac0c33c08de4f4191c32047d9820b3f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "duzeltme-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-duzeltme-sinavi-tek.txt",
+      "sha256": "9629b7394cd9b851471a6aaf2d88891dda8b77c7fa498b094765e36666919fbe",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci-duzeltme-farki.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T09:32:25+03:00",
+      "sure_sn": 38.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "81234f57bd694578b0a9a70e9b4cba59"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-denetci-sinavi-tek.txt",
+      "sha256": "07465d5a31408f559e7b086abbae905fc33960f5408042c9a144057014a68bd7",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/denetci.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T09:58:19+03:00",
+      "sure_sn": 1553.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "d5fca0abd31546abbf854b64a49d5fa6"
+    }
+  ],
+  "imza": "7fb522e7958383dae404f3b8ba7bd1cbf6659e50667e808408207111f939f0bd"
+}

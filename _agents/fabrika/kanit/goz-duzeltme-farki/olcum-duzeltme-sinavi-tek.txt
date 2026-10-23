@@ -1,0 +1,42 @@
+$ bash yazilim-fabrikasi/scripts/denetci-duzeltme-farki.test.sh
+# rc=0 sure=38.5s zaman=2026-10-23T09:32:25+03:00
+--- stdout ---
+════ D1 · tur 1: tam fark gider, kayıt incelediği başı (bas) yazar ════
+  ✓ D1a tur 1 koştu (4/E → rc 1)
+  ✓ D1b istemde değişmeyecek dosya var (tam fark)
+  ✓ D1c DENETIM-1.bas = incelenen baş
+════ D2 · tur 2 (yeni commit + ana hat dala birleşti): yalnız A..B farkı, PR dosyalarıyla sınırlı; önceki bulgular sayılı ════
+  ✓ D2a tur 2 koştu (5/E → rc 0)
+  ✓ D2b ekranda DÜZELTME TURU satırı
+  ✓ D2c istemde düzeltme notu
+  ✓ D2d istemde yeni satır var
+  ✓ D2e değişmeyen dosya istemde YOK (yalnız yeni fark)
+  ✓ D2f ana hattan gelen başkasının dosyası farka girmedi
+  ✓ D2g önceki bulgu ayrı satırda sayıldı
+  ✓ D2h DENETIM-2: bas=B, duzeltme_farki.onceki_bas=A, dosya=1
+════ D3 · baş değişmedi → tam fark, sebebi ekranda ════
+  ✓ D3a tur 2 aynı başla koştu
+  ✓ D3b sebep: baş önceki turla aynı
+  ✓ D3c tam fark gitti
+════ D4 · önceki kayıt bas taşımıyor (eski kayıt) → tam fark, sebebi ekranda ════
+  ✓ D4a tur 2 koştu
+  ✓ D4b sebep: eski kayıt
+  ✓ D4c tam fark gitti
+════ D5 · --diff kipi: baş ölçülemez → bas boş ════
+  ✓ D5a --diff ile koştu
+  ✓ D5b DENETIM-1.bas = null
+════ D6 · istem 100 KB'ı aşınca HER denetçide gönderim durur (sahte denetçi, eşik dikişi YOK) ════
+  ✓ D6a ~100 KB üstü istem → rc 1 (İŞİ BÖL)
+  ✓ D6b sınır 100000 olarak söyleniyor
+  ✓ D6c tur yakılmadı, denetçiye istem gitmedi
+  ✓ D6d DENETCI_ISTEM_TAVAN=200000 ile aynı iş denetlenir (rc 0)
+════ D7 · MUTASYON: her kapı kaldırılınca bir D kapısı düşer; kontrol D1a geçer ════
+  ✓ mutant 'duzeltme-yok' → D2e düştü, kontrol D1a geçti
+  ✓ mutant 'dosya-siniri-yok' → D2f düştü, kontrol D1a geçti
+  ✓ mutant 'bas-yazilmaz' → D1c düştü, kontrol D1a geçti
+  ✓ mutant 'onceki-bulgu-sayilmaz' → D2g düştü, kontrol D1a geçti
+  ✓ mutant 'tavan-yalniz-codex' → D6a düştü, kontrol D1a geçti
+  ✓ mutant 'tavan-120k' → D6a düştü, kontrol D1a geçti
+
+── SONUÇ (düzeltme-farkı): 29 geçti · 0 kaldı ──
+--- stderr ---

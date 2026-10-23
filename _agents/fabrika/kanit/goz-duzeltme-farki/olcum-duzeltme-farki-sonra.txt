@@ -1,0 +1,9 @@
+$ bash _agents/fabrika/kanit/goz-duzeltme-farki/duzeltme-olcer.sh agac
+# rc=0 sure=1.4s zaman=2026-10-23T09:31:47+03:00
+--- stdout ---
+kod kaynağı: agac
+(1) tur 1 fark bölümü: 8799 bayt · tur 2 fark bölümü: 623 bayt · tur 2'de değişmeyen dosya: hayır · önceki bulgu ayrı satırda: evet
+   · DÜZELTME TURU: göze yalnız 1d28d8c5..c36edcd7 farkı gider (1 dosya, 118 bayt; tam fark 8776 bayt)
+(2) ~110 KB istem → rc=1 · denetçiye: gönderilmedi
+   ✗ İŞİ BÖL — göze giden istem 108075 bayt > 100000 (istem tavanı; kanıt dosyaları farktan ayıklandıktan sonra): şişkin istemle denetim yapılmaz, tur yakılmadı.
+--- stderr ---
