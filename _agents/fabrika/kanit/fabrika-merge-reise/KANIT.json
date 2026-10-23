@@ -1,25 +1,66 @@
 {
   "is": "fabrika-merge-reise",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-23T13:35:10+03:00",
+  "guncelleme": "2026-10-23T14:19:44+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "fabrika-sinavlari",
       "asama": "sonra",
       "dosya": "olcum-fabrika-sinavlari-sonra.txt",
-      "sha256": "68ef3542538c23db72afc3fbce2a2bda8deff9fa1a4c605e6070be3706dcae6a",
+      "sha256": "fbfb9569b9da2e0396183c8c7d7a25d94cb98a1836480ec805a67721198f3fd7",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/fabrika-merge-reise/kos-fabrika-sinavlari.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T13:35:10+03:00",
-      "sure_sn": 2333.0,
+      "zaman": "2026-10-23T14:19:44+03:00",
+      "sure_sn": 1586.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "dc5398aa5e1948cca82e5764013bef10"
+      "olcum_id": "23f9b93ba4cb477f84a84246a3775fb5"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cekirdek-davranis",
+      "asama": "tek",
+      "dosya": "olcum-cekirdek-davranis-tek.txt",
+      "sha256": "8ad4aabeb058672a1e3db32ea47ea61a57b2704922a64171372ef1fe9e2baf1c",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/fabrika-merge-reise/cekirdek-davranis.sh",
+        "ikisi"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T13:53:11+03:00",
+      "sure_sn": 0.8,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "941aa22968124730b71dceac2495b142"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "cekirdek-davranis-mutant",
+      "asama": "tek",
+      "dosya": "olcum-cekirdek-davranis-mutant-tek.txt",
+      "sha256": "14ab53592ed4956d5b0b0ea0b48aff1a9fa7f2b4a349dd258e46e298f01d34ac",
+      "komut": [
+        "env",
+        "MUTANT=bitti-veto-citi",
+        "bash",
+        "_agents/fabrika/kanit/fabrika-merge-reise/cekirdek-davranis.sh",
+        "dal"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-23T13:53:11+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "cekirdek-davranis",
+      "beklenen": "kirmizi",
+      "olcum_id": "1efd89a5d20e4f7e96eafa9a48e9af6d"
     }
   ],
-  "imza": "8e866f4c900e218d8bca0995153cd122e63bd648a7dbffb184a4cffd46835407"
+  "imza": "407e63d45afd3b77eb2fa69da0e443d35fa0e97a32cf04bcf58b35778f7fe701"
 }

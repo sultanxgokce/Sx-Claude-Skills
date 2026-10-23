@@ -1,0 +1,19 @@
+$ bash _agents/fabrika/kanit/fabrika-merge-reise/cekirdek-davranis.sh ikisi
+# rc=0 sure=0.8s zaman=2026-10-23T13:53:11+03:00
+--- stdout ---
+── ÖNCE (origin/main kart.sh) — sapma beklenir:
+✗ sınıflı kart --oda yokken: kart var (beklenen kart yok)
+✗ sınıflı karta reis-dedi: rc 1 (beklenen rc 0)
+✓ Sultan dur sonrası reis-dedi: rc 1
+✗ Sultan dur sonrası bitti: rc 0 (beklenen rc 1)
+birlestirme_karari yok bitti
+sapma: 3
+   (önce rc 1)
+── SONRA (bu dal):
+✓ sınıflı kart --oda yokken: kart yok
+✓ sınıflı karta reis-dedi: rc 0
+✓ Sultan dur sonrası reis-dedi: rc 1
+✓ Sultan dur sonrası bitti: rc 1
+birlestirme_karari yok acik
+sapma: 0
+--- stderr ---
