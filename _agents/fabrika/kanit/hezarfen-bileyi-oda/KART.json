@@ -1,0 +1,37 @@
+{
+  "is": "hezarfen-bileyi-oda",
+  "cumle": "bileyi.py kart komutu --oda <oda> seçeneği alır ve verilirse kart.sh ac çağrısına --oda ile geçirir; sınıf kâhini bir alanda e ya da ? verdiyse (sınıflı iş) ve --oda yoksa kart.sh ÇAĞRILMADAN rc 1 döner ve '🔴 sınıflı iş: --oda ver — fabrika 0.21 odasız sınıflı kartı Sultan'a ulaştıramaz, açmaz' basar (fail-closed; --kuru'da da söylenir); sınıfsız işte --oda isteğe bağlıdır; bileyi.test.sh'ye argv kaydeden ve 0.21 kuralını uygulayan (odasız sınıflı → rc 1 'Sultan'a ulaşılamadı: --oda ver') sahte kart.sh ile kapılar: --oda geçişi · odasız sınıflı rc 1 ve kart.sh çağrılmadı · sınıfsız odasız açılır · sınıflı+--oda açılır; + mutant (oda çiti kalkınca); önce/sonra ölçüm; sınıfsız, kapıdan sonra birleştirme HEZARFEN (SERDAR devri); kurulu kopya birleşince sync-skills ile yalnız bileyi",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-23T15:19:06+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5M0F6K3N1P7B4RMW2VJ1EWM",
+  "tahmin_dk": 60,
+  "sayi_uyarilari": [
+    "1 döner",
+    "0.21 odasız",
+    "0.21 kuralını",
+    "1 ve"
+  ],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-23T15:19:06+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
