@@ -1,0 +1,17 @@
+$ tail -n 2000 -- _agents/fabrika/kanit/canli-dosya-kapisi/canli-nexus-1276.log
+# kaynak=dosya:_agents/fabrika/kanit/canli-dosya-kapisi/canli-nexus-1276.log tur=dosya desen=canlı-yazılan dosyaya dokunuyor en_az=1 son=2000 atesleme=1 rc=0 sure=0.0s zaman=2026-10-24T01:42:51+03:00
+--- stdout ---
+2026-10-24T01:42:50+03:00 ── BİRLEŞTİRME KAPISI · iş: musavir-ise-alim
+2026-10-24T01:42:50+03:00   · kanıt yeri: PR #1276 başı (c5c6c07b)
+2026-10-24T01:42:50+03:00   ✓ kart var · sınıf: yok
+2026-10-24T01:42:50+03:00   ✓ kanıt: manifest sağlam: 17 kayıt, imza ve sha'lar tutuyor · ⛔ 1 kayıt GEÇERSİZ ilan edildi (kanıt sayılmaz)
+2026-10-24T01:42:50+03:00   ⛔ GEÇERSİZ: olcum-davranis-sinavi-gercek-kosu-sonra.txt (kirmizi → gecersiz) — sınav betiği çıktı klasörünü kendisi oluşturmuyordu (arşivleme sonrası klasör yoktu, claude -p yönlendirmesi düştü); betiğe mkdir -p eklendi, sınav yeniden koştu (davranis-sinavi-gercek-kosu-2) · SERDAR · karşı kanıt: olcum-davranis-sinavi-gercek-kosu-2-sonra.txt
+2026-10-24T01:42:50+03:00   · canlı kanıt istenmedi — --canli h (sahip: canlı kanıt gerekmez dedi)
+2026-10-24T01:42:50+03:00   · denetim tur 3 · 5/5 · doğru şey: E · bulgu: 0 · yazan: claude → denetçi: codex
+2026-10-24T01:42:51+03:00   ⚠ PR canlı-yazılan dosyaya dokunuyor (birleşme sonrası birincil checkout'ta pull kilitlenebilir):
+2026-10-24T01:42:51+03:00       · _agents/handoff/aile-registry.yaml
+2026-10-24T01:42:51+03:00       · _agents/musavir/NOTES.md
+2026-10-24T01:42:51+03:00 
+2026-10-24T01:42:51+03:00 ✓ GEÇTİ — kanıt imzalı, bağımsız göz 5/5 + doğru şey E, kart yerinde.
+2026-10-24T01:42:51+03:00 rc=0
+--- stderr ---

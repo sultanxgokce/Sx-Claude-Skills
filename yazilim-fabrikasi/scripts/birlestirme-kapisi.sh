@@ -271,6 +271,32 @@ else
   _h "DENETİM kaydı YOK — bağımsız göz hiç koşmamış"; eksik=$((eksik+1))
 fi
 
+# ── CANLI-YAZILAN DOSYA UYARISI (yalnız bilgi — rc DEĞİŞMEZ): PR, başka süreçlerin sürekli yazdığı dosyaya dokunuyorsa söyle.
+#    Birincil checkout'ta bu dosyalar kirlenir; PR bunlara dokunursa birleşme sonrası `git pull` kilitlenir. Liste canli-dosyalar.txt'te.
+#    Değişen dosya listesi okunamazsa "ölçülemedi" denir (yok demez); uyarı kapıyı kırmızıya ÇEVİRMEZ.
+canli_uyari() {
+  local liste="$HERE/../canli-dosyalar.txt" dosyalar kalip f hit="" okundu=0
+  [ -r "$liste" ] || { _y "  ℹ canlı-dosya listesi okunamadı — uyarı ölçülemedi"; return 0; }
+  if [ -n "${CANLI_DOSYA_DEGISEN:-}" ] && [ -r "$CANLI_DOSYA_DEGISEN" ]; then dosyalar="$(cat "$CANLI_DOSYA_DEGISEN")"; okundu=1
+  elif [ -n "$PR" ] && command -v gh >/dev/null 2>&1 && dosyalar="$(cd "$DEPO" && gh pr diff "$PR" --name-only 2>/dev/null)" && [ -n "$dosyalar" ]; then okundu=1
+  elif dosyalar="$(git -C "$WT" diff --name-only origin/main...HEAD 2>/dev/null)" && [ -n "$dosyalar" ]; then okundu=1; fi
+  [ "$okundu" -eq 1 ] || { _y "  ℹ değişen dosya listesi okunamadı — canlı-dosya uyarısı ölçülemedi"; return 0; }
+  while IFS= read -r f; do
+    [ -n "$f" ] || continue
+    while IFS= read -r kalip; do
+      case "$kalip" in ''|\#*) continue ;; esac
+      # shellcheck disable=SC2254
+      case "$f" in $kalip) hit="$hit $f"; break ;; esac
+    done < "$liste"
+  done <<< "$dosyalar"
+  if [ -n "$hit" ]; then
+    _y "  ⚠ PR canlı-yazılan dosyaya dokunuyor (birleşme sonrası birincil checkout'ta pull kilitlenebilir):"
+    for f in $hit; do _y "      · $f"; done
+  fi
+  return 0
+}
+canli_uyari
+
 if [ "$olcemedi" -gt 0 ]; then _y ""; _h "ÖLÇÜLEMEDİ — kapı yeşil demiyor (rc=3)"; exit 3; fi
 if [ "$eksik" -gt 0 ]; then
   _y ""

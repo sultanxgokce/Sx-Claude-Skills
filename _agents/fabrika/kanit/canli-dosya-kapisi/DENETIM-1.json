@@ -1,0 +1,43 @@
+{
+  "tur": 1,
+  "is": "canli-dosya-kapisi",
+  "pr": "450",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-24T01:59:58+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-canli-dosya-kapisi",
+  "dal": "canli-dosya-kapisi",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 18789,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 19634
+  },
+  "bas": "d6b85ffebaa1852c27755c12d08640a436eb546d",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Birleştirme kapısına, tanımlı canlı dosya kalıplarıyla değişen PR dosyalarını karşılaştırıp eşleşmeleri adlarıyla uyaran ve kapı sonucunu değiştirmeyen işlev eklenmiş. Talep doğrudan karşılanmış; gerçek kapı koşusu, kapsamlı sınav ve mutasyon kontrolü başarılı, yalnız boşluk içeren olası dosya adlarının çıktı üretiminde korunması küçük bir rötuş olarak kalıyor.",
+    "bulgular": [
+      {
+        "ne": "Uyarıda eşleşen dosyalar boşlukla biriktirilip yeniden kelimelere ayrılıyor; ileride kalıba uyan ve adında boşluk bulunan bir dosya, uyarıda birden fazla bozuk ad gibi basılabilir.",
+        "kanit": "Eşleşme `hit=\"$hit $f\"` ile düz metne ekleniyor ve çıktı `for f in $hit` ile kabuk sözcük ayrımına bırakılıyor; okuma aşamasındaki `IFS= read -r f` koruması böylece çıktı aşamasında kaybediliyor.",
+        "konum": "yazilim-fabrikasi/scripts/birlestirme-kapisi.sh: canli_uyari içindeki `hit=\"$hit $f\"` ve `for f in $hit` satırları",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Gerçek kapı sınavı rc=0 ile 150/150 geçiyor; T15, canlı dosya eşleşmesini, iki adın basılmasını, sıradan dosyanın dışlanmasını, yalnız sıradan dosyada uyarı çıkmamasını, okunamayan listenin ölçülemedi diye belirtilmesini ve rc'nin değişmemesini ölçüyor. Mutantta eşleşme işaretlemesi kaldırıldığında uyarının kaybolduğu ayrıca gösterilmiş. Canlı kayıt gerçek logda uyarının bir kez ateşlendiğini doğruluyor; klasik önce/sonra çifti yok, ancak işlevsel ölçüm ve mutasyon kanıtı talep için yeterli."
+  }
+}

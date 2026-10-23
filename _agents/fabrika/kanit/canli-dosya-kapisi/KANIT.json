@@ -1,0 +1,60 @@
+{
+  "is": "canli-dosya-kapisi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-24T01:51:16+03:00",
+  "kayitlar": [
+    {
+      "tur": "canli",
+      "etiket": "nexus-1276-uyari",
+      "asama": "canli",
+      "dosya": "canli-nexus-1276-uyari.txt",
+      "sha256": "997f02fa8b36d3bf3ce710faa30ec71b965ad622e3b593bdfc6eaf1879413548",
+      "komut": [
+        "tail",
+        "-n",
+        "2000",
+        "--",
+        "_agents/fabrika/kanit/canli-dosya-kapisi/canli-nexus-1276.log"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "kaynak": "dosya:_agents/fabrika/kanit/canli-dosya-kapisi/canli-nexus-1276.log",
+      "kaynak_turu": "dosya",
+      "son": 2000,
+      "desen": "canlı-yazılan dosyaya dokunuyor",
+      "en_az": 1,
+      "atesleme_sayisi": 1,
+      "ilk_atesleme": {
+        "satir": "2026-10-24T01:42:51+03:00   ⚠ PR canlı-yazılan dosyaya dokunuyor (birleşme sonrası birincil checkout'ta pull kilitlenebilir):",
+        "saat": "2026-10-24T01:42:51+03:00",
+        "saat_iso": "2026-10-24T01:42:51+03:00"
+      },
+      "son_atesleme": {
+        "satir": "2026-10-24T01:42:51+03:00   ⚠ PR canlı-yazılan dosyaya dokunuyor (birleşme sonrası birincil checkout'ta pull kilitlenebilir):",
+        "saat": "2026-10-24T01:42:51+03:00",
+        "saat_iso": "2026-10-24T01:42:51+03:00"
+      },
+      "zaman": "2026-10-24T01:42:51+03:00",
+      "sure_sn": 0.0,
+      "olcum_id": "a1e851c7cc4e41e5925738ca27eed1d3"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi-sonra",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-sonra-sonra.txt",
+      "sha256": "dc536573dd8d64fdaa3c452a197ba2c188be64b4e6291c15378c65cb764fc6aa",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/birlestirme-kapisi.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-24T01:51:16+03:00",
+      "sure_sn": 63.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "72bd987bf0494ed987c95f3bbb8ecb8c"
+    }
+  ],
+  "imza": "93da5dede925aab4fd33d9ade5c547877531e130c0606065a19d32123e2ec6b5"
+}

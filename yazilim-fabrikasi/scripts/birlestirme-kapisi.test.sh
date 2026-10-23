@@ -503,4 +503,22 @@ borckart is-b5 e; bash "$PKG/kart.sh" canli-borc is-b5 --yazan M --gerekce "$GR"
 cp "$PKG/canli_borc.py.asil" "$PKG/canli_borc.py"
 [ "$MR" -eq 0 ]; g $? "T14za mutant 3: sınıflı Sultan-kararı denetimi kalkınca ajan borç yazabiliyor → T14t bu mutantta düşerdi"
 
+echo "════ T15 · canlı-yazılan dosya UYARISI (rc değişmez) ════"
+kart is-cd; bash "$K" olcum is-cd olc --asama tek -- echo 1 >/dev/null 2>&1; den is-cd 1 5 E
+LIVE="$T/degisen-canli.txt"; printf '%s\n' "ui/app/page.tsx" "_agents/handoff/serdar-defter.md" "_agents/hendese/NOTES.md" > "$LIVE"
+CIKTI="$(cd "$T" && CANLI_DOSYA_DEGISEN="$LIVE" bash "$G" is-cd 2>&1)"; RC=$?
+[ "$RC" -eq 0 ]; g $? "T15a canlı dosyaya dokunan PR yine GEÇER (rc=0, yalnız uyarı)"
+grep -q "canlı-yazılan dosyaya dokunuyor" <<<"$CIKTI" && grep -q "serdar-defter.md" <<<"$CIKTI" && grep -q "hendese/NOTES.md" <<<"$CIKTI"; g $? "T15b uyarı iki canlı dosyayı adıyla sayıyor"
+! grep -q "page.tsx" <<<"$CIKTI"; g $? "T15c sıradan dosya uyarıya girmiyor"
+TEMIZ="$T/degisen-temiz.txt"; printf '%s\n' "ui/app/page.tsx" "README.md" > "$TEMIZ"
+CIKTI="$(cd "$T" && CANLI_DOSYA_DEGISEN="$TEMIZ" bash "$G" is-cd 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && ! grep -q "canlı-yazılan" <<<"$CIKTI"; g $? "T15d yalnız sıradan dosya → uyarı YOK, rc=0"
+CIKTI="$(cd "$T" && CANLI_DOSYA_DEGISEN="$T/yok-boyle-dosya" bash "$G" is-cd 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && grep -q "ölçülemedi" <<<"$CIKTI"; g $? "T15e değişen liste okunamazsa 'ölçülemedi' denir, 'temiz' denmez (rc yine 0)"
+MC="$PKG/mutant-canli.sh"; sed 's/hit="\$hit \$f"; break/break/' "$G" > "$MC"; chmod +x "$MC"
+cp "$HERE/../canli-dosyalar.txt" "$T/canli-dosyalar.txt" 2>/dev/null; mkdir -p "$T/yazilim-fabrikasi"; cp "$HERE/../canli-dosyalar.txt" "$T/yazilim-fabrikasi/"
+grep -q 'case "\$f" in \$kalip) break' "$MC"; g $? "T15f mutant üretildi (eşleşme artık işaretlenmiyor)"
+CIKTI="$(cd "$T" && CANLI_DOSYA_DEGISEN="$LIVE" bash "$MC" is-cd 2>&1)"
+! grep -q "canlı-yazılan dosyaya dokunuyor" <<<"$CIKTI"; g $? "T15g mutant: uyarı kayboluyor → T15b bu mutantta düşerdi"
+
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]
