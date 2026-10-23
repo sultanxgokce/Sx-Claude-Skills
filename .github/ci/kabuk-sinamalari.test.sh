@@ -55,6 +55,17 @@ echo "── K7 · bilinmeyen kova"
 O="$(kos "$T/d1" yok)"; R=$?
 [ "$R" -eq 2 ]; g $? "K7 bilinmeyen kova adı → rc 2"
 
+echo "── K8 · CI'ın HİÇ koşmayacağı dosya kümesi (lint.yml pull_request.paths-ignore) tam olarak '_agents/**'"
+LY="$HERE/../workflows/lint.yml"
+ignore_listesi() {   # ignore_listesi <lint.yml> → pull_request bloğundaki paths-ignore maddeleri, satır satır (yorum satırları atlanır)
+  awk '/^on:/{on=1;next} on&&/^[^ #]/{on=0} on&&/^  pull_request:/{pr=1;next} pr&&/^  [^ #]/{pr=0} pr&&/^    paths-ignore:/{pi=1;next} pi&&/^    [^ #-]/{pi=0} pi&&/^      - /{sub(/^      - /,"");gsub(/[\047"]/,"");print}' "$1"
+}
+[ -f "$LY" ]; g $? "K8a lint.yml bulundu ($LY)"
+L1="$(ignore_listesi "$LY")"
+[ "$L1" = "_agents/**" ]; g $? "K8b paths-ignore listesi TAM olarak '_agents/**' (kanıt/denetim/kart dosyası): '$L1'"
+! grep -qE '\.md|SKILL' <<<"$L1"; g $? "K8c SKILL.md ve .md dosyaları CI'dan KAÇMAZ (sürüm frontmatter'ı lint'in konusu)"
+sed "s#      - '_agents/\*\*'#      - '_agents/**'\n      - '**/*.md'#" "$LY" > "$T/lint-mutant.yml"
+[ "$(ignore_listesi "$T/lint-mutant.yml" | wc -l)" -eq 2 ] && [ "$(ignore_listesi "$T/lint-mutant.yml" | tail -n 1)" = "**/*.md" ]; g $? "K8d ayıklayıcı mutantı görür: listeye '**/*.md' eklenince 2 madde okunur (K8b bu mutantta KIRMIZI olurdu)"
 echo "── MUTASYON · kova kuralı her şeyi 'kalan'a atarsa diploma kovası KIRMIZI olur"
 yeni_depo dm; M="$T/kabuk-mutant.sh"
 python3 - "$K" "$M" <<'PYM'
