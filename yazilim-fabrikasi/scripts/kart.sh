@@ -158,7 +158,10 @@ tetik() {  # tetik <oda> <başlık> <gövde> → 0 gitti/oda yok · 1 atılmadı
            #   sınıflı açılış bunu "Sultan'a ulaşılamadı" sayar ve kartı geri alır — göz 23 Eki tur 2)
   [ -n "$1" ] || return 0
   if [ ! -x "$TETIK" ]; then echo "· tetik atılmadı: $TETIK yok (mesaj kartta duruyor)"; return 1; fi
-  local f r=0; f="$(mktemp)"; printf '%s\n' "$3" > "$f"
+  local f r=0; f="$(mktemp)"
+  # HEDEF: oda-tetik.sh dağıtımı YALNIZ mektubun HEDEF: alanına göre yapar (oda argümanı tek başına yetmez; alan yoksa 'hedef-yok' iadesi
+  #   → sınıflı kart hiç açılamıyordu, lifeos-kalan 23 Eki). Alan ilk 5 satırda aranır: ilk satıra konur.
+  printf 'HEDEF: %s\n%s\n' "$1" "$3" > "$f"
   if bash "$TETIK" gonder "$1" "$f" --ajan "${ALDI:-fabrika}" --baslik "$2" >/dev/null 2>&1; then echo "✓ tetik: $1 ← $2"
   else echo "· tetik düştü (mesaj kartta duruyor, iş düşmez)"; r=1; fi
   rm -f "$f"; return "$r"
