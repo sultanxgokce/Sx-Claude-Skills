@@ -476,6 +476,37 @@ else
   FARK_KAYNAK="yerel üç-nokta $ANA...HEAD ($(git -C "$DEPO" rev-list --count "$ANA..HEAD") commit)"
 fi
 echo "· fark: $FARK_KAYNAK"
+# ── DÜZELTME TURU YALNIZ YENİ FARKI GÖRÜR (gorev_01M5JF5768X01SKG4QA11SYV3F, SÜZME 22 Eki): tur ≥2'de göze yine PR'ın TAMAMI
+#    gidiyordu; göz aynı kodu baştan okuyup ayda 173 kez 4/E → 4/E verdi, istem şişip tavana dayandı. Her kayıt artık incelediği
+#    başı (bas) yazar; sonraki tur önceki başı biliyorsa farkın yerine YALNIZ o baştan bu yana değişeni koyar — PR'ın kendi
+#    dosyalarıyla sınırlı (ana dalın birleşmesi başkasının işini getirmesin). Önceki bas yoksa (eski kayıt) · nesne bu depoda
+#    yoksa · baş değişmemişse · yeni fark boşsa → TAM fark gider ve sebebi ekranda yazar (sessiz daraltma yok).
+#    --diff kipinde baş ölçülemez (çağıranın dosyası) → bas boş, düzeltme farkı kurulmaz.
+BAS=""; DUZ_ONCEKI_BAS=""; DUZ_DOSYA=0; DUZ_BAYT=0; DUZ_TAM_BAYT=0
+if [ -n "$PR" ] && [ -z "$DIFF" ]; then BAS="$PR_SHA"
+elif [ -z "$DIFF" ]; then BAS="$(git -C "$DEPO" rev-parse -q --verify HEAD 2>/dev/null)"; fi
+if [ "$TUR" -gt 1 ] && [ -n "$BAS" ]; then
+  _ob="$(python3 -c "import json,sys;print(json.load(open(sys.argv[1],encoding='utf-8')).get('bas') or '')" "$DZ/DENETIM-$ONCEKI.json" 2>/dev/null)"
+  if [ -z "$_ob" ]; then _bilgi "· düzeltme farkı YOK: önceki tur kaydı incelediği başı yazmamış (eski kayıt) → tam fark gider"
+  elif [ "$_ob" = "$BAS" ]; then _bilgi "· düzeltme farkı YOK: baş önceki turla aynı (${BAS:0:8}) — yeni commit yok → tam fark gider"
+  elif ! git -C "$DEPO" cat-file -e "$_ob^{commit}" 2>/dev/null || ! git -C "$DEPO" cat-file -e "$BAS^{commit}" 2>/dev/null; then
+    _bilgi "· düzeltme farkı YOK: önceki baş (${_ob:0:8}) ya da bu baş bu depoda bulunamadı → tam fark gider"
+  else
+    mapfile -t _pd < <(python3 - "$TMP/diff.patch" <<'PYD'
+import re,sys
+G=re.compile(r'(?m)^diff --git (?:"((?:[^"\\]|\\.)*)"|(\S+)) (?:"((?:[^"\\]|\\.)*)"|(\S+))\s*$')
+for m in G.finditer(open(sys.argv[1],encoding="utf-8",errors="replace").read()):
+    b = m.group(3) if m.group(3) is not None else m.group(4)
+    print(b[2:] if b.startswith("b/") else b)
+PYD
+)
+    if [ "${#_pd[@]}" -gt 0 ] && git -C "$DEPO" diff "$_ob" "$BAS" -- "${_pd[@]}" > "$TMP/diff-duz.patch" 2>/dev/null && [ -s "$TMP/diff-duz.patch" ]; then
+      DUZ_TAM_BAYT=$(wc -c < "$TMP/diff.patch"); DUZ_BAYT=$(wc -c < "$TMP/diff-duz.patch"); DUZ_DOSYA=$(grep -c '^diff --git ' "$TMP/diff-duz.patch")
+      DUZ_ONCEKI_BAS="$_ob"; mv "$TMP/diff-duz.patch" "$TMP/diff.patch"
+      _bilgi "· DÜZELTME TURU: göze yalnız ${_ob:0:8}..${BAS:0:8} farkı gider ($DUZ_DOSYA dosya, $DUZ_BAYT bayt; tam fark $DUZ_TAM_BAYT bayt)"
+    else _bilgi "· düzeltme farkı YOK: ${_ob:0:8}..${BAS:0:8} arasında PR dosyalarında değişiklik yok → tam fark gider"; fi
+  fi
+fi
 # ── KANIT FARKA İKİNCİ KEZ GİRMESİN (15 Eki 2026, gorev_01M4ZSKHD1Y1FFT8P6Z5YMPTF9)
 #    Ölçülmüş vaka (PR #329, aynı gün): istem 135.913 bayt oldu, 110.000'de kırpıldı ve denetçi ÜRETİM KODU
 #    farkını hiç göremedi — "kodun kendisi bütünüyle denetlenemedi, bu eksikle 5 verilemez" dedi. Bir tur
@@ -626,11 +657,21 @@ PY
 } > "$TMP/p-olcum.md"
 {
   printf '\n\n===== DEĞİŞİKLİK (diff) =====\n'
+  [ -n "$DUZ_ONCEKI_BAS" ] && printf '[NOT: DÜZELTME TURU — önceki tur (%s) PR'"'"'ın TAMAMINI baş %s üzerinde inceledi; aşağısı YALNIZ o baştan bu başa (%s) PR dosyalarında değişen farktır (%s dosya, %s bayt; tam fark %s bayt). Değişmeyen kod önceki turda görüldü ve bulguları aşağıda ÖNCEKİ TUR başlığında. Önce her önceki bulgunun bu farkla kapanıp kapanmadığını değerlendir, sonra yeni farkta yeni sorun var mı bak; puan PR bütünü içindir.]\n' "$ONCEKI" "${DUZ_ONCEKI_BAS:0:12}" "${BAS:0:12}" "$DUZ_DOSYA" "$DUZ_BAYT" "$DUZ_TAM_BAYT"
   [ "$AYIKLANAN_DOSYA" -gt 0 ] && [ ! -s "$TMP/diff.patch" ] && printf '[NOT: bu turda fark TAMAMEN kanıt dosyalarından oluşuyordu (%s dosya, %s bayt); ÜRETİM KODU farkı BOŞTUR — eksik verilmedi, bu turda kod değişmedi. Hükmünü kanıt manifestine ve iş kartına dayandır.]\n' "$AYIKLANAN_DOSYA" "$AYIKLANAN_BAYT"
   [ "$AYIKLANAN_DOSYA" -gt 0 ] && [ -s "$TMP/diff.patch" ] && printf '[NOT: bu farktan %s kanıt dosyası (%s bayt) AYIKLANDI — kanıt manifesti ve ölçüm çıktıları yukarıda AYRI başlıklarda duruyor; saklanan bir şey yok, aynı veri farka ikinci kez girmesin diye çıkarıldı. Aşağısı ÜRETİM KODU farkıdır, eksik değildir.]\n' "$AYIKLANAN_DOSYA" "$AYIKLANAN_BAYT"
   cat "$TMP/diff.patch"
 } > "$TMP/p-fark.md"
-{ [ "$TUR" -gt 1 ] && { printf '\n\n===== ÖNCEKİ TUR (%s) =====\n' "$ONCEKI"; cat "$DZ/DENETIM-$ONCEKI.json"; }; } > "$TMP/p-onceki.md"
+{ [ "$TUR" -gt 1 ] && { printf '\n\n===== ÖNCEKİ TUR (%s) =====\n' "$ONCEKI"
+    # önceki bulgular kaydın içinde gömülü kalmasın: başta tek tek sayılır (düzeltme turunun asıl sorusu bunlar kapandı mı)
+    python3 - "$DZ/DENETIM-$ONCEKI.json" <<'PYO'
+import json,sys
+s=json.load(open(sys.argv[1],encoding="utf-8")).get("sonuc") or {}
+b=[x for x in (s.get("bulgular") or []) if x.get("agirlik")!="kutu-disi"]
+print(f"önceki puan: {s.get('kod_puani','?')}/5 · doğru şey: {s.get('dogru_sey','?')} · açık bulgu: {len(b)} — her birinin bu turda kapanıp kapanmadığını yaz")
+for i,x in enumerate(b,1): print(f"  B{i}. [{x.get('agirlik','?')}] {x.get('ne','')} — {x.get('konum','')}")
+PYO
+    printf -- '--- önceki tur kaydının tamamı ---\n'; cat "$DZ/DENETIM-$ONCEKI.json"; }; } > "$TMP/p-onceki.md"
 {
   if [ "${#KARELER[@]}" -gt 0 ]; then
     printf '\n\n===== KARELER (%s adet, bu isteme GÖRSEL olarak ekli — kabulün görsel kısmını bunlara bakarak değerlendir) =====\n' "${#KARELER[@]}"
@@ -680,15 +721,19 @@ KIRP_ESIK="${DENETCI_KIRP_ESIK:-110000}"; KIRP_TETIK=$((KIRP_ESIK + KIRP_ESIK/11
 #    yakılmaz, hangi parçanın şiştiği bayt bayt basılır.
 #    Yalnız AYIKLANMIŞ farkta anlamlı: ayıklama kapalıysa (DENETCI_KANIT_AYIKLA=0) kanıt da farkın içindedir, işi
 #    bölmek boyutu düşürmez → eski kırpma yolu sürer (ölçemediğine "böl" demez).
+# ── İSTEM TAVANI 100 KB (gorev_01M5JF5768X01SKG4QA11SYV3F): kırpma tetiği (120000) yalnız Codex'in argüman sınırıydı ve yalnız
+#    Codex yolunda koşuyordu; 100-120 KB'lık istem iki modelde de gönderiliyor, şişkin istemle tur yanıyordu. Gönderim artık
+#    istem DENETCI_ISTEM_TAVAN'ı (varsayılan 100000) ya da kırpma tetiğini — hangisi küçükse — aşınca HER denetçide durur.
+ISTEM_TAVAN="${DENETCI_ISTEM_TAVAN:-100000}"; BOL_SINIR=$(( ISTEM_TAVAN < KIRP_TETIK ? ISTEM_TAVAN : KIRP_TETIK ))
 ISTEM_BAYT=$(wc -c < "$TMP/istem.md"); KIRPILDI=0
-if { [ "$DENETCI" = "codex" ] || [ -n "${DENETCI_KIRP_ESIK:-}" ]; } && [ "${DENETCI_KANIT_AYIKLA:-1}" != "0" ] && [ "$ISTEM_BAYT" -gt "$KIRP_TETIK" ]; then
+if [ "${DENETCI_KANIT_AYIKLA:-1}" != "0" ] && [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then
   declare -A _AD=([sablon]="istem şablonu" [kart]="iş kartı" [kanit]="kanıt manifesti" [olcum]="ölçüm çıktıları" [fark]="üretim farkı" [onceki]="önceki tur kaydı" [kare]="kare listesi")
   _DOKUM=""; _EN=""; _EN_B=-1
   for _p in "${ISTEM_PARCALARI[@]}"; do
     _b=$(wc -c < "$TMP/p-$_p.md"); _DOKUM="$_DOKUM · ${_AD[$_p]} $_b"
     [ "$_b" -gt "$_EN_B" ] && { _EN="$_p"; _EN_B="$_b"; }
   done
-  _hata "İŞİ BÖL — göze giden istem $ISTEM_BAYT bayt > $KIRP_TETIK (kırpma eşiği; kanıt dosyaları farktan ayıklandıktan sonra): kırpık istemle denetim yapılmaz, tur yakılmadı."
+  _hata "İŞİ BÖL — göze giden istem $ISTEM_BAYT bayt > $BOL_SINIR (istem tavanı; kanıt dosyaları farktan ayıklandıktan sonra): şişkin istemle denetim yapılmaz, tur yakılmadı."
   _bilgi "   parçalar (bayt):${_DOKUM}"
   _bilgi "   en büyük parça: ${_AD[$_EN]} ($_EN_B bayt)"
   case "$_EN" in
@@ -803,9 +848,9 @@ PY
 SRC=$?
 if [ "$SRC" -ne 0 ]; then _hata "denetçi çıktısı geçersiz — ölçemedi"; cp "$HAM" "$DZ/DENETIM-$TUR-HAM.txt"; exit 3; fi
 KARE_KAYIT="$(for _k in "${KARELER[@]}"; do printf '%s\t%s\n' "$(basename "$_k")" "$(sha256sum "$_k" | cut -d' ' -f1)"; done)"
-python3 - "$DZ/DENETIM-$TUR.json" "$TUR" "$IS" "$PR" "$YAZAN" "$DENETCI_AD" "$KANIT_DURUM" "$DOGRULANMIS" "$KIRPILDI" "$ISTEM_BAYT" "$KIRP_ESIK" "$YEDEK" "$YAZAN_MODEL" "$YEDEK_MODEL" "$YAZAN_MODEL_KAYNAK" "$AYIKLANAN_DOSYA" "$AYIKLANAN_BAYT" "$KARE_KAYIT" "${KARE_VERILEMEDI:-0}" <<'PY'
+python3 - "$DZ/DENETIM-$TUR.json" "$TUR" "$IS" "$PR" "$YAZAN" "$DENETCI_AD" "$KANIT_DURUM" "$DOGRULANMIS" "$KIRPILDI" "$ISTEM_BAYT" "$KIRP_ESIK" "$YEDEK" "$YAZAN_MODEL" "$YEDEK_MODEL" "$YAZAN_MODEL_KAYNAK" "$AYIKLANAN_DOSYA" "$AYIKLANAN_BAYT" "$KARE_KAYIT" "${KARE_VERILEMEDI:-0}" "$BAS" "$DUZ_ONCEKI_BAS" "$DUZ_DOSYA" "$DUZ_BAYT" "$DUZ_TAM_BAYT" <<'PY'
 import json,sys,datetime
-yol,tur,is_,pr,yazan,den,kd,sonuc_yolu,kirp,bayt,esik,yedek,yazan_model,yedek_model,ym_kaynak,ayik_dosya,ayik_bayt,kare_kayit,kare_verilemedi=sys.argv[1:]
+yol,tur,is_,pr,yazan,den,kd,sonuc_yolu,kirp,bayt,esik,yedek,yazan_model,yedek_model,ym_kaynak,ayik_dosya,ayik_bayt,kare_kayit,kare_verilemedi,bas,duz_ob,duz_dosya,duz_bayt,duz_tam=sys.argv[1:]
 kareler=[{"ad":a,"sha256":h} for a,h in (l.split("\t") for l in kare_kayit.splitlines() if "\t" in l)]
 json.dump({"tur":int(tur),"is":is_,"pr":pr,"yazan":yazan,"denetci":den,"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
            "kanit_durumu":kd,
@@ -816,6 +861,8 @@ json.dump({"tur":int(tur),"is":is_,"pr":pr,"yazan":yazan,"denetci":den,"zaman":d
            # Kanıt dökümleri farka ikinci kez girip kodu istemden dışarı itiyordu (PR #329 turu yandı).
            # Ayıklama kayıtta durur: "fark eksikti" ile "kanıt ayrı gitti" sonradan ayırt edilsin.
            "kanit_ayiklandi":{"dosya":int(ayik_dosya),"bayt":int(ayik_bayt)},
+           "bas":(bas or None),   # incelenen baş: sonraki tur yalnız bu baştan bu yana değişeni görür (SYV3F)
+           "duzeltme_farki":({"onceki_bas":duz_ob,"dosya":int(duz_dosya),"bayt":int(duz_bayt),"tam_bayt":int(duz_tam)} if duz_ob else None),
            "kareler":({"adet":len(kareler),"gorsel_verildi":kare_verilemedi!="1","liste":kareler} if kareler else None),   # --kare: göz kareyi GÖRDÜ mü (yedek gözde hayır)
            "sonuc":json.load(open(sonuc_yolu,encoding="utf-8"))},open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
 PY

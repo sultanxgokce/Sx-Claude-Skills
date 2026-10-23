@@ -739,12 +739,12 @@ mut "kart-json-hatasi-yutulur" 's@denetim açılmaz"; exit 3; }@denetim açılma
 mut "kirpma-kaydini-kaldir" 's@"kirpildi":{"oldu":kirp=="1","istem_bayt":int(bayt),"esik":int(esik)},@"kirpildi":{"oldu":False,"istem_bayt":int(bayt),"esik":int(esik)},@'
 mut "gecersiz-goze-soylenmez" 's@\[ "\$NGEC" -gt 0 \] && KANIT_DURUM=@false \&\& KANIT_DURUM=@'
 # T-ISTEM mutantları (BÂNİ 21:59): her biri istem kapısının bir parçasını söker
-mut "istem-yerine-fark-olculur" 's@!= "0" \] && \[ "$ISTEM_BAYT" -gt "$KIRP_TETIK" \]; then@!= "0" ] \&\& [ "$(wc -c < "$TMP/diff.patch")" -gt "$KIRP_ESIK" ]; then@'
+mut "istem-yerine-fark-olculur" 's@!= "0" \] && \[ "$ISTEM_BAYT" -gt "$BOL_SINIR" \]; then@!= "0" ] \&\& [ "$(wc -c < "$TMP/diff.patch")" -gt "$KIRP_ESIK" ]; then@'
 mut "istem-bol-tur-yakar" 's@^  exit 1   # İŞİ BÖL@  :@'
 mut "istem-en-buyuk-ilk-parca" 's@\[ "$_b" -gt "$_EN_B" \] && {@[ -z "$_EN" ] \&\& {@'
 mut "istem-parca-dokumu-yok" 's@_DOKUM="$_DOKUM · ${_AD\[$_p\]} $_b"@:@'
 mut "istem-karti-dusurur" 's@^ISTEM_PARCALARI=(sablon kart kanit@ISTEM_PARCALARI=(sablon kanit@'
-mut "istem-ayiklama-kosulu-duser" 's@ && \[ "${DENETCI_KANIT_AYIKLA:-1}" != "0" \] && \[ "$ISTEM_BAYT"@ \&\& [ "$ISTEM_BAYT"@'
+mut "istem-ayiklama-kosulu-duser" 's@^if \[ "${DENETCI_KANIT_AYIKLA:-1}" != "0" \] && \[ "$ISTEM_BAYT" -gt "$BOL_SINIR" \]; then@if [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then@'
 mut "mutasyon-basligi-yok" 's@head -1 "$f" | grep -q .^=== MUTASYON KANITI. \&\& _mt=@false \&\& _mt=@'
 MUT_BOLUM=zil   # aşağıdaki 16 zil mutantı yalnız T-ZIL'le ölçülür (iç koşum IC_BOLUM=zil)
 mut "zil-tmux-soyulmaz" 's@env -u TMUX -u TMUX_PANE bash "$an" "$yazan"@env bash "$an" "$yazan"@'

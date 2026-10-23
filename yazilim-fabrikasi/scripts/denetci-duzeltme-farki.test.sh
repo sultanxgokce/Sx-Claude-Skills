@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+# denetci-duzeltme-farki.test.sh — düzeltme turu yalnız yeni farkı görür + istem tavanı 100 KB (gorev_01M5JF5768X01SKG4QA11SYV3F).
+#
+# NİÇİN AYRI DOSYA: kurulum gerçek bir çıplak origin, iki klon ve ana hattın ilerleyip dala birleşmesini ister (denetci.test.sh
+# origin'siz tek depo); denetci.test.sh de 900 sn kabuk tavanına yakın (ölçüldü 23 Eki: bu dosya 34 sn). Onu ÇAĞIRAN CI lint'idir:
+# "Kabuk sınamaları" adımı depodaki her *.test.sh'ı find ile türetir — denetci.test.sh'a bağlanmadı ki o tavanı aşmasın.
+# HERMETİK: denetçi DENETCI_KOMUT ile sahte betik (istemi diske bırakır, SAHTE_JSON basar); zil kapalı.
+# Mutant kipi: MUTANT_D=<bozuk denetci.sh> ile koşunca kapılar o dosyayı sınar.
+set -uo pipefail
+export FABRIKA_AILE_NOTIFY=-
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+D="${MUTANT_D:-$HERE/denetci.sh}"; K="$HERE/kanit.sh"
+GECEN=0; DUSEN=0
+kapi() { local ad="$1" bek="$2"; shift 2
+  "$@" >"$KOK/son.out" 2>&1; local rc=$?
+  if [[ $rc -eq $bek ]]; then GECEN=$((GECEN+1)); echo "  ✓ $ad"
+  else DUSEN=$((DUSEN+1)); echo "  ✗ $ad (rc=$rc, beklenen=$bek)"; fi; }
+iceren() { if grep -qF -- "$2" "$3" 2>/dev/null; then GECEN=$((GECEN+1)); echo "  ✓ $1"; else DUSEN=$((DUSEN+1)); echo "  ✗ $1 ('$2' $3 içinde yok)"; fi; }
+icermeyen() { if grep -qF -- "$2" "$3" 2>/dev/null; then DUSEN=$((DUSEN+1)); echo "  ✗ $1 ('$2' var, olmamalı)"; else GECEN=$((GECEN+1)); echo "  ✓ $1"; fi; }
+dogru() { if python3 -c "$2" 2>/dev/null; then GECEN=$((GECEN+1)); echo "  ✓ $1"; else DUSEN=$((DUSEN+1)); echo "  ✗ $1"; fi; }
+
+KOK="$(mktemp -d)"; trap 'rm -r -f "$KOK" 2>/dev/null' EXIT
+git init -q --bare -b main "$KOK/o.git"
+git clone -q "$KOK/o.git" "$KOK/w" 2>/dev/null; git clone -q "$KOK/o.git" "$KOK/baska" 2>/dev/null
+for r in w baska; do git -C "$KOK/$r" config user.email t@t; git -C "$KOK/$r" config user.name t; done
+echo taban > "$KOK/w/a.txt"; git -C "$KOK/w" add a.txt; git -C "$KOK/w" commit -q -m taban; git -C "$KOK/w" push -q origin main 2>/dev/null
+git -C "$KOK/w" remote set-head origin main >/dev/null 2>&1
+printf 'İŞ: düzeltme farkı\nSINIF: yok\n' > "$KOK/kart.md"
+SAHTE="$KOK/sahte.sh"; printf '#!/usr/bin/env bash\ncp "$1" "$SAHTE_ISTEM_KOPYA"; printf %%s "$SAHTE_JSON"\n' > "$SAHTE"; chmod +x "$SAHTE"
+export DENETCI_KOMUT="$SAHTE" SAHTE_ISTEM_KOPYA="$KOK/istem.md"
+J4='{"kod_puani":4,"dogru_sey":"E","ozet":"o","bulgular":[{"ne":"sinir-kontrolu-eksik","kanit":"k","konum":"kod.txt:1","agirlik":"uygulama"}],"kanit_gorusu":"k"}'
+J5='{"kod_puani":5,"dogru_sey":"E","ozet":"o","bulgular":[],"kanit_gorusu":"k"}'
+kanitla() { KANIT_DEPO="$KOK/w" bash "$K" olcum "$1" o --asama tek -- true >/dev/null 2>&1; }
+den() { local is="$1" js="$2"; shift 2; ( cd "$KOK/w" && SAHTE_JSON="$js" KANIT_DEPO="$KOK/w" bash "$D" "$is" --kart "$KOK/kart.md" "$@" < /dev/null ); }
+kayit() { echo "$KOK/w/_agents/fabrika/kanit/$1/DENETIM-$2.json"; }
+yap() { local dal="$1"; git -C "$KOK/w" checkout -q -b "$dal" origin/main 2>/dev/null
+  printf 'degismeyen-dosya-icerigi\n' > "$KOK/w/eski-$dal.txt"; printf 'ilk-satir\n' > "$KOK/w/kod-$dal.txt"
+  git -C "$KOK/w" add "eski-$dal.txt" "kod-$dal.txt"; git -C "$KOK/w" commit -q -m "ilk $dal"; }
+
+echo "════ D1 · tur 1: tam fark gider, kayıt incelediği başı (bas) yazar ════"
+yap d1; kanitla d1; A1="$(git -C "$KOK/w" rev-parse HEAD)"; : > "$KOK/istem.md"
+kapi "D1a tur 1 koştu (4/E → rc 1)" 1 den d1 "$J4"
+iceren "D1b istemde değişmeyecek dosya var (tam fark)" "degismeyen-dosya-icerigi" "$KOK/istem.md"
+dogru "D1c DENETIM-1.bas = incelenen baş" "import json;d=json.load(open('$(kayit d1 1)'));assert d['bas']=='$A1' and d['duzeltme_farki'] is None"
+
+echo "════ D2 · tur 2 (yeni commit + ana hat dala birleşti): yalnız A..B farkı, PR dosyalarıyla sınırlı; önceki bulgular sayılı ════"
+git -C "$KOK/baska" pull -q origin main 2>/dev/null; echo baskasinin-icerigi > "$KOK/baska/baskasinin.txt"
+git -C "$KOK/baska" add baskasinin.txt; git -C "$KOK/baska" commit -q -m baska; git -C "$KOK/baska" push -q origin main 2>/dev/null
+git -C "$KOK/w" fetch -q origin 2>/dev/null; git -C "$KOK/w" merge -q --no-edit origin/main 2>/dev/null
+printf 'ilk-satir\nduzeltme-satiri\n' > "$KOK/w/kod-d1.txt"; git -C "$KOK/w" commit -q -am duzeltme; B1="$(git -C "$KOK/w" rev-parse HEAD)"
+: > "$KOK/istem.md"
+kapi "D2a tur 2 koştu (5/E → rc 0)" 0 den d1 "$J5"
+iceren "D2b ekranda DÜZELTME TURU satırı" "DÜZELTME TURU: göze yalnız ${A1:0:8}..${B1:0:8}" "$KOK/son.out"
+iceren "D2c istemde düzeltme notu" "[NOT: DÜZELTME TURU" "$KOK/istem.md"
+iceren "D2d istemde yeni satır var" "+duzeltme-satiri" "$KOK/istem.md"
+icermeyen "D2e değişmeyen dosya istemde YOK (yalnız yeni fark)" "degismeyen-dosya-icerigi" "$KOK/istem.md"
+icermeyen "D2f ana hattan gelen başkasının dosyası farka girmedi" "baskasinin-icerigi" "$KOK/istem.md"
+iceren "D2g önceki bulgu ayrı satırda sayıldı" "B1. [uygulama] sinir-kontrolu-eksik" "$KOK/istem.md"
+dogru "D2h DENETIM-2: bas=B, duzeltme_farki.onceki_bas=A, dosya=1" "import json;d=json.load(open('$(kayit d1 2)'));f=d['duzeltme_farki'];assert d['bas']=='$B1' and f['onceki_bas']=='$A1' and f['dosya']==1 and f['tam_bayt']>f['bayt']>0"
+
+echo "════ D3 · baş değişmedi → tam fark, sebebi ekranda ════"
+yap d3; kanitla d3; den d3 "$J4" >/dev/null 2>&1; : > "$KOK/istem.md"
+kapi "D3a tur 2 aynı başla koştu" 0 den d3 "$J5"
+iceren "D3b sebep: baş önceki turla aynı" "baş önceki turla aynı" "$KOK/son.out"
+iceren "D3c tam fark gitti" "degismeyen-dosya-icerigi" "$KOK/istem.md"
+
+echo "════ D4 · önceki kayıt bas taşımıyor (eski kayıt) → tam fark, sebebi ekranda ════"
+yap d4; kanitla d4; den d4 "$J4" >/dev/null 2>&1
+python3 -c "import json;p='$(kayit d4 1)';d=json.load(open(p));d.pop('bas',None);json.dump(d,open(p,'w'))"
+printf 'ilk-satir\nyeni\n' > "$KOK/w/kod-d4.txt"; git -C "$KOK/w" commit -q -am d4b; : > "$KOK/istem.md"
+kapi "D4a tur 2 koştu" 0 den d4 "$J5"
+iceren "D4b sebep: eski kayıt" "eski kayıt" "$KOK/son.out"
+iceren "D4c tam fark gitti" "degismeyen-dosya-icerigi" "$KOK/istem.md"
+
+echo "════ D5 · --diff kipi: baş ölçülemez → bas boş ════"
+printf 'diff --git a/x b/x\n+satir\n' > "$KOK/d.patch"; kanitla d5
+kapi "D5a --diff ile koştu" 0 den d5 "$J5" --diff "$KOK/d.patch"
+dogru "D5b DENETIM-1.bas = null" "import json;d=json.load(open('$(kayit d5 1)'));assert d['bas'] is None"
+
+echo "════ D6 · istem 100 KB'ı aşınca HER denetçide gönderim durur (sahte denetçi, eşik dikişi YOK) ════"
+yap d6; python3 -c "open('$KOK/w/buyuk-d6.txt','w').write(''.join('satir-%05d-%s\n'%(i,'b'*80) for i in range(1100)))"
+git -C "$KOK/w" add buyuk-d6.txt; git -C "$KOK/w" commit -q -m buyuk; kanitla d6; : > "$KOK/istem.md"
+unset DENETCI_KIRP_ESIK DENETCI_ISTEM_TAVAN
+kapi "D6a ~100 KB üstü istem → rc 1 (İŞİ BÖL)" 1 den d6 "$J5"
+iceren "D6b sınır 100000 olarak söyleniyor" "> 100000 (istem tavanı" "$KOK/son.out"
+[ ! -e "$(kayit d6 1)" ] && [ ! -s "$KOK/istem.md" ] && { GECEN=$((GECEN+1)); echo "  ✓ D6c tur yakılmadı, denetçiye istem gitmedi"; } || { DUSEN=$((DUSEN+1)); echo "  ✗ D6c tur yandı ya da istem gitti"; }
+DENETCI_ISTEM_TAVAN=200000 kapi "D6d DENETCI_ISTEM_TAVAN=200000 ile aynı iş denetlenir (rc 0)" 0 den d6 "$J5"
+
+echo "════ D7 · MUTASYON: her kapı kaldırılınca bir D kapısı düşer; kontrol D1a geçer ════"
+if [ -z "${MUTANT_D:-}" ]; then
+  mut() { local ad="$1" eski="$2" yeni="$3" kapi_adi="$4"; local P="$KOK/mutpkg-$ad"; mkdir -p "$P"; cp -p "$HERE"/* "$P/" 2>/dev/null
+    python3 - "$HERE/denetci.sh" "$P/denetci.sh" "$eski" "$yeni" <<'PY'
+import sys; s,d,e,y=sys.argv[1:]; t=open(s,encoding='utf-8').read(); assert e in t, "desen yok: "+e; open(d,'w',encoding='utf-8').write(t.replace(e,y,1))
+PY
+    local O; O="$(MUTANT_D="$P/denetci.sh" bash "$HERE/denetci-duzeltme-farki.test.sh" 2>/dev/null)"
+    if grep -q "✗ $kapi_adi" <<<"$O" && grep -q "✓ D1a" <<<"$O"; then
+      GECEN=$((GECEN+1)); echo "  ✓ mutant '$ad' → $kapi_adi düştü, kontrol D1a geçti"
+    else DUSEN=$((DUSEN+1)); echo "  ✗ mutant '$ad' → $kapi_adi düşmedi ya da kontrol D1a da düştü (geçersiz mutant)"; fi; }
+  mut duzeltme-yok 'if [ "$TUR" -gt 1 ] && [ -n "$BAS" ]; then' 'if false; then' "D2e"
+  mut dosya-siniri-yok 'git -C "$DEPO" diff "$_ob" "$BAS" -- "${_pd[@]}"' 'git -C "$DEPO" diff "$_ob" "$BAS"' "D2f"
+  mut bas-yazilmaz '"bas":(bas or None),' '"bas":None,' "D1c"
+  mut onceki-bulgu-sayilmaz 'for i,x in enumerate(b,1): print(' 'for i,x in []: print(' "D2g"
+  mut tavan-yalniz-codex 'if [ "${DENETCI_KANIT_AYIKLA:-1}" != "0" ] && [ "$ISTEM_BAYT" -gt "$BOL_SINIR" ]; then' 'if { [ "$DENETCI" = "codex" ] || [ -n "${DENETCI_KIRP_ESIK:-}" ]; } && [ "${DENETCI_KANIT_AYIKLA:-1}" != "0" ] && [ "$ISTEM_BAYT" -gt "$KIRP_TETIK" ]; then' "D6a"
+  mut tavan-120k 'ISTEM_TAVAN="${DENETCI_ISTEM_TAVAN:-100000}"' 'ISTEM_TAVAN="${DENETCI_ISTEM_TAVAN:-200000}"' "D6a"
+fi
+
+echo ""; echo "── SONUÇ (düzeltme-farkı): $GECEN geçti · $DUSEN kaldı ──"
+[ "$DUSEN" -eq 0 ]
