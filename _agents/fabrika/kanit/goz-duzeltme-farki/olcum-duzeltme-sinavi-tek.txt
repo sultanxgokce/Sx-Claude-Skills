@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/denetci-duzeltme-farki.test.sh
-# rc=0 sure=72.5s zaman=2026-10-23T11:26:27+03:00
+# rc=0 sure=161.0s zaman=2026-10-23T12:50:57+03:00
 --- stdout ---
 ════ D1 · tur 1: tam fark gider, kayıt incelediği başı (bas) yazar ════
   ✓ D1a tur 1 koştu (4/E → rc 1)
@@ -43,10 +43,15 @@ $ bash yazilim-fabrikasi/scripts/denetci-duzeltme-farki.test.sh
   ✓ D7a tur 2 koştu
   ✓ D7b 🔴 özel adlı dosyanın değişikliği göze gitti
   ✓ D7c kayıt: duzeltme_farki.dosya=1 (boş fark sanılmadı)
+════ D9 · düzeltme commit'i bir PR dosyasını ana dal hâline TAMAMEN geri alırsa o geri alma göze gider (göz #436 tur 3) ════
+  ✓ D9a tur 2 koştu
+  ✓ D9b 🔴 geri alma (silinen satır) göze gitti
+  ✓ D9c kayıt: duzeltme_farki.dosya=1
 ════ D8 · MUTASYON: her kapı kaldırılınca bir D kapısı düşer; kontrol D1a geçer ════
   ✓ mutant 'duzeltme-yok' → D2e düştü, kontrol D1a geçti
   ✓ mutant 'dosya-siniri-yok' → D2f düştü, kontrol D1a geçti
   ✓ mutant 'yol-kacisli-okunur' → D7b düştü, kontrol D1a geçti
+  ✓ mutant 'geri-alinan-dosya-duser' → D9b düştü, kontrol D1a geçti
   ✓ mutant 'kutu-disi-ayiklanir' → D2i düştü, kontrol D1a geçti
   ✓ mutant 'bas-yazilmaz' → D1c düştü, kontrol D1a geçti
   ✓ mutant 'onceki-bulgu-sayilmaz' → D2g düştü, kontrol D1a geçti
@@ -55,5 +60,5 @@ $ bash yazilim-fabrikasi/scripts/denetci-duzeltme-farki.test.sh
   ✓ mutant 'bos-farkta-tam-fark' → D3c düştü, kontrol D1a geçti
   ✓ mutant 'tavan-120k' → D6a düştü, kontrol D1a geçti
 
-── SONUÇ (düzeltme-farkı): 44 geçti · 0 kaldı ──
+── SONUÇ (düzeltme-farkı): 48 geçti · 0 kaldı ──
 --- stderr ---

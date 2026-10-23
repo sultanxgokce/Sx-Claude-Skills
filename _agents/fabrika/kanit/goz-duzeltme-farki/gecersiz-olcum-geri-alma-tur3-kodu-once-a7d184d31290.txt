@@ -1,0 +1,9 @@
+# GEÇERSİZ İLANI — özgün kayda dokunulmadı
+hedef: olcum-geri-alma-tur3-kodu-once.txt
+hedef_sha256: 91074a8e89de6450a6b838f029e86fc05cd0628076af934439b148dcea21d29f
+hedef_zaman: 2026-10-23T12:46:01+03:00
+hedef_renk: yesil
+neden: ölçer bu kayıtta geri alma senaryosunu İÇERMİYORDU; yeşil sonuç tur 3 kusurunu ölçmedi (vekil ölçüt), ölçer genişletilip yeniden alınacak
+kim: HENDESE
+karsi: -
+zaman: 2026-10-23T12:46:29+03:00
