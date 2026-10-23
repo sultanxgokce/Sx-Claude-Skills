@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/kart.test.sh
-# rc=0 sure=15.8s zaman=2026-10-23T15:28:21+03:00
+# rc=0 sure=21.1s zaman=2026-10-23T16:07:05+03:00
 --- stdout ---
 ════ T1 · sınıf sorusu eksik → kart açılmaz ════
   ✓ eksik cevapla rc=1
@@ -189,10 +189,15 @@ $ bash yazilim-fabrikasi/scripts/kart.test.sh
   ✓ S16b sınıflı kartta Sultan'a sorulur
   ✓ S17 kısa eylem/soru reddedildi
   ✓ S18 satır sonu içeren soru reddedildi (defter ayracı)
+  ✓ S19 🔴 okunamayan kart (bozuk JSON): acik-soru rc 2 ÖLÇÜLEMEDİ — 'cevapsız soru yok' DEMEZ
+  ✓ S19c bozuk kart + gerçek cevapsız soru (ss-2 → Sultan): rc 3 (daha belirli olan söylenir)
+  ✓ S19b 🔴 sorular listesi bozuk kart (alan eksik): rc 2
+  ✓ S19d bozuk kart kalkınca yine rc 0
 ── T-SORU · MUTASYON: kapı ölünce yukarıdaki 🔴 kapı düşer ──
   ✓ mutant (bitti engeli): cevapsız soruyla kart KAPANDI → S5 bu mutantta düşerdi
   ✓ mutant (sorulan kimliği): sorulmayan ad cevap verdi → S7 bu mutantta düşerdi
   ✓ mutant (sinifli kural): sınıflı kartta SERDAR'a soruldu → S16 bu mutantta düşerdi
+  ✓ mutant (bozuk kart): okunamayan kart atlanıp rc 0 → S19 bu mutantta düşerdi
 
-── SONUÇ: 170 geçti · 0 kaldı ──
+── SONUÇ: 175 geçti · 0 kaldı ──
 --- stderr ---

@@ -8,7 +8,7 @@ diye soramıyordu. Bu modül soruyu KARTA bağlar ve tek bir yüzeyden okutur:
   kart.sh cevap <iş> --no N --kim <AD> --karar evet|hayir --oturum <ref> --soz "<sorulanın sözü, birebir>"
   kart.sh cevap-bekle <iş>   → İLK satır "yok|evet|acik|hayir<TAB>açıklama"; rc 0 yok/evet · 3 açık · 4 hayır
                                (kullanım: kart.sh cevap-bekle X && <geri alınamaz eylem>)
-  kart.sh acik-soru <AJAN>   → ajanın kartlarındaki cevapsız sorular; rc 0 yok · 3 var (kanca dilimi bunu okur)
+  kart.sh acik-soru <AJAN>   → ajanın kartlarındaki cevapsız sorular; rc 0 yok · 3 var · 2 okunamayan kart (fail-closed; kanca dilimi bunu okur)
   kart.sh bitti              → cevapsız soru varken kart KAPANMAZ (rc 1)
 
 Sınırlar (bilerek):

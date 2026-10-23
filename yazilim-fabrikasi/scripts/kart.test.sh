@@ -366,8 +366,18 @@ bash "$KT" sor ss-2 --kime Sultan --eylem "eski yedeği sil" --soru "Eski verita
 bash "$KT" sor ss-2 --kime Sultan --eylem "sil" --soru "kısa" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "S17 kısa eylem/soru reddedildi"
 bash "$KT" sor ss-2 --kime Sultan --eylem "eski yedeği sil" --soru "satır1
 satır2 yeterince uzun bir soru" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "S18 satır sonu içeren soru reddedildi (defter ayracı)"
+# göz #444 tur 1: okunamayan kart atlanıp rc 0 dönülüyordu — kanca kaynağı FAIL-CLOSED olmalı
+KDQ="$SQ/_agents/fabrika/kartlar"
+printf '{bozuk' > "$KDQ/zz-bozuk.json"
+O="$(bash "$KT" acik-soru NAKKAS 2>&1)"; RC=$?; [ "$RC" -eq 2 ] && grep -q "ÖLÇÜLEMEDİ" <<<"$O"; g $? "S19 🔴 okunamayan kart (bozuk JSON): acik-soru rc 2 ÖLÇÜLEMEDİ — 'cevapsız soru yok' DEMEZ"
+O="$(bash "$KT" acik-soru MIRAHUR 2>&1)"; [ $? -eq 3 ]; g $? "S19c bozuk kart + gerçek cevapsız soru (ss-2 → Sultan): rc 3 (daha belirli olan söylenir)"
+rm -f "$KDQ/zz-bozuk.json"
+printf '{"is":"zz-2","aldi":"NAKKAS","durum":"acik","sorular":[{"no":1}]}' > "$KDQ/zz-2.json"
+bash "$KT" acik-soru NAKKAS >/dev/null 2>&1; [ $? -eq 2 ]; g $? "S19b 🔴 sorular listesi bozuk kart (alan eksik): rc 2"
+rm -f "$KDQ/zz-2.json"
+bash "$KT" acik-soru NAKKAS >/dev/null 2>&1; g $? "S19d bozuk kart kalkınca yine rc 0"
 echo "── T-SORU · MUTASYON: kapı ölünce yukarıdaki 🔴 kapı düşer ──"
-for M in "bitti engeli" "sorulan kimliği" "sinifli kural"; do
+for M in "bitti engeli" "sorulan kimliği" "sinifli kural" "bozuk kart"; do
   MD="$T/mut-soru-${M// /-}"; mkdir -p "$MD"; cp "$HERE"/*.py "$HERE"/*.sh "$MD/" 2>/dev/null
   python3 - "$MD" "$M" <<'PYM' || g 1 "mutant kurulamadı ($M — çapa bayat)"
 import sys; d,m=sys.argv[1:]
@@ -376,6 +386,7 @@ def deg(f,a,b):
 if m=="bitti engeli": deg("kart.sh",'    if [ "$CMD" = "bitti" ]; then\n      SD="$(bash','    if false; then\n      SD="$(bash')
 if m=="sorulan kimliği": deg("soru.py",'    if kim != s["kime"]:','    if False:')
 if m=="sinifli kural": deg("soru.py",'and kime != "Sultan":','and False:')
+if m=="bozuk kart": deg("kart.sh",'if bozuk: print(f"ÖLÇÜLEMEDİ','if False: print(f"ÖLÇÜLEMEDİ')
 PYM
   cd "$SQ" || { g 1 "T-SORU deposu kayboldu"; break; }; rm -f _agents/fabrika/kartlar/mm-*.json
   bash "$MD/kart.sh" ac mm-1 --is "mutant sınavı için railway temizliği" --istedi SERDAR --aldi MIRAHUR --geri-alinamaz h --para h --dis-yuzey h --yetki h --canli h >/dev/null 2>&1
@@ -385,6 +396,7 @@ PYM
     "sorulan kimliği") bash "$MD/kart.sh" cevap mm-1 --no 1 --kim HENDESE --karar evet --oturum x --soz "olur" >/dev/null 2>&1; g $? "mutant ($M): sorulmayan ad cevap verdi → S7 bu mutantta düşerdi" ;;
     "sinifli kural") bash "$MD/kart.sh" ac mm-2 --is "mutant sınıflı yedek silme işi" --istedi Sultan --aldi MIRAHUR --geri-alinamaz e --para h --dis-yuzey h --yetki h --canli h >/dev/null 2>&1
                      bash "$MD/kart.sh" sor mm-2 --kime SERDAR --eylem "yedeği sil" --soru "Eski yedeği silebilir miyim, yer açılacak?" >/dev/null 2>&1; g $? "mutant ($M): sınıflı kartta SERDAR'a soruldu → S16 bu mutantta düşerdi" ;;
+    "bozuk kart") printf '{bozuk' > "$SQ/_agents/fabrika/kartlar/mm-bozuk.json"; bash "$MD/kart.sh" acik-soru NAKKAS >/dev/null 2>&1; g $? "mutant ($M): okunamayan kart atlanıp rc 0 → S19 bu mutantta düşerdi"; rm -f "$SQ/_agents/fabrika/kartlar/mm-bozuk.json" ;;
   esac
 done
 rm -f "$SQ/_agents/fabrika/kartlar/mm-"*.json
