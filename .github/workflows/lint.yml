@@ -8,6 +8,11 @@ on:
   push:
     branches: [main]
   pull_request:
+    # Yalnız kanıt / denetim / kart / el notu dosyası (_agents/) değiştiren PR'da CI hiç koşmaz: sınanacak kod yok. Kanca
+    # (scripts/hooks/birlestirme-kapisi.sh) bu durumu GitHub'dan taze okuyup "CI gerekmez" der. SKILL.md ve diğer .md dosyaları
+    # BİLEREK kapsam dışı: sürüm frontmatter'ı lint'in konusu.
+    paths-ignore:
+      - '_agents/**'
 
 concurrency:
   group: sx-lint-${{ github.ref }}
@@ -51,68 +56,21 @@ jobs:
           done
           [ "$dusen" -eq 0 ]
 
-      # Kabuk-sınamaları: 2026-07-30'a kadar depoda 20 adet `*.test.sh` vardı ve HİÇBİRİ
-      # bir kapıda koşmuyordu — yazılmış ama bağlanmamış koruma. (Aynı sınıf cloudtop'ta da
-      # ölçüldü.) Liste TÜRETİLİR, elle sayılmaz: yeni bir sınama eklendiği anda bu kapı onu
-      # kendiliğinden koşar; sıfır sınama bulmak KIRMIZI'dır (keşif bozulursa sessizce
-      # "hepsi geçti" demesin).
-      - name: "Kabuk sınamaları · her *.test.sh (liste türetilir, sıfır bulmak kırmızı)"
-        run: |
-          set -uo pipefail
-          # KARANTİNA — kapı ilk kez kurulurken KIRMIZI bulunan, bu PR'ın konusuyla İLGİSİZ
-          # sınamalar. Sessiz atlama YASAK: her atlanan satır aşağıda ADIYLA ve GEREKÇESİYLE
-          # loglanır, sayısı basılır. Karantina boşaltmak ayrı iştir (bulgu kaydı açıldı).
-          #   mucit-t1.test.sh — 4 kapı (G10/G11 kota-tavanı · G17b/G18 layiha-üretimi) YALNIZ
-          #   GitHub runner'ında düşüyor; üç yerel yapılandırmada (worktree · temiz klon ·
-          #   LC_ALL=C) 39/39 geçiyor. Ortam-farkı henüz izole edilmedi; L24 MUCİT paketinin
-          #   kendi işi (üreten≠işleten) → burada bodoslama düzeltilmiyor.
-          #   kasif-hafiza.test.sh — TAKVİMLE ÇÜRÜYEN SINAV (ölçüldü 2026-08-23, PR #206).
-          #   Kimsenin değişikliğinden kırılmadı: dosyaya en son #72'de dokunuldu. Ölçtüğü araç
-          #   (kasif-karne.sh:39) KAYAN 30 GÜNLÜK pencere kullanıyor — `date -u -d "-30 days"` —
-          #   ama sınavın fikstürü SABİT tarihler yazıyor (2026-07-01 · 07-25 · 07-26). Fikstür
-          #   pencerenin dışına düşünce araç karne yerine "Henüz karne verilemez" basıyor ve
-          #   metrik satırlarını arayan 5 iddia birden düşüyor (15 geçen / 5 düşen).
-          #   → Gerçek onarım: fikstür tarihleri GÖRECELİ olsun ("bugünden N gün önce").
-          #     Sahibi KAŞİF/MUCİT hattı; burada bodoslama düzeltilmiyor (üreten≠işleten).
-          #   ⚠️ Bu, "yeşilin ne zamanki veriye ait olduğu sorulmuyor" sınıfının bir vakasıdır —
-          #     kapı-sinavi becerisinin `bayat-mi` kapısının fikstür tarafındaki karşılığı.
-          #   compact.test.sh — K2 ('tur sırasında kuyruğa eklenen satır yeniden yazımda kaybolmaz') origin/main'de
-          #   de KIRMIZI (ölçüldü 2026-10-17, yerel + CI #354/#360 koşumları); 0.5 sn gecikmeli eklenen satır kayboluyor.
-          #   Gerçek yarış hatası mı zamanlama mı belirsiz → görev defterinde bulgu (sahip BÂNİ, kart compact-k2-yaris);
-          #   bu PR'ların dosyası değil. Karantina = sessiz atlama DEĞİL: aşağıda adıyla loglanır, sayılır.
-          KARANTINA=" ./mucit-suz/scripts/mucit-t1.test.sh ./kasif-tara/scripts/kasif-hafiza.test.sh ./terminal-onar/scripts/compact.test.sh "
-          # Süre-tavanı: varsayılan 300 sn sabitti; yazilim-fabrikasi/denetci.test.sh (15 mutant,
-          # her biri TÜM süiti yeniden koşuyor) CI'da üst üste 300 sn'de Terminated oldu (2026-10-15,
-          # ölç: #38724018436 vb. — 'bayat-kopya-geri-donusu' mutantında kesildi). Nexus'un
-          # kabuk-testleri.sh'teki AYNI desen: ilk 15 satırda `# kabuk-testleri: sure=N` isteyen
-          # sınama varsayılanı aşabilir, tavan 900 — istek kapıyı süresiz bekletmenin kılıfı olamaz.
-          KABUK_SURE_VARSAYILAN=300; KABUK_SURE_TAVAN=900
-          sure_sec(){
-            local t="$1" n
-            n="$(head -15 "$t" 2>/dev/null | sed -n 's/^# *kabuk-testleri: *sure=\([0-9]\{1,5\}\) *$/\1/p' | head -1)"
-            if [ -z "$n" ] || [ "$n" -lt 1 ]; then echo "$KABUK_SURE_VARSAYILAN"; return 0; fi
-            if [ "$n" -gt "$KABUK_SURE_TAVAN" ]; then echo "::warning::$t sure=$n istedi, tavan $KABUK_SURE_TAVAN uygulandı"; echo "$KABUK_SURE_TAVAN"; return 0; fi
-            echo "$n"
-          }
-          # Arçelik sınavı aşağıdaki bağımsız işte koşar; burada ikinci kez çalıştırılmaz.
-          mapfile -t T < <(find . -name '*.test.sh' -not -path './.git/*' -not -path './arcelik-fatura-kesim/scripts/kesim.test.sh' | sort)
-          if [ "${#T[@]}" -eq 0 ]; then echo "::error::hiç *.test.sh bulunamadı — keşif bozuk"; exit 1; fi
-          echo "bulunan sınama: ${#T[@]}"
-          dusen=0; atlanan=0
-          for t in "${T[@]}"; do
-            case "$KARANTINA" in
-              *" $t "*) echo "::warning::KARANTİNA — atlandı: $t"; atlanan=$((atlanan+1)); continue ;;
-            esac
-            echo "── $t"
-            sure="$(sure_sec "$t")"
-            if timeout "$sure" bash "$t"; then echo "   ✓ $t"; else echo "::error::$t KIRMIZI (süre tavanı ${sure}sn)"; dusen=$((dusen+1)); fi
-          done
-          echo "toplam=${#T[@]} koşan=$(( ${#T[@]} - atlanan )) atlanan=$atlanan düşen=$dusen"
-          # karantina listesindeki bir dosya artık YOKSA liste bayatlamıştır → kırmızı
-          for k in $KARANTINA; do
-            [ -f "$k" ] || { echo "::error::karantina listesi bayat: $k artık yok"; dusen=$((dusen+1)); }
-          done
-          [ "$dusen" -eq 0 ]
+  # Kabuk-sınamaları (her *.test.sh) ÜÇ kovada, üç ayrı runner'da koşar (duvar süresi en uzun kova): tek `for` döngüsü 41 dk sürüyordu
+  # (ölçüm: CI #40003038870 — 139 sınama, 2493 sn; diploma 740 · denetci 598 · geri kalan ~1150). Liste hâlâ TÜRETİLİR, sıfır bulmak
+  # hâlâ KIRMIZI, karantina hâlâ adıyla loglanır: hepsi .github/ci/kabuk-sinamalari.sh içinde (eski satır içi betiğin aynı sözleşmesi).
+  kabuk:
+    name: "kabuk sınamaları (${{ matrix.kova }})"
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        kova: [diploma, denetci, kalan]
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Kabuk sınamaları · ${{ matrix.kova }} kovası (liste türetilir, sıfır bulmak kırmızı)"
+        run: bash .github/ci/kabuk-sinamalari.sh "${{ matrix.kova }}"
 
   arcelik-fatura-kesim:
     name: arcelik-fatura-kesim sınavı
