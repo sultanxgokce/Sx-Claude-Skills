@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.22.2
+version: 0.23.0
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -131,6 +131,7 @@ Codex yoksa ya da iki denemede de düşerse, **yazandan farklı yeni bir Claude 
 sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kaldırılınca kırmızı).
 
 ## Sürüm notları
+- **0.23.0 (2026-10-23, HEZARFEN · SERDAR araştırması "69/43 saatlik iş", görev …90KA6C):** `kart.sh ac` cümlede sayısal ölçüt görürse (`≤6 dk`, `<5 sn`, `en çok 40 MB`, `6 dk altında`, `40 dk'dan az`) `--olcum-yeri` ister: `"yerel, 12 çekirdek"` | `"CI, 2 çekirdek"` | `"canlı"` (yerel ve CI için çekirdek sayısı şart); yoksa kart AÇILMAZ. W1G2N'de '4 paralel iş ≤6 dk' ölçütü 2 çekirdekli CI'da fiziken tutmuyordu, ~4,5 saat boşa gitti. `daralt` yeni cümlede ölçüt varsa yeri ister; ölçüt değişirse eski ölçüt GEÇERSİZ sayılır, karta `olcut_gecmisi` (eski→yeni) yazılır, görev bağlıysa görev adımı düşer. Dürüst sınır: görev başlığı defterde eklemeli alan, bu araç yeniden adlandıramaz (uyarı basar); yazıyla sayı ("altı dakika") ve eşik kelimesiz ölçüt yakalanmaz. Sınav T17 (OL1-OL12 + M-OL1-4).
 - **0.22.0 (2026-10-23, sürüm sırası: 0.21.0 merge-reise önce birleşti, bu iş 0.20.0 için hazırlanmıştı; BÂNİ · HENDESE 22 Eki ölçümü, gorev_01M5F03K79B5B19A2XQ54V8NMK):** `denetci.sh` ve `kanit.py` kaydı
   çağrıldığı ağacın köküne yazıyordu; iş alanı (worktree) açıkken BİRİNCİL kopyadan koşulan ölçüm/denetim orada takipsiz
   kalıyor, PR'a girmiyordu (Nexus 116 + cloudtop 45 takipsiz kanıt dosyası; ana kopyanın otomatik çekmesi 10 gün ölü). Artık

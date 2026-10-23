@@ -1,0 +1,62 @@
+{
+  "is": "hezarfen-olcut-nerede-olculecek",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T23:08:56+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kart-test",
+      "asama": "once",
+      "dosya": "olcum-kart-test-once.txt",
+      "sha256": "a003adaadb06f97ce318840b2bc7740bb081a72d4990829ba3b9d4d70f5ad195",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/ol-once.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T23:07:55+03:00",
+      "sure_sn": 20.5,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "c76e1a9a488f400682eda84da3a9eab6"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-test",
+      "asama": "sonra",
+      "dosya": "olcum-kart-test-sonra.txt",
+      "sha256": "9264e98de0240239ca7734593b860649205cd151de4c9b0952d297f26b9fae28",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/ol-sonra.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T23:08:30+03:00",
+      "sure_sn": 34.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "84c69483844446618d3db9705ef31d75"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-test-mutant",
+      "asama": "tek",
+      "dosya": "olcum-kart-test-mutant-tek.txt",
+      "sha256": "7490be76112338d64ba01c1565d3ab9ddd21843b23d0cbd22f6b5afaf12ab862",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/ol-mut.sh"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-23T23:08:56+03:00",
+      "sure_sn": 26.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "kart-test",
+      "beklenen": "kirmizi",
+      "olcum_id": "1babe05c26d54a97acf4e5529e5c7ca9"
+    }
+  ],
+  "imza": "4413cb5c55c4aab297b370304848a75c0d047608e5b5772992b3685f44260665"
+}

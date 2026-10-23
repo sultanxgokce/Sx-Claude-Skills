@@ -78,7 +78,7 @@ CMD="${1:-}"; IS="${2:-}"; if [ $# -ge 2 ]; then shift 2; else shift $#; fi   # 
 IS_C=""; ISTEDI=""; ALDI=""; GA=""; PARA=""; DIS=""; YETKI=""; KANIT=""; ODA=""; PR=""; YOL=""; NEDEN=""
 KARAR=""; OTURUM=""; SOZ=""; BEYAN=""; GEREKCE=""; REIS=""; CANLI=""; KALAN=""; CUMLE=""; YENI=""; YAZAN=""
 KIME=""; SORU=""; EYLEM=""; SNO=""; KIM=""   # cevap bekle (soru.py)
-SAYI_OLCUM=""; GOREV_BITTI=""; KARE=""; SURUM=""; OLCUM=""; BELGE=""   # kart bitti: görevi de bitirmek için kanıt sınıfı (KF22R: dilim ≠ görev)
+OLCUM_YERI=""; SAYI_OLCUM=""; GOREV_BITTI=""; KARE=""; SURUM=""; OLCUM=""; BELGE=""   # kart bitti: görevi de bitirmek için kanıt sınıfı (KF22R: dilim ≠ görev)
 while [ $# -gt 0 ]; do case "$1" in
   --is) IS_C="$2"; shift 2 ;; --istedi) ISTEDI="$2"; shift 2 ;; --aldi) ALDI="$2"; shift 2 ;;
   --geri-alinamaz) GA="$2"; shift 2 ;; --para) PARA="$2"; shift 2 ;; --dis-yuzey) DIS="$2"; shift 2 ;; --yetki) YETKI="$2"; shift 2 ;;
@@ -86,7 +86,7 @@ while [ $# -gt 0 ]; do case "$1" in
   --karar) KARAR="$2"; shift 2 ;; --oturum) OTURUM="$2"; shift 2 ;; --soz) SOZ="$2"; shift 2 ;; --beyan) BEYAN="$2"; shift 2 ;;
   --gerekce) GEREKCE="$2"; shift 2 ;; --reis) REIS="$2"; shift 2 ;; --canli) CANLI="$2"; shift 2 ;; --yazan) YAZAN="$2"; shift 2 ;;
   --kalan) KALAN="$2"; shift 2 ;; --cumle) CUMLE="$2"; shift 2 ;; --yeni) YENI="$2"; shift 2 ;;
-  --gorev) GOREV="$2"; shift 2 ;; --tahmin) TAHMIN="$2"; shift 2 ;; --sayi-olcum) SAYI_OLCUM="$2"; shift 2 ;;
+  --gorev) GOREV="$2"; shift 2 ;; --tahmin) TAHMIN="$2"; shift 2 ;; --sayi-olcum) SAYI_OLCUM="$2"; shift 2 ;; --olcum-yeri) OLCUM_YERI="$2"; shift 2 ;;
   --kime) KIME="$2"; shift 2 ;; --soru) SORU="$2"; shift 2 ;; --eylem) EYLEM="$2"; shift 2 ;; --no) SNO="$2"; shift 2 ;; --kim) KIM="$2"; shift 2 ;;
   --acik) ACIK=1; shift ;; *) _hata "tanınmayan argüman: $1"; exit 1 ;; esac; done
 GOREV="${GOREV:-}"; TAHMIN="${TAHMIN:-}"
@@ -99,7 +99,7 @@ GOREV="${GOREV:-}"; TAHMIN="${TAHMIN:-}"
 DEFTER_JY="${DEFTER_JETON_YOL:-/config/defter-jeton}"; DEFTER_U="${DEFTER_UC:-http://cloudtop-defter:8791}"
 gorev_yaz() {  # gorev_yaz <kart.json> <ac|bitti|tikandi> → rc 0 yazıldı · 4 yazılamadı (karta işlenir)
   local kj="$1" olay="$2" govde cfg cevap rc sonuc
-  govde="$(GOREV_BITTI="${GOREV_BITTI:-}" KARE="${KARE:-}" SURUM="${SURUM:-}" OLCUM="${OLCUM:-}" BELGE="${BELGE:-}" python3 - "$kj" "$olay" "$(basename "$DEPO")" <<'PY'
+  govde="$(DARALT_NOT="${DARALT_NOT:-}" GOREV_BITTI="${GOREV_BITTI:-}" KARE="${KARE:-}" SURUM="${SURUM:-}" OLCUM="${OLCUM:-}" BELGE="${BELGE:-}" python3 - "$kj" "$olay" "$(basename "$DEPO")" <<'PY'
 import json,sys,os
 k=json.load(open(sys.argv[1])); olay,depo=sys.argv[2:]; kim=k["aldi"]; is_=k["is"]
 if olay=="ac":
@@ -121,6 +121,8 @@ elif olay=="bitti":
         y={"gorev_durumu":"onay-bekliyor","kanit":kn}; ne="[⏸ onay bekliyor] %s · kart %s bitti · %s" % (kim,is_,kn)
     else:
         y=None; ne="[dilim bitti] %s · kart %s bitti%s · kanıt _agents/fabrika/kanit/%s/ (%s) — görev sürüyor; bitti için canlı kanıt sınıfı: kart.sh bitti %s --gorev-bitti --kare <yol> --surum <sürüm> | --olcum \"…\" | --belge <yol> (ya da gorev.sh bitti)" % (kim,is_,(" · "+pr) if pr else "",is_,depo,is_)
+elif olay=="daralt":
+    y=None; ne=os.environ.get("DARALT_NOT","")
 else:
     nd=(k.get("tikanma") or {}).get("neden","") or "tıkandı"
     y={"gorev_durumu":"bekliyor","not":"kart %s tıkandı: %s" % (is_,nd[:300])}; ne="[⏳ bekliyor] %s · kart %s tıkandı (%s): %s" % (kim,is_,(k.get("tikanma") or {}).get("yol",""),nd[:300])
@@ -148,7 +150,7 @@ p,olay,sonuc=sys.argv[1:]; k=json.load(open(p))
 k.setdefault("gorev_yazimlari",[]).append({"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),"olay":olay,"sonuc":sonuc})
 json.dump(k,open(p,"w"),ensure_ascii=False,indent=2)
 import os
-d={"ac":"çalışılıyor","bitti":("canlı borç adımı (görev çalışılıyor kalır)" if k.get("durum")=="canli-borclu" else "onay bekliyor" if os.environ.get("GOREV_BITTI") else "dilim adımı (görev çalışılıyor kalır; bitti = canlı kanıt sınıfıyla)"),"tikandi":"bekliyor"}[olay]
+d={"ac":"çalışılıyor","bitti":("canlı borç adımı (görev çalışılıyor kalır)" if k.get("durum")=="canli-borclu" else "onay bekliyor" if os.environ.get("GOREV_BITTI") else "dilim adımı (görev çalışılıyor kalır; bitti = canlı kanıt sınıfıyla)"),"tikandi":"bekliyor","daralt":"ölçüt adımı (görev durumu değişmez)"}[olay]
 print(("  ✓ görev %s → %s (defter)" % (k["gorev"],d)) if sonuc=="yazıldı" else ("  ⚠ GÖREV YAZILAMADI: %s → %s — %s (kart işlendi; karta yazıldı, rc 4)" % (k["gorev"],d,sonuc)))
 PY
   [ "$sonuc" = "yazıldı" ]
@@ -230,6 +232,45 @@ PY
 #    Sayı SAYILMAYAN yazımlar (atıf/ölçü, iddia değil): kimlik (gorev_…, W42, Ö3, 81D0W) · #PR · sürüm (0.18.1) · tarih/saat
 #    (2026-10-23, 04:30, "23 Eki") · sıra ("1. hafta") · birimli eşik/süre (40 dk, 100 KB, 390 px). Dürüst sınır: yazıyla sayı
 #    ("on üç görev") ve birimle yazılmış GÖZLEM ("ayda 40 dk kayıp") yakalanmaz; uyarı ölçümün yerini tutmaz, yalnız hatırlatır.
+# 🔴 ÖLÇÜT NEREDE ÖLÇÜLECEK (görev …90KA6C · SERDAR 23 Eki "69/43 saatlik iş" araştırması): W1G2N'nin başlığı "4 paralel iş ≤6 dk" diyordu; ölçüt
+#    2 çekirdekli CI'da fiziken tutamazdı (korpus 568 sn, iş toplamı 11-13 dk), yalnız 12 çekirdekli kutuda tutardı — "geçti", sonra "kaldı", ~4,5 saat.
+#    Kök: kartta sayının NEREDE ölçüleceği yoktu. Şimdi: cümlede sayısal ölçüt (eşik işaretli sayı + birim) varsa --olcum-yeri ZORUNLU, yoksa kart AÇILMAZ.
+#    Ölçüt sayılan yazımlar: "≤6 dk" · "<5 sn" · "en çok 40 MB" · "6 dk altında" · "40 dk'dan az". Sayılmayan: işaretsiz süre/boyut ("40 dk", "4 saat adımsız"),
+#    atıf/kimlik/sürüm/tarih. Dürüst sınır: yazıyla sayı ("altı dakika") ve eşik kelimesiz ölçüt yakalanmaz; araç hatırlatır, ölçümün yerini tutmaz.
+olcut_bul() {  # olcut_bul <cümle> → her satır bir sayısal ölçüt (boş = yok)
+  python3 - "$1" <<'PY'
+import re, sys
+c = sys.argv[1]
+B = r"(?:ms|sn|saniye|dk|dakika|sa|saat|kb|mb|gb|px|%)"
+S = r"\d+(?:[.,]\d+)?"
+DESEN = [rf"(?:≤|<=|<|≥|>=|>)\s*{S}\s*{B}(?!\w)",
+         rf"(?<!\w)en\s+(?:çok|az|fazla)\s+{S}\s*{B}(?!\w)",
+         rf"(?<![\w.,]){S}\s*{B}\s+(?:altında|altı|içinde|üstünde|üzerinde|üzeri|kadar)(?!\w)",
+         rf"(?<![\w.,]){S}\s*{B}['’]?(?:den|dan|ten|tan)\s+(?:az|kısa|çok|fazla|uzun)(?!\w)"]
+bul = []
+for d in DESEN:
+    bul += [m.group(0).strip() for m in re.finditer(d, c, re.I)]
+for b in dict.fromkeys(bul): print(b)
+PY
+}
+olcum_yeri_gecerli() {  # olcum_yeri_gecerli <değer> → rc 0: yer adı (yerel|CI|canlı) var; yerel/CI için çekirdek sayısı da var
+  python3 - "$1" <<'PY'
+import re, sys
+y = sys.argv[1].lower()
+yer = re.search(r"(?<!\w)(yerel|ci|canlı|canli)(?!\w)", y)
+if not yer: raise SystemExit(1)
+if yer.group(1) in ("canlı", "canli"): raise SystemExit(0)
+raise SystemExit(0 if re.search(r"\d+\s*(?:çekirdek|cekirdek|vcpu|core)", y) else 1)
+PY
+}
+olcut_zorunlu() {  # olcut_zorunlu <cümle> <nerede: ac|daralt> → rc 0 uygun · rc 1 hata basılmış
+  local o; o="$(olcut_bul "$1")" || { _hata "ölçüt aracı düştü — kart AÇILMADI (ölçemediğine temiz denmez)"; return 1; }
+  [ -n "$o" ] || return 0
+  olcum_yeri_gecerli "$OLCUM_YERI" && return 0
+  _hata "cümlede sayısal ölçüt var ($(printf '%s' "$o" | head -3 | tr '\n' ';' | sed 's/;$//')) ama NEREDE ölçüleceği yok: --olcum-yeri \"yerel, 12 çekirdek\" | \"CI, 2 çekirdek\" | \"canlı\" (yerel ve CI için çekirdek sayısı şart — W1G2N: '≤6 dk' 2 çekirdekli CI'da imkânsızdı, ~4,5 saat boşa gitti). İş $2 EDİLMEDİ"
+  return 1
+}
+
 sayi_uyar() {  # sayi_uyar <cümle> → her satır bir ölçümsüz sayı iddiası (boş = yok)
   python3 - "$1" <<'PY'
 import re, sys
@@ -252,6 +293,8 @@ case "$CMD" in
     for v in GA PARA DIS YETKI; do case "${!v}" in e|h|\?) ;; *) _hata "dört sınıf sorusu cevapsız kart AÇILMAZ: --geri-alinamaz --para --dis-yuzey --yetki (e|h|?)"; exit 1 ;; esac; done
     case "$CANLI" in ""|e|h) ;; *) _hata "--canli yalnız e|h olabilir ('$CANLI' değil): cron/servis/sunucu işi canlı kanıt ister mi?"; exit 1 ;; esac
     [ -f "$KD/$IS.json" ] && { _hata "kart zaten var: $IS (goster ile bak)"; exit 1; }
+    olcut_zorunlu "$IS_C" "AÇILMADI" || exit 1
+    OLCUT="$(olcut_bul "$IS_C")"
     # 🔴 SULTAN'A ULAŞIM YOLU (göz 23 Eki tur 2 · fabrika-merge-reise): sınıflı kartın başlama izni Sultan'a GİDER — yol yoksa kart
     #    AÇILMAZ (fail-closed, rc 1). Ölçüldü: eski araç "BAŞLAMA İZNİ SULTAN'A GİDER" basıp rc 0 dönüyordu; --oda yoksa tetik() sessizce
     #    çıkıyor, tetik betiği yoksa "atılmadı" deyip yine 0 — veto penceresi Sultan'ın hiç görmediği bir pencere oluyordu.
@@ -277,7 +320,7 @@ case "$CMD" in
     #    yayımlanır. Tetik sırasında süreç kesilirse görünür kart KALMAZ (izin isteği gitmemiş kart yok); başarısızlıkta yalnız KENDİ geçici
     #    dosyamız silinir — aynı kimlikle eşzamanlı açılan başkasının kartına dokunulmaz.
     KART_TMP="$KD/$IS.json.acilis-$$"
-    python3 - "$KART_TMP" "$IS" "$IS_C" "$ISTEDI" "$ALDI" "$GA" "$PARA" "$DIS" "$YETKI" "$KANIT" "$ODA" "$CG" "$CSEBEP" "$KUYARI" "$GOREV" "$TAHMIN" "$SUYARI" "$SAYI_OLCUM" "$SRC" "$SCIKTI" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY'
+    OLCUT="$OLCUT" OLCUM_YERI="$OLCUM_YERI" python3 - "$KART_TMP" "$IS" "$IS_C" "$ISTEDI" "$ALDI" "$GA" "$PARA" "$DIS" "$YETKI" "$KANIT" "$ODA" "$CG" "$CSEBEP" "$KUYARI" "$GOREV" "$TAHMIN" "$SUYARI" "$SAYI_OLCUM" "$SRC" "$SCIKTI" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY'
 import json,sys,datetime
 yol,is_,cumle,istedi,aldi,ga,para,dis,yetki,kanit,oda,cg,csebep,kuyari,gorev,tahmin,suyari,skomut,src,scikti,hdir=sys.argv[1:]
 sys.path.insert(0,hdir); from izin import KURAL_SURUMU
@@ -291,6 +334,9 @@ if siniflar:
     # 0.21.0: sınıflı kartta başlama izni (veto penceresi)
     kart["baslama_izni"]={"durum":"bekliyor","istendi":simdi}; kart["kural_surumu"]=KURAL_SURUMU
 if gorev: kart["gorev"]=gorev; kart["tahmin_dk"]=int(tahmin)
+import os
+if os.environ.get("OLCUT") or os.environ.get("OLCUM_YERI"):
+    kart["olcut"]=[x for x in os.environ.get("OLCUT","").splitlines() if x.strip()]; kart["olcum_yeri"]=os.environ.get("OLCUM_YERI","")
 sayilar=[u for u in suyari.splitlines() if u.strip()]
 TAVAN=2000   # kart bir JSON kaydıdır, ölçüm arşivi değil: tavan AÇIK yazılır, kesilme SESSİZ değildir (göz #430 tur 1)
 if skomut:
@@ -307,6 +353,7 @@ if skomut:
     ilk=(scikti.strip().splitlines() or ["(çıktı yok)"])[0][:120]
     print(f"  · sayı kaynağı karta yazıldı (rc={src}): {ilk}" if kaynakli else f"  ⚠ SAYI — ölçüm komutu DÜŞTÜ (rc={src}) — sayı kaynaksız sayıldı: {ilk}")
     if kart["sayi_olcum"]["kirpildi"]: print(f"  ⚠ SAYI — ölçüm çıktısı {kart['sayi_olcum']['cikti_bayt']} bayt: karta ilk {TAVAN} karakter + son 5 satır yazıldı (KIRPILDI); tam çıktı için kanit.sh olcum")
+if kart.get("olcut"): print("  · ölçüt: %s → ölçüleceği yer: %s (karta yazıldı)" % (" · ".join("'%s'" % u for u in kart["olcut"]), kart["olcum_yeri"]))
 if cg=="E": print(f"  · CANLI kanıt zorunlu ({csebep}): gerçek ateşleme kaydı (kanit.sh canli) olmadan birleştirme kapısı geçmez")
 elif csebep: print(f"  ⚠ canlı kanıt istenmedi — {csebep}; karta yazıldı, bağımsız göz görür")
 if not gorev: print("  · görev bağı yok — iş Sultan'ın 'çalışılıyor' görünümüne DÜŞMEZ (bağlamak için: kart.sh ac … --gorev gorev_<kimlik> --tahmin <dk>)")
@@ -517,6 +564,8 @@ PY
     [ -z "$eksik" ] || { _hata "eksik:$eksik — kalan bulgu, daraltılmış cümle ve oturum ref'i olmadan daraltma SAYILMAZ"; exit 1; }
     [ "${#KALAN}" -ge 20 ] || { _hata "--kalan en az 20 karakter — kalan bulgu bir cümledir, etiket değil"; exit 1; }
     [ "${#CUMLE}" -ge 20 ] || { _hata "--cumle en az 20 karakter — daraltılmış cümle yine bir iş cümlesidir"; exit 1; }
+    olcut_zorunlu "$CUMLE" "DARALTILMADI" || exit 1
+    OLCUT_YENI="$(olcut_bul "$CUMLE")"
     for v in KALAN CUMLE OTURUM YENI; do d="${!v}"; if [[ "$d" == *"|"* || "$d" == *$'\n'* ]]; then _hata "--$(printf '%s' "$v" | tr 'A-Z' 'a-z') içinde '|' ya da satır sonu olamaz (defter ayracı)"; exit 1; fi; done
     YENI="${YENI:-$IS-kalan}"
     # 🔴 (bağımsız göz tur 1) kart adı dosya adıdır: yol ayracı, '..' ya da boşluk kabul edilirse kart dizini DIŞINA yazılır
@@ -525,7 +574,7 @@ PY
     # tur_sifir: kanıt ağacındaki denetim sayısı (kanit_agaci: bu ağaç, yoksa iş alanı) — daraltmadan önceki turlar yeni cümleyi puanlamadı
     DZ="$(kanit_agaci "$IS")"
     TS=$(ls "$DZ"/DENETIM-[0-9]*.json 2>/dev/null | wc -l)
-    python3 - "$KD/$IS.json" "$KD/$YENI.json" "$YENI" "$KALAN" "$CUMLE" "$OTURUM" "$TS" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY' || exit 1
+    OLCUT_YENI="$OLCUT_YENI" OLCUM_YERI="$OLCUM_YERI" python3 - "$KD/$IS.json" "$KD/$YENI.json" "$YENI" "$KALAN" "$CUMLE" "$OTURUM" "$TS" "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" <<'PY' || exit 1
 import json,sys,datetime
 yol,yyol,yeni,kalan,cumle,oturum,ts,hdir=sys.argv[1:]
 sys.path.insert(0,hdir); from izin import izin_durumu, siniflimi, KURAL_SURUMU
@@ -548,6 +597,12 @@ if acik: rk["sultan_karari_tuketildi"]=True   # reis kaydı yine düşer (defter
 k.setdefault("reis_kararlari",[]).append(rk)
 k.setdefault("cumle_gecmisi",[]).append({"cumle":k["cumle"],"zaman":simdi,"kalan_kart":yeni})
 k["cumle"]=cumle
+# ÖLÇÜT (…90KA6C): daralma ölçütü değiştirdiyse eski ölçüt GEÇERSİZDİR — kartta eski/yeni birlikte durur, görev adımına yazılır
+import os
+eski_olcut=list(k.get("olcut") or []); yeni_olcut=[x for x in os.environ.get("OLCUT_YENI","").splitlines() if x.strip()]
+if eski_olcut!=yeni_olcut:
+    k.setdefault("olcut_gecmisi",[]).append({"zaman":simdi,"eski":eski_olcut,"yeni":yeni_olcut,"olcum_yeri":os.environ.get("OLCUM_YERI","")})
+    k["olcut"]=yeni_olcut; k["olcum_yeri"]=os.environ.get("OLCUM_YERI","") if yeni_olcut else ""
 k.setdefault("daraltmalar",[]).append({"zaman":simdi,"kalan_kart":yeni,"kalan":kalan,"tur_sifir":int(ts),"oturum":oturum})
 if k.get("durum")=="tikandi": k["durum"]="acik"
 k["gecmis"].append({"zaman":simdi,"olay":"daralt","kalan_kart":yeni,"tur_sifir":int(ts)})
@@ -592,7 +647,17 @@ except Exception as e:
     print(f"✗ ana kart yerine konamadı ({e}) — kalan kart geri alındı, daraltma OLMADI", file=sys.stderr); raise SystemExit(1)
 print(f"✓ kart daraltıldı: {k['is']} (tur sıfırı {ts}) · kalan bulgu yeni karta: {yeni} · {('SINIFLI, Sultan kararıyla (eski karar tüketildi)' if kim=='Sultan' else 'SINIFLI, reis kararı işlendi · izin: '+iz) if y['sultan'] else 'sınıfsız, reis kararı işlendi'}")
 print("  · denetçi bundan sonra yalnız daraltmadan SONRAKİ turları sayar; kapı daraltma sonrası en az bir 5/E tur ister")
+if eski_olcut!=yeni_olcut:
+    print("  ⚠ ÖLÇÜT değişti: eski %s GEÇERSİZ → yeni %s%s (karta yazıldı; görev başlığındaki eski ölçüt defterde güncellenmeli — başlık eklemeli alandır, bu araç yeniden adlandıramaz)" % (eski_olcut or "yok", yeni_olcut or "yok", (" · ölçüleceği yer: "+os.environ.get("OLCUM_YERI","")) if yeni_olcut else ""))
 PY
+    OLCUT_NOT="$(python3 - "$KD/$IS.json" <<'PY2'
+import json,sys
+k=json.load(open(sys.argv[1],encoding="utf-8")); g=(k.get("olcut_gecmisi") or [None])[-1]; d=(k.get("daraltmalar") or [None])[-1]
+if k.get("gorev") and g and d and g.get("zaman")==d.get("zaman"):
+    print("[✂ ölçüt daraltıldı] %s · kart %s: eski ölçüt %s GEÇERSİZ → yeni %s%s" % (k.get("aldi"),k["is"],g["eski"] or "yok",g["yeni"] or "yok",(" · ölçüleceği yer: "+g["olcum_yeri"]) if g["yeni"] else ""))
+PY2
+)"
+    if [ -n "$OLCUT_NOT" ]; then DARALT_NOT="$OLCUT_NOT" gorev_yaz "$KD/$IS.json" daralt || exit 4; fi
     ;;
   canli-borc)
     # 🔴 CANLI BORÇ (5WYQMW): kapıyı GEVŞETMEZ, borcu KAYDEDER ve görünür kılar. Koşullar canli_borc.py'de (tek gerçek).
