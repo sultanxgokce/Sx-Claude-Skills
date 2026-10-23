@@ -1,0 +1,36 @@
+{
+  "is": "fabrika-birincil-kopya-yazim-reddi",
+  "cumle": "yazilim-fabrikasi 0.19.0: denetci.sh ve kanit.py BİRİNCİL kopyada (worktree değil) koşulduğunda o iş için is-alani.sh kökünde (/config/projects/_wt/<depo>-<iş>) açık bir iş alanı varsa yazmayı REDDEDER (rc 2, alan yolunu ve doğru komutu söyler; sessiz yönlendirme yok); DENETIM-N.json'a depo yolu, dal ve birincil_mi alanı yazılır; iş alanından koşulan ve alanı olmayan iş eski davranışıyla aynı; ölçüm: Nexus 116 + cloudtop 45 takipsiz kanıt dosyası birincilde doğuyordu (HENDESE 22 Eki)",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-23T09:32:49+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [
+    "İKİ DEPO: cümle Nexus + cloudtop anıyor — iş birden çok depoya yayılıyorsa depo başına kart aç (her depoda kendi kartı, kendi PR'ı): kart.sh ac fabrika-birincil-kopya-yazim-reddi-nexus … · kart.sh ac fabrika-birincil-kopya-yazim-reddi-cloudtop …"
+  ],
+  "gorev": "gorev_01M5F03K79B5B19A2XQ54V8NMK",
+  "tahmin_dk": 180,
+  "sayi_uyarilari": [
+    "45 takipsiz"
+  ],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-23T09:32:49+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
