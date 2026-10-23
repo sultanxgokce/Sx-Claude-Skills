@@ -517,7 +517,7 @@ bash "$KT" acik-soru MIRAHUR >/dev/null 2>&1; g $? "S13 cevaplanınca acik-soru 
 bash "$KT" sor ss-1 --kime SERDAR --eylem "yalnız boş servisi sil" --soru "Satır sayısı 0 çıkan tek servisi silebilir miyim, ölçüm ekte?" >/dev/null 2>&1 && bash "$KT" cevap ss-1 --no 2 --kim SERDAR --karar evet --oturum sess-2 --soz "evet, yalnız o" >/dev/null 2>&1; g $? "S14 yeni soru (no 2) açıldı ve evet aldı"
 bash "$KT" cevap-bekle ss-1 >/dev/null 2>&1; [ $? -eq 4 ]; g $? "S14b eski hayır hâlâ görünür (rc 4) — sonraki evet eski reddi silmez"
 bash "$KT" bitti ss-1 >/dev/null 2>&1; g $? "S15 cevapsız soru kalmayınca kart kapanabilir"
-bash "$KT" ac ss-2 --is "veritabanı yedeğini sil" --istedi Sultan --aldi MIRAHUR --geri-alinamaz e --para h --dis-yuzey h --yetki h --canli h >/dev/null 2>&1
+bash "$KT" ac ss-2 --is "veritabanı yedeğini sil" --istedi Sultan --aldi MIRAHUR --geri-alinamaz e --para h --dis-yuzey h --yetki h --canli h --oda sinav-oda >/dev/null 2>&1
 bash "$KT" sor ss-2 --kime SERDAR --eylem "eski yedeği sil" --soru "Eski veritabanı yedeğini silebilir miyim, yer açılacak?" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "S16 🔴 SINIFLI kartta soru SERDAR'a sorulamaz (karar Sultan'ın)"
 bash "$KT" sor ss-2 --kime Sultan --eylem "eski yedeği sil" --soru "Eski veritabanı yedeğini silebilir miyim, yer açılacak?" >/dev/null 2>&1; g $? "S16b sınıflı kartta Sultan'a sorulur"
 bash "$KT" sor ss-2 --kime Sultan --eylem "sil" --soru "kısa" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "S17 kısa eylem/soru reddedildi"
@@ -551,7 +551,7 @@ PYM
   case "$M" in
     "bitti engeli") bash "$MD/kart.sh" bitti mm-1 >/dev/null 2>&1; g $? "mutant ($M): cevapsız soruyla kart KAPANDI → S5 bu mutantta düşerdi" ;;
     "sorulan kimliği") bash "$MD/kart.sh" cevap mm-1 --no 1 --kim HENDESE --karar evet --oturum x --soz "olur" >/dev/null 2>&1; g $? "mutant ($M): sorulmayan ad cevap verdi → S7 bu mutantta düşerdi" ;;
-    "sinifli kural") bash "$MD/kart.sh" ac mm-2 --is "mutant sınıflı yedek silme işi" --istedi Sultan --aldi MIRAHUR --geri-alinamaz e --para h --dis-yuzey h --yetki h --canli h >/dev/null 2>&1
+    "sinifli kural") bash "$MD/kart.sh" ac mm-2 --is "mutant sınıflı yedek silme işi" --istedi Sultan --aldi MIRAHUR --geri-alinamaz e --para h --dis-yuzey h --yetki h --canli h --oda sinav-oda >/dev/null 2>&1
                      bash "$MD/kart.sh" sor mm-2 --kime SERDAR --eylem "yedeği sil" --soru "Eski yedeği silebilir miyim, yer açılacak?" >/dev/null 2>&1; g $? "mutant ($M): sınıflı kartta SERDAR'a soruldu → S16 bu mutantta düşerdi" ;;
     "bozuk kart") printf '{bozuk' > "$SQ/_agents/fabrika/kartlar/mm-bozuk.json"; bash "$MD/kart.sh" acik-soru NAKKAS >/dev/null 2>&1; g $? "mutant ($M): okunamayan kart atlanıp rc 0 → S19 bu mutantta düşerdi"; rm -f "$SQ/_agents/fabrika/kartlar/mm-bozuk.json" ;;
   esac

@@ -1,7 +1,7 @@
 {
   "is": "fabrika-merge-reise-parca2b",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-23T17:34:16+03:00",
+  "guncelleme": "2026-10-23T19:30:24+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -95,7 +95,61 @@
       "renk": "ilan",
       "zaman": "2026-10-23T16:47:09+03:00",
       "olcum_id": "1c1af114523446b0a4bec9a35dbbf3f6"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "birlesim-fabrika-sinavlari",
+      "asama": "sonra",
+      "dosya": "olcum-birlesim-fabrika-sinavlari-sonra.txt",
+      "sha256": "40be09fa23fffcc533a3ffbf3eda143a1ab4e2f769107bf252b892824fd764b4",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/fabrika-merge-reise-parca2b/kos-fabrika-sinavlari.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T19:27:41+03:00",
+      "sure_sn": 1232.3,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "7c1fe38929fd4b5786d0c2ed14f73581"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "birlesim-kart-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-birlesim-kart-sinavi-sonra.txt",
+      "sha256": "4885546c615ccfa4ade10b34c2b6d3fd1267223b4b569ad952d53aa118a3d3b9",
+      "komut": [
+        "bash",
+        "-c",
+        "cd yazilim-fabrikasi/scripts && MUT_PARALEL=2 timeout 1800 bash kart.test.sh </dev/null"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T19:30:10+03:00",
+      "sure_sn": 21.8,
+      "boru_denetimi": "temiz",
+      "olcum_id": "7283df61348e4b3a9504c68e16644b84"
+    },
+    {
+      "tur": "gecersiz",
+      "etiket": "birlesim-fabrika-sinavlari",
+      "asama": "tek",
+      "dosya": "gecersiz-olcum-birlesim-fabrika-sinavlari-sonra-14c5e624496b.txt",
+      "sha256": "b57cdad751928c1b2160ac492cd3c80bbc196ea3549a3cd7b25da137c6f26caa",
+      "hedef_dosya": "olcum-birlesim-fabrika-sinavlari-sonra.txt",
+      "hedef_olcum_id": "7c1fe38929fd4b5786d0c2ed14f73581",
+      "hedef_sha256": "40be09fa23fffcc533a3ffbf3eda143a1ab4e2f769107bf252b892824fd764b4",
+      "hedef_zaman": "2026-10-23T19:27:41+03:00",
+      "hedef_renk": "kirmizi",
+      "neden": "kart.test.sh S16-S19c: #444 sınavları sınıflı kartı --oda'sız açıyordu (bu PR odasız sınıflı kartı reddeder); sınav açılışlarına --oda eklendi, düzeltilmiş koşum birlesim-kart-sinavi 248/0",
+      "kim": "SERDAR alt-ajanı",
+      "karsi": "olcum-birlesim-kart-sinavi-sonra.txt",
+      "rc": 0,
+      "renk": "ilan",
+      "zaman": "2026-10-23T19:30:23+03:00",
+      "olcum_id": "c421c5ee6c324b319ba9b8e37871237c"
     }
   ],
-  "imza": "9feb1cff545c73c985c086916659ac2be997aa06ea2c4346b3d7157a369ed05e"
+  "imza": "0bff0ab9d1925607974876dde0cd59f876e5be4a00a2ee56f329c2a0fa4b6bbe"
 }
