@@ -1,0 +1,22 @@
+{
+  "is": "hezarfen-ortam-okuyucu",
+  "cumle": "terminal-onar kapı başlatıcısı (onar.sh:130) ortam dosyasını tmux kabuğuna 'set -a; . dosya' ile yüklemez (görev GQ9DY: 303 satırlık dosyada 135 AD=değer dışı satır + 6 PEM işareti komut gibi koşup sır parçalarını ekrana düşürüyordu); ortak.sh'daki AD=değer okuyucusu paylaşılan ortam-yukle.sh dosyasına çıkar, kapı kabuğu onu kaynak alıp yükler, başka depolar da aynı dosyayı kullanır; sınav: bozuk satır koşmaz, değer parçası basılmaz, eski yol mutantla kırmızı",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-23T03:41:48+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": []
+}

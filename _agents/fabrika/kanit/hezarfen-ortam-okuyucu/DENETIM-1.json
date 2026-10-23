@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "hezarfen-ortam-okuyucu",
+  "pr": "427",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T03:52:07+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 22500,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 8467
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "H",
+    "ozet": "Kapı kabuğundaki tehlikeli kaynak alma kaldırılmış, okuyucu ortak dosyaya çıkarılmış ve gerçek ölçüm ile mutasyon sınavı temel güvenlik davranışını doğrulamış. Ancak iş kartının “başka depolar da aynı dosyayı kullanır” kısmı üretim farkında gerçekleştirilmediği hâlde belgede yapılmış gibi yazıldığı için önce bu kapsam eksikliği çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Paylaşılan okuyucunun başka depolarda kullanılması talebi karşılanmamış; değişiklik yalnız terminal-onar altında, buna karşın belge cloudtop mobile-start.sh'ın aynı dosyayı kullandığını iddia ediyor.",
+        "kanit": "Üretim farkında değişen/yeni dosyaların tamamı terminal-onar/ altındadır; cloudtop veya başka depo için hiçbir kod değişikliği yoktur. SKILL.md eklenen açıklama ise “cloudtop mobile-start.sh de aynı dosyayı kullanır” diyor.",
+        "konum": "terminal-onar/SKILL.md:13; üretim farkı dosya listesi",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam. Önce/sonra ölçümü onar.sh içindeki eski kalıbın 1'den 0'a indiğini; gerçek ölçüm E1-E9'un geçtiğini; mutasyon ölçümü ise eski yol geri geldiğinde sınavın kırmızıya döndüğünü gösteriyor. Bununla birlikte E8 yalnız metin eşleşmesi yapıyor ve sunulan ölçümler gerçek tmux kapı başlangıcını ya da başka depoların ortak dosyayı kullandığını ölçmüyor; paket sınavı kaydı da yalnız dosya kaydı olarak verilmiş, içeriği gösterilmemiş."
+  }
+}
