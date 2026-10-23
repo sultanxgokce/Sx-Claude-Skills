@@ -108,20 +108,29 @@ if kod != "200":
 try:
     L = json.loads(g)["gorevler"]
 except Exception:
+    L = None
+if not isinstance(L, list):   # göz #431 tur 1: {"gorevler":{}} de "liste yok"tur — TypeError ile rc 1 değil, ÖLÇÜLEMEDİ
     print("🟡 defter yanıtı bozuk (gorevler listesi yok) — defterdeki bulgular ÖLÇÜLEMEDİ", file=sys.stderr); sys.exit(3)
-n = 0
+n = bozuk = 0
 for k in L:
-    c = k.get("canli") or {}
-    if not (c.get("kaynak_nereden") == "bulgu komutu" or c.get("etiket") in ("bug", "ozellik")): continue
-    ad = ((k.get("adlar") or [{}])[0] or {}).get("deger", "")
-    if not str(ad).strip(): continue
-    kanit = next((str(a.get("deger", ""))[len("[kanıt] "):] for a in (k.get("adimlar") or []) if str(a.get("deger", "")).startswith("[kanıt] ")), "")
-    dd = c.get("gorev_durumu"); dd = dd[-1] if isinstance(dd, list) else dd   # çatışmalı durum: son değer
-    print(json.dumps({"id": k["id"], "tarih": str(k.get("olusturma") or "")[:10], "baslik": ad, "detay": kanit, "kanit": kanit,
+    # bozuk öğe (nesne değil · kimliksiz · canli nesne değil) SESSİZCE atlanmaz: sayılır ve söylenir
+    if not isinstance(k, dict) or not str(k.get("id") or "").strip() or not isinstance(k.get("canli") or {}, dict):
+        bozuk += 1; continue
+    try:   # eşleme kayıt başına korunur: adlar/adimlar beklenmedik türde gelirse kayıt BOZUK sayılır, akış çökmez
+        c = k.get("canli") or {}
+        if not (c.get("kaynak_nereden") == "bulgu komutu" or c.get("etiket") in ("bug", "ozellik")): continue
+        ad = ((k.get("adlar") or [{}])[0] or {}).get("deger", "")
+        if not str(ad).strip(): continue
+        kanit = next((str(a.get("deger", ""))[len("[kanıt] "):] for a in (k.get("adimlar") or []) if str(a.get("deger", "")).startswith("[kanıt] ")), "")
+        dd = c.get("gorev_durumu"); dd = dd[-1] if isinstance(dd, list) else dd   # çatışmalı durum: son değer
+        satir = json.dumps({"id": k["id"], "tarih": str(k.get("olusturma") or "")[:10], "baslik": ad, "detay": kanit, "kanit": kanit,
                       "gercek": kanit, "bulan": c.get("kaynak_kim") or "", "kutu": c.get("kutu") or k.get("ekleyen_kutu") or "",
                       "etiket": c.get("etiket") or "", "eski_no": str(c.get("eski_no") or ""), "defter_durumu": dd or "", "durum": "ham" if dd == "havuz" else (dd or ""),
-                      "kaynak": "defter"}, ensure_ascii=False)); n += 1
-print("· defterden %d bulgu kaydı (%d görev tarandı)" % (n, len(L)), file=sys.stderr)' ;;
+                      "kaynak": "defter"}, ensure_ascii=False)
+    except (AttributeError, TypeError, IndexError, KeyError):
+        bozuk += 1; continue
+    print(satir); n += 1
+print("· defterden %d bulgu kaydı (%d görev tarandı)" % (n, len(L)) + (" · %d BOZUK kayıt atlandı" % bozuk if bozuk else ""), file=sys.stderr)' ;;
   liste)
     [ -f "$YAZ" ] || _kur_yok; python3 "$YAZ" listele --kok "$KOK" ;;
   hal)

@@ -1,5 +1,5 @@
 $ bash bulgu/scripts/bulgu.test.sh
-# rc=0 sure=1.4s zaman=2026-10-23T05:04:14+03:00
+# rc=0 sure=1.5s zaman=2026-10-23T05:06:37+03:00
 --- stdout ---
   ✓ H1 hal: yazıcıya 'hal S-12 --hal uygulandi --gerekce … --kim MUAVİN --kok' gider, rc 0
   ✓ H2 🔴 'onaylandi' ajan tarafından yazılamaz (A06): rc 2, yazıcı ÇAĞRILMADI
@@ -43,7 +43,9 @@ $ bash bulgu/scripts/bulgu.test.sh
   ✓ HC5 jetonsuz kutu: rc 3 + ÖLÇÜLEMEDİ (boş liste 'bulgu yok' sanılmaz)
   ✓ HC6 defter reddederse (401) rc 3 + http kodu
   ✓ HC7 yanıtta gorevler listesi yoksa rc 3 (0 kayıt 'temiz' sayılmaz)
+  ✓ HC7b gorevler LİSTE değilse ({}) rc 3 + ÖLÇÜLEMEDİ (Python hatası/rc 1 değil — göz #431 tur 1)
+  ✓ HC7c bozuk öğeler (metin · kimliksiz · canli/adlar/adimlar yanlış tür) çökertmez: sağlam kayıt gelir, '5 BOZUK kayıt atlandı' söylenir
   ✓ HC8 defter ulaşılamazsa rc 3
   ✓ K1h merkeze ulaşılamazsa rc 1, kayıt HİÇBİR yere yazılmaz ve söylenir
-bulgu.test: 44 geçti · 0 kaldı
+bulgu.test: 46 geçti · 0 kaldı
 --- stderr ---

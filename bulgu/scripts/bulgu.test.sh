@@ -52,6 +52,9 @@ class H(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         with open(os.path.join(T,"get.log"),"a") as f: f.write(self.path+"\n")
         if self.path=="/gorevler" and self.headers.get("x-defter-jeton")=="bozuk-yanit-jeton": self.send_response(200); self.end_headers(); self.wfile.write(b'{"ok":true}'); return
+        if self.path=="/gorevler" and self.headers.get("x-defter-jeton")=="sozluk-yanit-jeton": self.send_response(200); self.end_headers(); self.wfile.write(b'{"ok":true,"gorevler":{}}'); return
+        if self.path=="/gorevler" and self.headers.get("x-defter-jeton")=="bozuk-oge-jeton":
+            self.send_response(200); self.end_headers(); self.wfile.write(json.dumps({"ok":True,"gorevler":["metin",{"canli":{"etiket":"bug"},"adlar":[{"deger":"kimliksiz"}]},{"id":"gorev_X","canli":"bozuk"},{"id":"gorev_Y","canli":{"etiket":"bug"},"adlar":"metin"},{"id":"gorev_Z","canli":{"etiket":"bug"},"adlar":[{"deger":"adim bozuk"}],"adimlar":["metin"]},{"id":"gorev_IYI000000000000001","olusturma":"2026-10-22T00:00:00Z","adlar":[{"deger":"sağlam bulgu"}],"canli":{"gorev_durumu":"havuz","etiket":"bug","kaynak_nereden":"bulgu komutu"},"adimlar":[]}]},ensure_ascii=False).encode()); return
         if self.headers.get("x-defter-jeton")!="sinav-jeton-ABC": self.send_response(401); self.end_headers(); self.wfile.write(b'{"ok":false}'); return
         if self.path=="/gorevler":   # havuz-cek fikstürü: canlı /gorevler biçimi (adlar[].deger · canli{} · adimlar[].deger · olusturma)
             G=lambda i,ad,c,ad_=None,t="2026-10-22T09:24:09.195Z": {"id":i,"olusturma":t,"ekleyen_kutu":"code","adlar":[{"deger":ad}] if ad else [],"canli":c,"adimlar":ad_ or []}
@@ -142,6 +145,12 @@ ok "HC6 defter reddederse (401) rc 3 + http kodu" '[ $r -eq 3 ] && [[ "$o" == *"
 printf 'bozuk-yanit-jeton\n' > "$T/jeton3"
 o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton3" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" havuz-cek 2>&1); r=$?
 ok "HC7 yanıtta gorevler listesi yoksa rc 3 (0 kayıt 'temiz' sayılmaz)" '[ $r -eq 3 ] && [[ "$o" == *"yanıtı bozuk"* ]]'
+printf 'sozluk-yanit-jeton\n' > "$T/jeton4"
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton4" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" havuz-cek 2>&1); r=$?
+ok "HC7b gorevler LİSTE değilse ({}) rc 3 + ÖLÇÜLEMEDİ (Python hatası/rc 1 değil — göz #431 tur 1)" '[ $r -eq 3 ] && [[ "$o" == *"yanıtı bozuk"* ]] && [[ "$o" != *Traceback* ]]'
+printf 'bozuk-oge-jeton\n' > "$T/jeton5"
+o=$(BULGU_KOK="$T/kok" DEFTER_JETON_YOL="$T/jeton5" DEFTER_UC="http://127.0.0.1:$PORT" bash "$B" havuz-cek 2>"$T/hc5.err"); r=$?
+ok "HC7c bozuk öğeler (metin · kimliksiz · canli/adlar/adimlar yanlış tür) çökertmez: sağlam kayıt gelir, '5 BOZUK kayıt atlandı' söylenir" '[ $r -eq 0 ] && [ "$(printf "%s\n" "$o" | grep -c gorev_IYI)" = 1 ] && grep -q "defterden 1 bulgu kaydı (6 görev tarandı) · 5 BOZUK kayıt atlandı" "$T/hc5.err" && ! grep -q Traceback "$T/hc5.err"'
 kill $SRV 2>/dev/null; wait $SRV 2>/dev/null
 o=$(env $M bash "$B" havuz-cek 2>&1); r=$?
 ok "HC8 defter ulaşılamazsa rc 3" '[ $r -eq 3 ] && [[ "$o" == *"ulaşılamadı"* ]]'

@@ -1,7 +1,7 @@
 {
   "is": "fikir-hatti-defter",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-23T05:04:31+03:00",
+  "guncelleme": "2026-10-23T05:07:16+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -26,7 +26,7 @@
       "etiket": "defteri-goruyor",
       "asama": "sonra",
       "dosya": "olcum-defteri-goruyor-sonra.txt",
-      "sha256": "80342fbc026d188ba08b6449e618277dbf17da44b1a587f98a9068413bba6153",
+      "sha256": "78ae4b15c843a960d326cba6476555caeecbf25b2604686d45a3acc594e51504",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/fikir-hatti-defter/fikir-hatti-olcer.sh",
@@ -34,27 +34,27 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T05:04:04+03:00",
-      "sure_sn": 39.7,
+      "zaman": "2026-10-23T05:07:16+03:00",
+      "sure_sn": 38.9,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "eae7920faff64242ab2f1332d39630c2"
+      "olcum_id": "107a041813444f1b8aa68b7b41766a77"
     },
     {
       "tur": "olcum",
       "etiket": "bulgu-sinavi",
       "asama": "tek",
       "dosya": "olcum-bulgu-sinavi-tek.txt",
-      "sha256": "9990ba46028bd4087aa4923509fb23e2379d3875c343d32240f4a00e6a681954",
+      "sha256": "66770d20fb44e398ee996cdb9ef5867a0e38091f368412ada7d433ad0aabf65f",
       "komut": [
         "bash",
         "bulgu/scripts/bulgu.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T05:04:14+03:00",
-      "sure_sn": 1.4,
+      "zaman": "2026-10-23T05:06:37+03:00",
+      "sure_sn": 1.5,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "43bf22f60b6d48d891830f5f5dc46aa2"
+      "olcum_id": "a8ce2afa00b94e3ca0a7839aa8bef0a4"
     },
     {
       "tur": "olcum",
@@ -142,5 +142,5 @@
       "olcum_id": "2086d019d5b04c33ab18cde3b674774a"
     }
   ],
-  "imza": "2912406382ed01ca10f7e731701891884dd72d1059bb5fc338320eb84a120bf9"
+  "imza": "37df04b9088d93f1adb77260a0607f7896338252da22a335296c1f78a1ac2c72"
 }
