@@ -1,0 +1,13 @@
+$ bash -c bash /config/projects/Nexus/scripts/agir-sira.sh denetci-once -- timeout 1500 bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/once/denetci.test.sh < /dev/null > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/once-den.out 2>&1; r=$?; grep -m6 '✗' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/once-den.out | cut -c1-170; grep SONUÇ /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/once-den.out; exit $r
+# rc=1 sure=991.8s zaman=2026-10-23T18:42:56+03:00
+--- stdout ---
+  ✗ G-a 3/H turu: kart.sh goz-adim is-g --not '[🔎 göz] kart is-g · tur 1 · kod 3/5 · doğru şey H · bulgu 1' (rc 1 değişmedi)
+  ✗ G-b 5/E turu: ikinci satır tur 2 · 5/5 · E · bulgu 0 (rc 0 değişmedi)
+  ✗ G-c kartsız iş (kart.json yok): göz adımı çağrılmaz
+  ✗ G-d kart aracı düşerse turun sonucu DEĞİŞMEZ (rc 0) ama uyarı söylenir
+  ✗ kart · manifest · diff · rubrik · ölçüm çıktısı istemde
+  ✗ M2 dosya başı satırı ve şablon kuralı istemde (✗ satırları bulgu değildir)
+  ✓ O1 🔴 188 satırlık ölçümün SONUÇ satırı istemde (eskiden ilk 60 satırda kalıyordu)
+── SONUÇ (fark-kendisi): 23 geçti · 0 kaldı ──
+── SONUÇ: 272 geçti · 7 kaldı ──
+--- stderr ---
