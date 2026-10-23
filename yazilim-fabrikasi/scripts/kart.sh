@@ -241,7 +241,7 @@ olcut_bul() {  # olcut_bul <cümle> → her satır bir sayısal ölçüt (boş =
   python3 - "$1" <<'PY'
 import re, sys
 c = sys.argv[1]
-B = r"(?:ms|sn|saniye|dk|dakika|sa|saat|kb|mb|gb|px|%)"
+B = r"(?:[^\W\d_]+|%)"   # her birim: zaman/boyut/piksel/yüzde ve sayılan şey (puan, istek, hata…) — dar sözlük göz tur 1 bulgusu
 S = r"\d+(?:[.,]\d+)?"
 DESEN = [rf"(?:≤|<=|<|≥|>=|>)\s*{S}\s*{B}(?!\w)",
          rf"(?<!\w)en\s+(?:çok|az|fazla)\s+{S}\s*{B}(?!\w)",
@@ -257,9 +257,9 @@ olcum_yeri_gecerli() {  # olcum_yeri_gecerli <değer> → rc 0: yer adı (yerel|
   python3 - "$1" <<'PY'
 import re, sys
 y = sys.argv[1].lower()
-yer = re.search(r"(?<!\w)(yerel|ci|canlı|canli)(?!\w)", y)
-if not yer: raise SystemExit(1)
-if yer.group(1) in ("canlı", "canli"): raise SystemExit(0)
+yerler = {("canlı" if m == "canli" else m) for m in re.findall(r"(?<!\w)(yerel|ci|canlı|canli)(?!\w)", y)}
+if len(yerler) != 1: raise SystemExit(1)   # yok ya da birden çok yüzey ('canlı, CI') belirsiz: tek yer adı şart
+if "canlı" in yerler: raise SystemExit(0)
 raise SystemExit(0 if re.search(r"\d+\s*(?:çekirdek|cekirdek|vcpu|core)", y) else 1)
 PY
 }
