@@ -23,7 +23,7 @@
 #   pr-kip-olc.sh <pr-no> <dosya-yolu> [--depo <kök>]
 #   pr-kip-olc.sh --fark <dosya> <dosya-yolu>      # hazır diff metninden (sınav/çevrimdışı)
 #
-# ÇIKIŞ: 0 = yalnız KİP (çakışma sayılmaz, uyarı yeter) · 1 = GERÇEK dokunuş (çakışma)
+# ÇIKIŞ: 0 = yalnız KİP, TAM çift 100644 → 100755 (çakışma sayılmaz, uyarı yeter) · 1 = GERÇEK dokunuş (çakışma)
 #        3 = ÖLÇÜLEMEDİ (gh yok · diff alınamadı · bölüm bulunamadı) — "temiz" DEĞİL
 set -uo pipefail
 BURASI="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -83,6 +83,10 @@ if [ -z "$BOLUM" ]; then
 fi
 
 hunk=$(printf '%s\n' "$BOLUM" | grep -c '^@@' || true)
+# Kip İNDİRİMİ yalnız TAM bir çifte verilir (göz #337 tur 1, kart pr-kip-olcer): tek bir `old mode`/`new mode` satırı
+#   ya da 100644→100755 dışındaki bir çift (ters yön · sembolik bağ 120000 · alt modül 160000) "yalnız kip" SAYILMAZ.
+eski_kip=$(printf '%s\n' "$BOLUM" | sed -n 's/^old mode \([0-7]\{6\}\)$/\1/p')
+yeni_kip=$(printf '%s\n' "$BOLUM" | sed -n 's/^new mode \([0-7]\{6\}\)$/\1/p')
 kip=$(printf '%s\n' "$BOLUM" | grep -cE '^(old|new) mode [0-7]{6}$' || true)
 adlandirma=$(printf '%s\n' "$BOLUM" | grep -cE '^(rename|copy) (from|to) ' || true)
 ikili=$(printf '%s\n' "$BOLUM" | grep -cE '^(Binary files|GIT binary patch)' || true)
@@ -101,7 +105,13 @@ if [ "$ikili" -gt 0 ]; then
   echo "GERÇEK: '$YOL' ikili dosya olarak değişiyor — hunk görünmez, değişiklik gerçek"; exit 1
 fi
 if [ "$kip" -gt 0 ]; then
-  echo "YALNIZ KİP: '$YOL' — dosya izni değişiyor, içerik farkı YOK (satır: 0)"; exit 0
+  if [ "$kip" -ne 2 ] || [ "$(printf '%s\n' "$eski_kip" | grep -c .)" -ne 1 ] || [ "$(printf '%s\n' "$yeni_kip" | grep -c .)" -ne 1 ]; then
+    echo "ÖLÇÜLEMEDİ: '$YOL' kip bölümü EKSİK/bozuk (old='${eski_kip//$'\n'/,}' new='${yeni_kip//$'\n'/,}') — 'zararsız' SAYILMAZ" >&2; exit 3
+  fi
+  if [ "$eski_kip" = 100644 ] && [ "$yeni_kip" = 100755 ]; then
+    echo "YALNIZ KİP: '$YOL' — 100644 → 100755 (çalıştırma biti), içerik farkı YOK (satır: 0)"; exit 0
+  fi
+  echo "GERÇEK: '$YOL' kip $eski_kip → $yeni_kip — indirim yalnız 100644 → 100755 içindir (fail-closed)"; exit 1
 fi
 
 # Buraya düşmek: hunk yok, kip yok, rename yok, binary yok, silme yok. Tanımadığımız bir hâl.

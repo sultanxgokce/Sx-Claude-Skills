@@ -168,5 +168,21 @@ kapi "kaçışlı Türkçe yol · içerik → rc=1" 1 "$T/kacisli-icerik.diff" "
 kapi "kaçışlı yolda kısmi ad TUTMAZ → rc=3" 3 "$T/kacisli.diff" "dosyası.sh"
 
 echo "────────────────────────────────────────────"
+# ── kip ÇİFTİ (göz #337 tur 1, kart pr-kip-olcer): indirim yalnız TAM 100644 → 100755 çiftine ────────────────
+printf 'diff --git a/ters.sh b/ters.sh\nold mode 100755\nnew mode 100644\n' > "$T/ters.diff"
+printf 'diff --git a/tek.sh b/tek.sh\nold mode 100644\n' > "$T/tek.diff"
+printf 'diff --git a/bag.sh b/bag.sh\nold mode 100644\nnew mode 120000\n' > "$T/bag.diff"
+kapi "ters yön 100755 → 100644 → rc=1 (indirim yok)" 1 "$T/ters.diff" "ters.sh"
+icerir "ters yönün kip çifti çıktıda söyleniyor" "kip 100755 → 100644"
+kapi "tek 'old mode' satırı (çift eksik) → rc=3" 3 "$T/tek.diff" "tek.sh"
+kapi "100644 → 120000 (sembolik bağ) → rc=1" 1 "$T/bag.diff" "bag.sh"
+kapi "doğru çift 100644 → 100755 hâlâ rc=0" 0 "$T/yalniz-kip.diff" "yazilim-fabrikasi/scripts/one.sh"
+# MUTASYON (geçici kopya): eski "kip satırı sayısı > 0 → rc 0" mantığı geri gelirse ters yön yeşile döner
+M="$T/mut"; mkdir -p "$M"; cp "$BURASI/pr-kip-olc.sh" "$BURASI/bolum-ayikla.py" "$M/"
+python3 - "$M/pr-kip-olc.sh" <<'PYM'
+import sys; f=sys.argv[1]; s=open(f,encoding="utf-8").read(); a='  if [ "$eski_kip" = 100644 ] && [ "$yeni_kip" = 100755 ]; then'; assert s.count(a)==1; open(f,"w",encoding="utf-8").write(s.replace(a,'  if true; then'))
+PYM
+bash "$M/pr-kip-olc.sh" --fark "$T/ters.diff" "ters.sh" >/dev/null 2>&1; [ $? -eq 0 ] && { printf '  ✓ %s\n' "mutant (çift denetimi yok): ters yön rc 0 döndü → üstteki kapı bu mutantta düşerdi"; GECTI=$((GECTI+1)); } || { printf '  ✗ %s\n' "mutant geçersiz: çift denetimi kaldırılınca bile ters yön rc 0 değil"; KALDI=$((KALDI+1)); }
+
 printf 'TOPLAM: %d geçti · %d kaldı\n' "$GECTI" "$KALDI"
 [ "$KALDI" = "0" ] || exit 1
