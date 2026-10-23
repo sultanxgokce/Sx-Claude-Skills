@@ -1,0 +1,93 @@
+{
+  "is": "kapsam-kapisi-hunk",
+  "arac": "kanit.py/0.3.0",
+  "guncelleme": "2026-10-15T18:03:19+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "ONCE-kapi-YOL-karsilastiriyor-kip-only-PR-alani-bloklamis-BEKLENEN-KIRMIZI",
+      "asama": "once",
+      "dosya": "olcum-ONCE-kapi-YOL-karsilastiriyor-kip-only-PR-alani-bloklamis-BEKLENEN-KIRMIZI-once.txt",
+      "sha256": "4673d6e4caf256a5817f4b32edb4e380ff820fc1f8b4e529b82015327acc35c7",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/projects/Sx-Claude-Skills && bash /config/.claude/skills/yazilim-fabrikasi/scripts/is-alani.sh ac olcum-denemesi --dosyalar ui-tasarim-akisi/arac/yogunluk-denetle.test.sh"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T18:01:21+03:00",
+      "sure_sn": 0.0
+    },
+    {
+      "tur": "olcum",
+      "etiket": "SONRA-arac-16-kapi-cift-yonlu",
+      "asama": "sonra",
+      "dosya": "olcum-SONRA-arac-16-kapi-cift-yonlu-sonra.txt",
+      "sha256": "57d785a8a3b643dc87296598f25b2505db3d2998dfd3bfdebd93b47c0358c635",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/pr-kip-olc.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:01:21+03:00",
+      "sure_sn": 0.2
+    },
+    {
+      "tur": "olcum",
+      "etiket": "CANLI-KONTROL-PR326-kip-only-dosya-rc0",
+      "asama": "sonra",
+      "dosya": "olcum-CANLI-KONTROL-PR326-kip-only-dosya-rc0-sonra.txt",
+      "sha256": "8b7435f402cee64ac8cebda9d172f7a69ab420f79b4d3c131e4551a30c13c5ee",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/pr-kip-olc.sh",
+        "326",
+        "ui-tasarim-akisi/arac/yogunluk-denetle.test.sh",
+        "--depo",
+        "/config/projects/Sx-Claude-Skills"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:01:22+03:00",
+      "sure_sn": 0.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "CANLI-KONTROL-PR326-icerik-degisen-dosya-rc1-BEKLENEN-KIRMIZI",
+      "asama": "sonra",
+      "dosya": "olcum-CANLI-KONTROL-PR326-icerik-degisen-dosya-rc1-BEKLENEN-KIRMIZI-sonra.txt",
+      "sha256": "f17cceff12ee698cef3ca2d64122aa927e61f77021807ac04f20a6871f23d042",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/pr-kip-olc.sh",
+        "326",
+        "kabuk-biti.test.sh",
+        "--depo",
+        "/config/projects/Sx-Claude-Skills"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-15T18:01:23+03:00",
+      "sure_sn": 0.9
+    },
+    {
+      "tur": "olcum",
+      "etiket": "DUZELTME-onceki-ONCE-kaydi-GECERSIZDI-kapiya-varmadan-dustu-bu-kayit-onun-yerine",
+      "asama": "once",
+      "dosya": "olcum-DUZELTME-onceki-ONCE-kaydi-GECERSIZDI-kapiya-varmadan-dustu-bu-kayit-onun-yerine-once.txt",
+      "sha256": "debab036d6002cf2c038d3b13a70ccfa739236288e9b5fb6e22e57b16aef6402",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/projects/Sx-Claude-Skills; echo \"--- 1) ESKI KAPININ GORDUGU (gh pr diff --name-only): dosya LISTEDE ---\"; gh pr diff 326 --name-only | grep -F \"ui-tasarim-akisi/arac/yogunluk-denetle.test.sh\"; echo \"rc_name_only=$?\"; echo \"--- 2) GERCEK (yeni arac): ayni dosyada SATIR farki ---\"; bash /config/projects/_wt/Sx-Claude-Skills-kapsam-kapisi-hunk/yazilim-fabrikasi/scripts/pr-kip-olc.sh 326 ui-tasarim-akisi/arac/yogunluk-denetle.test.sh --depo /config/projects/Sx-Claude-Skills; echo \"rc_kip_olc=$?\"; echo \"--- KUSUR: eski kapi (1) ile karar veriyordu, (2) sifir satir diyor ---\""
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-15T18:03:19+03:00",
+      "sure_sn": 2.3
+    }
+  ],
+  "imza": "c978d47b02788b8602e1e93f18c700377eb8ba89fa14cf01dde0d08b4b7d4670"
+}

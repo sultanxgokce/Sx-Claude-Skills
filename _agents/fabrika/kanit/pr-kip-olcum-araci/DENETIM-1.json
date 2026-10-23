@@ -1,0 +1,43 @@
+{
+  "tur": 1,
+  "is": "pr-kip-olcum-araci",
+  "pr": "",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-15T18:06:00+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19510,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Ayrı ölçüm aracı teslim edilmiş; yalnız kip değişikliğini rc=0, içerik ve tehlikeli hunk’sız durumları rc=1, ölçülemeyen durumları rc=3 ile ayırıyor ve kapıya bağlanmıyor. Ana davranış canlı PR ve 16 çift yönlü sınavla destekli, fakat boş seçenek değerleri kabuk hatasına düşüyor ve Git’in tırnakladığı özel karakterli yollar ölçülemiyor; önce bu dayanıklılık açıkları çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Değer isteyen --depo ve --fark seçenekleri değer yokken denetlenmiyor; set -u altında $2 erişimi aracın tanımlı kullanım/ölçüm sonucuna değil kabuk hatasına ve beklenmedik çıkış koduna yol açar.",
+        "kanit": "Seçenek dalları doğrudan DEPO=\"$2\" ve FARK_DOSYA=\"$2\" okuyup shift 2 yapıyor; öncesinde $# >= 2 kontrolü yok. Sınavın 16 maddesinde eksik seçenek değeri vakası bulunmuyor.",
+        "konum": "yazilim-fabrikasi/scripts/pr-kip-olc.sh:41-42; yazilim-fabrikasi/scripts/pr-kip-olc.test.sh:90-114",
+        "agirlik": "uygulama"
+      },
+      {
+        "ne": "Diff bölümünü boşlukla ayrılmış $3/$4 alanlarından çıkarma, Git’in boşluk veya özel karakter içeren yolları tırnaklayıp kaçışladığı diff başlıklarını çözemiyor; geçerli bir yalnız-kip dosyası rc=3'e düşebilir.",
+        "kanit": "Bölüm seçimi `a = $3; b = $4` ve ardından ham `a == yol || b == yol` karşılaştırmasına dayanıyor. Sınav fikstürlerinin tüm yolları boşluksuz ve tırnaksız; bu yol biçimi sınanmamış.",
+        "konum": "yazilim-fabrikasi/scripts/pr-kip-olc.sh:65-73; yazilim-fabrikasi/scripts/pr-kip-olc.test.sh:35-86",
+        "agirlik": "uygulama"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Canlı PR #326 üzerinde yalnız-kip için rc=0 ve içerik değişikliği için beklenen rc=1 çıktıları gerçekçi veri sağlıyor; ayrıca eski yol-temelli gözlem ile sıfır içerik farkı yan yana gösterilmiş. 16/16 çevrimdışı sınav çift yönlü ana sözleşmeyi kapsıyor, ancak eksik seçenek değeri ile tırnaklı/boşluklu Git yolları kanıtta ve sınavda yok."
+  }
+}

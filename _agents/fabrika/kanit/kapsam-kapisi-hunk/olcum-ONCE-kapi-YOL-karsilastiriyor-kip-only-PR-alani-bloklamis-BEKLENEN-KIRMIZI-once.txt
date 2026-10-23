@@ -1,0 +1,6 @@
+$ bash -c cd /config/projects/Sx-Claude-Skills && bash /config/.claude/skills/yazilim-fabrikasi/scripts/is-alani.sh ac olcum-denemesi --dosyalar ui-tasarim-akisi/arac/yogunluk-denetle.test.sh
+# rc=1 sure=0.0s zaman=2026-10-15T18:01:21+03:00
+--- stdout ---
+--- stderr ---
+✗ iş kartı yok: olcum-denemesi — önce: bash /config/.claude/skills/yazilim-fabrikasi/scripts/kart.sh ac olcum-denemesi --is "…" --istedi … --aldi … --geri-alinamaz/--para/--dis-yuzey/--yetki e|h|?
+✗   (kaçış: --kartsiz → kart cevapsız açılır ve Sultan'a gider)

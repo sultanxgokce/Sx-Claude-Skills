@@ -1,0 +1,6 @@
+$ bash -c T="$(mktemp -d)"; cd "$T"; git init -q .; printf "x\n" > "ölçüm dosyası.sh"; git add -A; git -c user.email=a@b -c user.name=c commit -qm ilk; chmod +x "ölçüm dosyası.sh"; git add -A; echo "git bu dosyayi diff basliginda boyle yaziyor:"; git diff --cached | head -1
+# rc=0 sure=0.1s zaman=2026-10-15T20:33:36+03:00
+--- stdout ---
+git bu dosyayi diff basliginda boyle yaziyor:
+diff --git "a/\303\266l\303\247\303\274m dosyas\304\261.sh" "b/\303\266l\303\247\303\274m dosyas\304\261.sh"
+--- stderr ---

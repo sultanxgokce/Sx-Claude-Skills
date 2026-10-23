@@ -1,0 +1,30 @@
+{
+  "tur": 2,
+  "is": "pr-kip-olcer",
+  "pr": "337",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T12:55:52+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 33721,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 30,
+    "bayt": 57993
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "İstenen bağımsız PR kip ölçeri, yol ayrıştırma yardımcısı ve çift yönlü sınav eklenmiş; yalnız tam 100644→100755 çifti rc 0, içerik/ad değiştirme/silme/ikili durumları rc 1 ve ölçülemeyen durumlar rc 3 veriyor. Önceki turun yanlış rc 0 açığı kapatılmış ve üretimi durduracak doğrulanabilir bir kusur kalmamış.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra çifti aracın origin/main üzerinde bulunmadığını, çalışma ağacında ise temel ayrımları doğru yaptığını gösteriyor; ayrıca gerçek ölçüm kaydı 32 sınavın tamamının geçtiğini ve önceki bulguya ait ters kip, eksik çift, sembolik bağ ve doğru çift vakalarının ayrı ayrı ölçüldüğünü gösteriyor. Çıktı içindeki mutant deneyi manifestte `mutasyon: true` olarak işaretli ayrı bir mutasyon kaydı değildir; bu nedenle onu mutasyon kanıtı saymıyorum, ancak gerçek kodun yeşil sınav sonucu ve doğrudan olumsuz vakalar yeterli kanıt sağlıyor."
+  }
+}
