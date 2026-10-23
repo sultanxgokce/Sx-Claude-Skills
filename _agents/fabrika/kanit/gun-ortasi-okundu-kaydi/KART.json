@@ -14,8 +14,13 @@
   "sultan": false,
   "kanit_nerede": "_agents/fabrika/kanit/gun-ortasi-okundu-kaydi",
   "oda": "",
-  "durum": "acik",
-  "gecmis": [],
+  "durum": "tikandi",
+  "gecmis": [
+    {
+      "zaman": "2026-10-23T06:18:28+03:00",
+      "olay": "tikandi"
+    }
+  ],
   "canli_gerekir": false,
   "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
   "kapsam_uyarilari": [],
@@ -26,6 +31,33 @@
       "zaman": "2026-10-23T05:46:28+03:00",
       "olay": "ac",
       "sonuc": "yazıldı"
+    },
+    {
+      "zaman": "2026-10-23T06:18:28+03:00",
+      "olay": "tikandi",
+      "sonuc": "yazıldı"
+    }
+  ],
+  "canli_kanit": "yok",
+  "bitis": "2026-10-23T06:18:28+03:00",
+  "pr": "",
+  "puan": {
+    "kod": 4,
+    "dogru": "E",
+    "tur": 3
+  },
+  "kanit_var": true,
+  "tikanma": {
+    "yol": "devam",
+    "neden": "Göz 3 tur: 3/E (2 bulgu) → 4/E (1) → 4/E (1); her tur bir bulgu kapandı, tur 3'te kalan tek bulgu yeni değil, aynı konunun son hâli: arayüz var-olabilirlik ön kontrolü (kaynakta komut adı grep'i) 'tahmin' sayılıyor. Çare somut ve küçük: ön kontrolü kaldır — kurye-yokla.sh varken okundu-liste → okundu-yolu doğrudan sorulur, cevap doğrulanır, ikisi de düşerse ölçemedim (okundu.log yalnız kuryesiz kutuda). Canlı hedef zaten ölçüldü (mihenk gelen 86→0). Tur 4 bunu kapatır; yol: devam."
+  },
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "BANI",
+      "oturum": "session_01Ge4BawKcUrcm1pdV8WANyF · aile-sinyal e0b179762732 · SERDAR 08:34",
+      "gerekce": "SERDAR reis kararı 23 Eki 08:34 (zil): Sx #434 TIKANDI → DEVAM +1 tur — \"3→4→4, tek bulgu\"",
+      "zaman": "2026-10-23T08:49:14+03:00"
     }
   ]
 }
