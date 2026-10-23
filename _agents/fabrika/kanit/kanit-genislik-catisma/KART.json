@@ -1,0 +1,35 @@
+{
+  "is": "kanit-genislik-catisma",
+  "cumle": "kanit.sh ekran --genislik, --uc-boy ya da --boylar ile birlikte verilince rc 2 ile reddedilir (hangisi geçerli belirsiz); tek boy kipinde --genislik verilmezse 1280 kalır",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-23T09:32:04+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M54D1PAG435JDEM0Z9M4PZV4",
+  "tahmin_dk": 30,
+  "sayi_uyarilari": [
+    "2 ile",
+    "1280 kalır"
+  ],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-23T09:32:04+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
