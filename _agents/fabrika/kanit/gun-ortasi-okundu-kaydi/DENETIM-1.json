@@ -1,0 +1,45 @@
+{
+  "tur": 1,
+  "is": "gun-ortasi-okundu-kaydi",
+  "pr": "434",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T05:57:48+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 28719,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "İstenen akış eklenmiş ve önce kırılan T5d–T5g kapıları son ölçümde 39/39 geçmiştir. Ancak kurye arayüzü gerçekten çağrılarak sınanmak yerine betik metnindeki iki yazım kalıbıyla tahmin edildiği için geçerli kutularda yanlış eski-yol davranışına düşebilir; önce bu uygulama sorununu çöz.",
+    "bulgular": [
+      {
+        "ne": "Arayüz desteği, kutuya komutu sorarak değil kurye-yokla.sh kaynak metninde iki sözdizimi kalıbı aranarak tahmin ediliyor. Tek tırnak, yardımcı fonksiyon veya başka geçerli komut yönlendirmesi kullanan bir kurye yanlışlıkla desteksiz sayılır; üstelik kurye dosyası mevcutken eski okundu.log yoluna düşülmesi, kartın yalnız kurye-yokla.sh olmayan kutu için istediği geriye uyumluluk sınırını aşar.",
+        "kanit": "Değişiklikte dallanma `[ -f \"$KY\" ] && grep -qE '\"okundu-liste\"|okundu-liste\\)' \"$KY\"` ve benzeri `okundu-yolu` metin taramasına bağlı; son `else` doğrudan eski okundu.log biçimini okuyor. T5d–T5f fikstürleri de yalnız bu regexlerin tanıdığı çift tırnak/case biçimlerini kullanıyor; alternatif geçerli arayüz yazımlarını veya kurye mevcut fakat komut yok durumunu ölçmüyor.",
+        "konum": "gun-ortasi/scripts/kalan.sh:147; gun-ortasi/scripts/kalan.test.sh:T5d–T5g",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "okundu-yolu komutu başarıyla dönse bile bildirdiği dosya yoksa ya da okunamıyorsa durum ölçülemedi yapılmıyor; boş okunan listesiyle bütün mektuplar okunmamış sayılıyor.",
+        "kanit": "`[ \"$sorgu_rc\" -eq 0 ] && [ -f \"$OK\" ] && okunan=\"$(cut -f1 \"$OK\" 2>/dev/null)\"` satırı eksik/okunamayan dosyada `sorgu_rc` değerini değiştirmiyor; sonraki `if [ \"$sorgu_rc\" -ne 0 ]` dalı atlanarak mektupları sayan döngü çalışıyor. T5e yalnız var olan `.okundu` dosyasını ölçüyor.",
+        "konum": "gun-ortasi/scripts/kalan.sh:154-163; gun-ortasi/scripts/kalan.test.sh:T5e",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Hedef sınav için kırmızı önce/yeşil sonra ölçüm çifti var ve son çıktı 39 geçti, 0 kaldı gösteriyor; ayrıca iki depo denetimi yeşil. Kanıt temel senaryoları güçlü biçimde doğruluyor, fakat sınavlar uygulamadaki kaynak-metin sezgisini aynen taklit ettiği ve okundu-yolu tarafından döndürülen eksik/okunamayan yolu sınamadığı için yukarıdaki kenarları kapsamıyor."
+  }
+}

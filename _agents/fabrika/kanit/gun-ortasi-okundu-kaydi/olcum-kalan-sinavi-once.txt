@@ -1,0 +1,51 @@
+$ timeout 300 bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/go/taban/gun-ortasi/scripts/kalan.test.sh
+# rc=1 sure=50.2s zaman=2026-10-23T09:18:33+03:00
+--- stdout ---
+  🟢 T1 rc=0 ve #OZET satırı var
+  🟢 T2 açık kart 1 · tıkandı ayrı 1 · bozuk JSON sayılmaz, ölçemedim der
+  🟢 T3 konum çapasından 'Açık' ve 'SARI' (2), 'bitti' değil
+  🟢 T4 göz md: son rapor; kapandı düşer; KISMEN + ### başlık açık → 3 (N1,N3,N4); eski tur N9 yok
+  🟢 T4c bölüm başlıkları ('## NOT-1 (…) — görüşüm', '## B1 doğrulaması') bulgu sayılmaz
+  🟢 T4b göz json: 3·H açık (1) · daha yeni 5·E json eski md'yi ezer · 5·E+BİLGİ açık değil → toplam 4
+  🟢 T5 gelen: TAM ad eşleşmesi (BA okundu, A okunmadı) + 40 günlük mektup da sayılır → 2
+  🟢 T15 #OZET olcemedim basılan satır sayısına eşit · alanların hiçbiri boş değil
+  🟢 T6 hedef: ANA-HEDEF ve CLAUDE.md Amaç basılır
+  🟢 T7 ölçülemeyen alan ? basar, 0 değil (çıpa, layiha, kapımda)
+  🟢 T8 salt-okur: kutu dokunulmadı
+  🟢 T9 pencere dışındaki çapa sayılmaz; '?' basar (ölçemedim)
+  🟢 T9b pencere genişletilince sayılır
+  🟢 T10 sayı olmayan pencere → rc=2
+  🟢 T11 gerçek çıpa: [x] kapalı (notunda 'bekliyor' geçse de) · [~] ve [ ] açık → 2/1
+  🟢 T16 1. bölüm /gunluk-plan'ın KUTULU tablosunu basar (madde · sahip · durum işareti · kanıt)
+  🟢 T17 ayrıştırıcı yoksa çıpa sayımı ? + ölçemedim (sessiz yedek sayım yok)
+  🟢 T11c başka klasörden çağrıda kutunun çıpası okunur → 2/1
+  🟢 T11b başka günün çıpası sayılmaz → ? ve ölçemedim
+  🟢 T14 cipa-ekle: rc=0 · 5 madde · sabah [x] korundu · 4. madde G1 · tazele 4 çalışır
+  🟢 T14c tekrar ekleme çoğaltmaz (5) · geri-al rc=0 · geri alınan açık sayılmaz (açık 2: [~]B,[ ]C; G1 kapandı, G2 geri)
+  🟢 T14d eşleşmeyen geri-al rc=1 · değersiz bayrak rc=2 (döngü yok) · boş liste rc=2
+  🟢 T14e çıpanın '## Not' bölümü ve yazıldı satırı korunur, maddeler Not'tan önce
+  🟢 T14f geri alınan yeniden açılır · '2)' ve 'G' ret (rc=2) · etiketsiz plan ret · sabah 2. madde [~] kaldı
+  🟢 T14h aynı etiket farklı metin → rc=2, sabahki G1 dokunulmadı
+  🟢 T14g ortak kilit tutulurken ekle BEKLER (≥1500 ms) · '→' içeren madde bir kez
+  🟢 T14j kilit beklenirken çıpa başka güne dönerse YAZMAZ (rc=1)
+  🟢 T14i araç yoksa rc=1 + sebep söylenir (tahminle yazmaz)
+  🟢 T14b cipa-ekle eski çıpaya ve çıpasız kutuya YAZMAZ (rc=1/1)
+  🟢 T12 sayım kırpmadan önce (15) ve kırpılan söylenir (+5)
+  🟢 T13 kapımda hata → ? ve ölçemedim (rc=7)
+  🟢 T16a araç var, çıpa yok → cipa_acik ? ve ölçemedim satırı
+  🟢 T16 beş kaynağın her biri kaldırılınca alanı '?' ve olcemedim +1
+  🟢 T5b büyük okundu kaydı (>64K, eşleşme başta ve sonda): A ve BA okundu sayılır → gelen 1 (yalnız ESKI)
+  🟢 T5c büyük çıpa (>64K, başlık başta) tarih kapısını geçer — 'bugüne ait değil' DENMEZ, sonraki adıma (tablo) ulaşır
+  🔴 T5d kayıt .okundu'dan OKUNUR (kurye koşturulmaz): BA okunmuş, A (özeti tutmaz) ve ESKI okunmamış → gelen 2; 'okundu.log yok' DENMEZ; not kaynağı ve sayıları söyler; kanarya 0 — beklenen [2/0/1/0/1/0] görülen [3/1/1/0/0/0]
+  🟢 T5d2 ölçüm .okundu'yu DEĞİŞTİRMEZ (yan etki yok): dosya özeti önce = sonra
+  🔴 T5e md5 özetli kayıt + yalın ad kaydı: BA ve A okunmuş → yalnız ESKI → gelen 1; kanarya 0 — beklenen [1/1/0/0/0] görülen [3/1/1/1/0]
+  🔴 T5f aynı ad için son özetli kayıt kazanır: A okunmuş, BA okunmamış → gelen 2 (BA, ESKI); not '2 ad · 1 okunmuş' — beklenen [2/0/1/1] görülen [3/1/1/0]
+  🔴 T5h tanınmayan özet biçimi (blake3) okunmuş sayılmaz: BA ve ESKI okunmamış → gelen 2; not '1 kayıt tanınmayan özet biçiminde — okunmuş sayılmadı' — beklenen [2/1/1] görülen [3/1/0]
+  🔴 T5i .okundu dizin (okunamaz) → gelen '?' ve ölçemedim +1; hiçbir mektup '•' ile basılmaz; kanarya 0 — beklenen [?/5/0/0] görülen [3/4/3/0]
+  🔴 T5k kurye var, .okundu yok, okundu.log yok → üçü de okunmamış (3) + not 'okundu damgası yok … koşturulmadı … bakılmadı'; ölçemedim artmaz; kanarya 0 — beklenen [3/1/4/0] görülen [3/0/4/0]
+  🔴 T5l kurye var, .okundu yok, okundu.log var → yine 3 okunmamış (BA dahil); okundu.log'daki BA bilgisi KULLANILMAZ; not bakılmadığını söyler; kanarya 0 — beklenen [3/1/1/0] görülen [2/0/0/0]
+  🔴 T5m kurye yok, .okundu var → .okundu okunur: BA ve A okunmuş → gelen 1; not '.okundu dosyasından okundu' — beklenen [1/1] görülen [3/0]
+  🟢 T5n pozitif kontrol: kanarya kurye elle çağrılınca iz bırakır (1) ve .okundu'yu 3 satıra yeniden yazar — yan etki görünür
+  🔴 T5g kayıt da kurye-yokla.sh de yok: üçü de okunmamış (3) ve not 'okundu kaydı yok … kurye-yokla.sh de yok' — beklenen [3/1] görülen [3/0]
+── SONUÇ: geçti=37 kaldı=9 ölçemedim=0 ──
+--- stderr ---

@@ -412,9 +412,13 @@ def cmd_ekran(a):
         hata(f"--gelen bir kutu adı olmalı (küçük harf/rakam/tire, ör. nexus): {a.gelen!r}", 2)
     boylar = UC_BOY if a.uc_boy else tuple(a.boylar) if a.boylar else None
     if not boylar:
-        sys.exit(_ekran_tek(a, a.etiket, a.genislik))
+        sys.exit(_ekran_tek(a, a.etiket, a.genislik if a.genislik is not None else 1280))
     if a.uc_boy and a.boylar:
         hata("--uc-boy ile --boylar birlikte verilmez (hangisi?)", 2)
+    # göz #433 tur 3 rötuşu: --genislik çoklu boyla birlikte sessizce yok sayılıyordu (varsayılan 1280 olduğu için verildiği
+    #   bile anlaşılmıyordu). Varsayılan artık boş; verildiyse ve çoklu boy da istendiyse hangisinin geçerli olduğu belirsiz → rc 2.
+    if a.genislik is not None:
+        hata("--genislik ile --uc-boy/--boylar birlikte verilmez (tek boy mu, çoklu mu?)", 2)
     sonuc = [(g, _ekran_tek(a, f"{a.etiket}-{g}", g)) for g in boylar]
     rcs = [rc for _, rc in sonuc]
     rc = 2 if 2 in rcs else 3 if 3 in rcs else (max(rcs) if any(rcs) else 0)
@@ -854,7 +858,7 @@ def main():
     p.add_argument("--depo")
     s = p.add_subparsers(dest="cmd", required=True)
     o = s.add_parser("olcum"); o.add_argument("is_adi"); o.add_argument("etiket"); o.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); o.add_argument("--boru-izin", dest="boru_izin", default=None); o.add_argument("--mutasyon", dest="mutasyon", default=None, metavar="GERCEK_ETIKET"); o.set_defaults(f=cmd_olcum)
-    e = s.add_parser("ekran"); e.add_argument("is_adi"); e.add_argument("etiket"); e.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); e.add_argument("--url", required=True); e.add_argument("--urun-imi"); e.add_argument("--bekle", help="kare almadan önce beklenecek öğenin CSS SEÇİCİSİ (süre DEĞİL)"); e.add_argument("--genislik", type=int, default=1280)
+    e = s.add_parser("ekran"); e.add_argument("is_adi"); e.add_argument("etiket"); e.add_argument("--asama", default="sonra", choices=["once", "sonra", "tek"]); e.add_argument("--url", required=True); e.add_argument("--urun-imi"); e.add_argument("--bekle", help="kare almadan önce beklenecek öğenin CSS SEÇİCİSİ (süre DEĞİL)"); e.add_argument("--genislik", type=int, default=None, help="tek boy genişliği (verilmezse 1280)")
     e.add_argument("--uc-boy", action="store_true", help="1440 · 1280 · 390 — her boy ayrı kayıt (etiket-<boy>)"); e.add_argument("--boylar", type=_boylar, help="virgüllü genişlik listesi")
     e.add_argument("--gelen", metavar="KUTU", help="yeşil kareleri Sultan'ın gelen klasörüne <kutu>_<iş>-kare-… adıyla kopyala"); e.set_defaults(f=cmd_ekran)
     d = s.add_parser("dosya"); d.add_argument("is_adi"); d.add_argument("etiket"); d.add_argument("yol"); d.add_argument("--asama", default="tek"); d.set_defaults(f=cmd_dosya)
