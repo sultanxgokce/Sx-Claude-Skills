@@ -52,7 +52,9 @@ kapi('S2b altbilgi ("Enter to select · …") ve şık açıklamaları soru metn
 const c = soruCoz('⏺ Kurulumu bitirdim.\nDo you want to continue with the migration? (y/n)');
 kapi('S3 numarasız soru → tur serbest, şık yok', c && c.tur === 'serbest' && c.siklar.length === 0 && c.metin.includes('migration'), JSON.stringify(c));
 kapi('S4 soru metni çıkmayan ekran → null (uydurulmaz)', soruCoz('⏺ Bitti.\nhiçbir soru yok burada') === null && soruCoz('') === null);
-kapi('S5 tek başına "3. foo" (1 numaraya inmeyen) menü sayılmaz', (() => { const x = soruCoz('⏺ x\nBir şey?\n  3. foo'); return !x || x.tur !== 'menu'; })());
+kapi('S5 numaralı şık var ama menü geçersiz → null, "serbest" DEĞİL (göz #440 tur 2): 1\'e inmeyen "3. foo" · tek "❯ 1. Yes" · arası kopuk "1." "3."',
+  soruCoz('⏺ x\nBir şey?\n  3. foo') === null && soruCoz('⏺ x\nDo you want to proceed?\n❯ 1. Yes') === null && soruCoz('⏺ x\nDo you want to proceed?\n❯ 1. Yes\n  3. No') === null);
+kapi('S5b numarasız soru yine serbest (S5 düzeltmesi serbest yolu kapatmadı)', (soruCoz('⏺ x\nDo you want to proceed? (y/n)') || {}).tur === 'serbest');
 const uzun = soruCoz('⏺ x\n' + 'ğüşıöç '.repeat(80) + 'Do you want to proceed?\n❯ 1. ' + 'Evet '.repeat(40) + '\n  2. Hayır\n  3. a\n  4. b\n  5. c\n  6. d\n  7. e\n  8. f');
 kapi('S6 metin ≤300 kod noktası (Türkçe harfle), şık metni ≤80, şık ≤6', uzun && Array.from(uzun.metin).length <= 300 && uzun.siklar.length === 6 && uzun.siklar.every((x) => Array.from(x.metin).length <= 80), uzun && Array.from(uzun.metin).length + '/' + uzun.siklar.length);
 

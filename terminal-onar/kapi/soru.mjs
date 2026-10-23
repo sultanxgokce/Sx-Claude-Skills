@@ -60,6 +60,9 @@ export function soruCoz(ekran) {
       if (!metin) return null;
       return { tur: 'menu', metin, siklar: siklar.slice(0, SIK_TAVAN).map((s) => ({ no: s.no, metin: kes(sirSuz(sik(s.metin)), SIK_METIN_TAVAN) })) };
     }
+    // numaralı şık satırı VAR ama geçerli menü (1'den başlayan en az iki ardışık şık) çıkmadı → ekran OKUNAMADI; "serbest" sayılmaz (serbest = şık
+    //   yok). Tek "❯ 1." ya da 1'e inmeyen "3." gören çözümleyici soruyu yanlış türle sunardı (göz #440 tur 2) — alan yazılmaz.
+    return null;
   }
   let q = -1; for (let i = bolge.length - 1; i >= 0; i--) if (SERBEST.test(bolge[i])) { q = i; break; }
   if (q < 0) return null;
