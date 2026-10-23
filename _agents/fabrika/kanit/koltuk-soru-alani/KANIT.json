@@ -1,0 +1,174 @@
+{
+  "is": "koltuk-soru-alani",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T15:35:39+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-bagla-sinavi",
+      "asama": "once",
+      "dosya": "olcum-koltuk-bagla-sinavi-once.txt",
+      "sha256": "b0ae6ae3e1f559dcb7341f9605c7d57cbc3231bd8985f9e3d226825fb054040a",
+      "komut": [
+        "bash",
+        "-c",
+        "timeout 300 bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/k1/taban/terminal-onar/scripts/koltuk-bagla.test.sh < /dev/null"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T15:33:04+03:00",
+      "sure_sn": 23.3,
+      "boru_denetimi": "temiz",
+      "olcum_id": "3e95c916c3874c5797afc6557f1cc07e"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-bagla-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-bagla-sinavi-sonra.txt",
+      "sha256": "4bc378fa81c6d86bcc04e488ac8a05d2004114acc4776828ac66390d6ca66460",
+      "komut": [
+        "bash",
+        "-c",
+        "timeout 300 bash /config/projects/_wt/Sx-Claude-Skills-koltuk-soru-alani/terminal-onar/scripts/koltuk-bagla.test.sh < /dev/null"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T15:33:39+03:00",
+      "sure_sn": 34.6,
+      "boru_denetimi": "temiz",
+      "olcum_id": "b4e6969fbd7747a59b685dc0edd2fec2"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "soru-sinavi",
+      "asama": "once",
+      "dosya": "olcum-soru-sinavi-once.txt",
+      "sha256": "4723be92a1d4ca8a022e5fc25e75e28e69ad0700c898f3a669b27d5f74c9f98c",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/k1/taban/terminal-onar/kapi && timeout 120 node soru.test.mjs < /dev/null"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T15:33:40+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "607e15ff52a442f9b4dffd73b90f4b15"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "soru-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-soru-sinavi-sonra.txt",
+      "sha256": "c249dc58e31ffb952f07aef135fa881a82cde3644d804df1f5d8159430d70767",
+      "komut": [
+        "bash",
+        "-c",
+        "cd /config/projects/_wt/Sx-Claude-Skills-koltuk-soru-alani/terminal-onar/kapi && timeout 120 node soru.test.mjs < /dev/null"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T15:33:40+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "temiz",
+      "olcum_id": "bb04586c9bc443af9fcb37ad2f89ff9f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapi-sinavi-regresyon",
+      "asama": "sonra",
+      "dosya": "olcum-kapi-sinavi-regresyon-sonra.txt",
+      "sha256": "6d9d370c5c906566e893f28f9a72b44a9ee164daef63993a102cc043c2394623",
+      "komut": [
+        "bash",
+        "-c",
+        "timeout 600 bash /config/projects/_wt/Sx-Claude-Skills-koltuk-soru-alani/terminal-onar/kapi/kapi-sinav.test.sh < /dev/null"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T15:34:23+03:00",
+      "sure_sn": 43.2,
+      "boru_denetimi": "temiz",
+      "olcum_id": "216c3ac366c841488363180d91d6fcce"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "koltuk-fark-regresyon",
+      "asama": "sonra",
+      "dosya": "olcum-koltuk-fark-regresyon-sonra.txt",
+      "sha256": "3a815fe11b3b5fb6deb0c7c3d9cd07b90dcb6fd01f3626faabaef51fd2b719f4",
+      "komut": [
+        "bash",
+        "-c",
+        "timeout 300 bash /config/projects/_wt/Sx-Claude-Skills-koltuk-soru-alani/terminal-onar/kapi/koltuk-fark.test.sh < /dev/null"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T15:35:39+03:00",
+      "sure_sn": 76.2,
+      "boru_denetimi": "temiz",
+      "olcum_id": "6550245d7cd440beb9fe3af6000810f7"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-parity-strict",
+      "asama": "sonra",
+      "dosya": "olcum-ci-parity-strict-sonra.txt",
+      "sha256": "f05a2f88f1a88e9ef4b4665d4719c407415f67fefc222fa98702cc0f409f653e",
+      "komut": [
+        "node",
+        "ahi/schema/validate-repo.mjs",
+        ".",
+        "--strict"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T15:35:39+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "480a5a343a874c83bb864cd0ba215c46"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-version-lint",
+      "asama": "sonra",
+      "dosya": "olcum-ci-version-lint-sonra.txt",
+      "sha256": "b2f86563f5c29e0ca9a75c4f6561ec680d491d43ad65a089419964a3fc7ff9d9",
+      "komut": [
+        "node",
+        "ahi/schema/version-lint.mjs",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T15:35:39+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "10e34f18664c4d0aaf5fba3fb0b30210"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "soru-sinavi-mutant-gecersiz-menu",
+      "asama": "sonra",
+      "dosya": "olcum-soru-sinavi-mutant-gecersiz-menu-sonra.txt",
+      "sha256": "5984a9bea92ae4573d60ed701a8bbae71bd7d4a63cda2c08fd40eef67f5ebf3f",
+      "komut": [
+        "bash",
+        "/tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/k1/mutant-s5.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-koltuk-soru-alani"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-23T15:33:40+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "mutasyon": true,
+      "gercek_olcum": "soru-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "3a00946ad4354268af5614d57b1b2ea8"
+    }
+  ],
+  "imza": "5ace4721b38c9421a9eb061d60e56f70abc401036f6fdda11c12e505a3909698"
+}

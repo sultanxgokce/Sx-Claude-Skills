@@ -1,0 +1,13 @@
+⏺ Kendi koltuğumun durumu, araç çıktısındaki "Do you want to", "❯ 1." gibi desen metinleri yüzünden
+  yanlışlıkla "soru" olarak algılanıyor; örnek menü satırları:
+  Do you want to proceed?
+  ❯ 1. Yes
+  2. No
+     --include=*.sh --include=*.mjs . | grep -v "^./terminal-onar/scripts/koltuk-bagla.sh" | head -10 | cut -c1-200;
+     tmux capture-pane -p -t bani -S -15 2>/dev/null | sed '/^[[:space:]]*$/d' | t…
+* Determining… (11m 32s · ↓ 37.5k tokens)
+                                                                               ✔ Update installed · Restart to apply
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+❯ 
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ bypass permissions on · 1 shell · ⧉ 4 · esc to interrupt · ← 6 agents · ↓ to manage
