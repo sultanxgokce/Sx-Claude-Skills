@@ -1,0 +1,17 @@
+$ bash -c set -o pipefail; timeout 240 bash yazilim-fabrikasi/scripts/gun-sonu.test.sh 2>&1 | grep -E '✗|G[0-9]|SONUÇ'
+# rc=0 sure=11.5s zaman=2026-10-23T14:48:46+03:00
+--- stdout ---
+  ✓ G1 --gelen YOKKEN gelen klasörüne dokunulmaz, satır da basılmaz
+  ✓ G2 --gelen: nexus_gun-sonu_<gün>.md yazıldı (kaynak önekli ad), satır yolu söylüyor, rc 0
+  ✓ G3 gelen dosyası özetin kendisi (başlık + görev defteri bölümü)
+  ✓ G4 gelen klasöründe başka dosya yok (yalnız özet)
+  ✓ G5 dizin yoksa YARATILMAZ (hub düzeni Sultan'ın), 'YAZILAMADI: dizin yok' basılır, rc 0 (cron bozulmaz)
+  ✓ G6 yazma izni yoksa 'YAZILAMADI: yazma izni yok', rc 0
+  ✓ G7 --yaz ile --gelen birlikte: depo kopyası ve gelen kopyası bayt bayt aynı
+  ✓ G8 --kapanis rc'si (3) --gelen ile değişmez; ölçülemedi satırı gelen kopyasında da var
+════ G9 · MUTASYON: bayrak kapısı kalkınca --gelen'siz koşu da gelen'e yazar (G1 kırmızı) ════
+  ✓ G9 MUTASYON: kapı kalkınca bayraksız koşu gelen'e yazıyor (G1 bunu yakalar)
+════ G10 · MUTASYON: yazılamayınca sessiz geçilirse satır kaybolur (G5 kırmızı) ════
+  ✓ G10 MUTASYON: sessiz yutma satırı düşürüyor (G5 bunu yakalar)
+── SONUÇ: 51 geçti · 0 kaldı ──
+--- stderr ---

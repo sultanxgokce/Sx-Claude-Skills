@@ -24,6 +24,9 @@ G="${MUTANT:-$HERE/gun-sonu.sh}"
 gecen=0; kalan=0
 g() { if [ "$1" -eq 0 ]; then gecen=$((gecen+1)); echo "  ✓ $2"; else kalan=$((kalan+1)); echo "  ✗ $2"; fi; }
 T="$(mktemp -d)"; GUN="$(date +%F)"
+# 🔴 HERMETİK (görev 9758FA): --gelen'in varsayılan hedefi /config/evraklar/Sultan/0-Gelen bu kutuda GERÇEKTEN var ve Sultan'ın cihazına
+#    senkronlanır — sınav oraya ASLA yazmasın. Bütün sınav boyunca geçici yola kilitli; G kapıları kendi alt dizinini verir.
+export GUN_SONU_GELEN_DIZ="$T/gelen-yok"
 mkdir -p "$T/_agents/fabrika/kartlar"
 ( cd "$T" && git init -q -b olcum . ) >/dev/null 2>&1
 cat > "$T/_agents/fabrika/kartlar/sinav.json" <<KART
@@ -199,6 +202,32 @@ M5="$T/mutant5.sh"; sed 's@    print("#kapanis: olculemedi=1 calisiliyor=-1"); s
 if cmp -s "$M5" "$G"; then g 1 "Ö13 mutant5 FARKSIZ (çapa bayat)"; else
   ( cd "$T" && DEFTER_UC="http://127.0.0.1:$PORT" DEFTER_JETON_YOL="$T/jeton-yok" bash "$M5" --gun "$GUN" --kapanis >/dev/null 2>&1 ); RCM5=$?
   [ "$RCM5" -ne 3 ]; g $? "Ö13 MUTASYON: ölçülemedi 0 sayılınca rc 3 kayboluyor (kapı gerçek)"
+fi
+echo "════ G · --gelen (görev 9758FA): özet Sultan'ın gelen klasörüne nexus_gun-sonu_<gün>.md olarak düşer; yalnız bayrakla; yazılamazsa söyler, rc değişmez ════"
+mkdir -p "$T/gelen"
+OG0="$( cd "$T" && GUN_SONU_GELEN_DIZ="$T/gelen" bash "$G" --gun "$GUN" 2>&1 )"; RCG0=$?
+[ "$RCG0" -eq 0 ] && [ -z "$(ls -A "$T/gelen")" ] && ! grep -q 'gelen klasörüne' <<<"$OG0"; g $? "G1 --gelen YOKKEN gelen klasörüne dokunulmaz, satır da basılmaz"
+OG1="$( cd "$T" && GUN_SONU_GELEN_DIZ="$T/gelen" bash "$G" --gun "$GUN" --gelen 2>&1 )"; RCG1=$?
+[ "$RCG1" -eq 0 ] && [ -f "$T/gelen/nexus_gun-sonu_$GUN.md" ] && grep -q "→ gelen klasörüne yazıldı: $T/gelen/nexus_gun-sonu_$GUN.md" <<<"$OG1"; g $? "G2 --gelen: nexus_gun-sonu_<gün>.md yazıldı (kaynak önekli ad), satır yolu söylüyor, rc 0"
+grep -q "^# GÜN SONU · $GUN" "$T/gelen/nexus_gun-sonu_$GUN.md" && grep -q '^## Görev defteri' "$T/gelen/nexus_gun-sonu_$GUN.md"; g $? "G3 gelen dosyası özetin kendisi (başlık + görev defteri bölümü)"
+[ "$(ls "$T/gelen" | wc -l)" -eq 1 ]; g $? "G4 gelen klasöründe başka dosya yok (yalnız özet)"
+OG2="$( cd "$T" && GUN_SONU_GELEN_DIZ="$T/gelen-yok" bash "$G" --gun "$GUN" --gelen 2>&1 )"; RCG2=$?
+[ "$RCG2" -eq 0 ] && grep -q "→ gelen klasörüne YAZILAMADI: dizin yok ($T/gelen-yok)" <<<"$OG2" && [ ! -d "$T/gelen-yok" ]; g $? "G5 dizin yoksa YARATILMAZ (hub düzeni Sultan'ın), 'YAZILAMADI: dizin yok' basılır, rc 0 (cron bozulmaz)"
+mkdir -p "$T/gelen-ro"; chmod 555 "$T/gelen-ro"
+OG3="$( cd "$T" && GUN_SONU_GELEN_DIZ="$T/gelen-ro" bash "$G" --gun "$GUN" --gelen 2>&1 )"; RCG3=$?; chmod 755 "$T/gelen-ro"
+[ "$RCG3" -eq 0 ] && grep -q "→ gelen klasörüne YAZILAMADI: yazma izni yok ($T/gelen-ro)" <<<"$OG3"; g $? "G6 yazma izni yoksa 'YAZILAMADI: yazma izni yok', rc 0"
+( cd "$T" && GUN_SONU_GELEN_DIZ="$T/gelen" bash "$G" --gun "$GUN" --gelen --yaz >/dev/null 2>&1 ); [ -f "$T/_agents/fabrika/gun-sonu/$GUN.md" ] && cmp -s "$T/_agents/fabrika/gun-sonu/$GUN.md" "$T/gelen/nexus_gun-sonu_$GUN.md"; g $? "G7 --yaz ile --gelen birlikte: depo kopyası ve gelen kopyası bayt bayt aynı"
+( cd "$T" && DEFTER_UC="http://127.0.0.1:$PORT" DEFTER_JETON_YOL="$T/jeton-yok" GUN_SONU_GELEN_DIZ="$T/gelen" bash "$G" --gun "$GUN" --gelen --kapanis >/dev/null 2>&1 ); RCG4=$?
+[ "$RCG4" -eq 3 ] && grep -q 'ÖLÇÜLEMEDİ' "$T/gelen/nexus_gun-sonu_$GUN.md"; g $? "G8 --kapanis rc'si (3) --gelen ile değişmez; ölçülemedi satırı gelen kopyasında da var"
+echo "════ G9 · MUTASYON: bayrak kapısı kalkınca --gelen'siz koşu da gelen'e yazar (G1 kırmızı) ════"
+MG="$T/mutant-gelen.sh"; sed 's@^if \[ "$GELEN" -eq 1 \]; then@if true; then@' "$G" > "$MG"
+if cmp -s "$MG" "$G"; then g 1 "G9 mutant FARKSIZ (çapa bayat)"; else
+  rm -f "$T/gelen"/*; ( cd "$T" && GUN_SONU_GELEN_DIZ="$T/gelen" bash "$MG" --gun "$GUN" >/dev/null 2>&1 ); [ -n "$(ls -A "$T/gelen")" ]; g $? "G9 MUTASYON: kapı kalkınca bayraksız koşu gelen'e yazıyor (G1 bunu yakalar)"
+fi
+echo "════ G10 · MUTASYON: yazılamayınca sessiz geçilirse satır kaybolur (G5 kırmızı) ════"
+MG2="$T/mutant-gelen2.sh"; sed 's@  if \[ ! -d "$GELEN_DIZ" \]; then echo "→ gelen klasörüne YAZILAMADI: dizin yok ($GELEN_DIZ)"@  if [ ! -d "$GELEN_DIZ" ]; then :@' "$G" > "$MG2"
+if cmp -s "$MG2" "$G"; then g 1 "G10 mutant FARKSIZ (çapa bayat)"; else
+  OMG2="$( cd "$T" && GUN_SONU_GELEN_DIZ="$T/gelen-yok" bash "$MG2" --gun "$GUN" --gelen 2>&1 )"; ! grep -q 'YAZILAMADI' <<<"$OMG2"; g $? "G10 MUTASYON: sessiz yutma satırı düşürüyor (G5 bunu yakalar)"
 fi
 kill "$DPID" 2>/dev/null; wait "$DPID" 2>/dev/null
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null

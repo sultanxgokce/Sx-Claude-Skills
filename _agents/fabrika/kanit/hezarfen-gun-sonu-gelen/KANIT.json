@@ -1,0 +1,65 @@
+{
+  "is": "hezarfen-gun-sonu-gelen",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T14:49:04+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "gun-sonu-sinavi",
+      "asama": "once",
+      "dosya": "olcum-gun-sonu-sinavi-once.txt",
+      "sha256": "0b35d9c9555443c07ec02ab11f0c34b409a151fd2026f91240280f6bbb1e76b9",
+      "komut": [
+        "bash",
+        "-c",
+        "set -o pipefail; MUTANT=/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/gun-sonu-once.sh timeout 240 bash yazilim-fabrikasi/scripts/gun-sonu.test.sh 2>&1 | grep -E '✗|SONUÇ'"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T14:48:35+03:00",
+      "sure_sn": 15.5,
+      "boru_denetimi": "temiz",
+      "olcum_id": "78b6474a30aa4dc3a9ae4737073538cf"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gun-sonu-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-gun-sonu-sinavi-sonra.txt",
+      "sha256": "8b055e10315ac7589db00ac897554b461508df49d3ad6950c7012c99dec24df5",
+      "komut": [
+        "bash",
+        "-c",
+        "set -o pipefail; timeout 240 bash yazilim-fabrikasi/scripts/gun-sonu.test.sh 2>&1 | grep -E '✗|G[0-9]|SONUÇ'"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T14:48:46+03:00",
+      "sure_sn": 11.5,
+      "boru_denetimi": "temiz",
+      "olcum_id": "25a710264d124f068b7aadec71828c14"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "gun-sonu-mutant-bayrak-kapisi-yok",
+      "asama": "sonra",
+      "dosya": "olcum-gun-sonu-mutant-bayrak-kapisi-yok-sonra.txt",
+      "sha256": "410f8f257f6bbe829465ef2cd657a7a2766b445997012e9ba219bddc358d5c9c",
+      "komut": [
+        "bash",
+        "-c",
+        "set -o pipefail; MUTANT=/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/gun-sonu-mut.sh timeout 240 bash yazilim-fabrikasi/scripts/gun-sonu.test.sh 2>&1 | grep -E '✗|SONUÇ'"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-23T14:49:04+03:00",
+      "sure_sn": 17.6,
+      "boru_denetimi": "temiz",
+      "mutasyon": true,
+      "gercek_olcum": "gun-sonu-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "80229579554e43fcaca9500112e71c7b"
+    }
+  ],
+  "imza": "ac07cae93043cce67467a31a1fcf03948a94f69eb8918574585a458c4dc8ae8c"
+}
