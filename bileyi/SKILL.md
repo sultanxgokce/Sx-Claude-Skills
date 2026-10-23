@@ -1,7 +1,7 @@
 ---
 name: bileyi
 type: agent
-version: 0.4.0
+version: 0.5.0
 description: >
   Bıçağı bileyen komut: kendi izimizi (bulgu havuzu · sürtünme raporu · aday havuzu) tarar,
   TEKRAR EDEN sürtünmeyi bulur ve onu yeteneğe çevirir — beceri · kural · yapılandırma.
@@ -273,3 +273,6 @@ durumdaydı).
   koşumda bir kopyalama uyarısı yüzünden dizine hiç geçilmemişti ve **on mutasyon da
   "kırmızı" bastı** (rc=127) — yani mutasyonlar değil kırık düzenek ölçülmüştü. Artık
   temiz hâl önce ve sonra ölçülür; temiz hâl kırmızıysa koşum **geçersiz** sayılır.
+
+## Görev defteri kaynağı (0.5.0 · görev 4FDVE5)
+22 Eki'den beri bulgular merkezî Görev Defteri'nde; araç artık onu da okur (`bulgu.sh havuz-cek` köprüsü, iz satırında `defter:`). Varsayılan: yalnız jeton okunabiliyorsa · `BILEYI_DEFTER=1` zorlar · `=-` kapatır; köprü ölçemezse 🟡 satırı kapsamaya girer. **Göç aynası:** 14-15 Eki'de kutu defterinden taşınan kayıt (`eski_no` + aynı başlık) iki kez sayılmaz (ölçüldü: code kutusunun 20 kaydından 15'i). Sınav: Y1-Y7 + mutant.

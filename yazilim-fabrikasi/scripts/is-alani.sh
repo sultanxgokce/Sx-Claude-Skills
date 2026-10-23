@@ -147,6 +147,33 @@ kontrol() {
 
 liste() { git -C "$DEPO" worktree list | sed 's/^/  /'; }
 
+# 🟡 KART KAPANIŞI (görev CBBQEE · B16BJ parçası, 23 Eki): kart = dilim; PR birleşince kartın 'bitti' olması ajanın
+#    hatırlamasına kalıyordu ve iki ayrı tuzak üretti — kart açık kalıyordu (17 Eki hijyeni: 30 sınıflı kart PR'ı birleşmiş ama
+#    açık) ya da `kart.sh bitti` alan kapandıktan SONRA koşulup "KANIT YOK" damgalıyordu. Çağıran: her işin zaten koştuğu bu
+#    kapanış adımı (yeni kanca/cron YOK). Kart AÇIKSA ve dalın PR'ı BİRLEŞMİŞSE `kart.sh bitti <iş> --pr N` alanın İÇİNDEN koşar.
+#    PR birleşmemişse (geri al, terk) ya da ölçülemezse (gh yok · ağ yok) kart AÇIK kalır ve bu SÖYLENİR — kapanış durmaz:
+#    alanı kapatmak kartı kapatmaktan bağımsız bir iştir. Kartı olmayan ya da zaten kapanmış iş için hiçbir şey yapılmaz.
+#    Dürüst sınır: alanı hiç kapatılmayan iş bu yoldan geçmez; kart→PR eşleşmesi dal adından (dal = iş adı).
+kart_kapanisi() {
+  local is="$1" yol="$2" kj="$DEPO/_agents/fabrika/kartlar/$1.json" durum pr
+  [ -f "$kj" ] || return 0
+  durum="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1],encoding="utf-8")).get("durum",""))' "$kj" 2>/dev/null)"
+  [ "$durum" = acik ] || return 0
+  if ! pr="$(cd "$yol" && gh pr list --head "$is" --state merged --json number -q '.[0].number' 2>/dev/null </dev/null)"; then
+    _bilgi "· kartın PR'ı ÖLÇÜLEMEDİ (gh) — kart AÇIK kaldı; birleştiyse elle: (cd $yol && kart.sh bitti $is --pr <N>)"; return 0
+  fi
+  if [ -z "$pr" ]; then
+    _bilgi "· '$is' dalının birleşmiş PR'ı yok — kart AÇIK kaldı (geri alındıysa: kart.sh tikandi $is --yol geri-al …)"; return 0
+  fi
+  ( cd "$yol" && bash "$HERE/kart.sh" bitti "$is" --pr "$pr" </dev/null ); local rc=$?
+  case "$rc" in
+    0) _bilgi "✓ kart kendiliğinden bitti: $is · PR #$pr birleşmiş (alanın içinden)" ;;
+    4) _bilgi "✓ kart kendiliğinden bitti: $is · PR #$pr — ⚠ görev defterine YAZILAMADI (yukarıdaki sebep); görev adımını elle yaz" ;;
+    # kart KAPANMADIYSA alan SİLİNMEZ: silinirse kart bir daha alanın içinden kapatılamaz ("KANIT YOK" tuzağı) — önce kartı düzelt
+    *) _hata "kart.sh bitti $is --pr $pr rc=$rc — kart kapanmadı, alan SİLİNMEDİ (kanıt alanın içinde); sebebi düzeltip yeniden kapat"; exit 1 ;;
+  esac
+}
+
 kapat() {
   local is="${1:-}"
   [ -n "$is" ] || { _hata "iş adı gerekiyor"; exit 1; }
@@ -165,6 +192,7 @@ kapat() {
       git -C "$yol" status --porcelain -uall | grep '^?? _agents/fabrika/kartlar/' | sed 's/^...//' | while IFS= read -r f; do rm -f "$yol/$f"; done
       _bilgi "· kartlar/ kayıtsız kopyası kaldırıldı (kart birincil depoda, iş kaybı yok)"
     fi
+    kart_kapanisi "$is" "$yol"   # alan silinmeden ÖNCE: kart.sh bitti kanıtı ve denetimi alanın içinden okur
     git -C "$DEPO" worktree remove "$yol" || { _hata "worktree kaldırılamadı"; exit 1; }
     _bilgi "✓ çalışma alanı kaldırıldı: $yol"
   else

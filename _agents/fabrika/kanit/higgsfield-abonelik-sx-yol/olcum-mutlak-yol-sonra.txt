@@ -1,0 +1,7 @@
+$ grep -n -F /config/.claude/skills/higgsfield-abonelik/scripts/ higgsfield-abonelik/SKILL.md
+# rc=0 sure=0.0s zaman=2026-10-22T23:59:08+03:00
+--- stdout ---
+124:bash /config/.claude/skills/higgsfield-abonelik/scripts/higgsfield-kimlik-kur.sh
+236:olsun). Çözüm modeli değiştirmek değil, `/config/.claude/skills/higgsfield-abonelik/scripts/filigran-yama.sh --bolge` ile bölge
+298:bash /config/.claude/skills/higgsfield-abonelik/scripts/filigran-yama.sh "$TABAN" out/pencere/sonra.png adim1.png --esik 14 --genislet 25
+--- stderr ---

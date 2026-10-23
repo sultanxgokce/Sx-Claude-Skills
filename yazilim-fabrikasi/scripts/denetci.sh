@@ -38,7 +38,14 @@ _zil_sonuc() {   # _zil_sonuc <aile-notify rc> <kime> <mesaj> — yalnız sorunu
   case "$1" in 0) ;; 3) printf '· denetçi zili deftere yazıldı, %s koltuğu meşgul → kuyrukta (boşalınca teslim): %s\n' "$2" "$3" >&2 ;;
     *) printf '⚠ denetçi zili gönderilemedi (%s · aile-notify rc %s): %s\n' "$2" "$1" "$3" >&2 ;; esac
 }
-_zil() {   # _zil <rc> — yazana --done, rc 3/4'te reise --waiting
+_zil_cal() {   # _zil_cal <komut…> → rc (aile-notify meşgul koltukta zili kuyruğa alıp yine rc 1 döner: KUYRUK satırı varsa 3 = kuyrukta)
+  local e r
+  e="$("$@" </dev/null 2>&1 >/dev/null)"; r=$?
+  # here-string, boru DEĞİL: pipefail altında 'printf | grep -q' erken çıkışta SIGPIPE (141) ile koşulu yanlış sayabilir
+  [ "$r" != 0 ] && grep -qE "^KUYRUK: .*(boşalınca teslim edilecek|zaten bekliyor)" <<<"$e" && r=3
+  return "$r"
+}
+_zil() {   # _zil <rc> — yazana düz ping, rc 3/4'te reise --waiting
   local rc="$1" an="${FABRIKA_AILE_NOTIFY:-}" yazan="${AGENT_NAME:-}" reis="" k="" ne
   [ "$an" = "-" ] && return 0   # bilerek kapalı (sınavlar: denetçiyi yüzlerce kez koşturur, gerçek koltuklara zil çalmasın)
   if [ -z "$an" ] && [ -n "${DENETCI_KOMUT:-}" ]; then   # sınav kipi: gerçek zil ARANMAZ, yalnız açıkça verilen çalar
@@ -66,11 +73,16 @@ _zil() {   # _zil <rc> — yazana --done, rc 3/4'te reise --waiting
   # SERDAR 23:22: TMUX soyulunca aile-notify göndereni çözemiyor, zil 'BILINMEYEN iş-bitti' diye düşüyordu → gönderen AILE_KIMDEN ile
   #   verilir (Nexus aile-notify yalnız TMUX'tan çözülemezse ve kayıtlı koltuksa kullanır). Yazan bilinmiyorsa VERİLMEZ: reisin adı
   #   gönderen gibi görünürdü. rc 3 = zil deftere yazıldı, koltuk meşgul → kuyrukta (gönderilemedi DEĞİL).
+  # 🔴 B843Q (22 Eki ölçümü): yazana '--done' + AILE_KIMDEN=<yazan> zili, Nexus #1235'in "alıcı = gönderen kuyruğa girmez" korumasına
+  #    takılıyordu → meşgul yazanın bitiş zili 'kuyruk … kendine' ile DÜŞTÜ (aile-sinyal.log 21:39 · 21:43, teslim yok) — bitmiş
+  #    göz turunu "koşuyor" sanma vakası geri geldi. Yazana artık DÜZ PING gider: gönderen adı yok (kuyrukta HARICI → kendine
+  #    sayılmaz, boşalınca teslim), deftere sahte "YAZAN iş-bitti" düşmez, metin "denetçi:" ile kimden geldiğini söyler.
+  #    Ping, koltuk meşgulse zili kuyruğa alıp yine rc 1 döner → 'kuyrukta' aile-notify'ın KUYRUK satırından okunur, rc'den değil.
   local kim="" r; [ "$yazansiz" = 0 ] && kim="$yazan"
-  env -u TMUX -u TMUX_PANE ${kim:+AILE_KIMDEN="$kim"} bash "$an" --done ${yazan:+--amir "$yazan"} "denetçi: $m" </dev/null >/dev/null 2>&1; r=$?
+  _zil_cal env -u TMUX -u TMUX_PANE bash "$an" "$yazan" "denetçi: $m"; r=$?
   _zil_sonuc "$r" "${yazan:-?}" "$m"
   if { [ "$rc" = 3 ] || [ "$rc" = 4 ]; } && [ "$yazansiz" = 0 ]; then   # yazansızda reis zaten --done'u aldı, ikinci zil yok
-    env ${kim:+AILE_KIMDEN="$kim"} bash "$an" --waiting --amir "$reis" "denetçi (${yazan:-yazan?}): $m" </dev/null >/dev/null 2>&1; r=$?
+    _zil_cal env ${kim:+AILE_KIMDEN="$kim"} bash "$an" --waiting --amir "$reis" "denetçi (${yazan:-yazan?}): $m"; r=$?
     _zil_sonuc "$r" "$reis (reis)" "$m"
   fi
 }

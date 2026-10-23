@@ -1,0 +1,6 @@
+$ bash _agents/fabrika/kanit/kapat-kart-bitti/kapanis-olcer.sh origin/main
+# rc=1 sure=0.2s zaman=2026-10-23T05:11:01+03:00
+--- stdout ---
+kod kaynağı: origin/main · kapat rc=0 · alan: kaldırıldı · kart (durum pr kanıt): acik - -
+   ✓ çalışma alanı kaldırıldı: /tmp/tmp.F6V9jU5iy6/alan/depo-olc
+--- stderr ---

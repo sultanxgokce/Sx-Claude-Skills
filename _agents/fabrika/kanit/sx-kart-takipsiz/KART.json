@@ -1,0 +1,24 @@
+{
+  "is": "sx-kart-takipsiz",
+  "cumle": "Sx: iş kartı dosyaları (_agents/fabrika/kartlar/*.json, main'de 71 takipli) git takibinden çıkar ve .gitignore'a girer, diskte kalır; böylece ana kopya (takipsiz 188 kartıyla) main'e geçebilir — geçiş bir klonda önce reddedilir, sonra geçer (cloudtop #802 emsali)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-23T03:44:54+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [
+    "İKİ DEPO: cümle Sx-Claude-Skills + cloudtop anıyor — iş birden çok depoya yayılıyorsa depo başına kart aç (her depoda kendi kartı, kendi PR'ı): kart.sh ac sx-kart-takipsiz-sx … · kart.sh ac sx-kart-takipsiz-cloudtop …"
+  ]
+}

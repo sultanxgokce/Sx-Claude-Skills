@@ -1,0 +1,16 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-sifre-yukle-sinavi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/mut-sx/sifre-yukle.test.sh
+# rc=1 sure=0.5s zaman=2026-10-23T03:47:49+03:00
+--- stdout ---
+     rc=0 bozuk=3 sifre_uzunluk=15 tek=a=b bos=[] sifre_var=1
+  ✓ E1 AD=değer satırları yüklendi (tırnak soyuldu, export öneki kabul)
+  ✓ E2 parola anahtarı kutu adından türedi ve doldu (sifre_var_mi=1)
+  ✓ E3 bozuk satır KOMUT gibi KOŞMADI (touch işareti yok)
+  ✓ E4 stderr'e değer parçası/command-not-found düşmedi
+  ✓ E5 bozuk satırlar SAYILDI (3: touch · çıplak değer · token_type), içerik basılmadı
+  ✓ E6 dosya yoksa rc=1, ortam dokunulmadı
+  ✗ E7 onar.sh başlatma komutunda 'set -a; . dosya' YOK (yorum satırları hariç)
+  ✗ E8 onar.sh kapı kabuğu ortam-yukle.sh + ortam_yukle ile yükler
+  ✓ E9 okuyucu TEK BAŞINA (ortak.sh yok, boş ortam, cwd /) çalışır: AD=değer yüklendi, bozuk=3, komut koşmadı, stderr temiz
+sifre-yukle.test: 7 geçti · 2 kaldı
+--- stderr ---

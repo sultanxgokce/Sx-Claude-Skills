@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "kart-sayi-uyarisi",
+  "pr": "430",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T04:44:34+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 22680,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 17785
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Kart, ölçümsüz sayı içeren cümleyi reddetmeden açıyor; uyarıyı ekrana ve karta yazıyor, verilen ölçüm komutunun çıkış kodu ile çıktısını da kaydediyor. Talebin ana akışı ve regresyon sınavları sağlam, ancak ölçüm çıktısının sessizce 400 karaktere kesilmesi düzeltilmeden üretime hazır saymam.",
+    "bulgular": [
+      {
+        "ne": "--sayi-olcum çıktısı yalnız ilk 400 karakterle karta yazılıyor; iş kartı çıktının karta kaynak olarak işlenmesini isterken bu kayıp belirtilmiyor ve önemli sonuç satırları kesilebilir.",
+        "kanit": "Üretim kodunda `kart[\"sayi_olcum\"]={\"komut\":skomut,\"rc\":int(src),\"cikti\":scikti[:400],...}` kullanılıyor; T13c sınavı yalnız kısa `13 görev bulundu` çıktısını ölçüyor, kesilme davranışını sınamıyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh: sayi_olcum kart alanının oluşturulduğu blok; yazilim-fabrikasi/scripts/kart.test.sh:T13c",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçüm çifti gerçekçi `13 görev` cümlesinde önce sessiz davranışı, sonra ekrandaki uyarı ile karttaki `sayi_uyarilari` alanını gösteriyor. Ayrıca kart.test.sh 144/144 yeşil; yeni T13c, kartın reddedilmemesini, üç sayı biçimini, yanlış-alarm örneklerini, başarılı ve başarısız ölçüm komutlarının rc/çıktı kaydını ve mutasyonla uyarı kapısının gerçekten ayırt edici olduğunu ölçüyor. Bununla birlikte uzun çıktının eksiksiz işlendiğine dair ölçüm yok; kod doğrudan 400 karakterlik kesme uyguluyor."
+  }
+}

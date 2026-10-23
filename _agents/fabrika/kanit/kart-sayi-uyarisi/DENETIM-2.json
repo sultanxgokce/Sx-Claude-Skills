@@ -1,0 +1,30 @@
+{
+  "tur": 2,
+  "is": "kart-sayi-uyarisi",
+  "pr": "430",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T04:46:40+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 26475,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 21908
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Kart, ölçümsüz sayı iddiasını reddetmeden açıyor; uyarıyı ekrana ve karta yazıyor, verilen ölçüm komutunun komutunu, çıktısını ve çıkış kodunu kaynak olarak kaydediyor. Önceki turdaki sessiz çıktı kesme sorunu açık kırpılma bilgisi, byte ölçüsü, ilk 2000 karakter ve son satırların korunmasıyla giderilmiş; talep ve sınav kanıtı yan yana üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçüm çifti gerçekçi `13 görev` cümlesinde önce kartın sessiz açıldığını, sonra yine rc=0 ile açılıp ekranda bir uyarı ve kartta `13 görev` kaydı oluştuğunu gösteriyor. `kart.test.sh` ölçümü 145 geçti, 0 kaldı: ölçümsüz sayıların uyarılması, kartın reddedilmemesi, başarılı ve başarısız `--sayi-olcum` komutlarında rc/çıktı kaydı, yanlış-alarm örnekleri ve uzun çıktının açıkça kırpılıp sonuç satırlarının korunması sınanmış. Mutasyon bölümü de sayı uyarısı kaldırıldığında ilgili kapının ayırt edici olduğunu gösteriyor; gerçek kodun durumu mutasyon dışındaki yeşil ölçümlerden okunuyor."
+  }
+}

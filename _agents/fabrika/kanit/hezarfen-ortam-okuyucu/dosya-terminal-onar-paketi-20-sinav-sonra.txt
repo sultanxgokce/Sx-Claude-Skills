@@ -1,0 +1,3 @@
+paket: 20 yeşil · 0 kırmızı
+
+[exited with code 0]

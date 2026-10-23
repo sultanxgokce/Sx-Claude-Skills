@@ -1,0 +1,78 @@
+{
+  "is": "kapat-kart-bitti",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T05:11:25+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kapanis",
+      "asama": "once",
+      "dosya": "olcum-kapanis-once.txt",
+      "sha256": "8148bfcfb650b0bb7baebcf72c90dc54a4c254a2e8767c6d57debe2400c9b95e",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kapat-kart-bitti/kapanis-olcer.sh",
+        "origin/main"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T05:11:01+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "8bd104ef189046c2b16cb34ca9ab1c62"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kapanis",
+      "asama": "sonra",
+      "dosya": "olcum-kapanis-sonra.txt",
+      "sha256": "62de6f16acf1d5e6aa5487f5636d55891863771c93d7508c202e08ce2c8bc3d4",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kapat-kart-bitti/kapanis-olcer.sh",
+        "agac"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T05:11:02+03:00",
+      "sure_sn": 0.4,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "2d27b30dc6db4030bee3321818d1e753"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "is-alani-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-is-alani-sinavi-tek.txt",
+      "sha256": "03f994e437181ae37d0e78dc060db153604eaf904082c23c327032afe6efdc3b",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/is-alani.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T05:11:04+03:00",
+      "sure_sn": 1.9,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4ac788e520604c49a6eef0d706ba161f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-kart-sinavi-tek.txt",
+      "sha256": "96b040dc53d4ab349838e47ab28edf73fd6c16584a8be52f728de0f14e769e3f",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T05:11:25+03:00",
+      "sure_sn": 10.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "034ffdfc0c8f4622aeb1ee053582488c"
+    }
+  ],
+  "imza": "c96c4a0d2b55634b3a67f5eb7a620a5be1d4ea0daf0dd37ee476b6fb2bccd984"
+}

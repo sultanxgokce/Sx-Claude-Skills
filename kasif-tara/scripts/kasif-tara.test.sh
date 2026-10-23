@@ -8,6 +8,8 @@
 # HERMETİK: yalnız $TMPDIR altında sahte odalar kurar. Gerçek bayrağa, gerçek deftere, ortak dizine
 #   YAZMAZ (G6 bunu ayrıca KANITLAR). node/npm gerekmez — saf bash + jq + python3.
 set -uo pipefail
+# 🔴 HERMETİK (4FDVE5): mucit-t1 jeton okunabiliyorsa merkezî Görev Defteri'ni de süzer — sınav canlı deftere gitmesin (bu kutuda jeton var).
+export MUCIT_GOREV_DEFTERI="-"
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PAKETLER="$(cd "$HERE/../.." && pwd)"

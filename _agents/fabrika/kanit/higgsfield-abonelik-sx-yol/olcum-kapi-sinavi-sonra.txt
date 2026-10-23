@@ -1,0 +1,17 @@
+$ bash -c A=kapi-sinavi/scripts/kapi-sinavi.sh; bash "$A" kayit && bash "$A" bagli-mi && bash "$A" ithal
+# rc=0 sure=15.6s zaman=2026-10-22T23:59:25+03:00
+--- stdout ---
+✓ defter tutarlı (6 kapı)
+✓ elogo-paket-butunlugu: bağlı (1 çağıran; biri kapının KENDİ modülünde — giriş noktası doğrulandı)
+✓ elogo-onay-beyani: bağlı (2 çağıran; biri kapının KENDİ modülünde — giriş noktası doğrulandı)
+✓ havuz-kayit-semasi: bağlı (13 çağıran; biri kapının KENDİ modülünde — giriş noktası doğrulandı)
+✓ yargi-hukum-esigi: bağlı (1 çağıran; biri kapının KENDİ modülünde — giriş noktası doğrulandı)
+✓ yogunluk-ekran-denetimi: bağlı (1 çağıran; biri kapının KENDİ modülünde — giriş noktası doğrulandı)
+✓ yogunluk-profil-tutarliligi: bağlı (1 çağıran; biri kapının KENDİ modülünde — giriş noktası doğrulandı)
+✓ elogo-paket-butunlugu: temiz içe aktarıldı (modül düzeyinde bloklayan yan etki yok)
+✓ elogo-onay-beyani: temiz içe aktarıldı (modül düzeyinde bloklayan yan etki yok)
+✓ havuz-kayit-semasi: temiz içe aktarıldı (modül düzeyinde bloklayan yan etki yok)
+✓ yargi-hukum-esigi: temiz içe aktarıldı (modül düzeyinde bloklayan yan etki yok)
+✓ yogunluk-ekran-denetimi: temiz içe aktarıldı (modül düzeyinde bloklayan yan etki yok)
+✓ yogunluk-profil-tutarliligi: temiz içe aktarıldı (modül düzeyinde bloklayan yan etki yok)
+--- stderr ---

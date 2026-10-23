@@ -135,6 +135,45 @@ echo "════ T10 · olmayan alanı kapatmak YEŞİL değil (rc 2, sahte ba
 CIKTI="$( cd "$T/depo" && bash "$IS" kapat boyle-bir-is-yok 2>&1 )"; r=$?
 [ $r -eq 2 ] && grep -q "YOK" <<<"$CIKTI"; g $? "olmayan alan → rc 2 + 'YOK' (eskiden rc 0 'zaten yok')"
 
+echo "════ T11 · KART KAPANIŞI (CBBQEE): PR birleşmişse kapat kartı alanın İÇİNDEN 'bitti' yapar; değilse açık bırakır ve söyler ════"
+GHK="$T/gh-kart"; mkdir -p "$GHK"; : > "$T/pr-harita"; : > "$T/gh-log"
+cat > "$GHK/gh" <<GH
+#!/usr/bin/env bash
+echo "\$*" >> "$T/gh-log"
+h=""; while [ \$# -gt 0 ]; do [ "\$1" = --head ] && h="\$2"; shift; done
+awk -v h="\$h" '\$1==h{print \$2}' "$T/pr-harita"
+GH
+chmod +x "$GHK/gh"
+KD="$T/depo/_agents/fabrika/kartlar"; mkdir -p "$KD"
+kart() { printf '{"is":"%s","cumle":"c","istedi":"S","aldi":"H","durum":"%s","gecmis":%s}\n' "$1" "$2" "${3:-[]}" > "$KD/$1.json"; }
+kdur() { python3 -c 'import json,sys;k=json.load(open(sys.argv[1]));print(k["durum"],k.get("pr",""),k.get("kanit_var",""))' "$KD/$1.json"; }
+alan_ac() {   # alan aç + kanıt dosyası YALNIZ alanda (commit'li): bitti onu görüyorsa alanın İÇİNDEN koşmuştur
+  ( cd "$T/depo" && bash "$IS" ac "$1" --kartsiz >/dev/null 2>&1 )
+  mkdir -p "$T/alan/depo-$1/_agents/fabrika/kanit/$1"; echo '{}' > "$T/alan/depo-$1/_agents/fabrika/kanit/$1/KANIT.json"
+  git -C "$T/alan/depo-$1" add -A >/dev/null 2>&1; git -C "$T/alan/depo-$1" -c user.email=t@t -c user.name=t commit -q -m "kanit" >/dev/null 2>&1
+}
+kart kb1 acik; alan_ac kb1; echo "kb1 42" >> "$T/pr-harita"
+CIKTI="$( cd "$T/depo" && PATH="$GHK:$PATH" bash "$IS" kapat kb1 2>&1 )"; RC=$?
+[ "$RC" -eq 0 ] && [ "$(kdur kb1)" = "bitti 42 True" ] && [ ! -d "$T/alan/depo-kb1" ]; g $? "🔴 PR birleşmiş + kart açık → kart 'bitti' (pr 42) · kanıt alanın İÇİNDEN görüldü · alan kapandı ($(kdur kb1))"
+grep -q "kart kendiliğinden bitti: kb1 · PR #42" <<<"$CIKTI"; g $? "kapanış ne yaptığını söylüyor"
+kart kb2 acik; alan_ac kb2
+CIKTI="$( cd "$T/depo" && PATH="$GHK:$PATH" bash "$IS" kapat kb2 2>&1 )"; RC=$?
+[ "$RC" -eq 0 ] && [ "$(kdur kb2)" = "acik  " ] && grep -q "birleşmiş PR'ı yok — kart AÇIK kaldı" <<<"$CIKTI" && [ ! -d "$T/alan/depo-kb2" ]; g $? "PR birleşmemiş (geri al/terk) → kart AÇIK kalır + söylenir, alan kapanır"
+kart kb3 acik; alan_ac kb3
+CIKTI="$( cd "$T/depo" && PATH="$BOZUK:$PATH" bash "$IS" kapat kb3 2>&1 )"; RC=$?
+[ "$RC" -eq 0 ] && [ "$(kdur kb3)" = "acik  " ] && grep -q "PR'ı ÖLÇÜLEMEDİ (gh) — kart AÇIK kaldı" <<<"$CIKTI"; g $? "gh düşünce ölçülemedi denir, kart açık kalır, kapanış durmaz (sessiz 'bitti' yok)"
+kart kb4 bitti; alan_ac kb4; : > "$T/gh-log"; echo "kb4 9" >> "$T/pr-harita"
+( cd "$T/depo" && PATH="$GHK:$PATH" bash "$IS" kapat kb4 >/dev/null 2>&1 )
+[ ! -s "$T/gh-log" ] && [ "$(kdur kb4 | cut -d' ' -f1-2)" = "bitti " ]; g $? "zaten kapanmış kart: gh'ye HİÇ sorulmaz, kart değişmez"
+kart kb5 acik '"bozuk"'; alan_ac kb5; echo "kb5 77" >> "$T/pr-harita"
+CIKTI="$( cd "$T/depo" && PATH="$GHK:$PATH" bash "$IS" kapat kb5 2>&1 )"; RC=$?
+[ "$RC" -ne 0 ] && [ -d "$T/alan/depo-kb5" ] && grep -q "kart kapanmadı, alan SİLİNMEDİ" <<<"$CIKTI"; g $? "🔴 kart.sh bitti düşerse alan SİLİNMEZ (silinseydi kart bir daha alanın içinden kapatılamazdı)"
+( cd "$T/depo" && PATH="$BOZUK:$PATH" bash "$IS" kapat kb5 >/dev/null 2>&1 ) || true
+echo "── T11 · MUTASYON (tam kopya): kapanış çağrısı kalkınca kart açık kalır → üstteki 🔴 kapı düşerdi ──"
+MD="$T/pkg-kk"; mkdir -p "$MD"; cp "$HERE"/*.sh "$HERE"/*.py "$MD/" 2>/dev/null
+python3 - "$MD/is-alani.sh" <<'PYM' && kart kbm acik && alan_ac kbm && echo "kbm 5" >> "$T/pr-harita" && ( cd "$T/depo" && PATH="$GHK:$PATH" bash "$MD/is-alani.sh" kapat kbm >/dev/null 2>&1 ); [ "$(kdur kbm 2>/dev/null)" = "acik  " ]; g $? "mutant (kart_kapanisi çağrılmıyor): birleşmiş PR'lı kart AÇIK kaldı → üstteki kapı bu mutantta düşerdi"
+import sys; f=sys.argv[1]; s=open(f,encoding="utf-8").read(); a='    kart_kapanisi "$is" "$yol"'; assert s.count(a)==1; open(f,"w",encoding="utf-8").write(s.replace(a,'    :'))
+PYM
 
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""

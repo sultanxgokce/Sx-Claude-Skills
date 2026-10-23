@@ -1,0 +1,38 @@
+{
+  "tur": 3,
+  "is": "kanit-uc-boy",
+  "pr": "433",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T05:24:27+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 30944,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 8,
+    "bayt": 33393
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Tek komutla 1440/1280/390 kare üretimi, boy başına ayrı yeşil kayıt, yalnız yeşil karelerin güvenli adla Gelen'e kopyalanması ve kısmi başarısızlığın komut sonucuna taşınması uygulanmış; önceki turdaki eksik hedef klasörü davranışı da rc=3 olacak şekilde düzeltilmiş. Üretimi engelleyen kusur görünmüyor; yalnız `--genislik` seçeneğinin çoklu-boy seçenekleriyle birlikte sessizce yok sayılması küçük bir CLI rötuşu olarak kalıyor.",
+    "bulgular": [
+      {
+        "ne": "`--genislik`, `--uc-boy` veya `--boylar` ile birlikte verilebiliyor ve çoklu-boy kipinde sessizce yok sayılıyor; yardım metni bunları alternatif gösterdiği için çelişkili çağrının rc=2 ile reddedilmesi daha tutarlı olur.",
+        "kanit": "Argümanlar aynı parser üzerinde ayrı ayrı tanımlanmış; `cmd_ekran` yalnız `a.uc_boy and a.boylar` birleşimini reddediyor. `boylar` dolu olduğunda `_ekran_tek` çağrılarına listedeki genişlikler verildiğinden `a.genislik` kullanılmıyor.",
+        "konum": "yazilim-fabrikasi/scripts/kanit.py:cmd_ekran ve main içindeki ekran argümanları",
+        "agirlik": "rotus",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçüm çifti seçeneğin önce tanınmadığını, sonra 1440/1280/390 için üç ayrı yeşil kayıt ve istenen Gelen adlarını gösteriyor; 221 geçen sınav kısmi düşüşü, yalnız yeşil kopyalamayı, eksik/yazılamayan hedefte rc=3'ü, güvenli kutu adını ve geriye uyumu kapsıyor. Mutant geçici kopya içinde koşturulmuş ve ilgili kapının bozuk sonucu yakalayacağı gösterilmiş olsa da manifestte `mutasyon:true` kaydı değildir; ayrıca sunulan kanıtta PNG karelerin kendisi bulunmadığından gerçekçi görsel içerik gözle doğrulanamıyor."
+  }
+}

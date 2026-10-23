@@ -315,5 +315,12 @@ kapi "D8 defter kapalı: satır aynen + 'okunamadı' söylenir, bekleme ≤ 4 sn
 printf -- '- [ ] 1) Görevsiz madde\n' > "$T/gorevsiz.md"
 kapi "D9 görev kimliği olmayan çıpa deftere HİÇ gitmez, alt satır yok" "0" "$(DEFTER_JETON_YOL="$T/jeton" DEFTER_UC="$DU" python3 "$KOK/tablo.py" "$T/gorevsiz.md" --md 2>&1 | grep -c 'düğüm')"
 kapi "D9b görevsiz çıpada jetonsuz kutuya da boş 'okunamadı' gürültüsü basılmaz" "0" "$(python3 "$KOK/tablo.py" "$T/gorevsiz.md" --md 2>&1 | grep -c 'düğüm')"
+echo "── YARDIM BİR HATA DEĞİLDİR (görev RN95G): --help/-h rc=0 + kullanım stdout'ta; tanınmayan argüman rc=2 kalır"
+kapi "H1 'tazele --help' rc=0" "0" "$(bash "$ARAC" tazele --help >/dev/null 2>&1; echo $?)"
+kapi "H2 '--help' (komutsuz) ve 'tablo -h' rc=0" "0|0" "$(bash "$ARAC" --help >/dev/null 2>&1; echo $?)|$(bash "$ARAC" tablo -h >/dev/null 2>&1; echo $?)"
+kapi "H3 yardım metni stdout'ta (stderr boş) — boruya giren çağıran metni görür" "1|0" "$(bash "$ARAC" tazele --help 2>/dev/null | grep -c '^kullanım:')|$(bash "$ARAC" tazele --help 2>&1 >/dev/null | wc -c)"
+kapi "H4 tanınmayan argüman HÂLÂ rc=2 + 'tanınmayan argüman' stderr'de (gevşeme yok)" "2|1" "$(bash "$ARAC" tazele --bilinmeyen >/dev/null 2>&1; echo $?)|$(bash "$ARAC" tazele --bilinmeyen 2>&1 >/dev/null | grep -c 'tanınmayan argüman: --bilinmeyen')"
+kapi "H5 '--madde --help' değer sayılmaz: değersiz bayrak rc=2 kalır (yardım değeri yutmaz)" "2" "$(bash "$ARAC" tazele --madde --help >/dev/null 2>&1; echo $?)"
+kapi "H6 yardım çıpaya DOKUNMAZ (yazmaz)" "$(cat "$C" 2>/dev/null | cksum)" "$(bash "$ARAC" yaz --plan 'x' --help >/dev/null 2>&1; cat "$C" 2>/dev/null | cksum)"
 echo "SONUÇ: $gecen geçti · $kalan kaldı"
 [ "$kalan" -eq 0 ]
