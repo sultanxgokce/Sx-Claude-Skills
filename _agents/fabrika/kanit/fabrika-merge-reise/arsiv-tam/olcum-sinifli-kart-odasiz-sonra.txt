@@ -1,0 +1,10 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/olc/olc-oda.sh /config/projects/_wt/Sx-Claude-Skills-fabrika-merge-reise/yazilim-fabrikasi/scripts
+# rc=0 sure=0.1s zaman=2026-10-23T11:16:48+03:00
+--- stdout ---
+── kart.sh ac çıktısı (paket: /config/projects/_wt/Sx-Claude-Skills-fabrika-merge-reise/yazilim-fabrikasi/scripts) ──
+✗ Sultan'a ulaşılamadı: --oda ver ya da tetik betiğini kur — sınıflı işin başlama izni Sultan'a gitmeli, --oda verilmedi (kart AÇILMADI)
+── kart.sh rc=1
+── kart dosyası yazıldı mı: 0
+── 'Sultan'a ulaşılamadı' satırı: 1
+SONUÇ: ulaşım yolu yokken sınıflı kart AÇILMADI (fail-closed)
+--- stderr ---

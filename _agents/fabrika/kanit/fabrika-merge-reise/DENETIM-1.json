@@ -1,0 +1,45 @@
+{
+  "tur": 1,
+  "is": "fabrika-merge-reise",
+  "pr": "437",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T13:36:51+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 118590,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 14,
+    "bayt": 67396
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "E",
+    "ozet": "Çekirdekte izin/veto tek noktaya alınmış; sınıflı kartta reis kararları, daraltma ve birleştirme kaydı yeni kurala geçirilmiş. Ancak Sultan “dur” dediğinde `bitti` akışı durmak yerine kartı bitirip birleştirme kararını yazıyor; ayrıca istenen önce/sonra ve araçça etiketlenmiş mutasyon kanıtı sunulmadığından önce bu veto kaçağı çözülmeli ve kanıt tamamlanmalı.",
+    "bulgular": [
+      {
+        "ne": "Veto, `bitti` işlemini engellemiyor: sınıflı ve `izin=dur` kart rc=0 ile bitiriliyor ve `birlestirme_karari` yazılıyor. Bu, “Sultan dur derse ... durur” kuralında birleştirme yolunu açık bırakıyor; yalnız uyarı basmak fail-closed davranış değil.",
+        "kanit": "`bitti|tikandi` bloğunda `iz==\"dur\"` için çıkış/red yok; bunun yerine `veto_uyari` atanıp JSON yazılıyor. Eklenen V13 sınavı da vetolu kartta `bitti` için özellikle `RC=0` ve `birlestirme_karari['izin']=='dur'` bekliyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh: bitti|tikandi Python bloğu; yazilim-fabrikasi/scripts/kart.test.sh:T16 V13",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "İş kartının istediği önce/sonra ve mutasyon kanıtı manifestte yok; yalnız tek bir toplu “sonra” ölçümü bulunuyor. Test dosyasında mutasyon senaryoları yazılmış olsa da bunlar `mutasyon:true` kayıt olarak araç manifestine girmediğinden rubriğe göre mutasyon kanıtı sayılamaz.",
+        "kanit": "Sağlam manifestte yalnız `etiket=fabrika-sinavlari`, `asama=sonra`, `rc=0` olan tek kayıt var; `asama=once`, `gercek_olcum` veya `mutasyon:true` kayıt bulunmuyor. İş kartı `kanıt_nerede` alanında açıkça “önce/sonra + mutasyon” istiyor.",
+        "konum": "KANIT MANİFESTİ:kayitlar[0]; İŞ KARTI:kanit_nerede",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; tek toplu son ölçüm yeşil, 14 sınav betiği rc=0 ve bildirilen sonuçlarda kırmızı yok. Buna karşın ölçüm çifti yok, önce kaydı yok ve mutasyonlar manifestte `mutasyon:true` olarak kayıtlı değil; dolayısıyla regresyon ve mutasyon iddiaları rubriğe uygun kanıtlanmış sayılmaz."
+  }
+}

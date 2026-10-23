@@ -1,0 +1,32 @@
+{
+  "tur": 2,
+  "is": "fabrika-merge-reise",
+  "pr": "437",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T15:19:38+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 99643,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 19,
+    "bayt": 81247
+  },
+  "bas": "a61a4a6538f95ca30abcb53db5017b2a4d4464d0",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ın başlama izni/vetosunu tek yüzeye alan çekirdek kurulmuş; sınıflı kartta reis kararları, daraltma ve birleştirme kaydı istenen kurala geçirilmiş. Önceki turdaki `bitti` veto kaçağı fail-closed çitle, kanıt eksiği de araç imzalı önce/sonra ölçümü ve gerçek mutasyon kaydıyla kapanmış; üretimi engelleyen kusur görünmüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. `cekirdek-davranis` ölçümü gerçekçi kart davranışında önce 2 sapma, sonra 0 sapma gösteriyor; vetolu `bitti` artık rc 1 ve kart açık kalıyor. `cekirdek-davranis-mutant` kaydı `mutasyon:true` ve `gercek_olcum` bağlantılı: veto çiti bilerek kaldırılınca sınav beklenen biçimde rc 1 ile mutantı yakalıyor. Ayrıca toplu son ölçümde `kart.test.sh` 201/0, `birlestirme-kapisi.test.sh` 143/0 ve `denetci.test.sh` 266/0 dahil tüm fabrika sınavları yeşil; önceki turun B1 ve B2 bulguları kapanmış."
+  }
+}

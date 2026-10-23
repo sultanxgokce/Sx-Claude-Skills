@@ -122,13 +122,10 @@ kartac is-r1; bash "$K" olcum is-r1 olc --asama tek -- echo 1 >/dev/null 2>&1
 SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-r1 --diff "$T/d.patch" >/dev/null 2>&1
 SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-r1 --diff "$T/d.patch" >/dev/null 2>&1
 SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-r1 --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 4 ]; g $? "sınıflı iş tur3 tıkandı (rc=4)"
-bash "$KT" reis-dedi is-r1 --karar devam --reis MUAVIN --oturum ref-r1 --gerekce "bulgular farkliydi ve hepsi kapandi, dorduncu tur ilerlemeyi olcer" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "🔴 SINIFLI karta reis kararı YAZILAMADI (merci Sultan)"
-python3 -c "import json;k=json.load(open('$T/_agents/fabrika/kartlar/is-r1.json'));assert not k.get('reis_kararlari')"; g $? "kartta reis_kararlari alanı oluşmadı"
-python3 - "$T/_agents/fabrika/kartlar/is-r1.json" <<'PY'
-import json,sys; k=json.load(open(sys.argv[1])); k["reis_kararlari"]=[{"karar":"devam","reis":"MUAVIN","oturum":"ref-elle","gerekce":"yirmi karakterden uzun elle yazilmis gerekce"}]; json.dump(k,open(sys.argv[1],"w"))
-PY
+bash "$KT" reis-dedi is-r1 --karar devam --reis MUAVIN --oturum ref-r1 --gerekce "bulgular farkliydi ve hepsi kapandi, dorduncu tur ilerlemeyi olcer" >/dev/null 2>&1; g $? "0.21.0: SINIFLI karta reis kararı kart.sh ile YAZILDI (denetçinin bunu okuması ikinci kartta: fabrika-merge-reise-parca2)"
+python3 -c "import json;k=json.load(open('$T/_agents/fabrika/kartlar/is-r1.json'));r=k['reis_kararlari'][-1];assert r['sinifli'] is True and not k.get('sultan_kararlari')"; g $? "kayıt reis_kararlari'nda sinifli:true; sultan_kararlari YOK (A06)"
 CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-r1 --diff "$T/d.patch" --reis-devam 2>&1)"; RC=$?
-[ "$RC" -eq 1 ]; g $? "🔴 sınıflı karta ELLE yazılmış reis kararı bile kapıyı AÇMIYOR (rc=1)"
+[ "$RC" -eq 1 ]; g $? "🔴 sınıflı kartta reis kararı (araçla yazılmış) denetçinin tavanını bu sürümde AÇMIYOR (rc=1; ikinci kartta açılır)"
 grep -q "SINIFLI" <<<"$CIKTI"; g $? "sebebi yazılı: kart sınıflı, merci Sultan"
 grep -q "sultan-dedi" <<<"$CIKTI"; g $? "doğru yol gösterildi (sultan-dedi)"
 [ ! -f "$T/_agents/fabrika/kanit/is-r1/DENETIM-4.json" ]; g $? "denetim KOŞULMADI"

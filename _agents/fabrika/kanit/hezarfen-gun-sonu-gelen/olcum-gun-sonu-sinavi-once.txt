@@ -1,0 +1,16 @@
+$ bash -c set -o pipefail; MUTANT=/tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/gun-sonu-once.sh timeout 240 bash yazilim-fabrikasi/scripts/gun-sonu.test.sh 2>&1 | grep -E '✗|SONUÇ'
+# rc=1 sure=13.0s zaman=2026-10-23T14:53:23+03:00
+--- stdout ---
+  ✗ G2 --gelen: nexus_gun-sonu_<gün>.md yazıldı (kaynak önekli ad), satır yolu söylüyor, rc 0
+  ✗ G3 gelen dosyası özetin kendisi (başlık + görev defteri bölümü)
+  ✗ G4 gelen klasöründe başka dosya yok (yalnız özet)
+  ✗ G5 dizin yoksa YARATILMAZ (hub düzeni Sultan'ın), 'YAZILAMADI: dizin yok' basılır, rc 0 (cron bozulmaz)
+  ✗ G6 yazma izni yoksa 'YAZILAMADI: yazma izni yok', rc 0
+  ✗ G6b başka hata (hedef bir dizin) GERÇEK sebebiyle basılır ('Is a directory'), 'yazma izni yok' DENMEZ, rc 0
+  ✗ G7 --yaz ile --gelen birlikte: depo kopyası ve gelen kopyası bayt bayt aynı
+  ✗ G8 --kapanis rc'si (3) --gelen ile değişmez; ölçülemedi satırı gelen kopyasında da var
+  ✗ G9 mutant FARKSIZ (çapa bayat)
+  ✗ G11 mutant FARKSIZ (çapa bayat)
+  ✗ G10 mutant FARKSIZ (çapa bayat)
+── SONUÇ: 42 geçti · 11 kaldı ──
+--- stderr ---

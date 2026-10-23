@@ -1,0 +1,22 @@
+$ bash _agents/fabrika/kanit/fabrika-merge-reise/kos-fabrika-sinavlari.sh
+# rc=0 sure=2263.7s zaman=2026-10-23T15:05:24+03:00
+--- stdout ---
+sınav dizini: /config/projects/_wt/Sx-Claude-Skills-fabrika-merge-reise/yazilim-fabrikasi/scripts · ham çıktılar: /tmp/tmp.B9BhC92eg8
+birlestirme-kapisi.test.sh rc=0 · ── SONUÇ: 143 geçti · 0 kaldı ──
+denetci-duzeltme-farki.test.sh rc=0 · ── SONUÇ (düzeltme-farkı): 48 geçti · 0 kaldı ──
+denetci-fark-ayikla.test.sh rc=0 · (sonuç satırı yok)
+denetci-fark-kendisi.test.sh rc=0 · ── SONUÇ (fark-kendisi): 23 geçti · 0 kaldı ──
+denetci-karne.test.sh rc=0 · ── SONUÇ: 22 geçti · 0 kaldı ──
+denetci-kayit-commit.test.sh rc=0 · ── SONUÇ: 14 geçti · 0 kaldı ──
+denetci-kutu-disi.test.sh rc=0 · (sonuç satırı yok)
+denetci.test.sh rc=0 · ── SONUÇ: 266 geçti · 0 kaldı ──
+denetim-sema-kati.test.sh rc=0 · (sonuç satırı yok)
+fabrika-kur.test.sh rc=0 · ── SONUÇ: 23 geçti · 0 kaldı ──
+gun-sonu.test.sh rc=0 · ── SONUÇ: 41 geçti · 0 kaldı ──
+is-alani.test.sh rc=0 · ── SONUÇ: 47 geçti · 0 kaldı ──
+kanit.test.sh rc=0 · ── SONUÇ: 224 geçti · 0 kaldı ──
+karne.test.sh rc=0 · ── SONUÇ: 9 geçti · 0 kaldı ──
+kart.test.sh rc=0 · ── SONUÇ: 201 geçti · 0 kaldı ──
+pr-kip-olc.test.sh rc=0 · TOPLAM: 32 geçti · 0 kaldı
+kırmızı sınav: 0
+--- stderr ---
