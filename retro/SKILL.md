@@ -16,13 +16,13 @@ varsayılan kardeş beceri `<skills>/bulgu/scripts/bulgu.sh`) **durum=ham** kay�
 - gorev_01M5M55BRC0V3G8A200PYTVZV9 · mihenk: PR'da testleri koşan küçük bir iş akışı gerek →
 ```
 Damga kuralı kutu önerisiyle aynıdır; havuzdaki kayıt **kendisi görev** olduğundan `→ gorev_<kendi id>` = Sırada'ya alındı demektir,
-`→ RED: <gerekçe>` = havuzda elendi. `suzum` damgasız/biçimsiz havuz satırını **kırmızı** sayar. `--yenile` eski havuz damgalarını
+`→ RED: <gerekçe>` = havuzda elendi. `suzum` damgasız/biçimsiz havuz satırını **kırmızı** sayar; bölümdeki çözülemeyen satır (oku silinmiş · kimliği bozuk) sessizce atlanmaz, o da kırmızıdır. `--yenile` eski havuz damgalarını
 (başlık değişmediyse) ve elle bölümleri korur; başlığı değişen kaydın damgası düşer ve söylenir; havuzdan çıkan (defterde artık
 'havuz' olmayan) kaydın satırı düşer ve söylenir. **Köprü ölçemezse** (jeton yok · defter ulaşılamadı · köprü dosyası yok) `merkez`
 MERKEZ.md'yi **yazmaz**, `◻ ÖLÇÜLEMEDİ … (0 havuz DEĞİL)` basar, rc 3 — sessiz "0 havuz" yok (K01). Bozuk köprü satırı sayılır ve
 notta söylenir. `suzum` havuz satırlarını MERKEZ.md'den okur (köprüyü çağırmaz); bölüm yoksa (1.3.0 öncesi dosya) uyarır, geriye
-dönük kırmızıya çevirmez. Kanıt: `retro.test.sh` T6h2 · T12a-z3 · T13a-m + mutant M16-M19 (köprü çağrısı silinince · ham süzgeci
-kalkınca · köprü yokluğu boş listeye çevrilince · damga denetimi kalkınca — dördü de ısırıyor).
+dönük kırmızıya çevirmez. Kanıt: `retro.test.sh` T6h2 · T12a-z3 · T13a-m + mutant M16-M20 (köprü çağrısı silinince · ham süzgeci
+kalkınca · köprü yokluğu boş listeye çevrilince · damga denetimi kalkınca · çözülemeyen satır sessizce atlanınca — beşi de ısırıyor).
 
 ## 🆕 1.2.0 · kart ve göz ölçüsü kutunun BÜTÜN depolarından (20 Eki · CQ46Y + NFS16 · retro W42 BERİD Ö1 + HENDESE Ö2)
 W42 retrosu yalnız çağrıldığı depoyu (Nexus) sayıyordu; ajanın Sx ve cloudtop kartları görünmüyordu (ölçüm: MİRAHUR W42 9 → 46 kart,
@@ -134,7 +134,7 @@ L1–L7 · MERKEZ.md süzüm ve havuz satırı biçimi. Şemayı değiştirmek =
 `scripts/retro.test.sh` — hermetik kapılar (mktemp depo · sahte NOTES/kart/DENETIM/kaçış/bekçi/registry · sahte havuz
 köprüsü `RETRO_BULGU_SH` · sabit tarih `RETRO_BUGUN`) + mutantlar kopya üstünde (L5 kalkınca ölçüsüz Z geçmemeli · kaynak
 yokluğu sıfıra çevrilince sarı kaybolmalı · iz ayrımı kalkınca ÇALIŞMADI EKSİK'e dönmeli · metin kıyası kalkınca bayat damga
-geçmemeli · havuz köprüsü M16-M19 — hepsi ısırıyor).
+geçmemeli · havuz köprüsü M16-M20 — hepsi ısırıyor).
 Canlı ölçüm (Nexus, 2026-W42): BÂNİ 244 NOTES satırı · 34 ders satırı · 20 kart (16 bitti · 4 tıkandı) · 48 göz turu;
 MUAVİN'in NOTES dosyası yok → o hücre ÖLÇÜLEMEDİ.
 

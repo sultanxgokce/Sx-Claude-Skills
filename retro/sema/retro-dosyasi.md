@@ -67,6 +67,6 @@ metin ≥ 8 karakter, `<…>` ya da `…` yer tutucusu içermez. Z maddesi `· �
 Araç bölümü `## Havuz süzümü — …` altında, görev defterindeki durum=ham kayıt başına:
 `- gorev_<26 karakter> · <başlık> → gorev_<26 karakter>` (Sırada'ya alındı; havuzdaki kayıt kendisi görev olduğundan
 çoğunlukla kendi kimliği) ya da `→ RED: <gerekçe ≥10 karakter>`. Satırlar yalnız bu bölümün içinde havuz satırı sayılır
-(Görevler bölümündeki `- gorev_… · ders M1` satırı değildir). `retro.py suzum` damgasız/biçimsiz havuz satırını kırmızı sayar;
+(Görevler bölümündeki `- gorev_… · ders M1` satırı değildir). `retro.py suzum` damgasız/biçimsiz havuz satırını ve bölümdeki çözülemeyen (oku silinmiş, kimliği bozuk) satırı kırmızı sayar;
 `merkez --yenile` başlığı değişmemiş kaydın damgasını korur, değişeninkini düşürür, havuzdan çıkan kaydın satırını düşürür ve
 ikisini de bildirir. Köprü (`bulgu.sh havuz-cek`) ölçemezse bölüm yazılmaz, dosya da yazılmaz: rc 3.

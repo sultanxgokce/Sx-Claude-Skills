@@ -578,19 +578,23 @@ def havuz_satir_coz(s):
 
 
 def merkez_havuz_satirlari(metin):
-    """MERKEZ.md'nin Havuz süzümü BÖLÜMÜNDEKİ satırlar → {gorev_id: (başlık, damga)}; bölüm yoksa None (1.3.0 öncesi dosya).
-    Bölümle sınırlı: Görevler bölümündeki '- gorev_… · ders M1' satırı havuz satırı sanılmasın."""
-    out, icinde, var = {}, False, False
+    """MERKEZ.md'nin Havuz süzümü BÖLÜMÜNDEKİ satırlar → ({gorev_id: (başlık, damga)}, bozuk_satırlar[]); bölüm yoksa (None, []).
+    Bölümle sınırlı: Görevler bölümündeki '- gorev_… · ders M1' satırı havuz satırı sanılmasın. Bölümdeki çözülemeyen satır
+    (oku silinmiş · kimliği bozuk · elle not) SESSİZCE ATLANMAZ, bozuk listesine girer (göz #442 tur 1: oku silinen satır süzümden kaçıyordu)."""
+    out, bozuk, icinde, var = {}, [], False, False
     for s in metin.splitlines():
         if s.startswith("## "):
             icinde = s.rstrip("\r\n") == MERKEZ_HAVUZ
             var = var or icinde
             continue
-        if icinde:
-            c = havuz_satir_coz(s)
-            if c:
-                out[c[0]] = (c[1], c[2])
-    return out if var else None
+        if not icinde or not s.strip() or s.startswith("_("):
+            continue   # boş satır ve aracın "_(… havuz kaydı yok …)_" notu satır değildir
+        c = havuz_satir_coz(s)
+        if c:
+            out[c[0]] = (c[1], c[2])
+        else:
+            bozuk.append(s.strip())
+    return (out, bozuk) if var else (None, [])
 
 
 def damga_gecerli(d):
@@ -659,7 +663,7 @@ def merkez(a):
                 c = merkez_satir_coz(s)
                 if c and c[3]:
                     eski_damga[(c[0], c[1])] = (c[2], c[3])
-            eski_havuz = merkez_havuz_satirlari(eski) or {}
+            eski_havuz = merkez_havuz_satirlari(eski)[0] or {}
             elle = merkez_elle_ham(eski)
         # Havuz köprüsü YAZMADAN ÖNCE okunur: ölçülemezse dosyaya dokunulmaz (eski damgalar ve elle bölümler yerinde kalır).
         havuz, havuz_not = havuz_cek()
@@ -739,10 +743,12 @@ def suzum(a):
             damga[(c[0], c[1])] = (c[2], c[3])
     eksik, toplam = [], 0
     # Havuz satırları MERKEZ.md'den okunur (köprü burada çağrılmaz: kayıt dosyadadır, taze çekim `merkez --yenile`nin işi).
-    havuz = merkez_havuz_satirlari(mmetin)
+    havuz, h_bozuk = merkez_havuz_satirlari(mmetin)
     if havuz is None:
         print("  ⚠ Havuz süzümü bölümü yok (MERKEZ.md 1.3.0 öncesi araçla yazılmış) — havuz süzümü bu dosyada ÖLÇÜLEMEDİ; `merkez --yenile` bölümü ekler")
         havuz = {}
+    for b in h_bozuk:
+        eksik.append(f"havuz satırı ÇÖZÜLEMEDİ (biçimsiz, süzüm sayılamaz): '{b[:60]}' — '- gorev_<26> · <başlık> → <damga>'; merkez --yenile ile yeniden kur")
     for kid, (_, d) in havuz.items():
         if not damga_gecerli(d):
             eksik.append(f"havuz {kid} damgasız ya da biçimsiz: '{d or '(boş)'}' — '→ gorev_<26>' (Sırada'ya al) ya da '→ RED: <gerekçe>'")

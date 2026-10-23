@@ -1,5 +1,5 @@
 $ bash retro/scripts/retro.test.sh
-# rc=0 sure=6.7s zaman=2026-10-23T15:28:33+03:00
+# rc=0 sure=7.7s zaman=2026-10-23T15:51:12+03:00
 --- stdout ---
 — T1 hafta
   ✓ T1a hafta kimliği sabit tarihten (rc=0)
@@ -162,6 +162,12 @@ $ bash retro/scripts/retro.test.sh
   ✓ T12l kendi-id damgası (= Sırada'ya alındı) geçerli
   ✓ T12m iki havuz satırı damgalı → yeşil (rc=0)
   ✓ T12n sayım
+  ✓ T12m2 önkoşul: havuz satırının oku silindi
+  ✓ T12m3 oku silinmiş (çözülemeyen) havuz satırı → suzum KIRMIZI, sessiz atlanmaz (rc=1)
+  ✓ T12m4 gerekçe
+  ✓ T12m5 kimliği bozuk satır da kırmızı (rc=1)
+  ✓ T12m6 bozuk kimlik gerekçesi
+  ✓ T12m7 bozuk satır kaldırılınca yeniden yeşil (aracın '_(… yok …)_' notu ve boş satır bozuk sayılmaz) (rc=0)
   ✓ T12o merkez --yenile (rc=0)
   ✓ T12p kendi-id damgası korundu
   ✓ T12q RED damgası korundu
@@ -219,6 +225,8 @@ $ bash retro/scripts/retro.test.sh
   ✓ M18 köprü yokluğu boş listeye çevrilince '0 havuz' sessiz yeşil olur (kapı yakalar): mutant ısırıldı
   ✓ M19 pozitif kontrol: damgasız havuz satırında gerçek suzum kırmızı
   ✓ M19 havuz damga denetimi kalkınca damgasız havuz satırı süzümden geçer (kapı yakalar): mutant ısırıldı
+  ✓ M20 pozitif kontrol: oku silinmiş havuz satırında gerçek suzum kırmızı
+  ✓ M20 çözülemeyen satır sessizce atlanınca süzümden kaçar (göz #442 tur 1 · kapı yakalar): mutant ısırıldı
 
-GECEN=204 DUSEN=0
+GECEN=212 DUSEN=0
 --- stderr ---

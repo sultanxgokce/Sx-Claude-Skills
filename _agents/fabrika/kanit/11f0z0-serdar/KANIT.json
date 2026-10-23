@@ -1,7 +1,7 @@
 {
   "is": "11f0z0-serdar",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-23T15:28:38+03:00",
+  "guncelleme": "2026-10-23T15:51:17+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -44,7 +44,7 @@
       "etiket": "havuz-satiri",
       "asama": "sonra",
       "dosya": "olcum-havuz-satiri-sonra.txt",
-      "sha256": "258ea2ed02783aaa15f1017284200ce64a77f5ef04c28fffb22a1c81ca3a05a9",
+      "sha256": "b64342653fe21933f7a97a4e7e37ddc6f482eb10a85c0c022dc148eec515234b",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/11f0z0-serdar/olc-havuz.sh",
@@ -52,17 +52,17 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T15:28:26+03:00",
+      "zaman": "2026-10-23T15:51:04+03:00",
       "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "82694e90f4d544f998a7ecb83d00ecad"
+      "olcum_id": "8c0187cf58b549e7afd6515381cc498d"
     },
     {
       "tur": "olcum",
       "etiket": "suzum-damgasiz-havuz",
       "asama": "sonra",
       "dosya": "olcum-suzum-damgasiz-havuz-sonra.txt",
-      "sha256": "aaef531c9315ff23a0d4e88fded138d35812a2b41d1d8d192efcfd3ab7544a1c",
+      "sha256": "9d494a0267cb311faeec8b9ee851d3826ee20d95ad7c1ece4cb607a3c6e606b7",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/11f0z0-serdar/olc-havuz.sh",
@@ -70,65 +70,65 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T15:28:26+03:00",
+      "zaman": "2026-10-23T15:51:05+03:00",
       "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "8c575c849ccb4b13bce476e530b0a120"
+      "olcum_id": "ee2cf877c52542b1ba807ddad6c71150"
     },
     {
       "tur": "olcum",
       "etiket": "sinav",
       "asama": "tek",
       "dosya": "olcum-sinav-tek.txt",
-      "sha256": "49146913471584f23261d975ac6bb9d42cc526b61ce2769b6d0638252eb47485",
+      "sha256": "23538294edcccbf587728471cb1008c15ce8754604cc550889e28971d96ee7cc",
       "komut": [
         "bash",
         "retro/scripts/retro.test.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T15:28:33+03:00",
-      "sure_sn": 6.7,
+      "zaman": "2026-10-23T15:51:12+03:00",
+      "sure_sn": 7.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "67fab0c28fdb43ab91f4dd10e80a4481"
+      "olcum_id": "8b91b5c2c38548a78e9b878989d34699"
     },
     {
       "tur": "olcum",
       "etiket": "mutant-kopru",
       "asama": "tek",
       "dosya": "olcum-mutant-kopru-tek.txt",
-      "sha256": "0dea25e2ec3b81d1d7165a6b53e23febf814ac7100f90d924ef85b75895904a2",
+      "sha256": "c5e73ef0680ef35d908afbfad91cf6173f6ca139f2c87d1337dfa050d1b6da89",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/11f0z0-serdar/mutant-kopru.sh"
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-23T15:28:33+03:00",
+      "zaman": "2026-10-23T15:51:13+03:00",
       "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "sinav",
       "beklenen": "kirmizi",
-      "olcum_id": "e6aa6ba31cf44a388372770e0ab26b43"
+      "olcum_id": "63ad2f271bb447ba95a5f76ed9176483"
     },
     {
       "tur": "olcum",
       "etiket": "gercek-defter-w43",
       "asama": "tek",
       "dosya": "olcum-gercek-defter-w43-tek.txt",
-      "sha256": "0809e4bc8df122c127b846c75982e218663f5f0100e176c56a2c37ccb37e5d3f",
+      "sha256": "27329dac567d9ded101c56126cc5c8784a1e854b45720f9ff81b8df4bf3772ee",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/11f0z0-serdar/olc-gercek.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T15:28:38+03:00",
-      "sure_sn": 4.6,
+      "zaman": "2026-10-23T15:51:17+03:00",
+      "sure_sn": 4.5,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "68e0985820914492ad86f9aa078e5c0b"
+      "olcum_id": "e4f58b376fae43dc86b9afade7b4d4b1"
     }
   ],
-  "imza": "e9d0b9b00ab92a24d36932601da07cc9d03172bd728928a3ce738aab4d7ecb07"
+  "imza": "9682e994494d2736444198c7b78eb8ef16e8c586251d573c00fa6534c5aa3beb"
 }

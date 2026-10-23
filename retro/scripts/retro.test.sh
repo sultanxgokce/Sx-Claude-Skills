@@ -297,6 +297,14 @@ kapi "T12j RED gerekçesi kısa → kırmızı, yalnız o satır" 1 python3 "$R"
 icermez "$CIKTI" "PYTVZV9" "T12l kendi-id damgası (= Sırada'ya alındı) geçerli"
 sed -i 's/→ RED: kısa/→ RED: ayrı kart olarak açıldı (denetçi düzeltme turu farkı)/' "$HM"
 kapi "T12m iki havuz satırı damgalı → yeşil" 0 python3 "$R" suzum --kok "$HK"; icerir "$CIKTI" "2 havuz kaydının tümü damgalı" "T12n sayım"
+# göz #442 tur 1: oku silinmiş havuz satırı sözlüğe girmiyor, süzüm onu görmüyordu → bölümdeki çözülemeyen satır KIRMIZI
+cp "$HM" "$T/havuz-merkez-iyi.md"; sed -i 's/^- gorev_01M5M55BRC0V3G8A200PYTVZV9 · \(.*\) → gorev_01M5M55BRC0V3G8A200PYTVZV9$/- gorev_01M5M55BRC0V3G8A200PYTVZV9 · \1/' "$HM"
+grep -q '^- gorev_01M5M55BRC0V3G8A200PYTVZV9 · .*→' "$HM" && kirmizi "T12m2 önkoşul: ok silinemedi" || ok "T12m2 önkoşul: havuz satırının oku silindi"
+kapi "T12m3 oku silinmiş (çözülemeyen) havuz satırı → suzum KIRMIZI, sessiz atlanmaz" 1 python3 "$R" suzum --kok "$HK"; icerir "$CIKTI" "havuz satırı ÇÖZÜLEMEDİ (biçimsiz" "T12m4 gerekçe"
+sed -i '/^## Havuz süzümü/a - gorev_KISA · kimliği bozuk satır → RED: kimlik bozuk olsa da' "$HM"   # bölümün İÇİNE (dosya sonu elle bölümdür)
+kapi "T12m5 kimliği bozuk satır da kırmızı" 1 python3 "$R" suzum --kok "$HK"; icerir "$CIKTI" "ÇÖZÜLEMEDİ (biçimsiz, süzüm sayılamaz): '- gorev_KISA" "T12m6 bozuk kimlik gerekçesi"
+cp "$T/havuz-merkez-iyi.md" "$HM"
+kapi "T12m7 bozuk satır kaldırılınca yeniden yeşil (aracın '_(… yok …)_' notu ve boş satır bozuk sayılmaz)" 0 python3 "$R" suzum --kok "$HK"
 printf '\n## Serbest havuz notu\nmerkezin havuz notu\n' >> "$HM"
 kapi "T12o merkez --yenile" 0 "${HB[@]}" python3 "$R" merkez --kok "$HK" --ajanlar X --yenile
 icerir "$(cat "$HM")" "→ gorev_01M5M55BRC0V3G8A200PYTVZV9" "T12p kendi-id damgası korundu"; icerir "$(cat "$HM")" "→ RED: ayrı kart olarak açıldı (denetçi" "T12q RED damgası korundu"
@@ -396,6 +404,9 @@ mut "M18 köprü yokluğu boş listeye çevrilince '0 havuz' sessiz yeşil olur 
 m_h_suzum(){ local rc; cp "$T/havuz-merkez-damgasiz.md" "$HM"; python3 "$1" suzum --kok "$HK" >/dev/null 2>&1; rc=$?; cp "$T/havuz-merkez.md" "$HM"; [ "$rc" -ne 0 ]; }
 m_h_suzum "$R" && ok "M19 pozitif kontrol: damgasız havuz satırında gerçek suzum kırmızı" || kirmizi "M19 pozitif kontrol: gerçek suzum damgasız havuzu geçiriyor"
 mut "M19 havuz damga denetimi kalkınca damgasız havuz satırı süzümden geçer (kapı yakalar)" 's/        if not damga_gecerli(d):/        if False:/' m_h_suzum
+m_h_bozuk(){ local rc; cp "$T/havuz-merkez.md" "$HM"; sed -i 's/^- gorev_01M5M55BRC0V3G8A200PYTVZV9 · \(.*\) → gorev_01M5M55BRC0V3G8A200PYTVZV9$/- gorev_01M5M55BRC0V3G8A200PYTVZV9 · \1/' "$HM"; python3 "$1" suzum --kok "$HK" >/dev/null 2>&1; rc=$?; cp "$T/havuz-merkez.md" "$HM"; [ "$rc" -ne 0 ]; }
+m_h_bozuk "$R" && ok "M20 pozitif kontrol: oku silinmiş havuz satırında gerçek suzum kırmızı" || kirmizi "M20 pozitif kontrol: gerçek suzum çözülemeyen satırı geçiriyor"
+mut "M20 çözülemeyen satır sessizce atlanınca süzümden kaçar (göz #442 tur 1 · kapı yakalar)" 's/            bozuk.append(s.strip())/            pass/' m_h_bozuk
 
 echo; echo "GECEN=$G DUSEN=$K"
 [ "$K" -eq 0 ]
