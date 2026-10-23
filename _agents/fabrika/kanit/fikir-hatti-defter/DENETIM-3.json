@@ -1,0 +1,30 @@
+{
+  "tur": 3,
+  "is": "fikir-hatti-defter",
+  "pr": "431",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T05:54:56+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 74820,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 14,
+    "bayt": 45431
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Görev defteri bulguları eski havuz biçimine çevrilip bileyi ve mucit-t1 kaynaklarına eklenmiş; okunamayan defter de sessizce boş sayılmayıp ÖLÇÜLEMEDİ olarak bildiriliyor. Gerçekçi önce/sonra ölçümü ile jetonsuz, bozuk yanıt, göç aynası ve kaynak arızası sınavları talebi üretime hazır düzeyde doğruluyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt içermiyor. `defteri-goruyor` ölçüm çifti önce rc=1 ile iki tüketicide defterden 0, sonra rc=0 ile bileyi için 445 ve mucit için 460 kayıt gösteriyor; ilgili bulgu, bileyi ve mucit sınavları yeşil. Çıktılardaki mutant denemeleri sınav duyarlılığını destekliyor, ancak manifest kayıtlarında `mutasyon:true` bulunmadığından resmî MUTASYON KANITI sayılmaz; gerçek ölçüm çifti ve davranış sınavları yine de talebi kanıtlamaya yeterli."
+  }
+}

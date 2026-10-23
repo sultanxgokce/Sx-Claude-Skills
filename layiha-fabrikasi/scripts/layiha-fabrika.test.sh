@@ -3,6 +3,8 @@
 # İzole: bayrak/havuz/defter TÜM yollar env-override ile temp-dizine yönlendirilir — GERÇEK
 # /config/.claude/layiha-fabrikasi.kapali'ye ve GERÇEK aday-havuzuna ASLA DOKUNMAZ.
 set -uo pipefail
+# 🔴 HERMETİK (4FDVE5): mucit-t1 jeton okunabiliyorsa merkezî Görev Defteri'ni de süzer — sınav canlı deftere gitmesin (bu kutuda jeton var).
+export MUCIT_GOREV_DEFTERI="-"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 GUARD_LIB="$HERE/layiha-fabrika-guard.lib.sh"
 FABRIKA="$HERE/layiha-fabrika.sh"

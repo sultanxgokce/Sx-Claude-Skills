@@ -1,0 +1,38 @@
+{
+  "tur": 1,
+  "is": "fikir-hatti-defter",
+  "pr": "431",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T05:05:45+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 66486,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 10,
+    "bayt": 37487
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Görev defteri köprüsü eklenmiş; bileyi ile mucit-t1 birleşik kaynağı gerçekten okuyor, önce/sonra ölçümü de hedef davranışın oluştuğunu gösteriyor. Ancak bozuk fakat `gorevler` anahtarı bulunan bazı yanıtlar ÖLÇÜLEMEDİ/rc=3 yerine Python hatasıyla rc=1 verebilir; üretim öncesi önce bu doğrulama açığını kapatın.",
+    "bulgular": [
+      {
+        "ne": "`havuz-cek`, `gorevler` alanının gerçekten liste olduğunu ve listedeki kayıtların gerekli nesne yapısını taşıdığını doğrulamıyor; örneğin `{\"gorevler\":{}}` veya kimliği olmayan bir bulgu kaydı döngü içinde TypeError/KeyError üretip rc=1 ile çıkar. İş kartının bozuk/okunamayan defter yanıtında rc=3 ve ÖLÇÜLEMEDİ deme sözleşmesi böylece her bozuk yanıt için sağlanmıyor.",
+        "kanit": "Kod yalnız `L = json.loads(g)[\"gorevler\"]` erişimini try/except içine alıyor; ardından `for k in L`, `k.get(...)` ve `k[\"id\"]` işlemleri korumasız. HC7 sınavı sadece `gorevler` anahtarının tamamen bulunmadığı yanıtı ölçüyor, yanlış türü veya bozuk kayıt öğesini ölçmüyor.",
+        "konum": "bulgu/scripts/bulgu.sh: havuz-cek içindeki gömülü Python bloğu; bulgu/scripts/bulgu.test.sh: HC7",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest sağlam ve araç imzalı; sarı manifest kaydı yok. `defteri-goruyor` önce kırmızı/sonra yeşil ölçüm çifti gerçekçi salt-okur defter verisiyle bileyi ve mucit çıktısındaki yeni kayıtları gösteriyor; bulgu, bileyi ve mucit sınavları da yeşil. Jetonsuz rc=3/ÖLÇÜLEMEDİ HC5 ile ölçülmüş. Mutasyon davranışı sınav çıktılarında gösterilmiş olsa da manifestte `mutasyon:true` etiketli ayrı kayıt bulunmadığından rubriğin resmî mutasyon kanıtı biçimini karşılamıyor; bu, güçlü gerçek ölçümü geçersiz kılmıyor."
+  }
+}
