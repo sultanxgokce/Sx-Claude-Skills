@@ -122,7 +122,7 @@ PY
   ! _k "$1" "$(_sen "$d")"; g $? "mutant ($5) → '$1' kapısı düşüyor"
 }
 _m a denetci.sh 'karne_yaz
-if [ "$PUAN" -eq 5 ]' 'if [ "$PUAN" -eq 5 ]' "denetçi karneyi çağırmıyor"
+# 🔴 GÖZ ADIMI GÖREVE' '# 🔴 GÖZ ADIMI GÖREVE' "denetçi karneyi çağırmıyor"
 _m a denetci.sh 'KANIT_DEPO="" bash "$HERE/karne.sh" yaz "$IS" --depo "$KART_DEPO"' 'bash "$HERE/karne.sh" yaz "$IS"' "birincil yönlendirmesi yok → karne iş alanına düşüyor"
 _m d denetci.sh '[ "${DENETCI_KARNE:-1}" = 1 ] ||' 'true ||' "DENETCI_KARNE=0 dinlenmiyor"
 _m e denetci.sh 'else _bilgi "   ⚠ karne yazılamadı' 'else exit 9; _bilgi "   ⚠ karne yazılamadı' "karne düşüşü turun sonucunu değiştiriyor"

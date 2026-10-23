@@ -470,6 +470,31 @@ N0=$(yz); O="$(DEFTER_JETON_YOL="$T/jeton-yok" bash "$KT" ac gb-4 --is "jetonsuz
 N0=$(yz); O="$(bash "$KT" ac gb-5 --is "bağsız iş" --istedi SERDAR --aldi BANI $SINIF 2>&1)"; RC=$?
 [ $RC -eq 0 ] && [ "$(yz)" -eq "$N0" ] && grep -q "görev bağı yok — iş Sultan'ın 'çalışılıyor' görünümüne DÜŞMEZ" <<<"$O"; g $? "G7 bağsız kart deftere gitmez, rc 0, bunu söyler (eski kartlar etkilenmez)"
 O="$(bash "$KT" bitti gb-5 2>&1)"; RC=$?; [ $RC -eq 0 ] && [ "$(yz)" -eq "$N0" ]; g $? "G7b bağsız kartın bitti'si de deftere gitmez"
+echo "════ T14b · 0.24.0 (Y7J3Q): yeni işe geçince önceki görev 'bekliyor'; göz turu göreve tek adım, durum değişmez ════"
+bash "$KT" bitti gb-3 >/dev/null 2>&1   # gb-3'ün görevi (KARTRED) ret döner; kart bitmiş olur → açık sayılmaz
+N0=$(yz); O="$(bash "$KT" ac gb-6 --is "yeni iş" --istedi SERDAR --aldi BANI $SINIF --gorev gorev_KARTTEST00000006 --tahmin 30 2>&1)"; RC=$?
+python3 - "$T/yazim.jsonl" "$N0" <<'PY'; g $? "G8 aynı ajanın açık görevli kartı (gb-4) varken yeni iş: gb-4'ün görevi 'bekliyor' + 'başka işe geçti: gb-6' ve yeni işin görevi 'çalışılıyor' (toplam 2 yazım)"
+import json,sys
+l=[json.loads(x) for x in open(sys.argv[1])][int(sys.argv[2]):]
+assert len(l)==2, l
+yeni=[x for x in l if x["yol"].endswith("gorev_KARTTEST00000006")][0]; eski=[x for x in l if x["yol"].endswith("gorev_KARTTEST00000004")][0]
+assert yeni["govde"]["yerine"]["gorev_durumu"]=="calisiliyor", yeni
+assert eski["govde"]["yerine"]=={"gorev_durumu":"bekliyor","not":"başka işe geçti: gb-6"}, eski
+assert eski["govde"]["adimlar"][0].startswith("[⏳ bekliyor] BANI · kart gb-4 açıkken başka işe geçti: gb-6"), eski
+PY
+[ $RC -eq 0 ] && python3 -c "import json;k=json.load(open('$KK/gb-4.json'));assert k['durum']=='acik' and k['gorev_yazimlari'][-1]['olay']=='gecti'"; g $? "G8b rc 0; önceki KART açık kalır (yalnız görevi bekliyor), karta 'gecti' yazımı işlenir"
+N0=$(yz); bash "$KT" ac gb-7 --is "başka ajanın işi" --istedi SERDAR --aldi MUAVIN $SINIF --gorev gorev_KARTTEST00000007 --tahmin 30 >/dev/null 2>&1
+[ "$(( $(yz) - N0 ))" -eq 1 ]; g $? "G8c başka ajanın kartı ETKİLENMEZ: yalnız kendi görevi yazıldı (+1 yazım)"
+N0=$(yz); O="$(bash "$KT" goz-adim gb-6 --not "[🔎 göz] kart gb-6 · tur 1 · kod 5/5 · doğru şey E · bulgu 0" 2>&1)"; RC=$?
+python3 - "$T/yazim.jsonl" "$N0" "$(yz)" <<'PY'; g $? "G9 goz-adim: tek PATCH, gövdede YALNIZ adimlar (durum alanı yok → görev durumu değişmez)"
+import json,sys
+l=[json.loads(x) for x in open(sys.argv[1])][int(sys.argv[2]):]
+assert len(l)==1 and l[0]["yol"].endswith("gorev_KARTTEST00000006"), l
+assert l[0]["govde"]=={"adimlar":["[🔎 göz] kart gb-6 · tur 1 · kod 5/5 · doğru şey E · bulgu 0"]}, l[0]["govde"]
+PY
+[ $RC -eq 0 ] && grep -q "→ göz adımı (durum değişmez) (defter)" <<<"$O"; g $? "G9b rc 0, ekranda '→ göz adımı (durum değişmez) (defter)'"
+N0=$(yz); O="$(bash "$KT" goz-adim gb-5 --not "x" 2>&1)"; RC=$?; [ $RC -eq 0 ] && [ "$(yz)" -eq "$N0" ] && grep -q "görev bağı yok" <<<"$O"; g $? "G9c bağsız kart: deftere gitmez, rc 0, söyler"
+bash "$KT" goz-adim gb-6 >/dev/null 2>&1; [ $? -eq 1 ]; g $? "G9d --not olmadan rc 1"
 kill $DSRV 2>/dev/null; wait $DSRV 2>/dev/null
 O="$(bash "$KT" bitti gb-2 2>&1)"; RC=$?
 [ $RC -eq 4 ] && grep -q "yazılamadı: deftere ulaşılamadı" <<<"$O" && python3 -c "import json;k=json.load(open('$KK/gb-2.json'));assert k['durum']=='bitti' and k['gorev_yazimlari'][-1]['olay']=='bitti'"; g $? "G8 defter kapalı: kart bitti İŞLENİR, 'ulaşılamadı' söylenir, rc 4 (sessiz eksik yok)"

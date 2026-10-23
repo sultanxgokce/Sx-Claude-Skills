@@ -1,0 +1,6 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-denetci-sinavi-* ===
+$ bash -c bash /config/projects/Nexus/scripts/agir-sira.sh denetci-mut -- bash -c 'if timeout 600 bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/mut-goz-cagri/denetci.test.sh < /dev/null 2>&1 | grep -m1 "✗"; then exit 1; else exit 0; fi'
+# rc=1 sure=1.9s zaman=2026-10-23T18:59:44+03:00
+--- stdout ---
+  ✗ G-a 3/H turu: kart.sh goz-adim is-g --not '[🔎 göz] kart is-g · tur 1 · kod 3/5 · doğru şey H · bulgu 1' (rc 1 değişmedi)
+--- stderr ---

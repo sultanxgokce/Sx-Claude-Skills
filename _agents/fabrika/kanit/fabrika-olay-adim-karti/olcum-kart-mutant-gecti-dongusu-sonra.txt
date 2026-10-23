@@ -1,0 +1,8 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-kart-sinavi-* ===
+$ bash -c unset KANIT_DEPO; bash /config/projects/Nexus/scripts/agir-sira.sh kart-mut -- timeout 900 bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/mut-gecti-dongusu/kart.test.sh < /dev/null > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/mut-gecti-dongusu.out 2>&1; r=$?; grep -m4 '✗' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/mut-gecti-dongusu.out | cut -c1-170; grep SONUÇ /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/mut-gecti-dongusu.out; exit $r
+# rc=1 sure=17.6s zaman=2026-10-23T19:01:10+03:00
+--- stdout ---
+  ✗ G8 aynı ajanın açık görevli kartı (gb-4) varken yeni iş: gb-4'ün görevi 'bekliyor' + 'başka işe geçti: gb-6' ve yeni işin görevi 'çalışılıyor' (t
+  ✗ G8b rc 0; önceki KART açık kalır (yalnız görevi bekliyor), karta 'gecti' yazımı işlenir
+── SONUÇ: 236 geçti · 2 kaldı ──
+--- stderr ---
