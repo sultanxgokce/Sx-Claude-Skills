@@ -1,0 +1,11 @@
+$ bash /tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/olc/olc-oda.sh /tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/pkg-main/yazilim-fabrikasi/scripts
+# rc=1 sure=0.2s zaman=2026-10-23T11:16:40+03:00
+--- stdout ---
+── kart.sh ac çıktısı (paket: /tmp/claude-1000/-config-projects-Nexus/4f6442d1-77db-445d-93ab-44b9fe1de9a0/scratchpad/pkg-main/yazilim-fabrikasi/scripts) ──
+✓ kart açıldı: olcum-sinifli · sınıf: yetki · SULTAN'A GİDER
+  · görev bağı yok — iş Sultan'ın 'çalışılıyor' görünümüne DÜŞMEZ (bağlamak için: kart.sh ac … --gorev gorev_<kimlik> --tahmin <dk>)
+── kart.sh rc=0
+── kart dosyası yazıldı mı: 1
+── 'Sultan'a ulaşılamadı' satırı: 0
+SONUÇ: ulaşım yolu yokken sınıflı kart açıldı ya da sessiz kaldı
+--- stderr ---
