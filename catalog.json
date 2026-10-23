@@ -1214,7 +1214,7 @@
       "sync_dagitim": true,
       "type": "workflow",
       "name": "UI Tasarım Akışı",
-      "version": "0.4.0",
+      "version": "0.7.1",
       "description": "UI/arayüz tasarım işinin ZORUNLU akış kapısı: ürün niyeti → sayfa envanteri → senaryolar (tık bütçesi) → ÇEKİRDEK+MARKA sözleşmesi → Claude design promptu → devam promptu + üç denetim. 'UI işi · arayüz · ekran tasarla · sayfa tasarımı · frontend görünüm · panel · layout · stil' tetiğinde çağrılır. /frontend-design ile BİRLİKTE zorunlu — biri ötekinin yerine geçmez.",
       "prerequisites": {
         "backend": [],
@@ -1468,7 +1468,7 @@
       "id": "frontend-boost",
       "type": "agent",
       "name": "/frontend-boost — etkili ama yalın sayfa tasarımı (GLOBAL)",
-      "version": "0.5.0",
+      "version": "0.5.1",
       "description": "Karşılama sayfası, ürünün açılış ekranı, sunum/broşür kapağı 'bir tasarımcı yapmış' densin diye tasarlanır: sahne · tek kahraman nesne · yazı görsel öğe · tek ışık · derinlik · tek açılış anı. Şablon (sahne.css + landing iskeleti), karakter alt kümeli yazı tipi aracı ve kontrastı GERÇEK zemin pikselinden ölçen araç birlikte gelir. 0.5.0 (Sultan 19 Eylül): her UI/tasarım işinde frontend-design ile BİRLİKTE zorunlu; frontend-design'ın güçlü yanları 'Devralınan disiplin' olarak içeride ve form/tablo/panel dahil her işte geçerli, sahne formülü yalnız önemli yüzeylerde. Dördüncü kapı tasarim-citasi (kütüphanesiz kutuda 'çıta kıyası yapılamadı' yazılır); referans arşivinden (55 broşür + 50 sunum) basılı ve sunum dersleri eklendi. Kontrast aracı onarıldı: FRONTEND_BOOST_SECICILER ile verilen metin gizlenmiyor, oran 1,00 çıkıyordu; artık gizleniyor ve 1,00 kalan kutu rc=3 'ölçülemedi' der. NAKKAŞ/MÜTEVELLİ/AKAR doğurdu; MUAVİN filo geneline paketledi."
     },
     {

@@ -57,11 +57,38 @@ tarayicisiz(){ [ "$1" = 3 ] && grep -qE 'çalışma-zamanı|başlatılamadı' "$
 r="$(calistir .ozel "$TMP/ozel.html")"
 if tarayicisiz "$r"; then olcul "T8 yalnız SECICILER ile verilen metin zeminden ölçülür (rc=0)"
 else kapi "T8 yalnız SECICILER ile verilen metin zeminden ölçülür (rc=0; eskiden 1,00 → rc=1)" "0" "$r"
-     kapi "T8b ölçülen oran 1,00 DEĞİL" "0" "$(grep -c '=1 (en açık' "$TMP/cikti")"; fi
+     kapi "T8b ölçülen oran 1,00 DEĞİL" "0" "$(grep -c '=1 (en kötü' "$TMP/cikti")"; fi
 r="$(calistir .ayni "$TMP/ayni.html")"
 if tarayicisiz "$r"; then olcul "T9 oranı 1,00 çıkan kutu ölçülemedi sayılır (rc=3)"
 else kapi "T9 oranı 1,00 çıkan kutu ölçülemedi sayılır (rc=3, rc=1 DEĞİL)" "3" "$r"
      kapi "T9b stderr nedeni söyler" "1" "$(grep -c 'ÖLÇÜLEMEDİ: .* kutuda oran 1,00' "$TMP/cikti")"; fi
+
+# T10-T13 🔴 ÇÖKME İHLAL DEĞİL · ORAN İKİ YÖNLÜ · BASKIN ZEMİN (MUAVİN, 2026-10-23, gorev XZE47).
+# Ölçüldü 19 Eki: yüksekliği 0 kutu getImageData'yı düşürüp rc=1 "eşik aşıldı" veriyordu; açık rozet
+# hapı üstündeki koyu yazı 0,07 basıyordu (tek yönlü oran + köşeden dış zemin). Çift yönlü fikstür:
+# temiz olanlar rc=0 (ALTIN), gerçek soluk metin hâlâ rc=1 (KIRMIZI) — düzeltme kapıyı gevşetmedi.
+kapi "T10k kodda iki yönlü oran (max/min)" "1" "$(grep -c 'Math.max(a,b)+.05)/(Math.min(a,b)+.05)' "$KOK/kontrast-olc.mjs")"
+kapi "T10l kodda 1 pikselden küçük kutu ölçüme girmez" "1" "$(grep -c '!(b.height>=1)' "$KOK/kontrast-olc.mjs")"
+GOV='<!doctype html><meta charset="utf-8"><body style="margin:0;background:#101418"><div class="sahne" style="padding:40px">'
+printf '%s<p style="color:#f0f0f0;font-size:20px">Normal açık metin</p><span style="display:block;height:0;overflow:hidden;color:#fff">sıfır</span></div>' "$GOV" > "$TMP/sifir.html"
+printf '%s<p style="color:#f0f0f0;font-size:20px">Normal açık metin</p><span style="display:inline-block;background:#f4f1ea;color:#1b1b1b;border-radius:999px;padding:2px 10px;font-size:13px">Rozet hap</span></div>' "$GOV" > "$TMP/hap.html"
+printf '%s<p style="color:#3a3f45;font-size:20px">Soluk metin</p><span style="display:inline-block;background:#f4f1ea;color:#c9c4b8;border-radius:999px;padding:2px 10px;font-size:13px">Soluk rozet</span></div>' "$GOV" > "$TMP/ihlal.html"
+printf '%s<svg width="300" height="60"><defs><linearGradient id="g"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#888"/></linearGradient></defs><text x="10" y="40" fill="url(#g)" font-size="24">Degrade</text></svg></div>' "$GOV" > "$TMP/cokme.html"
+calistir2(){ FRONTEND_BOOST_SAHNE=.sahne FRONTEND_BOOST_SECICILER="$1" node "$KOK/kontrast-olc.mjs" "file://$2" >"$TMP/cikti" 2>&1; printf '%s' $?; }
+r="$(calistir2 'p,span' "$TMP/sifir.html")"
+if tarayicisiz "$r"; then olcul "T10 yüksekliği 0 kutu çökertmez (rc=0)"
+else kapi "T10 yüksekliği 0 kutu çökertmez, ölçüme girmez (rc=0; eskiden IndexSizeError → rc=1)" "0" "$r"; fi
+r="$(calistir2 'p,span' "$TMP/hap.html")"
+if tarayicisiz "$r"; then olcul "T11 açık hap üstünde koyu yazı temiz (rc=0)"
+else kapi "T11 açık hap üstünde koyu yazı temiz (rc=0; eskiden 0,07 → rc=1)" "0" "$r"
+     kapi "T11b rozet oranı 10'dan büyük basılır" "1" "$(grep -qE 'Rozet hap=(1[0-9]|2[01])\.' "$TMP/cikti" && echo 1 || echo 0)"; fi
+r="$(calistir2 'p,span' "$TMP/ihlal.html")"
+if tarayicisiz "$r"; then olcul "T12 gerçek soluk metin hâlâ rc=1"
+else kapi "T12 gerçek soluk metin (iki yönde) hâlâ eşik aşıldı (rc=1) — kapı gevşemedi" "1" "$r"; fi
+r="$(calistir2 'text' "$TMP/cokme.html")"
+if tarayicisiz "$r"; then olcul "T13 ölçüm çökmesi rc=3"
+else kapi "T13 ölçüm sırasında çökme ÖLÇÜLEMEDİ (rc=3; eskiden rc=1 'eşik aşıldı')" "3" "$r"
+     kapi "T13b stderr çökmeyi ihlal saymadığını söyler" "1" "$(grep -c 'ne "temiz" ne "eşik aşıldı": rc=3' "$TMP/cikti")"; fi
 
 printf '\ngeçti=%s · kaldı=%s · ölçülemedi=%s\n' "$G" "$K" "$U"
 [ "$K" -eq 0 ] || exit 1

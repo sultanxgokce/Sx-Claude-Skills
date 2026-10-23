@@ -1,0 +1,31 @@
+$ bash frontend-boost/arac/araclar.test.sh
+# rc=0 sure=79.5s zaman=2026-10-23T00:52:34+03:00
+--- stdout ---
+  ✓ T1 adres verilmezse kullanım hatası (rc=2)
+  ✓ T2 tarayıcı yoksa rc=3 ÖLÇÜLEMEDİ (rc=0 DEĞİL)
+  ✓ T2b ileti 'temiz DEĞİL' der ve çözümü gösterir
+  ✓ T3 env ezmesi kodda var (FRONTEND_BOOST_PW ≥1 kez)
+  ✓ T3b sabit yol artık doğrudan import edilmiyor
+  ✓ T4 sıfır metin → rc=3 kapısı kodda
+  ✓ T4b eşik aşımı rc=1 olarak ayrılmış
+  ✓ T5 argümansız → rc=2 (yığın izi DEĞİL)
+  ✓ T5b argümansız çıktıda yığın izi yok
+  ✓ T6 sözdizimi temiz (py)
+  ✓ T6b sözdizimi temiz (mjs)
+  ✓ T7 gizleme listesi SECICILER'i de kapsar (kodda)
+  ✓ T7b oran 1,00 → ölçülemedi kapısı kodda
+  ✓ T8 yalnız SECICILER ile verilen metin zeminden ölçülür (rc=0; eskiden 1,00 → rc=1)
+  ✓ T8b ölçülen oran 1,00 DEĞİL
+  ✓ T9 oranı 1,00 çıkan kutu ölçülemedi sayılır (rc=3, rc=1 DEĞİL)
+  ✓ T9b stderr nedeni söyler
+  ✓ T10k kodda iki yönlü oran (max/min)
+  ✓ T10l kodda 1 pikselden küçük kutu ölçüme girmez
+  ✓ T10 yüksekliği 0 kutu çökertmez, ölçüme girmez (rc=0; eskiden IndexSizeError → rc=1)
+  ✓ T11 açık hap üstünde koyu yazı temiz (rc=0; eskiden 0,07 → rc=1)
+  ✓ T11b rozet oranı 10'dan büyük basılır
+  ✓ T12 gerçek soluk metin (iki yönde) hâlâ eşik aşıldı (rc=1) — kapı gevşemedi
+  ✓ T13 ölçüm sırasında çökme ÖLÇÜLEMEDİ (rc=3; eskiden rc=1 'eşik aşıldı')
+  ✓ T13b stderr çökmeyi ihlal saymadığını söyler
+
+geçti=25 · kaldı=0 · ölçülemedi=0
+--- stderr ---
