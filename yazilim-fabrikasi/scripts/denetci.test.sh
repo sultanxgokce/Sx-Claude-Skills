@@ -845,4 +845,31 @@ grep -q "İŞİ BÖL" <<<"$CIKTI" && grep -q "kart.sh daralt" <<<"$CIKTI"; g $? 
 SAHTE_JSON="$(J 5 E "")" DENETCI_KIRP_ESIK=50000 bash "$D" is-bol --diff "$T/bol.patch" >/dev/null 2>&1; [ $? -eq 0 ]; g $? "eşik altındaki fark normal denetlenir (rc=0)"
 
 
+echo "════ TP · BİRİNCİL KOPYADA DENETİM REDDİ (0.22.0 · gorev_01M5F03K79B5B19A2XQ54V8NMK): alan varken birincilden koşum kayıt bırakmaz ════"
+# NİÇİN: denetçi DENETIM-N.json + KART.json'u çağrıldığı ağacın köküne yazar; iş alanı açıkken BİRİNCİL kopyadan `--pr N` ile koşulan son tur
+#        orada takipsiz kalıyordu (HENDESE 22 Eki: Nexus 9 + cloudtop 13 işte). Alan = IS_ALANI_KOK/<depo-adı>-<iş>; birincil = git-dir == git-common-dir.
+TP="$(mktemp -d)"; ( cd "$TP" && git init -q -b main && git -c user.email=t@t -c user.name=T commit -q --allow-empty -m "ilk" ) >/dev/null 2>&1
+AKP="$TP/alanlar"; mkdir -p "$AKP"; WP="$AKP/$(basename "$TP")-is-p"; git -C "$TP" worktree add -q -b is-p "$WP" >/dev/null 2>&1; [ -d "$WP" ]; g $? "TP0 fikstür: birincil kopya + iş alanı"
+( cd "$TP" && bash "$KT" ac is-p --is x --istedi SULTAN --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h ) >/dev/null 2>&1
+IS_ALANI_KOK="$AKP" KANIT_DEPO="$WP" bash "$K" olcum is-p olc --asama tek -- echo 1 >/dev/null 2>&1
+CIKTI="$(SAHTE_JSON="$(J 5 E "")" IS_ALANI_KOK="$AKP" KANIT_DEPO="$TP" bash "$D" is-p --diff "$T/d.patch" 2>&1)"; RC=$?
+[ "$RC" -eq 2 ] && grep -q "BİRİNCİL kopyadasın" <<<"$CIKTI" && grep -q "$WP" <<<"$CIKTI"; g $? "TP1 birincilden, alan varken: rc 2 + 'BİRİNCİL kopyadasın' + alan yolu söylenir"
+[ ! -e "$TP/_agents/fabrika/kanit/is-p/DENETIM-1.json" ] && [ ! -e "$TP/_agents/fabrika/kanit/is-p/KART.json" ]; g $? "TP1b birincile DENETIM / KART.json yazılmadı"
+SAHTE_JSON="$(J 5 E "")" IS_ALANI_KOK="$AKP" KANIT_DEPO="$WP" bash "$D" is-p --diff "$T/d.patch" >/dev/null 2>&1; RC=$?
+[ "$RC" -eq 0 ] && python3 -c "import json;d=json.load(open('$WP/_agents/fabrika/kanit/is-p/DENETIM-1.json'));assert d['depo']=='$WP' and d['dal']=='is-p' and d['birincil_mi'] is False, d" 2>/dev/null; g $? "TP2 alandan koşum yazar (rc 0); DENETIM'de depo=alan, dal=is-p, birincil_mi=false"
+( cd "$TP" && bash "$KT" ac is-q --is x --istedi SULTAN --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki h ) >/dev/null 2>&1
+IS_ALANI_KOK="$AKP" KANIT_DEPO="$TP" bash "$K" olcum is-q olc --asama tek -- echo 1 >/dev/null 2>&1
+SAHTE_JSON="$(J 5 E "")" IS_ALANI_KOK="$AKP" KANIT_DEPO="$TP" bash "$D" is-q --diff "$T/d.patch" >/dev/null 2>&1; RC=$?
+[ "$RC" -eq 0 ] && python3 -c "import json;d=json.load(open('$TP/_agents/fabrika/kanit/is-q/DENETIM-1.json'));assert d['birincil_mi'] is True and d['dal']=='main', d" 2>/dev/null; g $? "TP3 alanı OLMAYAN iş birincilden eskisi gibi denetlenir; DENETIM birincil_mi=true, dal=main"
+# MUTASYON: betiğin bütün dizini kopyalanır (denetci.sh kardeşlerini \$HERE'den bulur), kopyada birincil tespiti sökülür → TP1 senaryosu birincile yazar
+MPD="$TP/scripts"; cp -r "$HERE" "$MPD"; sed -i 's/^\[ -n "\$_gd" \] && \[ "\$_gd" = "\$_gc" \] && DENETCI_BIRINCIL=1$/DENETCI_BIRINCIL=0/' "$MPD/denetci.sh"; ! cmp -s "$MPD/denetci.sh" "$HERE/denetci.sh"; g $? "TP4 mutant üretildi (desen tuttu)"
+# Mutantın yazabilmesi için birincilde de kanıt olmalı (denetçi kanıtı KANIT_DEPO'dan okur; kanıtsız rc 2 kapıdan ÖNCE düşer ve mutantı
+#   yanlışlıkla "yakalanmış" gösterirdi — tur 1 ölçümü: TP4b eski araçta da yeni araçta da aynı sebeple kırmızıydı). Kanıt alan tespiti
+#   kapalıyken (IS_ALANI_KOK boş dizin) birincile yazılır; sonra GERÇEK betik aynı kanıtla yine rc 2 vermeli (kapıyı kanıt değil tespit kapatıyor).
+IS_ALANI_KOK="$TP/alan-yok" KANIT_DEPO="$TP" bash "$K" olcum is-p olc --asama tek -- echo 1 >/dev/null 2>&1; [ -f "$TP/_agents/fabrika/kanit/is-p/KANIT.json" ]; g $? "TP4a fikstür: birincilde de kanıt var (alan tespiti kapalıyken yazıldı)"
+SAHTE_JSON="$(J 5 E "")" IS_ALANI_KOK="$AKP" KANIT_DEPO="$TP" bash "$D" is-p --diff "$T/d.patch" >/dev/null 2>&1; RC=$?
+[ "$RC" -eq 2 ] && [ ! -e "$TP/_agents/fabrika/kanit/is-p/DENETIM-1.json" ]; g $? "TP4c kanıt birincilde VARKEN gerçek betik yine rc 2, DENETIM yok (kapıyı kanıt değil birincil tespiti kapatıyor)"
+SAHTE_JSON="$(J 5 E "")" IS_ALANI_KOK="$AKP" KANIT_DEPO="$TP" bash "$MPD/denetci.sh" is-p --diff "$T/d.patch" >/dev/null 2>&1; RC=$?
+[ "$RC" -ne 2 ] && [ -f "$TP/_agents/fabrika/kanit/is-p/DENETIM-1.json" ]; g $? "TP4b MUTASYON: kapı sökülünce birincile DENETIM yazılır (kapı gerçekten kabloda)"
+git -C "$TP" worktree remove --force "$WP" >/dev/null 2>&1; find "$TP" -mindepth 1 -delete 2>/dev/null; rmdir "$TP" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]   # (göz tur 2) rc kalan sayısına bağlı: kırmızı sınav yeşil çıkış kodu veremez
