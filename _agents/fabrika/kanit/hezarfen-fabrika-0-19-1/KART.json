@@ -1,0 +1,23 @@
+{
+  "is": "hezarfen-fabrika-0-19-1",
+  "cumle": "yazilim-fabrikasi sürümü 0.19.0 → 0.19.1 (SKILL.md frontmatter + değişiklik satırı: gun-sonu.sh --gelen, Sx #439 / görev 9758FA): #439 sürüm bump'ı olmadan birleşti, kurulu kopya sync-skills ile güncellenemiyor (drift uyarısı: aynı sürüm, farklı içerik — ölçüldü: yalnız gun-sonu.sh ve gun-sonu.test.sh farklı); bump birleşince sync-skills --skill yazilim-fabrikasi --apply ile kurulu kopya güncellenir ve kurulu kopya sınavı (gun-sonu.test.sh) yeşil olur; kanıt: sync dry-run önce (drift) / sonra (planlandı); sınıfsız, kapıdan sonra birleştirme HEZARFEN (SERDAR devri)",
+  "istedi": "HEZARFEN",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-23T15:39:08+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": []
+}
