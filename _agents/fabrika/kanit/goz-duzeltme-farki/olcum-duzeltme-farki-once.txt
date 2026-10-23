@@ -1,7 +1,9 @@
 $ bash _agents/fabrika/kanit/goz-duzeltme-farki/duzeltme-olcer.sh origin/main
-# rc=1 sure=2.7s zaman=2026-10-23T09:31:45+03:00
+# rc=1 sure=2.3s zaman=2026-10-23T10:59:31+03:00
 --- stdout ---
 kod kaynağı: origin/main
 (1) tur 1 fark bölümü: 8799 bayt · tur 2 fark bölümü: 8811 bayt · tur 2'de değişmeyen dosya: evet · önceki bulgu ayrı satırda: hayır
+(1b) tur 3 (yeni commit yok) fark bölümü: 8811 bayt · değişmeyen dosya: evet
 (2) ~110 KB istem → rc=0 · denetçiye: gönderildi (108075 bayt)
+(2b) aynı istem, ayıklama KAPALI → rc=0 · denetçiye: gönderildi (108714 bayt)
 --- stderr ---
