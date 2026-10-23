@@ -600,6 +600,17 @@ PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran is-ub kotu -
 [ "$R1" -eq 2 ] && [ "$R2" -eq 2 ] && [ "$R3" -eq 2 ] && [ -z "$(_kay kotu)" ]; g $? "bozuk/tekrarlı --boylar ve --uc-boy+--boylar birlikte → rc 2, hiçbir kayıt yazılmadı"
 PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran is-ub tekkare --url https://ornek.test --asama tek --genislik 1280 >/dev/null 2>&1; RC=$?
 [ "$RC" -eq 0 ] && [ "$(_kay tekkare)" = "tekkare:yesil:1280" ] && [ -s "$UB/ekran-tekkare-tek.png" ]; g $? "geriye uyum: boysuz çağrı eskisi gibi TEK kayıt, etiket eki yok"
+: > "$T/boy-log"; PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran is-ub vars --url https://ornek.test --asama tek >/dev/null 2>&1; RC=$?
+[ "$RC" -eq 0 ] && [ "$(_kay vars)" = "vars:yesil:1280" ] && [ "$(cat "$T/boy-log")" = "1280" ]; g $? "--genislik verilmezse tek boy kipinde 1280 (varsayılan boşaldı ama davranış aynı)"
+: > "$T/boy-log"
+PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran is-ub gcat --url https://ornek.test --asama tek --uc-boy --genislik 800 >/dev/null 2>&1; G1=$?
+O="$(PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran is-ub gcat --url https://ornek.test --asama tek --boylar 1440,390 --genislik 1280 2>&1)"; G2=$?
+[ "$G1" -eq 2 ] && [ "$G2" -eq 2 ] && [ -z "$(_kay gcat)" ] && [ ! -s "$T/boy-log" ] && grep -q "\-\-genislik ile \-\-uc-boy/\-\-boylar birlikte verilmez" <<<"$O"; g $? "--genislik + --uc-boy / --boylar → rc 2, tarayıcı açılmadı, kayıt yok (eskiden --genislik sessizce yok sayılıyordu — göz #433 tur 3)"
+GM="$T/gm"; mkdir -p "$GM"; cp "$HERE"/kanit.py "$HERE"/kanit-ekran.mjs "$GM/" 2>/dev/null
+python3 - "$GM/kanit.py" <<'PYM'
+import sys; f=sys.argv[1]; s=open(f,encoding="utf-8").read(); a='    if a.genislik is not None:\n        hata('; assert s.count(a)==1; open(f,"w",encoding="utf-8").write(s.replace(a,'    if False:\n        hata('))
+PYM
+PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" KANIT_DEPO="$T" python3 "$GM/kanit.py" ekran is-ub gmut --url https://ornek.test --asama tek --uc-boy --genislik 800 >/dev/null 2>&1; [ $? -eq 0 ]; g $? "mutant (çatışma kapısı yok): --uc-boy --genislik 800 yeşil döndü → üstteki kapı bu mutantta düşerdi"
 for kotu in "../disari" "/tmp/mutlak" "Nexus" "a/b"; do
   PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran is-ub yolkac --url https://ornek.test --asama tek --uc-boy --gelen "$kotu" >/dev/null 2>&1; RK=$?
   [ "$RK" -eq 2 ] && [ -z "$(_kay yolkac)" ]; g $? "--gelen '$kotu' kutu adı değil → rc 2, HİÇ kare alınmadı (kopya klasör dışına taşınamaz — göz #433 tur 1)"
