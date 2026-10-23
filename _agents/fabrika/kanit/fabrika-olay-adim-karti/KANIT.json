@@ -1,0 +1,180 @@
+{
+  "is": "fabrika-olay-adim-karti",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T19:01:26+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kart-sinavi-once.txt",
+      "sha256": "480f039bba5f9ee59b315d530f1ed213243d6cf1924915d4bef6dd87c73d5659",
+      "komut": [
+        "bash",
+        "-c",
+        "unset KANIT_DEPO; bash /config/projects/Nexus/scripts/agir-sira.sh kart-once -- timeout 900 bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/once/kart.test.sh < /dev/null > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/once-kart.out 2>&1; r=$?; grep -m6 '✗' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/once-kart.out | cut -c1-170; grep SONUÇ /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/once-kart.out; exit $r"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T19:00:35+03:00",
+      "sure_sn": 16.5,
+      "boru_denetimi": "temiz",
+      "olcum_id": "1914782c192e4e8c8ec34ed63e195924"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinavi",
+      "asama": "once",
+      "dosya": "olcum-denetci-sinavi-once.txt",
+      "sha256": "2b456168d36bd7ab90448a90b39486423f272c7309087cfb69e8b66aeaa49651",
+      "komut": [
+        "bash",
+        "-c",
+        "bash /config/projects/Nexus/scripts/agir-sira.sh denetci-once -- timeout 1500 bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/once/denetci.test.sh < /dev/null > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/once-den.out 2>&1; r=$?; grep -m6 '✗' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/once-den.out | cut -c1-170; grep SONUÇ /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/once-den.out; exit $r"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T18:42:56+03:00",
+      "sure_sn": 991.8,
+      "boru_denetimi": "temiz",
+      "olcum_id": "fd552175f2814c3289cc0fff2b19c868"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kart-sinavi-sonra.txt",
+      "sha256": "6a3c5ba7eaf5dfdc1338bd7f89fab458a2b02d8fca958c468d473f7c679864d3",
+      "komut": [
+        "bash",
+        "-c",
+        "unset KANIT_DEPO; bash /config/projects/Nexus/scripts/agir-sira.sh kart-sonra -- timeout 900 bash /config/projects/_wt/Sx-Claude-Skills-fabrika-olay-adim-karti/yazilim-fabrikasi/scripts/kart.test.sh < /dev/null > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/sonra-kart.out 2>&1; r=$?; grep -m6 '✗' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/sonra-kart.out | cut -c1-170; grep SONUÇ /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/sonra-kart.out; exit $r"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T19:00:52+03:00",
+      "sure_sn": 17.5,
+      "boru_denetimi": "temiz",
+      "olcum_id": "7fba0028f34e4bb1b702a77bb14a7188"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-sinavi-sonra.txt",
+      "sha256": "b13cc9d45196440e3002675162c79f8175df8aede31428e4a04470d243e29248",
+      "komut": [
+        "bash",
+        "-c",
+        "bash /config/projects/Nexus/scripts/agir-sira.sh denetci-sonra -- timeout 2400 bash /config/projects/_wt/Sx-Claude-Skills-fabrika-olay-adim-karti/yazilim-fabrikasi/scripts/denetci.test.sh < /dev/null > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/sonra-den.out 2>&1; r=$?; grep -m6 '✗' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/sonra-den.out | cut -c1-170; grep SONUÇ /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/sonra-den.out; exit $r"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T18:59:06+03:00",
+      "sure_sn": 948.5,
+      "boru_denetimi": "temiz",
+      "olcum_id": "872bc10101474f33948e2c5d2e5ef482"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-mutant-gecti-dongusu",
+      "asama": "sonra",
+      "dosya": "olcum-kart-mutant-gecti-dongusu-sonra.txt",
+      "sha256": "2146e51b5c191e140efb24d06f832934f7bd79ca732ec13a96a86ff3023c7d86",
+      "komut": [
+        "bash",
+        "-c",
+        "unset KANIT_DEPO; bash /config/projects/Nexus/scripts/agir-sira.sh kart-mut -- timeout 900 bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/mut-gecti-dongusu/kart.test.sh < /dev/null > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/mut-gecti-dongusu.out 2>&1; r=$?; grep -m4 '✗' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/mut-gecti-dongusu.out | cut -c1-170; grep SONUÇ /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/mut-gecti-dongusu.out; exit $r"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-23T19:01:10+03:00",
+      "sure_sn": 17.6,
+      "boru_denetimi": "temiz",
+      "mutasyon": true,
+      "gercek_olcum": "kart-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "8fbbb3a241b54e6bbe616369176dc46c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-mutant-goz-durum",
+      "asama": "sonra",
+      "dosya": "olcum-kart-mutant-goz-durum-sonra.txt",
+      "sha256": "92fbbecff9c2734180fab7c5dbc46b16d1a05608de9a382cefc9750bc1bd5729",
+      "komut": [
+        "bash",
+        "-c",
+        "unset KANIT_DEPO; bash /config/projects/Nexus/scripts/agir-sira.sh kart-mut -- timeout 900 bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/mut-goz-durum/kart.test.sh < /dev/null > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/mut-goz-durum.out 2>&1; r=$?; grep -m4 '✗' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/mut-goz-durum.out | cut -c1-170; grep SONUÇ /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/mut-goz-durum.out; exit $r"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-23T19:01:26+03:00",
+      "sure_sn": 16.5,
+      "boru_denetimi": "temiz",
+      "mutasyon": true,
+      "gercek_olcum": "kart-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "e13fee7759d84e1dad876aa9fc39b69a"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-mutant-goz-cagri",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-mutant-goz-cagri-sonra.txt",
+      "sha256": "2ed6aa9591345001bf355124665395bd203b30daa92c1e440e2edb8a7a890df5",
+      "komut": [
+        "bash",
+        "-c",
+        "bash /config/projects/Nexus/scripts/agir-sira.sh denetci-mut -- bash -c 'if timeout 600 bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/mut-goz-cagri/denetci.test.sh < /dev/null 2>&1 | grep -m1 \"✗\"; then exit 1; else exit 0; fi'"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-23T18:59:44+03:00",
+      "sure_sn": 1.9,
+      "boru_denetimi": "temiz",
+      "mutasyon": true,
+      "gercek_olcum": "denetci-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "fba7326ccbfe42ff955d760428381ed3"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-parity-strict",
+      "asama": "sonra",
+      "dosya": "olcum-ci-parity-strict-sonra.txt",
+      "sha256": "0b900054318ca07b55dda84fb8aae1414ab9ca46e856e2baaab91cce42deb5df",
+      "komut": [
+        "node",
+        "ahi/schema/validate-repo.mjs",
+        ".",
+        "--strict"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T18:59:44+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "5aa088d5bee2489d8a6f0db54e7efad3"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-version-lint",
+      "asama": "sonra",
+      "dosya": "olcum-ci-version-lint-sonra.txt",
+      "sha256": "f41b73a57ea571c67b22f2b99d55773cfa8819ef31eaf61facc7915aa06db995",
+      "komut": [
+        "node",
+        "ahi/schema/version-lint.mjs",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T18:59:44+03:00",
+      "sure_sn": 0.1,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "f9a4a95b2ad94dd7bc89ec72150ee14e"
+    }
+  ],
+  "imza": "d1bde4b11a607af182266b280e8f3838b4d1a085ba5ae69ba8bb31f9f8af7873"
+}

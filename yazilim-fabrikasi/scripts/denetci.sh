@@ -957,6 +957,17 @@ karne_yaz() {
   else _bilgi "   ⚠ karne yazılamadı: $(printf '%s' "$e" | tail -1) — elle: karne.sh yaz $IS"; fi
 }
 karne_yaz
+# 🔴 GÖZ ADIMI GÖREVE (0.23.0 · gorev_01M5CWJAH2B8MFG4XFVY3Y7J3Q): kart bir göreve bağlıysa tur sonucu göreve TEK satır adım düşer
+#    (tur · puan · doğru şey · bulgu sayısı); görev durumu DEĞİŞMEZ. Yazılamazsa söylenir, turun sonucu (rc) DEĞİŞMEZ — bilgi kaydıdır, kapı değil.
+#    Kapatmak: DENETCI_GOREV_ADIMI=0 (sınavlar kendi sahtesini kullanır).
+goz_adimi_yaz() {
+  [ "${DENETCI_GOREV_ADIMI:-1}" = 1 ] || return 0
+  [ -f "$KART_DEPO/_agents/fabrika/kartlar/$IS.json" ] || return 0   # kartsız denetim (sınav · eski iş): göreve yazacak bağ yok
+  local e
+  if e="$(cd "$DEPO" && KANIT_DEPO="" bash "${DENETCI_KART_SH:-$HERE/kart.sh}" goz-adim "$IS" --not "[🔎 göz] kart $IS · tur $TUR · kod $PUAN/5 · doğru şey $DOGRU · bulgu $NB" 2>&1)"; then _bilgi "   $(printf '%s' "$e" | tail -1)"
+  else _bilgi "   ⚠ göz adımı göreve yazılamadı: $(printf '%s' "$e" | tail -1) — turun sonucu değişmez"; fi
+}
+goz_adimi_yaz
 if [ "$PUAN" -eq 5 ] && [ "$DOGRU" = "E" ]; then _bilgi "✓ GEÇTİ — merge kararı: sınıf işi Sultan, sınıfsız iş kutu reisi"; exit 0; fi
 # 🔴 Tavan SAYILI tura uygulanır (bu turun kendisi dahil edilerek yeniden hesaplanır).
 SAYILI_SON=$(python3 -c "

@@ -1,0 +1,7 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-kart-sinavi-* ===
+$ bash -c unset KANIT_DEPO; bash /config/projects/Nexus/scripts/agir-sira.sh kart-mut -- timeout 900 bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/mut-goz-durum/kart.test.sh < /dev/null > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/mut-goz-durum.out 2>&1; r=$?; grep -m4 '✗' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/mut-goz-durum.out | cut -c1-170; grep SONUÇ /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/mut-goz-durum.out; exit $r
+# rc=1 sure=16.5s zaman=2026-10-23T19:01:26+03:00
+--- stdout ---
+  ✗ G9 goz-adim: tek PATCH, gövdede YALNIZ adimlar (durum alanı yok → görev durumu değişmez)
+── SONUÇ: 237 geçti · 1 kaldı ──
+--- stderr ---

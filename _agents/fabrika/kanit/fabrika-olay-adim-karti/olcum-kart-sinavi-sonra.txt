@@ -1,0 +1,5 @@
+$ bash -c unset KANIT_DEPO; bash /config/projects/Nexus/scripts/agir-sira.sh kart-sonra -- timeout 900 bash /config/projects/_wt/Sx-Claude-Skills-fabrika-olay-adim-karti/yazilim-fabrikasi/scripts/kart.test.sh < /dev/null > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/sonra-kart.out 2>&1; r=$?; grep -m6 '✗' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/sonra-kart.out | cut -c1-170; grep SONUÇ /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/sonra-kart.out; exit $r
+# rc=0 sure=17.5s zaman=2026-10-23T19:00:52+03:00
+--- stdout ---
+── SONUÇ: 238 geçti · 0 kaldı ──
+--- stderr ---

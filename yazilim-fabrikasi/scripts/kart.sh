@@ -11,6 +11,7 @@
 #          --geri-alinamaz e|h|? --para e|h|? --dis-yuzey e|h|? --yetki e|h|? [--kanit "nerede olacak"] [--oda <oda>] [--canli e|h]
 #          --canli: cron/servis/sunucu işi gerçek ateşleme kaydı (kanit.sh canli) ister; verilmezse cümleden türetilir, karta yazılır
 #          [--sayi-olcum '<komut>']: cümlede "13 görev" gibi bir sayı iddiası varsa onu KAYNAĞINDAN sayan komut (yoksa UYARI, red değil)
+#   kart.sh goz-adim <iş> --not "<satır>"   (0.23.0) göz turunu göreve TEK adım yazar, durum değişmez (denetçi kendisi çağırır)
 #   kart.sh bitti <iş> [--pr N]        durum=bitti; son DENETIM puanını ve KANIT durumunu karta işler (kanıt: çağrıldığı ağaç, yoksa kartın iş alanı — kanit_agaci)
 #          sınıflıda birlestirme_karari yazar; VETOLU kartta rc 1
 #   kart.sh tikandi <iş> --yol devam|daralt|geri-al --neden "..."
@@ -87,7 +88,7 @@ while [ $# -gt 0 ]; do case "$1" in
   --gerekce) GEREKCE="$2"; shift 2 ;; --reis) REIS="$2"; shift 2 ;; --canli) CANLI="$2"; shift 2 ;; --yazan) YAZAN="$2"; shift 2 ;;
   --kalan) KALAN="$2"; shift 2 ;; --cumle) CUMLE="$2"; shift 2 ;; --yeni) YENI="$2"; shift 2 ;;
   --gorev) GOREV="$2"; shift 2 ;; --tahmin) TAHMIN="$2"; shift 2 ;; --sayi-olcum) SAYI_OLCUM="$2"; shift 2 ;;
-  --kime) KIME="$2"; shift 2 ;; --soru) SORU="$2"; shift 2 ;; --eylem) EYLEM="$2"; shift 2 ;; --no) SNO="$2"; shift 2 ;; --kim) KIM="$2"; shift 2 ;;
+  --kime) KIME="$2"; shift 2 ;; --soru) SORU="$2"; shift 2 ;; --eylem) EYLEM="$2"; shift 2 ;; --no) SNO="$2"; shift 2 ;; --kim) KIM="$2"; shift 2 ;; --not) NOT_="$2"; shift 2 ;;
   --acik) ACIK=1; shift ;; *) _hata "tanınmayan argüman: $1"; exit 1 ;; esac; done
 GOREV="${GOREV:-}"; TAHMIN="${TAHMIN:-}"
 
@@ -99,7 +100,7 @@ GOREV="${GOREV:-}"; TAHMIN="${TAHMIN:-}"
 DEFTER_JY="${DEFTER_JETON_YOL:-/config/defter-jeton}"; DEFTER_U="${DEFTER_UC:-http://cloudtop-defter:8791}"
 gorev_yaz() {  # gorev_yaz <kart.json> <ac|bitti|tikandi> → rc 0 yazıldı · 4 yazılamadı (karta işlenir)
   local kj="$1" olay="$2" govde cfg cevap rc sonuc
-  govde="$(GOREV_BITTI="${GOREV_BITTI:-}" KARE="${KARE:-}" SURUM="${SURUM:-}" OLCUM="${OLCUM:-}" BELGE="${BELGE:-}" python3 - "$kj" "$olay" "$(basename "$DEPO")" <<'PY'
+  govde="$(GOZ_NOT="${GOZ_NOT:-}" GECTI_KART="${GECTI_KART:-}" GOREV_BITTI="${GOREV_BITTI:-}" KARE="${KARE:-}" SURUM="${SURUM:-}" OLCUM="${OLCUM:-}" BELGE="${BELGE:-}" python3 - "$kj" "$olay" "$(basename "$DEPO")" <<'PY'
 import json,sys,os
 k=json.load(open(sys.argv[1])); olay,depo=sys.argv[2:]; kim=k["aldi"]; is_=k["is"]
 if olay=="ac":
@@ -121,6 +122,13 @@ elif olay=="bitti":
         y={"gorev_durumu":"onay-bekliyor","kanit":kn}; ne="[⏸ onay bekliyor] %s · kart %s bitti · %s" % (kim,is_,kn)
     else:
         y=None; ne="[dilim bitti] %s · kart %s bitti%s · kanıt _agents/fabrika/kanit/%s/ (%s) — görev sürüyor; bitti için canlı kanıt sınıfı: kart.sh bitti %s --gorev-bitti --kare <yol> --surum <sürüm> | --olcum \"…\" | --belge <yol> (ya da gorev.sh bitti)" % (kim,is_,(" · "+pr) if pr else "",is_,depo,is_)
+elif olay=="goz":
+    # 0.23.0 (gorev_…Y7J3Q): bağımsız göz turu göreve TEK SATIR adım olarak düşer; durum DEĞİŞMEZ (görev çalışılıyor olmayabilir de)
+    y=None; ne=os.environ.get("GOZ_NOT","").strip() or "[🔎 göz] kart %s" % is_
+elif olay=="gecti":
+    # 0.23.0: aynı ajan yeni işe geçti → önceki görev 'bekliyor' + sebep (bırakma anı artık araca geçer, ajanın hatırlamasına değil)
+    yeni=os.environ.get("GECTI_KART","?")
+    y={"gorev_durumu":"bekliyor","not":"başka işe geçti: %s" % yeni}; ne="[⏳ bekliyor] %s · kart %s açıkken başka işe geçti: %s" % (kim,is_,yeni)
 else:
     nd=(k.get("tikanma") or {}).get("neden","") or "tıkandı"
     y={"gorev_durumu":"bekliyor","not":"kart %s tıkandı: %s" % (is_,nd[:300])}; ne="[⏳ bekliyor] %s · kart %s tıkandı (%s): %s" % (kim,is_,(k.get("tikanma") or {}).get("yol",""),nd[:300])
@@ -148,7 +156,7 @@ p,olay,sonuc=sys.argv[1:]; k=json.load(open(p))
 k.setdefault("gorev_yazimlari",[]).append({"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),"olay":olay,"sonuc":sonuc})
 json.dump(k,open(p,"w"),ensure_ascii=False,indent=2)
 import os
-d={"ac":"çalışılıyor","bitti":("canlı borç adımı (görev çalışılıyor kalır)" if k.get("durum")=="canli-borclu" else "onay bekliyor" if os.environ.get("GOREV_BITTI") else "dilim adımı (görev çalışılıyor kalır; bitti = canlı kanıt sınıfıyla)"),"tikandi":"bekliyor"}[olay]
+d={"ac":"çalışılıyor","bitti":("canlı borç adımı (görev çalışılıyor kalır)" if k.get("durum")=="canli-borclu" else "onay bekliyor" if os.environ.get("GOREV_BITTI") else "dilim adımı (görev çalışılıyor kalır; bitti = canlı kanıt sınıfıyla)"),"tikandi":"bekliyor","goz":"göz adımı (durum değişmez)","gecti":"bekliyor (başka işe geçti)"}[olay]
 print(("  ✓ görev %s → %s (defter)" % (k["gorev"],d)) if sonuc=="yazıldı" else ("  ⚠ GÖREV YAZILAMADI: %s → %s — %s (kart işlendi; karta yazıldı, rc 4)" % (k["gorev"],d,sonuc)))
 PY
   [ "$sonuc" = "yazıldı" ]
@@ -294,6 +302,18 @@ elif csebep: print(f"  ⚠ canlı kanıt istenmedi — {csebep}; karta yazıldı
 if not gorev: print("  · görev bağı yok — iş Sultan'ın 'çalışılıyor' görünümüne DÜŞMEZ (bağlamak için: kart.sh ac … --gorev gorev_<kimlik> --tahmin <dk>)")
 PY
     GRC=0; [ -n "$GOREV" ] && { gorev_yaz "$KD/$IS.json" ac || GRC=4; }
+    # 0.23.0: aynı ajanın BAŞKA açık, görev bağlı kartı varsa o görev 'bekliyor' + 'başka işe geçti: <bu kart>' (bırakma anı araçta)
+    if [ -n "$GOREV" ]; then
+      for ONC in $(python3 - "$KD" "$IS" "$ALDI" "$GOREV" <<'PY'
+import json,glob,os,sys
+kd,yeni,aldi,gorev=sys.argv[1:]
+for f in sorted(glob.glob(kd+"/*.json")):
+    try: k=json.load(open(f))
+    except Exception: continue
+    if k.get("is")!=yeni and k.get("aldi")==aldi and k.get("durum")=="acik" and k.get("gorev") and k.get("gorev")!=gorev: print(k["is"])
+PY
+); do GECTI_KART="$IS" gorev_yaz "$KD/$ONC.json" gecti || GRC=4; done
+    fi
     # Sultan'a giden satır komut taşımaz (ulaşım yolu şartı ikinci kartta)
     IZIN_NOT=""; [ "$SINIFLI" = 1 ] && IZIN_NOT=" · başlama izni bekleniyor (veto penceresi: iş yürür; durdurmak için 'dur' demen yeter)"
     tetik "$ODA" "iş alındı: $IS" "$IS_C · sahip $ALDI · istedi $ISTEDI · sınıf: ${GA}${PARA}${DIS}${YETKI}$IZIN_NOT"
@@ -376,6 +396,13 @@ PY
     GRC=0; [ -n "$(python3 -c "import json;print(json.load(open('$KD/$IS.json')).get('gorev',''))")" ] && { gorev_yaz "$KD/$IS.json" "$CMD" || GRC=4; }
     tetik "$(python3 -c "import json;print(json.load(open('$KD/$IS.json')).get('oda',''))")" "iş $CMD: $IS" "$(python3 -c "import json;k=json.load(open('$KD/$IS.json'));print(k['cumle'],'· puan',k.get('puan'),'· pr',k.get('pr'))")"
     exit $GRC
+    ;;
+  goz-adim)   # goz-adim <iş> --not "<tek satır>" — bağımsız göz turunu göreve adım olarak yazar; durum DEĞİŞMEZ; görev bağı yoksa sessiz geçer
+    [ -f "$KD/$IS.json" ] || { _hata "kart yok: $IS"; exit 1; }
+    [ -n "${NOT_:-}" ] || { _hata "gerekli: --not \"<tek satır>\""; exit 1; }
+    if [ -z "$(python3 -c "import json;print(json.load(open('$KD/$IS.json')).get('gorev',''))")" ]; then echo "  · görev bağı yok — göz adımı deftere yazılmadı"; exit 0; fi
+    GOZ_NOT="$NOT_" gorev_yaz "$KD/$IS.json" goz || exit 4
+    exit 0
     ;;
   sultan-dedi)
     # 🔴 Sultan'ın sözlü kararı KARTA girer, komut satırında kalmaz. Niçin: bir yetki kapısını
