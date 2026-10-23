@@ -1,0 +1,40 @@
+{
+  "tur": 2,
+  "is": "fabrika-merge-reise-parca2b",
+  "pr": "445",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T17:36:14+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-fabrika-merge-reise-parca2b",
+  "dal": "fabrika-merge-reise-parca2b",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 39160,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 6810
+  },
+  "bas": "a2d7b58d8b815c972ea75bbe42a50a072d028588",
+  "duzeltme_farki": {
+    "onceki_bas": "cbc7c363087ae32ca7d1fabfcffcab90382c4c46",
+    "dosya": 10,
+    "bayt": 29859,
+    "tam_bayt": 57522
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sınıflı kart artık Sultan’a ulaşım yoksa açılmıyor; önceki turun B1 bulgusu geçici dosya, tetik sonrası atomik `ln` yayımı ve eşzamanlılık sınavlarıyla kapanmış. Önce/sonra ölçümü, gerçek ölçüm, mutasyon ve tam sınav süiti birlikte üretime hazır bir sonuç gösteriyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Odasız sınıflı kart için önce rc=1/kırmızı ve sonra rc=0/yeşil ölçüm çifti, kartın artık yazılmadığını ve açık hatanın verildiğini doğrudan gösteriyor. Mutasyon kaydı bozuk davranışı beklenen rc=1 ile yakalıyor; gerçek durum `gercek_olcum` kaydındaki başarılı son ölçümden okundu. Tam fabrika süiti kart 218/0, birleştirme kapısı 143/0, denetçi 266/0 ve diğer sınavları hatasız geçti; geçersiz eski kayıt hükme katılmadı. Önceki B1 ayrıca U7-U9 ve iki yeni mutantla süreç kesilmesi görünürlüğü, ezmeme ve başkasının kartını silmeme yönlerinden sınanmış."
+  }
+}
