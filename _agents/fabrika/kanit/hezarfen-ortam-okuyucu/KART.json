@@ -1,6 +1,6 @@
 {
   "is": "hezarfen-ortam-okuyucu",
-  "cumle": "terminal-onar kapı başlatıcısı (onar.sh:130) ortam dosyasını tmux kabuğuna 'set -a; . dosya' ile yüklemez (görev GQ9DY: 303 satırlık dosyada 135 AD=değer dışı satır + 6 PEM işareti komut gibi koşup sır parçalarını ekrana düşürüyordu); ortak.sh'daki AD=değer okuyucusu paylaşılan ortam-yukle.sh dosyasına çıkar, kapı kabuğu onu kaynak alıp yükler, başka depolar da aynı dosyayı kullanır; sınav: bozuk satır koşmaz, değer parçası basılmaz, eski yol mutantla kırmızı",
+  "cumle": "terminal-onar kapı başlatıcısı (onar.sh:130) ortam dosyasını tmux kabuğuna 'set -a; . dosya' ile yüklemez (görev GQ9DY: 303 satırlık dosyada 135 AD=değer dışı satır + 6 PEM işareti komut gibi koşup sır parçalarını ekrana düşürüyordu); ortak.sh'daki AD=değer okuyucusu yan etkisiz ortam-yukle.sh dosyasına çıkar, ortak.sh ve kapı kabuğu onu kaynak alır; sınav: bozuk satır koşmaz, değer parçası basılmaz, eski yol mutantla kırmızı",
   "istedi": "SERDAR",
   "aldi": "HEZARFEN",
   "zaman": "2026-10-23T03:41:48+03:00",
@@ -15,8 +15,40 @@
   "kanit_nerede": "",
   "oda": "",
   "durum": "acik",
-  "gecmis": [],
+  "gecmis": [
+    {
+      "zaman": "2026-10-23T03:54:31+03:00",
+      "olay": "daralt",
+      "kalan_kart": "hezarfen-ortam-okuyucu-depolar",
+      "tur_sifir": 2
+    }
+  ],
   "canli_gerekir": false,
   "canli_sebep": "",
-  "kapsam_uyarilari": []
+  "kapsam_uyarilari": [],
+  "reis_kararlari": [
+    {
+      "karar": "daralt",
+      "reis": "HEZARFEN",
+      "oturum": "göz #427 tur 1-2 (4/H: başka depo vaadi bu depoda ölçülemez)",
+      "gerekce": "daraltma: kalan bulgu yeni karta (hezarfen-ortam-okuyucu-depolar) — Başka depoların (cloudtop mobile-start.sh imglistener) paylaşılan okuyucuyu kullanması — bu depoda ölçülemez; cloudtop kartı hezarfen-imglistener-ortam / PR #811 karşılıyor",
+      "zaman": "2026-10-23T03:54:31+03:00"
+    }
+  ],
+  "cumle_gecmisi": [
+    {
+      "cumle": "terminal-onar kapı başlatıcısı (onar.sh:130) ortam dosyasını tmux kabuğuna 'set -a; . dosya' ile yüklemez (görev GQ9DY: 303 satırlık dosyada 135 AD=değer dışı satır + 6 PEM işareti komut gibi koşup sır parçalarını ekrana düşürüyordu); ortak.sh'daki AD=değer okuyucusu paylaşılan ortam-yukle.sh dosyasına çıkar, kapı kabuğu onu kaynak alıp yükler, başka depolar da aynı dosyayı kullanır; sınav: bozuk satır koşmaz, değer parçası basılmaz, eski yol mutantla kırmızı",
+      "zaman": "2026-10-23T03:54:31+03:00",
+      "kalan_kart": "hezarfen-ortam-okuyucu-depolar"
+    }
+  ],
+  "daraltmalar": [
+    {
+      "zaman": "2026-10-23T03:54:31+03:00",
+      "kalan_kart": "hezarfen-ortam-okuyucu-depolar",
+      "kalan": "Başka depoların (cloudtop mobile-start.sh imglistener) paylaşılan okuyucuyu kullanması — bu depoda ölçülemez; cloudtop kartı hezarfen-imglistener-ortam / PR #811 karşılıyor",
+      "tur_sifir": 2,
+      "oturum": "göz #427 tur 1-2 (4/H: başka depo vaadi bu depoda ölçülemez)"
+    }
+  ]
 }
