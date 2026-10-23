@@ -1,0 +1,11 @@
+$ bash _agents/fabrika/kanit/kanit-uc-boy/uc-boy-olcer.sh agac
+# rc=0 sure=3.1s zaman=2026-10-23T05:17:43+03:00
+--- stdout ---
+kod kaynağı: agac · kanit.sh ekran --uc-boy rc=0
+   ✓ kare alındı: ekran-ana-1440-tek.png (1440px · ürün imi doğrulandı)
+   ✓ kare alındı: ekran-ana-1280-tek.png (1280px · ürün imi doğrulandı)
+   ✓ kare alındı: ekran-ana-390-tek.png (390px · ürün imi doğrulandı)
+   ── üç boy özeti (ana): 1440px ✓ · 1280px ✓ · 390px ✓
+manifest (etiket:renk:PNG-genişlik): ana-1440:yesil:1440 ana-1280:yesil:1280 ana-390:yesil:390
+gelen kopyaları: olc_olc-kare-ana-1280-tek.png olc_olc-kare-ana-1440-tek.png olc_olc-kare-ana-390-tek.png 
+--- stderr ---

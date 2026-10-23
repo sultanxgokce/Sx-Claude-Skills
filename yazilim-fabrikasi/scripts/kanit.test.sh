@@ -573,6 +573,39 @@ _m25 e '("kirmizi" if p.returncode == 0 else "yesil")' '("yesil" if p.returncode
 _m25 h '        elif k.get("mutasyon"):' '        elif False:' "özet mutasyonu söylemiyor"
 _m25 b '        if mut == a.etiket:' '        if False:' "kendi etiketine bağlanabiliyor"
 
+echo "════ T-UB · ÜÇ BOY (görev 4PZV4): tek komut → 1440/1280/390 her boy AYRI imzalı kayıt; bir boy düşerse komut yeşil DÖNMEZ ════"
+# 🔴 HERMETİK: varsayılan gelen klasörü (/config/evraklar/Sultan/0-Gelen) bu kutuda GERÇEKTEN var ve Sultan'ın cihazına senkronlanır —
+#    sınav oraya ASLA yazmasın (ilk koşu iki sahte kareyi oraya düşürdü, elle silindi). Bölüm boyunca var olmayan bir yola kilitli.
+export KANIT_GELEN_DIZ="$T/gelen-yok"
+# sahte node: kanit-ekran.mjs argv'si (mjs url out ürün bekle genişlik) — genişliği deftere yazar, kareyi yazar; DUS_BOY genişliğinde düşer
+: > "$T/boy-log"
+_node_kur 'printf "%s\n" "$6" >> "'"$T"'/boy-log"; [ "$6" = "${DUS_BOY:-0}" ] && { echo "kare alınamadı ($6)" >&2; exit 1; }; printf "PNG%s" "$6" > "$3"; echo "kare: $3"'
+UB="$T/_agents/fabrika/kanit/is-ub"
+_kay() { python3 -c 'import json,sys;m=json.load(open(sys.argv[1]));print(" ".join("%s:%s:%s"%(k["etiket"],k["renk"],k.get("genislik","-")) for k in m["kayitlar"] if k["etiket"].startswith(sys.argv[2])))' "$UB/KANIT.json" "$1"; }
+O="$(PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran is-ub uc --url https://ornek.test --asama tek --uc-boy 2>&1)"; RC=$?
+[ "$RC" -eq 0 ] && [ "$(_kay uc-)" = "uc-1440:yesil:1440 uc-1280:yesil:1280 uc-390:yesil:390" ] && [ "$(tr '\n' ' ' < "$T/boy-log")" = "1440 1280 390 " ]; g $? "--uc-boy: tek komut, üç AYRI yeşil kayıt (etiket-<boy>), tarayıcıya üç genişlik gitti ($(_kay uc-))"
+grep -q "üç boy özeti (uc): 1440px ✓ · 1280px ✓ · 390px ✓" <<<"$O"; g $? "özet satırı her boyu söylüyor"
+O="$(DUS_BOY=1280 PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran is-ub dus --url https://ornek.test --asama tek --uc-boy --gelen kutu 2>&1)"; RC=$?
+[ "$RC" -eq 3 ] && [ "$(_kay dus-)" = "dus-1440:yesil:1440 dus-1280:sari:- dus-390:yesil:390" ] && grep -q "1440px ✓ · 1280px ◻ · 390px ✓ → rc 3: bir boy yeşil değil, komut yeşil DÖNMEZ" <<<"$O"; g $? "🔴 bir boy düşerse komut rc 3 (yeşil DEĞİL), öbür boylar kayıtlı ($(_kay dus-))"
+grep -q "gelen klasörü yok" <<<"$O"; g $? "--gelen: klasör yoksa söyler, kanıt yine kutuda (çökme yok)"
+mkdir -p "$T/gelen"
+O="$(DUS_BOY=1280 KANIT_GELEN_DIZ="$T/gelen" PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran is-ub gel --url https://ornek.test --asama tek --uc-boy --gelen nexus 2>&1)"
+[ "$(ls "$T/gelen" | tr '\n' ' ')" = "nexus_is-ub-kare-gel-1440-tek.png nexus_is-ub-kare-gel-390-tek.png " ] && [ "$(cat "$T/gelen/nexus_is-ub-kare-gel-390-tek.png")" = "PNG390" ]; g $? "--gelen: YALNIZ yeşil kareler <kutu>_<iş>-kare-… adıyla Sultan'ın gelen klasörüne (düşen 1280 gitmedi): $(ls "$T/gelen" | tr '\n' ' ')"
+: > "$T/boy-log"; PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran is-ub iki --url https://ornek.test --asama tek --boylar 1440,390 >/dev/null 2>&1; RC=$?
+[ "$RC" -eq 0 ] && [ "$(_kay iki-)" = "iki-1440:yesil:1440 iki-390:yesil:390" ]; g $? "--boylar 1440,390: yalnız verilen boylar"
+PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran is-ub kotu --url https://ornek.test --boylar 1440,abc >/dev/null 2>&1; R1=$?
+PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran is-ub kotu --url https://ornek.test --boylar 1440,1440 >/dev/null 2>&1; R2=$?
+PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran is-ub kotu --url https://ornek.test --uc-boy --boylar 390 >/dev/null 2>&1; R3=$?
+[ "$R1" -eq 2 ] && [ "$R2" -eq 2 ] && [ "$R3" -eq 2 ] && [ -z "$(_kay kotu)" ]; g $? "bozuk/tekrarlı --boylar ve --uc-boy+--boylar birlikte → rc 2, hiçbir kayıt yazılmadı"
+PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" bash "$K" ekran is-ub tekkare --url https://ornek.test --asama tek --genislik 1280 >/dev/null 2>&1; RC=$?
+[ "$RC" -eq 0 ] && [ "$(_kay tekkare)" = "tekkare:yesil:1280" ] && [ -s "$UB/ekran-tekkare-tek.png" ]; g $? "geriye uyum: boysuz çağrı eskisi gibi TEK kayıt, etiket eki yok"
+echo "── T-UB · MUTASYON (geçici kopya): çıkış en kötü sonucu taşımazsa düşen boy yeşil görünür → 🔴 kapı düşerdi ──"
+UBM="$T/ubm"; mkdir -p "$UBM"; cp "$HERE"/kanit.py "$HERE"/kanit-ekran.mjs "$UBM/" 2>/dev/null
+python3 - "$UBM/kanit.py" <<'PYM'
+import sys; f=sys.argv[1]; s=open(f,encoding="utf-8").read(); a='rc = 2 if 2 in rcs else 3 if 3 in rcs else (max(rcs) if any(rcs) else 0)'; assert s.count(a)==1; open(f,"w",encoding="utf-8").write(s.replace(a,'rc = 0'))
+PYM
+DUS_BOY=1280 PATH="$T/bin:$PATH" KANIT_PLAYWRIGHT_DIR="$PWD_DIR" KANIT_DEPO="$T" python3 "$UBM/kanit.py" ekran is-ub mut --url https://ornek.test --asama tek --uc-boy >/dev/null 2>&1; [ $? -eq 0 ]; g $? "mutant (rc hep 0): 1280 düştüğü hâlde komut yeşil döndü → üstteki 🔴 kapı bu mutantta düşerdi"
+
 find "$T" -mindepth 1 -delete 2>/dev/null; rmdir "$T" 2>/dev/null
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"
 [ "$kalan" -eq 0 ]
