@@ -1,31 +1,31 @@
 {
   "is": "fabrika-merge-reise",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-23T14:19:44+03:00",
+  "guncelleme": "2026-10-23T15:07:53+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
       "etiket": "fabrika-sinavlari",
       "asama": "sonra",
       "dosya": "olcum-fabrika-sinavlari-sonra.txt",
-      "sha256": "fbfb9569b9da2e0396183c8c7d7a25d94cb98a1836480ec805a67721198f3fd7",
+      "sha256": "a5709c5b8345ecb1cbc695a0f96eb80e3c0493eb913575050e09c7e2ff598fad",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/fabrika-merge-reise/kos-fabrika-sinavlari.sh"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T14:19:44+03:00",
-      "sure_sn": 1586.7,
+      "zaman": "2026-10-23T15:05:24+03:00",
+      "sure_sn": 2263.7,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "23f9b93ba4cb477f84a84246a3775fb5"
+      "olcum_id": "39521e43ce754138b8a9991245e634e5"
     },
     {
       "tur": "olcum",
       "etiket": "cekirdek-davranis",
       "asama": "tek",
       "dosya": "olcum-cekirdek-davranis-tek.txt",
-      "sha256": "8ad4aabeb058672a1e3db32ea47ea61a57b2704922a64171372ef1fe9e2baf1c",
+      "sha256": "03eee92d6c70b4c59684b908b008509c2b3a0203a1222b22c15d5bb96773201a",
       "komut": [
         "bash",
         "_agents/fabrika/kanit/fabrika-merge-reise/cekirdek-davranis.sh",
@@ -33,17 +33,17 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T13:53:11+03:00",
-      "sure_sn": 0.8,
+      "zaman": "2026-10-23T15:07:52+03:00",
+      "sure_sn": 0.9,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "941aa22968124730b71dceac2495b142"
+      "olcum_id": "e250cc757938472fbad093d0939a27ba"
     },
     {
       "tur": "olcum",
       "etiket": "cekirdek-davranis-mutant",
       "asama": "tek",
       "dosya": "olcum-cekirdek-davranis-mutant-tek.txt",
-      "sha256": "14ab53592ed4956d5b0b0ea0b48aff1a9fa7f2b4a349dd258e46e298f01d34ac",
+      "sha256": "94335131a4d4fabcd3373ab424e33dd69df90ecdc8b134a4453c2a6795e89452",
       "komut": [
         "env",
         "MUTANT=bitti-veto-citi",
@@ -53,14 +53,14 @@
       ],
       "rc": 1,
       "renk": "yesil",
-      "zaman": "2026-10-23T13:53:11+03:00",
-      "sure_sn": 0.4,
+      "zaman": "2026-10-23T15:07:53+03:00",
+      "sure_sn": 0.6,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
       "mutasyon": true,
       "gercek_olcum": "cekirdek-davranis",
       "beklenen": "kirmizi",
-      "olcum_id": "1efd89a5d20e4f7e96eafa9a48e9af6d"
+      "olcum_id": "fe8aa615f4e94329893cfc1017c3546f"
     }
   ],
-  "imza": "407e63d45afd3b77eb2fa69da0e443d35fa0e97a32cf04bcf58b35778f7fe701"
+  "imza": "a20009e4c4d7ba9ae631f7afa474fe4b5b7666d888aeb60035eb24c4c2378905"
 }
