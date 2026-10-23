@@ -498,7 +498,9 @@ if [ "$TUR" -gt 1 ] && [ -n "$BAS" ]; then
     #   değiştirenin iki ucu da); pathspec --literal-pathspecs ile verilir (":" ile başlayan ad sihir sayılmasın).
     _ana="$(git -C "$DEPO" symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null || echo origin/main)"
     _mb="$(git -C "$DEPO" merge-base "$_ana" "$BAS" 2>/dev/null)"
-    _pd=(); [ -n "$_mb" ] && mapfile -d '' -t _pd < <(git -C "$DEPO" diff --no-renames --name-only -z "$_mb" "$BAS" 2>/dev/null)
+    #   Liste İKİ UCUN BİRLEŞİMİ (göz #436 tur 3): yalnız yeni başın net farkı alınırsa, düzeltme commit'inde ana dal hâline
+    #   TAMAMEN geri alınan dosya net farktan düşer ve o geri alma göze gitmez → önceki başın PR dosyaları da listeye girer.
+    _pd=(); [ -n "$_mb" ] && mapfile -d '' -t _pd < <( { git -C "$DEPO" diff --no-renames --name-only -z "$_mb" "$BAS" && git -C "$DEPO" diff --no-renames --name-only -z "$(git -C "$DEPO" merge-base "$_ana" "$_ob")" "$_ob"; } 2>/dev/null | sort -zu)
     : > "$TMP/diff-duz.patch"
     if [ -z "$_mb" ]; then _bilgi "· düzeltme farkı hesaplanamadı: $_ana ile ${BAS:0:8} ortak atası bulunamadı (PR dosyaları ölçülemedi) → tam fark gider"
     elif [ "${#_pd[@]}" -gt 0 ] && ! git -C "$DEPO" --literal-pathspecs diff "$_ob" "$BAS" -- "${_pd[@]}" > "$TMP/diff-duz.patch" 2>/dev/null; then

@@ -108,6 +108,13 @@ kapi "D7a tur 2 koştu" 0 den d7 "$J5"
 iceren "D7b 🔴 özel adlı dosyanın değişikliği göze gitti" "+ozel-ad-duzeltmesi" "$KOK/istem.md"
 dogru "D7c kayıt: duzeltme_farki.dosya=1 (boş fark sanılmadı)" "import json;d=json.load(open('$(kayit d7 2)'));assert d['duzeltme_farki']['dosya']==1"
 
+echo "════ D9 · düzeltme commit'i bir PR dosyasını ana dal hâline TAMAMEN geri alırsa o geri alma göze gider (göz #436 tur 3) ════"
+yap d9; printf 'geri-alinacak-satir\n' >> "$KOK/w/a.txt"; git -C "$KOK/w" commit -q -am d9ek; kanitla d9; den d9 "$J4" >/dev/null 2>&1
+git -C "$KOK/w" show origin/main:a.txt > "$KOK/w/a.txt"; git -C "$KOK/w" commit -q -am d9gerial; : > "$KOK/istem.md"
+kapi "D9a tur 2 koştu" 0 den d9 "$J5"
+iceren "D9b 🔴 geri alma (silinen satır) göze gitti" "-geri-alinacak-satir" "$KOK/istem.md"
+dogru "D9c kayıt: duzeltme_farki.dosya=1" "import json;d=json.load(open('$(kayit d9 2)'));assert d['duzeltme_farki']['dosya']==1"
+
 echo "════ D8 · MUTASYON: her kapı kaldırılınca bir D kapısı düşer; kontrol D1a geçer ════"
 if [ -z "${MUTANT_D:-}" ]; then
   mut() { local ad="$1" eski="$2" yeni="$3" kapi_adi="$4"; local P="$KOK/mutpkg-$ad"; mkdir -p "$P"; cp -p "$HERE"/* "$P/" 2>/dev/null
@@ -120,7 +127,16 @@ PY
     else DUSEN=$((DUSEN+1)); echo "  ✗ mutant '$ad' → $kapi_adi düşmedi ya da kontrol D1a da düştü (geçersiz mutant)"; fi; }
   mut duzeltme-yok 'if [ "$TUR" -gt 1 ] && [ -n "$BAS" ]; then' 'if false; then' "D2e"
   mut dosya-siniri-yok 'git -C "$DEPO" --literal-pathspecs diff "$_ob" "$BAS" -- "${_pd[@]}"' 'git -C "$DEPO" diff "$_ob" "$BAS"' "D2f"
-  mut yol-kacisli-okunur 'diff --no-renames --name-only -z "$_mb" "$BAS"' 'diff --no-renames --name-only "$_mb" "$BAS"' "D7b"
+  # iki ucun İKİSİ de NUL'suz (kaçışlı) okunur: tek ucu bozmak öbür uç aynı yolu getirdiği için örtülürdü (göz #436 tur 3)
+  YOL_E="$(cat <<'MUTE'
+--name-only -z "$_mb" "$BAS" && git -C "$DEPO" diff --no-renames --name-only -z "$(git -C "$DEPO" merge-base "$_ana" "$_ob")" "$_ob"; } 2>/dev/null | sort -zu)
+MUTE
+)"; YOL_Y="$(cat <<'MUTY'
+--name-only "$_mb" "$BAS" && git -C "$DEPO" diff --no-renames --name-only "$(git -C "$DEPO" merge-base "$_ana" "$_ob")" "$_ob"; } 2>/dev/null | sort -u | tr '\n' '\0')
+MUTY
+)"
+  mut yol-kacisli-okunur "$YOL_E" "$YOL_Y" "D7b"
+  mut geri-alinan-dosya-duser ' && git -C "$DEPO" diff --no-renames --name-only -z "$(git -C "$DEPO" merge-base "$_ana" "$_ob")" "$_ob"; }' '; }' "D9b"
   mut kutu-disi-ayiklanir 'b=list(s.get("bulgular") or [])' 'b=[x for x in (s.get("bulgular") or []) if x.get("agirlik")!="kutu-disi"]' "D2i"
   mut bas-yazilmaz '"bas":(bas or None),' '"bas":None,' "D1c"
   mut onceki-bulgu-sayilmaz 'for i,x in enumerate(b,1): print(' 'for i,x in []: print(' "D2g"
