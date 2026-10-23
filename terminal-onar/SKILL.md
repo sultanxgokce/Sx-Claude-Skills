@@ -12,7 +12,8 @@ zamandan beri bekletildiğini görmek için ajanın ekranına gitmek zorundaydı
 cevap şıkkın numarasıyla verilir · **serbest**: şık yok), `metin` (son ⏺ satırından sonraki soru bloğu, ≤300 kod noktası; kutu
 çizgileri ve "Enter to select · ↑/↓ to navigate · Esc to cancel" altbilgisi girmez), `siklar` (≤6, her biri ≤80), `beri` (bu
 sorunun bu koltukta ilk görüldüğü an — `soru-beri.json` durum dosyası; soru hâlinden çıkan koltuğun kaydı silinir). Çözümleyici
-`kapi/soru.mjs`; okunamayan soru uydurulmaz (alan yok). Salt okur: tmux'a tuş gönderilmez.
+`kapi/soru.mjs`; okunamayan soru uydurulmaz (alan yok) — numaralı şık satırı olup geçerli menü (1'den başlayan en az iki
+ardışık şık) çıkmayan ekran da okunamadı sayılır, "serbest" diye sunulmaz (göz #440 tur 2). Salt okur: tmux'a tuş gönderilmez.
 - **Sır süzgeci** (`kapi/sir-suz.mjs`): ekran metni kutudan çıkmadan PEM · Bearer · `sk-` · GitHub/Slack/AWS jetonu · JWT ·
   URL parolası · `token=`/`parola=` değeri · tek başına uzun dizgi → `••• gizlendi` (anahtar adı görünür kalır).
 - **Yazı kutusu varken soru YOK:** eski kural ekranın son 15 satırında "Do you want to" / "❯ 1." aradığı için ajanın KENDİ
