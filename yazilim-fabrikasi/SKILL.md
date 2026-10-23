@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.22.0
+version: 0.22.1
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -140,7 +140,7 @@ sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kald�
   sökülünce yazar), denetci.test.sh **TP0–TP4c** (reddi · DENETIM/KART yok · alandan DENETIM depo/dal/birincil_mi=false ·
   alansız iş birincil_mi=true · mutant dizin kopyasında). Ölçüm komutu: HENDESE `_agents/hendese/olcer/`.
 - **0.21.0 (23 Eki, Sultan D1 · çekirdek; sıra: 0.19.0 #436, 0.20.0 V8NMK):** sınıflı işte Sultan yalnız başlama izni verir (veto), ara kararlar ve birleştirme reisin — kural `adimlar/0-kabul.md` "Sınıflı iş". `izin.py` + `kart.sh` (izin-durum · basla/dur · sınıflıda reis-dedi/daralt · veto çiti reis-dedi/daralt/bitti · birlestirme_karari). Kalanı ikinci kartta (`fabrika-merge-reise-parca2`).
-- **0.22.0 (23 Eki, Sultan D1 · Sultan'a ulaşım yolu; 0.21.0 çekirdeğinin ikinci kartı, parça 2b):** sınıflı kartın başlama izni Sultan'a GİDER — yol yoksa kart AÇILMAZ. `kart.sh ac` sınıflıda `--oda` yoksa, tetik betiği yoksa ya da tetik düşerse rc 1 "Sultan'a ulaşılamadı: --oda ver ya da tetik betiğini kur" der ve kartı yazmaz/geri alır; ölçüldü: eski araç "BAŞLAMA İZNİ SULTAN'A GİDER" basıp rc 0 dönüyordu (oda yoksa `tetik()` sessizce çıkıyor, betik yoksa "atılmadı" deyip yine 0). `tetik()` artık gitti/gitmedi söyler (sınıfsız çağıran yok sayar: iş düşmez). Sultan'a giden satırda komut yok. **Atomik yayım (göz tur 3):** kart önce geçici dosyaya yazılır, tetik başarınca `ln` ile (var olanı ezmeden) yayımlanır — tetikte süreç kesilirse görünür kart kalmaz, geri alma yalnız kendi geçici dosyasını siler (eşzamanlı aynı kimlikli başkasının kartı ezilmez/silinmez). Sınav T17 (U1-U9 + 7 mutant); sınavlar sahte tetikle koşar (gerçek odaya mektup bırakmaz). Kalan: parca2 (kapı/denetçi/gün sonu) · parca2c (canlı borç). Kural metni `adimlar/0-kabul.md`.
+- **0.22.1 (23 Eki, Sultan D1 · Sultan'a ulaşım yolu; 0.21.0 çekirdeğinin ikinci kartı, parça 2b):** sınıflı kartın başlama izni Sultan'a GİDER — yol yoksa kart AÇILMAZ. `kart.sh ac` sınıflıda `--oda` yoksa, tetik betiği yoksa ya da tetik düşerse rc 1 "Sultan'a ulaşılamadı: --oda ver ya da tetik betiğini kur" der ve kartı yazmaz/geri alır; ölçüldü: eski araç "BAŞLAMA İZNİ SULTAN'A GİDER" basıp rc 0 dönüyordu (oda yoksa `tetik()` sessizce çıkıyor, betik yoksa "atılmadı" deyip yine 0). `tetik()` artık gitti/gitmedi söyler (sınıfsız çağıran yok sayar: iş düşmez). Sultan'a giden satırda komut yok. **Atomik yayım (göz tur 3):** kart önce geçici dosyaya yazılır, tetik başarınca `ln` ile (var olanı ezmeden) yayımlanır — tetikte süreç kesilirse görünür kart kalmaz, geri alma yalnız kendi geçici dosyasını siler (eşzamanlı aynı kimlikli başkasının kartı ezilmez/silinmez). Sınav T17 (U1-U9 + 7 mutant); sınavlar sahte tetikle koşar (gerçek odaya mektup bırakmaz). Kalan: parca2 (kapı/denetçi/gün sonu) · parca2c (canlı borç). Kural metni `adimlar/0-kabul.md`.
 - **0.10.0 (2026-10-18, SERDAR · PCP7J daraltma adımı; 0.9.0 HENDESE üstüne):** tıkanma raporu "kapsamı daralt" diyordu ama hatta adımı yoktu:
   daralt kararı verilen iş (cloudtop #668) tur açamıyor, mutlak tavanı dolan iş (#670) bir daha denetlenemiyor, kapı
   reis/Sultan kararını hiç okumuyordu; geçici yol "yeni kart + yeni dal + yeni PR" Sultan'a günde ~30 karar yüklüyordu.
