@@ -1049,6 +1049,14 @@ def komut_kart(n) -> int:
     print(f"   gerekçe: {c['_gerekce']}")
     if "?" in c.values():
         print("   🔴 '?' var → kanona göre bu iş SULTAN'A GİDER (şüphede sınıf YUKARI)")
+    # 🔴 ODA ÇİTİ (görev …VJ1EWM, 23 Eki): fabrika 0.21 odasız SINIFLI kartı Sultan'a ulaştıramadığı için AÇMAZ (rc 1,
+    #    "Sultan'a ulaşılamadı: --oda ver ya da tetik betiğini kur"). Bu yol kartı --oda vermeden açıyordu ve sınavlar sahte
+    #    kart.sh kullandığı için görünmüyordu. Fail-closed: sınıflı iş + oda yok → kart.sh HİÇ çağrılmaz, sebep burada söylenir.
+    oda = getattr(n, "oda", None) or None
+    sinifli = any(c[a] in ("e", "?") for a in ("geri_alinamaz", "para", "dis_yuzey", "yetki"))
+    if sinifli and not oda:
+        print("🔴 sınıflı iş: --oda ver — fabrika 0.21 odasız sınıflı kartı Sultan'a ulaştıramaz, açmaz")
+        return 1
     if n.kuru:
         print("(kuru koşum — kart açılmadı)")
         return 0
@@ -1070,7 +1078,7 @@ def komut_kart(n) -> int:
                     "--istedi", "BILEYI", "--aldi", kimlik(depo),
                     "--geri-alinamaz", c["geri_alinamaz"], "--para", c["para"],
                     "--dis-yuzey", c["dis_yuzey"], "--yetki", c["yetki"],
-                    "--kanit", f"_agents/fabrika/kanit/{n.is_}"], depo)
+                    "--kanit", f"_agents/fabrika/kanit/{n.is_}"] + (["--oda", oda] if oda else []), depo)
     print(cik.strip())
     return 0 if rc == 0 else 1
 
@@ -1288,6 +1296,8 @@ def main(argv: list[str]) -> int:
     kt.add_argument("--hedef", action="append", required=True,
                     help="dokunulacak yol (birden çok verilebilir)")
     kt.add_argument("--cumle", default=None)
+    kt.add_argument("--oda", default=None,
+                    help="kartın odası (tetik hedefi); sınıflı işte ZORUNLU — fabrika 0.21 odasız sınıflı kartı açmaz")
     kt.add_argument("--sinif-dosya", default=None)
     kt.add_argument("--anahtar", default=None,
                     help="bu işin kapattığı ADAY anahtarı (tur çıktısında yazılı) — "
