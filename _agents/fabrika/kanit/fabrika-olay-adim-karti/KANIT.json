@@ -1,7 +1,7 @@
 {
   "is": "fabrika-olay-adim-karti",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-23T19:01:26+03:00",
+  "guncelleme": "2026-10-23T21:21:55+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -44,36 +44,36 @@
       "etiket": "kart-sinavi",
       "asama": "sonra",
       "dosya": "olcum-kart-sinavi-sonra.txt",
-      "sha256": "6a3c5ba7eaf5dfdc1338bd7f89fab458a2b02d8fca958c468d473f7c679864d3",
+      "sha256": "03812b1f0a26941cecb1191a9f009f0e576c7c22a445a06e8b45d8f32c9ca2de",
       "komut": [
         "bash",
         "-c",
-        "unset KANIT_DEPO; bash /config/projects/Nexus/scripts/agir-sira.sh kart-sonra -- timeout 900 bash /config/projects/_wt/Sx-Claude-Skills-fabrika-olay-adim-karti/yazilim-fabrikasi/scripts/kart.test.sh < /dev/null > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/sonra-kart.out 2>&1; r=$?; grep -m6 '✗' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/sonra-kart.out | cut -c1-170; grep SONUÇ /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/sonra-kart.out; exit $r"
+        "unset KANIT_DEPO; timeout 1500 bash /config/projects/_wt/Sx-Claude-Skills-fabrika-olay-adim-karti/yazilim-fabrikasi/scripts/kart.test.sh < /dev/null"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T19:00:52+03:00",
-      "sure_sn": 17.5,
+      "zaman": "2026-10-23T20:56:37+03:00",
+      "sure_sn": 29.8,
       "boru_denetimi": "temiz",
-      "olcum_id": "7fba0028f34e4bb1b702a77bb14a7188"
+      "olcum_id": "b5ae01405a3240d980e119bd0b1ff6df"
     },
     {
       "tur": "olcum",
       "etiket": "denetci-sinavi",
       "asama": "sonra",
       "dosya": "olcum-denetci-sinavi-sonra.txt",
-      "sha256": "b13cc9d45196440e3002675162c79f8175df8aede31428e4a04470d243e29248",
+      "sha256": "85f8c7c7da88a73c8662849ec040557994dd08d3885e652d6d4a05a7fe191939",
       "komut": [
         "bash",
         "-c",
-        "bash /config/projects/Nexus/scripts/agir-sira.sh denetci-sonra -- timeout 2400 bash /config/projects/_wt/Sx-Claude-Skills-fabrika-olay-adim-karti/yazilim-fabrikasi/scripts/denetci.test.sh < /dev/null > /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/sonra-den.out 2>&1; r=$?; grep -m6 '✗' /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/sonra-den.out | cut -c1-170; grep SONUÇ /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/y7j3q/sonra-den.out; exit $r"
+        "unset KANIT_DEPO; timeout 2400 bash /config/projects/_wt/Sx-Claude-Skills-fabrika-olay-adim-karti/yazilim-fabrikasi/scripts/denetci.test.sh < /dev/null"
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T18:59:06+03:00",
-      "sure_sn": 948.5,
+      "zaman": "2026-10-23T21:21:53+03:00",
+      "sure_sn": 1516.7,
       "boru_denetimi": "temiz",
-      "olcum_id": "872bc10101474f33948e2c5d2e5ef482"
+      "olcum_id": "50881bd7d6c44168986ef46151fdc62a"
     },
     {
       "tur": "olcum",
@@ -143,7 +143,7 @@
       "etiket": "ci-parity-strict",
       "asama": "sonra",
       "dosya": "olcum-ci-parity-strict-sonra.txt",
-      "sha256": "0b900054318ca07b55dda84fb8aae1414ab9ca46e856e2baaab91cce42deb5df",
+      "sha256": "48502b45020f4404405885c30c91b6d82ef83a51adca7566383628879b8f252a",
       "komut": [
         "node",
         "ahi/schema/validate-repo.mjs",
@@ -152,17 +152,17 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T18:59:44+03:00",
-      "sure_sn": 0.0,
+      "zaman": "2026-10-23T21:21:54+03:00",
+      "sure_sn": 0.3,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "5aa088d5bee2489d8a6f0db54e7efad3"
+      "olcum_id": "ba5b2734b60744e1b2ff0ade332c3f0b"
     },
     {
       "tur": "olcum",
       "etiket": "ci-version-lint",
       "asama": "sonra",
       "dosya": "olcum-ci-version-lint-sonra.txt",
-      "sha256": "f41b73a57ea571c67b22f2b99d55773cfa8819ef31eaf61facc7915aa06db995",
+      "sha256": "1faa4a0f677178143b835e1a399f91d00e0c777b06607acfbbc31f208e64730e",
       "komut": [
         "node",
         "ahi/schema/version-lint.mjs",
@@ -170,11 +170,11 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T18:59:44+03:00",
-      "sure_sn": 0.1,
+      "zaman": "2026-10-23T21:21:55+03:00",
+      "sure_sn": 0.4,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "f9a4a95b2ad94dd7bc89ec72150ee14e"
+      "olcum_id": "ab62749f449849b99b9f7d928440d076"
     }
   ],
-  "imza": "d1bde4b11a607af182266b280e8f3838b4d1a085ba5ae69ba8bb31f9f8af7873"
+  "imza": "780e5486313354b02f96e1b18a4bb0edfcb3866df5c98ae2ffe4c13f2e197108"
 }
