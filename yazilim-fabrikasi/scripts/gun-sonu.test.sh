@@ -142,6 +142,10 @@ grep -qE '^\- \[bitti\] \*\*sinifli-bitti\*\* .* izin: basla .* reis birleştird
 grep -q "veto hakkın var (reis kararı, Sultan sözü değil)" <<<"$O14"; g $? "Ö14f bölüm başlığı 'reis kararı, Sultan sözü değil' der (A06)"
 grep -qE '^\- sinifli — sahip M · açıldı .* · sınıflı · izin: dur$' <<<"$O14"; g $? "Ö14g açık işlerde 'sınıflı · izin: dur' (eski '· SULTAN' yok)"
 ! grep -q "· SULTAN" <<<"$O14"; g $? "Ö14h 'SULTAN' etiketi hiçbir satırda yok"
+# Sultan'a giden bölüm: başlıktan bir sonraki '## ' başlığına kadar (göz 23 Eki tur 2 — Sultan komut yazmaz)
+sultan_bolumu() { awk "/^## Sultan'a gidenler \\(/{b=1;print;next} /^## /{b=0} b" <<<"$1"; }
+SB14="$(sultan_bolumu "$O14")"
+[ "$(grep -c . <<<"$SB14")" -ge 3 ] && ! grep -q "kart.sh" <<<"$SB14" && grep -q "durdurmak için 'dur' demen yeter" <<<"$SB14"; g $? "Ö14i 'Sultan'a gidenler' bölümünde komut yok ('kart.sh' geçmez), Sultan-dili: 'durdurmak için 'dur' demen yeter' (bölüm ≥3 satır: ölçüldü, boş değil)"
 
 echo "════ Ö15 · MUTASYON: izin.py'de dur dalı kalkınca veto görünmez olur (Ö14b kırmızıya döner) ════"
 cp "$G" "$T/pkg/mutant-izin.sh"; cp "$T/pkg/izin.py" "$T/pkg/izin.py.asil"; sed -i 's/^        if d == "dur":$/        if False:/' "$T/pkg/izin.py"
@@ -150,6 +154,20 @@ if cmp -s "$T/pkg/izin.py" "$T/pkg/izin.py.asil"; then g 1 "Ö15 mutant FARKSIZ 
   grep -qE '^\- \[acik\] \*\*sinifli\*\* .* izin: bekliyor ' <<<"$OMI"; g $? "Ö15 MUTASYON: dur dalı ölünce vetolu kart 'bekliyor' görünüyor → Ö14b bu mutantta düşerdi"
 fi
 cp "$T/pkg/izin.py.asil" "$T/pkg/izin.py"
+echo "════ Ö16 · MUTASYON: başlığa komut geri konunca Ö14i kırmızıya döner ════"
+M16="$T/pkg/mutant-komut.sh"
+sed "s@durdurmak için 'dur' demen yeter)\")@'dur' dersen kapı kapanır: kart.sh sultan-dedi <iş> --karar dur)\")@" "$G" > "$M16"
+if cmp -s "$M16" "$G"; then g 1 "Ö16 mutant FARKSIZ (çapa bayat)"; else
+  OM16="$( cd "$T" && bash "$M16" --gun "$GUN" 2>&1 )"
+  grep -q "## Sultan'a gidenler (2) — başlama izni / veto" <<<"$OM16" && grep -q "kart.sh" <<<"$(sultan_bolumu "$OM16")"; g $? "Ö16 MUTASYON: eski komutlu başlıkta bölüm 'kart.sh' taşıyor → Ö14i bu mutantta düşerdi (önek yine korunur)"
+fi
+echo "════ Ö17 · MUTASYON (A06): reis bölümünden 'reis kararı, Sultan sözü değil' etiketi kalkınca Ö14f kırmızıya döner ════"
+M17="$T/pkg/mutant-etiket.sh"
+sed 's@ — veto hakkın var (reis kararı, Sultan sözü değil)")@ — veto hakkın var")@' "$G" > "$M17"
+if cmp -s "$M17" "$G"; then g 1 "Ö17 mutant FARKSIZ (çapa bayat)"; else
+  OM17="$( cd "$T" && bash "$M17" --gun "$GUN" 2>&1 )"
+  grep -q "## Reisin sınıflı işlerdeki kararları (1) — veto hakkın var" <<<"$OM17" && ! grep -q "reis kararı, Sultan sözü değil" <<<"$OM17"; g $? "Ö17 MUTASYON: etiket kalkınca bölüm etiketsiz → Ö14f bu mutantta düşerdi"
+fi
 rm -f "$T/_agents/fabrika/kartlar/sinifli.json" "$T/_agents/fabrika/kartlar/sinifli-bitti.json"
 
 echo "════ Ö7 · MUTASYON: saat çevrimi koparılınca kör pencere GERİ GELİR ════"

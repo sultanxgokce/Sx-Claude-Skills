@@ -49,7 +49,9 @@ def puan(k):
     if d: return f"{d['puan']}/5 {d['dogru']} · {d['tur']} tur"
     return "puan YOK"
 out=[f"# GÜN SONU · {gun} · {len(g)} iş (kart defterinden üretildi, elle satır yok)",""]
-out.append(f"## Sultan'a gidenler ({len(sultan)}) — başlama izni / veto (iş bekletilmez; 'dur' dersen kapı kapanır: kart.sh sultan-dedi <iş> --karar dur)")
+# Başlık öneki "## Sultan'a gidenler (" AYNEN korunur (dış okuyucular grep ediyor). Satır Sultan-dilindedir: Sultan komut yazmaz
+# (göz 23 Eki tur 2); ajanın işlediği komut belgede yaşar (adimlar/0-kabul.md "Sınıflı iş": kart.sh sultan-dedi <iş> --karar dur).
+out.append(f"## Sultan'a gidenler ({len(sultan)}) — başlama izni / veto (iş bekletilmez; durdurmak için 'dur' demen yeter)")
 for k in sultan: out.append(f"- [{k['durum']}] **{k['is']}** — {k['cumle']} · sınıf: {', '.join(k['siniflar'])} · izin: {izin(k)} · sahip {k['aldi']} · {puan(k)} · kanıt {'var' if k.get('kanit_var') else 'yok'}{' · PR '+k['pr'] if k.get('pr') else ''}{reis_birl(k)}")
 out.append(""); out.append(f"## İçeride bitirdiklerimiz ({len(icerde)}) — 'bunu bana sormalıydınız' dersen sınıf kuralı bu vakayla düzelir")
 for k in icerde: out.append(f"- **{k['is']}** — {k['cumle']} · sahip {k['aldi']} · {puan(k)} · kanıt {'var' if k.get('kanit_var') else '⚠ YOK'}{' · PR '+k['pr'] if k.get('pr') else ''}"

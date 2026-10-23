@@ -24,8 +24,12 @@ görünüm değişikliği "kusur düzeltmesi" sanılıp peşin onayla yayınland
 Sultan'ın sözü (session_01Ge4BawKcUrcm1pdV8WANyF): *"sadece ara kararlar değil birleştirme kararları da reise geçsin çünkü
 ciddi sorun yaşıyoruz çok iş takılıyor"*. Ölçüm: bağımsız gözden geçen işler ayda **1.138 saat** bekledi; 22 Eki'de sorulan
 12 kararın **12'sinde** Sultan ajan önerisini seçti.
-- **Başlama izni Sultan'a gider, iş bekletilmez.** `kart.sh ac` sınıflı kartta `baslama_izni: bekliyor` yazar ve bunu söyler
-  (tetik/oda varsa oraya da). İş alanı açılır, iş yürür. İzin bir **VETO PENCERESİ**dir: Sultan `kart.sh sultan-dedi <iş>
+- **Başlama izni Sultan'a gider, iş bekletilmez.** `kart.sh ac` sınıflı kartta `baslama_izni: bekliyor` yazar ve izin isteğini
+  `--oda <oda>` odasına tetikle (`FABRIKA_TETIK`, varsayılan Nexus `oda-tetik.sh`) gönderir. **Ulaşım yolu yoksa kart AÇILMAZ
+  (fail-closed, rc 1 — göz 23 Eki tur 2):** `--oda` verilmemişse, tetik betiği yoksa ya da tetik düşerse araç "Sultan'a
+  ulaşılamadı: --oda ver ya da tetik betiğini kur" der ve kartı yazmaz/geri alır. Varsayılan oda uydurulmaz (oda-tetik'te
+  "merkez/Sultan" odası yok). Sultan'a giden satır komut taşımaz: "durdurmak için 'dur' demen yeter"; Sultan'ın "dur"unu ajan
+  `kart.sh sultan-dedi <iş> --karar dur` ile karta işler. İş alanı açılır, iş yürür. İzin bir **VETO PENCERESİ**dir: Sultan `kart.sh sultan-dedi <iş>
   --karar dur` derse kapı birleştirmeyi reddeder, denetçi tur koşmaz, reis durur; `--karar basla` karta işlenir; hiçbir şey
   demezse iş reis kararlarıyla biter. Son basla/dur kazanır (dur = veto, sonraki basla vetoyu kaldırır).
 - **Ara kararlar (devam · daralt · geri-al · canlı borç) ve BİRLEŞTİRME kararı kutu reisinindir** — gerekçeli (≥20 karakter),
@@ -53,7 +57,9 @@ söyler (reis `geri-al` kararı, `reis-dedi`); "bunu bana sormalıydınız" ise 
 **Kapsam = teslim birimi** (retro W42 ders M2): kart tek depoda, tek PR'da, bir günde teslim edilecek kadar olsun. `kart.sh ac` cümlede iki depo adı ya da haftalık kapsam görürse UYARIR (red değil) ve depo başına / gün başına kart önerir; uyarı karta da yazılır.
 
 Kart açılınca ilgili odaya `oda-tetik` ile tek satır (var olan hat, L42): "<iş> alındı · sahip <ajan> · sınıf <x>" — sınıflı
-işte "· başlama izni bekleniyor (veto penceresi)" eklenir; Sultan'ın tek görünürlüğü bu satır ve gün sonu özetidir.
+işte "· başlama izni bekleniyor (veto penceresi: iş yürür; durdurmak için 'dur' demen yeter)" eklenir; Sultan'ın tek görünürlüğü
+bu satır ve gün sonu özetidir — bu yüzden sınıflı kartta satır gidemiyorsa kart açılmaz (yukarıda, "Sınıflı iş"). Sınıfsız kartta
+`--oda` isteğe bağlı, tetik best-effort (düşerse iş düşmez).
 Kart kapanınca aynı hattan "bitti · kanıt <yol> · puan <n>/5 <E/H>".
 
 ## Sahiplik ve tıkanma
