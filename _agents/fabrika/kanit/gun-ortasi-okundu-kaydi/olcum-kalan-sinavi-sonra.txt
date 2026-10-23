@@ -1,5 +1,5 @@
 $ timeout 300 bash /config/projects/_wt/Sx-Claude-Skills-gun-ortasi-okundu-kaydi/gun-ortasi/scripts/kalan.test.sh
-# rc=0 sure=11.9s zaman=2026-10-23T06:14:45+03:00
+# rc=0 sure=36.8s zaman=2026-10-23T08:51:34+03:00
 --- stdout ---
   🟢 T1 rc=0 ve #OZET satırı var
   🟢 T2 açık kart 1 · tıkandı ayrı 1 · bozuk JSON sayılmaz, ölçemedim der
@@ -43,7 +43,7 @@ $ timeout 300 bash /config/projects/_wt/Sx-Claude-Skills-gun-ortasi-okundu-kaydi
   🟢 T5i okundu-liste cevabı gelen/ dosya adı değil → ölçemedim, mektuplar sayılmaz
   🟢 T5j tek tırnak + yardımcı fonksiyonla yazılmış arayüz de tanınır: okundu-liste soruldu → BA ve A okunmuş → gelen 1
   🟢 T5k kurye var, arayüz yok, okundu.log yok → gelen '?' + ölçemedim 'kaydın yeri bilinmiyor' (3 okunmamış DENMEZ)
-  🟢 T5l kurye var, arayüz yok, okundu.log var → okundu.log okunur (BA okunmuş → 2) ve not 'okundu.log okundu'
+  🟢 T5l kurye var, arayüz yok, okundu.log var → yine ölçemedim; not 'okundu.log'a bakılmadı'; okundu.log'daki BA bilgisi KULLANILMAZ
   🟢 T5m okundu-yolu var, dosya henüz yok → üçü de okunmamış (3) ve not 'dosyası henüz yok … damgası basmamış'
   🟢 T5n yardım metninde 'okundu-liste' geçen yalnız-yol betiği: liste düşer (rc 1) → okundu-yolu'na GEÇİLİR → gelen 1; geçiş notu var; ölçemedim artmaz
   🟢 T5g kayıt da kurye-yokla.sh de yok: üçü de okunmamış (3) ve not 'okundu kaydı yok … kurye-yokla.sh de yok'
