@@ -1,0 +1,32 @@
+{
+  "is": "fabrika-olay-adim-karti",
+  "cumle": "gorev_01M5CWJAH2B8MFG4XFVY3Y7J3Q — yazilim-fabrikasi 0.23.0: kart --gorev bağlıysa (1) denetci.sh tur sonucu göreve tek satır adım yazar (tur · puan · doğru şey · bulgu sayısı), durum DEĞİŞMEZ (çalışılıyor olmayan görevde de aynı; sınavda ölçülür), yazılamazsa uyarı iş düşmez; her kanıt ölçümü YAZMAZ. (2) kart.sh ac --gorev yeni görev açarken aynı ajanın (aldi) başka açık kartı / çalışılıyor görevi varsa önceki görevi 'bekliyor' + 'başka işe geçti: <kart>' yazar (bırakma anı araca geçer). wait-ci adımı Nexus'ta ayrı kart. Ölçüm: bekçi --json nabız kırmızı, önce 16/15 → sonra fiilen çalışılanlarda 0.",
+  "istedi": "SERDAR",
+  "aldi": "BANI",
+  "zaman": "2026-10-23T18:20:36+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/fabrika-olay-adim-karti (sınav önce/sonra + mutasyon)",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: bekçi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5CWJAH2B8MFG4XFVY3Y7J3Q",
+  "tahmin_dk": 120,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-23T18:20:37+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
