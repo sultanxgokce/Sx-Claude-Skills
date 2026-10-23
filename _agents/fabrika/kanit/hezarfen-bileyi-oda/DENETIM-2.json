@@ -1,0 +1,45 @@
+{
+  "tur": 2,
+  "is": "hezarfen-bileyi-oda",
+  "pr": "441",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T16:15:19+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "sonnet",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 19644,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 7,
+    "bayt": 15820
+  },
+  "bas": "e3aeacb327c8edbf9513b52e2dcf41e627268fda",
+  "duzeltme_farki": {
+    "onceki_bas": "297461fb5a1fe77c7833c8c3ff85a39b16ef795f",
+    "dosya": 8,
+    "bayt": 21408,
+    "tam_bayt": 19779
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Düzeltme, oda kapılarının kullandığı geçici dizini ve çıktı değişkenini X11–X13 kapılarından ayırmış; gerçek ölçüm artık 127/127 geçiyor, OD1–OD4 istenen davranışları doğruluyor ve mutant çitin kaldırılmasını yakalıyor. Kod üretime hazır ve talep edilen şey yapılmış; önceki turun tek kutu-dışı bulgusu ise kurulu kopyaya birleşme sonrası teslim kaydı hâlâ bulunmadığından açık.",
+    "bulgular": [
+      {
+        "ne": "Önceki tur B1 kapanmadı: birleşme sonrasında kurulu kopyanın `sync-skills` ile yalnız bileyi için güncellendiğine dair kayıt hâlâ yok.",
+        "kanit": "Sağlam manifestte yalnız `bileyi-sinavi` önce/sonra ölçümleri ile `bileyi-mutant-oda-citi-yok` mutasyon ölçümü var; `sync-skills` veya kurulu kopya teslimine ilişkin kayıt bulunmuyor.",
+        "konum": "kanıt manifesti:kayitlar",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "Sultan'ın Mac'indeki kurulu kopya"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü 123/127 ve rc 1 iken gerçek sonra ölçümü 127/127 ve rc 0: OD1 kart.sh çağrılmadan fail-closed dönüşü ve tam mesajı, OD2 `--oda` aktarımını, OD3 sınıfsız odasız açılışı, OD4 `--kuru` uyarısını doğruluyor; X11–X13 de düzeltmeden sonra geçiyor. Mutasyon kaydı `mutasyon: true` ve `gercek_olcum: bileyi-sinavi` etiketli; bilerek kaldırılan oda çiti 3 düşen test ve rc 1 üreterek sınavın kusuru yakaladığını gösteriyor."
+  }
+}

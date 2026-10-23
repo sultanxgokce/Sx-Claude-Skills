@@ -611,6 +611,71 @@ assert 'kapanış damgası ATILAMAZ' in cik, cik
 assert rc == 0, rc
 "
 
+echo "OD · ODA ÇİTİ (görev …VJ1EWM): sınıflı kart --oda ile; odasız sınıflı rc 1 ve kart.sh çağrılmaz; sahte kart.sh 0.21 kuralını uygular"
+# sahte kart.sh — argv'yi kaydeder, 0.21 kuralını uygular: sınıflı (e|?) ve --oda yok → rc 1 (U1 mesajı)
+OF="$KOK/sahte-fabrika-oda"; mkdir -p "$OF"
+cat > "$OF/kart.sh" <<'KSH'
+#!/usr/bin/env bash
+printf '%s\n' "$*" >> "${KART_ARGV_LOG:?}"
+sinifli=0; oda=""
+args=("$@"); for ((i=0;i<${#args[@]};i++)); do
+  case "${args[$i]}" in --geri-alinamaz|--para|--dis-yuzey|--yetki) [ "${args[$((i+1))]}" = h ] || sinifli=1 ;; --oda) oda="${args[$((i+1))]}" ;; esac
+done
+if [ $sinifli = 1 ] && [ -z "$oda" ]; then echo "✗ Sultan'a ulaşılamadı: --oda ver ya da tetik betiğini kur (kart AÇILMADI)"; exit 1; fi
+echo "✓ kart açıldı${oda:+ · oda $oda}"
+KSH
+chmod +x "$OF/kart.sh"
+# sınıf dosyası: hooks/ altı → yetki e (sınıflı), bileyi/ altı → sınıfsız
+python3 - "$SK" "$KOK/sk-oda.json" <<'PY'
+import json, sys
+d = json.load(open(sys.argv[1], encoding="utf-8"))   # gerçek kural dosyasından türetilir: hooks/ → yetki e; bileyi/ → sınıfsız
+d["yetki"] = ["hooks/"]; d["geri_alinamaz"] = ["prod-db/"]; d["para"] = ["fatura/"]; d["dis_yuzey"] = ["public/"]; d["guvenli_onekler"] = ["bileyi/", "hooks/"]
+json.dump(d, open(sys.argv[2], "w"), ensure_ascii=False)
+PY
+oda_kos() { # <argv-log> <komut_kart n alanları…> → stdout + rc; sahte fabrika ile
+  python3 - "$B" "$OF" "$@" <<'PY'
+import importlib.util as u, pathlib, io, contextlib, os, sys, subprocess
+B, OF, log, is_, hedef, oda, kuru = sys.argv[1:8]
+s=u.spec_from_file_location('b', B); m=u.module_from_spec(s); s.loader.exec_module(m)
+m.FABRIKA = pathlib.Path(OF); m.kimlik = lambda depo, zorunlu=True: 'sinav-ajani'
+def kos(komut, cwd, zaman=600):
+    r = subprocess.run(komut, cwd=cwd, capture_output=True, text=True, env={**os.environ, "KART_ARGV_LOG": log}); return r.returncode, r.stdout + r.stderr
+m._kos = kos
+class N: pass
+n=N(); n.depo=os.path.dirname(log); n.havuz_depo=n.depo; n.is_=is_; n.hedef=[hedef]; n.cumle=None; n.anahtar=None
+n.sinif_dosya=os.path.join(os.path.dirname(log), 'sk-oda.json'); n.oda=(oda or None); n.kuru=(kuru=='1')
+t=io.StringIO()
+with contextlib.redirect_stdout(t): rc = m.komut_kart(n)
+print(t.getvalue()); sys.exit(rc)
+PY
+}
+mkdir -p "$KOK/od"; cp "$KOK/sk-oda.json" "$KOK/od/sk-oda.json"   # 🔴 DEĞİŞKEN ADI: bu bölüm OC kullanır — sınavın ilerisindeki X11–X13 "${O[@]}" DİZİSİNİ kullanıyor, O= ataması onu metne çevirip üçünü düşürüyordu (CI #441). 🔴 KENDİ dizini: paylaşılan $KOK/oda'ya yazmak X11–X13 (merkez havuzu sayımı) kapılarını düşürüyordu (CI #441)
+: > "$KOK/od/kart-argv.log"
+OC="$(oda_kos "$KOK/od/kart-argv.log" o1 hooks/a.js "" 0)"; rc=$?
+if [ $rc -eq 1 ] && [[ "$OC" == *"🔴 sınıflı iş: --oda ver — fabrika 0.21 odasız sınıflı kartı Sultan'a ulaştıramaz, açmaz"* ]] && [ ! -s "$KOK/od/kart-argv.log" ]; then GECEN=$((GECEN+1)); echo "  ✓ OD1 sınıflı (yetki e) + --oda yok → rc 1, sebep basıldı, kart.sh HİÇ çağrılmadı"
+else DUSEN=$((DUSEN+1)); echo "  ✗ OD1 (rc=$rc) argv-log=$(cat "$KOK/od/kart-argv.log" 2>/dev/null | head -1) · $OC"; fi
+: > "$KOK/od/kart-argv.log"
+OC="$(oda_kos "$KOK/od/kart-argv.log" o2 hooks/a.js oda-x 0)"; rc=$?
+if [ $rc -eq 0 ] && grep -q -- "--oda oda-x" "$KOK/od/kart-argv.log" && [[ "$OC" == *"kart açıldı · oda oda-x"* ]]; then GECEN=$((GECEN+1)); echo "  ✓ OD2 sınıflı + --oda oda-x → kart.sh'ye --oda geçti, 0.21 kuralı geçti, kart açıldı"
+else DUSEN=$((DUSEN+1)); echo "  ✗ OD2 (rc=$rc): $(cat "$KOK/od/kart-argv.log") · $OC"; fi
+: > "$KOK/od/kart-argv.log"
+OC="$(oda_kos "$KOK/od/kart-argv.log" o3 bileyi/a.py "" 0)"; rc=$?
+if [ $rc -eq 0 ] && ! grep -q -- "--oda" "$KOK/od/kart-argv.log" && [[ "$OC" == *"kart açıldı"* ]]; then GECEN=$((GECEN+1)); echo "  ✓ OD3 sınıfsız + --oda yok → kart.sh odasız çağrıldı, açıldı (oda isteğe bağlı)"
+else DUSEN=$((DUSEN+1)); echo "  ✗ OD3 (rc=$rc): $(cat "$KOK/od/kart-argv.log") · $OC"; fi
+: > "$KOK/od/kart-argv.log"
+OC="$(oda_kos "$KOK/od/kart-argv.log" o4 hooks/a.js "" 1)"; rc=$?
+if [ $rc -eq 1 ] && [[ "$OC" == *"--oda ver"* ]]; then GECEN=$((GECEN+1)); echo "  ✓ OD4 --kuru'da da odasız sınıflı iş SÖYLENİR (rc 1), kuru koşum sessiz 'açılmadı' demez"
+else DUSEN=$((DUSEN+1)); echo "  ✗ OD4 (rc=$rc): $OC"; fi
+# MUTASYON: oda çiti kalkınca O1 kırmızı (sahte kart.sh reddeder ama bileyi artık çağırır ve rc'yi geçirir — sebep bileyi'den değil)
+MB="$KOK/bileyi-mut-oda.py"; sed 's@    if sinifli and not oda:@    if False:@' "$B" > "$MB"
+if cmp -s "$MB" "$B"; then DUSEN=$((DUSEN+1)); echo "  ✗ MUT-OD mutant farksız (çapa bayat)"
+else
+  : > "$KOK/od/kart-argv.log"
+  OC="$(B="$MB" oda_kos "$KOK/od/kart-argv.log" o5 hooks/a.js "" 0)"; rc=$?
+  if [ -s "$KOK/od/kart-argv.log" ] && [[ "$OC" != *"🔴 sınıflı iş: --oda ver"* ]]; then GECEN=$((GECEN+1)); echo "  ✓ MUT-OD: çit kalkınca bileyi odasız sınıflı kartı kart.sh'ye GÖNDERİYOR (0.21 orada reddeder, rc=$rc) — OD1 bunu yakalar"
+  else DUSEN=$((DUSEN+1)); echo "  ✗ MUT-OD yakalanmadı (rc=$rc): $OC"; fi
+fi
+
 echo "U · SEDİR düzeni (12 Eki bulgusu: çivili yol · noktasız ı · ts alanı)"
 SED="$KOK/sedir"; mkdir -p "$SED/_agents/havuz"
 python3 - "$SED/_agents/havuz/bulgu-havuzu.jsonl" <<'PY'

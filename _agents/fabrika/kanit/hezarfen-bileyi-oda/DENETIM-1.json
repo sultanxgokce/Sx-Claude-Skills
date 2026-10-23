@@ -1,0 +1,40 @@
+{
+  "tur": 1,
+  "is": "hezarfen-bileyi-oda",
+  "pr": "441",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T15:23:59+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 20504,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 8243
+  },
+  "bas": "297461fb5a1fe77c7833c8c3ff85a39b16ef795f",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Oda çiti doğru yere konmuş: sınıflı odasız kart fail-closed duruyor, kart.sh çağrılmıyor; oda verilince aktarılıyor, sınıfsız akış açık kalıyor ve --kuru da susmuyor. Göreve özgü dört kapı ile mutant yakalaması güçlü olduğundan kod üretime hazır; yalnız kurulu kopyaya sync-skills teslimi bu kutuda kanıtlanmamış.",
+    "bulgular": [
+      {
+        "ne": "Birleşme sonrasında kurulu kopyanın `sync-skills` ile yalnız bileyi için güncellendiğine dair kayıt yok.",
+        "kanit": "Manifestte yalnız önce/sonra bileyi sınavı ve oda-çiti mutasyonu bulunuyor; kurulu kopya veya `sync-skills` çalıştırmasına ait ölçüm kaydı yok.",
+        "konum": "kanıt manifesti:kayitlar",
+        "agirlik": "kutu-disi",
+        "kutu_disi_yuzey": "Sultan'ın Mac'indeki kurulu kopya"
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra çifti OD1–OD4 davranışlarının kırmızıdan yeşile döndüğünü gerçekçi sahte kart.sh ve argv kaydıyla gösteriyor; mutasyon kaydı da çit kaldırılınca sınavın bozuk kodu yakaladığını kanıtlıyor. Genel sınavın sonra ölçümü X11–X13 nedeniyle rc 1, ancak aynı arızalar önce ölçümünde de mevcut ve oda değişikliğinin kapıları sonrasında geçiyor; bu nedenle görev kapsamındaki iddiaları çürütmüyor."
+  }
+}

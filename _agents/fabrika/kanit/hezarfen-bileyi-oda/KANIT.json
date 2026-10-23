@@ -1,0 +1,65 @@
+{
+  "is": "hezarfen-bileyi-oda",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T16:14:26+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "bileyi-sinavi",
+      "asama": "once",
+      "dosya": "olcum-bileyi-sinavi-once.txt",
+      "sha256": "a7b28fc266379839ab31745022e13406c931781ab5eefff2c36dde2a9bd9a4b7",
+      "komut": [
+        "bash",
+        "-c",
+        "set -o pipefail; timeout 300 bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/wt-bileyi-main/bileyi/scripts/bileyi.test.sh 2>&1 | grep -E '✗|toplam='"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T16:14:05+03:00",
+      "sure_sn": 15.3,
+      "boru_denetimi": "temiz",
+      "olcum_id": "622f583e8e894915b1cf48bce73def3f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bileyi-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-bileyi-sinavi-sonra.txt",
+      "sha256": "fa647e922b22c073eeb484c11cdcb47d86ab3106a899686486cda7e7f9a5fa5d",
+      "komut": [
+        "bash",
+        "-c",
+        "set -o pipefail; timeout 300 bash bileyi/scripts/bileyi.test.sh 2>&1 | grep -E '✗|OD[1-4]|MUT-OD|X1[123]|toplam='"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T16:14:15+03:00",
+      "sure_sn": 10.0,
+      "boru_denetimi": "temiz",
+      "olcum_id": "df1eed725a634f3f846c3e1c54b4f823"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "bileyi-mutant-oda-citi-yok",
+      "asama": "sonra",
+      "dosya": "olcum-bileyi-mutant-oda-citi-yok-sonra.txt",
+      "sha256": "f8f9bfe9299c360deebb364a18f568fc408ef590c24cf4ddec131a94a9202c7d",
+      "komut": [
+        "bash",
+        "-c",
+        "set -o pipefail; timeout 300 bash /tmp/claude-1000/-config-projects-Nexus/f3c46c94-69e9-485f-9f5c-15e34fedbca0/scratchpad/mut-bileyi/bileyi/scripts/bileyi.test.sh 2>&1 | grep -E '✗|toplam='"
+      ],
+      "rc": 1,
+      "renk": "yesil",
+      "zaman": "2026-10-23T16:14:26+03:00",
+      "sure_sn": 11.0,
+      "boru_denetimi": "temiz",
+      "mutasyon": true,
+      "gercek_olcum": "bileyi-sinavi",
+      "beklenen": "kirmizi",
+      "olcum_id": "0e6b83ad0e124e2ca1f1e195da6ac5b3"
+    }
+  ],
+  "imza": "2eee6ec228f972ca0e8ef78ec6018339a069220e2f032467973155d75b3a41a1"
+}

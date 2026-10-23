@@ -1,0 +1,13 @@
+$ bash -c set -o pipefail; timeout 300 bash bileyi/scripts/bileyi.test.sh 2>&1 | grep -E '✗|OD[1-4]|MUT-OD|X1[123]|toplam='
+# rc=0 sure=10.0s zaman=2026-10-23T16:14:15+03:00
+--- stdout ---
+  ✓ OD1 sınıflı (yetki e) + --oda yok → rc 1, sebep basıldı, kart.sh HİÇ çağrılmadı
+  ✓ OD2 sınıflı + --oda oda-x → kart.sh'ye --oda geçti, 0.21 kuralı geçti, kart açıldı
+  ✓ OD3 sınıfsız + --oda yok → kart.sh odasız çağrıldı, açıldı (oda isteğe bağlı)
+  ✓ OD4 --kuru'da da odasız sınıflı iş SÖYLENİR (rc 1), kuru koşum sessiz 'açılmadı' demez
+  ✓ MUT-OD: çit kalkınca bileyi odasız sınıflı kartı kart.sh'ye GÖNDERİYOR (0.21 orada reddeder, rc=1) — OD1 bunu yakalar
+  ✓ X11 merkez havuzu VE kutu defteri birlikte okunur (oda: 10 + defter: 5)
+  ✓ X12 🔴 AÇIK verilen yol yoksa sessizce düşmez: 🟡 okunamadı satırı
+  ✓ X13 açık yolu olmayan kaynak kapsamayı GENİŞ göstermez (1/2 kaynak)
+toplam=127 geçen=127 düşen=0
+--- stderr ---
