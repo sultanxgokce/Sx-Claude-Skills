@@ -1,0 +1,9 @@
+$ bash _agents/fabrika/kanit/kucuk-iki-onarim/iki-onarim-olcer.sh origin/main
+# rc=1 sure=1.6s zaman=2026-10-23T04:39:14+03:00
+--- stdout ---
+kod kaynağı: origin/main
+RN95G · 'tazele --help' rc=2 (beklenen 0) · 'tazele --bilinmeyen' rc=2 (beklenen 2)
+81D0W · uuid4 = 21 Eki CI değeri (e-0 içerir) zorlanınca ubl_satis sınavı rc=1
+  ✗ XML'de float artığı ('.00000' / 'e-') yok (rc=1, beklenen=0)
+toplam=25 geçen=24 düşen=1
+--- stderr ---
