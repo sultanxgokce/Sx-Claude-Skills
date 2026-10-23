@@ -1,5 +1,5 @@
 $ bash -c timeout 300 bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/k1/taban/terminal-onar/scripts/koltuk-bagla.test.sh < /dev/null
-# rc=1 sure=20.0s zaman=2026-10-23T15:26:51+03:00
+# rc=1 sure=23.3s zaman=2026-10-23T15:33:04+03:00
 --- stdout ---
 A · bağlanma (kabul yüzü)
   ✓ A1 argümansız → ana oturum (bugünkü davranış aynı)
@@ -173,7 +173,7 @@ node:fs:440
     return binding.readFileUtf8(path, stringToFlags(options.flag));
                    ^
 
-Error: ENOENT: no such file or directory, open '/tmp/tmp.xr0nDbQXrA/q/beri.json'
+Error: ENOENT: no such file or directory, open '/tmp/tmp.shujoP5i6o/q/beri.json'
     at Object.readFileSync (node:fs:440:20)
     at [eval]:1:34
     at runScriptInThisContext (node:internal/vm:209:10)
@@ -186,22 +186,19 @@ Error: ENOENT: no such file or directory, open '/tmp/tmp.xr0nDbQXrA/q/beri.json'
   errno: -2,
   code: 'ENOENT',
   syscall: 'open',
-  path: '/tmp/tmp.xr0nDbQXrA/q/beri.json'
+  path: '/tmp/tmp.shujoP5i6o/q/beri.json'
 }
 
 Node.js v22.23.0
-cat: /tmp/tmp.xr0nDbQXrA/q/beri.json: No such file or directory
+cat: /tmp/tmp.shujoP5i6o/q/beri.json: No such file or directory
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 AssertionError
-/tmp/tmp.xr0nDbQXrA/q/eski/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
-/tmp/tmp.xr0nDbQXrA/q/eski/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
-/tmp/tmp.xr0nDbQXrA/q/eski/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
-/tmp/tmp.xr0nDbQXrA/q/eski/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
-/tmp/tmp.xr0nDbQXrA/q/eski/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-AssertionError
+/tmp/tmp.shujoP5i6o/q/eski/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/tmp/tmp.shujoP5i6o/q/eski/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/tmp/tmp.shujoP5i6o/q/eski/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/tmp/tmp.shujoP5i6o/q/eski/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
+/tmp/tmp.shujoP5i6o/q/eski/scripts/koltuk-bagla.sh: line 130: /proc/100/environ: No such file or directory
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 AssertionError
@@ -210,7 +207,10 @@ Traceback (most recent call last):
 AssertionError
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
-FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.xr0nDbQXrA/q/m-suzgec/kapi/sir-suz.mjs'
+AssertionError
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp.shujoP5i6o/q/m-suzgec/kapi/sir-suz.mjs'
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 AssertionError

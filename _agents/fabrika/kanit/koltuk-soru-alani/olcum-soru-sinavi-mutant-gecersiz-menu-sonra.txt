@@ -1,0 +1,40 @@
+=== MUTASYON KANITI: kod BİLEREK bozuldu — aşağıdaki FAIL/✗ satırları BEKLENENDİR, bulgu değildir; rc≠0 = sınav bozuk kodu YAKALADI. Gerçek kod ölçümü: olcum-soru-sinavi-* ===
+$ bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/k1/mutant-s5.sh /config/projects/_wt/Sx-Claude-Skills-koltuk-soru-alani
+# rc=1 sure=0.1s zaman=2026-10-23T15:33:40+03:00
+--- stdout ---
+mutant: soru.mjs menü-geçersiz dalı sökülü (serbeste düşer)
+════ S · soru çözümleme (menü · serbest · bölge) ════
+  ✓ S1 izin kutusu → tur menu, 3 şık, numaralar 1-3
+  ✓ S1b soru metni kutunun içinden: komut + "Do you want to proceed?" (kutu çizgisi │ ╭ ╰ metne girmez)
+  ✓ S1c ajanın mesajındaki "1. eski dalı sil" listesi (son ⏺ ÜSTÜ) şık sayılmaz
+  ✓ S2 seçim sorusu (altbilgili) → menu, 3 şık; şık altı açıklama satırı şık değil
+  ✓ S2b altbilgi ("Enter to select · …") ve şık açıklamaları soru metnine girmez
+  ✓ S3 numarasız soru → tur serbest, şık yok
+  ✓ S4 soru metni çıkmayan ekran → null (uydurulmaz)
+  ✗ S5 numaralı şık var ama menü geçersiz → null, "serbest" DEĞİL (göz #440 tur 2): 1'e inmeyen "3. foo" · tek "❯ 1. Yes" · arası kopuk "1." "3."
+  ✓ S5b numarasız soru yine serbest (S5 düzeltmesi serbest yolu kapatmadı)
+  ✓ S6 metin ≤300 kod noktası (Türkçe harfle), şık metni ≤80, şık ≤6
+════ Z · sır süzgeci (SERDAR şart 4) ════
+  ✓ Z1 anahtar / Bearer / url parolası / token=… / PEM soru metninde gizlenir
+  ✓ Z2 şık metnindeki jeton (ghp_…) da gizlenir
+  ✓ Z3 sır olmayan metin aynen kalır (süzgeç her şeyi silmez)
+  ✓ Z4 anahtar=değer biçiminde ad görünür kalır ("token=••• gizlendi")
+  ✓ Z5 aws deseni gizlenir
+  ✓ Z5 slack deseni gizlenir
+  ✓ Z5 jwt deseni gizlenir
+  ✓ Z5 uzun deseni gizlenir
+════ B · beri (ilk görüldüğü an, durum dosyası) ════
+  ✓ B1 aynı soru ikinci okumada aynı an (beri taşınır)
+  ✓ B2 yeni soru → yeni an
+  ✓ B3 --tut: soru hâlinden çıkan koltuğun kaydı silinir, kalanınki durur
+  ✓ B4 silinen koltuk AYNI soruyu yeniden sorarsa an tazelenir (eski an taşınmaz)
+  ✓ B5 durum dosyası yoksa --tut dosya YARATMAZ
+════ A · ayrıştırıcı (koltuklar.mjs soruAyikla) ════
+  ✓ A1 hâl soru + geçerli JSON → koltukta soru alanı (tur · metin · şıklar · beri)
+  ✓ A2 hâl soru DEĞİLSE gelen soru alanı yok sayılır (eski okuma gösterilmez)
+  ✓ A3 bozuk JSON / bilinmeyen tür / tek şıklı menü → alan yok
+  ✓ A4 7 sütunlu eski satır (soru sütunu yok) çalışmaya devam eder, alan yok
+  ✓ A5 /api/kadro gövdesi (kadroBirlestir): kayıtsız koltukta soru alanı taşınır, soru hâlinde olmayanda alan yok
+
+── SONUÇ: 27 geçti · 1 kaldı ──
+--- stderr ---

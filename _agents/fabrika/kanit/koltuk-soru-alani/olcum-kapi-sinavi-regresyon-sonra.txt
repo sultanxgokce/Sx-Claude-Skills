@@ -1,5 +1,5 @@
 $ bash -c timeout 600 bash /config/projects/_wt/Sx-Claude-Skills-koltuk-soru-alani/terminal-onar/kapi/kapi-sinav.test.sh < /dev/null
-# rc=0 sure=42.1s zaman=2026-10-23T15:28:03+03:00
+# rc=0 sure=43.2s zaman=2026-10-23T15:34:23+03:00
 --- stdout ---
 ── kadro birleşimi (kadro.test.mjs)
 ── A · kayıt ayrıştırma
@@ -47,7 +47,8 @@ SONUÇ: 30 geçti · 0 kaldı
   ✓ S2b altbilgi ("Enter to select · …") ve şık açıklamaları soru metnine girmez
   ✓ S3 numarasız soru → tur serbest, şık yok
   ✓ S4 soru metni çıkmayan ekran → null (uydurulmaz)
-  ✓ S5 tek başına "3. foo" (1 numaraya inmeyen) menü sayılmaz
+  ✓ S5 numaralı şık var ama menü geçersiz → null, "serbest" DEĞİL (göz #440 tur 2): 1'e inmeyen "3. foo" · tek "❯ 1. Yes" · arası kopuk "1." "3."
+  ✓ S5b numarasız soru yine serbest (S5 düzeltmesi serbest yolu kapatmadı)
   ✓ S6 metin ≤300 kod noktası (Türkçe harfle), şık metni ≤80, şık ≤6
 ════ Z · sır süzgeci (SERDAR şart 4) ════
   ✓ Z1 anahtar / Bearer / url parolası / token=… / PEM soru metninde gizlenir
@@ -71,7 +72,7 @@ SONUÇ: 30 geçti · 0 kaldı
   ✓ A4 7 sütunlu eski satır (soru sütunu yok) çalışmaya devam eder, alan yok
   ✓ A5 /api/kadro gövdesi (kadroBirlestir): kayıtsız koltukta soru alanı taşınır, soru hâlinde olmayanda alan yok
 
-── SONUÇ: 27 geçti · 0 kaldı ──
+── SONUÇ: 28 geçti · 0 kaldı ──
 ── kadro E2 kayıt yazıcısı (kadro-yaz.test.mjs)
 ── Y · saf dönüşüm (durumDegistir)
   ✓ Y1 durum değeri yerinde değişir (satır yorumu kalır), önceki değer durum_once satırına; başka satır DEĞİŞMEZ

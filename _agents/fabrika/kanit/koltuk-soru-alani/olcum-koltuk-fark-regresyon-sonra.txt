@@ -1,5 +1,5 @@
 $ bash -c timeout 300 bash /config/projects/_wt/Sx-Claude-Skills-koltuk-soru-alani/terminal-onar/kapi/koltuk-fark.test.sh < /dev/null
-# rc=0 sure=74.7s zaman=2026-10-23T15:29:17+03:00
+# rc=0 sure=76.2s zaman=2026-10-23T15:35:39+03:00
 --- stdout ---
   ✓ F1 temiz kutu: rc 0 · görünür 2 (ana, 2026/85) · gizli 4 (altyapı) · düşen 0
   ✓ F1b gizlenen her oturumun gerekçesi var
