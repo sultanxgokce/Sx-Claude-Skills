@@ -8,7 +8,9 @@
 #   koltuk-bagla.sh --bos                                  BOŞ KABUK oturumlar (2.5.0): hiçbir bölmesinde Claude yok VE her bölmede
 #                                                          yalnız kabuk istemi var (altında hiçbir süreç yok). Sunucu/izleme koşan
 #                                                          Claude'suz oturum boş DEĞİLDİR (ör. nova/kesif-ui web sunucusu).
-#   koltuk-bagla.sh --liste                                görünür koltuklar, sekmeyle: ad · son-etkinlik(epoch) · claude(1|0) · tür(ajan|diger) · hâl · ne · hesap
+#   koltuk-bagla.sh --liste                                görünür koltuklar, sekmeyle: ad · son-etkinlik(epoch) · claude(1|0) · tür(ajan|diger) · hâl · ne · hesap · soru
+#                                                          soru (2.23.0 · K1 Engel kurgusu): hâl 'soru' iken tek satır JSON {tur menu|serbest, metin, siklar, beri}
+#                                                          (kapi/soru.mjs; sır süzgecinden geçmiş); başka hâlde ya da okunamazsa boş — uydurulmaz.
 #                                                          hesap (2.14.0 · G-BANI-0008 E1 zemini): koltuktaki Claude'un HESAP ADI — kapi · varsayilan · <ad> ·
 #                                                          bilinmiyor:<neden>; Claude'suz koltukta boş. Sürecin ortamından AD türetilir, kimlik DEĞERİ okunmaz.
 #
@@ -28,7 +30,8 @@ gizli() { case "$1" in ttyd-*|kapi-*|*-kurtarici|imglistener*) return 0 ;; esac;
 gizli_neden() { case "$1" in ttyd-*) echo "altyapı: web terminali (ttyd)" ;; kapi-*) echo "altyapı: kutu kapısı" ;;
   *-kurtarici) echo "altyapı: kurtarıcı ajan" ;; imglistener*) echo "altyapı: görsel dinleyici" ;; esac; }
 # 🔴 AD SÜZGECİ: tek kaynak koltuk-adi.sh (kural ve gerekçesi orada; kapı aynı kuralı KOLTUK_AD_DESEN'de taşır, eşdeğerlik sınavlı).
-. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/koltuk-adi.sh"
+KB_DIZIN="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+. "$KB_DIZIN/koltuk-adi.sh"
 gecerli_ad() { koltuk_adi_gecerli "$1"; }
 # ttyd ?arg=2026%2F85 değerini kabuğa ÇÖZÜLMÜŞ ('2026/85') iletir — gerçek ttyd+Chromium ile ölçüldü (13 Eki); burada çözme YOK.
 
@@ -145,6 +148,23 @@ koltuk_turu() {  # $1 = oturum · $2 = claude(1|0) → ajan yalnız Claude çal�
   #    durması türün değil `ana` bayrağının işidir (kapı onu ayrıca verir; merkez ana'yı türünden bağımsız önde çizer).
   if diger_mi "$1"; then echo diger; elif [ "$2" = 1 ]; then echo ajan; else echo diger; fi
 }
+# yazi_kutusu_var <ekran> → 0: ekranda Claude Code yazı kutusu var — '❯' ile başlayan (ama '❯ N.' menü şıkkı OLMAYAN) bir satırın hemen
+#   üstünde '─' çizgisi ve en çok 8 satır altında yine '─' çizgisi (çok satırlı insan taslağı kutuyu uzatır). U+00A0 boşluk sayılır
+#   (koltuk-gonder 15 Eki dersi). Boş satırlar çağıranda silinmiştir. Çizgi düz üç '─' ile aranır: mawk baytla çalışır, '─{3,}'
+#   tekrarı yalnız '─'nin SON baytına uygular ve gerçek çizgide HİÇ tutmaz (ölçüldü 23 Eki, mawk 1.3.4). awk programına tek tırnaklı yorum KONMAZ.
+yazi_kutusu_var() {
+  printf '%s\n' "$1" | sed 's/\xc2\xa0/ /g' | awk '
+    { c[NR] = ($0 ~ /^[[:space:]]*───/); p[NR] = ($0 ~ /^[[:space:]]*❯/ && $0 !~ /^[[:space:]]*❯[[:space:]]*[0-9]+\./) }
+    END { for (i = 2; i <= NR; i++) if (p[i] && c[i-1]) for (j = i + 1; j <= NR && j <= i + 8; j++) if (c[j]) exit 0; exit 1 }'
+}
+# soru_durum_yolu → kapi/soru.mjs ile AYNI kural (TO_SORU_DURUM · XDG_STATE_HOME · ~/.local/state)
+soru_durum_yolu() { if [ -n "${TO_SORU_DURUM:-}" ]; then printf '%s' "$TO_SORU_DURUM"; else printf '%s' "${XDG_STATE_HOME:-${HOME:-/config}/.local/state}/terminal-onar/soru-beri.json"; fi; }
+# soru_oku <oturum> → tek satır JSON ya da boş. Ekranın son 40 dolu satırı (soru kutusu uzun olabilir); node yoksa / okunamazsa boş (uydurulmaz).
+soru_oku() {
+  local hedef; hedef="$(bolme_bul "$1")"; [ -n "$hedef" ] || return 0
+  command -v node >/dev/null 2>&1 || return 0
+  tmux capture-pane -p -t "$hedef" -S -40 2>/dev/null | sed '/^[[:space:]]*$/d' | tail -n 40 | node "$KB_DIZIN/../kapi/soru.mjs" --oturum "$1" 2>/dev/null | head -1
+}
 koltuk_hali() {  # $1 = oturum → calisiyor|soru|sinirda|girdi|dis-olay|bos|bilinmiyor  (SON 15 dolu satır; eskisi sayılmaz)
   local ekran
   # 🔴 tmux -S -15 görünür panenin ÜSTÜNE 15 geçmiş satır ekler, sonunu sınırlamaz (bağımsız göz #298 tur 1): sınır tail ile.
@@ -155,7 +175,10 @@ koltuk_hali() {  # $1 = oturum → calisiyor|soru|sinirda|girdi|dis-olay|bos|bil
   [ -n "$ekran" ] || { echo bilinmiyor; return; }
   # Sıra: soru > meşgul > sınır > girdi > boş — soru en üstte: bekleyen bir soru, ekranda "esc to cancel" gibi meşgul izi taşısa
   # da sorudur; Sultan'ın görmesi gereken odur (filo yoklaması aynı deseni "Enter to select" istisnasıyla kuruyordu).
-  if printf '%s' "$ekran" | grep -qE 'Enter to select|Do you want to|❯ [0-9]+\. '; then echo soru; return; fi
+  # 🔴 YAZI KUTUSU VARKEN SORU YOK (2.23.0 · BÂNİ koltuğu 23 Eki 14:5x ölçümü): desen ajanın KENDİ yazdığı metinde de geçer
+  #    ("Do you want to", "❯ 1." içeren bir açıklama, araç çıktısı) — eski kural hâli yanlış 'soru' yapıyordu. Gerçek soru menüsü
+  #    açıkken Claude Code yazı kutusunu (çizgi · '❯' satırı · çizgi) ekrandan KALDIRIR; kutu duruyorsa soru yoktur.
+  if ! yazi_kutusu_var "$ekran" && printf '%s' "$ekran" | grep -qE 'Enter to select|Do you want to|❯ [0-9]+\. '; then echo soru; return; fi
   if printf '%s' "$ekran" | grep -qiE 'esc to interrupt|esc to cancel\)|\([0-9]+s ·|Running…|Waiting…'; then echo calisiyor; return; fi
   if printf '%s' "$ekran" | grep -qiE 'usage limit|limit reached|5-hour limit'; then echo sinirda; return; fi
   local satir
@@ -228,6 +251,7 @@ fi
 
 if [ "${1:-}" = "--liste" ]; then
   LISTE="$(koltuklar)" || exit 3
+  SORU_OTURUM="$(mktemp)" || exit 3
   AKT="$(tmux list-sessions -F '#{session_name}	#{session_activity}' 2>/dev/null)"   # son etkinlik: ada tam eşleşme, -t yok
   printf '%s\n' "$LISTE" | while IFS= read -r s; do
     [ -n "$s" ] || continue
@@ -239,8 +263,13 @@ if [ "${1:-}" = "--liste" ]; then
     ne="${hal#*$'\x1f'}"; hal="${hal%%$'\x1f'*}"; hal="${hal%$'\n'}"; [ "$ne" = "$hal" ] && ne=""   # echo'nun satır sonu ayraçtan önce kalır
     # 6. sütun: ne beklediği (yalnız dis-olay'da dolu); sekme/satır sonu taşımaz · 7. sütun: hesap adı (2.14.0; Claude'suz koltukta boş)
     if [ "$c" = 1 ]; then hesap="$(koltuk_hesabi "$s")"; else hesap=""; fi
-    printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$s" "${son:-0}" "$c" "$tur" "$hal" "$(printf '%s' "$ne" | tr '\t\n' '  ')" "$(printf '%s' "$hesap" | tr '\t\n' '  ')"
+    soru=""
+    if [ "$hal" = soru ]; then soru="$(soru_oku "$s")"; printf '%s\n' "$s" >> "$SORU_OTURUM"; fi
+    printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$s" "${son:-0}" "$c" "$tur" "$hal" "$(printf '%s' "$ne" | tr '\t\n' '  ')" "$(printf '%s' "$hesap" | tr '\t\n' '  ')" "$(printf '%s' "$soru" | tr '\t\n' '  ')"
   done
+  # soru hâlinden çıkan koltuğun 'beri' kaydı silinir (aynı soru sonra yeniden gelirse eski an taşınmasın); durum dosyası yoksa node koşmaz
+  if [ -s "$(soru_durum_yolu)" ] && command -v node >/dev/null 2>&1; then mapfile -t SO < "$SORU_OTURUM"; node "$KB_DIZIN/../kapi/soru.mjs" --tut "${SO[@]}" >/dev/null 2>&1; fi
+  rm -f "$SORU_OTURUM"
   exit 0
 fi
 

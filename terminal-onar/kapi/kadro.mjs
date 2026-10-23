@@ -197,7 +197,8 @@ export function kadroBirlestir({ uyeler = [], koltuklar = [], ana = '', kimlikle
     const n = norm(ad); for (const [a, k] of kalan) if (norm(a) === n) { kalan.delete(a); return k; }   // yalnız casing varyantı
     return null;
   };
-  const oturumSade = (k) => k ? { ad: k.ad, claude: !!k.claude, hal: k.hal || 'bilinmiyor', ne: k.ne || '', son: k.son || 0, tur: k.tur || '' } : null;
+  // soru (2.23.0 · K1): koltuk soru hâlindeyken sorunun kendisi (koltuklar.mjs soruAyikla süzdü); yoksa alan yok
+  const oturumSade = (k) => k ? { ad: k.ad, claude: !!k.claude, hal: k.hal || 'bilinmiyor', ne: k.ne || '', son: k.son || 0, tur: k.tur || '', ...(k.soru ? { soru: k.soru } : {}) } : null;
   const kisiler = uyeler.map((u) => {
     const ok = kimlikle.get(u), o = ok || bul(u.tmux);
     const hal = DURUM_HAL[u.durum] || ((u.hal && HAL_KAYIT.includes(u.hal)) ? u.hal : '');

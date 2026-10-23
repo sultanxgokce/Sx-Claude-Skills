@@ -1,9 +1,28 @@
 ---
 name: terminal-onar
 description: Bir kutuda Sultan'ın canlı çalışma düzenini (tmux <kutu>-ana'daki Claude konuşması + web terminali + telefon ekranı + kurtarıcı ajan + dakikalık bekçi) KURAR, ÖLÇER ve ONARIR. "/terminal-kur · bu kutuya terminal kur · /terminal-onar · terminal bozuldu · web terminali açılmıyor · oturum kapandı · düzeni yeniden kur" tetiğinde; onarım merdiveni (bekçi / Onar düğmesi) kademe 1-2'de de bu beceriyi çağırır. Bütün kutularda koşar — adlar kutudan türer, hiçbir kutu adı koda gömülü değildir.
-version: 2.22.0
+version: 2.23.0
 ---
 # /terminal-onar — canlı düzenin onarıcısı
+
+## 🆕 2.23.0 · Koltuğun sorusu kapıdan okunur — tür · metin · şıklar · ne zamandan beri (23 Eki · K1 · gorev_…V6FJPZ Engel kurgusu · SERDAR 14:42)
+Kapı bir koltuğun "soru" hâlinde olduğunu biliyordu ama **sorunun kendisini** vermiyordu; Sultan hangi soruyu, hangi şıklarla, ne
+zamandan beri bekletildiğini görmek için ajanın ekranına gitmek zorundaydı. Artık `koltuk-bagla.sh --liste` 8. sütunda (ve
+`/api/kadro` koltuk kaydında `soru` alanı) hâl **soru** iken tek satır JSON taşır: `tur` (**menu**: en az iki numaralı şık —
+cevap şıkkın numarasıyla verilir · **serbest**: şık yok), `metin` (son ⏺ satırından sonraki soru bloğu, ≤300 kod noktası; kutu
+çizgileri ve "Enter to select · ↑/↓ to navigate · Esc to cancel" altbilgisi girmez), `siklar` (≤6, her biri ≤80), `beri` (bu
+sorunun bu koltukta ilk görüldüğü an — `soru-beri.json` durum dosyası; soru hâlinden çıkan koltuğun kaydı silinir). Çözümleyici
+`kapi/soru.mjs`; okunamayan soru uydurulmaz (alan yok). Salt okur: tmux'a tuş gönderilmez.
+- **Sır süzgeci** (`kapi/sir-suz.mjs`): ekran metni kutudan çıkmadan PEM · Bearer · `sk-` · GitHub/Slack/AWS jetonu · JWT ·
+  URL parolası · `token=`/`parola=` değeri · tek başına uzun dizgi → `••• gizlendi` (anahtar adı görünür kalır).
+- **Yazı kutusu varken soru YOK:** eski kural ekranın son 15 satırında "Do you want to" / "❯ 1." aradığı için ajanın KENDİ
+  yazdığı açıklama hâli yanlış "soru" yapıyordu (BÂNİ koltuğu 23 Eki 14:5x). Gerçek soru menüsü açıkken Claude Code yazı kutusunu
+  (çizgi · `❯` · çizgi) kaldırır; `yazi_kutusu_var` kutuyu görürse soru verilmez. Fikstür gerçek ekrandan:
+  `scripts/fikstur/ekran-yazi-kutulu-20261023.txt`. Bu düzeltme merkezin "soru sordu" yazısını ve zil bekçisini de doğrultur.
+- Sınav: `koltuk-bagla.test.sh` Q1–Q9 (Q9 = aynı gerçek ekran eski kuralla yanlış "soru" → önce) + mutant M-kutu · M-suzgec ·
+  M-okuma · M-tut; `kapi/soru.test.mjs` S/Z/B/A (menü · serbest · bölge · sır · beri · ayrıştırıcı · kadro gövdesi).
+- Dürüst sınır: ajanın sohbet mesajıyla sorup boş istemde beklemesi "soru" hâli değildir (bugün de değil); onu bu sürüm görmez.
+  Cevabı koltuğa yazma (K2: hedefli `/api/gonder` + teslim doğrulaması) **ayrı iş**, sınıflı (yetki genişletme).
 
 ## 🆕 2.22.0 · Ortam dosyası kapı kabuğunda da KAYNAK ALINMAZ (23 Eki · gorev_…GQ9DY · SERDAR 23:2x)
 Kapıyı başlatan tmux kabuğu (onar.sh) ortam dosyasını `set -a; . dosya` ile yüklüyordu; ortak.sh 2.2.2'den beri aynı dosyayı

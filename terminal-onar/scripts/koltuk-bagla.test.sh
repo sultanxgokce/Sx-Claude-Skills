@@ -91,7 +91,7 @@ printf '%s\n' "bitti." "" "❯ " > "$S/ekran-MUHASIP"
 printf '%s\n' "sadece metin, istem yok" > "$S/ekran-cc-1"
 SAHTE="$S" PATH="$S/bin:$PATH" bash "$B" --liste > "$S/liste"; lrc=$?
 al() { grep -P "^$1\t" "$S/liste" | cut -f"$2"; }
-[ "$lrc" = 0 ] && [ "$(head -1 "$S/liste" | awk -F'\t' '{print NF}')" = 7 ] && ok "D1 liste 7 alan: ad · son · claude · tür · hâl · ne · hesap (2.14.0)" || bad D1 "rc=$lrc $(head -1 "$S/liste")"
+[ "$lrc" = 0 ] && [ "$(head -1 "$S/liste" | awk -F'\t' '{print NF}')" = 8 ] && ok "D1 liste 8 alan: ad · son · claude · tür · hâl · ne · hesap (2.14.0) · soru (2.23.0)" || bad D1 "rc=$lrc $(head -1 "$S/liste")"
 [ "$(al BASIRET 4)" = ajan ] && ok "D2 Claude çalışan oturum 'ajan'" || bad D2 "$(al BASIRET 4)"
 [ "$(al maiset-ana 4)" = diger ] && ok "D2b Claude'suz ANA oturum da 'diğer' (istisna yok; önde durması 'ana' bayrağının işi)" || bad D2b "$(al maiset-ana 4)"
 [ "$(al CARSI 4)" = diger ] && [ "$(al dash 4)" = diger ] && ok "D3 Claude'suz oturum ve dash* 'diğer'" || bad D3 "$(al CARSI 4)/$(al dash 4)"
@@ -208,6 +208,61 @@ print(hesap_adi('$1', $2))"; }
 else
   echo "  · H10 atlandı: hesap_kutu.py bu kutuda yok (eşdeğerlik Nexus kutusunda ölçülür)"
 fi
+
+echo "Q · soru alanı (2.23.0 · K1 Engel kurgusu · V6FJPZ): yazı kutusu varken soru yok · 8. sütun soru JSON · sır süzgeci · beri"
+command -v node >/dev/null 2>&1 || { echo "  ÖLÇÜLEMEDİ: node yok — Q bölümü koşmadı"; DUSEN=$((DUSEN+1)); }
+QD="$S/q"; mkdir -p "$QD"; export TO_SORU_DURUM="$QD/beri.json"
+qkos() { SAHTE="$S" PATH="$S/bin:$PATH" TO_SIMDI="$2" bash "${QB:-$B}" --liste > "$QD/$1"; }
+qal() { grep -P "^$2\t" "$QD/$1" | cut -f"$3"; }
+qjs() { node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{try{const j=JSON.parse(s);console.log(eval(process.argv[1]))}catch(e){console.log("JSON-YOK")}})' "$2" <<<"$1"; }
+qsil() { python3 -c 'import shutil,sys; shutil.rmtree(sys.argv[1], ignore_errors=True)' "$1"; }
+# sahte anahtar çalışma anında parçalardan kurulur (sır bekçisi dosyadaki düz biçimi haklı olarak reddeder)
+SAHTE_ANAHTAR="sk""-ant-api03-$(printf 'Q%.0s' $(seq 1 32))"
+printf '%s\n' maiset-ana BASIRET ZAKIR KALFA NEDIM MUHASIP > "$S/oturumlar"
+# ZAKIR: izin kutusu (menü), yazı kutusu YOK
+printf '%s\n' "⏺ Bash(git branch -D eski-dal)" "╭──────────────────────────╮" "│ Bash command             │" "│   git branch -D eski-dal │" "│ Do you want to proceed?  │" "│ ❯ 1. Yes                 │" "│   2. No, and tell Claude what to do differently (esc) │" "╰──────────────────────────╯" > "$S/ekran-ZAKIR"
+# BASIRET: GERÇEK ekran (BÂNİ koltuğu 23 Eki 15:02: çizgi · ❯+U+00A0 · çizgi · alt çubuk) + ajanın mesajında desen metni (14:5x vakası)
+cp "$(dirname "$B")/fikstur/ekran-yazi-kutulu-20261023.txt" "$S/ekran-BASIRET"
+# KALFA: numarasız soru (serbest)
+printf '%s\n' "⏺ Kurulum bitti." "Do you want to continue with the migration? (y/n)" > "$S/ekran-KALFA"
+# NEDIM: sır taşıyan menü sorusu
+printf '%s\n' "⏺ Bash(curl)" "Bash command" "  curl -H \"Authorization: Bearer $SAHTE_ANAHTAR\" https://x" "  token=abcdef1234567" "Do you want to proceed?" "❯ 1. Yes" "  2. No" > "$S/ekran-NEDIM"
+printf '%s\n' "bitti." "❯ " > "$S/ekran-MUHASIP"
+qkos l1 2026-10-23T12:00:00.000Z
+[ "$(head -1 "$QD/l1" | awk -F'\t' '{print NF}')" = 8 ] && ok "Q1 liste 8 alan (… · hesap · soru)" || bad Q1 "$(head -1 "$QD/l1" | awk -F'\t' '{print NF}')"
+[ "$(qal l1 ZAKIR 5)" = soru ] && [ "$(qjs "$(qal l1 ZAKIR 8)" 'j.tur+"/"+j.siklar.map(x=>x.no).join(",")')" = "menu/1,2" ] && ok "Q2 izin kutusu → hâl soru · 8. sütun menu, şıklar 1,2" || bad Q2 "$(qal l1 ZAKIR 5) $(qal l1 ZAKIR 8)"
+[ "$(qjs "$(qal l1 ZAKIR 8)" 'j.metin.includes("git branch -D eski-dal") && j.metin.includes("Do you want to proceed?") && !/[│╭╰]/.test(j.metin)')" = true ] && ok "Q2b soru metni komutu ve soruyu taşır, kutu çizgisi yok" || bad Q2b "$(qal l1 ZAKIR 8)"
+[ "$(qal l1 BASIRET 5)" != soru ] && [ -z "$(qal l1 BASIRET 8)" ] && ok "Q3 GERÇEK ekran: yazı kutusu duruyor + mesajda 'Do you want to'/'❯ 1.' → soru DEĞİL ($(qal l1 BASIRET 5)), soru sütunu boş" || bad Q3 "hal=$(qal l1 BASIRET 5) soru=$(qal l1 BASIRET 8)"
+[ "$(qal l1 KALFA 5)" = soru ] && [ "$(qjs "$(qal l1 KALFA 8)" 'j.tur+"/"+j.siklar.length')" = "serbest/0" ] && ok "Q4 numarasız soru → serbest, şık yok" || bad Q4 "$(qal l1 KALFA 8)"
+N8="$(qal l1 NEDIM 8)"; case "$N8" in *QQQQQQQQQQ*|*abcdef1234567*) bad Q5 "sır sızdı" ;; *"••• gizlendi"*) ok "Q5 soru metnindeki anahtar ve token=… sütuna gizlenmiş çıkar" ;; *) bad Q5 "gizlendi yok: $N8" ;; esac
+[ -z "$(qal l1 MUHASIP 8)" ] && [ "$(qal l1 MUHASIP 5)" = bos ] && ok "Q6 soru hâlinde olmayan koltukta soru sütunu boş" || bad Q6 "$(qal l1 MUHASIP 5) $(qal l1 MUHASIP 8)"
+qkos l2 2026-10-23T12:05:00.000Z
+[ "$(qjs "$(qal l2 ZAKIR 8)" 'j.beri')" = 2026-10-23T12:00:00.000Z ] && ok "Q7 aynı soru 5 dk sonra: beri ilk görüldüğü an (12:00)" || bad Q7 "$(qjs "$(qal l2 ZAKIR 8)" 'j.beri')"
+printf '%s\n' "⏺ Bitti." "❯ " > "$S/ekran-ZAKIR"; qkos l3 2026-10-23T12:10:00.000Z
+[ "$(node -e 'const d=JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));console.log(d.ZAKIR?"VAR":"YOK")' "$TO_SORU_DURUM")" = YOK ] && ok "Q8 soru hâlinden çıkan koltuğun beri kaydı silinir" || bad Q8 "$(cat "$TO_SORU_DURUM")"
+# ÖNCE: aynı GERÇEK ekran, yazı kutusu kapısı sökülmüş kuralla (origin/main kuralı) — hâl yanlış 'soru'
+QE="$QD/eski"; qsil "$QE"; mkdir -p "$QE"; cp -r "$(dirname "$B")/../scripts" "$(dirname "$B")/../kapi" "$QE/"
+python3 - "$QE/scripts/koltuk-bagla.sh" <<'PY'
+import sys;p=sys.argv[1];s=open(p,encoding="utf-8").read();a='if ! yazi_kutusu_var "$ekran" && printf'; assert a in s; open(p,"w",encoding="utf-8").write(s.replace(a,"if printf"))
+PY
+QB="$QE/scripts/koltuk-bagla.sh" qkos l0 2026-10-23T12:00:00.000Z
+[ "$(qal l0 BASIRET 5)" = soru ] && ok "Q9 ÖNCE (yazı kutusu kapısı yok): aynı gerçek ekran yanlış 'soru' — Q3 bu yanlışı ölçüyor" || bad Q9 "eski kural da soru demedi: $(qal l0 BASIRET 5)"
+# MUTANTLAR — terminal-onar kopyasında; her biri bir Q kapısını kırmızıya çevirmeli
+mutant() {  # mutant <ad> <dosya-göreli> <eski> <yeni> <kapı-komutu: mutant yakalandıysa 0>
+  local M="$QD/m-$1"; qsil "$M"; mkdir -p "$M"; cp -r "$(dirname "$B")/../scripts" "$(dirname "$B")/../kapi" "$M/"
+  python3 - "$M/$2" "$3" "$4" <<'PY' || { bad "M-$1" "mutant üretilemedi (desen tutmadı)"; return; }
+import sys;p,a,b=sys.argv[1:];s=open(p,encoding="utf-8").read(); assert s.count(a)>=1; open(p,"w",encoding="utf-8").write(s.replace(a,b,1))
+PY
+  cp "$S/ekran-NEDIM" "$QD/nedim.bak" 2>/dev/null
+  printf '%s\n' "⏺ Bash(git branch -D eski-dal)" "Do you want to proceed?" "❯ 1. Yes" "  2. No" > "$S/ekran-ZAKIR"; rm -f "$TO_SORU_DURUM"
+  QB="$M/scripts/koltuk-bagla.sh" qkos "o-$1" 2026-10-23T13:00:00.000Z
+  if eval "$5"; then ok "M-$1 mutant yakalandı"; else bad "M-$1" "mutant YAKALANMADI — kapı süs"; fi
+}
+mutant kutu scripts/koltuk-bagla.sh 'if ! yazi_kutusu_var "$ekran" && printf' 'if printf' '[ "$(qal o-kutu BASIRET 5)" = soru ]'
+mutant suzgec kapi/sir-suz.mjs 'for (const d of SIR_DESENLERI) s = s.replace(d.desen, d.yerine || GIZLI);' '' 'grep -q QQQQQQQQQQ "$QD/o-suzgec"'
+mutant okuma scripts/koltuk-bagla.sh 'soru="$(soru_oku "$s")"' 'soru=""' '[ "$(qal o-okuma ZAKIR 5)" = soru ] && [ -z "$(qal o-okuma ZAKIR 8)" ]'
+mutant tut scripts/koltuk-bagla.sh 'node "$KB_DIZIN/../kapi/soru.mjs" --tut "${SO[@]}"' 'true' 'printf "%s\n" "⏺ Bitti." "❯ " > "$S/ekran-ZAKIR"; QB="$QD/m-tut/scripts/koltuk-bagla.sh" qkos o-tut2 2026-10-23T13:05:00.000Z; [ "$(node -e "const d=JSON.parse(require(\"fs\").readFileSync(process.argv[1],\"utf8\"));console.log(d.ZAKIR?1:0)" "$TO_SORU_DURUM")" = 1 ]'
+unset TO_SORU_DURUM
 
 echo
 echo "toplam=$((GECEN+DUSEN)) geçen=$GECEN düşen=$DUSEN"
