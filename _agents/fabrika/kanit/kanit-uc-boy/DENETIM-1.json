@@ -1,0 +1,45 @@
+{
+  "tur": 1,
+  "is": "kanit-uc-boy",
+  "pr": "433",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T05:19:04+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 26111,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 5,
+    "bayt": 25515
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 4,
+    "dogru_sey": "E",
+    "ozet": "Üç boyun tek çağrıda ayrı yeşil kayıt üretmesi, en kötü sonucu çıkış koduna taşıması ve yalnız yeşil karelerin istenen adla Gelen klasörüne kopyalanması uygulanmış. Önce üretime çıkmadan `--gelen` değerinin hedef dizinden kaçmasını engelleyin ve kopyalama hatasında yeşil kanıt bırakılmasını önleyin.",
+    "bulgular": [
+      {
+        "ne": "`--gelen` değeri dosya adına doğrulanmadan katılıyor; mutlak yol veya yol ayırıcı içeren bir kutu değeri, kopyayı Sultan'ın Gelen klasörü dışına yönlendirebilir.",
+        "kanit": "Hedef `os.path.join(hedef_diz, f\"{a.gelen}_{a.is_adi}-kare-{etiket}-{a.asama}.png\")` ile kuruluyor ve argparse yalnız `metavar=\"KUTU\"` tanımlıyor; güvenli ad doğrulaması yok. Python'da ikinci parça mutlak yol olduğunda `hedef_diz` yok sayılır.",
+        "konum": "yazilim-fabrikasi/scripts/kanit.py:_gelene_kopyala ve main/--gelen",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Kayıt önce yeşil olarak manifeste ekleniyor, Gelen kopyası sonra yapılıyor; kopyalama izin/disk hatası verirse komut istisnayla kesilir ama manifestte yeşil kayıt kalır.",
+        "kanit": "Başarı kolunda sıralama `kayit_ekle(...)`, ardından `_gelene_kopyala(...)`; `_gelene_kopyala` içindeki `shutil.copyfile` için hata yakalama veya kayıt durumunu düzeltme yok.",
+        "konum": "yazilim-fabrikasi/scripts/kanit.py:_ekran_tek başarı kolu ve _gelene_kopyala",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce/sonra ölçüm çifti, 216 geçen sınav ve 1440/1280/390 genişlik kayıtları temel talebi güçlü biçimde doğruluyor; Gelen adlandırması ve yalnız yeşil kopyalama da ölçülmüş. Ancak kareler sahte node tarafından üretilmiş içeriklerdir, gerçek tarayıcı görüntüsü değildir. Ayrıca mutasyon bölümü manifestte `mutasyon:true` kayıtlı standart mutasyon ölçümü değil ve mutant üzerinde kapının gerçekten başarısız olduğunu koşturmak yerine mutantın hatalı biçimde rc=0 verdiğini doğruluyor; bu yüzden mutasyon kanıtı sınırlı kabul edilmelidir."
+  }
+}
