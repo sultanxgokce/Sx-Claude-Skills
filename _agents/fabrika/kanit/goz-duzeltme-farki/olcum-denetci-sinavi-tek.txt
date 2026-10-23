@@ -1,5 +1,5 @@
 $ bash yazilim-fabrikasi/scripts/denetci.test.sh
-# rc=0 sure=632.0s zaman=2026-10-23T11:11:14+03:00
+# rc=0 sure=523.3s zaman=2026-10-23T11:35:14+03:00
 --- stdout ---
 ════ T1 · kanıt yok → rc=2, denetim dosyası yok ════
   ✓ kanıtsız adım 4 açılmadı (rc=2)
@@ -208,7 +208,7 @@ $ bash yazilim-fabrikasi/scripts/denetci.test.sh
   ✓ Z3c rc 2 (kanıt yok, DENETIM yazılmadı) → yine zil; AGENT_NAME yazandır
   ✓ Z3d iş adı bile yokken (en erken çıkış) zil çalar; yazan bilinmiyorsa hedefsiz değil reise (SERDAR)
   ✓ Z3e sınav kipinde (DENETCI_KOMUT) gerçek zil ARANMAZ; söylenir
-  ✓ Z2a zaman aşımı → rc 3, beklemedi (2 sn < 6)
+  ✓ Z2a zaman aşımı → rc 3, beklemedi (1 sn < 6)
   ✓ Z2b DENETIM-1-HAM.txt'e ZAMAN AŞIMI yazıldı
   ✓ Z2c aşımda yazana zil + reise --waiting (kart istedi=SULTAN → SERDAR)
   ✓ Z2d aşımda da koşuyor izi silindi
@@ -275,7 +275,7 @@ $ bash yazilim-fabrikasi/scripts/denetci.test.sh
   ✓ mutant 'olcum-ortadan-secmez' sınavı KIRMIZI yapıyor
   ✓ mutant 'olcum-secilen-de-sayilir' sınavı KIRMIZI yapıyor
   ✓ mutant 'olcum-ayirici-eklenmez' sınavı KIRMIZI yapıyor
-  (bilgi) 48 mutant · 4 paralel · 523 sn
+  (bilgi) 48 mutant · 4 paralel · 427 sn
 
 ── KANIT-AYIKLAMA (ayrı dosya, buradan çağrılır) ──
 A · 🔴 kanıt dosyaları farktan AYIKLANIR, üretim kodu KALIR
