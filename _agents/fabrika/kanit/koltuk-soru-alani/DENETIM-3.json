@@ -1,0 +1,32 @@
+{
+  "tur": 3,
+  "is": "koltuk-soru-alani",
+  "pr": "440",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T15:36:13+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 80317,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 0,
+    "bayt": 0
+  },
+  "bas": null,
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultan’ım, koltuğun soru alanı menü/serbest ayrımı, metin ve şık sınırları, sır süzgeci, beri kalıcılığı, yazı kutusu kapısı ve `/api/kadro` aktarımıyla tamamlanmış. Önceki turdaki geçersiz menünün serbeste düşmesi kusuru artık alanı kaldıran açık dal, güçlendirilmiş S5 sınavı ve mutasyon kanıtıyla kapanmış; eldeki kanıta göre yalnız rötuş değil, üretime hazırdır.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. `koltuk-bagla-sinavi` kırmızı önce/yeşil sonra çifti gerçek yazı kutusu fikstürüyle alanın önce yokken sonra doğru dolmasını, menü ve serbest türlerini, sır süzgecini, beri kalıcılığını ve tmux’a yazmadan salt okumayı ölçüyor; `soru-sinavi` sonrasında 28/28, kapı regresyonu 111/111 ve koltuk-fark regresyonu 26/26 geçiyor. Önceki B1 kapanmış: `soru.mjs` geçersiz numaralı menü gördüğünde artık doğrudan `null` dönüyor, S5 tek `❯ 1.`, yalnız `3.` ve kopuk `1./3.` örneklerini reddediyor; ayrıca `mutasyon:true` kaydı bu korumayı söken bozuk kodun sınavda yakalandığını, `gercek_olcum: soru-sinavi` ise gerçek kodun yeşil olduğunu gösteriyor."
+  }
+}
