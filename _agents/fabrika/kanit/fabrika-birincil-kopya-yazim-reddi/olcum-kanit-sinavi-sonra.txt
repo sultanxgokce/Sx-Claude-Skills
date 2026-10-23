@@ -1,5 +1,5 @@
 $ bash -c timeout 900 bash /config/projects/_wt/Sx-Claude-Skills-fabrika-birincil-kopya-yazim-reddi/yazilim-fabrikasi/scripts/kanit.test.sh < /dev/null
-# rc=0 sure=148.5s zaman=2026-10-23T14:33:36+03:00
+# rc=0 sure=44.0s zaman=2026-10-23T16:11:18+03:00
 --- stdout ---
 ════ T1 · ölçüm çifti: komutu araç koşar, kırpılmamış çıktı+rc ════
   ✓ önce ölçümü rc=0
@@ -254,7 +254,7 @@ $ bash -c timeout 900 bash /config/projects/_wt/Sx-Claude-Skills-fabrika-birinci
   ✓ kopya yazılamazsa istisna YOK: kare kanıtı yeşil kalır, teslim düştüğü için komut rc 3 (kilit-390:yesil:390)
 ── T-UB · MUTASYON (geçici kopya): çıkış en kötü sonucu taşımazsa düşen boy yeşil görünür → 🔴 kapı düşerdi ──
   ✓ mutant (rc hep 0): 1280 düştüğü hâlde komut yeşil döndü → üstteki 🔴 kapı bu mutantta düşerdi
-════ TB · BİRİNCİL KOPYADA YAZMA REDDİ (0.20.0 · gorev_01M5F03K79B5B19A2XQ54V8NMK): alan varken birincile kanıt yazılmaz ════
+════ TB · BİRİNCİL KOPYADA YAZMA REDDİ (0.22.0 · gorev_01M5F03K79B5B19A2XQ54V8NMK): alan varken birincile kanıt yazılmaz ════
   ✓ TB0 fikstür: birincil kopya + iş alanı (worktree) açıldı
   ✓ TB1 birincilden, alan varken: rc 2 + 'BİRİNCİL kopyadasın' + alan yolu söylenir
   ✓ TB1b birincile HİÇBİR dosya yazılmadı (ölçüm dosyası da dizin de yok)

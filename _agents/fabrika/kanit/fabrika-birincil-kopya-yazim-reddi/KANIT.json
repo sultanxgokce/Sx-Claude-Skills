@@ -1,7 +1,7 @@
 {
   "is": "fabrika-birincil-kopya-yazim-reddi",
   "arac": "kanit.py/0.5.0",
-  "guncelleme": "2026-10-23T15:23:53+03:00",
+  "guncelleme": "2026-10-23T16:35:49+03:00",
   "kayitlar": [
     {
       "tur": "olcum",
@@ -26,7 +26,7 @@
       "etiket": "kanit-sinavi",
       "asama": "sonra",
       "dosya": "olcum-kanit-sinavi-sonra.txt",
-      "sha256": "3bf2d9b4cc956ec6f048706ae2fa7d34cad80c03219bc5cc4a85a13943db539f",
+      "sha256": "51add4d984ff53540ba097e37ff512a87f8b074a9adc12b07f8b0a65e877e19d",
       "komut": [
         "bash",
         "-c",
@@ -34,10 +34,10 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T14:33:36+03:00",
-      "sure_sn": 148.5,
+      "zaman": "2026-10-23T16:11:18+03:00",
+      "sure_sn": 44.0,
       "boru_denetimi": "temiz",
-      "olcum_id": "faaf3017368b423fba5717ce351c1ec2"
+      "olcum_id": "8e2e21732a7c40b689d4c7d289482163"
     },
     {
       "tur": "olcum",
@@ -62,7 +62,7 @@
       "etiket": "denetci-sinavi",
       "asama": "sonra",
       "dosya": "olcum-denetci-sinavi-sonra.txt",
-      "sha256": "a88aae0b3cab5d58aaffab0cfba253ba4f750c076eb614252801ee60feec358a",
+      "sha256": "112212fc2719fc033374cb812e9c6081e497320c5fac39b17aadd5bd7cc6f912",
       "komut": [
         "bash",
         "-c",
@@ -70,17 +70,17 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T15:23:53+03:00",
-      "sure_sn": 1252.5,
+      "zaman": "2026-10-23T16:35:48+03:00",
+      "sure_sn": 1470.4,
       "boru_denetimi": "temiz",
-      "olcum_id": "3fc8350ff60f4428b1d709c3883c78b0"
+      "olcum_id": "033e67fa4a394f26bc50c644231708b8"
     },
     {
       "tur": "olcum",
       "etiket": "ci-parity-strict",
       "asama": "sonra",
       "dosya": "olcum-ci-parity-strict-sonra.txt",
-      "sha256": "357dc39001c22ce243eac169bfddb0d40fb827693f37bcff3a81b70ddcd47a85",
+      "sha256": "4278c92fa7216fa564d9af7a0d3e94fbcd223123b45365186ba115803e6018f5",
       "komut": [
         "node",
         "ahi/schema/validate-repo.mjs",
@@ -89,17 +89,17 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T15:23:53+03:00",
-      "sure_sn": 0.0,
+      "zaman": "2026-10-23T16:35:48+03:00",
+      "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "da1f796c4914487098047fdd5c218823"
+      "olcum_id": "0c07a638f2dc430ba328c6a5cdb4cf46"
     },
     {
       "tur": "olcum",
       "etiket": "ci-version-lint",
       "asama": "sonra",
       "dosya": "olcum-ci-version-lint-sonra.txt",
-      "sha256": "9e36acbf7f70411bf380f48567dff77be10919138227d868ea4f1bf5fd9acc1b",
+      "sha256": "8dd19c07b19224e8fce48f47b2131c8306108b907708654d1689c2c454cd3d1a",
       "komut": [
         "node",
         "ahi/schema/version-lint.mjs",
@@ -107,11 +107,11 @@
       ],
       "rc": 0,
       "renk": "yesil",
-      "zaman": "2026-10-23T15:23:53+03:00",
-      "sure_sn": 0.0,
+      "zaman": "2026-10-23T16:35:49+03:00",
+      "sure_sn": 0.1,
       "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
-      "olcum_id": "a6de09eeacb740688e423d3e2892bced"
+      "olcum_id": "e7fb1b6ec5fd4d188b680963aa8a2ef5"
     }
   ],
-  "imza": "9d3976cc9d965c5375c007ca62924ca84105b3d8ea3cb20679fe0dc3a734a592"
+  "imza": "120c608f104a5eb974df459431bba6bd970977d323218d01d3be77d962e7c128"
 }

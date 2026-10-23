@@ -1,5 +1,5 @@
 $ bash -c timeout 2400 bash /config/projects/_wt/Sx-Claude-Skills-fabrika-birincil-kopya-yazim-reddi/yazilim-fabrikasi/scripts/denetci.test.sh < /dev/null
-# rc=0 sure=1252.5s zaman=2026-10-23T15:23:53+03:00
+# rc=0 sure=1470.4s zaman=2026-10-23T16:35:48+03:00
 --- stdout ---
 ════ T1 · kanıt yok → rc=2, denetim dosyası yok ════
   ✓ kanıtsız adım 4 açılmadı (rc=2)
@@ -46,9 +46,9 @@ $ bash -c timeout 2400 bash /config/projects/_wt/Sx-Claude-Skills-fabrika-birinc
   ✓ GEREKÇE de çıktıda görünüyor (niçin bir tur daha)
 ════ T7c · 🚪 REİS KAPISI: sınıfsız işte sahip kararı KARTTAN; sınıflı kartta KAPALI ════
   ✓ sınıflı iş tur3 tıkandı (rc=4)
-  ✓ 🔴 SINIFLI karta reis kararı YAZILAMADI (merci Sultan)
-  ✓ kartta reis_kararlari alanı oluşmadı
-  ✓ 🔴 sınıflı karta ELLE yazılmış reis kararı bile kapıyı AÇMIYOR (rc=1)
+  ✓ 0.21.0: SINIFLI karta reis kararı kart.sh ile YAZILDI (denetçinin bunu okuması ikinci kartta: fabrika-merge-reise-parca2)
+  ✓ kayıt reis_kararlari'nda sinifli:true; sultan_kararlari YOK (A06)
+  ✓ 🔴 sınıflı kartta reis kararı (araçla yazılmış) denetçinin tavanını bu sürümde AÇMIYOR (rc=1; ikinci kartta açılır)
   ✓ sebebi yazılı: kart sınıflı, merci Sultan
   ✓ doğru yol gösterildi (sultan-dedi)
   ✓ denetim KOŞULMADI
@@ -214,7 +214,7 @@ $ bash -c timeout 2400 bash /config/projects/_wt/Sx-Claude-Skills-fabrika-birinc
   ✓ Z2d aşımda da koşuyor izi silindi
   ✓ Z4 rc 4 (tıkandı) → yazana zil + kart sahibine (istedi=BANI) --waiting
   ✓ Z5 zil aracı yoksa iş durmaz (rc korunur) ama stderr'e yazılır
-  ✓ Z6 TERM'i yutan denetçi KILL ile kesilir → rc 3 + ZAMAN AŞIMI (3 sn < 6)
+  ✓ Z6 TERM'i yutan denetçi KILL ile kesilir → rc 3 + ZAMAN AŞIMI (2 sn < 6)
   ✓ Z7 geçersiz DENETCI_ZAMAN_ASIMI → söylenir, 900'e döner, denetim koşar (rc 1, 125 değil)
   ✓ Z8 ölü pid'li (SIGKILL artığı) iz bayat sayılır: söylenir, silinir, denetim koşar
   ✓ Z9 aynı işte canlı denetçi varken ikincisi rc 3 ile durur, öbürünün izine dokunmaz
@@ -275,7 +275,7 @@ $ bash -c timeout 2400 bash /config/projects/_wt/Sx-Claude-Skills-fabrika-birinc
   ✓ mutant 'olcum-ortadan-secmez' sınavı KIRMIZI yapıyor
   ✓ mutant 'olcum-secilen-de-sayilir' sınavı KIRMIZI yapıyor
   ✓ mutant 'olcum-ayirici-eklenmez' sınavı KIRMIZI yapıyor
-  (bilgi) 48 mutant · 2 paralel · 1114 sn
+  (bilgi) 48 mutant · 2 paralel · 1257 sn
 
 ── KANIT-AYIKLAMA (ayrı dosya, buradan çağrılır) ──
 A · 🔴 kanıt dosyaları farktan AYIKLANIR, üretim kodu KALIR
@@ -426,7 +426,7 @@ toplam=44 geçen=44 düşen=0
   ✓ 'İŞİ BÖL' + daralt yolu yazılı
   ✓ tur yakılmadı (DENETIM yok)
   ✓ eşik altındaki fark normal denetlenir (rc=0)
-════ TP · BİRİNCİL KOPYADA DENETİM REDDİ (0.20.0 · gorev_01M5F03K79B5B19A2XQ54V8NMK): alan varken birincilden koşum kayıt bırakmaz ════
+════ TP · BİRİNCİL KOPYADA DENETİM REDDİ (0.22.0 · gorev_01M5F03K79B5B19A2XQ54V8NMK): alan varken birincilden koşum kayıt bırakmaz ════
   ✓ TP0 fikstür: birincil kopya + iş alanı
   ✓ TP1 birincilden, alan varken: rc 2 + 'BİRİNCİL kopyadasın' + alan yolu söylenir
   ✓ TP1b birincile DENETIM / KART.json yazılmadı
