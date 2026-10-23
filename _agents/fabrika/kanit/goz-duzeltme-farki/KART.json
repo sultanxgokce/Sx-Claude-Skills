@@ -28,5 +28,14 @@
       "olay": "ac",
       "sonuc": "yazıldı"
     }
+  ],
+  "reis_kararlari": [
+    {
+      "karar": "devam",
+      "reis": "HENDESE",
+      "oturum": "Nexus _agents/hendese/NOTES.md:294 · SERDAR → HENDESE 23 Eki 13:0x",
+      "gerekce": "SERDAR kararı 23 Eki 13:0x: DEVAM, tur 4 mutlak tavan — her turun bulguları kapandı, doğru şey H→E→E, tur 3'ün tek dar bulgusu 5430454'te düzeltildi, sınav 48/0; tur 4 5/E değilse beşinci tur yok, doğrudan daralt",
+      "zaman": "2026-10-23T12:45:43+03:00"
+    }
   ]
 }
