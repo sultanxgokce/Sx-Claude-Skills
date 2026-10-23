@@ -1,0 +1,23 @@
+{
+  "is": "hezarfen-olcut-nerede-olculecek",
+  "cumle": "kart.sh ac başlıkta sayısal ölçüt varsa bunun nerede ölçüleceğini zorunlu ister: yerel ya da CI ya da canlı, yerel ve CI için çekirdek sayısı; verilmezse kart açılmaz; kart daraltılınca eski ölçüt geçersiz sayılıp görev adımına yeni ölçüt yazılır",
+  "istedi": "SERDAR",
+  "aldi": "HEZARFEN",
+  "zaman": "2026-10-23T22:35:39+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "_agents/fabrika/kanit/hezarfen-olcut-nerede-olculecek",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: canlı)",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": []
+}

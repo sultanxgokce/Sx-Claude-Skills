@@ -1,0 +1,40 @@
+{
+  "tur": 2,
+  "is": "hezarfen-olcut-nerede-olculecek",
+  "pr": "449",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T23:18:05+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-hezarfen-olcut-nerede-olculecek",
+  "dal": "hezarfen-olcut-nerede-olculecek",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 42325,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 6,
+    "bayt": 84152
+  },
+  "bas": "74011dc0ea503e65e8032441dedc0c446991e603",
+  "duzeltme_farki": {
+    "onceki_bas": "fb2f260dfa4178f478db383ef705db6dc75d2e64",
+    "dosya": 8,
+    "bayt": 90365,
+    "tam_bayt": 190737
+  },
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 5,
+    "dogru_sey": "E",
+    "ozet": "Sultanım, önceki turun iki açığı da kapanmış: ölçüt birimleri genel sözcüklere açılmış, birden çok ölçüm yüzeyi reddedilmiş ve iki düzeltme de yeni sınavlar ile mutasyon kapılarına bağlanmış. Gerçek ölçüm iki ayrı turda 268/268 ve 274/274 yeşil olduğundan, kart açma/daraltma talebi üretime hazır görünüyor.",
+    "bulgular": [],
+    "kanit_gorusu": "Manifest sağlam, araç imzalı ve sarı kayıt yok. Önce/sonra çiftleri iki kez kırmızıdan yeşile dönüyor: kart-test 252/268→268/268, kart-test-t2 254/274→274/274. B1, kart.sh içindeki genel sözcük birimi ile OL13–OL14 ve M-OL5 tarafından; B2, tek yüzey kümesi denetimi ile OL15–OL16 ve M-OL6 tarafından kapanmış. Mutasyon kayıtlarındaki başarısız satırlar beklenen sonuçtur; gerçek kod ölçümleri sıfır kalanla yeşildir."
+  }
+}

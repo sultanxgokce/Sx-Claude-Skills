@@ -570,4 +570,56 @@ PYM
 done
 rm -f "$SQ/_agents/fabrika/kartlar/mm-"*.json
 
+echo "════ T17 · ÖLÇÜT NEREDE ÖLÇÜLECEK (görev …90KA6C): cümlede sayısal ölçüt varsa --olcum-yeri ZORUNLU (W1G2N: '≤6 dk' 2 çekirdekli CI'da imkânsızdı) ════"
+mkdir -p "$T/depo17" && cd "$T/depo17" && git init -q -b main && git config user.email t@t && git config user.name T && echo x > f && git add -A && git commit -qm "chore: ilk" && export KANIT_DEPO="$T/depo17"   # önceki bölümler çalışma dizinini/deposunu değiştirmiş olabilir
+tetik_kur
+KU="$T/depo17/_agents/fabrika/kartlar"; D4S="--istedi SERDAR --aldi HEZARFEN --geri-alinamaz h --para h --dis-yuzey h --yetki h"
+O="$(bash "$KT" ac is-ol1 --is "korpus paralel koşsun, süre ≤6 dk olsun" $D4S 2>&1)"; rc=$?
+[ $rc -eq 1 ] && grep -q "NEREDE ölçüleceği yok" <<<"$O" && grep -q "≤6 dk" <<<"$O" && [ ! -f "$KU/is-ol1.json" ]; g $? "OL1 ölçütlü cümle + yer YOK → rc 1, sebep ölçütü söyler, kart AÇILMADI"
+O="$(bash "$KT" ac is-ol2 --is "korpus paralel koşsun, süre ≤6 dk olsun" $D4S --olcum-yeri "yerel" 2>&1)"; rc=$?
+[ $rc -eq 1 ] && [ ! -f "$KU/is-ol2.json" ]; g $? "OL2 'yerel' ama çekirdek sayısı YOK → rc 1 (çekirdek şart)"
+O="$(bash "$KT" ac is-ol3 --is "korpus paralel koşsun, süre ≤6 dk olsun" $D4S --olcum-yeri "yerel, 12 çekirdek" 2>&1)"; rc=$?
+[ $rc -eq 0 ] && grep -q "ölçüt: '≤6 dk' → ölçüleceği yer: yerel, 12 çekirdek" <<<"$O"; g $? "OL3 'yerel, 12 çekirdek' → açıldı, çıktı ölçüt+yeri söyler"
+python3 -c "import json,sys;k=json.load(open(sys.argv[1]));assert k['olcut']==['≤6 dk'] and k['olcum_yeri']=='yerel, 12 çekirdek',k" "$KU/is-ol3.json"; g $? "OL3b kartta olcut + olcum_yeri yazılı"
+bash "$KT" ac is-ol4 --is "korpus paralel koşsun, süre ≤6 dk olsun" $D4S --olcum-yeri "CI, 2 çekirdek" >/dev/null 2>&1; g $? "OL4 'CI, 2 çekirdek' kabul"
+bash "$KT" ac is-ol5 --is "uç noktanın cevap süresi ≤200 ms olsun" $D4S --olcum-yeri "canlı" >/dev/null 2>&1; g $? "OL5 'canlı' çekirdek sayısı istemeden kabul"
+bash "$KT" ac is-ol6 --is "bekçi dört saat adımsız kalan işe zil atsın, 152 kapılı sınav, sürüm 0.19.1" $D4S >/dev/null 2>&1; g $? "OL6 eşik işaretsiz süre / kapı sayısı / sürüm ölçüt SAYILMAZ → yer istenmez"
+bash "$KT" ac is-ol7 --is "araç en çok 40 MB bellek kullansın" $D4S >/dev/null 2>&1; [ $? -eq 1 ]; g $? "OL7 'en çok 40 MB' biçimi de ölçüt sayılır (yer yok → rc 1)"
+bash "$KT" ac is-ol8 --is "bu iş 6 dk altında bitmeli ve 40 dk'dan az sürmeli" $D4S >/dev/null 2>&1; [ $? -eq 1 ]; g $? "OL8 '6 dk altında' / 40 dk'dan az biçimleri de ölçüt sayılır"
+bash "$KT" ac is-ol13 --is "değerlendirme en az 95 puan versin ve en çok 10 istek atsın" $D4S >/dev/null 2>&1; [ $? -eq 1 ]; g $? "OL13 birim dar değil: 'en az 95 puan' / 'en çok 10 istek' de ölçüt sayılır (yer yok → rc 1)"
+bash "$KT" ac is-ol14 --is "oturum 3 hata altında kalsın" $D4S >/dev/null 2>&1; [ $? -eq 1 ]; g $? "OL14 '3 hata altında' ölçüt sayılır"
+bash "$KT" ac is-ol15 --is "korpus paralel koşsun, süre ≤6 dk olsun" $D4S --olcum-yeri "canlı, CI" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "OL15 birden çok yüzey adı ('canlı, CI') belirsiz → rc 1 (tek yer şart)"
+bash "$KT" ac is-ol16 --is "korpus paralel koşsun, süre ≤6 dk olsun" $D4S --olcum-yeri "CI, yerel, 2 çekirdek" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "OL16 'CI, yerel, 2 çekirdek' de belirsiz → rc 1"
+echo "──  T17 · daralt: yeni cümlede ölçüt varsa yer zorunlu; ölçüt değişince eski GEÇERSİZ, karta + görev adımına yazılır ──"
+O="$(bash "$KT" daralt is-ol3 --kalan "kalan: CI'da paralel koşu ayrı kartta yapılacak" --cumle "korpus paralel koşsun, süre ≤10 dk olsun" --oturum o1 2>&1)"; rc=$?
+[ $rc -eq 1 ] && grep -q "DARALTILMADI" <<<"$O" && python3 -c "import json,sys;k=json.load(open(sys.argv[1]));assert k['olcut']==['≤6 dk'] and 'cumle_gecmisi' not in k,k" "$KU/is-ol3.json"; g $? "OL9 daralt: yeni cümlede ölçüt var, yer YOK → rc 1, kart DEĞİŞMEDİ"
+O="$(bash "$KT" daralt is-ol3 --kalan "kalan: CI'da paralel koşu ayrı kartta yapılacak" --cumle "korpus paralel koşsun, süre ≤10 dk olsun" --oturum o1 --olcum-yeri "yerel, 12 çekirdek" 2>&1)"; rc=$?
+[ $rc -eq 0 ] && grep -q "ÖLÇÜT değişti: eski \['≤6 dk'\] GEÇERSİZ → yeni \['≤10 dk'\]" <<<"$O"; g $? "OL10 daralt + yer → ölçüt değişti uyarısı (eski GEÇERSİZ, yeni)"
+python3 -c "import json,sys;k=json.load(open(sys.argv[1]));assert k['olcut']==['≤10 dk'] and k['olcut_gecmisi'][-1]['eski']==['≤6 dk'] and k['olcut_gecmisi'][-1]['yeni']==['≤10 dk'] and k['olcum_yeri']=='yerel, 12 çekirdek',k" "$KU/is-ol3.json"; g $? "OL10b kartta güncel ölçüt + olcut_gecmisi (eski→yeni) yazılı"
+bash "$KT" daralt is-ol4 --kalan "kalan: ölçüt başka karta taşındı, burada yalnız paralel koşu" --cumle "korpus paralel koşsun, ölçüt başka kartta" --oturum o2 >/dev/null 2>&1; rc=$?
+python3 -c "import json,sys;k=json.load(open(sys.argv[1]));assert k['olcut']==[] and k['olcum_yeri']=='' and k['olcut_gecmisi'][-1]['eski']==['≤6 dk'],k" "$KU/is-ol4.json"; [ $rc -eq 0 ]; g $? "OL11 daralt ölçütü KALDIRIRSA yer istenmez, eski ölçüt geçersiz sayılıp kayda geçer"
+# görev bağlı kartta ölçüt adımı: jeton yok → defter yazımı düşer (rc 4, karta işlenir); yazım DENENDİ ve olay 'daralt'
+bash "$KT" ac is-ol12 --is "korpus paralel koşsun, süre ≤6 dk olsun" $D4S --olcum-yeri "CI, 2 çekirdek" --gorev gorev_01AAAAAAAAAAAAAAAAAAAAOL12 --tahmin 30 >/dev/null 2>&1
+O="$(bash "$KT" daralt is-ol12 --kalan "kalan: ölçüt başka karta taşındı, burada yalnız paralel koşu" --cumle "korpus paralel koşsun, süre ≤10 dk olsun" --oturum o3 --olcum-yeri "yerel, 12 çekirdek" 2>&1)"; rc=$?
+[ $rc -eq 4 ] && python3 -c "import json,sys;k=json.load(open(sys.argv[1]));y=k['gorev_yazimlari'];assert y[-1]['olay']=='daralt',y" "$KU/is-ol12.json"; g $? "OL12 görev bağlı kartta ölçüt daralması görev adımı olarak DENENİR (olay 'daralt'; jeton yok → rc 4, karta işlenir)"
+echo "──  T17 · MUTASYON: şart kalkarsa ilgili kapı KIRMIZI ──"
+m17() {  # m17 <ad> <eski> <yeni> <beklenen: komut dizisi sonucu rc>  → tam kopya + tek değişiklik; çapa tam 1 kez değilse g 1
+  local D="$T/pkg17-$1"; mkdir -p "$D"; cp "$HERE"/*.py "$HERE"/*.sh "$D/" 2>/dev/null
+  local n; n="$(python3 - "$D/kart.sh" "$2" "$3" <<'PYM'
+import sys; f, a, b = sys.argv[1:]; s = open(f, encoding="utf-8").read(); n = s.count(a); print(n)
+if n == 1: open(f, "w", encoding="utf-8").write(s.replace(a, b, 1))
+PYM
+)"
+  [ "$n" = 1 ] || { g 1 "m17 $1: çapa $n kez geçiyor (tam 1 olmalı)"; return 1; }
+  M17="$D/kart.sh"
+}
+m17 ac-sart '    olcut_zorunlu "$IS_C" "AÇILMADI" || exit 1' '    :' && { bash "$M17" ac is-mo1 --is "korpus paralel koşsun, süre ≤6 dk olsun" $D4S >/dev/null 2>&1; [ $? -eq 0 ]; g $? "M-OL1 ac'taki ölçüt şartı kalkarsa yersiz kart açılır (OL1 bu mutantta düşerdi)"; }
+m17 cekirdek-sart 'raise SystemExit(0 if re.search(r"\d+\s*(?:çekirdek|cekirdek|vcpu|core)", y) else 1)' 'raise SystemExit(0)' && { bash "$M17" ac is-mo2 --is "korpus paralel koşsun, süre ≤6 dk olsun" $D4S --olcum-yeri "yerel" >/dev/null 2>&1; [ $? -eq 0 ]; g $? "M-OL2 çekirdek sayısı şartı kalkarsa 'yerel' tek başına geçer (OL2 düşerdi)"; }
+m17 daralt-sart '    olcut_zorunlu "$CUMLE" "DARALTILMADI" || exit 1' '    :' && { bash "$KT" ac is-mo3 --is "korpus paralel koşsun, süre ≤6 dk olsun" $D4S --olcum-yeri "CI, 2 çekirdek" >/dev/null 2>&1; bash "$M17" daralt is-mo3 --kalan "kalan: ölçüt başka karta taşındı, burada paralel koşu" --cumle "korpus paralel koşsun, süre ≤10 dk olsun" --oturum o4 >/dev/null 2>&1; [ $? -eq 0 ]; g $? "M-OL3 daralt'taki ölçüt şartı kalkarsa yersiz daraltma geçer (OL9 düşerdi)"; }
+m17 birim-dar 'B = r"(?:[^\W\d_]+|%)"' 'B = r"(?:ms|sn|dk|sa|kb|mb|gb|px|%)"' && { bash "$M17" ac is-mo5 --is "değerlendirme en az 95 puan versin ve en çok 10 istek atsın" $D4S >/dev/null 2>&1; [ $? -eq 0 ]; g $? "M-OL5 birim sözlüğü daralırsa 'en az 95 puan' ölçüt sayılmaz, kart yersiz açılır (OL13 düşerdi)"; }
+m17 tek-yer 'if len(yerler) != 1: raise SystemExit(1)' 'if len(yerler) < 1: raise SystemExit(1)' && { bash "$M17" ac is-mo6 --is "korpus paralel koşsun, süre ≤6 dk olsun" $D4S --olcum-yeri "canlı, CI" >/dev/null 2>&1; [ $? -eq 0 ]; g $? "M-OL6 tek-yer şartı gevşerse 'canlı, CI' geçer (OL15 düşerdi)"; }
+m17 olcut-eski 'eski_olcut!=yeni_olcut:
+    k.setdefault("olcut_gecmisi",[])' 'False:
+    k.setdefault("olcut_gecmisi",[])' && { bash "$KT" ac is-mo4 --is "korpus paralel koşsun, süre ≤6 dk olsun" $D4S --olcum-yeri "CI, 2 çekirdek" >/dev/null 2>&1; bash "$M17" daralt is-mo4 --kalan "kalan: ölçüt başka karta taşındı, burada paralel koşu" --cumle "korpus paralel koşsun, süre ≤10 dk olsun" --oturum o5 --olcum-yeri "yerel, 12 çekirdek" >/dev/null 2>&1; python3 -c "import json,sys;k=json.load(open(sys.argv[1]));assert 'olcut_gecmisi' not in k" "$KU/is-mo4.json"; g $? "M-OL4 ölçüt değişimi kayda geçmezse olcut_gecmisi boş kalır (OL10b düşerdi)"; }
+
 echo ""; echo "── SONUÇ: $gecen geçti · $kalan kaldı ──"; [ "$kalan" -eq 0 ]
