@@ -1,0 +1,117 @@
+{
+  "is": "fabrika-birincil-kopya-yazim-reddi",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T14:23:19+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kanit-sinavi",
+      "asama": "once",
+      "dosya": "olcum-kanit-sinavi-once.txt",
+      "sha256": "3d7fd79f59120d047d91c7a1a80358c06021712cdaa9d2ed71bf9931f02da622",
+      "komut": [
+        "bash",
+        "-c",
+        "timeout 900 bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/v8/taban/yazilim-fabrikasi/scripts/kanit.test.sh < /dev/null"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T13:34:56+03:00",
+      "sure_sn": 28.1,
+      "boru_denetimi": "temiz",
+      "olcum_id": "1c71ccecf1884563bfdec194ca292f48"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kanit-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-kanit-sinavi-sonra.txt",
+      "sha256": "92e225916aef1cf58882097d5bb21f51bcb69b80094da62ec96e1c692802eab7",
+      "komut": [
+        "bash",
+        "-c",
+        "timeout 900 bash /config/projects/_wt/Sx-Claude-Skills-fabrika-birincil-kopya-yazim-reddi/yazilim-fabrikasi/scripts/kanit.test.sh < /dev/null"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T13:35:31+03:00",
+      "sure_sn": 35.3,
+      "boru_denetimi": "temiz",
+      "olcum_id": "5a51549f16244b728b84452a6be06201"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinavi",
+      "asama": "once",
+      "dosya": "olcum-denetci-sinavi-once.txt",
+      "sha256": "4f05ef8fddd62845723f29dfcfc3f7151d334f436e96859462b155440264b540",
+      "komut": [
+        "bash",
+        "-c",
+        "timeout 2400 bash /tmp/claude-1000/-config-projects-Nexus/ae3ee37a-9bcc-45ba-81bf-7bf938d1dc4c/scratchpad/v8/taban/yazilim-fabrikasi/scripts/denetci.test.sh < /dev/null"
+      ],
+      "rc": 1,
+      "renk": "kirmizi",
+      "zaman": "2026-10-23T14:02:26+03:00",
+      "sure_sn": 1614.1,
+      "boru_denetimi": "temiz",
+      "olcum_id": "adf8f0b5ba154f84bb8e758d306f8b61"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "denetci-sinavi",
+      "asama": "sonra",
+      "dosya": "olcum-denetci-sinavi-sonra.txt",
+      "sha256": "621f84c27e81de3078a6b13f5ce3fb346864239c6ec9029b1f43c6749c366163",
+      "komut": [
+        "bash",
+        "-c",
+        "timeout 2400 bash /config/projects/_wt/Sx-Claude-Skills-fabrika-birincil-kopya-yazim-reddi/yazilim-fabrikasi/scripts/denetci.test.sh < /dev/null"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T14:23:19+03:00",
+      "sure_sn": 1253.1,
+      "boru_denetimi": "temiz",
+      "olcum_id": "99595288b677495db42dc143f2bf2f2b"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-parity-strict",
+      "asama": "sonra",
+      "dosya": "olcum-ci-parity-strict-sonra.txt",
+      "sha256": "fb90e807c51561783a4635b8494929700d0b2359daa054b2d72a9038e3d29a6b",
+      "komut": [
+        "node",
+        "ahi/schema/validate-repo.mjs",
+        ".",
+        "--strict"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T14:23:19+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "efef76442f034315b8649c98faae002f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-version-lint",
+      "asama": "sonra",
+      "dosya": "olcum-ci-version-lint-sonra.txt",
+      "sha256": "3bcfc98a07e891982b59ccc1631bef0288ccedf9769ff2050f1b1110c1480aac",
+      "komut": [
+        "node",
+        "ahi/schema/version-lint.mjs",
+        "."
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T14:23:19+03:00",
+      "sure_sn": 0.0,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "773bd3c3fccd4a20947634d8ad609cd4"
+    }
+  ],
+  "imza": "41809c89b84c0f22c4fcaea279d0317b0ca3917575fabf8b75c98ec888366002"
+}
