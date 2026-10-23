@@ -12,16 +12,16 @@
 #          --canli: cron/servis/sunucu işi gerçek ateşleme kaydı (kanit.sh canli) ister; verilmezse cümleden türetilir, karta yazılır
 #          [--sayi-olcum '<komut>']: cümlede "13 görev" gibi bir sayı iddiası varsa onu KAYNAĞINDAN sayan komut (yoksa UYARI, red değil)
 #   kart.sh bitti <iş> [--pr N]        durum=bitti; son DENETIM puanını ve KANIT durumunu karta işler (kanıt: çağrıldığı ağaç, yoksa kartın iş alanı — kanit_agaci)
-#          sınıflıda birlestirme_karari (karar_veren: reis) yazar; VETOLU kartta rc 1, kart değişmez
+#          sınıflıda birlestirme_karari yazar; VETOLU kartta rc 1
 #   kart.sh tikandi <iş> --yol devam|daralt|geri-al --neden "..."
 #   kart.sh daralt <iş> --kalan "<kalan bulgu ≥20>" --cumle "<daraltılmış cümle ≥20>" --oturum <ref> [--yeni <ad>]
 #     → kart cümlesi daraltılır (eskisi cumle_gecmisi'ne), kalan bulgu YENİ karta (aynı sınıf cevapları, aynı sahip),
 #       karta daraltma kaydı (tur_sifir = kanıt ağacındaki denetim turu → denetçi yeni cümleyle sıfırdan sayar, kapı onu okur).
-#       Her kartta reis kararıyla işlenir (sınıflıda sinifli:true; kullanılmamış eski Sultan 'daralt' tüketilir); VETOLU kartta rc 1.
+#       Her kartta reis kararıyla (sınıflıda sinifli:true; eski Sultan 'daralt' tüketilir); VETOLU kartta rc 1.
 #   kart.sh sultan-dedi <iş> --karar <devam|daralt|geri-al|canli-borc|basla|dur> --oturum <ref> --soz "<verbatim ≤15 kelime>" \
-#          --beyan <AJAN> [--gerekce "<≥20 karakter>"]  (basla|dur dışında zorunlu); basla|dur başlama iznini günceller (dur = VETO)
+#          --beyan <AJAN> [--gerekce "<≥20 karakter>"] (basla|dur dışında zorunlu); dur = VETO
 #   kart.sh reis-dedi <iş> --karar <devam|daralt|geri-al|birlestir> --reis <AD> --oturum <ref> \
-#          --gerekce "<niçin — en az 20 karakter>"     ← her kartta (sınıflıda sinifli:true); VETOLU kartta rc 1
+#          --gerekce "<niçin — en az 20 karakter>"     ← her kartta; VETOLU kartta rc 1
 #          Sultan'ın SÖZLÜ kararını KARTA işler (D1 deseni). Üç parça zorunlu: oturum-ref · kırpık · beyan.
 #          🔴 A06: onay ÜRETMEZ, alınan onayı AKTARIR. Ref'siz beyan sayılmaz; uyduran kartta yakalanır.
 #   kart.sh canli-borc <iş> --yazan <AD> --gerekce "<niçin canlı kayıt şimdi üretilemiyor — en az 20 karakter>"
@@ -288,7 +288,7 @@ elif csebep: print(f"  ⚠ canlı kanıt istenmedi — {csebep}; karta yazıldı
 if not gorev: print("  · görev bağı yok — iş Sultan'ın 'çalışılıyor' görünümüne DÜŞMEZ (bağlamak için: kart.sh ac … --gorev gorev_<kimlik> --tahmin <dk>)")
 PY
     GRC=0; [ -n "$GOREV" ] && { gorev_yaz "$KD/$IS.json" ac || GRC=4; }
-    # Sultan'a giden satır komut taşımaz; ulaşım yolu yokken kartın açılmaması ikinci kartta (fabrika-merge-reise-parca2)
+    # Sultan'a giden satır komut taşımaz (ulaşım yolu şartı ikinci kartta)
     IZIN_NOT=""; [ "$SINIFLI" = 1 ] && IZIN_NOT=" · başlama izni bekleniyor (veto penceresi: iş yürür; durdurmak için 'dur' demen yeter)"
     tetik "$ODA" "iş alındı: $IS" "$IS_C · sahip $ALDI · istedi $ISTEDI · sınıf: ${GA}${PARA}${DIS}${YETKI}$IZIN_NOT"
     exit $GRC
@@ -372,7 +372,7 @@ PY
     #    sonradan denetlenebilir bir yalan hâline getirir. A06'nın verebileceği en güçlü şey budur.
     [ -n "$IS" ] || { _hata "iş adı gerekiyor"; exit 1; }
     [ -f "$KD/$IS.json" ] || { _hata "kart YOK: $KD/$IS.json"; exit 1; }
-    # 🔴 KAPALI KÜME (0.21.0; canlıda 13 serbest-metin karar vardı): basla|dur = başlama izni; gerisi geriye uyumlu ara kararlar.
+    # 0.21.0: kapalı küme (canlıda 13 serbest-metin karar vardı); basla|dur = başlama izni.
     case "$KARAR" in devam|daralt|geri-al|canli-borc|basla|dur) ;; "") ;; *) _hata "--karar yalnız devam|daralt|geri-al|canli-borc|basla|dur olabilir ('$KARAR' değil) — kapalı küme, serbest metin karta girmez"; exit 1 ;; esac
     eksik=""
     [ -n "$KARAR" ] || eksik="$eksik --karar"
@@ -412,7 +412,7 @@ if karar in ("basla","dur") and not siniflimi(k):
 k.setdefault("sultan_kararlari",[]).append(kayit)
 ek=""
 if karar in ("basla","dur"):
-    # 0.21.0: başlama izni / VETO — son basla/dur kazanır; alanı olmayan eski SINIFLI kart da buradan yeni kurala geçer
+    # 0.21.0: başlama izni / VETO — son basla/dur kazanır (eski kart alanı burada kazanır)
     bi=k.get("baslama_izni") if isinstance(k.get("baslama_izni"),dict) else {}
     k["baslama_izni"]={"durum":karar,"istendi":bi.get("istendi") or k.get("zaman"),"zaman":simdi,"oturum":oturum,"soz":soz,"beyan":beyan}
     k.setdefault("kural_surumu",KURAL_SURUMU)
@@ -427,7 +427,7 @@ PY
     #    yalnız Sultan'ın kararını okuyordu. Sonuç: sınıfsız bir işin sahibi kendi yetkisindeki kararı yazdıramıyor,
     #    kapı ya kapalı kalıyor ya da birisi Sultan'ın ağzından yazmaya özeniyor (A06). Aynı gün iki vaka
     #    (DEVRİYE doğrulayıcısı · kokpit A2). Karar AYRI alana girer (reis_kararlari) — Sultan'ın alanına değil.
-    # 🔴 0.21.0: SINIFLI kartta da kabul (kayıt sinifli:true; sultan_kararlari'na dokunulmaz). Tek çit VETO (izin-durum = dur → rc 1).
+    # 0.21.0: sınıflı kartta da kabul (sinifli:true); tek çit VETO (rc 1).
     [ -n "$IS" ] || { _hata "iş adı gerekiyor"; exit 1; }
     [ -f "$KD/$IS.json" ] || { _hata "kart YOK: $KD/$IS.json"; exit 1; }
     eksik=""

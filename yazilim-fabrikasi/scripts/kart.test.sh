@@ -231,7 +231,7 @@ bash "$KT" izin-durum is-dar-s >/dev/null 2>&1; [ $? -eq 3 ]; g $? "V18 bozuk ba
 bash "$KT" reis-dedi is-dar-s --karar devam --reis MUAVIN --oturum r --gerekce "yirmi karakterden uzun bir gerekce metni" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "V18b bozuk izinli kartta reis-dedi rc 1 (fail-closed)"
 bash "$KT" bitti is-dar-s >/dev/null 2>&1; [ $? -eq 1 ] && [ "$(python3 -c "import json;print(json.load(open('$T/depo2/_agents/fabrika/kartlar/is-dar-s.json'))['durum'])")" != bitti ]; g $? "V18c bozuk izinli kartta bitti rc 1, kart bitmedi"
 echo "── T16 · MUTASYON (tam kopya, kontrol şartlı): eski davranış geri gelirse ya da veto kapıyı kapatmazsa sınav KIRMIZI ──"
-# m16 alt kabukta çağrılmaz: çapa sayısı ana süitte ölçülür, 1 değilse KIRMIZI (kurulamayan mutant sessiz geçmesin).
+# m16 alt kabukta çağrılmaz: çapa sayısı ana süitte ölçülür, 1 değilse KIRMIZI.
 m16() {   # m16 <ad> <dosya> <eski> <yeni> → D16 (tam kopya + tek değişiklik); çapa tam 1 kez geçmiyorsa g 1 (ANA süitte) + rc 1
   D16="$T/pkg16-$1"; mkdir -p "$D16"; cp "$HERE"/*.py "$HERE"/*.sh "$D16/" 2>/dev/null
   local n; n="$(python3 - "$D16/$2" "$3" "$4" <<'PYM'
