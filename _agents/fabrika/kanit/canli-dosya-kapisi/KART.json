@@ -1,0 +1,23 @@
+{
+  "is": "canli-dosya-kapisi",
+  "cumle": "Birleştirme kapısı, PR'ın canlı yazılan dosyalara (aile-registry.yaml, ajan NOTES.md, serdar-defter.md, jsonl havuzları, Notlarim) dokunduğunu uyarsın; ana dal kopyalarının pull'u 'local changes would be overwritten' diye kilitleniyor (Nexus #1276)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-23T22:37:14+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "birlestirme-kapisi.test.sh: canlı dosyalı PR uyarı basar, rc değişmez",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": true,
+  "canli_sebep": "cümlede: canlı",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": []
+}
