@@ -492,16 +492,16 @@ if [ "$TUR" -gt 1 ] && [ -n "$BAS" ]; then
   elif ! git -C "$DEPO" cat-file -e "$_ob^{commit}" 2>/dev/null || ! git -C "$DEPO" cat-file -e "$BAS^{commit}" 2>/dev/null; then
     _bilgi "· düzeltme farkı hesaplanamadı: önceki baş (${_ob:0:8}) ya da bu baş bu depoda bulunamadı → tam fark gider"
   else
-    mapfile -t _pd < <(python3 - "$TMP/diff.patch" <<'PYD'
-import re,sys
-G=re.compile(r'(?m)^diff --git (?:"((?:[^"\\]|\\.)*)"|(\S+)) (?:"((?:[^"\\]|\\.)*)"|(\S+))\s*$')
-for m in G.finditer(open(sys.argv[1],encoding="utf-8",errors="replace").read()):
-    b = m.group(3) if m.group(3) is not None else m.group(4)
-    print(b[2:] if b.startswith("b/") else b)
-PYD
-)
+    # PR dosyaları fark METNİNDEN değil git'ten, NUL ayraçlı okunur (göz #436 tur 2): `diff --git` başlığında git, boşluklu yolu
+    #   TIRNAKSIZ yazar (\S+ deseni kaçırır), ASCII dışı/özel karakterli yolu tırnaklayıp oktal KAÇIŞLAR (ham alınırsa pathspec
+    #   tutmaz) → gerçek değişiklik "boş fark" sanılırdı. Liste = ana hatla ortak atadan bu başa değişen yollar (--no-renames: ad
+    #   değiştirenin iki ucu da); pathspec --literal-pathspecs ile verilir (":" ile başlayan ad sihir sayılmasın).
+    _ana="$(git -C "$DEPO" symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null || echo origin/main)"
+    _mb="$(git -C "$DEPO" merge-base "$_ana" "$BAS" 2>/dev/null)"
+    _pd=(); [ -n "$_mb" ] && mapfile -d '' -t _pd < <(git -C "$DEPO" diff --no-renames --name-only -z "$_mb" "$BAS" 2>/dev/null)
     : > "$TMP/diff-duz.patch"
-    if [ "${#_pd[@]}" -gt 0 ] && ! git -C "$DEPO" diff "$_ob" "$BAS" -- "${_pd[@]}" > "$TMP/diff-duz.patch" 2>/dev/null; then
+    if [ -z "$_mb" ]; then _bilgi "· düzeltme farkı hesaplanamadı: $_ana ile ${BAS:0:8} ortak atası bulunamadı (PR dosyaları ölçülemedi) → tam fark gider"
+    elif [ "${#_pd[@]}" -gt 0 ] && ! git -C "$DEPO" --literal-pathspecs diff "$_ob" "$BAS" -- "${_pd[@]}" > "$TMP/diff-duz.patch" 2>/dev/null; then
       _bilgi "· düzeltme farkı hesaplanamadı: git diff ${_ob:0:8}..${BAS:0:8} düştü → tam fark gider"
     else
       DUZ_TAM_BAYT=$(wc -c < "$TMP/diff.patch"); DUZ_BAYT=$(wc -c < "$TMP/diff-duz.patch"); DUZ_DOSYA=$(grep -c '^diff --git ' "$TMP/diff-duz.patch")
@@ -672,8 +672,9 @@ PY
     python3 - "$DZ/DENETIM-$ONCEKI.json" <<'PYO'
 import json,sys
 s=json.load(open(sys.argv[1],encoding="utf-8")).get("sonuc") or {}
-b=[x for x in (s.get("bulgular") or []) if x.get("agirlik")!="kutu-disi"]
-print(f"önceki puan: {s.get('kod_puani','?')}/5 · doğru şey: {s.get('dogru_sey','?')} · açık bulgu: {len(b)} — her birinin bu turda kapanıp kapanmadığını yaz")
+b=list(s.get("bulgular") or [])   # kutu-dışı da sayılır (göz #436 tur 2): sınıfı satırında yazar, ayıklanmaz
+kd=sum(1 for x in b if x.get("agirlik")=="kutu-disi")
+print(f"önceki puan: {s.get('kod_puani','?')}/5 · doğru şey: {s.get('dogru_sey','?')} · bulgu: {len(b)}" + (f" ({kd}'i kutu-dışı)" if kd else "") + " — her birinin bu turda kapanıp kapanmadığını yaz")
 for i,x in enumerate(b,1): print(f"  B{i}. [{x.get('agirlik','?')}] {x.get('ne','')} — {x.get('konum','')}")
 PYO
     printf -- '--- önceki tur kaydının tamamı ---\n'; cat "$DZ/DENETIM-$ONCEKI.json"; }; } > "$TMP/p-onceki.md"

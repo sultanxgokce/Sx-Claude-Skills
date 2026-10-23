@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # duzeltme-olcer.sh <kod kaynağı: git ref | "agac"> — SYV3F: düzeltme turunda göze ne gidiyor, şişkin istem gönderiliyor mu?
 #   Verilen kaynaktaki yazilim-fabrikasi/scripts geçici dizine alınır; geçici çıplak origin + klonda bir iş iki tur denetlenir
-#   (tur 1: 4/E bir bulgu; arada tek satırlık düzeltme commit'i), sahte denetçi istemi diske bırakır. Ölçülen:
+#   (tur 1: 4/E bir bulgu; arada tek satırlık düzeltme commit'i — kod dosyasının adı boşluklu + Türkçe harfli: göz #436 tur 2), sahte denetçi istemi diske bırakır. Ölçülen:
 #   (1) tur 2 istemindeki FARK bölümünün baytı · değişmeyen dosya istemde mi · önceki bulgu ayrı satırda mı;
 #   (1b) tur 3 — yeni commit YOK: fark bölümü kaç bayt, değişmeyen dosya istemde mi (göz #436 tur 1 bulgu 1);
 #   (2) ~110 KB'lık istem (100-120 KB arası) eşik dikişi olmadan sahte denetçiye GÖNDERİLİYOR mu; (2b) aynısı ayıklama KAPALIYKEN (bulgu 2).
@@ -24,18 +24,19 @@ J5='{"kod_puani":5,"dogru_sey":"E","ozet":"o","bulgular":[],"kanit_gorusu":"k"}'
 den() { ( cd "$T/w" && SAHTE_ISTEM_KOPYA="$3" SAHTE_JSON="$2" KANIT_DEPO="$T/w" bash "$T/s/denetci.sh" "$1" --kart "$T/kart.md" < /dev/null 2>&1 ); }
 # (1) iki tur: büyük değişmeyen dosya (8 KB) + küçük kod dosyası; tur arası tek satır düzeltme
 git -C "$T/w" checkout -q -b olc origin/main 2>/dev/null
-python3 -c "open('$T/w/degismeyen.txt','w').write(''.join('degismeyen-%04d\n'%i for i in range(500)))"; printf 'ilk\n' > "$T/w/kod.txt"
-git -C "$T/w" add degismeyen.txt kod.txt; git -C "$T/w" commit -q -m ilk
+python3 -c "open('$T/w/degismeyen.txt','w').write(''.join('degismeyen-%04d\n'%i for i in range(500)))"; printf 'ilk\n' > "$T/w/çok özel kod.txt"
+git -C "$T/w" add degismeyen.txt "çok özel kod.txt"; git -C "$T/w" commit -q -m ilk
 (cd "$T/w" && KANIT_DEPO="$T/w" bash "$T/s/kanit.sh" olcum olc o --asama tek -- true >/dev/null 2>&1)
 den olc "$J4" "$T/i1.md" >/dev/null
-printf 'ilk\nduzeltme\n' > "$T/w/kod.txt"; git -C "$T/w" commit -q -am duz
+printf 'ilk\nduzeltme\n' > "$T/w/çok özel kod.txt"; git -C "$T/w" commit -q -am duz
 O2="$(den olc "$J5" "$T/i2.md")"
 fark_bayt() { python3 -c "import sys;s=open(sys.argv[1],encoding='utf-8').read();a=s.find('===== DEĞİŞİKLİK (diff) =====');b=s.find('\n\n=====',a+10);print(len((s[a:b] if b>0 else s[a:]).encode()) if a>=0 else -1)" "$1"; }
 F1="$(fark_bayt "$T/i1.md")"; F2="$(fark_bayt "$T/i2.md")"
 grep -q "degismeyen-0499" "$T/i2.md" && DEG=evet || DEG=hayır
 grep -qF "B1. [uygulama] sinir-kontrolu-eksik" "$T/i2.md" && BUL=evet || BUL=hayır
+grep -qF "+duzeltme" "$T/i2.md" && DUZ=evet || DUZ=hayır
 echo "kod kaynağı: $1"
-echo "(1) tur 1 fark bölümü: $F1 bayt · tur 2 fark bölümü: $F2 bayt · tur 2'de değişmeyen dosya: $DEG · önceki bulgu ayrı satırda: $BUL"
+echo "(1) tur 1 fark bölümü: $F1 bayt · tur 2 fark bölümü: $F2 bayt · tur 2'de değişmeyen dosya: $DEG · önceki bulgu ayrı satırda: $BUL · düzeltme satırı (özel adlı dosya) istemde: $DUZ"
 printf '%s\n' "$O2" | grep -E "DÜZELTME TURU|düzeltme farkı" | sed 's/^/   /'
 O3T="$(den olc "$J5" "$T/i3t.md")"; F3="$(fark_bayt "$T/i3t.md")"
 grep -q "degismeyen-0499" "$T/i3t.md" && DEG3=evet || DEG3=hayır
@@ -53,4 +54,4 @@ printf '%s\n' "$O3" | grep -E "İŞİ BÖL" | sed 's/^/   /'
 : > "$T/i4.md"; O4="$(env -u DENETCI_KIRP_ESIK -u DENETCI_ISTEM_TAVAN DENETCI_KANIT_AYIKLA=0 bash -c "cd '$T/w' && SAHTE_ISTEM_KOPYA='$T/i4.md' SAHTE_JSON='$J5' KANIT_DEPO='$T/w' bash '$T/s/denetci.sh' buyuk --kart '$T/kart.md' < /dev/null 2>&1")"; RC4=$?
 [ -s "$T/i4.md" ] && GIT4="gönderildi ($(wc -c < "$T/i4.md") bayt)" || GIT4="gönderilmedi"
 echo "(2b) aynı istem, ayıklama KAPALI → rc=$RC4 · denetçiye: $GIT4"
-[ "$DEG" = hayır ] && [ "$BUL" = evet ] && [ "$F2" -lt "$F1" ] && [ "$DEG3" = hayır ] && [ "$RC3" = 1 ] && [ ! -s "$T/i3.md" ] && [ "$RC4" = 1 ] && [ ! -s "$T/i4.md" ]
+[ "$DEG" = hayır ] && [ "$BUL" = evet ] && [ "$DUZ" = evet ] && [ "$F2" -lt "$F1" ] && [ "$DEG3" = hayır ] && [ "$RC3" = 1 ] && [ ! -s "$T/i3.md" ] && [ "$RC4" = 1 ] && [ ! -s "$T/i4.md" ]
