@@ -957,7 +957,7 @@ karne_yaz() {
   else _bilgi "   ⚠ karne yazılamadı: $(printf '%s' "$e" | tail -1) — elle: karne.sh yaz $IS"; fi
 }
 karne_yaz
-# 🔴 GÖZ ADIMI GÖREVE (0.23.0 · gorev_01M5CWJAH2B8MFG4XFVY3Y7J3Q): kart bir göreve bağlıysa tur sonucu göreve TEK satır adım düşer
+# 🔴 GÖZ ADIMI GÖREVE (0.24.0 · gorev_01M5CWJAH2B8MFG4XFVY3Y7J3Q): kart bir göreve bağlıysa tur sonucu göreve TEK satır adım düşer
 #    (tur · puan · doğru şey · bulgu sayısı); görev durumu DEĞİŞMEZ. Yazılamazsa söylenir, turun sonucu (rc) DEĞİŞMEZ — bilgi kaydıdır, kapı değil.
 #    Kapatmak: DENETCI_GOREV_ADIMI=0 (sınavlar kendi sahtesini kullanır).
 goz_adimi_yaz() {

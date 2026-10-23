@@ -1,0 +1,61 @@
+{
+  "is": "sx-ci-paralel",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T22:36:35+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "ci-duvar-dk",
+      "asama": "once",
+      "dosya": "olcum-ci-duvar-dk-once.txt",
+      "sha256": "8f4e0679372078bc6268f7dc2a4f84f2cf46c55c2f93b725660a41888b44ff93",
+      "komut": [
+        "bash",
+        "-c",
+        "olc 40003038870"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T22:29:05+03:00",
+      "sure_sn": 1.3,
+      "boru_denetimi": "temiz",
+      "olcum_id": "5a9a21e2b2f9406998f92ac88c306c55"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kova-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-kova-sinavi-tek.txt",
+      "sha256": "3707bb45ef0b7dad58fc0b21d5340aafe70fcb9ab10b5ab85c29c8817f783b43",
+      "komut": [
+        "bash",
+        ".github/ci/kabuk-sinamalari.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T22:36:35+03:00",
+      "sure_sn": 2.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "919ce2ebc6d947b8b3b8af6f77f8db9c"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "ci-duvar-dk",
+      "asama": "sonra",
+      "dosya": "olcum-ci-duvar-dk-sonra.txt",
+      "sha256": "9d66318b8352e56256a3e258701527e493fe4053b1b07f8df4c06775af48dcdc",
+      "komut": [
+        "bash",
+        "-c",
+        "olc 40010041025; rc=$?; echo \"kovalar: denetci 8m27 diploma 11m3 kalan 7m29 (143 sinama = 1+1+141)\"; exit $rc"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T22:29:17+03:00",
+      "sure_sn": 0.6,
+      "boru_denetimi": "temiz",
+      "olcum_id": "c169434415ca4b41b05152bc2abed17c"
+    }
+  ],
+  "imza": "1d2d07b07f00df824bb0011b5049e6cc2a4a56521acd11e4ec43312c38f89005"
+}

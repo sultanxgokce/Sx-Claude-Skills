@@ -1,0 +1,7 @@
+$ bash _agents/fabrika/kanit/kart-tetik-hedef/tetik-olcer.sh /config/projects/_wt/Sx-Claude-Skills-kart-tetik-hedef/yazilim-fabrikasi/scripts/kart.sh
+# rc=0 sure=0.2s zaman=2026-10-23T20:57:37+03:00
+--- stdout ---
+kart.sh: /config/projects/_wt/Sx-Claude-Skills-kart-tetik-hedef/yazilim-fabrikasi/scripts/kart.sh · rc=0 · kart=var
+  · görev bağı yok — iş Sultan'ın 'çalışılıyor' görünümüne DÜŞMEZ (bağlamak için: kart.sh ac … --gorev gorev_<kimlik> --tahmin <dk>)
+✓ tetik: sinav-oda ← iş alındı: is-olc
+--- stderr ---

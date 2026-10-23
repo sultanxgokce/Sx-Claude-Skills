@@ -1,0 +1,23 @@
+{
+  "is": "kart-tetik-hedef",
+  "cumle": "Sınıflı kart --oda ile açılırken tetik mektubu HEDEF: satırı taşısın; oda-tetik 'hedef-yok' diye reddedip kartı açtırmıyor (lifeos-kalan, 23 Eki)",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-23T20:51:58+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "kart.test.sh: tetik gövdesinin ilk satırı HEDEF: <oda>",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "",
+  "kapsam_uyarilari": [],
+  "sayi_uyarilari": []
+}

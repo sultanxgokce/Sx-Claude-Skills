@@ -1,0 +1,50 @@
+{
+  "tur": 1,
+  "is": "hezarfen-olcut-nerede-olculecek",
+  "pr": "449",
+  "yazan": "claude",
+  "denetci": "codex",
+  "zaman": "2026-10-23T23:10:17+03:00",
+  "kanit_durumu": "sağlam (araç imzalı, sha'lar tutuyor)",
+  "depo": "/config/projects/_wt/Sx-Claude-Skills-hezarfen-olcut-nerede-olculecek",
+  "dal": "hezarfen-olcut-nerede-olculecek",
+  "birincil_mi": false,
+  "yedek": null,
+  "yazan_model": "opus",
+  "yazan_model_kaynak": "ayar-dosyasi",
+  "yedek_model": null,
+  "kirpildi": {
+    "oldu": false,
+    "istem_bayt": 46328,
+    "esik": 110000
+  },
+  "kanit_ayiklandi": {
+    "dosya": 4,
+    "bayt": 77652
+  },
+  "bas": "fb2f260dfa4178f478db383ef705db6dc75d2e64",
+  "duzeltme_farki": null,
+  "kareler": null,
+  "sonuc": {
+    "kod_puani": 3,
+    "dogru_sey": "H",
+    "ozet": "Sultanım, araç verilen eşik örneklerinde ölçüm yerini ve çekirdek sayısını kapatıyor; gerçek ölçüm 268/268 yeşil, mutasyon da dört kapının sökülmesini yakalıyor. Ancak iş kartı başlıktaki sayısal ölçütü genel isterken uygulama yalnız dar bir birim/eşik sözlüğünü tanıyor; önce bu kapsam açığı çözülmeli.",
+    "bulgular": [
+      {
+        "ne": "Sayısal ölçüt algılama talep edilenden dar: yalnız ms/sn/saniye/dk/dakika/sa/saat/KB/MB/GB/px/% birimleri ve dört eşik kalıbı tanınıyor. Bu nedenle örneğin “en az 95 puan”, “en çok 10 istek” veya “3 hata altında” gibi sayısal ölçütler ölçüm yeri olmadan kart açabilir.",
+        "kanit": "`olcut_bul` içindeki `B` yalnız zaman, veri boyutu, piksel ve yüzde birimlerini içeriyor; bütün `DESEN` ifadeleri ölçütü bu `B` ile sınırlandırıyor. Sonraki ölçüm yalnız OL1–OL8'de bu dar sözlükten süre/bellek örneklerini doğruluyor; genel sayısal ölçüt vakası yok.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh:232; olcum-kart-test-sonra.txt T17 OL1-OL8",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      },
+      {
+        "ne": "Ölçüm yeri doğrulaması birden fazla yüzey adı içeren belirsiz değerleri reddetmiyor; ilk eşleşme “canlı” ise aynı değerde CI/yerel geçse bile çekirdek şartı atlanabiliyor.",
+        "kanit": "`olcum_yeri_gecerli`, `re.search` ile ilk `(yerel|ci|canlı|canli)` eşleşmesini alıyor ve ilk eşleşme canlıysa doğrudan rc=0 dönüyor; örneğin `canlı, CI` çekirdeksiz kabul edilir. Yeşil ölçüm yalnız tek yüzeyli `CI, 2 çekirdek` ve `canlı` örneklerini sınıyor.",
+        "konum": "yazilim-fabrikasi/scripts/kart.sh:251; olcum-kart-test-sonra.txt T17 OL4-OL5",
+        "agirlik": "uygulama",
+        "kutu_disi_yuzey": null
+      }
+    ],
+    "kanit_gorusu": "Manifest araç imzalı ve sağlam; sarı kayıt yok. Önce ölçümü 252/268 kırmızıdan sonra 268/268 yeşile dönüyor, ayrıca mutasyon kaydı gerçek ölçümden doğru ayrılmış ve dört kapının bozulmasını yakalıyor. Kanıt güçlüdür fakat test matrisi genel “sayısal ölçüt” kapsamını ve belirsiz/çoklu ölçüm yeri girdilerini ölçmüyor."
+  }
+}

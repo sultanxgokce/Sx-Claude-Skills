@@ -52,7 +52,7 @@ CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-a --diff "$T/d.patch" --kart "$T/
 [ "$RC" -eq 0 ]; g $? "rc=0"
 grep -q "GEÇTİ" <<<"$CIKTI" && grep -q "tur 2" <<<"$CIKTI"; g $? "GEÇTİ ve tur 2 yazılı"
 
-echo "════ T3b · göz adımı göreve (0.23.0 · Y7J3Q): kartlı iş 5/E ve 3/H turunda kart.sh goz-adim tek satırla çağrılır; kartsız iş çağırmaz; yazılamasa tur sonucu değişmez ════"
+echo "════ T3b · göz adımı göreve (0.24.0 · Y7J3Q): kartlı iş 5/E ve 3/H turunda kart.sh goz-adim tek satırla çağrılır; kartsız iş çağırmaz; yazılamasa tur sonucu değişmez ════"
 KS="$T/kart-sahte.sh"; printf '#!/usr/bin/env bash\nprintf "%%s\\n" "$*" >> "%s/goz-cagri.log"\n' "$T" > "$KS"; chmod +x "$KS"; export DENETCI_KART_SH="$KS"
 kartac is-g; bash "$K" olcum is-g olc --asama tek -- echo 1 >/dev/null 2>&1
 SAHTE_JSON="$(J 3 H "$B")" bash "$D" is-g --diff "$T/d.patch" >/dev/null 2>&1; RC=$?

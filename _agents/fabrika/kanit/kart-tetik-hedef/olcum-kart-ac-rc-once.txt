@@ -1,0 +1,7 @@
+$ bash _agents/fabrika/kanit/kart-tetik-hedef/tetik-olcer.sh eski
+# rc=0 sure=0.2s zaman=2026-10-23T20:57:37+03:00
+--- stdout ---
+kart.sh: /tmp/tmp.joeD5iLUAF/eski/kart.sh · rc=1 · kart=yok
+· tetik düştü (mesaj kartta duruyor, iş düşmez)
+✗ Sultan'a ulaşılamadı: --oda ver ya da tetik betiğini kur — 'sinav-oda' odasına tetik düştü, başlama izni GİTMEDİ (kart GERİ ALINDI, açılmadı)
+--- stderr ---

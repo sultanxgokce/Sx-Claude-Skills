@@ -1,0 +1,61 @@
+{
+  "is": "kart-tetik-hedef",
+  "arac": "kanit.py/0.5.0",
+  "guncelleme": "2026-10-23T20:58:18+03:00",
+  "kayitlar": [
+    {
+      "tur": "olcum",
+      "etiket": "kart-ac-rc",
+      "asama": "once",
+      "dosya": "olcum-kart-ac-rc-once.txt",
+      "sha256": "b3b8219434d30efff0e6d85bd719757b7bb751e2cdbb77e8828eb198ad58d5e7",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kart-tetik-hedef/tetik-olcer.sh",
+        "eski"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T20:57:37+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "a2f9673631ca465eae8a96d7e931c2de"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-ac-rc",
+      "asama": "sonra",
+      "dosya": "olcum-kart-ac-rc-sonra.txt",
+      "sha256": "b0b010e8dc19abfc19fea6b120ef288210ac5811e9b9caf30843e2911350de77",
+      "komut": [
+        "bash",
+        "_agents/fabrika/kanit/kart-tetik-hedef/tetik-olcer.sh",
+        "/config/projects/_wt/Sx-Claude-Skills-kart-tetik-hedef/yazilim-fabrikasi/scripts/kart.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T20:57:37+03:00",
+      "sure_sn": 0.2,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "853ac3de66c74943b78b937935aa112f"
+    },
+    {
+      "tur": "olcum",
+      "etiket": "kart-sinavi",
+      "asama": "tek",
+      "dosya": "olcum-kart-sinavi-tek.txt",
+      "sha256": "6df81395340f3cfb4ec70284ae0eb016d339d968e14eba4d5f71f267d7e43f0d",
+      "komut": [
+        "bash",
+        "yazilim-fabrikasi/scripts/kart.test.sh"
+      ],
+      "rc": 0,
+      "renk": "yesil",
+      "zaman": "2026-10-23T20:58:18+03:00",
+      "sure_sn": 34.7,
+      "boru_denetimi": "kapsam-dışı (kabuk -c değil; dosya betiği içeriği denetlenmez)",
+      "olcum_id": "4462501f4d79455f8f2e6450e55283ac"
+    }
+  ],
+  "imza": "7d017238cb94abcc514e8ad9c32e81ea3824eb3aa4c8e6fc5b156f03944c4fb5"
+}
