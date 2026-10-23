@@ -44,9 +44,7 @@
      (PR #329 ve cloudtop #712 dersi — #712'de fark 73 KB'la geçmiş, istem 129 KB olup kırpılmıştı).
      Sonsuz düzelt-kanıtla-gönder döngüsü yasak (3-strike'ın fabrikadaki karşılığı).
 5. **Merge:**
-   - Kart **sınıf** taşıyorsa da → **kutu reisi** (0.21.0, Sultan D1 22 Eki; kural `0-kabul.md` "Sınıflı iş"): Sultan vetosu
-     yoksa (`kart.sh izin-durum` ≠ `dur`) reis birleştirir, `kart.sh bitti` kararı karta yazar; kapının vetoyu ölçmesi ikinci
-     kartta (`fabrika-merge-reise-parca2`). Dağıtım / canlıya alma Sultan eli. Ajan onay yazamaz (A06).
+   - Kart **sınıf** taşıyorsa da → **kutu reisi** (0.21.0, kural `0-kabul.md` "Sınıflı iş"); vetolu kartta `bitti` rc 1. Ajan onay yazamaz (A06).
    - Sınıfsız iş → **kutu reisi** merge eder; şart: 5 + E + kanıt manifesti + CI yeşil. Deftere `kayit-damgasi`
      ile kanıt+puan+damga; gün sonu özetinde "içeride bitirdiklerimiz". (Geçiş: Nexus'ta ilk iki hafta yine
      Sultan'a sorulur — Sultan 22 Eyl.)

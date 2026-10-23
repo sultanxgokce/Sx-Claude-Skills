@@ -2,39 +2,34 @@
 # kart.sh — fabrika 0. adım (KABUL): iş kartını ARAÇ yazar; sınıfı dört soruyla ARAÇ sorar (K6).
 #
 # Kartlar BİRİNCİL depo kökünde yaşar: <depo>/_agents/fabrika/kartlar/<iş>.json (worktree'ler ortak görür).
-# Dört sınıf sorusu cevapsız kart AÇILMAZ. Biri "e" ya da "?" ise → sultan=true (= sınıflı; şüphede sınıf YUKARI).
+# Dört sınıf sorusu cevapsız kart AÇILMAZ. Biri "e" ya da "?" ise → sultan=true (şüphede sınıf YUKARI).
 #
 # 🔴 KURAL 0.21.0 (Sultan D1 22 Eki; metin adimlar/0-kabul.md "Sınıflı iş"): sınıflı işte Sultan yalnız başlama izni verir (veto);
-#    ara kararlar ve birleştirme reisin. İzin tek yüzey: kart.sh izin-durum (izin.py). sultan alanı KALIR (= sınıflı).
+#    ara kararlar ve birleştirme reisin. İzin tek yüzey: kart.sh izin-durum (izin.py).
 #
 # Kullanım:
 #   kart.sh ac <iş> --is "tek cümle" --istedi <kim> --aldi <ajan> \
 #          --geri-alinamaz e|h|? --para e|h|? --dis-yuzey e|h|? --yetki e|h|? [--kanit "nerede olacak"] [--oda <oda>] [--canli e|h]
 #          --canli: cron/servis/sunucu işi gerçek ateşleme kaydı (kanit.sh canli) ister; verilmezse cümleden türetilir, karta yazılır
-#          sınıflı kartta baslama_izni:{durum:"bekliyor"} + kural_surumu yazılır; BAŞLAMA İZNİ Sultan'a gider (veto penceresi), iş yürür
 #          [--sayi-olcum '<komut>']: cümlede "13 görev" gibi bir sayı iddiası varsa onu KAYNAĞINDAN sayan komut (yoksa UYARI, red değil)
 #   kart.sh bitti <iş> [--pr N]        durum=bitti; son DENETIM puanını ve KANIT durumunu karta işler (kanıt: çağrıldığı ağaç, yoksa kartın iş alanı — kanit_agaci)
-#          sınıflı kartta birlestirme_karari{karar_veren:"reis", …} yazılır (kart = defter); vetolu kartta bitti rc 1 (kart değişmez)
+#          sınıflıda birlestirme_karari (karar_veren: reis) yazar; VETOLU kartta rc 1, kart değişmez
 #   kart.sh tikandi <iş> --yol devam|daralt|geri-al --neden "..."
 #   kart.sh daralt <iş> --kalan "<kalan bulgu ≥20>" --cumle "<daraltılmış cümle ≥20>" --oturum <ref> [--yeni <ad>]
 #     → kart cümlesi daraltılır (eskisi cumle_gecmisi'ne), kalan bulgu YENİ karta (aynı sınıf cevapları, aynı sahip),
 #       karta daraltma kaydı (tur_sifir = kanıt ağacındaki denetim turu → denetçi yeni cümleyle sıfırdan sayar, kapı onu okur).
-#       Her kartta reis kararı 'daralt' kendiliğinden işlenir (sınıflıda sinifli:true); kartta kullanılmamış Sultan 'daralt' varsa
-#       o tüketilir (geriye uyum). VETOLU kartta (izin-durum = dur) daraltma YOK, hiçbir kart değişmez (rc 1).
+#       Her kartta reis kararıyla işlenir (sınıflıda sinifli:true; kullanılmamış eski Sultan 'daralt' tüketilir); VETOLU kartta rc 1.
 #   kart.sh sultan-dedi <iş> --karar <devam|daralt|geri-al|canli-borc|basla|dur> --oturum <ref> --soz "<verbatim ≤15 kelime>" \
-#          --beyan <AJAN> [--gerekce "<niçin bu yol işe yarar — en az 20 karakter>"]   (basla|dur dışında --gerekce ZORUNLU)
-#          Sultan'ın SÖZLÜ kararını KARTA işler (D1 deseni). Üç parça zorunlu: oturum-ref · kırpık · beyan. Küme KAPALIDIR.
-#          basla|dur baslama_izni'ni günceller (son kazanır: dur = VETO); SINIFSIZ kartta basla|dur rc 1 (veto penceresi yok).
-#          🔴 A06: onay ÜRETMEZ, alınan onayı AKTARIR. Ref'siz beyan sayılmaz; uyduran kartta yakalanır.
+#          --beyan <AJAN> [--gerekce "<≥20 karakter>"]  (basla|dur dışında zorunlu); basla|dur başlama iznini günceller (dur = VETO)
 #   kart.sh reis-dedi <iş> --karar <devam|daralt|geri-al|birlestir> --reis <AD> --oturum <ref> \
-#          --gerekce "<niçin — en az 20 karakter>"     ← her kartta; sınıflı kartta kayıt sinifli:true taşır (A06: ayrı alan,
-#          Sultan sözü gibi GÖSTERİLMEZ). --reis kartın sahibi (aldi) olmak zorunda. VETOLU kartta rc 1 (önce sultan-dedi --karar basla).
+#          --gerekce "<niçin — en az 20 karakter>"     ← her kartta (sınıflıda sinifli:true); VETOLU kartta rc 1
+#          Sultan'ın SÖZLÜ kararını KARTA işler (D1 deseni). Üç parça zorunlu: oturum-ref · kırpık · beyan.
+#          🔴 A06: onay ÜRETMEZ, alınan onayı AKTARIR. Ref'siz beyan sayılmaz; uyduran kartta yakalanır.
 #   kart.sh canli-borc <iş> --yazan <AD> --gerekce "<niçin canlı kayıt şimdi üretilemiyor — en az 20 karakter>"
 #          CANLI BORÇ (5WYQMW · SERDAR 22 Eki 00:43): kart --canli e ve gerçek ateşleme kaydı HENÜZ üretilemiyorsa (dağıtım birleşmeden SONRA ya da
 #          başkasında) birleştirme kapısı borç kaydıyla geçer; kart `bitti` DEĞİL `canli-borclu` olur; borç dağıtımdan sonra `kanit.sh canli` ile ödenir,
 #          sonra `kart.sh bitti` kartı kapatır. SINIFSIZ kartta yazan kartın sahibidir (aldi); SINIFLI kartta borcu AJAN yazamaz: önce
 #          `kart.sh sultan-dedi <iş> --karar canli-borc …` (Sultan'ın sözü, D1 deseni). 24 saat ödenmezse `kart.sh borclar` kırmızı (rc 1).
-#          (sınıflı kartta borcun reise geçmesi ikinci kartta: fabrika-merge-reise-parca2)
 #   kart.sh canli-borc-durum <iş> → "yok|gecerli|gecersiz|odendi<TAB>açıklama" (kapının okuduğu yüzey) · kart.sh borclar → açık borçlar, yaşı
 #   kart.sh izin-durum <iş> → "gerekmiyor|bekliyor|basla|dur<TAB>açıklama" (kart yok/bozuk rc 3 — fail-closed)
 #   kart.sh goster <iş> · kart.sh liste [--acik] · kart.sh canli-gerekir <iş>  → "E|H<TAB>sebep" (eski kartta cümleden türetir)
@@ -154,14 +149,12 @@ PY
   [ "$sonuc" = "yazıldı" ]
 }
 
-tetik() {  # tetik <oda> <başlık> <gövde> → 0 gitti/oda yok · 1 atılmadı/düştü (sınıfsız çağıran yok sayar: iş düşmez;
-           #   sınıflı açılış bunu "Sultan'a ulaşılamadı" sayar ve kartı geri alır — göz 23 Eki tur 2)
+tetik() {  # tetik <oda> <başlık> <gövde>
   [ -n "$1" ] || return 0
-  if [ ! -x "$TETIK" ]; then echo "· tetik atılmadı: $TETIK yok (mesaj kartta duruyor)"; return 1; fi
-  local f r=0; f="$(mktemp)"; printf '%s\n' "$3" > "$f"
-  if bash "$TETIK" gonder "$1" "$f" --ajan "${ALDI:-fabrika}" --baslik "$2" >/dev/null 2>&1; then echo "✓ tetik: $1 ← $2"
-  else echo "· tetik düştü (mesaj kartta duruyor, iş düşmez)"; r=1; fi
-  rm -f "$f"; return "$r"
+  if [ ! -x "$TETIK" ]; then echo "· tetik atılmadı: $TETIK yok (mesaj kartta duruyor)"; return 0; fi
+  local f; f="$(mktemp)"; printf '%s\n' "$3" > "$f"
+  bash "$TETIK" gonder "$1" "$f" --ajan "${ALDI:-fabrika}" --baslik "$2" >/dev/null 2>&1 && echo "✓ tetik: $1 ← $2" || echo "· tetik düştü (mesaj kartta duruyor, iş düşmez)"
+  rm -f "$f"
 }
 
 # 🔴 CANLI SINIFI (retro 17 Eki 2026 · ders 1): cron · servis · sunucu içeren iş, "git'te düzeltildi" ile bitmez — kanıtı
@@ -249,13 +242,7 @@ case "$CMD" in
     for v in GA PARA DIS YETKI; do case "${!v}" in e|h|\?) ;; *) _hata "dört sınıf sorusu cevapsız kart AÇILMAZ: --geri-alinamaz --para --dis-yuzey --yetki (e|h|?)"; exit 1 ;; esac; done
     case "$CANLI" in ""|e|h) ;; *) _hata "--canli yalnız e|h olabilir ('$CANLI' değil): cron/servis/sunucu işi canlı kanıt ister mi?"; exit 1 ;; esac
     [ -f "$KD/$IS.json" ] && { _hata "kart zaten var: $IS (goster ile bak)"; exit 1; }
-    # 🔴 SULTAN'A ULAŞIM YOLU (göz 23 Eki tur 2): sınıflı kartın izin isteği gidemiyorsa kart AÇILMAZ (rc 1). Eski araç rc 0 dönüp
-    #    sessiz kalıyordu (Sultan'ın görmediği veto penceresi). Varsayılan oda uydurulmaz. Sınıfsız kart değişmedi (tetik best-effort).
     SINIFLI=0; case "${GA}${PARA}${DIS}${YETKI}" in *e*|*\?*) SINIFLI=1 ;; esac
-    if [ "$SINIFLI" = 1 ]; then
-      [ -n "$ODA" ] || { _hata "Sultan'a ulaşılamadı: --oda ver ya da tetik betiğini kur — sınıflı işin başlama izni Sultan'a gitmeli, --oda verilmedi (kart AÇILMADI)"; exit 1; }
-      [ -x "$TETIK" ] || { _hata "Sultan'a ulaşılamadı: --oda ver ya da tetik betiğini kur — tetik betiği yok: $TETIK (FABRIKA_TETIK; kart AÇILMADI)"; exit 1; }
-    fi
     if [ -n "$GOREV" ]; then
       [[ "$GOREV" =~ ^gorev_[A-Za-z0-9]{10,40}$ ]] || { _hata "--gorev gorev_<kimlik> biçiminde olmalı ('$GOREV' değil)"; exit 1; }
       [[ "$TAHMIN" =~ ^[1-9][0-9]{0,4}$ ]] || { _hata "--gorev verilince --tahmin <dk> ZORUNLU (defter 'çalışılıyor'a tahminsiz geçmez; Sultan: başladıysa tahmini bitiş)"; exit 1; }
@@ -278,7 +265,7 @@ kart={"is":is_,"cumle":cumle,"istedi":istedi,"aldi":aldi,"zaman":simdi,
       "sinif_cevaplari":cev,"siniflar":siniflar,"sultan":bool(siniflar),"kanit_nerede":kanit,"oda":oda,"durum":"acik","gecmis":[],
       "canli_gerekir":cg=="E","canli_sebep":csebep,"kapsam_uyarilari":[u for u in kuyari.splitlines() if u.strip()]}
 if siniflar:
-    # 0.21.0 (Sultan D1 22 Eki): sınıflı işte Sultan yalnız BAŞLAMA İZNİNİ verir — veto penceresi; iş bekletilmez, kart bunu taşır
+    # 0.21.0: sınıflı kartta başlama izni (veto penceresi)
     kart["baslama_izni"]={"durum":"bekliyor","istendi":simdi}; kart["kural_surumu"]=KURAL_SURUMU
 if gorev: kart["gorev"]=gorev; kart["tahmin_dk"]=int(tahmin)
 sayilar=[u for u in suyari.splitlines() if u.strip()]
@@ -289,7 +276,7 @@ if skomut:
 kaynakli = bool(skomut) and src=="0"
 kart["sayi_uyarilari"]=[] if kaynakli else sayilar
 json.dump(kart,open(yol,"w"),ensure_ascii=False,indent=2)
-print(f"✓ kart açıldı: {is_} · sınıf: {', '.join(siniflar) if siniflar else 'yok'} · {'BAŞLAMA İZNİ SULTAN\'A GİDER (veto penceresi: iş yürür, Sultan dur derse kapı kapanır; ara ve birleştirme kararları reisin, dağıtım Sultan eli)' if siniflar else 'ekipte biter, gün sonu özetine girer'}")
+print(f"✓ kart açıldı: {is_} · sınıf: {', '.join(siniflar) if siniflar else 'yok'} · {'BAŞLAMA İZNİ SULTAN\'A GİDER (veto penceresi: iş yürür; ara ve birleştirme kararları reisin)' if siniflar else 'ekipte biter, gün sonu özetine girer'}")
 for u in kart["kapsam_uyarilari"]: print(f"  ⚠ KAPSAM — {u} (uyarı, red değil; karta yazıldı)")
 if kart["sayi_uyarilari"]:
     print("  ⚠ SAYI — cümlede kaynağı ölçülmemiş sayı: %s → kaynağından sayan komutu ver: kart.sh ac … --sayi-olcum '<komut>' (uyarı, red değil; karta yazıldı)" % " · ".join("'%s'" % u for u in kart["sayi_uyarilari"]))
@@ -301,13 +288,10 @@ if cg=="E": print(f"  · CANLI kanıt zorunlu ({csebep}): gerçek ateşleme kayd
 elif csebep: print(f"  ⚠ canlı kanıt istenmedi — {csebep}; karta yazıldı, bağımsız göz görür")
 if not gorev: print("  · görev bağı yok — iş Sultan'ın 'çalışılıyor' görünümüne DÜŞMEZ (bağlamak için: kart.sh ac … --gorev gorev_<kimlik> --tahmin <dk>)")
 PY
-    # Sultan'a giden satır Sultan-dilindedir: Sultan komut yazmaz (göz 23 Eki tur 2). Ajan tarafı: kart.sh sultan-dedi <iş> --karar dur
-    IZIN_NOT=""; [ "$SINIFLI" = 1 ] && IZIN_NOT=" · başlama izni bekleniyor (veto penceresi: iş yürür; durdurmak için 'dur' demen yeter)"
-    TRC=0; tetik "$ODA" "iş alındı: $IS" "$IS_C · sahip $ALDI · istedi $ISTEDI · sınıf: ${GA}${PARA}${DIS}${YETKI}$IZIN_NOT" || TRC=1
-    if [ "$SINIFLI" = 1 ] && [ "$TRC" -ne 0 ]; then   # izin isteği GİTMEDİ → kart geri alınır (görev defterine daha dokunulmadı)
-      rm -f -- "$KD/$IS.json"; _hata "Sultan'a ulaşılamadı: --oda ver ya da tetik betiğini kur — '$ODA' odasına tetik düştü, başlama izni GİTMEDİ (kart GERİ ALINDI, açılmadı)"; exit 1
-    fi
     GRC=0; [ -n "$GOREV" ] && { gorev_yaz "$KD/$IS.json" ac || GRC=4; }
+    # Sultan'a giden satır komut taşımaz; ulaşım yolu yokken kartın açılmaması ikinci kartta (fabrika-merge-reise-parca2)
+    IZIN_NOT=""; [ "$SINIFLI" = 1 ] && IZIN_NOT=" · başlama izni bekleniyor (veto penceresi: iş yürür; durdurmak için 'dur' demen yeter)"
+    tetik "$ODA" "iş alındı: $IS" "$IS_C · sahip $ALDI · istedi $ISTEDI · sınıf: ${GA}${PARA}${DIS}${YETKI}$IZIN_NOT"
     exit $GRC
     ;;
   bitti|tikandi)
@@ -325,8 +309,7 @@ sys.path.insert(0,hdir); from kanit import etkin_kayitlar   # 4K938: etkin renk 
 from canli_borc import durum as borc_durum                  # 5WYQMW: canlı borç tek yerden
 from izin import izin_durumu, siniflimi                     # 0.21.0: başlama izni / veto tek yerden
 k=json.load(open(yol)); simdi=datetime.datetime.now().astimezone().isoformat(timespec="seconds")
-# 🔴 VETO çiti · bitti (göz tur 1, 23 Eki): Sultan "dur" dediyse kart BİTİRİLMEZ, birleştirme kararı YAZILMAZ (rc 1, kart değişmez);
-#    izin okunamıyorsa da bitmez (fail-closed). Eski hâl rc 0 verip yalnız uyarıyordu — veto birleştirme yolunu açık bırakıyordu.
+# 🔴 VETO çiti · bitti (göz tur 1): dur ya da okunamayan izin → kart bitmez, birleştirme kararı yazılmaz
 iz,iza=("gerekmiyor","") if not siniflimi(k) else izin_durumu(k)
 if cmd=="bitti" and iz in ("dur","olculemedi"):
     print(f"✗ {'Sultan DUR dedi' if iz=='dur' else 'kartın başlama izni OKUNAMADI'} — kart bitirilmez, birleştirme kararı yazılmaz ({iza}); "
@@ -348,8 +331,7 @@ k["puan"]={"kod":son["kod_puani"],"dogru":son["dogru_sey"],"tur":len(den)} if so
 k["kanit_var"]=kanit
 if cmd=="tikandi": k["tikanma"]={"yol":yolu,"neden":neden}
 k["gecmis"].append({"zaman":simdi,"olay":cmd})
-# 🔴 BİRLEŞTİRME KARARI REİSİN (0.21.0 · Sultan D1 22 Eki): sınıflı kartta bitti, birleştirme kararını KARTA yazar (kart = defter).
-#    karar_veren = reis, Sultan sözü DEĞİL (A06: ayrı alan). Vetolu kart buraya gelmez (yukarıdaki çit).
+# 0.21.0: sınıflı kartta birleştirme kararı karta (karar_veren: reis — A06: Sultan sözü değil)
 if cmd=="bitti" and siniflimi(k) and not k.get("birlestirme_karari"):
     rb=[x for x in (k.get("reis_kararlari") or []) if x.get("karar")=="birlestir"]
     k["birlestirme_karari"]={"karar_veren":"reis","reis":os.environ.get("AGENT_NAME") or k.get("aldi"),"pr":k.get("pr",""),"zaman":simdi,
@@ -424,7 +406,7 @@ sys.path.insert(0,hdir); from izin import siniflimi, KURAL_SURUMU
 k=json.load(open(yol,encoding="utf-8")); simdi=datetime.datetime.now().astimezone().isoformat(timespec="seconds")
 kayit={"karar":karar,"oturum":oturum,"soz":soz,"beyan":beyan,"gerekce":gerekce,"zaman":simdi}
 if karar in ("basla","dur") and not siniflimi(k):
-    # 🔴 SINIFSIZ kartta başlama izni / veto YOKTUR (hiçbir yüzey okumazdı: kağıt üstünde veto) — rc 1; durdurma reisin geri-al kararı.
+    # sınıfsız kartta veto penceresi yok (rc 1)
     print(f"✗ kart SINIFSIZ ({k['is']}): başlama izni / veto penceresi YOK — '{karar}' karta YAZILMADI (yazılsaydı hiçbir kapı okumazdı). "
           f"Sınıfsız iş ekipte biter; durdurmak reisin kararı: kart.sh reis-dedi {k['is']} --karar geri-al --reis {k.get('aldi')} --oturum … --gerekce …  "
           f"Sultan'a sorulmalıydıysa sınıf kuralı bu vakayla düzelir (0-kabul.md 'Sınıfsız iş').", file=sys.stderr); raise SystemExit(1)
@@ -435,7 +417,7 @@ if karar in ("basla","dur"):
     bi=k.get("baslama_izni") if isinstance(k.get("baslama_izni"),dict) else {}
     k["baslama_izni"]={"durum":karar,"istendi":bi.get("istendi") or k.get("zaman"),"zaman":simdi,"oturum":oturum,"soz":soz,"beyan":beyan}
     k.setdefault("kural_surumu",KURAL_SURUMU)
-    ek+=(" · ⛔ VETO: reis durur; reis-dedi ve daralt kapalı (kapı · denetçi · canlı borç okuması ikinci kartta) — kaldırmak Sultan'ın (--karar basla)" if karar=="dur"
+    ek+=(" · ⛔ VETO: reis durur; reis-dedi, daralt ve bitti kapalı — kaldırmak Sultan'ın (--karar basla)" if karar=="dur"
          else " · başlama izni verildi (varsa veto kalktı); iş reis kararlarıyla sürer, dağıtım Sultan eli")
 json.dump(k,open(yol,"w",encoding="utf-8"),ensure_ascii=False,indent=2)
 print(f"✓ Sultan karari karta islendi: {karar} · oturum {oturum} · beyan {beyan}{ek}")
@@ -515,8 +497,7 @@ sys.path.insert(0,hdir); from izin import izin_durumu, siniflimi, KURAL_SURUMU
 k=json.load(open(yol,encoding="utf-8")); simdi=datetime.datetime.now().astimezone().isoformat(timespec="seconds")
 if k.get("durum") not in ("acik","tikandi"):
     print(f"✗ kart durumu '{k.get('durum')}' — yalnız açık ya da tıkanmış kart daraltılır", file=sys.stderr); raise SystemExit(1)
-# 🔴 0.21.0: daralt HER kartta reis kararıyla işlenir (sınıflıda sinifli:true); VETO'da hiçbir kart değişmez (rc 1). Kullanılmamış
-#    eski Sultan 'daralt' kararı varsa tüketilir (tek kullanımlık; artık şart değil).
+# 0.21.0: daralt her kartta reis kararıyla; vetoda hiçbir kart değişmez; eski Sultan 'daralt' tüketilir
 sinifli=siniflimi(k); iz,iza=izin_durumu(k) if sinifli else ("gerekmiyor","")
 if sinifli and iz=="dur":   # VETO çiti · daralt
     print(f"✗ Sultan DUR dedi — daraltma yok, hiçbir kart değişmedi; önce kart.sh sultan-dedi {k['is']} --karar basla. {iza}", file=sys.stderr); raise SystemExit(1)
@@ -540,7 +521,7 @@ y={"is":yeni,"cumle":kalan,"istedi":k.get("istedi"),"aldi":k.get("aldi"),"zaman"
    "kanit_nerede":k.get("kanit_nerede",""),"oda":k.get("oda",""),"durum":"acik","gecmis":[{"zaman":simdi,"olay":"daraltmadan dogdu","koken":k["is"]}],
    "canli_gerekir":k.get("canli_gerekir",False),"canli_sebep":k.get("canli_sebep",""),"koken":k["is"]}
 if sinifli:
-    # 0.21.0: kalan kart kökün başlama iznini MİRAS alır (aynı işin parçası; veto olsaydı buraya gelinmezdi) — eski kart da alanı kazanır
+    # 0.21.0: kalan kart kökün başlama iznini miras alır
     y["baslama_izni"]=dict(k["baslama_izni"] if isinstance(k.get("baslama_izni"),dict) else {"durum":iz,"istendi":k.get("zaman")}); y["baslama_izni"]["miras"]=k["is"]
     y["kural_surumu"]=k.get("kural_surumu") or KURAL_SURUMU
 # 🔴 (bağımsız göz tur 1) iki kart ATOMİK yazılır: önce yeni kart geçici dosyaya + yerine koyma, sonra ana kart;

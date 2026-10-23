@@ -26,9 +26,7 @@ mkdir -p "$T/depo" && git -C "$T/depo" init -q -b main
 export KANIT_DEPO="$T/depo" FABRIKA_TETIK="$T/tetik.sh"; KT="$D/kart.sh"; KJ="$T/depo/_agents/fabrika/kartlar"; sapma=0
 bak() { if [ "$2" = "$3" ]; then echo "✓ $1: $2"; else echo "✗ $1: $2 (beklenen $3)"; sapma=$((sapma+1)); fi; }
 SNF="--istedi Sultan --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki e"
-( cd "$T/depo" && bash "$KT" ac k-odasiz --is "odasız sınıflı iş" $SNF >/dev/null 2>&1 ); [ -f "$KJ/k-odasiz.json" ] && v=var || v=yok
-bak "sınıflı kart --oda yokken" "kart $v" "kart yok"
-( cd "$T/depo" && bash "$KT" ac k1 --is "sınıflı iş" $SNF --oda oda >/dev/null 2>&1 )
+( cd "$T/depo" && bash "$KT" ac k1 --is "sınıflı iş" $SNF >/dev/null 2>&1 )
 ( cd "$T/depo" && bash "$KT" reis-dedi k1 --karar devam --reis MUAVIN --oturum r --gerekce "yirmi karakterden uzun bir gerekce" >/dev/null 2>&1 ); bak "sınıflı karta reis-dedi" "rc $?" "rc 0"
 ( cd "$T/depo" && bash "$KT" sultan-dedi k1 --karar dur --oturum o --soz "durun" --beyan MUAVIN >/dev/null 2>&1 )
 ( cd "$T/depo" && bash "$KT" reis-dedi k1 --karar devam --reis MUAVIN --oturum r --gerekce "yirmi karakterden uzun bir gerekce" >/dev/null 2>&1 ); bak "Sultan dur sonrası reis-dedi" "rc $?" "rc 1"
