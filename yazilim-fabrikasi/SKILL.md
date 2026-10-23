@@ -1,7 +1,7 @@
 ---
 name: yazilim-fabrikasi
 type: agent
-version: 0.19.0
+version: 0.20.0
 description: >
   Filonun tek çalışma hattı: her iş KABUL → İZOLE → İNŞA → KANITLA → GÖNDER adımlarından geçer.
   Her adımın çıktısını ajan değil ARAÇ yazar; puanı yazandan FARKLI model verir (bağımsız göz);
@@ -128,7 +128,7 @@ Codex yoksa ya da iki denemede de düşerse, **yazandan farklı yeni bir Claude 
 sürer; `DENETCI_YEDEK=0` yedeği kapatır. Sınav Y1-Y5 + mutasyon (yedek kaldırılınca kırmızı).
 
 ## Sürüm notları
-- **0.19.0 (2026-10-23, BÂNİ · HENDESE 22 Eki ölçümü, gorev_01M5F03K79B5B19A2XQ54V8NMK):** `denetci.sh` ve `kanit.py` kaydı
+- **0.20.0 (2026-10-23, BÂNİ · HENDESE 22 Eki ölçümü, gorev_01M5F03K79B5B19A2XQ54V8NMK):** `denetci.sh` ve `kanit.py` kaydı
   çağrıldığı ağacın köküne yazıyordu; iş alanı (worktree) açıkken BİRİNCİL kopyadan koşulan ölçüm/denetim orada takipsiz
   kalıyor, PR'a girmiyordu (Nexus 116 + cloudtop 45 takipsiz kanıt dosyası; ana kopyanın otomatik çekmesi 10 gün ölü). Artık
   birincil kopyada (git-dir == git-common-dir) o iş için is-alani.sh kökünde (`IS_ALANI_KOK`, vars. /config/projects/_wt,

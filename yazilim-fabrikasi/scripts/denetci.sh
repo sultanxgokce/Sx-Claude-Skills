@@ -206,7 +206,7 @@ DZ="$DEPO/_agents/fabrika/kanit/$IS"
 #    o anki hâli $DZ/KART.json'a kopyalanır — PR'a kart bununla gider, kartlar/ dizinindeki kopyayla değil; kopya yazılamazsa rc=3.
 KART_DEPO="${KART_DEPO:-$(c="$(git -C "$DEPO" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)" && [ -n "$c" ] && dirname "$c")}"
 [ -n "$KART_DEPO" ] || KART_DEPO="$DEPO"
-# 🔴 BİRİNCİL KOPYADA YAZMA REDDİ (0.19.0 · gorev_01M5F03K79B5B19A2XQ54V8NMK · HENDESE 22 Eki ölçümü): denetçi kaydı çağrıldığı ağacın
+# 🔴 BİRİNCİL KOPYADA YAZMA REDDİ (0.20.0 · gorev_01M5F03K79B5B19A2XQ54V8NMK · HENDESE 22 Eki ölçümü): denetçi kaydı çağrıldığı ağacın
 #    köküne yazar; iş alanı (worktree) varken BİRİNCİL kopyadan `--pr N` ile koşulan son tur DENETIM + KART.json birincilde kalıyor,
 #    kimse commit'lemiyordu (Nexus 116 + cloudtop 45 takipsiz kanıt dosyası; ana kopyanın otomatik çekmesi 10 gün ölü). Birincil
 #    kopya = git-common-dir ile git-dir aynı; bu iş için alan = is-alani.sh kökü altında <depo-adı>-<iş>. Alan varken birincilden
@@ -825,7 +825,7 @@ yol,tur,is_,pr,yazan,den,kd,sonuc_yolu,kirp,bayt,esik,yedek,yazan_model,yedek_mo
 kareler=[{"ad":a,"sha256":h} for a,h in (l.split("\t") for l in kare_kayit.splitlines() if "\t" in l)]
 json.dump({"tur":int(tur),"is":is_,"pr":pr,"yazan":yazan,"denetci":den,"zaman":datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
            "kanit_durumu":kd,
-           "depo":depo,"dal":(dal or None),"birincil":birincil=="1",   # 0.19.0 (V8NMK): kayıt NEREYE yazıldı — birincil kopyaya yazılan kayıt PR'a girmez, buradan ayırt edilir
+           "depo":depo,"dal":(dal or None),"birincil":birincil=="1",   # 0.20.0 (V8NMK): kayıt NEREYE yazıldı — birincil kopyaya yazılan kayıt PR'a girmez, buradan ayırt edilir
            "yedek":(yedek or None),   # Sultan Y0006: yedek gözle alınan puan codex puanı sanılmasın; sebebi kayıtta
            "yazan_model":(yazan_model or None), "yazan_model_kaynak":(ym_kaynak or None), "yedek_model":(yedek_model or None),   # yedek koşumunda dolu (ölçülemezse yedek koşmaz, rc=3)
 

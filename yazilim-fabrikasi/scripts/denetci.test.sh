@@ -849,7 +849,7 @@ grep -q "İŞİ BÖL" <<<"$CIKTI" && grep -q "kart.sh daralt" <<<"$CIKTI"; g $? 
 SAHTE_JSON="$(J 5 E "")" DENETCI_KIRP_ESIK=50000 bash "$D" is-bol --diff "$T/bol.patch" >/dev/null 2>&1; [ $? -eq 0 ]; g $? "eşik altındaki fark normal denetlenir (rc=0)"
 
 
-echo "════ TP · BİRİNCİL KOPYADA DENETİM REDDİ (0.19.0 · gorev_01M5F03K79B5B19A2XQ54V8NMK): alan varken birincilden koşum kayıt bırakmaz ════"
+echo "════ TP · BİRİNCİL KOPYADA DENETİM REDDİ (0.20.0 · gorev_01M5F03K79B5B19A2XQ54V8NMK): alan varken birincilden koşum kayıt bırakmaz ════"
 # NİÇİN: denetçi DENETIM-N.json + KART.json'u çağrıldığı ağacın köküne yazar; iş alanı açıkken BİRİNCİL kopyadan `--pr N` ile koşulan son tur
 #        orada takipsiz kalıyordu (HENDESE 22 Eki: Nexus 9 + cloudtop 13 işte). Alan = IS_ALANI_KOK/<depo-adı>-<iş>; birincil = git-dir == git-common-dir.
 TP="$(mktemp -d)"; ( cd "$TP" && git init -q -b main && git -c user.email=t@t -c user.name=T commit -q --allow-empty -m "ilk" ) >/dev/null 2>&1
