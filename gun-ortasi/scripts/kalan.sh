@@ -9,8 +9,9 @@
 #   3 konum çapaları (_agents/handoff/*-durum.md, son N gün, son 120 satır) — açık/kalan/ayrı kart/SARI/SIRADA
 #   4 bağımsız göz — her işin SON raporu: BAGIMSIZ-GOZ-kor-<n>.md YA DA fabrika denetçisinin DENETIM-<n>.json
 #     (5·E değilse açık; md'de kapanmamış N/B/Y/NOT/SARI/ENGEL satırları)
-#   5 gelen kutusu (0-teslimat/gelen) — okundu kaydında TAM adıyla olmayan HER mektup (pencere yok); kayıt KUTUDAN sorulur:
-#     scripts/kurye-yokla.sh okundu-liste → okundu-yolu → 0-teslimat/okundu.log (adı/biçimi tahmin edilmez, 75A8CJ)
+#   5 gelen kutusu (0-teslimat/gelen) — okundu kaydında TAM adıyla olmayan HER mektup (pencere yok); kayıt kutunun DOSYASINDAN
+#     okunur, kurye KOŞTURULMAZ: 0-teslimat/.okundu (kurye-yokla.sh biçimi: ad<TAB>sha256:|md5:özet · yalın ad; özet tutmazsa
+#     okunmamış) → kurye var ama .okundu yoksa damga yok → kuryesiz kutuda 0-teslimat/okundu.log (adı/biçimi tahmin edilmez, 75A8CJ)
 #   6 aktif layiha sayısı · 7 Sultan'ın kapısı · 8 hedef dosyaları · 9 ortam (dal, commit'siz, açık PR)
 #
 # ÇIKIŞ: 0 ölçüm bitti · 2 kullanım hatası. Son satır makine-okur:
@@ -135,57 +136,47 @@ else olcemedim "kanıt dizini yok: $KK"; fi
 
 bolum "5/9 · Gelen kutusu — okunmamış (pencere yok)"
 GELEN="?"
-GD="$KOK/0-teslimat/gelen"; OK="$KOK/0-teslimat/okundu.log"; KY="$KOK/scripts/kurye-yokla.sh"
+GD="$KOK/0-teslimat/gelen"; OK="$KOK/0-teslimat/okundu.log"; KY="$KOK/scripts/kurye-yokla.sh"; OKD="$KOK/0-teslimat/.okundu"
 if [ -d "$GD" ]; then
-  GELEN=0; liste=""; okunan=""; kaynak=""
-  # OKUNDU KAYDINI SAHİBİNDEN SOR, TAHMİN ETME (gorev_01M4ZMCTDB4B84P42S6R75A8CJ · MİHENK ölçümü 14 Eki): araç kaydı
-  #   '0-teslimat/okundu.log' diye arıyor, kutu '0-teslimat/.okundu' yazıyordu; biçim de başkaydı (ad<TAB>algoritma:özet,
-  #   eski satırlar yalın ad). Dosya bulunamayınca "hepsi okunmamış" denip 71 mektup basıldı, gerçek sayı 0'dı.
-  #   Sıra: (1) kutunun kurye-yokla.sh'ı 'okundu-liste' biliyorsa okunmuş sayılan ADLARI o basar (özeti tutmayan satır
-  #   okunmuş sayılmaz; biçim kutuda kalır) · (2) yalnız 'okundu-yolu' biliyorsa yol sorulur, satırın TAB'a kadar olan
-  #   ilk alanı addır · (3) kurye-yokla.sh yoksa eski okundu.log (' | ' ayraçlı, 3. alan). Sorgu düşerse ölçemedim —
-  #   okunamayan kayıt "okunmamış" DEĞİL "ölçülemedi"dir.
-  # SOR ve CEVABI DOĞRULA (bağımsız göz tur 1): arayüz desteği kaynak metnindeki yazım kalıbından ÇIKARILMAZ — tek/çift tırnak,
-  #   case etiketi, yardımcı fonksiyon hepsi geçerli yazımdır. Tek ön koşul: komut ADI dosyada hiç geçmiyorsa o komut var olamaz
-  #   (geçiyorsa SORULUR; geçmeyen komutu çağırmak kuryeyi yoklama kipine düşürür, o kip salt-okur değildir). Cevap biçimi doğrulanır:
-  #   okundu-liste → her satır gelen/ içinde var olan bir dosya adı · okundu-yolu → tek satır, mutlak yol. Uymayan cevap = ölçemedim.
-  #   kurye-yokla.sh VARKEN eski okundu.log'a sessizce düşülmez: arayüz yoksa okundu.log varsa okunur ve SÖYLENİR, yoksa ölçemedim.
-  neden=""; gecis=""
-  # Destek "sözcük geçiyor" ile KANITLANMAZ, cevapla kanıtlanır (bağımsız göz tur 2): komut adı geçiyorsa SORULUR; cevap
-  #   doğrulanmazsa (rc≠0 · biçim dışı) sıradaki arayüze GEÇİLİR — sıra okundu-liste → okundu-yolu → ölçemedim; geçiş notta yazılır.
-  liste_sor() {  # 0: okunan + kaynak doldu · 1: neden doldu
-    local cevap rc=0 a; cevap="$(bash "$KY" okundu-liste 2>/dev/null)" || rc=$?
-    [ "$rc" -eq 0 ] || { neden="okundu-liste rc=$rc"; return 1; }
-    while IFS= read -r a; do [ -z "$a" ] || [ -f "$GD/$a" ] || { neden="okundu-liste beklenmedik cevap satırı: ${a:0:60}"; return 1; }; done <<<"$cevap"
-    okunan="$cevap"; kaynak="kurye-yokla.sh okundu-liste"; return 0; }
-  yol_sor() {    # 0: OK (yol) doğrulandı, dosya varsa okunan doldu · 1: neden doldu
-    local rc=0; OK="$(bash "$KY" okundu-yolu 2>/dev/null)" || rc=$?
-    [ "$rc" -eq 0 ] || { neden="okundu-yolu rc=$rc"; return 1; }
-    { [ "$(grep -c . <<<"$OK")" -eq 1 ] && [ "${OK#/}" != "$OK" ]; } || { neden="okundu-yolu beklenmedik cevap (tek satır mutlak yol değil)"; return 1; }
-    kaynak="kurye-yokla.sh okundu-yolu → $OK"
-    if [ -e "$OK" ] && { [ ! -f "$OK" ] || [ ! -r "$OK" ]; }; then neden="kayıt dosyası okunamıyor: $OK"; return 1; fi
-    if [ -f "$OK" ]; then okunan="$(cut -f1 "$OK" 2>/dev/null)" || { neden="kayıt okunamadı: $OK"; return 1; }; fi
-    return 0; }
-  if [ -f "$KY" ]; then
-    # Kurye varsa kaydın sahibi odur: ÖN KONTROL YOK, doğrudan SORULUR (bağımsız göz tur 3: kaynakta komut adı aramak da tahmindir —
-    #   komutu değişkenden ya da başka dosyadan sunan kurye tanınmazdı). Tanımadığı komutta eski bir kurye yoklama kipine düşer
-    #   (touch .okundu + göç); filoda ölçüldü (23 Eki, host salt-okur): scripts/kurye-yokla.sh olan tek kutu mihenk ve iki komutu da
-    #   sunuyor — bu risk bugün yok, cevap doğrulaması yine de zorunlu. İkisi de düşerse ölçemedim; okundu.log'a BAKILMAZ
-    #   (kurye kutusunun kaydı .okundu'dur — o dosyayı aramak 71 sahte okunmamışın köküydü).
-    kaynak="kurye-yokla.sh"
-    if liste_sor; then :
-    else
-      n1="$neden"; neden=""
-      if yol_sor; then gecis="$n1 → okundu-yolu'na geçildi"
-      else neden="kurye-yokla.sh okundu kaydını söyleyemedi ($n1 · $neden) — kaydın yeri bilinmiyor, okundu.log'a bakılmadı (kurye kutusunun kaydı .okundu'dur)"; fi
-    fi
+  GELEN=0; liste=""; okunan=""; kaynak=""; neden=""; kayit_ad=0; bicim_dis=0
+  # OKUNDU KAYDI KUTUNUN DOSYASINDAN OKUNUR, KURYE KOŞTURULMAZ (gorev_01M4ZMCTDB4B84P42S6R75A8CJ · MİHENK ölçümü 14 Eki): araç kaydı
+  #   '0-teslimat/okundu.log' diye arıyor, kutu '0-teslimat/.okundu' yazıyordu; biçim de başkaydı. Dosya bulunamayınca "hepsi
+  #   okunmamış" denip 71 mektup basıldı, gerçek sayı 0'dı.
+  #   Kayıt sözleşmesi = kurye-yokla.sh'ın yazdığı DOSYA ve BİÇİM (mihenk scripts/kurye-yokla.sh satır 38-66 ile aynı kural):
+  #     'ad<TAB>sha256:<özet>' · 'ad<TAB>md5:<özet>' (göçte makbuzdan) · yalın 'ad' (eski damga). Aynı ad için SON özetli kayıt
+  #     kazanır; özet mektubun bugünkü özetini tutmuyorsa (okunduktan sonra değişmiş) okunmuş SAYILMAZ; özet iddia eden ama
+  #     tanınmayan biçim okunmuş SAYILMAZ; yalın ad okunmuş sayılır.
+  #   Kurye NİÇİN koşturulmaz (bağımsız göz tur 4): tanımadığı komutta eski bir kurye yoklama kipine düşer (touch .okundu + göç) —
+  #     salt-okur bir ölçüm kutunun durumunu değiştirmiş olur. Dosyayı okumak sormanın yan etkisiz hâlidir; kurye yalnız yazar.
+  #   Sıra: (1) .okundu varsa o okunur (kurye olsun olmasın — kayıt dosyadır) · (2) .okundu yok ama kurye-yokla.sh varsa damga
+  #     basılmamıştır: hepsi okunmamış, okundu.log'a BAKILMAZ (o dosyayı aramak 71 sahte okunmamışın köküydü) · (3) ikisi de yoksa
+  #     eski okundu.log (' | ' ayraçlı, 3. alan). Okunamayan kayıt "okunmamış" DEĞİL "ölçülemedi"dir.
+  okundu_oku() {  # $OKD → okunan (okunmuş sayılan adlar, satır satır) · kayit_ad · bicim_dis
+    local ad deger
+    while IFS=$'\t' read -r ad deger _; do
+      [ -n "$ad" ] || continue
+      kayit_ad=$((kayit_ad+1))
+      case "$deger" in
+        "")       okunan+="$ad"$'\n' ;;
+        sha256:*) [ "${deger#sha256:}" = "$(sha256sum -- "$GD/$ad" 2>/dev/null | cut -d' ' -f1)" ] && okunan+="$ad"$'\n' ;;
+        md5:*)    [ "${deger#md5:}"    = "$(md5sum    -- "$GD/$ad" 2>/dev/null | cut -d' ' -f1)" ] && okunan+="$ad"$'\n' ;;
+        *)        bicim_dis=$((bicim_dis+1)) ;;
+      esac
+    done < <(awk -F'\t' 'length($1)>0 { if (!($1 in g)) { g[$1]=1; s[++n]=$1 } if (NF>1) d[$1]=$0 } END { for (i=1;i<=n;i++) { a=s[i]; if (a in d) print d[a]; else print a } }' "$OKD" 2>/dev/null)
+    return 0
+  }
+  if [ -e "$OKD" ]; then
+    kaynak=".okundu"
+    if [ ! -f "$OKD" ] || [ ! -r "$OKD" ]; then neden="kayıt dosyası okunamıyor: $OKD"; else okundu_oku; fi
+  elif [ -f "$KY" ]; then
+    kaynak=".okundu (yok)"
   else
     kaynak="$OK"
     if [ -e "$OK" ] && { [ ! -f "$OK" ] || [ ! -r "$OK" ]; }; then neden="kayıt dosyası okunamıyor: $OK"
     elif [ -f "$OK" ]; then okunan="$(awk -F' [|] ' '{print $3}' "$OK" 2>/dev/null)" || neden="kayıt okunamadı: $OK"; fi
   fi
   if [ -n "$neden" ]; then
-    GELEN="?"; olcemedim "okundu kaydı sorgulanamadı ($kaynak · $neden) — mektuplar okunmamış SAYILMADI, sayılmadı"
+    GELEN="?"; olcemedim "okundu kaydı okunamadı ($kaynak · $neden) — mektuplar okunmamış SAYILMADI, sayılmadı"
   else
     while IFS= read -r f; do
       a="$(basename "$f")"
@@ -195,13 +186,14 @@ if [ -d "$GD" ]; then
       GELEN=$((GELEN+1)); liste+="  • $a ($(date -r "$f" +%F))"$'\n'
     done < <(find "$GD" -maxdepth 1 -type f -name '*.md' 2>/dev/null | sort)
     if [ -n "$liste" ]; then bas "$liste"; else printf '  (okunmamış mektup yok)\n'; fi
-    [ -z "$gecis" ] || printf '  not: %s\n' "$gecis"
     case "$kaynak" in
-      "kurye-yokla.sh okundu-liste") printf '  not: okundu kaydı kutudan soruldu (%s · %s okunmuş ad)\n' "$kaynak" "$(grep -c . <<<"$okunan")" ;;
-      "kurye-yokla.sh okundu-yolu"*) [ -f "$OK" ] && printf '  not: okundu kaydı kutudan soruldu (%s · %s satır)\n' "$kaynak" "$(grep -c . "$OK")" \
-                                     || printf '  not: okundu kaydı dosyası henüz yok (%s) — kutu okundu damgası basmamış; listelenenlerin hepsi okunmamış sayıldı\n' "$kaynak" ;;
+      ".okundu")
+        printf '  not: okundu kaydı %s dosyasından okundu (%s ad · %s okunmuş · kurye-yokla.sh koşturulmadı)\n' "${OKD#"$KOK"/}" "$kayit_ad" "$(grep -c . <<<"$okunan")"
+        [ "$bicim_dis" -eq 0 ] || printf '  not: %s kayıt tanınmayan özet biçiminde — okunmuş sayılmadı\n' "$bicim_dis" ;;
+      ".okundu (yok)")
+        printf '  not: okundu damgası yok (%s yok; kutuda scripts/kurye-yokla.sh var, koşturulmadı; okundu.log'"'"'a bakılmadı) — listelenenlerin hepsi okunmamış sayıldı\n' "${OKD#"$KOK"/}" ;;
       *) if [ -f "$OK" ]; then printf '  not: okundu kaydı: %s\n' "$kaynak"
-         else printf '  not: okundu kaydı yok (%s%s) — listelenenlerin hepsi okunmamış sayıldı\n' "$kaynak" "$([ -f "$KY" ] || printf '; kutuda scripts/kurye-yokla.sh de yok')"; fi ;;
+         else printf '  not: okundu kaydı yok (%s; kutuda scripts/kurye-yokla.sh de yok) — listelenenlerin hepsi okunmamış sayıldı\n' "$kaynak"; fi ;;
     esac
   fi
 else olcemedim "gelen kutusu yok: $GD (bu kutuda mektup düzeni farklı olabilir)"; fi

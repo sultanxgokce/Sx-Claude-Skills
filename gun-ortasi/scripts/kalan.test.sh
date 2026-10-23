@@ -222,122 +222,78 @@ O6="$(cd "$B" && GUN_ORTASI_SK="$SK2" GUN_ORTASI_KOK="$B" bash "$ARAC" 2>&1)"
 kapi "T5c büyük çıpa (>64K, başlık başta) tarih kapısını geçer — 'bugüne ait değil' DENMEZ, sonraki adıma (tablo) ulaşır" \
   "$(grep -c 'çıpa bugüne ait değil' <<<"$O6")/$(grep -c 'çıpa tabloya çevrilemedi' <<<"$O6")" "0/1"
 
-# ── T5d–T5g · OKUNDU KAYDI SAHİBİNDEN SORULUR (gorev_01M4ZMCTDB4B84P42S6R75A8CJ · MİHENK 14 Eki: kutu '0-teslimat/.okundu'
-#   yazıyor, araç 'okundu.log' arıyordu → 71 mektup okunmamış basıldı, gerçek 0). Sahte kurye-yokla.sh, mihenk'teki arayüzün
-#   KOPYASI: 'okundu-yolu' yolu basar; 'okundu-liste' özeti TUTAN ad+özet satırlarını ve özetsiz eski satırları okunmuş sayar.
-#   Fikstür mihenk'i taklit eder: okundu.log YOK, kayıt .okundu'da. Eski kod üçünde de "okundu.log yok — hepsi okunmamış" der.
+# ── T5d–T5n · OKUNDU KAYDI KUTUNUN DOSYASINDAN OKUNUR, KURYE KOŞTURULMAZ (gorev_01M4ZMCTDB4B84P42S6R75A8CJ · MİHENK 14 Eki: kutu
+#   '0-teslimat/.okundu' yazıyor, araç 'okundu.log' arıyordu → 71 mektup okunmamış basıldı, gerçek 0). Fikstür mihenk'i taklit eder:
+#   okundu.log YOK, kayıt .okundu'da (biçim kurye-yokla.sh'ın yazdığıyla aynı: ad<TAB>sha256:|md5:özet · yalın ad).
+#   Kutudaki kurye-yokla.sh bir KANARYA: her çağrı .kurye-cagrildi'ye iz bırakır ve eski kuryenin yoklama kipi gibi .okundu'yu
+#   "hepsi okunmuş" diye yeniden yazar — kalan.sh onu koşturursa hem iz kalır hem sayım kayar (bağımsız göz tur 4: tanımadığı
+#   komutta eski kurye touch + göç yapar; salt-okur ölçüm kutuyu değiştiremez). Eski kod üçünde de "okundu.log yok — hepsi okunmamış" der.
 mv "$B/0-teslimat/okundu.log" "$TMP/okundu.log.kenar"
 mkdir -p "$B/scripts"
-cat > "$B/scripts/kurye-yokla.sh" <<'EOF'
+cat > "$TMP/kanarya.sh" <<'EOF'
 #!/usr/bin/env bash
-# sahte kurye-yokla.sh — mihenk arayüzü: okundu-yolu · okundu-liste (ad<TAB>sha256:özet tutanlar + özetsiz eski satır) · yoklama rc 1
+# KANARYA kurye-yokla.sh — çağrılırsa iz bırakır ve .okundu'yu "hepsi okunmuş" diye yeniden yazar (eski kuryenin yoklama kipi)
 K="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/0-teslimat"
-case "${1:-}" in
-  okundu-yolu) echo "$K/.okundu"; exit 0 ;;
-  okundu-liste) [ -f "$K/.okundu" ] || exit 0
-    [ -z "${SAHTE_DUS:-}" ] || { echo "sahte: kayıt kilitli" >&2; exit 2; }
-    while IFS= read -r s; do [ -n "$s" ] || continue; ad="${s%%	*}"; [ -f "$K/gelen/$ad" ] || continue
-      case "$s" in *"	"*) d="${s#*	}"; [ "${d#sha256:}" = "$(sha256sum "$K/gelen/$ad" | cut -d' ' -f1)" ] && echo "$ad" ;;
-                   *) echo "$ad" ;; esac
-    done < "$K/.okundu"; exit 0 ;;
-  *) exit 1 ;;
-esac
+echo "çağrıldı: $*" >> "$K/.kurye-cagrildi"
+for f in "$K"/gelen/*.md; do printf '%s\tsha256:%s\n' "$(basename "$f")" "$(sha256sum "$f" | cut -d' ' -f1)"; done > "$K/.okundu"
+exit 0
 EOF
+cp "$TMP/kanarya.sh" "$B/scripts/kurye-yokla.sh"
+kanarya() { [ -f "$B/0-teslimat/.kurye-cagrildi" ] && echo 1 || echo 0; }
 # BA: özeti tutuyor (okunmuş) · A: okunduktan sonra İÇERİĞİ değişmiş (özet tutmaz → okunmamış) · ESKI: kayıtta yok
 printf 'BA.md\tsha256:%s\nA.md\tsha256:0000000000000000000000000000000000000000000000000000000000000000\n' "$(sha256sum "$B/0-teslimat/gelen/BA.md" | cut -d' ' -f1)" > "$B/0-teslimat/.okundu"
+OKD_ONCE="$(sha256sum "$B/0-teslimat/.okundu" | cut -d' ' -f1)"
 O7="$(kos env)"
-kapi "T5d kutunun kurye-yokla.sh'ı 'okundu-liste' biliyor: kayıt .okundu'dan SORULUR — BA okunmuş, A (özeti tutmaz) ve ESKI okunmamış → gelen 2; 'okundu.log yok' DENMEZ; kaynak yazılır" \
-  "$(oz "$O7" gelen)/$(grep -c '• BA.md' <<<"$O7")/$(grep -c '• A.md' <<<"$O7")/$(grep -c 'okundu kaydı yok' <<<"$O7")/$(grep -c 'kurye-yokla.sh okundu-liste · 1 okunmuş ad' <<<"$O7")" "2/0/1/0/1"
-# T5e · yalnız 'okundu-yolu' bilen eski kurye-yokla.sh: yol sorulur, satırın TAB'a kadar olan ilk alanı addır (özet denetimi kutuda değil → ad yeter)
-cat > "$B/scripts/kurye-yokla.sh" <<'SAHTE'
-#!/usr/bin/env bash
-# sahte eski kurye-yokla.sh — yalnız yol komutunu bilir (liste arayüzü yok)
-K="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/0-teslimat"
-if [ "${1:-}" = "okundu-yolu" ]; then echo "$K/.okundu"; exit 0; fi
-exit 1
-SAHTE
-printf 'BA.md\tsha256:abc\nA.md\n' > "$B/0-teslimat/.okundu"
+kapi "T5d kayıt .okundu'dan OKUNUR (kurye koşturulmaz): BA okunmuş, A (özeti tutmaz) ve ESKI okunmamış → gelen 2; 'okundu.log yok' DENMEZ; not kaynağı ve sayıları söyler; kanarya 0" \
+  "$(oz "$O7" gelen)/$(grep -c '• BA.md' <<<"$O7")/$(grep -c '• A.md' <<<"$O7")/$(grep -c 'okundu kaydı yok' <<<"$O7")/$(grep -c '0-teslimat/.okundu dosyasından okundu (2 ad · 1 okunmuş · kurye-yokla.sh koşturulmadı)' <<<"$O7")/$(kanarya)" "2/0/1/0/1/0"
+kapi "T5d2 ölçüm .okundu'yu DEĞİŞTİRMEZ (yan etki yok): dosya özeti önce = sonra" \
+  "$([ "$OKD_ONCE" = "$(sha256sum "$B/0-teslimat/.okundu" | cut -d' ' -f1)" ] && echo ayni || echo degisti)" "ayni"
+# T5e · md5 özetli kayıt (göçte makbuzdan gelen) + yalın ad (eski damga): ikisi de okunmuş → yalnız ESKI
+printf 'BA.md\tmd5:%s\nA.md\n' "$(md5sum "$B/0-teslimat/gelen/BA.md" | cut -d' ' -f1)" > "$B/0-teslimat/.okundu"
 O8="$(kos env)"
-kapi "T5e yalnız 'okundu-yolu' bilen kurye-yokla.sh: .okundu okunur, ad = TAB'a kadar ilk alan (özetli de yalın da) → yalnız ESKI → gelen 1" \
-  "$(oz "$O8" gelen)/$(grep -c '• ESKI.md' <<<"$O8")/$(grep -c '• BA.md' <<<"$O8")/$(grep -c '• A.md' <<<"$O8")" "1/1/0/0"
-# T5f · sahip sorgusu DÜŞERSE (rc 2): mektuplar okunmamış sayılmaz — gelen '?' ve ölçemedim +1 (okunamayan kayıt ≠ boş kayıt)
-cat > "$B/scripts/kurye-yokla.sh" <<'EOF'
-#!/usr/bin/env bash
-case "${1:-}" in okundu-liste) echo "sahte: kayıt kilitli" >&2; exit 2 ;; okundu-yolu) echo x; exit 0 ;; *) exit 1 ;; esac
-EOF
+kapi "T5e md5 özetli kayıt + yalın ad kaydı: BA ve A okunmuş → yalnız ESKI → gelen 1; kanarya 0" \
+  "$(oz "$O8" gelen)/$(grep -c '• ESKI.md' <<<"$O8")/$(grep -c '• BA.md' <<<"$O8")/$(grep -c '• A.md' <<<"$O8")/$(kanarya)" "1/1/0/0/0"
+# T5f · aynı ad için SON özetli kayıt kazanır (kurye-yokla.sh kayit_al kuralı): A önce yanlış sonra doğru → okunmuş; BA önce doğru sonra yanlış → okunmamış
+printf 'A.md\tsha256:0000000000000000000000000000000000000000000000000000000000000000\nBA.md\tsha256:%s\nA.md\tsha256:%s\nBA.md\tsha256:1111111111111111111111111111111111111111111111111111111111111111\n' \
+  "$(sha256sum "$B/0-teslimat/gelen/BA.md" | cut -d' ' -f1)" "$(sha256sum "$B/0-teslimat/gelen/A.md" | cut -d' ' -f1)" > "$B/0-teslimat/.okundu"
 O9="$(kos env)"
-kapi "T5f kurye-yokla.sh okundu-liste rc 2 → gelen '?' ve ölçemedim +1; üç mektubun hiçbiri '•' ile okunmamış basılmaz" \
-  "$(oz "$O9" gelen)/$(oz "$O9" olcemedim)/$(grep -cE '• (A|BA|ESKI)\.md' <<<"$O9")" "?/$(( $(oz "$O7" olcemedim) + 1 ))/0"
-# T5h · okundu-yolu başarıyla döner ama bildirdiği yol okunabilir bir dosya DEĞİL (dizin): ölçemedim, boş liste ile "hepsi okunmamış" DENMEZ (göz tur 1)
-cat > "$B/scripts/kurye-yokla.sh" <<'SAHTE'
-#!/usr/bin/env bash
-K="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/0-teslimat"
-if [ "${1:-}" = "okundu-yolu" ]; then echo "$K/okundu-dizin"; exit 0; fi
-exit 1
-SAHTE
-mkdir -p "$B/0-teslimat/okundu-dizin"
+kapi "T5f aynı ad için son özetli kayıt kazanır: A okunmuş, BA okunmamış → gelen 2 (BA, ESKI); not '2 ad · 1 okunmuş'" \
+  "$(oz "$O9" gelen)/$(grep -c '• A.md' <<<"$O9")/$(grep -c '• BA.md' <<<"$O9")/$(grep -c '(2 ad · 1 okunmuş' <<<"$O9")" "2/0/1/1"
+# T5h · özet İDDİA eden ama tanınmayan biçim (blake3:…): okunmuş SAYILMAZ (kurye kuralı: 'biçimi tanınmayan ama özet iddia eden satır okunmuş sayılmaz') ve söylenir
+printf 'BA.md\tblake3:abc\nA.md\tsha256:%s\n' "$(sha256sum "$B/0-teslimat/gelen/A.md" | cut -d' ' -f1)" > "$B/0-teslimat/.okundu"
 O11="$(kos env)"
-kapi "T5h okundu-yolu'nun bildirdiği yol dizin (okunamaz) → gelen '?' ve ölçemedim +1" \
-  "$(oz "$O11" gelen)/$(oz "$O11" olcemedim)" "?/$(( $(oz "$O7" olcemedim) + 1 ))"
-rmdir "$B/0-teslimat/okundu-dizin"
-# T5i · okundu-liste rc 0 ama cevap gelen/ dosya adı değil (yoklama metni sızmış) → beklenmedik cevap = ölçemedim
-cat > "$B/scripts/kurye-yokla.sh" <<'SAHTE'
-#!/usr/bin/env bash
-if [ "${1:-}" = "okundu-liste" ]; then echo "🔴 gelen/ içinde okunmamış 2 mektup var"; exit 0; fi
-exit 1
-SAHTE
+kapi "T5h tanınmayan özet biçimi (blake3) okunmuş sayılmaz: BA ve ESKI okunmamış → gelen 2; not '1 kayıt tanınmayan özet biçiminde — okunmuş sayılmadı'" \
+  "$(oz "$O11" gelen)/$(grep -c '• BA.md' <<<"$O11")/$(grep -c '1 kayıt tanınmayan özet biçiminde — okunmuş sayılmadı' <<<"$O11")" "2/1/1"
+# T5i · .okundu var ama okunabilir bir dosya DEĞİL (dizin): ölçemedim, boş liste ile "hepsi okunmamış" DENMEZ (okunamayan kayıt ≠ boş kayıt)
+rm -f "$B/0-teslimat/.okundu"; mkdir -p "$B/0-teslimat/.okundu"
 O12="$(kos env)"
-kapi "T5i okundu-liste cevabı gelen/ dosya adı değil → ölçemedim, mektuplar sayılmaz" \
-  "$(oz "$O12" gelen)/$(oz "$O12" olcemedim)/$(grep -c 'beklenmedik cevap' <<<"$O12")" "?/$(( $(oz "$O7" olcemedim) + 1 ))/1"
-# T5j · arayüz başka yazımla: tek tırnaklı case etiketi + yardımcı fonksiyon — yine tanınır ve sorulur (destek metin kalıbından çıkarılmaz)
-cat > "$B/scripts/kurye-yokla.sh" <<'SAHTE'
-#!/usr/bin/env bash
-K="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/0-teslimat"
-liste_bas() { while IFS= read -r s; do ad="${s%%	*}"; [ -f "$K/gelen/$ad" ] && echo "$ad"; done < "$K/.okundu"; }
-komut() { case "$1" in 'okundu-liste') liste_bas; exit 0 ;; 'okundu-yolu') echo "$K/.okundu"; exit 0 ;; esac; }
-komut "${1:-}"; exit 1
-SAHTE
-printf 'BA.md\tsha256:abc\nA.md\n' > "$B/0-teslimat/.okundu"
-O13="$(kos env)"
-kapi "T5j tek tırnak + yardımcı fonksiyonla yazılmış arayüz de tanınır: okundu-liste soruldu → BA ve A okunmuş → gelen 1" \
-  "$(oz "$O13" gelen)/$(grep -c 'kurye-yokla.sh okundu-liste · 2 okunmuş ad' <<<"$O13")" "1/1"
-# T5k · kurye-yokla.sh VAR ama okundu arayüzü YOK ve okundu.log da yok: eski yola sessizce düşülmez → kaydın yeri bilinmiyor = ölçemedim
-printf '#!/usr/bin/env bash\necho yokluyorum; exit 1\n' > "$B/scripts/kurye-yokla.sh"
+kapi "T5i .okundu dizin (okunamaz) → gelen '?' ve ölçemedim +1; hiçbir mektup '•' ile basılmaz; kanarya 0" \
+  "$(oz "$O12" gelen)/$(oz "$O12" olcemedim)/$(grep -cE '• (A|BA|ESKI)\.md' <<<"$O12")/$(kanarya)" "?/$(( $(oz "$O7" olcemedim) + 1 ))/0/0"
+rmdir "$B/0-teslimat/.okundu"
+# T5k · kurye-yokla.sh VAR, .okundu YOK, okundu.log da yok: damga basılmamış = hiç okunmamış (3); kurye koşturulmaz, okundu.log aranmaz, ölçemedim artmaz
 O14="$(kos env)"
-kapi "T5k kurye var, arayüz yok, okundu.log yok → gelen '?' + ölçemedim 'kaydın yeri bilinmiyor' (3 okunmamış DENMEZ)" \
-  "$(oz "$O14" gelen)/$(oz "$O14" olcemedim)/$(grep -c 'kaydın yeri bilinmiyor' <<<"$O14")" "?/$(( $(oz "$O7" olcemedim) + 1 ))/1"
-# T5l · kurye var, arayüz yok, yanında okundu.log da VAR: kurye kutusunun kaydı .okundu'dur — okundu.log'a BAKILMAZ (eski hata o dosyayı sanıp
-#   'hepsi okunmamış' demekti); ölçemedim der ve bakılmadığını söyler
+kapi "T5k kurye var, .okundu yok, okundu.log yok → üçü de okunmamış (3) + not 'okundu damgası yok … koşturulmadı … bakılmadı'; ölçemedim artmaz; kanarya 0" \
+  "$(oz "$O14" gelen)/$(grep -c "okundu damgası yok (0-teslimat/.okundu yok; kutuda scripts/kurye-yokla.sh var, koşturulmadı; okundu.log'a bakılmadı)" <<<"$O14")/$(oz "$O14" olcemedim)/$(kanarya)" "3/1/$(oz "$O7" olcemedim)/0"
+# T5l · kurye var, .okundu yok, yanında okundu.log VAR (BA okunmuş yazar): kurye kutusunun kaydı .okundu'dur — okundu.log'a BAKILMAZ (eski hata o dosyayı kayıt sanmaktı)
 cp "$TMP/okundu.log.kenar" "$B/0-teslimat/okundu.log"
 O15="$(kos env)"
-kapi "T5l kurye var, arayüz yok, okundu.log var → yine ölçemedim; not 'okundu.log'a bakılmadı'; okundu.log'daki BA bilgisi KULLANILMAZ" \
-  "$(oz "$O15" gelen)/$(oz "$O15" olcemedim)/$(grep -c "okundu.log'a bakılmadı" <<<"$O15")" "?/$(( $(oz "$O7" olcemedim) + 1 ))/1"
+kapi "T5l kurye var, .okundu yok, okundu.log var → yine 3 okunmamış (BA dahil); okundu.log'daki BA bilgisi KULLANILMAZ; not bakılmadığını söyler; kanarya 0" \
+  "$(oz "$O15" gelen)/$(grep -c '• BA.md' <<<"$O15")/$(grep -c "okundu.log'a bakılmadı" <<<"$O15")/$(kanarya)" "3/1/1/0"
 rm -f "$B/0-teslimat/okundu.log"
-# T5m · okundu-yolu'nun bildirdiği dosya HENÜZ yok (kutu damga basmamış): kutunun kendi anlamı 'hiç okunmamış' → 3, not bunu söyler
-cat > "$B/scripts/kurye-yokla.sh" <<'SAHTE'
-#!/usr/bin/env bash
-K="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/0-teslimat"
-if [ "${1:-}" = "okundu-yolu" ]; then echo "$K/.okundu"; exit 0; fi
-exit 1
-SAHTE
-rm -f "$B/0-teslimat/.okundu"
+# T5m · kurye YOK ama .okundu VAR: kayıt dosyadır, kurye şart değil — yine .okundu okunur
+rm -f "$B/scripts/kurye-yokla.sh"
+printf 'BA.md\tsha256:%s\nA.md\n' "$(sha256sum "$B/0-teslimat/gelen/BA.md" | cut -d' ' -f1)" > "$B/0-teslimat/.okundu"
 O16="$(kos env)"
-kapi "T5m okundu-yolu var, dosya henüz yok → üçü de okunmamış (3) ve not 'dosyası henüz yok … damgası basmamış'" \
-  "$(oz "$O16" gelen)/$(grep -c 'dosyası henüz yok' <<<"$O16")" "3/1"
-# T5n · sözcük geçer, komut yok (göz tur 2): yalnız-yol betiğinin yardım metninde 'okundu-liste' geçer → liste sorulur, düşer (rc 1),
-#   SIRADAKİNE geçilir: okundu-yolu doğrulanır ve kullanılır; geçiş notta yazılır. Eski tur burada ölçemedim diyordu (yol hiç sorulmuyordu).
-cat > "$B/scripts/kurye-yokla.sh" <<'SAHTE'
-#!/usr/bin/env bash
-# sahte eski kurye-yokla.sh — yalnız yol komutu; yardım metni ileride gelecek okundu-liste komutunu ANAR ama sunmaz
-K="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/0-teslimat"
-if [ "${1:-}" = "okundu-yolu" ]; then echo "$K/.okundu"; exit 0; fi
-echo "kullanım: kurye-yokla.sh [okundu-yolu]   (okundu-liste henüz yok)" >&2; exit 1
-SAHTE
-printf 'BA.md\tsha256:abc\nA.md\n' > "$B/0-teslimat/.okundu"
-O17="$(kos env)"
-kapi "T5n yardım metninde 'okundu-liste' geçen yalnız-yol betiği: liste düşer (rc 1) → okundu-yolu'na GEÇİLİR → gelen 1; geçiş notu var; ölçemedim artmaz" \
-  "$(oz "$O17" gelen)/$(grep -c "okundu-liste rc=1 → okundu-yolu'na geçildi" <<<"$O17")/$(oz "$O17" olcemedim)" "1/1/$(oz "$O7" olcemedim)"
-# T5g · kurye-yokla.sh de okundu.log da yok: eski yol, dürüst not (hepsi okunmamış sayıldı + kutuda kurye-yokla.sh de yok)
+kapi "T5m kurye yok, .okundu var → .okundu okunur: BA ve A okunmuş → gelen 1; not '.okundu dosyasından okundu'" \
+  "$(oz "$O16" gelen)/$(grep -c '0-teslimat/.okundu dosyasından okundu' <<<"$O16")" "1/1"
+# T5n · POZİTİF KONTROL — kanaryanın kendisi sağlam mı: kurye ELLE çağrılırsa iz bırakır ve .okundu'yu 3 satıra yeniden yazar;
+#   kalan.sh onu koşturmuş olsaydı T5d/T5e/T5k/T5l kanarya 1 ve sayımlar kaymış görünürdü (ölçer ölçülmeden olumsuz hüküm yok)
+cp "$TMP/kanarya.sh" "$B/scripts/kurye-yokla.sh"
+bash "$B/scripts/kurye-yokla.sh" okundu-liste >/dev/null 2>&1
+kapi "T5n pozitif kontrol: kanarya kurye elle çağrılınca iz bırakır (1) ve .okundu'yu 3 satıra yeniden yazar — yan etki görünür" \
+  "$(kanarya)/$(grep -c . "$B/0-teslimat/.okundu")" "1/3"
+rm -f "$B/0-teslimat/.kurye-cagrildi"
+# T5g · kurye-yokla.sh de .okundu da okundu.log da yok: eski yol, dürüst not (hepsi okunmamış sayıldı + kutuda kurye-yokla.sh de yok)
 rm -rf "$B/scripts" "$B/0-teslimat/.okundu"
 O10="$(kos env)"
 kapi "T5g kayıt da kurye-yokla.sh de yok: üçü de okunmamış (3) ve not 'okundu kaydı yok … kurye-yokla.sh de yok'" \

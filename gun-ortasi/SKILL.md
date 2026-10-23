@@ -43,7 +43,7 @@ GUN_ORTASI_GUN=7 bash /config/.claude/skills/gun-ortasi/scripts/kalan.sh # daha 
 | 2 | fabrika kartları | açık kart (tıkandı = tavanda karar verilmiş → ayrı sayılır) |
 | 3 | konum çapaları (`*-durum.md`, son N gün) | açık / kalan / ayrı kart / SARI / SIRADA satırları |
 | 4 | bağımsız göz — her işin SON raporu | `BAGIMSIZ-GOZ-kor-*.md` ya da fabrika `DENETIM-*.json`; 5·E değilse ya da kapanmamış bulgu varsa |
-| 5 | gelen kutusu | okundu kaydı KUTUDAN sorulur: `scripts/kurye-yokla.sh okundu-liste` (okunmuş adlar; biçim kutuda kalır), yoksa `okundu-yolu`, o da yoksa `0-teslimat/okundu.log`; kayıtta TAM adıyla olmayan her mektup. Sorgu düşerse ölçemedim (okunmamış sayılmaz) |
+| 5 | gelen kutusu | okundu kaydı kutunun DOSYASINDAN okunur, kurye KOŞTURULMAZ: `0-teslimat/.okundu` (kurye-yokla.sh biçimi: `ad<TAB>sha256:`/`md5:` özet ya da yalın ad; son özetli kayıt kazanır; özeti tutmayan ya da tanınmayan biçim okunmuş sayılmaz); kurye var ama `.okundu` yoksa damga yok (hepsi okunmamış, okundu.log'a bakılmaz); kuryesiz kutuda `0-teslimat/okundu.log`. Kayıtta TAM adıyla olmayan her mektup. Kayıt okunamıyorsa ölçemedim (okunmamış sayılmaz) |
 | 6 | layiha defteri | inşa bekleyen aktif layiha |
 | 7 | Sultan'ın kapısı | Sultan'ı bekleyen kart |
 | 8 | hedef dosyaları | ANA-HEDEF.md · CLAUDE.md "Amaç" (fikirlerin bağlanacağı yer) |
@@ -150,20 +150,23 @@ Akşam `/gunluk-plan kapanis` sabah + gün ortası maddelerini birlikte okur.
 - **1.3.0 (2026-10-23, BÂNİ · MİHENK/NECCAR bildirdi, gorev_01M4ZMCTDB4B84P42S6R75A8CJ):** `kalan.sh` 5. bölüm okundu
   kaydının **adını ve biçimini tahmin ediyordu** (`0-teslimat/okundu.log`, ` | ` ayraçlı 3. alan). mihenk `0-teslimat/.okundu`
   yazıyor ve biçimi `ad<TAB>algoritma:özet` — araç dosyayı bulamayınca "okundu.log yok — hepsi okunmamış" deyip **71 mektubu**
-  okunmamış bastı; gerçek sayı 0'dı. Kaydın adını yalnız sahibi bilir: artık kutunun `scripts/kurye-yokla.sh`'ı `okundu-liste`
-  biliyorsa okunmuş adlar **ondan** alınır (özeti tutmayan satır okunmuş sayılmaz), yalnız `okundu-yolu` biliyorsa yol sorulur
-  ve satırın TAB'a kadar olan ilk alanı addır; kurye-yokla.sh yoksa eski `okundu.log` yolu aynen. Sahip sorgusu düşerse
-  (rc≠0) ya da cevabı biçime uymazsa (okundu-liste satırı gelen/ dosyası değil · okundu-yolu tek satır mutlak yol değil ·
-  bildirdiği dosya okunamıyor) gelen `?` + ölçemedim — okunamayan kayıt "okunmamış" değil "ölçülemedi"dir. Arayüz desteği
-  kaynak metninden çıkarılmaz (bağımsız göz tur 1-3): kurye-yokla.sh varsa komut **ön kontrolsüz sorulur**, cevap biçimle
-  doğrulanır; doğrulanmazsa **sıradakine geçilir** (okundu-liste → okundu-yolu → ölçemedim) ve geçiş notta yazılır. Kurye
-  varken okundu.log'a hiç bakılmaz (kurye kutusunun kaydı `.okundu`dur; ikisi de düşerse "kaydın yeri bilinmiyor" ölçemedim).
-  Tanınmayan komutta eski bir kurye yoklama kipine düşerdi (touch + göç) — filoda ölçüldü (23 Eki): kurye-yokla.sh olan tek
-  kutu mihenk, iki komutu da sunuyor. Not satırı hangi kaynağa bakıldığını söyler. Kapılar **T5d–T5n** (sahte kurye-yokla.sh
-  = mihenk arayüzünün kopyası; özeti tutmayan mektup okunmamış kalır; tek tırnak + yardımcı fonksiyon yazımı; dizin/garip
-  cevap/arayüzsüz kurye → ölçemedim, yanındaki okundu.log'a bakılmadığı söylenir; yardım metninde anılan ama sunulmayan komut →
-  sıradakine geçiş); eski kod bunların tümünde kırmızı. Canlı ölçüm: mihenk kutusu (86 .md mektup, .okundu 86 satır) eski
-  kodla gelen=86 "okundu.log yok", yeni kodla gelen=0. 46 kapı.
+  okunmamış bastı; gerçek sayı 0'dı. Kayıt sözleşmesi kurye-yokla.sh'ın yazdığı **dosya ve biçimdir**: artık `0-teslimat/.okundu`
+  doğrudan, salt-okur okunur — `ad<TAB>sha256:özet` · `ad<TAB>md5:özet` (göçte makbuzdan) · yalın `ad` (eski damga); aynı ad için
+  **son özetli kayıt kazanır**; özet mektubun bugünkü özetini tutmuyorsa (okunduktan sonra değişmiş) ya da özet iddia eden biçim
+  tanınmıyorsa okunmuş **sayılmaz** (kurye-yokla.sh'ın kendi kuralı). Kurye **koşturulmaz** (bağımsız göz tur 4): tanımadığı
+  komutta eski bir kurye yoklama kipine düşer (touch .okundu + göç) ve salt-okur ölçüm kutuyu değiştirmiş olur — dosyayı okumak
+  sormanın yan etkisiz hâlidir. Kurye var ama `.okundu` yoksa damga basılmamıştır: hepsi okunmamış + not, `okundu.log`'a
+  bakılmaz (o dosyayı aramak 71 sahte okunmamışın köküydü). Kurye-yokla.sh yoksa eski `okundu.log` yolu aynen. Kayıt dosyası
+  okunamıyorsa (dizin, izin) gelen `?` + ölçemedim — okunamayan kayıt "okunmamış" değil "ölçülemedi"dir. Not satırı kaynağı,
+  kayıt/okunmuş sayısını ve kuryenin koşturulmadığını söyler. Göz turları: tur 1-3 arayüz desteğinin kaynak metninden
+  çıkarılmasına itiraz etti (sor, cevabı doğrula, sıradakine geç); tur 4 körlemesine sormanın eski kuryede yan etkisini buldu →
+  daraltıldı: kuryeye hiç sorulmaz, dosya okunur (kurye arayüzüyle sorgu ayrı kart `gun-ortasi-okundu-kurye-sorgu`). Kapılar
+  **T5d–T5n**: kutudaki kurye-yokla.sh bir KANARYA (çağrılırsa iz bırakır ve `.okundu`'yu "hepsi okunmuş" yazar) — hiçbir kapıda
+  iz yok, `.okundu` özeti önce=sonra; sha256/md5/yalın ad, son kayıt kazanır, tanınmayan biçim (blake3) okunmamış, dizin →
+  ölçemedim, kurye var `.okundu` yok → 3 + damga notu (okundu.log'daki bilgi kullanılmaz), kurye yok `.okundu` var → okunur,
+  pozitif kontrol (kanarya elle çağrılınca iz 1 + 3 satır); eski kod bunların tümünde kırmızı. Canlı ölçüm: mihenk kutusu
+  (86 .md mektup, .okundu 86 satır, dosya 21 Eki'den beri değişmemiş) eski kodla gelen=86 "okundu.log yok", yeni kodla gelen=0
+  (kurye koşturulmadan; .okundu değişmedi). 46 kapı.
 - **1.2.1 (2026-10-18, MUAVİN · TELLAL bildirdi, gorev_01M55X6PGK9C9K8MRSY0E01W3Q):** `kalan.sh` okundu
   kaydındaki mektubu **okunmamış** sayıyordu. Kök: `set -o pipefail` altında `printf | grep -q` — grep ilk
   eşleşmede çıkar, printf SIGPIPE alır, boru rc≠0 döner ve "bulundu" "bulunamadı" sayılır. Büyük kayıtta
