@@ -1,0 +1,31 @@
+{
+  "is": "denetci-zil-kuyruk",
+  "cumle": "denetçinin bitiş zili meşgul yazana da ulaşır: yazana gönderen adı taşımayan düz ping (denetçi: önekli) gider, kuyrukta 'kendine' sayılıp düşmez, boşalınca teslim edilir; sahte 'YAZAN iş-bitti' kaydı açılmaz; kuyruğa giren zil 'gönderilemedi' değil 'kuyrukta' diye söylenir",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-23T03:34:16+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi; cümlede: zil, zili)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5FA6RM7E5R8PA8G6XAB843Q",
+  "tahmin_dk": 60,
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-23T03:34:17+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
