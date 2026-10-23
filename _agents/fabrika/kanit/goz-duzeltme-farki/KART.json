@@ -1,0 +1,32 @@
+{
+  "is": "goz-duzeltme-farki",
+  "cumle": "Bağımsız göz düzeltme turunda (tur ≥2) göze önceki turun bulguları ayrı başlıkla ve yalnız önceki turun incelediği baştan bu yana değişen fark gitsin; her DENETIM kaydı incelediği başı (bas) yazar; göze giden istem 100 KB'ı (100000 bayt) aşınca gönderim durur, tur yakılmaz",
+  "istedi": "SERDAR",
+  "aldi": "HENDESE",
+  "zaman": "2026-10-23T08:51:49+03:00",
+  "sinif_cevaplari": {
+    "geri_alinamaz": "h",
+    "para": "h",
+    "dis_yuzey": "h",
+    "yetki": "h"
+  },
+  "siniflar": [],
+  "sultan": false,
+  "kanit_nerede": "",
+  "oda": "",
+  "durum": "acik",
+  "gecmis": [],
+  "canli_gerekir": false,
+  "canli_sebep": "--canli h (sahip: canlı kanıt gerekmez dedi)",
+  "kapsam_uyarilari": [],
+  "gorev": "gorev_01M5JF5768X01SKG4QA11SYV3F",
+  "tahmin_dk": 120,
+  "sayi_uyarilari": [],
+  "gorev_yazimlari": [
+    {
+      "zaman": "2026-10-23T08:51:50+03:00",
+      "olay": "ac",
+      "sonuc": "yazıldı"
+    }
+  ]
+}
