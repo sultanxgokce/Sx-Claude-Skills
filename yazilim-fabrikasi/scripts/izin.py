@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""izin — BAŞLAMA İZNİ / VETO penceresi (0.19.0 · Sultan D1 22 Eki 2026). Tek gerçek: kart.sh izin-durum, canli_borc.py,
+"""izin — BAŞLAMA İZNİ / VETO penceresi (0.21.0 · Sultan D1 22 Eki 2026). Tek gerçek: kart.sh izin-durum, canli_borc.py,
 denetci.sh ve birlestirme-kapisi.sh (kart.sh izin-durum üstünden) ve gun-sonu.sh buradan okur; kural metni adimlar/0-kabul.md'de yaşar.
 
 NİÇİN (Sultan, 22 Eki 2026, session_01Ge4BawKcUrcm1pdV8WANyF): "sadece ara kararlar değil birleştirme kararları da reise geçsin
@@ -19,7 +19,7 @@ SINIFSIZ kartta baslama_izni alanı OLMAZ: kart.sh sultan-dedi basla|dur'u sın�
 yazıyor, "kapı kapalı" diyordu, hiçbir kapı okumuyordu). Elle yazılmış alan YOK SAYILIR ve açıklamada söylenir; her yüzey "gerekmiyor" okur.
 """
 
-KURAL_SURUMU = "0.19.0"
+KURAL_SURUMU = "0.21.0"
 DURUMLAR = ("gerekmiyor", "bekliyor", "basla", "dur")
 
 

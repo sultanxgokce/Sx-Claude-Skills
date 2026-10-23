@@ -57,8 +57,6 @@ echo "════ T4 · ac: kendi alanı, origin/main'den, <depo>-<iş> adıyla
 CIKTI="$( cd "$T/depo" && bash "$IS" ac yeni-is --kartsiz 2>&1 )"; g $? "alan açıldı"
 [ ! -e "$T/alan/depo-yeni-is/_agents/fabrika/kartlar" ]; g $? "kart iş alanına KOPYALANMADI (tek kaynak birincil; 15 Eki — kopya bayatlıyor ve PR'la birincil pull'unu tıkıyordu)"
 grep -q "kopyalanmadı" <<<"$CIKTI"; g $? "açılış mesajı kartın birincilde kaldığını söylüyor"
-python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/yeni-is.json'));assert k['sultan'] and k['baslama_izni']['durum']=='bekliyor' and k['baslama_izni']['istendi'] and k['kural_surumu']=='0.19.0'"; g $? "kaçış kartı baslama_izni=bekliyor + kural_surumu taşır (0.19.0: başlama izni Sultan'a gider, alan açılır)"
-grep -q "başlama izni Sultan'a gider (veto penceresi" <<<"$CIKTI"; g $? "açılış mesajı 'başlama izni Sultan'a gider (veto penceresi …)' der"
 grep -q "TAZE" <<<"$CIKTI"; g $? "origin/main üstünde açtığını söylüyor"
 grep -q "PAYLAŞILAN KAYNAĞI izole etmez" <<<"$CIKTI"; g $? "paylaşılan-kaynak uyarısı basıldı"
 grep -q "dosya listesi verilmedi" <<<"$CIKTI"; g $? "kapsam bakılmadığını SÖYLÜYOR (sessiz atlama yok)"

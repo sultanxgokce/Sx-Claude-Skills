@@ -33,20 +33,20 @@ python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-1.j
 echo "════ T3 · '?' cevabı → şüphede yukarı, Sultan'a gider ════"
 CIKTI="$(bash "$KT" ac is-2 --is "anasayfa görünümü" --istedi reis --aldi NAKKAS --geri-alinamaz h --para h --dis-yuzey '?' --yetki h --oda sinav-oda 2>&1)"
 grep -q "SULTAN'A GİDER" <<<"$CIKTI"; g $? "SULTAN'A GİDER"
-grep -q "BAŞLAMA İZNİ" <<<"$CIKTI" && grep -q "veto penceresi" <<<"$CIKTI"; g $? "0.19.0: 'BAŞLAMA İZNİ … veto penceresi' der (iş bekletilmez)"
+grep -q "BAŞLAMA İZNİ" <<<"$CIKTI" && grep -q "veto penceresi" <<<"$CIKTI"; g $? "0.21.0: 'BAŞLAMA İZNİ … veto penceresi' der (iş bekletilmez)"
 python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-2.json'));assert k['sultan'] and k['siniflar']==['dis_yuzey']"; g $? "sınıf dis_yuzey"
-python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-2.json'));assert k['baslama_izni']['durum']=='bekliyor' and k['baslama_izni']['istendi'] and k['kural_surumu']=='0.19.0'"; g $? "karta baslama_izni=bekliyor + istendi + kural_surumu 0.19.0 yazıldı"
+python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-2.json'));assert k['baslama_izni']['durum']=='bekliyor' and k['baslama_izni']['istendi'] and k['kural_surumu']=='0.21.0'"; g $? "karta baslama_izni=bekliyor + istendi + kural_surumu 0.21.0 yazıldı"
 python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-1.json'));assert 'baslama_izni' not in k and 'kural_surumu' not in k"; g $? "sınıfsız kartta alan YOK (bayt bayt eski davranış)"
 [ "$(bash "$KT" izin-durum is-2 | cut -f1)" = bekliyor ] && [ "$(bash "$KT" izin-durum is-1 | cut -f1)" = gerekmiyor ]; g $? "izin-durum: sınıflı → bekliyor, sınıfsız → gerekmiyor"
 bash "$KT" ac is-2 --is x --istedi a --aldi b --geri-alinamaz h --para h --dis-yuzey h --yetki h >/dev/null 2>&1; [ $? -eq 1 ]; g $? "aynı ad ikinci kez açılmaz"
 
-echo "════ T9 · reis-dedi: ayrı alana yazar; 0.19.0 FLİP — SINIFLI kartta da KABUL (sinifli:true), Sultan'ın alanına dokunmaz (A268 + D1 22 Eki) ════"
+echo "════ T9 · reis-dedi: ayrı alana yazar; 0.21.0 FLİP — SINIFLI kartta da KABUL (sinifli:true), Sultan'ın alanına dokunmaz (A268 + D1 22 Eki) ════"
 CIKTI="$(bash "$KT" reis-dedi is-1 --karar devam --reis MUAVIN --oturum ref-a --gerekce "uc turun bulgulari farkliydi ve hepsi kapandi" 2>&1)"; RC=$?; [ "$RC" -eq 0 ] || echo "    ↳ $CIKTI"; g $RC "sınıfsız karta (is-1) reis kararı işlendi"
 python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-1.json'));r=k['reis_kararlari'][-1];assert r['reis']=='MUAVIN' and r['oturum']=='ref-a' and 'sultan_kararlari' not in k"; g $? "🔴 reis_kararlari dolu, sultan_kararlari YOK (Sultan'ın alanına yazılmadı)"
 CIKTI="$(bash "$KT" reis-dedi is-2 --karar devam --reis NAKKAS --oturum ref-b --gerekce "uc turun bulgulari farkliydi ve hepsi kapandi" 2>&1)"; RC=$?; [ "$RC" -eq 0 ] || echo "    ↳ $CIKTI"; g $RC "🔴 FLİP: SINIFLI karta (is-2, dis_yuzey) reis kararı KABUL EDİLDİ (rc 0) — eski kural reddederdi"
 python3 -c "import json;k=json.load(open('$T/depo/_agents/fabrika/kartlar/is-2.json'));r=k['reis_kararlari'][-1];assert r['sinifli'] is True and r['izin']=='bekliyor' and r['reis']=='NAKKAS' and 'sultan_kararlari' not in k"; g $? "🔴 kayıt reis_kararlari'nda sinifli:true + izin; sultan_kararlari OLUŞMADI (A06: Sultan sözü gibi yazılmadı)"
 grep -q "Sultan sozu degil" <<<"$CIKTI" && grep -q "SINIFLI" <<<"$CIKTI"; g $? "çıktı 'reis kararı, Sultan sözü değil' der (etiketli)"
-bash "$KT" reis-dedi is-2 --karar birlestir --reis NAKKAS --oturum ref-b --gerekce "kanit tam, goz 5/E, veto yok; birlestirme karari reisin" >/dev/null 2>&1; g $? "yeni küme üyesi 'birlestir' kabul (canli-borc da kümede)"
+bash "$KT" reis-dedi is-2 --karar birlestir --reis NAKKAS --oturum ref-b --gerekce "kanit tam, goz 5/E, veto yok; birlestirme karari reisin" >/dev/null 2>&1; g $? "yeni küme üyesi 'birlestir' kabul (canli-borc ikinci kartta)"
 bash "$KT" reis-dedi is-1 --karar devam --reis MUAVIN --oturum ref-a --gerekce "kisa" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "kısa gerekçe REDDEDİLDİ"
 bash "$KT" reis-dedi is-1 --karar devam --reis SERDAR --oturum ref-a --gerekce "uc turun bulgulari farkliydi ve hepsi kapandi" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "🔴 kartın sahibi olmayan ad (SERDAR ≠ aldi MUAVIN) REDDEDİLDİ"
 bash "$KT" reis-dedi is-1 --karar "olur" --reis MUAVIN --oturum ref-a --gerekce "uc turun bulgulari farkliydi ve hepsi kapandi" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "🔴 küme dışı karar ('olur') REDDEDİLDİ"
@@ -76,8 +76,8 @@ bash "$KT" tikandi is-3 --yol daralt --neden "şema çakışıyor" >/dev/null 2>
 
 echo "════ T7 · gün sonu özeti defterden: üç bölüm + açık işler ════"
 CIKTI="$(bash "$GS" --yaz 2>&1)"; g $? "özet üretildi"
-# 0.19.0 gün sonu etiketleri ("başlama izni / veto" başlığı, "reis birleştirdi", "sınıflı · izin: …") gun-sonu.sh ile İKİNCİ kartta
-#   (fabrika-merge-reise-kapi) gelir; bu kart gün sonunu değiştirmez → burada eski çıktı sınanır (gerilemesin).
+# 0.21.0 gün sonu etiketleri ("başlama izni / veto" başlığı, "reis birleştirdi", "sınıflı · izin: …") gun-sonu.sh ile İKİNCİ kartta
+#   (fabrika-merge-reise-parca2) gelir; bu kart gün sonunu değiştirmez → burada eski çıktı sınanır (gerilemesin).
 grep -q "## Sultan'a gidenler (3)" <<<"$CIKTI"; g $? "Sultan'a gidenler 3 (is-2 dış yüzey · is-3 geri alınamaz · kartsız kaçış)"
 grep -q "## İçeride bitirdiklerimiz (1)" <<<"$CIKTI" && grep -q "is-1" <<<"$CIKTI"; g $? "içeride bitenler 1 (is-1, 5/5 E)"
 grep -q "## Tıkananlar (1)" <<<"$CIKTI" && grep -q "şema çakışıyor" <<<"$CIKTI"; g $? "tıkananlar 1, nedeniyle"
@@ -153,7 +153,7 @@ python3 -c "import json;k=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-da
 python3 -c "import json;y=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-dar-kalan.json'));assert y['koken']=='is-dar' and y['aldi']=='MUAVIN' and y['istedi']=='Sultan' and y['sinif_cevaplari']=={'geri_alinamaz':'h','para':'h','dis_yuzey':'h','yetki':'h'} and y['durum']=='acik'"; g $? "kalan kart: aynı sahip/istedi/sınıf cevapları, köken yazılı"
 bash "$KT" daralt is-dar --kalan "üçüncü parça da ayrılsın yeterince uzun" --cumle "daha da daraltılmış cümle yeterince uzun" --oturum ref-d >/dev/null 2>&1; [ $? -eq 1 ]; g $? "aynı kalan ad ikinci kez açılmaz (--yeni gerekir)"
 bash "$KT" daralt is-dar --kalan "üçüncü parça da ayrılsın yeterince uzun" --cumle "daha da daraltılmış cümle yeterince uzun" --oturum ref-d --yeni is-dar-3 >/dev/null 2>&1; g $? "--yeni ile ikinci daraltma"
-echo "════ T12 · daralt SINIFLI kartta — 0.19.0 FLİP: Sultan kararı ŞART DEĞİL, reis kararı kendiliğinden (sinifli:true); veto varsa hiçbir kart değişmez ════"
+echo "════ T12 · daralt SINIFLI kartta — 0.21.0 FLİP: Sultan kararı ŞART DEĞİL, reis kararı kendiliğinden (sinifli:true); veto varsa hiçbir kart değişmez ════"
 bash "$KT" ac is-dar-s --is "para harcayan iş tek kartta iki yarımla tıkandı" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para e --dis-yuzey h --yetki h --oda sinav-oda >/dev/null 2>&1
 CIKTI="$(bash "$KT" daralt is-dar-s --kalan "kalan yarı yeterince uzun bir cümle burada" --cumle "daraltılmış cümle yeterince uzun burada" --oturum ref-s 2>&1)"; RC=$?; [ "$RC" -eq 0 ] || echo "    ↳ $CIKTI"; g $RC "🔴 FLİP: sınıflı kart Sultan kararı OLMADAN daraltıldı (rc 0) — eski kural rc 1 verirdi"
 python3 -c "import json;k=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-dar-s.json'));r=k['reis_kararlari'][-1];assert r['karar']=='daralt' and r['sinifli'] is True and r['reis']=='MUAVIN' and 'sultan_kararlari' not in k and len(k['daraltmalar'])==1"; g $? "reis kararı 'daralt' sinifli:true ile işlendi; sultan_kararlari OLUŞMADI (A06)"
@@ -177,7 +177,7 @@ bash "$KT" daralt is-at --kalan "kalan parça yeterince uzun bir cümle burada" 
 [ ! -f "$T/depo2/_agents/fabrika/kartlar/is-at-kalan.json" ]; g $? "yarım kalan kart yok"
 rmdir "$T/depo2/_agents/fabrika/kartlar/is-at-kalan.json.tmp" 2>/dev/null
 
-echo "════ T16 · BAŞLAMA İZNİ / VETO (0.19.0 · Sultan D1 22 Eki): sultan-dedi basla|dur → izin-durum; kapalı küme; vetoda reis-dedi/daralt/canli-borc rc 1; basla açar; eski kart; kart yok rc 3 ════"
+echo "════ T16 · BAŞLAMA İZNİ / VETO (0.21.0 · Sultan D1 22 Eki): sultan-dedi basla|dur → izin-durum; kapalı küme; vetoda reis-dedi/daralt rc 1; basla açar; eski kart; kart yok rc 3 ════"
 bash "$KT" ac is-vt --is "bekçi cron'u yetki genişleten iş" --istedi Sultan --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki e --canli e --oda sinav-oda >/dev/null 2>&1
 IFS=$'\t' read -r IZ IZA <<<"$(bash "$KT" izin-durum is-vt)"; [ "$IZ" = bekliyor ] && grep -q "veto yok" <<<"$IZA"; g $? "V1 açılışta izin-durum 'bekliyor<TAB>… veto yok'"
 bash "$KT" sultan-dedi is-vt --karar olur --oturum o0 --soz "olur" --beyan MUAVIN >/dev/null 2>&1; [ $? -eq 1 ]; g $? "V2 🔴 kapalı küme: --karar olur rc 1 (ölçüldü: eski araç rc 0 ile karta yazıyordu)"
@@ -192,21 +192,12 @@ bash "$KT" reis-dedi is-vt --karar devam --reis MUAVIN --oturum r1 --gerekce "yi
 CIKTI="$(bash "$KT" reis-dedi is-vt --karar devam --reis MUAVIN --oturum r1 --gerekce "yirmi karakterden uzun bir gerekce metni" 2>&1)"; grep -q "DUR dedi" <<<"$CIKTI" && grep -q "sultan-dedi is-vt --karar basla" <<<"$CIKTI"; g $? "V6b sebep + çare (sultan-dedi --karar basla) yazılı"
 bash "$KT" daralt is-vt --kalan "kalan yarı yeterince uzun bir cümle burada" --cumle "daraltılmış cümle yeterince uzun burada" --oturum r1 >/dev/null 2>&1; [ $? -eq 1 ]; g $? "V7 🔴 VETOLU kartta daralt rc 1"
 python3 -c "import json;k=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-vt.json'));assert 'reis_kararlari' not in k and 'daraltmalar' not in k"; [ $? -eq 0 ] && [ ! -f "$T/depo2/_agents/fabrika/kartlar/is-vt-kalan.json" ]; g $? "V7b hiçbir kart değişmedi, kalan kart doğmadı"
-bash "$KT" canli-borc is-vt --yazan MUAVIN --gerekce "kutuda dağıtım birleşmeden sonra Sultan elinde" >/dev/null 2>&1; [ $? -eq 1 ]; g $? "V8 🔴 VETOLU kartta canli-borc rc 1"
-python3 -c "import json;k=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-vt.json'));assert not k.get('canli_borc') and 'reis_kararlari' not in k"; g $? "V8b borç da reis kaydı da yazılmadı"
 CIKTI="$(bash "$KT" sultan-dedi is-vt --karar basla --oturum "sohbet-2355" --soz "tamam başlayın" --beyan MUAVIN 2>&1)"; RC=$?
 [ "$RC" -eq 0 ] && grep -q "veto kalktı" <<<"$CIKTI" && [ "$(bash "$KT" izin-durum is-vt | cut -f1)" = basla ]; g $? "V9 sultan-dedi basla vetoyu kaldırır (son basla/dur kazanır) → izin-durum basla"
 bash "$KT" reis-dedi is-vt --karar devam --reis MUAVIN --oturum r1 --gerekce "yirmi karakterden uzun bir gerekce metni" >/dev/null 2>&1; g $? "V10 basla sonrası reis-dedi açıldı"
 python3 -c "import json;k=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-vt.json'));r=k['reis_kararlari'][-1];assert r['sinifli'] and r['izin']=='basla'"; g $? "V10b kayıt izin:basla etiketli"
-bash "$KT" canli-borc is-vt --yazan MUAVIN --gerekce "kutuda dağıtım birleşmeden sonra Sultan elinde" >/dev/null 2>&1; g $? "V11 basla sonrası canli-borc yazıldı (reis canli-borc kaydıyla)"
-python3 -c "import json;k=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-vt.json'));r=k['reis_kararlari'][-1];assert r['karar']=='canli-borc' and r['sinifli'] and r['reis']=='MUAVIN' and k['canli_borc']['yazan']=='MUAVIN' and all(x['karar'] in ('dur','basla') for x in k['sultan_kararlari'])"; g $? "V11b reis canli-borc kaydı borçla birlikte; sultan_kararlari'na yalnız Sultan'ın sözleri (dur·basla) girdi"
-IFS=$'\t' read -r BD _ <<<"$(bash "$KT" canli-borc-durum is-vt 2>/dev/null)"; [ "$BD" = gecerli ]; g $? "V11c canli-borc-durum gecerli (reis kaydıyla, Sultan canli-borc kaydı YOK)"
+# V8/V11/V12 (vetolu kartta canlı borç · reis canlı borç kaydı) canli_borc.py ile İKİNCİ kartta (fabrika-merge-reise-parca2) gelir.
 bash "$KT" sultan-dedi is-vt --karar dur --oturum "sohbet-2358" --soz "yine durun" --beyan MUAVIN >/dev/null 2>&1
-IFS=$'\t' read -r BD BAC <<<"$(bash "$KT" canli-borc-durum is-vt 2>/dev/null)"; [ "$BD" = gecersiz ] && grep -q "DUR" <<<"$BAC"; g $? "V12 ikinci dur: var olan borç GEÇERSİZ olur ('DUR'), kapı geçirmez"
-O="$(bash "$KT" bitti is-vt --pr 77 2>&1)"; [ $? -eq 1 ] && grep -q "canlı borç GEÇERSİZ" <<<"$O" && [ "$(python3 -c "import json;print(json.load(open('$T/depo2/_agents/fabrika/kartlar/is-vt.json'))['durum'])")" = acik ]; g $? "V12b vetolu + borçlu kartta bitti reddedilir (borç geçersiz), kart açık kalır"
-python3 - <<PY
-import json;p='$T/depo2/_agents/fabrika/kartlar/is-vt.json';k=json.load(open(p));k.pop('canli_borc',None);k['reis_kararlari']=[x for x in k['reis_kararlari'] if x['karar']!='canli-borc'];json.dump(k,open(p,'w'))
-PY
 O="$(bash "$KT" bitti is-vt --pr 77 2>&1)"; RC=$?; [ "$RC" -eq 0 ] && grep -q "Sultan DUR demişti" <<<"$O" && grep -q "geri alma kararı Sultan'ın" <<<"$O"; g $? "V13 vetolu (borçsuz) kartta bitti rc 0 ama UYARIR: 'Sultan DUR demişti — geri alma kararı Sultan'ın' (veto geç geldi / kaçış)"
 python3 -c "import json;k=json.load(open('$T/depo2/_agents/fabrika/kartlar/is-vt.json'));assert k['birlestirme_karari']['izin']=='dur'"; g $? "V13b birlestirme_karari izin:dur ile kayda geçti (gün sonu 'VETOYA RAĞMEN' der)"
 python3 - <<PY

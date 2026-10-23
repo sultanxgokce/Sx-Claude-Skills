@@ -10,7 +10,9 @@ set -uo pipefail
 export FABRIKA_AILE_NOTIFY=-   # denetçi bitiş zili sınavda KAPALI (gerçek koltuklara çalmasın); zil kapısı kendi sahtesini verir
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 D="${MUTANT_D:-$HERE/denetci.sh}"; K="$HERE/kanit.sh"; KT="$HERE/kart.sh"
-kartac() { bash "$KT" ac "$1" --is x --istedi SULTAN --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki e >/dev/null 2>&1; }
+# Sınıflı kart Sultan'a ulaşım yolu ister (--oda + tetik betiği; 0.21.0) — sınav gerçek odaya mektup BIRAKMAZ: sahte tetik.
+TETIK_SAHTE="$(mktemp)"; printf '#!/usr/bin/env bash\nexit 0\n' > "$TETIK_SAHTE"; chmod +x "$TETIK_SAHTE"; export FABRIKA_TETIK="$TETIK_SAHTE"
+kartac() { bash "$KT" ac "$1" --is x --istedi SULTAN --aldi MUAVIN --geri-alinamaz h --para h --dis-yuzey h --yetki e --oda sinav-oda >/dev/null 2>&1; }
 gecen=0; kalan=0
 g() { if [ "$1" -eq 0 ]; then gecen=$((gecen+1)); echo "  ✓ $2"; else kalan=$((kalan+1)); echo "  ✗ $2"; fi; }
 
@@ -113,22 +115,19 @@ CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-s --diff "$T/d.patch" --sultan-de
 grep -q "TAVAN AÇILDI" <<<"$CIKTI"; g $? "tavanın açıldığını SÖYLÜYOR (sessiz değil)"
 grep -q "muavin/4390ad1f" <<<"$CIKTI"; g $? "oturum referansı çıktıda görünüyor"
 grep -q "kapinin amacini curutur" <<<"$CIKTI"; g $? "GEREKÇE de çıktıda görünüyor (niçin bir tur daha)"
-echo "════ T7c · 🚪 REİS KAPISI: sınıfsız işte sahip kararı KARTTAN; sınıflı kartta KAPALI ════"
+echo "════ T7c · 🚪 REİS KAPISI: sınıfsız işte sahip kararı KARTTAN; sınıflı kartta denetçinin reis kapısı KAPALI (açılması ikinci kartta) ════"
 # NİÇİN (8 Eki 2026 · A268): tıkandı raporu "karar iş sahibinin/reisin, sınıf işiyse Sultan'ın" diyordu ama araç
 # yalnız Sultan'ın kararını okuyordu. Sınıfsız işin sahibi kendi yetkisindeki kararı yazdıramıyor; kapı ya kapalı
 # kalıyor ya da A06'ya özendiriyordu (aynı gün iki vaka: DEVRİYE doğrulayıcısı · kokpit A2).
-# (a) SINIFLI kart: reis yolu her adımda KAPALI
+# (a) SINIFLI kart: kart.sh reis kararını yazar (0.21.0) ama denetçinin reis kapısı bu sürümde KAPALI kalır
 kartac is-r1; bash "$K" olcum is-r1 olc --asama tek -- echo 1 >/dev/null 2>&1
 SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-r1 --diff "$T/d.patch" >/dev/null 2>&1
 SAHTE_JSON="$(J 3 H "$B,$B")" bash "$D" is-r1 --diff "$T/d.patch" >/dev/null 2>&1
 SAHTE_JSON="$(J 2 H "$B")" bash "$D" is-r1 --diff "$T/d.patch" >/dev/null 2>&1; [ $? -eq 4 ]; g $? "sınıflı iş tur3 tıkandı (rc=4)"
-bash "$KT" reis-dedi is-r1 --karar devam --reis MUAVIN --oturum ref-r1 --gerekce "bulgular farkliydi ve hepsi kapandi, dorduncu tur ilerlemeyi olcer" >/dev/null 2>&1; [ $? -ne 0 ]; g $? "🔴 SINIFLI karta reis kararı YAZILAMADI (merci Sultan)"
-python3 -c "import json;k=json.load(open('$T/_agents/fabrika/kartlar/is-r1.json'));assert not k.get('reis_kararlari')"; g $? "kartta reis_kararlari alanı oluşmadı"
-python3 - "$T/_agents/fabrika/kartlar/is-r1.json" <<'PY'
-import json,sys; k=json.load(open(sys.argv[1])); k["reis_kararlari"]=[{"karar":"devam","reis":"MUAVIN","oturum":"ref-elle","gerekce":"yirmi karakterden uzun elle yazilmis gerekce"}]; json.dump(k,open(sys.argv[1],"w"))
-PY
+bash "$KT" reis-dedi is-r1 --karar devam --reis MUAVIN --oturum ref-r1 --gerekce "bulgular farkliydi ve hepsi kapandi, dorduncu tur ilerlemeyi olcer" >/dev/null 2>&1; g $? "0.21.0: SINIFLI karta reis kararı kart.sh ile YAZILDI (denetçinin bunu okuması ikinci kartta: fabrika-merge-reise-parca2)"
+python3 -c "import json;k=json.load(open('$T/_agents/fabrika/kartlar/is-r1.json'));r=k['reis_kararlari'][-1];assert r['sinifli'] is True and not k.get('sultan_kararlari')"; g $? "kayıt reis_kararlari'nda sinifli:true; sultan_kararlari YOK (A06)"
 CIKTI="$(SAHTE_JSON="$(J 5 E "")" bash "$D" is-r1 --diff "$T/d.patch" --reis-devam 2>&1)"; RC=$?
-[ "$RC" -eq 1 ]; g $? "🔴 sınıflı karta ELLE yazılmış reis kararı bile kapıyı AÇMIYOR (rc=1)"
+[ "$RC" -eq 1 ]; g $? "🔴 sınıflı kartta reis kararı (araçla yazılmış) denetçinin tavanını bu sürümde AÇMIYOR (rc=1; ikinci kartta açılır)"
 grep -q "SINIFLI" <<<"$CIKTI"; g $? "sebebi yazılı: kart sınıflı, merci Sultan"
 grep -q "sultan-dedi" <<<"$CIKTI"; g $? "doğru yol gösterildi (sultan-dedi)"
 [ ! -f "$T/_agents/fabrika/kanit/is-r1/DENETIM-4.json" ]; g $? "denetim KOŞULMADI"

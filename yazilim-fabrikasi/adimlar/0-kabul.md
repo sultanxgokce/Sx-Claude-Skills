@@ -19,7 +19,7 @@ KANIT NEREDE OLACAK: <_agents/fabrika/kanit/<iş>/ | ölçüm çifti | kare>
 görünüm değişikliği "kusur düzeltmesi" sanılıp peşin onayla yayınlandı; Sultan "bozulmuş" dedi.
 "Bu dış yüzey mi, iç mi" tereddüdü = dış.
 
-## Sınıflı iş — başlama izni Sultan'ın, kararlar reisin (0.19.0 · Sultan D1 22 Eki 2026)
+## Sınıflı iş — başlama izni Sultan'ın, kararlar reisin (0.21.0 · Sultan D1 22 Eki 2026)
 **Kural metni BURADA yaşar; betik başlıkları ve SKILL buraya atıf yapar.** Sultan (session_01Ge4BawKcUrcm1pdV8WANyF):
 *"sadece ara kararlar değil birleştirme kararları da reise geçsin çünkü ciddi sorun yaşıyoruz çok iş takılıyor"*. Ölçüm:
 bağımsız gözden geçen işler ayda **1.138 saat** bekledi; 22 Eki'de sorulan 12 kararın **12'sinde** Sultan ajan önerisini seçti.
@@ -27,9 +27,9 @@ bağımsız gözden geçen işler ayda **1.138 saat** bekledi; 22 Eki'de sorulan
   `--oda` odasına tetikle gönderir; `--oda` yoksa, tetik betiği yoksa ya da tetik düşerse kart AÇILMAZ (rc 1, fail-closed;
   varsayılan oda uydurulmaz). Sultan'a giden satır komut taşımaz ("durdurmak için 'dur' demen yeter").
 - İzin bir **VETO PENCERESİ**dir: Sultan'ın "dur"unu ajan `kart.sh sultan-dedi <iş> --karar dur` ile karta işler → reis durur
-  (`reis-dedi` · `daralt` · `canli-borc` rc 1); kapının ve denetçinin vetoyu okuması ikinci kartta (`fabrika-merge-reise-kapi`).
+  (`reis-dedi` · `daralt` rc 1); kapının ve denetçinin vetoyu okuması ikinci kartta (`fabrika-merge-reise-parca2`).
   `--karar basla` vetoyu kaldırır (son basla/dur kazanır); Sultan bir şey demezse iş reis kararlarıyla biter.
-- **Ara kararlar (devam · daralt · geri-al · canlı borç) ve BİRLEŞTİRME kararı kutu reisinindir** — gerekçeli (≥20 karakter),
+- **Ara kararlar (devam · daralt · geri-al) ve BİRLEŞTİRME kararı kutu reisinindir** (canlı borcun reise geçmesi ikinci kartta) — gerekçeli (≥20 karakter),
   `kart.sh reis-dedi` ile karta; `kart.sh bitti` birleştirme kararını `birlestirme_karari{karar_veren: reis}` olarak yazar.
 - **Dağıtım / canlıya alma Sultan eli olarak KALIR.**
 - **A06 korunur:** `sultan-dedi` yine oturum-ref · kırpık · beyan ister; reis kararı ayrı alandadır (`reis_kararlari`, sınıflıda
